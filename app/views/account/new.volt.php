@@ -14,25 +14,15 @@
   <?php echo $this->getContent(); ?>
   
   <div id="form-signin">
-   <?php echo Phalcon\Tag::form(array('account/new', 'id' => 'registerAccount')); ?>
+   <?php echo Phalcon\Tag::form(array('account/new', 'id' => 'registerAccount', 'method' => 'Post')); ?>
   
       <p>
        <?php echo $form->render('companyName'); ?>
-       <?php echo $form->render('email'); ?>
+       
       </p>
 
       <p>
-       <?php echo $form->render('firstName'); ?>
-       <?php echo $form->render('lastName'); ?>
-      </p>
 
-      <p>
-       <?php echo $form->render('pass'); ?>
-       <?php echo $form->render('pass2'); ?>
-      </p>
-
-      <p>
-       <?php echo $form->render('username'); ?>
        <?php echo $form->render('fileSpace'); ?>
       </p>
 

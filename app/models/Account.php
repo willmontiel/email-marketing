@@ -1,30 +1,24 @@
 <?php
-use Phalcon\Validation\Validator\PresenceOf,
-    Phalcon\Validation\Validator\StringLength,
-    Phalcon\Validation\Validator\Email;
-use Phalcon\Validation\Validator\Identical;
+use Phalcon\Mvc\Model\Validator\PresenceOf,
+    Phalcon\Mvc\Model\Validator\StringLength,
+    Phalcon\Mvc\Model\Validator\Email;
+use Phalcon\Mvc\Model\Validator\Identical;
 use Phalcon\Mvc\Controller;
 
 class Account extends \Phalcon\Mvc\Model
 {
+    
     public function validation()
     {
 
-        $this->validate( new PresenceOf(
-            array(
-                "field"  => "companyName",
-                "message" => array("Oye! Debes ingresar un nombre para tu cuenta")
-            )
-        ));
-        
-        $this->validate(new MaxMinValidator(
-            array(
-                "field"  => "companyName",
-                "min" => 5,
-                "max" => 50,
-                "message" => array("El nombre de tu cuenta debe estar entre 5 y 50 caracteres")
-            )
-        ));
+//        $this->validate( new PresenceOf(
+//            array(
+//                "field"  => "companyName",
+//                "message" => "Oye! Debes ingresar un nombre para tu cuenta"
+//            )
+//        ));
+//        
+//        
 
         $this->validate(new PresenceOf(
             array(
@@ -54,10 +48,34 @@ class Account extends \Phalcon\Mvc\Model
             )
         ));
 
-        return $this->validationHasFailed() != true;
+        if ($this->validationHasFailed() == true) {
+        return false;
+        }
     }
   
-            
+    public function getMessages()
+    {
+        $messages = array();
+        foreach (parent::getMessages() as $message) {
+            switch ($message->getType()) {
+                case 'InvalidCreateAttempt':
+                    $messages[] = 'The record cannot be created because it already exists';
+                    break;
+                case 'InvalidUpdateAttempt':
+                    $messages[] = 'The record cannot be updated because it already exists';
+                    break;
+                case 'PresenceOf':
+                    if ($message->getField() == 'companyName') {
+                        $messages[] = 'Oye! Debes ingresar un nombre para tu cuenta';
+                    }
+                    else {
+                        $messages[] = $message;
+                    }
+                    break;
+            }
+        }
+        return $messages;
+    }
            
 }
     

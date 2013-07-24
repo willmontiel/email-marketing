@@ -42,12 +42,12 @@ class AccountController extends \Phalcon\Mvc\Controller
         $form = new Form($account);
         
         $form->add(new Text('companyName'));
-        $form->add(new Text('email'));
-        $form->add(new Text ('firstName'));
-        $form->add(new Text ('lastName'));
-        $form->add(new Password ('pass'));
-        $form->add(new Password ('pass2'));
-        $form->add(new Text ('username'));
+//        $form->add(new Text('email'));
+//        $form->add(new Text ('firstName'));
+//        $form->add(new Text ('lastName'));
+//        $form->add(new Password ('pass'));
+//        $form->add(new Password ('pass2'));
+//        $form->add(new Text ('username'));
         $form->add(new Text ('fileSpace'));
         $form->add(new Text ('messageQuota'));
         $form->add(new Select("modeUse", array(
@@ -56,34 +56,33 @@ class AccountController extends \Phalcon\Mvc\Controller
         )));
         
 
-        if ($this->request->isPost()) 
-        {
+        if ($this->request->isPost()) {
             
             $form->bind($this->request->getPost(), $account);
-            
+
+            echo "Version de PhalconPHP: [" . \Phalcon\Version::getId() ."]\n";
             if ($form->isValid() && $account->save()) {
                 
-//                echo "<!-- " . $form->get('username')->getValue() . "-->";
+                $this->flash->success('La cuenta se ha registrado exitosamente!');
                 
-                $this->flash->success('Cuenta creada exitosamente!');
 //                $this->dispatcher->forward(
 //                    array(
 //                        'controller' => 'account',
 //                        'action' => 'new'
 //                    )
 //                );
-            }
-            else {
-                foreach ($account->getMessages() as $msg) {
+        }
+        else {
+           foreach ($account->getMessages() as $msg) {
                     $this->flash->error($msg);
-                }
-            }
-       }
+           }
+        }
+    }
       
         
-        $this->view->form = $form;
-    }
-            
-        
- }
-
+    $this->view->form = $form;
+ 
+     
+}     
+     
+ }  
