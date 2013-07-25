@@ -1,36 +1,70 @@
+{{ content() }}
 <div class="row-fluid">
     <div class="modal-header">
-        <h1>Nombre Base de Datos</h1>
+        <a class="text-right" href="dbases">Crear Base de Datos</a>
     </div>
-    <div class="row-fluid">
-        {{form('Dbases/edit')}}
-        <div class="row-fluid">
-            <div class="span3">
-                <span>Nombre</span>
-            </div>
-            <div class="span4">
-                {{editform.render("name")}}
-            </div>
-        </div>
-        <div class="row-fluid">
-            <div class="span3">
-                <span>Descripcion</span>                
-            </div>
-            <div class="span4">
-                {{editform.render("description")}}
-            </div>
-        </div>
-        <div class="row-fluid">
-            <div class="span3">
-                <span>Descripcion de los Contactos</span>
-            </div>
-            <div class="span4">
-                {{editform.render("descriptionContacts")}}
-            </div>
-        </div>
+    <div class="modal-header">
+        <h2>{{sdbase.name}}</h2>
     </div>
-    <div class="row-fluid text-center">
-        {{submit_button(Guardar)}}
-    </div>
-    </form>
 </div>
+<div class="row-fluid">
+    <div class="span12">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><span>Nombre</span></td>
+                    <th><span>Descripcion</span></th>
+                    <th><span>Descripcion Contactos</span></th>
+                    <th><span>Contactos</span></th>
+                    <th><span>Des-suscritos</span></th>
+                    <th><span>Rebotados</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        {{sdbase.name}}
+                    </td>
+                    <td>
+                        {{sdbase.description}}
+                    </td>
+                    <td>
+                        {{sdbase.descriptionContacts}}
+                    </td>
+                    <td>
+                        {{sdbase.contact}}
+                    </td>
+                    <td>
+                        {{sdbase.unsubscribed}}
+                    </td>
+                    <td>
+                        {{sdbase.bounced}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Direccion de Correo</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Añadido en la Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>            
+        </table>
+    </div>    
+</div>
+

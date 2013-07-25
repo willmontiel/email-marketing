@@ -7,6 +7,7 @@ use Phalcon\Mvc\Model\Validator\PresenceOf,
 
 class Dbases extends \Phalcon\Mvc\Model
 {
+    
 //    public function validation()
 //    {
 //

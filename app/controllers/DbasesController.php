@@ -159,16 +159,20 @@ class DbasesController extends \Phalcon\Mvc\Controller
         //Recuperar la informacion de la BD que se desea SI existe
         if($db = Dbases::findFirstByIdDbases($id))
         {
+            $this->view->setVar("edbase", $db);
             if($user->idAccount === $db->idAccount)
             {
+                if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) 
+                {
                 $db->delete();
+                $this->flashSession->success('Base de Datos Eliminada!');
                 $this->response->redirect("dbases");
-//                $this->dispatcher(
-//                            array(
-//                                'controller' => 'dbases',
-//                                'action' => 'index'
-//                            )
-//                        );
+                } else {
+                    $this->flashSession->error('Escriba la palabra "DELETE" correctamente');
+                    
+                    $this->view->disable();
+                    return $this->response->redirect('dbases');
+                }
             }
         }
     }
