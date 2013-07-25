@@ -6,73 +6,73 @@
   </div>
  </div>
  <br>
- <div class="span9">
+ <div class="span11">
   {{ content() }}
   
-  <div id="form-signin">
    {{ form('account/new', 'id': 'registerAccount', 'method': 'Post') }}
+   <div class="row-fluid">
+    <div class="span4">
       <p>
-       Nombre de la cuenta: 
-       {{ form.render('companyName') }}
+       Nombre de la cuenta: {{ newFormAccount.render('companyName') }}
       </p>
+    </div>
+   </div>
 
       <p>
-       Dirección de correo electronico: {{ form.render('email') }}
+       Dirección de correo electronico: {{ newFormAccount.render('email') }}
       </p>
 
       <p>
        Nombre:
-       {{ form.render('firstName') }}
+       {{ newFormAccount.render('firstName') }}
       </p>
 
       <p>
        Apellido:
-       {{ form.render('lastName') }}
+       {{ newFormAccount.render('lastName') }}
       </p>
 
 	  <p>
        Nombre de usuario:
-       {{ form.render('username') }}
+       {{ newFormAccount.render('username') }}
       </p>
 
       <p>
        Contraseña: 
-       {{ form.render('password') }}
+       {{ newFormAccount.render('password') }}
       </p>
 
       <p>
        Repita la contraseña:
-       {{ form.render('password2') }}
+       {{ newFormAccount.render('password2') }}
       </p>
 
       <p>
        Cantidad de espacio para archivos:
-       {{ form.render('fileSpace') }}
+       {{ newFormAccount.render('fileSpace') }}
       </p>
 
       <p>
        Cantidad de mensajes
-       {{ form.render('messageQuota') }}
+       {{ newFormAccount.render('messageQuota') }}
       </p>
 
       <p>
        Modo de uso:
-       {{ form.render('modeUse') }}
+       {{ newFormAccount.render('modeUse') }}
       </p>
 
       <p>
        Modo de pago:
-       {{ form.render('modeAccounting') }}
+       {{ newFormAccount.render('modeAccounting') }}
       </p>
       <p>
-       {{ submit_button('Registrar', 'class':"btn btn-inverse dropdown-toggle", 'data-toggle':"dropdown") }}
+       {{ submit_button("Registrar", 'class' : "btn btn-success") }}
       </p>
    
    </form>
   </div>  
- </div>
-
- {{ link_to('session', 'class': "btn btn-info dropdown-toggle", 'data-toggle': "dropdown", "login") }}
+ 
  <div class="span2">
   <img src="images/gorilla.jpg"/>
  </div>

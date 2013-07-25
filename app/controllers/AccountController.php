@@ -1,11 +1,17 @@
 <?php
 class AccountController extends \Phalcon\Mvc\Controller
 {
-    
-    public function newAction()
+    public function indexAction()
+	{
+		$account= Account::find();
+		$this->view->setVar("allAccount", $account);
+//		$this->view->setVas("allUser", User::find());
+	}
+
+	public function newAction()
     {
         $account = new Account();
-        $form = new AccountForm($account);
+        $form = new NewAccountForm($account);
       
         if ($this->request->isPost()) {
             
@@ -50,9 +56,48 @@ class AccountController extends \Phalcon\Mvc\Controller
         }
       
         
-      $this->view->form = $form;
+      $this->view->newFormAccount = $form;
  
      
-   }     
+   } 
+   
+   public function showAction($id)
+   {
+	    $users = User::find("idAccount = $id");
+		
+		$this->view->setVar("allUser", $users);	   
+   }
+ 
      
+   public function editAction($id)
+   {
+	    
+	    //Recuperar la informacion de la BD que se desea SI existe
+		$db = $this->findAndValidateDbaseAccount($id);
+		if ($db !== null) {
+            $this->view->setVar("edbase", $db);
+			//Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
+			$editform = new EditForm($db);
+
+			if ($this->request->isPost()) {   
+				$editform->bind($this->request->getPost(), $db);
+
+				if ($editform->isValid() && $db->save()) {
+					$this->flash->success('Base de Datos Actualizada Exitosamente!');
+					$this->dispatcher->forward(
+						array(
+							'controller' => 'dbases',
+							'action' => 'show'
+						)
+					);
+				}
+				else {
+					foreach ($db->getMessages() as $msg) {
+						$this->flash->error($msg);
+					}
+				}
+			}
+			$this->view->editform = $editform;
+        } 
+   }
  }  

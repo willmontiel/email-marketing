@@ -6,73 +6,73 @@
   </div>
  </div>
  <br>
- <div class="span9">
+ <div class="span11">
   <?php echo $this->getContent(); ?>
   
-  <div id="form-signin">
    <?php echo Phalcon\Tag::form(array('account/new', 'id' => 'registerAccount', 'method' => 'Post')); ?>
+   <div class="row-fluid">
+    <div class="span4">
       <p>
-       Nombre de la cuenta: 
-       <?php echo $form->render('companyName'); ?>
+       Nombre de la cuenta: <?php echo $newFormAccount->render('companyName'); ?>
       </p>
+    </div>
+   </div>
 
       <p>
-       Dirección de correo electronico: <?php echo $form->render('email'); ?>
+       Dirección de correo electronico: <?php echo $newFormAccount->render('email'); ?>
       </p>
 
       <p>
        Nombre:
-       <?php echo $form->render('firstName'); ?>
+       <?php echo $newFormAccount->render('firstName'); ?>
       </p>
 
       <p>
        Apellido:
-       <?php echo $form->render('lastName'); ?>
+       <?php echo $newFormAccount->render('lastName'); ?>
       </p>
 
 	  <p>
        Nombre de usuario:
-       <?php echo $form->render('username'); ?>
+       <?php echo $newFormAccount->render('username'); ?>
       </p>
 
       <p>
        Contraseña: 
-       <?php echo $form->render('password'); ?>
+       <?php echo $newFormAccount->render('password'); ?>
       </p>
 
       <p>
        Repita la contraseña:
-       <?php echo $form->render('password2'); ?>
+       <?php echo $newFormAccount->render('password2'); ?>
       </p>
 
       <p>
        Cantidad de espacio para archivos:
-       <?php echo $form->render('fileSpace'); ?>
+       <?php echo $newFormAccount->render('fileSpace'); ?>
       </p>
 
       <p>
        Cantidad de mensajes
-       <?php echo $form->render('messageQuota'); ?>
+       <?php echo $newFormAccount->render('messageQuota'); ?>
       </p>
 
       <p>
        Modo de uso:
-       <?php echo $form->render('modeUse'); ?>
+       <?php echo $newFormAccount->render('modeUse'); ?>
       </p>
 
       <p>
        Modo de pago:
-       <?php echo $form->render('modeAccounting'); ?>
+       <?php echo $newFormAccount->render('modeAccounting'); ?>
       </p>
       <p>
-       <?php echo Phalcon\Tag::submitButton(array('Registrar', 'class' => 'btn btn-inverse dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+       <?php echo Phalcon\Tag::submitButton(array('Registrar', 'class' => 'btn btn-success')); ?>
       </p>
    
    </form>
   </div>  
- </div>
-
- <?php echo Phalcon\Tag::linkTo(array('session', 'class' => 'btn btn-info dropdown-toggle', 'data-toggle' => 'dropdown', 'login')); ?>
+ 
  <div class="span2">
   <img src="images/gorilla.jpg"/>
  </div>
