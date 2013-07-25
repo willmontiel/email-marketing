@@ -1,55 +1,78 @@
 <div class="container-fluid">
 <div class="row-fluid">
  <div class="span12">
-  <div id="specific" class="hero-unit">
+  <div id="specific">
    <h1>Mail Gorilla</h1>
   </div>
  </div>
-
- <div class="span12 offset4" >
-  <h3>Registrar una Cuenta</h3>
- </div>
- 
- <div class="span7 offset1">
-  <?php echo $this->getContent(); ?>
+ <br>
+ <div class="span9">
+  {{ content() }}
   
   <div id="form-signin">
-   <?php echo Phalcon\Tag::form(array('account/new', 'id' => 'registerAccount')); ?>
-  
+   {{ form('account/new', 'id': 'registerAccount', 'method': 'Post') }}
       <p>
-       <?php echo $form->render('companyName'); ?>
-       <?php echo $form->render('email'); ?>
+       Nombre de la cuenta: 
+       {{ form.render('companyName') }}
       </p>
 
       <p>
-       <?php echo $form->render('firstName'); ?>
-       <?php echo $form->render('lastName'); ?>
+       Dirección de correo electronico: {{ form.render('email') }}
       </p>
 
       <p>
-       <?php echo $form->render('pass'); ?>
-       <?php echo $form->render('pass2'); ?>
+       Nombre:
+       {{ form.render('firstName') }}
       </p>
 
       <p>
-       <?php echo $form->render('username'); ?>
-       <?php echo $form->render('fileSpace'); ?>
+       Apellido:
+       {{ form.render('lastName') }}
+      </p>
+
+	  <p>
+       Nombre de usuario:
+       {{ form.render('username') }}
       </p>
 
       <p>
-       <?php echo $form->render('messageQuota'); ?>
-       <?php echo $form->render('modeUse'); ?>
+       Contraseña: 
+       {{ form.render('password') }}
       </p>
- 
+
       <p>
-       <?php echo Phalcon\Tag::submitButton(array('Registrar', 'class' => 'btn btn-inverse dropdown-toggle', 'data-toggle' => 'dropdown')); ?>
+       Repita la contraseña:
+       {{ form.render('password2') }}
+      </p>
+
+      <p>
+       Cantidad de espacio para archivos:
+       {{ form.render('fileSpace') }}
+      </p>
+
+      <p>
+       Cantidad de mensajes
+       {{ form.render('messageQuota') }}
+      </p>
+
+      <p>
+       Modo de uso:
+       {{ form.render('modeUse') }}
+      </p>
+
+      <p>
+       Modo de pago:
+       {{ form.render('modeAccounting') }}
+      </p>
+      <p>
+       {{ submit_button('Registrar', 'class':"btn btn-inverse dropdown-toggle", 'data-toggle':"dropdown") }}
       </p>
    
    </form>
   </div>  
  </div>
 
- <?php echo Phalcon\Tag::linkTo(array('session', 'class' => 'btn btn-info dropdown-toggle', 'data-toggle' => 'dropdown', 'login')); ?>
+ {{ link_to('session', 'class': "btn btn-info dropdown-toggle", 'data-toggle': "dropdown", "login") }}
  <div class="span2">
   <img src="images/gorilla.jpg"/>
  </div>
