@@ -8,7 +8,7 @@
             {%for dbase in dbases%}
                 <div class="row-fluid">
                     <div class="span6" >
-                        <h3><a href="dbases/read?id={{dbase.idDbases}}">{{dbase.name}}</a></h3>
+                        <h3><a href="dbases/show/{{dbase.idDbases}}">{{dbase.name}}</a></h3>
                         <span>{{dbase.description}}</span>
                         <div class="">
                                 Segmentos (icono)
@@ -24,8 +24,8 @@
                     </div>
                     <div class="span2">
                         <dl>
-                            <dd><a href="dbases/edit?id={{dbase.idDbases}}">Editar</a></dd>
-                            <dd><a href="#">Eliminar</a></dd>
+                            <dd><a href="dbases/edit/{{dbase.idDbases}}">Editar</a></dd>
+                            <dd><a href="dbases/delete/{{dbase.idDbases}}">Eliminar</a></dd>
                             <dd><a href="#">Agregar Contacto</a></dd>
                         </dl>
                     </div>

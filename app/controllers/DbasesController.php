@@ -14,63 +14,168 @@ class DbasesController extends \Phalcon\Mvc\Controller
         //Recuperar la informacion de la BD que se desea
         $db= Dbases::find("idAccount = $user->idAccount");
         $this->view->setVar("dbases", $db);
-        echo "Version de PhalconPHP: [" . \Phalcon\Version::getId() ."]\n";
     }
     
     public function createAction()
-    {
-        
-    }
-    
-    public function readAction()
     {
         //Recuperar idAccount del usuario
         $name = $this->session->get("user-name");
         $user = User::findFirst("username = '$name'");
 
-        //Recuperar la informacion de la BD que se desea
-        $id= $_GET['id'];
-        $db= Dbases::findFirst("idDbases = $id");
+        //Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
+        $db = new Dbases();
+        $db->idAccount = $user->idAccount;
+        $editform = new EditForm($db);
 
-        //Verificar si el usuario tiene acceso a esa BD
-        if($user->idAccount == $db->idAccount)
+        //Crear los campos        
+        $editform->add(new Text("name"));
+        $editform->add(new Text("description"));
+        $editform->add(new Text("descriptionContacts"));
+        if ($this->request->isPost()) 
+        {   
+            $editform->bind($this->request->getPost(), $db);
+
+            if ($editform->isValid() && $db->save()) {
+                $this->flash->success('Base de Datos Creada Exitosamente!');
+                $this->dispatcher->forward(
+                    array(
+                        'controller' => 'dbases',
+                        'action' => 'show',
+                        'params' => array($db->idDbases)
+                    )
+                );
+            }
+            else {
+                foreach ($db->getMessages() as $msg) {
+                    $this->flash->error($msg);
+                }
+            }
+        }
+            $this->view->editform = $editform;
+    }
+    
+    public function showAction($id)
+    {
+        //Recuperar idAccount del usuario
+        $name = $this->session->get("user-name");
+        $user = User::findFirst("username = '$name'");
+        
+        //Recuperar la informacion de la BD que se desea SI existe
+        if($db = Dbases::findFirstByIdDbases($id))
         {
-            $this->view->setVar("sdbase", $db);
-        }else //Si no tiene acceso redireccione 
-        {
-            $this->response->redirect("restricted");
+            //Verificar si el usuario tiene acceso a esa BD
+            if($user->idAccount == $db->idAccount)
+            {
+                $this->view->setVar("sdbase", $db);
+            }else //Si no tiene acceso redireccione 
+            {
+                $this->dispatcher->forward(
+                    array(
+                        'controller' => 'dbases',
+                        'action' => 'restricted'
+                    )
+                );
+            }
+        }  else {
+            $this->dispatcher->forward(
+                array(
+                    'controller' => 'dbases',
+                    'action' => 'restricted'
+                )
+            );
         }
         
     }
     
-    public function editAction()
+    public function editAction($id)
     {
-        //Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
-        $dbases = new Dbases;
-        $editform = new Form($dbases);
-        
-        //Crear los campos
-        $editform->add(new Text("name"));
-        $editform->add(new Text("description"));
-        $editform->add(new Text("descriptionContacts"));
-        
-        //Validar los valores que se reciben por Post
-        $editform->bind($this->request->getPost(), $dbases);
+        //Recuperar idAccount del usuario
+        $name = $this->session->get("user-name");
+        $user = User::findFirst("username = '$name'");
 
-        if ($this->request->isPost()) 
+        //Recuperar la informacion de la BD que se desea SI existe
+        if($db = Dbases::findFirstByIdDbases($id))
         {
-            if($editform->isValid())
+            $this->view->setVar("edbase", $db);
+            //Verificar si el usuario tiene acceso a esa BD
+            if($user->idAccount === $db->idAccount)
             {
-                $dbases->contact = 0;
-                $dbases->unsubscribed = 0;
-                $dbases->bounced = 0;
-                $dbases->idAccount=2;
-                echo "es valido";
-                //$dbases->save();
-                //$this->response->redirect("dbases/read");
+                //Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
+                $editform = new EditForm($db);
+
+                //Crear los campos        
+                $editform->add(new Text("name"));
+                $editform->add(new Text("description"));
+                $editform->add(new Text("descriptionContacts"));
+                if ($this->request->isPost()) 
+                {   
+                    $editform->bind($this->request->getPost(), $db);
+
+                    if ($editform->isValid() && $db->save()) {
+                        $this->flash->success('Base de Datos Actualizada Exitosamente!');
+                        $this->dispatcher->forward(
+                            array(
+                                'controller' => 'dbases',
+                                'action' => 'show'
+                            )
+                        );
+                    }
+                    else {
+                        foreach ($db->getMessages() as $msg) {
+                            $this->flash->error($msg);
+                        }
+                    }
+                }
+                    $this->view->editform = $editform;
+                }else //Si no tiene acceso redireccione 
+                {
+                $this->dispatcher->forward(
+                    array(
+                        'controller' => 'dbases',
+                        'action' => 'restricted'
+                    )
+                 );
+            }
+        } else {
+            //Si la BD no Existe
+            $this->dispatcher->forward(
+                        array(
+                            'controller' => 'dbases',
+                            'action' => 'restricted'
+                        )
+                    );
+        }
+
+        
+        
+    }
+    
+    public function deleteAction($id)
+    {
+        //Recuperar idAccount del usuario
+        $name = $this->session->get("user-name");
+        $user = User::findFirst("username = '$name'");
+
+        //Recuperar la informacion de la BD que se desea SI existe
+        if($db = Dbases::findFirstByIdDbases($id))
+        {
+            if($user->idAccount === $db->idAccount)
+            {
+                $db->delete();
+                $this->response->redirect("dbases");
+//                $this->dispatcher(
+//                            array(
+//                                'controller' => 'dbases',
+//                                'action' => 'index'
+//                            )
+//                        );
             }
         }
-        $this->view->editform = $editform;
-        
+    }
+
+
+    public function restrictedAction()
+    {
+
     }
 }

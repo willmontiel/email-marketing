@@ -8,7 +8,7 @@
             <?php foreach ($dbases as $dbase) { ?>
                 <div class="row-fluid">
                     <div class="span6" >
-                        <h3><a href="dbases/read?id=<?php echo $dbase->idDbases; ?>"><?php echo $dbase->name; ?></a></h3>
+                        <h3><a href="dbases/show/<?php echo $dbase->idDbases; ?>"><?php echo $dbase->name; ?></a></h3>
                         <span><?php echo $dbase->description; ?></span>
                         <div class="">
                                 Segmentos (icono)
@@ -24,8 +24,8 @@
                     </div>
                     <div class="span2">
                         <dl>
-                            <dd><a href="dbases/edit?id=<?php echo $dbase->idDbases; ?>">Editar</a></dd>
-                            <dd><a href="#">Eliminar</a></dd>
+                            <dd><a href="dbases/edit/<?php echo $dbase->idDbases; ?>">Editar</a></dd>
+                            <dd><a href="dbases/delete/<?php echo $dbase->idDbases; ?>">Eliminar</a></dd>
                             <dd><a href="#">Agregar Contacto</a></dd>
                         </dl>
                     </div>

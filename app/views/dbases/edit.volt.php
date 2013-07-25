@@ -1,10 +1,10 @@
 <?php echo $this->getContent(); ?>
 <div class="row-fluid">
     <div class="modal-header">
-        <h1>Nombre Base de Datos</h1>
+        <h1><?php echo $edbase->name; ?></h1>
     </div>
     <div class="row-fluid">
-        <?php echo Phalcon\Tag::form(array('Dbases/edit', 'method' => 'post')); ?>
+        <form action = "/eMarketing/dbases/edit/<?php echo $edbase->idDbases; ?>", method="post">
         <div class="row-fluid">
             <div class="span3">
                 <span>Nombre</span>
