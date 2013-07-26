@@ -8,6 +8,7 @@
         {{ stylesheet_link('css/style.css') }}
         {{ stylesheet_link ('css/flat-ui.css') }}
         {{ stylesheet_link ('css/bootstrap-modal.css') }}
+        {{ stylesheet_link ('css/prstyles.css') }}
         {{ javascript_include('js/jquery-1.8.3.min.js') }}
         {{ javascript_include('bootstrap/js/bootstrap.js') }}
         {{ javascript_include('js/jquery-ui-1.10.3.custom.min.js') }}
@@ -52,11 +53,11 @@
 <div class="container">
     <div class="row-fluid">
         <div class="span3">
-                <a href="/eMarketing/">{{ image('src': '/images/gorilla.jpg') }}<a>
+                <a href="/emarketing/">{{ image('src': '/images/gorilla.jpg') }}<a>
             <div class="row-fluid">
                 <ul class="nav nav-list text-center">
                     <li>
-                        <a href="/eMarketing/dbases"><label>Contactos</label></a>
+                        <a href="/emarketing/dbases"><label>Contactos</label></a>
                     </li>
                     <li>
                         <a href="#"><label>Campañas</label></a>

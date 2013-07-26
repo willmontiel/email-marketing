@@ -7,7 +7,15 @@ use Phalcon\Mvc\Model\Validator\PresenceOf,
 
 class Dbases extends \Phalcon\Mvc\Model
 {
+
+    public $idAccount;
     
+    public function initialize()
+    {
+        $this->belongsTo("idAccount", "Account", "idAccount", array(
+            "foreignKey" => true,
+        ));
+    }
 //    public function validation()
 //    {
 //

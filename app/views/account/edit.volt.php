@@ -1,8 +1,5 @@
-<?php echo $this->getContent(); ?>
-
-     
-     <form action = "/emarketing/account/edit/<?php echo $allAccount->idAccount; ?>" id="registerAccount" method="post">
-
+	  
+     <?php echo Phalcon\Tag::form(array('account/edit', 'id' => 'registerAccount', 'method' => 'Post')); ?>
       <p>
        Nombre de la cuenta: 
 	   <?php echo $editFormAccount->render('companyName'); ?>

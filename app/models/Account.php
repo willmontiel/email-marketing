@@ -9,7 +9,7 @@ class Account extends \Phalcon\Mvc\Model
     public function initialize()
     {
         $this->hasMany("idAccount", "User", "idAccount");
-		$this->useDynamicUpdate(true);
+		$this->hasMany("idAccount", "Dbases", "idAccount");
     }
     
     public function validation()

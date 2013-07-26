@@ -4,11 +4,10 @@ class AccountController extends \Phalcon\Mvc\Controller
     public function indexAction()
 	{
 		$account= Account::find();
-		$this->view->setVar("allAccount", $account);	
-		
-//		$this->view->setVar("dbases", $this->user->account->dbases);
+		$this->view->setVar("allAccount", $account);
+//		$this->view->setVas("allUser", User::find());
 	}
-	
+
 	public function newAction()
     {
         $account = new Account();
@@ -46,7 +45,7 @@ class AccountController extends \Phalcon\Mvc\Controller
 					}
 			   }
 			   else{
-				   $this->flash->error('Las contraseñas no coincide por favor verifica la información');
+				   $this->flash->error('Las contraseÃ±as no coincide por favor verifica la informaciÃ³n');
 			   }
 			}
             else {
@@ -72,48 +71,33 @@ class AccountController extends \Phalcon\Mvc\Controller
      
    public function editAction($id)
    {
-	    $account = Account::findFirstByIdAccount($id);
+	    
 	    //Recuperar la informacion de la BD que se desea SI existe
-		if ($account !== null) {
-            $this->view->setVar("allAccount", $account);
+		$db = $this->findAndValidateDbaseAccount($id);
+		if ($db !== null) {
+            $this->view->setVar("edbase", $db);
 			//Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
-			$editform = new EditAccountForm($account);
+			$editform = new EditForm($db);
 
 			if ($this->request->isPost()) {   
-				$editform->bind($this->request->getPost(), $account);
+				$editform->bind($this->request->getPost(), $db);
 
-				if ($editform->isValid() && $account->save()) {
+				if ($editform->isValid() && $db->save()) {
 					$this->flash->success('Base de Datos Actualizada Exitosamente!');
-					$this->response->redirect("account");
+					$this->dispatcher->forward(
+						array(
+							'controller' => 'dbases',
+							'action' => 'show'
+						)
+					);
 				}
 				else {
-					foreach ($account->getMessages() as $msg) {
+					foreach ($db->getMessages() as $msg) {
 						$this->flash->error($msg);
 					}
 				}
 			}
-			$this->view->editFormAccount = $editform;
+			$this->view->editform = $editform;
         } 
    }
-   
-   public function deleteAction($id)
-   {
-         $account = Account::findFirstByIdAccount($id);
-		 
-         if ($account !== null) {
-			if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
-				$account->delete();
-				$this->flashSession->success('Base de Datos Eliminada!');
-				$this->response->redirect("account");
-			} 
-			else {
-				$this->flash->error('Escriba la palabra "DELETE" correctamente');
-//				$this->view->disable();
-//				return $this->response->redirect('account');
-			}
-		}
-
-     }
-
-
  }  

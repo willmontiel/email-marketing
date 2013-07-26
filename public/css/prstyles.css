@@ -1,0 +1,23 @@
+.badge-number-dark,
+.badge-number-light {
+/*	height: 78px; */
+	border-radius: 5px;
+	margin: 5px;
+	padding: 12px;
+	text-align: right;
+}
+.badge-number-dark {
+	background: #999;
+}
+.badge-number-light {
+	background: #ddd;
+}
+.number-huge {
+	font-size: 48px;
+	font-weight: bold;
+}
+
+.regular-text {
+	font-size: 12px;
+	color: #222;
+}

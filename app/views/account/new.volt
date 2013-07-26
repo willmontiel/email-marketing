@@ -8,69 +8,68 @@
  <br>
  <div class="span11">
   {{ content() }}
-  
-   {{ form('account/new', 'id': 'registerAccount', 'method': 'Post') }}
    <div class="row-fluid">
     <div class="span4">
+		{{ form('account/new', 'id': 'registerAccount', 'method': 'Post') }}
       <p>
-       Nombre de la cuenta: {{ newFormAccount.render('companyName') }}
+       <label for="companyName">Nombre de la cuenta:</label>
+		{{ newFormAccount.render('companyName') }}
       </p>
-    </div>
-   </div>
+      <p>
+       <label for="email">Dirección de correo electronico:</label> 
+		{{ newFormAccount.render('email') }}
+      </p>
 
       <p>
-       Dirección de correo electronico: {{ newFormAccount.render('email') }}
-      </p>
-
-      <p>
-       Nombre:
+       <label for="firstName">Nombre:</label>
        {{ newFormAccount.render('firstName') }}
       </p>
 
       <p>
-       Apellido:
+       <label for="lastName">Apellido:</label>
        {{ newFormAccount.render('lastName') }}
       </p>
 
 	  <p>
-       Nombre de usuario:
+       <label for="username">Nombre de usuario:</label>
        {{ newFormAccount.render('username') }}
       </p>
 
       <p>
-       Contraseña: 
+       <label for="password">Contraseña:</label>
        {{ newFormAccount.render('password') }}
       </p>
 
       <p>
-       Repita la contraseña:
+       <label for="password2"> Repita la contraseña:</label>
        {{ newFormAccount.render('password2') }}
       </p>
 
       <p>
-       Cantidad de espacio para archivos:
+       <label for="fileSpace">Cantidad de espacio para archivos:</label>
        {{ newFormAccount.render('fileSpace') }}
       </p>
 
       <p>
-       Cantidad de mensajes
+       <label for="messageQuota">Cantidad de mensajes</label>
        {{ newFormAccount.render('messageQuota') }}
       </p>
 
       <p>
-       Modo de uso:
+       <label for="modeUse">Modo de uso:</label>
        {{ newFormAccount.render('modeUse') }}
       </p>
 
       <p>
-       Modo de pago:
+       <label for="modeAccounting">Modo de pago:</label>
        {{ newFormAccount.render('modeAccounting') }}
       </p>
       <p>
        {{ submit_button("Registrar", 'class' : "btn btn-success") }}
       </p>
-   
    </form>
+	</div>
+   </div>
   </div>  
  
  <div class="span2">

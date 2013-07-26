@@ -15,8 +15,7 @@ class EditForm extends Form
         'maxlength' => 150          
         )));
         $this->add(new Text('descriptionContacts', array(
-        'maxlength' => 150
-                  
+        'maxlength' => 150      
         )));
     }
 }

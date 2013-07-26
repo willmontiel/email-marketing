@@ -7,70 +7,67 @@
  </div>
  <br>
  <div class="span11">
-  <?php echo $this->getContent(); ?>
-  
-   <?php echo Phalcon\Tag::form(array('account/new', 'id' => 'registerAccount', 'method' => 'Post')); ?>
+  {{ content() }}
    <div class="row-fluid">
     <div class="span4">
+		{{ form('account/new', 'id': 'registerAccount', 'method': 'Post') }}
       <p>
-       Nombre de la cuenta: <?php echo $newFormAccount->render('companyName'); ?>
+       Nombre de la cuenta: {{ newFormAccount.render('companyName') }}
       </p>
-    </div>
-   </div>
-
       <p>
-       Dirección de correo electronico: <?php echo $newFormAccount->render('email'); ?>
+       Dirección de correo electronico: {{ newFormAccount.render('email') }}
       </p>
 
       <p>
        Nombre:
-       <?php echo $newFormAccount->render('firstName'); ?>
+       {{ newFormAccount.render('firstName') }}
       </p>
 
       <p>
        Apellido:
-       <?php echo $newFormAccount->render('lastName'); ?>
+       {{ newFormAccount.render('lastName') }}
       </p>
 
 	  <p>
        Nombre de usuario:
-       <?php echo $newFormAccount->render('username'); ?>
+       {{ newFormAccount.render('username') }}
       </p>
 
       <p>
        Contraseña: 
-       <?php echo $newFormAccount->render('password'); ?>
+       {{ newFormAccount.render('password') }}
       </p>
 
       <p>
        Repita la contraseña:
-       <?php echo $newFormAccount->render('password2'); ?>
+       {{ newFormAccount.render('password2') }}
       </p>
 
       <p>
        Cantidad de espacio para archivos:
-       <?php echo $newFormAccount->render('fileSpace'); ?>
+       {{ newFormAccount.render('fileSpace') }}
       </p>
 
       <p>
        Cantidad de mensajes
-       <?php echo $newFormAccount->render('messageQuota'); ?>
+       {{ newFormAccount.render('messageQuota') }}
       </p>
 
       <p>
        Modo de uso:
-       <?php echo $newFormAccount->render('modeUse'); ?>
+       {{ newFormAccount.render('modeUse') }}
       </p>
 
       <p>
        Modo de pago:
-       <?php echo $newFormAccount->render('modeAccounting'); ?>
+       {{ newFormAccount.render('modeAccounting') }}
       </p>
       <p>
-       <?php echo Phalcon\Tag::submitButton(array('Registrar', 'class' => 'btn btn-success')); ?>
+       {{ submit_button("Registrar", 'class' : "btn btn-success") }}
       </p>
-   
    </form>
+	</div>
+   </div>
   </div>  
  
  <div class="span2">
