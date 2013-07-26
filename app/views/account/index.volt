@@ -1,8 +1,6 @@
  {{ content() }} 
    <div class="row-fluid">
- 	
  		<h1>DashBoard Cuentas</h1>
- 	
   </div>
 
   <div class="text-right">
@@ -37,6 +35,10 @@
  		 {%endfor%}
  	    </table>
  	 </div>
+	 <div class="span12"></div>
+	 <div class="text-right">
+		 {{link_to('emarketing', 'class':"btn btn-inverse", "Regresar")}}
+	 </div>
     </div>
 
 {%for all in allAccount%}
@@ -54,8 +56,8 @@
 		</div>
 
 		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
-			<button class="btn btn-primary">Eliminar</button>
+			<button class="btn btn-inverse" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+			<button class="btn btn-danger">Eliminar</button>
 		</div>
 	</form>
 </div>

@@ -13,8 +13,18 @@ try {
 
     //Create a DI
     $di = new Phalcon\DI\FactoryDefault();
-    
-    $di->set('db', function(){
+  
+	$di->set('security2', function(){
+
+		$security2 = new Phalcon\Security();
+
+		//Set the password hashing factor to 12 rounds
+		$security2->setWorkFactor(12);
+
+		return $security2;
+    }, true);
+	
+	$di->set('db', function(){
         return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
             "host" => "localhost",
             "username" => "root",

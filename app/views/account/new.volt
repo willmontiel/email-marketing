@@ -1,8 +1,7 @@
-<fieldset>
-	<legend>
+{{ content() }}
+<div class="row-fluid">
 		<h1>Crear una nueva cuenta</h1>
-	</legend>
-</fieldset>
+</div>
  <div class="span12">
 	{{ content() }}
 	<div class="row-fluid">
@@ -79,7 +78,7 @@
 
       <p>
        {{ submit_button("Registrar", 'class' : "btn btn-success") }}
-	   {{link_to('account', 'class':"btn btn-warning", "Cancelar")}}
+	   {{link_to('account', 'class':"btn btn-inverse", "Cancelar")}}
       </p>
    </form>
    </div>
