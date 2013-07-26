@@ -25,21 +25,32 @@
 				</div>
 			</div>
 			<div class="span4" id="info-contact">
-				<div class="row-fluid" id="total-contacts">
-					<p>{{sdbase.Ctotal}}</p>
-					<p>Contactos</p>
+				<div class="badge-number-dark">
+					<span class="number-huge">{{sdbase.Ctotal}}</span>
+                    <br/>
+					<span class="regular-text">Contactos</span>
 				</div>
-				<div class="row-fluid" id="detalles-contacts">
-					<p>{{sdbase.Ctotal}}</p>
-					<p>Contactos Activos</p>
-					<p>{{sdbase.Ctotal}}</p>
-					<p>Contactos Inactivos</p>
-					<p>{{sdbase.Ctotal}}</p>
-					<p>Contactos Des-suscritos</p>
-					<p>{{sdbase.Ctotal}}</p>
-					<p>Contactos Rebotados</p>
-					<p>{{sdbase.Cspam}}</p>
-					<p>Contactos Spam</p>
+				<div class="badge-number-light">
+					<span class="number-large">{{sdbase.Ctotal}}</span>
+                    <br/>
+					<span class="regular-text">Contactos Activos</span>
+                    <br/>
+					<span class="number-large">{{sdbase.Ctotal}}</span>
+                    <br/>
+                    <span class="regular-text">Contactos Inactivos</span>
+                    <br/>
+					<span class="number-large">{{sdbase.Ctotal}}</span>
+                    <br/>
+                    <span class="regular-text">Contactos Des-suscritos</span>
+                    <br/>
+					<span class="number-large">{{sdbase.Ctotal}}</span>
+                    <br/>
+                    <span class="regular-text">Contactos Rebotados</span>
+                    <br/>
+					<span class="number-large">{{sdbase.Cspam}}</span>
+                    <br/>
+                    <span class="regular-text">Contactos Spam</span>
+                    <br/>
 				</div>
 			</div>
 		</div>
