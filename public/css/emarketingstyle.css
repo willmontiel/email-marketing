@@ -1,0 +1,47 @@
+p {
+    margin: 0px auto;
+    text-align: right;
+}
+
+
+#specific{
+    margin: 0px auto;
+    text-align: center;
+    font-family: "Segoe Script";
+}
+
+#form-signin{
+        
+        background-color: #0077b3;
+	    text-align: right;
+		color: white;
+        height: 460px;
+        width: 450px;
+        border-radius: 8px;
+        padding: 30px;
+}
+
+#form-login{
+        
+        background-color: #0077b3;
+	text-align:center;
+        height: 120px;
+        width: 400px;
+        border-radius: 8px;
+        padding: 30px;
+}
+#caja{
+    background-color: #7ab5d3;
+	text-align:center;
+	padding:5px;
+        border-radius: 8px;
+}
+
+.close{
+	float:right;
+}
+
+.dummy {
+   font-size:12px;
+   padding:5px;
+}
