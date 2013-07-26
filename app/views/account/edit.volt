@@ -1,5 +1,8 @@
-	  
-     {{ form('account/edit', 'id': 'registerAccount', 'method': 'Post') }}
+{{ content() }}
+
+     
+     <form action = "/emarketing/account/edit/{{allAccount.idAccount}}" id="registerAccount" method="post">
+
       <p>
        Nombre de la cuenta: 
 	   {{ editFormAccount.render('companyName') }}
