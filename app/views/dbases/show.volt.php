@@ -1,10 +1,7 @@
-{{ content() }}
+<?php echo $this->getContent(); ?>
 <div class="row-fluid">
     <div class="modal-header">
-        <a class="text-right" href="dbases">Crear Base de Datos</a>
-    </div>
-    <div class="modal-header">
-        <h2>{{sdbase.name}}</h2>
+        <h1><?php echo $sdbase->name; ?></h1>
     </div>
 </div>
 <div class="row-fluid">
@@ -23,22 +20,22 @@
             <tbody>
                 <tr>
                     <td>
-                        {{sdbase.name}}
+                        <?php echo $sdbase->name; ?>
                     </td>
                     <td>
-                        {{sdbase.description}}
+                        <?php echo $sdbase->description; ?>
                     </td>
                     <td>
-                        {{sdbase.descriptionContacts}}
+                        <?php echo $sdbase->descriptionContacts; ?>
                     </td>
                     <td>
-                        {{sdbase.contact}}
+                        <?php echo $sdbase->contact; ?>
                     </td>
                     <td>
-                        {{sdbase.unsubscribed}}
+                        <?php echo $sdbase->unsubscribed; ?>
                     </td>
                     <td>
-                        {{sdbase.bounced}}
+                        <?php echo $sdbase->bounced; ?>
                     </td>
                 </tr>
             </tbody>

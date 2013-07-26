@@ -1,10 +1,7 @@
 {{ content() }}
 <div class="row-fluid">
     <div class="modal-header">
-        <a class="text-right" href="dbases">Crear Base de Datos</a>
-    </div>
-    <div class="modal-header">
-        <h2>{{sdbase.name}}</h2>
+        <h1>{{sdbase.name}}</h1>
     </div>
 </div>
 <div class="row-fluid">
