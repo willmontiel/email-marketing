@@ -7,7 +7,8 @@ class EditAccountForm extends Form
 {
     public function initialize()
     {
-        $this->add(new Text('companyName'));
+        $this->add(new Text ('idAccount'));
+		$this->add(new Text('companyName'));
         $this->add(new Text ('fileSpace'));
         $this->add(new Text ('messageQuota'));
         $this->add(new Select("modeUse", array(

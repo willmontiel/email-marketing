@@ -4,10 +4,11 @@ class AccountController extends \Phalcon\Mvc\Controller
     public function indexAction()
 	{
 		$account= Account::find();
-		$this->view->setVar("allAccount", $account);
-//		$this->view->setVas("allUser", User::find());
+		$this->view->setVar("allAccount", $account);	
+		
+//		$this->view->setVar("dbases", $this->user->account->dbases);
 	}
-
+	
 	public function newAction()
     {
         $account = new Account();
@@ -71,33 +72,48 @@ class AccountController extends \Phalcon\Mvc\Controller
      
    public function editAction($id)
    {
-	    
+	    $account = Account::findFirstByIdAccount($id);
 	    //Recuperar la informacion de la BD que se desea SI existe
-		$db = $this->findAndValidateDbaseAccount($id);
-		if ($db !== null) {
-            $this->view->setVar("edbase", $db);
+		if ($account !== null) {
+            $this->view->setVar("allAccount", $account);
 			//Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
-			$editform = new EditForm($db);
+			$editform = new EditAccountForm($account);
 
 			if ($this->request->isPost()) {   
-				$editform->bind($this->request->getPost(), $db);
+				$editform->bind($this->request->getPost(), $account);
 
-				if ($editform->isValid() && $db->save()) {
+				if ($editform->isValid() && $account->save()) {
 					$this->flash->success('Base de Datos Actualizada Exitosamente!');
-					$this->dispatcher->forward(
-						array(
-							'controller' => 'dbases',
-							'action' => 'show'
-						)
-					);
+					$this->response->redirect("account");
 				}
 				else {
-					foreach ($db->getMessages() as $msg) {
+					foreach ($account->getMessages() as $msg) {
 						$this->flash->error($msg);
 					}
 				}
 			}
-			$this->view->editform = $editform;
+			$this->view->editFormAccount = $editform;
         } 
    }
+   
+   public function deleteAction($id)
+   {
+         $account = Account::findFirstByIdAccount($id);
+		 
+         if ($account !== null) {
+			if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
+				$account->delete();
+				$this->flashSession->success('Base de Datos Eliminada!');
+				$this->response->redirect("account");
+			} 
+			else {
+				$this->flash->error('Escriba la palabra "DELETE" correctamente');
+//				$this->view->disable();
+//				return $this->response->redirect('account');
+			}
+		}
+
+     }
+
+
  }  
