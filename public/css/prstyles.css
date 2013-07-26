@@ -41,3 +41,7 @@
 .text-red-color {
 	color: red;
 }
+.return-upper-right-corner {
+	line-height: 150px;
+	text-align: center;
+}

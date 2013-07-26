@@ -1,30 +1,30 @@
 {{ content() }}
 <div class="row-fluid">
-	<div class="row-fluid" id="top-info">
-		<div class="row-fluid" id="nombre-bd">
+	<div class="row-fluid">
+		<div class="row-fluid">
 			<div class="span8">
 				<div class="modal-header">
 					<h1>{{sdbase.name}}</h1>
 				</div>
 			</div>
-			<div class="span4">
-				<a href="/emarketing/dbases"><h3>Regresar</h3></a>
+			<div class="span4" >
+				<span class="return-upper-right-corner"><a href="/emarketing/dbases"><h3>Regresar</h3></a></span>
 			</div>
 		</div>
 
-		<div class="row-fluid" id="info-bd">
-			<div class="span8" id="descripTotal-bd">
-				<div class="row-fluid" id="descrip-db">
+		<div class="row-fluid">
+			<div class="span8">
+				<div class="row-fluid">
 					Descripcion: {{sdbase.description}}
 				</div>
-				<div class="row-fluid" id="descrip-contact">
+				<div class="row-fluid">
 					Descripcion de Contactos: {{sdbase.Cdescription}}
 				</div>
-				<div class="row-fluid" id="fecha-add">
+				<div class="row-fluid">
 					Fecha
 				</div>
 			</div>
-			<div class="span4" id="info-contact">
+			<div class="span4">
 				<div class="badge-number-dark">
 					<span class="number-huge">{{ sdbase.Ctotal|numberf }}</span>
                     <br/>
@@ -56,10 +56,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
 <div class="row-fluid">
     <div class="span12">
         <table class="table table-hover">

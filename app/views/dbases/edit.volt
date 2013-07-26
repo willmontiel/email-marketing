@@ -31,7 +31,8 @@
         </div>
     </div>
     <div class="row-fluid">
-       {{submit_button("Guardar", 'class' : "btn btn-success")}}
+		{{submit_button("Guardar", 'class' : "btn btn-success")}}
+		{{link_to('dbases', 'class':"btn btn-inverse", "Cancelar")}}
     </div>
     </form>
 </div>
