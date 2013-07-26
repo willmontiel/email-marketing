@@ -73,11 +73,11 @@ class NewAccountForm extends Form
 		
         $this->add(new Select("modeUse", array(
             '1' => 'Por Contacto',
-            '0' => 'Envio',
+            '2' => 'Envio',
         )));
         $this->add(new Select("modeAccounting", array(
             '1' => 'Prepago',
-            '0' => 'Postpago',
+            '2' => 'Postpago',
         )));
     }
 }

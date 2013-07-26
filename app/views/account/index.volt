@@ -14,8 +14,8 @@
  				<th>Id</th>
  				<th>Nombre de la cuenta</th>
  				<th>Modo de uso</th>
- 				<th>Espacio para archivos</th>
- 				<th>Cuota de mensajes</th>
+ 				<th>Cantidad de trafico de archivos (Mb):</th>
+ 				<th>Limite de mensajes/contactos</th>
  				<th>Modo de pago</th>
  			</tr>
  		 {%for all in allAccount%}
