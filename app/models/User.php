@@ -14,6 +14,7 @@ class User extends \Phalcon\Mvc\Model
         $this->belongsTo("idAccount", "Account", "idAccount", array(
             "foreignKey" => true,
         ));
+		$this->useDynamicUpdate(true);
     }
     
     public function validation()

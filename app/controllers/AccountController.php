@@ -40,8 +40,7 @@ class AccountController extends \Phalcon\Mvc\Controller
 					}
 					else {
 					$this->db->commit();
-					$this->flash->success('Se ha creado la cuenta exitosamente');
-					
+					$this->flash->success('Se ha creado la cuenta exitosamente');					
 					}
 			   }
 			   else{
@@ -72,32 +71,97 @@ class AccountController extends \Phalcon\Mvc\Controller
    public function editAction($id)
    {
 	    
-	    //Recuperar la informacion de la BD que se desea SI existe
-		$db = $this->findAndValidateDbaseAccount($id);
-		if ($db !== null) {
-            $this->view->setVar("edbase", $db);
-			//Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
-			$editform = new EditForm($db);
+	    $account = Account::findFirstByIdAccount($id);
+		if ($account !== null) {
+            $this->view->setVar("allAccount", $account);
+			$editform = new EditAccountForm($account);
 
-			if ($this->request->isPost()) {   
-				$editform->bind($this->request->getPost(), $db);
-
-				if ($editform->isValid() && $db->save()) {
-					$this->flash->success('Base de Datos Actualizada Exitosamente!');
-					$this->dispatcher->forward(
-						array(
-							'controller' => 'dbases',
-							'action' => 'show'
-						)
-					);
-				}
-				else {
-					foreach ($db->getMessages() as $msg) {
+ 			if ($this->request->isPost()) {   
+					$editform->bind($this->request->getPost(), $account);
+					$this->db->begin();
+								
+					if (!$editform->isValid() OR !$account->save()) {
+						$this->db->rollback();
+						foreach ($account->getMessages() as $msg) {
 						$this->flash->error($msg);
+						}
 					}
-				}
-			}
-			$this->view->editform = $editform;
+					else {
+					$this->db->commit();
+					$this->flash->success('Se ha creado la cuenta exitosamente');
+					$this->response->redirect("account");
+					}
+
+ 			}
+		$this->view->editFormAccount = $editform;
+
         } 
-   }
+    }
+
+	public function deleteAction($id)
+    {
+      $account = Account::findFirstByIdAccount($id);
+	  $user = User::findFirstByIdAccount($id);
+
+         if ($account !== null) {
+			if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
+				$account->delete();
+				$user->deleted();
+				$this->flashSession->success('Base de Datos Eliminada!');
+				$this->response->redirect("account");
+				} 
+
+			else {
+				$this->flash->error('Escriba la palabra "DELETE" correctamente');
+
+//				$this->view->disable();
+
+//				return $this->response->redirect('account');
+			}
+       }
+
+     }
+
+
+//	public function deleteAction($id)
+//	{
+//		$account = Account::findFirstByIdAccount($id);
+//		$user = User::findFirstByIdAccount($id);
+//        
+//		if ($account !== null) {
+//			if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
+//				$this->db->begin();
+//			
+//				if (!$user->delete()) {
+//						$this->db->rollback();
+//						foreach ($user->getMessages() as $msg) {
+//						$this->flash->error($msg);
+//						}
+//						
+//						foreach ($account->getMessages() as $msg) {
+//						$this->flash->error($msg);
+//						}
+//					}
+//					else {
+//					$account->delete();
+//					$this->db->commit();
+//					$this->flashSession->success('Base de Datos Eliminada!');
+//				    $this->response->redirect("account");					
+//					}
+//
+//			} 
+//			else {
+//			$this->flash->error('Escriba la palabra "DELETE" correctamente');
+//
+////				$this->view->disable();
+//
+////				return $this->response->redirect('account');
+//
+//			}
+//		}
+		
+
+//	}
+
+
  }  

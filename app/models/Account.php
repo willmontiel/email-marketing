@@ -10,6 +10,7 @@ class Account extends \Phalcon\Mvc\Model
     {
         $this->hasMany("idAccount", "User", "idAccount");
 		$this->hasMany("idAccount", "Dbases", "idAccount");
+		$this->useDynamicUpdate(true);
     }
     
     public function validation()
