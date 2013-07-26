@@ -37,7 +37,7 @@ class DbasesController extends \Phalcon\Mvc\Controller
         $this->view->setVar("dbases", $this->user->account->dbases);
     }
     
-    public function createAction()
+    public function newAction()
     {
         //Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
         $db = new Dbases();

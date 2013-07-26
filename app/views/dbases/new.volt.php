@@ -1,16 +1,16 @@
-{{ content() }}
+<?php echo $this->getContent(); ?>
 <div class="row-fluid">
     <div class="modal-header">
-        <h1>{{edbase.name}}</h1>
+        <h1>Nueva Base de Datos</h1>
     </div>
     <div class="row-fluid">
-        <form action = "/emarketing/dbases/edit/{{edbase.idDbases}}", method="post">
+        <form action = "/eMarketing/dbases/new", method="post">
         <div class="row-fluid">
             <div class="span3">
                 <label for="name">Nombre</label>
             </div>
             <div class="span4">
-                {{editform.render("name")}}
+                <?php echo $editform->render('name'); ?>
             </div>
         </div>
         <div class="row-fluid">
@@ -18,7 +18,7 @@
                 <label for="description">Descripcion</label>                
             </div>
             <div class="span4">
-                {{editform.render("description")}}
+                <?php echo $editform->render('description'); ?>
             </div>
         </div>
         <div class="row-fluid">
@@ -26,12 +26,12 @@
                 <label for="descriptionContacts">Descripcion de los Contactos</label>
             </div>
             <div class="span4">
-                {{editform.render("descriptionContacts")}}
+                <?php echo $editform->render('descriptionContacts'); ?>
             </div>
         </div>
     </div>
     <div class="row-fluid">
-       {{submit_button("Guardar", 'class' : "btn btn-success")}}
+       <?php echo Phalcon\Tag::submitButton(array('Guardar', 'class' => 'btn btn-success')); ?>
     </div>
     </form>
 </div>

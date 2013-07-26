@@ -7,7 +7,7 @@
         <form action = "/eMarketing/dbases/edit/<?php echo $edbase->idDbases; ?>", method="post">
         <div class="row-fluid">
             <div class="span3">
-                <span>Nombre</span>
+                <label for="name">Nombre</label>
             </div>
             <div class="span4">
                 <?php echo $editform->render('name'); ?>
@@ -15,7 +15,7 @@
         </div>
         <div class="row-fluid">
             <div class="span3">
-                <span>Descripcion</span>                
+                <label for="description">Descripcion</label>                
             </div>
             <div class="span4">
                 <?php echo $editform->render('description'); ?>
@@ -23,7 +23,7 @@
         </div>
         <div class="row-fluid">
             <div class="span3">
-                <span>Descripcion de los Contactos</span>
+                <label for="descriptionContacts">Descripcion de los Contactos</label>
             </div>
             <div class="span4">
                 <?php echo $editform->render('descriptionContacts'); ?>

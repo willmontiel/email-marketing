@@ -1,10 +1,10 @@
 {{ content() }}
 <div class="row-fluid">
     <div class="modal-header">
-        <h1>{{edbase.name}}</h1>
+        <h1>Nueva Base de Datos</h1>
     </div>
     <div class="row-fluid">
-        <form action = "/emarketing/dbases/edit/{{edbase.idDbases}}", method="post">
+        <form action = "/emarketing/dbases/new", method="post">
         <div class="row-fluid">
             <div class="span3">
                 <label for="name">Nombre</label>

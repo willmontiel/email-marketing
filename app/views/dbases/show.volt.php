@@ -1,47 +1,54 @@
 <?php echo $this->getContent(); ?>
 <div class="row-fluid">
-    <div class="modal-header">
-        <h1><?php echo $sdbase->name; ?></h1>
-    </div>
+	<div class="row-fluid" id="top-info">
+		<div class="row-fluid" id="nombre-bd">
+			<div class="span8">
+				<div class="modal-header">
+					<h1><?php echo $sdbase->name; ?></h1>
+				</div>
+			</div>
+			<div class="span4">
+				<a href="/emarketing/dbases"><h3>Regresar</h3></a>
+			</div>
+		</div>
+
+		<div class="row-fluid" id="info-bd">
+			<div class="span8" id="descripTotal-bd">
+				<div class="row-fluid" id="descrip-db">
+					Descripcion: <?php echo $sdbase->description; ?>
+				</div>
+				<div class="row-fluid" id="descrip-contact">
+					Descripcion de Contactos: <?php echo $sdbase->Cdescription; ?>
+				</div>
+				<div class="row-fluid" id="fecha-add">
+					Fecha
+				</div>
+			</div>
+			<div class="span4" id="info-contact">
+				<div class="row-fluid" id="total-contacts">
+					<p><?php echo $sdbase->Ctotal; ?></p>
+					<p>Contactos</p>
+				</div>
+				<div class="row-fluid" id="detalles-contacts">
+					<p><?php echo $sdbase->Ctotal; ?></p>
+					<p>Contactos Activos</p>
+					<p><?php echo $sdbase->Ctotal; ?></p>
+					<p>Contactos Inactivos</p>
+					<p><?php echo $sdbase->Ctotal; ?></p>
+					<p>Contactos Des-suscritos</p>
+					<p><?php echo $sdbase->Ctotal; ?></p>
+					<p>Contactos Rebotados</p>
+					<p><?php echo $sdbase->Cspam; ?></p>
+					<p>Contactos Spam</p>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<div class="row-fluid">
-    <div class="span12">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th><span>Nombre</span></td>
-                    <th><span>Descripcion</span></th>
-                    <th><span>Descripcion Contactos</span></th>
-                    <th><span>Contactos</span></th>
-                    <th><span>Des-suscritos</span></th>
-                    <th><span>Rebotados</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <?php echo $sdbase->name; ?>
-                    </td>
-                    <td>
-                        <?php echo $sdbase->description; ?>
-                    </td>
-                    <td>
-                        <?php echo $sdbase->descriptionContacts; ?>
-                    </td>
-                    <td>
-                        <?php echo $sdbase->contact; ?>
-                    </td>
-                    <td>
-                        <?php echo $sdbase->unsubscribed; ?>
-                    </td>
-                    <td>
-                        <?php echo $sdbase->bounced; ?>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+
+
+
+
 <div class="row-fluid">
     <div class="span12">
         <table class="table table-hover">

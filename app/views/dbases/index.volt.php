@@ -3,7 +3,7 @@
         <div class="row-fluid">
             <div class="modal-header">
                 <h1>Bases de Datos</h1>
-              <div class="text-right"> <a href="dbases/create"><h5>Crear Base de Datos</h5></a></div>
+              <div class="text-right"> <a href="dbases/new"><h5>Crear Base de Datos</h5></a></div>
             </div>
         </div>
         <div class="row-fluid">
@@ -19,9 +19,11 @@
                     </div>
                     <div class="span3">
                         <dl>
-                            <dd><?php echo $dbase->contact; ?> Contactos</dd>
-                            <dd><?php echo $dbase->unsubscribed; ?> Desuscritos</dd>
-                            <dd><?php echo $dbase->bounced; ?> Bounced</dd>
+                            <dd><?php echo $dbase->Cactive; ?> Activos</dd>
+							<dd><?php echo $dbase->Cinactive; ?> Inactivos</dd>
+                            <dd><?php echo $dbase->Cunsubscribed; ?> Des-suscritos</dd>
+                            <dd><?php echo $dbase->Cbounced; ?> Rebotados</dd>
+							<dd><?php echo $dbase->Cspam; ?> Spam</dd>
                         </dl>
                     </div>
                     <div class="span2">
@@ -41,7 +43,7 @@
     <h3>Seguro que Desea Eliminar</h3>
   </div>
   <div class="modal-body">
-    <form action = "/eMarketing/dbases/delete/<?php echo $dbase->idDbases; ?>", method="post">
+    <form action = "/emarketing/dbases/delete/<?php echo $dbase->idDbases; ?>", method="post">
       <p>Para eliminar escriba la palabra "DELETE"</p>
       <?php echo Phalcon\Tag::textField(array('delete')); ?>
   </div>
