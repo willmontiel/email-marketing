@@ -9,6 +9,8 @@
 	</div>
 </div>
 <div class="row-fluid">
+	
+<script type="text/x-handlebars">	
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="navbar">
@@ -23,6 +25,32 @@
 			</div>
 		</div>
 	</div>
+	{{outlet}}
+</script>
+	<script type="text/x-handlebars" id="campos">
+	<div class="row-fluid">
+		<div class="span12">
+			<table>
+				<thead>
+					<tr>
+						<td>
+							Nombre
+						</td>
+						<td>
+							Tipo
+						</td>
+						<td>
+							Requerido
+						</td>
+						<td>
+							Eliminar
+						</td>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+	</script>
 	{%for dbase in dbases%}
 			<div class="span6" >
 				<div class="row-fluid break-word">

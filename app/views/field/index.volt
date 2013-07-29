@@ -14,7 +14,7 @@
 						Requerido
 					</td>
 					<td>
-						Tipo
+						Eliminar
 					</td>
 				</tr>
 			</thead>

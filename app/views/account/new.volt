@@ -1,3 +1,6 @@
+{% extends "templates/index.volt" %}
+
+{% block content %}
 <div class="row-fluid">
 		<h1>Crear una nueva cuenta</h1>
 </div>
@@ -82,3 +85,4 @@
    </form>
    </div>
   </div>  
+  {%endblock%}
