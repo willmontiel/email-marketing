@@ -14,7 +14,7 @@ class EditForm extends Form
         $this->add(new Text('description', array(
         'maxlength' => 150          
         )));
-        $this->add(new Text('descriptionContacts', array(
+        $this->add(new Text('Cdescription', array(
         'maxlength' => 150      
         )));
     }

@@ -23,10 +23,10 @@
         </div>
         <div class="row-fluid">
             <div class="span3">
-                <label for="descriptionContacts">Descripcion de los Contactos</label>
+                <label for="Cdescription">Descripcion de los Contactos</label>
             </div>
             <div class="span4">
-                {{editform.render("descriptionContacts")}}
+                {{editform.render("Cdescription")}}
             </div>
         </div>
     </div>

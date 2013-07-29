@@ -7,6 +7,20 @@
 	</div>
 </div>
 <div class="row-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="navbar">
+				<ul class="nav-tabs">
+					<li class="active"><a href="#">General</a></li>
+					<li><a href="#">Campos</a></li>
+					<li><a href="#">Listas</a></li>
+					<li><a href="#">Segmentos</a></li>
+					<li><a href="#">Estadisticas</a></li>
+					<li><a href="#">Formularios</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 	{%for dbase in dbases%}
 		<div class="row-fluid">
 			<div class="span6" >
