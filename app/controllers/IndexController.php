@@ -4,8 +4,8 @@ class IndexController extends \Phalcon\Mvc\Controller
 {
     public function indexAction()
     {
-        
-        $name=$this->session->get("user-name", $u); 
-
+        $nom="prueba1";
+        $this->session->set("user-name", $nom);
+		
     }
 }

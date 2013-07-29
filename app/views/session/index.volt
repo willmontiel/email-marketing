@@ -25,7 +25,7 @@
    </p>
   
    <p>
-   {{ submit_button("Ingresar", 'class' : "btn btn-success") }}
+   {{ submit_button('Ingresar', 'class':"btn btn-inverse dropdown-toggle", 'data-toggle':"dropdown") }}
    {{ check_field('online') }} Recuerdame
    </p>
    </form>

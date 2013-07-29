@@ -3,7 +3,7 @@ use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Text,
     Phalcon\Forms\Element\Select;
 
-class DbasesController extends \Phalcon\Mvc\Controller
+class DbaseController extends \Phalcon\Mvc\Controller
 {
 	protected $user;
 	
@@ -16,14 +16,14 @@ class DbasesController extends \Phalcon\Mvc\Controller
 
 	protected function findAndValidateDbaseAccount($id)
 	{
-		if ($db = Dbases::findFirstByIdDbases($id)) {
+		if ($db = Dbase::findFirstByIdDbase($id)) {
 			if ($this->user->account == $db->account) {
                 return $db;
             }
         }  
 		$this->dispatcher->forward(
 			array(
-				'controller' => 'dbases',
+				'controller' => 'dbase',
 				'action' => 'restricted'
 			)
 		);
@@ -34,13 +34,13 @@ class DbasesController extends \Phalcon\Mvc\Controller
     {
 
 		//Recuperar la informacion de la BD que se desea
-        $this->view->setVar("dbases", $this->user->account->dbases);
+        $this->view->setVar("dbases", $this->user->account->dbase);
     }
     
     public function newAction()
     {
-        //Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
-        $db = new Dbases();
+        //Instanciar el formulario y Relacionarlo con los atributos del Model Dbase
+        $db = new Dbase();
         $db->account = $this->user->account;
         $editform = new EditForm($db);
 
@@ -51,9 +51,9 @@ class DbasesController extends \Phalcon\Mvc\Controller
                 $this->flash->success('Base de Datos Creada Exitosamente!');
                 $this->dispatcher->forward(
                     array(
-                        'controller' => 'dbases',
+                        'controller' => 'dbase',
                         'action' => 'show',
-                        'params' => array($db->idDbases)
+                        'params' => array($db->idDbase)
                     )
                 );
             }
@@ -81,7 +81,7 @@ class DbasesController extends \Phalcon\Mvc\Controller
 		$db = $this->findAndValidateDbaseAccount($id);
 		if ($db !== null) {
             $this->view->setVar("edbase", $db);
-			//Instanciar el formulario y Relacionarlo con los atributos del Model Dbases
+			//Instanciar el formulario y Relacionarlo con los atributos del Model Dbase
 			$editform = new EditForm($db);
 
 			if ($this->request->isPost()) {   
@@ -91,7 +91,7 @@ class DbasesController extends \Phalcon\Mvc\Controller
 					$this->flash->success('Base de Datos Actualizada Exitosamente!');
 					$this->dispatcher->forward(
 						array(
-							'controller' => 'dbases',
+							'controller' => 'dbase',
 							'action' => 'show'
 						)
 					);
@@ -115,11 +115,11 @@ class DbasesController extends \Phalcon\Mvc\Controller
 			if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
 				$db->delete();
 				$this->flashSession->success('Base de Datos Eliminada!');
-				$this->response->redirect("dbases");
+				$this->response->redirect("dbase");
 			} else {
 				$this->flashSession->error('Escriba la palabra "DELETE" correctamente');
 				$this->view->disable();
-				return $this->response->redirect('dbases');
+				return $this->response->redirect('dbase');
 			}
 		}
     }
