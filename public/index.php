@@ -119,7 +119,7 @@ try {
 	
 	// Grabar en LOG
 	// Archivo de log
-	$logger = new \Phalcon\Logger\Adapter\File("app/logs/debug.log");
+	$logger = new \Phalcon\Logger\Adapter\File("../app/logs/debug.log");
 	
 	$profiles = $di->get('profiler')->getProfiles();
 	

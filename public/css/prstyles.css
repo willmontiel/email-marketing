@@ -45,3 +45,6 @@
 	line-height: 150px;
 	text-align: center;
 }
+.break-word {
+	word-wrap: break-word;
+}
