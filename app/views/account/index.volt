@@ -1,4 +1,8 @@
- {{ content() }} 
+{% extends "templates/index.volt" %}
+
+{% block content %}
+<div class="container-fluid"> 
+{{ content() }} 
    <div class="row-fluid">
  		<h1>DashBoard Cuentas</h1>
   </div>
@@ -17,6 +21,7 @@
  				<th>Cantidad de trafico de archivos (Mb):</th>
  				<th>Limite de mensajes/contactos</th>
  				<th>Modo de pago</th>
+				<th></th>
  			</tr>
  		 {%for all in allAccount%}
  			<tr>
@@ -62,3 +67,5 @@
 	</form>
 </div>
 {%endfor%}
+</div>
+{% endblock %}

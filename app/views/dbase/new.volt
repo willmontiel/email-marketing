@@ -1,3 +1,6 @@
+{% extends "templates/index.volt" %}
+
+{% block content %}
 {{ content() }}
 <div class="row-fluid">
     <div class="row-fluid">
@@ -6,9 +9,13 @@
 				<h1>Nueva Base de Datos</h1>
 			</div>
 		</div>
+		
 		<div class="span4">
 			<span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
 		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span12"></div>
 	</div>
     <div class="row-fluid">
         <form action = "/emarketing/dbase/new", method="post">
@@ -43,3 +50,4 @@
     </div>
     </form>
 </div>
+{% endblock %}

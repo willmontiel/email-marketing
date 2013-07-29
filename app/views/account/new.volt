@@ -1,4 +1,3 @@
-{{ content() }}
 <div class="row-fluid">
 		<h1>Crear una nueva cuenta</h1>
 </div>
