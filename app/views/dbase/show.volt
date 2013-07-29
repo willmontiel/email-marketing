@@ -8,7 +8,7 @@
 				</div>
 			</div>
 			<div class="span4" >
-				<span class="return-upper-right-corner"><a href="/emarketing/dbases"><h3>Regresar</h3></a></span>
+				<span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
 			</div>
 		</div>
 

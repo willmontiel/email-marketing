@@ -1,10 +1,17 @@
 {{ content() }}
 <div class="row-fluid">
-    <div class="modal-header">
-        <h1>{{edbase.name}}</h1>
-    </div>
     <div class="row-fluid">
-        <form action = "/emarketing/dbases/edit/{{edbase.idDbases}}", method="post">
+		<div class="span8">
+			<div class="modal-header">
+				<h1>Nueva Base de Datos</h1>
+			</div>
+		</div>
+		<div class="span4">
+			<span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
+		</div>
+	</div>
+    <div class="row-fluid">
+        <form action = "/emarketing/dbase/new", method="post">
         <div class="row-fluid">
             <div class="span3">
                 <label for="name">Nombre</label>
@@ -32,7 +39,7 @@
     </div>
     <div class="row-fluid">
 		{{submit_button("Guardar", 'class' : "btn btn-success")}}
-		{{link_to('dbases', 'class':"btn btn-inverse", "Cancelar")}}
+		{{link_to('dbase', 'class':"btn btn-inverse", "Cancelar")}}
     </div>
     </form>
 </div>

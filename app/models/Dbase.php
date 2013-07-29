@@ -5,7 +5,7 @@ use Phalcon\Mvc\Model\Validator\PresenceOf,
     Phalcon\Mvc\Model\Validator\Identical,
     Phalcon\Mvc\Controller;
 
-class Dbases extends \Phalcon\Mvc\Model
+class Dbase extends \Phalcon\Mvc\Model
 {
 
     public $idAccount;
