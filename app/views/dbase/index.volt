@@ -1,4 +1,6 @@
-{{ content() }}
+{% extends "templates/index.volt" %}
+
+{% block content %}
 <div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
 <div class="row-fluid">
 	<div class="modal-header">
@@ -8,7 +10,6 @@
 </div>
 <div class="row-fluid">
 	{%for dbase in dbases%}
-		<div class="row-fluid">
 			<div class="span6" >
 				<div class="row-fluid break-word">
 					<h3><a href="dbase/show/{{dbase.idDbase}}">{{dbase.name}}</a></h3>
@@ -66,7 +67,6 @@
 					<dd><a href="#">Agregar Contacto</a></dd>
 				</dl>
 			</div>
-		</div>
 	{%endfor%}
  </div>
 		
@@ -88,4 +88,4 @@
     </form>
 </div>
 {%endfor%}
-    
+{% endblock %}

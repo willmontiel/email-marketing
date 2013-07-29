@@ -1,3 +1,6 @@
+{% extends "templates/index.volt" %}
+
+{% block content %}
 {{ content() }}
 <div class="row-fluid">
 	<div class="row-fluid">
@@ -79,3 +82,4 @@
     </div>    
 </div>
 
+{% endblock %}

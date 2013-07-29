@@ -50,33 +50,33 @@
         </style>
     </head>
     <body>
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span3">
-                <a href="/emarketing/">{{ image('src': '/images/gorilla.jpg') }}<a>
-            <div class="row-fluid">
-                <ul class="nav nav-list text-center">
-                    <li>
-                        <a href="/emarketing/dbases"><label>Contactos</label></a>
-                    </li>
-                    <li>
-                        <a href="#"><label>Campañas</label></a>
-                    </li>
-                    <li>
-                        <a href="#"><label>Autorespuestas</label></a>
-                    </li>
-                    <li>
-                        <a href="#"><label>Estadisticas</label></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="span9">
-            {{ content() }}
-        </div>
-    </div>
-</div>
-    
-
+			<div class="container-fluid">
+					<div class="row-fluid">
+						<div class="span3">
+								<a href="/emarketing/">{{ image('src': '/images/gorilla.jpg') }}<a>
+							<div class="row-fluid">
+								<ul class="nav nav-list text-center">
+									<li>
+										<a href="/emarketing/dbases"><label>Contactos</label></a>
+									</li>
+									<li>
+										<a href="#"><label>Campañas</label></a>
+									</li>
+									<li>
+										<a href="#"><label>Autorespuestas</label></a>
+									</li>
+									<li>
+										<a href="#"><label>Estadisticas</label></a>
+									</li>
+								</ul>
+									
+							</div>
+						</div>
+						<div class="span9">
+							{{ content() }}
+							{% block content %}{% endblock %}
+						</div>		
+					</div>
+				</div>	
     </body>
 </html>
