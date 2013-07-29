@@ -23,14 +23,40 @@ try {
 
 		return $security2;
     }, true);
+
+	// Profiler para hacer seguimiento de tiempos de ejecucion
+	$di->set('profiler', function(){
+		return new \Phalcon\Db\Profiler();
+	}, true);	
 	
-	$di->set('db', function(){
-        return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+	// Conexion a la base de datos
+	$di->set('db', function() use ($di) {
+		// Events Manager para la base de datos
+		$eventsManager = new \Phalcon\Events\Manager();
+		
+		// Profiler
+		$profiler = $di->get('profiler');
+		
+		$eventsManager->attach('db', function ($event, $connection) use ($profiler) {
+			if ($event->getType() == 'beforeQuery') {
+				$profiler->startProfile($connection->getSQLStatement());
+			}
+			else if ($event->getType() == 'afterQuery') {
+				$profiler->stopProfile();
+			}
+		});
+		
+        $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
             "host" => "localhost",
             "username" => "root",
             "password" => "",
             "dbname" => "emarketing_db"
         ));
+		
+		$connection->setEventsManager($eventsManager);
+		
+		return $connection;
+		
     });
 
     $di->set('url', function() {
@@ -90,8 +116,27 @@ try {
     $application = new \Phalcon\Mvc\Application($di);
 
     echo $application->handle()->getContent();
+	
+	// Grabar en LOG
+	// Archivo de log
+	$logger = new \Phalcon\Logger\Adapter\File("app/logs/debug.log");
+	
+	$profiles = $di->get('profiler')->getProfiles();
+	
+	$logger->log("==================== Application Profiling Information ========================", \Phalcon\Logger::INFO);
+	foreach ($profiles as $profile) {
+		$str = '******************************************************' . PHP_EOL .
+			   \sprintf('SQL Statement: [%s]', $profile->getSQLStatement()) . PHP_EOL .
+			   \sprintf('Start time: [%d]', $profile->getInitialTime()) . PHP_EOL .
+			   \sprintf('End time: [%d]', $profile->getFinalTime()) . PHP_EOL .
+			   \sprintf('Total elapsed time: [%f]', $profile->getTotalElapsedSeconds()) . PHP_EOL .
+			   '******************************************************';
+				
+		$logger->log($str, \Phalcon\Logger::INFO);
+	}
+	$logger->log("==================== Application Profiling Information End ====================", \Phalcon\Logger::INFO);
+
 
 } catch(\Phalcon\Exception $e) {
      echo "PhalconException: ", $e->getMessage();
 }
-?>
