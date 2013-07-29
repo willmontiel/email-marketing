@@ -11,7 +11,7 @@
 		<div class="row-fluid">
 			<div class="span6" >
 				<div class="row-fluid">
-					<h3><a href="dbases/show/{{dbase.idDbases}}">{{dbase.name}}</a></h3>
+					<h3><a href="dbases/show/{{dbase.idDbase}}">{{dbase.name}}</a></h3>
 					<span>{{dbase.description}}</span>
 				</div>
 				<div class="row-fluid">

@@ -10,35 +10,39 @@ class SessionController extends \Phalcon\Mvc\Controller
 
     public function loginAction()
     {
-        if ($this->request->isPost()) 
+		if ($this->request->isPost()) 
         {
-            
-         $user = $this->request->getPost("username");
-         $pass = $this->request->getPost("pass");
-         
-         $valido = User::findFirst("username='$user' AND password='$pass' OR email='$user' AND password='$pass'");
-         
-         if ($valido != false) 
-             {
-                
-                $u=$valido->user;
-                $this->session->set("user-name", $u);
+			$login = $this->request->getPost("username");
+			$password = $this->request->getPost("pass");
+		 
+			$user = User::findFirst(array(
+				"username = ?0",
+				"bind" => array($login)
+			));
+			
+			
+			 if ($user) {
+				if ($this->security2->checkHash($password, $user->password)) {
+                //The password is valid
+                $this->session->set("user-name", $login);
                 
                 $this->dispatcher->forward(array(
-                "controller" => "index",
+                "controller" => "dbases",
                 "action" => "index"
                 ));
-            }
+				}
+			}
             
-          else 
-             {
+			else 
+            {
                 $this->flash->error("Password o Usuario Incorrecto, Por favor intenta de nuevo");
-		$this->dispatcher->forward(array(
-                'controller' => 'session',
-                'action' => 'index'
-		));
-	        return false;
-            }
+				echo $pass2;
+				$this->dispatcher->forward(array(
+					'controller' => 'session',
+					'action' => 'index'
+				));
+				return false;
+			}
       
          
          
