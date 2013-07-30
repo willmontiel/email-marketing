@@ -34,25 +34,34 @@
 			<div class="text-center">
 			
 				{{ content() }}
+					
+				<div class="login-form">
+					{{ form('session/login', 'id': 'sessionlogin') }}
 
-				{{ form('session/login', 'id': 'sessionlogin') }}
+						<p>   
+							<strong>Usuario:</strong>
+							<div class="control-group">
+								{{ text_field("username", 'type': "text", 'class': "login-form", 'required': "required", 'autofocus': "autofocus", 'placeholder': "Nombre de Usuario" ) }}
+								<label class="login-field-icon fui-user" for="username"></label>
+							</div>
+						</p>
 
-					<p>   
-						<strong>Usuario:</strong>
-						{{ text_field("username", 'type': "text", 'required': "required", 'autofocus': "autofocus", 'placeholder': "Nombre de Usuario o E-mail") }}
-					</p>
+						<p> 
+							<strong>Contraseña:</strong>
+							<div class="control-group">
+								{{ password_field('pass', 'type': "email", 'class':"login-form",  'required': "required", 'autofocus': "autofocus", 'placeholder': "Contraseña") }}
+								<label class="login-field-icon fui-lock" for="pass"></label>
+							</div>
+						</p>
 
-					<p> 
-						<strong>Contraseña:</strong>
-						{{ password_field('pass', 'type': "email", 'required': "required", 'autofocus': "autofocus", 'placeholder': "Contraseña") }}
-					</p>
-
-				   <p>
-						{{ submit_button("Ingresar", 'class' : "btn btn-success") }}
-						{{ check_field('online') }} Recuerdame
-					</p>
-				</form>
-			
+						<p>
+							{{ submit_button("Ingresar", 'class' : "btn btn-primary btn-large btn-block") }}
+						</p>
+						<p>
+							{{link_to('', "Perdí mi contraseña")}} {{ check_field('online') }} Recuerdame
+						</p>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
