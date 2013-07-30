@@ -10,7 +10,7 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="text-center">
-				<h1>Mail Gorilla</h1>
+				<h2>Mail Gorilla</h2>
 			</div>
 		</div>
 	</div>
