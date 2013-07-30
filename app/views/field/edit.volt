@@ -1,0 +1,1 @@
+<p>{{view Ember.TextField valueBinding='field.name'}}</p>

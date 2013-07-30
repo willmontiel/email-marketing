@@ -2,19 +2,6 @@
 
 {% block content %}
 {{ content() }}
-<div class="row-fluid">
-	<div class="row-fluid">
-		<div class="row-fluid">
-			<div class="span8">
-				<div class="modal-header">
-					<h1>{{sdbase.name}}</h1>
-				</div>
-			</div>
-			<div class="span4" >
-				<span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
-			</div>
-		</div>
-
 <script type="text/x-handlebars">       
         <div class="row-fluid">
                 <div class="span12">
@@ -32,13 +19,13 @@
 </script>
         
 <script type="text/x-handlebars" id="campos">
-        <div class="row-fluid">
-        <div class="span12">
-                <h4>Campos de la Base de Datos</h4>
-                <p>Esta seccion esta dedicada a la Lectura\n
-                y Edicion de los Campos Personalizados
-                </p>
-        </div>
+<div class="row-fluid">
+	<div class="span12">
+			<h4>Campos de la Base de Datos</h4>
+			<p>Esta seccion esta dedicada a la Lectura\n
+			y Edicion de los Campos Personalizados
+			</p>
+	</div>
 </div>
 <div class="row-fluid add">
 	{{'{{#linkTo "adicionar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Adicionar</a>{{/linkTo}}'}}
@@ -63,26 +50,31 @@
                                 </tr>
                         </thead>
                         <tbody>
+						{%for field in fields%}
                                 <tr>
                                         <td>
-                                                {{field.name}}
+                                                <div class="name" id="name">{{field.name}}</div>
                                         </td>
                                         <td>
                                                 {{field.type}}
                                         </td>
                                         <td>
-                                                {% if(field.required == 'Si')%}
+                                                {% if(field.required === 'Si')%}
 													<input type="checkbox" checked="checked">
 												{%else%}
-													<input type="checkbox" checked="unchecked">
+													<input type="checkbox">
 												{%endif%}
                                         </td>
                                         <td>
-											<div class="demo-icons text-center">
+											<div class="demo-icons">
 												<a href="#"><span class="fui-cross"></span></a>
+											</div>
+											<div class="row-fluid">
+											{{'{{#linkTo "editar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Editar</a>{{/linkTo}}'}}
 											</div>
                                         </td>
                                 </tr>
+							{%endfor%}
                         </tbody>
                 </table>
         </div>
@@ -91,20 +83,6 @@
         {{'{{#linkTo "adicionar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Adicionar</a>{{/linkTo}}'}}
 </div>
  {{ "{{outlet}}" }}
-</script>
-
-<script type="text/x-handlebars" id="adicionar">
-<div class="row-fluid">
-	
-	<div class="span8">
-		Primera Parte
-	</div>
-	
-	<div class="span4">
-		Segunda Parte
-	</div>
-		
-</div>
 </script>
 
 <div class="row-fluid">
@@ -119,7 +97,7 @@
                 </div>
         </div>
         <div id="emberAppContainer"></div>
-        
+
 <script type="text/x-handlebars" id="index">
         <div class="row-fluid">
                 <div class="span8">
@@ -187,4 +165,77 @@
         </div>
 </script>
 
+<script type="text/x-handlebars" id="adicionar">
+<div class="row-fluid">
+	<div class="span8"
+		{{ form('field/new', 'id': 'newField', 'method': 'Post') }}
+			<table class="table table-striped">
+				<tr>
+					<td>
+						Nombre del campo:
+					</td>
+					<td>
+						{{ NewFieldForm.render('name') }}
+					</td>
+
+					<td>
+						Tipo:
+					</td>
+					<td>
+						{{ NewFieldForm.render('type') }}
+					</td>
+
+					<td>
+						<label class="checkbox" for="required">
+							<span class="icons">
+								<span class="first-icon fui-checkbox-unchecked"></span>
+								<span class="second-icon fui-checkbox-checked"></span>
+							</span>
+							{{ NewFieldForm.render('required') }} 
+							Requerido
+						</label>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>	
+</script>
+
+<script type="text/x-handlebars" id="editar">
+<div class="row-fluid">
+	<div class="span8">
+			{{ form('field/new', 'id': 'newField', 'method': 'Post') }}
+			<table class="table table-striped">
+				<tr>
+					<td>
+						Nombre del campo:
+					</td>
+					<td>
+						{{ NewFieldForm.render('name') }}
+					</td>
+
+					<td>
+						Tipo:
+					</td>
+					<td>
+						{{ NewFieldForm.render('type') }}
+					</td>
+
+					<td>
+						<label class="checkbox" for="required">
+							<span class="icons">
+								<span class="first-icon fui-checkbox-unchecked"></span>
+								<span class="second-icon fui-checkbox-checked"></span>
+							</span>
+							{{ NewFieldForm.render('required') }} 
+							Requerido
+						</label>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+</script>
 {% endblock %}
