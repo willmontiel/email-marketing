@@ -82,12 +82,7 @@ try {
         $url->setBaseUri('/emarketing/');
         return $url;
     });
-    //Setting up the view component
-    $di->set('view', function(){
-        $view = new \Phalcon\Mvc\View();
-        $view->setViewsDir('../app/views/');
-        return $view;
-    });
+
     
     //Register Volt as a service
     $di->set('volt', function($view, $di) {
@@ -99,7 +94,9 @@ try {
 		});
 		
         $volt->setOptions(array(
-            "compileAlways" => true
+            "compileAlways" => true,
+			"compiledPath" => "../app/compiled-templates/",
+			"compiledExtension" => ".compiled"
         ));
 
 		return $volt;
