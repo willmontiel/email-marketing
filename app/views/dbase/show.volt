@@ -35,49 +35,54 @@
                 <table class="table table-hover">
                         <thead>
                                 <tr>
-                                        <th>
-                                                Etiqueta
-                                        </th>
-                                        <th>
-                                                Tipo
-                                        </th>
-                                        <th>
-                                                Requerido
-                                        </th>
-										<th>
-												Editar
-										</th>
-                                        <th>
-                                                Eliminar
-                                        </th>
+									<th width="230">
+											Etiqueta
+									</th>
+									<th width="250">
+											Tipo
+									</th>
+									<th>
+											Requerido
+									</th>
+									<th>
+											Accion
+									</th>
                                 </tr>
                         </thead>
                         <tbody>
 						{%for field in fields%}
                                 <tr>
-                                        <td>
-                                                <div class="name" id="name">{{field.name}}</div>
-                                        </td>
-                                        <td>
-                                                {{field.type}}
-                                        </td>
-                                        <td>
-                                                {% if(field.required === 'Si')%}
-													<input type="checkbox" checked="checked">
-												{%else%}
-													<input type="checkbox">
-												{%endif%}
-                                        </td>
-                                        <td>
-											<div class="row-fluid">
+									<td>
+											<div class="name" id="name">{{field.name}}</div>
+									</td>
+									<td>
+											{{field.type}}
+									</td>
+									<td>
+											{% if(field.required === 'Si')%}
+												<label class="checkbox checked" for="required">
+													<span class="icons">
+														<span class="first-icon fui-checkbox-unchecked"></span>
+														<span class="second-icon fui-checkbox-checked"></span>
+													</span>
+												</label>
+											{%else%}
+												<label class="checkbox" for="required">
+													<span class="icons">
+														<span class="first-icon fui-checkbox-unchecked"></span>
+														<span class="second-icon fui-checkbox-checked"></span>
+													</span>
+												</label>
+											{%endif%}
+									</td>
+									<td>
+										<div class="span2">
 											{{'{{#linkTo "editar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Editar</a>{{/linkTo}}'}}
-											</div>
-                                        </td>
-										<td>
-											<div class="demo-icons">
-												<a href="#"><span class="fui-cross"></span></a>
-											</div>
-										</td>
+										</div>
+										<div class="span2">
+											<a href="#">Eliminar</a>
+										</div>
+									</td>
                                 </tr>
 							{%endfor%}
                         </tbody>
