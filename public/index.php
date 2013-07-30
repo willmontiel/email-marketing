@@ -83,6 +83,11 @@ try {
         return $url;
     });
 
+	
+	$di->set('logger', function () {
+		// Archivo de log
+		return new \Phalcon\Logger\Adapter\File("../app/logs/debug.log");
+	});
     
     //Register Volt as a service
     $di->set('volt', function($view, $di) {
@@ -113,7 +118,10 @@ try {
     });
     
     $di->setShared('session', function() {
-        $session = new Phalcon\Session\Adapter\Files();
+        $session = new Phalcon\Session\Adapter\Files(
+				array(
+					'uniqueId' => 'emarketing'
+		));
         $session->start();
         return $session;
     });
@@ -133,9 +141,7 @@ try {
     echo $application->handle()->getContent();
 	
 	// Grabar en LOG
-	// Archivo de log
-	$logger = new \Phalcon\Logger\Adapter\File("../app/logs/debug.log");
-	
+	$logger = $di->get('logger');
 	$profiles = $di->get('profiler')->getProfiles();
 	
 	if (count($profiles) > 0) {
