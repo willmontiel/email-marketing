@@ -138,19 +138,21 @@ try {
 	
 	$profiles = $di->get('profiler')->getProfiles();
 	
-	$logger->log("==================== Application Profiling Information ========================", \Phalcon\Logger::INFO);
-	foreach ($profiles as $profile) {
-		$str = '******************************************************' . PHP_EOL .
-			   \sprintf('SQL Statement: [%s]', $profile->getSQLStatement()) . PHP_EOL .
-			   \sprintf('Start time: [%d]', $profile->getInitialTime()) . PHP_EOL .
-			   \sprintf('End time: [%d]', $profile->getFinalTime()) . PHP_EOL .
-			   \sprintf('Total elapsed time: [%f]', $profile->getTotalElapsedSeconds()) . PHP_EOL .
-			   '******************************************************';
-				
-		$logger->log($str, \Phalcon\Logger::INFO);
-	}
-	$logger->log("==================== Application Profiling Information End ====================", \Phalcon\Logger::INFO);
+	if (count($profiles) > 0) {
+	
+		$logger->log("==================== Application Profiling Information ========================", \Phalcon\Logger::INFO);
+		foreach ($profiles as $profile) {
+			$str = '******************************************************' . PHP_EOL .
+				   \sprintf('SQL Statement: [%s]', $profile->getSQLStatement()) . PHP_EOL .
+				   \sprintf('Start time: [%d]', $profile->getInitialTime()) . PHP_EOL .
+				   \sprintf('End time: [%d]', $profile->getFinalTime()) . PHP_EOL .
+				   \sprintf('Total elapsed time: [%f]', $profile->getTotalElapsedSeconds()) . PHP_EOL .
+				   '******************************************************';
 
+			$logger->log($str, \Phalcon\Logger::INFO);
+		}
+		$logger->log("==================== Application Profiling Information End ====================", \Phalcon\Logger::INFO);
+	}
 
 } catch(\Phalcon\Exception $e) {
      echo "PhalconException: ", $e->getMessage();
