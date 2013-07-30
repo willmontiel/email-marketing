@@ -10,12 +10,16 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="text-center">
-				<h1>Mail Gorilla</h1>
+				<font face="ArdleysHand" size="20">
+					Mail Station
+				</font>
 			</div>
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span12" ></div>
+		<div class="span12" >
+			<div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
+		</div>
 	</div>
 	<div class="row-fluid">
 		<div class="span12"></div>
