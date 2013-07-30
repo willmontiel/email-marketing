@@ -35,18 +35,21 @@
                 <table class="table table-hover">
                         <thead>
                                 <tr>
-                                        <td>
+                                        <th>
                                                 Etiqueta
-                                        </td>
-                                        <td>
+                                        </th>
+                                        <th>
                                                 Tipo
-                                        </td>
-                                        <td>
+                                        </th>
+                                        <th>
                                                 Requerido
-                                        </td>
-                                        <td>
+                                        </th>
+										<th>
+												Editar
+										</th>
+                                        <th>
                                                 Eliminar
-                                        </td>
+                                        </th>
                                 </tr>
                         </thead>
                         <tbody>
@@ -66,13 +69,15 @@
 												{%endif%}
                                         </td>
                                         <td>
-											<div class="demo-icons">
-												<a href="#"><span class="fui-cross"></span></a>
-											</div>
 											<div class="row-fluid">
 											{{'{{#linkTo "editar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Editar</a>{{/linkTo}}'}}
 											</div>
                                         </td>
+										<td>
+											<div class="demo-icons">
+												<a href="#"><span class="fui-cross"></span></a>
+											</div>
+										</td>
                                 </tr>
 							{%endfor%}
                         </tbody>
@@ -169,22 +174,14 @@
 <div class="row-fluid">
 	<div class="span8"
 		{{ form('field/new', 'id': 'newField', 'method': 'Post') }}
-			<table class="table table-striped">
+			<table class="table table-hover">
 				<tr>
 					<td>
-						Nombre del campo:
-					</td>
-					<td>
 						{{ NewFieldForm.render('name') }}
-					</td>
-
-					<td>
-						Tipo:
 					</td>
 					<td>
 						{{ NewFieldForm.render('type') }}
 					</td>
-
 					<td>
 						<label class="checkbox" for="required">
 							<span class="icons">
