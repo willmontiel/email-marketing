@@ -9,7 +9,10 @@
         {{ stylesheet_link ('css/flat-ui.css') }}
         {{ stylesheet_link ('css/bootstrap-modal.css') }}
         {{ stylesheet_link ('css/prstyles.css') }}
-        {{ javascript_include('js/jquery-1.8.3.min.js') }}
+		{{ stylesheet_link ('css/normalize.css') }}
+		{{ stylesheet_link ('css/style.css') }}
+		{{ stylesheet_link ('css/emarketingstyle.css') }}
+        {{ javascript_include('js/libs/jquery-1.9.1.js') }}
         {{ javascript_include('bootstrap/js/bootstrap.js') }}
         {{ javascript_include('js/jquery-ui-1.10.3.custom.min.js') }}
         {{ javascript_include('js/jquery.ui.touch-punch.min.js') }}
@@ -24,30 +27,15 @@
         {{ javascript_include('js/application.js') }}
         {{ javascript_include('js/bootstrap-modal.js') }}
         {{ javascript_include('js/bootstrap-modalmanager.js') }}
+		{{ javascript_include('js/libs/handlebars-1.0.0-rc.4.js') }}
+		{{ javascript_include('js/libs/ember-1.0.0-rc.6.1.js') }}
 		{{ javascript_include('js/app.js') }}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Proyect">
         <meta name="author" content="Ivan">
 
         <style>
-            .container { min-width: 960px; }
-            .row-fluid input[type="text"], 
-            .row-fluid input[type="password"], 
-            .row-fluid input[type="datetime"], 
-            .row-fluid input[type="datetime-local"], 
-            .row-fluid input[type="date"], 
-            .row-fluid input[type="month"], 
-            .row-fluid input[type="time"], 
-            .row-fluid input[type="week"], 
-            .row-fluid input[type="number"], 
-            .row-fluid input[type="email"], 
-            .row-fluid input[type="url"], 
-            .row-fluid input[type="search"], 
-            .row-fluid input[type="tel"], 
-            .row-fluid input[type="color"], 
-            .row-fluid .uneditable-input {
-                height: 16px;
-            }
+
         </style>
     </head>
     <body>
@@ -74,7 +62,12 @@
 							</div>
 						</div>
 						<div class="span9">
-							{% block content %}{% endblock %}
+							{{ content() }}
+							<!-- Inicio de contenido -->
+							{% block content %}
+								<!-- Aqui va el contenido -->
+							{% endblock %}
+							<!-- Fin de contenido -->
 						</div>		
 					</div>
 				</div>	
