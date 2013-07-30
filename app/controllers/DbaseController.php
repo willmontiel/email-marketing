@@ -10,16 +10,18 @@ class DbaseController extends \Phalcon\Mvc\Controller
 	public function initialize()
 	{
 		//Recuperar idAccount del usuario
-		if ($this->session->has("user-name")) {
-
-            //Retrieve its value
-            $name = $this->session->get("user-name");
-			$this->user = User::findFirst("username = '$name'");
-        }
-      
-        
+		$this->user = $this->userObject;
 	}
 
+	public function verifyAcl($resource, $action, $destination, $message='Operacion no permitida')
+	{
+		if (!$this->acl->isAllowed($this->user->userrole, $resource, $action)) {	
+			$this->flashSession->error($message);
+			return $this->response->redirect($destination);
+		}
+		return null;
+	}
+	
 	protected function findAndValidateDbaseAccount($id)
 	{
 		if ($db = Dbase::findFirstByIdDbase($id)) {
@@ -38,9 +40,12 @@ class DbaseController extends \Phalcon\Mvc\Controller
 	
 	public function indexAction()
     {
-
 		//Recuperar la informacion de la BD que se desea
-        $this->view->setVar("dbases", $this->user->account->dbase);
+		$r = $this->verifyAcl('dbase', 'list', '');
+		if ($r)
+			return $r;
+		
+		$this->view->setVar("dbases", $this->user->account->dbase);
     }
     
     public function newAction()
