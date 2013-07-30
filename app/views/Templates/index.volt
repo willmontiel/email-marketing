@@ -63,7 +63,11 @@
 						</div>
 						<div class="span9">
 							{{ content() }}
-							{% block content %}{% endblock %}
+							<!-- Inicio de contenido -->
+							{% block content %}
+								<!-- Aqui va el contenido -->
+							{% endblock %}
+							<!-- Fin de contenido -->
 						</div>		
 					</div>
 				</div>	
