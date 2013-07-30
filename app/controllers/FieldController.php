@@ -31,4 +31,19 @@ class FieldController extends \Phalcon\Mvc\Controller
 		$this->view->NewFieldForm = $form;
 		
 	}
+	
+	public function editAction($id)
+	{
+		$field = new CustomField();
+		$editform = new NewFieldForm($field);
+		$registro = Customfield::findFirstByIdCustomField($id);
+				
+		if ($this->request->isPost()) {   
+			$editform->bind($this->request->getPost(), $registro);
+
+			if ($editform->isValid() && $registro->save()) {
+				$this->flash->success('Campo Editado Exitosamente!');
+			}
+		}
+	}
 }
