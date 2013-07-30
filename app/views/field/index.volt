@@ -7,8 +7,8 @@
 		</p>
 	</div>
 </div>
-<div class="row-fluid">
-	<span class="add"><a href="#">Adicionar</a></span>
+<div class="row-fluid add">
+	<a href="#">Adicionar</a>
 </div>
 <div class="row-fluid">
 	<div class="span12">
@@ -48,7 +48,7 @@
 		</table>
 	</div>
 </div>
-<div class="row-fluid">
+<div class="row-fluid add">
 	<a href="#">Adicionar</a>
 </div>
 
