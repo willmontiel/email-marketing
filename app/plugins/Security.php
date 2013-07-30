@@ -37,7 +37,6 @@ class Security extends Plugin
 
 			//Private area resources
 			$privateResources = array(
-				'account' => array('index', 'show', 'edit', 'delete'),
 				'dbase' => array('index', 'edit', 'new', 'show', 'restricted'),
 				'field' => array('index', 'new')
 			);
