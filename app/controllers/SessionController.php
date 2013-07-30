@@ -8,6 +8,14 @@ class SessionController extends \Phalcon\Mvc\Controller
     }
     
 
+	public function logoutAction()
+    {
+        $this->session->remove("user-name");
+        $this->session->destroy();
+		
+        $this->response->redirect("session/signin");
+    }
+	
     public function loginAction()
     {
 		if ($this->request->isPost()) 
@@ -26,21 +34,15 @@ class SessionController extends \Phalcon\Mvc\Controller
                 //The password is valid
                 $this->session->set("user-name", $login);
                 
-                $this->dispatcher->forward(array(
-                "controller" => "dbase",
-                "action" => "index"
-                ));
+                $this->response->redirect("");
 				}
 			}
             
 			else 
             {
                 $this->flash->error("Password o Usuario Incorrecto, Por favor intenta de nuevo");
-				echo $pass2;
-				$this->dispatcher->forward(array(
-					'controller' => 'session',
-					'action' => 'index'
-				));
+				$this->response->redirect("session/signin");
+				
 				return false;
 			}
       

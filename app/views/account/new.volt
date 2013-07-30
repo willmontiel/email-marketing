@@ -1,3 +1,5 @@
+{% extends "templates/index.volt" %}
+{% block content %}
 <div class="row-fluid">
 		<h1>Crear una nueva cuenta</h1>
 </div>
@@ -10,75 +12,76 @@
 			<fieldset>
 				<legend>Datos de la cuenta</legend>
 
-			<p>
-			 <label for="companyName">Nombre de la cuenta:</label>
-			  {{ newFormAccount.render('companyName') }}
-			</p>
+				<p>
+				 <label for="companyName">Nombre de la cuenta:</label>
+				  {{ newFormAccount.render('companyName') }}
+				</p>
 
-			<p>
-			 <label for="fileSpace">Cantidad de trafico de archivos (Mb):</label>
-			 {{ newFormAccount.render('fileSpace') }}
-			</p>
+				<p>
+				 <label for="fileSpace">Cantidad de trafico de archivos (Mb):</label>
+				 {{ newFormAccount.render('fileSpace') }}
+				</p>
 
-			<p>
-			 <label for="messageQuota">Limite de mensajes/contactos</label>
-			 {{ newFormAccount.render('messageQuota') }}
-			</p>
+				<p>
+				 <label for="messageQuota">Limite de mensajes/contactos</label>
+				 {{ newFormAccount.render('messageQuota') }}
+				</p>
 
-			<p>
-			 <label for="modeUse">Modo de uso:</label>
-			 {{ newFormAccount.render('modeUse') }}
-			</p>
+				<p>
+				 <label for="modeUse">Modo de uso:</label>
+				 {{ newFormAccount.render('modeUse') }}
+				</p>
 
-			<p>
-			 <label for="modeAccounting">Modo de pago:</label>
-			 {{ newFormAccount.render('modeAccounting') }}
-			</p>
+				<p>
+				 <label for="modeAccounting">Modo de pago:</label>
+				 {{ newFormAccount.render('modeAccounting') }}
+				</p>
 			</fieldset>
-	</div>
+		</div>
      
-	<div class="span1"></div>
+		<div class="span1"></div>
     
-	<div class="span5">
-		<fieldset>
-			<legend>Datos del administrador</legend>
-			<p>
-			 <label for="firstName">Nombre:</label>
-			 {{ newFormAccount.render('firstName') }}
-			</p>
+		<div class="span5">
+			<fieldset>
+				<legend>Datos del administrador</legend>
+				<p>
+				 <label for="firstName">Nombre:</label>
+				 {{ newFormAccount.render('firstName') }}
+				</p>
 
-			<p>
-			 <label for="lastName">Apellido:</label>
-			 {{ newFormAccount.render('lastName') }}
-			</p>
+				<p>
+				 <label for="lastName">Apellido:</label>
+				 {{ newFormAccount.render('lastName') }}
+				</p>
 
-			<p>
-			 <label for="email">Dirección de correo electronico:</label> 
-			  {{ newFormAccount.render('email') }}
-			</p>
+				<p>
+				 <label for="email">Dirección de correo electronico:</label> 
+				  {{ newFormAccount.render('email') }}
+				</p>
 
-			<p>
-			 <label for="username">Nombre de usuario:</label>
-			 {{ newFormAccount.render('username') }}
-			</p>
+				<p>
+				 <label for="username">Nombre de usuario:</label>
+				 {{ newFormAccount.render('username') }}
+				</p>
 
-			<p>
-			 <label for="password">Contraseña:</label>
-			 {{ newFormAccount.render('password') }}
-			</p>
+				<p>
+				 <label for="password">Contraseña:</label>
+				 {{ newFormAccount.render('password') }}
+				</p>
 
-			<p>
-			 <label for="password2"> Repita la contraseña:</label>
-			 {{ newFormAccount.render('password2') }}
-			</p>
-		</fieldset>
+				<p>
+				 <label for="password2"> Repita la contraseña:</label>
+				 {{ newFormAccount.render('password2') }}
+				</p>
+			</fieldset>
+		</div>
 	</div>
-</div>
 
       <p>
-       {{ submit_button("Registrar", 'class' : "btn btn-success") }}
-	   {{link_to('account', 'class':"btn btn-inverse", "Cancelar")}}
+		{{ submit_button("Registrar", 'class' : "btn btn-success") }}
+		{{link_to('account', 'class':"btn btn-inverse", "Cancelar")}}
       </p>
    </form>
    </div>
   </div>  
+{% endblock %}

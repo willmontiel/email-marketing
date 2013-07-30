@@ -73,7 +73,6 @@
 							</div>
 						</div>
 						<div class="span9">
-							{{ content() }}
 							{% block content %}{% endblock %}
 						</div>		
 					</div>

@@ -6,6 +6,7 @@ try {
     $loader = new \Phalcon\Loader();
     $loader->registerDirs(array(
         '../app/controllers/',
+		'../app/plugins/',
         '../app/models/',
         '../app/forms/',
         '../app/library/',
@@ -13,6 +14,23 @@ try {
 
     //Create a DI
     $di = new Phalcon\DI\FactoryDefault();
+	
+	$di->set('dispatcher', function() use ($di) {
+
+		$eventsManager = $di->getShared('eventsManager');
+
+		$security = new Security($di);
+
+		/**
+		 * We listen for events in the dispatcher using the Security plugin
+		 */
+		$eventsManager->attach('dispatch', $security);
+
+		$dispatcher = new Phalcon\Mvc\Dispatcher();
+		$dispatcher->setEventsManager($eventsManager);
+
+		return $dispatcher;
+	});
   
 	$di->set('security2', function(){
 

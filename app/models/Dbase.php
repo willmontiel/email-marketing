@@ -9,10 +9,14 @@ class Dbase extends \Phalcon\Mvc\Model
 {
 
     public $idAccount;
-    
-    public function initialize()
+	public $idDbase;
+	public $idCustomField;
+
+
+	public function initialize()
     {
-        $this->belongsTo("idAccount", "Account", "idAccount", array(
+        $this->hasMany("idDbase", "CustomField", "idCustomField");
+		$this->belongsTo("idAccount", "Account", "idAccount", array(
             "foreignKey" => true,
         ));
 		$this->useDynamicUpdate(true);
