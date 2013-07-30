@@ -1,4 +1,5 @@
 {% extends "templates/index.volt" %}
+
 {% block content %}
 <div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
 <div class="row-fluid">
@@ -7,7 +8,21 @@
 	  <div class="text-right"> <a href="dbase/new"><h5>Crear Base de Datos</h5></a></div>
 	</div>
 </div>
+<div class="row-fluid">
 	<div class="row-fluid">
+		<div class="span12">
+			<div class="navbar">
+				<ul class="nav-tabs">
+					<li class="active"><a href="#">General</a></li>
+					<li><a href="#">Campos</a></li>
+					<li><a href="#">Listas</a></li>
+					<li><a href="#">Segmentos</a></li>
+					<li><a href="#">Estadisticas</a></li>
+					<li><a href="#">Formularios</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 	{%for dbase in dbases%}
 			<div class="span6" >
 				<div class="row-fluid break-word">
@@ -68,7 +83,7 @@
 			</div>
 	{%endfor%}
  </div>
- 		
+		
 {%for dbase in dbases%}
 <div id="delete{{dbase.idDbase}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
@@ -88,4 +103,3 @@
 </div>
 {%endfor%}
 {% endblock %}
-

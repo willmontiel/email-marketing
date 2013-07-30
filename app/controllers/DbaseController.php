@@ -10,8 +10,14 @@ class DbaseController extends \Phalcon\Mvc\Controller
 	public function initialize()
 	{
 		//Recuperar idAccount del usuario
-        $name = $this->session->get("user-name");
-        $this->user = User::findFirst("username = '$name'");
+		if ($this->session->has("user-name")) {
+
+            //Retrieve its value
+            $name = $this->session->get("user-name");
+			$this->user = User::findFirst("username = '$name'");
+        }
+      
+        
 	}
 
 	protected function findAndValidateDbaseAccount($id)
