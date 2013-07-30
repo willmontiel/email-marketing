@@ -29,22 +29,24 @@ class SessionController extends \Phalcon\Mvc\Controller
 			));
 			
 			
-			 if ($user) {
+			 if (!$user) {
+				 
+				$this->flash->error("Password o Usuario Incorrecto, Por favor intenta de nuevo");
+				return false;
+			 }
+            
+			 else 
+             {
+//                
+//				$this->response->redirect("session/signin");
 				if ($this->security2->checkHash($password, $user->password)) {
                 //The password is valid
                 $this->session->set("user-name", $login);
                 
                 $this->response->redirect("");
 				}
-			}
-            
-			else 
-            {
-                $this->flash->error("Password o Usuario Incorrecto, Por favor intenta de nuevo");
-				$this->response->redirect("session/signin");
 				
-				return false;
-			}
+			 }
       
          
          

@@ -5,25 +5,17 @@
 		<div class="span12"></div>
 	</div>
 	<div class="row-fluid">
-		<div class="span12">
-			<div class="text-center">
-				<h1>Mail Gorilla</h1>
-			</div>
-		</div>
-	</div>
-	<div class="row-fluid">
 		<div class="span12"></div>
 	</div>
 	<div class="row-fluid">
-		<div class="span12" >
+		<div class="span12">
 			<div class="text-center">
-				<fieldset>
-					<legend>
-						<h3>Iniciar Sesión</h3>
-					</legend>
-				</fieldset>
+				<h2>Mail Gorilla</h2>
 			</div>
 		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span12" ></div>
 	</div>
 	<div class="row-fluid">
 		<div class="span12"></div>
@@ -58,7 +50,14 @@
 							{{ submit_button("Ingresar", 'class' : "btn btn-primary btn-large btn-block") }}
 						</p>
 						<p>
-							{{link_to('', "Perdí mi contraseña")}} {{ check_field('online') }} Recuerdame
+							<label class="checkbox" for="checkbox1">
+								<span class="icons">
+									<span class="first-icon fui-checkbox-unchecked"></span>
+									<span class="second-icon fui-checkbox-checked"></span>
+								</span>
+								<input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">
+								Recuerdame
+							</label>
 						</p>
 					</form>
 				</div>
