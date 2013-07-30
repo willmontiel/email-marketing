@@ -1,4 +1,6 @@
-App = Ember.Application.create();
+App = Ember.Application.create({
+	rootElement: '#emberAppContainer'
+});
 
 App.Router.map(function() {
   this.resource('campos');

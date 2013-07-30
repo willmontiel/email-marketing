@@ -60,7 +60,8 @@
 .text-red-color {
 	color: red;
 }
-.return-upper-right-corner {
+.return-upper-right-corner,
+.add {
 	line-height: 150px;
 	text-align: center;
 }
