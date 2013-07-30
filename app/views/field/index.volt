@@ -1,3 +1,4 @@
+{{ content() }}
 <div class="row-fluid">
         <div class="span12">
                 <h4>Campos de la Base de Datos</h4>

@@ -2,6 +2,18 @@
 
 {% block content %}
 {{ content() }}
+<div class="row-fluid">
+	<div class="row-fluid">
+		<div class="row-fluid">
+			<div class="span8">
+				<div class="modal-header">
+					<h1>{{sdbase.name}}</h1>
+				</div>
+			</div>
+			<div class="span4" >
+				<span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
+			</div>
+		</div>
 
 <script type="text/x-handlebars">       
         <div class="row-fluid">
@@ -175,5 +187,4 @@
         </div>
 </script>
 
-</div>
 {% endblock %}
