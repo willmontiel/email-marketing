@@ -50,6 +50,9 @@ class DbaseController extends \Phalcon\Mvc\Controller
     
     public function newAction()
     {
+		$r = $this->verifyAcl('dbase', 'new', '');
+		if ($r)
+			return $r;
         //Instanciar el formulario y Relacionarlo con los atributos del Model Dbase
         $db = new Dbase();
         $db->account = $this->user->account;
@@ -79,6 +82,9 @@ class DbaseController extends \Phalcon\Mvc\Controller
     
     public function showAction($id)
     {
+		$r = $this->verifyAcl('dbase', 'show', '');
+		if ($r)
+			return $r;
         //Recuperar la informacion de la BD que se desea SI existe
 		$db = $this->findAndValidateDbaseAccount($id);
 		if ($db !== null) {
@@ -114,6 +120,9 @@ class DbaseController extends \Phalcon\Mvc\Controller
     
     public function editAction($id)
     {
+		$r = $this->verifyAcl('dbase', 'edit', '');
+		if ($r)
+			return $r;
         //Recuperar la informacion de la BD que se desea SI existe
 		$db = $this->findAndValidateDbaseAccount($id);
 		if ($db !== null) {

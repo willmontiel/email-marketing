@@ -1,15 +1,36 @@
 <?php
 class AccountController extends \Phalcon\Mvc\Controller
 {
-    public function indexAction()
+	public function initialize()
 	{
+		//Recuperar idAccount del usuario
+		$this->user = $this->userObject;
+	}
+	
+	public function verifyAcl($resource, $action, $destination, $message='Operacion no permitida')
+	{
+		if (!$this->acl->isAllowed($this->user->userrole, $resource, $action)) {	
+			$this->flashSession->error($message);
+			return $this->response->redirect($destination);
+		}
+		return null;
+	}
+
+	public function indexAction()
+	{
+		$r = $this->verifyAcl('account', 'list', '');
+		if ($r)
+			return $r;
 		$account= Account::find();
 		$this->view->setVar("allAccount", $account);
 //		$this->view->setVas("allUser", User::find());
 	}
-
+	
 	public function newAction()
     {
+		$r = $this->verifyAcl('account', 'new', '');
+		if ($r)
+			return $r;
         $account = new Account();
         $form = new NewAccountForm($account);
       
@@ -62,6 +83,9 @@ class AccountController extends \Phalcon\Mvc\Controller
    
    public function showAction($id)
    {
+	   $r = $this->verifyAcl('account', 'show', '');
+		if ($r)
+			return $r;
 	    $users = User::find("idAccount = $id");
 		
 		$this->view->setVar("allUser", $users);	   
@@ -70,7 +94,9 @@ class AccountController extends \Phalcon\Mvc\Controller
      
    public function editAction($id)
    {
-	    
+	    $r = $this->verifyAcl('account', 'edit', '');
+		if ($r)
+			return $r;
 	    $account = Account::findFirstByIdAccount($id);
 		if ($account !== null) {
             $this->view->setVar("allAccount", $account);
@@ -100,68 +126,29 @@ class AccountController extends \Phalcon\Mvc\Controller
 
 	public function deleteAction($id)
     {
-      $account = Account::findFirstByIdAccount($id);
-	  $user = User::findFirstByIdAccount($id);
+	
+		$r = $this->verifyAcl('account', 'delete', '');
+		if ($r)
+			return $r;
+		$account = Account::findFirstByIdAccount($id);
+		$user = User::findFirstByIdAccount($id);
 
-         if ($account !== null) {
-			if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
-				$account->delete();
-				$user->deleted();
-				$this->flashSession->success('Base de Datos Eliminada!');
-				$this->response->redirect("account");
-				} 
+			if ($account !== null) {
+			   if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
+				   $account->delete();
+				   $user->deleted();
+				   $this->flashSession->success('Base de Datos Eliminada!');
+				   $this->response->redirect("account");
+				   } 
 
-			else {
-				$this->flash->error('Escriba la palabra "DELETE" correctamente');
+			   else {
+				   $this->flash->error('Escriba la palabra "DELETE" correctamente');
 
-//				$this->view->disable();
-
-//				return $this->response->redirect('account');
-			}
+   //				$this->view->disable();
+			
+			   }
        }
 
      }
-
-
-//	public function deleteAction($id)
-//	{
-//		$account = Account::findFirstByIdAccount($id);
-//		$user = User::findFirstByIdAccount($id);
-//        
-//		if ($account !== null) {
-//			if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
-//				$this->db->begin();
-//			
-//				if (!$user->delete()) {
-//						$this->db->rollback();
-//						foreach ($user->getMessages() as $msg) {
-//						$this->flash->error($msg);
-//						}
-//						
-//						foreach ($account->getMessages() as $msg) {
-//						$this->flash->error($msg);
-//						}
-//					}
-//					else {
-//					$account->delete();
-//					$this->db->commit();
-//					$this->flashSession->success('Base de Datos Eliminada!');
-//				    $this->response->redirect("account");					
-//					}
-//
-//			} 
-//			else {
-//			$this->flash->error('Escriba la palabra "DELETE" correctamente');
-//
-////				$this->view->disable();
-//
-////				return $this->response->redirect('account');
-//
-//			}
-//		}
-		
-
-//	}
-
 
  }  

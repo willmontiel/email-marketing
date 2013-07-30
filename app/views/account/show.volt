@@ -19,7 +19,7 @@
 				<th>Apellidos</th>
 				<th>Nombre de usuario</th>
 				<th>E-Mail</th>
-				<th>Tipo</th>
+				<th>Role</th>
 			</tr>
 		{%for all in allUser%}
 			<tr>
@@ -28,7 +28,7 @@
 				<td>{{all.lastName}}</td>
 				<td>{{all.username}}</td>
 				<td>{{all.email}}</td>
-				<td>{{all.type}}</td>
+				<td>{{all.userrole}}</td>
 				<td>
 					<a href="account/edit/{{all.idAccount}}">Editar</a><br>
 					<a href="#" data-toggle="modal">Eliminar</a>
