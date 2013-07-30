@@ -3,7 +3,10 @@ App = Ember.Application.create({
 });
 
 App.Router.map(function() {
-  this.resource('campos');
+  this.resource('campos', function(){
+	  this.resource('adicionar');
+  });
+  
 });
 
 App.IndexRoute = Ember.Route.extend({

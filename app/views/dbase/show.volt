@@ -29,7 +29,7 @@
         </div>
 </div>
 <div class="row-fluid add">
-	<a href="#">Adicionar</a>
+	{{'{{#linkTo "adicionar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Adicionar</a>{{/linkTo}}'}}
 </div>
 <div class="row-fluid">
         <div class="span12">
@@ -53,16 +53,22 @@
                         <tbody>
                                 <tr>
                                         <td>
-                                                Email
+                                                {{field.name}}
                                         </td>
                                         <td>
-                                                Email
+                                                {{field.type}}
                                         </td>
                                         <td>
-                                                (Si)
+                                                {% if(field.required == 'Si')%}
+													<input type="checkbox" checked="checked">
+												{%else%}
+													<input type="checkbox" checked="unchecked">
+												{%endif%}
                                         </td>
                                         <td>
-                                                X
+											<div class="demo-icons text-center">
+												<a href="#"><span class="fui-cross"></span></a>
+											</div>
                                         </td>
                                 </tr>
                         </tbody>
@@ -70,10 +76,25 @@
         </div>
 </div>
 <div class="row-fluid add">
-        <a href="#">Adicionar</a>
+        {{'{{#linkTo "adicionar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Adicionar</a>{{/linkTo}}'}}
+</div>
+ {{ "{{outlet}}" }}
+</script>
+
+<script type="text/x-handlebars" id="adicionar">
+<div class="row-fluid">
+	
+	<div class="span8">
+		Primera Parte
+	</div>
+	
+	<div class="span4">
+		Segunda Parte
+	</div>
+		
 </div>
 </script>
-        
+
 <div class="row-fluid">
         <div class="row-fluid">
                 <div class="span8">

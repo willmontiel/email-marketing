@@ -31,16 +31,22 @@
                         <tbody>
                                 <tr>
                                         <td>
-                                                Email
+                                                {{field.name}}
                                         </td>
                                         <td>
-                                                Email
+                                                {{field.type}}
                                         </td>
                                         <td>
-                                                (Si)
+                                                {% if(field.required == 'Si')%}
+													<input type="checkbox" checked="checked">
+												{%else%}
+													<input type="checkbox" checked="unchecked">
+												{%endif%}
                                         </td>
                                         <td>
-                                                X
+											<div class="demo-icons text-center">
+												<a href="#"><span class="fui-cross"></span></a>
+											</div>
                                         </td>
                                 </tr>
                         </tbody>
