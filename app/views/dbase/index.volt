@@ -1,11 +1,12 @@
 {% extends "templates/index.volt" %}
 {% block content %}
+<!-- aqui inicia mi contenido -->
 <div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
 <div class="row-fluid">
-        <div class="modal-header">
-                <h1>Bases de Datos</h1>
-          <div class="text-right"> <a href="dbase/new"><h5>Crear Base de Datos</h5></a></div>
-        </div>
+	<div class="modal-header">
+			<h1>Bases de Datos</h1>
+	  <div class="text-right"> <a href="dbase/new"><h5>Crear Base de Datos</h5></a></div>
+	</div>
 </div>
         <div class="row-fluid">
         {%for dbase in dbases%}
