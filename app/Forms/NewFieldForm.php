@@ -11,7 +11,7 @@ class NewFieldForm extends Form
 	{
 		
 		$this->add(new Text ('name', array(
-			'class' => 'span2',
+			'class' => 'span3',
 			'maxlength' => 30,
 			'type' => 'text',
 			'required' => 'required',
@@ -27,6 +27,7 @@ class NewFieldForm extends Form
         )));
 		
 		$this->add(new Check("required", array(
+			
 			'value' => "Requerido",
 			'data-toggle' => "checkbox"
         )));

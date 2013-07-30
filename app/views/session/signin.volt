@@ -37,7 +37,7 @@
 						<p>   
 							<strong>Usuario:</strong>
 							<div class="control-group">
-								{{ text_field("username", 'type': "text", 'class': "span4", 'required': "required", 'autofocus': "autofocus", 'placeholder': "Nombre de Usuario" ) }}
+								{{ text_field("username", 'type': "text", 'class': "span5", 'required': "required", 'autofocus': "autofocus", 'placeholder': "Nombre de Usuario" ) }}
 								<label class="login-field-icon fui-user" for="username"></label>
 							</div>
 						</p>
@@ -45,7 +45,7 @@
 						<p> 
 							<strong>Contraseña:</strong>
 							<div class="control-group">
-								{{ password_field('pass', 'type': "email", 'class':"span4",  'required': "required", 'autofocus': "autofocus", 'placeholder': "Contraseña") }}
+								{{ password_field('pass', 'type': "email", 'class':"span5",  'required': "required", 'autofocus': "autofocus", 'placeholder': "Contraseña") }}
 								<label class="login-field-icon fui-lock" for="pass"></label>
 							</div>
 						</p>

@@ -1,6 +1,6 @@
 {% extends "templates/index.volt" %}
 
-{% block content %}
+{% block content %} 
 <div class="span12">
 		<h1>Editar información de las cuentas</h1>
 	</div>	{{ content() }}

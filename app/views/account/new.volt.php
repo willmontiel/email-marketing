@@ -9,7 +9,6 @@
         <?php echo Phalcon\Tag::stylesheetLink('css/flat-ui.css'); ?>
         <?php echo Phalcon\Tag::stylesheetLink('css/bootstrap-modal.css'); ?>
         <?php echo Phalcon\Tag::stylesheetLink('css/prstyles.css'); ?>
-		<?php echo Phalcon\Tag::stylesheetLink('css/normalize.css'); ?>
 		<?php echo Phalcon\Tag::stylesheetLink('css/style.css'); ?>
 		<?php echo Phalcon\Tag::stylesheetLink('css/emarketingstyle.css'); ?>
         <?php echo Phalcon\Tag::javascriptInclude('js/libs/jquery-1.9.1.js'); ?>

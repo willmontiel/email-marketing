@@ -7,8 +7,7 @@
         {{ stylesheet_link('bootstrap/css/bootstrap-responsive.css') }}
         {{ stylesheet_link ('css/flat-ui.css') }}
         {{ stylesheet_link ('css/bootstrap-modal.css') }}
-        {{ stylesheet_link ('css/prstyles.css') }} 
-		{{ stylesheet_link ('css/prstyles.css') }}
+       
         {{ javascript_include('js/jquery-1.8.3.min.js') }}
         {{ javascript_include('bootstrap/js/bootstrap.js') }}
         {{ javascript_include('js/jquery-ui-1.10.3.custom.min.js') }}
