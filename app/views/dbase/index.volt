@@ -8,67 +8,69 @@
 	  <div class="text-right"> <a href="dbase/new"><h5>Crear Base de Datos</h5></a></div>
 	</div>
 </div>
-        <div class="row-fluid">
-        {%for dbase in dbases%}
-                        <div class="span6" >
-                                <div class="row-fluid break-word">
-                                        <h3><a href="dbase/show/{{dbase.idDbase}}">{{dbase.name}}</a></h3>
-                                        <span>{{dbase.description}}</span>
-                                </div>
-                                <div class="row-fluid">
-                                        <div class="span3 text-center">
-                                                <div class="row-fluid">
-                                                        <span class="number-medium text-gray-color text-center">26</span>
-                                                </div>
-                                                <div class="row-fluid">
-                                                        <span class="fui-radio-checked"></span> Segmentos
-                                                </div>  
-                                        </div>
-                                        <div class="span3 text-center">
-                                                <div class="row-fluid">
-                                                        <span class="number-medium text-gray-color ">12</span>
-                                                </div>
-                                                <div class="row-fluid">
-                                                        <span class="fui-list"></span> Listas
-                                                </div>  
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="span3 ">
-                                <div class="row-fluid">
-                                        <table>
-                                                <tr>
-                                                        <td class="text-right">
-                                                                <dl>
-                                                                        <dd>{{dbase.Cactive|numberf}}</dd>
-                                                                        <dd>{{dbase.Cinactive|numberf}}</dd>
-                                                                        <dd>{{dbase.Cunsubscribed|numberf}}</dd>
-                                                                        <dd>{{dbase.Cbounced|numberf}}</dd>
-                                                                        <dd>{{dbase.Cspam|numberf}}</dd>
-                                                                </dl>
-                                                        </td>
-                                                        <td class="text-left">
-                                                                <dl>
-                                                                        <dd>Activos</dd>
-                                                                        <dd>Inactivos</dd>
-                                                                        <dd>Des-suscritos</dd>
-                                                                        <dd>Rebotados</dd>
-                                                                        <dd>Spam</dd>
-                                                                </dl>
-                                                        </td>
-                                                </tr>
-                                        </table>
-                                </div>
-                        </div>
-                        <div class="span2">
-                                <dl>
-                                        <dd><a href="dbase/edit/{{dbase.idDbase}}">Editar</a></dd>
-                                        <dd><a href="#delete{{dbase.idDbase}}" data-toggle="modal">Eliminar</a></dd>
-                                        <dd><a href="#">Agregar Contacto</a></dd>
-                                </dl>
-                        </div>
-        {%endfor%}
- </div>
+	<div class="row-fluid">
+		<!-- Lista de mis bases de datos -->
+		{%for dbase in dbases%}
+			<div class="span6" >
+				<div class="row-fluid break-word">
+						<h3><a href="dbase/show/{{dbase.idDbase}}">{{dbase.name}}</a></h3>
+						<span>{{dbase.description}}</span>
+				</div>
+				<div class="row-fluid">
+						<div class="span3 text-center">
+								<div class="row-fluid">
+										<span class="number-medium text-gray-color text-center">26</span>
+								</div>
+								<div class="row-fluid">
+										<span class="fui-radio-checked"></span> Segmentos
+								</div>  
+						</div>
+						<div class="span3 text-center">
+								<div class="row-fluid">
+										<span class="number-medium text-gray-color ">12</span>
+								</div>
+								<div class="row-fluid">
+										<span class="fui-list"></span> Listas
+								</div>  
+						</div>
+				</div>
+			</div>
+			<div class="span3 ">
+				<div class="row-fluid">
+						<table>
+								<tr>
+										<td class="text-right">
+												<dl>
+														<dd>{{dbase.Cactive|numberf}}</dd>
+														<dd>{{dbase.Cinactive|numberf}}</dd>
+														<dd>{{dbase.Cunsubscribed|numberf}}</dd>
+														<dd>{{dbase.Cbounced|numberf}}</dd>
+														<dd>{{dbase.Cspam|numberf}}</dd>
+												</dl>
+										</td>
+										<td class="text-left">
+												<dl>
+														<dd>Activos</dd>
+														<dd>Inactivos</dd>
+														<dd>Des-suscritos</dd>
+														<dd>Rebotados</dd>
+														<dd>Spam</dd>
+												</dl>
+										</td>
+								</tr>
+						</table>
+				</div>
+			</div>
+			<div class="span2">
+				<dl>
+						<dd><a href="dbase/edit/{{dbase.idDbase}}">Editar</a></dd>
+						<dd><a href="#delete{{dbase.idDbase}}" data-toggle="modal">Eliminar</a></dd>
+						<dd><a href="#">Agregar Contacto</a></dd>
+				</dl>
+			</div>
+{%endfor%}
+		<!-- Fin de mi lista de bases de datos -->
+	</div>
                 
 {%for dbase in dbases%}
 <div id="delete{{dbase.idDbase}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
