@@ -45,7 +45,7 @@
 						<p> 
 							<strong>Contraseña:</strong>
 							<div class="control-group">
-								{{ password_field('pass', 'type': "email", 'class':"span5",  'required': "required", 'autofocus': "autofocus", 'placeholder': "Contraseña") }}
+								{{ password_field('pass', 'type': "password", 'class':"span5",  'required': "required", 'autofocus': "autofocus", 'placeholder': "Contraseña") }}
 								<label class="login-field-icon fui-lock" for="pass"></label>
 							</div>
 						</p>

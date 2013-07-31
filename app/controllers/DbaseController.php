@@ -3,27 +3,13 @@ use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Text,
     Phalcon\Forms\Element\Select;
 
-class DbaseController extends \Phalcon\Mvc\Controller
+class DbaseController extends ControllerBase
 {
 	protected $user;
 	
-	public function initialize()
-	{
-		//Recuperar idAccount del usuario
-		$this->user = $this->userObject;
-	}
-
-	public function verifyAcl($resource, $action, $destination, $message='Operacion no permitida')
-	{
-		if (!$this->acl->isAllowed($this->user->userrole, $resource, $action)) {	
-			$this->flashSession->error($message);
-			return $this->response->redirect($destination);
-		}
-		return null;
-	}
-	
 	protected function findAndValidateDbaseAccount($id)
 	{
+		
 		if ($db = Dbase::findFirstByIdDbase($id)) {
 			if ($this->user->account == $db->account) {
                 return $db;

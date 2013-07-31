@@ -1,5 +1,5 @@
 <?php
-class FieldController extends \Phalcon\Mvc\Controller
+class FieldController extends ControllerBase
 {
 	public function indexAction()
 	{

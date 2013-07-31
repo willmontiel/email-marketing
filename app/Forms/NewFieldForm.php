@@ -11,7 +11,7 @@ class NewFieldForm extends Form
 	{
 		
 		$this->add(new Text ('name', array(
-			'class' => 'span3',
+			'class' => 'span2',
 			'maxlength' => 30,
 			'type' => 'text',
 			'required' => 'required',

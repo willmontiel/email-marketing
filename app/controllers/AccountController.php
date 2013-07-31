@@ -1,21 +1,6 @@
 <?php
-class AccountController extends \Phalcon\Mvc\Controller
+class AccountController extends ControllerBase
 {
-	public function initialize()
-	{
-		//Recuperar idAccount del usuario
-		$this->user = $this->userObject;
-	}
-	
-	public function verifyAcl($resource, $action, $destination, $message='Operacion no permitida')
-	{
-		if (!$this->acl->isAllowed($this->user->userrole, $resource, $action)) {	
-			$this->flashSession->error($message);
-			return $this->response->redirect($destination);
-		}
-		return null;
-	}
-
 	public function indexAction()
 	{
 		$r = $this->verifyAcl('account', 'list', '');
@@ -48,7 +33,7 @@ class AccountController extends \Phalcon\Mvc\Controller
 		$pass =	$user->password = $form->getValue('password');
 		$pass2=	$user->password2 = $form->getValue('password2');
 				$user->username = $form->getValue('username');  
-				$user->type=1;
+				$user->type='ROLE_ADMIN';
 			    $user->account = $account;
 				
 				if($pass == $pass2){
