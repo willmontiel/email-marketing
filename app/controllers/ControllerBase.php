@@ -15,7 +15,12 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 	public function initialize()
 	{
 		//Recuperar idAccount del usuario
-		$this->user = $this->userObject;
+		if (isset($this->userObject)) {
+			$this->user = $this->userObject;
+		}
+		else {
+			$this->user = new User;
+		}
 	}
 
 	/**

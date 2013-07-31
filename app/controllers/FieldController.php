@@ -1,11 +1,88 @@
 <?php
+
+/**
+ * @RoutePrefix("/field")
+ */
 class FieldController extends ControllerBase
 {
+	
+	/**
+	 * @Get("/")
+	 */
 	public function indexAction()
 	{
 		
 	}
 	
+	
+	/**
+	 * @Post("/")
+	 */
+	public function insertAction()
+	{
+		$idBase = $this->request->get('idDbase', 'int', 0);
+		
+		$this->view->disable();
+		
+		
+		$this->response->setContentType('application/json', 'UTF-8');
+		
+		$this->response->setContent(json_encode(
+					array(
+						'status' => 'success',
+						'idDbase' => $idBase
+					)
+				)
+		);
+		
+		return $this->response;
+	}
+	
+	/**
+	 * @Put("/{idCustomField:[0-9]+}")
+	 */
+	public function updateAction($idCustomField)
+	{
+		$this->view->disable();
+		
+		
+		$this->response->setContentType('application/json', 'UTF-8');
+		
+		$this->response->setContent(json_encode(
+					array(
+						'status' => 'success',
+						'command' => 'update',
+						'idCustomField' => $idCustomField
+					)
+				)
+		);
+		
+		return $this->response;
+	}
+	
+	/**
+	 * @Get("/{idCustomField:[0-9]+}")
+	 */
+	public function queryAction($idCustomField)
+	{
+		$this->view->disable();
+		
+		
+		$this->response->setContentType('application/json', 'UTF-8');
+		
+		$this->response->setContent(json_encode(
+					array(
+						'status' => 'success',
+						'command' => 'query',
+						'idCustomField' => $idCustomField,
+						'text' => 'Estos son los campos del custom field'
+					)
+				)
+		);
+		
+		return $this->response;
+	}
+
 	public function newAction($idbase)
 	{
 		$field = new Customfield();

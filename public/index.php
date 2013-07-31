@@ -14,7 +14,11 @@ try {
 
     //Create a DI
     $di = new Phalcon\DI\FactoryDefault();
+
 	
+	/*
+	 * Dispatcher Object
+	 */
 	$di->set('dispatcher', function() use ($di) {
 
 		$eventsManager = $di->getShared('eventsManager');
@@ -32,6 +36,20 @@ try {
 		return $dispatcher;
 	});
   
+	
+	$di->set('router', function () {
+		
+		$router = new \Phalcon\Mvc\Router\Annotations();
+		
+		$router->addResource('Field', '/field');
+		
+		return $router;
+	});
+	
+	
+	/*
+	 * Security Object, utilizado para validacion y creacion de contraseñas
+	 */
 	$di->set('security2', function(){
 
 		$security2 = new Phalcon\Security();
@@ -42,12 +60,18 @@ try {
 		return $security2;
     }, true);
 
-	// Profiler para hacer seguimiento de tiempos de ejecucion
+	/*
+	 * Profiler Object. Lo utilizamos en modo de depuracion/desarrollo para
+	 * determinar los tiempos de ejecucion de SQL
+	 */
 	$di->set('profiler', function(){
 		return new \Phalcon\Db\Profiler();
 	}, true);	
 	
-	// Conexion a la base de datos
+
+	/*
+	 * Database Object, conexion primaria a la base de datos
+	 */
 	$di->set('db', function() use ($di) {
 		// Events Manager para la base de datos
 		$eventsManager = new \Phalcon\Events\Manager();
@@ -77,6 +101,9 @@ try {
 		
     });
 
+	/*
+	 * Url Object, utilizado para crear URLs
+	 */
     $di->set('url', function() {
         $url = new \Phalcon\Mvc\Url();
         $url->setBaseUri('/emarketing/');
@@ -84,12 +111,17 @@ try {
     });
 
 	
+	/*
+	 * Log Object, utilizado para logging en general a archivo
+	 */
 	$di->set('logger', function () {
 		// Archivo de log
 		return new \Phalcon\Logger\Adapter\File("../app/logs/debug.log");
 	});
     
-    //Register Volt as a service
+	/*
+	 * Volt Object, engine de templates
+	 */
     $di->set('volt', function($view, $di) {
 	    $volt = new Phalcon\Mvc\View\Engine\Volt($view, $di);
 		$compiler = $volt->getCompiler();
@@ -106,8 +138,11 @@ try {
 
 		return $volt;
     });
-    
-    //Registering Volt as template engine
+
+	
+    /*
+	 * View Object
+	 */
     $di->set('view', function() {
         $view = new \Phalcon\Mvc\View();
         $view->setViewsDir('../app/views/');
@@ -117,6 +152,9 @@ try {
         return $view;
     });
     
+	/*
+	 * Gestor de sesiones
+	 */
     $di->setShared('session', function() {
         $session = new Phalcon\Session\Adapter\Files(
 				array(
@@ -126,6 +164,9 @@ try {
         return $session;
     });
     
+	/*
+	 * Flash Object, para mantener mensajes flash entre una página y otra
+	 */
     $di->set('flash', function(){
         $flash = new \Phalcon\Flash\Direct(array(
             'error' => 'alert alert-error',

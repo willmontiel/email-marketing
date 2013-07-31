@@ -80,9 +80,12 @@ class Security extends Plugin
 
 		$controller = $dispatcher->getControllerName();
 		$action = $dispatcher->getActionName();
+		
+		$this->publicurls = array('session:signin', 'session:login', 'field:insert', 'field:update', 'field:query');
 
 		if ($role == 'ROLE_GUEST') {
-			if ($controller != 'session' || ($action != 'signin' && $action != 'login') ) {
+			$accessdir = $controller . ':' . $action;
+			if (!in_array($accessdir, $this->publicurls)) {
 				$this->response->redirect("session/signin");
 				return false;
 			}
