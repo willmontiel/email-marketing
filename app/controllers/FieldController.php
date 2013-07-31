@@ -17,13 +17,7 @@ class FieldController extends ControllerBase
 			$this->db->begin();
 			$field->idDbase = $idbase;
 			$field->idAccount = Dbase::findFirstByIdDbase($idbase)->idAccount;
-			
-			if(empty($field->values) || empty($field->required))
-			{
-				$field->values="Vacío";
-				$field->required=2;
-			}	
-			
+	
 				if (!$form->isValid() OR !$field->save()) {
 				
 				$this->db->rollback();
