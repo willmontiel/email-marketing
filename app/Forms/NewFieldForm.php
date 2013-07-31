@@ -25,8 +25,7 @@ class NewFieldForm extends Form
 			'5' => 'Selección',
 			'6' => 'Selección Multiple'
         )));
-		
-		$this->add(new Check("required", array(
+		$this->add(new Check("required", array(	
 			'value' => "1",
 			'data-toggle' => "checkbox"
         )));
