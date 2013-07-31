@@ -9,7 +9,6 @@
         {{ stylesheet_link ('css/flat-ui.css') }}
         {{ stylesheet_link ('css/bootstrap-modal.css') }}
         {{ stylesheet_link ('css/prstyles.css') }}
-		{{ stylesheet_link ('css/normalize.css') }}
 		{{ stylesheet_link ('css/style.css') }}
 		{{ stylesheet_link ('css/emarketingstyle.css') }}
         {{ javascript_include('js/libs/jquery-1.9.1.js') }}
