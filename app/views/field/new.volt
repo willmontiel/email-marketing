@@ -5,7 +5,7 @@
 		<div class="row-fluid">
 			<div class="span9">
 				{{ form('field/new', 'id': 'newField', 'method': 'Post') }}
-					<table class="table table-striped">
+					<table border="0">
 						<tr>
 							<td>
 								Nombre del campo:
