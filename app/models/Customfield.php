@@ -9,9 +9,7 @@ class Customfield extends \Phalcon\Mvc\Model
 	
 	public function initialize()
     {
-        $this->belongsTo("idCustomField", "Dbase", "idDbase", array(
-            "foreignKey" => true,
-        ));
+    
 		$this->useDynamicUpdate(true);
     }
 
