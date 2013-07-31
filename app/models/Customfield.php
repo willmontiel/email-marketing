@@ -4,14 +4,10 @@ use Phalcon\Mvc\Model\Validator\PresenceOf;
 
 class Customfield extends \Phalcon\Mvc\Model
 {
-	public $idBase;
-	public $idCustomField;
-	
+
 	public function initialize()
     {
-        $this->belongsTo("idCustomField", "Dbase", "idDbase", array(
-            "foreignKey" => true,
-        ));
+		
 		$this->useDynamicUpdate(true);
     }
 

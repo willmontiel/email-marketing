@@ -10,12 +10,11 @@ class Dbase extends \Phalcon\Mvc\Model
 
     public $idAccount;
 	public $idDbase;
-	public $idCustomField;
 
 
 	public function initialize()
     {
-        $this->hasMany("idDbase", "CustomField", "idCustomField");
+        $this->hasMany("idDbase", "Customfield", "idDbase");
 		$this->belongsTo("idAccount", "Account", "idAccount", array(
             "foreignKey" => true,
         ));

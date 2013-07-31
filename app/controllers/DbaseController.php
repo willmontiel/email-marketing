@@ -91,33 +91,59 @@ class DbaseController extends \Phalcon\Mvc\Controller
 			$this->view->setVar("sdbase", $db);
 			
 //*************************INICIA LA PARTE DE CUSTOM FIELDS*******************
+
+//*****************SHOW*****************//
 			
 			$field = Customfield::findByIdDbase($id);
 			$this->view->setVar("fields", $field);
+
+//*****************NEW*****************//
+			
 			$field = new CustomField();
-		$form = new NewFieldForm($field);
-		
-		if ($this->request->isPost()) {
-			
-			$form->bind($this->request->getPost(), $field);
-			$this->db->begin();
-			
-			if (!$form->isValid() OR !$field->save()) {
-				
-				$this->db->rollback();
-				foreach ($field->getMessages() as $msg) {
-						$this->flash->error($msg);
+			$form = new NewFieldForm($field);
+
+			if ($this->request->isPost()) {
+
+				$form->bind($this->request->getPost(), $field);
+				$this->db->begin();
+
+				if (!$form->isValid() OR !$field->save()) {
+
+					$this->db->rollback();
+					foreach ($field->getMessages() as $msg) {
+							$this->flash->error($msg);
+					}
+				}
+				else{
+					$this->db->commit();
+					$this->flash->success('Se ha creado la cuenta exitosamente');
 				}
 			}
-			else{
-				$this->db->commit();
-				$this->flash->success('Se ha creado la cuenta exitosamente');
+			$this->view->NewFieldForm = $form;
+			
+//*****************EDIT*****************//
+			
+			$field = new CustomField();
+			$editform = new NewFieldForm($field);
+			$registro = Customfield::findFirstByIdCustomField($id);
+
+			if ($this->request->isPost()) {   
+				$editform->bind($this->request->getPost(), $registro);
+
+				if ($editform->isValid() && $registro->save()) {
+					$this->flash->success('Campo Editado Exitosamente!');
+				}
 			}
-		}
-		$this->view->NewFieldForm = $form;
+			
+//*****************DELETE*****************//
+			
+			$registro = Customfield::findFirstByIdCustomField($id);
+			if ($this->request->isPost()) {
+				$registro->delete();
+			}
         }
     }
-    
+   
     public function editAction($id)
     {
 		$r = $this->verifyAcl('dbase', 'edit', '');

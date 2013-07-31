@@ -77,10 +77,10 @@
 									</td>
 									<td>
 										<div class="span2">
-											{{'{{#linkTo "editar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Editar</a>{{/linkTo}}'}}
+											{{'{{#linkTo "editar" tagName="label" href=false}}<a {{bindAttr href="view.href"}}>Editar</a>{{/linkTo}}'}}
 										</div>
 										<div class="span2">
-											<a href="#">Eliminar</a>
+											<a href="/emarketing/field/delete/{{field.idCustomField}}">Eliminar</a>
 										</div>
 									</td>
                                 </tr>
@@ -177,8 +177,8 @@
 
 <script type="text/x-handlebars" id="adicionar">
 <div class="row-fluid">
-	<div class="span8"
-		{{ form('field/new', 'id': 'newField', 'method': 'Post') }}
+	<div class="span8">
+		<form action = '/emarketing/field/new/{{sdbase.idDbase}}', id = 'newField', method="post">
 			<table class="table table-hover">
 				<tr>
 					<td>
@@ -199,6 +199,7 @@
 					</td>
 				</tr>
 			</table>
+			{{submit_button("Adicionar", 'class' : "btn btn-success")}}
 		</form>
 	</div>
 </div>	
@@ -207,7 +208,7 @@
 <script type="text/x-handlebars" id="editar">
 <div class="row-fluid">
 	<div class="span8">
-			{{ form('field/new', 'id': 'newField', 'method': 'Post') }}
+			<form action = 'field/edit/{{sdbase.idDbase}}', id = 'newField', method="post">
 			<table class="table table-striped">
 				<tr>
 					<td>

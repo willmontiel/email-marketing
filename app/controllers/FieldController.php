@@ -6,16 +6,18 @@ class FieldController extends \Phalcon\Mvc\Controller
 		
 	}
 	
-	public function newAction()
+	public function newAction($idbase)
 	{
-		$field = new CustomField();
+		$field = new Customfield();
 		$form = new NewFieldForm($field);
 		
 		if ($this->request->isPost()) {
-			
+
 			$form->bind($this->request->getPost(), $field);
 			$this->db->begin();
-			
+			$field->idDbase = $idbase;
+			$field->idAccount = Dbase::findFirstByIdDbase($idbase)->idAccount;
+			$field->values = NULL;
 			if (!$form->isValid() OR !$field->save()) {
 				
 				$this->db->rollback();
@@ -25,11 +27,12 @@ class FieldController extends \Phalcon\Mvc\Controller
 			}
 			else{
 				$this->db->commit();
-				$this->flash->success('Se ha creado la cuenta exitosamente');
+				$this->flash->success('Se ha creado el campo');
+				$this->response->redirect("dbase/show/$idbase#/campos");
 			}
 		}
 		$this->view->NewFieldForm = $form;
-		
+
 	}
 	
 	public function editAction($id)
@@ -45,5 +48,13 @@ class FieldController extends \Phalcon\Mvc\Controller
 				$this->flash->success('Campo Editado Exitosamente!');
 			}
 		}
+	}
+	
+	public function deleteAction($id)
+	{
+		$registro = Customfield::findFirstByIdCustomField($id);
+		$idbase = $registro->idDbase;
+		$registro->delete();
+		$this->response->redirect("dbase/show/$idbase#/campos");
 	}
 }
