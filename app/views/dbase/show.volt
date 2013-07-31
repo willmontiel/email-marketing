@@ -1,6 +1,7 @@
 {% extends "templates/index.volt" %}
 
 {% block content %}
+
 {{ content() }}
 <script type="text/x-handlebars">       
         <div class="row-fluid">
