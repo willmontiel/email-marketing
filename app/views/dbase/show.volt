@@ -8,7 +8,7 @@
                 <div class="span12">
                         <ul class="nav nav-pills">
                                 {{'{{#linkTo "index" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>General</a>{{/linkTo}}'}}
-                                {{'{{#linkTo "campos" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Campos</a>{{/linkTo}}'}}
+                                {{'{{#linkTo "fields" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Campos</a>{{/linkTo}}'}}
                                 <li><a href="#">Listas</a></li>
                                 <li><a href="#">Segmentos</a></li>
                                 <li><a href="#">Estadisticas</a></li>
@@ -19,30 +19,30 @@
         {{ "{{outlet}}" }}
 </script>
         
-<script type="text/x-handlebars" id="campos">
+<script type="text/x-handlebars" data-template-name="fields">
 <div class="row-fluid">
 	<div class="span12">
 			<h4>Campos de la Base de Datos</h4>
-			<p>Esta seccion esta dedicada a la Lectura\n
+			<p>Esta seccion esta dedicada a la Lectura
 			y Edicion de los Campos Personalizados
 			</p>
 	</div>
 </div>
-<div class="row-fluid add">
-	{{'{{#linkTo "adicionar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Adicionar</a>{{/linkTo}}'}}
+<div class="row-fluid">
+Adicionar!
 </div>
 <div class="row-fluid">
         <div class="span12">
                 <table class="table table-hover">
                         <thead>
                                 <tr>
-									<th width="230">
+									<th class="span3">
 											Etiqueta
 									</th>
-									<th width="250">
+									<th class="span4">
 											Tipo
 									</th>
-									<th>
+									<th class="span3">
 											Requerido
 									</th>
 									<th>
@@ -51,50 +51,45 @@
                                 </tr>
                         </thead>
                         <tbody>
-						{%for field in fields%}
+							{{'{{#each controller}}'}}
                                 <tr>
-									<td>
-											<div class="name" id="name">{{field.name}}</div>
+									<td>{{'{{name}}'}}</td>
+									<td>{{'{{type}}'}}</td>
+									<td>{{'{{#if required}}'}}
+										SI
+										{{'{{else}}'}}
+										NO
+										{{'{{/if}}'}}
 									</td>
-									<td>
-											{{field.type}}
-									</td>
-									<td>
-											{% if(field.required === 'Si')%}
-												<label class="checkbox checked" for="required">
+<!--												<label class="checkbox" for="required">
 													<span class="icons">
 														<span class="first-icon fui-checkbox-unchecked"></span>
 														<span class="second-icon fui-checkbox-checked"></span>
 													</span>
 												</label>
-											{%else%}
-												<label class="checkbox" for="required">
-													<span class="icons">
-														<span class="first-icon fui-checkbox-unchecked"></span>
-														<span class="second-icon fui-checkbox-checked"></span>
-													</span>
-												</label>
-											{%endif%}
-									</td>
+												-->
 									<td>
 										<div class="span2">
-											{{'{{#linkTo "editar" tagName="label" href=false}}<a {{bindAttr href="view.href"}}>Editar</a>{{/linkTo}}'}}
+										Editar
 										</div>
 										<div class="span2">
-											<a href="/emarketing/field/delete/{{field.idCustomField}}">Eliminar</a>
+										Eliminar
 										</div>
 									</td>
                                 </tr>
-							{%endfor%}
+							{{'{{else}}'}}
+								<tr><td colspan="4">No hay campos personalizados</td></tr>
+							{{'{{/each}}'}}
                         </tbody>
                 </table>
         </div>
 </div>
-<div class="row-fluid add">
-        {{'{{#linkTo "adicionar" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Adicionar</a>{{/linkTo}}'}}
+<div class="row-fluid">
+	{{'{{#linkTo "add" tagName="span" href=false}}<a {{bindAttr href="view.href"}}>Adicionar</a>{{/linkTo}}'}}
 </div>
  {{ "{{outlet}}" }}
 </script>
+
 
 <div class="row-fluid">
         <div class="row-fluid">
@@ -178,17 +173,17 @@
 
 <script type="text/x-handlebars" id="adicionar">
 <div class="row-fluid">
-	<div class="span8">
+	<div class="span10">
 		<form action = '/emarketing/field/new/{{sdbase.idDbase}}', id = 'newField', method="post">
 			<table class="table table-hover">
 				<tr>
-					<td>
+					<td class="span3">
 						{{ NewFieldForm.render('name') }}
 					</td>
-					<td>
+					<td class="span4">
 						{{ NewFieldForm.render('type') }}
 					</td>
-					<td>
+					<td class="span4">
 						<label class="checkbox" for="required">
 							<span class="icons">
 								<span class="first-icon fui-checkbox-unchecked"></span>
@@ -206,27 +201,21 @@
 </div>	
 </script>
 
-<script type="text/x-handlebars" id="editar">
+<script type="text/x-handlebars" data-template-name="edit">
 <div class="row-fluid">
-	<div class="span8">
-			<form action = 'field/edit/{{sdbase.idDbase}}', id = 'newField', method="post">
+	<div class="span10">
+		<form>
 			<table class="table table-striped">
 				<tr>
-					<td>
-						Nombre del campo:
-					</td>
-					<td>
-						{{ NewFieldForm.render('name') }}
+					<td class="span3">
+						<input type="text" name="name" value="{{field.name}}">
 					</td>
 
-					<td>
-						Tipo:
-					</td>
-					<td>
+					<td class="span4">
 						{{ NewFieldForm.render('type') }}
 					</td>
 
-					<td>
+					<td class="span4">
 						<label class="checkbox" for="required">
 							<span class="icons">
 								<span class="first-icon fui-checkbox-unchecked"></span>

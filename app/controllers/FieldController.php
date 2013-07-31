@@ -53,6 +53,7 @@ class FieldController extends ControllerBase
 		}
 	}
 	
+	
 	public function deleteAction($id)
 	{
 		$registro = Customfield::findFirstByIdCustomField($id);
