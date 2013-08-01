@@ -21,6 +21,7 @@ App.Field = DS.Model.extend({
 	name: DS.attr( 'string' ),
 	type: DS.attr( 'string' ),
 	required: DS.attr('boolean'),
+	values: DS.attr('text'),
 	
 	changedRequired: function() {
 		this.get("transaction").commit();
@@ -32,18 +33,16 @@ App.FieldsAddController = Ember.ObjectController.extend({
 	save: function() {
 		this.get("model.transaction").commit();
 		this.get("target").transitionTo("fields");
-	},
-			
+	},		
 	cancel: function(){
 		 this.get("transaction").rollback();
 		 this.get("target").transitionTo("fields");
 	},
 	isSelect: function() {
 		return (this.get('type') == "Select" || this.get('type') == "MultiSelect");
-	}.property('type'),
+	}.property('type')
 			
 });
-
 
 
 App.FieldsEditController = Ember.ObjectController.extend({

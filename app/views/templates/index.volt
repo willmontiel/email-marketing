@@ -35,7 +35,9 @@
         <meta name="author" content="Ivan">
 
         <style>
-
+			select {
+				width: 88%;
+			}
         </style>
     </head>
     <body>

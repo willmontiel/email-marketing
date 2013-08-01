@@ -39,13 +39,16 @@
 									<th class="span3">
 											Etiqueta
 									</th>
-									<th class="span4">
+									<th class="span2">
 											Tipo
 									</th>
-									<th class="span3">
+									<th class="span2">
 											Requerido
 									</th>
-									<th>
+									<th class="span3">
+											Valor
+									</th>
+									<th class="span2">
 											Accion
 									</th>
                                 </tr>
@@ -72,14 +75,10 @@
 											</label>
 										{{ '{{/if}}' }}
 									</td>
-
+									<td>{{'{{values}}'}}</td>
 									<td>
-										<div class="span2">
-											{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
-										</div>
-										<div class="span2">
-											{{'{{#linkTo "fields.remove" this}}'}} Eliminar {{'{{/linkTo}}'}}
-										</div>
+										{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
+										{{'{{#linkTo "fields.remove" this}}'}} Eliminar {{'{{/linkTo}}'}}
 									</td>
                                 </tr>
 								
@@ -187,7 +186,8 @@
 						<td class="span3">
 							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre"}} '}}	
 						</td>
-						<td class="span4">
+						<td class="span2">
+						
 							{{ '{{view Ember.Select
 								contentBinding="App.types"
 								optionValuePath="content.id"
@@ -198,10 +198,12 @@
 								{{ '{{partial "fields/select"}}' }}
 							{{ '{{/if}}' }}
 						</td>
-						<td class="span3">
-							{{' {{view Ember.Checkbox  valueBinding="required"}} '}}Requerido
+						<td class="span2">
+							{{' {{view Ember.Checkbox  valueBinding="required"}} '}}
 						</td>
-						<td>
+						<td class="span2">
+						</td>
+						<td class="span3">
 							<button class="btn btn-success">Grabar</button>
 							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</td>
@@ -215,7 +217,7 @@
 
 <script type="text/x-handlebars" data-template-name="fields/edit">
 <div class="row-fluid">
-	<div class="span10">
+	<div class="span12">
 		<form {{' {{action "save" on="submit"}} '}}>
 			<table class="table table-hover">
 				<tbody>
@@ -223,13 +225,15 @@
 						<td class="span3">
 							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre"}} '}}	
 						</td>
-						<td class="span4">
+						<td class="span2">
 							{{ '{{type}}'}}
 						</td>
-						<td class="span3">
+						<td class="span2">
 							{{' {{view Ember.Checkbox  valueBinding="required"}} '}}Requerido
 						</td>
-						<td>
+						<td class="span2">
+						</td>
+						<td class="span3">
 							<button class="btn btn-success">Editar</button>
 							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</td>
@@ -254,7 +258,6 @@
 </div>
 </script>
 <script type="text/x-handlebars" data-template-name="fields/_select">
-	{{ '{{view Ember.TextField valueBinding="values" placeholder="Valor"}}' }}
-	
+		{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor"}}' }}
 </script>
 {% endblock %}
