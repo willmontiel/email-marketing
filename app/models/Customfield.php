@@ -11,6 +11,9 @@ class Customfield extends \Phalcon\Mvc\Model
     {
     
 		$this->useDynamicUpdate(true);
+		$this->belongsTo("idDbase", "Dbase", "idDbase", array(
+            "foreignKey" => true,
+        ));
 		
     }
 	public function beforeValidationOnCreate()

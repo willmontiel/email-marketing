@@ -11,6 +11,22 @@ class FieldController extends ControllerBase
 	 */
 	public function indexAction()
 	{
+		$idbase = 0;
+		$dbases = $this->user->account->dbases;
+		
+		$lista = array();
+		foreach ($dbases as $db) {
+			$elem = array();
+			$elem['id'] = $db->idDbase;
+			$elem['name'] = $db->name;
+			$elem['description'] = $db->description;
+			$elem['Ctotal'] = $db->Ctotal;
+			$elem['name'] = $db->Cactive;
+			$elem['name'] = $db->Cinactive;
+			$elem['name'] = $db->Cunsubscribed;
+			$elem['name'] = $db->Cbounced;
+			$elem['name'] = $db->Cspam;
+		}
 		
 	}
 	

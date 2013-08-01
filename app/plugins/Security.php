@@ -81,10 +81,14 @@ class Security extends Plugin
 		$controller = $dispatcher->getControllerName();
 		$action = $dispatcher->getActionName();
 		
-		$this->publicurls = array('session:signin', 'session:login', 'field:insert', 'field:update', 'field:query');
-
+		$this->publicurls = array('session:signin', 'session:login', 'field:insert', 'field:update', 
+								  'field:query', 'api:listcustomfields', 'api:getcustomfield', 
+								  'api:createcustomfield', 'api:updatecustomfield', 'api:delcustomfield',
+			);
+		
 		if ($role == 'ROLE_GUEST') {
 			$accessdir = $controller . ':' . $action;
+			$this->logger->log("DIR: " . $accessdir);
 			if (!in_array($accessdir, $this->publicurls)) {
 				$this->response->redirect("session/signin");
 				return false;
