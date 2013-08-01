@@ -194,12 +194,16 @@
 								optionLabelPath="content.type"
 								valueBinding="type"}}'
 							}}
+							{{ '{{#if isSelect}}' }}
+								{{ '{{partial "fields/select"}}' }}
+							{{ '{{/if}}' }}
 						</td>
 						<td class="span3">
 							{{' {{view Ember.Checkbox  valueBinding="required"}} '}}Requerido
 						</td>
 						<td>
-							<button>Grabar</button>
+							<button class="btn btn-success">Grabar</button>
+							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</td>
 					</tr>
 				</tbody>	
@@ -220,22 +224,19 @@
 							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre"}} '}}	
 						</td>
 						<td class="span4">
-							{{ '{{view Ember.Select
-								contentBinding="App.types"
-								optionValuePath="content.id"
-								optionLabelPath="content.type"
-								valueBinding="type"}}'
-							}}
+							{{ '{{type}}'}}
 						</td>
 						<td class="span3">
 							{{' {{view Ember.Checkbox  valueBinding="required"}} '}}Requerido
 						</td>
 						<td>
-							<button>Editar</button>
+							<button class="btn btn-success">Editar</button>
+							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</td>
 					</tr>
 				</tbody>	
 			</table>
+		{{ "{{outlet}}" }}
 	</div>
 </div>
 </script>
@@ -251,5 +252,9 @@
 
  </div>
 </div>
+</script>
+<script type="text/x-handlebars" data-template-name="fields/_select">
+	{{ '{{view Ember.TextField valueBinding="values" placeholder="Valor"}}' }}
+	
 </script>
 {% endblock %}
