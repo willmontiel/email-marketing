@@ -198,8 +198,8 @@
 								{{ '{{partial "fields/select"}}' }}
 							{{ '{{/if}}' }}
 						</td>
-						<td class="span2">
-							{{' {{view Ember.Checkbox  valueBinding="required"}} '}}
+						<td class="span2">	
+							{{' {{view Ember.Checkbox  checkedBinding="required"}} '}}			
 						</td>
 						<td class="span2">
 						</td>
@@ -223,17 +223,18 @@
 				<tbody>
 					<tr>
 						<td class="span3">
-							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre"}} '}}	
+							{{' {{view Ember.TextField valueBinding="name"}} '}}	
 						</td>
 						<td class="span2">
 							{{ '{{type}}'}}
 						</td>
 						<td class="span2">
-							{{' {{view Ember.Checkbox  valueBinding="required"}} '}}Requerido
-						</td>
-						<td class="span2">
+							{{' {{view Ember.Checkbox  checkedBinding="required"}} '}}Requerido
 						</td>
 						<td class="span3">
+							{{' {{view Ember.TextField valueBinding="values"}} '}}	
+						</td>
+						<td class="span2">
 							<button class="btn btn-success">Editar</button>
 							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</td>
@@ -251,7 +252,10 @@
 
  <p>Esta seguro que desea Eliminar el Campo <strong>{{'{{this.name}}'}}</strong></p>
   <button {{'{{action eliminate this}}'}} class="btn btn-danger">
-   Eliminar
+		Eliminar
+  </button>
+  <button class="btn btn-inverse" {{ '{{action cancel this}}' }}>
+		Cancelar
   </button>
 
  </div>
