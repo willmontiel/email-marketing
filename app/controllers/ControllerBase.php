@@ -12,15 +12,11 @@
  */
 class ControllerBase extends \Phalcon\Mvc\Controller
 {
+	protected $_isJsonResponse = false;
+
 	public function initialize()
 	{
-		//Recuperar idAccount del usuario
-		if (isset($this->userObject)) {
-			$this->user = $this->userObject;
-		}
-		else {
-			$this->user = new User;
-		}
+		$this->user = $this->userObject;
 	}
 
 	/**
@@ -39,6 +35,27 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			return $this->response->redirect($destination);
 		}
 		return null;
+	}
+	
+	
+
+	/**
+	 * Llamar este metodo para enviar respuestas en modo JSON
+	 */
+	public function setJsonResponse($content, $status = 200, $message = '') {
+		$this->view->disable();
+
+		$this->_isJsonResponse = true;
+		$this->response->setContentType('application/json', 'UTF-8');
+		
+		if ($status != 200) {
+			$this->response->setStatusCode($status, $message);
+		}
+		if (is_array($content)) {
+			$content = json_encode($content);
+		}
+		$this->response->setContent($content);
+		return $this->response;
 	}
 }
 
