@@ -22,20 +22,48 @@ class ApiController extends ControllerBase
 		
 		if ($fields) {
 			foreach ($fields as $field) {
-				$elem = array();
-				$elem['id'] = $field->idCustomField;
-				$elem['name'] = $field->name;
-				$elem['type'] = $field->type;
-				$elem['required'] = ($field->required=='Si');
-				$elem['values'] = $field->values;
-
-				$lista[] = $elem;
+				$lista[] = $this->fromPObjectToJObject($field);
 			}
 		}
 
 		return $this->setJsonResponse(array('fields' => $lista) );
 		
 	}
+
+	/**
+	 * Graba la informacion de un StdObject con la informacion de 
+	 * un campo persnalizado, dentro de un objeto del modelo
+	 * @param \Object $jsonObject
+	 * @param Customfield $phObject
+	 */
+	protected function populatePObject($jsonObject, $phObject)
+	{
+		$phObject->name = $jsonObject->name;
+		$phObject->type = $jsonObject->type;
+		$phObject->required = ($jsonObject->required)?'Si':'No';
+		$phObject->values = $jsonObject->values;
+		$phObject->defaultValue = $jsonObject->default_value;
+	}
+
+	/**
+	 * Crea un arreglo con la informacion del objeto Customfield
+	 * para que pueda ser convertido a JSON
+	 * @param Customfield $phObject
+	 * @return array
+	 */
+	protected function fromPObjectToJObject($phObject)
+	{
+		$jsonObject = array();
+		$jsonObject['id'] = $phObject->idCustomField;
+		$jsonObject['name'] = $phObject->name;
+		$jsonObject['type'] = $phObject->type;
+		$jsonObject['required'] = ($phObject->required=='Si');
+		$jsonObject['values'] = $phObject->values;
+		$jsonObject['default_value'] = $phObject->defaultValue;
+		
+		return $jsonObject;
+	}
+	
 
 	/**
 	 * 
@@ -49,14 +77,8 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
 		}
 		
-		$fielddata = array();
+		$fielddata = $this->fromPObjectToJObject($customfield);
 		
-		$fielddata['id'] = $customfield->idCustomField;
-		$fielddata['name'] = $customfield->name;
-		$fielddata['type'] = $customfield->type;
-		$fielddata['required'] = ($customfield->required=='Si');
-		$fielddata['values'] = $customfield->values;
-
 		return $this->setJsonResponse(array('field' => $fielddata) );	
 	
 	}
@@ -101,11 +123,11 @@ class ApiController extends ControllerBase
 		
 		$contentsraw = $this->request->getRawBody();
 		$log->log('Got this: [' . $contentsraw . ']');
-		$contents = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contents, true) . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		// Validar campos
-		$contents = $contents->field;
+		$contents = $contentsT->field;
 		if (!$this->validFieldObject($contents)) {
 			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
 		}
@@ -121,10 +143,7 @@ class ApiController extends ControllerBase
 		// Insertar el objeto en la base de datos
 		$customfield = new Customfield();
 		$customfield->dbase = $db;
-		$customfield->name = $contents->name;
-		$customfield->type = $contents->type;
-		$customfield->required = ($contents->required)?'Si':'No';
-		$customfield->values = $contents->values;
+		$this->populatePObject($contents, $customfield);
 		
 		if (!$customfield->save()) {
 			foreach ($customfield->getMessages() as $message) {
@@ -133,13 +152,8 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Error grabando informacion');
 		}
 
-		$fielddata = array();
-		
-		$fielddata['id'] = $customfield->idCustomField;
-		$fielddata['name'] = $customfield->name;
-		$fielddata['type'] = $customfield->type;
-		$fielddata['required'] = ($customfield->required=='Si');
-		$fielddata['values'] = $customfield->values;
+
+		$fielddata = $this->fromPObjectToJObject($customfield);
 
 		return $this->setJsonResponse(array('field' => $fielddata), 201, 'Success');	
 	
@@ -164,11 +178,11 @@ class ApiController extends ControllerBase
 		$contentsraw = $this->request->getRawBody();
 
 		$log->log('Got this: [' . $contentsraw . ']');
-		$contents = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contents, true) . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		// Validar campos
-		$contents = $contents->field;
+		$contents = $contentsT->field;
 		if (!$this->validFieldObject($contents)) {
 			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
 		}
@@ -182,10 +196,7 @@ class ApiController extends ControllerBase
 		}
 		
 		// Actualizar el objeto en la base de datos
-		$customfield->name = $contents->name;
-		$customfield->type = $contents->type;
-		$customfield->required = ($contents->required)?'Si':'No';
-		$customfield->values = $contents->values;
+		$this->populatePObject($contents, $customfield);
 		
 		if (!$customfield->save()) {
 			foreach ($customfield->getMessages() as $message) {
@@ -194,13 +205,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Error grabando informacion');
 		}
 
-		$fielddata = array();
-		
-		$fielddata['id'] = $customfield->idCustomField;
-		$fielddata['name'] = $customfield->name;
-		$fielddata['type'] = $customfield->type;
-		$fielddata['required'] = ($customfield->required=='Si');
-		$fielddata['values'] = $customfield->values;
+		$fielddata = $this->fromPObjectToJObject($customfield);
 
 		return $this->setJsonResponse(array('field' => $fielddata), 201, 'Success');	
 	
