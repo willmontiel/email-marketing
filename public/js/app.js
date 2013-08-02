@@ -31,9 +31,18 @@ App.Field = DS.Model.extend({
 
 App.FieldsAddController = Ember.ObjectController.extend({
 	save: function() {
+		if (this.get('values') != undefined) { 
+			this.set('values', 
+			this.get('values').split(' ')
+			);
+		}
+		else if (this.get('name') == undefined) { 
+			this.set('name','Campo1');
+		}
 		this.get("model.transaction").commit();
 		this.get("target").transitionTo("fields");
-	},		
+	},
+		
 	cancel: function(){
 		 this.get("transaction").rollback();
 		 this.get("target").transitionTo("fields");
@@ -41,12 +50,18 @@ App.FieldsAddController = Ember.ObjectController.extend({
 	isSelect: function() {
 		return (this.get('type') == "Select" || this.get('type') == "MultiSelect");
 	}.property('type')
-			
+	
 });
 
 
 App.FieldsEditController = Ember.ObjectController.extend({
 	save: function() {
+		if (this.get('values') != undefined) { 
+			this.set('values', 
+			this.get('values').split(' ')
+			);
+		}
+		
 		this.get("model.transaction").commit();
 		this.get("target").transitionTo("fields");
 	},
@@ -90,7 +105,11 @@ App.FieldsRemoveController = Ember.ObjectController.extend({
 		this.get('content').deleteRecord();
 		this.get('store').commit();
 		this.get("target").transitionTo("fields");
-    }
+    },
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("fields");
+	}
 });
 App.FieldsController = Ember.ArrayController.extend();
 
