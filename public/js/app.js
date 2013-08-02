@@ -12,8 +12,13 @@ App.Router.map(function() {
 
 /* STORE */
 App.Store = DS.Store.extend({
-  revision: 13,
-  adapter: DS.FixtureAdapter.create()
+  revision: 13
+//  ,
+//  adapter: DS.FixtureAdapter.create()
+});
+
+DS.RESTAdapter.reopen({
+	namespace: MyDbaseUrl
 });
 
 
@@ -21,12 +26,11 @@ App.Field = DS.Model.extend({
 	name: DS.attr( 'string' ),
 	type: DS.attr( 'string' ),
 	required: DS.attr('boolean'),
-	values: DS.attr('text'),
-	values_temp: DS.attr('string'),
-	changedRequired: function() {
-		this.get("transaction").commit();
-		console.log("Transaction was commited");
-	}.observes("required")
+	values: DS.attr('string'),
+//	values_temp: DS.attr('string'),
+
+//	changedRequired: function() {
+//	}.observes("required")
 });
 
 App.FieldsAddController = Ember.ObjectController.extend({
@@ -87,13 +91,6 @@ App.types = [
   Ember.Object.create({type: "Selección Multiple",    id: "MultiSelect"})
 ];
 
-
-
-App.Field.FIXTURES = [
-  { id: 1, name: 'Nombre', type: "Text", required: false, values: 'vacio' },
-  { id: 2, name: 'Apellido' , type: "Text", required: true, values: 'vacio' }
-];
-
 App.FieldsRoute = Ember.Route.extend({
   model: function(){
    return App.Field.find();
@@ -103,8 +100,17 @@ App.FieldsRoute = Ember.Route.extend({
 App.FieldsEditRoute = Ember.Route.extend({
 	deactivate: function () {
 		console.log('Deactivate FieldsEdit');
-		if (this.currentModel.get('isDirty')) {
-			this.currentModel.get('transaction').rollback();
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+        console.log('Cambio de modelo');
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && model.get('isSaving') == false) {
+			model.get('transaction').rollback();
 		}
 	}
 });
@@ -114,7 +120,7 @@ App.FieldsAddRoute = Ember.Route.extend({
 		return App.Field.createRecord();
 	},
 	deactivate: function () {
-		if (this.currentModel.get('isNew')) {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
 			this.currentModel.get('transaction').rollback();
 		}
 	}

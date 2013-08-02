@@ -11,6 +11,8 @@
         {{ stylesheet_link ('css/prstyles.css') }}
 		{{ stylesheet_link ('css/style.css') }}
 		{{ stylesheet_link ('css/emarketingstyle.css') }}
+		
+		{% block header_javascript %}
         {{ javascript_include('js/libs/jquery-1.9.1.js') }}
         {{ javascript_include('bootstrap/js/bootstrap.js') }}
         {{ javascript_include('js/jquery-ui-1.10.3.custom.min.js') }}
@@ -30,6 +32,8 @@
 		{{ javascript_include('js/libs/ember-1.0.0-rc.6.1.js') }}
 		{{ javascript_include('js/libs/ember-data.js') }}
 		{{ javascript_include('js/app.js') }}
+
+		{% endblock %}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Proyect">
         <meta name="author" content="Ivan">

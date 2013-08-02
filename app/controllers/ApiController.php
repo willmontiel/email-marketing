@@ -79,8 +79,7 @@ class ApiController extends ControllerBase
 			$failed = true;
 		}
 		if (!isset($contents->values)) {
-			$this->errortxt[] = '"values" requerido';
-			$failed = true;
+			$contents->values = '';
 		}
 		return !$failed;
 	}
@@ -88,7 +87,7 @@ class ApiController extends ControllerBase
 
 	/**
 	 * 
-	 * @Put("/dbase/{idDbase:[0-9]+}/fields")
+	 * @Post("/dbase/{idDbase:[0-9]+}/fields")
 	 */
 	public function createcustomfieldAction($idDbase)
 	{
@@ -106,6 +105,7 @@ class ApiController extends ControllerBase
 		$log->log('Turned it into this: [' . print_r($contents, true) . ']');
 		
 		// Validar campos
+		$contents = $contents->field;
 		if (!$this->validFieldObject($contents)) {
 			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
 		}
@@ -147,7 +147,7 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @Post("/dbase/{idDbase:[0-9]+}/fields/{idCustomfield:[0-9]+}")
+	 * @Put("/dbase/{idDbase:[0-9]+}/fields/{idCustomfield:[0-9]+}")
 	 */
 	public function updatecustomfieldAction($idDbase, $idCustomfield)
 	{
@@ -168,6 +168,7 @@ class ApiController extends ControllerBase
 		$log->log('Turned it into this: [' . print_r($contents, true) . ']');
 		
 		// Validar campos
+		$contents = $contents->field;
 		if (!$this->validFieldObject($contents)) {
 			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
 		}

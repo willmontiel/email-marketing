@@ -37,13 +37,6 @@ class Customfield extends \Phalcon\Mvc\Model
             )
         ));
 		
-		$this->validate(new Uniqueness(
-				array(
-					"field" => "name",
-					"message" => "No debes tener campos con el mismo nombre"
-				)
-		));
-	
 		if ($this->validationHasFailed() == true) {
 			return false;
         }

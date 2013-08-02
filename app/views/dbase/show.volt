@@ -1,5 +1,12 @@
 {% extends "templates/index.volt" %}
 
+{% block header_javascript %}
+	<script type="text/javascript">
+		var MyDbaseUrl = 'emarketing/api/dbase/{{ sdbase.idDbase }}';
+	</script>
+	{{ super() }}
+{% endblock %}
+
 {% block content %}
 
 {{ content() }}
