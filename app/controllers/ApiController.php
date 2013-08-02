@@ -103,6 +103,9 @@ class ApiController extends ControllerBase
 		if (!isset($contents->values)) {
 			$contents->values = '';
 		}
+		if (!isset($contents->default_value)) {
+			$contents->default_value = '';
+		}
 		return !$failed;
 	}
 
