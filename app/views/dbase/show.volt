@@ -42,8 +42,8 @@
         <div class="span12">
                 <table class="table table-hover">
                         <thead>
-                                <tr>
-									<th class="span3">
+                                 <tr>
+									<th class="span2">
 											Etiqueta
 									</th>
 									<th class="span2">
@@ -52,8 +52,11 @@
 									<th class="span2">
 											Requerido
 									</th>
-									<th class="span3">
-											Valor
+									<th class="span2">
+											Opcion por Defecto
+									</th>
+									<th class="span2">
+											Opciones
 									</th>
 									<th class="span2">
 											Accion
@@ -82,6 +85,7 @@
 											</label>
 										{{ '{{/if}}' }}
 									</td>
+									<td>{{'{{defaultValue}}'}}</td>
 									<td>{{'{{values}}'}}</td>
 									<td>
 										{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
@@ -187,68 +191,115 @@
 <div class="row-fluid">
 	<div class="span12">
 		<form>
-			<table class="table table-hover">
-				<tbody>
-					<tr>
-						<td class="span3">
-							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre"}} '}}	
-						</td>
-						<td class="span2">
-						
+			<div class="span4">
+				<div class="row-fluid" id="nameNewField">
+					<label for="name">Nombre del Campo</label>
+					 {{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="true"}} '}}
+				</div>
+				<div class="row-fluid" id="typeNewField">
+					<label for="type">Tipo de Formato del Campo</label>
+						<div class="row-fluid">
 							{{ '{{view Ember.Select
-								contentBinding="App.types"
-								optionValuePath="content.id"
-								optionLabelPath="content.type"
-								valueBinding="type"}}'
-							}}
-							{{ '{{#if isSelect}}' }}
-								{{ '{{partial "fields/select"}}' }}
-							{{ '{{/if}}' }}
-						</td>
-						<td class="span2">	
-							{{' {{view Ember.Checkbox  checkedBinding="required"}} '}}			
-						</td>
-						<td class="span2">
-						</td>
-						<td class="span3">
-							<button class="btn btn-success"  {{' {{ action save this}}' }}>Grabar</button>
-							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-						</td>
-					</tr>
-				</tbody>	
-			</table>
+									contentBinding="App.types"
+									optionValuePath="content.id"
+									optionLabelPath="content.type"
+									valueBinding="type" id="type"}}'
+							 }}
+						</div>
+					</label>
+				</div>
+				<div class="row-fluid" id="requiredNewField">
+					<p>Seleccione si desea que el Campo sea Obligatorio</p>
+					<div class="row-fluid">
+					{{ '{{#if required}}' }}
+						<label class="checkbox checked" for="required">
+						<span class="icons">
+							<span class="first-icon fui-checkbox-unchecked">
+							</span>
+							<span class="second-icon fui-checkbox-checked">
+							</span>
+						</span>
+						 {{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
+						</label>
+					{{ '{{else}}' }}
+						<label class="checkbox" for="required">
+						<span class="icons">
+							<span class="first-icon fui-checkbox-unchecked">
+							</span>
+							<span class="second-icon fui-checkbox-checked">
+							</span>
+						</span>
+						 {{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
+						</label>
+					{{ '{{/if}}' }}
+					</div>
+				</div>	
+				<div class="row-fluid" id="defaultNewField">
+					<label for="value_default">Valor por defecto </label>
+						{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="value_default"}}' }}
+				</div>
+				<div class="row-fluid">
+					{{ '{{#if isSelect}}' }}
+						{{ '{{partial "fields/select"}}' }}
+					{{ '{{/if}}' }}
+				</div>
+				<div class="row-fluid" id="SaveNewField">
+					<div class="span3"><button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button></div>
+					<div class="span3"><button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button></div>
+				</div>	
+			</div>
 		</form>
 	</div>
-</div>	
+</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/edit">
 <div class="row-fluid">
 	<div class="span12">
-		<form >
-			<table class="table table-hover">
-				<tbody>
-					<tr>
-						<td class="span3">
-							{{' {{view Ember.TextField valueBinding="name"}} '}}	
-						</td>
-						<td class="span2">
-							{{ '{{type}}'}}
-						</td>
-						<td class="span2">
-							{{' {{view Ember.Checkbox  checkedBinding="required"}} '}}Requerido
-						</td>
-						<td class="span3">
-							{{ '{{view Ember.TextField valueBinding="values_temp" placeholder="Valor por defecto"}}' }}	
-						</td>
-						<td class="span2">
-							<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
-							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-						</td>
-					</tr>
-				</tbody>	
-			</table>
-		{{ "{{outlet}}" }}
+		<form>
+			<div class="span4">
+				<div class="row-fluid" id="nameNewField">
+					<label for="name">Nombre del Campo</label>
+					 {{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name"}} '}}</div>
+				<div class="row-fluid" id="requiredNewField">
+					<p>Seleccione si desea que el Campo sea Obligatorio</p>
+					<div class="row-fluid">
+					{{ '{{#if required}}' }}
+						<label class="checkbox checked" for="required">
+						<span class="icons">
+							<span class="first-icon fui-checkbox-unchecked">
+							</span>
+							<span class="second-icon fui-checkbox-checked">
+							</span>
+						</span>
+						 {{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
+						</label>
+					{{ '{{else}}' }}
+						<label class="checkbox" for="required">
+						<span class="icons">
+							<span class="first-icon fui-checkbox-unchecked">
+							</span>
+							<span class="second-icon fui-checkbox-checked">
+							</span>
+						</span>
+						 {{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
+						</label>
+					{{ '{{/if}}' }}
+					</div>
+				</div>	
+				<div class="row-fluid" id="defaultNewField">
+					<label for="value_default"=>Valor por defecto</label>
+						{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="value_default"}}' }}
+						{{ '{{#if isSelect}}' }}
+							{{ '{{partial "fields/select"}}' }}
+						{{ '{{/if}}' }}
+				</div>
+				<div class="row-fluid" id="SaveNewField">
+					<div class="span3"><button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button></div>
+					<div class="span3"><button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button></div>
+				</div>	
+			</div>
+		</form>
 	</div>
 </div>
 </script>
@@ -269,7 +320,7 @@
 </div>
 </script>
 <script type="text/x-handlebars" data-template-name="fields/_select">
-		{{ '{{view Ember.TextField valueBinding="values_temp" placeholder="Valor por defecto"}}' }}
-		{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor"}}' }}
+		<label for="values">Demas opciones</label>
+		{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor" id="values"}}' }}
 </script>
 {% endblock %}

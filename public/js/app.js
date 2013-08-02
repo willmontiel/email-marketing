@@ -23,12 +23,11 @@ DS.RESTAdapter.reopen({
 
 
 App.Field = DS.Model.extend({
-	name: DS.attr( 'string' ),
+	name: DS.attr('string', { required: true }),
 	type: DS.attr( 'string' ),
 	required: DS.attr('boolean'),
 	values: DS.attr('string'),
-//	values_temp: DS.attr('string'),
-
+	defaultValue: DS.attr('string')
 //	changedRequired: function() {
 //	}.observes("required")
 	becameError: function() {
@@ -42,10 +41,7 @@ App.Field = DS.Model.extend({
 App.FieldsAddController = Ember.ObjectController.extend({
 		
 	save: function() {
-		 if (this.get('values') != undefined) { 
-			this.set('values',
-			this.get('values_temp') + '\n '+ this.get('values')
-		);
+		if (this.get('values') != undefined) { 
 			this.set('values', 
 			this.get('values').split('\n')
 			);
@@ -68,11 +64,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 
 App.FieldsEditController = Ember.ObjectController.extend({
 	edit: function() {
-		if (this.get('values') != undefined) { 
-			this.set('values',
-			this.get('values_temp')+' '+this.get('values')
-		);
-			
+	if (this.get('values') != undefined) { 
 			this.set('values', 
 			this.get('values').split('\n')
 			);
@@ -83,7 +75,10 @@ App.FieldsEditController = Ember.ObjectController.extend({
 	cancel: function(){
 		 this.get("transaction").rollback();
 		 this.get("target").transitionTo("fields");
-	}
+	},
+	isSelect: function() {
+		return (this.get('type') == "Select" || this.get('type') == "MultiSelect");
+	}.property('type')
 });
 
 App.FieldController = Ember.ObjectController.extend();
