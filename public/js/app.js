@@ -23,7 +23,6 @@ App.Field = DS.Model.extend({
 	required: DS.attr('boolean'),
 	values: DS.attr('text'),
 	values_temp: DS.attr('string'),
-	
 	changedRequired: function() {
 		this.get("transaction").commit();
 		console.log("Transaction was commited");
@@ -31,8 +30,9 @@ App.Field = DS.Model.extend({
 });
 
 App.FieldsAddController = Ember.ObjectController.extend({
+		
 	save: function() {
-		if (this.get('values') != undefined) { 
+		 if (this.get('values') != undefined) { 
 			this.set('values',
 			this.get('values_temp') + '\n '+ this.get('values')
 		);
@@ -40,6 +40,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 			this.get('values').split('\n')
 			);
 		}
+		
 		this.get("model.transaction").commit();
 		this.get("target").transitionTo("fields");
 	},
@@ -56,7 +57,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 
 
 App.FieldsEditController = Ember.ObjectController.extend({
-	save: function() {
+	edit: function() {
 		if (this.get('values') != undefined) { 
 			this.set('values',
 			this.get('values_temp')+' '+this.get('values')
@@ -66,7 +67,6 @@ App.FieldsEditController = Ember.ObjectController.extend({
 			this.get('values').split('\n')
 			);
 		}
-		
 		this.get("model.transaction").commit();
 		this.get("target").transitionTo("fields");
 	},
@@ -100,11 +100,26 @@ App.FieldsRoute = Ember.Route.extend({
   } 
 });
 
-App.FieldsAddRoute = Ember.Route.extend({
-  model: function(){
-	  return App.Field.createRecord();
-  } 
+App.FieldsEditRoute = Ember.Route.extend({
+	deactivate: function () {
+		console.log('Deactivate FieldsEdit');
+		if (this.currentModel.get('isDirty')) {
+			this.currentModel.get('transaction').rollback();
+		}
+	}
 });
+
+App.FieldsAddRoute = Ember.Route.extend({
+	model: function(){
+		return App.Field.createRecord();
+	},
+	deactivate: function () {
+		if (this.currentModel.get('isNew')) {
+			this.currentModel.get('transaction').rollback();
+		}
+	}
+});
+
 App.FieldsRemoveController = Ember.ObjectController.extend({
     eliminate: function() {
 		this.get('content').deleteRecord();

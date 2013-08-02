@@ -179,7 +179,7 @@
 <script type="text/x-handlebars" data-template-name="fields/add">
 <div class="row-fluid">
 	<div class="span12">
-		<form {{' {{action "save" on="submit"}} '}}>
+		<form>
 			<table class="table table-hover">
 				<tbody>
 					<tr>
@@ -204,7 +204,7 @@
 						<td class="span2">
 						</td>
 						<td class="span3">
-							<button class="btn btn-success">Grabar</button>
+							<button class="btn btn-success"  {{' {{ action save this}}' }}>Grabar</button>
 							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</td>
 					</tr>
@@ -218,7 +218,7 @@
 <script type="text/x-handlebars" data-template-name="fields/edit">
 <div class="row-fluid">
 	<div class="span12">
-		<form {{' {{action "save" on="submit"}} '}}>
+		<form >
 			<table class="table table-hover">
 				<tbody>
 					<tr>
@@ -232,11 +232,10 @@
 							{{' {{view Ember.Checkbox  checkedBinding="required"}} '}}Requerido
 						</td>
 						<td class="span3">
-							{{ '{{view Ember.TextField valueBinding="values_temp" placeholder="Valor por defecto"}}' }}
-							{{' {{view Ember.TextArea valueBinding="values"}} '}}	
+							{{ '{{view Ember.TextField valueBinding="values_temp" placeholder="Valor por defecto"}}' }}	
 						</td>
 						<td class="span2">
-							<button class="btn btn-success">Editar</button>
+							<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
 							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</td>
 					</tr>
