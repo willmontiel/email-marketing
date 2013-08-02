@@ -12,7 +12,7 @@ App.Router.map(function() {
 
 /* STORE */
 App.Store = DS.Store.extend({
-  revision: 13
+	revision: 13
 //  ,
 //  adapter: DS.FixtureAdapter.create()
 });
@@ -31,6 +31,12 @@ App.Field = DS.Model.extend({
 
 //	changedRequired: function() {
 //	}.observes("required")
+	becameError: function() {
+		return alert('there was an error!');
+	},
+	becameInvalid: function(errors) {
+		return alert("Record was invalid because: " + errors);
+	}
 });
 
 App.FieldsAddController = Ember.ObjectController.extend({
@@ -81,6 +87,11 @@ App.FieldsEditController = Ember.ObjectController.extend({
 });
 
 App.FieldController = Ember.ObjectController.extend();
+
+Ember.TextField.reopen({
+	attributeBindings: ["required"]	
+});
+
 
 App.types = [
   Ember.Object.create({type: "Texto", id: "Text"}),
@@ -137,5 +148,6 @@ App.FieldsRemoveController = Ember.ObjectController.extend({
 		 this.get("target").transitionTo("fields");
 	}
 });
+
 App.FieldsController = Ember.ArrayController.extend();
 
