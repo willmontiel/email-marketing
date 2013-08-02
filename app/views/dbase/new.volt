@@ -18,7 +18,7 @@
 		<div class="span12"></div>
 	</div>
     <div class="row-fluid">
-        <form action = "/emarketing/dbase/new", method="post">
+        <form action = "/emarketing/dbase/new" method="post">
         <div class="row-fluid">
             <div class="span3">
                 <label for="name">Nombre</label>

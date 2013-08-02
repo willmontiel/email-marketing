@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         {{ get_title() }}
         {{ stylesheet_link('bootstrap/css/bootstrap.css') }}
-        {{ stylesheet_link('bootstrap/css/bootstrap-responsive.css') }}
         {{ stylesheet_link('css/style.css') }}
         {{ stylesheet_link ('css/flat-ui.css') }}
         {{ stylesheet_link ('css/bootstrap-modal.css') }}
@@ -46,37 +45,74 @@
         </style>
     </head>
     <body>
-			<div class="container-fluid">
-					<div class="row-fluid">
-						<div class="span3">
-								<a href="/emarketing/">{{ image('src': '/images/gorilla.jpg') }}<a>
-							<div class="row-fluid">
-								<ul class="nav nav-list text-center">
-									<li>
-										<a href="/emarketing/dbases"><label>Contactos</label></a>
-									</li>
-									<li>
-										<a href="#"><label>Campañas</label></a>
-									</li>
-									<li>
-										<a href="#"><label>Autorespuestas</label></a>
-									</li>
-									<li>
-										<a href="#"><label>Estadisticas</label></a>
-									</li>
-								</ul>
-									
-							</div>
+		<div class="container-fluid">
+			<!-----Inicio de la Toolbar Flat ui  ------->
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="navbar navbar-inverse">
+					<div class="navbar-inner">
+						<div class="container">
+							<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#nav-collapse-01"></button>
+						<div class="nav-collapse collapse" id="nav-collapse-01">
+							<ul class="nav">
+								<li>
+									<a href="#fakelink">
+										Mail Station
+										<span class="navbar-unread">1</span>
+									</a>
+								</li>
+							</ul>
+								<div class="span8"></div>
+							<ul class="nav">
+								<li>
+									<a href="#fakelink">
+										{{ userObject.firstName }} {{ userObject.lastName }} ({{ userObject.username }})<span class="fui-user"></span>
+									</a>
+									<ul>
+										<li><a href="#fakelink"><span class="fui-eye"></span> Ver perfil</a></li>
+										<li><a href="#fakelink"><span class="fui-new"></span> Cambio de contraseña</a></li>
+										<li><a href="session/logout"><span class="fui-cross"></span></span> Cerrar Sesión</a></li>
+									</ul>
+								</li>
+							</ul>	
+						</div>	
+				  </div>
+				</div>
+			  </div>
+			</div>
+      </div>
+	<!----- fin de la toolbar flat ui---->
+			
+				<div class="row-fluid">
+					<div class="span3">
+							<a href="/emarketing/">{{ image('src': '/images/gorilla.jpg') }}<a>
+						<div class="row-fluid">
+							<ul class="nav nav-list text-center">
+								<li>
+									<a href="/emarketing/dbases"><label>Contactos</label></a>
+								</li>
+								<li>
+									<a href="#"><label>Campañas</label></a>
+								</li>
+								<li>
+									<a href="#"><label>Autorespuestas</label></a>
+								</li>
+								<li>
+									<a href="#"><label>Estadisticas</label></a>
+								</li>
+							</ul>
+
 						</div>
-						<div class="span9">
-							{{ content() }}
-							<!-- Inicio de contenido -->
-							{% block content %}
-								<!-- Aqui va el contenido -->
-							{% endblock %}
-							<!-- Fin de contenido -->
-						</div>		
 					</div>
-				</div>	
+					<div class="span9">
+						{{ content() }}
+						<!-- Inicio de contenido -->
+						{% block content %}
+							<!-- Aqui va el contenido -->
+						{% endblock %}
+						<!-- Fin de contenido -->
+					</div>		
+				</div>
+			</div>	
     </body>
 </html>

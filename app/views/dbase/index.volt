@@ -1,4 +1,5 @@
 {% extends "templates/index.volt" %}
+
 {% block content %}
 
 <!-- aqui inicia mi contenido -->

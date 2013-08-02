@@ -27,7 +27,7 @@ App.Field = DS.Model.extend({
 	type: DS.attr( 'string' ),
 	required: DS.attr('boolean'),
 	values: DS.attr('string'),
-	defaultValue: DS.attr('string')
+	defaultValue: DS.attr('string'),
 //	changedRequired: function() {
 //	}.observes("required")
 	becameError: function() {

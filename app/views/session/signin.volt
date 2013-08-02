@@ -45,7 +45,7 @@
 						<p> 
 							<strong>Contraseña:</strong>
 							<div class="control-group">
-								{{ password_field('pass', 'type': "password", 'class':"span5",  'required': "required", 'autofocus': "autofocus", 'placeholder': "Contraseña") }}
+								{{ password_field('pass', 'type': "password", 'class':"span5",  'required': "required", 'placeholder': "Contraseña") }}
 								<label class="login-field-icon fui-lock" for="pass"></label>
 							</div>
 						</p>
@@ -53,7 +53,7 @@
 						<p>
 							{{ submit_button("Ingresar", 'class' : "btn btn-primary btn-large btn-block") }}
 						</p>
-						<p>
+						<p>	
 							<label class="checkbox" for="checkbox1">
 								<span class="icons">
 									<span class="first-icon fui-checkbox-unchecked"></span>
@@ -61,6 +61,8 @@
 								</span>
 								<input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">
 								Recuerdame
+								<span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+								{{ link_to('', "¿Olvidaste tu contraseña?")}}
 							</label>
 						</p>
 						<input type="hidden" name="<?php echo $this->security->getTokenKey() ?>" value="<?php echo $this->security->getToken() ?>"/>

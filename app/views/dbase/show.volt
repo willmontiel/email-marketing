@@ -36,6 +36,7 @@
 	</div>
 </div>
 <div class="row-fluid">
+
 	<div class="span12"></div>
 </div>
 <div class="row-fluid">
@@ -162,28 +163,6 @@
 								<br/>
 						</div>
 				</div>
-		</div>
-		<div class="row-fluid">
-				<div class="span12">
-						<table class="table table-hover">
-								<thead>
-										<tr>
-												<th>Direccion de Correo</th>
-												<th>Nombre</th>
-												<th>Estado</th>
-												<th>Añadido en la Fecha</th>
-										</tr>
-								</thead>
-								<tbody>
-										<tr>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-										</tr>
-								</tbody>            
-						</table>
-				</div>    
 		</div>
 	</script>
 
