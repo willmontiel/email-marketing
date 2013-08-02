@@ -232,7 +232,8 @@
 							{{' {{view Ember.Checkbox  checkedBinding="required"}} '}}Requerido
 						</td>
 						<td class="span3">
-							{{' {{view Ember.TextField valueBinding="values"}} '}}	
+							{{ '{{view Ember.TextField valueBinding="values_temp" placeholder="Valor por defecto"}}' }}
+							{{' {{view Ember.TextArea valueBinding="values"}} '}}	
 						</td>
 						<td class="span2">
 							<button class="btn btn-success">Editar</button>
@@ -262,6 +263,7 @@
 </div>
 </script>
 <script type="text/x-handlebars" data-template-name="fields/_select">
+		{{ '{{view Ember.TextField valueBinding="values_temp" placeholder="Valor por defecto"}}' }}
 		{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor"}}' }}
 </script>
 {% endblock %}

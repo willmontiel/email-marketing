@@ -22,6 +22,7 @@ App.Field = DS.Model.extend({
 	type: DS.attr( 'string' ),
 	required: DS.attr('boolean'),
 	values: DS.attr('text'),
+	values_temp: DS.attr('string'),
 	
 	changedRequired: function() {
 		this.get("transaction").commit();
@@ -32,12 +33,12 @@ App.Field = DS.Model.extend({
 App.FieldsAddController = Ember.ObjectController.extend({
 	save: function() {
 		if (this.get('values') != undefined) { 
+			this.set('values',
+			this.get('values_temp') + '\n '+ this.get('values')
+		);
 			this.set('values', 
-			this.get('values').split(' ')
+			this.get('values').split('\n')
 			);
-		}
-		else if (this.get('name') == undefined) { 
-			this.set('name','Campo1');
 		}
 		this.get("model.transaction").commit();
 		this.get("target").transitionTo("fields");
@@ -57,8 +58,12 @@ App.FieldsAddController = Ember.ObjectController.extend({
 App.FieldsEditController = Ember.ObjectController.extend({
 	save: function() {
 		if (this.get('values') != undefined) { 
+			this.set('values',
+			this.get('values_temp')+' '+this.get('values')
+		);
+			
 			this.set('values', 
-			this.get('values').split(' ')
+			this.get('values').split('\n')
 			);
 		}
 		
