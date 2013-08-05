@@ -45,6 +45,8 @@ class ApiController extends ControllerBase
 		$phObject->defaultValue = $jsonObject->default_value;
 		
 		$phObject->limitInferior = $jsonObject->limit_inferior;
+		$phObject->limitSuperior = $jsonObject->limit_superior;
+		$phObject->maxLong = $jsonObject->max_long;
 	}
 
 	/**
@@ -63,6 +65,10 @@ class ApiController extends ControllerBase
 		$jsonObject['values'] = $phObject->values;
 		$jsonObject['default_value'] = $phObject->defaultValue;
 		
+		$jsonObject['limit_inferior'] = $phObject->limitInferior;
+		$jsonObject['limit_superior'] = $phObject->limitSuperior;
+		$jsonObject['max_long'] = $phObject->maxLong;
+
 		return $jsonObject;
 	}
 	
