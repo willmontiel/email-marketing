@@ -49,6 +49,10 @@ App.Field = DS.Model.extend({
 	
 	isNumerical: function() {
 		return (this.get('type') == "Numerical");
+	}.property('type'),
+			
+	isDate: function() {
+		return (this.get('type') == "Date");
 	}.property('type')
 });
 

@@ -5,6 +5,7 @@
 		var MyDbaseUrl = 'emarketing/api/dbase/{{ sdbase.idDbase }}';
 	</script>
 	{{ super() }}
+	{{ partial("partials/ember_partial") }}
 {% endblock %}
 
 {% block content %}
@@ -232,8 +233,10 @@
 					</div>
 				</div>	
 				<div class="row-fluid" id="defaultNewField">
-					<label for="value_default">Valor por defecto </label>
+					{{ '{{#unless isDate}}' }}
+						<label for="value_default">Valor por defecto </label>
 						{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="value_default"}}' }}
+					{{ '{{/unless}}' }}
 				</div>
 				<div class="row-fluid">
 					{{ '{{#if isSelect}}' }}
