@@ -18,7 +18,7 @@
  				<th>Id</th>
  				<th>Nombre de la cuenta</th>
  				<th>Modo de uso</th>
- 				<th>Espacio Disponible (Mb):</th>
+ 				<th>Espacio disponible en disco (Mb)</th>
  				<th>Limite de mensajes/contactos</th>
  				<th>Modo de pago</th>
 				<th></th>

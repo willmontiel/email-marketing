@@ -19,7 +19,7 @@
 				<th>Apellidos</th>
 				<th>Nombre de usuario</th>
 				<th>E-Mail</th>
-				<th>Role</th>
+				<th>Tipo de usuario</th>
 			</tr>
 			
 		{%for all in allUser%}

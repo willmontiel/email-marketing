@@ -37,21 +37,26 @@ class AccountController extends ControllerBase
 			    $user->account = $account;
 				
 				if($pass == $pass2){
-				    $user->password = $this->security2->hash($pass);
-					if (!$user->save()) {
-						$this->db->rollback();
-						foreach ($user->getMessages() as $msg) {
-						$this->flash->error($msg);
+					if(strlen($pass) >= 8){
+						$user->password = $this->security2->hash($pass);
+						if (!$user->save()) {
+							$this->db->rollback();
+							foreach ($user->getMessages() as $msg) {
+							$this->flash->error($msg);
+							}
+						}
+						else {
+						$this->db->commit();
+						$this->flash->success('Se ha creado la cuenta exitosamente');					
 						}
 					}
-					else {
-					$this->db->commit();
-					$this->flash->success('Se ha creado la cuenta exitosamente');					
+					else{
+					$this->flash->error("La contraseña es muy corta, debe estar entre 8 y 40 caracteres");
 					}
-			   }
-			   else{
-				   $this->flash->error('Las contraseÃ±as no coinciden por favor verifica la informaciÃ³n');
-			   }
+				}
+				else{
+					   $this->flash->error('Las contraseñas no coinciden por favor verifica la información');
+				}		
 			}
             else {
 				foreach ($account->getMessages() as $msg) {

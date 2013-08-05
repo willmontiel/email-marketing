@@ -18,57 +18,49 @@ class NewAccountForm extends Form
         $this->add(new Text('email', array(
         'maxlength' => 80,
 		'type' => 'email',
-	    'required' => 'required',
-		'autofocus' => "autofocus"
+	    'required' => 'required'
         )));
 		
         $this->add(new Text('firstName', array(
         'maxlength' => 50,
 		'type' => 'text',
-        'required' => 'required',
-		'autofocus' => "autofocus"          
+        'required' => 'required'
         )));
 		
         $this->add(new Text ('lastName', array(
         'maxlength' => 50,
 		'type' => 'text',
-        'required' => 'required',
-		'autofocus' => "autofocus" 
+        'required' => 'required'
         )));
 		
         $this->add(new Password ('password', array(
         'maxlength' => 40,
 		'type' => 'text',
-        'required' => 'required',
-		'autofocus' => "autofocus" 
+        'required' => 'required'
         )));
 		
         $this->add(new Password ('password2', array(
         'maxlength' => 40,
 		'type' => 'text',
-        'required' => 'required',
-		'autofocus' => "autofocus" 
+        'required' => 'required' 
         )));
 		
         $this->add(new Text ('username', array(
         'maxlength' => 50,
 		'type' => 'text',
-        'required' => 'required',
-		'autofocus' => "autofocus" 
+        'required' => 'required' 
         )));
 		
         $this->add(new Text ('fileSpace', array(
         'maxlength' => 30,
 		'type' => 'text',
-        'required' => 'required',
-		'autofocus' => "autofocus" 
+        'required' => 'required' 
         )));
 		
         $this->add(new Text ('messageQuota', array(
         'maxlength' => 30,
 		'type' => 'text',
-        'required' => 'required',
-		'autofocus' => "autofocus" 
+        'required' => 'required' 
         )));
 		
         $this->add(new Select("modeUse", array(
