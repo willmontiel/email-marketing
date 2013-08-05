@@ -56,6 +56,17 @@ class Dbase extends \Phalcon\Mvc\Model
         }
         return $messages;
     }
+	
+	 public function beforeCreate()
+    {
+        $this->createdon = time();
+
+    }
+
+    public function beforeUpdate()
+    {
+        $this->updatedon = time();
+    }
 
 }
 ?>

@@ -9,13 +9,22 @@ class EditForm extends Form
     public function initialize()
     {
         $this->add(new Text('name', array(
-        'maxlength' => 50          
+        'maxlength' => 50,
+		'type' => 'text',
+		'required' => 'required',
+		'autofocus' => "autofocus"
         )));
         $this->add(new Text('description', array(
-        'maxlength' => 150          
+        'maxlength' => 150,
+		'type' => 'text',
+		'required' => 'required',
+		'autofocus' => "autofocus"
         )));
         $this->add(new Text('Cdescription', array(
-        'maxlength' => 150      
+        'maxlength' => 150,
+		'type' => 'text',
+		'required' => 'required',
+		'autofocus' => "autofocus"
         )));
     }
 }
