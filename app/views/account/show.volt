@@ -31,7 +31,7 @@
 				<td>{{all.email}}</td>
 				<td>{{all.userrole}}</td>
 				<td>
-					<a href="account/edit/{{all.idAccount}}">Editar</a><br>
+					<a href="#">Editar</a><br>
 					<a href="#" data-toggle="modal">Eliminar</a>
 				</td>
 			</tr>

@@ -26,11 +26,11 @@ App.Field = DS.Model.extend({
 	name: DS.attr('string', { required: true }),
 	type: DS.attr( 'string' ),
 	required: DS.attr('boolean'),
-	values: DS.attr('text'),
+	values: DS.attr('string'),
 	defaultValue: DS.attr('string'),
-	limitInferior: DS.attr('int'),
-	limitSuperior: DS.attr('int'),
-	maxLong: DS.attr('int'),
+	limitInferior: DS.attr('number'),
+	limitSuperior: DS.attr('number'),
+	maxLong: DS.attr('number'),
 //	changedRequired: function() {
 //	}.observes("required")
 	becameError: function() {
