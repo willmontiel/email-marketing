@@ -56,7 +56,7 @@
 						<div class="nav-collapse collapse" id="nav-collapse-01">
 							<ul class="nav">
 								<li>
-									<a href="#fakelink">
+									<a href="">
 										Mail Station
 										<span class="navbar-unread">1</span>
 									</a>
@@ -84,7 +84,7 @@
 	<!----- fin de la toolbar flat ui---->
 			
 				<div class="row-fluid">
-					<div class="span3">
+					<div class="span2">
 							<a href="/emarketing/">{{ image('src': '/images/gorilla.jpg') }}<a>
 						<div class="row-fluid">
 							<ul class="nav nav-list text-center">
@@ -104,7 +104,7 @@
 
 						</div>
 					</div>
-					<div class="span9">
+					<div class="span10">
 						{{ content() }}
 						<!-- Inicio de contenido -->
 						{% block content %}

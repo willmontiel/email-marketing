@@ -4,7 +4,6 @@
 		<h1>Crear una nueva cuenta</h1>
 </div>
  <div class="span12">
-	{{ content() }}
 	<div class="row-fluid">
 		<div class="span5">
 		{{ form('account/new', 'id': 'registerAccount', 'method': 'Post') }}

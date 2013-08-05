@@ -9,7 +9,6 @@
 
 {% block content %}
 
-{{ content() }}
 <script type="text/x-handlebars">       
         <div class="row-fluid">
                 <div class="span12">
@@ -87,7 +86,18 @@
 										{{ '{{/if}}' }}
 									</td>
 									<td>{{'{{defaultValue}}'}}</td>
-									<td>{{'{{values}}'}}</td>
+									<td>
+										{{ '{{#if isText}}' }}
+											Maximo {{'{{maxLong}}'}} Caracteres
+										{{ '{{/if}}' }}
+										{{ '{{#if isNumerical}}' }}
+											{{'{{limitInferior}}'}} - {{'{{limitSuperior}}'}}
+										{{ '{{/if}}' }}
+										{{ '{{#if isSelect}}' }}
+											{{'{{values}}'}}
+										{{ '{{/if}}' }}
+
+									</td>
 									<td>
 										{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
 										{{'{{#linkTo "fields.remove" this}}'}} Eliminar {{'{{/linkTo}}'}}
@@ -185,6 +195,14 @@
 									valueBinding="type" id="type"}}'
 							 }}
 						</div>
+						<div class="row-fluid">
+							{{ '{{#if isText}}' }}
+								{{ '{{partial "fields/text"}}' }}
+							{{ '{{/if}}' }}
+							{{ '{{#if isNumerical}}' }}
+								{{ '{{partial "fields/numerical"}}' }}
+							{{ '{{/if}}' }}
+						</div>
 					</label>
 				</div>
 				<div class="row-fluid" id="requiredNewField">
@@ -240,6 +258,16 @@
 				<div class="row-fluid" id="nameNewField">
 					<label for="name">Nombre del Campo</label>
 					 {{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name"}} '}}</div>
+				<div class="row-fluid">
+					<div class="row-fluid" id="typeNewField">
+							{{ '{{#if isText}}' }}
+								{{ '{{partial "fields/text"}}' }}
+							{{ '{{/if}}' }}
+							{{ '{{#if isNumerical}}' }}
+								{{ '{{partial "fields/numerical"}}' }}
+							{{ '{{/if}}' }}
+					</div>
+				</div>
 				<div class="row-fluid" id="requiredNewField">
 					<p>Seleccione si desea que el Campo sea Obligatorio</p>
 					<div class="row-fluid">
@@ -301,5 +329,24 @@
 <script type="text/x-handlebars" data-template-name="fields/_select">
 		<label for="values">Demas opciones</label>
 		{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor" id="values"}}' }}
+</script>
+
+<script type="text/x-handlebars" data-template-name="fields/_text">
+	<label for="maxlong">Longitud Maxima del Campo</label>
+	<div class="span5">
+		{{ '{{view Ember.TextField valueBinding="maxLong" placeholder="Letras" id="maxlong"}}' }}
+	</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="fields/_numerical">
+	<div class="span5">
+		<label for="limit_Inf">Valor Minimo</label>
+		{{ '{{view Ember.TextField valueBinding="limitInferior" placeholder="Inferior" id="limit_Inf"}}' }}
+	</div>
+	<div class="span1"></div>
+	<div class="span5">
+		<label for="limit_Sup">Valor Maximo</label>
+		{{ '{{view Ember.TextField valueBinding="limitSuperior" placeholder="Superior" id="limit_Sup"}}' }}
+	</div>
 </script>
 {% endblock %}

@@ -7,8 +7,7 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span12">
-			<div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>			
+		<div class="span12">			
 		</div>
 	</div>
 	<div class="row-fluid">

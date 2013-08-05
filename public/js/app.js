@@ -26,8 +26,11 @@ App.Field = DS.Model.extend({
 	name: DS.attr('string', { required: true }),
 	type: DS.attr( 'string' ),
 	required: DS.attr('boolean'),
-	values: DS.attr('string'),
+	values: DS.attr('text'),
 	defaultValue: DS.attr('string'),
+	limitInferior: DS.attr('int'),
+	limitSuperior: DS.attr('int'),
+	maxLong: DS.attr('int'),
 //	changedRequired: function() {
 //	}.observes("required")
 	becameError: function() {
@@ -35,7 +38,18 @@ App.Field = DS.Model.extend({
 	},
 	becameInvalid: function(errors) {
 		return alert("Record was invalid because: " + errors);
-	}
+	},
+	isSelect: function() {
+		return (this.get('type') == "Select" || this.get('type') == "MultiSelect");
+	}.property('type'),
+			
+	isText: function() {
+		return (this.get('type') == "Text");
+	}.property('type'),
+	
+	isNumerical: function() {
+		return (this.get('type') == "Numerical");
+	}.property('type')
 });
 
 App.FieldsAddController = Ember.ObjectController.extend({
@@ -54,11 +68,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 	cancel: function(){
 		 this.get("transaction").rollback();
 		 this.get("target").transitionTo("fields");
-	},
-	isSelect: function() {
-		return (this.get('type') == "Select" || this.get('type') == "MultiSelect");
-	}.property('type')
-	
+	}	
 });
 
 
@@ -75,10 +85,7 @@ App.FieldsEditController = Ember.ObjectController.extend({
 	cancel: function(){
 		 this.get("transaction").rollback();
 		 this.get("target").transitionTo("fields");
-	},
-	isSelect: function() {
-		return (this.get('type') == "Select" || this.get('type') == "MultiSelect");
-	}.property('type')
+	}
 });
 
 App.FieldController = Ember.ObjectController.extend();

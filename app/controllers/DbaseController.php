@@ -46,24 +46,39 @@ class DbaseController extends ControllerBase
 
         if ($this->request->isPost()) {   
             $editform->bind($this->request->getPost(), $db);
+			
+			if($otherbd=Dbase::findFirstByName($db->name)){
+				if($otherbd->idAccount == $db->account->idAccount){
+					$this->flash->error('El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
+				}
+			}
+			else{
+				$db->Ctotal = 0;
+				$db->Cactive = 0;
+				$db->Cinactive = 0;
+				$db->Cunsubscribed  = 0;
+				$db->Cbounced  = 0;
+				$db->Cspam   = 0;
 
-            if ($editform->isValid() && $db->save()) {
-                $this->flash->success('Base de Datos Creada Exitosamente!');
-                $this->dispatcher->forward(
-                    array(
-                        'controller' => 'dbase',
-                        'action' => 'show',
-                        'params' => array($db->idDbase)
-                    )
-                );
-            }
-            else {
-                foreach ($db->getMessages() as $msg) {
-                    $this->flash->error($msg);
-                }
-            }
-        }
-        $this->view->editform = $editform;
+				if ($editform->isValid() && $db->save()) {
+					$this->flash->success('Base de Datos Creada Exitosamente!');
+					$this->dispatcher->forward(
+						array(
+							'controller' => 'dbase',
+							'action' => 'show',
+							'params' => array($db->idDbase)
+						)
+					);
+				}
+				else {
+					foreach ($db->getMessages() as $msg) {
+						$this->flash->error($msg);
+					}
+				}	
+			}
+		}
+		
+			$this->view->editform = $editform;
     }
     
     public function showAction($id)
@@ -76,57 +91,7 @@ class DbaseController extends ControllerBase
 		if ($db !== null) {
 			$this->view->setVar("sdbase", $db);
 			
-//*************************INICIA LA PARTE DE CUSTOM FIELDS*******************
 
-//*****************SHOW*****************//
-			
-			$field = Customfield::findByIdDbase($id);
-			$this->view->setVar("fields", $field);
-
-//*****************NEW*****************//
-			
-			$field = new CustomField();
-			$form = new NewFieldForm($field);
-
-			if ($this->request->isPost()) {
-
-				$form->bind($this->request->getPost(), $field);
-				$this->db->begin();
-
-				if (!$form->isValid() OR !$field->save()) {
-
-					$this->db->rollback();
-					foreach ($field->getMessages() as $msg) {
-							$this->flash->error($msg);
-					}
-				}
-				else{
-					$this->db->commit();
-					$this->flash->success('Se ha creado la cuenta exitosamente');
-				}
-			}
-			$this->view->NewFieldForm = $form;
-			
-//*****************EDIT*****************//
-			
-			$field = new CustomField();
-			$editform = new NewFieldForm($field);
-			$registro = Customfield::findFirstByIdCustomField($id);
-
-			if ($this->request->isPost()) {   
-				$editform->bind($this->request->getPost(), $registro);
-
-				if ($editform->isValid() && $registro->save()) {
-					$this->flash->success('Campo Editado Exitosamente!');
-				}
-			}
-			
-//*****************DELETE*****************//
-			
-			$registro = Customfield::findFirstByIdCustomField($id);
-			if ($this->request->isPost()) {
-				$registro->delete();
-			}
         }
     }
    

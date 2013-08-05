@@ -59,7 +59,7 @@ class User extends \Phalcon\Mvc\Model
 			   array(
 					"field" => "password",
 					"min" => 8,
-					"message" => "La contraseña es muy corta, debe ser de 8 ó 40 caracteres"
+					"message" => "La contraseña es muy corta, debe ser de 8 a 40 caracteres"
 		)));
 
 		$this->validate(new PresenceOf(

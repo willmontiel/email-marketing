@@ -33,7 +33,7 @@ class AccountController extends ControllerBase
 		$pass =	$user->password = $form->getValue('password');
 		$pass2=	$user->password2 = $form->getValue('password2');
 				$user->username = $form->getValue('username');  
-				$user->type='ROLE_ADMIN';
+				$user->userrole='ROLE_ADMIN';
 			    $user->account = $account;
 				
 				if($pass == $pass2){
@@ -50,7 +50,7 @@ class AccountController extends ControllerBase
 					}
 			   }
 			   else{
-				   $this->flash->error('Las contraseÃ±as no coincide por favor verifica la informaciÃ³n');
+				   $this->flash->error('Las contraseÃ±as no coinciden por favor verifica la informaciÃ³n');
 			   }
 			}
             else {
