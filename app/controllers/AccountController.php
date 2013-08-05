@@ -47,7 +47,9 @@ class AccountController extends ControllerBase
 						}
 						else {
 						$this->db->commit();
-						$this->flash->success('Se ha creado la cuenta exitosamente');					
+						$this->flashSession->success('Se ha creado la cuenta exitosamente');
+						$this->response->redirect("account");
+						
 						}
 					}
 					else{

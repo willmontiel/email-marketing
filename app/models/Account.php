@@ -46,6 +46,17 @@ class Account extends \Phalcon\Mvc\Model
 			return false;
         }
     }
+	
+	public function beforeCreate()
+    {
+        $this->createdon = time();
+
+    }
+
+    public function beforeUpdate()
+    {
+        $this->updatedon = time();
+    }
            
 }
     

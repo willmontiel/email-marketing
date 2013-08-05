@@ -7,9 +7,22 @@ class EditAccountForm extends Form
 {
     public function initialize()
     {
-        $this->add(new Text('companyName'));
-        $this->add(new Text ('fileSpace'));
-        $this->add(new Text ('messageQuota'));
+        $this->add(new Text('companyName', array(
+        'maxlength' => 50,
+		'type' => 'text',
+        'required' => 'required',
+		'autofocus' => "autofocus" 
+        )));
+        $this->add(new Text ('fileSpace', array(
+        'maxlength' => 50,
+		'type' => 'text',
+        'required' => 'required' 
+        )));
+        $this->add(new Text ('messageQuota', array(
+        'maxlength' => 50,
+		'type' => 'text',
+        'required' => 'required' 
+        )));
         $this->add(new Select("modeUse", array(
             '1' => 'Por Contacto',
             '2' => 'Envio',

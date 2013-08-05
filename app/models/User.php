@@ -88,6 +88,17 @@ class User extends \Phalcon\Mvc\Model
 			
 	}
 	
+	public function beforeCreate()
+    {
+        $this->createdon = time();
+
+    }
+
+    public function beforeUpdate()
+    {
+        $this->updatedon = time();
+    }
+	
 		
 }
 	
