@@ -30,7 +30,6 @@
 		{{ javascript_include('js/libs/handlebars-1.0.0-rc.4.js') }}
 		{{ javascript_include('js/libs/ember-1.0.0-rc.6.1.js') }}
 		{{ javascript_include('js/libs/ember-data.js') }}
-		{{ javascript_include('js/libs/ember-data-validations')}}
 		{{ javascript_include('js/app.js') }}
 
 		{% endblock %}
@@ -56,7 +55,7 @@
 						<div class="nav-collapse collapse" id="nav-collapse-01">
 							<ul class="nav">
 								<li>
-									<a href="">
+									<a href="/emarketing/">
 										Mail Station
 										<span class="navbar-unread">1</span>
 									</a>
@@ -85,11 +84,11 @@
 			
 				<div class="row-fluid">
 					<div class="span2">
-							<a href="/emarketing/">{{ image('src': '/images/gorilla.jpg') }}<a>
+							<a href="/emarketing/">{{ image('src': '/images/email.png') }}<a>
 						<div class="row-fluid">
-							<ul class="nav nav-list text-center">
+							<ul class="nav nav-list text-left">
 								<li>
-									<a href="/emarketing/dbases"><label>Contactos</label></a>
+									<a href="/emarketing/dbase"><label>Contactos</label></a>
 								</li>
 								<li>
 									<a href="#"><label>Campañas</label></a>
