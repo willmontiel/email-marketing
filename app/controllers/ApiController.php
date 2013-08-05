@@ -43,6 +43,8 @@ class ApiController extends ControllerBase
 		$phObject->required = ($jsonObject->required)?'Si':'No';
 		$phObject->values = $jsonObject->values;
 		$phObject->defaultValue = $jsonObject->default_value;
+		
+		$phObject->limitInferior = $jsonObject->limit_inferior;
 	}
 
 	/**
