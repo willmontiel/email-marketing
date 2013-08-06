@@ -7,7 +7,7 @@
 					<input class="form-search" type="search" value="" placeholder="Buscar">
 				</div>
 				<div class="span1">
-					<button class="btn btn-primary" type="Submit"><span class="fui-search"></span></button>
+					<!--- <button class="btn btn-primary" type="Submit"><span class="fui-search"></span></button> -->
 				</div>
 			</form>
 			<div class="row-fluid">
@@ -87,6 +87,52 @@
 			 </table>
         </div>
 	</div>
+	<div class="row-fluid">
+		<div class="text-right">
+		{{'{{#linkTo "contacts.new"}} <button class="btn btn-primary">Agregar</button> {{/linkTo}}'}}
+		</div>
+	</div>
+ {{ "{{outlet}}" }}
 </script>
-
+<script type="text/x-handlebars" data-template-name="contacts/new">
+	<form>
+		<div class="row-fluid">
+			<div class="span3">
+				<div class="row-fluid">
+					<label>E-mail: </label>
+				</div>
+				<div class="row-fluid">
+					{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" }} '}}
+				</div>
+				<div class="row-fluid">
+					<label>Nombre: </label>
+				</div>
+				<div class="row-fluid">	
+					{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}} '}}
+				</div>
+				<div class="row-fluid">
+					<label>Apellido: </label>
+				</div>
+				<div class="row-fluid">
+					{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
+				</div>
+				<div class="row-fluid">
+					<label>Estado: </label>
+				</div>
+				<div class="row-fluid">
+					{{ '{{view Ember.Select
+							contentBinding="App.status"
+							optionValuePath="content.id"
+							optionLabelPath="content.st"
+							valueBinding="st"}}'
+					}}
+				</div>
+				<div class="row-fluid" id="SaveNewField">
+					<button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button>
+					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+				</div>	
+			</div>
+		</div>
+	</form>
+</script>
 

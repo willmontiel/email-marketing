@@ -172,6 +172,8 @@ App.FieldsController = Ember.ArrayController.extend();
 //Fin de todo lo que tenga que ver con los campos
 
 
+
+//Inicio contactos
 App.Contact = DS.Model.extend({
 	email: DS.attr( 'string' ),
 	name: DS.attr( 'string' ),
@@ -201,4 +203,32 @@ App.ContactsRoute = Ember.Route.extend({
   } 
 });
 
+App.status = [
+  Ember.Object.create({st: "Activo", id: "Activo"}),
+  Ember.Object.create({st: "Inactivo", id: "Inactivo"})
+];
+
+App.ContactsNewController = Ember.ObjectController.extend({
+		
+	save: function() {
+		this.get("model.transaction").commit();
+		this.get("target").transitionTo("contacts");
+	},
+		
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("contacts");
+	}	
+});
+
+App.ContactsNewRoute = Ember.Route.extend({
+	model: function(){
+		return App.Contact.createRecord();
+	},
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.get('transaction').rollback();
+		}
+	}
+});
 App.ContactsController = Ember.ArrayController.extend();
