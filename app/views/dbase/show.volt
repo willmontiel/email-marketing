@@ -100,8 +100,12 @@
 
 									</td>
 									<td>
-										{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
-										{{'{{#linkTo "fields.remove" this}}'}} Eliminar {{'{{/linkTo}}'}}
+										{{ '{{#if isEmail}}' }}
+											<span>Editar</span>
+										{{ '{{else}}' }}
+											{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
+										{{ '{{/if}}' }}
+											{{'{{#linkTo "fields.remove" this}}'}} Eliminar {{'{{/linkTo}}'}}
 									</td>
                                 </tr>
 								
@@ -128,6 +132,9 @@
                 </div>
                 <div class="span4" >
                         <span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
+						<div class="span3">
+							<a href="/emarketing/dbase/edit/{{sdbase.idDbase}}" class="btn btn-large btn-block btn-info">Editar</a>
+						</div>
                 </div>
         </div>
         <div id="emberAppContainer"></div>
@@ -330,7 +337,7 @@
 </div>
 </script>
 <script type="text/x-handlebars" data-template-name="fields/_select">
-		<label for="values">Demas opciones</label>
+		<label for="values">Opciones de la lista</label>
 		{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor" id="values"}}' }}
 </script>
 

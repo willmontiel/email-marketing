@@ -53,7 +53,11 @@ App.Field = DS.Model.extend({
 			
 	isDate: function() {
 		return (this.get('type') == "Date");
-	}.property('type')
+	}.property('type'),
+	
+	isEmail: function() {
+		return (this.get('name') == "Email" || this.get('name') == "Nombre" || this.get('name') == "Apellido");
+	}.property('name')
 });
 
 App.FieldsAddController = Ember.ObjectController.extend({

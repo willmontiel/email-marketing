@@ -20,7 +20,7 @@
         <form action = "/emarketing/dbase/new" method="post">
         <div class="row-fluid">
             <div class="span3">
-                <label for="name">Nombre</label>
+                <label for="name">*Nombre</label>
             </div>
             <div class="span4">
                 {{editform.render("name")}}
@@ -28,7 +28,7 @@
         </div>
         <div class="row-fluid">
             <div class="span3">
-                <label for="description">Descripcion</label>                
+                <label for="description">*Descripcion</label>                
             </div>
             <div class="span4">
                 {{editform.render("description")}}
@@ -36,7 +36,7 @@
         </div>
         <div class="row-fluid">
             <div class="span3">
-                <label for="Cdescription">Descripcion de los Contactos</label>
+                <label for="Cdescription">*Descripcion de los Contactos</label>
             </div>
             <div class="span4">
                 {{editform.render("Cdescription")}}
