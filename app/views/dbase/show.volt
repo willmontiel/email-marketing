@@ -20,6 +20,7 @@
                                 <li><a href="#">Segmentos</a></li>
                                 <li><a href="#">Estadisticas</a></li>
                                 <li><a href="#">Formularios</a></li>
+								{{'{{#linkTo "contacts" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}
                         </ul>
                 </div>
         </div>
@@ -251,8 +252,8 @@
 					{{ '{{/if}}' }}
 				</div>
 				<div class="row-fluid" id="SaveNewField">
-					<div class="span3"><button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button></div>
-					<div class="span3"><button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button></div>
+					<button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button>
+					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 				</div>	
 			</div>
 		</form>
@@ -312,8 +313,8 @@
 						{{ '{{/if}}' }}
 				</div>
 				<div class="row-fluid" id="SaveNewField">
-					<div class="span3"><button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button></div>
-					<div class="span3"><button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button></div>
+					<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
+					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 				</div>	
 			</div>
 		</form>
@@ -359,4 +360,55 @@
 		{{ '{{view Ember.TextField valueBinding="limitSuperior" placeholder="Superior" id="limit_Sup"}}' }}
 	</div>
 </script>
+
+<!---------------------- Contacts Template -------------------------->
+<script type="text/x-handlebars" data-template-name="contacts">
+	<div class="row-fluid">
+		<div class="span12">
+			<h4>Contactos</h4>	
+		</div>
+	</div>
+	
+	<div class="row-fluid">
+		<div class="span12"></div>
+	</div>
+	
+	<div class="row-fluid">
+        <div class="span12">
+			<table class="table table-hover">
+				<thead>
+					 <tr>
+						<th class="span4">
+							E-mail
+						</th>
+						<th class="span2">
+							Nombre
+						</th>
+						<th class="span2">
+							Apellido
+						</th>
+						<th class="span2">
+							Estado
+						</th>
+						<th class="span2">
+							Acciones
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			 </table>
+        </div>
+	</div>
+</script>
+
+
+
 {% endblock %}

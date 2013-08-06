@@ -8,6 +8,10 @@ App.Router.map(function() {
 	  this.resource('fields.edit', { path: '/fields/:field_id'}),
 	  this.resource('fields.remove', { path: '/remove/:field_id'});
   });
+  
+  this.resource('contacts', function(){
+	  this.route('new')
+  });
 });
 
 /* STORE */
@@ -21,7 +25,7 @@ DS.RESTAdapter.reopen({
 	namespace: MyDbaseUrl
 });
 
-
+//Inicio de todo lo que tenga que ver con los campos
 App.Field = DS.Model.extend({
 	name: DS.attr('string', { required: true }),
 	type: DS.attr( 'string' ),
@@ -160,4 +164,10 @@ App.FieldsRemoveController = Ember.ObjectController.extend({
 });
 
 App.FieldsController = Ember.ArrayController.extend();
+//Fin de todo lo que tenga que ver con los campos
 
+
+App.Contact = DS.Model.extend({
+	email: DS.attr( 'string' ),
+	
+});
