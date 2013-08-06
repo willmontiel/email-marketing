@@ -10,20 +10,19 @@ App.Router.map(function() {
   });
   
   this.resource('contacts', function(){
-	  this.route('new')
+	  this.route('new');
   });
 });
 
 /* STORE */
 App.Store = DS.Store.extend({
-	revision: 13
-//  ,
-//  adapter: DS.FixtureAdapter.create()
+	revision: 13,
+	adapter: DS.FixtureAdapter.create()
 });
 
-DS.RESTAdapter.reopen({
-	namespace: MyDbaseUrl
-});
+//DS.RESTAdapter.reopen({
+//	namespace: MyDbaseUrl
+//});
 
 //Inicio de todo lo que tenga que ver con los campos
 App.Field = DS.Model.extend({
@@ -116,6 +115,12 @@ App.types = [
   Ember.Object.create({type: "Selección Multiple",    id: "MultiSelect"})
 ];
 
+App.Field.FIXTURES = [
+  { id: 1, name: 'Email', type: 'Text', required: true, values: '', defaultValue: 'Ninguno' },
+  { id: 1, name: 'Nombre', type: 'Text', required: true, values: '', defaultValue: '' },
+  { id: 1, name: 'Apellido', type: 'Text', required: false, values: '', defaultValue: '' }
+];
+
 App.FieldsRoute = Ember.Route.extend({
   model: function(){
    return App.Field.find();
@@ -169,5 +174,31 @@ App.FieldsController = Ember.ArrayController.extend();
 
 App.Contact = DS.Model.extend({
 	email: DS.attr( 'string' ),
+	name: DS.attr( 'string' ),
+	lastName: DS.attr( 'string' ),
+	status: DS.attr( 'string' ),
 	
+	becameError: function() {
+		return alert('there was an error!');
+	},
+	becameInvalid: function(errors) {
+		return alert("Record was invalid because: " + errors);
+	}
 });
+
+App.Contact.FIXTURES = [
+  { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', status: 'Activo' },
+  { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', status: 'Activo' },
+  { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', status: 'Inactivo' },
+  { id: 4, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', status: 'Activo' }
+];
+
+App.ContactController = Ember.ObjectController.extend();
+
+App.ContactsRoute = Ember.Route.extend({
+  model: function(){
+   return App.Contact.find();
+  } 
+});
+
+App.ContactsController = Ember.ArrayController.extend();

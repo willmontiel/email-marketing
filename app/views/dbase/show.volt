@@ -15,12 +15,12 @@
                 <div class="span12">
                         <ul class="nav nav-pills">
                                 {{'{{#linkTo "index" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>General</a>{{/linkTo}}'}}
+								{{'{{#linkTo "contacts" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}
                                 {{'{{#linkTo "fields" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Campos</a>{{/linkTo}}'}}
                                 <li><a href="#">Listas</a></li>
                                 <li><a href="#">Segmentos</a></li>
                                 <li><a href="#">Estadisticas</a></li>
                                 <li><a href="#">Formularios</a></li>
-								{{'{{#linkTo "contacts" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}
                         </ul>
                 </div>
         </div>
@@ -437,53 +437,6 @@
 </script>
 
 <!---------------------- Contacts Template -------------------------->
-<script type="text/x-handlebars" data-template-name="contacts">
-	<div class="row-fluid">
-		<div class="span12">
-			<h4>Contactos</h4>	
-		</div>
-	</div>
-	
-	<div class="row-fluid">
-		<div class="span12"></div>
-	</div>
-	
-	<div class="row-fluid">
-        <div class="span12">
-			<table class="table table-hover">
-				<thead>
-					 <tr>
-						<th class="span4">
-							E-mail
-						</th>
-						<th class="span2">
-							Nombre
-						</th>
-						<th class="span2">
-							Apellido
-						</th>
-						<th class="span2">
-							Estado
-						</th>
-						<th class="span2">
-							Acciones
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</tbody>
-			 </table>
-        </div>
-	</div>
-</script>
-
-
+{{ partial("dbase/contacts") }}
 
 {% endblock %}
