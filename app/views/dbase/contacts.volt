@@ -77,7 +77,7 @@
 							<td>{{'{{lastName}}'}}</td>
 							<td>{{'{{status}}'}}</td>
 							<td>
-								Ver
+								{{ '{{#linkTo "contacts.show" this}}' }}ver{{'{{/linkTo}}'}}
 								Editar
 								Eliminar
 							</td>
@@ -136,4 +136,79 @@
 					</div>
 				</div>
 			</form>
+</script>
+<script type="text/x-handlebars" data-template-name="contacts/show">
+<div class="row-fluid">
+	<div class="span7">
+		<div class="row-fluid">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							Email: 
+						</td>
+						<td>
+							{{'{{email}}'}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Nombre: 
+						</td>
+						<td>
+							{{'{{name}}'}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Apellido: 
+						</td>
+						<td>
+							{{'{{lastName}}'}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Activo: 
+						</td>
+						<td>
+							Suscrito
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Campo 
+						</td>
+						<td>
+							Valor Campo
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="row-fluid">
+			<div class="span4">
+				<a href="#" class="btn btn-large btn-block btn-info">Desactivar</a>
+			</div>
+			<div class="span4">
+				<a href="#" class="btn btn-large btn-block btn-info">Des-suscribir</a>
+			</div>
+			<div class="span4">
+				<a href="#" class="btn btn-large btn-block btn-info">Editar</a>
+			</div>
+		</div>
+	</div>
+		
+	<div class="span5">
+		<div class="row-fluid">
+			Ultimas Campañas
+		</div>
+		<div class="row-fluid">
+			Ultimos Eventos
+		</div>
+		<div class="row-fluid">
+		
+		</div>
+	</div>
+</div>
 </script>

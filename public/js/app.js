@@ -2,6 +2,8 @@ App = Ember.Application.create({
 	rootElement: '#emberAppContainer'
 });
 
+App.set('errormessage', '');
+
 App.Router.map(function() {
   this.resource('fields', function(){
 	  this.route('add'),
@@ -10,7 +12,8 @@ App.Router.map(function() {
   });
   
   this.resource('contacts', function(){
-	  this.route('new');
+	  this.route('new'),
+	  this.resource('contacts.show', { path: '/show/:contact_id'});
   });
 });
 
@@ -56,11 +59,7 @@ App.Field = DS.Model.extend({
 			
 	isDate: function() {
 		return (this.get('type') == "Date");
-	}.property('type'),
-	
-	isEmail: function() {
-		return (this.get('name') == "Email" || this.get('name') == "Nombre" || this.get('name') == "Apellido");
-	}.property('name')
+	}.property('type')
 });
 
 App.FieldsAddController = Ember.ObjectController.extend({
@@ -77,6 +76,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 			this.get("model.transaction").commit();
 			this.get("target").transitionTo("fields");
 		} else {
+			App.set('errormessage', 'El campo ya existe');
 			this.get("target").transitionTo("fields.add");
 		}
 	},
@@ -90,13 +90,20 @@ App.FieldsAddController = Ember.ObjectController.extend({
 
 App.FieldsEditController = Ember.ObjectController.extend({
 	edit: function() {
-	if (this.get('values') != undefined) { 
-			this.set('values', 
-			this.get('values').split('\n')
-			);
+	exist = App.Field.find().filterProperty('name', this.get('name'));
+		if(exist.get("length") === 1 && this.get('name') === 'Email' && this.get('name') === 'Nombre' && this.get('name') === 'Apellido'){
+			if (this.get('values') != undefined) { 
+				this.set('values', 
+				this.get('values').split('\n')
+				);
+			}
+
+			this.get("model.transaction").commit();
+			this.get("target").transitionTo("fields");
+		} else {
+			App.set('errormessage', 'El campo ya existe');
+			this.get("target").transitionTo("fields.edit");
 		}
-		this.get("model.transaction").commit();
-		this.get("target").transitionTo("fields");
 	},
 	cancel: function(){
 		 this.get("transaction").rollback();
@@ -235,6 +242,10 @@ App.ContactsNewRoute = Ember.Route.extend({
 			this.currentModel.get('transaction').rollback();
 		}
 	}
+	
+});
+
+App.ContactsShowController = Ember.ObjectController.extend({
 	
 });
 App.ContactsIndexController = Ember.ArrayController.extend();

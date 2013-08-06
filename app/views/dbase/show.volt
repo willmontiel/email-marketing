@@ -176,12 +176,8 @@
 
 									</td>
 									<td>
-										{{ '{{#if isEmail}}' }}
-											<span>Editar</span>
-										{{ '{{else}}' }}
-											{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
-										{{ '{{/if}}' }}
-											{{'{{#linkTo "fields.remove" this}}'}} Eliminar {{'{{/linkTo}}'}}
+										{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
+										{{'{{#linkTo "fields.remove" this}}'}} Eliminar {{'{{/linkTo}}'}}
 									</td>
                                 </tr>
 								
@@ -213,20 +209,14 @@
                 </div>
         </div>
         <div id="emberAppContainer"></div>
-
+		
 	<script type="text/x-handlebars" data-template-name="index">
 		<div class="row-fluid">
 				<div class="span8">
-						<div class="row-fluid">
 								<p>Descripcion: {{sdbase.description}}</p>
-						</div>
-						<div class="row-fluid">
 								<p>Descripcion de Contactos: {{sdbase.Cdescription}}</p>
-						</div>
-						<div class="row-fluid">
 								<p>Fecha de Creacion: {{date('Y-m-d', sdbase.createdon)}}</p>
 								<p>Ultima Fecha de Actualizacion: {{date('Y-m-d', sdbase.updatedon)}}</p>
-						</div>
 						<div class="row-fluid">
 							<div class="span2">
 								<a href="/emarketing/dbase/edit/{{sdbase.idDbase}}" class="btn btn-large btn-block btn-info">Editar</a>
