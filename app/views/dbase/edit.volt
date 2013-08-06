@@ -10,7 +10,7 @@
         <form action = "/emarketing/dbase/edit/{{edbase.idDbase}}" method="post">
         <div class="row-fluid">
             <div class="span3">
-                <label for="name">Nombre</label>
+                <label for="name">*Nombre</label>
             </div>
             <div class="span4">
                 {{editform.render("name")}}
@@ -18,7 +18,7 @@
         </div>
         <div class="row-fluid">
             <div class="span3">
-                <label for="description">Descripcion</label>                
+                <label for="description">*Descripcion</label>                
             </div>
             <div class="span4">
                 {{editform.render("description")}}
@@ -26,7 +26,7 @@
         </div>
         <div class="row-fluid">
             <div class="span3">
-                <label for="Cdescription">Descripcion de los Contactos</label>
+                <label for="Cdescription">*Descripcion de los Contactos</label>
             </div>
             <div class="span4">
                 {{editform.render("Cdescription")}}
@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="row-fluid">
-		{{submit_button("Guardar", 'class' : "btn btn-success")}}
+		{{submit_button("Guardar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
 		{{link_to('dbase', 'class':"btn btn-inverse", "Cancelar")}}
     </div>
     </form>

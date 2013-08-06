@@ -20,6 +20,8 @@
 				<th>Nombre de usuario</th>
 				<th>E-Mail</th>
 				<th>Tipo de usuario</th>
+				<th>Fecha de registro</th>
+				<th>Última actualización</th>
 			</tr>
 			
 		{%for all in allUser%}
@@ -30,6 +32,8 @@
 				<td>{{all.username}}</td>
 				<td>{{all.email}}</td>
 				<td>{{all.userrole}}</td>
+				<td>{{all.createdon}}</td>
+				<td>{{all.updatedon}}</td>
 				<td>
 					<a href="#">Editar</a><br>
 					<a href="#" data-toggle="modal">Eliminar</a>

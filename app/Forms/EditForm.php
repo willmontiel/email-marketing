@@ -17,14 +17,12 @@ class EditForm extends Form
         $this->add(new Text('description', array(
         'maxlength' => 150,
 		'type' => 'text',
-		'required' => 'required',
-		'autofocus' => "autofocus"
+		'required' => 'required'
         )));
         $this->add(new Text('Cdescription', array(
         'maxlength' => 150,
 		'type' => 'text',
-		'required' => 'required',
-		'autofocus' => "autofocus"
+		'required' => 'required'
         )));
     }
 }

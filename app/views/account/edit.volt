@@ -10,32 +10,32 @@
 	<div class="span5">	
 		<form action = "/emarketing/account/edit/<?php echo $allAccount->idAccount; ?>" id="registerAccount" method="post">
 			<p>
-				Nombre de la cuenta: 
+				*Nombre de la cuenta: 
 				{{ editFormAccount.render('companyName') }}
 			</p>
 
 			<p>
-				Cantidad de trafico de archivos (Mb):
+				*Cantidad de trafico de archivos (Mb):
 				{{ editFormAccount.render('fileSpace') }}
 			</p>
 
 			<p>
-				Limite de mensajes/contactos:
+				*Limite de mensajes/contactos:
 				{{ editFormAccount.render('messageQuota') }}
 			</p>
 
 			<p>
-				Modo de uso:
+				*Modo de uso:
 				{{ editFormAccount.render('modeUse') }}
 			</p>
 			
 			<p>
-				Modo de Pago: 
+				*Modo de Pago: 
 				{{ editFormAccount.render('modeAccounting') }}
 			</p>
 
 			<p>
-				{{ submit_button("Registrar", 'class' : "btn btn-success") }}
+				{{ submit_button("Registrar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
 				{{link_to('account', 'class':"btn btn-inverse", "Regresar")}}
 			</p>
 		</form>

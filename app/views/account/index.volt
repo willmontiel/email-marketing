@@ -21,7 +21,8 @@
  				<th>Espacio disponible en disco (Mb)</th>
  				<th>Limite de mensajes/contactos</th>
  				<th>Modo de pago</th>
-				<th></th>
+				<th>Fecha de registro</th>
+				<th>Última actualización</th>
  			</tr>
  		 {%for all in allAccount%}
  			<tr>
@@ -31,6 +32,8 @@
  				<td>{{all.fileSpace}}</td>
  				<td>{{all.messageQuota}}</td>
  				<td>{{all.modeAccounting}}</td>
+				<td>{{all.createdon}}</td>
+				<td>{{all.updatedon}}</td>
 				<td>
 				 <a href="account/show/{{all.idAccount}}">Ver</a><br>
 				 <a href="account/edit/{{all.idAccount}}">Editar</a><br>

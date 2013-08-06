@@ -77,7 +77,7 @@
 	</div>
 
       <p>
-		{{ submit_button("Registrar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'title': "Recuerda que los campos con asterisco (*), son obligatorios, por favor no los olvides") }}
+		{{ submit_button("Registrar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
 		{{link_to('account', 'class':"btn btn-inverse", "Cancelar")}}
       </p>
    </form>
