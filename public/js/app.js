@@ -66,14 +66,19 @@ App.Field = DS.Model.extend({
 App.FieldsAddController = Ember.ObjectController.extend({
 		
 	save: function() {
-		if (this.get('values') != undefined) { 
-			this.set('values', 
-			this.get('values').split('\n')
-			);
+		exist = App.Field.find().filterProperty('name', this.get('name'));
+		if(exist.get("length") === 1 && this.get('name') === 'Email' && this.get('name') === 'Nombre' && this.get('name') === 'Apellido'){
+			if (this.get('values') != undefined) { 
+				this.set('values', 
+				this.get('values').split('\n')
+				);
+			}
+
+			this.get("model.transaction").commit();
+			this.get("target").transitionTo("fields");
+		} else {
+			this.get("target").transitionTo("fields.add");
 		}
-		
-		this.get("model.transaction").commit();
-		this.get("target").transitionTo("fields");
 	},
 		
 	cancel: function(){

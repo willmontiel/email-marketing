@@ -208,9 +208,6 @@
                 </div>
                 <div class="span4" >
                         <span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
-						<div class="span3">
-							<a href="/emarketing/dbase/edit/{{sdbase.idDbase}}" class="btn btn-large btn-block btn-info">Editar</a>
-						</div>
                 </div>
         </div>
         <div id="emberAppContainer"></div>
@@ -219,13 +216,19 @@
 		<div class="row-fluid">
 				<div class="span8">
 						<div class="row-fluid">
-								Descripcion: {{sdbase.description}}
+								<p>Descripcion: {{sdbase.description}}</p>
 						</div>
 						<div class="row-fluid">
-								Descripcion de Contactos: {{sdbase.Cdescription}}
+								<p>Descripcion de Contactos: {{sdbase.Cdescription}}</p>
 						</div>
 						<div class="row-fluid">
-								Fecha
+								<p>Fecha de Creacion: {{date('Y-m-d', sdbase.createdon)}}</p>
+								<p>Ultima Fecha de Actualizacion: {{date('Y-m-d', sdbase.updatedon)}}</p>
+						</div>
+						<div class="row-fluid">
+							<div class="span2">
+								<a href="/emarketing/dbase/edit/{{sdbase.idDbase}}" class="btn btn-large btn-block btn-info">Editar</a>
+							</div>
 						</div>
 				</div>
 				<div class="span4">
@@ -261,7 +264,7 @@
 	</script>
 
 <script type="text/x-handlebars" data-template-name="fields/add">
-<div class="row-fluid">
+		<div class="row-fluid">
 	<div class="span12">
 		<form>
 			<div class="span4">
