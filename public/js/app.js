@@ -126,10 +126,10 @@ App.Field.FIXTURES = [
   { id: 1, name: 'Apellido', type: 'Text', required: false, values: '', defaultValue: '' }
 ];
 
-App.FieldsRoute = Ember.Route.extend({
-  model: function(){
-   return App.Field.find();
-  } 
+App.FieldsIndexRoute = Ember.Route.extend({
+	model: function(){
+	 return App.Field.find();
+	}
 });
 
 App.FieldsEditRoute = Ember.Route.extend({
@@ -173,7 +173,8 @@ App.FieldsRemoveController = Ember.ObjectController.extend({
 	}
 });
 
-App.FieldsController = Ember.ArrayController.extend();
+// App.FieldsController = Ember.ArrayController.extend();
+App.FieldsIndexController = Ember.ArrayController.extend();
 //Fin de todo lo que tenga que ver con los campos
 
 
@@ -202,19 +203,18 @@ App.Contact.FIXTURES = [
 
 App.ContactController = Ember.ObjectController.extend();
 
-App.ContactsRoute = Ember.Route.extend({
-  model: function(){
-   return App.Contact.find();
-  } 
+App.ContactsIndexRoute = Ember.Route.extend({
+	model: function(){
+		return App.Contact.find();
+	}
 });
 
 App.status = [
-  Ember.Object.create({st: "Activo", id: "Activo"}),
-  Ember.Object.create({st: "Inactivo", id: "Inactivo"})
+  Ember.Object.create({state: "Activo", id: "Activo"}),
+  Ember.Object.create({state: "Inactivo", id: "Inactivo"})
 ];
 
 App.ContactsNewController = Ember.ObjectController.extend({
-		
 	save: function() {
 		this.get("model.transaction").commit();
 		this.get("target").transitionTo("contacts");
@@ -223,7 +223,7 @@ App.ContactsNewController = Ember.ObjectController.extend({
 	cancel: function(){
 		 this.get("transaction").rollback();
 		 this.get("target").transitionTo("contacts");
-	}	
+	}
 });
 
 App.ContactsNewRoute = Ember.Route.extend({
@@ -235,5 +235,6 @@ App.ContactsNewRoute = Ember.Route.extend({
 			this.currentModel.get('transaction').rollback();
 		}
 	}
+	
 });
-App.ContactsController = Ember.ArrayController.extend();
+App.ContactsIndexController = Ember.ArrayController.extend();

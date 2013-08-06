@@ -27,7 +27,7 @@
         {{ "{{outlet}}" }}
 </script>
         
-<script type="text/x-handlebars" data-template-name="fields">
+<script type="text/x-handlebars" data-template-name="fields/index">
 <div class="row-fluid">
 	<div class="span12">
 			<h4>Campos de la Base de Datos</h4>
@@ -195,9 +195,11 @@
 <div class="row-fluid">
 	{{'{{#linkTo "fields.add"}} Agregar {{/linkTo}}'}}
 </div>
- {{ "{{outlet}}" }}
+ 
 </script>
-
+<script type="text/x-handlebars" data-template-name="fields">
+	{{'{{outlet}}'}}
+</script>
 
 <div class="row-fluid">
         <div class="row-fluid">
