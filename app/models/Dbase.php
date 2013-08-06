@@ -67,36 +67,5 @@ class Dbase extends \Phalcon\Mvc\Model
     {
         $this->updatedon = time();
     }
-	
-	public function afterCreate()
-	{
-		$customField = new Customfield();
-					$customField->idDbase = $this->idDbase;
-					$customField->name = "Email";
-					$customField->type = "Text";
-					$customField->required = "Si";
-					$customField->defaultValue = " ";
-					$customField->values = " ";
-					$customField->save();
-					
-					$customField = new Customfield();
-					$customField->idDbase = $this->idDbase;
-					$customField->name = "Nombre";
-					$customField->type = "Text";
-					$customField->required = "Si";
-					$customField->defaultValue = " ";
-					$customField->values = " ";
-					$customField->save();
-					
-					$customField = new Customfield();
-					$customField->idDbase = $this->idDbase;
-					$customField->name = "Apellido";
-					$customField->type = "Text";
-					$customField->required = "Si";
-					$customField->defaultValue = " ";
-					$customField->values = " ";
-					$customField->save();
-	}
-
 }
 ?>

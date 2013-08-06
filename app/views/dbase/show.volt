@@ -66,6 +66,81 @@
                                 </tr>
                         </thead>
                         <tbody>
+								<tr>
+									<td>
+										Email
+									</td>
+									<td>
+										Text
+									</td>
+									<td>
+										<label class="checkbox checked" for="required">
+											<span class="icons">
+												<span class="first-icon fui-checkbox-unchecked"></span>
+												<span class="second-icon fui-checkbox-checked"></span>
+											</span>
+										</label>
+									</td>
+									<td>
+											
+									</td>
+									<td>
+										Maximo 40 Caracteres	
+									</td>
+									<td>
+											
+									</td>
+                                </tr>
+								<tr>
+									<td>
+										Nombre
+									</td>
+									<td>
+										Text
+									</td>
+									<td>
+										<label class="checkbox checked" for="required">
+											<span class="icons">
+												<span class="first-icon fui-checkbox-unchecked"></span>
+												<span class="second-icon fui-checkbox-checked"></span>
+											</span>
+										</label>
+									</td>
+									<td>
+											
+									</td>
+									<td>
+										Maximo 40 Caracteres	
+									</td>
+									<td>
+											
+									</td>
+                                </tr>
+								<tr>
+									<td>
+										Apellido
+									</td>
+									<td>
+										Text
+									</td>
+									<td>
+										<label class="checkbox checked" for="required">
+											<span class="icons">
+												<span class="first-icon fui-checkbox-unchecked"></span>
+												<span class="second-icon fui-checkbox-checked"></span>
+											</span>
+										</label>
+									</td>
+									<td>
+											
+									</td>
+									<td>
+										Maximo 40 Caracteres	
+									</td>
+									<td>
+											
+									</td>
+                                </tr>
 							{{'{{#each controller}}'}}
                                 <tr>
 									<td>{{'{{name}}'}}</td>
@@ -192,7 +267,7 @@
 			<div class="span4">
 				<div class="row-fluid" id="nameNewField">
 					<label for="name">Nombre del Campo</label>
-					 {{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="true"}} '}}
+					 {{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}} '}}
 				</div>
 				<div class="row-fluid" id="typeNewField">
 					<label for="type">Tipo de Formato del Campo</label>
