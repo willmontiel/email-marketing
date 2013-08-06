@@ -52,7 +52,7 @@
 			<table class="table table-striped">
 				<thead>
 					 <tr>
-						<th class="span4">
+						<th class="span2">
 							E-mail
 						</th>
 						<th class="span2">
@@ -65,6 +65,8 @@
 							Estado
 						</th>
 						<th class="span2">
+						</th>
+						<th class="span2">
 							Acciones
 						</th>
 					</tr>
@@ -75,7 +77,16 @@
 							<td>{{'{{email}}'}}</td>
 							<td>{{'{{name}}'}}</td>
 							<td>{{'{{lastName}}'}}</td>
-							<td>{{'{{status}}'}}</td>
+							<td>
+								<p>Estado: {{' {{status}} '}}</p>
+								<p>Rebotado: {{' {{bounced}} '}}</p>
+								<p>Desuscrito: {{' {{unsubscribed}} '}}</p>
+							</td>
+							<td>
+								<p class="text-left">Spam: {{' {{spam}} '}}</p>
+								<p class="text-left">Activado desde IP: {{' {{ipActived}} '}}</p>
+								<p class="text-left">Desuscrito desde IP: {{'{{ipSubscribed}}'}}</p>
+							</td>
 							<td>
 								Ver
 								Editar
@@ -97,42 +108,43 @@
 	{{'{{outlet}}'}}
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/new">
+		<p>Agrega un nuevo contacto, con sus datos más básicos. </p>
 			<form>
 				<div class="row-fluid">
 					<div class="span3">
-						<div class="row-fluid">
+						<p>
 							<label>E-mail: </label>
-						</div>
-						<div class="row-fluid">
+						</p>
+						<p>
 							{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" }} '}}
-						</div>
-						<div class="row-fluid">
+						</p>
+						<p>
 							<label>Nombre: </label>
-						</div>
-						<div class="row-fluid">	
+						</p>
+						<p>	
 							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}} '}}
-						</div>
-						<div class="row-fluid">
+						</p>
+						<p>
 							<label>Apellido: </label>
-						</div>
-						<div class="row-fluid">
+						</p>
+						<p>
 							{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
-						</div>
-						<div class="row-fluid">
+						</p>
+						<p>
 							<label>Estado: </label>
-						</div>
-						<div class="row-fluid">
+						</p>
+						<p>
 							{{ '{{view Ember.Select
 									contentBinding="App.status"
 									optionValuePath="content.id"
 									optionLabelPath="content.state"
-									valueBinding="state"}}'
+									valueBinding="status"}}'
 							}}
-						</div>
-						<div class="row-fluid" id="SaveNewField">
+						</p>
+						<p>
 							<button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button>
 							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-						</div>	
+						</p>	
 					</div>
 				</div>
 			</form>
