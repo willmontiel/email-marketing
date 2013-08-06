@@ -242,4 +242,29 @@ class ApiController extends ControllerBase
 	
 	}
 
+	
+	/**
+	 * 
+	 * @Get("/dbase/{idDbase:[0-9]+}/contacts")
+	 */
+	public function listcontactsAction($idDbase)
+	{
+		$db = Dbase::findFirstByIdDbase($idDbase);
+		
+		if (!$db || $db->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+		}
+		
+		$lista = array();
+		
+		$contacts = $db->contacts;
+		
+		if ($contacts) {
+			foreach ($contacts as $contact) {
+				$lista[] = $this->fromContactObjectToJObject($contact);
+			}
+		}
+
+		return $this->setJsonResponse(array('contacts' => $lista) );
+	}
 }
