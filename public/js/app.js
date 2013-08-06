@@ -192,6 +192,13 @@ App.Contact = DS.Model.extend({
 	name: DS.attr( 'string' ),
 	lastName: DS.attr( 'string' ),
 	status: DS.attr( 'string' ),
+	bounced: DS.attr('number'),
+	unsubscribed: DS.attr('number'),
+	spam: DS.attr('number'),
+	ipActived: DS.attr('number'),
+	ipSubscribed: DS.attr('number'),
+	updatedon: DS.attr('number'),
+	createdon: DS.attr('number'),
 	
 	becameError: function() {
 		return alert('there was an error!');
@@ -202,10 +209,10 @@ App.Contact = DS.Model.extend({
 });
 
 App.Contact.FIXTURES = [
-  { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', status: 'Activo' },
-  { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', status: 'Activo' },
-  { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', status: 'Inactivo' },
-  { id: 4, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', status: 'Activo' }
+  { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', bounced: 0, status: 'Activo', unsubscribed: 0, spam: 0, ipActived: 13542532, ipSubscribed: 0 },
+  { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', status: 'Activo', bounced: 15544512, unsubscribed: 15171518, spam: 0, ipActived: 561151515, ipSubscribed: 14822852 },
+  { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', status: 'Inactivo',bounced: 0, unsubscribed: 0, spam: 0, ipActived: 0, ipSubscribed: 0 },
+  { id: 4, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', status: 'Activo', bounced:0, unsubscribed: 0, spam: 0, ipActived: 1528228, ipSubscribed: 0 }
 ];
 
 App.ContactController = Ember.ObjectController.extend();
