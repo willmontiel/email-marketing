@@ -3,24 +3,14 @@
 		<div class="span7">
 			<div class="row-fluid">
 				<div class="span12">
-					<h2>DashBoard Contactos</h2>
+					<h2>Contactos</h2>
 					<form>
-						<div class="col-lg-6">
-							<div class="input-group">
-								<input type="text" class="form-control">
-								<div class="input-group-btn">
-									<button type="button" class="btn btn-primary" tabindex="-1">Action</button>
-									<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-										<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu pull-right">
-										<li><a href="#">Action</a></li>
-										<li><a href="#">Another action</a></li>
-										<li><a href="#">Something else here</a></li>
-									</ul>
-								 </div>
-							</div>
-						 </div>
+						<p>
+							{{ '{{view App.SearchView placeholder="search" target="App.searchController" action="search"}}' }}
+							{{ '{{#view Ember.Button target="App.searchController" action="search" class="btn btn-primary"}}' }}
+								 Search
+							{{ '{{/view}}' }}
+						</p>
 					</form>
 				</div>
 			</div>
@@ -147,7 +137,7 @@
 								<dl>
 									<dd>{{ '{{#linkTo "contacts.show" this}}Ver{{/linkTo}}' }}</dd>
 									<dd>{{ '{{#linkTo "contacts.edit" this}}Editar{{/linkTo}}' }}</dd>
-									<dd></dd>
+									<dd>{{ '{{#linkTo "contacts.delete" this}}Eliminar{{/linkTo}}' }}</dd>
 								</dl>
 							</td>
 						</tr>

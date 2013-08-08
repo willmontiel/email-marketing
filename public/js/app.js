@@ -263,6 +263,7 @@ App.ContactsDeleteController = Ember.ObjectController.extend({
 	}
 });
 
+
 //Rutas
 
 App.ContactsIndexRoute = Ember.Route.extend({
@@ -315,6 +316,20 @@ App.ContactsShowController = Ember.ObjectController.extend({
 		this.set("isSubscribed", true);
 	}
 });
+
+App.searchController = Ember.Object.create({
+    searchText: '',
+    search: function(){
+        console.log(App.Contact.find(this.get('searchText')));
+    }    
+});
+App.SearchView = Ember.TextField.extend(Ember.TargetActionSupport, {
+    valueBinding: 'App.searchController.searchText',
+    insertNewline: function() {
+        this.triggerAction();
+    }
+});
+
 App.ContactsIndexController = Ember.ArrayController.extend();
 
 App.ContactsShowRoute = Ember.Route.extend({
