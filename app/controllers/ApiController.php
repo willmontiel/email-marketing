@@ -267,4 +267,28 @@ class ApiController extends ControllerBase
 
 		return $this->setJsonResponse(array('contacts' => $lista) );
 	}
+	
+	protected function fromContactObjectToJObject(Contact $contact)
+	{
+		$object = array();
+		$object['email'] = $contact->email->email;
+		$object['name'] = $contact->name;
+		$object['last_name'] = $contact->lastName;
+		$object['is_active'] = ($contact->status != 0);
+		$object['activated_on'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
+		$object['is_subscribed'] = ($contact->unsubscribed == 0);
+		$object['subscribed_on'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
+		$object['unsubscribed_on'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
+		$object['is_bounced'] = ($contact->bounced != 0);
+		$object['bounced_on'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
+		$object['is_spam'] = ($contact->spam != 0);
+		$object['spam_on'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
+		$object['created_on'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
+		$object['updated_on'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
+		
+		$object['ip_subscribed'] = (($contact->ipSubscribed)?log2ip($contact->ipSubscribed):'');
+		$object['ip_activated'] = (($contact->ipActivated)?log2ip($contact->ipActivated):'');
+		
+		return $object;
+	}
 }
