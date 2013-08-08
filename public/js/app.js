@@ -68,7 +68,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 		
 	save: function() {
 		exist = App.Field.find().filterProperty('name', this.get('name'));
-		if(exist.get("length") === 1 && this.get('name') === 'Email' && this.get('name') === 'Nombre' && this.get('name') === 'Apellido'){
+		if(exist.get("length") === 1 && this.get('name') !== 'Email' && this.get('name') !== 'Nombre' && this.get('name') !== 'Apellido'){
 			if (this.get('values') != undefined) { 
 				this.set('values', 
 				this.get('values').split('\n')
@@ -76,7 +76,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 			}
 
 			this.get("model.transaction").commit();
-			this.get("target").transitionTo("fields");
+			this.get("target").transitionTo("fields.index");
 		} else {
 			App.set('errormessage', 'El campo ya existe');
 			this.get("target").transitionTo("fields.add");
@@ -93,7 +93,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 App.FieldsEditController = Ember.ObjectController.extend({
 	edit: function() {
 	exist = App.Field.find().filterProperty('name', this.get('name'));
-		if(exist.get("length") === 1 && this.get('name') === 'Email' && this.get('name') === 'Nombre' && this.get('name') === 'Apellido'){
+		if(exist.get("length") === 1 && this.get('name') !== 'Email' && this.get('name') !== 'Nombre' && this.get('name') !== 'Apellido'){
 			if (this.get('values') != undefined) { 
 				this.set('values', 
 				this.get('values').split('\n')
@@ -101,9 +101,9 @@ App.FieldsEditController = Ember.ObjectController.extend({
 			}
 
 			this.get("model.transaction").commit();
-			this.get("target").transitionTo("fields");
+			this.get("target").transitionTo("fields.index");
 		} else {
-			App.set('errormessage', 'El campo ya existe');
+			App.set('errormessage', 'El campo ya existe!');
 			this.get("target").transitionTo("fields.edit");
 		}
 	},
@@ -311,3 +311,5 @@ App.ContactsShowController = Ember.ObjectController.extend({
 	
 });
 App.ContactsIndexController = Ember.ArrayController.extend();
+
+App.ContactsShowController = Ember.ObjectController.extend();

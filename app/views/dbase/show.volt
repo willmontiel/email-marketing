@@ -194,6 +194,12 @@
  
 </script>
 <script type="text/x-handlebars" data-template-name="fields">
+	{{ '{{#if App.errormessage }}' }}
+		<div class="alert alert-message alert-error">
+			{{ '{{ App.errormessage }}' }}
+		</div>
+	{{ '{{/if}} '}}	
+		
 	{{'{{outlet}}'}}
 </script>
 
