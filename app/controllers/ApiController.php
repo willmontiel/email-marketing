@@ -286,8 +286,8 @@ class ApiController extends ControllerBase
 		$object['created_on'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
 		$object['updated_on'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
 		
-		$object['ip_subscribed'] = (($contact->ipSubscribed)?log2ip($contact->ipSubscribed):'');
-		$object['ip_activated'] = (($contact->ipActivated)?log2ip($contact->ipActivated):'');
+		$object['ip_subscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
+		$object['ip_activated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
 		return $object;
 	}
