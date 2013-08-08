@@ -120,9 +120,9 @@
 								<dl>
 									<dd>
 										{{ '{{#if status}}' }}
-											Activo
+											<span class="green-label">Activo</span>
 										{{ '{{else}}' }}
-											Inactivo
+											<span class="yellow-label">Inactivo</span>
 										{{ '{{/if}}' }}
 									</dd>
 									<dd>
@@ -146,8 +146,8 @@
 							<td>
 								<dl>
 									<dd>Ver</dd>
-									<dd>{{'{{#linkTo "contacts.edit" this}}Editar{{/linkTo}}'}}</dd>
-									<dd>Eliminar</dd>
+									<dd>{{ '{{#linkTo "contacts.edit" this}}Editar{{/linkTo}}' }}</dd>
+									<dd></dd>
 								</dl>
 							</td>
 						</tr>
@@ -218,53 +218,66 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/edit">
-		<p>Agrega un nuevo contacto, con sus datos más básicos. </p>
-			<form>
-				<div class="row-fluid">
-					<div class="span3">
-						<p>
-							<label>E-mail: </label>
-						</p>
-						<p>
-							{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
-						</p>
-						<p>
-							<label>Nombre: </label>
-						</p>
-						<p>	
-							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
-						</p>
-						<p>
-							<label>Apellido: </label>
-						</p>
-						<p>
-							{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
-						</p>
-						<p>
-							<label>Estado: </label>
-							{{ '{{#if status}}' }}
-								<label class="checkbox checked" for="status">
-									<span class="icons">
-										<span class="first-icon fui-checkbox-unchecked"></span>
-										<span class="second-icon fui-checkbox-checked"></span>
-									</span>
-							{{' {{view Ember.Checkbox  checkedBinding="status" id="status"}} '}}  Activo
-								</label>
-							{{ '{{else}}' }}
-								<label class="checkbox" for="status">
-									<span class="icons">
-										<span class="first-icon fui-checkbox-unchecked"></span>
-										<span class="second-icon fui-checkbox-checked"></span>
-									</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="status" id="status"}} '}}  Activo
-								</label>
-					{{ '{{/if}}' }}
-						</p>
-						<p>
-							<button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button>
-							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-						</p>	
-					</div>
-				</div>
-			</form>
+<p>Agrega un nuevo contacto, con sus datos más básicos. </p>
+	<form>
+		<div class="row-fluid">
+			<div class="span3">
+				<p>
+					<label>E-mail: </label>
+				</p>
+				<p>
+					{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
+				</p>
+				<p>
+					<label>Nombre: </label>
+				</p>
+				<p>	
+					{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
+				</p>
+				<p>
+					<label>Apellido: </label>
+				</p>
+				<p>
+					{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
+				</p>
+				<p>
+					<label>Estado: </label>
+					{{ '{{#if status}}' }}
+						<label class="checkbox checked" for="status">
+							<span class="icons">
+								<span class="first-icon fui-checkbox-unchecked"></span>
+								<span class="second-icon fui-checkbox-checked"></span>
+							</span>
+					{{' {{view Ember.Checkbox  checkedBinding="status" id="status"}} '}}  Activo
+						</label>
+					{{ '{{else}}' }}
+						<label class="checkbox" for="status">
+							<span class="icons">
+								<span class="first-icon fui-checkbox-unchecked"></span>
+								<span class="second-icon fui-checkbox-checked"></span>
+							</span>
+				 {{' {{view Ember.Checkbox  checkedBinding="status" id="status"}} '}}  Activo
+						</label>
+			{{ '{{/if}}' }}
+				</p>
+				<p>
+					<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
+					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+				</p>	
+			</div>
+		</div>
+	</form>
+</script>
+<script type="text/x-handlebars" data-template-name="contacts/delete">
+	<div class="row-fluid">
+		<div class="span5">
+			<p>Esta seguro que desea Eliminar el Contacto <strong>{{'{{this.name}}'}}</strong></p>
+			<button {{'{{action delete this}}'}} class="btn btn-danger">
+				Eliminar
+			</button>
+			<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>
+				Cancelar
+			</button>
+		</div>
+	</div>
 </script>

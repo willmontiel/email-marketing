@@ -82,6 +82,14 @@ span.red-label {
 	color: red;
 	font-weight: bold;
 }
+span.green-label {
+	color: #1abc9c;
+	font-weight: bold;
+}
+span.yellow-label {
+	color: #f5d313;
+	font-weight: bold;
+}
 
 body {
 	font-size: 13px;

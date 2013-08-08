@@ -14,7 +14,8 @@ App.Router.map(function() {
   this.resource('contacts', function(){
 	  this.route('new'),
 	  this.resource('contacts.show', { path: '/show/:contact_id'}),
-	  this.resource('contacts.edit', { path: '/edit/:contact_id'});
+	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
+	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
   });
 });
 
@@ -228,18 +229,9 @@ App.Contact.FIXTURES = [
   { id: 4, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', status: true, bounced:0, unsubscribed: 0, spam: 0, ipActived: 1528228, ipSubscribed: 0 }
 ];
 
+//Controladores
 App.ContactController = Ember.ObjectController.extend();
 
-App.ContactsIndexRoute = Ember.Route.extend({
-	model: function(){
-		return App.Contact.find();
-	}
-});
-
-App.status = [
-  Ember.Object.create({state: "Activo", id: "Activo"}),
-  Ember.Object.create({state: "Inactivo", id: "Inactivo"})
-];
 
 App.ContactsNewController = Ember.ObjectController.extend({
 	save: function() {
@@ -261,7 +253,27 @@ App.ContactsEditController = Ember.ObjectController.extend({
 	},
 	cancel: function(){
 		 this.get("transaction").rollback();
-		 this.get("target").transitionTo("fields");
+		 this.get("target").transitionTo("contacts");
+	}
+});
+
+App.ContactsDeleteController = Ember.ObjectController.extend({
+    delete: function() {
+		this.get('content').deleteRecord();
+		this.get('store').commit();
+		this.get("target").transitionTo("contacts");
+    },
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("contacts");
+	}
+});
+
+//Rutas
+
+App.ContactsIndexRoute = Ember.Route.extend({
+	model: function(){
+		return App.Contact.find();
 	}
 });
 
