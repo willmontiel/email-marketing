@@ -15,7 +15,7 @@ class NewAccountForm extends Form
 		'autofocus' => "autofocus" 
         )));
 		
-        $this->add(new Text('email', array(
+        $this->add(new EmailElement('email', array(
         'maxlength' => 80,
 		'type' => 'email',
 	    'required' => 'required'
