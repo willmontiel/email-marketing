@@ -9,6 +9,8 @@ class Email extends \Phalcon\Mvc\Model
 		$this->belongsTo("idDomain", "Domain", "idDomain", array(
             "foreignKey" => true,
         ));
+		
+		
 		$this->useDynamicUpdate(true);
 		
 	}

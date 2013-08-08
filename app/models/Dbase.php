@@ -19,6 +19,9 @@ class Dbase extends \Phalcon\Mvc\Model
 		$this->belongsTo("idAccount", "Account", "idAccount", array(
             "foreignKey" => true,
         ));
+
+        $this->hasMany("idDbase", "Contact", "idDbase", array('alias' => 'Contacts'));
+		
 		$this->useDynamicUpdate(true);
     }
 //    public function validation()
