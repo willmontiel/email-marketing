@@ -6,7 +6,7 @@
  *
  * @author hectorlasso
  */
-class CustomTags 
+class CustomTags extends \Phalcon\Tag
 {
 	/**
 	 * Generates a widget to show a HTML5 input[type="email"] tag
