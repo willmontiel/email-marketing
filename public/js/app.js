@@ -13,7 +13,8 @@ App.Router.map(function() {
   
   this.resource('contacts', function(){
 	  this.route('new'),
-	  this.resource('contacts.show', { path: '/show/:contact_id'});
+	  this.resource('contacts.show', { path: '/show/:contact_id'}),
+	  this.resource('contacts.edit', { path: '/edit/:contact_id'});
   });
 });
 
@@ -129,8 +130,8 @@ App.types = [
 
 App.Field.FIXTURES = [
   { id: 1, name: 'Email', type: 'Text', required: true, values: '', defaultValue: 'Ninguno' },
-  { id: 1, name: 'Nombre', type: 'Text', required: true, values: '', defaultValue: '' },
-  { id: 1, name: 'Apellido', type: 'Text', required: false, values: '', defaultValue: '' }
+  { id: 2, name: 'Nombre', type: 'Text', required: true, values: '', defaultValue: '' },
+  { id: 3, name: 'Apellido', type: 'Text', required: false, values: '', defaultValue: '' }
 ];
 
 App.FieldsIndexRoute = Ember.Route.extend({
@@ -191,7 +192,7 @@ App.Contact = DS.Model.extend({
 	email: DS.attr( 'string' ),
 	name: DS.attr( 'string' ),
 	lastName: DS.attr( 'string' ),
-	status: DS.attr( 'string' ),
+	status: DS.attr( 'boolean' ),
 	bounced: DS.attr('number'),
 	unsubscribed: DS.attr('number'),
 	spam: DS.attr('number'),
@@ -205,14 +206,26 @@ App.Contact = DS.Model.extend({
 	},
 	becameInvalid: function(errors) {
 		return alert("Record was invalid because: " + errors);
-	}
+	},
+			
+	isBounced: function() {
+		return (this.get('bounced') > 0);
+	}.property('bounced'),
+			
+	isUnsubscribed: function() {
+		return (this.get('unsubscribed') > 0);
+	}.property('unsubscribed'),
+			
+	isSpam: function() {
+		return (this.get('spam') > 0);
+	}.property('spam')
 });
 
 App.Contact.FIXTURES = [
-  { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', bounced: 0, status: 'Activo', unsubscribed: 0, spam: 0, ipActived: 13542532, ipSubscribed: 0 },
-  { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', status: 'Activo', bounced: 15544512, unsubscribed: 15171518, spam: 0, ipActived: 561151515, ipSubscribed: 14822852 },
-  { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', status: 'Inactivo',bounced: 0, unsubscribed: 0, spam: 0, ipActived: 0, ipSubscribed: 0 },
-  { id: 4, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', status: 'Activo', bounced:0, unsubscribed: 0, spam: 0, ipActived: 1528228, ipSubscribed: 0 }
+  { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', bounced: 0, status: true, unsubscribed: 0, spam: 1225455524, ipActived: 13542532, ipSubscribed: 0 },
+  { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', status: true, bounced: 15544512, unsubscribed: 15171518, spam: 0, ipActived: 561151515, ipSubscribed: 14822852 },
+  { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', status: false,bounced: 0, unsubscribed: 0, spam: 0, ipActived: 0, ipSubscribed: 0 },
+  { id: 4, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', status: true, bounced:0, unsubscribed: 0, spam: 0, ipActived: 1528228, ipSubscribed: 0 }
 ];
 
 App.ContactController = Ember.ObjectController.extend();
@@ -240,6 +253,18 @@ App.ContactsNewController = Ember.ObjectController.extend({
 	}
 });
 
+App.ContactsEditController = Ember.ObjectController.extend({
+	edit: function() {
+			this.get("model.transaction").commit();
+			this.get("target").transitionTo("contacts");
+		
+	},
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("fields");
+	}
+});
+
 App.ContactsNewRoute = Ember.Route.extend({
 	model: function(){
 		return App.Contact.createRecord();
@@ -250,6 +275,24 @@ App.ContactsNewRoute = Ember.Route.extend({
 		}
 	}
 	
+});
+
+App.ContactsEditRoute = Ember.Route.extend({
+	deactivate: function () {
+		console.log('Deactivate ContactsEdit');
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+        console.log('Cambio de modelo');
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && model.get('isSaving') == false) {
+			model.get('transaction').rollback();
+		}
+	}
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({

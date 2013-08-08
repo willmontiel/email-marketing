@@ -76,3 +76,13 @@
 .editdb {
 	margin-left: 125px;
 }
+
+
+span.red-label {
+	color: red;
+	font-weight: bold;
+}
+
+body {
+	font-size: 13px;
+}
