@@ -432,6 +432,6 @@
 </script>
 
 <!---------------------- Contacts Template -------------------------->
-{{ partial("dbase/contacts") }}
+{{ partial("dbase/partials/contacts_partial") }}
 
 {% endblock %}
