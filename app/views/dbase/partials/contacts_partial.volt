@@ -145,7 +145,7 @@
 							</td>
 							<td>
 								<dl>
-									<dd>Ver</dd>
+									<dd>{{ '{{#linkTo "contacts.show" this}}Ver{{/linkTo}}' }}</dd>
 									<dd>{{ '{{#linkTo "contacts.edit" this}}Editar{{/linkTo}}' }}</dd>
 									<dd></dd>
 								</dl>
@@ -280,4 +280,164 @@
 			</button>
 		</div>
 	</div>
+</script>
+<script type="text/x-handlebars" data-template-name="contacts/show">
+<div class="row-fluid">
+	<div class="span7">
+		<div class="row-fluid">
+			<table class="contact-info">
+				<tr>
+					<td>
+						<dl>
+							<dd>
+								Email:
+							</dd>
+							<dd>
+								Nombre:
+							</dd>
+							<dd>
+								Apellido:
+							</dd>
+							<dd>
+								{{ '{{#if status}}' }}
+									<label class="checkbox checked" for="status">
+										Activo <span class="icons">
+											<span class="first-icon fui-checkbox-unchecked"></span>
+											<span class="second-icon fui-checkbox-checked"></span>
+										</span>
+									</label>
+								{{ '{{else}}' }}
+									<label class="checkbox" for="status">
+										Activo <span class="icons">
+											<span class="first-icon fui-checkbox-unchecked"></span>
+											<span class="second-icon fui-checkbox-checked"></span>
+										</span>
+									</label> 
+								{{ '{{/if}}' }}	
+							</dd>
+							<dd>
+								Campo:
+							</dd>
+						</dl>
+					</td>
+					<td>
+						<dl>
+							<dd>
+								{{'{{email}}'}}
+							</dd>
+							<dd>
+								{{'{{name}}'}}
+							</dd>
+							<dd>
+								{{'{{lastName}}'}}
+							</dd>
+							<dd>
+								{{ '{{#if isUnsubscribed}}' }}
+									<label class="checkbox" for="unSubscribed">
+										Suscrito <span class="icons">
+											<span class="first-icon fui-checkbox-unchecked"></span>
+											<span class="second-icon fui-checkbox-checked"></span>
+										</span>
+									</label>
+								{{ '{{else}}' }}
+									<label class="checkbox checked" for="unSubscribed">
+										Suscrito <span class="icons">
+											<span class="first-icon fui-checkbox-unchecked"></span>
+											<span class="second-icon fui-checkbox-checked"></span>
+										</span>
+									</label> 
+								{{ '{{/if}}' }}	
+							</dd>
+							<dd>
+								info
+							</dd>
+						</dl>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="row-fluid">
+			<a href="#" class="btn btn-sm btn-info">Desactivar</a>
+			<a href="#" class="btn btn-sm btn-info">Des-suscribir</a>
+			{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
+		</div>
+	</div>
+		
+	<div class="span5">
+		<div class="row-fluid">
+			Ultimas Campañas
+			<br>
+			----------------------------------
+			<br>
+		</div>
+		<div class="row-fluid">
+			Ultimos Eventos
+			<br>
+			----------------------------------
+			<br>
+		</div>
+		<div class="row-fluid">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							Suscrito: 
+						</td>
+						<td>
+							{{'{{createdon}}'}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Direccion IP Suscrito: 
+						</td>
+						<td>
+							{{'{{ipSubscribed}}'}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Activado: 
+						</td>
+						<td>
+							{{'{{activatedon}}'}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Direccion IP Activado: 
+						</td>
+						<td>
+							{{'{{ipActived}}'}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Rebotado: 
+						</td>
+						<td>
+							{{'{{bouncedon}}'}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Reportado Spam: 
+						</td>
+						<td>
+							{{'{{spamon}}'}}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Des-suscrito: 
+						</td>
+						<td>
+							{{'{{unsubscribedon}}'}}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 </script>

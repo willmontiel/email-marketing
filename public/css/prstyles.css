@@ -76,7 +76,12 @@
 .editdb {
 	margin-left: 125px;
 }
-
+.contact-info {
+ font-size: 15px;
+}
+.contact-info dd {
+ margin: 15px;
+}
 
 span.red-label {
 	color: red;
