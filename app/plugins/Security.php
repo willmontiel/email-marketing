@@ -82,7 +82,7 @@ class Security extends Plugin
 		$action = $dispatcher->getActionName();
 		
 		$this->publicurls = array('session:signin', 'session:login', 'field:insert', 'field:update', 
-								  'field:query', 'api:listcustomfields', 'api:getcustomfield', 
+								  'field:query', 'api:listcontacts', 'api:getcustomfield', 
 								  'api:createcustomfield', 'api:updatecustomfield', 'api:delcustomfield',
 			);
 		
