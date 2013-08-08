@@ -113,13 +113,13 @@
 				{{'{{#each controller}}'}}
 					<tbody>
 						<tr>
-							<td>{{'{{email}}'}}</td>
+							<td>{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</td>
 							<td>{{'{{name}}'}}</td>
 							<td>{{'{{lastName}}'}}</td>
 							<td>
 								<dl>
 									<dd>
-										{{ '{{#if status}}' }}
+										{{ '{{#if isActived}}' }}
 											<span class="green-label">Activo</span>
 										{{ '{{else}}' }}
 											<span class="yellow-label">Inactivo</span>
@@ -130,11 +130,11 @@
 											Rebotado
 										{{ '{{/if}}' }}
 									</dd>
-									{{ '{{#if isUnsubscribed}}' }}
+									{{ '{{#unless isSubscribed}}' }}
 									<dd>
 											Desuscrito
 									</dd>
-									{{ '{{/if}}' }}
+									{{ '{{/unless}}' }}
 									{{ '{{#if isSpam}}' }}
 									<dd>
 										<span class="red-label">SPAM</span>
@@ -190,21 +190,21 @@
 						</p>
 						<p>
 							<label>Estado: </label>
-							{{ '{{#if status}}' }}
-								<label class="checkbox checked" for="status">
+							{{ '{{#if isActived}}' }}
+								<label class="checkbox checked" for="isActived">
 									<span class="icons">
 										<span class="first-icon fui-checkbox-unchecked"></span>
 										<span class="second-icon fui-checkbox-checked"></span>
 									</span>
-							{{' {{view Ember.Checkbox  checkedBinding="status" id="status"}} '}}  Activo
+							{{' {{view Ember.Checkbox  checkedBinding="isActived" id="isActived"}} '}}  Activo
 								</label>
 							{{ '{{else}}' }}
-								<label class="checkbox" for="status">
+								<label class="checkbox" for="isActived">
 									<span class="icons">
 										<span class="first-icon fui-checkbox-unchecked"></span>
 										<span class="second-icon fui-checkbox-checked"></span>
 									</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="status" id="status"}} '}}  Activo
+						 {{' {{view Ember.Checkbox  checkedBinding="isActived" id="isActived"}} '}}  Activo
 								</label>
 					{{ '{{/if}}' }}
 						</p>
@@ -242,21 +242,21 @@
 				</p>
 				<p>
 					<label>Estado: </label>
-					{{ '{{#if status}}' }}
-						<label class="checkbox checked" for="status">
+					{{ '{{#if isActived}}' }}
+						<label class="checkbox checked" for="isActived">
 							<span class="icons">
 								<span class="first-icon fui-checkbox-unchecked"></span>
 								<span class="second-icon fui-checkbox-checked"></span>
 							</span>
-					{{' {{view Ember.Checkbox  checkedBinding="status" id="status"}} '}}  Activo
+					{{' {{view Ember.Checkbox  checkedBinding="isActived" id="isActived"}} '}}  Activo
 						</label>
 					{{ '{{else}}' }}
-						<label class="checkbox" for="status">
+						<label class="checkbox" for="isActived">
 							<span class="icons">
 								<span class="first-icon fui-checkbox-unchecked"></span>
 								<span class="second-icon fui-checkbox-checked"></span>
 							</span>
-				 {{' {{view Ember.Checkbox  checkedBinding="status" id="status"}} '}}  Activo
+				 {{' {{view Ember.Checkbox  checkedBinding="isActived" id="isActived"}} '}}  Activo
 						</label>
 			{{ '{{/if}}' }}
 				</p>
@@ -284,6 +284,7 @@
 <script type="text/x-handlebars" data-template-name="contacts/show">
 <div class="row-fluid">
 	<div class="span7">
+	<h3>Detalles de Contacto</h3>
 		<div class="row-fluid">
 			<table class="contact-info">
 				<tr>
@@ -299,15 +300,15 @@
 								Apellido:
 							</dd>
 							<dd>
-								{{ '{{#if status}}' }}
-									<label class="checkbox checked" for="status">
+								{{ '{{#if isActived}}' }}
+									<label class="checkbox checked" for="isActived">
 										Activo <span class="icons">
 											<span class="first-icon fui-checkbox-unchecked"></span>
 											<span class="second-icon fui-checkbox-checked"></span>
 										</span>
 									</label>
 								{{ '{{else}}' }}
-									<label class="checkbox" for="status">
+									<label class="checkbox" for="isActived">
 										Activo <span class="icons">
 											<span class="first-icon fui-checkbox-unchecked"></span>
 											<span class="second-icon fui-checkbox-checked"></span>
@@ -332,15 +333,15 @@
 								{{'{{lastName}}'}}
 							</dd>
 							<dd>
-								{{ '{{#if isUnsubscribed}}' }}
-									<label class="checkbox" for="unSubscribed">
+								{{ '{{#if isSubscribed}}' }}
+									<label class="checkbox checked" for="unSubscribed">
 										Suscrito <span class="icons">
 											<span class="first-icon fui-checkbox-unchecked"></span>
 											<span class="second-icon fui-checkbox-checked"></span>
 										</span>
 									</label>
 								{{ '{{else}}' }}
-									<label class="checkbox checked" for="unSubscribed">
+									<label class="checkbox" for="unSubscribed">
 										Suscrito <span class="icons">
 											<span class="first-icon fui-checkbox-unchecked"></span>
 											<span class="second-icon fui-checkbox-checked"></span>
@@ -357,9 +358,19 @@
 			</table>
 		</div>
 		<div class="row-fluid">
-			<a href="#" class="btn btn-sm btn-info">Desactivar</a>
-			<a href="#" class="btn btn-sm btn-info">Des-suscribir</a>
+			{{ '{{#if isActived}}' }}
+				<button class="btn btn-sm btn-info" {{' {{action deactivated this}} '}}>Desactivar</button>
+			{{ '{{else}}' }}
+				<button class="btn btn-sm btn-info" {{' {{action activated this}} '}}>Activar</button>
+			{{ '{{/if}}' }}
+			{{ '{{#if isSubscribed}}' }}
+				<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Des-suscribir</button>
+			{{ '{{else}}' }}
+				<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
+			{{ '{{/if}}' }}
+			
 			{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
+			{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Regresar</button>{{/linkTo}}' }}
 		</div>
 	</div>
 		
@@ -384,7 +395,7 @@
 							Suscrito: 
 						</td>
 						<td>
-							{{'{{createdon}}'}}
+							{{'{{createdOn}}'}}
 						</td>
 					</tr>
 					<tr>
@@ -416,7 +427,7 @@
 							Rebotado: 
 						</td>
 						<td>
-							{{'{{bouncedon}}'}}
+							{{'{{bouncedOn}}'}}
 						</td>
 					</tr>
 					<tr>
@@ -424,7 +435,7 @@
 							Reportado Spam: 
 						</td>
 						<td>
-							{{'{{spamon}}'}}
+							{{'{{spamOn}}'}}
 						</td>
 					</tr>
 					<tr>

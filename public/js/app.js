@@ -193,40 +193,34 @@ App.Contact = DS.Model.extend({
 	email: DS.attr( 'string' ),
 	name: DS.attr( 'string' ),
 	lastName: DS.attr( 'string' ),
-	status: DS.attr( 'boolean' ),
-	bounced: DS.attr('number'),
-	unsubscribed: DS.attr('number'),
-	spam: DS.attr('number'),
-	ipActived: DS.attr('number'),
-	ipSubscribed: DS.attr('number'),
-	updatedon: DS.attr('number'),
-	createdon: DS.attr('number'),
+	status: DS.attr( 'number' ),
+	activedOn: DS.attr('string'),
+	bouncedOn: DS.attr('string'),
+	subscribedOn: DS.attr('string'),
+	unsubscribedOn: DS.attr('string'),
+	spamOn: DS.attr('string'),
+	ipActived: DS.attr('string'),
+	ipSubscribed: DS.attr('string'),
+	updatedOn: DS.attr('string'),
+	createdOn: DS.attr('string'),
+	isBounced: DS.attr('boolean'),
+	isSubscribed: DS.attr('boolean'),
+	isSpam: DS.attr('boolean'),
+	isActived: DS.attr('boolean'),
 	
 	becameError: function() {
 		return alert('there was an error!');
 	},
 	becameInvalid: function(errors) {
 		return alert("Record was invalid because: " + errors);
-	},
-			
-	isBounced: function() {
-		return (this.get('bounced') > 0);
-	}.property('bounced'),
-			
-	isUnsubscribed: function() {
-		return (this.get('unsubscribed') > 0);
-	}.property('unsubscribed'),
-			
-	isSpam: function() {
-		return (this.get('spam') > 0);
-	}.property('spam')
+	}
 });
 
 App.Contact.FIXTURES = [
-  { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', bounced: 0, status: true, unsubscribed: 0, spam: 1225455524, ipActived: 13542532, ipSubscribed: 0 },
-  { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', status: true, bounced: 15544512, unsubscribed: 15171518, spam: 0, ipActived: 561151515, ipSubscribed: 14822852 },
-  { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', status: false,bounced: 0, unsubscribed: 0, spam: 0, ipActived: 0, ipSubscribed: 0 },
-  { id: 4, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', status: true, bounced:0, unsubscribed: 0, spam: 0, ipActived: 1528228, ipSubscribed: 0 }
+  { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', activedOn: 12345678, bouncedOn: 0, status: true, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 1225455524, ipActived: 13542532, ipSubscribed: 0, isBounced: false, isActived: true, isSpam: true, isSubscribed: true },
+  { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', activedOn: 12345678, status: true, bouncedOn: 15544512, subscribedOn: 123456, unsubscribedOn: 15171518, spamOn: 0, ipActived: 561151515, ipSubscribed: 14822852, isBounced: true, isActived: true, isSpam: false, isSubscribed: false },
+  { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', activedOn: 0, status: false,bouncedOn: 0, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 0, ipActived: 0, ipSubscribed: 0, isBounced: false, isActived: false, isSpam: false, isSubscribed: false },
+  { id: 4, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActived: 1528228, ipSubscribed: 0, isBounced: true, isActived: true, isSpam: true, isSubscribed: true }
 ];
 
 //Controladores
@@ -308,8 +302,20 @@ App.ContactsEditRoute = Ember.Route.extend({
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
-	
+	deactivated: function () {
+		this.set("isActived", false);		
+	},
+	activated: function () {
+		this.set("isActived", true);
+	},
+	unsubscribedcontact: function () {
+		this.set("isSubscribed", false);
+	},
+	subscribedcontact: function () {
+		this.set("isSubscribed", true);
+	}
 });
 App.ContactsIndexController = Ember.ArrayController.extend();
 
-App.ContactsShowController = Ember.ObjectController.extend();
+App.ContactsShowRoute = Ember.Route.extend({
+});
