@@ -237,7 +237,13 @@ App.Contact.FIXTURES = [
   { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', activedOn: 12345678, bouncedOn: 0, status: true, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 1225455524, ipActived: 13542532, ipSubscribed: 0, isBounced: false, isActived: true, isSpam: true, isSubscribed: true },
   { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', activedOn: 12345678, status: true, bouncedOn: 15544512, subscribedOn: 123456, unsubscribedOn: 15171518, spamOn: 0, ipActived: 561151515, ipSubscribed: 14822852, isBounced: true, isActived: true, isSpam: false, isSubscribed: false },
   { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', activedOn: 0, status: false,bouncedOn: 0, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 0, ipActived: 0, ipSubscribed: 0, isBounced: false, isActived: false, isSpam: false, isSubscribed: false },
-  { id: 4, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActived: 1528228, ipSubscribed: 0, isBounced: true, isActived: true, isSpam: true, isSubscribed: true }
+  { id: 5, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActived: 1528228, ipSubscribed: 0, isBounced: true, isActived: true, isSpam: true, isSubscribed: true },
+  { id: 6, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActived: 1528228, ipSubscribed: 0, isBounced: true, isActived: true, isSpam: true, isSubscribed: true },
+  { id: 7, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActived: 1528228, ipSubscribed: 0, isBounced: true, isActived: true, isSpam: true, isSubscribed: true },
+  { id: 8, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActived: 1528228, ipSubscribed: 0, isBounced: true, isActived: true, isSpam: true, isSubscribed: true },
+  { id: 9, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActived: 1528228, ipSubscribed: 0, isBounced: true, isActived: true, isSpam: true, isSubscribed: true },
+  { id: 10, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActived: 1528228, ipSubscribed: 0, isBounced: true, isActived: true, isSpam: true, isSubscribed: true },
+  { id: 11, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActived: 1528228, ipSubscribed: 0, isBounced: true, isActived: true, isSpam: true, isSubscribed: true }
 ];
 
 //Controladores
@@ -287,6 +293,7 @@ App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
 		return App.Contact.find();
 	}
+	
 });
 
 App.ContactsNewRoute = Ember.Route.extend({
@@ -338,8 +345,8 @@ App.ContactsShowController = Ember.ObjectController.extend({
 App.ContactsIndexController = Ember.ArrayController.extend({
 	searchText: '',
     search: function(){
-    console.log (App.Contact.find(this.get('searchText')));
-    }
+		console.log (App.Contact.find(this.get('searchText')).get('name'));
+	}
 });
 
 App.ContactsShowRoute = Ember.Route.extend({
