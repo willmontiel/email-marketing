@@ -34,9 +34,14 @@ class ContactWrapper
 		
 		if ($email) {
 			// Validar que no exista ya un contacto con ese correo dentro de la base de datos
-			$contact = Contact::findFirst(array('idDbase' => $this->idDbase, 'idEmail' => $email->idEmail));
+			$contact = Contact::findFirst(
+				array(
+					'conditions' => 'idDbase = ?1 AND idEmail = ?2',
+					'bind' => array(1 => $this->idDbase, 2 => $email->idEmail)
+				)
+			);
 			if ($contact) {
-				throw new \Exception('Contacto ya existe en la base de datos');
+				throw new \Exception('Contacto ya existe en la base de datos: [' . $this->idDbase . '], [' . $email->idEmail .']');
 			}
 			// No existe, crear el nuevo contacto
 			$this->addContact($data, $email);
@@ -61,6 +66,7 @@ class ContactWrapper
 		$this->contact->email = $email;
 		$this->contact->bounced = 0;
 		$this->contact->spam = 0;
+		$this->contact->idDbase = $this->idDbase;
 		
 		$this->assignDataToContact($this->contact, $data);
 		

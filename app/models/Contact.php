@@ -1,6 +1,9 @@
 <?php
 class Contact extends \Phalcon\Mvc\Model
 {
+	public $unsubscribed;
+	public $status;
+	public $subscribedon;
 	
 	public function initialize()
     {
@@ -8,6 +11,9 @@ class Contact extends \Phalcon\Mvc\Model
             "foreignKey" => true,
         ));
 		$this->belongsTo("idEmail", "Email", "idEmail", array(
+            "foreignKey" => true,
+        ));
+		$this->belongsTo("idAccount", "Account", "idAccount", array(
             "foreignKey" => true,
         ));
 		$this->useDynamicUpdate(true);

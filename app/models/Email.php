@@ -1,5 +1,6 @@
 <?php
 use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Email as EmailV;
 
 class Email extends \Phalcon\Mvc\Model
 {
@@ -30,7 +31,7 @@ class Email extends \Phalcon\Mvc\Model
 				"message" => "Debes ingresar una dirección de correo electronico"
 		)));
 
-		$this->validate(new Email(
+		$this->validate(new EmailV(
 			   array(
 					"field" => "email",
 					"message" => "La direccion de correo electronico no es valida por favor verifica la información"
