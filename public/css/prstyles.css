@@ -102,3 +102,10 @@ span.orange-label {
 body {
 	font-size: 13px;
 }
+#areabatch {
+	height: 200px;
+}
+.infobatch {
+	width: 150px;
+	height: 120px;
+}

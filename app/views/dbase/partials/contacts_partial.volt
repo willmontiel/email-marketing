@@ -99,8 +99,8 @@
 						</th>
 					</tr>
 				</thead>
-				{{'{{#each controller}}'}}
 					<tbody>
+						{{'{{#each controller}}'}}
 						<tr>
 							<td>{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</td>
 							<td>{{'{{name}}'}}</td>
@@ -140,14 +140,15 @@
 								</dl>
 							</td>
 						</tr>
+						{{'{{/each}}'}}
 					</tbody>
-				{{'{{/each}}'}}
 			 </table>
         </div>
 	</div>
 	<div class="row-fluid">
 		<div class="text-right">
 			{{'{{#linkTo "contacts.new"}} <button class="btn btn-primary" >Agregar</button> {{/linkTo}}'}}
+			{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
 		</div>
 	</div>
 </script>
@@ -176,26 +177,6 @@
 						</p>
 						<p>
 							{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
-						</p>
-						<p>
-							<label>Estado: </label>
-							{{ '{{#if isActive}}' }}
-								<label class="checkbox checked" for="isActive">
-									<span class="icons">
-										<span class="first-icon fui-checkbox-unchecked"></span>
-										<span class="second-icon fui-checkbox-checked"></span>
-									</span>
-							{{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
-								</label>
-							{{ '{{else}}' }}
-								<label class="checkbox" for="isActive">
-									<span class="icons">
-										<span class="first-icon fui-checkbox-unchecked"></span>
-										<span class="second-icon fui-checkbox-checked"></span>
-									</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
-								</label>
-					{{ '{{/if}}' }}
 						</p>
 						<p>
 							<button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button>
@@ -245,7 +226,24 @@
 								<span class="first-icon fui-checkbox-unchecked"></span>
 								<span class="second-icon fui-checkbox-checked"></span>
 							</span>
-				 {{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
+					{{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
+						</label>
+					{{ '{{/if}}' }}
+					{{ '{{#if isSubscribed}}' }}
+						<label class="checkbox checked" for="isActive">
+							<span class="icons">
+								<span class="first-icon fui-checkbox-unchecked"></span>
+								<span class="second-icon fui-checkbox-checked"></span>
+							</span>
+					{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
+						</label>
+					{{ '{{else}}' }}
+						<label class="checkbox" for="isActive">
+							<span class="icons">
+								<span class="first-icon fui-checkbox-unchecked"></span>
+								<span class="second-icon fui-checkbox-checked"></span>
+							</span>
+				 {{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
 						</label>
 			{{ '{{/if}}' }}
 				</p>
@@ -388,7 +386,7 @@
 							Direccion IP Activado: 
 						</td>
 						<td>
-							{{'{{isActive}}'}}
+							{{'{{ipActive}}'}}
 						</td>
 					</tr>
 					<tr>
@@ -419,5 +417,24 @@
 			</table>
 		</div>
 	</div>
+</div>
+</script>
+<script type="text/x-handlebars" data-template-name="contacts/newbatch">
+<div class="row-fluid">
+		<div class="span2">
+			<div class="tooltip fade top in" display: block;">
+				<div class="tooltip-arrow">
+				</div>
+				<div class="tooltip-inner infobatch">
+					Ingrese los Contactos separados por saltos de linea
+					y los campos por COMAS ",".
+				</div>
+			</div>
+		</div>
+		<div class="span5">
+			{{ '{{view Ember.TextArea valueBinding="areabatch" placeholder="Contactos" id="areabatch"}}' }}
+			<button class="btn btn-sm btn-info">Guardar</button>
+			{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Cancelar</button>{{/linkTo}}' }}
+		</div>
 </div>
 </script>
