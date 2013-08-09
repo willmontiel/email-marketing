@@ -82,8 +82,8 @@ class Security extends Plugin
 		$action = $dispatcher->getActionName();
 		
 		$this->publicurls = array('session:signin', 'session:login', 'field:insert', 'field:update', 
-								  'field:query', 'api:listcontacts', 'api:getcustomfield', 
-								  'api:createcustomfield', 'api:updatecustomfield', 'api:delcustomfield',
+								  'field:query', 'api:listcontacts', 'api:getcontact', 
+								  'api:createcontact', 'api:updatecustomfield', 'api:delcustomfield',
 			);
 		
 		if ($role == 'ROLE_GUEST') {

@@ -258,37 +258,77 @@ class ApiController extends ControllerBase
 		$lista = array();
 		
 		$contacts = $db->contacts;
-		
+
+		$wrapper = new ContactWrapper();
 		if ($contacts) {
 			foreach ($contacts as $contact) {
-				$lista[] = $this->fromContactObjectToJObject($contact);
+				$lista[] = $wrapper->convertContactToJson($contact);
 			}
 		}
 
 		return $this->setJsonResponse(array('contacts' => $lista) );
 	}
 	
-	protected function fromContactObjectToJObject(Contact $contact)
+	/**
+	 * 
+	 * @Get("/dbase/{idDbase:[0-9]+}/contacts/{idContact:[0-9]+}")
+	 */	
+	public function getcontactAction($idDbase, $idContact)
 	{
-		$object = array();
-		$object['email'] = $contact->email->email;
-		$object['name'] = $contact->name;
-		$object['last_name'] = $contact->lastName;
-		$object['is_active'] = ($contact->status != 0);
-		$object['activated_on'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
-		$object['is_subscribed'] = ($contact->unsubscribed == 0);
-		$object['subscribed_on'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
-		$object['unsubscribed_on'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
-		$object['is_bounced'] = ($contact->bounced != 0);
-		$object['bounced_on'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
-		$object['is_spam'] = ($contact->spam != 0);
-		$object['spam_on'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
-		$object['created_on'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
-		$object['updated_on'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
 		
-		$object['ip_subscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
-		$object['ip_activated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
+		$contact = Contact::findFirstByIdContact($idContact);
 		
-		return $object;
+		if (!$contact || $contact->dbase->idDbase != $idDbase || $contact->dbase->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+		}
+		
+		$wrapper = new ContactWrapper();
+		
+		$fielddata = $wrapper->convertContactToJson($contact);
+		
+		return $this->setJsonResponse(array('field' => $fielddata) );	
+	
 	}
+		
+	/**
+	 * 
+	 * @Post("/dbase/{idDbase:[0-9]+}/contacts")
+	 */
+	public function createcontactAction($idDbase)
+	{
+		$db = Dbase::findFirstByIdDbase($idDbase);
+		
+		if (!$db || $db->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+		}
+		
+		$log = $this->logger;
+		
+		$contentsraw = $this->request->getRawBody();
+		$log->log('Got this: [' . $contentsraw . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		
+		$contents = $contentsT->contact;
+		
+		$wrapper = new ContactWrapper();
+		$wrapper->setAccount($this->user->account);
+		$wrapper->setIdDbase($idDbase);
+		
+		// Crear el nuevo contacto:
+		try {
+			$contact = $wrapper->createNewContactFromJsonData($contents);
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
+		}
+		
+		$contactdata = $wrapper->convertContactToJson($contact);
+
+		return $this->setJsonResponse(array('field' => $contactdata), 201, 'Success');	
+	
+	}
+
 }

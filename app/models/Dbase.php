@@ -2,8 +2,7 @@
 use Phalcon\Mvc\Model\Validator\PresenceOf,
     Phalcon\Mvc\Model\Validator\StringLength,
     Phalcon\Mvc\Model\Validator\Email,
-    Phalcon\Mvc\Model\Validator\Identical,
-    Phalcon\Mvc\Controller;
+    Phalcon\Mvc\Model\Validator\Identical;
 
 class Dbase extends \Phalcon\Mvc\Model
 {
@@ -24,17 +23,6 @@ class Dbase extends \Phalcon\Mvc\Model
 		
 		$this->useDynamicUpdate(true);
     }
-//    public function validation()
-//    {
-//
-//        $this->validate( new PresenceOf(
-//            array(
-//                "field"  => "name",
-//                "message" => array("Oye! Debes ingresar un nuevo nombre para tu Base de Datos")
-//            )
-//        ));
-//        return $this->validationHasFailed() != true;
-//    }
     
     public function getMessages()
     {
@@ -60,10 +48,10 @@ class Dbase extends \Phalcon\Mvc\Model
         return $messages;
     }
 	
-	 public function beforeCreate()
+	public function beforeCreate()
     {
         $this->createdon = time();
-				
+        $this->updatedon = time();
     }
 
     public function beforeUpdate()
@@ -71,4 +59,3 @@ class Dbase extends \Phalcon\Mvc\Model
         $this->updatedon = time();
     }
 }
-?>

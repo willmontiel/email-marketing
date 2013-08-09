@@ -4,18 +4,24 @@ use Phalcon\Mvc\Model\Validator\PresenceOf;
 class Email extends \Phalcon\Mvc\Model
 {
 	public  $idDomain;
-	public function inicializate()
+
+	public function initialize()
 	{
 		$this->belongsTo("idDomain", "Domain", "idDomain", array(
             "foreignKey" => true,
         ));
-		
+		$this->belongsTo("idAccount", "Account", "idAccount", array(
+            "foreignKey" => true,
+        ));
 		
 		$this->useDynamicUpdate(true);
 		
+		$this->createdon = 0;
+		$this->updatedon = 0;
+		
 	}
 
-		public function validation()
+	public function validation()
 	{
 		
 		$this->validate(new PresenceOf(
@@ -37,7 +43,7 @@ class Email extends \Phalcon\Mvc\Model
 	public function beforeCreate()
     {
         $this->createdon = time();
-
+        $this->updatedon = time();
     }
 
     public function beforeUpdate()
