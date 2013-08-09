@@ -251,8 +251,7 @@ App.Contact.FIXTURES = [
 //Controladores
 App.ContactController = Ember.ObjectController.extend();
 
-App.ContactsNewBatchController = Ember.ObjectController.extend({
-	content: [],
+App.ContactsNewbatchController = Ember.ObjectController.extend({
 	save: function() {
 		var content = this.get('arraybatch');
 		if(content.length > 0){
@@ -338,7 +337,7 @@ App.ContactsNewRoute = Ember.Route.extend({
 	
 });
 
-App.ContactsNewBatchRoute = Ember.Route.extend({
+App.ContactsNewbatchRoute = Ember.Route.extend({
 	model: function(){
 		return App.Contact.createRecord();
 	},

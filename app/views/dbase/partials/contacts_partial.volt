@@ -427,6 +427,7 @@
 <script type="text/x-handlebars" data-template-name="contacts/newbatch">
 <div class="row-fluid">
 		<div class="span2">
+		<form>
 			<div class="tooltip fade top in" display: block;">
 				<div class="tooltip-arrow">
 				</div>
@@ -437,9 +438,10 @@
 			</div>
 		</div>
 		<div class="span5">
-			{{ '{{view Ember.TextArea valueBinding="areabatch" placeholder="Contactos" id="areabatch"}}' }}
-			<button class="btn btn-sm btn-info">Guardar</button>
+			{{ '{{view Ember.TextArea valueBinding="arraybatch" placeholder="Contactos" id="areabatch"}}' }}
+			<button class="btn btn-sm btn-inverse" {{ '{{action save this}}' }}>Guardar</button>
 			{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Cancelar</button>{{/linkTo}}' }}
 		</div>
+		</form>
 </div>
 </script>
