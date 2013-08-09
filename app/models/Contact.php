@@ -4,6 +4,8 @@ class Contact extends \Phalcon\Mvc\Model
 	public $unsubscribed;
 	public $status;
 	public $subscribedon;
+	public $ipSubscribed;
+	public $ipActivated;
 	
 	public function initialize()
     {

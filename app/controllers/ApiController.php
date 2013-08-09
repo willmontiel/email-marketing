@@ -315,6 +315,9 @@ class ApiController extends ControllerBase
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($idDbase);
+		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
+		
+		$log->log('Got IP address: ' . $_SERVER["REMOTE_ADDR"]);
 		
 		// Crear el nuevo contacto:
 		try {

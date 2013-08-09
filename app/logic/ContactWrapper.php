@@ -11,7 +11,13 @@ class ContactWrapper
 	protected $idDbase;
 	protected $account;
 	protected $contact;
-	
+	protected $ipaddress;
+
+	public function __construct()
+	{
+		$this->ipaddress = ip2long('127.0.0.0');
+	}
+
 	public function setIdDbase($idDbase)
 	{
 		$this->idDbase = $idDbase;
@@ -20,6 +26,10 @@ class ContactWrapper
 	public function setAccount(Account $account)
 	{
 		$this->account = $account;
+	}
+	
+	public function setIPAdress($ipaddress) {
+		$this->ipaddress = ip2long($ipaddress);
 	}
 
 	public function createNewContactFromJsonData($data)
@@ -68,7 +78,7 @@ class ContactWrapper
 		$this->contact->spam = 0;
 		$this->contact->idDbase = $this->idDbase;
 		
-		$this->assignDataToContact($this->contact, $data);
+		$this->assignDataToContact($this->contact, $data, true);
 		
 		if (!$this->contact->save()) {
 			$errmsg = $this->contact->getMessages();
@@ -80,42 +90,47 @@ class ContactWrapper
 		}
 	}
 	
-	protected function assignDataToContact($contact, $data)
+	protected function assignDataToContact($contact, $data, $isnew = false)
 	{
 		$hora = time();
 		
 		$contact->name = $data->name;
 		$contact->lastName = $data->last_name;
-		
-		if ($contact->unsubscribed != 0 && $data->is_subscribed) {
-			// Actualmente des-suscrito y se actualiza a suscrito
-			$contact->unsubscribed = 0;
-			$contact->subscribedon = $hora;
-			$contact->ipSubscribed = $this->getIP();
-		}
-		else if ($contact->unsubscribed == 0 && !$data->is_subscribed) {
-			// Actualmente suscrito, y se actualiza a des-suscrito
-			$contact->unsubscribed = $hora;
-		}
 
-		if ($contact->status != 0 && !$data->is_active) {
-			// Actualmente activo, y se desactiva
-			$contact->status = 0;
+		if ($isnew) {
+			$contact->ipSubscribed = $this->ipaddress;
+			$contact->ipActivated = 0;
+			$contact->unsubscribed = (!$data->is_subscribed)?$hora:0;
+			$contact->subscribedon = ($data->is_subscribed)?$hora:0;
+			$contact->ipSubscribed = $this->ipaddress;
+			$contact->status = ($data->is_active)?$hora:0;
+			$contact->ipActivated = ($data->is_active)?$this->ipaddress:0;
 		}
-		else if ($contact->status == 0 && $data->is_active) {
-			// Actualmente desactivado y se activa
-			$contact->status = $hora;
-			$contact->ipActivated = $this->getIP();
+		else {
+			if ($contact->unsubscribed != 0 && $data->is_subscribed) {
+				// Actualmente des-suscrito y se actualiza a suscrito
+				$contact->unsubscribed = 0;
+				$contact->subscribedon = $hora;
+				$contact->ipSubscribed = $this->ipaddress;
+			}
+			else if ($contact->unsubscribed == 0 && !$data->is_subscribed) {
+				// Actualmente suscrito, y se actualiza a des-suscrito
+				$contact->unsubscribed = $hora;
+			}
+
+			if ($contact->status != 0 && !$data->is_active) {
+				// Actualmente activo, y se desactiva
+				$contact->status = 0;
+			}
+			else if ($contact->status == 0 && $data->is_active) {
+				// Actualmente desactivado y se activa
+				$contact->status = $hora;
+				$contact->ipActivated = $this->ipaddress;
+			}
+			
 		}
-		
 	}
 	
-	protected function getIP()
-	{
-		return ip2long($_SERVER['REMOTE_ADDR']);
-	}
-
-
 	protected function createEmail($email)
 	{
 		$emailo = new Email();
