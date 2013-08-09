@@ -267,8 +267,24 @@ App.ContactsNewBatchController = Ember.ObjectController.extend({
 
 App.ContactsNewController = Ember.ObjectController.extend({
 	save: function() {
-		this.get("model.transaction").commit();
-		this.get("target").transitionTo("contacts");
+		exist = App.Contact.find().filterProperty('email', this.get('email'));
+			if(exist.get("length") === 1){
+				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
+				if(filter.test(this.get('email'))){
+					this.get("model.transaction").commit();
+					App.set('errormessage', '');
+					this.get("target").transitionTo("contacts");
+				}
+				else{
+					App.set('errormessage', 'El email no es correcto');
+					this.get("target").transitionTo("contacts.new");
+				}
+			}
+			else{
+				App.set('errormessage', 'El email ya existe');
+				this.get("target").transitionTo("contacts.new");
+			}
+		
 	},
 		
 	cancel: function(){
