@@ -15,7 +15,8 @@ App.Router.map(function() {
 	  this.route('new'),
 	  this.resource('contacts.show', { path: '/show/:contact_id'}),
 	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
-	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
+	  this.resource('contacts.delete', { path: '/delete/:contact_id'}),
+	  this.route('newbatch');
   });
 });
 
@@ -310,6 +311,18 @@ App.ContactsIndexRoute = Ember.Route.extend({
 });
 
 App.ContactsNewRoute = Ember.Route.extend({
+	model: function(){
+		return App.Contact.createRecord();
+	},
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.get('transaction').rollback();
+		}
+	}
+	
+});
+
+App.ContactsNewBatchRoute = Ember.Route.extend({
 	model: function(){
 		return App.Contact.createRecord();
 	},
