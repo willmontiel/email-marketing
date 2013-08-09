@@ -334,20 +334,13 @@ App.ContactsShowController = Ember.ObjectController.extend({
 	}
 });
 
-App.searchController = Ember.Object.create({
-    searchText: '',
+
+App.ContactsIndexController = Ember.ArrayController.extend({
+	searchText: '',
     search: function(){
-        console.log(App.Contact.find(this.get('searchText')));
-    }    
-});
-App.SearchView = Ember.TextField.extend(Ember.TargetActionSupport, {
-    valueBinding: 'App.searchController.searchText',
-    insertNewline: function() {
-        this.triggerAction();
+    console.log (App.Contact.find(this.get('searchText')));
     }
 });
-
-App.ContactsIndexController = Ember.ArrayController.extend();
 
 App.ContactsShowRoute = Ember.Route.extend({
 });

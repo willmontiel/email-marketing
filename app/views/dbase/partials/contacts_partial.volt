@@ -6,10 +6,9 @@
 					<h2>Contactos</h2>
 					<form>
 						<p>
-							{{ '{{view App.SearchView placeholder="search" target="App.searchController" action="search"}}' }}
-							{{ '{{#view Ember.Button target="App.searchController" action="search" class="btn btn-primary"}}' }}
-								 Search
-							{{ '{{/view}}' }}
+							{{' {{view Ember.TextField valueBinding="searchText" placeholder="Buscar" autofocus="autofocus"}} '}}
+							<button class="btn btn-primary" {{ '{{action search this}}' }}>Buscar</button>
+								
 						</p>
 					</form>
 				</div>
