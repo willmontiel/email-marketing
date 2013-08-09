@@ -13,7 +13,6 @@ App.Router.map(function() {
   
   this.resource('contacts', function(){
 	  this.route('new'),
-	  this.route('newbatch'),
 	  this.resource('contacts.show', { path: '/show/:contact_id'}),
 	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
 	  this.resource('contacts.delete', { path: '/delete/:contact_id'}),
@@ -380,7 +379,3 @@ App.ContactsIndexController = Ember.ArrayController.extend({
 
 App.ContactsShowRoute = Ember.Route.extend({
 });
-
-App.ContactsNewbatchRoute = Ember.Route.extend();
-
-App.ContactsNewbatchController = Ember.ArrayController.extend();
