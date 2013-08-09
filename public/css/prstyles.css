@@ -95,7 +95,10 @@ span.yellow-label {
 	color: #f5d313;
 	font-weight: bold;
 }
-
+span.orange-label {
+	color: #F59B00;
+	font-weight: bold;
+}
 body {
 	font-size: 13px;
 }

@@ -22,7 +22,20 @@ App.Router.map(function() {
 /* STORE */
 App.Store = DS.Store.extend({
 	revision: 13,
-	adapter: DS.FixtureAdapter.create()
+	adapter: DS.FixtureAdapter.extend({
+        queryFixtures: function(fixtures, query, type) {
+            console.log(query);
+            console.log(type);
+            return fixtures.filter(function(item) {
+                for(prop in query) {
+                    if( item[prop] != query[prop]) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
+    })
 });
 
 //DS.RESTAdapter.reopen({
@@ -68,7 +81,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 		
 	save: function() {
 		exist = App.Field.find().filterProperty('name', this.get('name'));
-		if(exist.get("length") === 1 && this.get('name') !== 'Email' && this.get('name') !== 'Nombre' && this.get('name') !== 'Apellido'){
+		if(exist.get("length") === 1 && this.get('name').toLowerCase() !== 'email' && this.get('name').toLowerCase() !== 'nombre' && this.get('name').toLowerCase() !== 'apellido'){
 			if (this.get('values') != undefined) { 
 				this.set('values', 
 				this.get('values').split('\n')
@@ -76,6 +89,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 			}
 
 			this.get("model.transaction").commit();
+			App.set('errormessage', '');
 			this.get("target").transitionTo("fields.index");
 		} else {
 			App.set('errormessage', 'El campo ya existe');
@@ -85,6 +99,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 		
 	cancel: function(){
 		 this.get("transaction").rollback();
+		 App.set('errormessage', '');
 		 this.get("target").transitionTo("fields");
 	}	
 });
@@ -93,7 +108,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 App.FieldsEditController = Ember.ObjectController.extend({
 	edit: function() {
 	exist = App.Field.find().filterProperty('name', this.get('name'));
-		if(exist.get("length") === 1 && this.get('name') !== 'Email' && this.get('name') !== 'Nombre' && this.get('name') !== 'Apellido'){
+		if(exist.get("length") === 1 && this.get('name').toLowerCase() !== 'email' && this.get('name').toLowerCase() !== 'nombre' && this.get('name').toLowerCase() !== 'apellido'){
 			if (this.get('values') != undefined) { 
 				this.set('values', 
 				this.get('values').split('\n')
@@ -101,6 +116,7 @@ App.FieldsEditController = Ember.ObjectController.extend({
 			}
 
 			this.get("model.transaction").commit();
+			App.set('errormessage', '');
 			this.get("target").transitionTo("fields.index");
 		} else {
 			App.set('errormessage', 'El campo ya existe!');
@@ -109,6 +125,7 @@ App.FieldsEditController = Ember.ObjectController.extend({
 	},
 	cancel: function(){
 		 this.get("transaction").rollback();
+		 App.set('errormessage', '');
 		 this.get("target").transitionTo("fields");
 	}
 });
