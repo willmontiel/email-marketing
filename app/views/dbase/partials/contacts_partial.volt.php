@@ -111,7 +111,7 @@
 										<?php echo '{{#if isActived}}'; ?>
 											<span class="green-label">Activo</span>
 										<?php echo '{{else}}'; ?>
-											<span class="yellow-label">Inactivo</span>
+											<span class="orange-label">Inactivo</span>
 										<?php echo '{{/if}}'; ?>
 									</dd>
 									<dd>
@@ -290,20 +290,10 @@
 							</dd>
 							<dd>
 								<?php echo '{{#if isActived}}'; ?>
-									<label class="checkbox checked" for="isActived">
-										Activo <span class="icons">
-											<span class="first-icon fui-checkbox-unchecked"></span>
-											<span class="second-icon fui-checkbox-checked"></span>
-										</span>
-									</label>
+									<span class="green-label">Activo</span>
 								<?php echo '{{else}}'; ?>
-									<label class="checkbox" for="isActived">
-										Activo <span class="icons">
-											<span class="first-icon fui-checkbox-unchecked"></span>
-											<span class="second-icon fui-checkbox-checked"></span>
-										</span>
-									</label> 
-								<?php echo '{{/if}}'; ?>	
+									<span class="orange-label">Inactivo</span>
+								<?php echo '{{/if}}'; ?>
 							</dd>
 							<dd>
 								Campo:
@@ -323,19 +313,9 @@
 							</dd>
 							<dd>
 								<?php echo '{{#if isSubscribed}}'; ?>
-									<label class="checkbox checked" for="unSubscribed">
-										Suscrito <span class="icons">
-											<span class="first-icon fui-checkbox-unchecked"></span>
-											<span class="second-icon fui-checkbox-checked"></span>
-										</span>
-									</label>
+									<span class="green-label">Suscrito</span>
 								<?php echo '{{else}}'; ?>
-									<label class="checkbox" for="unSubscribed">
-										Suscrito <span class="icons">
-											<span class="first-icon fui-checkbox-unchecked"></span>
-											<span class="second-icon fui-checkbox-checked"></span>
-										</span>
-									</label> 
+									<span class="orange-label">Des-Suscrito</span>
 								<?php echo '{{/if}}'; ?>	
 							</dd>
 							<dd>
@@ -384,7 +364,7 @@
 							Suscrito: 
 						</td>
 						<td>
-							<?php echo '{{createdOn}}'; ?>
+							<?php echo '{{subscribedOn}}'; ?>
 						</td>
 					</tr>
 					<tr>
@@ -400,7 +380,7 @@
 							Activado: 
 						</td>
 						<td>
-							<?php echo '{{activatedon}}'; ?>
+							<?php echo '{{activedOn}}'; ?>
 						</td>
 					</tr>
 					<tr>
@@ -432,7 +412,7 @@
 							Des-suscrito: 
 						</td>
 						<td>
-							<?php echo '{{unsubscribedon}}'; ?>
+							<?php echo '{{unsubscribedOn}}'; ?>
 						</td>
 					</tr>
 				</tbody>
