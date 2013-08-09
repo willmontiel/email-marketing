@@ -108,7 +108,7 @@
 							<td>
 								<dl>
 									<dd>
-										{{ '{{#if isActived}}' }}
+										{{ '{{#if isActive}}' }}
 											<span class="green-label">Activo</span>
 										{{ '{{else}}' }}
 											<span class="orange-label">Inactivo</span>
@@ -179,21 +179,21 @@
 						</p>
 						<p>
 							<label>Estado: </label>
-							{{ '{{#if isActived}}' }}
-								<label class="checkbox checked" for="isActived">
+							{{ '{{#if isActive}}' }}
+								<label class="checkbox checked" for="isActive">
 									<span class="icons">
 										<span class="first-icon fui-checkbox-unchecked"></span>
 										<span class="second-icon fui-checkbox-checked"></span>
 									</span>
-							{{' {{view Ember.Checkbox  checkedBinding="isActived" id="isActived"}} '}}  Activo
+							{{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
 								</label>
 							{{ '{{else}}' }}
-								<label class="checkbox" for="isActived">
+								<label class="checkbox" for="isActive">
 									<span class="icons">
 										<span class="first-icon fui-checkbox-unchecked"></span>
 										<span class="second-icon fui-checkbox-checked"></span>
 									</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="isActived" id="isActived"}} '}}  Activo
+						 {{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
 								</label>
 					{{ '{{/if}}' }}
 						</p>
@@ -231,21 +231,21 @@
 				</p>
 				<p>
 					<label>Estado: </label>
-					{{ '{{#if isActived}}' }}
-						<label class="checkbox checked" for="isActived">
+					{{ '{{#if isActive}}' }}
+						<label class="checkbox checked" for="isActive">
 							<span class="icons">
 								<span class="first-icon fui-checkbox-unchecked"></span>
 								<span class="second-icon fui-checkbox-checked"></span>
 							</span>
-					{{' {{view Ember.Checkbox  checkedBinding="isActived" id="isActived"}} '}}  Activo
+					{{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
 						</label>
 					{{ '{{else}}' }}
-						<label class="checkbox" for="isActived">
+						<label class="checkbox" for="isActive">
 							<span class="icons">
 								<span class="first-icon fui-checkbox-unchecked"></span>
 								<span class="second-icon fui-checkbox-checked"></span>
 							</span>
-				 {{' {{view Ember.Checkbox  checkedBinding="isActived" id="isActived"}} '}}  Activo
+				 {{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
 						</label>
 			{{ '{{/if}}' }}
 				</p>
@@ -289,7 +289,7 @@
 								Apellido:
 							</dd>
 							<dd>
-								{{ '{{#if isActived}}' }}
+								{{ '{{#if isActive}}' }}
 									<span class="green-label">Activo</span>
 								{{ '{{else}}' }}
 									<span class="orange-label">Inactivo</span>
@@ -327,7 +327,7 @@
 			</table>
 		</div>
 		<div class="row-fluid">
-			{{ '{{#if isActived}}' }}
+			{{ '{{#if isActive}}' }}
 				<button class="btn btn-sm btn-info" {{' {{action deactivated this}} '}}>Desactivar</button>
 			{{ '{{else}}' }}
 				<button class="btn btn-sm btn-info" {{' {{action activated this}} '}}>Activar</button>
@@ -380,7 +380,7 @@
 							Activado: 
 						</td>
 						<td>
-							{{'{{activedOn}}'}}
+							{{'{{activatedOn}}'}}
 						</td>
 					</tr>
 					<tr>
@@ -388,7 +388,7 @@
 							Direccion IP Activado: 
 						</td>
 						<td>
-							{{'{{ipActived}}'}}
+							{{'{{isActive}}'}}
 						</td>
 					</tr>
 					<tr>
