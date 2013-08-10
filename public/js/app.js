@@ -24,25 +24,25 @@ App.Router.map(function() {
 App.Store = DS.Store.extend({
 	revision: 13
 	,
-	adapter: DS.FixtureAdapter.extend({
-        queryFixtures: function(fixtures, query, type) {
-            console.log(query);
-            console.log(type);
-            return fixtures.filter(function(item) {
-                for(prop in query) {
-                    if( item[prop] != query[prop]) {
-                        return false;
-                    }
-                }
-                return true;
-            });
-        }
-    })
+//	adapter: DS.FixtureAdapter.extend({
+//        queryFixtures: function(fixtures, query, type) {
+//            console.log(query);
+//            console.log(type);
+//            return fixtures.filter(function(item) {
+//                for(prop in query) {
+//                    if( item[prop] != query[prop]) {
+//                        return false;
+//                    }
+//                }
+//                return true;
+//            });
+//        }
+//    })
 });
 
-//DS.RESTAdapter.reopen({
-//	namespace: MyDbaseUrl
-//});
+DS.RESTAdapter.reopen({
+	namespace: MyDbaseUrl
+});
 
 //Inicio de todo lo que tenga que ver con los campos
 App.Field = DS.Model.extend({
@@ -270,6 +270,8 @@ App.ContactsNewController = Ember.ObjectController.extend({
 			if(exist.get("length") === 1){
 				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
 				if(filter.test(this.get('email'))){
+					this.get('model').set('isActive', true);
+					this.get('model').set('isSubscribed', true);
 					this.get("model.transaction").commit();
 					App.set('errormessage', '');
 					this.get("target").transitionTo("contacts");

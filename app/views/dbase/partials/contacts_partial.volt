@@ -217,23 +217,6 @@
 				</p>
 				<p>
 					<label>Estado: </label>
-					{{ '{{#if isActive}}' }}
-						<label class="checkbox checked" for="isActive">
-							<span class="icons">
-								<span class="first-icon fui-checkbox-unchecked"></span>
-								<span class="second-icon fui-checkbox-checked"></span>
-							</span>
-					{{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
-						</label>
-					{{ '{{else}}' }}
-						<label class="checkbox" for="isActive">
-							<span class="icons">
-								<span class="first-icon fui-checkbox-unchecked"></span>
-								<span class="second-icon fui-checkbox-checked"></span>
-							</span>
-					{{' {{view Ember.Checkbox  checkedBinding="isActive" id="isActive"}} '}}  Activo
-						</label>
-					{{ '{{/if}}' }}
 					{{ '{{#if isSubscribed}}' }}
 						<label class="checkbox checked" for="isActive">
 							<span class="icons">
@@ -275,7 +258,7 @@
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/show">
 <div class="row-fluid">
-	<div class="span7">
+	<div class="span7 well well-small">
 	<h3>Detalles de Contacto</h3>
 		<div class="row-fluid">
 			<table class="contact-info">
@@ -298,9 +281,6 @@
 									<span class="orange-label">Inactivo</span>
 								{{ '{{/if}}' }}
 							</dd>
-							<dd>
-								Campo:
-							</dd>
 						</dl>
 					</td>
 					<td>
@@ -321,20 +301,12 @@
 									<span class="orange-label">Des-Suscrito</span>
 								{{ '{{/if}}' }}	
 							</dd>
-							<dd>
-								info
-							</dd>
 						</dl>
 					</td>
 				</tr>
 			</table>
 		</div>
 		<div class="row-fluid">
-			{{ '{{#if isActive}}' }}
-				<button class="btn btn-sm btn-info" {{' {{action deactivated this}} '}}>Desactivar</button>
-			{{ '{{else}}' }}
-				<button class="btn btn-sm btn-info" {{' {{action activated this}} '}}>Activar</button>
-			{{ '{{/if}}' }}
 			{{ '{{#if isSubscribed}}' }}
 				<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Des-suscribir</button>
 			{{ '{{else}}' }}
@@ -346,76 +318,84 @@
 		</div>
 	</div>
 		
-	<div class="span5">
-		<div class="row-fluid">
+	<div class="span3">
+		<div class="row-fluid badge-show-dark well well-small">
 			Ultimas Campañas
 			<br>
 			----------------------------------
 			<br>
 		</div>
-		<div class="row-fluid">
+		<div class="row-fluid badge-show-medium well well-small">
 			Ultimos Eventos
 			<br>
 			----------------------------------
 			<br>
 		</div>
-		<div class="row-fluid">
+		<div class="row-fluid badge-show-ligth well well-small">
 			<table>
 				<tbody>
+					{{ '{{#if subscribedOn}}' }}
 					<tr>
-						<td>
-							Suscrito: 
+						<td class="text-right">
+							<span class="text-green-color">Suscrito:&nbsp</span> 
 						</td>
 						<td>
-							{{'{{subscribedOn}}'}}
+							<span class="number-small">{{'{{subscribedOn}}'}}</span>
 						</td>
 					</tr>
 					<tr>
-						<td>
-							Direccion IP Suscrito: 
+						<td class="text-right">
+							<span class="text-green-color">IP de Suscripcion:&nbsp</span>
 						</td>
 						<td>
-							{{'{{ipSubscribed}}'}}
+							<span class="number-small">{{'{{ipSubscribed}}'}}</span>
+						</td>
+					</tr>
+					{{ '{{/if}}' }}
+					{{ '{{#if isActive}}' }}
+					<tr>
+						<td class="text-right">
+							<span class="text-blue-color">Activado:&nbsp</span>
+						</td>
+						<td>
+							<span class="number-small">{{'{{activatedOn}}'}}</span>
 						</td>
 					</tr>
 					<tr>
-						<td>
-							Activado: 
+						<td class="text-right">
+							<span class="text-blue-color">IP de Activacion:&nbsp</span> 
 						</td>
 						<td>
-							{{'{{activatedOn}}'}}
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Direccion IP Activado: 
-						</td>
-						<td>
-							{{'{{ipActive}}'}}
+							<span class="number-small">{{'{{ipActive}}'}}</span>
 						</td>
 					</tr>
+					{{ '{{/if}}' }}
+					{{ '{{#if isBounced}}' }}
 					<tr>
-						<td>
-							Rebotado: 
+						<td class="text-right">
+							<span class="text-brown-color">Rebotado:&nbsp</span>
 						</td>
 						<td>
-							{{'{{bouncedOn}}'}}
+							<span class="number-small">{{'{{bouncedOn}}'}}</span>
 						</td>
 					</tr>
+					{{ '{{/if}}' }}
+					{{ '{{#if isSpam}}' }}
 					<tr>
-						<td>
-							Reportado Spam: 
+						<td class="text-right"> 
+							<span class="text-red-color">Reportado Spam:&nbsp</span>
 						</td>
 						<td>
-							{{'{{spamOn}}'}}
+							<span class="number-small">{{'{{spamOn}}'}}</span>
 						</td>
 					</tr>
+					{{ '{{/if}}' }}
 					<tr>
-						<td>
-							Des-suscrito: 
+						<td class="text-right">
+							<span class="text-gray-color">Des-suscrito:&nbsp</span>
 						</td>
 						<td>
-							{{'{{unsubscribedOn}}'}}
+							<span class="number-small">{{'{{unsubscribedOn}}'}}</span>
 						</td>
 					</tr>
 				</tbody>

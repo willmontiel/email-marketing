@@ -286,7 +286,7 @@ class ApiController extends ControllerBase
 		
 		$fielddata = $wrapper->convertContactToJson($contact);
 		
-		return $this->setJsonResponse(array('field' => $fielddata) );	
+		return $this->setJsonResponse(array('contact' => $fielddata) );	
 	
 	}
 		
@@ -330,7 +330,7 @@ class ApiController extends ControllerBase
 		
 		$contactdata = $wrapper->convertContactToJson($contact);
 
-		return $this->setJsonResponse(array('field' => $contactdata), 201, 'Success');	
+		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');	
 	
 	}
 
