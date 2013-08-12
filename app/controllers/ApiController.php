@@ -298,13 +298,40 @@ class ApiController extends ControllerBase
 		}
 		
 		$log = $this->logger;
-		
+
+		/*
+		 * Tomar el "payload" en formato JSON y convertirlo a un objeto de PHP (usando json_decode)
+		 * Por convencion del RESTAdapter de EMBERJS, el objeto esta embebido dentro de un atributo
+		 * "root" que tiene el mismo nombre que el tipo de objeto (modelo de Ember)
+		 * En este caso:
+		 * 
+		 * { contact:
+		 *		{ id: ___, email: _____, name: _____, last_name: _____ , ... }
+		 * }
+		 * 
+		 * Los nombres de atributos se convierten a minusculas, y se adiciona un prefijo
+		 * con "_" (underscore) a las letras mayusculas
+		 * 
+		 * Por ejemplo, si se define un modelo asi:
+		 * App.Contact = DS.Model.extend({
+		 *					email: DS.attr('string'),
+		 *					lastName: DS.attr('string')
+		 * });
+		 * 
+		 * 
+		 * RESTAdapter lo va a transferir como un objeto JSON asi:
+		 * 
+		 * { "contact": { "email": "email@aqui.com", "last_name": "apellido aqui" } } 
+		 * 
+		 * NOTESE el cambio de lastName a last_name
+		 * 
+		 */
 		$contentsraw = $this->request->getRawBody();
 		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
-		
+		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		
 		$wrapper = new ContactWrapper();
@@ -312,20 +339,18 @@ class ApiController extends ControllerBase
 		$wrapper->setIdDbase($idDbase);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
-		$log->log('Got IP address: ' . $_SERVER["REMOTE_ADDR"]);
-		
 		// Crear el nuevo contacto:
-				try {
-				$contact = $wrapper->createNewContactFromJsonData($contents);
-				}
-				catch (\Exception $e) {
-					$log->log('Exception: [' . $e . ']');
-					return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
-				}
+		try {
+			$contact = $wrapper->createNewContactFromJsonData($contents);
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
+		}
 
-			$contactdata = $wrapper->convertContactToJson($contact);
+		$contactdata = $wrapper->convertContactToJson($contact);
 
-			return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
+		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 		
 	}
 
