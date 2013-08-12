@@ -54,7 +54,7 @@ class ContactWrapper
 				)
 			);
 			if ($contact) {
-				throw new \Exception('Contacto ya existe en la base de datos: [' . $this->idDbase . '], [' . $email->idEmail .']');
+				throw new \InvalidArgumentException('El correo electronico [' . $data->email .  '] ya existe en la base de datos');
 			}
 			// No existe, crear el nuevo contacto
 			$this->addContact($data, $email);
@@ -136,6 +136,8 @@ class ContactWrapper
 	
 	protected function createEmail($email)
 	{
+		if (!\filter_var($variable))
+		
 		$emailo = new Email();
 		list($user, $edomain) = preg_split("/@/", $email, 2);
 		$domain = Domain::findFirstByName($edomain);
