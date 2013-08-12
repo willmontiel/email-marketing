@@ -1,0 +1,5 @@
+curl -v  "http://localhost/emarketing/api/dbase/148/contacts"
+
+curl -v  "http://localhost/emarketing/api/dbase/148/contacts/1"
+
+curl -v  -X POST "http://localhost/emarketing/api/dbase/148/contacts" -d '{"contact": {"email": "someonemore@sigmamovil.com", "name": "Nuevo", "last_name": "Contacto", "is_active": true, "is_subscribed": true, "is_bounced": false, "is_spam": false}}'

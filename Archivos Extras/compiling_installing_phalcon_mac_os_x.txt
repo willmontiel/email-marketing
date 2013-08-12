@@ -1,0 +1,17 @@
+cd cphalcon/build/32bits
+export CFLAGS="-O2 -fno-delete-null-pointer-checks -finline-functions -fomit-frame-pointer -march=core2 -m32"
+sudo make clean
+sudo phpize --clean
+phpize
+./configure --enable-phalcon
+make && sudo make install
+
+
+
+cd cphalcon/build/32bits
+export CFLAGS="-O2 -fno-delete-null-pointer-checks -finline-functions -fomit-frame-pointer -march=core2 -m64"
+sudo make clean
+sudo phpize --clean
+phpize
+./configure --enable-phalcon
+make && sudo make install

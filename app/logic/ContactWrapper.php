@@ -12,6 +12,9 @@ class ContactWrapper
 	protected $account;
 	protected $contact;
 	protected $ipaddress;
+	
+	
+	const PAGE_DEFAULT = 1;
 
 	public function __construct()
 	{
@@ -169,6 +172,34 @@ class ContactWrapper
 		return $emailo;
 	}
 
+	
+	public function setFilter($filter)
+	{
+		$this->filter = $filter;
+	}
+	
+	public function findContacts($page = 1, $limit = null)
+	{
+		// Buscar los contactos
+		$options = array();
+
+		if ($this->filter) {
+			$options['conditions'] = 'email = ?1';
+			$options['bind'] = array(1 => $this->filter);
+		}
+		$npage = ($limit)?$limit:self::PAGE_DEFAULT;
+		$start = ($page - 1) * $npage; 
+		$options['limit'] = array('limit' => $npage, 'offset' => $start);
+		$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));
+
+		$result = array();
+		foreach ($contacts as $contact) {
+			$result[] = $this->convertContactToJson($contact);
+		}
+		
+		return array('contacts' => $result, 'meta' => array( 'pagination' => array('page' => 1, 'limit' => 2, 'total' => 10000) ));
+	}
+	
 	public function convertContactToJson($contact)
 	{
 		$object = array();

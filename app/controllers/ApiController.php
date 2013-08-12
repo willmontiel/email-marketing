@@ -257,16 +257,11 @@ class ApiController extends ControllerBase
 		
 		$lista = array();
 		
-		$contacts = $db->contacts;
-
 		$wrapper = new ContactWrapper();
-		if ($contacts) {
-			foreach ($contacts as $contact) {
-				$lista[] = $wrapper->convertContactToJson($contact);
-			}
-		}
-
-		return $this->setJsonResponse(array('contacts' => $lista) );
+		
+		$result = $wrapper->findContacts();
+		
+		return $this->setJsonResponse($result);
 	}
 	
 	/**
