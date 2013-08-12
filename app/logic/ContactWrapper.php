@@ -136,7 +136,9 @@ class ContactWrapper
 	
 	protected function createEmail($email)
 	{
-		if (!\filter_var($variable))
+		if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			throw new InvalidArgumentException('La direccion [' . $email . '] no es una direccion de correo valida!');
+		}
 		
 		$emailo = new Email();
 		list($user, $edomain) = preg_split("/@/", $email, 2);

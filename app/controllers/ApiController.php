@@ -343,6 +343,10 @@ class ApiController extends ControllerBase
 		try {
 			$contact = $wrapper->createNewContactFromJsonData($contents);
 		}
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
+		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
