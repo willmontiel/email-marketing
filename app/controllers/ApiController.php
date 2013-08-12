@@ -315,18 +315,18 @@ class ApiController extends ControllerBase
 		$log->log('Got IP address: ' . $_SERVER["REMOTE_ADDR"]);
 		
 		// Crear el nuevo contacto:
-		try {
-			$contact = $wrapper->createNewContactFromJsonData($contents);
-		}
-		catch (\Exception $e) {
-			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
-		}
-		
-		$contactdata = $wrapper->convertContactToJson($contact);
+				try {
+				$contact = $wrapper->createNewContactFromJsonData($contents);
+				}
+				catch (\Exception $e) {
+					$log->log('Exception: [' . $e . ']');
+					return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
+				}
 
-		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');	
-	
+			$contactdata = $wrapper->convertContactToJson($contact);
+
+			return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
+		
 	}
 
 }

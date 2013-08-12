@@ -417,9 +417,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="span5">
+		<div class="span5">{{'{{email}}'}}
 			{{ '{{view Ember.TextArea valueBinding="arraybatch" placeholder="Contactos" id="areabatch"}}' }}
-			<button class="btn btn-sm btn-inverse" {{ '{{action save this}}' }}>Guardar</button>
+			 <a href="/emarketing/addcontacts/newbatch/{{ sdbase.idDbase }}">Ver</a>
 			{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Cancelar</button>{{/linkTo}}' }}
 		</div>
 		</form>
