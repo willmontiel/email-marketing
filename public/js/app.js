@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 App = Ember.Application.create({
 	rootElement: '#emberAppContainer'
 });
@@ -22,9 +21,25 @@ App.Router.map(function() {
 });
 
 /* STORE */
+// Serializador
+var serializer = DS.RESTSerializer.create();
+
+serializer.configure({
+    meta: 'meta',
+    pagination: 'pagination'
+});
+
+// Adaptador
+App.Adapter = DS.RESTAdapter.reopen({
+	namespace: MyDbaseUrl,
+	serializer: serializer
+});
+
+// Store (class)
 App.Store = DS.Store.extend({
-	revision: 13
-	,
+	revision: 13,
+	adapter: App.Adapter.create()
+	
 //	adapter: DS.FixtureAdapter.extend({
 //        queryFixtures: function(fixtures, query, type) {
 //            console.log(query);
@@ -41,9 +56,9 @@ App.Store = DS.Store.extend({
 //    })
 });
 
-DS.RESTAdapter.reopen({
-	namespace: MyDbaseUrl
-});
+// Store (object)
+App.store = App.Store.create();
+
 
 //Inicio de todo lo que tenga que ver con los campos
 App.Field = DS.Model.extend({
