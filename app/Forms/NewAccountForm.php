@@ -2,7 +2,8 @@
 use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Text,
     Phalcon\Forms\Element\Select,
-    Phalcon\Forms\Element\Password;
+    Phalcon\Forms\Element\Password,
+	Phalcon\Forms\Element;
 
 class NewAccountForm extends Form
 {

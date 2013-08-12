@@ -407,7 +407,6 @@
 <script type="text/x-handlebars" data-template-name="contacts/newbatch">
 <div class="row-fluid">
 		<div class="span2">
-		<form>
 			<div class="tooltip fade top in" display: block;">
 				<div class="tooltip-arrow">
 				</div>

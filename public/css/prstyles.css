@@ -93,6 +93,10 @@ span.red-label {
 	color: red;
 	font-weight: bold;
 }
+span.primary-label {
+	color: #1abc9c; 
+}
+
 span.green-label {
 	color: #1abc9c;
 	font-weight: bold;
