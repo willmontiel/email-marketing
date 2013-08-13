@@ -84,7 +84,7 @@ class Security extends Plugin
 		
 		$this->publicurls = array('session:signin', 'session:login', 'field:insert', 'field:update', 
 								  'field:query', 'api:listcontacts', 'api:getcontact', 
-								  'api:createcontact', 'api:updatecustomfield', 'api:delcustomfield',
+								  'api:createcontact', 'api:updatecontact', 'api:delcustomfield',
 			);
 		
 		if ($role == 'ROLE_GUEST') {

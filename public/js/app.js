@@ -241,14 +241,8 @@ App.Contact = DS.Model.extend({
 	isBounced: DS.attr('boolean'),
 	isSubscribed: DS.attr('boolean'),
 	isSpam: DS.attr('boolean'),
-	isActive: DS.attr('boolean'),
+	isActive: DS.attr('boolean')
 	
-	becameError: function() {
-		return alert('there was an error!');
-	},
-	becameInvalid: function(errors) {
-		return alert("Record was invalid because: " + errors);
-	}
 });
 
 App.Contact.FIXTURES = [
@@ -281,8 +275,12 @@ App.ContactsNewbatchController = Ember.ObjectController.extend({
 });
 
 App.ContactsNewController = Ember.ObjectController.extend({
+	errors: null,
+	
 	save: function() {
-		exist = App.Contact.find().filterProperty('email', this.get('email'));
+		
+		/*
+		 *exist = App.Contact.find().filterProperty('email', this.get('email'));
 			if(exist.get("length") === 1){
 				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
 				if(filter.test(this.get('email'))){
@@ -301,13 +299,51 @@ App.ContactsNewController = Ember.ObjectController.extend({
 				App.set('errormessage', 'El email ya existe');
 				this.get("target").transitionTo("contacts.new");
 			}
-		
+		*/
+		if (this.get('isValid') && !this.get('isSaving')) {
+			this.get('model').set('isActive', true);
+			this.get('model').set('isSubscribed', true);
+			this.get('model.transaction').commit();
+		}		
 	},
 		
 	cancel: function(){
 		 this.get("transaction").rollback();
 		 this.get("target").transitionTo("contacts");
+	},
+	
+	subscribeSave: function () {
+/*		this.get('model').on('didCreate', this, function() {
+		  return this.transitionToRoute('contacts');
+		});
+
+		this.get('model').on('becameInvalid', this, function() {
+		  this.handleFailure();
+		});
+
+		this.get('model').on('becameError', this, function() {
+		  this.handleFailure();
+		});	*/
+		console.log(this.get('model'));
+		console.log(this.get('content'));
+	},
+	
+	handleFailure: function() {
+		this.set('errors', this.get('content.errors'));
+		App.set('errormessage', this.get('content.errors'));
+		this.get('transaction').rollback();
+		this.set('content', this.createModel(this.get('toJSON')));
+		this.subscribeSave();
+	},
+	
+	createModel: function(attributes) {
+		console.log('Creating model!');
+		var x = this.get('store').transaction().createRecord(App.Contact, attributes);
+		console.log(x);
+		return x;
 	}
+	
+	
 });
 
 App.ContactsEditController = Ember.ObjectController.extend({
@@ -345,12 +381,17 @@ App.ContactsIndexRoute = Ember.Route.extend({
 
 App.ContactsNewRoute = Ember.Route.extend({
 	model: function(){
-		return App.Contact.createRecord();
+		//return App.Contact.createRecord();
+		return this.controllerFor('ContactsNew').createModel();
 	},
 	deactivate: function () {
 		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
 			this.currentModel.get('transaction').rollback();
 		}
+	},
+	setupController: function (controller, model) {
+		controller.set('errors', null);
+		controller.subscribeSave();
 	}
 	
 });
