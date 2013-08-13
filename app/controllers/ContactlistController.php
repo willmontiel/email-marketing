@@ -8,8 +8,12 @@ class ContactlistController extends ControllerBase
 		if ($r)
 			return $r;
 		
-		$this->view->setVar("contactlists", $this->list);
-		$this->view->setVar("idbases", $this->contactlist->dbase);
+		$idAccount=$this->user->account->idAccount;
+		
+		$query = $this->modelsManager->createQuery("SELECT Contactlist.* FROM Contactlist JOIN Dbase ON Contactlist.idDbase = Dbase.idDbase WHERE idAccount = $idAccount");
+		$lists = $query->execute();
+		
+		$this->view->setVar("contactlists", $lists);
 		
 	}
 	

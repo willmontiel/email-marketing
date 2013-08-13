@@ -18,8 +18,6 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 	{
 		//$this->user = $this->userObject;
 		$this->user = User::findFirstByIdUser(3);
-		$this->contactlist = Contactlist::findFirstByIdDbase(148);
-		$this->list = Contactlist::find("idDbase = 148");
 	}
 
 	/**

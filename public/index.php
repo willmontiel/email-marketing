@@ -81,14 +81,14 @@ try {
 		// Profiler
 		$profiler = $di->get('profiler');
 		
-//		$eventsManager->attach('db', function ($event, $connection) use ($profiler) {
-//			if ($event->getType() == 'beforeQuery') {
-//				$profiler->startProfile($connection->getSQLStatement());
-//			}
-//			else if ($event->getType() == 'afterQuery') {
-//				$profiler->stopProfile();
-//			}
-//		});
+		$eventsManager->attach('db', function ($event, $connection) use ($profiler) {
+			if ($event->getType() == 'beforeQuery') {
+				$profiler->startProfile($connection->getSQLStatement());
+			}
+			else if ($event->getType() == 'afterQuery') {
+				$profiler->stopProfile();
+			}
+		});
 		
         $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
             "host" => "localhost",
