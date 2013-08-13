@@ -1,4 +1,5 @@
 Applist = Ember.Application.create({
+	rootElement: '#emberApplistContainer'
 });
 
 Applist.set('errormessage', '');
@@ -19,7 +20,7 @@ serializer.configure({
     pagination: 'pagination'
 });
 
-// Adaptador
+//Adaptador
 //Applist.Adapter = DS.RESTAdapter.reopen({
 //	namespace: MyDbaseUrl,
 //	serializer: serializer
@@ -28,7 +29,7 @@ serializer.configure({
 // Store (class)
 Applist.Store = DS.Store.extend({
 	revision: 13,
-	adapter: Applist.Adapter.create(),
+//	adapter: Applist.Adapter.create()
 	adapter: DS.FixtureAdapter.extend({
         queryFixtures: function(fixtures, query, type) {
             console.log(query);
@@ -90,12 +91,13 @@ Applist.ListsNewRoute = Ember.Route.extend({
 
 //Controladores
 Applist.ListController = Ember.ObjectController.extend();
-Applist.ListsIndexController = Ember.ArrayController.extend();
+
+Applist.ListsIndexController = Ember.ObjectController.extend();
 
 Applist.ListsNewController = Ember.ObjectController.extend({
 	save: function(){
 		if(this.get('name')==null){
-			App.set('errormessage', 'Hay campos vacíos, por favor verifica la información');
+			Applist.set('errormessage', 'El campo nombre esta vacío, debes ingresar un nombre');
 			this.get("target").transitionTo("lists.new");
 		}
 		else{
@@ -114,6 +116,7 @@ Applist.ListsNewController = Ember.ObjectController.extend({
 			
 	cancel: function(){
 		this.get("transaction").rollback();
+		Applist.set('errormessage', '');
 		this.get("target").transitionTo("lists");
 	}
 });
