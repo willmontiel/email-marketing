@@ -40,6 +40,7 @@ class Security extends Plugin
 			$privateResources = array(
 				'account' => array('show', 'new', 'edit', 'delete', 'list'),
 				'dbase' => array('list', 'edit', 'new', 'show'),
+				'contactlist' => array('list', 'new', 'index'),
 				'field' => array('new'),
 			);
 

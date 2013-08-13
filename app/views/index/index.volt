@@ -16,7 +16,7 @@
 		<div class="text-left">
 			<div class="span12">
 				<div class="row-fluid">
-					<a href="contactlist"><h3>Ver Bases de Datos</h3></a>
+					<a href="dbase"><h3>Ver Bases de Datos</h3></a>
 				</div>
 				<div class="row-fluid">
 					<a href="dbase/new"><h3>Crear Bases de Datos</h3></a>

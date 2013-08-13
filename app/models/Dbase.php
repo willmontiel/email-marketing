@@ -20,6 +20,7 @@ class Dbase extends \Phalcon\Mvc\Model
         ));
 
         $this->hasMany("idDbase", "Contact", "idDbase", array('alias' => 'Contacts'));
+		$this->hasMany("idDbase", "Contactlist", "idDbase");
 		
 		$this->useDynamicUpdate(true);
     }
