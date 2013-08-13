@@ -14,7 +14,7 @@ class ContactWrapper
 	protected $ipaddress;
 	
 	
-	const PAGE_DEFAULT = 1;
+	const PAGE_DEFAULT = 20;
 
 	public function __construct()
 	{
