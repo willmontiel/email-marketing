@@ -1,15 +1,19 @@
 {% extends "templates/index.volt" %}
 {% block header_javascript %}
 	<script type="text/javascript">
-		var MyDbaseUrl = 'emarketing/api/dbase/{{ contactlists.idDbase }}';
+		var MyDbaseUrl = 'emarketing/api/dbase/{{ idbases.idDbase }}';
 	</script>
 	{{ super() }}
 	{{ partial("partials/emberlist_partial") }}
 {% endblock %}
 
 {% block content %}
+	<h4>{{idbases.idDbase}}</h4>
 	
-	<h1>{{contactlists.idDbase}}</h1>
+	{% for contactlist in contactlists %}
+		<li>{{contactlist.idList}}</li>
+	{% endfor %}
+	
 
 	<div id="emberApplistContainer">
 		<script type="text/x-handlebars" data-template-name="lists/index">   
@@ -66,7 +70,7 @@
 									<span class="primary-label">{{ '{{updatedon}}' }}</span>
 								</td>
 								<td>
-									<label><a href="#">Ver</a></label>
+									<label><a href="contactlist/show/{{'{{id}}' }}">Ver</a></label>
 									<label>Editar</label>
 								</td>
 							</tr>

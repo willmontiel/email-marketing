@@ -8,17 +8,18 @@ class ContactlistController extends ControllerBase
 		if ($r)
 			return $r;
 		
-		$this->view->setVar("contactlists", $this->contactlist->dbase);
+		$this->view->setVar("contactlists", $this->list);
+		$this->view->setVar("idbases", $this->contactlist->dbase);
+		
 	}
 	
-	public function showAction()
+	public function showAction($id)
 	{
 		$r = $this->verifyAcl('contactlist', 'show', '');
 		if ($r)
-			return $r;
-	    $users = User::find("idAccount = $id");
+			return $r;	
 		
-		$this->view->setVar("allUser", $users);	   
+		$this->view->setVar();
 		
 	}
 	
