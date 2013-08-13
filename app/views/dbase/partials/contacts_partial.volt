@@ -157,7 +157,8 @@
 		<div class="alert alert-message alert-error">
 			{{ '{{ App.errormessage }}' }}
 		</div>
-	{{ '{{/if}} '}}	
+	{{ '{{/if}} '}}
+	<div class="alert-success"><h4>{{ flashSession.output() }}</h4></div>
 	{{'{{outlet}}'}}
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/new">
@@ -416,9 +417,10 @@
 				</div>
 			</div>
 		</div>
-		<div class="span5">{{'{{email}}'}}
-			{{ '{{view Ember.TextArea valueBinding="arraybatch" placeholder="Contactos" id="areabatch"}}' }}
-			 <a href="/emarketing/addcontacts/newbatch/{{ sdbase.idDbase }}">Ver</a>
+		<form method="Post" action="/emarketing/contacts/newbatch/{{sdbase.idDbase}}" , 'method': 'Post') }}
+		<div class="span5">
+			{{ text_area("arraybatch") }}
+			<input class="btn btn-sm btn-inverse" type="submit" value="Guardar">
 			{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Cancelar</button>{{/linkTo}}' }}
 		</div>
 		</form>
