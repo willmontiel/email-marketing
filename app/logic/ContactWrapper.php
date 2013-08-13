@@ -34,29 +34,59 @@ class ContactWrapper
 	public function setIPAdress($ipaddress) {
 		$this->ipaddress = ip2long($ipaddress);
 	}
+	
+	public function updateContactFromJsonData($idContact, $data)
+	{
+		// Actualizar contacto:
+		// 1) Cargar el contacto
+		$contact = Contact::findFirstByIdContact($idContact);
+		if (!$contact) {
+			throw new \InvalidArgumentException('Contacto no encontrado en la base de datos!');
+		}
+		// 2) Validar que pertenezca a la BD
+		if ($contact->dbase->idDbase != $this->idDbase) {
+			throw new \InvalidArgumentException('Contacto no encontrado en la base de datos!');
+		}
+		// 3) Verificar si cambia el email
+
+		if ($data->email != $contact->email->email) {
+			// 4) Si cambia => validar si existe o no dentro de la BD
+			$email = $this->findEmailNotRepeated($data->email, $contact);
+			
+			// 5) Crear el email si es necesario
+			if (!$email) {
+				$email = $this->createEmail($data->email);
+			}
+			
+			// Asignar el nuevo email
+			$contact->email = $email;
+			
+		}
+
+		$this->contact = $contact;
+		
+		// 6) Actualizar los otros campos
+		$this->assignDataToContact($contact, $data);
+		
+
+		// 7) Grabar cambios
+		if (!$this->contact->save()) {
+			$errmsg = $this->contact->getMessages();
+			$msg = '';
+			foreach ($errmsg as $err) {
+				$msg .= $err . PHP_EOL;
+			}
+			throw new \Exception('Error al crear el contacto: >>' . $msg . '<<');
+		}		
+		
+		return $this->contact;
+	}
 
 	public function createNewContactFromJsonData($data)
 	{
 		// Verificar existencia del correo en la cuenta actual
-		$email = Email::findFirst(
-				array(
-					'conditions' => 'idAccount = ?1 AND email = ?2',
-					'bind' => array(1 => $this->account->idAccount, 2 => $data->email)
-				)
-		);
-		
+		$email = $this->findEmailNotRepeated($data->email);
 		if ($email) {
-			// Validar que no exista ya un contacto con ese correo dentro de la base de datos
-			$contact = Contact::findFirst(
-				array(
-					'conditions' => 'idDbase = ?1 AND idEmail = ?2',
-					'bind' => array(1 => $this->idDbase, 2 => $email->idEmail)
-				)
-			);
-			if ($contact) {
-				throw new \InvalidArgumentException('El correo electronico [' . $data->email .  '] ya existe en la base de datos');
-			}
-			// No existe, crear el nuevo contacto
 			$this->addContact($data, $email);
 		}
 		else {
@@ -65,6 +95,36 @@ class ContactWrapper
 		
 		return $this->contact;
 		
+	}
+	
+	protected function findEmailNotRepeated($emailaddress, $curcontact = null)
+	{
+		// Verificar existencia del correo en la cuenta actual
+		$email = Email::findFirst(
+				array(
+					'conditions' => 'idAccount = ?1 AND email = ?2',
+					'bind' => array(1 => $this->account->idAccount, 2 => $emailaddress)
+				)
+		);
+		// Existe el correo en la cuenta actual
+		if ($email) {
+			// Validar que no exista ya un contacto con ese correo dentro de la base de datos
+			$contact = Contact::findFirst(
+				array(
+					'conditions' => 'idDbase = ?1 AND idEmail = ?2',
+					'bind' => array(1 => $this->idDbase, 2 => $email->idEmail)
+				)
+			);
+			// Forma simplificada de hacer validacion, por claridad se cambia
+//			if ($contact && (!$curcontact || $contact->idContact != $curcontact->idContact) ) {
+			if ($contact) {
+				if  (!($curcontact && $contact->idContact == $curcontact->idContact)) {
+					throw new \InvalidArgumentException('El correo electronico [' . $emailaddress .  '] ya existe en la base de datos');
+				}
+			}
+		}
+		// Retornar el email
+		return $email;
 	}
 	
 	protected function addContact($data, Email $email = null)
