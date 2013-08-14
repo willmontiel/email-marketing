@@ -70,7 +70,7 @@
 									<span class="primary-label">{{ '{{updatedon}}' }}</span>
 								</td>
 								<td>
-									<label><a href="#">Ver</a></label>
+									<label><a href="contactlist/show/{{ '{{unbound id}}' }}">Ver</a></label>
 									<label>{{ '{{#linkTo "lists.edit" this}}' }}Editar{{ '{{/linkTo}}' }}</label>
 								</td>
 							</tr>
@@ -158,7 +158,7 @@
 			</div>
 		</script>
 	</div>
-		<!------------------------------------------------------------------>
+		<!---------------------------------
 
 	<br>
 	<div class="row-fluid">
@@ -175,4 +175,5 @@
 			<p>Cree, Consulte o actualice información sobre sus segmentos</p>
 		</div>
 	</div>
+  --------------------------------->
 {% endblock %}
