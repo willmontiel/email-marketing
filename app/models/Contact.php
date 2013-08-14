@@ -15,9 +15,7 @@ class Contact extends \Phalcon\Mvc\Model
 		$this->belongsTo("idEmail", "Email", "idEmail", array(
             "foreignKey" => true,
         ));
-		$this->belongsTo("idAccount", "Account", "idAccount", array(
-            "foreignKey" => true,
-        ));
+
 		$this->useDynamicUpdate(true);
 		
 		/* Inicializacion de valores de campos */

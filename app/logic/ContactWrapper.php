@@ -59,14 +59,14 @@ class ContactWrapper
 			}
 			
 			// Asignar el nuevo email
-			$contact->email = $email;
+			$contact->idEmail = $email->idEmail;
 			
 		}
 
 		$this->contact = $contact;
 		
 		// 6) Actualizar los otros campos
-		$this->assignDataToContact($contact, $data);
+		$this->assignDataToContact($this->contact, $data);
 		
 
 		// 7) Grabar cambios
