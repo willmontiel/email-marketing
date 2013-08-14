@@ -80,7 +80,7 @@
 		<script type="text/x-handlebars" data-template-name="contacts/index">
 			<div class="row-fluid">
 				<div class="text-right">
-					<button class="btn btn-primary" >Agregar</button>
+					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary">Agregar</button>{{'{{/linkTo}}'}}
 					{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
 				</div>
 			</div>
@@ -156,11 +156,12 @@
 			<br>
 			<div class="row-fluid">
 				<div class="text-right">
-					<button class="btn btn-primary" >Agregar</button>
+					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary" >Agregar</button>{{'{{/linkTo}}'}}
 					<button class="btn btn-primary" >Agregar Lotes</button>
 				</div>
 			</div>
 		</script>
+		
 		<script type="text/x-handlebars" data-template-name="contacts">
 				{{ '{{#if Appcontacts.errormessage }}' }}
 					<div class="alert alert-message alert-error">
@@ -169,6 +170,32 @@
 				{{ '{{/if}} '}}	
 
 				{{'{{outlet}}'}}
+		</script>
+		
+		<script type="text/x-handlebars" data-template-name="contacts/new">
+			<div class="row-fluid">
+				<div class="span3">
+					<form>
+						<label>*E-mail:</label>
+						<p>
+							{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus"}}'}}
+						</p>
+						<label>Nombre:</label>
+						<p>
+							{{'{{view Ember.TextField valueBinding="name"}}'}}
+						</p>
+						<label>Apellido:</label>
+						<p>
+							{{'{{view Ember.TextField valueBinding="lastName"}}'}}
+						</p>
+						<br>
+						<p>
+							<button class="btn btn-primary" {{'{{action save this}}'}}>Guardar</button>
+							<button class="btn btn-inverse" {{'{{action cancel this}}'}}>Cancelar</button>
+						</p>
+					</form>
+				</div>
+			</div>
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/newbatch">
 		<div class="row-fluid">

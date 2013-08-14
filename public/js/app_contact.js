@@ -91,11 +91,54 @@ Appcontact.ContactsIndexRoute = Ember.Route.extend({
 	}
 });
 
+Appcontact.ContactsNewRoute = Ember.Route.extend({
+	model: function(){
+		return Appcontact.Contact.createRecord();
+	},
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.get('transaction').rollback();
+		}
+	}
+});
+
 
 //Controladores
 
 Appcontact.ContactController = Ember.ObjectController.extend();
 Appcontact.ContactsIndexController = Ember.ArrayController.extend({
+	
+});
+
+Appcontact.ContactsNewController = Ember.ObjectController.extend({
+	save: function(){	
+		exist = Appcontact.Contact.find().filterProperty('email', this.get('email'));
+			if(exist.get("length") === 1){
+				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
+				if(filter.test(this.get('email'))){
+					this.get('model').set('isActive', true);
+					this.get('model').set('isSubscribed', true);
+					this.get("model.transaction").commit();
+					Appcontact.set('errormessage', '');
+					this.get("target").transitionTo("contacts");
+				}
+				else{
+					Appcontact.set('errormessage', 'El email no es correcto');
+					this.get("target").transitionTo("contacts.new");
+				}
+			}
+			else{
+				Appcontact.set('errormessage', 'El email ya existe');
+				this.get("target").transitionTo("contacts.new");
+			}
+			
+	},
+			
+	cancel: function(){
+		this.get("transaction").rollback();
+		Appcontact.set('errormessage', '');
+		this.get("target").transitionTo("contacts");
+	}
 	
 });
 
