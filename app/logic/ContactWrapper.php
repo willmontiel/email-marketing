@@ -200,6 +200,16 @@ class ContactWrapper
 			throw new InvalidArgumentException('La direccion [' . $email . '] no es una direccion de correo valida!');
 		}
 		
+		$emailex = Email::findFirstByEmail($email);
+		if ($emailex) {
+			$contactex = Contact::findFirstByIdEmail($emailex->idEmail);
+			if ($contactex) {
+				if ($contactex->idDbase == $this->idDbase) {
+					throw new InvalidArgumentException('La direccion ' . $email . ' ya existe en esta base de datos!');
+				}
+			}
+		}
+		
 		$emailo = new Email();
 		list($user, $edomain) = preg_split("/@/", $email, 2);
 		$domain = Domain::findFirstByName($edomain);

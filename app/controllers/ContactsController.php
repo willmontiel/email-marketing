@@ -127,10 +127,10 @@ class ContactsController extends ControllerBase
 				}
 				catch (\Exception $e) {
 					$log->log('Exception: [' . $e . ']');
-					return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
+					$this->flashSession->error($e->getMessage());	
 				}				
 			}
-			$this->flashSession->error('Contactos creados exitosamente');
+			$this->flashSession->success('Contactos creados exitosamente');
 			$this->response->redirect("dbase/show/$idDbase#/contacts");
 	}
 }
