@@ -23,10 +23,7 @@ class ContactlistController extends ControllerBase
 		if ($r)
 			return $r;	
 		
-		$idAccount=$this->user->account->idAccount;
-		
-		$query = $this->modelsManager->createQuery("SELECT  Contactlist.* FROM Contactlist JOIN Dbase ON Contactlist.idDbase = Dbase.idDbase WHERE idList = $id AND idAccount = $idAccount");
-		$list = $query->execute();
+		$list = Contactlist::findFirstByIdList($id);
 		
 		$this->view->setVar('datalist', $list);
 		
