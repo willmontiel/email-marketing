@@ -1,5 +1,11 @@
 {% extends "templates/index.volt" %}
-
+{% block header_javascript %}
+	<script type="text/javascript">
+		var MyDbaseUrl = 'emarketing/api/';
+	</script>
+	{{ super() }}
+	{{ partial("partials/embercontact_partial") }}
+{% endblock %}
 {% block content %}
 	<div class="row-fluid">
 		<div class="span12">
@@ -10,10 +16,159 @@
 			</div>
 			<br>
 			<div class="row-fluid">
-				<div class="span12">
+				<div class="span8">
 					{{datalist.description}}
+				</div>
+				<div class="span1"></div>
+				<div class="span3">
+					<div class="badge-number-light">
+						<table class="offset4">
+							<tr>
+								<td>
+									<span class="text-green-color"></span>
+								</td>
+								<td class="text-left">
+									<span class="regular-text">Activos</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span class="text-gray-color text-left"></span>
+								</td>
+								<td class="text-left">
+									<span class="regular-text">Inactivos</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span class="text-gray-color text-left"></span>
+								</td>	
+								<td class="text-left">
+									<span class="regular-text">Des-suscritos</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span class="text-brown-color text-left"></span>
+								</td>
+								<td class="text-left">
+									<span class="regular-text">Rebotados</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span class="text-red-color text-left"></span>
+								</td>
+								<td class="text-left">
+									<span class="regular-text">Spam</span>
+								</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<br>
+	<div class="row-fluid">
+		<div class="span12"></div>
+	</div>
+	<br>
+	
+	<!------------------ Ember! ---------------------------------->
+	<div id="emberAppcontactContainer">
+		<script type="text/x-handlebars" data-template-name="contacts/index">
+			<div class="row-fluid">
+				<div class="text-right">
+					<button class="btn btn-primary" >Agregar</button>
+					<button class="btn btn-primary" >Agregar Lotes</button>
+				</div>
+			</div>
+			<br>
+			<div class="row-fluid">
+				<div class="span12">
+					<table class="table table-striped">
+						<thead>
+							 <tr>
+								<th class="span3">
+									E-mail
+								</th>
+								<th class="span3">
+									Nombre
+								</th>
+								<th class="span3">
+									Apellido
+								</th>
+								<th class="span2">
+									Estado
+								</th>
+								<th class="span1">
+									Acciones
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+					{{'{{#each model}}'}}
+							<tr>
+								<td>{{'{{email}}'}}</td>
+								<td>{{'{{name}}'}}</td>
+								<td>{{'{{lastName}}'}}</td>
+								<td>
+									<dl>
+										<dd>
+											{{ '{{#if isActive}}' }}
+												<span class="green-label">Activo</span>
+											{{ '{{else}}' }}
+												<span class="orange-label">Inactivo</span>
+											{{ '{{/if}}' }}
+										</dd>
+										<dd>
+											{{ '{{#if isBounced}}' }}
+												Rebotado
+											{{ '{{/if}}' }}
+										</dd>
+										{{ '{{#unless isSubscribed}}' }}
+										<dd>
+												Desuscrito
+										</dd>
+										{{ '{{/unless}}' }}
+										{{ '{{#if isSpam}}' }}
+										<dd>
+											<span class="red-label">SPAM</span>
+										</dd>
+										{{ '{{/if}}' }}
+
+									</dl>
+								</td>
+								<td>
+									<dl>
+										<dd>Ver</dd>
+										<dd>Editar</dd>
+										<dd>Eliminar</dd>
+									</dl>
+								</td>
+							</tr>
+					{{ '{{/each}}' }}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<br>
+			<div class="row-fluid">
+				<div class="text-right">
+					<button class="btn btn-primary" >Agregar</button>
+					<button class="btn btn-primary" >Agregar Lotes</button>
+				</div>
+			</div>
+		</script>
+		<script type="text/x-handlebars" data-template-name="contacts">
+				{{ '{{#if Appcontacts.errormessage }}' }}
+					<div class="alert alert-message alert-error">
+				{{ '{{ Appcontacts.errormessage }}' }}
+					</div>
+				{{ '{{/if}} '}}	
+
+				{{'{{outlet}}'}}
+		</script>
 	</div>
 {% endblock %}

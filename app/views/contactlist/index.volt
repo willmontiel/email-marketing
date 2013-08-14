@@ -70,7 +70,7 @@
 									<span class="primary-label">{{ '{{updatedon}}' }}</span>
 								</td>
 								<td>
-									<label><a href="contactlist/show/{{ '{{unbound id}}' }}">Ver</a></label>
+									<label><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">Ver</a></label>
 									<label>{{ '{{#linkTo "lists.edit" this}}' }}Editar{{ '{{/linkTo}}' }}</label>
 								</td>
 							</tr>
