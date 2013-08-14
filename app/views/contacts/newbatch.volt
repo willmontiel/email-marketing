@@ -27,9 +27,9 @@
 			<td>{{content['name']}}</td>
 			<td>{{content['last_name']}}</td>
 			{% if content['status'] == "1" %}
-			<td>Importar</td>
+			<td>Crear</td>
 			{% else %}
-			<td>No Importar</td>
+			<td>Repetido</td>
 			{% endif %}
 		</tr>
 	
@@ -37,7 +37,7 @@
 	</tbody>
 </table>
 
-<a href="/emarketing/contacts/importbatch/{{idDbase}}" class="btn btn-inverse">Importar</a>
+<a href="/emarketing/contacts/importbatch/{{idDbase}}" class="btn btn-inverse">Crear</a>
 <a href="/emarketing/dbase/show/{{idDbase}}#/contacts/newbatch" class="btn btn-inverse">Cancelar</a>
 
 			</div>

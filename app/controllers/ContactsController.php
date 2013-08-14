@@ -56,18 +56,33 @@ class ContactsController extends ControllerBase
 						
 					}
 					
+					if(isset($batch)){
+						foreach ($batch as $b){
+							if($b['email'] === $email) {
+								$status=false;
+							}
+						}
+					}
+					
 					$batch[] = array(
 						'email' => $email,
 						'name' => $name,
 						'last_name' => $last_name,
 						'status' => $status,
 					);
+					
+					if($status) {
+						$batchreal[] = array(
+							'email' => $email,
+							'name' => $name,
+							'last_name' => $last_name,
+						);
+					}
 				}
 				
 		}
 		
-		$jsbatch = json_encode($batch);
-		$_SESSION['batch'] = $batch;
+		$_SESSION['batch'] = $batchreal;
 		
 		$this->view->setVar("batch", $batch);	
 		$this->view->setVar("idDbase", $idDbase);
