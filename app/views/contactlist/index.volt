@@ -70,8 +70,8 @@
 									<span class="primary-label">{{ '{{updatedon}}' }}</span>
 								</td>
 								<td>
-									<label><a href="contactlist/show/{{'{{id}}' }}">Ver</a></label>
-									<label>Editar</label>
+									<label><a href="#">Ver</a></label>
+									<label>{{ '{{#linkTo "lists.edit" this}}' }}Editar{{ '{{/linkTo}}' }}</label>
 								</td>
 							</tr>
 					{{ '{{/each}}' }}
@@ -118,7 +118,7 @@
 						<label>*Nombre</label>
 						<p>{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}</p>
 						<label>Descripción</label>
-						<p>{{ '{{view Ember.TextField valueBinding="description" placeholder="Descripción" required="required"}}' }}</p>
+						<p>{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}</p>
 						<br>
 						<button class="btn btn-primary" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
 						<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>
@@ -126,25 +126,53 @@
 				</div>
 			</div>	
 		</script>
-		
-		<!------------------------------------------------------------------>
-		
-		<script type="text/x-handlebars" data-template-name="segments/index">
-			<br>
-			<div class="row-fluid">
-				<div class="span12"></div>
-			</div>
+		<script type="text/x-handlebars" data-template-name="lists/edit">
 			<div class="row-fluid">
 				<div class="span12">
-					<h1>Segmentos</h1>
+					<h1>Listas</h1>
 				</div>
 			</div>
 			<br>
 			<div class="row-fluid">
 				<div class="span12">
-					<p>Cree, Consulte o actualice información sobre sus segmentos</p>
+					<p>Edita facilmente la información de tus listas</p>
+				</div>
+			</div>
+			<br>
+			<div class="row-fluid">
+				<div class="span3">
+					<label>Nombre</label>
+					<p>
+						{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" required="required" autofocus="autofocus"}}' }}
+					</p>
+					<label>Descripción</label>
+					<p>
+						{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
+					</p>
+					<br>
+					<p>
+						<button class="btn btn-inverse" {{ '{{action edit this}}' }}>Editar</button>
+						<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+					</p>
 				</div>
 			</div>
 		</script>
+	</div>
+		<!------------------------------------------------------------------>
+
+	<br>
+	<div class="row-fluid">
+		<div class="span12"></div>
+	</div>
+	<div class="row-fluid">
+		<div class="span12">
+			<h1>Segmentos</h1>
+		</div>
+	</div>
+	<br>
+	<div class="row-fluid">
+		<div class="span12">
+			<p>Cree, Consulte o actualice información sobre sus segmentos</p>
+		</div>
 	</div>
 {% endblock %}

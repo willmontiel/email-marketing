@@ -7,7 +7,8 @@ Applist.set('errormessage', '');
 //Definiendo Rutas
 Applist.Router.map(function() {
   this.resource('lists', function(){
-	  this.route('new');
+	  this.route('new'),
+	  this.resource('lists.edit', { path: '/edit/:list_id' });
   });
 });
 
@@ -89,6 +90,24 @@ Applist.ListsNewRoute = Ember.Route.extend({
 	}
 });
 
+Applist.ListsEditRoute = Ember.Route.extend({
+	deactivate: function () {
+		console.log('Deactivate ContactsListsEdit');
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+        console.log('Cambio de modelo');
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && model.get('isSaving') == false) {
+			model.get('transaction').rollback();
+		}
+	}
+});
+
 //Controladores
 Applist.ListController = Ember.ObjectController.extend();
 
@@ -118,5 +137,17 @@ Applist.ListsNewController = Ember.ObjectController.extend({
 		this.get("transaction").rollback();
 		Applist.set('errormessage', '');
 		this.get("target").transitionTo("lists");
+	}
+});
+
+Applist.ListsEditController = Ember.ObjectController.extend({
+	edit: function() {
+			this.get("model.transaction").commit();
+			this.get("target").transitionTo("lists");
+		
+	},
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("lists");
 	}
 });

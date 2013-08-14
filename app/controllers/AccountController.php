@@ -8,6 +8,7 @@ class AccountController extends ControllerBase
 			return $r;
 		$account= Account::find();
 		$this->view->setVar("allAccount", $account);
+		
 	}
 	
 	public function newAction()
