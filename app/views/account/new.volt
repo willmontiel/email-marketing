@@ -28,12 +28,12 @@
 
 				<p>
 				 <label for="modeUse">*Modo de uso:</label>
-				 {{ newFormAccount.render('modeUse') }}
+				 {{ newFormAccount.render('accountingMode') }}
 				</p>
 
 				<p>
 				 <label for="modeAccounting">*Modo de pago:</label>
-				 {{ newFormAccount.render('modeAccounting') }}
+				 {{ newFormAccount.render('subscriptionMode') }}
 				</p>	
 			</fieldset>
 		</div>

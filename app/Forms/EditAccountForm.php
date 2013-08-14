@@ -23,11 +23,11 @@ class EditAccountForm extends Form
 		'type' => 'text',
         'required' => 'required' 
         )));
-        $this->add(new Select("modeUse", array(
+        $this->add(new Select("accountingMode", array(
             '1' => 'Por Contacto',
             '2' => 'Envio',
         )));
-        $this->add(new Select("modeAccounting", array(
+        $this->add(new Select("subscriptionMode", array(
             '1' => 'Prepago',
             '2' => 'Postpago',
         )));

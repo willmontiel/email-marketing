@@ -26,12 +26,12 @@
 
 			<p>
 				*Modo de uso:
-				{{ editFormAccount.render('modeUse') }}
+				{{ editFormAccount.render('accountingMode') }}
 			</p>
 			
 			<p>
 				*Modo de Pago: 
-				{{ editFormAccount.render('modeAccounting') }}
+				{{ editFormAccount.render('subscriptionMode') }}
 			</p>
 
 			<p>

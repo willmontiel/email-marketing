@@ -28,10 +28,10 @@
  			<tr>
  				<td>{{all.idAccount}}</td>
 				<td>{{all.companyName}}</a></td>
- 				<td>{{all.modeUse}}</td>
+ 				<td>{{all.accountingMode}}</td>
  				<td>{{all.fileSpace}}</td>
  				<td>{{all.messageQuota}}</td>
- 				<td>{{all.modeAccounting}}</td>
+ 				<td>{{all.subscriptionMode}}</td>
 				<td>{{all.createdon}}</td>
 				<td>{{all.updatedon}}</td>
 				<td>
