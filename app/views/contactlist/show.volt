@@ -81,7 +81,7 @@
 			<div class="row-fluid">
 				<div class="text-right">
 					<button class="btn btn-primary" >Agregar</button>
-					<button class="btn btn-primary" >Agregar Lotes</button>
+					{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
 				</div>
 			</div>
 			<br>
@@ -169,6 +169,27 @@
 				{{ '{{/if}} '}}	
 
 				{{'{{outlet}}'}}
+		</script>
+		<script type="text/x-handlebars" data-template-name="contacts/newbatch">
+		<div class="row-fluid">
+				<div class="span2">
+					<div class="tooltip fade top in" display: block;">
+						<div class="tooltip-arrow">
+						</div>
+						<div class="tooltip-inner infobatch">
+							Ingrese los Contactos separados por saltos de linea
+							y los campos por COMAS ",".
+						</div>
+					</div>
+				</div>
+				<form method="Post" action="/emarketing/contacts/newbatch/{{datalist.idList}}" , 'method': 'Post') }}
+				<div class="span5">
+					{{ text_area("arraybatch") }}
+					<input class="btn btn-sm btn-inverse" type="submit" value="Guardar">
+					{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Cancelar</button>{{/linkTo}}' }}
+				</div>
+				</form>
+		</div>
 		</script>
 	</div>
 {% endblock %}

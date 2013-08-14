@@ -8,6 +8,7 @@ Appcontact.set('errormessage', '');
 Appcontact.Router.map(function() {
   this.resource('contacts', function(){
 	  this.route('new');
+	  this.route('newbatch')
   });
 });
 
@@ -97,3 +98,6 @@ Appcontact.ContactController = Ember.ObjectController.extend();
 Appcontact.ContactsIndexController = Ember.ArrayController.extend({
 	
 });
+
+App.ContactsNewbatchController = Ember.ObjectController.extend();
+App.ContactsNewbatchRoute = Ember.Route.extend();

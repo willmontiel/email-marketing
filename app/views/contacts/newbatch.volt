@@ -5,7 +5,7 @@
 	<div class="span9">
 		<div class="row-fluid">
 			<div class="modal-header">
-				<h1>Importacion de Contactos</h1>
+				<h1>Creacion Rapida de Contactos</h1>
 			</div>
 		</div>
 			<div class="row-fluid">

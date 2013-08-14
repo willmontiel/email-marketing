@@ -261,18 +261,7 @@ App.Contact.FIXTURES = [
 //Controladores
 App.ContactController = Ember.ObjectController.extend();
 
-App.ContactsNewbatchController = Ember.ObjectController.extend({
-	save: function() {
-		var content = this.get('arraybatch');
-		if(content.length > 0){
-			this.set('rawContent', content.join('\n'));
-			this.get("model.transaction").commit();
-			this.get("target").transitionTo("contacts");
-		}   
-			this.get("model.transaction").commit();
-			this.get("target").transitionTo("contacts");
-	}
-});
+App.ContactsNewbatchController = Ember.ObjectController.extend();
 
 App.ContactsNewController = Ember.ObjectController.extend({
 	errors: null,
@@ -396,17 +385,7 @@ App.ContactsNewRoute = Ember.Route.extend({
 	
 });
 
-App.ContactsNewbatchRoute = Ember.Route.extend({
-	model: function(){
-		return App.Contact.createRecord();
-	},
-	deactivate: function () {
-		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.get('transaction').rollback();
-		}
-	}
-	
-});
+App.ContactsNewbatchRoute = Ember.Route.extend();
 
 App.ContactsEditRoute = Ember.Route.extend({
 	deactivate: function () {
