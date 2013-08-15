@@ -7,8 +7,8 @@ Appcontact.set('errormessage', '');
 //Definiendo Rutas
 Appcontact.Router.map(function() {
   this.resource('contacts', function(){
-	  this.route('new');
-	  this.route('newbatch')
+	  this.route('new'),
+	  this.route('newbatch');
   });
 });
 
@@ -112,26 +112,33 @@ Appcontact.ContactsIndexController = Ember.ArrayController.extend({
 
 Appcontact.ContactsNewController = Ember.ObjectController.extend({
 	save: function(){	
-		exist = Appcontact.Contact.find().filterProperty('email', this.get('email'));
-			if(exist.get("length") === 1){
-				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
-				if(filter.test(this.get('email'))){
-					this.get('model').set('isActive', true);
-					this.get('model').set('isSubscribed', true);
-					this.get("model.transaction").commit();
-					Appcontact.set('errormessage', '');
-					this.get("target").transitionTo("contacts");
+		console.log('hey! Estoy aqui');
+		if(this.get('email')==null){
+			Appcontact.set('errormessage', 'El campo email esta vacío, por favor verifica la información');
+			this.get("target").transitionTo("contacts.new");
+			console.log('error email vacío');
+		}
+		else{
+			exist = Appcontact.Contact.find().filterProperty('email', this.get('email'));
+				if(exist.get("length") === 1){
+					var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
+					if(filter.test(this.get('email'))){
+						this.get('model').set('isActive', true);
+						this.get('model').set('isSubscribed', true);
+						this.get("model.transaction").commit();
+						Appcontact.set('errormessage', '');
+						this.get("target").transitionTo("contacts");
+					}
+					else{
+						Appcontact.set('errormessage', 'El email no es correcto, por favor verifica la información');
+						this.get("target").transitionTo("contacts.new");
+					}
 				}
 				else{
-					Appcontact.set('errormessage', 'El email no es correcto');
+					Appcontact.set('errormessage', 'El email ingresado ya existe, por favor verifica la información');
 					this.get("target").transitionTo("contacts.new");
 				}
-			}
-			else{
-				Appcontact.set('errormessage', 'El email ya existe');
-				this.get("target").transitionTo("contacts.new");
-			}
-			
+		}	
 	},
 			
 	cancel: function(){
@@ -142,5 +149,5 @@ Appcontact.ContactsNewController = Ember.ObjectController.extend({
 	
 });
 
-App.ContactsNewbatchController = Ember.ObjectController.extend();
-App.ContactsNewbatchRoute = Ember.Route.extend();
+Appcontact.ContactsNewbatchController = Ember.ObjectController.extend();
+Appcontact.ContactsNewbatchRoute = Ember.Route.extend();

@@ -163,9 +163,9 @@
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="contacts">
-				{{ '{{#if Appcontacts.errormessage }}' }}
+				{{ '{{#if Appcontact.errormessage }}' }}
 					<div class="alert alert-message alert-error">
-				{{ '{{ Appcontacts.errormessage }}' }}
+				{{ '{{ Appcontact.errormessage }}' }}
 					</div>
 				{{ '{{/if}} '}}	
 
