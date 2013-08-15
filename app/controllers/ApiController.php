@@ -71,6 +71,23 @@ class ApiController extends ControllerBase
 
 		return $jsonObject;
 	}
+	/**
+	 * Crea un arreglo con la informacion del objeto Customfield
+	 * para que pueda ser convertido a JSON
+	 * @param Customfield $phObject
+	 * @return array
+	 */
+	protected function arrayLists($contactlist)
+	{
+		$object = array();
+		$object['id'] = $contactlist->idList;
+		$object['name'] = $contactlist->name;
+		$object['description'] = $contactlist->description;
+		$object['createdon'] = $contactlist->createdon;
+		$object['updatedon'] = $contactlist->updatedon;
+
+		return $object;
+	}
 	
 
 	/**
@@ -438,61 +455,60 @@ class ApiController extends ControllerBase
 	 * 
 	 * @Post("/dbase/{idDbase:[0-9]+}/lists")
 	 */
-	public function createlistAction($idDbase)
-	{
-		$db = Dbase::findFirstByIdDbase($idDbase);
-		
-		if (!$db || $db->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
-		}
-		else{
-			$log = $this->logger;
-		
-			$contentsraw = $this->request->getRawBody();
-			$log->log('Got this: [' . $contentsraw . ']');
-			$contentsT = json_decode($contentsraw);
-			$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
-			
-			$contents = $contentsT->list;
-			$contactlist = new Contactlist();
-			
-			$contactlist->idDbase=$db;
-			$contactlist->name=$contents->name;
-			$contactlist->description=$contents->description;
-			
-			if(!$contactlist->save()){
-				foreach ($contactlist->getMessages() as $message) {
-				$log->log('Error grabando lista: [' . $message . ']');
-			}
-				return $this->setJsonResponse(array('status' => 'failed'), 404, 'error');
-			}
-			
-		}
-		
-	}
-	/**
-	 * @Get("/dbase/{idDbase:[0-9]+}/lists")
-	 */
-//	public function listlistAction($idDbase)
+//	public function createlistAction($idDbase)
 //	{
 //		$db = Dbase::findFirstByIdDbase($idDbase);
 //		
 //		if (!$db || $db->account != $this->user->account) {
 //			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
 //		}
+//		else{
+//			$log = $this->logger;
 //		
-//		$lista = array();
-//		
-//		$contactlists = $db->list;
-//		
-//		if ($contactlists) {
-//			foreach ($contactlists as $contactlist) {
-//				$lista[] = $this->fromPObjectToJObject($contactlist);
+//			$contentsraw = $this->request->getRawBody();
+//			$log->log('Got this: [' . $contentsraw . ']');
+//			$contentsT = json_decode($contentsraw);
+//			$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+//			
+//			$contents = $contentsT->list;
+//			$contactlist = new Contactlist();
+//			
+//			$contactlist->idDbase=$db;
+//			$contactlist->name=$contents->name;
+//			$contactlist->description=$contents->description;
+//			
+//			if(!$contactlist->save()){
+//				foreach ($contactlist->getMessages() as $message) {
+//				$log->log('Error grabando lista: [' . $message . ']');
 //			}
+//				return $this->setJsonResponse(array('status' => 'failed'), 404, 'error');
+//			}
+//			
 //		}
-//
-//		return $this->setJsonResponse(array('lists' => $lista) );
-//	
+//		
 //	}
+	
+	public function listsAction()
+	{
+//		$db = Dbase::findFirstByIdDbase(1155);
+//		
+//		if (!$db || $db->account != $this->user->account) {
+//			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+//		}
+		$lista = array();
+		$idAccount=$this->user->account->idAccount;
+                
+        $query = $this->modelsManager->createQuery("SELECT Contactlist.* FROM Contactlist JOIN Dbase ON Contactlist.idDbase = Dbase.idDbase WHERE idAccount = $idAccount");
+        $contactlists = $query->execute();
+		
+		if ($contactlists) {
+			foreach ($contactlists as $contactlist) {
+				$lista[] = $this->arrayLists($contactlist);
+			}
+		}
+
+		return $this->setJsonResponse(array('lists' => $lista) );
+	
+	}
 
 }

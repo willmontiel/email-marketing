@@ -1,20 +1,10 @@
 {% extends "templates/index.volt" %}
 {% block header_javascript %}
-	<script type="text/javascript">
-		var MyDbaseUrl = 'emarketing/api/';
-	</script>
 	{{ super() }}
 	{{ partial("partials/emberlist_partial") }}
 {% endblock %}
 
 {% block content %}
-	
-	<!---------------
-		{% for contactlist in contactlists %}
-			<li>{{contactlist.idList}}</li>
-		{% endfor %}
-	---------------->
-
 	<div id="emberApplistContainer">
 		<script type="text/x-handlebars" data-template-name="lists/index">   
 			<div class="row-fluid">
@@ -24,13 +14,11 @@
 			</div>
 			<br>
 			<div class="row-fluid">
-				<div class="span12">
+				<div class="span7">
 					<p>Vea información detallada sobre sus listas de contactos</p>
 				</div>
-			</div>
-			<br>
-			<div class="row-fluid">
-				<div class="span12 text-right">
+				<div class="span3"></div>
+				<div class="span2 text-right">
 					{{ '{{#linkTo "lists.new"}}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
 				</div>
 			</div>
@@ -82,7 +70,7 @@
 			<br>
 			<div class="row-fluid">
 				<div class="span12 text-right">
-					{{ '{{#linkTo "lists.new"}}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
+					{{ '{{#linkTo "lists.new" }}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
 				</div>
 			</div>
 		</script>

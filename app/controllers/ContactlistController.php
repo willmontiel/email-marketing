@@ -1,6 +1,7 @@
 <?php
 class ContactlistController extends ControllerBase
 {
+	
 	public function indexAction()
 	{
 		
@@ -8,12 +9,8 @@ class ContactlistController extends ControllerBase
 		if ($r)
 			return $r;
 		
-		$idAccount=$this->user->account->idAccount;
-		
-		$query = $this->modelsManager->createQuery("SELECT Contactlist.* FROM Contactlist JOIN Dbase ON Contactlist.idDbase = Dbase.idDbase WHERE idAccount = $idAccount");
-		$lists = $query->execute();
-		
-		$this->view->setVar("contactlists", $lists);
+		$idAccount = $this->user->account->idAccount;
+		$this->view->setVar("account", $idAccount);
 		
 	}
 	

@@ -22,29 +22,29 @@ serializer.configure({
 });
 
 //Adaptador
-//Applist.Adapter = DS.RESTAdapter.reopen({
-//	namespace: MyDbaseUrl,
-//	serializer: serializer
-//});
+Applist.Adapter = DS.RESTAdapter.reopen({
+	namespace: 'emarketing/api',
+	serializer: serializer
+});
 
 // Store (class)
 Applist.Store = DS.Store.extend({
 	revision: 13,
-//	adapter: Applist.Adapter.create()
-	adapter: DS.FixtureAdapter.extend({
-        queryFixtures: function(fixtures, query, type) {
-            console.log(query);
-            console.log(type);
-            return fixtures.filter(function(item) {
-                for(prop in query) {
-                    if( item[prop] != query[prop]) {
-                        return false;
-                    }
-                }
-                return true;
-            });
-        }
-    })
+	adapter: Applist.Adapter.create()
+//	adapter: DS.FixtureAdapter.extend({
+//        queryFixtures: function(fixtures, query, type) {
+//            console.log(query);
+//            console.log(type);
+//            return fixtures.filter(function(item) {
+//                for(prop in query) {
+//                    if( item[prop] != query[prop]) {
+//                        return false;
+//                    }
+//                }
+//                return true;
+//            });
+//        }
+//    })
 });
 
 // Store (object)
@@ -54,8 +54,8 @@ Applist.store = Applist.Store.create();
 Applist.List = DS.Model.extend({
 	name: DS.attr('string'),
 	description: DS.attr( 'string' ),
-	createdon: DS.attr('string'),
-	updatedon: DS.attr('string'),
+	createdon: DS.attr('number'),
+	updatedon: DS.attr('number'),
 	
 	becameError: function() {
 		return alert('there was an error!');
@@ -66,11 +66,11 @@ Applist.List = DS.Model.extend({
 });
 
 //Creando el fixture (parcial)
-Applist.List.FIXTURES = [
-	{id: 1, name: 'Mi primera Lista', description: 'Mi primera lista, no tiene descripcion alguna', createdon: '10 de agosto de 2012', updatedon: '12 de agosto de 2013'},
-	{id: 2, name: 'Mi segunda Lista', description: 'Mi seguna lista, no tiene descripcion alguna', createdon: '15 de marzo de 2013', updatedon: '16 de marzo de 2013'},
-	{id: 3, name: 'Mi tercera Lista', description: 'Mi tercera lista, no tiene descripcion alguna', createdon: '19 de febrero de 2013', updatedon: '19 de febrero de 2013'}
-];
+//Applist.List.FIXTURES = [
+//	{id: 1, name: 'Mi primera Lista', description: 'Mi primera lista, no tiene descripcion alguna', createdon: '10 de agosto de 2012', updatedon: '12 de agosto de 2013'},
+//	{id: 2, name: 'Mi segunda Lista', description: 'Mi seguna lista, no tiene descripcion alguna', createdon: '15 de marzo de 2013', updatedon: '16 de marzo de 2013'},
+//	{id: 3, name: 'Mi tercera Lista', description: 'Mi tercera lista, no tiene descripcion alguna', createdon: '19 de febrero de 2013', updatedon: '19 de febrero de 2013'}
+//];
 
 //Rutas
 Applist.ListsIndexRoute = Ember.Route.extend({
