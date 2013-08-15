@@ -7,10 +7,12 @@ class ContactsController extends ControllerBase
 		
 	}
 	
-	public function newbatchAction($idDbase)
+	public function newbatchAction($idList)
 	{
-		$db = Dbase::findFirstByIdDbase($idDbase);
-		
+		$list = Contactlist::findFirstByIdList($idList);
+
+		$db = Dbase::findFirstByIdDbase($list->idDbase);
+
 		if (!$db || $db->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
 		}
@@ -19,7 +21,7 @@ class ContactsController extends ControllerBase
 		
 		if (empty($contents)) {
 			$this->flashSession->error('No hay valores en el campo');
-			$this->response->redirect("dbase/show/$idDbase#/contacts/newbatch");
+			$this->response->redirect("contactlist/show/$idList#/contacts/newbatch");
 		}
 		
 		$eachrow = explode("\n", $contents);
@@ -83,19 +85,21 @@ class ContactsController extends ControllerBase
 		}
 		
 		$_SESSION['batch'] = $batchreal;
-		
+
 		$this->view->setVar("batch", $batch);	
-		$this->view->setVar("idDbase", $idDbase);
+		$this->view->setVar("idList", $idList);
 		
 	}
 	
-	public function importbatchAction($idDbase)
+	public function importbatchAction($idList)
 	{
 		$log = $this->logger;
-
+		
+		$list = Contactlist::findFirstByIdList($idList);
+		
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
-		$wrapper->setIdDbase($idDbase);
+		$wrapper->setIdDbase($list->idDbase);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
 		// Crear el nuevo contacto:
 			$batch = $_SESSION['batch'];
@@ -121,13 +125,13 @@ class ContactsController extends ControllerBase
 				$newcontact->email = $batch['email'];
 				$newcontact->name = $batch['name'];
 				$newcontact->last_name = $batch['last_name'];
-
+				
 				try {
 				$contact = $wrapper->createNewContactFromJsonData($newcontact);
 				}
 				catch (\Exception $e) {
 					$log->log('Exception: [' . $e . ']');
-					$this->flashSession->error($e->getMessage());	
+					$this->flashSession->error($e->getMessage());
 				}				
 			}
 			$this->flashSession->success('Contactos creados exitosamente');
