@@ -70,9 +70,10 @@
 		</div>
 	</div>
 	
-	<div class="row-fluid">
-		<div class="span12"></div>
-	</div>
+	<div class="text-right">
+			{{'{{#linkTo "contacts.new"}} <button class="btn btn-primary" >Agregar</button> {{/linkTo}}'}}
+			{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
+		</div>
 	
 	<div class="row-fluid">
         <div class="span12">
@@ -167,25 +168,30 @@
 							<label>E-mail: </label>
 						</p>
 						<p>
-							{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
+							{{ ember_textfield('email', 'E-mail', 'required') }}
 						</p>
 						<p>
 							<label>Nombre: </label>
 						</p>
 						<p>	
-							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" }} '}}
+							{{ ember_textfield('name', 'Nombre', '') }}
 						</p>
 						<p>
 							<label>Apellido: </label>
 						</p>
 						<p>
-							{{ ember_textfield('lastName', 'Apellido') }}
-							{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName"}} '}}
+							{{ ember_textfield('lastName', 'Apellido', '') }}
+							
 						</p>
 						<!-- Campos Personalizados -->
 							{%for field in fields%}
-							<p><label for="{{field.name}}">{{field.name}}:</label></p>
-							<p>{{ember_customfield(field)}}</p>
+								<p><label for="{{field.name}}">{{field.name}}:</label></p>
+								<p>{{ember_customfield(field)}}</p>
+								{% if (field.type == "Text") %}
+									Maximo {{field.maxLength}} caracteres
+								{% elseif field.type == "Numerical" %}
+									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
+								{%endif%}
 							{%endfor%}
 							
 						</p>
@@ -243,6 +249,18 @@
 						</label>
 			{{ '{{/if}}' }}
 				</p>
+				<!-- Campos Personalizados -->
+							{%for field in fields%}
+								<p><label for="{{field.name}}">{{field.name}}:</label></p>
+								<p>{{ember_customfield(field)}}</p>
+								{% if (field.type == "Text") %}
+									Maximo {{field.maxLength}} caracteres
+								{% elseif field.type == "Numerical" %}
+									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
+								{%endif%}
+							{%endfor%}
+						</p>
+				<!--  Fin de campos personalizados -->
 				<p>
 					<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
 					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
@@ -289,6 +307,11 @@
 									<span class="orange-label">Inactivo</span>
 								{{ '{{/if}}' }}
 							</dd>
+							<!-- Campos Personalizados -->
+							{%for field in fields%}
+								<dd> {{field.name}} </dd>
+							{%endfor%}
+							<!--  Fin de campos personalizados -->
 						</dl>
 					</td>
 					<td>
@@ -309,6 +332,11 @@
 									<span class="orange-label">Des-Suscrito</span>
 								{{ '{{/if}}' }}	
 							</dd>
+							<!-- Campos Personalizados -->
+							{%for field in fields%}
+								<dd> Valor del campo </dd>
+							{%endfor%}
+							<!--  Fin de campos personalizados -->
 						</dl>
 					</td>
 				</tr>

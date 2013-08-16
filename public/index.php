@@ -139,6 +139,9 @@ try {
 		$compiler->addFunction('ember_customfield_options', function ($resolvedArgs, $exprArgs) {
                         return 'CreateViewEmber::createOptions(' . $resolvedArgs . ')';
                     });
+		$compiler->addFunction('ember_textfield', function ($resolvedArgs, $exprArgs) {
+						return 'CreateViewEmber::createEmberTextField(' . $resolvedArgs . ')';
+					});
 		
         $volt->setOptions(array(
             "compileAlways" => true,

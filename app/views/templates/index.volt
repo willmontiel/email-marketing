@@ -9,6 +9,7 @@
         {{ stylesheet_link ('css/bootstrap-modal.css') }}
         {{ stylesheet_link ('css/prstyles.css') }}
 		{{ stylesheet_link ('css/style.css') }}
+		{{ stylesheet_link ('css/select2.css') }}
 		{{ stylesheet_link ('css/emarketingstyle.css') }}
 		
 		{% block header_javascript %}
@@ -27,6 +28,7 @@
         {{ javascript_include('js/application.js') }}
         {{ javascript_include('js/bootstrap-modal.js') }}
         {{ javascript_include('js/bootstrap-modalmanager.js') }}
+		{{ javascript_include('js/select2.js') }}
 		{% endblock %}
 		
         <meta name="viewport" content="width=device-width, initial-scale=1.0">

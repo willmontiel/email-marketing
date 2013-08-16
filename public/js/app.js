@@ -228,14 +228,6 @@ App.Contact = DS.Model.extend(
 	myContactModel
 );
 
-App.selectfield = Ember.Object.create({
-	selected: 'hola',
-	content: ["Yehuda", "Tom", this.value]
-});
-App.names = Ember.Object.create({
-  selected: 'tom',
-  content: ["Yehuda", "Tom"]
-});
 
 App.Contact.FIXTURES = [
   { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', activatedOn: 12345678, bouncedOn: 0, status: true, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 1225455524, ipActive: 13542532, ipSubscribed: 0, isBounced: false, isActive: true, isSpam: true, isSubscribed: true },
@@ -302,11 +294,11 @@ App.ContactsNewController = Ember.ObjectController.extend({
 			});
 			
 			model.get('transaction').commit();
-		}		
+				}
 	},
 		
 	cancel: function(){
-		 this.get("model.transaction").rollback();
+		 this.get("transaction").rollback();
 		 this.get("target").transitionTo("contacts");
 	},
 
@@ -353,7 +345,13 @@ App.ContactsIndexRoute = Ember.Route.extend({
 		return App.Contact.find();
 	}
 });
-
+App.ContactsNewView = Ember.View.extend({
+  didInsertElement: function() {
+        jQuery("select").select2({
+			placeholder: "Seleccione las Opciones"
+		});
+    }
+});
 App.ContactsNewRoute = Ember.Route.extend({
 	model: function(){
 		return App.Contact.createRecord();
@@ -383,6 +381,14 @@ App.ContactsEditRoute = Ember.Route.extend({
 			model.get('transaction').rollback();
 		}
 	}
+});
+
+App.ContactsEditView = Ember.View.extend({
+  didInsertElement: function() {
+        jQuery("select").select2({
+			placeholder: "Seleccione las Opciones"
+		});
+    }
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
