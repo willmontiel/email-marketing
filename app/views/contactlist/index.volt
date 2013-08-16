@@ -67,9 +67,22 @@
 					</table>
 				</div>
 			</div>
-			<br>
 			<div class="row-fluid">
-				<div class="span12 text-right">
+				<div class="span9">
+					<div class="pagination">
+						<ul>
+							<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }}></span></li>
+								
+							<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
+						</ul>
+					 </div>
+				</div>
+				<div class="span1">
+					{{  '{{totalrecords}}' }}
+					{{  '{{currentpage}}' }}
+				</div>
+				<div class="span2 text-right">
+					<br>
 					{{ '{{#linkTo "lists.new" }}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
 				</div>
 			</div>

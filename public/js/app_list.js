@@ -76,7 +76,7 @@ Applist.List = DS.Model.extend({
 Applist.ListsIndexRoute = Ember.Route.extend({
 	model: function(){
 		return Applist.List.find();
-	}
+	}	
 });
 
 Applist.ListsNewRoute = Ember.Route.extend({
@@ -111,7 +111,17 @@ Applist.ListsEditRoute = Ember.Route.extend({
 //Controladores
 Applist.ListController = Ember.ObjectController.extend();
 
-Applist.ListsIndexController = Ember.ObjectController.extend();
+Applist.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
+	getModelMetadata: function() {
+		return Applist.store.typeMapFor(Applist.List);
+	},
+	
+	refreshModel: function (obj) {
+		var result = Applist.List.find(obj);
+		this.set('content', result);
+	}
+
+});
 
 Applist.ListsNewController = Ember.ObjectController.extend({
 	save: function(){

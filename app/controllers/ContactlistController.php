@@ -9,9 +9,6 @@ class ContactlistController extends ControllerBase
 		if ($r)
 			return $r;
 		
-		$idAccount = $this->user->account->idAccount;
-		$this->view->setVar("account", $idAccount);
-		
 	}
 	
 	public function showAction($id)
