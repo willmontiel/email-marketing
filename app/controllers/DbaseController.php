@@ -90,6 +90,9 @@ class DbaseController extends ControllerBase
 		$db = $this->findAndValidateDbaseAccount($id);
 		if ($db !== null) {
 			$this->view->setVar("sdbase", $db);
+			$fields = Customfield::findByIdDbase($db->idDbase);
+			$this->view->setVar("fields", $fields);
+
         }
     }
    

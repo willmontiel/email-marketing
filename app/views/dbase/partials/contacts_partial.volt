@@ -14,9 +14,6 @@
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span12"></div>
-			</div>
-			<div class="row-fluid">
 				<div class="span12">
 					<p>
 						Aqui esta toda la información necesaria para gestionar los datos de tus contactos, sientete a gusto. 
@@ -176,14 +173,24 @@
 							<label>Nombre: </label>
 						</p>
 						<p>	
-							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
+							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" }} '}}
 						</p>
 						<p>
 							<label>Apellido: </label>
 						</p>
 						<p>
-							{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
+							{{ ember_textfield('lastName', 'Apellido') }}
+							{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName"}} '}}
 						</p>
+						<!-- Campos Personalizados -->
+							{%for field in fields%}
+							<p><label for="{{field.name}}">{{field.name}}:</label></p>
+							<p>{{ember_customfield(field)}}</p>
+							{%endfor%}
+							
+						</p>
+						<!--  Fin de campos personalizados -->
+						
 						<p>
 							<button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button>
 							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>

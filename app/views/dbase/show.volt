@@ -1,11 +1,57 @@
 {% extends "templates/index.volt" %}
 
 {% block header_javascript %}
-	<script type="text/javascript">
-		var MyDbaseUrl = 'emarketing/api/dbase/{{ sdbase.idDbase }}';
-	</script>
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
+	
+	<script type="text/javascript">
+		var MyDbaseUrl = 'emarketing/api/dbase/{{ sdbase.idDbase }}';
+		
+		var myContactModel = {
+			email: DS.attr( 'string' ),
+			name: DS.attr( 'string' ),
+			lastName: DS.attr( 'string' ),
+			status: DS.attr( 'number' ),
+			activatedOn: DS.attr('string'),
+			bouncedOn: DS.attr('string'),
+			subscribedOn: DS.attr('string'),
+			unsubscribedOn: DS.attr('string'),
+			spamOn: DS.attr('string'),
+			ipActive: DS.attr('string'),
+			ipSubscribed: DS.attr('string'),
+			updatedOn: DS.attr('string'),
+			createdOn: DS.attr('string'),
+			isBounced: DS.attr('boolean'),
+			isSubscribed: DS.attr('boolean'),
+			isSpam: DS.attr('boolean'),
+			isActive: DS.attr('boolean')
+			{%for field in fields%}
+			,
+				{% if field.type == "Text" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% elseif field.type == "Date" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% elseif field.type == "TextArea" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% elseif field.type == "Numerical" %}
+					{{field.name|lower }}: DS.attr('number')
+				{% elseif field.type == "Select" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% elseif field.type == "MultiSelect" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% endif %}
+			
+			{%endfor%}
+		};
+	</script>
+
+	{{ javascript_include('js/app.js') }}
+	
+	<script>
+		{%for field in fields %}
+			{{ ember_customfield_options(field) }}
+		{%endfor%}
+	</script>
 {% endblock %}
 
 {% block content %}
@@ -165,10 +211,10 @@
 									<td>{{'{{defaultValue}}'}}</td>
 									<td>
 										{{ '{{#if isText}}' }}
-											Maximo {{'{{maxLong}}'}} Caracteres
+											Maximo {{'{{maxLength}}'}} Caracteres
 										{{ '{{/if}}' }}
 										{{ '{{#if isNumerical}}' }}
-											{{'{{limitInferior}}'}} - {{'{{limitSuperior}}'}}
+											{{'{{minValue}}'}} - {{'{{maxValue}}'}}
 										{{ '{{/if}}' }}
 										{{ '{{#if isSelect}}' }}
 											{{'{{values}}'}}
@@ -421,19 +467,19 @@
 <script type="text/x-handlebars" data-template-name="fields/_text">
 	<label for="maxlong">Longitud Maxima del Campo</label>
 	<div class="span5">
-		{{ '{{view Ember.TextField valueBinding="maxLong" placeholder="Letras" id="maxlong"}}' }}
+		{{ '{{view Ember.TextField valueBinding="maxLength" placeholder="Letras" id="maxlong"}}' }}
 	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/_numerical">
 	<div class="span5">
 		<label for="limit_Inf">Valor Minimo</label>
-		{{ '{{view Ember.TextField valueBinding="limitInferior" placeholder="Inferior" id="limit_Inf"}}' }}
+		{{ '{{view Ember.TextField valueBinding="minValue" placeholder="Inferior" id="limit_Inf"}}' }}
 	</div>
 	<div class="span1"></div>
 	<div class="span5">
 		<label for="limit_Sup">Valor Maximo</label>
-		{{ '{{view Ember.TextField valueBinding="limitSuperior" placeholder="Superior" id="limit_Sup"}}' }}
+		{{ '{{view Ember.TextField valueBinding="maxValue" placeholder="Superior" id="limit_Sup"}}' }}
 	</div>
 </script>
 

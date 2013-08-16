@@ -135,7 +135,6 @@ class ContactWrapper
 		
 		$this->contact = new Contact();
 
-		$this->contact->account = $this->account;
 		$this->contact->email = $email;
 		$this->contact->bounced = 0;
 		$this->contact->spam = 0;

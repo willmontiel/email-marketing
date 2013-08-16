@@ -135,6 +135,6 @@ class ContactsController extends ControllerBase
 				}				
 			}
 			$this->flashSession->success('Contactos creados exitosamente');
-			$this->response->redirect("dbase/show/$idDbase#/contacts");
+			$this->response->redirect("dbase/show/$list->idDbase#/contacts");
 	}
 }

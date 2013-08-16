@@ -44,9 +44,9 @@ class ApiController extends ControllerBase
 		$phObject->values = $jsonObject->values;
 		$phObject->defaultValue = $jsonObject->default_value;
 		
-		$phObject->limitInferior = $jsonObject->limit_inferior;
-		$phObject->limitSuperior = $jsonObject->limit_superior;
-		$phObject->maxLong = $jsonObject->max_long;
+		$phObject->minValue = $jsonObject->min_value;
+		$phObject->maxValue = $jsonObject->max_value;
+		$phObject->maxLength = $jsonObject->max_length;
 	}
 
 	/**
@@ -65,9 +65,9 @@ class ApiController extends ControllerBase
 		$jsonObject['values'] = $phObject->values;
 		$jsonObject['default_value'] = $phObject->defaultValue;
 		
-		$jsonObject['limit_inferior'] = $phObject->limitInferior;
-		$jsonObject['limit_superior'] = $phObject->limitSuperior;
-		$jsonObject['max_long'] = $phObject->maxLong;
+		$jsonObject['min_value'] = $phObject->minValue;
+		$jsonObject['max_value'] = $phObject->maxValue;
+		$jsonObject['max_length'] = $phObject->maxLength;
 
 		return $jsonObject;
 	}
@@ -272,9 +272,6 @@ class ApiController extends ControllerBase
 		if (!$db || $db->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
 		}
-		
-		$lista = array();
-		
 		$wrapper = new ContactWrapper();
 		
 		$result = $wrapper->findContacts();
@@ -363,7 +360,7 @@ class ApiController extends ControllerBase
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
+			return $this->setJsonResponse(array('errors' => array('msg' => $e->getMessage())), 422, 'Invalid data');	
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');

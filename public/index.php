@@ -132,6 +132,14 @@ try {
 			return 'number_format(' . $resolvedArgs . ', 0, \',\', \'.\')';
 		});
 		
+		$compiler->addFunction('ember_customfield', function ($resolvedArgs, $exprArgs) {
+                        return 'CreateViewEmber::createField(' . $resolvedArgs . ')';
+                    });
+
+		$compiler->addFunction('ember_customfield_options', function ($resolvedArgs, $exprArgs) {
+                        return 'CreateViewEmber::createOptions(' . $resolvedArgs . ')';
+                    });
+		
         $volt->setOptions(array(
             "compileAlways" => true,
 			"compiledPath" => "../app/compiled-templates/",
