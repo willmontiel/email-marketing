@@ -161,3 +161,12 @@ Applist.ListsEditController = Ember.ObjectController.extend({
 		 this.get("target").transitionTo("lists");
 	}
 });
+
+//Vistas
+Applist.AvailablePages = Ember.View.extend({
+	tagName: 'li',
+			
+    page: function() {
+        return Ember.Object.create({id: this.get('content.page_id')});
+    }.property()
+});

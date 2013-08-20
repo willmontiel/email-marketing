@@ -26,39 +26,54 @@ Ember.MixinPagination = Ember.Mixin.create({
 //		}
 	}.property(),
 			
-		nextPage: function(){
-			var currentpage=parseInt(this.get("currentpage"));
-			var availablepages=parseInt(this.get("availablepages"));
-			if(currentpage >= availablepages){
-				
-			}
-			else{
-				var page=parseInt(this.get("currentpage"))+1;
-				var obj = {
-					page: page,
-					limit: this.get("recordsperpage")
-				};
-				this.refreshModel(obj);
-			}
+	nextPage: function(){
+		var currentpage=parseInt(this.get("currentpage"));
+		var availablepages=parseInt(this.get("availablepages"));
+		
+		if(currentpage >= availablepages){
+//				Hacer nada
+		}
+		else{
+			var page=parseInt(this.get("currentpage"))+1;
+			var obj = {
+				page: page,
+				limit: this.get("recordsperpage")
+			};
+			this.refreshModel(obj);
+		}
 	},
 			
 	prevPage: function(){
-			var currentpage=parseInt(this.get("currentpage"));
-			
-			if(currentpage == 1){
-				
-			}
-			else{
-				var page=parseInt(this.get("currentpage"))-1;
+		var currentpage=parseInt(this.get("currentpage"));
 
-				var obj = {
-					page: page,
-					limit: this.get("recordsperpage")
-				};
-				this.refreshModel(obj);
-			}
+		if(currentpage == 1){
+//				Hacer nada
+		}
+		else{
+			var page=parseInt(this.get("currentpage"))-1;
+
+			var obj = {
+				page: page,
+				limit: this.get("recordsperpage")
+			};
+			this.refreshModel(obj);
+		}
+	},
+	
+	pages: function() {
+
+		var availablePages = parseInt(this.get('availablepages')),
+		pages = [],
+		page;
+
+		for (i = 0; i < availablePages; i++) {
+		  page = i + 1;
+		  pages.push({ page_id: page.toString() });
+		}
+
+		return pages;
+
 	}
-
 		
 });
 
