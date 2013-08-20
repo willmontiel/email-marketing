@@ -132,6 +132,7 @@
 				</div>
 			</div>	
 		</script>
+		
 		<script type="text/x-handlebars" data-template-name="lists/edit">
 			<div class="row-fluid">
 				<div class="span12">

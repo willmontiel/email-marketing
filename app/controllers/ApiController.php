@@ -489,6 +489,17 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
+	 * @Post("/api/lists")
+	 */
+	public function NewListsAction()
+	{
+
+		
+	}
+	
+	
+	/**
+	 * 
 	 * @Get("/contactlist/{idList:[0-9]+}/contacts")
 	 */	
 	public function listcontactsbylistAction($idList)
