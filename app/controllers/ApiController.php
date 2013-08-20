@@ -491,11 +491,6 @@ class ApiController extends ControllerBase
 	 */
 	public function listsAction()
 	{
-//		$db = Dbase::findFirstByIdDbase(1155);
-//		
-//		if (!$db || $db->account != $this->user->account) {
-//			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
-//		}
 		$idAccount=$this->user->account->idAccount;
 		$limit = $this->request->getQuery('limit', null, 5);
 		$page = $this->request->getQuery('page', null, 1);
@@ -525,8 +520,6 @@ class ApiController extends ControllerBase
 		
 		$lista = array();
 		
-        
-		
         $query = $this->modelsManager->createQuery("SELECT Contactlist.* FROM Contactlist JOIN Dbase ON Contactlist.idDbase = Dbase.idDbase WHERE idAccount = $idAccount LIMIT $start, $limit");
         $contactlists = $query->execute();
 		
@@ -549,6 +542,9 @@ class ApiController extends ControllerBase
 	public function listcontactsbylistAction($idList)
 	{
 		
+		$limit = $this->request->getQuery('limit', null, 5);
+		$page = $this->request->getQuery('page', null, 1);
+		
 		$list = Contactlist::findFirstByIdList($idList);
 			
 		if ($list->dbase->account != $this->user->account) {
@@ -557,7 +553,7 @@ class ApiController extends ControllerBase
 
 		$wrapper = new ContactWrapper();
 		
-		$contacts = $wrapper->findContactsByList($list);
+		$contacts = $wrapper->findContactsByList($list, $page, $limit);
 	                
 		return $this->setJsonResponse($contacts);	
 	

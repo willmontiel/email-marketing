@@ -310,15 +310,36 @@ class ContactWrapper
 		return $object;
 	}
 	
-	public function findContactsByList($list) 
+	public function findContactsByList($list, $page, $limit) 
 	{
 		//$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));
-		$contacts = Coxcl::findByIdList($list->idList);
+		$total = Coxcl::count("idList = '$list->idList'");
+		$availablepages = ceil($total/$limit);
+		
+		if($page <= 0){
+			$start = 0;
+			$page = 1;
+		}
+		
+		else if($page > $availablepages){
+			$start = $availablepages*$limit;
+			$page = $start;
+		}
+		
+		else{
+			$start = ($page-1)*$limit;
+		}
+		
+		$contacts = Coxcl::find(array(
+			'idList' => $list->idList,
+			'limit' => array('number' => $limit, 'offset' => $start)
+		));
+		
 		$result = array();
 		foreach ($contacts as $contact) {
 			$contactT = Contact::findFirstByIdContact($contact->idContact);
 			$result[] = $this->convertContactToJson($contactT);
 		}
-		return array('contacts' => $result, 'meta' => array( 'pagination' => array('page' => 1, 'limit' => 2, 'total' => 10000) ));
+		return array('contacts' => $result, 'meta' => array( 'pagination' => array('page' => $page, 'limit' => $limit, 'total' => $total, 'availablepages' => $availablepages) ));
 	}
 }

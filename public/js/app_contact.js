@@ -98,8 +98,16 @@ Appcontact.ContactsIndexRoute = Ember.Route.extend({
 //Controladores
 
 Appcontact.ContactController = Ember.ObjectController.extend();
-Appcontact.ContactsIndexController = Ember.ArrayController.extend({
+
+Appcontact.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
+	getModelMetadata: function() {
+		return Appcontact.store.typeMapFor(Appcontact.Contact);
+	},
 	
+	refreshModel: function (obj) {
+		var result = Appcontact.Contact.find(obj);
+		this.set('content', result);
+	}
 });
 
 Appcontact.ContactsNewController = Ember.ObjectController.extend({

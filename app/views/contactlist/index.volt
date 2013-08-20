@@ -1,7 +1,9 @@
 {% extends "templates/index.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ partial("partials/emberlist_partial") }}
+	{{ partial("partials/ember_partial") }}
+	{{ javascript_include('js/mixin_pagination.js') }}
+	{{ javascript_include('js/app_list.js') }}
 {% endblock %}
 
 {% block content %}

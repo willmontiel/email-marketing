@@ -4,7 +4,10 @@
 		var MyDbaseUrl = 'emarketing/api/contactlist/{{datalist.idList}}';
 	</script>
 	{{ super() }}
-	{{ partial("partials/embercontact_partial") }}
+	{{ partial("partials/ember_partial") }}
+	{{ javascript_include('js/mixin_pagination.js') }}
+	{{ javascript_include('js/app_contact.js') }}
+	
 {% endblock %}
 {% block content %}
 	<div class="row-fluid">
@@ -155,7 +158,24 @@
 			</div>
 			<br>
 			<div class="row-fluid">
-				<div class="text-right">
+				<div class="span8">
+					<div class="pagination">
+						<ul>
+							<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }} style="cursor: pointer;"></span></li>
+								{{ '{{#each AvailablePages}}' }}
+										<li>{{ '{{view Applist.AvailablePages contentBinding="this"}}' }}</li>
+								{{ '{{/each}}' }}
+							<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
+						</ul>
+					 </div>
+				</div>
+				<div class="span1">
+					{{  '{{totalrecords}}' }}
+					{{  '{{currentpage}}' }}<br>
+					{{  '{{availablepages}}' }}
+				</div>
+				<div class="span3 text-right">
+					<br>
 					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary" >Agregar</button>{{'{{/linkTo}}'}}
 					<button class="btn btn-primary" >Agregar Lotes</button>
 				</div>
