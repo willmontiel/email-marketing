@@ -14,6 +14,7 @@ class Email extends \Phalcon\Mvc\Model
 		$this->belongsTo("idAccount", "Account", "idAccount", array(
             "foreignKey" => true,
         ));
+		$this->hasMany("idEmail", "Contact", "idEmail", array('alias' => 'Contacts'));
 		
 		$this->useDynamicUpdate(true);
 		

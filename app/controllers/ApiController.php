@@ -518,6 +518,10 @@ class ApiController extends ControllerBase
 
 		$wrapper = new ContactWrapper();
 		
+		$wrapper->setAccount($this->user->account);
+		$wrapper->setIdDbase($list->idDbase);
+		$wrapper->setIdList($idList);
+		
 		$contacts = $wrapper->findContactsByList($list, $page, $limit);
 	                
 		return $this->setJsonResponse($contacts);	
@@ -532,7 +536,7 @@ class ApiController extends ControllerBase
 	{
 		
 		$contact = Contact::findFirstByIdContact($idContact);
-                $list = Contactlist::findFirstByIdList($idList);
+		$list = Contactlist::findFirstByIdList($idList);
 			
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
@@ -576,7 +580,18 @@ class ApiController extends ControllerBase
 		// Crear el nuevo contacto:
       
 		try {
-				$contact = $wrapper->createNewContactFromJsonData($contents);
+				$existEmail = Email::findFirstByEmail($contents->email);
+				if ($existEmail) {
+					$existContact = Contact::findFirstByIdEmail($existEmail->idEmail);
+					if($existContact){
+						$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idList = $idList");
+						if (!$existList)
+							$contant = $wrapper->updateContactFromJsonData ($existContact->idContact, $contents);
+							$wrapper->associateContactToList($idList, $existContact->idContact);
+					}
+				} else {
+					$contact = $wrapper->createNewContactFromJsonData($contents);
+				}
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
@@ -651,14 +666,14 @@ class ApiController extends ControllerBase
 	{
 		
 		$contact = Contact::findFirstByIdContact($idContact);
-                $list = Contactlist::findFirstByIdList($idList);
+		$list = Contactlist::findFirstByIdList($idList);
 
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
 		}
 		
 		// Eliminar el campo
-		$customfield->delete();
+		$contact->delete();
 		
 		return $this->setJsonResponse(array('status' => 'success'), 201, 'Success');	
 	

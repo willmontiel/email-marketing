@@ -2,6 +2,7 @@
 {% block header_javascript %}
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
+		{{ javascript_include('js/mixin_pagination.js') }}
 		
 	<script type="text/javascript">
 		var MyDbaseUrl = 'emarketing/api/contactlist/{{datalist.idList}}';
@@ -43,8 +44,9 @@
 			{%endfor%}
 		};
 	</script>
-	{{ javascript_include('js/mixin_pagination.js') }}
+
 	{{ javascript_include('js/app_contact.js') }}
+	
 	<script>
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
@@ -252,6 +254,18 @@
 						<p>
 							{{'{{view Ember.TextField valueBinding="lastName"}}'}}
 						</p>
+						<!-- Campos Personalizados -->
+							{%for field in fields%}
+								<p><label for="{{field.name}}">{{field.name}}:</label></p>
+								<p>{{ember_customfield(field)}}</p>
+								{% if (field.type == "Text") %}
+									Maximo {{field.maxLength}} caracteres
+								{% elseif field.type == "Numerical" %}
+									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
+								{%endif%}
+							{%endfor%}
+						</p>
+						<!--  Fin de campos personalizados -->
 						<br>
 						<p>
 							<button class="btn btn-primary" {{'{{action save this}}'}}>Guardar</button>
@@ -410,7 +424,7 @@
 							</dd>
 							<!-- Campos Personalizados -->
 							{%for field in fields%}
-								<dd> Valor del campo </dd>
+								<dd> {{'{{'~field.name~'}}'}} </dd>
 							{%endfor%}
 							<!--  Fin de campos personalizados -->
 						</dl>

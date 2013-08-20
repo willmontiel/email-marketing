@@ -65,6 +65,7 @@ class ContactWrapper
 			}
 			
 			// Asignar el nuevo email
+			$contact->setEmail($email);
 			$contact->idEmail = $email->idEmail;
 			
 		}
@@ -158,12 +159,7 @@ class ContactWrapper
 			}
 			throw new \Exception('Error al crear el contacto: >>' . $msg . '<<');
 		} else {
-			$associate = new Coxcl();
-			$associate->idList = $this->idList;
-			$associate->idContact = $this->contact->idContact;
-					
-			$associate->save();
-			
+			$this->associateContactToList($this->idList, $this->contact->idContact);
 			$this->assignDataToCustomField($data);
 		}
 	}
@@ -228,6 +224,15 @@ class ContactWrapper
 		}
 	}
 	
+	protected function associateContactToList ($idList, $idContact)
+	{
+		$associate = new Coxcl();
+		$associate->idList = $idList;
+		$associate->idContact = $idContact;
+					
+		$associate->save();
+	}
+
 	protected function createEmail($email)
 	{
 		if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -333,27 +338,16 @@ class ContactWrapper
 		$object['ip_subscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
 		$object['ip_activated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
-		$this->convertCustomFieldtoJson($object, $contact);
-		
-		return $object;
-	}
-	
-	protected function convertCustomFieldtoJson($object, $contact)
-	{
 		$customfields = Customfield::findByIdDbase($this->idDbase);
 		
 		foreach ($customfields as $field) {
-			$valuefield = Coxcl::findFirst("idCustomField = '$field->idCustomField'", "idContact = '$contact->idContact'");
+			$valuefield = Fieldinstance::findFirst("idCustomField = $field->idCustomField AND idContact = $contact->idContact");
 			$object[$field->name] = $valuefield->textValue;
 		}
 		
 		return $object;
 	}
-
 	
-
-
-
 	public function findContactsByList($list, $page, $limit) 
 	{
 		//$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));

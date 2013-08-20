@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('js/mixin_pagination.js') }}
-	{{ javascript_include('js/app.js') }}
+
 	<script type="text/javascript">
 		var MyDbaseUrl = 'emarketing/api/dbase/{{ sdbase.idDbase }}';
 		
@@ -45,6 +45,8 @@
 			{%endfor%}
 		};
 	</script>
+	
+	{{ javascript_include('js/app.js') }}
 	
 	<script>
 		{%for field in fields %}
