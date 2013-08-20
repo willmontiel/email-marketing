@@ -120,6 +120,10 @@ try {
 		// Archivo de log
 		return new \Phalcon\Logger\Adapter\File("../app/logs/debug.log");
 	});
+	
+	$di->set('modelsManager', function(){
+		return new Phalcon\Mvc\Model\Manager();
+	});
     
 	/*
 	 * Volt Object, engine de templates

@@ -71,24 +71,6 @@ class ApiController extends ControllerBase
 
 		return $jsonObject;
 	}
-	/**
-	 * Crea un arreglo con la informacion del objeto Customfield
-	 * para que pueda ser convertido a JSON
-	 * @param Customfield $phObject
-	 * @return array
-	 */
-	protected function arrayLists($contactlist)
-	{
-		$object = array();
-		$object['id'] = $contactlist->idList;
-		$object['name'] = $contactlist->name;
-		$object['description'] = $contactlist->description;
-		$object['createdon'] = $contactlist->createdon;
-		$object['updatedon'] = $contactlist->updatedon;
-
-		return $object;
-	}
-	
 
 	/**
 	 * 
@@ -492,46 +474,16 @@ class ApiController extends ControllerBase
 	public function listsAction()
 	{
 		$idAccount=$this->user->account->idAccount;
+		
 		$limit = $this->request->getQuery('limit', null, 5);
 		$page = $this->request->getQuery('page', null, 1);
 		
 		
-		$query2 = $this->modelsManager->createQuery("SELECT Contactlist.* FROM Contactlist JOIN Dbase ON Contactlist.idDbase = Dbase.idDbase WHERE idAccount = $idAccount");
-        $all = $query2->execute();
-				
-		$total = count($all);
-		$availablepages = ceil($total/$limit);
+		$contactWrapper = new ContactListWrapper();
 		
-		if($page <= 0){
-			$start = 0;
-			$page = 1;
-		}
+		$contactlist = $contactWrapper->findContactListByList($idAccount, $limit, $page);
 		
-		else if($page > $availablepages){
-			$start = $availablepages*$limit;
-			$page = $start;
-		}
-		
-		else{
-			$start = ($page-1)*$limit;
-		}
-		
-		
-		
-		$lista = array();
-		
-        $query = $this->modelsManager->createQuery("SELECT Contactlist.* FROM Contactlist JOIN Dbase ON Contactlist.idDbase = Dbase.idDbase WHERE idAccount = $idAccount LIMIT $start, $limit");
-        $contactlists = $query->execute();
-		
-		
-		
-		if ($contactlists) {
-			foreach ($contactlists as $contactlist) {
-				$lista[] = $this->arrayLists($contactlist);
-			}
-		}
-		
-		return $this->setJsonResponse(array('lists' => $lista, 'meta' => array( 'pagination' => array('page' => $page, 'limit' =>$limit, 'total' => $total,'availablepages' => $availablepages) ) ) );
+		return $this->setJsonResponse($contactlist);
 		
 	}
 	
