@@ -10,6 +10,7 @@ Ember.MixinPagination = Ember.Mixin.create({
 			var p = this.getModelMetadata();
 
 			this.set('totalrecords', p.metadata.pagination.total);
+			this.set('availablepages',p.metadata.pagination.availablepages);
 			this.set('currentpage', p.metadata.pagination.page);
 			this.set('recordsperpage', p.metadata.pagination.limit);
 		}
@@ -26,22 +27,36 @@ Ember.MixinPagination = Ember.Mixin.create({
 	}.property(),
 			
 		nextPage: function(){
-			var page=parseInt(this.get("currentpage"))+1;
-			var obj = {
-				page: page,
-				limit: this.get("recordsperpage")
-			};
-			this.refreshModel(obj);
+			var currentpage=parseInt(this.get("currentpage"));
+			var availablepages=parseInt(this.get("availablepages"));
+			if(currentpage >= availablepages){
+				
+			}
+			else{
+				var page=parseInt(this.get("currentpage"))+1;
+				var obj = {
+					page: page,
+					limit: this.get("recordsperpage")
+				};
+				this.refreshModel(obj);
+			}
 	},
 			
 	prevPage: function(){
+			var currentpage=parseInt(this.get("currentpage"));
+			
+			if(currentpage == 1){
+				
+			}
+			else{
+				var page=parseInt(this.get("currentpage"))-1;
 
-			var page=parseInt(this.get("currentpage"))-1;
-			var obj = {
-				page: page,
-				limit: this.get("recordsperpage")
-			};
-			this.refreshModel(obj);
+				var obj = {
+					page: page,
+					limit: this.get("recordsperpage")
+				};
+				this.refreshModel(obj);
+			}
 	}
 
 		

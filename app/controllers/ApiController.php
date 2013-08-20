@@ -505,10 +505,23 @@ class ApiController extends ControllerBase
         $all = $query2->execute();
 				
 		$total = count($all);
-
-		$start = ($page-1)*$limit;
+		$availablepages = ceil($total/$limit);
 		
-		$availablepages=$total/$limit;
+		if($page <= 0){
+			$start = 0;
+			$page = 1;
+		}
+		
+		else if($page > $availablepages){
+			$start = $availablepages*$limit;
+			$page = $start;
+		}
+		
+		else{
+			$start = ($page-1)*$limit;
+		}
+		
+		
 		
 		$lista = array();
 		
@@ -524,8 +537,8 @@ class ApiController extends ControllerBase
 				$lista[] = $this->arrayLists($contactlist);
 			}
 		}
-
-		return $this->setJsonResponse(array('lists' => $lista, 'meta' => array( 'pagination' => array('page' => $page, 'limit' =>$limit, 'total' => $availablepages) ) ) );
+		
+		return $this->setJsonResponse(array('lists' => $lista, 'meta' => array( 'pagination' => array('page' => $page, 'limit' =>$limit, 'total' => $total,'availablepages' => $availablepages) ) ) );
 		
 	}
 

@@ -71,7 +71,7 @@
 				<div class="span9">
 					<div class="pagination">
 						<ul>
-							<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }}></span></li>
+							<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }} style="cursor: pointer;"></span></li>
 								
 							<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
 						</ul>
@@ -79,7 +79,8 @@
 				</div>
 				<div class="span1">
 					{{  '{{totalrecords}}' }}
-					{{  '{{currentpage}}' }}
+					{{  '{{currentpage}}' }}<br>
+					{{  '{{availablepages}}' }}
 				</div>
 				<div class="span2 text-right">
 					<br>
