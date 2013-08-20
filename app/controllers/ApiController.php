@@ -590,8 +590,8 @@ class ApiController extends ControllerBase
 	{
 		$list = Contactlist::findFirstByIdList($idList);
 		
-                if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+        if (!$list || $list->dbase->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
 		}
                 
 		$log = $this->logger;
@@ -606,7 +606,8 @@ class ApiController extends ControllerBase
 		
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
-		$wrapper->setIdDbase($$list->idDbase);
+		$wrapper->setIdDbase($list->idDbase);
+		$wrapper->setIdList($idList);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Editar el contacto existente

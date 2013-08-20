@@ -1,11 +1,11 @@
-Appcontact = Ember.Application.create({
-	rootElement: '#emberAppcontactContainer'
+App = Ember.Application.create({
+	rootElement: '#emberAppContainer'
 });
 
-Appcontact.set('errormessage', '');
+App.set('errormessage', '');
 
 //Definiendo Rutas
-Appcontact.Router.map(function() {
+App.Router.map(function() {
   this.resource('contacts', function(){
 	  this.route('new'),
 	  this.route('newbatch'),
@@ -23,15 +23,15 @@ serializer.configure({
 });
 
 //Adaptador
-Appcontact.Adapter = DS.RESTAdapter.reopen({
+App.Adapter = DS.RESTAdapter.reopen({
 	namespace: MyDbaseUrl,
 	serializer: serializer
 });
 
 // Store (class)
-Appcontact.Store = DS.Store.extend({
+App.Store = DS.Store.extend({
 	revision: 13,
-	adapter: Appcontact.Adapter.create()
+	adapter: App.Adapter.create()
 //	adapter: DS.FixtureAdapter.extend({
 //        queryFixtures: function(fixtures, query, type) {
 //            console.log(query);
@@ -49,31 +49,14 @@ Appcontact.Store = DS.Store.extend({
 });
 
 // Store (object)
-Appcontact.store = Appcontact.Store.create();
+App.store = App.Store.create();
 
 //Inicio contactos
-Appcontact.Contact = DS.Model.extend({
-	email: DS.attr( 'string' ),
-	name: DS.attr( 'string' ),
-	lastName: DS.attr( 'string' ),
-	status: DS.attr( 'number' ),
-	activatedOn: DS.attr('string'),
-	bouncedOn: DS.attr('string'),
-	subscribedOn: DS.attr('string'),
-	unsubscribedOn: DS.attr('string'),
-	spamOn: DS.attr('string'),
-	ipActive: DS.attr('string'),
-	ipSubscribed: DS.attr('string'),
-	updatedOn: DS.attr('string'),
-	createdOn: DS.attr('string'),
-	isBounced: DS.attr('boolean'),
-	isSubscribed: DS.attr('boolean'),
-	isSpam: DS.attr('boolean'),
-	isActive: DS.attr('boolean')
-	
-});
+App.Contact = DS.Model.extend(
+	myContactModel
+);
 
-//Appcontact.Contact.FIXTURES = [
+//App.Contact.FIXTURES = [
 //  { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', activatedOn: 12345678, bouncedOn: 0, status: true, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 1225455524, ipActive: 13542532, ipSubscribed: 0, isBounced: false, isActive: true, isSpam: true, isSubscribed: true },
 //  { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', activatedOn: 12345678, status: true, bouncedOn: 15544512, subscribedOn: 123456, unsubscribedOn: 15171518, spamOn: 0, ipActive: 561151515, ipSubscribed: 14822852, isBounced: true, isActive: true, isSpam: false, isSubscribed: false },
 //  { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', activatedOn: 0, status: false,bouncedOn: 0, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 0, ipActive: 0, ipSubscribed: 0, isBounced: false, isActive: false, isSpam: false, isSubscribed: false },
@@ -88,12 +71,45 @@ Appcontact.Contact = DS.Model.extend({
 
 //Rutas
 
-Appcontact.ContactsIndexRoute = Ember.Route.extend({
+App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
-		return Appcontact.Contact.find();
+		return App.Contact.find();
 	}
 });
 
+App.ContactsShowRoute = Ember.Route.extend({
+});
+
+App.ContactsNewRoute = Ember.Route.extend({
+	model: function(){
+		return App.Contact.createRecord();
+	},
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.get('transaction').rollback();
+		}
+	}
+});
+
+App.ContactsNewbatchRoute = Ember.Route.extend();
+
+App.ContactsEditRoute = Ember.Route.extend({
+	deactivate: function () {
+		console.log('Deactivate ContactsEdit');
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+        console.log('Cambio de modelo');
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && !model.get('isSaving') ) {
+			model.get('transaction').rollback();
+		}
+	}
+});
 
 //Controladores
 
@@ -110,7 +126,22 @@ Appcontact.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPag
 	}
 });
 
-Appcontact.ContactsNewController = Ember.ObjectController.extend({
+App.ContactsShowController = Ember.ObjectController.extend({
+	deactivated: function () {
+		this.set("isActive", false);		
+	},
+	activated: function () {
+		this.set("isActive", true);
+	},
+	unsubscribedcontact: function () {
+		this.set("isSubscribed", false);
+	},
+	subscribedcontact: function () {
+		this.set("isSubscribed", true);
+	}
+});
+
+App.ContactsNewController = Ember.ObjectController.extend({
 	errors: null,
 	
 	save: function() {
@@ -170,13 +201,15 @@ Appcontact.ContactsNewController = Ember.ObjectController.extend({
 		window.errormsg = this.get('content.errors');
 		console.log(errormsg);
 		this.set('errors', errormsg);
-		Appcontact.set('errormessage', errormsg);
+		App.set('errormessage', errormsg);
 		this.get('transaction').rollback();
-		this.set('content', Appcontact.Contact.createRecord(this.get('toJSON')));
+		this.set('content', App.Contact.createRecord(this.get('toJSON')));
 	}
 });
 
-Appcontact.ContactsEditController = Ember.ObjectController.extend({
+App.ContactsNewbatchController = Ember.ObjectController.extend();
+
+App.ContactsEditController = Ember.ObjectController.extend({
 	edit: function() {
 			this.get("model.transaction").commit();
 			this.get("target").transitionTo("contacts");
@@ -188,7 +221,7 @@ Appcontact.ContactsEditController = Ember.ObjectController.extend({
 	}
 });
 
-Appcontact.ContactsDeleteController = Ember.ObjectController.extend({
+App.ContactsDeleteController = Ember.ObjectController.extend({
     delete: function() {
 		this.get('content').deleteRecord();
 		this.get('store').commit();
@@ -201,48 +234,10 @@ Appcontact.ContactsDeleteController = Ember.ObjectController.extend({
 });
 
 
-//Rutas
+//Views
 
 
-Appcontact.ContactsNewView = Ember.View.extend({
-  didInsertElement: function() {
-        jQuery("select").select2({
-			placeholder: "Seleccione las Opciones"
-		});
-    }
-});
-Appcontact.ContactsNewRoute = Ember.Route.extend({
-	model: function(){
-		return Appcontact.Contact.createRecord();
-	},
-	deactivate: function () {
-		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.get('transaction').rollback();
-		}
-	}
-});
-
-Appcontact.ContactsNewbatchRoute = Ember.Route.extend();
-
-Appcontact.ContactsEditRoute = Ember.Route.extend({
-	deactivate: function () {
-		console.log('Deactivate ContactsEdit');
-		this.doRollBack();
-	},
-	contextDidChange: function() {
-        console.log('Cambio de modelo');
-		this.doRollBack();
-		this._super();
-    },
-	doRollBack: function () {
-		var model = this.get('currentModel');
-		if (model && model.get('isDirty') && model.get('isSaving') == false) {
-			model.get('transaction').rollback();
-		}
-	}
-});
-
-Appcontact.ContactsEditView = Ember.View.extend({
+App.ContactsNewView = Ember.View.extend({
   didInsertElement: function() {
         jQuery("select").select2({
 			placeholder: "Seleccione las Opciones"
@@ -250,24 +245,18 @@ Appcontact.ContactsEditView = Ember.View.extend({
     }
 });
 
-Appcontact.ContactsShowController = Ember.ObjectController.extend({
-	deactivated: function () {
-		this.set("isActive", false);		
-	},
-	activated: function () {
-		this.set("isActive", true);
-	},
-	unsubscribedcontact: function () {
-		this.set("isSubscribed", false);
-	},
-	subscribedcontact: function () {
-		this.set("isSubscribed", true);
-	}
+App.ContactsEditView = Ember.View.extend({
+  didInsertElement: function() {
+        jQuery("select").select2({
+			placeholder: "Seleccione las Opciones"
+		});
+    }
 });
 
 
-Appcontact.ContactsShowRoute = Ember.Route.extend({
-});
 
-Appcontact.ContactsNewbatchController = Ember.ObjectController.extend();
-Appcontact.ContactsNewbatchRoute = Ember.Route.extend();
+
+
+
+
+

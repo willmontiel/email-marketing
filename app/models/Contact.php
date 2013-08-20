@@ -14,6 +14,7 @@ class Contact extends \Phalcon\Mvc\Model
         ));
 		$this->belongsTo("idEmail", "Email", "idEmail", array(
             "foreignKey" => true,
+			'alias' => 'Email'
         ));
 
 		$this->useDynamicUpdate(true);

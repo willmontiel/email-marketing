@@ -1,7 +1,55 @@
 {% extends "templates/index.volt" %}
 {% block header_javascript %}
+	{{ super() }}
+	{{ partial("partials/embercontact_partial") }}
+	
 	<script type="text/javascript">
 		var MyDbaseUrl = 'emarketing/api/contactlist/{{datalist.idList}}';
+		
+		var myContactModel = {
+			email: DS.attr( 'string' ),
+			name: DS.attr( 'string' ),
+			lastName: DS.attr( 'string' ),
+			status: DS.attr( 'number' ),
+			activatedOn: DS.attr('string'),
+			bouncedOn: DS.attr('string'),
+			subscribedOn: DS.attr('string'),
+			unsubscribedOn: DS.attr('string'),
+			spamOn: DS.attr('string'),
+			ipActive: DS.attr('string'),
+			ipSubscribed: DS.attr('string'),
+			updatedOn: DS.attr('string'),
+			createdOn: DS.attr('string'),
+			isBounced: DS.attr('boolean'),
+			isSubscribed: DS.attr('boolean'),
+			isSpam: DS.attr('boolean'),
+			isActive: DS.attr('boolean')
+			{%for field in fields%}
+			,
+				{% if field.type == "Text" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% elseif field.type == "Date" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% elseif field.type == "TextArea" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% elseif field.type == "Numerical" %}
+					{{field.name|lower }}: DS.attr('number')
+				{% elseif field.type == "Select" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% elseif field.type == "MultiSelect" %}
+					{{field.name|lower }}: DS.attr('string')
+				{% endif %}
+			
+			{%endfor%}
+		};
+	</script>
+
+	{{ javascript_include('js/app_contact.js') }}
+	
+	<script>
+		{%for field in fields %}
+			{{ ember_customfield_options(field) }}
+		{%endfor%}
 	</script>
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
@@ -79,7 +127,7 @@
 	<br>
 	
 	<!------------------ Ember! ---------------------------------->
-	<div id="emberAppcontactContainer">
+	<div id="emberAppContainer">
 		<script type="text/x-handlebars" data-template-name="contacts/index">
 			<div class="row-fluid">
 				<div class="text-right">
@@ -183,9 +231,9 @@
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="contacts">
-				{{ '{{#if Appcontact.errormessage }}' }}
+				{{ '{{#if App.errormessage }}' }}
 					<div class="alert alert-message alert-error">
-				{{ '{{ Appcontact.errormessage }}' }}
+				{{ '{{ App.errormessage }}' }}
 					</div>
 				{{ '{{/if}} '}}	
 

@@ -100,6 +100,7 @@ class ContactsController extends ControllerBase
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
+		$wrapper->setIdList($idList);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
 		// Crear el nuevo contacto:
 			$batch = $_SESSION['batch'];
