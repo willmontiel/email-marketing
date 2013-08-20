@@ -83,7 +83,9 @@ class ContactWrapper
 				$msg .= $err . PHP_EOL;
 			}
 			throw new \Exception('Error al crear el contacto: >>' . $msg . '<<');
-		}		
+		} else {
+			$this->assignDataToCustomField($data);
+		}			
 		
 		return $this->contact;
 	}
@@ -161,6 +163,8 @@ class ContactWrapper
 			$associate->idContact = $this->contact->idContact;
 					
 			$associate->save();
+			
+			$this->assignDataToCustomField($data);
 		}
 	}
 	
@@ -202,6 +206,25 @@ class ContactWrapper
 				$contact->ipActivated = $this->ipaddress;
 			}
 			
+		}
+	}
+	
+	protected function assignDataToCustomField ($data)
+	{
+		$fields = Customfield::findByIdDbase($this->idDbase);
+		
+		foreach ($fields as $field) {
+			$fieldinstance = new Fieldinstance();
+			$fieldinstance->idCustomField = $field->idCustomField;
+			$fieldinstance->idContact = $this->contact->idContact;
+			if ($field->type == "Date") {
+				$name = $field->name;
+				$fieldinstance->numberValue = $data->$name;
+			} else {
+				$name = $field->name;
+				$fieldinstance->textValue = $data->$name;
+			}
+			$fieldinstance->save();
 		}
 	}
 	
@@ -310,9 +333,27 @@ class ContactWrapper
 		$object['ip_subscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
 		$object['ip_activated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
+		$this->convertCustomFieldtoJson($object, $contact);
+		
 		return $object;
 	}
 	
+	protected function convertCustomFieldtoJson($object, $contact)
+	{
+		$customfields = Customfield::findByIdDbase($this->idDbase);
+		
+		foreach ($customfields as $field) {
+			$valuefield = Coxcl::findFirst("idCustomField = '$field->idCustomField'", "idContact = '$contact->idContact'");
+			$object[$field->name] = $valuefield->textValue;
+		}
+		
+		return $object;
+	}
+
+	
+
+
+
 	public function findContactsByList($list, $page, $limit) 
 	{
 		//$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));
