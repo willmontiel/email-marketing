@@ -430,45 +430,6 @@ class ApiController extends ControllerBase
 		
 	}
 	
-	
-	
-	/**
-	 * 
-	 * @Post("/dbase/{idDbase:[0-9]+}/lists")
-	 */
-//	public function createlistAction($idDbase)
-//	{
-//		$db = Dbase::findFirstByIdDbase($idDbase);
-//		
-//		if (!$db || $db->account != $this->user->account) {
-//			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
-//		}
-//		else{
-//			$log = $this->logger;
-//		
-//			$contentsraw = $this->request->getRawBody();
-//			$log->log('Got this: [' . $contentsraw . ']');
-//			$contentsT = json_decode($contentsraw);
-//			$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
-//			
-//			$contents = $contentsT->list;
-//			$contactlist = new Contactlist();
-//			
-//			$contactlist->idDbase=$db;
-//			$contactlist->name=$contents->name;
-//			$contactlist->description=$contents->description;
-//			
-//			if(!$contactlist->save()){
-//				foreach ($contactlist->getMessages() as $message) {
-//				$log->log('Error grabando lista: [' . $message . ']');
-//			}
-//				return $this->setJsonResponse(array('status' => 'failed'), 404, 'error');
-//			}
-//			
-//		}
-//		
-//	}
-	
 	/**
 	 * 
 	 * @Get("/api/lists")
@@ -493,10 +454,14 @@ class ApiController extends ControllerBase
 	 * 
 	 * @Post("/api/lists")
 	 */
-	public function NewListsAction()
+	public function ListsNewAction()
 	{
-
+			$log = $this->logger;
 		
+			$contentsraw = $this->request->getRawBody();
+			$log->log('Got this: [' . $contentsraw . ']');
+			$contentsT = json_decode($contentsraw);
+			$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 	}
 	
 	

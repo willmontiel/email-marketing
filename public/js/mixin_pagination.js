@@ -59,21 +59,38 @@ Ember.MixinPagination = Ember.Mixin.create({
 			this.refreshModel(obj);
 		}
 	},
-	
-	pages: function() {
+			
+	firstPage: function(){
+		var currentpage=parseInt(this.get("currentpage"));
 
-		var availablePages = parseInt(this.get('availablepages')),
-		pages = [],
-		page;
-
-		for (i = 0; i < availablePages; i++) {
-		  page = i + 1;
-		  pages.push({ page_id: page.toString() });
+		if(currentpage == 1){
+//				Hacer nada
 		}
-
-		return pages;
-
+		else{
+			var obj = {
+				page: 1,
+				limit: this.get("recordsperpage")
+			};
+			this.refreshModel(obj);
+		}
+	},
+	
+	lastPage: function(){
+		var currentpage=parseInt(this.get("currentpage"));
+		var availablepages=parseInt(this.get("availablepages"));
+		
+		if(currentpage == availablepages){
+//				Hacer nada
+		}
+		else{
+			var obj = {
+				page: availablepages,
+				limit: this.get("recordsperpage")
+			};
+			this.refreshModel(obj);
+		}
 	}
+	
 		
 });
 

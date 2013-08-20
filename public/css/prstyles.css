@@ -97,6 +97,13 @@ span.primary-label {
 	color: #1abc9c; 
 }
 
+span.circle-primary {
+	color: white; 
+	background-color: #1abc9c;
+	border-radius: 9px;
+	font-size: 16px;
+}
+
 span.green-label {
 	color: #1abc9c;
 	font-weight: bold;

@@ -70,18 +70,22 @@
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span9">
+				<div class="span5">
 					<div class="pagination">
 						<ul>
+							<li class="previous"><span class="fui-arrow-left" {{ '{{action firstPage this}}' }} style="cursor: pointer;"><span class="fui-arrow-left" style="cursor: pointer;"></span></span></li>
 							<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }} style="cursor: pointer;"></span></li>
+							
 							<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
+							<li class="next"><span class="fui-arrow-right" {{ '{{action lastPage this}}' }}><span class="fui-arrow-right"></span></span></li>
 						</ul>
 					 </div>
 				</div>
-				<div class="span1">
-					{{  '{{totalrecords}}' }}
-					{{  '{{currentpage}}' }}<br>
-					{{  '{{availablepages}}' }}
+				<div class="span5">
+					<br><br>
+					Registros totales: <span class="primary-label">{{  '{{totalrecords}}' }}</span>,
+					Página  <span class="primary-label">{{  '{{currentpage}}' }}</span>
+					de <span class="primary-label">{{  '{{availablepages}}' }}</span>
 				</div>
 				<div class="span2 text-right">
 					<br>
