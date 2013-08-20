@@ -250,13 +250,15 @@ class ApiController extends ControllerBase
 	public function listcontactsAction($idDbase)
 	{
 		$db = Dbase::findFirstByIdDbase($idDbase);
+		$limit = $this->request->getQuery('limit', null, 5);
+		$page = $this->request->getQuery('page', null, 1);
 		
 		if (!$db || $db->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
 		}
 		$wrapper = new ContactWrapper();
 		
-		$result = $wrapper->findContacts();
+		$result = $wrapper->findContacts($limit, $page);
 		
 		return $this->setJsonResponse($result);
 	}

@@ -73,7 +73,7 @@
 	<div class="text-right">
 			{{'{{#linkTo "contacts.new"}} <button class="btn btn-primary" >Agregar</button> {{/linkTo}}'}}
 			{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
-		</div>
+	</div>
 	
 	<div class="row-fluid">
         <div class="span12">
@@ -144,6 +144,22 @@
         </div>
 	</div>
 	<div class="row-fluid">
+		<div class="span9">
+			<div class="pagination">
+				<ul>
+					<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }} style="cursor: pointer;"></span></li>
+						{{ '{{#each AvailablePages}}' }}
+								<li>{{ '{{view Applist.AvailablePages contentBinding="this"}}' }}</li>
+						{{ '{{/each}}' }}
+					<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
+				</ul>
+			</div>
+		</div>
+		<div class="span1">
+			{{  '{{totalrecords}}' }}
+			{{  '{{currentpage}}' }}<br>
+			{{  '{{availablepages}}' }}
+		</div>
 		<div class="text-right">
 			{{'{{#linkTo "contacts.new"}} <button class="btn btn-primary" >Agregar</button> {{/linkTo}}'}}
 			{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}

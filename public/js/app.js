@@ -407,7 +407,16 @@ App.ContactsShowController = Ember.ObjectController.extend({
 });
 
 
-App.ContactsIndexController = Ember.ArrayController.extend({
+App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
+	getModelMetadata: function() {
+		return App.store.typeMapFor(App.Contact);
+	},
+	
+	refreshModel: function (obj) {
+		var result = App.Contact.find(obj);
+		this.set('content', result);
+	},
+			
 	searchText: '',
     search: function(){
 		var resultado = App.Contact.find({ email: this.get('searchText') });

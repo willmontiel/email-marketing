@@ -1,5 +1,5 @@
 App = Ember.Application.create({
-	rootElement: '#emberAppContainer'
+	rootElement: '#emberAppContactContainer'
 });
 
 App.set('errormessage', '');

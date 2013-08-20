@@ -1,8 +1,8 @@
 {% extends "templates/index.volt" %}
 {% block header_javascript %}
-	{{ super() }}
-	{{ partial("partials/embercontact_partial") }}
-	
+		{{ super() }}
+		{{ partial("partials/ember_partial") }}
+		
 	<script type="text/javascript">
 		var MyDbaseUrl = 'emarketing/api/contactlist/{{datalist.idList}}';
 		
@@ -43,18 +43,14 @@
 			{%endfor%}
 		};
 	</script>
-
+	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/app_contact.js') }}
-	
 	<script>
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
 		{%endfor%}
 	</script>
-	{{ super() }}
-	{{ partial("partials/ember_partial") }}
-	{{ javascript_include('js/mixin_pagination.js') }}
-	{{ javascript_include('js/app_contact.js') }}
+
 	
 {% endblock %}
 {% block content %}
@@ -127,7 +123,7 @@
 	<br>
 	
 	<!------------------ Ember! ---------------------------------->
-	<div id="emberAppContainer">
+	<div id="emberAppContactContainer">
 		<script type="text/x-handlebars" data-template-name="contacts/index">
 			<div class="row-fluid">
 				<div class="text-right">
@@ -520,5 +516,5 @@
 	</div>
 </div>
 </script>
-	</div>
+</div>
 {% endblock %}

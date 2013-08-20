@@ -56,7 +56,7 @@ class ContactListWrapper extends ControllerBase
 			}
 		}
 		
-		return array('contactlist' => $lista, 'meta' => array( 'pagination' => array('page' => $page, 'limit' =>$limit, 'total' => $total,'availablepages' => $availablepages) ) ) ;
+		return array('lists' => $lista, 'meta' => array( 'pagination' => array('page' => $page, 'limit' =>$limit, 'total' => $total,'availablepages' => $availablepages) ) ) ;
 		
 	}
 }
