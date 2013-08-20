@@ -8,7 +8,10 @@ Appcontact.set('errormessage', '');
 Appcontact.Router.map(function() {
   this.resource('contacts', function(){
 	  this.route('new'),
-	  this.route('newbatch');
+	  this.route('newbatch'),
+	  this.resource('contacts.show', { path: '/show/:contact_id'}),
+	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
+	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
   });
 });
 
@@ -91,6 +94,115 @@ Appcontact.ContactsIndexRoute = Ember.Route.extend({
 	}
 });
 
+
+//Controladores
+
+Appcontact.ContactController = Ember.ObjectController.extend();
+Appcontact.ContactsIndexController = Ember.ArrayController.extend({
+	
+});
+
+Appcontact.ContactsNewController = Ember.ObjectController.extend({
+	errors: null,
+	
+	save: function() {
+		
+//		 exist = App.Contact.find().filterProperty('email', this.get('email'));
+//			if(exist.get("length") === 1){
+//				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
+//				if(filter.test(this.get('email'))){
+//					this.get('model').set('isActive', true);
+//					this.get('model').set('isSubscribed', true);
+//					this.get("model.transaction").commit();
+//					App.set('errormessage', '');
+//					this.get("target").transitionTo("contacts");
+//				}
+//				else{
+//					App.set('errormessage', 'El email no es correcto');
+//					this.get("target").transitionTo("contacts.new");
+//				}
+//			}
+//			else{
+//				App.set('errormessage', 'El email ya existe');
+//				this.get("target").transitionTo("contacts.new");
+//			}
+		var model = this.get('model');
+		if (model.get('isValid') && !model.get('isSaving')) {
+			
+			model.set('isActive', true);
+			model.set('isSubscribed', true);
+			
+			model.on('becameInvalid', this, function() {
+				console.log('INVALID, INVALID Will Robinson!');
+				this.handleFailure();
+			});			
+			model.on('becameError', this, function() {
+				console.log('ERROR, ERROR Will Robinson!: ');
+				console.log(this.get('content.error'));
+				console.log(this.get('model.error'));
+				console.log(this.get('content.errors'));
+				console.log(this.get('model.errors'));
+				this.handleFailure();
+			});	
+			model.on('didCreate', this, function() {
+				this.get('target').transitionTo('contacts');
+			});
+			
+			model.get('transaction').commit();
+				}
+	},
+		
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("contacts");
+	},
+
+	handleFailure: function() {
+		console.log('Handling failures!!!');
+		window.errormsg = this.get('content.errors');
+		console.log(errormsg);
+		this.set('errors', errormsg);
+		Appcontact.set('errormessage', errormsg);
+		this.get('transaction').rollback();
+		this.set('content', Appcontact.Contact.createRecord(this.get('toJSON')));
+	}
+});
+
+Appcontact.ContactsEditController = Ember.ObjectController.extend({
+	edit: function() {
+			this.get("model.transaction").commit();
+			this.get("target").transitionTo("contacts");
+		
+	},
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("contacts");
+	}
+});
+
+Appcontact.ContactsDeleteController = Ember.ObjectController.extend({
+    delete: function() {
+		this.get('content').deleteRecord();
+		this.get('store').commit();
+		this.get("target").transitionTo("contacts");
+    },
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("contacts");
+	}
+});
+
+
+//Rutas
+
+
+Appcontact.ContactsNewView = Ember.View.extend({
+  didInsertElement: function() {
+        jQuery("select").select2({
+			placeholder: "Seleccione las Opciones"
+		});
+    }
+});
 Appcontact.ContactsNewRoute = Ember.Route.extend({
 	model: function(){
 		return Appcontact.Contact.createRecord();
@@ -102,51 +214,51 @@ Appcontact.ContactsNewRoute = Ember.Route.extend({
 	}
 });
 
+Appcontact.ContactsNewbatchRoute = Ember.Route.extend();
 
-//Controladores
-
-Appcontact.ContactController = Ember.ObjectController.extend();
-Appcontact.ContactsIndexController = Ember.ArrayController.extend({
-	
+Appcontact.ContactsEditRoute = Ember.Route.extend({
+	deactivate: function () {
+		console.log('Deactivate ContactsEdit');
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+        console.log('Cambio de modelo');
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && model.get('isSaving') == false) {
+			model.get('transaction').rollback();
+		}
+	}
 });
 
-Appcontact.ContactsNewController = Ember.ObjectController.extend({
-	save: function(){	
-		console.log('hey! Estoy aqui');
-		if(this.get('email')==null){
-			Appcontact.set('errormessage', 'El campo email esta vacío, por favor verifica la información');
-			this.get("target").transitionTo("contacts.new");
-			console.log('error email vacío');
-		}
-		else{
-			exist = Appcontact.Contact.find().filterProperty('email', this.get('email'));
-				if(exist.get("length") === 1){
-					var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
-					if(filter.test(this.get('email'))){
-						this.get('model').set('isActive', true);
-						this.get('model').set('isSubscribed', true);
-						this.get("model.transaction").commit();
-						Appcontact.set('errormessage', '');
-						this.get("target").transitionTo("contacts");
-					}
-					else{
-						Appcontact.set('errormessage', 'El email no es correcto, por favor verifica la información');
-						this.get("target").transitionTo("contacts.new");
-					}
-				}
-				else{
-					Appcontact.set('errormessage', 'El email ingresado ya existe, por favor verifica la información');
-					this.get("target").transitionTo("contacts.new");
-				}
-		}	
+Appcontact.ContactsEditView = Ember.View.extend({
+  didInsertElement: function() {
+        jQuery("select").select2({
+			placeholder: "Seleccione las Opciones"
+		});
+    }
+});
+
+Appcontact.ContactsShowController = Ember.ObjectController.extend({
+	deactivated: function () {
+		this.set("isActive", false);		
 	},
-			
-	cancel: function(){
-		this.get("transaction").rollback();
-		Appcontact.set('errormessage', '');
-		this.get("target").transitionTo("contacts");
+	activated: function () {
+		this.set("isActive", true);
+	},
+	unsubscribedcontact: function () {
+		this.set("isSubscribed", false);
+	},
+	subscribedcontact: function () {
+		this.set("isSubscribed", true);
 	}
-	
+});
+
+
+Appcontact.ContactsShowRoute = Ember.Route.extend({
 });
 
 Appcontact.ContactsNewbatchController = Ember.ObjectController.extend();

@@ -541,5 +541,165 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse(array('lists' => $lista, 'meta' => array( 'pagination' => array('page' => $page, 'limit' =>$limit, 'total' => $total,'availablepages' => $availablepages) ) ) );
 		
 	}
+	
+	/**
+	 * 
+	 * @Get("/contactlist/{idList:[0-9]+}/contacts")
+	 */	
+	public function listcontactsbylistAction($idList)
+	{
+		
+		$list = Contactlist::findFirstByIdList($idList);
+			
+		if ($list->dbase->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+		}
 
+		$wrapper = new ContactWrapper();
+		
+		$contacts = $wrapper->findContactsByList($list);
+	                
+		return $this->setJsonResponse($contacts);	
+	
+	}
+        
+	/**
+	 * 
+	 * @Get("/contactlist/{idList:[0-9]+}/contacts/{idContact:[0-9]+}")
+	 */	
+	public function getcontactbylistAction($idList, $idContact)
+	{
+		
+		$contact = Contact::findFirstByIdContact($idContact);
+                $list = Contactlist::findFirstByIdList($idList);
+			
+		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+		}
+		
+		$wrapper = new ContactWrapper();
+                
+        $customfield = Customfield::findByIdDbase($list->idDbase);
+		
+		$fielddata = $wrapper->convertContactToJson($contact, $customfield);
+		
+		return $this->setJsonResponse(array('contact' => $fielddata) );	
+	
+	}
+        
+        
+    /**
+	 * 
+	 * @Post("/contactlist/{idList:[0-9]+}/contacts")
+	 */
+	public function createcontactbylistAction($idList)
+	{
+		$list = Contactlist::findFirstByIdList($idList);
+		
+		$log = $this->logger;
+
+		$contentsraw = $this->request->getRawBody();
+		$log->log('Got this: [' . $contentsraw . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		// Tomar el objeto dentro de la raiz
+		$contents = $contentsT->contact;
+		
+		$wrapper = new ContactWrapper();
+		$wrapper->setAccount($this->user->account);
+		$wrapper->setIdDbase($list->idDbase);
+		$wrapper->setIdList($idList);
+		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
+		
+		// Crear el nuevo contacto:
+      
+		try {
+				$contact = $wrapper->createNewContactFromJsonData($contents);
+		}
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('errors' => array('msg' => $e->getMessage())), 422, 'Invalid data');	
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
+		}
+
+		$contactdata = $wrapper->convertContactToJson($contact);
+
+		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
+		
+	}
+        
+        
+        
+    /**
+	 * 
+	 * @Put("/contactlist/{idList:[0-9]+}/contacts/{idContact:[0-9]+}")
+	 */
+	public function updatecontactbylistAction($idList, $idContact)
+	{
+		$list = Contactlist::findFirstByIdList($idList);
+		
+                if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+		}
+                
+		$log = $this->logger;
+
+		$contentsraw = $this->request->getRawBody();
+		$log->log('Got this: [' . $contentsraw . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		// Tomar el objeto dentro de la raiz
+		$contents = $contentsT->contact;
+		
+		$wrapper = new ContactWrapper();
+		$wrapper->setAccount($this->user->account);
+		$wrapper->setIdDbase($$list->idDbase);
+		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
+		
+		// Editar el contacto existente
+		try {
+			$contact = $wrapper->updateContactFromJsonData($idContact, $contents);
+		}
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
+		}
+
+		$contactdata = $wrapper->convertContactToJson($contact);
+
+		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
+		
+	}
+        
+        
+    /**
+	 * 
+	 * @Route("/contactlist/{idList:[0-9]+}/contacts/{idContact:[0-9]+}", methods="DELETE")
+	 */
+	public function deletecontactbylistAction($idList, $idContact)
+	{
+		
+		$contact = Contact::findFirstByIdContact($idContact);
+                $list = Contactlist::findFirstByIdList($idList);
+
+		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+		}
+		
+		// Eliminar el campo
+		$customfield->delete();
+		
+		return $this->setJsonResponse(array('status' => 'success'), 201, 'Success');	
+	
+	}
+	
 }

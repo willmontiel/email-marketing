@@ -9,6 +9,7 @@
 class ContactWrapper 
 {
 	protected $idDbase;
+	protected $idList;
 	protected $account;
 	protected $contact;
 	protected $ipaddress;
@@ -31,7 +32,12 @@ class ContactWrapper
 		$this->account = $account;
 	}
 	
-	public function setIPAdress($ipaddress) {
+	public function setIdList($idList)
+	{
+		$this->idList =$idList;
+	}
+
+		public function setIPAdress($ipaddress) {
 		$this->ipaddress = ip2long($ipaddress);
 	}
 	
@@ -149,6 +155,12 @@ class ContactWrapper
 				$msg .= $err . PHP_EOL;
 			}
 			throw new \Exception('Error al crear el contacto: >>' . $msg . '<<');
+		} else {
+			$associate = new Coxcl();
+			$associate->idList = $this->idList;
+			$associate->idContact = $this->contact->idContact;
+					
+			$associate->save();
 		}
 	}
 	
@@ -296,5 +308,17 @@ class ContactWrapper
 		$object['ip_activated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
 		return $object;
+	}
+	
+	public function findContactsByList($list) 
+	{
+		//$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));
+		$contacts = Coxcl::findByIdList($list->idList);
+		$result = array();
+		foreach ($contacts as $contact) {
+			$contactT = Contact::findFirstByIdContact($contact->idContact);
+			$result[] = $this->convertContactToJson($contactT);
+		}
+		return array('contacts' => $result, 'meta' => array( 'pagination' => array('page' => 1, 'limit' => 2, 'total' => 10000) ));
 	}
 }

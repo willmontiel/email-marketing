@@ -21,6 +21,10 @@ class ContactlistController extends ControllerBase
 		
 		$this->view->setVar('datalist', $list);
 		
+		$fields = Customfield::findByIdDbase($list->idDbase);
+		
+		$this->view->setVar("fields", $fields);
+		
 	}
 	
 }
