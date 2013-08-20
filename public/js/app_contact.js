@@ -113,15 +113,15 @@ App.ContactsEditRoute = Ember.Route.extend({
 
 //Controladores
 
-Appcontact.ContactController = Ember.ObjectController.extend();
+App.ContactController = Ember.ObjectController.extend();
 
-Appcontact.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
+App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
 	getModelMetadata: function() {
-		return Appcontact.store.typeMapFor(Appcontact.Contact);
+		return App.store.typeMapFor(App.Contact);
 	},
 	
 	refreshModel: function (obj) {
-		var result = Appcontact.Contact.find(obj);
+		var result = App.Contact.find(obj);
 		this.set('content', result);
 	}
 });
