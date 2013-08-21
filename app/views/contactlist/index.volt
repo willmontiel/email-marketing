@@ -1,9 +1,16 @@
 {% extends "templates/index.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	<script type="text/javascript">
+		var MyDbaseUrl = 'emarketing/api';
+	</script>
 	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/app_list.js') }}
+
+	<script>
+		Applist.DBObjectList = Applist.store.findAll(Applist.Dbase);
+	</script>
 {% endblock %}
 
 {% block content %}
@@ -40,7 +47,7 @@
 									Contactos
 								</th>
 								<th class="span2">
-									Estado
+									Base de datos
 								</th>
 								<th class="span1">
 									Acciones
@@ -53,12 +60,7 @@
 								<td>{{ '{{name}}' }}</td>
 								<td>{{ '{{description}}' }}</td>
 								<td></td>
-								<td>
-									<label>Creada el: </label>
-									<span class="primary-label">{{ '{{createdon}}' }}</span>
-									<label>Última actualización: </label>
-									<span class="primary-label">{{ '{{updatedon}}' }}</span>
-								</td>
+								<td><span class="label label-success">{{ '{{dbase.name }}' }}</span></td>
 								<td>
 									<label><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">Ver</a></label>
 									<label>{{ '{{#linkTo "lists.edit" this}}' }}Editar{{ '{{/linkTo}}' }}</label>
@@ -126,6 +128,8 @@
 						<p>{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}</p>
 						<label>Descripción</label>
 						<p>{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}</p>
+						<label>Base de datos</label>
+						<p>{{ '{{view Ember.Select contentBinding="Applist.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name"}}' }}</p>
 						<br>
 						<button class="btn btn-primary" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
 						<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>

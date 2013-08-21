@@ -128,7 +128,16 @@
 	<div id="emberAppContactContainer">
 		<script type="text/x-handlebars" data-template-name="contacts/index">
 			<div class="row-fluid">
-				<div class="text-right">
+				<div class="span9">
+					<form>
+						<p>
+							{{' {{view Ember.TextField valueBinding="searchText" placeholder="Buscar" autofocus="autofocus"}} '}}
+							<button class="btn btn-primary" {{ '{{action search this}}' }}>Buscar</button>
+					
+						</p>
+					</form>
+				</div>
+				<div class="span3 text-right">
 					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary">Agregar</button>{{'{{/linkTo}}'}}
 					{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
 				</div>

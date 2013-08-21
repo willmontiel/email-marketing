@@ -1,4 +1,5 @@
 <?php
+use Phalcon\Mvc\Model\Validator\PresenceOf;
 class Contactlist extends \Phalcon\Mvc\Model 
 {
 	public $idDbase;
@@ -9,6 +10,17 @@ class Contactlist extends \Phalcon\Mvc\Model
         ));
 		
 	}
+	
+	public function validation()
+    {
+		$this->validate(new PresenceOf(
+            array(
+                "field"   => "name",
+				"message" => "Debes ingresar un nombre para la lista"
+            )
+        ));
+	}
+	
 	public function beforeCreate()
     {
         $this->createdon = time();

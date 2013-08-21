@@ -8,7 +8,6 @@ class ContactlistController extends ControllerBase
 		$r = $this->verifyAcl('contactlist', 'index', '');
 		if ($r)
 			return $r;
-		
 	}
 	
 	public function showAction($id)

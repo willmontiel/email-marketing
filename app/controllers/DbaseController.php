@@ -31,7 +31,7 @@ class DbaseController extends ControllerBase
 		if ($r)
 			return $r;
 		
-		$this->view->setVar("dbases", $this->user->account->dbase);
+		$this->view->setVar("dbases", $this->user->account->dbases);
     }
     
     public function newAction()

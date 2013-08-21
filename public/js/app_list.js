@@ -23,7 +23,7 @@ serializer.configure({
 
 //Adaptador
 Applist.Adapter = DS.RESTAdapter.reopen({
-	namespace: 'emarketing/api',
+	namespace: MyDbaseUrl,
 	serializer: serializer
 });
 
@@ -50,20 +50,28 @@ Applist.Store = DS.Store.extend({
 // Store (object)
 Applist.store = Applist.Store.create();
 
-//Creando el modelo
+//Creando el modelos
+
+Applist.Dbase = DS.Model.extend({
+    name: DS.attr('string'),
+	lists: DS.hasMany('Applist.List')
+});
+
 Applist.List = DS.Model.extend({
+	dbase: DS.belongsTo('Applist.Dbase'),
 	name: DS.attr('string'),
 	description: DS.attr( 'string' ),
 	createdon: DS.attr('number'),
-	updatedon: DS.attr('number'),
-	
-	becameError: function() {
-		return alert('there was an error!');
-	},
-	becameInvalid: function(errors) {
-		return alert("Record was invalid because: " + errors);
+	updatedon: DS.attr('number')
+});
+
+Applist.DbaseIndexController = Ember.ArrayController.extend({
+	model: function()
+	{
+		return Applist.store.findAll(Applist.Dbase);
 	}
 });
+
 
 //Creando el fixture (parcial)
 //Applist.List.FIXTURES = [
@@ -130,13 +138,16 @@ Applist.ListsNewController = Ember.ObjectController.extend({
 			this.get("target").transitionTo("lists.new");
 		}
 		else{
-			exist = Applist.List.find().filterProperty('name', this.get('name'));
-				if(exist.get("length") === 1){
+			exist = Applist.List.find({name: this.get('name'), limit: 0});
+			console.log(exist);
+			Applist.resultado = exist;
+				if(exist.get("length") == 0) {
 					this.get('model.transaction').commit();
 					Applist.set('errormessage', '');
 					this.get("target").transitionTo("lists");
 				}
-				else{
+				else {
+					console.log(exist.get('firstObject').name);
 					Applist.set('errormessage', 'El nombre de la lista ya se encuentra guardado, por favor escoge otro');
 					this.get("target").transitionTo("lists.new");
 				}
@@ -161,5 +172,3 @@ Applist.ListsEditController = Ember.ObjectController.extend({
 		 this.get("target").transitionTo("lists");
 	}
 });
-
-//Vistas

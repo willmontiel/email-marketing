@@ -432,36 +432,66 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @Get("/api/lists")
+	 * @Get("/lists")
 	 */
 	public function listsAction()
 	{
-		$idAccount=$this->user->account->idAccount;
-		
 		$limit = $this->request->getQuery('limit', null, 5);
 		$page = $this->request->getQuery('page', null, 1);
 		
+		$name = $this->request->getQuery('name', null);
 		
 		$contactWrapper = new ContactListWrapper();
 		
-		$contactlist = $contactWrapper->findContactListByList($idAccount, $limit, $page);
+		$lists = $contactWrapper->findContactListByAccount($this->user->account, $limit, $page, $name);
 		
-		return $this->setJsonResponse($contactlist);
+		return $this->setJsonResponse($lists);
 		
 	}
 	
 	/**
 	 * 
-	 * @Post("/api/lists")
+	 * @Post("/lists")
 	 */
-	public function ListsNewAction()
+	public function listsnewAction()
 	{
-			$log = $this->logger;
+		$log = $this->logger;
+
+		$contentsraw = $this->request->getRawBody();
+		$log->log('Got this: [' . $contentsraw . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
-			$contentsraw = $this->request->getRawBody();
-			$log->log('Got this: [' . $contentsraw . ']');
-			$contentsT = json_decode($contentsraw);
-			$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		$contents = $contentsT->list;
+		
+		$wrapper = new ContactListWrapper();
+		
+		$wrapper->validateContactListData($contents);
+		
+		return $this->setJsonResponse($lists);
+	}
+	
+	/**
+	 * 
+	 * @Put("/lists/{idList:[0-9]+}")
+	 */
+	public function listseditAction($idList)
+	{
+		$log = $this->logger;
+		
+		$contentsraw = $this->request->getRawBody();
+		$log->log('Got this: [' . $contentsraw . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		// Tomar el objeto dentro de la raiz
+		$contents = $contentsT->list;
+		
+		$wrapper = new ContactListWrapper();
+		$wrapper->setIdList($idList);
+		$wrapper->updateContactList($contents);
+		
+		return $this->setJsonResponse($mensaje);
 	}
 	
 	
@@ -649,5 +679,17 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse(array('status' => 'success'), 201, 'Success');	
 	
 	}
-	
+
+	/**
+	 * 
+	 * @Get("/dbases")
+	 */
+	public function dbaselistAction()
+	{
+		$dbs = array();
+		foreach ($this->user->account->dbases as $db) {
+			$dbs[] = array('id'=> $db->idDbase, 'name' => $db->name);
+		}
+		return $this->setJsonResponse(array('dbases' => $dbs));
+	}
 }

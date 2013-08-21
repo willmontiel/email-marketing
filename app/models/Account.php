@@ -9,7 +9,7 @@ class Account extends \Phalcon\Mvc\Model
     public function initialize()
     {
         $this->hasMany("idAccount", "User", "idAccount");
-		$this->hasMany("idAccount", "Dbase", "idAccount");
+		$this->hasMany("idAccount", "Dbase", "idAccount", array('alias' => 'Dbases'));
 		$this->useDynamicUpdate(true);
     }
     
@@ -18,7 +18,7 @@ class Account extends \Phalcon\Mvc\Model
 		$this->validate(new PresenceOf(
             array(
                 "field"   => "companyName",
-				"message" => "Oye! Debes ingresar un nombre para la cuenta"
+				"message" => "Debes ingresar un nombre para la cuenta"
             )
         ));
 		
