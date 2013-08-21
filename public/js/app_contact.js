@@ -224,7 +224,7 @@ App.ContactsEditController = Ember.ObjectController.extend({
 App.ContactsDeleteController = Ember.ObjectController.extend({
     delete: function() {
 		this.get('content').deleteRecord();
-		this.get('store').commit();
+		this.get('model.transaction').commit();
 		this.get("target").transitionTo("contacts");
     },
 	cancel: function(){
