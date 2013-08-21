@@ -156,11 +156,12 @@
 		</div>
 		<div class="span4">
 			<br><br>
-			Registros totales: <span class="primary-label">{{  '{{totalrecords}}' }}</span>,
-			Página  <span class="primary-label">{{  '{{currentpage}}' }}</span>
-			de <span class="primary-label">{{  '{{availablepages}}' }}</span>
+			Registros totales: <span class="label label-filling">{{  '{{totalrecords}}' }}</span>&nbsp;
+			Página  <span class="label label-filling">{{  '{{currentpage}}' }}</span>
+			de <span class="label label-filling">{{  '{{availablepages}}' }}</span>
 		</div>
 		<div class="span3 text-right">
+			<br>
 			{{'{{#linkTo "contacts.new"}} <button class="btn btn-primary" >Agregar</button> {{/linkTo}}'}}
 			{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
 		</div>

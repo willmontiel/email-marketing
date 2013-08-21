@@ -271,6 +271,15 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
+	 * @Get("/dbase/{idDbase:[0-9]+}/contacts/{email:[0-9]+}")
+	 */
+	public function findcontactsAction()
+	{
+		
+	}
+	
+	/**
+	 * 
 	 * @Get("/dbase/{idDbase:[0-9]+}/contacts/{idContact:[0-9]+}")
 	 */	
 	public function getcontactAction($idDbase, $idContact)

@@ -89,7 +89,13 @@
 .contact-info td {
 	height: 35px;
 }
-
+.filling {
+  padding-right: 9px;
+  padding-left: 9px;
+  -webkit-border-radius: 9px;
+     -moz-border-radius: 9px;
+          border-radius: 9px;
+}
 span.red-label {
 	color: red;
 	font-weight: bold;
@@ -104,7 +110,10 @@ span.circle-primary {
 	border-radius: 9px;
 	font-size: 16px;
 }
-
+.label-filling,
+.filling-success {
+  background-color: #1abc9c;
+}
 span.green-label {
 	color: #1abc9c;
 	font-weight: bold;

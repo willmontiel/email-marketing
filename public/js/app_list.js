@@ -128,6 +128,13 @@ Applist.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPaginatio
 		var result = Applist.List.find(obj);
 		this.set('content', result);
 	}
+//	,
+//	searchText: '',
+//    search: function(){
+//		var resultado = App.Contact.find({ email: this.get('searchText') });
+//		console.log(resultado);
+//		this.set('content', resultado);
+//	}
 
 });
 

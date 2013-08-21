@@ -128,16 +128,7 @@
 	<div id="emberAppContactContainer">
 		<script type="text/x-handlebars" data-template-name="contacts/index">
 			<div class="row-fluid">
-				<div class="span9">
-					<form>
-						<p>
-							{{' {{view Ember.TextField valueBinding="searchText" placeholder="Buscar" autofocus="autofocus"}} '}}
-							<button class="btn btn-primary" {{ '{{action search this}}' }}>Buscar</button>
-					
-						</p>
-					</form>
-				</div>
-				<div class="span3 text-right">
+				<div class="text-right">
 					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary">Agregar</button>{{'{{/linkTo}}'}}
 					{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
 				</div>
@@ -225,9 +216,9 @@
 				</div>
 				<div class="span5">
 					<br><br>
-					Registros totales: <span class="primary-label">{{  '{{totalrecords}}' }}</span>,
-					Página  <span class="primary-label">{{  '{{currentpage}}' }}</span>
-					de <span class="primary-label">{{  '{{availablepages}}' }}</span>
+					Registros totales: <span class="label label-filling">{{  '{{totalrecords}}' }}</span>&nbsp;
+					Página  <span class="label label-filling">{{  '{{currentpage}}' }}</span>
+					de <span class="label label-filling">{{  '{{availablepages}}' }}</span>
 				</div>
 				<div class="span3 text-right">
 					<br>

@@ -60,7 +60,7 @@
 								<td>{{ '{{name}}' }}</td>
 								<td>{{ '{{description}}' }}</td>
 								<td></td>
-								<td><span class="label label-success">{{ '{{dbase.name }}' }}</span></td>
+								<td><span class="label label-filling">{{ '{{dbase.name }}' }}</span></td>
 								<td>
 									<label><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">Ver</a></label>
 									<label>{{ '{{#linkTo "lists.edit" this}}' }}Editar{{ '{{/linkTo}}' }}</label>
@@ -85,9 +85,9 @@
 				</div>
 				<div class="span5">
 					<br><br>
-					Registros totales: <span class="primary-label">{{  '{{totalrecords}}' }}</span>,
-					Página  <span class="primary-label">{{  '{{currentpage}}' }}</span>
-					de <span class="primary-label">{{  '{{availablepages}}' }}</span>
+					Registros totales: <span class="label label-filling">{{  '{{totalrecords}}' }}</span>&nbsp;
+					Página  <span class="label label-filling">{{  '{{currentpage}}' }}</span>
+					de <span class="label label-filling">{{  '{{availablepages}}' }}</span>
 				</div>
 				<div class="span2 text-right">
 					<br>
