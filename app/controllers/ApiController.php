@@ -632,13 +632,19 @@ class ApiController extends ControllerBase
 		
 		$contact = Contact::findFirstByIdContact($idContact);
 		$list = Contactlist::findFirstByIdList($idList);
+		
+		$association = Coxcl::findFirst("idList = $idList AND idContact = $idContact");
 
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
 		}
 		
 		// Eliminar el campo
-		$contact->delete();
+		$association->delete();
+		
+		if (!Coxcl::findFirst("idContact = $idContact")) {
+			$contact->delete();
+		}
 		
 		return $this->setJsonResponse(array('status' => 'success'), 201, 'Success');	
 	
