@@ -388,57 +388,41 @@
 		<div class="row-fluid">
 			<table class="contact-info">
 				<tr>
+					<td>Email:</td>
+					<td>{{'{{email}}'}}</td>
+				</tr>
+				<tr>
+					<td>Nombre:</td>
+					<td>{{'{{name}}'}}</td>
+				</tr>
+				<tr>
+					<td>Apellido:</td>
+					<td>{{'{{lastName}}'}}</td>
+				</tr>
+				<tr>
 					<td>
-						<dl>
-							<dd>
-								Email:
-							</dd>
-							<dd>
-								Nombre:
-							</dd>
-							<dd>
-								Apellido:
-							</dd>
-							<dd>
-								{{ '{{#if isActive}}' }}
-									<span class="green-label">Activo</span>
-								{{ '{{else}}' }}
-									<span class="orange-label">Inactivo</span>
-								{{ '{{/if}}' }}
-							</dd>
-							<!-- Campos Personalizados -->
-							{%for field in fields%}
-								<dd> {{field.name}} </dd>
-							{%endfor%}
-							<!--  Fin de campos personalizados -->
-						</dl>
+						{{ '{{#if isActive}}' }}
+							<span class="green-label">Activo</span>
+						{{ '{{else}}' }}
+							<span class="orange-label">Inactivo</span>
+						{{ '{{/if}}' }}
 					</td>
 					<td>
-						<dl>
-							<dd>
-								{{'{{email}}'}}
-							</dd>
-							<dd>
-								{{'{{name}}'}}
-							</dd>
-							<dd>
-								{{'{{lastName}}'}}
-							</dd>
-							<dd>
-								{{ '{{#if isSubscribed}}' }}
-									<span class="green-label">Suscrito</span>
-								{{ '{{else}}' }}
-									<span class="orange-label">Des-Suscrito</span>
-								{{ '{{/if}}' }}	
-							</dd>
-							<!-- Campos Personalizados -->
-							{%for field in fields%}
-								<dd> {{'{{'~field.name~'}}'}} </dd>
-							{%endfor%}
-							<!--  Fin de campos personalizados -->
-						</dl>
+						{{ '{{#if isSubscribed}}' }}
+							
+							<span class="green-label">Suscrito</span>
+						{{ '{{else}}' }}
+							
+							<span class="orange-label">Des-Suscrito</span>
+						{{ '{{/if}}' }}
 					</td>
 				</tr>
+				{%for field in fields%}
+				<tr>
+					<td>{{field.name}}</td>
+					<td>{{'{{'~field.name~'}}'}}</td>
+				</tr>
+				{%endfor%}
 			</table>
 		</div>
 		<div class="row-fluid">

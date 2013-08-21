@@ -208,8 +208,8 @@ App.FieldsAddRoute = Ember.Route.extend({
 App.FieldsRemoveController = Ember.ObjectController.extend({
     eliminate: function() {
 		this.get('content').deleteRecord();
-		this.get('store').commit();
-		this.get("target").transitionTo("fields");
+		this.get('model.transaction').commit();
+		this.get("target").transitionTo("contacts");
     },
 	cancel: function(){
 		 this.get("transaction").rollback();
@@ -392,17 +392,19 @@ App.ContactsEditView = Ember.View.extend({
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
-	deactivated: function () {
-		this.set("isActive", false);		
-	},
-	activated: function () {
-		this.set("isActive", true);
-	},
+//	deactivated: function () {
+//		this.set("isActive", false);		
+//	},
+//	activated: function () {
+//		this.set("isActive", true);
+//	},
 	unsubscribedcontact: function () {
 		this.set("isSubscribed", false);
+		this.get('model.transaction').commit();
 	},
 	subscribedcontact: function () {
 		this.set("isSubscribed", true);
+		this.get('model.transaction').commit();
 	}
 });
 

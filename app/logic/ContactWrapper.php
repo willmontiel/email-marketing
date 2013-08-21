@@ -90,6 +90,41 @@ class ContactWrapper
 		
 		return $this->contact;
 	}
+	
+	public function deleteContactFromList($contact, $list) 
+	{
+		$association = Coxcl::findFirst("idList = '$list->idList' AND idContact = '$contact->idContact'");
+		
+		$association->delete();
+		
+		if (!Coxcl::findFirst("idContact = '$contact->idContact'")) {
+			$customfields = Fieldinstance::findByIdContact($contact->idContact);
+				foreach ($customfields as $field) {
+					$field->delete();
+				}
+
+			$contact->delete();
+		}
+	}
+
+	public function searchContactinDbase($email)
+	{
+		$idAccount = $this->account->idAccount;
+		
+		$existEmail = Email::findFirst("email = '$email' AND idAccount = '$idAccount'");
+			
+		if ($existEmail) {
+			$existContact = Contact::findFirstByIdEmail($existEmail->idEmail);
+			if($existContact){
+				$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idList = $this->idList");
+				if (!$existList){
+					$this->associateContactToList($this->idList, $existContact->idContact);
+					return $existContact;
+				}
+			}
+		}
+		return false;
+	}
 
 	public function createNewContactFromJsonData($data)
 	{

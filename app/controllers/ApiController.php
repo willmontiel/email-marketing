@@ -235,6 +235,12 @@ class ApiController extends ControllerBase
 		}
 		
 		// Eliminar el campo
+		$fieldinstances = Fieldinstance::findByIdCustomField($idCustomfield);
+		
+		foreach ($fieldinstances as $fieldinstance) {
+			$fieldinstance->delete();
+		}
+		
 		$customfield->delete();
 		
 		return $this->setJsonResponse(array('status' => 'success'), 201, 'Success');	
@@ -573,18 +579,10 @@ class ApiController extends ControllerBase
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Crear el nuevo contacto:
-      
+
 		try {
-				$existEmail = Email::findFirstByEmail($contents->email);
-				if ($existEmail) {
-					$existContact = Contact::findFirstByIdEmail($existEmail->idEmail);
-					if($existContact){
-						$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idList = $idList");
-						if (!$existList)
-							$contant = $wrapper->updateContactFromJsonData ($existContact->idContact, $contents);
-							$wrapper->associateContactToList($idList, $existContact->idContact);
-					}
-				} else {
+				$contact = $wrapper->searchContactinDbase($contents->email);
+				if($contact == false) {
 					$contact = $wrapper->createNewContactFromJsonData($contents);
 				}
 		}
@@ -596,7 +594,7 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
 		}
-
+		
 		$contactdata = $wrapper->convertContactToJson($contact);
 
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
@@ -663,20 +661,16 @@ class ApiController extends ControllerBase
 		$contact = Contact::findFirstByIdContact($idContact);
 		$list = Contactlist::findFirstByIdList($idList);
 		
-		$association = Coxcl::findFirst("idList = $idList AND idContact = $idContact");
-
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
 		}
 		
-		// Eliminar el campo
-		$association->delete();
+		// Eliminar el Contacto de la Lista
+		$wrapper = new ContactWrapper();
 		
-		if (!Coxcl::findFirst("idContact = $idContact")) {
-			$contact->delete();
-		}
+		$wrapper->deleteContactFromList($contact, $list);
 		
-		return $this->setJsonResponse(array('status' => 'success'), 201, 'Success');	
+		return $this->setJsonResponse(null);	
 	
 	}
 

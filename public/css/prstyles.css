@@ -83,10 +83,11 @@
 	margin-left: 125px;
 }
 .contact-info {
- font-size: 15px;
+	font-size: 15px;
+	margin: 15px;
 }
-.contact-info dd {
- margin: 15px;
+.contact-info td {
+	height: 35px;
 }
 
 span.red-label {

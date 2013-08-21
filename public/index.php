@@ -146,7 +146,7 @@ try {
 		$compiler->addFunction('ember_textfield', function ($resolvedArgs, $exprArgs) {
 						return 'CreateViewEmber::createEmberTextField(' . $resolvedArgs . ')';
 					});
-		
+
         $volt->setOptions(array(
             "compileAlways" => true,
 			"compiledPath" => "../app/compiled-templates/",

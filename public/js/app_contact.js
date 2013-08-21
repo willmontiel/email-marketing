@@ -85,8 +85,9 @@ App.ContactsNewRoute = Ember.Route.extend({
 		return App.Contact.createRecord();
 	},
 	deactivate: function () {
-		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.get('transaction').rollback();
+		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
+			this.get('currentModel.transaction').rollback();
+			console.log('Rollback new Contact!');
 		}
 	}
 });
@@ -128,23 +129,28 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 	},
 	
 	refreshModel: function (obj) {
+		console.log('Retrieving!');
 		var result = App.Contact.find(obj);
+		console.log('Setting!');
 		this.set('content', result);
+		console.log('Set!');
 	}
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
-	deactivated: function () {
-		this.set("isActive", false);		
-	},
-	activated: function () {
-		this.set("isActive", true);
-	},
+//	deactivated: function () {
+//		this.set("isActive", false);		
+//	},
+//	activated: function () {
+//		this.set("isActive", true);
+//	},
 	unsubscribedcontact: function () {
 		this.set("isSubscribed", false);
+		this.get('model.transaction').commit();
 	},
 	subscribedcontact: function () {
 		this.set("isSubscribed", true);
+		this.get('model.transaction').commit();
 	}
 });
 
@@ -153,54 +159,40 @@ App.ContactsNewController = Ember.ObjectController.extend({
 	
 	save: function() {
 		
-//		 exist = App.Contact.find().filterProperty('email', this.get('email'));
-//			if(exist.get("length") === 1){
-//				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
-//				if(filter.test(this.get('email'))){
-//					this.get('model').set('isActive', true);
-//					this.get('model').set('isSubscribed', true);
-//					this.get("model.transaction").commit();
-//					App.set('errormessage', '');
-//					this.get("target").transitionTo("contacts");
-//				}
-//				else{
-//					App.set('errormessage', 'El email no es correcto');
-//					this.get("target").transitionTo("contacts.new");
-//				}
-//			}
-//			else{
-//				App.set('errormessage', 'El email ya existe');
-//				this.get("target").transitionTo("contacts.new");
-//			}
-		var model = this.get('model');
-		if (model.get('isValid') && !model.get('isSaving')) {
-			
-			model.set('isActive', true);
-			model.set('isSubscribed', true);
-			
-			model.on('becameInvalid', this, function() {
-				console.log('INVALID, INVALID Will Robinson!');
-				this.handleFailure();
-			});			
-			model.on('becameError', this, function() {
-				console.log('ERROR, ERROR Will Robinson!: ');
-				console.log(this.get('content.error'));
-				console.log(this.get('model.error'));
-				console.log(this.get('content.errors'));
-				console.log(this.get('model.errors'));
-				this.handleFailure();
-			});	
-			model.on('didCreate', this, function() {
-				this.get('target').transitionTo('contacts');
-			});
-			
-			model.get('transaction').commit();
+		 exist = App.Contact.find().filterProperty('email', this.get('email'));
+			if(exist.get("length") === 1){
+				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
+				if(filter.test(this.get('email'))){
+					this.get('model').set('isActive', true);
+					this.get('model').set('isSubscribed', true);
+					this.get("model.transaction").commit();
+					App.set('errormessage', '');
+					this.get("target").transitionTo("contacts");
 				}
+				else{
+					App.set('errormessage', 'El Email no es valido');
+					this.get("target").transitionTo("contacts.new");
+				}
+			}
+			else{
+				App.set('errormessage', 'El Email ya existe en esta Lista');
+				this.get("target").transitionTo("contacts.new");
+			}
+//		var model = this.get('model');
+//		if (model.get('isValid') && !model.get('isSaving')) {
+//			
+//			model.set('isActive', true);
+//			model.set('isSubscribed', true);
+//			
+//			model.get('transaction').commit();
+//			this.get('target').transitionTo('contacts');
+//		}
 	},
 		
 	cancel: function(){
-		 this.get("transaction").rollback();
-		 this.get("target").transitionTo("contacts");
+		console.log('Cancelling!');
+		this.get("target").transitionTo("contacts");
+		console.log('Cancelled!');
 	},
 
 	handleFailure: function() {
@@ -235,7 +227,7 @@ App.ContactsDeleteController = Ember.ObjectController.extend({
 		this.get("target").transitionTo("contacts");
     },
 	cancel: function(){
-		 this.get("transaction").rollback();
+		 this.get("model.transaction").rollback();
 		 this.get("target").transitionTo("contacts");
 	}
 });

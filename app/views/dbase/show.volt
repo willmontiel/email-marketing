@@ -449,6 +449,7 @@
  <div class="span5">
 
  <p>Esta seguro que desea Eliminar el Campo <strong>{{'{{this.name}}'}}</strong></p>
+ <p>Recuerde que se PERDERA LA INFORMACION de los contactos relacionada con este Campo</p>
   <button {{'{{action eliminate this}}'}} class="btn btn-danger">
 		Eliminar
   </button>
