@@ -1,12 +1,6 @@
 <?php
 class ContactListWrapper extends ControllerBase
 {
-	public $setIdList;
-	
-	public function setIdList($idList)
-	{
-		$this->idList = $idList;
-	}
 
 	/**
 	 * Crea un arreglo con la informacion del objeto Contactlist
@@ -131,16 +125,24 @@ class ContactListWrapper extends ControllerBase
 		}
 	}
 	
-	public function updateContactList($contents)
+	public function updateContactList($contents, $idList)
 	{
-		$list = new Contactlist();
-		$this->assignDataToContactList($contents, $list);
 		
-		if(!$list->save()){
-			return array('lists' => 'errror');
+		$contactList = Contactlist::findFirstByIdList($idList);
+		
+		if (!$contactList) {
+			throw new \InvalidArgumentException('Lista no encontrada en la base de datos!');
 		}
-		else{
+		
+		else {
+			$this->assignDataToContactList($contents, $contactList);
+		
+			if(!$contactList->save()){
+				return array('lists' => 'errror');
+			}
+			else{
 
+			}
 		}
 		
 	}

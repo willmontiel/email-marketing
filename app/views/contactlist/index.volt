@@ -153,7 +153,7 @@
 			<br>
 			<div class="row-fluid">
 				<div class="span3">
-					<label>Nombre</label>
+					<label>*Nombre</label>
 					<p>
 						{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" required="required" autofocus="autofocus"}}' }}
 					</p>
@@ -163,7 +163,7 @@
 					</p>
 					<br>
 					<p>
-						<button class="btn btn-inverse" {{ '{{action edit this}}' }}>Editar</button>
+						<button class="btn btn-inverse" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Editar</button>
 						<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 					</p>
 				</div>

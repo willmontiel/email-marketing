@@ -494,8 +494,7 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->list;
 		
 		$wrapper = new ContactListWrapper();
-		$wrapper->setIdList($idList);
-		$wrapper->updateContactList($contents);
+		$wrapper->updateContactList($contents, $idList);
 		
 		return $this->setJsonResponse($mensaje);
 	}

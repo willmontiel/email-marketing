@@ -163,9 +163,15 @@ Applist.ListsNewController = Ember.ObjectController.extend({
 
 Applist.ListsEditController = Ember.ObjectController.extend({
 	edit: function() {
+		if(this.get('name')== ""){
+			Applist.set('errormessage', 'El campo nombre esta vacío, debes ingresar un nombre');
+			this.get("target").transitionTo("lists.edit");
+		}
+		else{
 			this.get("model.transaction").commit();
+			Applist.set('errormessage', '');
 			this.get("target").transitionTo("lists");
-		
+		}
 	},
 	cancel: function(){
 		 this.get("transaction").rollback();
