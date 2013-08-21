@@ -369,8 +369,8 @@ class ContactWrapper
 		}
 		
 		$contacts = Coxcl::find(array(
-			'idList' => $list->idList,
-			'limit' => array('number' => $limit, 'offset' => $start)
+			"idList = '$list->idList'",
+			"limit" => array('number' => $limit, 'offset' => $start)
 		));
 		
 		$result = array();
