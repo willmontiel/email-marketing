@@ -6,7 +6,7 @@
  *
  * @author hectorlasso
  */
-class ContactWrapper 
+class ContactWrapper extends ControllerBase
 {
 	protected $idDbase;
 	protected $idList;
@@ -17,10 +17,11 @@ class ContactWrapper
 	
 	const PAGE_DEFAULT = 5;
 
-	public function __construct()
-	{
-		$this->ipaddress = ip2long('127.0.0.0');
-	}
+//	public function __construct()
+//	{
+//		$this->modelsManager = $di;
+//		$this->ipaddress = ip2long('127.0.0.0');
+//	}
 
 	public function setIdDbase($idDbase)
 	{
@@ -326,31 +327,78 @@ class ContactWrapper
 		$this->filter = $filter;
 	}
 	
-	public function findContacts($limit, $page)
+	public function findContacts(Dbase $db, $limit, $page)
 	{
 		// Buscar los contactos
-		$total = Contact::count();
+		
+		$idDbase = $db->idDbase;
+		$parameters = array('idDbase' => $idDbase);
+		
+		$querytxt = "SELECT COUNT(*) AS cnt FROM Contact WHERE idDbase = :idDbase:";
+
+		$query2 = $this->modelsManager->createQuery($querytxt);
+        $result = $query2->execute($parameters)->getFirst();
+				
+		$total = $result->cnt;
 		$availablepages = ceil($total/$limit);
 		
-		$options = array();
+		$page = ($page<1)?1:$page;
+		$start = ($page-1)*$limit;
+		
+		$lista = array();
 
-		if ($this->filter) {
-			$options['conditions'] = 'email = ?1';
-			$options['bind'] = array(1 => $this->filter);
+
+		$querytxt2 = "SELECT Contact.* FROM Contact WHERE idDbase = :idDbase:";
+
+		if ($limit != 0) {
+			$querytxt2 .= ' LIMIT ' . $limit . ' OFFSET ' . $start;
 		}
-		$npage = ($limit)?$limit:self::PAGE_DEFAULT;
-		$start = ($page - 1) * $npage; 
-		$options['limit'] = array('limit' => $npage, 'offset' => $start);
-		$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => $start)));
+        $query = $this->modelsManager->createQuery($querytxt2);
+		$contacts = $query->execute($parameters);
+		
+		
+		
+//		$total = Contact::count();
+//		$availablepages = ceil($total/$limit);
+//		
+//		$options = array();
+//
+//		if ($this->filter) {
+//			$options['conditions'] = 'email = ?1';
+//			$options['bind'] = array(1 => $this->filter);
+//		}
+//		$npage = ($limit)?$limit:self::PAGE_DEFAULT;
+//		$start = ($page - 1) * $npage; 
+//		$options['limit'] = array('limit' => $npage, 'offset' => $start);
+//		$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => $start)));
 
-		$result = array();
-		foreach ($contacts as $contact) {
-			$result[] = $this->convertContactToJson($contact);
+		$contactos = array();
+		
+		if($contacts){
+			foreach ($contacts as $contact) {
+				$contactos[] = $this->convertContactToJson($contact);
+			}
 		}
 		
-		return array('contacts' => $result, 'meta' => array( 'pagination' => array('page' => $page, 'limit' => $limit, 'total' => $total, 'availablepages' => $availablepages) ));
+		$listjson = array();
+		
+		foreach ($db->contactlist as $contactlist) {
+			$listjson[] = $this->convertContactListToJson($contactlist);
+		}
+		
+		return array('contacts' => $contactos,
+					 'lists' => $listjson,
+					 'meta' => array( 'pagination' => array('page' => $page, 'limit' => $limit, 'total' => $total, 'availablepages' => $availablepages) ));
 	}
 	
+	public function convertContactListToJson($contactlist)
+	{
+		$object = array();
+		$object['id'] = $contactlist->idList;
+		$object['name'] = $contactlist->name;
+		return $object;
+	}
+
 	public function convertContactToJson($contact)
 	{
 		$object = array();

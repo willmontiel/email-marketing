@@ -212,7 +212,8 @@
 							
 						</p>
 						<!--  Fin de campos personalizados -->
-						
+						<p>Seleccione la Lista a la que desea que pertenezca el Contacto</p>
+						<p>{{ '{{view Ember.Select contentBinding="App.ListObjectDB" selectionBinding="list" optionValuePath="content.id" optionLabelPath="content.name"}}' }}</p>
 						<p>
 							<button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button>
 							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>

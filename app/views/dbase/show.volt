@@ -9,6 +9,7 @@
 		var MyDbaseUrl = 'emarketing/api/dbase/{{ sdbase.idDbase }}';
 		
 		var myContactModel = {
+			list: DS.belongsTo('App.List'),
 			email: DS.attr( 'string' ),
 			name: DS.attr( 'string' ),
 			lastName: DS.attr( 'string' ),
@@ -52,6 +53,10 @@
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
 		{%endfor%}
+	</script>
+	
+	<script>
+		App.ListObjectDB = App.store.findAll(App.List);
 	</script>
 {% endblock %}
 

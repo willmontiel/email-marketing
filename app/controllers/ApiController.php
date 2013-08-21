@@ -264,7 +264,7 @@ class ApiController extends ControllerBase
 		}
 		$wrapper = new ContactWrapper();
 		
-		$result = $wrapper->findContacts($limit, $page);
+		$result = $wrapper->findContacts($db, $limit, $page);
 		
 		return $this->setJsonResponse($result);
 	}
