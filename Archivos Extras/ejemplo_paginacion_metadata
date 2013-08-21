@@ -1,0 +1,56 @@
+<JS>
+
+
+// ROUTE
+App.ContactsIndexRoute = Ember.Route.extend({
+	model: function(){
+		// {} Como parametro a FIND() o falla
+		return App.Contact.find({});
+	},
+	setupController: function (controller, model) {
+		controller.set('content', model);
+		controller.setPagination();
+	}
+});
+
+
+// CONTROLLER
+App.ContactsIndexController = Ember.ArrayController.extend({
+
+	// ESTO VA EN EL MIXIN ==========================
+	// atributos del controlador para que se vean en la vista
+	totalrecords: 0,
+	currentpage: 0,
+	recordsperpage: 0,
+
+	// Metodo que toma la informacion y llena las variables
+	setPagination: function () {
+		// Verificar paginacion
+		var p = this.getModelMetadata();
+		
+		this.set('totalrecords', p.metadata.pagination.total);
+		this.set('currentpage', p.metadata.pagination.page);
+		this.set('recordsperpage', p.metadata.pagination.limit);
+	},
+	// **************************************************
+
+	// ESTO VA EN EL CONTROLLER
+	getModelMetadata() {
+		return App.store.typeMapFor(App.Contact);
+	},
+	
+
+	searchText: '',
+    search: function(){
+		var resultado = App.Contact.find({ email: this.get('searchText') });
+		console.log(resultado);
+		this.set('content', resultado);
+	}
+});
+
+
+<VOLT => TPL>
+
+Registros: {{ '{{totalrecords}}' }}<br/>
+Pagina actual: {{ '{{currentpage}}' }} <br/>
+Registros por pagina: {{ '{{recordsperpage}}' }} <br/>
