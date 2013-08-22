@@ -66,9 +66,8 @@
                 <div class="span12">
                         <ul class="nav nav-pills">
                                 {{'{{#linkTo "index" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>General</a>{{/linkTo}}'}}
-								{{'{{#linkTo "contacts" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}
-                                {{'{{#linkTo "fields" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Campos</a>{{/linkTo}}'}}
-                                <li><a href="#">Listas</a></li>
+								{{'{{#linkTo "fields" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Campos</a>{{/linkTo}}'}}
+								{{'{{#linkTo "contacts" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}                                                                
                                 <li><a href="#">Segmentos</a></li>
                                 <li><a href="#">Estadisticas</a></li>
                                 <li><a href="#">Formularios</a></li>
