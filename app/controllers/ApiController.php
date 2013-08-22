@@ -256,25 +256,39 @@ class ApiController extends ControllerBase
 	public function listcontactsAction($idDbase)
 	{
 		$db = Dbase::findFirstByIdDbase($idDbase);
-		$limit = $this->request->getQuery('limit', null, 5);
-		$page = $this->request->getQuery('page', null, 1);
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
 		
-		if (!$db || $db->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
 		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
+		
 		$wrapper = new ContactWrapper();
+		$wrapper->setAccount($this->user->account);
+		$wrapper->setIdDbase($idDbase);
+		$wrapper->setPager($pager);		
 		
-		$result = $wrapper->findContacts($db, $limit, $page);
+		$valueSearch = $this->request->getQuery('email', null, null);
 		
-		return $this->setJsonResponse($result);
-	}
-	
-	/**
-	 * 
-	 * @Get("/dbase/{idDbase:[0-9]+}/contacts/{email:[0-9]+}")
-	 */
-	public function findcontactsAction()
-	{
+		if($valueSearch == null) {
+			if (!$db || $db->account != $this->user->account) {
+				return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+			}
+			$result = $wrapper->findContacts($db);
+
+			return $this->setJsonResponse($result);		
+		}
+		
+		else {
+			
+			$contacts = $wrapper->findContactsByValueSearch($valueSearch);
+			
+			return $this->setJsonResponse($contacts);
+		}
 		
 	}
 	
@@ -449,10 +463,18 @@ class ApiController extends ControllerBase
 	 * 
 	 * @Get("/lists")
 	 */
-	public function listsAction()
+	public function getlistsAction()
 	{
 		$limit = $this->request->getQuery('limit', null, 5);
 		$page = $this->request->getQuery('page', null, 1);
+		
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
 		
 		$name = $this->request->getQuery('name', null);
 		

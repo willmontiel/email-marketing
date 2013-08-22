@@ -6,22 +6,25 @@
  *
  * @author hectorlasso
  */
-class ContactWrapper extends ControllerBase
+class ContactWrapper 
 {
+
 	protected $idDbase;
 	protected $idList;
 	protected $account;
 	protected $contact;
 	protected $ipaddress;
-	
+
+	protected $pager;
+
+    protected $_di;
 	
 	const PAGE_DEFAULT = 5;
 
-//	public function __construct()
-//	{
-//		$this->modelsManager = $di;
-//		$this->ipaddress = ip2long('127.0.0.0');
-//	}
+	public function __construct()
+	{
+		$this->pager = new PaginationDecorator();
+	}
 
 	public function setIdDbase($idDbase)
 	{
@@ -31,6 +34,11 @@ class ContactWrapper extends ControllerBase
 	public function setAccount(Account $account)
 	{
 		$this->account = $account;
+	}
+	
+	public function setPager(PaginationDecorator $p)
+	{
+		$this->pager = $p;
 	}
 	
 	public function setIdList($idList)
@@ -327,50 +335,29 @@ class ContactWrapper extends ControllerBase
 		$this->filter = $filter;
 	}
 	
-	public function findContacts(Dbase $db, $limit, $page)
+	public function findContacts(Dbase $db)
 	{
 		// Buscar los contactos
-		
 		$idDbase = $db->idDbase;
 		$parameters = array('idDbase' => $idDbase);
 		
 		$querytxt = "SELECT COUNT(*) AS cnt FROM Contact WHERE idDbase = :idDbase:";
 
-		$query2 = $this->modelsManager->createQuery($querytxt);
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$query2 = $modelManager->createQuery($querytxt);
         $result = $query2->execute($parameters)->getFirst();
 				
 		$total = $result->cnt;
-		$availablepages = ceil($total/$limit);
-		
-		$page = ($page<1)?1:$page;
-		$start = ($page-1)*$limit;
-		
 		$lista = array();
-
 
 		$querytxt2 = "SELECT Contact.* FROM Contact WHERE idDbase = :idDbase:";
 
-		if ($limit != 0) {
-			$querytxt2 .= ' LIMIT ' . $limit . ' OFFSET ' . $start;
+		if ($this->pager->getRowsPerPage() != 0) {
+			$querytxt2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		}
-        $query = $this->modelsManager->createQuery($querytxt2);
+        $query = $modelManager->createQuery($querytxt2);
 		$contacts = $query->execute($parameters);
-		
-		
-		
-//		$total = Contact::count();
-//		$availablepages = ceil($total/$limit);
-//		
-//		$options = array();
-//
-//		if ($this->filter) {
-//			$options['conditions'] = 'email = ?1';
-//			$options['bind'] = array(1 => $this->filter);
-//		}
-//		$npage = ($limit)?$limit:self::PAGE_DEFAULT;
-//		$start = ($page - 1) * $npage; 
-//		$options['limit'] = array('limit' => $npage, 'offset' => $start);
-//		$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => $start)));
 
 		$contactos = array();
 		
@@ -379,6 +366,9 @@ class ContactWrapper extends ControllerBase
 				$contactos[] = $this->convertContactToJson($contact);
 			}
 		}
+
+		$this->pager->setRowsInCurrentPage(count($contactos));
+		$this->pager->setTotalRecords($total);
 		
 		$listjson = array();
 		
@@ -388,7 +378,7 @@ class ContactWrapper extends ControllerBase
 		
 		return array('contacts' => $contactos,
 					 'lists' => $listjson,
-					 'meta' => array( 'pagination' => array('page' => $page, 'limit' => $limit, 'total' => $total, 'availablepages' => $availablepages) ));
+					 'meta' => $this->pager->getPaginationObject());
 	}
 	
 	public function convertContactListToJson($contactlist)
@@ -431,29 +421,14 @@ class ContactWrapper extends ControllerBase
 		return $object;
 	}
 	
-	public function findContactsByList($list, $page, $limit) 
+	public function findContactsByList($list) 
 	{
 		//$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));
-		$total = Coxcl::count("idList = '$list->idList'");
-		$availablepages = ceil($total/$limit);
-		
-		if($page <= 0){
-			$start = 0;
-			$page = 1;
-		}
-		
-		else if($page > $availablepages){
-			$start = $availablepages*$limit;
-			$page = $start;
-		}
-		
-		else{
-			$start = ($page-1)*$limit;
-		}
-		
+		$this->pager->setTotalRecords(Coxcl::count("idList = '$list->idList'"));
+
 		$contacts = Coxcl::find(array(
 			"idList = '$list->idList'",
-			"limit" => array('number' => $limit, 'offset' => $start)
+			"limit" => array('number' => $this->pager->getRowsPerPage(), 'offset' => $this->pager->getStartIndex())
 		));
 		
 		$result = array();
@@ -461,6 +436,46 @@ class ContactWrapper extends ControllerBase
 			$contactT = Contact::findFirstByIdContact($contact->idContact);
 			$result[] = $this->convertContactToJson($contactT);
 		}
-		return array('contacts' => $result, 'meta' => array( 'pagination' => array('page' => $page, 'limit' => $limit, 'total' => $total, 'availablepages' => $availablepages) ));
+		$this->pager->setRowsInCurrentPage(count($result));
+		return array('contacts' => $result, 'meta' => $this->pager->getPaginationObject() );
+	}
+	
+	public function findContactsByValueSearch($valueSearch)
+	{
+		$email = Email::findFirst(
+					array(
+						'conditions' => 'email = ?1 AND idAccount = ?2',
+						'bind' => array(
+							1 => $valueSearch, 
+							2 => $this->account->idAccount
+						)
+					) 
+		);
+		if ($email) {
+			$matches = Contact::find(
+					array(
+						'conditions' => 'idEmail = ?1 AND idDbase = ?2',
+						'bind' => array(
+								1 => $email->idEmail,
+								2 => $this->idDbase
+							),
+						'limit' => array(
+							'number' => $this->pager->getRowsPerPage(),
+							'offset' => $this->pager->getStartIndex()
+						)
+					)
+			);
+		}
+		$contactos = array();
+		
+		if($matches) {
+			$this->pager->setTotalRecords(1);
+			foreach ($matches as $contact) {
+				$contactos[] = $this->convertContactToJson($contact);
+			}
+			$this->pager->setRowsInCurrentPage(count($contactos));
+			
+		}
+		return array('contacts' => $contactos, 'meta' => $this->pager->getPaginationObject());
 	}
 }
