@@ -156,3 +156,7 @@ body {
 .text-right {
 	text-align: right;
 }
+
+.message-delete {
+	font-size: 17px;
+}

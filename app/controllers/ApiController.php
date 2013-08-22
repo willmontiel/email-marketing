@@ -306,8 +306,12 @@ class ApiController extends ControllerBase
 		}
 		
 		$wrapper = new ContactWrapper();
+		$wrapper->setAccount($this->user->account);
+		$wrapper->setIdDbase($contact->idDbase);
 		
-		$fielddata = $wrapper->convertContactToJson($contact);
+		$customfield = Customfield::findByIdDbase($contact->idDbase);
+		
+		$fielddata = $wrapper->convertContactToJson($contact, $customfield);
 		
 		return $this->setJsonResponse(array('contact' => $fielddata) );	
 	
@@ -365,6 +369,7 @@ class ApiController extends ControllerBase
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($idDbase);
+		$wrapper->setIdList($contents->list_id);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Crear el nuevo contacto:

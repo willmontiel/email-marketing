@@ -361,8 +361,9 @@
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/delete">
 	<div class="row-fluid">
-		<div class="span5">
+		<div class="span5 message-delete">
 			<p>Esta seguro que desea Eliminar el Contacto <strong>{{'{{this.name}}'}}</strong></p>
+			<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminara por completo de su Base de Datos</p>
 			<button {{'{{action delete this}}'}} class="btn btn-danger">
 				Eliminar
 			</button>
