@@ -503,7 +503,7 @@ class ApiController extends ControllerBase
 		
 		$wrapper = new ContactListWrapper();
 		
-		$wrapper->validateContactListData($contents);
+		$lists = $wrapper->validateContactListData($contents);
 		
 		return $this->setJsonResponse($lists);
 	}
@@ -525,7 +525,7 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->list;
 		
 		$wrapper = new ContactListWrapper();
-		$wrapper->updateContactList($contents, $idList);
+		$mensaje = $wrapper->updateContactList($contents, $idList);
 		
 		return $this->setJsonResponse($mensaje);
 	}
