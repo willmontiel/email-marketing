@@ -433,11 +433,15 @@
 					</div>
 				</div>	
 				<div class="row-fluid" id="defaultNewField">
-					<label for="value_default"=>Valor por defecto</label>
+					{{ '{{#unless isDate}}' }}
+						<label for="value_default">Valor por defecto </label>
 						{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="value_default"}}' }}
-						{{ '{{#if isSelect}}' }}
-							{{ '{{partial "fields/select"}}' }}
-						{{ '{{/if}}' }}
+					{{ '{{/unless}}' }}
+				</div>
+				<div class="row-fluid">
+					{{ '{{#if isSelect}}' }}
+						{{ '{{partial "fields/select"}}' }}
+					{{ '{{/if}}' }}
 				</div>
 				<div class="row-fluid" id="SaveNewField">
 					<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
@@ -451,10 +455,10 @@
 
 <script type="text/x-handlebars" data-template-name="fields/remove">
 <div class="row-fluid">
- <div class="span5">
+ <div class="span5 message-delete">
 
  <p>Esta seguro que desea Eliminar el Campo <strong>{{'{{this.name}}'}}</strong></p>
- <p>Recuerde que se PERDERA LA INFORMACION de los contactos relacionada con este Campo</p>
+ <p>Recuerde que se <strong>PERDERA LA INFORMACION</strong> de los contactos relacionada con este Campo</p>
   <button {{'{{action eliminate this}}'}} class="btn btn-danger">
 		Eliminar
   </button>

@@ -209,7 +209,7 @@ App.FieldsRemoveController = Ember.ObjectController.extend({
     eliminate: function() {
 		this.get('content').deleteRecord();
 		this.get('model.transaction').commit();
-		this.get("target").transitionTo("contacts");
+		this.get("target").transitionTo("fields");
     },
 	cancel: function(){
 		 this.get("transaction").rollback();

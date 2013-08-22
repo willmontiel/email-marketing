@@ -243,7 +243,7 @@ class ApiController extends ControllerBase
 		
 		$customfield->delete();
 		
-		return $this->setJsonResponse(array('status' => 'success'), 201, 'Success');	
+		return $this->setJsonResponse(null);	
 	
 	}
 	
