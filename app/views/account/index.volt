@@ -24,27 +24,41 @@
 				<th>Fecha de registro</th>
 				<th>Última actualización</th>
  			</tr>
- 		 {%for all in allAccount%}
+ 		 {%for item in page.items%}
  			<tr>
- 				<td>{{all.idAccount}}</td>
-				<td>{{all.companyName}}</a></td>
- 				<td>{{all.accountingMode}}</td>
- 				<td>{{all.fileSpace}}</td>
- 				<td>{{all.messageQuota}}</td>
- 				<td>{{all.subscriptionMode}}</td>
-				<td>{{date('F j, Y', all.createdon)}}</td>
-				<td>{{date('F j, Y', all.updatedon)}}</td>
+ 				<td>{{item.idAccount}}</td>
+				<td>{{item.companyName}}</a></td>
+				<td>{{item.accountingMode}}</td>
+ 				<td>{{item.fileSpace}}</td>
+ 				<td>{{item.messageQuota}}</td>
+ 				<td>{{item.subscriptionMode}}</td>
+				<td>{{date('F j, Y', item.createdon)}}</td>
+				<td>{{date('F j, Y', item.updatedon)}}</td>
 				<td>
-				 <a href="account/show/{{all.idAccount}}">Ver</a><br>
-				 <a href="account/edit/{{all.idAccount}}">Editar</a><br>
+				 <a href="account/show/{{item.idAccount}}">Ver</a><br>
+				 <a href="account/edit/{{item.idAccount}}">Editar</a><br>
 				 Eliminar
 				</td>
  			</tr>
  		 {%endfor%}
  	    </table>
  	 </div>
-	 <div class="span12"></div>
-	 <div class="text-right">
+	 <div class="span5">
+		<div class="pagination">
+			<ul>
+				<li class="previous"><a href="account/index"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
+				<li class="previous"><span class="fui-arrow-left">{{link_to('account/index?page=<?= $page->before; ?>')}}</span></li>							
+				<li class="next"><span class="fui-arrow-right">{{link_to('account/index?page=<?php echo $page->next; ?>')}}</span></li>
+				<li class="next"><a href="account/index?page=<?= $page->last; ?>"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>
+			</ul>
+		 </div>
+	 </div>
+	 <div class="span2">
+		 <br>
+		 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
+	 </div>
+	 <div class="span4 text-right">
+		 <br>
 		 {{link_to('emarketing', 'class':"btn btn-inverse", "Regresar")}}
 	 </div>
     </div>

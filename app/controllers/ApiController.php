@@ -567,8 +567,8 @@ class ApiController extends ControllerBase
 	public function listcontactsbylistAction($idList)
 	{
 		
-		$limit = $this->request->getQuery('limit', null, 5);
-		$page = $this->request->getQuery('page', null, 1);
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
 		
 		$list = Contactlist::findFirstByIdList($idList);
 			

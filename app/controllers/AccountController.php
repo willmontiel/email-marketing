@@ -6,8 +6,24 @@ class AccountController extends ControllerBase
 		$r = $this->verifyAcl('account', 'list', '');
 		if ($r)
 			return $r;
-		$account= Account::find();
-		$this->view->setVar("allAccount", $account);
+		
+		$currentPage = $this->request->getQuery('page', null, 1); // GET
+		//$this->request->getPost('page', 'int'); // POST
+		
+		$builder = $this->modelsManager->createBuilder()
+			->columns('idAccount, companyName, accountingMode, fileSpace, messageQuota, subscriptionMode, createdon, updatedon')
+			->from('Account')
+			->orderBy('createdon');
+
+		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			"builder" => $builder,
+			"limit"=> 5,
+			"page" => $currentPage
+		));
+		
+		$page = $paginator->getPaginate();
+		$this->view->setVar("page", $page);
+//		$this->view->setVar("allAccount", $account);
 		
 	}
 	
