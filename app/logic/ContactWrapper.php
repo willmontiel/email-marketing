@@ -371,7 +371,6 @@ class ContactWrapper
         $result = $query2->execute($parameters)->getFirst();
 				
 		$total = $result->cnt;
-		$lista = array();
 
 		$querytxt2 = "SELECT Contact.* FROM Contact WHERE idDbase = :idDbase:";
 

@@ -129,6 +129,7 @@
 		<script type="text/x-handlebars" data-template-name="contacts/index">
 			<div class="row-fluid">
 				<div class="text-right">
+					<a href="/emarketing/contactlist#/lists"><button class="btn btn-inverse">Regresar</button></a>
 					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary">Agregar</button>{{'{{/linkTo}}'}}
 					{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
 				</div>
@@ -204,24 +205,10 @@
 			</div>
 			<br>
 			<div class="row-fluid">
-				<div class="span4">
-					<div class="pagination">
-						<ul>
-							<li class="previous"><span class="fui-arrow-left" {{ '{{action firstPage this}}' }} style="cursor: pointer;"><span class="fui-arrow-left" style="cursor: pointer;"></span></span></li>
-							<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }} style="cursor: pointer;"></span></li>
-							<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
-							<li class="next"><span class="fui-arrow-right" {{ '{{action lastPage this}}' }}><span class="fui-arrow-right"></span></span></li>
-						</ul>
-					 </div>
-				</div>
-				<div class="span5">
-					<br><br>
-					Registros totales: <span class="label label-filling">{{  '{{totalrecords}}' }}</span>&nbsp;
-					Página  <span class="label label-filling">{{  '{{currentpage}}' }}</span>
-					de <span class="label label-filling">{{  '{{availablepages}}' }}</span>
-				</div>
-				<div class="span3 text-right">
+				{{ partial("partials/pagination_partial") }}
+				<div class="span4 text-right">
 					<br>
+					<a href="/emarketing/contactlist#/lists"><button class="btn btn-inverse">Regresar</button></a>
 					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary" >Agregar</button>{{'{{/linkTo}}'}}
 					<button class="btn btn-primary" >Agregar Lotes</button>
 				</div>

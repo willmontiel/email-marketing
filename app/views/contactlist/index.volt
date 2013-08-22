@@ -9,7 +9,7 @@
 	{{ javascript_include('js/app_list.js') }}
 
 	<script>
-		Applist.DBObjectList = Applist.store.findAll(Applist.Dbase);
+		App.DBObjectList = App.store.findAll(App.Dbase);
 	</script>
 {% endblock %}
 
@@ -18,7 +18,7 @@
 		<script type="text/x-handlebars" data-template-name="lists/index">   
 			<div class="row-fluid">
 				<div class="span12">
-					<h1>Listas</h1>
+					<h1>Listas de contactos</h1>
 				</div>
 			</div>
 			<br>
@@ -72,33 +72,17 @@
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span5">
-					<div class="pagination">
-						<ul>
-							<li class="previous"><span class="fui-arrow-left" {{ '{{action firstPage this}}' }} style="cursor: pointer;"><span class="fui-arrow-left" style="cursor: pointer;"></span></span></li>
-							<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }} style="cursor: pointer;"></span></li>
-							
-							<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
-							<li class="next"><span class="fui-arrow-right" {{ '{{action lastPage this}}' }}><span class="fui-arrow-right"></span></span></li>
-						</ul>
-					 </div>
-				</div>
-				<div class="span5">
-					<br><br>
-					Registros totales: <span class="label label-filling">{{  '{{totalrecords}}' }}</span>&nbsp;
-					Página  <span class="label label-filling">{{  '{{currentpage}}' }}</span>
-					de <span class="label label-filling">{{  '{{availablepages}}' }}</span>
-				</div>
-				<div class="span2 text-right">
+				{{ partial("partials/pagination_partial") }}
+				<div class="span4 text-right">
 					<br>
 					{{ '{{#linkTo "lists.new" }}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
 				</div>
 			</div>
 		</script>
 		<script type="text/x-handlebars" data-template-name="lists">
-			{{ '{{#if Applist.errormessage }}' }}
+			{{ '{{#if App.errormessage }}' }}
 				<div class="alert alert-message alert-error">
-			{{ '{{ Applist.errormessage }}' }}
+			{{ '{{ App.errormessage }}' }}
 				</div>
 			{{ '{{/if}} '}}	
 		
@@ -129,7 +113,7 @@
 						<label>Descripción</label>
 						<p>{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}</p>
 						<label>Base de datos</label>
-						<p>{{ '{{view Ember.Select contentBinding="Applist.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name"}}' }}</p>
+						<p>{{ '{{view Ember.Select contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name"}}' }}</p>
 						<br>
 						<button class="btn btn-primary" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
 						<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>
