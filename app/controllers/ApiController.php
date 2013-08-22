@@ -464,6 +464,29 @@ class ApiController extends ControllerBase
 		
 	}
 	
+	 /**
+	 * 
+	 * @Route("/dbase/{idDbase:[0-9]+}/contacts/{idContact:[0-9]+}", methods="DELETE")
+	 */
+	public function deletecontactAction($idDbase, $idContact)
+	{
+		
+		$contact = Contact::findFirstByIdContact($idContact);
+		$db = Dbase::findFirstByIdDbase($idDbase);
+		
+		if (!$contact || $contact->dbase->idDbase != $db->idDbase || $contact->dbase->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+		}
+		
+		// Eliminar el Contacto de la Base de Datos
+		$wrapper = new ContactWrapper();
+		
+		$wrapper->deleteContactFromDB($contact, $db);
+		
+		return $this->setJsonResponse(null);	
+	
+	}
+	
 	/**
 	 * 
 	 * @Get("/lists")

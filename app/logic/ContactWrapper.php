@@ -115,6 +115,28 @@ class ContactWrapper
 			$contact->delete();
 		}
 	}
+	
+	public function deleteContactFromDB($contact, $db)
+	{
+		$allLists = Contactlist::findByIdDbase($db->idDbase);
+		
+		foreach ($allLists as $list)
+		{
+			$association = Coxcl::findFirst("idList = '$list->idList' AND idContact = '$contact->idContact'");
+			
+			if($association){
+				$association->delete();
+			}
+		}
+		
+		$customfields = $customfields = Fieldinstance::findByIdContact($contact->idContact);
+		
+		foreach ($customfields as $field){
+			$field->delete();
+		}
+		
+		$contact->delete();
+	}
 
 	public function searchContactinDbase($email)
 	{
