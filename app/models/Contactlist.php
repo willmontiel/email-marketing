@@ -1,6 +1,6 @@
 <?php
 use Phalcon\Mvc\Model\Validator\PresenceOf;
-class Contactlist extends \Phalcon\Mvc\Model 
+class Contactlist extends Modelbase 
 {
 	public $idDbase;
 	public function initialize()
@@ -21,14 +21,10 @@ class Contactlist extends \Phalcon\Mvc\Model
         ));
 	}
 	
-	public function beforeCreate()
+	public function beforeSave()
     {
-        $this->createdon = time();
-        $this->updatedon = time();
-    }
-
-    public function beforeUpdate()
-    {
-        $this->updatedon = time();
+        if ($this->description == NULL) {
+			$this->description = "Sin Descripcion";
+        }
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 class Coxcl extends \Phalcon\Mvc\Model
 {
 public function initialize()

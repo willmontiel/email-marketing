@@ -1,10 +1,11 @@
 <?php
-use Phalcon\Mvc\Model\Validator\PresenceOf,
-    Phalcon\Mvc\Model\Validator\StringLength,
-    Phalcon\Mvc\Model\Validator\Email,
-    Phalcon\Mvc\Model\Validator\Identical;
-
-class Dbase extends \Phalcon\Mvc\Model
+/**
+ * La clase Modelbase hereda las funciones:
+ * beforeUpdate -> Se ejecuta antes de actualizar un objeto y asigna un valor, en este caso un timestamp para el campo updateon
+ * beforeCreate -> Se ejecuta antes de crear un objeto y asigna dos valores, en este caso los respectivo timestamp para createdon y updateon
+ * $this->useDynamicUpdate(true); -> Hace que en caso de una edición, solo se actualicen los campos que presentan cambios 
+ */
+class Dbase extends Modelbase
 {
 
     public $idAccount;
@@ -22,8 +23,6 @@ class Dbase extends \Phalcon\Mvc\Model
         $this->hasMany("idDbase", "Contact", "idDbase", array('alias' => 'Contacts'));
 		
 		$this->hasMany("idDbase", "Contactlist", "idDbase");
-		
-		$this->useDynamicUpdate(true);
     }
     
     public function getMessages()
@@ -48,16 +47,5 @@ class Dbase extends \Phalcon\Mvc\Model
             }
         }
         return $messages;
-    }
-	
-	public function beforeCreate()
-    {
-        $this->createdon = time();
-        $this->updatedon = time();
-    }
-
-    public function beforeUpdate()
-    {
-        $this->updatedon = time();
     }
 }

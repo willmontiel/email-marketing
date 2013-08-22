@@ -40,10 +40,10 @@
 								<th class="span3">
 									Nombre
 								</th>
-								<th class="span4">
+								<th class="span3">
 									Descripción
 								</th>
-								<th class="span2">
+								<th class="span3">
 									Contactos
 								</th>
 								<th class="span2">
@@ -59,7 +59,7 @@
 							<tr>
 								<td><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a></td>
 								<td>{{ '{{description}}' }}</td>
-								<td></td>
+								<td>50</td>
 								<td><span class="label label-filling">{{ '{{dbase.name }}' }}</span></td>
 								<td>
 									<label><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">Ver</a></label>

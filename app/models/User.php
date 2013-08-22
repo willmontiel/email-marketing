@@ -4,8 +4,13 @@ use Phalcon\Mvc\Model\Validator\StringLength;
 use Phalcon\Mvc\Model\Validator\Email;
 use Phalcon\Mvc\Model\Validator\Regex;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
-
-class User extends \Phalcon\Mvc\Model
+/**
+ * La clase Modelbase hereda las funciones:
+ * beforeUpdate -> Se ejecuta antes de actualizar un objeto y asigna un valor, en este caso un timestamp para el campo updateon
+ * beforeCreate -> Se ejecuta antes de crear un objeto y asigna dos valores, en este caso los respectivo timestamp para createdon y updateon
+ * $this->useDynamicUpdate(true); -> Hace que en caso de una edición, solo se actualicen los campos que presentan cambios 
+ */
+class User extends Modelbase
 {
 	public $idAccount;
 
@@ -14,7 +19,7 @@ class User extends \Phalcon\Mvc\Model
         $this->belongsTo("idAccount", "Account", "idAccount", array(
             "foreignKey" => true,
         ));
-		$this->useDynamicUpdate(true);
+		
     }
     
     public function validation()
@@ -86,19 +91,6 @@ class User extends \Phalcon\Mvc\Model
 			return false;
 		}
 			
-	}
-	
-	public function beforeCreate()
-    {
-        $this->createdon = time();
-
-    }
-
-    public function beforeUpdate()
-    {
-        $this->updatedon = time();
-    }
-	
-		
+	}		
 }
 	

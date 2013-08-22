@@ -10,5 +10,6 @@ public function initialize()
 		$this->belongsTo("idContact", "Contact", "idContact", array(
             "foreignKey" => true,
         ));
+		$this->useDynamicUpdate(true);
 	}
 }

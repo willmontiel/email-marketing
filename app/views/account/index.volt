@@ -32,12 +32,12 @@
  				<td>{{all.fileSpace}}</td>
  				<td>{{all.messageQuota}}</td>
  				<td>{{all.subscriptionMode}}</td>
-				<td>{{all.createdon}}</td>
-				<td>{{all.updatedon}}</td>
+				<td>{{date('F j, Y', all.createdon)}}</td>
+				<td>{{date('F j, Y', all.updatedon)}}</td>
 				<td>
 				 <a href="account/show/{{all.idAccount}}">Ver</a><br>
 				 <a href="account/edit/{{all.idAccount}}">Editar</a><br>
-				 <a href="#">Eliminar</a>
+				 Eliminar
 				</td>
  			</tr>
  		 {%endfor%}

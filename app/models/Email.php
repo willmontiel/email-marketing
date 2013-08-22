@@ -1,8 +1,13 @@
 <?php
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 use Phalcon\Mvc\Model\Validator\Email as EmailV;
-
-class Email extends \Phalcon\Mvc\Model
+/**
+ * La clase Modelbase hereda las funciones:
+ * beforeUpdate -> Se ejecuta antes de actualizar un objeto y asigna un valor, en este caso un timestamp para el campo updateon
+ * beforeCreate -> Se ejecuta antes de crear un objeto y asigna dos valores, en este caso los respectivo timestamp para createdon y updateon
+ * $this->useDynamicUpdate(true); -> Hace que en caso de una edición, solo se actualicen los campos que presentan cambios 
+ */
+class Email extends Modelbase
 {
 	public  $idDomain;
 
@@ -15,8 +20,6 @@ class Email extends \Phalcon\Mvc\Model
             "foreignKey" => true,
         ));
 		$this->hasMany("idEmail", "Contact", "idEmail", array('alias' => 'Contacts'));
-		
-		$this->useDynamicUpdate(true);
 		
 		$this->createdon = 0;
 		$this->updatedon = 0;
@@ -41,17 +44,6 @@ class Email extends \Phalcon\Mvc\Model
 			return false;
 		}
 	}
-	
-	public function beforeCreate()
-    {
-        $this->createdon = time();
-        $this->updatedon = time();
-    }
 
-    public function beforeUpdate()
-    {
-        $this->updatedon = time();
-    }
-	
 }
 

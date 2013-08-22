@@ -1,6 +1,5 @@
 <?php
 use Phalcon\Mvc\Model\Validator\PresenceOf;
-use Phalcon\Mvc\Model\Validator\Uniqueness;
 
 class Customfield extends \Phalcon\Mvc\Model
 {
@@ -14,6 +13,10 @@ class Customfield extends \Phalcon\Mvc\Model
 		$this->belongsTo("idDbase", "Dbase", "idDbase", array(
             "foreignKey" => true,
         ));
+		/**
+		 * Hace que en caso de una edición, solo se actualicen los campos que presentan cambios 
+		 */
+		$this->useDynamicUpdate(true);
 		
     }
 	public function beforeValidationOnCreate()
