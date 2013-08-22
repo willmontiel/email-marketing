@@ -1,7 +1,20 @@
 <?php
-class ContactListWrapper extends ControllerBase
+class ContactListWrapper
 {
+	protected $pager;
+	protected $_di;
+	
+	const PAGE_DEFAULT = 5;
 
+	public function __construct()
+	{
+		$this->pager = new PaginationDecorator();
+	}
+	
+	public function setPager(PaginationDecorator $p)
+	{
+		$this->pager = $p;
+	}
 	/**
 	 * Crea un arreglo con la informacion del objeto Contactlist
 	 * para que pueda ser convertido a JSON
@@ -61,8 +74,9 @@ class ContactListWrapper extends ControllerBase
 	
 	}
 	
-	public function findContactListByAccount(Account $account, $limit, $page, $name = null)
+	public function findContactListByAccount(Account $account, $name = null)
 	{
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$idAccount = $account->idAccount;
 		$parameters = array('idAccount' => $idAccount);
 		$nameFilter = ' AND Contactlist.name=:name:';
@@ -72,14 +86,10 @@ class ContactListWrapper extends ControllerBase
 			$querytxt .= $nameFilter;
 			$parameters['name'] = $name;
 		}
-		$query2 = $this->modelsManager->createQuery($querytxt);
+		$query2 = $modelManager->createQuery($querytxt);
         $result = $query2->execute($parameters)->getFirst();
 				
 		$total = $result->cnt;
-		$availablepages = ceil($total/$limit);
-		
-		$page = ($page<1)?1:$page;
-		$start = ($page-1)*$limit;
 		
 		$lista = array();
 
@@ -88,10 +98,10 @@ class ContactListWrapper extends ControllerBase
 		if ($name) {
 			$querytxt2 .= $nameFilter;
 		}
-		if ($limit != 0) {
-			$querytxt2 .= ' LIMIT ' . $limit . ' OFFSET ' . $start;
+		if ($this->pager->getRowsPerPage() != 0) {
+			$querytxt2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		}
-        $query = $this->modelsManager->createQuery($querytxt2);
+        $query = $modelManager->createQuery($querytxt2);
 		$contactlists = $query->execute($parameters);
 		
 		if ($contactlists) {
@@ -103,9 +113,12 @@ class ContactListWrapper extends ControllerBase
 		foreach ($account->dbases as $bd) {
 			$bdjson[] = $this->convertBDToJson($bd);
 		}
+		
+		$this->pager->setRowsInCurrentPage(count($lista));
+		$this->pager->setTotalRecords($total);
 		return array('lists' => $lista, 
 					 'dbases' => $bdjson,
-					 'meta' => array( 'pagination' => array('page' => $page, 'limit' =>$limit, 'total' => $total,'availablepages' => $availablepages) ) 
+					 'meta' => $this->pager->getPaginationObject()
 				) ;
 		
 	}

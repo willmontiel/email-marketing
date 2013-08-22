@@ -57,7 +57,7 @@
 						</tbody>
 					{{'{{#each model}}'}}
 							<tr>
-								<td>{{ '{{name}}' }}</td>
+								<td><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a></td>
 								<td>{{ '{{description}}' }}</td>
 								<td></td>
 								<td><span class="label label-filling">{{ '{{dbase.name }}' }}</span></td>

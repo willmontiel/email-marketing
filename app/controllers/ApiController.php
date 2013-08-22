@@ -507,8 +507,9 @@ class ApiController extends ControllerBase
 		$name = $this->request->getQuery('name', null);
 		
 		$contactWrapper = new ContactListWrapper();
+		$contactWrapper->setPager($pager);
 		
-		$lists = $contactWrapper->findContactListByAccount($this->user->account, $limit, $page, $name);
+		$lists = $contactWrapper->findContactListByAccount($this->user->account, $name);
 		
 		return $this->setJsonResponse($lists);
 		
@@ -574,14 +575,21 @@ class ApiController extends ControllerBase
 		if ($list->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
 		}
-
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
 		$wrapper = new ContactWrapper();
 		
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
+		$wrapper->setPager($pager);
 		$wrapper->setIdList($idList);
 		
-		$contacts = $wrapper->findContactsByList($list, $page, $limit);
+		$contacts = $wrapper->findContactsByList($list);
 	                
 		return $this->setJsonResponse($contacts);	
 	
