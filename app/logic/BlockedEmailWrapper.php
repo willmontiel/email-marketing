@@ -21,7 +21,7 @@ class BlockedEmailWrapper
 		$object['idBlockedEmail'] = $Blockedemail->idBlockedEmail;
 		$object['idEmail'] = $Blockedemail->idEmail;
 		$object['blockedReason'] = $Blockedemail->blockedReason;
-		$object['BlockedDate'] = $Blockedemail->BlockedDate;
+		$object['BlockedDate'] = $Blockedemail->blockedDate;
 		$object['email'] = $Blockedemail->email;
 		return $object;
 	}
@@ -40,19 +40,19 @@ class BlockedEmailWrapper
 				
 		$total = $result->cnt;
 		
-		$querytxt2 = "SELECT Blockedemail.*, Email.email FROM Blockedemail JOIN Email ON Blockedemail.idEmail = Email.idEmail WHERE idAccount = :idAccount:";
+		$querytxt2 = "SELECT Blockedemail.idBlockedEmail, Blockedemail.idEmail, Blockedemail.blockedReason, Blockedemail.blockedDate, Email.email FROM Blockedemail JOIN Email ON Blockedemail.idEmail = Email.idEmail WHERE idAccount = :idAccount:";
 	
 		if ($this->pager->getRowsPerPage() != 0) {
 			$querytxt2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		}
         $query = $modelManager->createQuery($querytxt2);
-		$Blockedemails = $query->execute($parameters);
+		$blockedEmails = $query->execute($parameters);
 		
 		$blocked = array();
 		
-		if ($Blockedemails) {
-			foreach ($Blockedemails as $Blockedemail) {
-				$Blocked[] = $this->convertBlockedEmailList($Blockedemail);
+		if ($blockedEmails) {
+			foreach ($blockedEmails as $blockedEmail) {
+				$blocked[] = $this->convertBlockedEmailList($blockedEmail);
 			}
 		}
 		

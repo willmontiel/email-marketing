@@ -34,10 +34,10 @@
 					</tr>
 				</thead>
 				</tbody>
-					{{ '{{#each model}}' }}
+					{{ '{{#each controller}}' }}
 						<tr>
 							<td>{{ '{{email}}' }}</td>
-							<td>{{ '{{blockedDate}}' }}</td>
+							<td>{{ date("F j, Y",'{{blockedDate}}') }}</td>
 							<td>{{ '{{blockedReason}}'}}</td>
 							<td>
 								<label><a href="contactlist/show/#/contacts">Desbloquear</a></label>

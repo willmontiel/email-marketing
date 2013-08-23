@@ -77,10 +77,10 @@
 		<div class="span5">
 			<div class="pagination">
 				<ul>
-					<li class="previous"><a href="http://localhost/emarketing/dbase/index"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
-					<li class="previous"><a href="http://localhost/emarketing/dbase/index?page=<?=$page->before;?>"><span class="fui-arrow-left"></span></a></li>							
-					<li class="next"><a href="http://localhost/emarketing/dbase/index?page=<?=$page->next;?>"><span class="fui-arrow-right"></span></a></li>
-					<li class="next"><a href="http://localhost/emarketing/dbase/index?page=<?=$page->last;?>"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>
+					<li class="previous"><a href="dbase/index"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
+					<li class="previous"><a href="dbase/index?page=<?=$page->before;?>"><span class="fui-arrow-left"></span></a></li>							
+					<li class="next"><a href="dbase/index?page=<?=$page->next;?>"><span class="fui-arrow-right"></span></a></li>
+					<li class="next"><a href="dbase/index?page=<?=$page->last;?>"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>
 				</ul>
 			 </div>
 		 </div>
