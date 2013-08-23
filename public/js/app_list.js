@@ -9,6 +9,10 @@ App.Router.map(function() {
   this.resource('lists', function(){
 	  this.route('new'),
 	  this.resource('lists.edit', { path: '/edit/:list_id' });
+  }),
+  
+  this.resource('blocked', function(){
+	  this.route('block');
   });
 });
 
@@ -78,6 +82,12 @@ App.DbaseIndexController = Ember.ArrayController.extend({
 //	{id: 1, name: 'Mi primera Lista', description: 'Mi primera lista, no tiene descripcion alguna', createdon: '10 de agosto de 2012', updatedon: '12 de agosto de 2013'},
 //	{id: 2, name: 'Mi segunda Lista', description: 'Mi seguna lista, no tiene descripcion alguna', createdon: '15 de marzo de 2013', updatedon: '16 de marzo de 2013'},
 //	{id: 3, name: 'Mi tercera Lista', description: 'Mi tercera lista, no tiene descripcion alguna', createdon: '19 de febrero de 2013', updatedon: '19 de febrero de 2013'}
+//];
+//
+//App.Dbase.FIXTURES = [
+//	{id: 1, name: 'Base 1'},
+//	{id: 2, name: 'Base 2'},
+//	{id: 3, name: 'Base 3'}
 //];
 
 //Rutas
@@ -185,3 +195,6 @@ App.ListsEditController = Ember.ObjectController.extend({
 		 this.get("target").transitionTo("lists");
 	}
 });
+
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------

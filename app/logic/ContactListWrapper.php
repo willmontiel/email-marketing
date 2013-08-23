@@ -3,8 +3,6 @@ class ContactListWrapper
 {
 	protected $pager;
 	protected $_di;
-	
-	const PAGE_DEFAULT = 5;
 
 	public function __construct()
 	{

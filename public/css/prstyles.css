@@ -160,3 +160,14 @@ body {
 .message-delete {
 	font-size: 17px;
 }
+
+
+ul.nav.nav-tabs li.active a {
+	font-size: 18px;
+	font-weight: bold;
+	text-decoration: none;
+	cursor: default;
+}
+ul.nav.nav-tabs li a {
+	cursor: pointer;
+}

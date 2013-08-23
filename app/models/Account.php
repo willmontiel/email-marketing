@@ -15,7 +15,6 @@ class Account extends Modelbase
     {
         $this->hasMany("idAccount", "User", "idAccount");
 		$this->hasMany("idAccount", "Dbase", "idAccount", array('alias' => 'Dbases'));
-		$this->useDynamicUpdate(true);
     }
     
     public function validation()

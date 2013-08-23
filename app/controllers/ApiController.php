@@ -490,8 +490,8 @@ class ApiController extends ControllerBase
 	 */
 	public function getlistsAction()
 	{
-		$limit = $this->request->getQuery('limit', null, 5);
-		$page = $this->request->getQuery('page', null, 1);
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
 		
 		$pager = new PaginationDecorator();
 		if ($limit) {
@@ -748,4 +748,34 @@ class ApiController extends ControllerBase
 		}
 		return $this->setJsonResponse(array('dbases' => $dbs));
 	}
+	
+	//Inicio de listas globales de bloqueo de emails
+
+	/**
+	 * 
+	 * @Get("/blockeds")
+	 */
+
+	public function listblockedemailsAction()
+	{
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+		
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
+		
+		$blockedWrapper = new BlockedEmailWrapper();
+		$blockedWrapper->setPager($pager);
+		
+		$blockeds = $blockedWrapper->findBlockedEmailList($this->user->account);
+		
+		return $this->setJsonResponse($blockeds);
+	}
 }
+
+	

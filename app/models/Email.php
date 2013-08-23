@@ -13,6 +13,8 @@ class Email extends Modelbase
 
 	public function initialize()
 	{
+		$this->HasOne("idEmail", "Blockedemail", "idEmail");
+		
 		$this->belongsTo("idDomain", "Domain", "idDomain", array(
             "foreignKey" => true,
         ));
