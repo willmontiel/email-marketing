@@ -116,43 +116,7 @@ App.ContactsEditRoute = Ember.Route.extend({
 
 App.ContactController = Ember.ObjectController.extend();
 
-App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
-	searchText: '',
-    search: function(){
-		var resultado = App.Contact.find({ email: this.get('searchText') });
-		console.log(resultado);
-		this.set('content', resultado);
-	},
-			
-	getModelMetadata: function() {
-		return App.store.typeMapFor(App.Contact);
-	},
-	
-	refreshModel: function (obj) {
-		console.log('Retrieving!');
-		var result = App.Contact.find(obj);
-		console.log('Setting!');
-		this.set('content', result);
-		console.log('Set!');
-	}
-});
-
-App.ContactsShowController = Ember.ObjectController.extend({
-//	deactivated: function () {
-//		this.set("isActive", false);		
-//	},
-//	activated: function () {
-//		this.set("isActive", true);
-//	},
-	unsubscribedcontact: function () {
-		this.set("isSubscribed", false);
-		this.get('model.transaction').commit();
-	},
-	subscribedcontact: function () {
-		this.set("isSubscribed", true);
-		this.get('model.transaction').commit();
-	}
-});
+App.ContactsNewbatchController = Ember.ObjectController.extend();
 
 App.ContactsNewController = Ember.ObjectController.extend({
 	errors: null,
@@ -206,8 +170,6 @@ App.ContactsNewController = Ember.ObjectController.extend({
 	}
 });
 
-App.ContactsNewbatchController = Ember.ObjectController.extend();
-
 App.ContactsEditController = Ember.ObjectController.extend({
 	edit: function() {
 			this.get("model.transaction").commit();
@@ -232,9 +194,45 @@ App.ContactsDeleteController = Ember.ObjectController.extend({
 	}
 });
 
+App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
+	searchText: '',
+    search: function(){
+		var resultado = App.Contact.find({ email: this.get('searchText') });
+		console.log(resultado);
+		this.set('content', resultado);
+	},
+			
+	getModelMetadata: function() {
+		return App.store.typeMapFor(App.Contact);
+	},
+	
+	refreshModel: function (obj) {
+		console.log('Retrieving!');
+		var result = App.Contact.find(obj);
+		console.log('Setting!');
+		this.set('content', result);
+		console.log('Set!');
+	}
+});
+
+App.ContactsShowController = Ember.ObjectController.extend({
+//	deactivated: function () {
+//		this.set("isActive", false);		
+//	},
+//	activated: function () {
+//		this.set("isActive", true);
+//	},
+	unsubscribedcontact: function () {
+		this.set("isSubscribed", false);
+		this.get('model.transaction').commit();
+	},
+	subscribedcontact: function () {
+		this.set("isSubscribed", true);
+		this.get('model.transaction').commit();
+	}
+});
 
 //Views
-
 
 App.ContactsNewView = Ember.View.extend({
   didInsertElement: function() {

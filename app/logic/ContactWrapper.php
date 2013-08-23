@@ -410,7 +410,7 @@ class ContactWrapper
 		return $object;
 	}
 
-	public function convertContactToJson($contact)
+	public function convertContactToJson(Contact $contact)
 	{
 		$object = array();
 		$object['id'] = $contact->idContact;

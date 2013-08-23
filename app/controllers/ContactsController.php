@@ -9,6 +9,8 @@ class ContactsController extends ControllerBase
 	
 	public function newbatchAction($idList)
 	{
+		$this->flashSession->error('');
+		
 		$list = Contactlist::findFirstByIdList($idList);
 
 		$db = Dbase::findFirstByIdDbase($list->idDbase);
@@ -135,7 +137,7 @@ class ContactsController extends ControllerBase
 					$this->flashSession->error($e->getMessage());
 				}				
 			}
-			$this->flashSession->success('Contactos creados exitosamente');
+//			$this->flashSession->success('Contactos creados exitosamente');
 			$this->response->redirect("contactlist/show/$list->idList#/contacts");
 	}
 }

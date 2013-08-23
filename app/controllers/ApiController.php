@@ -246,9 +246,7 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse(null);	
 	
 	}
-	
-
-	
+		
 	/**
 	 * 
 	 * @Get("/dbase/{idDbase:[0-9]+}/contacts")
@@ -307,11 +305,10 @@ class ApiController extends ControllerBase
 		
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
-		$wrapper->setIdDbase($contact->idDbase);
+		$wrapper->setIdDbase($idDbase);
 		
-		$customfield = Customfield::findByIdDbase($contact->idDbase);
 		
-		$fielddata = $wrapper->convertContactToJson($contact, $customfield);
+		$fielddata = $wrapper->convertContactToJson($contact);
 		
 		return $this->setJsonResponse(array('contact' => $fielddata) );	
 	
@@ -384,7 +381,7 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
 		}
-
+		
 		$contactdata = $wrapper->convertContactToJson($contact);
 
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
@@ -457,7 +454,7 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
 		}
-
+		
 		$contactdata = $wrapper->convertContactToJson($contact);
 
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
@@ -610,10 +607,9 @@ class ApiController extends ControllerBase
 		}
 		
 		$wrapper = new ContactWrapper();
-                
-        $customfield = Customfield::findByIdDbase($list->idDbase);
+        $wrapper->setIdDbase($list->idDbase);
 		
-		$fielddata = $wrapper->convertContactToJson($contact, $customfield);
+		$fielddata = $wrapper->convertContactToJson($contact);
 		
 		return $this->setJsonResponse(array('contact' => $fielddata) );	
 	

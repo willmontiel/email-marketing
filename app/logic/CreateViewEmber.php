@@ -22,6 +22,13 @@ class CreateViewEmber
 				$valor = "{{view Ember.Select multiple='true' valueBinding='{$fieldname}' contentBinding='App.{$fieldname}_options' id='{$fieldname}' class='select'";
 				break;
 		}
+		
+		if($field->minValue && $field->maxValue) {
+			$valor.= " pattern='[0-9]{{$field->minValue},{$field->maxValue}}'";
+		} elseif ($field->maxLength) {
+			$valor.= " maxlength='{$field->maxLength}'";
+		}
+		
 		if ($field->required == "Si") {
 			$valor.= " required='required' }}";
 		}

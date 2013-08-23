@@ -101,14 +101,11 @@
 									<th class="span2">
 											Tipo
 									</th>
-									<th class="span2">
+									<th class="span1">
 											Requerido
 									</th>
 									<th class="span2">
-											Opcion por Defecto
-									</th>
-									<th class="span2">
-											Opciones
+											Valor por Defecto
 									</th>
 									<th class="span2">
 											Accion
@@ -135,9 +132,6 @@
 											
 									</td>
 									<td>
-										Maximo 40 Caracteres	
-									</td>
-									<td>
 											
 									</td>
                                 </tr>
@@ -149,7 +143,7 @@
 										Text
 									</td>
 									<td>
-										<label class="checkbox checked" for="required">
+										<label class="checkbox">
 											<span class="icons">
 												<span class="first-icon fui-checkbox-unchecked"></span>
 												<span class="second-icon fui-checkbox-checked"></span>
@@ -158,9 +152,6 @@
 									</td>
 									<td>
 											
-									</td>
-									<td>
-										Maximo 40 Caracteres	
 									</td>
 									<td>
 											
@@ -174,7 +165,7 @@
 										Text
 									</td>
 									<td>
-										<label class="checkbox checked" for="required">
+										<label class="checkbox">
 											<span class="icons">
 												<span class="first-icon fui-checkbox-unchecked"></span>
 												<span class="second-icon fui-checkbox-checked"></span>
@@ -183,9 +174,6 @@
 									</td>
 									<td>
 											
-									</td>
-									<td>
-										Maximo 40 Caracteres	
 									</td>
 									<td>
 											
@@ -214,18 +202,6 @@
 									</td>
 									<td>{{'{{defaultValue}}'}}</td>
 									<td>
-										{{ '{{#if isText}}' }}
-											Maximo {{'{{maxLength}}'}} Caracteres
-										{{ '{{/if}}' }}
-										{{ '{{#if isNumerical}}' }}
-											{{'{{minValue}}'}} - {{'{{maxValue}}'}}
-										{{ '{{/if}}' }}
-										{{ '{{#if isSelect}}' }}
-											{{'{{values}}'}}
-										{{ '{{/if}}' }}
-
-									</td>
-									<td>
 										{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
 										{{'{{#linkTo "fields.remove" this}}'}} Eliminar {{'{{/linkTo}}'}}
 									</td>
@@ -241,8 +217,8 @@
 <div class="row-fluid">
 	{{'{{#linkTo "fields.add"}} Agregar {{/linkTo}}'}}
 </div>
- 
 </script>
+
 <script type="text/x-handlebars" data-template-name="fields">
 	{{ '{{#if App.errormessage }}' }}
 		<div class="alert alert-message alert-error">
@@ -254,62 +230,65 @@
 </script>
 
 <div class="row-fluid">
-        <div class="row-fluid">
-                <div class="span8">
-                        <div class="modal-header">
-                                <h1>{{sdbase.name}}</h1>
-                        </div>
-                </div>
-                <div class="span4" >
-                        <span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
-                </div>
-        </div>
-        <div id="emberAppContainer"></div>
+	<div class="row-fluid">
+			<div class="span8">
+					<div class="modal-header">
+							<h1>{{sdbase.name}}</h1>
+					</div>
+			</div>
+			<div class="span4" >
+					<span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
+			</div>
+	</div>
+</div>
+
+	<!------------------ Ember! ---------------------------------->
+<div id="emberAppContainer">
 		
-	<script type="text/x-handlebars" data-template-name="index">
-		<div class="row-fluid">
-				<div class="span8">
-								<p>Descripcion: {{sdbase.description}}</p>
-								<p>Descripcion de Contactos: {{sdbase.Cdescription}}</p>
-								<p>Fecha de Creacion: {{date('Y-m-d', sdbase.createdon)}}</p>
-								<p>Ultima Fecha de Actualizacion: {{date('Y-m-d', sdbase.updatedon)}}</p>
-						<div class="row-fluid">
-							<div class="span2">
-								<a href="/emarketing/dbase/edit/{{sdbase.idDbase}}" class="btn btn-large btn-block btn-info">Editar</a>
-							</div>
+<script type="text/x-handlebars" data-template-name="index">
+	<div class="row-fluid">
+			<div class="span8">
+							<p>Descripcion: {{sdbase.description}}</p>
+							<p>Descripcion de Contactos: {{sdbase.Cdescription}}</p>
+							<p>Fecha de Creacion: {{date('Y-m-d', sdbase.createdon)}}</p>
+							<p>Ultima Fecha de Actualizacion: {{date('Y-m-d', sdbase.updatedon)}}</p>
+					<div class="row-fluid">
+						<div class="span2">
+							<a href="/emarketing/dbase/edit/{{sdbase.idDbase}}" class="btn btn-large btn-block btn-info">Editar</a>
 						</div>
-				</div>
-				<div class="span4">
-						<div class="badge-number-dark">
-								<span class="number-huge">{{ sdbase.Ctotal|numberf }}</span>
-								<br/>
-								<span class="regular-text">Contactos totales</span>
-						</div>
-						<div class="badge-number-light">
-								<span class="number-large text-green-color">{{ sdbase.Cactive|numberf }}</span>
-								<br/>
-								<span class="regular-text">Contactos Activos</span>
-								<br/>
-								<span class="number-large text-gray-color">{{ sdbase.Cinactive|numberf }}</span>
-								<br/>
-								<span class="regular-text">Contactos Inactivos</span>
-								<br/>
-								<span class="number-large text-gray-color">{{ sdbase.Cunsubscribed|numberf }}</span>
-								<br/>
-								<span class="regular-text">Contactos Des-suscritos</span>
-								<br/>
-								<span class="number-large text-brown-color">{{sdbase.Cbounced|numberf }}</span>
-								<br/>
-								<span class="regular-text">Contactos Rebotados</span>
-								<br/>
-								<span class="number-large text-red-color">{{sdbase.Cspam|numberf }}</span>
-								<br/>
-								<span class="regular-text">Contactos Spam</span>
-								<br/>
-						</div>
-				</div>
-		</div>
-	</script>
+					</div>
+			</div>
+			<div class="span4">
+					<div class="badge-number-dark">
+							<span class="number-huge">{{ sdbase.Ctotal|numberf }}</span>
+							<br/>
+							<span class="regular-text">Contactos totales</span>
+					</div>
+					<div class="badge-number-light">
+							<span class="number-large text-green-color">{{ sdbase.Cactive|numberf }}</span>
+							<br/>
+							<span class="regular-text">Contactos Activos</span>
+							<br/>
+							<span class="number-large text-gray-color">{{ sdbase.Cinactive|numberf }}</span>
+							<br/>
+							<span class="regular-text">Contactos Inactivos</span>
+							<br/>
+							<span class="number-large text-gray-color">{{ sdbase.Cunsubscribed|numberf }}</span>
+							<br/>
+							<span class="regular-text">Contactos Des-suscritos</span>
+							<br/>
+							<span class="number-large text-brown-color">{{sdbase.Cbounced|numberf }}</span>
+							<br/>
+							<span class="regular-text">Contactos Rebotados</span>
+							<br/>
+							<span class="number-large text-red-color">{{sdbase.Cspam|numberf }}</span>
+							<br/>
+							<span class="regular-text">Contactos Spam</span>
+							<br/>
+					</div>
+			</div>
+	</div>
+</script>
 
 <script type="text/x-handlebars" data-template-name="fields/add">
 		<div class="row-fluid">
@@ -468,6 +447,7 @@
  </div>
 </div>
 </script>
+
 <script type="text/x-handlebars" data-template-name="fields/_select">
 		<label for="values">Opciones de la lista</label>
 		{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor" id="values"}}' }}
@@ -491,6 +471,9 @@
 		{{ '{{view Ember.TextField valueBinding="maxValue" placeholder="Superior" id="limit_Sup"}}' }}
 	</div>
 </script>
+
+</div>
+
 <!---------------------- Contacts Template -------------------------->
 	{{ partial("dbase/partials/contacts_partial") }}
 

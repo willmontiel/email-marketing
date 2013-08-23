@@ -247,7 +247,51 @@ App.List = DS.Model.extend({
 //  { id: 11, email: 'lol@live.com', name: 'kubuntu', lastName: 'query', activatedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActive: 1528228, ipSubscribed: 0, isBounced: true, isActive: true, isSpam: true, isSubscribed: true }
 //];
 
+//Rutas
+
+App.ContactsIndexRoute = Ember.Route.extend({
+	model: function(){
+		return App.Contact.find();
+	}
+});
+
+App.ContactsShowRoute = Ember.Route.extend({
+});
+
+App.ContactsNewRoute = Ember.Route.extend({
+	model: function(){
+		return App.Contact.createRecord();
+	},
+	deactivate: function () {
+		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
+			this.get('currentModel.transaction').rollback();
+			console.log('Rollback new Contact!');
+		}
+	}
+});
+
+App.ContactsNewbatchRoute = Ember.Route.extend();
+
+App.ContactsEditRoute = Ember.Route.extend({
+	deactivate: function () {
+		console.log('Deactivate ContactsEdit');
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+        console.log('Cambio de modelo');
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && !model.get('isSaving')) {
+			model.get('transaction').rollback();
+		}
+	}
+});
+
 //Controladores
+
 App.ContactController = Ember.ObjectController.extend();
 
 App.ContactsNewbatchController = Ember.ObjectController.extend();
@@ -257,54 +301,55 @@ App.ContactsNewController = Ember.ObjectController.extend({
 	
 	save: function() {
 		
-//		 exist = App.Contact.find().filterProperty('email', this.get('email'));
-//			if(exist.get("length") === 1){
-//				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
-//				if(filter.test(this.get('email'))){
-//					this.get('model').set('isActive', true);
-//					this.get('model').set('isSubscribed', true);
-//					this.get("model.transaction").commit();
-//					App.set('errormessage', '');
-//					this.get("target").transitionTo("contacts");
-//				}
-//				else{
-//					App.set('errormessage', 'El email no es correcto');
-//					this.get("target").transitionTo("contacts.new");
-//				}
-//			}
-//			else{
-//				App.set('errormessage', 'El email ya existe');
-//				this.get("target").transitionTo("contacts.new");
-//			}
-		var model = this.get('model');
-		if (model.get('isValid') && !model.get('isSaving')) {
-			
-			model.set('isActive', true);
-			model.set('isSubscribed', true);
-			
-			model.on('becameInvalid', this, function() {
-				console.log('INVALID, INVALID Will Robinson!');
-				this.handleFailure();
-			});			
-			model.on('becameError', this, function() {
-				console.log('ERROR, ERROR Will Robinson!: ');
-				console.log(this.get('content.error'));
-				console.log(this.get('model.error'));
-				console.log(this.get('content.errors'));
-				console.log(this.get('model.errors'));
-				this.handleFailure();
-			});	
-			model.on('didCreate', this, function() {
-				this.get('target').transitionTo('contacts');
-			});
-			
-			model.get('transaction').commit();
+		 exist = App.Contact.find().filterProperty('email', this.get('email'));
+			if(exist.get("length") === 1){
+				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
+				if(filter.test(this.get('email'))){
+					this.get('model').set('isActive', true);
+					this.get('model').set('isSubscribed', true);
+					this.get("model.transaction").commit();
+					App.set('errormessage', '');
+					this.get("target").transitionTo("contacts");
 				}
+				else{
+					App.set('errormessage', 'El email no es correcto');
+					this.get("target").transitionTo("contacts.new");
+				}
+			}
+			else{
+				App.set('errormessage', 'El email ya existe');
+				this.get("target").transitionTo("contacts.new");
+			}
+//		var model = this.get('model');
+//		if (model.get('isValid') && !model.get('isSaving')) {
+//			
+//			model.set('isActive', true);
+//			model.set('isSubscribed', true);
+//			
+//			model.on('becameInvalid', this, function() {
+//				console.log('INVALID, INVALID Will Robinson!');
+//				this.handleFailure();
+//			});			
+//			model.on('becameError', this, function() {
+//				console.log('ERROR, ERROR Will Robinson!: ');
+//				console.log(this.get('content.error'));
+//				console.log(this.get('model.error'));
+//				console.log(this.get('content.errors'));
+//				console.log(this.get('model.errors'));
+//				this.handleFailure();
+//			});	
+//			model.on('didCreate', this, function() {
+//				this.get('target').transitionTo('contacts');
+//			});
+//			
+//			model.get('transaction').commit();
+//				}
 	},
 		
 	cancel: function(){
-		 this.get("transaction").rollback();
-		 this.get("target").transitionTo("contacts");
+		console.log('Cancelling!');
+		this.get("target").transitionTo("contacts");
+		console.log('Cancelled!');
 	},
 
 	handleFailure: function() {
@@ -342,58 +387,25 @@ App.ContactsDeleteController = Ember.ObjectController.extend({
 	}
 });
 
-
-//Rutas
-
-App.ContactsIndexRoute = Ember.Route.extend({
-	model: function(){
-		return App.Contact.find();
-	}
-});
-App.ContactsNewView = Ember.View.extend({
-  didInsertElement: function() {
-        jQuery("select").select2({
-			placeholder: "Seleccione las Opciones"
-		});
-    }
-});
-App.ContactsNewRoute = Ember.Route.extend({
-	model: function(){
-		return App.Contact.createRecord();
+App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
+	searchText: '',
+    search: function(){
+		var resultado = App.Contact.find({ email: this.get('searchText') });
+		console.log(resultado);
+		this.set('content', resultado);
 	},
-	deactivate: function () {
-		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.get('transaction').rollback();
-		}
-	}
-});
-
-App.ContactsNewbatchRoute = Ember.Route.extend();
-
-App.ContactsEditRoute = Ember.Route.extend({
-	deactivate: function () {
-		console.log('Deactivate ContactsEdit');
-		this.doRollBack();
+			
+	getModelMetadata: function() {
+		return App.store.typeMapFor(App.Contact);
 	},
-	contextDidChange: function() {
-        console.log('Cambio de modelo');
-		this.doRollBack();
-		this._super();
-    },
-	doRollBack: function () {
-		var model = this.get('currentModel');
-		if (model && model.get('isDirty') && model.get('isSaving') == false) {
-			model.get('transaction').rollback();
-		}
+	
+	refreshModel: function (obj) {
+		console.log('Retrieving!');
+		var result = App.Contact.find(obj);
+		console.log('Setting!');
+		this.set('content', result);
+		console.log('Set!');
 	}
-});
-
-App.ContactsEditView = Ember.View.extend({
-  didInsertElement: function() {
-        jQuery("select").select2({
-			placeholder: "Seleccione las Opciones"
-		});
-    }
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
@@ -413,25 +425,32 @@ App.ContactsShowController = Ember.ObjectController.extend({
 	}
 });
 
+//Views
 
-App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
-	getModelMetadata: function() {
-		return App.store.typeMapFor(App.Contact);
-	},
-	
-	refreshModel: function (obj) {
-		var result = App.Contact.find(obj);
-		this.set('content', result);
-	},
-			
-	searchText: '',
-    search: function(){
-		var resultado = App.Contact.find({ email: this.get('searchText') });
-		console.log(resultado);
-		this.set('content', resultado);
-	}
+App.ContactsNewView = Ember.View.extend({
+  didInsertElement: function() {
+        jQuery("select").select2({
+			placeholder: "Seleccione las Opciones"
+		});
+    }
 });
 
-App.ContactsShowRoute = Ember.Route.extend({
+App.ContactsEditView = Ember.View.extend({
+  didInsertElement: function() {
+        jQuery("select").select2({
+			placeholder: "Seleccione las Opciones"
+		});
+    }
 });
+
+
+
+
+
+
+
+
+
+
+
 
