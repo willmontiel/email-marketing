@@ -18,7 +18,7 @@ class BlockedEmailWrapper
 	public function convertBlockedEmailList($Blockedemail)
 	{
 		$object = array();
-		$object['idBlockedEmail'] = $Blockedemail->idBlockedEmail;
+		$object['idBlockedemail'] = $Blockedemail->idBlockedemail;
 		$object['idEmail'] = $Blockedemail->idEmail;
 		$object['blockedReason'] = $Blockedemail->blockedReason;
 		$object['BlockedDate'] = $Blockedemail->blockedDate;
@@ -40,7 +40,7 @@ class BlockedEmailWrapper
 				
 		$total = $result->cnt;
 		
-		$querytxt2 = "SELECT Blockedemail.idBlockedEmail, Blockedemail.idEmail, Blockedemail.blockedReason, Blockedemail.blockedDate, Email.email FROM Blockedemail JOIN Email ON Blockedemail.idEmail = Email.idEmail WHERE idAccount = :idAccount:";
+		$querytxt2 = "SELECT Blockedemail.idBlockedemail, Blockedemail.idEmail, Blockedemail.blockedReason, Blockedemail.blockedDate, Email.email FROM Blockedemail JOIN Email ON Blockedemail.idEmail = Email.idEmail WHERE idAccount = :idAccount:";
 	
 		if ($this->pager->getRowsPerPage() != 0) {
 			$querytxt2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
@@ -56,7 +56,7 @@ class BlockedEmailWrapper
 			}
 		}
 		
-		$this->pager->setRowsInCurrentPage(count($Blocked));
+		$this->pager->setRowsInCurrentPage(count($blocked));
 		$this->pager->setTotalRecords($total);
 		return array('blockeds' => $blocked, 
 					 'meta' => $this->pager->getPaginationObject()

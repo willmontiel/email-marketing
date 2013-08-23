@@ -198,3 +198,54 @@ App.ListsEditController = Ember.ObjectController.extend({
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
+App.Blocked = DS.Model.extend({
+	email: DS.attr('string'),
+    blockedReason: DS.attr('string'),
+	blockedDate: DS.attr('string')
+});
+
+//App.Blocked.FIXTURES = [
+//	{id: 1, email: 'lala@lala.com', blockedReason: 'HABEAS DATA', blockedDate: '12 de agosto de 2013'},
+//	{id: 2, email: 'lolo@lolo.com', blockedReason: 'Queja del cliente',  blockedDate: '16 de marzo de 2013'},
+//	{id: 3, email: 'lele@lele.com', blockedReason: 'HABEAS DATA',  blockedDate: '19 de febrero de 2013'}
+//];
+
+//Rutas
+App.BlockedIndexRoute = Ember.Route.extend({
+	model: function(){
+		return App.Blocked.find();
+	}
+});
+
+App.BlockedBlockRoute = Ember.Route.extend({
+	model: function(){
+		return App.Blocked.createRecord();
+	},
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.get('transaction').rollback();
+		}
+	}
+});
+
+//Controladores
+App.BlockedController = Ember.ObjectController.extend();
+
+App.BlockedIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
+	getModelMetadata: function() {
+		return App.store.typeMapFor(App.Blocked);
+	},
+	
+	refreshModel: function (obj) {
+		var result = App.Blocked.find(obj);
+		this.set('content', result);
+	}
+});
+
+App.BlockedBlockController = Ember.ObjectController.extend({
+	cancel: function(){
+		this.get("transaction").rollback();
+		App.set('errormessage', '');
+		this.get("target").transitionTo("blocked");
+	}
+});

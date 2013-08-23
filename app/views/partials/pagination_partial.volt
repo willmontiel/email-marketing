@@ -3,8 +3,8 @@
 		<ul>
 			<li class="previous"><span class="fui-arrow-left" {{ '{{action firstPage this}}' }} style="cursor: pointer;"><span class="fui-arrow-left" style="cursor: pointer;"></span></span></li>
 			<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }} style="cursor: pointer;"></span></li>							
-			<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
-			<li class="next"><span class="fui-arrow-right" {{ '{{action lastPage this}}' }}><span class="fui-arrow-right"></span></span></li>
+			<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }} style="cursor: pointer;"></span></li>
+			<li class="next"><span class="fui-arrow-right" {{ '{{action lastPage this}}' }} style="cursor: pointer;"><span class="fui-arrow-right"></span></span></li>
 		</ul>
 	 </div>
 </div>
