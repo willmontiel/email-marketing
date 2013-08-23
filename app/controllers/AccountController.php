@@ -11,7 +11,6 @@ class AccountController extends ControllerBase
 		//$this->request->getPost('page', 'int'); // POST
 		
 		$builder = $this->modelsManager->createBuilder()
-			->columns('idAccount, companyName, accountingMode, fileSpace, messageQuota, subscriptionMode, createdon, updatedon')
 			->from('Account')
 			->orderBy('createdon');
 

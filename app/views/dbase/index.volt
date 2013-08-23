@@ -12,12 +12,12 @@
 </div>
 	<div class="row-fluid">
 		<!-- Lista de mis bases de datos -->
-		{%for dbase in dbases%}
+		{%for item in page.items%}
 			<div class="row-fuid">
 				<div class="span6" >
 					<div class="row-fluid break-word">
-							<h3><a href="dbase/show/{{dbase.idDbase}}">{{dbase.name}}</a></h3>
-							<span>{{dbase.description}}</span>
+							<h3><a href="dbase/show/{{item.idDbase}}">{{item.name}}</a></h3>
+							<span>{{item.description}}</span>
 					</div>
 					<div class="row-fluid">
 							<div class="span3 text-center">
@@ -43,11 +43,11 @@
 						<tr>
 							<td class="text-right">
 								<dl>
-									<dd>{{dbase.Cactive|numberf}}</dd>
-									<dd>{{dbase.Cinactive|numberf}}</dd>
-									<dd>{{dbase.Cunsubscribed|numberf}}</dd>
-									<dd>{{dbase.Cbounced|numberf}}</dd>
-									<dd>{{dbase.Cspam|numberf}}</dd>
+									<dd>{{item.Cactive|numberf}}</dd>
+									<dd>{{item.Cinactive|numberf}}</dd>
+									<dd>{{item.Cunsubscribed|numberf}}</dd>
+									<dd>{{item.Cbounced|numberf}}</dd>
+									<dd>{{item.Cspam|numberf}}</dd>
 								</dl>
 							</td>
 							<td class="text-left">
@@ -64,8 +64,8 @@
 				</div>
 				<div class="span2">
 					<dl>
-							<dd><a href="dbase/edit/{{dbase.idDbase}}">Editar</a></dd>
-							<dd><a href="#delete{{dbase.idDbase}}" data-toggle="modal">Eliminar</a></dd>
+							<dd><a href="dbase/edit/{{item.idDbase}}">Editar</a></dd>
+							<dd><a href="#delete{{item.idDbase}}" data-toggle="modal">Eliminar</a></dd>
 							<dd><a href="#">Agregar Contacto</a></dd>
 					</dl>
 				</div>
@@ -73,15 +73,34 @@
 		{%endfor%}
 		<!-- Fin de mi lista de bases de datos -->
 	</div>
+	<div class="row-fluid">
+		<div class="span5">
+			<div class="pagination">
+				<ul>
+					<li class="previous"><a href="http://localhost/emarketing/dbase/index"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
+					<li class="previous"><a href="http://localhost/emarketing/dbase/index?page=<?=$page->before;?>"><span class="fui-arrow-left"></span></a></li>							
+					<li class="next"><a href="http://localhost/emarketing/dbase/index?page=<?=$page->next;?>"><span class="fui-arrow-right"></span></a></li>
+					<li class="next"><a href="http://localhost/emarketing/dbase/index?page=<?=$page->last;?>"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>
+				</ul>
+			 </div>
+		 </div>
+		 <div class="span3">
+			 <br><br>
+			 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
+			 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
+		 </div>
+		<div class="span3">
+		</div>
+	</div>
                 
-{%for dbase in dbases%}
-<div id="delete{{dbase.idDbase}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+{%for item in page.items%}
+<div id="delete{{item.idDbase}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>Seguro que Desea Eliminar</h3>
         </div>
         <div class="modal-body">
-                <form action = "/emarketing/dbase/delete/{{dbase.idDbase}}", method="post">
+                <form action = "/emarketing/dbase/delete/{{item.idDbase}}", method="post">
                         <p>Para eliminar escriba la palabra "DELETE"</p>
                         {{text_field("delete")}}
         </div>

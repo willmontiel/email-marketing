@@ -46,18 +46,19 @@
 	 <div class="span5">
 		<div class="pagination">
 			<ul>
-				<li class="previous"><a href="account/index"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
-				<li class="previous"><span class="fui-arrow-left">{{link_to('account/index?page=<?= $page->before; ?>')}}</span></li>							
-				<li class="next"><span class="fui-arrow-right">{{link_to('account/index?page=<?php echo $page->next; ?>')}}</span></li>
-				<li class="next"><a href="account/index?page=<?= $page->last; ?>"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>
+				<li class="previous"><a href="http://localhost/emarketing/account/index"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
+				<li class="previous"><a href="http://localhost/emarketing/account/index?page=<?=$page->before;?>"><span class="fui-arrow-left"></span></a></li>							
+				<li class="next"><a href="http://localhost/emarketing/account/index?page=<?=$page->next;?>"><span class="fui-arrow-right"></span></a></li>
+				<li class="next"><a href="http://localhost/emarketing/account/index?page=<?=$page->last;?>"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>
 			</ul>
 		 </div>
 	 </div>
-	 <div class="span2">
-		 <br>
+	 <div class="span3">
+		 <br><br>
+		 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
 		 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
 	 </div>
-	 <div class="span4 text-right">
+	 <div class="span3 text-right">
 		 <br>
 		 {{link_to('emarketing', 'class':"btn btn-inverse", "Regresar")}}
 	 </div>
