@@ -53,6 +53,10 @@ class ContactWrapper
 	public function updateContactFromJsonData($idContact, $data)
 	{
 		// Actualizar contacto:
+		// 0) Cargar el contacto Antigua para comparaciones 
+		
+		$oldContact = Contact::findFirstByIdContact($idContact);
+		
 		// 1) Cargar el contacto
 		$contact = Contact::findFirstByIdContact($idContact);
 		if (!$contact) {
@@ -95,6 +99,9 @@ class ContactWrapper
 			throw new \Exception('Error al crear el contacto: >>' . $msg . '<<');
 		} else {
 			$this->assignDataToCustomField($data);
+			
+			$counter = new ContactCounter();
+			$counter->updateContactCount($oldContact, $this->contact);
 		}			
 		
 		return $this->contact;
@@ -104,15 +111,20 @@ class ContactWrapper
 	{
 		$association = Coxcl::findFirst("idList = '$list->idList' AND idContact = '$contact->idContact'");
 		
-		$association->delete();
+		$counter = new ContactCounter();
 		
+		if($association->delete()) {
+			$counter->deleteContactByListCount($contact, $list->idList);
+		}		
 		if (!Coxcl::findFirst("idContact = '$contact->idContact'")) {
 			$customfields = Fieldinstance::findByIdContact($contact->idContact);
 				foreach ($customfields as $field) {
 					$field->delete();
 				}
 
-			$contact->delete();
+			if($contact->delete()) {
+				$counter->deleteContactCount($contact);
+			}
 		}
 	}
 	
@@ -120,12 +132,15 @@ class ContactWrapper
 	{
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
 		
+		$counter = new ContactCounter();
+		
 		foreach ($allLists as $list)
 		{
 			$association = Coxcl::findFirst("idList = '$list->idList' AND idContact = '$contact->idContact'");
 			
 			if($association){
 				$association->delete();
+				$counter->deleteContactByListCount($contact, $list->idList);
 			}
 		}
 		
@@ -135,7 +150,9 @@ class ContactWrapper
 			$field->delete();
 		}
 		
-		$contact->delete();
+		if($contact->delete()) {
+			$counter->deleteContactCount($contact);
+		}
 	}
 
 	public function searchContactinDbase($email)
@@ -227,6 +244,11 @@ class ContactWrapper
 		} else {
 			$this->associateContactToList($this->idList, $this->contact->idContact);
 			$this->assignDataToCustomField($data);
+			
+			$counter = new ContactCounter();
+			$counter->newContactCount($this->contact);
+			
+			$counter->saveCount();
 		}
 	}
 	
@@ -297,6 +319,9 @@ class ContactWrapper
 		$associate->idContact = $idContact;
 					
 		$associate->save();
+		
+//		$counter = new ContactCounter();
+//		$counter->newContactByListCount($idContact, $idList);
 	}
 
 	protected function createEmail($email)

@@ -74,7 +74,7 @@
 						<table class="offset4">
 							<tr>
 								<td>
-									<span class="text-green-color"></span>
+									<span class="text-green-color">{{datalist.Cactive}}</span>
 								</td>
 								<td class="text-left">
 									<span class="regular-text">Activos</span>
@@ -82,7 +82,7 @@
 							</tr>
 							<tr>
 								<td>
-									<span class="text-gray-color text-left"></span>
+									<span class="text-gray-color text-left">{{datalist.Cinactive}}</span>
 								</td>
 								<td class="text-left">
 									<span class="regular-text">Inactivos</span>
@@ -90,7 +90,7 @@
 							</tr>
 							<tr>
 								<td>
-									<span class="text-gray-color text-left"></span>
+									<span class="text-gray-color text-left">{{datalist.Cunsubscribed}}</span>
 								</td>	
 								<td class="text-left">
 									<span class="regular-text">Des-suscritos</span>
@@ -98,7 +98,7 @@
 							</tr>
 							<tr>
 								<td>
-									<span class="text-brown-color text-left"></span>
+									<span class="text-brown-color text-left">{{datalist.Cbounced}}</span>
 								</td>
 								<td class="text-left">
 									<span class="regular-text">Rebotados</span>
@@ -106,7 +106,7 @@
 							</tr>
 							<tr>
 								<td>
-									<span class="text-red-color text-left"></span>
+									<span class="text-red-color text-left">{{datalist.Cspam}}</span>
 								</td>
 								<td class="text-left">
 									<span class="regular-text">Spam</span>
@@ -160,7 +160,7 @@
 						<tbody>
 					{{'{{#each model}}'}}
 							<tr>
-								<td>{{'{{email}}'}}</td>
+								<td>{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</td>
 								<td>{{'{{name}}'}}</td>
 								<td>{{'{{lastName}}'}}</td>
 								<td>
@@ -210,7 +210,7 @@
 					<br>
 					<a href="/emarketing/contactlist#/lists"><button class="btn btn-inverse">Regresar</button></a>
 					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary" >Agregar</button>{{'{{/linkTo}}'}}
-					<button class="btn btn-primary" >Agregar Lotes</button>
+					{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
 				</div>
 			</div>
 		</script>
@@ -263,7 +263,8 @@
 			</div>
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/newbatch">
-		<div class="row-fluid">
+		<div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
+			<div class="row-fluid">
 				<div class="span2">
 					<div class="tooltip fade top in" display: block;">
 						<div class="tooltip-arrow">
