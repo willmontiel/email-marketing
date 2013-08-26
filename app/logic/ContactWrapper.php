@@ -18,12 +18,15 @@ class ContactWrapper
 	protected $pager;
 
     protected $_di;
-	
+	protected $counter;
+
+
 	const PAGE_DEFAULT = 5;
 
 	public function __construct()
 	{
 		$this->pager = new PaginationDecorator();
+		$this->counter = new ContactCounter();
 	}
 
 	public function setIdDbase($idDbase)
@@ -100,8 +103,9 @@ class ContactWrapper
 		} else {
 			$this->assignDataToCustomField($data);
 			
-			$counter = new ContactCounter();
-			$counter->updateContactCount($oldContact, $this->contact);
+			$this->counter->updateContact($oldContact, $this->contact);
+			
+			$this->counter->saveCounters();			
 		}			
 		
 		return $this->contact;
@@ -111,10 +115,8 @@ class ContactWrapper
 	{
 		$association = Coxcl::findFirst("idList = '$list->idList' AND idContact = '$contact->idContact'");
 		
-		$counter = new ContactCounter();
-		
 		if($association->delete()) {
-			$counter->deleteContactByListCount($contact, $list->idList);
+			$this->counter->deleteContactFromList($contact, $list);
 		}		
 		if (!Coxcl::findFirst("idContact = '$contact->idContact'")) {
 			$customfields = Fieldinstance::findByIdContact($contact->idContact);
@@ -123,16 +125,15 @@ class ContactWrapper
 				}
 
 			if($contact->delete()) {
-				$counter->deleteContactCount($contact);
+				$this->counter->deleteContactFromDbase($contact);
 			}
 		}
+		$this->counter->saveCounters();
 	}
 	
 	public function deleteContactFromDB($contact, $db)
 	{
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
-		
-		$counter = new ContactCounter();
 		
 		foreach ($allLists as $list)
 		{
@@ -140,7 +141,7 @@ class ContactWrapper
 			
 			if($association){
 				$association->delete();
-				$counter->deleteContactByListCount($contact, $list->idList);
+				$this->counter->deleteContactFromList($contact, $list);
 			}
 		}
 		
@@ -151,8 +152,10 @@ class ContactWrapper
 		}
 		
 		if($contact->delete()) {
-			$counter->deleteContactCount($contact);
+			$this->counter->deleteContactFromDbase($contact);			
 		}
+		
+		$this->counter->saveCounters();
 	}
 
 	public function searchContactinDbase($email)
@@ -167,6 +170,8 @@ class ContactWrapper
 				$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idList = $this->idList");
 				if (!$existList){
 					$this->associateContactToList($this->idList, $existContact->idContact);
+					$this->counter->saveCounters();
+					
 					return $existContact;
 				}
 			}
@@ -242,13 +247,13 @@ class ContactWrapper
 			}
 			throw new \Exception('Error al crear el contacto: >>' . $msg . '<<');
 		} else {
+			$this->counter->newContactToDbase($this->contact);
+			
 			$this->associateContactToList($this->idList, $this->contact->idContact);
+			
 			$this->assignDataToCustomField($data);
 			
-			$counter = new ContactCounter();
-			$counter->newContactCount($this->contact);
-			
-			$counter->saveCount();
+			$this->counter->saveCounters();
 		}
 	}
 	
@@ -318,10 +323,15 @@ class ContactWrapper
 		$associate->idList = $idList;
 		$associate->idContact = $idContact;
 					
-		$associate->save();
-		
-//		$counter = new ContactCounter();
-//		$counter->newContactByListCount($idContact, $idList);
+		if(!$associate->save())	{
+			throw new \Exception('Error al asociar el contacto a la lista');
+		} else {
+			
+			$list = Contactlist::findFirstByIdList($idList);
+			$contact = Contact::findFirstByIdContact($idContact);
+
+			$this->counter->newContactToList($contact, $list);
+		}
 	}
 
 	protected function createEmail($email)
