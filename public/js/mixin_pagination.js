@@ -19,12 +19,6 @@ Ember.MixinPagination = Ember.Mixin.create({
 		}
 		
 	}.observes('model.isLoaded', 'content.firstObject.isLoaded'),
-	availablePages: function(){
-//		var available = parseInt(this.get("totalrecords"));
-//		for (i=0; i=available; i++){
-//			
-//		}
-	}.property(),
 			
 	nextPage: function(){
 		var currentpage=parseInt(this.get("currentpage"));

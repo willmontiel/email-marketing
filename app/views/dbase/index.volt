@@ -77,10 +77,21 @@
 		<div class="span5">
 			<div class="pagination">
 				<ul>
-					<li class="previous"><a href="dbase/index"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
-					<li class="previous"><a href="dbase/index?page=<?=$page->before;?>"><span class="fui-arrow-left"></span></a></li>							
-					<li class="next"><a href="dbase/index?page=<?=$page->next;?>"><span class="fui-arrow-right"></span></a></li>
-					<li class="next"><a href="dbase/index?page=<?=$page->last;?>"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>
+					{% if page.current == 1 %}
+						<li class="previous"><a href="#" class="inactive"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
+						<li class="previous"><a href="#" class="inactive"><span class="fui-arrow-left"></span></a></li>
+					{% else %}
+						<li class="previous active"><a href="{{ url('dbase/index') }}"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
+						<li class="previous active"><a href="{{ url('dbase/index') }}?page={{ page.before }}"><span class="fui-arrow-left"></span></a></li>
+					{% endif %}
+								
+					{% if page.current >= page.total_pages %}
+						<li class="next"><a href="#" class="inactive"><span class="fui-arrow-right"></span></a></li>
+						<li class="next"><a href="#" class="inactive"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>
+					{% else %}
+						<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.next}}"><span class="fui-arrow-right"></span></a></li>
+						<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.last}}"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>		
+					{% endif %}
 				</ul>
 			 </div>
 		 </div>

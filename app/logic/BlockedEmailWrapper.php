@@ -27,7 +27,7 @@ class BlockedEmailWrapper
 				throw new InvalidArgumentException('El email enviado no existe');
 			}
 			else {
-				if ($id->blocked) {
+				if ($id->blocked > 0) {
 					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
 				}
 				else {
@@ -88,14 +88,30 @@ class BlockedEmailWrapper
 	
 	public function addEmailToBlockedList($contents, $idEmail)
 	{
-		$blockedEmail = new Blockedemail();
+		$blockedList = new Blockedemail();
 		
-		$blockedEmail->idEmail = $idEmail;
-		$blockedEmail->blockedReason = $contents->blocked_reason;
+		$blockedList->idEmail = $idEmail;
+		$blockedList->blockedReason = $contents->blocked_reason;
 		
-		if(!$blockedEmail->save()){
+		$this->db->begin();
+		if($blockedList->save()){
+			$blockedEmail  = new Email();
+			$blockedEmail->blocked = time();
+			
+			if(!$blockedEmail->save()) {
+				$this->db->rollback();
+				throw new InvalidArgumentException('No se guardaron los datos');
+			}
+			else {
+				$this->db->commit();
+			}
+			
+		}
+		
+		else {
+			
 			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
 		}
-		throw new InvalidArgumentException('Se ha bloqueado el email con exito');
+		
 	}
 }

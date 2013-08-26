@@ -171,3 +171,8 @@ ul.nav.nav-tabs li.active a {
 ul.nav.nav-tabs li a {
 	cursor: pointer;
 }
+
+a.inactive {
+   pointer-events: none;
+   cursor: default;
+}

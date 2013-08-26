@@ -36,7 +36,7 @@ class DbaseController extends ControllerBase
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
 				"data"  => $this->user->account->dbases,
-				"limit" => 5,
+				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page"  => $currentPage
 			)
 		);
