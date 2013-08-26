@@ -219,7 +219,8 @@ class ContactCounter
 		 * tomar un nuevo estado de NO SPAM pero seguir o adquirir un nuevo estado de DES-SUSCRITO
 		 * aumneta este ultimo.
 		 * 
-		 * Las prioridades son 
+		 * Las prioridades son: 
+		 * SPAM, BOUNCED, UNSUBSCRIBED, INACTIVE(Sin confirmar), ACTIVE
 		 *
 		 */
 
@@ -245,7 +246,7 @@ class ContactCounter
 					}
 				}
 			}
-		} elseif ($newcontact->bounced != $oldcontact->bounced) {
+		} elseif ($newcontact->bounced != $oldcontact->bounced && $newcontact->spam == 0) {
 			
 			$oper["Cbounced"] = ($newcontact->bounced != 0)?1:-1;
 			if($oper["Cbounced"] == 1) {
@@ -262,7 +263,7 @@ class ContactCounter
 				}
 			}
 			
-		} elseif ($newcontact->unsubscribed != $oldcontact->unsubscribed) {
+		} elseif ($newcontact->unsubscribed != $oldcontact->unsubscribed && $newcontact->bounced == 0 && $newcontact->spam == 0) {
 			
 			$oper["Cunsubscribed"] = ($newcontact->unsubscribed != 0)?1:-1;
 			if($oper["Cunsubscribed"] == 1) {
