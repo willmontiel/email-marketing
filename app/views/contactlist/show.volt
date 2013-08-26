@@ -70,6 +70,18 @@
 				</div>
 				<div class="span1"></div>
 				<div class="span3">
+					<div class="badge-number-dark">
+						<table class="offset4">
+							<tr>
+								<td>
+									<span class="text-green-color">{{datalist.Ctotal}}</span>
+								</td>
+								<td>
+									<span class="regular-text">Total Contactos</span>
+								</td>
+							</tr>
+						</table>
+					</div>
 					<div class="badge-number-light">
 						<table class="offset4">
 							<tr>
