@@ -1,0 +1,4 @@
+*.volt.php
+/app/views/dbase/edit.volt.php
+/app/views/dbase/index.volt.php
+/app/views/dbase/show.volt.php

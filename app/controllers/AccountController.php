@@ -8,15 +8,15 @@ class AccountController extends ControllerBase
 			return $r;
 		
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
-		//$this->request->getPost('page', 'int'); // POST
+
 		
 		$builder = $this->modelsManager->createBuilder()
 			->from('Account')
-			->orderBy('createdon');
+			->orderBy('idAccount');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
 			"builder" => $builder,
-			"limit"=> 5,
+			"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 			"page" => $currentPage
 		));
 		
