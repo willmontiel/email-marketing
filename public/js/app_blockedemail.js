@@ -55,7 +55,9 @@ App.BlockedBlockController = Ember.ObjectController.extend({
 		}
 		else {
 			if(filter.test(this.get('email'))) {
-				
+				this.get('model.transaction').commit();
+				App.set('errormessage', '');
+				this.get("target").transitionTo("blocked");
 			}
 			else {
 				App.set('errormessage', 'El email que ingresaste es invalido, por favor verifica la información');
@@ -68,5 +70,17 @@ App.BlockedBlockController = Ember.ObjectController.extend({
 		this.get("transaction").rollback();
 		App.set('errormessage', '');
 		this.get("target").transitionTo("blocked");
+	}
+});
+
+App.BlockedUnblockController = Ember.ObjectController.extend({	
+	unblock: function() {
+		this.get('content').deleteRecord();
+		this.get('model.transaction').commit();
+		this.get("target").transitionTo("blocked");
+    },
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("blocked");
 	}
 });

@@ -37,10 +37,10 @@
 					{{ '{{#each model}}' }}
 						<tr>
 							<td>{{ '{{email}}' }}</td>
-							<td>{{ '{{blockedDate}}' }}</td>
+							<td>{{'{{blockedDate}}' }}</td>
 							<td>{{ '{{blockedReason}}'}}</td>
 							<td>
-								<label><a href="contactlist/show/#/contacts">Desbloquear</a></label>
+								{{'{{#linkTo "blocked.unblock" this}}'}} Desbloquear {{'{{/linkTo}}'}}
 							</td>
 						</tr>
 					{{ '{{/each }}' }}
@@ -105,6 +105,37 @@
 				<button class="btn btn-danger" {{ '{{action block this }}' }}>Bloquear</button>
 				<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>
 			</form>
+		</div>
+	</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="blocked/unblock">
+	<div class="row-fluid">
+		<div class="span8">
+			<h2>Desbloquear Contactos</h2>
+		</div>
+		<div class="text-right span4">
+			{{ '{{#linkTo "blocked.index" }}' }}<button class="btn btn-inverse">Regresar</button>{{ '{{/linkTo}}' }}
+		</div>
+	</div>
+	<br>
+	<div class="row-fluid">
+		<div class="span8">
+			<p>
+				Usted va a desbloquear la dirección de correo electrónico <strong>{{'{{this.email}}'}}</strong>
+			</p>
+			<p>
+				Recuerde que al desbloquearla si hay información de contacto, se marcará como des-suscrito y por ende 
+				será un contacto in-activo en 
+				sus listas y bases de datos, 
+				Además si usted marcó la opción <strong>borrar todos los contactos relacionados con esta dirección de correo
+				electrónico</strong> al momento de bloquearla, deberá crear el contacto de nuevo
+			</p>
+			<p>
+				Click en <strong>desbloquear</strong> si desea continuar
+			</p>
+			 <button {{'{{action unblock this}}'}} class="btn btn-primary">Desbloquear</button>
+			 <button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar </button>
 		</div>
 	</div>
 </script>

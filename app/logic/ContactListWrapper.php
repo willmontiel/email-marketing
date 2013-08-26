@@ -157,6 +157,21 @@ class ContactListWrapper
 		}
 		
 	}
+	
+	public function deleteContactList($idList)
+	{
+		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$query = $modelsManager->createQuery("SELECT idContact, COUNT(*) FROM Coxcl AS C JOIN (SELECT idContact FROM Coxcl WHERE idList = :idList:) AS C2 USING idContact GROUP BY 1 HAVING COUNT(*) = 1");
+		
+		$association = $query->execute(array(
+			'idList' => $idList
+		));
+		
+//		$association->delete();
+		
+//		$list->delete();
+	}
 
 	
 }

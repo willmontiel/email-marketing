@@ -14,14 +14,37 @@ class BlockedEmailWrapper
 		$this->pager = $p;
 	}
 	
-	
+	public function validateBlockedEmailData($contents)
+	{
+		if (!isset($contents->email)) {
+			
+			throw new InvalidArgumentException('No has enviado un email');
+		}
+		else {
+			$id = Email::findFirst(array('conditions' => "email = ?0", 'bindings' => array($contents->email) ));
+			
+			if(!$id) {
+				throw new InvalidArgumentException('El email enviado no existe');
+			}
+			else {
+				if ($id->blocked) {
+					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
+				}
+				else {
+					$this->addEmailToBlockedList($contents, $id);
+				}
+			}
+			
+		}
+	}
+
 	public function convertBlockedEmailList($Blockedemail)
 	{
 		$object = array();
 		$object['idBlockedemail'] = $Blockedemail->idBlockedemail;
 		$object['idEmail'] = $Blockedemail->idEmail;
-		$object['blockedReason'] = $Blockedemail->blockedReason;
-		$object['BlockedDate'] = $Blockedemail->blockedDate;
+		$object['blocked_reason'] = $Blockedemail->blockedReason;
+		$object['blocked_date'] = $Blockedemail->blockedDate;
 		$object['email'] = $Blockedemail->email;
 		return $object;
 	}
@@ -61,5 +84,18 @@ class BlockedEmailWrapper
 		return array('blockeds' => $blocked, 
 					 'meta' => $this->pager->getPaginationObject()
 				) ;
+	}
+	
+	public function addEmailToBlockedList($contents, $idEmail)
+	{
+		$blockedEmail = new Blockedemail();
+		
+		$blockedEmail->idEmail = $idEmail;
+		$blockedEmail->blockedReason = $contents->blocked_reason;
+		
+		if(!$blockedEmail->save()){
+			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
+		}
+		throw new InvalidArgumentException('Se ha bloqueado el email con exito');
 	}
 }

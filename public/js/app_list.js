@@ -9,10 +9,12 @@ App.Router.map(function() {
   this.resource('lists', function(){
 	  this.route('new'),
 	  this.resource('lists.edit', { path: '/edit/:list_id' });
+	  this.resource('lists.delete', { path: '/delete/:list_id' });
   }),
   
   this.resource('blocked', function(){
 	  this.route('block');
+	  this.resource('blocked.unblock', { path: '/unblock/:blocked_id' });
   });
 });
 
@@ -196,56 +198,15 @@ App.ListsEditController = Ember.ObjectController.extend({
 	}
 });
 
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
-App.Blocked = DS.Model.extend({
-	email: DS.attr('string'),
-    blockedReason: DS.attr('string'),
-	blockedDate: DS.attr('string')
-});
-
-//App.Blocked.FIXTURES = [
-//	{id: 1, email: 'lala@lala.com', blockedReason: 'HABEAS DATA', blockedDate: '12 de agosto de 2013'},
-//	{id: 2, email: 'lolo@lolo.com', blockedReason: 'Queja del cliente',  blockedDate: '16 de marzo de 2013'},
-//	{id: 3, email: 'lele@lele.com', blockedReason: 'HABEAS DATA',  blockedDate: '19 de febrero de 2013'}
-//];
-
-//Rutas
-App.BlockedIndexRoute = Ember.Route.extend({
-	model: function(){
-		return App.Blocked.find();
-	}
-});
-
-App.BlockedBlockRoute = Ember.Route.extend({
-	model: function(){
-		return App.Blocked.createRecord();
-	},
-	deactivate: function () {
-		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.get('transaction').rollback();
-		}
-	}
-});
-
-//Controladores
-App.BlockedController = Ember.ObjectController.extend();
-
-App.BlockedIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	getModelMetadata: function() {
-		return App.store.typeMapFor(App.Blocked);
-	},
-	
-	refreshModel: function (obj) {
-		var result = App.Blocked.find(obj);
-		this.set('content', result);
-	}
-});
-
-App.BlockedBlockController = Ember.ObjectController.extend({
+App.ListsDeleteController = Ember.ObjectController.extend({
+	delete: function() {
+		this.get('content').deleteRecord();
+		this.get('model.transaction').commit();
+		this.get("target").transitionTo("lists");
+    },
 	cancel: function(){
-		this.get("transaction").rollback();
-		App.set('errormessage', '');
-		this.get("target").transitionTo("blocked");
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("lists");
 	}
+	
 });

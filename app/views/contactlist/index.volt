@@ -74,6 +74,7 @@
 								<td>
 									<label><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">Ver</a></label>
 									<label>{{ '{{#linkTo "lists.edit" this}}' }}Editar{{ '{{/linkTo}}' }}</label>
+									<label>{{ '{{#linkTo "lists.delete" this}}' }}Eliminar{{ '{{/linkTo}}' }}</label>
 								</td>
 							</tr>
 					{{ '{{/each}}' }}
@@ -160,6 +161,34 @@
 						<button class="btn btn-inverse" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Editar</button>
 						<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 					</p>
+				</div>
+			</div>
+		</script>
+		<script type="text/x-handlebars" data-template-name="lists/delete">
+			<div class="row-fluid">
+				<div class="span8">
+					<h3>Eliminar una lista de contactos</h3>
+				</div>
+				<div class="span4 text-right">
+					{{ '{{#linkTo lists.index}}' }}<button class="btn btn-inverse">Regresar</button>{{ '{{/linkTo}}' }}
+				</div>
+			</div>
+			<br>
+			<div class="row-fluid">
+				<div class="span10">
+					<p>
+						Aqui podrás eliminar tus listas de contactos, recuerda que al eliminar una lista de contactos
+						<strong>no perderás tus contactos</strong>, simplemente seran desacioados de dicha lista, pero en caso
+						de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado
+						por completo.</strong>
+					</p>
+					<p>
+						Si estás <strong>completamente seguro</strong> y deseas continuar da click en el botón eliminar para
+						proceder
+					</p>
+					<br>
+					<button class="btn btn-danger" {{ '{{action delete this}}' }}>Eliminar</button>
+					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 				</div>
 			</div>
 		</script>

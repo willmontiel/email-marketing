@@ -61,7 +61,7 @@
 								<ul class="nav">
 									<li>
 										<a href="#fakelink">
-											<span class="fui-user"></span> {{ userObject.firstName }} {{ userObject.lastName }} ({{ userObject.username }})
+											<span class="fui-user"></span> {{ userObject.idAccount }} {{ userObject.firstName }} {{ userObject.lastName }} ({{ userObject.username }})
 										</a>
 										<ul>
 											<li><a href="#fakelink"><span class="fui-eye"></span> Ver perfil</a></li>

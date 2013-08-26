@@ -484,6 +484,7 @@ class ApiController extends ControllerBase
 	
 	}
 	
+	/* Inicio de listas de contactos*/
 	/**
 	 * 
 	 * @Get("/lists")
@@ -516,7 +517,7 @@ class ApiController extends ControllerBase
 	 * 
 	 * @Post("/lists")
 	 */
-	public function listsnewAction()
+	public function contactlistsnewAction()
 	{
 		$log = $this->logger;
 
@@ -591,7 +592,21 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse($contacts);	
 	
 	}
-        
+	
+	/**
+	 * 
+	 * @Route("/lists/{idList:[0-9]+}", methods="DELETE")
+	 */
+    public function deletecontactlistAction($idList)
+	{
+		$wrapper = new ContactListWrapper();
+		
+		$wrapper->deleteContactList($idList);
+		
+		return $this->setJsonResponse(null);	
+	}
+	/*Fin listas de contactos*/
+	
 	/**
 	 * 
 	 * @Get("/contactlist/{idList:[0-9]+}/contacts/{idContact:[0-9]+}")
@@ -775,6 +790,38 @@ class ApiController extends ControllerBase
 		$blockeds = $blockedWrapper->findBlockedEmailList($this->user->account);
 		
 		return $this->setJsonResponse($blockeds);
+	}
+	
+	/**
+	 * 
+	 * @Post("/blockeds")
+	 */
+	public function addemailtoblockedlistAction()
+	{
+		$log = $this->logger;
+
+		$contentsraw = $this->request->getRawBody();
+		$log->log('Got this: [' . $contentsraw . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		$contents = $contentsT->blocked;
+		
+		$blockedWrapper = new BlockedEmailWrapper();
+		
+		$blockedEmail = $blockedWrapper->validateBlockedEmailData($contents);
+		
+		return $this->setJsonResponse($blockedEmail);
+		
+	}
+	
+	/**
+	 * 
+	 * @Route("/blockeds/{idBlockedemail:[0-9]+}", methods="DELETE")
+	 */
+	public function removeemailfromblockedlistAction()
+	{
+		
 	}
 }
 
