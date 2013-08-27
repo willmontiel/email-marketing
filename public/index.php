@@ -92,8 +92,8 @@ try {
 		
         $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
             "host" => "localhost",
-            "username" => "root",
-            "password" => "",
+            "username" => "emarketing_user",
+            "password" => "emarketing4dm1n",
             "dbname" => "emarketing_db"
         ));
 		
