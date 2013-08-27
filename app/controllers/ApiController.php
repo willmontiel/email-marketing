@@ -811,7 +811,7 @@ class ApiController extends ControllerBase
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
-		$contents = $contentsT->blocked;
+		$contents = $contentsT->blockedemail;
 		
 		$blockedWrapper = new BlockedEmailWrapper();
 		
@@ -831,9 +831,9 @@ class ApiController extends ControllerBase
 	{
 		$wrapper = new BlockedEmailWrapper();
 		$Dbases = $this->user->account->dbases;
-		$emailExsit = $wrapper->validateEmailBelongsToAccount(idBlockedemail, $Dbases);
+		$emailExist = $wrapper->validateEmailBelongsToAccount($idBlockedemail, $Dbases);
 		
-		if($emailExsit == false) {
+		if($emailExist == false) {
 			$status = "No se encontró la dirección de correo electrónico";
 		}
 		else {

@@ -81,7 +81,7 @@ class BlockedEmailWrapper
 		
 		$this->pager->setRowsInCurrentPage(count($blocked));
 		$this->pager->setTotalRecords($total);
-		return array('blockeds' => $blocked, 
+		return array('blockedemails' => $blocked, 
 					 'meta' => $this->pager->getPaginationObject()
 				) ;
 	}
@@ -105,7 +105,7 @@ class BlockedEmailWrapper
 	}
 	
 	//esta funcion remueve un email de la lista de bloqueo
-	public function removeEmailFromBlockedList(Blockedemail $idBlockedemail)
+	public function removeEmailFromBlockedList($idBlockedemail)
 	{
 		$removeEmail = Blockedemail::findFirst(array(
 				"conditions" => "idBlockedemail = ?1",
