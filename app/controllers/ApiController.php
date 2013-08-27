@@ -815,11 +815,9 @@ class ApiController extends ControllerBase
 		
 		$blockedWrapper = new BlockedEmailWrapper();
 		
-		$blockedEmail = $blockedWrapper->validateBlockedEmailData($contents);
-		
-		$blockedJson = $blockedWrapper->convertBlockedEmailList($blockedEmail);
+		$blockedWrapper->validateBlockedEmailData($contents);
 				
-		return $this->setJsonResponse($blockedJson);
+		return $this->setJsonResponse(null);
 		
 	}
 	

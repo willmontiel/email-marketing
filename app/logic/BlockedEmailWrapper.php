@@ -14,22 +14,24 @@ class BlockedEmailWrapper
 		$this->pager = $p;
 	}
 	
-	public function validateEmailBelongsToAccount($idEmail, $Dbases)
+	public function validateEmailBelongsToAccount($idBlockemail, $Dbases)
 	{
+		
+		
 		return true;
 	}
 
 	public function validateBlockedEmailData($contents)
 	{
 		if (!isset($contents->email)) {
-			throw new InvalidArgumentException('No has enviado un email');
+//			throw new InvalidArgumentException('No has enviado un email');
 		}
 		else {
 			$email = Email::findFirstByEmail($contents->email);
 			if(!$email) {
-				throw new InvalidArgumentException('El email enviado no existe');
+//				throw new InvalidArgumentException('El email enviado no existe');
 			} elseif($email->blocked != 0) {
-					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
+//					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
 			}
 			return $this->addEmailToBlockedList($contents, $email);
 		}
@@ -100,7 +102,7 @@ class BlockedEmailWrapper
 			$blocked->email = $email->email;
 			return $blocked;
 		} else {
-			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
+//			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
 		}	
 	}
 	
@@ -131,7 +133,6 @@ class BlockedEmailWrapper
 			}
 			
 			$removeEmail->delete();
-			return array("Se ha desbloqueado el email" => $msj);
 		}
 	}
 }
