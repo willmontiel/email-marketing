@@ -51,7 +51,7 @@ class ContactListWrapper
 			));
 		}
 		if(!$listExist) {
-			return false;
+			return true;
 		}
 		else {
 			return true;
@@ -189,17 +189,25 @@ class ContactListWrapper
 			HAVING COUNT(*) = 1";
 
 		$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idList' => $idList));
-
-		$deleteList = $db->delete(
-				'Contactlist',
-				'idList = '.$idList  
-		);
-		foreach ($results as $result) {	
-			$contact = $db->delete(
-				'Contact',
-				'idContact = '.$result["idContact"]
+		
+		$this->db->begin();
+			$deleteList = $db->delete(
+					'Contactlist',
+					'idList = '.$idList  
 			);
-		}
+			if(!$deleteList) {
+		$this->db->rollback();
+			}
+			else {
+				foreach ($results as $result) {	
+					$contact = $db->delete(
+						'Contact',
+						'idContact = '.$result["idContact"]
+					);
+		$this->db->commit();
+				}
+			}
+			
 	
 	}
 
