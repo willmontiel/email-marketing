@@ -87,6 +87,11 @@ class ContactListWrapper
 		$list->idDbase = $contents->dbase_id;
 		$list->name = $contents->name;
 		$list->description = $contents->description;
+		$list->Ctotal = 0;
+		$list->Cactive = 0;
+		$list->Cunsubscribed = 0;
+		$list->Cbounced = 0;
+		$list->Cspam = 0;
 		$list->createdon = $contents->createdon;
 		$list->updatedon = $contents->updatedon;
 	
