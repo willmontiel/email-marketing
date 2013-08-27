@@ -184,7 +184,13 @@ class ContactWrapper
 		// Verificar existencia del correo en la cuenta actual
 		$email = $this->findEmailNotRepeated($data->email);
 		if ($email) {
-			$this->addContact($data, $email);
+			$blocked = $this->findEmailBlocked($email);
+			if(!$blocked) {
+				$this->addContact($data, $email);
+			} 
+			else {
+				return "Email " . $email->email . " se encuentra Bloqueado por razones de " . $blocked->blockedReason;
+			}
 		}
 		else {
 			$this->addContact($data);
@@ -224,6 +230,15 @@ class ContactWrapper
 		return $email;
 	}
 	
+	protected function findEmailBlocked($email)
+	{
+		$blocked = Blockedemail::findFirstByIdEmail($email->idEmail);
+		
+		if(!$blocked) return false;
+		
+		return $blocked;		
+	}
+
 	protected function addContact($data, Email $email = null)
 	{
 		if ($email == null) {
