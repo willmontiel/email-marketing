@@ -825,10 +825,22 @@ class ApiController extends ControllerBase
 	 * 
 	 * @Route("/blockeds/{idBlockedemail:[0-9]+}", methods="DELETE")
 	 */
-	public function removeemailfromblockedlistAction()
+	public function removeemailfromblockedlistAction($idEmail)
 	{
+		$wrapper = new BlockedEmailWrapper();
+		$Dbases = $this->user->account->dbases;
+		$emailExsit = $wrapper->validateEmailBelongsToAccount($idEmail, $Dbases);
 		
+		if($emailExsit == false) {
+			$status = "No se encontró la dirección de correo electrónico";
+		}
+		else {
+			$status = $wrapper->removeEmailFromBlockedList($idEmail);	
+		}
+		return $this->setJsonResponse($status);
 	}
+	
+	/*Finaliza todo lo que tiene que ver con listas de bloqueo globales*/
 }
 
 	

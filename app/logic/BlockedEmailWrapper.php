@@ -14,6 +14,11 @@ class BlockedEmailWrapper
 		$this->pager = $p;
 	}
 	
+	public function validateEmailBelongsToAccount($idEmail, $Dbases)
+	{
+		return true;
+	}
+
 	public function validateBlockedEmailData($contents)
 	{
 		if (!isset($contents->email)) {
@@ -40,6 +45,9 @@ class BlockedEmailWrapper
 		$object['email'] = $Blockedemail->email;
 		return $object;
 	}
+	
+	//Funcion que busca todos los datos de los emails y las listas de bloqueo que coincidan con la cuenta
+	//y se lss envía a ember paginados en un arreglo para que pueda mostrarlos al usuario en el UI
 	public function findBlockedEmailList(Account $account)
 	{
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -96,5 +104,11 @@ class BlockedEmailWrapper
 			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
 		}
 		
+	}
+	
+	//esta funcion remueve un email de la lista de bloqueo
+	public function removeEmailFromBlockedList($idEmail)
+	{
+//		$emailExit
 	}
 }
