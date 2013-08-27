@@ -17,28 +17,17 @@ class BlockedEmailWrapper
 	public function validateBlockedEmailData($contents)
 	{
 		if (!isset($contents->email)) {
-			
 			throw new InvalidArgumentException('No has enviado un email');
 		}
 		else {
-			$id = Email::findFirst(array('conditions' => "email = ?0", 'bindings' => array($contents->email) ));
-			
-			if(!$id) {
+			$email = Email::findFirstByEmail($contents->email);
+			if(!$email) {
 				throw new InvalidArgumentException('El email enviado no existe');
-			}
-			else {
-				if ($id->blocked > 0) {
+			} elseif($email->blocked != 0) {
 					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
-				}
-				else {
-					$idEmail = $id->idEmail;
-					$this->addEmailToBlockedList($contents, $idEmail);
-				}
 			}
-			
+			$this->addEmailToBlockedList($contents, $email);
 		}
-
-		$this->addEmailToBlockedList($contents, $idEmail);
 	}
 
 	public function convertBlockedEmailList($Blockedemail)
@@ -89,16 +78,17 @@ class BlockedEmailWrapper
 				) ;
 	}
 	
-	public function addEmailToBlockedList($contents, $idEmail)
+	public function addEmailToBlockedList($contents, Email $email)
 	{
-		$blockedList = new Blockedemail();
+		$blocked = new Blockedemail();
 		
-		$blockedList->idEmail = $idEmail;
-		$blockedList->blockedReason = $contents->blocked_reason;
+		$blocked->idEmail = $email->idEmail;
+		$blocked->blockedReason = $contents->blocked_reason;
+		$blocked->blockedDate = time();
 		
-		if($blockedList->save()){
-			$blockedEmail  = new Email();
-			$blockedEmail->blocked = time();
+		if($blocked->save()){
+			$email->blocked = time();
+			$email->save();
 		}
 		
 		else {
