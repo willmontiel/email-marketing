@@ -164,7 +164,7 @@ class ContactWrapper
 		
 		$existEmail = Email::findFirst("email = '$email' AND idAccount = '$idAccount'");
 			
-		if ($existEmail) {
+		if ($existEmail && !$this->findEmailBlocked($existEmail)) {
 			$existContact = Contact::findFirstByIdEmail($existEmail->idEmail);
 			if($existContact){
 				$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idList = $this->idList");
@@ -183,14 +183,8 @@ class ContactWrapper
 	{
 		// Verificar existencia del correo en la cuenta actual
 		$email = $this->findEmailNotRepeated($data->email);
-		if ($email) {
-			$blocked = $this->findEmailBlocked($email);
-			if(!$blocked) {
+		if ($email && !$this->findEmailBlocked($email)) {
 				$this->addContact($data, $email);
-			} 
-			else {
-				return "Email " . $email->email . " se encuentra Bloqueado por razones de " . $blocked->blockedReason;
-			}
 		}
 		else {
 			$this->addContact($data);
@@ -234,9 +228,11 @@ class ContactWrapper
 	{
 		$blocked = Blockedemail::findFirstByIdEmail($email->idEmail);
 		
-		if(!$blocked) return false;
-		
-		return $blocked;		
+		if($blocked) {
+			throw new \InvalidArgumentException('El correo electronico [' . $email->email .  '] se encuentra Bloqueado por razones de [' . $blocked->blockedReason . ']');
+		} else {
+			return false;
+		}
 	}
 
 	protected function addContact($data, Email $email = null)
