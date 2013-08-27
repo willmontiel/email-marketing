@@ -1,4 +1,4 @@
-App.Blocked = DS.Model.extend({
+App.Blockedemail = DS.Model.extend({
 	email: DS.attr('string'),
     blockedReason: DS.attr('string'),
 	blockedDate: DS.attr('number')
@@ -11,15 +11,15 @@ App.Blocked = DS.Model.extend({
 //];
 
 //Rutas
-App.BlockedIndexRoute = Ember.Route.extend({
+App.BlockedemailsIndexRoute = Ember.Route.extend({
 	model: function(){
-		return App.Blocked.find();
+		return App.Blockedemail.find();
 	}
 });
 
-App.BlockedBlockRoute = Ember.Route.extend({
+App.BlockedemailsBlockRoute = Ember.Route.extend({
 	model: function(){
-		return App.Blocked.createRecord();
+		return App.Blockedemail.createRecord();
 	},
 	deactivate: function () {
 		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
@@ -30,39 +30,39 @@ App.BlockedBlockRoute = Ember.Route.extend({
 });
 
 //Controladores
-App.BlockedController = Ember.ObjectController.extend();
+App.BlockedemailController = Ember.ObjectController.extend();
 
-App.BlockedIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
+App.BlockedemailsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
 	getModelMetadata: function() {
-		return App.store.typeMapFor(App.Blocked);
+		return App.store.typeMapFor(App.Blockedemail);
 	},
 	
 	refreshModel: function (obj) {
-		var result = App.Blocked.find(obj);
+		var result = App.Blockedemail.find(obj);
 		this.set('content', result);
 	}
 });
 
-App.BlockedBlockController = Ember.ObjectController.extend({
+App.BlockedemailsBlockController = Ember.ObjectController.extend({
 	block: function (){
 		var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
 		if(this.get('email') == null) {
 			App.set('errormessage', 'El campo email esta vacío, por favor verifica la información');
-			this.get("target").transitionTo("blocked.block");
+			this.get("target").transitionTo("blockedemails.block");
 		}
 		else if (this.get('blockedReason') == null) {
 			App.set('errormessage', 'Debes enviar al menos una razón de porqué estas bloqueando este email, por favor verifica la información');
-			this.get("target").transitionTo("blocked.block");
+			this.get("target").transitionTo("blockedemails.block");
 		}
 		else {
 			if(filter.test(this.get('email'))) {
 				this.get('model.transaction').commit();
 				App.set('errormessage', '');
-				this.get("target").transitionTo("blocked");
+				this.get("target").transitionTo("blockedemails");
 			}
 			else {
 				App.set('errormessage', 'El email que ingresaste es invalido, por favor verifica la información');
-				this.get("target").transitionTo("blocked.block");
+				this.get("target").transitionTo("blockedemails.block");
 			}
 		}
 	},
@@ -70,18 +70,18 @@ App.BlockedBlockController = Ember.ObjectController.extend({
 	cancel: function(){
 		this.get("transaction").rollback();
 		App.set('errormessage', '');
-		this.get("target").transitionTo("blocked");
+		this.get("target").transitionTo("blockedemails");
 	}
 });
 
-App.BlockedUnblockController = Ember.ObjectController.extend({	
+App.BlockedemailsUnblockController = Ember.ObjectController.extend({	
 	unblock: function() {
 		this.get('content').deleteRecord();
 		this.get('model.transaction').commit();
-		this.get("target").transitionTo("blocked");
+		this.get("target").transitionTo("blockedemails");
     },
 	cancel: function(){
 		 this.get("transaction").rollback();
-		 this.get("target").transitionTo("blocked");
+		 this.get("target").transitionTo("blockedemails");
 	}
 });

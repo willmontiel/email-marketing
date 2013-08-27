@@ -774,7 +774,7 @@ class ApiController extends ControllerBase
 
 	/**
 	 * 
-	 * @Get("/blockeds")
+	 * @Get("/blockedemails")
 	 */
 
 	public function listblockedemailsAction()
@@ -800,7 +800,7 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @Post("/blockeds")
+	 * @Post("/blockedemails")
 	 */
 	public function addemailtoblockedlistAction()
 	{
@@ -825,19 +825,19 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @Route("/blockeds/{idBlockedemail:[0-9]+}", methods="DELETE")
+	 * @Route("/blockedemails/{idBlockedemail:[0-9]+}", methods="DELETE")
 	 */
-	public function removeemailfromblockedlistAction($idEmail)
+	public function removeemailfromblockedlistAction($idBlockedemail)
 	{
 		$wrapper = new BlockedEmailWrapper();
 		$Dbases = $this->user->account->dbases;
-		$emailExsit = $wrapper->validateEmailBelongsToAccount($idEmail, $Dbases);
+		$emailExsit = $wrapper->validateEmailBelongsToAccount(idBlockedemail, $Dbases);
 		
 		if($emailExsit == false) {
 			$status = "No se encontró la dirección de correo electrónico";
 		}
 		else {
-			$status = $wrapper->removeEmailFromBlockedList($idEmail);	
+			$status = $wrapper->removeEmailFromBlockedList($idBlockedemail);	
 		}
 		return $this->setJsonResponse($status);
 	}

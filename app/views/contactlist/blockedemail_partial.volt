@@ -1,4 +1,4 @@
-<script type="text/x-handlebars" data-template-name="blocked/index">
+<script type="text/x-handlebars" data-template-name="blockedemails/index">
 	<div class="row-fluid">
 		<div class="span12"></div>
 	</div>
@@ -10,7 +10,7 @@
 			</p>
 		</div>
 		<div class="span2 text-right">
-			{{ '{{#linkTo "blocked.block" }}' }}<button class="btn btn-danger">Bloquear</button>{{ '{{/linkTo}}' }}
+			{{ '{{#linkTo "blockedemails.block" }}' }}<button class="btn btn-danger">Bloquear</button>{{ '{{/linkTo}}' }}
 		</div>
 	</div>
 	<br>
@@ -40,7 +40,7 @@
 							<td>{{'{{blockedDate}}' }}</td>
 							<td>{{ '{{blockedReason}}'}}</td>
 							<td>
-								{{'{{#linkTo "blocked.unblock" this}}'}} Desbloquear {{'{{/linkTo}}'}}
+								{{'{{#linkTo "blockedemails.unblock" this}}'}} Desbloquear {{'{{/linkTo}}'}}
 							</td>
 						</tr>
 					{{ '{{/each }}' }}
@@ -52,11 +52,11 @@
 		{{ partial("partials/pagination_partial") }}
 		<div class="span4 text-right">
 			<br>
-			{{ '{{#linkTo "blocked.block" }}' }}<button class="btn btn-danger">Bloquear</button>{{ '{{/linkTo}}' }}
+			{{ '{{#linkTo "blockedemails.block" }}' }}<button class="btn btn-danger">Bloquear</button>{{ '{{/linkTo}}' }}
 		</div>
 	</div>
 </script>
-<script type="text/x-handlebars" data-template-name="blocked">
+<script type="text/x-handlebars" data-template-name="blockedemails">
 	{{ '{{#if App.errormessage }}' }}
 		<div class="alert alert-message alert-error">
 	{{ '{{ App.errormessage }}' }}
@@ -65,7 +65,7 @@
 
 	{{'{{outlet}}'}}
 </script>
-<script type="text/x-handlebars" data-template-name="blocked/block">
+<script type="text/x-handlebars" data-template-name="blockedemails/block">
 	<div class="row-fluid">
 		<div class="span12">
 			<h2>Bloquear Contactos</h2>
@@ -86,7 +86,7 @@
 			</p>
 		</div>
 		<div class="span2 text-right">
-			{{ '{{#linkTo "blocked.index" }}' }}<button class="btn btn-inverse">Regresar</button>{{ '{{/linkTo}}' }}
+			{{ '{{#linkTo "blockedemails.index" }}' }}<button class="btn btn-inverse">Regresar</button>{{ '{{/linkTo}}' }}
 		</div>
 	</div>
 	<br>
@@ -109,13 +109,13 @@
 	</div>
 </script>
 
-<script type="text/x-handlebars" data-template-name="blocked/unblock">
+<script type="text/x-handlebars" data-template-name="blockedemails/unblock">
 	<div class="row-fluid">
 		<div class="span8">
 			<h2>Desbloquear Contactos</h2>
 		</div>
 		<div class="text-right span4">
-			{{ '{{#linkTo "blocked.index" }}' }}<button class="btn btn-inverse">Regresar</button>{{ '{{/linkTo}}' }}
+			{{ '{{#linkTo "blockedemails.index" }}' }}<button class="btn btn-inverse">Regresar</button>{{ '{{/linkTo}}' }}
 		</div>
 	</div>
 	<br>

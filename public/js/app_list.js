@@ -12,9 +12,9 @@ App.Router.map(function() {
 	  this.resource('lists.delete', { path: '/delete/:list_id' });
   }),
   
-  this.resource('blocked', function(){
+  this.resource('blockedemails', function(){
 	  this.route('block');
-	  this.resource('blocked.unblock', { path: '/unblock/:blocked_id' });
+	  this.resource('blockedemails.unblock', { path: '/unblock/:blockedemail_id' });
   });
 });
 

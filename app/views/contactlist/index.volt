@@ -22,7 +22,7 @@
 				<ul class="nav nav-tabs">
 					{{'{{#linkTo "lists" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
 					<li><a href="#" >Segmentos</a></li>
-					{{'{{#linkTo "blocked" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}                                                                                                                    
+					{{'{{#linkTo "blockedemails" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}                                                                                                                    
 				</ul>
 			</div>
         </div>

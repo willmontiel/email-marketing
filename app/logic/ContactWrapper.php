@@ -345,7 +345,7 @@ class ContactWrapper
 		}
 	}
 
-	protected function createEmail($email)
+	public function createEmail($email)
 	{
 		if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			throw new InvalidArgumentException('La direccion [' . $email . '] no es una direccion de correo valida!');
@@ -384,6 +384,7 @@ class ContactWrapper
 		$emailo->bounced = 0;
 		$emailo->unsubscribed = 0;
 		$emailo->spam = 0;
+		$emailo->blocked = 0;
 
 		if (!$emailo->save()) {
 			$errmsg = $emailo->getMessages();

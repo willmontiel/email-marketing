@@ -105,8 +105,33 @@ class BlockedEmailWrapper
 	}
 	
 	//esta funcion remueve un email de la lista de bloqueo
-	public function removeEmailFromBlockedList($idEmail)
+	public function removeEmailFromBlockedList(Blockedemail $idBlockedemail)
 	{
-//		$emailExit
+		$removeEmail = Blockedemail::findFirst(array(
+				"conditions" => "idBlockedemail = ?1",
+				"bind"       =>array(1 => $idBlockedemail)
+			)
+		);
+		
+		if(!$removeEmail) {
+			throw new InvalidArgumentException('El email no se encuentra en la lista global de bloqueo');
+		}
+		
+		else {
+			$emailUnblock = Email::findFirst(array(
+					"conditions" => "idEmail = ?1",
+					"bind"		 => array(1 => $removeEmail->idEmail)
+				)
+			);
+			
+			$emailUnblock->blocked = 0;
+			
+			if(!$emailUnblock->save()) {
+				throw new InvalidArgumentException('El email no existe');
+			}
+			
+			$removeEmail->delete();
+			return array("Se ha desbloqueado el email" => $msj);
+		}
 	}
 }
