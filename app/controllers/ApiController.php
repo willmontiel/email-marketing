@@ -751,9 +751,9 @@ class ApiController extends ControllerBase
 		// Eliminar el Contacto de la Lista
 		$wrapper = new ContactWrapper();
 		
-		$wrapper->deleteContactFromList($contact, $list);
+		$mensaje = $wrapper->deleteContactFromList($contact, $list);
 		
-		return $this->setJsonResponse(null);	
+		return $this->setJsonResponse($mensaje);	
 	
 	}
 
@@ -815,8 +815,8 @@ class ApiController extends ControllerBase
 		
 		$blockedWrapper = new BlockedEmailWrapper();
 		
-		$blockedEmail = $blockedWrapper->validateBlockedEmailData($contents);
-		
+		$blockedWrapper->validateBlockedEmailData($contents);
+		$blockedEmail = "Si esta llegando";
 		return $this->setJsonResponse($blockedEmail);
 		
 	}

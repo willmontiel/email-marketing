@@ -16,12 +16,29 @@ class BlockedEmailWrapper
 	
 	public function validateBlockedEmailData($contents)
 	{
-		$idEmail = Blockedemail::findFirst(array(
-			"type = 'virtual'",
-			"order" => "name DESC",
-			"limit" => 30
-			)
-		);
+		if (!isset($contents->email)) {
+			
+			throw new InvalidArgumentException('No has enviado un email');
+		}
+		else {
+			$id = Email::findFirst(array('conditions' => "email = ?0", 'bindings' => array($contents->email) ));
+			
+			if(!$id) {
+				throw new InvalidArgumentException('El email enviado no existe');
+			}
+			else {
+				if ($id->blocked > 0) {
+					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
+				}
+				else {
+					$idEmail = $id->idEmail;
+					$this->addEmailToBlockedList($contents, $idEmail);
+				}
+			}
+			
+		}
+
+		$this->addEmailToBlockedList($contents, $idEmail);
 	}
 
 	public function convertBlockedEmailList($Blockedemail)
@@ -82,14 +99,6 @@ class BlockedEmailWrapper
 		if($blockedList->save()){
 			$blockedEmail  = new Email();
 			$blockedEmail->blocked = time();
-			
-			if(!$blockedEmail->save()) {
-				throw new InvalidArgumentException('No se guardaron los datos');
-			}
-			else {
-				
-			}
-			
 		}
 		
 		else {
