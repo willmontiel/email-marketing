@@ -40,6 +40,26 @@ class ContactListWrapper
 		return $object;
 	}
 	
+	public function validateListBelongsToAccount($idList)
+	{
+		$Dbases = $this->user->account->dbases;
+		
+		foreach ($Dbases as $Dbase) {
+			$listExist = Contactlist::findFirst(array(
+				"conditions" => "idDbase = ?1 AND idList = ?2",
+				"bind"       => array(1 => $Dbase->idDbase, 2 => $idList)
+			));
+		}
+		if(!$listExist) {
+			return false;
+		}
+		else {
+			return true;
+		}
+		
+	}
+
+
 	public function validateContactListData($contents)
 	{
 		
@@ -160,17 +180,27 @@ class ContactListWrapper
 	
 	public function deleteContactList($idList)
 	{
-		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
-		
-		$query = $modelsManager->createQuery("SELECT idContact, COUNT(*) FROM Coxcl AS C JOIN (SELECT idContact FROM Coxcl WHERE idList = :idList:) AS C2 USING idContact GROUP BY 1 HAVING COUNT(*) = 1");
-		
-		$association = $query->execute(array(
-			'idList' => $idList
-		));
-		
-//		$association->delete();
-		
-//		$list->delete();
+		$db = Phalcon\DI::getDefault()->get('db');
+		$query = 
+			"SELECT C1.idContact, C1.idList ,COUNT(*) 
+			FROM Coxcl C1
+				JOIN (SELECT idContact FROM Coxcl WHERE idList = :idList) C2 ON (C1.idContact = C2.idContact) 
+			GROUP BY 1 
+			HAVING COUNT(*) = 1";
+
+		$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idList' => $idList));
+
+		$deleteList = $db->delete(
+				'Contactlist',
+				'idList = '.$idList  
+		);
+		foreach ($results as $result) {	
+			$contact = $db->delete(
+				'Contact',
+				'idContact = '.$result["idContact"]
+			);
+		}
+	
 	}
 
 	

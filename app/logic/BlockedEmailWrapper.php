@@ -31,7 +31,8 @@ class BlockedEmailWrapper
 					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
 				}
 				else {
-					$this->addEmailToBlockedList($contents, $id);
+					$idEmail = $id->idEmail;
+					$this->addEmailToBlockedList($contents, $idEmail);
 				}
 			}
 			

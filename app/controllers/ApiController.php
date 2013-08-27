@@ -601,9 +601,15 @@ class ApiController extends ControllerBase
 	{
 		$wrapper = new ContactListWrapper();
 		
-		$wrapper->deleteContactList($idList);
+		$listExsit = $wrapper->validateListBelongsToAccount($idList);
 		
-		return $this->setJsonResponse(null);	
+		if($listExsit == false) {
+			$status = "No se encontro el contacto";
+		}
+		else {
+			$status = $wrapper->deleteContactList($idList);	
+		}
+		return $this->setJsonResponse($status);
 	}
 	/*Fin listas de contactos*/
 	
