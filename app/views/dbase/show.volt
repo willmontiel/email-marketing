@@ -269,7 +269,7 @@
 							<br/>
 							<span class="regular-text">Contactos Activos</span>
 							<br/>
-							<span class="number-large text-gray-color">{{ sdbase.Cinactive|numberf }}</span>
+							<span class="number-large text-gray-color">{{ get_inactive(sdbase)|numberf }}</span>
 							<br/>
 							<span class="regular-text">Contactos Inactivos</span>
 							<br/>

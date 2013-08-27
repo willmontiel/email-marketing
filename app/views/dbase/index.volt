@@ -44,7 +44,7 @@
 							<td class="text-right">
 								<dl>
 									<dd>{{item.Cactive|numberf}}</dd>
-									<dd>{{item.Cinactive|numberf}}</dd>
+									<dd>{{get_inactive(item)|numberf}}</dd>
 									<dd>{{item.Cunsubscribed|numberf}}</dd>
 									<dd>{{item.Cbounced|numberf}}</dd>
 									<dd>{{item.Cspam|numberf}}</dd>

@@ -23,6 +23,18 @@
 		</div>
 		<div class="span2"></div>
 		<div class="span3">
+			<div class="badge-number-dark">
+				<table class="offset4">
+					<tr>
+						<td>
+							<span class="text-green-color">{{sdbase.Ctotal|numberf}}</span>
+						</td>
+						<td>
+							<span class="regular-text">Total Contactos</span>
+						</td>
+					</tr>
+				</table>
+			</div>
 			<div class="badge-number-light">
 				<table class="offset4">
 					<tr>
@@ -35,7 +47,7 @@
 					</tr>
 					<tr>
 						<td>
-							<span class="text-gray-color text-left">{{ sdbase.Cinactive|numberf }}</span>
+							<span class="text-gray-color text-left">{{ get_inactive(sdbase)|numberf }}</span>
 						</td>
 						<td class="text-left">
 							<span class="regular-text">Inactivos</span>

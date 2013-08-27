@@ -146,7 +146,10 @@ try {
 		$compiler->addFunction('ember_textfield', function ($resolvedArgs, $exprArgs) {
 						return 'CreateViewEmber::createEmberTextField(' . $resolvedArgs . ')';
 					});
-
+		$compiler->addFunction('get_inactive', function ($resolvedArgs, $exprArgs) {
+						return 'ContactCounter::getInactive(' . $resolvedArgs . ')';
+					});
+					
         $volt->setOptions(array(
             "compileAlways" => true,
 			"compiledPath" => "../app/compiled-templates/",

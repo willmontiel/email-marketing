@@ -94,7 +94,7 @@
 							</tr>
 							<tr>
 								<td>
-									<span class="text-gray-color text-left">{{datalist.Cinactive}}</span>
+									<span class="text-gray-color text-left">{{get_inactive(datalist)|numberf}}</span>
 								</td>
 								<td class="text-left">
 									<span class="regular-text">Inactivos</span>

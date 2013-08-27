@@ -16,7 +16,6 @@ class ContactCounter
 
 			$actTotal = $db->Ctotal;
 			$actActive = $db->Cactive;
-			$actInactive = $db->Cinactive;
 			$actUnsubscribed = $db->Cunsubscribed;
 			$actBounced = $db->Cbounced;
 			$actSpam = $db->Cspam;
@@ -24,13 +23,12 @@ class ContactCounter
 				$parameters = array('idDbase' => $idDbase, 
 									'Ctotal' => $contents["Ctotal"] + $actTotal, 
 									'Cactive' => $contents["Cactive"] + $actActive, 
-									'Cinactive' => $contents["Cinactive"] + $actInactive, 
 									'Cunsubscribed' => $contents["Cunsubscribed"] + $actUnsubscribed,
 									'Cbounced' => $contents["Cbounced"] + $actBounced,
 									'Cspam' => $contents["Cspam"] + $actSpam
 				);
 
-				$query = "UPDATE Dbase SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cinactive = :Cinactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idDbase = :idDbase:";
+				$query = "UPDATE Dbase SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idDbase = :idDbase:";
 				$query2 = $modelManager->createQuery($query);
 				$result = $query2->execute($parameters);
 		}
@@ -42,7 +40,6 @@ class ContactCounter
 			
 			$actTotal = $list->Ctotal;
 			$actActive = $list->Cactive;
-			$actInactive = $list->Cinactive;
 			$actUnsubscribed = $list->Cunsubscribed;
 			$actBounced = $list->Cbounced;
 			$actSpam = $list->Cspam;
@@ -50,13 +47,12 @@ class ContactCounter
 				$parameters = array('idList' => $idList, 
 									'Ctotal' => $contents["Ctotal"] + $actTotal, 
 									'Cactive' => $contents["Cactive"] + $actActive, 
-									'Cinactive' => $contents["Cinactive"] + $actInactive, 
 									'Cunsubscribed' => $contents["Cunsubscribed"] + $actUnsubscribed,
 									'Cbounced' => $contents["Cbounced"] + $actBounced,
 									'Cspam' => $contents["Cspam"] + $actSpam
 				);
 
-				$query = "UPDATE Contactlist SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cinactive = :Cinactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idList = :idList:";
+				$query = "UPDATE Contactlist SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idList = :idList:";
 				$query2 = $modelManager->createQuery($query);
 				$result = $query2->execute($parameters);
 		}
@@ -118,7 +114,6 @@ class ContactCounter
 		 */
 		$array1["Ctotal"]+= $array2["Ctotal"];
 		$array1["Cactive"]+= $array2["Cactive"];
-		$array1["Cinactive"]+= $array2["Cinactive"];
 		$array1["Cunsubscribed"]+= $array2["Cunsubscribed"];
 		$array1["Cbounced"]+= $array2["Cbounced"];
 		$array1["Cspam"]+= $array2["Cspam"];
@@ -146,9 +141,7 @@ class ContactCounter
 				if($oper["Cunsubscribed"] == 0) {
 					if ($contact->status != 0) {
 						$oper["Cactive"] = 1;
-					} else {
-						$oper["Cinactive"]= 1;
-					}
+					} 
 				}
 			}
 		}
@@ -191,8 +184,6 @@ class ContactCounter
 				if($oper["Cunsubscribed"] ==0) {
 					if ($contact->status != 0) {
 						$oper["Cactive"] = -1;
-					} else {
-						$oper["Cinactive"]= -1;
 					}
 				}
 			}
@@ -205,7 +196,6 @@ class ContactCounter
 		$oper =	array(
 			"Ctotal" => 0,
 			"Cactive" => 0,
-			"Cinactive" => 0,
 			"Cunsubscribed" => 0,
 			"Cbounced" => 0,
 			"Cspam" => 0
@@ -233,7 +223,6 @@ class ContactCounter
 					$oper["Cunsubscribed"] = ($oldcontact->unsubscribed != 0)?-1:0;
 					if($oper["Cunsubscribed"] == 0) {
 						$oper["Cactive"] = ($oldcontact->status != 0)?-1:0;
-						$oper["Cinactive"] = ($oldcontact->status == 0)?-1:0;
 					}
 				}
 			} else {
@@ -242,7 +231,6 @@ class ContactCounter
 					$oper["Cunsubscribed"] = ($newcontact->unsubscribed != 0)?1:0;
 					if($oper["Cunsubscribed"] == 0) {
 						$oper["Cactive"] = ($newcontact->status != 0)?1:0;
-						$oper["Cinactive"] = ($newcontact->status == 0)?1:0;
 					}
 				}
 			}
@@ -253,13 +241,11 @@ class ContactCounter
 				$oper["Cunsubscribed"] = ($oldcontact->unsubscribed != 0)?-1:0;
 				if($oper["Cunsubscribed"] == 0) {
 					$oper["Cactive"] = ($oldcontact->status != 0)?-1:0;
-					$oper["Cinactive"] = ($oldcontact->status == 0)?-1:0;
 				}
 			} else {
 				$oper["Cunsubscribed"] = ($newcontact->unsubscribed != 0)?1:0;
 				if($oper["Cunsubscribed"] == 0) {
 					$oper["Cactive"] = ($newcontact->status != 0)?1:0;
-					$oper["Cinactive"] = ($newcontact->status == 0)?1:0;
 				}
 			}
 			
@@ -268,21 +254,14 @@ class ContactCounter
 			$oper["Cunsubscribed"] = ($newcontact->unsubscribed != 0)?1:-1;
 			if($oper["Cunsubscribed"] == 1) {
 				$oper["Cactive"] = ($oldcontact->status != 0)?-1:0;
-				$oper["Cinactive"] = ($oldcontact->status == 0)?-1:0;
 			} else {
 				$oper["Cactive"] = ($newcontact->status != 0)?1:0;
-				$oper["Cinactive"] = ($newcontact->status == 0)?1:0;
 			}
 			
-		} elseif($newcontact->status != $oldcontact->status) {
+		} elseif($newcontact->status != $oldcontact->status && $newcontact->bounced == 0 && $newcontact->spam == 0 && $newcontact->unsubscribed ==0) {
 			
-			if ($newcontact->status != 0) {
-				$oper["Cactive"] = 1;
-				$oper["Cinactive"] = -1;
-			} else {
-				$oper["Cinactive"] = 1;
-				$oper["Cactive"] = -1;
-			}
+			$oper["Cactive"] = ($newcontact->status != 0)?1:-1;
+
 		}
 		return $oper;
 	}
@@ -311,5 +290,12 @@ class ContactCounter
 				$this->counterList[$list->idList] = $this->sumArray($this->counterList[$list->idList], $oper);				
 			}
 		}
-	}	
+	}
+	
+	public static function getInactive($obj)
+	{
+		$inactive = $obj->Ctotal - ($obj->Cactive + $obj->Cunsubscribed + $obj->Cbounced + $obj->Cspam);
+		
+		return $inactive;
+	}
 }
