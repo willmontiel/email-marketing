@@ -31,18 +31,18 @@ class BlockedEmailWrapper
 			} elseif($email->blocked != 0) {
 					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
 			}
-			$this->addEmailToBlockedList($contents, $email);
+			return $this->addEmailToBlockedList($contents, $email);
 		}
 	}
 
 	public function convertBlockedEmailList($Blockedemail)
 	{
 		$object = array();
-		$object['idBlockedemail'] = $Blockedemail->idBlockedemail;
-		$object['idEmail'] = $Blockedemail->idEmail;
+		$object['id'] = $Blockedemail->idBlockedemail;
+		$object['email'] = $Blockedemail->email;
 		$object['blocked_reason'] = $Blockedemail->blockedReason;
 		$object['blocked_date'] = $Blockedemail->blockedDate;
-		$object['email'] = $Blockedemail->email;
+
 		return $object;
 	}
 	
@@ -97,13 +97,11 @@ class BlockedEmailWrapper
 		if($blocked->save()){
 			$email->blocked = time();
 			$email->save();
-		}
-		
-		else {
-			
+			$blocked->email = $email->email;
+			return $blocked;
+		} else {
 			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
-		}
-		
+		}	
 	}
 	
 	//esta funcion remueve un email de la lista de bloqueo

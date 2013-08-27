@@ -22,8 +22,9 @@ App.BlockedBlockRoute = Ember.Route.extend({
 		return App.Blocked.createRecord();
 	},
 	deactivate: function () {
-		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.get('transaction').rollback();
+		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
+			this.get('currentModel.transaction').rollback();
+			console.log('Rollback new Blocked Email!');
 		}
 	}
 });
