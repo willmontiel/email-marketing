@@ -828,8 +828,7 @@ class ApiController extends ControllerBase
 	public function removeemailfromblockedlistAction($idBlockedemail)
 	{
 		$wrapper = new BlockedEmailWrapper();
-		$Dbases = $this->user->account->dbases;
-		$emailExist = $wrapper->validateEmailBelongsToAccount($idBlockedemail, $Dbases);
+		$emailExist = $wrapper->validateEmailBelongsToAccount($this->user->account, $idBlockedemail);
 		
 		if($emailExist == false) {
 			$status = "No se encontró la dirección de correo electrónico";

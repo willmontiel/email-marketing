@@ -14,11 +14,28 @@ class BlockedEmailWrapper
 		$this->pager = $p;
 	}
 	
-	public function validateEmailBelongsToAccount($idBlockemail, $Dbases)
+	public function validateEmailBelongsToAccount(Account $account, $idBlockemail)
 	{
 		
+		$idAccount = $account->idAccount;
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+		$listExist="SELECT * 
+					FROM blockedemail
+						JOIN email
+						JOIN account 
+						ON ( blockedemail.idEmail = email.idEmail ) 
+					WHERE blockedemail.idBlockedemail =5
+					AND account.idAccount =6";
+				
+		$query = $modelManager->createQuery($listExist);
+		$blockedEmails = $query->execute($query);
 		
-		return true;
+		if(!$blockedEmails) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 
 	public function validateBlockedEmailData($contents)
