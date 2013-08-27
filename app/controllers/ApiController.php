@@ -600,8 +600,8 @@ class ApiController extends ControllerBase
     public function deletecontactlistAction($idList)
 	{
 		$wrapper = new ContactListWrapper();
-		
-		$listExsit = $wrapper->validateListBelongsToAccount($idList);
+		$Dbases = $this->user->account->dbases;
+		$listExsit = $wrapper->validateListBelongsToAccount($idList, $Dbases);
 		
 		if($listExsit == false) {
 			$status = "No se encontro el contacto";

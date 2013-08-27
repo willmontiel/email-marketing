@@ -13,6 +13,7 @@ class ContactListWrapper
 	{
 		$this->pager = $p;
 	}
+	
 	/**
 	 * Crea un arreglo con la informacion del objeto Contactlist
 	 * para que pueda ser convertido a JSON
@@ -40,9 +41,8 @@ class ContactListWrapper
 		return $object;
 	}
 	
-	public function validateListBelongsToAccount($idList)
+	public function validateListBelongsToAccount($idList, $Dbases)
 	{
-		$Dbases = $this->user->account->dbases;
 		
 		foreach ($Dbases as $Dbase) {
 			$listExist = Contactlist::findFirst(array(
@@ -195,22 +195,15 @@ class ContactListWrapper
 
 		$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idList' => $idList));
 		
-		$this->db->begin();
 			$deleteList = $db->delete(
 					'Contactlist',
 					'idList = '.$idList  
 			);
-			if(!$deleteList) {
-		$this->db->rollback();
-			}
-			else {
-				foreach ($results as $result) {	
+			foreach ($results as $result) {	
 					$contact = $db->delete(
 						'Contact',
 						'idContact = '.$result["idContact"]
 					);
-		$this->db->commit();
-				}
 			}
 			
 	
