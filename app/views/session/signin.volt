@@ -65,7 +65,7 @@
 								{{ link_to('', "¿Olvidaste tu contraseña?")}}
 							</label>
 						</p>
-						<input type="hidden" name="<?php echo $this->security->getTokenKey() ?>" value="<?php echo $this->security->getToken() ?>"/>
+						<input type="hidden" name="csrf" value="{{ security.getToken() }}"/>
 					</form>
 				</div>
 			</div>
