@@ -16,8 +16,8 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 
 	public function initialize()
 	{
-		//$this->user = $this->userObject;
-		$this->user = User::findFirstByIdUser(3);
+		$this->user = $this->userObject;
+		//$this->user = User::findFirstByIdUser(3);
 		
 	}
 

@@ -1,6 +1,6 @@
 <?php
 
-class ControllerBase extends \Phalcon\Mvc\Controller
+class TestController extends ControllerBase
 {
 	public $result;
 	
@@ -18,7 +18,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		
 		$wrapper = new ContactWrapper();
 		
-		$wrapper->setAccount($idAccount);
+		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($idDbase);
 		$wrapper->setIdList($idList);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
