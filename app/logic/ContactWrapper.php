@@ -321,6 +321,23 @@ class ContactWrapper
 				$contact->ipActivated = $this->ipaddress;
 			}
 			
+			if ($contact->bounced != 0 && !$data->is_bounced) {
+				// Actualmente rebotado y se actualiza a no rebotado
+				$contact->bounced = 0;
+			}
+			else if ($contact->bounced == 0 && $data->is_bounced) {
+				// Actualmente no rebotado, y se actualiza a rebotado
+				$contact->bounced = $hora;
+			}
+			
+			if ($contact->spam != 0 && !$data->is_spam) {
+				// Actualmente spam y se actualiza a no spam
+				$contact->spam = 0;
+			}
+			else if ($contact->spam == 0 && $data->is_spam) {
+				// Actualmente no spam, y se actualiza a spam
+				$contact->spam = $hora;
+			}
 		}
 	}
 	

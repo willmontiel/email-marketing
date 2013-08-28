@@ -11,69 +11,103 @@
 		{{ stylesheet_link ('css/emarketingstyle.css') }}
     </head>
     <body>
-
-<div class="row-fluid">
- 	 <div class="span6" >
- 		<table class="table">
-			<thead>
-				<tr>
-					<th> </th>
-					<th colspan="5">Base de Datos</th>
-					<th colspan="5">Listas</th>
-				</tr>
-				<tr>
-					<th>
-						Descripcion
-					</th>
-					<th>
-						Total Contactos
-					</th>
-					<th>
-						Activos
-					</th>
-					<th>
-						Des-Suscritos
-					</th>
-					<th>
-						Rebotados
-					</th>
-					<th>
-						Spam
-					</th>
-					<th>
-						Total Contactos
-					</th>
-					<th>
-						Activos
-					</th>
-					<th>
-						Des-Suscritos
-					</th>
-					<th>
-						Rebotados
-					</th>
-					<th>
-						Spam
-					</th>
-				</tr>
-			</thead>
-			<tbody>
- 		 {%for result in results%}
- 			<tr>
-				<td>{{result["Desc"]}}</td>
- 				<td>{{result["CtotalDB"]}}</td>
-				<td>{{result["CactiveDB"]}}</a></td>
-				<td>{{result["CunsubscribedDB"]}}</td>
-				<td>{{result["CbouncedDB"]}}</td>
- 				<td>{{result["CspamDB"]}}</td>
-				<td>{{result["CtotalList"]}}</td>
-				<td>{{result["CactiveList"]}}</a></td>
-				<td>{{result["CunsubscribedList"]}}</td>
-				<td>{{result["CbouncedList"]}}</td>
- 				<td>{{result["CspamList"]}}</td>
- 			</tr>
- 		 {%endfor%}
-			</tbody>
- 	    </table>
- 	 </div>
-</div>
+		<div class="row-fluid">
+			 <div class="span6" >
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th> </th>
+							<th colspan="6">Base de Datos</th>
+							<th colspan="6">Lista</th>
+							<th colspan="6">Lista Nueva</th>
+						</tr>
+						<tr>
+							<th>
+								Descripcion
+							</th>
+							<th>
+								Total Contactos
+							</th>
+							<th>
+								Activos
+							</th>
+							<th>
+								Inactivos
+							</th>
+							<th>
+								Des-Suscritos
+							</th>
+							<th>
+								Rebotados
+							</th>
+							<th>
+								Spam
+							</th>
+							<th>
+								Total Contactos
+							</th>
+							<th>
+								Activos
+							</th>
+							<th>
+								Inactivos
+							</th>
+							<th>
+								Des-Suscritos
+							</th>
+							<th>
+								Rebotados
+							</th>
+							<th>
+								Spam
+							</th>
+							<th>
+								Total Contactos
+							</th>
+							<th>
+								Activos
+							</th>
+							<th>
+								Inactivos
+							</th>
+							<th>
+								Des-Suscritos
+							</th>
+							<th>
+								Rebotados
+							</th>
+							<th>
+								Spam
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+				 {%for result in results%}
+					<tr>
+						<td>{{result["Desc"]}}</td>
+						<td>{{result["CtotalDB"]}}</td>
+						<td>{{result["CactiveDB"]}}</td>
+						<td>{{result["CinactiveDB"]}}</td>
+						<td>{{result["CunsubscribedDB"]}}</td>
+						<td>{{result["CbouncedDB"]}}</td>
+						<td>{{result["CspamDB"]}}</td>
+						<td>{{result["CtotalList"]}}</td>
+						<td>{{result["CactiveList"]}}</td>
+						<td>{{result["CinactiveList"]}}</td>
+						<td>{{result["CunsubscribedList"]}}</td>
+						<td>{{result["CbouncedList"]}}</td>
+						<td>{{result["CspamList"]}}</td>
+						<td>{{result["CtotalListNew"]}}</td>
+						<td>{{result["CactiveListNew"]}}</td>
+						<td>{{result["CinactiveListNew"]}}</td>
+						<td>{{result["CunsubscribedListNew"]}}</td>
+						<td>{{result["CbouncedListNew"]}}</td>
+						<td>{{result["CspamListNew"]}}</td>
+					</tr>
+				 {%endfor%}
+					</tbody>
+				</table>
+			 </div>
+		</div>
+	</body>
+</html>
