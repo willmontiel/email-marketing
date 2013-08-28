@@ -16,7 +16,6 @@ class BlockedEmailWrapper
 	
 	public function validateEmailBelongsToAccount(Account $account, $idBlockemail)
 	{
-		
 		$idAccount = $account->idAccount;
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$listExist="SELECT * 
@@ -24,11 +23,15 @@ class BlockedEmailWrapper
 						JOIN email
 						JOIN account 
 						ON ( blockedemail.idEmail = email.idEmail ) 
-					WHERE blockedemail.idBlockedemail =5
-					AND account.idAccount =6";
+					WHERE blockedemail.idBlockedemail = :idBlockedemail:
+					AND account.idAccount = :idAccount:";
 				
 		$query = $modelManager->createQuery($listExist);
-		$blockedEmails = $query->execute($query);
+		$blockedEmails = $query->execute(array(
+				"idBlockedemail" => "$idBlockemail",
+				"idAccount" => "$idAccount"
+			)
+		);
 		
 		if(!$blockedEmails) {
 			return false;
@@ -150,6 +153,7 @@ class BlockedEmailWrapper
 			}
 			
 			$removeEmail->delete();
+//			return array("Se ha desbloqueado la dirección de correo", $msj);
 		}
 	}
 }

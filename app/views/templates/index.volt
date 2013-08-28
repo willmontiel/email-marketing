@@ -57,8 +57,8 @@
 										</a>
 									</li>
 								</ul>
-								<ul class="span8"></ul>
-								<ul class="nav">
+								<ul class="span7"></ul>
+								<ul class="nav text-left">
 									<li>
 										<a href="#fakelink">
 											<span class="fui-user"></span> {{ userObject.idAccount }} {{ userObject.firstName }} {{ userObject.lastName }} ({{ userObject.username }})

@@ -836,7 +836,7 @@ class ApiController extends ControllerBase
 		else {
 			$status = $wrapper->removeEmailFromBlockedList($idBlockedemail);	
 		}
-		return $this->setJsonResponse($status);
+		return $this->setJsonResponse(null);
 	}
 	
 	/*Finaliza todo lo que tiene que ver con listas de bloqueo globales*/
