@@ -19,7 +19,8 @@
  				<th>Nombre de la cuenta</th>
  				<th>Modo de uso</th>
  				<th>Espacio disponible en disco (Mb)</th>
- 				<th>Limite de mensajes/contactos</th>
+				<th>Limite de contactos</th>
+				<th>Limite de mensajes</th>
  				<th>Modo de pago</th>
 				<th>Fecha de registro</th>
 				<th>Última actualización</th>
@@ -30,7 +31,8 @@
 				<td>{{item.companyName}}</a></td>
 				<td>{{item.accountingMode}}</td>
  				<td>{{item.fileSpace}}</td>
- 				<td>{{item.messageQuota}}</td>
+				<td>{{item.contactLimit}}</td>
+ 				<td>{{item.messageLimit}}</td>
  				<td>{{item.subscriptionMode}}</td>
 				<td>{{date('F j, Y', item.createdon)}}</td>
 				<td>{{date('F j, Y', item.updatedon)}}</td>

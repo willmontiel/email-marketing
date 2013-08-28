@@ -71,22 +71,22 @@ class BlockedEmailWrapper
 		$email = $contents->email;
 		$createEmail = new Email();
 		
-//		list($edomain) = preg_split("/@/", $email, 2);
-//		
-//		$domain = Domain::findFirstByName($edomain);
-//		
-//		if (!$domain) {
-//			$domain = new Domain();
-//			$domain->name = $edomain;
-//			if (!$domain->save()) {
-//				$errmsg = $domain->getMessages();
-//				$msg = '';
-//				foreach ($errmsg as $err) {
-//					$msg .= $err . PHP_EOL;
-//				}
-//				throw new \Exception('Error al crear el dominio [' . $edomain . ']: >>' . $msg . '<<');
-//			}
-//		}
+		list($edomain) = preg_split("/@/", $email, 2);
+		
+		$domain = Domain::findFirstByName($edomain);
+		
+		if (!$domain) {
+			$domain = new Domain();
+			$domain->name = $edomain;
+			if (!$domain->save()) {
+				$errmsg = $domain->getMessages();
+				$msg = '';
+				foreach ($errmsg as $err) {
+					$msg .= $err . PHP_EOL;
+				}
+				throw new \Exception('Error al crear el dominio [' . $edomain . ']: >>' . $msg . '<<');
+			}
+		}
 		
 		$idAccount = $account->idAccount;
 		

@@ -41,8 +41,15 @@ class Account extends Modelbase
         
         $this->validate(new PresenceOf(
             array(
-                "field"   => "messageQuota",
-                "message" => "Debes indicar el total de cuota de mensajes"
+                "field"   => "messageLimit",
+                "message" => "Debes indicar el limite de mensajes"
+            )
+        ));
+		
+		$this->validate(new PresenceOf(
+            array(
+                "field"   => "contactLimit",
+                "message" => "Debes indicar la cantidad total de mensajes"
             )
         ));
 

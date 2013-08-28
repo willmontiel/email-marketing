@@ -20,8 +20,13 @@
 			</p>
 
 			<p>
-				*Limite de mensajes/contactos:
-				{{ editFormAccount.render('messageQuota') }}
+				*Limite de contactos:
+				{{ editFormAccount.render('contactLimit') }}
+			</p>
+			
+			<p>
+				*Limite de mensajes:
+				{{ editFormAccount.render('messageLimit') }}
 			</p>
 
 			<p>
@@ -35,7 +40,7 @@
 			</p>
 
 			<p>
-				{{ submit_button("Registrar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
+				{{ submit_button("Editar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
 				{{link_to('account', 'class':"btn btn-inverse", "Regresar")}}
 			</p>
 		</form>
