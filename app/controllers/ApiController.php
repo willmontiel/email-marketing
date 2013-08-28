@@ -812,9 +812,19 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->blockedemail;
 		
 		$blockedWrapper = new BlockedEmailWrapper();
-		$blockedWrapper->validateBlockedEmailData($contents, $this->user->account);
-				
-		return $this->setJsonResponse(null);
+		
+		try {
+			$blockedWrapper->validateBlockedEmailData($contents, $this->user->account);
+		}
+		
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while blocking email!');	
+		}
 		
 	}
 	
@@ -824,16 +834,23 @@ class ApiController extends ControllerBase
 	 */
 	public function removeemailfromblockedlistAction($idBlockedemail)
 	{
-		$wrapper = new BlockedEmailWrapper();
-		$emailExist = $wrapper->validateEmailBelongsToAccount($this->user->account, $idBlockedemail);
+		$log = $this->logger;
 		
-		if($emailExist == false) {
-			$status = "No se encontró la dirección de correo electrónico";
+		$wrapper = new BlockedEmailWrapper();
+		
+		try {
+			$wrapper->validateEmailBelongsToAccount($this->user->account, $idBlockedemail);
 		}
-		else {
-			$status = $wrapper->removeEmailFromBlockedList($idBlockedemail);	
+		
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
 		}
-		return $this->setJsonResponse(null);
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
+		}
+		
 	}
 	
 	/*Finaliza todo lo que tiene que ver con listas de bloqueo globales*/

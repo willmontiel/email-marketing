@@ -191,7 +191,7 @@ class ContactWrapper
 			);
 			
 			if($totalEmails >= $contactLimit) {
-				throw new \InvalidArgumentException('Usted ha sobrepasado su limite de contactos [' . $contactLimit .  '] , sus conatctos suman ['. $totalEmails .']');
+				throw new \InvalidArgumentException('Usted ha sobrepasado su limite de contactos: [' . $contactLimit .  '] ,  por defecto el sistema ha guardado hasta llegar a ese limite, los demas datos se han descartado');
 			}
 			
 			else {
