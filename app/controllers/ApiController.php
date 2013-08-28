@@ -600,11 +600,11 @@ class ApiController extends ControllerBase
     public function deletecontactlistAction($idList)
 	{
 		$wrapper = new ContactListWrapper();
-		$Dbases = $this->user->account->dbases;
-		$listExsit = $wrapper->validateListBelongsToAccount($idList, $Dbases);
+		$account = $this->user->account;
+		$listExsit = $wrapper->validateListBelongsToAccount($idList, $account);
 		
 		if($listExsit == false) {
-			$status = "No se encontro el contacto";
+			$status = "No se encontro la lista";
 		}
 		else {
 			$status = $wrapper->deleteContactList($idList);	
@@ -814,8 +814,7 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->blockedemail;
 		
 		$blockedWrapper = new BlockedEmailWrapper();
-		
-		$blockedWrapper->validateBlockedEmailData($contents);
+		$blockedWrapper->validateBlockedEmailData($contents, $this->user->account);
 				
 		return $this->setJsonResponse(null);
 		

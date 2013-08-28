@@ -84,6 +84,11 @@
 				que pertenecen a esa dirección, si no se selecciona esa opción, por defecto se marcarán como des-suscritos
 				y podras revertirlo.
 			</p>
+			<p>
+				Si la dirección de correo electrónico que ingreses no existe, se creará automáticamente como bloqueada
+				y luego podrás desbloquearla, e ingresaras los datos neecsarios para crear un contacto para vincularlo
+				a esta dirección de correo.
+			</p>
 		</div>
 		<div class="span2 text-right">
 			{{ '{{#linkTo "blockedemails.index" }}' }}<button class="btn btn-inverse">Regresar</button>{{ '{{/linkTo}}' }}
@@ -101,7 +106,7 @@
 				<p>
 					{{ '{{view Ember.TextArea valueBinding="blockedReason" placeholder="Escribe la razón de bloqueo" required="required"}}' }}
 				</p>
-				
+				<p>Si estas seguro dale click al botón <strong>Bloquear</strong> para continuar.</p>
 				<button class="btn btn-danger" {{ '{{action block this }}' }}>Bloquear</button>
 				<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>
 			</form>

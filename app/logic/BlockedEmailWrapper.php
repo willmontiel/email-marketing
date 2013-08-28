@@ -14,17 +14,18 @@ class BlockedEmailWrapper
 		$this->pager = $p;
 	}
 	
+	//Esta funcion valida que el id de la lista de bloqueo pertenezaca a un base de datos de la cuenta en 
+	//la que se encuentra registrado el usuario que efectua la accion
 	public function validateEmailBelongsToAccount(Account $account, $idBlockemail)
 	{
 		$idAccount = $account->idAccount;
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-		$listExist="SELECT * 
+		$listExist="SELECT COUNT(*) 
 					FROM blockedemail
-						JOIN email
-						JOIN account 
+						JOIN email 
 						ON ( blockedemail.idEmail = email.idEmail ) 
 					WHERE blockedemail.idBlockedemail = :idBlockedemail:
-					AND account.idAccount = :idAccount:";
+					AND email.idAccount = :idAccount:";
 				
 		$query = $modelManager->createQuery($listExist);
 		$blockedEmails = $query->execute(array(
@@ -33,7 +34,7 @@ class BlockedEmailWrapper
 			)
 		);
 		
-		if(!$blockedEmails) {
+		if($blockedEmails < 0) {
 			return false;
 		}
 		else {
@@ -41,22 +42,77 @@ class BlockedEmailWrapper
 		}
 	}
 
-	public function validateBlockedEmailData($contents)
+	//esta funcion valida que el email a bloquear exista y que no se encuentre bloqueado
+	public function validateBlockedEmailData($contents, $account)
 	{
 		if (!isset($contents->email)) {
-//			throw new InvalidArgumentException('No has enviado un email');
+			throw new InvalidArgumentException('No has enviado un email');
 		}
 		else {
+			
 			$email = Email::findFirstByEmail($contents->email);
 			if(!$email) {
 //				throw new InvalidArgumentException('El email enviado no existe');
-			} elseif($email->blocked != 0) {
-//					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
+				$this->createBlockedEmail($contents, $account);
+			} 
+			else if($email->blocked != 0) {
+				throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
 			}
-			return $this->addEmailToBlockedList($contents, $email);
+			
+			else {
+				$this->addEmailToBlockedList($contents, $email);
+			}
 		}
 	}
 
+	//Esta funccion crea un email ya bloqueado, en caso de que no exista.
+	public function createBlockedEmail($contents, $account)
+	{
+		$email = $contents->email;
+		$createEmail = new Email();
+		
+//		list($edomain) = preg_split("/@/", $email, 2);
+//		
+//		$domain = Domain::findFirstByName($edomain);
+//		
+//		if (!$domain) {
+//			$domain = new Domain();
+//			$domain->name = $edomain;
+//			if (!$domain->save()) {
+//				$errmsg = $domain->getMessages();
+//				$msg = '';
+//				foreach ($errmsg as $err) {
+//					$msg .= $err . PHP_EOL;
+//				}
+//				throw new \Exception('Error al crear el dominio [' . $edomain . ']: >>' . $msg . '<<');
+//			}
+//		}
+		
+		$idAccount = $account->idAccount;
+		
+		$createEmail->idAccount = $idAccount;
+		$createEmail->idDomain = 1;
+		$createEmail->email = $email;
+		$createEmail->bounced = 0;
+		$createEmail->spam = 0;
+		$createEmail->blocked = time();
+
+		if (!$createEmail->save()) {
+			$errmsg = $createEmail->getMessages();
+			$msg = '';
+			foreach ($errmsg as $err) {
+				$msg .= $err . PHP_EOL;
+			}
+			throw new \Exception('Error al crear el email [' . $email . ']: >>' . $msg . '<<');
+		}
+		
+		else {
+			$this->addEmailToBlockedList($contents, $email);
+		}
+		
+	}
+	
+	//convierte los valores de la busqueda en en json
 	public function convertBlockedEmailList($Blockedemail)
 	{
 		$object = array();
@@ -122,7 +178,7 @@ class BlockedEmailWrapper
 			$blocked->email = $email->email;
 			return $blocked;
 		} else {
-//			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
+			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
 		}	
 	}
 	

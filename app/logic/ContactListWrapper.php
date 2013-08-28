@@ -41,17 +41,26 @@ class ContactListWrapper
 		return $object;
 	}
 	
-	public function validateListBelongsToAccount($idList, $Dbases)
+	public function validateListBelongsToAccount($idList, $account)
 	{
+		$idAccount = $account->idAccount;
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+		$contactlistExist= "SELECT COUNT(*) 
+							FROM contactlist
+								JOIN dbase
+								ON ( contactlist.idDbase = dbase.idDbase ) 
+							WHERE contactlist.idList = :idList:
+							AND dbase.idAccount = :idAccount:";
+				
+		$query = $modelManager->createQuery($contactlistExist);
+		$listExist = $query->execute(array(
+				"idList" => "$idList",
+				"idAccount" => "$idAccount"
+			)
+		);
 		
-		foreach ($Dbases as $Dbase) {
-			$listExist = Contactlist::findFirst(array(
-				"conditions" => "idDbase = ?1 AND idList = ?2",
-				"bind"       => array(1 => $Dbase->idDbase, 2 => $idList)
-			));
-		}
-		if(!$listExist) {
-			return true;
+		if($listExist < 0) {
+			return false;
 		}
 		else {
 			return true;
@@ -63,11 +72,8 @@ class ContactListWrapper
 	public function validateContactListData($contents)
 	{
 		
-		$this->errortxt = array();
-		$failed = false;
 		if (!isset($contents->name)) {
-			$this->errortxt[] = '"name" requerido';
-			$failed = true;
+			throw new InvalidArgumentException('No has enviado un nombre');
 		}
 		
 		else {
@@ -77,7 +83,7 @@ class ContactListWrapper
 				$this->createNewContactList($contents);
 			}
 			else {
-				return array('mensaje' => 'La lista ya existe',);
+				throw new InvalidArgumentException('Ya existe el nombre, por favor verifica la información');
 			}
 		}
 		
