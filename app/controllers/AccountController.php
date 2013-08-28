@@ -61,10 +61,35 @@ class AccountController extends ControllerBase
 							}
 						}
 						else {
-						$this->db->commit();
-						$this->flashSession->success('Se ha creado la cuenta exitosamente');
-						$this->response->redirect("account");
-						
+							$dbase = new Dbase();
+							$dbase->account = $account;
+							$dbase->name = "Mi base de datos";
+							
+							if($dbase->save()) {
+								$contactList = new Contactlist();
+								$contactList->dbase = $dbase;
+								$contactList->name = "Mi lista de contactos";
+								$contactList->Cdescription = "Sin descripción de contactos";
+								
+								if (!$contactList->save()) {
+									$this->db->rollback();
+									foreach ($contactList->getMessages() as $msg) {
+										$this->flash->error($msg);
+									}
+								}
+								else {
+									$this->db->commit();
+									$this->flashSession->success('Se ha creado la cuenta exitosamente');
+									$this->response->redirect("account");
+								}
+							}
+							else {
+								$this->db->rollback();
+								foreach ($dbase->getMessages() as $msg) {
+									$this->flash->error($msg);
+								}
+							
+							}
 						}
 					}
 					else{

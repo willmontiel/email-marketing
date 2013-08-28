@@ -192,7 +192,7 @@
 				<div class="span10">
 					<p>
 						Aqui podrás eliminar tus listas de contactos, recuerda que al eliminar una lista de contactos
-						<strong>no perderás tus contactos</strong>, simplemente seran desacioados de dicha lista, pero en caso
+						<strong>no perderás tus contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso
 						de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado
 						por completo.</strong>
 					</p>

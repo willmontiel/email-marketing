@@ -72,7 +72,8 @@
 	 </div>
 	 <div class="span3 text-right">
 		 <br>
-		 {{link_to('emarketing', 'class':"btn btn-inverse", "Regresar")}}
+		 
+		 {{link_to('', 'class':"btn btn-inverse", "Regresar")}}
 	 </div>
     </div>
 </div>
