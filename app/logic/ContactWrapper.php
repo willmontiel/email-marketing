@@ -181,16 +181,31 @@ class ContactWrapper
 
 	public function createNewContactFromJsonData($data)
 	{
-		// Verificar existencia del correo en la cuenta actual
-		$email = $this->findEmailNotRepeated($data->email);
-		if ($email && !$this->findEmailBlocked($email)) {
-				$this->addContact($data, $email);
-		}
-		else {
-			$this->addContact($data);
-		}
-		
-		return $this->contact;
+		//Validar que al crear un email no exceda el limite de emails en la cuenta
+		$idAccount = $this->account->idAccount;
+		$contactLimit = $this->account->contactLimit;
+			$totalEmails = Email::count(array(
+					"conditions" => "idAccount = ?1 AND bounced = 0 AND spam = 0 AND blocked = 0 ",
+					"bind"       => array(1 => $idAccount)
+				)
+			);
+			
+			if($totalEmails >= $contactLimit) {
+				throw new \InvalidArgumentException('Usted ha sobrepasado su limite de contactos [' . $contactLimit .  '] , sus conatctos suman ['. $totalEmails .']');
+			}
+			
+			else {
+				// Verificar existencia del correo en la cuenta actual
+				$email = $this->findEmailNotRepeated($data->email);
+				if ($email && !$this->findEmailBlocked($email)) {
+						$this->addContact($data, $email);
+				}
+				else {
+					$this->addContact($data);
+				}
+
+				return $this->contact;
+			}
 		
 	}
 	
