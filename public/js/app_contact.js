@@ -123,34 +123,49 @@ App.ContactsNewController = Ember.ObjectController.extend({
 	
 	save: function() {
 		
-		 exist = App.Contact.find().filterProperty('email', this.get('email'));
-			if(exist.get("length") === 1){
-				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
-				if(filter.test(this.get('email'))){
-					this.get('model').set('isActive', true);
-					this.get('model').set('isSubscribed', true);
-					this.get("model.transaction").commit();
-					App.set('errormessage', '');
-					this.get("target").transitionTo("contacts");
+//		 exist = App.Contact.find().filterProperty('email', this.get('email'));
+//			if(exist.get("length") === 1){
+//				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
+//				if(filter.test(this.get('email'))){
+//					this.get('model').set('isActive', true);
+//					this.get('model').set('isSubscribed', true);
+//					this.get("model.transaction").commit();
+//					App.set('errormessage', '');
+//					this.get("target").transitionTo("contacts");
+//				}
+//				else{
+//					App.set('errormessage', 'El Email no es valido');
+//					this.get("target").transitionTo("contacts.new");
+//				}
+//			}
+//			else{
+//				App.set('errormessage', 'El Email ya existe en esta Lista');
+//				this.get("target").transitionTo("contacts.new");
+//			}
+		var model = this.get('model');
+		if (model.get('isValid') && !model.get('isSaving')) {
+			
+			model.set('isActive', true);
+			model.set('isSubscribed', true);
+			
+			model.on('becameInvalid', this, function() {
+				console.log('INVALID, INVALID Will Robinson!');
+				this.handleFailure();
+			});			
+			model.on('becameError', this, function() {
+				console.log('ERROR, ERROR Will Robinson!: ');
+				console.log(this.get('content.error'));
+				console.log(this.get('model.error'));
+				console.log(this.get('content.errors'));
+				console.log(this.get('model.errors'));
+				this.handleFailure();
+			});	
+			model.on('didCreate', this, function() {
+				this.get('target').transitionTo('contacts');
+			});
+			
+			model.get('transaction').commit();
 				}
-				else{
-					App.set('errormessage', 'El Email no es valido');
-					this.get("target").transitionTo("contacts.new");
-				}
-			}
-			else{
-				App.set('errormessage', 'El Email ya existe en esta Lista');
-				this.get("target").transitionTo("contacts.new");
-			}
-//		var model = this.get('model');
-//		if (model.get('isValid') && !model.get('isSaving')) {
-//			
-//			model.set('isActive', true);
-//			model.set('isSubscribed', true);
-//			
-//			model.get('transaction').commit();
-//			this.get('target').transitionTo('contacts');
-//		}
 	},
 		
 	cancel: function(){
