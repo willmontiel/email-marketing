@@ -176,3 +176,6 @@ a.inactive {
    pointer-events: none;
    cursor: default;
 }
+.import {
+	font-size: 25px;
+}

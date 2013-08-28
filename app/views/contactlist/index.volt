@@ -18,6 +18,19 @@
 	<div id="emberApplistContainer">
 		<script type="text/x-handlebars">       
         <div class="row-fluid">
+			<div class="span12 text-right">
+				<div class="btn-group">
+					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+					<ul class="dropdown-menu">
+					  <li><a href="#">Ver Bases de Datos</a></li>
+					  <li><a href="#">Crear Base de Datos</a></li>
+					  <li><a href="#">Ver Cuentas</a></li>
+					  <li><a href="#">Crear Cuentas</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
 			<div class="span12">
 				<ul class="nav nav-tabs">
 					{{'{{#linkTo "lists" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
@@ -38,6 +51,7 @@
 				</div>
 				<div class="span3"></div>
 				<div class="span2 text-right">
+					{{ '{{#linkTo "lists.import"}}' }}<span class="fui-list import"> Importar</span>{{ '{{/linkTo}}' }}
 					{{ '{{#linkTo "lists.new"}}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
 				</div>
 			</div>
@@ -191,6 +205,14 @@
 					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 				</div>
 			</div>
+		</script>
+		
+		<script type="text/x-handlebars" data-template-name="lists/import">
+			<form method="Post" action="/emarketing/contacts/importcontacts" >
+				<input class="input-file" name="archivo" type="file" id="archivo"><br>
+				{{submit_button('class': "btn btn-primary", "Cargar")}}
+				<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+			</form>
 		</script>
 		{{ partial("contactlist/blockedemail_partial") }}
 </div>
