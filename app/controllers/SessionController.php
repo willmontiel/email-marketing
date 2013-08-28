@@ -31,7 +31,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 
 
 				 if (!$user) {
-						$this->sessionFlash->error("Usuario o Contraseña incorrecta");
+						$this->flashSession->error("Usuario o Contraseña incorrecta");
 						$this->response->redirect("session/signin");
 				 }
 				 else {
