@@ -140,4 +140,9 @@ class ContactsController extends ControllerBase
 //			$this->flashSession->success('Contactos creados exitosamente');
 			$this->response->redirect("contactlist/show/$list->idList#/contacts");
 	}
+	
+	public function importcontactsAction()
+	{
+		
+	}
 }
