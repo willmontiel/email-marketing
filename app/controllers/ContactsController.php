@@ -146,15 +146,30 @@ class ContactsController extends ControllerBase
 			$this->response->redirect("contactlist/show/$list->idList#/contacts");
 	}
 	
-	public function importcontactsAction()
+	public function importAction()
 	{
-		$archivo = $_FILES['importfile'];
-        $info = pathinfo($archivo['name']);
-        $idenvio = basename($archivo['name'],'.'.$info['extension']);
+		$file = $_FILES['importfile'];
+        $fileInfo = pathinfo($file['name']);
+		$separator = $this->request->getpost('separator');
+		$idDbase = $this->request->getpost('database');
 		
-		$open = fopen($archivo, r);
-		echo "Info: ".$info."<br>";
-		echo "idEnvio".$idenvio;
+		$destiny =  "C:\\".$fileInfo['basename'];
+		copy($_FILES['importfile']['tmp_name'],$destiny);
+		
+		$open = fopen($destiny, "r");
+		$data = array();
+		
+			$line = fgets($open);
+			$eachdata = explode($separator, trim($line));
+			$data['col1'] = $eachdata[0];
+			$data['col2'] = $eachdata[1];
+			$data['col3'] = $eachdata[2];
 
+		fclose($open);
+		$customfields = Customfield::findByIdDbase($idDbase);
+		
+		$this->view->setVar("customfields", $customfields);
+		$this->view->setVar("row", $data);
+		
 	}
 }

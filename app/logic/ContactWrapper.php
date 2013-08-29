@@ -55,18 +55,12 @@ class ContactWrapper
 	
 	public function updateContact($idEmail, $updates)
 	{
-//		$oldContact = Contact::find(array(
-//			"conditions" => "idEmail = ?1",
-//			"bind" => array(1 => $idEmail)
-//			)
-//		);
 		$contacts = Contact::find(array(
 			"conditions" => "idEmail = ?1",
 			"bind" => array(1 => $idEmail)
 			)
 		);
-		
-		
+				
 		foreach ($contacts as $contact) 
 		{
 			$oldContact = Contact::findFirstByIdContact($contact->idContact);
