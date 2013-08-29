@@ -814,7 +814,7 @@ class ApiController extends ControllerBase
 		$blockedWrapper = new BlockedEmailWrapper();
 		
 		try {
-			$success = $blockedWrapper->validateBlockedEmailData($contents, $this->user->account);
+			$blockedEmail = $blockedWrapper->validateBlockedEmailData($contents, $this->user->account);
 		}
 		
 		catch (\InvalidArgumentException $e) {
@@ -826,8 +826,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while blocking email!');	
 		}
 		
-		$result = $blockedWrapper->convertBlockedEmailList($success);
-		return $this->setJsonResponse(array('contact' => $result), 201, 'Success');
+		return $this->setJsonResponse(array('blockedemail' => $blockedEmail), 201, 'Success');
 	}
 	
 	/**

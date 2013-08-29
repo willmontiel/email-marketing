@@ -59,17 +59,18 @@ class BlockedEmailWrapper
 				$email = Email::findFirstByEmail($contents->email);
 				if(!$email) {
 	//				throw new InvalidArgumentException('El email enviado no existe');
-					$this->createBlockedEmail($contents, $account);
+					$blockedEmail = $this->createBlockedEmail($contents, $account);
 				} 
 				else if($email->blocked != 0) {
 					throw new InvalidArgumentException('Este email ya se encuentra bloqueado');
 				}
 
 				else {
-					$this->addEmailToBlockedList($contents, $email);
+					$blockedEmail = $this->addEmailToBlockedList($contents, $email);
 				}
 			}
 		}
+		return $blockedEmail;
 	}
 
 	//Esta funccion crea un email ya bloqueado, en caso de que no exista.
@@ -118,7 +119,9 @@ class BlockedEmailWrapper
 					"bind" => array(1 => $contents->email)
 				)
 			);
-			$this->addEmailToBlockedList($contents, $email);
+			$blockedEmail = $this->addEmailToBlockedList($contents, $email);
+			
+			return $blockedEmail;
 		}
 		
 	}
@@ -187,7 +190,8 @@ class BlockedEmailWrapper
 			$email->blocked = time();
 			$email->save();
 			$blocked->email = $email->email;
-			return $blocked;
+			$blockedJson = $this->convertBlockedEmailList($blocked);
+			return $blockedJson;
 		} else {
 			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
 		}	
