@@ -226,27 +226,18 @@ class ContactWrapper
 		$contactLimit = $this->account->contactLimit;
 		
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-		$countContacts="SELECT COUNT(*) AS total 
-				FROM contact
-					JOIN email ON (contact.idEmail = email.idEmail)
-					JOIN dbase ON ( contact.idDbase = dbase.idDbase )
-					JOIN account ON (dbase.idAccount = account.idAccount)
-				WHERE 
-					contact.bounced =0
-					AND contact.spam =0
-					AND contact.status >0
-					AND email.blocked = 0
-					AND account.idAccount = :idAccount:";
+		$totalActiveContacts = "SELECT SUM(dbase.Cactive) AS cnt
+								FROM dbase
+									JOIN account ON ( dbase.idAccount = account.idAccount ) 
+								WHERE account.idAccount = :idAccount:";
 		
-		$query = $modelManager->createQuery($countContacts);
-		$total = $query->execute(array(
+		$query = $modelManager->createQuery($totalActiveContacts);
+		$totalContacts = $query->execute(array(
 				'idAccount' => $idAccount
 			)
 		)->getFirst();
-		
-		$totalContacts = $total->total;
-		
-		if($totalContacts >= $contactLimit) {
+		$total = $totalContacts->cnt;
+		if($total >= $contactLimit) {
 			throw new \InvalidArgumentException('Usted ha sobrepasado su limite de contactos: [' . $contactLimit .  '] ,  por defecto el sistema ha guardado hasta llegar a ese limite, los demas datos se han descartado');
 		}
 

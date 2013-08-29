@@ -180,6 +180,10 @@ class ContactListWrapper
 	public function deleteContactList($idList)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
+		
+		$db->begin();
+		
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$query = 
 			"SELECT C1.idContact, C1.idList ,COUNT(*) 
 			FROM Coxcl C1
@@ -194,18 +198,19 @@ class ContactListWrapper
 				'idList = '.$idList  
 		);
 		
-		$ids = array_column($results, 'idContact');
-		$deleteContacts = $db->delete(
-			'Contact',
-			'idContact IN (' . implode(',', $ids) . ')'
-		);
 		
-		if(!$deleteContacts) {
-			return;
-		}
-		else {
+		$idsContact = array_map(function ($e) {
+			return $e['idContact'];
+		}, $results);
+		
+		$idContacts = "(". implode(',', $idsContact) . ")";
 			
-		}
+		$deleteContacts = "DELETE FROM Contact WHERE idContact IN " . $idContacts;
+		
+		$query2 = $modelManager->createQuery($deleteContacts);
+		$deletedContacts = $query2->execute();
+
+		$db->commit();
 	}
 
 	
