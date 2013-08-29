@@ -27,14 +27,8 @@ class BlockedEmailWrapper
 		}
 		$bemail->email->blocked = 0;
 		$bemail->email->save();
-
+		
 		$bemail->delete();
-		
-		$updateContact = array('unsubscribed' => time());
-		$wrapper = new ContactWrapper();
-		
-		$wrapper->updateContact($idBlockemail, $updateContact);
-		
 	}
 
 	//esta funcion valida que el email a bloquear exista y que no se encuentre bloqueado
@@ -195,6 +189,11 @@ class BlockedEmailWrapper
 			$email->blocked = time();
 			$email->save();
 			$blocked->email = $email->email;
+			
+			$updateContact = array('unsubscribed' => time());
+			$wrapper = new ContactWrapper();
+		
+			$wrapper->updateContact($email->idEmail, $updateContact);
 			
 			$blockedJson = $this->convertBlockedEmailList($blocked);
 			return $blockedJson;

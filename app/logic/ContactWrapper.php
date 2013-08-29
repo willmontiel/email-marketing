@@ -53,11 +53,18 @@ class ContactWrapper
 		$this->ipaddress = ip2long($ipaddress);
 	}
 	
-	public function updateContact($idContact, $updates)
+	public function updateContact($idEmail, $updates)
 	{
-		$oldContact = Contact::findFirstByIdContact($idContact);
-
-		$contact = Contact::findFirstByIdContact($idContact);
+		$oldContact = Contact::find(array(
+			"conditions" => "idEmail = ?1",
+			"bind" => array(1 => $idEmail)
+			)
+		);
+		$contact = Contact::find(array(
+			"conditions" => "idEmail = ?1",
+			"bind" => array(1 => $idEmail)
+			)
+		);
 		if (!$contact) {
 			throw new \InvalidArgumentException('Contacto no encontrado en la base de datos!');
 		}
@@ -79,7 +86,7 @@ class ContactWrapper
 			}
 			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
 		} else {
-			$this->counter->updateContact($oldContact, $this->contact);
+			$this->counter->updateContact($oldContact, $contact);
 			$this->counter->saveCounters();			
 		}
 	}
