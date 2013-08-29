@@ -189,7 +189,6 @@ class ContactListWrapper
 
 		$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idList' => $idList));
 		
-		$this->db->begin();
 		$db->delete(
 				'Contactlist',
 				'idList = '.$idList  
@@ -202,11 +201,10 @@ class ContactListWrapper
 		);
 		
 		if(!$deleteContacts) {
-			$this->db->rollback();
 			return;
 		}
 		else {
-			$this->db->commit();
+			
 		}
 	}
 

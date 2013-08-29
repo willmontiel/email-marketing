@@ -30,10 +30,10 @@ class BlockedEmailWrapper
 
 		$bemail->delete();
 		
-		$updateContact = array('unsubscribed' => 1);
+		$updateContact = array('unsubscribed' => time());
 		$wrapper = new ContactWrapper();
 		
-		$wrapper->updateContact($updateContact);
+		$wrapper->updateContact($idBlockemail, $updateContact);
 		
 	}
 
