@@ -55,40 +55,43 @@ class ContactWrapper
 	
 	public function updateContact($idEmail, $updates)
 	{
-		$oldContact = Contact::find(array(
+//		$oldContact = Contact::find(array(
+//			"conditions" => "idEmail = ?1",
+//			"bind" => array(1 => $idEmail)
+//			)
+//		);
+		$contacts = Contact::find(array(
 			"conditions" => "idEmail = ?1",
 			"bind" => array(1 => $idEmail)
 			)
 		);
-		$contact = Contact::find(array(
-			"conditions" => "idEmail = ?1",
-			"bind" => array(1 => $idEmail)
-			)
-		);
-		if (!$contact) {
-			throw new \InvalidArgumentException('Contacto no encontrado en la base de datos!');
-		}
-
-		if ($contact->dbase->idDbase != $this->idDbase) {
-			throw new \InvalidArgumentException('Contacto no encontrado en la base de datos!');
-		}
 		
-		foreach ($updates as $key=>$value)
+		
+		foreach ($contacts as $contact) 
 		{
-			$contact->$key = $value;
-		}
-		
-		if (!$contact->save()) {
-			$errmsg = $contact->getMessages();
-			$msg = '';
-			foreach ($errmsg as $err) {
-				$msg .= $err . PHP_EOL;
+			$oldContact = Contact::findFirstByIdContact($contact->idContact);
+			
+			if (!$contact) {
+				throw new \InvalidArgumentException('Contacto no se ha encontrado en la base de datos!');
 			}
-			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
-		} else {
-			$this->counter->updateContact($oldContact, $contact);
-			$this->counter->saveCounters();			
+			
+			foreach ($updates as $key=>$value)
+			{
+				$contact->$key = $value;
+			}
+
+			if (!$contact->save()) {
+				$errmsg = $contact->getMessages();
+				$msg = '';
+				foreach ($errmsg as $err) {
+					$msg .= $err . PHP_EOL;
+				}
+				throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
+			} else {
+				$this->counter->updateContact($oldContact, $contact);
+			}
 		}
+			$this->counter->saveCounters();			
 	}
 
 	public function updateContactFromJsonData($idContact, $data)
