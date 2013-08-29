@@ -30,25 +30,22 @@ class SessionController extends \Phalcon\Mvc\Controller
 				));
 
 
-				 if (!$user) {
-						$this->flashSession->error("Usuario o Contraseña incorrecta");
-						$this->response->redirect("session/signin");
-				 }
-				 else {
-					if ($this->security2->checkHash($password, $user->password)) {
-						$this->session->set('userid', $user->idUser);
-						$this->session->set('authenticated', true);
+				if ($user && $this->security2->checkHash($password, $user->password)) {
+					$this->session->set('userid', $user->idUser);
+					$this->session->set('authenticated', true);
 
-						$this->response->redirect("");
-					}
+					$this->response->redirect("");
 
-				 }
+				}
       
 			}
          
         }
         
-    }
-    
+		$this->flashSession->error('Usuario o contraseña incorrecta!');
+		$this->response->redirect('session/signin');
+
+	}
+	
     
 }
