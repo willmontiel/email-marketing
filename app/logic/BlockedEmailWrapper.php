@@ -14,38 +14,31 @@ class BlockedEmailWrapper
 		$this->pager = $p;
 	}
 	
-	//Esta funcion valida que el id de la lista de bloqueo pertenezaca a un base de datos de la cuenta en 
-	//la que se encuentra registrado el usuario que efectua la accion
-	public function validateEmailBelongsToAccount(Account $account, $idBlockemail)
+	/**
+	 * Esta funcion valida que el id de la lista de bloqueo pertenezca a un base de datos de la cuenta en 
+	 * la que se encuentra registrado el usuario que efectua la accion
+	 */
+	public function removeEmailFromBlockedList(Account $account, $idBlockemail)
 	{
-		$idAccount = $account->idAccount;
-		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-		$listExist="SELECT COUNT(*) AS cnt
-					FROM blockedemail
-						JOIN email 
-						ON ( blockedemail.idEmail = email.idEmail ) 
-					WHERE blockedemail.idBlockedemail = :idBlockedemail:
-					AND email.idAccount = :idAccount:";
-				
-		$query = $modelManager->createQuery($listExist);
-		$blockedEmails = $query->execute(array(
-				'idBlockedemail' => $idBlockemail,
-				'idAccount' => $idAccount
-			)
-		)->getFirst();
+		$bemail = Blockedemail::findFirst($idBlockemail);
 		
-		$totalEmailBlocked = $blockedEmails->cnt;
+		if (!$bemail || $bemail->email->account != $account) {
+			throw new Exception('Error');
+		}
+		$bemail->email->blocked = 0;
+		$bemail->email->save();
+
+		$bemail->delete();
 		
-		if($totalEmailBlocked == 0) {
-			throw new InvalidArgumentException('El email no existe');
-		}
-		else {
-			$this->removeEmailFromBlockedList($idBlockemail);	
-		}
+		$updateContact = array('unsubscribed' => 1);
+		$wrapper = new ContactWrapper();
+		
+		$wrapper->updateContact($updateContact);
+		
 	}
 
 	//esta funcion valida que el email a bloquear exista y que no se encuentre bloqueado
-	public function validateBlockedEmailData($contents, $account)
+	public function addBlockedEmail($contents, $account)
 	{
 		if (!\filter_var($contents->email, FILTER_VALIDATE_EMAIL)) {
 			throw new InvalidArgumentException('La direccion [' . $contents->email . '] no es una direccion de correo valida!');
@@ -202,41 +195,13 @@ class BlockedEmailWrapper
 			$email->blocked = time();
 			$email->save();
 			$blocked->email = $email->email;
+			
 			$blockedJson = $this->convertBlockedEmailList($blocked);
 			return $blockedJson;
-		} else {
-			throw new InvalidArgumentException('Ha ocurrido un error, por favor contacta con tu administrador');
+		} 
+		else {
+			throw new InvalidArgumentException('Se presento un error en la creacion del bloqueo!');
 		}	
 	}
 	
-	//esta funcion remueve un email de la lista de bloqueo
-	public function removeEmailFromBlockedList($idBlockedemail)
-	{
-		$removeEmail = Blockedemail::findFirst(array(
-				"conditions" => "idBlockedemail = ?1",
-				"bind"       =>array(1 => $idBlockedemail)
-			)
-		);
-		
-		if(!$removeEmail) {
-			throw new InvalidArgumentException('El email no se encuentra en la lista global de bloqueo');
-		}
-		
-		else {
-			$emailUnblock = Email::findFirst(array(
-					"conditions" => "idEmail = ?1",
-					"bind"		 => array(1 => $removeEmail->idEmail)
-				)
-			);
-
-			$emailUnblock->blocked = 0;
-			
-			if(!$emailUnblock->save()) {
-				throw new InvalidArgumentException('El email no existe');
-			}
-			
-			$removeEmail->delete();
-//			return array("Se ha desbloqueado la dirección de correo", $msj);
-		}
-	}
 }

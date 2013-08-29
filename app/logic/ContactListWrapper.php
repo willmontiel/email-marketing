@@ -41,27 +41,15 @@ class ContactListWrapper
 		return $object;
 	}
 	
-	public function validateListBelongsToAccount($idList, $account)
+	public function validateListBelongsToAccount(Account $account, $idList)
 	{
-		$idAccount = $account->idAccount;
-		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-		$contactlistExist= "SELECT COUNT(*) 
-							FROM contactlist
-								JOIN dbase
-								ON ( contactlist.idDbase = dbase.idDbase ) 
-							WHERE contactlist.idList = :idList:
-							AND dbase.idAccount = :idAccount:";
-				
-		$query = $modelManager->createQuery($contactlistExist);
-		$listExist = $query->execute(array(
-				"idList" => "$idList",
-				"idAccount" => "$idAccount"
-			)
-		);
+		$bContactList = Contactlist::findFirst($idList);
 		
-		if($listExist < 0) {
+		if (!$bContactList || $bContactList->dbase->account != $account) {
+			throw new Exception('Error');
 			return false;
 		}
+		
 		else {
 			return true;
 		}
@@ -201,18 +189,25 @@ class ContactListWrapper
 
 		$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idList' => $idList));
 		
-			$deleteList = $db->delete(
-					'Contactlist',
-					'idList = '.$idList  
-			);
-			foreach ($results as $result) {	
-					$contact = $db->delete(
-						'Contact',
-						'idContact = '.$result["idContact"]
-					);
-			}
-			
-	
+		$this->db->begin();
+		$db->delete(
+				'Contactlist',
+				'idList = '.$idList  
+		);
+		
+		$ids = array_column($results, 'idContact');
+		$deleteContacts = $db->delete(
+			'Contact',
+			'idContact IN (' . implode(',', $ids) . ')'
+		);
+		
+		if(!$deleteContacts) {
+			$this->db->rollback();
+			return;
+		}
+		else {
+			$this->db->commit();
+		}
 	}
 
 	

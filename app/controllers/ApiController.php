@@ -599,7 +599,7 @@ class ApiController extends ControllerBase
 	{
 		$wrapper = new ContactListWrapper();
 		$account = $this->user->account;
-		$listExsit = $wrapper->validateListBelongsToAccount($idList, $account);
+		$listExsit = $wrapper->validateListBelongsToAccount($account, $idList);
 		
 		if($listExsit == false) {
 			$status = "No se encontro la lista";
@@ -814,12 +814,12 @@ class ApiController extends ControllerBase
 		$blockedWrapper = new BlockedEmailWrapper();
 		
 		try {
-			$blockedEmail = $blockedWrapper->validateBlockedEmailData($contents, $this->user->account);
+			$blockedEmail = $blockedWrapper->addBlockedEmail($contents, $this->user->account);
 		}
 		
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
+			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
@@ -840,12 +840,12 @@ class ApiController extends ControllerBase
 		$wrapper = new BlockedEmailWrapper();
 		
 		try {
-			$wrapper->validateEmailBelongsToAccount($this->user->account, $idBlockedemail);
+			$wrapper->removeEmailFromBlockedList($this->user->account, $idBlockedemail);
 		}
 		
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
+			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');

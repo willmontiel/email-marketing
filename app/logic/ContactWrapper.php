@@ -497,7 +497,7 @@ class ContactWrapper
 				
 		$total = $result->cnt;
 
-		$querytxt2 = "SELECT Contact.* FROM Contact JOIN Email ON (Contact.idEmail = Email.idEmail) WHERE idDbase = :idDbase: AND Email.blocked = 0";
+		$querytxt2 = "SELECT Contact.* FROM Contact WHERE idDbase = :idDbase:";
 
 		if ($this->pager->getRowsPerPage() != 0) {
 			$querytxt2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
@@ -569,6 +569,7 @@ class ContactWrapper
 	
 	public function findContactsByList($list) 
 	{
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		//$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));
 		$this->pager->setTotalRecords(Coxcl::count("idList = '$list->idList'"));
 
@@ -576,6 +577,7 @@ class ContactWrapper
 			"idList = '$list->idList'",
 			"limit" => array('number' => $this->pager->getRowsPerPage(), 'offset' => $this->pager->getStartIndex())
 		));
+		
 		
 		$result = array();
 		foreach ($contacts as $contact) {
