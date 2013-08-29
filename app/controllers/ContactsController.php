@@ -98,17 +98,22 @@ class ContactsController extends ControllerBase
 		$log = $this->logger;
 		
 		$list = Contactlist::findFirstByIdList($idList);
+		$batch = $_SESSION['batch'];
 		
-		$wrapper = new ContactWrapper();
-		$wrapper->setAccount($this->user->account);
-		$wrapper->setIdDbase($list->idDbase);
-		$wrapper->setIdList($idList);
-		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
+		foreach ($batch as $batchC) {
 		// Crear el nuevo contacto:
-			$batch = $_SESSION['batch'];
+			
+			$wrapper = new ContactWrapper();
+			$wrapper->setAccount($this->user->account);
+			$wrapper->setIdDbase($list->idDbase);
+			$wrapper->setIdList($idList);
+			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
 
 			$newcontact = new stdClass();
 			
+			$newcontact->email = $batchC['email'];
+			$newcontact->name = $batchC['name'];
+			$newcontact->last_name = $batchC['last_name'];
 			$newcontact->status = "";
 			$newcontact->activated_on = "";
 			$newcontact->bounced_on = "";
@@ -120,29 +125,29 @@ class ContactsController extends ControllerBase
 			$newcontact->updated_on = "";
 			$newcontact->created_on = "";
 			$newcontact->is_bounced = "";
-			$newcontact->is_subscribed = 1;
+			$newcontact->is_subscribed = "";
 			$newcontact->is_spam = "";
 			$newcontact->is_active = 1;
 			
-			foreach ($batch as &$batch) {
-				$newcontact->email = $batch['email'];
-				$newcontact->name = $batch['name'];
-				$newcontact->last_name = $batch['last_name'];
-				
-				try {
-				$contact = $wrapper->createNewContactFromJsonData($newcontact);
+			try {
+				$contact = $wrapper->searchContactinDbase($newcontact->email);
+				if(!$contact) {
+					$contact = $wrapper->createNewContactFromJsonData($newcontact);
 				}
-				catch (\Exception $e) {
-					$log->log('Exception: [' . $e . ']');
-					$this->flashSession->error($e->getMessage());
-				}				
 			}
+			catch (\InvalidArgumentException $e) {
+				$log->log('Exception: [' . $e . ']');
+			}
+			catch (\Exception $e) {
+				$log->log('Exception: [' . $e . ']');
+			}				
+		}
 //			$this->flashSession->success('Contactos creados exitosamente');
 			$this->response->redirect("contactlist/show/$list->idList#/contacts");
 	}
 	
 	public function importcontactsAction()
 	{
-		
+		$contents = $this->request->getpost('importfile');
 	}
 }

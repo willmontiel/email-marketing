@@ -250,6 +250,28 @@ class TestController extends ControllerBase
 		$array[15] = $this->fullArray($db, $list, $listNew);
 		$array[15]['Desc'] = "Segundo Contacto Suscrito e Inactivo";
 		
+		//-----------------New Contacts By Batch-----------------//
+		
+		for($i=0; $i<3; $i++) {
+			$contact = $this->createContact($emailNew."a".$i);
+		}
+		
+		$db = Dbase::findFirstByIdDbase($this->idDbase);
+		$list = Contactlist::findFirstByIdList($this->idList);
+		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		
+		$array[16] = $this->fullArray($db, $list, $listNew);
+		$array[16]['Desc'] = "Contactos por Lote";
+		
+		//-----------------Final Result-----------------//
+		
+		$db = Dbase::findFirstByIdDbase($this->idDbase);
+		$list = Contactlist::findFirstByIdList($this->idList);
+		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		
+		$array[17] = $this->fullArray($db, $list, $listNew);
+		$array[17]['Desc'] = "Finalizacion de contadores";
+		
 		//-----------------Show Results-----------------//
 		
 		$this->view->setVar("results", $array);	
