@@ -148,6 +148,13 @@ class ContactsController extends ControllerBase
 	
 	public function importcontactsAction()
 	{
-		$contents = $this->request->getpost('importfile');
+		$archivo = $_FILES['importfile'];
+        $info = pathinfo($archivo['name']);
+        $idenvio = basename($archivo['name'],'.'.$info['extension']);
+		
+		$open = fopen($archivo, r);
+		echo "Info: ".$info."<br>";
+		echo "idEnvio".$idenvio;
+
 	}
 }

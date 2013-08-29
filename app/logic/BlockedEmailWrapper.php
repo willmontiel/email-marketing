@@ -56,7 +56,15 @@ class BlockedEmailWrapper
 			}
 			else {
 			
-				$email = Email::findFirstByEmail($contents->email);
+				$email = Email::findFirst(
+						array(
+							'conditions' => 'email = ?1 AND idAccount = ?2',
+							'bind' => array(
+								1 => $contents->email, 
+								2 => $account->idAccount
+							)
+						)
+				);
 				if(!$email) {
 	//				throw new InvalidArgumentException('El email enviado no existe');
 					$blockedEmail = $this->createBlockedEmail($contents, $account);
@@ -114,10 +122,14 @@ class BlockedEmailWrapper
 		}
 		
 		else {
-			$email = Email::findFirst(array(
-					"conditions" => "email = ?1",
-					"bind" => array(1 => $contents->email)
-				)
+			$email = Email::findFirst(
+					array(
+						'conditions' => 'email = ?1 AND idAccount = ?2',
+						'bind' => array(
+							1 => $contents->email, 
+							2 => $account->idAccount
+						)
+					)
 			);
 			$blockedEmail = $this->addEmailToBlockedList($contents, $email);
 			
@@ -216,7 +228,7 @@ class BlockedEmailWrapper
 					"bind"		 => array(1 => $removeEmail->idEmail)
 				)
 			);
-			
+
 			$emailUnblock->blocked = 0;
 			
 			if(!$emailUnblock->save()) {

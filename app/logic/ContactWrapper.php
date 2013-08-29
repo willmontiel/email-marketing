@@ -49,15 +49,45 @@ class ContactWrapper
 		$this->idList =$idList;
 	}
 
-		public function setIPAdress($ipaddress) {
+	public function setIPAdress($ipaddress) {
 		$this->ipaddress = ip2long($ipaddress);
 	}
 	
+	public function updateContact($idContact, $updates)
+	{
+		$oldContact = Contact::findFirstByIdContact($idContact);
+
+		$contact = Contact::findFirstByIdContact($idContact);
+		if (!$contact) {
+			throw new \InvalidArgumentException('Contacto no encontrado en la base de datos!');
+		}
+
+		if ($contact->dbase->idDbase != $this->idDbase) {
+			throw new \InvalidArgumentException('Contacto no encontrado en la base de datos!');
+		}
+		
+		foreach ($updates as $key=>$value)
+		{
+			$contact->$key = $value;
+		}
+		
+		if (!$contact->save()) {
+			$errmsg = $contact->getMessages();
+			$msg = '';
+			foreach ($errmsg as $err) {
+				$msg .= $err . PHP_EOL;
+			}
+			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
+		} else {
+			$this->counter->updateContact($oldContact, $this->contact);
+			$this->counter->saveCounters();			
+		}
+	}
+
 	public function updateContactFromJsonData($idContact, $data)
 	{
 		// Actualizar contacto:
 		// 0) Cargar el contacto Antigua para comparaciones 
-		
 		$oldContact = Contact::findFirstByIdContact($idContact);
 		
 		// 1) Cargar el contacto

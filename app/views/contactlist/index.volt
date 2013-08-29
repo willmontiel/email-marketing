@@ -208,7 +208,7 @@
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="lists/import">
-			<form method="Post" action="/emarketing/contacts/importcontacts" >
+			<form method="Post" action="/emarketing/contacts/importcontacts" enctype="multipart/form-data">
 				<input class="input-file" name="importfile" type="file" id="importfile"><br>
 				{{submit_button('class': "btn btn-primary", "Cargar")}}
 				<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
