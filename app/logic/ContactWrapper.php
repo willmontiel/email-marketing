@@ -184,28 +184,44 @@ class ContactWrapper
 		//Validar que al crear un email no exceda el limite de emails en la cuenta
 		$idAccount = $this->account->idAccount;
 		$contactLimit = $this->account->contactLimit;
-			$totalEmails = Email::count(array(
-					"conditions" => "idAccount = ?1 AND bounced = 0 AND spam = 0 AND blocked = 0 ",
-					"bind"       => array(1 => $idAccount)
-				)
-			);
-			
-			if($totalEmails >= $contactLimit) {
-				throw new \InvalidArgumentException('Usted ha sobrepasado su limite de contactos: [' . $contactLimit .  '] ,  por defecto el sistema ha guardado hasta llegar a ese limite, los demas datos se han descartado');
-			}
-			
-			else {
-				// Verificar existencia del correo en la cuenta actual
-				$email = $this->findEmailNotRepeated($data->email);
-				if ($email && !$this->findEmailBlocked($email)) {
-						$this->addContact($data, $email);
-				}
-				else {
-					$this->addContact($data);
-				}
+		
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+		$countContacts="SELECT COUNT(*) AS total 
+				FROM contact
+					JOIN email ON (contact.idEmail = email.idEmail)
+					JOIN dbase ON ( contact.idDbase = dbase.idDbase )
+					JOIN account ON (dbase.idAccount = account.idAccount)
+				WHERE 
+					contact.bounced =0
+					AND contact.spam =0
+					AND contact.status >0
+					AND email.blocked = 0
+					AND account.idAccount = :idAccount:";
+		
+		$query = $modelManager->createQuery($countContacts);
+		$total = $query->execute(array(
+				'idAccount' => $idAccount
+			)
+		)->getFirst();
+		
+		$totalContacts = $total->total;
+		
+		if($totalContacts >= $contactLimit) {
+			throw new \InvalidArgumentException('Usted ha sobrepasado su limite de contactos: [' . $contactLimit .  '] ,  por defecto el sistema ha guardado hasta llegar a ese limite, los demas datos se han descartado');
+		}
 
-				return $this->contact;
+		else {
+			// Verificar existencia del correo en la cuenta actual
+			$email = $this->findEmailNotRepeated($data->email);
+			if ($email && !$this->findEmailBlocked($email)) {
+					$this->addContact($data, $email);
 			}
+			else {
+				$this->addContact($data);
+			}
+
+			return $this->contact;
+		}
 		
 	}
 	
