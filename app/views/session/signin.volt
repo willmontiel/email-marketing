@@ -33,6 +33,7 @@
 					
 				<div class="login-form">
 					{{ form('session/login', 'id': 'sessionlogin') }}
+						<input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
 
 						<p>   
 							<strong>Usuario:</strong>
@@ -65,7 +66,6 @@
 								{{ link_to('', "¿Olvidaste tu contraseña?")}}
 							</label>
 						</p>
-						<input type="hidden" name="csrf" value="{{ security.getToken() }}"/>
 					</form>
 				</div>
 			</div>
