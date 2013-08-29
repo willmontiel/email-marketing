@@ -34,7 +34,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 					$this->session->set('userid', $user->idUser);
 					$this->session->set('authenticated', true);
 
-					$this->response->redirect("");
+					return $this->response->redirect("");
 
 				}
       
