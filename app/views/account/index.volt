@@ -34,8 +34,8 @@
 				<td>{{item.contactLimit}}</td>
  				<td>{{item.messageLimit}}</td>
  				<td>{{item.subscriptionMode}}</td>
-				<td>{{date('F j, Y', item.createdon)}}</td>
-				<td>{{date('F j, Y', item.updatedon)}}</td>
+				<td>{{date('d/m/Y H:i', item.createdon)}}</td>
+				<td>{{date('d/m/Y H:i', item.updatedon)}}</td>
 				<td>
 				 <a href="account/show/{{item.idAccount}}">Ver</a><br>
 				 <a href="account/edit/{{item.idAccount}}">Editar</a><br>

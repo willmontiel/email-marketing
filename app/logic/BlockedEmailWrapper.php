@@ -130,7 +130,7 @@ class BlockedEmailWrapper
 		$object['id'] = $Blockedemail->idBlockedemail;
 		$object['email'] = $Blockedemail->email;
 		$object['blocked_reason'] = $Blockedemail->blockedReason;
-		$object['blocked_date'] = $Blockedemail->blockedDate;
+		$object['blocked_date'] = date('d/m/Y H:i', $Blockedemail->blockedDate);
 
 		return $object;
 	}

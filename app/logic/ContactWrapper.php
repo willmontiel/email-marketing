@@ -451,7 +451,7 @@ class ContactWrapper
 				
 		$total = $result->cnt;
 
-		$querytxt2 = "SELECT Contact.* FROM Contact WHERE idDbase = :idDbase:";
+		$querytxt2 = "SELECT Contact.* FROM Contact JOIN Email ON (Contact.idEmail = Email.idEmail) WHERE idDbase = :idDbase: AND Email.blocked = 0";
 
 		if ($this->pager->getRowsPerPage() != 0) {
 			$querytxt2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
