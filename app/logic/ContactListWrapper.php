@@ -181,8 +181,6 @@ class ContactListWrapper
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$db->begin();
-		
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$query = 
 			"SELECT C1.idContact, C1.idList ,COUNT(*) 
@@ -210,7 +208,6 @@ class ContactListWrapper
 		$query2 = $modelManager->createQuery($deleteContacts);
 		$deletedContacts = $query2->execute();
 
-		$db->commit();
 	}
 
 	
