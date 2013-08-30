@@ -1,23 +1,8 @@
 <?php
-class ContactListWrapper
+class ContactListWrapper extends BaseWrapper
 {
-	protected $pager;
-	protected $account;
 
-	public function __construct()
-	{
-		$this->pager = new PaginationDecorator();
-	}
-	
-	public function setPager(PaginationDecorator $p)
-	{
-		$this->pager = $p;
-	}
-	
-	public function setAccount(Account $account) {
-		$this->account = $account;
-	}
-	
+
 	/**
 	 * Crea un arreglo con la informacion del objeto Contactlist
 	 * para que pueda ser convertido a JSON
@@ -77,11 +62,13 @@ class ContactListWrapper
 	{
 		
 		if (!isset($contents->name)) {
+			$this->addFieldError('name', 'Este campo es requerido!');
 			throw new InvalidArgumentException('El nombre de la lista de contactos es requerido!');
 		}
 		$cnt = Contactlist::countContactListsInAccount($this->account, 'Contactlist.name = :name:', array('name' => $contents->name));
 
 		if($cnt != 0) {
+			$this->addFieldError('name', 'Este nombre de lista ya existe en la base de datos seleccionada');
 			throw new InvalidArgumentException('Nombre de lista de contacto duplicado');
 		}
 		
