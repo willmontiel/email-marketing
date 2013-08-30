@@ -144,6 +144,7 @@
 					<a href="/emarketing/contactlist#/lists"><button class="btn btn-inverse">Regresar</button></a>
 					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary">Agregar</button>{{'{{/linkTo}}'}}
 					{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
+					{{ '{{#linkTo "contacts.import"}} <button class="btn btn-primary" >Importar</button> {{/linkTo}}' }}
 				</div>
 			</div>
 			<br>
@@ -514,6 +515,18 @@
 		</div>
 	</div>
 </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="contacts/import">
+	<form method="Post" action="/emarketing/contacts/import" enctype="multipart/form-data">
+		<div class="row-fluid">
+			<div class="span6">
+				<input class="input-file" name="importfile" type="file" id="importfile"><br>
+				{{submit_button('class': "btn btn-primary", "Cargar")}}
+				<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+			</div>
+		</div>
+	</form>
 </script>
 </div>
 {% endblock %}

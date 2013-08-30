@@ -8,7 +8,6 @@ App.set('errormessage', '');
 App.Router.map(function() {
   this.resource('lists', function(){
 	  this.route('new'),
-	  this.route('import'),
 	  this.resource('lists.edit', { path: '/edit/:list_id' });
 	  this.resource('lists.delete', { path: '/delete/:list_id' });
   }),
@@ -129,7 +128,7 @@ App.ListsEditRoute = Ember.Route.extend({
 	}
 });
 
-App.ListsImportRoute = Ember.Route.extend();
+
 
 //Controladores
 App.ListController = Ember.ObjectController.extend();
@@ -212,10 +211,4 @@ App.ListsDeleteController = Ember.ObjectController.extend({
 		 this.get("target").transitionTo("lists");
 	}
 	
-});
-
-App.ListsImportController = Ember.ObjectController.extend({
-	cancel: function() {
-		this.get("target").transitionTo("lists");
-	}
 });

@@ -51,7 +51,6 @@
 				</div>
 				<div class="span3"></div>
 				<div class="span2 text-right">
-					{{ '{{#linkTo "lists.import"}}' }}<span class="fui-list import"> Importar</span>{{ '{{/linkTo}}' }}
 					{{ '{{#linkTo "lists.new"}}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
 				</div>
 			</div>
@@ -205,38 +204,6 @@
 					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 				</div>
 			</div>
-		</script>
-		
-		<script type="text/x-handlebars" data-template-name="lists/import">
-			<form method="Post" action="/emarketing/contacts/import" enctype="multipart/form-data">
-				<div class="row-fluid">
-					<input class="input-file" name="importfile" type="file" id="importfile"><br>
-				</div>
-				<div class="row-fluid">
-					<div class="span2">
-						<label for="separator">Separador</label>
-						{{ text_field("separator") }}
-					</div>
-				</div>
-				<div class="row-fluid">
-					<div class="span5">
-						<label for="list">Nueva Lista</label>
-						{{ text_field("list") }}
-					</div>
-				</div>
-				<div class="row-fluid">
-					<div class="span5">
-						<label>Base de datos</label>
-						<p>{{ '{{view Ember.Select contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name" name="database" id="database"}}' }}</p>
-					</div>
-				</div>
-				<div class="row-fluid">
-					<div class="span9">
-					{{submit_button('class': "btn btn-primary", "Cargar")}}
-					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-					</div>
-				</div>
-			</form>
 		</script>
 		{{ partial("contactlist/blockedemail_partial") }}
 </div>

@@ -9,6 +9,7 @@ App.Router.map(function() {
   this.resource('contacts', function(){
 	  this.route('new'),
 	  this.route('newbatch'),
+	  this.route('import'),
 	  this.resource('contacts.show', { path: '/show/:contact_id'}),
 	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
 	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
@@ -111,6 +112,8 @@ App.ContactsEditRoute = Ember.Route.extend({
 		}
 	}
 });
+
+App.ContactsImportRoute = Ember.Route.extend();
 
 //Controladores
 
@@ -247,6 +250,12 @@ App.ContactsShowController = Ember.ObjectController.extend({
 	}
 });
 
+App.ContactsImportController = Ember.ObjectController.extend({
+	cancel: function() {
+		this.get("target").transitionTo("lists");
+	}
+});
+
 //Views
 
 App.ContactsNewView = Ember.View.extend({
@@ -264,11 +273,3 @@ App.ContactsEditView = Ember.View.extend({
 		});
     }
 });
-
-
-
-
-
-
-
-
