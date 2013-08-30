@@ -16,7 +16,7 @@ class ContactlistController extends ControllerBase
 		if ($r)
 			return $r;	
 		
-		$list = Contactlist::findFirstByIdList($id);
+		$list = Contactlist::findFirstByIdContactlist($id);
 		
 		$this->view->setVar('datalist', $list);
 		

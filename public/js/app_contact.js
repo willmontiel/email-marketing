@@ -275,12 +275,15 @@ App.ContactsShowController = Ember.ObjectController.extend({
 });
 
 App.ContactsImportController = Ember.ObjectController.extend({
-	save: function() {
-		alert("hola");
-		this.get("target").transitionTo("contacts.newimport");
-	},	
+	load: function() {
+		var importFile = new Array();
+		console.log(importFile = (this.get("importfile")));
+//		var importedFile = importFile.split("[\\r\\n]+");
+		//importedFile.open;
+	},
+	
 	cancel: function() {
-		this.get("target").transitionTo("lists");
+		this.get("target").transitionTo("contacts");
 	}
 });
 
@@ -304,4 +307,11 @@ App.ContactsEditView = Ember.View.extend({
 			placeholder: "Seleccione las Opciones"
 		});
     }
-});       
+});
+
+App.ImportView = Ember.View.extend({
+  tagName: 'input',
+  attributeBindings: ['name'],
+  type: 'file'
+  
+});

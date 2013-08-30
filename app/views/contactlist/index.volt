@@ -80,7 +80,7 @@
 						</tbody>
 					{{'{{#each model}}'}}
 							<tr>
-								<td><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a></td>
+								<td><a href="contactlist/show/{{ '{{id}}' }}#/contacts">{{ '{{name}}' }}</a></td>
 								<td>{{ '{{description}}' }}</td>
 								<td>50</td>
 								<td><span class="label label-filling">{{ '{{dbase.name }}' }}</span></td>

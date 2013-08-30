@@ -5,7 +5,7 @@
 		{{ javascript_include('js/mixin_pagination.js') }}
 		
 	<script type="text/javascript">
-		var MyDbaseUrl = 'emarketing/api/contactlist/{{datalist.idList}}';
+		var MyDbaseUrl = 'emarketing/api/contactlist/{{datalist.idContactlist}}';
 		
 		var myContactModel = {
 			email: DS.attr( 'string' ),
@@ -518,15 +518,8 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/import">
-	<form enctype="multipart/form-data">
-		<div class="row-fluid">
-			<div class="span6">
-				<input class="input-file" name="importfile" type="file" id="importfile"><br>
-				<button class="btn btn-inverse" {{ '{{action save this}}' }}>Guardar</button>
-				<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-			</div>
-		</div>
-	</form>
+		{{ '{{view App.ImportView fileBinding="SomeModel.attribute" }}' }}
+		<button {{ '{{ action load this}}' }}>Cargar</button>
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/newimport">
