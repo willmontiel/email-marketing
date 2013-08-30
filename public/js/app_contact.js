@@ -4,12 +4,21 @@ App = Ember.Application.create({
 
 App.set('errormessage', '');
 
+App.records = Ember.Object.create({
+    "row1": Ember.A(),
+	"row2": Ember.A(),
+	"row3": Ember.A(),
+	"row4": Ember.A(),
+	"row5": Ember.A()
+});
+
 //Definiendo Rutas
 App.Router.map(function() {
   this.resource('contacts', function(){
 	  this.route('new'),
 	  this.route('newbatch'),
 	  this.route('import'),
+	  this.route('newimport'),
 	  this.resource('contacts.show', { path: '/show/:contact_id'}),
 	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
 	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
@@ -114,6 +123,21 @@ App.ContactsEditRoute = Ember.Route.extend({
 });
 
 App.ContactsImportRoute = Ember.Route.extend();
+
+App.ContactsNewimportRoute = Ember.Route.extend({
+	model: function () {
+		App.records.row1.pushObject("correo1@email.com");
+		App.records.row1.pushObject("Nombre1");
+		App.records.row2.pushObject("correo2@email.com");
+		App.records.row2.pushObject("Nombre2");
+		App.records.row3.pushObject("correo3@email.com");
+		App.records.row3.pushObject("Nombre3");
+		App.records.row4.pushObject("correo4@email.com");
+		App.records.row4.pushObject("Nombre4");
+		App.records.row5.pushObject("correo5@email.com");
+		App.records.row5.pushObject("Nombre5");
+	}
+});
 
 //Controladores
 
@@ -251,9 +275,17 @@ App.ContactsShowController = Ember.ObjectController.extend({
 });
 
 App.ContactsImportController = Ember.ObjectController.extend({
+	save: function() {
+		alert("hola");
+		this.get("target").transitionTo("contacts.newimport");
+	},	
 	cancel: function() {
 		this.get("target").transitionTo("lists");
 	}
+});
+
+App.ContactsNewimportController = Ember.ObjectController.extend({
+	
 });
 
 //Views
@@ -272,4 +304,4 @@ App.ContactsEditView = Ember.View.extend({
 			placeholder: "Seleccione las Opciones"
 		});
     }
-});
+});       

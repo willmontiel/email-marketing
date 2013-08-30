@@ -518,15 +518,91 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/import">
-	<form method="Post" action="/emarketing/contacts/import" enctype="multipart/form-data">
+	<form enctype="multipart/form-data">
 		<div class="row-fluid">
 			<div class="span6">
 				<input class="input-file" name="importfile" type="file" id="importfile"><br>
-				{{submit_button('class': "btn btn-primary", "Cargar")}}
+				<button class="btn btn-inverse" {{ '{{action save this}}' }}>Guardar</button>
 				<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 			</div>
 		</div>
 	</form>
 </script>
+
+<script type="text/x-handlebars" data-template-name="contacts/newimport">
+	<div class="row-fluid">
+		<div class="span8">
+			<div class="row-fluid">
+				<div class="span7">
+				{{' {{#with App.records}} '}}
+							{{' {{#each row1}} '}}
+								<tr>
+									<td>{{' {{this}} '}}</td>
+									<td>
+										<select>
+											<option value="email">Email</option>
+											<option value="name">Nombre</option>
+											<option value="lastname">Apellido</option>
+											{% for field in fields %}
+												<option value="{{field.idCustomField}}">{{field.name}}</option>
+											{%endfor%}
+										</select>
+									</td>
+								</tr>
+							{{' {{/each}} '}}
+				{{' {{/with}} '}}
+								
+					
+					Delimitador:
+					<select>
+						<option value="coma" selected>,</option>
+						<option value="puntocoma">;</option>
+						<option value="slash">/</option>
+					</select>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span7">
+
+					<table>
+					{{' {{#with App.records}} '}}
+						<tr>
+							{{' {{#each row1}} '}}
+								<td>{{' {{this}} '}}</td>
+							{{' {{/each}} '}}
+						</tr>
+						<tr>
+							{{' {{#each row2}} '}}
+								<td>{{' {{this}} '}}</td>
+							{{' {{/each}} '}}
+						</tr>
+						<tr>
+							{{' {{#each row3}} '}}
+								<td>{{' {{this}} '}}</td>
+							{{' {{/each}} '}}
+						</tr>
+						<tr>
+							{{' {{#each row4}} '}}
+								<td>{{' {{this}} '}}</td>
+							{{' {{/each}} '}}
+						</tr>
+						<tr>
+							{{' {{#each row5}} '}}
+								<td>{{' {{this}} '}}</td>
+							{{' {{/each}} '}}
+						</tr>
+					{{' {{/with}} '}}
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<div class="span4">
+			Como queda guardada la info
+		</div>
+	</div>
+
+</script>
+
 </div>
 {% endblock %}
