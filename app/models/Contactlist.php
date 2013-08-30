@@ -27,4 +27,46 @@ class Contactlist extends Modelbase
 			$this->description = "Sin Descripcion";
         }
     }
+	
+	public static function findContactListsInAccount(Account $account, $conditions = null, $bind = null, $limits = null) 
+	{
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$phql = 'SELECT Contactlist.* FROM Contactlist JOIN Dbase WHERE idAccount = :idaccount:';
+		if ($conditions != null) {
+			$phql .= ' AND ' . $conditions;
+			$options = $bind;
+		}
+		if ($limits != null && is_array($limits) && isset($limits['number']) ) {
+			$number = $limits['number'];
+			$start = isset($limits['offset'])?$limits['offset']:0;
+			$phql .= ' LIMIT ' . $number . ' OFFSET ' . $start;
+		}
+		$options['idaccount'] = $account->idAccount;
+		$query = $mm->executeQuery($phql, $options);
+		
+		return $query;
+		
+	}
+	
+	public static function countContactListsInAccount(Account $account, $conditions = null, $bind = null ) 
+	{
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$phql = 'SELECT COUNT(*) cnt FROM Contactlist JOIN Dbase WHERE idAccount = :idaccount:';
+		if ($conditions != null) {
+			$phql .= ' AND ' . $conditions;
+			$options = $bind;
+		}
+		$options['idaccount'] = $account->idAccount;
+		$query = $mm->executeQuery($phql, $options);
+		
+		if ($query) {
+			return $query[0]->cnt;
+		}
+		return 0;
+		
+	}
+
+	
 }

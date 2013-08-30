@@ -159,19 +159,25 @@ App.ListsNewController = Ember.ObjectController.extend({
 			this.get("target").transitionTo("lists.new");
 		}
 		else{
-			exist = App.List.find({name: this.get('name'), limit: 0});
-			console.log(exist);
-			App.resultado = exist;
-				if(exist.get("length") == 0) {
+//			exist = App.List.find({name: this.get('name'), limit: 0});
+//			console.log(exist);
+//			App.resultado = exist;
+//				if(exist.get("length") == 0) {
+				var that = this;
+				this.get('content').one('didCreate',
+					function () {
+						console.log('list created! Yipee');
+						App.set('errormessage', '');
+						that.get("target").transitionTo("lists");
+					}
+				);
 					this.get('model.transaction').commit();
-					App.set('errormessage', '');
-					this.get("target").transitionTo("lists");
-				}
-				else {
-					console.log(exist.get('firstObject').name);
-					App.set('errormessage', 'El nombre de la lista ya se encuentra guardado, por favor escoge otro');
-					this.get("target").transitionTo("lists.new");
-				}
+//				}
+//				else {
+//					console.log(exist.get('firstObject').name);
+//					App.set('errormessage', 'El nombre de la lista ya se encuentra guardado, por favor escoge otro');
+//					this.get("target").transitionTo("lists.new");
+//				}
 		}
 	},
 			

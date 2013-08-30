@@ -520,15 +520,22 @@ class ApiController extends ControllerBase
 		$log = $this->logger;
 
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		$contents = $contentsT->list;
 		
 		$wrapper = new ContactListWrapper();
+		$wrapper->setAccount($this->user->account);
 		
-		$lists = $wrapper->validateContactListData($contents);
+		try {
+			$lists = $wrapper->validateContactListData($contents);
+		}
+		catch (InvalidArgumentException $e) {
+			return $this->setJsonResponse(array('errors' => array('name' => 'Nombre Incorrecto')), 422, 'Error: ' . $e->getMessage());
+		}
+		catch (Exception $e) {
+			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al crear lista de contactos')), 422, 'Error: ' . $e->getMessage());
+		}
 		
 		return $this->setJsonResponse($lists);
 	}
