@@ -4,20 +4,20 @@ class TestController extends ControllerBase
 {
 	protected $idDbase;
 	
-	protected $idList;
+	protected $idContactlist;
 	
-	protected $idListNew;
+	protected $idContactlistNew;
 
 	public function setIdDbase($idDbase) {
 		$this->idDbase = $idDbase;
 	}
 
-	public function setIdList($idList) {
-		$this->idList = $idList;
+	public function setIdContactlist($idContactlist) {
+		$this->idContactlist = $idContactlist;
 	}
 	
-	public function setIdListNew($idListNew) {
-		$this->idListNew = $idListNew;
+	public function setIdContactlistNew($idContactlistNew) {
+		$this->idContactlistNew = $idContactlistNew;
 	}
 	
 	public function indexAction()
@@ -31,14 +31,14 @@ class TestController extends ControllerBase
 		$emailNew = "other@other.com";
 		
 		$this->setIdDbase(1156);
-		$this->setIdList(9);
-		$this->setIdListNew(10);
+		$this->setIdContactlist(9);
+		$this->setIdContactlistNew(10);
 		
 		$log = $this->logger;
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[0] = $this->fullArray($db, $list, $listNew);
 		$array[0]['Desc'] = "Estado Inicial";
@@ -50,8 +50,8 @@ class TestController extends ControllerBase
 		$idContact = $contact->idContact;
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[1] = $this->fullArray($db, $list, $listNew);
 		$array[1]['Desc'] = "Nuevo Contacto Inactivo";
@@ -65,8 +65,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[2] = $this->fullArray($db, $list, $listNew);
 		$array[2]['Desc'] = "Suscrito y Activo";
@@ -80,8 +80,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[3] = $this->fullArray($db, $list, $listNew);
 		$array[3]['Desc'] = "Rebotado";
@@ -95,8 +95,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[4] = $this->fullArray($db, $list, $listNew);
 		$array[4]['Desc'] = "Suscrito, Activo y Rebotado";
@@ -110,8 +110,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[5] = $this->fullArray($db, $list, $listNew);
 		$array[5]['Desc'] = "Suscrito, Activo y Spam";
@@ -125,8 +125,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[6] = $this->fullArray($db, $list, $listNew);
 		$array[6]['Desc'] = "Des-suscrito";
@@ -140,8 +140,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[7] = $this->fullArray($db, $list, $listNew);
 		$array[7]['Desc'] = "Des-suscrito y Spam";
@@ -155,8 +155,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[8] = $this->fullArray($db, $list, $listNew);
 		$array[8]['Desc'] = "Des-suscrito, Rebotado";
@@ -170,8 +170,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[9] = $this->fullArray($db, $list, $listNew);
 		$array[9]['Desc'] = "Spam y Des-suscrito";
@@ -185,8 +185,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[10] = $this->fullArray($db, $list, $listNew);
 		$array[10]['Desc'] = "Des-suscrito, Spam y Rebotado";
@@ -200,8 +200,8 @@ class TestController extends ControllerBase
 		$this->updateContact($email, $idContact, $contact);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[11] = $this->fullArray($db, $list, $listNew);
 		$array[11]['Desc'] = "Rebotado";
@@ -211,8 +211,8 @@ class TestController extends ControllerBase
 		$contact = $this->createContact($email, true);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[12] = $this->fullArray($db, $list, $listNew);
 		$array[12]['Desc'] = "Contacto Existente a Lista Nueva";
@@ -222,8 +222,8 @@ class TestController extends ControllerBase
 		$contact = $this->createContact($email, true);
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[13] = $this->fullArray($db, $list, $listNew);
 		$array[13]['Desc'] = "Crear Contacto Existente en Lista Nueva Again";
@@ -231,8 +231,8 @@ class TestController extends ControllerBase
 		//-----------------Let's Show How the Counts Are-----------------//
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[14] = $this->fullArray($db, $list, $listNew);
 		$array[14]['Desc'] = "Contadores Despues de Ingresar un Contacto Erroneo";
@@ -244,8 +244,8 @@ class TestController extends ControllerBase
 		$idContact = $contact->idContact;
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[15] = $this->fullArray($db, $list, $listNew);
 		$array[15]['Desc'] = "Segundo Contacto Suscrito e Inactivo";
@@ -257,8 +257,8 @@ class TestController extends ControllerBase
 		}
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[16] = $this->fullArray($db, $list, $listNew);
 		$array[16]['Desc'] = "Contactos por Lote";
@@ -266,8 +266,8 @@ class TestController extends ControllerBase
 		//-----------------Final Result-----------------//
 		
 		$db = Dbase::findFirstByIdDbase($this->idDbase);
-		$list = Contactlist::findFirstByIdList($this->idList);
-		$listNew = Contactlist::findFirstByIdList($this->idListNew);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
 		
 		$array[17] = $this->fullArray($db, $list, $listNew);
 		$array[17]['Desc'] = "Finalizacion de contadores";
@@ -294,9 +294,9 @@ class TestController extends ControllerBase
 		$wrapper = new ContactWrapper();
 		
 		if(!$newlist) {
-			$wrapper->setIdList($this->idList);
+			$wrapper->setIdContactlist($this->idContactlist);
 		} else {
-			$wrapper->setIdList($this->idListNew);
+			$wrapper->setIdContactlist($this->idContactlistNew);
 		}		
 		
 		$wrapper->setAccount($this->user->account);
@@ -362,14 +362,14 @@ class TestController extends ControllerBase
 			"CtotalList" => $list->Ctotal,
 			"CactiveList" => $list->Cactive,
 			"CinactiveList" => $inactive->getInactive($list),
-			"CunsubscribedList" => $list->Cunsubscribed,
-			"CbouncedList" => $list->Cbounced,
+			"CunsubscribedContactlist" => $list->Cunsubscribed,
+			"CbouncedContactlist" => $list->Cbounced,
 			"CspamList" => $list->Cspam,
 			"CtotalListNew" => $listNew->Ctotal,
 			"CactiveListNew" => $listNew->Cactive,
 			"CinactiveListNew" => $inactive->getInactive($listNew),
-			"CunsubscribedListNew" => $listNew->Cunsubscribed,
-			"CbouncedListNew" => $listNew->Cbounced,
+			"CunsubscribedContactlistNew" => $listNew->Cunsubscribed,
+			"CbouncedContactlistNew" => $listNew->Cbounced,
 			"CspamListNew" => $listNew->Cspam
 		);
 		return $array;

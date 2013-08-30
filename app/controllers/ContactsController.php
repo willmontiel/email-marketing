@@ -7,11 +7,11 @@ class ContactsController extends ControllerBase
 		
 	}
 	
-	public function newbatchAction($idList)
+	public function newbatchAction($idContactlist)
 	{
 		$this->flashSession->error('');
 		
-		$list = Contactlist::findFirstByIdList($idList);
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 
 		$db = Dbase::findFirstByIdDbase($list->idDbase);
 
@@ -23,7 +23,7 @@ class ContactsController extends ControllerBase
 		
 		if (empty($contents)) {
 			$this->flashSession->error('No hay valores en el campo');
-			$this->response->redirect("contactlist/show/$idList#/contacts/newbatch");
+			$this->response->redirect("contactlist/show/$idContactlist#/contacts/newbatch");
 		}
 		
 		$eachrow = explode("\n", $contents);
@@ -89,15 +89,15 @@ class ContactsController extends ControllerBase
 		$_SESSION['batch'] = $batchreal;
 
 		$this->view->setVar("batch", $batch);	
-		$this->view->setVar("idList", $idList);
+		$this->view->setVar("idContactlist", $idContactlist);
 		
 	}
 	
-	public function importbatchAction($idList)
+	public function importbatchAction($idContactlist)
 	{
 		$log = $this->logger;
 		
-		$list = Contactlist::findFirstByIdList($idList);
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		$batch = $_SESSION['batch'];
 		
 		foreach ($batch as $batchC) {
@@ -106,7 +106,7 @@ class ContactsController extends ControllerBase
 			$wrapper = new ContactWrapper();
 			$wrapper->setAccount($this->user->account);
 			$wrapper->setIdDbase($list->idDbase);
-			$wrapper->setIdList($idList);
+			$wrapper->setIdContactlist($idContactlist);
 			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
 
 			$newcontact = new stdClass();
@@ -143,7 +143,7 @@ class ContactsController extends ControllerBase
 			}				
 		}
 //			$this->flashSession->success('Contactos creados exitosamente');
-			$this->response->redirect("contactlist/show/$list->idList#/contacts");
+			$this->response->redirect("contactlist/show/$list->idContactlist#/contacts");
 	}
 	
 	public function importAction()

@@ -3,7 +3,7 @@ class Coxcl extends \Phalcon\Mvc\Model
 {
 public function initialize()
 	{
-		$this->belongsTo("idList", "Contactlist", "idList", array(
+		$this->belongsTo("idContactlist", "Contactlist", "idContactlist", array(
             "foreignKey" => true,
         ));
 		$this->belongsTo("idContact", "Contact", "idContact", array(

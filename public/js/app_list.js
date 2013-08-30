@@ -74,7 +74,7 @@ App.List = DS.Model.extend({
 App.DbaseIndexController = Ember.ArrayController.extend({
 	model: function()
 	{
-		return App.store.findAll(App.Dbase);
+		return App.Dbase.find();
 	}
 });
 
@@ -133,16 +133,9 @@ App.ListsEditRoute = Ember.Route.extend({
 //Controladores
 App.ListController = Ember.ObjectController.extend();
 
-App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
-	getModelMetadata: function() {
-		return App.store.typeMapFor(App.List);
-	},
-	
-	refreshModel: function (obj) {
-		var result = App.List.find(obj);
-		this.set('content', result);
-	}
-//	,
+App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
+	modelClass : App.List,
+			
 //	searchText: '',
 //    search: function(){
 //		var resultado = App.Contact.find({ email: this.get('searchText') });

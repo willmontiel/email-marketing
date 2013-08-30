@@ -33,10 +33,10 @@ class ContactCounter
 				$result = $query2->execute($parameters);
 		}
 		
-		foreach ($this->counterList as $idList => $contents)
+		foreach ($this->counterList as $idContactlist => $contents)
 		{
 			
-			$list = Contactlist::findFirstByIdList($idList);	
+			$list = Contactlist::findFirstByIdContactlist($idContactlist);	
 			
 			$actTotal = $list->Ctotal;
 			$actActive = $list->Cactive;
@@ -44,7 +44,7 @@ class ContactCounter
 			$actBounced = $list->Cbounced;
 			$actSpam = $list->Cspam;
 
-				$parameters = array('idList' => $idList, 
+				$parameters = array('idContactlist' => $idContactlist, 
 									'Ctotal' => $contents["Ctotal"] + $actTotal, 
 									'Cactive' => $contents["Cactive"] + $actActive, 
 									'Cunsubscribed' => $contents["Cunsubscribed"] + $actUnsubscribed,
@@ -52,7 +52,7 @@ class ContactCounter
 									'Cspam' => $contents["Cspam"] + $actSpam
 				);
 
-				$query = "UPDATE Contactlist SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idList = :idList:";
+				$query = "UPDATE Contactlist SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idContactlist = :idContactlist:";
 				$query2 = $modelManager->createQuery($query);
 				$result = $query2->execute($parameters);
 		}
@@ -93,10 +93,10 @@ class ContactCounter
 		 */
 		
 		$oper = $this->newContact($contact);
-		if(!isset($this->counterList[$list->idList])) {
-			$this->counterList [$list->idList] = $oper;
+		if(!isset($this->counterList[$list->idContactlist])) {
+			$this->counterList [$list->idContactlist] = $oper;
 		} else {
-			$this->counterList[$list->idList] = $this->sumArray($this->counterList[$list->idList], $oper);
+			$this->counterList[$list->idContactlist] = $this->sumArray($this->counterList[$list->idContactlist], $oper);
 		}
 	}
 	
@@ -163,12 +163,12 @@ class ContactCounter
 	public function deleteContactFromList($contact, $list)
 	{
 		$oper = $this->deleteContact($contact);
-		if(!isset($this->counterList[$list->idList])) {
-			$this->counterList [$list->idList] = $oper;
+		if(!isset($this->counterList[$list->idContactlist])) {
+			$this->counterList [$list->idContactlist] = $oper;
 		} else {
 			$oper = $this->deleteContact($contact);
 		
-			$this->counterList[$list->idList] = $this->sumArray($this->counterList[$list->idList], $oper);
+			$this->counterList[$list->idContactlist] = $this->sumArray($this->counterList[$list->idContactlist], $oper);
 		}
 	}
 	
@@ -282,12 +282,12 @@ class ContactCounter
 		
 		foreach ($associations as $association) {
 			
-			$list = Contactlist::findFirstByIdList($association->idList);
+			$list = Contactlist::findFirstByIdContactlist($association->idContactlist);
 			
-			if(!isset($this->counterList[$list->idList])) {				
-				$this->counterList[$list->idList] = $oper;				
+			if(!isset($this->counterList[$list->idContactlist])) {				
+				$this->counterList[$list->idContactlist] = $oper;				
 			} else {				
-				$this->counterList[$list->idList] = $this->sumArray($this->counterList[$list->idList], $oper);				
+				$this->counterList[$list->idContactlist] = $this->sumArray($this->counterList[$list->idContactlist], $oper);				
 			}
 		}
 	}

@@ -288,7 +288,7 @@
 						</div>
 					</div>
 				</div>
-				<form method="Post" action="/emarketing/contacts/newbatch/{{datalist.idList}}" , 'method': 'Post') }}
+				<form method="Post" action="/emarketing/contacts/newbatch/{{datalist.idContactlist}}" , 'method': 'Post') }}
 				<div class="span5">
 					{{ text_area("arraybatch") }}
 					<input class="btn btn-sm btn-inverse" type="submit" value="Guardar">
@@ -518,8 +518,15 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/import">
-		{{ '{{view App.ImportView fileBinding="SomeModel.attribute" }}' }}
-		<button {{ '{{ action load this}}' }}>Cargar</button>
+	<form enctype="multipart/form-data">
+		<div class="row-fluid">
+			<div class="span6">
+				<input class="input-file" name="importfile" type="file" id="importfile"><br>
+				<button class="btn btn-inverse" {{ '{{action save this}}' }}>Guardar</button>
+				<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+			</div>
+		</div>
+	</form>
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/newimport">

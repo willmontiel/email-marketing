@@ -1,7 +1,15 @@
+/*
+ * Para utilizar el Mixin solo se debe 
+ * crear un atributo en el controlador con la clase del modelo que utiliza
+ * EJ:
+ * modelClass : App.List
+ */
+
 Ember.MixinPagination = Ember.Mixin.create({
 	totalrecords: 0,
 	currentpage: 0,
 	recordsperpage: 0,
+	availablepages: 0,
 
 	// Metodo que toma la informacion y llena las variables
 	setPagination: function () {
@@ -35,8 +43,16 @@ Ember.MixinPagination = Ember.Mixin.create({
 			};
 			this.refreshModel(obj);
 		}
-	},
-			
+	}
+	,
+	getModelMetadata: function() {
+		return App.store.typeMapFor(this.modelClass);
+	}
+	,
+	refreshModel: function (obj) {
+		this.set('content', this.modelClass.find(obj));
+	}
+	,
 	prevPage: function(){
 		var currentpage=parseInt(this.get("currentpage"));
 

@@ -10,7 +10,7 @@ class ContactWrapper
 {
 
 	protected $idDbase;
-	protected $idList;
+	protected $idContactlist;
 	protected $account;
 	protected $contact;
 	protected $ipaddress;
@@ -44,9 +44,9 @@ class ContactWrapper
 		$this->pager = $p;
 	}
 	
-	public function setIdList($idList)
+	public function setIdContactlist($idContactlist)
 	{
-		$this->idList =$idList;
+		$this->idContactlist =$idContactlist;
 	}
 
 	public function setIPAdress($ipaddress) {
@@ -147,7 +147,7 @@ class ContactWrapper
 	
 	public function deleteContactFromList($contact, $list) 
 	{
-		$association = Coxcl::findFirst("idList = '$list->idList' AND idContact = '$contact->idContact'");
+		$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
 		
 		if($association->delete()) {
 			$this->counter->deleteContactFromList($contact, $list);
@@ -171,7 +171,7 @@ class ContactWrapper
 		
 		foreach ($allLists as $list)
 		{
-			$association = Coxcl::findFirst("idList = '$list->idList' AND idContact = '$contact->idContact'");
+			$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
 			
 			if($association){
 				$association->delete();
@@ -201,9 +201,9 @@ class ContactWrapper
 		if ($existEmail && !$this->findEmailBlocked($existEmail)) {
 			$existContact = Contact::findFirstByIdEmail($existEmail->idEmail);
 			if($existContact){
-				$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idList = $this->idList");
+				$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idContactlist = $this->idContactlist");
 				if (!$existList){
-					$this->associateContactToList($this->idList, $existContact->idContact);
+					$this->associateContactToList($this->idContactlist, $existContact->idContact);
 					$this->counter->saveCounters();
 					
 					return $existContact;
@@ -316,7 +316,7 @@ class ContactWrapper
 		} else {
 			$this->counter->newContactToDbase($this->contact);
 			
-			$this->associateContactToList($this->idList, $this->contact->idContact);
+			$this->associateContactToList($this->idContactlist, $this->contact->idContact);
 			
 			$this->assignDataToCustomField($data);
 			
@@ -401,17 +401,17 @@ class ContactWrapper
 		}
 	}
 	
-	protected function associateContactToList ($idList, $idContact)
+	protected function associateContactToList ($idContactlist, $idContact)
 	{
 		$associate = new Coxcl();
-		$associate->idList = $idList;
+		$associate->idContactlist = $idContactlist;
 		$associate->idContact = $idContact;
 					
 		if(!$associate->save())	{
 			throw new \Exception('Error al asociar el contacto a la lista');
 		} else {
 			
-			$list = Contactlist::findFirstByIdList($idList);
+			$list = Contactlist::findFirstByidContactlist($idContactlist);
 			$contact = Contact::findFirstByIdContact($idContact);
 
 			$this->counter->newContactToList($contact, $list);
@@ -525,7 +525,7 @@ class ContactWrapper
 	public function convertContactListToJson($contactlist)
 	{
 		$object = array();
-		$object['id'] = $contactlist->idList;
+		$object['id'] = $contactlist->idContactlist;
 		$object['name'] = $contactlist->name;
 		return $object;
 	}
@@ -566,10 +566,10 @@ class ContactWrapper
 	{
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		//$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));
-		$this->pager->setTotalRecords(Coxcl::count("idList = '$list->idList'"));
+		$this->pager->setTotalRecords(Coxcl::count("idContactlist = '$list->idContactlist'"));
 
 		$contacts = Coxcl::find(array(
-			"idList = '$list->idList'",
+			"idContactlist = '$list->idContactlist'",
 			"limit" => array('number' => $this->pager->getRowsPerPage(), 'offset' => $this->pager->getStartIndex())
 		));
 		

@@ -366,7 +366,7 @@ class ApiController extends ControllerBase
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($idDbase);
-		$wrapper->setIdList($contents->list_id);
+		$wrapper->setIdContactlist($contents->list_id);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Crear el nuevo contacto:
@@ -542,9 +542,9 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @Put("/lists/{idList:[0-9]+}")
+	 * @Put("/lists/{idContactlist:[0-9]+}")
 	 */
-	public function listseditAction($idList)
+	public function listseditAction($idContactlist)
 	{
 		$log = $this->logger;
 		
@@ -557,7 +557,7 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->list;
 		
 		$wrapper = new ContactListWrapper();
-		$mensaje = $wrapper->updateContactList($contents, $idList);
+		$mensaje = $wrapper->updateContactList($contents, $idContactlist);
 		
 		return $this->setJsonResponse($mensaje);
 	}
@@ -565,15 +565,15 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @Get("/contactlist/{idList:[0-9]+}/contacts")
+	 * @Get("/contactlist/{idContactlist:[0-9]+}/contacts")
 	 */	
-	public function listcontactsbylistAction($idList)
+	public function listcontactsbylistAction($idContactlist)
 	{
 		
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
-		$list = Contactlist::findFirstByIdList($idList);
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 			
 		if ($list->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
@@ -590,7 +590,7 @@ class ApiController extends ControllerBase
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
 		$wrapper->setPager($pager);
-		$wrapper->setIdList($idList);
+		$wrapper->setIdContactlist($idContactlist);
 		
 		$contacts = $wrapper->findContactsByList($list);
 	                
@@ -600,19 +600,19 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @Route("/lists/{idList:[0-9]+}", methods="DELETE")
+	 * @Route("/lists/{idContactlist:[0-9]+}", methods="DELETE")
 	 */
-    public function deletecontactlistAction($idList)
+    public function deletecontactlistAction($idContactlist)
 	{
 		$wrapper = new ContactListWrapper();
 		$account = $this->user->account;
-		$listExsit = $wrapper->validateListBelongsToAccount($account, $idList);
+		$listExsit = $wrapper->validateListBelongsToAccount($account, $idContactlist);
 		
 		if($listExsit == false) {
 			$status = "No se encontro la lista";
 		}
 		else {
-			$status = $wrapper->deleteContactList($idList);	
+			$status = $wrapper->deleteContactList($idContactlist);	
 		}
 		return $this->setJsonResponse($status);
 	}
@@ -620,13 +620,13 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @Get("/contactlist/{idList:[0-9]+}/contacts/{idContact:[0-9]+}")
+	 * @Get("/contactlist/{idContactlist:[0-9]+}/contacts/{idContact:[0-9]+}")
 	 */	
-	public function getcontactbylistAction($idList, $idContact)
+	public function getcontactbylistAction($idContactlist, $idContact)
 	{
 		
 		$contact = Contact::findFirstByIdContact($idContact);
-		$list = Contactlist::findFirstByIdList($idList);
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 			
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
@@ -644,11 +644,11 @@ class ApiController extends ControllerBase
         
     /**
 	 * 
-	 * @Post("/contactlist/{idList:[0-9]+}/contacts")
+	 * @Post("/contactlist/{idContactlist:[0-9]+}/contacts")
 	 */
-	public function createcontactbylistAction($idList)
+	public function createcontactbylistAction($idContactlist)
 	{
-		$list = Contactlist::findFirstByIdList($idList);
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		
 		$log = $this->logger;
 
@@ -663,7 +663,7 @@ class ApiController extends ControllerBase
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
-		$wrapper->setIdList($idList);
+		$wrapper->setIdContactlist($idContactlist);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Crear el nuevo contacto:
@@ -693,11 +693,11 @@ class ApiController extends ControllerBase
         
     /**
 	 * 
-	 * @Put("/contactlist/{idList:[0-9]+}/contacts/{idContact:[0-9]+}")
+	 * @Put("/contactlist/{idContactlist:[0-9]+}/contacts/{idContact:[0-9]+}")
 	 */
-	public function updatecontactbylistAction($idList, $idContact)
+	public function updatecontactbylistAction($idContactlist, $idContact)
 	{
-		$list = Contactlist::findFirstByIdList($idList);
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		
         if (!$list || $list->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
@@ -716,7 +716,7 @@ class ApiController extends ControllerBase
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
-		$wrapper->setIdList($idList);
+		$wrapper->setIdContactlist($idContactlist);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Editar el contacto existente
@@ -741,13 +741,13 @@ class ApiController extends ControllerBase
         
     /**
 	 * 
-	 * @Route("/contactlist/{idList:[0-9]+}/contacts/{idContact:[0-9]+}", methods="DELETE")
+	 * @Route("/contactlist/{idContactlist:[0-9]+}/contacts/{idContact:[0-9]+}", methods="DELETE")
 	 */
-	public function deletecontactbylistAction($idList, $idContact)
+	public function deletecontactbylistAction($idContactlist, $idContact)
 	{
 		
 		$contact = Contact::findFirstByIdContact($idContact);
-		$list = Contactlist::findFirstByIdList($idList);
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');

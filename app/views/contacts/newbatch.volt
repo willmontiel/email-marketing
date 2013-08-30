@@ -37,8 +37,8 @@
 	</tbody>
 </table>
 
-<a href="/emarketing/contacts/importbatch/{{idList}}" class="btn btn-inverse">Crear</a>
-<a href="/emarketing/contactlist/show/{{idList}}#/contacts/newbatch" class="btn btn-inverse">Cancelar</a>
+<a href="/emarketing/contacts/importbatch/{{idContactlist}}" class="btn btn-inverse">Crear</a>
+<a href="/emarketing/contactlist/show/{{idContactlist}}#/contacts/newbatch" class="btn btn-inverse">Cancelar</a>
 
 			</div>
 	</div>

@@ -30,7 +30,7 @@ class ContactListWrapper extends BaseWrapper
 		return $object;
 	}
 	
-	public function validateListBelongsToAccount($idList, Account $account)
+	public function validateListBelongsToAccount($idContactlist, Account $account)
 	{
 //		$idAccount = $account->idAccount;
 //		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -38,18 +38,18 @@ class ContactListWrapper extends BaseWrapper
 //							FROM contactlist
 //								JOIN dbase
 //								ON ( contactlist.idDbase = dbase.idDbase ) 
-//							WHERE contactlist.idList = :idList:
+//							WHERE contactlist.idContactlist = :idContactlist:
 //							AND dbase.idAccount = :idAccount:";
 //				
 //		$query = $modelManager->createQuery($contactlistExist);
 //		$listExist = $query->execute(array(
-//				"idList" => "$idList",
+//				"idContactlist" => "$idContactlist",
 //				"idAccount" => "$idAccount"
 //			)
 //		);
 		
 		// Cambie el codigo de arriba con este codigo, que es utilizado en otras partes de forma similar
-		$listExist = Contactlist::countContactListsInAccount($account, 'idContactlist = :id:', array('id' => $idList));
+		$listExist = Contactlist::countContactListsInAccount($account, 'idContactlist = :id:', array('id' => $idContactlist));
 
 		if($listExist > 0) {
 			return true;
@@ -194,10 +194,10 @@ class ContactListWrapper extends BaseWrapper
 		return $list;
 	}
 	
-	public function updateContactList($contents, $idList)
+	public function updateContactList($contents, $idContactlist)
 	{
 		
-		$contactList = Contactlist::findFirstByIdContactlist($idList);
+		$contactList = Contactlist::findFirstByIdContactlist($idContactlist);
 		
 		if (!$contactList) {
 			throw new \InvalidArgumentException('Lista no encontrada en la base de datos!');
@@ -216,7 +216,7 @@ class ContactListWrapper extends BaseWrapper
 		
 	}
 	
-	public function deleteContactList($idList)
+	public function deleteContactList($idContactlist)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
@@ -228,11 +228,11 @@ class ContactListWrapper extends BaseWrapper
 			GROUP BY 1 
 			HAVING COUNT(*) = 1";
 
-			$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idContactlist' => $idList));
+			$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idContactlist' => $idContactlist));
 		
 			$deleteList = $db->delete(
 					'Contactlist',
-					'idContactlist = '.$idList  
+					'idContactlist = '.$idContactlist  
 			);
 			foreach ($results as $result) {	
 					$contact = $db->delete(
