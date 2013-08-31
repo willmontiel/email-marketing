@@ -148,28 +148,48 @@ class ContactsController extends ControllerBase
 	
 	public function importAction()
 	{
-		$file = $_FILES['importfile'];
-        $fileInfo = pathinfo($file['name']);
-		$separator = $this->request->getpost('separator');
+		$account = $this->user->account->idAccount ;
+		$internalNumber = uniqid();
+		$date = date("ymdHi",time());
+		$separator = "\n";
+		$internalName = $account."_".$date."_".$internalNumber.".csv";
+		
+		$fileInfo = $_FILES['importfile']['name'];
 		$idDbase = $this->request->getpost('database');
 		
-		$destiny =  "C:\\".$fileInfo['basename'];
-		copy($_FILES['importfile']['tmp_name'],$destiny);
+		$saveDataFile = new Importfile();
 		
-		$open = fopen($destiny, "r");
-		$data = array();
+		$saveDataFile->idAccount = $account;
+		$saveDataFile->internalName = $internalName;
+		$saveDataFile->originalName = $fileInfo;
+		$saveDataFile->createdon = time();
+		
+		if (!$saveDataFile->save()) {
+			foreach ($saveDataFile->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+				$this->response->redirect("contactlist/show/22#/contacts/import");
+			}
+		}
+		else {
+			$destiny =  "C:\\".$internalName;
+			copy($_FILES['importfile']['tmp_name'],$destiny);
+			
+			$open = fopen($destiny, "r");
+			$data = array();
 		
 			$line = fgets($open);
-			$eachdata = explode($separator, trim($line));
-			$data['col1'] = $eachdata[0];
-			$data['col2'] = $eachdata[1];
-			$data['col3'] = $eachdata[2];
+				$eachdata = explode($separator, trim($line));
+				$data['col1'] = $eachdata[0];
+				$data['col1'] = $eachdata[0];
+				$data['col1'] = $eachdata[0];
+			fclose($open);
+			
+			$customfields = Customfield::findByIdDbase($idDbase);
 
-		fclose($open);
-		$customfields = Customfield::findByIdDbase($idDbase);
+			$this->view->setVar("customfields", $customfields);
+			$this->view->setVar("row", $data);
+		}
 		
-		$this->view->setVar("customfields", $customfields);
-		$this->view->setVar("row", $data);
 		
 	}
 }

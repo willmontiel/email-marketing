@@ -14,6 +14,7 @@ class Account extends Modelbase
     public function initialize()
     {
         $this->hasMany("idAccount", "User", "idAccount");
+		$this->hasMany("idAccount", "Importfile","idAccount");
 		$this->hasMany("idAccount", "Dbase", "idAccount", array('alias' => 'Dbases'));
     }
     
