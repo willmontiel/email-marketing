@@ -257,7 +257,7 @@ class ContactListWrapper extends BaseWrapper
 					);
 			}
 			
-		$deleteContacts = "DELETE FROM Contact WHERE idContact IN " . $idContacts;
+		$deleteContacts = "DELETE FROM Contact, Fieldinstance WHERE idContact IN " . $idContacts;
 		
 		$query2 = $modelManager->createQuery($deleteContacts);
 		$deletedContacts = $query2->execute();

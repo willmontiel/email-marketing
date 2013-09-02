@@ -375,8 +375,7 @@ class ApiController extends ControllerBase
 			$contactdata = $wrapper->convertContactToJson($contact);
 		}
 		catch (\InvalidArgumentException $e) {
-			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('errors' => array('msg' => $e->getMessage())), 422, 'Invalid data');	
+			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');

@@ -249,6 +249,9 @@
 				<div class="span3">
 					<form>
 						<label>*E-mail:</label>
+						{{' {{#if errors.email }} '}}
+							<p class="alert alert-error">{{'{{errors.email}}'}}</p>
+						{{' {{/if }} '}}
 						<p>
 							{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus"}}'}}
 						</p>
@@ -530,7 +533,6 @@
 				<input name="importFile" type="file"><br>
 				<input type="hidden" name="idcontactlist" value={{datalist.idContactlist}}>
 				{{submit_button('class': "btn btn-primary", "Cargar")}}
-				<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 			</div>
 		</div>
 	</form>

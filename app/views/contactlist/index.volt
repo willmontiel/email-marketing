@@ -119,15 +119,15 @@
 		<div class="span12">
 			<p>Agregar una nueva lista</p>
 		</div>
-		<br>
-		<div class="span12">
-		</div>
-		<br>
+	</div>
+	<br>
+	<div class="row-fluid">
+		<br><br>
 		<div class="span3">
 			<form>
 				<label>*Nombre</label>
-				{{' {{#if errors.name }} '}}
-				<p class="alert alert-error">{{'{{errors.name}}'}}</p>
+				{{' {{#if errors.email }} '}}
+					<p class="alert alert-error">{{'{{errors.email}}'}}</p>
 				{{' {{/if }} '}}
 				<p>{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}</p>
 				<label>Descripción</label>

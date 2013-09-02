@@ -6,7 +6,7 @@
  *
  * @author hectorlasso
  */
-class ContactWrapper 
+class ContactWrapper extends BaseWrapper
 {
 
 	protected $idDbase;
@@ -212,6 +212,7 @@ class ContactWrapper
 		}
 		return false;
 	}
+	
 	protected function getTotalActiveContacts()
 	{
 		$idAccount = $this->account->idAccount;
@@ -235,6 +236,7 @@ class ContactWrapper
 		$total = $this->getTotalActiveContacts();
 		
 		if($total >= $this->account->contactLimit) {
+			$this->addFieldError('email', 'Ha sobrepasado el limite de contactos: [' . $this->account->contactLimit .  ']');
 			throw new \InvalidArgumentException('Ha sobrepasado el limite de contactos: [' . $this->account->contactLimit .  ']');
 		}
 
