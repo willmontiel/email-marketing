@@ -531,7 +531,7 @@ class ApiController extends ControllerBase
 			$lists = $wrapper->validateContactListData($contents);
 		}
 		catch (InvalidArgumentException $e) {
-			return $this->setJsonResponse(array('errors' => array('name' => 'Nombre Incorrecto')), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (Exception $e) {
 			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al crear lista de contactos')), 422, 'Error: ' . $e->getMessage());
@@ -605,16 +605,13 @@ class ApiController extends ControllerBase
     public function deletecontactlistAction($idContactlist)
 	{
 		$wrapper = new ContactListWrapper();
-		$account = $this->user->account;
-		$listExsit = $wrapper->validateListBelongsToAccount($account, $idContactlist);
 		
-		if($listExsit == false) {
-			$status = "No se encontro la lista";
+		if(!$wrapper->validateListBelongsToAccount($this->user->account, $idList)) {
+			return $this->setJsonResponse(null, 422, 'Lista invalida');
 		}
-		else {
-			$status = $wrapper->deleteContactList($idContactlist);	
-		}
-		return $this->setJsonResponse($status);
+
+		$wrapper->deleteContactList($idList);	
+		return $this->setJsonResponse(null);
 	}
 	/*Fin listas de contactos*/
 	

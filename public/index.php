@@ -111,6 +111,10 @@ try {
         $url->setBaseUri('/emarketing/');
         return $url;
     });
+	
+	$tmpdir = new stdClass;
+	$tmpdir->dir = dirname(__FILE__) . '/../tmp';
+	$di->set('tmppath', $tmpdir);
 
 	
 	/*

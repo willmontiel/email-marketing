@@ -1,4 +1,4 @@
-{% extends "templates/index.volt" %}
+{% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
@@ -14,37 +14,44 @@
 	</script>
 {% endblock %}
 
+{% block sectiontitle %}<i class="icon-user"></i> Contactos{%endblock%}
+{%block sectionsubtitle %}Administre sus bases de datos de contactos{% endblock %}
 {% block content %}
 	<div id="emberApplistContainer">
-		<script type="text/x-handlebars">       
-        <div class="row-fluid">
-			<div class="span12 text-right">
-				<div class="btn-group">
-					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-					<ul class="dropdown-menu">
-					  <li><a href="#">Ver Bases de Datos</a></li>
-					  <li><a href="#">Crear Base de Datos</a></li>
-					  <li><a href="#">Ver Cuentas</a></li>
-					  <li><a href="#">Crear Cuentas</a></li>
-					</ul>
+		{# handlebars de index #}
+		<script type="text/x-handlebars">
+			<div class="row-fluid">
+				<div class="span12 text-right">
+					<div class="btn-group">
+						<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+						<ul class="dropdown-menu">
+						  <li><a href="#">Ver Bases de Datos</a></li>
+						  <li><a href="#">Crear Base de Datos</a></li>
+						  <li><a href="#">Ver Cuentas</a></li>
+						  <li><a href="#">Crear Cuentas</a></li>
+						</ul>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row-fluid">
-			<div class="span12">
-				<ul class="nav nav-tabs">
-					{{'{{#linkTo "lists" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
-					<li><a href="#" >Segmentos</a></li>
-					{{'{{#linkTo "blockedemails" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}                                                                                                                    
-				</ul>
+			{# Tabs de navegacion #}
+			<div class="box">
+				<div class="box-header">
+					<ul class="nav nav-tabs nav-tabs-left">
+						{{'{{#linkTo "lists" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
+						<li><a href="#" >Segmentos</a></li>
+						{{'{{#linkTo "blockedemails" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}
+					</ul>
+				</div>
+				<div class="box-content padded">
+					<div class="tab-content">
+						{{ "{{outlet}}" }}
+					</div>
+				</div>
 			</div>
-        </div>
-        {{ "{{outlet}}" }}
 		</script>
+		{# /handlebars de index #}
+		{# handlebars de listas #}
 		<script type="text/x-handlebars" data-template-name="lists/index">
-			<div class="row-fluid">
-				<div class="span12"></div>
-			</div>
 			<div class="row-fluid">
 				<div class="span7">
 					<p>Vea información detallada sobre sus listas de contactos</p>
@@ -133,6 +140,9 @@
 		<div class="span3">
 			<form>
 				<label>*Nombre</label>
+				{{' {{#if errors.name }} '}}
+				<p class="alert alert-error">{{'{{errors.name}}'}}</p>
+				{{' {{/if }} '}}
 				<p>{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}</p>
 				<label>Descripción</label>
 				<p>{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}</p>

@@ -30,7 +30,7 @@ class ContactListWrapper extends BaseWrapper
 		return $object;
 	}
 	
-	public function validateListBelongsToAccount($idContactlist, Account $account)
+	public function validateListBelongsToAccount(Account $account, $idList)
 	{
 //		$idAccount = $account->idAccount;
 //		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -61,14 +61,15 @@ class ContactListWrapper extends BaseWrapper
 	public function validateContactListData($contents)
 	{
 		
-		if (!isset($contents->name)) {
-			$this->addFieldError('name', 'Este campo es requerido!');
+		if (!isset($contents->name) || trim($contents->name) == '' || $contents->name == null ) {
+			$this->addFieldError('name', 'El nombre de la lista de contactos es requerido!');
 			throw new InvalidArgumentException('El nombre de la lista de contactos es requerido!');
 		}
 		$cnt = Contactlist::countContactListsInAccount($this->account, 'Contactlist.name = :name:', array('name' => $contents->name));
 
 		if($cnt != 0) {
 			$this->addFieldError('name', 'Este nombre de lista ya existe en la base de datos seleccionada');
+			$this->addFieldError('name', 'Elija un nombre diferente, o una base de datos diferente!');
 			throw new InvalidArgumentException('Nombre de lista de contacto duplicado');
 		}
 		

@@ -148,8 +148,7 @@ App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
 App.ListsNewController = Ember.ObjectController.extend({
 	save: function(){
 		if(this.get('name')==null){
-			App.set('errormessage', 'El campo nombre esta vacío, debes ingresar un nombre');
-			this.get("target").transitionTo("lists.new");
+			App.set('errormessage', 'El nombre de la lista es requerido');
 		}
 		else{
 //			exist = App.List.find({name: this.get('name'), limit: 0});
@@ -159,8 +158,6 @@ App.ListsNewController = Ember.ObjectController.extend({
 				var that = this;
 				this.get('content').one('didCreate',
 					function () {
-						console.log('list created! Yipee');
-						App.set('errormessage', '');
 						that.get("target").transitionTo("lists");
 					}
 				);
