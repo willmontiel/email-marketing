@@ -9,9 +9,10 @@
 	var MyDbaseUrl = 'emarketing/api/import/{{idContactlist}}';
 
 	var myImportModel = {
-		email: DS.attr( 'string' ),
+		email: DS.attr( 'string' ),	
 		name: DS.attr( 'string' ),
 		lastname: DS.attr( 'string' )
+		 
 		{%for field in customfields%}
 			,
 			{{field.name|lower }}: DS.attr('string')
@@ -22,11 +23,30 @@
 {{ javascript_include('js/app_import.js') }}
 
 <script>
-	{%for item in row%}
-		App.{{item}}_options = [
-		{%for field in customfields %}	
-				"{{field.name}}",
-		{%endfor%}
+	App.email_options = [
+			{%for item in row%}
+				,	
+				"{{item}}"
+			{%endfor%}
+		];
+	App.name_options = [
+			{%for item in row%}
+				,	
+				"{{item}}"
+			{%endfor%}
+		];
+	App.lastname_options = [
+			{%for item in row%}
+				,	
+				"{{item}}"
+			{%endfor%}
+		];	
+	{%for field in customfields %}	
+		App.{{field.name|lower}}_options = [
+			{%for item in row%}
+				,	
+				"{{item}}"
+			{%endfor%}
 		];
 	{%endfor%}
 </script>
@@ -40,11 +60,29 @@
 			<div class="span5">
 				<table class="contact-info">
 					<tbody>
-						{%for item in row%}
 						<tr>		
-							<td>{{item}}</td>
+							<td>Email</td>
 							<td>
-								{{'{{ view Ember.Select contentBinding="App.'~item~'_options" valueBinding="'~item~'" }}'}}
+								{{'{{ view Ember.Select contentBinding="App.email_options" valueBinding="email" id="email"}}'}}
+							</td>
+						</tr>
+						<tr>		
+							<td>Nombre</td>
+							<td>
+								{{'{{ view Ember.Select contentBinding="App.name_options" valueBinding="name" id="name"}}'}}
+							</td>
+						</tr>
+						<tr>		
+							<td>Apellido</td>
+							<td>
+								{{'{{ view Ember.Select contentBinding="App.lastname_options" valueBinding="lastname" id="lastname"}}'}}
+							</td>
+						</tr>
+						{%for field in customfields %}
+						<tr>		
+							<td>{{field.name}}</td>
+							<td>
+								{{'{{ view Ember.Select contentBinding="App.'~field.name|lower~'_options" valueBinding="'~field.name|lower~'" id="'~field.name|lower~'"}}'}}
 							</td>
 						</tr>
 						{%endfor%}
@@ -55,9 +93,20 @@
 					<select>
 						<option value="coma" selected>,</option>
 						<option value="puntocoma">;</option>
-						<option value="slash"></option>
+						<option value="slash">/</option>
 					</select>
 				</div>
+			</div>
+			<div class="span5">
+				<p>Email: {{' {{email}} '}}</p>
+				<p>Nombre: {{' {{name}} '}}</p>
+				<p>Apellido: {{' {{lastname}} '}}</p>
+				{%for field in customfields %}
+						<p>{{field.name}}
+							<td>
+								{{'{{ '~field.name|lower~'}}'}}
+							</p>
+						{%endfor%}
 			</div>
 		</div>
 	</script>
