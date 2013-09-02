@@ -148,17 +148,18 @@ class ContactsController extends ControllerBase
 	
 	protected function validateImportedFile($file) 
 	{
-		$extensions = array ('csv');
+		$extensions = array('csv');
 		$maxSizeFile = 8388608; //Máximo tamaño del archivo en bytes
 		
-		$this->objFile = $file;
-		$fileName = strtolower($this->objFile['name']);
-		
-		if(!in_array(end(explode('.', $fileName)), $extensions)) {
+		$fileName = strtolower($file['name']);
+		$tmp = (explode('.', $fileName));
+		$extension = end($tmp);
+
+		if(!in_array($extension, $extensions, true)) {
 			return false;
 		}
 		
-		else if ($this->objFile['size'] > $maxSizeFile) {
+		else if ($file['size'] > $maxSizeFile) {
 			return false;
 		}
 		
@@ -185,7 +186,7 @@ class ContactsController extends ControllerBase
 			
 			if ($validate == false) {
 				$this->flashSession->error("Error en el archivo");
-				$this->response->redirect("");
+				$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 			}
 			else {
 				$internalNumber = uniqid();
@@ -205,7 +206,7 @@ class ContactsController extends ControllerBase
 				if (!$saveDataFile->save()) {
 						foreach ($saveDataFile->getMessages() as $msg) {
 								$this->flashSession->error($msg);
-								$this->response->redirect("contactlist/show$idContactlist#/contacts/import");
+								$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 						}
 				}
 				else {

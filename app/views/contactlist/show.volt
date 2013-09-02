@@ -57,6 +57,12 @@
 {% endblock %}
 {% block content %}
 	<div class="row-fluid">
+		<div class="span12" >
+			<div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
+		</div>
+	</div>
+	{{ content() }}
+	<div class="row-fluid">
 		<div class="span12">
 			<div class="row-fluid">
 				<div class="span12">
@@ -518,12 +524,6 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/import">
-	<div class="row-fluid">
-		<div class="span12" >
-			<div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
-		</div>
-	</div>
-	{{ content() }}
 	<form method="POST" action="/emarketing/contacts/import" enctype="multipart/form-data">
 		<div class="row-fluid">
 			<div class="span6">
