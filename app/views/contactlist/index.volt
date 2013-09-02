@@ -8,6 +8,7 @@
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
+	{{ javascript_include('js/app_segment.js') }}
 
 	<script>
 		App.DBObjectList = App.store.findAll(App.Dbase);
@@ -38,7 +39,7 @@
 				<div class="box-header">
 					<ul class="nav nav-tabs nav-tabs-left">
 						{{'{{#linkTo "lists" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
-						<li><a href="#" >Segmentos</a></li>
+						{{'{{#linkTo "segments" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Segmentos</a>{{/linkTo}}'}}
 						{{'{{#linkTo "blockedemails" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}
 					</ul>
 				</div>
@@ -202,5 +203,6 @@
 			</div>
 		</script>
 		{{ partial("contactlist/blockedemail_partial") }}
+		{{ partial("contactlist/segment_partial") }}
 </div>
 {% endblock %}

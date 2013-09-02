@@ -90,7 +90,6 @@ App.ContactsNewRoute = Ember.Route.extend({
 	deactivate: function () {
 		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
 			this.get('currentModel.transaction').rollback();
-			console.log('Rollback new Contact!');
 		}
 	}
 });

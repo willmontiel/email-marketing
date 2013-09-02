@@ -16,6 +16,10 @@ App.Router.map(function() {
 	  this.route('block');
 	  this.resource('blockedemails.unblock', { path: '/unblock/:blockedemail_id' });
   });
+  
+  this.resource('segments', function(){
+	  this.route('new');
+  });
 });
 
 /* STORE */
@@ -118,11 +122,9 @@ App.ListsNewRoute = Ember.Route.extend({
 
 App.ListsEditRoute = Ember.Route.extend({
 	deactivate: function () {
-		console.log('Deactivate ContactsListsEdit');
 		this.doRollBack();
 	},
 	contextDidChange: function() {
-        console.log('Cambio de modelo');
 		this.doRollBack();
 		this._super();
     },

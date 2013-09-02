@@ -423,8 +423,9 @@ class ContactWrapper extends BaseWrapper
 		}
 	}
 
-	public function createEmail($email)
+	public function createEmail($mail)
 	{
+		$email = strtolower($mail);
 		if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			throw new InvalidArgumentException('La direccion [' . $email . '] no es una direccion de correo valida!');
 		}
@@ -569,7 +570,6 @@ class ContactWrapper extends BaseWrapper
 	
 	public function findContactsByList($list) 
 	{
-		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		//$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));
 		$this->pager->setTotalRecords(Coxcl::count("idContactlist = '$list->idContactlist'"));
 

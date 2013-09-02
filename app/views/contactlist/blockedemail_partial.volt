@@ -6,7 +6,7 @@
 		<div class="span10">
 			<p>
 				Esta es la lista global de direcciones de correo electrónico bloqueados, ninguna dirección de correo
-				que esté listada abajo, esta recibiendo tus campañas de envío.
+				que esté listada abajo, esta recibiendo campañas de envío.
 			</p>
 		</div>
 		<div class="span2 text-right">
@@ -75,18 +75,18 @@
 	<div class="row-fluid">
 		<div class="span10">
 			<p>
-				Aqui podrás bloquear direcciones de correo, Cuando bloquees una direccion de
+				Aqui podrá bloquear direcciones de correo, Cuando bloque una direccion de
 				correo, este se marcará como des-suscrito, y por consiguiente sera omitido de todas las listas y bases de datos de 
-				tu cuenta al realizar una campaña de envío. 
+				la cuenta al realizar una campaña de envío. 
 			</p>
 			<p>
-				Al intentar bloquear direcciones de correo, el sistema te preguntará si deseas eliminar los contactos 
+				Al intentar bloquear direcciones de correo, el sistema preguntará si desea eliminar los contactos 
 				que pertenecen a esa dirección, si no se selecciona esa opción, por defecto se marcarán como des-suscritos
-				y podras revertirlo.
+				y en futuro podrá revertirlo.
 			</p>
 			<p>
-				Si la dirección de correo electrónico que ingreses no existe, se creará automáticamente como bloqueada
-				y luego podrás desbloquearla, e ingresaras los datos neecsarios para crear un contacto para vincularlo
+				Si la dirección de correo electrónico que ingrese no existe, se creará automáticamente como bloqueada
+				y luego podrá desbloquearla, e ingresara los datos necesarios para crear un contacto para vincularlo
 				a esta dirección de correo.
 			</p>
 		</div>
@@ -102,7 +102,7 @@
 				<p>
 					{{ '{{view Ember.TextField valueBinding="email" placeholder="Escribe el Email aquí" required="required" autofocus="autofocus"}}' }}
 				</p>
-				<label>*Escribe la razón por la cual estas bloqueando esta direccion de correo electrónico: </label>
+				<label>*Escriba la razón por la cual esta bloqueando esta dirección de correo electrónico: </label>
 				<p>
 					{{ '{{view Ember.TextArea valueBinding="blockedReason" placeholder="Escribe la razón de bloqueo" required="required"}}' }}
 				</p>

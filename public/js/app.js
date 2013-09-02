@@ -178,11 +178,9 @@ App.FieldsIndexRoute = Ember.Route.extend({
 
 App.FieldsEditRoute = Ember.Route.extend({
 	deactivate: function () {
-		console.log('Deactivate FieldsEdit');
 		this.doRollBack();
 	},
 	contextDidChange: function() {
-        console.log('Cambio de modelo');
 		this.doRollBack();
 		this._super();
     },
@@ -265,7 +263,6 @@ App.ContactsNewRoute = Ember.Route.extend({
 	deactivate: function () {
 		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
 			this.get('currentModel.transaction').rollback();
-			console.log('Rollback new Contact!');
 		}
 	}
 });
@@ -274,11 +271,9 @@ App.ContactsNewbatchRoute = Ember.Route.extend();
 
 App.ContactsEditRoute = Ember.Route.extend({
 	deactivate: function () {
-		console.log('Deactivate ContactsEdit');
 		this.doRollBack();
 	},
 	contextDidChange: function() {
-        console.log('Cambio de modelo');
 		this.doRollBack();
 		this._super();
     },
@@ -327,15 +322,9 @@ App.ContactsNewController = Ember.ObjectController.extend({
 			model.set('isSubscribed', true);
 			
 			model.on('becameInvalid', this, function() {
-				console.log('INVALID, INVALID Will Robinson!');
 				this.handleFailure();
 			});			
 			model.on('becameError', this, function() {
-				console.log('ERROR, ERROR Will Robinson!: ');
-				console.log(this.get('content.error'));
-				console.log(this.get('model.error'));
-				console.log(this.get('content.errors'));
-				console.log(this.get('model.errors'));
 				this.handleFailure();
 			});	
 			model.on('didCreate', this, function() {
@@ -347,15 +336,11 @@ App.ContactsNewController = Ember.ObjectController.extend({
 	},
 		
 	cancel: function(){
-		console.log('Cancelling!');
 		this.get("target").transitionTo("contacts");
-		console.log('Cancelled!');
 	},
 
 	handleFailure: function() {
-		console.log('Handling failures!!!');
 		window.errormsg = this.get('content.errors');
-		console.log(errormsg);
 		this.set('errors', errormsg);
 		App.set('errormessage', errormsg);
 		this.get('transaction').rollback();
@@ -391,7 +376,6 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 	searchText: '',
     search: function(){
 		var resultado = App.Contact.find({ email: this.get('searchText') });
-		console.log(resultado);
 		this.set('content', resultado);
 	},
 			
@@ -400,11 +384,8 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 	},
 	
 	refreshModel: function (obj) {
-		console.log('Retrieving!');
 		var result = App.Contact.find(obj);
-		console.log('Setting!');
 		this.set('content', result);
-		console.log('Set!');
 	}
 });
 
