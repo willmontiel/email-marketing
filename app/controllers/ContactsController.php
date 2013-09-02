@@ -146,12 +146,26 @@ class ContactsController extends ControllerBase
 			$this->response->redirect("contactlist/show/$list->idContactlist#/contacts");
 	}
 	
+	public function validateImportFile($file)
+	{
+		$extensions = array('csv');
+		
+		if(!in_array(end(explode('.', $file)), $extensions)) {
+			$this->flashSession->error('ha enviado un tipo de archivo invalido, recuerde que debe de ser un archivo de tipo .csv');
+			$this->response->redirect("contactlist/show/$idContactlist#/contacts/newbatch");
+			return false;
+		}
+	}
 	public function importAction()
 	{
-		$file = $_FILES['importfile'];
-        $fileInfo = pathinfo($file['name']);
-		$idContactlist = $this->request->getpost('idcontactlist');
-		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+		
+		$this->validateImportFile($_FILES['importfile']['name']);
+		
+		$account = $this->user->account->idAccount ;
+		$internalNumber = uniqid();
+		$date = date("ymdHi",time());
+		$separator = "\r\n";
+		$internalName = $account."_".$date."_".$internalNumber.".csv";
 		
 		
 		$saveDataFile = new Importfile();
