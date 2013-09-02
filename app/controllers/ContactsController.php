@@ -148,14 +148,11 @@ class ContactsController extends ControllerBase
 	
 	public function importAction()
 	{
-		$account = $this->user->account->idAccount ;
-		$internalNumber = uniqid();
-		$date = date("ymdHi",time());
-		$separator = "\r\n";
-		$internalName = $account."_".$date."_".$internalNumber.".csv";
+		$file = $_FILES['importfile'];
+        $fileInfo = pathinfo($file['name']);
+		$idContactlist = $this->request->getpost('idcontactlist');
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		
-		$fileInfo = $_FILES['importfile']['name'];
-		$idDbase = $this->request->getpost('database');
 		
 		$saveDataFile = new Importfile();
 		
@@ -178,18 +175,17 @@ class ContactsController extends ControllerBase
 			$data = array();
 		
 			$line = fgets($open);
-				$eachdata = explode($separator, trim($line));
-				$data['row1'] = $eachdata[0];
-				$data['row2'] = $eachdata[0];
-				$data['row3'] = $eachdata[0];
-			fclose($open);
-			
-			$customfields = Customfield::findByIdDbase($idDbase);
+			$eachdata = explode(",", trim($line));
+			$data['col1'] = $eachdata[0];
+			$data['col2'] = $eachdata[1];
+			$data['col3'] = $eachdata[2];
 
-			$this->view->setVar("customfields", $customfields);
-			$this->view->setVar("row", $data);
-		}
+		fclose($open);
+		$customfields = Customfield::findByIdDbase($list->idDbase);
 		
+		$this->view->setVar("customfields", $customfields);
+		$this->view->setVar("idContactlist", $idContactlist);
+		$this->view->setVar("row", $data);
 		
 	}
 }

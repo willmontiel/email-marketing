@@ -288,7 +288,7 @@
 						</div>
 					</div>
 				</div>
-				<form method="Post" action="/emarketing/contacts/newbatch/{{datalist.idList}}" , 'method': 'Post') }}
+				<form method="Post" action="/emarketing/contacts/newbatch/{{datalist.idContactlist}}" , 'method': 'Post') }}
 				<div class="span5">
 					{{ text_area("arraybatch") }}
 					<input class="btn btn-sm btn-inverse" type="submit" value="Guardar">
@@ -518,10 +518,15 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/import">
-	{{ form('contacts/import', 'method': "Post", 'enctype': "multipart/form-data") }}<br>
-			<input name="importfile" type="file" id="importfile"><br>
-			{{submit_button('class': "btn btn-primary", "Cargar")}}
-			<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+	<form method="Post" action="/emarketing/contacts/import" enctype="multipart/form-data">
+		<div class="row-fluid">
+			<div class="span6">
+				<input class="input-file" name="importfile" type="file" id="importfile"><br>
+				<input type="hidden" name="idcontactlist" value={{datalist.idContactlist}}>
+				{{submit_button('class': "btn btn-primary", "Cargar")}}
+				<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+			</div>
+		</div>
 	</form>
 </script>
 
