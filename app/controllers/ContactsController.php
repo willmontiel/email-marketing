@@ -146,60 +146,92 @@ class ContactsController extends ControllerBase
 			$this->response->redirect("contactlist/show/$list->idContactlist#/contacts");
 	}
 	
-	public function validateImportFile($file)
+	protected function validateImportedFile($file) 
 	{
-		$extensions = array('csv');
+		$extensions = array ('csv');
+		$maxSizeFile = 8388608; //Máximo tamaño del archivo en bytes
 		
-		if(!in_array(end(explode('.', $file)), $extensions)) {
-			$this->flashSession->error('ha enviado un tipo de archivo invalido, recuerde que debe de ser un archivo de tipo .csv');
-			$this->response->redirect("contactlist/show/$idContactlist#/contacts/newbatch");
+		$this->objFile = $file;
+		$fileName = strtolower($this->objFile['name']);
+		
+		if(!in_array(end(explode('.', $fileName)), $extensions)) {
 			return false;
 		}
+		
+		else if ($this->objFile['size'] > $maxSizeFile) {
+			return false;
+		}
+		
+		else {
+			return true;
+		}
+		
+		
 	}
 	public function importAction()
 	{
-		
-		$this->validateImportFile($_FILES['importfile']['name']);
-		
 		$account = $this->user->account->idAccount ;
-		$internalNumber = uniqid();
-		$date = date("ymdHi",time());
-		$separator = "\r\n";
-		$internalName = $account."_".$date."_".$internalNumber.".csv";
+		$idContactlist = $this->request->getpost('idcontactlist');
+		$idDbase = $this->request->getpost('database');
 		
-		
-		$saveDataFile = new Importfile();
-		
-		$saveDataFile->idAccount = $account;
-		$saveDataFile->internalName = $internalName;
-		$saveDataFile->originalName = $fileInfo;
-		$saveDataFile->createdon = time();
-		
-		if (!$saveDataFile->save()) {
-			foreach ($saveDataFile->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-				$this->response->redirect("contactlist/show/22#/contacts/import");
-			}
+		if (empty($_FILES['importFile']['name'])) {
+			$this->flashSession->error("No ha enviado ningún archivo");
+			$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 		}
+		
 		else {
-			$destiny =  "C:\\".$internalName;
-			copy($_FILES['importfile']['tmp_name'],$destiny);
 			
-			$open = fopen($destiny, "r");
-			$data = array();
-		
-			$line = fgets($open);
-			$eachdata = explode(",", trim($line));
-			$data['col1'] = $eachdata[0];
-			$data['col2'] = $eachdata[1];
-			$data['col3'] = $eachdata[2];
+			$validate = $this->validateImportedFile($_FILES['importFile']);
+			
+			if ($validate == false) {
+				$this->flashSession->error("Error en el archivo");
+				$this->response->redirect("");
+			}
+			else {
+				$internalNumber = uniqid();
+				$date = date("ymdHi",time());
+				$separator = "\r\n";
+				$internalName = $account."_".$date."_".$internalNumber.".csv";
 
-		fclose($open);
-		$customfields = Customfield::findByIdDbase($list->idDbase);
+				$fileInfo = $_FILES['importFile']['name'];
+
+				$saveDataFile = new Importfile();
+
+				$saveDataFile->idAccount = $account;
+				$saveDataFile->internalName = $internalName;
+				$saveDataFile->originalName = $fileInfo;
+				$saveDataFile->createdon = time();
+
+				if (!$saveDataFile->save()) {
+						foreach ($saveDataFile->getMessages() as $msg) {
+								$this->flashSession->error($msg);
+								$this->response->redirect("contactlist/show$idContactlist#/contacts/import");
+						}
+				}
+				else {
+						$destiny =  "C:\\".$internalName;
+						copy($_FILES['importFile']['tmp_name'],$destiny);
+
+						$open = fopen($destiny, "r");
+						$data = array();
+
+						$line = fgets($open);
+								$eachdata = explode($separator, trim($line));
+								$data['row1'] = $eachdata[0];
+								$data['row2'] = $eachdata[0];
+								$data['row3'] = $eachdata[0];
+						fclose($open);
+
+						$customfields = Customfield::findByIdDbase($idDbase);
+
+						$this->view->setVar("customfields", $customfields);
+						$this->view->setVar("row", $data);
+				}
+			}
+			
+		}
 		
-		$this->view->setVar("customfields", $customfields);
-		$this->view->setVar("idContactlist", $idContactlist);
-		$this->view->setVar("row", $data);
-		
+			
 	}
+			
 }

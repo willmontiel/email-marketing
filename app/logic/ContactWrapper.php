@@ -212,27 +212,30 @@ class ContactWrapper
 		}
 		return false;
 	}
-
-	public function createNewContactFromJsonData($data)
+	protected function getTotalActiveContacts()
 	{
-		//Validar que al crear un email no exceda el limite de emails en la cuenta
 		$idAccount = $this->account->idAccount;
-		$contactLimit = $this->account->contactLimit;
 		
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$totalActiveContacts = "SELECT SUM(dbase.Cactive) AS cnt
 								FROM dbase
-									JOIN account ON ( dbase.idAccount = account.idAccount ) 
-								WHERE account.idAccount = :idAccount:";
+								WHERE dbase.idAccount = :idAccount:";
 		
 		$query = $modelManager->createQuery($totalActiveContacts);
 		$totalContacts = $query->execute(array(
 				'idAccount' => $idAccount
 			)
 		)->getFirst();
-		$total = $totalContacts->cnt;
-		if($total >= $contactLimit) {
-			throw new \InvalidArgumentException('Usted ha sobrepasado su limite de contactos: [' . $contactLimit .  '] ,  por defecto el sistema ha guardado hasta llegar a ese limite, los demas datos se han descartado');
+		return $totalContacts->cnt;
+	}
+
+	public function createNewContactFromJsonData($data)
+	{
+		//Validar que al crear un email no exceda el limite de emails en la cuenta
+		$total = $this->getTotalActiveContacts();
+		
+		if($total >= $this->account->contactLimit) {
+			throw new \InvalidArgumentException('Ha sobrepasado el limite de contactos: [' . $this->account->contactLimit .  ']');
 		}
 
 		else {

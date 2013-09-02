@@ -518,10 +518,16 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/import">
-	<form method="Post" action="/emarketing/contacts/import" enctype="multipart/form-data">
+	<div class="row-fluid">
+		<div class="span12" >
+			<div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
+		</div>
+	</div>
+	{{ content() }}
+	<form method="POST" action="/emarketing/contacts/import" enctype="multipart/form-data">
 		<div class="row-fluid">
 			<div class="span6">
-				<input class="input-file" name="importfile" type="file" id="importfile"><br>
+				<input name="importFile" type="file"><br>
 				<input type="hidden" name="idcontactlist" value={{datalist.idContactlist}}>
 				{{submit_button('class': "btn btn-primary", "Cargar")}}
 				<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
