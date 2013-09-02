@@ -10,6 +10,8 @@ Ember.MixinPagination = Ember.Mixin.create({
 	currentpage: 0,
 	recordsperpage: 0,
 	availablepages: 0,
+	canprev: false,
+	cannext: false,
 
 	// Metodo que toma la informacion y llena las variables
 	setPagination: function () {
@@ -24,6 +26,21 @@ Ember.MixinPagination = Ember.Mixin.create({
 		}
 		catch (e) {
 			
+		}
+		var cp = parseInt(this.get('currentpage'));
+		var lp = parseInt(this.get('availablepages'));
+		if (cp <= 1) {
+			this.set('canprev', false);
+		}
+		else {
+			this.set('canprev', true);
+		}
+		
+		if (cp >= lp) {
+			this.set('cannext', false);
+		}
+		else {
+			this.set('cannext', true);
 		}
 		
 	}.observes('model.isLoaded', 'content.firstObject.isLoaded'),

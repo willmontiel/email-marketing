@@ -1,23 +1,12 @@
 <div class="span5">
-	<div class="pagination">
+	<div class="pagination pagination-centered pagination-large">
 		<ul>
-			{% if '{{currentpage}}' == 1 %}
-				<li class="previous"><span class="fui-arrow-left" {{ '{{action firstPage this}}' }}><span class="fui-arrow-left"></span></span></li>
-				<li class="previous"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }}></span></li>
-			{% else %}
-				<li class="previous active"><span class="fui-arrow-left" {{ '{{action firstPage this}}' }}><span class="fui-arrow-left"></span></span></li>
-				<li class="previous active"><span class="fui-arrow-left" {{ '{{action prevPage this}}' }}></span></li>
-			{% endif %}		
-					
-			{% if '{{currentpage}}' >= '{{availablepages}}'%}
-				<li class="next"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
-				<li class="next"><span class="fui-arrow-right" {{ '{{action lastPage this}}' }}><span class="fui-arrow-right"></span></span></li>
-			{% else %}
-				<li class="next active"><span class="fui-arrow-right" {{ '{{action nextPage this}}' }}></span></li>
-				<li class="next active"><span class="fui-arrow-right" {{ '{{action lastPage this}}' }}><span class="fui-arrow-right"></span></span></li>	
-			{% endif %}
+			<li {{' {{ bindAttr class="canprev:enabled:disabled"}}'}}><a href="#" {{ '{{action firstPage this}}' }}>&lt;&lt;</a></li>
+			<li {{' {{ bindAttr class="canprev:enabled:disabled"}}'}}><a href="#" {{ '{{action prevPage this}}' }}>&lt;</a></li>
+			<li {{' {{ bindAttr class="cannext:enabled:disabled"}}'}}><a href="#" {{ '{{action nextPage this}}' }}>&gt;</a></li>
+			<li {{' {{ bindAttr class="cannext:enabled:disabled"}}'}}><a href="#" {{ '{{action lastPage this}}' }}>&gt;&gt;</a></li>
 		</ul>
-	 </div>
+	</div>
 </div>
 <div class="span3">
 	<br><br>

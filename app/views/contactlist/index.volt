@@ -104,6 +104,7 @@
 			</div>
 			<div class="row-fluid">
 				{{ partial("partials/pagination_partial") }}
+			 
 				<div class="span4 text-right">
 					<br>
 					{{ '{{#linkTo "lists.new" }}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
