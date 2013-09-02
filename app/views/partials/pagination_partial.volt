@@ -1,5 +1,5 @@
-<div class="span5">
-	<div class="pagination pagination-centered pagination-large">
+<div class="span4">
+	<div class="pagination pagination-left ">
 		<ul>
 			<li {{' {{ bindAttr class="canprev:enabled:disabled"}}'}}><a href="#" {{ '{{action firstPage this}}' }}>&lt;&lt;</a></li>
 			<li {{' {{ bindAttr class="canprev:enabled:disabled"}}'}}><a href="#" {{ '{{action prevPage this}}' }}>&lt;</a></li>
@@ -9,7 +9,7 @@
 	</div>
 </div>
 <div class="span3">
-	<br><br>
+	<br />
 	Registros totales: <span class="label label-filling">{{  '{{totalrecords}}' }}</span>&nbsp;
 	Página  <span class="label label-filling">{{  '{{currentpage}}' }}</span>
 	de <span class="label label-filling">{{  '{{availablepages}}' }}</span>

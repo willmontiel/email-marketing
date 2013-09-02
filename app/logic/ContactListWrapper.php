@@ -9,7 +9,7 @@ class ContactListWrapper extends BaseWrapper
 	 * @param Contactlist $contactlist
 	 * @return array
 	 */
-	protected function convertListToJson($contactlist)
+	protected function convertListToJson(Contactlist $contactlist)
 	{
 		$object = array();
 		$object['id'] = $contactlist->idContactlist;
@@ -18,6 +18,21 @@ class ContactListWrapper extends BaseWrapper
 		$object['createdon'] = $contactlist->createdon;
 		$object['updatedon'] = $contactlist->updatedon;
 		$object['dbase_id'] = $contactlist->Dbase->idDbase;
+		/*
+		 * 	totalContacts: DS.attr('number'),
+	activeContacts: DS.attr('number'),
+	unsubscribedContacts: DS.attr('number'),
+	bouncedContacts: DS.attr('number'),
+	spamContacts: DS.attr('number'),
+	inactiveContacts: DS.attr('number'),
+
+		 */
+		$object['total_contacts'] = $contactlist->Ctotal;
+		$object['active_contacts'] = $contactlist->Cactive;
+		$object['unsubscribed_contacts'] = $contactlist->Cunsubscribed;
+		$object['bounced_contacts'] = $contactlist->Cbounced;
+		$object['spam_contacts'] = $contactlist->Cspam;
+		$object['inactive_contacts'] = $contactlist->getInactiveContacts();
 
 		return $object;
 	}

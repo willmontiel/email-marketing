@@ -52,64 +52,49 @@
 		{# /handlebars de index #}
 		{# handlebars de listas #}
 		<script type="text/x-handlebars" data-template-name="lists/index">
-			<div class="row-fluid">
-				<div class="span7">
-					<p>Vea información detallada sobre sus listas de contactos</p>
-				</div>
-				<div class="span3"></div>
-				<div class="span2 text-right">
-					{{ '{{#linkTo "lists.new"}}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
+			<div class="action-nav-normal">
+				<div class="row-fluid">
+					<div class="action-nav-button span2 pull-right">
+						{{ '{{#linkTo "lists.new" title="Crear lista de contactos" }}' }}
+							<i class="icon-file-alt"></i>
+							<span>Crear lista de Contactos</span>
+						{{' {{/linkTo}}' }}
+						<span class="triangle-button red"><i class="icon-plus"></i></span>
+					</div>
 				</div>
 			</div>
 			<br>
-			<div class="row-fluid">
-				<div class="span12">
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th class="span3">
-									Nombre
-								</th>
-								<th class="span3">
-									Descripción
-								</th>
-								<th class="span3">
-									Contactos
-								</th>
-								<th class="span2">
-									Base de datos
-								</th>
-								<th class="span1">
-									Acciones
-								</th>
-							</tr>
-						</thead>
-						</tbody>
-					{{'{{#each model}}'}}
-							<tr>
-								<td><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a></td>
-								<td>{{ '{{description}}' }}</td>
-								<td>50</td>
-								<td><span class="label label-filling">{{ '{{dbase.name }}' }}</span></td>
-								<td>
-									<label><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">Ver</a></label>
-									<label>{{ '{{#linkTo "lists.edit" this}}' }}Editar{{ '{{/linkTo}}' }}</label>
-									<label>{{ '{{#linkTo "lists.delete" this}}' }}Eliminar{{ '{{/linkTo}}' }}</label>
-								</td>
-							</tr>
-					{{ '{{/each}}' }}
-						</tbody>
-					</table>
+			<div class="box">
+				<div class="box-header">
+					<span class="title">Listas de Contactos</span>
+					<ul class="box-toolbar">
+						<li><span class="label label-green">{{'{{totalrecords}}'}}</span></li>
+					</ul>
+				</div>
+				<div class="box-content">
+				{{'{{#each model}}'}}
+					<div class="box-section news with-icons">
+						<div class="avatar blue">
+							<i class="icon-ok icon-2x"></i>
+						</div>
+						<div class="news-time">
+							<span>{{'{{activeContacts}}'}}</span> activos
+						</div>
+						<div class="news-content">
+							<div class="news-title"><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a></div>
+							<div class="news-text">
+								{{ '{{description}}' }}
+							</div>
+							<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
+						</div>
+					</div>
+				{{ '{{/each}}' }}
+				</div>
+				<div class="box-footer flat"> 
+					{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
-			<div class="row-fluid">
-				{{ partial("partials/pagination_partial") }}
-			 
-				<div class="span4 text-right">
-					<br>
-					{{ '{{#linkTo "lists.new" }}' }}<button class="btn btn-primary">Nueva lista</button>{{ '{{/linkTo}}' }}
-				</div>
-			</div>
+
 		</script>
 		<script type="text/x-handlebars" data-template-name="lists">
 			{{ '{{#if App.errormessage }}' }}
