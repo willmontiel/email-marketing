@@ -214,19 +214,17 @@ class ContactsController extends ControllerBase
 						copy($_FILES['importFile']['tmp_name'],$destiny);
 
 						$open = fopen($destiny, "r");
-						$data = array();
-
+						
 						$line = fgets($open);
-								$eachdata = explode($separator, trim($line));
-								$data['row1'] = $eachdata[0];
-								$data['row2'] = $eachdata[0];
-								$data['row3'] = $eachdata[0];
+						$eachdata = explode($separator, trim($line));
+								
 						fclose($open);
 
 						$customfields = Customfield::findByIdDbase($idDbase);
 
 						$this->view->setVar("customfields", $customfields);
-						$this->view->setVar("row", $data);
+						$this->view->setVar("row", $eachdata);
+						$this->view->setVar("idContactlist", $idContactlist);
 				}
 			}
 			
