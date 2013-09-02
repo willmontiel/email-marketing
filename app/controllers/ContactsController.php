@@ -156,15 +156,15 @@ class ContactsController extends ControllerBase
 		$extension = end($tmp);
 
 		if(!in_array($extension, $extensions, true)) {
-			return false;
+			return $msg = "Ha enviado un tipo de archivo no soportado, recuerde que el tipo de archivo es .csv";
 		}
 		
 		else if ($file['size'] > $maxSizeFile) {
-			return false;
+			return $msg = "Ha sobrepasado el tamaño limite de archivo";
 		}
 		
 		else {
-			return true;
+			return $msg = "";
 		}
 		
 		
@@ -173,7 +173,8 @@ class ContactsController extends ControllerBase
 	{
 		$account = $this->user->account->idAccount ;
 		$idContactlist = $this->request->getpost('idcontactlist');
-		$idDbase = $this->request->getpost('database');
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+		$idDbase = $list->idDbase;
 		
 		if (empty($_FILES['importFile']['name'])) {
 			$this->flashSession->error("No ha enviado ningún archivo");
@@ -184,14 +185,13 @@ class ContactsController extends ControllerBase
 			
 			$validate = $this->validateImportedFile($_FILES['importFile']);
 			
-			if ($validate == false) {
-				$this->flashSession->error("Error en el archivo");
-				$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
+			if ($validate != NULL) {
+				$this->flashSession->error($validate);
+				$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");	
 			}
 			else {
 				$internalNumber = uniqid();
 				$date = date("ymdHi",time());
-				$separator = "\r\n";
 				$internalName = $account."_".$date."_".$internalNumber.".csv";
 
 				$fileInfo = $_FILES['importFile']['name'];
@@ -214,10 +214,9 @@ class ContactsController extends ControllerBase
 						copy($_FILES['importFile']['tmp_name'],$destiny);
 
 						$open = fopen($destiny, "r");
-						
+
 						$line = fgets($open);
-						$eachdata = explode($separator, trim($line));
-								
+						$eachdata = explode(",", trim($line));
 						fclose($open);
 
 						$customfields = Customfield::findByIdDbase($idDbase);
@@ -225,6 +224,7 @@ class ContactsController extends ControllerBase
 						$this->view->setVar("customfields", $customfields);
 						$this->view->setVar("row", $eachdata);
 						$this->view->setVar("idContactlist", $idContactlist);
+						
 				}
 			}
 			
