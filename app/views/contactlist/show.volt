@@ -519,7 +519,7 @@
 
 <script type="text/x-handlebars" data-template-name="contacts/import">
 	{{ form('contacts/import', 'method': "Post", 'enctype': "multipart/form-data") }}<br>
-			<input name="importfile" type="file" id="importfile">
+			<input name="importfile" type="file" id="importfile"><br>
 			{{submit_button('class': "btn btn-primary", "Cargar")}}
 			<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
 	</form>

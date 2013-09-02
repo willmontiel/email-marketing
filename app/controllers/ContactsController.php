@@ -151,7 +151,7 @@ class ContactsController extends ControllerBase
 		$account = $this->user->account->idAccount ;
 		$internalNumber = uniqid();
 		$date = date("ymdHi",time());
-		$separator = "\n";
+		$separator = "\r\n";
 		$internalName = $account."_".$date."_".$internalNumber.".csv";
 		
 		$fileInfo = $_FILES['importfile']['name'];
@@ -179,9 +179,9 @@ class ContactsController extends ControllerBase
 		
 			$line = fgets($open);
 				$eachdata = explode($separator, trim($line));
-				$data['col1'] = $eachdata[0];
-				$data['col1'] = $eachdata[0];
-				$data['col1'] = $eachdata[0];
+				$data['row1'] = $eachdata[0];
+				$data['row2'] = $eachdata[0];
+				$data['row3'] = $eachdata[0];
 			fclose($open);
 			
 			$customfields = Customfield::findByIdDbase($idDbase);
