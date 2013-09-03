@@ -206,12 +206,12 @@ try {
     echo $application->handle()->getContent();
 	
 	// Grabar en LOG
-	$logger = $di->get('logger');
+	$dblogger = new \Phalcon\Logger\Adapter\File("../app/logs/dbdebug.log");;
 	$profiles = $di->get('profiler')->getProfiles();
 	
 	if (count($profiles) > 0) {
 	
-		$logger->log("==================== Application Profiling Information ========================", \Phalcon\Logger::INFO);
+		$dblogger->log("==================== Application Profiling Information ========================", \Phalcon\Logger::INFO);
 		foreach ($profiles as $profile) {
 			$str = '******************************************************' . PHP_EOL .
 				   \sprintf('SQL Statement: [%s]', $profile->getSQLStatement()) . PHP_EOL .
@@ -220,9 +220,9 @@ try {
 				   \sprintf('Total elapsed time: [%f]', $profile->getTotalElapsedSeconds()) . PHP_EOL .
 				   '******************************************************';
 
-			$logger->log($str, \Phalcon\Logger::INFO);
+			$dblogger->log($str, \Phalcon\Logger::INFO);
 		}
-		$logger->log("==================== Application Profiling Information End ====================", \Phalcon\Logger::INFO);
+		$dblogger->log("==================== Application Profiling Information End ====================", \Phalcon\Logger::INFO);
 	}
 
 } catch(\Phalcon\Exception $e) {
