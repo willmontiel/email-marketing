@@ -205,82 +205,82 @@
 		</div>
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/edit">
-<p>Agrega un nuevo contacto, con sus datos más básicos. </p>
-	<form>
-		<div class="row-fluid">
-			<div class="span3">
-				<p>
-					<label>E-mail: </label>
-				</p>
-				<p>
-					{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
-				</p>
-				<p>
-					<label>Nombre: </label>
-				</p>
-				<p>	
-					{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
-				</p>
-				<p>
-					<label>Apellido: </label>
-				</p>
-				<p>
-					{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
-				</p>
-				<p>
-					<label>Estado: </label>
-					{{ '{{#if isSubscribed}}' }}
-						<label class="checkbox checked" for="isActive">
-							<span class="icons">
-								<span class="first-icon fui-checkbox-unchecked"></span>
-								<span class="second-icon fui-checkbox-checked"></span>
-							</span>
-					{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
-						</label>
-					{{ '{{else}}' }}
-						<label class="checkbox" for="isActive">
-							<span class="icons">
-								<span class="first-icon fui-checkbox-unchecked"></span>
-								<span class="second-icon fui-checkbox-checked"></span>
-							</span>
-				 {{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
-						</label>
-			{{ '{{/if}}' }}
-				</p>
-				<!-- Campos Personalizados -->
-							{%for field in fields%}
-								<p><label for="{{field.name}}">{{field.name}}:</label></p>
-								<p>{{ember_customfield(field)}}</p>
-								{% if (field.type == "Text") %}
-									Maximo {{field.maxLength}} caracteres
-								{% elseif field.type == "Numerical" %}
-									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
-								{%endif%}
-							{%endfor%}
+			<p>Agrega un nuevo contacto, con sus datos más básicos. </p>
+			<form>
+				<div class="row-fluid">
+					<div class="span3">
+						<p>
+							<label>E-mail: </label>
 						</p>
-				<!--  Fin de campos personalizados -->
-				<p>
-					<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
-					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-				</p>	
+						<p>
+							{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
+						</p>
+						<p>
+							<label>Nombre: </label>
+						</p>
+						<p>	
+							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
+						</p>
+						<p>
+							<label>Apellido: </label>
+						</p>
+						<p>
+							{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
+						</p>
+						<p>
+							<label>Estado: </label>
+							{{ '{{#if isSubscribed}}' }}
+								<label class="checkbox checked" for="isActive">
+									<span class="icons">
+										<span class="first-icon fui-checkbox-unchecked"></span>
+										<span class="second-icon fui-checkbox-checked"></span>
+									</span>
+							{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
+								</label>
+							{{ '{{else}}' }}
+								<label class="checkbox" for="isActive">
+									<span class="icons">
+										<span class="first-icon fui-checkbox-unchecked"></span>
+										<span class="second-icon fui-checkbox-checked"></span>
+									</span>
+						 {{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
+								</label>
+					{{ '{{/if}}' }}
+						</p>
+						<!-- Campos Personalizados -->
+									{%for field in fields%}
+										<p><label for="{{field.name}}">{{field.name}}:</label></p>
+										<p>{{ember_customfield(field)}}</p>
+										{% if (field.type == "Text") %}
+											Maximo {{field.maxLength}} caracteres
+										{% elseif field.type == "Numerical" %}
+											El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
+										{%endif%}
+									{%endfor%}
+								</p>
+						<!--  Fin de campos personalizados -->
+						<p>
+							<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
+							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+						</p>	
+					</div>
+				</div>
+			</form>
+		</script>
+		<script type="text/x-handlebars" data-template-name="contacts/delete">
+			<div class="row-fluid">
+				<div class="span5 message-delete">
+					<p>Esta seguro que desea Eliminar el Contacto <strong>{{'{{this.name}}'}}</strong></p>
+					<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminara por completo de su Base de Datos</p>
+					<button {{'{{action delete this}}'}} class="btn btn-danger">
+						Eliminar
+					</button>
+					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>
+						Cancelar
+					</button>
+				</div>
 			</div>
-		</div>
-	</form>
-</script>
-<script type="text/x-handlebars" data-template-name="contacts/delete">
-	<div class="row-fluid">
-		<div class="span5 message-delete">
-			<p>Esta seguro que desea Eliminar el Contacto <strong>{{'{{this.name}}'}}</strong></p>
-			<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminara por completo de su Base de Datos</p>
-			<button {{'{{action delete this}}'}} class="btn btn-danger">
-				Eliminar
-			</button>
-			<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>
-				Cancelar
-			</button>
-		</div>
-	</div>
-</script>
+		</script>
 <script type="text/x-handlebars" data-template-name="contacts/show">
 <div class="row-fluid">
 	<div class="span7 well well-small">

@@ -227,34 +227,23 @@ class ContactListWrapper extends BaseWrapper
 	public function deleteContactList($idContactlist)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
-		
-		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-		$query = 
-			"SELECT C1.idContact, C1.idContactlist ,COUNT(*) 
-			FROM Coxcl C1
-				JOIN (SELECT idContact FROM Coxcl WHERE idContactlist = :idContactlist) C2 ON (C1.idContact = C2.idContact) 
-			GROUP BY 1 
-			HAVING COUNT(*) = 1";
 
-		$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idContactlist' => $idContactlist));
 		
-		$deleteList = $db->delete(
-				'Contactlist',
-				'idContactlist = '.$idContactlist  
-		);
-			
-		$res = array_map(function ($e) {
-			return $e['idContact'];
-		}, $results);
-
-		$idContacts = "(" . implode(',', $res) .")" ;
-			
-			
-		$deleteContacts = "DELETE FROM Contact WHERE idContact IN " . $idContacts;
+		$query = 'DELETE CO, CF
+				  FROM coxcl CL	
+					JOIN contact CO ON CL.idContact = CO.idContact 
+					LEFT JOIN fieldinstance CF ON CO.idContact = CF.idContact
+				  WHERE CO.idContact IN 
+					(SELECT C1.idContact
+					 FROM Coxcl C1
+						JOIN (SELECT idContact FROM Coxcl WHERE idContactlist = ?) C2 ON (C1.idContact = C2.idContact) 
+					 GROUP BY 1 
+					 HAVING COUNT(*) = 1)';
 		
-		$query2 = $modelManager->createQuery($deleteContacts);
-		$deletedContacts = $query2->execute();
-
+		$db->begin();
+		$db->execute($query, array($idContactlist));
+		$db->execute('DELETE FROM Contactlist WHERE idContactlist = ?', array($idContactlist));
+		$db->commit();
 	}
 
 	
