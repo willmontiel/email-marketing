@@ -93,21 +93,22 @@
           border-radius: 9px;
 }
 span.red-label {
-	color: red;
+	color: #8f3831;
+	font-size: 14px;
 	font-weight: bold;
 }
 span.primary-label {
 	color: #1abc9c; 
 }
 
-span.circle-primary {
-	color: white; 
-	background-color: #1abc9c;
-	border-radius: 9px;
-	font-size: 16px;
+span.blue-label {
+	color: #599cc7;
+	font-size: 14px;
+	font-weight: bold;
 }
 span.green-label {
-	color: #1abc9c;
+	color: #6eb056;
+	font-size: 14px;
 	font-weight: bold;
 }
 span.yellow-label {
@@ -116,6 +117,7 @@ span.yellow-label {
 }
 span.orange-label {
 	color: #F59B00;
+	font-size: 14px;
 	font-weight: bold;
 }
 body {
