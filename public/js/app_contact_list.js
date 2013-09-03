@@ -1,0 +1,1 @@
+App.currentList = App.List.find(currentList);

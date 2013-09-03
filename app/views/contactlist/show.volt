@@ -1,11 +1,11 @@
-{% extends "templates/index.volt" %}
+{% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
 		{{ javascript_include('js/mixin_pagination.js') }}
-		
-	<script type="text/javascript">
+<script type="text/javascript">
 		var MyDbaseUrl = 'emarketing/api/contactlist/{{datalist.idContactlist}}';
+		var currentList = {{datalist.idContactlist}};
 		
 		var myContactModel = {
 			email: DS.attr( 'string' ),
@@ -24,8 +24,16 @@
 			isBounced: DS.attr('boolean'),
 			isSubscribed: DS.attr('boolean'),
 			isSpam: DS.attr('boolean'),
-			isActive: DS.attr('boolean')
-			{%for field in fields%}
+			isActive: DS.attr('boolean'),
+			list: DS.belongsTo('App.List'),
+			isReallyActive: function () {
+				if (this.get('isActive') && this.get('isSubscribed') && !(this.get('isSpam') || this.get('isBounced'))) {
+					return true;
+				}
+				return false;
+			}.property('isSubscribed,isActive')
+
+		{%for field in fields%}
 			,
 				{% if field.type == "Text" %}
 					{{field.name|lower }}: DS.attr('string')
@@ -46,6 +54,8 @@
 	</script>
 
 	{{ javascript_include('js/app_contact.js') }}
+	{{ javascript_include('js/list_model.js') }}
+	{{ javascript_include('js/app_contact_list.js') }}
 	
 	<script>
 		{%for field in fields %}
@@ -55,231 +65,119 @@
 
 	
 {% endblock %}
+
+{% block sectiontitle %}Lista: <strong>{{datalist.name}}</strong>{% endblock %}
+{%block sectionsubtitle %}{{datalist.description}}{% endblock %}
+	
 {% block content %}
-	<div class="row-fluid">
-		<div class="span12" >
-			<div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
+
+	<script type="text/x-handlebars" >
+		<div class="box">
+		<div class="clearfix">
+			<ul class="inline sparkline-box" style="">
+
+				<li class="sparkline-row">
+					<h4 class="blue"><span>Contactos totales</span> {{'{{App.currentList.totalContactsF}}'}}</h4>
+				</li>
+
+				<li class="sparkline-row">
+					<h4 class="green"><span>Activos</span> {{'{{App.currentList.activeContactsF}}'}}</h4>
+				</li>
+
+				<li class="sparkline-row">
+					<h4 class="gray"><span>Inactivos</span> {{'{{App.currentList.inactiveContactsF}}'}}</h4>
+				</li>
+				<li class="sparkline-row">
+					<h4 class="gray"><span>Des-suscritos</span> {{'{{App.currentList.unsubscribedContactsF}}'}}</h4>
+				</li>
+				<li class="sparkline-row">
+					<h4 class="red"><span>Rebotados</span> {{'{{App.currentList.bouncedContactsF}}'}}</h4>
+				</li>
+				<li class="sparkline-row">
+					<h4 class="red"><span>Spam</span> {{'{{App.currentList.spamContactsF}}'}}</h4>
+				</li>
+
+			</ul>
 		</div>
-	</div>
-	{{ content() }}
-	<div class="row-fluid">
-		<div class="span12">
-			<div class="row-fluid">
-				<div class="span12">
-					<h1>{{datalist.name}}</h1>
-				</div>
-			</div>
-			<br>
-			<div class="row-fluid">
-				<div class="span8">
-					{{datalist.description}}
-				</div>
-				<div class="span1"></div>
-				<div class="span3">
-					<div class="badge-number-dark">
-						<table class="offset4">
-							<tr>
-								<td>
-									<span class="text-green-color">{{datalist.Ctotal}}</span>
-								</td>
-								<td>
-									<span class="regular-text">Total Contactos</span>
-								</td>
-							</tr>
-						</table>
-					</div>
-					<div class="badge-number-light">
-						<table class="offset4">
-							<tr>
-								<td>
-									<span class="text-green-color">{{datalist.Cactive}}</span>
-								</td>
-								<td class="text-left">
-									<span class="regular-text">Activos</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<span class="text-gray-color text-left">{{get_inactive(datalist)|numberf}}</span>
-								</td>
-								<td class="text-left">
-									<span class="regular-text">Inactivos</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<span class="text-gray-color text-left">{{datalist.Cunsubscribed}}</span>
-								</td>	
-								<td class="text-left">
-									<span class="regular-text">Des-suscritos</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<span class="text-brown-color text-left">{{datalist.Cbounced}}</span>
-								</td>
-								<td class="text-left">
-									<span class="regular-text">Rebotados</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<span class="text-red-color text-left">{{datalist.Cspam}}</span>
-								</td>
-								<td class="text-left">
-									<span class="regular-text">Spam</span>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-			</div>
 		</div>
-	</div>
-	<br>
-	<div class="row-fluid">
-		<div class="span12"></div>
-	</div>
-	<br>
+
+		{{'{{outlet}}'}}
+	</script>
 	
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppContactContainer">
 		<script type="text/x-handlebars" data-template-name="contacts/index">
-			<div class="row-fluid">
-				<div class="text-right">
-					<a href="/emarketing/contactlist#/lists"><button class="btn btn-inverse">Regresar</button></a>
-					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary">Agregar</button>{{'{{/linkTo}}'}}
-					{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
-					{{ '{{#linkTo "contacts.import"}} <button class="btn btn-primary" >Importar</button> {{/linkTo}}' }}
-				</div>
+			<div class="pull-right" style="margin-bottom: 5px;">
+				<a href="{{url('contactlist#/lists')}}" class="btn btn-blue"><i class="icon-home"></i> Todas las listas</a>
+				{{'{{#linkTo "contacts.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/linkTo}}'}}
+				{{'{{#linkTo "contacts.newbatch" class="btn btn-default"}}'}}<i class="icon-align-justify"></i> Crear Varios Contactos{{'{{/linkTo}}'}}
+				{{ '{{#linkTo "contacts.import" class="btn btn-default"}}'}}<i class="icon-file-alt"></i> Importar Contactos{{'{{/linkTo}}'}}			
 			</div>
-			<br>
-			<div class="row-fluid">
-				<div class="span12">
-					<table class="table table-striped">
-						<thead>
-							 <tr>
-								<th class="span3">
-									E-mail
-								</th>
-								<th class="span3">
-									Nombre
-								</th>
-								<th class="span3">
-									Apellido
-								</th>
-								<th class="span2">
-									Estado
-								</th>
-								<th class="span1">
-									Acciones
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-					{{'{{#each model}}'}}
-							<tr>
-								<td>{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</td>
-								<td>{{'{{name}}'}}</td>
-								<td>{{'{{lastName}}'}}</td>
-								<td>
-									<dl>
-										<dd>
-											{{ '{{#if isActive}}' }}
-												<span class="green-label">Activo</span>
-											{{ '{{else}}' }}
-												<span class="orange-label">Inactivo</span>
-											{{ '{{/if}}' }}
-										</dd>
-										<dd>
-											{{ '{{#if isBounced}}' }}
-												Rebotado
-											{{ '{{/if}}' }}
-										</dd>
-										{{ '{{#unless isSubscribed}}' }}
-										<dd>
-												Desuscrito
-										</dd>
-										{{ '{{/unless}}' }}
-										{{ '{{#if isSpam}}' }}
-										<dd>
-											<span class="red-label">SPAM</span>
-										</dd>
-										{{ '{{/if}}' }}
+			<div class="clearfix"></div>
 
-									</dl>
-								</td>
-								<td>
-									<dl>
-										<dd>{{ '{{#linkTo "contacts.show" this}}Ver{{/linkTo}}' }}</dd>
-										<dd>{{ '{{#linkTo "contacts.edit" this}}Editar{{/linkTo}}' }}</dd>
-										<dd>{{ '{{#linkTo "contacts.delete" this}}Eliminar{{/linkTo}}' }}</dd>
-									</dl>
-								</td>
-							</tr>
-					{{ '{{/each}}' }}
-						</tbody>
-					</table>
+			<div class="box">
+				<div class="box-header">
+					<span class="title">Contactos</span>
+ 					<ul class="box-toolbar">
+						<li><span class="label label-green">{{'{{totalrecords}}'}}</span></li>
+					</ul>
 				</div>
-			</div>
-			<br>
-			<div class="row-fluid">
-				{{ partial("partials/pagination_partial") }}
-				<div class="span4 text-right">
-					<br>
-					<a href="/emarketing/contactlist#/lists"><button class="btn btn-inverse">Regresar</button></a>
-					{{'{{#linkTo "contacts.new"}}'}}<button class="btn btn-primary" >Agregar</button>{{'{{/linkTo}}'}}
-					{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
+				<div class="box-content">
+				{{'{{#each model}}'}}
+					{{ partial("partials/contact_view_partial") }}
+				{{ '{{/each}}' }}
+				</div>
+				<div class="box-footer flat"> 
+					{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="contacts">
-				{{ '{{#if App.errormessage }}' }}
-					<div class="alert alert-message alert-error">
-				{{ '{{ App.errormessage }}' }}
-					</div>
-				{{ '{{/if}} '}}	
-
 				{{'{{outlet}}'}}
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="contacts/new">
-			<div class="row-fluid">
-				<div class="span3">
+			<div class="box span4">
+				<div class="box-header"><span class="title">Crear nuevo contacto</strong></span></div>
+				<div class="box-content">
 					<form>
-						<label>*E-mail:</label>
-						{{' {{#if errors.email }} '}}
-							<p class="alert alert-error">{{'{{errors.email}}'}}</p>
-						{{' {{/if }} '}}
-						<p>
+						<div class="padded">
+							<label>*E-mail:
+								{{' {{#if errors.email}} '}}
+									<span class="text text-error">{{'{{errors.email}}'}}</span>
+								{{' {{/if }} '}}
+							</label>
 							{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus"}}'}}
-						</p>
-						<label>Nombre:</label>
-						<p>
+							<label>Nombre:
+								{{' {{#if errors.name}} '}}
+									<span class="text text-error">{{'{{errors.name}}'}}</span>
+								{{' {{/if }} '}}
+							</label>
 							{{'{{view Ember.TextField valueBinding="name"}}'}}
-						</p>
-						<label>Apellido:</label>
-						<p>
+							<label>Apellido:
+								{{' {{#if errors.lastName}} '}}
+									<span class="text text-error">{{'{{errors.lastName}}'}}</span>
+								{{' {{/if }} '}}
+							</label>
 							{{'{{view Ember.TextField valueBinding="lastName"}}'}}
-						</p>
-						<!-- Campos Personalizados -->
+							<!-- Campos Personalizados -->
 							{%for field in fields%}
-								<p><label for="{{field.name}}">{{field.name}}:</label></p>
-								<p>{{ember_customfield(field)}}</p>
+								<label for="{{field.name}}">{{field.name}}:</label>
+								{{ember_customfield(field)}}
 								{% if (field.type == "Text") %}
 									Maximo {{field.maxLength}} caracteres
 								{% elseif field.type == "Numerical" %}
 									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
 								{%endif%}
 							{%endfor%}
-						</p>
-						<!--  Fin de campos personalizados -->
-						<br>
-						<p>
+							<!--  Fin de campos personalizados -->
+							<br>
+						</div>
+						<div class="form-actions">
 							<button class="btn btn-primary" {{'{{action save this}}'}}>Guardar</button>
 							<button class="btn btn-inverse" {{'{{action cancel this}}'}}>Cancelar</button>
-						</p>
+						</div>
 					</form>
 				</div>
 			</div>

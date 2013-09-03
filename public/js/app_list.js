@@ -1,10 +1,4 @@
-App = Ember.Application.create({
-	rootElement: '#emberApplistContainer'
-});
-
-App.set('errormessage', '');
-
-//Definiendo Rutas
+/* Rutas de Contact Lists */
 App.Router.map(function() {
   this.resource('lists', function(){
 	  this.route('new'),
@@ -22,65 +16,7 @@ App.Router.map(function() {
   });
 });
 
-/* STORE */
-// Serializador
-var serializer = DS.RESTSerializer.create();
-
-serializer.configure({
-    meta: 'meta',
-    pagination: 'pagination'
-});
-
-//Adaptador
-App.Adapter = DS.RESTAdapter.reopen({
-	namespace: MyDbaseUrl,
-	serializer: serializer
-});
-
-// Store (class)
-App.Store = DS.Store.extend({
-	revision: 13,
-	adapter: App.Adapter.create()
-//	adapter: DS.FixtureAdapter.extend({
-//        queryFixtures: function(fixtures, query, type) {
-//            console.log(query);
-//            console.log(type);
-//            return fixtures.filter(function(item) {
-//                for(prop in query) {
-//                    if( item[prop] != query[prop]) {
-//                        return false;
-//                    }
-//                }
-//                return true;
-//            });
-//        }
-//    })
-});
-
-// Store (object)
-App.store = App.Store.create();
-
-//Creando el modelos
-
-App.Dbase = DS.Model.extend({
-    name: DS.attr('string'),
-	lists: DS.hasMany('App.List')
-});
-
-App.List = DS.Model.extend({
-	dbase: DS.belongsTo('App.Dbase'),
-	name: DS.attr('string'),
-	totalContacts: DS.attr('number'),
-	activeContacts: DS.attr('number'),
-	unsubscribedContacts: DS.attr('number'),
-	bouncedContacts: DS.attr('number'),
-	spamContacts: DS.attr('number'),
-	inactiveContacts: DS.attr('number'),
-	description: DS.attr( 'string' ),
-	createdon: DS.attr('number'),
-	updatedon: DS.attr('number')
-});
-
+/* Controladores de Dbase  (necesario?) */
 App.DbaseIndexController = Ember.ArrayController.extend({
 	model: function()
 	{
@@ -88,8 +24,7 @@ App.DbaseIndexController = Ember.ArrayController.extend({
 	}
 });
 
-
-//Creando el fixture (parcial)
+/* Fixtures de prueba */
 //App.List.FIXTURES = [
 //	{id: 1, name: 'Mi primera Lista', description: 'Mi primera lista, no tiene descripcion alguna', createdon: '10 de agosto de 2012', updatedon: '12 de agosto de 2013'},
 //	{id: 2, name: 'Mi segunda Lista', description: 'Mi seguna lista, no tiene descripcion alguna', createdon: '15 de marzo de 2013', updatedon: '16 de marzo de 2013'},
@@ -102,7 +37,7 @@ App.DbaseIndexController = Ember.ArrayController.extend({
 //	{id: 3, name: 'Base 3'}
 //];
 
-//Rutas
+/* Rutas de Contact Lists */
 App.ListsIndexRoute = Ember.Route.extend({
 	model: function(){
 		return App.List.find();
@@ -138,19 +73,11 @@ App.ListsEditRoute = Ember.Route.extend({
 
 
 
-//Controladores
+/* Controladores de Contact Lists */
 App.ListController = Ember.ObjectController.extend();
 
 App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	modelClass : App.List,
-			
-//	searchText: '',
-//    search: function(){
-//		var resultado = App.Contact.find({ email: this.get('searchText') });
-//		console.log(resultado);
-//		this.set('content', resultado);
-//	}
-
+	modelClass : App.List
 });
 
 App.ListsNewController = Ember.ObjectController.extend({

@@ -568,21 +568,15 @@ class ContactWrapper extends BaseWrapper
 		return $object;
 	}
 	
-	public function findContactsByList($list) 
+	public function findContactsByList(Contactlist $list) 
 	{
-		//$contacts = Contact::find(array('limit' => array('number' => ContactWrapper::PAGE_DEFAULT, 'offset' => 0)));
-		$this->pager->setTotalRecords(Coxcl::count("idContactlist = '$list->idContactlist'"));
-
-		$contacts = Coxcl::find(array(
-			"idContactlist = '$list->idContactlist'",
-			"limit" => array('number' => $this->pager->getRowsPerPage(), 'offset' => $this->pager->getStartIndex())
-		));
-		
+		$this->pager->setTotalRecords(Contact::countContactsInList($list));
+		$contacts = Contact::findContactsInList($list, null, null, array('number' => $this->pager->getRowsPerPage(), 'offset' => $this->pager->getStartIndex()));
 		
 		$result = array();
 		foreach ($contacts as $contact) {
-			$contactT = Contact::findFirstByIdContact($contact->idContact);
-			$result[] = $this->convertContactToJson($contactT);
+			//$contactT = Contact::findFirstByIdContact($contact->idContact);
+			$result[] = $this->convertContactToJson($contact);
 		}
 		$this->pager->setRowsInCurrentPage(count($result));
 		return array('contacts' => $result, 'meta' => $this->pager->getPaginationObject() );

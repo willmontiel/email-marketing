@@ -9,7 +9,7 @@ class ContactListWrapper extends BaseWrapper
 	 * @param Contactlist $contactlist
 	 * @return array
 	 */
-	protected function convertListToJson(Contactlist $contactlist)
+	public static function convertListToJson(Contactlist $contactlist)
 	{
 		$object = array();
 		$object['id'] = $contactlist->idContactlist;
@@ -18,15 +18,7 @@ class ContactListWrapper extends BaseWrapper
 		$object['createdon'] = $contactlist->createdon;
 		$object['updatedon'] = $contactlist->updatedon;
 		$object['dbase_id'] = $contactlist->Dbase->idDbase;
-		/*
-		 * 	totalContacts: DS.attr('number'),
-	activeContacts: DS.attr('number'),
-	unsubscribedContacts: DS.attr('number'),
-	bouncedContacts: DS.attr('number'),
-	spamContacts: DS.attr('number'),
-	inactiveContacts: DS.attr('number'),
 
-		 */
 		$object['total_contacts'] = $contactlist->Ctotal;
 		$object['active_contacts'] = $contactlist->Cactive;
 		$object['unsubscribed_contacts'] = $contactlist->Cunsubscribed;
@@ -95,7 +87,7 @@ class ContactListWrapper extends BaseWrapper
 		
 		$list = $this->createNewContactList($contents);
 
-		return array('list' => $this->convertListToJson($list ));
+		return array('list' => self::convertListToJson($list ));
 		
 	}
 	public function assignDataToContactList($contents, $list)
@@ -103,11 +95,6 @@ class ContactListWrapper extends BaseWrapper
 		$list->idDbase = $contents->dbase_id;
 		$list->name = $contents->name;
 		$list->description = $contents->description;
-		$list->Ctotal = 0;
-		$list->Cactive = 0;
-		$list->Cunsubscribed = 0;
-		$list->Cbounced = 0;
-		$list->Cspam = 0;
 		$list->createdon = $contents->createdon;
 		$list->updatedon = $contents->updatedon;
 	
@@ -180,7 +167,7 @@ class ContactListWrapper extends BaseWrapper
 		$lista = array();
 		if ($contactlists) {
 			foreach ($contactlists as $contactlist) {
-				$lista[] = $this->convertListToJson($contactlist);
+				$lista[] = self::convertListToJson($contactlist);
 			}
 		}
 		// Incluir las bases de datos en la lista

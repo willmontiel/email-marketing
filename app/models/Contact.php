@@ -17,6 +17,10 @@ class Contact extends \Phalcon\Mvc\Model
 			'alias' => 'Email'
         ));
 
+		$this->hasMany("idContact", "Coxcl", "idContact", array(
+			'alias' => 'Lists'
+        ));
+
 		$this->useDynamicUpdate(true);
 		
 		/* Inicializacion de valores de campos */
@@ -48,4 +52,46 @@ class Contact extends \Phalcon\Mvc\Model
 		// Asignar fecha y hora de ultima actualizacion
         $this->updatedon = time();
     }	
+	
+	
+	public static function findContactsInList(Contactlist $list, $conditions = null, $bind = null, $limits = null) 
+	{
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$phql = 'SELECT Contact.* FROM Contact JOIN Coxcl WHERE idContactlist = :idcontactlist:';
+		if ($conditions != null) {
+			$phql .= ' AND ' . $conditions;
+			$options = $bind;
+		}
+		if ($limits != null && is_array($limits) && isset($limits['number']) ) {
+			$number = $limits['number'];
+			$start = isset($limits['offset'])?$limits['offset']:0;
+			$phql .= ' LIMIT ' . $number . ' OFFSET ' . $start;
+		}
+		$options['idcontactlist'] = $list->idContactlist;
+		$query = $mm->executeQuery($phql, $options);
+		
+		return $query;
+		
+	}
+	
+	public static function countContactsInList(Contactlist $list, $conditions = null, $bind = null) 
+	{
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$phql = 'SELECT COUNT(*) cnt FROM Contact JOIN Coxcl WHERE idContactlist = :idcontactlist:';
+		if ($conditions != null) {
+			$phql .= ' AND ' . $conditions;
+			$options = $bind;
+		}
+		$options['idcontactlist'] = $list->idContactlist;
+		$query = $mm->executeQuery($phql, $options);
+		
+		if ($query) {
+			return $query[0]->cnt;
+		}
+		return 0;
+		
+	}
+	
 }

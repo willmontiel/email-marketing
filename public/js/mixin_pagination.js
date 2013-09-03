@@ -25,7 +25,6 @@ Ember.MixinPagination = Ember.Mixin.create({
 			this.set('recordsperpage', p.metadata.pagination.limit);
 		}
 		catch (e) {
-			
 		}
 		var cp = parseInt(this.get('currentpage'));
 		var lp = parseInt(this.get('availablepages'));
@@ -63,6 +62,19 @@ Ember.MixinPagination = Ember.Mixin.create({
 	}
 	,
 	getModelMetadata: function() {
+		if (!this.modelClass) {
+			console.log('Excepcion: No se ha definido un modelo para paginacion');
+			return {
+				metadata: {
+					pagination: {
+						total: 0,
+						availablepages: 0,
+						page: 0,
+						limit: 0
+					}
+				}
+			};
+		}
 		return App.store.typeMapFor(this.modelClass);
 	}
 	,

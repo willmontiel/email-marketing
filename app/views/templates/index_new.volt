@@ -12,7 +12,8 @@
         {{ get_title() }}
 
         {{ stylesheet_link('stylesheets/application.css') }}
-
+        {{ stylesheet_link('css/prstyles.css') }}
+		
 		<!--[if lt IE 9]>
 		{{ javascript_include('javascripts/vendor/html5shiv.js') }}
 		{{ javascript_include('javascripts/vendor/excanvas.js') }}
@@ -79,16 +80,7 @@
 									</ul>
 								</li>
 							</ul>
-							{# Input de busqueda #}
-							<form class="navbar-search pull-right">
-								<input type="text" class="search-query animated" placeholder="Search">
-								<i class="icon-search"></i>
-							</form>
-							{# Fin de busqueda #}
 							<ul class="nav pull-right">
-								<li class="active">
-									<a href="{{ url('') }}" title="Dashboard"><i class="icon-home"></i> Inicio</a>
-								</li>
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrar <b class="caret"></b></a>
 									<ul class="dropdown-menu">

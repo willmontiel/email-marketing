@@ -592,10 +592,35 @@ class ApiController extends ControllerBase
 		$wrapper->setIdContactlist($idContactlist);
 		
 		$contacts = $wrapper->findContactsByList($list);
+		// Sideload de la informacion de la lista
+		$contacts['lists'] = array(ContactListWrapper::convertListToJson($list));
 	                
 		return $this->setJsonResponse($contacts);	
 	
 	}
+	
+	/**
+	 * 
+	 * @Get("/contactlist/{idContactlist:[0-9]+}/lists/{other}")
+	 */	
+	public function listbylistAction($idContactlist, $other)
+	{
+		
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+		
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+			
+		if ($list->dbase->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
+		}
+		
+		$contacts['list'] = array(ContactListWrapper::convertListToJson($list));
+	                
+		return $this->setJsonResponse($contacts);	
+	
+	}
+
 	
 	/**
 	 * 
