@@ -45,7 +45,7 @@ class ContactListWrapper extends BaseWrapper
 		return $object;
 	}
 	
-	public function validateListBelongsToAccount(Account $account, $idList)
+	public function validateListBelongsToAccount(Account $account, $idContactlist)
 	{
 //		$idAccount = $account->idAccount;
 //		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -69,7 +69,12 @@ class ContactListWrapper extends BaseWrapper
 		if($listExist > 0) {
 			return true;
 		}
-		return false;
+		else {
+			$this->addFieldError('name', 'La lista de contactos no existe!');
+			throw new InvalidArgumentException('No exist lista de contactos!');
+			return false;
+		}
+		
 	}
 
 
@@ -244,20 +249,21 @@ class ContactListWrapper extends BaseWrapper
 			GROUP BY 1 
 			HAVING COUNT(*) = 1";
 
-			$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idContactlist' => $idContactlist));
+		$results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idContactlist' => $idContactlist));
 		
-			$deleteList = $db->delete(
-					'Contactlist',
-					'idContactlist = '.$idContactlist  
-			);
-			foreach ($results as $result) {	
-					$contact = $db->delete(
-						'Contact',
-						'idContact = '.$result["idContact"]
-					);
-			}
+		$deleteList = $db->delete(
+				'Contactlist',
+				'idContactlist = '.$idContactlist  
+		);
 			
-		$deleteContacts = "DELETE FROM Contact, Fieldinstance WHERE idContact IN " . $idContacts;
+		$res = array_map(function ($e) {
+			return $e['idContact'];
+		}, $results);
+
+		$idContacts = "(" . implode(',', $res) .")" ;
+			
+			
+		$deleteContacts = "DELETE FROM Contact WHERE idContact IN " . $idContacts;
 		
 		$query2 = $modelManager->createQuery($deleteContacts);
 		$deletedContacts = $query2->execute();

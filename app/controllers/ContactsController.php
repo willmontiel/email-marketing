@@ -232,5 +232,10 @@ class ContactsController extends ControllerBase
 		
 			
 	}
+	
+	public function processfileAction()
+	{
+		
+	}
 			
 }

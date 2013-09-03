@@ -246,8 +246,7 @@
 						<div class="pull-left header">
 							<h3 class="title">
 								{% block sectiontitle %}<i class="icon-dashboard"></i>Dashboard{% endblock %}
-							</h3>
-							<h5>{%block sectionsubtitle %}Directorio: {{ tmppath.dir }}{% endblock %}</h5>
+						</h3>
 						  </div>
 
 					</div>

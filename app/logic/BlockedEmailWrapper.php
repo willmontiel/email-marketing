@@ -23,7 +23,7 @@ class BlockedEmailWrapper
 		$bemail = Blockedemail::findFirst($idBlockemail);
 		
 		if (!$bemail || $bemail->email->account != $account) {
-			throw new Exception('Error');
+			throw new Exception('No existe email');
 		}
 		$bemail->email->blocked = 0;
 		$bemail->email->save();

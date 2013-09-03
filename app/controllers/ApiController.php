@@ -603,14 +603,27 @@ class ApiController extends ControllerBase
 	 */
     public function deletecontactlistAction($idContactlist)
 	{
+		$log = $this->logger;
+		
 		$wrapper = new ContactListWrapper();
 		
-		if(!$wrapper->validateListBelongsToAccount($this->user->account, $idList)) {
-			return $this->setJsonResponse(null, 422, 'Lista invalida');
-		}
+		try {
+			if(!$wrapper->validateListBelongsToAccount($this->user->account, $idContactlist)) {
+				return $this->setJsonResponse(null, 422, 'Lista invalida');
+			}
 
-		$wrapper->deleteContactList($idList);	
-		return $this->setJsonResponse(null);
+			$deletedList = $wrapper->deleteContactList($idContactlist);	
+		}
+		
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while deleting list!');	
+		}
+		return $this->setJsonResponse($deletedList);
 	}
 	/*Fin listas de contactos*/
 	
