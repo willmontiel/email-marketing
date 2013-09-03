@@ -39,23 +39,6 @@ class ContactListWrapper extends BaseWrapper
 	
 	public function validateListBelongsToAccount(Account $account, $idContactlist)
 	{
-//		$idAccount = $account->idAccount;
-//		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-//		$contactlistExist= "SELECT COUNT(*) 
-//							FROM contactlist
-//								JOIN dbase
-//								ON ( contactlist.idDbase = dbase.idDbase ) 
-//							WHERE contactlist.idContactlist = :idContactlist:
-//							AND dbase.idAccount = :idAccount:";
-//				
-//		$query = $modelManager->createQuery($contactlistExist);
-//		$listExist = $query->execute(array(
-//				"idContactlist" => "$idContactlist",
-//				"idAccount" => "$idAccount"
-//			)
-//		);
-		
-		// Cambie el codigo de arriba con este codigo, que es utilizado en otras partes de forma similar
 		$listExist = Contactlist::countContactListsInAccount($account, 'idContactlist = :id:', array('id' => $idContactlist));
 
 		if($listExist > 0) {
@@ -63,7 +46,7 @@ class ContactListWrapper extends BaseWrapper
 		}
 		else {
 			$this->addFieldError('name', 'La lista de contactos no existe!');
-			throw new InvalidArgumentException('No exist lista de contactos!');
+			throw new InvalidArgumentException('No existe lista de contactos!');
 			return false;
 		}
 		
@@ -103,51 +86,6 @@ class ContactListWrapper extends BaseWrapper
 	
 	public function findContactListByAccount(Account $account, $name = null)
 	{
-//		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-//		$idAccount = $account->idAccount;
-//		$parameters = array('idAccount' => $idAccount);
-//		$nameFilter = ' AND Contactlist.name=:name:';
-//		
-//		$querytxt = "SELECT COUNT(*) AS cnt FROM Contactlist JOIN Dbase ON Contactlist.idDbase = Dbase.idDbase WHERE idAccount = :idAccount:";
-//		if ($name) {
-//			$querytxt .= $nameFilter;
-//			$parameters['name'] = $name;
-//		}
-//		$query2 = $modelManager->createQuery($querytxt);
-//        $result = $query2->execute($parameters)->getFirst();
-//				
-//		$total = $result->cnt;
-//		
-//		$lista = array();
-//
-//
-//		$querytxt2 = "SELECT Contactlist.* FROM Contactlist JOIN Dbase ON Contactlist.idDbase = Dbase.idDbase WHERE idAccount = :idAccount:";
-//		if ($name) {
-//			$querytxt2 .= $nameFilter;
-//		}
-//		if ($this->pager->getRowsPerPage() != 0) {
-//			$querytxt2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-//		}
-//        $query = $modelManager->createQuery($querytxt2);
-//		$contactlists = $query->execute($parameters);
-//		
-//		if ($contactlists) {
-//			foreach ($contactlists as $contactlist) {
-//				$lista[] = $this->convertListToJson($contactlist);
-//			}
-//		}
-//		$bdjson = array();
-//		foreach ($account->dbases as $bd) {
-//			$bdjson[] = $this->convertBDToJson($bd);
-//		}
-//		
-//		$this->pager->setRowsInCurrentPage(count($lista));
-//		$this->pager->setTotalRecords($total);
-//		return array('lists' => $lista, 
-//					 'dbases' => $bdjson,
-//					 'meta' => $this->pager->getPaginationObject()
-//				) ;
-		
 		// Nuevo codigo
 		$conditions = null;
 		$parameters = null;
@@ -241,8 +179,14 @@ class ContactListWrapper extends BaseWrapper
 					 HAVING COUNT(*) = 1)';
 		
 		$db->begin();
-		$db->execute($query, array($idContactlist));
-		$db->execute('DELETE FROM Contactlist WHERE idContactlist = ?', array($idContactlist));
+		$cascadeDelete = $db->execute($query, array($idContactlist));
+		$deleteContaclist = $db->execute('DELETE FROM Contactlist WHERE idContactlist = ?', array($idContactlist));
+		
+		if ($cascadeDelete == false || $deleteContaclist == false) {
+			$db->rollback();
+			throw new \InvalidArgumentException('Ha ocurrido un error, contacta al administrador !');
+		}
+		
 		$db->commit();
 	}
 
