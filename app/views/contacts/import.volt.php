@@ -39,9 +39,11 @@
 	var MyDbaseUrl = 'emarketing/api/import/<?php echo $idContactlist; ?>';
 
 	var myImportModel = {
-		email: DS.attr( 'string' ),
+		datas: DS.attr( 'string' ),
+		email: DS.attr( 'string' ),	
 		name: DS.attr( 'string' ),
-		lastname: DS.attr( 'string' )
+		lastname: DS.attr( 'string' ),
+		delimiter: DS.attr( 'string' )
 		<?php foreach ($customfields as $field) { ?>
 			,
 			<?php echo Phalcon\Text::lower($field->name); ?>: DS.attr('string')
@@ -50,16 +52,28 @@
 </script>
 
 <?php echo Phalcon\Tag::javascriptInclude('js/app_import.js'); ?>
-
-<script>
-	<?php foreach ($row as $item) { ?>
-		App.<?php echo $item; ?>_options = [
-		<?php foreach ($customfields as $field) { ?>	
-				"<?php echo $field->name; ?>",
-		<?php } ?>
-		];
-	<?php } ?>
+<script type="text/javascript">
+	
+	App.originalF = "<?php echo $row[0]; ?>";
+	App.originalS = "<?php echo $row[1]; ?>";
+	App.originalT = "<?php echo $row[2]; ?>";
+	App.originalFo = "<?php echo $row[3]; ?>";
+	App.originalFi = "<?php echo $row[3]; ?>";
+	App.optionsOr = " ,<?php echo $row[0]; ?>"
+	
+	App.options = App.optionsOr.split(",");
+	
+	App.firstline = App.originalF.split(",");
+	
+	App.secondline = App.originalS.split(",");
+	
+	App.thirdline = App.originalT.split(",");
+	
+	App.fourthline = App.originalFo.split(",");
+	
+	App.fifthline = App.originalFi.split(",");
 </script>
+
 
 
 		
@@ -136,16 +150,34 @@
 						<!-- Inicio de contenido -->
 						
 <div id="emberAppImportContainer">
-	<script type="text/x-handlebars">
+	<script type="text/x-handlebars" data-template-name="contacts/index">
 		<div class="row-fluid">
 			<div class="span5">
 				<table class="contact-info">
 					<tbody>
-						<?php foreach ($row as $item) { ?>
 						<tr>		
-							<td><?php echo $item; ?></td>
+							<td>Email</td>
 							<td>
-								<?php echo '{{ view Ember.Select contentBinding="App.' . $item . '_options" valueBinding="' . $item . '" }}'; ?>
+								<?php echo '{{ view Ember.Select contentBinding="App.options" valueBinding="email" id="email" class="select"}}'; ?>
+							</td>
+						</tr>
+						<tr>		
+							<td>Nombre</td>
+							<td>
+								<?php echo '{{ view Ember.Select contentBinding="App.options" valueBinding="name" id="name"}}'; ?>
+							</td>
+						</tr>
+						<tr>		
+							<td>Apellido</td>
+							<td>
+								<?php echo '{{ view Ember.Select contentBinding="App.options" valueBinding="lastname" id="lastname"}}'; ?>
+							</td>
+						</tr>
+						<?php foreach ($customfields as $field) { ?>
+						<tr>		
+							<td><?php echo $field->name; ?></td>
+							<td>
+								<?php echo '{{ view Ember.Select contentBinding="App.options" valueBinding="' . Phalcon\Text::lower($field->name) . '" id="' . Phalcon\Text::lower($field->name) . '"}}'; ?>
 							</td>
 						</tr>
 						<?php } ?>
@@ -153,15 +185,60 @@
 				</table>
 				<div class="span3">
 					Delimitador:
-					<select>
-						<option value="coma" selected>,</option>
-						<option value="puntocoma">;</option>
-						<option value="slash"></option>
-					</select>
+					<?php echo ' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '; ?>
 				</div>
+			</div>
+			<div class="span5">
+				<p>Email: <?php echo '{{email}}'; ?></p>
+				<p>Nombre: <?php echo '{{name}}'; ?></p>
+				<p>Apellido: <?php echo '{{lastname}}'; ?></p>
+				<?php foreach ($customfields as $field) { ?>
+				<p><?php echo $field->name; ?>: <?php echo '{{' . Phalcon\Text::lower($field->name) . '}}'; ?></p>
+				<?php } ?>
+				
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span8">
+				<table class="table table-striped">
+					<tr>
+						<?php echo ' {{#each App.firstline}} '; ?>
+							<td><?php echo ' {{this}} '; ?></td>
+						<?php echo ' {{/each}} '; ?>
+					</tr>
+					<tr>
+						<?php echo ' {{#each App.secondline}} '; ?>
+							<td><?php echo ' {{this}} '; ?></td>
+						<?php echo ' {{/each}} '; ?>
+					</tr>
+					<tr>
+						<?php echo ' {{#each App.thirdline}} '; ?>
+							<td><?php echo ' {{this}} '; ?></td>
+						<?php echo ' {{/each}} '; ?>
+					</tr>
+					<tr>
+						<?php echo ' {{#each App.fourthline}} '; ?>
+							<td><?php echo ' {{this}} '; ?></td>
+						<?php echo ' {{/each}} '; ?>
+					</tr>
+					<tr>
+						<?php echo ' {{#each App.fifthline}} '; ?>
+							<td><?php echo ' {{this}} '; ?></td>
+						<?php echo ' {{/each}} '; ?>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</script>
+	
+	<script type="text/x-handlebars" data-template-name="select">
+		<?php echo ' {{view App.DelimiterView name="delimiter" contentBinding="App.delimiter_opt"}} '; ?>
+	</script>
+	
+	<script type="text/x-handlebars" data-template-name="contacts">
+		<?php echo ' {{outlet}} '; ?>
+	</script>
+
 </div>
 
 						<!-- Fin de contenido -->

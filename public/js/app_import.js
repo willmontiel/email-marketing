@@ -2,11 +2,6 @@ App = Ember.Application.create({
 	rootElement: '#emberAppImportContainer'
 });
 
-App.firstline = [];
-App.secondline = [];
-App.thirdline = [];
-App.fourthline = [];
-App.fifthline = [];
 
 //Definiendo Rutas
 App.Router.map(function() {
@@ -16,26 +11,26 @@ App.Router.map(function() {
 });
 
 //Adaptador
-//App.Adapter = DS.RESTAdapter.reopen({
-//	//namespace: MyDbaseUrl,
-//});
+App.Adapter = DS.RESTAdapter.reopen({
+	namespace: MyDbaseUrl,
+});
 
 // Store (class)
 App.Store = DS.Store.extend({
 	revision: 13,
-//	adapter: App.Adapter.create()
-	adapter: DS.FixtureAdapter.extend({
-        queryFixtures: function(fixtures, query, type) {
-                return fixtures.filter(function(item) {
-                for(prop in query) {
-                    if( item[prop] != query[prop]) {
-                        return false;
-                    }
-                }
-                return true;
-            });
-        }
-    })
+	adapter: App.Adapter.create()
+//	adapter: DS.FixtureAdapter.extend({
+//        queryFixtures: function(fixtures, query, type) {
+//                return fixtures.filter(function(item) {
+//                for(prop in query) {
+//                    if( item[prop] != query[prop]) {
+//                        return false;
+//                    }
+//                }
+//                return true;
+//            });
+//        }
+//    })
 });
 
 // Store (object)
@@ -46,19 +41,12 @@ App.Contact = DS.Model.extend(
 	myImportModel
 );
 
-App.Contact.FIXTURES = [
-	{id: 1, datas:'correo@correo.com,nombrecorreo,apellidocorreo,6909090,3206235566', delimiter:',', email:'hola', name:'', lastname:'', camposeleccion:'', camposimple:'', telefono:'', nuevocampo:''},
-	{id: 2, datas:'correo2@correo2.com,nombre2correo,apellido2correo,6909092,3206235562', delimiter:',', email:'', name:'', lastname:'', camposeleccion:'', camposimple:'', telefono:'', nuevocampo:''},
-	{id: 3, datas:'correo3@correo3.com,nombre3correo,apellido3correo,6909093,3206235563', delimiter:',', email:'', name:'', lastname:'', camposeleccion:'', camposimple:'', telefono:'', nuevocampo:''},
-	{id: 4, datas:'correo4@correo4.com,nombre4correo,apellido4correo,6909094,3206235564', delimiter:',', email:'', name:'', lastname:'', camposeleccion:'', camposimple:'', telefono:'', nuevocampo:''},
-	{id: 5, datas:'correo5@correo5.com,nombre5correo,apellido5correo,6909095,3206235565', delimiter:',', email:'', name:'', lastname:'', camposeleccion:'', camposimple:'', telefono:'', nuevocampo:''}
-];
 
 //rutas
 App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
 		return App.Contact.find();
-	}
+	},
 });
 
 
@@ -67,21 +55,10 @@ App.ContactController = Ember.ObjectController.extend();
 
 App.ContactsIndexController = Ember.ObjectController.extend({
 
-	partir: function() {
-		var firstline =  App.Contact.find(1);
-		var data = firstline.toJSON().datas
-		var datas = data.split(",");
-		for(var i=0; i<datas.length; i++) {
-			App.firstline.pushObject(datas[i]);
-		}
-	}
 });
 
 App.ContactsIndexView = Ember.View.extend({
-	didInsertElement: function() {
-		var firstline =  App.Contact.find(1);
-		console.log(firstline);
-	}
+
 }); 
 
 App.delimiter_opt = [
@@ -94,73 +71,26 @@ App.delimiterView =  Ember.View.extend({
 
 App.DelimiterView = Ember.Select.extend({
 	change: function(evt) {
-		var firstline =  App.Contact.find(1);			
-		var data = firstline.toJSON().datas;
-		var datas = data.split(this.get('value'));
+		
+		var datas = App.originalF.split(this.get('value'));
+		App.set("options", datas);
+		App.options.unshift(" ");
+		
+		var datas = App.originalF.split(this.get('value'));
+		App.set("firstline", datas);
+		
+		var datas = App.originalS.split(this.get('value'));
+		App.set("secondline", datas);
 
-		if(App.firstline.length > 0){
-			while (App.firstline.length != 0){
-				App.firstline.popObject();
-			}
-		}
-		for(var i=0; i<datas.length; i++) {
-			App.firstline.pushObject(datas[i]);
-		}
+		var datas = App.originalT.split(this.get('value'));
+		App.set("thirdline", datas);
 		
-		var secondline =  App.Contact.find(2);
-		var data = secondline.toJSON().datas;
-		var datas = data.split(this.get('value'));
+		var datas = App.originalFo.split(this.get('value'));
+		App.set("fourthline", datas);
 		
-		if(App.secondline.length > 0){
-			while (App.secondline.length != 0){
-				App.secondline.popObject();
-			}
-		}
+		var datas = App.originalFi.split(this.get('value'));
+		App.set("fifthline", datas);
 		
-		for(var i=0; i<datas.length; i++) {
-			App.secondline.pushObject(datas[i]);
-		}
-		
-		var thirdline =  App.Contact.find(3);
-		var data = thirdline.toJSON().datas;
-		var datas = data.split(this.get('value'));
-		
-		if(App.thirdline.length > 0){
-			while (App.thirdline.length != 0){
-				App.thirdline.popObject();
-			}
-		}
-		
-		for(var i=0; i<datas.length; i++) {
-			App.thirdline.pushObject(datas[i]);
-		}
-		var fourthline =  App.Contact.find(4);
-		var data = fourthline.toJSON().datas;
-		var datas = data.split(this.get('value'));
-
-		if(App.fourthline.length > 0){
-			while (App.fourthline.length != 0){
-				App.fourthline.popObject();
-			}
-		}
-
-		for(var i=0; i<datas.length; i++) {
-			App.fourthline.pushObject(datas[i]);
-		}
-		
-		var fifthline =  App.Contact.find(5);
-		var data = fifthline.toJSON().datas;
-		var datas = data.split(this.get('value'));
-		
-		if(App.fifthline.length > 0){
-			while (App.fifthline.length != 0){
-				App.fifthline.popObject();
-			}
-		}
-		
-		for(var i=0; i<datas.length; i++) {
-			App.fifthline.pushObject(datas[i]);
-		}
 	}
 });
 

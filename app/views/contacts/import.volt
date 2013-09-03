@@ -22,6 +22,27 @@
 </script>
 
 {{ javascript_include('js/app_import.js') }}
+<script type="text/javascript">
+	
+	App.originalF = "{{row[0]}}";
+	App.originalS = "{{row[1]}}";
+	App.originalT = "{{row[2]}}";
+	App.originalFo = "{{row[3]}}";
+	App.originalFi = "{{row[3]}}";
+	App.optionsOr = " ,{{row[0]}}"
+	
+	App.options = App.optionsOr.split(",");
+	
+	App.firstline = App.originalF.split(",");
+	
+	App.secondline = App.originalS.split(",");
+	
+	App.thirdline = App.originalT.split(",");
+	
+	App.fourthline = App.originalFo.split(",");
+	
+	App.fifthline = App.originalFi.split(",");
+</script>
 
 
 {% endblock %}
@@ -31,46 +52,49 @@
 	<script type="text/x-handlebars" data-template-name="contacts/index">
 		<div class="row-fluid">
 			<div class="span5">
-			<p {{'{{action partir target="controller"}}'}}> Aqui </p>
-			{{' {{#with App.firstline}} '}}
 				<table class="contact-info">
 					<tbody>
 						<tr>		
 							<td>Email</td>
 							<td>
-								{{'{{ view Ember.Select contentBinding="App.firstline" valueBinding="email" id="email" class="select"}}'}}
+								{{'{{ view Ember.Select contentBinding="App.options" valueBinding="email" id="email" class="select"}}'}}
 							</td>
 						</tr>
 						<tr>		
 							<td>Nombre</td>
 							<td>
-								{{'{{ view Ember.Select contentBinding="App.firstline" valueBinding="name" id="name"}}'}}
+								{{'{{ view Ember.Select contentBinding="App.options" valueBinding="name" id="name"}}'}}
 							</td>
 						</tr>
 						<tr>		
 							<td>Apellido</td>
 							<td>
-								{{'{{ view Ember.Select contentBinding="App.firstline" valueBinding="lastname" id="lastname"}}'}}
+								{{'{{ view Ember.Select contentBinding="App.options" valueBinding="lastname" id="lastname"}}'}}
 							</td>
 						</tr>
 						{%for field in customfields %}
 						<tr>		
 							<td>{{field.name}}</td>
 							<td>
-								{{'{{ view Ember.Select contentBinding="App.firstline" valueBinding="'~field.name|lower~'" id="'~field.name|lower~'"}}'}}
+								{{'{{ view Ember.Select contentBinding="App.options" valueBinding="'~field.name|lower~'" id="'~field.name|lower~'"}}'}}
 							</td>
 						</tr>
 						{%endfor%}
 					</tbody>
 				</table>
-				{{' {{/with}} '}}
 				<div class="span3">
 					Delimitador:
 					{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}
-
 				</div>
 			</div>
 			<div class="span5">
+				<p>Email: {{'{{email}}'}}</p>
+				<p>Nombre: {{'{{name}}'}}</p>
+				<p>Apellido: {{'{{lastname}}'}}</p>
+				{%for field in customfields%}
+				<p>{{field.name}}: {{'{{'~field.name|lower~'}}'}}</p>
+				{%endfor%}
+				
 			</div>
 		</div>
 		<div class="row-fluid">
