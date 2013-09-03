@@ -35,7 +35,7 @@
 			<div class="navbar-inner">
 				<div class="container-fluid">
 					<div class="nav-collapse collapse" id="nav-collapse-01">
-						<a class="brand" href="/emarketing/">Mail Station</a>
+						<a class="brand" href="{{url('')}}">Mail Station</a>
 						<ul class="nav pull-right">
 							<li class="toggle-primary-sidebar hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-primary">
 								<button type="button" class="btn btn-navbar"><i class="icon-th-list"></i></button>

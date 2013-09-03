@@ -7,7 +7,7 @@
         <h1>{{edbase.name}}</h1>
     </div>
     <div class="row-fluid">
-        <form action = "/emarketing/dbase/edit/{{edbase.idDbase}}" method="post">
+        <form action = "{{url('dbase/edit')}}/{{edbase.idDbase}}" method="post">
         <div class="row-fluid">
             <div class="span3">
                 <label for="name">*Nombre</label>

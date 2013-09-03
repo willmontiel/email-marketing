@@ -111,6 +111,9 @@ try {
         return $url;
     });
 	
+	$apiurl = new stdClass;
+	$apiurl->url = $config->general->apiurlprefix;
+	$di->set('apiurlbase', $apiurl);
 	$tmpdir = new stdClass;
 	$tmpdir->dir = dirname(__FILE__) . '/../tmp';
 	$di->set('tmppath', $tmpdir);

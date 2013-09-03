@@ -111,7 +111,7 @@
                 <h3>Seguro que Desea Eliminar</h3>
         </div>
         <div class="modal-body">
-                <form action = "{{ url('dbase/delete/') }}{{item.idDbase}}", method="post">
+                <form action = "{{url('dbase/delete')}}/{{item.idDbase}}" method="post">
                         <p>Para eliminar escriba la palabra "DELETE"</p>
                         {{text_field("delete")}}
         </div>

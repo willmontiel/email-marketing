@@ -452,7 +452,7 @@
 				</div>
 			</div>
 		</div>
-		<form method="Post" action="/emarketing/contacts/newbatch/{{sdbase.idDbase}}" , 'method': 'Post') }}
+		<form method="Post" action="{{url('contacts/newbatch')}}/{{sdbase.idDbase}}" , 'method': 'Post') }}
 		<div class="span5">
 			{{ text_area("arraybatch") }}
 			<input class="btn btn-sm btn-inverse" type="submit" value="Guardar">

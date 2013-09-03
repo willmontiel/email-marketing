@@ -10,14 +10,14 @@
 		</div>
 		
 		<div class="span4">
-			<span class="return-upper-right-corner"><a href="{{ url('emarketing/dbase') }}"><h3>Regresar</h3></a></span>
+			<span class="return-upper-right-corner"><a href="{{url('dbase')}}"><h3>Regresar</h3></a></span>
 		</div>
 	</div>
 	<div class="row-fluid">
 		<div class="span12"></div>
 	</div>
     <div class="row-fluid">
-        <form action = "{{ url('dbase/new') }}" method="post">
+        <form action = "{{url('dbase/new')}}" method="post">
         <div class="row-fluid">
             <div class="span3">
                 <label for="name">*Nombre</label>

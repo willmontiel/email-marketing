@@ -4,7 +4,7 @@
 		{{ partial("partials/ember_partial") }}
 		{{ javascript_include('js/mixin_pagination.js') }}
 <script type="text/javascript">
-		var MyDbaseUrl = 'emarketing/api/contactlist/{{datalist.idContactlist}}';
+		var MyDbaseUrl = '{{apiurlbase.url ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};
 		
 		var myContactModel = {
@@ -196,7 +196,7 @@
 						</div>
 					</div>
 				</div>
-				<form method="Post" action="/emarketing/contacts/newbatch/{{datalist.idContactlist}}" , 'method': 'Post') }}
+				<form method="Post" action="{{url('contacts/newbatch')}}/{{datalist.idContactlist}}" , 'method': 'Post') }}
 				<div class="span5">
 					{{ text_area("arraybatch") }}
 					<input class="btn btn-sm btn-inverse" type="submit" value="Guardar">
@@ -435,7 +435,7 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/import">
-	<form method="POST" action="/emarketing/contacts/import#/contacts" enctype="multipart/form-data">
+	<form method="POST" action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data">
 		<div class="row-fluid">
 			<div class="span6">
 				<input name="importFile" type="file"><br>

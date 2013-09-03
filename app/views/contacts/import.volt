@@ -6,7 +6,7 @@
 
 
 <script type="text/javascript">
-	var MyDbaseUrl = 'emarketing/api/import/{{idContactlist}}';
+	var MyDbaseUrl = '{{apiurlbase.url ~ '/import/' ~ idContactlist}}';
 
 	var myImportModel = {
 		datas: DS.attr( 'string' ),

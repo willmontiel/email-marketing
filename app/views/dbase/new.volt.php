@@ -52,7 +52,7 @@
 							<div class="nav-collapse collapse" id="nav-collapse-01">
 								<ul class="nav">
 									<li>
-										<a href="/emarketing/">
+										<a href="<?php echo $this->url->get(''); ?>">
 											Mail Station<span class="navbar-unread">1</span>
 										</a>
 									</li>
@@ -80,11 +80,11 @@
 			
 				<div class="row-fluid">
 					<div class="span2">
-							<a href="/emarketing/"><?php echo Phalcon\Tag::image(array('src' => '/images/email.png')); ?><a>
+							<a href="<?php echo $this->url->get(''); ?>"><?php echo Phalcon\Tag::image(array('src' => '/images/email.png')); ?><a>
 						<div class="row-fluid">
 							<ul class="nav nav-list text-left">
 								<li>
-									<a href="/emarketing/contactlist#/lists"><label><h4><span class="fui-user"></span> Contactos</h4></label> </a>
+									<a href="<?php echo $this->url->get('contactlist#/lists'); ?>"><label><h4><span class="fui-user"></span> Contactos</h4></label> </a>
 								</li>
 								<li>
 									<a href="#"><label><h4><span class="fui-list"></span> Campañas</h4></label></a>
@@ -112,7 +112,7 @@
 		</div>
 		
 		<div class="span4">
-			<span class="return-upper-right-corner"><a href="<?php echo $this->url->get('emarketing/dbase'); ?>"><h3>Regresar</h3></a></span>
+			<span class="return-upper-right-corner"><a href="<?php echo $this->url->get('dbase'); ?>"><h3>Regresar</h3></a></span>
 		</div>
 	</div>
 	<div class="row-fluid">

@@ -2,7 +2,7 @@
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
-		var MyDbaseUrl = 'emarketing/api';
+		var MyDbaseUrl = '{{apiurlbase.url}}';
 	</script>
 	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('js/mixin_pagination.js') }}

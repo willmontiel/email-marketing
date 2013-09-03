@@ -6,7 +6,7 @@
 	{{ javascript_include('js/mixin_pagination.js') }}
 
 	<script type="text/javascript">
-		var MyDbaseUrl = 'emarketing/api/dbase/{{ sdbase.idDbase }}';
+		var MyDbaseUrl = '{{apiurlbase.url ~ '/dbase/' ~ sdbase.idDbase }}';
 		
 		var myContactModel = {
 			list: DS.belongsTo('App.List'),
@@ -237,7 +237,7 @@
 					</div>
 			</div>
 			<div class="span4" >
-					<span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
+					<span class="return-upper-right-corner"><a href="{{url('dbase')}}"><h3>Regresar</h3></a></span>
 			</div>
 	</div>
 </div>
@@ -254,7 +254,7 @@
 							<p>Ultima Fecha de Actualizacion: {{date('Y-m-d', sdbase.updatedon)}}</p>
 					<div class="row-fluid">
 						<div class="span2">
-							<a href="/emarketing/dbase/edit/{{sdbase.idDbase}}" class="btn btn-large btn-block btn-info">Editar</a>
+							<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-large btn-block btn-info">Editar</a>
 						</div>
 					</div>
 			</div>
