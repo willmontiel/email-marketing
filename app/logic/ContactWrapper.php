@@ -53,7 +53,7 @@ class ContactWrapper extends BaseWrapper
 		$this->ipaddress = ip2long($ipaddress);
 	}
 	
-	public function updateContact($idEmail, $updates)
+	public function updateContact($idEmail, $updates, $transaction = null)
 	{
 		$contacts = Contact::find(array(
 			"conditions" => "idEmail = ?1",
@@ -69,8 +69,11 @@ class ContactWrapper extends BaseWrapper
 				throw new \InvalidArgumentException('Contacto no se ha encontrado en la base de datos!');
 			}
 			
-			foreach ($updates as $key=>$value)
-			{
+			// Si se recibe una transaccion, asignarla al contacto que se actualiza
+			if ($transaction) {
+				$contact->setTransaction($transaction);
+			}
+			foreach ($updates as $key=>$value) {
 				$contact->$key = $value;
 			}
 

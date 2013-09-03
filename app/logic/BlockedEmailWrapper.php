@@ -179,28 +179,45 @@ class BlockedEmailWrapper
 	
 	public function addEmailToBlockedList($contents, Email $email)
 	{
-		$blocked = new Blockedemail();
+		/* Iniciar transaccion */
+		$tx = new Phalcon\Mvc\Model\Transaction\Manager;
+		$transaction = $tx->get();
 		
+		$blocked = new Blockedemail();
+		$blocked->setTransaction($transaction);
 		$blocked->idEmail = $email->idEmail;
 		$blocked->blockedReason = $contents->blocked_reason;
 		$blocked->blockedDate = time();
 		
 		if($blocked->save()){
+			// Asignar transaccion de actualizacion al email
+			$email->setTransaction($transaction);
+			
 			$email->blocked = time();
 			$email->save();
 			$blocked->email = $email->email;
 			
 			$updateContact = array('unsubscribed' => time());
 			$wrapper = new ContactWrapper();
-		
-			$wrapper->updateContact($email->idEmail, $updateContact);
-			
-			$blockedJson = $this->convertBlockedEmailList($blocked);
-			return $blockedJson;
+
+			try {
+				// Actualizar usando una transaccion
+				$wrapper->updateContact($email->idEmail, $updateContact, $transaction);
+
+				// Commit
+				$transaction->commit();
+				
+				$blockedJson = $this->convertBlockedEmailList($blocked);
+				return $blockedJson;
+			}
+			catch (Exception $e) {
+				$transaction->rollback();
+			}
 		} 
 		else {
-			throw new InvalidArgumentException('Se presento un error en la creacion del bloqueo!');
+			$transaction->rollback();
 		}	
+		throw new InvalidArgumentException('Se presento un error en la creacion del bloqueo!');
 	}
 	
 }
