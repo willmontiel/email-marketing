@@ -71,42 +71,34 @@
 				</div>
 			</div>
 			<div class="span5">
-				<p> Delimeter: {{'{{delimiter}}'}}</p>
-				<p> Data: {{'{{datas}}'}} </p>
-				<p>Email: {{' {{email}} '}}</p>
-				<p>Nombre: {{' {{name}} '}}</p>
-				<p>Apellido: {{' {{lastname}} '}}</p>
-				{%for field in customfields %}
-					<p>{{field.name}}</p>
-				{%endfor%}
 			</div>
 		</div>
 		<div class="row-fluid">
 			<div class="span8">
 				<table class="table table-striped">
 					<tr>
-						{{' {{#each value in App.firstline}} '}}
-							<td>{{' {{value}} '}}</td>
+						{{' {{#each App.firstline}} '}}
+							<td>{{' {{this}} '}}</td>
 						{{' {{/each}} '}}
 					</tr>
 					<tr>
-						{{' {{#each value in App.secondline}} '}}
-							<td>{{' {{value}} '}}</td>
+						{{' {{#each App.secondline}} '}}
+							<td>{{' {{this}} '}}</td>
 						{{' {{/each}} '}}
 					</tr>
 					<tr>
-						{{' {{#each value in App.thirdline}} '}}
-							<td>{{' {{value}} '}}</td>
+						{{' {{#each App.thirdline}} '}}
+							<td>{{' {{this}} '}}</td>
 						{{' {{/each}} '}}
 					</tr>
 					<tr>
-						{{' {{#each value in App.fourthline}} '}}
-							<td>{{' {{value}} '}}</td>
+						{{' {{#each App.fourthline}} '}}
+							<td>{{' {{this}} '}}</td>
 						{{' {{/each}} '}}
 					</tr>
 					<tr>
-						{{' {{#each value in App.fifthline}} '}}
-							<td>{{' {{value}} '}}</td>
+						{{' {{#each App.fifthline}} '}}
+							<td>{{' {{this}} '}}</td>
 						{{' {{/each}} '}}
 					</tr>
 				</table>

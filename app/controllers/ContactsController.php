@@ -125,7 +125,7 @@ class ContactsController extends ControllerBase
 			$newcontact->updated_on = "";
 			$newcontact->created_on = "";
 			$newcontact->is_bounced = "";
-			$newcontact->is_subscribed = "";
+			$newcontact->is_subscribed = 1;
 			$newcontact->is_spam = "";
 			$newcontact->is_active = 1;
 			

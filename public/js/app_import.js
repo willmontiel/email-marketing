@@ -66,21 +66,22 @@ App.ContactsIndexRoute = Ember.Route.extend({
 App.ContactController = Ember.ObjectController.extend();
 
 App.ContactsIndexController = Ember.ObjectController.extend({
-	init: function() {
-		
-	},
+
 	partir: function() {
 		var firstline =  App.Contact.find(1);
 		var data = firstline.toJSON().datas
 		var datas = data.split(",");
 		for(var i=0; i<datas.length; i++) {
-			App.firstline[i] = datas[i];
+			App.firstline.pushObject(datas[i]);
 		}
-		 this.render({ controller: 'contacts' });
 	}
 });
 
 App.ContactsIndexView = Ember.View.extend({
+	didInsertElement: function() {
+		var firstline =  App.Contact.find(1);
+		console.log(firstline);
+	}
 }); 
 
 App.delimiter_opt = [
@@ -93,42 +94,72 @@ App.delimiterView =  Ember.View.extend({
 
 App.DelimiterView = Ember.Select.extend({
 	change: function(evt) {
-		var firstline =  App.Contact.find(1);
-		var data = firstline.toJSON().datas
+		var firstline =  App.Contact.find(1);			
+		var data = firstline.toJSON().datas;
 		var datas = data.split(this.get('value'));
 
+		if(App.firstline.length > 0){
+			while (App.firstline.length != 0){
+				App.firstline.popObject();
+			}
+		}
 		for(var i=0; i<datas.length; i++) {
-			App.firstline[i] = datas[i];
+			App.firstline.pushObject(datas[i]);
 		}
 		
 		var secondline =  App.Contact.find(2);
-		var data = secondline.toJSON().datas
+		var data = secondline.toJSON().datas;
 		var datas = data.split(this.get('value'));
-
+		
+		if(App.secondline.length > 0){
+			while (App.secondline.length != 0){
+				App.secondline.popObject();
+			}
+		}
+		
 		for(var i=0; i<datas.length; i++) {
-			App.secondline[i] = datas[i];
+			App.secondline.pushObject(datas[i]);
 		}
 		
 		var thirdline =  App.Contact.find(3);
-		var data = thirdline.toJSON().datas
+		var data = thirdline.toJSON().datas;
 		var datas = data.split(this.get('value'));
-
+		
+		if(App.thirdline.length > 0){
+			while (App.thirdline.length != 0){
+				App.thirdline.popObject();
+			}
+		}
+		
 		for(var i=0; i<datas.length; i++) {
-			App.thirdline[i] = datas[i];
+			App.thirdline.pushObject(datas[i]);
 		}
 		var fourthline =  App.Contact.find(4);
-		var data = fourthline.toJSON().datas
+		var data = fourthline.toJSON().datas;
 		var datas = data.split(this.get('value'));
 
-		for(var i=0; i<datas.length; i++) {
-			App.fourthline[i] = datas[i];
+		if(App.fourthline.length > 0){
+			while (App.fourthline.length != 0){
+				App.fourthline.popObject();
+			}
 		}
-		var fifthline =  App.Contact.find(5);
-		var data = fifthline.toJSON().datas
-		var datas = data.split(this.get('value'));
 
 		for(var i=0; i<datas.length; i++) {
-			App.fifthline[i] = datas[i];
+			App.fourthline.pushObject(datas[i]);
+		}
+		
+		var fifthline =  App.Contact.find(5);
+		var data = fifthline.toJSON().datas;
+		var datas = data.split(this.get('value'));
+		
+		if(App.fifthline.length > 0){
+			while (App.fifthline.length != 0){
+				App.fifthline.popObject();
+			}
+		}
+		
+		for(var i=0; i<datas.length; i++) {
+			App.fifthline.pushObject(datas[i]);
 		}
 	}
 });
