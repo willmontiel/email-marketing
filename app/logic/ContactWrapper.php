@@ -209,9 +209,9 @@ class ContactWrapper extends BaseWrapper
 		$idAccount = $this->account->idAccount;
 		
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-		$totalActiveContacts = "SELECT SUM(dbase.Cactive) AS cnt
-								FROM dbase
-								WHERE dbase.idAccount = :idAccount:";
+		$totalActiveContacts = "SELECT SUM(Dbase.Cactive) AS cnt
+								FROM Dbase
+								WHERE Dbase.idAccount = :idAccount:";
 		
 		$query = $modelManager->createQuery($totalActiveContacts);
 		$totalContacts = $query->execute(array(
