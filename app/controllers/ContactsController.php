@@ -130,7 +130,7 @@ class ContactsController extends ControllerBase
 			$newcontact->is_active = 1;
 			
 			try {
-				$contact = $wrapper->searchContactinDbase($newcontact->email);
+				$contact = $wrapper->addExistingContactToListFromDbase($newcontact->email);
 				if(!$contact) {
 					$contact = $wrapper->createNewContactFromJsonData($newcontact);
 				}
