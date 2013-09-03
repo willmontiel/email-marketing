@@ -425,7 +425,7 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contacts/import">
-	<form method="POST" action="/emarketing/contacts/import" enctype="multipart/form-data">
+	<form method="POST" action="/emarketing/contacts/import#/contacts" enctype="multipart/form-data">
 		<div class="row-fluid">
 			<div class="span6">
 				<input name="importFile" type="file"><br>

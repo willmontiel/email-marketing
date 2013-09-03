@@ -9,10 +9,11 @@
 	var MyDbaseUrl = 'emarketing/api/import/{{idContactlist}}';
 
 	var myImportModel = {
+		datas: DS.attr( 'string' ),
 		email: DS.attr( 'string' ),	
 		name: DS.attr( 'string' ),
-		lastname: DS.attr( 'string' )
-		 
+		lastname: DS.attr( 'string' ),
+		delimiter: DS.attr( 'string' )
 		{%for field in customfields%}
 			,
 			{{field.name|lower }}: DS.attr('string')
@@ -22,93 +23,104 @@
 
 {{ javascript_include('js/app_import.js') }}
 
-<script>
-	App.email_options = [
-			{%for item in row%}
-				,	
-				"{{item}}"
-			{%endfor%}
-		];
-	App.name_options = [
-			{%for item in row%}
-				,	
-				"{{item}}"
-			{%endfor%}
-		];
-	App.lastname_options = [
-			{%for item in row%}
-				,	
-				"{{item}}"
-			{%endfor%}
-		];	
-	{%for field in customfields %}	
-		App.{{field.name|lower}}_options = [
-			{%for item in row%}
-				,	
-				"{{item}}"
-			{%endfor%}
-		];
-	{%endfor%}
-</script>
 
 {% endblock %}
 
 {% block content %}
 <div id="emberAppImportContainer">
-	<script type="text/x-handlebars">
+	<script type="text/x-handlebars" data-template-name="contacts/index">
 		<div class="row-fluid">
 			<div class="span5">
+			<p {{'{{action partir target="controller"}}'}}> Aqui </p>
+			{{' {{#with App.firstline}} '}}
 				<table class="contact-info">
 					<tbody>
 						<tr>		
 							<td>Email</td>
 							<td>
-								{{'{{ view Ember.Select contentBinding="App.email_options" valueBinding="email" id="email"}}'}}
+								{{'{{ view Ember.Select contentBinding="App.firstline" valueBinding="email" id="email" class="select"}}'}}
 							</td>
 						</tr>
 						<tr>		
 							<td>Nombre</td>
 							<td>
-								{{'{{ view Ember.Select contentBinding="App.name_options" valueBinding="name" id="name"}}'}}
+								{{'{{ view Ember.Select contentBinding="App.firstline" valueBinding="name" id="name"}}'}}
 							</td>
 						</tr>
 						<tr>		
 							<td>Apellido</td>
 							<td>
-								{{'{{ view Ember.Select contentBinding="App.lastname_options" valueBinding="lastname" id="lastname"}}'}}
+								{{'{{ view Ember.Select contentBinding="App.firstline" valueBinding="lastname" id="lastname"}}'}}
 							</td>
 						</tr>
 						{%for field in customfields %}
 						<tr>		
 							<td>{{field.name}}</td>
 							<td>
-								{{'{{ view Ember.Select contentBinding="App.'~field.name|lower~'_options" valueBinding="'~field.name|lower~'" id="'~field.name|lower~'"}}'}}
+								{{'{{ view Ember.Select contentBinding="App.firstline" valueBinding="'~field.name|lower~'" id="'~field.name|lower~'"}}'}}
 							</td>
 						</tr>
 						{%endfor%}
 					</tbody>
 				</table>
+				{{' {{/with}} '}}
 				<div class="span3">
 					Delimitador:
-					<select>
-						<option value="coma" selected>,</option>
-						<option value="puntocoma">;</option>
-						<option value="slash">/</option>
-					</select>
+					{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}
+
 				</div>
 			</div>
 			<div class="span5">
+				<p> Delimeter: {{'{{delimiter}}'}}</p>
+				<p> Data: {{'{{datas}}'}} </p>
 				<p>Email: {{' {{email}} '}}</p>
 				<p>Nombre: {{' {{name}} '}}</p>
 				<p>Apellido: {{' {{lastname}} '}}</p>
 				{%for field in customfields %}
-						<p>{{field.name}}
-							<td>
-								{{'{{ '~field.name|lower~'}}'}}
-							</p>
-						{%endfor%}
+					<p>{{field.name}}</p>
+				{%endfor%}
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span8">
+				<table class="table table-striped">
+					<tr>
+						{{' {{#each value in App.firstline}} '}}
+							<td>{{' {{value}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+					<tr>
+						{{' {{#each value in App.secondline}} '}}
+							<td>{{' {{value}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+					<tr>
+						{{' {{#each value in App.thirdline}} '}}
+							<td>{{' {{value}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+					<tr>
+						{{' {{#each value in App.fourthline}} '}}
+							<td>{{' {{value}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+					<tr>
+						{{' {{#each value in App.fifthline}} '}}
+							<td>{{' {{value}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+				</table>
 			</div>
 		</div>
 	</script>
+	
+	<script type="text/x-handlebars" data-template-name="select">
+		{{' {{view App.DelimiterView name="delimiter" contentBinding="App.delimiter_opt"}} '}}
+	</script>
+	
+	<script type="text/x-handlebars" data-template-name="contacts">
+		{{' {{outlet}} '}}
+	</script>
+
 </div>
 {% endblock %}
