@@ -35,7 +35,7 @@
     </div>
     <div class="row-fluid">
 		{{submit_button("Guardar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
-		{{link_to('dbase', 'class':"btn btn-inverse", "Cancelar")}}
+		<a href="{{ url('dbase') }}" class="btn btn-inverse">Cancelar</a>
     </div>
     </form>
 </div>

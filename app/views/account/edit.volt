@@ -41,7 +41,7 @@
 
 			<p>
 				{{ submit_button("Editar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
-				{{link_to('account', 'class':"btn btn-inverse", "Regresar")}}
+				<button {{ url('account/index') }} class="btn btn-inverse">Regresar</button>
 			</p>
 		</form>
 	</div>

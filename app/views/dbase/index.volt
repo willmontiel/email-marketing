@@ -7,7 +7,7 @@
 <div class="row-fluid">
 	<div class="modal-header">
 		<h1>Bases de Datos</h1>
-		<div class="text-right"> <a href="dbase/new"><h5>Crear Base de Datos</h5></a></div>
+		<div class="text-right"> <a href="{{ url('dbase/new') }}"><h5>Crear Base de Datos</h5></a></div>
 	</div>
 </div>
 	<div class="row-fluid">
@@ -16,7 +16,7 @@
 			<div class="row-fuid">
 				<div class="span6" >
 					<div class="row-fluid break-word">
-							<h3><a href="dbase/show/{{item.idDbase}}">{{item.name}}</a></h3>
+							<h3><a href="{{ url('dbase/show/') }}{{item.idDbase}}">{{item.name}}</a></h3>
 							<span>{{item.description}}</span>
 					</div>
 					<div class="row-fluid">
@@ -64,8 +64,8 @@
 				</div>
 				<div class="span2">
 					<dl>
-							<dd><a href="dbase/edit/{{item.idDbase}}">Editar</a></dd>
-							<dd><a href="#delete{{item.idDbase}}" data-toggle="modal">Eliminar</a></dd>
+							<dd><a href="{{ url('dbase/edit/') }}{{item.idDbase}}">Editar</a></dd>
+							<dd><a href="{{ url('#delete') }}#delete{{item.idDbase}}" data-toggle="modal">Eliminar</a></dd>
 							<dd><a href="#">Agregar Contacto</a></dd>
 					</dl>
 				</div>
@@ -111,7 +111,7 @@
                 <h3>Seguro que Desea Eliminar</h3>
         </div>
         <div class="modal-body">
-                <form action = "/emarketing/dbase/delete/{{item.idDbase}}", method="post">
+                <form action = "{{ url('dbase/delete/') }}{{item.idDbase}}", method="post">
                         <p>Para eliminar escriba la palabra "DELETE"</p>
                         {{text_field("delete")}}
         </div>

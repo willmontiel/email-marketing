@@ -112,14 +112,14 @@
 		</div>
 		
 		<div class="span4">
-			<span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
+			<span class="return-upper-right-corner"><a href="<?php echo $this->url->get('emarketing/dbase'); ?>"><h3>Regresar</h3></a></span>
 		</div>
 	</div>
 	<div class="row-fluid">
 		<div class="span12"></div>
 	</div>
     <div class="row-fluid">
-        <form action = "/emarketing/dbase/new" method="post">
+        <form action = "<?php echo $this->url->get('dbase/new'); ?>" method="post">
         <div class="row-fluid">
             <div class="span3">
                 <label for="name">*Nombre</label>
@@ -147,7 +147,7 @@
     </div>
     <div class="row-fluid">
 		<?php echo Phalcon\Tag::submitButton(array('Guardar', 'class' => 'btn btn-success', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides')); ?>
-		<?php echo Phalcon\Tag::linkTo(array('dbase', 'class' => 'btn btn-inverse', 'Cancelar')); ?>
+		<a href="<?php echo $this->url->get('dbase'); ?>" class="btn btn-inverse">cancelar</a>
     </div>
     </form>
 </div>

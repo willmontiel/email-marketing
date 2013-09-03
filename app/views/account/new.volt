@@ -83,7 +83,7 @@
 
       <p>
 		{{ submit_button("Registrar", 'class' : "btn btn-success", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
-		{{link_to('account', 'class':"btn btn-inverse", "Cancelar")}}
+		<a href="{{ url('account') }}" class="btn btn-inverse">Cancelar<a>
       </p>
    </form>
    </div>

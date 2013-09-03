@@ -64,8 +64,8 @@
 					</div>
 				{% endif %}
 				<br><br>
-				<a href="/emarketing/contacts/importbatch/{{idContactlist}}" class="btn btn-success">Crear</a>
-				<a href="/emarketing/contactlist/show/{{idContactlist}}#/contacts/newbatch" class="btn btn-inverse">Cancelar</a>
+				<a href="{{ url('contacts/importbatch/') }}{{idContactlist}}" class="btn btn-success">Crear</a>
+				<a href="{{ url('contactlist/show/') }}{{idContactlist}}#/contacts/newbatch" class="btn btn-inverse">Cancelar</a>
 			</div>
 		</div>
 	</div>

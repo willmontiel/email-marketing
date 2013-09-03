@@ -7,7 +7,7 @@
 </div>
 	
 	<div class="text-right">
-		<h3><a href="account/new" >Crear nuevo usuario</a></h3>
+		<h3><a href="{{ url('account/new') }}" >Crear nuevo usuario</a></h3>
 	</div>
 
 <div class="row-fluid">
@@ -46,7 +46,7 @@
 	<div class="span12"></div>
 	<div class="text-right">
 		<p>
-			{{link_to('account', 'class':"btn btn-inverse", "Regresar")}}
+			<a href="{{ url('account') }}" class="btn btn-inverse">Regresar</a>
 		</p>
 	</div>
 </div>

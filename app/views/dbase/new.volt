@@ -10,14 +10,14 @@
 		</div>
 		
 		<div class="span4">
-			<span class="return-upper-right-corner"><a href="/emarketing/dbase"><h3>Regresar</h3></a></span>
+			<span class="return-upper-right-corner"><a href="{{ url('emarketing/dbase') }}"><h3>Regresar</h3></a></span>
 		</div>
 	</div>
 	<div class="row-fluid">
 		<div class="span12"></div>
 	</div>
     <div class="row-fluid">
-        <form action = "/emarketing/dbase/new" method="post">
+        <form action = "{{ url('dbase/new') }}" method="post">
         <div class="row-fluid">
             <div class="span3">
                 <label for="name">*Nombre</label>
@@ -45,7 +45,7 @@
     </div>
     <div class="row-fluid">
 		{{submit_button("Guardar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
-		{{link_to('dbase', 'class':"btn btn-inverse", "Cancelar")}}
+		<a href="{{ url('dbase') }}" class="btn btn-inverse">cancelar</a>
     </div>
     </form>
 </div>

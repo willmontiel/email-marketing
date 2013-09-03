@@ -8,7 +8,7 @@
   </div>
   <div class="alert-success"><h4>{{ flashSession.output() }}</h4></div>
   <div class="text-right">
-   <h3><a href="account/new" >Crear nueva cuenta</a></h3>
+   <h3><a href="{{ url('account/new') }}" >Crear nueva cuenta</a></h3>
   </div>
 
   <div class="row-fluid">
@@ -37,8 +37,8 @@
 				<td>{{date('d/m/Y H:i', item.createdon)}}</td>
 				<td>{{date('d/m/Y H:i', item.updatedon)}}</td>
 				<td>
-				 <a href="account/show/{{item.idAccount}}">Ver</a><br>
-				 <a href="account/edit/{{item.idAccount}}">Editar</a><br>
+				 <a href="{{ url('account/show/') }}{{item.idAccount}}">Ver</a><br>
+				 <a href="{{ url('account/edit/') }}{{item.idAccount}}">Editar</a><br>
 				 Eliminar
 				</td>
  			</tr>
@@ -72,8 +72,7 @@
 	 </div>
 	 <div class="span3 text-right">
 		 <br>
-		 
-		 {{link_to('', 'class':"btn btn-inverse", "Regresar")}}
+		 <a href="{{ url('') }}" class="btn btn-inverse">Regresar</a>
 	 </div>
     </div>
 </div>
