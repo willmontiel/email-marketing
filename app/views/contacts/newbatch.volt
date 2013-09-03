@@ -51,11 +51,11 @@
 						<p>Ha sobrepasado la capacidad máxima para guardar contactos:</p>
 							<dl>
 								<dd>Capacidad máxima de contactos: <span class="green-label">{{limit}}</span></dd>
-								<dd>Contactos actuales: <span class="blue-label">{{limit}}</span></dd>
+								<dd>Contactos actuales: <span class="blue-label">{{currentActiveContacts}}</span></dd>
 								<dd>Contactos que intenta crear: <span class="orange-label">{{total}}</span></dd>
 							</dl>
 							<p>
-								Se ha excedido en <span class="red-label">{{(limit+total)-limit}}</span> contactos, si continúa con el proceso se guardarán los contactos hasta que llegue al limite,
+								Se ha excedido en <span class="red-label">{{(currentActiveContacts+total)-limit}}</span> contactos, si continúa con el proceso se guardarán los contactos hasta que llegue al limite,
 								el resto serán ignorados.
 							</p>
 							<p>

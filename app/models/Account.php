@@ -58,6 +58,18 @@ class Account extends Modelbase
 			return false;
         }
     }
+	
+	public function countActiveContactsInAccount()
+	{
+		$sql = 'SELECT SUM(Dbase.Cactive) cnt FROM Dbase WHERE Dbase.idAccount = :idAccount:';
+		
+		$r =  Phalcon\DI::getDefault()->get('modelsManager')->executeQuery($sql, array('idAccount' => $this->idAccount));
+		if (!$r) {
+			return 0;
+		}
+		return $r->getFirst()->cnt;
+	}
+			
            
 }
     

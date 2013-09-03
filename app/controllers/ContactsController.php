@@ -93,6 +93,7 @@ class ContactsController extends ControllerBase
 		$this->view->setVar("total", $totalValidContacts);
 		$this->view->setVar("batch", $batch);	
 		$this->view->setVar("idContactlist", $idContactlist);
+		$this->view->currentActiveContacts = $this->user->account->countActiveContactsInAccount();
 		
 	}
 	
