@@ -25,23 +25,13 @@ class ContactWrapper extends BaseWrapper
 
 	public function __construct()
 	{
-		$this->pager = new PaginationDecorator();
+		parent::__construct();
 		$this->counter = new ContactCounter();
 	}
 
 	public function setIdDbase($idDbase)
 	{
 		$this->idDbase = $idDbase;
-	}
-	
-	public function setAccount(Account $account)
-	{
-		$this->account = $account;
-	}
-	
-	public function setPager(PaginationDecorator $p)
-	{
-		$this->pager = $p;
 	}
 	
 	public function setIdContactlist($idContactlist)
@@ -88,7 +78,7 @@ class ContactWrapper extends BaseWrapper
 				$this->counter->updateContact($oldContact, $contact);
 			}
 		}
-			$this->counter->saveCounters();			
+		$this->counter->saveCounters();			
 	}
 
 	public function updateContactFromJsonData($idContact, $data)
@@ -118,9 +108,7 @@ class ContactWrapper extends BaseWrapper
 			}
 			
 			// Asignar el nuevo email
-			$contact->setEmail($email);
-			$contact->idEmail = $email->idEmail;
-			
+			$contact->email = $email;
 		}
 
 		$this->contact = $contact;
@@ -195,11 +183,11 @@ class ContactWrapper extends BaseWrapper
 		$this->counter->saveCounters();
 	}
 
-	public function searchContactinDbase($email)
+	public function addExistingContactToListFromDbase($email)
 	{
 		$idAccount = $this->account->idAccount;
 		
-		$existEmail = Email::findFirst("email = '$email' AND idAccount = '$idAccount'");
+		$existEmail = Email::findFirst("email = '$email' AND idAccount = $idAccount");
 			
 		if ($existEmail && !$this->findEmailBlocked($existEmail)) {
 			$existContact = Contact::findFirstByIdEmail($existEmail->idEmail);
@@ -247,7 +235,7 @@ class ContactWrapper extends BaseWrapper
 			// Verificar existencia del correo en la cuenta actual
 			$email = $this->findEmailNotRepeated($data->email);
 			if ($email && !$this->findEmailBlocked($email)) {
-					$this->addContact($data, $email);
+				$this->addContact($data, $email);
 			}
 			else {
 				$this->addContact($data);
@@ -280,6 +268,7 @@ class ContactWrapper extends BaseWrapper
 //			if ($contact && (!$curcontact || $contact->idContact != $curcontact->idContact) ) {
 			if ($contact) {
 				if  (!($curcontact && $contact->idContact == $curcontact->idContact)) {
+					$this->addFieldError('email', 'Ya existe un contacto con ese email!');
 					throw new \InvalidArgumentException('El correo electronico [' . $emailaddress .  '] ya existe en la base de datos');
 				}
 			}
@@ -290,10 +279,9 @@ class ContactWrapper extends BaseWrapper
 	
 	protected function findEmailBlocked($email)
 	{
-		$blocked = Blockedemail::findFirstByIdEmail($email->idEmail);
-		
-		if($blocked) {
-			throw new \InvalidArgumentException('El correo electronico [' . $email->email .  '] se encuentra Bloqueado por razones de [' . $blocked->blockedReason . ']');
+		if($email->blocked != 0) {
+			$this->addFieldError('email', 'El correo electronico esta bloqueado por [' . $email->blockedemail->blockedReason . ']');
+			throw new \InvalidArgumentException('El correo electronico [' . $email->email .  '] se encuentra bloqueado!');
 		} else {
 			return false;
 		}
@@ -350,6 +338,11 @@ class ContactWrapper extends BaseWrapper
 		}
 		else {
 			if ($contact->unsubscribed != 0 && $data->is_subscribed) {
+				if ($contact->email->blocked != 0) {
+					// Email bloqueado!!!
+					$this->addFieldError('email', 'El email esta bloqueado');
+					throw new InvalidArgumentException('Email bloqueado!!!');
+				}
 				// Actualmente des-suscrito y se actualiza a suscrito
 				$contact->unsubscribed = 0;
 				$contact->subscribedon = $hora;
@@ -560,6 +553,8 @@ class ContactWrapper extends BaseWrapper
 		
 		$object['ip_subscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
 		$object['ip_activated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
+		
+		$object['is_email_blocked'] = ($contact->email->blocked != 0);
 		
 		$customfields = Customfield::findByIdDbase($this->idDbase);
 		

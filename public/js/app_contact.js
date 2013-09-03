@@ -122,26 +122,6 @@ App.ContactsNewbatchController = Ember.ObjectController.extend();
 
 App.ContactsNewController = Ember.ObjectController.extend({
 	save: function() {
-		
-//		 exist = App.Contact.find().filterProperty('email', this.get('email'));
-//			if(exist.get("length") === 1){
-//				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
-//				if(filter.test(this.get('email'))){
-//					this.get('model').set('isActive', true);
-//					this.get('model').set('isSubscribed', true);
-//					this.get("model.transaction").commit();
-//					App.set('errormessage', '');
-//					this.get("target").transitionTo("contacts");
-//				}
-//				else{
-//					App.set('errormessage', 'El Email no es valido');
-//					this.get("target").transitionTo("contacts.new");
-//				}
-//			}
-//			else{
-//				App.set('errormessage', 'El Email ya existe en esta Lista');
-//				this.get("target").transitionTo("contacts.new");
-//			}
 		var that = this;
 		if (this.get('model.isValid') && !this.get('model.isSaving')) {
 			this.set('model.isActive', true);
@@ -164,7 +144,6 @@ App.ContactsEditController = Ember.ObjectController.extend({
 	edit: function() {
 			this.get("model.transaction").commit();
 			this.get("target").transitionTo("contacts");
-		
 	},
 	cancel: function(){
 		 this.get("model.transaction").rollback();
@@ -194,18 +173,21 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
-//	deactivated: function () {
-//		this.set("isActive", false);		
-//	},
-//	activated: function () {
-//		this.set("isActive", true);
-//	},
 	unsubscribedcontact: function () {
 		this.set("isSubscribed", false);
+		this.get('model').one('becameInvalid', function() {
+			alert('Fallo la actualizacion');
+		});
 		this.get('model.transaction').commit();
 	},
 	subscribedcontact: function () {
+		var id = this.get('model').get('id');
 		this.set("isSubscribed", true);
+		this.get('model').one('becameInvalid', this, function() {
+			//alert('Fallo la actualizacion');
+			this.set('isSubscribed', false);
+			this.get('model.transaction').commit();
+		});
 		this.get('model.transaction').commit();
 	}
 });

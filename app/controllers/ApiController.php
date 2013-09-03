@@ -687,9 +687,7 @@ class ApiController extends ControllerBase
 		$log = $this->logger;
 
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
@@ -702,15 +700,20 @@ class ApiController extends ControllerBase
 		
 		// Crear el nuevo contacto:
 
+		if (!isset($contents->email) || trim($contents->email) == '') {
+			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
+		}
 		try {
-				$contact = $wrapper->searchContactinDbase($contents->email);
-				if($contact == false) {
-					$contact = $wrapper->createNewContactFromJsonData($contents);
-				}
+			// Si el email ya existe en la base de datos, pero no esta en la lista, entonces adicionarlo a la lista
+			$contact = $wrapper->addExistingContactToListFromDbase($contents->email);
+			// Si no esta en la base de datos, adicionarlo a la BD
+			if($contact == false) {
+				$contact = $wrapper->createNewContactFromJsonData($contents);
+			}
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('errors' => array('msg' => $e->getMessage())), 422, 'Invalid data');	
+			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors()), 422, 'Invalid data');	
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
@@ -740,9 +743,7 @@ class ApiController extends ControllerBase
 		$log = $this->logger;
 
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
@@ -759,7 +760,8 @@ class ApiController extends ControllerBase
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
+			$contact = Contact::findFirst($idContact);
+			return $this->setJsonResponse(array('contact' => $wrapper->convertContactToJson($contact), 'errors' => $wrapper->getFieldErrors()), 422, 'Error: Invalid data');	
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');

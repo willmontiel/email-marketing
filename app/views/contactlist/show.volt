@@ -25,6 +25,7 @@
 			isSubscribed: DS.attr('boolean'),
 			isSpam: DS.attr('boolean'),
 			isActive: DS.attr('boolean'),
+			isEmailBlocked: DS.attr('boolean'),
 			list: DS.belongsTo('App.List'),
 			isReallyActive: function () {
 				if (this.get('isActive') && this.get('isSubscribed') && !(this.get('isSpam') || this.get('isBounced'))) {
@@ -243,7 +244,7 @@
 										<span class="first-icon fui-checkbox-unchecked"></span>
 										<span class="second-icon fui-checkbox-checked"></span>
 									</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
+						 {{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed" disabledBinding="isEmailBlocked"}} '}}  Suscrito
 								</label>
 					{{ '{{/if}}' }}
 						</p>
@@ -289,7 +290,11 @@
 			<table class="contact-info">
 				<tr>
 					<td>Email:</td>
-					<td>{{'{{email}}'}}</td>
+					<td>{{'{{email}}'}}
+						{{' {{#if errors.email}} '}}
+							<span class="text text-error">{{'{{errors.email}}'}}</span>
+						{{' {{/if }} '}}
+					</td>
 				</tr>
 				<tr>
 					<td>Nombre:</td>
@@ -329,7 +334,9 @@
 			{{ '{{#if isSubscribed}}' }}
 				<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Des-suscribir</button>
 			{{ '{{else}}' }}
+				{{'{{#unless isEmailBlocked}}'}}
 				<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
+				{{'{{/unless}}'}}
 			{{ '{{/if}}' }}
 			
 			{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
