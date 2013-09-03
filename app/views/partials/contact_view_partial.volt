@@ -19,6 +19,9 @@
 			</div>
 		</div>
 		<div class="news-title">{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</div>
+		{{ '{{#if isEmailBlocked}}' }}
+		<span class="badge badge-dark-red">Correo bloqueado</span>
+		{{ '{{/if}}' }}
 		{{ '{{#if isSpam}}' }}
 		<span class="badge badge-dark-red">Spam</span>
 		{{ '{{/if}}' }}

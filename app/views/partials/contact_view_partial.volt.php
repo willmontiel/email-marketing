@@ -19,6 +19,9 @@
 			</div>
 		</div>
 		<div class="news-title"><?php echo '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}'; ?></div>
+		<?php echo '{{#if isEmailBlocked}}'; ?>
+		<span class="badge badge-dark-red">Correo bloqueado</span>
+		<?php echo '{{/if}}'; ?>
 		<?php echo '{{#if isSpam}}'; ?>
 		<span class="badge badge-dark-red">Spam</span>
 		<?php echo '{{/if}}'; ?>
