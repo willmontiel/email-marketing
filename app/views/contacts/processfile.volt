@@ -1,19 +1,14 @@
 {% extends "templates/index_new.volt" %}
+{% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
 	<div class="row-fluid">
-		<div class="span12">
-			<h3>Reporte de importación de contactos</h3>
-		</div>
-	</div>
-	<br>
-	<div class="row-fluid">
-		<div class="span12">
-			<p>
+		<div class="span8 offset2">
+			<div class="well relative">
 				Este es el resultado de la importación de contactos que ha sido efectuada, en donde podrá consultar,
 				la totalidad de contactos que tenia el archivo importado, los contactos efectivos (importados
 				exitosamente), y los contactos que no pudieron ser procesados correctamente y la razón de ello.
 				
-			</p>
+			</div>
 		</div>
 	</div>
 	<br>
@@ -66,7 +61,7 @@
 
 							<tr class="status-warning">
 								<td class="icon"><i class="icon-random"></i></td>
-								<td>Duplicados en el archivo </td>
+								<td>No importados porque estan duplicados en el archivo </td>
 								<td><b>10</b></td>
 							</tr>
 

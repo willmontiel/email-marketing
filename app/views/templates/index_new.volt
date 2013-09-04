@@ -237,7 +237,7 @@
 					<div class="area-top clearfix">
 						<div class="pull-left header">
 							<h3 class="title">
-								{% block sectiontitle %}<i class="icon-dashboard"></i>Dashboard{% endblock %}
+								{% block sectiontitle %}<i class="icon-dashboard"></i>{% endblock %}
 						</h3>
 						  </div>
 

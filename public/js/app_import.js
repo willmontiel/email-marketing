@@ -58,7 +58,9 @@ App.ContactsIndexController = Ember.ObjectController.extend({
 });
 
 App.ContactsIndexView = Ember.View.extend({
-
+	didInsertElement: function() {
+		$('.easy-pie-step').easyPieChart({barColor: '#599cc7', trackColor: '#a1a1a1', scaleColor: false, lineWidth: 10, size: 50, lineCap: 'butt'});
+    }
 }); 
 
 App.delimiter_opt = [

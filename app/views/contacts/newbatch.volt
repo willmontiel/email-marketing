@@ -13,7 +13,7 @@
 					<div class="box-header">
 						<span class="title">Resultado importación por lotes de contactos</span>
 						<ul class="box-toolbar">
-							<li><span class="label label-green">{{total}} Contactos válidos</span></li>
+							<li><span class="label label-green">Contactos válidos: {{total}}</span></li>
 						</ul>
 					</div>
 					<div class="box-content">
@@ -44,7 +44,7 @@
 					</div>
 				</div>
 				<br><br>
-				{% if total+limit > limit %}
+				{% if total+currentActiveContacts > limit %}
 					<div class="alert alert-block">
 						<a class="close" data-dismiss="alert">×</a>
 						<h4 class="alert-heading">Advertencia!</h4><br>

@@ -114,6 +114,11 @@ App.ContactsEditRoute = Ember.Route.extend({
 
 App.ContactsImportRoute = Ember.Route.extend();
 
+App.ContactsImportView = Ember.View.extend({
+	didInsertElement: function() {
+		$('.easy-pie-step').easyPieChart({barColor: '#599cc7', trackColor: '#a1a1a1', scaleColor: false, lineWidth: 10, size: 50, lineCap: 'butt'});
+    }
+});
 //Controladores
 
 App.ContactController = Ember.ObjectController.extend();
