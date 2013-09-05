@@ -14,7 +14,7 @@ class ContactWrapper extends BaseWrapper
 	protected $account;
 	protected $contact;
 	protected $ipaddress;
-	protected $transaction;
+	protected $db;
 	protected $pager;
 
     protected $_di;
@@ -26,7 +26,15 @@ class ContactWrapper extends BaseWrapper
 	public function __construct()
 	{
 		parent::__construct();
+		
+	}
+	
+	public function startCounter() {
 		$this->counter = new ContactCounter();
+	}
+	
+	public function endCounters() {
+		$this->counter->saveCounters();
 	}
 
 	public function setIdDbase($idDbase)
@@ -43,29 +51,27 @@ class ContactWrapper extends BaseWrapper
 		$this->ipaddress = ip2long($ipaddress);
 	}
 	
-	public function setTransaction($transaction)
-	{
-		$this->transaction = $transaction;
-	}
-
 	public function startTransaction()
 	{
-		$manager = new Phalcon\Mvc\Model\Transaction\Manager();
-	    $this->transaction = $manager->get();
+	    $this->db = Phalcon\DI::getDefault()->get('db');
+		$this->db->begin();
+		$this->startCounter();
 	}
 	
 	public function endTransaction($cont = true)
 	{
-		$this->transaction->commit();
+		$this->db->commit();
+		$this->endCounters();
 		
 		if($cont) {
-			$this->startTransaction();
+			$this->db->begin();
+			$this->startCounter();
 		}
 	}
 	
 	public function rollbackTransaction()
 	{
-		$this->transaction->rollback();
+		$this->db->rollback("It can't GO!");
 	}
 
 	public function updateContact($idEmail, $updates, $transaction = null)
@@ -102,8 +108,7 @@ class ContactWrapper extends BaseWrapper
 			} else {
 				$this->counter->updateContact($oldContact, $contact);
 			}
-		}
-		$this->counter->saveCounters();			
+		}			
 	}
 
 	public function updateContactFromJsonData($idContact, $data)
@@ -154,8 +159,7 @@ class ContactWrapper extends BaseWrapper
 			$this->assignDataToCustomField($data);
 			
 			$this->counter->updateContact($oldContact, $this->contact);
-			
-			$this->counter->saveCounters();			
+						
 		}			
 		
 		return $this->contact;
@@ -178,7 +182,6 @@ class ContactWrapper extends BaseWrapper
 				$this->counter->deleteContactFromDbase($contact);
 			}
 		}
-		$this->counter->saveCounters();
 	}
 	
 	public function deleteContactFromDB($contact, $db)
@@ -205,7 +208,6 @@ class ContactWrapper extends BaseWrapper
 			$this->counter->deleteContactFromDbase($contact);			
 		}
 		
-		$this->counter->saveCounters();
 	}
 
 	public function addExistingContactToListFromDbase($email)
@@ -220,7 +222,6 @@ class ContactWrapper extends BaseWrapper
 				$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idContactlist = $this->idContactlist");
 				if (!$existList){
 					$this->associateContactToList($this->idContactlist, $existContact->idContact);
-					$this->counter->saveCounters();
 					
 					return $existContact;
 				}
@@ -319,8 +320,6 @@ class ContactWrapper extends BaseWrapper
 		}
 		
 		$this->contact = new Contact();
-		
-		$this->contact->setTransaction($this->transaction);
 
 		$this->contact->email = $email;
 		$this->contact->bounced = 0;
@@ -342,8 +341,7 @@ class ContactWrapper extends BaseWrapper
 			$this->associateContactToList($this->idContactlist, $this->contact->idContact);
 			
 			$this->assignDataToCustomField($data);
-			
-			$this->counter->saveCounters();
+
 		}
 	}
 	
@@ -434,9 +432,7 @@ class ContactWrapper extends BaseWrapper
 	protected function associateContactToList($idContactlist, $idContact)
 	{
 		$associate = new Coxcl();
-		
-		$associate->setTransaction($this->transaction);
-		
+				
 		$associate->idContactlist = $idContactlist;
 		$associate->idContact = $idContact;
 		

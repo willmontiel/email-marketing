@@ -199,6 +199,7 @@ class BlockedEmailWrapper
 			
 			$updateContact = array('unsubscribed' => time());
 			$wrapper = new ContactWrapper();
+			$wrapper->startCounter();
 
 			try {
 				// Actualizar usando una transaccion
@@ -213,6 +214,7 @@ class BlockedEmailWrapper
 			catch (Exception $e) {
 				$transaction->rollback();
 			}
+			$wrapper->endCounters();
 		} 
 		else {
 			$transaction->rollback();

@@ -364,6 +364,7 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->contact;
 		
 		$wrapper = new ContactWrapper();
+		$wrapper->startCounter();
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($idDbase);
 		$wrapper->setIdContactlist($contents->list_id);
@@ -381,6 +382,8 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
 		}
+		$wrapper->endCounters();
+		
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 		
 	}
@@ -435,6 +438,8 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->contact;
 		
 		$wrapper = new ContactWrapper();
+		$wrapper->startCounter();
+		
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($idDbase);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
@@ -451,7 +456,7 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
 		}
-		
+		$wrapper->endCounters();
 		$contactdata = $wrapper->convertContactToJson($contact);
 
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
@@ -474,8 +479,10 @@ class ApiController extends ControllerBase
 		
 		// Eliminar el Contacto de la Base de Datos
 		$wrapper = new ContactWrapper();
-		
+		$wrapper->startCounter();
 		$wrapper->deleteContactFromDB($contact, $db);
+		
+		$wrapper->endCounters();
 		
 		return $this->setJsonResponse(null);	
 	
@@ -693,6 +700,8 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->contact;
 		
 		$wrapper = new ContactWrapper();
+		$wrapper->startCounter();
+		
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
 		$wrapper->setIdContactlist($idContactlist);
@@ -719,7 +728,7 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
 		}
-		
+		$wrapper->endCounters();
 		$contactdata = $wrapper->convertContactToJson($contact);
 
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
@@ -749,6 +758,8 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->contact;
 		
 		$wrapper = new ContactWrapper();
+		$wrapper->startCounter();
+
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
 		$wrapper->setIdContactlist($idContactlist);
@@ -767,7 +778,7 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
 		}
-
+		$wrapper->endCounters();
 		$contactdata = $wrapper->convertContactToJson($contact);
 
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
@@ -791,8 +802,11 @@ class ApiController extends ControllerBase
 		
 		// Eliminar el Contacto de la Lista
 		$wrapper = new ContactWrapper();
+		$wrapper->startCounter();
 		
 		$mensaje = $wrapper->deleteContactFromList($contact, $list);
+		
+		$wrapper->endCounters();
 		
 		return $this->setJsonResponse($mensaje);	
 	

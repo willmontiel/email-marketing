@@ -27,16 +27,18 @@ class TestController extends ControllerBase
 
 	public function testtransactionAction()
 	{
-		$manager = new Phalcon\Mvc\Model\Transaction\Manager();
-	    $transaction = $manager->get();
+//		$manager = new Phalcon\Mvc\Model\Transaction\Manager();
+//	    $transaction = $manager->get();
 				
 		try {
+			$this->db->begin();
 		$contact = new Contact();
-		$contact->setTransaction($transaction);
+		
+//		$contact->setTransaction($transaction);
 		
 		$contact->idDbase = 1155;
 		$contact->idEmail = 638;
-		$contact->name = "Pepito";
+		$contact->name = "Pepitos";
 		$contact->bounced = 0;
 		$contact->unsubscribed = 0;
 		$contact->spam = 0;
@@ -49,13 +51,14 @@ class TestController extends ControllerBase
 		$contact->createdon = 1378332895;
 			
 		if(!$contact->save()) {
-			$transaction->rollback("No se pudo guardar el contacto");
+//			$transaction->rollback("No se pudo guardar el contacto");
+			$this->db->rollback();
 		}
 		//$transaction->commit();
 		
 		$associate = new Coxcl();
 		
-		$associate->setTransaction($transaction);
+//		$associate->setTransaction($transaction);
 		
 		$associate->idContactlist = 1;
 		$associate->contact = $contact;
@@ -65,10 +68,12 @@ class TestController extends ControllerBase
 			foreach ($associate->getMessages() as $m) {
 				$t = $m->getMessage() . '<br/>';
 			}
-			$transaction->rollback("No se pudo crear la asociacion");
+//			$transaction->rollback("No se pudo crear la asociacion");
+			$this->db->rollback();
 		}
+		$this->db->commit();
 
-		$transaction->commit();
+//		$transaction->commit();
 
 		$contactnew = Contact::findFirstByIdContact($contact->idContact);
 		$associatenew = Coxcl::findFirstByIdContact($contact->idContact);
@@ -77,9 +82,9 @@ class TestController extends ControllerBase
 		$this->view->setVar("associate", $associatenew);
 			$this->view->setVar('txterror', $t);
 		}
-		catch (\Phalcon\Mvc\Model\Transaction\Failed $e) {
-			echo 'Transaccion fallida!';
-			$this->view->setVar('txterror', $t);
+		catch (Exception $e) {
+			echo 'Proceso fallido!';
+			$this->view->setVar('txterror', $t . ',' . $e);
 		}
 	}
 	

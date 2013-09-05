@@ -326,7 +326,7 @@
 				{%for field in fields%}
 				<tr>
 					<td>{{field.name}}</td>
-					<td>{{'{{'~field.name~'}}'}}</td>
+					<td>{{'{{'~field.name|lower~'}}'}}</td>
 				</tr>
 				{%endfor%}
 			</table>

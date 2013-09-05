@@ -23,11 +23,12 @@ class ImportContactWrapper extends BaseWrapper
 		$customfields = Customfield::findByIdDbase($list->idDbase);
 				
 		$cantTrans = 0;
+		
 		$wrapper = new ContactWrapper();
+		
+		$wrapper->startTransaction();
+		
 		while(! feof($open)) {
-			if($cantTrans == 0){
-				$wrapper->startTransaction();
-			}
 			$wrapper->setAccount($this->account);
 			$wrapper->setIdDbase($list->idDbase);
 			$wrapper->setIdContactlist($this->idContactlist);
@@ -44,11 +45,10 @@ class ImportContactWrapper extends BaseWrapper
 				}
 			}
 			catch (\InvalidArgumentException $e) {
-//				$wrapper->rollbackTransaction();
+				$wrapper->rollbackTransaction();
 			}
 			catch (\Exception $e) {
-				echo $e;
-//				$wrapper->rollbackTransaction();
+				$wrapper->rollbackTransaction();
 			}			 
 			
 			$line = trim(fgets($open));
