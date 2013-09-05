@@ -85,34 +85,28 @@
 								<tr>
 									<td>Email</td>
 									<td>
-										<div class="selector hover span12">
-											{{'{{ view Ember.Select contentBinding="App.options" valueBinding="email" id="email" class="uniform"}}'}}
-										</div>
+										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="email" id="email"}}'}}
 									</td>
 								</tr>
 								<tr>		
-									<td>Nombre</td>
-									<td>
-										<div class="selector hover span12">
-											{{'{{ view Ember.Select contentBinding="App.options" valueBinding="name" id="name" class="uniform"}}'}}
-										</div>
-									</td>
+									<th>Nombre</th>
+									<th>
+										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="name" id="name"}}'}}
+									</th>
 								</tr>
 								<tr>		
-									<td>Apellido</td>
-									<td>
-										<div class="selector hover span12">
-											{{'{{ view Ember.Select contentBinding="App.options" valueBinding="lastname" id="lastname" class="uniform"}}'}}
-										</div>
-									</td>
+									<th>Apellido</th>
+									<th>
+										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="lastname" id="lastname"}}'}}
+									</th>
 								</tr>
 								{%for field in customfields %}
 								<tr>		
-									<td>{{field.name}}</td>
-									<td>
+									<th>{{field.name}}</th>
+									<th>
 										{{'{{ view Ember.Select contentBinding="App.options" class="uniform" valueBinding="'~field.name|lower~'" id="'~field.name|lower~'"}}'}}
 						
-									</td>
+									</th>
 								</tr>
 								{%endfor%}
 							</tbody>
@@ -149,12 +143,13 @@
 								<td>Apellido: </td>
 								<td>{{'{{lastname}}'}}</td>
 							</tr>
-							<tr>
 						{%for field in customfields%}
+							<tr>
 								<td>{{field.name}}: </td>
 								<td>{{'{{'~field.name|lower~'}}'}}</td>
-						{%endfor%}
+							
 							</tr>
+						{%endfor%}
 						</tbody>
 					</table>
 				</div>

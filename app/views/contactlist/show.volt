@@ -53,7 +53,6 @@
 			{%endfor%}
 		};
 	</script>
-
 	{{ javascript_include('js/app_contact.js') }}
 	{{ javascript_include('js/list_model.js') }}
 	{{ javascript_include('js/app_contact_list.js') }}

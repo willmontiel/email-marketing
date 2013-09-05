@@ -53,7 +53,7 @@
 				<div class="row-fluid">
 					<div class="span3">
 						{{ '{{#if isDbaseSelected}}' }}
-							lala
+							{{ '{{dbase.id}}' }}
 						{{ '{{/if}}' }}
 					</div>
 					<div class="span3">
