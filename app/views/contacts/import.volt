@@ -85,26 +85,28 @@
 								<tr>
 									<td>Email</td>
 									<td>
-										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="email" id="email"}}'}}
+										<input type="hidden" value="{{nameFile}}" name="nameFile">
+										<input type="hidden" value="{{idContactlist}}" name="idContactlist">
+										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="email" id="email" name="email"}}'}}
 									</td>
 								</tr>
 								<tr>		
 									<th>Nombre</th>
 									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="name" id="name"}}'}}
+										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="name" id="name" name="name"}}'}}
 									</th>
 								</tr>
 								<tr>		
 									<th>Apellido</th>
 									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="lastname" id="lastname"}}'}}
+										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="lastname" id="lastname" name="lastname"}}'}}
 									</th>
 								</tr>
 								{%for field in customfields %}
 								<tr>		
 									<th>{{field.name}}</th>
 									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" class="uniform" valueBinding="'~field.name|lower~'" id="'~field.name|lower~'"}}'}}
+										{{'{{ view Ember.Select contentBinding="App.options" class="uniform" valueBinding="'~field.name|lower~'" id="'~field.name|lower~'" name="'~field.name|lower~'"}}'}}
 						
 									</th>
 								</tr>
