@@ -916,6 +916,15 @@ class ApiController extends ControllerBase
 	/*Inicio de segmentos*/
 	
 	/**
+	 * @Get ("/segments")
+	 */
+	public function getSegments()
+	{
+		
+		
+	}
+	
+	/**
 	 * @Post("/segments")
 	 */
 	public function createsegmentAction()
@@ -932,7 +941,7 @@ class ApiController extends ControllerBase
 		$Wrapper = new SegmentWrapper();
 		
 		try {
-			$segment = $Wrapper->addBlockedEmail($contents, $this->user->account);
+			$segment = $Wrapper->startCreatingSegmentProcess($contents, $this->user->account);
 		}
 		
 		catch (\InvalidArgumentException $e) {
@@ -944,7 +953,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating segment!');	
 		}
 		
-		return $this->setJsonResponse(array('blockedemail' => $segment), 201, 'Success');
+		return $this->setJsonResponse(array('segment' => $segment), 201, 'Success');
 	}	
 	
 	/**

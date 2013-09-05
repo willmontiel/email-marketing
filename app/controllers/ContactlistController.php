@@ -12,12 +12,12 @@ class ContactlistController extends ControllerBase
 		$idAccount = $this->user->account->idAccount;
 		
 		$db = Phalcon\DI::getDefault()->get('db');
-		$query = "SELECT customfield .* 
+		$sql = "SELECT customfield .* 
 				FROM customfield
 					JOIN dbase ON ( customfield.idDbase = dbase.idDbase ) 
 				WHERE dbase.idAccount = :idAccount";
 		
-		 $results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idAccount' => $idAccount));
+		 $results = $db->fetchAll($sql, Phalcon\Db::FETCH_ASSOC, array('idAccount' => $idAccount));
 //		
 //		$results =  Phalcon\DI::getDefault()->get('modelsManager')->executeQuery($sql, array ('idAccount' => $idAccount));
 //		

@@ -15,7 +15,10 @@
 		var SegmentModel = {
 			name: DS.attr('string'),
 			description: DS.attr('string')
-				
+			{%for field in fields%}
+				,
+				{{field['idDbase']}}
+			{%endfor%}
 			,
 			isDbaseSelected: function() {
 				return true;

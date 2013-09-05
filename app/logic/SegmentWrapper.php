@@ -1,6 +1,10 @@
 <?php
 class SegmentWrapper extends BaseWrapper
 {
+	public function startCreatingSegmentProcess()
+	{
+		
+	}
 	public function startDeletingSegmentProcess(Account $account, $idSegment)
 	{
 		$idDbase = Dbase::findByIdAccount($account->idAccount);
