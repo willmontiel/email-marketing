@@ -2,8 +2,8 @@
 *.volt%%*%%.php
 configuration.ini
 nbproject/*
-.gitignore
-app/logs/debug.log
+nbproject/private/*
+.gitignoreapp/logs/debug.log
 nbproject/private/config.properties
 nbproject/private/private.properties
 nbproject/private/private.xml
