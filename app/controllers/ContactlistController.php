@@ -17,21 +17,19 @@ class ContactlistController extends ControllerBase
 					JOIN dbase ON ( customfield.idDbase = dbase.idDbase ) 
 				WHERE dbase.idAccount = :idAccount";
 		
-		 $results = $db->fetchAll($sql, Phalcon\Db::FETCH_ASSOC, array('idAccount' => $idAccount));
-//		
-//		$results =  Phalcon\DI::getDefault()->get('modelsManager')->executeQuery($sql, array ('idAccount' => $idAccount));
-//		
-//		foreach ($results as $result) {
-//			$arrayFields[$result->idCustomField] = array(
-//					'idCustom' => $result->idDbase,
-//					'name' => $result->name, 
-//					'type' => $result->type
-//			);
-//		}
+		$results = $db->fetchAll($sql, Phalcon\Db::FETCH_ASSOC, array('idAccount' => $idAccount));
 		
 		$totalFields = count($results);
+		
+		for ($i = 0; $i < $totalFields; $i++) {
+			$arrayFields[$i][$results[$i]['idDbase']] = array (
+				'idCustomField' => $results[$i]['idCustomField'],
+				'name' => $results[$i]['name']
+			);			
+		}
+		
 		$this->view->setVar("totalFields", $totalFields);
-		$this->view->setVar("fields", $results);
+		$this->view->setVar("fields", $arrayFields);
 	}
 	
 	public function showAction($id)

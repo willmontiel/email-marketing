@@ -10,32 +10,32 @@
 	{{ javascript_include('js/list_model.js') }}
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
-	<script>
+	<script type="text/javascript">
 		App.DBObjectList = App.store.findAll(App.Dbase);
 		var SegmentModel = {
 			name: DS.attr('string'),
-			description: DS.attr('string')
-			{%for field in fields%}
-				,
-				{{field['name']|lower}}: DS.attr('string')
-			{%endfor%}
-			,
+			description: DS.attr('string'),
+			
 			isDbaseSelected: function() {
-				return true;
-			}.property('criteria'),
-			
-			{{totalFields}}
+				App.fieldObjects = [];
+				for(var i=0; i<{{totalFields}}; i++) {
+				
+				}
+				
+				App.fieldObjects[ ..idDBase.. ] = [
+					// Por cada uno de los customfields de esa base de datos:
+					{ id: ..nombre del campo codificado.., label: ..nombre del campo... }
+				];
+			}.property('criteria')
 		};
-		
-			
 	</script>
 	{{ javascript_include('js/app_segment.js') }}
 {% endblock %}
-
 {% block sectiontitle %}<i class="icon-user"></i> Contactos{%endblock%}
 {%block sectionsubtitle %}Administre sus bases de datos de contactos{% endblock %}
 {% block content %}
 	<div id="emberApplistContainer">
+		{{ dump(fields[0][1])}}
 		{# handlebars de index #}
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}
