@@ -207,6 +207,7 @@ class BlockedEmailWrapper extends BaseWrapper
 
 				// Commit
 				$transaction->commit();
+				$wrapper->endCounters();
 				
 				$blockedJson = $this->convertBlockedEmailList($blocked);
 				return $blockedJson;
@@ -214,7 +215,7 @@ class BlockedEmailWrapper extends BaseWrapper
 			catch (Exception $e) {
 				$transaction->rollback();
 			}
-			$wrapper->endCounters();
+			
 		} 
 		else {
 			$transaction->rollback();

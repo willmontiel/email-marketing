@@ -270,7 +270,9 @@ class ContactsController extends ControllerBase
 		$importwrapper->setIdContactlist($idContactlist);
 		$importwrapper->setAccount($this->user->account);
 		
-		$importwrapper->startImport($fields, $destiny, $delimiter);	
+		$count = $importwrapper->startImport($fields, $destiny, $delimiter);
+		
+		$this->view->setVar("count", $count);
 	}
 			
 }
