@@ -1,3 +1,11 @@
 *.volt.php
 *.volt%%*%%.php
 configuration.ini
+app/logs/debug.log
+nbproject/private/config.properties
+nbproject/private/private.properties
+nbproject/private/private.xml
+nbproject/project.properties
+nbproject/project.xml
+public/css/normalize.css
+public/css/style.css
