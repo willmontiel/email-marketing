@@ -28,7 +28,7 @@
 	App.originalS = "{{row[1]}}";
 	App.originalT = "{{row[2]}}";
 	App.originalFo = "{{row[3]}}";
-	App.originalFi = "{{row[3]}}";
+	App.originalFi = "{{row[4]}}";
 	App.optionsOr = " ,{{row[0]}}"
 	
 	App.options = App.optionsOr.split(",");
@@ -50,6 +50,7 @@
 {% block content %}
 <div id="emberAppImportContainer">
 	<script type="text/x-handlebars" data-template-name="contacts/index">
+		<form method="POST" action="{{url('contacts/processfile')}}">
 		<div class="row-fluid">
 			<div class="span8">
 				<div class="well relative">

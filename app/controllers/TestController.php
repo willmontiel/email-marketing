@@ -25,6 +25,64 @@ class TestController extends ControllerBase
 		
 	}
 
+	public function testtransactionAction()
+	{
+		$manager = new Phalcon\Mvc\Model\Transaction\Manager();
+	    $transaction = $manager->get();
+				
+		try {
+		$contact = new Contact();
+		$contact->setTransaction($transaction);
+		
+		$contact->idDbase = 1155;
+		$contact->idEmail = 638;
+		$contact->name = "Pepito";
+		$contact->bounced = 0;
+		$contact->unsubscribed = 0;
+		$contact->spam = 0;
+		$contact->ipActivated= 2130706433;
+		$contact->ipSubscribed= 2130706433;
+		$contact->updatedon = 1378332895;
+		$contact->lastName = "Perez";
+		$contact->subscribedon = 1378332895;
+		$contact->status = 1378332895;
+		$contact->createdon = 1378332895;
+			
+		if(!$contact->save()) {
+			$transaction->rollback("No se pudo guardar el contacto");
+		}
+		//$transaction->commit();
+		
+		$associate = new Coxcl();
+		
+		$associate->setTransaction($transaction);
+		
+		$associate->idContactlist = 1;
+		$associate->contact = $contact;
+		$t = '';
+		
+		if(!$associate->save()) {
+			foreach ($associate->getMessages() as $m) {
+				$t = $m->getMessage() . '<br/>';
+			}
+			$transaction->rollback("No se pudo crear la asociacion");
+		}
+
+		$transaction->commit();
+
+		$contactnew = Contact::findFirstByIdContact($contact->idContact);
+		$associatenew = Coxcl::findFirstByIdContact($contact->idContact);
+		
+		$this->view->setVar("contact", $contactnew);	
+		$this->view->setVar("associate", $associatenew);
+			$this->view->setVar('txterror', $t);
+		}
+		catch (\Phalcon\Mvc\Model\Transaction\Failed $e) {
+			echo 'Transaccion fallida!';
+			$this->view->setVar('txterror', $t);
+		}
+	}
+	
 	public function testcountersAction()
 	{
 		$email = "newone@newone.com";

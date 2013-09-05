@@ -14,7 +14,7 @@ class ContactWrapper extends BaseWrapper
 	protected $account;
 	protected $contact;
 	protected $ipaddress;
-
+	protected $transaction;
 	protected $pager;
 
     protected $_di;
@@ -43,6 +43,31 @@ class ContactWrapper extends BaseWrapper
 		$this->ipaddress = ip2long($ipaddress);
 	}
 	
+	public function setTransaction($transaction)
+	{
+		$this->transaction = $transaction;
+	}
+
+	public function startTransaction()
+	{
+		$manager = new Phalcon\Mvc\Model\Transaction\Manager();
+	    $this->transaction = $manager->get();
+	}
+	
+	public function endTransaction($cont = true)
+	{
+		$this->transaction->commit();
+		
+		if($cont) {
+			$this->startTransaction();
+		}
+	}
+	
+	public function rollbackTransaction()
+	{
+		$this->transaction->rollback();
+	}
+
 	public function updateContact($idEmail, $updates, $transaction = null)
 	{
 		$contacts = Contact::find(array(
@@ -294,6 +319,8 @@ class ContactWrapper extends BaseWrapper
 		}
 		
 		$this->contact = new Contact();
+		
+		$this->contact->setTransaction($this->transaction);
 
 		$this->contact->email = $email;
 		$this->contact->bounced = 0;
@@ -392,24 +419,35 @@ class ContactWrapper extends BaseWrapper
 			$fieldinstance->idCustomField = $field->idCustomField;
 			$fieldinstance->idContact = $this->contact->idContact;
 			if ($field->type == "Date") {
-				$name = $field->name;
+				$name = strtolower($field->name);
 				$fieldinstance->numberValue = $data->$name;
 			} else {
-				$name = $field->name;
+				$name = strtolower($field->name);
 				$fieldinstance->textValue = $data->$name;
 			}
-			$fieldinstance->save();
+			if(!$fieldinstance->save()) {
+				throw new \Exception('Error al crear los Campos Personalizados del Contacto');
+			}
 		}
 	}
 	
-	protected function associateContactToList ($idContactlist, $idContact)
+	protected function associateContactToList($idContactlist, $idContact)
 	{
 		$associate = new Coxcl();
+		
+		$associate->setTransaction($this->transaction);
+		
 		$associate->idContactlist = $idContactlist;
 		$associate->idContact = $idContact;
-					
+		
 		if(!$associate->save())	{
-			throw new \Exception('Error al asociar el contacto a la lista');
+			$m = $associate->getMessages();
+			$a = array();
+			foreach ($m as $msg) {
+				$a[] = $msg;
+			}
+			$txt = implode(',', $msg);
+			throw new \Exception('Error al asociar el contacto a la lista con idContactlist: '.$idContactlist. ' y idContact: ' .$idContact. '!' . PHP_EOL . '[' . $txt . ']');
 		} else {
 			
 			$list = Contactlist::findFirstByidContactlist($idContactlist);
@@ -560,7 +598,7 @@ class ContactWrapper extends BaseWrapper
 		
 		foreach ($customfields as $field) {
 			$valuefield = Fieldinstance::findFirst("idCustomField = $field->idCustomField AND idContact = $contact->idContact");
-			$object[$field->name] = $valuefield->textValue;
+			$object[strtolower($field->name)] = $valuefield->textValue;
 		}
 		
 		return $object;

@@ -77,7 +77,7 @@ class ContactCounter
 		 */
 		
 		$oper = $this->newContact($contact);
-		if(!isset($this->$counterDB[$contact->idDbase])) {
+		if(!isset($this->counterDB[$contact->idDbase])) {
 			$this->counterDB[$contact->idDbase] = $oper;
 		} else {
 			$this->counterDB[$contact->idDbase] = $this->sumArray($this->counterDB[$contact->idDbase], $oper);

@@ -19,7 +19,7 @@ class ContactsController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
 		}
 		
-		$contents = $this->request->getpost('arraybatch');
+		$contents = $this->request->getPost('arraybatch');
 		
 		if (empty($contents)) {
 			$this->flashSession->error('No hay valores en el campo');
@@ -176,7 +176,7 @@ class ContactsController extends ControllerBase
 	public function importAction()
 	{
 		$account = $this->user->account->idAccount ;
-		$idContactlist = $this->request->getpost('idcontactlist');
+		$idContactlist = $this->request->getPost('idcontactlist');
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		$idDbase = $list->idDbase;
 		
@@ -228,6 +228,7 @@ class ContactsController extends ControllerBase
 						$this->view->setVar("customfields", $customfields);
 						$this->view->setVar("row", $line);
 						$this->view->setVar("idContactlist", $idContactlist);
+						$this->view->setVar("nameFile", $internalName);
 						
 				}
 			}
@@ -239,7 +240,35 @@ class ContactsController extends ControllerBase
 	
 	public function processfileAction()
 	{
+		$log = $this->logger;
 		
+		$nameFile = $this->request->getPost('nameFile');
+		$idContactlist = $this->request->getPost('idContactlist');
+		
+		$fields[0] = $this->request->getPost('email');
+		$fields[1] = $this->request->getPost('name');
+		$fields[2] = $this->request->getPost('lastname');
+		$delimiter = $this->request->getPost('delimiter');
+		
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+		$customfields = Customfield::findByIdDbase($list->idDbase);
+		
+		$numfield = 3;
+		foreach ($customfields as $field) {
+			$namefield= $field->name;
+			$fields[$numfield] = $this->request->getPost(strtolower($namefield));
+			$numfield++;
+		}
+				
+		$destiny =  "C:\\".$nameFile;
+		
+		$importwrapper = new ImportContactWrapper();
+		
+		
+		$importwrapper->setIdContactlist($idContactlist);
+		$importwrapper->setAccount($this->user->account);
+		
+		$importwrapper->startImport($fields, $destiny, $delimiter);	
 	}
 			
 }
