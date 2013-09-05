@@ -216,7 +216,7 @@ class ContactsController extends ControllerBase
 						}
 				}
 				else {
-						$destiny =  "C:\\".$internalName;
+						$destiny =  "../tmp/ifiles/" . $internalName;
 						copy($_FILES['importFile']['tmp_name'],$destiny);
 
 						$open = fopen($destiny, "r");

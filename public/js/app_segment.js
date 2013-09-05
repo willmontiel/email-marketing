@@ -1,12 +1,6 @@
-App.Segment = DS.Model.extend({
-	name: DS.attr('string'),
-	description: DS.attr('string'),
-	idDbase: DS.attr('number'),
-	
-	isDbaseSelected: function() {
-		return true;
-	}.property('criteria')
-});
+App.Segment = DS.Model.extend(
+	SegmentModel
+);
 
 App.criteria = [
   Ember.Object.create({criterion: "todas las", id: "all"}),
@@ -56,4 +50,16 @@ App.SegmentsNewController = Ember.ObjectController.extend({
     contract: function() {
       this.set('isExpanded', false);
     }
+});
+
+App.SegmentsDeleteController = Ember.ObjectController.extend({
+	delete: function() {
+		this.get('content').deleteRecord();
+		this.get('model.transaction').commit();
+		this.get("target").transitionTo("segments");
+    },
+	cancel: function(){
+		 this.get("transaction").rollback();
+		 this.get("target").transitionTo("segments");
+	}
 });

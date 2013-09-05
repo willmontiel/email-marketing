@@ -1,5 +1,5 @@
 <?php
-class BlockedEmailWrapper
+class BlockedEmailWrapper extends BaseWrapper
 {
 	protected $pager;
 	protected $_di;

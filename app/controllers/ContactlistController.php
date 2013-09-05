@@ -8,6 +8,31 @@ class ContactlistController extends ControllerBase
 		$r = $this->verifyAcl('contactlist', 'index', '');
 		if ($r)
 			return $r;
+
+		$idAccount = $this->user->account->idAccount;
+		
+		$db = Phalcon\DI::getDefault()->get('db');
+		$query = "SELECT customfield .* 
+				FROM customfield
+					JOIN dbase ON ( customfield.idDbase = dbase.idDbase ) 
+				WHERE dbase.idAccount = :idAccount";
+		
+		 $results = $db->fetchAll($query, Phalcon\Db::FETCH_ASSOC, array('idAccount' => $idAccount));
+//		
+//		$results =  Phalcon\DI::getDefault()->get('modelsManager')->executeQuery($sql, array ('idAccount' => $idAccount));
+//		
+//		foreach ($results as $result) {
+//			$arrayFields[$result->idCustomField] = array(
+//					'idCustom' => $result->idDbase,
+//					'name' => $result->name, 
+//					'type' => $result->type
+//			);
+//		}
+		
+		$totalFields = count($results);
+		$this->view->setVar("arrayFields", $arrayFields);
+		$this->view->setVar("totalFields", $totalFields);
+		$this->view->setVar("fields", $results);
 	}
 	
 	public function showAction($id)

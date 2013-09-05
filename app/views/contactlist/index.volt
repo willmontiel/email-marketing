@@ -1,20 +1,31 @@
 {% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{apiurlbase.url}}';
 	</script>
-	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/list_model.js') }}
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
-	{{ javascript_include('js/app_segment.js') }}
-
 	<script>
 		App.DBObjectList = App.store.findAll(App.Dbase);
+		var SegmentModel = {
+			name: DS.attr('string'),
+			description: DS.attr('string')
+				
+			,
+			isDbaseSelected: function() {
+				return true;
+			}.property('criteria'),
+			
+		};
+		
+			
 	</script>
+	{{ javascript_include('js/app_segment.js') }}
 {% endblock %}
 
 {% block sectiontitle %}<i class="icon-user"></i> Contactos{%endblock%}
@@ -185,7 +196,6 @@
 		</div>
 	</div>
 </script>
-
 	{{ partial("contactlist/blockedemail_partial") }}
 	{{ partial("contactlist/segment_partial")}}
 </div>

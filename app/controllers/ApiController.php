@@ -906,12 +906,69 @@ class ApiController extends ControllerBase
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while deleting blocked email!');	
 		}
 		
 	}
 	
 	/*Finaliza todo lo que tiene que ver con listas de bloqueo globales*/
+	
+	/*Inicio de segmentos*/
+	
+	/**
+	 * @Post("/segments")
+	 */
+	public function createsegmentAction()
+    {
+		$log = $this->logger;
+
+		$contentsraw = $this->request->getRawBody();
+		$log->log('Got this: [' . $contentsraw . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		$contents = $contentsT->segment;
+		
+		$Wrapper = new SegmentWrapper();
+		
+		try {
+			$segment = $Wrapper->addBlockedEmail($contents, $this->user->account);
+		}
+		
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating segment!');	
+		}
+		
+		return $this->setJsonResponse(array('blockedemail' => $segment), 201, 'Success');
+	}	
+	
+	/**
+	 * @Route("/segments/{idSegment:[0-9]+}", methods="DELETE")
+	 */
+	public function deletesegmentAction($idSegment)
+	{
+		$log = $this->logger;
+		
+		$wrapper = new SegmentWrapper();
+		
+		try {
+			$wrapper->startDeletingSegmentProcess($this->user->account, $idSegment);
+		}
+		
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while deleting segment!');	
+		}
+	}
 }
 
 	
