@@ -86,7 +86,7 @@ class ContactsController extends ControllerBase
 				
 		}
 		
-		$_SESSION['batch'] = $batchreal;
+		$this->session->set('batch_data', $batchreal);
 			
 		$totalValidContacts = count($batchreal);
 		$this->view->setVar("limit", $this->user->account->contactLimit);
@@ -102,10 +102,13 @@ class ContactsController extends ControllerBase
 		$log = $this->logger;
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
-		$batch = $_SESSION['batch'];
+		if (!$this->session->has('batch_data')) {
+			return $this->response->redirect('contactlist/show/$list->idContactlist#/contacts');
+		}
+		$batch = $this->session->get('batch_data');
 		
 		foreach ($batch as $batchC) {
-		// Crear el nuevo contacto:
+			// Crear el nuevo contacto:
 			
 			$wrapper = new ContactWrapper();
 			$wrapper->setAccount($this->user->account);
@@ -146,8 +149,7 @@ class ContactsController extends ControllerBase
 				$log->log('Exception: [' . $e . ']');
 			}				
 		}
-//			$this->flashSession->success('Contactos creados exitosamente');
-			$this->response->redirect("contactlist/show/$list->idContactlist#/contacts");
+		return $this->response->redirect("contactlist/show/$list->idContactlist#/contacts");
 	}
 	
 	protected function validateImportedFile($file) 

@@ -182,26 +182,34 @@
 			</div>
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/newbatch">
-		<div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
-			<div class="row-fluid">
-				<div class="span2">
-					<div class="tooltip fade top in" display: block;">
-						<div class="tooltip-arrow">
+			<div class="box span8">
+				<div class="box-header"><span class="title">Crear multiples Contactos</span></div>
+				<form method="post" action="{{url('contacts/newbatch')}}/{{datalist.idContactlist}}">
+					<div class="box-content padded">
+						<div class="alert-info padded">
+							<p>A través de esta función puede varios contactos al mismo tiempo.</p>
+							<p>Simplemente escriba en el cuadro de texto una línea de contenido por cada contacto que desee crear separando los campos por comas.</p>
+							<p><strong>Ejemplo:</strong></p>
+							<dl>
+								<dd>email1@email.com,Nombre1,Apellido1</dd>
+								<dd>email2@otroemail.com,Nombre2</dd>
+								<dd>email3@hotmail.com</dd>
+							</dl>
+							<p>Note que no es necesario incluir todos los campos, el único <strong>campo requerido es "email"</strong>.</p>
+							<p class="text-success">El sistema validará los registros repetidos y los correos inválidos.</p>
 						</div>
-						<div class="tooltip-inner infobatch">
-							Ingrese los Contactos separados por saltos de linea
-							y los campos por COMAS ",".
-						</div>
+						<br/>
+						<label>
+							Información de los contactos
+						</label>
+						{{ text_area("arraybatch", '', 'cols': '40', 'rows': '6', 'class': 'span10') }}
 					</div>
-				</div>
-				<form method="Post" action="{{url('contacts/newbatch')}}/{{datalist.idContactlist}}" , 'method': 'Post') }}
-				<div class="span5">
-					{{ text_area("arraybatch") }}
-					<input class="btn btn-sm btn-inverse" type="submit" value="Guardar">
-					{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Cancelar</button>{{/linkTo}}' }}
-				</div>
+					<div class="box-footer flat padded">
+							{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-default">Cancelar</button>{{/linkTo}}' }}
+							<input class="btn btn-sm btn-primary" type="submit" value="Continuar">
+					</div>
 				</form>
-		</div>
+			</div>
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/edit">
 			<p>Agrega un nuevo contacto, con sus datos más básicos. </p>
