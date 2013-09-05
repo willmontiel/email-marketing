@@ -30,7 +30,6 @@ class ContactlistController extends ControllerBase
 //		}
 		
 		$totalFields = count($results);
-		$this->view->setVar("arrayFields", $arrayFields);
 		$this->view->setVar("totalFields", $totalFields);
 		$this->view->setVar("fields", $results);
 	}

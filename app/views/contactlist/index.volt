@@ -17,13 +17,14 @@
 			description: DS.attr('string')
 			{%for field in fields%}
 				,
-				{{field['idDbase']}}
+				{{field['name']|lower}}: DS.attr('string')
 			{%endfor%}
 			,
 			isDbaseSelected: function() {
 				return true;
 			}.property('criteria'),
 			
+			{{totalFields}}
 		};
 		
 			
