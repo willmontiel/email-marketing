@@ -12,6 +12,15 @@ class ImportContactWrapper extends BaseWrapper
 	
 	public function startImport($fields, $destiny, $delimiter) {
 		
+		$db = Phalcon\DI::getDefault()->get('db');
+		$success = array();
+		$errors = array();
+		$total = 0;
+		$exist = 0;
+		$invalid = 0;
+		$bloqued = 0;
+		$limit = 0;
+		
 		$open = fopen($destiny, "r");
 		
 		$line = trim(fgets($open));
@@ -26,7 +35,9 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$wrapper = new ContactWrapper();
 		
-		$wrapper->startTransaction();
+		$db->begin();
+		
+		$wrapper->startCounter();
 		
 		while(! feof($open)) {
 			$wrapper->setAccount($this->account);
@@ -37,7 +48,9 @@ class ImportContactWrapper extends BaseWrapper
 			$this->newcontact = new stdClass();
 			
 			$this->MappingToJSON($linew, $posCol, $customfields);
-
+			
+			array_push($success, $linew);
+			
 			try {
 				$contact = $wrapper->addExistingContactToListFromDbase($this->newcontact->email);
 				if(!$contact) {
@@ -45,11 +58,36 @@ class ImportContactWrapper extends BaseWrapper
 				}
 			}
 			catch (\InvalidArgumentException $e) {
-				$wrapper->rollbackTransaction();
+				
+				array_pop($success);
+				
+				switch ($e->getCode()) {
+					case 0:
+						array_push($linew, "Existente");
+						$exist++;
+						break;						
+					case 1:
+						array_push($linew, "Correo Invalido");
+						$invalid++;
+						break;
+					case 2:
+						array_push($linew, "Correo Bloqueado");
+						$bloqued++;
+						break;
+					case 3:
+						array_push($linew, "Limite de Contactos Excedido");
+						$limit++;
+						break;
+				}
+				
+				array_push($errors, $linew);
+				
 			}
 			catch (\Exception $e) {
 				$wrapper->rollbackTransaction();
 			}			 
+			
+			$total++;
 			
 			$line = trim(fgets($open));
 			$linew = explode($delimiter, $line);
@@ -57,12 +95,33 @@ class ImportContactWrapper extends BaseWrapper
 			$cantTrans++;
 			
 			if($cantTrans == 100){
-				$wrapper->endTransaction();
+				$db->commit();				
+				$wrapper->endCounters();
+				
+				$db->begin();
+				$wrapper->startCounter();
+				
 				$cantTrans = 0;
 			}
 		}
 
-		$wrapper->endTransaction(false);
+		$db->commit();				
+		$wrapper->endCounters();
+		
+		$this->createReports($errors, $success);
+		
+		$count = array(
+			"total" => $total,
+			"import" => $total-($exist+$invalid+$bloqued+$limit),
+			"Nimport" => $exist+$invalid+$bloqued+$limit,
+			"exist" => $exist,
+			"invalid" => $invalid,
+			"bloqued" => $bloqued,
+			"limit" => $limit				
+		);
+		
+		return $count;
+		
 	}
 	
 	protected function SettingPositions($fields, $linew) {
@@ -103,5 +162,24 @@ class ImportContactWrapper extends BaseWrapper
 			$this->newcontact->$namefield = $linew[$posCol[$numfield]];
 			$numfield++;
 		}
+	}
+	
+	protected function createReports($errors, $success)
+	{
+		$fp = fopen('C:\\noimportados.csv', 'w');
+
+		foreach ($errors as $error) {
+			fputcsv($fp, $error);
+		}
+
+		fclose($fp);
+		
+		$fp = fopen('C:\\importados.csv', 'w');
+
+		foreach ($success as $succ) {
+			fputcsv($fp, $succ);
+		}
+
+		fclose($fp);
 	}
 }
