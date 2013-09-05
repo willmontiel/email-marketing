@@ -11,3 +11,5 @@ nbproject/project.properties
 nbproject/project.xml
 public/css/normalize.css
 public/css/style.css
+app/logs/dbdebug.log
+tmp/ifiles/6_1309052059_5228f0c7811e1.csv
