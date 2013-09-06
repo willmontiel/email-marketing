@@ -204,10 +204,8 @@ class BlockedEmailWrapper extends BaseWrapper
 				// Actualizar usando una transaccion
 				if($contents->delete_contact == null) {
 					$wrapper->updateContact($email->idEmail, $updateContact, $transaction);
-
 					// Commit
 					$transaction->commit();
-					$wrapper->endCounters();
 				}
 				
 				else {
