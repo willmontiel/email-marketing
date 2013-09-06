@@ -50,29 +50,6 @@ class ContactWrapper extends BaseWrapper
 	public function setIPAdress($ipaddress) {
 		$this->ipaddress = ip2long($ipaddress);
 	}
-	
-	public function startTransaction()
-	{
-	    $this->db = Phalcon\DI::getDefault()->get('db');
-		$this->db->begin();
-		$this->startCounter();
-	}
-	
-	public function endTransaction($cont = true)
-	{
-		$this->db->commit();
-		$this->endCounters();
-		
-		if($cont) {
-			$this->db->begin();
-			$this->startCounter();
-		}
-	}
-	
-	public function rollbackTransaction()
-	{
-		$this->db->rollback("It can't GO!");
-	}
 
 	public function updateContact($idEmail, $updates, $transaction = null)
 	{
@@ -237,7 +214,7 @@ class ContactWrapper extends BaseWrapper
 		
 		if($total >= $this->account->contactLimit) {
 			$this->addFieldError('email', 'Ha sobrepasado el limite de contactos: [' . $this->account->contactLimit .  ']');
-			throw new \InvalidArgumentException('Ha sobrepasado el limite de contactos: [' . $this->account->contactLimit .  ']');
+			throw new \InvalidArgumentException('Ha sobrepasado el limite de contactos: [' . $this->account->contactLimit .  ']', 3);
 		}
 		else {
 			// Verificar existencia del correo en la cuenta actual
@@ -277,7 +254,7 @@ class ContactWrapper extends BaseWrapper
 			if ($contact) {
 				if  (!($curcontact && $contact->idContact == $curcontact->idContact)) {
 					$this->addFieldError('email', 'Ya existe un contacto con ese email!');
-					throw new \InvalidArgumentException('El correo electronico [' . $emailaddress .  '] ya existe en la base de datos');
+					throw new \InvalidArgumentException('El correo electronico [' . $emailaddress .  '] ya existe en la base de datos', 0);
 				}
 			}
 		}
@@ -289,7 +266,7 @@ class ContactWrapper extends BaseWrapper
 	{
 		if($email->blocked != 0) {
 			$this->addFieldError('email', 'El correo electronico esta bloqueado por [' . $email->blockedemail->blockedReason . ']');
-			throw new \InvalidArgumentException('El correo electronico [' . $email->email .  '] se encuentra bloqueado!');
+			throw new \InvalidArgumentException('El correo electronico [' . $email->email .  '] se encuentra bloqueado!', 2);
 		} else {
 			return false;
 		}
@@ -439,7 +416,7 @@ class ContactWrapper extends BaseWrapper
 	{
 		$email = strtolower($mail);
 		if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			throw new InvalidArgumentException('La direccion [' . $email . '] no es una direccion de correo valida!');
+			throw new InvalidArgumentException('La direccion [' . $email . '] no es una direccion de correo valida!', 1);
 		}
 		
 		$emailex = Email::findFirstByEmail($email);

@@ -216,6 +216,9 @@ class ContactsController extends ControllerBase
 						}
 				}
 				else {
+						//$newproccess = 
+					
+					
 						$destiny =  "../tmp/ifiles/" . $internalName;
 						copy($_FILES['importFile']['tmp_name'],$destiny);
 
@@ -262,7 +265,7 @@ class ContactsController extends ControllerBase
 			$numfield++;
 		}
 				
-		$destiny =  "C:\\".$nameFile;
+		$destiny =  "../tmp/ifiles/".$nameFile;
 		
 		$importwrapper = new ImportContactWrapper();
 		

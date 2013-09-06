@@ -13,6 +13,7 @@ class ImportContactWrapper extends BaseWrapper
 	public function startImport($fields, $destiny, $delimiter) {
 		
 		$db = Phalcon\DI::getDefault()->get('db');
+		
 		$success = array();
 		$errors = array();
 		$total = 0;
@@ -20,6 +21,7 @@ class ImportContactWrapper extends BaseWrapper
 		$invalid = 0;
 		$bloqued = 0;
 		$limit = 0;
+		$cantTrans = 0;
 		
 		$open = fopen($destiny, "r");
 		
@@ -30,8 +32,6 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
 		$customfields = Customfield::findByIdDbase($list->idDbase);
-				
-		$cantTrans = 0;
 		
 		$wrapper = new ContactWrapper();
 		
@@ -84,7 +84,7 @@ class ImportContactWrapper extends BaseWrapper
 				
 			}
 			catch (\Exception $e) {
-				$wrapper->rollbackTransaction();
+				$db->rollback();
 			}			 
 			
 			$total++;
@@ -166,20 +166,52 @@ class ImportContactWrapper extends BaseWrapper
 	
 	protected function createReports($errors, $success)
 	{
-		$fp = fopen('C:\\noimportados.csv', 'w');
-
-		foreach ($errors as $error) {
-			fputcsv($fp, $error);
-		}
-
-		fclose($fp);
+		$uniquecode = uniqid();
 		
-		$fp = fopen('C:\\importados.csv', 'w');
+		$nameNimported = $this->account->idAccount."_".date("ymdHi",time())."_".$uniquecode."noneimported.csv";
+		
+		$saveFileError = new Importfile();
+		$saveFileError->idAccount = $this->account->idAccount;
+		$saveFileError->internalName = $nameNimported;
+		$saveFileError->originalName = $nameNimported;
+		$saveFileError->createdon = time();
 
-		foreach ($success as $succ) {
-			fputcsv($fp, $succ);
+		if (!$saveFileError->save()) {
+				foreach ($saveFileError->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+						$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
+				}
+		} else {
+			$fp = fopen('../tmp/ifiles/' . $nameNimported, 'w');
+
+			foreach ($errors as $error) {
+				fputcsv($fp, $error);
+			}
+
+			fclose($fp);
 		}
+		
+		$nameImported = $this->account->idAccount."_".date("ymdHi",time())."_".$uniquecode."imported.csv";
+		
+		$saveFileSuccess = new Importfile();
+		$saveFileSuccess->idAccount = $this->account->idAccount;
+		$saveFileSuccess->internalName = $nameImported;
+		$saveFileSuccess->originalName = $nameImported;
+		$saveFileSuccess->createdon = time();
+		
+		if (!$saveFileSuccess->save()) {
+				foreach ($saveFileSuccess->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+						$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
+				}
+		} else {
+			$fp = fopen('../tmp/ifiles/' . $nameImported, 'w');		
 
-		fclose($fp);
+			foreach ($success as $succ) {
+				fputcsv($fp, $succ);
+			}
+
+			fclose($fp);
+		}
 	}
 }

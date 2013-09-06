@@ -76,7 +76,7 @@
 									<span class="news-title">Total contactos no importados</span>
 									<a href="#">(Descargar reporte)</a>
 								</td>
-								<td><b style="font-size: 20px;">115</b></td>
+								<td><b style="font-size: 20px;">{{count['Nimport']}}</b></td>
 							</tr>
 						</tbody>
 					</table>
