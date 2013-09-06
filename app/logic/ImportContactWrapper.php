@@ -121,7 +121,8 @@ class ImportContactWrapper extends BaseWrapper
 			"exist" => $exist,
 			"invalid" => $invalid,
 			"bloqued" => $bloqued,
-			"limit" => $limit				
+			"limit" => $limit,
+			"idProcces" => $this->idProccess
 		);
 		
 		return $count;

@@ -36,7 +36,7 @@
 								<td class="icon"><i class="icon-ok"></i></td>
 								<td>
 									<span class="news-title">Importados exitosamente </span>
-									<a href="#">(Descargar reporte)</a>
+									<a href="#" target="_blank">(Descargar reporte)</a>
 								</td>
 								<td><b style="font-size: 20px;">{{count['import']}}</b></td>
 							</tr>
@@ -74,7 +74,7 @@
 								<td class="icon"><i class="icon-warning-sign"></i></td>
 								<td>
 									<span class="news-title">Total contactos no importados</span>
-									<a href="#">(Descargar reporte)</a>
+									<a href="#" target="_blank">(Descargar reporte)</a>
 								</td>
 								<td><b style="font-size: 20px;">{{count['Nimport']}}</b></td>
 							</tr>
