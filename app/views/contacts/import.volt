@@ -83,12 +83,12 @@
 						<table class="table table-normal">
 							<tbody>
 								<tr>
-									<td>Email</td>
-									<td>
-										<input type="hidden" value="{{idImportproccess}}" name="idImportproccess">
+									<th>Email</th>
+									<th>
+										<input type="hidden" value="{{nameFile}}" name="nameFile">
 										<input type="hidden" value="{{idContactlist}}" name="idContactlist">
 										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="email" id="email" name="email"}}'}}
-									</td>
+									</th>
 								</tr>
 								<tr>		
 									<th>Nombre</th>
@@ -116,9 +116,7 @@
 					</div>
 				<div class="box-footer">
 					<span class="title">Delimitador: </span>
-					<div class="selector hover span2">
-					{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" class="uniform"}} '}}
-					</div>
+					{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" class="span2"}} '}}
 				</div>
 			</div>
 		</div>
@@ -127,28 +125,28 @@
 				<div class="box-header">
 					<span class="title">Previsualización</span>
 					<ul class="box-toolbar">
-						<li><span class="label label-black"><i class="icon-eye-open"></i></span></li>
+						<li><span class="label label-blue"><i class="icon-eye-open"></i></span></li>
 					</ul>
 				</div>
 				<div class="box-content">
 					<table class="table table-normal">
 						<tbody>
 							<tr>
-								<td>Email: </td>
-								<td>{{'{{email}}'}}</td>
+								<th>Email: </th>
+								<th>{{'{{email}}'}}</th>
 							</tr>
 							<tr>
-								<td>Nombre:</td>
-								<td> {{'{{name}}'}}</td>
+								<th>Nombre:</th>
+								<th> {{'{{name}}'}}</th>
 							</tr>
 							<tr>
-								<td>Apellido: </td>
-								<td>{{'{{lastname}}'}}</td>
+								<th>Apellido: </th>
+								<th>{{'{{lastname}}'}}</th>
 							</tr>
 						{%for field in customfields%}
 							<tr>
-								<td>{{field.name}}: </td>
-								<td>{{'{{'~field.name|lower~'}}'}}</td>
+								<th>{{field.name}}: </th>
+								<th>{{'{{'~field.name|lower~'}}'}}</th>
 							
 							</tr>
 						{%endfor%}
