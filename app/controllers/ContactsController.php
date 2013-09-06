@@ -216,7 +216,17 @@ class ContactsController extends ControllerBase
 						}
 				}
 				else {
-						//$newproccess = 
+						$newproccess = new Importproccess();
+						
+						$newproccess->idAccount = $account;
+						$newproccess->inputFile = $saveDataFile->idImportfile;
+						
+						if(!$newproccess->save()) {
+							foreach ($newproccess->getMessages() as $msg) {
+								$this->flashSession->error($msg);
+								$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
+							}
+						}
 					
 					
 						$destiny =  "../tmp/ifiles/" . $internalName;
@@ -233,7 +243,7 @@ class ContactsController extends ControllerBase
 						$this->view->setVar("customfields", $customfields);
 						$this->view->setVar("row", $line);
 						$this->view->setVar("idContactlist", $idContactlist);
-						$this->view->setVar("nameFile", $internalName);
+						$this->view->setVar("idImportproccess", $newproccess->idImportproccess);
 						
 				}
 			}
@@ -247,8 +257,12 @@ class ContactsController extends ControllerBase
 	{
 		$log = $this->logger;
 		
-		$nameFile = $this->request->getPost('nameFile');
+		$idImportproccess = $this->request->getPost('idImportproccess');
 		$idContactlist = $this->request->getPost('idContactlist');
+		
+		$proccess = Importproccess::findFirstByIdImportproccess($idImportproccess);
+		$file = Importfile::findFirstByIdImportfile($proccess->inputFile);
+		$nameFile = $file->internalName;
 		
 		$fields[0] = $this->request->getPost('email');
 		$fields[1] = $this->request->getPost('name');
@@ -269,7 +283,7 @@ class ContactsController extends ControllerBase
 		
 		$importwrapper = new ImportContactWrapper();
 		
-		
+		$importwrapper->setIdProccess($idImportproccess);
 		$importwrapper->setIdContactlist($idContactlist);
 		$importwrapper->setAccount($this->user->account);
 		

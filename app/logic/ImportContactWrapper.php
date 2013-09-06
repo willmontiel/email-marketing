@@ -4,7 +4,11 @@ class ImportContactWrapper extends BaseWrapper
 {
 	protected $idContactlist;
 	protected $newcontact;
-
+	protected $idProccess;
+	
+	public function setIdProccess($idProccess) {
+		$this->idProccess = $idProccess;
+	}
 
 	public function setIdContactlist($idContactlist) {
 		$this->idContactlist = $idContactlist;
@@ -213,5 +217,15 @@ class ImportContactWrapper extends BaseWrapper
 
 			fclose($fp);
 		}
+		
+		$proccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
+		
+		$proccess->errorFile = $saveFileError->idImportfile;
+		$proccess->successFile = $saveFileSuccess->idImportfile;
+		
+		if(!$proccess->save()) {
+			throw new InvalidArgumentException("Error al crear el registro del proceso de importacion");
+		}
+		
 	}
 }
