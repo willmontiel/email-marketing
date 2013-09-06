@@ -72,5 +72,4 @@ class Account extends Modelbase
 	}
 			
            
-}
-    
+}   

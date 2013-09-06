@@ -8,7 +8,7 @@
 	<div class="span12"></div>	
 	
 	<div class="span5">	
-		<form action = "{{url('account/edit/')}}{{allAccountidAccount}}" id="registerAccount" method="post">
+		<form action = "{{url('account/edit/')}}{{allAccount.idAccount}}" id="registerAccount" method="post">
 			<p>
 				*Nombre de la cuenta: 
 				{{ editFormAccount.render('companyName') }}

@@ -76,7 +76,7 @@
 			<div class="span12">
 				<h4>Bloquear direcciones de correo</h4>
 				<p>
-					Aqui podrá bloquear direcciones de correo, Cuando bloque una direccion de
+					Aqui podrá bloquear direcciones de correo, Cuando bloquee una dirección de
 					correo, este se marcará como des-suscrito, y por consiguiente sera omitido de todas las listas y bases de datos de 
 					la cuenta al realizar una campaña de envío. 
 				</p>
@@ -93,23 +93,32 @@
 			</div>
 		</div>
 	</div>
-	<br>
 	<div class="row-fluid">
 		<div class="padded">
 			<div class="span4">
-				<form>
-					<label>*Dirección de correo electronico: </label>
-					<p>
-						{{ '{{view Ember.TextField valueBinding="email" placeholder="Escribe el Email aquí" required="required" autofocus="autofocus"}}' }}
-					</p>
-					<label>*Escriba la razón por la cual esta bloqueando esta dirección de correo electrónico: </label>
-					<p>
-						{{ '{{view Ember.TextArea valueBinding="blockedReason" placeholder="Escribe la razón de bloqueo" required="required"}}' }}
-					</p>
-					<p>Si estas seguro dale click al botón <strong>Bloquear</strong> para continuar.</p>
-					<button class="btn btn-danger" {{ '{{action block this }}' }}>Bloquear</button>
-					<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>
-				</form>
+				<div class="box">
+					<div class="box-header">
+						<div class="title">
+							Bloquear direccion de correo electrónico
+						</div>
+					</div>
+					<div class="box-content">
+						<div class="padded">
+							<form>
+								<label>*Dirección de correo electronico: </label>
+								{{ '{{view Ember.TextField valueBinding="email" placeholder="Escribe el Email aquí" required="required" autofocus="autofocus"}}' }}
+
+								<label>*Escriba la razón por la cual esta bloqueando esta dirección de correo electrónico: </label>
+								{{ '{{view Ember.TextArea valueBinding="blockedReason" placeholder="Escribe la razón de bloqueo" required="required"}}' }}
+
+								<p>Si estas seguro dale click al botón <strong>Bloquear</strong> para continuar.</p>
+								<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact"}}' }} Eliminar contactos asociados al email</p>
+								<button class="btn btn-danger" {{ '{{action block this }}' }}>Bloquear</button>
+								<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

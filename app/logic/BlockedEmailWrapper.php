@@ -202,11 +202,26 @@ class BlockedEmailWrapper extends BaseWrapper
 
 			try {
 				// Actualizar usando una transaccion
-				$wrapper->updateContact($email->idEmail, $updateContact, $transaction);
+				if($contents->delete_contact == null) {
+					$wrapper->updateContact($email->idEmail, $updateContact, $transaction);
 
-				// Commit
-				$transaction->commit();
+					// Commit
+					$transaction->commit();
+					$wrapper->endCounters();
+				}
 				
+				else {
+					$contact = Contact::findFirst(array(
+						"conditions" => "idEmail = ?1",
+						"bind" => array(1 => $email->idEmail)
+						)
+					);
+					
+					$db = Dbase::findFirstByIdDbase($contact->idDbase);
+					
+					$wrapper->deleteContactFromDB($contact, $db);
+					$transaction->commit();
+				}
 				$blockedJson = $this->convertBlockedEmailList($blocked);
 				return $blockedJson;
 			}

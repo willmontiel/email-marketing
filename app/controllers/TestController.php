@@ -93,9 +93,9 @@ class TestController extends ControllerBase
 		$email = "newone@newone.com";
 		$emailNew = "other@other.com";
 		
-		$this->setIdDbase(1156);
-		$this->setIdContactlist(9);
-		$this->setIdContactlistNew(10);
+		$this->setIdDbase(4);
+		$this->setIdContactlist(26);
+		$this->setIdContactlistNew(25);
 		
 		$log = $this->logger;
 		
@@ -361,7 +361,7 @@ class TestController extends ControllerBase
 		} else {
 			$wrapper->setIdContactlist($this->idContactlistNew);
 		}		
-		
+		$wrapper->startCounter();
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($this->idDbase);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
@@ -369,7 +369,7 @@ class TestController extends ControllerBase
 		$contact = $this->createContactObj($email, "", 1, "", "");
 		
 		try {
-				$contactC = $wrapper->searchContactinDbase($contact->email);
+				$contactC = $wrapper->addExistingContactToListFromDbase($contact->email);
 				if(!$contactC) {
 					$contactC = $wrapper->createNewContactFromJsonData($contact);
 				}
@@ -382,7 +382,7 @@ class TestController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return 	NULL;
 		}
-				
+		$wrapper->endCounters();		
 		return $contactC;
 	}
 

@@ -1,7 +1,8 @@
 App.Blockedemail = DS.Model.extend({
 	email: DS.attr('string'),
     blockedReason: DS.attr('string'),
-	blockedDate: DS.attr('string')
+	blockedDate: DS.attr('string'),
+	deleteContact: DS.attr('boolean')
 });
 
 //App.Blocked.FIXTURES = [
