@@ -85,7 +85,7 @@
 								<tr>
 									<th>Email</th>
 									<th>
-										<input type="hidden" value="{{nameFile}}" name="nameFile">
+										<input type="hidden" value="{{idImportproccess}}" name="idImportproccess">
 										<input type="hidden" value="{{idContactlist}}" name="idContactlist">
 										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="email" id="email" name="email"}}'}}
 									</th>
