@@ -107,10 +107,11 @@ class ContactsController extends ControllerBase
 		}
 		$batch = $this->session->get('batch_data');
 		
+		$wrapper = new ContactWrapper();
+		$wrapper->startCounter();
+		
 		foreach ($batch as $batchC) {
 			// Crear el nuevo contacto:
-			
-			$wrapper = new ContactWrapper();
 			$wrapper->setAccount($this->user->account);
 			$wrapper->setIdDbase($list->idDbase);
 			$wrapper->setIdContactlist($idContactlist);
@@ -141,13 +142,16 @@ class ContactsController extends ControllerBase
 				if(!$contact) {
 					$contact = $wrapper->createNewContactFromJsonData($newcontact);
 				}
+				//$wrapper->endCounters();
 			}
 			catch (\InvalidArgumentException $e) {
 				$log->log('Exception: [' . $e . ']');
 			}
 			catch (\Exception $e) {
 				$log->log('Exception: [' . $e . ']');
-			}				
+			}
+			
+			$wrapper->endCounters();
 		}
 		return $this->response->redirect("contactlist/show/$list->idContactlist#/contacts");
 	}
