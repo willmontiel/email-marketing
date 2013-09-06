@@ -26,15 +26,38 @@ class ContactWrapper extends BaseWrapper
 	public function __construct()
 	{
 		parent::__construct();
+		$this->counter = new ContactCounter();
+		$this->db = Phalcon\DI::getDefault()->get('db');
 		
 	}
 	
-	public function startCounter() {
-		$this->counter = new ContactCounter();
+//	public function startCounter() {
+//		$this->counter = new ContactCounter();
+//	}
+//	
+//	public function endCounters() {
+//		$this->counter->saveCounters();
+//	}
+	
+	public function startTransaction()
+	{
+		$this->db->begin();
 	}
 	
-	public function endCounters() {
+	public function endTransaction($cont = true)
+	{
+		$this->db->commit();
 		$this->counter->saveCounters();
+		
+		if($cont) {
+			$this->db->begin();
+			$this->counter = new ContactCounter();
+		}
+	}
+	
+	public function rollbackTransaction()
+	{
+		$this->db->rollback("It can't GO!");
 	}
 
 	public function setIdDbase($idDbase)
@@ -85,7 +108,8 @@ class ContactWrapper extends BaseWrapper
 			} else {
 				$this->counter->updateContact($oldContact, $contact);
 			}
-		}			
+		}
+		$this->counter->saveCounters();
 	}
 
 	public function updateContactFromJsonData($idContact, $data)
@@ -136,7 +160,8 @@ class ContactWrapper extends BaseWrapper
 			$this->assignDataToCustomField($data);
 			
 			$this->counter->updateContact($oldContact, $this->contact);
-						
+			
+			$this->counter->saveCounters();			
 		}			
 		
 		return $this->contact;
@@ -159,6 +184,7 @@ class ContactWrapper extends BaseWrapper
 				$this->counter->deleteContactFromDbase($contact);
 			}
 		}
+		$this->counter->saveCounters();
 	}
 	
 	public function deleteContactFromDB($contact, $db)
@@ -184,7 +210,7 @@ class ContactWrapper extends BaseWrapper
 		if($contact->delete()) {
 			$this->counter->deleteContactFromDbase($contact);			
 		}
-		
+		$this->counter->saveCounters();
 	}
 
 	public function addExistingContactToListFromDbase($email)
@@ -199,6 +225,7 @@ class ContactWrapper extends BaseWrapper
 				$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idContactlist = $this->idContactlist");
 				if (!$existList){
 					$this->associateContactToList($this->idContactlist, $existContact->idContact);
+					$this->counter->saveCounters();
 					
 					return $existContact;
 				}
@@ -225,7 +252,8 @@ class ContactWrapper extends BaseWrapper
 			else {
 				$this->addContact($data);
 			}
-
+			$this->counter->saveCounters();
+			
 			return $this->contact;
 		}
 		
@@ -300,7 +328,7 @@ class ContactWrapper extends BaseWrapper
 			$this->associateContactToList($this->idContactlist, $this->contact->idContact);
 			
 			$this->assignDataToCustomField($data);
-
+			
 		}
 	}
 	

@@ -199,7 +199,6 @@ class BlockedEmailWrapper extends BaseWrapper
 			
 			$updateContact = array('unsubscribed' => time());
 			$wrapper = new ContactWrapper();
-			$wrapper->startCounter();
 
 			try {
 				// Actualizar usando una transaccion
@@ -207,7 +206,6 @@ class BlockedEmailWrapper extends BaseWrapper
 
 				// Commit
 				$transaction->commit();
-				$wrapper->endCounters();
 				
 				$blockedJson = $this->convertBlockedEmailList($blocked);
 				return $blockedJson;

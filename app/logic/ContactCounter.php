@@ -270,7 +270,7 @@ class ContactCounter
 	{
 		$oper = $this->assignDataToUpdateContact($oldcontact, $newcontact);
 				
-		if(!isset($this->$counterDB[$newcontact->idDbase])) {
+		if(!isset($this->counterDB[$newcontact->idDbase])) {
 			$this->counterDB[$newcontact->idDbase] = $oper;
 		} else {
 			$oper = $this->newContact($contact);
