@@ -1,58 +1,59 @@
 <script type="text/x-handlebars" data-template-name="blockedemails/index">
 	<div class="row-fluid">
-		<div class="span12"></div>
-	</div>
-	<div class="row-fluid">
-		<div class="span10">
-			<p>
-				Esta es la lista global de direcciones de correo electrónico bloqueados, ninguna dirección de correo
-				que esté listada abajo, esta recibiendo campañas de envío.
-			</p>
-		</div>
-		<div class="span2 text-right">
+		<div class="span12 text-right">
 			{{ '{{#linkTo "blockedemails.block" }}' }}<button class="btn btn-danger">Bloquear</button>{{ '{{/linkTo}}' }}
 		</div>
 	</div>
-	<br>
 	<div class="row-fluid">
 		<div class="span12">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class="span3">
-							Email
-						</th>
-						<th class="span3">
-							Fecha
-						</th>
-						<th class="span5">
-							Razón de bloqueo
-						</th>
-						<th class="span1">
-							Acciones
-						</th>
-					</tr>
-				</thead>
-				</tbody>
-					{{ '{{#each model}}' }}
-						<tr>
-							<td>{{ '{{email}}' }}</td>
-							<td>{{'{{blockedDate}}' }}</td>
-							<td>{{ '{{blockedReason}}'}}</td>
-							<td>
-								{{'{{#linkTo "blockedemails.unblock" this}}'}} Desbloquear {{'{{/linkTo}}'}}
-							</td>
-						</tr>
-					{{ '{{/each }}' }}
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<div class="row-fluid">
-		{{ partial("partials/pagination_partial") }}
-		<div class="span4 text-right">
-			<br>
-			{{ '{{#linkTo "blockedemails.block" }}' }}<button class="btn btn-danger">Bloquear</button>{{ '{{/linkTo}}' }}
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Bloquear dirección de correo electrónico
+					</div>
+				</div>
+				<div class="box-content">
+					<div class="padded">
+						<p>
+							Esta es la lista global de direcciones de correo electrónico bloqueados, ninguna dirección de correo
+							que esté listada abajo, esta recibiendo campañas de envío.
+						</p>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th class="span3">
+										Email
+									</th>
+									<th class="span3">
+										Fecha
+									</th>
+									<th class="span5">
+										Razón de bloqueo
+									</th>
+									<th class="span1">
+										Acciones
+									</th>
+								</tr>
+							</thead>
+							</tbody>
+								{{ '{{#each model}}' }}
+									<tr>
+										<td>{{ '{{email}}' }}</td>
+										<td>{{'{{blockedDate}}' }}</td>
+										<td>{{ '{{blockedReason}}'}}</td>
+										<td>
+											{{'{{#linkTo "blockedemails.unblock" this}}'}} Desbloquear {{'{{/linkTo}}'}}
+										</td>
+									</tr>
+								{{ '{{/each }}' }}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="box-footer">
+					{{ partial("partials/pagination_partial") }}
+				</div>
+			</div>
 		</div>
 	</div>
 </script>
