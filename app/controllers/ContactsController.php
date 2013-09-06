@@ -142,7 +142,6 @@ class ContactsController extends ControllerBase
 				if(!$contact) {
 					$contact = $wrapper->createNewContactFromJsonData($newcontact);
 				}
-				//$wrapper->endCounters();
 			}
 			catch (\InvalidArgumentException $e) {
 				$log->log('Exception: [' . $e . ']');
@@ -150,9 +149,10 @@ class ContactsController extends ControllerBase
 			catch (\Exception $e) {
 				$log->log('Exception: [' . $e . ']');
 			}
-			
-			$wrapper->endCounters();
 		}
+		
+		$wrapper->endCounters();
+		
 		return $this->response->redirect("contactlist/show/$list->idContactlist#/contacts");
 	}
 	
