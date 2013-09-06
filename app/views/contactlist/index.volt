@@ -17,15 +17,7 @@
 			description: DS.attr('string'),
 			
 			isDbaseSelected: function() {
-				App.fieldObjects = [];
-				for(var i=0; i<{{totalFields}}; i++) {
-				
-				}
-				
-				App.fieldObjects[ ..idDBase.. ] = [
-					// Por cada uno de los customfields de esa base de datos:
-					{ id: ..nombre del campo codificado.., label: ..nombre del campo... }
-				];
+				return true;
 			}.property('criteria')
 		};
 	</script>
