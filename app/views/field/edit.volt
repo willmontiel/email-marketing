@@ -1,1 +1,1 @@
-<p>{{view Ember.TextField valueBinding='field.name'}}</p>
+<p>{{view Ember.TextField valueBinding='field.idCustomField'}}</p>

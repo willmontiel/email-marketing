@@ -194,7 +194,7 @@ class ContactWrapper extends BaseWrapper
 			}
 		}
 		
-		$customfields = $customfields = Fieldinstance::findByIdContact($contact->idContact);
+		$customfields = Fieldinstance::findByIdContact($contact->idContact);
 		
 		foreach ($customfields as $field){
 			$field->delete();
@@ -401,10 +401,10 @@ class ContactWrapper extends BaseWrapper
 			$fieldinstance->idCustomField = $field->idCustomField;
 			$fieldinstance->idContact = $this->contact->idContact;
 			if ($field->type == "Date") {
-				$name = strtolower($field->name);
+				$name = "campo".$field->idCustomField;
 				$fieldinstance->numberValue = $data->$name;
 			} else {
-				$name = strtolower($field->name);
+				$name = "campo".$field->idCustomField;
 				$fieldinstance->textValue = $data->$name;
 			}
 			if(!$fieldinstance->save()) {
@@ -578,7 +578,7 @@ class ContactWrapper extends BaseWrapper
 		
 		foreach ($customfields as $field) {
 			$valuefield = Fieldinstance::findFirst("idCustomField = $field->idCustomField AND idContact = $contact->idContact");
-			$object[strtolower($field->name)] = $valuefield->textValue;
+			$object["campo".$field->idCustomField] = $valuefield->textValue;
 		}
 		
 		return $object;

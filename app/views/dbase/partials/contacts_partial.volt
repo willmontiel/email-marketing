@@ -199,7 +199,7 @@
 						</p>
 						<!-- Campos Personalizados -->
 							{%for field in fields%}
-								<p><label for="{{field.name}}">{{field.name}}:</label></p>
+								<p><label for="campo{{field.idCustomField}}">{{field.name}}:</label></p>
 								<p>{{ember_customfield(field)}}</p>
 								{% if (field.type == "Text") %}
 									Maximo {{field.maxLength}} caracteres
@@ -266,7 +266,7 @@
 				</p>
 				<!-- Campos Personalizados -->
 							{%for field in fields%}
-								<p><label for="{{field.name}}">{{field.name}}:</label></p>
+								<p><label for="campo{{field.idCustomField}}">{{field.name}}:</label></p>
 								<p>{{ember_customfield(field)}}</p>
 								{% if (field.type == "Text") %}
 									Maximo {{field.maxLength}} caracteres
@@ -337,7 +337,7 @@
 				{%for field in fields%}
 				<tr>
 					<td>{{field.name}}</td>
-					<td>{{'{{'~field.name|lower~'}}'}}</td>
+					<td>{{'{{campo'~field.idCustomField~'}}'}}</td>
 				</tr>
 				{%endfor%}
 			</table>

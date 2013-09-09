@@ -16,7 +16,7 @@
 		delimiter: DS.attr( 'string' )
 		{%for field in customfields%}
 			,
-			{{field.name|lower }}: DS.attr('string')
+			campo{{field.idCustomField }}: DS.attr('string')
 		{%endfor%}
 	};
 </script>
@@ -106,7 +106,7 @@
 								<tr>		
 									<th>{{field.name}}</th>
 									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" class="uniform" valueBinding="'~field.name|lower~'" id="'~field.name|lower~'" name="'~field.name|lower~'"}}'}}
+										{{'{{ view Ember.Select contentBinding="App.options" class="uniform" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'"}}'}}
 						
 									</th>
 								</tr>
@@ -146,7 +146,7 @@
 						{%for field in customfields%}
 							<tr>
 								<th>{{field.name}}: </th>
-								<th>{{'{{'~field.name|lower~'}}'}}</th>
+								<th>{{'{{campo'~field.idCustomField~'}}'}}</th>
 							
 							</tr>
 						{%endfor%}

@@ -4,7 +4,7 @@ class CreateViewEmber
 {
 	public static function createField(Customfield $field)
 	{
-		$fieldname = strtolower($field->name);
+		$fieldname = "campo".$field->idCustomField;
 		switch ($field->type) {
 			case "Text":
 			case "Date":
@@ -48,7 +48,7 @@ class CreateViewEmber
 		//
 		$resultado = '';
 		if ($field->type == 'Select' || $field->type == 'MultiSelect') {
-			$oname = strtolower($field->name) . '_options';
+			$oname = "campo" . $field->idCustomField . '_options';
 			$resultado = 'App.' . $oname . ' = [' . PHP_EOL;
 			$valores = explode(',', $field->values);
 			$valores = array_merge(array($field->defaultValue), $valores);

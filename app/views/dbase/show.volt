@@ -30,17 +30,17 @@
 			{%for field in fields%}
 			,
 				{% if field.type == "Text" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% elseif field.type == "Date" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% elseif field.type == "TextArea" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% elseif field.type == "Numerical" %}
-					{{field.name|lower }}: DS.attr('number')
+					campo{{field.idCustomField }}: DS.attr('number')
 				{% elseif field.type == "Select" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% elseif field.type == "MultiSelect" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% endif %}
 			
 			{%endfor%}

@@ -37,17 +37,17 @@
 		{%for field in fields%}
 			,
 				{% if field.type == "Text" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% elseif field.type == "Date" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% elseif field.type == "TextArea" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% elseif field.type == "Numerical" %}
-					{{field.name|lower }}: DS.attr('number')
+					campo{{field.idCustomField }}: DS.attr('number')
 				{% elseif field.type == "Select" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% elseif field.type == "MultiSelect" %}
-					{{field.name|lower }}: DS.attr('string')
+					campo{{field.idCustomField }}: DS.attr('string')
 				{% endif %}
 			
 			{%endfor%}
@@ -162,7 +162,7 @@
 							{{'{{view Ember.TextField valueBinding="lastName"}}'}}
 							<!-- Campos Personalizados -->
 							{%for field in fields%}
-								<label for="{{field.name}}">{{field.name}}:</label>
+								<label for="campo{{field.idCustomField }}">{{field.name}}:</label>
 								{{ember_customfield(field)}}
 								{% if (field.type == "Text") %}
 									Maximo {{field.maxLength}} caracteres
@@ -334,7 +334,7 @@
 				{%for field in fields%}
 				<tr>
 					<td>{{field.name}}</td>
-					<td>{{'{{'~field.name|lower~'}}'}}</td>
+					<td>{{'{{campo'~field.idCustomField~'}}'}}</td>
 				</tr>
 				{%endfor%}
 			</table>

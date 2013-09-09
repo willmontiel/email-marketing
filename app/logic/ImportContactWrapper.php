@@ -155,7 +155,7 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$numfield = 3;
 		foreach ($customfields as $field) {
-			$namefield= strtolower($field->name);
+			$namefield= "campo".$field->idCustomField;
 			$this->newcontact->$namefield = $linew[$posCol[$numfield]];
 			$numfield++;
 		}
