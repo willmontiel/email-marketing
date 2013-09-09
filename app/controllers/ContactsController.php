@@ -274,8 +274,8 @@ class ContactsController extends ControllerBase
 		
 		$numfield = 3;
 		foreach ($customfields as $field) {
-			$namefield= $field->name;
-			$fields[$numfield] = $this->request->getPost(strtolower($namefield));
+			$namefield= "campo".$field->idCustomField;
+			$fields[$numfield] = $this->request->getPost($namefield);
 			$numfield++;
 		}
 				
