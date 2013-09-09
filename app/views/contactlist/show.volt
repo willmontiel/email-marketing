@@ -477,7 +477,7 @@
 			  </a>
 			</div>
 			<div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
-				<div class="accordion-inner">
+				<div class="accordion-inner box">
 					<p>
 						Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc 
 						permiten crear y editar archivos CSV fácilmente.
@@ -505,7 +505,7 @@
 										<tbody>
 											<tr class="status-pending">
 												<td>Cabecera</td>
-												<td style="text-align: center;"><strong>Email</strong></td>
+												<td><strong>Email</strong></td>
 											</tr>
 											<tr class="status-pending">
 												<td>Datos de contactos</td>
@@ -554,6 +554,32 @@
 						<div class="span6">
 							<div class="box">
 								<div class="box-header">
+									<span class="title">Archivo .csv con cabecera</span>				
+								</div>
+								<div class="box-content">
+									<table class="table table-normal">
+										<thead></thead>
+										<tbody>
+											<tr class="status-pending">
+												<td>Cabecera</td>
+												<td><strong>Email, Nombre, Apellido</strong></td>
+											</tr>
+											<tr class="status-pending">
+											  <td>Datos de contactos</td>
+											  <td>micorreo@noreply.com, Antonio, Lopez</td>
+											</tr>
+											<tr class="status-pending">
+											  <td></td>
+											  <td>micorreo2@noreply.com, Luz María, Rodriguez</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="span6">
+							<div class="box">
+								<div class="box-header">
 									<span class="title">Archivo .csv sin cabecera</span>				
 								</div>
 								<div class="box-content">
@@ -573,43 +599,11 @@
 							  </div>
 							</div>
 						</div>
-						<div class="span6">
-							<div class="box">
-								<div class="box-header">
-									<span class="title">Archivo .csv con cabecera</span>				
-								</div>
-								<div class="box-content">
-									<table class="table table-normal">
-										<thead></thead>
-										<tbody>
-											<tr class="status-pending">
-												<td>Cabecera</td>
-												<td style="text-align: center;"><strong>Email</strong></td>
-												<td style="text-align: center;"><strong>Nombre</strong></td>
-												<td style="text-align: center;"><strong>Apellido</strong></td>
-											</tr>
-											<tr class="status-pending">
-											  <td>Datos de contactos</td>
-											  <td>micorreo@noreply.com</td>
-											  <td>Antonio</td>
-											  <td>Lopez</td>
-											</tr>
-											<tr class="status-pending">
-											  <td></td>
-											  <td>micorreo2@noreply.com</td>
-											  <td>Luz María</td>
-											  <td>Rodriguez</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
 					</div>
 					<p>
 						Una vez que haya introducido todos los contactos en una tabla, guarde el documento y seleccione CSV (delimitado por comas) 
 						(*.csv) como el tipo de archivo que desea guardar.
-						Una vez que haya guardado el archivo, y este seguro de haber seguido los criterios anterios puede pasar a importar sus contactos a la aplicación.
+						Una vez que haya guardado el archivo, y este seguro de haber seguido los criterios anteriores puede pasar a importar sus contactos a la aplicación.
 					</p>
 				</div>
 			</div>

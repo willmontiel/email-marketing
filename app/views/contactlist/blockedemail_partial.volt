@@ -110,9 +110,8 @@
 
 								<label>*Escriba la razón por la cual esta bloqueando esta dirección de correo electrónico: </label>
 								{{ '{{view Ember.TextArea valueBinding="blockedReason" placeholder="Escribe la razón de bloqueo" required="required"}}' }}
-
 								<p>Si estas seguro dale click al botón <strong>Bloquear</strong> para continuar.</p>
-								<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact"}}' }} Eliminar contactos asociados al email</p>
+								<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact" class="icheck"}}' }} Eliminar contactos asociados al email</p>
 								<button class="btn btn-danger" {{ '{{action block this }}' }}>Bloquear</button>
 								<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>
 							</form>

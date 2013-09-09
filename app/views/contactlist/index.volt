@@ -79,7 +79,7 @@
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li>{{ '{{#linkTo "lists.edit" this}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
-										<li><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts"><i class="icon-search"></i> Ver detalles</a></li>
+										<li><a href="{{url('contactlist/show/')}}{{ '{{unbound id}}' }}#/contacts"><i class="icon-search"></i> Ver detalles</a></li>
 										<li>{{ '{{#linkTo "lists.delete" this}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}</li>
 									</ul>
 								</div>

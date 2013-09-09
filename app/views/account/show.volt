@@ -1,53 +1,64 @@
-{% extends "templates/index.volt" %}
-
+{% extends "templates/index_new.volt" %}
+{% block sectiontitle %}<i class="icon-user-md"></i> Informacion de usuarios de cuentas{%endblock%}
 {% block content %}
 {{ content() }}
-<div class="row-fluid">
-		<h1>Informacion de usuarios de cuentas</h1>
-</div>
-	
+<div class="container-fluid padded">
 	<div class="text-right">
-		<h3><a href="{{ url('account/new') }}" >Crear nuevo usuario</a></h3>
+		<a href="#" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
 	</div>
+	<br />
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Listado de usuarios por cuenta
+					</div>
+				</div>
+				<div class="box-content">
+					<table class='table table-normal'>
+						<thead>
+							<tr>
+								<td>Id</td>
+								<td>Nombres</td>
+								<td>Apellidos</td>
+								<td>Nombre de usuario</td>
+								<td>E-Mail</td>
+								<td>Tipo de usuario</td>
+								<td>Fecha de registro</td>
+								<td>Última actualización</td>
+							</tr>
+						</thead>
+					{%for all in allUser%}
+						<tbody>
+							<tr>
+								<td>{{all.idUser}}</td>
+								<td>{{all.firstName}}</td>
+								<td>{{all.lastName}}</td>
+								<td>{{all.username}}</td>
+								<td>{{all.email}}</td>
+								<td>{{all.userrole}}</td>
+								<td>{{all.createdon}}</td>
+								<td>{{all.updatedon}}</td>
+								<td>
+									<a href="#">Editar</a><br>
+									<a href="#" data-toggle="modal">Eliminar</a>
+								</td>
+							</tr>
+						</tbody>
+					{%endfor%}
+					</table>
+				</div>
+			</div>
 
-<div class="row-fluid">
-	<div class="span12">
-		<table class='table table-striped'>
-			<tr>
-				<th>Id</th>
-				<th>Nombres</th>
-				<th>Apellidos</th>
-				<th>Nombre de usuario</th>
-				<th>E-Mail</th>
-				<th>Tipo de usuario</th>
-				<th>Fecha de registro</th>
-				<th>Última actualización</th>
-			</tr>
-			
-		{%for all in allUser%}
-			<tr>
-				<td>{{all.idUser}}</td>
-				<td>{{all.firstName}}</td>
-				<td>{{all.lastName}}</td>
-				<td>{{all.username}}</td>
-				<td>{{all.email}}</td>
-				<td>{{all.userrole}}</td>
-				<td>{{all.createdon}}</td>
-				<td>{{all.updatedon}}</td>
-				<td>
-					<a href="#">Editar</a><br>
-					<a href="#" data-toggle="modal">Eliminar</a>
-				</td>
-			</tr>
-		{%endfor%}
-		</table>
-	</div>
-	
-	<div class="span12"></div>
-	<div class="text-right">
-		<p>
-			<a href="{{ url('account') }}" class="btn btn-inverse">Regresar</a>
-		</p>
+		</div>
+
+		<div class="span12"></div>
+		<div class="text-right">
+			<p>
+				<a href="{{ url('account') }}" class="btn btn-inverse">Regresar</a>
+			</p>
+		</div>
 	</div>
 </div>
 {% endblock %}
