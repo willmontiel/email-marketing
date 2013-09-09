@@ -209,15 +209,16 @@ class BlockedEmailWrapper extends BaseWrapper
 				}
 				
 				else {
-					$contact = Contact::findFirst(array(
+					$contacts = Contact::find(array(
 						"conditions" => "idEmail = ?1",
 						"bind" => array(1 => $email->idEmail)
 						)
 					);
 					
-					$db = Dbase::findFirstByIdDbase($contact->idDbase);
-					
-					$wrapper->deleteContactFromDB($contact, $db);
+					foreach ($contacts as $contact){
+						$db = Dbase::findFirstByIdDbase($contact->idDbase);
+						$wrapper->deleteContactFromDB($contact, $db);
+					}
 					$transaction->commit();
 				}
 				$blockedJson = $this->convertBlockedEmailList($blocked);

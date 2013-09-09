@@ -16,8 +16,6 @@ class ImportContactWrapper extends BaseWrapper
 	
 	public function startImport($fields, $destiny, $delimiter) {
 		
-		$db = Phalcon\DI::getDefault()->get('db');
-		
 		$success = array();
 		$errors = array();
 		$total = 0;
@@ -39,15 +37,15 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$wrapper = new ContactWrapper();
 		
-		$db->begin();
-		
-		$wrapper->startCounter();
+		$wrapper->setAccount($this->account);
+		$wrapper->setIdDbase($list->idDbase);
+		$wrapper->setIdContactlist($this->idContactlist);
+		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
+
+		$wrapper->startTransaction();
 		
 		while(! feof($open)) {
-			$wrapper->setAccount($this->account);
-			$wrapper->setIdDbase($list->idDbase);
-			$wrapper->setIdContactlist($this->idContactlist);
-			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
+
 
 			$this->newcontact = new stdClass();
 			
@@ -56,9 +54,9 @@ class ImportContactWrapper extends BaseWrapper
 			array_push($success, $linew);
 			
 			try {
-				$contact = $wrapper->addExistingContactToListFromDbase($this->newcontact->email);
+				$contact = $wrapper->addExistingContactToListFromDbase($this->newcontact->email, false);
 				if(!$contact) {
-					$contact = $wrapper->createNewContactFromJsonData($this->newcontact);
+					$contact = $wrapper->createNewContactFromJsonData($this->newcontact, false);
 				}
 			}
 			catch (\InvalidArgumentException $e) {
@@ -88,7 +86,7 @@ class ImportContactWrapper extends BaseWrapper
 				
 			}
 			catch (\Exception $e) {
-				$db->rollback();
+				$wrapper->rollbackTransaction();
 			}			 
 			
 			$total++;
@@ -99,18 +97,12 @@ class ImportContactWrapper extends BaseWrapper
 			$cantTrans++;
 			
 			if($cantTrans == 100){
-				$db->commit();				
-				$wrapper->endCounters();
-				
-				$db->begin();
-				$wrapper->startCounter();
+				$wrapper->endTransaction();
 				
 				$cantTrans = 0;
 			}
 		}
-
-		$db->commit();				
-		$wrapper->endCounters();
+		$wrapper->endTransaction(false);
 		
 		$this->createReports($errors, $success);
 		

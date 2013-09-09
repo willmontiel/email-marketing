@@ -31,14 +31,6 @@ class ContactWrapper extends BaseWrapper
 		
 	}
 	
-//	public function startCounter() {
-//		$this->counter = new ContactCounter();
-//	}
-//	
-//	public function endCounters() {
-//		$this->counter->saveCounters();
-//	}
-	
 	public function startTransaction()
 	{
 		$this->db->begin();
@@ -57,7 +49,7 @@ class ContactWrapper extends BaseWrapper
 	
 	public function rollbackTransaction()
 	{
-		$this->db->rollback("It can't GO!");
+		$this->db->rollback();
 	}
 
 	public function setIdDbase($idDbase)
@@ -106,6 +98,7 @@ class ContactWrapper extends BaseWrapper
 				}
 				throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
 			} else {
+				Phalcon\DI::getDefault()->get('logger')->log("El estado del viejo contacto: " . $oldContact->unsubscribed . " y el del nuevo es: " . $contact->unsubscribed);
 				$this->counter->updateContact($oldContact, $contact);
 			}
 		}
@@ -213,7 +206,7 @@ class ContactWrapper extends BaseWrapper
 		$this->counter->saveCounters();
 	}
 
-	public function addExistingContactToListFromDbase($email)
+	public function addExistingContactToListFromDbase($email, $saveCounters = true)
 	{
 		$idAccount = $this->account->idAccount;
 		
@@ -222,19 +215,22 @@ class ContactWrapper extends BaseWrapper
 		if ($existEmail && !$this->findEmailBlocked($existEmail)) {
 			$existContact = Contact::findFirstByIdEmail($existEmail->idEmail);
 			if($existContact){
-				$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idContactlist = $this->idContactlist");
-				if (!$existList){
-					$this->associateContactToList($this->idContactlist, $existContact->idContact);
-					$this->counter->saveCounters();
-					
-					return $existContact;
+				if($existContact->idDbase == $this->idDbase){
+					$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idContactlist = $this->idContactlist");
+					if (!$existList){
+						$this->associateContactToList($this->idContactlist, $existContact->idContact);
+						if($saveCounters)
+							$this->counter->saveCounters();
+
+						return $existContact;
+					}
 				}
 			}
 		}
 		return false;
 	}
 	
-	public function createNewContactFromJsonData($data)
+	public function createNewContactFromJsonData($data, $saveCounters = true)
 	{
 		//Validar que al crear un email no exceda el limite de emails en la cuenta
 		$total = $this->account->countActiveContactsInAccount();
@@ -252,7 +248,8 @@ class ContactWrapper extends BaseWrapper
 			else {
 				$this->addContact($data);
 			}
-			$this->counter->saveCounters();
+			if($saveCounters)
+				$this->counter->saveCounters();
 			
 			return $this->contact;
 		}

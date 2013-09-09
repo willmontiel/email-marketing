@@ -214,7 +214,7 @@ class ContactCounter
 		 *
 		 */
 
-		if($newcontact->spam != $oldcontact->spam) {
+		if($newcontact->spam != $oldcontact->spam && ($newcontact->spam == 0 || $oldcontact->spam == 0)) {
 			
 			$oper["Cspam"] = ($newcontact->spam != 0)?1:-1;
 			if($oper["Cspam"] == 1){
@@ -234,7 +234,7 @@ class ContactCounter
 					}
 				}
 			}
-		} elseif ($newcontact->bounced != $oldcontact->bounced && $newcontact->spam == 0) {
+		} elseif ($newcontact->bounced != $oldcontact->bounced && $newcontact->spam == 0 && ($newcontact->bounced == 0 || $oldcontact->bounced == 0)) {
 			
 			$oper["Cbounced"] = ($newcontact->bounced != 0)?1:-1;
 			if($oper["Cbounced"] == 1) {
@@ -249,7 +249,7 @@ class ContactCounter
 				}
 			}
 			
-		} elseif ($newcontact->unsubscribed != $oldcontact->unsubscribed && $newcontact->bounced == 0 && $newcontact->spam == 0) {
+		} elseif ($newcontact->unsubscribed != $oldcontact->unsubscribed && $newcontact->bounced == 0 && $newcontact->spam == 0 && ($newcontact->unsubscribed == 0 || $oldcontact->unsubscribed == 0)) {
 			
 			$oper["Cunsubscribed"] = ($newcontact->unsubscribed != 0)?1:-1;
 			if($oper["Cunsubscribed"] == 1) {
@@ -258,7 +258,7 @@ class ContactCounter
 				$oper["Cactive"] = ($newcontact->status != 0)?1:0;
 			}
 			
-		} elseif($newcontact->status != $oldcontact->status && $newcontact->bounced == 0 && $newcontact->spam == 0 && $newcontact->unsubscribed ==0) {
+		} elseif($newcontact->status != $oldcontact->status && $newcontact->bounced == 0 && $newcontact->spam == 0 && $newcontact->unsubscribed ==0 && ($newcontact->status == 0 || $oldcontact->status == 0)) {
 			
 			$oper["Cactive"] = ($newcontact->status != 0)?1:-1;
 

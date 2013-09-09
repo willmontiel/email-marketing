@@ -470,7 +470,7 @@ class ApiController extends ControllerBase
 		$db = Dbase::findFirstByIdDbase($idDbase);
 		
 		if (!$contact || $contact->dbase->idDbase != $db->idDbase || $contact->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
 		}
 		
 		// Eliminar el Contacto de la Base de Datos
@@ -789,7 +789,7 @@ class ApiController extends ControllerBase
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
 		}
 		
 		// Eliminar el Contacto de la Lista
