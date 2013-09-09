@@ -67,6 +67,9 @@
 {% endblock %}
 
 {% block sectiontitle %}Lista: <strong>{{datalist.name}}</strong>{% endblock %}
+{% block sectionContactLimit %}
+	{{ partial("partials/contactlimitinfo_partial") }}
+{%endblock%}
 {%block sectionsubtitle %}{{datalist.description}}{% endblock %}
 	
 {% block content %}

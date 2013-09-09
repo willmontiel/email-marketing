@@ -9,7 +9,6 @@ class AccountController extends ControllerBase
 		
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 
-		
 		$builder = $this->modelsManager->createBuilder()
 			->from('Account')
 			->orderBy('idAccount');
@@ -21,8 +20,8 @@ class AccountController extends ControllerBase
 		));
 		
 		$page = $paginator->getPaginate();
+		
 		$this->view->setVar("page", $page);
-//		$this->view->setVar("allAccount", $account);
 		
 	}
 	

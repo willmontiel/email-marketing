@@ -33,6 +33,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 				if ($user && $this->security2->checkHash($password, $user->password)) {
 					$this->session->set('userid', $user->idUser);
 					$this->session->set('authenticated', true);
+					
 
 					return $this->response->redirect("");
 

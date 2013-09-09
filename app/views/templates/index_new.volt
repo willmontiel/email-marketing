@@ -233,14 +233,13 @@
 		<div class="main-content">
 			<div class="container-fluid">
 				<div class="row-fluid">
-
 					<div class="area-top clearfix">
 						<div class="pull-left header">
 							<h3 class="title">
 								{% block sectiontitle %}<i class="icon-dashboard"></i>{% endblock %}
-						</h3>
-						  </div>
-
+							</h3>
+						</div>	
+						{% block sectionContactLimit %}{% endblock %}
 					</div>
 				</div>
 			</div>

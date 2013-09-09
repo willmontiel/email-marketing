@@ -21,9 +21,28 @@
 			}.property('criteria')
 		};
 	</script>
+	<script type="text/javascript">
+		var showcontactsinfo = Ember.View.create({
+			templateName: 'show-contacts-info',
+			numero: 0
+		});
+		
+		$(function (){
+			showcontactsinfo.appendTo('#x-view');
+			setInterval(function() {
+				//
+				showcontactsinfo.set('numero', showcontactsinfo.get('numero') + 1);
+			}, 5000);
+		});
+	</script>
 	{{ javascript_include('js/app_segment.js') }}
 {% endblock %}
-{% block sectiontitle %}<i class="icon-user"></i> Contactos{%endblock%}
+{% block sectiontitle %}
+	<i class="icon-user"></i> Contactos
+{% endblock %}
+{% block sectionContactLimit %}
+	{{ partial("partials/contactlimitinfo_partial") }}
+{%endblock%}
 {%block sectionsubtitle %}Administre sus bases de datos de contactos{% endblock %}
 {% block content %}
 	<div id="emberApplistContainer">

@@ -30,9 +30,9 @@ class DbaseController extends ControllerBase
 		$r = $this->verifyAcl('dbase', 'list', '');
 		if ($r)
 			return $r;
+		
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
-		//$this->request->getPost('page', 'int'); // POST
-	
+		
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
 				"data"  => $this->user->account->dbases,
@@ -42,9 +42,8 @@ class DbaseController extends ControllerBase
 		);
 		
 		$page = $paginator->getPaginate();
-		$this->view->setVar("page", $page);
 		
-//		$this->view->setVar("dbases", $this->user->account->dbases);
+		$this->view->setVar("page", $page);
     }
     
     public function newAction()

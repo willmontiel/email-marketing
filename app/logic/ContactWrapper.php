@@ -233,9 +233,7 @@ class ContactWrapper extends BaseWrapper
 	public function createNewContactFromJsonData($data, $saveCounters = true)
 	{
 		//Validar que al crear un email no exceda el limite de emails en la cuenta
-		$total = $this->account->countActiveContactsInAccount();
-		
-		if($total >= $this->account->contactLimit) {
+		if ($this->account->accountingMode == 'Contacto' && $this->account->countActiveContactsInAccount() >= $this->account->contactLimit) {
 			$this->addFieldError('email', 'Ha sobrepasado el limite de contactos: [' . $this->account->contactLimit .  ']');
 			throw new \InvalidArgumentException('Ha sobrepasado el limite de contactos: [' . $this->account->contactLimit .  ']', 3);
 		}
