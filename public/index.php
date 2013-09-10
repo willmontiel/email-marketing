@@ -15,6 +15,15 @@ try {
 
     //Create a DI
     $di = new Phalcon\DI\FactoryDefault();
+	
+	// Create timer object
+	$timer = new TimerObject();
+	// Start counting
+	$timer->startTimer('app', 'The whole app');
+	
+	$di->set('timerObject', $timer);
+	
+	
 
 	/* Configuracion */
 	$config = new \Phalcon\Config\Adapter\Ini("../app/config/configuration.ini");
@@ -80,19 +89,22 @@ try {
 		// Events Manager para la base de datos
 		$eventsManager = new \Phalcon\Events\Manager();
 		
-		if ($config->general->profiledb) {
+//		if ($config->general->profiledb) {
 			// Profiler
 			$profiler = $di->get('profiler');
+			$timer = $di->get('timerObject');
 
-			$eventsManager->attach('db', function ($event, $connection) use ($profiler) {
+			$eventsManager->attach('db', function ($event, $connection) use ($profiler, $timer) {
 				if ($event->getType() == 'beforeQuery') {
 					$profiler->startProfile($connection->getSQLStatement());
+					$timer->startTimer('SQL', 'Query Execution');
 				}
 				else if ($event->getType() == 'afterQuery') {
 					$profiler->stopProfile();
+					$timer->endTimer('SQL');
 				}
 			});
-		}
+//		}
 		
         $connection = new \Phalcon\Db\Adapter\Pdo\Mysql($config->database->toArray());
 		
@@ -206,6 +218,12 @@ try {
     $application = new \Phalcon\Mvc\Application($di);
 
     echo $application->handle()->getContent();
+
+	// Finalizar timer
+	$timer->endTimer('app');
+	
+	// Grabar en el log
+	$di->get('logger')->log($timer);
 	
 	// Grabar en LOG toda la ejecucion de SQL del profiler
 	// Solamente si esta configurado asi

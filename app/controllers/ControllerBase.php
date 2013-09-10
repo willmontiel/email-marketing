@@ -59,5 +59,17 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		$this->response->setContent($content);
 		return $this->response;
 	}
+	
+	
+	public function beforeExecuteRoute($dispatcher)
+	{
+		$this->timerObject->startTimer('controller', 'Controller/action [' . $dispatcher->getControllerName() . ':' . $dispatcher->getActionName() . ']');
+	}
+
+	public function afterExecuteRoute($dispatcher)
+	{
+		$this->timerObject->endTimer('controller');
+	}
+
 }
 
