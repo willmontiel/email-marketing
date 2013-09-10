@@ -90,6 +90,12 @@ class TestController extends ControllerBase
 	
 	public function testcountersAction()
 	{
+		$array = $this->secondTest();
+		$this->view->setVar("results", $array); 
+	}	
+	
+	public function firstTest()
+	{
 			$email = "newone@newone.com";
 			$emailNew = "other@other.com";
 
@@ -340,8 +346,41 @@ class TestController extends ControllerBase
 			$array[17]['Desc'] = "Finalizacion de contadores";
 		
 			//-----------------Show Results-----------------//
+			return $array;	
+	}
+	
+	public function secondTest()
+	{
+		$email = "newone@newone.com";
+		$emailNew = "other@other.com";
 
-			$this->view->setVar("results", $array); 
+		$this->setIdDbase(1155);
+		$this->setIdContactlist(1);
+		$this->setIdContactlistNew(14);
+
+		$log = $this->logger;
+		
+		$this->createContact("newone0@newone.com", false, 1, 1, 1, 1);
+		$this->createContact("newone1@newone.com", false, 1, 1, 0, 1);
+		$this->createContact("newone2@newone.com", false, 1, 0, 1, 1);
+		$this->createContact("newone3@newone.com", false, 1, 0, 0, 1);
+		$this->createContact("newone4@newone.com", false, 0, 1, 1, 0);
+		$this->createContact("newone5@newone.com", false, 0, 1, 0, 0);
+		$this->createContact("newone6@newone.com", false, 0, 0, 1, 0);
+		$this->createContact("newone7@newone.com", false, 0, 0, 0, 0);
+		$this->createContact("newone8@newone.com", false, 1, 1, 1, 0);
+		$this->createContact("newone9@newone.com", false, 1, 1, 0, 0);
+		$this->createContact("newone10@newone.com", false, 1, 0, 1, 0);
+		$this->createContact("newone11@newone.com", false, 1, 0, 0, 0);
+
+		$db = Dbase::findFirstByIdDbase($this->idDbase);
+		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		$listNew = Contactlist::findFirstByIdContactlist($this->idContactlistNew);
+
+		$array[0] = $this->fullArray($db, $list, $listNew);
+		$array[0]['Desc'] = "Resultado de contadores";
+		
+		return $array;
 	}
 
 	protected function updateContact($email, $idContact, $contact)
@@ -355,7 +394,7 @@ class TestController extends ControllerBase
 			$wrapper->updateContactFromJsonData($idContact, $contact);
 	}       
 
-	protected function createContact($email, $newlist = false)
+	protected function createContact($email, $newlist = false, $isactive = "", $issubscribed = "", $isbounced = "", $isspam = "")
 	{
 			$log = $this->logger;
 			$wrapper = new ContactWrapper();
@@ -370,13 +409,14 @@ class TestController extends ControllerBase
 			$wrapper->setIdDbase($this->idDbase);
 			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 
-			$contact = $this->createContactObj($email, "", 1, "", "");
+			$contact = $this->createContactObj($email, $isactive, $issubscribed, $isbounced, $isspam);
 
 			try {
-							$contactC = $wrapper->addExistingContactToListFromDbase($contact->email);
-							if(!$contactC) {
-									$contactC = $wrapper->createNewContactFromJsonData($contact);
-							}
+					$log->log("Envia esto" . print_r($contact, true));		
+					$contactC = $wrapper->addExistingContactToListFromDbase($contact->email);
+					if(!$contactC) {
+							$contactC = $wrapper->createNewContactFromJsonData($contact);
+					}
 			}
 			catch (\InvalidArgumentException $e) {
 					$log->log('Exception: [' . $e . ']');

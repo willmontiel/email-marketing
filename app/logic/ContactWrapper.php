@@ -304,8 +304,6 @@ class ContactWrapper extends BaseWrapper
 		$this->contact = new Contact();
 
 		$this->contact->email = $email;
-		$this->contact->bounced = 0;
-		$this->contact->spam = 0;
 		$this->contact->idDbase = $this->idDbase;
 		
 		$this->assignDataToContact($this->contact, $data, true);
@@ -342,6 +340,8 @@ class ContactWrapper extends BaseWrapper
 			$contact->ipSubscribed = $this->ipaddress;
 			$contact->status = ($data->is_active)?$hora:0;
 			$contact->ipActivated = ($data->is_active)?$this->ipaddress:0;
+			$contact->bounced = ($data->is_bounced)?$hora:0;
+			$contact->spam = ($data->is_spam)?$hora:0;
 		}
 		else {
 			if ($contact->unsubscribed != 0 && $data->is_subscribed) {
