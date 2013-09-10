@@ -33,8 +33,8 @@
 				<div class="padded">
 					<label>
 						Seleccione base de datos:
-						{{ '{{view Ember.Select contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name" class="span3"}}' }}
-						</label>
+						{{ '{{view App.DbaseSelect contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name" class="span3"}}' }}
+					</label>
 					<br/>
 					<label>					
 					Crear segmento con 
@@ -50,12 +50,17 @@
 					</label>
 				</div>
 				<br />
-				<div class="row-fluid">
-					<div class="span3">
-						{{ '{{#if isDbaseSelected}}' }}
-							{{ '{{dbase.id}}' }}
-						{{ '{{/if}}' }}
-					</div>
+				<div class="row-fluid">	
+				<div class="span3">
+					{{ '{{view Ember.Select
+						contentBinding="App.customFields"
+						optionValuePath="content.id"
+						optionLabelPath="content.customField"
+						valueBinding="id" id="id"}}'
+					}}
+					{{ '{{dbase.id}}' }}
+						
+				</div>
 					<div class="span3">
 						{{ '{{view Ember.Select
 							contentBinding="App.relations"

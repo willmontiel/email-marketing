@@ -14,15 +14,8 @@
 		App.DBObjectList = App.store.findAll(App.Dbase);
 	</script>
 	<script type="text/javascript">
-		var totalFields = {{totalFields}};
-		var customFieldsArray = {{fields|json_encode}};
-
-		for(i = 0; i < totalFields; i++) {
-			console.log(customFieldsArray[i]);
-		}
-		
-		
-		
+		App.totalFields = {{totalFields}};
+		App.customFieldsArray = {{fields|json_encode}};	
 	</script>
 	<script type="text/javascript">
 		var showcontactsinfo = Ember.View.create({

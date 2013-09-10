@@ -1,7 +1,9 @@
 App.Segment = DS.Model.extend({
 	name: DS.attr('string'),
 	description: DS.attr('string'),
-	criteria: DS.attr('string')
+	criteria: DS.attr('string'),
+	customField: DS.attr('number'),
+	dbase: DS.attr('number')
 });
 
 App.criteria = [
@@ -38,6 +40,9 @@ App.SegementsIndexController = Ember.ArrayController.extend(Ember.MixinPaginatio
 });
 
 App.SegmentsNewController = Ember.ObjectController.extend({
+	changed: function() {
+		
+	},
     pressed: function() {
       this.set('isPressed', true);
     },
@@ -59,3 +64,24 @@ App.SegmentsDeleteController = Ember.ObjectController.extend({
 	}
 });
 
+App.DbaseSelect = Ember.Select.extend({
+	change: function(evt) {
+		var idDbase;
+		console.log(idDbase = this.get('value'));
+		console.log(App.customField = App.customFieldsArray[idDbase]);
+		
+		if (App.customField != null) {
+			for(var i = 0; i < 1; i++) {
+				console.log(App.customField['idCustomField']);
+				console.log(App.customField['name']);
+			}
+		}
+		App.customFields = [
+  Ember.Object.create({customField: "Texto", id: "Text"}),
+];
+		
+	}
+});
+
+
+		
