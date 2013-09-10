@@ -12,14 +12,17 @@
 	{{ javascript_include('js/app_blockedemail.js') }}
 	<script type="text/javascript">
 		App.DBObjectList = App.store.findAll(App.Dbase);
-		var SegmentModel = {
-			name: DS.attr('string'),
-			description: DS.attr('string'),
-			
-			isDbaseSelected: function() {
-				return true;
-			}.property('criteria')
-		};
+	</script>
+	<script type="text/javascript">
+		var totalFields = {{totalFields}};
+		var customFieldsArray = {{fields|json_encode}};
+
+		for(i = 0; i < totalFields; i++) {
+			console.log(customFieldsArray[i]);
+		}
+		
+		
+		
 	</script>
 	<script type="text/javascript">
 		var showcontactsinfo = Ember.View.create({
@@ -46,7 +49,7 @@
 {%block sectionsubtitle %}Administre sus bases de datos de contactos{% endblock %}
 {% block content %}
 	<div id="emberApplistContainer">
-		{#{{ dump(fields[0][1])}} #}
+		{{dump(fields)}} 
 		{# handlebars de index #}
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}

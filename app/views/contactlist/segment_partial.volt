@@ -32,9 +32,9 @@
 			<form>
 				<div class="padded">
 					<label>
-					Seleccione base de datos:
-					{{ '{{view Ember.Select contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name" class="span3"}}' }}
-					</label>
+						Seleccione base de datos:
+						{{ '{{view Ember.Select contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name" class="span3"}}' }}
+						</label>
 					<br/>
 					<label>					
 					Crear segmento con 
@@ -72,45 +72,11 @@
 						<button class="btn btn-default" {{ '{{action pressed}}' }}>+</button>
 					</div>
 				</div>
-				<div class="row-fluid">
-					{{ '{{#if isPressed}}' }}
-						{{ '{{partial "segments/newcondition"}}' }}
-					{{ '{{/if}}' }}
-				</div>
 				<button class="btn btn-default">Crear</button>
 			</form>
 		</div>
 	</div>
 </script>
-<script type="text/x-handlebars" data-template-name="segments/_newcondition">
-	<div class="row-fluid">
-		<div class="span3">
-			<select>
-				<option>Email</option>
-				<option>Nombre</option>
-			</select>
-		</div>
-		<div class="span3">
-			{{ '{{view Ember.Select
-				contentBinding="App.relations"
-				optionValuePath="content.id"
-				optionLabelPath="content.relation"
-				valueBinding="relation"
-				}}'
-			}}
-		</div>
-		<div class="span3">
-			{{ '{{view Ember.TextField valueBinding="value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
-		</div>
-		<div class="span1">
-			<button class="btn btn-default">+</button>
-		</div>
-		<div class="span1">
-			<button class="btn btn-default">-</button>
-		</div>
-	</div>
-</script>
-
 <script type="text/x-handlebars" data-template-name="segments/delete">
 	<div class="box">
 		<div class="box-header">

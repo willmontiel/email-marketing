@@ -11,16 +11,11 @@
 	<div class="row-fluid">
 		<div class="span12" >
 			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Listado de cuentas
-					</div>
-				</div>
 				<div class="box-content">
 						<table class="table table-normal">
 							<thead>
 								<tr>
-									<td>Datos principales</td>
+									<td>Listado de cuentas</td>
 									<td>Espacio en disco (Mb)</td>
 									<td>Limite de contactos</td>
 									<td>Limite de mensajes</td>
@@ -39,7 +34,7 @@
 											</div>
 											<div class="news-content">
 												<div class="news-time">
-													<span>{{item.idAccount}}</span>Cuenta
+													<span>{{item.idAccount}}</span>
 												</div>
 												<div class="news-title">
 													<a href="{{ url('account/show/') }}{{item.idAccount}}">{{item.companyName}}</a>
@@ -98,7 +93,7 @@
 					</div>
 					<div class="span3 text-right">
 						<br>
-						<a href="{{ url('') }}" class="btn btn-inverse">Regresar</a>
+						<a href="{{ url('') }}" class="btn btn-default">Regresar</a>
 					</div>
 				</div>
 			</div>

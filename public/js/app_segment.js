@@ -1,6 +1,8 @@
-App.Segment = DS.Model.extend(
-	SegmentModel
-);
+App.Segment = DS.Model.extend({
+	name: DS.attr('string'),
+	description: DS.attr('string'),
+	criteria: DS.attr('string')
+});
 
 App.criteria = [
   Ember.Object.create({criterion: "todas las", id: "all"}),
@@ -32,14 +34,7 @@ App.SegmentsNewRoute = Ember.Route.extend({
 App.SegementController = Ember.ObjectController.extend();
 
 App.SegementsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	getModelMetadata: function() {
-		return App.store.typeMapFor(App.Blockedemail);
-	},
-	
-	refreshModel: function (obj) {
-		var result = App.Blockedemail.find(obj);
-		this.set('content', result);
-	}
+	modelClass : App.List
 });
 
 App.SegmentsNewController = Ember.ObjectController.extend({
@@ -63,3 +58,4 @@ App.SegmentsDeleteController = Ember.ObjectController.extend({
 		 this.get("target").transitionTo("segments");
 	}
 });
+

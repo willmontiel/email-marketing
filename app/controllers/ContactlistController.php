@@ -22,9 +22,10 @@ class ContactlistController extends ControllerBase
 		$totalFields = count($results);
 		
 		for ($i = 0; $i < $totalFields; $i++) {
-			$arrayFields[$i][$results[$i]['idDbase']] = array (
-				'idCustomField' => $results[$i]['idCustomField'],
-				'name' => $results[$i]['name']
+			$arrayFields[$results[$i]['idDbase']] [$results[$i]['idCustomField']]= array (
+				'idCustomField' => $results[$i]['idCustomField'], 
+				'name' => $results[$i]['name'],
+				'type' => $results[$i]['type']
 			);			
 		}
 		

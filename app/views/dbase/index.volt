@@ -24,92 +24,81 @@
 		<div class="box-content">
 	{%for item in page.items%}
 			<div class="box-section news with-icons">
-				<div class="row-fluid">
-					<div class="avatar cyan">
-						<i class="icon-book icon-2x"></i>
+				<div class="avatar cyan">
+					<i class="icon-book icon-2x"></i>
+				</div>
+				<div class="news-content">
+					<div class="news-title">
+						<a href="{{ url('dbase/show/') }}{{item.idDbase}}">{{item.name}}</a>
 					</div>
-					<div class="news-content span3">
-						<div class="news-title">
-							<a href="{{ url('dbase/show/') }}{{item.idDbase}}">{{item.name}}</a>
-						</div>
-						<div class="news-text">
-							{{item.description}}
-						</div>
-					</div>
-					<div class="news-content span3">
-						<table>
-							<tr>
-								<td class="text-right">
-									<dl>
-										<dd>{{item.Cactive|numberf}}</dd>
-										<dd>{{get_inactive(item)|numberf}}</dd>
-										<dd>{{item.Cunsubscribed|numberf}}</dd>
-										<dd>{{item.Cbounced|numberf}}</dd>
-										<dd>{{item.Cspam|numberf}}</dd>
-									</dl>
-								</td>
-								<td class="text-left">
-									<dl>
-										<dd>Activos</dd>
-										<dd>Inactivos</dd>
-										<dd>Des-suscritos</dd>
-										<dd>Rebotados</dd>
-										<dd>Spam</dd>
-									</dl>
-								</td>
-							</tr>
-						</table>
-					</div>
-					<div class="news-content span2">
-						<div class="pull-right" style="margin-right: 10px;">
-								<div class="btn-group">
-									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li><a href="{{ url('dbase/edit/') }}{{item.idDbase}}"><i class="icon-pencil"></i> Editar</a></li>
-										<li><a href="{{ url('#delete') }}#delete{{item.idDbase}}" data-toggle="modal"><i class="icon-trash"></i> Eliminar</a></li>
-									</ul>
-								</div>
-							</div>
+					<div class="news-text">
+						{{item.description}}
 					</div>
 				</div>
+				<ul class="inline pull-right sparkline-box">
+						<li class="sparkline-row">
+							<h4 class="green"><span>Activos</span> {{item.Cactive|numberf}}</h4>
+						</li>
+						
+						<li class="sparkline-row">
+							<h4 class="gray"><span>Inactivos</span> {{get_inactive(item)|numberf}}</h4>
+						</li>
+						
+						<li class="sparkline-row">
+							<h4 class="blue"><span>Des-suscritos</span> {{item.Cunsubscribed|numberf}}</h4>
+						</li>
+
+						<li class="sparkline-row">
+							<h4 class="red"><span>Rebotados</span> {{item.Cbounced|numberf}}</h4>
+						</li>
+
+						<li class="sparkline-row">
+							<h4 class="red"><span>Spam</span> {{item.Cspam|numberf}}</h4>
+						</li>
+					</ul>
 			</div>
 	{%endfor%}
+		</div>
+		<div class="box-footer padded">
+			<div class="row-fluid">
+				<div class="span5">
+					<div class="pagination">
+						<ul>
+							{% if page.current == 1 %}
+								<li class="previous"><a href="#" class="inactive"><<</a></li>
+								<li class="previous"><a href="#" class="inactive"><</a></li>
+							{% else %}
+								<li class="previous active"><a href="{{ url('dbase/index') }}"><<</a></li>
+								<li class="previous active"><a href="{{ url('dbase/index') }}?page={{ page.before }}"><</a></li>
+							{% endif %}
+
+							{% if page.current >= page.total_pages %}
+								<li class="next"><a href="#" class="inactive">></a></li>
+								<li class="next"><a href="#" class="inactive">>></a></li>
+							{% else %}
+								<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.next}}">></a></li>
+								<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.last}}">>></a></li>		
+							{% endif %}
+						</ul>
+					 </div>
+				 </div>
+				 <div class="span5">
+					 <br />
+					 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
+					 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
+				 </div>
+				<div class="span2 text-right">
+					<br>
+					<a href="{{ url('') }}" class="btn btn-default">Regresar</a>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 		<!-- Fin de mi lista de bases de datos -->
 </div>
 
 
-	<div class="row-fluid">
-		<div class="span5">
-			<div class="pagination">
-				<ul>
-					{% if page.current == 1 %}
-						<li class="previous"><a href="#" class="inactive"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
-						<li class="previous"><a href="#" class="inactive"><span class="fui-arrow-left"></span></a></li>
-					{% else %}
-						<li class="previous active"><a href="{{ url('dbase/index') }}"><span class="fui-arrow-left"><span class="fui-arrow-left"></span></span></a></li>
-						<li class="previous active"><a href="{{ url('dbase/index') }}?page={{ page.before }}"><span class="fui-arrow-left"></span></a></li>
-					{% endif %}
-								
-					{% if page.current >= page.total_pages %}
-						<li class="next"><a href="#" class="inactive"><span class="fui-arrow-right"></span></a></li>
-						<li class="next"><a href="#" class="inactive"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>
-					{% else %}
-						<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.next}}"><span class="fui-arrow-right"></span></a></li>
-						<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.last}}"><span class="fui-arrow-right"><span class="fui-arrow-right"></span></span></a></li>		
-					{% endif %}
-				</ul>
-			 </div>
-		 </div>
-		 <div class="span3">
-			 <br><br>
-			 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
-			 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
-		 </div>
-		<div class="span3">
-		</div>
-	</div>
+	
                 
 {%for item in page.items%}
 <div id="delete{{item.idDbase}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

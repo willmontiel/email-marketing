@@ -12,7 +12,7 @@ App.Router.map(function() {
 
 //Adaptador
 App.Adapter = DS.RESTAdapter.reopen({
-	namespace: MyDbaseUrl,
+	namespace: MyDbaseUrl
 });
 
 // Store (class)
@@ -46,7 +46,7 @@ App.Contact = DS.Model.extend(
 App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
 		return App.Contact.find();
-	},
+	}
 });
 
 
