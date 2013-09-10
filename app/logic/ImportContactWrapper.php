@@ -161,7 +161,25 @@ class ImportContactWrapper extends BaseWrapper
 		$numfield = 3;
 		foreach ($customfields as $field) {
 			$namefield= "campo".$field->idCustomField;
-			$this->newcontact->$namefield = (isset($posCol[$numfield]))?$linew[$posCol[$numfield]]:"";
+			$this->newcontact->$namefield = (isset($posCol[$numfield]))?$linew[$posCol[$numfield]]:$field->defaultValue;
+			if($field->required == "Si" && !$field->defaultValue){
+				switch($field->type) {
+					case "Text":
+						$this->newcontact->$namefield = (isset($posCol[$numfield]))?$linew[$posCol[$numfield]]:" ";
+						break;
+					case "Numerical":
+						if(isset($posCol[$numfield]))
+							$this->newcontact->$namefield = (is_numeric($linew[$posCol[$numfield]]))?strtotime($linew[$posCol[$numfield]]):0;
+						break;
+					case "Date":
+						$this->newcontact->$namefield = (isset($posCol[$numfield]))?$linew[$posCol[$numfield]]:date('Y-m-d',time());
+						break;
+				}
+			} 
+			elseif ($field->required == "No" && $field->type == "Numerical") {
+				if(isset($posCol[$numfield]))
+						$this->newcontact->$namefield = (is_numeric($linew[$posCol[$numfield]]))?$linew[$posCol[$numfield]]:$field->defaultValue;
+			}
 			$numfield++;
 		}
 	}

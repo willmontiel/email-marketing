@@ -582,7 +582,7 @@ class ContactWrapper extends BaseWrapper
 			$valuefield = Fieldinstance::findFirst("idCustomField = $field->idCustomField AND idContact = $contact->idContact");
 			if ($field->type == "Date") {
 				if($valuefield->numberValue) {
-					$object["campo".$field->idCustomField] = date('Y-m-d',$valuefield->numberValue);
+					$object["campo".$field->idCustomField] = date('j-F-Y',$valuefield->numberValue);
 				} else {
 					$object["campo".$field->idCustomField] = $valuefield->numberValue;
 				}
