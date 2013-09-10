@@ -82,6 +82,17 @@ try {
 	}, true);	
 	
 
+	$di->set('modelsMetadata', function() {
+
+		// Create a meta-data manager with APC
+		$metaData = new \Phalcon\Mvc\Model\MetaData\Files(array(
+//			"lifetime" => 86400,
+			"metaDataDir"   => "../app/cache/metadata/"
+		));
+
+		return $metaData;
+	});
+	
 	/*
 	 * Database Object, conexion primaria a la base de datos
 	 */

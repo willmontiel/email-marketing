@@ -594,7 +594,106 @@ class ContactWrapper extends BaseWrapper
 		
 		return $object;
 	}
+
+	/**
+	 * 
+	 * @param $contactRow
+	 * @param array $customfields
+	 * @param array $fieldinstances
+	 * @return array
+	 */
+	protected function convertCompleteContactToJson($contactRow, $customfields, $fieldinstances)
+	{
+		$contact = $contactRow->contact;
+		$email   = $contactRow->email;
+		$object = array();
+		$object['id'] = $contact->idContact;
+		$object['email'] = $email->email;
+		$object['name'] = $contact->name;
+		$object['last_name'] = $contact->lastName;
+		$object['is_active'] = ($contact->status != 0);
+		$object['activated_on'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
+		$object['is_subscribed'] = ($contact->unsubscribed == 0);
+		$object['subscribed_on'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
+		$object['unsubscribed_on'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
+		$object['is_bounced'] = ($contact->bounced != 0);
+		$object['bounced_on'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
+		$object['is_spam'] = ($contact->spam != 0);
+		$object['spam_on'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
+		$object['created_on'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
+		$object['updated_on'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
+		
+		$object['ip_subscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
+		$object['ip_activated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
+		
+		$object['is_email_blocked'] = ($email->blocked != 0);
+		
+		
+		foreach ($customfields as $field) {
+			$key = $contact->idContact . ':' . $field['id'];
+			$value = '';
+			if (isset($fieldinstances[$key])) {
+				$fvalue = $fieldinstances[$key];
+				switch ($field['type']) {
+					case 'Date':
+						$value = date('Y-m-d',$fvalue['numberValue']);
+						break;
+					case 'Number':
+						$value = $fvalue['numberValue'];
+						break;
+					default:
+						$value = $fvalue['textValue'];
+				}
+			}
+			$object[$field['name']] = $value;
+		}
+		
+		return $object;
+	}
 	
+	public function findContactsComplete(Contactlist $list)
+	{
+		// Total de contactos
+		$this->pager->setTotalRecords(Contact::countContactsInList($list));
+		
+		// Contactos
+		$contacts = Contact::findContactsAndEmailsInList($list, null, null, array('number' => $this->pager->getRowsPerPage(), 'offset' => $this->pager->getStartIndex()));
+		
+		// IDs de contactos
+		$ids = array();
+		foreach ($contacts as $c) {
+			$ids[] = $c->contact->idContact;
+		}
+		// Consultar la lista de campos personalizados para esos contactos
+		$finstancesO = Fieldinstance::findInstancesForMultipleContacts($ids);
+		
+		// Consultar lista de campos personalizados de la base de datos
+		$cfieldsO = Customfield::findCustomfieldsForDbase($list->dbase);
+		
+		
+		// Convertir la lista de campos personalizados y de instancias a arreglos
+		$cfields = array();
+		foreach ($cfieldsO as $cf) {
+			$cfields[$cf->idCustomField] = array('id' => $cf->idCustomField, 'type' => $cf->type, 'name' => 'campo' . $cf->idCustomField);
+		}
+		unset($cfieldsO);
+		
+		$finstances = array();
+		foreach ($finstancesO as $fi) {
+			$key = $fi->idContact . ':' . $fi->idCustomField;
+			$finstances[$key] = array('numberValue' => $fi->numberValue, 'textValue' => $fi->textValue);
+		}
+		
+		$result = array();
+		foreach ($contacts as $contact) {
+			//$contactT = Contact::findFirstByIdContact($contact->idContact);
+			$result[] = $this->convertCompleteContactToJson($contact, $cfields, $finstances);
+		}
+		$this->pager->setRowsInCurrentPage(count($result));
+		return array('contacts' => $result, 'meta' => $this->pager->getPaginationObject() );
+		
+	}
+
 	public function findContactsByList(Contactlist $list) 
 	{
 		$this->pager->setTotalRecords(Contact::countContactsInList($list));

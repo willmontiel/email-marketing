@@ -75,6 +75,36 @@ class Contact extends \Phalcon\Mvc\Model
 		
 	}
 	
+	/**
+	 * Busca los contactos Y los emails
+	 * @param Contactlist $list
+	 * @param string $conditions
+	 * @param array $bind
+	 * @param array $limits
+	 * @return \Phalcon\Mvc\Model\ResultsetInterface
+	 */
+	public static function findContactsAndEmailsInList(Contactlist $list, $conditions = null, $bind = null, $limits = null) 
+	{
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$phql = 'SELECT Contact.*, Email.* FROM Contact JOIN Email JOIN Coxcl WHERE idContactlist = :idcontactlist:';
+		if ($conditions != null) {
+			$phql .= ' AND ' . $conditions;
+			$options = $bind;
+		}
+		if ($limits != null && is_array($limits) && isset($limits['number']) ) {
+			$number = $limits['number'];
+			$start = isset($limits['offset'])?$limits['offset']:0;
+			$phql .= ' LIMIT ' . $number . ' OFFSET ' . $start;
+		}
+		$options['idcontactlist'] = $list->idContactlist;
+		$query = $mm->executeQuery($phql, $options);
+		
+		return $query;
+		
+	}
+	
+	
 	public static function countContactsInList(Contactlist $list, $conditions = null, $bind = null) 
 	{
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');

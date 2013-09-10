@@ -68,7 +68,6 @@ class Contactlist extends Modelbase
 		
 	}
 
-
 	public function getInactiveContacts()
 	{
 		return $this->Ctotal - ($this->Cactive + $this->Cunsubscribed + $this->Cbounced + $this->Cspam);

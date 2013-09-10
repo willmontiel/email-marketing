@@ -47,4 +47,14 @@ class Customfield extends \Phalcon\Mvc\Model
 		
 		
 	}
+	
+	public static function findCustomfieldsForDbase(Dbase $db)
+	{
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$phql = 'SELECT Customfield.* FROM Customfield WHERE idDbase = :iddbase:';
+		$query = $mm->executeQuery($phql, array('iddbase' => $db->idDbase));
+		
+		return $query;
+	}
 }
