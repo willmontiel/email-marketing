@@ -1,0 +1,12 @@
+*.volt.php
+app/cache/metadata/*
+<<<<<<< HEAD
+app/views/templates/signin.volt%%e%%.php
+*volt%%e%%.php
+nbproject/private/private.xml
+app/config/configuration.ini
+=======
+app/config/*.ini
+*.volt%%e%%.php
+dbdebug.log
+>>>>>>> no message

@@ -1,6 +1,5 @@
 *.volt.php
 app/cache/metadata/*
-app/views/templates/signin.volt%%e%%.php
-*volt%%e%%.php
-nbproject/private/private.xml
-app/config/configuration.ini
+app/config/*.ini
+*.volt%%e%%.php
+dbdebug.log
