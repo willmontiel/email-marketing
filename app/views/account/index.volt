@@ -20,12 +20,13 @@
 						<table class="table table-normal">
 							<thead>
 								<tr>
-									<th></th>
+									<td>Datos principales</td>
 									<td>Espacio en disco (Mb)</td>
 									<td>Limite de contactos</td>
 									<td>Limite de mensajes</td>
 									<td>Fecha de registro</td>
 									<td>Última actualización</td>
+									<td></td>
 								</tr>
 							</thead>
 							<tbody>
@@ -33,10 +34,13 @@
 								<tr>
 									<td>
 										<div class="box-section news with-icons">
-											<div class="avatar green">
-												<span style="color: white;">{{item.idAccount}}</span>
+											<div class="avatar cyan">
+												<span><i class="icon-sitemap icon-2x"></i></span>
 											</div>
 											<div class="news-content">
+												<div class="news-time">
+													<span>{{item.idAccount}}</span>Cuenta
+												</div>
 												<div class="news-title">
 													<a href="{{ url('account/show/') }}{{item.idAccount}}">{{item.companyName}}</a>
 												</div>

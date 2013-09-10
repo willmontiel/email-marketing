@@ -238,6 +238,7 @@
 							<h3 class="title">
 								{% block sectiontitle %}<i class="icon-dashboard"></i>{% endblock %}
 							</h3>
+							<h5>{% block sectionsubtitle %}{% endblock %}</h5>
 						</div>	
 						{% block sectionContactLimit %}{% endblock %}
 					</div>

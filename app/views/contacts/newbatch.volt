@@ -44,18 +44,18 @@
 					</div>
 				</div>
 				<br><br>
-				{% if total+currentActiveContacts > limit %}
+				{% if total+currentActiveContacts > account.contactLimit and account.accountingMode == 'Contacto'%}
 					<div class="alert alert-block">
 						<a class="close" data-dismiss="alert">×</a>
 						<h4 class="alert-heading">Advertencia!</h4><br>
 						<p>Ha sobrepasado la capacidad máxima para guardar contactos:</p>
 							<dl>
-								<dd>Capacidad máxima de contactos: <span class="green-label">{{limit}}</span></dd>
+								<dd>Capacidad máxima de contactos: <span class="green-label">{{account.contactLimit}}</span></dd>
 								<dd>Contactos actuales: <span class="blue-label">{{currentActiveContacts}}</span></dd>
 								<dd>Contactos que intenta crear: <span class="orange-label">{{total}}</span></dd>
 							</dl>
 							<p>
-								Se ha excedido en <span class="red-label">{{(currentActiveContacts+total)-limit}}</span> contactos, si continúa con el proceso se guardarán los contactos hasta que llegue al limite,
+								Se ha excedido en <span class="red-label">{{(currentActiveContacts+total)-account.contactLimit}}</span> contactos, si continúa con el proceso se guardarán los contactos hasta que llegue al limite,
 								el resto serán ignorados.
 							</p>
 							<p>

@@ -1,78 +1,85 @@
-{% extends "templates/index.volt" %}
-
+{% extends "templates/index_new.volt" %}
+{% block sectiontitle %}<i class="icon-book icon-2x"></i>Bases de Datos{% endblock %}
+{%block sectionsubtitle %}Configuración avanzada{% endblock %}
 {% block content %}
-
-<!-- aqui inicia mi contenido -->
-<div class="alert-error"><h4>{{ flashSession.output() }}</h4></div>
+<!-- aqui inicia mi contenido 
+<div class="alert  alert-error"><h4>{{ flashSession.output() }}</h4></div>
+-->
 <div class="row-fluid">
-	<div class="modal-header">
-		<h1>Bases de Datos</h1>
-		<div class="text-right"> <a href="{{ url('dbase/new') }}"><h5>Crear Base de Datos</h5></a></div>
+	<div class="text-right"> 
+		<a href="{{ url('dbase/new') }}" class="btn btn-default">
+			<i class="icon-plus"></i> Crear Base de Datos
+		</a>
 	</div>
 </div>
-	<div class="row-fluid">
+<br />
+<div class="row-fluid">
 		<!-- Lista de mis bases de datos -->
-		{%for item in page.items%}
-			<div class="row-fuid">
-				<div class="span6" >
-					<div class="row-fluid break-word">
-							<h3><a href="{{ url('dbase/show/') }}{{item.idDbase}}">{{item.name}}</a></h3>
-							<span>{{item.description}}</span>
+	<div class="box">
+		<div class="box-header">
+			<div class="title">
+				Lista de bases de datos
+			</div>
+		</div>
+		<div class="box-content">
+	{%for item in page.items%}
+			<div class="box-section news with-icons">
+				<div class="row-fluid">
+					<div class="avatar cyan">
+						<i class="icon-book icon-2x"></i>
 					</div>
-					<div class="row-fluid">
-							<div class="span3 text-center">
-									<div class="row-fluid">
-											<span class="number-medium text-gray-color text-center">26</span>
-									</div>
-									<div class="row-fluid">
-											<span class="fui-radio-checked"></span> Segmentos
-									</div>  
-							</div>
-							<div class="span3 text-center">
-									<div class="row-fluid">
-											<span class="number-medium text-gray-color ">12</span>
-									</div>
-									<div class="row-fluid">
-											<span class="fui-list"></span> Listas
-									</div>  
+					<div class="news-content span3">
+						<div class="news-title">
+							<a href="{{ url('dbase/show/') }}{{item.idDbase}}">{{item.name}}</a>
+						</div>
+						<div class="news-text">
+							{{item.description}}
+						</div>
+					</div>
+					<div class="news-content span3">
+						<table>
+							<tr>
+								<td class="text-right">
+									<dl>
+										<dd>{{item.Cactive|numberf}}</dd>
+										<dd>{{get_inactive(item)|numberf}}</dd>
+										<dd>{{item.Cunsubscribed|numberf}}</dd>
+										<dd>{{item.Cbounced|numberf}}</dd>
+										<dd>{{item.Cspam|numberf}}</dd>
+									</dl>
+								</td>
+								<td class="text-left">
+									<dl>
+										<dd>Activos</dd>
+										<dd>Inactivos</dd>
+										<dd>Des-suscritos</dd>
+										<dd>Rebotados</dd>
+										<dd>Spam</dd>
+									</dl>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="news-content span2">
+						<div class="pull-right" style="margin-right: 10px;">
+								<div class="btn-group">
+									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li><a href="{{ url('dbase/edit/') }}{{item.idDbase}}"><i class="icon-pencil"></i> Editar</a></li>
+										<li><a href="{{ url('#delete') }}#delete{{item.idDbase}}" data-toggle="modal"><i class="icon-trash"></i> Eliminar</a></li>
+									</ul>
+								</div>
 							</div>
 					</div>
-				</div>
-				<div class="span3 ">
-					<table>
-						<tr>
-							<td class="text-right">
-								<dl>
-									<dd>{{item.Cactive|numberf}}</dd>
-									<dd>{{get_inactive(item)|numberf}}</dd>
-									<dd>{{item.Cunsubscribed|numberf}}</dd>
-									<dd>{{item.Cbounced|numberf}}</dd>
-									<dd>{{item.Cspam|numberf}}</dd>
-								</dl>
-							</td>
-							<td class="text-left">
-								<dl>
-									<dd>Activos</dd>
-									<dd>Inactivos</dd>
-									<dd>Des-suscritos</dd>
-									<dd>Rebotados</dd>
-									<dd>Spam</dd>
-								</dl>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="span2">
-					<dl>
-							<dd><a href="{{ url('dbase/edit/') }}{{item.idDbase}}">Editar</a></dd>
-							<dd><a href="{{ url('#delete') }}#delete{{item.idDbase}}" data-toggle="modal">Eliminar</a></dd>
-							<dd><a href="#">Agregar Contacto</a></dd>
-					</dl>
 				</div>
 			</div>
-		{%endfor%}
-		<!-- Fin de mi lista de bases de datos -->
+	{%endfor%}
 	</div>
+</div>
+		<!-- Fin de mi lista de bases de datos -->
+</div>
+
+
 	<div class="row-fluid">
 		<div class="span5">
 			<div class="pagination">

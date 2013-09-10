@@ -89,7 +89,7 @@ class ContactsController extends ControllerBase
 		$this->session->set('batch_data', $batchreal);
 			
 		$totalValidContacts = count($batchreal);
-		$this->view->setVar("limit", $this->user->account->contactLimit);
+		$this->view->setVar("account", $this->user->account);
 		$this->view->setVar("total", $totalValidContacts);
 		$this->view->setVar("batch", $batch);	
 		$this->view->setVar("idContactlist", $idContactlist);
