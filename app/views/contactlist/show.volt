@@ -2,6 +2,7 @@
 {% block header_javascript %}
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
+		{{ partial("partials/date_view_partial") }}
 		{{ javascript_include('js/mixin_pagination.js') }}
 <script type="text/javascript">
 		var MyDbaseUrl = '{{apiurlbase.url ~ '/contactlist/' ~ datalist.idContactlist}}';
@@ -167,9 +168,9 @@
 							{%for field in fields%}
 								<label for="campo{{field.idCustomField }}">{{field.name}}:</label>
 								{{ember_customfield(field)}}
-								{% if (field.type == "Text") %}
+								{% if (field.type == "Text" and field.maxLength != "") %}
 									Maximo {{field.maxLength}} caracteres
-								{% elseif field.type == "Numerical" %}
+								{% elseif field.type == "Numerical" and field.minValue != "" and field.maxValue != 0 %}
 									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
 								{%endif%}
 							{%endfor%}
@@ -337,7 +338,7 @@
 				{%for field in fields%}
 				<tr>
 					<td>{{field.name}}</td>
-					<td>{{'{{campo'~field.idCustomField~'}}'}}</td>
+						<td>{{'{{campo'~field.idCustomField~'}}'}}</td>
 				</tr>
 				{%endfor%}
 			</table>
@@ -700,5 +701,5 @@
 
 </script>
 
-</div>
+  </div>
 {% endblock %}

@@ -424,14 +424,16 @@ App.ContactsEditView = Ember.View.extend({
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
+App.DatePickerField = Em.View.extend({
+  templateName: 'datepicker',
+  didInsertElement: function() {
+    var onChangeDate, self;
+    self = this;
+    onChangeDate = function(ev) {
+      return self.set("value", moment.utc(ev.date).format("YYYY-MM-DD"));
+    };
+    return this.$('.datepicker').datepicker({
+      separator: "-"
+    }).on("changeDate", onChangeDate);
+  }
+});

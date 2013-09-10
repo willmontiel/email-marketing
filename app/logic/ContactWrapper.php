@@ -400,7 +400,11 @@ class ContactWrapper extends BaseWrapper
 			$fieldinstance->idContact = $this->contact->idContact;
 			if ($field->type == "Date") {
 				$name = "campo".$field->idCustomField;
-				$fieldinstance->numberValue = $data->$name;
+				$value = null;
+				if($data->$name != null){
+					$value = strtotime($data->$name);
+				}
+				$fieldinstance->numberValue = $value;
 			} else {
 				$name = "campo".$field->idCustomField;
 				$fieldinstance->textValue = $data->$name;
@@ -576,7 +580,16 @@ class ContactWrapper extends BaseWrapper
 		
 		foreach ($customfields as $field) {
 			$valuefield = Fieldinstance::findFirst("idCustomField = $field->idCustomField AND idContact = $contact->idContact");
-			$object["campo".$field->idCustomField] = $valuefield->textValue;
+			if ($field->type == "Date") {
+				if($valuefield->numberValue) {
+					$object["campo".$field->idCustomField] = date('Y-m-d',$valuefield->numberValue);
+				} else {
+					$object["campo".$field->idCustomField] = $valuefield->numberValue;
+				}
+			}
+			else {
+				$object["campo".$field->idCustomField] = $valuefield->textValue;
+			}
 		}
 		
 		return $object;

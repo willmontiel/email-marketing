@@ -3,6 +3,7 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
+	{{ partial("partials/date_view_partial") }}
 	{{ javascript_include('js/mixin_pagination.js') }}
 
 	<script type="text/javascript">

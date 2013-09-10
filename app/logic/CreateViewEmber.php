@@ -7,7 +7,6 @@ class CreateViewEmber
 		$fieldname = "campo".$field->idCustomField;
 		switch ($field->type) {
 			case "Text":
-			case "Date":
 			case "Numerical":
 				$valor = "{{view Ember.TextField valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}'";
 				break;
@@ -20,6 +19,9 @@ class CreateViewEmber
 				break;
 			case "MultiSelect":
 				$valor = "{{view Ember.Select multiple='true' valueBinding='{$fieldname}' contentBinding='App.{$fieldname}_options' id='{$fieldname}' class='select'";
+				break;
+			case "Date":
+				$valor = "{{view App.DatePickerField valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}'";
 				break;
 		}
 		

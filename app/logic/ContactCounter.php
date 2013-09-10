@@ -9,6 +9,7 @@ class ContactCounter
 	{	
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
+		if(isset($this->counterDB))
 		foreach ($this->counterDB as $idDbase => $contents)
 		{
 			
@@ -33,6 +34,7 @@ class ContactCounter
 				$result = $query2->execute($parameters);
 		}
 		
+		if(isset($this->counterList))
 		foreach ($this->counterList as $idContactlist => $contents)
 		{
 			

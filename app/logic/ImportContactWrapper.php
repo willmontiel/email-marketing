@@ -32,6 +32,10 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$posCol = $this->SettingPositions($fields, $linew);
 		
+		if(empty($posCol)) {
+			throw new \InvalidArgumentException('No hay Mapeo de los Campos y las Columnas del Archivo');
+		}
+		
 		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
 		$customfields = Customfield::findByIdDbase($list->idDbase);
 		
@@ -123,6 +127,7 @@ class ImportContactWrapper extends BaseWrapper
 	
 	protected function SettingPositions($fields, $linew) {
 		
+		$posCol = array();
 		for($i=0; $i< count($fields); $i++) {
 			for($j=0; $j< count($linew); $j++) {
 				if($fields[$i] == $linew[$j]) {
@@ -135,9 +140,9 @@ class ImportContactWrapper extends BaseWrapper
 
 	protected function MappingToJSON($linew, $posCol, $customfields){
 		
-		$this->newcontact->email = $linew[$posCol[0]];
-		$this->newcontact->name = $linew[$posCol[1]];
-		$this->newcontact->last_name = $linew[$posCol[2]];
+		$this->newcontact->email = (isset($posCol[0]))?$linew[$posCol[0]]:"";
+		$this->newcontact->name = (isset($posCol[1]))?$linew[$posCol[1]]:"";
+		$this->newcontact->last_name = (isset($posCol[2]))?$linew[$posCol[2]]:"";;
 		$this->newcontact->status = "";
 		$this->newcontact->activated_on = "";
 		$this->newcontact->bounced_on = "";
@@ -156,7 +161,7 @@ class ImportContactWrapper extends BaseWrapper
 		$numfield = 3;
 		foreach ($customfields as $field) {
 			$namefield= "campo".$field->idCustomField;
-			$this->newcontact->$namefield = $linew[$posCol[$numfield]];
+			$this->newcontact->$namefield = (isset($posCol[$numfield]))?$linew[$posCol[$numfield]]:"";
 			$numfield++;
 		}
 	}
