@@ -51,25 +51,18 @@ App.ContactsIndexRoute = Ember.Route.extend({
 	}
 });
 
-//App.ContactsShowRoute = Ember.Route.extend({
-//});
+App.ContactsShowRoute = Ember.Route.extend({	
+});
 
 App.ContactsNewRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.createRecord('contact');
 	},
-			
-	actions: {
-		save: function() {
-			this.modelFor('contact').save();
-		}
-	}
-	,
-	
-			
-	deactivate: function () {
-		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
-			this.get('currentModel.transaction').rollback();
+	actions : {
+		deactivate: function () {
+			if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
+				this.get('currentModel.transaction').rollback();
+			}
 		}
 	}
 });
@@ -106,46 +99,56 @@ App.ContactController = Ember.ObjectController.extend();
 App.ContactsNewbatchController = Ember.ObjectController.extend();
 
 App.ContactsNewController = Ember.ObjectController.extend({
-	save: function() {
-		var that = this;
-		if (this.get('model.isValid') && !this.get('model.isSaving')) {
-			this.set('model.isActive', true);
-			this.set('model.isSubscribed', true);
-			
-			this.get('content').one('didCreate', function() {
-				that.transitionToRoute('contacts');
+	
+	actions: {
+		save: function() {
+			var self = this;
+			self.content.set('isActive', true);
+			self.content.set('isSubscribed', true);
+			self.content.save().then(function(){
+				self.transitionToRoute('contacts');
 			});
-			
-			this.get('model.transaction').commit();
-		}
-	},
+		},	
 		
-	cancel: function(){
-		this.get("target").transitionTo("contacts");
+		cancel: function(){
+			this.get('model').rollback();
+			this.transitionTo("contacts");
+		}
 	}
 });
 
 App.ContactsEditController = Ember.ObjectController.extend({
-	edit: function() {
-			this.get("model.transaction").commit();
-			this.get("target").transitionTo("contacts");
-	},
-	cancel: function(){
-		 this.get("model.transaction").rollback();
-		 this.get("target").transitionTo("contacts");
+	actions : {
+		edit: function() {
+			var self = this;
+			self.content.save().then(function(){
+				self.transitionToRoute('contacts');
+			});
+		},
+		cancel: function(){
+			this.get('model').rollback();
+			this.transitionTo("contacts");
+		}
 	}
 });
 
 App.ContactsDeleteController = Ember.ObjectController.extend({
-    delete: function() {
-		this.get('content').deleteRecord();
-		this.get('model.transaction').commit();
-		this.get("target").transitionTo("contacts");
-    },
-	cancel: function(){
-		 this.get("model.transaction").rollback();
-		 this.get("target").transitionTo("contacts");
+    actions : {
+		
+		delete: function() {
+			var self = this;		
+			self.get('model').deleteRecord();
+			self.get('model').save();		
+			this.transitionToRoute('contacts');
+		},
+				
+		cancel: function(){
+			 this.get("model").rollback();
+			 this.transitionTo("contacts");
+		}
 	}
+	
+	
 });
 
 App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
@@ -158,22 +161,18 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
-	unsubscribedcontact: function () {
-		this.set("isSubscribed", false);
-		this.get('model').one('becameInvalid', function() {
-			alert('Fallo la actualizacion');
-		});
-		this.get('model.transaction').commit();
-	},
-	subscribedcontact: function () {
-		var id = this.get('model').get('id');
-		this.set("isSubscribed", true);
-		this.get('model').one('becameInvalid', this, function() {
-			//alert('Fallo la actualizacion');
-			this.set('isSubscribed', false);
-			this.get('model.transaction').commit();
-		});
-		this.get('model.transaction').commit();
+	actions :{
+		subscribedcontact: function () {
+			//this.set("isSubscribed", true);
+			var self = this;
+			self.content.set('isSubscribed', true);
+			self.content.save();
+		},
+		unsubscribedcontact: function () {
+			var self = this;
+			self.content.set('isSubscribed', false);
+			self.content.save();
+		}
 	}
 });
 

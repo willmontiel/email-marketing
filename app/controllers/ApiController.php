@@ -690,7 +690,8 @@ class ApiController extends ControllerBase
 
 		$contentsraw = $this->request->getRawBody();
 		$contentsT = json_decode($contentsraw);
-
+		$log->log('Got this: [' . $contentsraw . ']');
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		

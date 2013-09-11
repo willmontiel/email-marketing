@@ -27,7 +27,7 @@
 			isSpam: DS.attr('boolean'),
 			isActive: DS.attr('boolean'),
 			isEmailBlocked: DS.attr('boolean'),
-			list: DS.belongsTo('App.List'),
+			list: DS.belongsTo('list'),
 			isReallyActive: function () {
 				if (this.get('isActive') && this.get('isSubscribed') && !(this.get('isSpam') || this.get('isBounced'))) {
 					return true;

@@ -34,7 +34,7 @@ App.ListsIndexRoute = Ember.Route.extend({
 
 App.ListsNewRoute = Ember.Route.extend({
 	model: function(){
-		return App.List.createRecord();
+		return this.store.createRecord('list');
 	},
 	deactivate: function () {
 		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
