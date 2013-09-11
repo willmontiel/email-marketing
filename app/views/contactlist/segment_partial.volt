@@ -30,53 +30,54 @@
 		</div>
 		<div class="box-content padded">
 			<form>
-				<div class="padded">
-					<label>
-						Seleccione base de datos:
-						{{ '{{view App.DbaseSelect contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name" class="span3"}}' }}
-					</label>
-					<br/>
-					<label>					
+				<label>
+					Seleccione base de datos:
+					{{ '{{view App.DbaseSelect contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name" class="span3"}}' }}
+				</label>
+				<br/>
+				<label>					
 					Crear segmento con 
-						{{ '{{view Ember.Select
-								contentBinding="App.criteria"
-								optionValuePath="content.id"
-								optionLabelPath="content.criterion"
-								valueBinding="criterion"
-								class="span2"
-							}}'
-						}}
+					{{ '{{view Ember.Select
+						  contentBinding="App.criteria"
+						  optionValuePath="content.id"
+						  optionLabelPath="content.criterion"
+						  valueBinding="criterion"
+						  class="span2"}}'
+					}}
 					condiciones a continuación:
-					</label>
-				</div>
+				</label>
 				<br />
 				<div class="row-fluid">	
-				<div class="span3">
-					{{ '{{view Ember.Select
-						contentBinding="App.customFields"
-						optionValuePath="content.id"
-						optionLabelPath="content.customField"
-						valueBinding="id" id="id"}}'
-					}}
-					{{ '{{dbase.id}}' }}
-						
-				</div>
+					<div class="span3">
+						{{ '{{view Ember.Select
+							  contentBinding="App.customFields"
+							  optionValuePath="content.id"
+							  optionLabelPath="content.customField"
+							  valueBinding="id" id="id"}}'
+						}}
+						{{ '{{dbase.id}}' }}
+					</div>
 					<div class="span3">
 						{{ '{{view Ember.Select
 							contentBinding="App.relations"
 							optionValuePath="content.id"
 							optionLabelPath="content.relation"
-							valueBinding="relation"
-							}}'
+							valueBinding="relation"}}'
 						}}
 					</div>
 					<div class="span3">
 						{{ '{{view Ember.TextField valueBinding="value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
 					</div>
-					<div class="span1">
-						<button class="btn btn-default" {{ '{{action pressed}}' }}>+</button>
+					<div class="span2">
+						<button class="btn btn-default" {{ '{{action aConditionMore}}' }}>+</button>
 					</div>
 				</div>
+				{{ '{{# if isMore}}' }}
+				<div class="row-fluid">
+					lala
+					<button class="btn btn-default" {{ '{{action aConditionLess}}' }}>-</button>
+				</div>
+				{{ '{{/if}}' }}
 				<button class="btn btn-default">Crear</button>
 			</form>
 		</div>

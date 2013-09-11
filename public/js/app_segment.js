@@ -40,15 +40,12 @@ App.SegementsIndexController = Ember.ArrayController.extend(Ember.MixinPaginatio
 });
 
 App.SegmentsNewController = Ember.ObjectController.extend({
-	changed: function() {
-		
-	},
-    pressed: function() {
-      this.set('isPressed', true);
+    aConditionMore: function() {
+      this.set('isMore', true);
     },
 
-    contract: function() {
-      this.set('isExpanded', false);
+    aConditionLess: function() {
+      this.set('isMore', false);
     }
 });
 
@@ -86,7 +83,8 @@ App.DbaseSelect = Ember.Select.extend({
 	}
 });
 
-
 App.customFields = [
-		Ember.Object.create({customField: "Texto", id: "Text"})
-	];	
+		Ember.Object.create({customField: "Email", id: "email"}),
+		Ember.Object.create({customField: "Nombre", id: "nombre"}),
+		Ember.Object.create({customField: "Apellido", id: "apellido"})
+];	
