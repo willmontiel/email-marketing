@@ -32,7 +32,7 @@
 			<form>
 				<label>
 					Seleccione base de datos:
-					{{ '{{view App.DbaseSelect contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name" class="span3"}}' }}
+					{{ '{{view App.DbaseSelect selectionBinding="dbase" contentBinding="dbases" optionLabelPath="content.name" class="span3"}}' }}
 				</label>
 				<br/>
 				<label>					

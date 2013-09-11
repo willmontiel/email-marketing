@@ -129,7 +129,7 @@ class BlockedEmailWrapper extends BaseWrapper
 	public function convertBlockedEmailList($Blockedemail)
 	{
 		$object = array();
-		$object['id'] = $Blockedemail->idBlockedemail;
+		$object['id'] = intval($Blockedemail->idBlockedemail);
 		$object['email'] = $Blockedemail->email;
 		$object['blocked_reason'] = $Blockedemail->blockedReason;
 		$object['blocked_date'] = date('d/m/Y H:i', $Blockedemail->blockedDate);

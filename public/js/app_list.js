@@ -21,7 +21,7 @@ App.Router.map(function() {
 App.DbaseIndexController = Ember.ArrayController.extend({
 	model: function()
 	{
-		return App.Dbase.find();
+		return this.store.find('dbase');
 	}
 });
 
@@ -40,9 +40,9 @@ App.DbaseIndexController = Ember.ArrayController.extend({
 
 /* Rutas de Contact Lists */
 App.ListsIndexRoute = Ember.Route.extend({
-	model: function(){
-		return App.List.find();
-	}	
+	model: function () {
+		return this.store.find('list');
+	}
 });
 
 App.ListsNewRoute = Ember.Route.extend({
@@ -78,7 +78,8 @@ App.ListsEditRoute = Ember.Route.extend({
 App.ListController = Ember.ObjectController.extend();
 
 App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	modelClass : App.List
+	modelClass : 'list',
+	needs: ['dbase']
 });
 
 App.ListsNewController = Ember.ObjectController.extend({

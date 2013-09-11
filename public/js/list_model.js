@@ -5,12 +5,12 @@ if (!App.Dbase) {
 	// definir version simplificada de Lista (si no esta definida)
 	App.Dbase = DS.Model.extend({
 		name: DS.attr('string'),
-		lists: DS.hasMany('App.List')
+//		lists: DS.hasMany('list')
 	});
 }
 
 App.List = DS.Model.extend({
-	dbase: DS.belongsTo('App.Dbase'),
+	dbase: DS.belongsTo('dbase'),
 	name: DS.attr('string'),
 	totalContacts: DS.attr('number'),
 	activeContacts: DS.attr('number'),

@@ -12,12 +12,12 @@ class ContactListWrapper extends BaseWrapper
 	public static function convertListToJson(Contactlist $contactlist)
 	{
 		$object = array();
-		$object['id'] = $contactlist->idContactlist;
+		$object['id'] = intval($contactlist->idContactlist);
 		$object['name'] = $contactlist->name;
 		$object['description'] = $contactlist->description;
 		$object['createdon'] = $contactlist->createdon;
 		$object['updatedon'] = $contactlist->updatedon;
-		$object['dbase_id'] = $contactlist->Dbase->idDbase;
+		$object['dbase'] = $contactlist->Dbase->idDbase;
 
 		$object['total_contacts'] = $contactlist->Ctotal;
 		$object['active_contacts'] = $contactlist->Cactive;

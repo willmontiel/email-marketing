@@ -79,7 +79,7 @@ Ember.MixinPagination = Ember.Mixin.create({
 	}
 	,
 	refreshModel: function (obj) {
-		this.set('content', this.modelClass.find(obj));
+		this.set('content', this.store.find(this.modelClass, obj));
 	}
 	,
 	prevPage: function(){

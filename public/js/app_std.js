@@ -4,39 +4,22 @@ App = Ember.Application.create({
 
 /* STORE */
 // Serializador
-var serializer = DS.RESTSerializer.create();
-
-serializer.configure({
-    meta: 'meta',
-    pagination: 'pagination'
-});
+//App.ApplicationSerializer = DS.RESTSerializer.extend({
+//    meta: 'meta',
+//    pagination: 'pagination'
+//});
 
 //Adaptador
-App.Adapter = DS.RESTAdapter.reopen({
+App.ApplicationAdapter = DS.RESTAdapter.extend();
+
+App.ApplicationAdapter.reopen({
 	namespace: MyDbaseUrl,
-	serializer: serializer
+	serializer: App.ApplicationSerializer
 });
 
 // Store (class)
-App.Store = DS.Store.extend({
-	revision: 13,
-	adapter: App.Adapter.create()
-//	adapter: DS.FixtureAdapter.extend({
-//        queryFixtures: function(fixtures, query, type) {
-//            console.log(query);
-//            console.log(type);
-//            return fixtures.filter(function(item) {
-//                for(prop in query) {
-//                    if( item[prop] != query[prop]) {
-//                        return false;
-//                    }
-//                }
-//                return true;
-//            });
-//        }
-//    })
-});
+App.Store = DS.Store.extend({});
 
 // Store (object)
-App.store = App.Store.create();
+//App.store = App.Store.create();
 

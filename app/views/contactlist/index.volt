@@ -11,7 +11,7 @@
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
 	<script type="text/javascript">
-		App.DBObjectList = App.store.findAll(App.Dbase);
+		//App.DBObjectList = App.store.find(App.Dbase);
 	</script>
 	<script type="text/javascript">
 		App.totalFields = {{totalFields}};

@@ -14,7 +14,7 @@ App.Blockedemail = DS.Model.extend({
 //Rutas
 App.BlockedemailsIndexRoute = Ember.Route.extend({
 	model: function(){
-		return App.Blockedemail.find();
+		return this.store.find('blockedemail');
 	}
 });
 
@@ -32,14 +32,9 @@ App.BlockedemailsBlockRoute = Ember.Route.extend({
 //Controladores
 App.BlockedemailController = Ember.ObjectController.extend();
 
-App.BlockedemailsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
+App.BlockedemailsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, {
 	getModelMetadata: function() {
 		return App.store.typeMapFor(App.Blockedemail);
-	},
-	
-	refreshModel: function (obj) {
-		var result = App.Blockedemail.find(obj);
-		this.set('content', result);
 	}
 });
 

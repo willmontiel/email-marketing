@@ -3,7 +3,7 @@ App.Segment = DS.Model.extend({
 	description: DS.attr('string'),
 	criteria: DS.attr('string'),
 	customField: DS.attr('number'),
-	dbase: DS.attr('number')
+	dbase: DS.hasMany('dbase'),
 });
 
 App.criteria = [
@@ -28,6 +28,10 @@ App.SegmentsIndexRoute = Ember.Route.extend({
 App.SegmentsNewRoute = Ember.Route.extend({
 	model: function(){
 		return App.Segment.createRecord();
+	},
+	setupController: function (controller, model) {
+		this._super(controller, model);
+		controller.set('dbases', this.controllerFor('dbase').find());
 	}
 });
 
