@@ -18,7 +18,7 @@ App.Router.map(function() {
 });
 
 /* Controladores de Dbase  (necesario?) */
-App.DbaseIndexController = Ember.ArrayController.extend({
+App.DbaseController = Ember.ArrayController.extend({
 	model: function()
 	{
 		return this.store.find('dbase');

@@ -118,7 +118,7 @@ class ContactListWrapper extends BaseWrapper
 		$this->pager->setTotalRecords($total);
 		
 		return array('lists' => $lista, 
-					 'dbases' => $bdjson,
+					 'dbase' => $bdjson,
 					 'meta' => $this->pager->getPaginationObject()
 				) ;
 		
