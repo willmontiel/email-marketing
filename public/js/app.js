@@ -351,12 +351,6 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
-//	deactivated: function () {
-//		this.set("isActive", false);		
-//	},
-//	activated: function () {
-//		this.set("isActive", true);
-//	},
 	unsubscribedcontact: function () {
 		this.set("isSubscribed", false);
 		this.get('model.transaction').commit();

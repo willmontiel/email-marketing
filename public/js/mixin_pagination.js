@@ -2,7 +2,7 @@
  * Para utilizar el Mixin solo se debe 
  * crear un atributo en el controlador con la clase del modelo que utiliza
  * EJ:
- * modelClass : App.List
+ * modelClass : 'list'
  */
 
 Ember.MixinPagination = Ember.Mixin.create({
