@@ -70,18 +70,23 @@ App.DbaseSelect = Ember.Select.extend({
 		console.log(idDbase = this.get('value'));
 		console.log(App.customField = App.customFieldsArray[idDbase]);
 		
+		App.customFields.length = 0;
+		
 		if (App.customField != null) {
 			for(var i = 0; i < 1; i++) {
 				console.log(App.customField['idCustomField']);
 				console.log(App.customField['name']);
+				console.log(App.customField['type']);
+				var obj = Ember.Object.create({customField: App.customField['name'], id: App.customField['idCustomField']});
+				App.customFields.push(obj);
 			}
 		}
-		App.customFields = [
-  Ember.Object.create({customField: "Texto", id: "Text"}),
-];
+		
 		
 	}
 });
 
 
-		
+App.customFields = [
+		Ember.Object.create({customField: "Texto", id: "Text"})
+	];	

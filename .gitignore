@@ -1,5 +1,10 @@
 *.volt.php
 app/cache/metadata/*
-app/config/*.ini
-*.volt%%e%%.php
-dbdebug.log
+/app/config/configuration.ini
+/app/logs/dbdebug.log
+/app/logs/debug.log
+/app/views/templates/signin.volt%%e%%.php
+/app/views/templates/index_new.volt%%e%%.php
+/public/css/style.css
+/app/views/templates/index.volt%%e%%.php
+/public/css/normalize.css
