@@ -241,9 +241,9 @@ class ApiController extends ControllerBase
 			$fieldinstance->delete();
 		}
 		
-		$customfield->delete();
+		$response = $customfield->delete();
 		
-		return $this->setJsonResponse(null);	
+		return $this->setJsonResponse($response);	
 	
 	}
 		

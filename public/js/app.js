@@ -80,29 +80,13 @@ App.Field = DS.Model.extend({
 });
 
 App.FieldsAddController = Ember.ObjectController.extend({
-		
-	save: function() {
-		exist = App.Field.find().filterProperty('name', this.get('name'));
-		if(exist.get("length") === 1 && this.get('name').toLowerCase() !== 'email' && this.get('name').toLowerCase() !== 'nombre' && this.get('name').toLowerCase() !== 'apellido'){
-			if (this.get('values') != undefined) { 
-				this.set('values', 
-				this.get('values').split('\n')
-				);
-			}
-
-			this.get("model.transaction").commit();
-			App.set('errormessage', '');
-			this.get("target").transitionTo("fields.index");
-		} else {
-			App.set('errormessage', 'El campo ya existe');
-			this.get("target").transitionTo("fields.add");
+	actions : {
+		save: function() {
+			var self = this;
+			self.content.save().then(function() {
+				self.transitionToRoute('fields.index');
+			});
 		}
-	},
-		
-	cancel: function(){
-		 this.get("transaction").rollback();
-		 App.set('errormessage', '');
-		 this.get("target").transitionTo("fields");
 	}	
 });
 
@@ -195,14 +179,16 @@ App.FieldsAddRoute = Ember.Route.extend({
 });
 
 App.FieldsRemoveController = Ember.ObjectController.extend({
-    eliminate: function() {
-		this.get('content').deleteRecord();
-		this.get('model.transaction').commit();
-		this.get("target").transitionTo("fields");
-    },
-	cancel: function(){
-		 this.get("transaction").rollback();
-		 this.get("target").transitionTo("fields");
+	actions: {
+		eliminate: function() {
+			var self = this;
+			var field = self.get('model');
+			field.deleteRecord();
+			
+			field.save().then(function () {
+				self.transitionToRoute('fields.index');
+			});
+		}
 	}
 });
 
@@ -359,7 +345,7 @@ App.ContactsDeleteController = Ember.ObjectController.extend({
 App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
 	searchText: '',
     search: function(){
-		var resultado = App.Contact.find({ email: this.get('searchText') });
+		var resultado = this.store.find('contact', { email: this.get('searchText') });
 		this.set('content', resultado);
 	},
 	modelClass: 'Contact'
