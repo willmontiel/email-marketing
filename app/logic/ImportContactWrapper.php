@@ -53,7 +53,8 @@ class ImportContactWrapper extends BaseWrapper
 
 			$this->newcontact = new stdClass();
 			
-			$this->MappingToJSON($linew, $posCol, $customfields);
+			$this->MappingToJSON($linew, $posCol);
+			$this->MappingCustomFieldsToJSON($linew, $posCol, $customfields);
 			
 			array_push($success, $linew);
 			
@@ -138,7 +139,7 @@ class ImportContactWrapper extends BaseWrapper
 		return $posCol;
 	}
 
-	protected function MappingToJSON($linew, $posCol, $customfields){
+	protected function MappingToJSON($linew, $posCol){
 		
 		$this->newcontact->email = (isset($posCol[0]))?$linew[$posCol[0]]:"";
 		$this->newcontact->name = (isset($posCol[1]))?$linew[$posCol[1]]:"";
@@ -157,7 +158,10 @@ class ImportContactWrapper extends BaseWrapper
 		$this->newcontact->is_subscribed = 1;
 		$this->newcontact->is_spam = "";
 		$this->newcontact->is_active = 1;
-		
+	}
+	
+	protected function MappingCustomFieldsToJSON($linew, $posCol, $customfields)
+	{
 		$numfield = 3;
 		foreach ($customfields as $field) {
 			$namefield= "campo".$field->idCustomField;
@@ -178,12 +182,13 @@ class ImportContactWrapper extends BaseWrapper
 			} 
 			elseif ($field->required == "No" && $field->type == "Numerical") {
 				if(isset($posCol[$numfield]))
-						$this->newcontact->$namefield = (is_numeric($linew[$posCol[$numfield]]))?$linew[$posCol[$numfield]]:$field->defaultValue;
+					$this->newcontact->$namefield = (is_numeric($linew[$posCol[$numfield]]))?$linew[$posCol[$numfield]]:$field->defaultValue;
 			}
 			$numfield++;
 		}
 	}
-	
+
+
 	protected function createReports($errors, $success)
 	{
 		$uniquecode = uniqid();
