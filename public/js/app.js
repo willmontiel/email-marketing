@@ -43,8 +43,10 @@ App.Store = DS.Store.extend({});
 // Store (object)
 //App.store = App.Store.extend();
 
+//**
+// ** Inicio de todo lo que tenga que ver con los campos personalizados**
+//**
 
-//Inicio de todo lo que tenga que ver con los campos
 App.Field = DS.Model.extend({
 	name: DS.attr('string', { required: true }),
 	type: DS.attr( 'string' ),
@@ -54,8 +56,6 @@ App.Field = DS.Model.extend({
 	minValue: DS.attr('number'),
 	maxValue: DS.attr('number'),
 	maxLength: DS.attr('number'),
-//	changedRequired: function() {
-//	}.observes("required")
 	becameError: function() {
 		return alert('there was an error!');
 	},
@@ -79,69 +79,25 @@ App.Field = DS.Model.extend({
 	}.property('type')
 });
 
-App.FieldsAddController = Ember.ObjectController.extend({
-	actions : {
-		save: function() {
-			var self = this;
-			self.content.save().then(function() {
-				self.transitionToRoute('fields.index');
-			});
-		}
-	}	
-});
-
-
-App.FieldsEditController = Ember.ObjectController.extend({
-	edit: function() {
-	exist = App.Field.find().filterProperty('name', this.get('name'));
-		if(exist.get("length") === 1 && this.get('name').toLowerCase() !== 'email' && this.get('name').toLowerCase() !== 'nombre' && this.get('name').toLowerCase() !== 'apellido'){
-			if (this.get('values') != undefined) { 
-				this.set('values', 
-				this.get('values').split('\n')
-				);
-			}
-
-			this.get("model.transaction").commit();
-			App.set('errormessage', '');
-			this.get("target").transitionTo("fields.index");
-		} else {
-			App.set('errormessage', 'El campo ya existe!');
-			this.get("target").transitionTo("fields.edit");
-		}
-	},
-	cancel: function(){
-		 this.get("transaction").rollback();
-		 App.set('errormessage', '');
-		 this.get("target").transitionTo("fields");
-	}
-});
-
-App.FieldController = Ember.ObjectController.extend();
-
-Ember.TextField.reopen({
-	attributeBindings: ["required"]	
-});
-
-
-App.types = [
-  Ember.Object.create({type: "Texto", id: "Text"}),
-  Ember.Object.create({type: "Fecha",    id: "Date"}),
-  Ember.Object.create({type: "Numerico",    id: "Numerical"}),
-  Ember.Object.create({type: "Area de texto",    id: "TextArea"}),
-  Ember.Object.create({type: "Selección",    id: "Select"}),
-  Ember.Object.create({type: "Selección Multiple",    id: "MultiSelect"})
-];
-
-//App.Field.FIXTURES = [
-//  { id: 1, name: 'Email', type: 'Text', required: true, values: '', defaultValue: 'Ninguno' },
-//  { id: 2, name: 'Nombre', type: 'Text', required: true, values: '', defaultValue: '' },
-//  { id: 3, name: 'Apellido', type: 'Text', required: false, values: '', defaultValue: '' }
-//];
-
+//**
+// ** RUTAS **
+//**
 App.FieldsIndexRoute = Ember.Route.extend({
 	model: function(){
 	 return this.store.find('field');
 	}	
+});
+
+App.FieldsAddRoute = Ember.Route.extend({
+	model: function(){
+		return this.store.createRecord('field');
+	},
+		
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.get('transaction').rollback();
+		}
+	}
 });
 
 App.FieldsEditRoute = Ember.Route.extend({
@@ -160,22 +116,48 @@ App.FieldsEditRoute = Ember.Route.extend({
 	}
 });
 
-App.FieldsAddRoute = Ember.Route.extend({
-	model: function(){
-		return this.store.createRecord('field');
-	},
-			
+//** FIN RUTAS **
+
+//**
+// ** CONTROLADORES **
+//**
+App.FieldController = Ember.ObjectController.extend();
+
+App.FieldsAddController = Ember.ObjectController.extend({
+	actions : {
+		save: function() {
+			var self = this;
+			self.content.save().then(function() {
+				self.transitionToRoute('fields.index');
+			});
+		},
+				
+		cancel: function(){
+			var self = this;
+			self.get('model').rollback();
+			self.transitionToRoute('fields');
+		}
+	}	
+});
+
+App.FieldsEditController = Ember.ObjectController.extend({
 	actions: {
-		save: function(){
-			this.modelFor('field').save();
+		edit: function() {
+			var self = this;
+			if (self.get('values') != undefined) { 
+				self.set('values', 
+				self.get('values').split('\n')
+				);
+			}
+			self.content.save().then(function() {
+				self.transitionToRoute('fields');
+			});
+		},
+		cancel: function() {
+			this.get('model').rollback();
+			this.transitionToRoute('fields');
 		}
 	}
-			
-//	deactivate: function () {
-//		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-//			this.currentModel.get('transaction').rollback();
-//		}
-//	}
 });
 
 App.FieldsRemoveController = Ember.ObjectController.extend({
@@ -183,33 +165,58 @@ App.FieldsRemoveController = Ember.ObjectController.extend({
 		eliminate: function() {
 			var self = this;
 			var field = self.get('model');
+			
+			//borrando registro del store
 			field.deleteRecord();
 			
+			//haciendo persistencia en el cambio
 			field.save().then(function () {
 				self.transitionToRoute('fields.index');
-			});
+			}),
+					
+			function (error) {
+				field.rollback();
+            };
+		},
+				
+		cancel: function() {
+			this.transitionToRoute('fields.index');
 		}
 	}
 });
+//** FIN CONTROLADORES **
 
-// App.FieldsController = Ember.ArrayController.extend();
-App.FieldsIndexController = Ember.ArrayController.extend();
-//Fin de todo lo que tenga que ver con los campos
+Ember.TextField.reopen({
+	attributeBindings: ["required"]	
+});
+App.types = [
+  Ember.Object.create({type: "Texto", id: "Text"}),
+  Ember.Object.create({type: "Fecha",    id: "Date"}),
+  Ember.Object.create({type: "Numerico",    id: "Numerical"}),
+  Ember.Object.create({type: "Area de texto",    id: "TextArea"}),
+  Ember.Object.create({type: "Selección",    id: "Select"}),
+  Ember.Object.create({type: "Selección Multiple",    id: "MultiSelect"})
+];
 
+//**
+//** Fin de todo lo que tenga que ver con los campos **
+//********************************************************************************************************************
 
+//********************************************************************************************************************
+//** Inicio contactos **
+//**
 
-//Inicio contactos
 App.Contact = DS.Model.extend(
 	myContactModel
 );
-
 
 App.List = DS.Model.extend({
     name: DS.attr('string'),
 	lists: DS.hasMany('contact')
 });
-
-//Rutas
+//**
+//** RUTAS **
+//**
 
 App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
@@ -224,17 +231,12 @@ App.ContactsNewRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.createRecord('contact');
 	},
-	
-	actions: {
-		save: function() {
-			this.modelFor('contact').save();
+			
+	deactivate: function () {
+		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
+			this.get('currentModel.transaction').rollback();
 		}
 	}
-//	deactivate: function () {
-//		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
-//			this.get('currentModel.transaction').rollback();
-//		}
-//	}
 });
 
 App.ContactsNewbatchRoute = Ember.Route.extend();
@@ -254,91 +256,88 @@ App.ContactsEditRoute = Ember.Route.extend({
 		}
 	}
 });
+//** FIN RUTAS **
 
-//Controladores
-
+//**
+//** CONTROLADORES **
+//**
 App.ContactController = Ember.ObjectController.extend();
 
 App.ContactsNewbatchController = Ember.ObjectController.extend();
 
 App.ContactsNewController = Ember.ObjectController.extend({
 	errors: null,
-	
-	save: function() {
-		
-//		 exist = App.Contact.find().filterProperty('email', this.get('email'));
-//			if(exist.get("length") === 1){
-//				var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
-//				if(filter.test(this.get('email'))){
-//					this.get('model').set('isActive', true);
-//					this.get('model').set('isSubscribed', true);
-//					this.get("model.transaction").commit();
-//					App.set('errormessage', '');
-//					this.get("target").transitionTo("contacts");
-//				}
-//				else{
-//					App.set('errormessage', 'El email no es correcto');
-//					this.get("target").transitionTo("contacts.new");
-//				}
-//			}
-//			else{
-//				App.set('errormessage', 'El email ya existe');
-//				this.get("target").transitionTo("contacts.new");
-//			}
-		var model = this.get('model');
-		if (model.get('isValid') && !model.get('isSaving')) {
-			
-			model.set('isActive', true);
-			model.set('isSubscribed', true);
-			
-			model.on('becameInvalid', this, function() {
-				this.handleFailure();
-			});			
-			model.on('becameError', this, function() {
-				this.handleFailure();
-			});	
-			model.on('didCreate', this, function() {
-				this.get('target').transitionTo('contacts');
-			});
-			
-			model.get('transaction').commit();
-				}
-	},
-		
-	cancel: function(){
-		this.get("target").transitionTo("contacts");
-	},
+	actions: {
+		save: function() {
+			var model = this.get('model');
+			var self = this;
+			if (model.get('isValid') && !model.get('isSaving')) {
 
+				model.set('isActive', true);
+				model.set('isSubscribed', true);
+
+				model.on('becameInvalid', this, function() {
+					this.handleFailure();
+				});			
+				model.on('becameError', this, function() {
+					this.handleFailure();
+				});	
+				model.on('didCreate', this, function() {
+					this.get('target').transitionTo('contacts');
+				});
+
+				self.content.save().then(function () {
+					self.transitionToRoute('contacts');
+				});
+			}
+		},
+
+		cancel: function(){
+			this.transitionToRoute("contacts");
+		}
+	},
+	
 	handleFailure: function() {
-		window.errormsg = this.get('content.errors');
-		this.set('errors', errormsg);
+		var self = this;
+		window.errormsg = self.get('content.errors');
+		self.set('errors', errormsg);
 		App.set('errormessage', errormsg);
-		this.get('transaction').rollback();
-		this.set('content', App.Contact.createRecord(this.get('toJSON')));
+		self.get('model').rollback();
+		self.set('content', this.store.createRecord('contact', this.get('toJSON')));
 	}
 });
 
 App.ContactsEditController = Ember.ObjectController.extend({
-	edit: function() {
-			this.get("model.transaction").commit();
-			this.get("target").transitionTo("contacts");
-		
-	},
-	cancel: function(){
-		 this.get("transaction").rollback();
-		 this.get("target").transitionTo("contacts");
+	actions: {
+		edit: function() {
+			var self = this;
+			self.content.save().then(function (){
+				self.transitionToRoute('contacts');
+			});	
+		},
+		cancel: function(){
+			var self = this;
+			self.get('model').rollback();
+			self.transitionToRoute('contacts');
+		}
 	}
 });
 
 App.ContactsDeleteController = Ember.ObjectController.extend({
-    delete: function() {
-		this.get('content').deleteRecord();
-		this.get('model.transaction').commit();
-		this.get("target").transitionTo("contacts");
-    },
-	cancel: function(){
-		 this.get("transaction").rollback();
-		 this.get("target").transitionTo("contacts");
+	actions: {
+		delete: function() {
+			var self = this;
+			var contact = self.get('model');
+			contact.deleteRecord();
+			
+			contact.save().then(function() {
+				contact.transitionToRoute('contacts');
+			});
+		},
+				
+		cancel: function(){
+			this.transitionToRoute("contacts");
+		}
 	}
 });
 

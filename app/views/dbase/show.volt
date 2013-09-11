@@ -349,7 +349,7 @@
 				<div class="row-fluid" id="defaultNewField">
 					{{ '{{#unless isDate}}' }}
 						<label for="value_default">Valor por defecto </label>
-						{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="value_default"}}' }}
+						{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="defaultValue"}}' }}
 					{{ '{{/unless}}' }}
 				</div>
 				<div class="row-fluid">

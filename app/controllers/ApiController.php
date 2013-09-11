@@ -42,11 +42,11 @@ class ApiController extends ControllerBase
 		$phObject->type = $jsonObject->type;
 		$phObject->required = ($jsonObject->required)?'Si':'No';
 		$phObject->values = $jsonObject->values;
-		$phObject->defaultValue = $jsonObject->default_value;
+		$phObject->defaultValue = $jsonObject->defaultValue;
 		
-		$phObject->minValue = $jsonObject->min_value;
-		$phObject->maxValue = $jsonObject->max_value;
-		$phObject->maxLength = $jsonObject->max_length;
+		$phObject->minValue = $jsonObject->minValue;
+		$phObject->maxValue = $jsonObject->maxValue;
+		$phObject->maxLength = $jsonObject->maxVength;
 	}
 
 	/**
@@ -63,11 +63,11 @@ class ApiController extends ControllerBase
 		$jsonObject['type'] = $phObject->type;
 		$jsonObject['required'] = ($phObject->required=='Si');
 		$jsonObject['values'] = $phObject->values;
-		$jsonObject['default_value'] = $phObject->defaultValue;
+		$jsonObject['defaultValue'] = $phObject->defaultValue;
 		
-		$jsonObject['min_value'] = $phObject->minValue;
-		$jsonObject['max_value'] = $phObject->maxValue;
-		$jsonObject['max_length'] = $phObject->maxLength;
+		$jsonObject['minValue'] = $phObject->minValue;
+		$jsonObject['maxValue'] = $phObject->maxValue;
+		$jsonObject['maxLength'] = $phObject->maxLength;
 
 		return $jsonObject;
 	}
@@ -476,9 +476,9 @@ class ApiController extends ControllerBase
 		// Eliminar el Contacto de la Base de Datos
 		$wrapper = new ContactWrapper();
 
-		$wrapper->deleteContactFromDB($contact, $db);
+		$response = $wrapper->deleteContactFromDB($contact, $db);
 		
-		return $this->setJsonResponse(null);	
+		return $this->setJsonResponse($response);	
 	
 	}
 	

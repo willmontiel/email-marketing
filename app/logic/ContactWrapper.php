@@ -201,7 +201,7 @@ class ContactWrapper extends BaseWrapper
 		}
 		
 		if($contact->delete()) {
-			$this->counter->deleteContactFromDbase($contact);			
+			$this->counter->deleteContactFromDbase($contact);
 		}
 		$this->counter->saveCounters();
 	}
@@ -330,18 +330,18 @@ class ContactWrapper extends BaseWrapper
 		$hora = time();
 		
 		$contact->name = $data->name;
-		$contact->lastName = $data->last_name;
+		$contact->lastName = $data->lastName;
 
 		if ($isnew) {
 			$contact->ipSubscribed = $this->ipaddress;
 			$contact->ipActivated = 0;
-			$contact->unsubscribed = (!$data->is_subscribed)?$hora:0;
-			$contact->subscribedon = ($data->is_subscribed)?$hora:0;
+			$contact->unsubscribed = (!$data->isSubscribed)?$hora:0;
+			$contact->subscribedon = ($data->isSubscribed)?$hora:0;
 			$contact->ipSubscribed = $this->ipaddress;
-			$contact->status = ($data->is_active)?$hora:0;
-			$contact->ipActivated = ($data->is_active)?$this->ipaddress:0;
-			$contact->bounced = ($data->is_bounced)?$hora:0;
-			$contact->spam = ($data->is_spam)?$hora:0;
+			$contact->status = ($data->isActive)?$hora:0;
+			$contact->ipActivated = ($data->isActive)?$this->ipaddress:0;
+			$contact->bounced = ($data->isBounced)?$hora:0;
+			$contact->spam = ($data->isSpam)?$hora:0;
 		}
 		else {
 			if ($contact->unsubscribed != 0 && $data->is_subscribed) {
@@ -355,35 +355,35 @@ class ContactWrapper extends BaseWrapper
 				$contact->subscribedon = $hora;
 				$contact->ipSubscribed = $this->ipaddress;
 			}
-			else if ($contact->unsubscribed == 0 && !$data->is_subscribed) {
+			else if ($contact->unsubscribed == 0 && !$data->isSubscribed) {
 				// Actualmente suscrito, y se actualiza a des-suscrito
 				$contact->unsubscribed = $hora;
 			}
 
-			if ($contact->status != 0 && !$data->is_active) {
+			if ($contact->status != 0 && !$data->isActive) {
 				// Actualmente activo, y se desactiva
 				$contact->status = 0;
 			}
-			else if ($contact->status == 0 && $data->is_active) {
+			else if ($contact->status == 0 && $data->isActive) {
 				// Actualmente desactivado y se activa
 				$contact->status = $hora;
 				$contact->ipActivated = $this->ipaddress;
 			}
 			
-			if ($contact->bounced != 0 && !$data->is_bounced) {
+			if ($contact->bounced != 0 && !$data->isBounced) {
 				// Actualmente rebotado y se actualiza a no rebotado
 				$contact->bounced = 0;
 			}
-			else if ($contact->bounced == 0 && $data->is_bounced) {
+			else if ($contact->bounced == 0 && $data->isBounced) {
 				// Actualmente no rebotado, y se actualiza a rebotado
 				$contact->bounced = $hora;
 			}
 			
-			if ($contact->spam != 0 && !$data->is_spam) {
+			if ($contact->spam != 0 && !$data->isSpam) {
 				// Actualmente spam y se actualiza a no spam
 				$contact->spam = 0;
 			}
-			else if ($contact->spam == 0 && $data->is_spam) {
+			else if ($contact->spam == 0 && $data->isSpam) {
 				// Actualmente no spam, y se actualiza a spam
 				$contact->spam = $hora;
 			}
@@ -558,23 +558,23 @@ class ContactWrapper extends BaseWrapper
 		$object['id'] = $contact->idContact;
 		$object['email'] = $contact->email->email;
 		$object['name'] = $contact->name;
-		$object['last_name'] = $contact->lastName;
-		$object['is_active'] = ($contact->status != 0);
-		$object['activated_on'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
-		$object['is_subscribed'] = ($contact->unsubscribed == 0);
-		$object['subscribed_on'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
-		$object['unsubscribed_on'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
-		$object['is_bounced'] = ($contact->bounced != 0);
-		$object['bounced_on'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
-		$object['is_spam'] = ($contact->spam != 0);
-		$object['spam_on'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
-		$object['created_on'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
-		$object['updated_on'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
+		$object['lastName'] = $contact->lastName;
+		$object['isActive'] = ($contact->status != 0);
+		$object['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
+		$object['isSubscribed'] = ($contact->unsubscribed == 0);
+		$object['subscribedOn'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
+		$object['unsubscribedOn'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
+		$object['isBounced'] = ($contact->bounced != 0);
+		$object['bouncedOn'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
+		$object['isSpam'] = ($contact->spam != 0);
+		$object['spamOn'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
+		$object['createdOn'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
+		$object['updatedOn'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
 		
-		$object['ip_subscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
-		$object['ip_activated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
+		$object['ipSubscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
+		$object['ipActivated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
-		$object['is_email_blocked'] = ($contact->email->blocked != 0);
+		$object['isEmailBlocked'] = ($contact->email->blocked != 0);
 		
 		$customfields = Customfield::findByIdDbase($this->idDbase);
 		
@@ -614,23 +614,23 @@ class ContactWrapper extends BaseWrapper
 		$object['id'] = $contact->idContact;
 		$object['email'] = $email->email;
 		$object['name'] = $contact->name;
-		$object['last_name'] = $contact->lastName;
-		$object['is_active'] = ($contact->status != 0);
-		$object['activated_on'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
-		$object['is_subscribed'] = ($contact->unsubscribed == 0);
-		$object['subscribed_on'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
-		$object['unsubscribed_on'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
-		$object['is_bounced'] = ($contact->bounced != 0);
-		$object['bounced_on'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
-		$object['is_spam'] = ($contact->spam != 0);
-		$object['spam_on'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
-		$object['created_on'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
-		$object['updated_on'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
+		$object['lastName'] = $contact->lastName;
+		$object['isActive'] = ($contact->status != 0);
+		$object['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
+		$object['isSubscribed'] = ($contact->unsubscribed == 0);
+		$object['subscribedOn'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
+		$object['unsubscribedOn'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
+		$object['isBounced'] = ($contact->bounced != 0);
+		$object['bouncedOn'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
+		$object['isSpam'] = ($contact->spam != 0);
+		$object['spamOn'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
+		$object['createdOn'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
+		$object['updatedOn'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
 		
-		$object['ip_subscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
-		$object['ip_activated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
+		$object['ipSubscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
+		$object['ipActivated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
-		$object['is_email_blocked'] = ($email->blocked != 0);
+		$object['isEmailBlocked'] = ($email->blocked != 0);
 		
 		
 		foreach ($customfields as $field) {
