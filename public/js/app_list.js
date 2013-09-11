@@ -25,19 +25,6 @@ App.DbaseController = Ember.ArrayController.extend({
 	}
 });
 
-/* Fixtures de prueba */
-//App.List.FIXTURES = [
-//	{id: 1, name: 'Mi primera Lista', description: 'Mi primera lista, no tiene descripcion alguna', createdon: '10 de agosto de 2012', updatedon: '12 de agosto de 2013'},
-//	{id: 2, name: 'Mi segunda Lista', description: 'Mi seguna lista, no tiene descripcion alguna', createdon: '15 de marzo de 2013', updatedon: '16 de marzo de 2013'},
-//	{id: 3, name: 'Mi tercera Lista', description: 'Mi tercera lista, no tiene descripcion alguna', createdon: '19 de febrero de 2013', updatedon: '19 de febrero de 2013'}
-//];
-//
-//App.Dbase.FIXTURES = [
-//	{id: 1, name: 'Base 1'},
-//	{id: 2, name: 'Base 2'},
-//	{id: 3, name: 'Base 3'}
-//];
-
 /* Rutas de Contact Lists */
 App.ListsIndexRoute = Ember.Route.extend({
 	model: function () {

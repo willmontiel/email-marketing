@@ -5,7 +5,7 @@ if (!App.Dbase) {
 	// definir version simplificada de Lista (si no esta definida)
 	App.Dbase = DS.Model.extend({
 		name: DS.attr('string'),
-//		lists: DS.hasMany('list')
+		lists: DS.hasMany('list')
 	});
 }
 

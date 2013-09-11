@@ -22,42 +22,26 @@ App.Router.map(function() {
 
 /* STORE */
 // Serializador
-var serializer = DS.RESTSerializer.create();
+//var serializer = DS.RESTSerializer.create();
 
-serializer.configure({
-    meta: 'meta',
-    pagination: 'pagination'
-});
+//serializer.configure({
+//    meta: 'meta',
+//    pagination: 'pagination'
+//});
 
 // Adaptador
-App.Adapter = DS.RESTAdapter.reopen({
+App.ApplicationAdapter = DS.RESTAdapter.extend();
+
+App.ApplicationAdapter.reopen({
 	namespace: MyDbaseUrl,
-	serializer: serializer
+	serializer: App.AplicationSerializer
 });
 
 // Store (class)
-App.Store = DS.Store.extend({
-	revision: 13,
-	adapter: App.Adapter.create()
-	
-//	adapter: DS.FixtureAdapter.extend({
-//        queryFixtures: function(fixtures, query, type) {
-//            console.log(query);
-//            console.log(type);
-//            return fixtures.filter(function(item) {
-//                for(prop in query) {
-//                    if( item[prop] != query[prop]) {
-//                        return false;
-//                    }
-//                }
-//                return true;
-//            });
-//        }
-//    })
-});
+App.Store = DS.Store.extend({});
 
 // Store (object)
-App.store = App.Store.create();
+//App.store = App.Store.extend();
 
 
 //Inicio de todo lo que tenga que ver con los campos
@@ -172,8 +156,8 @@ App.types = [
 
 App.FieldsIndexRoute = Ember.Route.extend({
 	model: function(){
-	 return App.Field.find();
-	}
+	 return this.store.find('field');
+	}	
 });
 
 App.FieldsEditRoute = Ember.Route.extend({
@@ -194,13 +178,20 @@ App.FieldsEditRoute = Ember.Route.extend({
 
 App.FieldsAddRoute = Ember.Route.extend({
 	model: function(){
-		return App.Field.createRecord();
+		return this.store.createRecord('field');
 	},
-	deactivate: function () {
-		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.get('transaction').rollback();
+			
+	actions: {
+		save: function(){
+			this.modelFor('field').save();
 		}
 	}
+			
+//	deactivate: function () {
+//		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+//			this.currentModel.get('transaction').rollback();
+//		}
+//	}
 });
 
 App.FieldsRemoveController = Ember.ObjectController.extend({
@@ -229,27 +220,14 @@ App.Contact = DS.Model.extend(
 
 App.List = DS.Model.extend({
     name: DS.attr('string'),
-	lists: DS.hasMany('App.Contact')
+	lists: DS.hasMany('contact')
 });
-
-//App.Contact.FIXTURES = [
-//  { id: 1, email: 'puertorro@hotmail.es', name: 'Fenicio', lastName: 'Cuantindioy', activatedOn: 12345678, bouncedOn: 0, status: true, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 1225455524, ipActive: 13542532, ipSubscribed: 0, isBounced: false, isActive: true, isSpam: true, isSubscribed: true },
-//  { id: 2, email: 'lachicacandente@hotmail.es', name: 'Lola', lastName: 'Lolita', activatedOn: 12345678, status: true, bouncedOn: 15544512, subscribedOn: 123456, unsubscribedOn: 15171518, spamOn: 0, ipActive: 561151515, ipSubscribed: 14822852, isBounced: true, isActive: true, isSpam: false, isSubscribed: false },
-//  { id: 3, email: 'superbigman@yahoo.es', name: 'Disney Alberto', lastName: 'Mosquera', activatedOn: 0, status: false,bouncedOn: 0, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 0, ipActive: 0, ipSubscribed: 0, isBounced: false, isActive: false, isSpam: false, isSubscribed: false },
-//  { id: 5, email: 'yatusabe@live.com', name: 'Maicol Yovany', lastName: 'Icasa', activatedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActive: 1528228, ipSubscribed: 0, isBounced: true, isActive: true, isSpam: true, isSubscribed: true },
-//  { id: 6, email: 'elcoco@gmail.com', name: 'linux', lastName: 'bin', activatedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActive: 1528228, ipSubscribed: 0, isBounced: true, isActive: true, isSpam: true, isSubscribed: true },
-//  { id: 7, email: 'labebe@live.com', name: 'mac', lastName: 'var', activatedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActive: 1528228, ipSubscribed: 0, isBounced: true, isActive: true, isSpam: true, isSubscribed: true },
-//  { id: 8, email: 'ajam@live.com', name: 'Ubuntu', lastName: 'www', activatedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActive: 1528228, ipSubscribed: 0, isBounced: true, isActive: true, isSpam: true, isSubscribed: true },
-//  { id: 9, email: 'jj@jj.com', name: 'windows', lastName: 'ext', activatedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActive: 1528228, ipSubscribed: 0, isBounced: true, isActive: true, isSpam: true, isSubscribed: true },
-//  { id: 10, email: 'jojojo@live.com', name: 'fedora', lastName: 'dll', activatedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActive: 1528228, ipSubscribed: 0, isBounced: true, isActive: true, isSpam: true, isSubscribed: true },
-//  { id: 11, email: 'lol@live.com', name: 'kubuntu', lastName: 'query', activatedOn: 12345678, status: true, bouncedOn:123456, subscribedOn: 123456, unsubscribedOn: 0, spamOn: 123567, ipActive: 1528228, ipSubscribed: 0, isBounced: true, isActive: true, isSpam: true, isSubscribed: true }
-//];
 
 //Rutas
 
 App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
-		return App.Contact.find();
+		return this.store.find('contact');
 	}
 });
 
@@ -258,13 +236,19 @@ App.ContactsShowRoute = Ember.Route.extend({
 
 App.ContactsNewRoute = Ember.Route.extend({
 	model: function(){
-		return App.Contact.createRecord();
+		return this.store.createRecord('contact');
 	},
-	deactivate: function () {
-		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
-			this.get('currentModel.transaction').rollback();
+	
+	actions: {
+		save: function() {
+			this.modelFor('contact').save();
 		}
 	}
+//	deactivate: function () {
+//		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
+//			this.get('currentModel.transaction').rollback();
+//		}
+//	}
 });
 
 App.ContactsNewbatchRoute = Ember.Route.extend();
@@ -378,15 +362,7 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 		var resultado = App.Contact.find({ email: this.get('searchText') });
 		this.set('content', resultado);
 	},
-			
-	getModelMetadata: function() {
-		return App.store.typeMapFor(App.Contact);
-	},
-	
-	refreshModel: function (obj) {
-		var result = App.Contact.find(obj);
-		this.set('content', result);
-	}
+	modelClass: 'Contact'
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({

@@ -10,7 +10,7 @@
 		var MyDbaseUrl = '{{apiurlbase.url ~ '/dbase/' ~ sdbase.idDbase }}';
 		
 		var myContactModel = {
-			list: DS.belongsTo('App.List'),
+			list: DS.belongsTo('list'),
 			email: DS.attr( 'string' ),
 			name: DS.attr( 'string' ),
 			lastName: DS.attr( 'string' ),
@@ -57,7 +57,7 @@
 	</script>
 	
 	<script>
-		App.ListObjectDB = App.store.findAll(App.List);
+		//App.ListObjectDB = App.store.findAll(App.List);
 	</script>
 {% endblock %}
 
