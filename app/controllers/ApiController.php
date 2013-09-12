@@ -515,7 +515,7 @@ class ApiController extends ControllerBase
 	 * 
 	 * @Post("/lists")
 	 */
-	public function contactlistsnewAction()
+	public function createContactList()
 	{
 		$log = $this->logger;
 
@@ -528,7 +528,7 @@ class ApiController extends ControllerBase
 		$wrapper->setAccount($this->user->account);
 		
 		try {
-			$lists = $wrapper->validateContactListData($contents);
+			$lists = $wrapper->createContactlist($contents);
 		}
 		catch (InvalidArgumentException $e) {
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());

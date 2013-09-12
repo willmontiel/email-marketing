@@ -19,12 +19,12 @@ class ContactListWrapper extends BaseWrapper
 		$object['updatedon'] = $contactlist->updatedon;
 		$object['dbase'] = $contactlist->Dbase->idDbase;
 
-		$object['total_contacts'] = $contactlist->Ctotal;
-		$object['active_contacts'] = $contactlist->Cactive;
-		$object['unsubscribed_contacts'] = $contactlist->Cunsubscribed;
-		$object['bounced_contacts'] = $contactlist->Cbounced;
-		$object['spam_contacts'] = $contactlist->Cspam;
-		$object['inactive_contacts'] = $contactlist->getInactiveContacts();
+		$object['totalContacts'] = $contactlist->Ctotal;
+		$object['activeContacts'] = $contactlist->Cactive;
+		$object['unsubscribedContacts'] = $contactlist->Cunsubscribed;
+		$object['bouncedContacts'] = $contactlist->Cbounced;
+		$object['spamContacts'] = $contactlist->Cspam;
+		$object['inactiveContacts'] = $contactlist->getInactiveContacts();
 
 		return $object;
 	}
@@ -53,7 +53,7 @@ class ContactListWrapper extends BaseWrapper
 	}
 
 
-	public function validateContactListData($contents)
+	public function createContactlist($contents)
 	{
 		
 		if (!isset($contents->name) || trim($contents->name) == '' || $contents->name == null ) {
@@ -188,6 +188,7 @@ class ContactListWrapper extends BaseWrapper
 		}
 		
 		$db->commit();
+		return $deleteContaclist;
 	}
 
 	

@@ -117,13 +117,15 @@ App.ListsDeleteController = Ember.ObjectController.extend({
 		delete: function() {
 			var self = this;
 			var list = self.get('content');
-			this.get('content').deleteRecord();
-			this.get('model.transaction').commit();
-			this.get("target").transitionTo("lists");
+			
+			list.deleteRecord();
+			
+			list.save().then(function(){
+				self.transitionToRoute('lists');
+			});
 		},
 		cancel: function(){
-			 this.get("transaction").rollback();
-			 this.get("target").transitionTo("lists");
+			this.transitionTo('lists');	
 		}
 	}
 });
