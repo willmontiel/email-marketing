@@ -81,35 +81,39 @@
 	
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppContactContainer">
-		<script type="text/x-handlebars" data-template-name="contacts/index">
+		<script type="text/x-handlebars" data-template-name="contacts">
 		<div class="padded">
 		<div class="clearfix">
 			<ul class="inline sparkline-box" style="">
 
 				<li class="sparkline-row">
-					<h4 class="blue"><span>Contactos totales</span> {{'{{App.currentList.totalContactsF}}'}}</h4>
+					<h4 class="blue"><span>Contactos totales</span> {{'{{lista.totalContactsF}}'}}</h4>
 				</li>
 
 				<li class="sparkline-row">
-					<h4 class="green"><span>Activos</span> {{'{{App.currentList.activeContactsF}}'}}</h4>
+					<h4 class="green"><span>Activos</span> {{'{{lista.activeContactsF}}'}}</h4>
 				</li>
 
 				<li class="sparkline-row">
-					<h4 class="gray"><span>Inactivos</span> {{'{{App.currentList.inactiveContactsF}}'}}</h4>
+					<h4 class="gray"><span>Inactivos</span> {{'{{lista.inactiveContactsF}}'}}</h4>
 				</li>
 				<li class="sparkline-row">
-					<h4 class="gray"><span>Des-suscritos</span> {{'{{App.currentList.unsubscribedContactsF}}'}}</h4>
+					<h4 class="gray"><span>Des-suscritos</span> {{'{{lista.unsubscribedContactsF}}'}}</h4>
 				</li>
 				<li class="sparkline-row">
-					<h4 class="red"><span>Rebotados</span> {{'{{App.currentList.bouncedContactsF}}'}}</h4>
+					<h4 class="red"><span>Rebotados</span> {{'{{lista.bouncedContactsF}}'}}</h4>
 				</li>
 				<li class="sparkline-row">
-					<h4 class="red"><span>Spam</span> {{'{{App.currentList.spamContactsF}}'}}</h4>
+					<h4 class="red"><span>Spam</span> {{'{{lista.spamContactsF}}'}}</h4>
 				</li>
 
 			</ul>
 		</div>
 		</div>
+			{{'{{outlet}}'}}
+		</script>
+		<script type="text/x-handlebars" data-template-name="contacts/index">
+
 			<div class="pull-right" style="margin-bottom: 5px;">
 				<a href="{{url('contactlist#/lists')}}" class="btn btn-blue"><i class="icon-home"></i> Todas las listas</a>
 				{{'{{#linkTo "contacts.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/linkTo}}'}}
@@ -134,10 +138,6 @@
 					{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
-		</script>
-		
-		<script type="text/x-handlebars" data-template-name="contacts">
-				{{'{{outlet}}'}}
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="contacts/new">

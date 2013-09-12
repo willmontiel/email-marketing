@@ -1,7 +1,15 @@
 //App.currentList = this.store.find('list', currentList);
 
 App.ContactsRoute =  Ember.Route.extend({
-	model: function() {
-		App.currentList = this.store.find('list', currentList);
+	setupController: function (controller, model) {
+		controller.set('model', model);
+		controller.inicializar();
+	}
+});
+
+App.ContactsController = Ember.Controller.extend({
+	lista: null,
+	inicializar: function () {
+		this.set('lista', this.store.find('list', currentList));
 	}
 });
