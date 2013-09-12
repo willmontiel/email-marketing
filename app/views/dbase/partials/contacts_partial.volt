@@ -40,11 +40,11 @@
 				<li class="sparkline-row">
 					<h4 class="orange"><span>Des-suscritos</span>{{ sdbase.Cunsubscribed|numberf }}</h4>
 				</li>
-		
+
 				<li class="sparkline-row">
 					<h4 class="red"><span>Rebotados</span>{{sdbase.Cbounced|numberf }}</h4>
 				</li>
-		
+
 				<li class="sparkline-row">
 					<h4 class="red"><span>Spam</span>{{sdbase.Cspam|numberf }}</h4>
 				</li>

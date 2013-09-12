@@ -15,44 +15,37 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Bloquear dirección de correo electrónico
-					</div>
-				</div>
 				<div class="box-content">
-					<div class="padded">
-						<table class="table table-striped">
-							<thead>
+					<table class="table table-normal">
+						<thead>
+							<tr>
+								<td>
+									Email
+								</td>
+								<td class="span3">
+									Fecha
+								</td>
+								<td class="span5">
+									Razón de bloqueo
+								</td>
+								<td class="span1">
+									Acciones
+								</td>
+							</tr>
+						</thead>
+						</tbody>
+							{{ '{{#each model}}' }}
 								<tr>
-									<th class="span3">
-										Email
-									</th>
-									<th class="span3">
-										Fecha
-									</th>
-									<th class="span5">
-										Razón de bloqueo
-									</th>
-									<th class="span1">
-										Acciones
-									</th>
+									<td>{{ '{{email}}' }}</td>
+									<td>{{'{{blockedDate}}' }}</td>
+									<td>{{ '{{blockedReason}}'}}</td>
+									<td>
+										{{'{{#linkTo "blockedemails.unblock" this}}'}} Desbloquear {{'{{/linkTo}}'}}
+									</td>
 								</tr>
-							</thead>
-							</tbody>
-								{{ '{{#each model}}' }}
-									<tr>
-										<td>{{ '{{email}}' }}</td>
-										<td>{{'{{blockedDate}}' }}</td>
-										<td>{{ '{{blockedReason}}'}}</td>
-										<td>
-											{{'{{#linkTo "blockedemails.unblock" this}}'}} Desbloquear {{'{{/linkTo}}'}}
-										</td>
-									</tr>
-								{{ '{{/each }}' }}
-							</tbody>
-						</table>
-					</div>
+							{{ '{{/each }}' }}
+						</tbody>
+					</table>
 				</div>
 				<div class="box-footer">
 					{{ partial("partials/pagination_partial") }}
@@ -81,8 +74,9 @@
 					la cuenta al realizar una campaña de envío. 
 				</p>
 				<p>
-					Al intentar bloquear direcciones de correo, el sistema preguntará si desea eliminar los contactos 
-					que pertenecen a esa dirección, si no se selecciona esa opción, por defecto se marcarán como des-suscritos
+					cuando intente bloquear direcciones de correo, podrá configurar si desea que el sistema elimine los contactos
+					asociados a esa dirección por medio de una casilla de verificación,
+					si no se configura esa opción, por defecto se marcarán como des-suscritos
 					y en futuro podrá revertirlo.
 				</p>
 				<p>
@@ -111,7 +105,7 @@
 								<label>*Escriba la razón por la cual esta bloqueando esta dirección de correo electrónico: </label>
 								{{ '{{view Ember.TextArea valueBinding="blockedReason" placeholder="Escribe la razón de bloqueo" required="required"}}' }}
 								<p>Si estas seguro dale click al botón <strong>Bloquear</strong> para continuar.</p>
-								<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact" class="icheck"}}' }} Eliminar contactos asociados al email</p>
+								<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact" class="icheckbox_flat-aero hover"}}' }} Eliminar contactos asociados al email</p>
 								<button class="btn btn-danger" {{ '{{action block this }}' }}>Bloquear</button>
 								<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>
 							</form>

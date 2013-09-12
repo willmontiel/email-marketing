@@ -24,7 +24,7 @@
 		<div class="box-content">
 	{%for item in page.items%}
 			<div class="box-section news with-icons">
-				<div class="avatar cyan">
+				<div class="avatar purple">
 					<i class="icon-book icon-2x"></i>
 				</div>
 				<div class="news-content">

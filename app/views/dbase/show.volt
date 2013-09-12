@@ -89,7 +89,7 @@
 			<div class="box">
 				<div class="box-content">
 					<div class="box-section news with-icons">
-						<div class="avatar green">
+						<div class="avatar blue">
 							<i class="icon-tags icon-2x"></i>
 						</div>
 						<div class="news-time">
@@ -237,9 +237,9 @@
 								{{sdbase.description}}
 							</div>
 							<div class="news-text">
-								<p>Descripcion de Contactos: {{sdbase.Cdescription}}</p>
-								Creada el {{date('Y-m-d', sdbase.createdon)}}<br />
-								Actualizada el {{date('Y-m-d', sdbase.updatedon)}}
+								<p>Descripcion de Contactos: <br />{{sdbase.Cdescription}}</p>
+								Creada en {{date('Y-m-d', sdbase.createdon)}}<br />
+								Actualizada en {{date('Y-m-d', sdbase.updatedon)}}
 							</div>
 						</div>
 					</div>
