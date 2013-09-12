@@ -61,162 +61,139 @@
 {% endblock %}
 {%block sectionsubtitle %} {{sdbase.description}} {% endblock %}
 {% block content %}
-<script type="text/x-handlebars">       
-        <div class="row-fluid">
-                <div class="span12">
-                        <ul class="nav nav-pills">
-                                {{'{{#linkTo "index" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>General</a>{{/linkTo}}'}}
-								{{'{{#linkTo "fields" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Campos</a>{{/linkTo}}'}}
-								{{'{{#linkTo "contacts" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}                                                                
-                                <li><a href="#">Segmentos</a></li>
-                                <li><a href="#">Estadisticas</a></li>
-                                <li><a href="#">Formularios</a></li>
-                        </ul>
-                </div>
-        </div>
-        {{ "{{outlet}}" }}
-</script>
-        
-<script type="text/x-handlebars" data-template-name="fields/index">
-<div class="row-fluid">
-	<div class="span12">
-			<h4>Campos de la Base de Datos</h4>
-			<p>Esta seccion esta dedicada a la Lectura
-			y Edicion de los Campos Personalizados
-			</p>
+<script type="text/x-handlebars"> 
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="box">
+				<div class="box-header">
+					<ul class="nav nav-tabs nav-tabs-left">
+						{{'{{#linkTo "index" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>General</a>{{/linkTo}}'}}
+						{{'{{#linkTo "fields" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Campos</a>{{/linkTo}}'}}
+						{{'{{#linkTo "contacts" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}                                                                
+						<li><a href="#">Segmentos</a></li>
+						<li><a href="#">Estadisticas</a></li>
+						<li><a href="#">Formularios</a></li>
+					</ul>
+				</div>
+				<div class="box-content padded">
+					{{ "{{outlet}}" }}
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
-<div class="row-fluid">
-
-	<div class="span12"></div>
-</div>
-<div class="row-fluid">
-        <div class="span12">
-                <table class="table table-hover">
-                        <thead>
-                                 <tr>
-									<th class="span2">
-											Etiqueta
-									</th>
-									<th class="span2">
-											Tipo
-									</th>
-									<th class="span1">
-											Requerido
-									</th>
-									<th class="span2">
-											Valor por Defecto
-									</th>
-									<th class="span2">
-											Accion
-									</th>
-                                </tr>
-                        </thead>
-                        <tbody>
-								<tr>
-									<td>
-										Email
-									</td>
-									<td>
-										Text
-									</td>
-									<td>
-										<label class="checkbox checked" for="required">
-											<span class="icons">
-												<span class="first-icon fui-checkbox-unchecked"></span>
-												<span class="second-icon fui-checkbox-checked"></span>
-											</span>
-										</label>
-									</td>
-									<td>
-											
-									</td>
-									<td>
-											
-									</td>
-                                </tr>
-								<tr>
-									<td>
-										Nombre
-									</td>
-									<td>
-										Text
-									</td>
-									<td>
-										<label class="checkbox">
-											<span class="icons">
-												<span class="first-icon fui-checkbox-unchecked"></span>
-												<span class="second-icon fui-checkbox-checked"></span>
-											</span>
-										</label>
-									</td>
-									<td>
-											
-									</td>
-									<td>
-											
-									</td>
-                                </tr>
-								<tr>
-									<td>
-										Apellido
-									</td>
-									<td>
-										Text
-									</td>
-									<td>
-										<label class="checkbox">
-											<span class="icons">
-												<span class="first-icon fui-checkbox-unchecked"></span>
-												<span class="second-icon fui-checkbox-checked"></span>
-											</span>
-										</label>
-									</td>
-									<td>
-											
-									</td>
-									<td>
-											
-									</td>
-                                </tr>
-							{{'{{#each controller}}'}}
-                                <tr>
-									<td>{{'{{name}}'}}</td>
-									<td>{{'{{type}}'}}</td>
-									<td>
-										{{ '{{#if required}}' }}
-											<label class="checkbox checked" for="required">
-												<span class="icons">
-													<span class="first-icon fui-checkbox-unchecked"></span>
-													<span class="second-icon fui-checkbox-checked"></span>
-												</span>
-											</label>
-										{{ '{{else}}' }}
-											<label class="checkbox" for="required">
-												<span class="icons">
-													<span class="first-icon fui-checkbox-unchecked"></span>
-													<span class="second-icon fui-checkbox-checked"></span>
-												</span>
-											</label>
-										{{ '{{/if}}' }}
-									</td>
-									<td>{{'{{defaultValue}}'}}</td>
-									<td>
-										{{ '{{#linkTo "fields.edit" this}}' }}Editar{{'{{/linkTo}}'}}
-										{{'{{#linkTo "fields.remove" this}}'}} Eliminar {{'{{/linkTo}}'}}
-									</td>
-                                </tr>
-								
-							{{'{{else}}'}}
-								<tr><td colspan="4">No hay campos personalizados</td></tr>
-							{{'{{/each}}'}}
-                        </tbody>
-                </table>
-        </div>
-</div>
-<div class="row-fluid">
-	{{'{{#linkTo "fields.add"}} Agregar {{/linkTo}}'}}
-</div>
+</script>
+<script type="text/x-handlebars" data-template-name="fields/index">       
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="box">
+				<div class="box-content">
+					<div class="box-section news with-icons">
+						<div class="avatar green">
+							<i class="icon-tags icon-2x"></i>
+						</div>
+						<div class="news-time">
+						</div>
+						<div class="news-content">
+							<div class="news-title">
+								Campos de la Base de Datos
+							</div>
+							<div class="news-text">
+								Esta seccion esta dedicada a la Lectura
+								y Edicion de los Campos Personalizados
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span12 padded text-right">
+			{{'{{#linkTo "fields.add" class="btn btn-default"}}<i class="icon-plus"></i> Agregar campo{{/linkTo}}'}}
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="box">
+				<div class="box-content">
+					<table class="table table-normal">
+						<thead>
+							<tr>
+								<td>Etiqueta</td>
+								<td>Tipo</td>
+								<td>Requerido</td>
+								<td>Valor por Defecto</td>
+								<td>Accion</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Email</td>
+								<td>Text</td>
+								<td>
+									<div class="icheckbox_flat-aero checked hover">
+									</div>
+								</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Nombre</td>
+								<td>Text</td>
+								<td>
+									<div class="icheckbox_flat-aero hover">
+									</div>
+								</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Apellido</td>
+								<td>Text</td>
+								<td>
+									<div class="icheckbox_flat-aero hover">
+									</div>
+								</td>
+								<td></td>
+								<td></td>
+							</tr>
+						{{'{{#each controller}}'}}
+							<tr>
+								<td>{{'{{name}}'}}</td>
+								<td>{{'{{type}}'}}</td>
+								<td>
+									{{ '{{#if required}}' }}
+										<div class="icheckbox_flat-aero checked hover">
+										</div>
+									{{ '{{else}}' }}
+										<div class="icheckbox_flat-aero hover">
+										</div>
+									{{ '{{/if}}' }}
+								</td>
+								<td>{{'{{defaultValue}}'}}</td>
+								<td>
+									<div class="pull-right">
+										<div class="btn-group">
+											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
+											<ul class="dropdown-menu">
+												<li>{{ '{{#linkTo "fields.edit" this}}' }}<i class="icon-pencil"></i> Editar{{'{{/linkTo}}'}}</li>
+												<li>{{'{{#linkTo "fields.remove" this}}'}}<i class="icon-trash"></i> Eliminar {{'{{/linkTo}}'}}</li>
+											</ul>
+										</div>
+									</div>
+									
+									
+								</td>
+							</tr>
+						{{'{{else}}'}}
+							<tr><td colspan="4">No hay campos personalizados</td></tr>
+						{{'{{/each}}'}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields">
@@ -237,49 +214,85 @@
 </div>
 	<!------------------ Ember! ---------------------------------->
 <div id="emberAppContainer">
-		
 <script type="text/x-handlebars" data-template-name="index">
 	<div class="row-fluid">
-			<div class="span8">
-							<p>Descripcion: {{sdbase.description}}</p>
-							<p>Descripcion de Contactos: {{sdbase.Cdescription}}</p>
-							<p>Fecha de Creacion: {{date('Y-m-d', sdbase.createdon)}}</p>
-							<p>Ultima Fecha de Actualizacion: {{date('Y-m-d', sdbase.updatedon)}}</p>
-					<div class="row-fluid">
-						<div class="span2">
-							<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-large btn-block btn-info">Editar</a>
+		<div class="span6">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Información de la base de datos
+					</div>
+				</div>
+				<div class="box-content padded">
+					<div class="box-section news with-icons">
+						<div class="avatar purple">
+							<i class="icon-book icon-2x"></i>
+						</div>
+						<div class="news-time">
+							<span>14</span>feb
+						</div>
+						<div class="news-content">
+							<div class="news-title">
+								{{sdbase.description}}
+							</div>
+							<div class="news-text">
+								<p>Descripcion de Contactos: {{sdbase.Cdescription}}</p>
+								Creada el {{date('Y-m-d', sdbase.createdon)}}<br />
+								Actualizada el {{date('Y-m-d', sdbase.updatedon)}}
+							</div>
 						</div>
 					</div>
-			</div>
-			<div class="span4">
-					<div class="badge-number-dark">
-							<span class="number-huge">{{ sdbase.Ctotal|numberf }}</span>
-							<br/>
-							<span class="regular-text">Contactos totales</span>
+					<br />
+					<div class="row-fluid">
+						<div class="span2">
+							<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default">Editar</a>
+						</div>
 					</div>
-					<div class="badge-number-light">
-							<span class="number-large text-green-color">{{ sdbase.Cactive|numberf }}</span>
-							<br/>
-							<span class="regular-text">Contactos Activos</span>
-							<br/>
-							<span class="number-large text-gray-color">{{ get_inactive(sdbase)|numberf }}</span>
-							<br/>
-							<span class="regular-text">Contactos Inactivos</span>
-							<br/>
-							<span class="number-large text-gray-color">{{ sdbase.Cunsubscribed|numberf }}</span>
-							<br/>
-							<span class="regular-text">Contactos Des-suscritos</span>
-							<br/>
-							<span class="number-large text-brown-color">{{sdbase.Cbounced|numberf }}</span>
-							<br/>
-							<span class="regular-text">Contactos Rebotados</span>
-							<br/>
-							<span class="number-large text-red-color">{{sdbase.Cspam|numberf }}</span>
-							<br/>
-							<span class="regular-text">Contactos Spam</span>
-							<br/>
-					</div>
+				</div>
+			</div>	
+		</div>
+		<div class="span6">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">Información de contactos</div>
+				</div>
+				<div class="box-content">
+					<table class="table table-normal">
+						<tbody>
+							<tr>
+								<td><i class="icon-user"></i> Contactos totales</td>
+								<td class="status-success"><span class="label label-blue">{{ sdbase.Ctotal|numberf }}</span></td>
+							</tr>
+
+							<tr>
+								<td><i class="icon-ok"></i> Contactos Activos</td>
+								<td class="status-success"><span class="label label-green">{{ sdbase.Cactive|numberf }}</span></td>
+							</tr>
+
+							<tr>
+								<td><i class="icon-question-sign"></i> Contactos Inactivos</td>
+								<td class="status-error"><span class="label label-gray"> {{ get_inactive(sdbase)|numberf }}</span></td>
+							</tr>
+
+							<tr>
+								<td><i class="icon-check-empty"></i> Contactos Des-suscritos</td>
+								<td class="status-success"><span class="label label-warning"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
+							</tr>
+
+							<tr>
+								<td><i class="icon-retweet"></i> Contactos Rebotados</td>
+								<td class="status-success"><span class="label label-red"> {{sdbase.Cbounced|numberf }}</span></td>
+							</tr>
+
+							<tr>
+								<td><i class="icon-exclamation-sign"></i> Contactos Spam</td>
+								<td class="status-success"><span class="label label-red"> {{sdbase.Cspam|numberf }}</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
+		</div>
 	</div>
 </script>
 

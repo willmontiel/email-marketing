@@ -63,7 +63,6 @@ Ember.MixinPagination = Ember.Mixin.create({
 	,
 	getModelMetadata: function() {
 		if (!this.modelClass) {
-			console.log('Excepcion: No se ha definido un modelo para paginacion');
 			return {
 				metadata: {
 					pagination: {
