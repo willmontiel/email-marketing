@@ -101,6 +101,7 @@ App.ListsEditController = Ember.ObjectController.extend({
 			else{
 				var self = this;
 				self.content.save().then(function() {
+					App.set('errormessage', '');
 					self.transitionToRoute("lists");
 				});
 			}

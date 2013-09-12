@@ -888,7 +888,7 @@ class ApiController extends ControllerBase
 		$wrapper = new BlockedEmailWrapper();
 		
 		try {
-			$wrapper->removeEmailFromBlockedList($this->user->account, $idBlockedemail);
+			$response = $wrapper->removeEmailFromBlockedList($this->user->account, $idBlockedemail);
 		}
 		
 		catch (\InvalidArgumentException $e) {
@@ -900,6 +900,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while deleting blocked email!');	
 		}
 		
+		return $this->setJsonResponse(array ('blockedemails' => $response), 202, 'email unblocked success');
 	}
 	
 	/*Finaliza todo lo que tiene que ver con listas de bloqueo globales*/

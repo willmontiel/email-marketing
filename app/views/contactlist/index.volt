@@ -115,7 +115,12 @@
 
 		</script>
 		<script type="text/x-handlebars" data-template-name="lists">
-			{{'{{outlet}}'}}
+				{{ '{{#if App.errormessage }}' }}
+					<div class="alert alert-message alert-error">
+				{{ '{{ App.errormessage }}' }}
+					</div>
+				{{ '{{/if}} '}}	
+				{{ '{{outlet}}' }}
 		</script>
 		
 		<!------------- Crear una nueva lista ------------------------->

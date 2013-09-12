@@ -28,7 +28,7 @@ class BlockedEmailWrapper extends BaseWrapper
 		$bemail->email->blocked = 0;
 		$bemail->email->save();
 		
-		$bemail->delete();
+		return $bemail->delete();
 	}
 
 	//esta funcion valida que el email a bloquear exista y que no se encuentre bloqueado
@@ -131,8 +131,8 @@ class BlockedEmailWrapper extends BaseWrapper
 		$object = array();
 		$object['id'] = intval($Blockedemail->idBlockedemail);
 		$object['email'] = $Blockedemail->email;
-		$object['blocked_reason'] = $Blockedemail->blockedReason;
-		$object['blocked_date'] = date('d/m/Y H:i', $Blockedemail->blockedDate);
+		$object['blockedReason'] = $Blockedemail->blockedReason;
+		$object['blockedDate'] = date('d/m/Y H:i', $Blockedemail->blockedDate);
 
 		return $object;
 	}
@@ -186,7 +186,7 @@ class BlockedEmailWrapper extends BaseWrapper
 		$blocked = new Blockedemail();
 		$blocked->setTransaction($transaction);
 		$blocked->idEmail = $email->idEmail;
-		$blocked->blockedReason = $contents->blocked_reason;
+		$blocked->blockedReason = $contents->blockedReason;
 		$blocked->blockedDate = time();
 		
 		if($blocked->save()){
@@ -202,7 +202,7 @@ class BlockedEmailWrapper extends BaseWrapper
 
 			try {
 				// Actualizar usando una transaccion
-				if($contents->delete_contact == null) {
+				if($contents->deleteContact == null) {
 					$wrapper->updateContact($email->idEmail, $updateContact, $transaction);
 					// Commit
 					$transaction->commit();
