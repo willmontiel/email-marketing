@@ -25,18 +25,23 @@ App.List = DS.Model.extend({
 	totalContactsF: function() {
 		return this.formatNumber(this.get('totalContacts'));
 	}.property('totalContacts'),
+			
 	activeContactsF: function() {
 		return this.formatNumber(this.get('activeContacts'));
 	}.property('activeContacts'),
+			
 	unsubscribedContactsF: function() {
 		return this.formatNumber(this.get('unsubscribedContacts'));
 	}.property('unsubscribedContacts'),
+			
 	bouncedContactsF: function() {
 		return this.formatNumber(this.get('bouncedContacts'));
 	}.property('bouncedContacts'),
+			
 	spamContactsF: function() {
 		return this.formatNumber(this.get('spamContacts'));
 	}.property('spamContacts'),
+			
 	inactiveContactsF: function() {
 		return this.formatNumber(this.get('inactiveContacts'));
 	}.property('inactiveContacts'),

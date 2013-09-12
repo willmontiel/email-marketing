@@ -1,4 +1,4 @@
-{% extends "templates/index.volt" %}
+{% extends "templates/index_new.volt" %}
 
 {% block header_javascript %}
 	{{ super() }}
@@ -55,12 +55,11 @@
 			{{ ember_customfield_options(field) }}
 		{%endfor%}
 	</script>
-	
-	<script>
-		//App.ListObjectDB = App.store.findAll(App.List);
-	</script>
 {% endblock %}
-
+{% block sectiontitle %}
+	<i class="icon-book"></i> {{sdbase.name}}
+{% endblock %}
+{%block sectionsubtitle %} {{sdbase.description}} {% endblock %}
 {% block content %}
 <script type="text/x-handlebars">       
         <div class="row-fluid">
@@ -229,20 +228,13 @@
 		
 	{{'{{outlet}}'}}
 </script>
-
 <div class="row-fluid">
 	<div class="row-fluid">
-			<div class="span8">
-					<div class="modal-header">
-							<h1>{{sdbase.name}}</h1>
-					</div>
-			</div>
-			<div class="span4" >
-					<span class="return-upper-right-corner"><a href="{{url('dbase')}}"><h3>Regresar</h3></a></span>
-			</div>
+		<div class="span12 text-right">
+			<a href="{{url('dbase')}}" class="btn btn-default">Regresar</a>
+		</div>
 	</div>
 </div>
-
 	<!------------------ Ember! ---------------------------------->
 <div id="emberAppContainer">
 		

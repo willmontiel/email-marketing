@@ -80,13 +80,7 @@
 				</table>
 			</div>
 		</div>
-	</div>
-	
-	<div class="text-right">
-			{{'{{#linkTo "contacts.new"}} <button class="btn btn-primary" >Agregar</button> {{/linkTo}}'}}
-			{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
-	</div>
-	
+	</div>	
 	<div class="row-fluid">
         <div class="span12">
 			<table class="table table-striped">
@@ -157,11 +151,6 @@
 	</div>
 	<div class="row-fluid">
 		{{ partial("partials/pagination_partial") }}
-		<div class="span4 text-right">
-			<br>
-			{{'{{#linkTo "contacts.new"}} <button class="btn btn-primary" >Agregar</button> {{/linkTo}}'}}
-			{{'{{#linkTo "contacts.newbatch"}} <button class="btn btn-primary" >Agregar Lotes</button> {{/linkTo}}'}}
-		</div>
 	</div>
 </script>
 <script type="text/x-handlebars" data-template-name="contacts">
@@ -173,54 +162,6 @@
 	<div class="alert-success"><h4>{{ flashSession.output() }}</h4></div>
 	{{'{{outlet}}'}}
 </script>
-<script type="text/x-handlebars" data-template-name="contacts/new">
-		<p>Agrega un nuevo contacto, con sus datos más básicos. </p>
-			<form>
-				<div class="row-fluid">
-					<div class="span3">
-						<p>
-							<label>E-mail: </label>
-						</p>
-						<p>
-							{{ ember_textfield('email', 'E-mail', 'required') }}
-						</p>
-						<p>
-							<label>Nombre: </label>
-						</p>
-						<p>	
-							{{ ember_textfield('name', 'Nombre', '') }}
-						</p>
-						<p>
-							<label>Apellido: </label>
-						</p>
-						<p>
-							{{ ember_textfield('lastName', 'Apellido', '') }}
-							
-						</p>
-						<!-- Campos Personalizados -->
-							{%for field in fields%}
-								<p><label for="campo{{field.idCustomField}}">{{field.name}}:</label></p>
-								<p>{{ember_customfield(field)}}</p>
-								{% if (field.type == "Text") %}
-									Maximo {{field.maxLength}} caracteres
-								{% elseif field.type == "Numerical" %}
-									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
-								{%endif%}
-							{%endfor%}
-							
-						</p>
-						<!--  Fin de campos personalizados -->
-						<p>Seleccione la Lista a la que pertenece</p>
-						<p>{{ '{{view Ember.Select contentBinding="App.ListObjectDB" selectionBinding="list" optionValuePath="content.id" optionLabelPath="content.name"}}' }}</p>
-						<p>
-							<button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button>
-							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-						</p>	
-					</div>
-				</div>
-			</form>
-</script>
-
 <script type="text/x-handlebars" data-template-name="contacts/edit">
 <p>Agrega un nuevo contacto, con sus datos más básicos. </p>
 	<form>
@@ -438,26 +379,5 @@
 			</table>
 		</div>
 	</div>
-</div>
-</script>
-<script type="text/x-handlebars" data-template-name="contacts/newbatch">
-<div class="row-fluid">
-		<div class="span2">
-			<div class="tooltip fade top in" display: block;">
-				<div class="tooltip-arrow">
-				</div>
-				<div class="tooltip-inner infobatch">
-					Ingrese los Contactos separados por saltos de linea
-					y los campos por COMAS ",".
-				</div>
-			</div>
-		</div>
-		<form method="Post" action="{{url('contacts/newbatch')}}/{{sdbase.idDbase}}" , 'method': 'Post') }}
-		<div class="span5">
-			{{ text_area("arraybatch") }}
-			<input class="btn btn-sm btn-inverse" type="submit" value="Guardar">
-			{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Cancelar</button>{{/linkTo}}' }}
-		</div>
-		</form>
 </div>
 </script>

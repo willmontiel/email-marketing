@@ -12,11 +12,9 @@ App.Router.map(function() {
   });
   
   this.resource('contacts', function(){
-	  this.route('new'),
 	  this.resource('contacts.show', { path: '/show/:contact_id'}),
 	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
-	  this.resource('contacts.delete', { path: '/delete/:contact_id'}),
-	  this.route('newbatch');
+	  this.resource('contacts.delete', { path: '/delete/:contact_id'})
   });
 });
 
@@ -227,20 +225,6 @@ App.ContactsIndexRoute = Ember.Route.extend({
 App.ContactsShowRoute = Ember.Route.extend({
 });
 
-App.ContactsNewRoute = Ember.Route.extend({
-	model: function(){
-		return this.store.createRecord('contact');
-	},
-			
-	deactivate: function () {
-		if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
-			this.get('currentModel.transaction').rollback();
-		}
-	}
-});
-
-App.ContactsNewbatchRoute = Ember.Route.extend();
-
 App.ContactsEditRoute = Ember.Route.extend({
 	deactivate: function () {
 		this.doRollBack();
@@ -262,50 +246,6 @@ App.ContactsEditRoute = Ember.Route.extend({
 //** CONTROLADORES **
 //**
 App.ContactController = Ember.ObjectController.extend();
-
-App.ContactsNewbatchController = Ember.ObjectController.extend();
-
-App.ContactsNewController = Ember.ObjectController.extend({
-	errors: null,
-	actions: {
-		save: function() {
-			var model = this.get('model');
-			var self = this;
-			if (model.get('isValid') && !model.get('isSaving')) {
-
-				model.set('isActive', true);
-				model.set('isSubscribed', true);
-
-				model.on('becameInvalid', this, function() {
-					this.handleFailure();
-				});			
-				model.on('becameError', this, function() {
-					this.handleFailure();
-				});	
-				model.on('didCreate', this, function() {
-					this.get('target').transitionTo('contacts');
-				});
-
-				self.content.save().then(function () {
-					self.transitionToRoute('contacts');
-				});
-			}
-		},
-
-		cancel: function(){
-			this.transitionToRoute("contacts");
-		}
-	},
-	
-	handleFailure: function() {
-		var self = this;
-		window.errormsg = self.get('content.errors');
-		self.set('errors', errormsg);
-		App.set('errormessage', errormsg);
-		self.get('model').rollback();
-		self.set('content', this.store.createRecord('contact', this.get('toJSON')));
-	}
-});
 
 App.ContactsEditController = Ember.ObjectController.extend({
 	actions: {
@@ -359,36 +299,4 @@ App.ContactsShowController = Ember.ObjectController.extend({
 		this.set("isSubscribed", true);
 		this.get('model.transaction').commit();
 	}
-});
-
-//Views
-
-App.ContactsNewView = Ember.View.extend({
-  didInsertElement: function() {
-        jQuery("select").select2({
-			placeholder: "Seleccione las Opciones"
-		});
-    }
-});
-
-App.ContactsEditView = Ember.View.extend({
-  didInsertElement: function() {
-        jQuery("select").select2({
-			placeholder: "Seleccione las Opciones"
-		});
-    }
-});
-
-App.DatePickerField = Em.View.extend({
-  templateName: 'datepicker',
-  didInsertElement: function() {
-    var onChangeDate, self;
-    self = this;
-    onChangeDate = function(ev) {
-      return self.set("value", moment.utc(ev.date).format("YYYY-MM-DD"));
-    };
-    return this.$('.datepicker').datepicker({
-      separator: "-"
-    }).on("changeDate", onChangeDate);
-  }
 });
