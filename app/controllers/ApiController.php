@@ -592,8 +592,8 @@ class ApiController extends ControllerBase
 		$wrapper->setPager($pager);
 		$wrapper->setIdContactlist($idContactlist);
 
-		$contacts = $wrapper->findContactsComplete($list);
-//		$contacts = $wrapper->findContactsByList($list);
+//		$contacts = $wrapper->findContactsComplete($list);
+		$contacts = $wrapper->findContactsByList($list);
 		// Sideload de la informacion de la lista
 		$contacts['lists'] = array(ContactListWrapper::convertListToJson($list));
 

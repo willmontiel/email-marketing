@@ -143,21 +143,21 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$this->newcontact->email = (isset($posCol[0]))?$linew[$posCol[0]]:"";
 		$this->newcontact->name = (isset($posCol[1]))?$linew[$posCol[1]]:"";
-		$this->newcontact->last_name = (isset($posCol[2]))?$linew[$posCol[2]]:"";;
+		$this->newcontact->lastName = (isset($posCol[2]))?$linew[$posCol[2]]:"";;
 		$this->newcontact->status = "";
-		$this->newcontact->activated_on = "";
-		$this->newcontact->bounced_on = "";
-		$this->newcontact->subscribed_on = "";
-		$this->newcontact->unsubscribed_on = "";
-		$this->newcontact->spam_on = "";
-		$this->newcontact->ip_active = "";
-		$this->newcontact->ip_subscribed = "";
-		$this->newcontact->updated_on = "";
-		$this->newcontact->created_on = "";
-		$this->newcontact->is_bounced = "";
-		$this->newcontact->is_subscribed = 1;
-		$this->newcontact->is_spam = "";
-		$this->newcontact->is_active = 1;
+		$this->newcontact->activatedOn = "";
+		$this->newcontact->bouncedOn = "";
+		$this->newcontact->subscribedOn = "";
+		$this->newcontact->unsubscribedOn = "";
+		$this->newcontact->spamOn = "";
+		$this->newcontact->ipActive = "";
+		$this->newcontact->ipSubscribed = "";
+		$this->newcontact->updatedOn = "";
+		$this->newcontact->createdOn = "";
+		$this->newcontact->isBounced = "";
+		$this->newcontact->isSubscribed = 1;
+		$this->newcontact->isSpam = "";
+		$this->newcontact->isActive = 1;
 	}
 	
 	protected function MappingCustomFieldsToJSON($linew, $posCol, $customfields)

@@ -11,30 +11,16 @@ App.Router.map(function() {
 });
 
 //Adaptador
-App.Adapter = DS.RESTAdapter.reopen({
+
+App.ApplicationAdapter = DS.RESTAdapter.reopen({
 	namespace: MyDbaseUrl
 });
 
 // Store (class)
-App.Store = DS.Store.extend({
-	revision: 13,
-	adapter: App.Adapter.create()
-//	adapter: DS.FixtureAdapter.extend({
-//        queryFixtures: function(fixtures, query, type) {
-//                return fixtures.filter(function(item) {
-//                for(prop in query) {
-//                    if( item[prop] != query[prop]) {
-//                        return false;
-//                    }
-//                }
-//                return true;
-//            });
-//        }
-//    })
-});
+App.Store = DS.Store.extend();
 
 // Store (object)
-App.store = App.Store.create();
+//App.store = App.Store.create();
 
 //Inicio importacion
 App.Contact = DS.Model.extend(
@@ -42,20 +28,20 @@ App.Contact = DS.Model.extend(
 );
 
 
-//rutas
+//Rutas
 App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
-		return App.Contact.find();
+//		return this.store.find('contact');
+		return myImportModel;
 	}
 });
 
 
 //Controladores
-App.ContactController = Ember.ObjectController.extend();
+App.ContactsIndexController = Ember.ObjectController.extend();
 
-App.ContactsIndexController = Ember.ObjectController.extend({
 
-});
+//Views
 
 App.ContactsIndexView = Ember.View.extend({
 	didInsertElement: function() {

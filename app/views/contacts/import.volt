@@ -133,20 +133,20 @@
 						<tbody>
 							<tr>
 								<th>Email: </th>
-								<th>{{'{{email}}'}}</th>
+								<td>{{'{{email}}'}}</td>
 							</tr>
 							<tr>
 								<th>Nombre:</th>
-								<th> {{'{{name}}'}}</th>
+								<td> {{'{{name}}'}}</td>
 							</tr>
 							<tr>
 								<th>Apellido: </th>
-								<th>{{'{{lastname}}'}}</th>
+								<td>{{'{{lastname}}'}}</td>
 							</tr>
 						{%for field in customfields%}
 							<tr>
 								<th>{{field.name}}: </th>
-								<th>{{'{{campo'~field.idCustomField~'}}'}}</th>
+								<td>{{'{{campo'~field.idCustomField~'}}'}}</td>
 							
 							</tr>
 						{%endfor%}
