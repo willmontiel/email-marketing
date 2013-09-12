@@ -62,6 +62,7 @@
 {%block sectionsubtitle %} {{sdbase.description}} {% endblock %}
 {% block content %}
 <script type="text/x-handlebars"> 
+	<br />
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="box">

@@ -1,42 +1,33 @@
-{% extends "templates/index.volt" %}
-
+{% extends "templates/index_new.volt" %}
+{% block sectiontitle %}
+	<i class="icon-book"></i> {{edbase.name}}
+{% endblock %}
+{%block sectionsubtitle %} {{edbase.description}} {% endblock %}
 {% block content %}
 {{ content() }}
-<div class="row-fluid">
-    <div class="modal-header">
-        <h1>{{edbase.name}}</h1>
-    </div>
-    <div class="row-fluid">
-        <form action = "{{url('dbase/edit')}}/{{edbase.idDbase}}" method="post">
-        <div class="row-fluid">
-            <div class="span3">
-                <label for="name">*Nombre</label>
-            </div>
-            <div class="span4">
-                {{editform.render("name")}}
-            </div>
-        </div>
-        <div class="row-fluid">
-            <div class="span3">
-                <label for="description">*Descripcion</label>                
-            </div>
-            <div class="span4">
-                {{editform.render("description")}}
-            </div>
-        </div>
-        <div class="row-fluid">
-            <div class="span3">
-                <label for="Cdescription">*Descripcion de los Contactos</label>
-            </div>
-            <div class="span4">
-                {{editform.render("Cdescription")}}
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-		{{submit_button("Guardar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
-		<a href="{{ url('dbase') }}" class="btn btn-inverse">Cancelar</a>
-    </div>
-    </form>
-</div>
+	<div class="row-fluid">
+		<div class="span3">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Editar una base de datos
+					</div>
+				</div>
+				<div class="box-content padded">
+					<form action = "{{url('dbase/edit')}}/{{edbase.idDbase}}" method="post">
+						<label for="name">*Nombre</label>
+						{{editform.render("name")}}
+								
+						<label for="description">*Descripcion</label>                
+						{{editform.render("description")}}
+						
+						<label for="Cdescription">*Descripcion de los Contactos</label>
+						{{editform.render("Cdescription")}}
+						<br />	
+						{{submit_button("Guardar", 'class' : "btn btn-default", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
+						<a href="{{ url('dbase') }}" class="btn btn-default">Cancelar</a>
+					</form>
+				</div>
+			</div>
+		</div>
 {% endblock %}

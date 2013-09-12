@@ -131,9 +131,7 @@ App.FieldsAddController = Ember.ObjectController.extend({
 		},
 				
 		cancel: function(){
-			var self = this;
-			self.get('model').rollback();
-			self.transitionToRoute('fields');
+			this.transitionToRoute('fields');
 		}
 	}	
 });

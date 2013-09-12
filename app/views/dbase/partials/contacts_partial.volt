@@ -1,156 +1,133 @@
 <script type="text/x-handlebars" data-template-name="contacts/index">
 	<div class="row-fluid">
-		<div class="span7">
-			<div class="row-fluid">
-				<div class="span12">
-					<h2>Contactos</h2>
-					<form>
-						<p>
-							{{' {{view Ember.TextField valueBinding="searchText" placeholder="Buscar" autofocus="autofocus"}} '}}
-							<button class="btn btn-primary" {{ '{{action search this}}' }}>Buscar</button>
-					
-						</p>
-					</form>
-				</div>
-			</div>
-			<div class="row-fluid">
-				<div class="span12">
-					<p>
-						Aqui esta toda la información necesaria para gestionar los datos de tus contactos, sientete a gusto. 
-					</p>
+		<div class="span8">
+			<div class="box">
+				<div class="box-content">
+					<div class="box-section news with-icons">
+						<div class="avatar green">
+							<i class="icon-user icon-2x"></i>
+						</div>
+						<div class="news-content">
+							<div class="news-title">
+								Contactos
+							</div>
+							<div class="news-text">
+								Aqui esta toda la información necesaria para gestionar los datos de tus contactos, recuerda que al editar, 
+								eliminar o des-suscribir un contacto, estos cambios se aplicaran a nivel de todas las listas con las que este
+								relacionado
+								ese contacto, que a su vez estan relacionadas con esta base de datos. 
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="span2"></div>
-		<div class="span3">
-			<div class="badge-number-dark">
-				<table class="offset4">
-					<tr>
-						<td>
-							<span class="text-green-color">{{sdbase.Ctotal|numberf}}</span>
-						</td>
-						<td>
-							<span class="regular-text">Total Contactos</span>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div class="badge-number-light">
-				<table class="offset4">
-					<tr>
-						<td>
-							<span class="text-green-color">{{ sdbase.Cactive|numberf }}</span>
-						</td>
-						<td class="text-left">
-							<span class="regular-text">Activos</span>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span class="text-gray-color text-left">{{ get_inactive(sdbase)|numberf }}</span>
-						</td>
-						<td class="text-left">
-							<span class="regular-text">Inactivos</span>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span class="text-gray-color text-left">{{ sdbase.Cunsubscribed|numberf }}</span>
-						</td>	
-						<td class="text-left">
-							<span class="regular-text">Des-suscritos</span>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span class="text-brown-color text-left">{{sdbase.Cbounced|numberf }}</span>
-						</td>
-						<td class="text-left">
-							<span class="regular-text">Rebotados</span>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span class="text-red-color text-left">{{sdbase.Cspam|numberf }}</span>
-						</td>
-						<td class="text-left">
-							<span class="regular-text">Spam</span>
-						</td>
-					</tr>
-				</table>
-			</div>
+		<div class="span4">
+			<ul class="inline pull-right sparkline-box">
+				<li class="sparkline-row">
+					<h4 class="blue"><span>Contactos Totales</span>{{sdbase.Ctotal|numberf}}</h4>
+				</li>
+
+				<li class="sparkline-row">
+					<h4 class="green"><span>Activos</span>{{ sdbase.Cactive|numberf }}</h4>
+				</li>
+
+				<li class="sparkline-row">
+					<h4 class="gray"><span>Inactivos</span>{{ get_inactive(sdbase)|numberf }}</h4>
+				</li>
+			</ul>
+			<ul class="inline pull-right sparkline-box">
+				<li class="sparkline-row">
+					<h4 class="orange"><span>Des-suscritos</span>{{ sdbase.Cunsubscribed|numberf }}</h4>
+				</li>
+		
+				<li class="sparkline-row">
+					<h4 class="red"><span>Rebotados</span>{{sdbase.Cbounced|numberf }}</h4>
+				</li>
+		
+				<li class="sparkline-row">
+					<h4 class="red"><span>Spam</span>{{sdbase.Cspam|numberf }}</h4>
+				</li>
+			</ul>
 		</div>
-	</div>	
-	<div class="row-fluid">
-        <div class="span12">
-			<table class="table table-striped">
-				<thead>
-					 <tr>
-						<th class="span3">
-							E-mail
-						</th>
-						<th class="span3">
-							Nombre
-						</th>
-						<th class="span3">
-							Apellido
-						</th>
-						<th class="span2">
-							Estado
-						</th>
-						<th class="span1">
-							Acciones
-						</th>
-					</tr>
-				</thead>
-					<tbody>
-						{{'{{#each controller}}'}}
-						<tr>
-							<td>{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</td>
-							<td>{{'{{name}}'}}</td>
-							<td>{{'{{lastName}}'}}</td>
-							<td>
-								<dl>
-									<dd>
-										{{ '{{#if isActive}}' }}
-											<span class="green-label">Activo</span>
-										{{ '{{else}}' }}
-											<span class="orange-label">Inactivo</span>
-										{{ '{{/if}}' }}
-									</dd>
-									<dd>
-										{{ '{{#if isBounced}}' }}
-											Rebotado
-										{{ '{{/if}}' }}
-									</dd>
-									{{ '{{#unless isSubscribed}}' }}
-									<dd>
-											Desuscrito
-									</dd>
-									{{ '{{/unless}}' }}
-									{{ '{{#if isSpam}}' }}
-									<dd>
-										<span class="red-label">SPAM</span>
-									</dd>
-									{{ '{{/if}}' }}
-									
-								</dl>
-							</td>
-							<td>
-								<dl>
-									<dd>{{ '{{#linkTo "contacts.show" this}}Ver{{/linkTo}}' }}</dd>
-									<dd>{{ '{{#linkTo "contacts.edit" this}}Editar{{/linkTo}}' }}</dd>
-									<dd>{{ '{{#linkTo "contacts.delete" this}}Eliminar{{/linkTo}}' }}</dd>
-								</dl>
-							</td>
-						</tr>
-						{{'{{/each}}'}}
-					</tbody>
-			 </table>
-        </div>
 	</div>
 	<div class="row-fluid">
-		{{ partial("partials/pagination_partial") }}
+		<div class="span3">
+			<form>
+				<p>
+					<label class="input-with-submit">
+						{{' {{view Ember.TextField valueBinding="searchText" type="text" placeholder="Buscar" autofocus="autofocus"}} '}}
+						<button class="submit-icon" {{ '{{action search this}}' }}><i class="icon-search"></i></button>
+					</label>
+				</p>
+			</form>
+		</div>
+	</div>
+	<div class="row-fluid">
+        <div class="span12">
+			<div class="box">
+				<div class="box-content">
+					<table class="table table-normal">
+						<thead>
+							 <tr>
+								<td>E-mail</td>
+								<td>Nombre</td>
+								<td>Apellido</td>
+								<td>Estado</td>
+								<td>Acciones</td>
+							</tr>
+						</thead>
+						<tbody>
+							{{'{{#each controller}}'}}
+							<tr>
+								<td>{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</td>
+								<td>{{'{{name}}'}}</td>
+								<td>{{'{{lastName}}'}}</td>
+								<td>
+									<dl>
+										<dd>
+											{{ '{{#if isActive}}' }}
+												<span class="green-label">Activo</span>
+											{{ '{{else}}' }}
+												<span class="orange-label">Inactivo</span>
+											{{ '{{/if}}' }}
+										</dd>
+										<dd>
+											{{ '{{#if isBounced}}' }}
+												Rebotado
+											{{ '{{/if}}' }}
+										</dd>
+										{{ '{{#unless isSubscribed}}' }}
+										<dd>
+												Desuscrito
+										</dd>
+										{{ '{{/unless}}' }}
+										{{ '{{#if isSpam}}' }}
+										<dd>
+											<span class="red-label">SPAM</span>
+										</dd>
+										{{ '{{/if}}' }}
+
+									</dl>
+								</td>
+								<td>
+									<dl>
+										<dd>{{ '{{#linkTo "contacts.show" this}}Ver{{/linkTo}}' }}</dd>
+										<dd>{{ '{{#linkTo "contacts.edit" this}}Editar{{/linkTo}}' }}</dd>
+										<dd>{{ '{{#linkTo "contacts.delete" this}}Eliminar{{/linkTo}}' }}</dd>
+									</dl>
+								</td>
+							</tr>
+							{{'{{/each}}'}}
+						</tbody>
+					 </table>
+				</div>
+				<div class="box-footer">
+					{{ partial("partials/pagination_partial") }}
+				</div>
+			</div>
+			
+        </div>
 	</div>
 </script>
 <script type="text/x-handlebars" data-template-name="contacts">
@@ -159,7 +136,6 @@
 			{{ '{{ App.errormessage }}' }}
 		</div>
 	{{ '{{/if}} '}}
-	<div class="alert-success"><h4>{{ flashSession.output() }}</h4></div>
 	{{'{{outlet}}'}}
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/edit">
