@@ -119,21 +119,21 @@ class ContactsController extends ControllerBase
 			
 			$newcontact->email = $batchC['email'];
 			$newcontact->name = $batchC['name'];
-			$newcontact->last_name = $batchC['last_name'];
+			$newcontact->lastName = $batchC['lastName'];
 			$newcontact->status = "";
-			$newcontact->activated_on = "";
-			$newcontact->bounced_on = "";
-			$newcontact->subscribed_on = "";
-			$newcontact->unsubscribed_on = "";
-			$newcontact->spam_on = "";
-			$newcontact->ip_active = "";
-			$newcontact->ip_subscribed = "";
-			$newcontact->updated_on = "";
-			$newcontact->created_on = "";
-			$newcontact->is_bounced = "";
-			$newcontact->is_subscribed = 1;
-			$newcontact->is_spam = "";
-			$newcontact->is_active = 1;
+			$newcontact->activatedOn = "";
+			$newcontact->bouncedOn = "";
+			$newcontact->subscribedOn = "";
+			$newcontact->unsubscribedOn = "";
+			$newcontact->spamOn = "";
+			$newcontact->ipActive = "";
+			$newcontact->ipSubscribed = "";
+			$newcontact->updatedOn = "";
+			$newcontact->createdOn = "";
+			$newcontact->isBounced = "";
+			$newcontact->isSubscribed = 1;
+			$newcontact->isSpam = "";
+			$newcontact->isActive = 1;
 			
 			try {
 				$contact = $wrapper->addExistingContactToListFromDbase($newcontact->email);

@@ -344,7 +344,7 @@ class ContactWrapper extends BaseWrapper
 			$contact->spam = ($data->isSpam)?$hora:0;
 		}
 		else {
-			if ($contact->unsubscribed != 0 && $data->is_subscribed) {
+			if ($contact->unsubscribed != 0 && $data->isSubscribed) {
 				if ($contact->email->blocked != 0) {
 					// Email bloqueado!!!
 					$this->addFieldError('email', 'El email esta bloqueado');
