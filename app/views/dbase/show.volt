@@ -195,6 +195,11 @@
 			</div>
 		</div>
 	</div>
+	<div class="row-fluid">
+		<div class="span12 padded text-right">
+			{{'{{#linkTo "fields.add" class="btn btn-default"}}<i class="icon-plus"></i> Agregar campo{{/linkTo}}'}}
+		</div>
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields">
@@ -298,142 +303,94 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/add">
-		<div class="row-fluid">
-	<div class="span12">
-		<form>
-			<div class="span4">
-				<div class="row-fluid" id="nameNewField">
-					<label for="name">Nombre del Campo</label>
-					 {{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}} '}}
+	<div class="row-fluid">
+		<div class="box span4">
+			<div class="box-header">
+				<div class="title">
+					Agregar un nuevo campo
 				</div>
-				<div class="row-fluid" id="typeNewField">
-					<label for="type">Tipo de Formato del Campo</label>
-						<div class="row-fluid">
-							{{ '{{view Ember.Select
-									contentBinding="App.types"
-									optionValuePath="content.id"
-									optionLabelPath="content.type"
-									valueBinding="type" id="type"}}'
-							 }}
-						</div>
-						<div class="row-fluid">
-							{{ '{{#if isText}}' }}
-								{{ '{{partial "fields/text"}}' }}
-							{{ '{{/if}}' }}
-							{{ '{{#if isNumerical}}' }}
-								{{ '{{partial "fields/numerical"}}' }}
-							{{ '{{/if}}' }}
-						</div>
-					</label>
-				</div>
-				<div class="row-fluid" id="requiredNewField">
-					<p>Seleccione si desea que el Campo sea Obligatorio</p>
-					<div class="row-fluid">
-					{{ '{{#if required}}' }}
-						<label class="checkbox checked" for="required">
-						<span class="icons">
-							<span class="first-icon fui-checkbox-unchecked">
-							</span>
-							<span class="second-icon fui-checkbox-checked">
-							</span>
-						</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
-						</label>
-					{{ '{{else}}' }}
-						<label class="checkbox" for="required">
-						<span class="icons">
-							<span class="first-icon fui-checkbox-unchecked">
-							</span>
-							<span class="second-icon fui-checkbox-checked">
-							</span>
-						</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
-						</label>
-					{{ '{{/if}}' }}
-					</div>
-				</div>	
-				<div class="row-fluid" id="defaultNewField">
+			</div>
+			<div class="box-content padded">
+				<form>
+					<label>Nombre del Campo</label>
+					{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}} '}}
+					
+					<label>Tipo de Formato del Campo</label>
+						{{ '{{view Ember.Select
+								contentBinding="App.types"
+								optionValuePath="content.id"
+								optionLabelPath="content.type"
+								valueBinding="type" id="type"}}'
+						 }}
+					<br />
+						{{ '{{#if isText}}' }}
+							{{ '{{partial "fields/text"}}' }}
+						{{ '{{/if}}' }}
+						{{ '{{#if isNumerical}}' }}
+							{{ '{{partial "fields/numerical"}}' }}
+						{{ '{{/if}}' }}
+						
+					<label>Seleccione si desea que el campo sea requerido</label>
+					{{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
+					
+					<br /><br />
 					{{ '{{#unless isDate}}' }}
-						<label for="value_default">Valor por defecto </label>
+						<label>Valor por defecto </label>
 						{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="defaultValue"}}' }}
 					{{ '{{/unless}}' }}
-				</div>
-				<div class="row-fluid">
+					
 					{{ '{{#if isSelect}}' }}
 						{{ '{{partial "fields/select"}}' }}
 					{{ '{{/if}}' }}
-				</div>
-				<div class="row-fluid" id="SaveNewField">
-					<button class="btn btn-success" {{' {{action save this}} '}}>Grabar</button>
-					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-				</div>	
+					
+					<br />
+					<button class="btn btn-blue" {{' {{action save this}} '}}>Grabar</button>
+					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+				</form>
 			</div>
-		</form>
+		</div>
 	</div>
-</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/edit">
-<div class="row-fluid">
-	<div class="span12">
-		<form>
-			<div class="span4">
-				<div class="row-fluid" id="nameNewField">
-					<label for="name">Nombre del Campo</label>
-					 {{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name"}} '}}</div>
-				<div class="row-fluid">
-					<div class="row-fluid" id="typeNewField">
-							{{ '{{#if isText}}' }}
-								{{ '{{partial "fields/text"}}' }}
-							{{ '{{/if}}' }}
-							{{ '{{#if isNumerical}}' }}
-								{{ '{{partial "fields/numerical"}}' }}
-							{{ '{{/if}}' }}
-					</div>
+	<div class="row-fluid">
+		<div class="box span3">
+			<div class="box-header">
+				<div class="title">
+					Editar un campo personalizado
 				</div>
-				<div class="row-fluid" id="requiredNewField">
-					<p>Seleccione si desea que el Campo sea Obligatorio</p>
-					<div class="row-fluid">
-					{{ '{{#if required}}' }}
-						<label class="checkbox checked" for="required">
-						<span class="icons">
-							<span class="first-icon fui-checkbox-unchecked">
-							</span>
-							<span class="second-icon fui-checkbox-checked">
-							</span>
-						</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
-						</label>
-					{{ '{{else}}' }}
-						<label class="checkbox" for="required">
-						<span class="icons">
-							<span class="first-icon fui-checkbox-unchecked">
-							</span>
-							<span class="second-icon fui-checkbox-checked">
-							</span>
-						</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
-						</label>
+			</div>
+			<div class="box-content padded">
+				<form>
+					<label>Nombre del Campo</label>
+					{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name"}} '}}
+					
+					<br />
+					{{ '{{#if isText}}' }}
+						{{ '{{partial "fields/text"}}' }}
 					{{ '{{/if}}' }}
-					</div>
-				</div>	
-				<div class="row-fluid" id="defaultNewField">
+					{{ '{{#if isNumerical}}' }}
+						{{ '{{partial "fields/numerical"}}' }}
+					{{ '{{/if}}' }}
+					
+					<label>Seleccione si desea que el Campo sea Obligatorio</label>
+					{{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
+					
+					<br /><br />
 					{{ '{{#unless isDate}}' }}
-						<label for="value_default">Valor por defecto </label>
+						<label>Valor por defecto </label>
 						{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="value_default"}}' }}
 					{{ '{{/unless}}' }}
-				</div>
-				<div class="row-fluid">
+						
 					{{ '{{#if isSelect}}' }}
 						{{ '{{partial "fields/select"}}' }}
 					{{ '{{/if}}' }}
-				</div>
-				<div class="row-fluid" id="SaveNewField">
-					<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
-					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-				</div>	
+					<br />	
+					<button class="btn btn-blue" {{' {{action edit this}} '}}>Editar</button>
+					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+				</form>
 			</div>
-		</form>
+		</div>
 	</div>
 </div>
 </script>
@@ -461,22 +418,16 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/_text">
-	<label for="maxlong">Longitud Maxima del Campo</label>
-	<div class="span5">
-		{{ '{{view Ember.TextField valueBinding="maxLength" placeholder="Letras" id="maxlong"}}' }}
-	</div>
+	<label>Longitud Maxima del Campo</label>
+	{{ '{{view Ember.TextField valueBinding="maxLength" placeholder="Letras" id="maxlong"}}' }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/_numerical">
-	<div class="span5">
-		<label for="limit_Inf">Valor Minimo</label>
-		{{ '{{view Ember.TextField valueBinding="minValue" placeholder="Inferior" id="limit_Inf"}}' }}
-	</div>
-	<div class="span1"></div>
-	<div class="span5">
-		<label for="limit_Sup">Valor Maximo</label>
-		{{ '{{view Ember.TextField valueBinding="maxValue" placeholder="Superior" id="limit_Sup"}}' }}
-	</div>
+	<label>Valor Minimo</label>
+	{{ '{{view Ember.TextField valueBinding="minValue" placeholder="Inferior" id="limit_Inf"}}' }}
+	
+	<label for="limit_Sup">Valor Maximo</label>
+	{{ '{{view Ember.TextField valueBinding="maxValue" placeholder="Superior" id="limit_Sup"}}' }}
 </script>
 
 </div>
