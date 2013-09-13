@@ -1,6 +1,22 @@
 <?php
 class AccountController extends ControllerBase
 {
+	
+	public function loadcontactsinfoAction()
+	{
+		$account = $this->user->account;
+		$currentActiveContacts = $this->user->account->countActiveContactsInAccount();
+		
+		// Convirtiendo a Json
+		$object = array();
+		$object['activeContacts'] = $currentActiveContacts;
+		$object['contactLimit'] = $account->contactLimit;
+		$object['accountingMode'] = $account->accountingMode;
+					
+		return $this->setJsonResponse($object);
+	
+	}
+	
 	public function indexAction()
 	{
 		$r = $this->verifyAcl('account', 'list', '');

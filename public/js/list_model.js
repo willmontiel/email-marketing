@@ -9,11 +9,6 @@ if (!App.Dbase) {
 	});
 }
 
-App.Infocontact = DS.Model.extend({
-	activeContacts: DS.attr('number'),
-	contactLimit: DS.attr('number')
-});
-
 App.List = DS.Model.extend({
 	dbase: DS.belongsTo('dbase'),
 	name: DS.attr('string'),
@@ -50,7 +45,7 @@ App.List = DS.Model.extend({
 	inactiveContactsF: function() {
 		return this.formatNumber(this.get('inactiveContacts'));
 	}.property('inactiveContacts'),
-	
+
 	formatNumber: function (n) {
 		if (!n)
 			return '0';

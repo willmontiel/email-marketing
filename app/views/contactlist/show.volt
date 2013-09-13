@@ -4,10 +4,36 @@
 		{{ partial("partials/ember_partial") }}
 		{{ partial("partials/date_view_partial") }}
 		{{ javascript_include('js/mixin_pagination.js') }}
+<script type="text/javascript">	 
+	$(function(){
+		$.getJSON(MyBaseURL + 'account/loadcontactsinfo',function(data){ 
+			if (data.accountingMode == 'Contacto') {
+				$('#contactsInfo').append(data.activeContacts +'/'+data.contactLimit);
+			}
+			else {
+				$('#contactsInfo').append(data.activeContacts);
+			}
+		});
+	});
+	$(function() {
+		setInterval(function() {
+			$.getJSON(MyBaseURL + 'account/loadcontactsinfo',function(data){
+				if (data.accountingMode == 'Contacto') {
+					$("#contactsInfo").empty();
+					$('#contactsInfo').append(data.activeContacts +'/'+data.contactLimit);
+				}
+				else {
+					$("#contactsInfo").empty();
+					$('#contactsInfo').append(data.activeContacts);
+				}
+			});
+		}, 5000);
+	});
+</script>
 <script type="text/javascript">
 		var MyDbaseUrl = '{{apiurlbase.url ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};
-		
+
 		var myContactModel = {
 			email: DS.attr( 'string' ),
 			name: DS.attr( 'string' ),
@@ -63,18 +89,15 @@
 			{{ ember_customfield_options(field) }}
 		{%endfor%}
 	</script>
-
-	
 {% endblock %}
 
 {% block sectiontitle %}Lista: <strong>{{datalist.name}}</strong>{% endblock %}
+
+{%block sectionsubtitle %}{{datalist.description}}{% endblock %}
 {% block sectionContactLimit %}
 	{{ partial("partials/contactlimitinfo_partial") }}
-{%endblock%}
-{%block sectionsubtitle %}{{datalist.description}}{% endblock %}
-	
+{%endblock%}	
 {% block content %}
-
 	<script type="text/x-handlebars" >
 		{{'{{outlet}}'}}
 	</script>

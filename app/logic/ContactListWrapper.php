@@ -9,7 +9,7 @@ class ContactListWrapper extends BaseWrapper
 	 * @param Contactlist $contactlist
 	 * @return array
 	 */
-	public static function convertListToJson(Contactlist $contactlist)
+	public static function convertListToJson(Contactlist $contactlist, $account)
 	{
 		$object = array();
 		$object['id'] = intval($contactlist->idContactlist);
@@ -18,6 +18,7 @@ class ContactListWrapper extends BaseWrapper
 		$object['createdon'] = $contactlist->createdon;
 		$object['updatedon'] = $contactlist->updatedon;
 		$object['dbase'] = $contactlist->Dbase->idDbase;
+		$object['infocontact'] = $account->idAccount;
 
 		$object['totalContacts'] = $contactlist->Ctotal;
 		$object['activeContacts'] = $contactlist->Cactive;
@@ -34,15 +35,6 @@ class ContactListWrapper extends BaseWrapper
 		$object = array();
 		$object['id'] = $dbase->idDbase;
 		$object['name'] = $dbase->name;
-		return $object;
-	}
-	
-	protected function convertInfoAccountContactsToJson($activeContacts, $account)
-	{
-		$object = array();
-		$object['id'] = 1;
-		$object['activeContacts'] = $activeContacts;
-		$object['contactLimit'] = $account->contactLimit;
 		return $object;
 	}
 	
@@ -93,7 +85,7 @@ class ContactListWrapper extends BaseWrapper
 	}
 	
 	
-	public function findContactListByAccount(Account $account, $name = null, $activeContacts = null)
+	public function findContactListByAccount(Account $account, $name = null)
 	{
 		// Nuevo codigo
 		$conditions = null;
@@ -114,7 +106,7 @@ class ContactListWrapper extends BaseWrapper
 		$lista = array();
 		if ($contactlists) {
 			foreach ($contactlists as $contactlist) {
-				$lista[] = self::convertListToJson($contactlist);
+				$lista[] = self::convertListToJson($contactlist, $account);
 			}
 		}
 		// Incluir las bases de datos en la lista
@@ -122,15 +114,12 @@ class ContactListWrapper extends BaseWrapper
 		foreach ($account->dbases as $bd) {
 			$bdjson[] = $this->convertBDToJson($bd);
 		}
-		// Incluir informacion de contactos por cuenta
-			$infoAccountContactsJson = $this->convertInfoAccountContactsToJson($activeContacts, $account);
 		// Actualizar el elemento de paginacion
 		$this->pager->setRowsInCurrentPage(count($lista));
 		$this->pager->setTotalRecords($total);
 		
 		return array('lists' => $lista, 
 					 'dbase' => $bdjson,
-					 'infocontacts' => $infoAccountContactsJson,
 					 'meta' => $this->pager->getPaginationObject()
 				) ;
 		

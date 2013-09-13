@@ -20,6 +20,9 @@
 		<![endif]-->
 		
 		{% block header_javascript %}
+		<script type="text/javascript">
+			var MyBaseURL = '{{url('')}}';
+		</script>
 		{{ javascript_include('javascripts/application.js') }}
 		{% endblock %}
 

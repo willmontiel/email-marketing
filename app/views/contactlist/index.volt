@@ -14,19 +14,32 @@
 		App.totalFields = {{totalFields}};
 		App.customFieldsArray = {{fields|json_encode}};	
 	</script>
-	<script type="text/javascript">
-		//var showcontactsinfo = Ember.View.create({
-		//	templateName: 'show-contacts-info',
-		//	numero: 0
-		//});
+	<script type="text/javascript">	 
+		$(document).ready(function(){
+			$.getJSON('account/loadcontactsinfo',function(data){ 
+				if (data.accountingMode == 'Contacto') {
+					$('#contactsInfo').append(data.activeContacts +'/'+data.contactLimit);
+				}
+				else {
+					$('#contactsInfo').append(data.activeContacts);
+				}
+			});
+		});
 		
-		//$(function (){
-		//	showcontactsinfo.appendTo('#x-view');
-		//	setInterval(function() {
-				//
-		//		showcontactsinfo.set('numero', showcontactsinfo.get('numero') + 1);
-		//	}, 5000);
-		//});
+		$(function() {
+			setInterval(function() {
+				$.getJSON('account/loadcontactsinfo',function(data){
+					if (data.accountingMode == 'Contacto') {
+						$("#contactsInfo").empty();
+						$('#contactsInfo').append(data.activeContacts +'/'+data.contactLimit);
+					}
+					else {
+						$("#contactsInfo").empty();
+						$('#contactsInfo').append(data.activeContacts);
+					}
+				});
+			}, 5000);
+		});
 	</script>
 	{{ javascript_include('js/app_segment.js') }}
 {% endblock %}
@@ -83,6 +96,7 @@
 							<i class="icon-ok icon-2x"></i>
 						</div>
 						<div class="news-time">
+							<span>{{ '{{infocontact.activeContacts}}' }}</span>
 							<span>{{'{{activeContactsF}}'}}</span> activos
 						</div>
 						<div class="news-content">

@@ -505,8 +505,7 @@ class ApiController extends ControllerBase
 		$contactWrapper = new ContactListWrapper();
 		$contactWrapper->setPager($pager);
 		
-		$activeContacts = $this->user->account->countActiveContactsInAccount();
-		$lists = $contactWrapper->findContactListByAccount($this->user->account, $name, $activeContacts);
+		$lists = $contactWrapper->findContactListByAccount($this->user->account, $name);
 		
 		return $this->setJsonResponse($lists);
 		

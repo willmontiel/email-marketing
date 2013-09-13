@@ -13,7 +13,7 @@ App = Ember.Application.create({
 App.ApplicationAdapter = DS.RESTAdapter.extend();
 
 App.ApplicationAdapter.reopen({
-	namespace: MyDbaseUrl,
+	namespace: MyDbaseUrl
 //	serializer: App.ApplicationSerializer
 });
 
