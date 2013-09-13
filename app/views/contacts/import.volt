@@ -13,10 +13,11 @@
 		email: DS.attr( 'string' ),	
 		name: DS.attr( 'string' ),
 		lastname: DS.attr( 'string' ),
+		header :DS.attr( 'boolean' ),
 		delimiter: DS.attr( 'string' )
 		{%for field in customfields%}
 			,
-			campo{{field.idCustomField }}: DS.attr('string')
+			campo{{ field.idCustomField }}: DS.attr('string')
 		{%endfor%}		
 	};
 </script>
@@ -39,13 +40,21 @@
 	App.fifthline = advancedSplit(App.lines[4], ",");
 </script>
 
+<script type="text/javascript">
+	App.ContactsIndexController.reopen({
+	{%for field in customfields%}
+		campo{{ field.idCustomField }}F: function () {
+		return App.secondline[this.get('content.campo{{ field.idCustomField }}')];
+	}.property('content.campo{{ field.idCustomField }}'),
+	{%endfor%}		
+});
+</script>
 
 {% endblock %}
 {% block sectiontitle %}Importar contactos{% endblock %}
 {% block content %}
 <div id="emberAppImportContainer">
 	<script type="text/x-handlebars" data-template-name="contacts/index">
-		<form method="POST" action="{{url('contacts/processfile')}}">
 		<div class="row-fluid">
 			<div class="span8">
 				<div class="well relative">
@@ -64,7 +73,7 @@
 				</div>
 			</div>
 		</div>
-		<form method="POST" action="{{url('contacts/processfile')}}">
+		<form method="POST" action="{{url('contacts/processfile/')}}{{idContactlist~'/'~idImportfile}}">
 		<div class="row-fluid">
 			<div class="span6">
 				<div class="box">
@@ -80,8 +89,6 @@
 								<tr>
 									<th>Email</th>
 									<th>
-										<input type="hidden" value="{{idImportproccess}}" name="idImportproccess">
-										<input type="hidden" value="{{idContactlist}}" name="idContactlist">
 										{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="email" id="email" name="email"}}'}}
 									</th>
 								</tr>
@@ -112,6 +119,8 @@
 				<div class="box-footer">
 					<span class="title">Delimitador: </span>
 					{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" class="span2"}} '}}
+					<span class="title">Encabezado: </span>
+					{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
 				</div>
 			</div>
 		</div>
@@ -128,20 +137,20 @@
 						<tbody>
 							<tr>
 								<th>Email: </th>
-								<td>{{'{{email}}'}}</td>
+								<td>{{'{{emailF}}'}}</td>
 							</tr>
 							<tr>
 								<th>Nombre:</th>
-								<td> {{'{{name}}'}}</td>
+								<td> {{'{{nameF}}'}}</td>
 							</tr>
 							<tr>
 								<th>Apellido: </th>
-								<td>{{'{{lastname}}'}}</td>
+								<td>{{'{{lastnameF}}'}}</td>
 							</tr>
 						{%for field in customfields%}
 							<tr>
 								<th>{{field.name}}: </th>
-								<td>{{'{{campo'~field.idCustomField~'}}'}}</td>
+								<td>{{'{{campo'~field.idCustomField~'F}}'}}</td>
 							
 							</tr>
 						{%endfor%}
@@ -163,11 +172,13 @@
 					<div class="box-content">
 						<table class="table table-normal">
 							<tbody>
+								{{' {{#unless hasheader}} '}}
 								<tr>
 									{{' {{#each App.firstline}} '}}
 										<td>{{' {{this}} '}}</td>
 									{{' {{/each}} '}}
 								</tr>
+								{{ '{{/unless}}' }}
 								<tr>
 									{{' {{#each App.secondline}} '}}
 										<td>{{' {{this}} '}}</td>

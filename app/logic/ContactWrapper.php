@@ -591,7 +591,7 @@ class ContactWrapper extends BaseWrapper
 				switch ($field->type) {
 					case 'Date':
 						if($fvalue['numberValue']) {
-							$value = date('J-f-y',$fvalue['numberValue']);
+							$value = date('Y-m-d',$fvalue['numberValue']);
 						} else {
 							$value = "";
 						}

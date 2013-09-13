@@ -31,14 +31,30 @@ App.Contact = DS.Model.extend(
 //Rutas
 App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
-//		return this.store.find('contact');
 		return myImportModel;
 	}
 });
 
 
 //Controladores
-App.ContactsIndexController = Ember.ObjectController.extend();
+App.ContactsIndexController = Ember.ObjectController.extend({
+	emailF: function () {
+		return App.secondline[this.get('content.email')];
+	}.property('content.email'),
+	nameF: function () {
+		return App.secondline[this.get('content.name')];
+	}.property('content.name'),
+	lastnameF: function () {
+		return App.secondline[this.get('content.lastname')];
+	}.property('content.lastname'),
+	hasheader: function () {
+		if(this.get('content.header') == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}.property('content.header')
+});
 
 
 //Views
@@ -60,8 +76,9 @@ App.delimiterView =  Ember.View.extend({
 App.DelimiterView = Ember.Select.extend({
 	change: function(evt) {
 		var delim = this.get('value');
-		
-		App.set('options', advancedSplit(" " + delim + App.lines[0], delim));
+		var opt = mappingColumns(advancedSplit(App.lines[0], delim))
+		opt.unshift(" ");
+		App.set('options', opt);
 		App.set('firstline', advancedSplit(App.lines[0], delim));
 		App.set('secondline',  advancedSplit(App.lines[1], delim));
 		App.set('thirdline',  advancedSplit(App.lines[2], delim));

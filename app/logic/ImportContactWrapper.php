@@ -4,17 +4,17 @@ class ImportContactWrapper extends BaseWrapper
 {
 	protected $idContactlist;
 	protected $newcontact;
-	protected $idProccess;
+	protected $idFile;
 	
-	public function setIdProccess($idProccess) {
-		$this->idProccess = $idProccess;
+	public function setIdFile($idFile) {
+		$this->idFile = $idFile;
 	}
 
 	public function setIdContactlist($idContactlist) {
 		$this->idContactlist = $idContactlist;
 	}
 	
-	public function startImport($fields, $destiny, $delimiter) {
+	public function startImport($fields, $destiny, $delimiter, $header) {
 		
 		$success = array();
 		$errors = array();
@@ -25,17 +25,24 @@ class ImportContactWrapper extends BaseWrapper
 		$limit = 0;
 		$cantTrans = 0;
 		$posCol = $fields;
-		
+
 		$open = fopen($destiny, "r");
 		
-//		$linew = trim(fgetcsv($open, 0, $delimiter));
-//		$line = trim(fgets($open));
-//		$linew = explode($delimiter, $line);
-
-//		$posCol = $this->SettingPositions($fields, $linew);
-		
+		if($header) {
+			$linew = fgetcsv($open, 0, $delimiter);
+		}
+	
 		if(empty($posCol)) {
 			throw new \InvalidArgumentException('No hay Mapeo de los Campos y las Columnas del Archivo');
+		}
+		
+		$newproccess = new Importproccess();
+						
+		$newproccess->idAccount = $this->account->idAccount;
+		$newproccess->inputFile = $this->idFile;
+
+		if(!$newproccess->save()) {
+			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
 		}
 		
 		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
@@ -52,69 +59,64 @@ class ImportContactWrapper extends BaseWrapper
 		
 		while(! feof($open)) {
 			
-			$line = trim(fgets($open));
-			$linew = explode($delimiter, $line);
-//			$linew = trim(fgetcsv($open, 0, $delimiter));
+			$linew = fgetcsv($open, 0, $delimiter);
 			
-			$this->newcontact = new stdClass();
-			
-			$this->MappingToJSON($linew, $posCol);
-			$this->MappingCustomFieldsToJSON($linew, $posCol, $customfields);
-			
-			array_push($success, $linew);
-			
-			try {
-				$contact = $wrapper->addExistingContactToListFromDbase($this->newcontact->email, false);
-				if(!$contact) {
-					$contact = $wrapper->createNewContactFromJsonData($this->newcontact, false);
+			if (!empty($linew)) {
+				$this->newcontact = new stdClass();
+
+				$this->MappingToJSON($linew, $posCol);
+				$this->MappingCustomFieldsToJSON($linew, $posCol, $customfields);
+
+				array_push($success, $linew);
+				try {
+					$contact = $wrapper->addExistingContactToListFromDbase($this->newcontact->email, $list, false);
+					if(!$contact) {
+						$contact = $wrapper->createNewContactFromJsonData($this->newcontact, $list, false);
+					}
 				}
-			}
-			catch (\InvalidArgumentException $e) {
-				
-				array_pop($success);
-				
-				switch ($e->getCode()) {
-					case 0:
-						array_push($linew, "Existente");
-						$exist++;
-						break;						
-					case 1:
-						array_push($linew, "Correo Invalido");
-						$invalid++;
-						break;
-					case 2:
-						array_push($linew, "Correo Bloqueado");
-						$bloqued++;
-						break;
-					case 3:
-						array_push($linew, "Limite de Contactos Excedido");
-						$limit++;
-						break;
+				catch (\InvalidArgumentException $e) {
+
+					array_pop($success);
+
+					switch ($e->getCode()) {
+						case 0:
+							array_push($linew, "Existente");
+							$exist++;
+							break;						
+						case 1:
+							array_push($linew, "Correo Invalido");
+							$invalid++;
+							break;
+						case 2:
+							array_push($linew, "Correo Bloqueado");
+							$bloqued++;
+							break;
+						case 3:
+							array_push($linew, "Limite de Contactos Excedido");
+							$limit++;
+							break;
+					}
+
+					array_push($errors, $linew);
+
 				}
-				
-				array_push($errors, $linew);
-				
-			}
-			catch (\Exception $e) {
-				$wrapper->rollbackTransaction();
-			}			 
+				catch (\Exception $e) {
+					$wrapper->rollbackTransaction();
+				}			 
 			
-			$total++;
-			
-//			$line = trim(fgets($open));
-//			$linew = explode($delimiter, $line);
-			
-			$cantTrans++;
-			
-			if($cantTrans == 100){
-				$wrapper->endTransaction();
-				
-				$cantTrans = 0;
+				$total++;
+				$cantTrans++;
+
+				if ($cantTrans == 100) {
+					$wrapper->endTransaction();
+
+					$cantTrans = 0;
+				}
 			}
 		}
 		$wrapper->endTransaction(false);
 		
-		$this->createReports($errors, $success);
+		$this->createReports($errors, $success, $newproccess->idImportproccess);
 		
 		$count = array(
 			"total" => $total,
@@ -124,24 +126,11 @@ class ImportContactWrapper extends BaseWrapper
 			"invalid" => $invalid,
 			"bloqued" => $bloqued,
 			"limit" => $limit,
-			"idProcces" => $this->idProccess
+			"idProcces" => $newproccess->idImportproccess
 		);
 		
 		return $count;
 		
-	}
-	
-	protected function SettingPositions($fields, $linew) {
-		
-		$posCol = array();
-		for($i=0; $i< count($fields); $i++) {
-			for($j=0; $j< count($linew); $j++) {
-				if($fields[$i] == $linew[$j]) {
-					$posCol[$i] = $j;
-				}
-			}
-		}
-		return $posCol;
 	}
 
 	protected function MappingToJSON($linew, $posCol){
@@ -194,7 +183,7 @@ class ImportContactWrapper extends BaseWrapper
 	}
 
 
-	protected function createReports($errors, $success)
+	protected function createReports($errors, $success, $idImportproccess)
 	{
 		$uniquecode = uniqid();
 		
@@ -244,7 +233,7 @@ class ImportContactWrapper extends BaseWrapper
 			fclose($fp);
 		}
 		
-		$proccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
+		$proccess = Importproccess::findFirstByIdImportproccess($idImportproccess);
 		
 		$proccess->errorFile = $saveFileError->idImportfile;
 		$proccess->successFile = $saveFileSuccess->idImportfile;
