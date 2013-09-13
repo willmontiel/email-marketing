@@ -70,46 +70,33 @@
 					<table class="table table-normal">
 						<thead>
 							 <tr>
-								<td>E-mail</td>
-								<td>Nombre</td>
-								<td>Apellido</td>
-								<td>Estado</td>
-								<td>Acciones</td>
+								<th colspan="3">E-mail</th>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
 							{{'{{#each controller}}'}}
 							<tr>
-								<td>{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</td>
+								<td>
+									{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}
+									{{ '{{#if isEmailBlocked}}' }}<br/>
+									<span class="badge badge-dark-red">Correo bloqueado</span>
+									{{ '{{/if}}' }}
+									{{ '{{#if isSpam}}' }}<br/>
+									<span class="badge badge-dark-red">Spam</span>
+									{{ '{{/if}}' }}
+									{{ '{{#if isBounced}}' }}<br/>
+									<span class="badge badge-red">Rebotado</span>
+									{{ '{{/if}}' }}
+									{{ '{{#unless isSubscribed}}' }}<br/>
+									<span class="badge badge-gray">Desuscrito</span>
+									{{ '{{/unless}}' }}
+									{{ '{{#unless isActive}}' }}<br/>
+									<span class="badge badge-blue">Sin confirmar</span>	
+									{{ '{{/unless}}' }}
+								</td>
 								<td>{{'{{name}}'}}</td>
 								<td>{{'{{lastName}}'}}</td>
-								<td>
-									<dl>
-										<dd>
-											{{ '{{#if isActive}}' }}
-												<span class="green-label">Activo</span>
-											{{ '{{else}}' }}
-												<span class="orange-label">Inactivo</span>
-											{{ '{{/if}}' }}
-										</dd>
-										<dd>
-											{{ '{{#if isBounced}}' }}
-												Rebotado
-											{{ '{{/if}}' }}
-										</dd>
-										{{ '{{#unless isSubscribed}}' }}
-										<dd>
-												Desuscrito
-										</dd>
-										{{ '{{/unless}}' }}
-										{{ '{{#if isSpam}}' }}
-										<dd>
-											<span class="red-label">SPAM</span>
-										</dd>
-										{{ '{{/if}}' }}
-
-									</dl>
-								</td>
 								<td>
 									<dl>
 										<dd>{{ '{{#linkTo "contacts.show" this}}Ver{{/linkTo}}' }}</dd>

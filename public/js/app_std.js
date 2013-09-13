@@ -4,7 +4,7 @@ App = Ember.Application.create({
 
 /* STORE */
 // Serializador
-App.Serializer = DS.RESTSerializer.extend({
+App.ApplicationSerializer = DS.RESTSerializer.extend({
     meta: 'meta',
     pagination: 'pagination'
 });

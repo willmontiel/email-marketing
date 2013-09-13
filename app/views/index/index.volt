@@ -52,6 +52,7 @@
 			</div>
 		</div>
 		<div class="span4">
+			{% if confAccount.accountingMode == 'Contacto'%}
 			<div class="box">
 				<div class="box-header">
 					<div class="title">
@@ -62,9 +63,9 @@
 					<div class="dashboard-stats">
 						<ul class="inline">
 							<li class="glyph"><i class="icon-user icon-2x"></i></li>
-							<li class="count"><span class="blue-label">1200</span></li>
+							<li class="count"><span class="blue-label">{{currentActiveContacts}}</span></li>
 						</ul>
-						<div class="progress progress-striped progress-blue active"><div class="bar tip" title="" data-percent="80" data-original-title="80%"></div></div>
+						<div class="progress progress-striped progress-blue active"><div class="bar tip" title="" data-percent="{{(currentActiveContacts*100)/confAccount.contactLimit}}" data-original-title="{{(currentActiveContacts*100)/confAccount.contactLimit}}% de la capacidad de contactos"></div></div>
 						<span class="stats-label">Contactos activos por cuenta</span>
 					</div>	
 					<br />
@@ -73,7 +74,7 @@
 							<div class="dashboard-stats small">
 								<ul class="inline">
 									<li class="glyph"><i class="icon-exclamation-sign"></i></li>
-									<li class="count">2000</li>
+									<li class="count">{{confAccount.contactLimit}}</li>
 								</ul>
 								<span class="stats-label">Capacidad máxima</span>
 							</div>	
@@ -82,7 +83,7 @@
 							<div class="dashboard-stats small">
 								<ul class="inline">
 									<li class="glyph"><i class="icon-ok-sign"></i></li>
-									<li class="count">800</li>
+									<li class="count">{{confAccount.contactLimit-currentActiveContacts}}</li>
 								</ul>
 								<span class="stats-label">Capacidad disponible</span>
 							</div>	
@@ -91,6 +92,47 @@
 
 				</div>
 			</div>
+			{% elseif confAccount.accountingMode == 'Envio'%}
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Información sobre mensajes
+					</div>
+				</div>
+				<div class="box-content padded">
+					<div class="dashboard-stats">
+						<ul class="inline">
+							<li class="glyph"><i class="icon-user icon-2x"></i></li>
+							<li class="count"><span class="blue-label">9000</span></li>
+						</ul>
+						<div class="progress progress-striped progress-blue active"><div class="bar tip" title="" data-percent="{{(9000*100)/confAccount.messageLimit}}" data-original-title="{{(9000*100)/confAccount.messageLimit}}% de la capacidad de para envío de mensajes"></div></div>
+						<span class="stats-label">Mensajes enviados</span>
+					</div>	
+					<br />
+					<div class="row-fluid">
+						<div class="span6">
+							<div class="dashboard-stats small">
+								<ul class="inline">
+									<li class="glyph"><i class="icon-exclamation-sign"></i></li>
+									<li class="count">{{confAccount.messageLimit}}</li>
+								</ul>
+								<span class="stats-label">Capacidad de mensajes</span>
+							</div>	
+						</div>
+						<div class="span6">
+							<div class="dashboard-stats small">
+								<ul class="inline">
+									<li class="glyph"><i class="icon-ok-sign"></i></li>
+									<li class="count">{{confAccount.messageLimit-9000}}</li>
+								</ul>
+								<span class="stats-label">Mensajes disponibles</span>
+							</div>	
+						</div>
+					</div>
+
+				</div>
+			</div>
+			{% endif %}
 		</div>
 	</div>
 	<hr class="divider">
