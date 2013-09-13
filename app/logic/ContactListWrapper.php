@@ -37,6 +37,15 @@ class ContactListWrapper extends BaseWrapper
 		return $object;
 	}
 	
+	protected function convertInfoAccountContactsToJson($activeContacts, $account)
+	{
+		$object = array();
+		$object['id'] = 1;
+		$object['activeContacts'] = $activeContacts;
+		$object['contactLimit'] = $account->contactLimit;
+		return $object;
+	}
+	
 	public function validateListBelongsToAccount(Account $account, $idContactlist)
 	{
 		$listExist = Contactlist::countContactListsInAccount($account, 'idContactlist = :id:', array('id' => $idContactlist));
@@ -84,7 +93,7 @@ class ContactListWrapper extends BaseWrapper
 	}
 	
 	
-	public function findContactListByAccount(Account $account, $name = null)
+	public function findContactListByAccount(Account $account, $name = null, $activeContacts = null)
 	{
 		// Nuevo codigo
 		$conditions = null;
@@ -113,12 +122,15 @@ class ContactListWrapper extends BaseWrapper
 		foreach ($account->dbases as $bd) {
 			$bdjson[] = $this->convertBDToJson($bd);
 		}
+		// Incluir informacion de contactos por cuenta
+			$infoAccountContactsJson = $this->convertInfoAccountContactsToJson($activeContacts, $account);
 		// Actualizar el elemento de paginacion
 		$this->pager->setRowsInCurrentPage(count($lista));
 		$this->pager->setTotalRecords($total);
 		
 		return array('lists' => $lista, 
 					 'dbase' => $bdjson,
+					 'infocontacts' => $infoAccountContactsJson,
 					 'meta' => $this->pager->getPaginationObject()
 				) ;
 		

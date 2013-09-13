@@ -9,6 +9,11 @@ if (!App.Dbase) {
 	});
 }
 
+App.Infocontact = DS.Model.extend({
+	activeContacts: DS.attr('number'),
+	contactLimit: DS.attr('number')
+});
+
 App.List = DS.Model.extend({
 	dbase: DS.belongsTo('dbase'),
 	name: DS.attr('string'),

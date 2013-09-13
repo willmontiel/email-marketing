@@ -22,12 +22,12 @@ App.relations = [
 //Definiendo rutas
 
 App.SegmentsIndexRoute = Ember.Route.extend({
-	modelClass : App.Segment
+	modelClass : 'segment'
 });
 
 App.SegmentsNewRoute = Ember.Route.extend({
 	model: function(){
-		return App.Segment.createRecord();
+		return this.store.createRecord('segment');
 	},
 	setupController: function (controller, model) {
 		this._super(controller, model);

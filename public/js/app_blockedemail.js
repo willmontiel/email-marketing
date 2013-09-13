@@ -25,9 +25,7 @@ App.BlockedemailsBlockRoute = Ember.Route.extend({
 App.BlockedemailController = Ember.ObjectController.extend();
 
 App.BlockedemailsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, {
-	getModelMetadata: function() {
-		return App.store.typeMapFor(App.Blockedemail);
-	}
+	modelClass : 'blockedemail'
 });
 
 App.BlockedemailsBlockController = Ember.ObjectController.extend({

@@ -11,25 +11,22 @@
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
 	<script type="text/javascript">
-		App.DBObjectList = App.dbase.content.store;
-	</script>
-	<script type="text/javascript">
 		App.totalFields = {{totalFields}};
 		App.customFieldsArray = {{fields|json_encode}};	
 	</script>
 	<script type="text/javascript">
-		var showcontactsinfo = Ember.View.create({
-			templateName: 'show-contacts-info',
-			numero: 0
-		});
+		//var showcontactsinfo = Ember.View.create({
+		//	templateName: 'show-contacts-info',
+		//	numero: 0
+		//});
 		
-		$(function (){
-			showcontactsinfo.appendTo('#x-view');
-			setInterval(function() {
+		//$(function (){
+		//	showcontactsinfo.appendTo('#x-view');
+		//	setInterval(function() {
 				//
-				showcontactsinfo.set('numero', showcontactsinfo.get('numero') + 1);
-			}, 5000);
-		});
+		//		showcontactsinfo.set('numero', showcontactsinfo.get('numero') + 1);
+		//	}, 5000);
+		//});
 	</script>
 	{{ javascript_include('js/app_segment.js') }}
 {% endblock %}
