@@ -17,31 +17,26 @@
 		{%for field in customfields%}
 			,
 			campo{{field.idCustomField }}: DS.attr('string')
-		{%endfor%}
+		{%endfor%}		
 	};
 </script>
 
 {{ javascript_include('js/app_import.js') }}
 <script type="text/javascript">
-	
-	App.originalF = "{{row[0]}}";
-	App.originalS = "{{row[1]}}";
-	App.originalT = "{{row[2]}}";
-	App.originalFo = "{{row[3]}}";
-	App.originalFi = "{{row[4]}}";
-	App.optionsOr = " ,{{row[0]}}"
-	
-	App.options = App.optionsOr.split(",");
-	
-	App.firstline = App.originalF.split(",");
-	
-	App.secondline = App.originalS.split(",");
-	
-	App.thirdline = App.originalT.split(",");
-	
-	App.fourthline = App.originalFo.split(",");
-	
-	App.fifthline = App.originalFi.split(",");
+	App.lines = [];
+	App.lines.push("{{row[0]}}");
+	App.lines.push("{{row[1]}}");
+	App.lines.push("{{row[2]}}");
+	App.lines.push("{{row[3]}}");
+	App.lines.push("{{row[4]}}");
+	App.lines.push("{{row[0]}}");
+
+	App.options = mappingColumns(advancedSplit(App.lines[5], ","));
+	App.firstline = advancedSplit(App.lines[0], ",");
+	App.secondline = advancedSplit(App.lines[1], ",");
+	App.thirdline = advancedSplit(App.lines[2], ",");
+	App.fourthline = advancedSplit(App.lines[3], ",");
+	App.fifthline = advancedSplit(App.lines[4], ",");
 </script>
 
 
@@ -87,26 +82,26 @@
 									<th>
 										<input type="hidden" value="{{idImportproccess}}" name="idImportproccess">
 										<input type="hidden" value="{{idContactlist}}" name="idContactlist">
-										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="email" id="email" name="email"}}'}}
+										{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="email" id="email" name="email"}}'}}
 									</th>
 								</tr>
 								<tr>		
 									<th>Nombre</th>
 									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="name" id="name" name="name"}}'}}
+										{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="name" id="name" name="name"}}'}}
 									</th>
 								</tr>
 								<tr>		
 									<th>Apellido</th>
 									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" valueBinding="lastname" id="lastname" name="lastname"}}'}}
+										{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="lastname" id="lastname" name="lastname"}}'}}
 									</th>
 								</tr>
 								{%for field in customfields %}
 								<tr>		
 									<th>{{field.name}}</th>
 									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" class="uniform" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'"}}'}}
+										{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" class="uniform" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'"}}'}}
 						
 									</th>
 								</tr>

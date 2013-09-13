@@ -184,7 +184,8 @@ class ContactsController extends ControllerBase
 		
 		if (empty($_FILES['importFile']['name'])) {
 			$this->flashSession->error("No ha enviado ningún archivo");
-			$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
+			$this->debug->log('No hay archivo');
+			return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 		}
 		
 		else {
@@ -193,12 +194,13 @@ class ContactsController extends ControllerBase
 			
 			if ($validate != NULL) {
 				$this->flashSession->error($validate);
-				$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");	
+				$this->debug->log($validate);
+				return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");	
 			}
 			else {
 				$internalNumber = uniqid();
 				$date = date("ymdHi",time());
-				$internalName = $account."_".$date."_".$internalNumber.".csv";
+				$internalName = "{$account}_{$date}_{$internalNumber}.csv";
 
 				$fileInfo = $_FILES['importFile']['name'];
 
@@ -211,9 +213,10 @@ class ContactsController extends ControllerBase
 
 				if (!$saveDataFile->save()) {
 						foreach ($saveDataFile->getMessages() as $msg) {
-								$this->flashSession->error($msg);
-								$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
+							$this->flashSession->error($msg);
+							$this->debug->log($msg);
 						}
+						return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 				}
 				else {
 						$newproccess = new Importproccess();
@@ -224,8 +227,9 @@ class ContactsController extends ControllerBase
 						if(!$newproccess->save()) {
 							foreach ($newproccess->getMessages() as $msg) {
 								$this->flashSession->error($msg);
-								$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
+								$this->debug->log($msg);
 							}
+							return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 						}
 					
 					
@@ -233,8 +237,10 @@ class ContactsController extends ControllerBase
 						copy($_FILES['importFile']['tmp_name'],$destiny);
 
 						$open = fopen($destiny, "r");
-						for($i=0; $i<5; $i++) {
-							$line[$i] = trim(fgets($open));
+						$line = array('', '', '', '', '');
+						for($i=0; $i<5 && !feof($open); $i++) {
+							$l = trim(fgets($open));
+							$line[$i] = str_replace('"', '\"', $l);
 						}
 						fclose($open);
 

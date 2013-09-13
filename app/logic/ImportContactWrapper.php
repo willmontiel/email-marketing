@@ -24,13 +24,15 @@ class ImportContactWrapper extends BaseWrapper
 		$bloqued = 0;
 		$limit = 0;
 		$cantTrans = 0;
+		$posCol = $fields;
 		
 		$open = fopen($destiny, "r");
 		
-		$line = trim(fgets($open));
-		$linew = explode($delimiter, $line);
-		
-		$posCol = $this->SettingPositions($fields, $linew);
+//		$linew = trim(fgetcsv($open, 0, $delimiter));
+//		$line = trim(fgets($open));
+//		$linew = explode($delimiter, $line);
+
+//		$posCol = $this->SettingPositions($fields, $linew);
 		
 		if(empty($posCol)) {
 			throw new \InvalidArgumentException('No hay Mapeo de los Campos y las Columnas del Archivo');
@@ -49,8 +51,11 @@ class ImportContactWrapper extends BaseWrapper
 		$wrapper->startTransaction();
 		
 		while(! feof($open)) {
-
-
+			
+			$line = trim(fgets($open));
+			$linew = explode($delimiter, $line);
+//			$linew = trim(fgetcsv($open, 0, $delimiter));
+			
 			$this->newcontact = new stdClass();
 			
 			$this->MappingToJSON($linew, $posCol);
@@ -96,8 +101,8 @@ class ImportContactWrapper extends BaseWrapper
 			
 			$total++;
 			
-			$line = trim(fgets($open));
-			$linew = explode($delimiter, $line);
+//			$line = trim(fgets($open));
+//			$linew = explode($delimiter, $line);
 			
 			$cantTrans++;
 			
