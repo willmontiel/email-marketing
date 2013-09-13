@@ -4,17 +4,17 @@ App = Ember.Application.create({
 
 /* STORE */
 // Serializador
-App.ApplicationSerializer = DS.RESTSerializer.extend({
-    meta: 'meta',
-    pagination: 'pagination'
-});
+//App.Serializer = DS.RESTSerializer.extend({
+//    meta: 'meta',
+//    pagination: 'pagination'
+//});
 
 //Adaptador
 App.ApplicationAdapter = DS.RESTAdapter.extend();
 
 App.ApplicationAdapter.reopen({
 	namespace: MyDbaseUrl,
-	serializer: App.ApplicationSerializer
+//	serializer: App.ApplicationSerializer
 });
 
 // Store (class)
