@@ -178,7 +178,7 @@
 							<br>
 						</div>
 						<div class="form-actions">
-							<button class="btn btn-primary" {{'{{action save this}}'}}>Guardar</button>
+							<button  data-loading-text="saving..." {{'{{bindAttr class=":btn :btn-primary isSaving:loading"}}'}} {{'{{bindAttr disabled="isSaving"}}'}} {{'{{action save this}}'}}>Guardar</button>
 							<button class="btn btn-inverse" {{'{{action cancel this}}'}}>Cancelar</button>
 						</div>
 					</form>

@@ -206,7 +206,7 @@ class ContactWrapper extends BaseWrapper
 		$this->counter->saveCounters();
 	}
 
-	public function addExistingContactToListFromDbase($email, $saveCounters = true)
+	public function addExistingContactToListFromDbase($email, Contactlist $list, $saveCounters = true)
 	{
 		$idAccount = $this->account->idAccount;
 		
@@ -216,9 +216,9 @@ class ContactWrapper extends BaseWrapper
 			$existContact = Contact::findFirstByIdEmail($existEmail->idEmail);
 			if($existContact){
 				if($existContact->idDbase == $this->idDbase){
-					$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idContactlist = $this->idContactlist");
+					$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idContactlist = $list->idContactlist");
 					if (!$existList){
-						$this->associateContactToList($this->idContactlist, $existContact->idContact);
+						$this->associateContactToList($list, $existContact);
 						if($saveCounters)
 							$this->counter->saveCounters();
 
@@ -230,7 +230,7 @@ class ContactWrapper extends BaseWrapper
 		return false;
 	}
 	
-	public function createNewContactFromJsonData($data, $saveCounters = true)
+	public function createNewContactFromJsonData($data, Contactlist $list = null, $saveCounters = true)
 	{
 		//Validar que al crear un email no exceda el limite de emails en la cuenta
 		if ($this->account->accountingMode == 'Contacto' && $this->account->countActiveContactsInAccount() >= $this->account->contactLimit) {
@@ -241,10 +241,10 @@ class ContactWrapper extends BaseWrapper
 			// Verificar existencia del correo en la cuenta actual
 			$email = $this->findEmailNotRepeated($data->email);
 			if ($email && !$this->findEmailBlocked($email)) {
-				$this->addContact($data, $email);
+				$this->addContact($data, $email, $list);
 			}
 			else {
-				$this->addContact($data);
+				$this->addContact($data, null, $list);
 			}
 			if($saveCounters)
 				$this->counter->saveCounters();
@@ -295,7 +295,7 @@ class ContactWrapper extends BaseWrapper
 		}
 	}
 
-	protected function addContact($data, Email $email = null)
+	protected function addContact($data, Email $email = null, Contactlist $list = null)
 	{
 		if ($email == null) {
 			$email = $this->createEmail($data->email);
@@ -315,10 +315,14 @@ class ContactWrapper extends BaseWrapper
 				$msg .= $err . PHP_EOL;
 			}
 			throw new \Exception('Error al crear el contacto: >>' . $msg . '<<');
-		} else {
+		} 
+		else {
 			$this->counter->newContactToDbase($this->contact);
 			
-			$this->associateContactToList($this->idContactlist, $this->contact->idContact);
+			if ($list == null) {
+				$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+			}
+			$this->associateContactToList($list, $this->contact);
 			
 			$this->assignDataToCustomField($data);
 			
@@ -415,12 +419,12 @@ class ContactWrapper extends BaseWrapper
 		}
 	}
 	
-	protected function associateContactToList($idContactlist, $idContact)
+	protected function associateContactToList(Contactlist $list, Contact $contact)
 	{
 		$associate = new Coxcl();
 				
-		$associate->idContactlist = $idContactlist;
-		$associate->idContact = $idContact;
+		$associate->idContactlist = $list->idContactlist;
+		$associate->idContact = $contact->idContact;
 		
 		if(!$associate->save())	{
 			$m = $associate->getMessages();
@@ -432,9 +436,6 @@ class ContactWrapper extends BaseWrapper
 			throw new \Exception('Error al asociar el contacto a la lista con idContactlist: '.$idContactlist. ' y idContact: ' .$idContact. '!' . PHP_EOL . '[' . $txt . ']');
 		} else {
 			
-			$list = Contactlist::findFirstByidContactlist($idContactlist);
-			$contact = Contact::findFirstByIdContact($idContact);
-
 			$this->counter->newContactToList($contact, $list);
 		}
 	}
@@ -577,23 +578,32 @@ class ContactWrapper extends BaseWrapper
 		$object['isEmailBlocked'] = ($contact->email->blocked != 0);
 		
 		$customfields = Customfield::findByIdDbase($this->idDbase);
+
+		// Consultar la lista de campos personalizados para esos contactos
+		$finstancesO = Fieldinstance::findInstancesForMultipleContacts(array($contact->idContact));
+		$fieldinstances = $this->createFieldInstanceMap($finstancesO);
 		
 		foreach ($customfields as $field) {
-			$valuefield = Fieldinstance::findFirst("idCustomField = $field->idCustomField AND idContact = $contact->idContact");
-			if ($field->type == "Date") {
-				if($valuefield->numberValue) {
-					if($valuefield->numberValue) {
-						$object["campo".$field->idCustomField] = date('j-F-Y',$valuefield->numberValue);
-					} else {
-						$object["campo".$field->idCustomField] = "";
-					}					
-				} else {
-					$object["campo".$field->idCustomField] = $valuefield->numberValue;
+			$key = $contact->idContact . ':' . $field->idCustomField;
+			$value = '';
+			if (isset($fieldinstances[$key])) {
+				$fvalue = $fieldinstances[$key];
+				switch ($field->type) {
+					case 'Date':
+						if($fvalue['numberValue']) {
+							$value = date('J-f-y',$fvalue['numberValue']);
+						} else {
+							$value = "";
+						}
+						break;
+					case 'Number':
+						$value = $fvalue['numberValue'];
+						break;
+					default:
+						$value = $fvalue['textValue'];
 				}
 			}
-			else {
-				$object["campo".$field->idCustomField] = $valuefield->textValue;
-			}
+			$object['campo' . $field->idCustomField] = $value;
 		}
 		
 		return $object;
@@ -686,11 +696,7 @@ class ContactWrapper extends BaseWrapper
 		}
 		unset($cfieldsO);
 		
-		$finstances = array();
-		foreach ($finstancesO as $fi) {
-			$key = $fi->idContact . ':' . $fi->idCustomField;
-			$finstances[$key] = array('numberValue' => $fi->numberValue, 'textValue' => $fi->textValue);
-		}
+		$finstances = $this->createFieldInstanceMap($finstancesO);
 		
 		$result = array();
 		foreach ($contacts as $contact) {
@@ -700,6 +706,17 @@ class ContactWrapper extends BaseWrapper
 		$this->pager->setRowsInCurrentPage(count($result));
 		return array('contacts' => $result, 'meta' => $this->pager->getPaginationObject() );
 		
+	}
+	
+	protected function createFieldInstanceMap($finstancesO)
+	{
+		$finstances = array();
+		foreach ($finstancesO as $fi) {
+			$key = $fi->idContact . ':' . $fi->idCustomField;
+			$finstances[$key] = array('numberValue' => $fi->numberValue, 'textValue' => $fi->textValue);
+		}
+		
+		return $finstances;
 	}
 
 	public function findContactsByList(Contactlist $list) 

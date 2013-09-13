@@ -50,7 +50,7 @@ class Contact extends \Phalcon\Mvc\Model
     public function beforeUpdate()
     {
 		// Asignar fecha y hora de ultima actualizacion
-        $this->updatedon = time();
+//        $this->updatedon = time();
     }	
 	
 	

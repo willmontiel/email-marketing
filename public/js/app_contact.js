@@ -98,36 +98,62 @@ App.ContactController = Ember.ObjectController.extend();
 
 App.ContactsNewbatchController = Ember.ObjectController.extend();
 
-App.ContactsNewController = Ember.ObjectController.extend({
-	
-	actions: {
-		save: function() {
-			var self = this;
-			self.content.set('isActive', true);
-			self.content.set('isSubscribed', true);
-			self.content.save().then(function(){
-				self.transitionToRoute('contacts');
-			});
-		},	
-		
-		cancel: function(){
-			this.get('model').rollback();
-			this.transitionTo("contacts");
-		}
+Ember.SaveHandlerMixin = Ember.Mixin.create({
+	handleSavePromise: function (p, troute, message) {
+		var self = this;
+		p.then(function () {
+			self.transitionToRoute(troute);
+			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
+		}, function (error) {
+			if (error.status == 422) {
+				try {
+					var obj = $.parseJSON(error.responseText);
+					self.set('errors', obj.errors);
+				}
+				catch (e) {
+				}
+			}
+			else {
+				self.set('errors', {errormsg: error.statusText});
+			}
+		});
 	}
 });
 
-App.ContactsEditController = Ember.ObjectController.extend({
+App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
+	
+	actions: {
+		save: function() {
+			this.content.set('isActive', true);
+			this.content.set('isSubscribed', true);
+			this.handleSavePromise(this.content.save(), 'contacts', 'El contacto ha sido creado con exito!');
+		},	
+		
+		cancel: function(){
+			var record = this.get('model');
+			if (record.get('isDirty')) {
+				record.rollback();
+			}
+			this.transitionToRoute("contacts");
+		}
+	}
+	,
+	emailChanged: function () {
+		var em = this.get('content.email');
+//		if (em.regexp()) {
+//			
+//		}
+	}.observes('content.email')
+});
+
+App.ContactsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	actions : {
 		edit: function() {
-			var self = this;
-			self.content.save().then(function(){
-				self.transitionToRoute('contacts');
-			});
+			this.handleSavePromise(this.content.save(), 'contacts', 'El contacto fue actualizado exitosamente');
 		},
 		cancel: function(){
 			this.get('model').rollback();
-			this.transitionTo("contacts");
+			this.transitionToRoute("contacts");
 		}
 	}
 });

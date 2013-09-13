@@ -703,16 +703,17 @@ class ApiController extends ControllerBase
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Crear el nuevo contacto:
+		sleep(3);
 
 		if (!isset($contents->email) || trim($contents->email) == '') {
 			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
 		}
 		try {
 			// Si el email ya existe en la base de datos, pero no esta en la lista, entonces adicionarlo a la lista
-			$contact = $wrapper->addExistingContactToListFromDbase($contents->email);
+			$contact = $wrapper->addExistingContactToListFromDbase($contents->email, $list);
 			// Si no esta en la base de datos, adicionarlo a la BD
 			if($contact == false) {
-				$contact = $wrapper->createNewContactFromJsonData($contents);
+				$contact = $wrapper->createNewContactFromJsonData($contents, $list);
 			}
 		}
 		catch (\InvalidArgumentException $e) {

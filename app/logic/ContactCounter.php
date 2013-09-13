@@ -9,54 +9,54 @@ class ContactCounter
 	{	
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		if(isset($this->counterDB))
-		foreach ($this->counterDB as $idDbase => $contents)
-		{
-			
-			$db = Dbase::findFirstByIdDbase($idDbase);
+		if (isset($this->counterDB)) {
+			foreach ($this->counterDB as $idDbase => $contents) {
 
-			$actTotal = $db->Ctotal;
-			$actActive = $db->Cactive;
-			$actUnsubscribed = $db->Cunsubscribed;
-			$actBounced = $db->Cbounced;
-			$actSpam = $db->Cspam;
+				$db = Dbase::findFirstByIdDbase($idDbase);
 
-				$parameters = array('idDbase' => $idDbase, 
-									'Ctotal' => $contents["Ctotal"] + $actTotal, 
-									'Cactive' => $contents["Cactive"] + $actActive, 
-									'Cunsubscribed' => $contents["Cunsubscribed"] + $actUnsubscribed,
-									'Cbounced' => $contents["Cbounced"] + $actBounced,
-									'Cspam' => $contents["Cspam"] + $actSpam
-				);
+				$actTotal = $db->Ctotal;
+				$actActive = $db->Cactive;
+				$actUnsubscribed = $db->Cunsubscribed;
+				$actBounced = $db->Cbounced;
+				$actSpam = $db->Cspam;
 
-				$query = "UPDATE Dbase SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idDbase = :idDbase:";
-				$query2 = $modelManager->createQuery($query);
-				$result = $query2->execute($parameters);
+					$parameters = array('idDbase' => $idDbase, 
+										'Ctotal' => $contents["Ctotal"] + $actTotal, 
+										'Cactive' => $contents["Cactive"] + $actActive, 
+										'Cunsubscribed' => $contents["Cunsubscribed"] + $actUnsubscribed,
+										'Cbounced' => $contents["Cbounced"] + $actBounced,
+										'Cspam' => $contents["Cspam"] + $actSpam
+					);
+
+					$query = "UPDATE Dbase SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idDbase = :idDbase:";
+					$query2 = $modelManager->createQuery($query);
+					$result = $query2->execute($parameters);
+			}
 		}
 		
-		if(isset($this->counterList))
-		foreach ($this->counterList as $idContactlist => $contents)
-		{
-			
-			$list = Contactlist::findFirstByIdContactlist($idContactlist);	
-			
-			$actTotal = $list->Ctotal;
-			$actActive = $list->Cactive;
-			$actUnsubscribed = $list->Cunsubscribed;
-			$actBounced = $list->Cbounced;
-			$actSpam = $list->Cspam;
+		if (isset($this->counterList)) {
+			foreach ($this->counterList as $idContactlist => $contents) {
 
-				$parameters = array('idContactlist' => $idContactlist, 
-									'Ctotal' => $contents["Ctotal"] + $actTotal, 
-									'Cactive' => $contents["Cactive"] + $actActive, 
-									'Cunsubscribed' => $contents["Cunsubscribed"] + $actUnsubscribed,
-									'Cbounced' => $contents["Cbounced"] + $actBounced,
-									'Cspam' => $contents["Cspam"] + $actSpam
-				);
+				$list = Contactlist::findFirstByIdContactlist($idContactlist);	
 
-				$query = "UPDATE Contactlist SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idContactlist = :idContactlist:";
-				$query2 = $modelManager->createQuery($query);
-				$result = $query2->execute($parameters);
+				$actTotal = $list->Ctotal;
+				$actActive = $list->Cactive;
+				$actUnsubscribed = $list->Cunsubscribed;
+				$actBounced = $list->Cbounced;
+				$actSpam = $list->Cspam;
+
+					$parameters = array('idContactlist' => $idContactlist, 
+										'Ctotal' => $contents["Ctotal"] + $actTotal, 
+										'Cactive' => $contents["Cactive"] + $actActive, 
+										'Cunsubscribed' => $contents["Cunsubscribed"] + $actUnsubscribed,
+										'Cbounced' => $contents["Cbounced"] + $actBounced,
+										'Cspam' => $contents["Cspam"] + $actSpam
+					);
+
+					$query = "UPDATE Contactlist SET Ctotal = :Ctotal:, Cactive = :Cactive:, Cunsubscribed =  :Cunsubscribed:, Cbounced = :Cbounced:, Cspam = :Cspam: WHERE idContactlist = :idContactlist:";
+					$query2 = $modelManager->createQuery($query);
+					$result = $query2->execute($parameters);
+			}
 		}
 	}
 	
@@ -96,7 +96,7 @@ class ContactCounter
 		
 		$oper = $this->newContact($contact);
 		if(!isset($this->counterList[$list->idContactlist])) {
-			$this->counterList [$list->idContactlist] = $oper;
+			$this->counterList[$list->idContactlist] = $oper;
 		} else {
 			$this->counterList[$list->idContactlist] = $this->sumArray($this->counterList[$list->idContactlist], $oper);
 		}
@@ -153,11 +153,11 @@ class ContactCounter
 	public function deleteContactFromDbase($contact)
 	{
 		$oper = $this->deleteContact($contact);
-		if(!isset($this->$counterDB[$contact->idDbase])) {
+		
+		if(!isset($this->counterDB[$contact->idDbase])) {
 			$this->counterDB[$contact->idDbase] = $oper;
-		} else {
-			$oper = $this->deleteContact($contact);
-			
+		} 
+		else {
 			$this->counterDB[$contact->idDbase] = $this->sumArray($this->counterDB[$contact->idDbase], $oper);
 		}
 	}
@@ -167,9 +167,8 @@ class ContactCounter
 		$oper = $this->deleteContact($contact);
 		if(!isset($this->counterList[$list->idContactlist])) {
 			$this->counterList [$list->idContactlist] = $oper;
-		} else {
-			$oper = $this->deleteContact($contact);
-		
+		} 
+		else {
 			$this->counterList[$list->idContactlist] = $this->sumArray($this->counterList[$list->idContactlist], $oper);
 		}
 	}
@@ -219,48 +218,54 @@ class ContactCounter
 		if($newcontact->spam != $oldcontact->spam && ($newcontact->spam == 0 || $oldcontact->spam == 0)) {
 			
 			$oper["Cspam"] = ($newcontact->spam != 0)?1:-1;
-			if($oper["Cspam"] == 1){
+			if ($oper["Cspam"] == 1){
 				$oper["Cbounced"] = ($oldcontact->bounced != 0)?-1:0;
-				if($oper["Cbounced"] == 0) {
+				if ($oper["Cbounced"] == 0) {
 					$oper["Cunsubscribed"] = ($oldcontact->unsubscribed != 0)?-1:0;
-					if($oper["Cunsubscribed"] == 0) {
+					if ($oper["Cunsubscribed"] == 0) {
 						$oper["Cactive"] = ($oldcontact->status != 0)?-1:0;
 					}
 				}
-			} else {
+			}
+			else {
 				$oper["Cbounced"] = ($newcontact->bounced != 0)?1:0;
-				if($oper["Cbounced"] == 0) {
+				if ($oper["Cbounced"] == 0) {
 					$oper["Cunsubscribed"] = ($newcontact->unsubscribed != 0)?1:0;
-					if($oper["Cunsubscribed"] == 0) {
+					if ($oper["Cunsubscribed"] == 0) {
 						$oper["Cactive"] = ($newcontact->status != 0)?1:0;
 					}
 				}
 			}
-		} elseif ($newcontact->bounced != $oldcontact->bounced && $newcontact->spam == 0 && ($newcontact->bounced == 0 || $oldcontact->bounced == 0)) {
+		} 
+		elseif ($newcontact->bounced != $oldcontact->bounced && $newcontact->spam == 0 && ($newcontact->bounced == 0 || $oldcontact->bounced == 0)) {
 			
 			$oper["Cbounced"] = ($newcontact->bounced != 0)?1:-1;
-			if($oper["Cbounced"] == 1) {
+			if ($oper["Cbounced"] == 1) {
 				$oper["Cunsubscribed"] = ($oldcontact->unsubscribed != 0)?-1:0;
-				if($oper["Cunsubscribed"] == 0) {
+				if ($oper["Cunsubscribed"] == 0) {
 					$oper["Cactive"] = ($oldcontact->status != 0)?-1:0;
 				}
-			} else {
+			}
+			else {
 				$oper["Cunsubscribed"] = ($newcontact->unsubscribed != 0)?1:0;
-				if($oper["Cunsubscribed"] == 0) {
+				if ($oper["Cunsubscribed"] == 0) {
 					$oper["Cactive"] = ($newcontact->status != 0)?1:0;
 				}
 			}
 			
-		} elseif ($newcontact->unsubscribed != $oldcontact->unsubscribed && $newcontact->bounced == 0 && $newcontact->spam == 0 && ($newcontact->unsubscribed == 0 || $oldcontact->unsubscribed == 0)) {
+		} 
+		elseif ($newcontact->unsubscribed != $oldcontact->unsubscribed && $newcontact->bounced == 0 && $newcontact->spam == 0 && ($newcontact->unsubscribed == 0 || $oldcontact->unsubscribed == 0)) {
 			
 			$oper["Cunsubscribed"] = ($newcontact->unsubscribed != 0)?1:-1;
-			if($oper["Cunsubscribed"] == 1) {
+			if ($oper["Cunsubscribed"] == 1) {
 				$oper["Cactive"] = ($oldcontact->status != 0)?-1:0;
-			} else {
+			}
+			else {
 				$oper["Cactive"] = ($newcontact->status != 0)?1:0;
 			}
 			
-		} elseif($newcontact->status != $oldcontact->status && $newcontact->bounced == 0 && $newcontact->spam == 0 && $newcontact->unsubscribed ==0 && ($newcontact->status == 0 || $oldcontact->status == 0)) {
+		} 
+		elseif ($newcontact->status != $oldcontact->status && $newcontact->bounced == 0 && $newcontact->spam == 0 && $newcontact->unsubscribed ==0 && ($newcontact->status == 0 || $oldcontact->status == 0)) {
 			
 			$oper["Cactive"] = ($newcontact->status != 0)?1:-1;
 
