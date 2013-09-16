@@ -125,12 +125,7 @@ class DbaseController extends ControllerBase
 
 				if ($editform->isValid() && $db->save()) {
 					$this->flash->success('Base de Datos Actualizada Exitosamente!');
-					$this->dispatcher->forward(
-						array(
-							'controller' => 'dbase',
-							'action' => 'show'
-						)
-					);
+					$this->response->redirect("dbase/show/$id");
 				}
 				else {
 					foreach ($db->getMessages() as $msg) {

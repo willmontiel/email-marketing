@@ -25,7 +25,7 @@
 						{{editform.render("Cdescription")}}
 						<br />	
 						{{submit_button("Guardar", 'class' : "btn btn-default", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
-						<a href="{{ url('dbase') }}" class="btn btn-default">Cancelar</a>
+						<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default">Cancelar</a>
 					</form>
 				</div>
 			</div>

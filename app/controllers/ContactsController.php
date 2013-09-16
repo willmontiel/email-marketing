@@ -71,7 +71,7 @@ class ContactsController extends ControllerBase
 					$batch[] = array(
 						'email' => $email,
 						'name' => $name,
-						'last_name' => $last_name,
+						'lastName' => $last_name,
 						'status' => $status,
 					);
 					
@@ -79,7 +79,7 @@ class ContactsController extends ControllerBase
 						$batchreal[] = array(
 							'email' => $email,
 							'name' => $name,
-							'last_name' => $last_name,
+							'lastName' => $last_name,
 						);
 					}
 				}
@@ -136,9 +136,9 @@ class ContactsController extends ControllerBase
 			$newcontact->isActive = 1;
 			
 			try {
-				$contact = $wrapper->addExistingContactToListFromDbase($newcontact->email);
+				$contact = $wrapper->addExistingContactToListFromDbase($newcontact->email, $list);
 				if(!$contact) {
-					$contact = $wrapper->createNewContactFromJsonData($newcontact);
+					$contact = $wrapper->createNewContactFromJsonData($newcontact, $list);
 				}
 			}
 			catch (\InvalidArgumentException $e) {
@@ -184,7 +184,6 @@ class ContactsController extends ControllerBase
 		
 		if (empty($_FILES['importFile']['name'])) {
 			$this->flashSession->error("No ha enviado ningún archivo");
-			$this->debug->log('No hay archivo');
 			return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 		}
 		
@@ -194,7 +193,6 @@ class ContactsController extends ControllerBase
 			
 			if ($validate != NULL) {
 				$this->flashSession->error($validate);
-				$this->debug->log($validate);
 				return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");	
 			}
 			else {

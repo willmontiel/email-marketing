@@ -31,7 +31,7 @@
 								<tr>
 									<td>{{content['email']}}</td>
 									<td>{{content['name']}}</td>
-									<td>{{content['last_name']}}</td>
+									<td>{{content['lastName']}}</td>
 									{% if content['status'] == "1" %}
 									<td>Crear</td>
 									{% else %}
