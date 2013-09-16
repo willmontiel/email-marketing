@@ -442,6 +442,9 @@ class ApiController extends ControllerBase
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Editar el contacto existente
+		if (!isset($contents->email) || trim($contents->email) == '') {
+			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
+		}
 		try {
 			$contact = $wrapper->updateContactFromJsonData($idContact, $contents);
 		}
@@ -761,6 +764,9 @@ class ApiController extends ControllerBase
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Editar el contacto existente
+		if (!isset($contents->email) || trim($contents->email) == '') {
+			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
+		}
 		try {
 			$contact = $wrapper->updateContactFromJsonData($idContact, $contents);
 		}

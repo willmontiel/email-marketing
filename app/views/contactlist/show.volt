@@ -234,7 +234,11 @@
 				<div class="row-fluid">
 					<div class="span3">
 						<p>
-							<label>E-mail: </label>
+							<label>E-mail:
+								{{' {{#if errors.email}} '}}
+									<span class="text text-error">{{'{{errors.email}}'}}</span>
+								{{' {{/if }} '}}
+							</label>
 						</p>
 						<p>
 							{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}

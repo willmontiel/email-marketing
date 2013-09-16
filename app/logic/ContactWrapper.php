@@ -402,16 +402,24 @@ class ContactWrapper extends BaseWrapper
 			$fieldinstance = new Fieldinstance();
 			$fieldinstance->idCustomField = $field->idCustomField;
 			$fieldinstance->idContact = $this->contact->idContact;
+			$name = "campo".$field->idCustomField;
+			$value = null;
 			if ($field->type == "Date") {
-				$name = "campo".$field->idCustomField;
-				$value = null;
 				if($data->$name != null){
 					$value = strtotime($data->$name);
+				} 
+				else { 
+					$value = $field->defaultValue;
 				}
 				$fieldinstance->numberValue = $value;
 			} else {
-				$name = "campo".$field->idCustomField;
-				$fieldinstance->textValue = $data->$name;
+				if($data->$name != null){
+					$value = $data->$name;
+				} 
+				else { 
+					$value = $field->defaultValue;
+				}
+				$fieldinstance->textValue = $value;
 			}
 			if(!$fieldinstance->save()) {
 				throw new \Exception('Error al crear los Campos Personalizados del Contacto');

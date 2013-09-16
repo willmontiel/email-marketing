@@ -177,9 +177,9 @@
 							{%for field in fields%}
 								<p><label for="campo{{field.idCustomField}}">{{field.name}}:</label></p>
 								<p>{{ember_customfield(field)}}</p>
-								{% if (field.type == "Text") %}
+								{% if (field.type == "Text" and field.maxLength != "") %}
 									Maximo {{field.maxLength}} caracteres
-								{% elseif field.type == "Numerical" %}
+								{% elseif field.type == "Numerical" and field.minValue != "" and field.maxValue != 0 %}
 									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
 								{%endif%}
 							{%endfor%}
