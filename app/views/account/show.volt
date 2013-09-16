@@ -4,7 +4,8 @@
 {{ content() }}
 <div class="container-fluid padded">
 	<div class="text-right">
-		<a href="#" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
+		<a href="{{url('account/newuser/')}}{{idAccount}}" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
+		<a href="{{ url('account/index') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
 	</div>
 	<br />
 	<div class="row-fluid">
@@ -24,35 +25,68 @@
 								<td>Última actualización</td>
 							</tr>
 						</thead>
-					{%for all in allUser%}
+					{%for item in page.items%}
 						<tbody>
 							<tr>
-								<td>{{all.idUser}}</td>
-								<td>{{all.firstName}}</td>
-								<td>{{all.lastName}}</td>
-								<td>{{all.username}}</td>
-								<td>{{all.email}}</td>
-								<td>{{all.userrole}}</td>
-								<td>{{date('Y-m-d', all.createdon)}}</td>
-								<td>{{date('Y-m-d', all.updatedon)}}</td>
+								<td>{{item.idUser}}</td>
+								<td>{{item.firstName}}</td>
+								<td>{{item.lastName}}</td>
+								<td>{{item.username}}</td>
+								<td>{{item.email}}</td>
+								<td>{{item.userrole}}</td>
+								<td>{{date('Y-m-d', item.createdon)}}</td>
+								<td>{{date('Y-m-d', item.updatedon)}}</td>
 								<td>
-									<a href="#">Editar</a><br>
-									<a href="#" data-toggle="modal">Eliminar</a>
+									<div class="pull-right">
+										<div class="btn-group">
+											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
+											<ul class="dropdown-menu">
+												<li><a href="{{url('account/edituser/')}}{{item.idUser}}"><i class="icon-pencil"></i> Editar</a></li>
+												<li><a href="{{url('account/deleteuser/')}}{{item.idUser}}"><i class="icon-trash"></i> Eliminar</a></li>
+											</ul>
+										</div>
+									</div>
 								</td>
 							</tr>
 						</tbody>
 					{%endfor%}
 					</table>
 				</div>
+				<div class="box-footer">
+					<div class="row-fluid">
+						<div class="span5">
+							<div class="pagination">
+								<ul>
+									{% if page.current == 1 %}
+										<li class="previous"><a href="#" class="inactive"><<</a></li>
+										<li class="previous"><a href="#" class="inactive"><</a></li>
+									{% else %}
+										<li class="previous active"><a href="{{ url('account/show') }}"><<</a></li>
+										<li class="previous active"><a href="{{ url('account/show') }}?page={{ page.before }}"><</a></li>
+									{% endif %}
+
+									{% if page.current >= page.total_pages %}
+										<li class="next"><a href="#" class="inactive">></a></li>
+										<li class="next"><a href="#" class="inactive">>></a></li>
+									{% else %}
+										<li class="next active"><a href="{{ url('account/show') }}?page={{page.next}}">></a></li>
+										<li class="next active"><a href="{{ url('account/show') }}?page={{page.last}}">>></a></li>		
+									{% endif %}
+								</ul>
+							</div>
+						</div>
+						<div class="span5">
+							<br />
+							Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
+							Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
+						</div>
+					</div>
+				</div>
 			</div>
-
 		</div>
-
-		<div class="span12"></div>
 		<div class="text-right">
-			<p>
-				<a href="{{ url('account') }}" class="btn btn-inverse">Regresar</a>
-			</p>
+			<a href="{{ url('account/newuser') }}" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
+			<a href="{{ url('account/index') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
 		</div>
 	</div>
 </div>

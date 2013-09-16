@@ -46,8 +46,8 @@
 									<td>{{item.fileSpace}}</td>
 									<td>{{item.contactLimit}}</td>
 									<td>{{item.messageLimit}}</td>
-									<td>{{date('d/m/Y H:i', item.createdon)}}</td>
-									<td>{{date('d/m/Y H:i', item.updatedon)}}</td>
+									<td>{{date('d/m/Y', item.createdon)}}</td>
+									<td>{{date('d/m/Y', item.updatedon)}}</td>
 									<td>
 										<div class="pull-right" style="margin-right: 10px;">
 											<div class="btn-group">

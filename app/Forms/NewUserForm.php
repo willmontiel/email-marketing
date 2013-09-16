@@ -52,7 +52,13 @@ class NewUserForm extends Form
         )));
 		
         $this->add(new Select("userrole", array(
-            'ROLE_ADMIN' => 'Administrador de cuenta'
+            'ROLE_ADMIN' => 'Administrador de la cuenta'
+        )));
+		
+		$this->add(new Select("userrole2", array(
+			'ROLE_SUDO' => 'Super administrador',
+            'ROLE_ADMIN' => 'Administrador local',
+			
         )));
     }
 }

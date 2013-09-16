@@ -29,6 +29,7 @@ class Security extends Plugin
 			//Register roles
 			$roles = array(
 				'ROLE_ADMIN' => new Phalcon\Acl\Role('ROLE_ADMIN'),
+				'ROLE_SUDO' => new Phalcon\Acl\Role('ROLE_SUDO'),
 				'ROLE_USER' => new Phalcon\Acl\Role('ROLE_USER')
 			);
 			
@@ -38,7 +39,7 @@ class Security extends Plugin
 
 			//Private area resources
 			$privateResources = array(
-				'account' => array('show', 'new', 'edit', 'delete', 'list'),
+				'account' => array('show', 'new', 'edit', 'delete', 'list', 'newuser', 'edituser', 'deleteuser'),
 				'user' => array('index', 'new', 'edit', 'delete', 'show'),
 				'dbase' => array('list', 'edit', 'new', 'show'),
 				'contactlist' => array('list', 'new', 'index', 'show'),

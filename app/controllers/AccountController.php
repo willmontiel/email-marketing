@@ -1,7 +1,12 @@
 <?php
 class AccountController extends ControllerBase
 {
-	
+	/**
+	 * 
+	 * Esta funcion se encarga de retornar en json la cantidad de contactos activos por cuenta, para
+	 * visualizarlos desde la sección de listas de contactos, esto se hace con jquery que hará la peticion
+	 * cada determinado tiempo para mentener actualizada la información al usuario.
+	 */
 	public function loadcontactsinfoAction()
 	{
 		$account = $this->user->account;
@@ -17,6 +22,10 @@ class AccountController extends ControllerBase
 	
 	}
 	
+	/**
+	 * 
+	 * Esta función se encarga de mostrar toda la información de las cuentas al super-administrador
+	 */
 	public function indexAction()
 	{
 		$r = $this->verifyAcl('account', 'list', '');
@@ -41,6 +50,10 @@ class AccountController extends ControllerBase
 		
 	}
 	
+	/*
+	 * Esta función se utiliza para crear cuentas con su respectivo usuario y base de datos base, esta funcion es
+	 * utuilizada solo por los super-administradores  
+	 */
 	public function newAction()
     {
 		$r = $this->verifyAcl('account', 'new', '');
@@ -100,17 +113,37 @@ class AccountController extends ControllerBase
   
    } 
    
+   /*
+    * Esta función se encarga de mostrar todos los usuarios de todas la cuentas. Es utilizada por el super-administrador
+    */
    public function showAction($id)
    {
-	   $r = $this->verifyAcl('account', 'show', '');
+		$r = $this->verifyAcl('account', 'show', '');
 		if ($r)
-			return $r;
-	    $users = User::find("idAccount = $id");
-		
-		$this->view->setVar("allUser", $users);	   
+			return $r;	 
+
+		$currentPage = $this->request->getQuery('page', null, 1); // GET
+
+		$paginator = new \Phalcon\Paginator\Adapter\Model(
+			array(
+				"data" => User::find(array(
+					"conditions" => "idAccount = ?1",
+					"bind" => array(1 => $id)
+				)),
+				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
+				"page" => $currentPage
+			)
+		);
+
+		$page = $paginator->getPaginate();
+
+		$this->view->setVar("page", $page);
+		$this->view->setVar("idAccount", $id);
    }
  
-     
+   /*
+    * Esta función se encarga de editar información de una cuenta. Es utilizada por el super-administador
+    */  
    public function editAction($id)
    {
 	    $r = $this->verifyAcl('account', 'edit', '');
@@ -132,9 +165,9 @@ class AccountController extends ControllerBase
 						}
 					}
 					else {
-					$this->db->commit();
-					$this->flash->success('Se ha editado la cuenta exitosamente');
-					$this->response->redirect("account");
+						$this->db->commit();
+						$this->flash->success('Se ha editado la cuenta exitosamente');
+						$this->response->redirect("account");
 					}
 
  			}
@@ -142,7 +175,10 @@ class AccountController extends ControllerBase
 
         } 
     }
-
+	
+	/*
+	 * Esta función se encagar de borrar una cuenta de la base de datos, es muy delicada. Es utilizada por el administrador
+	 */
 	public function deleteAction($id)
     {
 	
@@ -162,12 +198,82 @@ class AccountController extends ControllerBase
 
 			   else {
 				   $this->flash->error('Escriba la palabra "DELETE" correctamente');
-
-   //				$this->view->disable();
-			
 			   }
        }
 
      }
+	 
+	 /*
+	  * Esta funcion se encarga de crear usuarios a partir del id de la cuenta que recibe desde la vista
+	  */
+	public function newuserAction($id)
+	{
+		$r = $this->verifyAcl('account', 'edit', '');
+	   if ($r)
+		   return $r;
 
+	   $user = new User();
+	   $form = new NewUserForm($user);
+
+	   $account = Account::findFirst(array(
+		   "conditions" => "idAccount = ?1",
+		   "bind" => array(1 => $id)
+	   ));
+
+	   if(!$account){
+		   $this->flashSession->error("La cuenta no existe, por favor verifica la información");
+		   $this->response->redirect("account/index");
+	   }
+
+	   else {
+		   if ($this->request->isPost()) {
+		   $form->bind($this->request->getPost(), $user);
+
+		   $pass = $form->getValue('password');
+		   $pass2 = $form->getValue('password2');
+
+		   if(strlen($pass) >= 8) {
+
+			   if($pass == $pass2) {
+
+				   $this->db->begin();
+				   $user->idAccount = $id;
+				   $user->password = $this->security2->hash($pass);
+
+
+				   if ($form->isValid() && $user->save()) {
+					   $this->db->commit();
+					   $this->flashSession->success("Se ha creado el usuario exitosamente");
+					   $this->response->redirect("account/index");
+				   }
+
+				   else {
+					   $this->db->rollback();
+					   foreach ($user->getMessages() as $msg) {
+						   $this->flash->error($msg);
+					   }
+				   }
+			   }
+			   else {
+				   $this->flashSession->error("Las contraseñas no coinciden por favor verifica la información");
+				   $this->response->redirect("account/newuser");
+			   }
+		   }
+		   else {
+			   $this->flashSession->error("La contraseña es muy corta, debe estar entre 8 y 40 caracteres");
+			   $this->response->redirect("account/newuser");
+		   }	
+
+
+	   }
+
+	   $this->view->NewUserForm = $form;
+	   $this->view->setVar('account', $account);
+	   }		
+	}
+	 
+	public function edituserAction($id)
+	{
+		 
+	}
  }  

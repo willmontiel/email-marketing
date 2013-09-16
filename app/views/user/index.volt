@@ -36,7 +36,9 @@
 						<tr>
 							<td></td>
 							<td>Email</td>
-							<td>Función</td>
+							<td>Tipo de usuario</td>
+							<td>Fecha de creación</td>
+							<td>Última actualización</td>
 							<td></td>
 						</tr>
 					</thead>
@@ -46,14 +48,14 @@
 							<td>
 								<div class="box-section news with-icons">
 									<div class="avatar blue">
-										<i class="icon-group icon-2x"></i>
+										<i class="icon-user icon-2x"></i>
 									</div>
 									<div class="news-content">
 										<div class="news-title">
 											{{item.username}}
 										</div>
 										<div class="news-text">
-											{{item.firstName}}<br />
+											{{item.firstName}}
 											{{item.lastName}}
 										</div>
 									</div>
@@ -61,6 +63,8 @@
 							</td>
 							<td>{{item.email}}</td>
 							<td>{{item.userrole}}</td>
+							<td>{{ date('d/m/Y',item.createdon)}}</td>
+							<td>{{ date('d/m/Y',item.updatedon)}}</td>
 							<td>
 								<div class="pull-right">
 									<div class="btn-group">
