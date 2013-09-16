@@ -289,12 +289,32 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
-	unsubscribedcontact: function () {
-		this.set("isSubscribed", false);
-		this.get('model.transaction').commit();
-	},
-	subscribedcontact: function () {
-		this.set("isSubscribed", true);
-		this.get('model.transaction').commit();
+	actions :{
+		subscribedcontact: function () {
+			//this.set("isSubscribed", true);
+			var self = this;
+			self.content.set('isSubscribed', true);
+			self.content.save();
+		},
+		unsubscribedcontact: function () {
+			var self = this;
+			self.content.set('isSubscribed', false);
+			self.content.save();
+		}
 	}
+});
+
+
+App.DatePickerField = Em.View.extend({
+  templateName: 'datepicker',
+  didInsertElement: function() {
+    var onChangeDate, self;
+    self = this;
+    onChangeDate = function(ev) {
+      return self.set("value", moment.utc(ev.date).format("YYYY-MM-DD"));
+    };
+    return this.$('.datepicker').datepicker({
+      separator: "-"
+    }).on("changeDate", onChangeDate);
+  }
 });
