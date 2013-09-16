@@ -5,16 +5,6 @@
 		{{ partial("partials/date_view_partial") }}
 		{{ javascript_include('js/mixin_pagination.js') }}
 <script type="text/javascript">	 
-	$(function(){
-		$.getJSON(MyBaseURL + 'account/loadcontactsinfo',function(data){ 
-			if (data.accountingMode == 'Contacto') {
-				$('#contactsInfo').append(data.activeContacts +'/'+data.contactLimit);
-			}
-			else {
-				$('#contactsInfo').append(data.activeContacts);
-			}
-		});
-	});
 	$(function() {
 		setInterval(function() {
 			$.getJSON(MyBaseURL + 'account/loadcontactsinfo',function(data){

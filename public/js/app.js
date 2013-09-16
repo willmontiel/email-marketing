@@ -176,6 +176,7 @@ App.FieldsRemoveController = Ember.ObjectController.extend({
 		},
 				
 		cancel: function() {
+			this.get("model").rollback();
 			this.transitionToRoute('fields.index');
 		}
 	}
@@ -254,9 +255,8 @@ App.ContactsEditController = Ember.ObjectController.extend({
 			});	
 		},
 		cancel: function(){
-			var self = this;
-			self.get('model').rollback();
-			self.transitionToRoute('contacts');
+			this.get('model').rollback();
+			this.transitionToRoute('contacts');
 		}
 	}
 });
@@ -274,6 +274,7 @@ App.ContactsDeleteController = Ember.ObjectController.extend({
 		},
 				
 		cancel: function(){
+			this.get("model").rollback();
 			this.transitionToRoute("contacts");
 		}
 	}
