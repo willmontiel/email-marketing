@@ -48,88 +48,91 @@ class ImportContactWrapper extends BaseWrapper
 		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
 		$customfields = Customfield::findByIdDbase($list->idDbase);
 		
-		$wrapper = new ContactWrapper();
+		$test = new TestController();
+		$test->testimportAction($destiny, $list, $posCol, $delimiter);
 		
-		$wrapper->setAccount($this->account);
-		$wrapper->setIdDbase($list->idDbase);
-		$wrapper->setIdContactlist($this->idContactlist);
-		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
-
-		$wrapper->startTransaction();
-		
-		while(! feof($open)) {
-			
-			$linew = fgetcsv($open, 0, $delimiter);
-			
-			if (!empty($linew)) {
-				$this->newcontact = new stdClass();
-
-				$this->MappingToJSON($linew, $posCol);
-				$this->MappingCustomFieldsToJSON($linew, $posCol, $customfields);
-
-				array_push($success, $linew);
-				try {
-					$contact = $wrapper->addExistingContactToListFromDbase($this->newcontact->email, $list, false);
-					if(!$contact) {
-						$contact = $wrapper->createNewContactFromJsonData($this->newcontact, $list, false);
-					}
-				}
-				catch (\InvalidArgumentException $e) {
-
-					array_pop($success);
-
-					switch ($e->getCode()) {
-						case 0:
-							array_push($linew, "Existente");
-							$exist++;
-							break;						
-						case 1:
-							array_push($linew, "Correo Invalido");
-							$invalid++;
-							break;
-						case 2:
-							array_push($linew, "Correo Bloqueado");
-							$bloqued++;
-							break;
-						case 3:
-							array_push($linew, "Limite de Contactos Excedido");
-							$limit++;
-							break;
-					}
-
-					array_push($errors, $linew);
-
-				}
-				catch (\Exception $e) {
-					$wrapper->rollbackTransaction();
-				}			 
-			
-				$total++;
-				$cantTrans++;
-
-				if ($cantTrans == 100) {
-					$wrapper->endTransaction();
-
-					$cantTrans = 0;
-				}
-			}
-		}
-		$wrapper->endTransaction(false);
-		
-		$this->createReports($errors, $success, $newproccess->idImportproccess);
-		
-		$count = array(
-			"total" => $total,
-			"import" => $total-($exist+$invalid+$bloqued+$limit),
-			"Nimport" => $exist+$invalid+$bloqued+$limit,
-			"exist" => $exist,
-			"invalid" => $invalid,
-			"bloqued" => $bloqued,
-			"limit" => $limit,
-			"idProcces" => $newproccess->idImportproccess
-		);
-		
-		return $count;
+//		$wrapper = new ContactWrapper();
+//		
+//		$wrapper->setAccount($this->account);
+//		$wrapper->setIdDbase($list->idDbase);
+//		$wrapper->setIdContactlist($this->idContactlist);
+//		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
+//
+//		$wrapper->startTransaction();
+//		
+//		while(! feof($open)) {
+//			
+//			$linew = fgetcsv($open, 0, $delimiter);
+//			
+//			if (!empty($linew)) {
+//				$this->newcontact = new stdClass();
+//
+//				$this->MappingToJSON($linew, $posCol);
+//				$this->MappingCustomFieldsToJSON($linew, $posCol, $customfields);
+//
+//				array_push($success, $linew);
+//				try {
+//					$contact = $wrapper->addExistingContactToListFromDbase($this->newcontact->email, $list, false);
+//					if(!$contact) {
+//						$contact = $wrapper->createNewContactFromJsonData($this->newcontact, $list, false);
+//					}
+//				}
+//				catch (\InvalidArgumentException $e) {
+//
+//					array_pop($success);
+//
+//					switch ($e->getCode()) {
+//						case 0:
+//							array_push($linew, "Existente");
+//							$exist++;
+//							break;						
+//						case 1:
+//							array_push($linew, "Correo Invalido");
+//							$invalid++;
+//							break;
+//						case 2:
+//							array_push($linew, "Correo Bloqueado");
+//							$bloqued++;
+//							break;
+//						case 3:
+//							array_push($linew, "Limite de Contactos Excedido");
+//							$limit++;
+//							break;
+//					}
+//
+//					array_push($errors, $linew);
+//
+//				}
+//				catch (\Exception $e) {
+//					$wrapper->rollbackTransaction();
+//				}			 
+//			
+//				$total++;
+//				$cantTrans++;
+//
+//				if ($cantTrans == 100) {
+//					$wrapper->endTransaction();
+//
+//					$cantTrans = 0;
+//				}
+//			}
+//		}
+//		$wrapper->endTransaction(false);
+//		
+//		$this->createReports($errors, $success, $newproccess->idImportproccess);
+//		
+//		$count = array(
+//			"total" => $total,
+//			"import" => $total-($exist+$invalid+$bloqued+$limit),
+//			"Nimport" => $exist+$invalid+$bloqued+$limit,
+//			"exist" => $exist,
+//			"invalid" => $invalid,
+//			"bloqued" => $bloqued,
+//			"limit" => $limit,
+//			"idProcces" => $newproccess->idImportproccess
+//		);
+//		
+//		return $count;
 		
 	}
 

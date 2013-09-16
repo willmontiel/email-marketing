@@ -481,4 +481,62 @@ class TestController extends ControllerBase
 			);
 			return $array;
 	}
+	
+	
+	public function testimportAction($destiny, $list, $posCol, $delimiter)
+	{
+		$db = Phalcon\DI::getDefault()->get('db');
+		
+		$log = $this->logger;
+		
+		$hora = time();
+		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);
+		
+		$open = fopen($destiny, "r");
+		
+		$cont = 0;
+		$values = "";
+		$posEmail = $posCol[0];
+		$posName = $posCol[1];
+		$posLastname = $posCol[2];
+		
+		while(! feof($open)) {
+			$linew = fgetcsv($open, 0, $delimiter);
+			if (!empty($linew)) {
+				if($cont != 0) {
+					$values.=", ";
+				}
+				list($user, $edomain) = preg_split("/@/", $linew[0], 2);	
+				$values.= "('$linew[$posEmail] ', '$linew[$posName]', '$linew[$posLastname]', '$edomain')";
+				$cont++;
+			}
+		}
+		$tabletmp = "INSERT INTO tmpimport(email, name, lastName, domain) VALUES ".$values.";";
+		
+		$findidcontact = "UPDATE tmpimport t JOIN contact c ON (t.idEmail = c.idEmail AND c.idDbase = $list->idDbase) SET t.idContact = c.idContact, t.status = 'BD' WHERE t.idEmail IS NOT NULL;";
+		
+		$findcoxcl = "UPDATE tmpimport t JOIN coxcl x ON (t.idContact = x.idContact AND x.idContactlist = $list->idContactlist) SET t.coxcl = 1, t.status = 'Lista' WHERE t.idContact IS NOT NULL;";
+		
+		$extraQuery = "UPDATE tmpimport t JOIN email e ON (t.email = e.email AND e.idAccount = 6) SET t.idEmail = e.idEmail;
+				UPDATE tmpimport t JOIN domain d ON (t.domain = d.name) SET t.idDomain = d.idDomain WHERE t.idEmail IS NOT NULL;";
+		
+		$createcontacts = "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, bounced, spam, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) SELECT $list->idDbase, t.idEmail, t.name, t.lastName, $hora, 0, 0, 0, $ipaddress, $ipaddress, $hora, $hora, $hora FROM tmpimport t WHERE t.idContact IS NULL;";
+		
+		$createcoxcl = "INSERT INTO coxcl (idContactlist, idContact, createdon) SELECT $list->idContactlist, t.idContact, $hora FROM tmpimport t WHERE t.coxcl IS NULL";
+		
+		$db->begin();
+		
+		$firstquery = $db->execute($tabletmp);
+		
+		$extraEmailDomain = $db->execute($extraQuery);
+		
+		$idcontacts = $db->execute($findidcontact);
+		$contactscreated = $db->execute($createcontacts);
+		$idcontactscreated = $db->execute($findidcontact);
+		
+		$coxcls = $db->execute($findcoxcl);
+		$createdcoxcl = $db->execute($createcoxcl);
+		
+		$db->commit();
+	}
 }
