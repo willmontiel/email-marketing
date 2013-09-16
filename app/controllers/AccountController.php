@@ -133,7 +133,7 @@ class AccountController extends ControllerBase
 					}
 					else {
 					$this->db->commit();
-					$this->flash->success('Se ha creado la cuenta exitosamente');
+					$this->flash->success('Se ha editado la cuenta exitosamente');
 					$this->response->redirect("account");
 					}
 
@@ -153,12 +153,12 @@ class AccountController extends ControllerBase
 		$user = User::findFirstByIdAccount($id);
 
 			if ($account !== null) {
-			   if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
+				if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
 				   $account->delete();
 				   $user->deleted();
 				   $this->flashSession->success('Base de Datos Eliminada!');
 				   $this->response->redirect("account");
-				   } 
+				} 
 
 			   else {
 				   $this->flash->error('Escriba la palabra "DELETE" correctamente');

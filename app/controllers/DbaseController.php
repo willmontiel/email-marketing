@@ -33,9 +33,11 @@ class DbaseController extends ControllerBase
 		
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 		
+		$idAccount = $this->user->account->idAccount;
+		
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
-				"data"  => $this->user->account->dbases,
+				"data"  => Dbase::find("idAccount = $idAccount"),
 				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page"  => $currentPage
 			)

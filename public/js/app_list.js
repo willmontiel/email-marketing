@@ -68,28 +68,6 @@ App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
 	needs: ['dbase']
 });
 
-App.ListsNewController = Ember.ObjectController.extend({
-	actions: {
-		save: function(){
-			if(this.get('name')==null){
-				App.set('errormessage', 'El nombre de la lista es requerido');
-				this.transitionToRoute('lists.new');
-			}
-			else{
-				var self = this;
-				self.content.save().then(function(){
-					self.transitionToRoute('lists');
-				});
-			}
-		},
-
-		cancel: function(){
-			this.get('model').rollback();
-			this.transitionToRoute("lists");
-		}
-	}
-});
-
 App.ListsEditController = Ember.ObjectController.extend({
 	actions: {
 		edit: function() {
@@ -129,3 +107,8 @@ App.ListsDeleteController = Ember.ObjectController.extend({
 		}
 	}
 });
+
+//App.DbaseSelect = [
+//	Ember.Object.create({customField: "Email", id: "email"}),
+//	Ember.Object.create({customField: "Email", id: "email"}),
+//];

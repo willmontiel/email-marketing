@@ -33,9 +33,6 @@
 												<span><i class="icon-sitemap icon-2x"></i></span>
 											</div>
 											<div class="news-content">
-												<div class="news-time">
-													<span>{{item.idAccount}}</span>
-												</div>
 												<div class="news-title">
 													<a href="{{ url('account/show/') }}{{item.idAccount}}">{{item.companyName}}</a>
 												</div>

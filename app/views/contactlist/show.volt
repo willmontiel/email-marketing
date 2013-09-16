@@ -4,22 +4,7 @@
 		{{ partial("partials/ember_partial") }}
 		{{ partial("partials/date_view_partial") }}
 		{{ javascript_include('js/mixin_pagination.js') }}
-<script type="text/javascript">	 
-	$(function() {
-		setInterval(function() {
-			$.getJSON(MyBaseURL + 'account/loadcontactsinfo',function(data){
-				if (data.accountingMode == 'Contacto') {
-					$("#contactsInfo").empty();
-					$('#contactsInfo').append(data.activeContacts +'/'+data.contactLimit);
-				}
-				else {
-					$("#contactsInfo").empty();
-					$('#contactsInfo').append(data.activeContacts);
-				}
-			});
-		}, 5000);
-	});
-</script>
+		{{ javascript_include('js/load_activecontacts.js')}}
 <script type="text/javascript">
 		var MyDbaseUrl = '{{apiurlbase.url ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};

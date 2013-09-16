@@ -10,11 +10,6 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Listado de usuarios por cuenta
-					</div>
-				</div>
 				<div class="box-content">
 					<table class='table table-normal'>
 						<thead>
@@ -38,8 +33,8 @@
 								<td>{{all.username}}</td>
 								<td>{{all.email}}</td>
 								<td>{{all.userrole}}</td>
-								<td>{{all.createdon}}</td>
-								<td>{{all.updatedon}}</td>
+								<td>{{date('Y-m-d', all.createdon)}}</td>
+								<td>{{date('Y-m-d', all.updatedon)}}</td>
 								<td>
 									<a href="#">Editar</a><br>
 									<a href="#" data-toggle="modal">Eliminar</a>

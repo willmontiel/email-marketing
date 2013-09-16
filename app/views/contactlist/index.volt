@@ -14,33 +14,36 @@
 		App.totalFields = {{totalFields}};
 		App.customFieldsArray = {{fields|json_encode}};	
 	</script>
-	<script type="text/javascript">	 
-		$(document).ready(function(){
-			$.getJSON('account/loadcontactsinfo',function(data){ 
-				if (data.accountingMode == 'Contacto') {
-					$('#contactsInfo').append(data.activeContacts +'/'+data.contactLimit);
-				}
-				else {
-					$('#contactsInfo').append(data.activeContacts);
-				}
-			});
-		});
+	<script text="text/javascript">
 		
-		$(function() {
-			setInterval(function() {
-				$.getJSON('account/loadcontactsinfo',function(data){
-					if (data.accountingMode == 'Contacto') {
-						$("#contactsInfo").empty();
-						$('#contactsInfo').append(data.activeContacts +'/'+data.contactLimit);
+		App.ListsNewController = Ember.ObjectController.extend({
+			
+			dbases: [
+				{dbase: "NADA", id: 1}
+			],
+
+			actions: {
+				save: function(){
+					if(this.get('name')==null){
+						App.set('errormessage', 'El nombre de la lista es requerido');
+						this.transitionToRoute('lists.new');
 					}
-					else {
-						$("#contactsInfo").empty();
-						$('#contactsInfo').append(data.activeContacts);
+					else{
+						var self = this;
+						self.content.save().then(function(){
+							self.transitionToRoute('lists');
+						});
 					}
-				});
-			}, 5000);
+				},
+
+				cancel: function(){
+					this.get('model').rollback();
+					this.transitionToRoute("lists");
+				}
+			}
 		});
 	</script>
+	{{ javascript_include('js/load_activecontacts.js')}}
 	{{ javascript_include('js/app_segment.js') }}
 {% endblock %}
 {% block sectiontitle %}
@@ -156,7 +159,11 @@
 					</label>
 					{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
 					<label>Base de datos</label>
-					{{ '{{view Ember.Select contentBinding="App.DBObjectList" selectionBinding="dbase" optionValuePath="content.id" optionLabelPath="content.name"}}' }}
+					{{ '{{view Ember.Select
+						contentBinding="dbases"
+						optionValuePath="content.id"
+						optionLabelPath="content.dbase"}}'
+					}}
 				</div>
 				<div class="form-actions">
 					<button class="btn btn-default" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>

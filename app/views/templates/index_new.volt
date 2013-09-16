@@ -88,7 +88,7 @@
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrar <b class="caret"></b></a>
 									<ul class="dropdown-menu">
 										<li><a href="{{ url('account') }}">Cuentas</a></li>
-										<li><a href="#">Usuarios</a></li>
+										<li><a href="{{ url('user') }}">Usuarios</a></li>
 									</ul>
 								</li>
 							</ul>
