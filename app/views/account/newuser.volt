@@ -63,7 +63,7 @@
 						<br />
 						
 						{{ submit_button("Crear", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
-						<a href="{{ url('account/index') }}" class="btn btn-default">Cancelar<a>
+						<a href="{{url('account/show/')}}{{account.idAccount}}" class="btn btn-default">Cancelar<a>
 					</form>
 					
 				</div>

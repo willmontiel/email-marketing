@@ -15,11 +15,7 @@
 					<table class='table table-normal'>
 						<thead>
 							<tr>
-								<td>Id</td>
-								<td>Nombres</td>
-								<td>Apellidos</td>
-								<td>Nombre de usuario</td>
-								<td>E-Mail</td>
+								<td></td>
 								<td>Tipo de usuario</td>
 								<td>Fecha de registro</td>
 								<td>Última actualización</td>
@@ -28,11 +24,22 @@
 					{%for item in page.items%}
 						<tbody>
 							<tr>
-								<td>{{item.idUser}}</td>
-								<td>{{item.firstName}}</td>
-								<td>{{item.lastName}}</td>
-								<td>{{item.username}}</td>
-								<td>{{item.email}}</td>
+								<td>
+									<div class="box-section news with-icons">
+										<div class="avatar blue">
+											<span style="color: white;">{{item.idUser}}</span>
+										</div>
+										<div class="news-content">
+											<div class="news-title">
+												{{item.username}}
+											</div>
+											<div class="news-text">
+												{{item.firstName}} {{item.lastName}}<br />
+												{{item.email}}
+											</div>
+										</div>
+									</div>
+								</td>
 								<td>{{item.userrole}}</td>
 								<td>{{date('Y-m-d', item.createdon)}}</td>
 								<td>{{date('Y-m-d', item.updatedon)}}</td>

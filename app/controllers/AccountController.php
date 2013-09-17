@@ -52,7 +52,7 @@ class AccountController extends ControllerBase
 	
 	/*
 	 * Esta función se utiliza para crear cuentas con su respectivo usuario y base de datos base, esta funcion es
-	 * utuilizada solo por los super-administradores  
+	 * utilizada solo por los super-administradores  
 	 */
 	public function newAction()
     {
@@ -115,6 +115,7 @@ class AccountController extends ControllerBase
    
    /*
     * Esta función se encarga de mostrar todos los usuarios de todas la cuentas. Es utilizada por el super-administrador
+    * Recibe el id de la cuenta
     */
    public function showAction($id)
    {
@@ -143,6 +144,7 @@ class AccountController extends ControllerBase
  
    /*
     * Esta función se encarga de editar información de una cuenta. Es utilizada por el super-administador
+    * Recibe el id de la cuenta
     */  
    public function editAction($id)
    {
@@ -178,13 +180,14 @@ class AccountController extends ControllerBase
 	
 	/*
 	 * Esta función se encagar de borrar una cuenta de la base de datos, es muy delicada. Es utilizada por el administrador
+	 * recibe el id de la cuenta
 	 */
 	public function deleteAction($id)
     {
-	
 		$r = $this->verifyAcl('account', 'delete', '');
 		if ($r)
 			return $r;
+		
 		$account = Account::findFirstByIdAccount($id);
 		$user = User::findFirstByIdAccount($id);
 
@@ -204,76 +207,150 @@ class AccountController extends ControllerBase
      }
 	 
 	 /*
-	  * Esta funcion se encarga de crear usuarios a partir del id de la cuenta que recibe desde la vista
+	  * Esta funcion se encarga de crear usuarios a partir del id de la cuenta
 	  */
 	public function newuserAction($id)
 	{
-		$r = $this->verifyAcl('account', 'edit', '');
-	   if ($r)
-		   return $r;
+		$r = $this->verifyAcl('account', 'newuser', '');
+		if ($r)
+			return $r;
 
-	   $user = new User();
-	   $form = new NewUserForm($user);
+		$user = new User();
+		$form = new NewUserForm($user);
+		
+		$account = Account::findFirst(array(
+			"conditions" => "idAccount = ?1",
+			"bind" => array(1 => $id)
+		));
+		
+		if(!$account){
+			$this->view->disable();
+			$this->flashSession->error("La cuenta no existe");
+			$this->response->redirect("account/index");
+		}
+		
+		else {
+			if ($this->request->isPost()) {
+				$form->bind($this->request->getPost(), $user);
 
-	   $account = Account::findFirst(array(
-		   "conditions" => "idAccount = ?1",
-		   "bind" => array(1 => $id)
-	   ));
+				$pass = $form->getValue('password');
+				$pass2 = $form->getValue('password2');
 
-	   if(!$account){
-		   $this->flashSession->error("La cuenta no existe, por favor verifica la información");
-		   $this->response->redirect("account/index");
-	   }
+				if(strlen($pass) < 8) {
+					 $this->flashSession->error("La contraseña es muy corta, debe estar entre 8 y 40 caracteres");
+					 $this->response->redirect("account/newuser");
+				}
 
-	   else {
-		   if ($this->request->isPost()) {
-		   $form->bind($this->request->getPost(), $user);
+				else {
+					if($pass !== $pass2) {
+						$this->flashSession->error("Las contraseñas no coinciden por favor verifica la información");
+						$this->response->redirect("account/newuser");
+					}
+					else {
 
-		   $pass = $form->getValue('password');
-		   $pass2 = $form->getValue('password2');
+						$this->db->begin();
+						$user->idAccount = $id;
+						$user->password = $this->security2->hash($pass);
 
-		   if(strlen($pass) >= 8) {
+						if ($form->isValid() && $user->save()) {
+							$this->db->commit();
+							$this->flashSession->success("Se ha creado el usuario exitosamente");
+							$this->response->redirect("account/index");
+						}
 
-			   if($pass == $pass2) {
+						else {
+							$this->db->rollback();
+							foreach ($user->getMessages() as $msg) {
+								$this->flash->error($msg);
+							}
+						}
+					}
+				}
+			 }
 
-				   $this->db->begin();
-				   $user->idAccount = $id;
-				   $user->password = $this->security2->hash($pass);
-
-
-				   if ($form->isValid() && $user->save()) {
-					   $this->db->commit();
-					   $this->flashSession->success("Se ha creado el usuario exitosamente");
-					   $this->response->redirect("account/index");
-				   }
-
-				   else {
-					   $this->db->rollback();
-					   foreach ($user->getMessages() as $msg) {
-						   $this->flash->error($msg);
-					   }
-				   }
-			   }
-			   else {
-				   $this->flashSession->error("Las contraseñas no coinciden por favor verifica la información");
-				   $this->response->redirect("account/newuser");
-			   }
-		   }
-		   else {
-			   $this->flashSession->error("La contraseña es muy corta, debe estar entre 8 y 40 caracteres");
-			   $this->response->redirect("account/newuser");
-		   }	
-
-
-	   }
-
-	   $this->view->NewUserForm = $form;
-	   $this->view->setVar('account', $account);
-	   }		
+			 $this->view->NewUserForm = $form;
+			 $this->view->setVar('account', $account);
+			
+		}
 	}
-	 
+	
+	
+	/*
+	 * Esta función le permite al super-administrador editar cualquier usuario de cualquier cuenta
+	 * Recibe el id del usuario
+	 */
 	public function edituserAction($id)
 	{
-		 
+		$r = $this->verifyAcl('account', 'edituser', '');
+		if ($r)
+			return $r;
+		
+		$userExist = User::findFirst(array(
+			"conditions" => "idUser = ?1",
+			"bind" => array(1 => $id)
+		));
+		
+		if(!$userExist){
+			$this->view->disable();
+			$this->flashSession->error("el usuario no existe");
+			$this->response->redirect("account/index");
+		}
+		else {
+			if ($userExist !== null) {
+				$this->view->setVar("user", $userExist);
+				$form = new NewUserForm($userExist);
+
+				if ($this->request->isPost()) {   
+					
+					$form->bind($this->request->getPost(), $userExist);
+					$this->db->begin();
+
+					if (!$form->isValid() OR !$userExist->save()) {
+						$this->db->rollback();
+						
+						foreach ($userExist->getMessages() as $msg) {
+							$this->flashSession->error($msg);
+						}
+					}
+					else {
+						$this->db->commit();
+						$this->flashSession->success('Se ha editado el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. ' exitosamente');
+						$this->response->redirect("account/index");
+					}
+				}
+				$this->view->NewUserForm = $form;
+			} 	
+		}
+	}
+	
+	/*
+	 * Esta funcion permite al super-administrador eliminar cualquier usuario de cualquier cuenta
+	 * recibe el id el usuario
+	 */
+	public function deleteuserAction($id)
+	{
+		$r = $this->verifyAcl('account', 'deleteuser', '');
+		if ($r)
+			return $r;
+		
+		$user = User::findFirst(array(
+			"conditions" => "idUser = ?1",
+			"bind" => array(1 => $id)
+		));
+		
+		if(!$user){
+			$this->view->disable();
+			$this->flashSession->error('No existe el usuario');
+			$this->response->redirect("account/index");
+		}
+		else {
+			if(!$user->delete()) {
+				foreach ($user->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+			}
+			$this->flashSession->success('Se ha eliminado el usuario!');
+			$this->response->redirect("account/show/".$user->idAccount);
+		}
 	}
  }  

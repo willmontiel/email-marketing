@@ -35,7 +35,6 @@
 					<thead>
 						<tr>
 							<td></td>
-							<td>Email</td>
 							<td>Tipo de usuario</td>
 							<td>Fecha de creación</td>
 							<td>Última actualización</td>
@@ -55,13 +54,12 @@
 											{{item.username}}
 										</div>
 										<div class="news-text">
-											{{item.firstName}}
-											{{item.lastName}}
+											{{item.firstName}} {{item.lastName}}<br />
+											{{item.email}}
 										</div>
 									</div>
 								</div>
 							</td>
-							<td>{{item.email}}</td>
 							<td>{{item.userrole}}</td>
 							<td>{{ date('d/m/Y',item.createdon)}}</td>
 							<td>{{ date('d/m/Y',item.updatedon)}}</td>
