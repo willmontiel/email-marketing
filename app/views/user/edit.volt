@@ -3,7 +3,6 @@
 {%block sectionsubtitle %}Cree, edite o proporcione permisos a los usuarios de su cuenta{% endblock %}
 
 {% block content %}
-	{{ content() }}
 	<div class="row-fluid">
 		<div class="box">
 			<div class="box-content">
@@ -13,7 +12,7 @@
 					</div>
 					<div class="news-content">
 						<div class="news-title">
-							Editar un usuario
+							Editar el usuario <span class="label label-black">{{user.username}}</span>
 						</div>
 						<div class="news-text">
 							Aqui podrá editar la información de los usuarios que tiene en la cuenta, actualice toda
@@ -26,8 +25,10 @@
 		</div>
 	</div>
 	<br />
+	{{ flashSession.output() }}
+	<br />
 	<div class="row-fluid">
-		<div class="span4">
+		<div class="span3">
 			<div class="box">
 				<div class="box-header">
 					<div class="title">
@@ -35,7 +36,7 @@
 					</div>
 				</div>
 				<div class="box-content padded">
-					<form action = "{{url('user/edit/')}}{{allUser.idUser}}" id="createUser" method="post">
+					<form action = "{{url('user/edit/')}}{{user.idUser}}" method="post">
 						<label>*Nombre </label>
 						{{ NewUserForm.render('firstName') }}
 
@@ -62,7 +63,6 @@
 						{{ submit_button("Editar", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
 						<a href="{{ url('user/index') }}" class="btn btn-default">Cancelar<a>
 					</form>
-					
 				</div>
 			</div>
 		</div>

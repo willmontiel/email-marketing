@@ -85,27 +85,36 @@ class AccountController extends ControllerBase
 						if (!$user->save()) {
 							$this->db->rollback();
 							foreach ($user->getMessages() as $msg) {
-							$this->flash->error($msg);
+								$this->flashSession->error($msg);
 							}
+							$this->view->disable();
+							$this->response->redirect("account/new");
 						}
 						
 						$this->db->commit();
 						$this->flashSession->success('Se ha creado la cuenta exitosamente');
-						$this->response->redirect("account");
+						$this->view->disable();
+						$this->response->redirect("account/index");
 					}
 							
 					else{
-						$this->flash->error("La contraseña es muy corta, debe estar entre 8 y 40 caracteres");
+						$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 y máximo 40 caracteres");
+						$this->view->disable();
+						$this->response->redirect("account/new");
 					}
 				}
 				else{
-					   $this->flash->error('Las contraseñas no coinciden por favor verifica la información');
+					$this->flashSession->error('Las contraseñas no coinciden por favor verifica la información');
+					$this->view->disable();
+					$this->response->redirect("account/new");
 				}		
 			}
             else {
 				foreach ($account->getMessages() as $msg) {
-                $this->flash->error($msg);
+					$this->flashSession->error($msg);
                 }
+				$this->view->disable();
+				$this->response->redirect("account/new");
             }
         }
        
@@ -163,12 +172,15 @@ class AccountController extends ControllerBase
 					if (!$editform->isValid() OR !$account->save()) {
 						$this->db->rollback();
 						foreach ($account->getMessages() as $msg) {
-						$this->flash->error($msg);
+							$this->flashSession->error($msg);
 						}
+						$this->view->disable();
+						$this->response->redirect("account/edit/".$account->idAccount);
 					}
 					else {
 						$this->db->commit();
-						$this->flash->success('Se ha editado la cuenta exitosamente');
+						$this->flashSession->success('Se ha editado la cuenta exitosamente');
+						$this->view->disable();
 						$this->response->redirect("account");
 					}
 
@@ -196,7 +208,8 @@ class AccountController extends ControllerBase
 				   $account->delete();
 				   $user->deleted();
 				   $this->flashSession->success('Base de Datos Eliminada!');
-				   $this->response->redirect("account");
+				   $this->view->disable();
+				   $this->response->redirect("account/index");
 				} 
 
 			   else {
@@ -224,8 +237,8 @@ class AccountController extends ControllerBase
 		));
 		
 		if(!$account){
+			$this->flashSession->error("Ha intentado crear un usuario en una cuenta que no existe, por favor verifique la información");
 			$this->view->disable();
-			$this->flashSession->error("La cuenta no existe");
 			$this->response->redirect("account/index");
 		}
 		
@@ -237,14 +250,16 @@ class AccountController extends ControllerBase
 				$pass2 = $form->getValue('password2');
 
 				if(strlen($pass) < 8) {
-					 $this->flashSession->error("La contraseña es muy corta, debe estar entre 8 y 40 caracteres");
-					 $this->response->redirect("account/newuser");
+					$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 caracteres y máximo 40");
+					$this->view->disable();
+					$this->response->redirect("account/newuser/".$account->idAccount);
 				}
 
 				else {
 					if($pass !== $pass2) {
 						$this->flashSession->error("Las contraseñas no coinciden por favor verifica la información");
-						$this->response->redirect("account/newuser");
+						$this->view->disable();
+						$this->response->redirect("account/newuser/".$account->idAccount);
 					}
 					else {
 
@@ -254,8 +269,9 @@ class AccountController extends ControllerBase
 
 						if ($form->isValid() && $user->save()) {
 							$this->db->commit();
-							$this->flashSession->success("Se ha creado el usuario exitosamente");
-							$this->response->redirect("account/index");
+							$this->flashSession->error("Se ha creado el usuario exitosamente en la cuenta ". $account->companyName);
+							$this->view->disable();
+							$this->response->redirect("account/show/".$account->idAccount);
 						}
 
 						else {
@@ -291,8 +307,8 @@ class AccountController extends ControllerBase
 		));
 		
 		if(!$userExist){
+			$this->flashSession->error("El usuario que intenta editar no existe, por favor verifique la información");
 			$this->view->disable();
-			$this->flashSession->error("el usuario no existe");
 			$this->response->redirect("account/index");
 		}
 		else {
@@ -303,6 +319,7 @@ class AccountController extends ControllerBase
 				if ($this->request->isPost()) {   
 					
 					$form->bind($this->request->getPost(), $userExist);
+					
 					$this->db->begin();
 
 					if (!$form->isValid() OR !$userExist->save()) {
@@ -311,11 +328,14 @@ class AccountController extends ControllerBase
 						foreach ($userExist->getMessages() as $msg) {
 							$this->flashSession->error($msg);
 						}
+						$this->view->disable();
+						$this->response->redirect("account/show/".$userExist->idAccount);
 					}
 					else {
 						$this->db->commit();
-						$this->flashSession->success('Se ha editado el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. ' exitosamente');
-						$this->response->redirect("account/index");
+						$this->flashSession->success('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
+						$this->view->disable();
+						$this->response->redirect("account/show/".$userExist->idAccount);
 					}
 				}
 				$this->view->NewUserForm = $form;
@@ -339,8 +359,8 @@ class AccountController extends ControllerBase
 		));
 		
 		if(!$user){
+			$this->flashSession->error('El usuario que ha intentado eliminar no existe, por favor verifique la información');
 			$this->view->disable();
-			$this->flashSession->error('No existe el usuario');
 			$this->response->redirect("account/index");
 		}
 		else {
@@ -348,8 +368,11 @@ class AccountController extends ControllerBase
 				foreach ($user->getMessages() as $msg) {
 					$this->flashSession->error($msg);
 				}
+				$this->view->disable();
+				$this->response->redirect("account/show/".$user->idAccount);
 			}
-			$this->flashSession->success('Se ha eliminado el usuario!');
+			$this->flashSession->success('Se ha eliminado el usuario ' .$user->username. ' exitosamente');
+			$this->view->disable();
 			$this->response->redirect("account/show/".$user->idAccount);
 		}
 	}

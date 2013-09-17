@@ -23,9 +23,14 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid text-right">
-		<a href="{{url('user/new')}}" class="btn btn-default"><i class="icon-plus"></i> Crear usuario</a>
-		<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
+	<div class="row-fluid">
+		<div class="span6">
+			{{ flashSession.output() }}
+		</div>
+		<div class="span6 text-right">
+			<a href="{{url('user/new')}}" class="btn btn-default"><i class="icon-plus"></i> Crear usuario</a>
+			<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
+		</div>
 	</div>
 	<br />
 	<div class="row-fluid">

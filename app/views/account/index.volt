@@ -1,8 +1,9 @@
 {% extends "templates/index_new.volt" %}
 {% block sectiontitle %}<i class="icon-sitemap"></i> Cuentas{%endblock%}
+{%block sectionsubtitle %}Administre las cuentas en la aplicación{% endblock %}
+
 {% block content %}
-<div class="container-fluid"> 
-{{ content() }} 
+{{ flashSession.output() }}
 <div class="container-fluid padded">
 	<div class="text-right">
 	 <a href="{{ url('account/new') }}" class="btn btn-default"><i class="icon-plus"></i> Crear nueva cuenta</a>

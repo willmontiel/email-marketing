@@ -1,10 +1,13 @@
 {% extends "templates/index_new.volt" %}
 {% block sectiontitle %}<i class="icon-spinner"></i> Crear una nueva cuenta{%endblock%}
+{%block sectionsubtitle %}Cree una cuenta asignandole al mismo tiempo un usuario administrador{% endblock %}
+
 {% block content %}
+{{ flashSession.output() }}
 	<div class="container-fluid padded">
 		<div class="row-fluid">
 			{{ form('account/new', 'id': 'registerAccount', 'method': 'Post') }}
-			<div class="span6">
+			<div class="span3">
 				<div class="box">
 					<div class="box-header">
 						<div class="title">
@@ -32,7 +35,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="span6">
+			<div class="span3">
 				<div class="box">
 					<div class="box-header">
 						<div class="title">

@@ -1,7 +1,9 @@
 {% extends "templates/index_new.volt" %}
 {% block sectiontitle %}<i class="icon-user-md"></i> Informacion de usuarios de cuentas{%endblock%}
+{%block sectionsubtitle %}Administre la información de los usuarios de la cuenta{% endblock %}
+
 {% block content %}
-{{ content() }}
+{{ flashSession.output() }}
 <div class="container-fluid padded">
 	<div class="text-right">
 		<a href="{{url('account/newuser/')}}{{idAccount}}" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
@@ -59,7 +61,7 @@
 					{%endfor%}
 					</table>
 				</div>
-				<div class="box-footer">
+				<div class="box-footer padded">
 					<div class="row-fluid">
 						<div class="span5">
 							<div class="pagination">

@@ -76,7 +76,7 @@ class NewAccountForm extends Form
         )));
         $this->add(new Select("subscriptionMode", array(
             '1' => 'Prepago',
-            '2' => 'Postpago',
+            '2' => 'Pospago',
         )));
     }
 }

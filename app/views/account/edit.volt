@@ -1,8 +1,10 @@
 {% extends "templates/index_new.volt" %}
 {% block sectiontitle %}<i class="icon-edit"></i> Editar información de las cuentas{%endblock%}
+{%block sectionsubtitle %}Edite la configuración de la cuenta{% endblock %}
+
 {% block content %} 
+{{ flashSession.output() }}
 <div class="container-fluid padded">
-	{{ content() }}
 	<div class="box span3">
 		<div class="box-header">
 			<div class="title">
@@ -14,7 +16,7 @@
 				<label>*Nombre de la cuenta: </label>
 				{{ editFormAccount.render('companyName') }}
 			
-				<label>*Cantidad de trafico de archivos (Mb):</label>
+				<label>*Espacio disponible en disco(Mb):</label>
 				{{ editFormAccount.render('fileSpace') }}
 
 				<label>*Limite de contactos:</label>

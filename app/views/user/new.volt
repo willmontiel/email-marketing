@@ -3,7 +3,6 @@
 {%block sectionsubtitle %}Cree, edite o proporcione permisos a los usuarios de su cuenta{% endblock %}
 
 {% block content %}
-	{{ content() }}
 	<div class="row-fluid">
 		<div class="box">
 			<div class="box-content">
@@ -29,8 +28,10 @@
 		<a href="{{url('user/index')}}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
 	</div>
 	<br />
+	{{ flashSession.output() }}
+	<br />
 	<div class="row-fluid">
-		<div class="span4">
+		<div class="span3">
 			<div class="box">
 				<div class="box-header">
 					<div class="title">
