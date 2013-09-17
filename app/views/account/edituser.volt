@@ -40,25 +40,25 @@
 				<div class="box-content padded">
 					<form action="{{url('account/edituser/')}}{{user.idUser}}" method="Post">
 						<label>*Nombre </label>
-						{{ NewUserForm.render('firstName') }}
+						{{ UserForm.render('firstName') }}
 
 						<label>*Apellido </label>
-						{{ NewUserForm.render('lastName') }}
+						{{ UserForm.render('lastName') }}
 
 						<label>*Dirección de correo electrónico </label>
-						{{ NewUserForm.render('email') }}
+						{{ UserForm.render('email') }}
 
 						<label>*Nombre de usuario </label>
-						{{ NewUserForm.render('username') }}
+						{{ UserForm.render('username') }}
 
 						<label>*Contraseña </label>
-						{{ NewUserForm.render('pass') }}
+						{{ UserForm.render('passForEdit') }}
 
 						<label>*Repita la contraseña </label>
-						{{ NewUserForm.render('password2') }}	
+						{{ UserForm.render('pass2ForEdit') }}	
 
 						<label>*Funciones </label>
-						{{ NewUserForm.render('userrole') }}	
+						{{ UserForm.render('userrole') }}	
 						
 						<br />
 						

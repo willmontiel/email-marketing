@@ -44,6 +44,7 @@ class SessionController extends \Phalcon\Mvc\Controller
         }
         
 		$this->flashSession->error('Usuario o contraseña incorrecta!');
+		$this->view->disable();
 		$this->response->redirect('session/signin');
 
 	}

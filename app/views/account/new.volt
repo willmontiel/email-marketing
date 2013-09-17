@@ -4,7 +4,25 @@
 
 {% block content %}
 {{ flashSession.output() }}
-	<div class="container-fluid padded">
+	<div class="row-fluid">
+		<div class="box">
+			<div class="box-content">
+				<div class="box-section news with-icons">
+					<div class="avatar blue">
+						<i class="icon-lightbulb icon-2x"></i>
+					</div>
+					<div class="news-content">
+						<div class="news-title">
+							Crear un nueva cuenta
+						</div>
+						<div class="news-text">
+							Aqui puede crear una nueva cuenta, configurar .
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 		<div class="row-fluid">
 			{{ form('account/new', 'id': 'registerAccount', 'method': 'Post') }}
 			<div class="span3">
@@ -64,11 +82,7 @@
 				</div> 
 			</div>
 		</div>
-		<p>
-		{{ submit_button("Registrar", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
-		<a href="{{ url('account') }}" class="btn btn-default">Cancelar<a>
-		</p>
-		</form>
-	</div>
-</div>  
+			{{ submit_button("Registrar", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+			<a href="{{ url('account') }}" class="btn btn-default">Cancelar<a>
+	</form>
 {% endblock %}

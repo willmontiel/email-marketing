@@ -4,8 +4,27 @@
 
 {% block content %}
 {{ flashSession.output() }}
-<div class="container-fluid padded">
-	<div class="text-right">
+	<div class="row-fluid">
+		<div class="box">
+			<div class="box-content">
+				<div class="box-section news with-icons">
+					<div class="avatar blue">
+						<i class="icon-lightbulb icon-2x"></i>
+					</div>
+					<div class="news-content">
+						<div class="news-title">
+							Administre los usuarios de la cuenta
+						</div>
+						<div class="news-text">
+							Aqui puede editar información de los usuarios de la cuenta, puede dar permisos y quitarlos. Tambien puede
+							crear nuevos usuarios como tambien eliminarlos.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid text-right">
 		<a href="{{url('account/newuser/')}}{{idAccount}}" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
 		<a href="{{ url('account/index') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
 	</div>
@@ -98,5 +117,4 @@
 			<a href="{{ url('account/index') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
 		</div>
 	</div>
-</div>
 {% endblock %}

@@ -5,7 +5,7 @@ use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Password,
 	Phalcon\Forms\Element;
 
-class NewUserForm extends Form
+class UserForm extends Form
 {
     public function initialize()
     {
@@ -33,12 +33,6 @@ class NewUserForm extends Form
 			'required' => 'required'
         )));
 		
-		$this->add(new Password ('pass', array(
-			'maxlength' => 40,
-			'type' => 'text',
-			'required' => 'required'
-        )));
-		
         $this->add(new Password ('password2', array(
 			'maxlength' => 40,
 			'type' => 'text',
@@ -52,13 +46,23 @@ class NewUserForm extends Form
         )));
 		
         $this->add(new Select("userrole", array(
-            'ROLE_ADMIN' => 'Administrador de la cuenta'
+            'ROLE_ADMIN' => 'Administrador de la cuenta',
+			'ROLE_CONTACT' => 'Administrador de contactos'
         )));
 		
 		$this->add(new Select("userrole2", array(
 			'ROLE_SUDO' => 'Super administrador',
-            'ROLE_ADMIN' => 'Administrador local',
-			
+            'ROLE_ADMIN' => 'Administrador local'
+        )));
+		
+		$this->add(new Password ('passForEdit', array(
+			'maxlength' => 40,
+			'type' => 'text'
+        )));
+		
+		$this->add(new Password ('pass2ForEdit', array(
+			'maxlength' => 40,
+			'type' => 'text' 
         )));
     }
 }

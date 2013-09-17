@@ -27,7 +27,7 @@ class DbaseController extends ControllerBase
 	public function indexAction()
     {
 		//Recuperar la informacion de la BD que se desea
-		$r = $this->verifyAcl('dbase', 'list', '');
+		$r = $this->verifyAcl('dbase', 'index', '');
 		if ($r)
 			return $r;
 		
@@ -100,6 +100,7 @@ class DbaseController extends ControllerBase
 		$r = $this->verifyAcl('dbase', 'show', '');
 		if ($r)
 			return $r;
+		
         //Recuperar la informacion de la BD que se desea SI existe
 		$db = $this->findAndValidateDbaseAccount($id);
 		if ($db !== null) {
@@ -115,6 +116,7 @@ class DbaseController extends ControllerBase
 		$r = $this->verifyAcl('dbase', 'edit', '');
 		if ($r)
 			return $r;
+		
         //Recuperar la informacion de la BD que se desea SI existe
 		$db = $this->findAndValidateDbaseAccount($id);
 		if ($db !== null) {
@@ -142,6 +144,10 @@ class DbaseController extends ControllerBase
     
     public function deleteAction($id)
     {
+		$r = $this->verifyAcl('dbase', 'delete', '');
+		if ($r)
+			return $r;
+		
         //Recuperar la informacion de la BD que se desea SI existe
         $db = $this->findAndValidateDbaseAccount($id);
 		if ($db !== null) {

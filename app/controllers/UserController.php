@@ -32,7 +32,7 @@ class UserController extends ControllerBase
 			return $r;
 		
 		$user = new User();
-		$form = new NewUserForm($user);
+		$form = new UserForm($user);
 		
 		if($this->request->isPost()) {
 			$form->bind($this->request->getPost(), $user);
@@ -48,7 +48,7 @@ class UserController extends ControllerBase
 			else {
 				if($pass !== $pass2) {
 					$this->view->disable();
-					$this->flashSession->error("Las contraseñas no coinciden por favor verifica la información");
+					$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
 					$this->response->redirect("user/new");
 				}
 				else {
@@ -76,7 +76,7 @@ class UserController extends ControllerBase
 			}
 		}
 		
-		$this->view->NewUserForm = $form;
+		$this->view->UserForm = $form;
 	}
 	
 	public function editAction($id)
@@ -99,47 +99,73 @@ class UserController extends ControllerBase
 		}
 		
 		else {
-			$form = new NewUserForm($user);
+			$form = new UserForm($user);
 			
 			if ($this->request->isPost()) {   
 				
 				$form->bind($this->request->getPost(), $user);
 				
-				$pass = $form->getValue('pass');
-				$pass2 = $form->getValue('password2');
+				$pass = $form->getValue('passForEdit');
+				$pass2 = $form->getValue('pass2ForEdit');
 				
-				if(strlen($pass) < 8 || strlen($pass) > 40) {
-					$this->flashSession->error("La contraseña es muy corta o muy larga, esta debe tener mínimo 8 y máximo 40 caracteres");
-					$this->view->disable();
-					$this->response->redirect("user/edit/".$user->idUser);
-				}
-				else{
-					if($pass !== $pass2) {
-						$this->flashSession->error("Las contraseñas no coinciden por favor verifica la información");
+				if(!empty($pass)||!empty($pass2)){
+					
+					if(strlen($pass) < 8 || strlen($pass) > 40) {
+						$this->flashSession->error("La contraseña es muy corta o muy larga, esta debe tener mínimo 8 y máximo 40 caracteres");
 						$this->view->disable();
 						$this->response->redirect("user/edit/".$user->idUser);
 					}
 					else{
-						$this->db->begin();
-						if (!$form->isValid() OR !$user->save()) {
-							$this->db->rollback();
-							foreach ($user->getMessages() as $msg) {
-								$this->flash->error($msg);
-							}
+						if($pass !== $pass2) {
+							$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
 							$this->view->disable();
 							$this->response->redirect("user/edit/".$user->idUser);
 						}
-						else {
-							$this->db->commit();
-							$this->flashSession->success('Se ha actualizado el usuario exitosamente');
-							$this->view->disable();
-							$this->response->redirect("user/index");
+						else{
+							$this->db->begin();
+							
+							$user->password = $this->security2->hash($pass);
+							
+							if (!$form->isValid() OR !$user->save()) {
+								$this->db->rollback();
+								foreach ($user->getMessages() as $msg) {
+									$this->flash->error($msg);
+								}
+								$this->view->disable();
+								$this->response->redirect("user/edit/".$user->idUser);
+							}
+							else {
+								$this->db->commit();
+								$this->flashSession->success('Se ha actualizado el usuario exitosamente');
+								$this->view->disable();
+								$this->response->redirect("user/index");
+							}
 						}
 					}
 				}
+				
+				else{
+					$this->db->begin();
+
+					if (!$form->isValid() OR !$user->save()) {
+						$this->db->rollback();
+						foreach ($user->getMessages() as $msg) {
+							$this->flash->error($msg);
+						}
+						$this->view->disable();
+						$this->response->redirect("user/edit/".$user->idUser);
+					}
+					else {
+						$this->db->commit();
+						$this->flashSession->success('Se ha actualizado el usuario exitosamente');
+						$this->view->disable();
+						$this->response->redirect("user/index");
+					}
+				}
  			}
+			
 			$this->view->setVar("user", $user);
-			$this->view->NewUserForm = $form;
+			$this->view->UserForm = $form;
 		}
 	}
 	

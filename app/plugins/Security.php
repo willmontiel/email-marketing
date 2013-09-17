@@ -29,35 +29,70 @@ class Security extends Plugin
 			//Register roles
 			$roles = array(
 				'ROLE_ADMIN' => new Phalcon\Acl\Role('ROLE_ADMIN'),
-				'ROLE_SUDO' => new Phalcon\Acl\Role('ROLE_SUDO'),
-				'ROLE_USER' => new Phalcon\Acl\Role('ROLE_USER')
+				'ROLE_CONTACT' => new Phalcon\Acl\Role('ROLE_CONTACT'),
+				'ROLE_SUDO' => new Phalcon\Acl\Role('ROLE_SUDO')
 			);
 			
 			foreach ($roles as $role) {
 				$acl->addRole($role);
 			}
-
-			//Private area resources
-			$privateResources = array(
-				'account' => array('show', 'new', 'edit', 'delete', 'list', 'newuser', 'edituser', 'deleteuser'),
+			
+			
+			//Roles de usuario
+			$ROLE_ADMIN = array(
 				'user' => array('index', 'new', 'edit', 'delete', 'show'),
-				'dbase' => array('list', 'edit', 'new', 'show'),
-				'contactlist' => array('list', 'new', 'index', 'show'),
-				'field' => array('new'),
+				'dbase' => array('index', 'edit', 'new', 'show', 'delete'),
+				'contactlist' => array('index', 'new', 'index', 'show'),
+				'contacts' => array('newbatch'),
+				'field' => array('index', 'insert','new', 'update', 'query', 'edit', 'delete'),
+			);
+			
+			$ROLE_CONTACT = array(
+				'contactlist' => array('index', 'new', 'index', 'show'),
+				'contacts' => array('newbatch', 'processfile', 'import', 'importbatch'),
+			);
+			
+			$ROLE_SUDO = array(
+				'account' => array('show', 'new', 'edit', 'delete', 'list', 'newuser', 'edituser', 'deleteuser', 'index'),
+				'user' => array('index', 'new', 'edit', 'delete', 'show'),
+				'dbase' => array('index', 'edit', 'new', 'show', 'delete'),
+				'contactlist' => array('index', 'new', 'index', 'show'),
+				'contacts' => array('newbatch'),
+				'field' => array('index','insert', 'new', 'update', 'query', 'edit', 'delete'),
 			);
 
-			foreach ($privateResources as $resource => $actions) {
+			
+			foreach ($ROLE_ADMIN as $resource => $actions) {
 				$acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
 			}
-
-			//Grant acess to private area to role Users
-			foreach ($privateResources as $resource => $actions) {
+			//Grant acess to private area to ROLE_ADMIN
+			foreach ($ROLE_ADMIN as $resource => $actions) {
 				foreach ($actions as $action){
 					$acl->allow('ROLE_ADMIN', $resource, $action);
-					$acl->allow('ROLE_USER', $resource, $action);
 				}
 			}
-
+			
+			foreach ($ROLE_SUDO as $resource => $actions) {
+				$acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
+			}
+			//Grant acess to private area to ROLE_SUDO
+			foreach ($ROLE_SUDO as $resource => $actions) {
+				foreach ($actions as $action){
+					$acl->allow('ROLE_SUDO', $resource, $action);
+				}
+			}
+			
+			foreach ($ROLE_CONTACT as $resource => $actions) {
+				$acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
+			}
+			//Grant acess to private area to ROLE_SUDO
+			foreach ($ROLE_CONTACT as $resource => $actions) {
+				foreach ($actions as $action){
+					$acl->allow('ROLE_CONTACT', $resource, $action);
+				}
+			}
+			
+			
 			//The acl is stored in session, APC would be useful here too
 			$this->persistent->acl = $acl;
 		}

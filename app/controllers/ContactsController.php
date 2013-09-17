@@ -9,6 +9,10 @@ class ContactsController extends ControllerBase
 	
 	public function newbatchAction($idContactlist)
 	{
+		$r = $this->verifyAcl('contacts', 'newbatch', '');
+		if ($r)
+			return $r;
+		
 		$this->flashSession->error('');
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
@@ -99,6 +103,10 @@ class ContactsController extends ControllerBase
 	
 	public function importbatchAction($idContactlist)
 	{
+		$r = $this->verifyAcl('contacts', 'importbatch', '');
+		if ($r)
+			return $r;
+		
 		$log = $this->logger;
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
@@ -177,6 +185,10 @@ class ContactsController extends ControllerBase
 	}
 	public function importAction()
 	{
+		$r = $this->verifyAcl('contacts', 'import', '');
+		if ($r)
+			return $r;
+		
 		$account = $this->user->account->idAccount ;
 		$idContactlist = $this->request->getPost('idcontactlist');
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
@@ -246,6 +258,10 @@ class ContactsController extends ControllerBase
 	
 	public function processfileAction($idContactlist, $idImportfile)
 	{
+		$r = $this->verifyAcl('contacts', 'processfile', '');
+		if ($r)
+			return $r;
+		
 		$log = $this->logger;
 
 		$file = Importfile::findFirstByIdImportfile($idImportfile);

@@ -4,9 +4,29 @@
 
 {% block content %}
 {{ flashSession.output() }}
-<div class="container-fluid padded">
-	<div class="text-right">
-	 <a href="{{ url('account/new') }}" class="btn btn-default"><i class="icon-plus"></i> Crear nueva cuenta</a>
+	<div class="row-fluid">
+		<div class="box">
+			<div class="box-content">
+				<div class="box-section news with-icons">
+					<div class="avatar cyan">
+						<i class="icon-lightbulb icon-2x"></i>
+					</div>
+					<div class="news-content">
+						<div class="news-title">
+							Administre las cuentas de la aplicación
+						</div>
+						<div class="news-text">
+							Aqui puede ver, crear o editar las cuentas de la apliación, como tambien administrar los usuarios
+							de dichas cuentas.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid text-right">
+		<a href="{{ url('account/new') }}" class="btn btn-default"><i class="icon-plus"></i> Crear nueva cuenta</a>
+		<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
 	</div>
 	<br />
 	<div class="row-fluid">
@@ -89,13 +109,12 @@
 						Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
 						Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
 					</div>
-					<div class="span3 text-right">
-						<br>
-						<a href="{{ url('') }}" class="btn btn-default">Regresar</a>
-					</div>
 				</div>
 			</div>
 		</div>
  	 </div>
-</div>
+	<div class="row-fluid text-right">
+		<a href="{{ url('account/new') }}" class="btn btn-default"><i class="icon-plus"></i> Crear nueva cuenta</a>
+		<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
+	</div>
 {% endblock %}

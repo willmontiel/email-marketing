@@ -12,7 +12,7 @@
 		</div>
 	</div>
 	<br />
-	{{ content() }}
+	{{ flashSession.output() }}
 	<div class="row-fluid">
 		<div class="padded span4 offset4">
 			<div class="login box">

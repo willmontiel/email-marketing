@@ -28,7 +28,7 @@
         </style>
     </head>
     <body>
-		<div class="container-fluid padded">
+		<div class="container-fluid">
 			<div class="row-fluid">
 				<!-- Inicio de contenido -->
 				{% block content %}

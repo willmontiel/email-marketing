@@ -28,7 +28,7 @@ class AccountController extends ControllerBase
 	 */
 	public function indexAction()
 	{
-		$r = $this->verifyAcl('account', 'list', '');
+		$r = $this->verifyAcl('account', 'index', '');
 		if ($r)
 			return $r;
 		
@@ -104,7 +104,7 @@ class AccountController extends ControllerBase
 					}
 				}
 				else{
-					$this->flashSession->error('Las contraseñas no coinciden por favor verifica la información');
+					$this->flashSession->error('Las contraseñas no coinciden por favor verifique la información');
 					$this->view->disable();
 					$this->response->redirect("account/new");
 				}		
@@ -229,7 +229,7 @@ class AccountController extends ControllerBase
 			return $r;
 
 		$user = new User();
-		$form = new NewUserForm($user);
+		$form = new UserForm($user);
 		
 		$account = Account::findFirst(array(
 			"conditions" => "idAccount = ?1",
@@ -257,7 +257,7 @@ class AccountController extends ControllerBase
 
 				else {
 					if($pass !== $pass2) {
-						$this->flashSession->error("Las contraseñas no coinciden por favor verifica la información");
+						$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
 						$this->view->disable();
 						$this->response->redirect("account/newuser/".$account->idAccount);
 					}
@@ -284,7 +284,7 @@ class AccountController extends ControllerBase
 				}
 			 }
 
-			 $this->view->NewUserForm = $form;
+			 $this->view->UserForm = $form;
 			 $this->view->setVar('account', $account);
 			
 		}
@@ -314,31 +314,58 @@ class AccountController extends ControllerBase
 		else {
 			if ($userExist !== null) {
 				$this->view->setVar("user", $userExist);
-				$form = new NewUserForm($userExist);
+				$form = new UserForm($userExist);
 
 				if ($this->request->isPost()) {   
 					
 					$form->bind($this->request->getPost(), $userExist);
 					
-					$this->db->begin();
+					$pass = $form->getValue('passForEdit');
+					$pass2 = $form->getValue('pass2ForEdit');
+					
+					if(!empty($pass)||!empty($pass2)){
 
-					if (!$form->isValid() OR !$userExist->save()) {
-						$this->db->rollback();
+						$this->db->begin();
 						
-						foreach ($userExist->getMessages() as $msg) {
-							$this->flashSession->error($msg);
+						$userExist->password = $this->security2->hash($pass);
+						
+						if (!$form->isValid() OR !$userExist->save()) {
+							$this->db->rollback();
+
+							foreach ($userExist->getMessages() as $msg) {
+								$this->flashSession->error($msg);
+							}
+							$this->view->disable();
+							$this->response->redirect("account/show/".$userExist->idAccount);
 						}
-						$this->view->disable();
-						$this->response->redirect("account/show/".$userExist->idAccount);
+						else {
+							$this->db->commit();
+							$this->flashSession->success('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
+							$this->view->disable();
+							$this->response->redirect("account/show/".$userExist->idAccount);
+						}
 					}
-					else {
-						$this->db->commit();
-						$this->flashSession->success('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
-						$this->view->disable();
-						$this->response->redirect("account/show/".$userExist->idAccount);
+					else{
+						$this->db->begin();
+						if (!$form->isValid() OR !$userExist->save()) {
+							$this->db->rollback();
+
+							foreach ($userExist->getMessages() as $msg) {
+								$this->flashSession->error($msg);
+							}
+							$this->view->disable();
+							$this->response->redirect("account/show/".$userExist->idAccount);
+						}
+						else {
+							$this->db->commit();
+							$this->flashSession->success('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
+							$this->view->disable();
+							$this->response->redirect("account/show/".$userExist->idAccount);
+						}
 					}
+					
 				}
-				$this->view->NewUserForm = $form;
+				$this->view->UserForm = $form;
 			} 	
 		}
 	}
