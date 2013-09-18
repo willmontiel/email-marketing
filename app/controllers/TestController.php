@@ -483,7 +483,7 @@ class TestController extends ControllerBase
 	}
 	
 	
-	public function testimportAction($destiny, $list, $posCol, $delimiter)
+	public function testimportAction($destiny, $list, $posCol, $delimiter, $account, $idImportproccess)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
@@ -494,33 +494,40 @@ class TestController extends ControllerBase
 		
 		$open = fopen($destiny, "r");
 		
-		$cont = 0;
+		$firstline = TRUE;
 		$values = "";
-		$posEmail = $posCol[0];
-		$posName = $posCol[1];
-		$posLastname = $posCol[2];
+		$contactLimit = $account->contactLimit;
+		$activeContacts = $account->countActiveContactsInAccount();
 		
 		while(! feof($open)) {
 			$linew = fgetcsv($open, 0, $delimiter);
-			if (!empty($linew)) {
-				if($cont != 0) {
-					$values.=", ";
+			$name = (isset($posCol[1]))?$linew[$posCol[1]]:"";
+			$lastname = (isset($posCol[2]))?$linew[$posCol[2]]:"";
+			
+			if ( !empty($linew) ) {
+				if ( ($activeContacts <= $contactLimit) ) {
+					$email = strtolower($linew[0]);
+					if ( \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
+						if ( !$firstline ) {
+							$values.=", ";
+						}
+						list($user, $edomain) = preg_split("/@/", $linew[0], 2);	
+						$values.= "('$linew[0]', find_or_create_email('$linew[0]', '$edomain', $account->idAccount), '$name', '$lastname', '$edomain', find_domain('$edomain'))";
+						$firstline = FALSE;
+					}
 				}
-				list($user, $edomain) = preg_split("/@/", $linew[0], 2);	
-				$values.= "('$linew[$posEmail] ', '$linew[$posName]', '$linew[$posLastname]', '$edomain')";
-				$cont++;
 			}
 		}
-		$tabletmp = "INSERT INTO tmpimport(email, name, lastName, domain) VALUES ".$values.";";
 		
-		$findidcontact = "UPDATE tmpimport t JOIN contact c ON (t.idEmail = c.idEmail AND c.idDbase = $list->idDbase) SET t.idContact = c.idContact, t.status = 'BD' WHERE t.idEmail IS NOT NULL;";
+		$tabletmp = "INSERT INTO tmpimport(email, idEmail, name, lastName, domain, idDomain) VALUES ".$values.";";
 		
-		$findcoxcl = "UPDATE tmpimport t JOIN coxcl x ON (t.idContact = x.idContact AND x.idContactlist = $list->idContactlist) SET t.coxcl = 1, t.status = 'Lista' WHERE t.idContact IS NOT NULL;";
+		$findidemailblocked = "UPDATE tmpimport t JOIN email e ON (t.idEmail = e.idEmail AND e.idAccount = $account->idAccount) SET t.blocked = 1, t.status = 'Blq' WHERE t.idEmail IS NOT NULL AND e.blocked > 0;";
 		
-		$extraQuery = "UPDATE tmpimport t JOIN email e ON (t.email = e.email AND e.idAccount = 6) SET t.idEmail = e.idEmail;
-				UPDATE tmpimport t JOIN domain d ON (t.domain = d.name) SET t.idDomain = d.idDomain WHERE t.idEmail IS NOT NULL;";
+		$findidcontact = "UPDATE tmpimport t JOIN contact c ON (t.idEmail = c.idEmail AND c.idDbase = $list->idDbase) SET t.idContact = c.idContact WHERE t.idEmail IS NOT NULL;";
 		
-		$createcontacts = "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, bounced, spam, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) SELECT $list->idDbase, t.idEmail, t.name, t.lastName, $hora, 0, 0, 0, $ipaddress, $ipaddress, $hora, $hora, $hora FROM tmpimport t WHERE t.idContact IS NULL;";
+		$findcoxcl = "UPDATE tmpimport t JOIN coxcl x ON (t.idContact = x.idContact AND x.idContactlist = $list->idContactlist) SET t.coxcl = 1, t.status = 'Lst' WHERE t.idContact IS NOT NULL;";
+		
+		$createcontacts = "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, bounced, spam, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) SELECT $list->idDbase, t.idEmail, t.name, t.lastName, $hora, 0, 0, 0, $ipaddress, $ipaddress, $hora, $hora, $hora FROM tmpimport t WHERE t.idContact IS NULL AND t.blocked IS NULL;";
 		
 		$createcoxcl = "INSERT INTO coxcl (idContactlist, idContact, createdon) SELECT $list->idContactlist, t.idContact, $hora FROM tmpimport t WHERE t.coxcl IS NULL";
 		
@@ -528,7 +535,7 @@ class TestController extends ControllerBase
 		
 		$firstquery = $db->execute($tabletmp);
 		
-		$extraEmailDomain = $db->execute($extraQuery);
+		$emailsblocked = $db->execute($findidemailblocked);
 		
 		$idcontacts = $db->execute($findidcontact);
 		$contactscreated = $db->execute($createcontacts);
@@ -538,5 +545,134 @@ class TestController extends ControllerBase
 		$createdcoxcl = $db->execute($createcoxcl);
 		
 		$db->commit();
+		
+		$this->runReports($destiny, $delimiter, $activeContacts, $contactLimit, $idImportproccess);
+		
+	}
+	
+	protected function runReports($destiny, $delimiter, $activeContacts, $contactLimit, $idImportproccess) {
+		
+		$db = Phalcon\DI::getDefault()->get('db');
+		$total = 0;
+		$invalid = 0;
+		$limit = 0;
+		$success = array();
+		$errors = array();
+		
+		$query1 = "SELECT t.email FROM tmpimport t WHERE t.blocked = 1";
+		//$query2 = "SELECT t.email FROM tmpimport t WHERE t.coxcl = 1 AND t.blocked IS NULL";
+		
+		$db->begin();
+		
+		$emailsBlocked = $db->execute($query1);
+		//$emailsRepeated = $db->execute($query2);
+		
+		$db->commit();
+		
+		$open = fopen($destiny, "r");
+		
+		while(! feof($open)) {
+			$linew = fgetcsv($open, 0, $delimiter);
+			array_push($success, $linew);
+			
+			if ( !empty($linew) ) {
+				if ( !($activeContacts <= $contactLimit) ) {
+					array_pop($success);
+					array_push($linew, "Limite de Contactos Excedido");
+					array_push($errors, $linew);
+					$limit++;
+				}
+				else {
+					$email = strtolower($linew[0]);
+					if ( !\filter_var($email, FILTER_VALIDATE_EMAIL) ) {
+						array_pop($success);
+						array_push($linew, "Correo Invalido");
+						array_push($errors, $linew);
+						$invalid++;
+					} 
+					else {
+						foreach ($emailsBlocked as $emailblocked) {
+							if($emailblocked == $linew[0]) {
+								array_pop($success);
+								array_push($linew, "Correo Bloqueado");
+								array_push($errors, $linew);
+								$bloqued++;
+							}
+						}
+//						foreach ($emailsRepeated as $emailrepeated) {
+//							if($emailrepeated == $linew[0]){
+//								array_pop($success);
+//								array_push($linew, "Existente");
+//								array_push($errors, $linew);
+//								$exist++;
+//							} 
+//						}
+						$total++;
+					}
+				}
+			}
+		}
+		$this->createReports($errors, $success, $idImportproccess);
+	}
+	
+	protected function createReports($errors, $success, $idImportproccess)
+	{
+		$uniquecode = uniqid();
+		
+		$nameNimported = $this->account->idAccount."_".date("ymdHi",time())."_".$uniquecode."noneimported.csv";
+		
+		$saveFileError = new Importfile();
+		$saveFileError->idAccount = $this->account->idAccount;
+		$saveFileError->internalName = $nameNimported;
+		$saveFileError->originalName = $nameNimported;
+		$saveFileError->createdon = time();
+
+		if (!$saveFileError->save()) {
+				foreach ($saveFileError->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+						$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
+				}
+		} else {
+			$fp = fopen('../tmp/ifiles/' . $nameNimported, 'w');
+
+			foreach ($errors as $error) {
+				fputcsv($fp, $error);
+			}
+
+			fclose($fp);
+		}
+		
+		$nameImported = $this->account->idAccount."_".date("ymdHi",time())."_".$uniquecode."imported.csv";
+		
+		$saveFileSuccess = new Importfile();
+		$saveFileSuccess->idAccount = $this->account->idAccount;
+		$saveFileSuccess->internalName = $nameImported;
+		$saveFileSuccess->originalName = $nameImported;
+		$saveFileSuccess->createdon = time();
+		
+		if (!$saveFileSuccess->save()) {
+				foreach ($saveFileSuccess->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+						$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
+				}
+		} else {
+			$fp = fopen('../tmp/ifiles/' . $nameImported, 'w');		
+
+			foreach ($success as $succ) {
+				fputcsv($fp, $succ);
+			}
+
+			fclose($fp);
+		}
+		
+		$proccess = Importproccess::findFirstByIdImportproccess($idImportproccess);
+		
+		$proccess->errorFile = $saveFileError->idImportfile;
+		$proccess->successFile = $saveFileSuccess->idImportfile;
+		
+		if(!$proccess->save()) {
+			throw new InvalidArgumentException("Error al crear el registro del proceso de importacion");
+		}
+		
 	}
 }
