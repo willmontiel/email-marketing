@@ -25,7 +25,7 @@ App.BlockedemailsBlockRoute = Ember.Route.extend({
 App.BlockedemailController = Ember.ObjectController.extend();
 
 App.BlockedemailsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, {
-	modelClass : 'blockedemail'
+	modelClass : App.Blockedemail
 });
 
 App.BlockedemailsBlockController = Ember.ObjectController.extend({
@@ -43,8 +43,8 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend({
 			else {
 				if(filter.test(this.get('email'))) {
 					var self = this;
-					self.content.save().then(function(){
-						self.transitionToROute('blockedemails')
+					self.content.save().then(function() {
+						self.transitionToRoute('blockedemails');
 					});
 				}
 				else {

@@ -64,7 +64,7 @@ App.ListsEditRoute = Ember.Route.extend({
 App.ListController = Ember.ObjectController.extend();
 
 App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	modelClass : 'list',
+	modelClass : App.List,
 	needs: ['dbase']
 });
 

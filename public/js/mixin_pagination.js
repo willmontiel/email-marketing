@@ -16,13 +16,14 @@ Ember.MixinPagination = Ember.Mixin.create({
 	// Metodo que toma la informacion y llena las variables
 	setPagination: function () {
 		// Verificar paginacion
+		console.log('Pagination!');
 		try {
-			var p = this.getModelMetadata();
+			var p = this.store.typeMapFor(this.modelClass).metadata;
 
-			this.set('totalrecords', p.metadata.pagination.total);
-			this.set('availablepages',p.metadata.pagination.availablepages);
-			this.set('currentpage', p.metadata.pagination.page);
-			this.set('recordsperpage', p.metadata.pagination.limit);
+			this.set('totalrecords', p.pagination.total);
+			this.set('availablepages',p.pagination.availablepages);
+			this.set('currentpage', p.pagination.page);
+			this.set('recordsperpage', p.pagination.limit);
 		}
 		catch (e) {
 		}
@@ -42,93 +43,80 @@ Ember.MixinPagination = Ember.Mixin.create({
 			this.set('cannext', true);
 		}
 		
-	}.observes('model.isLoaded', 'content.firstObject.isLoaded'),
+	}.observes('content.length'),
 			
-	nextPage: function(){
-		var currentpage=parseInt(this.get("currentpage"));
-		var availablepages=parseInt(this.get("availablepages"));
-		
-		if(currentpage >= availablepages){
-//				Hacer nada
-		}
-		else{
-			var page=parseInt(this.get("currentpage"))+1;
-			var obj = {
-				page: page,
-				limit: this.get("recordsperpage")
-			};
-			this.refreshModel(obj);
-		}
-	}
-	,
-	getModelMetadata: function() {
-		if (!this.modelClass) {
-			return {
-				metadata: {
-					pagination: {
-						total: 0,
-						availablepages: 0,
-						page: 0,
-						limit: 0
-					}
-				}
-			};
-		}
-		return App.store.typeMapFor(this.modelClass);
-	}
-	,
 	refreshModel: function (obj) {
 		this.set('content', this.store.find(this.modelClass, obj));
 	}
 	,
-	prevPage: function(){
-		var currentpage=parseInt(this.get("currentpage"));
+	actions: {
 
-		if(currentpage == 1){
-//				Hacer nada
-		}
-		else{
-			var page=parseInt(this.get("currentpage"))-1;
+		nextPage: function(){
+			var currentpage=parseInt(this.get("currentpage"));
+			var availablepages=parseInt(this.get("availablepages"));
 
-			var obj = {
-				page: page,
-				limit: this.get("recordsperpage")
-			};
-			this.refreshModel(obj);
-		}
-	},
-			
-	firstPage: function(){
-		var currentpage=parseInt(this.get("currentpage"));
-
-		if(currentpage == 1){
-//				Hacer nada
-		}
-		else{
-			var obj = {
-				page: 1,
-				limit: this.get("recordsperpage")
-			};
-			this.refreshModel(obj);
-		}
-	},
+			if(currentpage >= availablepages){
+	//				Hacer nada
+			}
+			else{
+				var page=parseInt(this.get("currentpage"))+1;
+				var obj = {
+					page: page,
+					limit: this.get("recordsperpage")
+				};
+				this.refreshModel(obj);
+			}
+		},
 	
-	lastPage: function(){
-		var currentpage=parseInt(this.get("currentpage"));
-		var availablepages=parseInt(this.get("availablepages"));
-		
-		if(currentpage == availablepages){
-//				Hacer nada
+		prevPage: function(){
+			var currentpage=parseInt(this.get("currentpage"));
+
+			if(currentpage == 1){
+	//				Hacer nada
+			}
+			else{
+				var page=parseInt(this.get("currentpage"))-1;
+
+				var obj = {
+					page: page,
+					limit: this.get("recordsperpage")
+				};
+				this.refreshModel(obj);
+			}
+		},
+
+		firstPage: function(){
+			var currentpage=parseInt(this.get("currentpage"));
+
+			if(currentpage == 1){
+	//				Hacer nada
+			}
+			else{
+				var obj = {
+					page: 1,
+					limit: this.get("recordsperpage")
+				};
+				this.refreshModel(obj);
+			}
+		},
+
+		lastPage: function(){
+			var currentpage=parseInt(this.get("currentpage"));
+			var availablepages=parseInt(this.get("availablepages"));
+
+			if(currentpage == availablepages){
+	//				Hacer nada
+			}
+			else{
+				var obj = {
+					page: availablepages,
+					limit: this.get("recordsperpage")
+				};
+				this.refreshModel(obj);
+			}
 		}
-		else{
-			var obj = {
-				page: availablepages,
-				limit: this.get("recordsperpage")
-			};
-			this.refreshModel(obj);
-		}
+	
 	}
-	
 		
 });
 
