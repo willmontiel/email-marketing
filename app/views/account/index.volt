@@ -3,7 +3,6 @@
 {%block sectionsubtitle %}Administre las cuentas en la aplicación{% endblock %}
 
 {% block content %}
-{{ flashSession.output() }}
 	<div class="row-fluid">
 		<div class="box">
 			<div class="box-content">
@@ -24,9 +23,14 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid text-right">
-		<a href="{{ url('account/new') }}" class="btn btn-default"><i class="icon-plus"></i> Crear nueva cuenta</a>
-		<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
+	<div class="row-fluid">
+		<div class="span8">
+			{{ flashSession.output() }}
+		</div>
+		<div class="span4 text-right">
+			<a href="{{ url('account/new') }}" class="btn btn-default"><i class="icon-plus"></i> Crear nueva cuenta</a>
+			<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
+		</div>
 	</div>
 	<br />
 	<div class="row-fluid">

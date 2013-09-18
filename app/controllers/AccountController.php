@@ -380,27 +380,36 @@ class AccountController extends ControllerBase
 		if ($r)
 			return $r;
 		
-		$user = User::findFirst(array(
-			"conditions" => "idUser = ?1",
-			"bind" => array(1 => $id)
-		));
+		$idUser = $this->session->get('userid');
 		
-		if(!$user){
-			$this->flashSession->error('El usuario que ha intentado eliminar no existe, por favor verifique la información');
+		if($id == $idUser){
+			$this->flashSession->success("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
 			$this->view->disable();
 			$this->response->redirect("account/index");
 		}
 		else {
-			if(!$user->delete()) {
-				foreach ($user->getMessages() as $msg) {
-					$this->flashSession->error($msg);
+			$user = User::findFirst(array(
+				"conditions" => "idUser = ?1",
+				"bind" => array(1 => $id)
+			));
+
+			if(!$user){
+				$this->flashSession->error('El usuario que ha intentado eliminar no existe, por favor verifique la información');
+				$this->view->disable();
+				$this->response->redirect("account/index");
+			}
+			else {
+				if(!$user->delete()) {
+					foreach ($user->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+					$this->view->disable();
+					$this->response->redirect("account/show/".$user->idAccount);
 				}
+				$this->flashSession->success('Se ha eliminado el usuario ' .$user->username. ' exitosamente');
 				$this->view->disable();
 				$this->response->redirect("account/show/".$user->idAccount);
-			}
-			$this->flashSession->success('Se ha eliminado el usuario ' .$user->username. ' exitosamente');
-			$this->view->disable();
-			$this->response->redirect("account/show/".$user->idAccount);
+			}	
 		}
 	}
  }  

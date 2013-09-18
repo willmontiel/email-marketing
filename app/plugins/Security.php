@@ -4,7 +4,6 @@ use Phalcon\Events\Event,
 	Phalcon\Mvc\User\Plugin,
 	Phalcon\Mvc\Dispatcher,
 	Phalcon\Acl;
-
 /**
  * Security
  *
@@ -23,76 +22,48 @@ class Security extends Plugin
 		if (!isset($this->persistent->acl)) {
 
 			$acl = new Phalcon\Acl\Adapter\Memory();
-
 			$acl->setDefaultAction(Phalcon\Acl::DENY);
 
-			//Register roles
-			$roles = array(
-				'ROLE_ADMIN' => new Phalcon\Acl\Role('ROLE_ADMIN'),
-				'ROLE_CONTACT' => new Phalcon\Acl\Role('ROLE_CONTACT'),
-				'ROLE_SUDO' => new Phalcon\Acl\Role('ROLE_SUDO')
-			);
+			//Registrando roles
+			$userroles = Role::find();
 			
+			$roles = array();
+			foreach ($userroles as $role){
+				$roles[$role->name] = new Phalcon\Acl\Role($role->name);
+			}
 			foreach ($roles as $role) {
 				$acl->addRole($role);
 			}
 			
+			$db = Phalcon\DI::getDefault()->get('db');
 			
-			//Roles de usuario
-			$ROLE_ADMIN = array(
-				'user' => array('index', 'new', 'edit', 'delete', 'show'),
-				'dbase' => array('index', 'edit', 'new', 'show', 'delete'),
-				'contactlist' => array('index', 'new', 'index', 'show'),
-				'contacts' => array('newbatch'),
-				'field' => array('index', 'insert','new', 'update', 'query', 'edit', 'delete'),
-			);
+			$sql = "SELECT resource.name AS resource, roxre.action AS action 
+					FROM roxre
+						JOIN resource ON ( roxre.idResource = resource.idResource )";
 			
-			$ROLE_CONTACT = array(
-				'contactlist' => array('index', 'new', 'index', 'show'),
-				'contacts' => array('newbatch', 'processfile', 'import', 'importbatch'),
-			);
+			$results = $db->fetchAll($sql, Phalcon\Db::FETCH_ASSOC);
 			
-			$ROLE_SUDO = array(
-				'account' => array('show', 'new', 'edit', 'delete', 'list', 'newuser', 'edituser', 'deleteuser', 'index'),
-				'user' => array('index', 'new', 'edit', 'delete', 'show'),
-				'dbase' => array('index', 'edit', 'new', 'show', 'delete'),
-				'contactlist' => array('index', 'new', 'index', 'show'),
-				'contacts' => array('newbatch', 'processfile', 'import', 'importbatch'),
-				'field' => array('index','insert', 'new', 'update', 'query', 'edit', 'delete'),
-			);
-
+			$resources = array();
+			foreach ($results as $key) {
+				$k = $key['resource'];
+				$v = $key['action'];
+				
+				if(!isset($resources[$k])){
+					$resources[$k];
+				}
+				$resources[$k][] = $v;
+			}
 			
-			foreach ($ROLE_ADMIN as $resource => $actions) {
+			foreach ($resources as $resource => $actions) {
 				$acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
 			}
 			//Grant acess to private area to ROLE_ADMIN
-			foreach ($ROLE_ADMIN as $resource => $actions) {
-				foreach ($actions as $action){
-					$acl->allow('ROLE_ADMIN', $resource, $action);
-				}
-			}
-			
-			foreach ($ROLE_SUDO as $resource => $actions) {
-				$acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
-			}
-			//Grant acess to private area to ROLE_SUDO
-			foreach ($ROLE_SUDO as $resource => $actions) {
+			foreach ($resources as $resource => $actions) {
 				foreach ($actions as $action){
 					$acl->allow('ROLE_SUDO', $resource, $action);
 				}
 			}
-			
-			foreach ($ROLE_CONTACT as $resource => $actions) {
-				$acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
-			}
-			//Grant acess to private area to ROLE_SUDO
-			foreach ($ROLE_CONTACT as $resource => $actions) {
-				foreach ($actions as $action){
-					$acl->allow('ROLE_CONTACT', $resource, $action);
-				}
-			}
-			
-			
+	
 			//The acl is stored in session, APC would be useful here too
 			$this->persistent->acl = $acl;
 		}
@@ -109,6 +80,7 @@ class Security extends Plugin
 		if ($this->session->get('authenticated')) {
 			$user = User::findFirstByIdUser($this->session->get('userid'));
 			if ($user) {
+				
 				$role = $user->userrole;
 				
 				// Inyectar el usuario
@@ -119,10 +91,10 @@ class Security extends Plugin
 		$controller = $dispatcher->getControllerName();
 		$action = $dispatcher->getActionName();
 		
-		$this->publicurls = array('session:signin', 'session:login', 'field:insert', 'field:update', 
-								  'field:query', 'api:listcontacts', 'api:getcontact', 
-								  'api:createcontact', 'api:updatecontact', 'api:delcustomfield',
-			);
+		$this->publicurls = array(
+			'session:signin', 
+			'session:login'
+		);
 		
 		if ($role == 'ROLE_GUEST') {
 			$accessdir = $controller . ':' . $action;
@@ -134,7 +106,5 @@ class Security extends Plugin
 		}
 		
 		$this->_dependencyInjector->set('acl', $this->getAcl());
-
 	}
-
 }

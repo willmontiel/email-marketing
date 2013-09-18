@@ -175,27 +175,35 @@ class UserController extends ControllerBase
 		if ($r)
 			return $r;
 		
-		$idAccount = $this->user->account->idAccount;
+		$idUser = $this->session->get('userid');
 		
-		$user = User::findFirst(array(
-			"conditions" => "idUser = ?1 AND idAccount = ?2",
-			"bind" => array(1 => $id, 2 => $idAccount)
-		));
-		
-		if($user){
-			if(!$user->delete()){
-				foreach ($user->getMessages() as $msg) {
-					$this->flashSession->error($msg);
-				}
-			}
-			$this->flashSession->success("El usuario " .$user->username. " ha sido borrado exitosamente");
+		if($id == $idUser){
+			$this->flashSession->success("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
 			$this->view->disable();
 			$this->response->redirect("user/index");
 		}
-		else{
-			$this->flashSession->error("El usuario que intenta borrar no existe, por favor verifique la información");
-			$this->view->disable();
-			$this->response->redirect("user/index");
+		else {
+			$idAccount = $this->user->account->idAccount;
+			$user = User::findFirst(array(
+				"conditions" => "idUser = ?1 AND idAccount = ?2",
+				"bind" => array(1 => $id, 2 => $idAccount)
+			));
+
+			if($user){
+				if(!$user->delete()){
+					foreach ($user->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
+				$this->flashSession->success("El usuario " .$user->username. " ha sido eliminado exitosamente");
+				$this->view->disable();
+				$this->response->redirect("user/index");
+			}
+			else{
+				$this->flashSession->error("El usuario que intenta borrar no existe, por favor verifique la información");
+				$this->view->disable();
+				$this->response->redirect("user/index");
+			}
 		}
 	}
 }
