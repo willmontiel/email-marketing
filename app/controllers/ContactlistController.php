@@ -21,12 +21,20 @@ class ContactlistController extends ControllerBase
 		
 		$totalFields = count($results);
 		
-		for ($i = 0; $i < $totalFields; $i++) {
-			$arrayFields[$results[$i]['idDbase']] = array (
-				'idCustomField' => $results[$i]['idCustomField'],
-				'name' => $results[$i]['name'],
-				'type' => $results[$i]['type']
-			);			
+		$arrayFields = array();
+		
+		foreach($results as $key){
+			$k = $key['idDbase'];
+			$idCustomField = $key['idCustomField'];
+			$name = $key['name'];
+			$type = $key['type'];
+			
+			if(!isset($arrayFields[$k])){
+				$arrayFields[$k];
+			}
+			$arrayFields[$k][] = $idCustomField;
+			$arrayFields[$k][] = $name;
+			$arrayFields[$k][] = $type;
 		}
 		
 		$this->view->setVar("totalFields", $totalFields);

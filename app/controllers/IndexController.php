@@ -28,6 +28,27 @@ class IndexController extends ControllerBase
 				$resources[$k][] = $v;
 			}
 			
-		$this->view->setVar("resources", $resources);
+			$this->view->setVar("resources", $resources);
+			
+			
+			$sql2 ="SELECT resource.name AS resource, roxre.action AS action 
+					FROM allowed
+						JOIN roxre ON ( allowed.idRoxre = roxre.idRoxre ) 
+						JOIN resource ON ( roxre.idResource = resource.idResource ) 
+					WHERE allowed.idRole =1";
+			
+			$allowedResources = $db->fetchAll($sql2, Phalcon\Db::FETCH_ASSOC);
+			
+			//Grant acess to private area to ROLE_ADMIN
+			$allow = array();
+			
+			foreach($allowedResources as $allowedResource){
+				if(!isset($allow[$allowedResource['resource']])){
+					$allow[$allowedResource['resource']];
+				}
+				$allow[$allowedResource['resource']][] = $allowedResource['action'];
+			}
+			$this->view->setVar("allow", $allow);
+		
     }
 }

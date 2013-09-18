@@ -7,7 +7,8 @@ use Phalcon\Events\Event,
 /**
  * Security
  *
- * This is the security plugin which controls that users only have access to the modules they're assigned to
+ * Este es la clase que proporciona los permisos a los usuarios. Esta clase decide si un usuario pueder hacer determinada
+ * tarea basandose en el tipo de ROLE que posea
  */
 class Security extends Plugin
 {
@@ -45,20 +46,39 @@ class Security extends Plugin
 			
 			$resources = array();
 			foreach ($results as $key) {
-				$k = $key['resource'];
-				$v = $key['action'];
 				
-				if(!isset($resources[$k])){
-					$resources[$k];
+				if(!isset($resources[$key['resource']])){
+					$resources[$key['resource']];
 				}
-				$resources[$k][] = $v;
+				$resources[$key['resource']][] = $key['action'];
 			}
 			
 			foreach ($resources as $resource => $actions) {
 				$acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
 			}
+			
+//--------------------------------------------------------------------------------------------------------------
+			
+			$sql2 ="SELECT resource.name AS resource, roxre.action AS action 
+					FROM allowed
+						JOIN roxre ON ( allowed.idRoxre = roxre.idRoxre ) 
+						JOIN resource ON ( roxre.idResource = resource.idResource ) 
+					WHERE allowed.idRole =1";
+			
+			$allowedResources = $db->fetchAll($sql2, Phalcon\Db::FETCH_ASSOC);
+			
 			//Grant acess to private area to ROLE_ADMIN
-			foreach ($resources as $resource => $actions) {
+			$allow = array();
+			
+			foreach($allowedResources as $allowedResource){
+				if(!isset($allow[$allowedResource['resource']])){
+					$allow[$allowedResource['resource']];
+				}
+				$allow[$allowedResource['resource']][] = $allowedResource['action'];
+			}
+			
+			//Grant acess to private area to ROLE_ADMIN
+			foreach ($allow as $resource => $actions) {
 				foreach ($actions as $action){
 					$acl->allow('ROLE_SUDO', $resource, $action);
 				}
