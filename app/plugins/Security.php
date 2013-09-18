@@ -57,7 +57,7 @@ class Security extends Plugin
 				'user' => array('index', 'new', 'edit', 'delete', 'show'),
 				'dbase' => array('index', 'edit', 'new', 'show', 'delete'),
 				'contactlist' => array('index', 'new', 'index', 'show'),
-				'contacts' => array('newbatch'),
+				'contacts' => array('newbatch', 'processfile', 'import', 'importbatch'),
 				'field' => array('index','insert', 'new', 'update', 'query', 'edit', 'delete'),
 			);
 

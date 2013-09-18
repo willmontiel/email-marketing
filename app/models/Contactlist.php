@@ -71,5 +71,38 @@ class Contactlist extends Modelbase
 	public function getInactiveContacts()
 	{
 		return $this->Ctotal - ($this->Cactive + $this->Cunsubscribed + $this->Cbounced + $this->Cspam);
-	}	
+	}
+	
+	public function updateCountersInContactlist()
+	{
+		$sql = "SELECT COUNT(*) AS cnt,
+					SUM( IF(c.status != 0, IF(c.unsubscribed = 0, IF(c.bounced = 0, IF(c.spam = 0,1,0), 0),0),0)) AS activecnt,
+					SUM( IF(c.unsubscribed != 0, IF(c.bounced = 0, IF(c.spam = 0,1,0), 0),0)) AS unsubscribedcnt,
+					SUM( IF(c.bounced != 0, IF(c.spam = 0,1,0), 0)) AS bouncedcnt,
+					SUM( IF(c.spam != 0,1,0)) AS spamcnt
+				FROM contact c JOIN coxcl x ON (c.idContact = x.idContact)
+				WHERE x.idContactlist = $this->idContactlist";
+		
+		$db = Phalcon\DI::getDefault()->get('db');
+		
+		$r = $db->fetchAll($sql);
+		
+		$counter = array();
+		
+		foreach ($r as $cntr) {
+			$counter[0] = $cntr['cnt'];
+			$counter[1] = $cntr['activecnt'];
+			$counter[2] = $cntr['unsubscribedcnt'];
+			$counter[3] = $cntr['bouncedcnt'];
+			$counter[4] = $cntr['spamcnt'];
+		}
+
+		$sql2 = "UPDATE contactlist SET Ctotal = $counter[0], Cactive = $counter[1], Cunsubscribed = $counter[2], Cbounced = $counter[3], Cspam = $counter[4] WHERE idContactlist = $this->idContactlist";
+		
+		$db->begin();
+		
+		$db->execute($sql2);
+		
+		$db->commit();
+	}
 }

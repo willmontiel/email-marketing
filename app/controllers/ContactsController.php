@@ -267,19 +267,17 @@ class ContactsController extends ControllerBase
 		$file = Importfile::findFirstByIdImportfile($idImportfile);
 		$nameFile = $file->internalName;
 		$header = $this->request->getPost('header');
-		$fields[0] = $this->request->getPost('email');
-		$fields[1] = $this->request->getPost('name');
-		$fields[2] = $this->request->getPost('lastname');
+		$fields['email'] = $this->request->getPost('email');
+		$fields['name'] = $this->request->getPost('name');
+		$fields['lastname'] = $this->request->getPost('lastname');
 		$delimiter = $this->request->getPost('delimiter');
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		$customfields = Customfield::findByIdDbase($list->idDbase);
 		
-		$numfield = 3;
 		foreach ($customfields as $field) {
 			$namefield= "campo".$field->idCustomField;
-			$fields[$numfield] = $this->request->getPost($namefield);
-			$numfield++;
+			$fields[$field->idCustomField] = $this->request->getPost($namefield);
 		}
 				
 		$destiny =  "../tmp/ifiles/".$nameFile;
