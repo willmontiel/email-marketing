@@ -4,11 +4,6 @@ class ContactlistController extends ControllerBase
 	
 	public function indexAction()
 	{
-		
-		$r = $this->verifyAcl('contactlist', 'index', '');
-		if ($r)
-			return $r;
-
 		$idAccount = $this->user->account->idAccount;
 		
 		$db = Phalcon\DI::getDefault()->get('db');
@@ -43,10 +38,7 @@ class ContactlistController extends ControllerBase
 	
 	public function showAction($id)
 	{
-		$r = $this->verifyAcl('contactlist', 'show', '');
-		if ($r)
-			return $r;	
-		
+	
 		$list = Contactlist::findFirstByIdContactlist($id);
 		
 		$this->view->setVar('datalist', $list);

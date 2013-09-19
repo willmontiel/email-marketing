@@ -4,10 +4,6 @@ class UserController extends ControllerBase
 {
 	public function indexAction()
 	{
-		$r = $this->verifyAcl('user', 'index', '');
-		if ($r)
-			return $r;
-		
 		$idAccount = $this->user->account->idAccount;
 		
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
@@ -27,10 +23,6 @@ class UserController extends ControllerBase
 	
 	public function newAction()
 	{
-		$r = $this->verifyAcl('user', 'new', '');
-		if ($r)
-			return $r;
-		
 		$user = new User();
 		$form = new UserForm($user);
 		
@@ -41,15 +33,13 @@ class UserController extends ControllerBase
 			$pass2 = $form->getValue('password2');
 			
 			if(strlen($pass) < 8 || strlen($pass) > 40) {
-				$this->view->disable();
 				$this->flashSession->error("La contraseña es muy corta, esta debe tener mínimo 8 y máximo 40 caracteres");
-				$this->response->redirect("user/new");
+				return $this->response->redirect("user/new");
 			}
 			else {
 				if($pass !== $pass2) {
-					$this->view->disable();
 					$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
-					$this->response->redirect("user/new");
+					return ;$this->response->redirect("user/new");
 				}
 				else {
 					
@@ -60,8 +50,7 @@ class UserController extends ControllerBase
 					if ($form->isValid() && $user->save()) {
 						$this->db->commit();
 						$this->flashSession->success("Se ha creado el usuario exitosamente");
-						$this->view->disable();
-						$this->response->redirect("user/index");
+						return $this->response->redirect("user/index");
 					}
 					
 					else {
@@ -69,8 +58,7 @@ class UserController extends ControllerBase
 						foreach ($user->getMessages() as $msg) {
 							$this->flashSession->error($msg);
 						}
-						$this->view->disable();
-						$this->response->redirect("user/index");
+						return $this->response->redirect("user/index");
 					}
 				}
 			}
@@ -81,10 +69,6 @@ class UserController extends ControllerBase
 	
 	public function editAction($id)
 	{
-		$r = $this->verifyAcl('user', 'edit', '');
-		if ($r)
-			return $r;
-		
 		$idAccount = $this->user->account->idAccount;
 		
 		$user = User::findFirst(array(
@@ -93,9 +77,8 @@ class UserController extends ControllerBase
 		));
 		
 		if (!$user) {
-			$this->view->disable();
 			$this->flashSession->error("El usuario que intenta actualizar no existe, por favor verifique la información");
-			$this->response->redirect("user/index");
+			return $this->response->redirect("user/index");
 		}
 		
 		else {
@@ -112,14 +95,12 @@ class UserController extends ControllerBase
 					
 					if(strlen($pass) < 8 || strlen($pass) > 40) {
 						$this->flashSession->error("La contraseña es muy corta o muy larga, esta debe tener mínimo 8 y máximo 40 caracteres");
-						$this->view->disable();
-						$this->response->redirect("user/edit/".$user->idUser);
+						return $this->response->redirect("user/edit/".$user->idUser);
 					}
 					else{
 						if($pass !== $pass2) {
 							$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
-							$this->view->disable();
-							$this->response->redirect("user/edit/".$user->idUser);
+							return $this->response->redirect("user/edit/".$user->idUser);
 						}
 						else{
 							$this->db->begin();
@@ -131,14 +112,12 @@ class UserController extends ControllerBase
 								foreach ($user->getMessages() as $msg) {
 									$this->flash->error($msg);
 								}
-								$this->view->disable();
-								$this->response->redirect("user/edit/".$user->idUser);
+								return $this->response->redirect("user/edit/".$user->idUser);
 							}
 							else {
 								$this->db->commit();
 								$this->flashSession->success('Se ha actualizado el usuario exitosamente');
-								$this->view->disable();
-								$this->response->redirect("user/index");
+								return $this->response->redirect("user/index");
 							}
 						}
 					}
@@ -152,14 +131,12 @@ class UserController extends ControllerBase
 						foreach ($user->getMessages() as $msg) {
 							$this->flash->error($msg);
 						}
-						$this->view->disable();
-						$this->response->redirect("user/edit/".$user->idUser);
+						return $this->response->redirect("user/edit/".$user->idUser);
 					}
 					else {
 						$this->db->commit();
 						$this->flashSession->success('Se ha actualizado el usuario exitosamente');
-						$this->view->disable();
-						$this->response->redirect("user/index");
+						return $this->response->redirect("user/index");
 					}
 				}
  			}
@@ -171,16 +148,11 @@ class UserController extends ControllerBase
 	
 	public function deleteAction($id)
 	{
-		$r = $this->verifyAcl('user', 'delete', '');
-		if ($r)
-			return $r;
-		
 		$idUser = $this->session->get('userid');
 		
 		if($id == $idUser){
 			$this->flashSession->success("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
-			$this->view->disable();
-			$this->response->redirect("user/index");
+			return $this->response->redirect("user/index");
 		}
 		else {
 			$idAccount = $this->user->account->idAccount;
@@ -194,15 +166,14 @@ class UserController extends ControllerBase
 					foreach ($user->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}
+					return $this->response->redirect("user/index");
 				}
 				$this->flashSession->success("El usuario " .$user->username. " ha sido eliminado exitosamente");
-				$this->view->disable();
-				$this->response->redirect("user/index");
+				return $this->response->redirect("user/index");
 			}
 			else{
 				$this->flashSession->error("El usuario que intenta borrar no existe, por favor verifique la información");
-				$this->view->disable();
-				$this->response->redirect("user/index");
+				return $this->response->redirect("user/index");
 			}
 		}
 	}

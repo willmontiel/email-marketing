@@ -30,17 +30,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 	 * @param string $message el mensaje, por defecto es "Operacion no permitida"
 	 * @return \Phalcon\HTTP\ResponseInterface
 	 */
-	public function verifyAcl($resource, $action, $message='Operacion no permitida')
-	{
-		if (!$this->acl->isAllowed($this->user->userrole, $resource, $action)) {	
-			$this->flashSession->error($message);
-			return $this->response->redirect('error/index');
-		}
-		return null;
-	}
 	
-	
-
 	/**
 	 * Llamar este metodo para enviar respuestas en modo JSON
 	 */

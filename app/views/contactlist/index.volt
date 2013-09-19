@@ -55,8 +55,6 @@
 {%block sectionsubtitle %}Administre sus bases de datos de contactos{% endblock %}
 {% block content %}
 	<div id="emberApplistContainer">
-		 {{dump(fields)}} 
-		{# handlebars de index #}
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}
 			<div class="box">

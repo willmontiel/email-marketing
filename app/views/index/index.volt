@@ -2,8 +2,9 @@
 {% block sectiontitle %}<i class="icon-envelope-alt icon-2x"></i>Bienvenido a Mail Station{% endblock %}
 {%block sectionsubtitle %}Su sistema de marketing digital{% endblock %}
 {% block content %}
-{{dump(resources)}}
+{# {{dump(resources)}}
 {{dump(allow)}}
+{{dump(map)}} #}
 	<div class="row-fluid">
 		<div class="box">
 			<div class="box-content">

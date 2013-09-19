@@ -27,11 +27,7 @@ class AccountController extends ControllerBase
 	 * Esta función se encarga de mostrar toda la información de las cuentas al super-administrador
 	 */
 	public function indexAction()
-	{
-		$r = $this->verifyAcl('account', 'index', '');
-		if ($r)
-			return $r;
-		
+	{	
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 
 		$builder = $this->modelsManager->createBuilder()
@@ -56,9 +52,6 @@ class AccountController extends ControllerBase
 	 */
 	public function newAction()
     {
-		$r = $this->verifyAcl('account', 'new', '');
-		if ($r)
-			return $r;
         $account = new Account();
         $form = new NewAccountForm($account);
       
@@ -87,34 +80,29 @@ class AccountController extends ControllerBase
 							foreach ($user->getMessages() as $msg) {
 								$this->flashSession->error($msg);
 							}
-							$this->view->disable();
-							$this->response->redirect("account/new");
+							return $this->response->redirect("account/new");
 						}
 						
 						$this->db->commit();
 						$this->flashSession->success('Se ha creado la cuenta exitosamente');
-						$this->view->disable();
-						$this->response->redirect("account/index");
+						return $this->response->redirect("account/index");
 					}
 							
 					else{
 						$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 y máximo 40 caracteres");
-						$this->view->disable();
-						$this->response->redirect("account/new");
+						return $this->response->redirect("account/new");
 					}
 				}
 				else{
 					$this->flashSession->error('Las contraseñas no coinciden por favor verifique la información');
-					$this->view->disable();
-					$this->response->redirect("account/new");
+					return $this->response->redirect("account/new");
 				}		
 			}
             else {
 				foreach ($account->getMessages() as $msg) {
 					$this->flashSession->error($msg);
                 }
-				$this->view->disable();
-				$this->response->redirect("account/new");
+				return $this->response->redirect("account/new");
             }
         }
        
@@ -128,10 +116,6 @@ class AccountController extends ControllerBase
     */
    public function showAction($id)
    {
-		$r = $this->verifyAcl('account', 'show', '');
-		if ($r)
-			return $r;	 
-
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
@@ -157,10 +141,11 @@ class AccountController extends ControllerBase
     */  
    public function editAction($id)
    {
-	    $r = $this->verifyAcl('account', 'edit', '');
-		if ($r)
-			return $r;
-	    $account = Account::findFirstByIdAccount($id);
+	    $account = Account::findFirst(array(
+			"conditions" => "idAccount = ?1",
+			"bind" => array(1 => $id)
+		));
+		
 		if ($account !== null) {
             $this->view->setVar("allAccount", $account);
 			$editform = new EditAccountForm($account);
@@ -174,14 +159,12 @@ class AccountController extends ControllerBase
 						foreach ($account->getMessages() as $msg) {
 							$this->flashSession->error($msg);
 						}
-						$this->view->disable();
-						$this->response->redirect("account/edit/".$account->idAccount);
+						return $this->response->redirect("account/edit/".$account->idAccount);
 					}
 					else {
 						$this->db->commit();
 						$this->flashSession->success('Se ha editado la cuenta exitosamente');
-						$this->view->disable();
-						$this->response->redirect("account");
+						return $this->response->redirect("account");
 					}
 
  			}
@@ -195,25 +178,27 @@ class AccountController extends ControllerBase
 	 * recibe el id de la cuenta
 	 */
 	public function deleteAction($id)
-    {
-		$r = $this->verifyAcl('account', 'delete', '');
-		if ($r)
-			return $r;
-		
-		$account = Account::findFirstByIdAccount($id);
-		$user = User::findFirstByIdAccount($id);
+    {	
+		$account = Account::findFirst(array(
+			"conditions" => "idAccount = ?1",
+			"bind" => array(1 => $id)
+		));
+		$user = User::findFirst(array(
+			"conditions" => "idAccount = ?1",
+			"bind" => array(1 => $id)
+		));
 
 			if ($account !== null) {
 				if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
 				   $account->delete();
 				   $user->deleted();
 				   $this->flashSession->success('Base de Datos Eliminada!');
-				   $this->view->disable();
-				   $this->response->redirect("account/index");
+				   return $this->response->redirect("account/index");
 				} 
 
 			   else {
-				   $this->flash->error('Escriba la palabra "DELETE" correctamente');
+				   $this->flashSession->error('Escriba la palabra "DELETE" correctamente');
+				    return $this->response->redirect("account/index");
 			   }
        }
 
@@ -224,10 +209,6 @@ class AccountController extends ControllerBase
 	  */
 	public function newuserAction($id)
 	{
-		$r = $this->verifyAcl('account', 'newuser', '');
-		if ($r)
-			return $r;
-
 		$user = new User();
 		$form = new UserForm($user);
 		
@@ -238,8 +219,7 @@ class AccountController extends ControllerBase
 		
 		if(!$account){
 			$this->flashSession->error("Ha intentado crear un usuario en una cuenta que no existe, por favor verifique la información");
-			$this->view->disable();
-			$this->response->redirect("account/index");
+			return $this->response->redirect("account/index");
 		}
 		
 		else {
@@ -251,15 +231,13 @@ class AccountController extends ControllerBase
 
 				if(strlen($pass) < 8) {
 					$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 caracteres y máximo 40");
-					$this->view->disable();
-					$this->response->redirect("account/newuser/".$account->idAccount);
+					return $this->response->redirect("account/newuser/".$account->idAccount);
 				}
 
 				else {
 					if($pass !== $pass2) {
 						$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
-						$this->view->disable();
-						$this->response->redirect("account/newuser/".$account->idAccount);
+						return $this->response->redirect("account/newuser/".$account->idAccount);
 					}
 					else {
 
@@ -270,8 +248,7 @@ class AccountController extends ControllerBase
 						if ($form->isValid() && $user->save()) {
 							$this->db->commit();
 							$this->flashSession->error("Se ha creado el usuario exitosamente en la cuenta ". $account->companyName);
-							$this->view->disable();
-							$this->response->redirect("account/show/".$account->idAccount);
+							return $this->response->redirect("account/show/".$account->idAccount);
 						}
 
 						else {
@@ -279,6 +256,7 @@ class AccountController extends ControllerBase
 							foreach ($user->getMessages() as $msg) {
 								$this->flash->error($msg);
 							}
+							return $this->response->redirect("account/show/".$account->idAccount);
 						}
 					}
 				}
@@ -297,10 +275,6 @@ class AccountController extends ControllerBase
 	 */
 	public function edituserAction($id)
 	{
-		$r = $this->verifyAcl('account', 'edituser', '');
-		if ($r)
-			return $r;
-		
 		$userExist = User::findFirst(array(
 			"conditions" => "idUser = ?1",
 			"bind" => array(1 => $id)
@@ -308,8 +282,7 @@ class AccountController extends ControllerBase
 		
 		if(!$userExist){
 			$this->flashSession->error("El usuario que intenta editar no existe, por favor verifique la información");
-			$this->view->disable();
-			$this->response->redirect("account/index");
+			return $this->response->redirect("account/index");
 		}
 		else {
 			if ($userExist !== null) {
@@ -335,14 +308,12 @@ class AccountController extends ControllerBase
 							foreach ($userExist->getMessages() as $msg) {
 								$this->flashSession->error($msg);
 							}
-							$this->view->disable();
-							$this->response->redirect("account/show/".$userExist->idAccount);
+							return $this->response->redirect("account/show/".$userExist->idAccount);
 						}
 						else {
 							$this->db->commit();
 							$this->flashSession->success('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
-							$this->view->disable();
-							$this->response->redirect("account/show/".$userExist->idAccount);
+							return $this->response->redirect("account/show/".$userExist->idAccount);
 						}
 					}
 					else{
@@ -353,14 +324,12 @@ class AccountController extends ControllerBase
 							foreach ($userExist->getMessages() as $msg) {
 								$this->flashSession->error($msg);
 							}
-							$this->view->disable();
-							$this->response->redirect("account/show/".$userExist->idAccount);
+							return $this->response->redirect("account/show/".$userExist->idAccount);
 						}
 						else {
 							$this->db->commit();
 							$this->flashSession->success('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
-							$this->view->disable();
-							$this->response->redirect("account/show/".$userExist->idAccount);
+							return $this->response->redirect("account/show/".$userExist->idAccount);
 						}
 					}
 					
@@ -376,16 +345,11 @@ class AccountController extends ControllerBase
 	 */
 	public function deleteuserAction($id)
 	{
-		$r = $this->verifyAcl('account', 'deleteuser', '');
-		if ($r)
-			return $r;
-		
 		$idUser = $this->session->get('userid');
 		
 		if($id == $idUser){
 			$this->flashSession->success("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
-			$this->view->disable();
-			$this->response->redirect("account/index");
+			return $this->response->redirect("account/index");
 		}
 		else {
 			$user = User::findFirst(array(
@@ -395,20 +359,17 @@ class AccountController extends ControllerBase
 
 			if(!$user){
 				$this->flashSession->error('El usuario que ha intentado eliminar no existe, por favor verifique la información');
-				$this->view->disable();
-				$this->response->redirect("account/index");
+				return $this->response->redirect("account/index");
 			}
 			else {
 				if(!$user->delete()) {
 					foreach ($user->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}
-					$this->view->disable();
-					$this->response->redirect("account/show/".$user->idAccount);
+					return $this->response->redirect("account/show/".$user->idAccount);
 				}
 				$this->flashSession->success('Se ha eliminado el usuario ' .$user->username. ' exitosamente');
-				$this->view->disable();
-				$this->response->redirect("account/show/".$user->idAccount);
+				return $this->response->redirect("account/show/".$user->idAccount);
 			}	
 		}
 	}

@@ -11,9 +11,6 @@ class FieldController extends ControllerBase
 	 */
 	public function indexAction()
 	{
-		$r = $this->verifyAcl('field', 'index', '');
-		if ($r)
-			return $r;
 		
 		$idbase = 0;
 		$dbases = $this->user->account->dbases;
@@ -40,10 +37,6 @@ class FieldController extends ControllerBase
 	 */
 	public function insertAction()
 	{
-		$r = $this->verifyAcl('field', 'insert', '');
-		if ($r)
-			return $r;
-		
 		$idBase = $this->request->get('idDbase', 'int', 0);
 		
 		$this->view->disable();
@@ -67,10 +60,6 @@ class FieldController extends ControllerBase
 	 */
 	public function updateAction($idCustomField)
 	{
-		$r = $this->verifyAcl('field', 'update', '');
-		if ($r)
-			return $r;
-
 		$this->view->disable();
 		
 		
@@ -93,10 +82,6 @@ class FieldController extends ControllerBase
 	 */
 	public function queryAction($idCustomField)
 	{
-		$r = $this->verifyAcl('field', 'query', '');
-		if ($r)
-			return $r;
-		
 		$this->view->disable();
 		
 		
@@ -117,10 +102,6 @@ class FieldController extends ControllerBase
 
 	public function newAction($idbase)
 	{
-		$r = $this->verifyAcl('field', 'new', '');
-		if ($r)
-			return $r;
-		
 		$field = new Customfield();
 		$form = new NewFieldForm($field);
 		
@@ -153,10 +134,6 @@ class FieldController extends ControllerBase
 	
 	public function editAction($id)
 	{
-		$r = $this->verifyAcl('field', 'edit', '');
-		if ($r)
-			return $r;
-		
 		$field = new CustomField();
 		$editform = new NewFieldForm($field);
 		$registro = Customfield::findFirstByIdCustomField($id);
@@ -173,10 +150,6 @@ class FieldController extends ControllerBase
 	
 	public function deleteAction($id)
 	{
-		$r = $this->verifyAcl('field', 'delete', '');
-		if ($r)
-			return $r;
-		
 		$registro = Customfield::findFirstByIdCustomField($id);
 		$idbase = $registro->idDbase;
 		$registro->delete();
