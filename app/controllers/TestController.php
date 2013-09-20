@@ -25,67 +25,68 @@ class TestController extends ControllerBase
 
 	}
 
+	public function testzmqAction()
+	{
+		$this->view->disable();
+		$context = new ZMQContext();
+		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
+		$requester->connect("tcp://localhost:5556");
+		$toSend = 'Test de Prueba';
+		$requester->send($toSend);
+		return $this->response->setContent("Se fue el pedido");
+
+	}
 	public function testtransactionAction()
 	{
-//		$manager = new Phalcon\Mvc\Model\Transaction\Manager();
-//	    $transaction = $manager->get();
-				
+		
 		try {
 			$this->db->begin();
-		$contact = new Contact();
-		
-//		$contact->setTransaction($transaction);
-		
-		$contact->idDbase = 1155;
-		$contact->idEmail = 638;
-		$contact->name = "Pepitos";
-		$contact->bounced = 0;
-		$contact->unsubscribed = 0;
-		$contact->spam = 0;
-		$contact->ipActivated= 2130706433;
-		$contact->ipSubscribed= 2130706433;
-		$contact->updatedon = 1378332895;
-		$contact->lastName = "Perez";
-		$contact->subscribedon = 1378332895;
-		$contact->status = 1378332895;
-		$contact->createdon = 1378332895;
-			
-		if(!$contact->save()) {
-//			$transaction->rollback("No se pudo guardar el contacto");
-			$this->db->rollback();
-		}
-		//$transaction->commit();
-		
-		$associate = new Coxcl();
-		
-//		$associate->setTransaction($transaction);
-		
-		$associate->idContactlist = 1;
-		$associate->contact = $contact;
-		$t = '';
-		
-		if(!$associate->save()) {
-			foreach ($associate->getMessages() as $m) {
-				$t = $m->getMessage() . '<br/>';
+			$contact = new Contact();
+
+
+			$contact->idDbase = 1155;
+			$contact->idEmail = 638;
+			$contact->name = "Pepitos";
+			$contact->bounced = 0;
+			$contact->unsubscribed = 0;
+			$contact->spam = 0;
+			$contact->ipActivated= 2130706433;
+			$contact->ipSubscribed= 2130706433;
+			$contact->updatedon = 1378332895;
+			$contact->lastName = "Perez";
+			$contact->subscribedon = 1378332895;
+			$contact->status = 1378332895;
+			$contact->createdon = 1378332895;
+
+			if(!$contact->save()) {
+				$this->db->rollback();
 			}
-//			$transaction->rollback("No se pudo crear la asociacion");
-			$this->db->rollback();
-		}
-		$this->db->commit();
 
-//		$transaction->commit();
+			$associate = new Coxcl();
 
-		$contactnew = Contact::findFirstByIdContact($contact->idContact);
-		$associatenew = Coxcl::findFirstByIdContact($contact->idContact);
-		
-		$this->view->setVar("contact", $contactnew);	
-		$this->view->setVar("associate", $associatenew);
-			$this->view->setVar('txterror', $t);
-		}
-		catch (Exception $e) {
-			echo 'Proceso fallido!';
-			$this->view->setVar('txterror', $t . ',' . $e);
-		}
+			$associate->idContactlist = 1;
+			$associate->contact = $contact;
+			$t = '';
+
+			if(!$associate->save()) {
+				foreach ($associate->getMessages() as $m) {
+					$t = $m->getMessage() . '<br/>';
+				}
+				$this->db->rollback();
+			}
+			$this->db->commit();
+
+			$contactnew = Contact::findFirstByIdContact($contact->idContact);
+			$associatenew = Coxcl::findFirstByIdContact($contact->idContact);
+
+			$this->view->setVar("contact", $contactnew);	
+			$this->view->setVar("associate", $associatenew);
+				$this->view->setVar('txterror', $t);
+			}
+			catch (Exception $e) {
+				echo 'Proceso fallido!';
+				$this->view->setVar('txterror', $t . ',' . $e);
+			}
 	}
 	
 	public function testcountersAction()
