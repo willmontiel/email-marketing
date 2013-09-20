@@ -139,14 +139,14 @@ class Security extends Plugin
 		}
 		else {
 			$acl = $this->getAcl();
-			
+
 			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
 			if (!isset($map[$controller .'::'. $action])) {
 				$this->logger->log("[$controller::$action] no existe en el mapa de permisos");
 				$this->response->redirect('error/index');
 				return false;
 			}
-				
+
 			$reg = $map[$controller .'::'. $action];
 			$this->logger->log("[$controller::$action] tiene este mapa: " . print_r($reg, true));
 

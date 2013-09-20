@@ -1,10 +1,6 @@
 <?php
-/*
-*  Hello World client
-*  Connects REQ socket to tcp://localhost:5555
-*  Sends "Hello" to server, expects "World" back
-* @author Ian Barber <ian(dot)barber(at)gmail(dot)com>
-*/
+
+$contact = new Contact;
 
 $context = new ZMQContext();
 if ($argc >= 1) {

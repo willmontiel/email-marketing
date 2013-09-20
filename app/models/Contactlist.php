@@ -90,19 +90,15 @@ class Contactlist extends Modelbase
 		$counter = array();
 		
 		foreach ($r as $cntr) {
-			$counter[0] = $cntr['cnt'];
-			$counter[1] = $cntr['activecnt'];
-			$counter[2] = $cntr['unsubscribedcnt'];
-			$counter[3] = $cntr['bouncedcnt'];
-			$counter[4] = $cntr['spamcnt'];
+			$counter[0] = (isset($cntr['cnt']))?$cntr['cnt']:0;
+			$counter[1] = (isset($cntr['activecnt']))?$cntr['activecnt']:0;
+			$counter[2] = (isset($cntr['unsubscribedcnt']))?$cntr['unsubscribedcnt']:0;
+			$counter[3] = (isset($cntr['bouncedcnt']))?$cntr['bouncedcnt']:0;
+			$counter[4] = (isset($cntr['spamcnt']))?$cntr['spamcnt']:0;
 		}
 
 		$sql2 = "UPDATE contactlist SET Ctotal = $counter[0], Cactive = $counter[1], Cunsubscribed = $counter[2], Cbounced = $counter[3], Cspam = $counter[4] WHERE idContactlist = $this->idContactlist";
-		
-		$db->begin();
-		
+
 		$db->execute($sql2);
-		
-		$db->commit();
 	}
 }

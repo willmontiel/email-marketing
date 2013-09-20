@@ -266,22 +266,29 @@ class ContactsController extends ControllerBase
 			$namefield= "campo".$field->idCustomField;
 			$fields[$field->idCustomField] = $this->request->getPost($namefield);
 		}
-				
-		$destiny =  "../tmp/ifiles/".$nameFile;
+
+		$destiny =  "../../../tmp/ifiles/".$nameFile;
+		$idAccount = $this->user->account->idAccount;
+		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);
+
+		$arrayToSend = array(
+			'fields' => $fields,
+			'destiny' => $destiny,
+			'delimiter' => $delimiter,
+			'header' => $header,
+			'idContactlist' => $idContactlist,
+			'idImportfile' => $idImportfile,
+			'idAccount' => $idAccount,
+			'ipaddress' => $ipaddress
+			);
+		$toSend = json_encode($arrayToSend);
 		
-		$importwrapper = new ImportContactWrapper();
+		$context = new ZMQContext();
 		
-		$importwrapper->setIdFile($idImportfile);
-		$importwrapper->setIdContactlist($idContactlist);
-		$importwrapper->setAccount($this->user->account);
+		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
+		$requester->connect("tcp://localhost:5556");
+		$requester->send($toSend);
 		
-		try {
-		$count = $importwrapper->startImport($fields, $destiny, $delimiter, $header);
-		} 
-		catch (\InvalidArgumentException $e) {
-			$log->log($e->getMessage());
-			$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
-		}
 		$this->view->setVar("count", $count);
 	}
 			
