@@ -6,6 +6,7 @@ class ImportContactWrapper extends BaseWrapper
 	protected $newcontact;
 	protected $idFile;
 	protected $ipaddress;
+//	protected $tablename;
 
 
 	public function setIdFile($idFile) {
@@ -19,6 +20,10 @@ class ImportContactWrapper extends BaseWrapper
 	public function setIpaddress($ipaddress) {
 		$this->ipaddress = $ipaddress;
 	}
+	
+//	public function setTablename($tablename) {
+//		$this->tablename = $tablename;
+//	}
 	
 	public function startImport($fields, $destiny, $delimiter, $header) {
 		
@@ -47,6 +52,8 @@ class ImportContactWrapper extends BaseWrapper
 		if(!$newproccess->save()) {
 			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
 		}
+		
+//		$this->tablename = "tmp". $newproccess->idImportproccess;
 		$deletetable = "TRUNCATE TABLE tmpimport;";
 		$db->execute($deletetable);
 		
@@ -73,6 +80,7 @@ class ImportContactWrapper extends BaseWrapper
 		$db = Phalcon\DI::getDefault()->get('db');
 		$idAccount = $this->account->idAccount;
 		$customfields = array();
+		$emails = array();
 		$line = 0;
 		$idArray = 0;
 		$oldActiveContacts = 0;
@@ -95,25 +103,28 @@ class ImportContactWrapper extends BaseWrapper
 				if ( ($thisActiveContacts < $contactLimit) ) {
 					$email = strtolower($email);
 					if ( \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
-						if ( $line != 0 ) {
-							$values.=", ";
-						}
-						list($user, $edomain) = preg_split("/@/", $email, 2);
-						$fieldEmail = $db-> escapeString($email);
-						$fieldDomain = $db->escapeString($edomain);
-						$fieldName = $db->escapeString($name);
-						$fieldLastname = $db->escapeString($lastname);
-						$values.= "($idArray, $fieldEmail, find_or_create_email($fieldEmail, $fieldDomain, $idAccount), $fieldName, $fieldLastname)";
-						foreach ($posCol as $key => $value) {
-							if(is_numeric($key) && !empty($linew[$value])){
-								$valuescf = array ($idArray, $key, $linew[$value]);
-								array_push($customfields, $valuescf);
+						if (empty($emails) || !in_array($email, $emails)) {
+							array_push($emails, $email);	
+							if ( $line != 0 ) {
+								$values.=", ";
 							}
-						} 
-						$line++;
-						$idArray++;
-						if ($mode == "Contacto") {
-							$thisActiveContacts++;
+							list($user, $edomain) = preg_split("/@/", $email, 2);
+							$fieldEmail = $db->escapeString($email);
+							$fieldDomain = $db->escapeString($edomain);
+							$fieldName = $db->escapeString($name);
+							$fieldLastname = $db->escapeString($lastname);
+							$values.= "($idArray, $fieldEmail, find_or_create_email($fieldEmail, $fieldDomain, $idAccount), $fieldName, $fieldLastname)";
+							foreach ($posCol as $key => $value) {
+								if(is_numeric($key) && !empty($linew[$value])){
+									$valuescf = array ($idArray, $key, $linew[$value]);
+									array_push($customfields, $valuescf);
+								}
+							} 
+							$line++;
+							$idArray++;
+							if ($mode == "Contacto") {
+								$thisActiveContacts++;
+							}
 						}
 					}
 				}
@@ -140,6 +151,7 @@ class ImportContactWrapper extends BaseWrapper
 		$db = Phalcon\DI::getDefault()->get('db');
 		$hora = time();
 		
+//		$newtable = "CREATE TABLE $this->tablename LIKE tmpimport";
 		$tabletmp = "INSERT INTO tmpimport(idArray, email, idEmail, name, lastName) VALUES $values;";
 		$findidemailblocked = "UPDATE tmpimport t JOIN email e ON (t.idEmail = e.idEmail) SET t.blocked = 1 WHERE t.idEmail IS NOT NULL AND e.blocked > 0 AND e.idAccount = $idAccount;";
 		$findidcontactinDB = "UPDATE tmpimport t JOIN contact c ON (t.idEmail = c.idEmail) SET t.idContact = c.idContact, t.dbase = 1 WHERE t.idEmail IS NOT NULL AND c.idDbase = $idDbase;";
@@ -149,8 +161,10 @@ class ImportContactWrapper extends BaseWrapper
 		$createcontacts = "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, bounced, spam, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) SELECT $idDbase, t.idEmail, t.name, t.lastName, $hora, 0, 0, 0, $this->ipaddress, $this->ipaddress, $hora, $hora, $hora FROM tmpimport t WHERE t.idContact IS NULL AND t.blocked IS NULL;";
 		$createcoxcl = "INSERT INTO coxcl (idContactlist, idContact, createdon) SELECT $this->idContactlist, t.idContact, $hora FROM tmpimport t WHERE t.coxcl IS NULL AND t.blocked IS NULL";
 		$status = "UPDATE tmpimport SET status = 1 WHERE coxcl IS NULL AND blocked IS NULL;";
-
+		
 		$db->begin();
+		
+//		$db->execute($newtable);
 		
 		$db->execute($tabletmp);
 		
@@ -227,6 +241,8 @@ class ImportContactWrapper extends BaseWrapper
 		$limit = 0;
 		$exist = 0;
 		$bloqued = 0;
+		$repeated = 0;
+		$emails = array();
 		$success = array();
 		$errors = array();
 		
@@ -253,8 +269,13 @@ class ImportContactWrapper extends BaseWrapper
 					array_push($linew, "Correo Invalido");
 					array_push($errors, $linew);
 					$invalid++;
-				} 
+				} elseif (!empty($emails) && in_array($email, $emails)) {
+					array_push($linew, "Correo Repetido en Archivo");
+					array_push($errors, $linew);
+					$repeated++;
+				}
 				else {
+					array_push($emails, $email);	
 					foreach ($emailsImported as $emailimported) {
 						if($emailimported['email'] == $linew[0]) {
 							array_push($success, $linew);
@@ -278,7 +299,6 @@ class ImportContactWrapper extends BaseWrapper
 						} 
 					}
 					if(!$done) {
-						array_pop($success);
 						array_push($linew, "Limite de Contactos Excedido");
 						array_push($errors, $linew);
 						$limit++;
@@ -293,12 +313,13 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$count = array(
 			"total" => $total,
-			"import" => $total-($exist+$invalid+$bloqued+$limit),
-			"Nimport" => $exist+$invalid+$bloqued+$limit,
+			"import" => $total-($exist+$invalid+$bloqued+$limit+$repeated),
+			"Nimport" => $exist+$invalid+$bloqued+$limit+$repeated,
 			"exist" => $exist,
 			"invalid" => $invalid,
 			"bloqued" => $bloqued,
 			"limit" => $limit,
+			"repeated" => $repeated,
 			"idProcces" => $idImportproccess
 		);
 		
