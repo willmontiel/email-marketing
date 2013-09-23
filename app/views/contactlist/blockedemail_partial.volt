@@ -8,7 +8,7 @@
 		</div>
 		<div class="span2 text-right">
 			<div class="padded">
-				{{ '{{#linkTo "blockedemails.block" }}' }}<button class="btn btn-danger">Bloquear</button>{{ '{{/linkTo}}' }}
+				{{ '{{#linkTo "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger"}}Bloquear{{/linkTo}}' }}
 			</div>
 		</div>
 	</div>
@@ -40,7 +40,8 @@
 									<td>{{'{{blockedDate}}' }}</td>
 									<td>{{ '{{blockedReason}}'}}</td>
 									<td>
-										{{'{{#linkTo "blockedemails.unblock" this}}'}} Desbloquear {{'{{/linkTo}}'}}
+										{{ '{{#linkTo "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger"}}Bloquear{{/linkTo}}' }}
+										{{'{{#linkTo "blockedemails.unblock" this disabledWhen="deleteDisabled" class="btn btn-deafault"}}Desbloquear{{/linkTo}}'}}
 									</td>
 								</tr>
 							{{ '{{/each }}' }}
@@ -60,7 +61,6 @@
 	{{ '{{ App.errormessage }}' }}
 		</div>
 	{{ '{{/if}} '}}	
-
 	{{'{{outlet}}'}}
 </script>
 <script type="text/x-handlebars" data-template-name="blockedemails/block">
@@ -98,6 +98,11 @@
 					</div>
 					<div class="box-content">
 						<div class="padded">
+							{{'{{#if errors.errormsg}}'}}
+								<div class="alert alert-error">
+									{{'{{errors.errormsg}}'}}
+								</div>
+							{{'{{/if}}'}}
 							<form>
 								<label>*Dirección de correo electronico: </label>
 								{{ '{{view Ember.TextField valueBinding="email" placeholder="Escribe el Email aquí" required="required" autofocus="autofocus"}}' }}

@@ -4,6 +4,7 @@
 		{{ partial("partials/ember_partial") }}
 		{{ partial("partials/date_view_partial") }}
 		{{ javascript_include('js/mixin_pagination.js') }}
+		{{ javascript_include('js/mixin_catchmessages.js') }}
 		{{ javascript_include('js/load_activecontacts.js')}}
 <script type="text/javascript">
 		var MyDbaseUrl = '{{apiurlbase.url ~ '/contactlist/' ~ datalist.idContactlist}}';
@@ -74,6 +75,9 @@
 {%endblock%}	
 {% block content %}
 	<script type="text/x-handlebars" >
+		{{' {{#if errors.email}} '}}
+			<span class="text text-error">{{'{{errors.email}}'}}</span>
+		{{' {{/if }} '}}
 		{{'{{outlet}}'}}
 	</script>
 	

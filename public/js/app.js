@@ -18,15 +18,6 @@ App.Router.map(function() {
   });
 });
 
-/* STORE */
-// Serializador
-//var serializer = DS.RESTSerializer.create();
-
-//serializer.configure({
-//    meta: 'meta',
-//    pagination: 'pagination'
-//});
-
 // Adaptador
 App.ApplicationAdapter = DS.RESTAdapter.extend();
 

@@ -6,22 +6,27 @@
 		var MyDbaseUrl = '{{apiurlbase.url}}';
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
+	{{ javascript_include('js/mixin_catchmessages.js') }}
 	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/list_model.js') }}
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
 	<script type="text/javascript">
 		App.totalFields = {{totalFields}};
-		App.customFieldsArray = {{fields|json_encode}};	
+		App.customFieldsArray = {{fields|json_encode}};
+		
+		// ACL de blocked emails:
+		App.blockedemailACL = {
+			canCreate: {{ acl_Ember('api::addemailtoblockedlist') }},
+			canRead: {{ acl_Ember('api::addemailtoblockedlist')}},
+			canUpdate: {{ acl_Ember('api::addemailtoblockedlist') }},
+			canDelete: {{ acl_Ember ('api::addemailtoblockedlist')}}
+		};
 	</script>
 	<script text="text/javascript">
 		
 		App.ListsNewController = Ember.ObjectController.extend({
-			
-			dbases: [
-				{dbase: "NADA", id: 1}
-			],
-
+		
 			actions: {
 				save: function(){
 					if(this.get('name')==null){
@@ -62,7 +67,7 @@
 					<ul class="nav nav-tabs nav-tabs-left">
 						{{'{{#linkTo "lists" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
 						{{'{{#linkTo "segments" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Segmentos</a>{{/linkTo}}'}}
-						{{'{{#linkTo "blockedemails" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}
+						{{'{{#linkTo "blockedemails" tagName="li" href=false disabledWhen="readDisabled" }}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}
 					</ul>
 					<div class="title">
 						<a href="{{url('dbase')}}" class="pull-right" title="Configuracion avanzada"><i class="icon-cog"></i></a>
@@ -202,29 +207,29 @@
 
 <script type="text/x-handlebars" data-template-name="lists/delete">
 	<div class="row-fluid">
-		<div class="span8">
-			<h3>Eliminar una lista de contactos</h3>
-		</div>
-		<div class="span4 text-right">
-			{{ '{{#linkTo lists.index}}' }}<button class="btn btn-inverse">Regresar</button>{{ '{{/linkTo}}' }}
-		</div>
-	</div>
-	<br>
-	<div class="row-fluid">
-		<div class="span10">
-			<p>
-				Aqui podrás eliminar tus listas de contactos, recuerda que al eliminar una lista de contactos
-				<strong>no perderás tus contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso
-				de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado
-				por completo.</strong>
-			</p>
-			<p>
-				Si estás <strong>completamente seguro</strong> y deseas continuar da click en el botón eliminar para
-				proceder
-			</p>
-			<br>
-			<button class="btn btn-danger" {{ '{{action delete this}}' }}>Eliminar</button>
-			<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
+		<div class="box">
+			<div class="box-header">
+				<div class="title">
+					Eliminar una lista de contactos
+				</div>
+			</div>
+			<div class="box-content padded">
+				<div class="row-fluid">
+					<p>
+						Aqui podrá eliminar listas de contactos, recuerde que al eliminar una lista de contactos
+						<strong>no perderá los contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso
+						de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado
+						por completo.</strong>
+					</p>
+					<p>
+						Si está <strong>completamente seguro</strong> y desea continuar haga clic en el botón eliminar para
+						proceder
+					</p>
+					<br>
+					<button class="btn btn-danger" {{ '{{action delete this}}' }}>Eliminar</button>
+					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </script>

@@ -17,13 +17,6 @@ App.Router.map(function() {
   });
 });
 
-//var serializer = DS.RESTSerializer.create();
-//
-//serializer.configure({
-//    meta: 'meta',
-//    pagination: 'pagination'
-//});
-
 //Adaptador
 App.ApplicationAdapter = DS.RESTAdapter.extend();
 
@@ -97,28 +90,6 @@ App.ContactsImportView = Ember.View.extend({
 App.ContactController = Ember.ObjectController.extend();
 
 App.ContactsNewbatchController = Ember.ObjectController.extend();
-
-Ember.SaveHandlerMixin = Ember.Mixin.create({
-	handleSavePromise: function (p, troute, message) {
-		var self = this;
-		p.then(function () {
-			self.transitionToRoute(troute);
-			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
-		}, function (error) {
-			if (error.status == 422) {
-				try {
-					var obj = $.parseJSON(error.responseText);
-					self.set('errors', obj.errors);
-				}
-				catch (e) {
-				}
-			}
-			else {
-				self.set('errors', {errormsg: error.statusText});
-			}
-		});
-	}
-});
 
 App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	

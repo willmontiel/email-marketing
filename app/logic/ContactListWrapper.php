@@ -84,6 +84,22 @@ class ContactListWrapper extends BaseWrapper
 	
 	}
 	
+	public function findContactListInAccount($id, Account $account)
+	{
+		$list = Contactlist::findFirstByIdContactlist($id);
+		
+		if ($list && $list->dbase->account == $account) {
+			$list = $this->convertListToJson($list, $account);
+		}
+		else {
+			throw new InvalidArgumentException('Lista no existe en la cuenta');
+		}
+		
+		return array('list' => $list, 
+			 'dbase' => $this->getDbasesAsJSON($account),
+			 'meta' => $this->pager->getPaginationObject()
+		) ;
+	}
 	
 	public function findContactListByAccount(Account $account, $name = null)
 	{
@@ -109,20 +125,25 @@ class ContactListWrapper extends BaseWrapper
 				$lista[] = self::convertListToJson($contactlist, $account);
 			}
 		}
-		// Incluir las bases de datos en la lista
-		$bdjson = array();
-		foreach ($account->dbases as $bd) {
-			$bdjson[] = $this->convertBDToJson($bd);
-		}
+
 		// Actualizar el elemento de paginacion
 		$this->pager->setRowsInCurrentPage(count($lista));
 		$this->pager->setTotalRecords($total);
 		
 		return array('lists' => $lista, 
-					 'dbase' => $bdjson,
+					 'dbase' => $this->getDbasesAsJSON($account),
 					 'meta' => $this->pager->getPaginationObject()
 				) ;
 		
+	}
+	
+	protected function getDbasesAsJSON(Account $account)
+	{
+		$bdjson = array();
+		foreach ($account->dbases as $bd) {
+			$bdjson[] = $this->convertBDToJson($bd);
+		}	
+		return $bdjson;
 	}
 	
 	public function createNewContactList($contents)

@@ -74,8 +74,7 @@ try {
 		));
 		return $cache;
 	});
-	
-	
+
 	/*
 	 * Security Object, utilizado para validacion y creacion de contraseñas
 	 */
@@ -193,6 +192,9 @@ try {
 					});
 		$compiler->addFunction('get_inactive', function ($resolvedArgs, $exprArgs) {
 						return 'ContactCounter::getInactive(' . $resolvedArgs . ')';
+					});
+		$compiler->addFunction('acl_Ember', function ($resolvedArgs, $exprArgs){
+						return 'CreateAclEmber::getAcl(' . $resolvedArgs .')';
 					});
 					
         $volt->setOptions(array(

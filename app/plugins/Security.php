@@ -20,48 +20,32 @@ class Security extends Plugin
 
 	public function getAcl()
 	{
-		if (!isset($this->persistent->acl)) {
-
+		/*
+		 * Buscar ACL en cache
+		 */
+		$acl = null; //$this->cache->get('acl-cache');
+		
+		if (!$acl) {
+			// No existe, crear objeto ACL
+	
 			$acl = new Phalcon\Acl\Adapter\Memory();
 			$acl->setDefaultAction(Phalcon\Acl::DENY);
 
-			// Delete all items from the cache
-			$keys = $this->cache->queryKeys();
-			foreach ($keys as $key) {
-				$this->cache->delete($key);
-			}
-			
-			$cacheRole = 'roles.cache';
-			$cacheResource = 'resources.cache';
-			$cacheRelationship = 'userandroles';
-			
-			$userroles = $this->cache->get($cacheRole);
-			$results = $this->cache->get($cacheResource);
-			$userandroles = $this->cache->get($cacheRelationship);
-			
-			if ($userroles === null || $results === null || $userandroles === null) {
-				
-				$userroles = Role::find();
-				
-				$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-			
-				$sql = "SELECT Resource.name AS resource, Action.action AS action 
-						FROM Action
-							JOIN Resource ON ( Action.idResource = Resource.idResource )";
+			$userroles = Role::find();
 
-				$results = $modelManager->executeQuery($sql);
-				
-				$userandroles = $modelManager->executeQuery('SELECT Role.name AS rolename, Resource.name AS resname, Action.action AS actname
-														 FROM Allowed
-															JOIN Role ON ( Role.idRole = Allowed.idRole ) 
-															JOIN Action ON ( Action.idAction = Allowed.idAction ) 
-															JOIN Resource ON ( Action.idResource = Resource.idResource ) ');
-			
-				
-				$this->cache->save($cacheRole, $userroles);
-				$this->cache->save($cacheResource, $results);
-				$this->cache->save($cacheRelationship, $userandroles);
-			}
+			$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+
+			$sql = "SELECT Resource.name AS resource, Action.action AS action 
+					FROM Action
+						JOIN Resource ON ( Action.idResource = Resource.idResource )";
+
+			$results = $modelManager->executeQuery($sql);
+
+			$userandroles = $modelManager->executeQuery('SELECT Role.name AS rolename, Resource.name AS resname, Action.action AS actname
+													 FROM Allowed
+														JOIN Role ON ( Role.idRole = Allowed.idRole ) 
+														JOIN Action ON ( Action.idAction = Allowed.idAction ) 
+														JOIN Resource ON ( Action.idResource = Resource.idResource ) ');
 			
 			//Registrando roles
 			foreach ($userroles as $role){
@@ -86,11 +70,103 @@ class Security extends Plugin
 			foreach($userandroles as $role) {
 				$acl->allow($role->rolename, $role->resname, $role->actname);
 			}
-
-			$this->persistent->acl = $acl;
+			
+			$this->cache->save('acl-cache', $acl);
 		}
 
-		return $this->persistent->acl;
+		// Retornar ACL
+		return $acl;
+		
+	}
+	
+	protected function getControllerMap()
+	{
+		$map = null; //$this->cache->get('controllermap-cache');
+		if (!$map) {
+			$map = array(
+				'error::index' => array(),
+				'session::signin' => array(),
+				'session::login' => array(),
+				'session::logout' => array(),
+				//Dashboard
+				'index::index' => array('dashboard' => array('read')),
+				//Account controller
+				'account::index' => array('account' => array('read')),
+				'account::new' => array('account' => array('create', 'read')),
+				'account::edit' => array('account' => array ('read', 'update')),
+				'account::show' => array('user' => array ('read')),
+				'account::delete' => array('account' => array ('read', 'delete')),
+				'account::newuser' => array('user' => array ('read', 'create')),
+				'account::edituser' => array('user' => array ('read','update')),
+				'account::deleteuser' => array('user' => array ('read', 'delete')),
+				//Contactlist controller
+				'contactlist::index' => array('contactlist' => array('read')),
+				'contactlist::show' => array('contactlist' => array('read')),
+				//Contacts controller
+				'contacts::index' => array('contact' => array('read')),
+				'contacts::newbatch' => array('contact' => array('read','importbatch')),
+				'contacts::import' => array('contact' => array('read','importbatch')),
+				'contacts::processfile' => array('contact' => array('read','importbatch')),
+				//Dbase controller
+				'dbase::index' => array('dbase' => array('read')),
+				'dbase::new' => array('dbase' => array('read','new')),
+				'dbase::show' => array('dbase' => array('read')),
+				'dbase::edit' => array('edit' => array('read','update')),
+				'dbase::delete' => array('dbase' => array('read', 'delete')),
+				//Usuarios
+				'user::index' => array('user' => array('read')),
+				//Api
+				//Listas de contactos y contactos 
+				'api::getlists' => array('contactlist' => array('read')),
+				'api::createcontactlist' => array('contactlist' => array('read', 'create')),
+				'account::loadcontactsinfo' => array('contactlist' => array('read')),
+				'api::listcontactsbylist' => array('contactlist' => array('read')),
+				'api::getcontactbylist' => array('contact' => array('read')),
+				'api::listbylist' => array('contactlist' => array('read')),
+				'api::updatecontactbylist' => array('contact' => array('read','update')),
+				'api::createcontactbylist' => array('contact' => array('read', 'create')),
+				'api::listsedit' => array('contactlist' => array('read', 'update')),
+				'api::deletecontactlist' => array('contactlist' => array('read', 'delete')),
+				//listas de bloqueo
+				'api::listblockedemails' => array('blockemail' => array('read')),
+				'api::addemailtoblockedlist' => array('blockemail' => array('read', 'block email')),
+				'api::removeemailfromblockedlist' => array('blockemail' => array('read', 'unblock email')),
+				//Campos personalizados
+				'api::listcustomfields' => array('customfield' => array('read')),
+				'api::createcustomfield' => array('customfield' => array('read', 'create')),
+				'api::updatecustomfield' => array('customfield' => array('read', 'update')),
+				'api::delcustomfield' => array('customfield' => array('read', 'delete')),
+				//Contactos desde base de datos
+				'api::listcontacts' => array('contact' => array('read')),
+				'api::getcontact' => array('contact' => array('read')),
+				'api::updatecontact' => array('contact' => array('read', 'update')),
+				'api::deletecontact' => array ('contact' => array('read', 'delete')),
+				'api::getonelist' => array('contactlist' => array('read')),
+			);
+		}
+		return $map;
+	}
+	
+	public function setJsonResponse($content, $status, $message) {
+		$this->view->disable();
+
+		$this->_isJsonResponse = true;
+		$this->response->setContentType('application/json', 'UTF-8');
+		$this->response->setStatusCode($status, $message);
+		
+		if (is_array($content)) {
+			$content = json_encode($content);
+		}
+		$this->response->setContent($content);
+		return $this->response;
+	}
+	
+	protected function validateResponse($controller, $action = null){
+		$controllersWithjsonResponse = array ('api');
+		if(in_array($controller, $controllersWithjsonResponse)){
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -102,110 +178,54 @@ class Security extends Plugin
 		if ($this->session->get('authenticated')) {
 			$user = User::findFirstByIdUser($this->session->get('userid'));
 			if ($user) {
-				
 				$role = $user->userrole;
-				
 				// Inyectar el usuario
 				$this->_dependencyInjector->set('userObject', $user);
 			}
 		}
-		
-	//Este arreglo contiene los controladores y las acciones que son públicas como el inicio de sesión (session:signin)
-		$this->publicurls = array(
-			'session:signin', 
-			'session:login',
-			'session:logout'
-		);
-		
-		$map = array(
-			'index::index' => array('dashboard' => array('read')),
-			'error::index' => array(),
-			'session::logout' => array(),
-			//Account controller
-			'account::index' => array('account' => array('read')),
-			'account::new' => array('account' => array('create', 'read')),
-			'account::edit' => array('account' => array ('read', 'update')),
-			'account::show' => array('user' => array ('read')),
-			'account::delete' => array('account' => array ('read', 'delete')),
-			'account::newuser' => array('user' => array ('read', 'create')),
-			'account::edituser' => array('user' => array ('read','update')),
-			'account::deleteuser' => array('user' => array ('read', 'delete')),
-			//Contactlist controller
-			'contactlist::index' => array('contactlist' => array('read')),
-			'contactlist::show' => array('contactlist' => array('read')),
-			//Contacts controller
-			'contacts::index' => array('contact' => array('read')),
-			'contacts::newbatch' => array('contact' => array('read','importbatch')),
-			'contacts::import' => array('contact' => array('read','importbatch')),
-			'contacts::processfile' => array('contact' => array('read','importbatch')),
-			//Dbase controller
-			'dbase::index' => array('dbase' => array('read')),
-			'dbase::new' => array('dbase' => array('read','new')),
-			'dbase::show' => array('dbase' => array('read')),
-			'dbase::edit' => array('edit' => array('read','update')),
-			'dbase::delete' => array('dbase' => array('read', 'delete')),
-			//Usuarios
-			'user::index' => array('user' => array('read')),
-			//Api
-			//Listas de contactos
-			'api::getlists' => array('contactlist' => array('read')),
-			'api::createcontactlist' => array('contactlist' => array('read', 'create')),
-			'account::loadcontactsinfo' => array('contactlist' => array('read')),
-			'api::listcontactsbylist' => array('contact' => array('read'),
-												'contactlist' => array('read')
-										),
-			'api::getcontactbylist' => array('contact' => array('read')),
-			'api::listbylist' => array('contact' => array('read')),
-			'api::updatecontactbylist' => array('contact' => array('read','update')),
-			'api::createcontactbylist' => array('contact' => array('read', 'create')),
-			'api::listsedit' => array('contactlist' => array('read', 'update')),
-			'api::deletecontactlist' => array('contactlist' => array('read', 'delete')),
-			//listas de bloqueo
-			'api::listblockedemails' => array('blockemail' => array('read')),
-			'api::addemailtoblockedlist' => array('blockemail' => array('read', 'block email')),
-			'api::removeemailfromblockedlist' => array('blockemail' => array('read', 'unblock email'))
-		);
+
+		$map = $this->getControllerMap();
 		
 		$controller = $dispatcher->getControllerName();
 		$action = $dispatcher->getActionName();
 		
 		$this->logger->log("DIR: " . $controller . ':' . $action);
 		$this->logger->log("ROLE: " . $role);
-		
-		if ($role == 'ROLE_GUEST') {
-			$accessdir = $controller . ':' . $action;
-			$this->logger->log("DIR: " . $accessdir);
-			if (!in_array($accessdir, $this->publicurls)) {
-				$this->response->redirect("session/signin");
-				return false;
-			}
-		}
-		else {
-			$acl = $this->getAcl();
 
-			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
-			if (!isset($map[$controller .'::'. $action])) {
-				$this->logger->log("[$controller::$action] no existe en el mapa de permisos");
+		$acl = $this->getAcl();
+
+		$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
+		if (!isset($map[$controller .'::'. $action])) {
+			$this->logger->log("[$controller::$action] no existe en el mapa de permisos");
+			if($this->validateResponse($controller) == true){
+				$this->setJsonResponse(array('status' => 'deny'), 404, 'Ha accesado a un recurso restringido');
+			}
+			else{
 				$this->response->redirect('error/index');
-				return false;
 			}
+			return false;
+		}
 
-			$reg = $map[$controller .'::'. $action];
-			$this->logger->log("[$controller::$action] tiene este mapa: " . print_r($reg, true));
+		$reg = $map[$controller .'::'. $action];
+		$this->logger->log("[$controller::$action] tiene este mapa: " . print_r($reg, true));
 
-			foreach($reg as $resources => $actions){
-				$this->logger->log("Validando permiso sobre recurso [$resources] (" . implode(',', $actions) . ")");
-				foreach ($actions as $act) {
-					if (!$acl->isAllowed($role, $resources, $act)) {
-						$this->logger->log('Verificacion manual: ' . ($acl->isAllowed('ROLE_ADMIN', 'session', 'login')?'YES':'NO'));
-						$this->logger->log("Oops no esta permitido: [$resources] ($act)");
-						$this->logger->log(print_r($acl, true));
-						$this->response->redirect('error/index');
-						return false;
+		foreach($reg as $resources => $actions){
+			$this->logger->log("Validando permiso sobre recurso [$resources] (" . implode(',', $actions) . ")");
+			foreach ($actions as $act) {
+				if (!$acl->isAllowed($role, $resources, $act)) {
+					$this->logger->log('Verificacion manual: ' . ($acl->isAllowed('ROLE_ADMIN', 'session', 'login')?'YES':'NO'));
+					$this->logger->log("Oops no esta permitido: [$resources] ($act)");
+					$this->logger->log(print_r($acl, true));
+					if($this->validateResponse($controller) == true){
+						$this->setJsonResponse('Denegado', 404, 'Ha accesado a un recurso restringido');
 					}
+					else{
+						$this->response->redirect('error/index');
+					}
+					return false;
 				}
 			}
-			return true;
-		}	
-	}
+		}
+		return true;
+	}	
 }

@@ -66,12 +66,13 @@ App.ListController = Ember.ObjectController.extend();
 App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
 	modelClass : App.List,
 	needs: ['dbase']
+	
 });
 
 App.ListsEditController = Ember.ObjectController.extend({
 	actions: {
 		edit: function() {
-			if(this.get('name')== ""){
+			if(this.get('name') == ""){
 				App.set('errormessage', 'El campo nombre esta vacío, debes ingresar un nombre');
 				this.transitionToRoute("lists.edit");
 			}

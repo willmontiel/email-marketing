@@ -516,6 +516,20 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse($lists);
 		
 	}
+	/**
+	 * 
+	 * @Get("/lists/{idContactlist:[0-9]+}")
+	 */
+	public function getonelistAction($idContactlist)
+	{
+		
+		$contactWrapper = new ContactListWrapper();
+		
+		$lists = $contactWrapper->findContactListInAccount($idContactlist, $this->user->account);
+		
+		return $this->setJsonResponse($lists);
+		
+	}
 	
 	/**
 	 * 

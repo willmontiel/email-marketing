@@ -27,7 +27,7 @@ class AccountController extends ControllerBase
 	 * Esta función se encarga de mostrar toda la información de las cuentas al super-administrador
 	 */
 	public function indexAction()
-	{	
+	{
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 
 		$builder = $this->modelsManager->createBuilder()

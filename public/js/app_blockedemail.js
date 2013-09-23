@@ -2,7 +2,10 @@ App.Blockedemail = DS.Model.extend({
 	email: DS.attr('string'),
     blockedReason: DS.attr('string'),
 	blockedDate: DS.attr('string'),
-	deleteContact: DS.attr('boolean')
+	deleteContact: DS.attr('boolean'),
+	isDeny: function() {
+		return true;
+	}.property()
 });
 //**
 //** RUTAS **
@@ -24,11 +27,19 @@ App.BlockedemailsBlockRoute = Ember.Route.extend({
 //**
 App.BlockedemailController = Ember.ObjectController.extend();
 
-App.BlockedemailsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, {
+App.BlockedemailsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, Ember.AclMixin, {
+	init: function () 
+	{
+		this.set('acl', App.blockedemailACL);
+	},
 	modelClass : App.Blockedemail
 });
 
-App.BlockedemailsBlockController = Ember.ObjectController.extend({
+App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, Ember.AclMixin, {
+	init: function () 
+	{
+		this.set('acl', App.blockedemailACL);
+	},
 	actions: {
 		block: function (){
 			var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
@@ -42,10 +53,7 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend({
 			}
 			else {
 				if(filter.test(this.get('email'))) {
-					var self = this;
-					self.content.save().then(function() {
-						self.transitionToRoute('blockedemails');
-					});
+					this.handleSavePromise(this.content.save(), 'blockedemails', 'Correo bloqueado!');
 				}
 				else {
 					App.set('errormessage', 'El email que ingresaste es invalido, por favor verifica la información');
