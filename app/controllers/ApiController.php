@@ -10,7 +10,10 @@ class ApiController extends ControllerBase
 	 */
 	public function listcustomfieldsAction($idDbase)
 	{
-		$db = Dbase::findFirstByIdDbase($idDbase);
+		$db = Dbase::findFirst(array(
+			"conditions" => "idDbase = ?1",
+			"bind" => array (1 => $idDbase)
+		));
 		
 		if (!$db || $db->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
@@ -614,7 +617,10 @@ class ApiController extends ControllerBase
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
-		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+		$list = Contactlist::findFirst(array(
+			"conditions" => "idContactlist = ?1",
+			"bind" => array(1 => $idContactlist)
+		));
 			
 		if ($list->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
@@ -664,8 +670,15 @@ class ApiController extends ControllerBase
 	public function getcontactbylistAction($idContactlist, $idContact)
 	{
 		
-		$contact = Contact::findFirstByIdContact($idContact);
-		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+		$contact = Contact::findFirst(array(
+			"conditions" => "idContact = ?1",
+			"bind" => array(1 => $idContact)
+		));
+		
+		$list = Contactlist::findFirst(array(
+			"conditions" => "idContactlist = ?1",
+			"bind" => array(1 => $idContactlist)
+		));
 			
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');

@@ -176,8 +176,8 @@
 							<br>
 						</div>
 						<div class="form-actions">
-							<button  data-loading-text="saving..." {{'{{bindAttr class=":btn :btn-primary isSaving:loading"}}'}} {{'{{bindAttr disabled="isSaving"}}'}} {{'{{action save this}}'}}>Guardar</button>
-							<button class="btn btn-inverse" {{'{{action cancel this}}'}}>Cancelar</button>
+							<button  data-loading-text="saving..." {{'{{bindAttr class=":btn :btn-blue isSaving:loading"}}'}} {{'{{bindAttr disabled="isSaving"}}'}} {{'{{action save this}}'}}>Guardar</button>
+							<button class="btn btn-default" {{'{{action cancel this}}'}}>Cancelar</button>
 						</div>
 					</form>
 				</div>
@@ -207,79 +207,79 @@
 						{{ text_area("arraybatch", '', 'cols': '40', 'rows': '6', 'class': 'span10') }}
 					</div>
 					<div class="box-footer flat padded">
-							{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-default">Cancelar</button>{{/linkTo}}' }}
-							<input class="btn btn-sm btn-primary" type="submit" value="Continuar">
+						<input class="btn btn-blue" type="submit" value="Continuar">
+						{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-default">Cancelar</button>{{/linkTo}}' }}
 					</div>
 				</form>
 			</div>
 		</script>
-		<script type="text/x-handlebars" data-template-name="contacts/edit">
-			<p>Agrega un nuevo contacto, con sus datos más básicos. </p>
-			<form>
-				<div class="row-fluid">
-					<div class="span3">
-						<p>
-							<label>E-mail:
-								{{' {{#if errors.email}} '}}
-									<span class="text text-error">{{'{{errors.email}}'}}</span>
-								{{' {{/if }} '}}
-							</label>
-						</p>
-						<p>
-							{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
-						</p>
-						<p>
-							<label>Nombre: </label>
-						</p>
-						<p>	
-							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
-						</p>
-						<p>
-							<label>Apellido: </label>
-						</p>
-						<p>
-							{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
-						</p>
-						<p>
-							<label>Estado: </label>
-							{{ '{{#if isSubscribed}}' }}
-								<label class="checkbox checked" for="isActive">
-									<span class="icons">
-										<span class="first-icon fui-checkbox-unchecked"></span>
-										<span class="second-icon fui-checkbox-checked"></span>
-									</span>
-							{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
-								</label>
-							{{ '{{else}}' }}
-								<label class="checkbox" for="isActive">
-									<span class="icons">
-										<span class="first-icon fui-checkbox-unchecked"></span>
-										<span class="second-icon fui-checkbox-checked"></span>
-									</span>
-						 {{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed" disabledBinding="isEmailBlocked"}} '}}  Suscrito
-								</label>
-					{{ '{{/if}}' }}
-						</p>
-						<!-- Campos Personalizados -->
-									{%for field in fields%}
-										<p><label for="{{field.name}}">{{field.name}}:</label></p>
-										<p>{{ember_customfield(field)}}</p>
-										{% if (field.type == "Text") %}
-											Maximo {{field.maxLength}} caracteres
-										{% elseif field.type == "Numerical" %}
-											El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
-										{%endif%}
-									{%endfor%}
-								</p>
-						<!--  Fin de campos personalizados -->
-						<p>
-							<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
-							<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-						</p>	
+	<script type="text/x-handlebars" data-template-name="contacts/edit">
+		<br />
+		<div class="row-fluid">
+			<div class="box">
+				<div class="box-content">
+					<div class="box-section news with-icons">
+						<div class="avatar blue">
+							<i class="icon-lightbulb icon-2x"></i>
+						</div>
+						<div class="news-content">
+							<div class="news-title">
+								Editar el contacto {{ '{{email}}' }}
+							</div>
+							<div class="news-text">
+								Aqui podrá editar/actualizar la información un contacto,  como nombre, apellido o simplemente
+								des-suscribirlo, recuerde que al editar cualquier dato, esto se actualizará a nivel de base de datos
+								sin importar en que lista este.
+							</div>
+						</div>
 					</div>
 				</div>
-			</form>
-		</script>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="box span3">
+				<div class="box-header">
+					<div class="title">
+						Editar un contacto
+					</div>
+				</div>
+				<div class="box-content padded">
+					<form>
+						<label>E-mail</label>
+						{{' {{#if errors.email}} '}}
+							<span class="text text-error">{{'{{errors.email}}'}}</span>
+						{{' {{/if }} '}}
+						{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
+						<label>Nombre: </label>
+						{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
+						<label>Apellido: </label>
+						{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
+						<label>Estado: </label>
+						{{ '{{#if isSubscribed}}' }}
+							{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito<br />
+						{{ '{{else}}' }}
+							{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed" disabledBinding="isEmailBlocked"}} '}}  Suscrito<br />
+						{{ '{{/if}}' }}
+						<br />
+						<!-- Campos Personalizados -->
+						{%for field in fields%}
+							<p><label for="{{field.name}}">{{field.name}}:</label></p>
+							<p>{{ember_customfield(field)}}</p>
+							{% if (field.type == "Text") %}
+								Maximo {{field.maxLength}} caracteres
+							{% elseif field.type == "Numerical" %}
+								El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
+							{%endif%}
+						{%endfor%}
+						<!--  Fin de campos personalizados -->
+						<br />
+						<button class="btn btn-blue" {{' {{action edit this}} '}}>Editar</button>
+						<button class="btn btn-deafult" {{ '{{action cancel this}}' }}>Cancelar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</script>
 		<script type="text/x-handlebars" data-template-name="contacts/delete">
 			<div class="row-fluid">
 				<div class="span5 message-delete">
@@ -295,6 +295,28 @@
 			</div>
 		</script>
 <script type="text/x-handlebars" data-template-name="contacts/show">
+	<br />
+	<div class="row-fluid">
+		<div class="box">
+			<div class="box-content">
+				<div class="box-section news with-icons">
+					<div class="avatar blue">
+						<i class="icon-lightbulb icon-2x"></i>
+					</div>
+					<div class="news-content">
+						<div class="news-title">
+							Información detallada de contacto
+						</div>
+						<div class="news-text">
+							Aqui podrá ver en detalle los datos de cada contacto, como cuando fue activado o suscrito, 
+							información sobre campañas que ha recibido y mucho más. Tambien podrá desuscribirlo o suscribirlo,
+							y editar la mayoría de los datos.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="row-fluid">
 		<div class="span6"> 
 			<div class="box">
@@ -629,7 +651,7 @@
 			<form method="POST" action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data">
 				<input name="importFile" type="file"><br>
 				<input type="hidden" name="idcontactlist" value={{datalist.idContactlist}}>
-				{{submit_button('class': "btn btn-default", "Cargar")}}
+				{{submit_button('class': "btn btn-blue", "Cargar")}}
 				<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default">Cancelar</a>
 			</form>
 		</div>

@@ -24,7 +24,6 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span6">
 			{{ flashSession.output() }}
 		</div>
 		<div class="span6 text-right">

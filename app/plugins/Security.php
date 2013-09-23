@@ -25,19 +25,50 @@ class Security extends Plugin
 			$acl = new Phalcon\Acl\Adapter\Memory();
 			$acl->setDefaultAction(Phalcon\Acl::DENY);
 
+			// Delete all items from the cache
+			$keys = $this->cache->queryKeys();
+			foreach ($keys as $key) {
+				$this->cache->delete($key);
+			}
+			
+			$cacheRole = 'roles.cache';
+			$cacheResource = 'resources.cache';
+			$cacheRelationship = 'userandroles';
+			
+			$userroles = $this->cache->get($cacheRole);
+			$results = $this->cache->get($cacheResource);
+			$userandroles = $this->cache->get($cacheRelationship);
+			
+			if ($userroles === null || $results === null || $userandroles === null) {
+				
+				$userroles = Role::find();
+				
+				$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+			
+				$sql = "SELECT Resource.name AS resource, Action.action AS action 
+						FROM Action
+							JOIN Resource ON ( Action.idResource = Resource.idResource )";
+
+				$results = $modelManager->executeQuery($sql);
+				
+				$userandroles = $modelManager->executeQuery('SELECT Role.name AS rolename, Resource.name AS resname, Action.action AS actname
+														 FROM Allowed
+															JOIN Role ON ( Role.idRole = Allowed.idRole ) 
+															JOIN Action ON ( Action.idAction = Allowed.idAction ) 
+															JOIN Resource ON ( Action.idResource = Resource.idResource ) ');
+			
+				
+				$this->cache->save($cacheRole, $userroles);
+				$this->cache->save($cacheResource, $results);
+				$this->cache->save($cacheRelationship, $userandroles);
+			}
+			
 			//Registrando roles
-			$userroles = Role::find();
 			foreach ($userroles as $role){
 				$acl->addRole(new Phalcon\Acl\Role($role->name));
 			}
+			
 			//Registrando recursos
-			$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
-			
-			$sql = "SELECT Resource.name AS resource, Roxre.action AS action 
-					FROM Roxre
-						JOIN Resource ON ( Roxre.idResource = Resource.idResource )";
-			
-			$results = $modelManager->executeQuery($sql);
 			$resources = array();
 			foreach ($results as $key) {
 				
@@ -50,13 +81,7 @@ class Security extends Plugin
 			foreach ($resources as $resource => $actions) {
 				$acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
 			}
-			
-			$userandroles = $modelManager->executeQuery('SELECT Role.name AS rolename, Resource.name AS resname, Roxre.action AS actname
-														 FROM Allowed
-															JOIN Role ON ( Role.idRole = Allowed.idRole ) 
-															JOIN Roxre ON ( Roxre.idRoxre = Allowed.idRoxre ) 
-															JOIN Resource ON ( Roxre.idResource = Resource.idResource ) ');
-			
+
 			//Relacionando roles y recursos desde la base de datos
 			foreach($userandroles as $role) {
 				$acl->allow($role->rolename, $role->resname, $role->actname);
@@ -93,9 +118,9 @@ class Security extends Plugin
 		);
 		
 		$map = array(
-			'index::index' => array('session' => array('login')),
+			'index::index' => array('dashboard' => array('read')),
 			'error::index' => array(),
-			'session::logout' => array('session' => array('login')),
+			'session::logout' => array(),
 			//Account controller
 			'account::index' => array('account' => array('read')),
 			'account::new' => array('account' => array('create', 'read')),
@@ -103,24 +128,42 @@ class Security extends Plugin
 			'account::show' => array('user' => array ('read')),
 			'account::delete' => array('account' => array ('read', 'delete')),
 			'account::newuser' => array('user' => array ('read', 'create')),
-			'account::edituser' => array('user' => array ('read','edit')),
+			'account::edituser' => array('user' => array ('read','update')),
 			'account::deleteuser' => array('user' => array ('read', 'delete')),
 			//Contactlist controller
 			'contactlist::index' => array('contactlist' => array('read')),
 			'contactlist::show' => array('contactlist' => array('read')),
 			//Contacts controller
 			'contacts::index' => array('contact' => array('read')),
-			'contacts::newbatch' => array('contact' => array('importbatch')),
-			'contacts::importbatch' => array('contact' => array('importbatch')),
-			'contacts::processfile' => array('contact' => array('importbatch')),
+			'contacts::newbatch' => array('contact' => array('read','importbatch')),
+			'contacts::import' => array('contact' => array('read','importbatch')),
+			'contacts::processfile' => array('contact' => array('read','importbatch')),
 			//Dbase controller
 			'dbase::index' => array('dbase' => array('read')),
 			'dbase::new' => array('dbase' => array('read','new')),
 			'dbase::show' => array('dbase' => array('read')),
 			'dbase::edit' => array('edit' => array('read','update')),
 			'dbase::delete' => array('dbase' => array('read', 'delete')),
-			//
-			'user::index' => array('user' => array('read'))
+			//Usuarios
+			'user::index' => array('user' => array('read')),
+			//Api
+			//Listas de contactos
+			'api::getlists' => array('contactlist' => array('read')),
+			'api::createcontactlist' => array('contactlist' => array('read', 'create')),
+			'account::loadcontactsinfo' => array('contactlist' => array('read')),
+			'api::listcontactsbylist' => array('contact' => array('read'),
+												'contactlist' => array('read')
+										),
+			'api::getcontactbylist' => array('contact' => array('read')),
+			'api::listbylist' => array('contact' => array('read')),
+			'api::updatecontactbylist' => array('contact' => array('read','update')),
+			'api::createcontactbylist' => array('contact' => array('read', 'create')),
+			'api::listsedit' => array('contactlist' => array('read', 'update')),
+			'api::deletecontactlist' => array('contactlist' => array('read', 'delete')),
+			//listas de bloqueo
+			'api::listblockedemails' => array('blockemail' => array('read')),
+			'api::addemailtoblockedlist' => array('blockemail' => array('read', 'block email')),
+			'api::removeemailfromblockedlist' => array('blockemail' => array('read', 'unblock email'))
 		);
 		
 		$controller = $dispatcher->getControllerName();

@@ -73,5 +73,29 @@ class IndexController extends ControllerBase
 //			}
 //			$this->view->setVar('map', $resources);
 		
+		
+//		$frontCache = new Phalcon\Cache\Frontend\Data();
+//		$cache = new Phalcon\Cache\Backend\Memcache($frontCache, array(
+//				"host" => "localhost",
+//				"port" => "11211"
+//			));
+//		$cache->queryKeys("userandroles.cache");
+//
+//		// Delete all items from the cache
+//		$keys = $cache->queryKeys();
+//		foreach ($keys as $key) {
+//			$cache->delete($key);
+//		}
+//		$products = $cache->get("roles.cache");
+//		$x = $cache->get("resources.cache");
+//		$j = $cache->get("userandroles.cache");
+//		if ($products === null){
+//			$this->flashSession->success('Se ha borrado el caché');
+//			return $this->response->redirect("index/index");
+//		}
+//		$this->view->setVar('map', $products);
+//		$this->view->setVar('map2', $x);
+//		$this->view->setVar('map3', $j);
+//		
     }
 }

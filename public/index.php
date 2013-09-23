@@ -59,6 +59,22 @@ try {
 		return $router;
 	});
 	
+	/*
+	 * Cache, se encarga de comunicarse con Memcache
+	 */
+	$di->set('cache', function (){
+		
+		$frontCache = new Phalcon\Cache\Frontend\Data(array(
+			"lifetime" => 172800
+		));
+		
+		$cache = new Phalcon\Cache\Backend\Memcache($frontCache, array(
+			"host" => "localhost",
+			"port" => "11211"
+		));
+		return $cache;
+	});
+	
 	
 	/*
 	 * Security Object, utilizado para validacion y creacion de contraseñas

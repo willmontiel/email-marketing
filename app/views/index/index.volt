@@ -3,15 +3,21 @@
 {%block sectionsubtitle %}Su sistema de marketing digital{% endblock %}
 {% block content %}
 {# {{dump(resources)}}
-{{dump(allow)}}
-{{dump(map)}} #}
+{{dump(allow)} #}
+{#
+{{dump(map)}}
+{{dump(map2)}}
+{{dump(map3)}}
+ #}
+
+{{flashSession.output()}}
 	<div class="row-fluid">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
 					<div class="avatar green"><i class="icon-lightbulb icon-2x"></i></div>
 					<div class="news-time">
-						<span>11</span> feb
+						<span>{{ date('d',time())}}</span> {{ date('M',time())}}
 					</div>
 					<div class="news-content">
 						<div class="news-title">
