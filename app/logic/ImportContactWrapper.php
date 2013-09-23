@@ -6,7 +6,7 @@ class ImportContactWrapper extends BaseWrapper
 	protected $newcontact;
 	protected $idFile;
 	protected $ipaddress;
-//	protected $tablename;
+	protected $tablename;
 
 
 	public function setIdFile($idFile) {
@@ -20,10 +20,6 @@ class ImportContactWrapper extends BaseWrapper
 	public function setIpaddress($ipaddress) {
 		$this->ipaddress = $ipaddress;
 	}
-	
-//	public function setTablename($tablename) {
-//		$this->tablename = $tablename;
-//	}
 	
 	public function startImport($fields, $destiny, $delimiter, $header) {
 		
@@ -53,23 +49,26 @@ class ImportContactWrapper extends BaseWrapper
 			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
 		}
 		
-//		$this->tablename = "tmp". $newproccess->idImportproccess;
-		$deletetable = "TRUNCATE TABLE tmpimport;";
-		$db->execute($deletetable);
+		$this->tablename = "tmp". $newproccess->idImportproccess;
 		
-		if($activeContacts < $contactLimit) {
+		$newtable = "CREATE TABLE $this->tablename LIKE tmpimport";
+		$deletetable = "DROP TABLE $this->tablename";
+		
+		$db->execute($newtable);
+		
+		if($activeContacts < $contactLimit) {			
 			
 			$customfields = $this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
-
+		
 			$this->createFieldInstances($customfields, $dbase->idDbase);
 		}
 		
 		$dbase->updateCountersInDbase();
 		$list->updateCountersInContactlist();
 		
-		$count = $this->runReports($destiny, $header, $delimiter, $activeContacts, $contactLimit, $mode, $newproccess->idImportproccess);
+		$count = $this->runReports($destiny, $header, $delimiter, $newproccess->idImportproccess);
 		
-//		$db->execute($deletetable);
+		$db->execute($deletetable);
 		
 		return $count;
 		
@@ -95,10 +94,9 @@ class ImportContactWrapper extends BaseWrapper
 		
 		while(! feof($open)) {
 			$linew = fgetcsv($open, 0, $delimiter);
-			$email = (isset($posCol['email']))?$linew[$posCol['email']]:"";
-			$name = (isset($posCol['name']))?$linew[$posCol['name']]:"";
-			$lastname = (isset($posCol['lastname']))?$linew[$posCol['lastname']]:"";
-			
+			$email = (!empty($posCol['email']) || $posCol['email'] == '0')?$linew[$posCol['email']]:"";
+			$name = (!empty($posCol['name']) || $posCol['name'] == '0')?$linew[$posCol['name']]:"";
+			$lastname = (!empty($posCol['lastname']) || $posCol['lastname'] == '0')?$linew[$posCol['lastname']]:"";
 			if ( !empty($linew) ) {
 				if ( ($thisActiveContacts < $contactLimit) ) {
 					$email = strtolower($email);
@@ -151,20 +149,18 @@ class ImportContactWrapper extends BaseWrapper
 		$db = Phalcon\DI::getDefault()->get('db');
 		$hora = time();
 		
-//		$newtable = "CREATE TABLE $this->tablename LIKE tmpimport";
-		$tabletmp = "INSERT INTO tmpimport(idArray, email, idEmail, name, lastName) VALUES $values;";
-		$findidemailblocked = "UPDATE tmpimport t JOIN email e ON (t.idEmail = e.idEmail) SET t.blocked = 1 WHERE t.idEmail IS NOT NULL AND e.blocked > 0 AND e.idAccount = $idAccount;";
-		$findidcontactinDB = "UPDATE tmpimport t JOIN contact c ON (t.idEmail = c.idEmail) SET t.idContact = c.idContact, t.dbase = 1 WHERE t.idEmail IS NOT NULL AND c.idDbase = $idDbase;";
-		$findidcontact = "UPDATE tmpimport t JOIN contact c ON (t.idEmail = c.idEmail) SET t.idContact = c.idContact WHERE t.idEmail IS NOT NULL AND c.idDbase = $idDbase;";
-		$findcoxcl = "UPDATE tmpimport t JOIN coxcl x ON (t.idContact = x.idContact) SET t.coxcl = 1 WHERE t.idContact IS NOT NULL AND x.idContactlist = $this->idContactlist;";
-		$countemailsavailables = "SELECT COUNT(*) AS cnt FROM tmpimport WHERE idContact IS NULL AND blocked IS NULL";
-		$createcontacts = "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, bounced, spam, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) SELECT $idDbase, t.idEmail, t.name, t.lastName, $hora, 0, 0, 0, $this->ipaddress, $this->ipaddress, $hora, $hora, $hora FROM tmpimport t WHERE t.idContact IS NULL AND t.blocked IS NULL;";
-		$createcoxcl = "INSERT INTO coxcl (idContactlist, idContact, createdon) SELECT $this->idContactlist, t.idContact, $hora FROM tmpimport t WHERE t.coxcl IS NULL AND t.blocked IS NULL";
-		$status = "UPDATE tmpimport SET status = 1 WHERE coxcl IS NULL AND blocked IS NULL;";
+		$tabletmp = "INSERT INTO $this->tablename (idArray, email, idEmail, name, lastName) VALUES $values;";
+		$findidemailblocked = "UPDATE $this->tablename t JOIN email e ON (t.idEmail = e.idEmail) SET t.blocked = 1 WHERE t.idEmail IS NOT NULL AND e.blocked > 0 AND e.idAccount = $idAccount;";
+		$findidcontactinDB = "UPDATE $this->tablename t JOIN contact c ON (t.idEmail = c.idEmail) SET t.idContact = c.idContact, t.dbase = 1 WHERE t.idEmail IS NOT NULL AND c.idDbase = $idDbase;";
+		$findidcontact = "UPDATE $this->tablename t JOIN contact c ON (t.idEmail = c.idEmail) SET t.idContact = c.idContact WHERE t.idEmail IS NOT NULL AND c.idDbase = $idDbase;";
+		$findcoxcl = "UPDATE $this->tablename t JOIN coxcl x ON (t.idContact = x.idContact) SET t.coxcl = 1 WHERE t.idContact IS NOT NULL AND x.idContactlist = $this->idContactlist;";
+		$countemailsavailables = "SELECT COUNT(*) AS cnt FROM $this->tablename WHERE idContact IS NULL AND blocked IS NULL";
+		$createcontacts = "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, bounced, spam, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) SELECT $idDbase, t.idEmail, t.name, t.lastName, $hora, 0, 0, 0, $this->ipaddress, $this->ipaddress, $hora, $hora, $hora FROM $this->tablename t WHERE t.idContact IS NULL AND t.blocked IS NULL;";
+		$createcoxcl = "INSERT INTO coxcl (idContactlist, idContact, createdon) SELECT $this->idContactlist, t.idContact, $hora FROM $this->tablename t WHERE t.coxcl IS NULL AND t.blocked IS NULL";
+		$status = "UPDATE $this->tablename SET status = 1 WHERE coxcl IS NULL AND blocked IS NULL;";
+		$newcontact = "UPDATE $this->tablename SET new = 1 WHERE idContact IS NULL AND blocked IS NULL";
 		
 		$db->begin();
-		
-//		$db->execute($newtable);
 		
 		$db->execute($tabletmp);
 		
@@ -172,6 +168,7 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$db->execute($findidcontactinDB);
 		$db->execute($createcontacts);
+		$db->execute($newcontact);
 		
 		$contactsToCreate = $db->fetchAll($countemailsavailables);
 		
@@ -192,7 +189,7 @@ class ImportContactWrapper extends BaseWrapper
 		$values = "";
 		$line = 0;
 		$DateCF = "SELECT idCustomField FROM customfield WHERE type = 'DATE' AND idDbase = $idDbase;";
-		$idcontactsfromtmp = "SELECT t.idArray, t.idContact FROM tmpimport t WHERE t.idContact IS NOT NULL AND t.status = 1 AND t.dbase IS NULL;";
+		$idcontactsfromtmp = "SELECT t.idArray, t.idContact FROM $this->tablename t WHERE t.idContact IS NOT NULL AND t.new IS NOT NULL;";
 		
 		$idscontactwithcf = $db->fetchAll($idcontactsfromtmp);
 		$idsDateCF = $db->fetchAll($DateCF);
@@ -233,7 +230,7 @@ class ImportContactWrapper extends BaseWrapper
 		}
 	}
 
-	protected function runReports($destiny, $header, $delimiter, $activeContacts, $contactLimit, $mode, $idImportproccess) {
+	protected function runReports($destiny, $header, $delimiter, $idImportproccess) {
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		$total = 0;
@@ -246,9 +243,9 @@ class ImportContactWrapper extends BaseWrapper
 		$success = array();
 		$errors = array();
 		
-		$querytxt1 = "SELECT t.email FROM tmpimport t WHERE t.blocked = 1;";
-		$querytxt2 = "SELECT t.email FROM tmpimport t WHERE t.coxcl = 1 AND t.blocked IS NULL AND t.status IS NULL;";
-		$querytxt3 = "SELECT t.email FROM tmpimport t WHERE t.status = 1;";
+		$querytxt1 = "SELECT t.email FROM $this->tablename t WHERE t.blocked = 1;";
+		$querytxt2 = "SELECT t.email FROM $this->tablename t WHERE t.coxcl = 1 AND t.blocked IS NULL AND t.status IS NULL;";
+		$querytxt3 = "SELECT t.email FROM $this->tablename t WHERE t.status = 1;";
 
 		$emailsBlocked = $db->fetchAll($querytxt1);
 		$emailsRepeated = $db->fetchAll($querytxt2);

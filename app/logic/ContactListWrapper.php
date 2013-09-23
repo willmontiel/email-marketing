@@ -166,7 +166,8 @@ class ContactListWrapper extends BaseWrapper
 	public function deleteContactList($idContactlist)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
-
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+		$idDbase = $list->idDbase;
 		
 		$query = 'DELETE CO, CF
 				  FROM coxcl CL	
@@ -188,7 +189,12 @@ class ContactListWrapper extends BaseWrapper
 			throw new \InvalidArgumentException('Ha ocurrido un error, contacta al administrador !');
 		}
 		
-		$db->commit();
+		$db->commit();		
+
+		$dbase = Dbase::findFirstByIdDbase($idDbase);
+		
+		$dbase->updateCountersInDbase();		
+
 		return $deleteContaclist;
 	}
 

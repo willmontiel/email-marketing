@@ -62,7 +62,7 @@
 							<tr class="status-warning">
 								<td class="icon"><i class="icon-random"></i></td>
 								<td>No importados porque estan duplicados en el archivo </td>
-								<td><b>0</b></td>
+								<td><b>{{count['repeated']}}</b></td>
 							</tr>
 
 							<tr class="status-pending">
