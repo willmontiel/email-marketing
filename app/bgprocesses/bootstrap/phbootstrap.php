@@ -13,8 +13,19 @@ $loader->registerDirs(array(
 	'../../logic/',
 ))->register();
 
+// Ruta de APP
+$apppath = realpath('../../../');
+
 //Create a DI
 $di = new Phalcon\DI\FactoryDefault();
+
+/* Ruta de APP */
+$di->set('appPath', function () use ($apppath) {
+	$obj = new stdClass;
+	$obj->path = $apppath;
+	
+	return $obj;
+});
 
 /* Configuracion */
 $config = new \Phalcon\Config\Adapter\Ini("../../config/configuration.ini");
@@ -27,6 +38,8 @@ $di->set('profiler', function(){
 	return new \Phalcon\Db\Profiler();
 }, true);	
 
+// Create timer object
+$di->set('timerObject',  new TimerObject());
 
 $di->set('modelsMetadata', function() {
 
@@ -48,12 +61,15 @@ $di->set('db', function() use ($di, $config) {
 	if ($config->general->profiledb) {
 		// Profiler
 		$profiler = $di->get('profiler');
-		$eventsManager->attach('db', function ($event, $connection) use ($profiler) {
+		$timer = $di->get('timerObject');
+		$eventsManager->attach('db', function ($event, $connection) use ($profiler, $timer) {
 			if ($event->getType() == 'beforeQuery') {
 				$profiler->startProfile($connection->getSQLStatement());
+				$timer->startTimer('SQL', 'Query Execution');
 			}
 			else if ($event->getType() == 'afterQuery') {
 				$profiler->stopProfile();
+				$timer->endTimer('SQL');
 			}
 		});
 	}
@@ -81,3 +97,27 @@ $di->set('logger', function () {
 $di->set('modelsManager', function(){
 	return new Phalcon\Mvc\Model\Manager();
 });
+
+
+
+function print_dbase_profile()
+{
+	$dblogger = new \Phalcon\Logger\Adapter\File("../../logs/bgdbdebug.log");
+	$profiles = Phalcon\DI::getDefault()->get('profiler')->getProfiles();
+
+	if (count($profiles) > 0) {
+
+		$dblogger->log("==================== Application Profiling Information ========================", \Phalcon\Logger::INFO);
+		foreach ($profiles as $profile) {
+			$str = '******************************************************' . PHP_EOL .
+				   \sprintf('SQL Statement: [%s]', $profile->getSQLStatement()) . PHP_EOL .
+				   \sprintf('Start time: [%d]', $profile->getInitialTime()) . PHP_EOL .
+				   \sprintf('End time: [%d]', $profile->getFinalTime()) . PHP_EOL .
+				   \sprintf('Total elapsed time: [%f]', $profile->getTotalElapsedSeconds()) . PHP_EOL .
+				   '******************************************************';
+
+			$dblogger->log($str, \Phalcon\Logger::INFO);
+		}
+		$dblogger->log("==================== Application Profiling Information End ====================", \Phalcon\Logger::INFO);
+	}
+}

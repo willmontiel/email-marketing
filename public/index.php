@@ -176,6 +176,10 @@ try {
 	    $volt = new Phalcon\Mvc\View\Engine\Volt($view, $di);
 		$compiler = $volt->getCompiler();
 		
+		$compiler->addFilter('int', function($resolvedArgs, $exprArgs) {
+			return 'intval(' . $resolvedArgs . ')';
+		});
+		
 		$compiler->addFilter('numberf', function ($resolvedArgs, $exprArgs) {
 			return 'number_format(' . $resolvedArgs . ', 0, \',\', \'.\')';
 		});

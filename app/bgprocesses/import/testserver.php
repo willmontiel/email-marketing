@@ -1,10 +1,4 @@
 <?php
-/*
-*  Hello World server
-*  Binds REP socket to tcp://*:5555
-*  Expects "Hello" from client, replies with "World"
-* @author Ian Barber <ian(dot)barber(at)gmail(dot)com>
-*/
 
 require_once '../bootstrap/phbootstrap.php';
 
@@ -15,15 +9,24 @@ $context = new ZMQContext(1);
 $responder = new ZMQSocket($context, ZMQ::SOCKET_REP);
 $responder->bind("tcp://*:5556");
 
+$timer = Phalcon\DI::getDefault()->get('timerObject');
+$log   = Phalcon\DI::getDefault()->get('logger');
+
 while (true) {
+	$timer->startTimer('waiting', 'Waiting for request!');
 	$request = $responder->recv();
+	$timer->endTimer('waiting');
+	$timer->startTimer('replying', 'Replying to request!');
+	$responder->send('');
+	$timer->endTimer('replying');
 	
-	printf ("I'm on it \n");
+	$timer->startTimer('processing', 'Processing request');
+	printf ("I'm On It \n");
 		
 	$arrayDecode = json_decode($request);
 	
 	$idContactlist = $arrayDecode->idContactlist;
-	$idImportfile = $arrayDecode->idImportfile;
+	$idImportproccess = $arrayDecode->idImportproccess;
 	$fields = $arrayDecode->fields;
 	$destiny = $arrayDecode->destiny;
 	$delimiter = $arrayDecode->delimiter;
@@ -34,20 +37,29 @@ while (true) {
 	$importwrapper = new ImportContactWrapper();
 	$account = Account::findFirstByIdAccount($idAccount);
 	
-	$importwrapper->setIdFile($idImportfile);
+	$importwrapper->setIdProccess($idImportproccess);
 	$importwrapper->setIdContactlist($idContactlist);
 	$importwrapper->setAccount($account);
 	$importwrapper->setIpaddress($ipaddress);
 
 	try {
-		$count = $importwrapper->startImport($fields, $destiny, $delimiter, $header);
+		$importwrapper->startImport($fields, $destiny, $delimiter, $header);
 	}
 	catch (\InvalidArgumentException $e) {
-		Phalcon\DI::getDefault()->get('logger')->log($e);
+		$log->log($e);
 	}
 	catch (\Exception $e) {
-		Phalcon\DI::getDefault()->get('logger')->log($e);
+		$log->log($e);
 	}
-	printf ("I'm done \n");
-	$responder->send('');
+	printf ("I'm Done \n");
+	$timer->endTimer('processing');
+
+	print_timer($timer, $log);
+	print_dbase_profile();
+}
+
+
+function print_timer(TimerObject $timer, $log)
+{
+	$log->log($timer);
 }

@@ -248,7 +248,7 @@ class ContactsController extends ControllerBase
 	
 	public function processfileAction($idContactlist, $idImportfile)
 	{
-		
+		$this->view->disable();
 		$log = $this->logger;
 
 		$file = Importfile::findFirstByIdImportfile($idImportfile);
@@ -270,26 +270,61 @@ class ContactsController extends ControllerBase
 		$destiny =  "../../../tmp/ifiles/".$nameFile;
 		$idAccount = $this->user->account->idAccount;
 		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);
-
+	
+		$open = fopen("../tmp/ifiles/".$nameFile, "r");
+		
+		if(!$open) {
+			Phalcon\DI::getDefault()->get('logger')->log("Error al abrir el archivo original");
+		}
+		
+		if($header) {
+			$linew = fgetcsv($open, 0, $delimiter);
+		}
+		
+		$linecount = 0;
+		
+		while(!feof($open)){
+			
+			$linew = fgetcsv($open, 0, $delimiter);
+			
+			if ( !empty($linew) ) {
+				$linecount++;
+			}
+		}
+		
+		$newproccess = new Importproccess();
+						
+		$newproccess->idAccount = $idAccount;
+		$newproccess->inputFile = $idImportfile;
+		$newproccess->status = "Pendiente";
+		$newproccess->totalReg = $linecount;
+		$newproccess->processLines = 0;
+		
+		if(!$newproccess->save()) {
+			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
+		}		
+		
 		$arrayToSend = array(
 			'fields' => $fields,
 			'destiny' => $destiny,
 			'delimiter' => $delimiter,
 			'header' => $header,
 			'idContactlist' => $idContactlist,
-			'idImportfile' => $idImportfile,
+			'idImportproccess' => $newproccess->idImportproccess,
 			'idAccount' => $idAccount,
 			'ipaddress' => $ipaddress
 			);
+		
 		$toSend = json_encode($arrayToSend);
 		
-		$context = new ZMQContext();
 		
+		$context = new ZMQContext();
+
 		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 		$requester->connect("tcp://localhost:5556");
 		$requester->send($toSend);
 		
-		$this->view->setVar("count", $count);
+		return $this->response->redirect("proccess/show/$newproccess->idImportproccess");
 	}
 			
 }

@@ -4,13 +4,13 @@ class ImportContactWrapper extends BaseWrapper
 {
 	protected $idContactlist;
 	protected $newcontact;
-	protected $idFile;
+	protected $idProccess;
 	protected $ipaddress;
 	protected $tablename;
 
 
-	public function setIdFile($idFile) {
-		$this->idFile = $idFile;
+	public function setIdProccess($idProccess) {
+		$this->idProccess = $idProccess;
 	}
 
 	public function setIdContactlist($idContactlist) {
@@ -25,6 +25,7 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		$mode = $this->account->accountingMode;
+		
 		if ($mode == "Contacto") {
 			$contactLimit = $this->account->contactLimit;
 			$activeContacts = $this->account->countActiveContactsInAccount();
@@ -32,6 +33,7 @@ class ImportContactWrapper extends BaseWrapper
 			$contactLimit = 1;
 			$activeContacts = 0;
 		}
+		
 		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
 		$dbase = Dbase::findFirstByIdDbase($list->idDbase);
 		$posCol = (array) $fields;
@@ -40,37 +42,28 @@ class ImportContactWrapper extends BaseWrapper
 			throw new \InvalidArgumentException('No hay Mapeo de los Campos y las Columnas del Archivo');
 		}
 
-		$newproccess = new Importproccess();
-						
-		$newproccess->idAccount = $this->account->idAccount;
-		$newproccess->inputFile = $this->idFile;
+		$newproccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
+		$newproccess->status = "En Ejecucion";
 
 		if(!$newproccess->save()) {
-			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
+			throw new \InvalidArgumentException('No se pudo actualizar el estado del proceso');
 		}
 		
 		$this->tablename = "tmp". $newproccess->idImportproccess;
 		
 		$newtable = "CREATE TABLE $this->tablename LIKE tmpimport";
 		$deletetable = "DROP TABLE $this->tablename";
-		
+
 		$db->execute($newtable);
 		
-		if($activeContacts < $contactLimit) {			
-			
-			$customfields = $this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
-		
-			$this->createFieldInstances($customfields, $dbase->idDbase);
+		if ($activeContacts < $contactLimit) {			
+			$this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
 		}
-		
+
 		$dbase->updateCountersInDbase();
 		$list->updateCountersInContactlist();
-		
-		$count = $this->runReports($destiny, $header, $delimiter, $newproccess->idImportproccess);
-		
+
 		$db->execute($deletetable);
-		
-		return $count;
 		
 	}
 	
@@ -80,68 +73,116 @@ class ImportContactWrapper extends BaseWrapper
 		$idAccount = $this->account->idAccount;
 		$customfields = array();
 		$emails = array();
+		$errors = array();
+		$repeated = 0;
+		$invalid = 0;
+		$limit = 0;
 		$line = 0;
-		$idArray = 0;
+		$totalLine = 0;
 		$oldActiveContacts = 0;
 		$thisActiveContacts = $activeContacts;
 		$values = "";
 		
-		$open = fopen($destiny, "r");
+		$open = @fopen($destiny, "r");
 		
-		if($header) {
+		if (!$open) {
+			throw new InvalidArgumentException("Error al abrir el archivo original");
+		}
+		
+		if ($header) {
 			$linew = fgetcsv($open, 0, $delimiter);
 		}
 		
 		while(! feof($open)) {
+			
 			$linew = fgetcsv($open, 0, $delimiter);
+			
 			$email = (!empty($posCol['email']) || $posCol['email'] == '0')?$linew[$posCol['email']]:"";
 			$name = (!empty($posCol['name']) || $posCol['name'] == '0')?$linew[$posCol['name']]:"";
 			$lastname = (!empty($posCol['lastname']) || $posCol['lastname'] == '0')?$linew[$posCol['lastname']]:"";
+			
 			if ( !empty($linew) ) {
+				
 				if ( ($thisActiveContacts < $contactLimit) ) {
 					$email = strtolower($email);
+					
 					if ( \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
+						
 						if (empty($emails) || !in_array($email, $emails)) {
 							array_push($emails, $email);	
+							
 							if ( $line != 0 ) {
 								$values.=", ";
 							}
+							
 							list($user, $edomain) = preg_split("/@/", $email, 2);
+							
 							$fieldEmail = $db->escapeString($email);
 							$fieldDomain = $db->escapeString($edomain);
 							$fieldName = $db->escapeString($name);
 							$fieldLastname = $db->escapeString($lastname);
-							$values.= "($idArray, $fieldEmail, find_or_create_email($fieldEmail, $fieldDomain, $idAccount), $fieldName, $fieldLastname)";
+							
+							$values.= "($totalLine, $fieldEmail, find_or_create_email($fieldEmail, $fieldDomain, $idAccount), $fieldName, $fieldLastname)";
+							
 							foreach ($posCol as $key => $value) {
+								
 								if(is_numeric($key) && !empty($linew[$value])){
-									$valuescf = array ($idArray, $key, $linew[$value]);
+									$valuescf = array ($totalLine, $key, $linew[$value]);
 									array_push($customfields, $valuescf);
 								}
+								
 							} 
+							
 							$line++;
-							$idArray++;
+							
 							if ($mode == "Contacto") {
+								
 								$thisActiveContacts++;
+								
 							}
 						}
+						else {
+							$lineInFile = ($header)?$totalLine+2:$totalLine+1;
+							array_push($errors, $lineInFile.','.$email.',Correo Repetido en Archivo');
+							$repeated++;
+						}
+					}
+					else {
+						$lineInFile = ($header)?$totalLine+2:$totalLine+1;
+						array_push($errors, $lineInFile.','.$email.',Correo Invalido');
+						$invalid++;
 					}
 				}
+				else {
+					$lineInFile = ($header)?$totalLine+2:$totalLine+1;
+					array_push($errors, $lineInFile.','.$email.',Limite de Contactos Excedido');
+					$limit++;
+				}
+				$totalLine++;
 			}
 			
 			if (($line == 50 || feof($open) || ($thisActiveContacts == $contactLimit && $mode == "Contacto")) && (!empty($values))) {
+				
 				$contactsInserted = $this->runSQLs($values, $idAccount, $idDbase);
 				if ($mode == "Contacto") {
+					
 					$thisActiveContacts = $activeContacts + $contactsInserted + $oldActiveContacts;
 					$oldActiveContacts += $contactsInserted;
 				}
+				
+				$this->createFieldInstances($customfields, $idDbase);
+				
+				$queryToAdd = "UPDATE importproccess SET processLines = $totalLine WHERE idImportproccess = $this->idProccess";
+				$db->execute($queryToAdd);
+				
 				$line = 0;
 				$values = "";
+				$customfields = array();
 			}
 		}
 		
 		fclose($open);
-		
-		return $customfields;
+		$this->runReports($errors, $repeated, $invalid, $limit);
 	}
 	
 	protected function runSQLs($values, $idAccount, $idDbase)
@@ -188,6 +229,7 @@ class ImportContactWrapper extends BaseWrapper
 		$db = Phalcon\DI::getDefault()->get('db');
 		$values = "";
 		$line = 0;
+		
 		$DateCF = "SELECT idCustomField FROM customfield WHERE type = 'DATE' AND idDbase = $idDbase;";
 		$idcontactsfromtmp = "SELECT t.idArray, t.idContact FROM $this->tablename t WHERE t.idContact IS NOT NULL AND t.new IS NOT NULL;";
 		
@@ -195,15 +237,20 @@ class ImportContactWrapper extends BaseWrapper
 		$idsDateCF = $db->fetchAll($DateCF);
 		
 		foreach ($idscontactwithcf as $ids){
+	
 			$done = FALSE;
 			$idForArray = $ids['idArray'];
 			$idtoContact = $ids['idContact'];
 			foreach ($customfields as $cf) {
+				
 				if ($cf[0] == $idForArray) {
+					
 					if($line != 0) {
 						$values.=", ";
 					}
+					
 					foreach ($idsDateCF as $dates) {
+						
 						if ($cf[1] == $dates['idCustomField']) {
 							$date = strtotime($cf[2]);
 							$value = (is_numeric($date))?$date:"NULL";
@@ -211,122 +258,41 @@ class ImportContactWrapper extends BaseWrapper
 							$done = TRUE;
 						}
 					}
+					
 					if (!$done) {
-						$values.= "($cf[1], $idtoContact, '$cf[2]', NULL)";
+						$value = $db->escapeString($cf[2]);
+						$values.= "($cf[1], $idtoContact, $value, NULL)";
 					}
+					
 					$line++;
 				}
+				
 				if ((!empty($values)) && $line == 100) {
-				$createFieldinstances = "INSERT INTO fieldinstance (idCustomField, idContact, textValue, numberValue) VALUES ".$values.";";
-				$db->execute($createFieldinstances);
-				$line = 0;
-				$values = "";
-			}
+					$createFieldinstances = "INSERT INTO fieldinstance (idCustomField, idContact, textValue, numberValue) VALUES ".$values.";";
+					$db->execute($createFieldinstances);
+					$line = 0;
+					$values = "";
+				}
 			}
 		}
+		
 		if(!empty($values) && $line != 0){
 			$createFieldinstances = "INSERT INTO fieldinstance (idCustomField, idContact, textValue, numberValue) VALUES ".$values.";";
 			$db->execute($createFieldinstances);
 		}
 	}
 
-	protected function runReports($destiny, $header, $delimiter, $idImportproccess) {
-		
+	protected function runReports($errors, $repeated, $invalid, $limit) {
 		$db = Phalcon\DI::getDefault()->get('db');
-		$total = 0;
-		$invalid = 0;
-		$limit = 0;
 		$exist = 0;
 		$bloqued = 0;
-		$repeated = 0;
-		$emails = array();
-		$success = array();
-		$errors = array();
-		
-		$querytxt1 = "SELECT t.email FROM $this->tablename t WHERE t.blocked = 1;";
-		$querytxt2 = "SELECT t.email FROM $this->tablename t WHERE t.coxcl = 1 AND t.blocked IS NULL AND t.status IS NULL;";
-		$querytxt3 = "SELECT t.email FROM $this->tablename t WHERE t.status = 1;";
-
-		$emailsBlocked = $db->fetchAll($querytxt1);
-		$emailsRepeated = $db->fetchAll($querytxt2);
-		$emailsImported = $db->fetchAll($querytxt3);
-		
-		$open = fopen($destiny, "r");
-		
-		if($header) {
-			$linew = fgetcsv($open, 0, $delimiter);
-		}
-		
-		while(! feof($open)) {
-			$done = FALSE;
-			$linew = fgetcsv($open, 0, $delimiter);
-			if ( !empty($linew) ) {
-				$email = strtolower($linew[0]);
-				if ( !\filter_var($email, FILTER_VALIDATE_EMAIL) ) {
-					array_push($linew, "Correo Invalido");
-					array_push($errors, $linew);
-					$invalid++;
-				} elseif (!empty($emails) && in_array($email, $emails)) {
-					array_push($linew, "Correo Repetido en Archivo");
-					array_push($errors, $linew);
-					$repeated++;
-				}
-				else {
-					array_push($emails, $email);	
-					foreach ($emailsImported as $emailimported) {
-						if($emailimported['email'] == $linew[0]) {
-							array_push($success, $linew);
-							$done = TRUE;
-						}
-					}
-					foreach ($emailsBlocked as $emailblocked) {
-						if($emailblocked['email'] == $linew[0]) {
-							array_push($linew, "Correo Bloqueado");
-							array_push($errors, $linew);
-							$bloqued++;
-							$done = TRUE;
-						}
-					}
-					foreach ($emailsRepeated as $emailrepeated) {
-						if($emailrepeated['email'] == $linew[0]){
-							array_push($linew, "Existente");
-							array_push($errors, $linew);
-							$exist++;
-							$done = TRUE;
-						} 
-					}
-					if(!$done) {
-						array_push($linew, "Limite de Contactos Excedido");
-						array_push($errors, $linew);
-						$limit++;
-					}
-
-				}
-				$total++;
-			}
-		}
-		fclose($open);
-		$this->createReports($errors, $success, $idImportproccess);
-		
-		$count = array(
-			"total" => $total,
-			"import" => $total-($exist+$invalid+$bloqued+$limit+$repeated),
-			"Nimport" => $exist+$invalid+$bloqued+$limit+$repeated,
-			"exist" => $exist,
-			"invalid" => $invalid,
-			"bloqued" => $bloqued,
-			"limit" => $limit,
-			"repeated" => $repeated,
-			"idProcces" => $idImportproccess
-		);
-		
-		return $count;
-	}
-	
-
-	protected function createReports($errors, $success, $idImportproccess)
-	{
 		$uniquecode = uniqid();
+
+		// Path de archivos
+		$filePath = Phalcon\DI::getDefault()->get('appPath')->path . '/tmp/ifiles/';
+		$filesPath = str_replace("\\", "/", $filePath);
+
+		$nameImported =  $this->account->idAccount."_".date("ymdHi",time())."_".$uniquecode."imported.csv";
 		$nameNimported = $this->account->idAccount."_".date("ymdHi",time())."_".$uniquecode."noneimported.csv";
 		
 		$saveFileError = new Importfile();
@@ -334,14 +300,25 @@ class ImportContactWrapper extends BaseWrapper
 		$saveFileError->internalName = $nameNimported;
 		$saveFileError->originalName = $nameNimported;
 		$saveFileError->createdon = time();
-
+		
 		if (!$saveFileError->save()) {
-				foreach ($saveFileError->getMessages() as $msg) {
-						$this->flashSession->error($msg);
-						$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
-				}
-		} else {
-			$fp = fopen('../../../tmp/ifiles/' . $nameNimported, 'w');
+			throw new \InvalidArgumentException('No se pudo crear el archivo de Errores');
+		} 
+		else {
+			$queryForErrors =  "SELECT idArray, email, 
+									CASE WHEN blocked = 1 THEN 'Correo Bloqueado'
+										WHEN coxcl = 1 AND blocked IS NULL THEN 'Existente'
+									END
+								FROM {$this->tablename}
+								WHERE status IS NULL
+								INTO OUTFILE  '{$filesPath}{$nameNimported}'
+								FIELDS TERMINATED BY ','
+								ENCLOSED BY '\"'
+								LINES TERMINATED BY '\n'";
+
+			$db->execute($queryForErrors);							
+			
+			$fp = fopen($filesPath . $nameNimported, 'a');
 
 			foreach ($errors as $error) {
 				fputcsv($fp, $error);
@@ -350,8 +327,6 @@ class ImportContactWrapper extends BaseWrapper
 			fclose($fp);
 		}
 		
-		$nameImported = $this->account->idAccount."_".date("ymdHi",time())."_".$uniquecode."imported.csv";
-		
 		$saveFileSuccess = new Importfile();
 		$saveFileSuccess->idAccount = $this->account->idAccount;
 		$saveFileSuccess->internalName = $nameImported;
@@ -359,28 +334,38 @@ class ImportContactWrapper extends BaseWrapper
 		$saveFileSuccess->createdon = time();
 		
 		if (!$saveFileSuccess->save()) {
-				foreach ($saveFileSuccess->getMessages() as $msg) {
-						$this->flashSession->error($msg);
-						$this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
-				}
+			throw new \InvalidArgumentException('No se pudo crear el archivo de Exito');
 		} else {
-			$fp = fopen('../../../tmp/ifiles/' . $nameImported, 'w');		
+			$queryForSuccess = "SELECT idArray, email
+								FROM {$this->tablename}
+								WHERE status = 1
+								INTO OUTFILE  '{$filesPath}{$nameImported}'
+								FIELDS TERMINATED BY ','
+								ENCLOSED BY '\"'
+								LINES TERMINATED BY '\n'";
 
-			foreach ($success as $succ) {
-				fputcsv($fp, $succ);
-			}
-
-			fclose($fp);
+			$db->execute($queryForSuccess);
 		}
+		$queryBloqued = "SELECT COUNT(*) AS 'bloqueados' FROM {$this->tablename} WHERE blocked = 1 AND status IS NULL";
+		$queryExist = "SELECT COUNT(*)	AS 'existentes' FROM {$this->tablename} WHERE status IS NULL AND coxcl = 1 AND blocked IS NULL";
 		
-		$proccess = Importproccess::findFirstByIdImportproccess($idImportproccess);
+		$bloquedCount = $db->fetchAll($queryBloqued);
+		$existCount = $db->fetchAll($queryExist);
+		
+		$bloqued = $bloquedCount[0]['bloqueados'];
+		$exist = $existCount[0]['existentes'];
+		
+		$queryInfo = "UPDATE importproccess SET exist = $exist, invalid = $invalid, bloqued = $bloqued, limitcontact = $limit, repeated = $repeated WHERE idImportproccess = $this->idProccess";
+		$db->execute($queryInfo);
+		
+		$proccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
 		
 		$proccess->errorFile = $saveFileError->idImportfile;
 		$proccess->successFile = $saveFileSuccess->idImportfile;
+		$proccess->status = "Finalizado";
 		
 		if(!$proccess->save()) {
-			throw new InvalidArgumentException("Error al crear el registro del proceso de importacion");
+			throw new \InvalidArgumentException('No se pudo actualizar el estado del proceso');
 		}
-		
 	}
 }
