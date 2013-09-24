@@ -10,13 +10,44 @@ class ApiController extends ControllerBase
 	 */
 	public function listcustomfieldsAction($idDbase)
 	{
-		$db = Dbase::findFirst(array(
-			"conditions" => "idDbase = ?1",
-			"bind" => array (1 => $idDbase)
-		));
+
+		
+		$list = $this->listcustomfields($idDbase);
+		
+		if ($list === false) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+		}
+		
+		return $this->setJsonResponse(array('fields' => $list));
+	}
+	
+	/**
+	 * 
+	 * @Get("/fields")
+	 */
+	public function getcustomfieldsaliasAction()
+	{
+		$idDbase = $this->request->getQuery('dbase', null, 0);
+		if ($idDbase != 0) {
+			$list = $this->listcustomfields($idDbase);
+
+			if ($list === false) {
+				return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+			}
+
+			return $this->setJsonResponse(array('fields' => $list));
+		}
+		
+		return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+	}
+	
+
+	protected function listcustomfields($idDbase)
+	{
+		$db = Dbase::findFirstByIdDbase($idDbase);
 		
 		if (!$db || $db->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+			return false;
 		}
 		
 		$lista = array();
@@ -28,9 +59,8 @@ class ApiController extends ControllerBase
 				$lista[] = $this->fromPObjectToJObject($field);
 			}
 		}
-
-		return $this->setJsonResponse(array('fields' => $lista) );
 		
+		return $lista;
 	}
 
 	/**
@@ -67,6 +97,7 @@ class ApiController extends ControllerBase
 		$jsonObject['required'] = ($phObject->required=='Si');
 		$jsonObject['values'] = $phObject->values;
 		$jsonObject['defaultValue'] = $phObject->defaultValue;
+		$jsonObject['dbase'] = $phObject->idDbase;
 		
 		$jsonObject['minValue'] = $phObject->minValue;
 		$jsonObject['maxValue'] = $phObject->maxValue;
@@ -868,7 +899,7 @@ class ApiController extends ControllerBase
 		foreach ($this->user->account->dbases as $db) {
 			$dbs[] = array('id'=> $db->idDbase, 'name' => $db->name);
 		}
-		return $this->setJsonResponse(array('dbases' => $dbs));
+		return $this->setJsonResponse(array('dbase' => $dbs));
 	}
 	
 	//Inicio de listas globales de bloqueo de emails

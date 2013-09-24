@@ -30,29 +30,6 @@
 			allowContactlist: {{acl_Ember('api::getlists')}}
 		};
 	</script>
-	<script text="text/javascript">
-		
-		App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
-		
-			actions: {
-				save: function(){
-					if(this.get('name')==null){
-						App.set('errormessage', 'El nombre de la lista es requerido');
-						this.transitionToRoute('lists.new');
-					}
-					else{
-						this.handleSavePromise(this.content.save(), 'lists', 'Se ha creado la lista!');
-						App.set('errormessage', '');
-					}
-				},
-
-				cancel: function(){
-					this.get('model').rollback();
-					this.transitionToRoute("lists");
-				}
-			}
-		});
-	</script>
 	{{ javascript_include('js/load_activecontacts.js')}}
 	{{ javascript_include('js/app_segment.js') }}
 {% endblock %}
@@ -163,22 +140,24 @@
 					{{' {{/if }} '}}
 				</label>				
 
-				{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}
-				<label>Descripción
-					{{' {{#if errors.description }} '}}
-						<span class="text text-error">{{'{{errors.description}}'}}</span>
-					{{' {{/if }} '}}
-				</label>
-				{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
-				<label>Base de datos</label>
-				{{ '{{view Ember.Select
-					contentBinding="dbases"
-					optionValuePath="content.id"
-					optionLabelPath="content.dbase"}}'
-				}}
-				
-				<button class="btn btn-default" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
-				<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+					{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}
+					<label>Descripción
+						{{' {{#if errors.description }} '}}
+							<span class="text text-error">{{'{{errors.description}}'}}</span>
+						{{' {{/if }} '}}
+					</label>
+					{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
+					<label>Base de datos</label>
+					{{ '{{view Ember.Select
+						contentBinding="controllers.dbase.content"
+						optionValuePath="content.id"
+						optionLabelPath="content.name"}}'
+					}}
+				</div>
+				<div class="form-actions">
+					<button class="btn btn-default" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
+					<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+				</div>
 			</form>
 		</div>
 	</div>	

@@ -15,14 +15,17 @@ App.Router.map(function() {
 	  this.route('new');
 	  this.resource('segments.delete', {path: '/delete/:segment_id'});
   });
+  
+   this.route('dbase');
 });
 
 /* Controladores de Dbase  (necesario?) */
-App.DbaseController = Ember.ArrayController.extend({
-	model: function() {
+App.DbaseRoute = Ember.Route.extend({
+  	model: function() {
 		return this.store.find('dbase');
 	}
 });
+App.DbaseController = Ember.ArrayController.extend({});
 
 /* Rutas de Contact Lists */
 App.ListsIndexRoute = Ember.Route.extend({
@@ -37,8 +40,12 @@ App.ListsNewRoute = Ember.Route.extend({
 	},
 	deactivate: function () {
 		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.get('model').rollback();
+			this.currentModel.rollback();
 		}
+	},
+	setupController: function(controller, model) {
+		controller.set('model', model);
+		controller.loadDbases();
 	}
 });
 
@@ -53,7 +60,7 @@ App.ListsEditRoute = Ember.Route.extend({
 	doRollBack: function () {
 		var model = this.get('currentModel');
 		if (model && model.get('isDirty') && model.get('isSaving') == false) {
-			model.get('transaction').rollback();
+			model.rollback();
 		}
 	}
 });
@@ -69,8 +76,36 @@ App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, E
 		this.set('acl', App.contactListACL);
 	},
 	modelClass : App.List,
-	needs: ['dbase']
+	needs: 'dbase'
+});
+
+App.ListsNewController = Ember.ObjectController.extend({
+	needs: ['dbase'],
+
+	loadDbases: function () {
+		this.get('controllers.dbase').set('content', this.store.find('dbase'));
+	},
 	
+	actions: {
+		save: function(){
+			if(this.get('name')==null){
+				App.set('errormessage', 'El nombre de la lista es requerido');
+				this.transitionToRoute('lists.new');
+			}
+			else{
+				var self = this;
+				self.content.save().then(function(){
+					self.transitionToRoute('lists');
+				});
+			}
+		},
+
+		cancel: function(){
+			window.theDbaseController = this.get('controllers.dbase');
+			console.log(this.get('controllers.dbase'));
+			this.transitionToRoute("lists");
+		}
+	}
 });
 
 App.ListsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {

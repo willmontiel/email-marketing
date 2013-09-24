@@ -32,7 +32,14 @@
 			<form>
 				<label>
 					Seleccione base de datos:
-					{{ '{{view App.DbaseSelect selectionBinding="dbase" contentBinding="dbases" optionLabelPath="content.name" class="span3"}}' }}
+					{{ '{{view Ember.Select 
+								selectionBinding="dbase" 
+								contentBinding="controllers.dbase.content" 
+								optionValuePath="content.id" 
+								optionLabelPath="content.name" 
+								prompt="Seleccione una base de datos"
+								class="span3"}}' 
+					}}
 				</label>
 				<br/>
 				<label>					
@@ -50,10 +57,12 @@
 				<div class="row-fluid">	
 					<div class="span3">
 						{{ '{{view Ember.Select
-							  contentBinding="App.customFields"
+							  contentBinding="cfields"
 							  optionValuePath="content.id"
-							  optionLabelPath="content.customField"
-							  valueBinding="id" id="id"}}'
+							  optionLabelPath="content.name"
+							  valueBinding="id" id="id"
+							  prompt="Seleccione un campo"
+							}}'
 						}}
 						{{ '{{dbase.id}}' }}
 					</div>
