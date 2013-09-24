@@ -165,20 +165,24 @@ class ContactListWrapper extends BaseWrapper
 	public function updateContactList($contents, $idContactlist)
 	{
 		
-		$contactList = Contactlist::findFirstByIdContactlist($idContactlist);
+		$contactList = Contactlist::findFirst(array(
+			"conditions" => "idContactlist = ?1",
+			"bind" => array(1 => $idContactlist)
+		));
 		
 		if (!$contactList) {
 			throw new \InvalidArgumentException('Lista no encontrada en la base de datos!');
+			$this->addFieldError('Lista', 'No se encuentra la lista en la base de datos');
 		}
 		
 		else {
-			$this->assignDataToContactList($contents, $contactList);
+			$mensaje = $this->assignDataToContactList($contents, $contactList);
 		
 			if(!$contactList->save()){
 				return array('lists' => 'errror');
 			}
 			else{
-
+				return $mensaje;
 			}
 		}
 		

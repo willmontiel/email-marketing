@@ -12,9 +12,9 @@
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 				<ul class="dropdown-menu">
-					<li>{{ '{{#linkTo "contacts.edit" this}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
+					<li>{{ '{{#linkTo "contacts.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
 					<li>{{ '{{#linkTo "contacts.show" this}}' }}<i class="icon-search"></i> Ver detalles{{ '{{/linkTo}}' }}</li>
-					<li>{{ '{{#linkTo "contacts.delete" this}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}</li>
+					<li>{{ '{{#linkTo "contacts.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}</li>
 				</ul>
 			</div>
 		</div>

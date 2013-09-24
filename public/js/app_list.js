@@ -63,13 +63,17 @@ App.ListsEditRoute = Ember.Route.extend({
 /* Controladores de Contact Lists */
 App.ListController = Ember.ObjectController.extend();
 
-App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
+App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, Ember.AclMixin,{
+	init: function () 
+	{
+		this.set('acl', App.contactListACL);
+	},
 	modelClass : App.List,
 	needs: ['dbase']
 	
 });
 
-App.ListsEditController = Ember.ObjectController.extend({
+App.ListsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	actions: {
 		edit: function() {
 			if(this.get('name') == ""){
@@ -77,11 +81,8 @@ App.ListsEditController = Ember.ObjectController.extend({
 				this.transitionToRoute("lists.edit");
 			}
 			else{
-				var self = this;
-				self.content.save().then(function() {
-					App.set('errormessage', '');
-					self.transitionToRoute("lists");
-				});
+				this.handleSavePromise(this.content.save(), 'lists', 'Se ha actualizado la lista!');
+				App.set('errormessage', '');
 			}
 		},
 		cancel: function(){
@@ -91,25 +92,17 @@ App.ListsEditController = Ember.ObjectController.extend({
 	}
 });
 
-App.ListsDeleteController = Ember.ObjectController.extend({
+App.ListsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	actions: {
 		delete: function() {
-			var self = this;
-			var list = self.get('content');
-			
+			var list = this.get('content');
 			list.deleteRecord();
 			
-			list.save().then(function(){
-				self.transitionToRoute('lists');
-			});
+			this.handleSavePromise(list.save(), 'lists', 'Se ha eliminado la lista');
 		},
 		cancel: function(){
-			this.transitionTo('lists');	
+			this.get('model').rollback();
+			this.transitionToRoute("lists");
 		}
 	}
 });
-
-//App.DbaseSelect = [
-//	Ember.Object.create({customField: "Email", id: "email"}),
-//	Ember.Object.create({customField: "Email", id: "email"}),
-//];

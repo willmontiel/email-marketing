@@ -70,12 +70,12 @@
 					<table class="table table-normal">
 						<thead>
 							 <tr>
-								<th colspan="3">E-mail</th>
-								<th>Acciones</th>
+								<td colspan="3">E-mail</td>
+								<td>Acciones</td>
 							</tr>
 						</thead>
 						<tbody>
-							{{'{{#each controller}}'}}
+						{{'{{#each model}}'}}
 							<tr>
 								<td>
 									{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}
@@ -103,14 +103,18 @@
 											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 											<ul class="dropdown-menu">
 												<li>{{ '{{#linkTo "contacts.show" this}}<i class="icon-search"></i> Ver{{/linkTo}}' }}</li>
-												<li>{{ '{{#linkTo "contacts.edit" this}}<i class="icon-pencil"></i> Editar{{/linkTo}}' }}</li>
-												<li>{{ '{{#linkTo "contacts.delete" this}}<i class="icon-trash"></i> Eliminar{{/linkTo}}' }}</li>
+												<li>{{ '{{#linkTo "contacts.edit" this disabledWhen="controller.updateDisabled"}}<i class="icon-pencil"></i> Editar{{/linkTo}}' }}</li>
+												<li>{{ '{{#linkTo "contacts.delete" this disabledWhen="controller.deleteDisabled"}}<i class="icon-trash"></i> Eliminar{{/linkTo}}' }}</li>
 											</ul>
 										</div>
 									</div>
 								</td>
 							</tr>
-							{{'{{/each}}'}}
+						{{ '{{else}}' }}
+							<tr>
+								<td colspan="3">No hay contactos en esta base de datos</td>
+							</tr>
+						{{'{{/each}}'}}
 						</tbody>
 					 </table>
 				</div>
@@ -130,80 +134,81 @@
 	{{ '{{/if}} '}}
 	{{'{{outlet}}'}}
 </script>
-<script type="text/x-handlebars" data-template-name="contacts/edit">
-<p>Agrega un nuevo contacto, con sus datos más básicos. </p>
-	<form>
-		<div class="row-fluid">
-			<div class="span3">
-				<p>
-					<label>E-mail: </label>
-				</p>
-				<p>
-					{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
-				</p>
-				<p>
-					<label>Nombre: </label>
-				</p>
-				<p>	
-					{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
-				</p>
-				<p>
-					<label>Apellido: </label>
-				</p>
-				<p>
-					{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
-				</p>
-				<p>
-					<label>Estado: </label>
-					{{ '{{#if isSubscribed}}' }}
-						<label class="checkbox checked" for="isActive">
-							<span class="icons">
-								<span class="first-icon fui-checkbox-unchecked"></span>
-								<span class="second-icon fui-checkbox-checked"></span>
-							</span>
-					{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
-						</label>
-					{{ '{{else}}' }}
-						<label class="checkbox" for="isActive">
-							<span class="icons">
-								<span class="first-icon fui-checkbox-unchecked"></span>
-								<span class="second-icon fui-checkbox-checked"></span>
-							</span>
-				 {{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
-						</label>
-			{{ '{{/if}}' }}
-				</p>
-				<!-- Campos Personalizados -->
-							{%for field in fields%}
-								<p><label for="campo{{field.idCustomField}}">{{field.name}}:</label></p>
-								<p>{{ember_customfield(field)}}</p>
-								{% if (field.type == "Text" and field.maxLength != "") %}
-									Maximo {{field.maxLength}} caracteres
-								{% elseif field.type == "Numerical" and field.minValue != "" and field.maxValue != 0 %}
-									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
-								{%endif%}
-							{%endfor%}
-						</p>
-				<!--  Fin de campos personalizados -->
-				<p>
-					<button class="btn btn-success" {{' {{action edit this}} '}}>Editar</button>
-					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar</button>
-				</p>	
+<script type="text/x-handlebars" data-template-name="contacts/edit">	
+	<div class="row-fluid">
+		<div class="span3">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Agrega un nuevo contacto, con sus datos más básicos
+					</div>
+				</div>
+				<div class="box-content padded">
+					<form>
+						{{ '{{#if errors.errormsg}}' }}
+							<div class="alert alert-error">
+								<button type="button" class="close" data-dismiss="alert">×</button>
+								{{ '{{errors.errormsg}}' }}
+							</div>
+						{{ '{{/if}}' }}
+						<label>E-mail: </label>
+						{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
+
+						<label>Nombre: </label>
+						{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
+
+						<label>Apellido: </label>
+						{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
+
+						<label>Estado: </label>
+						{{ '{{#if isSubscribed}}' }}
+							{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
+						{{ '{{else}}' }}
+							{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito
+						{{ '{{/if}}' }}
+						<br /><br />
+						<!-- Campos Personalizados -->
+						{%for field in fields%}
+							<label>{{field.name}}:</label>
+							{{ember_customfield(field)}}
+							{% if (field.type == "Text" and field.maxLength != "") %}
+								Maximo {{field.maxLength}} caracteres
+							{% elseif field.type == "Numerical" and field.minValue != "" and field.maxValue != 0 %}
+								El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
+							{%endif%}
+						{%endfor%}
+						<!--  Fin de campos personalizados -->
+						<br />
+						<button class="btn btn-blue" {{' {{action edit this}} '}}>Editar</button>
+						<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+					</form>
+				</div>
 			</div>
 		</div>
-	</form>
+	</div>
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/delete">
 	<div class="row-fluid">
-		<div class="span6 message-delete">
-			<p>Esta seguro que desea Eliminar el Contacto <strong>{{'{{this.name}}'}}</strong></p>
-			<p>Recuerde que se eliminara de <strong>TODAS</strong> sus listas y de su Base de datos</p>
-			<button {{'{{action delete this}}'}} class="btn btn-danger">
-				Eliminar
-			</button>
-			<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>
-				Cancelar
-			</button>
+		<div class="span12">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Eliminar un contacto
+					</div>
+				</div>
+				<div class="box-content padded">
+					<p>Si elimina un contacto, se eliminará de todas las listas y de Bases de datos a las que pertenece</p>
+					<p>¿Esta seguro que desea eliminar el Contacto <strong>{{'{{email}}'}}</strong>?</p>
+					{{ '{{#if errors.errormsg}}' }}
+						<div class="alert alert-error">
+							<button type="button" class="close" data-dismiss="alert">×</button>
+							{{ '{{errors.errormsg}}' }}
+						</div>
+					{{ '{{/if}}' }}
+					<button {{'{{action delete this}}'}} class="btn btn-danger">Eliminar</button>
+					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </script>

@@ -4,7 +4,7 @@
 		{{ partial("partials/ember_partial") }}
 		{{ partial("partials/date_view_partial") }}
 		{{ javascript_include('js/mixin_pagination.js') }}
-		{{ javascript_include('js/mixin_catchmessages.js') }}
+		{{ javascript_include('js/mixin_config.js') }}
 		{{ javascript_include('js/load_activecontacts.js')}}
 <script type="text/javascript">
 		var MyDbaseUrl = '{{apiurlbase.url ~ '/contactlist/' ~ datalist.idContactlist}}';
@@ -59,7 +59,15 @@
 	{{ javascript_include('js/app_contact.js') }}
 	{{ javascript_include('js/list_model.js') }}
 	{{ javascript_include('js/app_contact_list.js') }}
-	
+	<script type="text/javascript">
+		App.contactACL = {
+			canCreate: {{acl_Ember('api::createcontactbylist')}},
+			canImportBatch: {{acl_Ember('contacts::importbatch')}},
+			canImport: {{acl_Ember('contacts::import')}},
+			canUpdate: {{acl_Ember('api::updatecontactbylist')}},
+			canDelete: {{acl_Ember('api::deletecontactbylist')}}
+		};
+	</script>
 	<script>
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
@@ -118,9 +126,9 @@
 
 			<div class="pull-right" style="margin-bottom: 5px;">
 				<a href="{{url('contactlist#/lists')}}" class="btn btn-blue"><i class="icon-home"></i> Todas las listas</a>
-				{{'{{#linkTo "contacts.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/linkTo}}'}}
-				{{'{{#linkTo "contacts.newbatch" class="btn btn-default"}}'}}<i class="icon-align-justify"></i> Crear Varios Contactos{{'{{/linkTo}}'}}
-				{{ '{{#linkTo "contacts.import" class="btn btn-default"}}'}}<i class="icon-file-alt"></i> Importar Contactos{{'{{/linkTo}}'}}			
+				{{'{{#linkTo "contacts.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/linkTo}}'}}
+				{{'{{#linkTo "contacts.newbatch" class="btn btn-default" disabledWhen="importBatchDisabled"}}'}}<i class="icon-align-justify"></i> Crear Varios Contactos{{'{{/linkTo}}'}}
+				{{ '{{#linkTo "contacts.import" class="btn btn-default" disabledWhen="importDisabled"}}'}}<i class="icon-file-alt"></i> Importar Contactos{{'{{/linkTo}}'}}			
 			</div>
 			<div class="clearfix"></div>
 
@@ -148,6 +156,11 @@
 				<div class="box-content">
 					<form>
 						<div class="padded">
+							{{ '{{#if errors.errormsg}}' }}
+								<div class="alert alert-error">
+									{{ '{{errors.errormsg}}' }}
+								</div>
+							{{ '{{/if}}' }}
 							<label>*E-mail:
 								{{' {{#if errors.email}} '}}
 									<span class="text text-error">{{'{{errors.email}}'}}</span>
@@ -203,6 +216,7 @@
 							</dl>
 							<p>Note que no es necesario incluir todos los campos, el único <strong>campo requerido es "email"</strong>.</p>
 							<p class="text-success">El sistema validará los registros repetidos y los correos inválidos.</p>
+							<p class="text-success">Recuerde que solo puede crear máximo 30 contactos por este medio, si requiere crear más, diríjase a "Importación desde archico .csv".</p>
 						</div>
 						<br/>
 						<label>
@@ -249,6 +263,11 @@
 				</div>
 				<div class="box-content padded">
 					<form>
+						{{ '{{#if errors.errormsg}}' }}
+							<div class="alert alert-error">
+								{{ '{{errors.errormsg}}' }}
+							</div>
+						{{ '{{/if}}' }}
 						<label>E-mail</label>
 						{{' {{#if errors.email}} '}}
 							<span class="text text-error">{{'{{errors.email}}'}}</span>
@@ -284,20 +303,29 @@
 			</div>
 		</div>
 	</script>
-		<script type="text/x-handlebars" data-template-name="contacts/delete">
-			<div class="row-fluid">
-				<div class="span5 message-delete">
-					<p>Esta seguro que desea Eliminar el Contacto <strong>{{'{{this.name}}'}}</strong></p>
-					<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminara por completo de su Base de Datos</p>
-					<button {{'{{action delete this}}'}} class="btn btn-danger">
-						Eliminar
-					</button>
-					<button class="btn btn-inverse" {{ '{{action cancel this}}' }}>
-						Cancelar
-					</button>
+	<script type="text/x-handlebars" data-template-name="contacts/delete">
+		<div class="row-fluid">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Eliminar un contacto
+					</div>
+				</div>
+				<div class="box-content padded">
+					<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminara por completo de la 
+					Base de Datos</p>
+					<p>¿Esta seguro que desea Eliminar el Contacto <strong>{{'{{name}}'}} ?</strong></p>
+					{{ '{{#if errors.errormsg}}' }}
+						<div class="alert alert-error">
+							{{ '{{errors.errormsg}}' }}
+						</div>
+					{{ '{{/if}}' }}
+					<button {{'{{action delete this}}'}} class="btn btn-danger">Eliminar</button>
+					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
 				</div>
 			</div>
-		</script>
+		</div>
+	</script>
 <script type="text/x-handlebars" data-template-name="contacts/show">
 	<br />
 	<div class="row-fluid">

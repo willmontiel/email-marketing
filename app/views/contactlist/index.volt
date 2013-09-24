@@ -6,7 +6,7 @@
 		var MyDbaseUrl = '{{apiurlbase.url}}';
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
-	{{ javascript_include('js/mixin_catchmessages.js') }}
+	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/list_model.js') }}
 	{{ javascript_include('js/app_list.js') }}
@@ -17,15 +17,22 @@
 		
 		// ACL de blocked emails:
 		App.blockedemailACL = {
-			canCreate: {{ acl_Ember('api::addemailtoblockedlist') }},
-			canRead: {{ acl_Ember('api::addemailtoblockedlist')}},
-			canUpdate: {{ acl_Ember('api::addemailtoblockedlist') }},
-			canDelete: {{ acl_Ember ('api::addemailtoblockedlist')}}
+			canCreate: {{ acl_Ember('api::addemailtoblockedlist')}},
+			canDelete: {{ acl_Ember ('api::removeemailfromblockedlist')}}
+		};
+		//ACL de Contact List
+		App.contactListACL = {
+			canCreate: {{acl_Ember('api::createcontactlist')}},
+			canRead: {{acl_Ember('api::getcontactbylist')}},
+			canUpdate: {{acl_Ember('api::listsedit')}},
+			canDelete: {{acl_Ember('api::deletecontactlist')}},
+			allowBlockedemail: {{acl_Ember('api::listblockedemails')}},
+			allowContactlist: {{acl_Ember('api::getlists')}}
 		};
 	</script>
 	<script text="text/javascript">
 		
-		App.ListsNewController = Ember.ObjectController.extend({
+		App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		
 			actions: {
 				save: function(){
@@ -34,10 +41,8 @@
 						this.transitionToRoute('lists.new');
 					}
 					else{
-						var self = this;
-						self.content.save().then(function(){
-							self.transitionToRoute('lists');
-						});
+						this.handleSavePromise(this.content.save(), 'lists', 'Se ha creado la lista!');
+						App.set('errormessage', '');
 					}
 				},
 
@@ -65,9 +70,9 @@
 			<div class="box">
 				<div class="box-header">
 					<ul class="nav nav-tabs nav-tabs-left">
-						{{'{{#linkTo "lists" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
+						{{'{{#linkTo "lists" tagName="li" href=false disabledWhen="allowContactlist"}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
 						{{'{{#linkTo "segments" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Segmentos</a>{{/linkTo}}'}}
-						{{'{{#linkTo "blockedemails" tagName="li" href=false disabledWhen="readDisabled" }}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}
+						{{'{{#linkTo "blockedemails" tagName="li" href=false disabledWhen="allowBlockedemail" }}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}
 					</ul>
 					<div class="title">
 						<a href="{{url('dbase')}}" class="pull-right" title="Configuracion avanzada"><i class="icon-cog"></i></a>
@@ -84,7 +89,7 @@
 		{# handlebars de listas #}
 		<script type="text/x-handlebars" data-template-name="lists/index">
 			<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
-				{{'{{#linkTo "lists.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/linkTo}}'}}
+				{{'{{#linkTo "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/linkTo}}'}}
 			</div>
 			<div class="clearfix"></div>
 			
@@ -96,7 +101,7 @@
 					</ul>
 				</div>
 				<div class="box-content">
-				{{'{{#each model}}'}}
+				{{'{{#each}}'}}
 					<div class="box-section news with-icons">
 						<div class="avatar blue">
 							<i class="icon-ok icon-2x"></i>
@@ -110,9 +115,9 @@
 								<div class="btn-group">
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li>{{ '{{#linkTo "lists.edit" this}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
+										<li>{{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
 										<li><a href="{{url('contactlist/show/')}}{{ '{{unbound id}}' }}#/contacts"><i class="icon-search"></i> Ver detalles</a></li>
-										<li>{{ '{{#linkTo "lists.delete" this}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}</li>
+										<li>{{ '{{#linkTo "lists.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}</li>
 									</ul>
 								</div>
 							</div>
@@ -147,31 +152,33 @@
 		<div class="box-header"><span class="title">Agregar una nueva lista</span></div>
 		<div class="box-content padded">
 			<form>
-				<div class="padded">
-					<label>Nombre *
-						{{' {{#if errors.name }} '}}
-							<span class="text text-error">{{'{{errors.name}}'}}</span>
-						{{' {{/if }} '}}
-					</label>				
+				{{'{{#if errors.errormsg}}'}}
+					<div class="alert alert-error">
+						{{'{{errors.errormsg}}'}}
+					</div>
+				{{'{{/if}}'}}
+				<label>Nombre *
+					{{' {{#if errors.name }} '}}
+						<span class="text text-error">{{'{{errors.name}}'}}</span>
+					{{' {{/if }} '}}
+				</label>				
 
-					{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}
-					<label>Descripción
-						{{' {{#if errors.description }} '}}
-							<span class="text text-error">{{'{{errors.description}}'}}</span>
-						{{' {{/if }} '}}
-					</label>
-					{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
-					<label>Base de datos</label>
-					{{ '{{view Ember.Select
-						contentBinding="dbases"
-						optionValuePath="content.id"
-						optionLabelPath="content.dbase"}}'
-					}}
-				</div>
-				<div class="form-actions">
-					<button class="btn btn-default" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
-					<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
-				</div>
+				{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}
+				<label>Descripción
+					{{' {{#if errors.description }} '}}
+						<span class="text text-error">{{'{{errors.description}}'}}</span>
+					{{' {{/if }} '}}
+				</label>
+				{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
+				<label>Base de datos</label>
+				{{ '{{view Ember.Select
+					contentBinding="dbases"
+					optionValuePath="content.id"
+					optionLabelPath="content.dbase"}}'
+				}}
+				
+				<button class="btn btn-default" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
+				<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
 			</form>
 		</div>
 	</div>	
@@ -183,6 +190,11 @@
 		<div class="box-content">
 			<form>
 				<div class="padded">
+					{{'{{#if errors.errormsg}}'}}
+						<div class="alert alert-error">
+							{{'{{errors.errormsg}}'}}
+						</div>
+					{{'{{/if}}'}}
 					<label>*Nombre
 						{{' {{#if errors.name }} '}}
 							<span class="text text-error">{{'{{errors.name}}'}}</span>
@@ -197,7 +209,7 @@
 					{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
 				</div>
 				<div class="form-actions">
-					<button class="btn btn-primary" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Editar</button>
+					<button class="btn btn-blue" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Editar</button>
 					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
 				</div>
 			</form>
@@ -225,6 +237,11 @@
 						Si está <strong>completamente seguro</strong> y desea continuar haga clic en el botón eliminar para
 						proceder
 					</p>
+					{{'{{#if errors.errormsg}}'}}
+						<div class="alert alert-error">
+							{{'{{errors.errormsg}}'}}
+						</div>
+					{{'{{/if}}'}}
 					<br>
 					<button class="btn btn-danger" {{ '{{action delete this}}' }}>Eliminar</button>
 					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>

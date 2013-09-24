@@ -5,6 +5,7 @@
 	{{ partial("partials/ember_partial") }}
 	{{ partial("partials/date_view_partial") }}
 	{{ javascript_include('js/mixin_pagination.js') }}
+	{{ javascript_include('js/mixin_config.js') }}
 
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{apiurlbase.url ~ '/dbase/' ~ sdbase.idDbase }}';
@@ -49,7 +50,22 @@
 	</script>
 	
 	{{ javascript_include('js/app.js') }}
-	
+	<script type="text/javascript">
+		//ACL de los campos personalizados
+		App.customFieldACL = {
+			canCreate: {{acl_Ember('api::createcustomfield')}},
+			canRead: {{acl_Ember('api::listcustomfields')}},
+			canUpdate: {{acl_Ember('api::updatecustomfield')}},
+			canDelete: {{acl_Ember('api::delcustomfield')}}
+		};
+		
+		//ACL de contactos
+		App.contactACL = {
+			canRead: {{acl_Ember('api::listcontacts')}},
+			canUpdate: {{acl_Ember('api::updatecontact')}},
+			canDelete: {{acl_Ember('api::deletecontact')}}
+		}
+	</script>
 	<script>
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
@@ -68,9 +84,9 @@
 			<div class="box">
 				<div class="box-header">
 					<ul class="nav nav-tabs nav-tabs-left">
-						{{'{{#linkTo "index" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>General</a>{{/linkTo}}'}}
+						{{'{{#linkTo "index" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bindAttr href="view.href"}}>General</a>{{/linkTo}}'}}
 						{{'{{#linkTo "fields" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Campos</a>{{/linkTo}}'}}
-						{{'{{#linkTo "contacts" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}                                                                
+						{{'{{#linkTo "contacts" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}                                                                
 						<li><a href="#">Segmentos</a></li>
 						<li><a href="#">Estadisticas</a></li>
 						<li><a href="#">Formularios</a></li>
@@ -110,7 +126,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span12 padded text-right">
-			{{'{{#linkTo "fields.add" class="btn btn-default"}}<i class="icon-plus"></i> Agregar campo{{/linkTo}}'}}
+			{{'{{#linkTo "fields.add" class="btn btn-default" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/linkTo}}'}}
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -158,7 +174,7 @@
 								<td></td>
 								<td></td>
 							</tr>
-						{{'{{#each controller}}'}}
+						{{'{{#each}}'}}
 							<tr>
 								<td>{{'{{name}}'}}</td>
 								<td>{{'{{type}}'}}</td>
@@ -177,8 +193,8 @@
 										<div class="btn-group">
 											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 											<ul class="dropdown-menu">
-												<li>{{ '{{#linkTo "fields.edit" this}}' }}<i class="icon-pencil"></i> Editar{{'{{/linkTo}}'}}</li>
-												<li>{{'{{#linkTo "fields.remove" this}}'}}<i class="icon-trash"></i> Eliminar {{'{{/linkTo}}'}}</li>
+												<li>{{ '{{#linkTo "fields.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{'{{/linkTo}}'}}</li>
+												<li>{{'{{#linkTo "fields.remove" this disabledWhen="controller.deleteDisabled"}}'}}<i class="icon-trash"></i> Eliminar {{'{{/linkTo}}'}}</li>
 											</ul>
 										</div>
 									</div>
@@ -197,7 +213,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span12 padded text-right">
-			{{'{{#linkTo "fields.add" class="btn btn-default"}}<i class="icon-plus"></i> Agregar campo{{/linkTo}}'}}
+			{{'{{#linkTo "fields.add" class="btn btn-default" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/linkTo}}'}}
 		</div>
 	</div>
 </script>
@@ -311,6 +327,11 @@
 				</div>
 			</div>
 			<div class="box-content padded">
+				{{ '{{#if errors.errormsg}}' }}
+					<div class="alert alert-error">
+						{{ '{{errors.errormsg}}' }}
+					</div>
+				{{ '{{/if}}' }}
 				<form>
 					<label>Nombre del Campo</label>
 					{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}} '}}
@@ -362,6 +383,11 @@
 			</div>
 			<div class="box-content padded">
 				<form>
+					{{ '{{#if errors.errormsg}}' }}
+						<div class="alert alert-error">
+							{{ '{{errors.errormsg}}' }}
+						</div>
+					{{ '{{/if}}' }}
 					<label>Nombre del Campo</label>
 					{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name"}} '}}
 					
@@ -396,20 +422,26 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/remove">
-<div class="row-fluid">
- <div class="span5 message-delete">
-
- <p>Esta seguro que desea Eliminar el Campo <strong>{{'{{this.name}}'}}</strong></p>
- <p>Recuerde que se <strong>PERDERA LA INFORMACION</strong> de los contactos relacionada con este Campo</p>
-  <button {{'{{action eliminate this}}'}} class="btn btn-danger">
-		Eliminar
-  </button>
-  <button class="btn btn-inverse" {{ '{{action cancel this}}' }}>
-		Cancelar
-  </button>
-
- </div>
-</div>
+	<div class="row-fluid">
+		<div class="box">
+			<div class="box-header">
+				<div class="title">
+					Eliminar un campo personalizado
+				</div>
+			</div>
+			<div class="box-content padded">			
+				<p>Si elimina este campo personalizado se borrará toda la información de los contactos relacionada con este Campo</p>
+				<p>¿Esta seguro que desea eliminar el Campo <strong>{{'{{name}}'}}</strong>?</p>
+				{{ '{{#if errors.errormsg}}' }}
+					<div class="alert alert-error">
+						{{ '{{errors.errormsg}}' }}
+					</div>
+				{{ '{{/if}}' }}
+				<button {{'{{action eliminate this}}'}} class="btn btn-danger">Eliminar</button>
+				<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>	
+			</div>
+		</div>
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/_select">

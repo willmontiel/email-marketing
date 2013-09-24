@@ -29,9 +29,6 @@ App.ApplicationAdapter.reopen({
 // Store (class)
 App.Store = DS.Store.extend({});
 
-// Store (object)
-//App.store = App.Store.extend();
-
 //**
 // ** Inicio de todo lo que tenga que ver con los campos personalizados**
 //**
@@ -45,12 +42,6 @@ App.Field = DS.Model.extend({
 	minValue: DS.attr('number'),
 	maxValue: DS.attr('number'),
 	maxLength: DS.attr('number'),
-	becameError: function() {
-		return alert('there was an error!');
-	},
-	becameInvalid: function(errors) {
-		return alert("Record was invalid because: " + errors);
-	},
 	isSelect: function() {
 		return (this.get('type') == "Select" || this.get('type') == "MultiSelect");
 	}.property('type'),
@@ -74,17 +65,18 @@ App.Field = DS.Model.extend({
 App.FieldsIndexRoute = Ember.Route.extend({
 	model: function(){
 	 return this.store.find('field');
-	}	
+	}
 });
 
 App.FieldsAddRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.createRecord('field');
 	},
-		
-	deactivate: function () {
-		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.get('transaction').rollback();
+	actions : {
+		deactivate: function () {
+			if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
+				this.get('currentModel.transaction').rollback();
+			}
 		}
 	}
 });
@@ -112,22 +104,26 @@ App.FieldsEditRoute = Ember.Route.extend({
 //**
 App.FieldController = Ember.ObjectController.extend();
 
-App.FieldsAddController = Ember.ObjectController.extend({
+App.FieldsIndexController = Ember.ArrayController.extend(Ember.AclMixin, {
+	init: function () 
+	{
+		this.set('acl', App.customFieldACL);
+	}
+});
+
+App.FieldsAddController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	actions : {
 		save: function() {
-			var self = this;
-			self.content.save().then(function() {
-				self.transitionToRoute('fields.index');
-			});
+			this.handleSavePromise(this.content.save(), 'fields.index', 'Se ha creado el campo personalizado');
 		},
 				
 		cancel: function(){
-			this.transitionToRoute('fields');
+			this.transitionToRoute("fields");
 		}
 	}	
 });
 
-App.FieldsEditController = Ember.ObjectController.extend({
+App.FieldsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	actions: {
 		edit: function() {
 			var self = this;
@@ -136,9 +132,7 @@ App.FieldsEditController = Ember.ObjectController.extend({
 				self.get('values').split('\n')
 				);
 			}
-			self.content.save().then(function() {
-				self.transitionToRoute('fields');
-			});
+			this.handleSavePromise(this.content.save(), 'fields', 'Se ha editado el campo personalizado exitosamente');
 		},
 		cancel: function() {
 			this.get('model').rollback();
@@ -147,19 +141,15 @@ App.FieldsEditController = Ember.ObjectController.extend({
 	}
 });
 
-App.FieldsRemoveController = Ember.ObjectController.extend({
+App.FieldsRemoveController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	actions: {
 		eliminate: function() {
-			var self = this;
-			var field = self.get('model');
-			
+			var field = this.get('model');
 			//borrando registro del store
 			field.deleteRecord();
 			
 			//haciendo persistencia en el cambio
-			field.save().then(function () {
-				self.transitionToRoute('fields.index');
-			}),
+			this.handleSavePromise(field.save(), 'fields.index', 'Se ha eliminado el campo personalizado exitosamente'),
 					
 			function (error) {
 				field.rollback();
@@ -237,13 +227,10 @@ App.ContactsEditRoute = Ember.Route.extend({
 //**
 App.ContactController = Ember.ObjectController.extend();
 
-App.ContactsEditController = Ember.ObjectController.extend({
+App.ContactsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	actions: {
 		edit: function() {
-			var self = this;
-			self.content.save().then(function (){
-				self.transitionToRoute('contacts');
-			});	
+			this.handleSavePromise(this.content.save(), 'contacts', 'Se ha editado el campo existosamente');
 		},
 		cancel: function(){
 			this.get('model').rollback();
@@ -252,16 +239,13 @@ App.ContactsEditController = Ember.ObjectController.extend({
 	}
 });
 
-App.ContactsDeleteController = Ember.ObjectController.extend({
+App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	actions: {
 		delete: function() {
-			var self = this;
-			var contact = self.get('model');
+			var contact = this.get('model');
 			contact.deleteRecord();
 			
-			contact.save().then(function() {
-				contact.transitionToRoute('contacts');
-			});
+			this.handleSavePromise(contact.save(), 'contacts', 'Se ha eliminado el contacto exitosamente');
 		},
 				
 		cancel: function(){
@@ -271,12 +255,20 @@ App.ContactsDeleteController = Ember.ObjectController.extend({
 	}
 });
 
-App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
-	searchText: '',
-    search: function(){
-		var resultado = this.store.find('contact', { email: this.get('searchText') });
-		this.set('content', resultado);
+App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, Ember.AclMixin,{
+	init: function () 
+	{
+		this.set('acl', App.contactACL);
 	},
+	
+	actions: {
+		searchText: '',
+		search: function(){
+			var resultado = this.store.find('contact', { email: this.get('searchText') });
+			this.set('content', resultado);
+		}
+	},
+			
 	modelClass: 'Contact'
 });
 

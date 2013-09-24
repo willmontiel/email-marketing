@@ -14,7 +14,6 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 				}
 			}
 			else {
-//				console.log('Error: ' + error.statusText);
 				self.set('errors', {errormsg: error.statusText});
 			}
 		});
@@ -56,6 +55,41 @@ Ember.AclMixin = Ember.Mixin.create({
 		else {
 			return true;
 		}
-	}.property()
+	}.property(),
 			
+	allowBlockedemail: function() {
+		if(this.acl !== 0 && this.acl.allowBlockedemail !== 0) {
+			return false;
+		}
+		else{
+			return true;
+		}
+	}.property(),
+	
+	allowContactlist: function() {
+		if(this.acl !==0 && this.acl.allowContactlist !== 0) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}.property(),
+	
+	importBatchDisabled: function() {
+		if(this.acl !== 0 && this.acl.canImportBatch !== 0){
+			return false;
+		}
+		else {
+			return true;
+		}
+	}.property(),
+			
+	importDisabled: function() {
+		if(this.acl !== 0 && this.acl.canImport !== 0) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}.property()
 });

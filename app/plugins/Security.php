@@ -23,7 +23,7 @@ class Security extends Plugin
 		/*
 		 * Buscar ACL en cache
 		 */
-		$acl = null; //$this->cache->get('acl-cache');
+		$acl = $this->cache->get('acl-cache');
 		
 		if (!$acl) {
 			// No existe, crear objeto ACL
@@ -105,11 +105,12 @@ class Security extends Plugin
 				//Contacts controller
 				'contacts::index' => array('contact' => array('read')),
 				'contacts::newbatch' => array('contact' => array('read','importbatch')),
+				'contacts::importbatch' => array('contact' => array('read', 'importbatch')),
 				'contacts::import' => array('contact' => array('read','importbatch')),
 				'contacts::processfile' => array('contact' => array('read','importbatch')),
 				//Dbase controller
 				'dbase::index' => array('dbase' => array('read')),
-				'dbase::new' => array('dbase' => array('read','new')),
+				'dbase::new' => array('dbase' => array('read','create')),
 				'dbase::show' => array('dbase' => array('read')),
 				'dbase::edit' => array('edit' => array('read','update')),
 				'dbase::delete' => array('dbase' => array('read', 'delete')),
@@ -125,6 +126,7 @@ class Security extends Plugin
 				'api::listbylist' => array('contactlist' => array('read')),
 				'api::updatecontactbylist' => array('contact' => array('read','update')),
 				'api::createcontactbylist' => array('contact' => array('read', 'create')),
+				'api::deletecontactbylist' => array('contact' => array('read', 'delete')),
 				'api::listsedit' => array('contactlist' => array('read', 'update')),
 				'api::deletecontactlist' => array('contactlist' => array('read', 'delete')),
 				//listas de bloqueo
@@ -144,6 +146,7 @@ class Security extends Plugin
 				'api::getonelist' => array('contactlist' => array('read')),
 			);
 		}
+		$this->cache->save('controllermap-cache', $map);
 		return $map;
 	}
 	
@@ -198,7 +201,7 @@ class Security extends Plugin
 		if (!isset($map[$controller .'::'. $action])) {
 			$this->logger->log("[$controller::$action] no existe en el mapa de permisos");
 			if($this->validateResponse($controller) == true){
-				$this->setJsonResponse(array('status' => 'deny'), 404, 'Ha accesado a un recurso restringido');
+				$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
 			}
 			else{
 				$this->response->redirect('error/index');
@@ -217,7 +220,7 @@ class Security extends Plugin
 					$this->logger->log("Oops no esta permitido: [$resources] ($act)");
 					$this->logger->log(print_r($acl, true));
 					if($this->validateResponse($controller) == true){
-						$this->setJsonResponse('Denegado', 404, 'Ha accesado a un recurso restringido');
+						$this->setJsonResponse('Denegado', 404, 'Acción no permitida');
 					}
 					else{
 						$this->response->redirect('error/index');

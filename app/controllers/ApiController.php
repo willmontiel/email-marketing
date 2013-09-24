@@ -472,8 +472,14 @@ class ApiController extends ControllerBase
 	public function deletecontactAction($idDbase, $idContact)
 	{
 		
-		$contact = Contact::findFirstByIdContact($idContact);
-		$db = Dbase::findFirstByIdDbase($idDbase);
+		$contact = Contact::findFirst(array(
+			"conditions" => "idContact = ?1",
+			"bind" => array(1 => $idContact)
+		));
+		$db = Dbase::findFirst(array(
+			"conditions" => "idDbase = ?1",
+			"bind" => array(1 => $idDbase)
+		));
 		
 		if (!$contact || $contact->dbase->idDbase != $db->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
@@ -482,9 +488,9 @@ class ApiController extends ControllerBase
 		// Eliminar el Contacto de la Base de Datos
 		$wrapper = new ContactWrapper();
 
-		$response = $wrapper->deleteContactFromDB($contact, $db);
+		$result = $wrapper->deleteContactFromDB($contact, $db);
 		
-		return $this->setJsonResponse($response);	
+		return $this->setJsonResponse(array ('contact' => $result), 202, 'contact deleted success');	
 	
 	}
 	
@@ -577,7 +583,15 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->list;
 		
 		$wrapper = new ContactListWrapper();
-		$mensaje = $wrapper->updateContactList($contents, $idContactlist);
+		try {
+			$mensaje = $wrapper->updateContactList($contents, $idContactlist);
+		}
+		catch (InvalidArgumentException $e) {
+			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
+		}
+		catch (Exception $e) {
+			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al actualizar lista de contactos')), 422, 'Error: ' . $e->getMessage());
+		}
 		
 		return $this->setJsonResponse($mensaje);
 	}
@@ -714,7 +728,10 @@ class ApiController extends ControllerBase
 	 */
 	public function createcontactbylistAction($idContactlist)
 	{
-		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+		$list = Contactlist::findFirst(array(
+			"conditions" => "idContactlist = ?1",
+			"bind" => array(1 => $idContactlist)
+		));
 		
 		$log = $this->logger;
 
@@ -733,8 +750,6 @@ class ApiController extends ControllerBase
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
 		// Crear el nuevo contacto:
-		sleep(3);
-
 		if (!isset($contents->email) || trim($contents->email) == '') {
 			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
 		}
@@ -821,8 +836,14 @@ class ApiController extends ControllerBase
 	public function deletecontactbylistAction($idContactlist, $idContact)
 	{
 		
-		$contact = Contact::findFirstByIdContact($idContact);
-		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+		$contact = Contact::findFirst(array(
+			"conditions" => "idContact = ?1",
+			"bind" => array(1 => $idContact)
+		));
+		$list = Contactlist::findFirst(array(
+			"conditions" => "idContactlist = ?1",
+			"bind" => array(1 => $idContactlist)
+		));
 		
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
@@ -831,9 +852,9 @@ class ApiController extends ControllerBase
 		// Eliminar el Contacto de la Lista
 		$wrapper = new ContactWrapper();
 		
-		$mensaje = $wrapper->deleteContactFromList($contact, $list);
+		$response = $wrapper->deleteContactFromList($contact, $list);
 		
-		return $this->setJsonResponse($mensaje);	
+		return $this->setJsonResponse(array ('contact' => $response), 202, 'contact deleted success');	
 	
 	}
 
@@ -875,7 +896,7 @@ class ApiController extends ControllerBase
 		
 		$blockeds = $blockedWrapper->findBlockedEmailList($this->user->account);
 		
-		return $this->setJsonResponse($blockeds);
+		return $this->setJsonResponse($blockeds,  202, 'blockedemail catched success');
 	}
 	
 	/**

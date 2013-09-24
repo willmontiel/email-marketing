@@ -75,6 +75,12 @@ try {
 		return $cache;
 	});
 
+	$di->set('acl', function(){
+		$acl = new Phalcon\Acl\Adapter\Memory();
+		$acl->setDefaultAction(Phalcon\Acl::DENY);
+		
+		return $acl;
+	});
 	/*
 	 * Security Object, utilizado para validacion y creacion de contraseñas
 	 */
@@ -198,7 +204,7 @@ try {
 						return 'ContactCounter::getInactive(' . $resolvedArgs . ')';
 					});
 		$compiler->addFunction('acl_Ember', function ($resolvedArgs, $exprArgs){
-						return 'CreateAclEmber::getAcl(' . $resolvedArgs .')';
+						return 'CreateAclEmber::getAclToEmber(' . $resolvedArgs . ')';
 					});
 					
         $volt->setOptions(array(

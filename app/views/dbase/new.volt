@@ -1,52 +1,36 @@
-{% extends "templates/index.volt" %}
-
+{% extends "templates/index_new.volt" %}
+{% block sectiontitle %}<i class="icon-book icon-2x"> </i> Nueva base de datos{% endblock %}
+{%block sectionsubtitle %}Cree una base de datos, y administre listas de contactos{% endblock %}
 {% block content %}
-<div class="row-fluid">
-    <div class="row-fluid">
-		<div class="span8">
-			<div class="modal-header">
-				<h1>Nueva Base de Datos</h1>
+	<div class="row-fluid">
+		<div class="span12 text-right">
+			<a href="{{url('dbase')}}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
+		</div>
+	</div>
+	<br />
+    <div class="row-fluid span3">
+		<div class="box">
+			<div class="box-header">
+				<div class="title">
+					Crear una base de datos
+				</div>
+			</div>
+			<div class="box-content padded">	
+				<form action = "{{url('dbase/new')}}" method="post">
+					<label>*Nombre</label>
+					{{editform.render("name")}}
+					
+					<label>*Descripcion</label>                
+					{{editform.render("description")}}
+					
+					<label>*Descripcion de los Contactos</label>
+					{{editform.render("Cdescription")}}
+					<div class="form-actions">
+						{{submit_button("Guardar", 'class' : "btn btn-blue", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
+						<a href="{{ url('dbase') }}" class="btn btn-default">cancelar</a>
+					</div>
+				</form>
 			</div>
 		</div>
-		
-		<div class="span4">
-			<span class="return-upper-right-corner"><a href="{{url('dbase')}}"><h3>Regresar</h3></a></span>
-		</div>
 	</div>
-	<div class="row-fluid">
-		<div class="span12"></div>
-	</div>
-    <div class="row-fluid">
-        <form action = "{{url('dbase/new')}}" method="post">
-        <div class="row-fluid">
-            <div class="span3">
-                <label for="name">*Nombre</label>
-            </div>
-            <div class="span4">
-                {{editform.render("name")}}
-            </div>
-        </div>
-        <div class="row-fluid">
-            <div class="span3">
-                <label for="description">*Descripcion</label>                
-            </div>
-            <div class="span4">
-                {{editform.render("description")}}
-            </div>
-        </div>
-        <div class="row-fluid">
-            <div class="span3">
-                <label for="Cdescription">*Descripcion de los Contactos</label>
-            </div>
-            <div class="span4">
-                {{editform.render("Cdescription")}}
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-		{{submit_button("Guardar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
-		<a href="{{ url('dbase') }}" class="btn btn-inverse">cancelar</a>
-    </div>
-    </form>
-</div>
 {% endblock %}

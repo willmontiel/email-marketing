@@ -2,10 +2,7 @@ App.Blockedemail = DS.Model.extend({
 	email: DS.attr('string'),
     blockedReason: DS.attr('string'),
 	blockedDate: DS.attr('string'),
-	deleteContact: DS.attr('boolean'),
-	isDeny: function() {
-		return true;
-	}.property()
+	deleteContact: DS.attr('boolean')
 });
 //**
 //** RUTAS **
@@ -13,12 +10,27 @@ App.Blockedemail = DS.Model.extend({
 App.BlockedemailsIndexRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.find('blockedemail');
+	},
+	actions : {
+		deactivate: function () {
+			if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
+				this.get('currentModel.transaction').rollback();
+			}
+		}
 	}
 });
 
 App.BlockedemailsBlockRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.createRecord('blockedemail');
+	},
+		
+	actions : {
+		deactivate: function () {
+			if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+				this.currentModel.get('model').rollback();
+			}
+		}
 	}
 });
 
@@ -35,7 +47,7 @@ App.BlockedemailsIndexController = Ember.ArrayController.extend(Ember.MixinPagin
 	modelClass : App.Blockedemail
 });
 
-App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, Ember.AclMixin, {
+App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	init: function () 
 	{
 		this.set('acl', App.blockedemailACL);
@@ -54,6 +66,7 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandl
 			else {
 				if(filter.test(this.get('email'))) {
 					this.handleSavePromise(this.content.save(), 'blockedemails', 'Correo bloqueado!');
+					App.set('errormessage', '');
 				}
 				else {
 					App.set('errormessage', 'El email que ingresaste es invalido, por favor verifica la información');
@@ -69,16 +82,13 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandl
 	}
 });
 
-App.BlockedemailsUnblockController = Ember.ObjectController.extend({	
+App.BlockedemailsUnblockController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{	
 	actions: {
 		unblock: function() {
-			var self = this;
-			var block = self.get('content');
+			var block = this.get('model');
 			block.deleteRecord();
 			
-			block.save().then(function(){
-				self.transitionToRoute('blockedemails');
-			});
+			this.handleSavePromise(block.save(), 'blockedemails', 'Dirección de correo electrónico desbloqueada!');
 		},
 				
 		cancel: function(){

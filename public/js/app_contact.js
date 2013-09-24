@@ -28,9 +28,6 @@ App.ApplicationAdapter.reopen({
 // Store (class)
 App.Store = DS.Store.extend();
 
-// Store (object)
-//App.store = App.Store.create();
-
 //Inicio contactos
 App.Contact = DS.Model.extend(
 	myContactModel
@@ -92,7 +89,6 @@ App.ContactController = Ember.ObjectController.extend();
 App.ContactsNewbatchController = Ember.ObjectController.extend();
 
 App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
-	
 	actions: {
 		save: function() {
 			this.content.set('isActive', true);
@@ -129,14 +125,12 @@ App.ContactsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 	}
 });
 
-App.ContactsDeleteController = Ember.ObjectController.extend({
+App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
     actions : {
 		
 		delete: function() {
-			var self = this;		
-			self.get('model').deleteRecord();
-			self.get('model').save();		
-			this.transitionToRoute('contacts');
+			this.get('model').deleteRecord();
+			this.handleSavePromise(this.content.save(), 'contacts', 'El contacto ha sido eliminado con exito!');
 		},
 				
 		cancel: function(){
@@ -148,13 +142,17 @@ App.ContactsDeleteController = Ember.ObjectController.extend({
 	
 });
 
-App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{	
+App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, Ember.AclMixin,{
+	init: function () 
+	{
+		this.set('acl', App.contactACL);
+	},
 	searchText: '',
-	modelClass : App.Contact,
     search: function(){
-		var resultado = App.Contact.find({ email: this.get('searchText') });
+		var resultado = this.store.find('contact', { email: this.get('searchText') });
 		this.set('content', resultado);
-	}
+	},
+	modelClass: App.Contact
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({

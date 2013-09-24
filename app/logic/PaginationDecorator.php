@@ -11,7 +11,7 @@ class PaginationDecorator {
 	protected $rows;
 	
 	const START_PAGE = 1;
-	const DEFAULT_LIMIT = 5;
+	const DEFAULT_LIMIT = 20;
 	
 	public function __construct()
 	{

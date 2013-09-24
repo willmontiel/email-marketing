@@ -40,9 +40,15 @@
 									<td>{{'{{blockedDate}}' }}</td>
 									<td>{{ '{{blockedReason}}'}}</td>
 									<td>
-										{{ '{{#linkTo "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger"}}Bloquear{{/linkTo}}' }}
-										{{'{{#linkTo "blockedemails.unblock" this disabledWhen="deleteDisabled" class="btn btn-deafault"}}Desbloquear{{/linkTo}}'}}
+										{{'{{#linkTo "blockedemails.unblock" this disabledWhen="controller.deleteDisabled" }}Desbloquear{{/linkTo}}'}}
 									</td>
+								</tr>
+							{{ '{{else}}' }}
+								<tr>
+									<td>No hay direcciones de correo bloqueadas</td>
+									<td></td>
+									<td></td>
+									<td></td>
 								</tr>
 							{{ '{{/each }}' }}
 						</tbody>
@@ -112,7 +118,7 @@
 								<p>Si estas seguro dale click al botón <strong>Bloquear</strong> para continuar.</p>
 								<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact" class="icheckbox_flat-aero hover"}}' }} Eliminar contactos asociados al email</p>
 								<button class="btn btn-danger" {{ '{{action block this }}' }}>Bloquear</button>
-								<button class="btn btn-inverse" {{ '{{action cancel this }}' }}>Cancelar</button>
+								<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
 							</form>
 						</div>
 					</div>
@@ -126,9 +132,6 @@
 	<div class="row-fluid">
 		<div class="span8">
 			<h2>Desbloquear Contactos</h2>
-		</div>
-		<div class="text-right span4">
-			{{ '{{#linkTo "blockedemails.index" }}' }}<button class="btn btn-inverse">Regresar</button>{{ '{{/linkTo}}' }}
 		</div>
 	</div>
 	<br>
@@ -147,8 +150,14 @@
 			<p>
 				Click en <strong>desbloquear</strong> si desea continuar
 			</p>
-			 <button {{'{{action unblock this}}'}} class="btn btn-primary">Desbloquear</button>
-			 <button class="btn btn-inverse" {{ '{{action cancel this}}' }}>Cancelar </button>
+			{{'{{#if errors.errormsg}}'}}
+				<br />
+				<div class="alert alert-error">
+					{{'{{errors.errormsg}}'}}
+				</div>
+			{{'{{/if}}'}}
+			 <button {{'{{action unblock this}}'}} class="btn btn-blue">Desbloquear</button>
+			 <button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar </button>
 		</div>
 	</div>
 </script>
