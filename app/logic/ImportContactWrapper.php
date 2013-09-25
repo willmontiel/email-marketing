@@ -37,8 +37,15 @@ class ImportContactWrapper extends BaseWrapper
 		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
 		$dbase = Dbase::findFirstByIdDbase($list->idDbase);
 		$posCol = (array) $fields;
-		
-		if(empty($posCol)) {
+
+		if(empty($posCol['email'])) {
+			$newproccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
+			$newproccess->status = "Importacion no realizada";
+			
+			if(!$newproccess->save()) {
+				throw new \InvalidArgumentException('No se pudo actualizar el estado del proceso');
+			}
+			
 			throw new \InvalidArgumentException('No hay Mapeo de los Campos y las Columnas del Archivo');
 		}
 
@@ -119,13 +126,13 @@ class ImportContactWrapper extends BaseWrapper
 							$fieldDomain = $db->escapeString($edomain);
 							$fieldName = $db->escapeString($name);
 							$fieldLastname = $db->escapeString($lastname);
-							
-							$values.= "($totalLine, $fieldEmail, find_or_create_email($fieldEmail, $fieldDomain, $idAccount), $fieldName, $fieldLastname)";
+							$lineInFile = ($header)?$totalLine+1:$totalLine;
+							$values.= "($lineInFile, $fieldEmail, find_or_create_email($fieldEmail, $fieldDomain, $idAccount), $fieldName, $fieldLastname)";
 							
 							foreach ($posCol as $key => $value) {
 								
 								if(is_numeric($key) && !empty($linew[$value])){
-									$valuescf = array ($totalLine, $key, $linew[$value]);
+									$valuescf = array ($lineInFile, $key, $linew[$value]);
 									array_push($customfields, $valuescf);
 								}
 								
@@ -140,19 +147,19 @@ class ImportContactWrapper extends BaseWrapper
 							}
 						}
 						else {
-							$lineInFile = ($header)?$totalLine+2:$totalLine+1;
+							$lineInFile = ($header)?$totalLine+1:$totalLine;
 							array_push($errors, $lineInFile.','.$email.',Correo Repetido en Archivo');
 							$repeated++;
 						}
 					}
 					else {
-						$lineInFile = ($header)?$totalLine+2:$totalLine+1;
+						$lineInFile = ($header)?$totalLine+1:$totalLine;
 						array_push($errors, $lineInFile.','.$email.',Correo Invalido');
 						$invalid++;
 					}
 				}
 				else {
-					$lineInFile = ($header)?$totalLine+2:$totalLine+1;
+					$lineInFile = ($header)?$totalLine+1:$totalLine;
 					array_push($errors, $lineInFile.','.$email.',Limite de Contactos Excedido');
 					$limit++;
 				}
@@ -315,14 +322,17 @@ class ImportContactWrapper extends BaseWrapper
 								LINES TERMINATED BY '\n'";
 
 			$db->execute($queryForErrors);							
-			
-			$fp = fopen($filesPath . $nameNimported, 'a');
+			Phalcon\DI::getDefault()->get('logger')->log(print_r($errors, true));
+			if(!empty($errors)) {
+				$fp = fopen($filesPath . $nameNimported, 'a');
 
-			foreach ($errors as $error) {
-				fputcsv($fp, $error);
+				foreach ($errors as $error) {
+					$tmp = explode(",", $error);
+					fputcsv($fp, $tmp);
+				}
+
+				fclose($fp);
 			}
-
-			fclose($fp);
 		}
 		
 		$saveFileSuccess = new Importfile();
