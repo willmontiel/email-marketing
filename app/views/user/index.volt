@@ -24,10 +24,15 @@
 		</div>
 	</div>
 	<div class="row-fluid">
+		<div class="span6">
 			{{ flashSession.output() }}
 		</div>
 		<div class="span6 text-right">
-			<a href="{{url('user/new')}}" class="btn btn-default"><i class="icon-plus"></i> Crear usuario</a>
+			{% if allow == 0 %}
+				<button class="btn btn-default" disabled="disabled"><i class="icon-plus"></i> Crear usuario</button>
+			{% else %}
+				<a href="{{url('user/new')}}" class="btn btn-default"><i class="icon-plus"></i> Crear usuario</a>
+			{% endif %}
 			<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
 		</div>
 	</div>

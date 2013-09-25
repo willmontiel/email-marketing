@@ -269,7 +269,7 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 		}
 	},
 			
-	modelClass: 'Contact'
+	modelClass: App.Contact
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({

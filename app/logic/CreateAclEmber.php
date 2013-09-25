@@ -15,8 +15,8 @@ class CreateAclEmber
 		$role = User::findFirstByIdUser($idSession->get('userid'));
 		
 		$cache = $di['cache'];
-		$cacheAcl = $cache->get('acl-cache');
 		$cacheMap = $cache->get('controllermap-cache');
+		$acl = $cache->get('acl-cache');
 		
 		if(!isset($cacheMap[$allow])){
 			return 0;
@@ -26,7 +26,7 @@ class CreateAclEmber
 			$reg = $cacheMap[$allow];
 			foreach($reg as $resources => $actions){
 				foreach ($actions as $act) {
-					if (!$cacheAcl->isAllowed($role->userrole, $resources, $act)) {
+					if (!$acl->isAllowed($role->userrole, $resources, $act)) {
 						return 0;
 					}
 					else {

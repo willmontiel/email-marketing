@@ -105,6 +105,24 @@
 							<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
 						</div>
 					</div>
+				{{ '{{else}}' }}
+					<div class="box-section news with-icons">
+						<div class="avatar green">
+							<i class="icon-lightbulb icon-2x"></i>
+						</div>
+						<div class="news-content">
+							<div class="news-title">
+								No hay listas de contactos
+							</div>
+							<div class="news-text">
+								<p>
+									Para empezar a administrar contactos, puede crear una lista de contactos,
+									haga clic en el siguiente enlace para crear una
+								</p>
+								{{'{{#linkTo "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/linkTo}}'}}
+							</div>
+						</div>
+					</div>
 				{{ '{{/each}}' }}
 				</div>
 				<div class="box-footer flat"> 

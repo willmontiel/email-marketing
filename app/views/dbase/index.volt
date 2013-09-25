@@ -23,9 +23,10 @@
 		</div>
 		<div class="box-content">
 	{%for item in page.items%}
-			<table>
+			<table class="table table-normal">
+				<thead></thead>
 				<tbody>
-					<tr class="span12">
+					<tr>
 						<td class="span6">
 							<div class="box-section news with-icons">
 								<div class="avatar purple">
@@ -99,7 +100,7 @@
 				 </div>
 				<div class="span2 text-right">
 					<br>
-					<a href="{{ url('') }}" class="btn btn-default">Regresar</a>
+					<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
 				</div>
 			</div>
 		</div>

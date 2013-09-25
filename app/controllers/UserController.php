@@ -18,7 +18,10 @@ class UserController extends ControllerBase
 		
 		$page = $paginator->getPaginate();
 		
+		$allow = $this->verifyAcl('user', 'new');
+		
 		$this->view->setVar("page", $page);
+		$this->view->setVar("allow", $allow);
 	}
 	
 	public function newAction()

@@ -107,7 +107,6 @@
 		</div>
 		<!-- /sidebar -->
 		<div class="primary-sidebar">
-
 			<!-- Main nav -->
 			<ul class="nav nav-collapse collapse nav-collapse-primary">
 				<li class="active">
@@ -145,93 +144,8 @@
 						<span>Estadísticas</span>
 					</a>
 				</li>
-				<li class="dark-nav ">
-
-					<span class="glow"></span>
-					<a class="accordion-toggle collapsed " data-toggle="collapse" href="#zwz2Ux5SfP">
-						<i class="icon-beaker icon-2x"></i>
-						<span>UI Lab<i class="icon-caret-down"></i></span>
-
-					</a>
-
-					<ul id="zwz2Ux5SfP" class="collapse ">
-
-						  <li class="">
-							<a href="../ui_lab/buttons.html">
-								<i class="icon-hand-up"></i> Buttons
-							</a>
-						  </li>
-
-						  <li class="">
-							<a href="../ui_lab/general.html">
-								<i class="icon-beaker"></i> General elements
-							</a>
-						  </li>
-
-						  <li class="">
-							<a href="../ui_lab/icons.html">
-								<i class="icon-info-sign"></i> Icons
-							</a>
-						  </li>
-
-						  <li class="">
-							<a href="../ui_lab/grid.html">
-								<i class="icon-th-large"></i> Grid
-							</a>
-						  </li>
-
-						  <li class="">
-							<a href="../ui_lab/tables.html">
-								<i class="icon-table"></i> Tables
-							</a>
-						  </li>
-
-						  <li class="">
-							<a href="../ui_lab/widgets.html">
-								<i class="icon-plus-sign-alt"></i> Widgets
-							</a>
-						  </li>
-
-					</ul>
-
-				</li>
-
-
 			</ul>
-
-			<div class="hidden-tablet hidden-phone">
-			  <div class="text-center" style="margin-top: 60px">
-				<div class="easy-pie-chart-percent" style="display: inline-block" data-percent="89"><span>89%</span></div>
-				<div style="padding-top: 20px"><b>CPU Usage</b></div>
-			  </div>
-
-			  <hr class="divider" style="margin-top: 60px">
-
-			  <div class="sparkline-box side">
-
-				<div class="sparkline-row">
-				  <h4 class="gray"><span>Orders</span> 847</h4>
-				  <div class="sparkline big" data-color="gray"><!--28,11,24,24,8,20,26,22,16,6,12,15--></div>
-				</div>
-
-				<hr class="divider">
-				<div class="sparkline-row">
-				  <h4 class="dark-green"><span>Income</span> $43.330</h4>
-				  <div class="sparkline big" data-color="darkGreen"><!--16,20,6,19,25,22,9,13,7,10,15,4--></div>
-				</div>
-
-				<hr class="divider">
-				<div class="sparkline-row">
-				  <h4 class="blue"><span>Reviews</span> 223</h4>
-				  <div class="sparkline big" data-color="blue"><!--20,18,21,17,5,7,29,9,8,14,23,8--></div>
-				</div>
-
-				<hr class="divider">
-			  </div>
-			</div>
-
 		</div>
-
 		<!-- content -->
 		<div class="main-content">
 			<div class="container-fluid">

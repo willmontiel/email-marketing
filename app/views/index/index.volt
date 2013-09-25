@@ -7,9 +7,7 @@
 {#
 {{dump(map)}}
 {{dump(map2)}}
-{{dump(map3)}}
- #}
-
+#}
 {{flashSession.output()}}
 	<div class="row-fluid">
 		<div class="box">

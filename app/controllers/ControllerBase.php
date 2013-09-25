@@ -30,11 +30,38 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 	 * @param string $message el mensaje, por defecto es "Operacion no permitida"
 	 * @return \Phalcon\HTTP\ResponseInterface
 	 */
-	
+	public function verifyAcl($resource, $action)
+	{
+		$map = $this->cache->get('controllermap-cache');
+		$acl = $this->cache->get('acl-cache');
+		
+		if (!isset($map[$resource .'::'. $action])) {
+			return 0;
+		}
+		
+		$reg = $map[$resource .'::'. $action];
+		
+		foreach($reg as $resources => $actions){
+			foreach ($actions as $act) {
+				if (!$acl->isAllowed($this->user->userrole, $resources, $act)) {
+					$this->logger->log("no tiene permiso sobre ". $resource .",". $action);
+					return 0;
+				}
+				$this->logger->log("validado sobre ". $resource .",". $action);
+				return 1;
+			}
+		}
+	}
+
 	/**
 	 * Llamar este metodo para enviar respuestas en modo JSON
+	 * @param string $content
+	 * @param int $status
+	 * @param string $message
+	 * @return \Phalcon\Http\ResponseInterface
 	 */
-	public function setJsonResponse($content, $status = 200, $message = '') {
+	public function setJsonResponse($content, $status = 200, $message = '') 
+	{
 		$this->view->disable();
 
 		$this->_isJsonResponse = true;

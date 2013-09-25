@@ -174,7 +174,7 @@
 								<td></td>
 								<td></td>
 							</tr>
-						{{'{{#each}}'}}
+						{{'{{#each model}}'}}
 							<tr>
 								<td>{{'{{name}}'}}</td>
 								<td>{{'{{type}}'}}</td>

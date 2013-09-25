@@ -101,6 +101,7 @@ App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 		cancel: function(){
 			window.theDbaseController = this.get('controllers.dbase');
 			console.log(this.get('controllers.dbase'));
+			this.get('model').rollback();
 			this.transitionToRoute("lists");
 		}
 	}

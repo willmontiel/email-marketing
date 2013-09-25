@@ -23,13 +23,14 @@ class Security extends Plugin
 		/*
 		 * Buscar ACL en cache
 		 */
-		$acl = $this->cache->get('acl-cache');
+		$acl = null; //$this->cache->get('acl-cache');
 		
 		if (!$acl) {
 			// No existe, crear objeto ACL
 	
-			$acl = new Phalcon\Acl\Adapter\Memory();
-			$acl->setDefaultAction(Phalcon\Acl::DENY);
+//			$acl = new Phalcon\Acl\Adapter\Memory();
+//			$acl->setDefaultAction(Phalcon\Acl::DENY);
+			$acl = $this->acl;
 
 			$userroles = Role::find();
 
@@ -81,7 +82,7 @@ class Security extends Plugin
 	
 	protected function getControllerMap()
 	{
-		$map = null; //$this->cache->get('controllermap-cache');
+		$map = $this->cache->get('controllermap-cache');
 		if (!$map) {
 			$map = array(
 				'error::index' => array(),
@@ -123,6 +124,9 @@ class Security extends Plugin
 				'dbase::delete' => array('dbase' => array('read', 'delete')),
 				//Usuarios
 				'user::index' => array('user' => array('read')),
+				'user::new' => array('user' => array('read', 'create')),
+				'user::edit' => array('user' => array('read', 'update')),
+				'user::delete' => array('user' => array('read', 'delete')),
 				//Api
 				//Listas de contactos y contactos 
 				'api::getlists' => array('contactlist' => array('read')),
