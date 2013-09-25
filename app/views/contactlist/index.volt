@@ -151,7 +151,9 @@
 					{{ '{{view Ember.Select
 						contentBinding="controllers.dbase.content"
 						optionValuePath="content.id"
-						optionLabelPath="content.name"}}'
+						optionLabelPath="content.name"
+						selectionBinding="dbase"
+						}}'
 					}}
 				</div>
 				<div class="form-actions">

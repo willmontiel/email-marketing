@@ -190,7 +190,11 @@ class ContactListWrapper extends BaseWrapper
 	public function deleteContactList($idContactlist)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
-		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+		$list = Contactlist::findFirst(array(
+			"conditions" => "idContactlist = ?1",
+			"bind" => array(1 => $idContactlist)
+		));
+		
 		$idDbase = $list->idDbase;
 		
 		$query = 'DELETE CO, CF

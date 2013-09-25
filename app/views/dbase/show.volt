@@ -230,7 +230,7 @@
 <div class="row-fluid">
 	<div class="row-fluid">
 		<div class="span12 text-right">
-			<a href="{{url('dbase')}}" class="btn btn-default">Regresar</a>
+			<a href="{{url('dbase')}}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
 		</div>
 	</div>
 </div>
@@ -250,15 +250,13 @@
 						<div class="avatar purple">
 							<i class="icon-book icon-2x"></i>
 						</div>
-						<div class="news-time">
-							<span>14</span>feb
-						</div>
 						<div class="news-content">
 							<div class="news-title">
-								{{sdbase.description}}
+								{{sdbase.name}}
 							</div>
 							<div class="news-text">
-								<p>Descripcion de Contactos: <br />{{sdbase.Cdescription}}</p>
+								<p>{{sdbase.description}}</p>
+								<p>{{sdbase.Cdescription}}</p>
 								Creada en {{date('Y-m-d', sdbase.createdon)}}<br />
 								Actualizada en {{date('Y-m-d', sdbase.updatedon)}}
 							</div>

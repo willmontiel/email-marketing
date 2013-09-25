@@ -79,7 +79,7 @@ App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, E
 	needs: 'dbase'
 });
 
-App.ListsNewController = Ember.ObjectController.extend({
+App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	needs: ['dbase'],
 
 	loadDbases: function () {
@@ -93,10 +93,8 @@ App.ListsNewController = Ember.ObjectController.extend({
 				this.transitionToRoute('lists.new');
 			}
 			else{
-				var self = this;
-				self.content.save().then(function(){
-					self.transitionToRoute('lists');
-				});
+				this.handleSavePromise(this.content.save(), 'lists', 'Se ha creado la lista exitosamente');
+				App.set('errormessage', '');
 			}
 		},
 
@@ -112,7 +110,7 @@ App.ListsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, 
 	actions: {
 		edit: function() {
 			if(this.get('name') == ""){
-				App.set('errormessage', 'El campo nombre esta vacío, debes ingresar un nombre');
+				App.set('errormessage', 'El campo nombre esta vacío, debe ingresar un nombre');
 				this.transitionToRoute("lists.edit");
 			}
 			else{

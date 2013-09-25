@@ -23,40 +23,50 @@
 		</div>
 		<div class="box-content">
 	{%for item in page.items%}
-			<div class="box-section news with-icons">
-				<div class="avatar purple">
-					<i class="icon-book icon-2x"></i>
-				</div>
-				<div class="news-content">
-					<div class="news-title">
-						<a href="{{ url('dbase/show/') }}{{item.idDbase}}">{{item.name}}</a>
-					</div>
-					<div class="news-text">
-						{{item.description}}
-					</div>
-				</div>
-				<ul class="inline pull-right sparkline-box">
-						<li class="sparkline-row">
-							<h4 class="green"><span>Activos</span> {{item.Cactive|numberf}}</h4>
-						</li>
-						
-						<li class="sparkline-row">
-							<h4 class="gray"><span>Inactivos</span> {{get_inactive(item)|numberf}}</h4>
-						</li>
-						
-						<li class="sparkline-row">
-							<h4 class="blue"><span>Des-suscritos</span> {{item.Cunsubscribed|numberf}}</h4>
-						</li>
+			<table>
+				<tbody>
+					<tr class="span12">
+						<td class="span6">
+							<div class="box-section news with-icons">
+								<div class="avatar purple">
+									<i class="icon-book icon-2x"></i>
+								</div>
+								<div class="news-content">
+									<div class="news-title">
+										<a href="{{ url('dbase/show/') }}{{item.idDbase}}">{{item.name}}</a>
+									</div>
+									<div class="news-text">
+										{{item.description}}
+									</div>
+								</div>
+							</div>
+						</td>
+						<td class="span6">
+							<ul class="inline pull-right sparkline-box">
+								<li class="sparkline-row">
+									<h4 class="green"><span>Activos</span> {{item.Cactive|numberf}}</h4>
+								</li>
 
-						<li class="sparkline-row">
-							<h4 class="red"><span>Rebotados</span> {{item.Cbounced|numberf}}</h4>
-						</li>
+								<li class="sparkline-row">
+									<h4 class="gray"><span>Inactivos</span> {{get_inactive(item)|numberf}}</h4>
+								</li>
 
-						<li class="sparkline-row">
-							<h4 class="red"><span>Spam</span> {{item.Cspam|numberf}}</h4>
-						</li>
-					</ul>
-			</div>
+								<li class="sparkline-row">
+									<h4 class="blue"><span>Des-suscritos</span> {{item.Cunsubscribed|numberf}}</h4>
+								</li>
+
+								<li class="sparkline-row">
+									<h4 class="red"><span>Rebotados</span> {{item.Cbounced|numberf}}</h4>
+								</li>
+
+								<li class="sparkline-row">
+									<h4 class="red"><span>Spam</span> {{item.Cspam|numberf}}</h4>
+								</li>
+							</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 	{%endfor%}
 		</div>
 		<div class="box-footer padded">
