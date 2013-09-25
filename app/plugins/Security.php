@@ -123,6 +123,7 @@ class Security extends Plugin
 				//Listas de contactos y contactos 
 				'api::getlists' => array('contactlist' => array('read')),
 				'api::createcontactlist' => array('contactlist' => array('read', 'create')),
+				'api::dbaselist' => array('contactlist' => array('read', 'create')),
 				'account::loadcontactsinfo' => array('contactlist' => array('read')),
 				'api::listcontactsbylist' => array('contactlist' => array('read')),
 				'api::getcontactbylist' => array('contact' => array('read')),

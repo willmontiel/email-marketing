@@ -572,7 +572,7 @@ class ApiController extends ControllerBase
 	 * 
 	 * @Post("/lists")
 	 */
-	public function createContactList()
+	public function createcontactListAction()
 	{
 		$log = $this->logger;
 
