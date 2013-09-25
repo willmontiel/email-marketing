@@ -111,6 +111,10 @@ class Security extends Plugin
 				'contacts::importbatch' => array('contact' => array('read', 'importbatch')),
 				'contacts::import' => array('contact' => array('read','importbatch')),
 				'contacts::processfile' => array('contact' => array('read','importbatch')),
+				//Página de procesos
+				'proccess::show' => array('process' => array('read')),
+				'proccess::downoladsuccess' => array('process' => array('download')),
+				'proccess::downoladerror' => array('process' => array('download')),
 				//Dbase controller
 				'dbase::index' => array('dbase' => array('read')),
 				'dbase::new' => array('dbase' => array('read','create')),
