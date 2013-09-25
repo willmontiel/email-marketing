@@ -78,7 +78,7 @@
 					</ul>
 				</div>
 				<div class="box-content">
-				{{'{{#each}}'}}
+				{{'{{#each model}}'}}
 					<div class="box-section news with-icons">
 						<div class="avatar blue">
 							<i class="icon-ok icon-2x"></i>

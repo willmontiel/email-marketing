@@ -65,11 +65,11 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandl
 			}
 			else {
 				if(filter.test(this.get('email'))) {
-					this.handleSavePromise(this.content.save(), 'blockedemails', 'Correo bloqueado!');
+					this.handleSavePromise(this.content.save(), 'blockedemails', 'Correo bloqueado exitosamente');
 					App.set('errormessage', '');
 				}
 				else {
-					App.set('errormessage', 'El email que ingresaste es invalido, por favor verifica la información');
+					App.set('errormessage', 'La dirección de correo electrónico ingresada es invalida, por favor verifica la información');
 					this.transitionToRoute('blockedemails.block');
 				}
 			}

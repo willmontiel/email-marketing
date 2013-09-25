@@ -65,7 +65,6 @@ class ContactListWrapper extends BaseWrapper
 
 		if($cnt != 0) {
 			$this->addFieldError('name', 'Este nombre de lista ya existe en la base de datos seleccionada');
-			$this->addFieldError('name', 'Elija un nombre diferente, o una base de datos diferente!');
 			throw new InvalidArgumentException('Nombre de lista de contacto duplicado');
 		}
 		
@@ -76,7 +75,7 @@ class ContactListWrapper extends BaseWrapper
 	}
 	public function assignDataToContactList($contents, $list)
 	{
-		$list->idDbase = $contents->dbase_id;
+		$list->idDbase = $contents->dbase;
 		$list->name = $contents->name;
 		$list->description = $contents->description;
 		$list->createdon = $contents->createdon;
@@ -182,7 +181,7 @@ class ContactListWrapper extends BaseWrapper
 				return array('lists' => 'errror');
 			}
 			else{
-				return $mensaje;
+				return array('list' => self::convertListToJson($contactList ));
 			}
 		}
 		
