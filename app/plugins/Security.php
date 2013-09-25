@@ -23,7 +23,7 @@ class Security extends Plugin
 		/*
 		 * Buscar ACL en cache
 		 */
-		$acl = $this->cache->get('acl-cache');
+		$acl = null; //$this->cache->get('acl-cache');
 		
 		if (!$acl) {
 			// No existe, crear objeto ACL
@@ -96,9 +96,12 @@ class Security extends Plugin
 				'account::edit' => array('account' => array ('read', 'update')),
 				'account::show' => array('user' => array ('read')),
 				'account::delete' => array('account' => array ('read', 'delete')),
-				'account::newuser' => array('user' => array ('read', 'create')),
-				'account::edituser' => array('user' => array ('read','update')),
-				'account::deleteuser' => array('user' => array ('read', 'delete')),
+				'account::newuser' => array('user' => array ('read', 'create'),
+									        'account' => array('read')),
+				'account::edituser' => array('user' => array ('read','update'),
+					                         'account' => array('read')),
+				'account::deleteuser' => array('user' => array ('read', 'delete'),
+					                           'account' => array('read')),
 				//Contactlist controller
 				'contactlist::index' => array('contactlist' => array('read')),
 				'contactlist::show' => array('contactlist' => array('read')),
@@ -189,46 +192,63 @@ class Security extends Plugin
 
 		$map = $this->getControllerMap();
 		
+		$this->publicurls = array(
+			'session:signin', 
+			'session:login',
+			'session:logout'
+		);
+		
 		$controller = $dispatcher->getControllerName();
 		$action = $dispatcher->getActionName();
 		
 		$this->logger->log("DIR: " . $controller . ':' . $action);
 		$this->logger->log("ROLE: " . $role);
 
-		$acl = $this->getAcl();
-
-		$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
-		if (!isset($map[$controller .'::'. $action])) {
-			$this->logger->log("[$controller::$action] no existe en el mapa de permisos");
-			if($this->validateResponse($controller) == true){
-				$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
-			}
-			else{
-				$this->response->redirect('error/index');
-			}
-			return false;
-		}
-
-		$reg = $map[$controller .'::'. $action];
-		$this->logger->log("[$controller::$action] tiene este mapa: " . print_r($reg, true));
-
-		foreach($reg as $resources => $actions){
-			$this->logger->log("Validando permiso sobre recurso [$resources] (" . implode(',', $actions) . ")");
-			foreach ($actions as $act) {
-				if (!$acl->isAllowed($role, $resources, $act)) {
-					$this->logger->log('Verificacion manual: ' . ($acl->isAllowed('ROLE_ADMIN', 'session', 'login')?'YES':'NO'));
-					$this->logger->log("Oops no esta permitido: [$resources] ($act)");
-					$this->logger->log(print_r($acl, true));
-					if($this->validateResponse($controller) == true){
-						$this->setJsonResponse('Denegado', 404, 'Acción no permitida');
-					}
-					else{
-						$this->response->redirect('error/index');
-					}
+		if ($role == 'ROLE_GUEST') {
+			$accessdir = $controller . ':' . $action;
+			
+			if (!in_array($accessdir, $this->publicurls)) {
+					$this->response->redirect("session/signin");
 					return false;
+			}
+		}
+		else{
+			$acl = $this->getAcl();
+			
+			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
+			if (!isset($map[$controller .'::'. $action])) {
+				$this->logger->log("[$controller::$action] no existe en el mapa de permisos");
+				if($this->validateResponse($controller) == true){
+					$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
+				}
+				else{
+					$this->response->redirect('error/index');
+				}
+				return false;
+			}
+
+
+			$reg = $map[$controller .'::'. $action];
+			$this->logger->log("[$controller::$action] tiene este mapa: " . print_r($reg, true));
+
+			foreach($reg as $resources => $actions){
+				$this->logger->log("Validando permiso sobre recurso [$resources] (" . implode(',', $actions) . ")");
+				foreach ($actions as $act) {
+					if (!$acl->isAllowed($role, $resources, $act)) {
+						$this->logger->log('Verificacion manual: ' . ($acl->isAllowed('ROLE_ADMIN', 'session', 'login')?'YES':'NO'));
+						$this->logger->log("Oops no esta permitido: [$resources] ($act)");
+						$this->logger->log(print_r($acl, true));
+						if($this->validateResponse($controller) == true){
+							$this->setJsonResponse('Denegado', 404, 'Acción no permitida');
+						}
+						else{
+							$this->response->redirect('error/index');
+						}
+						return false;
+					}
 				}
 			}
+			return true;
 		}
-		return true;
 	}	
 }
