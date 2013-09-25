@@ -38,7 +38,7 @@ class ImportContactWrapper extends BaseWrapper
 		$dbase = Dbase::findFirstByIdDbase($list->idDbase);
 		$posCol = (array) $fields;
 
-		if(empty($posCol['email'])) {
+		if(empty($posCol['email']) && $posCol['email'] != '0') {
 			$newproccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
 			$newproccess->status = "Importacion no realizada";
 			
@@ -103,8 +103,8 @@ class ImportContactWrapper extends BaseWrapper
 			$linew = fgetcsv($open, 0, $delimiter);
 			
 			$email = (!empty($posCol['email']) || $posCol['email'] == '0')?$linew[$posCol['email']]:"";
-			$name = (!empty($posCol['name']) || $posCol['name'] == '0')?$linew[$posCol['name']]:"";
-			$lastname = (!empty($posCol['lastname']) || $posCol['lastname'] == '0')?$linew[$posCol['lastname']]:"";
+			$name = ((!empty($posCol['name']) || $posCol['name'] == '0') && isset($linew[$posCol['name']]))?$linew[$posCol['name']]:"";
+			$lastname = ((!empty($posCol['lastname']) || $posCol['lastname'] == '0') && isset($linew[$posCol['lastname']]))?$linew[$posCol['lastname']]:"";
 			
 			if ( !empty($linew) ) {
 				
@@ -166,17 +166,18 @@ class ImportContactWrapper extends BaseWrapper
 				$totalLine++;
 			}
 			
-			if (($line == 50 || feof($open) || ($thisActiveContacts == $contactLimit && $mode == "Contacto")) && (!empty($values))) {
-				
-				$contactsInserted = $this->runSQLs($values, $idAccount, $idDbase);
-				if ($mode == "Contacto") {
+			if ($line == 50 || feof($open) || ($thisActiveContacts == $contactLimit && $mode == "Contacto")) {
+				if(!empty($values)) {
 					
-					$thisActiveContacts = $activeContacts + $contactsInserted + $oldActiveContacts;
-					$oldActiveContacts += $contactsInserted;
+					$contactsInserted = $this->runSQLs($values, $idAccount, $idDbase);
+					if ($mode == "Contacto") {
+
+						$thisActiveContacts = $activeContacts + $contactsInserted + $oldActiveContacts;
+						$oldActiveContacts += $contactsInserted;
+					}
+
+					$this->createFieldInstances($customfields, $idDbase);
 				}
-				
-				$this->createFieldInstances($customfields, $idDbase);
-				
 				$queryToAdd = "UPDATE importproccess SET processLines = $totalLine WHERE idImportproccess = $this->idProccess";
 				$db->execute($queryToAdd);
 				
@@ -322,7 +323,7 @@ class ImportContactWrapper extends BaseWrapper
 								LINES TERMINATED BY '\n'";
 
 			$db->execute($queryForErrors);							
-			Phalcon\DI::getDefault()->get('logger')->log(print_r($errors, true));
+
 			if(!empty($errors)) {
 				$fp = fopen($filesPath . $nameNimported, 'a');
 
