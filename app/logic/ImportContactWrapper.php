@@ -55,10 +55,8 @@ class ImportContactWrapper extends BaseWrapper
 		$deletetable = "DROP TABLE $this->tablename";
 
 		$db->execute($newtable);
-		
-		if ($activeContacts < $contactLimit) {			
-			$this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
-		}
+				
+		$this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
 
 		$dbase->updateCountersInDbase();
 		$list->updateCountersInContactlist();
