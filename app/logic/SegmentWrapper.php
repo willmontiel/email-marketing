@@ -1,7 +1,7 @@
 <?php
 class SegmentWrapper extends BaseWrapper
 {
-	public function startCreatingSegmentProcess()
+	public function startCreatingSegmentProcess($contents, Account $account)
 	{
 		
 	}

@@ -1,9 +1,9 @@
 App.Segment = DS.Model.extend({
 	name: DS.attr('string'),
 	description: DS.attr('string'),
+	criterion: DS.attr('string'),
 	criteria: DS.attr('string'),
-	customField: DS.attr('number'),
-	dbase: DS.belongsTo('dbase'),
+	dbase: DS.belongsTo('dbase')
 });
 
 App.criteria = [
@@ -29,12 +29,6 @@ App.Field = DS.Model.extend({
 	minValue: DS.attr('number'),
 	maxValue: DS.attr('number'),
 	maxLength: DS.attr('number'),
-	becameError: function() {
-		return alert('there was an error!');
-	},
-	becameInvalid: function(errors) {
-		return alert("Record was invalid because: " + errors);
-	},
 	isSelect: function() {
 		return (this.get('type') == "Select" || this.get('type') == "MultiSelect");
 	}.property('type'),
@@ -77,7 +71,10 @@ App.SegmentsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 	modelClass : App.List
 });
 
-App.SegmentsNewController = Ember.ObjectController.extend({
+App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
+	
+	criteria: Ember.A([{}]),		
+	
 	needs: ['dbase'],
 	
 	cfields: Ember.A([
@@ -96,37 +93,57 @@ App.SegmentsNewController = Ember.ObjectController.extend({
 	
 	loadDbases: function () {
 		this.get('controllers.dbase').set('content', this.store.find('dbase'));
+		console.log(this.get('limitCriteria'));
 	},
 	
 	changeDbase: function () {
-		console.log('Dbase changed to: ' + this.content.get('dbase.id') + ', ' + this.content.get('dbase.name'));
 		if (this.content.get('dbase')) {
 			var s = this;
 			// Cargar lista de custom fields
 			var cfs = this.store.find('field', {dbase: this.get('content.dbase.id')}).then(function (data) {
 				var arr = s.stdfields.slice(0);
 				
-				console.log('Loaded!');
-				console.log(data);
-				
 				data.forEach(function (item, index) {
-					console.log('Item: ' + index);
-					console.log(item.get('id') + ', ' + item.get('name'));
 					arr.push({id: 'cf_' + item.get('id'), name: item.get('name')});
 				});
 				s.set('cfields.[]', arr);
-
 			});
 		}
 	}.observes('content.dbase'),
 	
 	actions: {
 		aConditionMore: function() {
-		  this.set('isMore', true);
+			var newobj = {};
+			this.criteria.pushObject(newobj);
+			if ( this.criteria.length > 5 ) {
+				this.set('limitCriteria', true);
+			} else {
+				this.set('limitCriteria', false);
+			}
+			
 		},
 
-		aConditionLess: function() {
-		  this.set('isMore', false);
+		aConditionLess: function(data) {
+			this.criteria.removeObject(data);
+			if ( this.criteria.length < 6 ) {
+				this.set('limitCriteria', false);
+			} else {
+				this.set('limitCriteria', true);
+			}
+		},
+				
+		save : function() {
+//			for (var i = 0; i<this.criteria.length; i++) {
+//				console.log(this.get('name'));
+//				console.log(this.get('dbase.id'));
+//				console.log(this.get('criterion'));
+//				console.log(this.criteria[i].cfields);
+//				console.log(this.criteria[i].relations);
+//				console.log(this.criteria[i].value);
+//			}
+			var JsonCriteria = JSON.stringify(this.criteria);
+			this.content.set('criteria', JsonCriteria);
+			this.handleSavePromise(this.content.save(), 'segments', 'Se ha creado el segmento existosamente');
 		}
 	}
 });

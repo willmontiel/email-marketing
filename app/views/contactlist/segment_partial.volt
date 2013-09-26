@@ -30,8 +30,11 @@
 		</div>
 		<div class="box-content padded">
 			<form>
-				<label>
-					Seleccione base de datos:
+				<label>*Nombre: </label>
+					{{ '{{view Ember.TextField valueBinding="name"}}' }}
+				<label>Descripción: </label>
+					{{ '{{view Ember.TextArea valueBinding="description"}}' }}
+				<label>*Seleccione base de datos:</label>
 					{{ '{{view Ember.Select 
 								selectionBinding="dbase" 
 								contentBinding="controllers.dbase.content" 
@@ -40,10 +43,7 @@
 								prompt="Seleccione una base de datos"
 								class="span3"}}' 
 					}}
-				</label>
-				<br/>
-				<label>					
-					Crear segmento con 
+				<label>	Crear segmento con </label>
 					{{ '{{view Ember.Select
 						  contentBinding="App.criteria"
 						  optionValuePath="content.id"
@@ -52,42 +52,43 @@
 						  class="span2"}}'
 					}}
 					condiciones a continuación:
-				</label>
-				<br />
+				
+				<br /><br />
 				<div class="row-fluid">	
-					<div class="span3">
-						{{ '{{view Ember.Select
-							  contentBinding="cfields"
-							  optionValuePath="content.id"
-							  optionLabelPath="content.name"
-							  valueBinding="id" id="id"
-							  prompt="Seleccione un campo"
-							}}'
-						}}
-						{{ '{{dbase.id}}' }}
-					</div>
-					<div class="span3">
-						{{ '{{view Ember.Select
-							contentBinding="App.relations"
-							optionValuePath="content.id"
-							optionLabelPath="content.relation"
-							valueBinding="relation"}}'
-						}}
-					</div>
-					<div class="span3">
-						{{ '{{view Ember.TextField valueBinding="value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
-					</div>
-					<div class="span2">
+					<div class="span12">
+						{{ '{{#unless limitCriteria}}' }}
 						<button class="btn btn-default" {{ '{{action aConditionMore}}' }}>+</button>
+						{{ '{{/unless}}' }}
+						{{' {{#each cr in criteria}} '}}
+						<div class="row-fluid">
+							<div class="span3">
+								{{ '{{view Ember.Select
+									  contentBinding="cfields"
+									  optionValuePath="content.id"
+									  optionLabelPath="content.name"
+									  valueBinding="cr.cfields"
+									  prompt="Seleccione un campo"
+									}}'
+								}}
+							</div>
+							<div class="span3">
+								{{ '{{view Ember.Select
+									contentBinding="App.relations"
+									optionValuePath="content.id"
+									optionLabelPath="content.relation"
+									valueBinding="cr.relations"}}'
+								}}
+							</div>
+							<div class="span3">
+								{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
+							</div>
+							<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}>-</button>
+						</div>
+						{{' {{/each}} '}}
 					</div>
 				</div>
-				{{ '{{# if isMore}}' }}
-				<div class="row-fluid">
-					lala
-					<button class="btn btn-default" {{ '{{action aConditionLess}}' }}>-</button>
-				</div>
-				{{ '{{/if}}' }}
-				<button class="btn btn-default">Crear</button>
+				
+				<button class="btn btn-default" {{ '{{action save this }}' }}>Crear</button>
 			</form>
 		</div>
 	</div>
