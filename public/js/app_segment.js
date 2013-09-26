@@ -50,7 +50,10 @@ App.Field = DS.Model.extend({
 //Definiendo rutas
 
 App.SegmentsIndexRoute = Ember.Route.extend({
-	modelClass : 'segment'
+//	modelClass : 'segment',
+	model: function(){
+		return this.store.find('segment');
+	}
 });
 
 App.SegmentsNewRoute = Ember.Route.extend({
@@ -62,6 +65,8 @@ App.SegmentsNewRoute = Ember.Route.extend({
 		controller.loadDbases();
 	}
 });
+
+App.SegmentsDeleteRoute = Ember.Route.extend({})
 
 //Definiendo controladores
 
@@ -133,14 +138,6 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 		},
 				
 		save : function() {
-//			for (var i = 0; i<this.criteria.length; i++) {
-//				console.log(this.get('name'));
-//				console.log(this.get('dbase.id'));
-//				console.log(this.get('criterion'));
-//				console.log(this.criteria[i].cfields);
-//				console.log(this.criteria[i].relations);
-//				console.log(this.criteria[i].value);
-//			}
 			var JsonCriteria = JSON.stringify(this.criteria);
 			this.content.set('criteria', JsonCriteria);
 			this.handleSavePromise(this.content.save(), 'segments', 'Se ha creado el segmento existosamente');
@@ -148,14 +145,15 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 	}
 });
 
-App.SegmentsDeleteController = Ember.ObjectController.extend({
-	delete: function() {
-		this.get('content').deleteRecord();
-		this.get('model.transaction').commit();
-		this.get("target").transitionTo("segments");
-    },
-	cancel: function(){
-		 this.get("transaction").rollback();
-		 this.get("target").transitionTo("segments");
+App.SegmentsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
+	actions : {
+		delete: function() {
+			this.get('model').deleteRecord();
+			this.handleSavePromise(this.content.save(), 'segments', 'El Segmento ha sido eliminado con exito!');
+		},
+		cancel: function(){
+			 this.get("transaction").rollback();
+			 this.get("target").transitionTo("segments");
+		}
 	}
 });

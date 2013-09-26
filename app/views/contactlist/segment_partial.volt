@@ -3,20 +3,46 @@
 		{{'{{#linkTo "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nueva segmento{{'{{/linkTo}}'}}
 	</div>
 	<div class="clearfix"></div>
-	<div class="box">
-		<div class="box-header">
-			<div class="title">
-				Segmentos
+	<div class="row-fluid">
+        <div class="span12">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Segmentos
+					</div>
+				</div>
+				<div class="box-content">
+					<table class="table table-normal">
+						<thead>
+							<tr>
+							   <td colspan="2">Segmento</td>
+							   <td>Acciones</td>
+						   </tr>
+					   </thead>
+						<tbody>
+						{{'{{#each model}}'}}
+							<tr>
+								<td>{{' {{name}}'}}</td>
+								<td>{{' {{description}}'}}</td>
+								<td>
+									<div class="pull-right" style="margin-right: 10px;">
+										<div class="btn-group">
+											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
+											<ul class="dropdown-menu">
+												<li>{{ '{{#linkTo "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/linkTo}}' }}</li>
+											</ul>
+										</div>
+									</div>
+								</td>
+							</tr>
+						{{ '{{/each}}' }}
+						</tbody>
+					</table>
+				</div>
+				<div class="box-footer flat"> 
+					{{ partial("partials/pagination_partial") }}
+				</div>
 			</div>
-		</div>
-		<div class="box-content">
-			<table class="table table-normal">
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-		<div class="box-footer flat"> 
-			{{ partial("partials/pagination_partial") }}
 		</div>
 	</div>
 </script>

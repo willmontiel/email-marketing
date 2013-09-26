@@ -996,10 +996,25 @@ class ApiController extends ControllerBase
 	/**
 	 * @Get ("/segments")
 	 */
-	public function getSegments()
+	public function segmentsAction()
 	{
-		
-		
+		$segment[0] = array (
+			'id' => 0,
+			'name' => 'mi segmento',
+            'description' => 'Esta es la descripcion',
+            'criterion' => 'all',
+            'criteria' => '[{"relations":"begins","cfields":"lastName","value":"lala"},{"relations":"ends","cfields":"name","value":"lalalala"}]',
+            'dbase' => 7
+		);
+		$segment[1] = array (
+			'id' => 1,
+			'name' => 'mi otro segmento',
+            'description' => 'Esta Definitivamente es la descripcion',
+            'criterion' => 'any',
+            'criteria' => '[{"relations":"begins","cfields":"lastName","value":"lala"},{"relations":"ends","cfields":"name","value":"lalalala"}]',
+            'dbase' => 7
+		);
+		return $this->setJsonResponse(array ('segments' => $segment));
 	}
 	
 	/**
@@ -1044,7 +1059,7 @@ class ApiController extends ControllerBase
 		$wrapper = new SegmentWrapper();
 		
 		try {
-			$wrapper->startDeletingSegmentProcess($this->user->account, $idSegment);
+			$response = $wrapper->startDeletingSegmentProcess($this->user->account, $idSegment);
 		}
 		
 		catch (\InvalidArgumentException $e) {
@@ -1055,6 +1070,8 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while deleting segment!');	
 		}
+		
+		return $this->setJsonResponse(array ('contact' => $response), 202, 'segment deleted success');	
 	}
 }
 
