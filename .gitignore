@@ -12,3 +12,6 @@ app/cache/metadata/*
 /tmp/ifiles/6_1309102135_522f90b42f4f1.csv
 nbproject/private/private.xml
 /tmp/ifiles/
+/app/logs/bgdbdebug.log
+/app/logs/bgprocess.log
+/public/phpinfo.php

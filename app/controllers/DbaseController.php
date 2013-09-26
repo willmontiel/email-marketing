@@ -47,18 +47,23 @@ class DbaseController extends ControllerBase
     {
         //Instanciar el formulario y Relacionarlo con los atributos del Model Dbase
         $db = new Dbase();
-        $db->account = $this->user->account;
+		
         $editform = new EditForm($db);
 
         if ($this->request->isPost()) {   
             $editform->bind($this->request->getPost(), $db);
 			
-			if($otherbd=Dbase::findFirstByName($db->name)){
-				if($otherbd->idAccount == $db->account->idAccount){
-					$this->flash->error('El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
-				}
+			$name = $editform->getValue('name');
+			$otherbd = Dbase::find(array(
+				"conditions" => "name = ?1",
+				"bind" => array(1 => $name)
+			));
+			
+			if ($otherbd->idAccount == $this->user->account->idAccount) {
+				$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
+				return $this->response->redirect('dbase/new');
 			}
-			else{
+			else {
 				$db->Ctotal = 0;
 				$db->Cactive = 0;
 				$db->Cinactive = 0;
@@ -78,8 +83,9 @@ class DbaseController extends ControllerBase
 				}
 				else {
 					foreach ($db->getMessages() as $msg) {
-						$this->flash->error($msg);
+						$this->flashSession->error($msg);
 					}
+					return $this->response->redirect('dbase/new');
 				}	
 			}
 		}

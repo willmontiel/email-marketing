@@ -142,6 +142,12 @@
 				<div class="box-content">
 				{{'{{#each model}}'}}
 					{{ partial("partials/contact_view_partial") }}
+				{{ '{{else}}' }}
+					<div class="padded">
+						No tiene contactos en esta lista, para crearlos haga click en "crear contacto", para crear
+						un solo contacto, "crear varios contactos", para crear hasta 30 contactos e "importar contactos",
+						para importar un archivo .csv con hasta 100000 contactos.
+					</div>
 				{{ '{{/each}}' }}
 				</div>
 				<div class="box-footer flat"> 

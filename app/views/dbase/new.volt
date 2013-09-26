@@ -8,6 +8,7 @@
 		</div>
 	</div>
 	<br />
+	{{ flashSession.output() }}
     <div class="row-fluid span3">
 		<div class="box">
 			<div class="box-header">
