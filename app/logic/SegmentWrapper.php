@@ -1,6 +1,20 @@
 <?php
 class SegmentWrapper extends BaseWrapper
 {
+	/**
+	 * Esta funcion valida si un campo enviado desde un segmento es propio o personalizado
+	 * @param Json $contents
+	 */
+	protected function validateTypeField($contents)
+	{
+		$arrayTypeFields = array('email','name', 'lastname');
+		$typeFields[] = $contents->criteria;
+		for ($i = 0; $i < count($typeFields); $i++) {
+			if(in_array($typeFields[$i]['cfields'], $arrayTypeFields)) {
+			}
+			
+		}
+	}
 	public function startCreatingSegmentProcess($contents, Account $account)
 	{
 		$dbaseExist = Dbase::findFirst(array(
@@ -34,12 +48,15 @@ class SegmentWrapper extends BaseWrapper
 	 */
 	public function saveSegmentAndCriteriaInDb ($contents) 
 	{
+//		$this->validateTypeField($contents);
+		
 		$segment = new Segment();
 		
+		$segment->idDbase = $contents->dbase;
 		$segment->name = $contents->name;
 		$segment->description = $contents->description;
-		$segment->idDbase = $contents->dbase;
-		$segment->createon = time();
+		$segment->criterion = $contents->criterion;
+		$segment->createdon = time();
 		
 		if (!$segment->save()) {
 			$txt = implode(PHP_EOL,  $segment->getMessages());
@@ -47,8 +64,45 @@ class SegmentWrapper extends BaseWrapper
 			throw new InvalidArgumentException('Ha ocurrido un error');
 			throw new Exception('Error al crear el segmento!');
 		}
-		
-		return $segment;
+		else {
+			$criteria = new Criteria();
+
+			$typeFields = json_decode($contents->criteria, true);
+			Phalcon\DI::getDefault()->get('logger')->log($typeFields[0]. " este es el array");
+			foreach ($typeFields as $typeField) {
+				if ($typeField{"cfields"} == 'email' || $typeField{"cfields"} == 'name' || $typeField{"cfields"} == 'lastName') {
+					Phalcon\DI::getDefault()->get('logger')->log($typeField{"cfields"}. " este es el campo");
+					Phalcon\DI::getDefault()->get('logger')->log($typeField{"value"}. " este es el valor");
+					Phalcon\DI::getDefault()->get('logger')->log($typeField{"relations"}. " esta es la relación");
+					$criteria->idSegment = $segment->idSegment;
+					$criteria->type = 4;
+					$criteria->value = $typeField{"value"};
+					$criteria->relation = $typeField{"relations"};
+					$criteria->fieldName = $typeField{"cfields"};
+					Phalcon\DI::getDefault()->get('logger')->log("la relación es: ". $typeField{"relations"});
+				}
+				else {
+					Phalcon\DI::getDefault()->get('logger')->log($typeField{"cfields"}. " este es el campo");
+					Phalcon\DI::getDefault()->get('logger')->log($typeField{"value"}. " este es el valor");
+					Phalcon\DI::getDefault()->get('logger')->log($typeField{"relations"}. " esta es la relación");
+					//$customField = explode("_", $typeFields{"cfields"});
+					$customField = preg_split("_", $typeFields{"cfields"});
+					Phalcon\DI::getDefault()->get('logger')->log($customField[0]. " este es el id");
+					$criteria->idSegment = $segment->idSegment;
+					$criteria->type = 3;
+					$criteria->relation = $typeFields{"relations"};
+					$criteria->value = $typeFields{"value"};
+					$criteria->idCustomField = $customField[1];
+				}
+				if (!$criteria->save()) {
+					$txt = implode(PHP_EOL,  $criteria->getMessages());
+					Phalcon\DI::getDefault()->get('logger')->log($txt);
+					throw new InvalidArgumentException('shit! Ha ocurrido un error');
+					throw new Exception('Error al crear el criterio!');
+				}
+			}
+			return $segment;
+		}
 	}
 	 /**
 	  * Funcion que convierte datos a Json para enviarlos a Ember
