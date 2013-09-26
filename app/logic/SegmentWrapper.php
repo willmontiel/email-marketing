@@ -2,17 +2,56 @@
 class SegmentWrapper extends BaseWrapper
 {
 	/**
-	 * Esta funcion valida si un campo enviado desde un segmento es propio o personalizado
-	 * @param Json $contents
+	 * Funcion encarga de validar el tipo de campo (propio o personalizado) para guardarlo en criteria
+	 * @param json $contents
 	 */
-	protected function validateTypeField($contents)
+	protected function saveCriteria($contents)
 	{
-		$arrayTypeFields = array('email','name', 'lastname');
-		$typeFields[] = $contents->criteria;
-		for ($i = 0; $i < count($typeFields); $i++) {
-			if(in_array($typeFields[$i]['cfields'], $arrayTypeFields)) {
-			}
+		$criteria1 = new Criteria();
+		$criteria = new Criteria();
+		
+		$typeFields = json_decode($contents->criteria, true);
 			
+		foreach ($typeFields as $typeField) {
+			if ($typeField{"cfields"} == 'email' || $typeField{"cfields"} == 'name' || $typeField{"cfields"} == 'lastName') {
+				Phalcon\DI::getDefault()->get('logger')->log($typeField{"cfields"}. " este es el campo");
+				Phalcon\DI::getDefault()->get('logger')->log($typeField{"value"}. " este es el valor");
+				Phalcon\DI::getDefault()->get('logger')->log($typeField{"relations"}. " esta es la relación");
+				$criteria1->idSegment = $segment->idSegment;
+				$criteria1->type = 4;
+				$criteria1->value = $typeField{"value"};
+				$criteria1->relation = $typeField{"relations"};
+				$criteria1->fieldName = $typeField{"cfields"};
+				Phalcon\DI::getDefault()->get('logger')->log("la relación es: ". $typeField{"relations"});
+				if (!$criteria1->save()) {
+					$txt = implode(PHP_EOL,  $criteria->getMessages());
+					Phalcon\DI::getDefault()->get('logger')->log($txt);
+					throw new InvalidArgumentException('shit! Ha ocurrido un error');
+					throw new Exception('Error al crear el criterio!');
+				}
+				Phalcon\DI::getDefault()->get('logger')->log("Se guardo un campo propio");
+			}
+			else {
+				Phalcon\DI::getDefault()->get('logger')->log($typeField{"cfields"}. " este es el campo");
+				Phalcon\DI::getDefault()->get('logger')->log($typeField{"value"}. " este es el valor");
+				Phalcon\DI::getDefault()->get('logger')->log($typeField{"relations"}. " esta es la relación");
+				
+				$customField = $typeField{"cfields"};
+				$idCustomField = preg_split("/_/", $customField);
+				Phalcon\DI::getDefault()->get('logger')->log($idCustomField[1]. " este es el id");
+				$criteria->idSegment = $segment->idSegment;
+				$criteria->type = 3;
+				$criteria->relation = $typeField{"relations"};
+				$criteria->value = $typeField{"value"};
+				$criteria->idCustomField = $idCustomField[1];
+				if (!$criteria->save()) {
+					$txt = implode(PHP_EOL,  $criteria->getMessages());
+					Phalcon\DI::getDefault()->get('logger')->log($txt);
+					throw new InvalidArgumentException('shit! Ha ocurrido un error');
+					throw new Exception('Error al crear el criterio!');
+				}
+				Phalcon\DI::getDefault()->get('logger')->log("Se guardo un campo personalizado");
+			}
 		}
 	}
 	public function startCreatingSegmentProcess($contents, Account $account)
@@ -46,10 +85,10 @@ class SegmentWrapper extends BaseWrapper
 	 * Esta funcion agrega los datos del segmento, nombre, descripción, etc, y los datos del criterio, en cada tabla respectivamente
 	 * @param Json $contents
 	 */
-	public function saveSegmentAndCriteriaInDb ($contents) 
+	public function saveSegmentAndCriteriaInDb($contents) 
 	{
-//		$this->validateTypeField($contents);
-		
+		$db = Phalcon\DI::getDefault()->get('db');
+		$db->begin();
 		$segment = new Segment();
 		
 		$segment->idDbase = $contents->dbase;
@@ -58,50 +97,61 @@ class SegmentWrapper extends BaseWrapper
 		$segment->criterion = $contents->criterion;
 		$segment->createdon = time();
 		
-		if (!$segment->save()) {
-			$txt = implode(PHP_EOL,  $segment->getMessages());
-			Phalcon\DI::getDefault()->get('logger')->log($txt);
-			throw new InvalidArgumentException('Ha ocurrido un error');
-			throw new Exception('Error al crear el segmento!');
+		if ($segment->save()) {
+			try {
+			
+				$typeFields = json_decode($contents->criteria, true);
+
+				foreach ($typeFields as $typeField) {
+					$criteria = new Criteria();
+					
+					$criteria->idSegment = $segment->idSegment;
+					$criteria->value = $typeField{"value"};
+//					$criteria->relation = $typeField{"relations"};
+					
+					switch ($typeField["cfields"]) {
+						case 'name':
+						case 'lastName':
+							$type = 'contact';
+							break;
+						case 'email':
+							$type = 'email';
+							break;
+						case 'domain':
+							$type = 'domain';
+							break;
+						default:
+							if (substr($typeField["cfields"], 0, 3) == 'cf_') {
+								$type = 'custom';
+								$criteria->idCustomField = substr($typeField["cfields"], 3);
+							}
+							else {
+								throw new InvalidArgumentException('Error: invalid type');
+							}
+							break;
+					}
+					$criteria->type = $type;
+					$criteria->fieldName = $typeField["cfields"];
+					
+					
+					if (!$criteria->save()) {
+						$txt = implode(PHP_EOL,  $criteria->getMessages());
+						Phalcon\DI::getDefault()->get('logger')->log($txt);
+						throw new ErrorException('Ha ocurrido un error');
+					}
+				}
+				$db->commit();
+			}
+			catch (Exception $e) {
+				$db->rollback();
+				throw $e;
+			}
 		}
 		else {
-			$criteria = new Criteria();
-
-			$typeFields = json_decode($contents->criteria, true);
-			Phalcon\DI::getDefault()->get('logger')->log($typeFields[0]. " este es el array");
-			foreach ($typeFields as $typeField) {
-				if ($typeField{"cfields"} == 'email' || $typeField{"cfields"} == 'name' || $typeField{"cfields"} == 'lastName') {
-					Phalcon\DI::getDefault()->get('logger')->log($typeField{"cfields"}. " este es el campo");
-					Phalcon\DI::getDefault()->get('logger')->log($typeField{"value"}. " este es el valor");
-					Phalcon\DI::getDefault()->get('logger')->log($typeField{"relations"}. " esta es la relación");
-					$criteria->idSegment = $segment->idSegment;
-					$criteria->type = 4;
-					$criteria->value = $typeField{"value"};
-					$criteria->relation = $typeField{"relations"};
-					$criteria->fieldName = $typeField{"cfields"};
-					Phalcon\DI::getDefault()->get('logger')->log("la relación es: ". $typeField{"relations"});
-				}
-				else {
-					Phalcon\DI::getDefault()->get('logger')->log($typeField{"cfields"}. " este es el campo");
-					Phalcon\DI::getDefault()->get('logger')->log($typeField{"value"}. " este es el valor");
-					Phalcon\DI::getDefault()->get('logger')->log($typeField{"relations"}. " esta es la relación");
-					//$customField = explode("_", $typeFields{"cfields"});
-					$customField = preg_split("_", $typeFields{"cfields"});
-					Phalcon\DI::getDefault()->get('logger')->log($customField[0]. " este es el id");
-					$criteria->idSegment = $segment->idSegment;
-					$criteria->type = 3;
-					$criteria->relation = $typeFields{"relations"};
-					$criteria->value = $typeFields{"value"};
-					$criteria->idCustomField = $customField[1];
-				}
-				if (!$criteria->save()) {
-					$txt = implode(PHP_EOL,  $criteria->getMessages());
-					Phalcon\DI::getDefault()->get('logger')->log($txt);
-					throw new InvalidArgumentException('shit! Ha ocurrido un error');
-					throw new Exception('Error al crear el criterio!');
-				}
-			}
-			return $segment;
+			$txt = implode(PHP_EOL,  $segment->getMessages());
+			$db->rollback();
+			Phalcon\DI::getDefault()->get('logger')->log($txt);
+			throw new ErrorException('Ha ocurrido un error');
 		}
 	}
 	 /**
