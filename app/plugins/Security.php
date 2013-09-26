@@ -156,6 +156,9 @@ class Security extends Plugin
 				'api::updatecontact' => array('contact' => array('read', 'update')),
 				'api::deletecontact' => array ('contact' => array('read', 'delete')),
 				'api::getonelist' => array('contactlist' => array('read')),
+				//Segmentos 
+				'api::getcustomfieldsalias' => array('segment' => array('create')),
+				'api::createsegment' => array('segment' => array('read', 'create')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
