@@ -61,7 +61,7 @@ class SegmentWrapper extends BaseWrapper
 					
 					$criteria->idSegment = $segment->idSegment;
 					$criteria->value = $typeField{"value"};
-//					$criteria->relation = $typeField{"relations"};
+					$criteria->relation = $typeField{"relations"};
 					
 					switch ($typeField["cfields"]) {
 						case 'name':
@@ -154,7 +154,7 @@ class SegmentWrapper extends BaseWrapper
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
 		$queryTxt ="SELECT s.idSegment, s.name, s.description, s.criterion, c.relation, c.value, s.idDbase,
-						IF (c.idCustomField IS NULL, c.internalValue, c.idCustomField) AS cfields
+						IF (c.idCustomField IS NULL, c.internalField, c.idCustomField) AS cfields
 					FROM segment s JOIN criteria c ON s.idSegment = c.idSegment JOIN dbase d ON s.idDbase = d.idDbase
 					WHERE d.idAccount = :idAccount:";
 		

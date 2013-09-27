@@ -5,7 +5,7 @@ App.Segment = DS.Model.extend({
 	criteria: DS.attr('string'),
 	dbase: DS.belongsTo('dbase')
 });
-
+App.extravar = "";
 App.criteria = [
   Ember.Object.create({criterion: "todas las", id: "all"}),
   Ember.Object.create({criterion: "cualquiera de las",    id: "any"})
@@ -162,6 +162,12 @@ App.SegmentsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 
 App.SegmentsEditController = Ember.ObjectController.extend({
 	init: function() {
+		App.set('extravar', this);
+		var extra = "";
+		extra = this;
 		console.log(this);
+		console.log(extra);
+		console.log(App.get('extravar'));
+		console.log(App.extravar);
 	}
 });
