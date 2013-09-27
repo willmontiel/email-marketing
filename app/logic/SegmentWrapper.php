@@ -8,7 +8,7 @@ class SegmentWrapper extends BaseWrapper
 	 * @throws InvalidArgumentException
 	 * @throws \Exception
 	 */
-	public function startCreatingSegmentProcess($contents, Account $account)
+	public function createSegment($contents, Account $account)
 	{
 		$dbaseExist = Dbase::findFirst(array(
 			"conditions" => "idDbase = ?1 and idAccount = ?2",
@@ -127,8 +127,44 @@ class SegmentWrapper extends BaseWrapper
 		
 		return $object;
 	}
+	
+	/**
+	 * Function que empieza el proceso de actualización de un segmento (validaciones, etc)
+	 * @param type $contents
+	 * @param Account $account
+	 */
+	public function updateSegment($contents, $idSegment,  Account $account)
+	{
+		$dbase = Dbase::findFirst(array(
+			"conditions" => "idDbase = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $contents->idDbase,
+							2 => $account->idAccount)
+		));
+		
+		if (!$dbase) {
+			throw new \Exception('La base de datos no existe');
+		}
+		else {
+			$segment = Segment::findFirst(array(
+				"conditions" => "idSegment = ?1 AND idDbase = ?2",
+				"bind" => array(1 => $idSegment,
+								2 => $contents->idDbase)
+			));
+			
+			if (!$segment) {
+				throw new \Exception('El segmento no existe');
+			}
+			$this->updateSegmentData();
+		}
+	}
+	
+	public function updateSegmentData()
+	{
+		
+	}
 
-	public function startDeletingSegmentProcess(Account $account, $idSegment)
+
+	public function deleteSegment(Account $account, $idSegment)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		Phalcon\DI::getDefault()->get('logger')->log("POR ACA");
@@ -154,17 +190,12 @@ class SegmentWrapper extends BaseWrapper
 
 	}
 	
-	public function deleteSegment($segment)
-	{
-		
-	}
-	
 	public function findSegments() 
 	{
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
 		$queryTxt ="SELECT s.idSegment, s.name, s.description, s.criterion, c.relation, c.value, s.idDbase,
-						IF (c.idCustomField IS NULL, c.internalField, c.idCustomField) AS cfields
+						IF (c.idCustomField IS NULL, c.fieldName, c.idCustomField) AS cfields
 					FROM segment s JOIN criteria c ON s.idSegment = c.idSegment JOIN dbase d ON s.idDbase = d.idDbase
 					WHERE d.idAccount = :idAccount:";
 		

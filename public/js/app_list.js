@@ -13,8 +13,8 @@ App.Router.map(function() {
   
   this.resource('segments', function(){
 	  this.route('new');
-	  this.resource('segments.edit', {path: '/edit/:segment_id'});
-	  this.resource('segments.delete', {path: '/delete/:segment_id'});
+	  this.resource('segments.edit', { path: '/edit/:segment_id'});
+	  this.resource('segments.delete', { path: '/delete/:segment_id'});
   });
   
    this.route('dbase');

@@ -1034,7 +1034,7 @@ class ApiController extends ControllerBase
 		$Wrapper = new SegmentWrapper();
 		
 		try {
-			$segment = $Wrapper->startCreatingSegmentProcess($contents, $this->user->account);
+			$segment = $Wrapper->createSegment($contents, $this->user->account);
 		}
 		
 		catch (\InvalidArgumentException $e) {
@@ -1050,6 +1050,39 @@ class ApiController extends ControllerBase
 	}	
 	
 	/**
+	 * 
+	 * @put ("/segments/{idSement:[0-9]+}")
+	 */
+	public function editsegmentAction($idSegment)
+	{
+		$log = $this->logger;
+		
+		$contentsraw = $this->request->getRawBody();
+		$log->log('Got this: [' . $contentsraw . ']');
+		$contentsT = json_decode($contentsraw);
+		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		// Tomar el objeto dentro de la raiz
+		$contents = $contentsT->segment;
+		$account = $this->user->account;
+		$wrapper = new SegmentWrapper();
+		
+		try {
+			$response = $wrapper->updateSegment($contents, $idSegment, $account);
+		}
+		catch (InvalidArgumentException $e) {
+			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
+		}
+		catch (Exception $e) {
+			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Error while updating segment')), 422, 'Error: ' . $e->getMessage());
+		}
+		
+		return $this->setJsonResponse($response);
+		
+	}
+
+
+	/**
 	 * @Route("/segments/{idSegment:[0-9]+}", methods="DELETE")
 	 */
 	public function deletesegmentAction($idSegment)
@@ -1059,7 +1092,7 @@ class ApiController extends ControllerBase
 		$wrapper = new SegmentWrapper();
 		
 		try {
-			$response = $wrapper->startDeletingSegmentProcess($this->user->account, $idSegment);
+			$response = $wrapper->deleteSegment($this->user->account, $idSegment);
 		}
 		
 		catch (\InvalidArgumentException $e) {

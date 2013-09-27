@@ -52,9 +52,23 @@ App.SegmentsNewRoute = Ember.Route.extend({
 	}
 });
 
-App.SegmentsDeleteRoute = Ember.Route.extend({});
+App.SegmentsEditRoute = Ember.Route.extend({
+	deactivate: function () {
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && model.get('isSaving') == false) {
+			model.rollback();
+		}
+	}
+});
 
-App.SegmentsEditRoute = Ember.Route.extend({});
+App.SegmentsDeleteRoute = Ember.Route.extend({});
 
 //Definiendo controladores
 
@@ -146,7 +160,7 @@ App.SegmentsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 	}
 });
 
-App.SegmentsEditController = Ember.ObjectController.extend({
+App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	criteria: Ember.A(),
 			
 	cfields: Ember.A([
@@ -178,5 +192,16 @@ App.SegmentsEditController = Ember.ObjectController.extend({
 		objJSON.forEach(function (i) {
 			s.pushObject(i);
 		});
-	}.observes('content')
+	}.observes('content'),
+	
+	actions: {
+		edit: function() {
+			this.handleSavePromise(this.content.save(), 'segments', 'Se ha editado el segmento existosamente');
+		},
+				
+		cancel: function() {
+			this.get('model').rollback();
+			this.transitionToRoute("segments");
+		}
+	}
 });

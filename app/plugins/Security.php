@@ -161,6 +161,7 @@ class Security extends Plugin
 				'api::getcustomfieldsalias' => array('segment' => array('create')),
 				'api::createsegment' => array('segment' => array('read', 'create')),
 				'api::deletesegment' => array('segment' => array('read', 'delete')),
+				'api::dbases' => array('segment' => array('read', 'update'))
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

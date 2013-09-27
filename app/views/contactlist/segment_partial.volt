@@ -141,30 +141,49 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="segments/edit">
-	{{'{{name}}'}}
-	{{'{{description}}'}}
-		
-	{{' {{#each cr in criteria}} '}}
-		<div class="span3">
-			{{ '{{view Ember.Select
-				  contentBinding="cfields"
-				  optionValuePath="content.id"
-				  optionLabelPath="content.name"
-				  valueBinding="cr.cfields"
-				  prompt="Seleccione un campo"
-				}}'
-			}}
+	<div class="box">
+		<div class="box-header">
+			<div class="title">
+				Editar un segmento
+			</div>
 		</div>
-		<div class="span3">
-			{{ '{{view Ember.Select
-				contentBinding="App.relations"
-				optionValuePath="content.id"
-				optionLabelPath="content.relation"
-				valueBinding="cr.relations"}}'
-			}}
+		<div class="box-content padded">
+			<label>*Nombre: </label>
+			{{'{{view Ember.TextField valueBinding="name"}}'}}
+				
+			<label>Descripción: </label>
+			{{'{{view Ember.TextField valueBinding="description"}}'}}
+			
+			<br /><br />
+			{{' {{#each cr in criteria}} '}}
+				<div class="row-fluid">
+					<div class="span4">
+						{{ '{{view Ember.Select
+							  contentBinding="cfields"
+							  optionValuePath="content.id"
+							  optionLabelPath="content.name"
+							  valueBinding="cr.cfields"
+							  prompt="Seleccione un campo"
+							}}'
+						}}
+					</div>
+					<div class="span4">
+						{{ '{{view Ember.Select
+							  contentBinding="App.relations"
+							  optionValuePath="content.id"
+							  optionLabelPath="content.relation"
+							  valueBinding="cr.relations"
+							}}'
+						}}
+					</div>
+					<div class="span4">
+						{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required"}}' }}
+					</div>
+				</div>
+			{{' {{/each}} '}}
+				<br />
+				<button class="btn btn-blue" {{ '{{action edit this}}' }}>Editar</button>
+				<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
 		</div>
-		<div class="span3">
-			{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
-		</div>
-	{{' {{/each}} '}}
+	</div>
 </script>
