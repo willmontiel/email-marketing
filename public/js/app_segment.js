@@ -182,13 +182,16 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 		var idDbase = this.get('dbase.id');
 		var y = this;
 		var x = this.store.find('field', {dbase: idDbase}).then(function (data) {
-					data.forEach(function (item, index) {
-						y.cfields.pushObject({id: 'cf_' + item.get('id'), name: item.get('name')});
-					});
+				var arr = y.stdfields.slice(0);
+				data.forEach(function (item, index) {
+					arr.push({id: 'cf_' + item.get('id'), name: item.get('name')});
 				});
-		var criteriaJSON = this.get('content.criteria')
-		var objJSON = JSON.parse(criteriaJSON)
+				y.set('cfields.[]', arr);
+			});
+		var criteriaJSON = this.get('content.criteria');
+		var objJSON = JSON.parse(criteriaJSON);
 		var s = this.get('criteria');
+		s.clear();
 		objJSON.forEach(function (i) {
 			s.pushObject(i);
 		});

@@ -194,8 +194,7 @@ class SegmentWrapper extends BaseWrapper
 	{
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		$queryTxt ="SELECT s.idSegment, s.name, s.description, s.criterion, c.relation, c.value, s.idDbase,
-						IF (c.idCustomField IS NULL, c.fieldName, c.idCustomField) AS cfields
+		$queryTxt ="SELECT s.idSegment, s.name, s.description, s.criterion, c.relation, c.value, s.idDbase, c.fieldName AS cfields
 					FROM segment s JOIN criteria c ON s.idSegment = c.idSegment JOIN dbase d ON s.idDbase = d.idDbase
 					WHERE d.idAccount = :idAccount:";
 		
@@ -211,7 +210,7 @@ class SegmentWrapper extends BaseWrapper
 			$final = count($segments) - 1;
 			$i = 0;
 			foreach ($segments as $segment) {
-				if ((!in_array($segment->idSegment, $ids) || $i == $final) && !empty($ids)) {
+				if ((!in_array($segment->idSegment, $ids)) && !empty($ids)) {
 					$criteriaJson = json_encode($criteria);
 					$segmentTosend = (isset($oldSegment))?$oldSegment:$segment;
 					$result[] = $this->convertSegmentToJson($segmentTosend, $criteriaJson);
