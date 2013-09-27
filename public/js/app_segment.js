@@ -167,7 +167,7 @@ App.SegmentsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 			this.handleSavePromise(this.content.save(), 'segments', 'El Segmento ha sido eliminado con exito!');
 		},
 		cancel: function(){
-			 this.get("transaction").rollback();
+//			 this.get("transaction").rollback();
 			 this.get("target").transitionTo("segments");
 		}
 	}
