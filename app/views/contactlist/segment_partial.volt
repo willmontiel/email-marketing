@@ -30,6 +30,7 @@
 											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 											<ul class="dropdown-menu">
 												<li>{{ '{{#linkTo "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/linkTo}}' }}</li>
+												<li>{{ '{{#linkTo "segments.edit" this}}<i class="icon-pencil"></i> Editar{{/linkTo}}' }}</li>
 											</ul>
 										</div>
 									</div>
@@ -138,4 +139,9 @@
 			</div>
 		</div>
 	</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="segments/edit">
+	{{'{{name}}'}}
+	{{'{{description}}'}}
 </script>

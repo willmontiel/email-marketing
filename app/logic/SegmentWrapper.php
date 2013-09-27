@@ -158,13 +158,16 @@ class SegmentWrapper extends BaseWrapper
 	  * Funcion que convierte datos a Json para enviarlos a Ember
 	  * @param Segment $segment
 	  */
-	public static function convertSegmentToJson($segment)
+	public static function convertSegmentToJson($segment, $criteria)
 	{
 		$object = array();
 		
 		$object['id'] = intval($segment->idSegment);
 		$object['name'] = $segment->name;
 		$object['description'] = $segment->description;
+		$object['criterion'] = $segment->criterion;
+		$object['criteria'] = $criteria;
+		$object['dbase'] = $segment->idDbase;
 		
 		return $object;
 	}
@@ -190,6 +193,57 @@ class SegmentWrapper extends BaseWrapper
 	public function deleteSegment($segment)
 	{
 		
+	}
+	
+	public function findSegments() 
+	{
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$queryTxt ="SELECT s.idSegment, s.name, s.description, s.criterion, c.relation, c.value, s.idDbase,
+						IF (c.idCustomField IS NULL, c.internalValue, c.idCustomField) AS cfields
+					FROM segment s JOIN criteria c ON s.idSegment = c.idSegment JOIN dbase d ON s.idDbase = d.idDbase
+					WHERE d.idAccount = :idAccount:";
+		
+		$parameters = array('idAccount' => $this->account->idAccount);
+
+		$query2 = $modelManager->createQuery($queryTxt);
+        $segments = $query2->execute($parameters);
+		
+		$ids = array ();
+		$criteria = array ();
+		if ($segments) {
+			$final = count($segments) - 1;
+			$i = 0;
+			foreach ($segments as $segment) {
+				if ($i == $final) {
+					$objectCrit = $this->createCriteria($segment);
+					array_push($criteria, $objectCrit);
+				}
+				if ((!in_array($segment->idSegment, $ids) || $i == $final) && !empty($ids)) {
+					$criteriaJson = json_encode($criteria);
+					$result[] = $this->convertSegmentToJson($oldSegment, $criteriaJson);
+					$criteria = array ();
+				}
+				array_push($ids, $segment->idSegment);
+					
+				$objectCrit = $this->createCriteria($segment);
+				array_push($criteria, $objectCrit);
+				$oldSegment = $segment;
+				$i++;
+			}
+		}
+		
+		return $result;
+	}
+	
+	protected function createCriteria($segment)
+	{
+		$objectCrit = new stdClass();
+		$objectCrit->relations = $segment->relation;
+		$objectCrit->cfields = $segment->cfields;
+		$objectCrit->value = $segment->value;
+
+		return $objectCrit;
 	}
 	
 }

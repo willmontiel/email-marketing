@@ -998,22 +998,22 @@ class ApiController extends ControllerBase
 	 */
 	public function segmentsAction()
 	{
-		$segment[0] = array (
-			'id' => 0,
-			'name' => 'mi segmento',
-            'description' => 'Esta es la descripcion',
-            'criterion' => 'all',
-            'criteria' => '[{"relations":"begins","cfields":"lastName","value":"lala"},{"relations":"ends","cfields":"name","value":"lalalala"}]',
-            'dbase' => 7
-		);
-		$segment[1] = array (
-			'id' => 1,
-			'name' => 'mi otro segmento',
-            'description' => 'Esta Definitivamente es la descripcion',
-            'criterion' => 'any',
-            'criteria' => '[{"relations":"begins","cfields":"lastName","value":"lala"},{"relations":"ends","cfields":"name","value":"lalalala"}]',
-            'dbase' => 7
-		);
+		$log = $this->logger;
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
+		
+		$wrapper = new SegmentWrapper();
+		$wrapper->setAccount($this->user->account);
+		$segment = $wrapper->findSegments();
+
 		return $this->setJsonResponse(array ('segments' => $segment));
 	}
 	

@@ -66,7 +66,9 @@ App.SegmentsNewRoute = Ember.Route.extend({
 	}
 });
 
-App.SegmentsDeleteRoute = Ember.Route.extend({})
+App.SegmentsDeleteRoute = Ember.Route.extend({});
+
+App.SegmentsEditRoute = Ember.Route.extend({});
 
 //Definiendo controladores
 
@@ -155,5 +157,11 @@ App.SegmentsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 			 this.get("transaction").rollback();
 			 this.get("target").transitionTo("segments");
 		}
+	}
+});
+
+App.SegmentsEditController = Ember.ObjectController.extend({
+	init: function() {
+		console.log(this);
 	}
 });
