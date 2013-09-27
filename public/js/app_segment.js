@@ -5,7 +5,7 @@ App.Segment = DS.Model.extend({
 	criteria: DS.attr('string'),
 	dbase: DS.belongsTo('dbase')
 });
-App.extravar = "";
+
 App.criteria = [
   Ember.Object.create({criterion: "todas las", id: "all"}),
   Ember.Object.create({criterion: "cualquiera de las",    id: "any"})
@@ -21,6 +21,7 @@ App.relations = [
 
 
 App.Field = DS.Model.extend({
+	dbase: DS.belongsTo('dbase'),
 	name: DS.attr('string', { required: true }),
 	type: DS.attr( 'string' ),
 	required: DS.attr('boolean'),
@@ -28,22 +29,7 @@ App.Field = DS.Model.extend({
 	defaultValue: DS.attr('string'),
 	minValue: DS.attr('number'),
 	maxValue: DS.attr('number'),
-	maxLength: DS.attr('number'),
-	isSelect: function() {
-		return (this.get('type') == "Select" || this.get('type') == "MultiSelect");
-	}.property('type'),
-			
-	isText: function() {
-		return (this.get('type') == "Text");
-	}.property('type'),
-	
-	isNumerical: function() {
-		return (this.get('type') == "Numerical");
-	}.property('type'),
-			
-	isDate: function() {
-		return (this.get('type') == "Date");
-	}.property('type')
+	maxLength: DS.attr('number')
 });
 
 
@@ -161,13 +147,36 @@ App.SegmentsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 });
 
 App.SegmentsEditController = Ember.ObjectController.extend({
-	init: function() {
-		App.set('extravar', this);
-		var extra = "";
-		extra = this;
-		console.log(this);
-		console.log(extra);
-		console.log(App.get('extravar'));
-		console.log(App.extravar);
-	}
+	criteria: Ember.A(),
+			
+	cfields: Ember.A([
+		{id: 'email', name: 'Correo electronico', type: 'text'},
+		{id: 'domain', name: 'Dominio del Correo', type: 'text'},
+		{id: 'name', name: 'Nombre', type: 'text'},
+		{id: 'lastName', name: 'Apellido', type: 'text'},
+	]),
+	stdfields: [
+		{id: 'email', name: 'Correo electronico', type: 'text'},
+		{id: 'domain', name: 'Dominio del Correo', type: 'text'},
+		{id: 'name', name: 'Nombre', type: 'text'},
+		{id: 'lastName', name: 'Apellido', type: 'text'},
+//		{id: 'status', name: 'Estado', type: 'select', options: ['Activo', 'Inactivo', 'Des-suscrito', 'Spam', 'Rebotado']},
+	],
+			
+	setCriteriaArray: function ()
+	{
+		var idDbase = this.get('id');
+		var y = this;
+		var x = this.store.find('field', {dbase: idDbase}).then(function (data) {
+					data.forEach(function (item, index) {
+						y.cfields.pushObject({id: 'cf_' + item.get('id'), name: item.get('name')});
+					});
+				});
+		var criteriaJSON = this.get('content.criteria')
+		var objJSON = JSON.parse(criteriaJSON)
+		var s = this.get('criteria');
+		objJSON.forEach(function (i) {
+			s.pushObject(i);
+		});
+	}.observes('content')
 });

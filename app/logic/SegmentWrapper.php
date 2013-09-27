@@ -31,7 +31,7 @@ class SegmentWrapper extends BaseWrapper
 			}
 			else {
 				$segment = $this->saveSegmentAndCriteriaInDb($contents);
-				return array('segment' => self::convertSegmentToJson($segment));
+				return self::convertSegmentToJson($segment);
 			}
 		}
 	}
@@ -107,12 +107,13 @@ class SegmentWrapper extends BaseWrapper
 			Phalcon\DI::getDefault()->get('logger')->log($txt);
 			throw new ErrorException('Ha ocurrido un error');
 		}
+		return $segment;
 	}
 	 /**
 	  * Funcion que convierte datos a Json para enviarlos a Ember
 	  * @param Segment $segment
 	  */
-	public static function convertSegmentToJson($segment, $criteria)
+	public static function convertSegmentToJson($segment, $criteria = null)
 	{
 		$object = array();
 		
@@ -122,6 +123,7 @@ class SegmentWrapper extends BaseWrapper
 		$object['criterion'] = $segment->criterion;
 		$object['criteria'] = $criteria;
 		$object['dbase'] = $segment->idDbase;
+		
 		
 		return $object;
 	}
@@ -160,9 +162,10 @@ class SegmentWrapper extends BaseWrapper
 		
 		$parameters = array('idAccount' => $this->account->idAccount);
 
-		$query2 = $modelManager->createQuery($queryTxt);
-        $segments = $query2->execute($parameters);
+		$query = $modelManager->createQuery($queryTxt);
+        $segments = $query->execute($parameters);
 		
+		$result = array();
 		$ids = array ();
 		$criteria = array ();
 		if ($segments) {
@@ -186,8 +189,9 @@ class SegmentWrapper extends BaseWrapper
 				$i++;
 			}
 		}
-		
-		return $result;
+		return array('segments' => $result, 
+					 'meta' => $this->pager->getPaginationObject()
+					);
 	}
 	
 	protected function createCriteria($segment)

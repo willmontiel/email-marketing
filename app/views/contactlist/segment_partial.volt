@@ -13,12 +13,7 @@
 				</div>
 				<div class="box-content">
 					<table class="table table-normal">
-						<thead>
-							<tr>
-							   <td colspan="2">Segmento</td>
-							   <td>Acciones</td>
-						   </tr>
-					   </thead>
+						<thead></thead>
 						<tbody>
 						{{'{{#each model}}'}}
 							<tr>
@@ -35,6 +30,10 @@
 										</div>
 									</div>
 								</td>
+							</tr>
+						{{ '{{else}}' }}
+							<tr>
+								<td colspan="3">No hay segmentos disponibles</td>
 							</tr>
 						{{ '{{/each}}' }}
 						</tbody>
@@ -58,9 +57,9 @@
 		<div class="box-content padded">
 			<form>
 				<label>*Nombre: </label>
-					{{ '{{view Ember.TextField valueBinding="name"}}' }}
+					{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre"}}' }}
 				<label>Descripción: </label>
-					{{ '{{view Ember.TextArea valueBinding="description"}}' }}
+					{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción"}}' }}
 				<label>*Seleccione base de datos:</label>
 					{{ '{{view Ember.Select 
 								selectionBinding="dbase" 
@@ -144,4 +143,28 @@
 <script type="text/x-handlebars" data-template-name="segments/edit">
 	{{'{{name}}'}}
 	{{'{{description}}'}}
+		
+	{{' {{#each cr in criteria}} '}}
+		<div class="span3">
+			{{ '{{view Ember.Select
+				  contentBinding="cfields"
+				  optionValuePath="content.id"
+				  optionLabelPath="content.name"
+				  valueBinding="cr.cfields"
+				  prompt="Seleccione un campo"
+				}}'
+			}}
+		</div>
+		<div class="span3">
+			{{ '{{view Ember.Select
+				contentBinding="App.relations"
+				optionValuePath="content.id"
+				optionLabelPath="content.relation"
+				valueBinding="cr.relations"}}'
+			}}
+		</div>
+		<div class="span3">
+			{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
+		</div>
+	{{' {{/each}} '}}
 </script>

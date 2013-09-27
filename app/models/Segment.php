@@ -16,5 +16,8 @@ class Segment extends \Phalcon\Mvc\Model
 	public function beforeCreate()
     {
         $this->createdon = time();
+		if ($this->description == null) {
+			$this->description = "Sin descripción";
+		}
     }
 }

@@ -38,7 +38,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('fields' => $list));
 		}
 		
-		return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+		return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos!!');
 	}
 	
 
@@ -1014,7 +1014,7 @@ class ApiController extends ControllerBase
 		$wrapper->setAccount($this->user->account);
 		$segment = $wrapper->findSegments();
 
-		return $this->setJsonResponse(array ('segments' => $segment));
+		return $this->setJsonResponse($segment, 201, 'success');
 	}
 	
 	/**
