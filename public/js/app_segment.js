@@ -49,6 +49,14 @@ App.SegmentsNewRoute = Ember.Route.extend({
 	setupController: function (controller, model) {
 		this._super(controller, model);
 		controller.loadDbases();
+	},
+	
+	actions : {
+		deactivate: function () {
+			if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+				this.currentModel.get('model').rollback();
+			}
+		}
 	}
 });
 
@@ -75,7 +83,7 @@ App.SegmentsDeleteRoute = Ember.Route.extend({});
 App.SegmentController = Ember.ObjectController.extend();
 
 App.SegmentsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	modelClass : App.List
+	modelClass : App.Segment
 });
 
 App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
@@ -143,6 +151,11 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 			var JsonCriteria = JSON.stringify(this.criteria);
 			this.content.set('criteria', JsonCriteria);
 			this.handleSavePromise(this.content.save(), 'segments', 'Se ha creado el segmento existosamente');
+		},
+		
+		cancel: function(){
+//			this.get('model').rollback();
+			this.transitionToRoute('segments');
 		}
 	}
 });

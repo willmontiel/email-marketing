@@ -1,8 +1,7 @@
 <script type="text/x-handlebars" data-template-name="segments/index">
 	<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
-		{{'{{#linkTo "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nueva segmento{{'{{/linkTo}}'}}
+		{{'{{#linkTo "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/linkTo}}'}}
 	</div>
-	<div class="clearfix"></div>
 	<div class="row-fluid">
         <div class="span12">
 			<div class="box">
@@ -12,39 +11,39 @@
 					</div>
 				</div>
 				<div class="box-content">
-					<table class="table table-normal">
-						<thead></thead>
-						<tbody>
-						{{'{{#each model}}'}}
-							<tr>
-								<td>{{' {{name}}'}}</td>
-								<td>{{' {{description}}'}}</td>
-								<td>
-									<div class="pull-right" style="margin-right: 10px;">
-										<div class="btn-group">
-											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-											<ul class="dropdown-menu">
-												<li>{{ '{{#linkTo "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/linkTo}}' }}</li>
-												<li>{{ '{{#linkTo "segments.edit" this}}<i class="icon-pencil"></i> Editar{{/linkTo}}' }}</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-							</tr>
-						{{ '{{else}}' }}
-							<tr>
-								<td colspan="3">No hay segmentos disponibles</td>
-							</tr>
-						{{ '{{/each}}' }}
-						</tbody>
-					</table>
-				</div>
+				{{'{{#each model}}'}}
+					<div class="box-section news with-icons">
+						<div class="avatar purple">
+							<i class="icon-resize-horizontal icon-2x"></i>
+						</div>
+						<div class="news-content">
+							<div class="pull-right" style="margin-right: 10px;">
+								<div class="btn-group">
+									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li>{{ '{{#linkTo "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/linkTo}}' }}</li>
+										<li>{{ '{{#linkTo "segments.edit" this}}<i class="icon-pencil"></i> Editar{{/linkTo}}' }}</li>
+									</ul>
+								</div>
+							</div>
+							<div class="news-title">	
+								{{' {{name}}'}}
+							</div>
+							<div class="news-text">
+								{{' {{description}}'}}
+							</div>
+						</div>
+					</div>
+				{{ '{{else}}' }}
+					No hay segmentos disponibles
+				{{ '{{/each}}' }}
 				<div class="box-footer flat"> 
 					{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 </script>
 <script type="text/x-handlebars" data-template-name="segments">
 	{{'{{outlet}}'}}
@@ -114,7 +113,8 @@
 					</div>
 				</div>
 				
-				<button class="btn btn-default" {{ '{{action save this }}' }}>Crear</button>
+				<button class="btn btn-blue" {{ '{{action save this }}' }}>Crear</button>
+				<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
 			</form>
 		</div>
 	</div>

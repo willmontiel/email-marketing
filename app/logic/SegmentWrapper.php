@@ -60,8 +60,8 @@ class SegmentWrapper extends BaseWrapper
 					$criteria = new Criteria();
 					
 					$criteria->idSegment = $segment->idSegment;
-					$criteria->value = $typeField{"value"};
-					$criteria->relation = $typeField{"relations"};
+					$criteria->value = $typeField["value"];
+					$criteria->relation = $typeField["relations"];
 					
 					switch ($typeField["cfields"]) {
 						case 'name':
@@ -137,7 +137,7 @@ class SegmentWrapper extends BaseWrapper
 	{
 		$dbase = Dbase::findFirst(array(
 			"conditions" => "idDbase = ?1 AND idAccount = ?2",
-			"bind" => array(1 => $contents->idDbase,
+			"bind" => array(1 => $contents->dbase,
 							2 => $account->idAccount)
 		));
 		
@@ -148,19 +148,72 @@ class SegmentWrapper extends BaseWrapper
 			$segment = Segment::findFirst(array(
 				"conditions" => "idSegment = ?1 AND idDbase = ?2",
 				"bind" => array(1 => $idSegment,
-								2 => $contents->idDbase)
+								2 => $contents->dbase)
 			));
 			
 			if (!$segment) {
 				throw new \Exception('El segmento no existe');
 			}
-			$this->updateSegmentData();
+			$this->updateSegmentData($contents, $segment);
 		}
 	}
 	
-	public function updateSegmentData()
+	public function updateSegmentData($contents, Segment $segment)
 	{
+		$segment->name = $contents->name;
+		$segment->description = $contents->description;
 		
+		if (!$segment->save()) {
+			$txt = implode(PHP_EOL,  $segment->getMessages());
+			Phalcon\DI::getDefault()->get('logger')->log($txt);
+			throw new ErrorException('Ha ocurrido un error');
+		}
+		
+		$objCriteria = Criteria::findFirst(array(
+			"conditions" => "idSegment = ?1",
+			"bind" => array(1 => $segment->idSegment)
+		));
+		
+		$arrayFields = json_decode($contents->criteria, true);
+		
+		for ($i = 0; $i < count($objCriteria); $i++) {
+			
+			$criteria->value = $typeField["value"];
+			$criteria->relation = $typeField["relations"];
+
+			switch ($typeField["cfields"]) {
+				case 'name':
+				case 'lastName':
+					$type = 'contact';
+					break;
+				case 'email':
+					$type = 'email';
+					break;
+				case 'domain':
+					$type = 'domain';
+					break;
+				default:
+					if (substr($typeField["cfields"], 0, 3) == 'cf_') {
+						$type = 'custom';
+						$criteria->idCustomField = substr($typeField["cfields"], 3);
+					}
+					else {
+						throw new InvalidArgumentException('Error: invalid type');
+					}
+					break;
+			}
+			$criteria->type = $type;
+			$criteria->fieldName = $typeField["cfields"];
+
+
+			if (!$criteria->save()) {
+				$txt = implode(PHP_EOL,  $criteria->getMessages());
+				Phalcon\DI::getDefault()->get('logger')->log($txt);
+				throw new ErrorException('Ha ocurrido un error');
+			}
+		}
+		return $segment;
+//		$criteria = Criteria::find()
 	}
 
 

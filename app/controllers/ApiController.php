@@ -1051,7 +1051,7 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @put ("/segments/{idSement:[0-9]+}")
+	 * @Put("/segments/{idSegment:[0-9]+}")
 	 */
 	public function editsegmentAction($idSegment)
 	{
