@@ -130,20 +130,28 @@ class SegmentWrapper extends BaseWrapper
 
 	public function startDeletingSegmentProcess(Account $account, $idSegment)
 	{
-		$idDbase = Dbase::findByIdAccount($account->idAccount);
-		$segment = Segment::findFirst(array(
-				"conditions" => "idSegment = ?1 AND idDbase = ?2",
-				"bind" => array(
-					1 => $idSegment,
-					2 => $idDbase
-				)
-			)
-		);
+		$db = Phalcon\DI::getDefault()->get('db');
+		Phalcon\DI::getDefault()->get('logger')->log("POR ACA");
+
+		Phalcon\DI::getDefault()->get('logger')->log("POR AQUI");
+		$query = "	DELETE c, s 
+					FROM segment s 
+						JOIN criteria c ON s.idSegment = c.idSegment 
+					WHERE s.idSegment = ?";
 		
-		if (!$segment ) {
-			throw new \Exception('El segmento no existe');
+		$db->begin();
+		
+		$deletedSegment = $db->execute($query, array($idSegment));
+		
+		if (!$deletedSegment) {
+			$db->rollback();
+			throw new \InvalidArgumentException('Fallo la eliminacion del segmento');
 		}
-		$deletedSegment = $this->deleteSegment($segment);
+		
+		$db->commit();
+		Phalcon\DI::getDefault()->get('logger')->log("Elimino");
+		return $deletedSegment;
+
 	}
 	
 	public function deleteSegment($segment)
@@ -172,17 +180,19 @@ class SegmentWrapper extends BaseWrapper
 			$final = count($segments) - 1;
 			$i = 0;
 			foreach ($segments as $segment) {
+				if ((!in_array($segment->idSegment, $ids) || $i == $final) && !empty($ids)) {
+					$criteriaJson = json_encode($criteria);
+					$segmentTosend = (isset($oldSegment))?$oldSegment:$segment;
+					$result[] = $this->convertSegmentToJson($segmentTosend, $criteriaJson);
+					$criteria = array ();
+				}
 				if ($i == $final) {
 					$objectCrit = $this->createCriteria($segment);
 					array_push($criteria, $objectCrit);
-				}
-				if ((!in_array($segment->idSegment, $ids) || $i == $final) && !empty($ids)) {
 					$criteriaJson = json_encode($criteria);
-					$result[] = $this->convertSegmentToJson($oldSegment, $criteriaJson);
-					$criteria = array ();
+					$result[] = $this->convertSegmentToJson($segment, $criteriaJson);
 				}
 				array_push($ids, $segment->idSegment);
-					
 				$objectCrit = $this->createCriteria($segment);
 				array_push($criteria, $objectCrit);
 				$oldSegment = $segment;

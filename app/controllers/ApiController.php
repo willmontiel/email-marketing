@@ -1055,7 +1055,7 @@ class ApiController extends ControllerBase
 	public function deletesegmentAction($idSegment)
 	{
 		$log = $this->logger;
-		
+		$log->log('llego a la eliminacion');
 		$wrapper = new SegmentWrapper();
 		
 		try {
@@ -1071,7 +1071,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while deleting segment!');	
 		}
 		
-		return $this->setJsonResponse(array ('contact' => $response), 202, 'segment deleted success');	
+		return $this->setJsonResponse($response);	
 	}
 }
 
