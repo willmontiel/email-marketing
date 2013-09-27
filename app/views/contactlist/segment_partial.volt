@@ -163,7 +163,6 @@
 							  optionValuePath="content.id"
 							  optionLabelPath="content.name"
 							  valueBinding="cr.cfields"
-							  prompt="Seleccione un campo"
 							}}'
 						}}
 					</div>

@@ -200,18 +200,20 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 					arr.push({id: 'cf_' + item.get('id'), name: item.get('name')});
 				});
 				y.set('cfields.[]', arr);
+				var criteriaJSON = y.get('content.criteria');
+				var objJSON = JSON.parse(criteriaJSON);
+				var s = y.get('criteria');
+				s.clear();
+				objJSON.forEach(function (i) {
+					s.pushObject(i);
+				});
 			});
-		var criteriaJSON = this.get('content.criteria');
-		var objJSON = JSON.parse(criteriaJSON);
-		var s = this.get('criteria');
-		s.clear();
-		objJSON.forEach(function (i) {
-			s.pushObject(i);
-		});
 	}.observes('content'),
 	
 	actions: {
 		edit: function() {
+			var JsonCriteria = JSON.stringify(this.criteria);
+			this.content.set('criteria', JsonCriteria);
 			this.handleSavePromise(this.content.save(), 'segments', 'Se ha editado el segmento existosamente');
 		},
 				

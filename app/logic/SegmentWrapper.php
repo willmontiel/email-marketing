@@ -124,7 +124,6 @@ class SegmentWrapper extends BaseWrapper
 		$object['criteria'] = $criteria;
 		$object['dbase'] = $segment->idDbase;
 		
-		
 		return $object;
 	}
 	
@@ -154,11 +153,14 @@ class SegmentWrapper extends BaseWrapper
 			if (!$segment) {
 				throw new \Exception('El segmento no existe');
 			}
-			$this->updateSegmentData($contents, $segment);
+			$response = $this->updateSegmentData($contents, $segment);
+			
 		}
+		
+		return $response;
 	}
 	
-	public function updateSegmentData($contents, Segment $segment)
+	protected function updateSegmentData($contents, Segment $segment)
 	{
 		$segment->name = $contents->name;
 		$segment->description = $contents->description;
@@ -169,53 +171,58 @@ class SegmentWrapper extends BaseWrapper
 			throw new ErrorException('Ha ocurrido un error');
 		}
 		
-		$objCriteria = Criteria::findFirst(array(
-			"conditions" => "idSegment = ?1",
-			"bind" => array(1 => $segment->idSegment)
-		));
+		$criteria = $this->updateCriteria($contents, $segment->idSegment);
 		
-		$arrayFields = json_decode($contents->criteria, true);
+		$response = $this->convertSegmentToJson($segment);
 		
-		for ($i = 0; $i < count($objCriteria); $i++) {
-			
-			$criteria->value = $typeField["value"];
-			$criteria->relation = $typeField["relations"];
-
-			switch ($typeField["cfields"]) {
-				case 'name':
-				case 'lastName':
-					$type = 'contact';
-					break;
-				case 'email':
-					$type = 'email';
-					break;
-				case 'domain':
-					$type = 'domain';
-					break;
-				default:
-					if (substr($typeField["cfields"], 0, 3) == 'cf_') {
-						$type = 'custom';
-						$criteria->idCustomField = substr($typeField["cfields"], 3);
-					}
-					else {
-						throw new InvalidArgumentException('Error: invalid type');
-					}
-					break;
-			}
-			$criteria->type = $type;
-			$criteria->fieldName = $typeField["cfields"];
-
-
-			if (!$criteria->save()) {
-				$txt = implode(PHP_EOL,  $criteria->getMessages());
-				Phalcon\DI::getDefault()->get('logger')->log($txt);
-				throw new ErrorException('Ha ocurrido un error');
-			}
-		}
-		return $segment;
-//		$criteria = Criteria::find()
+		return $response;
+//		
 	}
 
+	protected function updateCriteria($contents, $idSegment)
+	{
+		$arrayFields = json_decode($contents->criteria, true);
+		Phalcon\DI::getDefault()->get('logger')->log(print_r($arrayFields, true));
+		
+		$objCriterias = Criteria::find(array(
+			"conditions" => "idSegment = ?1",
+			"bind" => array(1 => $idSegment)
+		));
+		foreach ($objCriterias as $objcr) {
+			foreach ($arrayFields as $key => $value) {
+				if($value['idCriteria'] == $objcr->idCriteria) {
+					$objcr->relation = $value['relations'];
+					$objcr->value = $value['value'];
+					$objcr->fieldName = $value['cfields'];
+					
+					switch ($value["cfields"]) {
+						case 'name':
+						case 'lastName':
+							$type = 'contact';
+							break;
+						case 'email':
+							$type = 'email';
+							break;
+						case 'domain':
+							$type = 'domain';
+							break;
+						default:
+							if (substr($value["cfields"], 0, 3) == 'cf_') {
+								$type = 'custom';
+								$objcr->idCustomField = substr($value["cfields"], 3);
+							}
+							else {
+								throw new InvalidArgumentException('Error: invalid type');
+							}
+							break;
+					}
+					$objcr->type = $type;				
+					
+					$objcr->save();
+				}
+			}
+		}
+	}
 
 	public function deleteSegment(Account $account, $idSegment)
 	{
@@ -247,7 +254,7 @@ class SegmentWrapper extends BaseWrapper
 	{
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		$queryTxt ="SELECT s.idSegment, s.name, s.description, s.criterion, c.relation, c.value, s.idDbase, c.fieldName AS cfields
+		$queryTxt ="SELECT s.idSegment, s.name, s.description, s.criterion, c.idCriteria, c.relation, c.value, s.idDbase, c.fieldName AS cfields
 					FROM segment s JOIN criteria c ON s.idSegment = c.idSegment JOIN dbase d ON s.idDbase = d.idDbase
 					WHERE d.idAccount = :idAccount:";
 		
@@ -290,6 +297,8 @@ class SegmentWrapper extends BaseWrapper
 	protected function createCriteria($segment)
 	{
 		$objectCrit = new stdClass();
+		
+		$objectCrit->idCriteria = $segment->idCriteria;
 		$objectCrit->relations = $segment->relation;
 		$objectCrit->cfields = $segment->cfields;
 		$objectCrit->value = $segment->value;

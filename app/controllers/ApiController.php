@@ -1077,7 +1077,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Error while updating segment')), 422, 'Error: ' . $e->getMessage());
 		}
 		
-		return $this->setJsonResponse($response);
+		return $this->setJsonResponse(array('segment' => $response), 201, 'Success');
 		
 	}
 
