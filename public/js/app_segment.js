@@ -108,7 +108,6 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 	
 	loadDbases: function () {
 		this.get('controllers.dbase').set('content', this.store.find('dbase'));
-		console.log(this.get('limitCriteria'));
 	},
 	
 	changeDbase: function () {
@@ -211,7 +210,29 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 	}.observes('content'),
 	
 	actions: {
+		
+		aConditionMore: function() {
+			var newobj = {};
+			this.criteria.pushObject(newobj);
+			if ( this.criteria.length > 5 ) {
+				this.set('limitCriteria', true);
+			} else {
+				this.set('limitCriteria', false);
+			}
+			
+		},
+
+		aConditionLess: function(data) {
+			this.criteria.removeObject(data);
+			if ( this.criteria.length < 6 ) {
+				this.set('limitCriteria', false);
+			} else {
+				this.set('limitCriteria', true);
+			}
+		},
+		
 		edit: function() {
+			console.log(this.criteria);
 			var JsonCriteria = JSON.stringify(this.criteria);
 			this.content.set('criteria', JsonCriteria);
 			this.handleSavePromise(this.content.save(), 'segments', 'Se ha editado el segmento existosamente');

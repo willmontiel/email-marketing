@@ -63,28 +63,8 @@ class SegmentWrapper extends BaseWrapper
 					$criteria->value = $typeField["value"];
 					$criteria->relation = $typeField["relations"];
 					
-					switch ($typeField["cfields"]) {
-						case 'name':
-						case 'lastName':
-							$type = 'contact';
-							break;
-						case 'email':
-							$type = 'email';
-							break;
-						case 'domain':
-							$type = 'domain';
-							break;
-						default:
-							if (substr($typeField["cfields"], 0, 3) == 'cf_') {
-								$type = 'custom';
-								$criteria->idCustomField = substr($typeField["cfields"], 3);
-							}
-							else {
-								throw new InvalidArgumentException('Error: invalid type');
-							}
-							break;
-					}
-					$criteria->type = $type;
+					$this->findType($typeField["cfields"], $criteria);
+					
 					$criteria->fieldName = $typeField["cfields"];
 					
 					
@@ -189,39 +169,68 @@ class SegmentWrapper extends BaseWrapper
 			"bind" => array(1 => $idSegment)
 		));
 		foreach ($objCriterias as $objcr) {
+			$done = FALSE;
 			foreach ($arrayFields as $key => $value) {
-				if($value['idCriteria'] == $objcr->idCriteria) {
+				if (!array_key_exists('idCriteria', $value)) {
+					
+					$newobj = new Criteria();
+					$newobj->idSegment = $idSegment;
+					$newobj->relation = $value['relations'];
+					$newobj->value = $value['value'];
+					$newobj->fieldName = $value['cfields'];
+					
+					$this->findType($value["cfields"], $newobj);
+					
+					$newobj->save();
+					
+					unset($arrayFields[$key]);
+					
+					$done = TRUE;
+				}
+				else if (($value['idCriteria'] == $objcr->idCriteria)) {
 					$objcr->relation = $value['relations'];
 					$objcr->value = $value['value'];
 					$objcr->fieldName = $value['cfields'];
 					
-					switch ($value["cfields"]) {
-						case 'name':
-						case 'lastName':
-							$type = 'contact';
-							break;
-						case 'email':
-							$type = 'email';
-							break;
-						case 'domain':
-							$type = 'domain';
-							break;
-						default:
-							if (substr($value["cfields"], 0, 3) == 'cf_') {
-								$type = 'custom';
-								$objcr->idCustomField = substr($value["cfields"], 3);
-							}
-							else {
-								throw new InvalidArgumentException('Error: invalid type');
-							}
-							break;
-					}
-					$objcr->type = $type;				
+					$this->findType($value["cfields"], $objcr);				
 					
 					$objcr->save();
+					
+					$done = TRUE;
+				} 
+				else if(!$done){
+					$objcr->delete();
+					
+					$done = TRUE;
 				}
 			}
 		}
+	}
+	
+	protected function findType($value, $objcr)
+	{
+		switch ($value) {
+			case 'name':
+			case 'lastName':
+				$type = 'contact';
+				break;
+			case 'email':
+				$type = 'email';
+				break;
+			case 'domain':
+				$type = 'domain';
+				break;
+			default:
+				if (substr($value, 0, 3) == 'cf_') {
+					$type = 'custom';
+					$objcr->idCustomField = substr($value, 3);
+				}
+				else {
+					throw new InvalidArgumentException('Error: invalid type');
+				}
+				break;
+		}
+		$objcr->type = $type;
 	}
 
 	public function deleteSegment(Account $account, $idSegment)
@@ -256,7 +265,8 @@ class SegmentWrapper extends BaseWrapper
 		
 		$queryTxt ="SELECT s.idSegment, s.name, s.description, s.criterion, c.idCriteria, c.relation, c.value, s.idDbase, c.fieldName AS cfields
 					FROM segment s JOIN criteria c ON s.idSegment = c.idSegment JOIN dbase d ON s.idDbase = d.idDbase
-					WHERE d.idAccount = :idAccount:";
+					WHERE d.idAccount = :idAccount:
+					ORDER BY s.idSegment";
 		
 		$parameters = array('idAccount' => $this->account->idAccount);
 

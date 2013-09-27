@@ -154,10 +154,22 @@
 			<label>Descripción: </label>
 			{{'{{view Ember.TextField valueBinding="description"}}'}}
 			
+			<label>Editar Segmento con: </label>
+			{{ '{{view Ember.Select
+				contentBinding="App.criteria"
+				optionValuePath="content.id"
+				optionLabelPath="content.criterion"
+				valueBinding="criterion"
+				class="span2"}}'
+			}}
+			<br /><br />
+			{{ '{{#unless limitCriteria}}' }}
+			<button class="btn btn-default" {{ '{{action aConditionMore}}' }}>+</button>
+			{{ '{{/unless}}' }}
 			<br /><br />
 			{{' {{#each cr in criteria}} '}}
 				<div class="row-fluid">
-					<div class="span4">
+					<div class="span3">
 						{{ '{{view Ember.Select
 							  contentBinding="cfields"
 							  optionValuePath="content.id"
@@ -166,7 +178,7 @@
 							}}'
 						}}
 					</div>
-					<div class="span4">
+					<div class="span3">
 						{{ '{{view Ember.Select
 							  contentBinding="App.relations"
 							  optionValuePath="content.id"
@@ -175,9 +187,10 @@
 							}}'
 						}}
 					</div>
-					<div class="span4">
+					<div class="span3">
 						{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required"}}' }}
 					</div>
+					<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}>-</button>
 				</div>
 			{{' {{/each}} '}}
 				<br />
