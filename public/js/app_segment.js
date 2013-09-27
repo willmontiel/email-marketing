@@ -165,7 +165,7 @@ App.SegmentsEditController = Ember.ObjectController.extend({
 			
 	setCriteriaArray: function ()
 	{
-		var idDbase = this.get('id');
+		var idDbase = this.get('dbase.id');
 		var y = this;
 		var x = this.store.find('field', {dbase: idDbase}).then(function (data) {
 					data.forEach(function (item, index) {
