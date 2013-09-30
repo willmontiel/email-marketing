@@ -23,6 +23,8 @@ class Dbase extends Modelbase
         $this->hasMany("idDbase", "Contact", "idDbase", array('alias' => 'Contacts'));
 		
 		$this->hasMany("idDbase", "Contactlist", "idDbase");
+		
+		$this->hasMany("idDbase", "Segment", "idDbase");
     }
     
     public function getMessages()

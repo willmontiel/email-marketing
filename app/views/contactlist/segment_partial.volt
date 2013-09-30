@@ -26,8 +26,8 @@
 									</ul>
 								</div>
 							</div>
-							<div class="news-title">	
-								{{' {{name}}'}}
+							<div class="news-title">
+							<a href="{{url('segment/show/')}}{{ '{{unbound id}}' }}#/contacts">{{' {{name}} '}}</a>
 							</div>
 							<div class="news-text">
 								{{' {{description}}'}}
@@ -221,4 +221,8 @@
 				<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
 		</div>
 	</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="segments/show">
+
 </script>

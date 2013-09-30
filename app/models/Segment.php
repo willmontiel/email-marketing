@@ -3,6 +3,14 @@ use Phalcon\Mvc\Model\Validator\PresenceOf;
 
 class Segment extends \Phalcon\Mvc\Model
 {
+	public $idDbase;
+	
+	public function initialize()
+	{
+		$this->belongsTo("idDbase", "Dbase", "idDbase", array(
+            "foreignKey" => true,
+        ));
+	}
 	public function validation()
 	{
 		$this->validate(new PresenceOf(

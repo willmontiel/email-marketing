@@ -41,8 +41,6 @@ class SegmentWrapper extends BaseWrapper
 	 */
 	public function saveSegmentAndCriteriaInDb($contents) 
 	{
-		$db = Phalcon\DI::getDefault()->get('db');
-		$db->begin();
 		$segment = new Segment();
 		
 		$segment->idDbase = $contents->dbase;
@@ -74,16 +72,14 @@ class SegmentWrapper extends BaseWrapper
 						throw new ErrorException('Ha ocurrido un error');
 					}
 				}
-				$db->commit();
+				$this->saveSxC($segment);
 			}
 			catch (Exception $e) {
-				$db->rollback();
 				throw $e;
 			}
 		}
 		else {
 			$txt = implode(PHP_EOL,  $segment->getMessages());
-			$db->rollback();
 			Phalcon\DI::getDefault()->get('logger')->log($txt);
 			throw new ErrorException('Ha ocurrido un error');
 		}
@@ -144,6 +140,7 @@ class SegmentWrapper extends BaseWrapper
 	{
 		$segment->name = $contents->name;
 		$segment->description = $contents->description;
+		$segment->criterion = $contents->criterion;
 		
 		if (!$segment->save()) {
 			$txt = implode(PHP_EOL,  $segment->getMessages());
@@ -314,6 +311,147 @@ class SegmentWrapper extends BaseWrapper
 		$objectCrit->value = $segment->value;
 
 		return $objectCrit;
+	}
+	
+	protected function saveSxC(Segment $segment) {
+		$allcriterias = Criteria::findByIdSegment($segment->idSegment);
+		$join = "";
+		$conditions = "";
+		$firstCondition = TRUE;
+		$multTables = ($segment->criterion == 'all')?TRUE:FALSE;
+		$tablenumber = 1;
+		
+		foreach ($allcriterias as $criteria) {
+			switch ($criteria->type) {
+				case 'custom' :
+					if($multTables) {
+						$join.= "JOIN fieldinstance f$tablenumber ON (c.idContact = f$tablenumber.idContact) ";
+						$value = "f$tablenumber.idCustomField = $criteria->idCustomField AND f$tablenumber.textValue ";
+						$tablenumber++;
+					}
+					else {
+						$join.= "JOIN fieldinstance f ON (c.idContact = f.idContact) ";
+						$value = "( f.idCustomField = $criteria->idCustomField AND f.textValue ) ";
+					}
+					break;
+				case 'contact' :
+					$value = "c.$criteria->fieldName ";
+					break;
+				case 'email' :
+					$join.="JOIN email e ON (c.idEmail = e.idEmail) ";
+					$value = "e.$criteria->fieldName ";
+					break;
+				case 'domain' :
+					$join.="JOIN email em ON (c.idEmail = em.idEmail) JOIN domain d ON (em.idDomain = d.idDomain) ";
+					$value = "d.$criteria->fieldName ";
+					break;
+			}
+			
+			switch ($criteria->relation) {
+				case 'begins' :
+					$relation = "LIKE '$criteria->value%'";
+					break;
+				case 'ends' :
+					$relation = "LIKE '%$criteria->value'";
+					break;
+				case 'content' :
+					$relation = "LIKE '%$criteria->value%'";
+					break;
+				case '!content' :
+					$relation = "NOT LIKE '%$criteria->value%'";
+					break;
+				case 'greater' :
+					$relation = "> ". $criteria->value;
+					break;
+				case 'less' :
+					$relation = "< ". $criteria->value;
+					break;
+				case 'equals' :
+					$relation = "= '$criteria->value'";
+					break;
+			}
+			
+			if($firstCondition) {
+				$conditions.= $value . $relation;
+				$firstCondition = FALSE;
+			} 
+			else {
+				if($segment->criterion == 'any') {
+					$conditions.= " OR " . $value . $relation;
+				} 
+				else {
+					$conditions.= " AND " . $value . $relation;
+				}
+			}
+		}
+		
+		$SQL = "INSERT INTO sxc (idContact, idSegment) SELECT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND " . $conditions;
+		
+		$db = Phalcon\DI::getDefault()->get('db');
+		
+		$db->begin();
+		
+		$result = $db->execute($SQL);
+		
+		if(!$result) {
+			$db->rollback();
+			throw new \InvalidArgumentException('Error al crear la asociacion del segmento y los contactos');
+		}
+		
+		$db->commit();
+		
+		Phalcon\DI::getDefault()->get('logger')->log($SQL);
+	}
+	
+	public function findContactsInSegment(Segment $segment)
+	{
+//		$db = Phalcon\DI::getDefault()->get('db');
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$findQuery = "SELECT c.* 
+					FROM Contact c 
+						JOIN Sxc s ON (c.idContact = s.idContact)
+					WHERE s.idSegment = :idSegment:";
+		
+		$query = $modelManager->createQuery($findQuery);
+		
+		$parameters = array('idSegment' => $segment->idSegment);
+		
+		$contacts = $query->execute($parameters);
+		
+		
+		$cwrapper = new ContactWrapper();
+		
+		$ids = array();
+		foreach ($contacts as $c) {
+			$ids[] = $c->idContact;
+		}
+
+		// Consultar la lista de campos personalizados para esos contactos
+		$finstancesO = Fieldinstance::findInstancesForMultipleContacts($ids);
+
+		// Consultar lista de campos personalizados de la base de datos
+		$cfieldsO = Customfield::findCustomfieldsForDbase($segment->dbase);
+
+		
+		// Convertir la lista de campos personalizados y de instancias a arreglos
+		$cfields = array();
+		foreach ($cfieldsO as $cf) {
+			$cfields[$cf->idCustomField] = array('id' => $cf->idCustomField, 'type' => $cf->type, 'name' => 'campo' . $cf->idCustomField);
+		}
+		unset($cfieldsO);
+
+		$finstances = $cwrapper->createFieldInstanceMap($finstancesO);
+
+		$result = array();
+		foreach ($contacts as $contact) {
+			//$contactT = Contact::findFirstByIdContact($contact->idContact);
+			$result[] = $cwrapper->convertCompleteContactToJson($contact, $cfields, $finstances);
+		}
+
+		$this->pager->setRowsInCurrentPage(count($result));
+		return array('contacts' => $result, 'meta' => $this->pager->getPaginationObject() );
+		
 	}
 	
 }

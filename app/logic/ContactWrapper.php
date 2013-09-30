@@ -624,7 +624,7 @@ class ContactWrapper extends BaseWrapper
 	 * @param array $fieldinstances
 	 * @return array
 	 */
-	protected function convertCompleteContactToJson($contactRow, $customfields, $fieldinstances)
+	public function convertCompleteContactToJson($contactRow, $customfields, $fieldinstances)
 	{
 		$contact = $contactRow->contact;
 		$email   = $contactRow->email;
@@ -716,7 +716,7 @@ class ContactWrapper extends BaseWrapper
 		
 	}
 	
-	protected function createFieldInstanceMap($finstancesO)
+	public function createFieldInstanceMap($finstancesO)
 	{
 		$finstances = array();
 		foreach ($finstancesO as $fi) {

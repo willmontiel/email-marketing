@@ -1018,6 +1018,25 @@ class ApiController extends ControllerBase
 	}
 	
 	/**
+	 * @Get ("/segment/{idSegment:[0-9]+}/show")
+	 */
+	public function segmentAction($idSegment)
+	{
+		$log = $this->logger;
+	
+		$segment = Segment::findFirst(array(
+			"conditions" => "idSegment = ?1",
+			"bind" => array(1 => $idSegment)
+		));
+		
+		$segmentwrapper = new SegmentWrapper();
+		
+		$contacts = $segmentwrapper->findContactsInSegment($segment);
+
+		return $this->setJsonResponse($contacts);
+	}
+	
+	/**
 	 * @Post("/segments")
 	 */
 	public function createsegmentAction()

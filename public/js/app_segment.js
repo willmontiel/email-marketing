@@ -80,6 +80,8 @@ App.SegmentsEditRoute = Ember.Route.extend({
 
 App.SegmentsDeleteRoute = Ember.Route.extend({});
 
+App.SegmentsShowRoute = Ember.Route.extend({});
+
 //Definiendo controladores
 
 App.SegmentController = Ember.ObjectController.extend();
@@ -271,4 +273,8 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 			this.transitionToRoute("segments");
 		}
 	}
+});
+
+App.SegmentsShowController = Ember.ObjectController.extend ({
+	
 });
