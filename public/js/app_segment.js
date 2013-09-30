@@ -16,7 +16,9 @@ App.relations = [
   Ember.Object.create({relation: "Contiene",    id: "content"}),
   Ember.Object.create({relation: "No contiene",    id: "!content"}),
   Ember.Object.create({relation: "Empieza con",    id: "begins"}),
-  Ember.Object.create({relation: "Termina en",    id: "ends"})
+  Ember.Object.create({relation: "Termina en",    id: "ends"}),
+  Ember.Object.create({relation: "Mayor que",    id: "greater"}),
+  Ember.Object.create({relation: "Menor que",    id: "less"})
 ];
 
 
@@ -83,7 +85,7 @@ App.SegmentsDeleteRoute = Ember.Route.extend({});
 App.SegmentController = Ember.ObjectController.extend();
 
 App.SegmentsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	modelClass : App.Segment
+	modelClass : App.Segment,
 });
 
 App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
@@ -113,6 +115,7 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 	changeDbase: function () {
 		if (this.content.get('dbase')) {
 			var s = this;
+			this.set('dbaseSelected', true);
 			// Cargar lista de custom fields
 			var cfs = this.store.find('field', {dbase: this.get('content.dbase.id')}).then(function (data) {
 				var arr = s.stdfields.slice(0);
@@ -134,6 +137,9 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 			} else {
 				this.set('limitCriteria', false);
 			}
+			if( this.criteria.length > 1) {
+				this.set('defaultCriteria', false);
+			} 
 			
 		},
 
@@ -144,12 +150,24 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 			} else {
 				this.set('limitCriteria', true);
 			}
+			if( this.criteria.length < 2) {
+				this.set('defaultCriteria', true);
+			} 
 		},
 				
 		save : function() {
-			var JsonCriteria = JSON.stringify(this.criteria);
-			this.content.set('criteria', JsonCriteria);
-			this.handleSavePromise(this.content.save(), 'segments', 'Se ha creado el segmento existosamente');
+			if ( this.criteria.length < 1 ) {
+				console.log("No hay condiciones");
+//				App.set('errormessage', 'No hay condiciones');
+			} else {
+				var JsonCriteria = JSON.stringify(this.criteria);
+				this.content.set('criteria', JsonCriteria);
+				this.handleSavePromise(this.content.save(), 'segments', 'Se ha creado el segmento existosamente');
+			}
+		},
+		
+		reset : function() {
+			this.set('dbaseSelected', false);
 		},
 		
 		cancel: function(){
@@ -219,7 +237,9 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 			} else {
 				this.set('limitCriteria', false);
 			}
-			
+			if( this.criteria.length > 1) {
+				this.set('defaultCriteria', false);
+			}			
 		},
 
 		aConditionLess: function(data) {
@@ -229,16 +249,24 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 			} else {
 				this.set('limitCriteria', true);
 			}
+			if( this.criteria.length < 2) {
+				this.set('defaultCriteria', true);
+			}
 		},
 		
 		edit: function() {
-			console.log(this.criteria);
-			var JsonCriteria = JSON.stringify(this.criteria);
-			this.content.set('criteria', JsonCriteria);
-			this.handleSavePromise(this.content.save(), 'segments', 'Se ha editado el segmento existosamente');
+			if ( this.criteria.length < 1 ) {
+				console.log("No hay condiciones");
+//				App.set('errormessage', 'No hay condiciones');
+			} else {
+				var JsonCriteria = JSON.stringify(this.criteria);
+				this.content.set('criteria', JsonCriteria);
+				this.handleSavePromise(this.content.save(), 'segments', 'Se ha editado el segmento existosamente');
+			}
 		},
 				
 		cancel: function() {
+			this.set('criteria', JSON.parse(this.content.get('criteria'))) ;
 			this.get('model').rollback();
 			this.transitionToRoute("segments");
 		}

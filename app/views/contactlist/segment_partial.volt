@@ -46,6 +46,11 @@
 </div>
 </script>
 <script type="text/x-handlebars" data-template-name="segments">
+	{{ '{{#if App.errormessage }}' }}
+		<div class="alert alert-message alert-error">
+	{{ '{{ App.errormessage }}' }}
+		</div>
+	{{ '{{/if}} '}}	
 	{{'{{outlet}}'}}
 </script>
 <script type="text/x-handlebars" data-template-name="segments/new">
@@ -59,6 +64,7 @@
 					{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre"}}' }}
 				<label>Descripción: </label>
 					{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción"}}' }}
+				{{ '{{#unless dbaseSelected}}' }}
 				<label>*Seleccione base de datos:</label>
 					{{ '{{view Ember.Select 
 								selectionBinding="dbase" 
@@ -68,6 +74,17 @@
 								prompt="Seleccione una base de datos"
 								class="span3"}}' 
 					}}
+				{{ '{{else}}' }}
+				<br /><br />
+					<select class="span3" disabled="disabled">
+						<option>{{' {{dbase.name}} '}}</option>
+					</select>
+					<p>
+						Si desea cambiar la base de datos presione el botón <button class="btn btn-default" {{ '{{action reset this }}' }}>Reset</button>
+					</p>
+				<br />
+				{{ '{{/unless}}' }}
+				{{ '{{#if dbaseSelected}}' }}
 				<label>	Crear segmento con </label>
 					{{ '{{view Ember.Select
 						  contentBinding="App.criteria"
@@ -84,6 +101,7 @@
 						{{ '{{#unless limitCriteria}}' }}
 						<button class="btn btn-default" {{ '{{action aConditionMore}}' }}>+</button>
 						{{ '{{/unless}}' }}
+						<br /><br />
 						{{' {{#each cr in criteria}} '}}
 						<div class="row-fluid">
 							<div class="span3">
@@ -107,7 +125,9 @@
 							<div class="span3">
 								{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
 							</div>
+							{{ '{{#unless defaultCriteria}}' }}
 							<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}>-</button>
+							{{ '{{/unless}}' }}
 						</div>
 						{{' {{/each}} '}}
 					</div>
@@ -115,6 +135,7 @@
 				
 				<button class="btn btn-blue" {{ '{{action save this }}' }}>Crear</button>
 				<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+				{{ '{{/if}}' }}
 			</form>
 		</div>
 	</div>
@@ -190,7 +211,9 @@
 					<div class="span3">
 						{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required"}}' }}
 					</div>
+					{{ '{{#unless defaultCriteria}}' }}
 					<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}>-</button>
+					{{ '{{/unless}}' }}
 				</div>
 			{{' {{/each}} '}}
 				<br />
