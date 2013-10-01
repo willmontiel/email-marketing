@@ -5,7 +5,6 @@
         <meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800">
-
 		<!-- Always force latest IE rendering engine or request Chrome Frame -->
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
@@ -108,8 +107,8 @@
 		<!-- /sidebar -->
 		<div class="primary-sidebar">
 			<!-- Main nav -->
-			<ul class="nav nav-collapse collapse nav-collapse-primary">
-				<li class="active">
+			<ul  class="nav nav-collapse collapse nav-collapse-primary">
+				<li id="currentPage" class="">
 					<span class="glow"></span>
 					<a href="{{ url('') }}">
 						<i class="icon-dashboard icon-2x"></i>
@@ -139,7 +138,7 @@
 				</li>
 				<li class="">
 					<span class="glow"></span>
-					<a href="{{ url('') }}">
+					<a href="{{ url('contactlist#/lists"') }}">
 						<i class="icon-bar-chart icon-2x"></i>
 						<span>Estadísticas</span>
 					</a>
@@ -172,6 +171,13 @@
 				
 			</div>		
 		</div>
+		<script type="text/javascript">
+			$( "#currentPage li" ).click(function(event) {
+				//alert( "Handler for .click() called." );
+				$('#currentPage li').removeClass('active');
+				$(this).addClass("active");
+			 });
+		</script>
 		<!-- /content -->
     </body>
 </html>

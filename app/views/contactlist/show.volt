@@ -91,6 +91,7 @@
 	
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppContactContainer">
+		{{ router.getRewriteUri()}}
 		<script type="text/x-handlebars" data-template-name="contacts">
 		<div class="padded">
 		<div class="clearfix">
