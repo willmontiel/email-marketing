@@ -4,6 +4,7 @@ use Phalcon\Mvc\Model\Validator\PresenceOf;
 class Segment extends \Phalcon\Mvc\Model
 {
 	public $idDbase;
+	public $idSegment;
 	
 	public function initialize()
 	{
@@ -12,6 +13,8 @@ class Segment extends \Phalcon\Mvc\Model
         ));
 		
 		$this->hasMany("idSegment", "Sxc", "idSegment");
+		
+		$this->hasMany("idSegment", "Criteria", "idSegment");
 	}
 	public function validation()
 	{

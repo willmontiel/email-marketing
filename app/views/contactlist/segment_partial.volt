@@ -12,6 +12,7 @@
 				</div>
 				<div class="box-content">
 				{{'{{#each model}}'}}
+					{{' {{# unless isNew }}' }}
 					<div class="box-section news with-icons">
 						<div class="avatar purple">
 							<i class="icon-resize-horizontal icon-2x"></i>
@@ -34,6 +35,7 @@
 							</div>
 						</div>
 					</div>
+					{{' {{/unless}}'}}
 				{{ '{{else}}' }}
 					No hay segmentos disponibles
 				{{ '{{/each}}' }}

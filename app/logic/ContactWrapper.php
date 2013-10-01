@@ -154,7 +154,11 @@ class ContactWrapper extends BaseWrapper
 			
 			$this->counter->updateContact($oldContact, $this->contact);
 			
-			$this->counter->saveCounters();			
+			$this->counter->saveCounters();
+			
+			$swrapper = new SegmentWrapper;
+			
+			$swrapper->contactCreatedOrUpdated($this->contact);
 		}			
 		
 		return $this->contact;
@@ -248,6 +252,10 @@ class ContactWrapper extends BaseWrapper
 			}
 			if($saveCounters)
 				$this->counter->saveCounters();
+			
+			$swrapper = new SegmentWrapper;
+			
+			$swrapper->contactCreatedOrUpdated($this->contact);
 			
 			return $this->contact;
 		}

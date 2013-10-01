@@ -157,15 +157,15 @@ class Security extends Plugin
 				'api::deletecontact' => array ('contact' => array('read', 'delete')),
 				'api::getonelist' => array('contactlist' => array('read')),
 				//Segmentos 
+				'segment::show' => array('segment' => array('read')),
+				'api::segment' => array('segment' => array('read')),
 				'api::segments' => array('segment' => array('read')),
+				'api::dbases' => array('segment' => array('read', 'update')),
 				'api::getcustomfieldsalias' => array('segment' => array('create')),
 				'api::createsegment' => array('segment' => array('read', 'create')),
 				'api::deletesegment' => array('segment' => array('read', 'delete')),
-				'api::dbases' => array('segment' => array('read', 'update')),
-				'api::editsegment' => array('segment' => array('read', 'update')),
-				'segment::show' => array('segment' => array('read')),
-				'api::segment' => array('segment' => array('read')),
-				'api::updatecontactbysegment' => array('segment' => array('read', 'update')),
+				'api::updatesegment' => array('segment' => array('read', 'update')),
+				'api::updatecontactbysegment' => array('contact' => array('read', 'update')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

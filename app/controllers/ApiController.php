@@ -1072,7 +1072,7 @@ class ApiController extends ControllerBase
 	 * 
 	 * @Put("/segments/{idSegment:[0-9]+}")
 	 */
-	public function editsegmentAction($idSegment)
+	public function updatesegmentAction($idSegment)
 	{
 		$log = $this->logger;
 		

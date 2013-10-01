@@ -131,6 +131,12 @@ class SegmentWrapper extends BaseWrapper
 			}
 			$response = $this->updateSegmentData($contents, $segment);
 			
+			$allSxC = Sxc::findByIdSegment($idSegment);
+
+			$allSxC->delete();
+
+			$this->saveSxC($segment);
+			
 		}
 		
 		return $response;
@@ -148,18 +154,16 @@ class SegmentWrapper extends BaseWrapper
 			throw new ErrorException('Ha ocurrido un error');
 		}
 		
-		$criteria = $this->updateCriteria($contents, $segment->idSegment);
+		$this->updateCriteria($contents, $segment->idSegment);
 		
 		$response = $this->convertSegmentToJson($segment);
 		
-		return $response;
-//		
+		return $response;	
 	}
 
 	protected function updateCriteria($contents, $idSegment)
 	{
 		$arrayFields = json_decode($contents->criteria, true);
-		Phalcon\DI::getDefault()->get('logger')->log(print_r($arrayFields, true));
 		
 		$objCriterias = Criteria::find(array(
 			"conditions" => "idSegment = ?1",
@@ -233,16 +237,13 @@ class SegmentWrapper extends BaseWrapper
 	public function deleteSegment(Account $account, $idSegment)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
-		Phalcon\DI::getDefault()->get('logger')->log("POR ACA");
 
-		Phalcon\DI::getDefault()->get('logger')->log("POR AQUI");
-		$query = "	DELETE c, s 
+		$query = "	DELETE s
 					FROM segment s 
-						JOIN criteria c ON s.idSegment = c.idSegment 
 					WHERE s.idSegment = ?";
 		
 		$db->begin();
-		
+		Phalcon\DI::getDefault()->get('logger')->log($query);
 		$deletedSegment = $db->execute($query, array($idSegment));
 		
 		if (!$deletedSegment) {
@@ -251,7 +252,7 @@ class SegmentWrapper extends BaseWrapper
 		}
 		
 		$db->commit();
-		Phalcon\DI::getDefault()->get('logger')->log("Elimino");
+
 		return $deletedSegment;
 
 	}
@@ -318,6 +319,7 @@ class SegmentWrapper extends BaseWrapper
 		$join = "";
 		$conditions = "";
 		$firstCondition = TRUE;
+		$alreadyTable = FALSE;
 		$multTables = ($segment->criterion == 'all')?TRUE:FALSE;
 		$tablenumber = 1;
 		
@@ -330,8 +332,11 @@ class SegmentWrapper extends BaseWrapper
 						$tablenumber++;
 					}
 					else {
-						$join.= "JOIN fieldinstance f ON (c.idContact = f.idContact) ";
-						$value = "( f.idCustomField = $criteria->idCustomField AND f.textValue ) ";
+						if (!$alreadyTable) {
+							$join.= "JOIN fieldinstance f ON (c.idContact = f.idContact) ";
+							$alreadyTable = TRUE;
+						}
+						$value = "f.idCustomField = $criteria->idCustomField AND f.textValue ";
 					}
 					break;
 				case 'contact' :
@@ -343,7 +348,7 @@ class SegmentWrapper extends BaseWrapper
 					break;
 				case 'domain' :
 					$join.="JOIN email em ON (c.idEmail = em.idEmail) JOIN domain d ON (em.idDomain = d.idDomain) ";
-					$value = "d.$criteria->fieldName ";
+					$value = "d.name ";
 					break;
 			}
 			
@@ -385,8 +390,8 @@ class SegmentWrapper extends BaseWrapper
 			}
 		}
 		
-		$SQL = "INSERT INTO sxc (idContact, idSegment) SELECT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND " . $conditions;
-		
+		$SQL = "INSERT INTO sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND " . $conditions;
+		Phalcon\DI::getDefault()->get('logger')->log($SQL);
 		$db = Phalcon\DI::getDefault()->get('db');
 		
 		$db->begin();
@@ -399,13 +404,10 @@ class SegmentWrapper extends BaseWrapper
 		}
 		
 		$db->commit();
-		
-		Phalcon\DI::getDefault()->get('logger')->log($SQL);
 	}
 	
 	public function findContactsInSegment(Segment $segment)
 	{
-//		$db = Phalcon\DI::getDefault()->get('db');
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
 		$findQuery = "SELECT Contact.*, Email.* 
@@ -452,6 +454,107 @@ class SegmentWrapper extends BaseWrapper
 		$this->pager->setRowsInCurrentPage(count($result));
 		return array('contacts' => $result, 'meta' => $this->pager->getPaginationObject() );
 		
+	}
+	
+	public function contactCreatedOrUpdated(Contact $contact)
+	{
+//		Phalcon\DI::getDefault()->get('logger')->log("");
+
+		$db = Phalcon\DI::getDefault()->get('db');
+		
+		$segments = Segment::findByIdDbase($contact->idDbase);
+
+		foreach ( $segments as $segment ) {
+			
+			if ( $segment->criterion == 'any' ) { 
+				$belongs = false;
+			}
+			else {
+				$belongs = true;
+			}
+			
+			foreach ( $segment->criteria as $criteria ) {
+							
+				switch ($criteria->type) {	
+					case 'contact' :
+						$value = $criteria->fieldName;
+						$contact->$value;
+						$field = $contact->$value;
+						break;
+					case 'email' :
+						$field = $contact->email->email;
+						break;
+					case 'domain' :
+						$field = $contact->email->domain->name;
+						break;
+					case 'custom' :
+						$fd = Fieldinstance::findFirst(array(
+														"conditions" => ("idCustomField = ?1 AND idContact = ?2"),
+														"bind" => array (1 => $criteria->idCustomField,
+																		 2 => $contact->idContact)
+														));
+						$field = $fd->textValue;
+						break;
+				}
+					
+				$meets = $this->compareCriteria($field, $criteria->relation, $criteria->value);
+				
+				if ( $segment->criterion == 'any' ) { 
+					if ($meets) {
+						$belongs = true;
+					}
+				}
+				else {
+					if(!$meets) {
+						$belongs = false;
+					} 
+				}
+			}
+			if ($belongs) {
+				$sql = "INSERT IGNORE INTO sxc (idSegment, idContact) VALUES ($segment->idSegment, $contact->idContact)";
+				
+				$db->execute($sql);
+			} 
+			else {
+				$exist = Sxc::findFirst(array(
+										"conditions" => ("idSegment = ?1 AND idContact = ?2"),
+										"bind" => array (1 => $segment->idSegment,
+														 2 => $contact->idContact)
+										));
+				if($exist) {
+					$exist->delete();
+				}
+			}
+		}
+	}
+	
+	protected function compareCriteria($field, $operator, $value)
+	{
+		switch ($operator) {
+			case 'begins' :
+				$meets = (stripos($field, $value) === 0)?true:false;
+				break;
+			case 'ends' :
+				$meets = (stripos($field, $value) !== 0)?true:false;
+				break;
+			case 'content' :
+				$meets = (stripos($field, $value))?true:false;
+				break;
+			case '!content' :
+				$meets = (stripos($field, $value))?false:true;
+				break;
+			case 'greater' :
+				$meets = ($field > $value)?true:false;
+				break;
+			case 'less' :
+				$meets = ($field < $value)?true:false;
+				break;
+			case 'equals' :
+				$meets = ($field == $value)?true:false;
+				break;
+		}
+		
+		return $meets;
 	}
 	
 }
