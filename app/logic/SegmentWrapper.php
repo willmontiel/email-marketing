@@ -408,47 +408,47 @@ class SegmentWrapper extends BaseWrapper
 //		$db = Phalcon\DI::getDefault()->get('db');
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		$findQuery = "SELECT c.* 
-					FROM Contact c 
-						JOIN Sxc s ON (c.idContact = s.idContact)
-					WHERE s.idSegment = :idSegment:";
+		$findQuery = "SELECT Contact.*, Email.* 
+					FROM Contact JOIN Email JOIN Sxc 
+					WHERE idSegment = :idsegment:";
 		
 		$query = $modelManager->createQuery($findQuery);
 		
-		$parameters = array('idSegment' => $segment->idSegment);
+		$parameters['idsegment'] = $segment->idSegment;
 		
-		$contacts = $query->execute($parameters);
+		$contacts = $modelManager->executeQuery($findQuery, $parameters);
 		
+		$result = array();
 		
 		$cwrapper = new ContactWrapper();
 		
 		$ids = array();
 		foreach ($contacts as $c) {
-			$ids[] = $c->idContact;
+			$ids[] = $c->contact->idContact;
 		}
+		if(!empty($ids)) {
+			
+			// Consultar la lista de campos personalizados para esos contactos
+			$finstancesO = Fieldinstance::findInstancesForMultipleContacts($ids);
 
-		// Consultar la lista de campos personalizados para esos contactos
-		$finstancesO = Fieldinstance::findInstancesForMultipleContacts($ids);
+			// Consultar lista de campos personalizados de la base de datos
+			$cfieldsO = Customfield::findCustomfieldsForDbase($segment->dbase);
 
-		// Consultar lista de campos personalizados de la base de datos
-		$cfieldsO = Customfield::findCustomfieldsForDbase($segment->dbase);
 
-		
-		// Convertir la lista de campos personalizados y de instancias a arreglos
-		$cfields = array();
-		foreach ($cfieldsO as $cf) {
-			$cfields[$cf->idCustomField] = array('id' => $cf->idCustomField, 'type' => $cf->type, 'name' => 'campo' . $cf->idCustomField);
+			// Convertir la lista de campos personalizados y de instancias a arreglos
+			$cfields = array();
+			foreach ($cfieldsO as $cf) {
+				$cfields[$cf->idCustomField] = array('id' => $cf->idCustomField, 'type' => $cf->type, 'name' => 'campo' . $cf->idCustomField);
+			}
+			unset($cfieldsO);
+
+			$finstances = $cwrapper->createFieldInstanceMap($finstancesO);
+
+			foreach ($contacts as $contact) {
+				$result[] = $cwrapper->convertCompleteContactToJson($contact, $cfields, $finstances);
+			}
+			
 		}
-		unset($cfieldsO);
-
-		$finstances = $cwrapper->createFieldInstanceMap($finstancesO);
-
-		$result = array();
-		foreach ($contacts as $contact) {
-			//$contactT = Contact::findFirstByIdContact($contact->idContact);
-			$result[] = $cwrapper->convertCompleteContactToJson($contact, $cfields, $finstances);
-		}
-
 		$this->pager->setRowsInCurrentPage(count($result));
 		return array('contacts' => $result, 'meta' => $this->pager->getPaginationObject() );
 		

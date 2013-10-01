@@ -679,6 +679,9 @@ class ContactWrapper extends BaseWrapper
 	
 	public function findContactsComplete(Contactlist $list)
 	{
+		// Arreglo de contactos encontrados
+		$result = array();
+		
 		// Total de contactos
 		$this->pager->setTotalRecords(Contact::countContactsInList($list));
 		
@@ -690,26 +693,27 @@ class ContactWrapper extends BaseWrapper
 		foreach ($contacts as $c) {
 			$ids[] = $c->contact->idContact;
 		}
-		// Consultar la lista de campos personalizados para esos contactos
-		$finstancesO = Fieldinstance::findInstancesForMultipleContacts($ids);
-		
-		// Consultar lista de campos personalizados de la base de datos
-		$cfieldsO = Customfield::findCustomfieldsForDbase($list->dbase);
-		
-		
-		// Convertir la lista de campos personalizados y de instancias a arreglos
-		$cfields = array();
-		foreach ($cfieldsO as $cf) {
-			$cfields[$cf->idCustomField] = array('id' => $cf->idCustomField, 'type' => $cf->type, 'name' => 'campo' . $cf->idCustomField);
-		}
-		unset($cfieldsO);
-		
-		$finstances = $this->createFieldInstanceMap($finstancesO);
-		
-		$result = array();
-		foreach ($contacts as $contact) {
-			//$contactT = Contact::findFirstByIdContact($contact->idContact);
-			$result[] = $this->convertCompleteContactToJson($contact, $cfields, $finstances);
+			if(!empty($ids)) {
+			// Consultar la lista de campos personalizados para esos contactos
+			$finstancesO = Fieldinstance::findInstancesForMultipleContacts($ids);
+
+			// Consultar lista de campos personalizados de la base de datos
+			$cfieldsO = Customfield::findCustomfieldsForDbase($list->dbase);
+
+
+			// Convertir la lista de campos personalizados y de instancias a arreglos
+			$cfields = array();
+			foreach ($cfieldsO as $cf) {
+				$cfields[$cf->idCustomField] = array('id' => $cf->idCustomField, 'type' => $cf->type, 'name' => 'campo' . $cf->idCustomField);
+			}
+			unset($cfieldsO);
+
+			$finstances = $this->createFieldInstanceMap($finstancesO);
+
+			foreach ($contacts as $contact) {
+				//$contactT = Contact::findFirstByIdContact($contact->idContact);
+				$result[] = $this->convertCompleteContactToJson($contact, $cfields, $finstances);
+			}
 		}
 		$this->pager->setRowsInCurrentPage(count($result));
 		return array('contacts' => $result, 'meta' => $this->pager->getPaginationObject() );

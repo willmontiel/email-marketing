@@ -657,8 +657,8 @@ class ApiController extends ControllerBase
 		$wrapper->setPager($pager);
 		$wrapper->setIdContactlist($idContactlist);
 
-//		$contacts = $wrapper->findContactsComplete($list);
-		$contacts = $wrapper->findContactsByList($list);
+		$contacts = $wrapper->findContactsComplete($list);
+//		$contacts = $wrapper->findContactsByList($list);
 		// Sideload de la informacion de la lista
 		$contacts['lists'] = array(ContactListWrapper::convertListToJson($list));
 
@@ -1124,6 +1124,57 @@ class ApiController extends ControllerBase
 		}
 		
 		return $this->setJsonResponse($response);	
+	}
+	
+	/**
+	 * 
+	 * @Put("/segment/{idSegment:[0-9]+}/contacts/{idContact:[0-9]+}")
+	 */
+	public function updatecontactbysegmentAction($idSegment, $idContact)
+	{
+		$segment = Segment::findFirst(array(
+			"conditions" => "idSegment = ?1",
+			"bind" => array(1 => $idSegment)
+		));
+		
+        if (!$segment || $segment->dbase->account != $this->user->account) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el segmento');
+		}
+                
+		$log = $this->logger;
+
+		$contentsraw = $this->request->getRawBody();
+		$contentsT = json_decode($contentsraw);
+		
+		// Tomar el objeto dentro de la raiz
+		$contents = $contentsT->contact;
+		
+		$wrapper = new ContactWrapper();
+
+		$wrapper->setAccount($this->user->account);
+		$wrapper->setIdDbase($segment->idDbase);
+		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
+		
+		// Editar el contacto existente
+		if (!isset($contents->email) || trim($contents->email) == '') {
+			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
+		}
+		try {
+			$contact = $wrapper->updateContactFromJsonData($idContact, $contents);
+		}
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			$contact = Contact::findFirst($idContact);
+			return $this->setJsonResponse(array('contact' => $wrapper->convertContactToJson($contact), 'errors' => $wrapper->getFieldErrors()), 422, 'Error: Invalid data');	
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
+		}
+
+		$contactdata = $wrapper->convertContactToJson($contact);
+
+		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 	}
 }
 

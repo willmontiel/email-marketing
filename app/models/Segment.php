@@ -10,6 +10,8 @@ class Segment extends \Phalcon\Mvc\Model
 		$this->belongsTo("idDbase", "Dbase", "idDbase", array(
             "foreignKey" => true,
         ));
+		
+		$this->hasMany("idSegment", "Sxc", "idSegment");
 	}
 	public function validation()
 	{

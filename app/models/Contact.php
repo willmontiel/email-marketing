@@ -20,6 +20,8 @@ class Contact extends \Phalcon\Mvc\Model
 		$this->hasMany("idContact", "Coxcl", "idContact", array(
 			'alias' => 'Lists'
         ));
+		
+		$this->hasMany("idContact", "Sxc", "idContact");
 
 		$this->useDynamicUpdate(true);
 		

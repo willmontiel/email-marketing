@@ -165,6 +165,7 @@ class Security extends Plugin
 				'api::editsegment' => array('segment' => array('read', 'update')),
 				'segment::show' => array('segment' => array('read')),
 				'api::segment' => array('segment' => array('read')),
+				'api::updatecontactbysegment' => array('segment' => array('read', 'update')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
