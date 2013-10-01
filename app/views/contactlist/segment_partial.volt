@@ -62,32 +62,58 @@
 		</div>
 		<div class="box-content padded">
 			<form>
-				<label>*Nombre: </label>
+			<div class="row-fluid">
+				<div class="span3">
+					<label>*Nombre: </label>
 					{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre"}}' }}
-				<label>Descripción: </label>
+					
+					<label>Descripción: </label>
 					{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción"}}' }}
-				{{ '{{#unless dbaseSelected}}' }}
-				<label>*Seleccione base de datos:</label>
-					{{ '{{view Ember.Select 
-								selectionBinding="dbase" 
-								contentBinding="controllers.dbase.content" 
-								optionValuePath="content.id" 
-								optionLabelPath="content.name" 
-								prompt="Seleccione una base de datos"
-								class="span3"}}' 
-					}}
-				{{ '{{else}}' }}
-				<br /><br />
-					<select class="span3" disabled="disabled">
-						<option>{{' {{dbase.name}} '}}</option>
-					</select>
-					<p>
-						Si desea cambiar la base de datos presione el botón <button class="btn btn-default" {{ '{{action reset this }}' }}>Reset</button>
-					</p>
-				<br />
-				{{ '{{/unless}}' }}
+					
+					{{ '{{#unless dbaseSelected}}' }}
+						<label>*Seleccione base de datos:</label>
+							{{ '{{view Ember.Select 
+									selectionBinding="dbase" 
+									contentBinding="controllers.dbase.content" 
+									optionValuePath="content.id" 
+									optionLabelPath="content.name" 
+									prompt="Seleccione una base de datos"}}' 
+							}}
+						 <br /><br />
+						 	
+						<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+						<button class="btn btn-default" disabled="disabled">Grabar</button>
+					{{ '{{else}}' }}
+						<br /><br />
+						<select class="span12" disabled="disabled">
+							<option>{{' {{dbase.name}} '}}</option>
+						</select>
+						<br /><br />
+						<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+						<button class="btn btn-blue" {{ '{{action save this}}' }}>Grabar</button>
+						<br />
+					{{ '{{/unless}}' }}
+				</div>
+				<div class="span9">
+					<div class="box-section news with-icons">
+						<div class="avatar blue">
+							<i class="icon-lightbulb icon-2x"></i>
+						</div>
+						<div class="news-content">
+							<div class="news-title">
+								Segmentos
+							</div>
+							<div class="news-text">
+								With 2.2.2 out the door, our attention has shifted almost entirely to the next major update to the project ...
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr></hr>
+			<div class="row-fluid">
 				{{ '{{#if dbaseSelected}}' }}
-				<label>	Crear segmento con </label>
+				Crear segmento con 
 					{{ '{{view Ember.Select
 						  contentBinding="App.criteria"
 						  optionValuePath="content.id"
@@ -96,14 +122,9 @@
 						  class="span2"}}'
 					}}
 					condiciones a continuación:
-				
-				<br /><br />
 				<div class="row-fluid">	
 					<div class="span12">
-						{{ '{{#unless limitCriteria}}' }}
-						<button class="btn btn-default" {{ '{{action aConditionMore}}' }}>+</button>
-						{{ '{{/unless}}' }}
-						<br /><br />
+						<br />
 						{{' {{#each cr in criteria}} '}}
 						<div class="row-fluid">
 							<div class="span3">
@@ -128,16 +149,19 @@
 								{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
 							</div>
 							{{ '{{#unless defaultCriteria}}' }}
-							<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}>-</button>
+							<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}><i class="icon-trash"></i></button>
 							{{ '{{/unless}}' }}
 						</div>
 						{{' {{/each}} '}}
+						<br />
+						{{ '{{#unless limitCriteria}}' }}
+							<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar</button>
+						{{ '{{/unless}}' }}
+						<button class="btn btn-default" {{ '{{action reset this }}' }}><i class="icon-bolt"></i> Reset</button>
 					</div>
 				</div>
-				
-				<button class="btn btn-blue" {{ '{{action save this }}' }}>Crear</button>
-				<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
 				{{ '{{/if}}' }}
+			</div>
 			</form>
 		</div>
 	</div>

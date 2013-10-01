@@ -45,7 +45,7 @@ class SegmentWrapper extends BaseWrapper
 		
 		$segment->idDbase = $contents->dbase;
 		$segment->name = $contents->name;
-		$segment->description = $contents->description;
+		$segment->description = ($contents->description)?$contents->description:"Sin Descripcion";
 		$segment->criterion = $contents->criterion;
 		$segment->createdon = time();
 		
@@ -314,7 +314,8 @@ class SegmentWrapper extends BaseWrapper
 		return $objectCrit;
 	}
 	
-	protected function saveSxC(Segment $segment) {
+	protected function saveSxC(Segment $segment)
+	{
 		$allcriterias = Criteria::findByIdSegment($segment->idSegment);
 		$join = "";
 		$conditions = "";
@@ -328,7 +329,7 @@ class SegmentWrapper extends BaseWrapper
 				case 'custom' :
 					if($multTables) {
 						$join.= "JOIN fieldinstance f$tablenumber ON (c.idContact = f$tablenumber.idContact) ";
-						$value = "f$tablenumber.idCustomField = $criteria->idCustomField AND f$tablenumber.textValue ";
+						$value = "( f$tablenumber.idCustomField = $criteria->idCustomField AND f$tablenumber.textValue ";
 						$tablenumber++;
 					}
 					else {
@@ -336,43 +337,43 @@ class SegmentWrapper extends BaseWrapper
 							$join.= "JOIN fieldinstance f ON (c.idContact = f.idContact) ";
 							$alreadyTable = TRUE;
 						}
-						$value = "f.idCustomField = $criteria->idCustomField AND f.textValue ";
+						$value = "( f.idCustomField = $criteria->idCustomField AND f.textValue ";
 					}
 					break;
 				case 'contact' :
-					$value = "c.$criteria->fieldName ";
+					$value = "( c.$criteria->fieldName ";
 					break;
 				case 'email' :
 					$join.="JOIN email e ON (c.idEmail = e.idEmail) ";
-					$value = "e.$criteria->fieldName ";
+					$value = "( e.$criteria->fieldName ";
 					break;
 				case 'domain' :
 					$join.="JOIN email em ON (c.idEmail = em.idEmail) JOIN domain d ON (em.idDomain = d.idDomain) ";
-					$value = "d.name ";
+					$value = "( d.name ";
 					break;
 			}
 			
 			switch ($criteria->relation) {
 				case 'begins' :
-					$relation = "LIKE '$criteria->value%'";
+					$relation = "LIKE '$criteria->value%' )";
 					break;
 				case 'ends' :
-					$relation = "LIKE '%$criteria->value'";
+					$relation = "LIKE '%$criteria->value' )";
 					break;
 				case 'content' :
-					$relation = "LIKE '%$criteria->value%'";
+					$relation = "LIKE '%$criteria->value%' )";
 					break;
 				case '!content' :
-					$relation = "NOT LIKE '%$criteria->value%'";
+					$relation = "NOT LIKE '%$criteria->value%' )";
 					break;
 				case 'greater' :
-					$relation = "> ". $criteria->value;
+					$relation = "> ". $criteria->value . " )";
 					break;
 				case 'less' :
-					$relation = "< ". $criteria->value;
+					$relation = "< ". $criteria->value . " )";
 					break;
 				case 'equals' :
-					$relation = "= '$criteria->value'";
+					$relation = "= '$criteria->value' )";
 					break;
 			}
 			
@@ -390,7 +391,7 @@ class SegmentWrapper extends BaseWrapper
 			}
 		}
 		
-		$SQL = "INSERT INTO sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND " . $conditions;
+		$SQL = "INSERT INTO sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND ( " . $conditions . " )";
 		Phalcon\DI::getDefault()->get('logger')->log($SQL);
 		$db = Phalcon\DI::getDefault()->get('db');
 		
@@ -512,7 +513,7 @@ class SegmentWrapper extends BaseWrapper
 			}
 			if ($belongs) {
 				$sql = "INSERT IGNORE INTO sxc (idSegment, idContact) VALUES ($segment->idSegment, $contact->idContact)";
-				
+				Phalcon\DI::getDefault()->get('logger')->log($sql);
 				$db->execute($sql);
 			} 
 			else {
@@ -535,7 +536,7 @@ class SegmentWrapper extends BaseWrapper
 				$meets = (stripos($field, $value) === 0)?true:false;
 				break;
 			case 'ends' :
-				$meets = (stripos($field, $value) !== 0)?true:false;
+				$meets = (substr($field, -strlen($value)) === $value)?true:false;
 				break;
 			case 'content' :
 				$meets = (stripos($field, $value))?true:false;
