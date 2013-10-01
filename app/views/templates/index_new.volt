@@ -107,8 +107,8 @@
 		<!-- /sidebar -->
 		<div class="primary-sidebar">
 			<!-- Main nav -->
-			<ul  class="nav nav-collapse collapse nav-collapse-primary">
-				<li id="currentPage" class="">
+			<ul id="currentPage" class="nav nav-collapse collapse nav-collapse-primary">
+				<li class="active">
 					<span class="glow"></span>
 					<a href="{{ url('') }}">
 						<i class="icon-dashboard icon-2x"></i>
@@ -173,9 +173,9 @@
 		</div>
 		<script type="text/javascript">
 			$( "#currentPage li" ).click(function(event) {
-				//alert( "Handler for .click() called." );
 				$('#currentPage li').removeClass('active');
 				$(this).addClass("active");
+				return true;
 			 });
 		</script>
 		<!-- /content -->
