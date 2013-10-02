@@ -171,6 +171,7 @@
 						optionValuePath="content.id"
 						optionLabelPath="content.name"
 						selectionBinding="dbase"
+						prompt="Seleccione una base de datos"
 						}}'
 					}}
 				</div>

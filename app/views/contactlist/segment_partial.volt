@@ -32,12 +32,28 @@
 							</div>
 							<div class="news-text">
 								{{' {{description}}'}}
+								<br />
+								<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
 							</div>
 						</div>
 					</div>
 					{{' {{/unless}}'}}
 				{{ '{{else}}' }}
-					No hay segmentos disponibles
+					<div class="box-section news with-icons">
+						<div class="avatar green">
+							<i class="icon-lightbulb icon-2x"></i>
+						</div>
+						<div class="news-content">
+							<div class="news-title">
+								No hay segmentos
+							</div>
+							<div class="news-text">
+								No tiene segmentos de contactos creados, para crear uno haga click en el siguiente enlace
+								<br /><br />
+								{{'{{#linkTo "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/linkTo}}'}}
+							</div>
+						</div>
+					</div>
 				{{ '{{/each}}' }}
 				<div class="box-footer flat"> 
 					{{ partial("partials/pagination_partial") }}
@@ -48,11 +64,6 @@
 </div>
 </script>
 <script type="text/x-handlebars" data-template-name="segments">
-	{{ '{{#if App.errormessage }}' }}
-		<div class="alert alert-message alert-error">
-	{{ '{{ App.errormessage }}' }}
-		</div>
-	{{ '{{/if}} '}}	
 	{{'{{outlet}}'}}
 </script>
 <script type="text/x-handlebars" data-template-name="segments/new">
@@ -61,6 +72,22 @@
 			<div class="title">Agregar un nuevo segmento</div>
 		</div>
 		<div class="box-content padded">
+			{{ '{{#if App.errormessage }}' }}
+				<div class="row-fluid">
+					<div class="alert alert-error">
+						<h4>Error!</h4>
+						{{ '{{ App.errormessage }}' }}
+					</div>
+				</div>
+			{{ '{{/if}} '}}
+			{{'{{#if errors.segmentname}}'}}
+				<div class="row-fluid">
+					<div class="alert alert-error">
+						<h4>Error!</h4>
+						{{'{{errors.segmentname}}'}}
+					</div>
+				</div>
+			{{'{{/if}}'}}
 			<form>
 			<div class="row-fluid">
 				<div class="span3">
@@ -145,6 +172,12 @@
 				<div class="row-fluid">	
 					<div class="span12">
 						<br />
+						{{'{{#if errors.segment}}'}}
+							<div class="alert alert-error">
+								<h4>Error! </h4>
+								{{'{{errors.segment}}'}}
+							</div>
+						{{'{{/if}}'}}
 						{{' {{#each cr in criteria}} '}}
 						<div class="row-fluid">
 							<div class="span3">
@@ -215,6 +248,22 @@
 			</div>
 		</div>
 		<div class="box-content padded">
+			{{ '{{#if App.errormessage }}' }}
+				<div class="row-fluid">
+					<div class="alert alert-error">
+						<h4>Error!</h4>
+						{{ '{{ App.errormessage }}' }}
+					</div>
+				</div>
+			{{ '{{/if}} '}}	
+			{{'{{#if errors.segmentname}}'}}
+				<div class="row-fluid">
+					<div class="alert alert-error">
+						<h4>Error!</h4>
+						{{'{{errors.segmentname}}'}}
+					</div>
+				</div>
+			{{'{{/if}}'}}
 			<div class="row-fluid">
 				<div class="span3">
 					<label>*Nombre: </label>
@@ -240,6 +289,12 @@
 					class="span2"}}'
 				}}
 				<br /><br />
+				{{'{{#if errors.segment}}'}}
+					<div class="alert alert-error">
+						<h4>Error!</h4>
+						{{'{{errors.segment}}'}}
+					</div>
+				{{'{{/if}}'}}
 				{{' {{#each cr in criteria}} '}}
 					<div class="row-fluid">
 						<div class="span3">
@@ -248,6 +303,7 @@
 								  optionValuePath="content.id"
 								  optionLabelPath="content.name"
 								  valueBinding="cr.cfields"
+								  prompt="Seleccione un campo"
 								}}'
 							}}
 						</div>

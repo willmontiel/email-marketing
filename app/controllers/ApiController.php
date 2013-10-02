@@ -1023,6 +1023,17 @@ class ApiController extends ControllerBase
 	public function segmentAction($idSegment)
 	{
 		$log = $this->logger;
+		
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+		
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
 	
 		$segment = Segment::findFirst(array(
 			"conditions" => "idSegment = ?1",
@@ -1030,6 +1041,8 @@ class ApiController extends ControllerBase
 		));
 		
 		$segmentwrapper = new SegmentWrapper();
+		
+		$segmentwrapper->setPager($pager);
 		
 		$contacts = $segmentwrapper->findContactsInSegment($segment);
 
@@ -1058,7 +1071,7 @@ class ApiController extends ControllerBase
 		
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
+			return $this->setJsonResponse(array('errors' => $Wrapper->getFieldErrors()), 422, 'Invalid data');
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');

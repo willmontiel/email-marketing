@@ -10,13 +10,6 @@ App.Blockedemail = DS.Model.extend({
 App.BlockedemailsIndexRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.find('blockedemail');
-	},
-	actions : {
-		deactivate: function () {
-			if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
-				this.get('currentModel.transaction').rollback();
-			}
-		}
 	}
 });
 
@@ -24,12 +17,9 @@ App.BlockedemailsBlockRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.createRecord('blockedemail');
 	},
-		
-	actions : {
-		deactivate: function () {
-			if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-				this.currentModel.get('model').rollback();
-			}
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.rollback();
 		}
 	}
 });

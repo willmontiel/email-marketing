@@ -93,6 +93,10 @@ App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 				App.set('errormessage', 'El nombre de la lista es requerido');
 				this.transitionToRoute('lists.new');
 			}
+			else if(this.get("dbase.id") == null) {
+				App.set('errormessage', 'Recuerde seleccionar una Base de Datos');
+				this.transitionToRoute('lists.new');
+			}
 			else{
 				this.handleSavePromise(this.content.save(), 'lists', 'Se ha creado la lista exitosamente');
 				App.set('errormessage', '');

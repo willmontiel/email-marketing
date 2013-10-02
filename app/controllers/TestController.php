@@ -676,4 +676,61 @@ class TestController extends ControllerBase
 		}
 		
 	}
+	
+	public function transactionsegmentAction()
+	{
+		$log = $this->logger;
+		
+		$segment = new Segment();
+
+		$segment->idDbase = 7;
+		$segment->name = "Segmento de pruebas";
+		$segment->description = "Segmento de prueba para transacciones";
+		$segment->criterion = "any";
+		$segment->createdon = time();
+
+		$c = array();
+		
+		$criteria = new Criteria();
+
+		$criteria->idCustomField = null;
+		$criteria->relation = 'equals';
+		$criteria->value = 'abcd';
+		$criteria->fieldName = 'email';
+		$criteria->type = 'email';
+		
+		$c[] = $criteria;
+
+		$criteria = new Criteria();
+		$criteria->idCustomField = null;
+		$criteria->relation = 'equals';
+		$criteria->value = 'efgh';
+		$criteria->fieldName = 'name';
+		$criteria->type = 'contact';
+		
+		$c[] = $criteria;
+		
+		$criteria = new Criteria();
+		$criteria->idCustomField = 123456;
+		$criteria->relation = 'equals';
+		$criteria->value = 'efgh';
+		$criteria->fieldName = 'name';
+		$criteria->type = 'contact';
+		
+		$c[] = $criteria;
+		
+		$segment->criteria = $c;
+		try {		
+			if (!$segment->save()) {
+				$txt = '';
+				foreach ($segment->getMessages() as $msg) {
+					$txt .= '. ' . $msg . PHP_EOL;
+				}
+				$log->log("error: [$txt]\n");
+			}
+		}
+		catch (Exception $e) {
+			$log->log("error: [$e]\n");
+		}
+	}
 }

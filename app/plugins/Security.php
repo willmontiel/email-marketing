@@ -85,6 +85,9 @@ class Security extends Plugin
 		$map = null; //$this->cache->get('controllermap-cache');
 		if (!$map) {
 			$map = array(
+				//Tests
+				'test::transactionsegment' => array(),				
+				
 				'error::index' => array(),
 				'session::signin' => array(),
 				'session::login' => array(),

@@ -17,8 +17,8 @@ App.relations = [
   Ember.Object.create({relation: "No contiene",    id: "!content"}),
   Ember.Object.create({relation: "Empieza con",    id: "begins"}),
   Ember.Object.create({relation: "Termina en",    id: "ends"}),
-  Ember.Object.create({relation: "Mayor que",    id: "greater"}),
-  Ember.Object.create({relation: "Menor que",    id: "less"})
+//  Ember.Object.create({relation: "Mayor que",    id: "greater"}),
+//  Ember.Object.create({relation: "Menor que",    id: "less"})
 ];
 
 
@@ -53,11 +53,9 @@ App.SegmentsNewRoute = Ember.Route.extend({
 		controller.loadDbases();
 	},
 	
-	actions : {
-		deactivate: function () {
-			if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-				this.currentModel.get('model').rollback();
-			}
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.rollback();
 		}
 	}
 });
@@ -158,13 +156,19 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 		},
 				
 		save : function() {
-			if ( this.criteria.length < 1 ) {
-				console.log("No hay condiciones");
-//				App.set('errormessage', 'No hay condiciones');
-			} else {
-				var JsonCriteria = JSON.stringify(this.criteria);
-				this.content.set('criteria', JsonCriteria);
-				this.handleSavePromise(this.content.save(), 'segments', 'Se ha creado el segmento existosamente');
+			if (this.get('name') == null) {
+				App.set('errormessage', 'El segmento debe tener un nombre, por favor verifica la infomación');
+			}
+			else {
+				if ( this.criteria.length < 1 ) {
+				App.set('errormessage', 'El segmento debe tener al menos una condición');
+				} 
+				else {
+					App.set('errormessage', '');
+					var JsonCriteria = JSON.stringify(this.criteria);
+					this.content.set('criteria', JsonCriteria);
+					this.handleSavePromise(this.content.save(), 'segments', 'Se ha creado el segmento existosamente');
+				}
 			}
 		},
 		
@@ -173,7 +177,8 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 		},
 		
 		cancel: function(){
-//			this.get('model').rollback();
+			App.set('errormessage', '');
+			this.get('model').rollback();
 			this.transitionToRoute('segments');
 		}
 	}
@@ -257,17 +262,23 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 		},
 		
 		edit: function() {
-			if ( this.criteria.length < 1 ) {
-				console.log("No hay condiciones");
-//				App.set('errormessage', 'No hay condiciones');
-			} else {
-				var JsonCriteria = JSON.stringify(this.criteria);
-				this.content.set('criteria', JsonCriteria);
-				this.handleSavePromise(this.content.save(), 'segments', 'Se ha editado el segmento existosamente');
+			if (this.get('name') == '') {
+				App.set('errormessage', 'El segmento debe tener un nombre, por favor verifica la infomación');
 			}
+			else {
+				if ( this.criteria.length < 1 ) {
+					App.set('errormessage', 'El segmento debe tener al menos una condición');
+				} 
+				else { 
+					var JsonCriteria = JSON.stringify(this.criteria);
+					this.content.set('criteria', JsonCriteria);
+					this.handleSavePromise(this.content.save(), 'segments', 'Se ha editado el segmento existosamente');
+				}
+			}	
 		},
 				
 		cancel: function() {
+			App.set('errormessage', '');
 			this.set('criteria', JSON.parse(this.content.get('criteria'))) ;
 			this.get('model').rollback();
 			this.transitionToRoute("segments");
@@ -276,5 +287,5 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 });
 
 App.SegmentsShowController = Ember.ObjectController.extend ({
-	
+
 });

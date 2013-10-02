@@ -29,14 +29,6 @@ class ContactListWrapper extends BaseWrapper
 
 		return $object;
 	}
-
-	protected function convertBDToJson($dbase)
-	{
-		$object = array();
-		$object['id'] = $dbase->idDbase;
-		$object['name'] = $dbase->name;
-		return $object;
-	}
 	
 	public function validateListBelongsToAccount(Account $account, $idContactlist)
 	{
@@ -77,7 +69,7 @@ class ContactListWrapper extends BaseWrapper
 	{
 		$list->idDbase = $contents->dbase;
 		$list->name = $contents->name;
-		$list->description = $contents->description;
+		$list->description = (isset($contents->description))?$contents->description:"Sin Descripcion";
 		$list->createdon = $contents->createdon;
 		$list->updatedon = $contents->updatedon;
 	
@@ -95,7 +87,7 @@ class ContactListWrapper extends BaseWrapper
 		}
 		
 		return array('list' => $list, 
-			 'dbase' => $this->getDbasesAsJSON($account),
+			 'dbase' => DbaseWrapper::getDbasesAsJSON($account),
 			 'meta' => $this->pager->getPaginationObject()
 		) ;
 	}
@@ -130,20 +122,13 @@ class ContactListWrapper extends BaseWrapper
 		$this->pager->setTotalRecords($total);
 		
 		return array('lists' => $lista, 
-					 'dbase' => $this->getDbasesAsJSON($account),
+					 'dbase' => DbaseWrapper::getDbasesAsJSON($account),
 					 'meta' => $this->pager->getPaginationObject()
 				) ;
 		
 	}
 	
-	protected function getDbasesAsJSON(Account $account)
-	{
-		$bdjson = array();
-		foreach ($account->dbases as $bd) {
-			$bdjson[] = $this->convertBDToJson($bd);
-		}	
-		return $bdjson;
-	}
+	
 	
 	public function createNewContactList($contents)
 	{

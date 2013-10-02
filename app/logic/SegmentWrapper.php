@@ -16,8 +16,8 @@ class SegmentWrapper extends BaseWrapper
 							2 => $account->idAccount)
 		));
 		if (!$dbaseExist) {
-			throw new InvalidArgumentException('La base de datos no existe por favor verifique la información');
-			throw new \Exception('Base de datos inexistente');
+			$this->addFieldError('segment', 'La base de datos no existe por favor verifique la información');
+			throw new \InvalidArgumentException('La base de datos no existe por favor verifique la información');
 		}
 		else {
 			$segment = Segment::findFirst(array(
@@ -26,8 +26,8 @@ class SegmentWrapper extends BaseWrapper
 								2 => $dbaseExist->idDbase)
 			));
 			if ($segment) {
-				throw new InvalidArgumentException('Ya existe un segmento con el nombre enviado, por favor verifique la información');
-				throw new \Exception('Existe un segmento con el nombre enviado');
+				$this->addFieldError('segmentname', 'Ya existe un segmento con el nombre enviado, por favor verifique la información');
+				throw new \InvalidArgumentException('Ya existe un segmento con el nombre enviado, por favor verifique la información');
 			}
 			else {
 				$segment = $this->saveSegmentAndCriteriaInDb($contents);
@@ -49,40 +49,29 @@ class SegmentWrapper extends BaseWrapper
 		$segment->criterion = $contents->criterion;
 		$segment->createdon = time();
 		
-		if ($segment->save()) {
-			try {
+		$typeFields = json_decode($contents->criteria, true);
+		$c = array();
+		
+		foreach ($typeFields as $typeField) {
 			
-				$typeFields = json_decode($contents->criteria, true);
+			$criteria = new Criteria();
 
-				foreach ($typeFields as $typeField) {
-					$criteria = new Criteria();
-					
-					$criteria->idSegment = $segment->idSegment;
-					$criteria->value = $typeField["value"];
-					$criteria->relation = $typeField["relations"];
-					
-					$this->findType($typeField["cfields"], $criteria);
-					
-					$criteria->fieldName = $typeField["cfields"];
-					
-					
-					if (!$criteria->save()) {
-						$txt = implode(PHP_EOL,  $criteria->getMessages());
-						Phalcon\DI::getDefault()->get('logger')->log($txt);
-						throw new ErrorException('Ha ocurrido un error');
-					}
-				}
-				$this->saveSxC($segment);
-			}
-			catch (Exception $e) {
-				throw $e;
-			}
+			$this->findType($typeField["cfields"], $criteria);
+			$criteria->value = $typeField["value"];
+			$criteria->relation = $typeField["relations"];
+			$criteria->fieldName = $typeField["cfields"];
+			
+			$c[] = $criteria;
 		}
-		else {
+		
+		$segment->criteria = $c;
+		
+		if ( !$segment->save() ) {
 			$txt = implode(PHP_EOL,  $segment->getMessages());
 			Phalcon\DI::getDefault()->get('logger')->log($txt);
 			throw new ErrorException('Ha ocurrido un error');
 		}
+		$this->saveSxC($segment);
 		return $segment;
 	}
 	 /**
@@ -119,25 +108,36 @@ class SegmentWrapper extends BaseWrapper
 		if (!$dbase) {
 			throw new \Exception('La base de datos no existe');
 		}
-		else {
-			$segment = Segment::findFirst(array(
-				"conditions" => "idSegment = ?1 AND idDbase = ?2",
-				"bind" => array(1 => $idSegment,
-								2 => $contents->dbase)
-			));
-			
-			if (!$segment) {
-				throw new \Exception('El segmento no existe');
-			}
-			$response = $this->updateSegmentData($contents, $segment);
-			
-			$allSxC = Sxc::findByIdSegment($idSegment);
-
-			$allSxC->delete();
-
-			$this->saveSxC($segment);
-			
+		
+		$segment = Segment::findFirst(array(
+			"conditions" => "idSegment = ?1 AND idDbase = ?2",
+			"bind" => array(1 => $idSegment,
+							2 => $dbase->idDbase)
+		));
+		
+		if (!$segment) {
+			throw new \Exception('El segmento no existe');
 		}
+		
+		$nameExist = Segment::findFirst(array(
+			"conditions" => "idSegment != ?1 AND idDbase = ?2 AND name = ?3",
+			"bind" => array(1 => $idSegment,
+							2 => $segment->idDbase,
+							3 => $contents->name)
+		));
+		
+		if ($nameExist) {
+			$this->addFieldError('segmentname', "El nombre del segmento ingresado ya existe, por favor verifique la información");
+			throw new \InvalidArgumentException("El nombre ya existe");
+		}
+		
+		$response = $this->updateSegmentData($contents, $segment);
+
+		$allSxC = Sxc::findByIdSegment($idSegment);
+
+		$allSxC->delete();
+
+		$this->saveSxC($segment);
 		
 		return $response;
 	}
@@ -148,13 +148,15 @@ class SegmentWrapper extends BaseWrapper
 		$segment->description = $contents->description;
 		$segment->criterion = $contents->criterion;
 		
+		$c = $this->updateCriteria($contents, $segment->idSegment);
+		
+		$segment->criteria = $c;
+		
 		if (!$segment->save()) {
 			$txt = implode(PHP_EOL,  $segment->getMessages());
 			Phalcon\DI::getDefault()->get('logger')->log($txt);
 			throw new ErrorException('Ha ocurrido un error');
 		}
-		
-		$this->updateCriteria($contents, $segment->idSegment);
 		
 		$response = $this->convertSegmentToJson($segment);
 		
@@ -164,6 +166,7 @@ class SegmentWrapper extends BaseWrapper
 	protected function updateCriteria($contents, $idSegment)
 	{
 		$arrayFields = json_decode($contents->criteria, true);
+		$c = array();
 		
 		$objCriterias = Criteria::find(array(
 			"conditions" => "idSegment = ?1",
@@ -175,14 +178,14 @@ class SegmentWrapper extends BaseWrapper
 				if (!array_key_exists('idCriteria', $value)) {
 					
 					$newobj = new Criteria();
-					$newobj->idSegment = $idSegment;
+
 					$newobj->relation = $value['relations'];
 					$newobj->value = $value['value'];
 					$newobj->fieldName = $value['cfields'];
 					
 					$this->findType($value["cfields"], $newobj);
 					
-					$newobj->save();
+					$c[] = $newobj;
 					
 					unset($arrayFields[$key]);
 					
@@ -195,7 +198,7 @@ class SegmentWrapper extends BaseWrapper
 					
 					$this->findType($value["cfields"], $objcr);				
 					
-					$objcr->save();
+					$c[] = $objcr;
 					
 					$done = TRUE;
 				} 
@@ -206,6 +209,8 @@ class SegmentWrapper extends BaseWrapper
 				}
 			}
 		}
+		
+		return $c;
 	}
 	
 	protected function findType($value, $objcr)
@@ -227,7 +232,8 @@ class SegmentWrapper extends BaseWrapper
 					$objcr->idCustomField = substr($value, 3);
 				}
 				else {
-					throw new InvalidArgumentException('Error: invalid type');
+					$this->addFieldError('segment', 'Debe seleccionar una campo por cada condición');
+					throw new \InvalidArgumentException('Debe seleccionar una campo por cada condición');
 				}
 				break;
 		}
@@ -248,7 +254,8 @@ class SegmentWrapper extends BaseWrapper
 		
 		if (!$deletedSegment) {
 			$db->rollback();
-			throw new \InvalidArgumentException('Fallo la eliminacion del segmento');
+			$this->addFieldError('segment', 'Falló la eliminacion del segmento');
+			throw new \InvalidArgumentException('Falló la eliminacion del segmento');
 		}
 		
 		$db->commit();
@@ -296,8 +303,9 @@ class SegmentWrapper extends BaseWrapper
 				$oldSegment = $segment;
 				$i++;
 			}
-		}
-		return array('segments' => $result, 
+		}		
+		return array('segments' => $result,
+					 'dbase' => DbaseWrapper::getDbasesAsJSON($this->account),
 					 'meta' => $this->pager->getPaginationObject()
 					);
 	}
@@ -391,7 +399,7 @@ class SegmentWrapper extends BaseWrapper
 			}
 		}
 		
-		$SQL = "INSERT INTO sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND ( " . $conditions . " )";
+		$SQL = "INSERT INTO Sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND ( " . $conditions . " )";
 		Phalcon\DI::getDefault()->get('logger')->log($SQL);
 		$db = Phalcon\DI::getDefault()->get('db');
 		
@@ -422,13 +430,22 @@ class SegmentWrapper extends BaseWrapper
 
 	public function findContactsInSegment(Segment $segment)
 	{
+		
+		$this->pager->setTotalRecords(Contact::countContactsInSegment($segment));
+				
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
 		$findQuery = "SELECT Contact.*, Email.* 
 					FROM Contact JOIN Email JOIN Sxc 
 					WHERE idSegment = :idsegment:";
 		
-		$query = $modelManager->createQuery($findQuery);
+		$number = $this->pager->getRowsPerPage();
+		
+		if (isset($number) ) {
+			$offset = $this->pager->getStartIndex();
+			$start = isset($offset)?$offset:0;
+			$findQuery .= ' LIMIT ' . $number . ' OFFSET ' . $start;
+		}
 		
 		$parameters['idsegment'] = $segment->idSegment;
 		

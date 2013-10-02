@@ -126,4 +126,22 @@ class Contact extends \Phalcon\Mvc\Model
 		
 	}
 	
+	public static function countContactsInSegment(Segment $segment, $conditions = null, $bind = null)
+	{
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$phql = 'SELECT COUNT(*) cnt FROM Contact JOIN Sxc WHERE idSegment = :idsegment:';
+		if ($conditions != null) {
+			$phql .= ' AND ' . $conditions;
+			$options = $bind;
+		}
+		$options['idsegment'] = $segment->idSegment;
+		$query = $mm->executeQuery($phql, $options);
+		
+		if ($query) {
+			return $query[0]->cnt;
+		}
+		return 0;
+	}
+	
 }
