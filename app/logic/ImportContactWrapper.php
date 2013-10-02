@@ -67,7 +67,11 @@ class ImportContactWrapper extends BaseWrapper
 
 		$dbase->updateCountersInDbase();
 		$list->updateCountersInContactlist();
-
+		
+		$swrapper = new SegmentWrapper;
+		
+		$swrapper->contactsImported($dbase->idDbase);
+		
 		$db->execute($deletetable);
 		
 	}

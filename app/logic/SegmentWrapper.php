@@ -407,6 +407,19 @@ class SegmentWrapper extends BaseWrapper
 		$db->commit();
 	}
 	
+	protected function deleteSxC(Segment $segment)
+	{
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$query = "DELETE FROM Sxc WHERE idSegment = :idsegment:";
+		
+		$parameters['idsegment'] = $segment->idSegment;
+		
+		$modelManager->executeQuery($query, $parameters);
+		
+	}
+
+
 	public function findContactsInSegment(Segment $segment)
 	{
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -556,6 +569,20 @@ class SegmentWrapper extends BaseWrapper
 		}
 		
 		return $meets;
+	}
+	
+	public function contactsImported($idDbase)
+	{
+		$segments = Segment::findByIdDbase($idDbase);
+		
+		foreach ($segments as $segment) {
+			
+			$this->deleteSxC($segment);
+			
+			$this->saveSxC($segment);	
+			
+		}
+		
 	}
 	
 }
