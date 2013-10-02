@@ -108,7 +108,7 @@
 		<div class="primary-sidebar">
 			<!-- Main nav -->
 			<ul id="currentPage" class="nav nav-collapse collapse nav-collapse-primary">
-				<li id="1">
+				<li class="" id="1">
 					<span class="glow"></span>
 					<a href="{{ url('') }}">
 						<i class="icon-dashboard icon-2x"></i>
