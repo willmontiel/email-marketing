@@ -108,35 +108,35 @@
 		<div class="primary-sidebar">
 			<!-- Main nav -->
 			<ul id="currentPage" class="nav nav-collapse collapse nav-collapse-primary">
-				<li class="active">
+				<li id="1">
 					<span class="glow"></span>
 					<a href="{{ url('') }}">
 						<i class="icon-dashboard icon-2x"></i>
 						<span>Dashboard</span>
 					</a>
 				</li>
-				<li class="">
+				<li class="" id="2">
 					<span class="glow"></span>
 					<a href="{{ url('contactlist#/lists"') }}">
 						<i class="icon-user icon-2x"></i>
 						<span>Contactos</span>
 					</a>
 				</li>
-				<li class="">
+				<li class="" id="3">
 					<span class="glow"></span>
 					<a href="{{ url('') }}">
 						<i class="icon-envelope icon-2x"></i>
 						<span>Campañas</span>
 					</a>
 				</li>
-				<li class="">
+				<li class="" id="4">
 					<span class="glow"></span>
 					<a href="{{ url('') }}">
 						<i class="icon-edit icon-2x"></i>
 						<span>Autorespuestas</span>
 					</a>
 				</li>
-				<li class="">
+				<li class="" id="5">
 					<span class="glow"></span>
 					<a href="{{ url('contactlist#/lists"') }}">
 						<i class="icon-bar-chart icon-2x"></i>
@@ -172,11 +172,14 @@
 			</div>		
 		</div>
 		<script type="text/javascript">
-			$( "#currentPage li" ).click(function(event) {
-				$('#currentPage li').removeClass('active');
-				$(this).addClass("active");
-				return true;
-			 });
+			var current = "{{ router.getRewriteUri()}}";
+
+			if (current == "/") {
+				document.getElementById('1').className = "active";
+			}
+			else if (current.indexOf("/contactlist") !== -1) {
+				document.getElementById('2').className = "active";
+			}
 		</script>
 		<!-- /content -->
     </body>

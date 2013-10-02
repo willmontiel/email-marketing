@@ -77,7 +77,8 @@
 									contentBinding="controllers.dbase.content" 
 									optionValuePath="content.id" 
 									optionLabelPath="content.name" 
-									prompt="Seleccione una base de datos"}}' 
+									prompt="Seleccione una base de datos"
+									class="span11"}}' 
 							}}
 						 <br /><br />
 						 	
@@ -95,16 +96,35 @@
 					{{ '{{/unless}}' }}
 				</div>
 				<div class="span9">
-					<div class="box-section news with-icons">
-						<div class="avatar blue">
-							<i class="icon-lightbulb icon-2x"></i>
-						</div>
-						<div class="news-content">
-							<div class="news-title">
-								Segmentos
+					<div class="box">
+						<div class="box-section news with-icons">
+							<div class="avatar green">
+								<i class="icon-lightbulb icon-2x"></i>
 							</div>
-							<div class="news-text">
-								With 2.2.2 out the door, our attention has shifted almost entirely to the next major update to the project ...
+							<div class="news-content">
+								<div class="news-title">
+									Segmentos
+								</div>
+								<div class="news-text">
+									<p>
+										Aqui podrá crear segmentos con los contactos de una base de datos determinada.
+									</p>
+									<p>
+										Un segmento es un fragmento, o en este caso una lista, hecha con los contactos que siguen determinadas condiciones, como 
+										por ejemplo: "Todos los contactos en los que el nombre empiece con jaime", este ejemplo
+										creara una lista con todos los contactos que siguen esa condición
+									</p>
+									<p>
+										Para empezar a crear un segmento, deberá ingresar un nombre y una descripción,
+										y deberá seleccionar una base de datos de contactos en la cual se aplicarán las condiciones definidas.
+									</p>
+									<p>
+										El siguiente paso es seleccionar si se deben completar todas las condiciones que defina o cualquiera de ellas,
+										esto quiere decir que si selecciona todas las condiciones, un contacto solo pertenecerá
+										al segmento sí y solo sí cumple con todas las condiciones, o en caso de que seleccione cualquiera de ellas
+										el contacto pertenecerá al segmento sí cumple al menos una de ellas.
+									</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -155,7 +175,7 @@
 						{{' {{/each}} '}}
 						<br />
 						{{ '{{#unless limitCriteria}}' }}
-							<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar</button>
+							<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
 						{{ '{{/unless}}' }}
 						<button class="btn btn-default" {{ '{{action reset this }}' }}><i class="icon-bolt"></i> Reset</button>
 					</div>
@@ -195,57 +215,68 @@
 			</div>
 		</div>
 		<div class="box-content padded">
-			<label>*Nombre: </label>
-			{{'{{view Ember.TextField valueBinding="name"}}'}}
+			<div class="row-fluid">
+				<div class="span3">
+					<label>*Nombre: </label>
+					{{'{{view Ember.TextField valueBinding="name"}}'}}
 				
-			<label>Descripción: </label>
-			{{'{{view Ember.TextField valueBinding="description"}}'}}
-			
-			<label>Editar Segmento con: </label>
-			{{ '{{view Ember.Select
-				contentBinding="App.criteria"
-				optionValuePath="content.id"
-				optionLabelPath="content.criterion"
-				valueBinding="criterion"
-				class="span2"}}'
-			}}
-			<br /><br />
-			{{ '{{#unless limitCriteria}}' }}
-			<button class="btn btn-default" {{ '{{action aConditionMore}}' }}>+</button>
-			{{ '{{/unless}}' }}
-			<br /><br />
-			{{' {{#each cr in criteria}} '}}
-				<div class="row-fluid">
-					<div class="span3">
-						{{ '{{view Ember.Select
-							  contentBinding="cfields"
-							  optionValuePath="content.id"
-							  optionLabelPath="content.name"
-							  valueBinding="cr.cfields"
-							}}'
-						}}
+					<label>Descripción: </label>
+					{{'{{view Ember.TextArea valueBinding="description"}}'}}
+					<br /><br />
+					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+					<button class="btn btn-blue" {{ '{{action edit this}}' }}>Editar</button>
+				</div>
+				<div class="span9">
+				</div>
+			</div>
+			<hr></hr>
+			<div class="row-fluid">
+				Editar Segmento con:
+				{{ '{{view Ember.Select
+					contentBinding="App.criteria"
+					optionValuePath="content.id"
+					optionLabelPath="content.criterion"
+					valueBinding="criterion"
+					class="span2"}}'
+				}}
+				<br /><br />
+				{{' {{#each cr in criteria}} '}}
+					<div class="row-fluid">
+						<div class="span3">
+							{{ '{{view Ember.Select
+								  contentBinding="cfields"
+								  optionValuePath="content.id"
+								  optionLabelPath="content.name"
+								  valueBinding="cr.cfields"
+								}}'
+							}}
+						</div>
+						<div class="span3">
+							{{ '{{view Ember.Select
+								  contentBinding="App.relations"
+								  optionValuePath="content.id"
+								  optionLabelPath="content.relation"
+								  valueBinding="cr.relations"
+								}}'
+							}}
+						</div>
+						<div class="span3">
+							{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required"}}' }}
+						</div>
+						{{ '{{#unless defaultCriteria}}' }}
+						<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}><i class="icon-trash"></i></button>
+						{{ '{{/unless}}' }}
 					</div>
-					<div class="span3">
-						{{ '{{view Ember.Select
-							  contentBinding="App.relations"
-							  optionValuePath="content.id"
-							  optionLabelPath="content.relation"
-							  valueBinding="cr.relations"
-							}}'
-						}}
-					</div>
-					<div class="span3">
-						{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required"}}' }}
-					</div>
-					{{ '{{#unless defaultCriteria}}' }}
-					<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}>-</button>
+				{{' {{/each}} '}}
+					<br />
+					{{ '{{#unless limitCriteria}}' }}
+						<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
 					{{ '{{/unless}}' }}
 				</div>
-			{{' {{/each}} '}}
-				<br />
-				<button class="btn btn-blue" {{ '{{action edit this}}' }}>Editar</button>
-				<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-		</div>
+			</div>
+		
+			
+			
 	</div>
 </script>
 
