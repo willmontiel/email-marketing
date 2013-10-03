@@ -72,11 +72,10 @@ App.FieldsAddRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.createRecord('field');
 	},
-	actions : {
-		deactivate: function () {
-			if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
-				this.get('currentModel.transaction').rollback();
-			}
+
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.rollback();
 		}
 	}
 });
@@ -114,6 +113,12 @@ App.FieldsIndexController = Ember.ArrayController.extend(Ember.AclMixin, {
 App.FieldsAddController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	actions : {
 		save: function() {
+			var self = this;
+			if (self.get('values') != undefined) { 
+				self.set('values', 
+				self.get('values').split('\n')
+				);
+			}
 			this.handleSavePromise(this.content.save(), 'fields.index', 'Se ha creado el campo personalizado');
 		},
 				
@@ -124,6 +129,14 @@ App.FieldsAddController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 });
 
 App.FieldsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
+	setOptions: function ()
+	{
+		var values = this.get('values');
+		var valuesInLine = values.replace(/,/g, '\n');
+		this.set('values', valuesInLine);
+		
+	}.observes('content'),
+	
 	actions: {
 		edit: function() {
 			var self = this;

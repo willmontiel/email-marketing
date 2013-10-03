@@ -48,13 +48,13 @@ App.ContactsNewRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.createRecord('contact');
 	},
-	actions : {
-		deactivate: function () {
-			if (this.get('currentModel.isNew') && !this.get('currentModel.isSaving')) {
-				this.get('currentModel.transaction').rollback();
-			}
+
+	deactivate: function () {
+		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
+			this.currentModel.rollback();
 		}
 	}
+
 });
 
 App.ContactsNewbatchRoute = Ember.Route.extend();
@@ -98,17 +98,19 @@ App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 				App.set('errormessage', '');
 				this.handleSavePromise(this.content.save(), 'contacts', 'El contacto ha sido creado con exito!');
 			}
-			App.set('errormessage', 'La dirección de correo electrónico ingresada es invalida, por favor verifica la información');
-			this.transitionToRoute('blockedemails.block');
+			else {
+				App.set('errormessage', 'La dirección de correo electrónico ingresada es invalida, por favor verifica la información');
+				this.transitionToRoute('contacts.new');
+			}
 			
 		},	
 		
 		cancel: function(){
 			App.set('errormessage', '');
-			var record = this.get('model');
-			if (record.get('isDirty')) {
-				record.rollback();
-			}
+//			var record = this.get('model');
+//			if (record.get('isDirty')) {
+//				record.rollback();
+//			}
 			this.transitionToRoute("contacts");
 		}
 	}
@@ -129,7 +131,9 @@ App.ContactsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 				App.set('errormessage', '');
 				this.handleSavePromise(this.content.save(), 'contacts', 'El contacto fue actualizado exitosamente');
 			}
-			App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
+			else {
+				App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
+			}
 		},
 		cancel: function(){
 			App.set('errormessage', '');

@@ -217,17 +217,26 @@ class ContactWrapper extends BaseWrapper
 		$existEmail = Email::findFirst("email = '$email' AND idAccount = $idAccount");
 			
 		if ($existEmail && !$this->findEmailBlocked($existEmail)) {
-			$existContact = Contact::findFirstByIdEmail($existEmail->idEmail);
-			if($existContact){
-				if($existContact->idDbase == $this->idDbase){
-					$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idContactlist = $list->idContactlist");
-					if (!$existList){
-						$this->associateContactToList($list, $existContact);
-						if($saveCounters)
-							$this->counter->saveCounters();
 
-						return $existContact;
-					}
+			$existContact = Contact::findFirst(array(
+				"conditions" => "idEmail = ?1 and idDbase = ?2",
+				"bind" => array(1 => $existEmail->idEmail,
+								2 => $this->idDbase)
+			));		
+			
+			if($existContact){
+				
+				$existList = Coxcl::findFirst("idContact = $existContact->idContact AND idContactlist = $list->idContactlist");
+				
+				if (!$existList){
+
+					$this->associateContactToList($list, $existContact);
+					
+					if($saveCounters)
+						
+						$this->counter->saveCounters();
+
+					return $existContact;
 				}
 			}
 		}

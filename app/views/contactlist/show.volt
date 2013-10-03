@@ -174,18 +174,18 @@
 									{{ '{{errors.errormsg}}' }}
 								</div>
 							{{ '{{/if}}' }}
-							<label>*E-mail:
+							<label for="email">*E-mail:
 								{{' {{#if errors.email}} '}}
 									<span class="text text-error">{{'{{errors.email}}'}}</span>
 								{{' {{/if }} '}}
 							</label>
 					
-							{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus"}}'}}
-							<label>Nombre:</label>
-							{{'{{view Ember.TextField valueBinding="name"}}'}}
+							{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus" id="email"}}'}}
+							<label for="name">Nombre:</label>
+							{{'{{view Ember.TextField valueBinding="name" id="name"}}'}}
 								
-							<label>Apellido:</label>
-							{{'{{view Ember.TextField valueBinding="lastName"}}'}}
+							<label for="lastName">Apellido:</label>
+							{{'{{view Ember.TextField valueBinding="lastName" id="lastName"}}'}}
 								
 							<!-- Campos Personalizados -->
 							{%for field in fields%}
@@ -281,16 +281,16 @@
 								{{ '{{errors.errormsg}}' }}
 							</div>
 						{{ '{{/if}}' }}
-						<label>E-mail</label>
+						<label for="email">E-mail</label>
 						{{' {{#if errors.email}} '}}
 							<span class="text text-error">{{'{{errors.email}}'}}</span>
 						{{' {{/if }} '}}
 						{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
-						<label>Nombre: </label>
+						<label for="name">Nombre: </label>
 						{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
-						<label>Apellido: </label>
+						<label for="lastName">Apellido: </label>
 						{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
-						<label>Estado: </label>
+						<label for="isSubscribed">Estado: </label>
 						{{ '{{#if isSubscribed}}' }}
 							{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito<br />
 						{{ '{{else}}' }}
@@ -299,11 +299,11 @@
 						<br />
 						<!-- Campos Personalizados -->
 						{%for field in fields%}
-							<p><label for="{{field.name}}">{{field.name}}:</label></p>
-							<p>{{ember_customfield(field)}}</p>
-							{% if (field.type == "Text") %}
+							<label for="campo{{field.idCustomField }}">{{field.name}}:</label>
+							{{ember_customfield(field)}}
+							{% if (field.type == "Text" and field.maxLength != "") %}
 								Maximo {{field.maxLength}} caracteres
-							{% elseif field.type == "Numerical" %}
+							{% elseif field.type == "Numerical" and field.minValue != "" and field.maxValue != 0 %}
 								El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
 							{%endif%}
 						{%endfor%}
