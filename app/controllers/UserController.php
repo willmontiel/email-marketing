@@ -42,7 +42,7 @@ class UserController extends ControllerBase
 			else {
 				if($pass !== $pass2) {
 					$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
-					return ;$this->response->redirect("user/new");
+					return $this->response->redirect("user/new");
 				}
 				else {
 					
@@ -80,7 +80,7 @@ class UserController extends ControllerBase
 		));
 		
 		if (!$user) {
-			$this->flashSession->error("El usuario que intenta actualizar no existe, por favor verifique la información");
+			$this->flashSession->error("El usuario que intenta editar no existe, por favor verifique la información");
 			return $this->response->redirect("user/index");
 		}
 		
@@ -110,17 +110,17 @@ class UserController extends ControllerBase
 							
 							$user->password = $this->security2->hash($pass);
 							
-							if (!$form->isValid() OR !$user->save()) {
+							if (!$form->isValid()||!$user->save()) {
 								$this->db->rollback();
 								foreach ($user->getMessages() as $msg) {
-									$this->flash->error($msg);
+									$this->flashSession->error($msg);
 								}
 								return $this->response->redirect("user/edit/".$user->idUser);
 							}
 							else {
 								$this->db->commit();
 								$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
-								return $this->response->redirect("user/index");
+								return $this->response->redirect("user");
 							}
 						}
 					}
@@ -132,7 +132,7 @@ class UserController extends ControllerBase
 					if (!$form->isValid() OR !$user->save()) {
 						$this->db->rollback();
 						foreach ($user->getMessages() as $msg) {
-							$this->flash->error($msg);
+							$this->flashSession->error($msg);
 						}
 						return $this->response->redirect("user/edit/".$user->idUser);
 					}
@@ -171,7 +171,7 @@ class UserController extends ControllerBase
 					}
 					return $this->response->redirect("user/index");
 				}
-				$this->flashSession->warning("El usuario " .$user->username. " ha sido eliminado exitosamente");
+				$this->flashSession->warning("El usuario <strong>" .$user->username. "</strong> ha sido eliminado exitosamente");
 				return $this->response->redirect("user/index");
 			}
 			else{

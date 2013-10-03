@@ -24,11 +24,14 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid text-right">
-		<a href="{{url('account/index')}}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
+	<div class="row-fluid">
+		<div class="span8">
+			{{ flashSession.output() }}
+		</div>
+		<div class="span4 text-right">
+			<a href="{{url('account/index')}}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
+		</div>
 	</div>
-	<br />
-	{{ flashSession.output() }}
 	<br />
 	<div class="row-fluid">
 		<div class="span4">
@@ -38,35 +41,35 @@
 						Crear un nuevo usuario
 					</div>
 				</div>
-				<div class="box-content padded">
+				<div class="box-content">
 					<form action="{{url('account/newuser/')}}{{account.idAccount}}" method="Post">
-						<label>*Nombre </label>
-						{{ UserForm.render('firstName') }}
+						<div class="padded">
+							<label>*Nombre </label>
+							{{ UserForm.render('firstName') }}
 
-						<label>*Apellido </label>
-						{{ UserForm.render('lastName') }}
+							<label>*Apellido </label>
+							{{ UserForm.render('lastName') }}
 
-						<label>*Dirección de correo electrónico </label>
-						{{ UserForm.render('email') }}
+							<label>*Dirección de correo electrónico </label>
+							{{ UserForm.render('email') }}
 
-						<label>*Nombre de usuario </label>
-						{{ UserForm.render('username') }}
+							<label>*Nombre de usuario </label>
+							{{ UserForm.render('username') }}
 
-						<label>*Contraseña </label>
-						{{ UserForm.render('password') }}
+							<label>*Contraseña </label>
+							{{ UserForm.render('password') }}
 
-						<label>*Repita la contraseña </label>
-						{{ UserForm.render('password2') }}	
+							<label>*Repita la contraseña </label>
+							{{ UserForm.render('password2') }}	
 
-						<label>*Funciones </label>
-						{{ UserForm.render('userrole') }}	
-						
-						<br />
-						
-						{{ submit_button("Crear", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
-						<a href="{{url('account/show/')}}{{account.idAccount}}" class="btn btn-default">Cancelar<a>
+							<label>*Funciones </label>
+							{{ UserForm.render('userrole') }}	
+						</div>
+						<div class="form-actions">
+							<a href="{{url('account/show/')}}{{account.idAccount}}" class="btn btn-default">Cancelar</a>
+							{{ submit_button("Grabar", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+						</div>
 					</form>
-					
 				</div>
 			</div>
 		</div>

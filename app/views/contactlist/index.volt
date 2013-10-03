@@ -176,8 +176,8 @@
 					}}
 				</div>
 				<div class="form-actions">
-					<button class="btn btn-default" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
 					<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+					<button class="btn btn-blue" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
 				</div>
 			</form>
 		</div>
@@ -209,8 +209,8 @@
 					{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
 				</div>
 				<div class="form-actions">
-					<button class="btn btn-blue" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Editar</button>
 					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+					<button class="btn btn-blue" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
 				</div>
 			</form>
 		</div>

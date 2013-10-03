@@ -90,7 +90,6 @@ class User extends Modelbase
 		if ($this->validationHasFailed() == true) {
 			return false;
 		}
-			
 	}		
 }
 	

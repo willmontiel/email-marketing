@@ -1,12 +1,18 @@
 {% extends "templates/index_new.volt" %}
-
+{% block header_javascript %}
+	{{ super() }}
+	{{ javascript_include('js/load_activecontacts.js')}}
+{% endblock %}
+{% block sectiontitle %}
+	<i class="icon-user"></i> Contactos
+{% endblock %}
+{% block sectionContactLimit %}
+	{{ partial("partials/contactlimitinfo_partial") }}
+{%endblock%}
+{%block sectionsubtitle %}Creacion Rapida de Contactos{% endblock %}
 {% block content %}
 <div class="row-fluid">
 	<div class="span12">
-		<div class="row-fluid">
-			<h3>Creacion Rapida de Contactos</h3>
-		</div>
-		<br>
 		<div class="row-fluid">
 			<div class="span8 offset2">
 				<div class="box">
@@ -43,8 +49,8 @@
 						</table>
 					</div>
 				</div>
-				<br><br>
 				{% if total+currentActiveContacts > account.contactLimit and account.accountingMode == 'Contacto'%}
+					<br><br>
 					<div class="alert alert-block">
 						<a class="close" data-dismiss="alert">×</a>
 						<h4 class="alert-heading">Advertencia!</h4><br>
@@ -64,8 +70,8 @@
 					</div>
 				{% endif %}
 				<br><br>
-				<a href="{{ url('contacts/importbatch/') }}{{idContactlist}}" class="btn btn-blue">Crear</a>
 				<a href="{{ url('contactlist/show/') }}{{idContactlist}}#/contacts/newbatch" class="btn btn-default">Cancelar</a>
+				<a href="{{ url('contacts/importbatch/') }}{{idContactlist}}" class="btn btn-blue">Guardar</a>
 			</div>
 		</div>
 	</div>

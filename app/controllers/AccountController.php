@@ -154,7 +154,7 @@ class AccountController extends ControllerBase
 					$editform->bind($this->request->getPost(), $account);
 					$this->db->begin();
 								
-					if (!$editform->isValid() OR !$account->save()) {
+					if (!$editform->isValid() || !$account->save()) {
 						$this->db->rollback();
 						foreach ($account->getMessages() as $msg) {
 							$this->flashSession->error($msg);
@@ -254,9 +254,9 @@ class AccountController extends ControllerBase
 						else {
 							$this->db->rollback();
 							foreach ($user->getMessages() as $msg) {
-								$this->flash->error($msg);
+								$this->flashSession->error($msg);
 							}
-							return $this->response->redirect("account/show/".$account->idAccount);
+							return $this->response->redirect("account/newuser/".$account->idAccount);
 						}
 					}
 				}
@@ -308,11 +308,11 @@ class AccountController extends ControllerBase
 							foreach ($userExist->getMessages() as $msg) {
 								$this->flashSession->error($msg);
 							}
-							return $this->response->redirect("account/show/".$userExist->idAccount);
+							return $this->response->redirect("account/edituser/".$userExist->idUser);
 						}
 						else {
 							$this->db->commit();
-							$this->flashSession->notice('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
+							$this->flashSession->notice('Se ha editado exitosamente el usuario <strong>' .$userExist->username. '</strong> de la cuenta <strong>' .$userExist->idAccount. '</strong>');
 							return $this->response->redirect("account/show/".$userExist->idAccount);
 						}
 					}
@@ -324,11 +324,11 @@ class AccountController extends ControllerBase
 							foreach ($userExist->getMessages() as $msg) {
 								$this->flashSession->error($msg);
 							}
-							return $this->response->redirect("account/show/".$userExist->idAccount);
+							return $this->response->redirect("account/edituser/".$userExist->idUser);
 						}
 						else {
 							$this->db->commit();
-							$this->flashSession->notice('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
+							$this->flashSession->notice('Se ha editado exitosamente el usuario <strong>' .$userExist->username. '</strong> de la cuenta <strong>' .$userExist->idAccount. '</strong>');
 							return $this->response->redirect("account/show/".$userExist->idAccount);
 						}
 					}
@@ -368,7 +368,7 @@ class AccountController extends ControllerBase
 					}
 					return $this->response->redirect("account/show/".$user->idAccount);
 				}
-				$this->flashSession->warning('Se ha eliminado el usuario ' .$user->username. ' exitosamente');
+				$this->flashSession->warning('Se ha eliminado el usuario <strong>' .$user->username. '</strong> exitosamente');
 				return $this->response->redirect("account/show/".$user->idAccount);
 			}	
 		}

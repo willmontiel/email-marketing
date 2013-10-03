@@ -161,10 +161,29 @@
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="contacts/new">
+			<div class="row-fluid">
+				<div class="box">
+					<div class="box-content">
+						<div class="box-section news with-icons">
+							<div class="avatar green">
+								<i class="icon-lightbulb icon-2x"></i>
+							</div>
+							<div class="news-content">
+								<div class="news-title">
+									Crear un nuevo contacto
+								</div>
+								<div class="news-text">
+									Cree un nuevo contacto, basta con una dirección de correo electrónico y si desea otros
+									datos báscicos como nombre y apellido.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			{{ '{{#if App.errormessage }}' }}
 				<div class="alert alert-message alert-error">
-				<h4>Error!</h4>
-				{{ '{{ App.errormessage }}' }}
+					{{ '{{ App.errormessage }}' }}
 				</div>
 			{{ '{{/if}} '}}
 			<div class="box span4">
@@ -177,17 +196,16 @@
 									{{ '{{errors.errormsg}}' }}
 								</div>
 							{{ '{{/if}}' }}
-							<label for="email">*E-mail:
-								{{' {{#if errors.email}} '}}
+							{{' {{#if errors.email}} '}}
 									<span class="text text-error">{{'{{errors.email}}'}}</span>
-								{{' {{/if }} '}}
-							</label>
-					
+							{{' {{/if }} '}}
+							<label>*E-mail:</label>
 							{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus" id="email"}}'}}
-							<label for="name">Nombre:</label>
+							
+							<label>Nombre:</label>
 							{{'{{view Ember.TextField valueBinding="name" id="name"}}'}}
 								
-							<label for="lastName">Apellido:</label>
+							<label>Apellido:</label>
 							{{'{{view Ember.TextField valueBinding="lastName" id="lastName"}}'}}
 								
 							<!-- Campos Personalizados -->
@@ -198,8 +216,8 @@
 							<!--  Fin de campos personalizados -->
 						</div>
 						<div class="form-actions">
-							<button  data-loading-text="saving..." {{'{{bindAttr class=":btn :btn-blue isSaving:loading"}}'}} {{'{{bindAttr disabled="isSaving"}}'}} {{'{{action save this}}'}}>Guardar</button>
 							<button class="btn btn-default" {{'{{action cancel this}}'}}>Cancelar</button>
+							<button  data-loading-text="saving..." {{'{{bindAttr class=":btn :btn-blue isSaving:loading"}}'}} {{'{{bindAttr disabled="isSaving"}}'}} {{'{{action save this}}'}}>Guardar</button>
 						</div>
 					</form>
 				</div>
@@ -211,7 +229,7 @@
 				<form method="post" action="{{url('contacts/newbatch')}}/{{datalist.idContactlist}}">
 					<div class="box-content padded">
 						<div class="alert-info padded">
-							<p>A través de esta función puede varios contactos al mismo tiempo.</p>
+							<p>A través de esta función puede crear varios contactos al mismo tiempo.</p>
 							<p>Simplemente escriba en el cuadro de texto una línea de contenido por cada contacto que desee crear separando los campos por comas.</p>
 							<p><strong>Ejemplo:</strong></p>
 							<dl>
@@ -230,8 +248,8 @@
 						{{ text_area("arraybatch", '', 'cols': '40', 'rows': '6', 'class': 'span10') }}
 					</div>
 					<div class="box-footer flat padded">
-						<input class="btn btn-blue" type="submit" value="Continuar">
 						{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-default">Cancelar</button>{{/linkTo}}' }}
+						<input class="btn btn-blue" type="submit" value="Continuar">
 					</div>
 				</form>
 			</div>
@@ -241,7 +259,7 @@
 			<div class="box">
 				<div class="box-content">
 					<div class="box-section news with-icons">
-						<div class="avatar blue">
+						<div class="avatar green">
 							<i class="icon-lightbulb icon-2x"></i>
 						</div>
 						<div class="news-content">
@@ -260,8 +278,7 @@
 		</div>
 		{{ '{{#if App.errormessage }}' }}
 			<div class="alert alert-message alert-error">
-			<h4>Error!</h4>
-			{{ '{{ App.errormessage }}' }}
+				{{ '{{ App.errormessage }}' }}
 			</div>
 		{{ '{{/if}} '}}
 		<div class="row-fluid">
@@ -278,16 +295,19 @@
 								{{ '{{errors.errormsg}}' }}
 							</div>
 						{{ '{{/if}}' }}
-						<label for="email">E-mail</label>
 						{{' {{#if errors.email}} '}}
 							<span class="text text-error">{{'{{errors.email}}'}}</span>
 						{{' {{/if }} '}}
+						<label>E-mail</label>
 						{{' {{view Ember.TextField valueBinding="email" placeholder="E-mail" id="email" required="required" autofocus="autofocus"}} '}}
-						<label for="name">Nombre: </label>
+						
+						<label>Nombre: </label>
 						{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" }} '}}
-						<label for="lastName">Apellido: </label>
+						
+						<label>Apellido: </label>
 						{{' {{view Ember.TextField valueBinding="lastName" placeholder="Apellido" id="lastName" required="required"}} '}}
-						<label for="isSubscribed">Estado: </label>
+						
+						<label>Estado: </label>
 						{{ '{{#if isSubscribed}}' }}
 							{{' {{view Ember.Checkbox  checkedBinding="isSubscribed" id="isSubscribed"}} '}}  Suscrito<br />
 						{{ '{{else}}' }}
@@ -544,6 +564,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
+			{{ flashSession.output() }}
 			<div class="accordion-heading">
 			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
 				Haga clic aqui para más información
@@ -686,10 +707,10 @@
 	<div class="row-fluid">
 		<div class="span6">
 			<form method="POST" action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data">
-				<input name="importFile" type="file"><br>
+				<input name="importFile" type="file"><br /><br />
 				<input type="hidden" name="idcontactlist" value={{datalist.idContactlist}}>
-				{{submit_button('class': "btn btn-blue", "Cargar")}}
 				<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default">Cancelar</a>
+				{{submit_button('class': "btn btn-blue", "Cargar")}}
 			</form>
 		</div>
 	</div>

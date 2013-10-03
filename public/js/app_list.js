@@ -98,12 +98,13 @@ App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 				this.transitionToRoute('lists.new');
 			}
 			else{
-				this.handleSavePromise(this.content.save(), 'lists', 'Se ha creado la lista exitosamente');
 				App.set('errormessage', '');
+				this.handleSavePromise(this.content.save(), 'lists', 'Se ha creado la lista exitosamente');
 			}
 		},
 
 		cancel: function(){
+			App.set('errormessage', '');
 			window.theDbaseController = this.get('controllers.dbase');
 			console.log(this.get('controllers.dbase'));
 			this.get('model').rollback();
@@ -120,13 +121,14 @@ App.ListsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, 
 				this.transitionToRoute("lists.edit");
 			}
 			else{
-				this.handleSavePromise(this.content.save(), 'lists', 'Se ha actualizado la lista!');
 				App.set('errormessage', '');
+				this.handleSavePromise(this.content.save(), 'lists', 'Se ha actualizado la lista!');
 			}
 		},
 		cancel: function(){
-			 this.get('model').rollback();
-			 this.transitionToRoute("lists");
+			App.set('errormessage', '');
+			this.get('model').rollback();
+			this.transitionToRoute("lists");
 		}
 	}
 });

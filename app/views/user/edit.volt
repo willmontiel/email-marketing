@@ -24,8 +24,14 @@
 			</div>
 		</div>
 	</div>
-	<br />
-	{{ flashSession.output() }}
+	<div class="row-fluid">
+		<div class="span8">
+			{{ flashSession.output() }}
+		</div>
+		<div class="span4 text-right">
+			<a href="{{url('user')}}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
+		</div>
+	</div>
 	<br />
 	<div class="row-fluid">
 		<div class="span3">
@@ -35,33 +41,34 @@
 						Editar un usuario
 					</div>
 				</div>
-				<div class="box-content padded">
+				<div class="box-content">
 					<form action = "{{url('user/edit/')}}{{user.idUser}}" method="post">
-						<label>*Nombre </label>
-						{{ UserForm.render('firstName') }}
+						<div class="padded">
+							<label>*Nombre </label>
+							{{ UserForm.render('firstName') }}
 
-						<label>*Apellido </label>
-						{{ UserForm.render('lastName') }}
+							<label>*Apellido </label>
+							{{ UserForm.render('lastName') }}
 
-						<label>*Dirección de correo electrónico </label>
-						{{ UserForm.render('email') }}
+							<label>*Dirección de correo electrónico </label>
+							{{ UserForm.render('email') }}
 
-						<label>*Nombre de usuario </label>
-						{{ UserForm.render('username') }}
+							<label>*Nombre de usuario </label>
+							{{ UserForm.render('username') }}
 
-						<label>*Contraseña </label>
-						{{ UserForm.render('passForEdit') }}
+							<label>*Contraseña </label>
+							{{ UserForm.render('passForEdit') }}
 
-						<label>*Repita la contraseña </label>
-						{{ UserForm.render('pass2ForEdit') }}	
+							<label>*Repita la contraseña </label>
+							{{ UserForm.render('pass2ForEdit') }}	
 
-						<label>*Funciones </label>
-						{{ UserForm.render('userrole') }}	
-						
-						<br />
-						
-						{{ submit_button("Editar", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
-						<a href="{{ url('user/index') }}" class="btn btn-default">Cancelar<a>
+							<label>*Funciones </label>
+							{{ UserForm.render('userrole') }}	
+						</div>
+						<div class="form-actions">
+							<a href="{{ url('user') }}" class="btn btn-default">Cancelar</a>
+							{{ submit_button("Grabar", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+						</div>
 					</form>
 				</div>
 			</div>

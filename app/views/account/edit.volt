@@ -54,7 +54,7 @@
 						{{ editFormAccount.render('subscriptionMode') }}
 					</div>
 					<div class="form-actions">
-						<button {{ url('account') }} class="btn btn-default">Cancelar</button>
+						<a href="{{ url('account') }}" class="btn btn-default">Cancelar</a>
 						{{ submit_button("Grabar", 'class' : "btn btn-blue", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
 					</div>
 				</form>
