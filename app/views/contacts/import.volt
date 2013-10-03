@@ -205,8 +205,8 @@
 				</div>
 			</div>
 		</div>
-		{{submit_button('class': "btn btn-default", "Enviar")}}
 		<a href="{{ url('contactlist/show/'~ idContactlist ~'#/contacts/import') }}" class="btn btn-default">Cancelar</a>
+		{{submit_button('class': "btn btn-blue", "Enviar")}}
 		</form>
 	</script>
 	

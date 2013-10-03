@@ -157,7 +157,7 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 				
 		save : function() {
 			if (this.get('name') == null) {
-				App.set('errormessage', 'El segmento debe tener un nombre, por favor verifica la infomación');
+				App.set('errormessage', 'El segmento debe tener un nombre, por favor verifique la infomación');
 			}
 			else {
 				if ( this.criteria.length < 1 ) {
@@ -263,7 +263,7 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 		
 		edit: function() {
 			if (this.get('name') == '') {
-				App.set('errormessage', 'El segmento debe tener un nombre, por favor verifica la infomación');
+				App.set('errormessage', 'El segmento debe tener un nombre, por favor verifique la infomación');
 			}
 			else {
 				if ( this.criteria.length < 1 ) {
@@ -284,8 +284,4 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 			this.transitionToRoute("segments");
 		}
 	}
-});
-
-App.SegmentsShowController = Ember.ObjectController.extend ({
-
 });

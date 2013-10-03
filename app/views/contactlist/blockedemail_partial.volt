@@ -1,9 +1,21 @@
 <script type="text/x-handlebars" data-template-name="blockedemails/index">
 	<div class="row-fluid">
 		<div class="span10">
-			<div class="padded">
-				Esta es la lista global de direcciones de correo electrónico bloqueados, ninguna dirección de correo
-				que esté listada abajo, esta recibiendo campañas de envío.
+			<div class="box">
+				<div class="box-section news with-icons">
+					<div class="avatar green">
+						<i class="icon-lightbulb icon-2x"></i>
+					</div>
+					<div class="news-content">
+						<div class="news-title">
+							Lista de direcciones de correo bloqueadas
+						</div>
+						<div class="news-text">
+							Esta es la lista global de direcciones de correo electrónico bloqueados, ninguna dirección de correo
+							que esté listada abajo, esta recibiendo campañas de envío.
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="span2 text-right">
@@ -45,10 +57,7 @@
 								</tr>
 							{{ '{{else}}' }}
 								<tr>
-									<td>No hay direcciones de correo bloqueadas</td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<td celspadding="4">No hay direcciones de correo bloqueadas</td>
 								</tr>
 							{{ '{{/each }}' }}
 						</tbody>
@@ -62,36 +71,49 @@
 	</div>
 </script>
 <script type="text/x-handlebars" data-template-name="blockedemails">
-	{{ '{{#if App.errormessage }}' }}
-		<div class="alert alert-message alert-error">
-	{{ '{{ App.errormessage }}' }}
-		</div>
-	{{ '{{/if}} '}}	
 	{{'{{outlet}}'}}
 </script>
 <script type="text/x-handlebars" data-template-name="blockedemails/block">
 	<div class="row-fluid">
-		<div class="padded">
-			<div class="span12">
-				<h4>Bloquear direcciones de correo</h4>
-				<p>
-					Aqui podrá bloquear direcciones de correo, Cuando bloquee una dirección de
-					correo, este se marcará como des-suscrito, y por consiguiente sera omitido de todas las listas y bases de datos de 
-					la cuenta al realizar una campaña de envío. 
-				</p>
-				<p>
-					cuando intente bloquear direcciones de correo, podrá configurar si desea que el sistema elimine los contactos
-					asociados a esa dirección por medio de una casilla de verificación,
-					si no se configura esa opción, por defecto se marcarán como des-suscritos
-					y en futuro podrá revertirlo.
-				</p>
-				<p>
-					Si la dirección de correo electrónico que ingrese no existe, se creará automáticamente como bloqueada
-					y luego podrá desbloquearla, e ingresara los datos necesarios para crear un contacto para vincularlo
-					a esta dirección de correo.
-				</p>
+		<div class="span12">
+			<div class="box">
+				<div class="box-section news with-icons">
+					<div class="avatar green">
+						<i class="icon-lightbulb icon-2x"></i>
+					</div>
+					<div class="news-content">
+						<div class="news-title">
+							Bloquear direcciones de correo
+						</div>
+						<div class="news-text">
+							<p>
+								Aqui podrá bloquear direcciones de correo, Cuando bloquee una dirección de
+								correo, este se marcará como des-suscrito, y por consiguiente sera omitido de todas las listas y bases de datos de 
+								la cuenta al realizar una campaña de envío. 
+							</p>
+							<p>
+								cuando intente bloquear direcciones de correo, podrá configurar si desea que el sistema elimine los contactos
+								asociados a esa dirección por medio de una casilla de verificación,
+								si no se configura esa opción, por defecto se marcarán como des-suscritos
+								y en futuro podrá revertirlo.
+							</p>
+							<p>
+								Si la dirección de correo electrónico que ingrese no existe, se creará automáticamente como bloqueada
+								y luego podrá desbloquearla, e ingresara los datos necesarios para crear un contacto para vincularlo
+								a esta dirección de correo.
+							</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
+	</div>
+	<div class="row-fluid">
+		{{ '{{#if App.errormessage }}' }}
+			<div class="alert alert-message alert-error">
+		{{ '{{ App.errormessage }}' }}
+			</div>
+		{{ '{{/if}} '}}	
 	</div>
 	<div class="row-fluid">
 		<div class="padded">
@@ -115,10 +137,12 @@
 
 								<label>*Escriba la razón por la cual esta bloqueando esta dirección de correo electrónico: </label>
 								{{ '{{view Ember.TextArea valueBinding="blockedReason" placeholder="Escribe la razón de bloqueo" required="required"}}' }}
+								
 								<p>Si estas seguro dale click al botón <strong>Bloquear</strong> para continuar.</p>
 								<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact" class="icheckbox_flat-aero hover"}}' }} Eliminar contactos asociados al email</p>
-								<button class="btn btn-danger" {{ '{{action block this }}' }}>Bloquear</button>
+								
 								<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+								<button class="btn btn-danger" {{ '{{action block this }}' }}>Bloquear</button>
 							</form>
 						</div>
 					</div>

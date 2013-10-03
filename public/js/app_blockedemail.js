@@ -55,8 +55,8 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandl
 			}
 			else {
 				if(filter.test(this.get('email'))) {
-					this.handleSavePromise(this.content.save(), 'blockedemails', 'Correo bloqueado exitosamente');
 					App.set('errormessage', '');
+					this.handleSavePromise(this.content.save(), 'blockedemails', 'Correo bloqueado exitosamente');
 				}
 				else {
 					App.set('errormessage', 'La dirección de correo electrónico ingresada es invalida, por favor verifica la información');
@@ -66,6 +66,7 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandl
 		},
 
 		cancel: function(){
+			App.set('errormessage', '');
 			this.get('model').rollback();
 			this.transitionToRoute('blockedemails');
 		}
@@ -75,6 +76,7 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandl
 App.BlockedemailsUnblockController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{	
 	actions: {
 		unblock: function() {
+			App.set('errormessage', '');
 			var block = this.get('model');
 			block.deleteRecord();
 			
@@ -82,7 +84,8 @@ App.BlockedemailsUnblockController = Ember.ObjectController.extend(Ember.SaveHan
 		},
 				
 		cancel: function(){
-			 this.transitionToRoute('blockedemails');
+			App.set('errormessage', '');
+			this.transitionToRoute('blockedemails');
 		}
 	}
 });

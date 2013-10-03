@@ -75,7 +75,6 @@
 			{{ '{{#if App.errormessage }}' }}
 				<div class="row-fluid">
 					<div class="alert alert-error">
-						<h4>Error!</h4>
 						{{ '{{ App.errormessage }}' }}
 					</div>
 				</div>
@@ -83,7 +82,6 @@
 			{{'{{#if errors.segmentname}}'}}
 				<div class="row-fluid">
 					<div class="alert alert-error">
-						<h4>Error!</h4>
 						{{'{{errors.segmentname}}'}}
 					</div>
 				</div>
@@ -174,7 +172,6 @@
 						<br />
 						{{'{{#if errors.segment}}'}}
 							<div class="alert alert-error">
-								<h4>Error! </h4>
 								{{'{{errors.segment}}'}}
 							</div>
 						{{'{{/if}}'}}
@@ -251,7 +248,6 @@
 			{{ '{{#if App.errormessage }}' }}
 				<div class="row-fluid">
 					<div class="alert alert-error">
-						<h4>Error!</h4>
 						{{ '{{ App.errormessage }}' }}
 					</div>
 				</div>
@@ -259,7 +255,6 @@
 			{{'{{#if errors.segmentname}}'}}
 				<div class="row-fluid">
 					<div class="alert alert-error">
-						<h4>Error!</h4>
 						{{'{{errors.segmentname}}'}}
 					</div>
 				</div>
@@ -291,7 +286,6 @@
 				<br /><br />
 				{{'{{#if errors.segment}}'}}
 					<div class="alert alert-error">
-						<h4>Error!</h4>
 						{{'{{errors.segment}}'}}
 					</div>
 				{{'{{/if}}'}}
@@ -324,18 +318,11 @@
 						{{ '{{/unless}}' }}
 					</div>
 				{{' {{/each}} '}}
-					<br />
-					{{ '{{#unless limitCriteria}}' }}
-						<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
-					{{ '{{/unless}}' }}
-				</div>
+				<br />
+				{{ '{{#unless limitCriteria}}' }}
+					<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
+				{{ '{{/unless}}' }}
 			</div>
-		
-			
-			
+		</div>
 	</div>
-</script>
-
-<script type="text/x-handlebars" data-template-name="segments/show">
-
 </script>
