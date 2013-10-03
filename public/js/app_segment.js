@@ -90,7 +90,7 @@ App.SegmentsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 
 App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	
-	criteria: Ember.A([{}]),		
+	criteria: Ember.A(),		
 	
 	needs: ['dbase'],
 	
@@ -111,6 +111,12 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 	loadDbases: function () {
 		this.get('controllers.dbase').set('content', this.store.find('dbase'));
 	},
+			
+	resetCriteria: function () {
+		if (this.get('content.isValid')) {
+			this.set('criteria', new Ember.A([{}]));
+		}
+	}.observes('content'),
 	
 	changeDbase: function () {
 		if (this.content.get('dbase')) {
@@ -178,7 +184,6 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 		
 		cancel: function(){
 			App.set('errormessage', '');
-			this.get('model').rollback();
 			this.transitionToRoute('segments');
 		}
 	}

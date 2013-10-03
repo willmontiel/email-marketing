@@ -119,9 +119,6 @@
 				</li>
 
 			</ul>
-			<div class="title">
-				<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="pull-right" title="Configuracion avanzada"><i class="icon-cog"></i></a>
-			</div>
 		</div>
 		</div>
 			{{'{{outlet}}'}}
@@ -133,6 +130,7 @@
 				{{'{{#linkTo "contacts.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/linkTo}}'}}
 				{{'{{#linkTo "contacts.newbatch" class="btn btn-default" disabledWhen="importBatchDisabled"}}'}}<i class="icon-align-justify"></i> Crear Varios Contactos{{'{{/linkTo}}'}}
 				{{ '{{#linkTo "contacts.import" class="btn btn-default" disabledWhen="importDisabled"}}'}}<i class="icon-file-alt"></i> Importar Contactos{{'{{/linkTo}}'}}			
+				<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="btn btn-default" title="Configuracion avanzada"><i class="icon-cog"></i></a>
 			</div>
 			<div class="clearfix"></div>
 
