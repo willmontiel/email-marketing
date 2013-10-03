@@ -1,7 +1,4 @@
 <?php
-use Phalcon\Forms\Form,
-    Phalcon\Forms\Element\Text,
-    Phalcon\Forms\Element\Select;
 
 class DbaseController extends ControllerBase
 {
@@ -15,12 +12,7 @@ class DbaseController extends ControllerBase
                 return $db;
             }
         }  
-		$this->dispatcher->forward(
-			array(
-				'controller' => 'dbase',
-				'action' => 'restricted'
-			)
-		);
+		$this->response->redirect('error');
 		return null;
 	}
 	
@@ -61,12 +53,10 @@ class DbaseController extends ControllerBase
 								2 => $name)
 			));
 			if ($nameExist) {
-				$this->flashSession->outputMessage('error', 'El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
+				$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrado, por favor verifique la información');
 				return $this->response->redirect('dbase/new');
 			}
 			else {
-				
-				$log->log('A punto de guardar ');
 				$db->idAccount = $idAccount;
 				$db->Ctotal = 0;
 				$db->Cactive = 0;
@@ -76,14 +66,8 @@ class DbaseController extends ControllerBase
 				$db->Cspam   = 0;
 
 				if ($editform->isValid() && $db->save()) {
-					$this->flash->success('Base de Datos Creada Exitosamente!');
-					$this->dispatcher->forward(
-						array(
-							'controller' => 'dbase',
-							'action' => 'show',
-							'params' => array($db->idDbase)
-						)
-					);
+					$this->flashSession->success('Base de Datos Creada Exitosamente!');
+					$this->response->redirect('dbase/show/'. $db->idDbase);
 				}
 				else {
 					foreach ($db->getMessages() as $msg) {
@@ -132,13 +116,13 @@ class DbaseController extends ControllerBase
 									3 => $db->idDbase)
 				));
 				if ($nameExist) {
-					$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
+					$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrado, por favor verifique la información');
 					return $this->response->redirect('dbase/edit/'. $id);
 				}
 				else {
 					if ($editform->isValid() && $db->save()) {
 						$this->flashSession->success('Base de Datos Actualizada Exitosamente!');
-						return $this->response->redirect('dbase/show/'. $id);
+						$this->response->redirect('dbase/show/'. $id);
 					}
 					else {
 						foreach ($db->getMessages() as $msg) {
@@ -168,11 +152,5 @@ class DbaseController extends ControllerBase
 				return $this->response->redirect('dbase');
 			}
 		}
-    }
-
-
-    public function restrictedAction()
-    {
-
     }
 }

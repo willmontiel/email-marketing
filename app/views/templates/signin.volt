@@ -36,7 +36,6 @@
 				{% endblock %}
 				<!-- Fin de contenido -->
 			</div>
-
 		</div>	
 		<!-- /content -->
     </body>

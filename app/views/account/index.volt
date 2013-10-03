@@ -7,7 +7,7 @@
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
-					<div class="avatar cyan">
+					<div class="avatar green">
 						<i class="icon-lightbulb icon-2x"></i>
 					</div>
 					<div class="news-content">

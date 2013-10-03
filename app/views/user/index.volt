@@ -24,10 +24,10 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span6">
+		<div class="span8">
 			{{ flashSession.output() }}
 		</div>
-		<div class="span6 text-right">
+		<div class="span4 text-right">
 			{% if allow == 0 %}
 				<button class="btn btn-default" disabled="disabled"><i class="icon-plus"></i> Crear usuario</button>
 			{% else %}

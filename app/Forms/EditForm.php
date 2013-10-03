@@ -1,8 +1,7 @@
 <?php
 use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Text,
-    Phalcon\Forms\Element\Select,
-    Phalcon\Forms\Element\Password;
+	Phalcon\Forms\Element\TextArea;
 
 class EditForm extends Form
 {
@@ -14,12 +13,12 @@ class EditForm extends Form
 		'required' => 'required',
 		'autofocus' => "autofocus"
         )));
-        $this->add(new Text('description', array(
+        $this->add(new TextArea('description', array(
         'maxlength' => 150,
 		'type' => 'text',
 		'required' => 'required'
         )));
-        $this->add(new Text('Cdescription', array(
+        $this->add(new TextArea('Cdescription', array(
         'maxlength' => 150,
 		'type' => 'text',
 		'required' => 'required'

@@ -27,19 +27,19 @@ class User extends Modelbase
 		$this->validate(new PresenceOf(
 		   array(
 				"field"   => "email",
-				"message" => "Por favor ingresa tu dirección de correo electronico"
+				"message" => "No ha ingresado una dirección de correo electronico, por favor verifique la información"
 		)));
 
 		$this->validate(new Email(
 			   array(
 					"field" => "email",
-					"message" => "La direccion de correo electronico no es valida por favor verifica la información"
+					"message" => "La direccion de correo electronico no es valida por favor verifique la información"
 		)));
 		
 		$this->validate(new Uniqueness(
 				array(
                 "field"   => "email",
-                "message" => "Parece que esta dirección de correo electronico ya se encuentra registrada"
+                "message" => "La dirección de correo electrónico ya se enceuntra registrada, por favor verifique la información"
         )));
 
 		$this->validate(new PresenceOf(
@@ -51,13 +51,13 @@ class User extends Modelbase
 		$this->validate(new PresenceOf(
 			   array(
 					"field" => "lastName",
-					"message" => "El apellido esta vacío"
+					"message" => "El campo apellido esta vacío"
 		)));
 
 		$this->validate(new PresenceOf(
 			   array(
 					"field" => "password",
-					"message" => "Por favor ingresa una contraseña, (minimo 8 caracteres)"
+					"message" => "No ha ingresado una contraseña, (minimo 8 caracteres)"
 		)));
 
 		$this->validate(new StringLength(
@@ -70,7 +70,7 @@ class User extends Modelbase
 		$this->validate(new PresenceOf(
 			   array(
 					"field" => "username",
-					"message" => "Por favor ingresa el nombre de usuario, se necesitará para iniciar sesión"
+					"message" => "Por favor ingrese el nombre de usuario, se necesitará para iniciar sesión"
 		)));
 
 		$this->validate(new Regex(

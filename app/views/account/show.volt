@@ -3,12 +3,11 @@
 {%block sectionsubtitle %}Administre la información de los usuarios de la cuenta{% endblock %}
 
 {% block content %}
-{{ flashSession.output() }}
 	<div class="row-fluid">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
-					<div class="avatar blue">
+					<div class="avatar green">
 						<i class="icon-lightbulb icon-2x"></i>
 					</div>
 					<div class="news-content">
@@ -24,9 +23,16 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid text-right">
-		<a href="{{url('account/newuser/')}}{{idAccount}}" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
-		<a href="{{ url('account/index') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
+	<div class="row-fluid">
+		<div class="span8">
+			{{ flashSession.output() }}
+		</div>
+		<div class="span4">	
+			<div class="row-fluid text-right">
+				<a href="{{url('account/newuser/')}}{{idAccount}}" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
+				<a href="{{ url('account/index') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
+			</div>
+		</div>
 	</div>
 	<br />
 	<div class="row-fluid">

@@ -84,7 +84,7 @@ class AccountController extends ControllerBase
 						}
 						
 						$this->db->commit();
-						$this->flashSession->success('Se ha creado la cuenta exitosamente');
+						$this->flashSession->notice('Se ha creado la cuenta exitosamente');
 						return $this->response->redirect("account/index");
 					}
 							
@@ -163,7 +163,7 @@ class AccountController extends ControllerBase
 					}
 					else {
 						$this->db->commit();
-						$this->flashSession->success('Se ha editado la cuenta exitosamente');
+						$this->flashSession->notice('Se ha editado la cuenta exitosamente');
 						return $this->response->redirect("account");
 					}
 
@@ -247,7 +247,7 @@ class AccountController extends ControllerBase
 
 						if ($form->isValid() && $user->save()) {
 							$this->db->commit();
-							$this->flashSession->error("Se ha creado el usuario exitosamente en la cuenta ". $account->companyName);
+							$this->flashSession->notice("Se ha creado el usuario exitosamente en la cuenta ". $account->companyName);
 							return $this->response->redirect("account/show/".$account->idAccount);
 						}
 
@@ -312,7 +312,7 @@ class AccountController extends ControllerBase
 						}
 						else {
 							$this->db->commit();
-							$this->flashSession->success('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
+							$this->flashSession->notice('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
 							return $this->response->redirect("account/show/".$userExist->idAccount);
 						}
 					}
@@ -328,7 +328,7 @@ class AccountController extends ControllerBase
 						}
 						else {
 							$this->db->commit();
-							$this->flashSession->success('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
+							$this->flashSession->notice('Se ha editado exitosamente el usuario ' .$userExist->username. ' de la cuenta ' .$userExist->idAccount. '');
 							return $this->response->redirect("account/show/".$userExist->idAccount);
 						}
 					}
@@ -348,7 +348,7 @@ class AccountController extends ControllerBase
 		$idUser = $this->session->get('userid');
 		
 		if($id == $idUser){
-			$this->flashSession->success("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
+			$this->flashSession->error("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
 			return $this->response->redirect("account/index");
 		}
 		else {
@@ -368,7 +368,7 @@ class AccountController extends ControllerBase
 					}
 					return $this->response->redirect("account/show/".$user->idAccount);
 				}
-				$this->flashSession->success('Se ha eliminado el usuario ' .$user->username. ' exitosamente');
+				$this->flashSession->warning('Se ha eliminado el usuario ' .$user->username. ' exitosamente');
 				return $this->response->redirect("account/show/".$user->idAccount);
 			}	
 		}

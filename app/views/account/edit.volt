@@ -3,39 +3,62 @@
 {%block sectionsubtitle %}Edite la configuración de la cuenta{% endblock %}
 
 {% block content %} 
-{{ flashSession.output() }}
-<div class="container-fluid padded">
-	<div class="box span3">
-		<div class="box-header">
-			<div class="title">
-				Editar datos de la cuenta
+	<div class="row-fluid">
+		<div class="box">
+			<div class="box-content">
+				<div class="box-section news with-icons">
+					<div class="avatar green">
+						<i class="icon-lightbulb icon-2x"></i>
+					</div>
+					<div class="news-content">
+						<div class="news-title">
+							Edite información de las cuentas
+						</div>
+						<div class="news-text">
+							Edite datos de cuentas o reconfigure.
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="box-content padded">
-			<form action = "{{url('account/edit/')}}{{allAccount.idAccount}}" id="registerAccount" method="post">
-				<label>*Nombre de la cuenta: </label>
-				{{ editFormAccount.render('companyName') }}
-			
-				<label>*Espacio disponible en disco(Mb):</label>
-				{{ editFormAccount.render('fileSpace') }}
+	</div>
+	<div class="row-fluid">
+		{{ flashSession.output() }}
+	</div>
+	<div class="row-fluid padded">
+		<div class="box span3">
+			<div class="box-header">
+				<div class="title">
+					Editar datos de la cuenta
+				</div>
+			</div>
+			<div class="box-content">
+				<form action = "{{url('account/edit/')}}{{allAccount.idAccount}}" id="registerAccount" method="post">
+					<div class="padded">
+						<label>*Nombre de la cuenta: </label>
+						{{ editFormAccount.render('companyName') }}
 
-				<label>*Limite de contactos:</label>
-				{{ editFormAccount.render('contactLimit') }}
-			
-				<label>*Limite de mensajes:</label>
-				{{ editFormAccount.render('messageLimit') }}
+						<label>*Espacio disponible en disco(Mb):</label>
+						{{ editFormAccount.render('fileSpace') }}
 
-				<label>*Modo de uso:</label>
-				{{ editFormAccount.render('accountingMode') }}
-				
-				<label>*Modo de Pago: </label>
-				{{ editFormAccount.render('subscriptionMode') }}
-				
-				<br />
-				{{ submit_button("Editar", 'class' : "btn btn-success", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
-				<button {{ url('account/index') }} class="btn btn-inverse">Regresar</button>
-			</form>
+						<label>*Limite de contactos:</label>
+						{{ editFormAccount.render('contactLimit') }}
+
+						<label>*Limite de mensajes:</label>
+						{{ editFormAccount.render('messageLimit') }}
+
+						<label>*Modo de uso:</label>
+						{{ editFormAccount.render('accountingMode') }}
+
+						<label>*Modo de Pago: </label>
+						{{ editFormAccount.render('subscriptionMode') }}
+					</div>
+					<div class="form-actions">
+						<button {{ url('account') }} class="btn btn-default">Cancelar</button>
+						{{ submit_button("Grabar", 'class' : "btn btn-blue", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
 {% endblock %}

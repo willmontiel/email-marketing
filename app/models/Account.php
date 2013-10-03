@@ -24,34 +24,34 @@ class Account extends Modelbase
 		$this->validate(new PresenceOf(
             array(
                 "field"   => "companyName",
-				"message" => "Debes ingresar un nombre para la cuenta"
+				"message" => "Debe ingresar un nombre para la cuenta"
             )
         ));
 		
 		$this->validate(new Uniqueness(
 				array(
                 "field"   => "companyName",
-                "message" => "Parece que el nombre de la cuenta ya existe, por favor verifica la información"
+                "message" => "El nombre de la cuenta ya existe, por favor verifique la información"
         )));
 		
         $this->validate(new PresenceOf(
             array(
                 "field"   => "fileSpace",
-                "message" => "Debes indicar la cuota de espacio para archivos"
+                "message" => "Debe indicar la cuota de espacio para archivos"
             )
         ));
         
         $this->validate(new PresenceOf(
             array(
                 "field"   => "messageLimit",
-                "message" => "Debes indicar el limite de mensajes"
+                "message" => "Debe indicar el limite de mensajes"
             )
         ));
 		
 		$this->validate(new PresenceOf(
             array(
                 "field"   => "contactLimit",
-                "message" => "Debes indicar la cantidad total de mensajes"
+                "message" => "Debe indicar la cantidad total de mensajes"
             )
         ));
 

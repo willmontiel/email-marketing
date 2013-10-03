@@ -244,7 +244,7 @@ class Security extends Plugin
 					$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
 				}
 				else{
-					$this->response->redirect('error/index');
+					$this->response->redirect('error');
 				}
 				return false;
 			}
@@ -264,7 +264,7 @@ class Security extends Plugin
 							$this->setJsonResponse('Denegado', 404, 'Acción no permitida');
 						}
 						else{
-							$this->response->redirect('error/index');
+							$this->response->redirect('error');
 						}
 						return false;
 					}

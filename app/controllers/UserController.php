@@ -52,7 +52,7 @@ class UserController extends ControllerBase
 				
 					if ($form->isValid() && $user->save()) {
 						$this->db->commit();
-						$this->flashSession->success("Se ha creado el usuario exitosamente");
+						$this->flashSession->notice("Se ha creado el usuario exitosamente");
 						return $this->response->redirect("user/index");
 					}
 					
@@ -119,7 +119,7 @@ class UserController extends ControllerBase
 							}
 							else {
 								$this->db->commit();
-								$this->flashSession->success('Se ha actualizado el usuario exitosamente');
+								$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
 								return $this->response->redirect("user/index");
 							}
 						}
@@ -138,7 +138,7 @@ class UserController extends ControllerBase
 					}
 					else {
 						$this->db->commit();
-						$this->flashSession->success('Se ha actualizado el usuario exitosamente');
+						$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
 						return $this->response->redirect("user/index");
 					}
 				}
@@ -154,7 +154,7 @@ class UserController extends ControllerBase
 		$idUser = $this->session->get('userid');
 		
 		if($id == $idUser){
-			$this->flashSession->success("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
+			$this->flashSession->error("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
 			return $this->response->redirect("user/index");
 		}
 		else {
@@ -171,7 +171,7 @@ class UserController extends ControllerBase
 					}
 					return $this->response->redirect("user/index");
 				}
-				$this->flashSession->success("El usuario " .$user->username. " ha sido eliminado exitosamente");
+				$this->flashSession->warning("El usuario " .$user->username. " ha sido eliminado exitosamente");
 				return $this->response->redirect("user/index");
 			}
 			else{
