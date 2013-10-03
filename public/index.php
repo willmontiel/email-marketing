@@ -244,8 +244,8 @@ try {
 	/*
 	 * Flash Object, para mantener mensajes flash entre una página y otra
 	 */
-    $di->set('flash', function(){
-        $flash = new \Phalcon\Flash\Direct(array(
+    $di->set('flashSession', function(){
+        $flash = new \Phalcon\Flash\Session(array(
             'error' => 'alert alert-error',
             'success' => 'alert alert-success',
             'notice' => 'alert alert-info',

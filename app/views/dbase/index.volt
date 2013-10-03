@@ -2,9 +2,8 @@
 {% block sectiontitle %}<i class="icon-book icon-2x"></i>Bases de Datos{% endblock %}
 {%block sectionsubtitle %}Configuración avanzada{% endblock %}
 {% block content %}
-<!-- aqui inicia mi contenido 
-<div class="alert  alert-error"><h4>{{ flashSession.output() }}</h4></div>
--->
+<!-- aqui inicia mi contenido -->
+{{ flashSession.output() }}
 <div class="row-fluid">
 	<div class="text-right"> 
 		<a href="{{ url('dbase/new') }}" class="btn btn-default">

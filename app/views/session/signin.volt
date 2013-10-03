@@ -1,7 +1,6 @@
 {% extends "templates/signin.volt" %}
 {% block content %}
-<div class="container-fluid">
-	<br /><br />
+	<br />
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="text-center">
@@ -11,10 +10,9 @@
 			</div>
 		</div>
 	</div>
-	<br />
-	{{ flashSession.output() }}
 	<div class="row-fluid">
 		<div class="padded span4 offset4">
+			{{ flashSession.output() }}
 			<div class="login box">
 				<div class="box-header">
 					<span class="title">Iniciar sesión</span>
@@ -45,5 +43,4 @@
 			</div>
 		</div>
 	</div>
-</div>
 {% endblock %}

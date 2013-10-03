@@ -54,8 +54,6 @@ class DbaseController extends ControllerBase
             $editform->bind($this->request->getPost(), $db);
 			$idAccount = $this->user->account->idAccount;
 			$name = $editform->getValue('name');
-			
-			$log = $this->logger;
 		
 			$nameExist = Dbase::findFirst(array(
 				"conditions" => "idAccount = ?1 AND name = ?2",
@@ -63,8 +61,7 @@ class DbaseController extends ControllerBase
 								2 => $name)
 			));
 			if ($nameExist) {
-				$log->log('si hay coincidencias ');
-				$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
+				$this->flashSession->outputMessage('error', 'El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
 				return $this->response->redirect('dbase/new');
 			}
 			else {
@@ -136,7 +133,7 @@ class DbaseController extends ControllerBase
 				));
 				if ($nameExist) {
 					$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
-					return $this->response->redirect('dbase/edit/' .$db);
+					return $this->response->redirect('dbase/edit/'. $id);
 				}
 				else {
 					if ($editform->isValid() && $db->save()) {
