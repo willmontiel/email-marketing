@@ -127,15 +127,14 @@
 	</div>
 </script>
 <script type="text/x-handlebars" data-template-name="contacts">
-	{{ '{{#if App.errormessage }}' }}
-		<div class="alert alert-message alert-error">
-			<h4>Error!</h4>
-			{{ '{{ App.errormessage }}' }}
-		</div>
-	{{ '{{/if}} '}}
 	{{'{{outlet}}'}}
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/edit">	
+	{{ '{{#if App.errormessage }}' }}
+		<div class="alert alert-message alert-error">
+			{{ '{{ App.errormessage }}' }}
+		</div>
+	{{ '{{/if}} '}}
 	<div class="row-fluid">
 		<div class="span3">
 			<div class="box">
@@ -148,7 +147,6 @@
 					<form>
 						{{ '{{#if errors.errormsg}}' }}
 							<div class="alert alert-error">
-								<button type="button" class="close" data-dismiss="alert">×</button>
 								{{ '{{errors.errormsg}}' }}
 							</div>
 						{{ '{{/if}}' }}
@@ -202,10 +200,14 @@
 					<p>¿Esta seguro que desea eliminar el Contacto <strong>{{'{{email}}'}}</strong>?</p>
 					{{ '{{#if errors.errormsg}}' }}
 						<div class="alert alert-error">
-							<h4>Error!</h4>
 							{{ '{{errors.errormsg}}' }}
 						</div>
 					{{ '{{/if}}' }}
+					{{ '{{#if App.errormessage }}' }}
+						<div class="alert alert-message alert-error">
+							{{ '{{ App.errormessage }}' }}
+						</div>
+					{{ '{{/if}} '}}	
 					<button {{'{{action delete this}}'}} class="btn btn-danger">Eliminar</button>
 					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
 				</div>

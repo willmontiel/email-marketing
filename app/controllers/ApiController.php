@@ -1012,6 +1012,7 @@ class ApiController extends ControllerBase
 		
 		$wrapper = new SegmentWrapper();
 		$wrapper->setAccount($this->user->account);
+		$wrapper->setPager($page);
 		$segment = $wrapper->findSegments();
 
 		return $this->setJsonResponse($segment, 201, 'success');
@@ -1190,5 +1191,3 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 	}
 }
-
-	
