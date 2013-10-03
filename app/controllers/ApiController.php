@@ -79,7 +79,7 @@ class ApiController extends ControllerBase
 		
 		$phObject->minValue = $jsonObject->minValue;
 		$phObject->maxValue = $jsonObject->maxValue;
-		$phObject->maxLength = $jsonObject->maxVength;
+		$phObject->maxLength = $jsonObject->maxLength;
 	}
 
 	/**
@@ -130,11 +130,11 @@ class ApiController extends ControllerBase
 		$this->errortxt = array();
 		$failed = false;
 		if (!isset($contents->name)) {
-			$this->errortxt[] = '"name" requerido';
+			$this->errortxt[] = '"Nombre" requerido';
 			$failed = true;
 		}
 		if (!isset($contents->type)) {
-			$this->errortxt[] = '"type" requerido';
+			$this->errortxt[] = '"Tipo" requerido';
 			$failed = true;
 		}
 		if (!isset($contents->required)) {

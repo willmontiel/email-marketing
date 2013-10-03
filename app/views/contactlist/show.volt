@@ -119,6 +119,9 @@
 				</li>
 
 			</ul>
+			<div class="title">
+				<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="pull-right" title="Configuracion avanzada"><i class="icon-cog"></i></a>
+			</div>
 		</div>
 		</div>
 			{{'{{outlet}}'}}
@@ -191,14 +194,8 @@
 							{%for field in fields%}
 								<label for="campo{{field.idCustomField }}">{{field.name}}:</label>
 								{{ember_customfield(field)}}
-								{% if (field.type == "Text" and field.maxLength != "") %}
-									Maximo {{field.maxLength}} caracteres
-								{% elseif field.type == "Numerical" and field.minValue != "" and field.maxValue != 0 %}
-									El valor debe estar entre {{field.minValue}} y {{field.maxValue}} numeros
-								{%endif%}
 							{%endfor%}
 							<!--  Fin de campos personalizados -->
-							<br>
 						</div>
 						<div class="form-actions">
 							<button  data-loading-text="saving..." {{'{{bindAttr class=":btn :btn-blue isSaving:loading"}}'}} {{'{{bindAttr disabled="isSaving"}}'}} {{'{{action save this}}'}}>Guardar</button>

@@ -93,3 +93,7 @@ Ember.AclMixin = Ember.Mixin.create({
 		}
 	}.property()
 });
+
+Ember.TextField.reopen({
+	attributeBindings: ["required"]	
+});

@@ -232,9 +232,9 @@ class ContactWrapper extends BaseWrapper
 
 					$this->associateContactToList($list, $existContact);
 					
-					if($saveCounters)
-						
+					if($saveCounters) {						
 						$this->counter->saveCounters();
+					}
 
 					return $existContact;
 				}

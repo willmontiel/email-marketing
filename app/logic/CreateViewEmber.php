@@ -8,7 +8,7 @@ class CreateViewEmber
 		switch ($field->type) {
 			case "Text":
 			case "Numerical":
-				$valor = "{{view Ember.TextField valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}'";
+				$valor = "{{view Ember.TextField valueBinding='{$fieldname}'  id='{$fieldname}'";
 				break;
 			case "TextArea":
 				$valor = "{{view Ember.TextArea valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}'";
@@ -26,9 +26,9 @@ class CreateViewEmber
 		}
 		
 		if($field->minValue && $field->maxValue) {
-			$valor.= " pattern='[0-9]{{$field->minValue},{$field->maxValue}}'";
+			$valor.= " placeholder='El valor debe estar entre {$field->minValue} y {$field->maxValue}' pattern='[0-9]{{$field->minValue},{$field->maxValue}}'";
 		} elseif ($field->maxLength) {
-			$valor.= " maxlength='{$field->maxLength}'";
+			$valor.= " placeholder='Maximo {$field->maxLength} caracteres' maxlength='{$field->maxLength}'";
 		}
 		
 		if ($field->required == "Si") {
