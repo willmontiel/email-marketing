@@ -332,87 +332,91 @@ class SegmentWrapper extends BaseWrapper
 		$multTables = ($segment->criterion == 'all')?TRUE:FALSE;
 		$tablenumber = 1;
 		
-		foreach ($allcriterias as $criteria) {
-			switch ($criteria->type) {
-				case 'custom' :
-					if($multTables) {
-						$join.= "JOIN fieldinstance f$tablenumber ON (c.idContact = f$tablenumber.idContact) ";
-						$value = "( f$tablenumber.idCustomField = $criteria->idCustomField AND f$tablenumber.textValue ";
-						$tablenumber++;
-					}
-					else {
-						if (!$alreadyTable) {
-							$join.= "JOIN fieldinstance f ON (c.idContact = f.idContact) ";
-							$alreadyTable = TRUE;
+		if($allcriterias){
+			
+			foreach ($allcriterias as $criteria) {
+				switch ($criteria->type) {
+					case 'custom' :
+						if($multTables) {
+							$join.= "JOIN fieldinstance f$tablenumber ON (c.idContact = f$tablenumber.idContact) ";
+							$value = "( f$tablenumber.idCustomField = $criteria->idCustomField AND f$tablenumber.textValue ";
+							$tablenumber++;
 						}
-						$value = "( f.idCustomField = $criteria->idCustomField AND f.textValue ";
-					}
-					break;
-				case 'contact' :
-					$value = "( c.$criteria->fieldName ";
-					break;
-				case 'email' :
-					$join.="JOIN email e ON (c.idEmail = e.idEmail) ";
-					$value = "( e.$criteria->fieldName ";
-					break;
-				case 'domain' :
-					$join.="JOIN email em ON (c.idEmail = em.idEmail) JOIN domain d ON (em.idDomain = d.idDomain) ";
-					$value = "( d.name ";
-					break;
-			}
-			
-			switch ($criteria->relation) {
-				case 'begins' :
-					$relation = "LIKE '$criteria->value%' )";
-					break;
-				case 'ends' :
-					$relation = "LIKE '%$criteria->value' )";
-					break;
-				case 'content' :
-					$relation = "LIKE '%$criteria->value%' )";
-					break;
-				case '!content' :
-					$relation = "NOT LIKE '%$criteria->value%' )";
-					break;
-				case 'greater' :
-					$relation = "> ". $criteria->value . " )";
-					break;
-				case 'less' :
-					$relation = "< ". $criteria->value . " )";
-					break;
-				case 'equals' :
-					$relation = "= '$criteria->value' )";
-					break;
-			}
-			
-			if($firstCondition) {
-				$conditions.= $value . $relation;
-				$firstCondition = FALSE;
-			} 
-			else {
-				if($segment->criterion == 'any') {
-					$conditions.= " OR " . $value . $relation;
+						else {
+							if (!$alreadyTable) {
+								$join.= "JOIN fieldinstance f ON (c.idContact = f.idContact) ";
+								$alreadyTable = TRUE;
+							}
+							$value = "( f.idCustomField = $criteria->idCustomField AND f.textValue ";
+						}
+						break;
+					case 'contact' :
+						$value = "( c.$criteria->fieldName ";
+						break;
+					case 'email' :
+						$join.="JOIN email e ON (c.idEmail = e.idEmail) ";
+						$value = "( e.$criteria->fieldName ";
+						break;
+					case 'domain' :
+						$join.="JOIN email em ON (c.idEmail = em.idEmail) JOIN domain d ON (em.idDomain = d.idDomain) ";
+						$value = "( d.name ";
+						break;
+				}
+
+				switch ($criteria->relation) {
+					case 'begins' :
+						$relation = "LIKE '$criteria->value%' )";
+						break;
+					case 'ends' :
+						$relation = "LIKE '%$criteria->value' )";
+						break;
+					case 'content' :
+						$relation = "LIKE '%$criteria->value%' )";
+						break;
+					case '!content' :
+						$relation = "NOT LIKE '%$criteria->value%' )";
+						break;
+					case 'greater' :
+						$relation = "> ". $criteria->value . " )";
+						break;
+					case 'less' :
+						$relation = "< ". $criteria->value . " )";
+						break;
+					case 'equals' :
+						$relation = "= '$criteria->value' )";
+						break;
+				}
+
+				if($firstCondition) {
+					$conditions.= $value . $relation;
+					$firstCondition = FALSE;
 				} 
 				else {
-					$conditions.= " AND " . $value . $relation;
+					if($segment->criterion == 'any') {
+						$conditions.= " OR " . $value . $relation;
+					} 
+					else {
+						$conditions.= " AND " . $value . $relation;
+					}
 				}
 			}
+
+			$SQL = "INSERT INTO Sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND ( " . $conditions . " )";
+			Phalcon\DI::getDefault()->get('logger')->log($SQL);
+			$db = Phalcon\DI::getDefault()->get('db');
+
+			$db->begin();
+
+			$result = $db->execute($SQL);
+
+			if(!$result) {
+				$db->rollback();
+				throw new \InvalidArgumentException('Error al crear la asociacion del segmento y los contactos');
+			}
+
+			$db->commit();
+		
 		}
-		
-		$SQL = "INSERT INTO Sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND ( " . $conditions . " )";
-		Phalcon\DI::getDefault()->get('logger')->log($SQL);
-		$db = Phalcon\DI::getDefault()->get('db');
-		
-		$db->begin();
-		
-		$result = $db->execute($SQL);
-		
-		if(!$result) {
-			$db->rollback();
-			throw new \InvalidArgumentException('Error al crear la asociacion del segmento y los contactos');
-		}
-		
-		$db->commit();
 	}
 	
 	protected function deleteSxC(Segment $segment)

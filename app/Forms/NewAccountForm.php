@@ -71,12 +71,12 @@ class NewAccountForm extends Form
         )));
 		
         $this->add(new Select("accountingMode", array(
-            '1' => 'Por Contacto',
-            '2' => 'Envío',
+            'Contacto' => 'Por Contacto',
+            'Envio' => 'Envío',
         )));
         $this->add(new Select("subscriptionMode", array(
-            '1' => 'Prepago',
-            '2' => 'Pospago',
+            'Prepago' => 'Prepago',
+            'Pospago' => 'Pospago',
         )));
     }
 }

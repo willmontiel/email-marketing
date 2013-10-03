@@ -68,12 +68,11 @@ class ImportContactWrapper extends BaseWrapper
 		$dbase->updateCountersInDbase();
 		$list->updateCountersInContactlist();
 		
-		$swrapper = new SegmentWrapper;
-		
-		$swrapper->contactsImported($dbase->idDbase);
-		
 		$db->execute($deletetable);
 		
+		$swrapper = new SegmentWrapper;
+		
+		$swrapper->contactsImported($dbase->idDbase);		
 	}
 	
 	protected function createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $idDbase)
