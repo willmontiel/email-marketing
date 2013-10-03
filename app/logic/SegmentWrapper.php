@@ -10,6 +10,11 @@ class SegmentWrapper extends BaseWrapper
 	 */
 	public function createSegment($contents, Account $account)
 	{
+		if(!isset($contents->name) || trim($contents->name) == '' || $contents->name == null) {
+			$this->addFieldError('segmentname', 'El segmento debe tener nombre');
+			throw new \InvalidArgumentException('El segmento debe tener nombre');
+		}
+		
 		$dbaseExist = Dbase::findFirst(array(
 			"conditions" => "idDbase = ?1 and idAccount = ?2",
 			"bind" => array(1 => $contents->dbase,
@@ -53,6 +58,11 @@ class SegmentWrapper extends BaseWrapper
 		$c = array();
 		
 		foreach ($typeFields as $typeField) {
+			
+			if(!isset($typeField["value"]) || trim($typeField["value"]) == '' || $typeField["value"] == null) {
+				$this->addFieldError('segment', 'La condicion debe tener un valor de comparacion');
+				throw new \InvalidArgumentException('La condicion debe tener un valor de comparacion');
+			}
 			
 			$criteria = new Criteria();
 
@@ -99,6 +109,11 @@ class SegmentWrapper extends BaseWrapper
 	 */
 	public function updateSegment($contents, $idSegment,  Account $account)
 	{
+		if(!isset($contents->name) || trim($contents->name) == '' || $contents->name == null) {
+			$this->addFieldError('segmentname', 'El segmento debe tener nombre');
+			throw new \InvalidArgumentException('El segmento debe tener nombre');
+		}
+		
 		$dbase = Dbase::findFirst(array(
 			"conditions" => "idDbase = ?1 AND idAccount = ?2",
 			"bind" => array(1 => $contents->dbase,

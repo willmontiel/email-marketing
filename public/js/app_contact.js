@@ -96,6 +96,7 @@ App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 				this.content.set('isActive', true);
 				this.content.set('isSubscribed', true);
 				App.set('errormessage', '');
+				App.set('segment', '');
 				this.handleSavePromise(this.content.save(), 'contacts', 'El contacto ha sido creado con exito!');
 			}
 			else {

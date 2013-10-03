@@ -119,7 +119,13 @@ App.FieldsAddController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				self.get('values').split('\n')
 				);
 			}
-			this.handleSavePromise(this.content.save(), 'fields.index', 'Se ha creado el campo personalizado');
+			if (this.get('name') == "") {
+				App.set('errormessage', 'El campo personalizado debe tener un nombre');
+			}
+			else {
+				console.log("paso");
+				this.handleSavePromise(this.content.save(), 'fields.index', 'Se ha creado el campo personalizado');
+			}
 		},
 				
 		cancel: function(){

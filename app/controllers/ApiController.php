@@ -129,7 +129,7 @@ class ApiController extends ControllerBase
 	{
 		$this->errortxt = array();
 		$failed = false;
-		if (!isset($contents->name)) {
+		if (!isset($contents->name) || trim($contents->name) == '' || $contents->name == null) {
 			$this->errortxt[] = '"Nombre" requerido';
 			$failed = true;
 		}
