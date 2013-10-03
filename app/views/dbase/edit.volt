@@ -6,6 +6,7 @@
 {% block content %}
 {{ content() }}
 	<div class="row-fluid">
+		{{ flashSession.output() }}
 		<div class="span3">
 			<div class="box">
 				<div class="box-header">
@@ -24,10 +25,11 @@
 						<label for="Cdescription">*Descripcion de los Contactos</label>
 						{{editform.render("Cdescription")}}
 						<br />	
-						{{submit_button("Guardar", 'class' : "btn btn-default", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
 						<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default">Cancelar</a>
+						{{submit_button("Guardar", 'class' : "btn btn-blue", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
 					</form>
 				</div>
 			</div>
 		</div>
+	</div>
 {% endblock %}

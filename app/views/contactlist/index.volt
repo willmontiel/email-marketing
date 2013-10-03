@@ -134,7 +134,7 @@
 		<script type="text/x-handlebars" data-template-name="lists">
 				{{ '{{#if App.errormessage }}' }}
 					<div class="alert alert-message alert-error">
-				{{ '{{ App.errormessage }}' }}
+					{{ '{{ App.errormessage }}' }}
 					</div>
 				{{ '{{/if}} '}}	
 				{{ '{{outlet}}' }}

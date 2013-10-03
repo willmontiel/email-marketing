@@ -44,7 +44,7 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandl
 	},
 	actions: {
 		block: function (){
-			var filter=/^[A-Za-z][A-Za-z0-9_]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/;
+			var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
 			if(this.get('email') == null) {
 				App.set('errormessage', 'El campo email esta vacío, por favor verifica la información');
 				this.transitionToRoute('blockedemails.block');

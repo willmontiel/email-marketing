@@ -230,9 +230,15 @@ App.ContactController = Ember.ObjectController.extend();
 App.ContactsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	actions: {
 		edit: function() {
-			this.handleSavePromise(this.content.save(), 'contacts', 'Se ha editado el campo existosamente');
+			var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+			if (filter.test(this.get('email'))) {
+				App.set('errormessage', '');
+				this.handleSavePromise(this.content.save(), 'contacts', 'Se ha editado el campo existosamente');
+			}
+			App.set('errormessage', 'La dirección de correo electrónico ingresada no es válida, por favor verifique los datos');
 		},
 		cancel: function(){
+			App.set('errormessage', '');
 			this.get('model').rollback();
 			this.transitionToRoute('contacts');
 		}

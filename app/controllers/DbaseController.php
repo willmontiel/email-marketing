@@ -52,18 +52,25 @@ class DbaseController extends ControllerBase
 
         if ($this->request->isPost()) {   
             $editform->bind($this->request->getPost(), $db);
-			
+			$idAccount = $this->user->account->idAccount;
 			$name = $editform->getValue('name');
-			$otherbd = Dbase::find(array(
-				"conditions" => "name = ?1",
-				"bind" => array(1 => $name)
-			));
 			
-			if ($otherbd->idAccount == $this->user->account->idAccount) {
+			$log = $this->logger;
+		
+			$nameExist = Dbase::findFirst(array(
+				"conditions" => "idAccount = ?1 AND name = ?2",
+				"bind" => array(1 => $idAccount,
+								2 => $name)
+			));
+			if ($nameExist) {
+				$log->log('si hay coincidencias ');
 				$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
 				return $this->response->redirect('dbase/new');
 			}
 			else {
+				
+				$log->log('A punto de guardar ');
+				$db->idAccount = $idAccount;
 				$db->Ctotal = 0;
 				$db->Cactive = 0;
 				$db->Cinactive = 0;
@@ -86,6 +93,7 @@ class DbaseController extends ControllerBase
 						$this->flashSession->error($msg);
 					}
 					return $this->response->redirect('dbase/new');
+					
 				}	
 			}
 		}
@@ -113,17 +121,33 @@ class DbaseController extends ControllerBase
             $this->view->setVar("edbase", $db);
 			//Instanciar el formulario y Relacionarlo con los atributos del Model Dbase
 			$editform = new EditForm($db);
-
+			
 			if ($this->request->isPost()) {   
 				$editform->bind($this->request->getPost(), $db);
-
-				if ($editform->isValid() && $db->save()) {
-					$this->flash->success('Base de Datos Actualizada Exitosamente!');
-					$this->response->redirect("dbase/show/$id");
+				
+				$idAccount = $db->idAccount;
+				$name = $editform->getValue('name');
+				
+				$nameExist = Dbase::findFirst(array(
+					"conditions" => "idAccount = ?1 AND name = ?2 AND idDbase != ?3",
+					"bind" => array(1 => $idAccount,
+									2 => $name,
+									3 => $db->idDbase)
+				));
+				if ($nameExist) {
+					$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrada en esta cuenta, por favor verifica los datos');
+					return $this->response->redirect('dbase/edit/' .$db);
 				}
 				else {
-					foreach ($db->getMessages() as $msg) {
-						$this->flash->error($msg);
+					if ($editform->isValid() && $db->save()) {
+						$this->flashSession->success('Base de Datos Actualizada Exitosamente!');
+						return $this->response->redirect('dbase/show/'. $id);
+					}
+					else {
+						foreach ($db->getMessages() as $msg) {
+							$this->flashSession->error($msg);
+						}
+						return $this->response->redirect("dbase/edit/". $id);
 					}
 				}
 			}

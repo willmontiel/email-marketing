@@ -91,12 +91,20 @@ App.ContactsNewbatchController = Ember.ObjectController.extend();
 App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	actions: {
 		save: function() {
-			this.content.set('isActive', true);
-			this.content.set('isSubscribed', true);
-			this.handleSavePromise(this.content.save(), 'contacts', 'El contacto ha sido creado con exito!');
+			var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+			if (filter.test(this.get('email'))) {
+				this.content.set('isActive', true);
+				this.content.set('isSubscribed', true);
+				App.set('errormessage', '');
+				this.handleSavePromise(this.content.save(), 'contacts', 'El contacto ha sido creado con exito!');
+			}
+			App.set('errormessage', 'La dirección de correo electrónico ingresada es invalida, por favor verifica la información');
+			this.transitionToRoute('blockedemails.block');
+			
 		},	
 		
 		cancel: function(){
+			App.set('errormessage', '');
 			var record = this.get('model');
 			if (record.get('isDirty')) {
 				record.rollback();
@@ -116,9 +124,15 @@ App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 App.ContactsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	actions : {
 		edit: function() {
-			this.handleSavePromise(this.content.save(), 'contacts', 'El contacto fue actualizado exitosamente');
+			var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+			if (filter.test(this.get('email'))) {
+				App.set('errormessage', '');
+				this.handleSavePromise(this.content.save(), 'contacts', 'El contacto fue actualizado exitosamente');
+			}
+			App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
 		},
 		cancel: function(){
+			App.set('errormessage', '');
 			this.get('model').rollback();
 			this.transitionToRoute("contacts");
 		}

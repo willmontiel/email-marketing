@@ -123,7 +123,7 @@ class Security extends Plugin
 				'dbase::index' => array('dbase' => array('read')),
 				'dbase::new' => array('dbase' => array('read','create')),
 				'dbase::show' => array('dbase' => array('read')),
-				'dbase::edit' => array('edit' => array('read','update')),
+				'dbase::edit' => array('dbase' => array('read','update')),
 				'dbase::delete' => array('dbase' => array('read', 'delete')),
 				//Usuarios
 				'user::index' => array('user' => array('read')),

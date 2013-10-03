@@ -40,7 +40,7 @@ class Dbase extends Modelbase
                     break;
                 case 'PresenceOf':
                     if ($message->getField() == 'name') {
-                        $messages[] = 'Oye! Debes ingresar un nuevo nombre para tu Base de Datos';
+                        $messages[] = 'No ha enviado un nombre para la base de Datos';
                     }
                     else {
                         $messages[] = $message;

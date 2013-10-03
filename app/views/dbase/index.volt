@@ -27,7 +27,7 @@
 				<thead></thead>
 				<tbody>
 					<tr>
-						<td class="span6">
+						<td class="span5">
 							<div class="box-section news with-icons">
 								<div class="avatar purple">
 									<i class="icon-book icon-2x"></i>
@@ -42,7 +42,7 @@
 								</div>
 							</div>
 						</td>
-						<td class="span6">
+						<td class="span5">
 							<ul class="inline pull-right sparkline-box">
 								<li class="sparkline-row">
 									<h4 class="green"><span>Activos</span> {{item.Cactive|numberf}}</h4>
@@ -64,6 +64,17 @@
 									<h4 class="red"><span>Spam</span> {{item.Cspam|numberf}}</h4>
 								</li>
 							</ul>
+						</td>
+						<td class="span2">
+							<div class="pull-right">
+								<div class="btn-group">
+									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li><a href="{{ url('dbase/edit/') }}{{item.idDbase}}"><i class="icon-pencil"></i> Editar</a></li>
+										<li><a href="{{ url('dbase/delete/') }}{{item.idDbase}}"><i class="icon-trash"></i> Eliminar </a></li>
+									</ul>
+								</div>
+							</div>
 						</td>
 					</tr>
 				</tbody>

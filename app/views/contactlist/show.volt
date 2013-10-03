@@ -158,6 +158,12 @@
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="contacts/new">
+			{{ '{{#if App.errormessage }}' }}
+				<div class="alert alert-message alert-error">
+				<h4>Error!</h4>
+				{{ '{{ App.errormessage }}' }}
+				</div>
+			{{ '{{/if}} '}}
 			<div class="box span4">
 				<div class="box-header"><span class="title">Crear nuevo contacto</strong></span></div>
 				<div class="box-content">
@@ -173,19 +179,14 @@
 									<span class="text text-error">{{'{{errors.email}}'}}</span>
 								{{' {{/if }} '}}
 							</label>
+					
 							{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus"}}'}}
-							<label>Nombre:
-								{{' {{#if errors.name}} '}}
-									<span class="text text-error">{{'{{errors.name}}'}}</span>
-								{{' {{/if }} '}}
-							</label>
+							<label>Nombre:</label>
 							{{'{{view Ember.TextField valueBinding="name"}}'}}
-							<label>Apellido:
-								{{' {{#if errors.lastName}} '}}
-									<span class="text text-error">{{'{{errors.lastName}}'}}</span>
-								{{' {{/if }} '}}
-							</label>
+								
+							<label>Apellido:</label>
 							{{'{{view Ember.TextField valueBinding="lastName"}}'}}
+								
 							<!-- Campos Personalizados -->
 							{%for field in fields%}
 								<label for="campo{{field.idCustomField }}">{{field.name}}:</label>
@@ -239,7 +240,6 @@
 			</div>
 		</script>
 	<script type="text/x-handlebars" data-template-name="contacts/edit">
-		<br />
 		<div class="row-fluid">
 			<div class="box">
 				<div class="box-content">
@@ -261,6 +261,12 @@
 				</div>
 			</div>
 		</div>
+		{{ '{{#if App.errormessage }}' }}
+			<div class="alert alert-message alert-error">
+			<h4>Error!</h4>
+			{{ '{{ App.errormessage }}' }}
+			</div>
+		{{ '{{/if}} '}}
 		<div class="row-fluid">
 			<div class="box span3">
 				<div class="box-header">
@@ -303,8 +309,8 @@
 						{%endfor%}
 						<!--  Fin de campos personalizados -->
 						<br />
-						<button class="btn btn-blue" {{' {{action edit this}} '}}>Editar</button>
 						<button class="btn btn-deafult" {{ '{{action cancel this}}' }}>Cancelar</button>
+						<button class="btn btn-blue" {{' {{action edit this}} '}}>Grabar</button>
 					</form>
 				</div>
 			</div>
