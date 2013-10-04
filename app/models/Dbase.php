@@ -1,4 +1,5 @@
 <?php
+use Phalcon\Mvc\Model\Validator\PresenceOf;
 /**
  * La clase Modelbase hereda las funciones:
  * beforeUpdate -> Se ejecuta antes de actualizar un objeto y asigna un valor, en este caso un timestamp para el campo updateon
@@ -27,7 +28,31 @@ class Dbase extends Modelbase
 		$this->hasMany("idDbase", "Segment", "idDbase");
     }
     
-    public function getMessages()
+	public function validate() 
+	{
+		$this->validate(new PresenceOf(
+            array(
+                "field"   => "name",
+				"message" => "Debe ingresar un nombre para la base de datos"
+            )
+        ));
+		
+		$this->validate(new PresenceOf(
+            array(
+                "field"   => "description",
+				"message" => "Debe ingresar una descripción para la base de datos"
+            )
+        ));
+		
+		$this->validate(new PresenceOf(
+            array(
+                "field"   => "Cdescription",
+				"message" => "Debe ingresar una descripción de contactos para la base de datos"
+            )
+        ));
+	}
+
+	public function getMessages()
     {
         $messages = array();
         foreach (parent::getMessages() as $message) {

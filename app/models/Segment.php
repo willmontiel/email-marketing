@@ -33,4 +33,24 @@ class Segment extends \Phalcon\Mvc\Model
 			$this->description = "Sin descripción";
 		}
     }
+	
+	public static function countSegmentsInAccount(Account $account, $conditions = null, $bind = null ) 
+	{
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$phql = 'SELECT COUNT(*) cnt FROM segment s JOIN dbase d ON s.idDbase = d.idDbase WHERE d.idAccount = :idaccount:';
+		
+		if ($conditions != null) {
+			$phql .= ' AND ' . $conditions;
+			$options = $bind;
+		}
+		$options['idaccount'] = $account->idAccount;
+		$query = $mm->executeQuery($phql, $options);
+		
+		if ($query) {
+			return $query[0]->cnt;
+		}
+		return 0;
+		
+	}
 }

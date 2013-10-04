@@ -1012,7 +1012,7 @@ class ApiController extends ControllerBase
 		
 		$wrapper = new SegmentWrapper();
 		$wrapper->setAccount($this->user->account);
-		$wrapper->setPager($page);
+		$wrapper->setPager($pager);
 		$segment = $wrapper->findSegments();
 
 		return $this->setJsonResponse($segment, 201, 'success');

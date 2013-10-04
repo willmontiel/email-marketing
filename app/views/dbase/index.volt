@@ -21,10 +21,10 @@
 	</div>
 </div>
 <div class="row-fluid">
+	<div class="span8">
 	{{ flashSession.output() }}
-</div>
-<div class="row-fluid">
-	<div class="text-right"> 
+	</div>
+	<div class="span4 text-right"> 
 		<a href="{{ url('dbase/new') }}" class="btn btn-default">
 			<i class="icon-plus"></i> Crear Base de Datos
 		</a>
@@ -89,7 +89,7 @@
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li><a href="{{ url('dbase/edit/') }}{{item.idDbase}}"><i class="icon-pencil"></i> Editar</a></li>
-										<li><a href="{{ url('dbase/delete/') }}{{item.idDbase}}"><i class="icon-trash"></i> Eliminar </a></li>
+										<li><a data-toggle="modal" href="#modal-simple" data-id="{{item.idDbase}}"><i class="icon-trash"></i> Eliminar </a></li>
 									</ul>
 								</div>
 							</div>
@@ -137,25 +137,19 @@
 		<!-- Fin de mi lista de bases de datos -->
 </div>
 
-
-	
-                
-{%for item in page.items%}
-<div id="delete{{item.idDbase}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3>Seguro que Desea Eliminar</h3>
-        </div>
-        <div class="modal-body">
-                <form action = "{{url('dbase/delete')}}/{{item.idDbase}}" method="post">
-                        <p>Para eliminar escriba la palabra "DELETE"</p>
-                        {{text_field("delete")}}
-        </div>
-        <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
-                <button class="btn btn-primary">Eliminar</button>
-        </div>
-    </form>
+<div id="modal-simple" class="modal hide fade" aria-hidden="false">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h6 id="modal-tablesLabel">Eliminar Base de Datos</h6>
+	</div>
+	<div class="modal-body">
+		Esta seguro que desea eliminar esta Base de Datos.
+		<br/>
+		Recuerde que si elimina la Base de Datos se perderan todos los contactos, listas de contactos y segmentos que pertenezcan a ella
+	</div>
+	<div class="modal-footer">
+	  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+	  <a href="{{ url('dbase/delete/') }}" class="btn btn-danger">Eliminar</a>
+	</div>
 </div>
-{%endfor%}
 {% endblock %}

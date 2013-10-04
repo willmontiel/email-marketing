@@ -283,58 +283,60 @@ class SegmentWrapper extends BaseWrapper
 	{
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		$queryTxt ="SELECT s.idSegment, s.name, s.description, s.criterion, c.idCriteria, c.relation, c.value, s.idDbase, c.fieldName AS cfields
-					FROM segment s JOIN criteria c ON s.idSegment = c.idSegment JOIN dbase d ON s.idDbase = d.idDbase
-					WHERE d.idAccount = :idAccount:
-					ORDER BY s.idSegment";
+		$number = $this->pager->getRowsPerPage();
 		
-		$parameters = array('idAccount' => $this->account->idAccount);
+		$this->pager->setTotalRecords(Segment::countSegmentsInAccount($this->account));
+		
+		$queryTxt ="SELECT s.*
+					FROM segment s JOIN dbase d ON s.idDbase = d.idDbase
+					WHERE d.idAccount = :idaccount:";
+		
+		if (isset($number) ) {
+			$offset = $this->pager->getStartIndex();
+			$start = isset($offset)?$offset:0;
+			$queryTxt .= ' LIMIT ' . $number . ' OFFSET ' . $start;
+		}
+		
+		$parameters = array('idaccount' => $this->account->idAccount);
 
 		$query = $modelManager->createQuery($queryTxt);
-        $segments = $query->execute($parameters);
+		$segments = $query->execute($parameters);
 		
 		$result = array();
-		$ids = array ();
 		$criteria = array ();
+		
 		if ($segments) {
-			$final = count($segments) - 1;
-			$i = 0;
+			
 			foreach ($segments as $segment) {
-				if ((!in_array($segment->idSegment, $ids)) && !empty($ids)) {
-					$criteriaJson = json_encode($criteria);
-					$segmentTosend = (isset($oldSegment))?$oldSegment:$segment;
-					$result[] = $this->convertSegmentToJson($segmentTosend, $criteriaJson);
-					$criteria = array ();
+				
+				$criterias = Criteria::findByIdSegment($segment->idSegment);
+				
+				foreach ($criterias as $cr) {
+					
+					$cleanCr = new stdClass();
+					
+					$cleanCr->idCriteria = $cr->idCriteria;
+					$cleanCr->relations = $cr->relation;
+					$cleanCr->cfields = $cr->cfields;
+					$cleanCr->value = $cr->value;
+					
+					array_push($criteria, $cleanCr);
 				}
-				if ($i == $final) {
-					$objectCrit = $this->createCriteria($segment);
-					array_push($criteria, $objectCrit);
-					$criteriaJson = json_encode($criteria);
-					$result[] = $this->convertSegmentToJson($segment, $criteriaJson);
-				}
-				array_push($ids, $segment->idSegment);
-				$objectCrit = $this->createCriteria($segment);
-				array_push($criteria, $objectCrit);
-				$oldSegment = $segment;
-				$i++;
+				
+				$criteriaJson = json_encode($criteria);
+				
+				$result[] = $this->convertSegmentToJson($segment, $criteriaJson);
+				
+				$criteria = array ();
 			}
-		}		
+		}
+		
+		$this->pager->setRowsInCurrentPage(count($result));
+
 		return array('segments' => $result,
 					 'dbase' => DbaseWrapper::getDbasesAsJSON($this->account),
 					 'meta' => $this->pager->getPaginationObject()
 					);
-	}
-	
-	protected function createCriteria($segment)
-	{
-		$objectCrit = new stdClass();
-		
-		$objectCrit->idCriteria = $segment->idCriteria;
-		$objectCrit->relations = $segment->relation;
-		$objectCrit->cfields = $segment->cfields;
-		$objectCrit->value = $segment->value;
-
-		return $objectCrit;
 	}
 	
 	protected function saveSxC(Segment $segment)

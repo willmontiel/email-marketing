@@ -173,7 +173,6 @@
 		</div>
 		<script type="text/javascript">
 			var current = "{{ router.getRewriteUri()}}";
-
 			if (current == "/") {
 				document.getElementById('1').className = "active";
 			}

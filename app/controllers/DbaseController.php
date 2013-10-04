@@ -46,6 +46,11 @@ class DbaseController extends ControllerBase
             $editform->bind($this->request->getPost(), $db);
 			$idAccount = $this->user->account->idAccount;
 			$name = $editform->getValue('name');
+			
+			if(!isset($name) || trim($name) === '' || $name == NULL) {
+				$this->flashSession->error('Debe ingresar un nombre para la base de datos');
+				return $this->response->redirect('dbase/new');
+			}
 		
 			$nameExist = Dbase::findFirst(array(
 				"conditions" => "idAccount = ?1 AND name = ?2",
@@ -141,16 +146,13 @@ class DbaseController extends ControllerBase
     {
         //Recuperar la informacion de la BD que se desea SI existe
         $db = $this->findAndValidateDbaseAccount($id);
-		if ($db !== null) {
-			if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
-				$db->delete();
-				$this->flashSession->success('Base de Datos Eliminada!');
-				$this->response->redirect("dbase");
-			} else {
-				$this->flashSession->error('Escriba la palabra "DELETE" correctamente');
-				$this->view->disable();
-				return $this->response->redirect('dbase');
-			}
+		if ($db) {
+			$db->delete();
+			$this->flashSession->warning('Base de Datos Eliminada!');
+		} 
+		else {
+			$this->flashSession->error('Base de Datos no existe');
 		}
+		return $this->response->redirect('dbase');
     }
 }
