@@ -135,15 +135,6 @@
 				
 			</div>		
 		</div>
-		<script type="text/javascript">
-			var current = "{{ router.getRewriteUri()}}";
-			if (current == "/") {
-				document.getElementById('1').className = "active";
-			}
-			else if (current.indexOf("/contactlist") !== -1) {
-				document.getElementById('2').className = "active";
-			}
-		</script>
 		<!-- /content -->
     </body>
 </html>
