@@ -107,43 +107,7 @@
 		<!-- /sidebar -->
 		<div class="primary-sidebar">
 			<!-- Main nav -->
-			<ul id="currentPage" class="nav nav-collapse collapse nav-collapse-primary">
-				<li class="" id="1">
-					<span class="glow"></span>
-					<a href="{{ url('') }}">
-						<i class="icon-dashboard icon-2x"></i>
-						<span>Dashboard</span>
-					</a>
-				</li>
-				<li class="" id="2">
-					<span class="glow"></span>
-					<a href="{{ url('contactlist#/lists"') }}">
-						<i class="icon-user icon-2x"></i>
-						<span>Contactos</span>
-					</a>
-				</li>
-				<li class="" id="3">
-					<span class="glow"></span>
-					<a href="{{ url('') }}">
-						<i class="icon-envelope icon-2x"></i>
-						<span>Campañas</span>
-					</a>
-				</li>
-				<li class="" id="4">
-					<span class="glow"></span>
-					<a href="{{ url('') }}">
-						<i class="icon-edit icon-2x"></i>
-						<span>Autorespuestas</span>
-					</a>
-				</li>
-				<li class="" id="5">
-					<span class="glow"></span>
-					<a href="{{ url('contactlist#/lists"') }}">
-						<i class="icon-bar-chart icon-2x"></i>
-						<span>Estadísticas</span>
-					</a>
-				</li>
-			</ul>
+			{{ partial("partials/menu_partial") }}
 		</div>
 		<!-- content -->
 		<div class="main-content">

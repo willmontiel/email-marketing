@@ -12,9 +12,6 @@
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
 	<script type="text/javascript">
-		//App.totalFields = {#{{totalFields}};
-		//App.customFieldsArray = {{fields|json_encode}};  #}
-		
 		// ACL de blocked emails:
 		App.blockedemailACL = {
 			canCreate: {{ acl_Ember('api::addemailtoblockedlist')}},

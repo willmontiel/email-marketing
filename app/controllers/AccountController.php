@@ -21,7 +21,6 @@ class AccountController extends ControllerBase
 		return $this->setJsonResponse($object);
 	
 	}
-	
 	/**
 	 * 
 	 * Esta función se encarga de mostrar toda la información de las cuentas al super-administrador

@@ -36,7 +36,6 @@ try {
 		$eventsManager = $di->getShared('eventsManager');
 
 		$security = new Security($di);
-
 		/**
 		 * We listen for events in the dispatcher using the Security plugin
 		 */
@@ -74,7 +73,12 @@ try {
 		));
 		return $cache;
 	});
-
+	
+	//Se encargar de injectar la clase que administra el menu 
+	$di->set('elements', function(){
+		return new VisualElements();
+	});
+	
 	$di->set('acl', function(){
 		$acl = new Phalcon\Acl\Adapter\Memory();
 		$acl->setDefaultAction(Phalcon\Acl::DENY);
