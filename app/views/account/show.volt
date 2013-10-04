@@ -76,7 +76,7 @@
 											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 											<ul class="dropdown-menu">
 												<li><a href="{{url('account/edituser/')}}{{item.idUser}}"><i class="icon-pencil"></i> Editar</a></li>
-												<li><a href="{{url('account/deleteuser/')}}{{item.idUser}}"><i class="icon-trash"></i> Eliminar</a></li>
+												<li><a class="ShowDialog" data-toggle="modal" href="#modal-simple" data-id="{{url('account/deleteuser/')}}{{item.idUser}}"><i class="icon-trash"></i> Eliminar</a></li>
 											</ul>
 										</div>
 									</div>
@@ -123,4 +123,25 @@
 			<a href="{{ url('account/index') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
 		</div>
 	</div>
+	
+<div id="modal-simple" class="modal hide fade" aria-hidden="false">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h6 id="modal-tablesLabel">Eliminar Usuario</h6>
+	</div>
+	<div class="modal-body">
+		Esta seguro que desea eliminar este Usuario.
+	</div>
+	<div class="modal-footer">
+	  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+	  <a href="" id="deleteUser" class="btn btn-danger" >Eliminar</a>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).on("click", ".ShowDialog", function () {
+		var myURL = $(this).data('id');
+		$("#deleteUser").attr('href', myURL );
+	});
+</script>
 {% endblock %}

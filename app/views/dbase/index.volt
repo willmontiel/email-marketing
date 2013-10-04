@@ -89,7 +89,7 @@
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li><a href="{{ url('dbase/edit/') }}{{item.idDbase}}"><i class="icon-pencil"></i> Editar</a></li>
-										<li><a data-toggle="modal" href="#modal-simple" data-id="{{item.idDbase}}"><i class="icon-trash"></i> Eliminar </a></li>
+										<li><a class="ShowDialog" data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item.idDbase}}"><i class="icon-trash"></i> Eliminar </a></li>
 									</ul>
 								</div>
 							</div>
@@ -149,7 +149,15 @@
 	</div>
 	<div class="modal-footer">
 	  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-	  <a href="{{ url('dbase/delete/') }}" class="btn btn-danger">Eliminar</a>
+	  <a href="" id="deleteDb" class="btn btn-danger" >Eliminar</a>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(document).on("click", ".ShowDialog", function () {
+		var myURL = $(this).data('id');
+		$("#deleteDb").attr('href', myURL );
+	});
+</script>
+
 {% endblock %}

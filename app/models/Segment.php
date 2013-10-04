@@ -38,7 +38,7 @@ class Segment extends \Phalcon\Mvc\Model
 	{
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		$phql = 'SELECT COUNT(*) cnt FROM segment s JOIN dbase d ON s.idDbase = d.idDbase WHERE d.idAccount = :idaccount:';
+		$phql = 'SELECT COUNT(*) cnt FROM Segment s JOIN Dbase d ON s.idDbase = d.idDbase WHERE d.idAccount = :idaccount:';
 		
 		if ($conditions != null) {
 			$phql .= ' AND ' . $conditions;

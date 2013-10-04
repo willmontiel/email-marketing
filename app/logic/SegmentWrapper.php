@@ -288,7 +288,7 @@ class SegmentWrapper extends BaseWrapper
 		$this->pager->setTotalRecords(Segment::countSegmentsInAccount($this->account));
 		
 		$queryTxt ="SELECT s.*
-					FROM segment s JOIN dbase d ON s.idDbase = d.idDbase
+					FROM Segment s JOIN Dbase d ON s.idDbase = d.idDbase
 					WHERE d.idAccount = :idaccount:";
 		
 		if (isset($number) ) {
@@ -418,7 +418,7 @@ class SegmentWrapper extends BaseWrapper
 				}
 			}
 
-			$SQL = "INSERT INTO Sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND ( " . $conditions . " )";
+			$SQL = "INSERT INTO Sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM Contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND ( " . $conditions . " )";
 			Phalcon\DI::getDefault()->get('logger')->log($SQL);
 			$db = Phalcon\DI::getDefault()->get('db');
 
