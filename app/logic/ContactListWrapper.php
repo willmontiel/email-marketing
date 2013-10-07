@@ -188,8 +188,8 @@ class ContactListWrapper extends BaseWrapper
 					LEFT JOIN fieldinstance CF ON CO.idContact = CF.idContact
 				  WHERE CO.idContact IN 
 					(SELECT C1.idContact
-					 FROM Coxcl C1
-						JOIN (SELECT idContact FROM Coxcl WHERE idContactlist = ?) C2 ON (C1.idContact = C2.idContact) 
+					 FROM coxcl C1
+						JOIN (SELECT idContact FROM coxcl WHERE idContactlist = ?) C2 ON (C1.idContact = C2.idContact) 
 					 GROUP BY 1 
 					 HAVING COUNT(*) = 1)';
 		
