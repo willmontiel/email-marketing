@@ -62,7 +62,9 @@ class AccountController extends ControllerBase
             
 				$user = new User();
 				
-				$user->email = $form->getValue('email');
+				$email = strtolower($form->getValue('email'));
+				
+				$user->email = $email;
 				$user->firstName = $form->getValue('firstName');
 				$user->lastName = $form->getValue('lastName');				
 		$pass =	$user->password = $form->getValue('password');
@@ -241,7 +243,10 @@ class AccountController extends ControllerBase
 					else {
 
 						$this->db->begin();
+						$email = strtolower($form->getValue('email'));
+						
 						$user->idAccount = $id;
+						$user->email = $email;
 						$user->password = $this->security2->hash($pass);
 
 						if ($form->isValid() && $user->save()) {
@@ -294,11 +299,12 @@ class AccountController extends ControllerBase
 					
 					$pass = $form->getValue('passForEdit');
 					$pass2 = $form->getValue('pass2ForEdit');
+					$email = strtolower($form->getValue('email'));
 					
 					if(!empty($pass)||!empty($pass2)){
 
 						$this->db->begin();
-						
+						$userExist->email = $email;
 						$userExist->password = $this->security2->hash($pass);
 						
 						if (!$form->isValid() OR !$userExist->save()) {
@@ -317,6 +323,8 @@ class AccountController extends ControllerBase
 					}
 					else{
 						$this->db->begin();
+						
+						$userExist->email = $email;
 						if (!$form->isValid() OR !$userExist->save()) {
 							$this->db->rollback();
 

@@ -34,6 +34,7 @@ class UserController extends ControllerBase
 			
 			$pass = $form->getValue('password');
 			$pass2 = $form->getValue('password2');
+			$email = strtolower($form->getValue('email'));
 			
 			if(strlen($pass) < 8 || strlen($pass) > 40) {
 				$this->flashSession->error("La contraseña es muy corta, esta debe tener mínimo 8 y máximo 40 caracteres");
@@ -48,6 +49,7 @@ class UserController extends ControllerBase
 					
 					$this->db->begin();
 					$user->idAccount = $this->user->account->idAccount;
+					$user->email = $email;
 					$user->password = $this->security2->hash($pass);
 				
 					if ($form->isValid() && $user->save()) {
@@ -93,6 +95,7 @@ class UserController extends ControllerBase
 				
 				$pass = $form->getValue('passForEdit');
 				$pass2 = $form->getValue('pass2ForEdit');
+				$email = strtolower($form->getValue('email'));
 				
 				if(!empty($pass)||!empty($pass2)){
 					
@@ -109,6 +112,7 @@ class UserController extends ControllerBase
 							$this->db->begin();
 							
 							$user->password = $this->security2->hash($pass);
+							$user->email = $email;
 							
 							if (!$form->isValid()||!$user->save()) {
 								$this->db->rollback();
@@ -125,10 +129,9 @@ class UserController extends ControllerBase
 						}
 					}
 				}
-				
 				else{
 					$this->db->begin();
-
+					$user->email = $email;
 					if (!$form->isValid() OR !$user->save()) {
 						$this->db->rollback();
 						foreach ($user->getMessages() as $msg) {
