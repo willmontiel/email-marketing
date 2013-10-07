@@ -23,7 +23,7 @@ class Security extends Plugin
 		/*
 		 * Buscar ACL en cache
 		 */
-		$acl = null; //$this->cache->get('acl-cache');
+		$acl = $this->cache->get('acl-cache');
 		
 		if (!$acl) {
 			// No existe, crear objeto ACL
@@ -82,7 +82,7 @@ class Security extends Plugin
 	
 	protected function getControllerMap()
 	{
-		$map = null; //$this->cache->get('controllermap-cache');
+		$map = $this->cache->get('controllermap-cache');
 		if (!$map) {
 			$map = array(
 				//Tests
