@@ -429,13 +429,12 @@
 				</div>
 				<div class="box-footer padded">
 					{{ '{{#if isSubscribed}}' }}
-					<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Des-suscribir</button>
-				{{ '{{else}}' }}
-					{{'{{#unless isEmailBlocked}}'}}
-					<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
-					{{'{{/unless}}'}}
-				{{ '{{/if}}' }}
-
+						<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Des-suscribir</button>
+					{{ '{{else}}' }}
+						{{'{{#unless isEmailBlocked}}'}}
+							<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
+						{{'{{/unless}}'}}
+					{{ '{{/if}}' }}
 				{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
 				{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Regresar</button>{{/linkTo}}' }}
 				</div>
