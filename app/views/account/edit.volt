@@ -26,7 +26,7 @@
 		{{ flashSession.output() }}
 	</div>
 	<div class="row-fluid padded">
-		<div class="box span3">
+		<div class="box span4">
 			<div class="box-header">
 				<div class="title">
 					Editar datos de la cuenta

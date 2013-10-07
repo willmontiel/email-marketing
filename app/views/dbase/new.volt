@@ -29,7 +29,7 @@
 	<div class="row-fluid">
 		{{ flashSession.output() }}
 	</div>
-    <div class="row-fluid span3">
+    <div class="row-fluid span4">
 		<div class="box">
 			<div class="box-header">
 				<div class="title">

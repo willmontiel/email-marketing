@@ -24,10 +24,10 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span8">
+		<div class="span7">
 			{{ flashSession.output() }}
 		</div>
-		<div class="span4 text-right">
+		<div class="span5 text-right">
 			<a href="{{ url('account/new') }}" class="btn btn-default"><i class="icon-plus"></i> Crear nueva cuenta</a>
 			<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
 		</div>

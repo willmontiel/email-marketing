@@ -136,7 +136,7 @@
 		</div>
 	{{ '{{/if}} '}}
 	<div class="row-fluid">
-		<div class="span3">
+		<div class="span4">
 			<div class="box">
 				<div class="box-header">
 					<div class="title">

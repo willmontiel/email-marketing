@@ -359,7 +359,7 @@
 
 <script type="text/x-handlebars" data-template-name="fields/edit">
 	<div class="row-fluid">
-		<div class="box span3">
+		<div class="box span4">
 			<div class="box-header">
 				<div class="title">
 					Editar un campo personalizado

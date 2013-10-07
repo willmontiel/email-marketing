@@ -280,7 +280,7 @@
 			</div>
 		{{ '{{/if}} '}}
 		<div class="row-fluid">
-			<div class="box span3">
+			<div class="box span4">
 				<div class="box-header">
 					<div class="title">
 						Editar un contacto
@@ -436,7 +436,7 @@
 						{{'{{/unless}}'}}
 					{{ '{{/if}}' }}
 				{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
-				{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-inverse">Regresar</button>{{/linkTo}}' }}
+				{{ '{{#linkTo "contacts"}}<button class="btn btn-default">Regresar</button>{{/linkTo}}' }}
 				</div>
 			</div>
 		</div>

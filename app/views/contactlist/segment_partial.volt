@@ -88,7 +88,7 @@
 			{{'{{/if}}'}}
 			<form>
 			<div class="row-fluid">
-				<div class="span3">
+				<div class="span4">
 					<label>*Nombre: </label>
 					{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre"}}' }}
 					
@@ -120,7 +120,7 @@
 						<br />
 					{{ '{{/unless}}' }}
 				</div>
-				<div class="span9">
+				<div class="span8">
 					<div class="box">
 						<div class="box-section news with-icons">
 							<div class="avatar green">
@@ -156,8 +156,8 @@
 				</div>
 			</div>
 			<hr></hr>
+			{{ '{{#if dbaseSelected}}' }}
 			<div class="row-fluid">
-				{{ '{{#if dbaseSelected}}' }}
 				Crear segmento con 
 					{{ '{{view Ember.Select
 						  contentBinding="App.criteria"
@@ -167,52 +167,51 @@
 						  class="span2"}}'
 					}}
 					condiciones a continuación:
-				<div class="row-fluid">	
-					<div class="span12">
-						<br />
-						{{'{{#if errors.segment}}'}}
-							<div class="alert alert-error">
-								{{'{{errors.segment}}'}}
-							</div>
-						{{'{{/if}}'}}
-						{{' {{#each cr in criteria}} '}}
-						<div class="row-fluid">
-							<div class="span3">
-								{{ '{{view Ember.Select
-									  contentBinding="cfields"
-									  optionValuePath="content.id"
-									  optionLabelPath="content.name"
-									  valueBinding="cr.cfields"
-									  prompt="Seleccione un campo"
-									}}'
-								}}
-							</div>
-							<div class="span3">
-								{{ '{{view Ember.Select
-									contentBinding="App.relations"
-									optionValuePath="content.id"
-									optionLabelPath="content.relation"
-									valueBinding="cr.relations"}}'
-								}}
-							</div>
-							<div class="span3">
-								{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
-							</div>
-							{{ '{{#unless defaultCriteria}}' }}
+			</div>
+			<div class="row-fluid">
+				{{'{{#if errors.segment}}'}}
+					<div class="alert alert-error">
+						{{'{{errors.segment}}'}}
+					</div>
+				{{'{{/if}}'}}
+			</div>
+			{{' {{#each cr in criteria}} '}}
+				<div class="row-fluid">
+					<div class="span3">
+						{{ '{{view Ember.Select
+							 contentBinding="cfields"
+							 optionValuePath="content.id"
+							 optionLabelPath="content.name"
+							 valueBinding="cr.cfields"
+							 prompt="Seleccione un campo"}}'
+						}}
+					</div>
+					<div class="span3">
+						{{ '{{view Ember.Select
+							contentBinding="App.relations"
+							optionValuePath="content.id"
+							optionLabelPath="content.relation"
+							valueBinding="cr.relations"}}'
+						}}
+					</div>
+					<div class="span3">
+						{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
+					</div>
+					<div class="span3">
+						{{ '{{#unless defaultCriteria}}' }}
 							<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}><i class="icon-trash"></i></button>
-							{{ '{{/unless}}' }}
-						</div>
-						{{' {{/each}} '}}
-						<br />
-						{{ '{{#unless limitCriteria}}' }}
-							<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
 						{{ '{{/unless}}' }}
-						<button class="btn btn-default" {{ '{{action reset this }}' }}><i class="icon-bolt"></i> Reset</button>
 					</div>
 				</div>
-				{{ '{{/if}}' }}
+			{{' {{/each}} '}}
+			<div class="row-fluid">
+				{{ '{{#unless limitCriteria}}' }}
+					<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
+				{{ '{{/unless}}' }}
+				<button class="btn btn-default" {{ '{{action reset this }}' }}><i class="icon-bolt"></i> Reset</button>
 			</div>
 			</form>
+			{{ '{{/if}}' }}
 		</div>
 	</div>
 </script>
@@ -236,7 +235,6 @@
 		</div>
 	</div>
 </script>
-
 <script type="text/x-handlebars" data-template-name="segments/edit">
 	<div class="box">
 		<div class="box-header">
@@ -260,7 +258,7 @@
 				</div>
 			{{'{{/if}}'}}
 			<div class="row-fluid">
-				<div class="span3">
+				<div class="span4">
 					<label>*Nombre: </label>
 					{{'{{view Ember.TextField valueBinding="name"}}'}}
 				
@@ -270,8 +268,7 @@
 					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
 					<button class="btn btn-blue" {{ '{{action edit this}}' }}>Editar</button>
 				</div>
-				<div class="span9">
-				</div>
+				<div class="span8"></div>
 			</div>
 			<hr></hr>
 			<div class="row-fluid">
@@ -289,36 +286,40 @@
 						{{'{{errors.segment}}'}}
 					</div>
 				{{'{{/if}}'}}
-				{{' {{#each cr in criteria}} '}}
-					<div class="row-fluid">
-						<div class="span3">
-							{{ '{{view Ember.Select
-								  contentBinding="cfields"
-								  optionValuePath="content.id"
-								  optionLabelPath="content.name"
-								  valueBinding="cr.cfields"
-								  prompt="Seleccione un campo"
-								}}'
-							}}
-						</div>
-						<div class="span3">
-							{{ '{{view Ember.Select
-								  contentBinding="App.relations"
-								  optionValuePath="content.id"
-								  optionLabelPath="content.relation"
-								  valueBinding="cr.relations"
-								}}'
-							}}
-						</div>
-						<div class="span3">
-							{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required"}}' }}
-						</div>
+			</div>
+			{{' {{#each cr in criteria}} '}}
+				<div class="row-fluid">
+					<div class="span3">
+						{{ '{{view Ember.Select
+							  contentBinding="cfields"
+							  optionValuePath="content.id"
+							  optionLabelPath="content.name"
+							  valueBinding="cr.cfields"
+							  prompt="Seleccione un campo"
+							}}'
+						}}
+					</div>
+					<div class="span3">
+						{{ '{{view Ember.Select
+							  contentBinding="App.relations"
+							  optionValuePath="content.id"
+							  optionLabelPath="content.relation"
+							  valueBinding="cr.relations"
+							}}'
+						}}
+					</div>
+					<div class="span3">
+						{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required"}}' }}
+					</div>
+					<div class="span3">
 						{{ '{{#unless defaultCriteria}}' }}
-						<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}><i class="icon-trash"></i></button>
+							<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}><i class="icon-trash"></i></button>
 						{{ '{{/unless}}' }}
 					</div>
-				{{' {{/each}} '}}
-				<br />
+				</div>
+			{{' {{/each}} '}}
+			<br />
+			<div class="row-fluid">
 				{{ '{{#unless limitCriteria}}' }}
 					<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
 				{{ '{{/unless}}' }}

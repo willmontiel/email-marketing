@@ -117,7 +117,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="padded">
-			<div class="span4">
+			<div class="span5">
 				<div class="box">
 					<div class="box-header">
 						<div class="title">
@@ -180,8 +180,8 @@
 					{{'{{errors.errormsg}}'}}
 				</div>
 			{{'{{/if}}'}}
-			 <button {{'{{action unblock this}}'}} class="btn btn-blue">Desbloquear</button>
 			 <button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar </button>
+			 <button {{'{{action unblock this}}'}} class="btn btn-blue">Desbloquear</button>
 		</div>
 	</div>
 </script>

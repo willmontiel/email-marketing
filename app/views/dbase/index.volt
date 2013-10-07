@@ -24,10 +24,10 @@
 	</div>
 </div>
 <div class="row-fluid">
-	<div class="span8">
+	<div class="span7">
 	{{ flashSession.output() }}
 	</div>
-	<div class="span4 text-right"> 
+	<div class="span5 text-right"> 
 		<a href="{{ url('dbase/new') }}" class="btn btn-default">
 			<i class="icon-plus"></i> Crear Base de Datos
 		</a>
@@ -137,8 +137,8 @@
 		<!-- Fin de mi lista de bases de datos -->
 </div>
 <div class="row-fluid">
-	<div class="span8"></div>
-	<div class="span4 text-right"> 
+	<div class="span7"></div>
+	<div class="span5 text-right"> 
 		<a href="{{ url('dbase/new') }}" class="btn btn-default">
 			<i class="icon-plus"></i> Crear Base de Datos
 		</a>
