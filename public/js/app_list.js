@@ -39,11 +39,13 @@ App.ListsNewRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.createRecord('list');
 	},
+			
 	deactivate: function () {
 		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
 			this.currentModel.rollback();
 		}
 	},
+			
 	setupController: function(controller, model) {
 		controller.set('model', model);
 		controller.loadDbases();
@@ -106,7 +108,6 @@ App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 		cancel: function(){
 			App.set('errormessage', '');
 			window.theDbaseController = this.get('controllers.dbase');
-			console.log(this.get('controllers.dbase'));
 			this.get('model').rollback();
 			this.transitionToRoute("lists");
 		}

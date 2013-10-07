@@ -52,13 +52,12 @@ class VisualElements extends Phalcon\Mvc\User\Component
 		$controller = $this->view->getControllerName();
 		$action = $this->view->getActionName();
 		
-		foreach ($this->_menu as $caption => $option) {
-			foreach($option['controller'] as $c){
-				if ($c == $controller) {
-					$this->_menu[$caption]['class'] = "active";
-				}
-			}
-        }
-		return $this->_menu;
+		$menu = new MenuIterator($this->_menu, $controller);
+		
+		$menu->getClass();
+		
+		$log->log("este es el arreglo ". print_r($menu, true));
+		
+		return $menu;
 	}
 }
