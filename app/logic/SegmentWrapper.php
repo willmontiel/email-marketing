@@ -317,7 +317,7 @@ class SegmentWrapper extends BaseWrapper
 					
 					$cleanCr->idCriteria = $cr->idCriteria;
 					$cleanCr->relations = $cr->relation;
-					$cleanCr->cfields = $cr->cfields;
+					$cleanCr->cfields = $cr->fieldName;
 					$cleanCr->value = $cr->value;
 					
 					array_push($criteria, $cleanCr);
