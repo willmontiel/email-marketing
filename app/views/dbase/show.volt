@@ -208,11 +208,6 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
-		<div class="span12 padded text-right">
-			{{'{{#linkTo "fields.add" class="btn btn-default" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/linkTo}}'}}
-		</div>
-	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields">
@@ -221,7 +216,7 @@
 <div class="row-fluid">
 	<div class="row-fluid">
 		<div class="span12 text-right">
-			<a href="{{url('dbase')}}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
+			<a href="{{url('dbase')}}" class="btn btn-default"><i class="icon-reply"></i> Bases de datos</a>
 		</div>
 	</div>
 </div>

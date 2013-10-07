@@ -14,7 +14,10 @@
 					Administre y configure las bases de datos de contactos
 				</div>
 				<div class="news-text">
-					Rails 4.0 is still unfinished, but it is shaping up to become a great release ...
+					Esta es la página principal de las bases de datos en la cuenta, aqui podrá encontrar información acerca de la configuración
+					de cada base de datos, los contactos activos e inactivos, etc. Además podrá crear campos personalizados y configurar las bases
+					dependiendo de las necesidades.
+					
 				</div>
 			</div>
 		</div>
@@ -28,6 +31,7 @@
 		<a href="{{ url('dbase/new') }}" class="btn btn-default">
 			<i class="icon-plus"></i> Crear Base de Datos
 		</a>
+		<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
 	</div>
 </div>
 <br />
@@ -127,14 +131,19 @@
 					 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
 					 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
 				 </div>
-				<div class="span2 text-right">
-					<br>
-					<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
-				</div>
 			</div>
 		</div>
 	</div>
 		<!-- Fin de mi lista de bases de datos -->
+</div>
+<div class="row-fluid">
+	<div class="span8"></div>
+	<div class="span4 text-right"> 
+		<a href="{{ url('dbase/new') }}" class="btn btn-default">
+			<i class="icon-plus"></i> Crear Base de Datos
+		</a>
+		<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
+	</div>
 </div>
 
 <div id="modal-simple" class="modal hide fade" aria-hidden="false">
@@ -143,9 +152,12 @@
 	  <h6 id="modal-tablesLabel">Eliminar Base de Datos</h6>
 	</div>
 	<div class="modal-body">
-		Esta seguro que desea eliminar esta Base de Datos.
-		<br/>
-		Recuerde que si elimina la Base de Datos se perderan todos los contactos, listas de contactos y segmentos que pertenezcan a ella
+		<p>
+			¿Esta seguro que desea eliminar esta base de datos?
+		</p>
+		<p>
+			Recuerde que si elimina la base de datos se perderan todos los contactos, listas de contactos y segmentos que pertenezcan a ella
+		</p>
 	</div>
 	<div class="modal-footer">
 	  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
