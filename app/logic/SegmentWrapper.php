@@ -418,7 +418,7 @@ class SegmentWrapper extends BaseWrapper
 				}
 			}
 
-			$SQL = "INSERT INTO Sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM Contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND ( " . $conditions . " )";
+			$SQL = "INSERT INTO sxc (idContact, idSegment) SELECT DISTINCT c.idContact, $segment->idSegment FROM contact c " . $join . " WHERE c.idDbase = $segment->idDbase AND ( " . $conditions . " )";
 			Phalcon\DI::getDefault()->get('logger')->log($SQL);
 			$db = Phalcon\DI::getDefault()->get('db');
 
