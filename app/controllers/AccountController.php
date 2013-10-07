@@ -83,10 +83,33 @@ class AccountController extends ControllerBase
 							}
 							return $this->response->redirect("account/new");
 						}
-						
-						$this->db->commit();
-						$this->flashSession->notice('Se ha creado la cuenta exitosamente');
-						return $this->response->redirect("account/index");
+						else {
+							$dbase = new Dbase();
+							$dbase->account = $account;
+							$dbase->name = "Mi base de datos";
+							$dbase->description = "Sin descripción";
+							$dbase->Cdescription = "Sin descripción de contactos";
+							$dbase->Ctotal = 0;
+							$dbase->Cactive = 0;
+							$dbase->Cunsubscribed = 0;
+							$dbase->Cbounced = 0;
+							$dbase->Cspam = 0;
+							$dbase->createdon = time();
+							$dbase->update = time();
+							
+							if (!$dbase->save()) {
+								$this->db->rollback();
+								foreach ($dbase->getMessages() as $msg) {
+									$this->flashSession->error($msg);
+								}
+								return $this->response->redirect("account/new");
+							}
+							else {
+								$this->db->commit();
+								$this->flashSession->notice('Se ha creado la cuenta exitosamente');
+								return $this->response->redirect("account/index");
+							}
+						}
 					}
 							
 					else{
