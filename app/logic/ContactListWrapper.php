@@ -182,19 +182,18 @@ class ContactListWrapper extends BaseWrapper
 		
 		$idDbase = $list->idDbase;
 		
-		$query = 'DELETE CO, CF
-				  FROM coxcl CL	
-					JOIN contact CO ON CL.idContact = CO.idContact 
-					LEFT JOIN fieldinstance CF ON CO.idContact = CF.idContact
-				  WHERE CO.idContact IN 
-					(SELECT C1.idContact
-					 FROM coxcl C1
-						JOIN (SELECT idContact FROM coxcl WHERE idContactlist = ?) C2 ON (C1.idContact = C2.idContact) 
-					 GROUP BY 1 
-					 HAVING COUNT(*) = 1)';
+		$query = 'DELETE CO
+					FROM coxcl CL	
+						JOIN contact CO ON CL.idContact = CO.idContact
+					WHERE CL.idContactlist = ?
+						AND NOT EXISTS 
+							(SELECT C1.idContact
+							FROM coxcl C1
+							WHERE C1.idContact = CO.idContact
+								AND idContactlist != ?)';
 		
 		$db->begin();
-		$cascadeDelete = $db->execute($query, array($idContactlist));
+		$cascadeDelete = $db->execute($query, array($idContactlist, $idContactlist));
 		$deleteContaclist = $db->execute('DELETE FROM Contactlist WHERE idContactlist = ?', array($idContactlist));
 		
 		if ($cascadeDelete == false || $deleteContaclist == false) {
