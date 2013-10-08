@@ -5,4 +5,9 @@ class MailController extends ControllerBase
 	{
 		
 	}
+	
+	public function newAction()
+	{
+		
+	}
 }

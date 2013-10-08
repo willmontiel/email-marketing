@@ -173,7 +173,8 @@ class Security extends Plugin
 			
 		//* RELEASE 0.2.0 *//
 				//Envío de correos
-				'mail::index' => array('mail' => array('read'))
+				'mail::index' => array('mail' => array('read')),
+				'mail::new' => array('mail' => array('read', 'create')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
