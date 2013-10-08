@@ -22,7 +22,7 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 			"controller" => array(""),
 			"class" => "",
 			"url" => "",
-			"title" => "Campañas",
+			"title" => "Correos",
 			"icon" => "icon-envelope"
 		),
 		"Autorespuestas" => array(
