@@ -1,5 +1,5 @@
 <?php
-class EmailController extends ControllerBase
+class MailController extends ControllerBase
 {
 	public function indexAction()
 	{
