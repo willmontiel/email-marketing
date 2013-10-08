@@ -21,7 +21,7 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 		"Campanas" => array(
 			"controller" => array(""),
 			"class" => "",
-			"url" => "",
+			"url" => "mail",
 			"title" => "Correos",
 			"icon" => "icon-envelope"
 		),
