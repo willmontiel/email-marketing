@@ -28,14 +28,13 @@ class MailForm extends Form
 		
 		$this->add(new Text('fromEmail', array(
 			'maxlength' => 50,
-			'type' => 'text',
+			'type' => 'email',
 			'required' => 'required' 
         )));
 		
 		$this->add(new Text('replyTo', array(
 			'maxlength' => 50,
-			'type' => 'text',
-			'required' => 'required' 
+			'type' => 'email'
         )));
 		
 		$this->add(new Text('toWho', array(

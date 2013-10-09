@@ -34,7 +34,10 @@ class MailController extends ControllerBase
 			$mail->status = "Draft";
 			
             if ($form->isValid() && $mail->save()) {
-				$this->response->redirect('mail/content');
+				$this->dispatcher->forward(array(
+					"action" => "content",
+					"params" => array($mail->idMail)
+				));
 			}
 			else {
 				foreach ($mail->getMessages() as $msg) {
@@ -47,9 +50,9 @@ class MailController extends ControllerBase
 		$this->view->MailForm = $form;
 	}
 	
-	public function contentAction()
+	public function contentAction($idMail)
 	{
-		
+		$this->view->setVar('lala', $idMail);
 	}
 	
 	public function targetAction()
