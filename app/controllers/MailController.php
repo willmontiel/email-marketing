@@ -1,6 +1,21 @@
 <?php
 class MailController extends ControllerBase
 {
+	protected function validateProcess($idMail)
+	{
+		$mail = Mail::findFirst(array(
+			"conditions" => "idMail = ?1 AND idAccount = ?2 AND status = ?3",
+			"bind" => array(1 => $idMail,
+							2 => $this->user->account->idAccount,
+							3 => "Draft")
+		)); 
+		if ($mail) {
+			return true;
+		}
+		else if(!$mail || $mail == null) {
+			return $this->response->redirect("mail/setup");
+		}
+	}
 	public function indexAction()
 	{
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
@@ -50,15 +65,40 @@ class MailController extends ControllerBase
 		$this->view->MailForm = $form;
 	}
 	
-	public function fontAction($idMail)
+	public function fontAction($idMail = null)
 	{
-		$this->view->setVar('idMail', $idMail);
+		$isOk = $this->validateProcess($idMail);
+		
+		if ($isOk) {
+			$this->view->setVar('idMail', $idMail);
+		}
 	}
 
 	public function editorAction($idMail) 
 	{
+		$isOk = $this->validateProcess($idMail);
+		
+		if ($isOk) {
+			//aqui haces lo q tengas q hacer jejeje,
+			//esta evita q el usuario se salte los pasos
+			$this->view->setVar('idMail', $idMail);
+		}
+		
 		
 	}
+	
+	public function htmlAction($idMail)
+	{
+		$isOk = $this->validateProcess($idMail);
+		
+		if ($isOk) {
+			//aqui haces lo q tengas q hacer jejeje,
+			//esta evita q el usuario se salte los pasos
+			$this->view->setVar('idMail', $idMail);
+		}
+		
+	}
+
 	public function targetAction()
 	{
 		
