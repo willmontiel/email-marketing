@@ -88,13 +88,11 @@
 								<div class="btn-group">
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										{%if item.status == 'Draft'%}
-										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-signin"></i> Enviar</a></li>
-										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-pencil"></i> Editar</a></li>
-										{%else%}
-										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-copy"></i> Duplicar</a></li>
-										{%endif%}
-										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-trash"></i> Eliminar </a></li>
+									{% for value in mail_options(item.status) %}
+										<li><a href="{{ url(value.url) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
+									{% endfor %}
+										<li><a href="{{ url('mail/#/') }}{{item.idMail}}"><i class="icon-copy"></i>Duplicar</a></li>
+										<li><a href="{{ url('mail/#/') }}{{item.idMail}}"><i class="icon-trash"></i>Eliminar </a></li>
 									</ul>
 								</div>
 							</div>

@@ -210,6 +210,9 @@ try {
 		$compiler->addFunction('acl_Ember', function ($resolvedArgs, $exprArgs){
 						return 'CreateAclEmber::getAclToEmber(' . $resolvedArgs . ')';
 					});
+		$compiler->addFunction('mail_options', function ($resolvedArgs, $exprArgs){
+						return 'OptionsMail::getOptions(' . $resolvedArgs . ')';
+					});
 					
         $volt->setOptions(array(
             "compileAlways" => true,
