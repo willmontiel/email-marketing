@@ -61,6 +61,18 @@
 	</div>
 	<br />
 	<div class="row-fluid">
+		<div class="sidebar-editor span1 offset1 well">
+			<ul class="pull-right">
+				<li>
+					<a href="#" class="icon-align-left icon-4x" draggable="true"></a>
+					Texto
+				</li>
+				<li>
+					<a href="#img" class="icon-picture icon-4x" draggable="true"></a>
+					Imagen
+				</li>
+			</ul>
+		</div>
 		<div class="span8">
 			<textarea id="redactor_content" name="content"></textarea>
 		</div>
