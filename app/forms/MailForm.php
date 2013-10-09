@@ -1,7 +1,9 @@
 <?php
 use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Text,
-	Phalcon\Forms\Element\Select;
+	Phalcon\Forms\Element\Select,
+	Phalcon\Forms\Element,
+	Phalcon\Forms\Element\TextArea;
 
 class MailForm extends Form
 {
@@ -26,18 +28,24 @@ class MailForm extends Form
 			'required' => 'required' 
         )));
 		
-		$this->add(new Text('fromEmail', array(
+		$this->add(new EmailElement('fromEmail', array(
 			'maxlength' => 50,
 			'type' => 'email',
 			'required' => 'required' 
         )));
 		
-		$this->add(new Text('replyTo', array(
+		$this->add(new EmailElement('replyTo', array(
 			'maxlength' => 50,
 			'type' => 'email'
         )));
 		
 		$this->add(new Text('toWho', array(
+			'maxlength' => 50,
+			'type' => 'text',
+			'required' => 'required'
+        )));
+		
+		$this->add(new TextArea('content', array(
 			'maxlength' => 50,
 			'type' => 'text',
 			'required' => 'required'

@@ -67,7 +67,7 @@
 					</div>
 
 					<div class="span3 action-nav-button">
-						<a href="{{url('mail/predesigned')}}" title="Messages">
+						<a href="{{url('mail/editor/')}}{{idMail}}" title="Messages">
 							<i class="icon-magic"></i>
 							<span>Plantillas prediseñadas</span>
 						</a>
@@ -80,7 +80,7 @@
 					</div>
 
 					<div class="span3 action-nav-button">
-						<a href="#" title="Files">
+						<a href="{{url('mail/html/')}}{{idMail}}" title="Files">
 							<i class="icon-pencil"></i>
 							<span>Html desde cero (avanzado)</span>
 						</a>
@@ -92,7 +92,7 @@
 					</div>
 
 					<div class="span3 action-nav-button">
-						<a href="#" title="Users">
+						<a href="{{url('mail/html/')}}{{idMail}}" title="Users">
 							<i class="icon-upload-alt"></i>
 							<span>Importar desde una url</span>
 						</a>

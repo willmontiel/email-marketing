@@ -74,7 +74,7 @@ class MailController extends ControllerBase
 		}
 	}
 
-	public function editorAction($idMail) 
+	public function editorAction($idMail = null) 
 	{
 		$isOk = $this->validateProcess($idMail);
 		
@@ -87,16 +87,24 @@ class MailController extends ControllerBase
 		
 	}
 	
-	public function htmlAction($idMail)
+	public function htmlAction($idMail = null)
 	{
 		$isOk = $this->validateProcess($idMail);
 		
 		if ($isOk) {
-			//aqui haces lo q tengas q hacer jejeje,
-			//esta evita q el usuario se salte los pasos
 			$this->view->setVar('idMail', $idMail);
+			
+			$mail = new Mail();
+			$form = new MailForm($mail);
+			
+			if ($this->request->isPost()) {
+				$form->bind($this->request->getPost(), $mail);
+
+				$idMail = $form->getValue('idMail');
+			}
+			
+			$this->view->MailForm = $form;
 		}
-		
 	}
 
 	public function targetAction()
