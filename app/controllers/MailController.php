@@ -52,9 +52,13 @@ class MailController extends ControllerBase
 	
 	public function contentAction($idMail)
 	{
-		$this->view->setVar('lala', $idMail);
+		$this->view->setVar('idMail', $idMail);
 	}
-	
+
+	public function editorAction($idMail) 
+	{
+		
+	}
 	public function targetAction()
 	{
 		

@@ -28,7 +28,7 @@
 					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
-				<div class="breadcrumb-button blue">
+				<div class="breadcrumb-button">
 					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
@@ -36,7 +36,7 @@
 					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
-				<div class="breadcrumb-button">
+				<div class="breadcrumb-button blue">
 					<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
@@ -48,60 +48,5 @@
 	</div>
 	<br />
 	<div class="row-fluid">
-		<hr class="divider">
-			<div class="action-nav-normal">
-				<div class="row-fluid">
-					<div class="span3 action-nav-button">
-						<a href="{{url('mail/editor/')}}{{idMail}}" title="New Project">
-							<i class="icon-picture"></i>
-							<span>Editor avanzado</span>
-						</a>
-						<span class="triangle-button green"><i class="icon-plus"></i></span>
-						<br />
-						<p>
-							Create beautiful, mobile-friendly
-							emails with our new editor
-						</p>
-					</div>
-
-					<div class="span3 action-nav-button">
-						<a href="{{url('mail/predesigned')}}" title="Messages">
-							<i class="icon-magic"></i>
-							<span>Plantillas prediseñadas</span>
-						</a>
-						<span class="triangle-button green"><i class="icon-ok"></i></span>
-						<br />
-						<p>
-							Create beautiful, mobile-friendly
-							emails with our new editor
-						</p>
-					</div>
-
-					<div class="span3 action-nav-button">
-						<a href="#" title="Files">
-							<i class="icon-pencil"></i>
-							<span>Html desde cero (avanzado)</span>
-						</a>
-						<br />
-						<p>
-							Create beautiful, mobile-friendly
-							emails with our new editor
-						</p>
-					</div>
-
-					<div class="span3 action-nav-button">
-						<a href="#" title="Users">
-							<i class="icon-upload-alt"></i>
-							<span>Importar desde una url</span>
-						</a>
-						<br />
-						<p>
-							Create beautiful, mobile-friendly
-							emails with our new editor
-						</p>
-					</div>	
-				</div>
-			</div>
-		<hr class="divider">
 	</div>
 {% endblock %}
