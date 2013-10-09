@@ -49,19 +49,21 @@
 					<tr>
 						<td class="span5">
 							<div class="box-section news with-icons">
-								<div class="avatar purple">
+								<div class="avatar blue">
 									<i class="icon-envelope icon-2x"></i>
 								</div>
 								<div class="news-content">
 									<div class="news-title">
-										<a href="{{ url('#') }}{{item.idMail}}">{{item.name}}</a>
+										<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
 									</div>
 									<div class="news-text">
-										{{item.status}}
+										{{item.status}} <br /> 
+										Creado el {{date('Y-m-d', item.createdon)}} - Actualizado el {{date('Y-m-d', item.updatedon)}}
 									</div>
 								</div>
 							</div>
 						</td>
+						{%if item.status == 'Send'%}
 						<td class="span5">
 							<ul class="inline pull-right sparkline-box">
 								<li class="sparkline-row">
@@ -73,13 +75,19 @@
 								</li>
 							</ul>
 						</td>
+						{%endif%}
 						<td class="span2">
 							<div class="pull-right">
 								<div class="btn-group">
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li><a href="{{ url('#') }}{{item.idMail}}"><i class="icon-pencil"></i> Editar</a></li>
-										<li><a href="{{ url('#') }}{{item.idMail}}"><i class="icon-trash"></i> Eliminar </a></li>
+										{%if item.status == 'Draft'%}
+										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-pencil"></i> Enviar</a></li>
+										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-pencil"></i> Editar</a></li>
+										{%else%}
+										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-pencil"></i> Copiar</a></li>
+										{%endif%}
+										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-trash"></i> Eliminar </a></li>
 									</ul>
 								</div>
 							</div>
@@ -98,16 +106,16 @@
 								<li class="previous"><a href="#" class="inactive"><<</a></li>
 								<li class="previous"><a href="#" class="inactive"><</a></li>
 							{% else %}
-								<li class="previous active"><a href="{{ url('dbase/index') }}"><<</a></li>
-								<li class="previous active"><a href="{{ url('dbase/index') }}?page={{ page.before }}"><</a></li>
+								<li class="previous active"><a href="{{ url('mail/index') }}"><<</a></li>
+								<li class="previous active"><a href="{{ url('mail/index') }}?page={{ page.before }}"><</a></li>
 							{% endif %}
 
 							{% if page.current >= page.total_pages %}
 								<li class="next"><a href="#" class="inactive">></a></li>
 								<li class="next"><a href="#" class="inactive">>></a></li>
 							{% else %}
-								<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.next}}">></a></li>
-								<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.last}}">>></a></li>		
+								<li class="next active"><a href="{{ url('mail/index') }}?page={{page.next}}">></a></li>
+								<li class="next active"><a href="{{ url('mail/index') }}?page={{page.last}}">>></a></li>		
 							{% endif %}
 						</ul>
 					 </div>
