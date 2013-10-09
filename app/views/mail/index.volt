@@ -47,7 +47,7 @@
 				<thead></thead>
 				<tbody>
 					<tr>
-						<td class="span5">
+						<td>
 							<div class="box-section news with-icons">
 								<div class="avatar blue">
 									<i class="icon-envelope icon-2x"></i>
@@ -58,14 +58,21 @@
 									</div>
 									<div class="news-text">
 										{{item.status}} <br /> 
-										Creado el {{date('Y-m-d', item.createdon)}} - Actualizado el {{date('Y-m-d', item.updatedon)}}
+										Creado el {{date('Y-m-d', item.createdon)}} 
+										{%if item.status != 'Draft' %}
+										- Enviado el {{date('Y-m-d', item.startedon)}}
+										{%endif%}
 									</div>
 								</div>
 							</div>
 						</td>
 						{%if item.status == 'Send'%}
-						<td class="span5">
-							<ul class="inline pull-right sparkline-box">
+						<td>
+							<ul class="inline sparkline-box">
+								<li class="sparkline-row">
+									<h4 class="blue"><span>Suscritores</span> 0 </h4>
+								</li>
+								
 								<li class="sparkline-row">
 									<h4 class="green"><span>Clickeados</span> 0 </h4>
 								</li>
@@ -76,16 +83,16 @@
 							</ul>
 						</td>
 						{%endif%}
-						<td class="span2">
-							<div class="pull-right">
+						<td class="span3">
+							<div class="offset3">
 								<div class="btn-group">
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										{%if item.status == 'Draft'%}
-										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-pencil"></i> Enviar</a></li>
+										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-signin"></i> Enviar</a></li>
 										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-pencil"></i> Editar</a></li>
 										{%else%}
-										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-pencil"></i> Copiar</a></li>
+										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-copy"></i> Duplicar</a></li>
 										{%endif%}
 										<li><a href="{{ url('mail/#') }}{{item.idMail}}"><i class="icon-trash"></i> Eliminar </a></li>
 									</ul>
