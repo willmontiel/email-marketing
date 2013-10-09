@@ -35,7 +35,7 @@ class MailController extends ControllerBase
 			
             if ($form->isValid() && $mail->save()) {
 				$this->dispatcher->forward(array(
-					"action" => "content",
+					"action" => "font",
 					"params" => array($mail->idMail)
 				));
 			}
@@ -50,7 +50,7 @@ class MailController extends ControllerBase
 		$this->view->MailForm = $form;
 	}
 	
-	public function contentAction($idMail)
+	public function fontAction($idMail)
 	{
 		$this->view->setVar('idMail', $idMail);
 	}
