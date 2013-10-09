@@ -66,11 +66,11 @@
 								</div>
 							</div>
 						</td>
-						{%if item.status == 'Send'%}
+						{%if item.status == 'Sent'%}
 						<td>
 							<ul class="inline sparkline-box">
 								<li class="sparkline-row">
-									<h4 class="blue"><span>Suscritores</span> 0 </h4>
+									<h4 class="blue"><span>Suscriptores</span> 0 </h4>
 								</li>
 								
 								<li class="sparkline-row">
