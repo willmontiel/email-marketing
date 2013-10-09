@@ -1,5 +1,7 @@
 <?php
-class Mail extends \Phalcon\Mvc\Model
+use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Validator\Email;
+class Mail extends Modelbase
 {
 	public function initialize()
 	{

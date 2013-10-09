@@ -28,7 +28,7 @@
 	</div>
 	<div class="span5 text-right"> 
 		<a href="{{ url('mail/setup') }}" class="btn btn-default">
-			<i class="icon-plus"></i> Crear Correo
+			<i class="icon-plus"></i> Nuevo Correo
 		</a>
 	</div>
 </div>

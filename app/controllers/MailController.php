@@ -29,6 +29,8 @@ class MailController extends ControllerBase
 			$form->bind($this->request->getPost(), $mail);
 			
 			$mail->idAccount = $this->user->account->idAccount;
+			$mail->fromEmail = strtolower($form->getValue('fromEmail'));
+			$mail->replyTo = strtolower($form->getValue('replyTo'));
 			$mail->status = "Draft";
 			
             if ($form->isValid() && $mail->save()) {
