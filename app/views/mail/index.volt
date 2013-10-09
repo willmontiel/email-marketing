@@ -27,7 +27,7 @@
 	{{ flashSession.output() }}
 	</div>
 	<div class="span5 text-right"> 
-		<a href="{{ url('mail/new') }}" class="btn btn-default">
+		<a href="{{ url('mail/setup') }}" class="btn btn-default">
 			<i class="icon-plus"></i> Crear Correo
 		</a>
 	</div>
