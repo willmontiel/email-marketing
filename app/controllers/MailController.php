@@ -49,10 +49,7 @@ class MailController extends ControllerBase
 			$mail->status = "Draft";
 			
             if ($form->isValid() && $mail->save()) {
-				$this->dispatcher->forward(array(
-					"action" => "font",
-					"params" => array($mail->idMail)
-				));
+				$this->response->redirect("mail/font/" .$mail->idMail);
 			}
 			else {
 				foreach ($mail->getMessages() as $msg) {
@@ -92,15 +89,23 @@ class MailController extends ControllerBase
 		$isOk = $this->validateProcess($idMail);
 		
 		if ($isOk) {
-			$this->view->setVar('idMail', $idMail);
-			
-			$mail = new Mail();
-			$form = new MailForm($mail);
+			$mailContent = new Mailcontent();
+			$form = new MailForm($mailContent);
 			
 			if ($this->request->isPost()) {
-				$form->bind($this->request->getPost(), $mail);
-
-				$idMail = $form->getValue('idMail');
+				$form->bind($this->request->getPost(), $mailContent);
+				
+				$mailContent->idMail = $idMail;
+				
+				if($form->isValid() && $mailContent->save()) {
+					$this->response->redirect("mail/target/" .$idMail);
+				}
+				else {
+					foreach ($mailContent->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+					return $this->response->redirect("mail/html/". $idMail);
+				}
 			}
 			
 			$this->view->MailForm = $form;

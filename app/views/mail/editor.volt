@@ -1,8 +1,8 @@
 {% extends "templates/index_new.volt" %}
 {% block header_javascript %}
-		{{ super() }}
-		{{ javascript_include('redactor/redactor.js')}}
-		{{ stylesheet_link('redactor/redactor.css') }}
+	{{ super() }}
+	{{ javascript_include('redactor/redactor.js')}}
+	{{ stylesheet_link('redactor/redactor.css') }}
 	<script type="text/javascript">
 	$(document).ready(
 		function()

@@ -1,4 +1,17 @@
 {% extends "templates/index_new.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	{{ javascript_include('redactor/redactor.js')}}
+	{{ stylesheet_link('redactor/redactor.css') }}
+	<script type="text/javascript">
+	$(document).ready(
+		function()
+		{
+			$('#redactor_content').redactor();
+		}
+	);
+	</script>
+{% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
 {% block content %}
@@ -44,27 +57,27 @@
 			</div>
 		</div>
 	</div>
+	<br />
 	<div class="row-fluid">
 		{{ flashSession.output()}}
 	</div>
-	<br />
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="box">
 				<div class="box-header">
 				</div>
 				<div class="box-content">
-					<div class="padded">
-						{{ form('mail/html', 'id': 'newMail', 'method': 'Post', 'class' : 'fill-up') }}
-							<input type="hidden" name="idMail" value="{{idMail}}">
+					{{ form('mail/html/43', 'id': 'newMail', 'method': 'Post') }}
+						<div class="padded">
+							<!---<input type="hidden" name="idMail" value="">-->
 							<label>Cree su propio código HTML: </label>
 							{{ MailForm.render('content') }}
-						</form>
-					</div>
-					<div class="form-actions">
-						<a href="" class="btn btn-default">Cancelar</a>
-						<button class="btn btn-blue">Siguiente</button>
-					</div>
+						</div>
+						<div class="form-actions">
+							<a href="" class="btn btn-default">Cancelar</a>
+							{{ submit_button("Siguiente", 'class' : "btn btn-blue") }}
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
