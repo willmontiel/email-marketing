@@ -113,9 +113,38 @@ class MailController extends ControllerBase
 		}
 	}
 
-	public function targetAction()
+	public function targetAction($idMail = null)
 	{
+		$log = $this->logger;
+		$isOk = $this->validateProcess($idMail);
 		
+		if ($isOk) {
+			$this->view->setVar('idMail', $idMail);
+			$idAccount = $this->user->account->idAccount;
+			
+			$dbases = Dbase::findByIdAccount($idAccount);
+			
+			$array = array();
+			foreach ($dbases as $dbase) {
+				$array[] = $dbase->idDbase;
+				$log->log("este es :". $dbase->idDbase);
+			}
+		   
+			$idsDbase = implode(",", $array);
+			
+			$phql1 = "SELECT * FROM Contactlist WHERE idDbase IN (". $idsDbase .")";
+			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
+			
+			$log->log("este es :". $phql1);
+			$log->log("este es :". $phql2);
+			$contactlists = $this->modelsManager->executeQuery($phql1);
+			$segments = $this->modelsManager->executeQuery($phql2);
+			
+			$this->view->setVar('dbases', $dbases);
+			$this->view->setVar('contactlists', $contactlists);
+			$this->view->setVar('segments', $segments);
+			
+		}
 	}
 	
 	public function scheduleAction()
