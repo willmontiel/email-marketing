@@ -45,6 +45,10 @@
 	</div>
 	<br />
 	<div class="row-fluid">
+		{{ flashSession.output()}}
+	</div>
+	<br />
+	<div class="row-fluid">
 		<div class="box">
 			<div class="box-header">
 				<div class="title">
@@ -52,9 +56,28 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<div class="padded">
-					<label>Nombre: </label>
-				</div>
+				{{ form('mail/setup', 'id': 'newMail', 'method': 'Post', 'class' : 'fill-up') }}
+					<div class="padded">
+						<label>*Nombre: </label>
+						{{ MailForm.render('name') }}
+						
+						<label>*Asunto: </label>
+						{{ MailForm.render('subject') }}
+										
+						<label>*Enviar desde este nombre: </label>
+						{{ MailForm.render('fromName') }}
+						
+						<label>*Enviar desde este correo: </label>
+						{{ MailForm.render('fromEmail') }}
+						
+						<label>*Responder a este correo: </label>
+						{{ MailForm.render('replyTo') }}
+					</div>
+					<div class="form-actions">
+						<a href="{{url('')}}" class="btn btn-default">Cancelar</a>
+						<button class="btn btn-blue">Siguiente</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

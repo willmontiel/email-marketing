@@ -20,7 +20,42 @@ class MailController extends ControllerBase
 		$this->view->setVar("page", $page);
 	}
 	
-	public function newAction()
+	public function setupAction()
+	{
+		$mail = new Mail();
+		$form = new MailForm($mail);
+		
+		if ($this->request->isPost()) {
+			$form->bind($this->request->getPost(), $mail);
+			
+			$mail->idAccount = $this->user->account->idAccount;
+			$mail->status = "Draft";
+			
+            if ($form->isValid() && $mail->save()) {
+				$this->response->redirect('mail/content');
+			}
+			else {
+				foreach ($mail->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+				return $this->response->redirect("mail/setup");
+			}
+			
+		}
+		$this->view->MailForm = $form;
+	}
+	
+	public function contentAction()
+	{
+		
+	}
+	
+	public function targetAction()
+	{
+		
+	}
+	
+	public function scheduleAction()
 	{
 		
 	}

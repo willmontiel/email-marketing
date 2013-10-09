@@ -86,7 +86,7 @@ class AccountController extends ControllerBase
 						else {
 							$dbase = new Dbase();
 							$dbase->account = $account;
-							$dbase->name = "Mi base de datos";
+							$dbase->name = "Base de datos";
 							$dbase->description = "Sin descripción";
 							$dbase->Cdescription = "Sin descripción de contactos";
 							$dbase->Ctotal = 0;
