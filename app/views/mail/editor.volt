@@ -1,4 +1,8 @@
 {% extends "templates/index_new.volt" %}
+{% block header_javascript %}
+		{{ super() }}
+		{{ javascript_include('redactor/redactor.js')}}
+{% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
 {% block content %}

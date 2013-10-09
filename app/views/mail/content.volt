@@ -11,10 +11,12 @@
 					</div>
 					<div class="news-content">
 						<div class="news-title">
-							Editar o crear contenido
+							Seleccion como va a crear el contenido
 						</div>
 						<div class="news-text">
-							Rails 4.0 is still unfinished, but it is shaping up to become a great release ...
+							Tenemos muchas opciones para crear contenido a los correos, podrá utilizar el editor
+							avanzado que es una herramienta muy poderosa que hará mas facil crear contenido con estilo
+							y bien estructurado en unos pocos minutos, y muchas opciones más.
 						</div>
 					</div>
 				</div>
@@ -59,8 +61,8 @@
 						<span class="triangle-button green"><i class="icon-plus"></i></span>
 						<br />
 						<p>
-							Create beautiful, mobile-friendly
-							emails with our new editor
+							Cree contenido con estilo, bien estructurado y con los mejores estandares
+							de forma muy sencilla en unos pocos minutos.
 						</p>
 					</div>
 
@@ -72,8 +74,8 @@
 						<span class="triangle-button green"><i class="icon-ok"></i></span>
 						<br />
 						<p>
-							Create beautiful, mobile-friendly
-							emails with our new editor
+							Utilice alguna de nuestras plantillas prediseñadas, que le servirán de guía para 
+							crear un contenido con estilo y llamativo a los correos.
 						</p>
 					</div>
 
@@ -84,8 +86,8 @@
 						</a>
 						<br />
 						<p>
-							Create beautiful, mobile-friendly
-							emails with our new editor
+							Utilice nuestro editor de código html, para crear contenido a correos desde código fuente
+							(recomendado solo a usuarios avanzados).
 						</p>
 					</div>
 
@@ -96,8 +98,7 @@
 						</a>
 						<br />
 						<p>
-							Create beautiful, mobile-friendly
-							emails with our new editor
+							Importe contenido html desde un enlace externo
 						</p>
 					</div>	
 				</div>

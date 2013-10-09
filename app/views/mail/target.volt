@@ -11,10 +11,11 @@
 					</div>
 					<div class="news-content">
 						<div class="news-title">
-							Editar o crear contenido
+							Seleccione los destinatarios del correo
 						</div>
 						<div class="news-text">
-							Rails 4.0 is still unfinished, but it is shaping up to become a great release ...
+							Es una de las partes más importantes, podrá seleccionar desde listas de contactos, segmentos hasta bases de
+							datos, en un solo paso.
 						</div>
 					</div>
 				</div>

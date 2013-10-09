@@ -11,10 +11,11 @@
 					</div>
 					<div class="news-content">
 						<div class="news-title">
-							Editar o crear contenido
+							Programar el envío
 						</div>
 						<div class="news-text">
-							Rails 4.0 is still unfinished, but it is shaping up to become a great release ...
+							Esta es la ultima parte del proceso, despues de haber seguido los pasos correctamente solo
+							tendrá que programar el envío, puede enviar el correo ya o programar una fecha
 						</div>
 					</div>
 				</div>

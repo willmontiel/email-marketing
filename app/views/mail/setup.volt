@@ -14,7 +14,14 @@
 							Información de correo
 						</div>
 						<div class="news-text">
-							Rails 4.0 is still unfinished, but it is shaping up to become a great release ...
+							<p>
+								Aqui podrá ingresar la información básica del correo, como un nombre para el correo,
+								el asunto, la direccion de correo desde donde se envía, etc.
+							</p>
+							<p>
+								Una vez haya terminado de ingresar los datos, haga click en el botón siguiente para continuar 
+								con el proceso.
+							</p>
 						</div>
 					</div>
 				</div>
@@ -49,7 +56,7 @@
 	</div>
 	<br />
 	<div class="row-fluid">
-		<div class="box">
+		<div class="box span4">
 			<div class="box-header">
 				<div class="title">
 					Nuevo correo
