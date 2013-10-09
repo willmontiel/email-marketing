@@ -91,6 +91,7 @@ class MailController extends ControllerBase
 		if ($isOk) {
 			$mailContent = new Mailcontent();
 			$form = new MailForm($mailContent);
+			$this->view->setVar('idMail', $idMail);
 			
 			if ($this->request->isPost()) {
 				$form->bind($this->request->getPost(), $mailContent);

@@ -67,7 +67,7 @@
 				<div class="box-header">
 				</div>
 				<div class="box-content">
-					{{ form('mail/html/43', 'id': 'newMail', 'method': 'Post') }}
+					<form action = "{{url('mail/html')}}/{{idMail}}" method="post">
 						<div class="padded">
 							<!---<input type="hidden" name="idMail" value="">-->
 							<label>Cree su propio código HTML: </label>

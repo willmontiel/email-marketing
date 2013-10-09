@@ -25,7 +25,6 @@ class OptionsMail
 			default :
 				break;
 		}
-		Phalcon\DI::getDefault()->get('logger')->log(print_r($array, true));
 		return $array;
 	}
 	
