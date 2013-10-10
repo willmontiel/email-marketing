@@ -103,7 +103,7 @@
 						<div id="list" style="display: none;">
 							<select multiple="multiple" name="contactlists[]" id="listSelect">
 								{% for contactlist in contactlists %}
-									<option value="{{contactlist.idContactlist}}">{{contactlist.name}}</option>
+									<option value="{{contactlist.idContactlist}}">{{contactlist.name}},  {{contactlist.Dbase}}</option>
 								{% endfor %}
 							</select>
 						</div>

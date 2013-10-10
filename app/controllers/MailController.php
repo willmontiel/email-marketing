@@ -131,7 +131,7 @@ class MailController extends ControllerBase
 		   
 			$idsDbase = implode(",", $array);
 			
-			$phql1 = "SELECT * FROM Contactlist WHERE idDbase IN (". $idsDbase .")";
+			$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
 			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
 			
 			$contactlists = $this->modelsManager->executeQuery($phql1);
