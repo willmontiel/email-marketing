@@ -1,4 +1,31 @@
 {% extends "templates/index_new.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	<script type="text/javascript">
+	$(document).ready(function(){
+        $("input[name=radios]").click(function () { 
+			$("#db").css("display", "none");
+			$("#list").css("display", "none");
+			$("#seg").css("display", "none");
+			
+			$('#dbSelect').prop('selectedIndex',-1);
+			$('#listSelect').prop('selectedIndex',-1);
+			$('#segSelect').prop('selectedIndex',-1);
+			
+			if ($('input:radio[name=radios]:checked').val() == "0") {
+				$("#db").css("display", "block");
+			}
+			else if ($('input:radio[name=radios]:checked').val() == "1") {
+				$('#dbSelect').prop('selectedIndex',-1);
+				$("#list").css("display", "block");
+			}
+			else if ($('input:radio[name=radios]:checked').val() == "2") {
+				$("#seg").css("display", "block");
+			}
+         });
+	});
+</script>
+{% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
 {% block content %}
@@ -44,6 +71,7 @@
 			</div>
 		</div>
 	</div>
+	<br />
 	<div class="row-fluid">
 		{{ flashSession.output()}}
 	</div>
@@ -59,34 +87,35 @@
 				<form action="{{url('mail/schedule/')}}{{idMail}}" method="post">
 					<div class="padded">
 						<div>
-							<input type="radio" name="optionsRadios[abc]" class="icheck" checked id="iradio1">
-							<label for="iradio1">Base de datos de contactos </label>
+							<input type="radio" name="radios" value="0" id="dbRadio" >Base de datos de contactos <br />
 						</div>
-						<select class="chzn-select" name="dbase">
-							{% for dbase in dbases %}
-								<option value="{{dbase.idDbase}}">{{dbase.name}}</option>
-							{% endfor %}
-						</select>
+						<div id="db" style="display: none;">
+							<select multiple="multiple" name="dbases[]"  id="dbSelect">
+								{% for dbase in dbases %}
+									<option value="{{dbase.idDbase}}">{{dbase.name}}</option>
+								{% endfor %}
+							</select>
+						</div>
 						<br /><br />
 						<div>
-							<input type="radio" name="optionsRadios[abc]" class="icheck" checked id="iradio1">
-							<label for="iradio1">Lista de contactos </label>
+							<input type="radio" name="radios" value="1" id="listRadio">Lista de contactos <br />
 						</div>
-						<select class="chzn-select" name="contactlist">
-							{% for contactlist in contactlists %}
-								<option value="{{contactlist.idContactlist}}">{{contactlist.name}}</option>
-							{% endfor %}
-						</select>
+						<div id="list" style="display: none;">
+							<select multiple="multiple" name="contactlists[]" id="listSelect">
+								{% for contactlist in contactlists %}
+									<option value="{{contactlist.idContactlist}}">{{contactlist.name}}</option>
+								{% endfor %}
+							</select>
+						</div>
 						<br /><br />
-						<div>
-							<input type="radio" name="optionsRadios[abc]" class="icheck" checked id="iradio1">
-							<label for="iradio1">Segmentos </label>
+						<input type="radio" name="radios" value="2" id="segmentRadio"> Segmentos <br />
+						<div id="seg" style="display: none;">
+							<select multiple="multiple" name="segments[]" id="segSelect">
+								{% for segment in segments %}
+									<option value="{{segment.idSegment}}">{{segment.name}}</option>
+								{% endfor %}
+							</select>
 						</div>
-						<select class="chzn-select" name="segments">
-							{% for segment in segments %}
-								<option value="{{segment.idSegment}}">{{segment.name}}</option>
-							{% endfor %}
-						</select>
 					</div>
 					<div class="form-actions">
 						<a href="" class="btn btn-default">Cancelar</a>

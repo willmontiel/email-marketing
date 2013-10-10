@@ -49,7 +49,7 @@ class MailController extends ControllerBase
 			$mail->status = "Draft";
 			
             if ($form->isValid() && $mail->save()) {
-				$this->response->redirect("mail/font/" .$mail->idMail);
+				$this->response->redirect("mail/source/" .$mail->idMail);
 			}
 			else {
 				foreach ($mail->getMessages() as $msg) {
@@ -62,7 +62,7 @@ class MailController extends ControllerBase
 		$this->view->MailForm = $form;
 	}
 	
-	public function fontAction($idMail = null)
+	public function sourceAction($idMail = null)
 	{
 		$isOk = $this->validateProcess($idMail);
 		
@@ -127,7 +127,6 @@ class MailController extends ControllerBase
 			$array = array();
 			foreach ($dbases as $dbase) {
 				$array[] = $dbase->idDbase;
-				$log->log("este es :". $dbase->idDbase);
 			}
 		   
 			$idsDbase = implode(",", $array);
@@ -135,8 +134,6 @@ class MailController extends ControllerBase
 			$phql1 = "SELECT * FROM Contactlist WHERE idDbase IN (". $idsDbase .")";
 			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
 			
-			$log->log("este es :". $phql1);
-			$log->log("este es :". $phql2);
 			$contactlists = $this->modelsManager->executeQuery($phql1);
 			$segments = $this->modelsManager->executeQuery($phql2);
 			
@@ -147,8 +144,66 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function scheduleAction()
+	private function returnIds($contacts, $idMail) 
 	{
+		$idContacts = " VALUES";
+		foreach ($contacts as $id) {
+			if ($comma == false) {
+				$idContacts .= " (" . $idMail . "," . $id->idContact . ") ";
+			}
+			$idContacts .= ", (" . $idMail . "," . $id->idContact . ") ";
+			$comma = true;
+		}
+		return $idContacts;
+	}
+
+	public function scheduleAction($idMail = null)
+	{
+		$log = $this->logger;
+		$isOk = $this->validateProcess($idMail);
 		
+		if ($isOk) {
+			if ($this->request->isPost()) {
+				
+				$dbases = $this->request->getPost("dbases");
+				$contactlists = $this->request->getPost("contactlists");
+				$segments = $this->request->getPost("segments");
+				
+				$sql = "REPLACE INTO mxc (idMail, idContact)";
+				
+				if ($dbases != null) {
+					$dbase = implode(',', $dbases);
+					$phql = "SELECT Contact.idContact FROM Contact WHERE Contact.idDbase IN (" . $dbase . ")";
+				}
+				
+				else if ($contactlists != null) {
+					$contactlist = implode(',', $contactlists);
+					$phql= "SELECT coxcl.idContact FROM coxcl WHERE coxcl.idContactlist IN (" . $contactlist . ")";
+				}
+				
+				else if ($segments != null) {
+					$segment = implode(',', $segments);
+					$phql .= "SELECT sxc.idContact FROM sxc WHERE sxc.idSegment IN (" . $segment . ")";
+				}
+				
+				$contacts = $this->modelsManager->executeQuery($phql);
+				if (count($contacts) <= 0) {
+					$this->flashSession->error("No hay contactos registrados en el criterio seleccionado, por favor verifique la información");
+					return $this->response->redirect("mail/target/" . $idMail);
+				}
+				$idContacts = $this->returnIds($contacts, $idMail);
+				$sql .= $idContacts;
+				
+				$log->log("este es: ". $sql);
+				$db = Phalcon\DI::getDefault()->get('db');
+
+				$db->begin();
+				$result = $db->execute($sql);
+				if(!$result) {
+					$db->rollback();
+				}
+				$db->commit();
+			}
+		}
 	}
 }

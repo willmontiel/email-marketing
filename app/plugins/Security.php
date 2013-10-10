@@ -175,7 +175,7 @@ class Security extends Plugin
 				//Envío de correos
 				'mail::index' => array('mail' => array('read')),
 				'mail::setup' => array('mail' => array('read', 'create')),
-				'mail::font' => array('mail' => array('read', 'create')),
+				'mail::source' => array('mail' => array('read', 'create')),
 				'mail::editor' => array('mail' => array('read', 'create')),
 				'mail::html' => array('mail' => array('read', 'create')),
 				'mail::target' => array('mail' => array('read', 'create')),

@@ -7,7 +7,7 @@
 	$(document).ready(
 		function()
 		{
-			$('#redactor_content').redactor();
+			$('#redactor_content').redactor({fullpage: true});
 		}
 	);
 	</script>
