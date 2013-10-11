@@ -186,6 +186,10 @@ class MailController extends ControllerBase
 					$phql .= "SELECT sxc.idContact FROM sxc WHERE sxc.idSegment IN (" . $segment . ")";
 				}
 				
+				else {
+					$this->flashSession->error("No ha seleccionado una lista, base de datos o segmento, por favor verifique la información");
+					return $this->response->redirect("mail/target/" . $idMail);
+				}
 				$contacts = $this->modelsManager->executeQuery($phql);
 				if (count($contacts) <= 0) {
 					$this->flashSession->error("No hay contactos registrados en el criterio seleccionado, por favor verifique la información");
