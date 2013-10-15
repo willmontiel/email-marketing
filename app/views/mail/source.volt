@@ -11,7 +11,7 @@
 					</div>
 					<div class="news-content">
 						<div class="news-title">
-							Seleccion como va a crear el contenido
+							Seleccionar como va a crear el contenido
 						</div>
 						<div class="news-text">
 							Tenemos muchas opciones para crear contenido a los correos, podrá utilizar el editor
@@ -92,7 +92,7 @@
 					</div>
 
 					<div class="span3 action-nav-button">
-						<a href="{{url('mail/html/')}}{{idMail}}" title="Users">
+						<a href="{{url('mail/import/')}}{{idMail}}" title="Users">
 							<i class="icon-upload-alt"></i>
 							<span>Importar desde una url</span>
 						</a>

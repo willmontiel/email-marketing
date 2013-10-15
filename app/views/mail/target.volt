@@ -16,7 +16,6 @@
 				$("#db").css("display", "block");
 			}
 			else if ($('input:radio[name=radios]:checked').val() == "1") {
-				$('#dbSelect').prop('selectedIndex',-1);
 				$("#list").css("display", "block");
 			}
 			else if ($('input:radio[name=radios]:checked').val() == "2") {

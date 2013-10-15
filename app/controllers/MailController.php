@@ -113,34 +113,123 @@ class MailController extends ControllerBase
 		}
 	}
 
-	public function targetAction($idMail = null)
+	/**
+	 * Funcion que guarda las imagenes de la url cargada
+	 * @param type $file
+	 */
+	protected function downloadimages($file)
+	{
+	//				$internalNumber = uniqid();
+	//				$date = date("ymdHi",time());
+	//				$name = "{$idAccount}_{$date}_{$internalNumber}";
+	//				
+	//				$destiny =  "../assets/" . $idAccount . "/" . $internalName;
+	//				copy($_FILES['importFile']['tmp_name'],$destiny);
+		
+	}
+	
+	/**
+	 * Función que descarga código html desde una url y la guarda en una carpeta determinada en el servidor
+	 * @param type $url
+	 * @param type $dir
+	 * @return type
+	 */
+	protected function downloadhtml($url, $dir)
+	{
+		$html = file_get_html($url);
+		
+		$htmlbase = $html->find('head base');
+		if (count($htmlbase) > 0) {
+			$htmlbase = $htmlbase[0];
+		}
+		
+		if ($htmlbase) {
+			$base = $htmlbase->href;
+			$htmlbase->outertext = '';
+		}
+		
+		else {
+			$path = pathinfo($dir); 
+			$base = $path['dirname'];
+		}
+		
+		foreach($html->find('img') as $element) {
+			if (trim($element->src) !== null && trim($element->src) !== '') {
+				$oldlocation = $element->src;
+				$location = $this->addImageToMap($oldlocation, $base);
+
+				$element->src = $location;
+			}
+		}
+		
+		$this->html = $html;
+		
+		return $html;
+		
+	}
+	
+	public function importAction($idMail = null)
 	{
 		$log = $this->logger;
 		$isOk = $this->validateProcess($idMail);
 		
 		if ($isOk) {
 			$this->view->setVar('idMail', $idMail);
-			$idAccount = $this->user->account->idAccount;
 			
-			$dbases = Dbase::findByIdAccount($idAccount);
-			
-			$array = array();
-			foreach ($dbases as $dbase) {
-				$array[] = $dbase->idDbase;
+			if ($this->request->isPost()) {
+				$idAccount = $this->user->account->idAccount;
+				
+				$url = $this->request->getPost("url");
+				$image = $this->request->getPost("image");
+				
+				$dir = "../assets/" . $idAccount;
+				if(!filter_var($url, FILTER_VALIDATE_URL)) {
+					$this->flashSession->error("La url ingresada no es válida, por favor verifique la información");
+					return $this->response->redirect("mail/import/" . $idMail);
+				}
+				
+				if (!file_exists($dir)) {
+					mkdir($dir, 0700);
+				} 
+				
+				$html = $this->downloadhtml($url, $dir);
+				file_put_contents('downloaded.html', $html);
+//				if ($image == "load") {
+//					$this->downloadimages($file);
+//				}
 			}
-		   
-			$idsDbase = implode(",", $array);
+		}
+	}
+	
+	public function targetAction($idMail = null)
+	{
+		$isOk = $this->validateProcess($idMail);
+		
+		if ($isOk) {
+			$this->view->setVar('idMail', $idMail);
 			
-			$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
-			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
-			
-			$contactlists = $this->modelsManager->executeQuery($phql1);
-			$segments = $this->modelsManager->executeQuery($phql2);
-			
-			$this->view->setVar('dbases', $dbases);
-			$this->view->setVar('contactlists', $contactlists);
-			$this->view->setVar('segments', $segments);
-			
+			if ($this->request->isPost()) {
+				$idAccount = $this->user->account->idAccount;
+
+				$dbases = Dbase::findByIdAccount($idAccount);
+
+				$array = array();
+				foreach ($dbases as $dbase) {
+					$array[] = $dbase->idDbase;
+				}
+
+				$idsDbase = implode(",", $array);
+
+				$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
+				$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
+
+				$contactlists = $this->modelsManager->executeQuery($phql1);
+				$segments = $this->modelsManager->executeQuery($phql2);
+
+				$this->view->setVar('dbases', $dbases);
+				$this->view->setVar('contactlists', $contactlists);
+				$this->view->setVar('segments', $segments);
+			}
 		}
 	}
 	
@@ -209,5 +298,36 @@ class MailController extends ControllerBase
 				$db->commit();
 			}
 		}
+	}
+	
+	public function deleteAction($idMail)
+	{
+		$log = $this->logger;
+		$time = strtotime("-31 days");
+		$mail = Mail::findFirst(array(
+			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR status = ?4",
+			"bind" => array(1 => $idMail,
+							2 => $this->user->account->idAccount,
+							3 => $time,
+							4 => "Draft")
+		));
+	
+		if (!$mail) {
+			$this->flashSession->error("No se ha encontrado el correo, por favor verifique la información");
+			return $this->response->redirect("mail");
+		}
+		
+		else if (!$mail->delete()) {
+			foreach ($mail->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+			}
+			return $this->response->redirect("mail");
+		}
+		
+		else {
+			$this->flashSession->warning("Se ha eliminado el correo exitosamente");
+			return $this->response->redirect("mail");
+		}
+		
 	}
 }
