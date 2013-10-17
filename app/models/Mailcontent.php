@@ -1,12 +1,13 @@
 <?php
 use Phalcon\Mvc\Model\Validator\PresenceOf;
-use Phalcon\Mvc\Model\Validator\Uniqueness;
 
 class Mailcontent extends \Phalcon\Mvc\Model
 {
 	public function initialize()
 	{
 		$this->belongsTo("idMail", "Mail", "idMail");
+		
+		$this->useDynamicUpdate(true);
 	}
 	
 	public function validation()
@@ -16,12 +17,6 @@ class Mailcontent extends \Phalcon\Mvc\Model
 				"field"   => "content",
 				"message" => "No ha ingresado ningún contenido para el correo, por favor verifique la información"
 		)));
-		
-		$this->validate(new Uniqueness(
-				array(
-                "field"   => "idMail",
-                "message" => "No se pudo guardar la información , por favor verifique e intente de nuevo"
-        )));
 		
 		if ($this->validationHasFailed() == true) {
 			return false;

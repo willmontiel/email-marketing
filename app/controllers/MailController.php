@@ -1,6 +1,8 @@
 <?php
 class MailController extends ControllerBase
 {
+	protected $image_map = array();
+	
 	protected function validateProcess($idMail)
 	{
 		$mail = Mail::findFirst(array(
@@ -16,8 +18,9 @@ class MailController extends ControllerBase
 			return $this->response->redirect("mail/setup");
 		}
 	}
+	
 	public function indexAction()
-	{
+	{	
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 		
 		$idAccount = $this->user->account->idAccount;
@@ -89,83 +92,50 @@ class MailController extends ControllerBase
 		$isOk = $this->validateProcess($idMail);
 		
 		if ($isOk) {
-			$mailContent = new Mailcontent();
-			$form = new MailForm($mailContent);
+			$mailContentExist = Mailcontent::findFirst(array(
+				"conditions" => "idMail = ?1",
+				"bind" => array(1 => $idMail)
+			));
+			
+			if ($mailContentExist) {
+				$this->view->setVar("mailContent", $mailContentExist);
+				$form = new MailForm($mailContentExist);
+			}
+			else {
+				$mailContent = new Mailcontent();
+				$form = new MailForm($mailContent);
+			}
+			
 			$this->view->setVar('idMail', $idMail);
 			
-			if ($this->request->isPost()) {
+			if ($this->request->isPost() && $mailContentExist) {
+				$form->bind($this->request->getPost(), $mailContentExist);
+				
+				if(!$form->isValid() || !$mailContentExist->save()) {
+					foreach ($mailContentExist->getMessages() as $msg) {
+							$this->flashSession->error($msg);
+					}
+					return $this->response->redirect("mail/html/". $idMail);
+				}
+				$this->response->redirect("mail/target/" .$idMail);
+			}
+			
+			else if ($this->request->isPost() && !$mailContentExist) {
 				$form->bind($this->request->getPost(), $mailContent);
 				
 				$mailContent->idMail = $idMail;
 				
-				if($form->isValid() && $mailContent->save()) {
-					$this->response->redirect("mail/target/" .$idMail);
-				}
-				else {
+				if(!$form->isValid() || !$mailContent->save()) {
 					foreach ($mailContent->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}
 					return $this->response->redirect("mail/html/". $idMail);
 				}
+				$this->response->redirect("mail/target/" .$idMail);
 			}
 			
 			$this->view->MailForm = $form;
 		}
-	}
-
-	/**
-	 * Funcion que guarda las imagenes de la url cargada
-	 * @param type $file
-	 */
-	protected function downloadimages($file)
-	{
-	//				$internalNumber = uniqid();
-	//				$date = date("ymdHi",time());
-	//				$name = "{$idAccount}_{$date}_{$internalNumber}";
-	//				
-	//				$destiny =  "../assets/" . $idAccount . "/" . $internalName;
-	//				copy($_FILES['importFile']['tmp_name'],$destiny);
-		
-	}
-	
-	/**
-	 * Función que descarga código html desde una url y la guarda en una carpeta determinada en el servidor
-	 * @param type $url
-	 * @param type $dir
-	 * @return type
-	 */
-	protected function downloadhtml($url, $dir)
-	{
-		$html = file_get_html($url);
-		
-		$htmlbase = $html->find('head base');
-		if (count($htmlbase) > 0) {
-			$htmlbase = $htmlbase[0];
-		}
-		
-		if ($htmlbase) {
-			$base = $htmlbase->href;
-			$htmlbase->outertext = '';
-		}
-		
-		else {
-			$path = pathinfo($dir); 
-			$base = $path['dirname'];
-		}
-		
-		foreach($html->find('img') as $element) {
-			if (trim($element->src) !== null && trim($element->src) !== '') {
-				$oldlocation = $element->src;
-				$location = $this->addImageToMap($oldlocation, $base);
-
-				$element->src = $location;
-			}
-		}
-		
-		$this->html = $html;
-		
-		return $html;
-		
 	}
 	
 	public function importAction($idMail = null)
@@ -182,53 +152,123 @@ class MailController extends ControllerBase
 				$url = $this->request->getPost("url");
 				$image = $this->request->getPost("image");
 				
-				$dir = "../assets/" . $idAccount;
+				$dir = $this->asset->dir . $idAccount . "/images";
+				
 				if(!filter_var($url, FILTER_VALIDATE_URL)) {
 					$this->flashSession->error("La url ingresada no es válida, por favor verifique la información");
 					return $this->response->redirect("mail/import/" . $idMail);
 				}
 				
 				if (!file_exists($dir)) {
-					mkdir($dir, 0700);
+					mkdir($dir, 0777, true);
 				} 
 				
-				$html = $this->downloadhtml($url, $dir);
-				file_put_contents('downloaded.html', $html);
-//				if ($image == "load") {
-//					$this->downloadimages($file);
-//				}
+				$getHtml = new LoadHtml();
+				$html = $getHtml->gethtml($url, $image, $dir);
+				
+				$mailContent = Mailcontent::findFirst(array(
+					"conditions" => "idMail = ?1",
+					"bind" => array(1 => $idMail)
+				));
+				
+				if (!$mailContent) {
+					$content = new Mailcontent();
+					$content->idMail = $idMail;
+					$content->content = $html->__toString();
+					
+					if (!$content->save()) {
+						foreach ($content->getMessages() as $msg) {
+							$this->flashSession->error($msg);
+						}		
+						return $this->response->redirect("mail/import/" . $idMail);
+					}
+					return $this->response->redirect("mail/html/" . $idMail);
+				}
+				
+				$mailContent->content = $html->__toString();
+
+				if (!$mailContent->save()) {
+					foreach ($mailContent->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}		
+					return $this->response->redirect("mail/import/" . $idMail);
+				}
+				else {
+					return $this->response->redirect("mail/html/" . $idMail);
+				}
 			}
 		}
 	}
 	
 	public function targetAction($idMail = null)
 	{
+		$log = $this->logger;
 		$isOk = $this->validateProcess($idMail);
-		
 		if ($isOk) {
 			$this->view->setVar('idMail', $idMail);
+			$idAccount = $this->user->account->idAccount;
+			$dbases = Dbase::findByIdAccount($idAccount);
+
+			$array = array();
+			foreach ($dbases as $dbase) {
+				$array[] = $dbase->idDbase;
+			}
+
+			$idsDbase = implode(",", $array);
+
+			$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
+			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
+
+			$contactlists = $this->modelsManager->executeQuery($phql1);
+			$segments = $this->modelsManager->executeQuery($phql2);
+
+			$this->view->setVar('dbases', $dbases);
+			$this->view->setVar('contactlists', $contactlists);
+			$this->view->setVar('segments', $segments);
 			
 			if ($this->request->isPost()) {
-				$idAccount = $this->user->account->idAccount;
-
-				$dbases = Dbase::findByIdAccount($idAccount);
-
-				$array = array();
-				foreach ($dbases as $dbase) {
-					$array[] = $dbase->idDbase;
+				$dbases = $this->request->getPost("dbases");
+				$contactlists = $this->request->getPost("contactlists");
+				$segments = $this->request->getPost("segments");
+				
+				$sql = "REPLACE INTO mxc (idMail, idContact)";
+				
+				if ($dbases != null) {
+					$dbase = implode(',', $dbases);
+					$phql = "SELECT contact.idContact FROM contact WHERE contact.idDbase IN (" . $dbase . ")";
 				}
-
-				$idsDbase = implode(",", $array);
-
-				$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
-				$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
-
-				$contactlists = $this->modelsManager->executeQuery($phql1);
-				$segments = $this->modelsManager->executeQuery($phql2);
-
-				$this->view->setVar('dbases', $dbases);
-				$this->view->setVar('contactlists', $contactlists);
-				$this->view->setVar('segments', $segments);
+				
+				else if ($contactlists != null) {
+					$contactlist = implode(',', $contactlists);
+					$phql= "SELECT coxcl.idContact FROM coxcl WHERE coxcl.idContactlist IN (" . $contactlist . ")";
+				}
+				
+				else if ($segments != null) {
+					$segment = implode(',', $segments);
+					$phql .= "SELECT sxc.idContact FROM sxc WHERE sxc.idSegment IN (" . $segment . ")";
+				}
+				
+				else {
+					$this->flashSession->error("No ha seleccionado una lista, base de datos o segmento, por favor verifique la información");
+					return $this->response->redirect("mail/target/" . $idMail);
+				}
+				$contacts = $this->modelsManager->executeQuery($phql);
+				if (count($contacts) <= 0) {
+					$this->flashSession->error("No hay contactos registrados, por favor seleccione otra base de datos, lista o segmento");
+					return $this->response->redirect("mail/target/" . $idMail);
+				}
+				$idContacts = $this->returnIds($contacts, $idMail);
+				$sql .= $idContacts;
+				
+				$db = Phalcon\DI::getDefault()->get('db');
+				$db->begin();
+				$result = $db->execute($sql);
+				
+				if(!$result) {
+					$db->rollback();
+				}
+				$db->commit();
+				return $this->response->redirect("mail/schedule/" . $idMail);
 			}
 		}
 	}
@@ -254,48 +294,7 @@ class MailController extends ControllerBase
 		if ($isOk) {
 			if ($this->request->isPost()) {
 				
-				$dbases = $this->request->getPost("dbases");
-				$contactlists = $this->request->getPost("contactlists");
-				$segments = $this->request->getPost("segments");
 				
-				$sql = "REPLACE INTO mxc (idMail, idContact)";
-				
-				if ($dbases != null) {
-					$dbase = implode(',', $dbases);
-					$phql = "SELECT Contact.idContact FROM Contact WHERE Contact.idDbase IN (" . $dbase . ")";
-				}
-				
-				else if ($contactlists != null) {
-					$contactlist = implode(',', $contactlists);
-					$phql= "SELECT coxcl.idContact FROM coxcl WHERE coxcl.idContactlist IN (" . $contactlist . ")";
-				}
-				
-				else if ($segments != null) {
-					$segment = implode(',', $segments);
-					$phql .= "SELECT sxc.idContact FROM sxc WHERE sxc.idSegment IN (" . $segment . ")";
-				}
-				
-				else {
-					$this->flashSession->error("No ha seleccionado una lista, base de datos o segmento, por favor verifique la información");
-					return $this->response->redirect("mail/target/" . $idMail);
-				}
-				$contacts = $this->modelsManager->executeQuery($phql);
-				if (count($contacts) <= 0) {
-					$this->flashSession->error("No hay contactos registrados en el criterio seleccionado, por favor verifique la información");
-					return $this->response->redirect("mail/target/" . $idMail);
-				}
-				$idContacts = $this->returnIds($contacts, $idMail);
-				$sql .= $idContacts;
-				
-				$log->log("este es: ". $sql);
-				$db = Phalcon\DI::getDefault()->get('db');
-
-				$db->begin();
-				$result = $db->execute($sql);
-				if(!$result) {
-					$db->rollback();
-				}
-				$db->commit();
 			}
 		}
 	}

@@ -83,7 +83,7 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<form action="{{url('mail/schedule/')}}{{idMail}}" method="post">
+				<form action="{{url('mail/target/')}}{{idMail}}" method="post">
 					<div class="padded">
 						<div>
 							<input type="radio" name="radios" value="0" id="dbRadio" >Base de datos de contactos <br />

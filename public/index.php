@@ -11,8 +11,13 @@ try {
         '../app/forms/',
         '../app/library/',
         '../app/logic/',
-    ))->register();
-
+    ));
+	
+	$loader->registerClasses(array(
+		"simple_html_dom" => "../app/library/simple_html_dom.php",
+	));
+		// register autoloader
+	$loader->register();
     //Create a DI
     $di = new Phalcon\DI\FactoryDefault();
 	
@@ -162,8 +167,17 @@ try {
 	$apiurl = new stdClass;
 	$apiurl->url = $config->general->apiurlprefix;
 	$di->set('apiurlbase', $apiurl);
+	
+	/*
+	 * Directorio de assets
+	 */
+	$asset = new stdClass;
+	$asset->dir = $config->general->assetsfolder;
+	$asset->url = $config->general->assetsbaseuri;
+	$di->set('asset', $asset);
+
 	$tmpdir = new stdClass;
-	$tmpdir->dir = dirname(__FILE__) . '/../tmp';
+	$tmpdir->dir = $config->general->tmpdir;
 	$di->set('tmppath', $tmpdir);
 
 	

@@ -170,7 +170,7 @@ class AccountController extends ControllerBase
 			"bind" => array(1 => $id)
 		));
 		
-		if ($account !== null) {
+		if ($account) {
             $this->view->setVar("allAccount", $account);
 			$editform = new EditAccountForm($account);
 
@@ -192,9 +192,10 @@ class AccountController extends ControllerBase
 					}
 
  			}
-		$this->view->editFormAccount = $editform;
-
+			$this->view->editFormAccount = $editform;
         } 
+		$this->flashSession->error('La cuenta no existe, por favor verifique la información');
+		return $this->response->redirect("account");
     }
 	
 	/*

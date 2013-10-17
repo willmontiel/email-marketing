@@ -16,6 +16,7 @@ class Account extends Modelbase
         $this->hasMany("idAccount", "User", "idAccount");
 		$this->hasMany("idAccount", "Importfile","idAccount");
 		$this->hasMany("idAccount", "Importprocess", "idAccount");
+		$this->hasMany("idAccount", "Asset", "idAccount");
 		$this->hasMany("idAccount", "Dbase", "idAccount", array('alias' => 'Dbases'));
     }
     
