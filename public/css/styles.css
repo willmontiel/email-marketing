@@ -1,0 +1,186 @@
+.module-cont {
+	border: solid 1px black;
+	min-height: 490px;
+	height: auto;
+	position: relative;
+	overflow: auto;
+	padding: 5px;
+}
+
+.sub-mod-cont {
+	min-height: 120px;
+	height: auto;
+	position: relative;
+	border: solid 2px white;
+}
+.sub-mod-cont:hover {
+	border: solid 2px #68a6ce;
+}
+
+.module-cont .module {
+	margin: 4px;
+	min-height: 50px;
+	padding: 3px;
+	position: relative;
+	border: 1px dotted #dddddd;
+}
+
+.module-cont .module.module-separator {
+	min-height: 25px;
+}
+
+.tool, .save-tool {
+	display: none;
+}
+
+.info-guide {
+	display: none;
+    text-align: center;
+	position: absolute;
+	width: 100%;
+}
+
+.module-cont .module .tool {
+	height: 16px;
+	width: 16px;
+	position: absolute;
+	display: none;
+	cursor: pointer;
+	top: 0px;
+	background-color: lightgray;
+}
+.module-cont .module .tool:hover {
+	background-color: darkgray;
+}
+.module-cont .module .handle-tool {
+	left: 0;
+	cursor: move;
+}
+.module-cont .module .remove-tool {
+	left: 32px;
+}
+.module-cont .module .edit-tool {
+	left: 16px;
+}
+.module-cont .module .save-tool {
+	height: 16px;
+	width: 16px;
+	position: absolute;
+	display: none;
+	cursor: pointer;
+	top: 0px;
+	background-color: lightgray;
+	left: 48px;
+	z-index: 1000;
+}
+.module-cont .module:hover {
+	border: 1px dashed #8d8d8d;
+}
+.module-cont .module:hover .tool {
+	display: block;
+}
+
+.module-cont .placeholder {
+	min-height: 80px;
+	background-color: skyblue;
+}
+
+.placeholder:before {
+	content: 'Drop here!';
+}
+
+#toolbar {
+	position: relative;
+}
+#toolbar .module {
+	z-index: 10;
+	position: relative;
+	margin-top: 5px;
+	cursor: move;
+	border: solid 1px lightgray;
+}
+
+#toolbar .module hr {
+	margin: 0;
+}
+
+.module hr {
+	margin: 12px 0;
+	height: 2px;
+	background-color: black;
+}
+
+#edit-area .sub-mod-cont:hover .info-guide {
+	display: block;
+}
+
+#components .content {
+	display: none;
+}
+
+#components .module {
+	height: 90px;
+	width: 90px;
+	background-position:center; 
+	background-repeat: no-repeat;
+}
+
+.layout img {
+	height: 95px;
+}
+
+#components .module:hover {
+	background-color: lightgray; 
+}
+
+#components .module-text-image {
+	background-image: url('/emarketing/images/captionleft.png');
+}
+
+#components .module-image-text {
+	background-image: url('/emarketing/images/captionright.png');
+}
+
+#components .module-text-only {
+	background-image: url('/emarketing/images/text.png');
+}
+
+#components .module-image-only {
+	background-image: url('/emarketing/images/image.png');
+}
+
+#components .module-separator {
+	background-image: url('/emarketing/images/divider.png');
+}
+
+.full-width {
+	float: left;
+	width: -moz-calc(100% - 4px);
+	width: -webkit-calc(100% - 4px);
+	width: calc(100% - 4px);
+}
+
+.half-width {
+	float: left;
+	width: -moz-calc(50% - 4px);
+	width: -webkit-calc(50% - 4px);
+	width: calc(50% - 4px);
+}
+
+.third-width {
+	float: left;
+	width: -moz-calc(33.3% - 4px);
+	width: -webkit-calc(33.3% - 4px);
+	width: calc(33.3% - 4px);
+}
+
+.twothird-width {
+	float: left;
+	width: -moz-calc(66.6% - 4px);
+	width: -webkit-calc(66.6% - 4px);
+	width: calc(66.6% - 4px);
+}
+
+.show-zones-draggable {
+	border: solid 2px #68a6ce;
+}

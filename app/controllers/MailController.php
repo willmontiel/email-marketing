@@ -304,4 +304,9 @@ class MailController extends ControllerBase
 		}
 		
 	}
+	
+	public function editor_frameAction() 
+	{
+		
+	}
 }
