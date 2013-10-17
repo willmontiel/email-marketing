@@ -7,52 +7,75 @@
 class LoadHtml
 {
 	/**
+	 *
+	 * @var \Phalcon\Logger\Adapter\File
+	 */
+	protected $log = null;
+	
+	protected function di()
+    {
+        return \Phalcon\DI\FactoryDefault::getDefault();
+    }
+	
+	public function __construct() 
+	{
+		$this->log = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
+		$di = $this->di();
+		$this->asset = $di['asset'];
+	}
+
+	/**
 	 * Función que descarga código html desde una url y la guarda las imagenes de ser necesario en una carpeta determinada en el servidor
 	 * @param string $url 
 	 * @param boolean $image 
 	 * @param string $dir
-	 * @return simple_html_dom
+	 * @return string
 	 */
-	public function gethtml($url, $image, $dir)
+	public function gethtml($url, $image, $dir, $idAccount)
 	{
 		$some = new simple_html_dom();
 		
 		$html = file_get_html($url);
 		
 		$htmlbase = $html->find('head base');
-		
-		if (count($htmlbase) > 0 AND $image == "load") {
+		if (count($htmlbase) > 0) {
 			$htmlbase = $htmlbase[0];
 		}
-		
-		if ($htmlbase) {
+		if ($htmlbase && $image == 'load') {
+//			echo "Found base: {$htmlbase} - href={$htmlbase->href}\n\n";
 			$base = $htmlbase->href;
 			$htmlbase->outertext = '';
 		}
-		
 		else {
-			$path = pathinfo($dir); 
+			$path = pathinfo($this->url); 
 			$base = $path['dirname'];
 		}
+		
+		$this->base = $base;
+		$this->dir = $dir;
+		$this->idAccount = $idAccount;
 		
 		if ($image == "load") {		
 			foreach($html->find('img') as $element) {
 				if (trim($element->src) !== null && trim($element->src) !== '') {
 					$oldlocation = $element->src;
-					$location = $this->addImageToMap($oldlocation, $base, $dir);
-	
+					$location = $this->addImageToMap($oldlocation);
 					$element->src = $location;
+					$this->log->log('Locations [old: ' . $oldlocation . '], [new: ' . $location . '], Base: '. $this->asset->url);
+
 				}
 			}
 		}
+		$this->html = $html;
 		
-		return $html;
+		return $html->__toString();
 		
 	}
 	
-	private function addImageToMap($img, $urlbase, $dir)
+	private function addImageToMap($img)
 	{
-		$log = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
+		$urlbase = $this->base;
+		$dir = $this->dir;
 		
 		if (in_array($img, $this->image_map)) {
 			return $this->image_map[$img];
@@ -78,15 +101,17 @@ class LoadHtml
 
 		// Set local path
 		$imagepath = $dir . '/' . $path['basename'];
-		$log->log("este es el nombre: " . $path['basename']);
+		
 		$this->image_map[$img] = $imagepath;
-		$imagenewurl  = $this->asset->url .  $path['basename'];
-		
-		// DOWNLOAD
-//		echo "Downloading {$imageurl} into {$imagepath} and referencing it as: {$imagenewurl}\n";
+		$imagenewurl  = $this->asset->url . $this->idAccount . "/images/" . $path['basename'];
+	
 		file_put_contents($imagepath, file_get_contents($imageurl));
+		$imageInfo = getimagesize($imageurl);
+		$imageSize = filesize($imagepath);
+		$dimensions = $imageInfo[0] . " x " . $imageInfo[1];
 		
-//		$this->saveAssetInDB($path['basename'], $path['extension'], $dimensions, $type);
+		
+		$this->saveAssetInDB($path['basename'], $imageSize, $dimensions, $path['extension']);
 		
 		return $imagenewurl;
 	}
@@ -98,18 +123,23 @@ class LoadHtml
 	 * @param string $dimensions
 	 * @param string $type
 	 */
-	private function saveAssetInDB($fileName, $fileSize, $dimensions = null, $type)
+	public function saveAssetInDB($fileName, $fileSize, $dimensions = null, $type = null)
 	{
+		
 		$asset = new Asset();
 		
-		$asset->idAccount = $this->user->account->idAccount;
+		$asset->idAccount = $this->idAccount;
 		$asset->fileName = $fileName;
-		$asset->fileSize = $fileName;
-		$asset->dimensions = $fileName;
-		$asset->Type = $type;
+		$asset->fileSize = $fileSize;
+		$asset->dimensions = $dimensions;
+		$asset->type = $type;
 		$asset->createdon = time();
 		
-		$asset->save();
+		if (!$asset->save()) {
+			foreach ($asset->getMessages() as $msg) {
+				$this->log->log("Error: ". $msg);
+			}
+		}
 	}
 	
 	private function getURLbase($url)

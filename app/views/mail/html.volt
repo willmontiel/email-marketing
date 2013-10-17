@@ -74,7 +74,7 @@
 							{{ MailForm.render('content') }}
 						</div>
 						<div class="form-actions">
-							<a href="" class="btn btn-default">Cancelar</a>
+							<a href="{{url('mail/source')}}/{{idMail}}" class="btn btn-default">Anterior</a>
 							{{ submit_button("Siguiente", 'class' : "btn btn-blue") }}
 						</div>
 					</form>

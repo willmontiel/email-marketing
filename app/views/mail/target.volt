@@ -85,9 +85,7 @@
 			<div class="box-content">
 				<form action="{{url('mail/target/')}}{{idMail}}" method="post">
 					<div class="padded">
-						<div>
-							<input type="radio" name="radios" value="0" id="dbRadio" >Base de datos de contactos <br />
-						</div>
+						<input type="radio" name="radios" value="0" id="dbRadio" >Base de datos de contactos <br />
 						<div id="db" style="display: none;">
 							<select multiple="multiple" name="dbases[]"  id="dbSelect">
 								{% for dbase in dbases %}
@@ -95,10 +93,9 @@
 								{% endfor %}
 							</select>
 						</div>
-						<br /><br />
-						<div>
-							<input type="radio" name="radios" value="1" id="listRadio">Lista de contactos <br />
-						</div>
+						<br />
+						<input type="radio" name="radios" value="1" id="listRadio">
+						Lista de contactos 
 						<div id="list" style="display: none;">
 							<select multiple="multiple" name="contactlists[]" id="listSelect">
 								{% for contactlist in contactlists %}
@@ -117,7 +114,7 @@
 						</div>
 					</div>
 					<div class="form-actions">
-						<a href="" class="btn btn-default">Cancelar</a>
+						<a href="{{url('mail/source')}}/{{idMail}}" class="btn btn-default">Anterior</a>
 						{{submit_button('Siguiente', 'class' : "btn btn-blue")}}
 					</div>
 				</form>

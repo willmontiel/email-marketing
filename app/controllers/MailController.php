@@ -52,7 +52,7 @@ class MailController extends ControllerBase
 			$mail->status = "Draft";
 			
             if ($form->isValid() && $mail->save()) {
-				$this->response->redirect("mail/source/" .$mail->idMail);
+				return $this->response->redirect("mail/source/" .$mail->idMail);
 			}
 			else {
 				foreach ($mail->getMessages() as $msg) {
@@ -89,9 +89,15 @@ class MailController extends ControllerBase
 	
 	public function htmlAction($idMail = null)
 	{
-		$isOk = $this->validateProcess($idMail);
+		$log = $this->logger;
+//		$isOk = $this->validateProcess($idMail);
+//		
+//		if ($isOk) {
+
+		$log->log('Referrer: ' . $this->request->getHTTPReferer());
+		$log->log(print_r($_REQUEST, true));
 		
-		if ($isOk) {
+			$log->log("Ingrese a html por alguna razón");
 			$mailContentExist = Mailcontent::findFirst(array(
 				"conditions" => "idMail = ?1",
 				"bind" => array(1 => $idMail)
@@ -100,27 +106,32 @@ class MailController extends ControllerBase
 			if ($mailContentExist) {
 				$this->view->setVar("mailContent", $mailContentExist);
 				$form = new MailForm($mailContentExist);
+				$log->log("mail existe");
 			}
 			else {
 				$mailContent = new Mailcontent();
 				$form = new MailForm($mailContent);
+				$log->log("mail no existe");
 			}
 			
 			$this->view->setVar('idMail', $idMail);
 			
 			if ($this->request->isPost() && $mailContentExist) {
+				$log->log("Hay post y mail existe");
 				$form->bind($this->request->getPost(), $mailContentExist);
 				
 				if(!$form->isValid() || !$mailContentExist->save()) {
 					foreach ($mailContentExist->getMessages() as $msg) {
 							$this->flashSession->error($msg);
 					}
-					return $this->response->redirect("mail/html/". $idMail);
+					$log->log("Redirijo");
 				}
-				$this->response->redirect("mail/target/" .$idMail);
+				else {
+					return $this->response->redirect("mail/target/" .$idMail);
+				}
 			}
-			
 			else if ($this->request->isPost() && !$mailContentExist) {
+				$log->log("Hay post y mail no existe");
 				$form->bind($this->request->getPost(), $mailContent);
 				
 				$mailContent->idMail = $idMail;
@@ -128,21 +139,24 @@ class MailController extends ControllerBase
 				if(!$form->isValid() || !$mailContent->save()) {
 					foreach ($mailContent->getMessages() as $msg) {
 						$this->flashSession->error($msg);
+						$log->log("Error grabando mail");
 					}
-					return $this->response->redirect("mail/html/". $idMail);
+					$log->log("Redirijo 2");
 				}
-				$this->response->redirect("mail/target/" .$idMail);
+				else {
+					return $this->response->redirect("mail/target/" .$idMail);
+				}
 			}
-			
+			$log->log("Salí sin hacer absolutamente nada");
+			$log->log("-------------------------------------------------------------------------");
 			$this->view->MailForm = $form;
-		}
+//		}
 	}
 	
 	public function importAction($idMail = null)
 	{
 		$log = $this->logger;
 		$isOk = $this->validateProcess($idMail);
-		
 		if ($isOk) {
 			$this->view->setVar('idMail', $idMail);
 			
@@ -164,36 +178,20 @@ class MailController extends ControllerBase
 				} 
 				
 				$getHtml = new LoadHtml();
-				$html = $getHtml->gethtml($url, $image, $dir);
+				$html = $getHtml->gethtml($url, $image, $dir, $idAccount);
 				
-				$mailContent = Mailcontent::findFirst(array(
-					"conditions" => "idMail = ?1",
-					"bind" => array(1 => $idMail)
-				));
-				
-				if (!$mailContent) {
-					$content = new Mailcontent();
-					$content->idMail = $idMail;
-					$content->content = $html->__toString();
+				$content = new Mailcontent();
+				$content->idMail = $idMail;
+				$content->content = $html;
 					
-					if (!$content->save()) {
-						foreach ($content->getMessages() as $msg) {
-							$this->flashSession->error($msg);
-						}		
-						return $this->response->redirect("mail/import/" . $idMail);
-					}
-					return $this->response->redirect("mail/html/" . $idMail);
-				}
-				
-				$mailContent->content = $html->__toString();
-
-				if (!$mailContent->save()) {
-					foreach ($mailContent->getMessages() as $msg) {
+				if (!$content->save()) {
+					foreach ($content->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}		
 					return $this->response->redirect("mail/import/" . $idMail);
 				}
 				else {
+					$log->log("Estoy redirigiendo por alguna razón");
 					return $this->response->redirect("mail/html/" . $idMail);
 				}
 			}
