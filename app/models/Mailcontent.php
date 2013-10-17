@@ -10,16 +10,16 @@ class Mailcontent extends \Phalcon\Mvc\Model
 		$this->useDynamicUpdate(true);
 	}
 	
-	public function validation()
+	public function getMessages()
     {
-		$this->validate(new PresenceOf(
-		   array(
-				"field"   => "content",
-				"message" => "No ha ingresado ningún contenido para el correo, por favor verifique la información"
-		)));
-		
-		if ($this->validationHasFailed() == true) {
-			return false;
-		}
-	}
+        $messages = array();
+        foreach (parent::getMessages() as $message) {
+            switch ($message->getType()) {
+                case 'PresenceOf':
+                    $messages[] = 'No ha ingresado ningún contenido para el correo, por favor verifique la información';
+                    break;
+            }
+        }
+        return $messages;
+    }
 }

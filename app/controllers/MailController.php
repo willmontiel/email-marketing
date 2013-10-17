@@ -90,14 +90,10 @@ class MailController extends ControllerBase
 	public function htmlAction($idMail = null)
 	{
 		$log = $this->logger;
-//		$isOk = $this->validateProcess($idMail);
-//		
-//		if ($isOk) {
-
-		$log->log('Referrer: ' . $this->request->getHTTPReferer());
-		$log->log(print_r($_REQUEST, true));
+		$isOk = $this->validateProcess($idMail);
 		
-			$log->log("Ingrese a html por alguna razón");
+		if ($isOk) {
+
 			$mailContentExist = Mailcontent::findFirst(array(
 				"conditions" => "idMail = ?1",
 				"bind" => array(1 => $idMail)
@@ -106,51 +102,32 @@ class MailController extends ControllerBase
 			if ($mailContentExist) {
 				$this->view->setVar("mailContent", $mailContentExist);
 				$form = new MailForm($mailContentExist);
-				$log->log("mail existe");
 			}
 			else {
 				$mailContent = new Mailcontent();
 				$form = new MailForm($mailContent);
-				$log->log("mail no existe");
 			}
 			
 			$this->view->setVar('idMail', $idMail);
 			
-			if ($this->request->isPost() && $mailContentExist) {
-				$log->log("Hay post y mail existe");
-				$form->bind($this->request->getPost(), $mailContentExist);
-				
-				if(!$form->isValid() || !$mailContentExist->save()) {
-					foreach ($mailContentExist->getMessages() as $msg) {
-							$this->flashSession->error($msg);
-					}
-					$log->log("Redirijo");
-				}
-				else {
-					return $this->response->redirect("mail/target/" .$idMail);
-				}
-			}
-			else if ($this->request->isPost() && !$mailContentExist) {
-				$log->log("Hay post y mail no existe");
-				$form->bind($this->request->getPost(), $mailContent);
+			if ($this->request->isPost()) {
+				$mailContent = new Mailcontent();
+				$content = $this->request->getPost("content");
 				
 				$mailContent->idMail = $idMail;
+				$mailContent->content = htmlspecialchars($content, ENT_QUOTES);
 				
-				if(!$form->isValid() || !$mailContent->save()) {
-					foreach ($mailContent->getMessages() as $msg) {
+				if(!$mailContent->save()) {
+					foreach ($mailContentExist->getMessages() as $msg) {
 						$this->flashSession->error($msg);
-						$log->log("Error grabando mail");
 					}
-					$log->log("Redirijo 2");
 				}
 				else {
 					return $this->response->redirect("mail/target/" .$idMail);
 				}
 			}
-			$log->log("Salí sin hacer absolutamente nada");
-			$log->log("-------------------------------------------------------------------------");
 			$this->view->MailForm = $form;
-//		}
+		}
 	}
 	
 	public function importAction($idMail = null)
@@ -182,7 +159,7 @@ class MailController extends ControllerBase
 				
 				$content = new Mailcontent();
 				$content->idMail = $idMail;
-				$content->content = $html;
+				$content->content = htmlspecialchars($html, ENT_QUOTES);
 					
 				if (!$content->save()) {
 					foreach ($content->getMessages() as $msg) {

@@ -47,7 +47,7 @@ class LoadHtml
 			$htmlbase->outertext = '';
 		}
 		else {
-			$path = pathinfo($this->url); 
+			$path = pathinfo($url); 
 			$base = $path['dirname'];
 		}
 		
@@ -66,7 +66,6 @@ class LoadHtml
 				}
 			}
 		}
-		$this->html = $html;
 		
 		return $html->__toString();
 		

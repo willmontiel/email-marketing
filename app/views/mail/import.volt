@@ -67,7 +67,7 @@
 							</div>
 						</div>
 						<div class="form-actions">
-							<button class="btn btn-default">Anterior</button>
+							<a href="{{url('mail/source')}}/{{idMail}}" class="btn btn-default">Anterior</a>
 							<button class="btn btn-blue">Importar</button>
 						</div>
 					</form>

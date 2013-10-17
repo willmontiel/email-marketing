@@ -2,24 +2,30 @@
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
-	$(document).ready(function(){
-        $("input[name=radios]").click(function () { 
-			$("#db").css("display", "none");
-			$("#list").css("display", "none");
-			$("#seg").css("display", "none");
+	$(function(){
+        $("input[name=radios]").on('ifChecked', function () { 
+			$("#db").hide();
+			$("#list").hide();
+			$("#seg").hide();
+			
 			
 			$('#dbSelect').prop('selectedIndex',-1);
+			$("#dbSelect").val('').trigger("liszt:updated");
 			$('#listSelect').prop('selectedIndex',-1);
 			$('#segSelect').prop('selectedIndex',-1);
 			
-			if ($('input:radio[name=radios]:checked').val() == "0") {
-				$("#db").css("display", "block");
-			}
-			else if ($('input:radio[name=radios]:checked').val() == "1") {
-				$("#list").css("display", "block");
-			}
-			else if ($('input:radio[name=radios]:checked').val() == "2") {
-				$("#seg").css("display", "block");
+			var val = $('input[name=radios]:checked').val();
+			console.log(val);
+			switch (val) {
+				case "0":
+					$("#db").show();
+					break;
+				case "1":
+					$("#list").show();
+					break;
+				case "2":
+					$("#seg").show();
+					break;
 			}
          });
 	});
@@ -52,14 +58,18 @@
 		<div class="span8 offset2">
 			<div id="breadcrumbs">
 				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-					<span class="breadcrumb-arrow"><span></span></span>
+					<a href="{{url('mail/setup')}}/{{idMail}}">
+						<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
+						<span class="breadcrumb-arrow"><span></span></span>
+					</a>
 				</div>
 				<div class="breadcrumb-button blue">
+					<a href="{{url('mail/source')}}/{{idMail}}">
+						<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
+						<span class="breadcrumb-arrow"><span></span></span>
+					</a>
+				</div>
+				<div class="breadcrumb-button">
 					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
@@ -85,28 +95,31 @@
 			<div class="box-content">
 				<form action="{{url('mail/target/')}}{{idMail}}" method="post">
 					<div class="padded">
-						<input type="radio" name="radios" value="0" id="dbRadio" >Base de datos de contactos <br />
+						<input type="radio" name="radios" class="icheck" value="0" id="dbRadio" >
+						<label for="dbRadio">Base de datos de contactos</label> <br />
 						<div id="db" style="display: none;">
-							<select multiple="multiple" name="dbases[]"  id="dbSelect">
+							<select multiple="multiple" name="dbases[]"  id="dbSelect" class="chzn-select">
 								{% for dbase in dbases %}
 									<option value="{{dbase.idDbase}}">{{dbase.name}}</option>
 								{% endfor %}
 							</select>
 						</div>
 						<br />
-						<input type="radio" name="radios" value="1" id="listRadio">
-						Lista de contactos 
+						<input type="radio" name="radios" class="icheck" value="1" id="listRadio">
+						<label for="listRadio">Lista de contactos </label>
 						<div id="list" style="display: none;">
-							<select multiple="multiple" name="contactlists[]" id="listSelect">
+							<select multiple="multiple" name="contactlists[]" id="listSelect" class="chzn-select">
 								{% for contactlist in contactlists %}
 									<option value="{{contactlist.idContactlist}}">{{contactlist.name}},  {{contactlist.Dbase}}</option>
 								{% endfor %}
 							</select>
 						</div>
 						<br /><br />
-						<input type="radio" name="radios" value="2" id="segmentRadio"> Segmentos <br />
+						<input type="radio" name="radios" class="icheck" value="2" id="segmentRadio">
+						<label for="segmentRadio">Segmentos</label>
+						<br />
 						<div id="seg" style="display: none;">
-							<select multiple="multiple" name="segments[]" id="segSelect">
+							<select multiple="multiple" name="segments[]" id="segSelect" class="chzn-select">
 								{% for segment in segments %}
 									<option value="{{segment.idSegment}}">{{segment.name}}</option>
 								{% endfor %}

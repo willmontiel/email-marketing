@@ -7,7 +7,10 @@
 	$(document).ready(
 		function()
 		{
-			$('#redactor_content').redactor({fullpage: true});
+			try {
+				$('#redactor_content').redactor({fullpage: true});
+			}
+			catch (e) {}
 		}
 	);
 	</script>
@@ -39,12 +42,16 @@
 		<div class="span8 offset2">
 			<div id="breadcrumbs">
 				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
-					<span class="breadcrumb-arrow"><span></span></span>
+					<a href="{{url('mail/setup')}}/{{idMail}}">
+						<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
+						<span class="breadcrumb-arrow"><span></span></span>
+					</a>
 				</div>
 				<div class="breadcrumb-button blue">
-					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-					<span class="breadcrumb-arrow"><span></span></span>
+					<a href="{{url('mail/source')}}/{{idMail}}">
+						<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
+						<span class="breadcrumb-arrow"><span></span></span>
+					</a>
 				</div>
 				<div class="breadcrumb-button">
 					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
