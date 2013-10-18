@@ -63,13 +63,13 @@
 						<span class="breadcrumb-arrow"><span></span></span>
 					</a>
 				</div>
-				<div class="breadcrumb-button blue">
+				<div class="breadcrumb-button">
 					<a href="{{url('mail/source')}}/{{idMail}}">
 						<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
 						<span class="breadcrumb-arrow"><span></span></span>
 					</a>
 				</div>
-				<div class="breadcrumb-button">
+				<div class="breadcrumb-button blue">
 					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
