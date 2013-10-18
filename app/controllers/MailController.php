@@ -38,12 +38,28 @@ class MailController extends ControllerBase
 		$this->view->setVar("page", $page);
 	}
 	
-	public function setupAction()
+	public function setupAction($idMail = null)
 	{
-		$mail = new Mail();
-		$form = new MailForm($mail);
+		$log = $this->logger;
+		$mailExist = Mail::findFirst(array(
+			"conditions" => "idMail = ?1",
+			"bind" => array(1 => $idMail)
+		));
+		
+		if ($mailExist) {
+			$form = new MailForm($mailExist);
+			$this->view->setVar('idMail', $idMail);
+		}
+		else {
+			$mail = new Mail();
+			$form = new MailForm($mail);
+			$this->view->setVar('idMail', " ");
+		}
 		
 		if ($this->request->isPost()) {
+			if ($mailExist) {
+				$mail = $mailExist;
+			}
 			$form->bind($this->request->getPost(), $mail);
 			
 			$mail->idAccount = $this->user->account->idAccount;
@@ -58,7 +74,6 @@ class MailController extends ControllerBase
 				foreach ($mail->getMessages() as $msg) {
 					$this->flashSession->error($msg);
 				}
-				return $this->response->redirect("mail/setup");
 			}
 			
 		}
@@ -278,14 +293,15 @@ class MailController extends ControllerBase
 	{
 		$log = $this->logger;
 		$time = strtotime("-31 days");
+		
 		$mail = Mail::findFirst(array(
-			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR status = ?4",
+			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR (idMail = ?1 AND idAccount = ?2 AND status = ?4)",
 			"bind" => array(1 => $idMail,
 							2 => $this->user->account->idAccount,
 							3 => $time,
 							4 => "Draft")
 		));
-	
+		
 		if (!$mail) {
 			$this->flashSession->error("No se ha encontrado el correo, por favor verifique la información");
 			return $this->response->redirect("mail");

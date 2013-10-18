@@ -57,7 +57,7 @@ class LoadHtml
 		
 		if ($image == "load") {		
 			foreach($html->find('img') as $element) {
-				if (trim($element->src) !== null && trim($element->src) !== '') {
+				if (trim($element->src) !== null && trim($element->src) !== '' && substr(trim($element->src), 0, 5) !== 'data:'  )  {
 					$oldlocation = $element->src;
 					$location = $this->addImageToMap($oldlocation);
 					$element->src = $location;
@@ -67,7 +67,12 @@ class LoadHtml
 			}
 		}
 		
-		return $html->__toString();
+		$busqueda = array("<script" , "</script>");
+		$reemplazar = array("<!-- ", " -->");
+		
+		$newhtml = str_replace($busqueda,$reemplazar, $html->__toString());
+		$this->log->log("esto es: " . $newhtml);
+		return $newhtml;
 		
 	}
 	

@@ -1,6 +1,8 @@
 {% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ javascript_include('js/preview.js')}}
+	{{ javascript_include('js/stoperror.js')}}
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
 	<script type="text/javascript">
@@ -83,6 +85,7 @@
 						<div class="form-actions">
 							<a href="{{url('mail/source')}}/{{idMail}}" class="btn btn-default">Anterior</a>
 							{{ submit_button("Siguiente", 'class' : "btn btn-blue") }}
+							<input onclick="verHTML(this.form)" type="button" value="Visualizar" class="btn btn-black">
 						</div>
 					</form>
 				</div>

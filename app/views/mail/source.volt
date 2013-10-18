@@ -27,8 +27,10 @@
 		<div class="span8 offset2">
 			<div id="breadcrumbs">
 				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
-					<span class="breadcrumb-arrow"><span></span></span>
+					<a href="{{url('mail/setup')}}/{{idMail}}">
+						<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
+						<span class="breadcrumb-arrow"><span></span></span>
+					</a>
 				</div>
 				<div class="breadcrumb-button blue">
 					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
