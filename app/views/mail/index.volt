@@ -92,7 +92,7 @@
 										<li><a href="{{ url(value.url) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
 									{% endfor %}
 										<li><a href="{{ url('mail/clone/') }}{{item.idMail}}"><i class="icon-copy"></i>Duplicar</a></li>
-										<li><a href="{{ url('mail/#/') }}{{item.idMail}}"><i class="icon-trash"></i>Eliminar </a></li>
+										<li><a href="{{ url('mail/delete/') }}{{item.idMail}}"><i class="icon-trash"></i>Eliminar </a></li>
 									</ul>
 								</div>
 							</div>

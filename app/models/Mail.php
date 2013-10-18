@@ -7,6 +7,8 @@ class Mail extends Modelbase
 	{
 		$this->hasMany("idMail", "Mxc", "idMail");
 		$this->hasOne("idMail", "Mailcontent", "idMail");
+		
+		$this->useDynamicUpdate(true);
 	}
 	
 	public function validation()

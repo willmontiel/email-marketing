@@ -12,7 +12,7 @@ class MailController extends ControllerBase
 							3 => "Draft")
 		)); 
 		if ($mail) {
-			return true;
+			return $mail;
 		}
 		else if(!$mail || $mail == null) {
 			return $this->response->redirect("mail/setup");
@@ -42,8 +42,9 @@ class MailController extends ControllerBase
 	{
 		$log = $this->logger;
 		$mailExist = Mail::findFirst(array(
-			"conditions" => "idMail = ?1",
-			"bind" => array(1 => $idMail)
+			"conditions" => "idMail = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
 		));
 		
 		if ($mailExist) {
@@ -68,7 +69,19 @@ class MailController extends ControllerBase
 			$mail->status = "Draft";
 			
             if ($form->isValid() && $mail->save()) {
-				return $this->response->redirect("mail/source/" .$mail->idMail);
+				switch ($mail->type) {
+					case "Html":
+						return $this->response->redirect("mail/html/" .$mail->idMail);
+						break;
+					
+					case "Editor":
+						return $this->response->redirect("mail/editor/" .$mail->idMail);
+						break;
+					
+					default:
+						return $this->response->redirect("mail/source/" .$mail->idMail);
+						break;
+				}
 			}
 			else {
 				foreach ($mail->getMessages() as $msg) {
@@ -82,10 +95,31 @@ class MailController extends ControllerBase
 	
 	public function sourceAction($idMail = null)
 	{
-		$isOk = $this->validateProcess($idMail);
+		$mail = Mail::findFirst(array(
+			"conditions" => "idMail = ?1 AND idAccount = ?2 AND status = ?3",
+			"bind" => array(1 => $idMail,
+							2 => $this->user->account->idAccount,
+							3 => "Draft")
+		)); 
 		
-		if ($isOk) {
-			$this->view->setVar('idMail', $idMail);
+		if ($mail) {
+			switch ($mail->type) {
+				case "Html":
+					return $this->response->redirect("mail/html/" .$idMail);
+					break;
+				
+				case "Editor":
+					return $this->response->redirect("mail/editor/" .$idMail);
+					break;
+				
+				default:
+					$this->view->setVar('idMail', $idMail);
+					break;
+			}
+		}
+		
+		else {
+			return $this->response->redirect("mail/setup/" .$idMail);
 		}
 	}
 
@@ -105,9 +139,9 @@ class MailController extends ControllerBase
 	public function htmlAction($idMail = null)
 	{
 		$log = $this->logger;
-		$isOk = $this->validateProcess($idMail);
+		$mail = $this->validateProcess($idMail);
 		
-		if ($isOk) {
+		if ($mail) {
 
 			$mailContentExist = Mailcontent::findFirst(array(
 				"conditions" => "idMail = ?1",
@@ -132,8 +166,15 @@ class MailController extends ControllerBase
 				$mailContent->idMail = $idMail;
 				$mailContent->content = htmlspecialchars($content, ENT_QUOTES);
 				
+				$mail->type = "Html";
+				
 				if(!$mailContent->save()) {
 					foreach ($mailContentExist->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
+				else if (!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}
 				}
@@ -148,11 +189,12 @@ class MailController extends ControllerBase
 	public function importAction($idMail = null)
 	{
 		$log = $this->logger;
-		$isOk = $this->validateProcess($idMail);
-		if ($isOk) {
+		$mail = $this->validateProcess($idMail);
+		if ($mail) {
 			$this->view->setVar('idMail', $idMail);
 			
 			if ($this->request->isPost()) {
+				$this->db->begin();
 				$idAccount = $this->user->account->idAccount;
 				
 				$url = $this->request->getPost("url");
@@ -173,17 +215,28 @@ class MailController extends ControllerBase
 				$html = $getHtml->gethtml($url, $image, $dir, $idAccount);
 				
 				$content = new Mailcontent();
+				
 				$content->idMail = $idMail;
 				$content->content = htmlspecialchars($html, ENT_QUOTES);
-					
+				
+				$mail->type = "Html";
+				
 				if (!$content->save()) {
 					foreach ($content->getMessages() as $msg) {
 						$this->flashSession->error($msg);
+					}	
+					$this->db->rollback();
+					return $this->response->redirect("mail/import/" . $idMail);
+				}
+				else if (!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->flashSession->error($msg);
 					}		
+					$this->db->rollback();
 					return $this->response->redirect("mail/import/" . $idMail);
 				}
 				else {
-					$log->log("Estoy redirigiendo por alguna razón");
+					$this->db->commit();
 					return $this->response->redirect("mail/html/" . $idMail);
 				}
 			}
@@ -328,9 +381,69 @@ class MailController extends ControllerBase
 	
 	public function cloneAction($idMail = null)
 	{
-		$isOk = $this->validateProcess($idMail);
-		if ($isOk) {
+		$idAccount = $this->user->account->idAccount;
+		
+		$mail = Mail::findFirst(array(
+			"conditions" => "idMail = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $idMail,
+							2 => $idAccount)
+		)); 
+		
+		if ($mail) {
 			
+			$this->db->begin();
+			/* Mail Clone */
+			$mailClone = new Mail();
+			
+			$mailClone->idAccount = $idAccount;
+			$mailClone->name = $mail->name . " (copia)";
+			$mailClone->subject = $mail->subject;
+			$mailClone->fromName = $mail->fromName;
+			$mailClone->fromEmail = $mail->fromEmail;
+			$mailClone->replyTo = $mail->replyTo;
+			$mailClone->type = $mail->type;
+			$mailClone->status = "Draft";
+			$mailClone->createdon = time();
+			
+			if (!$mailClone->save()) {
+				foreach ($mailClone->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+				$this->db->rollback();
+				return $this->response->redirect("mail/index");
+			}
+			
+			/* Mail Content Clone*/
+			$mailContentClone = new Mailcontent();
+			
+			$mailContent = Mailcontent::findFirst(array(
+				"conditions" => "idMail = ?1",
+				"bind" => array(1 => $mail->idMail)
+			));
+			
+			if ($mailContent) {
+				$mailContentClone->idMail = $mailClone->idMail;
+				$mailContentClone->content = $mailContent->content;
+				
+				if (!$mailContentClone->save()) {
+					foreach ($mailContentClone->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+					$this->db->rollback();
+					return $this->response->redirect("mail/index");
+				}
+				else {
+					$this->db->commit();
+					return $this->response->redirect("mail/setup/" .$mailClone->idMail);
+				}
+			}
+			else {
+				$this->db->commit();
+				return $this->response->redirect("mail/setup/" .$mailClone->idMail);
+			}
+		}
+		else {
+			return $this->response->redirect("mail/setup");
 		}
 	}
 }

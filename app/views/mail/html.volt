@@ -50,10 +50,8 @@
 					</a>
 				</div>
 				<div class="breadcrumb-button blue">
-					<a href="{{url('mail/source')}}/{{idMail}}">
-						<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-						<span class="breadcrumb-arrow"><span></span></span>
-					</a>
+					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
+					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
 				<div class="breadcrumb-button">
 					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
