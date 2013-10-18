@@ -62,7 +62,7 @@ Editor.prototype.changeLayout = function() {
 
 		objdz[newdz.name] = newdz;
 	}
-	console.log(objdz);
+	
 	this.createDZ(objdz);		
 	
 };
@@ -78,8 +78,6 @@ Editor.prototype.serializeDZ = function() {
 			this.dz[key] = this.dz[key].persist();
 		}
 	}
-	
-	
 	
 };
 

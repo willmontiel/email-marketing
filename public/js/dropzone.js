@@ -63,12 +63,13 @@ Dropzone.prototype.persist = function() {
 Dropzone.prototype.unpersist = function(obj) {
 	
 	this.name = obj.name;
+	this.parent = obj.parent;
 	
 	if(this.width === undefined) {
 		
 		this.width = obj.width;
 	}
-	this.parent = obj.parent;
+	
 	this.$obj = $('<div id="' + this.name + '" class="sub-mod-cont drop-zone ' + this.width + ' ui-sortable"></div>');
 	
 	for (var i=0; i< obj.content.length; i++) {

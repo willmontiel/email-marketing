@@ -14,7 +14,7 @@ Block.prototype.deleteBlock = function() {
 Block.prototype.persist = function() {
 	return {
 		type: this.typeBlock,
-		contentData: this.contentData.html(),
+		contentData: $('<div/>').html(this.contentData.html()),
 		htmlData: this.htmlData.html()
 	};
 	
@@ -22,22 +22,18 @@ Block.prototype.persist = function() {
 
 Block.prototype.unpersist = function(obj, dz) {
 	this.typeBlock = obj.type;
+	this.parentBlock = dz;
 	this.contentData = $('<div/>');
 	this.contentData = this.contentData.html(obj.contentData).children();
+	
 	this.htmlData = $('<div/>').html(
-			"<div class=\"handle-tool icon-move tool\"></div>\
+						"<div class=\"" + this.typeBlock + "\" style=\"display: block;\">\n\
+						<div class=\"handle-tool icon-move tool\"></div>\
 						<div class=\"edit-tool icon-pencil tool\"></div>\
 						<div class=\"remove-tool icon-trash tool\"></div>\
 						<div class=\"save-tool icon-ok\" style=\"display: none;\"></div>\
-						<div class=\"content\"></div>").children();
-	this.htmlData.filter('.content').append(this.contentData);
-
-	var module = $('<div class="' + this.typeBlock + '"></div>');
+						<div class=\"content\"></div></div>").children();
 	
-	module.append(this.htmlData);
-
-	this.parentBlock = dz;
-	
-	return module;
+	this.htmlData.find('.content').append(this.contentData);
 	
 };
