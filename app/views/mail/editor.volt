@@ -61,6 +61,6 @@
 	</div>
 	<br />
 	<div class="row-fluid">
-		<iframe src="{{url('mail/editor_frame')}}" height="600" width="100%"></iframe>
+		<iframe src="{{url('mail/editor_frame')}}" border = "0px"height="900" width="100%"></iframe>
 	</div>
 {% endblock %}

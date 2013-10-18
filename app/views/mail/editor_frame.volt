@@ -30,6 +30,9 @@
 				<li class="">
 					<a href="#components" data-toggle="tab">Componentes</a>
 				</li>
+				<li id="tabimages" class="">
+					<a href="#images" data-toggle="tab">Imagenes</a>
+				</li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="layouts">
@@ -49,6 +52,7 @@
 					</div>
 					<div class="module module-image-only">
 						<div class="handle-tool icon-move tool"></div>
+						<div class="edit-image-tool icon-picture tool"></div>
 						<div class="remove-tool icon-trash tool"></div>
 						<div class="save-tool icon-ok"></div>
 						<div class="content">
@@ -60,6 +64,7 @@
 					<div class="module module-text-image">
 						<div class="handle-tool icon-move tool"></div>
 						<div class="edit-tool icon-pencil tool"></div>
+						<div class="edit-image-tool icon-picture tool"></div>
 						<div class="remove-tool icon-trash tool"></div>
 						<div class="save-tool icon-ok"></div>
 						<div class="content clearfix">
@@ -93,6 +98,8 @@
 						</div>
 					</div>
 				</div>
+				<div class="tab-pane" id="images">
+				</div>	
 			</div>	
 		</div>
 	</div>

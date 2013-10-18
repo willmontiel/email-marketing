@@ -59,9 +59,13 @@
 .module-cont .module .remove-tool {
 	left: 32px;
 }
-.module-cont .module .edit-tool {
+.module-cont .module .edit-tool{
 	left: 16px;
 }
+.module-cont .module .edit-image-tool{
+	left: 48px;
+}
+
 .module-cont .module .save-tool {
 	height: 16px;
 	width: 16px;

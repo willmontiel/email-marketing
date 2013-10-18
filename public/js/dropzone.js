@@ -3,29 +3,33 @@ function Dropzone (name, parent, width) {
 	this.parent = parent;
 	this.width = width;
 	this.content = [];
+	this.$obj = "";
 
-	this.text = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"'>\n\
-					<div class='info-guide'>\n\
-						<span class='label label-info'>" + this.name + "</span>\n\
-					</div>\n\
-				</div>";
 };
 
 Dropzone.prototype.createHtmlZone = function() {
 	
-	$(this.parent).append(this.text);
+	var htmltext = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"'>\n\
+					<div class='info-guide'>\n\
+						<span class='label label-info'>" + this.name + "</span>\n\
+					</div>\n\
+				</div>";
+	
+	$(this.parent).append(htmltext);
+	
+	this.$obj = $("#content-" + this.name);
+	
+	this.$obj.data('smobj', this);
 	
 };
 
 Dropzone.prototype.deletezone = function() {
-	
-	$("#content-" + this.name).remove();
+
+	this.$obj.remove();
 	
 };
 
 Dropzone.prototype.setWidth = function(newWidth) {
-	
-	$("#content-" + this.name).removeClass(this.width).addClass(newWidth);
 	
 	this.width = newWidth;
 };
@@ -33,56 +37,76 @@ Dropzone.prototype.setWidth = function(newWidth) {
 Dropzone.prototype.insertBlocks = function() {
 	
 	for (var bl = 0; bl < this.content.length; bl++) {
-		//console.log(this.content[bl].contentData.html());
-		$("#content-" + this.name).append(this.content[bl].htmlData);
+		
+		this.$obj.append(this.content[bl].htmlData);
 	}
 };
 
-Dropzone.prototype.createBlock = function(clase, content) {
-	return new Block(this, clase, content, null);
-}
+Dropzone.prototype.createBlock = function(clase, content, html) {
+	return new Block(this, clase, content, html);
+};
+
+Dropzone.prototype.persist = function() {
+	var obj = {
+		name: this.name,
+		width: this.width,
+		parent: this.parent,
+		content: []
+	};
+	
+	for (var i=0; i< this.content.length; i++) {
+		obj.content.push(this.content[i].persist());
+	}
+	return obj;
+};
+
+Dropzone.prototype.unpersist = function(obj) {
+	
+	this.name = obj.name;
+	
+	if(this.width === undefined) {
+		
+		this.width = obj.width;
+	}
+	this.parent = obj.parent;
+	this.$obj = $('<div id="' + this.name + '" class="sub-mod-cont drop-zone ' + this.width + ' ui-sortable"></div>');
+	
+	for (var i=0; i< obj.content.length; i++) {
+		
+		var newblk = new Block();
+		
+		this.$obj.append(newblk.unpersist(obj.content[i], this));
+		
+		this.content.push(newblk);
+	}
+	
+	return this.$obj;
+};
 
 Dropzone.prototype.ondrop = function() {
-	var parentBlock;
-	var newobj;
 	var t = this;
 	
-	$("#content-" + this.name).sortable({
+	this.$obj.sortable({
 		
 		sort: function() {
 			$('#edit-area .drop-zone .info-guide').show();
 			$('#edit-area .sub-mod-cont').addClass('show-zones-draggable');			
 		},
-		
-		update: function(event, object) {
-			var blkobj = object.item.data('smobj');
-//			console.log(object.item.index());
-//			console.log(blkobj);
-//			console.log(t.content);
-
-			for(var i = 0; i < t.content.length; i++) {
 				
-				if(t.content[i] == blkobj) {
-					
-					t.content.splice(i);
-					
-				}
-			}
-			
-			var pos = object.item.index() - 1;
-			var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'));
-
-			object.item.data('smobj', newobj);
-			t.content.splice(pos, 0, newobj);
-		},
-
 		stop: function(event, object) {
 			
 			if (object.item.data('smobj') == undefined) {
-				var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'));
-				object.item.data('smobj', newobj);
-			}
 
+				var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'), object.item);
+				
+				object.item.data('smobj', newobj);
+				
+			}
+			
+			var objblk = object.item.data('smobj');
+
+			objblk.parentBlock.content.splice(object.item.index() - 1, 0, objblk);
+			
 			$('#edit-area .drop-zone .info-guide').hide();
 			
 			$('#edit-area .sub-mod-cont').removeClass('show-zones-draggable');
@@ -90,14 +114,10 @@ Dropzone.prototype.ondrop = function() {
 				
 		receive: function(event, object) {
 
-			//t.content.push(newobj);
-
-			if (object.sender == object.item) {
-				console.log('Son el mismo!!!');
-			}
-			else {
-				console.log('NO son el mismo!!!');
-				var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'));
+			if (object.sender != object.item) {
+				
+				var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'), object.item);
+				
 				object.item.data('smobj', newobj);
 			}
 		},
@@ -111,8 +131,9 @@ Dropzone.prototype.ondrop = function() {
 				if(t.content[i] == blkobj) {
 					
 					t.content[i].deleteBlock();
-					
-					t.content.splice(i);
+
+					t.content.splice(i, 1);
+				
 				}
 			}			
 		}

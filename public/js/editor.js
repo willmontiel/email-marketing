@@ -4,12 +4,6 @@ function Editor() {
 }
 var editor = new Editor(); 
 
-Editor.prototype.newlayout = function() {
-	
-	this.layout.createlayout();
-	
-};
-
 Editor.prototype.otherLayout = function() {
 	var t = this;
 	
@@ -21,7 +15,16 @@ Editor.prototype.otherLayout = function() {
 
 		t.layout = newLayout;
 		
-		t.changeLayout(oldLayout);
+		if(jQuery.isEmptyObject(oldLayout)) {
+			
+			t.newDropZones();
+		}
+		else {
+			
+			t.serializeDZ();
+			
+			t.changeLayout();
+		}
 
 		$('.drop-zone').sortable({ 
 			handle: '.handle-tool', 
@@ -34,43 +37,77 @@ Editor.prototype.otherLayout = function() {
 
 };
 
-Editor.prototype.changeLayout = function(oldLayout) {
-	console.log(oldLayout)
-	if(jQuery.isEmptyObject(oldLayout)) {
+Editor.prototype.changeLayout = function() {
+	
+	var objdz = {};
+
+	for(var z = 0; z < this.layout.zones.length; z++) {
 		
-		this.newDropZones();
-	} 
-	else {
+		var dzname = this.layout.zones[z].name;
 		
-		for(var z = 0; z < this.layout.zones.length; z++) {
+		if(!jQuery.isEmptyObject(this.dz[dzname])) {
+
+			var newdz = new Dropzone();
+
+			newdz.setWidth(this.layout.zones[z].width);
+
+			newdz.unpersist(this.dz[dzname]);
 			
-			if(!jQuery.isEmptyObject(this.dz[this.layout.zones[z].name])) {
-				
-				var newdz = this.dz[this.layout.zones[z].name];
-				
-				this.dz[this.layout.zones[z].name].deletezone();
-				
-				newdz.createHtmlZone();
-				newdz.setWidth(this.layout.zones[z].width);
-				newdz.insertBlocks();
-				newdz.ondrop();
-				
-				this.dz[newdz.name] = newdz;
+		}
+		else {
 
-			}
-			else {
-				var dz = new Dropzone(this.layout.zones[z].name,'#edit-area', this.layout.zones[z].width);;
-		
-				dz.createHtmlZone();
+			var newdz = new Dropzone(dzname,'#edit-area', this.layout.zones[z].width);;
+			
+		}
 
-				dz.ondrop();
-
-				this.dz[dz.name] = dz;
-			}
-		}	
+		objdz[newdz.name] = newdz;
 	}
+	console.log(objdz);
+	this.createDZ(objdz);		
+	
 };
 
+Editor.prototype.serializeDZ = function() {
+
+	this.deleteZones();
+	
+	for (var key in this.dz) {
+		
+		if(this.dz[key] instanceof Dropzone) {
+			
+			this.dz[key] = this.dz[key].persist();
+		}
+	}
+	
+	
+	
+};
+
+Editor.prototype.createDZ = function(objdz) {
+	
+	for (var key in objdz) {
+		
+		if(objdz[key] instanceof Dropzone) {
+			
+			objdz[key].createHtmlZone();
+			objdz[key].insertBlocks();
+			objdz[key].ondrop();
+		}
+	}
+	
+	this.dz = objdz;
+};
+
+Editor.prototype.deleteZones = function() {
+	
+	for (var key in this.dz) {
+		
+		if(this.dz[key] instanceof Dropzone) {
+			
+			this.dz[key].deletezone();
+		}
+	}
+};
 
 Editor.prototype.newDropZones = function() {
 	
@@ -87,6 +124,20 @@ Editor.prototype.newDropZones = function() {
 	}
 };
 
+Editor.prototype.deleteZoneByTool = function(name, objblk) {
+	
+	for(var i = 0; i < this.dz[name].content.length; i++) {
+			
+			if(this.dz[name].content[i] == objblk) {
+				
+				var oldObj = this.dz[name].content[i];
+
+				oldObj.deleteBlock();
+
+				this.dz[name].content.splice(i, 1);
+			}
+		}	
+};
 
 $(function() {
 	
@@ -108,18 +159,8 @@ $(function() {
 		var grandparent = $(this).parents('.drop-zone');
 		
 		var name = grandparent.attr('id').replace("content-","");
-
-		for(var i = 0; i < editor.dropzones[name].content.length; i++) {
-			
-			if(editor.dropzones[name].content[i].id === parent.data('smobj')) {
-				
-				var oldObj = editor.dropzones[name].content[i];
-
-				oldObj.deleteBlock();
-
-				editor.dropzones[name].content.splice(i);
-			}
-		}	
+		
+		editor.deleteZoneByTool(name, parent.data('smobj'));
 		
 		parent.remove();
 		
@@ -155,22 +196,6 @@ $(function() {
 		
 		$(this).hide();
 		
-		var parent = $(this).parents('.module');
-		
-		var grandparent = $(this).parents('.drop-zone');
-		
-		var name = grandparent.attr('id').replace("content-","");
-
-		for(var i = 0; i < editor.dropzones[name].content.length; i++) {
-			
-			if(editor.dropzones[name].content[i].id === parent.data('smobj')) {
-				
-				var obj = editor.dropzones[name].content[i];
-
-				obj.contentData = $(this).siblings('.content');
-			}
-		}
-		
 	});
 	
 	$('#components .module').draggable({
@@ -189,6 +214,11 @@ $(function() {
 	$('#guardar').on('click', function() {
 		console.log(editor);
 	});
+	
+//	$('.module-cont').on('click', '.module > .edit-image-tool', function() {
+//		$('#images').addClass('active');
+//		$('#tab-images').addClass('active');
+//	})
 });
 	
 

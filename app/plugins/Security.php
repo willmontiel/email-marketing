@@ -181,7 +181,8 @@ class Security extends Plugin
 				'mail::target' => array('mail' => array('read', 'create')),
 				'mail::schedule' => array('mail' => array('read', 'create')),
 				'mail::delete' => array('mail' => array('read', 'delete')),
-				'mail::import' => array('mail' => array('read', 'create'))
+				'mail::import' => array('mail' => array('read', 'create')),
+				'mail::editor_frame' => array('mail' => array('read', 'create')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
