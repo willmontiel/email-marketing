@@ -325,4 +325,12 @@ class MailController extends ControllerBase
 	{
 		
 	}
+	
+	public function cloneAction($idMail = null)
+	{
+		$isOk = $this->validateProcess($idMail);
+		if ($isOk) {
+			
+		}
+	}
 }
