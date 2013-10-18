@@ -116,8 +116,7 @@ class MailController extends ControllerBase
 					$this->view->setVar('idMail', $idMail);
 					break;
 			}
-		}
-		
+		} 
 		else {
 			return $this->response->redirect("mail/setup/" .$idMail);
 		}
@@ -432,18 +431,12 @@ class MailController extends ControllerBase
 					$this->db->rollback();
 					return $this->response->redirect("mail/index");
 				}
-				else {
-					$this->db->commit();
-					return $this->response->redirect("mail/setup/" .$mailClone->idMail);
-				}
 			}
-			else {
-				$this->db->commit();
-				return $this->response->redirect("mail/setup/" .$mailClone->idMail);
-			}
+			$this->db->commit();
+			return $this->response->redirect("mail/setup/" .$mailClone->idMail);
 		}
-		else {
-			return $this->response->redirect("mail/setup");
-		}
+		
+		$this->flashSession->error('Un error no permitio duplicar el correo!');
+		return $this->response->redirect("mail/index");
 	}
 }

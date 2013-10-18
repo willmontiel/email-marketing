@@ -9,10 +9,10 @@
 	$(document).ready(
 		function()
 		{
-			try {
-				$('#redactor_content').redactor({fullpage: true});
-			}
-			catch (e) {}
+			$('#redactor_content').redactor({
+				imageUpload: '/your_image_upload_script/',
+				fullpage: true
+			});
 		}
 	);
 	</script>
