@@ -10,7 +10,8 @@
 		function()
 		{
 			$('#redactor_content').redactor({
-				imageUpload: '/your_image_upload_script/',
+				imageUpload: '/emarketing/asset/upload/',
+				imageGetJson: '/emarketing/asset/list/',
 				fullpage: true
 			});
 		}

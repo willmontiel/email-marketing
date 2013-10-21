@@ -183,6 +183,10 @@ class Security extends Plugin
 				'mail::delete' => array('mail' => array('read', 'delete')),
 				'mail::import' => array('mail' => array('read', 'create')),
 				'mail::clone' => array('mail' => array('read', 'clone')),
+				'asset::upload' => array('mail' => array('read', 'create')),
+				'asset::show' => array('mail' => array('read', 'create')),
+				'asset::list' => array('mail' => array('read', 'create')),
+				'asset::thumb' => array('mail' => array('read', 'create')),
 				'mail::editor_frame' => array('mail' => array('read', 'create'))
 			);
 		}
