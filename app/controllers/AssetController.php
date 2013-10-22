@@ -1,140 +1,82 @@
 <?php
 class AssetController extends ControllerBase
-{
-	const MAX_FILE_SIZE = 10000000;
-	
-	
+{	
 	public function uploadAction ()
 	{
-		if (empty($_FILES['file']['name'])) {
-			$this->flashSession->error("No ha enviado ningún archivo");
+		$space = $this->getSpaceInAccount();
+		
+		if (!$space) {
+			return $this->setJsonResponse(
+					array(
+						'error' => 'Ha sobrepasaso el limite de espacio en disco. para liberar espacio en disco
+							        elimine imágenes o archivos que considere innecesarios'
+						)
+					, 401 , 'Ha sobrepasado el limite de espacio en disco!');
+		}
+		else if (empty($_FILES['file']['name'])) {
+			return $this->setJsonResponse(
+					array(
+						'error' => 'No ha enviado ningún archivo o ha enviado un archivo no soportado, por favor verifique la información'
+						)
+					, 400 , 'Archivo vacio o incorrecto');
 		}
 		else {
-			$this->idAccount = $this->user->account->idAccount;
-			$this->file = $_FILES['file'];
+			$name = $_FILES['file']['name'];
+			$size = $_FILES['file']['size'];
+			$type = $_FILES['file']['type'];
+			$tmp_dir = $_FILES['file']['tmp_name'];
+			
 			try {
-				$this->processFile();
-				$asset = $this->saveImage();
+				$assetObj = new AssetObj($this->user->account);
+				$assetObj->createImage($name, $size, $type, $tmp_dir);
 			} 
 			catch (InvalidArgumentException $e) {
-				return $this->flashSession->error("Ha ocurrido un error intente de nuevo");
+				return $this->setJsonResponse(
+					array(
+						'error' => 'Ha ocurrido un error mientras se cargaba la imágen, por favor asegurese
+									de que el archivo que intenta subir realmente sea una imágen (jpeg, jpg, gif, png)
+									y tenga un peso menor a 10 MB'
+						)
+					, 400 , 'Error en archivo!');
 			}
 			
 			$array = array(
-				'filelink' => "/emarketing/asset/show/" .$asset->idAsset
+				'filelink' => $assetObj->getUrlImage()
 			);
 			echo stripslashes(json_encode($array));
 		}
 	}
 	
-	private function processFile () 
-	{	
-		$name = $this->file['name']; 
-		$size = $this->file['size']; 
+	
+	public function getSpaceInAccount()
+	{
+		$account = $this->user->account;
 		
-		$ext= "%\.(gif|jpe?g|png)$%i";
+		$phql = "SELECT SUM(asset.fileSize) cnt FROM asset WHERE asset.idAccount = :idAccount:";
+		$result = $this->modelsManager->executeQuery($phql, array('idAccount' => $account->idAccount));
 		
-		$isValid = preg_match($ext, $name);
+		$space = ($result->getFirst()->cnt / 1048576 );
 		
-		if ($size > self::MAX_FILE_SIZE) {
-			throw new InvalidArgumentException('File size exceeds maximum: ' . self::MAX_FILE_SIZE . ' bytes');
+		if ($space >= $account->fileSpace) {
+			return false;
 		}
-		else if (!$isValid) {
-			throw new InvalidArgumentException('Invalid extension for file...');
-		}
+		return true;
 	}
 	
-	private function saveImage ()
-	{
-		$dir = $this->asset->dir . $this->idAccount . "/images/" ;
-		
-		if (!file_exists($dir)) {
-			mkdir($dir, 0777, true);
-		}
-		
-		
-		$ext = $this->returnExt($this->file['name']);
-		$asset = $this->saveAssetInDb();
-		
-		$nameThumb = $asset->idAsset . "_thumb." .$ext;
-		$nameImage = $asset->idAsset . "." .$ext;
-		$dirThumb = $dir . $nameThumb;
-		$dirImage = $dir . $nameImage;
-		
-		if (!move_uploaded_file($this->file['tmp_name'], $dirImage)){ 
-			throw new InvalidArgumentException('Image could not be uploaded on the server');
-		}
-		else {
-			switch ($ext) {
-				case "jpg":
-				case "jpeg":
-					$img = @imagecreatefromjpeg($dirImage);
-					break;
-
-				case "png":
-					$img = @imagecreatefrompng($dirImage);
-					break;
-
-				case "gif":
-					$img = @imagecreatefromgif($dirImage);
-					break;
-			}
-
-			$width = imagesx ($img);
-			$heigh =imagesy($img);
-			$thumb = imagecreatetruecolor(100 ,74);
-
-			ImageCopyResized($thumb, $img, 0, 0, 0, 0, 100, 74, $width, $heigh);
-			
-			if (!imagejpeg($thumb, $dirThumb)) {
-				throw new InvalidArgumentException('thumb could not be saved on the server');
-			}
-			return $asset;
-		}
-	}
 	
-	private function returnExt ($name) 
-	{
-		$fileName = strtolower($name);
-		$tmp = (explode('.', $fileName));
-		$ext = end($tmp);
-		$ext = strtolower($ext);
-		
-		return $ext;
-	}
-	
-	private function saveAssetInDb () 
-	{
-		$info = getimagesize($this->file['tmp_name']);
-		$dimensions = $info[0] . " x " . $info[1];
-		
-		$asset = new Asset();
-
-		$asset->idAccount = $this->idAccount;
-		$asset->fileName = $this->file['name'];
-		$asset->fileSize = $this->file['size'];
-		$asset->dimensions = $dimensions;
-		$asset->type = $this->file['type'];
-		$asset->createdon = time();
-
-		if (!$asset->save()) {
-			foreach ($asset->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-				throw new InvalidArgumentException('could not be saved on the database');
-			}
-		}
-		return $asset;
-	}
 	
 	public function listAction () 
 	{
 		$log = $this->logger;
 		$this->view->disable();
 		
-		$assets = Asset::find(array(
-			"conditions" => "idAccount = ?1",
-			"bind" => array(1 => $this->user->account->idAccount)
-		));
+		$a = new AssetObj($this->user->account);
+		$assets = $a->allAssetInAccount();
+//		$log->log("Este es jason: " . print_r($assets , true));
+//		$assets = Asset::find(array(
+//			"conditions" => "idAccount = ?1",
+//			"bind" => array(1 => $this->user->account->idAccount)
+//		));
 		
 		if (!$assets) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontroraron la imágenes!!');
@@ -142,17 +84,24 @@ class AssetController extends ControllerBase
 		
 		$jsonImage = array();
 		foreach ($assets as $asset) {
-			$img = "/emarketing/asset/show/" . $asset->idAsset;
-			$thumb ="/emarketing/asset/thumbnail/" . $asset->idAsset;
+			$img = $a->getUrlImage($asset);
+			
+			$thumb = $a->getUrlThumbnail($asset);
+			if (!file_exists($thumb)) {
+				$a->createThumbnail($thumb, $img, "jpg");
+			}
+			
 			$title = $asset->fileName;
+			
+			$log->log("Este es thumb: " . $thumb);
+			$log->log("Este es img: " . $img);
 			
 			$jsonImage[] = array ('thumb' => $thumb, 
 								'image' => $img,
 								'title' => $title);
 		}
-		
-		$log->log("Este es jason: " . print_r($jsonImage, true));
-		echo stripslashes(json_encode($jsonImage));
+		$log->log("Este es jason: " . print_r($jsonImage , true));
+//		echo stripslashes(json_encode($jsonImage));
 	}
 	
 	public function showAction ($idAsset) 
@@ -182,6 +131,7 @@ class AssetController extends ControllerBase
 	
 	public function thumbnailAction ($idAsset) 
 	{
+		$log = $this->logger;
 		$this->view->disable();
 		$idAccount = $this->user->account->idAccount;
 		
@@ -203,5 +153,15 @@ class AssetController extends ControllerBase
 		$this->response->setHeader("Content-Length", $asset->size);
 		
 		return $this->response->setContent(file_get_contents($img));
+	}
+	
+	private function returnExt ($name) 
+	{
+		$fileName = strtolower($name);
+		$tmp = (explode('.', $fileName));
+		$ext = end($tmp);
+		$ext = strtolower($ext);
+		
+		return $ext;
 	}
 }

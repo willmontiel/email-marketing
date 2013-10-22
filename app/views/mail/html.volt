@@ -12,6 +12,9 @@
 			$('#redactor_content').redactor({
 				imageUpload: '/emarketing/asset/upload/',
 				imageGetJson: '/emarketing/asset/list/',
+				imageUploadErrorCallback: function(json) {
+					$.gritter.add({class_name: 'warn', title: '<i class="icon-warning-sign"></i> Atención', text: json.error, sticky: false, time: 10000});
+				},
 				fullpage: true
 			});
 		}

@@ -9,4 +9,12 @@ class Asset extends \Phalcon\Mvc\Model
 		$this->useDynamicUpdate(true);
 	}
 			
+	public function findAllAssetInAccount()
+	{
+		$assets = Asset::find(array(
+			"conditions" => "idAccount = ?1",
+			"bind" => array(1 => $this->idAccount)
+		));
+		return $assets;
+	}
 }
