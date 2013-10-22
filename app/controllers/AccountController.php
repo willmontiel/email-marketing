@@ -102,7 +102,6 @@ class AccountController extends ControllerBase
 								foreach ($dbase->getMessages() as $msg) {
 									$this->flashSession->error($msg);
 								}
-								return $this->response->redirect("account/new");
 							}
 							else {
 								$this->db->commit();
@@ -114,19 +113,16 @@ class AccountController extends ControllerBase
 							
 					else{
 						$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 y máximo 40 caracteres");
-						return $this->response->redirect("account/new");
 					}
 				}
 				else{
 					$this->flashSession->error('Las contraseñas no coinciden por favor verifique la información');
-					return $this->response->redirect("account/new");
 				}		
 			}
             else {
 				foreach ($account->getMessages() as $msg) {
 					$this->flashSession->error($msg);
                 }
-				return $this->response->redirect("account/new");
             }
         }
        
@@ -183,7 +179,6 @@ class AccountController extends ControllerBase
 						foreach ($account->getMessages() as $msg) {
 							$this->flashSession->error($msg);
 						}
-						return $this->response->redirect("account/edit/".$account->idAccount);
 					}
 					else {
 						$this->db->commit();
@@ -256,13 +251,11 @@ class AccountController extends ControllerBase
 
 				if(strlen($pass) < 8) {
 					$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 caracteres y máximo 40");
-					return $this->response->redirect("account/newuser/".$account->idAccount);
 				}
 
 				else {
 					if($pass !== $pass2) {
 						$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
-						return $this->response->redirect("account/newuser/".$account->idAccount);
 					}
 					else {
 
@@ -284,7 +277,6 @@ class AccountController extends ControllerBase
 							foreach ($user->getMessages() as $msg) {
 								$this->flashSession->error($msg);
 							}
-							return $this->response->redirect("account/newuser/".$account->idAccount);
 						}
 					}
 				}
@@ -325,7 +317,7 @@ class AccountController extends ControllerBase
 					$pass2 = $form->getValue('pass2ForEdit');
 					$email = strtolower($form->getValue('email'));
 					
-					if(!empty($pass)||!empty($pass2)){
+					if((!empty($pass)||!empty($pass2)) && ($pass == $pass2)){
 
 						$this->db->begin();
 						$userExist->email = $email;

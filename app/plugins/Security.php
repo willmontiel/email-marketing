@@ -186,7 +186,7 @@ class Security extends Plugin
 				'asset::upload' => array('mail' => array('read', 'create')),
 				'asset::show' => array('mail' => array('read', 'create')),
 				'asset::list' => array('mail' => array('read', 'create')),
-				'asset::thumb' => array('mail' => array('read', 'create')),
+				'asset::thumbnail' => array('mail' => array('read', 'create')),
 				'mail::editor_frame' => array('mail' => array('read', 'create'))
 			);
 		}
