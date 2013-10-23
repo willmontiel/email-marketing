@@ -3,21 +3,15 @@ class AssetObj
 {
 	const MAX_FILE_SIZE = 1000000;
 	protected $log = null;
-
-
-	protected function di()
-    {
-        return \Phalcon\DI\FactoryDefault::getDefault();
-    }
 	
 	function __construct(Account $account) 
 	{
 		$this->idAccount = $account->idAccount;
 		$this->log = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
 		
-		$di = $this->di();
+		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 		
-		$this->asset = $di['asset'];
+		$this->assetsrv = $di['asset'];
 		$this->url = $di['url'];
 	}
 	
@@ -28,14 +22,14 @@ class AssetObj
 	 * @param string $type
 	 * @param string $tmp_dir
 	 */
-	public function createImage($name, $size, $type, $tmp_dir)
+	public function createImage($name, $type, $tmp_dir, $size = null)
 	{
 		try {
 			$this->validateFile($name, $size);
 			$this->saveImageFile($name, $size, $type, $tmp_dir);
 		}
 		catch (InvalidArgumentException $e) {
-			
+			throw new InvalidArgumentException('we have a error...');
 		}
 	}
 	
@@ -45,7 +39,7 @@ class AssetObj
 	 * @param string $size
 	 * @throws InvalidArgumentException
 	 */
-	private function validateFile($name, $size) 
+	protected function validateFile($name, $size) 
 	{	
 		$ext= "%\.(gif|jpe?g|png)$%i";
 		
@@ -60,30 +54,30 @@ class AssetObj
 	}
 	
 	
-	private function saveImageFile($name, $size, $type, $tmp_dir)
+	protected function saveImageFile($name, $size, $type, $tmp_dir)
 	{
-		$dir = $this->asset->dir . $this->idAccount . "/images/" ;
+		$dir = $this->assetsrv->dir . $this->idAccount . "/images/" ;
 		
 		if (!file_exists($dir)) {
 			mkdir($dir, 0777, true);
 		}
 		
-		$ext = $this->returnExt($name);
+		$ext = pathinfo($name, PATHINFO_EXTENSION);
 		$this->saveAssetInDb($name, $size, $type, $tmp_dir);
 		
-		$nameImage = $this->idAsset . "." .$ext;
+		$nameImage = $this->asset->idAsset . "." .$ext;
 		$dirImage = $dir . $nameImage;
 		
 		if (!move_uploaded_file($tmp_dir, $dirImage)){ 
 			throw new InvalidArgumentException('Image could not be uploaded on the server');
 		}
 		
-		$nameThumb = $this->idAsset . "_thumb." .$ext;
+		$nameThumb = $this->asset->idAsset . "_thumb.jpeg";
 		$dirThumb = $dir . $nameThumb;
 		$this->createThumbnail($dirThumb, $dirImage, $ext);
 	}
 	
-	private function saveAssetInDb ($name, $size, $type, $tmp_dir) 
+	protected function saveAssetInDb($name, $size, $type, $tmp_dir) 
 	{
 		$info = getimagesize($tmp_dir);
 		$dimensions = $info[0] . " x " . $info[1];
@@ -98,10 +92,9 @@ class AssetObj
 		$asset->createdon = time();
 
 		if (!$asset->save()) {
-			//$log->log("No guardó asset in database");
 			throw new InvalidArgumentException('could not be saved on the database');
 		}
-		$this->idAsset = $asset->idAsset;
+		$this->asset = $asset;
 	}
 	
 	public function createThumbnail($dirThumb, $dirImage, $ext)
@@ -132,37 +125,38 @@ class AssetObj
 		}		
 	}
 	
-	public static function allAssetInAccount()
+	public static function findAllAssetsInAccount(Account $account)
 	{
-		$asset = new Asset();
-		return $asset->findAllAssetInAccount();
-	}
-
-	private function returnExt ($name) 
-	{
-		$fileName = strtolower($name);
-		$tmp = (explode('.', $fileName));
-		$ext = end($tmp);
-		$ext = strtolower($ext);
+		$assets = Asset::findAllAssetsInAccount($account);
+		$aobjs = array();
+		foreach ($assets as $a) {
+			$obj = new AssetObj($account);
+			$obj->setAsset($a);
+			$aobjs[] = $obj;
+		}
 		
-		return $ext;
+		return $aobjs;
 	}
 	
-	public function getUrlImage(Asset $asset = null)
+	protected function setAsset(Asset $a)
 	{
-		if (!$asset) {
-			
-		}
-		$urlImage = $this->url->get("asset/show/") . $this->idAsset;
+		$this->asset = $a;
+	}
+
+	public function getImagePrivateUrl()
+	{
+		$urlImage = $this->url->get('asset/show') . '/' . $this->asset->idAsset;
 		return $urlImage;
 	}
 	
-	public function getUrlThumbnail(Asset $asset = null)
+	public function getThumbnailUrl()
 	{
-		if (!$asset) {
-			
-		}
-		$urlThumbnail = $this->url->get("asset/thumbnail/") . $asset->idAccount;
+		$urlThumbnail = $this->url->get('asset/thumbnail')  . '/' . $this->asset->idAsset;
 		return $urlThumbnail;
+	}
+	
+	public function getFileName()
+	{
+		return $this->asset->fileName;
 	}
 }

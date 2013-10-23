@@ -28,7 +28,7 @@ class AssetController extends ControllerBase
 			
 			try {
 				$assetObj = new AssetObj($this->user->account);
-				$assetObj->createImage($name, $size, $type, $tmp_dir);
+				$assetObj->createImage($name, $type, $tmp_dir, $size);
 			} 
 			catch (InvalidArgumentException $e) {
 				return $this->setJsonResponse(
@@ -41,9 +41,9 @@ class AssetController extends ControllerBase
 			}
 			
 			$array = array(
-				'filelink' => $assetObj->getUrlImage()
+				'filelink' => $assetObj->getImagePrivateUrl()
 			);
-			echo stripslashes(json_encode($array));
+			return $this->setJsonResponse($array);
 		}
 	}
 	
@@ -67,46 +67,23 @@ class AssetController extends ControllerBase
 	
 	public function listAction () 
 	{
-		$log = $this->logger;
-		$this->view->disable();
+		$assets = AssetObj::findAllAssetsInAccount($this->user->account);
 		
-		$a = new AssetObj($this->user->account);
-		$assets = $a->allAssetInAccount();
-//		$log->log("Este es jason: " . print_r($assets , true));
-//		$assets = Asset::find(array(
-//			"conditions" => "idAccount = ?1",
-//			"bind" => array(1 => $this->user->account->idAccount)
-//		));
-		
-		if (!$assets) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontroraron la imágenes!!');
+		if (count($assets) < 1) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontraron la imágenes!!');
 		}
 		
 		$jsonImage = array();
-		foreach ($assets as $asset) {
-			$img = $a->getUrlImage($asset);
-			
-			$thumb = $a->getUrlThumbnail($asset);
-			if (!file_exists($thumb)) {
-				$a->createThumbnail($thumb, $img, "jpg");
-			}
-			
-			$title = $asset->fileName;
-			
-			$log->log("Este es thumb: " . $thumb);
-			$log->log("Este es img: " . $img);
-			
-			$jsonImage[] = array ('thumb' => $thumb, 
-								'image' => $img,
-								'title' => $title);
+		foreach ($assets as $a) {
+			$jsonImage[] = array ('thumb' => $a->getThumbnailUrl(), 
+								'image' => $a->getImagePrivateUrl(),
+								'title' => $a->getFileName());
 		}
-		$log->log("Este es jason: " . print_r($jsonImage , true));
-//		echo stripslashes(json_encode($jsonImage));
+		return $this->setJsonResponse($jsonImage);
 	}
 	
 	public function showAction ($idAsset) 
 	{
-		$this->view->disable();
 		$idAccount = $this->user->account->idAccount;
 		
 		$asset = Asset::findFirst(array(
@@ -119,20 +96,20 @@ class AssetController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'not found'), 404, 'No se encontro la imágen!!');
 		}
 		
-		$ext = $this->returnExt($asset->fileName);
+		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
 		
 		$img = $this->asset->dir . $this->user->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
 		
 		$this->response->setHeader("Content-Type", $asset->type);
 		$this->response->setHeader("Content-Length", $asset->size);
 		
+		$this->view->disable();
 		return $this->response->setContent(file_get_contents($img));
 	}
 	
 	public function thumbnailAction ($idAsset) 
 	{
 		$log = $this->logger;
-		$this->view->disable();
 		$idAccount = $this->user->account->idAccount;
 		
 		$asset = Asset::findFirst(array(
@@ -141,27 +118,17 @@ class AssetController extends ControllerBase
 							2 => $idAsset)
 		));
 		
-		if (!$asset) {
-			return $this->setJsonResponse(array('status' => 'not found'), 404, 'No se encontro la imágen!!');
+		if (count($asset) < 1) {
+			return $this->setJsonResponse(array('status' => 'not found'), 404, 'No se encontró la imágen!!');
 		}
 		
-		$ext = $this->returnExt($asset->fileName);
-		
-		$img = $this->asset->dir . $this->user->account->idAccount . "/images/" . $asset->idAsset . "_thumb." .$ext;
-		
-		$this->response->setHeader("Content-Type", $asset->type);
+		$img = $this->asset->dir . $this->user->account->idAccount . "/images/" . $asset->idAsset . "_thumb.jpeg";
+	
+		$this->response->setHeader("Content-Type", "image/jpeg");
 		$this->response->setHeader("Content-Length", $asset->size);
 		
+		$this->view->disable();
 		return $this->response->setContent(file_get_contents($img));
 	}
-	
-	private function returnExt ($name) 
-	{
-		$fileName = strtolower($name);
-		$tmp = (explode('.', $fileName));
-		$ext = end($tmp);
-		$ext = strtolower($ext);
-		
-		return $ext;
-	}
+
 }
