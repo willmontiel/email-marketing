@@ -37,8 +37,7 @@ Dropzone.prototype.setWidth = function(newWidth) {
 Dropzone.prototype.insertBlocks = function() {
 	
 	for (var bl = 0; bl < this.content.length; bl++) {
-		
-		this.$obj.append(this.content[bl].htmlData);
+		this.$obj.append(this.content[bl].createBlock());
 	}
 };
 
@@ -77,7 +76,7 @@ Dropzone.prototype.unpersist = function(obj) {
 		var newblk = new Block();
 		
 		this.$obj.append(newblk.unpersist(obj.content[i], this));
-		
+
 		this.content.push(newblk);
 	}
 	
@@ -126,7 +125,7 @@ Dropzone.prototype.ondrop = function() {
 		remove: function(event, object) {
 			
 			var blkobj = object.item.data('smobj');
-			
+
 			for(var i = 0; i < t.content.length; i++) {
 				
 				if(t.content[i] == blkobj) {
