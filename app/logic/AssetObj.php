@@ -6,8 +6,8 @@ class AssetObj
 	
 	function __construct(Account $account) 
 	{
-		$this->idAccount = $account->idAccount;
-		$this->log = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
+		$this->account = $account;
+		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
 		
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 		
@@ -16,7 +16,7 @@ class AssetObj
 	}
 	
 	/**
-	 * Función que encarga de crear imagen, thumbnail y guardar en la base de datos
+	 * Función que se encarga de gestionar la creación de una imagen y thumbnail en el servidor y un registro en la base de datos
 	 * @param string $name
 	 * @param int $size
 	 * @param string $type
@@ -26,7 +26,13 @@ class AssetObj
 	{
 		try {
 			$this->validateFile($name, $size);
-			$this->saveImageFile($name, $size, $type, $tmp_dir);
+			$this->saveAssetInDb($name, $size, $type, $tmp_dir);
+			
+			$image = new Image($this->account);
+			$dirImage = $image->saveImage($this->asset, $name, $tmp_dir);
+			
+			$thumbnail = new Thumbnail($this->account);
+			$thumbnail->createThumbnail($this->asset, $dirImage, $name);
 		}
 		catch (InvalidArgumentException $e) {
 			throw new InvalidArgumentException('we have a error...');
@@ -41,7 +47,7 @@ class AssetObj
 	 */
 	protected function validateFile($name, $size) 
 	{	
-		$ext= "%\.(gif|jpe?g|png)$%i";
+		$ext= '%\.(gif|jpe?g|png)$%i';
 		
 		$isValid = preg_match($ext, $name);
 		
@@ -53,38 +59,22 @@ class AssetObj
 		}
 	}
 	
-	
-	protected function saveImageFile($name, $size, $type, $tmp_dir)
-	{
-		$dir = $this->assetsrv->dir . $this->idAccount . "/images/" ;
-		
-		if (!file_exists($dir)) {
-			mkdir($dir, 0777, true);
-		}
-		
-		$ext = pathinfo($name, PATHINFO_EXTENSION);
-		$this->saveAssetInDb($name, $size, $type, $tmp_dir);
-		
-		$nameImage = $this->asset->idAsset . "." .$ext;
-		$dirImage = $dir . $nameImage;
-		
-		if (!move_uploaded_file($tmp_dir, $dirImage)){ 
-			throw new InvalidArgumentException('Image could not be uploaded on the server');
-		}
-		
-		$nameThumb = $this->asset->idAsset . "_thumb.jpeg";
-		$dirThumb = $dir . $nameThumb;
-		$this->createThumbnail($dirThumb, $dirImage, $ext);
-	}
-	
+	/**
+	 * Funcion que guarda un información de un asset en las base de datos y crea un objeto asset
+	 * @param string $name nombre con extensión del archivo
+	 * @param int $size peso del archivo
+	 * @param string $type tipo mime del archivo
+	 * @param string $tmp_dir ubicación de archivo
+	 * @throws InvalidArgumentException
+	 */
 	protected function saveAssetInDb($name, $size, $type, $tmp_dir) 
 	{
 		$info = getimagesize($tmp_dir);
-		$dimensions = $info[0] . " x " . $info[1];
+		$dimensions = $info[0] . ' x ' . $info[1];
 		
 		$asset = new Asset();
 
-		$asset->idAccount = $this->idAccount;
+		$asset->idAccount = $this->account->idAccount;
 		$asset->fileName = $name;
 		$asset->fileSize = $size;
 		$asset->dimensions = $dimensions;
@@ -97,34 +87,11 @@ class AssetObj
 		$this->asset = $asset;
 	}
 	
-	public function createThumbnail($dirThumb, $dirImage, $ext)
-	{
-		switch ($ext) {
-			case "jpg":
-			case "jpeg":
-				$img = @imagecreatefromjpeg($dirImage);
-				break;
-
-			case "png":
-				$img = @imagecreatefrompng($dirImage);
-				break;
-
-			case "gif":
-				$img = @imagecreatefromgif($dirImage);
-				break;
-		}
-
-		$width = imagesx ($img);
-		$heigh =imagesy($img);
-		$thumb = imagecreatetruecolor(100 ,74);
-
-		ImageCopyResized($thumb, $img, 0, 0, 0, 0, 100, 74, $width, $heigh);
-
-		if (!imagejpeg($thumb, $dirThumb, 50)) {
-			throw new InvalidArgumentException('thumb could not be saved on the server');
-		}		
-	}
-	
+	/**
+	 * funcion que retorna un objeto assetObj
+	 * @param Account $account
+	 * @return \AssetObj
+	 */
 	public static function findAllAssetsInAccount(Account $account)
 	{
 		$assets = Asset::findAllAssetsInAccount($account);
@@ -142,7 +109,7 @@ class AssetObj
 	{
 		$this->asset = $a;
 	}
-
+	
 	public function getImagePrivateUrl()
 	{
 		$urlImage = $this->url->get('asset/show') . '/' . $this->asset->idAsset;
@@ -150,7 +117,16 @@ class AssetObj
 	}
 	
 	public function getThumbnailUrl()
-	{
+	{	
+		$dir = $this->assetsrv->dir . $this->account->idAccount . '/images/';
+		$thumb = $dir . $this->asset->idAsset . '_thumb.jpeg';
+		if (!file_exists($thumb)) {
+			$ext = pathinfo( $this->asset->fileName, PATHINFO_EXTENSION);
+			$image = $dir . $this->asset->idAsset . '.' . $ext;
+			$thumbnail = new Thumbnail($this->account);
+			$thumbnail->createThumbnail($this->asset, $image, $this->asset->fileName);
+		}
+		
 		$urlThumbnail = $this->url->get('asset/thumbnail')  . '/' . $this->asset->idAsset;
 		return $urlThumbnail;
 	}

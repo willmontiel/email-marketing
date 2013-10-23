@@ -92,7 +92,8 @@
 										<li><a href="{{ url(value.url) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
 									{% endfor %}
 										<li><a href="{{ url('mail/clone/') }}{{item.idMail}}"><i class="icon-copy"></i>Duplicar</a></li>
-										<li><a href="{{ url('mail/delete/') }}{{item.idMail}}"><i class="icon-trash"></i>Eliminar </a></li>
+										<li><a class="ShowDialog" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}"><i class="icon-trash"></i>Eliminar </a></li>
+										
 									</ul>
 								</div>
 							</div>
@@ -136,4 +137,29 @@
 		<!-- Fin de mi lista de correos -->
 </div>
 
+<div id="modal-simple" class="modal hide fade" aria-hidden="false">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h6 id="modal-tablesLabel">Eliminar Base de Datos</h6>
+	</div>
+	<div class="modal-body">
+		<p>
+			¿Esta seguro que desea eliminar este correo?
+		</p>
+		<p>
+			Recuerde que si elimina este correo se perderán todos los datos asociados, excepto las imágenes
+		</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+	  <a href="" id="deleteMail" class="btn btn-danger" >Eliminar</a>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).on("click", ".ShowDialog", function () {
+		var myURL = $(this).data('id');
+		$("#deleteMail").attr('href', myURL );
+	});
+</script>
 {% endblock %}
