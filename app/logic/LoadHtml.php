@@ -42,7 +42,6 @@ class LoadHtml
 			$htmlbase = $htmlbase[0];
 		}
 		if ($htmlbase && $image == 'load') {
-//			echo "Found base: {$htmlbase} - href={$htmlbase->href}\n\n";
 			$base = $htmlbase->href;
 			$htmlbase->outertext = '';
 		}
@@ -61,8 +60,6 @@ class LoadHtml
 					$oldlocation = $element->src;
 					$location = $this->addImageToMap($oldlocation);
 					$element->src = $location;
-					$this->log->log('Locations [old: ' . $oldlocation . '], [new: ' . $location . '], Base: '. $this->asset->url);
-
 				}
 			}
 		}
@@ -71,7 +68,6 @@ class LoadHtml
 		$reemplazar = array("<!-- ", " -->");
 		
 		$newhtml = str_replace($busqueda,$reemplazar, $html->__toString());
-		$this->log->log("esto es: " . $newhtml);
 		return $newhtml;
 		
 	}
@@ -102,24 +98,35 @@ class LoadHtml
 			// URL relativo
 			$imageurl = $urlbase . '/' . $img;
 		}
-
-		// Set local path
-		$imagepath = $dir . '/' . $path['basename'];
 		
-		$this->image_map[$img] = $imagepath;
-		$imagenewurl  = $this->asset->url . $this->idAccount . "/images/" . $path['basename'];
-	
-		file_put_contents($imagepath, file_get_contents($imageurl));
 		$imageInfo = getimagesize($imageurl);
-		$imageSize = filesize($imagepath);
+		$imageSize = $this->getRemoteFileSize($imageurl);
 		$dimensions = $imageInfo[0] . " x " . $imageInfo[1];
 		
+		$asset = $this->saveAssetInDB($path['basename'], $imageSize, $dimensions, $path['extension']);
+		// Set local path
+		$imagepath = $dir . '/' . $asset->idAsset . '.' . $path['extension'];
 		
-		$this->saveAssetInDB($path['basename'], $imageSize, $dimensions, $path['extension']);
+		$this->image_map[$img] = $imagepath;
+		$imagenewurl  = $this->asset->url . $this->idAccount . "/images/" . $asset->idAsset . '.' . $path['extension'];
+	
+		file_put_contents($imagepath, file_get_contents($imageurl));
 		
 		return $imagenewurl;
 	}
 	
+	public function getRemoteFileSize($url) {
+        $info = get_headers($url,1);
+ 
+        if (is_array($info['Content-Length'])) {
+            $info = end($info['Content-Length']);
+        }
+        else {
+            $info = $info['Content-Length'];
+        }
+ 
+        return $info;
+    }
 	/**
 	 * Funcion que se encarga de guardar la información de cada asset cargado en la base de datos
 	 * @param string $fileName
@@ -129,7 +136,6 @@ class LoadHtml
 	 */
 	public function saveAssetInDB($fileName, $fileSize, $dimensions = null, $type = null)
 	{
-		
 		$asset = new Asset();
 		
 		$asset->idAccount = $this->idAccount;
@@ -144,6 +150,7 @@ class LoadHtml
 				$this->log->log("Error: ". $msg);
 			}
 		}
+		return $asset;
 	}
 	
 	private function getURLbase($url)

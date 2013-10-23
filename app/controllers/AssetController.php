@@ -93,7 +93,7 @@ class AssetController extends ControllerBase
 		));
 		
 		if (!$asset) {
-			return $this->setJsonResponse(array('status' => 'not found'), 404, 'No se encontro la imágen!!');
+			return $this->setJsonResponse(array('Error' => 'not found'), 404, 'No se encontro la imágen!!');
 		}
 		
 		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
@@ -109,7 +109,6 @@ class AssetController extends ControllerBase
 	
 	public function thumbnailAction ($idAsset) 
 	{
-		$log = $this->logger;
 		$idAccount = $this->user->account->idAccount;
 		
 		$asset = Asset::findFirst(array(
@@ -118,8 +117,8 @@ class AssetController extends ControllerBase
 							2 => $idAsset)
 		));
 		
-		if (count($asset) < 1) {
-			return $this->setJsonResponse(array('status' => 'not found'), 404, 'No se encontró la imágen!!');
+		if (!$asset) {
+			return $this->setJsonResponse(array('Error' => 'not found'), 404, 'No se encontró la imágen!!');
 		}
 		
 		$img = $this->asset->dir . $this->user->account->idAccount . "/images/" . $asset->idAsset . "_thumb.jpeg";

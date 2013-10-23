@@ -343,7 +343,6 @@ class MailController extends ControllerBase
 	
 	public function deleteAction($idMail)
 	{
-		$log = $this->logger;
 		$time = strtotime("-31 days");
 		
 		$mail = Mail::findFirst(array(
