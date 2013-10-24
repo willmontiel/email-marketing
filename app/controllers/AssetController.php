@@ -35,7 +35,7 @@ class AssetController extends ControllerBase
 					array(
 						'error' => 'Ha ocurrido un error mientras se cargaba la imágen, por favor asegurese
 									de que el archivo que intenta subir realmente sea una imágen (jpeg, jpg, gif, png)
-									y tenga un peso menor a 10 MB'
+									y tenga un tamaño de archivo menor a 10 MB'
 						)
 					, 400 , 'Error en archivo!');
 			}

@@ -4,6 +4,7 @@
 	{{ javascript_include('js/preview.js')}}
 	{{ javascript_include('js/stoperror.js')}}
 	{{ javascript_include('redactor/redactor.js')}}
+	{{ javascript_include('redactor/langs/es.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
 	<script type="text/javascript">
 	$(document).ready(
@@ -13,8 +14,9 @@
 				imageUpload: '/emarketing/asset/upload/',
 				imageGetJson: '/emarketing/asset/list/',
 				imageUploadErrorCallback: function(json) {
-					$.gritter.add({class_name: 'warn', title: '<i class="icon-warning-sign"></i> Atención', text: json.error, sticky: false, time: 10000});
+					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: json.error, sticky: false, time: 10000});
 				},
+				lang: 'es',
 				fullpage: true
 			});
 		}

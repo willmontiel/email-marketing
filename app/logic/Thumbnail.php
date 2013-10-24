@@ -49,9 +49,15 @@ class Thumbnail
 
 		if (!imagepng ($thumb, $dir)) {
 			throw new InvalidArgumentException('thumb could not be saved on the server');
-		}		
+		}	
 	}
 	
+	/**
+	 * Funcion que retorna una arreglo con información para crear un thumbnail con la funcion ImageCopyResized, de acuerdo con las dimensiones que tenga la imágen base
+	 * @param int $width ancho original de la imágen base
+	 * @param int $height altura original de la imágen base
+	 * @return array ('newWidth', 'newHeight', 'y', 'x')
+	 */
 	protected function getCreateThumbnailInfo($width, $height)
 	{
 		$thumbnail = $width/$height;
