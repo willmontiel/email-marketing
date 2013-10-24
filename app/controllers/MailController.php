@@ -124,15 +124,23 @@ class MailController extends ControllerBase
 
 	public function editorAction($idMail = null) 
 	{
+		$log = $this->logger;
+		
 		$isOk = $this->validateProcess($idMail);
 		
 		if ($isOk) {
-			//aqui haces lo q tengas q hacer jejeje,
-			//esta evita q el usuario se salte los pasos
+
 			$this->view->setVar('idMail', $idMail);
 		}
 		
-		
+		 if ($this->request->isPost()) {
+			
+			$contentsraw = $_POST['editor'];
+
+			$contentsT = json_decode($contentsraw);
+
+			$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		 }		
 	}
 	
 	public function htmlAction($idMail = null)
@@ -372,9 +380,11 @@ class MailController extends ControllerBase
 		
 	}
 	
-	public function editor_frameAction() 
+	public function editor_frameAction($idMail) 
 	{
+		$log = $this->logger;
 		
+		$this->view->setVar('idMail', $idMail);
 	}
 	
 	public function cloneAction($idMail = null)

@@ -3,14 +3,6 @@
 	{{ super() }}
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
-	<script type="text/javascript">
-	$(document).ready(
-		function()
-		{
-			$('#redactor_content').redactor();
-		}
-	);
-	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
@@ -61,6 +53,6 @@
 	</div>
 	<br />
 	<div class="row-fluid">
-		<iframe src="{{url('mail/editor_frame')}}" border = "0px"height="900" width="100%"></iframe>
+		<iframe src="{{url('mail/editor_frame')}}/{{idMail}}" border = "0px"height="700" width="100%"></iframe>
 	</div>
 {% endblock %}

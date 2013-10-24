@@ -224,8 +224,14 @@ $(function() {
 	$('#guardar').on('click', function() {
 		
 		editor.serializeDZ();
-		console.log(editor);
+		var editorToSend = JSON.stringify(editor);
 		
+		$.ajax(
+			{
+			url: "editor",
+			type: "POST",			
+			data: { editor: editorToSend}
+		});
 	});
 	
 	$('.module-cont').on('click', '.module > .tools > .edit-image-tool', function() {
