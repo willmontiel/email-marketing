@@ -121,9 +121,9 @@ class AssetController extends ControllerBase
 			return $this->setJsonResponse(array('Error' => 'not found'), 404, 'No se encontró la imágen!!');
 		}
 		
-		$img = $this->asset->dir . $this->user->account->idAccount . "/images/" . $asset->idAsset . "_thumb.jpeg";
+		$img = $this->asset->dir . $this->user->account->idAccount . "/images/" . $asset->idAsset . "_thumb.png";
 	
-		$this->response->setHeader("Content-Type", "image/jpeg");
+		$this->response->setHeader("Content-Type", "image/png");
 		$this->response->setHeader("Content-Length", $asset->size);
 		
 		$this->view->disable();

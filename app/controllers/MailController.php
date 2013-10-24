@@ -194,12 +194,12 @@ class MailController extends ControllerBase
 			
 			if ($this->request->isPost()) {
 				$this->db->begin();
-				$idAccount = $this->user->account->idAccount;
+				$account = $this->user->account;
 				
 				$url = $this->request->getPost("url");
 				$image = $this->request->getPost("image");
 				
-				$dir = $this->asset->dir . $idAccount . "/images";
+				$dir = $this->asset->dir . $account->idAccount . "/images";
 				
 				if(!filter_var($url, FILTER_VALIDATE_URL)) {
 					$this->flashSession->error("La url ingresada no es válida, por favor verifique la información");
@@ -211,7 +211,7 @@ class MailController extends ControllerBase
 				} 
 				
 				$getHtml = new LoadHtml();
-				$html = $getHtml->gethtml($url, $image, $dir, $idAccount);
+				$html = $getHtml->gethtml($url, $image, $dir, $account);
 				
 				$content = new Mailcontent();
 				

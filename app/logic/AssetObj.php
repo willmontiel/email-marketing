@@ -119,7 +119,7 @@ class AssetObj
 	public function getThumbnailUrl()
 	{	
 		$dir = $this->assetsrv->dir . $this->account->idAccount . '/images/';
-		$thumb = $dir . $this->asset->idAsset . '_thumb.jpeg';
+		$thumb = $dir . $this->asset->idAsset . '_thumb.png';
 		if (!file_exists($thumb)) {
 			$ext = pathinfo( $this->asset->fileName, PATHINFO_EXTENSION);
 			$image = $dir . $this->asset->idAsset . '.' . $ext;

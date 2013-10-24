@@ -31,7 +31,7 @@ class LoadHtml
 	 * @param string $dir
 	 * @return string
 	 */
-	public function gethtml($url, $image, $dir, $idAccount)
+	public function gethtml($url, $image, $dir, Account $account)
 	{
 		$some = new simple_html_dom();
 		
@@ -52,7 +52,7 @@ class LoadHtml
 		
 		$this->base = $base;
 		$this->dir = $dir;
-		$this->idAccount = $idAccount;
+		$this->account = $account;
 		
 		if ($image == "load") {		
 			foreach($html->find('img') as $element) {
@@ -108,9 +108,12 @@ class LoadHtml
 		$imagepath = $dir . '/' . $asset->idAsset . '.' . $path['extension'];
 		
 		$this->image_map[$img] = $imagepath;
-		$imagenewurl  = $this->asset->url . $this->idAccount . "/images/" . $asset->idAsset . '.' . $path['extension'];
+		$imagenewurl  = $this->asset->url . $this->account->idAccount . "/images/" . $asset->idAsset . '.' . $path['extension'];
 	
 		file_put_contents($imagepath, file_get_contents($imageurl));
+		$thumbnail = new Thumbnail($this->account);
+		
+		$thumbnail->createThumbnail($asset, $imagepath, $path['basename']);
 		
 		return $imagenewurl;
 	}
@@ -138,7 +141,7 @@ class LoadHtml
 	{
 		$asset = new Asset();
 		
-		$asset->idAccount = $this->idAccount;
+		$asset->idAccount = $this->account->idAccount;
 		$asset->fileName = $fileName;
 		$asset->fileSize = $fileSize;
 		$asset->dimensions = $dimensions;

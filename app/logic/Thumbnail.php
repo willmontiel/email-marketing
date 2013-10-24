@@ -5,6 +5,7 @@ class Thumbnail
 	{
 		$this->account = $account;
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
+		$this->log = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
 		$this->assetsrv = $di['asset'];
 	}
 	
@@ -16,7 +17,7 @@ class Thumbnail
 			mkdir($dir, 0777, true);
 		}
 		$ext = pathinfo($name, PATHINFO_EXTENSION);
-		$dir .= $asset->idAsset . '_thumb.jpeg';
+		$dir .= $asset->idAsset . '_thumb.png';
 		
 		switch ($ext) {
 			case 'jpg':
@@ -34,13 +35,41 @@ class Thumbnail
 		}
 
 		$width = imagesx ($img);
-		$heigh =imagesy($img);
+		$height =imagesy($img);
+		
+		$thumbnailInfo = $this->getCreateThumbnailInfo($width, $height);
+		
 		$thumb = imagecreatetruecolor(100 ,74);
+		
+		$transparent = imagecolorallocate($thumb, 0, 0, 0);
+		// Hacer el fondo transparente
+		imagecolortransparent($thumb, $transparent);
+		
+		ImageCopyResized($thumb, $img, $thumbnailInfo['x'], $thumbnailInfo['y'], 0, 0, $thumbnailInfo['newWidth'], $thumbnailInfo['newHeight'], $width, $height);
 
-		ImageCopyResized($thumb, $img, 0, 0, 0, 0, 100, 74, $width, $heigh);
-
-		if (!imagejpeg($thumb, $dir, 50)) {
+		if (!imagepng ($thumb, $dir)) {
 			throw new InvalidArgumentException('thumb could not be saved on the server');
 		}		
+	}
+	
+	protected function getCreateThumbnailInfo($width, $height)
+	{
+		$thumbnail = $width/$height;
+		
+		if ($thumbnail >= 1.35) {
+			$newHeight = (100/$width) * $height;;
+			$thumbnailInfo = array('newWidth' => 100, 
+								   'newHeight' => $newHeight,
+								   'y' => (74-$newHeight)/2,
+								   'x' => 0);
+		}
+		else if ($thumbnail < 1.35) {
+			$newWidth = (74/$height) * $width;;
+			$thumbnailInfo = array('newWidth' => $newWidth, 
+								   'newHeight' => 74,
+								   'y' => 0,
+								   'x' => (100-$newWidth)/2);
+		}
+		return $thumbnailInfo;
 	}
 }
