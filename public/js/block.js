@@ -27,6 +27,14 @@ Block.prototype.deleteBlock = function() {
       delete this[key];	
 };
 
+Block.prototype.setHtmlData = function(htmlData) {
+	
+	this.htmlData = htmlData;
+	
+	this.htmlData.append(this.contentData);	
+	
+	newRedactor();
+};
 
 Block.prototype.persist = function() {
 	
@@ -39,12 +47,20 @@ Block.prototype.persist = function() {
 	if(this.hasOwnProperty('height') && this.hasOwnProperty('width')) {
 		obj.height = this.height;
 		obj.width = this.width;
+		obj.displayer = this.displayer;
 	}
 	
 	return obj;
 };
 
 Block.prototype.unpersist = function(obj, dz) {
+	
+	if(obj.hasOwnProperty('height') && obj.hasOwnProperty('width') && obj.hasOwnProperty('displayer')) {
+		this.displayer = obj.displayer;
+		this.height = obj.height;
+		this.width = obj.width;
+	}
+	
 	this.typeBlock = obj.type;
 	this.parentBlock = dz;
 	this.contentData = $('<div/>');
@@ -86,11 +102,10 @@ Block.prototype.assignDisplayer = function(displayer) {
 Block.prototype.setSizeImage = function(height, width) {
 	
 	this.height = height;
-	this.width = width;
-	
+	this.width = width;	
 };
 
 Block.prototype.changeAttrBlock = function(attr, value) {
-
+	
 	this.htmlData.find('img').attr(attr, value);	
 };

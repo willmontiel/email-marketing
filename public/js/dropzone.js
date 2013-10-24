@@ -104,7 +104,7 @@ Dropzone.prototype.ondrop = function() {
 			}
 			
 			var objblk = object.item.data('smobj');
-
+			
 			objblk.parentBlock.content.splice(object.item.index() - 1, 0, objblk);
 			
 			$('#edit-area .drop-zone .info-guide').hide();
@@ -116,7 +116,13 @@ Dropzone.prototype.ondrop = function() {
 
 			if (object.sender != object.item) {
 				
-				var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'), object.item);
+				var newobj = new Block();
+
+				newobj.unpersist($(object.sender).data('smobj').objSer, t);
+				
+				//var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'), object.item);
+				
+				newobj.setHtmlData(object.item);
 				
 				object.item.data('smobj', newobj);
 			}
@@ -125,17 +131,19 @@ Dropzone.prototype.ondrop = function() {
 		remove: function(event, object) {
 			
 			var blkobj = object.item.data('smobj');
-
+			
+			t.objSer = blkobj.persist();
+			
 			for(var i = 0; i < t.content.length; i++) {
 				
 				if(t.content[i] == blkobj) {
 					
 					t.content[i].deleteBlock();
-
+					
 					t.content.splice(i, 1);
 				
 				}
-			}			
+			}
 		}
 	});
 };

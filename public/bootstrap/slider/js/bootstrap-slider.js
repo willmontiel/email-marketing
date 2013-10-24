@@ -379,7 +379,7 @@
 		tooltip: 'show',
 		handle: 'round',
 		formater: function(value) {
-			return value;
+			return value + "%";
 		}
 	};
 

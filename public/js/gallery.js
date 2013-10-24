@@ -51,7 +51,7 @@ MediaDisplayer.prototype.setGallery = function(gallery) {
 };
 
 MediaDisplayer.prototype.Selected = function(newsrc) {
-
+	
 	$('#imagedisplayer').empty();
 
 	if (this.block != null && this.block.hasOwnProperty('htmlData')) {
@@ -166,7 +166,8 @@ MediaDisplayer.prototype.createSlider = function() {
 		
 		t.block.setSizeImage(heightNatural, widthNatural);
 
-		t.block.changeAttrBlock('width', widthNatural); 
+		t.block.changeAttrBlock('width', widthNatural);
+		t.block.changeAttrBlock('height', heightNatural);
 	});	
 };
 
