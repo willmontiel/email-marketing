@@ -9,6 +9,8 @@ Editor.prototype.otherLayout = function() {
 	
 	$('.layout').on('click', function() {
 
+		layoutChosen();
+		
 		var oldLayout = t.layout;
 		
 		var newLayout = $(this).data('layoutObj');
@@ -62,7 +64,7 @@ Editor.prototype.changeLayout = function() {
 
 		objdz[newdz.name] = newdz;
 	}
-	console.log(objdz);
+	
 	this.createDZ(objdz);		
 	
 };
@@ -78,8 +80,6 @@ Editor.prototype.serializeDZ = function() {
 			this.dz[key] = this.dz[key].persist();
 		}
 	}
-	
-	
 	
 };
 
@@ -139,10 +139,20 @@ Editor.prototype.deleteZoneByTool = function(name, objblk) {
 		}	
 };
 
+function layoutChosen() {
+	$('#tabcomponents').show();
+	$('#tabimages').show();
+}
+
 $(function() {
 	
 	for(var l = 0; l < layouts.length; l++) {
 		layouts[l].createlayout();
+	}
+	
+	for(var l = 0; l < mediaGallery.length; l++) {
+		mediaGallery[l].createMedia();
+		mediaGallery[l].mediaSelected();
 	}
 	
 	editor.otherLayout();
@@ -152,7 +162,7 @@ $(function() {
 		helper: "clone"
 	});
 
-	$('.module-cont').on('click', '.module > .remove-tool', function (event) {
+	$('.module-cont').on('click', '.module > .tools > .remove-tool', function (event) {
 		
 		var parent = $(this).parents('.module');
 		
@@ -165,60 +175,92 @@ $(function() {
 		parent.remove();
 		
 	});
+	
+
+//	$('.module-cont').on('click', '.module > .edit-tool', function (event) 
+//	{
+//		var textcontent = $(this).parents('.module').find('.content-text');
+//
+//		$(this).parents('.module').find('.save-tool').show();
+//
+//		textcontent.redactor({ 
+//			focus: true,
+//			buttons: [
+//				'html', '|', 
+//				'formatting', '|', 
+//				'bold', 'italic', 'deleted', '|', 
+//				'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 
+//				'link', '|', 
+//				'fontcolor', 'backcolor', '|', 
+//				'alignment'
+//			]
+//		});
+//	});
 
 
-	$('.module-cont').on('click', '.module > .edit-tool', function (event) 
-	{
-		var textcontent = $(this).parents('.module').find('.content-text');
-
-		$(this).parents('.module').find('.save-tool').show();
-
-		textcontent.redactor({ 
-			focus: true,
-			buttons: [
-				'html', '|', 
-				'formatting', '|', 
-				'bold', 'italic', 'deleted', '|', 
-				'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 
-				'link', '|', 
-				'fontcolor', 'backcolor', '|', 
-				'alignment'
-			]
-		});
-	});
-
-
-	$('.module-cont').on('click', '.module > .save-tool', function (event) 
-	{		
-		var textcontent = $(this).parents('.module').find('.content-text');
-
-		textcontent.redactor('destroy');
-		
-		$(this).hide();
-		
-	});
+//	$('.module-cont').on('click', '.module > .save-tool', function (event) 
+//	{		
+//		var textcontent = $(this).parents('.module').find('.content-text');
+//
+//		textcontent.redactor('destroy');
+//		
+//		$(this).hide();
+//		
+//	});
 	
 	$('#components .module').draggable({
 		drag: function() {
-			$('#edit-area .drop-zone .info-guide').css("display", "block");
-			
+			$('#edit-area .drop-zone .info-guide').show();
+
 			$('#edit-area .sub-mod-cont').addClass('show-zones-draggable');
 		},
 		stop: function() {
-			$('#edit-area .drop-zone .info-guide').css("display", '');
+			$('#edit-area .drop-zone .info-guide').hide();
 
 			$('#edit-area .sub-mod-cont').removeClass('show-zones-draggable');
 		}
 	});
 	
 	$('#guardar').on('click', function() {
+		
+		editor.serializeDZ();
 		console.log(editor);
+		
 	});
 	
-//	$('.module-cont').on('click', '.module > .edit-image-tool', function() {
-//		$('#images').addClass('active');
-//		$('#tab-images').addClass('active');
-//	})
+	$('.module-cont').on('click', '.module > .tools > .edit-image-tool', function() {
+		
+		$('#components').removeClass('active');
+		$('#tabcomponents').removeClass('active');
+		
+		$('#layouts').removeClass('active');
+		$('#tablayouts').removeClass('active');
+		
+		$('#images').addClass('active');
+		$('#tabimages').addClass('active');
+		
+		var content = $(this).parents('.module');
+
+		content.data('smobj').createImage();
+		
+	});
+	
+	$('.module-cont').on('click', '.module  .content-image > .edit-image-tool', function() {
+		
+		$('#components').removeClass('active');
+		$('#tabcomponents').removeClass('active');
+		
+		$('#layouts').removeClass('active');
+		$('#tablayouts').removeClass('active');
+		
+		$('#images').addClass('active');
+		$('#tabimages').addClass('active');
+		
+		var content = $(this).parents('.module');
+
+		content.data('smobj').createImage();
+		
+	});
 });
 	
 
