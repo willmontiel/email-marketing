@@ -63,7 +63,7 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<form action="{{url('mail/setup')}}/{{idMail}}" method="post">
+				<form action="{{url('mail/setup')}}/{{idMail}}" method="post" class="fill-up">
 				{{ form('mail/setup', 'id': 'newMail', 'method': 'Post', 'class' : 'fill-up') }}
 					<div class="padded">
 						<label>*Nombre: </label>

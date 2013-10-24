@@ -4,15 +4,21 @@
 	{{ javascript_include('js/preview.js')}}
 	{{ javascript_include('js/stoperror.js')}}
 	{{ javascript_include('redactor/redactor.js')}}
+	{{ javascript_include('redactor/langs/es.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
 	<script type="text/javascript">
 	$(document).ready(
 		function()
 		{
-			try {
-				$('#redactor_content').redactor({fullpage: true});
-			}
-			catch (e) {}
+			$('#redactor_content').redactor({
+				imageUpload: '/emarketing/asset/upload/',
+				imageGetJson: '/emarketing/asset/list/',
+				imageUploadErrorCallback: function(json) {
+					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: json.error, sticky: false, time: 10000});
+				},
+				lang: 'es',
+				fullpage: true
+			});
 		}
 	);
 	</script>
@@ -50,10 +56,8 @@
 					</a>
 				</div>
 				<div class="breadcrumb-button blue">
-					<a href="{{url('mail/source')}}/{{idMail}}">
-						<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-						<span class="breadcrumb-arrow"><span></span></span>
-					</a>
+					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
+					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
 				<div class="breadcrumb-button">
 					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
