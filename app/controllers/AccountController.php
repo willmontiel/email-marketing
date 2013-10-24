@@ -317,7 +317,7 @@ class AccountController extends ControllerBase
 					$pass2 = $form->getValue('pass2ForEdit');
 					$email = strtolower($form->getValue('email'));
 					
-					if((!empty($pass)||!empty($pass2)) && ($pass == $pass2)){
+					if((!empty($pass)||!empty($pass2)) && ($pass == $pass2) && (strlen($pass) < 8)){
 
 						$this->db->begin();
 						$userExist->email = $email;
@@ -329,7 +329,6 @@ class AccountController extends ControllerBase
 							foreach ($userExist->getMessages() as $msg) {
 								$this->flashSession->error($msg);
 							}
-							return $this->response->redirect("account/edituser/".$userExist->idUser);
 						}
 						else {
 							$this->db->commit();
@@ -347,7 +346,6 @@ class AccountController extends ControllerBase
 							foreach ($userExist->getMessages() as $msg) {
 								$this->flashSession->error($msg);
 							}
-							return $this->response->redirect("account/edituser/".$userExist->idUser);
 						}
 						else {
 							$this->db->commit();

@@ -40,7 +40,7 @@ class OptionsMail
 				break;
 			case 'Editar':
 				$object->text = "Editar";
-				$object->url = "mail/#/";
+				$object->url = "mail/setup/";
 				$object->icon = "icon-pencil";
 				break;
 			case 'Detener':
