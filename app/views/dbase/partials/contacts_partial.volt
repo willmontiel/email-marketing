@@ -67,15 +67,15 @@
         <div class="span12">
 			<div class="box">
 				<div class="box-content">
-					<table class="table table-normal">
-						<thead>
-							 <tr>
-								<td colspan="3">E-mail</td>
-								<td>Acciones</td>
-							</tr>
-						</thead>
-						<tbody>
-						{{'{{#each model}}'}}
+					{{'{{#each model}}'}}
+						<table class="table table-normal">
+							<thead>
+								 <tr>
+									<td colspan="3">E-mail</td>
+									<td>Acciones</td>
+								</tr>
+							</thead>
+							<tbody>
 							<tr>
 								<td>
 									{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}
@@ -110,13 +110,26 @@
 									</div>
 								</td>
 							</tr>
-						{{ '{{else}}' }}
-							<tr>
-								<td colspan="3">No hay contactos en esta base de datos</td>
-							</tr>
-						{{'{{/each}}'}}
 						</tbody>
 					 </table>
+				{{ '{{else}}' }}
+					<div class="box-section news with-icons">
+						<div class="avatar green">
+							<i class="icon-lightbulb icon-2x"></i>
+						</div>
+						<div class="news-content">
+							<div class="news-title">
+								No hay contactos en esta base de datos
+							</div>
+							<div class="news-text">
+								<p>
+									Para empezar a administrar contactos, puede crear una lista de contactos en la base de datos,
+									y asociar contactos a la misma.
+								</p>
+							</div>
+						</div>
+					</div>
+				{{'{{/each}}'}}
 				</div>
 				<div class="box-footer">
 					{{ partial("partials/pagination_partial") }}

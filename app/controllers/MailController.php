@@ -14,7 +14,7 @@ class MailController extends ControllerBase
 		if ($mail) {
 			return $mail;
 		}
-		else if(!$mail || $mail == null) {
+		else if(!$mail || count($mail) < 0) {
 			return $this->response->redirect("mail/setup");
 		}
 	}
@@ -170,8 +170,13 @@ class MailController extends ControllerBase
 				$mailContent = new Mailcontent();
 				$content = $this->request->getPost("content");
 				
+				$buscar = array("<script" , "</script>");
+				$reemplazar = array("<!-- ", " -->");
+
+				$newContent = str_replace($buscar,$reemplazar, $content);
+				
 				$mailContent->idMail = $idMail;
-				$mailContent->content = htmlspecialchars($content, ENT_QUOTES);
+				$mailContent->content = htmlspecialchars($newContent, ENT_QUOTES);
 				
 				$mail->type = "Html";
 				
@@ -186,7 +191,7 @@ class MailController extends ControllerBase
 					}
 				}
 				else {
-					return $this->response->redirect("mail/target/" .$idMail);
+					return $this->response->redirect("mail/plaintext/" .$idMail);
 				}
 			}
 			$this->view->MailForm = $form;
@@ -447,5 +452,44 @@ class MailController extends ControllerBase
 		
 		$this->flashSession->error('Un error no permitio duplicar el correo!');
 		return $this->response->redirect("mail/index");
+	}
+	
+	public function plaintextAction($idMail)
+	{
+		$mail = $this->validateProcess($idMail);
+		
+		if ($mail) {
+			
+			$this->view->setVar('idMail', $mail->idMail);
+			
+			$mailContent = Mailcontent::findFirst(array(
+				"conditions" =>"idMail = ?1",
+				"bind" => array(1 => $mail->idMail)
+			));
+			
+			if ($mailContent->plainText == null) {
+				$text = new PlainText();
+				$plainText = $text->getPlainText($mailContent);
+			}
+			else {
+				$plainText = $mailContent->plainText;
+			}
+			
+			$this->view->setVar('plaintext', $plainText);
+			
+			if ($this->request->isPost()) {
+				
+				$mailContent->plainText = $this->request->getPost('plaintext');
+				
+				if (!$mailContent->save()) {
+					foreach ($mailContent->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
+				else {
+					$this->response->redirect("mail/target/" . $idMail);
+				}
+			}
+		}
 	}
 }

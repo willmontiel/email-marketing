@@ -119,15 +119,15 @@
 			<div class="action-nav-normal">
 				<div class="span3 action-nav-button">
 					<a href="#" title="Mis envíos">
-						<i class="icon-envelope"></i>
-						<span>Enviar campaña</span>
+						<i class="icon-envelope-alt"></i>
+						<span>Enviar correo</span>
 					</a>
 					<span class="triangle-button blue"><i class="icon-external-link"></i></span>
 				</div>
 				<div class="span3 action-nav-button">
-					<a href="#" title="Mis campañas">
-						<i class="icon-comments-alt"></i>
-						<span>Nueva campaña</span>
+					<a href="{{url('mail/setup')}}" title="Mis campañas">
+						<i class="icon-envelope"></i>
+						<span>Nuevo correo</span>
 					</a>
 					<span class="triangle-button green"><i class="icon-plus"></i></span>
 				</div>

@@ -200,7 +200,7 @@
 								</td>
 							</tr>
 						{{'{{else}}'}}
-							<tr><td colspan="4">No hay campos personalizados</td></tr>
+							<tr><td colspan="5">No hay campos personalizados</td></tr>
 						{{'{{/each}}'}}
 						</tbody>
 					</table>

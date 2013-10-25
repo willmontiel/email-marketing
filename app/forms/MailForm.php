@@ -16,7 +16,10 @@ class MailForm extends Form
 			'autofocus' => "autofocus" 
         )));
 		
-		$this->add(new TextArea('subject', array(
+		$this->add(new Text('subject', array(
+			'maxlength' => 50,
+			'type' => 'text',
+			'required' => 'required' 
         )));
 		
 		$this->add(new Text('fromName', array(
@@ -44,7 +47,6 @@ class MailForm extends Form
 		
 		$this->add(new TextArea('content', array(
 			'rows' => 20,
-			'type' => 'text',
 			'id' => 'redactor_content'
         )));
 	}

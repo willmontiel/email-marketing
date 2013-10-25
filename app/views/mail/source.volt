@@ -86,9 +86,10 @@
 							<i class="icon-pencil"></i>
 							<span>Html desde cero (avanzado)</span>
 						</a>
+						<span class="triangle-button blue"><i class="icon-align-left"></i></span>
 						<br />
 						<p>
-							Utilice nuestro editor de código html, para crear contenido a correos desde código fuente
+							Utilice nuestro editor de código html, para crear contenido de correos desde código fuente
 							(recomendado solo a usuarios avanzados).
 						</p>
 					</div>
@@ -98,6 +99,7 @@
 							<i class="icon-upload-alt"></i>
 							<span>Importar desde una url</span>
 						</a>
+						<span class="triangle-button blue"><i class="icon-download-alt"></i></span>
 						<br />
 						<p>
 							Importe contenido html desde un enlace externo

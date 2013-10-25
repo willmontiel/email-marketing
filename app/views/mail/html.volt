@@ -6,17 +6,25 @@
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ javascript_include('redactor/langs/es.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
+	{{ javascript_include('redactor/plugins/clips.js') }}
+	{{ javascript_include('redactor/plugins/fontcolor.js') }}
+	{{ javascript_include('redactor/plugins/fontfamily.js') }}
+	{{ javascript_include('redactor/plugins/fontsize.js') }}
+	{{ javascript_include('redactor/plugins/fullscreen.js') }}
+	{{ javascript_include('redactor/plugins/textdirection.js') }}
+
 	<script type="text/javascript">
 	$(document).ready(
 		function()
 		{
 			$('#redactor_content').redactor({
-				imageUpload: '/emarketing/asset/upload/',
-				imageGetJson: '/emarketing/asset/list/',
+				imageUpload: '{{ url('asset/upload') }}/',
+				imageGetJson: '{{ url ('asset/list') }}/',
 				imageUploadErrorCallback: function(json) {
 					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: json.error, sticky: false, time: 10000});
 				},
 				lang: 'es',
+				plugins: ['clips', 'fontcolor', 'fontfamily', 'fontsize', 'fullscreen', 'textdirection'],
 				fullpage: true
 			});
 		}

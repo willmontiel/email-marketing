@@ -1,9 +1,4 @@
 <?php
-
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 class LoadHtml
 {
 	/**
@@ -12,15 +7,10 @@ class LoadHtml
 	 */
 	protected $log = null;
 	
-	protected function di()
-    {
-        return \Phalcon\DI\FactoryDefault::getDefault();
-    }
-	
 	public function __construct() 
 	{
 		$this->log = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
-		$di = $this->di();
+		$di = \Phalcon\DI\FactoryDefault::getDefault();
 		$this->asset = $di['asset'];
 	}
 

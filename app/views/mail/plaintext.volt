@@ -11,17 +11,11 @@
 					</div>
 					<div class="news-content">
 						<div class="news-title">
-							Información de correo
+							Crear contenido texto
 						</div>
 						<div class="news-text">
-							<p>
-								Aqui podrá ingresar la información básica del correo, como un nombre para el correo,
-								el asunto, la direccion de correo desde donde se envía, etc.
-							</p>
-							<p>
-								Una vez haya terminado de ingresar los datos, haga click en el botón siguiente para continuar 
-								con el proceso.
-							</p>
+							La aplicación automaticamente creará contenido textual a partir del contenido html que se haya
+							creado.
 						</div>
 					</div>
 				</div>
@@ -31,11 +25,11 @@
 	<div class="row-fluid">
 		<div class="span8 offset2">
 			<div id="breadcrumbs">
-				<div class="breadcrumb-button blue">
+				<div class="breadcrumb-button">
 					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
-				<div class="breadcrumb-button">
+				<div class="breadcrumb-button blue">
 					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
@@ -50,39 +44,27 @@
 			</div>
 		</div>
 	</div>
-	<br />
 	<div class="row-fluid">
 		{{ flashSession.output()}}
 	</div>
 	<br />
 	<div class="row-fluid">
-		<div class="box span4">
+		<div class="box">
 			<div class="box-header">
 				<div class="title">
-					Nuevo correo
+					Mensaje de texto plano
 				</div>
 			</div>
 			<div class="box-content">
-				<form action="{{url('mail/setup')}}/{{idMail}}" method="post" class="fill-up">
+				<form action="{{url('mail/plaintext')}}/{{idMail}}" class="fill-up" method="post">
 					<div class="padded">
-						<label>*Nombre: </label>
-						{{ MailForm.render('name') }}
-						
-						<label>*Asunto: </label>
-						{{ MailForm.render('subject') }}
-										
-						<label>*Enviar desde este nombre: </label>
-						{{ MailForm.render('fromName') }}
-						
-						<label>*Enviar desde este correo: </label>
-						{{ MailForm.render('fromEmail') }}
-						
-						<label>Responder a este correo: </label>
-						{{ MailForm.render('replyTo') }}
+						{% autoescape false %}
+						<textarea name="plaintext" type="text" rows="10" required="required" autofocus="autofocus">{{plaintext}}</textarea>
+						{% endautoescape %}
 					</div>
 					<div class="form-actions">
-						<a href="{{url('mail/index')}}" class="btn btn-default">Cancelar</a>
-						<button class="btn btn-blue">Siguiente</button>
+						<a href="" class="btn btn-default">Anterior</a>
+						<input type="submit" class="btn btn-blue" value="Siguiente" />
 					</div>
 				</form>
 			</div>
