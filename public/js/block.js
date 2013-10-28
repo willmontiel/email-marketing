@@ -16,9 +16,10 @@ function newRedactor() {
 			'bold', 'italic', 'deleted', '|', 
 			'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 
 			'link', '|', 
-			'fontcolor', 'backcolor', '|', 
 			'alignment'
-		]
+		],
+		
+		plugins: ['clips', 'fontcolor', 'fontfamily', 'fontsize']
     });
 }
 
@@ -68,7 +69,7 @@ Block.prototype.unpersist = function(obj, dz) {
 	
 	this.htmlData = $('<div/>').html(
 						"<div class=\"" + this.typeBlock + "\" style=\"display: block;\">\n\
-						<div class=\"tools\">\
+						<div class=\"tools\" style=\"float: left;\">\
 							<div class=\"handle-tool icon-move tool\"></div>\
 							<div class=\"remove-tool icon-trash tool\"></div>\
 						</div>\
@@ -102,10 +103,21 @@ Block.prototype.assignDisplayer = function(displayer) {
 Block.prototype.setSizeImage = function(height, width) {
 	
 	this.height = height;
-	this.width = width;	
+	this.width = width;
 };
 
-Block.prototype.changeAttrBlock = function(attr, value) {
+Block.prototype.changeAttrImgBlock = function(attr, value) {
 	
-	this.htmlData.find('img').attr(attr, value);	
+	this.htmlData.find('img').attr(attr, value);
+};
+
+Block.prototype.setMediaDisplayer = function() {
+	
+	if(this.typeBlock.search("image") > 0) {
+		
+		this.createImage();
+	}
+	else {
+		NoMediaDisplayer();
+	}
 };

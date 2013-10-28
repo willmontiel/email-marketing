@@ -94,13 +94,21 @@ Dropzone.prototype.ondrop = function() {
 		},
 				
 		stop: function(event, object) {
-			
+
+			parent.iframeResize();
+
 			if (object.item.data('smobj') == undefined) {
 
 				var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'), object.item);
 				
+				newobj.setMediaDisplayer();
+				
 				object.item.data('smobj', newobj);
 				
+			}
+			else {
+				
+				object.item.data('smobj').setMediaDisplayer();
 			}
 			
 			var objblk = object.item.data('smobj');
@@ -120,10 +128,8 @@ Dropzone.prototype.ondrop = function() {
 
 				newobj.unpersist($(object.sender).data('smobj').objSer, t);
 				
-				//var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'), object.item);
-				
 				newobj.setHtmlData(object.item);
-				
+
 				object.item.data('smobj', newobj);
 			}
 		},

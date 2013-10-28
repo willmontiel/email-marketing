@@ -126,21 +126,50 @@ class MailController extends ControllerBase
 	{
 		$log = $this->logger;
 		
-		$isOk = $this->validateProcess($idMail);
+		$mail = $this->validateProcess($idMail);
 		
-		if ($isOk) {
-
+		if ($mail) {
 			$this->view->setVar('idMail', $idMail);
+			
+			$objMail = Mailcontent::findFirst(array(
+				"conditions" => "idMail = ?1",
+				"bind" => array(1 => $mail->idMail)
+			));
+			
+			if ($objMail) {
+				$this->view->setVar('objMail', $objMail->content);
+			}
+			else  {
+				$this->view->setVar('objMail', 'null');
+			}
+			
+			if ($this->request->isPost()) {
+
+				$mailContent = new Mailcontent();
+				$content = $this->request->getPost("editor");
+				$log->log($content);
+				$mailContent->idMail = $idMail;
+				$mailContent->content = $content;
+
+				$mail->type = "Editor";
+
+				if(!$mailContent->save()) {
+					$log->log("No guarda");
+					foreach ($mailContent->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
+				else if (!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
+				else {
+					return $this->response->redirect("mail/plaintext/" .$idMail);
+				}
+			}		
 		}
 		
-		 if ($this->request->isPost()) {
-			
-			$contentsraw = $_POST['editor'];
-
-			$contentsT = json_decode($contentsraw);
-
-			$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
-		 }		
 	}
 	
 	public function htmlAction($idMail = null)
@@ -388,7 +417,21 @@ class MailController extends ControllerBase
 	public function editor_frameAction($idMail) 
 	{
 		$log = $this->logger;
+		if (!$this->request->isPost()) {
+		$assets = AssetObj::findAllAssetsInAccount($this->user->account);
 		
+		foreach ($assets as $a) {
+			$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
+								'image' => $a->getImagePrivateUrl(),
+								'title' => $a->getFileName(),
+								'id' => $a->getIdAsset());								
+		}
+		
+		$this->view->setVar('assets', $arrayAssets);
+		}
+		else {
+			$this->view->setVar('assets', $arrayAssets);
+		}
 		$this->view->setVar('idMail', $idMail);
 	}
 	

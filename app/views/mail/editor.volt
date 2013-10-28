@@ -3,6 +3,14 @@
 	{{ super() }}
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
+<script type="text/javascript">
+	function iframeResize() {
+		var iFrame = document.getElementById('iframeEditor');
+		//iFrame.height = '';
+		iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
+	};
+	var objMail = {{objMail}};
+</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
@@ -53,6 +61,6 @@
 	</div>
 	<br />
 	<div class="row-fluid">
-		<iframe src="{{url('mail/editor_frame')}}/{{idMail}}" border = "0px"height="700" width="100%"></iframe>
+		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}/{{idMail}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
 {% endblock %}

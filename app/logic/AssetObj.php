@@ -135,4 +135,9 @@ class AssetObj
 	{
 		return $this->asset->fileName;
 	}
+	
+	public function getIdAsset()
+	{
+		return $this->asset->idAsset;
+	}
 }

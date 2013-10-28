@@ -3,7 +3,7 @@
 	min-height: 490px;
 	height: auto;
 	position: relative;
-	overflow: auto;
+	overflow: visible;
 	padding: 5px;
 }
 
@@ -207,4 +207,29 @@
 #imagedisplayer {
 	width: 270px;
 	background-color: white;
+}
+
+.module-container {
+	float: left;
+	margin: 5px;
+/*	background-color: lightblue;
+	padding: 8px;
+	border-radius: 5px;*/
+}
+
+.module-information {
+	text-align: center;
+}
+
+.dz-message {
+	text-align: center;
+	font-family: inherit;
+	font-size: 25px;
+}
+#uploadimage {
+	margin-top: 25px;
+}
+
+.medias img{
+	margin: 5px;
 }
