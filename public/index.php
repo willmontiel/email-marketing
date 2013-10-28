@@ -227,6 +227,9 @@ try {
 		$compiler->addFunction('mail_options', function ($resolvedArgs, $exprArgs){
 						return 'OptionsMail::getOptions(' . $resolvedArgs . ')';
 					});
+		$compiler->addFunction('smart_wizard', function ($resolvedArgs, $exprArgs){
+						return 'SmartWizard::getWizard(' . $resolvedArgs . ')';
+					});
 					
         $volt->setOptions(array(
             "compileAlways" => true,

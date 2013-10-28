@@ -1,4 +1,19 @@
 {% extends "templates/index_new.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	<script type="text/javascript">
+	$(function(){
+        $("input[name=schedule]").on('ifChecked', function () { 
+			$("#date").hide();
+			
+			var val = $('input[name=schedule]:checked').val()
+			if (val == "1") {
+				$("#date").show();
+			}
+         });
+	});
+	</script>
+{% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
 {% block content %}
@@ -50,5 +65,33 @@
 	</div>
 	<br />
 	<div class="row-fluid">
+		<div class="span12">
+			<div class="box offset3 span6">
+				<div class="box-header">
+					<div class="title">
+						Programar el envío
+					</div>
+				</div>
+				<div class="box-content">
+					<form>
+						<div class="padded">
+							<input type="radio" name="schedule" class="icheck" value="0" id="rightNow"/>
+							<label for="rightNow">Enviar el correo de inmediato: </label><br />
+							
+							<input type="radio" name="schedule" class="icheck" value="1" id="inFuture"/>
+							<label for="inFuture">Programar el correo para que se envíe en el futuro: </label><br />
+							<div id="date" style="display: none;">
+								<label>Seleccione fecha de envío: </label>
+								<input class="datepicker fill-up" type="text" placeholder="Fecha de envío" name="dateSchedule">
+							</div>
+						</div>
+						<div class="form-actions">
+							<a href="" class="btn btn-default">Anterior</a>
+							<input type="submit" class="btn btn-blue" value="Siguiente">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 {% endblock %}

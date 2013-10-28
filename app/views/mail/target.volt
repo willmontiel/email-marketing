@@ -28,6 +28,14 @@
 					break;
 			}
          });
+		 
+		$("#target").click(function(){
+			$.post("{{url('mail/target')}}/{{idMail}}", $("#contentForm").serialize(),function(){});
+		});
+		
+		$("#advanced").click(function(){
+			$.post("{{url('mail/filter')}}/{{idMail}}", $("#contentForm").serialize(),function(){});
+		});
 	});
 </script>
 {% endblock %}
@@ -93,7 +101,7 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<form action="{{url('mail/target/')}}{{idMail}}" method="post">
+				<form id="contentForm">
 					<div class="padded">
 						<input type="radio" name="radios" class="icheck" value="0" id="dbRadio" >
 						<label for="dbRadio">Base de datos de contactos</label> <br />
@@ -127,8 +135,9 @@
 						</div>
 					</div>
 					<div class="form-actions">
-						<a href="{{url('mail/source')}}/{{idMail}}" class="btn btn-default">Anterior</a>
-						{{submit_button('Siguiente', 'class' : "btn btn-blue")}}
+						<a href="{{url('mail/plaintext')}}/{{idMail}}" class="btn btn-default"><< Anterior</a>
+						<input type="button" class="btn btn-blue" value="Siguiente >>" id="target">
+						<input type="button" class="btn btn-blue" value="Avanzado" id="advanced">
 					</div>
 				</form>
 			</div>

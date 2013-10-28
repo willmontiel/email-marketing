@@ -535,4 +535,26 @@ class MailController extends ControllerBase
 			}
 		}
 	}
+	
+	public function filterAction($idMail)
+	{
+		$mail = $this->validateProcess($idMail);
+		if ($mail) {
+			
+		}
+	}
+	
+	public function previewAction($idMail)
+	{
+		$mail = $this->validateProcess($idMail);
+		if ($mail) {
+			$this->view->setVar("idMail", $idMail);
+			$form = new MailForm($mail);
+			
+			if ($this->request->isPost()) {
+				
+			}
+			$this->view->MailForm = $form;
+		}
+	}
 }

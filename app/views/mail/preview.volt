@@ -11,11 +11,10 @@
 					</div>
 					<div class="news-content">
 						<div class="news-title">
-							Crear contenido texto
+							Pre-visualización
 						</div>
 						<div class="news-text">
-							La aplicación automaticamente creará contenido textual a partir del contenido html que se haya
-							creado.
+							Este es el resumen del correo
 						</div>
 					</div>
 				</div>
@@ -29,7 +28,7 @@
 					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
-				<div class="breadcrumb-button blue">
+				<div class="breadcrumb-button">
 					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
@@ -37,10 +36,11 @@
 					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
-				<div class="breadcrumb-button">
+				<div class="breadcrumb-button blue">
 					<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
 					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
+					<div class="breadcrumb-button"></div>
 			</div>
 		</div>
 	</div>
@@ -49,24 +49,46 @@
 	</div>
 	<br />
 	<div class="row-fluid">
-		<div class="box">
-			<div class="box-header">
-				<div class="title">
-					Mensaje de texto plano
+		<div class="span12">
+			<div class="box offset3 span6">
+				<div class="box-header">
+					<div class="title">
+						Enviar correo
+					</div>
 				</div>
-			</div>
-			<div class="box-content">
-				<form action="{{url('mail/plaintext')}}/{{idMail}}"  method="post">
-					<div class="padded">
-						{% autoescape false %}
-						<textarea name="plaintext" class="span12" type="text" rows="10" required="required" autofocus="autofocus">{{plaintext}}</textarea>
-						{% endautoescape %}
-					</div>
-					<div class="form-actions">
-						<a href="{{url('mail/source')}}/{{idMail}}" class="btn btn-default">Anterior</a>
-						<input type="submit" class="btn btn-blue" value="Siguiente" />
-					</div>
-				</form>
+				<div class="box-content">
+					<form class="fill-up">
+						<div class="padded">
+							<label>Nombre de la campaña: </label>
+							{{ MailForm.render('name') }}
+							
+							<label>Asunto: </label>
+							{{ MailForm.render('subject') }}
+
+							<label>Nombre del remitente: </label>
+							{{ MailForm.render('fromName') }}
+
+							<label>Dirección de correo del remitente: </label>
+							{{ MailForm.render('fromEmail') }}
+
+							<label>Dirección de correo de respuesta: </label>
+							{{ MailForm.render('replyTo') }}
+
+							<label>Nombre de la lista, base de datos o segmento a donde se envía: </label>
+							<input type="text" value="Mi lista" class="span12"/>
+
+							<label>Cantidad de contactos totales: </label>
+							<input type="text" value="1200" class="span12"/>
+
+							<label>Fecha y hora de envío: </label>
+							<input type="text" value="Lunes, 28 de octubre de 2013, 5:07 pm" class="span12"/>
+						</div>
+						<div class="form-actions">
+							<a href="" class="btn btn-default">Anterior</a>
+							<button class="btn btn-blue">Siguiente</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
