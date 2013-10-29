@@ -92,7 +92,7 @@
 					</div>
 				</div>
 				<div class="box-content">
-					<form action = "{{url('mail/html')}}" method="post">
+					<form action = "{{url('mail/filter')}}/{{mail.idMail}}" method="post">
 						<div class="padded">
 							<input type="radio" name="filter" id="clickLink" class="icheck" value="0" />
 							<label for="clickLink">Seleccionar contactos que hayan realizado clic en algún enlace: </label><br />
@@ -129,8 +129,8 @@
 							
 						</div>
 						<div class="form-actions">
-							<a href="" class="btn btn-default">Anterior</a>
-							<input type="submit" class="btn btn-blue" value="Siguiente" />
+							<button class="btn btn-default" name="direction" value="prev"><i class="icon-circle-arrow-left"></i> Anterior</button>
+							<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
 						</div>	
 					</form>
 				</div>

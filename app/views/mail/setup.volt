@@ -81,8 +81,8 @@
 						{{ MailForm.render('replyTo') }}
 					</div>
 					<div class="form-actions">
-						<a href="{{url('mail/index')}}" class="btn btn-default">Cancelar</a>
-						<button class="btn btn-blue">Siguiente</button>
+						<a href="{{url('mail/index')}}" class="btn btn-default"><i class="icon-remove-sign"></i> Cancelar</a>
+						<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
 					</div>
 				</form>
 			</div>

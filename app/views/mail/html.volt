@@ -58,7 +58,7 @@
 		<div class="span8 offset2">
 			<div id="breadcrumbs">
 				<div class="breadcrumb-button">
-					<a href="{{url('mail/setup')}}/{{idMail}}">
+					<a href="{{url('mail/setup')}}/{{mail.idMail}}">
 						<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
 						<span class="breadcrumb-arrow"><span></span></span>
 					</a>
@@ -88,15 +88,15 @@
 				<div class="box-header">
 				</div>
 				<div class="box-content">
-					<form action = "{{url('mail/html')}}/{{idMail}}" method="post">
+					<form action = "{{url('mail/html')}}/{{mail.idMail}}" method="post">
 						<div class="padded">
 							<!---<input type="hidden" name="idMail" value="">-->
 							<label>Cree su propio código HTML: </label>
 							{{ MailForm.render('content') }}
 						</div>
 						<div class="form-actions">
-							<a href="{{url('mail/source')}}/{{idMail}}" class="btn btn-default">Anterior</a>
-							{{ submit_button("Siguiente", 'class' : "btn btn-blue") }}
+							<button class="btn btn-default" value="prev" name="direction"><i class="icon-circle-arrow-left"></i> Anterior</button>
+							<button class="btn btn-blue" value="next" name="direction">Siguiente <i class="icon-circle-arrow-right"></i></button>
 							<input onclick="verHTML(this.form)" type="button" value="Visualizar" class="btn btn-black">
 						</div>
 					</form>

@@ -56,15 +56,15 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<form action="{{url('mail/plaintext')}}/{{idMail}}"  method="post">
+				<form action="{{url('mail/plaintext')}}/{{mail.idMail}}"  method="post">
 					<div class="padded">
 						{% autoescape false %}
 						<textarea name="plaintext" class="span12" type="text" rows="10" required="required" autofocus="autofocus">{{plaintext}}</textarea>
 						{% endautoescape %}
 					</div>
 					<div class="form-actions">
-						<a href="{{url('mail/source')}}/{{idMail}}" class="btn btn-default">Anterior</a>
-						<input type="submit" class="btn btn-blue" value="Siguiente" />
+						<button class="btn btn-default" value="prev" name="direction"><i class="icon-circle-arrow-left"></i> Anterior</button>
+						<button class="btn btn-blue" value="next" name="direction">Siguiente <i class="icon-circle-arrow-right"></i></button>
 					</div>
 				</form>
 			</div>

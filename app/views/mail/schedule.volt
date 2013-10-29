@@ -5,7 +5,7 @@
 	$(function(){
         $("input[name=schedule]").on('ifChecked', function () { 
 			$("#date").hide();
-			
+			$("#dateSchedule").val("");
 			var val = $('input[name=schedule]:checked').val()
 			if (val == "1") {
 				$("#date").show();
@@ -39,25 +39,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span8 offset2">
-			<div id="breadcrumbs">
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button blue">
-					<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-					<div class="breadcrumb-button"></div>
-			</div>
+			{{partial('partials/wizard_partial')}}
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -82,7 +64,7 @@
 							<label for="inFuture">Programar el correo para que se envíe en el futuro: </label><br />
 							<div id="date" style="display: none;">
 								<label>Seleccione fecha de envío: </label>
-								<input class="datepicker fill-up" type="text" placeholder="Fecha de envío" name="dateSchedule">
+								<input class="datepicker fill-up" type="text" placeholder="Fecha de envío" name="dateSchedule" id="dateSchedule">
 							</div>
 						</div>
 						<div class="form-actions">

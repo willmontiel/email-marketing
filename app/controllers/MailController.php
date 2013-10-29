@@ -2,7 +2,8 @@
 class MailController extends ControllerBase
 {
 	protected $image_map = array();
-	
+
+
 	protected function validateProcess($idMail)
 	{
 		$mail = Mail::findFirst(array(
@@ -19,6 +20,59 @@ class MailController extends ControllerBase
 		}
 	}
 	
+	protected function routeRequest($action, $direction, $idMail)
+	{
+		if ($direction == 'next') {
+			switch ($action) {
+				case 'setup':
+					$go = 'mail/source/';
+					break;
+				case 'html':
+					$go = 'mail/plaintext/';
+					break;
+				case 'editor':
+					$go = 'mail/plaintext/';
+					break;
+				case 'plaintext':
+					$go = 'mail/target/';
+					break;
+				case 'target':
+					$go = 'mail/schedule/';
+					break;
+				case 'filter':
+					$go = 'mail/schedule/';
+					break;
+			}
+			return $this->response->redirect($go . $idMail);
+		}
+		else if ($direction == 'prev') {
+			switch ($action) {
+				case 'html':
+					$go = 'mail/setup/';
+					break;
+				case 'editor':
+					$go = 'mail/setup/';
+					break;
+				case 'plaintext':
+					$go = 'mail/source/';
+					break;
+				case 'target':
+					$go = 'mail/plaintext/';
+					break;
+				case 'filter':
+					$go = 'mail/target/';
+					break;
+				case 'schedule':
+					$go = 'mail/target/';
+					break;
+			}
+			return $this->response->redirect($go . $idMail);
+		}
+		else if ($direction == 'filter') {
+			return $this->response->redirect('mail/filter/' . $idMail);
+		}
+	}
+
 	public function indexAction()
 	{	
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
@@ -40,7 +94,6 @@ class MailController extends ControllerBase
 	
 	public function setupAction($idMail = null)
 	{
-		$log = $this->logger;
 		$mailExist = Mail::findFirst(array(
 			"conditions" => "idMail = ?1 AND idAccount = ?2",
 			"bind" => array(1 => $idMail,
@@ -144,7 +197,7 @@ class MailController extends ControllerBase
 			}
 			
 			if ($this->request->isPost()) {
-
+				
 				$mailContent = new Mailcontent();
 				$content = $this->request->getPost("editor");
 				$log->log($content);
@@ -165,6 +218,7 @@ class MailController extends ControllerBase
 					}
 				}
 				else {
+					//$this->routeRequest('editor', $direction, $idMail);
 					return $this->response->redirect("mail/plaintext/" .$idMail);
 				}
 			}		
@@ -174,7 +228,6 @@ class MailController extends ControllerBase
 	
 	public function htmlAction($idMail = null)
 	{
-		$log = $this->logger;
 		$mail = $this->validateProcess($idMail);
 		
 		if ($mail) {
@@ -193,11 +246,13 @@ class MailController extends ControllerBase
 				$form = new MailForm($mailContent);
 			}
 			
-			$this->view->setVar('idMail', $idMail);
+			$this->view->setVar('mail', $mail);
 			
 			if ($this->request->isPost()) {
 				$mailContent = new Mailcontent();
+				
 				$content = $this->request->getPost("content");
+				$direction = $this->request->getPost("direction");
 				
 				$buscar = array("<script" , "</script>");
 				$reemplazar = array("<!-- ", " -->");
@@ -220,7 +275,7 @@ class MailController extends ControllerBase
 					}
 				}
 				else {
-					return $this->response->redirect("mail/plaintext/" .$idMail);
+					$this->routeRequest('html', $direction, $idMail);
 				}
 			}
 			$this->view->MailForm = $form;
@@ -229,10 +284,9 @@ class MailController extends ControllerBase
 	
 	public function importAction($idMail = null)
 	{
-		$log = $this->logger;
 		$mail = $this->validateProcess($idMail);
 		if ($mail) {
-			$this->view->setVar('idMail', $idMail);
+			$this->view->setVar('mail', $mail);
 			
 			if ($this->request->isPost()) {
 				$this->db->begin();
@@ -286,12 +340,12 @@ class MailController extends ControllerBase
 	
 	public function targetAction($idMail = null)
 	{
-		$log = $this->logger;
-		$isOk = $this->validateProcess($idMail);
-		if ($isOk) {
-			$this->view->setVar('idMail', $idMail);
-			$idAccount = $this->user->account->idAccount;
-			$dbases = Dbase::findByIdAccount($idAccount);
+		$mail = $this->validateProcess($idMail);
+		
+		if ($mail) {
+			$this->view->setVar('mail', $mail);
+			
+			$dbases = Dbase::findByIdAccount($this->user->account->idAccount);
 
 			$array = array();
 			foreach ($dbases as $dbase) {
@@ -311,48 +365,31 @@ class MailController extends ControllerBase
 			$this->view->setVar('segments', $segments);
 			
 			if ($this->request->isPost()) {
-				$dbases = $this->request->getPost("dbases");
-				$contactlists = $this->request->getPost("contactlists");
-				$segments = $this->request->getPost("segments");
+				$direction = $this->request->getPost('direction');
 				
-				$sql = "REPLACE INTO mxc (idMail, idContact)";
+				$idDbases = $this->request->getPost("dbases");
+				$idContactlists = $this->request->getPost("contactlists");
+				$idSegments = $this->request->getPost("segments");
 				
-				if ($dbases != null) {
-					$dbase = implode(',', $dbases);
-					$phql = "SELECT contact.idContact FROM contact WHERE contact.idDbase IN (" . $dbase . ")";
-				}
-				
-				else if ($contactlists != null) {
-					$contactlist = implode(',', $contactlists);
-					$phql= "SELECT coxcl.idContact FROM coxcl WHERE coxcl.idContactlist IN (" . $contactlist . ")";
-				}
-				
-				else if ($segments != null) {
-					$segment = implode(',', $segments);
-					$phql .= "SELECT sxc.idContact FROM sxc WHERE sxc.idSegment IN (" . $segment . ")";
-				}
-				
-				else {
-					$this->flashSession->error("No ha seleccionado una lista, base de datos o segmento, por favor verifique la información");
+				if ($idDbases == null && $idContactlists == null && $idSegments == null) {
+					$this->flashSession->error("No ha seleccionado listas de contactos, base de datos o segmentos, por favor verifique la información");
 					return $this->response->redirect("mail/target/" . $idMail);
 				}
-				$contacts = $this->modelsManager->executeQuery($phql);
-				if (count($contacts) <= 0) {
+				
+				try {
+					$target = new TargetObj($dbases, $contactlists, $segments);
+					$response = $target->createTargetObj($idDbases, $idContactlists, $idSegments, $mail);
+				}
+				catch (InvalidArgumentException $e) {
+					throw new InvalidArgumentException("Error while saving targetObj in db");
+				}
+				
+				if (!$response) {
 					$this->flashSession->error("No hay contactos registrados, por favor seleccione otra base de datos, lista o segmento");
-					return $this->response->redirect("mail/target/" . $idMail);
 				}
-				$idContacts = $this->returnIds($contacts, $idMail);
-				$sql .= $idContacts;
-				
-				$db = Phalcon\DI::getDefault()->get('db');
-				$db->begin();
-				$result = $db->execute($sql);
-				
-				if(!$result) {
-					$db->rollback();
+				else {
+					$this->routeRequest('target', $direction, $mail->idMail);
 				}
-				$db->commit();
-				return $this->response->redirect("mail/schedule/" . $idMail);
 			}
 		}
 	}
@@ -373,9 +410,10 @@ class MailController extends ControllerBase
 	public function scheduleAction($idMail = null)
 	{
 		$log = $this->logger;
-		$isOk = $this->validateProcess($idMail);
+		$mail = $this->validateProcess($idMail);
 		
-		if ($isOk) {
+		if ($mail) {
+			$this->view->setVar('mail', $mail);
 			if ($this->request->isPost()) {
 				
 				
@@ -493,17 +531,17 @@ class MailController extends ControllerBase
 			return $this->response->redirect("mail/setup/" .$mailClone->idMail);
 		}
 		
-		$this->flashSession->error('Un error no permitio duplicar el correo!');
+		$this->flashSession->error('Un error no permitió duplicar el correo');
 		return $this->response->redirect("mail/index");
 	}
 	
 	public function plaintextAction($idMail)
 	{
+		$log = $this->logger;
 		$mail = $this->validateProcess($idMail);
 		
 		if ($mail) {
-			
-			$this->view->setVar('idMail', $mail->idMail);
+			$this->view->setVar('mail', $mail);
 			
 			$mailContent = Mailcontent::findFirst(array(
 				"conditions" =>"idMail = ?1",
@@ -512,7 +550,7 @@ class MailController extends ControllerBase
 			
 			if ($mailContent->plainText == null) {
 				$text = new PlainText();
-				$plainText = $text->getPlainText($mailContent);
+				$plainText = $text->getPlainText($mailContent->content);
 			}
 			else {
 				$plainText = $mailContent->plainText;
@@ -522,6 +560,7 @@ class MailController extends ControllerBase
 			
 			if ($this->request->isPost()) {
 				
+				$direction = $this->request->getPost('direction');
 				$mailContent->plainText = $this->request->getPost('plaintext');
 				
 				if (!$mailContent->save()) {
@@ -530,7 +569,7 @@ class MailController extends ControllerBase
 					}
 				}
 				else {
-					$this->response->redirect("mail/target/" . $idMail);
+					$this->routeRequest('plaintext', $direction, $mail->idMail);
 				}
 			}
 		}
@@ -540,7 +579,14 @@ class MailController extends ControllerBase
 	{
 		$mail = $this->validateProcess($idMail);
 		if ($mail) {
-			
+			$this->view->setVar('mail', $mail);
+			if ($this->request->isPost()) {
+				
+				$direction = $this->request->getPost('direction');
+				
+				
+				$this->routeRequest('filter', $direction, $mail->idMail);
+			}
 		}
 	}
 	
@@ -548,13 +594,15 @@ class MailController extends ControllerBase
 	{
 		$mail = $this->validateProcess($idMail);
 		if ($mail) {
-			$this->view->setVar("idMail", $idMail);
-			$form = new MailForm($mail);
-			
+			$mailContent = Mailcontent::findFirst(array(
+				"conditions" => "idMail = ?1",
+				"bind" => array(1 => $mail->idMail)
+			));
 			if ($this->request->isPost()) {
 				
 			}
-			$this->view->MailForm = $form;
+			$this->view->setVar('mail', $mail);
+			$this->view->setVar('mailContent', $mailContent);
 		}
 	}
 }

@@ -47,6 +47,7 @@ class MailForm extends Form
 		
 		$this->add(new TextArea('content', array(
 			'rows' => 20,
+			'required' => 'required',
 			'id' => 'redactor_content'
         )));
 	}

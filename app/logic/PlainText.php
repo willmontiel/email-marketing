@@ -1,9 +1,9 @@
 <?php
 class PlainText
 {
-	public function getPlainText(Mailcontent $mailContent)
+	public function getPlainText($mailContent)
 	{
-		$contentHtml = html_entity_decode($mailContent->content); 
+		$contentHtml = html_entity_decode($mailContent); 
 		
 		$buscar = array(
 			"</p>" ,

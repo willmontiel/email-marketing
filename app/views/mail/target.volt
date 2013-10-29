@@ -28,14 +28,6 @@
 					break;
 			}
          });
-		 
-		$("#target").click(function(){
-			$.post("{{url('mail/target')}}/{{idMail}}", $("#contentForm").serialize(),function(){});
-		});
-		
-		$("#advanced").click(function(){
-			$.post("{{url('mail/filter')}}/{{idMail}}", $("#contentForm").serialize(),function(){});
-		});
 	});
 </script>
 {% endblock %}
@@ -66,13 +58,13 @@
 		<div class="span8 offset2">
 			<div id="breadcrumbs">
 				<div class="breadcrumb-button">
-					<a href="{{url('mail/setup')}}/{{idMail}}">
+					<a href="{{url('mail/setup')}}/{{mail.idMail}}">
 						<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
 						<span class="breadcrumb-arrow"><span></span></span>
 					</a>
 				</div>
 				<div class="breadcrumb-button">
-					<a href="{{url('mail/source')}}/{{idMail}}">
+					<a href="{{url('mail/source')}}/{{mail.idMail}}">
 						<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
 						<span class="breadcrumb-arrow"><span></span></span>
 					</a>
@@ -101,7 +93,7 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<form id="contentForm">
+				<form action="{{url('mail/target')}}/{{mail.idMail}}" method="post">
 					<div class="padded">
 						<input type="radio" name="radios" class="icheck" value="0" id="dbRadio" >
 						<label for="dbRadio">Base de datos de contactos</label> <br />
@@ -135,9 +127,9 @@
 						</div>
 					</div>
 					<div class="form-actions">
-						<a href="{{url('mail/plaintext')}}/{{idMail}}" class="btn btn-default"><< Anterior</a>
-						<input type="button" class="btn btn-blue" value="Siguiente >>" id="target">
-						<input type="button" class="btn btn-blue" value="Avanzado" id="advanced">
+						<button class="btn btn-default" name="direction" value="prev"><i class="icon-circle-arrow-left"></i> Anterior</button>
+						<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
+						<button class="btn btn-black" name="direction" value="filter"><i class="icon-cogs"></i> Avanzado</button>
 					</div>
 				</form>
 			</div>

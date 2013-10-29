@@ -56,7 +56,7 @@
 					</div>
 				</div>
 				<div class="box-content">
-					<form action="{{url('mail/import/')}}{{idMail}}" method="post" class="fill-up">
+					<form action="{{url('mail/import/')}}{{mail.idMail}}" method="post" class="fill-up">
 						<div class="padded">
 							<label>Escriba o copie y pegue la dirección del enlace (url)</label>
 							<input type="url" name="url" required="required" autofocus="autofocus">
@@ -67,8 +67,8 @@
 							</div>
 						</div>
 						<div class="form-actions">
-							<a href="{{url('mail/source')}}/{{idMail}}" class="btn btn-default">Anterior</a>
-							<button class="btn btn-blue">Importar</button>
+							<a href="{{url('mail/source')}}/{{mail.idMail}}" class="btn btn-default"><i class="icon-remove-sign"></i> Cancelar</a>
+							<button class="btn btn-blue">Importar <i class="icon-cloud-download"></i></button>
 						</div>
 					</form>
 				</div>
