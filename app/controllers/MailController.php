@@ -120,6 +120,7 @@ class MailController extends ControllerBase
 			$mail->fromEmail = strtolower($form->getValue('fromEmail'));
 			$mail->replyTo = strtolower($form->getValue('replyTo'));
 			$mail->status = "Draft";
+			$mail->wizardOption = "setup";
 			
             if ($form->isValid() && $mail->save()) {
 				switch ($mail->type) {
@@ -263,6 +264,7 @@ class MailController extends ControllerBase
 				$mailContent->content = htmlspecialchars($newContent, ENT_QUOTES);
 				
 				$mail->type = "Html";
+				$mail->wizardOption = "source";
 				
 				if(!$mailContent->save()) {
 					foreach ($mailContentExist->getMessages() as $msg) {
@@ -315,6 +317,7 @@ class MailController extends ControllerBase
 				$content->content = htmlspecialchars($html, ENT_QUOTES);
 				
 				$mail->type = "Html";
+				$mail->wizardOption = "source";
 				
 				if (!$content->save()) {
 					foreach ($content->getMessages() as $msg) {

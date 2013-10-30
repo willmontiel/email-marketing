@@ -94,6 +94,11 @@ class SmartWizard
 						$wizard['setup']['url'] = 'mail/setup';
 						$wizard['source']['url'] = 'mail/source';
 						$wizard['target']['wizard'] = 'breadcrumb-button blue';
+					case 'schedule':
+						$wizard['setup']['url'] = 'mail/setup';
+						$wizard['source']['url'] = 'mail/source';
+						$wizard['target']['url'] = 'mail/target';
+						$wizard['schedule']['wizard'] = 'breadcrumb-button blue';
 						break;
 				}
 				break;
@@ -119,6 +124,13 @@ class SmartWizard
 						$wizard['source']['url'] = 'mail/source';
 						$wizard['target']['wizard'] = 'breadcrumb-button blue';
 						$wizard['schedule']['url'] = 'mail/schedule';
+						break;
+					case 'schedule':
+					case 'preview':
+						$wizard['setup']['url'] = 'mail/setup';
+						$wizard['source']['url'] = 'mail/source';
+						$wizard['target']['url'] = 'mail/schedule';
+						$wizard['schedule']['wizard'] = 'breadcrumb-button blue';
 						break;
 				}
 				break;

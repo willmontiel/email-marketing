@@ -24,24 +24,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span8 offset2">
-			<div id="breadcrumbs">
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button blue">
-					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-			</div>
+			{{partial('partials/wizard_partial')}}
 		</div>
 	</div>
 	<div class="row-fluid">

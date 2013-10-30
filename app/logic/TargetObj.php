@@ -110,16 +110,12 @@ class TargetObj
 
 	protected function saveTargetDataInDB(Mail $mail, $destinationJson, $totalContacts, $targetsName)
 	{
-		$mailContent = Mailcontent::findFirst(array(
-			"conditions" => "idMail = ?1",
-			"bind" => array(1 => $mail->idMail)
-		));
-
-		$mailContent->target = json_encode($destinationJson);
-		$mailContent->targetName = implode(', ', $targetsName);
-		$mailContent->totalContacts = $totalContacts;
+		$mail->wizardOption = 'target';
+		$mail->target = json_encode($destinationJson);
+		$mail->targetName = implode(', ', $targetsName);
+		$mail->totalContacts = $totalContacts;
 		
-		if (!$mailContent->save()) {
+		if (!$mail->save()) {
 			throw new InvalidArgumentException("Error while saving targetObj in db");
 		}
 		
