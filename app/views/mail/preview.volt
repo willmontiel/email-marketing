@@ -90,14 +90,14 @@
 								</div>
 								<strong>Nombre de la lista, base de datos o segmento a donde se envía: </strong>
 								<div class="news-text">
-									{{mailContent.targetName}}
+									{{mail.targetName}}
 								</div>
 							</div>
 							<br />
 							<div class="news-content">
 								<strong>Contactos totales aproximados: </strong>
 								<div class="news-text">
-									{{mailContent.totalContacts}}
+									{{mail.totalContacts}}
 								</div>
 							</div>
 						</div>

@@ -1,16 +1,31 @@
 {% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
+	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
 	<script type="text/javascript">
 	$(function(){
         $("input[name=schedule]").on('ifChecked', function () { 
 			$("#date").hide();
 			$("#dateSchedule").val("");
 			var val = $('input[name=schedule]:checked').val()
-			if (val == "1") {
+			if (val == "after") {
 				$("#date").show();
 			}
          });
+		
+		var nowTemp = new Date();
+		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
+	 //HH:mm PP
+		$('#scheduleArea').datetimepicker({
+			language: 'en',
+			maskInput: true,
+			pickTime: false,
+			format: "dd/MM/yyyy hh:mm",
+			//pick12HourFormat: true,
+			pickSeconds: false,
+			startDate: now
+		});
 	});
 	</script>
 {% endblock %}
@@ -55,21 +70,23 @@
 					</div>
 				</div>
 				<div class="box-content">
-					<form>
+					<form action="{{url('mail/schedule')}}/{{mail.idMail}}" method="post">
 						<div class="padded">
-							<input type="radio" name="schedule" class="icheck" value="0" id="rightNow"/>
+							<input type="radio" name="schedule" class="icheck" value="rightNow" id="rightNow"/>
 							<label for="rightNow">Enviar el correo de inmediato: </label><br />
 							
-							<input type="radio" name="schedule" class="icheck" value="1" id="inFuture"/>
-							<label for="inFuture">Programar el correo para que se envíe en el futuro: </label><br />
+							<input type="radio" name="schedule" class="icheck" value="after" id="inFuture"/>
+							<label for="inFuture">Programar el correo para que se envíe en la siguiente fecha: </label><br />
 							<div id="date" style="display: none;">
 								<label>Seleccione fecha de envío: </label>
-								<input class="datepicker fill-up" type="text" placeholder="Fecha de envío" name="dateSchedule" id="dateSchedule">
+								<div id="scheduleArea" class="input-append date" class="span5">
+									<input type="text" class="add-on input-date-picker" name="dateSchedule" id="dateSchedule"/>
+								</div>
 							</div>
 						</div>
 						<div class="form-actions">
-							<a href="" class="btn btn-default">Anterior</a>
-							<input type="submit" class="btn btn-blue" value="Siguiente">
+							<button class="btn btn-default" name="direction" value="prev"><i class="icon-circle-arrow-left"></i> Anterior</button>
+							<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
 						</div>
 					</form>
 				</div>

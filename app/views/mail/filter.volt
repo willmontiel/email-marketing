@@ -4,28 +4,28 @@
 	<script type="text/javascript">
 	$(function(){
         $("input[name=filter]").on('ifChecked', function () { 
-			$("#link").hide();
+			$("#mail").hide();
 			$("#open").hide();
-			$("#date").hide();
+			$("#click").hide();
 			$("#exclude").hide();
 			
-			$('#link').prop('selectedIndex',-1);
-			$('#open').prop('selectedIndex',-1);
-			$('#date').prop('selectedIndex',-1);
-			$('#exclude').prop('selectedIndex',-1);
+			$("#sendMail").val('');
+			$('#sendOpen').prop('selectedIndex',-1);
+			$('#sendClick').prop('selectedIndex',-1);
+			$('#sendExclude').prop('selectedIndex',-1);
 			
 			var val = $('input[name=filter]:checked').val();
 			switch (val) {
-				case "0":
-					$("#link").show();
+				case "byMail":
+					$("#mail").show();
 					break;
-				case "1":
+				case "byOpen":
 					$("#open").show();
 					break;
-				case "2":
-					$("#date").show();
+				case "byClick":
+					$("#click").show();
 					break;
-				case "3":
+				case "byExclude":
 					$("#exclude").show();
 					break;
 			}
@@ -57,26 +57,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span8 offset2">
-			<div id="breadcrumbs">
-				<div class="breadcrumb-button">
-					<a href="{{url('mail/setup')}}">
-						<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
-						<span class="breadcrumb-arrow"><span></span></span>
-					</a>
-				</div>
-				<div class="breadcrumb-button blue">
-					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-			</div>
+			{{partial('partials/wizard_partial')}}
 		</div>
 	</div>
 	<br />
@@ -88,48 +69,54 @@
 			<div class="box offset2 span8">
 				<div class="box-header">
 					<div class="title">
-						Filtrar contactos por: 
+						<i class="icon-cogs"></i> Avanzado
 					</div>
 				</div>
 				<div class="box-content">
 					<form action = "{{url('mail/filter')}}/{{mail.idMail}}" method="post">
 						<div class="padded">
-							<input type="radio" name="filter" id="clickLink" class="icheck" value="0" />
-							<label for="clickLink">Seleccionar contactos que hayan realizado clic en algún enlace: </label><br />
-							<div id="link" style="display: none;">
-								<select multiple="multiple" name="link[]" id="link" class="chzn-select">
-									
-								</select>
+							<input type="radio" name="filter" id="byMail" class="icheck" value="byMail" />
+							<label for="byMail">Enviar a contactos que tenga el siguiente correo: </label><br />
+							<div id="mail" style="display: none;">
+								<input type="email" name="byMail" required="required" id="sendMail" />
 							</div>
 							
-							
-							<input type="radio" name="filter" id="openMail" class="icheck" value="1" />
-							<label for="openMail">Seleccionar contactos que hayan abierto cualquier correo electrónico: </label><br />
+							<input type="radio" name="filter" id="byOpen" class="icheck" value="byOpen" />
+							<label for="byOpen">Enviar a contactos que hayan abierto el siguiente correo electrónico: </label><br />
 							<div id="open" style="display: none;">
-								<select multiple="multiple" name="openMail[]" id="open" class="chzn-select">
-									
+								<select multiple="multiple" name="byOpen[]" id="sendOpen" class="chzn-select">
+									<option value="any">Cualquier correo enviado</option>
+									<option value="week10">Boletin informativo semana 10</option>
+									<option value="week11">Boletin informativo semana 11</option>
+									<option value="week12">Boletin informativo semana 12</option>
 								</select>
 							</div>
 							
-							<input type="radio" name="filter" id="dateMail" class="icheck" value="2" />
-							<label for="dateMail">Seleccionar contactos que hayan abierto un correo electrónico enviado en una fecha en particular: </label><br />
-							<div id="date" style="display: none;">
-								<select multiple="multiple" name="dateMail[]" id="date" class="chzn-select">
-									
+							<input type="radio" name="filter" id="byClick" class="icheck" value="byClick" />
+							<label for="byClick">Enviar a contactos que hayan hecho click en el siguiente enlace: </label><br />
+							<div id="click" style="display: none;">
+								<select multiple="multiple" name="byClick[]" id="sendClick" class="chzn-select">
+									<option value="any">Cualquier correo enviado</option>
+									<option value="week10">Boletin informativo semana 10</option>
+									<option value="week11">Boletin informativo semana 11</option>
+									<option value="week12">Boletin informativo semana 12</option>
 								</select>
 							</div>
 							
-							<input type="radio" name="filter" id="excludeContact" class="icheck" value="3" />
-							<label for="excludeContact">Excluir aquellos contactos que hayan abierto algún correo electrónico enviado en una fecha en particular: </label>
+							<input type="radio" name="filter" id="byExclude" class="icheck" value="byExclude" />
+							<label for="byExclude">No enviar a aquellos contactos que hayan abierto el siguiente correo electrónico: </label>
 							<div id="exclude" style="display: none;">
-								<select multiple="multiple" name="excludeContact[]" id="exclude" class="chzn-select">
-									
+								<select multiple="multiple" name="byExclude[]" id="sendExclude" class="chzn-select">
+									<option value="any">Cualquier correo enviado</option>
+									<option value="week10">Boletin informativo semana 10</option>
+									<option value="week11">Boletin informativo semana 11</option>
+									<option value="week12">Boletin informativo semana 12</option>
 								</select>
 							</div>
 							
 						</div>
 						<div class="form-actions">
-							<button class="btn btn-default" name="direction" value="prev"><i class="icon-circle-arrow-left"></i> Anterior</button>
+							<a class="btn btn-default" href="{{url('mail/target/')}}/{{mail.idMail}}" ><i class="icon-circle-arrow-left"></i> Anterior</a>
 							<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
 						</div>	
 					</form>

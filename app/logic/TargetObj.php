@@ -1,15 +1,26 @@
 <?php
 class TargetObj 
 {
-	function __construct($dbases, $contactlists, $segments) 
+	function __construct() 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 		
 		$this->log = $di['logger'];
 		$this->modelsManager = $di['modelsManager'];
-		
+	}
+	
+	public function setDbases ($dbases)
+	{
 		$this->dbases = $dbases;
+	}
+	
+	public function setContactlists ($contactlists)
+	{
 		$this->contactlists = $contactlists;
+	}
+	
+	public function setSegments ($segments)
+	{
 		$this->segments = $segments;
 	}
 	
@@ -110,7 +121,14 @@ class TargetObj
 
 	protected function saveTargetDataInDB(Mail $mail, $destinationJson, $totalContacts, $targetsName)
 	{
-		$mail->wizardOption = 'target';
+		if ($mail->wizardOption == 'target' || $mail->wizardOption == 'source') {
+			$wizardOption = 'target';
+		}
+		else{
+			$wizardOption = $mail->wizardOption;
+		}
+		
+		$mail->wizardOption = $wizardOption;
 		$mail->target = json_encode($destinationJson);
 		$mail->targetName = implode(', ', $targetsName);
 		$mail->totalContacts = $totalContacts;
