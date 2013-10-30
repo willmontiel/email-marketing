@@ -41,7 +41,10 @@ class AssetController extends ControllerBase
 			}
 			
 			$array = array(
-				'filelink' => $assetObj->getImagePrivateUrl()
+				'filelink' => $assetObj->getImagePrivateUrl(),
+				'thumb' => $assetObj->getThumbnailUrl(),
+				'title' => $assetObj->getFileName(),
+				'id' => $assetObj->getIdAsset()
 			);
 			return $this->setJsonResponse($array);
 		}

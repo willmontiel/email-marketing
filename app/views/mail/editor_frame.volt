@@ -176,7 +176,7 @@
 					</div>
 					<div id="uploadimage" class="modal hide fade well">
 						<h2 class="text-center">Cargar Imagen</h2>
-						<form action="{{url('asset/upload')}}" class="dropzone">
+						<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
 							<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
 						</form>
 						<button id="close-modal-upload"class="btn btn-default" data-dismiss="modal">Regresar</button>

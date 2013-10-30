@@ -1,4 +1,4 @@
-function Dropzone (name, parent, width) {
+function DropzoneArea (name, parent, width) {
 	this.name = name;
 	this.parent = parent;
 	this.width = width;
@@ -7,7 +7,7 @@ function Dropzone (name, parent, width) {
 
 };
 
-Dropzone.prototype.createHtmlZone = function() {
+DropzoneArea.prototype.createHtmlZone = function() {
 	
 	var htmltext = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"'>\n\
 					<div class='info-guide'>\n\
@@ -23,29 +23,29 @@ Dropzone.prototype.createHtmlZone = function() {
 	
 };
 
-Dropzone.prototype.deletezone = function() {
+DropzoneArea.prototype.deletezone = function() {
 
 	this.$obj.remove();
 	
 };
 
-Dropzone.prototype.setWidth = function(newWidth) {
+DropzoneArea.prototype.setWidth = function(newWidth) {
 	
 	this.width = newWidth;
 };
 
-Dropzone.prototype.insertBlocks = function() {
+DropzoneArea.prototype.insertBlocks = function() {
 	
 	for (var bl = 0; bl < this.content.length; bl++) {
 		this.$obj.append(this.content[bl].createBlock());
 	}
 };
 
-Dropzone.prototype.createBlock = function(clase, content, html) {
+DropzoneArea.prototype.createBlock = function(clase, content, html) {
 	return new Block(this, clase, content, html);
 };
 
-Dropzone.prototype.persist = function() {
+DropzoneArea.prototype.persist = function() {
 	var obj = {
 		name: this.name,
 		width: this.width,
@@ -59,7 +59,7 @@ Dropzone.prototype.persist = function() {
 	return obj;
 };
 
-Dropzone.prototype.unpersist = function(obj) {
+DropzoneArea.prototype.unpersist = function(obj) {
 	
 	this.name = obj.name;
 	this.parent = obj.parent;
@@ -83,7 +83,7 @@ Dropzone.prototype.unpersist = function(obj) {
 	return this.$obj;
 };
 
-Dropzone.prototype.ondrop = function() {
+DropzoneArea.prototype.ondrop = function() {
 	var t = this;
 	
 	this.$obj.sortable({
@@ -112,6 +112,15 @@ Dropzone.prototype.ondrop = function() {
 			}
 			
 			var objblk = object.item.data('smobj');
+			
+			for(var i = 0; i < t.content.length; i++) {
+				
+				if(t.content[i] == objblk) {
+					
+					t.content.splice(i, 1);
+				
+				}
+			}
 			
 			objblk.parentBlock.content.splice(object.item.index() - 1, 0, objblk);
 			
@@ -143,7 +152,7 @@ Dropzone.prototype.ondrop = function() {
 			for(var i = 0; i < t.content.length; i++) {
 				
 				if(t.content[i] == blkobj) {
-					
+
 					t.content[i].deleteBlock();
 					
 					t.content.splice(i, 1);

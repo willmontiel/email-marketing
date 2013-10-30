@@ -53,6 +53,15 @@ Editor.prototype.objectExists = function(objMail) {
 		editor.changeLayout();
 
 		NoMediaDisplayer();
+		
+		$('.drop-zone').sortable({ 
+			handle: '.handle-tool', 
+			placeholder: 'placeholder', 
+			items: '> div.module',
+			connectWith: '.drop-zone'
+		});
+
+		layoutChosen();
 	}
 };
 
@@ -66,7 +75,7 @@ Editor.prototype.changeLayout = function() {
 		
 		if(!jQuery.isEmptyObject(this.dz[dzname])) {
 
-			var newdz = new Dropzone();
+			var newdz = new DropzoneArea();
 
 			newdz.setWidth(this.layout.zones[z].width);
 
@@ -75,7 +84,7 @@ Editor.prototype.changeLayout = function() {
 		}
 		else {
 
-			var newdz = new Dropzone(dzname,'#edit-area', this.layout.zones[z].width);;
+			var newdz = new DropzoneArea(dzname,'#edit-area', this.layout.zones[z].width);;
 			
 		}
 
@@ -92,7 +101,7 @@ Editor.prototype.serializeDZ = function() {
 	
 	for (var key in this.dz) {
 		
-		if(this.dz[key] instanceof Dropzone) {
+		if(this.dz[key] instanceof DropzoneArea) {
 			
 			this.dz[key] = this.dz[key].persist();
 		}
@@ -104,7 +113,7 @@ Editor.prototype.createDZ = function(objdz) {
 	
 	for (var key in objdz) {
 		
-		if(objdz[key] instanceof Dropzone) {
+		if(objdz[key] instanceof DropzoneArea) {
 			
 			objdz[key].createHtmlZone();
 			objdz[key].insertBlocks();
@@ -119,7 +128,7 @@ Editor.prototype.deleteZones = function() {
 	
 	for (var key in this.dz) {
 		
-		if(this.dz[key] instanceof Dropzone) {
+		if(this.dz[key] instanceof DropzoneArea) {
 			
 			this.dz[key].deletezone();
 		}
@@ -130,7 +139,7 @@ Editor.prototype.newDropZones = function() {
 	
 	for(var z = 0; z < this.layout.zones.length; z++) {
 		
-		var dz = new Dropzone(this.layout.zones[z].name,'#edit-area', this.layout.zones[z].width);;
+		var dz = new DropzoneArea(this.layout.zones[z].name,'#edit-area', this.layout.zones[z].width);;
 		
 		dz.createHtmlZone();
 		
@@ -168,6 +177,8 @@ function layoutChosen() {
 	$('#components').addClass('active');
 	$('#tabcomponents').addClass('active');
 }
+
+Dropzone.autoDiscover = false;
 
 $(function() {
 	
@@ -265,16 +276,15 @@ $(function() {
 		
 	});
 	
-	$('#close-modal-upload').on('click', function() {
-		$.ajax(
-			{
-			url: config.uploadUrl,
-			type: "POST",
-			success: function(data){ 
-			  console.log(data);
-			}
-		});
-	});
-});
+	var myDropzone = new Dropzone("#my-dropzone");
 	
+	myDropzone.on("success", function(file, response) {
+		
+		var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);
+		
+		newMedia.createMedia();
+		newMedia.mediaSelected();
 
+	});	
+	
+});
