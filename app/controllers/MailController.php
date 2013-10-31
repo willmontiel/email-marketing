@@ -450,6 +450,7 @@ class MailController extends ControllerBase
 	
 	public function targetAction($idMail = null)
 	{
+		$log = $this->logger;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND status = ?2 AND (wizardOption = ?3 OR wizardOption = ?4 OR wizardOption = ?5)',
 			'bind' => array(1 => $idMail,
@@ -483,16 +484,20 @@ class MailController extends ControllerBase
 			
 			if ($this->request->isPost()) {
 				$direction = $this->request->getPost('direction');
+				$targetSelected = $this->request->getPost('targetSelected');
 				
 				$idDbases = $this->request->getPost("dbases");
 				$idContactlists = $this->request->getPost("contactlists");
 				$idSegments = $this->request->getPost("segments");
 				
-				if ($idDbases == null && $idContactlists == null && $idSegments == null) {
+				if ($idDbases == null && $idContactlists == null && $idSegments == null && $targetSelected == null) {
 					$this->flashSession->error("No ha seleccionado listas de contactos, base de datos o segmentos, por favor verifique la información");
 					return $this->response->redirect("mail/target/" . $idMail);
 				}
-				
+				else if ($targetSelected !== '' && ($idDbases == null && $idContactlists == null && $idSegments == null)) {
+					$this->routeRequest('target', $direction, $mail->idMail);
+					return false;
+				}
 				try {
 					$target = new TargetObj();
 					
@@ -605,14 +610,14 @@ class MailController extends ControllerBase
 					$dateTimestamp = mktime($hour, $minute, 0, $month, $day, $year);
 					
 					if($dateTimestamp < time()) {
-						$this->flashSession->error("Ha ingresado una fecha del pasado, por favor verifique la información");
-						return $this->response->redirect('mail/schedule/' . $mail->idMail);
+						$this->flashSession->error("Ha ingresado una fecha que ya ha pasado, por favor verifique la información");
+						return false;
 					}
 					$mail->dateSchedule = $dateTimestamp;
 				}
 				else if ($schedule == null && $date == null) {
 					$this->flashSession->error("No ha ingresado una fecha de envío del correo, por favor verifique la información");
-					return $this->response->redirect('mail/schedule/' . $mail->idMail);
+					return false;
 				}
 				
 				$mail->wizardOption = 'schedule';

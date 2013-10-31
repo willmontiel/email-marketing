@@ -56,28 +56,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span8 offset2">
-			<div id="breadcrumbs">
-				<div class="breadcrumb-button">
-					<a href="{{url('mail/setup')}}/{{mail.idMail}}">
-						<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
-						<span class="breadcrumb-arrow"><span></span></span>
-					</a>
-				</div>
-				<div class="breadcrumb-button">
-					<a href="{{url('mail/source')}}/{{mail.idMail}}">
-						<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-						<span class="breadcrumb-arrow"><span></span></span>
-					</a>
-				</div>
-				<div class="breadcrumb-button blue">
-					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-			</div>
+			{{partial('partials/wizard_partial')}}
 		</div>
 	</div>
 	<br />
@@ -85,7 +64,7 @@
 		{{ flashSession.output()}}
 	</div>
 	<br />
-	<div class="row-fluid span4">
+	<div class="row-fluid offset3 span5">
 		<div class="box">
 			<div class="box-header">
 				<div class="title">
@@ -95,39 +74,43 @@
 			<div class="box-content">
 				<form action="{{url('mail/target')}}/{{mail.idMail}}" method="post">
 					<div class="padded">
-						<input type="radio" name="radios" class="icheck" value="0" id="dbRadio" >
-						<label for="dbRadio">Base de datos de contactos</label> <br />
-						<div id="db" style="display: none;">
-							<select multiple="multiple" name="dbases[]"  id="dbSelect" class="chzn-select">
-								{% for dbase in dbases %}
-									<option value="{{dbase.idDbase}}">{{dbase.name}}</option>
-								{% endfor %}
-							</select>
-						</div>
-						<br />
-						<input type="radio" name="radios" class="icheck" value="1" id="listRadio">
-						<label for="listRadio">Lista de contactos </label>
-						<div id="list" style="display: none;">
-							<select multiple="multiple" name="contactlists[]" id="listSelect" class="chzn-select">
-								{% for contactlist in contactlists %}
-									<option value="{{contactlist.idContactlist}}">{{contactlist.name}},  {{contactlist.Dbase}}</option>
-								{% endfor %}
-							</select>
-						</div>
-						<br /><br />
-						<input type="radio" name="radios" class="icheck" value="2" id="segmentRadio">
-						<label for="segmentRadio">Segmentos</label>
-						<br />
-						<div id="seg" style="display: none;">
-							<select multiple="multiple" name="segments[]" id="segSelect" class="chzn-select">
-								{% for segment in segments %}
-									<option value="{{segment.idSegment}}">{{segment.name}}</option>
-								{% endfor %}
-							</select>
-						</div>
+						{% if mail.targetName !== ''%}
+							{{partial('partials/targetselect_partial')}}
+						{% else %}
+							<input type="radio" name="radios" class="icheck" value="0" id="dbRadio" >
+							<label for="dbRadio">Base de datos de contactos</label> <br />
+							<div id="db" style="display: none;">
+								<select multiple="multiple" name="dbases[]"  id="dbSelect" class="chzn-select">
+									{% for dbase in dbases %}
+										<option value="{{dbase.idDbase}}">{{dbase.name}}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<br />
+							<input type="radio" name="radios" class="icheck" value="1" id="listRadio">
+							<label for="listRadio">Lista de contactos </label>
+							<div id="list" style="display: none;">
+								<select multiple="multiple" name="contactlists[]" id="listSelect" class="chzn-select">
+									{% for contactlist in contactlists %}
+										<option value="{{contactlist.idContactlist}}">{{contactlist.name}},  {{contactlist.Dbase}}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<br /><br />
+							<input type="radio" name="radios" class="icheck" value="2" id="segmentRadio">
+							<label for="segmentRadio">Segmentos</label>
+							<br />
+							<div id="seg" style="display: none;">
+								<select multiple="multiple" name="segments[]" id="segSelect" class="chzn-select">
+									{% for segment in segments %}
+										<option value="{{segment.idSegment}}">{{segment.name}}</option>
+									{% endfor %}
+								</select>
+							</div>
+						{% endif %}
 					</div>
 					<div class="form-actions">
-						<a href="{{url('mail/plaintext')}}/{{mail.idMail}}" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</a>
+						<button button class="btn btn-blue" name="direction" value="prev"><i class="icon-circle-arrow-left"></i> Anterior</button>
 						<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
 						<button class="btn btn-black" name="direction" value="filter"><i class="icon-cogs"></i> Avanzado</button>
 					</div>

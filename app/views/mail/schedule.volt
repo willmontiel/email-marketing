@@ -77,19 +77,24 @@
 				<div class="box-content">
 					<form action="{{url('mail/schedule')}}/{{mail.idMail}}" method="post">
 						<div class="padded">
-							<input type="radio" name="schedule" class="icheck" value="rightNow" id="rightNow"/>
+							{% if mail.dateSchedule == null%}
+								{% set display = 'display: none;'%}
+								{% set checked = '' %}
+								{% set value = ''%}
+							{% else %}
+								{% set display = 'display: block;'%}
+								{% set checked = 'checked' %}
+								{% set value = date('d/m/y G:i', mail.dateSchedule) %}
+							{% endif %}
+							<input type="radio" name="schedule" class="icheck" value="rightNow" id="rightNow">
 							<label for="rightNow">Enviar el correo de inmediato: </label><br />
 							
-							<input type="radio" name="schedule" class="icheck" value="after" id="inFuture"/>
+							<input type="radio" name="schedule" class="icheck" {{checked}} value="after" id="inFuture">
 							<label for="inFuture">Programar el correo para que se envíe en la siguiente fecha: </label><br />
-							<div id="date" style="display: none;">
+							<div id="date" style="{{display}}">
 								<label>Seleccione fecha de envío: </label>
 								<div id="scheduleArea" class="input-append date" class="span5">
-									{% if mail.dateSchedule == null%}
-										<input type="text" class="add-on input-date-picker" name="dateSchedule" id="dateSchedule" />
-									{% else %}
-										<input type="text" class="add-on input-date-picker" name="dateSchedule" id="dateSchedule" value="{{date('d/m/y G:i', mail.dateSchedule)}}"/>
-									{% endif %}
+									<input type="text" class="add-on input-date-picker" name="dateSchedule" id="dateSchedule" value="{{value}}">
 								</div>
 							</div>
 						</div>
