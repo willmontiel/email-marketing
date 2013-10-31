@@ -126,12 +126,12 @@ class MailController extends ControllerBase
 		
 		if ($mailExist) {
 			$form = new MailForm($mailExist);
-			$this->view->setVar('idMail', $idMail);
+			$this->view->setVar('mail', $mailExist);
 		}
 		else {
 			$mail = new Mail();
 			$form = new MailForm($mail);
-			$this->view->setVar('idMail', " ");
+			$this->view->setVar('mail', "");
 		}
 		
 		if ($this->request->isPost()) {
@@ -536,22 +536,26 @@ class MailController extends ControllerBase
 				$targetJson = json_decode($mail->target);
 				$direction = $this->request->getPost('direction');
 				
-				$byMail = $this->request->getPost('byMail');
-				$byOpen = $this->request->getPost('byOpen');
-				$byClick = $this->request->getPost('byClick');
-				$byExclude = $this->request->getPost('byExclude');
+				$byMail = $this->request->getPost('sendByMail');
+				$byOpen = $this->request->getPost('sendByOpen');
+				$byClick = $this->request->getPost('sendByClick');
+				$byExclude = $this->request->getPost('excludeContact');
 				
-//				$log->log("link: " . $clickLink . ", open: " . $openMail . ", date: " . $dateMail . ", exclude: " . $excludeContact);
-				if ($byMail !== null ) { 
-					$targetJson->filter2 = $byMail;
+				$log->log("mail: " . $byMail . ", open: " . $byOpen . ", click: " . $byClick . ", exclude: " . print_r($byExclude, true));
+				if ($byMail !== "" ) { 
+					$log->log("mail");
+					$targetJson->filter = $byMail;
 				}
 				else if ($byOpen !== null ) {
+					$log->log("open");
 					$targetJson->filter = $byOpen;
 				}
 				else if ($byClick !== null ) {
+					$log->log("click");
 					$targetJson->filter = $byClick;
 				}
 				else if ($byExclude !== null ) {
+					$log->log("exclude");
 					$targetJson->filter = $byExclude;
 				}
 				else {
@@ -593,22 +597,30 @@ class MailController extends ControllerBase
 				$schedule = $this->request->getPost('schedule');
 				$date = $this->request->getPost('dateSchedule');
 				
-				
-				$log->log("Schedule: " . $schedule . " date: " . $date);
-				
-
-//				$log->log("date: " . date($date));
 				if ($schedule == 'rightNow') {
-					
+					$mail->dateSchedule = time();
 				}
-				else if ($schedule == 'after') {
-					list($day, $month, $year, $hour, $minute) = split('[/ :]', $date);
+				else if ($schedule == 'after' || $date !== "") {
+					list($day, $month, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $date);
 					$dateTimestamp = mktime($hour, $minute, 0, $month, $day, $year);
-					$log->logger("Este es timestamp: " . $dateTimestamp);
-					$x = date($dateTimestamp);
-					$log->logger("Este es date: " . $x);
+					
+					if($dateTimestamp < time()) {
+						$this->flashSession->error("Ha ingresado una fecha del pasado, por favor verifique la información");
+						return $this->response->redirect('mail/schedule/' . $mail->idMail);
+					}
+					$mail->dateSchedule = $dateTimestamp;
+				}
+				else if ($schedule == null && $date == null) {
+					$this->flashSession->error("No ha ingresado una fecha de envío del correo, por favor verifique la información");
+					return $this->response->redirect('mail/schedule/' . $mail->idMail);
 				}
 				
+				$mail->wizardOption = 'schedule';
+				if (!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
 				
 				$this->routeRequest('schedule', $direction, $mail->idMail);
 			}
@@ -635,19 +647,6 @@ class MailController extends ControllerBase
 		else {
 			return $this->response->redirect('mail/source/' . $idMail);
 		}
-	}
-	
-	private function returnIds($contacts, $idMail) 
-	{
-		$idContacts = " VALUES";
-		foreach ($contacts as $id) {
-			if ($comma == false) {
-				$idContacts .= " (" . $idMail . "," . $id->idContact . ") ";
-			}
-			$idContacts .= ", (" . $idMail . "," . $id->idContact . ") ";
-			$comma = true;
-		}
-		return $idContacts;
 	}
 
 	protected function validateProcess($idMail)

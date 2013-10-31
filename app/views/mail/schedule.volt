@@ -20,7 +20,7 @@
 		$('#scheduleArea').datetimepicker({
 			language: 'en',
 			maskInput: true,
-			pickTime: false,
+			pickTime: true,
 			format: "dd/MM/yyyy hh:mm",
 			//pick12HourFormat: true,
 			pickSeconds: false,
@@ -57,16 +57,21 @@
 			{{partial('partials/wizard_partial')}}
 		</div>
 	</div>
+	<br />
 	<div class="row-fluid">
 		{{ flashSession.output()}}
 	</div>
-	<br />
+	
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="box offset3 span6">
 				<div class="box-header">
 					<div class="title">
-						Programar el envío
+						{% if mail.dateSchedule == null%}
+							Programar fecha de envío
+						{% else %}
+							<div class="pull-right">Fecha de envío programada: {{date('d/m/y h:i a', mail.dateSchedule)}}</div>
+						{% endif %}
 					</div>
 				</div>
 				<div class="box-content">
@@ -80,7 +85,11 @@
 							<div id="date" style="display: none;">
 								<label>Seleccione fecha de envío: </label>
 								<div id="scheduleArea" class="input-append date" class="span5">
-									<input type="text" class="add-on input-date-picker" name="dateSchedule" id="dateSchedule"/>
+									{% if mail.dateSchedule == null%}
+										<input type="text" class="add-on input-date-picker" name="dateSchedule" id="dateSchedule" />
+									{% else %}
+										<input type="text" class="add-on input-date-picker" name="dateSchedule" id="dateSchedule" value="{{date('d/m/y G:i', mail.dateSchedule)}}"/>
+									{% endif %}
 								</div>
 							</div>
 						</div>

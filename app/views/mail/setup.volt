@@ -30,24 +30,29 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span8 offset2">
-			<div id="breadcrumbs">
-				<div class="breadcrumb-button blue">
-					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
-					<span class="breadcrumb-arrow"><span></span></span>
+			{% if mail is empty %}
+				<div id="breadcrumbs">
+					<div class="breadcrumb-button blue">
+						<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
+						<span class="breadcrumb-arrow"><span></span></span>
+					</div>
+					<div class="breadcrumb-button">
+						<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
+						<span class="breadcrumb-arrow"><span></span></span>
+					</div>
+					<div class="breadcrumb-button">
+						<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
+						<span class="breadcrumb-arrow"><span></span></span>
+					</div>
+					<div class="breadcrumb-button">
+						<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
+						<span class="breadcrumb-arrow"><span></span></span>
+					</div>
 				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-				<div class="breadcrumb-button">
-					<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
-					<span class="breadcrumb-arrow"><span></span></span>
-				</div>
-			</div>
+			{% else %}
+				{{partial('partials/wizard_partial')}}
+			{% endif %}
+			
 		</div>
 	</div>
 	<br />
@@ -63,7 +68,7 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<form action="{{url('mail/setup')}}/{{idMail}}" method="post" class="fill-up">
+				<form action="{% if mail is empty %}{{url('mail/setup')}}{% else %}{{url('mail/setup')}}/{{mail.idMail}}{% endif %}" method="post" class="fill-up">
 					<div class="padded">
 						<label>*Nombre: </label>
 						{{ MailForm.render('name') }}

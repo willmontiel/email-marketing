@@ -139,4 +139,17 @@ class TargetObj
 		
 		return true;
 	}
+	
+	private function returnIds($contacts, $idMail) 
+	{
+		$idContacts = " VALUES";
+		foreach ($contacts as $id) {
+			if ($comma == false) {
+				$idContacts .= " (" . $idMail . "," . $id->idContact . ") ";
+			}
+			$idContacts .= ", (" . $idMail . "," . $id->idContact . ") ";
+			$comma = true;
+		}
+		return $idContacts;
+	}
 }

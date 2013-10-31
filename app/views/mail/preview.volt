@@ -104,19 +104,19 @@
 						<div class="box-section news">
 							<div class="news-content">
 								<div class="news-time">
-									<a href="{{url('mail/target')}}/{{mail.idMail}}">
+									<a href="{{url('mail/schedule')}}/{{mail.idMail}}">
 										<div class="relief">Editar</div>
 									</a>
 								</div>
 								<strong>Fecha y hora de envío:  </strong>
 								<div class="news-text">
-									Lunes, 28 de octubre de 2013, 5:07 pm
+									{{date('F j - Y,  g:i a', mail.dateSchedule)}}
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="box-footer padded">
-						<button class="btn btn-default" name="direction" value="prev"><i class="icon-circle-arrow-left"></i> Anterior</button>
+						<a href="{{url('mail/schedule')}}/{{mail.idMail}}" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</a>
 						<button class="btn btn-blue" name="direction" value="next">Confirmar <i class="icon-envelope"></i></button>
 					</div>
 				</form>
