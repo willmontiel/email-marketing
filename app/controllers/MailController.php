@@ -610,7 +610,7 @@ class MailController extends ControllerBase
 					$dateTimestamp = mktime($hour, $minute, 0, $month, $day, $year);
 					
 					if($dateTimestamp < time()) {
-						$this->flashSession->error("Ha ingresado una fecha que ya ha pasado, por favor verifique la información");
+						$this->flashSession->error("la siguiente fecha: <span style='color: #fff7f8;'>" . $date . " </span> que ha ingresado ya ha pasado, por favor verifique la información");
 						return false;
 					}
 					$mail->dateSchedule = $dateTimestamp;

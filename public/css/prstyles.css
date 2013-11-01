@@ -187,3 +187,7 @@ a.inactive {
 	text-align: left !important;
 	background-color: white !important;
 }
+
+/*#breadcrumbs .breadcrumb-button:last-child .breadcrumb-label {
+	padding-right: 36px !important;
+}*/
