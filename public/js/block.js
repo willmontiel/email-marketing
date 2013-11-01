@@ -48,15 +48,13 @@ Block.prototype.deleteBlock = function() {
 Block.prototype.setHtmlData = function(htmlData) {
 	
 	this.htmlData = htmlData;
-	
-	//newRedactor();
+
 };
 
 Block.prototype.persist = function() {
 	
 	var obj = {
 			type: this.typeBlock,
-			//htmlData: this.htmlData.html()
 		};
 	
 	if(this.typeBlock.search('text') > 0 && this.typeBlock.search('image') > 0) {
@@ -70,8 +68,9 @@ Block.prototype.persist = function() {
 		obj.height = this.height;
 		obj.width = this.width;
 		obj.displayer = this.displayer;
+		obj.align = this.align;
 	}
-	
+
 	return obj;
 };
 
@@ -81,6 +80,7 @@ Block.prototype.unpersist = function(obj, dz) {
 		this.displayer = obj.displayer;
 		this.height = obj.height;
 		this.width = obj.width;
+		this.align = obj.align;
 	}
 	
 	this.typeBlock = obj.type;
@@ -91,7 +91,7 @@ Block.prototype.unpersist = function(obj, dz) {
 		var contentText = $('<div class="content-text"></div>');
 		contentText = contentText.html(obj.contentData.text);
 		
-		var contentImage = $('<div class="content-image"></div>');
+		var contentImage = $('<div class="content-image ' + obj.align + '"></div>');
 		contentImage = contentImage.html(obj.contentData.image);
 		
 		var table = $('<table><tr></tr><table/>');
@@ -119,12 +119,12 @@ Block.prototype.unpersist = function(obj, dz) {
 	else if(this.typeBlock.search('text') > 0) {
 		var contentData = $('<div/>');
 		contentData = contentData.html('<div class="content-text full-content">' + obj.contentData + '</div>');
-		
+
 		this.contentData = contentData.children();
 	}
 	else if(this.typeBlock.search('image') > 0){
 		var contentData = $('<div/>');
-		contentData = contentData.html('<div class="content-image full-content">' + obj.contentData + '</div>');
+		contentData = contentData.html('<div class="content-image full-content ' + obj.align + '">' + obj.contentData + '</div>');
 		
 		this.contentData = contentData.children();
 	}
@@ -142,11 +142,6 @@ Block.prototype.unpersist = function(obj, dz) {
 							<div class=\"remove-tool icon-trash tool\"></div>\
 						</div>\
 						<div class=\"content clearfix\"></div></div>").children();
-	
-//	if(this.typeBlock.search('image') > 0) {
-//		
-//		this.htmlData.find('.tools').append('<div class="edit-image-tool icon-picture tool"></div>');
-//	}
 	
 	this.htmlData.find('.content').append(contentData.children());
 	
@@ -172,6 +167,11 @@ Block.prototype.setSizeImage = function(height, width) {
 	
 	this.height = height;
 	this.width = width;
+};
+
+Block.prototype.setAlignImgBlock = function(align) {
+	
+	this.align = align;
 };
 
 Block.prototype.changeAttrImgBlock = function(attr, value) {

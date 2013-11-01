@@ -88,7 +88,7 @@
 								<div class="remove-tool icon-trash tool"></div>
 							</div>
 							<div class="content clearfix">
-								<div class="content-image full-content">
+								<div class="content-image full-content pull-left">
 									<img class="media-object" src="{{url('images/image')}}" alt="64x64" />
 								</div>
 							</div>
@@ -113,7 +113,7 @@
 											</div>
 										</td>
 										<td>
-											<div class="content-image">
+											<div class="content-image pull-left">
 												<img class="media-object" src="{{url('images/image')}}" alt="64x64" />
 											</div>
 										</td>
@@ -136,7 +136,7 @@
 								<table>
 									<tr>
 										<td>
-											<div class="content-image">
+											<div class="content-image pull-left">
 												<img class="media-object" src="{{url('images/image')}}" alt="64x64" />
 											</div>
 										</td>

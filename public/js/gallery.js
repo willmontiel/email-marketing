@@ -80,7 +80,7 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 			$(img).on('load', function() {
 
 				if(t.block.hasOwnProperty('displayer') && t.block.displayer.imagesrc === newsrc) {
-					
+				
 					var realHeight = t.block.height;
 					
 					var realWidth = t.block.width;
@@ -100,6 +100,8 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 					var heightDisplayer = 130*img.naturalHeight/img.naturalWidth;
 					
 					t.block.assignDisplayer({imagesrc: newsrc, percent: 100, width: widthDisplayer, height: heightDisplayer});
+					
+					t.block.setAlignImgBlock("pull-left");
 				}
 				
 				t.block.setSizeImage(realHeight, realWidth);
@@ -178,6 +180,7 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('.chose_align').on('click', function() {
 		t.block.addClassContentImgBlock("pull-" + $(this).attr('data-dropdown'));
+		t.block.setAlignImgBlock("pull-" + $(this).attr('data-dropdown'));
 	});
 };
 
