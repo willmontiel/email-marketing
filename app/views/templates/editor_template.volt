@@ -47,7 +47,6 @@
 
 						
 						<div class="nav-collapse nav-collapse-top collapse">
-
 							<ul class="nav full pull-right">
 								<li class="dropdown user-avatar">
 									<!-- the dropdown has a custom user-avatar class, this is the small avatar with the badge -->
@@ -101,29 +100,16 @@
 			
 
 		<!-- sidebar -->
-		<div class="sidebar-background">
-			<div class="primary-sidebar-background"></div>
+		<div class="sidebar-background sidebar-background-editor">
+			<div class="primary-sidebar-background primary-sidebar-background-editor"></div>
 		</div>
 		<!-- /sidebar -->
 		<div class="primary-sidebar">
 			<!-- Main nav -->
-			{{ partial("partials/menu_partial") }}
+			{{ partial("partials/editormenu_partial") }}
 		</div>
 		<!-- content -->
-		<div class="main-content">
-			<div class="container-fluid">
-				<div class="row-fluid">
-					<div class="area-top clearfix">
-						<div class="pull-left header">
-							<h3 class="title">
-								{% block sectiontitle %}<i class="icon-dashboard"></i>{% endblock %}
-							</h3>
-							<h5>{% block sectionsubtitle %}{% endblock %}</h5>
-						</div>	
-						{% block sectionContactLimit %}{% endblock %}
-					</div>
-				</div>
-			</div>
+		<div class="main-content main-content-editor">
 			<div class="container-fluid padded">
 				<div class="row-fluid">
 					<!-- Inicio de contenido -->
