@@ -9,18 +9,19 @@
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
 	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
+	{{ javascript_include('javascripts/colorpicker/js/bootstrap-colorpicker.js')}}
 	{{ javascript_include('redactor/plugins/clips.js') }}
 	{{ javascript_include('redactor/plugins/fontcolor.js') }}
 	{{ javascript_include('redactor/plugins/fontfamily.js') }}
 	{{ javascript_include('redactor/plugins/fontsize.js') }}
 	{{ stylesheet_link('css/styles.css') }}
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
+	{{ stylesheet_link('javascripts/colorpicker/css/colorpicker.css') }}
 
 	{{ javascript_include('js/gallery.js') }}
 
 	<script>
-		var config = {sendUrl : "{{url('mail/editor')}}/{{idMail}}",
-			uploadUrl: "{{url('asset/show')}}"};
+		var config = {sendUrl : "{{url('mail/editor')}}/{{idMail}}"};
 		
 		var mediaGallery = [
 		{%for asset in assets%}
@@ -34,17 +35,15 @@
 	{{ javascript_include('js/layout.js') }}
 	{{ javascript_include('js/editor.js') }}
 
-
-	
 {% endblock %}
 {% block content %}
 	<br /><br />
 <div class="row-fluid">
-	<div class="span7 offset1">
+	<div class="span7">
 		<div id="edit-area" class="module-cont clearfix">
 		</div>
 	</div>
-	<div class="span4">
+	<div class="span5">
 		<div id="toolbar">
 			<ul class="nav nav-tabs">
 				<li id="tablayouts" class="active">
@@ -55,6 +54,9 @@
 				</li>
 				<li id="tabimages" class="">
 					<a href="#images" data-toggle="tab">Imagenes</a>
+				</li>
+				<li id="tabstyles" class="">
+					<a href="#styles" data-toggle="tab">Estilos</a>
 				</li>
 			</ul>
 			<div class="tab-content">
@@ -69,7 +71,7 @@
 								<div class="remove-tool icon-trash tool"></div>
 							</div>
 							<div class="content">
-								<div class="content-text">
+								<div class="content-text full-content">
 									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
 								</div>
 							</div>
@@ -82,12 +84,12 @@
 						<div class="module module-image-only">
 							<div class="tools">
 								<div class="handle-tool icon-move tool"></div>
-								<div class="edit-image-tool icon-picture tool"></div>
+								{#<div class="edit-image-tool icon-picture tool"></div>#}
 								<div class="remove-tool icon-trash tool"></div>
 							</div>
-							<div class="content">
-								<div class="content-image">
-									<a href="#" class="edit-image-tool"><img class="media-object" src="{{url('images/image')}}" alt="64x64" /></a>
+							<div class="content clearfix">
+								<div class="content-image full-content">
+									<img class="media-object" src="{{url('images/image')}}" alt="64x64" />
 								</div>
 							</div>
 						</div>
@@ -99,16 +101,24 @@
 						<div class="module module-text-image">
 							<div class="tools">
 								<div class="handle-tool icon-move tool"></div>
-								<div class="edit-image-tool icon-picture tool"></div>
+								{#<div class="edit-image-tool icon-picture tool"></div>#}
 								<div class="remove-tool icon-trash tool"></div>
 							</div>
 							<div class="content clearfix">
-								<div class="content-image pull-right">
-									<a href="#" class="edit-image-tool"><img class="media-object" src="{{url('images/image')}}" alt="64x64" /></a>
-								</div>
-								<div class="content-text">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-								</div>
+								<table>
+									<tr>
+										<td>
+											<div class="content-text">
+												<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											</div>
+										</td>
+										<td>
+											<div class="content-image">
+												<img class="media-object" src="{{url('images/image')}}" alt="64x64" />
+											</div>
+										</td>
+									</tr>
+								</table>
 							</div>
 						</div>
 						<div class="module-information">
@@ -119,16 +129,26 @@
 						<div class="module module-image-text">
 							<div class="tools">
 								<div class="handle-tool icon-move tool"></div>
-								<div class="edit-image-tool icon-picture tool"></div>
+								{#<div class="edit-image-tool icon-picture tool"></div>#}
 								<div class="remove-tool icon-trash tool"></div>
 							</div>
 							<div class="content clearfix">
-								<div class="content-image pull-left">
-									<a href="#" class="edit-image-tool"><img class="media-object" src="{{url('images/image')}}" alt="64x64" /></a>
-								</div>
-								<div class="content-text">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-								</div>
+								<table>
+									<tr>
+										<td>
+											<div class="content-image">
+												<img class="media-object" src="{{url('images/image')}}" alt="64x64" />
+											</div>
+										</td>
+										<td>
+											<div class="content-text">
+												<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											</div>
+										</td>
+									</tr>
+								</table>
+								
+								
 							</div>
 						</div>
 						<div class="module-information">
@@ -149,9 +169,23 @@
 							<p>Separador</p>
 						</div>
 					</div>
+					<div class="module-container">
+						<div class="module module-social-share">
+							<div class="tools">
+								<div class="handle-tool icon-move tool"></div>
+								<div class="remove-tool icon-trash tool"></div>
+							</div>
+							<div class="content">
+								
+							</div>
+						</div>
+						<div class="module-information">
+							<p>Redes Sociales</p>
+						</div>
+					</div>
 				</div>
 				<div class="tab-pane" id="images">
-					<div id="oneimage" class="well">
+					<div id="oneimage" class="well clearfix">
 						
 						<table>
 							<tr>
@@ -167,6 +201,22 @@
 						<div id="imageslider">
 						
 						</div>
+						<div id="accept_cancel_image" class="pull-right">
+							<a href="#" class="btn btn-default" id="accept_change">Aplicar</a>
+							<a href="#" class="btn btn-default" id="cancel_change">Cancelar</a>
+						</div>
+						<div id="align_image" class="pull-left">
+							<div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+								  Alinear <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li class="chose_align" data-dropdown="left"><a href="#">Izquierda</a></li>
+									<li class="chose_align" data-dropdown="center"><a href="#">Centro</a></li>
+									<li class="chose_align" data-dropdown="right"><a href="#">Derecha</a></li>
+								</ul>
+							</div>
+						</div>
 					</div>
 					<div id="gallery">
 						
@@ -181,7 +231,13 @@
 						</form>
 						<button id="close-modal-upload"class="btn btn-default" data-dismiss="modal">Regresar</button>
 					</div>
-				</div>	
+				</div>
+					
+				<div class="tab-pane" id="styles">
+					<div class="panel-group" id="accordion">
+						
+					</div>
+				</div>
 			</div>	
 		</div>
 	</div>

@@ -63,6 +63,18 @@
 		else return val;
 
 	};
+	
+	$.fn.destroyEditor = function()
+	{
+		this.each(function()
+		{
+			if (typeof $(this).data('redactor') != 'undefined')
+			{
+				$(this).data('redactor').destroy();
+				$(this).removeData('redactor');
+			}
+		});
+	};
 
 	// Initialization
 	function Redactor(el, options)

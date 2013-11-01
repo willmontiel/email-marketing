@@ -95,9 +95,9 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 					
 					var realWidth = img.naturalWidth;
 					
-					var widthDisplayer = 90;
+					var widthDisplayer = 130;
 					
-					var heightDisplayer = 90*img.naturalHeight/img.naturalWidth;
+					var heightDisplayer = 130*img.naturalHeight/img.naturalWidth;
 					
 					t.block.assignDisplayer({imagesrc: newsrc, percent: 100, width: widthDisplayer, height: heightDisplayer});
 				}
@@ -119,8 +119,8 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 				t.createSlider();
 				
 				$('#imagedisplayer').append(img);
-			
-				$('#imagedisplayer').css('height', Math.round((90*img.naturalHeight/img.naturalWidth)*3) + 'px');
+				
+				$('#imagedisplayer').css('height', Math.round((130*img.naturalHeight/img.naturalWidth)*2) + 'px');
 			});
 		}
 	}
@@ -144,6 +144,9 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('#imageslider').append(slr);
 	
+	$('#accept_cancel_image').show();
+	$('#align_image').show();
+	
 	var value = 100;
 
 	if(t.block.displayer.hasOwnProperty('percent')) {
@@ -151,7 +154,7 @@ MediaDisplayer.prototype.createSlider = function() {
 		value = t.block.displayer.percent;
 	}
 
-	$('#sliderMedia').slider({min: 10, max: 300, value: value, step: 10})
+	$('#sliderMedia').slider({min: 10, max: 200, value: value, step: 10})
 		.on('slide', function(ev){
 		
 		t.block.displayer.percent = ev.value;
@@ -159,8 +162,8 @@ MediaDisplayer.prototype.createSlider = function() {
 		var widthNatural = Math.round(t.image.naturalWidth*(ev.value/100));
 		var heightNatural = Math.round(t.image.naturalHeight*(ev.value/100));
 		
-		t.image.width = 90*(ev.value/100);
-		t.image.height = 90*(ev.value/100);
+		t.image.width = 130*(ev.value/100);
+		t.image.height = 130*(ev.value/100);
 		
 		t.block.displayer.width = t.image.width;
 		t.block.displayer.height = t.image.height;
@@ -171,7 +174,11 @@ MediaDisplayer.prototype.createSlider = function() {
 
 		t.block.changeAttrImgBlock('width', widthNatural);
 		t.block.changeAttrImgBlock('height', heightNatural);
-	});	
+	});
+	
+	$('.chose_align').on('click', function() {
+		t.block.addClassContentImgBlock("pull-" + $(this).attr('data-dropdown'));
+	});
 };
 
 MediaDisplayer.prototype.valuesHW = function(height, width) {

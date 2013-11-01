@@ -1,5 +1,6 @@
-function DropzoneArea (name, parent, width) {
+function DropzoneArea (name, color, parent, width) {
 	this.name = name;
+	this.color = color;
 	this.parent = parent;
 	this.width = width;
 	this.content = [];
@@ -9,7 +10,7 @@ function DropzoneArea (name, parent, width) {
 
 DropzoneArea.prototype.createHtmlZone = function() {
 	
-	var htmltext = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"'>\n\
+	var htmltext = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"' style='background-color:" + this.color + ";'>\n\
 					<div class='info-guide'>\n\
 						<span class='label label-info'>" + this.name + "</span>\n\
 					</div>\n\
@@ -48,6 +49,7 @@ DropzoneArea.prototype.createBlock = function(clase, content, html) {
 DropzoneArea.prototype.persist = function() {
 	var obj = {
 		name: this.name,
+		color: this.color,
 		width: this.width,
 		parent: this.parent,
 		content: []
@@ -62,6 +64,7 @@ DropzoneArea.prototype.persist = function() {
 DropzoneArea.prototype.unpersist = function(obj) {
 	
 	this.name = obj.name;
+	this.color = obj.color;
 	this.parent = obj.parent;
 	
 	if(this.width === undefined) {
@@ -83,6 +86,15 @@ DropzoneArea.prototype.unpersist = function(obj) {
 	return this.$obj;
 };
 
+DropzoneArea.prototype.zoneColor = function() {
+	var t = this;
+	
+	$('#color-' + this.name).colorpicker().on('changeColor', function(ev){
+		t.$obj.css('background-color', ev.color.toHex());
+		t.color = ev.color.toHex();
+	});
+};
+
 DropzoneArea.prototype.ondrop = function() {
 	var t = this;
 	
@@ -98,8 +110,15 @@ DropzoneArea.prototype.ondrop = function() {
 			parent.iframeResize();
 
 			if (object.item.data('smobj') == undefined) {
-
-				var newobj = t.createBlock(object.item.attr('class'), $(object.item).children('.content'), object.item);
+				
+				if(object.item.attr('class').search('text') > 0 && object.item.attr('class').search('image') > 0){
+					var content = {image: $(object.item).find('.content-image'), text: $(object.item).find('.content-text')};
+				}
+				else {
+					var content = $(object.item).find('.full-content');
+				}
+				
+				var newobj = t.createBlock(object.item.attr('class'), content, object.item);
 				
 				newobj.setMediaDisplayer();
 				
@@ -124,7 +143,7 @@ DropzoneArea.prototype.ondrop = function() {
 			
 			objblk.parentBlock.content.splice(object.item.index() - 1, 0, objblk);
 			
-			$('#edit-area .drop-zone .info-guide').hide();
+			$('#edit-area .drop-zone .info-guide').css("display", "");
 			
 			$('#edit-area .sub-mod-cont').removeClass('show-zones-draggable');
 		},
@@ -134,7 +153,7 @@ DropzoneArea.prototype.ondrop = function() {
 			if (object.sender != object.item) {
 				
 				var newobj = new Block();
-
+				
 				newobj.unpersist($(object.sender).data('smobj').objSer, t);
 				
 				newobj.setHtmlData(object.item);

@@ -17,6 +17,8 @@ Editor.prototype.otherLayout = function() {
 
 		t.layout = newLayout;
 		
+		t.colorLayout();
+		
 		if(jQuery.isEmptyObject(oldLayout)) {
 			
 			t.newDropZones();
@@ -47,11 +49,14 @@ Editor.prototype.objectExists = function(objMail) {
 	
 	if(objMail != null) {
 		
-		editor.layout = objMail.layout;
-		editor.dz = objMail.dz;
-
-		editor.changeLayout();
-
+		this.layout = objMail.layout;
+		this.dz = objMail.dz;
+		this.editorColor = objMail.editorColor;
+		
+		this.colorLayout();
+		
+		this.changeLayout();
+		
 		NoMediaDisplayer();
 		
 		$('.drop-zone').sortable({ 
@@ -84,15 +89,16 @@ Editor.prototype.changeLayout = function() {
 		}
 		else {
 
-			var newdz = new DropzoneArea(dzname,'#edit-area', this.layout.zones[z].width);;
+			var newdz = new DropzoneArea(dzname, 'rgb(255,255,255)','#edit-area', this.layout.zones[z].width);;
 			
 		}
 
 		objdz[newdz.name] = newdz;
 	}
 	
-	this.createDZ(objdz);		
+	this.createDZ(objdz);
 	
+	newRedactor();
 };
 
 Editor.prototype.serializeDZ = function() {
@@ -109,8 +115,33 @@ Editor.prototype.serializeDZ = function() {
 	
 };
 
-Editor.prototype.createDZ = function(objdz) {
+Editor.prototype.colorLayout = function() {
 	
+	$('#accordion').empty();
+	
+	$('#edit-area').css('background-color', this.editorColor);
+	
+	this.createZoneStyle({name: 'pagina'}, this.zoneHtmlColor('pagina', this.editorColor));
+	
+	var t = this;
+	
+	$('#color-pagina').colorpicker().on('changeColor', function(ev){
+		$('#edit-area').css('background-color', ev.color.toHex());
+		t.editorColor = ev.color.toHex();
+	});
+};
+
+Editor.prototype.zoneHtmlColor = function(name, color) {
+	
+	var text = "<div class='input-append color' data-color='" + color + "' data-color-format='hex' id='color-" + name + "'>\n\
+					<input type='text' class='span8' value='' placeholder=" + color + ">\n\
+					<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>\n\
+				</div>";
+	return text;
+};
+
+Editor.prototype.createDZ = function(objdz) {
+		
 	for (var key in objdz) {
 		
 		if(objdz[key] instanceof DropzoneArea) {
@@ -118,10 +149,32 @@ Editor.prototype.createDZ = function(objdz) {
 			objdz[key].createHtmlZone();
 			objdz[key].insertBlocks();
 			objdz[key].ondrop();
+			this.createZoneStyle(objdz[key], this.zoneHtmlColor(objdz[key].name, objdz[key].color));
+			objdz[key].zoneColor();
 		}
 	}
 	
 	this.dz = objdz;
+};
+
+Editor.prototype.createZoneStyle = function(objdz, bodytext) {
+	
+	var text = "<div class='panel panel-default'>\
+					<div class='panel-heading'>\n\
+						<h4 class='panel-title'>\n\
+						  <a data-toggle='collapse' data-parent='#accordion' href='#collapse" + objdz.name + "'>\n\
+							" + objdz.name.charAt(0).toUpperCase() + objdz.name.substr(1).toLowerCase() + "\n\
+						  </a>\n\
+						</h4>\n\
+					  </div>\n\
+					  <div id='collapse" + objdz.name + "' class='panel-collapse collapse'>\n\
+						<div class='panel-body'>\n\
+						" + bodytext + "</div>\n\
+					  </div>\n\
+					</div>\n\
+				</div>";
+	
+	$('#accordion').append(text);
 };
 
 Editor.prototype.deleteZones = function() {
@@ -139,11 +192,14 @@ Editor.prototype.newDropZones = function() {
 	
 	for(var z = 0; z < this.layout.zones.length; z++) {
 		
-		var dz = new DropzoneArea(this.layout.zones[z].name,'#edit-area', this.layout.zones[z].width);;
+		var dz = new DropzoneArea(this.layout.zones[z].name, 'rgb(255,255,255)', '#edit-area', this.layout.zones[z].width);;
 		
 		dz.createHtmlZone();
 		
 		dz.ondrop();
+		
+		this.createZoneStyle(dz, this.zoneHtmlColor(dz.name, dz.color));
+		dz.zoneColor();
 		
 		this.dz[dz.name] = dz;
 		
@@ -170,6 +226,7 @@ Editor.prototype.deleteZoneByTool = function(name, objblk) {
 function layoutChosen() {
 	$('#tabcomponents').show();
 	$('#tabimages').show();
+	$('#tabstyles').show();
 
 	$('#layouts').removeClass('active');
 	$('#tablayouts').removeClass('active');
@@ -191,14 +248,18 @@ $(function() {
 		mediaGallery[l].mediaSelected();
 	}
 	
-	editor.objectExists(parent.objMail)
+	editor.objectExists(parent.objMail);
 	
 	editor.otherLayout();
+	
+	$('#edit-area, #toolbar').css('height', '600px');
 	
 	$('#toolbar .module').draggable({
 		connectToSortable: ".drop-zone",
 		helper: "clone"
 	});
+	
+	$('img').on('dragstart', function(event) { event.preventDefault(); });
 	
 	$('.module-cont').on('click', '.module > .tools > .remove-tool', function (event) {
 		
@@ -223,7 +284,7 @@ $(function() {
 			$('#edit-area .sub-mod-cont').addClass('show-zones-draggable');
 		},
 		stop: function() {
-			$('#edit-area .drop-zone .info-guide').hide();
+			$('#edit-area .drop-zone .info-guide').css("display", "");
 
 			$('#edit-area .sub-mod-cont').removeClass('show-zones-draggable');
 		}
@@ -242,30 +303,36 @@ $(function() {
 		});
 	});
 	
-	$('.module-cont').on('click', '.module > .tools > .edit-image-tool', function() {
-		
-		$('#components').removeClass('active');
-		$('#tabcomponents').removeClass('active');
-		
-		$('#layouts').removeClass('active');
-		$('#tablayouts').removeClass('active');
-		
-		$('#images').addClass('active');
-		$('#tabimages').addClass('active');
-		
-		var content = $(this).parents('.module');
-		
-		content.data('smobj').createImage();
-		
-	});
+//	$('.module-cont').on('click', '.module > .tools > .edit-image-tool', function() {
+//		
+//		$('#components').removeClass('active');
+//		$('#tabcomponents').removeClass('active');
+//		
+//		$('#layouts').removeClass('active');
+//		$('#tablayouts').removeClass('active');
+//		
+//		$('#styles').removeClass('active');
+//		$('#tabstyles').removeClass('active');
+//		
+//		$('#images').addClass('active');
+//		$('#tabimages').addClass('active');
+//		
+//		var content = $(this).parents('.module');
+//		
+//		content.data('smobj').createImage();
+//		
+//	});
 	
-	$('.module-cont').on('click', '.module  .content-image > .edit-image-tool', function() {
+	$('.module-cont').on('click', '.content-image > .media-object', function() {
 		
 		$('#components').removeClass('active');
 		$('#tabcomponents').removeClass('active');
 		
 		$('#layouts').removeClass('active');
 		$('#tablayouts').removeClass('active');
+		
+		$('#styles').removeClass('active');
+		$('#tabstyles').removeClass('active');
 		
 		$('#images').addClass('active');
 		$('#tabimages').addClass('active');
