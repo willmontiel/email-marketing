@@ -230,6 +230,9 @@ try {
 		$compiler->addFunction('smart_wizard', function ($resolvedArgs, $exprArgs){
 						return 'SmartWizard::getWizard(' . $resolvedArgs . ')';
 					});
+		$compiler->addFunction('select_target', function ($resolvedArgs, $exprArgs){
+						return 'SmartSelect::getSelectTarget(' . $resolvedArgs . ')';
+					});
 					
         $volt->setOptions(array(
             "compileAlways" => true,

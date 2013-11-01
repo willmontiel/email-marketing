@@ -74,7 +74,7 @@
 			<div class="box-content">
 				<form action="{{url('mail/target')}}/{{mail.idMail}}" method="post">
 					<div class="padded">
-						{% if mail.targetName !== ''%}
+						{% if mail.targetName !== '' AND mail.target !== ''%}
 							{{partial('partials/targetselect_partial')}}
 						{% else %}
 							<input type="radio" name="radios" class="icheck" value="0" id="dbRadio" >

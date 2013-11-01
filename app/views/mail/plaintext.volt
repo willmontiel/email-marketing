@@ -48,7 +48,7 @@
 					<div class="form-actions">
 						<button class="btn btn-default" value="prev" name="direction"><i class="icon-circle-arrow-left"></i> Anterior</button>
 						<button class="btn btn-blue" value="next" name="direction">Siguiente <i class="icon-circle-arrow-right"></i></button>
-						<button class="btn btn-black" value="plaintext" name="direction">Generar desde contenido html</button>
+						<button class="btn btn-black" value="plaintext" name="direction">Generar desde contenido html <i class="icon-refresh"></i></button>
 					</div>
 				</form>
 			</div>

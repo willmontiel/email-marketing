@@ -188,6 +188,6 @@ a.inactive {
 	background-color: white !important;
 }
 
-/*#breadcrumbs .breadcrumb-button:last-child .breadcrumb-label {
-	padding-right: 36px !important;
+/*#breadcrumbs {
+	width: 0% !important;
 }*/

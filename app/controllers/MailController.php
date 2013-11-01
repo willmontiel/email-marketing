@@ -299,7 +299,9 @@ class MailController extends ControllerBase
 			$this->view->setVar('mail', $mail);
 			
 			if ($this->request->isPost()) {
-				$mailContent = new Mailcontent();
+				if ($mailContentExist) {
+					$mailContent = $mailContentExist;
+				}
 				
 				if ($mail->wizardOption == 'source' || $mail->wizardOption == 'setup') {
 					$wizardOption = 'source';
@@ -310,6 +312,7 @@ class MailController extends ControllerBase
 				
 				$content = $this->request->getPost("content");
 				$direction = $this->request->getPost("direction");
+				$plainText = null;
 				
 				$buscar = array("<script" , "</script>");
 				$reemplazar = array("<!-- ", " -->");
@@ -434,15 +437,25 @@ class MailController extends ControllerBase
 			if ($this->request->isPost()) {
 				
 				$direction = $this->request->getPost('direction');
-				$mailContent->plainText = $this->request->getPost('plaintext');
 				
-				if (!$mailContent->save()) {
-					foreach ($mailContent->getMessages() as $msg) {
-						$this->flashSession->error($msg);
-					}
-				}
-				else {
-					$this->routeRequest('plaintext', $direction, $mail->idMail);
+				switch ($direction) {
+					case 'plaintext':
+						$text = new PlainText();
+						$plainText = $text->getPlainText($mailContent->content);
+						$this->view->setVar('plaintext', $plainText);
+						break;
+					
+					default :
+						$mailContent->plainText = $this->request->getPost('plaintext');
+						if (!$mailContent->save()) {
+							foreach ($mailContent->getMessages() as $msg) {
+								$this->flashSession->error($msg);
+							}
+						}
+						else {
+							$this->routeRequest('plaintext', $direction, $mail->idMail);
+						}
+						break;;
 				}
 			}
 		}
@@ -546,22 +559,34 @@ class MailController extends ControllerBase
 				$byClick = $this->request->getPost('sendByClick');
 				$byExclude = $this->request->getPost('excludeContact');
 				
-				$log->log("mail: " . $byMail . ", open: " . $byOpen . ", click: " . $byClick . ", exclude: " . print_r($byExclude, true));
+//				$log->log("mail: " . $byMail . ", open: " . $byOpen . ", click: " . $byClick . ", exclude: " . print_r($byExclude, true));
 				if ($byMail !== "" ) { 
-					$log->log("mail");
-					$targetJson->filter = $byMail;
+					$filter = array(
+						'type' => 'mail',
+						'criteria' => $byMail
+					);
+					$targetJson->filter = $filter;
 				}
 				else if ($byOpen !== null ) {
-					$log->log("open");
-					$targetJson->filter = $byOpen;
+					$filter = array(
+						'type' => 'open',
+						'criteria' => $byOpen
+					);
+					$targetJson->filter = $filter;
 				}
 				else if ($byClick !== null ) {
-					$log->log("click");
-					$targetJson->filter = $byClick;
+					$filter = array(
+						'type' => 'click',
+						'criteria' => $byOpen
+					);
+					$targetJson->filter = $filter;
 				}
 				else if ($byExclude !== null ) {
-					$log->log("exclude");
-					$targetJson->filter = $byExclude;
+					$filter = array(
+						'type' => 'exclude',
+						'criteria' => $byOpen
+					);
+					$targetJson->filter = $filter;
 				}
 				else {
 					$this->flashSession->error('Debe seleccionar al menos un filtro, por favor verifique la información');
@@ -646,7 +671,6 @@ class MailController extends ControllerBase
 			$this->view->setVar('mail', $mail);
 			
 			if ($this->request->isPost()) {
-				
 			}
 		}
 		else {
@@ -724,5 +748,10 @@ class MailController extends ControllerBase
 		else if ($direction == 'filter') {
 			return $this->response->redirect('mail/filter/' . $idMail);
 		}
+	}
+	
+	public function templateAction()
+	{
+		
 	}
 }

@@ -78,7 +78,7 @@
 							<input type="radio" name="filter" id="byMail" class="icheck" value="byMail" />
 							<label for="byMail">Enviar a contactos que tenga el siguiente correo: </label><br />
 							<div id="mail" style="display: none;">
-								<input type="email" name="sendByMail" id="sendMail" />
+								<input type="email" name="sendByMail" id="sendMail" >
 							</div>
 							
 							<input type="radio" name="filter" id="byOpen" class="icheck" value="byOpen" />

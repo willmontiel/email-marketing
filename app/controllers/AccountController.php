@@ -189,8 +189,10 @@ class AccountController extends ControllerBase
  			}
 			$this->view->editFormAccount = $editform;
         } 
-		$this->flashSession->error('La cuenta no existe, por favor verifique la información');
-		return $this->response->redirect("account");
+		else {
+			$this->flashSession->error('La cuenta no existe, por favor verifique la información');
+			return $this->response->redirect("account");
+		}
     }
 	
 	/*

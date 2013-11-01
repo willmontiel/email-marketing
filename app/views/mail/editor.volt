@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/editor_template.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	{{ javascript_include('redactor/redactor.js')}}
@@ -12,7 +12,6 @@
 	var objMail = {{objMail}};
 </script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block content %}
 	<div class="row-fluid">
 		<div class="span8 offset2">

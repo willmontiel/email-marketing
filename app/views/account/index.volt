@@ -78,8 +78,8 @@
 											<div class="btn-group">
 												<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 												<ul class="dropdown-menu">
-													<li><a href="{{ url('account/show/') }}{{item.idAccount}}"><i class="icon-search"></i> Ver detalles</a></li>
-													<li><a href="{{ url('account/edit/') }}{{item.idAccount}}"><i class="icon-pencil"></i> Editar</a></li>
+													<li><a href="{{ url('account/show') }}/{{item.idAccount}}"><i class="icon-search"></i> Ver detalles</a></li>
+													<li><a href="{{ url('account/edit') }}/{{item.idAccount}}"><i class="icon-pencil"></i> Editar</a></li>
 												</ul>
 											</div>
 										</div>
