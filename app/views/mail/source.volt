@@ -69,7 +69,7 @@
 					</div>
 
 					<div class="span3 action-nav-button">
-						<a href="{{url('mail/editor/')}}{{idMail}}" title="Messages">
+						<a href="{{url('mail/template/')}}{{idMail}}" title="Messages">
 							<i class="icon-magic"></i>
 							<span>Plantillas prediseñadas</span>
 						</a>

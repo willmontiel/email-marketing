@@ -203,8 +203,8 @@ class MailController extends ControllerBase
 			return $this->response->redirect("mail/setup/" .$idMail);
 		}
 	}
-
-	public function editorAction($idMail = null) 
+	
+	public function editorAction($idMail = null, $idTemplate = null) 
 	{
 		$log = $this->logger;
 		
@@ -213,16 +213,27 @@ class MailController extends ControllerBase
 		if ($mail) {
 			$this->view->setVar('mail', $mail);
 			
-			$objMail = Mailcontent::findFirst(array(
-				"conditions" => "idMail = ?1",
-				"bind" => array(1 => $mail->idMail)
+			$objTemplate = Template::findFirst(array(
+				"conditions" => "idTemplate = ?1",
+				"bind" => array(1 => $idTemplate)
 			));
-			
-			if ($objMail) {
-				$this->view->setVar('objMail', $objMail->content);
+		
+			if ($objTemplate) {
+				$log->log('Este es template: ' . print_r($objTemplate->content, true));
+				$this->view->setVar('objMail', $objTemplate->content);
 			}
-			else  {
-				$this->view->setVar('objMail', 'null');
+			else {
+				$objMail = Mailcontent::findFirst(array(
+					"conditions" => "idMail = ?1",
+					"bind" => array(1 => $mail->idMail)
+				));
+
+				if ($objMail) {
+					$this->view->setVar('objMail', $objMail->content);
+				}
+				else  {
+					$this->view->setVar('objMail', 'null');
+			}
 			}
 			
 			if ($this->request->isPost()) {
@@ -274,6 +285,30 @@ class MailController extends ControllerBase
 			$this->view->setVar('assets', $arrayAssets);
 		}
 		$this->view->setVar('idMail', $idMail);
+	}
+	
+	public function templateAction($idMail)
+	{
+		$mail = $this->validateProcess($idMail);
+		
+		if ($mail) {
+			$this->view->setVar('mail', $mail);
+			
+			$templates = Template::find();
+			
+			$arrayTemplate = array();
+			foreach ($templates as $template) {
+				$templateInfo = array(
+					"id" => $template->idTemplate, 
+					"name" => $template->name, 
+					"content" => $template->content);
+
+					$arrayTemplate[$template->category][] = $templateInfo;
+			}
+			
+			$this->view->setVar('templates', $templates);
+			$this->view->setVar('arrayTemplate', $arrayTemplate);
+		}
 	}
 	
 	public function htmlAction($idMail = null)
@@ -750,8 +785,4 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function templateAction()
-	{
-		
-	}
 }

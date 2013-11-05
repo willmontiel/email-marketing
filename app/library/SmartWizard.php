@@ -57,6 +57,7 @@ class SmartWizard
 						$wizard['setup']['url'] = 'mail/setup';
 						break;
 					case 'editor':
+					case 'template':
 					case 'html':
 					case 'import':
 						$wizard['setup']['url'] = 'mail/setup';
