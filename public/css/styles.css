@@ -228,6 +228,7 @@ table {
 #imagedisplayer {
 	width: 260px;
 	background-color: white;
+	margin-right: 35px;
 }
 
 .module-container {
@@ -255,10 +256,6 @@ table {
 	margin: 5px;
 }
 
-#accept_cancel_image, #align_image {
-	display: none;
-}
-
 .redactor_box, .redactor_editor, .redactor_editor:focus {
 	background-color: transparent !important;
 }
@@ -278,4 +275,17 @@ table {
 	display: block;
     margin-left: auto;
     margin-right: auto
+}
+
+.soc_net {
+	float: left;
+}
+
+#images {
+	padding: 20px;
+}
+
+#align_image {
+	display: none;
+	margin-top: 25px;
 }

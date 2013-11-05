@@ -54,7 +54,7 @@ MediaDisplayer.prototype.setGallery = function(gallery) {
 MediaDisplayer.prototype.Selected = function(newsrc, title) {
 	
 	$('#imagedisplayer').empty();
-
+	
 	if (this.block != null && this.block.hasOwnProperty('htmlData')) {
 		
 		if(newsrc == '/emarketing/images/image') {
@@ -200,6 +200,7 @@ MediaDisplayer.prototype.cleanMediaDisplayer = function() {
 	$('#imageslider').empty();
 	$('#imagedisplayer').css('height', '');
 	$('#imagedisplayer').empty();
+	$('#align_image').hide();
 };
 
 function NoMediaDisplayer() {

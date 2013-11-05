@@ -21,7 +21,7 @@
 	{{ javascript_include('js/gallery.js') }}
 
 	<script>
-		var config = {sendUrl : "{{url('mail/editor')}}/{{idMail}}"};
+		var config = {sendUrl : "{{url('mail/editor')}}/{{idMail}}", imagesUrl: "{{url('images')}}"};
 		
 		var mediaGallery = [
 		{%for asset in assets%}
@@ -31,6 +31,7 @@
 	</script>
 	
 	{{ javascript_include('js/block.js') }}
+	{{ javascript_include('js/social_block.js') }}
 	{{ javascript_include('js/dropzone.js') }}
 	{{ javascript_include('js/layout.js') }}
 	{{ javascript_include('js/editor.js') }}
@@ -39,11 +40,11 @@
 {% block content %}
 	<br /><br />
 <div class="row-fluid">
-	<div class="span7">
+	<div class="span9">
 		<div id="edit-area" class="module-cont clearfix">
 		</div>
 	</div>
-	<div class="span5">
+	<div class="span3">
 		<div id="toolbar">
 			<ul class="nav nav-tabs">
 				<li id="tablayouts" class="active">
@@ -51,9 +52,6 @@
 				</li>
 				<li id="tabcomponents" class="">
 					<a href="#components" data-toggle="tab">Componentes</a>
-				</li>
-				<li id="tabimages" class="">
-					<a href="#images" data-toggle="tab">Imagenes</a>
 				</li>
 				<li id="tabstyles" class="">
 					<a href="#styles" data-toggle="tab">Estilos</a>
@@ -89,7 +87,7 @@
 							</div>
 							<div class="content clearfix">
 								<div class="content-image full-content pull-left">
-									<img class="media-object" src="{{url('images/image')}}" alt="64x64" />
+									<img data-toggle="modal" href="#images" class="media-object" src="{{url('images/image')}}" alt="64x64" />
 								</div>
 							</div>
 						</div>
@@ -114,7 +112,7 @@
 										</td>
 										<td>
 											<div class="content-image pull-left">
-												<img class="media-object" src="{{url('images/image')}}" alt="64x64" />
+												<img data-toggle="modal" href="#images" class="media-object" src="{{url('images/image')}}" alt="64x64" />
 											</div>
 										</td>
 									</tr>
@@ -137,7 +135,7 @@
 									<tr>
 										<td>
 											<div class="content-image pull-left">
-												<img class="media-object" src="{{url('images/image')}}" alt="64x64" />
+												<img data-toggle="modal" href="#images" class="media-object" src="{{url('images/image')}}" alt="64x64" />
 											</div>
 										</td>
 										<td>
@@ -161,7 +159,7 @@
 								<div class="handle-tool icon-move tool"></div>
 								<div class="remove-tool icon-trash tool"></div>
 							</div>
-							<div class="content">
+							<div class="content full-content">
 								<hr />
 							</div>
 						</div>
@@ -175,8 +173,8 @@
 								<div class="handle-tool icon-move tool"></div>
 								<div class="remove-tool icon-trash tool"></div>
 							</div>
-							<div class="content">
-								
+							<div class="content clearfix">
+
 							</div>
 						</div>
 						<div class="module-information">
@@ -184,28 +182,41 @@
 						</div>
 					</div>
 				</div>
-				<div class="tab-pane" id="images">
-					<div id="oneimage" class="well clearfix">
+				<div class="tab-pane" id="styles">
+					<div class="panel-group" id="accordion">
 						
-						<table>
-							<tr>
-							<td>
-								<div id="imagedisplayer"></div>
-							</td>
-							<td>
-								<div id="widthImg"></div>
-								<div id="heightImg"></div>								
-							</td>
-							</tr>
-						</table>
+					</div>
+				</div>
+			</div>	
+		</div>
+			
+		<div id="images" class="modal hide fade">
+			<ul class="nav nav-tabs">
+				<li id="taboneimage" class="active">
+					<a href="#oneimage" data-toggle="tab">Editar</a>
+				</li>
+				<li id="tabgallery" class="">
+					<a href="#gallery" data-toggle="tab">Galeria</a>
+				</li>
+				<li id="tabuploadimage" class="">
+					<a href="#uploadimage" data-toggle="tab">Cargar</a>
+				</li>
+			</ul>
+				
+			<div class="tab-content">
+
+				<div id="oneimage" class="tab-pane active well clearfix">
+					<div class="pull-left">
+						<div id="imagedisplayer"></div>
 						<div id="imageslider">
+
+						</div>
+					</div>
+					<div class="pull-left">
+						<div id="widthImg"></div>
+						<div id="heightImg"></div>	
 						
-						</div>
-						<div id="accept_cancel_image" class="pull-right">
-							<a href="#" class="btn btn-default" id="accept_change">Aplicar</a>
-							<a href="#" class="btn btn-default" id="cancel_change">Cancelar</a>
-						</div>
-						<div id="align_image" class="pull-left">
+						<div id="align_image">
 							<div class="btn-group">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 								  Alinear <span class="caret"></span>
@@ -218,27 +229,32 @@
 							</div>
 						</div>
 					</div>
-					<div id="gallery">
-						
-					</div>
-					<div id="modal-upload-image" class="">
-						<a class="btn btn-default" data-toggle="modal" href="#uploadimage">Cargar Imagen</a>
-					</div>
-					<div id="uploadimage" class="modal hide fade well">
-						<h2 class="text-center">Cargar Imagen</h2>
-						<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
-							<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
-						</form>
-						<button id="close-modal-upload"class="btn btn-default" data-dismiss="modal">Regresar</button>
-					</div>
-				</div>
 					
-				<div class="tab-pane" id="styles">
-					<div class="panel-group" id="accordion">
-						
-					</div>
+					
 				</div>
-			</div>	
+				
+				<div id="gallery" class="tab-pane">
+
+				</div>
+
+				<div id="uploadimage" class="tab-pane well">
+					<h2 class="text-center">Cargar Imagen</h2>
+					<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
+						<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
+					</form>
+				</div>
+			</div>
+				
+			<div id="accept_cancel_image" class="pull-right">
+				<a href="#" class="btn btn-default" id="accept_change" data-dismiss="modal">Aplicar</a>
+				<a href="#" class="btn btn-default" id="cancel_change" data-dismiss="modal">Cancelar</a>
+			</div>
+		</div>
+			
+		<div id="socialnetwork" class="modal hide fade">
+			<div id="socialData">
+			
+			</div>
 		</div>
 	</div>
 </div>

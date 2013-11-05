@@ -303,39 +303,7 @@ $(function() {
 		});
 	});
 	
-//	$('.module-cont').on('click', '.module > .tools > .edit-image-tool', function() {
-//		
-//		$('#components').removeClass('active');
-//		$('#tabcomponents').removeClass('active');
-//		
-//		$('#layouts').removeClass('active');
-//		$('#tablayouts').removeClass('active');
-//		
-//		$('#styles').removeClass('active');
-//		$('#tabstyles').removeClass('active');
-//		
-//		$('#images').addClass('active');
-//		$('#tabimages').addClass('active');
-//		
-//		var content = $(this).parents('.module');
-//		
-//		content.data('smobj').createImage();
-//		
-//	});
-	
 	$('.module-cont').on('click', '.content-image > .media-object', function() {
-		
-		$('#components').removeClass('active');
-		$('#tabcomponents').removeClass('active');
-		
-		$('#layouts').removeClass('active');
-		$('#tablayouts').removeClass('active');
-		
-		$('#styles').removeClass('active');
-		$('#tabstyles').removeClass('active');
-		
-		$('#images').addClass('active');
-		$('#tabimages').addClass('active');
 		
 		var content = $(this).parents('.module');
 

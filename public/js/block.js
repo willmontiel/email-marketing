@@ -4,6 +4,11 @@ function Block (parentBlock, typeBlock, contentData, htmlData) {
 	this.contentData = contentData;
 	this.htmlData = htmlData;
 	
+	if(typeBlock != undefined && typeBlock.search('social') > 0) {
+		
+		this.createSocialBlocks();
+	}
+	
 	newRedactor();
 }
 
@@ -198,4 +203,24 @@ Block.prototype.setMediaDisplayer = function() {
 	else {
 		NoMediaDisplayer();
 	}
+};
+
+Block.prototype.createSocialBlocks = function() {
+	var socials = [];
+	var socialsNames = ['facebook', 'twitter', 'linkedin', 'google_plus'];
+	
+	for(var i = 0; i < 4; i++) {
+		socials[i] = new SocialBlock(this.htmlData, socialsNames[i]);
+	}
+	this.contentData = socials;
+	
+	var t = this;
+	
+	this.htmlData.on('click', function() {
+		
+		for(var i = 0; i < t.contentData.length; i++) {
+			
+			t.contentData[i].showSocialInfo();
+		}
+	});
 };
