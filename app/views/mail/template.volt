@@ -29,21 +29,22 @@
 	</div>
 	<div class="row-fluid">
 		{{ flashSession.output()}}
+		<br />
 	</div>
-	<br />
+	<hr class="divider">
 	<div class="row-fluid">
-		<div class="span12">
-			<hr class="divider">
-				<div class="accordion" id="accordion2">
-					{% for category, template in arrayTemplate %}
-						<div class="accordion-group">
-							<div class="accordion-heading">
-								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{category}}">
-									{{category}}
-								</a>
-							</div>
-							<div id="{{category}}" class="accordion-body {% if loop.first %}in{% endif %} collapse">
-								<div class="accordion-inner">
+		<div class="span10">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Escoja una plantilla
+					</div>
+				</div>
+				<div class="box-content">
+					<div class="padded">
+						<div class="tab-content">
+							{% for category, template in arrayTemplate %}
+								<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category}}">
 									<ul class="thumbnails padded">
 										{% for t in template %}
 										<li class="span3">
@@ -51,15 +52,32 @@
 											<a href="{{url('mail/editor')}}/{{mail.idMail}}/{{t['id']}}" class="thumbnail">
 												<img src="{{url('template/thumbnail')}}/{{t['id']}}" alt="{{t['name']}}" title="{{t['name']}}">
 											</a>
+											<div class="btn-toolbar" style="margin-left: 30%; margin-top: 10%;">
+												<div class="btn-group ">
+													<button class="btn btn-default" title="Previsualizar"><i class="icon-eye-open"></i></button>
+													<button class="btn btn-default" title="Descargar"><i class="icon-download"></i></button>
+												</div>
+											</div>
 										</li>
 										{% endfor %}
 									</ul>
 								</div>
-							</div>
+							{% endfor %}
 						</div>
-					{% endfor %}
+					</div>
 				</div>
-			<hr class="divider">
+			</div>
+		</div>
+		<div class="span2">
+			<div class="box">
+				<div class="padded">
+					<ul class="nav nav-pills nav-stacked">
+						{% for category, template in arrayTemplate %}
+							<li class="{% if loop.first %}active{% endif %}"><a href="#{{category}}" data-toggle="tab">{{category}}</a></li> 
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 {% endblock %}
