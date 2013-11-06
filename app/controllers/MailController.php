@@ -219,7 +219,6 @@ class MailController extends ControllerBase
 			));
 		
 			if ($objTemplate) {
-				$log->log('Este es template: ' . print_r($objTemplate->content, true));
 				$this->view->setVar('objMail', $objTemplate->content);
 			}
 			else {
@@ -240,14 +239,17 @@ class MailController extends ControllerBase
 				
 				$mailContent = new Mailcontent();
 				$content = $this->request->getPost("editor");
-				$log->log($content);
+//				$log->log($content);
 				$mailContent->idMail = $idMail;
 				$mailContent->content = $content;
 
 				$mail->type = "Editor";
-
+				
+				$editorObj = new EditorObj;
+				$editorObj->convertEditorObjToHtml($content);
+				
 				if(!$mailContent->save()) {
-					$log->log("No guarda");
+//					$log->log("No guarda");
 					foreach ($mailContent->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}
