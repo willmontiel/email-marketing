@@ -168,7 +168,7 @@
 						</div>
 					</div>
 					<div class="module-container">
-						<div class="module module-social-share">
+						<div class="module module-social-follow">
 							<div class="tools">
 								<div class="handle-tool icon-move tool"></div>
 								<div class="remove-tool icon-trash tool"></div>
@@ -178,7 +178,24 @@
 							</div>
 						</div>
 						<div class="module-information">
-							<p>Redes Sociales</p>
+							<p>Social Follow</p>
+						</div>
+					</div>
+					<div class="module-container">
+						<div class="module module-social-share">
+							<div class="tools">
+								<div class="handle-tool icon-move tool"></div>
+								<div class="remove-tool icon-trash tool"></div>
+							</div>
+							<div class="content clearfix">
+								<div class="sub_social_content content_facebook"></div>
+								<div class="sub_social_content content_twitter"></div>
+								<div class="sub_social_content content_linkedin"></div>
+								<div class="sub_social_content content_google_plus"></div>
+							</div>
+						</div>
+						<div class="module-information">
+							<p>Social Share</p>
 						</div>
 					</div>
 				</div>
@@ -253,7 +270,7 @@
 			
 		<div id="socialnetwork" class="modal hide fade">
 			<div id="socialData">
-			
+				
 			</div>
 		</div>
 	</div>

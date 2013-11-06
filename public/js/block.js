@@ -207,16 +207,26 @@ Block.prototype.setMediaDisplayer = function() {
 
 Block.prototype.createSocialBlocks = function() {
 	var socials = [];
+	var socialType = '';
 	var socialsNames = ['facebook', 'twitter', 'linkedin', 'google_plus'];
 	
+	if(this.typeBlock.search('share') > 0) {
+		socialType = 'share';
+	}
+	else {
+		socialType = 'follow';
+	}
+	
 	for(var i = 0; i < 4; i++) {
-		socials[i] = new SocialBlock(this.htmlData, socialsNames[i]);
+		socials[i] = new SocialBlock(this.htmlData, socialsNames[i], socialType);
 	}
 	this.contentData = socials;
 	
 	var t = this;
 	
 	this.htmlData.on('click', function() {
+		
+		$('#socialData').empty();
 		
 		for(var i = 0; i < t.contentData.length; i++) {
 			

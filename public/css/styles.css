@@ -163,6 +163,10 @@ table {
 	background-image: url('../images/socialfollow.png');
 }
 
+#components .module-social-follow {
+	background-image: url('../images/socialfollow.png');
+}
+
 .full-width {
 	float: left;
 	width: -moz-calc(100% - 4px);
@@ -277,7 +281,7 @@ table {
     margin-right: auto
 }
 
-.soc_net {
+.soc_net_follow, .sub_social_content, .titleSocial, .asignSocialShare, .imageSocial {
 	float: left;
 }
 
