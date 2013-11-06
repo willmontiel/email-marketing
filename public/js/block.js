@@ -53,7 +53,18 @@ Block.prototype.deleteBlock = function() {
 Block.prototype.setHtmlData = function(htmlData) {
 	
 	this.htmlData = htmlData;
-
+	
+	if(this.typeBlock.search('social') > 0) {
+		
+		for(var i = 0; i < this.contentData.length; i++) {
+			
+			this.contentData[i].setParentBlock(this.htmlData);
+			
+			this.contentData[i].createSocialNetHtml();
+		}
+		
+		this.createSocialBlocks();
+	}
 };
 
 Block.prototype.persist = function() {
@@ -142,16 +153,11 @@ Block.prototype.unpersist = function(obj, dz) {
 		this.contentData = contentData.children();
 	}
 	else if(this.typeBlock.search('social') > 0) {
-		var arraysb = [];
-		
-		for(var i = 0; i<obj.contentData.length; i++) {
-			
-			var sb = new SocialBlock();
-			
-			arraysb[i] = sb.unpersist(obj.contentData[i]);
-		}
-		
-		this.contentData = arraysb;
+		var contentData = $('<div/>');
+		contentData = contentData.html('<div class="sub_social_content content_facebook"></div> \n\
+										<div class="sub_social_content content_twitter"></div>\n\
+										<div class="sub_social_content content_linkedin"></div>\n\
+										<div class="sub_social_content content_google_plus"></div>');
 	}
 	else {
 		var contentData = $('<div/>');
@@ -169,8 +175,26 @@ Block.prototype.unpersist = function(obj, dz) {
 						<div class=\"content clearfix\"></div></div>").children();
 	
 	this.htmlData.find('.content').append(contentData.children());
-	
+
 	this.htmlData.data('smobj', this);
+	
+	if(this.typeBlock.search('social') > 0) {
+			
+		this.contentData = [];
+		
+		for(var i = 0; i<obj.contentData.length; i++) {
+			
+			var newsociblk = new SocialBlock(this.htmlData);
+	
+			newsociblk.unpersist(obj.contentData[i]);
+			newsociblk.createSocialNetHtml();
+			
+			this.contentData.push(newsociblk);
+			
+		}
+		
+		this.createSocialBlocks();
+	}
 };
 
 Block.prototype.createBlock = function() {
@@ -226,31 +250,39 @@ Block.prototype.setMediaDisplayer = function() {
 };
 
 Block.prototype.createSocialBlocks = function() {
-	var socials = [];
-	var socialType = '';
-	var socialsNames = ['facebook', 'twitter', 'linkedin', 'google_plus'];
 	
-	if(this.typeBlock.search('share') > 0) {
-		socialType = 'share';
-	}
-	else {
-		socialType = 'follow';
-	}
-	
-	for(var i = 0; i < 4; i++) {
-		socials[i] = new SocialBlock(this.htmlData, socialsNames[i], socialType);
-	}
-	this.contentData = socials;
+	if(!$.isArray(this.contentData)) {
+		
+		var socials = [];
+		var socialType = '';
+		var socialsNames = ['facebook', 'twitter', 'linkedin', 'google_plus'];
+
+		if(this.typeBlock.search('share') > 0) {
+			socialType = 'share';
+		}
+		else {
+			socialType = 'follow';
+		}
+
+		for(var i = 0; i < 4; i++) {
+			socials[i] = new SocialBlock(this.htmlData, socialsNames[i], socialType);
+			socials[i].createSocialNetHtml();
+		}
+		this.contentData = socials;
+	} 
 	
 	var t = this;
 	
 	this.htmlData.on('click', function() {
-		
+
 		$('#socialData').empty();
 		
-		for(var i = 0; i < t.contentData.length; i++) {
+		if(t.contentData != undefined) {
 			
-			t.contentData[i].showSocialInfo();
+			for(var i = 0; i < t.contentData.length; i++) {
+
+				t.contentData[i].showSocialInfo();
+			}
 		}
 	});
 };

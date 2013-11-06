@@ -79,7 +79,7 @@ DropzoneArea.prototype.unpersist = function(obj) {
 		var newblk = new Block();
 		
 		this.$obj.append(newblk.unpersist(obj.content[i], this));
-
+		
 		this.content.push(newblk);
 	}
 	
@@ -111,17 +111,17 @@ DropzoneArea.prototype.ondrop = function() {
 
 			if (object.item.data('smobj') == undefined) {
 				
-					if(object.item.attr('class').search('text') > 0 && object.item.attr('class').search('image') > 0){
-						var content = {image: $(object.item).find('.content-image'), text: $(object.item).find('.content-text')};
-					}
-					else {
-						var content = $(object.item).find('.full-content');
-					}
+				if(object.item.attr('class').search('text') > 0 && object.item.attr('class').search('image') > 0){
+					var content = {image: $(object.item).find('.content-image'), text: $(object.item).find('.content-text')};
+				}
+				else {
+					var content = $(object.item).find('.full-content');
+				}
 
-					var newobj = t.createBlock(object.item.attr('class'), content, object.item);
-					
-					newobj.setMediaDisplayer();
-				
+				var newobj = t.createBlock(object.item.attr('class'), content, object.item);
+
+				newobj.setMediaDisplayer();
+
 				object.item.data('smobj', newobj);
 				
 			}

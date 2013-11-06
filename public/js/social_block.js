@@ -1,12 +1,14 @@
-function SocialBlock (parentBlock, socialName, socialType) {
+function SocialBlock (parentBlock, socialName, socialType) {	
 	this.parentBlock = parentBlock;
 	this.socialName = socialName;
 	this.linktext = socialName;
 	this.socialType = socialType;
 	this.selected = true;
-	
-	this.createSocialNetHtml();
 }
+
+SocialBlock.prototype.setParentBlock = function(parentBlock) {
+	this.parentBlock = parentBlock;
+};
 
 SocialBlock.prototype.persist = function() {
 	var obj = {};
@@ -27,8 +29,7 @@ SocialBlock.prototype.unpersist = function(obj) {
 	this.socialName = obj.socialName;
 	this.socialType = obj.socialType;
 	this.url = obj.url;
-	
-	this.createSocialNetHtml();
+
 };
 
 SocialBlock.prototype.createSocialNetHtml = function() {
@@ -45,12 +46,18 @@ SocialBlock.prototype.createSocialNetHtml = function() {
 	
 	this.htmlData = text;
 	
-	this.parentBlock.find('.content_' + this.socialName).append(text);
+	if(this.selected) {
+		this.parentBlock.find('.content_' + this.socialName).empty();
+		this.parentBlock.find('.content_' + this.socialName).append(text);
+	}
 };
 
 SocialBlock.prototype.showSocialInfo = function() {
 
-	this.setUrlByDefault();
+	if(this.url == undefined) {
+		
+		this.setUrlByDefault();
+	}	
 	
 	if(this.socialType == 'follow') {
 		
@@ -97,6 +104,11 @@ SocialBlock.prototype.showSocialFollow = function() {
 		t.linktext = $(this).val();
 	});	
 	
+	$(htmlText.find('.urllink')).on('change', function(){
+		
+		t.url = $(this).val();
+	});	
+	
 	this.selectSocial(htmlText);
 	
 	return htmlText;
@@ -140,7 +152,7 @@ SocialBlock.prototype.selectSocial = function(htmlText) {
 			t.selected = true;
 		}
 		else {
-			
+
 			t.htmlData.remove();
 			
 			t.selected = false;
