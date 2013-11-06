@@ -52,10 +52,9 @@
 											<a href="{{url('mail/editor')}}/{{mail.idMail}}/{{t['id']}}" class="thumbnail">
 												<img src="{{url('template/thumbnail')}}/{{t['id']}}" alt="{{t['name']}}" title="{{t['name']}}">
 											</a>
-											<div class="btn-toolbar" style="margin-left: 30%; margin-top: 10%;">
+											<div class="btn-toolbar" style="margin-left: 40%; margin-top: 10%;">
 												<div class="btn-group ">
 													<button class="btn btn-default" title="Previsualizar"><i class="icon-eye-open"></i></button>
-													<button class="btn btn-default" title="Descargar"><i class="icon-download"></i></button>
 												</div>
 											</div>
 										</li>
@@ -71,7 +70,7 @@
 		<div class="span2">
 			<div class="box">
 				<div class="padded">
-					<ul class="nav nav-pills nav-stacked">
+					<ul class="nav nav-pills nav-stacked nav-template">
 						{% for category, template in arrayTemplate %}
 							<li class="{% if loop.first %}active{% endif %}"><a href="#{{category}}" data-toggle="tab">{{category}}</a></li> 
 						{% endfor %}
