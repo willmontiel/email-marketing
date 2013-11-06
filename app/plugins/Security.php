@@ -191,7 +191,9 @@ class Security extends Plugin
 				'mail::plaintext' => array('mail' => array('read', 'create')),
 				'mail::filter' => array('mail' => array('read', 'create')),
 				'mail::preview' => array('mail' => array('read', 'create', 'send')),
-				'mail::template' => array('mail' => array('read', 'create'))
+				'mail::template' => array('mail' => array('read', 'create')),
+				'template::image' => array('mail' => array('read', 'create')),
+				'template::thumbnail' => array('mail' => array('read', 'create')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

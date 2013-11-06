@@ -175,7 +175,13 @@ try {
 	$asset->dir = $config->general->assetsfolder;
 	$asset->url = $config->general->assetsbaseuri;
 	$di->set('asset', $asset);
-
+	/*
+	 * Directorio de assets globales
+	 */
+	$globalasset = new stdClass();
+	$globalasset->dir = $config->general->globalassetsfolder;
+	$di->set('globalasset', $globalasset);
+	
 	$tmpdir = new stdClass;
 	$tmpdir->dir = $config->general->tmpdir;
 	$di->set('tmppath', $tmpdir);

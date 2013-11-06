@@ -13,7 +13,7 @@
 					</div>
 					<div class="news-content">
 						<div class="news-title">
-							Bienvenido <a href="#"> {{userObject.firstName}} {{userObject.lastName}}</a>
+							Bienvenido(a) <a href="#"> {{userObject.firstName}} {{userObject.lastName}}</a>
 						</div>
 						<div class="news-text">
 							Esta es la página principal de la aplicación aqui podrá encontrar, información relevante sobre

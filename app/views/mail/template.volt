@@ -42,14 +42,14 @@
 									{{category}}
 								</a>
 							</div>
-							<div id="{{category}}" class="accordion-body collapse">
+							<div id="{{category}}" class="accordion-body {% if loop.first %}in{% endif %} collapse">
 								<div class="accordion-inner">
 									<ul class="thumbnails padded">
 										{% for t in template %}
 										<li class="span3">
 											<h5 style="text-align: center;">{{t['name']}}</h5>
 											<a href="{{url('mail/editor')}}/{{mail.idMail}}/{{t['id']}}" class="thumbnail">
-												<img src="http://localhost/emarketing/templates/1/images/{{t['id']}}.JPG" alt="{{t['name']}}" title="{{t['name']}}">
+												<img src="{{url('template/thumbnail')}}/{{t['id']}}" alt="{{t['name']}}" title="{{t['name']}}">
 											</a>
 										</li>
 										{% endfor %}
