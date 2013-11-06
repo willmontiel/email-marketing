@@ -267,7 +267,7 @@ table {
 	overflow-y: scroll;
 }
 
-#edit-area {
+#edit-area, .sub_social_content {
 	margin-left: 15px;
 }
 
@@ -281,8 +281,16 @@ table {
     margin-right: auto
 }
 
-.soc_net_follow, .sub_social_content, .titleSocial, .asignSocialShare, .imageSocial {
+.sub_social_content, .infoSocial, .asignSocial, .imageSocial {
 	float: left;
+}
+
+.socialComponent, .infoSocial, .asignSocial {
+	margin: 15px;
+}
+
+.link_text {
+	text-align: center;
 }
 
 #images {
@@ -292,4 +300,7 @@ table {
 #align_image {
 	display: none;
 	margin-top: 25px;
+}
+.imagesbody {
+	max-height: 445px;
 }

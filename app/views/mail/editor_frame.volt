@@ -174,7 +174,10 @@
 								<div class="remove-tool icon-trash tool"></div>
 							</div>
 							<div class="content clearfix">
-
+								<div class="sub_social_content content_facebook"></div>
+								<div class="sub_social_content content_twitter"></div>
+								<div class="sub_social_content content_linkedin"></div>
+								<div class="sub_social_content content_google_plus"></div>
 							</div>
 						</div>
 						<div class="module-information">
@@ -220,7 +223,7 @@
 				</li>
 			</ul>
 				
-			<div class="tab-content">
+			<div class="tab-content imagesbody">
 
 				<div id="oneimage" class="tab-pane active well clearfix">
 					<div class="pull-left">

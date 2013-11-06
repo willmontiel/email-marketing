@@ -65,6 +65,14 @@ Block.prototype.persist = function() {
 	if(this.typeBlock.search('text') > 0 && this.typeBlock.search('image') > 0) {
 		obj.contentData = {image: $.trim(this.contentData.image.html()), text: $.trim(this.contentData.text.html())};
 	}
+	else if(this.typeBlock.search('social') > 0) {
+		var sb = [];
+		
+		for(var i = 0; i < this.contentData.length; i++) {
+			sb[i] = this.contentData[i].persist()
+		}
+		obj.contentData = sb;
+	}
 	else {
 		obj.contentData = $.trim(this.contentData.html());	
 	}
@@ -132,6 +140,18 @@ Block.prototype.unpersist = function(obj, dz) {
 		contentData = contentData.html('<div class="content-image full-content ' + obj.align + '">' + obj.contentData + '</div>');
 		
 		this.contentData = contentData.children();
+	}
+	else if(this.typeBlock.search('social') > 0) {
+		var arraysb = [];
+		
+		for(var i = 0; i<obj.contentData.length; i++) {
+			
+			var sb = new SocialBlock();
+			
+			arraysb[i] = sb.unpersist(obj.contentData[i]);
+		}
+		
+		this.contentData = arraysb;
 	}
 	else {
 		var contentData = $('<div/>');
