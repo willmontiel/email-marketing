@@ -211,7 +211,12 @@
 		</div>
 			
 		<div id="images" class="modal hide fade">
-			<ul class="nav nav-tabs">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>Imagenes</h3>
+			</div>
+				
+			<ul class="nav nav-tabs nav-tabs-gallery">
 				<li id="taboneimage" class="active">
 					<a href="#oneimage" data-toggle="tab">Editar</a>
 				</li>
@@ -223,57 +228,65 @@
 				</li>
 			</ul>
 				
-			<div class="tab-content imagesbody">
+			<div class="modal-body">
+				<div class="tab-content imagesbody">
+					<div id="oneimage" class="tab-pane active well clearfix">
+						<div class="pull-left">
+							<div id="imagedisplayer"></div>
+							<div id="imageslider">
 
-				<div id="oneimage" class="tab-pane active well clearfix">
-					<div class="pull-left">
-						<div id="imagedisplayer"></div>
-						<div id="imageslider">
-
+							</div>
 						</div>
-					</div>
-					<div class="pull-left">
-						<div id="widthImg"></div>
-						<div id="heightImg"></div>	
-						
-						<div id="align_image">
-							<div class="btn-group">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-								  Alinear <span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" role="menu">
-									<li class="chose_align" data-dropdown="left"><a href="#">Izquierda</a></li>
-									<li class="chose_align" data-dropdown="center"><a href="#">Centro</a></li>
-									<li class="chose_align" data-dropdown="right"><a href="#">Derecha</a></li>
-								</ul>
+						<div class="pull-left">
+							<div id="widthImg"></div>
+							<div id="heightImg"></div>	
+
+							<div id="align_image">
+								<div class="btn-group">
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+									  Alinear <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										<li class="chose_align" data-dropdown="left"><a href="#">Izquierda</a></li>
+										<li class="chose_align" data-dropdown="center"><a href="#">Centro</a></li>
+										<li class="chose_align" data-dropdown="right"><a href="#">Derecha</a></li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>
-					
-					
-				</div>
-				
-				<div id="gallery" class="tab-pane">
 
-				</div>
+					<div id="gallery" class="tab-pane">
 
-				<div id="uploadimage" class="tab-pane well">
-					<h2 class="text-center">Cargar Imagen</h2>
-					<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
-						<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
-					</form>
+					</div>
+
+					<div id="uploadimage" class="tab-pane well">
+						<h2 class="text-center">Cargar Imagen</h2>
+						<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
+							<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
+						</form>
+					</div>
 				</div>
 			</div>
-				
-			<div id="accept_cancel_image" class="pull-right">
-				<a href="#" class="btn btn-default" id="accept_change" data-dismiss="modal">Aplicar</a>
-				<a href="#" class="btn btn-default" id="cancel_change" data-dismiss="modal">Cancelar</a>
+			<div class="modal-footer">
+				<div id="accept_cancel_image">
+					<a href="#" class="btn btn-default" id="accept_change" data-dismiss="modal">Aplicar</a>
+					<a href="#" class="btn btn-default" id="cancel_change" data-dismiss="modal">Cancelar</a>
+				</div>
 			</div>
 		</div>
 			
 		<div id="socialnetwork" class="modal hide fade">
-			<div id="socialData">
-				
+			<div class="modal-header">
+				<div id="social_title"></div>
+			</div>
+			<div class="modal-body">
+				<div id="socialData">
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
 			</div>
 		</div>
 	</div>

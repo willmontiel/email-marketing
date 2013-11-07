@@ -70,7 +70,7 @@ Block.prototype.setHtmlData = function(htmlData) {
 Block.prototype.persist = function() {
 	
 	var obj = {
-			type: this.typeBlock,
+			type: this.typeBlock.match(/module-[^ ]*/)[0]
 		};
 	
 	if(this.typeBlock.search('text') > 0 && this.typeBlock.search('image') > 0) {
@@ -167,7 +167,7 @@ Block.prototype.unpersist = function(obj, dz) {
 	}
 	
 	this.htmlData = $('<div/>').html(
-						"<div class=\"" + this.typeBlock + "\" style=\"display: block;\">\n\
+						"<div class=\"module " + this.typeBlock + " ui-draggable\" style=\"display: block;\">\n\
 						<div class=\"tools\" style=\"float: left;\">\
 							<div class=\"handle-tool icon-move tool\"></div>\
 							<div class=\"remove-tool icon-trash tool\"></div>\

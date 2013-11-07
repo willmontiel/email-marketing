@@ -61,13 +61,19 @@ SocialBlock.prototype.showSocialInfo = function() {
 	
 	if(this.socialType == 'follow') {
 		
+		var htmlTitle = ('<h3>Social Follow</h3>')
 		var htmlText = this.showSocialFollow();
 	}
 	else {
+		
+		var htmlTitle = ('<h3>Social Share</h3>')
 		var htmlText = this.showSocialShare();
 	}
 	
 	$('#socialData').append(htmlText);
+	
+	$('#social_title').empty();
+	$('#social_title').append(htmlTitle);
 };
 
 SocialBlock.prototype.showSocialFollow = function() {
@@ -80,11 +86,11 @@ SocialBlock.prototype.showSocialFollow = function() {
 		
 	var htmlText = $("<div class=\"socialComponent clearfix\">\n\
 						<div class=\"imageSocial\">\n\
-							<img src=\"" + config.imagesUrl + "/" + this.socialName + "\" />\n\
+							<img src=\"" + config.imagesUrl + "/" + this.socialName + "\" /><label>" + this.socialName.charAt(0).toUpperCase() + this.socialName.slice(1) + "</label>\n\
 						</div>\n\
 						<div class=\"infoSocial\">\n\
-							<div class=\"titleSocial\"><input class=\"titlelink\" type=\"text\" value=\"" + this.linktext + "\"></div>\n\
-							<div class=\"urlSocial\"><input class=\"urllink\" type=\"text\" value=\"" + this.url + "\"></div>\n\
+							<div class=\"titleSocial\"><label>Texto del Link</label><input class=\"titlelink\" type=\"text\" value=\"" + this.linktext + "\"></div>\n\
+							<div class=\"urlSocial\"><label>Url de Pagina</label><input class=\"urllink\" type=\"text\" value=\"" + this.url + "\"></div>\n\
 						</div>\n\
 						<div class=\"asignSocial\">\n\
 							<label class=\"checkbox\"><input " + checked + " class=\"target\" type=\"checkbox\"></label>\n\
