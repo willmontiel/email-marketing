@@ -241,3 +241,9 @@ a.inactive {
 	-moz-transition:opacity 0.25s;
 	-webkit-transition:opacity 0.25s;
 }
+
+.preview-modal {
+	left: 35% !important;
+	width: 70% !important;
+	
+}

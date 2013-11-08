@@ -106,13 +106,17 @@
 			</div>
 		</div>
 	</div>
-	<div id="preview-modal" class="modal hide fade">
+	<div id="preview-modal" class="modal hide fade preview-modal">
 		<div class="modal-header">
+			Previsualización de plantilla
 		</div>
 		<div class="modal-body">
 			<div id="content-template">
 				
 			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-black" data-dismiss="modal">x</button>
 		</div>
 	</div>
 {% endblock %}
