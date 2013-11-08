@@ -57,4 +57,16 @@ class Customfield extends \Phalcon\Mvc\Model
 		
 		return $query;
 	}
+	
+	public static function findAllCustomfieldNamesInAccount(Account $account) 
+	{
+		$db = Phalcon\DI::getDefault()->get('db');
+		
+		$phql = 'SELECT DISTINCT cf.name FROM Customfield cf JOIN Dbase db ON (cf.idDbase = db.idDbase) WHERE db.idAccount = ' . $account->idAccount;
+		
+		$query = $db->fetchAll($phql);
+
+		return $query;
+		
+	}
 }

@@ -20,9 +20,9 @@ RedactorPlugins.clips = {
 
 		}, this );
 
-		this.buttonAdd('clips', 'Clips', function(e)
+		this.buttonAdd('clips', 'Campos', function(e)
 		{
-			this.modalInit('Clips', '#clipsmodal', 500, callback);
+			this.modalInit('Campos', '#clipsmodal', 500, callback);
 		});
 	},
 	insertClip: function(html)

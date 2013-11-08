@@ -216,7 +216,7 @@
 				<h3>Imagenes</h3>
 			</div>
 				
-			<ul class="nav nav-tabs nav-tabs-gallery">
+			<ul class="nav nav-tabs nav-tabs-in-modal">
 				<li id="taboneimage" class="active">
 					<a href="#oneimage" data-toggle="tab">Editar</a>
 				</li>
@@ -295,5 +295,56 @@
 	<div class="span2 offset2">
 		<input id="guardar" type="submit" class="btn btn-blue" value="Guardar">
 	</div>
+</div>
+	
+<div id="clipsmodal" style="display: none;">
+	
+	<section>
+		<ul class="redactor_clips_box">
+			<li>
+				<a href="#" class="redactor_clip_link">Email</a>
+
+				<div class="redactor_clip" style="display: none;">
+					%%EMAIL%%
+				</div>
+			</li>
+			<li>
+				<a href="#" class="redactor_clip_link">Nombre</a>
+
+				<div class="redactor_clip" style="display: none;">
+					%%NOMBRE%%
+				</div>
+			</li>
+			<li>
+				<a href="#" class="redactor_clip_link">Apellido</a>
+
+				<div class="redactor_clip" style="display: none;">
+					%%APELLIDO%%
+				</div>
+			</li>
+			
+			{%for cf in cfs%}
+				<li>
+					<a href="#" class="redactor_clip_link">{{cf['originalName']}}</a>
+
+					<div class="redactor_clip" style="display: none;">
+						%%{{cf['linkName']}}%%
+					</div>
+				</li>
+			{%endfor%}
+			
+			<li>
+				<a href="#" class="redactor_clip_link">Enlace de des-suscripcion</a>
+
+				<div class="redactor_clip" style="display: none;">
+					<a href="#%%UNSUBSCRIBE%%">Para des-suscribirse haga clic aqui</a>
+					
+				</div>
+			</li>
+		</ul>
+	</section>
+	<footer>
+		<a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
+	</footer>
 </div>
 {% endblock %}

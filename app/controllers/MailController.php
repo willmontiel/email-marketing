@@ -272,7 +272,9 @@ class MailController extends ControllerBase
 	public function editor_frameAction($idMail) 
 	{
 		$log = $this->logger;
+		
 		if (!$this->request->isPost()) {
+			
 		$assets = AssetObj::findAllAssetsInAccount($this->user->account);
 		
 		foreach ($assets as $a) {
@@ -287,6 +289,18 @@ class MailController extends ControllerBase
 		else {
 			$this->view->setVar('assets', $arrayAssets);
 		}
+		
+		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
+		
+		foreach ($cfs as $cf) {
+			$linkname = strtoupper(str_replace(array ("á", "é", "í", "ó", "ú", "ñ", " ", "&", ), 
+											   array ("a", "e", "i", "o", "u", "n", "_"), $cf[0]));
+			
+			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
+		}
+		
+		$this->view->setVar('cfs', $arrayCf);
+		
 		$this->view->setVar('idMail', $idMail);
 	}
 	

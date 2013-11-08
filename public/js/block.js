@@ -30,7 +30,7 @@ function newRedactor() {
 					'alignment' 
 				],
 
-				plugins: ['fontcolor', 'fontfamily', 'fontsize'],
+				plugins: ['fontcolor', 'fontfamily', 'fontsize', 'clips'],
 
 				buttonsCustom: {
 					save: {
