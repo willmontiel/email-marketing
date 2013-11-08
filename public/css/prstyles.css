@@ -212,3 +212,32 @@ a.inactive {
 .nav-template > .active > a, .nav-pills > .active > a:hover {
 	background-color: #60a1ca !important;
 }
+
+
+.img-wrap{
+	overflow:hidden;
+	position:relative;
+}
+.img-info{
+	background-color:#000;
+	bottom:0;
+	color:#fff;
+	opacity:0;
+	filter: alpha(opacity = 0);
+	position:absolute;
+	width:100%;
+	height: 20%;
+	z-index:1000;
+}
+.img-info h4, .img-info p{
+	padding:0 10px;
+	margin-top: 5%;
+	text-align: center;
+}
+.img-wrap:hover .img-info{
+	opacity:0.55;
+	filter: alpha(opacity = 75);
+	transition:opacity 0.25s;
+	-moz-transition:opacity 0.25s;
+	-webkit-transition:opacity 0.25s;
+}

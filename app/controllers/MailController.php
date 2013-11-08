@@ -246,7 +246,7 @@ class MailController extends ControllerBase
 				$mail->type = "Editor";
 				
 				$editorObj = new HtmlObj;
-				$editorObj->assignContent($content);
+				$editorObj->assignContent(json_decode($content));
 				$editorObj->render();
 				
 				if(!$mailContent->save()) {
@@ -304,9 +304,11 @@ class MailController extends ControllerBase
 				$templateInfo = array(
 					"id" => $template->idTemplate, 
 					"name" => $template->name, 
-					"content" => $template->content);
+					"content" => $template->content,
+					"html" => $template->contentHtml
+				);
 
-					$arrayTemplate[$template->category][] = $templateInfo;
+				$arrayTemplate[$template->category][] = $templateInfo;
 			}
 			
 			$this->view->setVar('templates', $templates);
@@ -716,6 +718,18 @@ class MailController extends ControllerBase
 		}
 	}
 
+	public function showtemplateAction($id)
+	{
+		$log = $this->logger;
+		$template = Template::findFirst(array(
+			"conditions" => "idTemplate = ?1",
+			"bind" => array(1 => $id)
+		));
+		
+//		$log->log("Html: " . $template->contentHtml);
+		return $this->setJsonResponse(array('template' => $template->contentHtml));
+	}
+	
 	protected function validateProcess($idMail)
 	{
 		$mail = Mail::findFirst(array(
