@@ -5,11 +5,12 @@
 		{{ javascript_include('js/stoperror.js')}}
 	<script type="text/javascript">
 		function preview(id) {
-			console.log(id);
 			$.post("{{url('mail/showtemplate')}}/" + id, function(template){
-				var a = $('<div/>').text(template.template).html();
-				$( "#content-template" ).append(a);
-				console.log(a);
+				var e = document.createElement('div');
+				e.innerHTML = template.template;
+				var d = e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+				$( "#content-template" ).empty();
+				$( "#content-template" ).append(d);
 			});
 		}
 	</script>

@@ -11,6 +11,7 @@ try {
         '../app/forms/',
         '../app/library/',
         '../app/logic/',
+		'../app/editorlogic/',
     ));
 	
 	$loader->registerClasses(array(

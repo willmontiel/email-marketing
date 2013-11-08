@@ -247,7 +247,8 @@ class MailController extends ControllerBase
 				
 				$editorObj = new HtmlObj;
 				$editorObj->assignContent(json_decode($content));
-				$editorObj->render();
+				$a = $editorObj->render();
+				$log->log('Html: ' . $a);
 				
 				if(!$mailContent->save()) {
 //					$log->log("No guarda");
