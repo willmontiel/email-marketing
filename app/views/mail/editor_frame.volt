@@ -21,13 +21,29 @@
 	{{ javascript_include('js/gallery.js') }}
 
 	<script>
-		var config = {sendUrl : "{{url('mail/editor')}}/{{idMail}}", imagesUrl: "{{url('images')}}"};
+		var config = {sendUrl : "{{url('mail/editor')}}/{{idMail}}", imagesUrl: "{{url('images')}}", previewUrl: "{{url('mail/previeweditor')}}"};
 		
 		var mediaGallery = [
 		{%for asset in assets%}
 			new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}}),
 		{%endfor%}
 		];
+		
+		function verHTML(form) {
+			editor.serializeDZ();
+			var editorToSend = JSON.stringify(editor);
+			
+			$.ajax(
+				{
+				url: config.previewUrl,
+				type: "POST",			
+				data: { editor: editorToSend},
+				success: function(response) {
+					win = open("", "DisplayWindow", "toolbar=0, titlebar=yes , status=1, directories=yes, menubar=0, location=yes, directories=yes, width=700, height=650, left=1, top=0");
+					win.document.write("" + response.response + "");
+				}
+			})
+		}
 	</script>
 	
 	{{ javascript_include('js/block.js') }}
@@ -294,6 +310,9 @@
 <div>
 	<div class="span2 offset2">
 		<input id="guardar" type="submit" class="btn btn-blue" value="Guardar">
+	</div>
+	<div class="span2 offset2">
+		<input onclick="verHTML(this.form)" type="button" value="Visualizar" class="btn btn-black">
 	</div>
 </div>
 	

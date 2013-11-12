@@ -732,6 +732,17 @@ class MailController extends ControllerBase
 			return $this->response->redirect('mail/source/' . $idMail);
 		}
 	}
+	
+	public function previeweditorAction()
+	{
+		$log = $this->logger;
+		$content = $this->request->getPost("editor");
+
+		$editorObj = new HtmlObj;
+		$editorObj->assignContent(json_decode($content));
+		
+		return $this->setJsonResponse(array('response' => $editorObj->render()));
+	}
 
 	public function showtemplateAction($id)
 	{
