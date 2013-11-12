@@ -10,7 +10,7 @@
 				e.innerHTML = template.template;
 				var d = e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 				$( "#content-template" ).empty();
-				$( "#content-template" ).append(d);
+				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(d);
 			});
 		}
 	</script>

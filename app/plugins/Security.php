@@ -248,9 +248,6 @@ class Security extends Plugin
 		
 		$controller = $dispatcher->getControllerName();
 		$action = $dispatcher->getActionName();
-		
-		$this->logger->log("DIR: " . $controller . ':' . $action);
-		$this->logger->log("ROLE: " . $role);
 
 		if ($role == 'ROLE_GUEST') {
 			$accessdir = $controller . ':' . $action;
@@ -263,9 +260,7 @@ class Security extends Plugin
 		else{
 			$acl = $this->getAcl();
 			
-			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
 			if (!isset($map[$controller .'::'. $action])) {
-				$this->logger->log("[$controller::$action] no existe en el mapa de permisos");
 				if($this->validateResponse($controller) == true){
 					$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
 				}
@@ -277,14 +272,10 @@ class Security extends Plugin
 
 
 			$reg = $map[$controller .'::'. $action];
-			$this->logger->log("[$controller::$action] tiene este mapa: " . print_r($reg, true));
-
+			
 			foreach($reg as $resources => $actions){
-				$this->logger->log("Validando permiso sobre recurso [$resources] (" . implode(',', $actions) . ")");
 				foreach ($actions as $act) {
 					if (!$acl->isAllowed($role, $resources, $act)) {
-						$this->logger->log('Verificacion manual: ' . ($acl->isAllowed('ROLE_ADMIN', 'session', 'login')?'YES':'NO'));
-						$this->logger->log("Oops no esta permitido: [$resources] ($act)");
 						$this->logger->log(print_r($acl, true));
 						if($this->validateResponse($controller) == true){
 							$this->setJsonResponse('Denegado', 404, 'Acción no permitida');

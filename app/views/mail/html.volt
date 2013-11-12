@@ -31,7 +31,7 @@
 	function verHTML(form) {
 		var inf = form.content.value;
 		$( "#content-template" ).empty();
-		$( "#content-template" ).append(inf);
+		$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(inf);
 	}
 	</script>
 {% endblock %}
@@ -94,7 +94,7 @@
 			Previsualización de plantilla
 		</div>
 		<div class="modal-body">
-			<div id="content-template">
+			<div id="content-template" class="align-modal-body">
 				
 			</div>
 		</div>

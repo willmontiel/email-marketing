@@ -243,7 +243,12 @@ a.inactive {
 }
 
 .preview-modal {
-	left: 35% !important;
 	width: 70% !important;
-	
+	margin-left: auto !important;
+	margin-right: auto !important;
+	left: auto !important;
+}
+
+.align-modal-body {
+	margin: auto !important;
 }
