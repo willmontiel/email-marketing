@@ -1,8 +1,6 @@
 {% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ javascript_include('js/preview.js')}}
-	{{ javascript_include('js/stoperror.js')}}
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ javascript_include('redactor/langs/es.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
@@ -29,6 +27,12 @@
 			});
 		}
 	);
+	
+	function verHTML(form) {
+		var inf = form.content.value;
+		$( "#content-template" ).empty();
+		$( "#content-template" ).append(inf);
+	}
 	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
@@ -78,11 +82,24 @@
 						<div class="form-actions">
 							<button class="btn btn-default" value="prev" name="direction"><i class="icon-circle-arrow-left"></i> Anterior</button>
 							<button class="btn btn-blue" value="next" name="direction">Siguiente <i class="icon-circle-arrow-right"></i></button>
-							<input onclick="verHTML(this.form)" type="button" value="Visualizar" class="btn btn-black">
+							<input onclick="verHTML(this.form)" href="#preview-modal" data-toggle="modal" type="button" value="Visualizar" class="btn btn-black">
 						</div>
 					</form>
 				</div>
 			</div>
+		</div>
+	</div>
+	<div id="preview-modal" class="modal hide fade preview-modal">
+		<div class="modal-header">
+			Previsualización de plantilla
+		</div>
+		<div class="modal-body">
+			<div id="content-template">
+				
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-black" data-dismiss="modal">x</button>
 		</div>
 	</div>
 {% endblock %}
