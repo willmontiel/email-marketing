@@ -255,7 +255,8 @@ Block.prototype.createSocialBlocks = function() {
 		
 		var socials = [];
 		var socialType = '';
-		var socialsNames = ['facebook', 'twitter', 'linkedin', 'google_plus'];
+		var socialsNames = ['Facebook', 'Twitter', 'LinkedIn', 'Google Plus'];
+		var imagesNames = ['facebook_image', 'twitter_image', 'linkedin_image', 'google_plus_image'];
 
 		if(this.typeBlock.search('share') > 0) {
 			socialType = 'share';
@@ -265,7 +266,7 @@ Block.prototype.createSocialBlocks = function() {
 		}
 
 		for(var i = 0; i < 4; i++) {
-			socials[i] = new SocialBlock(this.htmlData, socialsNames[i], socialType);
+			socials[i] = new SocialBlock(this.htmlData, socialsNames[i], socialType, imagesNames[i]);
 			socials[i].createSocialNetHtml();
 		}
 		this.contentData = socials;

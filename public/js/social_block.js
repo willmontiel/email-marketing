@@ -1,6 +1,7 @@
-function SocialBlock (parentBlock, socialName, socialType) {	
+function SocialBlock (parentBlock, socialName, socialType, imageName) {	
 	this.parentBlock = parentBlock;
 	this.socialName = socialName;
+	this.imageName = imageName;
 	this.linktext = socialName;
 	this.socialType = socialType;
 	this.selected = true;
@@ -16,6 +17,7 @@ SocialBlock.prototype.persist = function() {
 	obj.linktext = this.linktext;
 	obj.selected = this.selected;
 	obj.socialName = this.socialName;
+	obj.imageName = this.imageName;
 	obj.socialType = this.socialType;
 	obj.url = this.url;
 	
@@ -27,6 +29,7 @@ SocialBlock.prototype.unpersist = function(obj) {
 	this.linktext = obj.linktext;
 	this.selected = obj.selected;
 	this.socialName = obj.socialName;
+	this.imageName = obj.imageName;
 	this.socialType = obj.socialType;
 	this.url = obj.url;
 
@@ -38,17 +41,18 @@ SocialBlock.prototype.createSocialNetHtml = function() {
 	
 	if(this.socialType == 'share') {
 		
-		text = $("<div class=\"soc_net_share button_" + this.socialName + " pull-left\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.socialName + "_" + this.socialType + "\" alt=\"64x64\" /></div>");
+		text = $("<div class=\"soc_net_share button_" + this.socialName + " pull-left\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" alt=\"64x64\" /></div>");
 	}
 	else {
-		text = $("<div class=\"soc_net_follow button_" + this.socialName + " pull-left\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.socialName + "_" + this.socialType + "\" alt=\"64x64\" /></div><div class=\"link_text\">" + this.linktext + "</div>");
+		text = $("<div class=\"soc_net_follow button_" + this.socialName + " pull-left\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" alt=\"64x64\" /></div><div class=\"link_text\">" + this.linktext + "</div>");
 	}	
 	
 	this.htmlData = text;
 	
 	if(this.selected) {
-		this.parentBlock.find('.content_' + this.socialName).empty();
-		this.parentBlock.find('.content_' + this.socialName).append(text);
+		var forcontent = this.socialName.replace(" ","_");
+		this.parentBlock.find('.content_' + forcontent).empty();
+		this.parentBlock.find('.content_' + forcontent).append(text);
 	}
 };
 
@@ -86,7 +90,7 @@ SocialBlock.prototype.showSocialFollow = function() {
 		
 	var htmlText = $("<div class=\"socialComponent clearfix\">\n\
 						<div class=\"imageSocial\">\n\
-							<img src=\"" + config.imagesUrl + "/" + this.socialName + "_" + this.socialType + "\" /><label>" + this.socialName.charAt(0).toUpperCase() + this.socialName.slice(1) + "</label>\n\
+							<img src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" /><label>" + this.socialName.charAt(0).toUpperCase() + this.socialName.slice(1) + "</label>\n\
 						</div>\n\
 						<div class=\"infoSocial\">\n\
 							<div class=\"titleSocial\"><label>Texto del Link</label><input class=\"titlelink\" type=\"text\" value=\"" + this.linktext + "\"></div>\n\
@@ -101,7 +105,9 @@ SocialBlock.prototype.showSocialFollow = function() {
 	
 	$(htmlText.find('.titlelink')).on('change', function(){
 		
-		var contentText = t.parentBlock.find('.content_' + t.socialName + ' .link_text');
+		var forcontent = t.socialName.replace(" ","_");
+		
+		var contentText = t.parentBlock.find('.content_' + forcontent + ' .link_text');
 		
 		contentText.empty();
 		
@@ -130,7 +136,7 @@ SocialBlock.prototype.showSocialShare = function() {
 	
 	var htmlText = $("<div class=\"socialComponent clearfix\">\n\
 						<div class=\"imageSocial\">\n\
-							<img src=\"" + config.imagesUrl + "/" + this.socialName + "_" + this.socialType + "\" />\n\
+							<img src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" />\n\
 						</div>\n\
 						<div class=\"infoSocial\">\n\
 							<div class=\"titleSocial\">" + this.linktext + "</div>\n\
@@ -153,7 +159,9 @@ SocialBlock.prototype.selectSocial = function(htmlText) {
 		
 		if($(this).is(':checked')) {
 			
-			t.parentBlock.find('.content_' + t.socialName).append(t.htmlData);
+			var forcontent = t.socialName.replace(" ","_");
+			
+			t.parentBlock.find('.content_' + forcontent).append(t.htmlData);
 			
 			t.selected = true;
 		}
@@ -172,16 +180,16 @@ SocialBlock.prototype.setUrlByDefault = function() {
 	
 	switch(this.socialName)
 	{
-		case 'facebook':
+		case 'Facebook':
 			url = "http://www.facebook.com";
 			break;
-		case 'twitter':
+		case 'Twitter':
 			url = "http://www.twitter.com";
 			break;
-		case 'google_plus':
+		case 'Google Plus':
 			url = "http://plus.google.com";
 			break;
-		case 'linkedin':
+		case 'LinkedIn':
 			url = "http://www.linkedin.com";
 			break;	
 	}
