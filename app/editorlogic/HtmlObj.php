@@ -21,7 +21,7 @@ class HtmlObj extends HtmlAbstract
 	
 	public function renderObjPrefix()
 	{
-		return '<body bgcolor="'. $this->backgroundColor . '"><table style="width: 550px;" width="550px" cellspacing="0" cellpadding="0"><tbody>';
+		return '<table style="background-color: '. $this->backgroundColor . '; width: 100%;"><tr><td style="padding: 20px;"><center><table style="width: 550px;" width="550px" cellspacing="0" cellpadding="0"><tbody>';
 	}
 	public function renderChildPrefix($i)
 	{
@@ -30,12 +30,12 @@ class HtmlObj extends HtmlAbstract
 				return '';
 			}
 			else if($i == 3) {
-				return '<tr><td><table style="width: 100%;"><tbody><tr>';
+				return '<tr><td><table style="width: 100%; border-collapse: collapse; table-layout: fixed;"><tbody><tr>';
 			}
 		}
 		elseif (strpos($this->layout->name, 'columns')) {
 			if($i == 4) {
-				return '<tr><td><table style="width: 100%;"><tbody><tr>';
+				return '<tr><td><table style="width: 100%; border-collapse: collapse; table-layout: fixed;"><tbody><tr>';
 			}
 			if($i == 5) {
 				return '';
@@ -74,6 +74,6 @@ class HtmlObj extends HtmlAbstract
 	}
 	public function renderObjPostfix()
 	{
-		return '</tbody></table></body>';
+		return '</tbody></table></center></td></tr></table>';
 	}
 }

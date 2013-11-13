@@ -93,6 +93,12 @@ DropzoneArea.prototype.zoneColor = function() {
 		t.$obj.css('background-color', ev.color.toHex());
 		t.color = ev.color.toHex();
 	});
+	
+	$('#field-color-' + this.name).on('change', function(){
+		$('#color-' + t.name).colorpicker('setValue', $(this).val());
+		$('#edit-area').css('background-color', $(this).val());
+		t.editorColor = $(this).val();
+	});
 };
 
 DropzoneArea.prototype.ondrop = function() {

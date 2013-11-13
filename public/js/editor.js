@@ -89,7 +89,7 @@ Editor.prototype.changeLayout = function() {
 		}
 		else {
 
-			var newdz = new DropzoneArea(dzname, 'rgb(255,255,255)','#edit-area', this.layout.zones[z].width);;
+			var newdz = new DropzoneArea(dzname, '#ffffff','#edit-area', this.layout.zones[z].width);;
 			
 		}
 
@@ -129,12 +129,17 @@ Editor.prototype.colorLayout = function() {
 		$('#edit-area').css('background-color', ev.color.toHex());
 		t.editorColor = ev.color.toHex();
 	});
+	$('#field-color-pagina').on('change', function(){
+		$('#color-pagina').colorpicker('setValue', $(this).val());
+		$('#edit-area').css('background-color', $(this).val());
+		t.editorColor = $(this).val();
+	});
 };
 
 Editor.prototype.zoneHtmlColor = function(name, color) {
 	
 	var text = "<div class='input-append color' data-color='" + color + "' data-color-format='hex' id='color-" + name + "'>\n\
-					<input type='text' class='span8' value='' placeholder=" + color + ">\n\
+					<input type='text' class='span8' value='' placeholder=" + color + " id='field-color-" + name + "'>\n\
 					<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>\n\
 				</div>";
 	return text;
