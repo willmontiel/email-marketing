@@ -5,7 +5,7 @@
 		{{ javascript_include('js/stoperror.js')}}
 	<script type="text/javascript">
 		function preview(id) {
-			$.post("{{url('mail/showtemplate')}}/" + id, function(template){
+			$.post("{{url('template/preview')}}/" + id, function(template){
 				var e = document.createElement('div');
 				e.innerHTML = template.template;
 				var d = e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;

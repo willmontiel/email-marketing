@@ -39,6 +39,22 @@ class AssetObj
 		}
 	}
 	
+	public function createGlobalImage($name, $type, $tmp_dir, $size = null)
+	{
+		try {
+			$this->validateFile($name, $size);
+			$this->saveGloblaImageInDb($name, $size, $type, $tmp_dir);
+			
+			$image = new Image($this->account);
+			$dirImage = $image->saveImage($this->asset, $name, $tmp_dir);
+			
+			$thumbnail = new Thumbnail($this->account);
+			$thumbnail->createThumbnail($this->asset, $dirImage, $name);
+		}
+		catch (InvalidArgumentException $e) {
+			throw new InvalidArgumentException('we have a error...');
+		}
+	}
 	/**
 	 * Funcion que valida que el archivo este correcto
 	 * @param string $name

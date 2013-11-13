@@ -660,7 +660,7 @@ class ApiController extends ControllerBase
 		$contacts = $wrapper->findContactsComplete($list);
 //		$contacts = $wrapper->findContactsByList($list);
 		// Sideload de la informacion de la lista
-		$contacts['lists'] = array(ContactListWrapper::convertListToJson($list));
+		$contacts['lists'] = array(ContactListWrapper::convertListToJson($list, $list->dbase->account));
 
 		return $this->setJsonResponse($contacts);	
 	
@@ -685,7 +685,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
 		}
 		
-		$contacts['list'] = array(ContactListWrapper::convertListToJson($list));
+		$contacts['list'] = array(ContactListWrapper::convertListToJson($list, $list->dbase->account));
 	                
 		return $this->setJsonResponse($contacts);	
 	

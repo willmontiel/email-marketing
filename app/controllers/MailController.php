@@ -733,29 +733,6 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function previeweditorAction()
-	{
-		$log = $this->logger;
-		$content = $this->request->getPost("editor");
-
-		$editorObj = new HtmlObj;
-		$editorObj->assignContent(json_decode($content));
-		
-		return $this->setJsonResponse(array('response' => $editorObj->render()));
-	}
-
-	public function showtemplateAction($id)
-	{
-		$log = $this->logger;
-		$template = Template::findFirst(array(
-			"conditions" => "idTemplate = ?1",
-			"bind" => array(1 => $id)
-		));
-		
-//		$log->log("Html: " . $template->contentHtml);
-		return $this->setJsonResponse(array('template' => $template->contentHtml));
-	}
-	
 	protected function validateProcess($idMail)
 	{
 		$mail = Mail::findFirst(array(

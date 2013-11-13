@@ -179,9 +179,9 @@ try {
 	/*
 	 * Directorio de assets globales
 	 */
-	$globalasset = new stdClass();
-	$globalasset->dir = $config->general->globalassetsfolder;
-	$di->set('globalasset', $globalasset);
+	$templatesfolder = new stdClass();
+	$templatesfolder->dir = $config->general->templatesfolder;
+	$di->set('templatesfolder', $templatesfolder);
 	
 	$tmpdir = new stdClass;
 	$tmpdir->dir = $config->general->tmpdir;

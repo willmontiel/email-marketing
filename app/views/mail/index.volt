@@ -30,6 +30,9 @@
 		<a href="{{ url('mail/setup') }}" class="btn btn-default">
 			<i class="icon-plus"></i> Nuevo Correo
 		</a>
+		<a href="{{ url('template/new') }}" class="btn btn-default">
+			<i class="icon-plus"></i> Nueva Plantilla
+		</a>
 	</div>
 </div>
 <br />
