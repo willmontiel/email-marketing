@@ -25,7 +25,7 @@
 	{{ javascript_include('js/editor.js') }}
 
 <script>
-		var config = {sendUrl : "{{url('mail/editor')}}/{{idMail}}", imagesUrl: "{{url('images')}}", previewUrl: "{{url('mail/previeweditor')}}"};
+		var config = {sendUrl : "{{url('mail/editor')}}/{{idMail}}", imagesUrl: "{{url('images')}}", previewUrl: "{{url('mail/previeweditor')}}", templateUrl : "{{url('template/create')}}"};
 		
 		var mediaGallery = [
 		{%for asset in assets%}
@@ -313,6 +313,12 @@
 	</div>
 	<div class="span2 offset2">
 		<input onclick="verHTML(this.form)" type="button" value="Visualizar" class="btn btn-black">
+	</div>
+	<div class="span2">
+		<input id="createTemplate" type="submit" value="Guardar como Plantilla" class="btn btn-black">
+		<div id="newtemplatename">
+			<input type="text">
+		</div>
 	</div>
 </div>
 	

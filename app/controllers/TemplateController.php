@@ -95,4 +95,12 @@ class TemplateController extends ControllerBase
 		$this->view->disable();
 		return $this->response->setContent(file_get_contents($img));
 	}
+	
+	public function createAction() 
+	{
+		$log = $this->logger;
+		$content = $this->request->getPost("editor");
+		$name = $this->request->getPost("name");
+		
+	}
 }

@@ -308,6 +308,25 @@ $(function() {
 		});
 	});
 	
+	$('#createTemplate').on('click', function() {
+		
+	});
+	
+	$('#saveTemplate').on('click', function() {
+
+		editor.serializeDZ();
+		var editorToSend = JSON.stringify(editor);
+		
+		$.ajax(
+			{
+			url: config.templateUrl,
+			type: "POST",			
+			data: { editor: editorToSend}
+		});
+		
+		editor.objectExists(editor);
+	});
+	
 	$('.module-cont').on('click', '.content-image > .media-object', function() {
 		
 		var content = $(this).parents('.module');
