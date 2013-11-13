@@ -195,6 +195,7 @@ class Security extends Plugin
 				'mail::template' => array('mail' => array('read', 'create')),
 				'template::image' => array('mail' => array('read', 'create')),
 				'template::thumbnail' => array('mail' => array('read', 'create')),
+				'template::create' => array('mail' => array('create')),
 				'template::preview' => array('mail' => array('read', 'create')),
 				'template::new' => array('template' => array('read', 'create')),
 				'template::editor_frame' => array('template' => array('read', 'create')),

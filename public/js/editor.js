@@ -308,20 +308,16 @@ $(function() {
 		});
 	});
 	
-	$('#createTemplate').on('click', function() {
-		
-	});
-	
 	$('#saveTemplate').on('click', function() {
 
 		editor.serializeDZ();
 		var editorToSend = JSON.stringify(editor);
-		
+
 		$.ajax(
 			{
 			url: config.templateUrl,
 			type: "POST",			
-			data: { editor: editorToSend}
+			data: { editor: editorToSend, name: $('#templatename').val()}
 		});
 		
 		editor.objectExists(editor);

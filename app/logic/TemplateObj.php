@@ -6,7 +6,7 @@ class TemplateObj
 		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
 		
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
-		
+		$this->assetsfolder = $di['asset'];
 		$this->templatesfolder = $di['templatesfolder'];
 		$this->asset = $di['asset'];
 		$this->url = $di['url'];
@@ -27,7 +27,7 @@ class TemplateObj
 		}
 		
 		$template = $this->saveTemplateInDb($idAccount, $name, $category, $content, $contentHtml);
-		$newContentHtml = $this->saveTemplateInFolder($template->idTemplate, $contentHtml);
+		$newContentHtml = $this->saveTemplateInFolder($template->idTemplate, $contentHtml, $idAccount);
 		$this->updateContentHtml($template, $newContentHtml);
 	}
 	
@@ -47,9 +47,14 @@ class TemplateObj
 		return $template;
 	}
 	
-	protected function saveTemplateInFolder($idTemplate, $contentHtml)
+	protected function saveTemplateInFolder($idTemplate, $contentHtml, $idAccount)
 	{
-		$dir = $this->templatesfolder->dir . $idTemplate . '/images/';
+		if($idAccount){
+			$dir = $this->assetsfolder->dir . $idAccount . '/templates/' . $idTemplate . '/images/';
+		}
+		else {
+			$dir = $this->templatesfolder->dir . $idTemplate . '/images/';
+		}
 		if (!file_exists($dir)) {
 			mkdir($dir, 0777, true);
 		} 

@@ -1,8 +1,6 @@
 {% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-		{{ javascript_include('js/preview.js')}}
-		{{ javascript_include('js/stoperror.js')}}
 	<script type="text/javascript">
 		function preview(id) {
 			$.post("{{url('template/preview')}}/" + id, function(template){
@@ -67,7 +65,7 @@
 											<h5 style="text-align: center;">{{t['name']}}</h5>
 											<a href="{{url('mail/editor')}}/{{mail.idMail}}/{{t['id']}}" class="thumbnail">
 												<div class="img-wrap">
-													<img src="{{url('template/thumbnail')}}/{{t['id']}}" alt="{{t['name']}}" title="{{t['name']}}">
+													<img src="{{url('template/thumbnail')}}/{{t['id']}}/{{t['idAccount']}}" alt="{{t['name']}}" title="{{t['name']}}">
 													<div class="img-info">
 														<p><i class="icon-ok"></i> Elegir</p>
 													</div>

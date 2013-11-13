@@ -312,7 +312,7 @@ class MailController extends ControllerBase
 		if ($mail) {
 			$this->view->setVar('mail', $mail);
 			
-			$templates = Template::find();
+			$templates = Template::findGlobalsAndPrivateTemplates($this->user->account);
 			
 			$arrayTemplate = array();
 			foreach ($templates as $template) {
@@ -320,7 +320,8 @@ class MailController extends ControllerBase
 					"id" => $template->idTemplate, 
 					"name" => $template->name, 
 					"content" => $template->content,
-					"html" => $template->contentHtml
+					"html" => $template->contentHtml,
+					"idAccount" => $template->idAccount
 				);
 
 				$arrayTemplate[$template->category][] = $templateInfo;
@@ -731,6 +732,17 @@ class MailController extends ControllerBase
 		else {
 			return $this->response->redirect('mail/source/' . $idMail);
 		}
+	}
+	
+	public function previeweditorAction()
+	{
+		$log = $this->logger;
+		$content = $this->request->getPost("editor");
+
+		$editorObj = new HtmlObj;
+		$editorObj->assignContent(json_decode($content));
+		
+		return $this->setJsonResponse(array('response' => $editorObj->render()));
 	}
 	
 	protected function validateProcess($idMail)

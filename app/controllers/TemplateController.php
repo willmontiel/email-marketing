@@ -75,7 +75,7 @@ class TemplateController extends ControllerBase
 		return $this->response->setContent(file_get_contents($img));
 	}
 	
-	public function thumbnailAction($idTemplate) 
+	public function thumbnailAction($idTemplate, $idAccount) 
 	{
 		$template = Template::findFirst(array(
 			"conditions" => "idTemplate = ?1",
@@ -86,8 +86,15 @@ class TemplateController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'template not found!!');
 		}
 		
-		$img = $this->globalasset->dir . $idTemplate . "/images/thumbnail_" . $idTemplate . ".png";
-//		$log->log("Url: " . $img);
+		if($idAccount) {
+			
+			$img = $this->asset->dir . $idAccount . "/templates/" . $idTemplate . "/images/thumbnail_" . $idTemplate . ".png";
+			$log->log($img);
+		}
+		else {
+			$img = $this->templatesfolder->dir . $idTemplate . "/images/thumbnail_" . $idTemplate . ".png";
+		}
+		
 		$info = getimagesize($img);
 		$this->response->setHeader("Content-Type:", $info['mime']);
 		$this->response->setHeader("Content-Length", filesize($img));
@@ -102,5 +109,18 @@ class TemplateController extends ControllerBase
 		$content = $this->request->getPost("editor");
 		$name = $this->request->getPost("name");
 		
+		if (empty($content) || empty($name)) {
+			return $this->setJsonResponse(array('error' => 'Ha enviado campos vacíos, por favor verifique la información'), 404, 'failed');
+		}
+		
+		$category = "Mis Templates";
+		
+		try {
+			$template = new TemplateObj();
+			$template->createTemplate($name, $category, $content, $this->user->account);
+		}
+		catch (InvalidArgumentException $e) {
+
+		}
 	}
 }

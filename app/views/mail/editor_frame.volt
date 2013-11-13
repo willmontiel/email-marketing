@@ -315,12 +315,24 @@
 		<input onclick="verHTML(this.form)" type="button" value="Visualizar" class="btn btn-black">
 	</div>
 	<div class="span2">
-		<input id="createTemplate" type="submit" value="Guardar como Plantilla" class="btn btn-black">
-		<div id="newtemplatename">
-			<input type="text">
-		</div>
+		<input data-toggle="modal" href="#newtemplatename" type="submit" value="Guardar como Plantilla" class="btn btn-black">
 	</div>
 </div>
+
+<div id="newtemplatename" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Nuevo Template</h3>
+	</div>
+	<div class="modal-body">
+		<label>Escriba un nombre para el nuevo template</label>
+		<input id="templatename" type="text">
+	</div>
+	<div class="modal-footer">
+		<a id="saveTemplate" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
+		<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>	
 	
 <div id="clipsmodal" style="display: none;">
 	
