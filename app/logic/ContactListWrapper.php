@@ -214,7 +214,33 @@ class ContactListWrapper extends BaseWrapper
 		return $deleteContaclist;
 	}
 
-	
+	public function findContactListByValueSearch(Account $account, $valueSearch)
+	{
+		$dbase = Dbase::findFirst(array(
+			'conditions' => 'idAccount = ?1 and name = ?2',
+			'bind' => array(1 => $account->idAccount,
+							2 => $valueSearch)
+		));
+		
+		$contactLists = Contactlist::find(array(
+			'conditions' => 'idDbase = ?1',
+			'bind' => array(1 => $dbase->idDbase)
+		));
+		
+		$lists = array();
+		
+		if ($contactLists) {
+			$this->pager->setTotalRecords(count($contactLists));
+			foreach ($contactLists as $list) {
+				$lists[] = $this->convertListToJson($list, $account);
+			}
+		}
+		return array(
+					'lists' => $lists, 
+					'dbase' => DbaseWrapper::getDbasesAsJSON($account),
+					'meta' => $this->pager->getPaginationObject()
+				);
+	}
 }
 
 
