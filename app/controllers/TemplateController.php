@@ -3,22 +3,25 @@ class TemplateController extends ControllerBase
 {	
 	public function newAction()
 	{
-		$log = $this->logger;
 		if ($this->request->isPost()) {
 			$content = $this->request->getPost("editor");
 			$name = $this->request->getPost("name");
 			$category = $this->request->getPost("category");
 			
 			if (empty($content) || empty($name) || empty($category)) {
-				return $this->setJsonResponse(array('error' => 'Ha enviado campos vacíos, por favor verifique la información'), 404, 'failed');
+				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos, por favor verifique la información'), 404, 'failed');
 			}
 			
 			try {
 				$template = new TemplateObj();
-				$template->createTemplate($name, $category, $content);
+				$templateDone = $template->createTemplate($name, $category, $content);
 			}
 			catch (InvalidArgumentException $e) {
-				
+				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 404, 'failed');
+			}
+			
+			if ($templateDone) {
+				return $this->setJsonResponse(array('msg' => 'Se ha creado la cuenta exitosamente'), 200, 'success');
 			}
 		}
 	}
@@ -97,7 +100,7 @@ class TemplateController extends ControllerBase
 		
 		$info = getimagesize($img);
 		$this->response->setHeader("Content-Type:", $info['mime']);
-		$this->response->setHeader("Content-Length", filesize($img));
+		//$this->response->setHeader("Content-Length", filesize($img));
 		
 		$this->view->disable();
 		return $this->response->setContent(file_get_contents($img));

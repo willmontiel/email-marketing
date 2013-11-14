@@ -14,11 +14,6 @@ class TemplateObj
 	
 	public function createTemplate($name, $category, $content, Account $account = null)
 	{
-		$editorObj = new HtmlObj;
-		$editorObj->assignContent(json_decode($content));
-		$contentHtml = $editorObj->render();
-		$this->log->log('Html: ' . $contentHtml);
-		
 		if ($account == null) {
 			$idAccount = null;
 		}
@@ -26,62 +21,78 @@ class TemplateObj
 			$idAccount = $account->idAccount;
 		}
 		
-		$template = $this->saveTemplateInDb($idAccount, $name, $category, $content, $contentHtml);
-		$newContentHtml = $this->saveTemplateInFolder($template->idTemplate, $contentHtml, $idAccount);
-		$this->updateContentHtml($template, $newContentHtml);
+		$template = $this->saveTemplateInDb($idAccount, $name, $category);
+		$newContent = $this->saveTemplateInFolder($template->idTemplate, $content);
+		
+		$editorObj = new HtmlObj;
+		$editorObj->assignContent(json_decode($newContent));
+		$contentHtml = $editorObj->render();
+		
+		$this->updateContentHtml($template, $newContent, $contentHtml);
+		
+		return true;
 	}
 	
-	protected function saveTemplateInDb($idAccount, $name, $category, $content, $contentHtml)
+	protected function saveTemplateInDb($idAccount, $name, $category)
 	{
 		$template = new Template();
 		$template->idAccount = $idAccount;
 		$template->name = $name;
 		$template->category = $category;
-		$template->content = $content;
-		$template->contentHtml = $contentHtml;
+		$template->content = null;
+		$template->contentHtml = null;
 		
 		if (!$template->save()) {
 			throw new InvalidArgumentException('we have a error...');
 		}
-	
 		return $template;
 	}
 	
-	protected function saveTemplateInFolder($idTemplate, $contentHtml, $idAccount)
+	protected function saveTemplateInFolder($idTemplate, $content)
 	{
-		if($idAccount){
-			$dir = $this->assetsfolder->dir . $idAccount . '/templates/' . $idTemplate . '/images/';
-		}
-		else {
-			$dir = $this->templatesfolder->dir . $idTemplate . '/images/';
-		}
+		$contentJson = json_decode($content);
+		$dir = $this->templatesfolder->dir . $idTemplate . '/images/';
 		if (!file_exists($dir)) {
 			mkdir($dir, 0777, true);
 		} 
 		
-		$srcs = $this->getImageSrc($contentHtml);
-		
 		$find = array();
 		$replace = array();
-		foreach ($srcs as $src) {
-			$idAsset = filter_var($src->getAttribute('src'), FILTER_SANITIZE_NUMBER_INT);
-			$asset = Asset::findFirst(array(
-				"conditions" => "idAsset = ?1",
-				"bind" => array(1 => $idAsset)
-			));
-		
-			$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
-			
-			$templateImage = $this->saveTemplateImage($idTemplate, $asset->fileName);
-			
-			$find[] = $src->getAttribute('src');
-			$replace[] = $this->url->get('template/image') . '/' . $idTemplate . '/' .$templateImage->idTemplateImage;
-		
-			$img = $this->asset->dir . $asset->idAccount . "/images/" . $asset->idAsset . "." .$ext;
-			copy($img, $dir . $templateImage->idTemplateImage . '.' .$ext);
+		foreach ($contentJson->dz as $zone) {
+			foreach ($zone->content as $data) {
+				$imgTag = new DOMDocument();
+				if (is_object($data->contentData )) {
+					$imgTag->loadHTML($data->contentData->image);
+				}
+				else {
+					$imgTag->loadHTML($data->contentData);
+				}
+				
+				$src = $imgTag->getElementsByTagName('img');
+				
+				if ($src->length !== 0) {
+					$idAsset = filter_var($src->item(0)->getAttribute('src'), FILTER_SANITIZE_NUMBER_INT);
+
+					$asset = Asset::findFirst(array(
+						"conditions" => "idAsset = ?1",
+						"bind" => array(1 => $idAsset)
+					));
+
+					$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
+					$templateImage = $this->saveTemplateImage($idTemplate, $asset->fileName);
+
+					$img = $this->asset->dir . $asset->idAccount . "/images/" . $asset->idAsset . "." .$ext;
+					
+					if (!copy($img, $dir . $templateImage->idTemplateImage . '.' .$ext)) {
+						throw new InvalidArgumentException('Error while copying image files');
+					}
+					$find[] = $src->item(0)->getAttribute('src');
+					$replace[] = $this->url->get('template/image') . '/' . $idTemplate . '/' .$templateImage->idTemplateImage;
+				}
+			}
 		}
-		$newContentHtml = $this->replaceSrc($find, $replace, $contentHtml);
-		return $newContentHtml;
+		$newContent = str_replace($find, $replace, $content);
+		return $newContent;
 	}
 	
 	private function saveTemplateImage($idTemplate, $name)
@@ -92,33 +103,18 @@ class TemplateObj
 		$templateImage->name = $name;
 		
 		if (!$templateImage->save()) {
-			throw new InvalidArgumentException('Erro while saving templateimage');
+			throw new InvalidArgumentException('Error while saving templateimage');
 		}
 		return $templateImage;
 	}
-		
-	private function updateContentHtml($template, $newContentHtml)
+	
+	private function updateContentHtml($template, $newContent, $newContentHtml)
 	{
+		$template->content = $newContent;
 		$template->contentHtml = htmlspecialchars($newContentHtml, ENT_QUOTES);
 		
 		if (!$template->save()) {
-			$this->log->log("No guardó");
-			throw new InvalidArgumentException('Erro while updating template');
+			throw new InvalidArgumentException('Error while updating template');
 		}
-	}
-	
-	private function getImageSrc($data)
-	{
-		$imgTag = new DOMDocument();
-		$imgTag->loadHTML($data);
-		
-		$srcs = $imgTag->getElementsByTagName('img');
-		return $srcs;
-	}
-	
-	private function replaceSrc($find, $replace, $contentHtml)
-	{
-		$newContent = str_replace($find, $replace, $contentHtml);
-		return $newContent;
 	}
 }

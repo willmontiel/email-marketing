@@ -22,9 +22,14 @@
 				name: name,
 				category: category,		
 				editor: editor
+			},
+			error: function(msg){
+				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
+			},
+			success: function(){
+				$(location).attr('href', "{{url('mail/index')}}"); 
 			}
 		});
-		console.log(editor);
 	}
 </script>
 {% endblock %}

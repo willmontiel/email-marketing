@@ -27,8 +27,8 @@ class AssetController extends ControllerBase
 			$tmp_dir = $_FILES['file']['tmp_name'];
 			
 			try {
-				$assetObj = new AssetObj();
-				$assetObj->createImage($this->user->account, $name, $type, $tmp_dir, $size);
+				$assetObj = new AssetObj($this->user->account);
+				$assetObj->createImage($name, $type, $tmp_dir, $size);
 			} 
 			catch (InvalidArgumentException $e) {
 				return $this->setJsonResponse(
