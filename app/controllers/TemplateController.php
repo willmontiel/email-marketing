@@ -9,7 +9,7 @@ class TemplateController extends ControllerBase
 			$category = $this->request->getPost("category");
 			
 			if (empty($content) || empty($name) || empty($category)) {
-				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos, por favor verifique la información'), 404, 'failed');
+				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos, por favor verifique la información'), 400 , 'failed');
 			}
 			
 			try {
@@ -17,7 +17,7 @@ class TemplateController extends ControllerBase
 				$templateDone = $template->createTemplate($name, $category, $content);
 			}
 			catch (InvalidArgumentException $e) {
-				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 404, 'failed');
+				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
 			
 			if ($templateDone) {

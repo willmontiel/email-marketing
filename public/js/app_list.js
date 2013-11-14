@@ -79,7 +79,15 @@ App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, E
 		this.set('acl', App.contactListACL);
 	},
 	modelClass : App.List,
-	needs: 'dbase'
+	needs: 'dbase',
+	
+	actions: {
+		searchText: '',
+		search: function(){
+			var resultado = this.store.find('list', { dbase: this.get('searchText') });
+			this.set('content', resultado);
+		}
+	}
 });
 
 App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
