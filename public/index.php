@@ -215,6 +215,10 @@ try {
 			return 'number_format(' . $resolvedArgs . ', 0, \',\', \'.\')';
 		});
 		
+		$compiler->addFilter('change_spaces_in_between', function ($resolvedArgs, $exprArgs){
+				return 'str_replace(" ", "_", ' . $resolvedArgs . ')';
+			});
+		
 		$compiler->addFunction('ember_customfield', function ($resolvedArgs, $exprArgs) {
                         return 'CreateViewEmber::createField(' . $resolvedArgs . ')';
                     });

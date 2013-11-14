@@ -33,23 +33,18 @@
 		{%endfor%}
 		];
 		
-		function verHTML(form) {
+		function catchEditorData() {
 			editor.serializeDZ();
 			var editorToSend = JSON.stringify(editor);
-			
-			$.ajax(
-				{
-				url: config.previewUrl,
-				type: "POST",			
-				data: { editor: editorToSend},
-				success: function(response) {
-					win = open("", "DisplayWindow", "toolbar=0, titlebar=yes , status=1, directories=yes, menubar=0, location=yes, directories=yes, width=700, height=650, left=1, top=0");
-					win.document.write("" + response.response + "");
-				}
-			});
-			
+
+			return editorToSend;
+		}
+		
+		
+		function RecreateEditor() {
 			editor.objectExists(editor);
 		}
+
 	</script>
 
 {% endblock %}
@@ -307,18 +302,6 @@
 		</div>
 	</div>
 </div>
-<div>
-	<div class="span2 offset2">
-		<input id="guardar" type="submit" class="btn btn-blue" value="Guardar">
-	</div>
-	<div class="span2 offset2">
-		<input onclick="verHTML(this.form)" type="button" value="Visualizar" class="btn btn-black">
-	</div>
-	<div class="span2">
-		<input data-toggle="modal" href="#newtemplatename" type="submit" value="Guardar como Plantilla" class="btn btn-black">
-	</div>
-</div>
-
 <div id="newtemplatename" class="modal hide fade">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

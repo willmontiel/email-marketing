@@ -236,6 +236,12 @@ class MailController extends ControllerBase
 			}
 			
 			if ($this->request->isPost()) {
+				if ($mail->wizardOption == 'source' || $mail->wizardOption == 'setup') {
+					$wizardOption = 'source';
+				}
+				else{
+					$wizardOption = $mail->wizardOption;
+				}
 				
 				$mailContent = new Mailcontent();
 				$content = $this->request->getPost("editor");
@@ -244,11 +250,7 @@ class MailController extends ControllerBase
 				$mailContent->content = $content;
 
 				$mail->type = "Editor";
-				
-				$editorObj = new HtmlObj;
-				$editorObj->assignContent(json_decode($content));
-				$a = $editorObj->render();
-				$log->log('Html: ' . $a);
+				$mail->wizardOption = $wizardOption;
 				
 				if(!$mailContent->save()) {
 //					$log->log("No guarda");
@@ -466,10 +468,10 @@ class MailController extends ControllerBase
 	public function plaintextAction($idMail)
 	{
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND status = ?2 AND type = ?3',
+			'conditions' => 'idMail = ?1 AND status = ?2 AND wizardOption = ?3',
 			'bind' => array(1 => $idMail,
 							2 => 'Draft',
-							3 => 'Html')
+							3 => 'source')
 		));
 		
 		if ($mail) {
@@ -480,9 +482,18 @@ class MailController extends ControllerBase
 				'bind' => array(1 => $mail->idMail)
 			));
 			
+			if ($mail->type == 'Editor') {
+				$editorObj = new HtmlObj;
+				$editorObj->assignContent(json_decode($mailContent->content));
+				$content = $editorObj->render();
+			}
+			else {
+				$content = $mailContent->content;
+			}
+			
 			if ($mailContent->plainText == null) {
 				$text = new PlainText();
-				$plainText = $text->getPlainText($mailContent->content);
+				$plainText = $text->getPlainText($content);
 			}
 			else {
 				$plainText = $mailContent->plainText;
@@ -514,6 +525,9 @@ class MailController extends ControllerBase
 						break;;
 				}
 			}
+		}
+		else {
+			return $this->response->redirect('mail/source/' . $idMail);
 		}
 	}
 	

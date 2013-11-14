@@ -312,19 +312,6 @@ $(function() {
 		}
 	});
 	
-	$('#guardar').on('click', function() {
-		
-		editor.serializeDZ();
-		var editorToSend = JSON.stringify(editor);
-		
-		$.ajax(
-			{
-			url: config.sendUrl,
-			type: "POST",			
-			data: { editor: editorToSend}
-		});
-	});
-	
 	$('#saveTemplate').on('click', function() {
 
 		editor.serializeDZ();

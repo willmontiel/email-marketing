@@ -58,7 +58,7 @@
 					<div class="padded">
 						<div class="tab-content">
 							{% for category, template in arrayTemplate %}
-								<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category}}">
+								<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category|change_spaces_in_between}}">
 									<ul class="thumbnails padded">
 										{% for t in template %}
 										<li class="span3">
@@ -97,7 +97,7 @@
 					<div class="padded">
 						<ul class="nav nav-pills nav-stacked nav-template">
 							{% for category, template in arrayTemplate %}
-								<li class="{% if loop.first %}active{% endif %}"><a href="#{{category}}" data-toggle="tab">{{category}}</a></li> 
+								<li class="{% if loop.first %}active{% endif %}"><a href="#{{category|change_spaces_in_between}}" data-toggle="tab">{{category}}</a></li> 
 							{% endfor %}
 						</ul>
 					</div>
