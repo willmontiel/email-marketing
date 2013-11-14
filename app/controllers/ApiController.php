@@ -544,15 +544,15 @@ class ApiController extends ControllerBase
 		}
 		
 		$name = $this->request->getQuery('name', null);
-		$valueSearch = $this->request->getQuery('dbase', null, null);
+		$idDbase = $this->request->getQuery('dbase', null, null);
 		$contactWrapper = new ContactListWrapper();
 		$contactWrapper->setPager($pager);
 		
-		if($valueSearch == null) {
+		if($idDbase == 0) {
 			$lists = $contactWrapper->findContactListByAccount($this->user->account, $name);
 		}
 		else {
-			$lists = $contactWrapper->findContactListByValueSearch($this->user->account, $valueSearch);
+			$lists = $contactWrapper->findContactListByIdDbase($this->user->account, $idDbase);
 		}
 		return $this->setJsonResponse($lists);
 	}

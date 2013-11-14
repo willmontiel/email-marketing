@@ -214,17 +214,11 @@ class ContactListWrapper extends BaseWrapper
 		return $deleteContaclist;
 	}
 
-	public function findContactListByValueSearch(Account $account, $valueSearch)
+	public function findContactListByIdDbase(Account $account, $idDbase)
 	{
-		$dbase = Dbase::findFirst(array(
-			'conditions' => 'idAccount = ?1 and name = ?2',
-			'bind' => array(1 => $account->idAccount,
-							2 => $valueSearch)
-		));
-		
 		$contactLists = Contactlist::find(array(
 			'conditions' => 'idDbase = ?1',
-			'bind' => array(1 => $dbase->idDbase)
+			'bind' => array(1 => $idDbase)
 		));
 		
 		$lists = array();

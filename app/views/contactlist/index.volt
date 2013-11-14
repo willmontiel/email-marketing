@@ -66,10 +66,12 @@
 				<div class="span7">
 					<form>
 						<p>
-							<label class="input-with-submit pull-left">
-								{{' {{view Ember.TextField valueBinding="searchText" type="text" placeholder="Buscar" autofocus="autofocus"}} '}}
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="submit-icon" {{ '{{action search this}}' }}><i class="icon-search"></i></button>
-							</label>
+							{{ '{{view Ember.Select
+									contentBinding="dbaseSelect"
+									optionValuePath="content.id"
+									optionLabelPath="content.name"
+									valueBinding="selectedDbase"}}'
+							}}
 						</p>
 					</form>
 				</div>

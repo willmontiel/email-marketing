@@ -70,23 +70,31 @@ App.ListsEditRoute = Ember.Route.extend({
 
 
 
-/* Controladores de Contact Lists */
+/* Controladores de ContactLists */
 App.ListController = Ember.ObjectController.extend();
 
-App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, Ember.AclMixin,{
+App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, Ember.AclMixin,{		
+	selectedDbase: null,
 	init: function () 
 	{
 		this.set('acl', App.contactListACL);
 	},
+
 	modelClass : App.List,
-	needs: 'dbase',
+	needs: ['dbase'],
+	dbaseSelect: [
+		{name: "Todas las bases", id: 0},
+		{name: "Plantilla PSG", id: 7},
+		{name: "Emirates Stadium",    id: 8}
+	],
 	
+	dbaseSelectChange: function () {
+		var idDbase = this.get('selectedDbase');
+		var resultado = this.store.find('list', { dbase: idDbase });
+		this.set('content', resultado);
+    }.observes('selectedDbase'),
+			
 	actions: {
-		searchText: '',
-		search: function(){
-			var resultado = this.store.find('list', { dbase: this.get('searchText') });
-			this.set('content', resultado);
-		}
 	}
 });
 
