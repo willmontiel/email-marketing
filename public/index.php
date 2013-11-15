@@ -131,7 +131,7 @@ try {
 		// Events Manager para la base de datos
 		$eventsManager = new \Phalcon\Events\Manager();
 		
-//		if ($config->general->profiledb) {
+		if ($config->general->profiledb) {
 			// Profiler
 			$profiler = $di->get('profiler');
 			$timer = $di->get('timerObject');
@@ -146,7 +146,7 @@ try {
 					$timer->endTimer('SQL');
 				}
 			});
-//		}
+		}
 		
         $connection = new \Phalcon\Db\Adapter\Pdo\Mysql($config->database->toArray());
 		

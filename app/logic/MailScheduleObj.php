@@ -6,12 +6,12 @@ class MailScheduleObj
 		$this->mail = $mail;
 	}
 	
-	public function taskSchedule()
+	public function scheduleTask()
 	{
 		$task = new Mailschedule();
 		
-		$task->idMail = $this->mail;
-		$task->scheduleDate = $this->scheduleDate;
+		$task->mail = $this->mail;
+		$task->scheduleDate = $this->mail->scheduleDate;
 		
 		if (!$task->save()) {
 			return false;
