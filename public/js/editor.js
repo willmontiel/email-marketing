@@ -246,12 +246,18 @@ Editor.prototype.deleteZoneByTool = function(name, objblk) {
 };
 
 function layoutChosen() {
+	
+	$('#none-layout').remove();
 	$('#tabcomponents').show();
 	$('#tabimages').show();
 	$('#tabstyles').show();
-
+	parent.$('.btnoptions').show();
+	
 	$('#layouts').removeClass('active');
 	$('#tablayouts').removeClass('active');
+	
+	$('#styles').removeClass('active');
+	$('#tabstyles').removeClass('active');
 	
 	$('#components').addClass('active');
 	$('#tabcomponents').addClass('active');
@@ -282,6 +288,8 @@ $(function() {
 	});
 	
 	$('img').on('dragstart', function(event) { event.preventDefault(); });
+	
+	$('.gallery-modal').draggable({handle: ".gallery-header"});
 	
 	$('.module-cont').on('click', '.module > .tools > .remove-tool', function (event) {
 		
@@ -321,7 +329,7 @@ $(function() {
 			{
 			url: config.templateUrl,
 			type: "POST",			
-			data: { editor: editorToSend, name: $('#templatename').val()}
+			data: { editor: editorToSend, name: $('#templatename').val(), category: $('#templatecategory').val()}
 		});
 		
 		editor.objectExists(editor);

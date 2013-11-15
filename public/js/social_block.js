@@ -41,10 +41,10 @@ SocialBlock.prototype.createSocialNetHtml = function() {
 	
 	if(this.socialType == 'share') {
 		
-		text = $("<div class=\"soc_net_share button_" + this.socialName + " pull-left\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" alt=\"64x64\" /></div>");
+		text = $("<div class=\"soc_net_share button_" + this.socialName + " pull-center\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" alt=\"64x64\" /></div>");
 	}
 	else {
-		text = $("<div class=\"soc_net_follow button_" + this.socialName + " pull-left\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" alt=\"64x64\" /></div><div class=\"link_text\">" + this.linktext + "</div>");
+		text = $("<div class=\"soc_net_follow button_" + this.socialName + " pull-center\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" alt=\"64x64\" /></div><div class=\"link_text\">" + this.linktext + "</div>");
 	}	
 	
 	this.htmlData = text;

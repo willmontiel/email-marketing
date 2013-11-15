@@ -252,3 +252,20 @@ a.inactive {
 .align-modal-body {
 	margin: auto !important;
 }
+
+.btnoptions {
+	display: none;
+}
+
+.templateName {
+	margin: 15px 25px 0px 500px;
+}
+
+.templateCategory {
+	margin-top: 15px;
+	margin-right: 25px;
+}
+
+.templateBtns {
+	margin-top: 15px;
+}

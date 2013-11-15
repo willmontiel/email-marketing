@@ -12,9 +12,16 @@ class TemplateController extends ControllerBase
 				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos, por favor verifique la información'), 400 , 'failed');
 			}
 			
+			if ($this->user->userrole == "ROLE_SUDO") {
+				$account = null;
+			}
+			else {
+				$account = $this->user->account;
+			}
+			
 			try {
 				$template = new TemplateObj();
-				$templateDone = $template->createTemplate($name, $category, $content);
+				$templateDone = $template->createTemplate($name, $category, $content, $account);
 			}
 			catch (InvalidArgumentException $e) {
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
@@ -111,16 +118,17 @@ class TemplateController extends ControllerBase
 		$log = $this->logger;
 		$content = $this->request->getPost("editor");
 		$name = $this->request->getPost("name");
-		
+		$category = $this->request->getPost("category");
+				
 		if (empty($content) || empty($name)) {
 			return $this->setJsonResponse(array('error' => 'Ha enviado campos vacíos, por favor verifique la información'), 404, 'failed');
 		}
 		
-		$category = "Mis Templates";
+		$categoryF = !empty($category) ? $category : "Mis Templates";
 		
 		try {
 			$template = new TemplateObj();
-			$template->createTemplate($name, $category, $content, $this->user->account);
+			$template->createTemplate($name, $categoryF, $content, $this->user->account);
 		}
 		catch (InvalidArgumentException $e) {
 

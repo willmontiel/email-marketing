@@ -25,7 +25,7 @@
 	{{ javascript_include('js/editor.js') }}
 
 <script>
-		var config = {sendUrl : "{{url('mail/editor')}}/{{idMail}}", imagesUrl: "{{url('images')}}", previewUrl: "{{url('mail/previeweditor')}}", templateUrl : "{{url('template/create')}}"};
+		var config = {imagesUrl: "{{url('images')}}", templateUrl : "{{url('template/create')}}"};
 		
 		var mediaGallery = [
 		{%for asset in assets%}
@@ -53,6 +53,10 @@
 <div class="row-fluid">
 	<div class="span9">
 		<div id="edit-area" class="module-cont clearfix">
+			<div id="none-layout">
+				<div class="none-layout-image"></div>
+				<h3>Seleccione un Layout</h3>
+			</div>
 		</div>
 	</div>
 	<div class="span3">
@@ -98,7 +102,7 @@
 							</div>
 							<div class="content clearfix">
 								<div class="content-image full-content pull-left">
-									<img data-toggle="modal" href="#images" class="media-object" src="{{url('images/image')}}" alt="64x64" />
+									<img data-toggle="modal" href="#images" class="media-object image-placeholder" />
 								</div>
 							</div>
 						</div>
@@ -123,7 +127,7 @@
 										</td>
 										<td>
 											<div class="content-image pull-left">
-												<img data-toggle="modal" href="#images" class="media-object" src="{{url('images/image')}}" alt="64x64" />
+												<img data-toggle="modal" href="#images" class="media-object image-text-placeholder" />
 											</div>
 										</td>
 									</tr>
@@ -146,7 +150,7 @@
 									<tr>
 										<td>
 											<div class="content-image pull-left">
-												<img data-toggle="modal" href="#images" class="media-object" src="{{url('images/image')}}" alt="64x64" />
+												<img data-toggle="modal" href="#images" class="media-object image-text-placeholder" />
 											</div>
 										</td>
 										<td>
@@ -221,8 +225,8 @@
 			</div>	
 		</div>
 			
-		<div id="images" class="modal hide fade">
-			<div class="modal-header">
+		<div id="images" class="modal hide fade gallery-modal">
+			<div class="modal-header gallery-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h3>Imagenes</h3>
 			</div>
@@ -310,6 +314,9 @@
 	<div class="modal-body">
 		<label>Escriba un nombre para el nuevo template</label>
 		<input id="templatename" type="text">
+		<br />
+		<label>Categoria</label>
+		<input id="templatecategory" type="text">
 	</div>
 	<div class="modal-footer">
 		<a id="saveTemplate" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>

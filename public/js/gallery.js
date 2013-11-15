@@ -55,10 +55,25 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 	
 	$('#imagedisplayer').empty();
 	
+	switch (this.block.parentBlock.width) {
+		case 'full-width':
+			this.widthZone =  550;
+			break;
+		case 'half-width':
+			this.widthZone = 550/2;
+			break;
+		case 'third-width':
+			this.widthZone = Math.floor(550/3);
+			break;
+		case 'twothird-width':
+			this.widthZone = Math.floor(550*2/3);
+			break;
+	}
+	
 	if (this.block != null && this.block.hasOwnProperty('htmlData')) {
 		
-		if(newsrc == '/emarketing/images/image') {
-			
+		if(newsrc == undefined) {
+	
 			this.cleanMediaDisplayer();
 			
 			var msg = $('<p>Seleccione una imagen de la galeria</p>');
@@ -66,6 +81,10 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 			$('#imagedisplayer').append(msg);
 		}
 		else {
+			
+			this.block.htmlData.find('img').removeClass('image-placeholder');
+			
+			this.block.htmlData.find('img').removeClass('image-text-placeholder');
 			
 			this.block.changeAttrImgBlock('src', newsrc);
 			
@@ -93,7 +112,14 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 
 					var realHeight = img.naturalHeight;
 					
-					var realWidth = img.naturalWidth;
+					if( t.block.typeBlock.search('text') > 0 ) {
+						
+						var realWidth = (img.naturalWidth > Math.floor(t.widthZone*3/4)) ? Math.floor(t.widthZone*3/4) : img.naturalWidth;
+					}
+					else {
+						
+						var realWidth = (img.naturalWidth > t.widthZone) ? t.widthZone : img.naturalWidth;
+					}
 					
 					var widthDisplayer = 130;
 					
@@ -142,21 +168,41 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('#imageslider').empty();
 	
+	$('#imageslider').append($('<br/> <div>Aumentar o Disminuir el Tamaño de la Imagen</div>'));
+	
 	var slr = $('<input type="text" id="sliderMedia" >');
 	
 	$('#imageslider').append(slr);
 	
-	$('#accept_cancel_image').show();
 	$('#align_image').show();
 	
+	var totalWidthBlock = (t.image.naturalWidth > t.widthZone) ? t.widthZone : t.image.naturalWidth;
+	
+	if( t.block.typeBlock.search('text') > 0 ) {
+						
+		totalWidthBlock = (t.image.naturalWidth > Math.floor(t.widthZone*3/4)) ? Math.floor(t.widthZone*3/4) : t.image.naturalWidth;
+	}
+	
+	var maxwidthpx = Math.floor(totalWidthBlock*100/t.image.naturalWidth);
+	
+	var realmax = maxwidthpx - ( maxwidthpx%10 );
+	
 	var value = 100;
-
+	var minValue = 10;
+	var stepValue = 10;
+		
+	if(realmax <= 100) {
+		value = maxwidthpx*t.image.naturalWidth/totalWidthBlock;
+		minValue = 1;
+		stepValue = 1;
+	}
+	
 	if(t.block.displayer.hasOwnProperty('percent')) {
 		
 		value = t.block.displayer.percent;
 	}
 
-	$('#sliderMedia').slider({min: 10, max: 200, value: value, step: 10})
+	$('#sliderMedia').slider({min: minValue, max: realmax, value: value, step: stepValue})
 		.on('slide', function(ev){
 		
 		t.block.displayer.percent = ev.value;

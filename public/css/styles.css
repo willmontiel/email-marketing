@@ -310,3 +310,62 @@ table {
 	display: none;
 	margin-top: 25px;
 }
+
+.gallery-header {
+	cursor: move;
+}
+
+.gallery-header h3 {
+	text-align: center;
+}
+
+.gallery-header button {
+	padding: 0px 4px 4px 4px;
+	background-color: darkgray;
+}
+
+#imageslider .slider-selection {
+	background: gray;
+}
+
+#imageslider .slider-handle  {
+	background: #0088cc;
+}
+
+#imageslider .slider-track  {
+	background: white;
+}
+
+#oneimage, #gallery, #uploadimage{
+	background-color: #DFDFDF;
+}
+
+.none-layout-image {
+	background-image: url('../images/n1.png');
+	background-repeat: no-repeat;
+	background-position:center;
+	height: 450px;
+	margin-bottom: -140px;
+}
+
+#none-layout h3 {
+	text-align: center;
+}
+
+.image-placeholder, .image-text-placeholder {
+	background-image: url('../images/image');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: #ededed;
+	border-radius: 5px;
+}
+
+.image-placeholder {
+	height: 150px;
+	width: 820px;
+}
+
+.image-text-placeholder {
+	height: 120px;
+	width: 250px;
+}

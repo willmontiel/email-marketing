@@ -71,7 +71,7 @@
 	</div>
 	<br />
 	<div class="row-fluid">
-		<div>
+		<div class="btnoptions">
 			<div class="span1 offset2">
 				<input onclick="sendData()" type="button" value="Guardar" class="btn btn-blue">
 			</div>

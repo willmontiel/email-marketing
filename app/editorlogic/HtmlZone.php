@@ -33,7 +33,7 @@ class HtmlZone extends HtmlAbstract
 				break;
 		}
 		
-		return '<td style="width: ' . $width . '; background-color: ' . $this->color . ';"><table style="width: 100%; border-collapse: collapse; table-layout: fixed;" cellpadding="10"><tbody>';
+		return '<td style="width: ' . $width . '; background-color: ' . $this->color . ';"><table style="width: 100%; border-collapse: collapse; table-layout: fixed;" cellpadding="0"><tbody>';
 	}
 	public function renderChildPrefix($i)
 	{
