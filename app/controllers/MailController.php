@@ -687,7 +687,6 @@ class MailController extends ControllerBase
 	
 	public function scheduleAction($idMail = null)
 	{
-		$log = $this->logger;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND status = ?2 AND (wizardOption = ?3 OR wizardOption = ?4)',
 			'bind' => array(1 => $idMail,
@@ -704,31 +703,42 @@ class MailController extends ControllerBase
 				$date = $this->request->getPost('dateSchedule');
 				
 				if ($schedule == 'rightNow') {
-					$mail->dateSchedule = time();
+					$mail->scheduleDate = time();
 				}
 				else if ($schedule == 'after' || $date !== "") {
 					list($day, $month, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $date);
 					$dateTimestamp = mktime($hour, $minute, 0, $month, $day, $year);
 					
 					if($dateTimestamp < time()) {
-						$this->flashSession->error("la siguiente fecha: <span style='color: #fff7f8;'>" . $date . " </span> que ha ingresado ya ha pasado, por favor verifique la información");
+						$this->flashSession->error("la fecha: <span style='color: #fff7f8;'>" . $date . " </span> que ha ingresado ya ha pasado, por favor verifique la información");
 						return false;
 					}
-					$mail->dateSchedule = $dateTimestamp;
+					$mail->scheduleDate = $dateTimestamp;
 				}
 				else if ($schedule == null && $date == null) {
 					$this->flashSession->error("No ha ingresado una fecha de envío del correo, por favor verifique la información");
 					return false;
 				}
-				
+				$this->db->begin();
 				$mail->wizardOption = 'schedule';
 				if (!$mail->save()) {
 					foreach ($mail->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}
+					return $this->response->redirect('mail/schedule/' . $idMail);
 				}
 				
-				$this->routeRequest('schedule', $direction, $mail->idMail);
+				$mailSchedule = new MailScheduleObj($mail);
+				$scheduled = $mailSchedule->taskSchedule();
+				if ($scheduled) {
+					$this->db->commit();
+					$this->routeRequest('schedule', $direction, $mail->idMail);
+				}
+				else {
+					$this->db->rollback();
+					$this->flashSession->error('Ha ocurrido un error');
+					return $this->response->redirect('mail/schedule/' . $idMail);
+				}
 			}
 		}
 		else {
@@ -756,7 +766,6 @@ class MailController extends ControllerBase
 	
 	public function previeweditorAction()
 	{
-		$log = $this->logger;
 		$content = $this->request->getPost("editor");
 
 		$editorObj = new HtmlObj;
