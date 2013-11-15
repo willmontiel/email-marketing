@@ -28,10 +28,11 @@
 		var config = {imagesUrl: "{{url('images')}}", templateUrl : "{{url('template/create')}}"};
 		
 		var mediaGallery = [
-		{%for asset in assets%}
+			{%for asset in assets%}
 			new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}}),
-		{%endfor%}
+			{%endfor%}
 		];
+		
 		
 		function catchEditorData() {
 			editor.serializeDZ();
@@ -316,7 +317,7 @@
 		<input id="templatename" type="text">
 		<br />
 		<label>Categoria</label>
-		<input id="templatecategory" type="text">
+		<input id="templatecategory" type="text" value="Mis Templates" readonly>
 	</div>
 	<div class="modal-footer">
 		<a id="saveTemplate" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>

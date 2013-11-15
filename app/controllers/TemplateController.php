@@ -31,37 +31,22 @@ class TemplateController extends ControllerBase
 				return $this->setJsonResponse(array('msg' => 'Se ha creado la cuenta exitosamente'), 200, 'success');
 			}
 		}
-	}
-	
-	public function editor_frameAction() 
-	{
-		if (!$this->request->isPost()) {
+		else { 
 			
-		$assets = AssetObj::findAllAssetsInAccount($this->user->account);
-		
-		foreach ($assets as $a) {
-			$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
-								'image' => $a->getImagePrivateUrl(),
-								'title' => $a->getFileName(),
-								'id' => $a->getIdAsset());								
-		}
-		
-		$this->view->setVar('assets', $arrayAssets);
-		}
-		else {
-			$this->view->setVar('assets', $arrayAssets);
-		}
-		
-		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
-		
-		foreach ($cfs as $cf) {
-			$linkname = strtoupper(str_replace(array ("á", "é", "í", "ó", "ú", "ñ", " ", "&", ), 
-											   array ("a", "e", "i", "o", "u", "n", "_"), $cf[0]));
+			if ($this->user->userrole == "ROLE_SUDO") {
+				$templates = Template::findGlobalCategoryTemplates();
+			}
+			else {
+				$templates = Template::findPrivateCategoryTemplates($this->user->account);
+			}
+					
+			$arrayTemplate = array();
+			foreach ($templates as $template) {
+				$arrayTemplate[]= $template->category;
+			}
 			
-			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
-		}
-		
-		$this->view->setVar('cfs', $arrayCf);
+			$this->view->setVar('categories', $arrayTemplate);
+		}		
 	}
 	
 	public function previewAction($id)

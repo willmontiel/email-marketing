@@ -10,6 +10,43 @@
 		iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
 	};
 	
+	function verHTML() {
+		
+		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+		
+		$.ajax(
+			{
+			url: "{{url('mail/previeweditor')}}",
+			type: "POST",			
+			data: { editor: editor},
+			error: function(msg){
+				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
+			},
+			success: function(response) {
+				win = open("", "DisplayWindow", "toolbar=0, titlebar=yes , status=1, directories=yes, menubar=0, location=yes, directories=yes, width=700, height=650, left=1, top=0");
+				win.document.write("" + response.response + "");
+			}
+		});
+		
+		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
+	}
+	
+	function writenewcategory() {
+		$('.selectcategory').hide();
+		$('.btnNewCategory').hide();
+		
+		$('.newcategory').show();
+		$('.btnSelectCategory').show();
+	};
+	
+	function selectcategory() {
+		$('.newcategory').hide();
+		$('.btnSelectCategory').hide();
+		
+		$('.selectcategory').show();
+		$('.btnNewCategory').show();
+	};
+	
 	function sendData() {
 		var name = $("#name").val();
 		var category = $("#category").val();
@@ -53,34 +90,37 @@
 		</div>
     </div>
 	<div class="row-fluid">
-		<div class="box span6 offset3">
-			<div class="box-header">
-				<div class="title">
-					Crear una nueva plantilla
+		<div class="btnoptions">
+			<div class="box span12 btnoptions">
+				<div class="templateName pull-left">
+					<label>Nombre de la plantilla: 
+					<input type="text" name="name" id="name"></label>
 				</div>
-			</div>
-			<div class="box-content">
-				<div class="padded">
-					<form class="fill-up">
-						<label>Nombre de la plantilla</label>
-						<input type="text" name="name" id="name">
-
-						<label>Categoría</label>
-						<input type="text" name="categoria" id="categoria">
-						{#
-						<select class="chzn-select" name="categoria" id="category">
-							<option value="Magazine">Magazine</option>
-							<option value="Newsletter">Newsletter</option>
-							<option value="Newspaper">Newspaper</option>
-							<option value="Book">Book</option>
-						</select>
-						#}
-					</form>
+				<div class="templateCategory pull-left">
+					<label class="selectcategory" >Categoría: 
+					<select class="uniform" name="categoria" id="category">
+						<option value="Mis Templates">Mis Templates</option>
+						{%for category in categories%}
+							<option value="{{category}}">{{category}}</option>
+						{%endfor%}
+					</select></label>
+					<label class="newcategory" style="margin-left: -40px;">Nueva Categoria: 
+					<input type="text" name="categoria" id="category" style="width: 124px;">
+					</label>
 				</div>
-			</div>
-			<div class="form-actions">
-				<a href="{{url('mail/index')}}" class="btn btn-default">Cancelar</a>
-				<input type="submit" class="btn btn-blue" value="Guardar" onclick="sendData()">
+				<div class="btnNewCategory pull-left">
+					<button class="btn btn-default" onclick="writenewcategory()"><i class="icon-pencil"></i></button>
+				</div>
+				<div class="btnSelectCategory pull-left">
+					<button class="btn btn-default" onclick="selectcategory()"><i class="icon-th-list"></i></button>
+				</div>
+				<div class="templateBtns pull-left">
+					<a href="{{url('mail/index')}}" class="btn btn-default">Cancelar</a>
+					<input type="submit" class="btn btn-blue" value="Guardar" onclick="sendData()">
+				</div>
+				<div class="templatePreview pull-right">
+					<button class="btn btn-default" onclick="verHTML()">Visualizar</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -89,7 +129,7 @@
 	</div>
 	<br />
 	<div class="row-fluid">
-		<iframe id="iframeEditor" src="{{url('template/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
+		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
 	<br />
 {% endblock %}

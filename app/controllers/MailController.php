@@ -272,22 +272,25 @@ class MailController extends ControllerBase
 		
 	}
 	
-	public function editor_frameAction($idMail) 
+	public function editor_frameAction($idMail = NULL) 
 	{
 		$log = $this->logger;
 		
 		if (!$this->request->isPost()) {
 			
-		$assets = AssetObj::findAllAssetsInAccount($this->user->account);
-		
-		foreach ($assets as $a) {
-			$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
-								'image' => $a->getImagePrivateUrl(),
-								'title' => $a->getFileName(),
-								'id' => $a->getIdAsset());								
-		}
-		
-		$this->view->setVar('assets', $arrayAssets);
+			$assets = AssetObj::findAllAssetsInAccount($this->user->account);
+			if(empty($assets)) {
+					$arrayAssets = array();
+			}
+			else {
+				foreach ($assets as $a) {
+					$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
+										'image' => $a->getImagePrivateUrl(),
+										'title' => $a->getFileName(),
+										'id' => $a->getIdAsset());								
+				}
+			}
+			$this->view->setVar('assets', $arrayAssets);
 		}
 		else {
 			$this->view->setVar('assets', $arrayAssets);
@@ -304,7 +307,10 @@ class MailController extends ControllerBase
 		
 		$this->view->setVar('cfs', $arrayCf);
 		
-		$this->view->setVar('idMail', $idMail);
+		if($idMail) {
+		
+			$this->view->setVar('idMail', $idMail);
+		}
 	}
 	
 	public function templateAction($idMail)

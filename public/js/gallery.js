@@ -177,13 +177,15 @@ MediaDisplayer.prototype.createSlider = function() {
 	$('#align_image').show();
 	
 	var totalWidthBlock = (t.image.naturalWidth > t.widthZone) ? t.widthZone : t.image.naturalWidth;
+	var maxWidthZone = t.widthZone;
 	
 	if( t.block.typeBlock.search('text') > 0 ) {
-						
+		
 		totalWidthBlock = (t.image.naturalWidth > Math.floor(t.widthZone*3/4)) ? Math.floor(t.widthZone*3/4) : t.image.naturalWidth;
+		maxWidthZone = Math.floor(t.widthZone*3/4);
 	}
 	
-	var maxwidthpx = Math.floor(totalWidthBlock*100/t.image.naturalWidth);
+	var maxwidthpx = Math.floor(maxWidthZone*100/t.image.naturalWidth);
 	
 	var realmax = maxwidthpx - ( maxwidthpx%10 );
 	
