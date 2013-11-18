@@ -11,14 +11,14 @@ class BlockImageOnly extends HtmlAbstract
 		
 		$this->align = str_replace('pull-', '', $data->align);
 		$height = $data->height;
-		$width = $data->width;
+		$this->width = $data->width;
 		
-		$this->children[] ='<img src="' . $src . '" alt="' . $alt . '" style="height: ' . $height . 'px; width: ' . $width . 'px;" height="' . $height . '" width="' . $width . '">';
+		$this->children[] ='<img src="' . $src . '" alt="' . $alt . '" style="height: ' . $height . 'px; width: ' . $this->width . 'px;" height="' . $height . '" width="' . $this->width . '">';
 	}
 	
 	public function renderObjPrefix()
 	{
-		return '<td align="' . $this->align . '">';
+		return '<td align="' . $this->align . '" style="width: ' . $this->width . 'px;" width="' . $this->width . 'px">';
 	}
 	public function renderChildPrefix($i)
 	{
