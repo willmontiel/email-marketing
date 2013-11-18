@@ -8,12 +8,22 @@ class MailScheduleObj
 	
 	public function scheduleTask()
 	{
-		$task = new Mailschedule();
+		$task = Mailschedule::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $this->mail->idMail)
+		));
 		
-		$task->mail = $this->mail;
-		$task->scheduleDate = $this->mail->scheduleDate;
+		if ($task) {
+			$scheduleTask = $task;
+		}
+		else {
+			$scheduleTask = new Mailschedule();
+		}
 		
-		if (!$task->save()) {
+		$scheduleTask->mail = $this->mail;
+		$scheduleTask->scheduleDate = $this->mail->scheduleDate;
+		
+		if (!$scheduleTask->save()) {
 			return false;
 		}
 		return true;

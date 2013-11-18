@@ -289,3 +289,15 @@ a.inactive {
 	margin-top: 15px;
 	margin-right: 15px;
 }
+
+.frame-preview-thumbnail-html {
+	border: none;
+	width: 550px;
+	height: 580px; 
+	-moz-transform: scale(0.35);
+	-moz-transform-origin: 0 0;
+	-o-transform: scale(0.35);
+	-o-transform-origin: 0 0;
+	-webkit-transform: scale(0.35);
+	-webkit-transform-origin: 0 0;
+}

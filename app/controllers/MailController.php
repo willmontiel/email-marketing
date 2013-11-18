@@ -719,10 +719,9 @@ class MailController extends ControllerBase
 					$this->flashSession->error("No ha ingresado una fecha de envío del correo, por favor verifique la información");
 					return false;
 				}
-				$this->db->begin();
+				
 				$mail->wizardOption = 'schedule';
 				if (!$mail->save()) {
-					$this->db->rollback();
 					foreach ($mail->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}
@@ -732,11 +731,9 @@ class MailController extends ControllerBase
 				$mailSchedule = new MailScheduleObj($mail);
 				$scheduled = $mailSchedule->scheduleTask();
 				if ($scheduled) {
-					$this->db->commit();
 					$this->routeRequest('schedule', $direction, $mail->idMail);
 				}
 				else {
-					$this->db->rollback();
 					$this->flashSession->error('Ha ocurrido un error');
 					return $this->response->redirect('mail/schedule/' . $idMail);
 				}

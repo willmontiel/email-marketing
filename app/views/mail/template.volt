@@ -11,6 +11,18 @@
 				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(d);
 			});
 		}
+		$(function (){
+			{% for category, template in arrayTemplate %}
+				{% for t in template %}
+					var e = document.createElement('div');
+					e.innerHTML = '{{t['html']}}';
+					var d = e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+					$( "#thumbnail-div-{{t['id']}}" ).empty();
+					$('<iframe class="frame-preview-thumbnail-html"/>').appendTo('#thumbnail-div-{{t['id']}}').contents().find('body').append(d);
+				{% endfor %}
+			{% endfor %}
+			
+		});
 	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
@@ -64,8 +76,10 @@
 										<li class="span3">
 											<h5 style="text-align: center;">{{t['name']}}</h5>
 											<a href="{{url('mail/editor')}}/{{mail.idMail}}/{{t['id']}}" class="thumbnail">
-												<div class="img-wrap">
-													<img src="{{url('template/thumbnail')}}/{{t['id']}}/{{t['idAccount']}}" alt="{{t['name']}}" title="{{t['name']}}">
+												<div class="img-wrap" style="height: 200px">
+													<div id="thumbnail-div-{{t['id']}}" style="height: 200px">
+														
+													</div>
 													<div class="img-info">
 														<p><i class="icon-ok"></i> Elegir</p>
 													</div>
