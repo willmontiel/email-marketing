@@ -733,4 +733,22 @@ class TestController extends ControllerBase
 			$log->log("error: [$e]\n");
 		}
 	}
+	
+	function testemailcontactAction()
+	{
+		$account = $this->user->account;
+		
+		$txt = array();
+		
+		$txt[] = "Account: [{$account->name} - {$account->idAccount}]";
+		$db = $account->dbases[0];
+		$txt[] = "Dbase: [{$db->name} - {$db->idDbase}]";
+		
+		$contact = new Contact;
+		$emaill = new Email;
+		$domain = Domain::findFirst();
+		$contact->name = 'Testing contact';
+		
+		
+	}
 }
