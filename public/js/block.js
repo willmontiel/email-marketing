@@ -93,6 +93,7 @@ Block.prototype.persist = function() {
 		obj.width = this.width;
 		obj.displayer = this.displayer;
 		obj.align = this.align;
+		obj.widthZone = this.widthZone;
 	}
 
 	return obj;
@@ -105,6 +106,7 @@ Block.prototype.unpersist = function(obj, dz) {
 		this.height = obj.height;
 		this.width = obj.width;
 		this.align = obj.align;
+		this.widthZone = obj.widthZone;
 	}
 	
 	this.typeBlock = obj.type;
@@ -120,14 +122,19 @@ Block.prototype.unpersist = function(obj, dz) {
 		
 		var table = $('<table><tr></tr><table/>');
 		
-		var column1 = $('<td/>');
-		var column2 = $('<td/>');
-		
+		var imgWidth = this.width * this.parentBlock.$obj.width() / this.widthZone;
+
 		if(this.typeBlock.search('text-image') > 0) {
+			var column1 = $('<td/>');
+			var column2 = $('<td width="' + imgWidth + '"></td>');
+			
 			column1 = column1.append(contentText);
 			column2 = column2.append(contentImage);
 		}
 		else {
+			var column1 = $('<td width="' + imgWidth + '"></td>');
+			var column2 = $('<td/>');
+			
 			column1 = column1.append(contentImage);
 			column2 = column2.append(contentText);
 		}
@@ -231,6 +238,17 @@ Block.prototype.setSizeImage = function(height, width) {
 	
 	this.height = Math.floor(height);
 	this.width = Math.floor(width);
+};
+
+Block.prototype.setTableColumn = function(name, value) {
+	
+	if(this.typeBlock.search('image-only') < 0 ) { 
+		
+		var realValue = value * this.parentBlock.$obj.width() / this.widthZone;
+		
+		this.htmlData.find('img').closest('td').attr(name, realValue);
+	}
+	
 };
 
 Block.prototype.setAlignImgBlock = function(align) {
