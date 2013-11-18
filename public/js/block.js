@@ -203,6 +203,21 @@ Block.prototype.createBlock = function() {
 
 Block.prototype.createImage = function() {
 	
+	switch (this.parentBlock.width) {
+		case 'full-width':
+			this.widthZone =  550;
+			break;
+		case 'half-width':
+			this.widthZone = 550/2;
+			break;
+		case 'third-width':
+			this.widthZone = Math.floor(550/3);
+			break;
+		case 'twothird-width':
+			this.widthZone = Math.floor(550*2/3);
+			break;
+	}
+	
 	media.setBlock(this);
 	media.Selected(this.htmlData.find('img').attr('src'));	
 };
@@ -214,8 +229,8 @@ Block.prototype.assignDisplayer = function(displayer) {
 
 Block.prototype.setSizeImage = function(height, width) {
 	
-	this.height = height;
-	this.width = width;
+	this.height = Math.floor(height);
+	this.width = Math.floor(width);
 };
 
 Block.prototype.setAlignImgBlock = function(align) {
@@ -225,7 +240,64 @@ Block.prototype.setAlignImgBlock = function(align) {
 
 Block.prototype.changeAttrImgBlock = function(attr, value) {
 	
+	if(attr == 'width' || attr == 'height') {
+		
+		value = value * this.parentBlock.$obj.width() / this.widthZone
+	}
 	this.htmlData.find('img').attr(attr, value);
+};
+
+Block.prototype.unpersistImage = function(obj) {
+
+	if(obj != undefined) {
+		
+		var objimage = JSON.parse(obj);
+
+		this.height = objimage.height;
+		this.width = objimage.width;
+		this.align = objimage.align;
+		this.displayer.height = objimage.heightDisplayer;
+		this.displayer.width = objimage.widthDisplayer;
+		this.displayer.imagesrc = objimage.imagesrc;
+		this.displayer.percent = objimage.percent;
+
+		this.changeAttrImgBlock('height', this.height);
+		this.changeAttrImgBlock('width', this.width);
+		this.changeAttrImgBlock('src', this.displayer.imagesrc);
+		this.addClassContentImgBlock(this.align);
+	}
+	else {
+		delete this.height;
+		delete this.width;
+		delete this.align;
+		delete this.displayer;
+
+		this.htmlData.find('img').removeAttr('height');
+		this.htmlData.find('img').removeAttr('width');
+		this.htmlData.find('img').removeAttr('src');
+		this.htmlData.find('img').removeAttr('alt');
+		
+		if(this.typeBlock.search('image-only') > 0) {
+			
+			this.htmlData.find('img').addClass('image-placeholder');
+		}
+		else {
+			this.htmlData.find('img').addClass('image-text-placeholder');
+		}
+	}
+};
+
+Block.prototype.persistImage = function() {
+	
+	var obj = {	height: this.height,
+				width: this.width, 
+				align: this.align,
+				imagesrc: this.displayer.imagesrc,
+				heightDisplayer: this.displayer.height, 
+				widthDisplayer: this.displayer.width, 
+				percent: this.displayer.percent };
+	
+	return obj;
 };
 
 Block.prototype.addClassContentImgBlock = function(value) {
@@ -255,7 +327,8 @@ Block.prototype.createSocialBlocks = function() {
 		
 		var socials = [];
 		var socialType = '';
-		var socialsNames = ['facebook', 'twitter', 'linkedin', 'google_plus'];
+		var socialsNames = ['Facebook', 'Twitter', 'LinkedIn', 'Google Plus'];
+		var imagesNames = ['facebook_image', 'twitter_image', 'linkedin_image', 'google_plus_image'];
 
 		if(this.typeBlock.search('share') > 0) {
 			socialType = 'share';
@@ -265,7 +338,7 @@ Block.prototype.createSocialBlocks = function() {
 		}
 
 		for(var i = 0; i < 4; i++) {
-			socials[i] = new SocialBlock(this.htmlData, socialsNames[i], socialType);
+			socials[i] = new SocialBlock(this.htmlData, socialsNames[i], socialType, imagesNames[i]);
 			socials[i].createSocialNetHtml();
 		}
 		this.contentData = socials;

@@ -131,7 +131,7 @@ try {
 		// Events Manager para la base de datos
 		$eventsManager = new \Phalcon\Events\Manager();
 		
-//		if ($config->general->profiledb) {
+		if ($config->general->profiledb) {
 			// Profiler
 			$profiler = $di->get('profiler');
 			$timer = $di->get('timerObject');
@@ -146,7 +146,7 @@ try {
 					$timer->endTimer('SQL');
 				}
 			});
-//		}
+		}
 		
         $connection = new \Phalcon\Db\Adapter\Pdo\Mysql($config->database->toArray());
 		
@@ -179,9 +179,9 @@ try {
 	/*
 	 * Directorio de assets globales
 	 */
-	$globalasset = new stdClass();
-	$globalasset->dir = $config->general->globalassetsfolder;
-	$di->set('globalasset', $globalasset);
+	$templatesfolder = new stdClass();
+	$templatesfolder->dir = $config->general->templatesfolder;
+	$di->set('templatesfolder', $templatesfolder);
 	
 	$tmpdir = new stdClass;
 	$tmpdir->dir = $config->general->tmpdir;
@@ -214,6 +214,10 @@ try {
 		$compiler->addFilter('numberf', function ($resolvedArgs, $exprArgs) {
 			return 'number_format(' . $resolvedArgs . ', 0, \',\', \'.\')';
 		});
+		
+		$compiler->addFilter('change_spaces_in_between', function ($resolvedArgs, $exprArgs){
+				return 'str_replace(" ", "_", ' . $resolvedArgs . ')';
+			});
 		
 		$compiler->addFunction('ember_customfield', function ($resolvedArgs, $exprArgs) {
                         return 'CreateViewEmber::createField(' . $resolvedArgs . ')';

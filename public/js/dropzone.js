@@ -88,10 +88,30 @@ DropzoneArea.prototype.unpersist = function(obj) {
 
 DropzoneArea.prototype.zoneColor = function() {
 	var t = this;
+	this.oldColor = this.color;
 	
 	$('#color-' + this.name).colorpicker().on('changeColor', function(ev){
 		t.$obj.css('background-color', ev.color.toHex());
 		t.color = ev.color.toHex();
+		t.oldColor = ev.color.toHex();
+	});
+	
+	$('#field-color-' + this.name).on('change', function(){
+		$('#color-' + t.name).colorpicker('setValue', $(this).val());
+		t.$obj.css('background-color', $(this).val());
+		t.color = $(this).val();
+		t.oldColor = $(this).val();
+	});
+	
+	$('input[name=color-trans-' + this.name + ']').on('change', function(){
+		if($( "input:checked" ).val()) {
+			t.$obj.css('background-color', 'transparent');
+			t.color = 'transparent';
+		}
+		else {
+			t.$obj.css('background-color', t.oldColor);
+			t.color = t.oldColor;
+		}
 	});
 };
 

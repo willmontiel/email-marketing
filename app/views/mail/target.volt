@@ -15,7 +15,7 @@
 			$('#segSelect').prop('selectedIndex',-1);
 			
 			var val = $('input[name=radios]:checked').val();
-			console.log(val);
+
 			switch (val) {
 				case "0":
 					$("#db").show();

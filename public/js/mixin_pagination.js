@@ -16,7 +16,6 @@ Ember.MixinPagination = Ember.Mixin.create({
 	// Metodo que toma la informacion y llena las variables
 	setPagination: function () {
 		// Verificar paginacion
-		console.log('Pagination!');
 		try {
 			var p = this.store.typeMapFor(this.modelClass).metadata;
 

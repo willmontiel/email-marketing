@@ -7,11 +7,15 @@ class ContactListWrapper extends BaseWrapper
 	 * Crea un arreglo con la informacion del objeto Contactlist
 	 * para que pueda ser convertido a JSON
 	 * @param Contactlist $contactlist
+	 * @param Account $account
 	 * @return array
 	 */
-	public static function convertListToJson(Contactlist $contactlist, $account)
+	public static function convertListToJson(Contactlist $contactlist, Account $account = null)
 	{
 		$object = array();
+		if ($account == null) {
+			$account = $contactlist->dbase->account;
+		}
 		$object['id'] = intval($contactlist->idContactlist);
 		$object['name'] = $contactlist->name;
 		$object['description'] = $contactlist->description;
@@ -62,7 +66,7 @@ class ContactListWrapper extends BaseWrapper
 		
 		$list = $this->createNewContactList($contents);
 
-		return array('list' => self::convertListToJson($list ));
+		return array('list' => self::convertListToJson($list, $list->dbase->account));
 		
 	}
 	public function assignDataToContactList($contents, $list)
@@ -166,7 +170,7 @@ class ContactListWrapper extends BaseWrapper
 				return array('lists' => 'errror');
 			}
 			else{
-				return array('list' => self::convertListToJson($contactList ));
+				return array('list' => self::convertListToJson($contactList, $contactList->dbase->account));
 			}
 		}
 		
@@ -210,7 +214,27 @@ class ContactListWrapper extends BaseWrapper
 		return $deleteContaclist;
 	}
 
-	
+	public function findContactListByIdDbase(Account $account, $idDbase)
+	{
+		$contactLists = Contactlist::find(array(
+			'conditions' => 'idDbase = ?1',
+			'bind' => array(1 => $idDbase)
+		));
+		
+		$lists = array();
+		
+		if ($contactLists) {
+			$this->pager->setTotalRecords(count($contactLists));
+			foreach ($contactLists as $list) {
+				$lists[] = $this->convertListToJson($list, $account);
+			}
+		}
+		return array(
+					'lists' => $lists, 
+					'dbase' => DbaseWrapper::getDbasesAsJSON($account),
+					'meta' => $this->pager->getPaginationObject()
+				);
+	}
 }
 
 

@@ -1,11 +1,9 @@
 {% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-		{{ javascript_include('js/preview.js')}}
-		{{ javascript_include('js/stoperror.js')}}
 	<script type="text/javascript">
 		function preview(id) {
-			$.post("{{url('mail/showtemplate')}}/" + id, function(template){
+			$.post("{{url('template/preview')}}/" + id, function(template){
 				var e = document.createElement('div');
 				e.innerHTML = template.template;
 				var d = e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
@@ -13,6 +11,18 @@
 				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(d);
 			});
 		}
+		$(function (){
+			{% for category, template in arrayTemplate %}
+				{% for t in template %}
+					var e = document.createElement('div');
+					e.innerHTML = '{{t['html']}}';
+					var d = e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+					$( "#thumbnail-div-{{t['id']}}" ).empty();
+					$('<iframe class="frame-preview-thumbnail-html"/>').appendTo('#thumbnail-div-{{t['id']}}').contents().find('body').append(d);
+				{% endfor %}
+			{% endfor %}
+			
+		});
 	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
@@ -60,14 +70,16 @@
 					<div class="padded">
 						<div class="tab-content">
 							{% for category, template in arrayTemplate %}
-								<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category}}">
+								<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category|change_spaces_in_between}}">
 									<ul class="thumbnails padded">
 										{% for t in template %}
 										<li class="span3">
 											<h5 style="text-align: center;">{{t['name']}}</h5>
 											<a href="{{url('mail/editor')}}/{{mail.idMail}}/{{t['id']}}" class="thumbnail">
-												<div class="img-wrap">
-													<img src="{{url('template/thumbnail')}}/{{t['id']}}" alt="{{t['name']}}" title="{{t['name']}}">
+												<div class="img-wrap" style="height: 200px">
+													<div id="thumbnail-div-{{t['id']}}" style="height: 200px">
+														
+													</div>
 													<div class="img-info">
 														<p><i class="icon-ok"></i> Elegir</p>
 													</div>
@@ -99,12 +111,18 @@
 					<div class="padded">
 						<ul class="nav nav-pills nav-stacked nav-template">
 							{% for category, template in arrayTemplate %}
-								<li class="{% if loop.first %}active{% endif %}"><a href="#{{category}}" data-toggle="tab">{{category}}</a></li> 
+								<li class="{% if loop.first %}active{% endif %}"><a href="#{{category|change_spaces_in_between}}" data-toggle="tab">{{category}}</a></li> 
 							{% endfor %}
 						</ul>
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<br />
+	<div class="row-fluid">
+		<div class="span12 padded">
+			<a href="{{url('mail/source')}}/{{mail.idMail}}" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</a>
 		</div>
 	</div>
 	<div id="preview-modal" class="modal hide fade preview-modal">

@@ -252,3 +252,62 @@ a.inactive {
 .align-modal-body {
 	margin: auto !important;
 }
+
+.btnoptions {
+	display: none;
+}
+
+.templateName {
+	margin-top: 15px;
+	margin-right: 50px;
+	margin-left: 15px;
+}
+
+.templateCategory {
+	margin-top: 15px;
+	margin-right: 5px;
+}
+
+.btnNewCategory, .btnSelectCategory {
+	margin-top: 15px;
+	margin-right: 25px;
+}
+
+.globalTemplateOpt {
+	display: none;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.btnSelectCategory {
+	display: none;
+}
+
+.templateBtns {
+	margin-top: 15px;
+}
+
+.newcategory {
+	display: none;
+}
+
+.templatePreview {
+	margin-top: 15px;
+	margin-right: 15px;
+}
+
+.frame-preview-thumbnail-html {
+	border: none;
+	width: 560px;
+	height: 590px; 
+	-moz-transform: scale(0.35);
+	-moz-transform-origin: 0 0;
+	-o-transform: scale(0.35);
+	-o-transform-origin: 0 0;
+	-webkit-transform: scale(0.35);
+	-webkit-transform-origin: 0 0;
+}
+
+#modal-simple-template h5 {
+	text-align: center;
+}

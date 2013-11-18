@@ -62,11 +62,25 @@
 		{# /handlebars de index #}
 		{# handlebars de listas #}
 		<script type="text/x-handlebars" data-template-name="lists/index">
-			<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
-				{{'{{#linkTo "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/linkTo}}'}}
+			<div class="row-fluid">
+				<div class="span7">
+					<form>
+						<p>
+							{{ '{{view Ember.Select
+									contentBinding="dbaseSelect"
+									optionValuePath="content.id"
+									optionLabelPath="content.name"
+									valueBinding="selectedDbase"}}'
+							}}
+						</p>
+					</form>
+				</div>
+				<div class="span5">
+					<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
+						{{'{{#linkTo "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/linkTo}}'}}
+					</div>
+				</div>	
 			</div>
-			<div class="clearfix"></div>
-			
 			<div class="box">
 				<div class="box-header">
 					<span class="title">Listas de Contactos</span>

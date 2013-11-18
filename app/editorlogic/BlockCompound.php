@@ -41,7 +41,7 @@ class BlockCompound extends HtmlAbstract
 	
 	public function renderObjPrefix()
 	{
-		return '';
+		return '<td><table style="width: 100%; border-collapse: collapse; table-layout: fixed;"><tr>';
 	}
 	public function renderChildPrefix($i)
 	{
@@ -53,6 +53,6 @@ class BlockCompound extends HtmlAbstract
 	}
 	public function renderObjPostfix()
 	{
-		return '';
+		return '</tr></table></td>';
 	}
 }

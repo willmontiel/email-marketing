@@ -67,24 +67,24 @@
 			<div class="box offset3 span6">
 				<div class="box-header">
 					<div class="title">
-						{% if mail.dateSchedule == null%}
+						{% if mail.scheduleDate == null%}
 							Programar fecha de envío
 						{% else %}
-							<div class="pull-right">Fecha de envío programada: {{date('d/m/y h:i a', mail.dateSchedule)}}</div>
+							<div class="pull-right">Fecha de envío programada: {{date('d/m/y h:i a', mail.scheduleDate)}}</div>
 						{% endif %}
 					</div>
 				</div>
 				<div class="box-content">
 					<form action="{{url('mail/schedule')}}/{{mail.idMail}}" method="post">
 						<div class="padded">
-							{% if mail.dateSchedule == null%}
+							{% if mail.scheduleDate == null%}
 								{% set display = 'display: none;'%}
 								{% set checked = '' %}
 								{% set value = ''%}
 							{% else %}
 								{% set display = 'display: block;'%}
 								{% set checked = 'checked' %}
-								{% set value = date('d/m/y G:i', mail.dateSchedule) %}
+								{% set value = date('d/m/y G:i', mail.scheduleDate) %}
 							{% endif %}
 							<input type="radio" name="schedule" class="icheck" value="rightNow" id="rightNow">
 							<label for="rightNow">Enviar el correo de inmediato: </label><br />

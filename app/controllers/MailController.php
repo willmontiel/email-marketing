@@ -236,6 +236,12 @@ class MailController extends ControllerBase
 			}
 			
 			if ($this->request->isPost()) {
+				if ($mail->wizardOption == 'source' || $mail->wizardOption == 'setup') {
+					$wizardOption = 'source';
+				}
+				else{
+					$wizardOption = $mail->wizardOption;
+				}
 				
 				$mailContent = new Mailcontent();
 				$content = $this->request->getPost("editor");
@@ -244,11 +250,7 @@ class MailController extends ControllerBase
 				$mailContent->content = $content;
 
 				$mail->type = "Editor";
-				
-				$editorObj = new HtmlObj;
-				$editorObj->assignContent(json_decode($content));
-				$a = $editorObj->render();
-				$log->log('Html: ' . $a);
+				$mail->wizardOption = $wizardOption;
 				
 				if(!$mailContent->save()) {
 //					$log->log("No guarda");
@@ -270,22 +272,25 @@ class MailController extends ControllerBase
 		
 	}
 	
-	public function editor_frameAction($idMail) 
+	public function editor_frameAction($idMail = NULL) 
 	{
 		$log = $this->logger;
 		
 		if (!$this->request->isPost()) {
 			
-		$assets = AssetObj::findAllAssetsInAccount($this->user->account);
-		
-		foreach ($assets as $a) {
-			$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
-								'image' => $a->getImagePrivateUrl(),
-								'title' => $a->getFileName(),
-								'id' => $a->getIdAsset());								
-		}
-		
-		$this->view->setVar('assets', $arrayAssets);
+			$assets = AssetObj::findAllAssetsInAccount($this->user->account);
+			if(empty($assets)) {
+					$arrayAssets = array();
+			}
+			else {
+				foreach ($assets as $a) {
+					$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
+										'image' => $a->getImagePrivateUrl(),
+										'title' => $a->getFileName(),
+										'id' => $a->getIdAsset());								
+				}
+			}
+			$this->view->setVar('assets', $arrayAssets);
 		}
 		else {
 			$this->view->setVar('assets', $arrayAssets);
@@ -302,7 +307,10 @@ class MailController extends ControllerBase
 		
 		$this->view->setVar('cfs', $arrayCf);
 		
-		$this->view->setVar('idMail', $idMail);
+		if($idMail) {
+		
+			$this->view->setVar('idMail', $idMail);
+		}
 	}
 	
 	public function templateAction($idMail)
@@ -312,7 +320,7 @@ class MailController extends ControllerBase
 		if ($mail) {
 			$this->view->setVar('mail', $mail);
 			
-			$templates = Template::find();
+			$templates = Template::findGlobalsAndPrivateTemplates($this->user->account);
 			
 			$arrayTemplate = array();
 			foreach ($templates as $template) {
@@ -320,7 +328,8 @@ class MailController extends ControllerBase
 					"id" => $template->idTemplate, 
 					"name" => $template->name, 
 					"content" => $template->content,
-					"html" => $template->contentHtml
+					"html" => $template->contentHtml,
+					"idAccount" => $template->idAccount
 				);
 
 				$arrayTemplate[$template->category][] = $templateInfo;
@@ -465,10 +474,10 @@ class MailController extends ControllerBase
 	public function plaintextAction($idMail)
 	{
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND status = ?2 AND type = ?3',
+			'conditions' => 'idMail = ?1 AND status = ?2 AND wizardOption = ?3',
 			'bind' => array(1 => $idMail,
 							2 => 'Draft',
-							3 => 'Html')
+							3 => 'source')
 		));
 		
 		if ($mail) {
@@ -479,9 +488,18 @@ class MailController extends ControllerBase
 				'bind' => array(1 => $mail->idMail)
 			));
 			
+			if ($mail->type == 'Editor') {
+				$editorObj = new HtmlObj;
+				$editorObj->assignContent(json_decode($mailContent->content));
+				$content = $editorObj->render();
+			}
+			else {
+				$content = $mailContent->content;
+			}
+			
 			if ($mailContent->plainText == null) {
 				$text = new PlainText();
-				$plainText = $text->getPlainText($mailContent->content);
+				$plainText = $text->getPlainText($content);
 			}
 			else {
 				$plainText = $mailContent->plainText;
@@ -513,6 +531,9 @@ class MailController extends ControllerBase
 						break;;
 				}
 			}
+		}
+		else {
+			return $this->response->redirect('mail/source/' . $idMail);
 		}
 	}
 	
@@ -666,7 +687,6 @@ class MailController extends ControllerBase
 	
 	public function scheduleAction($idMail = null)
 	{
-		$log = $this->logger;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND status = ?2 AND (wizardOption = ?3 OR wizardOption = ?4)',
 			'bind' => array(1 => $idMail,
@@ -683,17 +703,17 @@ class MailController extends ControllerBase
 				$date = $this->request->getPost('dateSchedule');
 				
 				if ($schedule == 'rightNow') {
-					$mail->dateSchedule = time();
+					$mail->scheduleDate = time();
 				}
 				else if ($schedule == 'after' || $date !== "") {
 					list($day, $month, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $date);
 					$dateTimestamp = mktime($hour, $minute, 0, $month, $day, $year);
 					
 					if($dateTimestamp < time()) {
-						$this->flashSession->error("la siguiente fecha: <span style='color: #fff7f8;'>" . $date . " </span> que ha ingresado ya ha pasado, por favor verifique la información");
+						$this->flashSession->error("la fecha: <span style='color: #fff7f8;'>" . $date . " </span> que ha ingresado ya ha pasado, por favor verifique la información");
 						return false;
 					}
-					$mail->dateSchedule = $dateTimestamp;
+					$mail->scheduleDate = $dateTimestamp;
 				}
 				else if ($schedule == null && $date == null) {
 					$this->flashSession->error("No ha ingresado una fecha de envío del correo, por favor verifique la información");
@@ -705,9 +725,18 @@ class MailController extends ControllerBase
 					foreach ($mail->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}
+					return $this->response->redirect('mail/schedule/' . $idMail);
 				}
 				
-				$this->routeRequest('schedule', $direction, $mail->idMail);
+				$mailSchedule = new MailScheduleObj($mail);
+				$scheduled = $mailSchedule->scheduleTask();
+				if ($scheduled) {
+					$this->routeRequest('schedule', $direction, $mail->idMail);
+				}
+				else {
+					$this->flashSession->error('Ha ocurrido un error');
+					return $this->response->redirect('mail/schedule/' . $idMail);
+				}
 			}
 		}
 		else {
@@ -732,19 +761,37 @@ class MailController extends ControllerBase
 			return $this->response->redirect('mail/source/' . $idMail);
 		}
 	}
-
-	public function showtemplateAction($id)
+	
+	public function previeweditorAction()
 	{
-		$log = $this->logger;
-		$template = Template::findFirst(array(
-			"conditions" => "idTemplate = ?1",
-			"bind" => array(1 => $id)
-		));
+		$content = $this->request->getPost("editor");
+
+		$editorObj = new HtmlObj;
+		$editorObj->assignContent(json_decode($content));
 		
-//		$log->log("Html: " . $template->contentHtml);
-		return $this->setJsonResponse(array('template' => $template->contentHtml));
+		return $this->setJsonResponse(array('response' => $editorObj->render()));
 	}
 	
+	public function converttotemplateAction($idMail)
+	{
+		$mail = Mailcontent::findFirstByIdMail($idMail);
+		
+		$name = $this->request->getPost("nametemplate");
+		
+		$category = $this->request->getPost("category");
+		
+		try {
+			
+			$template = new TemplateObj();
+			$template->createTemplate($name, $category, $mail->content, $this->user->account);
+		}
+		catch (InvalidArgumentException $e) {
+
+		}
+		
+		return $this->response->redirect('mail');
+	}
+
 	protected function validateProcess($idMail)
 	{
 		$mail = Mail::findFirst(array(

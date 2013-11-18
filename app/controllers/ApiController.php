@@ -544,14 +544,17 @@ class ApiController extends ControllerBase
 		}
 		
 		$name = $this->request->getQuery('name', null);
-		
+		$idDbase = $this->request->getQuery('dbase', null, null);
 		$contactWrapper = new ContactListWrapper();
 		$contactWrapper->setPager($pager);
 		
-		$lists = $contactWrapper->findContactListByAccount($this->user->account, $name);
-		
+		if($idDbase == 0) {
+			$lists = $contactWrapper->findContactListByAccount($this->user->account, $name);
+		}
+		else {
+			$lists = $contactWrapper->findContactListByIdDbase($this->user->account, $idDbase);
+		}
 		return $this->setJsonResponse($lists);
-		
 	}
 	/**
 	 * 
@@ -660,7 +663,7 @@ class ApiController extends ControllerBase
 		$contacts = $wrapper->findContactsComplete($list);
 //		$contacts = $wrapper->findContactsByList($list);
 		// Sideload de la informacion de la lista
-		$contacts['lists'] = array(ContactListWrapper::convertListToJson($list));
+		$contacts['lists'] = array(ContactListWrapper::convertListToJson($list, $list->dbase->account));
 
 		return $this->setJsonResponse($contacts);	
 	
@@ -685,7 +688,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
 		}
 		
-		$contacts['list'] = array(ContactListWrapper::convertListToJson($list));
+		$contacts['list'] = array(ContactListWrapper::convertListToJson($list, $list->dbase->account));
 	                
 		return $this->setJsonResponse($contacts);	
 	

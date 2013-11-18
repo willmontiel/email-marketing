@@ -110,7 +110,7 @@
 								</div>
 								<strong>Fecha y hora de envío:  </strong>
 								<div class="news-text">
-									{{date('F j - Y,  g:i a', mail.dateSchedule)}}
+									{{date('F j - Y,  g:i a', mail.scheduleDate)}}
 								</div>
 							</div>
 						</div>
