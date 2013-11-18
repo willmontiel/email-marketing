@@ -1,6 +1,15 @@
 <?php
 class Template extends \Phalcon\Mvc\Model
 {
+	public $idAccount;
+	public function initialize()
+	{
+		$this->belongsTo("idAccount", "Account", "idAccount", array(
+            "foreignKey" => true,
+        ));
+		$this->useDynamicUpdate(true);
+	}
+
 	public static function findGlobalsAndPrivateTemplates(Account $account)
 	{
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');

@@ -25,6 +25,17 @@ class TestController extends ControllerBase
 
 	}
 
+	
+	public function testmailAction()
+	{
+		$account = $this->user->account;
+		$email = new Email();
+		
+		$email->idAccount = $account->idAccount;
+		$email->idDomain = 88;
+		$email->email = "contacto1@sm.com"
+	}
+	
 	public function testzmqAction()
 	{
 		$this->view->disable();
@@ -732,5 +743,23 @@ class TestController extends ControllerBase
 		catch (Exception $e) {
 			$log->log("error: [$e]\n");
 		}
+	}
+	
+	function testemailcontactAction()
+	{
+		$account = $this->user->account;
+		
+		$txt = array();
+		
+		$txt[] = "Account: [{$account->name} - {$account->idAccount}]";
+		$db = $account->dbases[0];
+		$txt[] = "Dbase: [{$db->name} - {$db->idDbase}]";
+		
+		$contact = new Contact;
+		$emaill = new Email;
+		$domain = Domain::findFirst();
+		$contact->name = 'Testing contact';
+		
+		
 	}
 }
