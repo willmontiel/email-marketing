@@ -25,6 +25,17 @@ class TestController extends ControllerBase
 
 	}
 
+	
+	public function testmailAction()
+	{
+		$account = $this->user->account;
+		$email = new Email();
+		
+		$email->idAccount = $account->idAccount;
+		$email->idDomain = 88;
+		$email->email = "contacto1@sm.com"
+	}
+	
 	public function testzmqAction()
 	{
 		$this->view->disable();
