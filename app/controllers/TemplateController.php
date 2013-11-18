@@ -7,12 +7,13 @@ class TemplateController extends ControllerBase
 			$content = $this->request->getPost("editor");
 			$name = $this->request->getPost("name");
 			$category = $this->request->getPost("category");
+			$global = $this->request->getPost("global");
 			
 			if (empty($content) || empty($name) || empty($category)) {
 				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos, por favor verifique la información'), 400 , 'failed');
 			}
 			
-			if ($this->user->userrole == "ROLE_SUDO") {
+			if (($this->user->userrole == "ROLE_SUDO") && ($global == 'true')) {
 				$account = null;
 			}
 			else {
@@ -60,7 +61,13 @@ class TemplateController extends ControllerBase
 	
 	public function imageAction($idTemplate, $idTemplateImage) 
 	{
-		$img = $this->templatesfolder->dir . $idTemplate. "/images/" . $idTemplateImage . ".JPG";
+		$tpImg = Templateimage::findFirst(array(
+			'conditions' => 'idTemplateImage = ?1',
+			'bind' => array(1 => $idTemplateImage)
+		));
+		
+		$ext = pathinfo( $tpImg->name, PATHINFO_EXTENSION);
+		$img = $this->templatesfolder->dir . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
 	
 		$info = getimagesize($img);
 		$this->response->setHeader("Content-Type:", $info['mime']);

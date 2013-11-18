@@ -8,19 +8,22 @@ abstract class HtmlAbstract
 		$htmlRendered = $this->renderObjPrefix();
 		$i = 1;
 		
-		foreach ($this->children as $child) {
-			$htmlRendered .= $this->renderChildPrefix($i);
+		if(isset($this->children)) {
 			
-			if(is_object($child)) {
-				
-				$htmlRendered .= $child->render();
+			foreach ($this->children as $child) {
+				$htmlRendered .= $this->renderChildPrefix($i);
+
+				if(is_object($child)) {
+
+					$htmlRendered .= $child->render();
+				}
+				else {
+					$htmlRendered .= $child;
+				}
+
+				$htmlRendered .= $this->renderChildPostfix($i);
+				$i++;
 			}
-			else {
-				$htmlRendered .= $child;
-			}
-			
-			$htmlRendered .= $this->renderChildPostfix($i);
-			$i++;
 		}
 		
 		$htmlRendered .= $this->renderObjPostfix();

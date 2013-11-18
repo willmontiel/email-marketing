@@ -273,6 +273,12 @@ a.inactive {
 	margin-right: 25px;
 }
 
+.globalTemplateOpt {
+	display: none;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
 .btnSelectCategory {
 	display: none;
 }
@@ -292,12 +298,16 @@ a.inactive {
 
 .frame-preview-thumbnail-html {
 	border: none;
-	width: 550px;
-	height: 580px; 
+	width: 560px;
+	height: 590px; 
 	-moz-transform: scale(0.35);
 	-moz-transform-origin: 0 0;
 	-o-transform: scale(0.35);
 	-o-transform-origin: 0 0;
 	-webkit-transform: scale(0.35);
 	-webkit-transform-origin: 0 0;
+}
+
+#modal-simple-template h5 {
+	text-align: center;
 }

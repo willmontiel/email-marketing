@@ -1,11 +1,11 @@
 <?php
 class OptionsMail 
 {	
-	public static function getOptions($status) {
+	public static function getOptions($mail) {
 		
 		$array = array();
-				
-		switch ($status) {
+		
+		switch ($mail->status) {
 			case 'Draft':
 				$array[] = self::getObject("Enviar");
 				$array[] = self::getObject("Editar");

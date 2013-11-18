@@ -10,7 +10,7 @@ class HtmlObj extends HtmlAbstract
 	public function assignContent($content)
 	{		
 		$this->layout = $content->layout;
-		$this->backgroundColor = $content->editorColor;
+		$this->backgroundColor = isset($content->editorColor) ? $content->editorColor : '#ffffff';
 		
 		foreach ($content->dz as $key => $values) {
 			$HtmlZone = new HtmlZone();

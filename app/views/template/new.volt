@@ -9,7 +9,7 @@
 		//iFrame.height = '';
 		iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
 	};
-	
+
 	function verHTML() {
 		
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
@@ -30,6 +30,14 @@
 		
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
 	}
+	
+	$(function() {
+		if( '{{ userObject.userrole }}' == 'ROLE_SUDO') {
+		
+			$('.globalTemplateOpt').show();
+		}
+	});	
+
 	
 	function writenewcategory() {
 		$('.selectcategory').hide();
@@ -54,6 +62,7 @@
 	function sendData() {
 		var name = $("#name").val();
 		var category = $("#category").val();
+		var global = $("#isglobal")[0].checked;
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$.ajax(
 			{
@@ -61,7 +70,8 @@
 			type: "POST",			
 			data: { 
 				name: name,
-				category: category,		
+				category: category,
+				global: global,
 				editor: editor
 			},
 			statusCode: {
@@ -121,6 +131,9 @@
 				<div class="templateBtns pull-left">
 					<a href="{{url('mail/index')}}" class="btn btn-default">Cancelar</a>
 					<input type="submit" class="btn btn-blue" value="Guardar" onclick="sendData()">
+				</div>
+				<div class="globalTemplateOpt pull-left">
+					<label><input type="checkbox" name="isglobal" id="isglobal"> Plantilla Global</label>
 				</div>
 				<div class="templatePreview pull-right">
 					<button class="btn btn-default" onclick="verHTML()">Visualizar</button>

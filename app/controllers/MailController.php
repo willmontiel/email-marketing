@@ -772,6 +772,26 @@ class MailController extends ControllerBase
 		return $this->setJsonResponse(array('response' => $editorObj->render()));
 	}
 	
+	public function converttotemplateAction($idMail)
+	{
+		$mail = Mailcontent::findFirstByIdMail($idMail);
+		
+		$name = $this->request->getPost("nametemplate");
+		
+		$category = $this->request->getPost("category");
+		
+		try {
+			
+			$template = new TemplateObj();
+			$template->createTemplate($name, $category, $mail->content, $this->user->account);
+		}
+		catch (InvalidArgumentException $e) {
+
+		}
+		
+		return $this->response->redirect('mail');
+	}
+
 	protected function validateProcess($idMail)
 	{
 		$mail = Mail::findFirst(array(
