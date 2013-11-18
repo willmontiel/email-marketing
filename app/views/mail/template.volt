@@ -119,6 +119,12 @@
 			</div>
 		</div>
 	</div>
+	<br />
+	<div class="row-fluid">
+		<div class="span12 padded">
+			<a href="{{url('mail/source')}}/{{mail.idMail}}" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</a>
+		</div>
+	</div>
 	<div id="preview-modal" class="modal hide fade preview-modal">
 		<div class="modal-header">
 			Previsualización de plantilla
