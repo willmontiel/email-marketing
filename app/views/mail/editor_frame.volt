@@ -103,7 +103,7 @@
 							</div>
 							<div class="content clearfix">
 								<div class="content-image full-content pull-left">
-									<img data-toggle="modal" href="#images" class="media-object image-placeholder" />
+									<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object image-placeholder" />
 								</div>
 							</div>
 						</div>
@@ -128,7 +128,7 @@
 										</td>
 										<td>
 											<div class="content-image pull-left">
-												<img data-toggle="modal" href="#images" class="media-object image-text-placeholder" />
+												<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object image-text-placeholder" />
 											</div>
 										</td>
 									</tr>
@@ -151,7 +151,7 @@
 									<tr>
 										<td>
 											<div class="content-image pull-left">
-												<img data-toggle="modal" href="#images" class="media-object image-text-placeholder" />
+												<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object image-text-placeholder" />
 											</div>
 										</td>
 										<td>

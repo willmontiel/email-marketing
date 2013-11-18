@@ -248,7 +248,7 @@ Block.prototype.changeAttrImgBlock = function(attr, value) {
 };
 
 Block.prototype.unpersistImage = function(obj) {
-	
+
 	if(obj != undefined) {
 		
 		var objimage = JSON.parse(obj);
@@ -271,7 +271,7 @@ Block.prototype.unpersistImage = function(obj) {
 		delete this.width;
 		delete this.align;
 		delete this.displayer;
-		
+
 		this.htmlData.find('img').removeAttr('height');
 		this.htmlData.find('img').removeAttr('width');
 		this.htmlData.find('img').removeAttr('src');

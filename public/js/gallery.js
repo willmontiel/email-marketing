@@ -60,6 +60,8 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 	if (this.block != null && this.block.hasOwnProperty('htmlData')) {
 		
 		if(newsrc == undefined) {
+			
+			delete this.oldImage;
 	
 			this.cleanMediaDisplayer();
 			
