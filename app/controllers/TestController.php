@@ -24,17 +24,6 @@ class TestController extends ControllerBase
 	{
 
 	}
-
-	
-	public function testmailAction()
-	{
-		$account = $this->user->account;
-		$email = new Email();
-		
-		$email->idAccount = $account->idAccount;
-		$email->idDomain = 88;
-		$email->email = "contacto1@sm.com"
-	}
 	
 	public function testzmqAction()
 	{
@@ -747,19 +736,85 @@ class TestController extends ControllerBase
 	
 	function testemailcontactAction()
 	{
+		$log = $this->logger;
 		$account = $this->user->account;
 		
 		$txt = array();
 		
-		$txt[] = "Account: [{$account->name} - {$account->idAccount}]";
+		$txt[] = "Account: [{$account->companyName} - {$account->idAccount}]";
 		$db = $account->dbases[0];
 		$txt[] = "Dbase: [{$db->name} - {$db->idDbase}]";
 		
-		$contact = new Contact;
-		$emaill = new Email;
-		$domain = Domain::findFirst();
-		$contact->name = 'Testing contact';
+		$email = $this->addEmail($account);
 		
+		$txt[] = "Email1: [{$email->email} - {$email->idEmail}]";
 		
+		$contact = new Contact();
+		
+		$contact->idDbase = $db->idDbase;
+		$contact->idEmail = $email->idEmail;
+		$contact->name = 'Testing contact 001';
+		$contact->lastName = 'test1';
+		$contact->bounced = 0;
+		$contact->unsubscribed = 0;
+		$contact->spam = 0;
+		$contact->ipActivated = 0;
+		$contact->ipSubscribed = 0;
+		$contact->updatedon = time();
+		$contact->subscribedon = time();
+		$contact->status = time();
+		$contact->createdon = time();
+		
+		if (!$contact->save()) {
+			foreach ($contact->getMessages() as $msg) {
+				$log->log('Error: ' . $msg);
+			}
+			$log->log('Error while creating contact!');
+			return false;
+		}
+		
+		$txt[] = "Contact: [{$contact->idDbase} - {$contact->idContact}], [{$contact->name} - {$contact->lastName}]";
+		
+		$email2 = $this->addEmail($account);
+		
+		$txt[] = "Email2: [{$email2->email} - {$email2->idEmail}]";
+		
+		$contact->email = $email2;
+		
+		if (!$contact->save()){
+			foreach ($contact->getMessages() as $msg) {
+				$log->log('Error2: ' . $msg);
+			}
+			$log->log('Error while creating contact2!');
+			return false;
+		}
+		
+		$log->log('Txt: ' . print_r($txt, true));
 	}
+	
+	
+	protected function addEmail($account)
+	{
+		$x = rand(5, 15);
+		$log = $this->logger;
+		$email = new Email;
+		
+		$email->idAccount = $account->idAccount;
+		$email->idDomain = 88;
+		$email->email = 'contact' . $x . '@test.com';
+		$email->bounced = 0;
+		$email->spam = 0;
+		$email->blocked = 0;
+		$email->createdOn = time();
+		
+		if (!$email->save()) {
+			foreach ($email->getMessages() as $msg) {
+				$log->log('Error: ' . $msg);
+			}
+			$log->log('Error while creating email!');
+			return false;
+		}
+		return $email;
+	}
+	
 }

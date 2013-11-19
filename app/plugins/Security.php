@@ -203,6 +203,9 @@ class Security extends Plugin
 				'template::edit' => array('template' => array('read', 'update')),
 				'template::preview' => array('mail' => array('read', 'create', 'send')),
 				'sendingprocess::index' => array('mail' => array('read', 'create', 'send')),
+				
+				//tests
+				'test::testemailcontact' => array('mail' => array('read', 'create', 'send')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
