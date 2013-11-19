@@ -181,16 +181,16 @@ Editor.prototype.createDZ = function(objdz) {
 
 Editor.prototype.createZoneStyle = function(objdz, bodytext) {
 	
-	var text = "<div class='panel panel-default'>\
-					<div class='panel-heading'>\n\
+	var text = "<div class='accordion-group'>\
+					<div class='accordion-heading'>\n\
 						<h4 class='panel-title'>\n\
-						  <a data-toggle='collapse' data-parent='#accordion' href='#collapse" + objdz.name + "'>\n\
+						  <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#collapse" + objdz.name + "'>\n\
 							" + objdz.name.charAt(0).toUpperCase() + objdz.name.substr(1).toLowerCase() + "\n\
 						  </a>\n\
 						</h4>\n\
 					  </div>\n\
-					  <div id='collapse" + objdz.name + "' class='panel-collapse collapse'>\n\
-						<div class='panel-body'>\n\
+					  <div id='collapse" + objdz.name + "' class='accordion-body collapse'>\n\
+						<div class='accordion-inner'>\n\
 						" + bodytext + "</div>\n\
 					  </div>\n\
 					</div>\n\
