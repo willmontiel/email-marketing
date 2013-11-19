@@ -122,7 +122,9 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 				}
 				
 				t.block.setSizeImage(realHeight, realWidth);
-					
+				
+				t.block.setTableColumn('width', realWidth);
+				
 				t.block.changeAttrImgBlock('height', realHeight);
 					
 				t.block.changeAttrImgBlock('width', realWidth);
@@ -201,10 +203,12 @@ MediaDisplayer.prototype.createSlider = function() {
 		t.block.displayer.width = t.image.width;
 		t.block.displayer.height = t.image.height;
 		
+		t.block.setTableColumn('width', widthNatural);
+		
 		t.valuesHW(heightNatural, widthNatural);
 		
 		t.block.setSizeImage(heightNatural, widthNatural);
-
+		
 		t.block.changeAttrImgBlock('width', widthNatural);
 		t.block.changeAttrImgBlock('height', heightNatural);
 	});
