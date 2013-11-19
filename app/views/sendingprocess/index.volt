@@ -22,10 +22,15 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span12">
+		<div class="span12 padded">
 			<div class="box">
-				<div class="box-header">
-					<span class="title">Procesos de envío</span>
+				<div class="box-header padded">
+					<div class="input-prepend span3">
+						<a class="add-on" href="#">
+							<i class="icon-search"></i>
+						</a>
+						<input type="text" placeholder="Buscar...">
+					</div>
 				</div>
 				<div class="box-content">
 					<table id="processes-table" class="tablesorter table table-normal">

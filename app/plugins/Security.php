@@ -205,7 +205,7 @@ class Security extends Plugin
 				'sendingprocess::index' => array('mail' => array('read', 'create', 'send')),
 				
 				//tests
-				'test::testemailcontact' => array('mail' => array('read', 'create', 'send')),
+				'test::testzmq' => array('mail' => array('read', 'create', 'send')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

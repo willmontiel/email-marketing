@@ -311,3 +311,38 @@ a.inactive {
 #modal-simple-template h5 {
 	text-align: center;
 }
+
+
+/* tables */
+table {
+	border-collapse: collapse;
+	border-color: gray;
+}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+	border-bottom: 1px solid #d1d2da;
+	border-right: 1px solid #d1d2da;
+	padding: 3px 5px 2px 5px;
+	text-align: center;
+	color: #666;
+	font-weight: 600;
+	font-size: 12px;
+	text-shadow: 0 1px rgba(255,255,255,0.5);
+	background-color: #eaeaea;
+}
+table.tablesorter thead tr .header {
+	background-image: url(../tablesorter/bg.gif);
+	background-repeat: no-repeat;
+	background-position: right;
+	cursor: pointer;
+}
+table.tablesorter thead tr .headerSortUp {
+	background-image: url(../tablesorter/asc.gif);
+}
+table.tablesorter thead tr .headerSortDown {
+	background-image: url(../tablesorter/desc.gif);
+}
+
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+background-color: #f2f3f7;
+}
+
