@@ -1,6 +1,12 @@
 <?php
 class ParentSender
 {
+	protected $pids;
+
+	public function __construct()
+	{
+		$this->pids = array();
+	}
 	public function initializePool()
 	{
 		$context = new ZMQContext();
@@ -11,18 +17,27 @@ class ParentSender
 	{
 		$pid = pcntl_fork();
 		if ($pid > 0) {
-			echo "Soy el parent... child process={$pid}\n";
+			echo "New child process={$pid}\n";
+			$this->pids[] = $pid;
 		}
 		elseif ($pid == 0) {
-			echo "Soy el child!!!\n";
-			echo "Mi PID es: " . getmypid() . PHP_EOL;
+			pcntl_exec('/usr/bin/php', array('childSender.php'));
 		}
 		else {
 			echo "Error! \n";
 		}
 	}
+
+	public function waitForAll()
+	{
+		sleep(10);
+	}
 }
 
 $x = new ParentSender();
 
-$x->forkChild();
+for ($i=0; $i<10; $i++) {
+	$x->forkChild();
+}
+
+$x->waitForAll();
