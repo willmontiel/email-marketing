@@ -76,18 +76,23 @@ App.ListsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, E
 	init: function () 
 	{
 		this.set('acl', App.contactListACL);
-		this.set('x', this.store.find('dbase'));
+		var t = this;
+		this.store.find('dbase').then(function(db) {
+			var dbases = db.get('content');
+			var values = [{id: 0, name:'Todas las Bases de Datos'}];
+			for(var i = 0; i < dbases.length; i++) {
+				var obj = {id: dbases[i].get('id'), name: dbases[i].get('name')};
+				values.push(obj);
+			}
+			t.set('dbaseSelect', values);
+		});
 	},
 
 	modelClass : App.List,
 	needs: ['dbase'],
+
+	dbaseSelect: [],
 	
-	dbaseSelect: [
-		{name: "Todas las bases", id: 0},
-		{name: "Plantilla PSG", id: 7},
-		{name: "Emirates Stadium",    id: 8}
-	],
-//	
 	dbaseSelectChange: function () {
 		var idDbase = this.get('selectedDbase');
 		var resultado = this.store.find('list', { dbase: idDbase });
