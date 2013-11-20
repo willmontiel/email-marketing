@@ -1,4 +1,6 @@
 <?php
+//require_once '../bootstrap/phbootstrap.php';
+
 class ParentSender
 {
 	protected $pids;
@@ -7,10 +9,10 @@ class ParentSender
 	{
 		$this->pids = array();
 	}
+	
 	public function initializePool()
 	{
-		$context = new ZMQContext();
-		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ); 
+		
 	}
 	
 	public function forkChild()
@@ -27,7 +29,7 @@ class ParentSender
 			echo "Error! \n";
 		}
 	}
-
+	
 	public function waitForAll()
 	{
 		sleep(10);
@@ -36,8 +38,22 @@ class ParentSender
 
 $x = new ParentSender();
 
-for ($i=0; $i<10; $i++) {
+for ($i=0; $i<4; $i++) {
 	$x->forkChild();
-}
+} 
 
-$x->waitForAll();
+$context = new ZMQContext(1);
+//  Socket to talk to clients
+$responder = new ZMQSocket($context, ZMQ::SOCKET_REP);
+$responder->bind("tcp://*:5556");
+
+while (true) {
+	$request = $responder->recv();
+	printf("$request \n");
+	
+	switch ($request) {
+		case 'free':
+			$responder->send("doSomething");
+			break;
+	}
+}

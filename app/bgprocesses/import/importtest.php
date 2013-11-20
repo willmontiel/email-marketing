@@ -1,6 +1,6 @@
 <?php
 
-$contact = new Contact;
+//$contact = new Contact;
 
 $context = new ZMQContext();
 if ($argc >= 1) {
