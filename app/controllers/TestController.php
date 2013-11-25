@@ -817,4 +817,148 @@ class TestController extends ControllerBase
 		return $email;
 	}
 	
+	
+	
+	
+	public function startAction()
+	{
+		$log = $this->logger;
+		$idMail = 115;
+		
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		if ($mail) {
+			$identifyTargetObj = new IdentifyTargetObj();
+			$contacts = $identifyTargetObj->identifyTarget($mail);
+			
+			$prepareMail = new PrepareMailObj($this->user->account);
+			$content = $prepareMail->beginPreparation($mail);
+
+			$this->replaceCustomField($mail, $content, $contacts);
+			
+		}
+	}
+	
+	public function replaceCustomField(Mail $mail, $content, $idcontacts)
+	{
+		$log = $this->logger;
+		$account = $this->user->account;
+		$dbases = Dbase::find(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array (1 => $account->idAccount)
+		));
+		
+		$idsDbase = array();
+		$idsContact = array();
+
+		foreach ($dbases as $dbase) {
+			$idsDbase[] = $dbase->idDbase;
+		}
+		
+		foreach ($idcontacts as $id) {
+			$idsContact[] = $id->idContact;
+		}
+		
+		$idContact = implode(", ", $idsContact);
+		$idDbase = implode(", ", $idsDbase);
+		
+		$sql1 = "SELECT c.idContact, e.email, c.name, c.lastName, cf.name AS field, cf.type, f.textValue, f.numberValue
+				FROM contact AS c
+					JOIN email AS e ON (c.idEmail = e.idEmail) 
+					LEFT JOIN customfield AS cf ON (c.idDbase = cf.idDbase)
+					LEFT JOIN fieldinstance AS f ON (cf.idCustomField = f.idCustomField)
+				WHERE c.idContact IN (" . $idContact . ") AND (e.spam = 0 AND e.blocked = 0)";
+		
+		$sql2 = "SELECT cf.idCustomField, cf.name FROM customfield AS cf WHERE idDbase IN (" . $idDbase . ")";
+		
+		$db = Phalcon\DI::getDefault()->get('db');
+		
+		$arrayContacts = $db->fetchAll($sql1);
+		$arrayFields = $db->fetchAll($sql2);
+
+		$find = array('%%EMAIL%%', '%%NOMBRE%%', '%%APELLIDO%%');
+		
+		foreach ($arrayFields as $field) {
+			$f = $this->stripAccents($field['name']);
+			$find[] = "%%" . $f . "%%";
+		}
+		
+		$contacts = $this->organizeContactsAndCustomFields($arrayContacts);
+			
+		foreach ($contacts as $contact) {
+			
+			$replace = array($contact['info']['email'], $contact['info']['name'], $contact['info']['lastName']);
+			
+			foreach ($contact['fields'] as $fields) {
+				if (!empty($fields)) {
+					$replace[] = $fields;
+					next($contact['fields']);
+				}
+				else {
+					$t = count($find);
+					for ($i=0; $i<$t-3; $i++) {
+						$replace[] = " ";
+					}
+				}
+			}
+			
+			$newcontent = str_ireplace($find, $replace, $content);
+//			$log->log($newcontent);
+		}
+	}
+	
+	protected function organizeContactsAndCustomFields($result)
+	{
+		$log = $this->logger;
+		$contacts = array();
+		
+		foreach ($result as $contact) {
+			$field = $this->stripAccents($contact['field']);
+
+			if (!isset($contacts[$contact['idContact']])) {
+				$contacts[$contact['idContact']]['info']['email'] = $contact['email'];
+				$contacts[$contact['idContact']]['info']['name'] = $contact['name'];
+				$contacts[$contact['idContact']]['info']['lastName'] = $contact['lastName'];
+				
+				$f = $this->getTypeCustomField($contact);
+				$contacts[$contact['idContact']]['fields'] = array($f);
+			}
+			else {
+				$f = $this->getTypeCustomField($contact);
+				$contacts[$contact['idContact']]['fields']["$field"] = $f;
+			}
+		}
+
+//		$log->log("Contacts: " . print_r($contacts, true));
+		return $contacts;
+	}
+	
+	protected function getTypeCustomField($contact)
+	{
+		switch ($contact['type']) {
+			case 'Date':
+				$c  =  date('Y-m-d',$contact['numberValue']);
+				break;
+			case 'Number':
+				$c = $contact['numberValue'];
+				break;
+			default:
+				$c = $contact['textValue'];
+		}
+		return $c;
+	}
+	
+	protected function stripAccents($cadena){
+		$originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ';
+		$modificadas = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr';
+		
+		$cadena = utf8_decode($cadena);
+		$cadena = strtr($cadena, utf8_decode($originales), $modificadas);
+		$cadena = strtoupper($cadena);
+		
+		return utf8_encode($cadena);
+	}
 }

@@ -54,7 +54,7 @@ class TargetObj
 			$destinationJson->filter = "";
 			
 			$type = 'dbase';
-			$phql = "SELECT contact.idContact FROM contact WHERE contact.idDbase IN (" . $dbase . ")";
+			$phql = "SELECT Contact.idContact FROM Contact WHERE Contact.idDbase IN (" . $dbase . ")";
 		}
 
 		else if ($idContactlists != null) {
@@ -65,7 +65,7 @@ class TargetObj
 			$destinationJson->filter = "";
 			
 			$type = 'list';
-			$phql= "SELECT coxcl.idContact FROM coxcl WHERE coxcl.idContactlist IN (" . $contactlist . ")";
+			$phql= "SELECT Coxcl.idContact FROM Coxcl WHERE Coxcl.idContactlist IN (" . $contactlist . ")";
 		}
 
 		else if ($idSegments != null) {
@@ -76,10 +76,9 @@ class TargetObj
 			$destinationJson->filter = "";
 			
 			$type = 'segment';
-			$phql .= "SELECT sxc.idContact FROM sxc WHERE sxc.idSegment IN (" . $segment . ")";
+			$phql .= "SELECT Sxc.idContact FROM Sxc WHERE Sxc.idSegment IN (" . $segment . ")";
 		}
 		
-		$this->log->log("tipo: " . $type);
 		$targetInfo = array('destinationJson' => $destinationJson, 'type' => $type, 'phql' => $phql);
 		return $targetInfo;
 	}
