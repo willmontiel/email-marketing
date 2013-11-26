@@ -3,10 +3,10 @@ class PrepareMailObj
 {
 	public function __construct(Account $account) 
 	{
-		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
-		$di =  \Phalcon\DI\FactoryDefault::getDefault();
-		
-		$this->url = $di['url'];
+//		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
+//		$di =  \Phalcon\DI\FactoryDefault::getDefault();
+//		
+//		$this->url = $di['url'];
 		$this->account = $account;
 	}
 	
