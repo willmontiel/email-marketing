@@ -1,5 +1,5 @@
 <?php
-class PrepareMailObj
+class PrepareMail
 {
 	public function __construct(Account $account) 
 	{

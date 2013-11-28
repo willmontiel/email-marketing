@@ -1,5 +1,5 @@
 <?php
-class MailFieldObj
+class MailField
 {
 	public $html;
 	public $text;
@@ -30,10 +30,29 @@ class MailFieldObj
 		}
 		
 		list($this->fields, $fields) = $arrayFields;
-		$f = array_unique($fields);
-		$customFields = implode(", ", $f);
+		$result = array_unique($fields);
 		
-		return strtolower($customFields);
+		$s = array();
+		$c = array();
+		
+		foreach ($result as $r) {
+			if ($r == 'NAME' || $r == 'LASTNAME') {
+				$s[] = $r;
+			}
+			else {
+				$c[] = $r;
+			}
+		}
+
+		$standard = strtolower(implode(", ", $s));
+		$custom = strtolower(implode(", ", $c));
+
+		$customFields = array(
+			'standard' => $standard,
+			'custom' => $custom
+		);
+		
+		return $customFields;
 	}
 	
 	public function processCustomFields($fieldValuesArray)
@@ -48,7 +67,7 @@ class MailFieldObj
 		$replace = array($fieldValuesArray['email'], $fieldValuesArray['name'], $fieldValuesArray['lastName']);
 		
 		foreach ($fieldValuesArray as $value) {
-			if (trim($value)=== '') {
+			if (trim($value)=== '' || empty($value)) {
 				$replace[] = " ";
 			}
 			else {
@@ -69,9 +88,3 @@ class MailFieldObj
 		return $content;
 	}
 }
-//
-//$html = "";
-//$text = "";
-//$subject = "";
-//
-//$x = new MailFieldObj($html, $text, $subject);

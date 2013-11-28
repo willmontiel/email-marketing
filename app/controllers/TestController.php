@@ -827,10 +827,10 @@ class TestController extends ControllerBase
 //		));
 //		
 //		if ($mail) {
-//			$identifyTargetObj = new IdentifyTargetObj();
-//			$contacts = $identifyTargetObj->identifyTarget($mail);
+//			$identifyTarget = new IdentifyTarget();
+//			$contacts = $identifyTarget->identifyTarget($mail);
 //			
-//			$prepareMail = new PrepareMailObj($this->user->account);
+//			$prepareMail = new PrepareMail($this->user->account);
 //			$content = $prepareMail->beginPreparation($mail);
 		
 //			$this->replaceCustomField($mail, $content, $contacts);

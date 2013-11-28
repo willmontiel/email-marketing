@@ -1,5 +1,5 @@
 <?php
-class IdentifyTargetObj
+class IdentifyTarget
 {
 	public function __construct() 
 	{
@@ -25,22 +25,20 @@ class IdentifyTargetObj
 		
 		switch ($target->destination) {
 			case 'dbases':
-				$phql = "SELECT contact.idContact FROM contact WHERE contact.idDbase IN (" . $ids . ")";
+				$phql = "SELECT Contact.idContact FROM Contact WHERE Contact.idDbase IN (" . $ids . ")";
 				break;
 			
 			case 'lists':
-				$phql= "SELECT coxcl.idContact FROM coxcl WHERE coxcl.idContactlist IN (" . $ids . ")";
+				$phql= "SELECT Coxcl.idContact FROM Coxcl WHERE Coxcl.idContactlist IN (" . $ids . ")";
 				break;
 				
 			case 'segments':
-				$phql .= "SELECT sxc.idContact FROM sxc WHERE sxc.idSegment IN (" . $ids . ")";
+				$phql .= "SELECT Sxc.idContact FROM Sxc WHERE Sxc.idSegment IN (" . $ids . ")";
 				break;
 		}
 		
 		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$contacts = $modelsManager->executeQuery($phql);
-		
-		$totalContacts = count($contacts);
 		
 		$idContacts = $this->returnIds($contacts, $mail->idMail);
 		
@@ -50,7 +48,7 @@ class IdentifyTargetObj
 		
 		$destination = $db->execute($sql);
 		
-		return $contacts;
+		return $destination;
 	}
 	
 	protected function returnIds($contacts, $idMail) 
