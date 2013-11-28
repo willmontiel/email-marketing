@@ -8,6 +8,7 @@
 //Register an autoloader
 $loader = new \Phalcon\Loader();
 $loader->registerDirs(array(
+	'../sender',
 	'../../models/',
 	'../../library/',
 	'../../logic/',
@@ -98,7 +99,12 @@ $di->set('modelsManager', function(){
 	return new Phalcon\Mvc\Model\Manager();
 });
 
-
+$di->set('publisher', function () {
+	$context = new ZMQContext(1);
+	$publisher = new ZMQSocket($context, ZMQ::SOCKET_PUB);
+	$publisher->bind("tcp://*:5558");
+	return 	$publisher;
+});
 
 function print_dbase_profile()
 {

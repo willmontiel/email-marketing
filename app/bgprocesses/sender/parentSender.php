@@ -1,59 +1,77 @@
 <?php
-//require_once '../bootstrap/phbootstrap.php';
+require_once '../bootstrap/phbootstrap.php';
+
+$parent = new ParentSender();
+
+$parent->startProcess();
 
 class ParentSender
 {
-	protected $pids;
-
-	public function __construct()
-	{
-		$this->pids = array();
-	}
+	protected $sockets;
+	protected $pool;
+	protected $client;
+	protected $tasks;
 	
-	public function initializePool()
+	public function __construct() {
+		$this->sockets = new Sockets();
+	}
+
+	public function startProcess()
 	{
+		$registry = new Registry();
 		
-	}
-	
-	public function forkChild()
-	{
-		$pid = pcntl_fork();
-		if ($pid > 0) {
-			echo "New child process={$pid}\n";
-			$this->pids[] = $pid;
+		// Crear los objetos
+		$this->client = new ClientHandler($registry);
+		$this->pool = new PoolHandler($registry);
+		$this->tasks = new TasksHandler($registry);
+		$this->client->register();
+		$this->pool->register();
+		$this->tasks->register();
+		
+		$this->tasks->setPool($this->pool);
+		$this->client->setTasks($this->tasks);
+		$this->client->setPool($this->pool);
+		
+		$this->pool->createInitialChildren();
+		
+		$poll = new ZMQPoll();
+		$poll->add($this->sockets->getReply(), ZMQ::POLL_IN);
+		$poll->add($this->sockets->getPull(), ZMQ::POLL_IN);
+		
+		$readable = $writeable = array();
+			
+		while (true) {
+
+			$events = $poll->poll($readable, $writeable, 1000);
+
+			if ($events > 0) {
+
+				foreach ($readable as $socket) {
+					
+					if ($socket === $this->sockets->getReply()) {
+						
+						$request = $socket->recv();
+						
+						$this->sockets->getReply()->send('');
+						
+						sscanf($request, "%s %s %s", $type, $data, $code);
+						
+						$registry->handleEvent(new Event($type, $data, $code));
+					}
+					else if($socket === $this->sockets->getPull()) {
+						
+						$request = $socket->recv();
+						
+						sscanf($request, "%s %s %s", $type, $data, $code);
+						
+						$registry->handleEvent(new Event($type, $data, $code));
+					}
+				}
+			}
+			else {
+				$registry->handleEvent(new Event('Idle'));
+				$registry->handleEvent(new Event('WP'));
+			}
 		}
-		elseif ($pid == 0) {
-			pcntl_exec('/usr/bin/php', array('childSender.php'));
-		}
-		else {
-			echo "Error! \n";
-		}
-	}
-	
-	public function waitForAll()
-	{
-		sleep(10);
-	}
-}
-
-$x = new ParentSender();
-
-for ($i=0; $i<4; $i++) {
-	$x->forkChild();
-} 
-
-$context = new ZMQContext(1);
-//  Socket to talk to clients
-$responder = new ZMQSocket($context, ZMQ::SOCKET_REP);
-$responder->bind("tcp://*:5556");
-
-while (true) {
-	$request = $responder->recv();
-	printf("$request \n");
-	
-	switch ($request) {
-		case 'free':
-			$responder->send("doSomething");
-			break;
 	}
 }
