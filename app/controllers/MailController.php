@@ -474,10 +474,12 @@ class MailController extends ControllerBase
 	public function plaintextAction($idMail)
 	{
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND status = ?2 AND wizardOption = ?3',
+			'conditions' => 'idMail = ?1 AND status = ?2 AND (wizardOption = ?3 OR wizardOption = ?4 OR wizardOption = ?5)',
 			'bind' => array(1 => $idMail,
 							2 => 'Draft',
-							3 => 'source')
+							3 => 'source',
+							4 => 'target',
+							5 => 'schedule')
 		));
 		
 		if ($mail) {

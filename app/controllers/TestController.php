@@ -817,4 +817,36 @@ class TestController extends ControllerBase
 		return $email;
 	}
 	
+	public function startAction()
+	{
+//		$idMail = 115;
+//		
+//		$mail = Mail::findFirst(array(
+//			'conditions' => 'idMail = ?1',
+//			'bind' => array(1 => $idMail)
+//		));
+//		
+//		if ($mail) {
+//			$identifyTarget = new IdentifyTarget();
+//			$contacts = $identifyTarget->identifyTarget($mail);
+//			
+//			$prepareMail = new PrepareMail($this->user->account);
+//			$content = $prepareMail->beginPreparation($mail);
+		
+//			$this->replaceCustomField($mail, $content, $contacts);
+			
+//		}
+	}
+	
+	
+	protected function stripAccents($cadena){
+		$originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ';
+		$modificadas = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr';
+		
+		$cadena = utf8_decode($cadena);
+		$cadena = strtr($cadena, utf8_decode($originales), $modificadas);
+		$cadena = strtoupper($cadena);
+		
+		return utf8_encode($cadena);
+	}
 }
