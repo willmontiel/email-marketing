@@ -819,6 +819,15 @@ class TestController extends ControllerBase
 	
 	public function startAction()
 	{
+		$log = $this->logger;
+		$contactIterator = new ContactIterator(115, "37, 38");
+		
+		$i = 0;
+		foreach ($contactIterator as $f) {
+			//$log->log("Contact: " . print_r($f, true));
+			$i++;
+		}
+		$log->log("Finalice! {$i} iteraciones");
 //		$idMail = 115;
 //		
 //		$mail = Mail::findFirst(array(

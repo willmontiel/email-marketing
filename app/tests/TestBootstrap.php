@@ -31,6 +31,7 @@ function initialize($dir)
 	$connection = new \Phalcon\Db\Adapter\Pdo\Mysql($config->database->toArray());
 
 	$di->set('db', $connection);
+	
 }
 
 	

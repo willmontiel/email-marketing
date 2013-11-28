@@ -13,7 +13,7 @@ class ContactIteratorTest extends PHPUnit_Framework_TestCase {
 	
 	public function testReturnCorrectContacts()
 	{
-		$contactIterator = new ContactIterator(113);
+		$contactIterator = new ContactIterator(115);
 		
 		foreach ($contactIterator as $contact) {
 			$x = array();
@@ -24,7 +24,7 @@ class ContactIteratorTest extends PHPUnit_Framework_TestCase {
 			$obj->lastName = 'Perez5';
 
 			$x['contact'] = $obj;
-
+			
 			$this->assertEquals($x, $contact);
 		}
 		
