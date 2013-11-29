@@ -9,39 +9,52 @@ class ContactIterator implements Iterator
 	
 	const ROWS_PER_FETCH = 1000;
 	
-	public function __construct($idMail, $idFields) 
+	public function __construct(Mail $mail, $idFields) 
 	{
-		$this->mail = $idMail;
+		$this->mail = $mail->idMail;
 		$this->fields = $idFields;
 	}
 	
 	public function extractContactsFromDB($start = 0)
 	{
 		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . ' AND idContact > ' . $start . ' ORDER BY idContact LIMIT ' . self::ROWS_PER_FETCH;
-//		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . '  ORDER BY idContact LIMIT 50 OFFSET ' .  $start;
-		$sql2 = ' SELECT cf.name, fi.idContact, fi.textValue, fi.numberValue FROM customfield AS cf JOIN fieldInstance AS fi ON (cf.idCustomField = fi.idCustomField) WHERE cf.idCustomField IN (' . $this->fields . ')';
-		$sql3 = 'SELECT c.idContact, c.name, c.lastName, e.email, f.name AS field, f.textValue, f.numberValue 
-					FROM (' . $sql1 . ') AS l 
-						JOIN contact AS c ON(l.idContact = c.idContact)
-						JOIN email AS e ON(c.idEmail = e.idEmail)
-						LEFT JOIN (' . $sql2 . ') AS f ON(c.idContact = f.idContact)';
-
-		unset($this->contacts);
-		$db = Phalcon\DI::getDefault()->get('db');
-		$result = $db->query($sql3);
-//		$db = Phalcon\DI::getDefault()->get('logger')->log('Memory before fetch: ' . memory_get_peak_usage(true));
-//		Phalcon\DI::getDefault()->get('timerObject')->startTimer('fetching', 'Fetching data');
-		$this->contacts = $result->fetchAll();
-//		Phalcon\DI::getDefault()->get('timerObject')->endTimer('fetching');
-//		$db = Phalcon\DI::getDefault()->get('logger')->log('Memory after fetch: ' . memory_get_peak_usage(true));
+		if (!$this->fields) {
+			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email 
+						FROM (' . $sql1 . ') AS l 
+							JOIN contact AS c ON(l.idContact = c.idContact)
+							JOIN email AS e ON(c.idEmail = e.idEmail)';
+		}
+		else {
+			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email, f.name AS field, f.textValue, f.numberValue 
+						FROM (' . $sql1 . ') AS l 
+							JOIN contact AS c ON(l.idContact = c.idContact)
+							JOIN email AS e ON(c.idEmail = e.idEmail)
+							LEFT JOIN (SELECT cf.name, fi.idContact, fi.textValue, fi.numberValue FROM customfield AS cf JOIN fieldInstance AS fi ON (cf.idCustomField = fi.idCustomField) WHERE cf.idCustomField IN (' . $this->fields . ')) AS f ON(c.idContact = f.idContact)';
+		}
 		
-		if (count($this->contacts) <= 0) {
+		unset($this->contacts);
+		
+		$db = Phalcon\DI::getDefault()->get('db');
+		$result = $db->query($sql);
+		$contacts = $result->fetchAll();
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Organizing', 'Organizing data');
+		if (count($contacts) <= 0) {
 			return false;
 		}
+//		Phalcon\DI::getDefault()->get('logger')->log('SQl: '. $sql);
 		$this->offset = 0;
+		
+		if (!$this->fields) {
+			$this->prepareContactsWithoutCustomFields($contacts);
+		}
+		else {
+			$this->prepareContactsWithCustomFields($contacts);
+		}
 		$end = end($this->contacts);
-		$this->start = $end['idContact'];
-//		$this->start += count($this->contacts);
+		$this->start = $end['contact']['idContact'];
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Organizing Array');
+		Phalcon\DI::getDefault()->get('logger')->log('Memory after Organize: ' . memory_get_peak_usage(true));
+		
 		return true;
 	}
 	
@@ -54,17 +67,7 @@ class ContactIterator implements Iterator
 	
 	public function current()
 	{
-		$contacts = array();
-		$obj = new stdClass();
-		
-		$curr = $this->contacts[$this->offset];
-		
-		$obj->idContact = $curr['idContact'];
-		$obj->name = $curr['name'];
-		$obj->lastName = $curr['lastName'];
-		
-		$contacts['contact'] = $obj;
-        return $contacts;
+		return $this->contacts[$this->offset];
 	}
 	
 	public function key()
@@ -94,6 +97,100 @@ class ContactIterator implements Iterator
 		}
 		else {
 			return true;
+		}
+	}
+	
+	protected function prepareContactsWithoutCustomFields($contacts)
+	{
+		$i = 0;
+		$this->contacts = array();
+		foreach ($contacts as $m) {
+			$c = array(
+				'idContact' => $m['idContact'],
+				'name' => $m['name'],
+				'lastName' => $m['lastName']
+			);
+
+			$e = array(
+				'email' => $m['email']
+			);
+
+			$f = array();
+			$this->contacts[$i]['contact'] = $c;
+			$this->contacts[$i]['email'] = $e;
+			$this->contacts[$i]['fields'] = $f;
+			
+			$i++;
+		}
+	}
+	
+	protected function prepareContactsWithCustomFields($contacts)
+	{
+		$this->contacts = array();
+		$i = -1;
+		$k = 0;
+		
+		foreach ($contacts as $m) {
+			if (count($this->contacts) == 0) {
+				$c = array(
+					'idContact' => $m['idContact'],
+					'name' => $m['name'],
+					'lastName' => $m['lastName']
+				);
+
+				$e = array(
+					'email' => $m['email']
+				);
+
+				$f = array();
+				if ($m['field'] !== null) {
+					if ($m['textValue'] !== null) {
+						$f[$m['field']] = $m['textValue'];
+					}
+					else if ($m['numberValue'] !== null) {
+						$f[$m['field']] = $m['numberValue'];
+					}
+				}
+				$this->contacts[0]['contact'] = $c;
+				$this->contacts[0]['email'] = $e;
+				$this->contacts[0]['fields'] = $f;
+			}
+			else if ($this->contacts[$i]['contact']['idContact'] == $m['idContact']) {
+				if ($m['textValue'] !== null) {
+					$this->contacts[$i]['fields']['field'] = $m['textValue'];
+				}
+				else if ($m['numberValue'] !== null) {
+					$this->contacts[$i]['fields']['field'] = $m['numberValue'];
+				}
+				$i--;
+				$k--;
+			}
+			else {
+				$c = array(
+					'idContact' => $m['idContact'],
+					'name' => $m['name'],
+					'lastName' => $m['lastName']
+				);
+
+				$e = array(
+					'email' => $m['email']
+				);
+
+				$f = array();
+				if ($m['field'] !== null) {
+					if ($m['textValue'] !== null) {
+						$f[$m['field']] = $m['textValue'];
+					}
+					else if ($m['numberValue'] !== null) {
+						$f[$m['field']] = $m['numberValue'];
+					}
+				}
+				$this->contacts[$k]['contact'] = $c;
+				$this->contacts[$k]['email'] = $e;
+				$this->contacts[$k]['fields'] = $f;
+			}
+			$i++;
+			$k++;
 		}
 	}
 }
