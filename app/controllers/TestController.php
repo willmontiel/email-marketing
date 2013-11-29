@@ -817,10 +817,9 @@ class TestController extends ControllerBase
 		return $email;
 	}
 	
-	public function startAction()
+	public function startAction($idMail)
 	{
 		$log = $this->logger;
-		$idMail = 115;
 		
 		$account = $this->user->account;
 		$mail = Mail::findFirst(array(
@@ -852,7 +851,10 @@ class TestController extends ControllerBase
 				$contactIterator = new ContactIterator($mail, $idsCustomField);
 //				$i = 0;
 				foreach ($contactIterator as $contact) {
-					$mailField->processCustomFields($contact);
+					$c = $mailField->processCustomFields($contact);
+					$log->log("Html: " . $c['html']);
+//					$log->log("Text: " . $c['text']);
+//					$log->log("Subject: " . $c['subject']);
 //					$log->log("Contact: " . print_r($f, true));
 //					$i++;
 				}

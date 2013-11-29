@@ -24,6 +24,7 @@ class PrepareContentMail
 //				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
 				$htmlObj->assignContent(json_decode($mailContent->content));
 				$content = $htmlObj->render();
+//				$this->log->log('Json: ' . $content);
 			}
 			else {
 //				$this->log->log("No Hay editor");

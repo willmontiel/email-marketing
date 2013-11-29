@@ -4,6 +4,8 @@ class MailField
 	public $html;
 	public $text;
 	public $subject;
+	public $fields;
+	public $idDbases;
 	
 	public function __construct($html, $text, $subject, $idDbases) 
 	{
@@ -40,7 +42,17 @@ class MailField
 		}
 		
 //		$this->log->log("Fields: " . print_r($arrayFields, true));
-		list($this->fields, $fields) = $arrayFields;
+		list($cf, $fields) = $arrayFields;
+		$f = array_unique($cf);
+		$this->fields = array();
+		foreach ($f as $x) {
+			if ($x == '%%EMAIL%%' || $x == '%%NOMBRE%%' || $x == '%%APELLIDO%%') {
+				
+			}
+			else {
+				$this->fields[] = $x;
+			}
+		}
 		$customfieldsFound = array_unique($fields);
 //		$this->log->log("Fields2: " . print_r($customfieldsFound, true));
 	
@@ -63,18 +75,20 @@ class MailField
 		return $custom;
 	}
 	
-	public function processCustomFields($fieldValuesArray)
+	public function processCustomFields($contact)
 	{
-		if ($fieldValuesArray == null || !is_array($fieldValuesArray)) {
+		if ($contact == null || !is_array($contact)) {
 			throw new InvalidArgumentException('Error processCustomFields received a not valid array');
 		}
 		
-		$f = array('%%EMAIL%%', '%%NAME%%', '%%LASTNAME%%');
+		$f = array('%%EMAIL%%', '%%NOMBRE%%', '%%APELLIDO%%');
 		$find = array_merge($f, $this->fields);
 		
-		$replace = array($fieldValuesArray['email'], $fieldValuesArray['name'], $fieldValuesArray['lastName']);
+//		$this->log->log("Custom: " . print_r($find, true));
 		
-		foreach ($fieldValuesArray as $value) {
+		$replace = array($contact['email']['email'], $contact['contact']['name'], $contact['contact']['lastName']);
+		
+		foreach ($contact['fields'] as $key => $value) {
 			if (trim($value)=== '' || empty($value)) {
 				$replace[] = " ";
 			}
@@ -82,10 +96,11 @@ class MailField
 				$replace[] = $value;
 			}
 		}
-		
-		$newHtml = str_ireplace($find, $replace, $this->html);
-		$newText = str_ireplace($find, $replace, $this->text);
-		$newSubject = str_ireplace($find, $replace, $this->subject);
+//		$this->log->log("Replace: " . print_r($replace, true));
+//		$this->log->log("Html antes del susodicho: " . $this->html);
+		$newHtml = str_replace($find, $replace, $this->html);
+		$newText = str_replace($find, $replace, $this->text);
+		$newSubject = str_replace($find, $replace, $this->subject);
 		
 		$content = array(
 			'html' => $newHtml,
