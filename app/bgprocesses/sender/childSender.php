@@ -1,5 +1,5 @@
 <?php
-//require_once '../bootstrap/phbootstrap.php';
+require_once '../bootstrap/phbootstrap.php';
 
 $child = new ChildSender();
 
@@ -10,26 +10,29 @@ class ChildSender
 	protected $pid;
 	protected $mode ='NORMAL';
 	protected $lasttime;
-	
+	protected $subscriber;
+	protected $push;
+
 	const NUMBER_OF_SECONDS = 20;
 	
 	public function initialize()
 	{
 		$this->pid = getmypid();
-		
+		$x = new childObj();
+		$x->setSocket($this);
 		$context = new ZMQContext();
 		
-		$subscriber = new ZMQSocket($context, ZMQ::SOCKET_SUB);
-		$subscriber->connect("tcp://localhost:5558");
+		$this->subscriber = new ZMQSocket($context, ZMQ::SOCKET_SUB);
+		$this->subscriber->connect("tcp://localhost:5558");
 		
-		$push = new ZMQSocket($context, ZMQ::SOCKET_PUSH);
-		$push->connect("tcp://localhost:5557");
+		$this->push = new ZMQSocket($context, ZMQ::SOCKET_PUSH);
+		$this->push->connect("tcp://localhost:5557");
 		
 		$filter = "$this->pid";
-		$subscriber->setSockOpt(ZMQ::SOCKOPT_SUBSCRIBE, $filter);
+		$this->subscriber->setSockOpt(ZMQ::SOCKOPT_SUBSCRIBE, $filter);
 		
 		$poll = new ZMQPoll();
-		$poll->add($subscriber, ZMQ::POLL_IN);
+		$poll->add($this->subscriber, ZMQ::POLL_IN);
 		$readable = $writable = array();
 		
 		while (true) {
@@ -37,43 +40,55 @@ class ChildSender
 			
 			if ($events && count($readable) > 0) {
 				
-				$request = $subscriber->recv(ZMQ::MODE_NOBLOCK);	
+				$request = $this->subscriber->recv(ZMQ::MODE_NOBLOCK);	
 				
 				if($request) {
 					
 					sscanf($request, "%d %s %s", $pid, $type, $data);
-					
 					switch ($type) {
+						case 'Echo-Request':
+//							printf('Ping numero '.$data. ' en ' .$pid. PHP_EOL);
+							$response = sprintf("%s %s Echo-Reply", 'Child-'.$this->pid, $data);
+							break;
 						case 'Echo-Tmp-Request':
-							printf('EmoPing numero '.$data .PHP_EOL);
+//							printf('EmoPing numero '.$data. ' en ' .$pid. PHP_EOL);
 							$this->mode = 'TEMP';
 							$response = sprintf("%s %s Echo-Tmp-Reply", 'Child-'.$this->pid, $data);
 							break;
-						case 'Echo-Request':
-							printf('Ping numero '.$data .PHP_EOL);
-							$response = sprintf("%s %s Echo-Reply", 'Child-'.$this->pid, $data);
-							break;
-						case 'Process-Task':
+						case 'Processing-Task':
 							printf('Soy el PID ' . $pid . ' Y me Llego Esto: ' . $data . PHP_EOL);
-							
-							sleep(30);		
+							sleep(30);
+//							$x->startProcess($data);
 							
 							printf('PID ' . $pid . ' Acabo' . PHP_EOL);
-							$response = sprintf("%s %s Available", 'Child-'.$this->pid, $this->pid);
+							$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
 							break;
 					}
-					$push->send($response);
+					$this->push->send($response);
 					$this->lasttime = time();
 				}
 			}
 			else {
 				if ((time() - $this->lasttime) > self::NUMBER_OF_SECONDS && $this->mode == 'TEMP') {
 					$response = sprintf("%s %s Kill-Process", 'Child-'.$this->pid, $this->pid);
-					$push->send($response);
+					$this->push->send($response);
 					exit(0);
 				}
 			}
 		}
+	}
+	
+	public function Messages()
+	{
+		$request = $this->subscriber->recv(ZMQ::MODE_NOBLOCK);	
+
+		if($request) {
+			sscanf($request, "%d %s %s", $pid, $type, $data);
+			$response = sprintf("%s %s $type", 'Process-Response', $this->pid);
+			$this->push->send($response);
+			return $type;
+		}
+		return NULL;
 	}
 }
 

@@ -5,48 +5,58 @@
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 	$requester->connect("tcp://localhost:5556");
 	
-	$requester->send(sprintf("%s 'FirstWork'", 'NewTask'));
+	$requester->send(sprintf("%s 'Now1'", 'New-Task'));
+	$request = $requester->recv();
+	
+//	sleep(rand(0, 5));
+//	
+//	$requester->send(sprintf("%s 'Now1'", 'Cancel-Process'));
+//	$request = $requester->recv();
+//	
+//	sleep(rand(0, 5));
+//	
+//	$requester->send(sprintf("%s 'Now1'", 'Stop-Process'));
+//	$request = $requester->recv();
+	
+	sleep(rand(0, 5));
+	
+	$requester->send(sprintf("%s", 'Scheduled-Task'));
+	$request = $requester->recv();
+	
+	$requester->send(sprintf("%s 'Now5'", 'New-Task'));
 	$request = $requester->recv();
 	
 	sleep(rand(0, 5));
 	
-	$requester->send(sprintf("%s 'SecondWork'", 'NewTask'));
+	$requester->send(sprintf("%s 'Now65'", 'New-Task'));
 	$request = $requester->recv();
 	
 	sleep(rand(0, 5));
 	
-	$requester->send(sprintf("%s 'ThirdWork'", 'NewTask'));
+	$requester->send(sprintf("%s 'Now72'", 'New-Task'));
 	$request = $requester->recv();
 	
 	sleep(rand(0, 5));
 	
-	$requester->send(sprintf("%s 'FourthWork'", 'NewTask'));
+	$requester->send(sprintf("%s 'Now45'", 'New-Task'));
 	$request = $requester->recv();
 	
 	sleep(rand(0, 5));
 	
-	$requester->send(sprintf("%s 'FifthWork'", 'NewTask'));
+	$requester->send(sprintf("%s 'Now85'", 'New-Task'));
 	$request = $requester->recv();
 	
-	sleep(1);
+	sleep(rand(0, 5));
 	
-	$requester->send(sprintf("%s 'SixthWork'", 'NewTask'));
+	$requester->send(sprintf("%s 'Now36'", 'New-Task'));
 	$request = $requester->recv();
 	
-	sleep(1);
+	sleep(rand(0, 5));
 	
-	$requester->send(sprintf("%s 'SeventhWork'", 'NewTask'));
+	$requester->send(sprintf("%s 'Now12'", 'New-Task'));
 	$request = $requester->recv();
 	
-	sleep(1);
+	sleep(rand(0, 5));
 	
-	$requester->send(sprintf("%s 'EighthWork'", 'NewTask'));
+	$requester->send(sprintf("%s 'Now89'", 'New-Task'));
 	$request = $requester->recv();
-	
-	sleep(1);
-	
-	$requester->send(sprintf("%s 'NinthWork'", 'NewTask'));
-	$request = $requester->recv();
-
-
-

@@ -30,6 +30,7 @@ class TasksHandler extends Handler
 	{
 		switch ($event->type) {
 			case 'Idle':
+				$this->taskScheduling();
 				if($this->checkReadyTasks()) {
 					$this->SendReadyTasks();
 				}
@@ -49,31 +50,35 @@ class TasksHandler extends Handler
 		}
 	}
 	
-	public function sendTask($task, $process)
+	public function sendTask($task, ChildHandler $process)
 	{
-		$send = sprintf("%d Process-Task %s", $process->getPid(), $task);
+		$send = sprintf("%d Processing-Task %s", $process->getPid(), $task);
 		
 		$this->publisher->send($send);
 		
 		$process->setAvailable(FALSE);
+		
+		$this->pool->processGotTask($process, $task);
 	}
 	
-	public function taskScheduling($task, $schedule)
+	public function taskScheduling()
 	{
-		$this->scheduledTasks[] = array($schedule, $task);
+		$this->scheduledTasks = Mailschedule::find(array("limit" => 20, "order"  => "scheduleDate ASC"));
+		
+		if(count($this->scheduledTasks) > 0){
+			$this->checkScheduledTasks();
+		}
 	}
 	
-	public function checkScheduleTasks()
+	public function checkScheduledTasks()
 	{
-		while(count($this->scheduledTasks) > 0)
-		{
-			foreach ($this->scheduledTasks as $task) {
-				if($task[0] == time()) {
-					$this->saveReadyTask($task[1]);
-					
-				}
+		foreach ($this->scheduledTasks as $task) {
+			if($task->scheduleDate <= time()) {
+				$this->saveReadyTask($task->idMail);
+				$task->delete();
 			}
 		}
+		$this->SendReadyTasks();
 	}
 	
 	public function saveReadyTask($task)
@@ -81,6 +86,13 @@ class TasksHandler extends Handler
 		$this->readyTasks[] = $task;
 	}
 	
+	public function sendCommandToProcess($command, $pid)
+	{
+		$send = sprintf("%d %s %s", $pid, $command, $pid);
+
+		$this->publisher->send($send);
+	}
+
 	public function checkReadyTasks()
 	{
 		if(count($this->readyTasks) > 0) {

@@ -6,7 +6,7 @@ class ClientHandler extends Handler
 	
 	public function getEvents()
 	{
-		$events = array('NewTask');
+		$events = array('New-Task', 'Scheduled-Task', 'Cancel-Process', 'Play-Process', 'Stop-Process');
 		
 		return $events;
 	}
@@ -14,11 +14,20 @@ class ClientHandler extends Handler
 	public function handleEvent(Event $event)
 	{
 		switch ($event->type) {
-			case 'NewTask':
+			case 'New-Task':
 				$this->sendNewTask($event->data);
 				break;
-			case 'ScheduledTask':
-				$this->scheduling($event->data);
+			case 'Scheduled-Task':
+				$this->scheduling();
+				break;
+			case 'Cancel-Process':
+				$this->cancelTaskInProcess($event->data);
+				break;
+			case 'Play-Process':
+				$this->playTask($event->data);
+				break;
+			case 'Stop-Process':
+				$this->stopTaskInProcess($event->data);
 				break;
 		}
 	}
@@ -45,11 +54,26 @@ class ClientHandler extends Handler
 		}
 	}
 	
-	protected function scheduling($data)
+	protected function scheduling()
 	{
-		$task = $data->content;
-		$schedule = $data->schedule;
+		$this->tasks->taskScheduling();
+	}
+	
+	protected function cancelTaskInProcess($data)
+	{
+		$pid = $this->pool->findPidFromTask($data);
+		$this->tasks->sendCommandToProcess('Cancel', $pid);
 		
-		$this->tasks->taskScheduling($task, $schedule);
+	}
+	
+	protected function stopTaskInProcess($data)
+	{
+		$pid = $this->pool->findPidFromTask($data);
+		$this->tasks->sendCommandToProcess('Stop', $pid);
+	}
+	
+	protected function playTask($data)
+	{
+		
 	}
 }

@@ -36,8 +36,9 @@ class ChildHandler extends Handler
 				$this->setConfirmed(TRUE);
 				$this->setAvailable(TRUE);
 				break;
-			case 'Available':
+			case 'Process-Available':
 				$this->setAvailable(TRUE);
+				$this->pool->processAvailable($this);
 				break;
 			case 'Kill-Process':
 				$this->IDie();
@@ -102,7 +103,7 @@ class ChildHandler extends Handler
 		
 		if ($pid > 0) {
 			
-			echo "---New Child Process {$pid}\n";
+//			echo "---New Child Process {$pid}\n";
 
 			$this->pid = $pid;
 			

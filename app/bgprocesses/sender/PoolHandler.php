@@ -3,14 +3,15 @@ class PoolHandler extends Handler
 {	
 	protected $children = array();
 	protected $tmpChildren = array();
-	const NUMBER_MAX_OF_TMP_CHILDREN = 2;
+	protected $engagedProcesses = array();
+	const MAX_OF_TMP_CHILDREN = 4;
 	const INITIAL_CHILDREN = 4;
 
 	protected $tasks;
 	
 	public function getEvents()
 	{
-		$events = array('Idle', 'WP');
+		$events = array('Idle', 'WP', 'Process-Response');
 		
 		return $events;
 	}
@@ -28,6 +29,9 @@ class PoolHandler extends Handler
 				break;
 			case 'WP':
 				$this->deadChildren();
+				break;
+			case 'Response-From-Child':
+				printf('Pool ' .$event->code .PHP_EOL);
 				break;
 		}
 	}
@@ -78,7 +82,12 @@ class PoolHandler extends Handler
 	public function getAvailableChild()
 	{
 		foreach ($this->children as $child) {			
-			if($child->getAvailable()) {				
+			if($child->getAvailable()) {
+				//Mover Proceso al Final del Arreglo
+				$key = array_search($child, $this->children);
+				unset($this->children[$key]);
+				$this->children[] = $child;
+				
 				return $child;
 			}
 		}
@@ -89,13 +98,35 @@ class PoolHandler extends Handler
 			}
 		}
 		
-		if( (count($this->tmpChildren) < self::NUMBER_MAX_OF_TMP_CHILDREN) && (count($this->childrenWithOutConfirmation()) <= 0) ) {
+		if( (count($this->tmpChildren) < self::MAX_OF_TMP_CHILDREN) && (count($this->childrenWithOutConfirmation()) <= 0) ) {
 			$this->newChild(true);
 		}
 		
 		return NULL;
 	}
 	
+	public function processGotTask(ChildHandler $process, $task)
+	{
+		$this->engagedProcesses[$process->getPid()] = $task;
+	}
+	
+	public function processAvailable(ChildHandler $process)
+	{
+		unset($this->engagedProcesses[$process->getPid()]);
+	}
+	
+	public function findPidFromTask($task)
+	{
+		if(count($this->engagedProcesses) > 0) {
+			foreach ($this->engagedProcesses as $pid => $content){
+				if($content == $task) {
+					return $pid;
+				}
+			}
+		}
+		return NULL;
+	}
+
 	public function childDie(ChildHandler $child)
 	{
 		$this->registry->unregisterEvent('Child-'.$child->getPid());
