@@ -21,6 +21,9 @@ class ChildCommunication extends BaseWrapper
 			$mail->startedon = time();
 			$mail->save();
 			
+			$account = Account::findFirstByIdAccount($mail->idAccount);
+			$this->setAccount($account);
+			
 			$dbases = Dbase::findByIdAccount($this->account->idAccount);
 			$id = array();
 			foreach ($dbases as $dbase) {
