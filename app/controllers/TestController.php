@@ -845,17 +845,34 @@ class TestController extends ControllerBase
 				$content = $prepareMail->getContentMail($mail);
 				
 				$mailField = new MailField($content->html, $content->text, $mail->subject, $idDbases);
-				$idsCustomField = $mailField->getCustomFields();
+				$cf = $mailField->getCustomFields();
 				
-				$log->log("customfield {$idsCustomField}");
-				$contactIterator = new ContactIterator($mail, $idsCustomField);
+				switch ($cf) {
+					case 'No Fields':
+						$customFields = false;
+						$fields = false;
+						break;
+					case 'No Custom':
+						$fields = true;
+						$customFields = false;
+						break;
+					default:
+						$fields = true;
+						$customFields = $cf;
+						break;
+				}
+				
+				$log->log("customfield {$customFields}");
+				$contactIterator = new ContactIterator($mail, $customFields);
 //				$i = 0;
 				foreach ($contactIterator as $contact) {
-//					$c = $mailField->processCustomFields($contact);
-//					$log->log("Html: " . $c['html']);
-//					$log->log("Text: " . $c['text']);
-//					$log->log("Subject: " . $c['subject']);
-					$log->log("Contact: " . print_r($contact, true));
+					if ($fields) {
+						$c = $mailField->processCustomFields($contact);
+//						$log->log("Html: " . $c['html']);
+	//					$log->log("Text: " . $c['text']);
+	//					$log->log("Subject: " . $c['subject']);
+					}
+//					$log->log("Contact: " . print_r($contact, true));
 //					$i++;
 				}
 //				$log->log("Finalice! {$i} iteraciones");

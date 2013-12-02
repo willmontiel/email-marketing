@@ -102,31 +102,59 @@ class ContactIterator implements Iterator
 	
 	protected function prepareContactsWithoutCustomFields($contacts)
 	{
-		$i = 0;
+		Phalcon\DI::getDefault()->get('logger')->log('Sin Custom');
+		$i = -1;
+		$k = 0;
 		$this->contacts = array();
 		foreach ($contacts as $m) {
-			$c = array(
-				'idContact' => $m['idContact'],
-				'name' => $m['name'],
-				'lastName' => $m['lastName']
-			);
+			if (count($this->contacts) == 0) {
+				$c = array(
+					'idContact' => $m['idContact'],
+					'name' => $m['name'],
+					'lastName' => $m['lastName']
+				);
 
-			$e = array(
-				'email' => $m['email'],
-				'idEmail' => $m['idEmail']
-			);
+				$e = array(
+					'email' => $m['email'],
+					'idEmail' => $m['idEmail']
+				);
 
-			$f = array();
-			$this->contacts[$i]['contact'] = $c;
-			$this->contacts[$i]['email'] = $e;
-			$this->contacts[$i]['fields'] = $f;
-			
+				$f = array();
+				
+				$this->contacts[0]['contact'] = $c;
+				$this->contacts[0]['email'] = $e;
+				$this->contacts[0]['fields'] = $f;
+			}
+			else if ($this->contacts[$i]['email']['idEmail'] == $m['idEmail']) {
+//				$i--;
+//				$k--;
+			}
+			else {
+				$c = array(
+					'idContact' => $m['idContact'],
+					'name' => $m['name'],
+					'lastName' => $m['lastName']
+				);
+
+				$e = array(
+					'email' => $m['email'],
+					'idEmail' => $m['idEmail']
+				);
+
+				$f = array();
+				
+				$this->contacts[$k]['contact'] = $c;
+				$this->contacts[$k]['email'] = $e;
+				$this->contacts[$k]['fields'] = $f;
+			}
 			$i++;
+			$k++;
 		}
 	}
 	
 	protected function prepareContactsWithCustomFields($contacts)
 	{
+		Phalcon\DI::getDefault()->get('logger')->log('Con Custom');
 		$this->contacts = array();
 		$i = -1;
 		$k = 0;
