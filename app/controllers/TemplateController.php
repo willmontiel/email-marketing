@@ -123,7 +123,7 @@ class TemplateController extends ControllerBase
 			$template->createTemplate($name, $categoryF, $content, $this->user->account);
 		}
 		catch (InvalidArgumentException $e) {
-
+			$this->flashSession->error('Ha ocurrido un error, por favor conacte al administrador');
 		}
 	}
 }

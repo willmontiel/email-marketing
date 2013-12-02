@@ -348,7 +348,7 @@ class MailController extends ControllerBase
 		$mail = $this->validateProcess($idMail);
 		
 		if ($mail) {
-
+			
 			$mailContentExist = Mailcontent::findFirst(array(
 				"conditions" => "idMail = ?1",
 				"bind" => array(1 => $idMail)
@@ -406,6 +406,16 @@ class MailController extends ControllerBase
 					$this->routeRequest('html', $direction, $idMail);
 				}
 			}
+			$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
+		
+			foreach ($cfs as $cf) {
+				$linkname = strtoupper(str_replace(array ("á", "é", "í", "ó", "ú", "ñ", " ", "&", ), 
+												   array ("a", "e", "i", "o", "u", "n", "_"), $cf[0]));
+
+				$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
+			}
+
+			$this->view->setVar('cfs', $arrayCf);
 			$this->view->MailForm = $form;
 		}
 	}
