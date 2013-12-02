@@ -19,13 +19,13 @@ class ContactIterator implements Iterator
 	{
 		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . ' AND idContact > ' . $start . ' ORDER BY idContact LIMIT ' . self::ROWS_PER_FETCH;
 		if (!$this->fields) {
-			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email 
+			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email, e.idEmail 
 						FROM (' . $sql1 . ') AS l 
 							JOIN contact AS c ON(l.idContact = c.idContact)
 							JOIN email AS e ON(c.idEmail = e.idEmail)';
 		}
 		else {
-			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email, f.name AS field, f.textValue, f.numberValue 
+			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email, e.idEmail, f.name AS field, f.textValue, f.numberValue 
 						FROM (' . $sql1 . ') AS l 
 							JOIN contact AS c ON(l.idContact = c.idContact)
 							JOIN email AS e ON(c.idEmail = e.idEmail)
@@ -112,7 +112,8 @@ class ContactIterator implements Iterator
 			);
 
 			$e = array(
-				'email' => $m['email']
+				'email' => $m['email'],
+				'idEmail' => $m['idEmail']
 			);
 
 			$f = array();
@@ -139,7 +140,8 @@ class ContactIterator implements Iterator
 				);
 
 				$e = array(
-					'email' => $m['email']
+					'email' => $m['email'],
+					'idEmail' => $m['idEmail']
 				);
 
 				$f = array();
@@ -155,7 +157,7 @@ class ContactIterator implements Iterator
 				$this->contacts[0]['email'] = $e;
 				$this->contacts[0]['fields'] = $f;
 			}
-			else if ($this->contacts[$i]['contact']['idContact'] == $m['idContact']) {
+			else if ($this->contacts[$i]['email']['idEmail'] == $m['idEmail']) {
 				if ($m['textValue'] !== null) {
 					$this->contacts[$i]['fields']['field'] = $m['textValue'];
 				}
@@ -173,7 +175,8 @@ class ContactIterator implements Iterator
 				);
 
 				$e = array(
-					'email' => $m['email']
+					'email' => $m['email'],
+					'idEmail' => $m['idEmail']
 				);
 
 				$f = array();
