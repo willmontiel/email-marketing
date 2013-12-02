@@ -47,22 +47,20 @@ class ChildSender
 					sscanf($request, "%d %s %s", $pid, $type, $data);
 					switch ($type) {
 						case 'Echo-Request':
-//							printf('Ping numero '.$data. ' en ' .$pid. PHP_EOL);
 							$response = sprintf("%s %s Echo-Reply", 'Child-'.$this->pid, $data);
 							break;
 						case 'Echo-Tmp-Request':
-//							printf('EmoPing numero '.$data. ' en ' .$pid. PHP_EOL);
 							$this->mode = 'TEMP';
+							
 							$response = sprintf("%s %s Echo-Tmp-Reply", 'Child-'.$this->pid, $data);
 							break;
 						case 'Processing-Task':
 							printf('Soy el PID ' . $pid . ' Y me Llego Esto: ' . $data . PHP_EOL);
-//							sleep(30);
-							$account = Account::findFirstByIdAccount(13);
-							$communication->setAccount($account);
+
 							$communication->startProcess($data);
 							
 							printf('PID ' . $pid . ' Acabo' . PHP_EOL);
+							
 							$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
 							break;
 					}
