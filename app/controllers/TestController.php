@@ -851,11 +851,11 @@ class TestController extends ControllerBase
 				$contactIterator = new ContactIterator($mail, $idsCustomField);
 //				$i = 0;
 				foreach ($contactIterator as $contact) {
-					$c = $mailField->processCustomFields($contact);
-					$log->log("Html: " . $c['html']);
+//					$c = $mailField->processCustomFields($contact);
+//					$log->log("Html: " . $c['html']);
 //					$log->log("Text: " . $c['text']);
 //					$log->log("Subject: " . $c['subject']);
-//					$log->log("Contact: " . print_r($f, true));
+					$log->log("Contact: " . print_r($contact, true));
 //					$i++;
 				}
 //				$log->log("Finalice! {$i} iteraciones");
