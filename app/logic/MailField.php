@@ -4,24 +4,36 @@ class MailField
 	public $html;
 	public $text;
 	public $subject;
+	public $fields;
+	public $idDbases;
 	
-	public function __construct($html, $text, $subject) 
+	public function __construct($html, $text, $subject, $idDbases) 
 	{
+		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
+		$di =  \Phalcon\DI\FactoryDefault::getDefault();
+		
 		if (trim($subject) === '') {
 			throw new InvalidArgumentException('Empty subject');
 		}
 		else if (trim($html)=== '' && trim($text) === '') {
 			throw new InvalidArgumentException('Empty html and subject');
 		}
+		else if (trim($idDbases)=== '') {
+			throw new InvalidArgumentException('Empty idDbases');
+		}
 		
 		$this->html = $html;
 		$this->text = $text;
 		$this->subject = $subject;
-		
+		$this->idDbases = $idDbases;
 	}
 	
 	public function getCustomFields()
 	{
+		$phql = "SELECT * FROM Customfield WHERE idDbase IN (" . $this->idDbases . ")";
+		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+		$result = $modelsManager->executeQuery($phql);
+		
 		$allFields = $this->html . $this->text . $this->subject;
 		preg_match_all('/%%([a-zA-Z0-9_\-]*)%%/', $allFields, $arrayFields);
 		
@@ -29,44 +41,54 @@ class MailField
 			throw new InvalidArgumentException('Error returned by Preg_match_all, invalid values');
 		}
 		
-		list($this->fields, $fields) = $arrayFields;
-		$result = array_unique($fields);
-		
-		$s = array();
-		$c = array();
-		
-		foreach ($result as $r) {
-			if ($r == 'NAME' || $r == 'LASTNAME') {
-				$s[] = $r;
+//		$this->log->log("Fields: " . print_r($arrayFields, true));
+		list($cf, $fields) = $arrayFields;
+		$f = array_unique($cf);
+		$this->fields = array();
+		foreach ($f as $x) {
+			if ($x == '%%EMAIL%%' || $x == '%%NOMBRE%%' || $x == '%%APELLIDO%%') {
+				
 			}
 			else {
-				$c[] = $r;
+				$this->fields[] = $x;
 			}
 		}
-
-		$standard = strtolower(implode(", ", $s));
-		$custom = strtolower(implode(", ", $c));
-
-		$customFields = array(
-			'standard' => $standard,
-			'custom' => $custom
-		);
+		$customfieldsFound = array_unique($fields);
+//		$this->log->log("Fields2: " . print_r($customfieldsFound, true));
+	
+		$ids = array();
+		if ($result) {
+			foreach ($result as $r) {
+				foreach ($customfieldsFound as $c) {
+					if (strtoupper($r->name) == $c) {
+						$ids[] = $r->idCustomField;
+					}
+				}
+			}
+		}
+//		$this->log->log("Fields4: " . print_r($ids, true));
+		if (count($ids) <= 0) {
+			return false;
+		}
 		
-		return $customFields;
+		$custom = strtolower(implode(", ", $ids));
+		return $custom;
 	}
 	
-	public function processCustomFields($fieldValuesArray)
+	public function processCustomFields($contact)
 	{
-		if ($fieldValuesArray == null || !is_array($fieldValuesArray)) {
+		if ($contact == null || !is_array($contact)) {
 			throw new InvalidArgumentException('Error processCustomFields received a not valid array');
 		}
 		
 		$f = array('%%EMAIL%%', '%%NOMBRE%%', '%%APELLIDO%%');
 		$find = array_merge($f, $this->fields);
 		
-		$replace = array($fieldValuesArray['email'], $fieldValuesArray['name'], $fieldValuesArray['lastName']);
+//		$this->log->log("Custom: " . print_r($find, true));
 		
-		foreach ($fieldValuesArray as $value) {
+		$replace = array($contact['email']['email'], $contact['contact']['name'], $contact['contact']['lastName']);
+		
+		foreach ($contact['fields'] as $key => $value) {
 			if (trim($value)=== '' || empty($value)) {
 				$replace[] = " ";
 			}
@@ -74,10 +96,11 @@ class MailField
 				$replace[] = $value;
 			}
 		}
-		
-		$newHtml = str_ireplace($find, $replace, $this->html);
-		$newText = str_ireplace($find, $replace, $this->text);
-		$newSubject = str_ireplace($find, $replace, $this->subject);
+//		$this->log->log("Replace: " . print_r($replace, true));
+//		$this->log->log("Html antes del susodicho: " . $this->html);
+		$newHtml = str_replace($find, $replace, $this->html);
+		$newText = str_replace($find, $replace, $this->text);
+		$newSubject = str_replace($find, $replace, $this->subject);
 		
 		$content = array(
 			'html' => $newHtml,

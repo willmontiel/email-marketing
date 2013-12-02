@@ -817,25 +817,54 @@ class TestController extends ControllerBase
 		return $email;
 	}
 	
-	public function startAction()
+	public function startAction($idMail)
 	{
-//		$idMail = 115;
-//		
-//		$mail = Mail::findFirst(array(
-//			'conditions' => 'idMail = ?1',
-//			'bind' => array(1 => $idMail)
-//		));
-//		
-//		if ($mail) {
-//			$identifyTarget = new IdentifyTarget();
-//			$contacts = $identifyTarget->identifyTarget($mail);
-//			
-//			$prepareMail = new PrepareMail($this->user->account);
-//			$content = $prepareMail->beginPreparation($mail);
+		$log = $this->logger;
 		
-//			$this->replaceCustomField($mail, $content, $contacts);
+		$account = $this->user->account;
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		if ($mail) {
+			$dbases = Dbase::findByIdAccount($account->idAccount);
 			
-//		}
+			$id = array();
+			foreach ($dbases as $dbase) {
+				$id[] = $dbase->idDbase;
+			}
+			
+			$idDbases = implode(', ', $id);
+			
+			try {
+				$identifyTarget = new IdentifyTarget();
+				$identifyTarget->identifyTarget($mail);
+			
+				$prepareMail = new PrepareContentMail($account);
+				$content = $prepareMail->getContentMail($mail);
+				
+				$mailField = new MailField($content->html, $content->text, $mail->subject, $idDbases);
+				$idsCustomField = $mailField->getCustomFields();
+				
+				$log->log("customfield {$idsCustomField}");
+				$contactIterator = new ContactIterator($mail, $idsCustomField);
+//				$i = 0;
+				foreach ($contactIterator as $contact) {
+					$c = $mailField->processCustomFields($contact);
+					$log->log("Html: " . $c['html']);
+//					$log->log("Text: " . $c['text']);
+//					$log->log("Subject: " . $c['subject']);
+//					$log->log("Contact: " . print_r($f, true));
+//					$i++;
+				}
+//				$log->log("Finalice! {$i} iteraciones");
+			}
+			catch (InvalidArgumentException $e) {
+
+			}
+		}
+		
 	}
 	
 	

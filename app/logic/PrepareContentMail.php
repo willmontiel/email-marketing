@@ -1,16 +1,16 @@
 <?php
-class PrepareMail
+class PrepareContentMail
 {
 	public function __construct(Account $account) 
 	{
-//		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
-//		$di =  \Phalcon\DI\FactoryDefault::getDefault();
+		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
+		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 //		
-//		$this->url = $di['url'];
+		$this->url = $di['url'];
 		$this->account = $account;
 	}
 	
-	public function beginPreparation(Mail $mail)
+	public function getContentMail(Mail $mail)
 	{
 		$mailContent = Mailcontent::findFirst(array(
 			'conditions' => 'idMail = ?1',
@@ -24,16 +24,23 @@ class PrepareMail
 //				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
 				$htmlObj->assignContent(json_decode($mailContent->content));
 				$content = $htmlObj->render();
+//				$this->log->log('Json: ' . $content);
 			}
 			else {
 //				$this->log->log("No Hay editor");
 				$content =  html_entity_decode($mailContent->content);
 			}
-			
 //			$this->log->log("Content: " . $content);
 			$convertedSrc = $this->convertImageSrc($content);
+//			$this->log->log("Content: " . $convertedSrc);
+			$mailContentProcessed = new stdClass();
+			$mailContentProcessed->html = $convertedSrc;
+			$mailContentProcessed->text = $mailContent->plainText;
 			
-			return $convertedSrc;
+			return $mailContentProcessed;
+		}
+		else {
+			throw new InvalidArgumentException('Error while consulting mailContent');
 		}
 	}
 	

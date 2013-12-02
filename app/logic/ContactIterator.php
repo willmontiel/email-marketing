@@ -1,69 +1,196 @@
 <?php
 class ContactIterator implements Iterator
 {
-	public function __construct($idMail) 
+	public $mail;
+	public $fields;
+	public $contacts;
+	public $start;
+	public $offset;
+	
+	const ROWS_PER_FETCH = 1000;
+	
+	public function __construct(Mail $mail, $idFields) 
 	{
-		$this->mail = $idMail;
-		$start = 0;
-		
-		$this->contacts = $this->getContacts($start);
-		
-//		while ($this->contacts !== 0) {
-//			$start += $ultimo = end($this->contacts['idContact']);
-//			$this->contacts = $this->getContacts($start);
-//		}
+		$this->mail = $mail->idMail;
+		$this->fields = $idFields;
 	}
 	
-	public function getContacts($start)
+	public function extractContactsFromDB($start = 0)
 	{
-		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . ' AND idContact > ' . $start . ' ORDER BY idContact LIMIT 100';
-		$sql2 = 'SELECT c.idContact, c.name, c.lastName, e.email, f.idCustomField, f.textValue, f.numberValue 
-					FROM (' . $sql1 . ') AS l 
-						JOIN contact AS c ON(l.idContact = c.idContact)
-						JOIN email AS e ON(c.idEmail = e.idEmail)
-						LEFT JOIN fieldinstance AS f ON(c.idContact = f.idContact)';
-
+		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . ' AND idContact > ' . $start . ' ORDER BY idContact LIMIT ' . self::ROWS_PER_FETCH;
+		if (!$this->fields) {
+			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email 
+						FROM (' . $sql1 . ') AS l 
+							JOIN contact AS c ON(l.idContact = c.idContact)
+							JOIN email AS e ON(c.idEmail = e.idEmail)';
+		}
+		else {
+			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email, f.name AS field, f.textValue, f.numberValue 
+						FROM (' . $sql1 . ') AS l 
+							JOIN contact AS c ON(l.idContact = c.idContact)
+							JOIN email AS e ON(c.idEmail = e.idEmail)
+							LEFT JOIN (SELECT cf.name, fi.idContact, fi.textValue, fi.numberValue FROM customfield AS cf JOIN fieldInstance AS fi ON (cf.idCustomField = fi.idCustomField) WHERE cf.idCustomField IN (' . $this->fields . ')) AS f ON(c.idContact = f.idContact)';
+		}
+		
+		unset($this->contacts);
+		
 		$db = Phalcon\DI::getDefault()->get('db');
-		$result = $db->query($sql2);
+		$result = $db->query($sql);
 		$contacts = $result->fetchAll();
-
-		return $contacts;
-	}
-	
-	public function current()
-	{
-		$contacts = array();
-		$obj = new stdClass();
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Organizing', 'Organizing data');
+		if (count($contacts) <= 0) {
+			return false;
+		}
+//		Phalcon\DI::getDefault()->get('logger')->log('SQl: '. $sql);
+		$this->offset = 0;
 		
-		$curr = current($this->contacts);
+		if (!$this->fields) {
+			$this->prepareContactsWithoutCustomFields($contacts);
+		}
+		else {
+			$this->prepareContactsWithCustomFields($contacts);
+		}
+		$end = end($this->contacts);
+		$this->start = $end['contact']['idContact'];
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Organizing Array');
+		Phalcon\DI::getDefault()->get('logger')->log('Memory after Organize: ' . memory_get_peak_usage(true));
 		
-		$obj->idContact = $curr['idContact'];
-		$obj->name = $curr['name'];
-		$obj->lastName = $curr['lastName'];
-		
-		$contacts['contact'] = $obj;
-        return $contacts;
-	}
-	
-	public function key()
-	{
-		return key($this->contacts);
+		return true;
 	}
 	
 	public function rewind()
 	{
-		reset($this->contacts);
+		$this->start = 0;
+		$this->contacts = array();
+		$this->offset = 0;
 	}
+	
+	public function current()
+	{
+		return $this->contacts[$this->offset];
+	}
+	
+	public function key()
+	{
+		return $this->contact[$this->offset]['idContact'];
+	}
+	
+	
 	
 	public function next()
 	{
-		$var = next($this->contacts);
+		$this->offset++;
+		//array_shift($this->contacts);
 	}
 	
 	public function valid()
 	{
-		$key = key($this->contacts);
-        $var = ($key !== NULL && $key !== FALSE);
-        return $var;
+		$cnt = count($this->contacts);
+		
+		if (($cnt - $this->offset) <= 0) {
+			if ($this->extractContactsFromDB($this->start)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
+	}
+	
+	protected function prepareContactsWithoutCustomFields($contacts)
+	{
+		$i = 0;
+		$this->contacts = array();
+		foreach ($contacts as $m) {
+			$c = array(
+				'idContact' => $m['idContact'],
+				'name' => $m['name'],
+				'lastName' => $m['lastName']
+			);
+
+			$e = array(
+				'email' => $m['email']
+			);
+
+			$f = array();
+			$this->contacts[$i]['contact'] = $c;
+			$this->contacts[$i]['email'] = $e;
+			$this->contacts[$i]['fields'] = $f;
+			
+			$i++;
+		}
+	}
+	
+	protected function prepareContactsWithCustomFields($contacts)
+	{
+		$this->contacts = array();
+		$i = -1;
+		$k = 0;
+		
+		foreach ($contacts as $m) {
+			if (count($this->contacts) == 0) {
+				$c = array(
+					'idContact' => $m['idContact'],
+					'name' => $m['name'],
+					'lastName' => $m['lastName']
+				);
+
+				$e = array(
+					'email' => $m['email']
+				);
+
+				$f = array();
+				if ($m['field'] !== null) {
+					if ($m['textValue'] !== null) {
+						$f[$m['field']] = $m['textValue'];
+					}
+					else if ($m['numberValue'] !== null) {
+						$f[$m['field']] = $m['numberValue'];
+					}
+				}
+				$this->contacts[0]['contact'] = $c;
+				$this->contacts[0]['email'] = $e;
+				$this->contacts[0]['fields'] = $f;
+			}
+			else if ($this->contacts[$i]['contact']['idContact'] == $m['idContact']) {
+				if ($m['textValue'] !== null) {
+					$this->contacts[$i]['fields']['field'] = $m['textValue'];
+				}
+				else if ($m['numberValue'] !== null) {
+					$this->contacts[$i]['fields']['field'] = $m['numberValue'];
+				}
+				$i--;
+				$k--;
+			}
+			else {
+				$c = array(
+					'idContact' => $m['idContact'],
+					'name' => $m['name'],
+					'lastName' => $m['lastName']
+				);
+
+				$e = array(
+					'email' => $m['email']
+				);
+
+				$f = array();
+				if ($m['field'] !== null) {
+					if ($m['textValue'] !== null) {
+						$f[$m['field']] = $m['textValue'];
+					}
+					else if ($m['numberValue'] !== null) {
+						$f[$m['field']] = $m['numberValue'];
+					}
+				}
+				$this->contacts[$k]['contact'] = $c;
+				$this->contacts[$k]['email'] = $e;
+				$this->contacts[$k]['fields'] = $f;
+			}
+			$i++;
+			$k++;
+		}
 	}
 }

@@ -48,7 +48,9 @@ class IdentifyTarget
 		
 		$destination = $db->execute($sql);
 		
-		return $destination;
+		if (!$destination) {
+			throw new InvalidArgumentException('Error while consulting recipients');
+		}
 	}
 	
 	protected function returnIds($contacts, $idMail) 

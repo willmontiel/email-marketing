@@ -18,7 +18,7 @@ class MailFieldTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testEmptySubjectIsNotAllowed()
 	{
-		$obj = new MailField('html', 'texto', '');
+		$obj = new MailField('html', 'texto', '', '9, 11');
 	}
 
 	/**
@@ -26,44 +26,41 @@ class MailFieldTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testEmptySubjectIsNotNull()
 	{
-		$obj = new MailField('html', 'texto', null);
+		$obj = new MailField('html', 'texto', null, '9, 11');
+	}
+	
+	/**
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testEmptyIdDbasesIsNotNull()
+	{
+		$obj = new MailField('html', 'texto', 'subject', null);
 	}
 	
 	public function testReturnCorrectCustomFields()
 	{
-		$result = array(
-			'standard' => null,
-			'custom' => 'nombre, apellido, edad'
-		);
+		$result = "39, 40";
 		
-		$obj = new MailField('Mi nombre es: %%NOMBRE%%, mi apellido es :%%APELLIDO%%, mi edad: %%EDAD%%', 'texto', 'subject');
+		$obj = new MailField('Mi nombre es: %%NAME%%, mi apellido es :%%LASTNAME%%, mi edad: %%EDAD%% y mi pelcula es %%PELICULAS%%', 'texto', 'subject', "9, 11");
 		$fields = $obj->getCustomFields();
 		$this->assertEquals($result, $fields);
 		
-		$obj2 = new MailField('Mi nombre es: %%NOMBRE%%, mi apellido es :%%APELLIDO%%, mi edad: %%EDAD%%', 'Este es su asunto Sr. %%APELLIDO%%', 'Este es su asunto Sr. %%APELLIDO%%');
+		$obj2 = new MailField('Mi nombre es: %%NOMBRE%%, mi apellido es :%%APELLIDO%%, mi edad: %%EDAD%% %%PELICULAS%%', 'Este es su asunto Sr. %%APELLIDO%%', 'Este es su asunto Sr. %%APELLIDO%%', "9, 11");
 		$fields2 = $obj2->getCustomFields();
 		$this->assertEquals($result, $fields2);
-//		
-		$obj3 = new MailField('Mi nombre es: %%NOMBRE%%, mi apellido es :%%APELLIDO, mi edad: %%EDAD%%', 'Este es su asunto Sr. %%APELLIDO%%', 'Este es su asunto Sr. %%APELLIDO%%');
+////		
+		$obj3 = new MailField('Mi nombre es: %%NOMBRE%%, mi apellido es :%%APELLIDO, mi edad: %%EDAD%% %%PELICULAS%%', 'Este es su asunto Sr. %%APELLIDO%%', 'Este es su asunto Sr. %%APELLIDO%%', "9, 11");
 		$fields3 = $obj3->getCustomFields();
-		$result3 = array(
-			'standard' => null,
-			'custom' => 'nombre, edad, apellido'
-		);
-		$this->assertEquals($result3, $fields3);
-//		
-		$obj4 = new MailField('Mi nombre es: %%NAME%%, %%LASTNAME%% %%NOMBRE%%%%NOMBRE_ÑA%%, mi apellido es :%%APELLIDO, mi edad: %%EDAD_A%%', 'Este es su asunto Sr. %%APELLIDO/%%', 'Este es su asunto Sr. %%APELLIDO56%%');
+		$this->assertEquals($result, $fields3);
+////		
+		$obj4 = new MailField('Mi nombre es: %%NAME%%, %%LASTNAME%% %%NOMBRE%%%%NOMBRE_ÑA%%, mi apellido es :%%APELLIDO, mi edad: %%EDAD_A%%', 'Este es su asunto Sr. %%APELLIDO/%%', 'Este es su asunto Sr. %%APELLIDO56%%', "9, 11");
 		$fields4 = $obj4->getCustomFields();
-		$result4 = array(
-			'standard' => 'name, lastname',
-			'custom' => 'nombre, edad_a, apellido56'
-		);
-		$this->assertEquals($result4, $fields4);
+		$this->assertEquals(false, $fields4);
 	}	
 	
 	public function testReturnMailWithCorrectCustomFieldsReplace()
 	{	
-		$obj = new MailField('Mi correo es: %%EMAIL%%, Mi nombre es: %%NAME%%, mi apellido es :%%LASTNAME%%, mi edad: %%EDAD%%', 'text', 'subject');
+		$obj = new MailField('Mi correo es: %%EMAIL%%, Mi nombre es: %%NAME%%, mi apellido es :%%LASTNAME%%, mi edad: %%EDAD%%', 'text', 'subject', "9, 11");
 		
 		$contact = array(
 			'email' => 'jose@xxx.com',
@@ -83,10 +80,7 @@ class MailFieldTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals($content, $result);
 		
-		/*.......................................................................................................................................*/
-		/*Atributo del arreglo de informacion de contacto como vacío*/
-		
-		$obj2 = new MailField('Mi correo es: %%EMAIL%%, Mi nombre es: %%NAME%%, mi apellido es :%%LASTNAME%%, mi edad: %%EDAD%%', 'text', 'subject');
+		$obj2 = new MailField('Mi correo es: %%EMAIL%%, Mi nombre es: %%NAME%%, mi apellido es :%%LASTNAME%%, mi edad: %%EDAD%%', 'text', 'subject', "9, 11");
 		
 		$contact2 = array(
 			'email' => 'jose@xxx.com',
@@ -106,10 +100,9 @@ class MailFieldTest extends PHPUnit_Framework_TestCase
 //		
 		$this->assertEquals($content2, $result2);
 		
-		/*.......................................................................................................................................*/
 		/*Atributo de arreglo de informacion de contacto como null*/
 		
-		$obj3 = new MailField('Mi correo es: %%EMAIL%%, Mi nombre es: %%NAME%%, mi apellido es :%%LASTNAME%%, mi edad: %%EDAD%%', 'text', 'subject');
+		$obj3 = new MailField('Mi correo es: %%EMAIL%%, Mi nombre es: %%NAME%%, mi apellido es :%%LASTNAME%%, mi edad: %%EDAD%%', 'text', 'subject', "9, 11");
 		
 		$contact3 = array(
 			'email' => 'jose@xxx.com',
@@ -128,7 +121,5 @@ class MailFieldTest extends PHPUnit_Framework_TestCase
 		);
 		
 		$this->assertEquals($content3, $result3);
-
 	}
-	
 }
