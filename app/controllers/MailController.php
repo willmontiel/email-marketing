@@ -228,11 +228,13 @@ class MailController extends ControllerBase
 				));
 
 				if ($objMail) {
+					$text = $objMail->plainText;
 					$this->view->setVar('objMail', $objMail->content);
 				}
 				else  {
+					$text = null;
 					$this->view->setVar('objMail', 'null');
-			}
+				}
 			}
 			
 			if ($this->request->isPost()) {
@@ -248,7 +250,8 @@ class MailController extends ControllerBase
 //				$log->log($content);
 				$mailContent->idMail = $idMail;
 				$mailContent->content = $content;
-
+				$mailContent->plainText = $text;
+				
 				$mail->type = "Editor";
 				$mail->wizardOption = $wizardOption;
 				
@@ -515,8 +518,16 @@ class MailController extends ControllerBase
 				
 				switch ($direction) {
 					case 'plaintext':
+						if ($mail->type == 'Editor') {
+							$editorObj = new HtmlObj;
+							$editorObj->assignContent(json_decode($mailContent->content));
+							$content = $editorObj->render();
+						}
+						else {
+							$content = $mailContent->content;
+						}
 						$text = new PlainText();
-						$plainText = $text->getPlainText($mailContent->content);
+						$plainText = $text->getPlainText($content);
 						$this->view->setVar('plaintext', $plainText);
 						break;
 					
