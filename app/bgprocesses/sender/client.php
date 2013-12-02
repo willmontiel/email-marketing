@@ -1,17 +1,17 @@
 <?php
 
-	$context = new ZMQContext();
-		
-	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$requester->connect("tcp://localhost:5556");
+//	$context = new ZMQContext();
+//		
+//	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
+//	$requester->connect("tcp://localhost:5556");
 	
-	$requester->send(sprintf("%s 60", 'New-Task'));
-	$request = $requester->recv();
-	
-	sleep(rand(0, 5));
-	
-	$requester->send(sprintf("%s 60", 'Cancel-Process'));
-	$request = $requester->recv();
+//	$requester->send(sprintf("%s 60", 'New-Task'));
+//	$request = $requester->recv();
+//	
+//	sleep(50);
+//	
+//	$requester->send(sprintf("%s 60", 'Cancel-Process'));
+//	$request = $requester->recv();
 //	
 //	sleep(rand(0, 5));
 //	

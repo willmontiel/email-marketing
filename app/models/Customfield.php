@@ -62,7 +62,7 @@ class Customfield extends \Phalcon\Mvc\Model
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$phql = 'SELECT DISTINCT cf.name FROM Customfield cf JOIN Dbase db ON (cf.idDbase = db.idDbase) WHERE db.idAccount = ' . $account->idAccount;
+		$phql = 'SELECT DISTINCT cf.name FROM customfield cf JOIN dbase db ON (cf.idDbase = db.idDbase) WHERE db.idAccount = ' . $account->idAccount;
 		
 		$query = $db->fetchAll($phql);
 

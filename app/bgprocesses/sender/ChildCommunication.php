@@ -17,6 +17,10 @@ class ChildCommunication extends BaseWrapper
 		));
 
 		if ($mail) {
+			$mail->status = 'Sending';
+			$mail->startedon = time();
+			$mail->save();
+			
 			$dbases = Dbase::findByIdAccount($this->account->idAccount);
 			$id = array();
 			foreach ($dbases as $dbase) {
@@ -30,24 +34,45 @@ class ChildCommunication extends BaseWrapper
 			
 				$prepareMail = new PrepareContentMail($this->account);
 				$content = $prepareMail->getContentMail($mail);
+				
 				$mailField = new MailField($content->html, $content->text, $mail->subject, $idDbases);
-				$idsCustomField = $mailField->getCustomFields();
-				$log->log("customfield {$idsCustomField}");
-				$contactIterator = new ContactIterator($mail, $idsCustomField);
-//				$i = 0;
+				$cf = $mailField->getCustomFields();
+				
+				switch ($cf) {
+					case 'No Fields':
+						$customFields = false;
+						$fields = false;
+						break;
+					case 'No Custom':
+						$fields = true;
+						$customFields = false;
+						break;
+					default:
+						$fields = true;
+						$customFields = $cf;
+						break;
+				}
+				
+				$log->log("customfield {$customFields}");
+				$contactIterator = new ContactIterator($mail, $customFields);
 				foreach ($contactIterator as $contact) {
-					$c = $mailField->processCustomFields($contact);
-					$log->log("Html: " . $c['html']);
-//					$log->log("Text: " . $c['text']);
-//					$log->log("Subject: " . $c['subject']);
+					if ($fields) {
+						$c = $mailField->processCustomFields($contact);
+						$log->log("Html: " . $c['html']);
+	//					$log->log("Text: " . $c['text']);
+	//					$log->log("Subject: " . $c['subject']);
+					}
+					$log->log("Html: " . $content->html);
 //					$log->log("Contact: " . print_r($contact, true));
-//					$i++;
 					$command = $this->socket->Messages();
 					if($command == 'Cancel') {
 						 break;
 					}
 				}
-//				$log->log("Finalice! {$i} iteraciones");
+				
+				$mail->status = 'Sent';
+				$mail->finishedon = time();
+				$mail->save();
 			}
 			catch (InvalidArgumentException $e) {
 

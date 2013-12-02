@@ -82,7 +82,7 @@ class ChildSender
 	
 	public function Messages()
 	{
-		$request = $this->subscriber->recv();	
+		$request = $this->subscriber->recv(ZMQ::MODE_NOBLOCK);	
 
 		if($request) {
 			sscanf($request, "%d %s %s", $pid, $type, $data);
