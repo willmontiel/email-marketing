@@ -1,5 +1,5 @@
 <?php
-class childObj extends BaseWrapper
+class ChildCommunication extends BaseWrapper
 {
 	protected $socket;
 	
