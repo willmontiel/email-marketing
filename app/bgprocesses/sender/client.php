@@ -8,15 +8,15 @@
 	$requester->send(sprintf("%s 'Now1'", 'New-Task'));
 	$request = $requester->recv();
 	
-//	sleep(rand(0, 5));
-//	
-//	$requester->send(sprintf("%s 'Now1'", 'Cancel-Process'));
-//	$request = $requester->recv();
-//	
-//	sleep(rand(0, 5));
-//	
-//	$requester->send(sprintf("%s 'Now1'", 'Stop-Process'));
-//	$request = $requester->recv();
+	sleep(rand(0, 5));
+	
+	$requester->send(sprintf("%s 'Now1'", 'Cancel-Process'));
+	$request = $requester->recv();
+	
+	sleep(rand(0, 5));
+	
+	$requester->send(sprintf("%s 'Now1'", 'Stop-Process'));
+	$request = $requester->recv();
 	
 	sleep(rand(0, 5));
 	
