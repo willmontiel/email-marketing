@@ -63,7 +63,7 @@ class TasksHandler extends Handler
 	
 	public function taskScheduling()
 	{
-		$this->scheduledTasks = Mailschedule::find(array("limit" => 20, "order"  => "scheduleDate ASC"));
+		$this->scheduledTasks = Mailschedule::find(array("limit" => 20, "order"  => "scheduleDate ASC", "confirmationStatus = 'Yes'"));
 		
 		if(count($this->scheduledTasks) > 0){
 			$this->checkScheduledTasks();

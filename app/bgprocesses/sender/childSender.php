@@ -18,8 +18,8 @@ class ChildSender
 	public function initialize()
 	{
 		$this->pid = getmypid();
-		$x = new childObj();
-		$x->setSocket($this);
+		$communication = new ChildCommunication();
+		$communication->setSocket($this);
 		$context = new ZMQContext();
 		
 		$this->subscriber = new ZMQSocket($context, ZMQ::SOCKET_SUB);
@@ -59,8 +59,8 @@ class ChildSender
 							printf('Soy el PID ' . $pid . ' Y me Llego Esto: ' . $data . PHP_EOL);
 //							sleep(30);
 							$account = Account::findFirstByIdAccount(13);
-							$x->setAccount($account);
-							$x->startProcess($data);
+							$communication->setAccount($account);
+							$communication->startProcess($data);
 							
 							printf('PID ' . $pid . ' Acabo' . PHP_EOL);
 							$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
@@ -82,7 +82,7 @@ class ChildSender
 	
 	public function Messages()
 	{
-		$request = $this->subscriber->recv();	
+		$request = $this->subscriber->recv(ZMQ::MODE_NOBLOCK);	
 
 		if($request) {
 			sscanf($request, "%d %s %s", $pid, $type, $data);

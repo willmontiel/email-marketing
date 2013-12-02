@@ -117,7 +117,7 @@
 					</div>
 					<div class="box-footer padded">
 						<a href="{{url('mail/schedule')}}/{{mail.idMail}}" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</a>
-						<button class="btn btn-blue" name="direction" value="next">Confirmar <i class="icon-envelope"></i></button>
+						<a href="{{url('mail/confirm')}}/{{mail.idMail}}" class="btn btn-blue">Confirmar <i class="icon-envelope"></i></a>
 					</div>
 				</form>
 			</div>

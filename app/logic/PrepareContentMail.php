@@ -66,7 +66,7 @@ class PrepareContentMail
 				
 //				$this->log->log("Partes : " . print_r($srcParts, true));
 				
-				$srcPre = '/' . $srcParts[1] . '/' . $srcParts[2];
+				$srcPre = '/' . $srcParts[2];
 //				$this->log->log("srcPrefi : " . $srcPre);
 //				$this->log->log("srcPrivate : " . $srcPrivate);
 //				$this->log->log("srcPublic : " . $srcPublic);
@@ -109,7 +109,7 @@ class PrepareContentMail
 		
 		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
 		
-		$img = "http://localhost" . $this->url->get('assets') . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
+		$img = "http://localhost/emarketing" . $this->url->get('assets') . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
 	
 		return $img;
 	}
@@ -122,7 +122,7 @@ class PrepareContentMail
 		));
 		
 		$ext = pathinfo( $tpImg->name, PATHINFO_EXTENSION);
-		$img = "http://localhost" . $this->url->get('templates') . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
+		$img = "http://localhost/emarketing" . $this->url->get('templates') . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
 	
 		return $img;
 	}

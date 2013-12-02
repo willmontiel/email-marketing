@@ -27,7 +27,7 @@ class IdentifyTarget
 				$phql = "SELECT Contact.idContact FROM Contact WHERE Contact.idDbase IN (" . $ids . ")";
 				break;
 			
-			case 'lists':
+			case 'contactlists':
 				$phql= "SELECT Coxcl.idContact FROM Coxcl WHERE Coxcl.idContactlist IN (" . $ids . ")";
 				break;
 				

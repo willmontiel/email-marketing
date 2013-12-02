@@ -307,7 +307,7 @@ class MailController extends ControllerBase
 			
 			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
 		}
-		
+
 		$this->view->setVar('cfs', $arrayCf);
 		
 		if($idMail) {
@@ -741,15 +741,16 @@ class MailController extends ControllerBase
 					return $this->response->redirect('mail/schedule/' . $idMail);
 				}
 				
-				$mailSchedule = new MailScheduleObj($mail);
-				$scheduled = $mailSchedule->scheduleTask();
-				if ($scheduled) {
-					$this->routeRequest('schedule', $direction, $mail->idMail);
+				if ($schedule == 'after' || $date !== "") {
+					$mailSchedule = new MailScheduleObj($mail);
+					$scheduled = $mailSchedule->scheduleTask();
+					if (!$scheduled) {
+						$this->flashSession->error('Ha ocurrido un error');
+						return $this->response->redirect('mail/schedule/' . $idMail);
+					}
 				}
-				else {
-					$this->flashSession->error('Ha ocurrido un error');
-					return $this->response->redirect('mail/schedule/' . $idMail);
-				}
+				
+				$this->routeRequest('schedule', $direction, $mail->idMail);
 			}
 		}
 		else {
@@ -803,6 +804,25 @@ class MailController extends ControllerBase
 		}
 		
 		return $this->response->redirect('mail');
+	}
+	
+	public function confirmAction($idMail)
+	{
+		$schedule = Mailschedule::findFirstByIdMail($idMail);
+		if($schedule) {
+			$schedule->confirmationStatus = 'Yes';
+
+			if(!$schedule->save()){
+				foreach ($schedule->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+				return $this->response->redirect('mail/preview/' . $idMail);
+			}
+		}
+		$commObj = new Comunication();
+		$commObj->sendToParent($idMail);
+		
+		return $this->response->redirect("mail/index");
 	}
 
 	protected function validateProcess($idMail)

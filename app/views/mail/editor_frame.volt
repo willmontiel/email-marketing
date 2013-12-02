@@ -350,16 +350,17 @@
 					%%APELLIDO%%
 				</div>
 			</li>
-			
-			{%for cf in cfs%}
-				<li>
-					<a href="#" class="redactor_clip_link">{{cf['originalName']}}</a>
+			{%if cfs is defined %}
+				{%for cf in cfs%}
+					<li>
+						<a href="#" class="redactor_clip_link">{{cf['originalName']}}</a>
 
-					<div class="redactor_clip" style="display: none;">
-						%%{{cf['linkName']}}%%
-					</div>
-				</li>
-			{%endfor%}
+						<div class="redactor_clip" style="display: none;">
+							%%{{cf['linkName']}}%%
+						</div>
+					</li>
+				{%endfor%}
+			{%endif%}
 			
 			<li>
 				<a href="#" class="redactor_clip_link">Enlace de des-suscripcion</a>
