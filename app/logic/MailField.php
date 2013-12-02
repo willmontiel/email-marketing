@@ -9,8 +9,7 @@ class MailField
 	
 	public function __construct($html, $text, $subject, $idDbases) 
 	{
-		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
-		$di =  \Phalcon\DI\FactoryDefault::getDefault();
+		$this->log = Phalcon\DI::getDefault()->get('logger');
 		
 		if (trim($subject) === '') {
 			throw new InvalidArgumentException('Empty subject');

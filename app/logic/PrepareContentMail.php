@@ -3,7 +3,7 @@ class PrepareContentMail
 {
 	public function __construct(Account $account) 
 	{
-		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
+		$this->log = Phalcon\DI::getDefault()->get('logger');
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 //		
 		$this->url = $di['url'];

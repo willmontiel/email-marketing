@@ -12,6 +12,7 @@ $loader->registerDirs(array(
 	'../../models/',
 	'../../library/',
 	'../../logic/',
+	'../../editorlogic/',
 ))->register();
 
 // Ruta de APP

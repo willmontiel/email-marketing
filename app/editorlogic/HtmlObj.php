@@ -3,8 +3,7 @@ class HtmlObj extends HtmlAbstract
 {	
 	public function __construct() 
 	{
-		$this->log = new Phalcon\Logger\Adapter\File('../app/logs/debug.log');
-		$di =  \Phalcon\DI\FactoryDefault::getDefault();
+		$this->log = Phalcon\DI::getDefault()->get('logger');
 	}
 	
 	public function assignContent($content)

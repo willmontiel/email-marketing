@@ -57,8 +57,10 @@ class ChildSender
 							break;
 						case 'Processing-Task':
 							printf('Soy el PID ' . $pid . ' Y me Llego Esto: ' . $data . PHP_EOL);
-							sleep(30);
-//							$x->startProcess($data);
+//							sleep(30);
+							$account = Account::findFirstByIdAccount(13);
+							$x->setAccount($account);
+							$x->startProcess($data);
 							
 							printf('PID ' . $pid . ' Acabo' . PHP_EOL);
 							$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
@@ -80,7 +82,7 @@ class ChildSender
 	
 	public function Messages()
 	{
-		$request = $this->subscriber->recv(ZMQ::MODE_NOBLOCK);	
+		$request = $this->subscriber->recv();	
 
 		if($request) {
 			sscanf($request, "%d %s %s", $pid, $type, $data);
