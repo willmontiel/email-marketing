@@ -30,12 +30,16 @@ class MailField
 	
 	public function getCustomFields()
 	{
+		$allFields = $this->html . $this->text . $this->subject;
+		preg_match_all('/%%([a-zA-Z0-9_\-]*)%%/', $allFields, $arrayFields);
+		
+		if (count($arrayFields[0]) == 0) {
+			return 'No Fields';
+		}
+		
 		$phql = "SELECT * FROM Customfield WHERE idDbase IN (" . $this->idDbases . ")";
 		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$result = $modelsManager->executeQuery($phql);
-		
-		$allFields = $this->html . $this->text . $this->subject;
-		preg_match_all('/%%([a-zA-Z0-9_\-]*)%%/', $allFields, $arrayFields);
 		
 		if ($arrayFields === false) {
 			throw new InvalidArgumentException('Error returned by Preg_match_all, invalid values');
@@ -47,7 +51,6 @@ class MailField
 		$this->fields = array();
 		foreach ($f as $x) {
 			if ($x == '%%EMAIL%%' || $x == '%%NOMBRE%%' || $x == '%%APELLIDO%%') {
-				
 			}
 			else {
 				$this->fields[] = $x;
@@ -68,7 +71,7 @@ class MailField
 		}
 //		$this->log->log("Fields4: " . print_r($ids, true));
 		if (count($ids) <= 0) {
-			return false;
+			return 'No Custom';
 		}
 		
 		$custom = strtolower(implode(", ", $ids));
