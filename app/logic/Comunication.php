@@ -12,7 +12,6 @@ class Comunication
 
 	public function sendToParent($idMail)
 	{
-		printf('Inicia proceso' .PHP_EOL);
 		$this->requester->send(sprintf("%s $idMail", 'New-Task'));
 		$response = $this->requester->recv();
 	}
