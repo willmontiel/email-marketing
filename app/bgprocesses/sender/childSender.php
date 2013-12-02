@@ -58,6 +58,8 @@ class ChildSender
 						case 'Processing-Task':
 							printf('Soy el PID ' . $pid . ' Y me Llego Esto: ' . $data . PHP_EOL);
 //							sleep(30);
+							$account = Account::findFirstByIdAccount(13);
+							$x->setAccount($account);
 							$x->startProcess($data);
 							
 							printf('PID ' . $pid . ' Acabo' . PHP_EOL);
