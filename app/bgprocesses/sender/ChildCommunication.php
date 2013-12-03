@@ -58,23 +58,35 @@ class ChildCommunication extends BaseWrapper
 				
 				$log->log("customfield {$customFields}");
 				$contactIterator = new ContactIterator($mail, $customFields);
+				$disruptedProcess = FALSE;
 				foreach ($contactIterator as $contact) {
 					if ($fields) {
 						$c = $mailField->processCustomFields($contact);
 						$log->log("Html: " . $c['html']);
-	//					$log->log("Text: " . $c['text']);
-	//					$log->log("Subject: " . $c['subject']);
+//						$log->log("Text: " . $c['text']);
+//						$log->log("Subject: " . $c['subject']);
 					}
-					$log->log("Html: " . $content->html);
+					else {
+						$log->log("Html: " . $content->html);
+					}
 //					$log->log("Contact: " . print_r($contact, true));
-					$command = $this->socket->Messages();
-					if($command == 'Cancel') {
-						 break;
+					$msg = $this->socket->Messages();
+					switch ($msg) {
+						case 'Cancel':
+							$mail->status = 'Cancelled';
+							$disruptedProcess = TRUE;
+							break 2;
+						case 'Stop':
+							$mail->status = 'Paused';
+							$disruptedProcess = TRUE;
+							break 2;
 					}
 				}
 				
-				$mail->status = 'Sent';
-				$mail->finishedon = time();
+				if(!$disruptedProcess) {
+					$mail->status = 'Sent';
+					$mail->finishedon = time();
+				}
 				$mail->save();
 			}
 			catch (InvalidArgumentException $e) {
