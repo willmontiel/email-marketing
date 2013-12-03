@@ -104,7 +104,7 @@ class AssetController extends ControllerBase
 		$img = $this->asset->dir . $this->user->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
 		
 		$this->response->setHeader("Content-Type", $asset->type);
-		$this->response->setHeader("Content-Length", $asset->size);
+//		$this->response->setHeader("Content-Length", $asset->size);
 		
 		$this->view->disable();
 		return $this->response->setContent(file_get_contents($img));
@@ -127,7 +127,7 @@ class AssetController extends ControllerBase
 		$img = $this->asset->dir . $this->user->account->idAccount . "/images/" . $asset->idAsset . "_thumb.png";
 	
 		$this->response->setHeader("Content-Type", "image/png");
-		$this->response->setHeader("Content-Length", $asset->size);
+//		$this->response->setHeader("Content-Length", $asset->size);
 		
 		$this->view->disable();
 		return $this->response->setContent(file_get_contents($img));
