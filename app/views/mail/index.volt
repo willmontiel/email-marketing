@@ -73,15 +73,19 @@
 						<td>
 							<ul class="inline sparkline-box">
 								<li class="sparkline-row">
-									<h4 class="blue"><span>Suscriptores</span> 0 </h4>
+									<h4 class="blue"><span>Destinatarios</span> 0 </h4>
 								</li>
 								
 								<li class="sparkline-row">
-									<h4 class="green"><span>Clickeados</span> 0 </h4>
+									<h4 class="green"><span>Aperturas</span> 0 </h4>
 								</li>
 
 								<li class="sparkline-row">
-									<h4 class="gray"><span>Abiertos</span> 0 </h4>
+									<h4 class="gray"><span>Clicks</span> 0 </h4>
+								</li>
+								
+								<li class="sparkline-row">
+									<h4 class="red"><span>Rebotes</span> 0 </h4>
 								</li>
 							</ul>
 						</td>
