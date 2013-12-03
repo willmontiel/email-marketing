@@ -29,7 +29,7 @@
 		
 		var mediaGallery = [
 			{%for asset in assets%}
-			new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}}),
+				new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}}),
 			{%endfor%}
 		];
 		
