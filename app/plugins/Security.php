@@ -207,6 +207,7 @@ class Security extends Plugin
 				
 				//tests
 				'test::start' => array('mail' => array('read', 'create', 'send')),
+				'test::mailer' => array('mail' => array('read', 'create', 'send')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

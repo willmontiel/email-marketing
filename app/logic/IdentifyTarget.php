@@ -20,28 +20,35 @@ class IdentifyTarget
 			$this->log->log('No hay filtro');
 		}
 		
-		$sql = "REPLACE INTO mxc (idMail, idContact)";
+		$sql = "INSERT IGNORE INTO mxc ";
 		
 		switch ($target->destination) {
 			case 'dbases':
-				$phql = "SELECT Contact.idContact FROM Contact WHERE Contact.idDbase IN (" . $ids . ")";
+				$sql2 = "(SELECT " . $mail->idMail . ", c.idContact 
+                        	FROM contact AS C 
+                        		JOIN email AS e ON (c.idEmail = e.idEmail) 
+                        	WHERE c.idDbase IN (" . $ids . ") AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
 				break;
 			
 			case 'contactlists':
-				$phql= "SELECT Coxcl.idContact FROM Coxcl WHERE Coxcl.idContactlist IN (" . $ids . ")";
+				$sql2 = "(SELECT " . $mail->idMail . ", cl.idContact 
+							FROM coxcl AS cl
+								JOIN contact AS c ON (cl.idContact = c.idContact)
+								JOIN email AS e ON (c.idEmail = e.idEmail)
+							WHERE cl.idContactlist IN (" . $ids . ") AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
 				break;
 				
 			case 'segments':
-				$phql .= "SELECT Sxc.idContact FROM Sxc WHERE Sxc.idSegment IN (" . $ids . ")";
+				$sql2 = "(SELECT " . $mail->idMail . ", sc.idContact 
+							FROM sxc AS sc
+								JOIN contact AS c ON (sc.idContact = c.idContact)
+								JOIN email AS e ON (c.idEmail = e.idEmail)
+							WHERE sc.idSegment IN (" . $ids . ") AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
 				break;
 		}
 		
-		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
-		$contacts = $modelsManager->executeQuery($phql);
-		
-		$idContacts = $this->returnIds($contacts, $mail->idMail);
-		
-		$sql .= $idContacts;
+		$sql .= $sql2;
+//		$this->log->log('SQL: ' . $sql);
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		
@@ -50,19 +57,5 @@ class IdentifyTarget
 		if (!$destination) {
 			throw new InvalidArgumentException('Error while consulting recipients');
 		}
-	}
-	
-	protected function returnIds($contacts, $idMail) 
-	{
-		$idContacts = " VALUES";
-		$comma = false;
-		foreach ($contacts as $id) {
-			if (!$comma) {
-				$idContacts .= " (" . $idMail . "," . $id->idContact . ") ";
-			}
-			$idContacts .= ", (" . $idMail . "," . $id->idContact . ") ";
-			$comma = true;
-		}
-		return $idContacts;
 	}
 }
