@@ -186,7 +186,14 @@ try {
 	$tmpdir = new stdClass;
 	$tmpdir->dir = $config->general->tmpdir;
 	$di->set('tmppath', $tmpdir);
-
+	
+	/*
+	 * Configuración MTA
+	 */
+	$mtaConfig = new stdClass();
+	$mtaConfig->domain = $config->mta->domain;
+	$mtaConfig->port = $config->mta->port;
+	$di->set('mtadata', $mtaConfig);
 	
 	/*
 	 * Log Object, utilizado para logging en general a archivo

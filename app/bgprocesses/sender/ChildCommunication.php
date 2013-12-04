@@ -1,7 +1,15 @@
 <?php
+require_once "swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
 	protected $socket;
+	
+	public function __construct() 
+	{
+		$di =  \Phalcon\DI\FactoryDefault::getDefault();
+	
+		$this->mta = $di['mtadata'];
+	}
 	
 	public function setSocket($socket)
 	{
@@ -15,7 +23,8 @@ class ChildCommunication extends BaseWrapper
 			'conditions' => 'idMail = ?1',
 			'bind' => array(1 => $idMail)
 		));
-
+		
+		echo 'Empecé el proceso con MTA!';
 		if ($mail) {
 			$mail->status = 'Sending';
 			$mail->startedon = time();
@@ -56,24 +65,46 @@ class ChildCommunication extends BaseWrapper
 						break;
 				}
 				
-				$log->log("customfield {$customFields}");
 				$contactIterator = new ContactIterator($mail, $customFields);
 				$disruptedProcess = FALSE;
+				
+				// Crear transport y mailer
+				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
+				$swift = Swift_Mailer::newInstance($transport);
+				
+				$i = 0;
+				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
 				foreach ($contactIterator as $contact) {
 					if ($fields) {
 						$c = $mailField->processCustomFields($contact);
-						
-						
-						
-						
-						$log->log("Html: " . $c['html']);
-//						$log->log("Text: " . $c['text']);
-//						$log->log("Subject: " . $c['subject']);
+						$subject = $c['subject'];
+						$html = $c['html'];
+						$text = $c['text'];
 					}
 					else {
-						$log->log("Html: " . $content->html);
+						$subject = $mail->subject;
+						$html = $content->html;
+						$text = $content->text;
 					}
-//					$log->log("Contact: " . print_r($contact, true));
+					$from = array($mail->fromEmail => $mail->fromName);
+					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
+					
+					$message = new Swift_Message($subject);
+					$message->setFrom($from);
+					$message->setBody($html, 'text/html');
+					$message->setTo($to);
+					$message->addPart($text, 'text/plain');
+
+					$recipients = $swift->send($message, $failures);
+
+					if ($recipients){
+						echo "Message {$i} successfully sent! \n";
+					} 
+					else {
+						echo "There was an error in message {}: \n";
+						print_r($failures);
+					}
+					$log->log("HTML: " . $html);
 					$msg = $this->socket->Messages();
 					switch ($msg) {
 						case 'Cancel':
@@ -85,8 +116,9 @@ class ChildCommunication extends BaseWrapper
 							$disruptedProcess = TRUE;
 							break 2;
 					}
+					$i++;
 				}
-				
+				Phalcon\DI::getDefault()->get('timerObject')->endTimer('all messages sent!');
 				if(!$disruptedProcess) {
 					$mail->status = 'Sent';
 					$mail->finishedon = time();

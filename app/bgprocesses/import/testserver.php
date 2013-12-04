@@ -1,5 +1,4 @@
 <?php
-
 require_once '../bootstrap/phbootstrap.php';
 
 define("REQUEST_TIMEOUT", 2500);
