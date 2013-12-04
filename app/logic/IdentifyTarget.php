@@ -25,7 +25,7 @@ class IdentifyTarget
 		switch ($target->destination) {
 			case 'dbases':
 				$sql2 = "(SELECT " . $mail->idMail . ", c.idContact 
-                        	FROM contact AS C 
+                        	FROM contact AS c 
                         		JOIN email AS e ON (c.idEmail = e.idEmail) 
                         	WHERE c.idDbase IN (" . $ids . ") AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
 				break;

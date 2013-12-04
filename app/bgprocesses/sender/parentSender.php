@@ -1,9 +1,50 @@
 <?php
 require_once '../bootstrap/phbootstrap.php';
 
-$parent = new ParentSender();
+if(isset($argv[1])) {
+	
+	switch ($argv[1]) {
+		case '-d':
+			printf('Demonizando' .PHP_EOL);
+			demonize();
+			break;
+		case '-r':
+			printf('Directamente' .PHP_EOL);
+			break;
+		default :
+			printf('Comando no reconocido' .PHP_EOL);
+			exit(0);
+			break;
+	}
+}
+else {
+	printf('Comando no reconocido' .PHP_EOL);
+	exit(0);
+}
 
+$parent = new ParentSender();
 $parent->startProcess();
+
+function demonize()
+{
+	if (pcntl_fork() != 0) {
+			exit(0);
+	}
+
+	if(posix_setsid() < 0) {
+		printf('Error en el Setsid' .PHP_EOL);
+		exit(0);
+	}
+
+	if (pcntl_fork() != 0) {
+			exit(0);
+	}
+	
+	fclose(STDIN);
+	fclose(STDOUT);
+	fclose(STDERR);
+}
+
 
 class ParentSender
 {
