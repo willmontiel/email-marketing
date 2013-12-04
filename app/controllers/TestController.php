@@ -884,6 +884,12 @@ class TestController extends ControllerBase
 		
 	}
 	
+	
+	public function mailerAction()
+	{
+		$mailer = new SwiftMailer();
+	}
+	
 	protected function stripAccents($cadena){
 		$originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ';
 		$modificadas = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr';

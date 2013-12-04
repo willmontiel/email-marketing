@@ -1,11 +1,15 @@
 <?php
+/**
+ * esto fue hecho por ivan si hay algo malo culpenlo a el este es el codigo de la u empieza con (2080 y algo) :D
+ */
 require_once "swift_required.php";
 
 $subject = 'Hello from Mailing, PHP!';
 $from = array('ivan.barona@sigmamovil.com' =>'Ivan Barona');
 $to = array(
- 'ivan.barona@sigmamovil.com'  => 'Ivan Barona',
- 'william.montiel@sigmamovil.com' => 'Will I Am'
+	'recipient00001@test001.local.discardallmail.drh.net' => 'recipient00001',
+	'recipient00002@test001.local.discardallmail.drh.net' => 'recipient00002',
+	'recipient00003@test001.local.discardallmail.drh.net' => 'recipient00003'
 );
 
 $text = "Mailing speaks plaintext";

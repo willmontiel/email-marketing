@@ -62,6 +62,10 @@ class ChildCommunication extends BaseWrapper
 				foreach ($contactIterator as $contact) {
 					if ($fields) {
 						$c = $mailField->processCustomFields($contact);
+						
+						
+						
+						
 						$log->log("Html: " . $c['html']);
 //						$log->log("Text: " . $c['text']);
 //						$log->log("Subject: " . $c['subject']);
