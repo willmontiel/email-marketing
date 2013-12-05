@@ -19,17 +19,19 @@ class ContactIterator implements Iterator
 	{
 		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . ' AND idContact > ' . $start . ' ORDER BY idContact LIMIT ' . self::ROWS_PER_FETCH;
 		if (!$this->fields) {
-			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email, e.idEmail 
-						FROM (' . $sql1 . ') AS l 
-							JOIN contact AS c ON(l.idContact = c.idContact)
-							JOIN email AS e ON(c.idEmail = e.idEmail)';
-		}
-		else {
-			$sql = 'SELECT c.idContact, c.name, c.lastName, e.email, e.idEmail, f.name AS field, f.textValue, f.numberValue 
+			$sql = 'SELECT c.idContact, c.name, c.lastName, e.idEmail, e.email
 						FROM (' . $sql1 . ') AS l 
 							JOIN contact AS c ON(l.idContact = c.idContact)
 							JOIN email AS e ON(c.idEmail = e.idEmail)
-							LEFT JOIN (SELECT cf.name, fi.idContact, fi.textValue, fi.numberValue FROM customfield AS cf JOIN fieldInstance AS fi ON (cf.idCustomField = fi.idCustomField) WHERE cf.idCustomField IN (' . $this->fields . ')) AS f ON(c.idContact = f.idContact)';
+						WHERE  c.bounced <= 0 AND c.unsubscribed <= 0 AND c.spam <= 0 AND e.bounced <= 0 AND e.spam <= 0 AND e.blocked <= 0';
+		}
+		else {
+			$sql = 'SELECT c.idContact, c.name, c.lastName, e.idEmail, e.email, f.name AS field, f.textValue, f.numberValue 
+						FROM (' . $sql1 . ') AS l 
+							JOIN contact AS c ON(l.idContact = c.idContact)
+							JOIN email AS e ON(c.idEmail = e.idEmail)
+							LEFT JOIN (SELECT cf.name, fi.idContact, fi.textValue, fi.numberValue FROM customfield AS cf JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) WHERE cf.idCustomField IN (' . $this->fields . ')) AS f ON(c.idContact = f.idContact)
+						WHERE  c.bounced <= 0 AND c.unsubscribed <= 0 AND c.spam <= 0 AND e.bounced <= 0 AND e.spam <= 0 AND e.blocked <= 0';
 		}
 		
 		unset($this->contacts);
@@ -80,7 +82,6 @@ class ContactIterator implements Iterator
 	public function next()
 	{
 		$this->offset++;
-		//array_shift($this->contacts);
 	}
 	
 	public function valid()

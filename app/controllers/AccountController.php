@@ -57,6 +57,7 @@ class AccountController extends ControllerBase
         if ($this->request->isPost()) {
             
             $form->bind($this->request->getPost(), $account);
+			$account->idUrlDomain = 1;
 			$this->db->begin();
             if ($form->isValid() && $account->save()) {
             

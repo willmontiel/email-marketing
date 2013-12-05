@@ -1,5 +1,5 @@
 <?php
-require_once "swift_required.php";
+require_once "../../../public/swiftmailer-5.0.3/lib/swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
 	protected $socket;
@@ -72,7 +72,7 @@ class ChildCommunication extends BaseWrapper
 				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
 				$swift = Swift_Mailer::newInstance($transport);
 				
-				$i = 0;
+				$i = 1;
 				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
 				foreach ($contactIterator as $contact) {
 					if ($fields) {
@@ -101,10 +101,12 @@ class ChildCommunication extends BaseWrapper
 						echo "Message {$i} successfully sent! \n";
 					} 
 					else {
-						echo "There was an error in message {}: \n";
+						echo "There was an error in message {$i}: \n";
+						$log->log("Error while sending mail: " . $failures);
 						print_r($failures);
 					}
 					$log->log("HTML: " . $html);
+//					echo 'Hrml: ' . $html;
 					$msg = $this->socket->Messages();
 					switch ($msg) {
 						case 'Cancel':

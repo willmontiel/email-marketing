@@ -198,7 +198,7 @@ class ContactListWrapper extends BaseWrapper
 		
 		$db->begin();
 		$cascadeDelete = $db->execute($query, array($idContactlist, $idContactlist));
-		$deleteContaclist = $db->execute('DELETE FROM Contactlist WHERE idContactlist = ?', array($idContactlist));
+		$deleteContaclist = $db->execute('DELETE FROM contactlist WHERE idContactlist = ?', array($idContactlist));
 		
 		if ($cascadeDelete == false || $deleteContaclist == false) {
 			$db->rollback();

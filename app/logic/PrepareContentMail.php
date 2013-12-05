@@ -1,13 +1,18 @@
 <?php
 class PrepareContentMail
 {
+	public $url;
+	public $account;
+	public $domain;
+	
 	public function __construct(Account $account) 
 	{
 		$this->log = Phalcon\DI::getDefault()->get('logger');
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
-//		
+	
 		$this->url = $di['url'];
 		$this->account = $account;
+		$this->domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 	}
 	
 	public function getContentMail(Mail $mail)
@@ -109,7 +114,7 @@ class PrepareContentMail
 		
 		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
 		
-		$img = "http://localhost/emarketing" . $this->url->get('assets') . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
+		$img = $this->domain->imageUrl . $this->url->get('assets') . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
 	
 		return $img;
 	}
@@ -122,7 +127,7 @@ class PrepareContentMail
 		));
 		
 		$ext = pathinfo( $tpImg->name, PATHINFO_EXTENSION);
-		$img = "http://localhost/emarketing" . $this->url->get('templates') . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
+		$img = $this->domain->imageUrl . $this->url->get('templates') . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
 	
 		return $img;
 	}

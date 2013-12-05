@@ -5,13 +5,13 @@
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 	$requester->connect("tcp://localhost:5556");
 	
-	$requester->send(sprintf("%s 73", 'New-Task'));
+	$requester->send(sprintf("%s 116", 'New-Task'));
 	$request = $requester->recv();
 	
-	sleep(5);
-	
-	$requester->send(sprintf("%s 73", 'Cancel-Process'));
-	$request = $requester->recv();
+//	sleep(5);
+//	
+//	$requester->send(sprintf("%s 73", 'Cancel-Process'));
+//	$request = $requester->recv();
 //	
 //	sleep(rand(0, 5));
 //	

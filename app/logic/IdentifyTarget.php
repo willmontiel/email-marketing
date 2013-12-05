@@ -27,7 +27,7 @@ class IdentifyTarget
 				$sql2 = "(SELECT " . $mail->idMail . ", c.idContact 
                         	FROM contact AS c 
                         		JOIN email AS e ON (c.idEmail = e.idEmail) 
-                        	WHERE c.idDbase IN (" . $ids . ") AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
+                        	WHERE c.idDbase IN (" . $ids . ") AND e.bounced <= 0 AND e.spam <= 0 AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
 				break;
 			
 			case 'contactlists':
@@ -35,7 +35,7 @@ class IdentifyTarget
 							FROM coxcl AS cl
 								JOIN contact AS c ON (cl.idContact = c.idContact)
 								JOIN email AS e ON (c.idEmail = e.idEmail)
-							WHERE cl.idContactlist IN (" . $ids . ") AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
+							WHERE cl.idContactlist IN (" . $ids . ") AND e.bounced <= 0 AND e.spam <= 0 AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
 				break;
 				
 			case 'segments':
@@ -43,7 +43,7 @@ class IdentifyTarget
 							FROM sxc AS sc
 								JOIN contact AS c ON (sc.idContact = c.idContact)
 								JOIN email AS e ON (c.idEmail = e.idEmail)
-							WHERE sc.idSegment IN (" . $ids . ") AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
+							WHERE sc.idSegment IN (" . $ids . ") AND e.bounced <= 0 AND e.spam <= 0 AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
 				break;
 		}
 		
