@@ -107,6 +107,13 @@ $di->set('publisher', function () {
 	return 	$publisher;
 });
 
+$di->set('reply', function () {
+	$context = new ZMQContext(1);
+	$reply = new ZMQSocket($context, ZMQ::SOCKET_REP);
+	$reply->bind("tcp://*:5556");
+	return 	$reply;
+});
+
 function print_dbase_profile()
 {
 	$dblogger = new \Phalcon\Logger\Adapter\File("../../logs/bgdbdebug.log");

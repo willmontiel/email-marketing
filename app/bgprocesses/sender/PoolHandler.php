@@ -151,4 +151,54 @@ class PoolHandler extends Handler
 
 		}
 	}
+	
+	public function killAllChildren()
+	{
+		foreach ($this->children as $child) {			
+			$child->sendKill();
+		}
+		
+		if(count($this->tmpChildren) > 0) {			
+			
+			foreach ($this->tmpChildren as $tmpchild) {
+				$tmpchild->sendKill();
+			}
+		}
+	}
+	
+	public function childreStatus()
+	{
+		$status = $Childconfirm = $Childnoconfirm = $Tmpconfirm = $Tmpnoconfirm = $Engstatus = '';
+		
+		foreach ($this->children as $child) {
+			if(!$child->getConfirmed()) {
+				$Childconfirm.= 'Process ' .$child->getPid(). ' not confirm' . PHP_EOL;
+			}
+			else {
+				$Childnoconfirm.= 'Process ' .$child->getPid(). ' confirm' . PHP_EOL;
+			}
+		}
+		if(count($this->tmpChildren) > 0) {			
+			
+			foreach ($this->tmpChildren as $tmpchild) {
+				if(!$tmpchild->getConfirmed()) {
+					$Tmpconfirm.= 'Temporary process ' .$tmpchild->getPid(). ' not confirm' . PHP_EOL;
+				}
+				else {
+					$Tmpnoconfirm.= 'Temporary process ' .$tmpchild->getPid(). ' confirm' . PHP_EOL;
+				}
+			}
+		}
+		
+		if(count($this->engagedProcesses) > 0) {			
+			
+			foreach ($this->engagedProcesses as $process => $data) {
+				$Engstatus.= 'Process ' . $process . ' working data: ' . $data . PHP_EOL;
+			}
+		}
+		
+		$status = $Childconfirm . $Childnoconfirm . $Tmpconfirm . $Tmpnoconfirm . $Engstatus;
+		
+		return $status;
+	}
 }

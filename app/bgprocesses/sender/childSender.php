@@ -63,6 +63,10 @@ class ChildSender
 							
 							$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
 							break;
+						case 'Echo-Kill':
+							printf($pid . ' Es hora de que muera' . PHP_EOL);
+							exit(0);
+							break;
 					}
 					$this->push->send($response);
 					$this->lasttime = time();
@@ -84,6 +88,12 @@ class ChildSender
 
 		if($request) {
 			sscanf($request, "%d %s %s", $pid, $type, $data);
+			switch ($type) {
+				case 'Echo-Kill':
+					printf($pid . ' Estoy trabajando pero debo morir' . PHP_EOL);
+					exit(0);
+					break;
+			}
 			$response = sprintf("%s %s $type", 'Process-Response', $this->pid);
 			$this->push->send($response);
 			return $type;
