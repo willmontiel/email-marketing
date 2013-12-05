@@ -2,28 +2,54 @@
 require_once '../bootstrap/phbootstrap.php';
 
 if(isset($argv[1])) {
-	
 	switch ($argv[1]) {
 		case '-d':
-			printf('Demonizando' .PHP_EOL);
 			demonize();
+			if (isRunning()) {
+				echo "The process is already running!\n";
+				exit(0);
+			}
+			printf('Daemon' .PHP_EOL);
+			fclose(STDIN);
+			fclose(STDOUT);
+			fclose(STDERR);
 			break;
 		case '-r':
-			printf('Directamente' .PHP_EOL);
+			if (isRunning()) {
+				echo "The process is already running!\n";
+				exit(0);
+			}
+			printf('Directo' .PHP_EOL);
+			break;
+		case '-k':
+			if (!isRunning()) {
+				echo "There's no process to terminate\n";
+				exit(0);
+			}
+			killProcess();
+			exit(0);
+			break;
+		case '-s':
+			if (!isRunning()) {
+				echo "There's no process\n";
+				exit(0);
+			}
+			processStatus();
+			exit(0);
 			break;
 		default :
 			printf('Comando no reconocido' .PHP_EOL);
 			exit(0);
 			break;
 	}
+
+	$parent = new ParentSender();
+	$parent->startProcess();
 }
 else {
 	printf('Comando no reconocido' .PHP_EOL);
 	exit(0);
 }
-
-$parent = new ParentSender();
-$parent->startProcess();
 
 function demonize()
 {
@@ -32,29 +58,81 @@ function demonize()
 	}
 
 	if(posix_setsid() < 0) {
-		printf('Error en el Setsid' .PHP_EOL);
 		exit(0);
 	}
 
 	if (pcntl_fork() != 0) {
 			exit(0);
 	}
-	
-	fclose(STDIN);
-	fclose(STDOUT);
-	fclose(STDERR);
 }
 
+function isRunning()
+{
+	$context = new ZMQContext(1);
+	$selfrequester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
+	$selfrequester->connect("tcp://localhost:5556");
+	
+	$poll = new ZMQPoll();
+	$poll->add($selfrequester, ZMQ::POLL_OUT);
+	$selfrequester->setSockOpt(ZMQ::SOCKOPT_LINGER, 0);
+
+	$readable = array();
+	$writeable = array();
+	$response = null;
+
+	$events = $poll->poll($readable, $writeable, 1000);
+	if ($events && count($writeable) > 0) {
+		$selfrequester->send('Are-You-There');
+	}
+	else {
+		return false;
+	}
+	printf('Checking...' .PHP_EOL);
+	
+	$writeable = array();
+	$poll->clear();
+	$poll->add($selfrequester, ZMQ::POLL_IN);
+	$events = $poll->poll($readable, $writeable, 1000);
+	if ($events && count($readable) > 0) {
+		$response = $selfrequester->recv(ZMQ::MODE_NOBLOCK);
+		return true;
+	}
+	
+	$poll->clear();
+	return false;
+}
+
+function killProcess()
+{
+	$context = new ZMQContext(1);
+	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
+	$requester->connect("tcp://localhost:5556");
+	$requester->send('Time-To-Die');
+	$r = $requester->recv();
+	printf('Recibi: ' . $r . PHP_EOL);
+}
+
+function processStatus()
+{
+	$context = new ZMQContext(1);
+	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
+	$requester->connect("tcp://localhost:5556");
+	$requester->send('Show-Status');
+	$r = $requester->recv();
+	printf($r);
+//	$x ="aqui no va\nesto";
+//	echo $x;
+}
 
 class ParentSender
 {
-	protected $sockets;
+	protected $di;
 	protected $pool;
 	protected $client;
 	protected $tasks;
 	
 	public function __construct() {
-		$this->sockets = new Sockets();
+		$this->di =  \Phalcon\DI\FactoryDefault::getDefault();
 	}
 
 	public function startProcess()
@@ -75,9 +153,16 @@ class ParentSender
 		
 		$this->pool->createInitialChildren();
 		
+		$context = new ZMQContext(1);
+		
+		$pull = new ZMQSocket($context, ZMQ::SOCKET_PULL);
+		$pull->bind("tcp://*:5557");		
+				
+		$reply = $this->di['reply'];
+		
 		$poll = new ZMQPoll();
-		$poll->add($this->sockets->getReply(), ZMQ::POLL_IN);
-		$poll->add($this->sockets->getPull(), ZMQ::POLL_IN);
+		$poll->add($reply, ZMQ::POLL_IN);
+		$poll->add($pull, ZMQ::POLL_IN);
 		
 		$readable = $writeable = array();
 			
@@ -89,17 +174,15 @@ class ParentSender
 
 				foreach ($readable as $socket) {
 					
-					if ($socket === $this->sockets->getReply()) {
+					if ($socket === $reply) {
 						
 						$request = $socket->recv();
-						
-						$this->sockets->getReply()->send('');
 						
 						sscanf($request, "%s %s %s", $type, $data, $code);
 						
 						$registry->handleEvent(new Event($type, $data, $code));
 					}
-					else if($socket === $this->sockets->getPull()) {
+					else if($socket === $pull) {
 						
 						$request = $socket->recv();
 						

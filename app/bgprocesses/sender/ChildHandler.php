@@ -96,6 +96,12 @@ class ChildHandler extends Handler
 		$this->pool->childDie($this);
 		unset($this);
 	}
+	
+	public function sendKill()
+	{
+		$send = sprintf("%d Echo-Kill", $this->pid);
+		$this->publisher->send($send);
+	}
 
 	public function forkChild()
 	{
