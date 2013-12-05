@@ -41,7 +41,12 @@ $di->set('profiler', function(){
 }, true);	
 
 // Create timer object
-$di->set('timerObject',  new TimerObject());
+$timer = new TimerObject();
+// Start counting
+$timer->startTimer('app', 'The whole app');
+
+$di->set('timerObject', $timer);
+
 
 $di->set('modelsMetadata', function() {
 
@@ -87,6 +92,14 @@ $di->set('db', function() use ($di, $config) {
 $tmpdir = new stdClass;
 $tmpdir->dir = dirname(__FILE__) . '/../../../tmp';
 $di->set('tmppath', $tmpdir);
+
+/*
+ * Configuración MTA
+ */
+$mtaConfig = new stdClass();
+$mtaConfig->domain = $config->mta->domain;
+$mtaConfig->port = $config->mta->port;
+$di->set('mtadata', $mtaConfig);
 
 /*
  * Log Object, utilizado para logging en general a archivo

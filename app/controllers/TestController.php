@@ -887,7 +887,13 @@ class TestController extends ControllerBase
 	
 	public function mailerAction()
 	{
-		$mailer = new SwiftMailer();
+		$di =  \Phalcon\DI\FactoryDefault::getDefault();
+		
+		$this->asset = $di['asset'];
+		$this->mta = $di['mtadata'];
+		
+		echo $this->asset->url;
+		echo $this->mta->domain;
 	}
 	
 	protected function stripAccents($cadena){
