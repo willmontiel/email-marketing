@@ -24,14 +24,14 @@ class IdentifyTarget
 		
 		switch ($target->destination) {
 			case 'dbases':
-				$sql2 = "(SELECT " . $mail->idMail . ", c.idContact 
+				$sql2 = "(SELECT " . $mail->idMail . ", c.idContact, 'scheduled'
                         	FROM contact AS c 
                         		JOIN email AS e ON (c.idEmail = e.idEmail) 
                         	WHERE c.idDbase IN (" . $ids . ") AND e.bounced <= 0 AND e.spam <= 0 AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0)";
 				break;
 			
 			case 'contactlists':
-				$sql2 = "(SELECT " . $mail->idMail . ", cl.idContact 
+				$sql2 = "(SELECT " . $mail->idMail . ", cl.idContact, 'scheduled' 
 							FROM coxcl AS cl
 								JOIN contact AS c ON (cl.idContact = c.idContact)
 								JOIN email AS e ON (c.idEmail = e.idEmail)
@@ -39,7 +39,7 @@ class IdentifyTarget
 				break;
 				
 			case 'segments':
-				$sql2 = "(SELECT " . $mail->idMail . ", sc.idContact 
+				$sql2 = "(SELECT " . $mail->idMail . ", sc.idContact, 'scheduled' 
 							FROM sxc AS sc
 								JOIN contact AS c ON (sc.idContact = c.idContact)
 								JOIN email AS e ON (c.idEmail = e.idEmail)
