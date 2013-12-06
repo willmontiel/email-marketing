@@ -26,9 +26,6 @@ class ChildCommunication extends BaseWrapper
 		
 		echo 'Empecé el proceso con MTA!';
 		if ($mail) {
-			$mail->status = 'Sending';
-			$mail->startedon = time();
-			$mail->save();
 			
 			$account = Account::findFirstByIdAccount($mail->idAccount);
 			$this->setAccount($account);
@@ -65,8 +62,18 @@ class ChildCommunication extends BaseWrapper
 						break;
 				}
 				
-				$contactIterator = new ContactIterator($mail, $customFields);
+				$lastId = 0;
+				
+				if($mail->status == 'Paused') {
+					$lastId = $mail->lastSent;
+				}
+				
+				$contactIterator = new ContactIterator($mail, $customFields, $lastId);
 				$disruptedProcess = FALSE;
+				
+				$mail->status = 'Sending';
+				$mail->startedon = time();
+				$mail->save();
 				
 				// Crear transport y mailer
 				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
@@ -86,25 +93,25 @@ class ChildCommunication extends BaseWrapper
 						$html = $content->html;
 						$text = $content->text;
 					}
-					$from = array($mail->fromEmail => $mail->fromName);
-					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
-					
-					$message = new Swift_Message($subject);
-					$message->setFrom($from);
-					$message->setBody($html, 'text/html');
-					$message->setTo($to);
-					$message->addPart($text, 'text/plain');
-
-					$recipients = $swift->send($message, $failures);
-
-					if ($recipients){
-						echo "Message {$i} successfully sent! \n";
-					} 
-					else {
-						echo "There was an error in message {$i}: \n";
-						$log->log("Error while sending mail: " . $failures);
-						print_r($failures);
-					}
+//					$from = array($mail->fromEmail => $mail->fromName);
+//					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
+//					
+//					$message = new Swift_Message($subject);
+//					$message->setFrom($from);
+//					$message->setBody($html, 'text/html');
+//					$message->setTo($to);
+//					$message->addPart($text, 'text/plain');
+//
+//					$recipients = $swift->send($message, $failures);
+//
+//					if ($recipients){
+//						echo "Message {$i} successfully sent! \n";
+//					} 
+//					else {
+//						echo "There was an error in message {$i}: \n";
+//						$log->log("Error while sending mail: " . $failures);
+//						print_r($failures);
+//					}
 					$log->log("HTML: " . $html);
 //					echo 'Hrml: ' . $html;
 					$msg = $this->childprocess->Messages();
@@ -114,9 +121,14 @@ class ChildCommunication extends BaseWrapper
 							$disruptedProcess = TRUE;
 							break 2;
 						case 'Stop':
+							$log->log("Estado: Me pausaron");
 							$mail->status = 'Paused';
+							$mail->lastSent = $contact['contact']['idContact'];
 							$disruptedProcess = TRUE;
 							break 2;
+						case 'Checking-Work':
+							$this->childprocess->responseToParent('Work-Checked' , $i);
+							break;
 					}
 					$i++;
 				}

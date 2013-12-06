@@ -117,7 +117,7 @@ function processStatus()
 	$context = new ZMQContext(1);
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 	$requester->connect("tcp://localhost:5556");
-	$requester->send('Show-Status');
+	$requester->send('Show-Status-Console');
 	$r = $requester->recv();
 	printf($r);
 //	$x ="aqui no va\nesto";
@@ -150,6 +150,7 @@ class ParentSender
 		$this->tasks->setPool($this->pool);
 		$this->client->setTasks($this->tasks);
 		$this->client->setPool($this->pool);
+		$this->pool->setClient($this->client);
 		
 		$this->pool->createInitialChildren();
 		

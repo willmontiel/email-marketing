@@ -13,7 +13,7 @@ class ClientHandler extends Handler
 	
 	public function getEvents()
 	{
-		$events = array('New-Task', 'Scheduled-Task', 'Cancel-Process', 'Play-Process', 'Stop-Process', 'Are-You-There', 'Time-To-Die', 'Show-Status', 'Show-Status-Console');
+		$events = array('New-Task', 'Scheduled-Task', 'Cancel-Process', 'Play-Process', 'Stop-Process', 'Are-You-There', 'Time-To-Die', 'Show-Status', 'Show-Status-Console', 'Checking-Work');
 		
 		return $events;
 	}
@@ -58,6 +58,9 @@ class ClientHandler extends Handler
 				$poolStatus = 'Parent Working' . PHP_EOL . $poolStatus;
 				$this->reply->send($poolStatus);
 				break;
+			case 'Checking-Work':
+				$this->pool->checkingChildWork($event->data);
+				break;
 		}
 	}
 	
@@ -71,7 +74,7 @@ class ClientHandler extends Handler
 		$this->tasks = $tasks;
 	}
 	
-	protected function sendNewTask($data)
+	public function sendNewTask($data)
 	{
 		$process = $this->pool->getAvailableChild();
 		
@@ -83,26 +86,31 @@ class ClientHandler extends Handler
 		}
 	}
 	
-	protected function scheduling()
+	public function scheduling()
 	{
 		$this->tasks->taskScheduling();
 	}
 	
-	protected function cancelTaskInProcess($data)
+	public function cancelTaskInProcess($data)
 	{
 		$pid = $this->pool->findPidFromTask($data);
 		$this->tasks->sendCommandToProcess('Cancel', $pid);
 		
 	}
 	
-	protected function stopTaskInProcess($data)
+	public function stopTaskInProcess($data)
 	{
 		$pid = $this->pool->findPidFromTask($data);
 		$this->tasks->sendCommandToProcess('Stop', $pid);
 	}
 	
-	protected function playTask($data)
+	public function playTask($data)
 	{
 		
+	}
+	
+	public function responseToClient($content)
+	{
+		$this->reply->send($content);
 	}
 }
