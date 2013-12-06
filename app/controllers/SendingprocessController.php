@@ -3,41 +3,42 @@ class SendingprocessController extends ControllerBase
 {
 	public function getprocessesinfoAction()
 	{
-		$account = $this->user->account;
-		$currentActiveContacts = $this->user->account->countActiveContactsInAccount();
+		$context = new ZMQContext();
 		
-		// Convirtiendo a Json
-		$object = array();
-		$object['activeContacts'] = $currentActiveContacts;
-		$object['contactLimit'] = $account->contactLimit;
-		$object['accountingMode'] = $account->accountingMode;
+		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
+		$requester->connect("tcp://localhost:5556");
+
+		$requester->send(sprintf("%s", 'Show-Status'));
+		$request = $requester->recv();
+		
+		$status = json_decode($request);
+		
+		$processesArray = array();
+		foreach ($status as $key => $value) {
+			$obj = new stdClass();
+			$obj->pid = $key;
+			$obj->type = $value->Type;
+			$obj->confirm = $value->Confirm;
+			if ($value->Status == '---') {
+				$obj->status = 'Free';
+				$obj->totalContacts = '---';
+				$obj->sentContacts = '---';
+			}
+			else {
+				$obj->status = 'Working';
+				$mail = Mail::findFirstByIdMail($value->Status);
+				$obj->totalContacts = $mail->totalContacts;
+				$obj->sentContacts = '---';
+			}
+			$obj->task = $value->Status;
+			$processesArray[] = $obj;
+		}
 					
-		return $this->setJsonResponse($object);
-		
-//		$mails = Mail::find(array(
-//			"conditions" => "status = ?1 OR status = ?2 OR status = ?3",
-//			"bind" => array(1 => "Canceled",
-//							2 => "Paused",
-//							3 => "Sending")
-//		));
-//		
-//		return $this->setJsonResponse($object);
+		return $this->setJsonResponse($processesArray);
 	}
 	
 	public function indexAction()
 	{	
-//		$currentPage = $this->request->getQuery('page', null, 1); // GET
-//		
-//		$paginator = new \Phalcon\Paginator\Adapter\Model(
-//			array(
-//				"data"  => Mail::find(),
-//				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
-//				"page"  => $currentPage
-//			)
-//		);
-//		
-//		$page = $paginator->getPaginate();
-//		
-//		$this->view->setVar("page", $page);
+		
 	}
 }	
