@@ -3,6 +3,7 @@ require_once "../../../public/swiftmailer-5.0.3/lib/swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
 	protected $childprocess;
+	const CONTACTS_PER_UPDATE = 25;
 	
 	public function __construct() 
 	{
@@ -80,6 +81,7 @@ class ChildCommunication extends BaseWrapper
 				$swift = Swift_Mailer::newInstance($transport);
 				
 				$i = 1;
+				$sentContacts = array();
 				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
 				foreach ($contactIterator as $contact) {
 					if ($fields) {
@@ -106,15 +108,20 @@ class ChildCommunication extends BaseWrapper
 
 					if ($recipients){
 						echo "Message {$i} successfully sent! \n";
-						$mxc = Mxc::findFirst(array(
-							'conditions' => 'idMail = ?1 AND idContact = ?2',
-							'bind' => array(1 => $mail->idMail,
-											2 => $contact['contact']['idContact'])
-						));
-						$mxc->status = 'sent';
-						if (!$mxc->save()) {
-							foreach ($mxc->getMessages() as $msg)
-							$log->log("Error while saving mxc status: " . $mxc);
+						$sentContacts[] = $contact['contact']['idContact'];
+						if (count($sentContacts) == self::CONTACTS_PER_UPDATE) {
+							$idsContact = implode(', ', $sentContacts);
+							$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = " . $mail->idMail . " AND idContact IN (" . $idsContact . ")";
+							$mm = Phalcon\DI::getDefault()->get('modelsManager');
+							$mm->executeQuery($phql);
+							if ($mm) {
+								echo "state's the first 20 changed successfully! \n";
+								unset($sentContacts);
+								$sentContacts = array();
+							}
+							else {
+								$log->log("Error guardando");
+							}
 						}
 					} 
 					else {
