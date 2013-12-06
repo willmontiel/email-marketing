@@ -13,6 +13,12 @@ class Comunication
 	public function sendToParent($idMail)
 	{
 		$this->requester->send(sprintf("%s $idMail", 'New-Task'));
-		$response = $this->requester->recv();
+		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+	}
+	
+	public function sendSchedulingToParent($idMail)
+	{
+		$this->requester->send(sprintf("%s $idMail", 'Scheduled-Task'));
+		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 	}
 }
