@@ -4,6 +4,7 @@ class PoolHandler extends Handler
 	protected $children = array();
 	protected $tmpChildren = array();
 	protected $engagedProcesses = array();
+	protected $client;
 	const MAX_OF_TMP_CHILDREN = 4;
 	const INITIAL_CHILDREN = 4;
 
@@ -19,6 +20,11 @@ class PoolHandler extends Handler
 	public function setTasks(TasksHandler $tasks)
 	{
 		$this->tasks = $tasks;
+	}
+	
+	public function setClient(ClientHandler $client)
+	{
+		$this->client = $client;
 	}
 	
 	public function handleEvent(Event $event)
@@ -166,6 +172,29 @@ class PoolHandler extends Handler
 		}
 	}
 	
+	public function checkingChildWork($childPID)
+	{
+		foreach ($this->children as $child) {
+			if($child->getPid() == $childPID) {
+				$child->askHowsMyWork();
+			}
+		}
+		
+		if(count($this->tmpChildren) > 0) {
+			foreach ($this->tmpChildren as $tmpchild) {
+				if($tmpchild->getPid() == $childPID) {
+					$tmpchild->askHowsMyWork();
+				}
+			}
+		}
+	}
+	
+	public function responseFromChild($header, $content)
+	{
+		$send = sprintf("%s %s", $header, $content);
+		$this->client->responseToClient($send);
+	}
+
 	public function childrenStatus()
 	{
 		$status = $Childconfirm = $Childnoconfirm = $Tmpconfirm = $Tmpnoconfirm = $Engstatus = '';

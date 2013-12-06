@@ -43,6 +43,9 @@ class ChildHandler extends Handler
 			case 'Kill-Process':
 				$this->IDie();
 				break;
+			case 'Work-Checked':
+				$this->pool->responseFromChild('Checked', $event->data);
+				break;
 		}
 	}
 	
@@ -91,6 +94,12 @@ class ChildHandler extends Handler
 		$this->publisher->send($send);
 	}
 	
+	public function askHowsMyWork()
+	{
+		$send = sprintf("%d Checking-Work", $this->pid);
+		$this->publisher->send($send);
+	}
+
 	public function IDie()
 	{
 		$this->pool->childDie($this);

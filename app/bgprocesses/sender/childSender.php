@@ -94,11 +94,17 @@ class ChildSender
 					exit(0);
 					break;
 			}
-			$response = sprintf("%s %s $type", 'Process-Response', $this->pid);
-			$this->push->send($response);
+//			$response = sprintf("%s %s $type", 'Process-Response', $this->pid);
+//			$this->responseToParent($response);
 			return $type;
 		}
 		return NULL;
+	}
+	
+	public function responseToParent($header, $content)
+	{
+		$response = sprintf("%s %s %s", 'Child-'.$this->pid, $content, $header);
+		$this->push->send($response);
 	}
 }
 

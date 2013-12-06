@@ -5,14 +5,16 @@ class ContactIterator implements Iterator
 	public $fields;
 	public $contacts;
 	public $start;
+	public $lastId;
 	public $offset;
 	
 	const ROWS_PER_FETCH = 1000;
 	
-	public function __construct(Mail $mail, $idFields) 
+	public function __construct(Mail $mail, $idFields, $lastId = 0) 
 	{
 		$this->mail = $mail->idMail;
 		$this->fields = $idFields;
+		$this->lastId = $lastId;
 	}
 	
 	public function extractContactsFromDB($start = 0)
@@ -62,7 +64,7 @@ class ContactIterator implements Iterator
 	
 	public function rewind()
 	{
-		$this->start = 0;
+		$this->start = $this->lastId;
 		$this->contacts = array();
 		$this->offset = 0;
 	}

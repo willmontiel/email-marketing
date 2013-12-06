@@ -320,7 +320,7 @@ class ImportContactWrapper extends BaseWrapper
 									END
 								FROM {$this->tablename}
 								WHERE status IS NULL
-								INTO OUTFILE  '/tmp/{$nameNimported}'
+								INTO OUTFILE  '{$filesPath}{$nameNimported}'
 								FIELDS TERMINATED BY ','
 								ENCLOSED BY '\"'
 								LINES TERMINATED BY '\n'";
@@ -351,7 +351,7 @@ class ImportContactWrapper extends BaseWrapper
 			$queryForSuccess = "SELECT idArray, email
 								FROM {$this->tablename}
 								WHERE status = 1
-								INTO OUTFILE  '/tmp/{$nameImported}'
+								INTO OUTFILE  '{$filesPath}{$nameImported}'
 								FIELDS TERMINATED BY ','
 								ENCLOSED BY '\"'
 								LINES TERMINATED BY '\n'";
