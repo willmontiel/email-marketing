@@ -11,42 +11,44 @@
 	
 	$requester->send(sprintf("%s 3", 'New-Task'));
 	$request = $requester->recv();
-	sleep(1);
-	$requester->send(sprintf("%s 4820", 'Checking-Work'));
-	$request = $requester->recv();
-	sscanf($request, '%s %s', $header, $content);
-	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
-	sleep(1);
-	$requester->send(sprintf("%s 4820", 'Checking-Work'));
-	$request = $requester->recv();
-	sscanf($request, '%s %s', $header, $content);
-	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
-	sleep(1);
-	$requester->send(sprintf("%s 4820", 'Checking-Work'));
-	$request = $requester->recv();
-	sscanf($request, '%s %s', $header, $content);
-	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
-	sleep(1);
-	$requester->send(sprintf("%s 4820", 'Checking-Work'));
-	$request = $requester->recv();
-	sscanf($request, '%s %s', $header, $content);
-	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
-	sleep(1);
-	$requester->send(sprintf("%s 4820", 'Checking-Work'));
-	$request = $requester->recv();
-	sscanf($request, '%s %s', $header, $content);
-	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
+//	sleep(1);
+//	$requester->send(sprintf("%s 4820", 'Checking-Work'));
+//	$request = $requester->recv();
+//	sscanf($request, '%s %s', $header, $content);
+//	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
+//	sleep(1);
+//	$requester->send(sprintf("%s 4820", 'Checking-Work'));
+//	$request = $requester->recv();
+//	sscanf($request, '%s %s', $header, $content);
+//	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
+//	sleep(1);
+//	$requester->send(sprintf("%s 4820", 'Checking-Work'));
+//	$request = $requester->recv();
+//	sscanf($request, '%s %s', $header, $content);
+//	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
+//	sleep(1);
+//	$requester->send(sprintf("%s 4820", 'Checking-Work'));
+//	$request = $requester->recv();
+//	sscanf($request, '%s %s', $header, $content);
+//	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
+//	sleep(1);
+//	$requester->send(sprintf("%s 4820", 'Checking-Work'));
+//	$request = $requester->recv();
+//	sscanf($request, '%s %s', $header, $content);
+//	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
 	
 	
 //	sleep(5);
 //	
-//	$requester->send(sprintf("%s 73", 'Cancel-Process'));
+//	$requester->send(sprintf("%s 3", 'Cancel-Process'));
 //	$request = $requester->recv();
+	
+
+//	sleep(3);
 //	
-//	sleep(2);
-//	
-//	$requester->send(sprintf("%s 2", 'Stop-Process'));
+//	$requester->send(sprintf("%s 3", 'Stop-Process'));
 //	$request = $requester->recv();
+
 //	
 //	sleep(rand(0, 5));
 //	

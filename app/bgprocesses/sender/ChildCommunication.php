@@ -118,6 +118,7 @@ class ChildCommunication extends BaseWrapper
 					switch ($msg) {
 						case 'Cancel':
 							$mail->status = 'Cancelled';
+							$mail->lastSent = NULL;
 							$disruptedProcess = TRUE;
 							break 2;
 						case 'Stop':
@@ -135,6 +136,7 @@ class ChildCommunication extends BaseWrapper
 				Phalcon\DI::getDefault()->get('timerObject')->endTimer('all messages sent!');
 				if(!$disruptedProcess) {
 					$mail->status = 'Sent';
+					$mail->lastSent = NULL;
 					$mail->finishedon = time();
 				}
 				$mail->save();
