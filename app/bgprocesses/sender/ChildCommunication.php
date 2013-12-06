@@ -107,13 +107,14 @@ class ChildCommunication extends BaseWrapper
 					if ($recipients){
 						echo "Message {$i} successfully sent! \n";
 						$mxc = Mxc::findFirst(array(
-							'conditions' => 'idMail = ?1, idContact = ?2',
+							'conditions' => 'idMail = ?1 AND idContact = ?2',
 							'bind' => array(1 => $mail->idMail,
 											2 => $contact['contact']['idContact'])
 						));
 						$mxc->status = 'sent';
 						if (!$mxc->save()) {
-							
+							foreach ($mxc->getMessages() as $msg)
+							$log->log("Error while saving mxc status: " . $mxc);
 						}
 					} 
 					else {
