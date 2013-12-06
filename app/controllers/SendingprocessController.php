@@ -23,12 +23,17 @@ class SendingprocessController extends ControllerBase
 				$obj->status = 'Free';
 				$obj->totalContacts = '---';
 				$obj->sentContacts = '---';
+				$obj->pause = false;
 			}
 			else {
 				$obj->status = 'Working';
 				$mail = Mail::findFirstByIdMail($value->Status);
+				$requester->send(sprintf("%s $key", 'Checking-Work'));
+				$request = $requester->recv();
+				sscanf($request, '%s %s', $header, $work);
 				$obj->totalContacts = $mail->totalContacts;
-				$obj->sentContacts = '---';
+				$obj->sentContacts = $work;
+				$obj->pause = true;
 			}
 			$obj->task = $value->Status;
 			$processesArray[] = $obj;
@@ -40,5 +45,16 @@ class SendingprocessController extends ControllerBase
 	public function indexAction()
 	{	
 		
+	}
+	
+	public function pauseAction($idTask)
+	{
+		$context = new ZMQContext();
+		
+		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
+		$requester->connect("tcp://localhost:5556");
+		
+		$requester->send(sprintf("%s $idTask", 'Stop-Process'));
+		$request = $requester->recv();
 	}
 }	

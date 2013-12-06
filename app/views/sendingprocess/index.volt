@@ -13,8 +13,15 @@
 							$.getJSON(MyBaseURL + 'sendingprocess/getprocessesinfo',function(data){
 							$('#resultado').empty();
 							for(var f=0; f<data.length; f++){
+								var pause;
+								if (data[f].pause){
+									pause = '<a href="{{url('sendingprocess/pause')}}/' + data[f].pid +'"><span class="label label-dark-red">Pause</span></a>'; 
+								}
+								else{
+								pause = '---';
+								}
 								$("#resultado").append(
-									'<tr><td style="text-align: center;">' + data[f].pid + '</td><td style="text-align: center;">' + data[f].type + '</td><td style="text-align: center;">' + data[f].confirm + '</td><td style="text-align: center;">' + data[f].status + '</td><td style="text-align: center;">' + data[f].task + '</td><td style="text-align: center;">' + data[f].totalContacts + '</td><td style="text-align: center;">' + data[f].sentContacts + '</td></tr>'
+									'<tr><td style="text-align: center;">' + data[f].pid + '</td><td style="text-align: center;">' + data[f].type + '</td><td style="text-align: center;">' + data[f].confirm + '</td><td style="text-align: center;">' + data[f].status + '</td><td style="text-align: center;">' + data[f].task +'</td><td style="text-align: center;">' + data[f].totalContacts + '</td><td style="text-align: center;">' + data[f].sentContacts + '</td><td style="text-align: center;">' + pause + '</td></tr>'
 								); 
 							}
 					  });
@@ -22,7 +29,7 @@
 		
 		$(function() {
 			loadNow();
-			var autoRefresh = setInterval(loadNow, 10000);
+			var autoRefresh = setInterval(loadNow, 45000);
 		});
 	</script>
 {% endblock %}
@@ -60,6 +67,7 @@
 								<th>Task</th>
 								<th>Total contacts</th>
 								<th>Sent contacts</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody id="resultado">

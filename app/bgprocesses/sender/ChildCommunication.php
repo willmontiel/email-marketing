@@ -93,26 +93,26 @@ class ChildCommunication extends BaseWrapper
 						$html = $content->html;
 						$text = $content->text;
 					}
-//					$from = array($mail->fromEmail => $mail->fromName);
-//					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
-//					
-//					$message = new Swift_Message($subject);
-//					$message->setFrom($from);
-//					$message->setBody($html, 'text/html');
-//					$message->setTo($to);
-//					$message->addPart($text, 'text/plain');
-//
-//					$recipients = $swift->send($message, $failures);
-//
-//					if ($recipients){
-//						echo "Message {$i} successfully sent! \n";
-//					} 
-//					else {
-//						echo "There was an error in message {$i}: \n";
-//						$log->log("Error while sending mail: " . $failures);
-//						print_r($failures);
-//					}
-					$log->log("HTML: " . $html);
+					$from = array($mail->fromEmail => $mail->fromName);
+					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
+					
+					$message = new Swift_Message($subject);
+					$message->setFrom($from);
+					$message->setBody($html, 'text/html');
+					$message->setTo($to);
+					$message->addPart($text, 'text/plain');
+
+					$recipients = $swift->send($message, $failures);
+
+					if ($recipients){
+						echo "Message {$i} successfully sent! \n";
+					} 
+					else {
+						echo "There was an error in message {$i}: \n";
+						$log->log("Error while sending mail: " . $failures);
+						print_r($failures);
+					}
+//					$log->log("HTML: " . $html);
 //					echo 'Hrml: ' . $html;
 					$msg = $this->childprocess->Messages();
 					switch ($msg) {
