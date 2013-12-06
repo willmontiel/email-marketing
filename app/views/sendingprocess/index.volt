@@ -15,7 +15,7 @@
 							for(var f=0; f<data.length; f++){
 								var pause;
 								if (data[f].pause){
-									pause = '<a href="{{url('sendingprocess/pause')}}/' + data[f].pid +'"><span class="label label-dark-red">Pause</span></a>'; 
+									pause = '<a href="{{url('sendingprocess/pause')}}/' + data[f].task +'"><span class="label label-dark-red">Pause</span></a>'; 
 								}
 								else{
 								pause = '---';

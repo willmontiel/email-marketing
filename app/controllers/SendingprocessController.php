@@ -49,6 +49,8 @@ class SendingprocessController extends ControllerBase
 	
 	public function pauseAction($idTask)
 	{
+		$log = $this->logger;
+	
 		$context = new ZMQContext();
 		
 		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
@@ -56,5 +58,7 @@ class SendingprocessController extends ControllerBase
 		
 		$requester->send(sprintf("%s $idTask", 'Stop-Process'));
 		$request = $requester->recv();
+		
+		return $this->response->redirect('sendingprocess');
 	}
 }	
