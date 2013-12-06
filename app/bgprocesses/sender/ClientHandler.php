@@ -13,7 +13,7 @@ class ClientHandler extends Handler
 	
 	public function getEvents()
 	{
-		$events = array('New-Task', 'Scheduled-Task', 'Cancel-Process', 'Play-Process', 'Stop-Process', 'Are-You-There', 'Time-To-Die', 'Show-Status');
+		$events = array('New-Task', 'Scheduled-Task', 'Cancel-Process', 'Play-Process', 'Stop-Process', 'Are-You-There', 'Time-To-Die', 'Show-Status', 'Show-Status-Console');
 		
 		return $events;
 	}
@@ -50,7 +50,11 @@ class ClientHandler extends Handler
 				exit(0);
 				break;
 			case 'Show-Status':
-				$poolStatus = $this->pool->childreStatus();
+				$poolStatus = $this->pool->childrenStatusArray();
+				$this->reply->send($poolStatus);
+				break;
+			case 'Show-Status-Console':
+				$poolStatus = $this->pool->childrenStatus();
 				$poolStatus = 'Parent Working' . PHP_EOL . $poolStatus;
 				$this->reply->send($poolStatus);
 				break;
