@@ -117,12 +117,13 @@ class ChildCommunication extends BaseWrapper
 					$msg = $this->childprocess->Messages();
 					switch ($msg) {
 						case 'Cancel':
+							$log->log('Estado: Me Cancelaron');
 							$mail->status = 'Cancelled';
 							$mail->lastSent = NULL;
 							$disruptedProcess = TRUE;
 							break 2;
 						case 'Stop':
-							$log->log("Estado: Me pausaron");
+							$log->log("Estado: Me Pausaron");
 							$mail->status = 'Paused';
 							$mail->lastSent = $contact['contact']['idContact'];
 							$disruptedProcess = TRUE;
@@ -134,12 +135,17 @@ class ChildCommunication extends BaseWrapper
 					$i++;
 				}
 				Phalcon\DI::getDefault()->get('timerObject')->endTimer('all messages sent!');
+				
 				if(!$disruptedProcess) {
+					$log->log('Estado: Me enviaron');
 					$mail->status = 'Sent';
 					$mail->lastSent = NULL;
 					$mail->finishedon = time();
 				}
-				$mail->save();
+
+				if(!$mail->save()) {
+					$log->log('No se pudo actualizar el estado del MAIL');
+				}
 			}
 			catch (InvalidArgumentException $e) {
 

@@ -38,13 +38,13 @@
 //	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
 	
 	
-//	sleep(5);
-//	
-//	$requester->send(sprintf("%s 3", 'Cancel-Process'));
-//	$request = $requester->recv();
+	sleep(2);
+	
+	$requester->send(sprintf("%s 3", 'Cancel-Process'));
+	$request = $requester->recv();
 	
 
-//	sleep(3);
+//	sleep(2);
 //	
 //	$requester->send(sprintf("%s 3", 'Stop-Process'));
 //	$request = $requester->recv();
