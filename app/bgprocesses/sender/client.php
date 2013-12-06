@@ -9,7 +9,19 @@
 //	$request = $requester->recv();
 //	printf($request);
 	
-	$requester->send(sprintf("%s 124", 'New-Task'));
+	$requester->send(sprintf("%s 1", 'New-Task'));
+	$request = $requester->recv();
+	
+	$requester->send(sprintf("%s 2", 'New-Task'));
+	$request = $requester->recv();
+	
+	$requester->send(sprintf("%s 3", 'New-Task'));
+	$request = $requester->recv();
+	
+	$requester->send(sprintf("%s 4", 'New-Task'));
+	$request = $requester->recv();
+	
+	$requester->send(sprintf("%s 5", 'New-Task'));
 	$request = $requester->recv();
 //	sleep(1);
 //	$requester->send(sprintf("%s 4820", 'Checking-Work'));
@@ -37,11 +49,11 @@
 //	sscanf($request, '%s %s', $header, $content);
 //	printf('Se realizo un ' . $header . ' y trajo ' . $content .PHP_EOL);
 	
-	
-	sleep(2);
-	
-	$requester->send(sprintf("%s 3", 'Cancel-Process'));
-	$request = $requester->recv();
+//	
+//	sleep(2);
+//	
+//	$requester->send(sprintf("%s 3", 'Cancel-Process'));
+//	$request = $requester->recv();
 	
 
 //	sleep(2);
