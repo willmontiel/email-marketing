@@ -186,7 +186,7 @@ class ApiController extends ControllerBase
 		
 		// Insertar el objeto en la base de datos
 		$customfield = new Customfield();
-		$customfield->dbase = $db;
+		$customfield->idDbase = $db->idDbase;
 		$this->populatePObject($contents, $customfield);
 		
 		if (!$customfield->save()) {

@@ -166,7 +166,7 @@ class PoolHandler extends Handler
 		}
 	}
 	
-	public function childreStatus()
+	public function childrenStatus()
 	{
 		$status = $Childconfirm = $Childnoconfirm = $Tmpconfirm = $Tmpnoconfirm = $Engstatus = '';
 		
@@ -200,5 +200,42 @@ class PoolHandler extends Handler
 		$status = $Childconfirm . $Childnoconfirm . $Tmpconfirm . $Tmpnoconfirm . $Engstatus;
 		
 		return $status;
+	}
+	
+	public function childrenStatusArray()
+	{
+		$status = array();
+		
+		foreach ($this->children as $child) {
+			if(!$child->getConfirmed()) {
+				$status[$child->getPid()]['Confirm'] = 'No';
+			}
+			else {
+				$status[$child->getPid()]['Confirm'] = 'Yes';
+			}
+			$status[$child->getPid()]['Status'] = '---';
+			$status[$child->getPid()]['Type'] = 'Permanent';
+		}
+		if(count($this->tmpChildren) > 0) {			
+			
+			foreach ($this->tmpChildren as $tmpchild) {
+				if(!$tmpchild->getConfirmed()) {
+					$status[$tmpchild->getPid()]['Confirm'] = 'No';
+				}
+				else {
+					$status[$tmpchild->getPid()]['Confirm'] = 'Yes';
+				}
+				$status[$tmpchild->getPid()]['Type'] = 'Temporary';
+			}
+		}
+		
+		if(count($this->engagedProcesses) > 0) {			
+			
+			foreach ($this->engagedProcesses as $process => $data) {
+				$status[$process]['Status'] = $data;
+			}
+		}
+		
+		return json_encode($status);
 	}
 }

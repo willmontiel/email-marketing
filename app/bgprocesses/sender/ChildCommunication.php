@@ -2,7 +2,7 @@
 require_once "../../../public/swiftmailer-5.0.3/lib/swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
-	protected $socket;
+	protected $childprocess;
 	
 	public function __construct() 
 	{
@@ -11,9 +11,9 @@ class ChildCommunication extends BaseWrapper
 		$this->mta = $di['mtadata'];
 	}
 	
-	public function setSocket($socket)
+	public function setSocket($childprocess)
 	{
-		$this->socket = $socket;
+		$this->childprocess = $childprocess;
 	}
 	
 	public function startProcess($idMail)
@@ -107,7 +107,7 @@ class ChildCommunication extends BaseWrapper
 					}
 					$log->log("HTML: " . $html);
 //					echo 'Hrml: ' . $html;
-					$msg = $this->socket->Messages();
+					$msg = $this->childprocess->Messages();
 					switch ($msg) {
 						case 'Cancel':
 							$mail->status = 'Cancelled';

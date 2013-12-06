@@ -321,7 +321,7 @@ class ContactsController extends ControllerBase
 		$context = new ZMQContext();
 
 		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-		$requester->connect("tcp://localhost:5556");
+		$requester->connect("tcp://localhost:5555");
 		$requester->send($toSend);
 		
 		return $this->response->redirect("proccess/show/$newproccess->idImportproccess");
