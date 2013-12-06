@@ -8,12 +8,6 @@ class MailScheduleObj
 	
 	public function scheduleTask()
 	{
-		$this->mail->status = 'Scheduled';
-		
-		if(!$this->mail->save()) {
-			return false;
-		}
-		
 		$task = Mailschedule::findFirst(array(
 			'conditions' => 'idMail = ?1',
 			'bind' => array(1 => $this->mail->idMail)

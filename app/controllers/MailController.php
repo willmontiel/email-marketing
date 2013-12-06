@@ -90,11 +90,12 @@ class MailController extends ControllerBase
 		$time = strtotime("-31 days");
 		
 		$mail = Mail::findFirst(array(
-			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR (idMail = ?1 AND idAccount = ?2 AND status = ?4)",
+			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR (idMail = ?1 AND idAccount = ?2 AND (status = ?4 OR status = ?5))",
 			"bind" => array(1 => $idMail,
 							2 => $this->user->account->idAccount,
 							3 => $time,
-							4 => "Draft")
+							4 => "Draft",
+							5 => "Scheduled" )
 		));
 		
 		if (!$mail) {
@@ -819,16 +820,39 @@ class MailController extends ControllerBase
 	public function confirmAction($idMail)
 	{
 		$schedule = Mailschedule::findFirstByIdMail($idMail);
+		$mail = Mail::findFirstByIdMail($idMail);
+		
 		if($schedule) {
+			$mail->status = 'Scheduled';
+			if(!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+				return $this->response->redirect('mail/preview/' . $idMail);
+			}
 			$schedule->confirmationStatus = 'Yes';
-
 			if(!$schedule->save()){
 				foreach ($schedule->getMessages() as $msg) {
 					$this->flashSession->error($msg);
 				}
 				return $this->response->redirect('mail/preview/' . $idMail);
 			}
+			$commObj = new Comunication();
+			$commObj->sendSchedulingToParent($idMail);	
+			
+			return $this->response->redirect("mail/index");
 		}
+		
+		$mail->status = 'Sending';
+		$mail->startedon = time();
+		
+		if(!$mail->save()) {
+			foreach ($mail->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+			}
+			return $this->response->redirect('mail/preview/' . $idMail);
+		}
+		
 		$commObj = new Comunication();
 		$commObj->sendToParent($idMail);
 		

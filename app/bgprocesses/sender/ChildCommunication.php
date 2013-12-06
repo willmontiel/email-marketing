@@ -71,10 +71,6 @@ class ChildCommunication extends BaseWrapper
 				$contactIterator = new ContactIterator($mail, $customFields, $lastId);
 				$disruptedProcess = FALSE;
 				
-				$mail->status = 'Sending';
-				$mail->startedon = time();
-				$mail->save();
-				
 				// Crear transport y mailer
 				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
 				$swift = Swift_Mailer::newInstance($transport);
