@@ -39,7 +39,7 @@ class ClientHandler extends Handler
 				break;
 			case 'Stop-Process':
 				$this->stopTaskInProcess($event->data);
-				$this->reply->send("Stoping..");
+				$this->reply->send("Stopping..");
 				break;
 			case 'Are-You-There':
 				$this->reply->send("I'm Here");
