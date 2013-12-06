@@ -120,6 +120,7 @@ class ChildCommunication extends BaseWrapper
 							$log->log('Estado: Me Cancelaron');
 							$mail->status = 'Cancelled';
 							$mail->lastSent = NULL;
+							$mail->finishedon = time();
 							$disruptedProcess = TRUE;
 							break 2;
 						case 'Stop':

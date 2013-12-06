@@ -120,8 +120,6 @@ function processStatus()
 	$requester->send('Show-Status-Console');
 	$r = $requester->recv();
 	printf($r);
-//	$x ="aqui no va\nesto";
-//	echo $x;
 }
 
 class ParentSender

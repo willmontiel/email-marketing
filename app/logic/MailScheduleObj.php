@@ -28,6 +28,7 @@ class MailScheduleObj
 		
 		$scheduleTask->mail = $this->mail;
 		$scheduleTask->scheduleDate = $this->mail->scheduleDate;
+		$scheduleTask->confirmationStatus = 'No';		
 		
 		if (!$scheduleTask->save()) {
 			return false;
