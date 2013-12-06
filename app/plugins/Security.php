@@ -204,7 +204,8 @@ class Security extends Plugin
 				'template::edit' => array('template' => array('read', 'update')),
 				'template::preview' => array('mail' => array('read', 'create', 'send')),
 				'sendingprocess::index' => array('mail' => array('read', 'create', 'send')),
-				
+				'sendingprocess::getprocessesinfo' => array('mail' => array('read', 'create', 'send')),
+
 				//tests
 				'test::start' => array('mail' => array('read', 'create', 'send')),
 				'test::mailer' => array('mail' => array('read', 'create', 'send')),

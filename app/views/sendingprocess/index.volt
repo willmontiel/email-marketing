@@ -4,9 +4,20 @@
 	{{ javascript_include('tablesorter/jquery-latest.js')}}
 	{{ javascript_include('tablesorter/jquery.tablesorter.js')}}
 	<script type="text/javascript">
-		$(document).ready(function() { 
+		var MyDbaseUrl = '{{apiurlbase.url}}';
+		$(function() { 
 			$("#processes-table").tablesorter(); 
 		}); 
+		
+		var loadNow = function() {   
+						  $.getJSON(MyBaseURL + 'sendingprocess/getprocessesinfo',function(data){
+					  });
+		};
+		
+		$(function() {
+			loadNow();
+			var autoRefresh = setInterval(loadNow, 10000);
+		});
 	</script>
 {% endblock %}
 {% block content %}
@@ -31,23 +42,32 @@
 						</a>
 						<input type="text" placeholder="Buscar...">
 					</div>
+					<div class="pull-right">
+						<button class="btn btn-default" onclick="loadNow()"><i class="icon-refresh"></i> Refresh</button>
+					</div>
 				</div>
-				<div class="box-content">
+				<div class="box-content" id="info-processes">
 					<table id="processes-table" class="tablesorter table table-normal">
 						<thead>
 							<tr>
-								<th>Id de correo</th>
-								<th>Cuenta</th>
-								<th>Estado</th>
-								<th>Tiempo estimado</th>
+								<th>PID</th>
+								<th>Type</th>
+								<th>Confirm</th>
+								<th>Status</th>
+								<th>Task</th>
+								<th>Total contacts</th>
+								<th>Sent contacts</th>
 							</tr>
 						</thead>
 						<tbody>
-							{%for item in page.items%}
+							{%for a in account%}
 								<tr>
-									<td>{{item.idMail}}</td>
-									<td>{{item.idAccount}}</td>
-									<td>{{item.status}}</td>
+									<td>{{a.company}}</td>
+									<td>{{a.idAccount}}</td>
+									<td>lala</td>
+									<td class="center">1.7</td>
+									<td class="center">1.7</td>
+									<td class="center">1.7</td>
 									<td class="center">1.7</td>
 								</tr>
 							{% endfor %}
@@ -55,34 +75,7 @@
 					</table>
 				</div>
 				<div class="box-footer padded">
-					<div class="row-fluid">
-						<div class="span5">
-							<div class="pagination">
-								<ul>
-									{% if page.current == 1 %}
-										<li class="previous"><a href="#" class="inactive"><<</a></li>
-										<li class="previous"><a href="#" class="inactive"><</a></li>
-									{% else %}
-										<li class="previous active"><a href="{{ url('mail/index') }}"><<</a></li>
-										<li class="previous active"><a href="{{ url('mail/index') }}?page={{ page.before }}"><</a></li>
-									{% endif %}
-
-									{% if page.current >= page.total_pages %}
-										<li class="next"><a href="#" class="inactive">></a></li>
-										<li class="next"><a href="#" class="inactive">>></a></li>
-									{% else %}
-										<li class="next active"><a href="{{ url('mail/index') }}?page={{page.next}}">></a></li>
-										<li class="next active"><a href="{{ url('mail/index') }}?page={{page.last}}">>></a></li>		
-									{% endif %}
-								</ul>
-							 </div>
-						 </div>
-						 <div class="span5">
-							 <br />
-							 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
-							 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
-						 </div>
-					</div>
+				
 				</div>
 			 </div>
 		</div>
