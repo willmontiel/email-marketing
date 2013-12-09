@@ -7,7 +7,6 @@ class OptionsMail
 		
 		switch ($mail->status) {
 			case 'Draft':
-				$array[] = self::getObject("Enviar");
 				$array[] = self::getObject("Editar");
 				break;
 			case 'Scheduled':
@@ -35,7 +34,7 @@ class OptionsMail
 		switch ($option) {
 			case 'Enviar':
 				$object->text = "Enviar";
-				$object->url = "mail/#/";
+				$object->url = "mail/play/";
 				$object->icon = "icon-signin";
 				break;
 			case 'Editar':
@@ -45,12 +44,12 @@ class OptionsMail
 				break;
 			case 'Detener':
 				$object->text = "Detener";
-				$object->url = "mail/#/";
+				$object->url = "mail/stop/";
 				$object->icon = "icon-signin";
 				break;
 			case 'Cancelar':
 				$object->text = "Cancelar";
-				$object->url = "mail/#/";
+				$object->url = "mail/cancel/";
 				$object->icon = "icon-signin";
 				break;
 		}

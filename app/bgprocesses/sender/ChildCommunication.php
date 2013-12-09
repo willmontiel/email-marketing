@@ -131,6 +131,14 @@ class ChildCommunication extends BaseWrapper
 					switch ($msg) {
 						case 'Cancel':
 							$log->log('Estado: Me Cancelaron');
+							
+							$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $mail->idMail;
+							$mm = Phalcon\DI::getDefault()->get('modelsManager');
+							$mm->executeQuery($phql);
+							if (!$mm) {
+								$log->log("Error updating MxC");
+							}
+							
 							$mail->status = 'Cancelled';
 							$mail->lastSent = NULL;
 							$mail->finishedon = time();
