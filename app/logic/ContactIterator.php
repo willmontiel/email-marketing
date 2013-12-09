@@ -19,7 +19,7 @@ class ContactIterator implements Iterator
 	
 	public function extractContactsFromDB($start = 0)
 	{
-		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . ' AND idContact > ' . $start . ' ORDER BY idContact LIMIT ' . self::ROWS_PER_FETCH;
+		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . ' AND idContact > ' . $start . ' AND status = "scheduled" ORDER BY idContact LIMIT ' . self::ROWS_PER_FETCH;
 		if (!$this->fields) {
 			$sql = 'SELECT c.idContact, c.name, c.lastName, e.idEmail, e.email
 						FROM (' . $sql1 . ') AS l 

@@ -13,7 +13,7 @@ class ClientHandler extends Handler
 	
 	public function getEvents()
 	{
-		$events = array('New-Task', 'Scheduled-Task', 'Cancel-Process', 'Play-Process', 'Stop-Process', 'Are-You-There', 'Time-To-Die', 'Show-Status', 'Show-Status-Console', 'Checking-Work');
+		$events = array('Play-Task', 'Scheduled-Task', 'Cancel-Process', 'Stop-Process', 'Are-You-There', 'Time-To-Die', 'Show-Status', 'Show-Status-Console', 'Checking-Work');
 		
 		return $events;
 	}
@@ -21,9 +21,9 @@ class ClientHandler extends Handler
 	public function handleEvent(Event $event)
 	{
 		switch ($event->type) {
-			case 'New-Task':
+			case 'Play-Task':
 				$this->sendNewTask($event->data);
-				$this->reply->send("New One..");
+				$this->reply->send("Playing One..");
 				break;
 			case 'Scheduled-Task':
 				$this->scheduling();
@@ -32,10 +32,6 @@ class ClientHandler extends Handler
 			case 'Cancel-Process':
 				$this->cancelTaskInProcess($event->data);
 				$this->reply->send("Canceling..");
-				break;
-			case 'Play-Process':
-				$this->playTask($event->data);
-				$this->reply->send("Playing..");
 				break;
 			case 'Stop-Process':
 				$this->stopTaskInProcess($event->data);
@@ -102,11 +98,6 @@ class ClientHandler extends Handler
 	{
 		$pid = $this->pool->findPidFromTask($data);
 		$this->tasks->sendCommandToProcess('Stop', $pid);
-	}
-	
-	public function playTask($data)
-	{
-		
 	}
 	
 	public function responseToClient($content)
