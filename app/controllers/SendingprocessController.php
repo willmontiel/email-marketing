@@ -3,8 +3,8 @@ class SendingprocessController extends ControllerBase
 {
 	public function getprocessesinfoAction()
 	{
-		$process = new ProcessStatus();
-		$status = $process->getStatus();
+		$communication = new Comunication();
+		$status = $communication->getStatus();
 		if ($status !== null) {
 			return $this->setJsonResponse($status);
 		}
@@ -16,11 +16,11 @@ class SendingprocessController extends ControllerBase
 		
 	}
 	
-	public function pauseAction($idTask)
+	public function stopAction($idTask)
 	{
-		$process = new ProcessStatus();
+		$communication = new Comunication();
 		
-		$process->pauseTask($idTask);
+		$communication->sendPausedToParent($idTask);
 		
 		return $this->response->redirect('sendingprocess');
 	}

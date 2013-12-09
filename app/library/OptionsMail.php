@@ -35,21 +35,25 @@ class OptionsMail
 			case 'Enviar':
 				$object->text = "Enviar";
 				$object->url = "mail/play/";
+				$object->urlProgramming = "programmingmail/play/";
 				$object->icon = "icon-signin";
 				break;
 			case 'Editar':
 				$object->text = "Editar";
 				$object->url = "mail/setup/";
+				$object->urlProgramming = "mail/setup/";
 				$object->icon = "icon-pencil";
 				break;
 			case 'Detener':
 				$object->text = "Detener";
 				$object->url = "mail/stop/";
+				$object->urlProgramming = "programmingmail/stop/";
 				$object->icon = "icon-signin";
 				break;
 			case 'Cancelar':
 				$object->text = "Cancelar";
 				$object->url = "mail/cancel/";
+				$object->urlProgramming = "programmingmail/cancel/";
 				$object->icon = "icon-signin";
 				break;
 		}
