@@ -22,7 +22,7 @@ class ProgrammingmailController extends ControllerBase
 	
 	public function stopAction($idMail)
 	{
-		$communication = new Comunication();
+		$communication = new Communication();
 		
 		$communication->sendPausedToParent($idMail);
 		
@@ -31,16 +31,16 @@ class ProgrammingmailController extends ControllerBase
 
 	public function playAction($idMail)
 	{
-		$communication = new Comunication();
+		$communication = new Communication();
 		
-		$communication->sendToParent($idMail);
+		$communication->sendPlayToParent($idMail);
 		
 		return $this->response->redirect('programmingmail');
 	}
 
 	public function cancelAction($idMail)
 	{
-		$communication = new Comunication();
+		$communication = new Communication();
 		
 		$communication->sendCancelToParent($idMail);
 		

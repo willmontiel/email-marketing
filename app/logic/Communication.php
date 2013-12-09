@@ -56,7 +56,7 @@ class Communication
 		return NULL;
 	}
 	
-	public function sendToParent($idMail)
+	public function sendPlayToParent($idMail)
 	{
 		$this->requester->send(sprintf("%s $idMail", 'Play-Task'));
 		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);

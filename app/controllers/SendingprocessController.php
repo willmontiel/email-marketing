@@ -18,7 +18,7 @@ class SendingprocessController extends ControllerBase
 	
 	public function stopAction($idTask)
 	{
-		$communication = new Comunication();
+		$communication = new Communication();
 		
 		$communication->sendPausedToParent($idTask);
 		
