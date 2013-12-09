@@ -42,7 +42,6 @@ class AccountController extends ControllerBase
 		$page = $paginator->getPaginate();
 		
 		$this->view->setVar("page", $page);
-		
 	}
 	
 	/*
