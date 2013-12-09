@@ -48,39 +48,46 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span12 padded">
-			<div class="box">
-				<div class="box-header padded">
-					<div class="pull-left">
-						<h5>Active processes</h5>
-					</div>
-					<div class="pull-right">
-						<button class="btn btn-default" onclick="loadNow()"><i class="icon-refresh"></i> Refresh</button>
-					</div>
-				</div>
-				<div class="box-content" >
-					<table id="processes-table" class="tablesorter table table-normal">
-						<thead>
-							<tr>
-								<th>PID</th>
-								<th>Type</th>
-								<th>Confirm</th>
-								<th>Status</th>
-								<th>Task</th>
-								<th>Total contacts</th>
-								<th>Sent contacts</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody id="resultado">
-							
-						</tbody>
-					</table>
-				</div>
-				<div class="box-footer padded">
-				
-				</div>
-			 </div>
+		<div class="span7">
+		{{ flashSession.output() }}
 		</div>
+		<div class="span5 text-right">
+			<a href="{{url('index')}}" class="btn btn-blue"><i class="icon-dashboard"></i> Devuelta al dashboard</a>
+		</div>
+	</div>
+	<br />
+	<div class="row-fluid">
+		<div class="box">
+			<div class="box-header padded">
+				<div class="pull-left">
+					<h5>Active processes</h5>
+				</div>
+				<div class="pull-right">
+					<button class="btn btn-default" onclick="loadNow()"><i class="icon-refresh"></i> Refresh</button>
+				</div>
+			</div>
+			<div class="box-content" >
+				<table id="processes-table" class="tablesorter table table-normal">
+					<thead>
+						<tr>
+							<th>PID</th>
+							<th>Type</th>
+							<th>Confirm</th>
+							<th>Status</th>
+							<th>Task</th>
+							<th>Total contacts</th>
+							<th>Sent contacts</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody id="resultado">
+
+					</tbody>
+				</table>
+			</div>
+			<div class="box-footer padded">
+
+			</div>
+		 </div>
 	</div>	
 {% endblock %}

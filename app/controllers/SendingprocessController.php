@@ -3,7 +3,7 @@ class SendingprocessController extends ControllerBase
 {
 	public function getprocessesinfoAction()
 	{
-		$communication = new Comunication();
+		$communication = new Communication();
 		$status = $communication->getStatus();
 		if ($status !== null) {
 			return $this->setJsonResponse($status);

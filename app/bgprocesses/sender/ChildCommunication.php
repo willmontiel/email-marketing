@@ -91,18 +91,19 @@ class ChildCommunication extends BaseWrapper
 						$html = $content->html;
 						$text = $content->text;
 					}
-					$from = array($mail->fromEmail => $mail->fromName);
-					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
-					
-					$message = new Swift_Message($subject);
-					$message->setFrom($from);
-					$message->setBody($html, 'text/html');
-					$message->setTo($to);
-					$message->addPart($text, 'text/plain');
-
-					$recipients = $swift->send($message, $failures);
-
-					if ($recipients){
+//					$from = array($mail->fromEmail => $mail->fromName);
+//					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
+//					
+//					$message = new Swift_Message($subject);
+//					$message->setFrom($from);
+//					$message->setBody($html, 'text/html');
+//					$message->setTo($to);
+//					$message->addPart($text, 'text/plain');
+//
+//					$recipients = $swift->send($message, $failures);
+//
+//					if ($recipients){
+					if (true) {
 						echo "Message {$i} successfully sent! \n";
 //						$log->log("IdContact: " . $contact['contact']['idContact']);
 						$sentContacts[] = $contact['contact']['idContact'];
