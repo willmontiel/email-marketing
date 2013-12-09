@@ -206,6 +206,7 @@ class Security extends Plugin
 				'sendingprocess::index' => array('mail' => array('read', 'create', 'send')),
 				'sendingprocess::getprocessesinfo' => array('mail' => array('read', 'create', 'send')),
 				'sendingprocess::pause' => array('mail' => array('read', 'create', 'send')),
+				'programmingmail::index' => array('mail' => array('read', 'create', 'send')),
 
 				//tests
 				'test::start' => array('mail' => array('read', 'create', 'send')),
