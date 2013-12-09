@@ -1,6 +1,21 @@
 <?php
 class ProgrammingmailController extends ControllerBase
 {
+	protected function router($action)
+	{
+		switch ($action) {
+			case 'index':
+				return $this->response->redirect('programmingmail/index');
+				break;
+			case 'manage':
+				return $this->response->redirect('programmingmail/manage');
+				break;
+			default :
+				return $this->response->redirect('programmingmail/index');
+				break;
+		}
+	}
+
 	public function indexAction()
 	{
 		$idAccount = $this->user->account->idAccount;
@@ -20,31 +35,50 @@ class ProgrammingmailController extends ControllerBase
 		$this->view->setVar("page", $page);
 	}
 	
-	public function stopAction($idMail)
+	public function stopAction($action, $idMail)
 	{
 		$communication = new Communication();
 		
 		$communication->sendPausedToParent($idMail);
 		
-		return $this->response->redirect('programmingmail');
+		$this->router($action);
 	}
 
-	public function playAction($idMail)
+	public function playAction($action, $idMail)
 	{
 		$communication = new Communication();
 		
 		$communication->sendPlayToParent($idMail);
 		
-		return $this->response->redirect('programmingmail');
+		$this->router($action);
 	}
 
-	public function cancelAction($idMail)
+	public function cancelAction($action, $idMail)
 	{
-		$communication = new Communication();
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
 		
-		$communication->sendCancelToParent($idMail);
+		if ($mail->status == 'Scheduled') {
+			$mail->status = 'Cancelled';
+			
+			if (!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+			}
+			else {
+				$this->flashSession->warning("Se ha cancelado el correo exitosamente, recuerde que esta acción no se puede revertir");
+			}
+		}
+		else {
+			$communication = new Communication();
 		
-		return $this->response->redirect('programmingmail');
+			$communication->sendCancelToParent($idMail);
+		}
+		
+		$this->router($action);
 	}
 	
 	public function manageAction()
@@ -53,7 +87,7 @@ class ProgrammingmailController extends ControllerBase
 
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
-				"data" => Mail::find("status != 'Draft'"),
+				"data" => Mail::find("status != 'Draft' ORDER BY scheduleDate"),
 				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page" => $currentPage
 			)

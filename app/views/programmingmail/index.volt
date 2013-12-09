@@ -68,13 +68,13 @@
 									<div class="btn-group">
 										<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 										<ul class="dropdown-menu">
-										{% for value in mail_options(item) %}
-											<li><a href="{{ url(value.urlProgramming) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
+										{% for value in programming_options(item) %}
+											{% if value.url == 'null'%}	
+												&nbsp;<i class="icon-minus-sign"></i> No hay acciones disponibles&nbsp;
+											{% else %}
+												<li><a href="{{ url(value.url) }}index/{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
+											{% endif %}
 										{% endfor %}
-											<li><a href="{{ url('mail/clone/') }}{{item.idMail}}"><i class="icon-copy"></i>Duplicar</a></li>
-										{% if item.type%}
-											<li><a class="ShowDialogTemplate" data-backdrop="static" data-toggle="modal" href="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}"><i class="icon-magic"></i>Plantilla</a></li>
-										{%endif%}
 										</ul>
 									</div>
 								</td>
@@ -115,32 +115,4 @@
 			</div>
 		 </div>
 	</div>
-	<div id="modal-simple-template" class="modal hide fade" aria-hidden="false">
-		<div class="modal-header">
-		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		  <h5>Crear Template</h5>
-		</div>
-		<div class="modal-body">
-			<form id="temapletMail" method="post">
-				<table><tr>
-						<td style="padding-right: 10px;"><label for="nametemplate">Nombre del Template</label></td><td><input type="text" id="nametemplate" name="nametemplate"></td>
-					</tr><tr>
-						<td><label for="category">Categoria</label></td><td><input type="text" id="category" name="category" value="Mis Templates" readonly></td>
-				</tr></table>
-		</div>
-		<div class="modal-footer">
-		  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-		  <input class="btn btn-blue" type="submit" value="Crear">
-		</div>
-			</form>
-	</div>
-
-	<script type="text/javascript">
-		$(function() {
-			$('.ShowDialogTemplate').on('click', function() {
-				var myURL = $(this).data('id');
-				$("#temapletMail").attr('action', myURL );
-			});
-		});
-	</script>
 {% endblock %}
