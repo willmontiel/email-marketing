@@ -108,7 +108,7 @@ class ChildCommunication extends BaseWrapper
 
 					if ($recipients){
 						echo "Message {$i} successfully sent! \n";
-//						$log->log("IdContact: " . $contact['contact']['idContact']);
+						$log->log("Message successfully sent! with idContact: " . $contact['contact']['idContact']);
 						$sentContacts[] = $contact['contact']['idContact'];
 						$lastContact = end(end($contactIterator));
 						if (count($sentContacts) == self::CONTACTS_PER_UPDATE || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact'] || $msg == "Stop") {

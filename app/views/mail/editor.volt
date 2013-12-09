@@ -67,20 +67,22 @@
 	</div>
 	<br />
 	<div class="row-fluid">
-		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}/{{mail.idMail}}" width="100%" onload="iframeResize()" seamless></iframe>
-	</div>
-	<br />
-	<div class="row-fluid">
 		<div class="btnoptions">
-			<div class="span1 offset2">
-				<input onclick="sendData()" type="button" value="Guardar" class="btn btn-blue">
-			</div>
-			<div class="span1">
-				<input onclick="verHTML()" type="button" value="Visualizar" class="btn btn-black">
-			</div>
-			<div class="span1">
-				<input onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">
+			<div class="box span12">
+				<div class="span1 pull-right NextFromEditor">
+					<input onclick="sendData()" type="button" value="Siguiente" class="btn btn-blue">
+				</div>
+				<div class="span1 pull-right VisualizeEditor">
+					<input onclick="verHTML()" type="button" value="Visualizar" class="btn btn-black">
+				</div>
+				<div class="span1 pull-right SaveTemplate">
+					<input onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">
+				</div>
 			</div>
 		</div>
 	</div>
+	<div class="row-fluid">
+		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}/{{mail.idMail}}" width="100%" onload="iframeResize()" seamless></iframe>
+	</div>
+	<br />
 {% endblock %}

@@ -12,7 +12,7 @@ class PoolHandler extends Handler
 	
 	public function getEvents()
 	{
-		$events = array('Idle', 'WP', 'Process-Response');
+		$events = array('Idle', 'WP', 'Response-From-Child');
 		
 		return $events;
 	}

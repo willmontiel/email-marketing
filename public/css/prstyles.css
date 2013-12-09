@@ -166,6 +166,23 @@ a.inactive {
 	list-style-type: none;
 }
 
+.btnoptions .box {
+	height: 45px;
+	padding-top: 6px;
+}
+
+.NextFromEditor {
+	margin-right: 25px;
+}
+
+.VisualizeEditor {
+	margin-right: 25px;
+}
+
+.SaveTemplate {
+	margin-right: 65px;
+}
+
 .relief {
 	min-height: 20px;
 	color: black;
