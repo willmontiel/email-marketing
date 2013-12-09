@@ -80,6 +80,9 @@ class ChildCommunication extends BaseWrapper
 				$sentContacts = array();
 				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
 				foreach ($contactIterator as $contact) {
+					
+					$msg = $this->childprocess->Messages();
+					
 					if ($fields) {
 						$c = $mailField->processCustomFields($contact);
 						$subject = $c['subject'];
@@ -91,6 +94,7 @@ class ChildCommunication extends BaseWrapper
 						$html = $content->html;
 						$text = $content->text;
 					}
+					
 					$from = array($mail->fromEmail => $mail->fromName);
 					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
 					
@@ -107,7 +111,7 @@ class ChildCommunication extends BaseWrapper
 //						$log->log("IdContact: " . $contact['contact']['idContact']);
 						$sentContacts[] = $contact['contact']['idContact'];
 						$lastContact = end(end($contactIterator));
-						if (count($sentContacts) == self::CONTACTS_PER_UPDATE || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact']) {
+						if (count($sentContacts) == self::CONTACTS_PER_UPDATE || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact'] || $msg == "Stop") {
 							$idsContact = implode(', ', $sentContacts);
 							$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = " . $mail->idMail . " AND idContact IN (" . $idsContact . ")";
 							$mm = Phalcon\DI::getDefault()->get('modelsManager');
@@ -129,7 +133,6 @@ class ChildCommunication extends BaseWrapper
 					}
 //					$log->log("HTML: " . $html);
 //					echo 'Hrml: ' . $html;
-					$msg = $this->childprocess->Messages();
 					switch ($msg) {
 						case 'Cancel':
 							$log->log('Estado: Me Cancelaron');
