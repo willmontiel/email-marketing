@@ -1,5 +1,5 @@
 <?php
-class Comunication
+class Communication
 {
 	protected $requester;
 	
@@ -10,7 +10,7 @@ class Comunication
 		$this->requester->connect("tcp://localhost:5556");
 	}
 
-	public function sendToParent($idMail)
+	public function sendPlayToParent($idMail)
 	{
 		$this->requester->send(sprintf("%s $idMail", 'Play-Task'));
 		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);

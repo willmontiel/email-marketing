@@ -18,7 +18,7 @@ class OptionsMail
 				$array[] = self::getObject("Cancelar");
 				break;
 			case 'Paused':
-				$array[] = self::getObject("Enviar");
+				$array[] = self::getObject("Reanudar");
 				$array[] = self::getObject("Cancelar");
 				break;
 			default :
@@ -32,8 +32,8 @@ class OptionsMail
 		$object = new stdClass();
 		
 		switch ($option) {
-			case 'Enviar':
-				$object->text = "Enviar";
+			case 'Reanudar':
+				$object->text = "Reanudar";
 				$object->url = "mail/play/";
 				$object->icon = "icon-signin";
 				break;

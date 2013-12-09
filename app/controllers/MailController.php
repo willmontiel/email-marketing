@@ -90,12 +90,13 @@ class MailController extends ControllerBase
 		$time = strtotime("-31 days");
 		
 		$mail = Mail::findFirst(array(
-			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR (idMail = ?1 AND idAccount = ?2 AND (status = ?4 OR status = ?5))",
+			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR (idMail = ?1 AND idAccount = ?2 AND (status = ?4 OR status = ?5 OR status = ?6))",
 			"bind" => array(1 => $idMail,
 							2 => $this->user->account->idAccount,
 							3 => $time,
 							4 => "Draft",
-							5 => "Scheduled" )
+							5 => "Scheduled" ,
+							6 => "Cancelled" )
 		));
 		
 		if (!$mail) {
@@ -837,7 +838,7 @@ class MailController extends ControllerBase
 				}
 				return $this->response->redirect('mail/preview/' . $idMail);
 			}
-			$commObj = new Comunication();
+			$commObj = new Communication();
 			$commObj->sendSchedulingToParent($idMail);	
 			
 			return $this->response->redirect("mail/index");
@@ -853,15 +854,15 @@ class MailController extends ControllerBase
 			return $this->response->redirect('mail/preview/' . $idMail);
 		}
 		
-		$commObj = new Comunication();
-		$commObj->sendToParent($idMail);
+		$commObj = new Communication();
+		$commObj->sendPlayToParent($idMail);
 		
 		return $this->response->redirect("mail/index");
 	}
 	
 	public function stopAction($idMail)
 	{
-		$commObj = new Comunication();
+		$commObj = new Communication();
 		$commObj->sendPausedToParent($idMail);
 		
 		$mail = Mail::findFirstByIdMail($idMail);
@@ -879,8 +880,8 @@ class MailController extends ControllerBase
 	
 	public function playAction($idMail)
 	{
-		$commObj = new Comunication();
-		$commObj->sendToParent($idMail);
+		$commObj = new Communication();
+		$commObj->sendPlayToParent($idMail);
 		
 		$mail = Mail::findFirstByIdMail($idMail);
 		
@@ -902,7 +903,7 @@ class MailController extends ControllerBase
 		$mail = Mail::findFirstByIdMail($idMail);
 		
 		if($mail->status == 'Sending') {
-			$commObj = new Comunication();
+			$commObj = new Communication();
 			$commObj->sendCancelToParent($idMail);
 		}
 		else {
