@@ -104,8 +104,10 @@ class ChildCommunication extends BaseWrapper
 
 					if ($recipients){
 						echo "Message {$i} successfully sent! \n";
+//						$log->log("IdContact: " . $contact['contact']['idContact']);
 						$sentContacts[] = $contact['contact']['idContact'];
-						if (count($sentContacts) == self::CONTACTS_PER_UPDATE) {
+						$lastContact = end(end($contactIterator));
+						if (count($sentContacts) == self::CONTACTS_PER_UPDATE || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact']) {
 							$idsContact = implode(', ', $sentContacts);
 							$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = " . $mail->idMail . " AND idContact IN (" . $idsContact . ")";
 							$mm = Phalcon\DI::getDefault()->get('modelsManager');
