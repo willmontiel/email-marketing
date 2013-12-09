@@ -206,10 +206,18 @@ class Security extends Plugin
 				'template::editor_frame' => array('template' => array('read', 'create')),
 				'template::edit' => array('template' => array('read', 'update')),
 				'template::preview' => array('mail' => array('read', 'create', 'send')),
+				
+				//Sending processes
 				'sendingprocess::index' => array('mail' => array('read', 'create', 'send')),
 				'sendingprocess::getprocessesinfo' => array('mail' => array('read', 'create', 'send')),
-				'sendingprocess::pause' => array('mail' => array('read', 'create', 'send')),
+				'sendingprocess::stop' => array('mail' => array('read', 'create', 'send')),
+				
+				//Programming mail
 				'programmingmail::index' => array('mail' => array('read', 'create', 'send')),
+				'programmingmail::stop' => array('mail' => array('read', 'create', 'send')),
+				'programmingmail::play' => array('mail' => array('read', 'create', 'send')),
+				'programmingmail::cancel' => array('mail' => array('read', 'create', 'send')),
+				'programmingmail::manage' => array('mail' => array('read', 'create', 'send')),
 
 				//tests
 				'test::start' => array('mail' => array('read', 'create', 'send')),

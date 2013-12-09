@@ -14,15 +14,15 @@
 							$('#resultado').empty();
 							if(data !== null) {
 								for(var f=0; f<data.length; f++){
-									var pause;
+									var stop;
 									if (data[f].pause){
-										pause = '<a href="{{url('sendingprocess/pause')}}/' + data[f].task +'"><span class="label label-dark-red">Pause</span></a>'; 
+										stop = '<a href="{{url('sendingprocess/stop')}}/' + data[f].task +'"><span class="label label-dark-red">Stop</span></a>'; 
 									}
 									else{
-									pause = '---';
+									stop = '---';
 									}
 									$("#resultado").append(
-										'<tr><td style="text-align: center;">' + data[f].pid + '</td><td style="text-align: center;">' + data[f].type + '</td><td style="text-align: center;">' + data[f].confirm + '</td><td style="text-align: center;">' + data[f].status + '</td><td style="text-align: center;">' + data[f].task +'</td><td style="text-align: center;">' + data[f].totalContacts + '</td><td style="text-align: center;">' + data[f].sentContacts + '</td><td style="text-align: center;">' + pause + '</td></tr>'
+										'<tr><td style="text-align: center;">' + data[f].pid + '</td><td style="text-align: center;">' + data[f].type + '</td><td style="text-align: center;">' + data[f].confirm + '</td><td style="text-align: center;">' + data[f].status + '</td><td style="text-align: center;">' + data[f].task +'</td><td style="text-align: center;">' + data[f].totalContacts + '</td><td style="text-align: center;">' + data[f].sentContacts + '</td><td style="text-align: center;">' + stop + '</td></tr>'
 									); 
 								}
 							}

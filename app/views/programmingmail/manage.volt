@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/editor_template.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	{{ javascript_include('tablesorter/jquery-latest.js')}}
@@ -10,8 +10,6 @@
 		}); 
 	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-envelope icon-2x"></i>Programación de correos{% endblock %}
-{%block sectionsubtitle %}Administre cuando se deben enviar los correos{% endblock %}
 {% block content%}
 	<div class="row-fluid">
 		<div class="box">
@@ -21,10 +19,10 @@
 				</div>
 				<div class="news-content">
 					<div class="news-title">
-						Administre la programación de envío de los correos
+						Administrar la programación de envío de correos
 					</div>
 					<div class="news-text">
-						Aqui podrá administrar la programación de los correos, pausarlos, cancelarlos y tambien reprogramar fechas
+						Cancele, pause o reanude correos programados o que se esten enviando.
 					</div>
 				</div>
 			</div>
