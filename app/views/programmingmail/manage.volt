@@ -33,7 +33,7 @@
 		{{ flashSession.output() }}
 		</div>
 		<div class="span5 text-right">
-			<a href="{{url('mail')}}" class="btn btn-blue"><i class="icon-envelope"></i> Todos los correos</a>
+			<a href="{{url('index')}}" class="btn btn-blue"><i class="icon-dashboard"></i> Devuelta al dashboard</a>
 		</div>
 	</div>
 	<br />
@@ -66,13 +66,13 @@
 									<div class="btn-group">
 										<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 										<ul class="dropdown-menu">
-										{% for value in mail_options(item) %}
-											<li><a href="{{ url(value.urlProgramming) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
+										{% for value in programming_options(item) %}
+											{% if value.url == 'null'%}	
+												&nbsp;<i class="icon-minus-sign"></i> No hay acciones disponibles&nbsp;
+											{% else %}
+												<li><a href="{{ url(value.url) }}manage/{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
+											{% endif %}
 										{% endfor %}
-											<li><a href="{{ url('mail/clone/') }}{{item.idMail}}"><i class="icon-copy"></i>Duplicar</a></li>
-										{% if item.type%}
-											<li><a class="ShowDialogTemplate" data-backdrop="static" data-toggle="modal" href="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}"><i class="icon-magic"></i>Plantilla</a></li>
-										{%endif%}
 										</ul>
 									</div>
 								</td>

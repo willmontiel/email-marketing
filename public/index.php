@@ -245,6 +245,9 @@ try {
 		$compiler->addFunction('mail_options', function ($resolvedArgs, $exprArgs){
 						return 'OptionsMail::getOptions(' . $resolvedArgs . ')';
 					});
+		$compiler->addFunction('programming_options', function ($resolvedArgs, $exprArgs){
+						return 'ProgrammingOptions::getOptions(' . $resolvedArgs . ')';
+					});
 		$compiler->addFunction('smart_wizard', function ($resolvedArgs, $exprArgs){
 						return 'SmartWizard::getWizard(' . $resolvedArgs . ')';
 					});

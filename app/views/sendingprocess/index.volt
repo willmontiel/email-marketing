@@ -60,10 +60,10 @@
 		<div class="box">
 			<div class="box-header padded">
 				<div class="pull-left">
-					<h5>Active processes</h5>
+					<h5>Procesos activos</h5>
 				</div>
 				<div class="pull-right">
-					<button class="btn btn-default" onclick="loadNow()"><i class="icon-refresh"></i> Refresh</button>
+					<button class="btn btn-default" onclick="loadNow()"><i class="icon-refresh"></i> Refrescar</button>
 				</div>
 			</div>
 			<div class="box-content" >

@@ -1,16 +1,12 @@
 <?php
-class OptionsMail 
+class ProgrammingOptions
 {	
 	public static function getOptions($mail) {
 		
 		$array = array();
 		
 		switch ($mail->status) {
-			case 'Draft':
-				$array[] = self::getObject("Editar");
-				break;
 			case 'Scheduled':
-				$array[] = self::getObject("Editar");
 				$array[] = self::getObject("Cancelar");
 				break;
 			case 'Sending':
@@ -22,6 +18,7 @@ class OptionsMail
 				$array[] = self::getObject("Cancelar");
 				break;
 			default :
+				$array[] = self::getObject("Sin acciones");
 				break;
 		}
 		return $array;
@@ -34,22 +31,22 @@ class OptionsMail
 		switch ($option) {
 			case 'Reanudar':
 				$object->text = "Reanudar";
-				$object->url = "mail/play/";
+				$object->url = "programmingmail/play/";
 				$object->icon = "icon-signin";
-				break;
-			case 'Editar':
-				$object->text = "Editar";
-				$object->url = "mail/setup/";
-				$object->icon = "icon-pencil";
 				break;
 			case 'Detener':
 				$object->text = "Detener";
-				$object->url = "mail/stop/";
+				$object->url = "programmingmail/stop/";
 				$object->icon = "icon-signin";
 				break;
 			case 'Cancelar':
 				$object->text = "Cancelar";
-				$object->url = "mail/cancel/";
+				$object->url = "programmingmail/cancel/";
+				$object->icon = "icon-signin";
+				break;
+			default:
+				$object->text = "No hay acciones disponibles";
+				$object->url = "null";
 				$object->icon = "icon-signin";
 				break;
 		}
