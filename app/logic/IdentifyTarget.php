@@ -8,10 +8,15 @@ class IdentifyTarget
 	
 	public function identifyTarget($mail)
 	{
-		$target = json_decode($mail->target);
-//		$this->log->log('Target: ' . print_r($target, true));
-		$ids = implode(',', $target->ids);
-//		$this->log->log('Ids: ' . $ids);
+		if($mail->target){
+			$target = json_decode($mail->target);
+//			$this->log->log('Target: ' . print_r($target, true));
+			$ids = implode(',', $target->ids);
+//			$this->log->log('Ids: ' . $ids);
+		}
+		else {
+			throw new \InvalidArgumentException('Error while checking target');
+		}
 		
 		if (!empty($target->filter)){
 			$this->log->log('Hay filtro');

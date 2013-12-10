@@ -152,9 +152,32 @@ class PoolHandler extends Handler
 		$pid = pcntl_waitpid(-1, $status, WNOHANG);
 
 		if ($pid > 0) {
+			
+			foreach ($this->children as $key => $child) {			
+				if($child->getPid() == $pid) {
+					unset($this->children[$key]);
+				}
+			}
 
+			if(count($this->tmpChildren) > 0) {			
+
+				foreach ($this->tmpChildren as $key => $tmpchild) {
+					if($tmpchild->getPid() == $pid) {
+						unset($this->tmpChildren[$key]);
+					}
+				}
+			}
+
+			if(count($this->engagedProcesses) > 0) {			
+
+				foreach ($this->engagedProcesses as $process => $data) {
+					if($process == $pid) {
+						unset($this->engagedProcesses[$process]);
+					}
+				}
+			}
+		
 			echo "Proceso Hijo {$pid} Termino con Estado {$status}\n";
-
 		}
 	}
 	
@@ -254,6 +277,7 @@ class PoolHandler extends Handler
 				else {
 					$status[$tmpchild->getPid()]['Confirm'] = 'Yes';
 				}
+				$status[$tmpchild->getPid()]['Status'] = '---';
 				$status[$tmpchild->getPid()]['Type'] = 'Temporary';
 			}
 		}

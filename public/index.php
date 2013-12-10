@@ -12,6 +12,7 @@ try {
         '../app/library/',
         '../app/logic/',
 		'../app/editorlogic/',
+		'../app/bgprocesses/sender/',
     ));
 	
 	$loader->registerClasses(array(

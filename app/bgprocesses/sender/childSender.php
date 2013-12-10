@@ -3,7 +3,7 @@ require_once '../bootstrap/phbootstrap.php';
 
 $child = new ChildSender();
 
-$child->initialize();
+$child->startProcess();
 
 class ChildSender
 {
@@ -15,7 +15,7 @@ class ChildSender
 
 	const NUMBER_OF_SECONDS = 20;
 	
-	public function initialize()
+	public function startProcess()
 	{
 		$this->pid = getmypid();
 		$communication = new ChildCommunication();
@@ -23,10 +23,10 @@ class ChildSender
 		$context = new ZMQContext();
 		
 		$this->subscriber = new ZMQSocket($context, ZMQ::SOCKET_SUB);
-		$this->subscriber->connect("tcp://localhost:5558");
+		$this->subscriber->connect(SocketConstants::PUB2CHILDREN_ENDPOINT);
 		
 		$this->push = new ZMQSocket($context, ZMQ::SOCKET_PUSH);
-		$this->push->connect("tcp://localhost:5557");
+		$this->push->connect(SocketConstants::PULLFROMCHILD_ENDPOINT);
 		
 		$filter = "$this->pid";
 		$this->subscriber->setSockOpt(ZMQ::SOCKOPT_SUBSCRIBE, $filter);
@@ -62,6 +62,9 @@ class ChildSender
 							printf('PID ' . $pid . ' Acabo' . PHP_EOL);
 							
 							$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
+							break;
+						case 'Processing-Task':
+							$response = sprintf("%s %s %s", 'Child-'.$this->pid, 0, 'Work-Checked');
 							break;
 						case 'Echo-Kill':
 							printf($pid . ' Es hora de que muera' . PHP_EOL);

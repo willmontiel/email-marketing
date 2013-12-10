@@ -1,6 +1,8 @@
 <?php
 require_once '../bootstrap/phbootstrap.php';
 
+umask(0000);
+
 if(isset($argv[1])) {
 	switch ($argv[1]) {
 		case '-d':
@@ -70,7 +72,7 @@ function isRunning()
 {
 	$context = new ZMQContext(1);
 	$selfrequester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$selfrequester->connect("tcp://localhost:5556");
+	$selfrequester->connect(SocketConstants::MAILREQUESTS_ENDPOINT);
 	
 	$poll = new ZMQPoll();
 	$poll->add($selfrequester, ZMQ::POLL_OUT);
@@ -80,7 +82,7 @@ function isRunning()
 	$writeable = array();
 	$response = null;
 
-	$events = $poll->poll($readable, $writeable, 1000);
+	$events = $poll->poll($readable, $writeable, 2000);
 	if ($events && count($writeable) > 0) {
 		$selfrequester->send('Are-You-There');
 	}
@@ -92,7 +94,7 @@ function isRunning()
 	$writeable = array();
 	$poll->clear();
 	$poll->add($selfrequester, ZMQ::POLL_IN);
-	$events = $poll->poll($readable, $writeable, 1000);
+	$events = $poll->poll($readable, $writeable, 2000);
 	if ($events && count($readable) > 0) {
 		$response = $selfrequester->recv(ZMQ::MODE_NOBLOCK);
 		return true;
@@ -106,7 +108,7 @@ function killProcess()
 {
 	$context = new ZMQContext(1);
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$requester->connect("tcp://localhost:5556");
+	$requester->connect(SocketConstants::MAILREQUESTS_ENDPOINT);
 	$requester->send('Time-To-Die');
 	$r = $requester->recv();
 	printf('Recibi: ' . $r . PHP_EOL);
@@ -116,7 +118,7 @@ function processStatus()
 {
 	$context = new ZMQContext(1);
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$requester->connect("tcp://localhost:5556");
+	$requester->connect(SocketConstants::MAILREQUESTS_ENDPOINT);
 	$requester->send('Show-Status-Console');
 	$r = $requester->recv();
 	printf($r);
@@ -129,12 +131,27 @@ class ParentSender
 	protected $client;
 	protected $tasks;
 	
+	protected $context;
+
 	public function __construct() {
 		$this->di =  \Phalcon\DI\FactoryDefault::getDefault();
+		$this->context = new ZMQContext(3);
+		
+		$context = $this->context;
+
+		$publisher = new ZMQSocket($context, ZMQ::SOCKET_PUB);
+		$publisher->bind(SocketConstants::PUB2CHILDREN_ENDPOINT);
+		$this->di->set('publisher', $publisher);
+
+		$reply = new ZMQSocket($context, ZMQ::SOCKET_REP);
+		$reply->bind(SocketConstants::MAILREQUESTS_ENDPOINT);
+		$this->di->set('reply', $reply);
 	}
 
 	public function startProcess()
 	{
+		$log = $this->di['logger'];
+		
 		$registry = new Registry();
 		
 		// Crear los objetos
@@ -152,10 +169,10 @@ class ParentSender
 		
 		$this->pool->createInitialChildren();
 		
-		$context = new ZMQContext(1);
+		$context = $this->context;
 		
 		$pull = new ZMQSocket($context, ZMQ::SOCKET_PULL);
-		$pull->bind("tcp://*:5557");		
+		$pull->bind(SocketConstants::PULLFROMCHILD_ENDPOINT);		
 				
 		$reply = $this->di['reply'];
 		
@@ -172,23 +189,12 @@ class ParentSender
 			if ($events > 0) {
 
 				foreach ($readable as $socket) {
-					
-					if ($socket === $reply) {
-						
-						$request = $socket->recv();
-						
-						sscanf($request, "%s %s %s", $type, $data, $code);
-						
-						$registry->handleEvent(new Event($type, $data, $code));
-					}
-					else if($socket === $pull) {
-						
-						$request = $socket->recv();
-						
-						sscanf($request, "%s %s %s", $type, $data, $code);
-						
-						$registry->handleEvent(new Event($type, $data, $code));
-					}
+
+					$request = $socket->recv();
+					echo 'Parent:: Recibi esto -> ' . $request . PHP_EOL;
+					$log->log('Parent:: Recibi esto -> ' . $request);
+					sscanf($request, "%s %s %s", $type, $data, $code);
+					$registry->handleEvent(new Event($type, $data, $code));
 				}
 			}
 			else {
