@@ -862,7 +862,7 @@ class MailController extends ControllerBase
 	
 	public function stopAction($idMail)
 	{
-		$commObj = new Communication();
+		$commObj = new Communication($this->logger);
 		$commObj->sendPausedToParent($idMail);
 		
 		$mail = Mail::findFirstByIdMail($idMail);
@@ -880,7 +880,7 @@ class MailController extends ControllerBase
 	
 	public function playAction($idMail)
 	{
-		$commObj = new Communication();
+		$commObj = new Communication($this->logger);
 		$commObj->sendPlayToParent($idMail);
 		
 		$mail = Mail::findFirstByIdMail($idMail);
@@ -903,7 +903,7 @@ class MailController extends ControllerBase
 		$mail = Mail::findFirstByIdMail($idMail);
 		
 		if($mail->status == 'Sending') {
-			$commObj = new Communication();
+			$commObj = new Communication($this->logger);
 			$commObj->sendCancelToParent($idMail);
 		}
 		else {

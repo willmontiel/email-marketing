@@ -90,16 +90,26 @@ class ClientHandler extends Handler
 	public function cancelTaskInProcess($data)
 	{
 		$pid = $this->pool->findPidFromTask($data);
-		$this->tasks->sendCommandToProcess('Cancel', $pid);
+		if($pid === NULL) {
+			$this->tasks->removeSaveTask($data);
+		}
+		else {
+			$this->tasks->sendCommandToProcess('Cancel', $pid);
+		}
 		
 	}
 	
 	public function stopTaskInProcess($data)
 	{
 		$pid = $this->pool->findPidFromTask($data);
-		$this->tasks->sendCommandToProcess('Stop', $pid);
+		if($pid === NULL) {
+			$this->tasks->removeSaveTask($data);
+		}
+		else {
+			$this->tasks->sendCommandToProcess('Stop', $pid);
+		}
 	}
-	
+
 	public function responseToClient($content)
 	{
 		$this->reply->send($content);

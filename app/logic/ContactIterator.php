@@ -19,6 +19,10 @@ class ContactIterator implements Iterator
 	
 	public function extractContactsFromDB($start = 0)
 	{
+		if(!$this->mail) {
+			Phalcon\DI::getDefault()->get('logger')->log('Contact Iterator Error: ' . $start);
+			throw new \InvalidArgumentException('Error while processing contacts');
+		}
 		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . ' AND idContact > ' . $start . ' AND status = "scheduled" ORDER BY idContact LIMIT ' . self::ROWS_PER_FETCH;
 		if (!$this->fields) {
 			$sql = 'SELECT c.idContact, c.name, c.lastName, e.idEmail, e.email

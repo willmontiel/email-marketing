@@ -25,7 +25,7 @@ class ChildCommunication extends BaseWrapper
 			'bind' => array(1 => $idMail)
 		));
 		
-		echo 'Empecé el proceso con MTA!';
+		echo 'Empecé el proceso con MTA!' .PHP_EOL;
 		if ($mail) {
 			
 			$account = Account::findFirstByIdAccount($mail->idAccount);
@@ -107,7 +107,7 @@ class ChildCommunication extends BaseWrapper
 					$recipients = $swift->send($message, $failures);
 
 					if ($recipients){
-						echo "Message {$i} successfully sent! \n";
+//						echo "Message {$i} successfully sent! \n";
 						$log->log("Message successfully sent! with idContact: " . $contact['contact']['idContact']);
 						$sentContacts[] = $contact['contact']['idContact'];
 						$lastContact = end(end($contactIterator));
@@ -117,7 +117,7 @@ class ChildCommunication extends BaseWrapper
 							$mm = Phalcon\DI::getDefault()->get('modelsManager');
 							$mm->executeQuery($phql);
 							if ($mm) {
-								echo "state's the first 20 changed successfully! \n";
+//								echo "state's the first 20 changed successfully! \n";
 								unset($sentContacts);
 								$sentContacts = array();
 							}
@@ -175,7 +175,13 @@ class ChildCommunication extends BaseWrapper
 				}
 			}
 			catch (InvalidArgumentException $e) {
-
+				$log->log('Exception: [' . $e . ']');
+				$mail->status = 'Cancelled';
+				$mail->lastSent = NULL;
+				$mail->finishedon = time();
+				if(!$mail->save()) {
+					$log->log('No se pudo actualizar el estado del MAIL');
+				}
 			}
 		}
 		

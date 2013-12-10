@@ -113,20 +113,6 @@ $di->set('modelsManager', function(){
 	return new Phalcon\Mvc\Model\Manager();
 });
 
-$di->set('publisher', function () {
-	$context = new ZMQContext(1);
-	$publisher = new ZMQSocket($context, ZMQ::SOCKET_PUB);
-	$publisher->bind("tcp://*:5558");
-	return 	$publisher;
-});
-
-$di->set('reply', function () {
-	$context = new ZMQContext(1);
-	$reply = new ZMQSocket($context, ZMQ::SOCKET_REP);
-	$reply->bind("tcp://*:5556");
-	return 	$reply;
-});
-
 function print_dbase_profile()
 {
 	$dblogger = new \Phalcon\Logger\Adapter\File("../../logs/bgdbdebug.log");

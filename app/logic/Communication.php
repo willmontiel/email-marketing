@@ -3,11 +3,14 @@ class Communication
 {
 	protected $requester;
 	
-	public function __construct() {
+	public function __construct($log = null) {
 		$context = new ZMQContext();
-		
+
 		$this->requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-		$this->requester->connect("tcp://localhost:5556");
+		if ($log) {
+			$log->log("Connecting to: [" . SocketConstants::MAILREQUESTS_ENDPOINT_PEER . "]");
+		}
+		$this->requester->connect(SocketConstants::MAILREQUESTS_ENDPOINT_PEER);
 	}
 	
 	public function getStatus()

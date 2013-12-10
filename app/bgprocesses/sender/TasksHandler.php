@@ -102,4 +102,13 @@ class TasksHandler extends Handler
 			return FALSE;
 		}
 	}
+	
+	public function removeSaveTask($task)
+	{
+		foreach ($this->readyTasks as $k => $t) {
+			if($t == $task) {
+				unset($this->readyTasks[$k]);
+			}
+		}
+	}
 }
