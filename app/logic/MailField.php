@@ -62,7 +62,7 @@ class MailField
 		if ($result) {
 			foreach ($result as $r) {
 				foreach ($customfieldsFound as $c) {
-					if (strtoupper($r->name) == $c) {
+					if (strtoupper($r->name) == str_replace('_', ' ', $c)) {
 						$ids[] = $r->idCustomField;
 					}
 				}

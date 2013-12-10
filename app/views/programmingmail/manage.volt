@@ -33,7 +33,7 @@
 		{{ flashSession.output() }}
 		</div>
 		<div class="span5 text-right">
-			<a href="{{url('index')}}" class="btn btn-blue"><i class="icon-dashboard"></i> Devuelta al dashboard</a>
+			<a href="{{url('index')}}" class="btn btn-blue"><i class="icon-dashboard"></i> Volver a la página principal</a>
 		</div>
 	</div>
 	<br />
@@ -69,6 +69,8 @@
 										{% for value in programming_options(item) %}
 											{% if value.url == 'null'%}	
 												&nbsp;<i class="icon-minus-sign"></i> No hay acciones disponibles&nbsp;
+											{% elseif value.text == 'Editar'%}
+												
 											{% else %}
 												<li><a href="{{ url(value.url) }}manage/{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
 											{% endif %}

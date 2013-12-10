@@ -52,7 +52,7 @@
 		{{ flashSession.output() }}
 		</div>
 		<div class="span5 text-right">
-			<a href="{{url('index')}}" class="btn btn-blue"><i class="icon-dashboard"></i> Devuelta al dashboard</a>
+			<a href="{{url('index')}}" class="btn btn-blue"><i class="icon-dashboard"></i> Volver a la página principal</a>
 		</div>
 	</div>
 	<br />
