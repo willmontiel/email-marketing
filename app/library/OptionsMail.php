@@ -10,7 +10,6 @@ class OptionsMail
 				$array[] = self::getObject("Editar");
 				break;
 			case 'Scheduled':
-				$array[] = self::getObject("Editar");
 				$array[] = self::getObject("Cancelar");
 				break;
 			case 'Sending':

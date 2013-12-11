@@ -65,7 +65,7 @@
 									<div class="news-text">
 										{{item.status}} <br /> 
 										Creado el {{date('Y-m-d', item.createdon)}} 
-										{%if item.status != 'Draft' or item.status != 'Scheduled'%}
+										{%if item.status != 'Draft' and item.status != 'Scheduled'%}
 										- Enviado el {{date('Y-m-d', item.startedon)}}
 										{%endif%}
 									</div>
@@ -98,6 +98,9 @@
 								<div class="btn-group">
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
+									{%if item.status == 'Scheduled'%}
+										<li><a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{ url('mail/stop/') }}{{item.idMail}}"><i class="icon-pencil"></i>Pausar </a></li>
+									{%endif%}
 									{% for value in mail_options(item) %}
 										<li><a href="{{ url(value.url) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
 									{% endfor %}
@@ -168,6 +171,25 @@
 	</div>
 </div>
 
+<div id="modal-simple-edit" class="modal hide fade" aria-hidden="false">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h6 id="modal-tablesLabel">Pausar Correo Programado</h6>
+	</div>
+	<div class="modal-body">
+		<p>
+			¿Esta seguro que desea pausar este correo?
+		</p>
+		<p>
+			Recuerde que si pausa este correo debera programarlo de nuevo.
+		</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+	  <a href="" id="editScheduledMail" class="btn btn-blue" >Pausar</a>
+	</div>
+</div>
+
 <div id="modal-simple-template" class="modal hide fade" aria-hidden="false">
 	<div class="modal-header">
 	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -198,6 +220,13 @@
 		$('.ShowDialogTemplate').on('click', function() {
 			var myURL = $(this).data('id');
 			$("#temapletMail").attr('action', myURL );
+		});
+	});
+	
+	$(function() {
+		$('.ShowDialogEditScheduled').on('click', function() {
+			var myURL = $(this).data('id');
+			$("#editScheduledMail").attr('href', myURL );
 		});
 	});
 </script>

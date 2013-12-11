@@ -8,7 +8,7 @@ class ProgrammingOptions
 		switch ($mail->status) {
 			case 'Scheduled':
 				$array[] = self::getObject("Cancelar");
-				$array[] = self::getObject("Editar");
+				$array[] = self::getObject("Pausar");
 				break;
 			case 'Sending':
 				$array[] = self::getObject("Detener");
@@ -45,9 +45,9 @@ class ProgrammingOptions
 				$object->url = "programmingmail/cancel/";
 				$object->icon = "icon-signin";
 				break;
-			case 'Editar':
-				$object->text = "Editar";
-				$object->url = "mail/setup/";
+			case 'Pausar':
+				$object->text = "Pausar";
+				$object->url = "mail/stop/";
 				$object->icon = "icon-signin";
 				break;
 			default:

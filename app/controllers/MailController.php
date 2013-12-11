@@ -127,23 +127,7 @@ class MailController extends ControllerBase
 		));
 		
 		if ($mailExist) {
-			$form = new MailForm($mailExist);
-			
-			if($mailExist->status == 'Scheduled') {
-				$scheduled = Mailschedule::findFirstByIdMail($idMail);
-				if(!$scheduled->delete()) {
-					foreach ($scheduled->getMessages() as $msg) {
-						$this->flashSession->error($msg);
-					}
-				}
-				$mailExist->status = "Draft";
-				if(!$mailExist->save()) {
-					foreach ($mailExist->getMessages() as $msg) {
-						$this->flashSession->error($msg);
-					}
-				}
-			}
-			
+			$form = new MailForm($mailExist);			
 			$this->view->setVar('mail', $mailExist);
 		}
 		else {
@@ -875,7 +859,32 @@ class MailController extends ControllerBase
 	public function stopAction($idMail)
 	{
 		$commObj = new Communication($this->logger);
-		$commObj->sendPausedToParent($idMail);
+		
+		$mail = Mail::findFirst(array(
+			"conditions" => "idMail = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
+		));
+		
+		if ($mail && $mail->status == 'Scheduled') {
+			$scheduled = Mailschedule::findFirstByIdMail($idMail);
+			if(!$scheduled->delete()) {
+				foreach ($scheduled->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+			}
+			$mail->status = "Draft";
+			if(!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+			}
+			
+			$commObj->sendSchedulingToParent($idMail);
+		}
+		else {
+			$commObj->sendPausedToParent($idMail);
+		}
 		
 		return $this->response->redirect("mail/index");
 	}

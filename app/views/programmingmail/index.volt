@@ -71,7 +71,7 @@
 										{% for value in programming_options(item) %}
 											{% if value.url == 'null'%}	
 												&nbsp;<i class="icon-minus-sign"></i> No hay acciones disponibles&nbsp;
-											{% elseif value.text == 'Editar'%}
+											{% elseif value.text == 'Pausar'%}
 												<li><a href="{{ url(value.url) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
 											{% else %}
 												<li><a href="{{ url(value.url) }}index/{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
