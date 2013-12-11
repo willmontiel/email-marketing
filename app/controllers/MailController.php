@@ -46,7 +46,7 @@ class MailController extends ControllerBase
 			$mailClone->replyTo = $mail->replyTo;
 			$mailClone->type = $mail->type;
 			$mailClone->status = "Draft";
-			$mailClone->wizardOption = $mail->wizardOption;
+			$mailClone->wizardOption = "source";
 			$mailClone->createdon = time();
 			
 			if (!$mailClone->save()) {
