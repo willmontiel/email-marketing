@@ -41,10 +41,10 @@ SocialBlock.prototype.createSocialNetHtml = function() {
 	
 	if(this.socialType == 'share') {
 		
-		text = $("<div class=\"soc_net_share button_" + this.socialName + " pull-center\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" alt=\"64x64\" /></div>");
+		text = $("<div class=\"soc_net_share button_" + this.socialName + " pull-center\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + ".png\" alt=\"64x64\" /></div>");
 	}
 	else {
-		text = $("<div class=\"soc_net_follow button_" + this.socialName + " pull-center\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" alt=\"64x64\" /></div><div class=\"link_text\">" + this.linktext + "</div>");
+		text = $("<div class=\"soc_net_follow button_" + this.socialName + " pull-center\"><img data-toggle=\"modal\" href=\"#socialnetwork\" class=\"media-object\" src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + ".png\" alt=\"64x64\" /></div><div class=\"link_text\">" + this.linktext + "</div>");
 	}	
 	
 	this.htmlData = text;
@@ -90,7 +90,7 @@ SocialBlock.prototype.showSocialFollow = function() {
 		
 	var htmlText = $("<div class=\"socialComponent clearfix\">\n\
 						<div class=\"imageSocial\">\n\
-							<img src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" /><label>" + this.socialName.charAt(0).toUpperCase() + this.socialName.slice(1) + "</label>\n\
+							<img src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + ".png\" /><label>" + this.socialName.charAt(0).toUpperCase() + this.socialName.slice(1) + "</label>\n\
 						</div>\n\
 						<div class=\"infoSocial\">\n\
 							<div class=\"titleSocial\"><label>Texto del Link</label><input class=\"titlelink\" type=\"text\" value=\"" + this.linktext + "\"></div>\n\
@@ -136,7 +136,7 @@ SocialBlock.prototype.showSocialShare = function() {
 	
 	var htmlText = $("<div class=\"socialComponent clearfix\">\n\
 						<div class=\"imageSocial\">\n\
-							<img src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + "\" />\n\
+							<img src=\"" + config.imagesUrl + "/" + this.imageName + "_" + this.socialType + ".png\" />\n\
 						</div>\n\
 						<div class=\"infoSocial\">\n\
 							<div class=\"titleSocial\">" + this.linktext + "</div>\n\

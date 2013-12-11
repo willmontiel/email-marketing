@@ -18,11 +18,6 @@
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	{{ stylesheet_link('javascripts/colorpicker/css/colorpicker.css') }}
 	{{ javascript_include('js/gallery.js') }}
-	{{ javascript_include('js/block.js') }}
-	{{ javascript_include('js/social_block.js') }}
-	{{ javascript_include('js/dropzone.js') }}
-	{{ javascript_include('js/layout.js') }}
-	{{ javascript_include('js/editor.js') }}
 
 <script>
 		var config = {imagesUrl: "{{url('images')}}", templateUrl : "{{url('template/create')}}"};
@@ -33,7 +28,7 @@
 			{%endfor%}
 		];
 		
-		
+
 		function catchEditorData() {
 			editor.serializeDZ();
 			var editorToSend = JSON.stringify(editor);
@@ -47,6 +42,12 @@
 		}
 
 	</script>
+	
+	{{ javascript_include('js/block.js') }}
+	{{ javascript_include('js/social_block.js') }}
+	{{ javascript_include('js/dropzone.js') }}
+	{{ javascript_include('js/layout.js') }}
+	{{ javascript_include('js/editor.js') }}
 
 {% endblock %}
 {% block content %}

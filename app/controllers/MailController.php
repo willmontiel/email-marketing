@@ -128,6 +128,22 @@ class MailController extends ControllerBase
 		
 		if ($mailExist) {
 			$form = new MailForm($mailExist);
+			
+			if($mailExist->status == 'Scheduled') {
+				$scheduled = Mailschedule::findFirstByIdMail($idMail);
+				if(!$scheduled->delete()) {
+					foreach ($scheduled->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
+				$mailExist->status = "Draft";
+				if(!$mailExist->save()) {
+					foreach ($mailExist->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
+			}
+			
 			$this->view->setVar('mail', $mailExist);
 		}
 		else {
