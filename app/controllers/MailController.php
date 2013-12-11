@@ -861,16 +861,6 @@ class MailController extends ControllerBase
 		$commObj = new Communication($this->logger);
 		$commObj->sendPausedToParent($idMail);
 		
-		$mail = Mail::findFirstByIdMail($idMail);
-		
-		$mail->status = 'Paused';
-		
-		if(!$mail->save()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-			}
-		}
-		
 		return $this->response->redirect("mail/index");
 	}
 	
@@ -879,44 +869,13 @@ class MailController extends ControllerBase
 		$commObj = new Communication($this->logger);
 		$commObj->sendPlayToParent($idMail);
 		
-		$mail = Mail::findFirstByIdMail($idMail);
-		
-		$mail->status = 'Sending';
-		
-		if(!$mail->save()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-			}
-		}
-		
 		return $this->response->redirect("mail/index");
 	}
 	
 	public function cancelAction($idMail)
 	{
-		$log = $this->logger;
-		
-		$mail = Mail::findFirstByIdMail($idMail);
-		
-		if($mail->status == 'Sending') {
-			$commObj = new Communication($this->logger);
-			$commObj->sendCancelToParent($idMail);
-		}
-		else {
-			$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $idMail;
-			$this->modelsManager->executeQuery($phql);
-			if (!$this->modelsManager) {
-				$log->log("Error updating MxC");
-			}
-		}
-		
-		$mail->status = 'Cancelled';
-		
-		if(!$mail->save()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-			}
-		}
+		$commObj = new Communication($this->logger);
+		$commObj->sendCancelToParent($idMail);
 		
 		return $this->response->redirect("mail/index");
 	}

@@ -61,25 +61,87 @@ class Communication
 	
 	public function sendPlayToParent($idMail)
 	{
-		$this->requester->send(sprintf("%s $idMail", 'Play-Task'));
-		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+		$mail = Mail::findFirstByIdMail($idMail);
+		
+		if(!$this->verifySentStatus($mail)) {
+
+			$this->requester->send(sprintf("%s $idMail", 'Play-Task'));
+			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+
+			$mail->status = 'Sending';
+
+			if(!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+			}
+		}
 	}
 	
 	public function sendPausedToParent($idMail)
-	{
-		$this->requester->send(sprintf("%s $idMail", 'Stop-Process'));
-		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+	{		
+		$mail = Mail::findFirstByIdMail($idMail);
+
+		if(!$this->verifySentStatus($mail)) {
+			
+			$this->requester->send(sprintf("%s $idMail", 'Stop-Process'));
+			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+		}
+		$mail->status = 'Paused';
+
+		if(!$mail->save()) {
+			foreach ($mail->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+			}
+		}
 	}
 	
 	public function sendCancelToParent($idMail)
 	{
-		$this->requester->send(sprintf("%s $idMail", 'Cancel-Process'));
-		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+		$mail = Mail::findFirstByIdMail($idMail);
+		
+		if(!$this->verifySentStatus($mail)) {
+			if($mail->status == 'Sending') {
+				$this->requester->send(sprintf("%s $idMail", 'Cancel-Process'));
+				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+			}
+			else if($mail->status == 'Scheduled') {
+				$scheduled = Mailschedule::findFirstByIdMail($idMail);
+				$scheduled->delete();
+				$this->requester->send(sprintf("%s $idMail", 'Scheduled-Task'));
+				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+			}
+			else {
+				$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $idMail;
+				$mm = Phalcon\DI::getDefault()->get('modelsManager');
+				$mm->executeQuery($phql);
+				if (!$mm) {
+					$log->log("Error updating MxC to Cancel");
+				}
+			}
+
+			$mail->status = 'Cancelled';
+
+			if(!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+			}
+		}
 	}
 
 	public function sendSchedulingToParent($idMail)
 	{
 		$this->requester->send(sprintf("%s $idMail", 'Scheduled-Task'));
 		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+	}
+	
+	protected function verifySentStatus(Mail $mail)
+	{
+		if($mail->status == 'Sent') {
+			return TRUE;
+		}
+		
+		return FALSE;
 	}
 }
