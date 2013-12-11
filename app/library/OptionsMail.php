@@ -43,7 +43,7 @@ class OptionsMail
 				break;
 			case 'Detener':
 				$object->text = "Detener";
-				$object->url = "mail/stop/";
+				$object->url = "mail/stop/index/";
 				$object->icon = "icon-signin";
 				break;
 			case 'Cancelar':
