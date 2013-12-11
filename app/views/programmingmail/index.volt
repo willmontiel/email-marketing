@@ -72,9 +72,9 @@
 											{% if value.url == 'null'%}	
 												&nbsp;<i class="icon-minus-sign"></i> No hay acciones disponibles&nbsp;
 											{% elseif value.text == 'Pausar'%}
-												<li><a href="{{ url(value.url) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
+												<li><a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{url('mail/stop')}}/programming/{{item.idMail}}"><i class="{{value.icon}}"></i> Pausar</a></li>
 											{% else %}
-												<li><a href="{{ url(value.url) }}index/{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
+												<li><a href="{{url(value.url)}}index/{{item.idMail}}"><i class="{{value.icon}}"></i> {{value.text}}</a></li>
 											{% endif %}
 										{% endfor %}
 										</ul>
@@ -117,4 +117,31 @@
 			</div>
 		 </div>
 	</div>
+	<div id="modal-simple-edit" class="modal hide fade" aria-hidden="false">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		  <h6 id="modal-tablesLabel">Pausar Correo Programado</h6>
+		</div>
+		<div class="modal-body">
+			<p>
+				¿Esta seguro que desea pausar este correo?
+			</p>
+			<p>
+				Recuerde que si pausa este correo debera programarlo de nuevo.
+			</p>
+		</div>
+		<div class="modal-footer">
+		  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+		  <a href="" id="editScheduledMail" class="btn btn-blue" >Pausar</a>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(function() {
+			$('.ShowDialogEditScheduled').click(function() {
+				var myURL = $(this).attr('data-id');
+				console.log(myURL);
+				$("#editScheduledMail").attr('href', myURL );
+			});
+		});
+	</script>
 {% endblock %}

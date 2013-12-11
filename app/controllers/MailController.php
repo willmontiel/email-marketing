@@ -856,7 +856,7 @@ class MailController extends ControllerBase
 		return $this->response->redirect("mail/index");
 	}
 	
-	public function stopAction($idMail)
+	public function stopAction($direction, $idMail)
 	{
 		$commObj = new Communication($this->logger);
 		
@@ -886,7 +886,18 @@ class MailController extends ControllerBase
 			$commObj->sendPausedToParent($idMail);
 		}
 		
-		return $this->response->redirect("mail/index");
+		switch ($direction) {
+			case 'programming':
+				$route = 'programmingmail/index';
+				break;
+			case 'manage':
+				$route = 'programmingmail/manage';
+				break;
+			case 'index':
+				$route = 'mail/index';
+				break;
+		}
+		return $this->response->redirect($route);
 	}
 	
 	public function playAction($idMail)

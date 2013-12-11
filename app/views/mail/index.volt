@@ -99,7 +99,7 @@
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
 									{%if item.status == 'Scheduled'%}
-										<li><a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{ url('mail/stop/') }}{{item.idMail}}"><i class="icon-pencil"></i>Pausar </a></li>
+										<li><a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}"><i class="icon-pause"></i>Pausar </a></li>
 									{%endif%}
 									{% for value in mail_options(item) %}
 										<li><a href="{{ url(value.url) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
