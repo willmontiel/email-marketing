@@ -76,6 +76,14 @@ class ChildCommunication extends BaseWrapper
 				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
 				$swift = Swift_Mailer::newInstance($transport);
 				
+				if($mail->status == 'Scheduled') {
+					$mail->startedon = time();
+				}
+				$mail->status = 'Sending';
+				if(!$mail->save()) {
+					$log->log('No se pudo actualizar el estado del MAIL');
+				}				
+				
 				$i = 1;
 				$sentContacts = array();
 				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');

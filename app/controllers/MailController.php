@@ -268,10 +268,6 @@ class MailController extends ControllerBase
 						$this->flashSession->error($msg);
 					}
 				}
-				else {
-					//$this->routeRequest('editor', $direction, $idMail);
-					return $this->response->redirect("mail/plaintext/" .$idMail);
-				}
 			}		
 		}
 		
