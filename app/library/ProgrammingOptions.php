@@ -33,22 +33,22 @@ class ProgrammingOptions
 			case 'Reanudar':
 				$object->text = "Reanudar";
 				$object->url = "programmingmail/play/";
-				$object->icon = "icon-signin";
+				$object->icon = "icon-play";
 				break;
 			case 'Detener':
 				$object->text = "Detener";
 				$object->url = "programmingmail/stop/";
-				$object->icon = "icon-signin";
+				$object->icon = "icon-pause";
 				break;
 			case 'Cancelar':
 				$object->text = "Cancelar";
 				$object->url = "programmingmail/cancel/";
-				$object->icon = "icon-signin";
+				$object->icon = "icon-remove";
 				break;
 			case 'Pausar':
 				$object->text = "Pausar";
 				$object->url = "mail/stop/";
-				$object->icon = "icon-signin";
+				$object->icon = "icon-pause";
 				break;
 			default:
 				$object->text = "No hay acciones disponibles";
