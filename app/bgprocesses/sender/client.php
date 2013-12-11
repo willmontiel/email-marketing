@@ -9,9 +9,25 @@
 //	$requester->send(sprintf("%s", 'Show-Status'));
 //	$request = $requester->recv();
 //	printf($request);
-	
-	$requester->send(sprintf("%s 52", 'Play-Task'));
-	$request = $requester->recv();
+
+	$requester->send(sprintf("%s 40", 'Play-Task'));
+		$request = $requester->recv();
+	$requester->send(sprintf("%s 41", 'Play-Task'));
+		$request = $requester->recv();
+	$requester->send(sprintf("%s 42", 'Play-Task'));
+		$request = $requester->recv();
+	$requester->send(sprintf("%s 43", 'Play-Task'));
+		$request = $requester->recv();
+	$requester->send(sprintf("%s 44", 'Play-Task'));
+		$request = $requester->recv();
+	$requester->send(sprintf("%s 47", 'Play-Task'));
+		$request = $requester->recv();
+	$requester->send(sprintf("%s 55", 'Play-Task'));
+		$request = $requester->recv();
+	$requester->send(sprintf("%s 56", 'Play-Task'));
+		$request = $requester->recv();
+	$requester->send(sprintf("%s 58", 'Play-Task'));
+		$request = $requester->recv();
 	
 //	$requester->send(sprintf("%s 2", 'New-Task'));
 //	$request = $requester->recv();

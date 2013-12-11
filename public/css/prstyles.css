@@ -166,9 +166,13 @@ a.inactive {
 	list-style-type: none;
 }
 
-.btnoptions .box {
+.optionsEditor {
 	height: 45px;
 	padding-top: 6px;
+}
+
+.BeforeFromEditor {
+	margin-right: 15px;
 }
 
 .NextFromEditor {
@@ -176,11 +180,11 @@ a.inactive {
 }
 
 .VisualizeEditor {
-	margin-right: 25px;
+	margin-left: 25px;
 }
 
 .SaveTemplate {
-	margin-right: 65px;
+	margin-left: 15px;
 }
 
 .relief {

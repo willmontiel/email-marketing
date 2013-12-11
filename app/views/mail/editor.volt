@@ -11,10 +11,9 @@
 	};
 	var objMail = {{objMail}};
 	
-	function sendData() {
+	function sendData(value) {
 		
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
-		console.log(editor)
 		$.ajax(
 			{
 			url: "{{url('mail/editor')}}/{{mail.idMail}}",
@@ -24,9 +23,15 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function(){
-				$(location).attr('href', "{{url('mail/plaintext')}}/{{mail.idMail}}"); 
+				if(value == 'Next') {
+					$(location).attr('href', "{{url('mail/plaintext')}}/{{mail.idMail}}"); 
+				}
+				else {
+					$(location).attr('href', "{{url('mail/setup')}}/{{mail.idMail}}"); 
+				}
 			}
 		});
+		
 	}
 	
 	function verHTML() {
@@ -68,15 +73,18 @@
 	<br />
 	<div class="row-fluid">
 		<div class="btnoptions">
-			<div class="box span12">
-				<div class="span1 pull-right NextFromEditor">
-					<input onclick="sendData()" type="button" value="Siguiente" class="btn btn-blue">
+			<div class="box span12 optionsEditor">
+				<div class="pull-right NextFromEditor">
+					<button onclick="sendData('Next')" type="button" value="Siguiente" class="btn btn-blue">Siguiente <i class="icon-circle-arrow-right"></i></button>
 				</div>
-				<div class="span1 pull-right VisualizeEditor">
-					<input onclick="verHTML()" type="button" value="Visualizar" class="btn btn-black">
+				<div class="pull-right BeforeFromEditor">
+					<button onclick="sendData('Previous')" type="button" value="Anterior" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</button>
 				</div>
-				<div class="span1 pull-right SaveTemplate">
-					<input onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">
+				<div class="pull-left VisualizeEditor">
+					<button onclick="verHTML()" type="button" value="Visualizar" class="btn btn-default">Visualizar  <i class="icon-eye-open"></i></button>
+				</div>
+				<div class="pull-left SaveTemplate">
+					<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">Guardar como Plantilla <i class="icon-picture"></i></button>
 				</div>
 			</div>
 		</div>
