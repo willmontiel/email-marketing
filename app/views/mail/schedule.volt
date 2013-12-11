@@ -84,7 +84,7 @@
 							{% else %}
 								{% set display = 'display: block;'%}
 								{% set checked = 'checked' %}
-								{% set value = date('d/m/y G:i', mail.scheduleDate) %}
+								{% set value = date('d/m/Y G:i', mail.scheduleDate) %}
 							{% endif %}
 							<input type="radio" name="schedule" class="icheck" value="rightNow" id="rightNow">
 							<label for="rightNow">Enviar el correo de inmediato: </label><br />
