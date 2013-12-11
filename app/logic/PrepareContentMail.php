@@ -23,7 +23,10 @@ class PrepareContentMail
 		));
 		
 		if ($mailContent) {
-			if ($mail->type == 'Editor') {
+			if (trim($mailContent->content) === '') {
+				throw new \InvalidArgumentException("Error mail's content is empty");
+			}
+			else if ($mail->type == 'Editor') {
 //				$this->log->log("Hay editor");
 				$htmlObj = new HtmlObj();
 //				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
