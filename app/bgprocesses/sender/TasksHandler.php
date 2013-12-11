@@ -75,6 +75,10 @@ class TasksHandler extends Handler
 		foreach ($this->scheduledTasks as $task) {
 			if($task->scheduleDate <= time()) {
 				$this->saveReadyTask($task->idMail);
+				$mail = Mail::findFirstByIdMail($task->idMail);
+				$mail->status = 'Sending';
+				$mail->startedon = time();
+				$mail->save();
 				$task->delete();
 			}
 		}

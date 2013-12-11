@@ -153,18 +153,23 @@ class MailController extends ControllerBase
 			$mail->wizardOption = $wizardOption;
 			
             if ($form->isValid() && $mail->save()) {
-				switch ($mail->type) {
-					case "Html":
-						return $this->response->redirect("mail/html/" .$mail->idMail);
-						break;
-					
-					case "Editor":
-						return $this->response->redirect("mail/editor/" .$mail->idMail);
-						break;
-					
-					default:
-						return $this->response->redirect("mail/source/" .$mail->idMail);
-						break;
+				if(!$mail->type) {
+					return $this->response->redirect("mail/source/" .$mail->idMail);
+				}
+				else {
+					switch ($mail->type) {
+						case "Html":
+							return $this->response->redirect("mail/html/" .$mail->idMail);
+							break;
+
+						case "Editor":
+							return $this->response->redirect("mail/editor/" .$mail->idMail);
+							break;
+
+						default:
+							return $this->response->redirect("mail/source/" .$mail->idMail);
+							break;
+					}
 				}
 			}
 			else {
@@ -867,19 +872,7 @@ class MailController extends ControllerBase
 		));
 		
 		if ($mail && $mail->status == 'Scheduled') {
-			$scheduled = Mailschedule::findFirstByIdMail($idMail);
-			if(!$scheduled->delete()) {
-				foreach ($scheduled->getMessages() as $msg) {
-					$this->flashSession->error($msg);
-				}
-			}
-			$mail->status = "Draft";
-			if(!$mail->save()) {
-				foreach ($mail->getMessages() as $msg) {
-					$this->flashSession->error($msg);
-				}
-			}
-			
+			$this->stopScheduledTask($mail);
 			$commObj->sendSchedulingToParent($idMail);
 		}
 		else {
@@ -903,6 +896,22 @@ class MailController extends ControllerBase
 		$commObj->sendCancelToParent($idMail);
 		
 		return $this->response->redirect("mail/index");
+	}
+	
+	protected function stopScheduledTask(Mail $mail)
+	{
+		$scheduled = Mailschedule::findFirstByIdMail($mail->idMail);
+		if(!$scheduled->delete()) {
+			foreach ($scheduled->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+			}
+		}
+		$mail->status = "Draft";
+		if(!$mail->save()) {
+			foreach ($mail->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+			}
+		}
 	}
 
 	protected function validateProcess($idMail)

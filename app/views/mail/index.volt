@@ -66,7 +66,7 @@
 										{{item.status}} <br /> 
 										Creado el {{date('Y-m-d', item.createdon)}} 
 										{%if item.status != 'Draft' and item.status != 'Scheduled'%}
-										- Enviado el {{date('Y-m-d', item.startedon)}}
+										- Enviado el {{date('Y-m-d, g:i a', item.startedon)}}
 										{%endif%}
 									</div>
 								</div>
