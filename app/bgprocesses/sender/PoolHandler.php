@@ -149,6 +149,8 @@ class PoolHandler extends Handler
 
 	public function deadChildren()
 	{
+		$log = $this->di['logger'];
+		
 		$pid = pcntl_waitpid(-1, $status, WNOHANG);
 
 		if ($pid > 0) {
@@ -156,6 +158,7 @@ class PoolHandler extends Handler
 			foreach ($this->children as $key => $child) {			
 				if($child->getPid() == $pid) {
 					unset($this->children[$key]);
+					$this->newChild();
 				}
 			}
 
@@ -178,6 +181,7 @@ class PoolHandler extends Handler
 			}
 		
 			echo "Proceso Hijo {$pid} Termino con Estado {$status}\n";
+			$log->log('Proceso Hijo ['. $pid . '] Termino con Estado [' . $status . ']' . PHP_EOL);
 		}
 	}
 	

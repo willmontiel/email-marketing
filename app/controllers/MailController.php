@@ -722,6 +722,9 @@ class MailController extends ControllerBase
 		));
 		
 		if ($mail) {
+			if($mail->scheduleDate < time()){
+				$mail->scheduleDate = time() + 60;
+			}
 			$this->view->setVar('mail', $mail);
 			if ($this->request->isPost()) {
 				$direction = $this->request->getPost('direction');

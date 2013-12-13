@@ -65,7 +65,7 @@
 									<div class="news-text">
 										{{item.status}} <br /> 
 										Creado el {{date('Y-m-d', item.createdon)}} 
-										{%if item.status != 'Draft' and item.status != 'Scheduled'%}
+										{%if item.status == 'Sent'%}
 										- Enviado el {{date('Y-m-d, g:i a', item.startedon)}}
 										{%endif%}
 									</div>
