@@ -20,6 +20,10 @@ class TestController extends ControllerBase
 			$this->idContactlistNew = $idContactlistNew;
 	}
 
+	public function aperturasAction()
+	{
+		
+	}
 	public function indexAction()
 	{
 

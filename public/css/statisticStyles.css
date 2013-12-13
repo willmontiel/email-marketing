@@ -16,6 +16,17 @@
 	color: red;
 }
 
+.green-color {
+	color: #74b35d;
+}
+
+.blue-color {
+	color: #60a1ca;
+}
+
+.sea-blue-color {
+	color: #3162C5;
+}
 td h3 {
 	text-align: center;
 }
@@ -34,6 +45,12 @@ td h3 {
 	background-image: -webkit-linear-gradient(top,#fa3939,red);
 }
 
+.news .avatar.sea-blue-color {
+	background: #3162C5;
+	border: 1px solid #3162C5;
+	background-image: -webkit-linear-gradient(top,#3162F9,#3162C5);
+}
+
 .news .avatar.darkred {
 	background: #953B39;
 	border: 1px solid #953B39;
@@ -44,4 +61,9 @@ td h3 {
 	background: #bdb5b8;
 	border: 1px solid #bdb5b8;
 	background-image: -webkit-linear-gradient(top,#cfc8cb,#bdb5b8);
+}
+
+.time-graph {
+	width: 500px;
+	height: 250px;
 }
