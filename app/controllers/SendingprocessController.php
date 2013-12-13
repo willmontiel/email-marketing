@@ -22,6 +22,8 @@ class SendingprocessController extends ControllerBase
 		
 		$communication->sendPausedToParent($idTask);
 		
+		sleep(1);
+		
 		return $this->response->redirect('sendingprocess');
 	}
 }	
