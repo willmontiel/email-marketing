@@ -87,7 +87,7 @@
 				<div class="box-header">
 					<ul class="nav nav-tabs nav-tabs-left">
 						{{'{{#linkTo "apertures" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}
-						
+
 					</ul>
 				</div>
 				<div class="box-content padded">
