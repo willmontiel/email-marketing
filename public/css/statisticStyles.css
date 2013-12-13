@@ -1,0 +1,47 @@
+.clicksColor {
+	color: #8cc079;
+}
+.totalColor {
+	color: #81babd;
+}
+.darkturquoise {
+	color: #08C;
+}
+
+.unsubscribedColor {
+	color: #7fb3d4;
+}
+
+.red {
+	color: red;
+}
+
+td h3 {
+	text-align: center;
+}
+
+.titleMail {
+	text-align: center;
+}
+
+.darkred {
+	color: #953B39;
+}
+
+.news .avatar.red {
+	background: red;
+	border: 1px solid red;
+	background-image: -webkit-linear-gradient(top,#fa3939,red);
+}
+
+.news .avatar.darkred {
+	background: #953B39;
+	border: 1px solid #953B39;
+	background-image: -webkit-linear-gradient(top,#a35856,#953B39);
+}
+
+.news .avatar.gray {
+	background: #bdb5b8;
+	border: 1px solid #bdb5b8;
+	background-image: -webkit-linear-gradient(top,#cfc8cb,#bdb5b8);
+}
