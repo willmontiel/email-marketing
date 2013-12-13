@@ -364,6 +364,5 @@ table.tablesorter thead tr .headerSortDown {
 }
 
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-background-color: #f2f3f7;
+	background-color: #f2f3f7;
 }
-
