@@ -1,40 +1,20 @@
-App.Contact = DS.Model.extend({
-	email: DS.attr('string'),
-	name: DS.attr('string'),
-	lastname: DS.attr('string')
+App.set('errormessage', '');
+
+App.Router.map(function() {
+  this.resource('apertures', function(){
+  });
 });
 
-//Definiendo rutas
+/*Routes*/
 
-App.ContactsIndexRoute = Ember.Route.extend({
-	model: function(){
-		return this.store.find('contact');
-	}
+App.AperturesIndexRoute = Ember.Route.extend({
+//	model: function () {
+//		return this.store.find('list');
+//	}
 });
 
-//Definiendo controladores
-
-App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	modelClass : App.Contact
-});
-
-// -------- // -------- // -------- // -------- // -------- // -------- //
-
-App.Statistic = DS.Model.extend({
-	type: DS.attr('string'),
-	amount: DS.attr('string'),
-});
-
-//Definiendo rutas
-
-App.StatisticsIndexRoute = Ember.Route.extend({
-	model: function(){
-		return this.store.find('contact');
-	}
-});
-
-//Definiendo controladores
-
-App.StatisticsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	modelClass : App.Contact
-});
+/*Controllers*/
+App.ApertureController = Ember.ObjectController.extend();
+App.AperturesIndexController = Ember.ArrayController.extend(Ember.MixinPagination, Ember.AclMixin,{	
+  
+});	
