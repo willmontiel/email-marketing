@@ -20,6 +20,32 @@
 	color: #74b35d;
 }
 
+.label-green-percent {
+	background: #8cc079;
+	font-size: 16px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-radius: 5px;
+}
+
+.label-blue-percent {
+	background: #7fb3d4;
+	font-size: 16px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-radius: 5px;
+}
+
+.label-gray-light-percent {
+	background: #CDCDCD;
+	font-size: 16px;
+	padding: 10px;
+	color: black;
+	border-radius: 5px;
+}
+
 .blue-color {
 	color: #60a1ca;
 }

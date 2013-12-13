@@ -76,19 +76,27 @@
 		<div class="news span4">
 			<table class="table-condensed">
 				<thead>
-					<tr style="background: #CDCDCD;">
-						<td colspan="5"><h4>Resumén de aperturas</h4></td>
+					<tr>
+						<td colspan="5"><label class="label-gray-light-percent">Resumén de aperturas</label></td>
 					</tr>
 				</thead>
 				<tbody>
+					<tr><td colspan="5"></td></tr>
 					<tr>
 						<td>
 							<div class="avatar blue">
 								<i class="icon-envelope icon-2x"></i>
 							</div>
 						</td>
-						<td><h4 class="blue-color">3000</h4></td>
-						<td><h4>|</h4></td>
+						<td colspan="2">
+							<label class="label-blue-percent">
+								<table>
+									<tr>
+										<td colspan="2">3000</td>
+									</tr>
+								</table>	
+							</label>
+						</td>
 						<td colspan="2"><h4>Correos enviados</h4></td>
 					</tr>
 					<tr>
@@ -97,9 +105,17 @@
 								<i class="icon-search icon-2x"></i>
 							</div>
 						</td>
-						<td><h4 class="green-color">2500</h4></td>
-						<td><h4>|</h4></td>
-						<td><h4 class="green-color">83%</h4></td>
+						<td  colspan="3">
+							<label class="label-green-percent">
+								<table>
+									<tr>
+										<td>2500</td>
+										<td>|</td>
+										<td>83%</td>
+									</tr>
+								</table>
+							</label>
+						</td>
 						<td><h4>Aperturas</h4></td>
 					</tr>
 				</tbody>
