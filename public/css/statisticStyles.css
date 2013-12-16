@@ -1,31 +1,9 @@
-.clicksColor {
-	color: #8cc079;
-}
-.totalColor {
-	color: #81babd;
-}
-.darkturquoise {
-	color: #08C;
-}
-
-.unsubscribedColor {
-	color: #7fb3d4;
-}
-
-.red {
-	color: red;
-}
-
-td h3 {
+.centertext {
 	text-align: center;
 }
 
 .titleMail {
 	text-align: center;
-}
-
-.darkred {
-	color: #953B39;
 }
 
 .news .avatar.red {
@@ -41,7 +19,95 @@ td h3 {
 }
 
 .news .avatar.gray {
-	background: #bdb5b8;
-	border: 1px solid #bdb5b8;
-	background-image: -webkit-linear-gradient(top,#cfc8cb,#bdb5b8);
+	background: #8c8689;
+	border: 1px solid #8c8689;
+	background-image: -webkit-linear-gradient(top,#999697,#8c8689);
+}
+.dataMailContacts > ul {
+	list-style-type: none;
+}
+
+.label-total-percent {
+ background: #85adc7;
+ font-size: 20px;
+ padding: 3px;
+ text-align: center;
+ color: white;
+ border-radius: 5px;
+}
+
+.label-click-percent {
+ background: #81babd;
+ font-size: 18px;
+ padding: 3px;
+ text-align: center;
+ color: white;
+ border-radius: 5px;
+}
+
+.label-open-percent {
+ background: #8cc079;
+ font-size: 18px;
+ padding: 3px;
+ text-align: center;
+ color: white;
+ border-radius: 5px;
+}
+
+.label-unsubscribed-percent {
+ background: #8c8689;
+ font-size: 18px;
+ padding: 3px;
+ text-align: center;
+ color: white;
+ border-radius: 5px;
+}
+
+.label-bounced-percent {
+ background: #953B39;
+ font-size: 18px;
+ padding: 3px;
+ text-align: center;
+ color: white;
+ border-radius: 5px;
+}
+
+.label-spam-percent {
+ background: #d12929;
+ font-size: 18px;
+ padding: 3px;
+ text-align: center;
+ color: white;
+ border-radius: 5px;
+}
+
+label > table {
+	width: 100%;
+}
+
+.clicksColor {
+	color: #81babd;
+}
+.totalColor {
+	color: #85adc7;
+}
+
+.openColor a{
+	color: #8cc079 !important;
+}
+
+.openColor li{
+	list-style-type: none;
+}
+
+.unsubscribedColor {
+	color: #8c8689;
+}
+
+.spamColor {
+	color: #d12929;
+}
+
+.bouncedColor {
+	color: #953B39;
 }

@@ -11,69 +11,46 @@
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('amcharts/amcharts.js')}}
 	{{ javascript_include('amcharts/serial.js')}}
-	<script type = "text/javascript">
+	{{ javascript_include('amcharts/pie.js')}}
+	{{ stylesheet_link('css/statisticStyles.css') }}
+	
+	<script>
 		var chartData = [{
-			month: "Enero",
-			apertures: 0
+			type: "Aperturas",
+			amount: 63
 		}, {
-			month: "Febrero",
-			apertures: 0
-		}, {
-			month: "Marzo",
-			apertures: 0
-		}, {
-			month: "Abril",
-			apertures: 0
-		}, {
-			month: "Mayo",
-			apertures: 0
-		}, {
-			month: "Junio",
-			apertures: 0
-		}, {
-			month: "Julio",
-			apertures: 0
-		}, {
-			month: "Agosto",
-			apertures: 0
-		}, {
-			month: "Septiembre",
-			apertures: 0
-		}, {
-			month: "Octubre",
-			apertures: 500
-		}, {
-			month: "Noviembre",
-			apertures: 900
-		}, {
-			month: "Diciembre",
-			apertures: 800
+			type: "Rebotados",
+			amount: 22
+		},{
+			type: "No Aperturas",
+			amount: 15
 		}]; 
 	</script>
-	<script type="text/javascript">
+	<script>
+
 		AmCharts.ready(function () {
-			var chart = new AmCharts.AmSerialChart();
+			var chart = new AmCharts.AmPieChart();
 			chart.dataProvider = chartData;
-			chart.categoryField = "month";
+			chart.titleField = "type";
+			chart.valueField = "amount";
+
+			chart.sequencedAnimation = true;
+			chart.startEffect = "easeOutSine";
+			chart.innerRadius = "40%";
 			chart.startDuration = 1;
+			chart.labelRadius = 2;
+			chart.balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
+			// this makes the chart 3D
+			chart.depth3D = 10;
+			chart.angle = 15;
+			
+			chart.addListener("clickSlice", function (event) {
 				
-			var graph = new AmCharts.AmGraph();
-			graph.valueField = "apertures";
-			graph.type = "column";
-			graph.title = "Aperturas de correo 2013";
-			graph.lineColor = "#000000";
-            graph.fillColors = "#6eb056";
-            graph.fillAlphas = 0.7;
-            graph.balloonText = "<span style='font-size:13px;'>[[title]] en [[category]]:<b>[[value]]</b></span>";
-			chart.addGraph(graph);
-	
-			// LEGEND
-            var legend = new AmCharts.AmLegend();
-            legend.useGraphSettings = true;
-            chart.addLegend(legend);
-				
-			chart.write('chartContainer');
+			});
+			
+			chart.write('chartdiv');
 		});
+
 	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-signal icon-2x"></i>Estadisticas{% endblock %}
@@ -84,76 +61,103 @@
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}
 			<div class="news span5">
-				<div class="offset3 titleMail">
+				<div class="offset2 titleMail">
 					<h2>Correo XYZ</h2>
 				</div>
 				<div class="offset3 dataMailContacts">
 					<table class="table-condensed">
 						<tr>
+							
 							<td>
-								<div class="avatar blue">
-									<i class="icon-reorder icon-2x"></i>
-								</div>
+								<label class="label-total-percent centertext">
+									<table><tr>
+										<td>
+											<i class="icon-envelope" style="font-size: 20px;"></i>
+										</td>
+										<td>9098</td>
+									</tr></table>
+								</label>
 							</td>
-							<td><h4 class="totalColor">9098</h4></td>
-							<td><h4>|</h4></td>
-							<td><h3 class="totalColor">100%</h3></td>
-							<td><h4>Totales</h4></td>
+							<td><h4 class="totalColor">Totales</h4></td>
 						</tr>
 						<tr>
 							<td>
-								<div class="avatar green">
-									<i class="icon-lightbulb icon-2x"></i>
-								</div>
+								<label class="label-open-percent">
+									<table><tr>
+										<td>
+											<i class="icon-search"></i>
+										</td>
+										<td>4252</td>
+										<td>|</td>
+										<td>46.74%</td>
+									</tr></table>
+								</label>
 							</td>
-							<td><h4 class="darkturquoise">4252</h4></td>
-							<td><h4>|</h4></td>
-							<td><h3 class="darkturquoise">46.74%</h3></td>
-							<td><h4>Aperturas</h4></td>
+							<td><h4 class="openColor">{{'{{#linkTo "drilldown.apertures" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
 						</tr>
 						<tr>
+						
 							<td>
-								<div class="avatar cyan">
-									<i class="icon-hand-up icon-2x"></i>
-								</div>
+								<label class="label-click-percent">
+									<table><tr>
+										<td>
+											<i class="icon-hand-up"></i>
+										</td>
+										<td>3882</td>
+										<td>|</td>
+										<td>42.67%</td>
+									</tr></table>
+								</label>
 							</td>
-							<td><h4 class="clicksColor">3882</h4></td>
-							<td><h4>|</h4></td>
-							<td><h3 class="clicksColor">42.67%</h3></td>
-							<td><h4>Clicks</h4></td>
+							<td><h4 class="clicksColor">Clicks</h4></td>
 						</tr>
 						<tr>
+							
 							<td>
-								<div class="avatar gray">
-									<i class="icon-warning-sign icon-2x"></i>
-								</div>
+								<label class="label-unsubscribed-percent">
+									<table><tr>
+										<td>
+											<i class="icon-minus-sign"></i>
+										</td>
+										<td>964</td>
+										<td>|</td>
+										<td>10.60%</td>
+									</tr></table>
+								</label>
 							</td>
-							<td><h4 class="unsubscribedColor">964</h4></td>
-							<td><h4>|</h4></td>
-							<td><h3 class="unsubscribedColor">10.60%</h3></td>
-							<td><h4>Des-suscritos</h4></td>
+							<td><h4 class="unsubscribedColor">Des-suscritos</h4></td>
 						</tr>
 						<tr>
+							
 							<td>
-								<div class="avatar darkred">
-									<i class="icon-warning-sign icon-2x"></i>
-								</div>
+								<label class="label-bounced-percent">
+									<table><tr>
+										<td>
+											<i class="icon-warning-sign"></i>
+										</td>
+										<td>964</td>
+										<td>|</td>
+										<td>10.60%</td>
+									</tr></table>
+								</label>
 							</td>
-							<td><h4 class="darkred">964</h4></td>
-							<td><h4>|</h4></td>
-							<td><h3 class="darkred">10.60%</h3></td>
-							<td><h4>Rebotes</h4></td>
+							<td><h4 class="bouncedColor">Rebotes</h4></td>
 						</tr>
 						<tr>
+							
 							<td>
-								<div class="avatar red">
-									<i class="icon-warning-sign icon-2x"></i>
-								</div>
+								<label class="label-spam-percent">
+									<table><tr>
+										<td>
+											<i class="icon-remove"></i>
+										</td>
+										<td>964</td>
+										<td>|</td>
+										<td>10.60%</td>
+									</tr></table>
+								</label>
 							</td>
-							<td><h4 class="red">964</h4></td>
-							<td><h4>|</h4></td>
-							<td><h3 class="red">10.60%</h3></td>
-							<td><h4>Spam</h4></td>
+							<td><h4 class="spamColor">Spam</h4></td>
 						</tr>
 					</table>
 				</div>
@@ -163,9 +167,12 @@
 				<div id="chartdiv" style="width: 640px; height: 400px;">
 				</div>
 			</div>
+			<div class="span12">
+				{{ "{{outlet}}" }}
+			</div>
 		</script>
 		
-		<script type="text/x-handlebars" data-template-name="apertures/index">
+		<script type="text/x-handlebars" data-template-name="drilldown/apertures">
 			<div class="row-fluid">
 				<div class="span3">
 					<div class="news-title">
@@ -174,25 +181,25 @@
 					<table>
 						<tr>
 							<td>
-								<dl>
-									<dd><label class="small-circle-for-icon"><i class="icon-envelope icon-2x"></i></label></dd>
-									<dd><i class="icon-eye-open"></i></dd>
-									<dd><i class="icon-thumbs-up"></i></dd>
-								</dl>
+								<ul>
+									<li><label class="small-circle-for-icon"><i class="icon-envelope icon-2x"></i></label></li>
+									<li><i class="icon-eye-open"></i></li>
+									<li><i class="icon-thumbs-up"></i></li>
+								</ul>
 							</td>
 							<td>
-								<dl>
-									<dd>Correos enviados</dd>
-									<dd>Aperturas totales</dd>
-									<dd>Promedio de aperturas</dd>
-								</dl>
+								<ul>
+									<li>Correos enviados</li>
+									<li>Aperturas totales</li>
+									<li>Promedio de aperturas</li>
+								</ul>
 							</td>
 							<td>
-								<dl>
-									<dd>2000</dd>
-									<dd>1500</dd>
-									<dd>3</dd>
-								</dl>
+								<ul>
+									<li>2000</li>
+									<li>1500</li>
+									<li>3</li>
+								</ul>
 							</td>
 						</tr>
 					</table>
