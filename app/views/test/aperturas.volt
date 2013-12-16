@@ -37,7 +37,7 @@
 			apertures: 500
 		}, {
 			month: "Nov",
-			apertures: 1200
+			apertures: 5000
 		}, {
 			month: "Dic",
 			apertures: 800
@@ -83,16 +83,12 @@
 				<tbody>
 					<tr><td colspan="5"></td></tr>
 					<tr>
-						<td>
-							<div class="avatar blue">
-								<i class="icon-envelope icon-2x"></i>
-							</div>
-						</td>
-						<td colspan="2">
+						<td colspan="3">
 							<label class="label-blue-percent">
 								<table>
 									<tr>
-										<td colspan="2">3000</td>
+										<td><i class="icon-envelope"></i></td>
+										<td>3000</td>
 									</tr>
 								</table>	
 							</label>
@@ -100,15 +96,11 @@
 						<td colspan="2"><h4>Correos enviados</h4></td>
 					</tr>
 					<tr>
-						<td>
-							<div class="avatar green">
-								<i class="icon-search icon-2x"></i>
-							</div>
-						</td>
-						<td  colspan="3">
+						<td colspan="3">
 							<label class="label-green-percent">
 								<table>
 									<tr>
+										<td><i class="icon-search"></i></td>
 										<td>2500</td>
 										<td>|</td>
 										<td>83%</td>
@@ -116,7 +108,7 @@
 								</table>
 							</label>
 						</td>
-						<td><h4>Aperturas</h4></td>
+						<td  colspan="2"><h4>Aperturas</h4></td>
 					</tr>
 				</tbody>
 			</table>
