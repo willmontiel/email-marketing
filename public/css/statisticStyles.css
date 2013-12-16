@@ -1,4 +1,59 @@
-.centertext {
+.clicksColor {
+	color: #8cc079;
+}
+.totalColor {
+	color: #81babd;
+}
+.darkturquoise {
+	color: #08C;
+}
+
+.unsubscribedColor {
+	color: #7fb3d4;
+}
+
+.red {
+	color: red;
+}
+
+.green-color {
+	color: #74b35d;
+}
+
+.label-green-percent {
+	background: #8cc079;
+	font-size: 16px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-radius: 5px;
+}
+
+.label-blue-percent {
+	background: #7fb3d4;
+	font-size: 16px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-radius: 5px;
+}
+
+.label-gray-light-percent {
+	background: #CDCDCD;
+	font-size: 16px;
+	padding: 10px;
+	color: black;
+	border-radius: 5px;
+}
+
+.blue-color {
+	color: #60a1ca;
+}
+
+.sea-blue-color {
+	color: #3162C5;
+}
+td h3 {
 	text-align: center;
 }
 
@@ -10,6 +65,12 @@
 	background: red;
 	border: 1px solid red;
 	background-image: -webkit-linear-gradient(top,#fa3939,red);
+}
+
+.news .avatar.sea-blue-color {
+	background: #3162C5;
+	border: 1px solid #3162C5;
+	background-image: -webkit-linear-gradient(top,#3162F9,#3162C5);
 }
 
 .news .avatar.darkred {
@@ -63,51 +124,7 @@
  border-radius: 5px;
 }
 
-.label-bounced-percent {
- background: #953B39;
- font-size: 18px;
- padding: 3px;
- text-align: center;
- color: white;
- border-radius: 5px;
-}
-
-.label-spam-percent {
- background: #d12929;
- font-size: 18px;
- padding: 3px;
- text-align: center;
- color: white;
- border-radius: 5px;
-}
-
-label > table {
-	width: 100%;
-}
-
-.clicksColor {
-	color: #81babd;
-}
-.totalColor {
-	color: #85adc7;
-}
-
-.openColor a{
-	color: #8cc079 !important;
-}
-
-.openColor li{
-	list-style-type: none;
-}
-
-.unsubscribedColor {
-	color: #8c8689;
-}
-
-.spamColor {
-	color: #d12929;
-}
-
-.bouncedColor {
-	color: #953B39;
+.time-graph {
+	width: 500px;
+	height: 250px;
 }
