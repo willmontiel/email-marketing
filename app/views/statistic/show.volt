@@ -94,7 +94,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="openColor">{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
+							<td><h4 class="openColor subtitleColor">{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
 						</tr>
 						<tr>
 						
@@ -110,7 +110,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="clicksColor">Clicks</h4></td>
+							<td><h4 class="clicksColor subtitleColor">{{'{{#linkTo "drilldown.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clicks</a>{{/linkTo}}'}}</h4></td>
 						</tr>
 						<tr>
 							
@@ -126,7 +126,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="unsubscribedColor">Des-suscritos</h4></td>
+							<td><h4 class="unsubscribedColor subtitleColor">Des-suscritos</h4></td>
 						</tr>
 						<tr>
 							
@@ -142,7 +142,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="bouncedColor">Rebotes</h4></td>
+							<td><h4 class="bouncedColor subtitleColor">Rebotes</h4></td>
 						</tr>
 						<tr>
 							
@@ -158,7 +158,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="spamColor">Spam</h4></td>
+							<td><h4 class="spamColor subtitleColor">Spam</h4></td>
 						</tr>
 					</table>
 				</div>
@@ -172,8 +172,10 @@
 				{{ "{{outlet}}" }}
 			</div>
 		</script>
-		
-		
-			{{ partial("statistic/apertures") }}
+		{{ partial("statistic/opens") }}
+		{{ partial("statistic/clicks") }}
+		<script type="text/x-handlebars" data-template-name="timeGraph">
+		<div id="ChartContainer"></div>
+		</script>
 	</div>
 {% endblock %}

@@ -1,11 +1,11 @@
-<script type="text/x-handlebars" data-template-name="drilldown/opens">
+<script type="text/x-handlebars" data-template-name="drilldown/clicks">
 	<hr />
 	<div class="row-fluid">
 		<div class="news span4">
 			<table class="table-condensed">
 				<thead>
 					<tr>
-						<td colspan="5"><label class="label-gray-light-percent">Resumén de aperturas</label></td>
+						<td colspan="5"><label class="label-gray-light-percent">Resumén de Clicks</label></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -36,19 +36,19 @@
 								</table>
 							</label>
 						</td>
-						<td  colspan="2"><h4>Aperturas</h4></td>
+						<td  colspan="2"><h4>Clicks</h4></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		{{'{{view App.DrilldownTimeGraphView idChart="openBarChartContainer" typeChart="Bar"}}'}}
+		{{'{{view App.DrilldownTimeGraphView idChart="clickPieChartContainer" typeChart="Pie"}}'}}
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="box">
 				<div class="box-header">
 					<div class="title">
-						Lista de aperturas
+						Lista de clicks
 					</div>
 				</div>
 				<div class="box-content">
@@ -75,6 +75,4 @@
 		</div>
 	</div>
 </script>
-<script type="text/x-handlebars" data-template-name="timeGraph">
-    <div id="ChartContainer"></div>
-</script>
+

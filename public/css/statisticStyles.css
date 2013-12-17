@@ -158,12 +158,16 @@ label > table {
 	color: #85adc7;
 }
 
+.subtitleColor li{
+	list-style-type: none;
+}
+
 .openColor a{
 	color: #8cc079 !important;
 }
 
-.openColor li{
-	list-style-type: none;
+.clicksColor a{
+	color: #81babd !important;
 }
 
 .unsubscribedColor {

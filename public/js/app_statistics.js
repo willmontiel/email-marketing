@@ -11,52 +11,86 @@ App.Opendetaillist = DS.Model.extend({
 	os: DS.attr('string')
 });
 
+App.Clickstatistic = DS.Model.extend({
+	title: DS.attr('string'),
+	value: DS.attr('string')
+});
+
+App.Clickdetaillist = DS.Model.extend({
+	email: DS.attr('string'),
+	date: DS.attr('string'),
+	os: DS.attr('string')
+});
+
 App.Router.map(function() {
   this.resource('drilldown', function(){
 	  this.route('opens');
+	  this.route('clicks');
   });
 });
 
 /*Routes*/
 
-App.DrilldownIndexRoute = Ember.Route.extend({
-  
-});
+App.DrilldownIndexRoute = Ember.Route.extend({});
 
 App.DrilldownOpensRoute = Ember.Route.extend({
 	model: function () {
 		return this.store.find('opendetaillist');		
+	},
+	setupController: function(controller, model) {
+		controller.set('model', model);
+		controller.loadDataChart();
+	}
+});
+
+App.DrilldownClicksRoute = Ember.Route.extend({
+	model: function () {
+		return this.store.find('clickdetaillist');		
+	},
+	setupController: function(controller, model) {
+		controller.set('model', model);
+		controller.loadDataChart();
 	}
 });
 
 /*Controllers*/
 App.DrilldownController = Ember.ObjectController.extend();
-App.DrilldownIndexController = Ember.ArrayController.extend({	
-  
-});	
+App.DrilldownIndexController = Ember.ArrayController.extend({});	
+
 App.DrilldownOpensController = Ember.ArrayController.extend({	
-	init: function() {
+	loadDataChart: function() {
 		this.store.find('openstatistic').then(function(statistic) {
-			var values =[];
-			var all = statistic.get('content');
-			for(var i = 0; i < all.length; i++) {
-				var obj = {title: all[i].get('title'), value: all[i].get('value')};
-				values.push(obj);
-			}
+			var values = getContent(statistic);
 			App.set('chartData', values);
 		});
 	}
 });
 
-App.DrilldownIndexController = Ember.ArrayController.extend({	
-  
+App.DrilldownClicksController = Ember.ArrayController.extend({	
+	loadDataChart: function() {
+		this.store.find('clickstatistic').then(function(statistic) {
+		   var values = getContent(statistic);
+			App.set('chartData', values);
+		});
+	}
 });
+
+function getContent(statistic)
+{
+	var values =[];
+	var all = statistic.get('content');
+	for(var i = 0; i < all.length; i++) {
+		var obj = {title: all[i].get('title'), value: all[i].get('value')};
+		values.push(obj);
+	}
+	return values;
+}
 
 App.DrilldownTimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
 	drawChart:function(){
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");	
-		
+
 		var chartData = App.get('chartData');
 		
 		var chart;
