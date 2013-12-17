@@ -170,6 +170,11 @@ class Security extends Plugin
 				'api::deletesegment' => array('segment' => array('read', 'delete')),
 				'api::updatesegment' => array('segment' => array('read', 'update')),
 				'api::updatecontactbysegment' => array('contact' => array('read', 'update')),
+				
+				//Apistatistics
+				//Estadisticas
+				'apistatistics::openstatistics' => array('statistic' => array('read')),
+				'apistatistics::opendetaillists' => array('statistic' => array('read')),
 			
 		//* RELEASE 0.2.0 *//
 				//Envío de correos
@@ -224,7 +229,8 @@ class Security extends Plugin
 				'test::mailer' => array('mail' => array('read', 'create', 'send')),
 				'test::aperturas' => array('statistic' => array('read')),
 				//statistics
-				'statistic::index' => array('statistic' => array('read'))
+				'statistic::index' => array('statistic' => array('read')),
+				'statistic::show' => array('statistic' => array('read')),
 				
 			);
 		}

@@ -63,13 +63,7 @@ class ChildCommunication extends BaseWrapper
 						break;
 				}
 				
-				$lastId = 0;
-				
-				if($mail->status == 'Paused') {
-					$lastId = $mail->lastSent;
-				}
-				
-				$contactIterator = new ContactIterator($mail, $customFields, $lastId);
+				$contactIterator = new ContactIterator($mail, $customFields);
 				$disruptedProcess = FALSE;
 				
 				// Crear transport y mailer
@@ -154,14 +148,12 @@ class ChildCommunication extends BaseWrapper
 							}
 							
 							$mail->status = 'Cancelled';
-							$mail->lastSent = NULL;
 							$mail->finishedon = time();
 							$disruptedProcess = TRUE;
 							break 2;
 						case 'Stop':
 							$log->log("Estado: Me Pausaron");
 							$mail->status = 'Paused';
-							$mail->lastSent = $contact['contact']['idContact'];
 							$disruptedProcess = TRUE;
 							break 2;
 						case 'Checking-Work':
@@ -175,7 +167,6 @@ class ChildCommunication extends BaseWrapper
 				if(!$disruptedProcess) {
 					$log->log('Estado: Me enviaron');
 					$mail->status = 'Sent';
-					$mail->lastSent = NULL;
 					$mail->finishedon = time();
 				}
 
@@ -186,7 +177,6 @@ class ChildCommunication extends BaseWrapper
 			catch (InvalidArgumentException $e) {
 				$log->log('Exception: [' . $e . ']');
 				$mail->status = 'Cancelled';
-				$mail->lastSent = NULL;
 				$mail->finishedon = time();
 				if(!$mail->save()) {
 					$log->log('No se pudo actualizar el estado del MAIL');
