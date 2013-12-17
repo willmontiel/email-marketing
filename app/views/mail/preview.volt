@@ -90,7 +90,11 @@
 								</div>
 								<strong>Nombre de la lista, base de datos o segmento a donde se envía: </strong>
 								<div class="news-text">
-									{{mail.targetName}}
+									<ul>
+										{% for t in target%}
+											<li> {{t.name}} </li> 
+										{% endfor %}
+									</ul>
 								</div>
 							</div>
 							<br />
