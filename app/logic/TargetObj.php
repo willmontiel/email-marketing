@@ -35,9 +35,8 @@ class TargetObj
 			return false;
 		}
 		
-		$targetsName = $this->findTargetsName($idDbases, $idContactlists, $idSegments, $targetInfo['type']);
-		$response = $this->saveTargetDataInDB($mail, $targetInfo['destinationJson'], $totalContacts, $targetsName);
-		$this->log->log("Nombre target: " . print_r($targetsName, true));
+//		$targetsName = $this->findTargetsName($idDbases, $idContactlists, $idSegments, $targetInfo['type']);
+		$response = $this->saveTargetDataInDB($mail, $targetInfo['destinationJson'], $totalContacts);
 		
 		return $response;
 	}
@@ -118,7 +117,7 @@ class TargetObj
 	}
 
 
-	protected function saveTargetDataInDB(Mail $mail, $destinationJson, $totalContacts, $targetsName)
+	protected function saveTargetDataInDB(Mail $mail, $destinationJson, $totalContacts)
 	{
 		if ($mail->wizardOption == 'target' || $mail->wizardOption == 'source') {
 			$wizardOption = 'target';
@@ -129,7 +128,6 @@ class TargetObj
 		
 		$mail->wizardOption = $wizardOption;
 		$mail->target = json_encode($destinationJson);
-		$mail->targetName = implode(', ', $targetsName);
 		$mail->totalContacts = $totalContacts;
 		
 		if (!$mail->save()) {
@@ -137,18 +135,5 @@ class TargetObj
 		}
 		
 		return true;
-	}
-	
-	private function returnIds($contacts, $idMail) 
-	{
-		$idContacts = " VALUES";
-		foreach ($contacts as $id) {
-			if ($comma == false) {
-				$idContacts .= " (" . $idMail . "," . $id->idContact . ") ";
-			}
-			$idContacts .= ", (" . $idMail . "," . $id->idContact . ") ";
-			$comma = true;
-		}
-		return $idContacts;
 	}
 }

@@ -776,20 +776,45 @@ class MailController extends ControllerBase
 	
 	public function previewAction($idMail)
 	{
+		$log = $this->logger;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND status = ?2',
 			'bind' => array(1 => $idMail,
 							2 => 'Draft')
 		));
 		if ($mail) {
+			$target = $this->findTargetsName($mail->target);
 			$this->view->setVar('mail', $mail);
-			
-			if ($this->request->isPost()) {
-			}
+			$this->view->setVar('target', $target);
 		}
 		else {
 			return $this->response->redirect('mail/source/' . $idMail);
 		}
+	}
+	
+	protected function findTargetsName($target)
+	{
+		$t = json_decode($target);
+		$ids = implode(", ", $t->ids);
+		//{"destination":"dbases","ids":["7","8"],"filter":{"type":"open","criteria":["week11","week12"]}}
+		
+		switch ($t->destination) {
+			case 'dbases':
+				$query = $this->modelsManager->createQuery("SELECT name FROM Dbase WHERE idDbase IN (" . $ids . ")");
+				$result = $query->execute();
+				break;
+			
+			case 'contactlists':
+				$query = $this->modelsManager->createQuery("SELECT name FROM Contactlist WHERE idContactlist IN (" . $ids . ")");
+				$result = $query->execute();
+				break;;
+				
+			case 'segments':
+				$query = $this->modelsManager->createQuery("SELECT name FROM Segment WHERE idSegment IN (" . $ids . ")");
+				$result = $query->execute();
+				break;
+		}
+		return $result;
 	}
 	
 	public function previeweditorAction()
