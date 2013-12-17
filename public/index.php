@@ -170,6 +170,10 @@ try {
 	$apiurl->url = $config->general->apiurlprefix;
 	$di->set('apiurlbase', $apiurl);
 	
+	$apistatistics = new stdClass;
+	$apistatistics->url = $config->general->apiurlstatisticprefix;
+	$di->set('apiurlstatistic', $apistatistics);
+	
 	/*
 	 * Directorio de assets
 	 */

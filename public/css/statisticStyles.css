@@ -128,3 +128,52 @@ td h3 {
 	width: 500px;
 	height: 250px;
 }
+
+.label-bounced-percent {
+ background: #953B39;
+ font-size: 18px;
+ padding: 3px;
+ text-align: center;
+ color: white;
+ border-radius: 5px;
+}
+
+.label-spam-percent {
+ background: #d12929;
+ font-size: 18px;
+ padding: 3px;
+ text-align: center;
+ color: white;
+ border-radius: 5px;
+}
+
+label > table {
+	width: 100%;
+}
+
+.clicksColor {
+	color: #81babd;
+}
+.totalColor {
+	color: #85adc7;
+}
+
+.openColor a{
+	color: #8cc079 !important;
+}
+
+.openColor li{
+	list-style-type: none;
+}
+
+.unsubscribedColor {
+	color: #8c8689;
+}
+
+.spamColor {
+	color: #d12929;
+}
+
+.bouncedColor {
+	color: #953B39;
+}

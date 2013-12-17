@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlbase.url}}';
+		var MyDbaseUrl = '{{apiurlstatistic.url}}';
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
@@ -49,7 +49,7 @@
 				
 			});
 			
-			chart.write('chartdiv');
+			chart.write('summaryChart');
 		});
 
 	</script>
@@ -62,10 +62,10 @@
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}
 			<div class="news span5">
-				<div class="offset2 titleMail">
+				<div class="titleMail">
 					<h2>Correo XYZ</h2>
 				</div>
-				<div class="offset3 dataMailContacts">
+				<div class="offset1 dataMailContacts">
 					<table class="table-condensed">
 						<tr>
 							
@@ -94,7 +94,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="openColor">{{'{{#linkTo "drilldown.apertures" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
+							<td><h4 class="openColor">{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
 						</tr>
 						<tr>
 						
@@ -165,7 +165,7 @@
 			</div>
 	
 			<div class="span6">
-				<div id="chartdiv" style="width: 640px; height: 400px;">
+				<div id="summaryChart" style="width: 640px; height: 400px;">
 				</div>
 			</div>
 			<div class="span12">
@@ -173,85 +173,7 @@
 			</div>
 		</script>
 		
-		<script type="text/x-handlebars" data-template-name="drilldown/apertures">
-			<div class="row-fluid">
-				<div class="span3">
-					<div class="news-title">
-						Resumen
-					</div>
-					<table>
-						<tr>
-							<td>
-								<ul>
-									<li><label class="small-circle-for-icon"><i class="icon-envelope icon-2x"></i></label></li>
-									<li><i class="icon-eye-open"></i></li>
-									<li><i class="icon-thumbs-up"></i></li>
-								</ul>
-							</td>
-							<td>
-								<ul>
-									<li>Correos enviados</li>
-									<li>Aperturas totales</li>
-									<li>Promedio de aperturas</li>
-								</ul>
-							</td>
-							<td>
-								<ul>
-									<li>2000</li>
-									<li>1500</li>
-									<li>3</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-				</div>
-				
-				<div id="chartContainer" class="time-graph span9"></div>
-			</div>
-			<div class="row-fluid">
-				<div class="span12">
-					<div class="box">
-						<div class="box-header">
-							<div class="title">
-								Lista de aperturas
-							</div>
-						</div>
-						<div class="box-content">
-							<table class="table table-normal">
-								<thead>
-									<tr>
-										<td>Fecha y hora</td>
-										<td>Dirección de correo</td>
-										<td>Sistema operativo?</td>
-									</tr>
-								</thead>
-								<tbody>
-								</tbody>
-									<tr>
-										<td></td>
-										<td>xxxxx@xxxxx.com</td>
-										<td>???</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>xxxxx@xxxxx.com</td>
-										<td>???</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>xxxxx@xxxxx.com</td>
-										<td>???</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>xxxxx@xxxxx.com</td>
-										<td>???</td>
-									</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</script>
+		
+			{{ partial("statistic/apertures") }}
 	</div>
 {% endblock %}
