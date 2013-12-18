@@ -170,8 +170,8 @@ label > table {
 	color: #81babd !important;
 }
 
-.unsubscribedColor {
-	color: #8c8689;
+.unsubscribedColor a{
+	color: #8c8689 !important;
 }
 
 .spamColor {
