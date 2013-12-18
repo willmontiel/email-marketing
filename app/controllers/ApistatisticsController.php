@@ -146,4 +146,23 @@ class ApistatisticsController extends ControllerBase
 		);		
 		return $this->setJsonResponse(array('drilldown' => $statistics));
 	}
+	
+	/**
+	 * @Get("/opendetaillists/{idContactlist:[0-9]+}")
+	 */
+	public function contactlistAction($idContactList)
+	{
+		$this->logger->log("id: " . $idContactList);
+		$statsContactList = Statcontactlist::find(array(
+			'conditions' => 'idContactlist = ?1',
+			'bind' => array(1 => $idContactList)
+		));
+		
+		$statWrapper = new ContactlistStatisticsWrapper();
+		
+		$stat = $statWrapper->getOpenStats($statsContactList);
+
+		return $this->setJsonResponse($stat);
+	}		
+	
 }
