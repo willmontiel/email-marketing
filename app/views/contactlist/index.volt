@@ -95,6 +95,9 @@
 							<i class="icon-ok icon-2x"></i>
 						</div>
 						<div class="news-time">
+							<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}"><i class="icon-bar-chart icon-2x"></i></a>
+						</div>
+						<div class="news-time">
 							<span>{{ '{{infocontact.activeContacts}}' }}</span>
 							<span>{{'{{activeContactsF}}'}}</span> activos
 						</div>
@@ -104,7 +107,7 @@
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li>{{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
-										<li><a href="{{url('contactlist/show/')}}{{ '{{unbound id}}' }}#/contacts"><i class="icon-search"></i> Ver detalles</a></li>
+										<li><a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts"><i class="icon-search"></i> Ver detalles</a></li>
 										<li>{{ '{{#linkTo "lists.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}</li>
 									</ul>
 								</div>

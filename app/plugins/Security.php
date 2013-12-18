@@ -174,6 +174,8 @@ class Security extends Plugin
 				//Apistatistics
 				//Estadisticas
 				'apistatistics::dbase' => array('statistic' => array('read')),
+				'apistatistics::contactlist' => array('statistic' => array('read')),
+				
 			
 		//* RELEASE 0.2.0 *//
 				//Envío de correos
@@ -231,6 +233,7 @@ class Security extends Plugin
 				'statistic::index' => array('statistic' => array('read')),
 				'statistic::show' => array('statistic' => array('read')),
 				'statistic::dbase' => array('statistic' => array('read')),
+				'statistic::contactlist' => array('statistic' => array('read')),
 				
 			);
 		}

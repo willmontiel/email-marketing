@@ -56,7 +56,7 @@
 								</div>
 								<div class="news-time">
 									<span>&nbsp;</span>
-									<a href="{{url('statistic/show')}}/{{item.idDbase}}"><i class="icon-bar-chart icon-2x"></i></a>
+									<a href="{{url('statistic/dbase')}}/{{item.idDbase}}"><i class="icon-bar-chart icon-2x"></i></a>
 								</div>
 								<div class="news-content">
 									<div class="news-title">

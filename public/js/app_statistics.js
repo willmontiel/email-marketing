@@ -5,9 +5,19 @@ App.Dbasestatistic = DS.Model.extend({
 	details: DS.attr('string')
 });
 
+App.Contactliststatistic = DS.Model.extend({
+	statistics: DS.attr('string'),
+	details: DS.attr('string')
+});
+
 App.Router.map(function() {
   this.resource('dbasestatistic', function(){
-	  this.route('opens')
+	  this.route('opens'),
+	  this.route('clicks')
+  });
+  
+  this.resource('contactliststatistic', function(){
+	  this.route('opens'),
 	  this.route('clicks')
   });
 });
@@ -37,6 +47,20 @@ App.DbasestatisticClicksRoute = Ember.Route.extend({
 	}
 });
 
+/*Contact list statistic routes*/
+
+App.ContactliststatisticIndexRoute = Ember.Route.extend({});
+
+App.ContactliststatisticOpensRoute = Ember.Route.extend({
+	model: function () {
+		return this.store.find('contactliststatistic');	
+		//console.log(this.store.find('contactliststatistic'))
+	},
+//	setupController: function(controller, model) {
+//		controller.set('model', model);
+//		controller.loadDataChart();
+//	}
+});
 /*Controllers*/
 App.DbasestatisticController = Ember.ObjectController.extend();
 App.DbasestatisticController = Ember.ArrayController.extend({});	
@@ -59,6 +83,19 @@ App.DbasestatisticClicksController = Ember.ArrayController.extend({
 	}
 });
 
+/*Contact list statistic controllers*/
+App.ContactliststatisticController = Ember.ObjectController.extend();
+
+App.ContactliststatisticOpensController = Ember.ArrayController.extend({
+	loadDataChart: function() {
+		this.store.find('openstatistic').then(function(statistic) {
+			var values = getContent(statistic);
+			App.set('chartData', values);
+		});
+	}
+});
+
+
 function getContent(statistic)
 {
 	var values =[];
@@ -76,8 +113,6 @@ App.DrilldownTimeGraphView = Ember.View.extend({
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");	
 
 		var chartData = App.get('chartData');
-		
-		var chart;
 
 		if(this.typeChart === 'Pie') {
 			chart = createPieChart(chartData);
