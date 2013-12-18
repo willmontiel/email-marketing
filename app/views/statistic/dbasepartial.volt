@@ -1,4 +1,4 @@
-<script type="text/x-handlebars" data-template-name="drilldowndbase/clicks">
+<script type="text/x-handlebars" data-template-name="drilldown/clicks">
 	<hr />
 	<div class="row-fluid">
 		<div class="news span4">
@@ -76,7 +76,7 @@
 	</div>
 </script>
 
-<script type="text/x-handlebars" data-template-name="drilldowndbase/opens">
+<script type="text/x-handlebars" data-template-name="drilldown/opens">
 	<hr />
 	<div class="row-fluid">
 		<div class="news span4">
@@ -154,7 +154,7 @@
 	</div>
 </script>
 
-<script type="text/x-handlebars" data-template-name="drilldowndbase/unsubscribed">
+<script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
 	<hr />
 	<div class="row-fluid">
 		<div class="news span4">
