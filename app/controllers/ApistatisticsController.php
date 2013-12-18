@@ -144,7 +144,7 @@ class ApistatisticsController extends ControllerBase
 			'statistics' => json_encode($allstadistics),
 			'details' => json_encode($alldetails)
 		);		
-		return $this->setJsonResponse(array('drilldowndbase' => $statistics));
+		return $this->setJsonResponse(array('drilldown' => $statistics));
 	}
 	
 	/**
