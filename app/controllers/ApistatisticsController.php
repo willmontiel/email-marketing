@@ -11,104 +11,139 @@ class ApistatisticsController extends ControllerBase
 	{
 		$log = $this->logger;
 		$log->log('El id dbase es: ' . $idDbase);
-		$values[0] = array(
-			'id' => 1,
+		
+		$opens[] = array(
 			'title' =>'Enero',
-			'value' => '20'
+			'value' => 20
 		);
-		$values[1] = array(
-			'id' => 2,
+		$opens[] = array(
 			'title' =>'Febrero',
-			'value' => '30'
+			'value' => 30
 		);
-		$values[2] = array(
-			'id' => 3,
+		$opens[] = array(
 			'title' =>'Marzo',
-			'value' => '50'
+			'value' => 50
 		);
 		
+		$clicks[] = array(
+			'title' =>'Julio',
+			'value' => 15
+		);
+		$clicks[] = array(
+			'title' =>'Agosto',
+			'value' => 45
+		);
+		$clicks[] = array(
+			'title' =>'Septiembre',
+			'value' => 40
+		);
+
+		$unsubscribed[] = array(
+			'title' =>'Septiembre',
+			'value' => 15
+		);
 		
-		$contact[0] = array(
+		$unsubscribed[] = array(
+			'title' =>'Octubre',
+			'value' => 15
+		);
+		$unsubscribed[] = array(
+			'title' =>'Noviembre',
+			'value' => 45
+		);
+		$unsubscribed[] = array(
+			'title' =>'Diciembre',
+			'value' => 40
+		);
+		
+		$opencontact[] = array(
 			'id' => 100,
 			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
 			'date' => date('Y-m-d', 1386687891),
 			'os' => 'Ubuntu'
 		);
 		
-		$contact[1] = array(
+		$opencontact[] = array(
 			'id' => 145,
 			'email' => 'recipient00002@test002.local.discardallmail.drh.net',
 			'date' => date('Y-m-d',1386687891),
 			'os' => 'Windows'
 		);
 		
-		$contact[2] = array(
+		$opencontact[] = array(
 			'id' => 161,
 			'email' => 'recipient00003@test003.local.discardallmail.drh.net',
 			'date' => date('Y-m-d',1386687891),
 			'os' => 'Mac'
 		);
 		
-		$statistics['statistics'] = json_encode($values);
-		$statistics['details'] = json_encode($contact);
 		
-		return $this->setJsonResponse(array('dbasestatistic' => $statistics));
-	}
-	/**
-	 * @Get("/clickstatistics")
-	 */
-	
-	public function clickstatisticsAction($idMail)
-	{
-		$log = $this->logger;
-		
-		$values[0] = array(
-			'id' => 58,
-			'title' =>'Enero',
-			'value' => '20'
-		);
-		$values[1] = array(
-			'id' => 26,
-			'title' =>'Febrero',
-			'value' => '30'
-		);
-		$values[2] = array(
-			'id' => 37,
-			'title' =>'Marzo',
-			'value' => '50'
-		);
-
-		return $this->setJsonResponse(array('clickstatistic' => $values));
-	}
-	
-	/**
-	 * @Get("/clickdetaillists")
-	 */
-	public function clickdetaillistsAction()
-	{
-		$log = $this->logger;
-		
-		$contact[0] = array(
-			'id' => 71,
-			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
+		$clickcontact[] = array(
+			'id' => 100,
+			'email' => 'otrocorreo@otro.correo',
 			'date' => date('Y-m-d', 1386687891),
 			'os' => 'Ubuntu'
 		);
 		
-		$contact[1] = array(
-			'id' => 254,
-			'email' => 'recipient00002@test002.local.discardallmail.drh.net',
+		$clickcontact[] = array(
+			'id' => 145,
+			'email' => 'otrocorreo2@otro2.correo2',
 			'date' => date('Y-m-d',1386687891),
 			'os' => 'Windows'
 		);
 		
-		$contact[2] = array(
-			'id' => 89,
-			'email' => 'recipient00003@test003.local.discardallmail.drh.net',
+		$clickcontact[] = array(
+			'id' => 161,
+			'email' => 'otrocorreo3@otro3.correo3',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 20,
+			'email' => 'newmail@new.mail',
+			'date' => date('Y-m-d', 1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 240,
+			'email' => 'newmail1@new1.mail1',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 57,
+			'email' => 'newmail2@new2.mail2',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 161,
+			'email' => 'otrocorreo3@otro3.correo3',
 			'date' => date('Y-m-d',1386687891),
 			'os' => 'Mac'
 		);
-
-		return $this->setJsonResponse(array('clickdetaillist' => $contact));
+		
+		$allstadistics = array(
+			'opens' => $opens,
+			'clicks' => $clicks,
+			'unsubscribed' => $unsubscribed
+		);
+		
+		$alldetails = array(
+			'opens' => $opencontact,
+			'clicks' => $clickcontact,
+			'unsubscribed' => $unsubscribedcontact
+		);
+		
+		$statistics[] = array(
+			'id' => 12,
+			'statistics' => json_encode($allstadistics),
+			'details' => json_encode($alldetails)
+		);		
+		return $this->setJsonResponse(array('drilldowndbase' => $statistics));
 	}
 }

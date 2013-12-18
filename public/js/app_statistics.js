@@ -1,82 +1,102 @@
 App.set('errormessage', '');
+App.set('chartData', '');
 
-App.Dbasestatistic = DS.Model.extend({
+App.Drilldowndbase = DS.Model.extend({
+	details: DS.attr('string'),
 	statistics: DS.attr('string'),
-	details: DS.attr('string')
+
 });
 
 App.Router.map(function() {
-  this.resource('dbasestatistic', function(){
-	  this.route('opens')
-	  this.route('clicks')
+  this.resource('drilldowndbase', function(){
+	  this.route('opens'),
+	  this.route('clicks'),
+	  this.route('unsubscribed')
   });
 });
 
 /*Routes*/
 
-App.DbasestatisticIndexRoute = Ember.Route.extend({});
+App.DrilldowndbaseIndexRoute = Ember.Route.extend({});
 
-App.DbasestatisticOpensRoute = Ember.Route.extend({
+App.DrilldowndbaseOpensRoute = Ember.Route.extend({
 	model: function () {
-		//return this.store.find('dbasestatistic');	
-		console.log(this.store.find('dbasestatistic'))
-	},
-//	setupController: function(controller, model) {
-//		controller.set('model', model);
-//		controller.loadDataChart();
-//	}
-});
-
-App.DbasestatisticClicksRoute = Ember.Route.extend({
-	model: function () {
-		return this.store.find('dbasestatistic');		
+		return this.store.find('drilldowndbase');	
 	},
 	setupController: function(controller, model) {
 		controller.set('model', model);
 		controller.loadDataChart();
+		controller.loadDataDetails();
 	}
 });
+
+App.DrilldowndbaseClicksRoute = Ember.Route.extend({
+	model: function () {
+		return this.store.find('drilldowndbase');		
+	},
+	setupController: function(controller, model) {
+		controller.set('model', model);
+		controller.loadDataChart();
+		controller.loadDataDetails();
+	}
+});
+
+App.DrilldowndbaseUnsubscribedRoute = Ember.Route.extend({
+	model: function () {
+		return this.store.find('drilldowndbase');	
+	},
+	setupController: function(controller, model) {
+		controller.set('model', model);
+		controller.loadDataChart();
+		controller.loadDataDetails();
+	}
+});
+
 
 /*Controllers*/
-App.DbasestatisticController = Ember.ObjectController.extend();
-App.DbasestatisticController = Ember.ArrayController.extend({});	
+App.DrilldowndbaseController = Ember.ObjectController.extend();
+App.DrilldowndbaseIndexController = Ember.ArrayController.extend({});	
 
-App.DbasestatisticOpensController = Ember.ArrayController.extend({
+App.DrilldowndbaseOpensController = Ember.ArrayController.extend({
 	loadDataChart: function() {
-		this.store.find('openstatistic').then(function(statistic) {
-			var values = getContent(statistic);
-			App.set('chartData', values);
-		});
+		var statistics = JSON.parse(this.get('model').content[0].get('statistics')).opens;
+		App.set('chartData', statistics);
+	},
+	loadDataDetails: function() {
+		var details = JSON.parse(this.get('model').content[0].get('details')).opens;
+		App.set('detailsData', details);
 	}
 });
 
-App.DbasestatisticClicksController = Ember.ArrayController.extend({	
+App.DrilldowndbaseClicksController = Ember.ArrayController.extend({	
 	loadDataChart: function() {
-		this.store.find('clickstatistic').then(function(statistic) {
-		   var values = getContent(statistic);
-			App.set('chartData', values);
-		});
+		var statistics = JSON.parse(this.get('model').content[0].get('statistics')).clicks;
+		App.set('chartData', statistics);
+	},
+	loadDataDetails: function() {
+		var details = JSON.parse(this.get('model').content[0].get('details')).clicks;
+		App.set('detailsData', details);
 	}
 });
 
-function getContent(statistic)
-{
-	var values =[];
-	var all = statistic.get('content');
-	for(var i = 0; i < all.length; i++) {
-		var obj = {title: all[i].get('title'), value: all[i].get('value')};
-		values.push(obj);
+App.DrilldowndbaseUnsubscribedController = Ember.ArrayController.extend({	
+	loadDataChart: function() {
+		var statistics = JSON.parse(this.get('model').content[0].get('statistics')).unsubscribed;
+		App.set('chartData', statistics);
+	},
+	loadDataDetails: function() {
+		var details = JSON.parse(this.get('model').content[0].get('details')).unsubscribed;
+		App.set('detailsData', details);
 	}
-	return values;
-}
+});
 
-App.DrilldownTimeGraphView = Ember.View.extend({
+App.TimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
-	drawChart:function(){
+	didInsertElement:function(){
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");	
 
 		var chartData = App.get('chartData');
-		
+
 		var chart;
 
 		if(this.typeChart === 'Pie') {
@@ -87,8 +107,7 @@ App.DrilldownTimeGraphView = Ember.View.extend({
 		}
 
 		chart.write(this.idChart);
-
-  }.observes('App.chartData')
+	}
 });
 
 function createBarChart(chartData) {
