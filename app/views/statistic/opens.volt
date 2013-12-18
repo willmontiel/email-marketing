@@ -1,4 +1,4 @@
-<script type="text/x-handlebars" data-template-name="drilldown/opens">
+<script type="text/x-handlebars" data-template-name="dbasestatistic/opens">
 	<hr />
 	<div class="row-fluid">
 		<div class="news span4">

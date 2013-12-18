@@ -5,12 +5,12 @@
 class ApistatisticsController extends ControllerBase
 {
 	/**
-	 * @Get("/openstatistics")
+	 * @Get("/dbase/{idDbase:[0-9]+}/dbasestatistics")
 	 */
-	public function openstatisticsAction($idMail)
+	public function dbaseAction($idDbase)
 	{
 		$log = $this->logger;
-		
+		$log->log('El id dbase es: ' . $idDbase);
 		$values[0] = array(
 			'id' => 1,
 			'title' =>'Enero',
@@ -26,16 +26,7 @@ class ApistatisticsController extends ControllerBase
 			'title' =>'Marzo',
 			'value' => '50'
 		);
-
-		return $this->setJsonResponse(array('openstatistic' => $values));
-	}
-	
-	/**
-	 * @Get("/opendetaillists")
-	 */
-	public function opendetaillistsAction()
-	{
-		$log = $this->logger;
+		
 		
 		$contact[0] = array(
 			'id' => 100,
@@ -57,10 +48,12 @@ class ApistatisticsController extends ControllerBase
 			'date' => date('Y-m-d',1386687891),
 			'os' => 'Mac'
 		);
-
-		return $this->setJsonResponse(array('opendetaillist' => $contact));
+		
+		$statistics['statistics'] = json_encode($values);
+		$statistics['details'] = json_encode($contact);
+		
+		return $this->setJsonResponse(array('dbasestatistic' => $statistics));
 	}
-	
 	/**
 	 * @Get("/clickstatistics")
 	 */

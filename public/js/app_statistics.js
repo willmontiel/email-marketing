@@ -1,51 +1,35 @@
 App.set('errormessage', '');
 
-App.Openstatistic = DS.Model.extend({
-	title: DS.attr('string'),
-	value: DS.attr('string')
-});
-
-App.Opendetaillist = DS.Model.extend({
-	email: DS.attr('string'),
-	date: DS.attr('string'),
-	os: DS.attr('string')
-});
-
-App.Clickstatistic = DS.Model.extend({
-	title: DS.attr('string'),
-	value: DS.attr('string')
-});
-
-App.Clickdetaillist = DS.Model.extend({
-	email: DS.attr('string'),
-	date: DS.attr('string'),
-	os: DS.attr('string')
+App.Dbasestatistic = DS.Model.extend({
+	statistics: DS.attr('string'),
+	details: DS.attr('string')
 });
 
 App.Router.map(function() {
-  this.resource('drilldown', function(){
-	  this.route('opens');
-	  this.route('clicks');
+  this.resource('dbasestatistic', function(){
+	  this.route('opens')
+	  this.route('clicks')
   });
 });
 
 /*Routes*/
 
-App.DrilldownIndexRoute = Ember.Route.extend({});
+App.DbasestatisticIndexRoute = Ember.Route.extend({});
 
-App.DrilldownOpensRoute = Ember.Route.extend({
+App.DbasestatisticOpensRoute = Ember.Route.extend({
 	model: function () {
-		return this.store.find('opendetaillist');		
+		//return this.store.find('dbasestatistic');	
+		console.log(this.store.find('dbasestatistic'))
 	},
-	setupController: function(controller, model) {
-		controller.set('model', model);
-		controller.loadDataChart();
-	}
+//	setupController: function(controller, model) {
+//		controller.set('model', model);
+//		controller.loadDataChart();
+//	}
 });
 
-App.DrilldownClicksRoute = Ember.Route.extend({
+App.DbasestatisticClicksRoute = Ember.Route.extend({
 	model: function () {
-		return this.store.find('clickdetaillist');		
+		return this.store.find('dbasestatistic');		
 	},
 	setupController: function(controller, model) {
 		controller.set('model', model);
@@ -54,10 +38,10 @@ App.DrilldownClicksRoute = Ember.Route.extend({
 });
 
 /*Controllers*/
-App.DrilldownController = Ember.ObjectController.extend();
-App.DrilldownIndexController = Ember.ArrayController.extend({});	
+App.DbasestatisticController = Ember.ObjectController.extend();
+App.DbasestatisticController = Ember.ArrayController.extend({});	
 
-App.DrilldownOpensController = Ember.ArrayController.extend({	
+App.DbasestatisticOpensController = Ember.ArrayController.extend({
 	loadDataChart: function() {
 		this.store.find('openstatistic').then(function(statistic) {
 			var values = getContent(statistic);
@@ -66,7 +50,7 @@ App.DrilldownOpensController = Ember.ArrayController.extend({
 	}
 });
 
-App.DrilldownClicksController = Ember.ArrayController.extend({	
+App.DbasestatisticClicksController = Ember.ArrayController.extend({	
 	loadDataChart: function() {
 		this.store.find('clickstatistic').then(function(statistic) {
 		   var values = getContent(statistic);

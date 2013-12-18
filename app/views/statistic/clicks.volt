@@ -1,4 +1,4 @@
-<script type="text/x-handlebars" data-template-name="drilldown/clicks">
+<script type="text/x-handlebars" data-template-name="dbasestatistic/clicks">
 	<hr />
 	<div class="row-fluid">
 		<div class="news span4">

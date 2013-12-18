@@ -173,10 +173,7 @@ class Security extends Plugin
 				
 				//Apistatistics
 				//Estadisticas
-				'apistatistics::openstatistics' => array('statistic' => array('read')),
-				'apistatistics::opendetaillists' => array('statistic' => array('read')),
-				'apistatistics::clickstatistics' => array('statistic' => array('read')),
-				'apistatistics::clickdetaillists' => array('statistic' => array('read')),
+				'apistatistics::dbase' => array('statistic' => array('read')),
 			
 		//* RELEASE 0.2.0 *//
 				//Envío de correos
@@ -299,7 +296,7 @@ class Security extends Plugin
 		}
 		else{
 			$acl = $this->getAcl();
-			
+			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
 			if (!isset($map[$controller .'::'. $action])) {
 				if($this->validateResponse($controller) == true){
 					$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
