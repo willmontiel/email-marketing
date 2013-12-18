@@ -91,7 +91,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="openColor subtitleColor">{{'{{#linkTo "contactliststatistic.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
+							<td><h4 class="openColor subtitleColor">{{'{{#linkTo "drilldowncontactlist.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
 						</tr>
 						<tr>
 						
@@ -107,7 +107,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="clicksColor subtitleColor">{{'{{#linkTo "contactliststatistic.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clicks</a>{{/linkTo}}'}}</h4></td>
+							<td><h4 class="clicksColor subtitleColor">{#{{'{{#linkTo "drilldrowncontactlist.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clicks</a>{{/linkTo}}'}}#}</h4></td>
 						</tr>
 						<tr>
 							
