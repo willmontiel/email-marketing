@@ -233,6 +233,7 @@ class Security extends Plugin
 				//statistics
 				'statistic::index' => array('statistic' => array('read')),
 				'statistic::show' => array('statistic' => array('read')),
+				'statistic::dbase' => array('statistic' => array('read')),
 				
 			);
 		}

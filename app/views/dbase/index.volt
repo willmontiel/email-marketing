@@ -54,9 +54,13 @@
 								<div class="avatar purple">
 									<i class="icon-book icon-2x"></i>
 								</div>
+								<div class="news-time">
+									<span>&nbsp;</span>
+									<a href="{{url('statistic/show')}}/{{item.idDbase}}"><i class="icon-bar-chart icon-2x"></i></a>
+								</div>
 								<div class="news-content">
 									<div class="news-title">
-										<a href="{{ url('dbase/show/') }}{{item.idDbase}}">{{item.name}}</a>
+										<a href="{{ url('dbase/show') }}/{{item.idDbase}}">{{item.name}}</a>
 									</div>
 									<div class="news-text">
 										{{item.description}}

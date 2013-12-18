@@ -20,7 +20,7 @@ App.Router.map(function() {
    this.route('dbase');
 });
 
-/* Controladores de Dbase  (necesario?) */
+/* Controladores de Dbase  (necesario?) *-*/
 App.DbaseRoute = Ember.Route.extend({
   	model: function() {
 		return this.store.find('dbase');
