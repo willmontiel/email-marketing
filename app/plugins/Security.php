@@ -229,7 +229,7 @@ class Security extends Plugin
 				'test::aperturas' => array('statistic' => array('read')),
 				//statistics
 				'statistic::index' => array('statistic' => array('read')),
-				'statistic::mail' => array('statistic' => array('read')),
+				'statistic::show' => array('statistic' => array('read')),
 				'statistic::dbase' => array('statistic' => array('read')),
 				
 			);
