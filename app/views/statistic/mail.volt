@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlstatistic.url}}';
+		var MyDbaseUrl = '{{apiurlstatistic.url ~ '/mail/15' }}';
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
@@ -14,26 +14,22 @@
 	{{ javascript_include('amcharts/serial.js')}}
 	{{ javascript_include('amcharts/pie.js')}}
 	{{ stylesheet_link('css/statisticStyles.css') }}
-	
+
 	<script>
-		var chartData = [{
-			type: "Aperturas",
-			amount: 63
-		}, {
-			type: "Rebotados",
-			amount: 22
-		},{
-			type: "No Aperturas",
-			amount: 15
-		}]; 
-	</script>
-	<script>
+		var chartData = [];
+		
+		{%for data in summaryChartData %}
+			var data = new Object();
+			data.title = '{{ data['title'] }}';
+			data.value = {{ data['value'] }};
+			chartData.push(data);
+		{%endfor%}
 
 		AmCharts.ready(function () {
 			var chart = new AmCharts.AmPieChart();
 			chart.dataProvider = chartData;
-			chart.titleField = "type";
-			chart.valueField = "amount";
+			chart.titleField = "title";
+			chart.valueField = "value";
 
 			chart.sequencedAnimation = true;
 			chart.startEffect = "easeOutSine";
@@ -126,7 +122,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="unsubscribedColor subtitleColor">Des-suscritos</h4></td>
+							<td><h4 class="unsubscribedColor subtitleColor">{{'{{#linkTo "drilldown.unsubscribed" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Des-suscritos</a>{{/linkTo}}'}}</h4></td>
 						</tr>
 						<tr>
 							
@@ -172,8 +168,7 @@
 				{{ "{{outlet}}" }}
 			</div>
 		</script>
-		{{ partial("statistic/opens") }}
-		{{ partial("statistic/clicks") }}
+		{{ partial("statistic/dbasepartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
 		<div id="ChartContainer"></div>
 		</script>

@@ -4,7 +4,6 @@ App.set('chartData', '');
 App.Drilldown = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string'),
-
 });
 
 App.Router.map(function() {

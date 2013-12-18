@@ -9,7 +9,7 @@
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_std.js') }}
-	{{ javascript_include('js/app_dbase_statistics.js') }}
+	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('amcharts/amcharts.js')}}
 	{{ javascript_include('amcharts/serial.js')}}
 	{{ javascript_include('amcharts/pie.js')}}
