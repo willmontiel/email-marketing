@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlstatistic.url ~ '/dbase/15' }}';
+		var MyDbaseUrl = '{{apiurlstatistic.url ~ '/dbase/' ~ idDbase }}';
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}

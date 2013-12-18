@@ -31,6 +31,7 @@ class StatisticController extends ControllerBase
 			);
 			
 			$this->view->setVar("summaryChartData", $summaryChartData);
+			$this->view->setVar("idMail", $idMail);
 		}
 		else {
 			$this->response->redirect('error');
@@ -55,6 +56,7 @@ class StatisticController extends ControllerBase
 		);
 	
 		$this->view->setVar("summaryChartData", $summaryChartData);
+		$this->view->setVar("idDbase", $idDbase);
 	}
 	
 	public function contactlistAction($idContactList)
