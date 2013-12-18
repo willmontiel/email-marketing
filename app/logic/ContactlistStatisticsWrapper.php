@@ -3,29 +3,27 @@ class ContactlistStatisticsWrapper extends BaseWrapper
 {
 	public function convertStatContactList($stat)
 	{
-		$mail = array();
-		foreach ($stat as $s) {
-			$idContactlist =  $s->idContactlist;
-			
-			$mailStat = new stdClass();
-			$mailStat->idMail = $s->idMail;
-			$mailStat->date = $s->sentDate;
-			$mailStat->sent = $s->sent;
-			
-			$mail[] = $mailStat;
-		}
 		
-		$object = array();
-		$object['id'] = intval($idContactlist);
-		$object['statistic'] = $mail;
-		$object['details'] = 'lala';
-
-		return $object;
 	}
 	
 	public function getOpenStats($stat)
 	{
-		$stats = $this->convertStatContactList($stat);
-		return array('Contactliststatistic' => $stats) ;
+		$stats = array();
+		$mail = array();
+		
+		foreach ($stat as $s) {
+			$idContactlist =  $s->idContactlist;
+			$mailStat = new stdClass();
+			$mailStat->idMail = $s->idMail;
+			$mailStat->title = $s->sentDate;
+			$mailStat->value = $s->sent;
+			
+			$mail[] = $mailStat;
+		}
+		$stats['id'] = intval($idContactlist);
+		$stats['statistics'] = json_encode($mail);
+		$stats['details'] = 'lala';
+		
+		return array('drilldowncontactlist' => $stats) ;
 	}
 }
