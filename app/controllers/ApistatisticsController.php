@@ -156,9 +156,9 @@ class ApistatisticsController extends ControllerBase
 	}
 	
 	/**
-	 * @Get("/opendetaillists/{idContactlist:[0-9]+}")
+	 * @Get("/contactlist/{idContactlist:[0-9]+}/drilldownopens")
 	 */
-	public function contactlistAction($idContactList)
+	public function contactlistopensAction($idContactList)
 	{
 		$this->logger->log("id: " . $idContactList);
 		$statsContactList = Statcontactlist::find(array(

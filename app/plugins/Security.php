@@ -174,7 +174,7 @@ class Security extends Plugin
 				//Apistatistics
 				//Estadisticas
 				'apistatistics::dbase' => array('statistic' => array('read')),
-				'apistatistics::contactlist' => array('statistic' => array('read')),
+				'apistatistics::contactlistopens' => array('statistic' => array('read')),
 				'apistatistics::mailopens' => array('statistic' => array('read')),
 				
 			
