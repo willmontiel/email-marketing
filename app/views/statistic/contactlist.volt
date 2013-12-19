@@ -8,7 +8,6 @@
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
-	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('amcharts/amcharts.js')}}
 	{{ javascript_include('amcharts/serial.js')}}
@@ -55,7 +54,7 @@
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
 	<!------------------ Ember! ---------------------------------->
-	<div id="emberApplistContainer">
+	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}
 			<div class="news span5">
@@ -91,7 +90,7 @@
 									</tr></table>
 								</label>
 							</td>
-							<td><h4 class="openColor subtitleColor">{{'{{#linkTo "drilldowncontactlist.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
+							<td><h4 class="openColor subtitleColor">{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
 						</tr>
 						<tr>
 						
