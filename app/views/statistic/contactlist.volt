@@ -168,8 +168,7 @@
 				{{ "{{outlet}}" }}
 			</div>
 		</script>
-		{{ partial("statistic/contactlistopens") }}
-		{{ partial("statistic/contactlistclicks") }}
+		{{ partial("statistic/drilldownpartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
 		<div id="ChartContainer"></div>
 		</script>

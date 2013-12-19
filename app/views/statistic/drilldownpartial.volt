@@ -123,33 +123,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Lista de aperturas
-					</div>
-				</div>
-				<div class="box-content">
-					<table class="table table-normal">
-						<thead>
-							<tr>
-								<td>Fecha y hora</td>
-								<td>Dirección de correo</td>
-								<td>Sistema operativo?</td>
-							</tr>
-						</thead>
-						<tbody>
-						{{'{{#each App.detailsData}}'}}
-							<tr>
-								<td>{{'{{date}}'}}</td>
-								<td>{{'{{email}}'}}</td>
-								<td>{{'{{os}}'}}</td>
-							</tr>
-						{{ '{{/each}}' }}
-						</tbody>
-					</table>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </script>
