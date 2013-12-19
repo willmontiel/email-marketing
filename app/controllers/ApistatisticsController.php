@@ -146,6 +146,14 @@ class ApistatisticsController extends ControllerBase
 		);		
 		return $this->setJsonResponse(array('drilldown' => $statistics));
 	}
+
+	/**
+	 * @Get("/mail/{idMail:[0-9]+}/drilldownopens")
+	 */
+	public function mailopensAction($idMail)
+	{
+		return $this->setJsonResponse(array('status'=> 'Error'), 500, 'Mensaje de error');
+	}
 	
 	/**
 	 * @Get("/opendetaillists/{idContactlist:[0-9]+}")
@@ -168,7 +176,7 @@ class ApistatisticsController extends ControllerBase
 	/**
 	 * @Get("/mail/{idMail:[0-9]+}/drilldowns")
 	 */
-	public function mailAction($idMail)
+	public function mailsAction($idMail)
 	{
 		$log = $this->logger;
 		$log->log('El id Mail es: ' . $idMail);		

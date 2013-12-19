@@ -8,7 +8,6 @@
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
-	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('amcharts/amcharts.js')}}
 	{{ javascript_include('amcharts/serial.js')}}
@@ -22,6 +21,7 @@
 			var data = new Object();
 			data.title = '{{ data['title'] }}';
 			data.value = {{ data['value'] }};
+			data.url = '{{ data['url'] }}';
 			chartData.push(data);
 		{%endfor%}
 
@@ -30,6 +30,7 @@
 			chart.dataProvider = chartData;
 			chart.titleField = "title";
 			chart.valueField = "value";
+			chart.urlField = "url";
 
 			chart.sequencedAnimation = true;
 			chart.startEffect = "easeOutSine";
@@ -54,12 +55,12 @@
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
 	<!------------------ Ember! ---------------------------------->
-	<div id="emberApplistContainer">
+	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}
 			<div class="news span5">
 				<div class="titleMail">
-					<h2>Correo XYZ</h2>
+					<h2>Mail ABC</h2>
 				</div>
 				<div class="offset1 dataMailContacts">
 					<table class="table-condensed">
@@ -71,7 +72,7 @@
 										<td>
 											<i class="icon-envelope" style="font-size: 20px;"></i>
 										</td>
-										<td>9098</td>
+										<td>{{statisticsData.total}}</td>
 									</tr></table>
 								</label>
 							</td>
@@ -84,9 +85,9 @@
 										<td>
 											<i class="icon-search"></i>
 										</td>
-										<td>4252</td>
+										<td>{{statisticsData.opens}}</td>
 										<td>|</td>
-										<td>46.74%</td>
+										<td>{{statisticsData.statopens}}%</td>
 									</tr></table>
 								</label>
 							</td>
@@ -100,9 +101,9 @@
 										<td>
 											<i class="icon-hand-up"></i>
 										</td>
-										<td>3882</td>
+										<td>{{statisticsData.clicks}}</td>
 										<td>|</td>
-										<td>42.67%</td>
+										<td>{{statisticsData.statclicks}}%</td>
 									</tr></table>
 								</label>
 							</td>
@@ -116,9 +117,9 @@
 										<td>
 											<i class="icon-minus-sign"></i>
 										</td>
-										<td>964</td>
+										<td>{{statisticsData.unsubscribed}}</td>
 										<td>|</td>
-										<td>10.60%</td>
+										<td>{{statisticsData.statunsubscribed}}%</td>
 									</tr></table>
 								</label>
 							</td>
@@ -132,9 +133,9 @@
 										<td>
 											<i class="icon-warning-sign"></i>
 										</td>
-										<td>964</td>
+										<td>{{statisticsData.bounced}}</td>
 										<td>|</td>
-										<td>10.60%</td>
+										<td>{{statisticsData.statbounced}}%</td>
 									</tr></table>
 								</label>
 							</td>
@@ -148,9 +149,9 @@
 										<td>
 											<i class="icon-remove"></i>
 										</td>
-										<td>964</td>
+										<td>{{statisticsData.spam}}</td>
 										<td>|</td>
-										<td>10.60%</td>
+										<td>{{statisticsData.statspam}}%</td>
 									</tr></table>
 								</label>
 							</td>

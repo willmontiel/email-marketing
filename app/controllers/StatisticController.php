@@ -11,27 +11,13 @@ class StatisticController extends ControllerBase
 		$log = $this->logger;
 		$log->log('El Id de Mail es: ' . $idMail);
 				
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
-		));
+		$statWrapper = new StatisticsWrapper();
+		$mailStat = $statWrapper->showMailStatistics($idMail);
 		
-		if($mail) {
-			$summaryChartData[] = array(
-				'title' => "Aperturas",
-				'value' => $mail->uniqueOpens
-			);
-			$summaryChartData[] = array(
-				'title' => "Rebotados",
-				'value' => $mail->bounced
-			);
-			$summaryChartData[] = array(
-				'title' => "No Aperturas",
-				'value' => $mail->totalContacts - ( $mail->uniqueOpens + $mail->bounced)
-			);
-			
-			$this->view->setVar("summaryChartData", $summaryChartData);
+		if($mailStat) {
 			$this->view->setVar("idMail", $idMail);
+			$this->view->setVar("summaryChartData", $mailStat['summaryChartData']);
+			$this->view->setVar("statisticsData", $mailStat['statisticsData']);
 		}
 		else {
 			$this->response->redirect('error');
