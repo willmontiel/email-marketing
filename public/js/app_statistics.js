@@ -1,7 +1,46 @@
+App = Ember.Application.create({
+	rootElement: '#emberAppstatisticsContainer'
+});
+
+//Adaptador
+//App.ApplicationAdapter = DS.RESTAdapter.extend();
+
+DS.RESTAdapter.reopen({
+	namespace: MyDbaseUrl,
+	//plurals: {dbase: 'dbasess'}
+});
+
+//DS.RESTAdapter.configure('plurals', {
+//		dbase: 'dbases'
+//	});
+
+// Store (class)
+App.Store = DS.Store.extend({});
+
 App.set('errormessage', '');
 App.set('chartData', '');
 
-App.Drilldown = DS.Model.extend({
+App.Drilldownopen = DS.Model.extend({
+	details: DS.attr('string'),
+	statistics: DS.attr('string'),
+});
+
+App.Drilldownclick = DS.Model.extend({
+	details: DS.attr('string'),
+	statistics: DS.attr('string'),
+});
+
+App.Drilldownunsubscribed = DS.Model.extend({
+	details: DS.attr('string'),
+	statistics: DS.attr('string'),
+});
+
+App.Drilldownbounced = DS.Model.extend({
+	details: DS.attr('string'),
+	statistics: DS.attr('string'),
+});
+
+App.Drilldownspam = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string'),
 });
@@ -20,7 +59,7 @@ App.DrilldownIndexRoute = Ember.Route.extend({});
 
 App.DrilldownOpensRoute = Ember.Route.extend({
 	model: function () {
-		return this.store.find('drilldown');	
+		return this.store.find('drilldownopen');	
 	},
 	setupController: function(controller, model) {
 		controller.set('model', model);
@@ -31,7 +70,7 @@ App.DrilldownOpensRoute = Ember.Route.extend({
 
 App.DrilldownClicksRoute = Ember.Route.extend({
 	model: function () {
-		return this.store.find('drilldown');		
+		return this.store.find('drilldownclick');		
 	},
 	setupController: function(controller, model) {
 		controller.set('model', model);
@@ -42,7 +81,7 @@ App.DrilldownClicksRoute = Ember.Route.extend({
 
 App.DrilldownUnsubscribedRoute = Ember.Route.extend({
 	model: function () {
-		return this.store.find('drilldown');	
+		return this.store.find('drilldownunsubscribed');	
 	},
 	setupController: function(controller, model) {
 		controller.set('model', model);
@@ -58,33 +97,33 @@ App.DrilldownIndexController = Ember.ArrayController.extend({});
 
 App.DrilldownOpensController = Ember.ArrayController.extend({
 	loadDataChart: function() {
-		var statistics = JSON.parse(this.get('model').content[0].get('statistics')).opens;
+		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
 	},
 	loadDataDetails: function() {
-		var details = JSON.parse(this.get('model').content[0].get('details')).opens;
+		var details = JSON.parse(this.get('model').content[0].get('details'));
 		App.set('detailsData', details);
 	}
 });
 
 App.DrilldownClicksController = Ember.ArrayController.extend({	
 	loadDataChart: function() {
-		var statistics = JSON.parse(this.get('model').content[0].get('statistics')).clicks;
+		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
 	},
 	loadDataDetails: function() {
-		var details = JSON.parse(this.get('model').content[0].get('details')).clicks;
+		var details = JSON.parse(this.get('model').content[0].get('details'));
 		App.set('detailsData', details);
 	}
 });
 
 App.DrilldownUnsubscribedController = Ember.ArrayController.extend({	
 	loadDataChart: function() {
-		var statistics = JSON.parse(this.get('model').content[0].get('statistics')).unsubscribed;
+		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
 	},
 	loadDataDetails: function() {
-		var details = JSON.parse(this.get('model').content[0].get('details')).unsubscribed;
+		var details = JSON.parse(this.get('model').content[0].get('details'));
 		App.set('detailsData', details);
 	}
 });

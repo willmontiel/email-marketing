@@ -61,6 +61,7 @@ try {
 		
 		$router->addResource('Field', '/field');
 		$router->addResource('Api', '/api');
+		$router->addResource('Apistatistics', '/apistatistics');
 		
 		return $router;
 	});
