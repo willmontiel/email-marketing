@@ -160,7 +160,7 @@ class ApistatisticsController extends ControllerBase
 	 */
 	public function contactlistopensAction($idContactList)
 	{
-		$statWrapper = new ContactlistStatisticsWrapper();
+		$statWrapper = new StatisticsWrapper();
 		
 		$stat = $statWrapper->getOpenStats($idContactList);
 
@@ -322,22 +322,4 @@ class ApistatisticsController extends ControllerBase
 		);		
 		return $this->setJsonResponse(array('drilldownunsubscribed' => $statistics));
 	}
-	
-	/**
-	 * @Get("/contactlist/{idContactlist:[0-9]+}/drilldownopens")
-	 */
-	public function contactlistopensAction($idContactList)
-	{
-		$this->logger->log("id: " . $idContactList);
-		$statsContactList = Statcontactlist::find(array(
-			'conditions' => 'idContactlist = ?1',
-			'bind' => array(1 => $idContactList)
-		));
-		
-		$statWrapper = new ContactlistStatisticsWrapper();
-		
-		$stat = $statWrapper->getOpenStats($statsContactList);
-
-		return $this->setJsonResponse($stat);
-	}	
 }

@@ -55,122 +55,124 @@
 {% block content %}
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
-		<script type="text/x-handlebars">
-			{# Tabs de navegacion #}
-			<div class="news span5">
+		{# <script type="text/x-handlebars"> #}
+			<div class="news span6">
 				<div class="titleMail">
 					<h2>Base de Datos XYZ</h2>
 				</div>
 				<div class="offset1 dataMailContacts">
-					<table class="table-condensed">
-						<tr>
-							
-							<td>
-								<label class="label-total-percent centertext">
-									<table><tr>
-										<td>
-											<i class="icon-envelope" style="font-size: 20px;"></i>
-										</td>
-										<td>{{stat.sent}}</td>
-									</tr></table>
-								</label>
-							</td>
-							<td><h4 class="totalColor">Totales</h4></td>
-						</tr>
+					<table>
 						<tr>
 							<td>
-								<label class="label-open-percent">
-									<table><tr>
+								<table class="table-condensed">
+									<tr>
 										<td>
-											<i class="icon-search"></i>
+											<label class="label-total-percent centertext">
+												<table>
+													<tr>
+														<td>
+															<i class="icon-envelope" style="font-size: 20px;"></i>
+														</td>
+														<td style="text-align: right;">{{stat.sent}}</td>
+													</tr>
+												</table>
+											</label>
 										</td>
-										<td>{{stat.uniqueOpens}}</td>
-										<td>|</td>
-										<td>{{stat.percentageUniqueOpens}}%</td>
-									</tr></table>
-								</label>
+										<td><h4 class="totalColor">Totales</h4></td>
+									</tr>
+									<tr>
+										<td>
+											<label class="label-open-percent">
+												<table><tr>
+													<td>
+														<i class="icon-search"></i>
+													</td>
+													<td>{{stat.uniqueOpens}}</td>
+													<td>|</td>
+													<td>{{stat.percentageUniqueOpens}}%</td>
+												</tr></table>
+											</label>
+										</td>
+										<td><h4 class="openColor subtitleColor">Aperturas</h4></td>
+									</tr>
+									<tr>
+										<td>
+											<label class="label-click-percent">
+												<table><tr>
+													<td>
+														<i class="icon-hand-up"></i>
+													</td>
+													<td>{{stat.clicks}}</td>
+													<td>|</td>
+													<td>----</td>
+												</tr></table>
+											</label>
+										</td>
+										<td><h4 class="clicksColor subtitleColor">Clicks</h4></td>
+									</tr>
+								</table>
 							</td>
-							<td><h4 class="openColor subtitleColor">{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
-						</tr>
-						<tr>
-						
 							<td>
-								<label class="label-click-percent">
-									<table><tr>
+								<table class="table-condensed">
+									<tr>
 										<td>
-											<i class="icon-hand-up"></i>
+											<label class="label-unsubscribed-percent">
+												<table><tr>
+													<td>
+														<i class="icon-minus-sign"></i>
+													</td>
+													<td>{{stat.unsubscribed}}</td>
+													<td>|</td>
+													<td>{{stat.percentageUnsubscribed}}%</td>
+												</tr></table>
+											</label>
 										</td>
-										<td>{{stat.clicks}}</td>
-										<td>|</td>
-										<td>----</td>
-									</tr></table>
-								</label>
-							</td>
-							<td><h4 class="clicksColor subtitleColor">{#{{'{{#linkTo "drilldrowncontactlist.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clicks</a>{{/linkTo}}'}}#}</h4></td>
-						</tr>
-						<tr>
-							
-							<td>
-								<label class="label-unsubscribed-percent">
-									<table><tr>
+										<td><h4 class="unsubscribedColor subtitleColor">Des-suscritos</h4></td>
+									</tr>
+									<tr>
 										<td>
-											<i class="icon-minus-sign"></i>
+											<label class="label-bounced-percent">
+												<table><tr>
+													<td>
+														<i class="icon-warning-sign"></i>
+													</td>
+													<td>{{stat.bounced}}</td>
+													<td>|</td>
+													<td>{{stat.percentageBounced}}%</td>
+												</tr></table>
+											</label>
 										</td>
-										<td>{{stat.unsubscribed}}</td>
-										<td>|</td>
-										<td>{{stat.percentageUnsubscribed}}%</td>
-									</tr></table>
-								</label>
-							</td>
-							<td><h4 class="unsubscribedColor subtitleColor">Des-suscritos</h4></td>
-						</tr>
-						<tr>
-							
-							<td>
-								<label class="label-bounced-percent">
-									<table><tr>
+										<td><h4 class="bouncedColor subtitleColor">Rebotes</h4></td>
+									</tr>
+									<tr>
 										<td>
-											<i class="icon-warning-sign"></i>
+											<label class="label-spam-percent">
+												<table><tr>
+													<td>
+														<i class="icon-remove"></i>
+													</td>
+													<td>{{stat.spam}}</td>
+													<td>|</td>
+													<td>{{stat.percentageSpam}}%</td>
+												</tr></table>
+											</label>
 										</td>
-										<td>{{stat.bounced}}</td>
-										<td>|</td>
-										<td>{{stat.percentageBounced}}%</td>
-									</tr></table>
-								</label>
+										<td><h4 class="spamColor subtitleColor">Spam</h4></td>
+									</tr>
+								</table>
 							</td>
-							<td><h4 class="bouncedColor subtitleColor">Rebotes</h4></td>
-						</tr>
-						<tr>
-							
-							<td>
-								<label class="label-spam-percent">
-									<table><tr>
-										<td>
-											<i class="icon-remove"></i>
-										</td>
-										<td>{{stat.spam}}</td>
-										<td>|</td>
-										<td>{{stat.percentageSpam}}%</td>
-									</tr></table>
-								</label>
-							</td>
-							<td><h4 class="spamColor subtitleColor">Spam</h4></td>
 						</tr>
 					</table>
 				</div>
 			</div>
 	
-			<div class="span6">
+			<div class="span5">
 				<div id="summaryChart" style="width: 640px; height: 400px;">
 				</div>
 			</div>
 			<div class="span12">
 				{{ "{{outlet}}" }}
 			</div>
-		</script>
-		{{ partial("statistic/drilldownpartial") }}
-		<script type="text/x-handlebars" data-template-name="timeGraph">
-		<div id="ChartContainer"></div>
 		</script>
 	</div>
 {% endblock %}
