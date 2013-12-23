@@ -1,17 +1,24 @@
 <?php
 class ContactlistStatisticsWrapper extends BaseWrapper
 {
-	public function getOpenStats($stat)
+	public function getOpenStats($idContactList)
 	{
+		$statsContactList = Statcontactlist::find(array(
+			'conditions' => 'idContactlist = ?1',
+			'bind' => array(1 => $idContactList)
+		));
+		
 		$stats = array();
 		$mail = array();
 		
-		foreach ($stat as $s) {
+		foreach ($statsContactList as $s) {
+			$dt = new DateTime();
+			$dt->setTimestamp($s->sentDate);
 			$idContactlist =  $s->idContactlist;
 			$mailStat = new stdClass();
 			$mailStat->idMail = $s->idMail;
-			$mailStat->title = $s->sentDate;
-			$mailStat->value = $s->sent;
+			$mailStat->title = $dt->format('d/M/Y');
+			$mailStat->value = $s->uniqueOpens;
 			
 			$mail[] = $mailStat;
 		}
@@ -19,7 +26,7 @@ class ContactlistStatisticsWrapper extends BaseWrapper
 		$stats[] = array(
 			'id' => intval($idContactlist),
 			'statistics' => json_encode($mail),
-			'details' => 'lala'
+			'details' => json_encode($det['opens'] = array('lala'))
 		);
 		
 		return array('drilldownopen' => $stats) ;

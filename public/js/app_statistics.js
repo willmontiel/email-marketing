@@ -111,6 +111,7 @@ App.DrilldownIndexController = Ember.ArrayController.extend({});
 App.DrilldownOpensController = Ember.ArrayController.extend({
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
+		console.log(statistics);
 		App.set('chartData', statistics);
 	},
 	loadDataDetails: function() {

@@ -241,7 +241,6 @@ class Security extends Plugin
 				'statistic::dbase' => array('statistic' => array('read')),
 				'statistic::contactlist' => array('statistic' => array('read')),
 				'statistic::mail' => array('statistic' => array('read')),
-				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
