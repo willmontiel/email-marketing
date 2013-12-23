@@ -154,19 +154,19 @@ App.TimeGraphView = Ember.View.extend({
 
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
 		
-		var chartData = createChartData('MM');
-		
+		var chartData = createChartData('YYYY-MM');
+
 		if(this.typeChart === 'Pie') {
 			chart = createPieChart(chartData);
 		}
 		else if(this.typeChart === 'Bar') {
-			chart = createBarChart(null, chartData);
+			chart = createBarChart(null, chartData, 'YYYY-MM', 'MM');
 		}
 		else if(this.typeChart === 'Line') {
-			chart = createLineChart(null, chartData);
+			chart = createLineChart(null, chartData, 'YYYY-MM', 'MM');
 		}
 		else if(this.typeChart === 'LineStep') {
-			chart = createLineStepChart(null, chartData, "MM");
+			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM');
 		}
 
 		chart.write(this.idChart);
@@ -175,27 +175,22 @@ App.TimeGraphView = Ember.View.extend({
 	changeScale: function()	{
 		var scale = App.get('scaleSelected');
 		if(scale !== null) {
+			removeLastChart(chart);
 			switch(scale) {
 				case 'hh':
-					var chartData = createChartData('MM-DD HH:mm');
-					chart.removeGraph(chart.graphs[0]);
-					chart = createLineStepChart(chart, chartData, 'MM-DD JJ:NN');
+					var chartData = createChartData('YYYY-MM-DD HH:mm');
+					chart = createLineStepChart(chart, chartData, 'YYYY-MM-DD JJ:NN', 'hh');
 					break;
 				case 'DD':
-					var chartData = createChartData('MM-DD');
-					chart.removeGraph(chart.graphs[0]);
-					chart = createLineStepChart(chart, chartData, 'MM-DD');
+					var chartData = createChartData('YYYY-MM-DD');
+					chart = createLineChart(chart, chartData, 'YYYY-MM-DD', 'DD');
 					break;
 				case 'MM':
-					var chartData = createChartData('MM');
-					chart.removeGraph(chart.graphs[0]);
-					chart = createBarChart(chart, chartData);
+					var chartData = createChartData('YYYY-MM');
+					chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM');
 					break;
 			}
 			
-			var categoryAxis = chart.categoryAxis;
-			categoryAxis.minPeriod = scale;
-			chart.dataProvider = chartData;
 			chart.validateData();
 			chart.animateAgain();
 		}
@@ -226,4 +221,12 @@ function createChartData(format) {
 		}
 	}
 	return result;
+}
+
+function removeLastChart(chart) {
+	chart.removeGraph(chart.graphs[0]);
+	chart.removeValueAxis(chart.valueAxes[0]);
+	chart.removeChartCursor();
+	chart.removeChartScrollbar();
+	chart.removeLegend();
 }

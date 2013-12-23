@@ -83,13 +83,23 @@
 							<td>{{statisticsData.clicks}}</td>
 							<td>|</td>
 							<td>{{statisticsData.statclicks}}%</td>
+							<td>Clics Unicos</td>
+						</tr>
+					</table>
+				</label>
+				<label class="label-click-percent">
+					<table>
+						<tr>
+							<td></td>
+							<td>9</td>
+							<td>|</td>
+							<td>20%</td>
+							<td>Clics Totales</td>
 						</tr>
 					</table>
 				</label>
 			</div>
-			<div class="titleMail">
-				<h4 class="clicksColor">Clics</h4>
-			</div>
+			
 		</div>
 		<div class="pull-right scaleChart">
 			<label for="scaleHour">
@@ -108,6 +118,35 @@
 		{{'{{view App.TimeGraphView idChart="clickPieChartContainer" typeChart="Bar"}}'}}
 	</div>
 	<div class="row-fluid">
+		<div class="clickstotalsandunique span6">
+			<div class="box">
+				<div class="box-content">
+					<table class="table table-normal">
+						<thead>
+							<tr>
+								<td>Vinculos</td>
+								<td>Total Clics</td>
+								<td>Total Clics Unicos</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>https://www.google.com</td>
+								<td>15</td>
+								<td>5</td>
+							</tr>
+							<tr>
+								<td>https://www.facebook.com</td>
+								<td>9</td>
+								<td>4</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">
 		<div class="span12">
 			<div class="box">
 				<div class="box-header">
@@ -119,17 +158,17 @@
 					<table class="table table-normal">
 						<thead>
 							<tr>
-								<td>Fecha y hora</td>
 								<td>Dirección de correo</td>
-								<td>Sistema operativo?</td>
+								<td>Enlace</td>
+								<td>Fecha y hora</td>
 							</tr>
 						</thead>
 						<tbody>
 						{{'{{#each App.detailsData}}'}}
 							<tr>
-								<td>{{'{{date}}'}}</td>
 								<td>{{'{{email}}'}}</td>
-								<td>{{'{{os}}'}}</td>
+								<td>{{'{{link}}'}}</td>
+								<td>{{'{{date}}'}}</td>
 							</tr>
 						{{ '{{/each}}' }}
 						</tbody>
