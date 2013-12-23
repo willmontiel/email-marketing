@@ -88,15 +88,6 @@ td h3 {
 	list-style-type: none;
 }
 
-.label-total-percent {
- background: #85adc7;
- font-size: 22px;
- padding: 3px;
- text-align: center;
- color: white;
- border-radius: 5px;
-}
-
 .label-click-percent {
  background: #81babd;
  font-size: 18px;
@@ -106,45 +97,11 @@ td h3 {
  border-radius: 5px;
 }
 
-.label-open-percent {
- background: #8cc079;
- font-size: 18px;
- padding: 3px;
- text-align: center;
- color: white;
- border-radius: 5px;
-}
 
-.label-unsubscribed-percent {
- background: #8c8689;
- font-size: 18px;
- padding: 3px;
- text-align: center;
- color: white;
- border-radius: 5px;
-}
 
 .time-graph {
 	width: 500px;
 	height: 250px;
-}
-
-.label-bounced-percent {
- background: #953B39;
- font-size: 18px;
- padding: 3px;
- text-align: center;
- color: white;
- border-radius: 5px;
-}
-
-.label-spam-percent {
- background: #d12929;
- font-size: 18px;
- padding: 3px;
- text-align: center;
- color: white;
- border-radius: 5px;
 }
 
 label > table {
@@ -174,6 +131,10 @@ label > table {
 	color: #8c8689 !important;
 }
 
+.unsubscribedColor{
+	color: #8c8689 !important;
+}
+
 .openColor{
 	color: #8cc079;
 }
@@ -193,4 +154,178 @@ label > table {
 
 .scaleChart {
 	margin-right: 50px;
+}
+
+/*Green labels for open statistics in tr table*/
+.border-radious-green-left {
+	background: #8cc079;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+}
+
+.border-radious-green-center {
+	background: #8cc079;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+}
+
+.border-radious-green-right {
+	background: #8cc079;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
+}
+
+/*Blue labels for total data statistics in tr table*/
+.border-radious-blue-left {
+	background: #85adc7;
+	font-size: 22px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+}
+
+.border-radious-blue-center {
+	background: #85adc7;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+}
+
+.border-radious-blue-right {
+	background: #85adc7;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
+}
+
+/*Cyan labels for clicks statistics in tr table*/
+.border-radious-cyan-left {
+	background: #81babd;
+	font-size: 22px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+}
+
+.border-radious-cyan-center {
+	background: #81babd;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+}
+
+.border-radious-cyan-right {
+	background: #81babd;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
+}
+
+/*Gray labels for unsubscribed statistics in tr table*/
+.border-radious-gray-left {
+	background: #8c8689;
+	font-size: 22px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+}
+
+.border-radious-gray-center {
+	background: #8c8689;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+}
+
+.border-radious-gray-right {
+	background: #8c8689;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
+}
+
+/*Scarlet red labels for bounced statistics in tr table*/
+.border-radious-scarlet-left {
+	background: #953B39;
+	font-size: 22px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+}
+
+.border-radious-scarlet-center {
+	background: #953B39;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+}
+
+.border-radious-scarlet-right {
+	background: #953B39;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
+}
+
+/*red labels for spam statistics in tr table*/
+.border-radious-red-left {
+	background: #d12929;
+	font-size: 22px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+}
+
+.border-radious-red-center {
+	background: #d12929;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+}
+
+.border-radious-red-right {
+	background: #d12929;
+	font-size: 18px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
 }
