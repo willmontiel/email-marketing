@@ -8,7 +8,6 @@
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
-	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('amcharts/amcharts.js')}}
 	{{ javascript_include('amcharts/serial.js')}}
@@ -53,7 +52,7 @@
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
 	<!------------------ Ember! ---------------------------------->
-	<div id="emberApplistContainer">
+	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}
 			<div class="news span5">
@@ -167,7 +166,7 @@
 				{{ "{{outlet}}" }}
 			</div>
 		</script>
-		{{ partial("statistic/drilldownpartial") }}
+		{{ partial("statistic/dbasepartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
 		<div id="ChartContainer"></div>
 		</script>

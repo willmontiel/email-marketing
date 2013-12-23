@@ -34,6 +34,7 @@ class StatisticsWrapper extends BaseWrapper
 			);
 			
 			$statisticsData = new stdClass();
+			$statisticsData->mailName = $mail->name;
 			$statisticsData->total = $total;
 			$statisticsData->opens = $opens;
 			$statisticsData->statopens = ( $opens / $total ) * 100 ;
@@ -55,4 +56,286 @@ class StatisticsWrapper extends BaseWrapper
 			return FALSE;
 		}
 	}
+	
+	public function findMailOpenStats($idMail)
+	{
+		$opens = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			$opens[] = array(
+				'title' =>$h1,
+				'value' => $value
+			);
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
+		
+		$opencontact[] = array(
+			'id' => 100,
+			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
+			'date' => date('Y-m-d', 1386687891),
+			'os' => 'Ubuntu'
+		);
+		
+		$opencontact[] = array(
+			'id' => 145,
+			'email' => 'recipient00002@test002.local.discardallmail.drh.net',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$opencontact[] = array(
+			'id' => 161,
+			'email' => 'recipient00003@test003.local.discardallmail.drh.net',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$response['statistics'] = $opens;
+		$response['details'] = $opencontact;
+			
+		return $response;
+	}
+	
+	public function findMailClickStats($idMail)
+	{
+		$clicks[] = array(
+			'title' =>'2012-01-01',
+			'value' => 15
+		);
+		$clicks[] = array(
+			'title' =>'2012-06-01',
+			'value' => 45
+		);
+		$clicks[] = array(
+			'title' =>'2012-12-01',
+			'value' => 40
+		);
+		
+		$clickcontact[] = array(
+			'id' => 100,
+			'email' => 'otrocorreo@otro.correo',
+			'date' => date('Y-m-d', 1386687891),
+			'os' => 'Ubuntu'
+		);
+		
+		$clickcontact[] = array(
+			'id' => 145,
+			'email' => 'otrocorreo2@otro2.correo2',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$clickcontact[] = array(
+			'id' => 161,
+			'email' => 'otrocorreo3@otro3.correo3',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$response['statistics'] = $clicks;
+		$response['details'] = $clickcontact;
+			
+		return $response;
+	}
+	
+	public function findMailUnsubscribedStats($idMail)
+	{
+		$unsubscribed[] = array(
+			'title' =>'2012-09-01',
+			'value' => 15
+		);
+		
+		$unsubscribed[] = array(
+			'title' =>'2012-10-01',
+			'value' => 15
+		);
+		$unsubscribed[] = array(
+			'title' =>'2012-11-01',
+			'value' => 45
+		);
+		$unsubscribed[] = array(
+			'title' =>'2012-12-01',
+			'value' => 40
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 20,
+			'email' => 'newmail@new.mail',
+			'date' => date('Y-m-d', 1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 240,
+			'email' => 'newmail1@new1.mail1',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 57,
+			'email' => 'newmail2@new2.mail2',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 161,
+			'email' => 'otrocorreo3@otro3.correo3',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Mac'
+		);
+		
+		$response['statistics'] = $unsubscribed;
+		$response['details'] = $unsubscribedcontact;
+			
+		return $response;
+	}
+	
+	public function findDbaseOpenStats($idDbase)
+	{
+		$opens[] = array(
+			'title' =>'Enero',
+			'value' => 20
+		);
+		$opens[] = array(
+			'title' =>'Febrero',
+			'value' => 30
+		);
+		$opens[] = array(
+			'title' =>'Marzo',
+			'value' => 50
+		);
+		
+		$opencontact[] = array(
+			'id' => 100,
+			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
+			'date' => date('Y-m-d', 1386687891),
+			'os' => 'Ubuntu'
+		);
+		
+		$opencontact[] = array(
+			'id' => 145,
+			'email' => 'recipient00002@test002.local.discardallmail.drh.net',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$opencontact[] = array(
+			'id' => 161,
+			'email' => 'recipient00003@test003.local.discardallmail.drh.net',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Mac'
+		);
+		
+		$response['statistics'] = $opens;
+		$response['details'] = $opencontact;
+			
+		return $response;
+	}
+	
+	public function findDbaseClickStats($idDbase)
+	{
+		$clicks[] = array(
+			'title' =>'Julio',
+			'value' => 15
+		);
+		$clicks[] = array(
+			'title' =>'Agosto',
+			'value' => 45
+		);
+		$clicks[] = array(
+			'title' =>'Septiembre',
+			'value' => 40
+		);
+		
+		$clickcontact[] = array(
+			'id' => 100,
+			'email' => 'otrocorreo@otro.correo',
+			'date' => date('Y-m-d', 1386687891),
+			'os' => 'Ubuntu'
+		);
+		
+		$clickcontact[] = array(
+			'id' => 145,
+			'email' => 'otrocorreo2@otro2.correo2',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$clickcontact[] = array(
+			'id' => 161,
+			'email' => 'otrocorreo3@otro3.correo3',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$response['statistics'] = $clicks;
+		$response['details'] = $clickcontact;
+			
+		return $response;
+	}
+	
+	public function findDbaseUnsubscribedStats($idDbase)
+	{
+		$unsubscribed[] = array(
+			'title' =>'Septiembre',
+			'value' => 15
+		);
+		
+		$unsubscribed[] = array(
+			'title' =>'Octubre',
+			'value' => 15
+		);
+		$unsubscribed[] = array(
+			'title' =>'Noviembre',
+			'value' => 45
+		);
+		$unsubscribed[] = array(
+			'title' =>'Diciembre',
+			'value' => 40
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 20,
+			'email' => 'newmail@new.mail',
+			'date' => date('Y-m-d', 1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 240,
+			'email' => 'newmail1@new1.mail1',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 57,
+			'email' => 'newmail2@new2.mail2',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Windows'
+		);
+		
+		$unsubscribedcontact[] = array(
+			'id' => 161,
+			'email' => 'otrocorreo3@otro3.correo3',
+			'date' => date('Y-m-d',1386687891),
+			'os' => 'Mac'
+		);
+		
+		$response['statistics'] = $unsubscribed;
+		$response['details'] = $unsubscribedcontact;
+			
+		return $response;
+	}
+	
 }

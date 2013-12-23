@@ -8,7 +8,7 @@ class BlockTextOnly extends HtmlAbstract
 	
 	public function renderObjPrefix()
 	{
-		return '<td style="word-break: break-all;">';
+		return '<td style="word-break: break-word; padding: 15px 15px;">';
 	}
 	public function renderChildPrefix($i)
 	{

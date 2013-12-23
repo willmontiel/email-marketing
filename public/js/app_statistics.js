@@ -20,6 +20,19 @@ App.Store = DS.Store.extend({});
 App.set('errormessage', '');
 App.set('chartData', '');
 
+
+Ember.RadioButton = Ember.View.extend({
+    tagName : "input",
+    type : "radio",
+    attributeBindings : [ "name", "type", "value", "checked:checked:" ],
+    click : function() {
+        this.set("selection", this.$().val())
+    },
+    checked : function() {
+        return this.get("value") == this.get("selection");   
+    }.property()
+});
+
 App.Drilldownopen = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string'),
@@ -128,65 +141,95 @@ App.DrilldownUnsubscribedController = Ember.ArrayController.extend({
 	}
 });
 
+App.scaleSelected = null;
+
+App.chartScale = [
+	"Hora", "Dia", "Mes", "Año"
+];
+
 App.TimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
+	chart: null,
 	didInsertElement:function(){
-		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");	
 
-		var chartData = App.get('chartData');
+		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
+		
+//		var chartData = App.get('chartData');
 
-		var chart;
-
+//		moment.lang('es');	
+//		var m = moment.unix(moment().unix() - 86400);
+//		console.log(m.format("MM-DD-YYYY"));		
+		var chartData = createChartData('MM');
+		
 		if(this.typeChart === 'Pie') {
 			chart = createPieChart(chartData);
 		}
 		else if(this.typeChart === 'Bar') {
-			chart = createBarChart(chartData);
+			chart = createBarChart(null, chartData);
+		}
+		else if(this.typeChart === 'Line') {
+			chart = createLineChart(null, chartData, "MM");
+		}
+		else if(this.typeChart === 'LineStep') {
+			chart = createLineStepChart(null, chartData, "MM");
 		}
 
 		chart.write(this.idChart);
-	}
+	},
+			
+	changeScale: function()	{
+		var scale = App.get('scaleSelected');
+		console.log(scale)
+		if(scale !== null) {
+			switch(scale) {
+				case 'hh':
+					var chartData = createChartData('MM-DD HH:mm');
+					chart.removeGraph(chart.graphs[0]);
+					chart = createLineStepChart(chart, chartData, 'MM-DD JJ:NN');
+					break;
+				case 'DD':
+					chart.removeGraph(chart.graphs[0]);
+					chart = createLineStepChart(chart, chartData, 'MM-DD');
+					var chartData = createChartData('MM-DD');
+					break;
+				case 'MM':
+					chart.removeGraph(chart.graphs[0]);
+					chart = createBarChart(chart, chartData);
+					var chartData = createChartData('MM');
+					break;
+			}
+			
+			var categoryAxis = chart.categoryAxis;
+			categoryAxis.minPeriod = scale;
+			chart.dataProvider = chartData;
+			chart.validateData();
+			chart.animateAgain();
+		}
+		
+	}.observes('App.scaleSelected'),		
+			
 });
 
-function createBarChart(chartData) {
-	var chart = new AmCharts.AmSerialChart();
-	chart.dataProvider = chartData;
-	chart.categoryField = "title";
-	chart.startDuration = 1;
-
-	var graph = new AmCharts.AmGraph();
-	graph.valueField = "value";
-	graph.type = "column";
-	graph.title = "Aperturas de correo 2013";
-	graph.lineColor = "#000000";
-	graph.fillColors = "#6eb056";
-	graph.fillAlphas = 0.7;
-	graph.balloonText = "<span style='font-size:13px;'>Aperturas de correo 2013 en [[category]]:<b>[[value]]</b></span>";
-	chart.addGraph(graph);
-
-	// LEGEND
-	var legend = new AmCharts.AmLegend();
-	legend.useGraphSettings = true;
-	chart.addLegend(legend);
+function createChartData(format) {
 	
-	return chart;
-}
-
-function createPieChart(chartData) {
-	var chart = new AmCharts.AmPieChart();
-	chart.dataProvider = chartData;
-	chart.titleField = "title";
-	chart.valueField = "value";
-
-	chart.sequencedAnimation = true;
-	chart.startEffect = "easeOutSine";
-	chart.innerRadius = "40%";
-	chart.startDuration = 1;
-	chart.labelRadius = 2;
-	chart.balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
-	// this makes the chart 3D
-	chart.depth3D = 10;
-	chart.angle = 15;
+	var totalData = App.get('chartData');
+	var newData = [];
+	var result = [];
 	
-	return chart;
+	for(var i = 0; i < totalData.length; i++) {
+		if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
+			newData[(moment.unix(totalData[i].title)).format(format)] = 0;
+		}
+		newData[(moment.unix(totalData[i].title)).format(format)]+= totalData[i].value;
+	}
+
+	for (var key in newData) {
+		if(newData.hasOwnProperty(key)) {
+			var obj = new Object();
+			obj.title = '' + key;
+			obj.value = '' + newData[key];
+			result.push(obj);
+		}
+	}
+	return result;
 }
