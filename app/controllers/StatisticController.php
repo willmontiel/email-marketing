@@ -26,23 +26,44 @@ class StatisticController extends ControllerBase
 	
 	public function dbaseAction($idDbase)
 	{
-		$log = $this->logger;
-		//$log->log('El Id de Base de Datos es: ' . $idDbase);
-		$summaryChartData[] = array(
-			'title' => "Aperturas",
-			'value' => 65
-		);
-		$summaryChartData[] = array(
-			'title' => "Rebotados",
-			'value' => 20
-		);
-		$summaryChartData[] = array(
-			'title' => "No Aperturas",
-			'value' => 15
-		);
-	
-		$this->view->setVar("summaryChartData", $summaryChartData);
-		$this->view->setVar("idDbase", $idDbase);
+		$statsDbase = Statdbase::find(array(
+			'conditions' => 'idDbase = ?1',
+			'bind' => array(1 => $idDbase)
+		));
+		
+		if ($statsDbase) {
+			$stat = new stdClass();
+			
+			foreach ($statsDbase as $s) {
+				$idDbase =  $s->idDbase;
+				$sent +=  $s->sent;
+				$uniqueOpens +=  $s->uniqueOpens;
+				$clicks +=  $s->clicks;
+				$bounced +=  $s->bounced;
+				$spam +=  $s->spam;
+				$unsubscribed += $s->unsubscribed;
+			}
+			
+			$this->logger->log("Sent: " . $sent);
+			$stat->idDbase = $idDbase;
+			$stat->sent = $sent;
+			$stat->uniqueOpens = $uniqueOpens;
+			$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
+			$stat->clicks = $clicks;
+			$stat->bounced = $bounced;
+			$stat->percentageBounced = round(($bounced*100)/$sent);
+			$stat->spam = $spam;
+			$stat->percentageSpam = round(($spam*100)/$sent);
+			$stat->unsubscribed = $unsubscribed;
+			$stat->percentageUnsubscribed = round(($unsubscribed*100)/$sent);
+			
+			$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
+			
+			$this->view->setVar('stat', $stat);
+		}
+		else {
+			$this->view->setVar('stat', 0);
+		}
 	}
 	
 	public function contactlistAction($idContactList)
