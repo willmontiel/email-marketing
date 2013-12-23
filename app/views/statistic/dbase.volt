@@ -54,7 +54,7 @@
 {% block content %}
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
-		{# <script type="text/x-handlebars"> #}
+		<script type="text/x-handlebars">
 			<div class="news span7">
 				<div class="titleMail">
 					<h2>Base de Datos XYZ</h2>
@@ -173,6 +173,17 @@
 				<div id="summaryChart" style="width: 640px; height: 400px;">
 				</div>
 			</div>
+			<div class="span12">
+				<button class="btn btn-default"><i class="icon-retweet"></i> Comparar</button>
+				<select class="span2">
+					<option>Base de datos 1</option>
+					<option>Base de datos 2</option>
+					<option>Base de datos 3</option>
+				</select>
+			</div>
 		</script>
+		<div class="span12">
+			{{ "{{outlet}}" }}
+		</div>
 	</div>
 {% endblock %}

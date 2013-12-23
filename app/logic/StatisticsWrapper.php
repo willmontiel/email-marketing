@@ -37,15 +37,15 @@ class StatisticsWrapper extends BaseWrapper
 			$statisticsData->mailName = $mail->name;
 			$statisticsData->total = $total;
 			$statisticsData->opens = $opens;
-			$statisticsData->statopens = ( $opens / $total ) * 100 ;
+			$statisticsData->statopens = round(( $opens / $total ) * 100 );
 			$statisticsData->clicks = $clicks;
-			$statisticsData->statclicks = ( $clicks / $opens ) * 100 ;
+			$statisticsData->statclicks = round(( $clicks / $opens ) * 100 );
 			$statisticsData->bounced = $bounced;
-			$statisticsData->statbounced = ( $bounced / $total ) * 100 ;
+			$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
 			$statisticsData->unsubscribed = $unsubscribed;
-			$statisticsData->statunsubscribed = ( $unsubscribed / $total ) * 100 ;
+			$statisticsData->statunsubscribed = round(( $unsubscribed / $total ) * 100 );
 			$statisticsData->spam = $spam;
-			$statisticsData->statspam = ( $spam / $total ) * 100 ;
+			$statisticsData->statspam = round(( $spam / $total ) * 100 );
 
 			$response['summaryChartData'] = $summaryChartData;
 			$response['statisticsData'] = $statisticsData;

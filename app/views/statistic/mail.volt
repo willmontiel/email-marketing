@@ -59,7 +59,6 @@
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
-			{# Tabs de navegacion #}
 			<div class="news span6">
 				<div class="titleMail">
 					<h2>{{statisticsData.mailName}}</h2>
@@ -69,100 +68,111 @@
 						<table class="table-condensed">
 							<tr>
 								<td>
-									<label class="label-total-percent centertext">
-										<table><tr>
-											<td>
+									<table class="table-condensed">
+										<tr>
+											<td class="border-radious-blue-left">
 												<i class="icon-envelope" style="font-size: 20px;"></i>
 											</td>
-											<td>{{statisticsData.total}}</td>
-										</tr></table>
-									</label>
-								</td>
-								<td><h4 class="totalColor">Totales</h4></td>
-							</tr>
-							<tr>
-								<td>
-									<label class="label-open-percent">
-										<table><tr>
+											<td class="border-radious-blue-center" colspan="2">
+
+											</td>
+											<td class="border-radious-blue-right">
+												{{statisticsData.total}}
+											</td>
 											<td>
+												<h4 class="totalColor">Totales</h4>
+											</td>
+										</tr>
+										<tr><td colspan="5"><td></tr>
+										<tr>
+											<td class="border-radious-green-left">
 												<i class="icon-search"></i>
 											</td>
-											<td>{{statisticsData.opens}}</td>
-											<td>|</td>
-											<td><b>{{statisticsData.statopens}}%</b></td>
-										</tr></table>
-									</label>
-								</td>
-								<td><h4 class="openColor subtitleColor">{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4></td>
-							</tr>
-							<tr>
-								<td>
-									<label class="label-click-percent">
-										<table><tr>
+											<td class="border-radious-green-center">
+												{{statisticsData.opens}}
+											</td>
+											<td class="border-radious-green-center">
+												|
+											</td>
+											<td class="border-radious-green-right">
+												<b>{{statisticsData.statopens}}%</b>
+											</td>
 											<td>
+												<h4 class="openColor subtitleColor">{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4>
+											</td>
+										</tr>
+										<tr><td colspan="5"><td></tr>
+										<tr>
+											<td class="border-radious-cyan-left">
 												<i class="icon-hand-up"></i>
 											</td>
-											<td>{{statisticsData.clicks}}</td>
-											<td>|</td>
-											<td><b>{{statisticsData.statclicks}}%</b></td>
-										</tr></table>
-									</label>
+											<td class="border-radious-cyan-center ">
+												{{statisticsData.clicks}}
+											</td>
+											<td class="border-radious-cyan-center">
+												|
+											</td>
+											<td class="border-radious-cyan-right">
+												{{statisticsData.statclicks}}%
+											</td>
+											<td><h4 class="clicksColor subtitleColor">{{'{{#linkTo "drilldown.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clics</a>{{/linkTo}}'}}</h4></td>
+										</tr>
+									</table>
 								</td>
-								<td><h4 class="clicksColor subtitleColor">{{'{{#linkTo "drilldown.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clics</a>{{/linkTo}}'}}</h4></td>
+								<td>
+									<table class="table-condensed">
+										<tr>
+											<td class="border-radious-gray-left">
+												<i class="icon-minus-sign"></i>
+											</td>
+											<td class="border-radious-gray-center ">
+												{{statisticsData.unsubscribed}}
+											</td>
+											<td class="border-radious-gray-center">
+												|
+											</td>
+											<td class="border-radious-gray-right">
+												{{statisticsData.statunsubscribed}}%
+											</td>
+											<td><h4 class="unsubscribedColor subtitleColor">{{'{{#linkTo "drilldown.unsubscribed" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Des-suscritos</a>{{/linkTo}}'}}</h4></td>
+										</tr>
+										<tr><td colspan="5"><td></tr>
+										<tr>
+											<td class="border-radious-scarlet-left">
+												<i class="icon-warning-sign"></i>
+											</td>
+											<td class="border-radious-scarlet-center ">
+												{{statisticsData.bounced}}
+											</td>
+											<td class="border-radious-scarlet-center">
+												|
+											</td>
+											<td class="border-radious-scarlet-right">
+												{{statisticsData.statbounced}}%
+											</td>
+											<td><h4 class="bouncedColor subtitleColor">Rebotes</h4></td>
+										</tr>
+										<tr><td colspan="5"><td></tr>
+										<tr>
+											<td class="border-radious-red-left">
+												<i class="icon-remove"></i>
+											</td>
+											<td class="border-radious-red-center ">
+												{{statisticsData.spam}}
+											</td>
+											<td class="border-radious-red-center">
+												|
+											</td>
+											<td class="border-radious-red-right">
+												<b>{{statisticsData.statspam}}%</b>
+											</td>
+											<td><h4 class="spamColor subtitleColor">Spam</h4></td>
+										</tr>
+									</table>
+								</td>
 							</tr>
 						</table>
 					</div>
-					<div class="infoStat">
-						<table class="table-condensed" cellspacing="10">
-							<tr>
-								<td>
-									<label class="label-unsubscribed-percent">
-										<table><tr>
-											<td>
-												<i class="icon-minus-sign"></i>
-											</td>
-											<td>{{statisticsData.unsubscribed}}</td>
-											<td>|</td>
-											<td><b>{{statisticsData.statunsubscribed}}%</b></td>
-										</tr></table>
-									</label>
-								</td>
-								<td><h4 class="unsubscribedColor subtitleColor">{{'{{#linkTo "drilldown.unsubscribed" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Des-suscritos</a>{{/linkTo}}'}}</h4></td>
-							</tr>
-							<tr>
-								<td>
-									<label class="label-bounced-percent">
-										<table><tr>
-											<td>
-												<i class="icon-warning-sign"></i>
-											</td>
-											<td>{{statisticsData.bounced}}</td>
-											<td>|</td>
-											<td><b>{{statisticsData.statbounced}}%</b></td>
-										</tr></table>
-									</label>
-								</td>
-								<td><h4 class="bouncedColor subtitleColor">Rebotes</h4></td>
-							</tr>
-							<tr>
-								<td>
-									<label class="label-spam-percent">
-										<table><tr>
-											<td>
-												<i class="icon-remove"></i>
-											</td>
-											<td>{{statisticsData.spam}}</td>
-											<td>|</td>
-											<td><b>{{statisticsData.statspam}}%</b></td>
-										</tr></table>
-									</label>
-								</td>
-								<td><h4 class="spamColor subtitleColor">Spam</h4></td>
-							</tr>
-						</table>	
-					</div>	
-						
-						
 				</div>
 			</div>
 	

@@ -26,6 +26,7 @@ class StatisticController extends ControllerBase
 	
 	public function dbaseAction($idDbase)
 	{
+		$dbases = Dbase::findByIdAccount($this->user->account->idAccount);
 		$statsDbase = Statdbase::find(array(
 			'conditions' => 'idDbase = ?1',
 			'bind' => array(1 => $idDbase)
