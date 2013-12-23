@@ -106,18 +106,23 @@ class StatisticsWrapper extends BaseWrapper
 	
 	public function findMailClickStats($idMail)
 	{
-		$clicks[] = array(
-			'title' =>'2012-01-01',
-			'value' => 15
-		);
-		$clicks[] = array(
-			'title' =>'2012-06-01',
-			'value' => 45
-		);
-		$clicks[] = array(
-			'title' =>'2012-12-01',
-			'value' => 40
-		);
+		$clicks = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			$clicks[] = array(
+				'title' =>$h1,
+				'value' => $value
+			);
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
 		
 		$clickcontact[] = array(
 			'id' => 100,
@@ -148,23 +153,23 @@ class StatisticsWrapper extends BaseWrapper
 	
 	public function findMailUnsubscribedStats($idMail)
 	{
-		$unsubscribed[] = array(
-			'title' =>'2012-09-01',
-			'value' => 15
-		);
-		
-		$unsubscribed[] = array(
-			'title' =>'2012-10-01',
-			'value' => 15
-		);
-		$unsubscribed[] = array(
-			'title' =>'2012-11-01',
-			'value' => 45
-		);
-		$unsubscribed[] = array(
-			'title' =>'2012-12-01',
-			'value' => 40
-		);
+		$unsubscribed = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			$unsubscribed[] = array(
+				'title' =>$h1,
+				'value' => $value
+			);
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
 		
 		$unsubscribedcontact[] = array(
 			'id' => 20,

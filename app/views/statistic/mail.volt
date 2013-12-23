@@ -108,7 +108,7 @@
 										</tr></table>
 									</label>
 								</td>
-								<td><h4 class="clicksColor subtitleColor">{{'{{#linkTo "drilldown.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clicks</a>{{/linkTo}}'}}</h4></td>
+								<td><h4 class="clicksColor subtitleColor">{{'{{#linkTo "drilldown.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clics</a>{{/linkTo}}'}}</h4></td>
 							</tr>
 						</table>
 					</div>

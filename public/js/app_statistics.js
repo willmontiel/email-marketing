@@ -111,7 +111,6 @@ App.DrilldownIndexController = Ember.ArrayController.extend({});
 App.DrilldownOpensController = Ember.ArrayController.extend({
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
-		console.log(statistics);
 		App.set('chartData', statistics);
 	},
 	loadDataDetails: function() {
@@ -155,11 +154,6 @@ App.TimeGraphView = Ember.View.extend({
 
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
 		
-//		var chartData = App.get('chartData');
-
-//		moment.lang('es');	
-//		var m = moment.unix(moment().unix() - 86400);
-//		console.log(m.format("MM-DD-YYYY"));		
 		var chartData = createChartData('MM');
 		
 		if(this.typeChart === 'Pie') {
@@ -169,7 +163,7 @@ App.TimeGraphView = Ember.View.extend({
 			chart = createBarChart(null, chartData);
 		}
 		else if(this.typeChart === 'Line') {
-			chart = createLineChart(null, chartData, "MM");
+			chart = createLineChart(null, chartData);
 		}
 		else if(this.typeChart === 'LineStep') {
 			chart = createLineStepChart(null, chartData, "MM");
@@ -180,7 +174,6 @@ App.TimeGraphView = Ember.View.extend({
 			
 	changeScale: function()	{
 		var scale = App.get('scaleSelected');
-		console.log(scale)
 		if(scale !== null) {
 			switch(scale) {
 				case 'hh':
@@ -189,14 +182,14 @@ App.TimeGraphView = Ember.View.extend({
 					chart = createLineStepChart(chart, chartData, 'MM-DD JJ:NN');
 					break;
 				case 'DD':
+					var chartData = createChartData('MM-DD');
 					chart.removeGraph(chart.graphs[0]);
 					chart = createLineStepChart(chart, chartData, 'MM-DD');
-					var chartData = createChartData('MM-DD');
 					break;
 				case 'MM':
+					var chartData = createChartData('MM');
 					chart.removeGraph(chart.graphs[0]);
 					chart = createBarChart(chart, chartData);
-					var chartData = createChartData('MM');
 					break;
 			}
 			
