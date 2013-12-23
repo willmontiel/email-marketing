@@ -34,6 +34,7 @@ class StatisticsWrapper extends BaseWrapper
 			);
 			
 			$statisticsData = new stdClass();
+			$statisticsData->mailName = $mail->name;
 			$statisticsData->total = $total;
 			$statisticsData->opens = $opens;
 			$statisticsData->statopens = ( $opens / $total ) * 100 ;

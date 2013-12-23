@@ -119,7 +119,7 @@
 				</tbody>
 			</table>
 		</div>
-		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar"}}'}}
+		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Line"}}'}}
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
