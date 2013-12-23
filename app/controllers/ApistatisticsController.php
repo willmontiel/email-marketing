@@ -115,6 +115,7 @@ class ApistatisticsController extends ControllerBase
 	public function contactlistopensAction($idContactList)
 	{
 		$this->logger->log("id: " . $idContactList);
+		
 		$statsContactList = Statcontactlist::find(array(
 			'conditions' => 'idContactlist = ?1',
 			'bind' => array(1 => $idContactList)

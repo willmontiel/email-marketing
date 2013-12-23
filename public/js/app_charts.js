@@ -1,16 +1,17 @@
-function createBarChart(chart, chartData) {
+function createBarChart(chart, chartData, dateFormat, minPeriod) {
 	if(chart == undefined || chart == null) {
 		chart = new AmCharts.AmSerialChart();
 	}
 	chart.dataProvider = chartData;
 	chart.categoryField = "title";
 	chart.startDuration = 1;
+	chart.dataDateFormat = dateFormat;
 	
 	var categoryAxis = chart.categoryAxis;
 	categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
-	categoryAxis.minPeriod = "MM"; // our data is daily, so we set minPeriod to DD
+	categoryAxis.minPeriod = minPeriod; // our data is daily, so we set minPeriod to DD
 	categoryAxis.axisColor = "#DADADA";
-
+	
 	var graph = new AmCharts.AmGraph();
 	graph.valueField = "value";
 	graph.type = "column";
@@ -48,23 +49,20 @@ function createPieChart(chartData) {
 	return chart;
 }
 
-function createLineChart(chart, chartData) {
-	//2013-10-01-1-10-0
-	
-	// SERIAL CHART
+function createLineChart(chart, chartData, dateFormat, minPeriod) {
 	if(chart == undefined || chart == null) {
 		chart = new AmCharts.AmSerialChart();
 	}
 	chart.pathToImages = "../../amcharts/images/";
 	chart.dataProvider = chartData;
 	chart.categoryField = "title";
-	chart.dataDateFormat = "YYYY-MM-DD JJ:NN";
+	chart.dataDateFormat = dateFormat;
 
 	// AXES
 	// category
 	var categoryAxis = chart.categoryAxis;
 	categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
-	categoryAxis.minPeriod = "hh"; // our data is daily, so we set minPeriod to DD
+	categoryAxis.minPeriod = minPeriod; // our data is daily, so we set minPeriod to DD
 	categoryAxis.dashLength = 1;
 	categoryAxis.gridAlpha = 0.15;
 	categoryAxis.axisColor = "#DADADA";
@@ -97,14 +95,18 @@ function createLineChart(chart, chartData) {
 
 	// SCROLLBAR
 	var chartScrollbar = new AmCharts.ChartScrollbar();
-	chartScrollbar.graph = graph;
 	chartScrollbar.scrollbarHeight = 30;
 	chart.addChartScrollbar(chartScrollbar);
+	
+	// LEGEND
+	var legend = new AmCharts.AmLegend();
+	legend.useGraphSettings = true;
+	chart.addLegend(legend);
 	
 	return chart;
 }
 
-function createLineStepChart(chart, chartData, dateFormat){
+function createLineStepChart(chart, chartData, dateFormat, minPeriod){
 	if(chart == undefined || chart == null) {
 		chart = new AmCharts.AmSerialChart();
 	}
@@ -118,7 +120,7 @@ function createLineStepChart(chart, chartData, dateFormat){
 	// Category
 	var categoryAxis = chart.categoryAxis;
 	categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
-	categoryAxis.minPeriod = "hh"; // our data is yearly, so we set minPeriod to YYYY
+	categoryAxis.minPeriod = minPeriod; // our data is yearly, so we set minPeriod to YYYY
 	categoryAxis.minorGridEnabled = true;
 	categoryAxis.minorGridAlpha = 0.15;
 
@@ -149,6 +151,11 @@ function createLineStepChart(chart, chartData, dateFormat){
 	// SCROLLBAR
 	var chartScrollbar = new AmCharts.ChartScrollbar();
 	chart.addChartScrollbar(chartScrollbar);
+	
+	// LEGEND
+	var legend = new AmCharts.AmLegend();
+	legend.useGraphSettings = true;
+	chart.addLegend(legend);
 	
 	return chart
 }

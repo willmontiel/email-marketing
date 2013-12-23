@@ -128,21 +128,26 @@ class StatisticsWrapper extends BaseWrapper
 			'id' => 100,
 			'email' => 'otrocorreo@otro.correo',
 			'date' => date('Y-m-d', 1386687891),
-			'os' => 'Ubuntu'
+			'link' => 'https://www.google.com'
 		);
 		
 		$clickcontact[] = array(
 			'id' => 145,
 			'email' => 'otrocorreo2@otro2.correo2',
 			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
+			'link' => 'https://www.facebook.com'
 		);
 		
 		$clickcontact[] = array(
 			'id' => 161,
 			'email' => 'otrocorreo3@otro3.correo3',
 			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
+			'link' => 'https://www.google.com'
+		);
+		
+		$links[] = array(
+			'link' => 'https://www.google.com',
+			'clicks' => 20
 		);
 		
 		$response['statistics'] = $clicks;
