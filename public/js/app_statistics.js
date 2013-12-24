@@ -2,19 +2,10 @@ App = Ember.Application.create({
 	rootElement: '#emberAppstatisticsContainer'
 });
 
-//Adaptador
-//App.ApplicationAdapter = DS.RESTAdapter.extend();
-
 DS.RESTAdapter.reopen({
 	namespace: MyDbaseUrl,
-	//plurals: {dbase: 'dbasess'}
 });
 
-//DS.RESTAdapter.configure('plurals', {
-//		dbase: 'dbases'
-//	});
-
-// Store (class)
 App.Store = DS.Store.extend({});
 
 App.set('errormessage', '');
@@ -115,6 +106,7 @@ App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginatio
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
+		App.set('scaleSelected', null)
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
@@ -122,10 +114,13 @@ App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginatio
 	}
 });
 
-App.DrilldownClicksController = Ember.ArrayController.extend({	
+App.DrilldownClicksController = Ember.ArrayController.extend({
+	selectedLink: [],
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
-		App.set('chartData', statistics);
+		App.set('clicksData', statistics);
+		var dataByLink = groupByLink(statistics[0].link);
+		App.set('chartData', dataByLink);
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
@@ -133,7 +128,18 @@ App.DrilldownClicksController = Ember.ArrayController.extend({
 		
 		var links = JSON.parse(this.get('model').content[0].get('links'));
 		App.set('detailsLinks', links);
-	}
+		
+		this.selectedLink = [];
+		App.set('linkSelected', App.get('clicksData')[0].link);
+		for(var i = 0; i < links.length; i++) {
+			this.selectedLink.push(links[i].link);
+		}
+	},
+	linkSelectChange: function () {	
+		var link = App.get('linkSelected');
+		var dataByLink = groupByLink(link);
+		App.set('chartData', dataByLink);
+    }.observes('App.linkSelected')
 });
 
 App.DrilldownUnsubscribedController = Ember.ArrayController.extend({	
@@ -161,7 +167,7 @@ App.TimeGraphView = Ember.View.extend({
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
 		
 		var chartData = createChartData('YYYY-MM');
-
+		
 		if(this.typeChart === 'Pie') {
 			chart = createPieChart(chartData);
 		}
@@ -180,28 +186,27 @@ App.TimeGraphView = Ember.View.extend({
 			
 	changeScale: function()	{
 		var scale = App.get('scaleSelected');
-		if(scale !== null) {
-			removeLastChart(chart);
-			switch(scale) {
-				case 'hh':
-					var chartData = createChartData('YYYY-MM-DD HH:mm');
-					chart = createLineStepChart(chart, chartData, 'YYYY-MM-DD JJ:NN', 'hh');
-					break;
-				case 'DD':
-					var chartData = createChartData('YYYY-MM-DD');
-					chart = createLineChart(chart, chartData, 'YYYY-MM-DD', 'DD');
-					break;
-				case 'MM':
-					var chartData = createChartData('YYYY-MM');
-					chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM');
-					break;
-			}
-			
-			chart.validateData();
-			chart.animateAgain();
+		removeLastChart(chart);
+		switch(scale) {
+			case 'hh':
+				var chartData = createChartData('YYYY-MM-DD HH:mm');
+				chart = createLineStepChart(chart, chartData, 'YYYY-MM-DD JJ:NN', 'hh');
+				break;
+			case 'DD':
+				var chartData = createChartData('YYYY-MM-DD');
+				chart = createLineChart(chart, chartData, 'YYYY-MM-DD', 'DD');
+				break;
+			case 'MM':
+			default:
+				var chartData = createChartData('YYYY-MM');
+				chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM');
+				break;
 		}
+
+		chart.validateData();
+		chart.animateAgain();
 		
-	}.observes('App.scaleSelected'),		
+	}.observes('App.scaleSelected', 'App.linkSelected'),		
 			
 });
 
@@ -235,4 +240,18 @@ function removeLastChart(chart) {
 	chart.removeChartCursor();
 	chart.removeChartScrollbar();
 	chart.removeLegend();
+}
+
+function groupByLink(link) {
+	var statistics = App.get('clicksData');
+	var arrayObj = [];
+	for(var i=0; i < statistics.length; i++) {
+		if(statistics[i].link == link) {
+			var obj = new Object();
+			obj.title = '' + statistics[i].title;
+			obj.value = statistics[i].value;
+			arrayObj.push(obj);
+		}
+	}
+	return arrayObj;
 }

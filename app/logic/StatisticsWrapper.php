@@ -124,14 +124,21 @@ class StatisticsWrapper extends BaseWrapper
 		$h1 = 1380657600;
 		$v1 = 3000;
 		$v2 = 2900;
-		for ($i = 0; $i < 1800; $i++) {
+		for ($i = 0; $i < 50; $i++) {
 			$value = rand($v1, $v2);
-			if($i == 20 || $i == 100 || $i == 150) {
-				$value = 0;
+			if($i < 15) {
+				$link = 'https://www.google.com';
+			}
+			else if($i < 35) {
+				$link = 'https://www.facebook.com';
+			}
+			else {
+				$link = 'https://www.twitter.com';
 			}
 			$clicks[] = array(
 				'title' =>$h1,
-				'value' => $value
+				'value' => $value,
+				'link' => $link
 			);
 			$v1 = $v1 - 1;
 			$v2 = $v2 - 1;
