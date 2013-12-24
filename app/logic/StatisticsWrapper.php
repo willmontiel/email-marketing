@@ -37,15 +37,15 @@ class StatisticsWrapper extends BaseWrapper
 			$statisticsData->mailName = $mail->name;
 			$statisticsData->total = $total;
 			$statisticsData->opens = $opens;
-			$statisticsData->statopens = ( $opens / $total ) * 100 ;
+			$statisticsData->statopens = round(( $opens / $total ) * 100 );
 			$statisticsData->clicks = $clicks;
-			$statisticsData->statclicks = ( $clicks / $opens ) * 100 ;
+			$statisticsData->statclicks = round(( $clicks / $opens ) * 100 );
 			$statisticsData->bounced = $bounced;
-			$statisticsData->statbounced = ( $bounced / $total ) * 100 ;
+			$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
 			$statisticsData->unsubscribed = $unsubscribed;
-			$statisticsData->statunsubscribed = ( $unsubscribed / $total ) * 100 ;
+			$statisticsData->statunsubscribed = round (( $unsubscribed / $total ) * 100 );
 			$statisticsData->spam = $spam;
-			$statisticsData->statspam = ( $spam / $total ) * 100 ;
+			$statisticsData->statspam = round(( $spam / $total ) * 100 );
 
 			$response['summaryChartData'] = $summaryChartData;
 			$response['statisticsData'] = $statisticsData;
@@ -98,10 +98,24 @@ class StatisticsWrapper extends BaseWrapper
 			'os' => 'Windows'
 		);
 		
-		$response['statistics'] = $opens;
-		$response['details'] = $opencontact;
-			
-		return $response;
+		$opencontact[] = array(
+			'id' => 199,
+			'email' => 'recipient00003@test007.local.discardallmail.drh.net',
+			'date' => date('Y-m-d',1386688891),
+			'os' => 'Windows Phone'
+		);
+		
+		$this->pager->setTotalRecords(count($opencontact));
+		
+		$statistics[] = array(
+			'id' => $idMail,
+			'statistics' => json_encode($response['statistics'] = $opens),
+			'details' => json_encode($response['details'] = $opencontact)
+		);
+		
+		$this->pager->setRowsInCurrentPage(count($opencontact));
+		
+		return array('drilldownopen' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
 	
 	public function findMailClickStats($idMail)

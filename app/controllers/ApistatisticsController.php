@@ -61,16 +61,24 @@ class ApistatisticsController extends ControllerBase
 	 */
 	public function mailopensAction($idMail)
 	{
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+		
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
+		
 		$statWrapper = new StatisticsWrapper();
 		
 		$stat = $statWrapper->findMailOpenStats($idMail);
 		
-		$statistics[] = array(
-			'id' => $idMail,
-			'statistics' => json_encode($stat['statistics']),
-			'details' => json_encode($stat['details'])
-		);		
-		return $this->setJsonResponse(array('drilldownopen' => $statistics));
+		$statWrapper->setPager($pager);
+				
+		return $this->setJsonResponse($stat);
 	}
 	
 	/**
