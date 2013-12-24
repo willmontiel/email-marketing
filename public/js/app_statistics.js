@@ -97,8 +97,12 @@ App.DrilldownUnsubscribedRoute = Ember.Route.extend({
 
 
 /*Controllers*/
-App.DrilldownController = Ember.ObjectController.extend();
-App.DrilldownIndexController = Ember.ArrayController.extend({});	
+App.DrilldownController = Ember.ObjectController.extend({});
+App.DrilldownIndexController = Ember.ArrayController.extend({
+	compareDbases: function() {
+		
+	}
+});	
 
 App.DrilldownOpensController = Ember.ArrayController.extend({
 	loadDataChart: function() {

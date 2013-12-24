@@ -14,6 +14,13 @@
 	{{ javascript_include('amcharts/pie.js')}}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	<script>
+		App.types = [
+			{% for dbase in dbases%}
+				Ember.Object.create({id: "{{dbase.idDbase}}", name: "{{dbase.name}}"}),
+			{% endfor %}
+		];
+	</script>
+	<script>
 			var chartData = [{
 				type: "Aperturas",
 				amount: {{stat.uniqueOpens}}
@@ -174,16 +181,20 @@
 				</div>
 			</div>
 			<div class="span12">
+				<button class="btn btn-default" {{ '{{action compare this }}' }}><i class="icon-retweet"></i> Comparar</button>
 				<button class="btn btn-default"><i class="icon-retweet"></i> Comparar</button>
-				<select class="span2">
-					<option>Base de datos 1</option>
-					<option>Base de datos 2</option>
-					<option>Base de datos 3</option>
-				</select>
+				{{ '{{view Ember.Select
+						contentBinding="App.types"
+						optionValuePath="content.id"
+						optionLabelPath="content.name"
+						valueBinding="name" id="id"
+						class="span3"}}'
+				}}
 			</div>
+			<div class="span12">
+				{{ "{{outlet}}" }}
+			</div>
+			
 		</script>
-		<div class="span12">
-			{{ "{{outlet}}" }}
-		</div>
 	</div>
 {% endblock %}
