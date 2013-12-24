@@ -191,9 +191,10 @@
 						class="span3"}}'
 				}}
 			</div>
+			<div class="span12">
+				{{ "{{outlet}}" }}
+			</div>
+			
 		</script>
-		<div class="span12">
-			{{ "{{outlet}}" }}
-		</div>
 	</div>
 {% endblock %}
