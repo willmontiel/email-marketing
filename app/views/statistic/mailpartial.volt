@@ -130,16 +130,13 @@
 							</tr>
 						</thead>
 						<tbody>
+							{{'{{#each App.detailsLinks}}'}}
 							<tr>
-								<td>https://www.google.com</td>
-								<td>15</td>
-								<td>5</td>
+								<td>{{'{{link}}'}}</td>
+								<td>{{'{{total}}'}}</td>
+								<td>{{'{{uniques}}'}}</td>
 							</tr>
-							<tr>
-								<td>https://www.facebook.com</td>
-								<td>9</td>
-								<td>4</td>
-							</tr>
+							{{ '{{/each}}' }}
 						</tbody>
 					</table>
 				</div>
