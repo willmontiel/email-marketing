@@ -107,13 +107,11 @@ App.DrilldownUnsubscribedRoute = Ember.Route.extend({
 
 /*Controllers*/
 App.DrilldownController = Ember.ObjectController.extend({});
-App.DrilldownIndexController = Ember.ArrayController.extend({
-	compareDbases: function() {
-		
-	}
-});	
+App.DrilldownIndexController = Ember.ArrayController.extend({});	
 
-App.DrilldownOpensController = Ember.ArrayController.extend({
+App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPagination, {
+	modelClass : App.Drilldownopen,
+			
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
