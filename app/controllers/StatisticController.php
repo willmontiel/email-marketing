@@ -61,6 +61,7 @@ class StatisticController extends ControllerBase
 			$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
 			
 			$this->view->setVar('stat', $stat);
+			$this->view->setVar('dbases', $dbases);
 		}
 		else {
 			$this->view->setVar('stat', 0);

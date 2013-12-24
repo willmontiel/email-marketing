@@ -105,7 +105,7 @@ App.DrilldownUnsubscribedRoute = Ember.Route.extend({
 
 
 /*Controllers*/
-App.DrilldownController = Ember.ObjectController.extend();
+App.DrilldownController = Ember.ObjectController.extend({});
 App.DrilldownIndexController = Ember.ArrayController.extend({});	
 
 App.DrilldownOpensController = Ember.ArrayController.extend({
