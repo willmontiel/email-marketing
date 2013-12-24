@@ -184,11 +184,18 @@ class StatisticsWrapper extends BaseWrapper
 			'uniques' => 19,
 		);
 		
-		$response['statistics'] = $clicks;
-		$response['details'] = $clickcontact;
-		$response['links'] = $links;
-			
-		return $response;
+		$this->pager->setTotalRecords(count($clickcontact));
+		
+		$statistics[] = array(
+			'id' => $idMail,
+			'statistics' => json_encode($clicks),
+			'details' => json_encode($clickcontact),
+			'links' => json_encode($links),
+		);
+		
+		$this->pager->setRowsInCurrentPage(count($clickcontact));
+		
+		return array('drilldownclick' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
 	
 	public function findMailUnsubscribedStats($idMail)
@@ -239,10 +246,17 @@ class StatisticsWrapper extends BaseWrapper
 			'os' => 'Mac'
 		);
 		
-		$response['statistics'] = $unsubscribed;
-		$response['details'] = $unsubscribedcontact;
-			
-		return $response;
+		$this->pager->setTotalRecords(count($unsubscribedcontact));
+		
+		$statistics[] = array(
+			'id' => $idMail,
+			'statistics' => json_encode($unsubscribed),
+			'details' => json_encode($unsubscribedcontact)
+		);
+		
+		$this->pager->setRowsInCurrentPage(count($unsubscribedcontact));
+		
+		return array('drilldownunsubscribed' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}
 	
 	public function findDbaseOpenStats($idDbase)

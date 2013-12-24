@@ -74,10 +74,10 @@ class ApistatisticsController extends ControllerBase
 		
 		$statWrapper = new StatisticsWrapper();
 		
+		$statWrapper->setPager($pager);
+		
 		$stat = $statWrapper->findMailOpenStats($idMail);
 		
-		$statWrapper->setPager($pager);
-				
 		return $this->setJsonResponse($stat);
 	}
 	
@@ -86,18 +86,24 @@ class ApistatisticsController extends ControllerBase
 	 */
 	public function mailclicksAction($idMail)
 	{
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+		
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
+		
 		$statWrapper = new StatisticsWrapper();
+		
+		$statWrapper->setPager($pager);
 		
 		$stat = $statWrapper->findMailClickStats($idMail);
 		
-		$statistics[] = array(
-			'id' => $idMail,
-			'statistics' => json_encode($stat['statistics']),
-			'details' => json_encode($stat['details']),
-			'links' => json_encode($stat['links']),
-		);
-		
-		return $this->setJsonResponse(array('drilldownclick' => $statistics));
+		return $this->setJsonResponse($stat);
 	}
 	
 	/**
@@ -105,17 +111,24 @@ class ApistatisticsController extends ControllerBase
 	 */
 	public function mailunsubscribedAction($idMail)
 	{
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+		
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
+		
 		$statWrapper = new StatisticsWrapper();
+		
+		$statWrapper->setPager($pager);
 		
 		$stat = $statWrapper->findMailUnsubscribedStats($idMail);
 		
-		$statistics[] = array(
-			'id' => $idMail,
-			'statistics' => json_encode($stat['statistics']),
-			'details' => json_encode($stat['details'])
-		);
-		
-		return $this->setJsonResponse(array('drilldownunsubscribed' => $statistics));
+		return $this->setJsonResponse($stat);
 	}
 	
 	/**

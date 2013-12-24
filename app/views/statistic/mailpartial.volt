@@ -198,6 +198,9 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="box-footer flat"> 
+					{{ partial("partials/pagination_partial") }}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -267,6 +270,9 @@
 						{{ '{{/each}}' }}
 						</tbody>
 					</table>
+				</div>
+				<div class="box-footer flat"> 
+					{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
 		</div>
