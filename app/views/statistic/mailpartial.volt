@@ -7,10 +7,10 @@
 				<label class="label-open-percent">
 					<table>
 						<tr>
-							<td></td>
-							<td>{{statisticsData.opens}}</td>
-							<td>|</td>
-							<td>{{statisticsData.statopens}}%</td>
+							<td class="border-radious-green-left"></td>
+							<td class="border-radious-green-center">{{statisticsData.opens}}</td>
+							<td class="border-radious-green-center">|</td>
+							<td class="border-radious-green-right">{{statisticsData.statopens}}%</td>
 						</tr>
 					</table>
 				</label>
@@ -44,7 +44,7 @@
 				</label>
 			</div>
 		</div>
-		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar"}}'}}
+		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar" textChart="Aperturas de Correo"}}'}}
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
@@ -142,7 +142,7 @@
 				</label>
 			</div>
 		</div>
-		{{'{{view App.TimeGraphView idChart="clickPieChartContainer" typeChart="Bar"}}'}}
+		{{'{{view App.TimeGraphView idChart="clickPieChartContainer" typeChart="Bar" textChart="Clics de Correo"}}'}}
 	</div>
 	<div class="row-fluid">
 		<div class="clickstotalsandunique span6">
@@ -212,13 +212,13 @@
 		<div class="news span3">
 			<label class="label-gray-light-percent"><i class="icon-minus-sign"></i> Resumen de des-suscritos</label>
 			<div>
-				<label class="label-unsubscribed-percent">
+				<label>
 					<table>
 						<tr>
-							<td></td>
-							<td>{{statisticsData.unsubscribed}}</td>
-							<td>|</td>
-							<td>{{statisticsData.statunsubscribed}}%</td>
+							<td class="border-radious-gray-left"></td>
+							<td class="border-radious-gray-center">{{statisticsData.unsubscribed}}</td>
+							<td class="border-radious-gray-center">|</td>
+							<td class="border-radious-gray-right">{{statisticsData.statunsubscribed}}%</td>
 						</tr>
 					</table>
 				</label>
@@ -228,20 +228,29 @@
 			</div>
 		</div>
 		<div class="pull-right scaleChart">
-			<label for="scaleHour">
-				{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
-				Hora
-			</label>
-			<label for="scaleDay">
-				{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
-				Dia
-			</label>
-			<label for="scaleMonth">
-				{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
-				Mes
-			</label>
+			<div class="pull-left">
+				Agrupar por: &nbsp;
 			</div>
-		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar"}}'}}
+			<div class="pull-right">
+				<label for="scaleHour">
+					{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
+					Hora &nbsp;
+				</label>
+			</div>
+			<div class="pull-right">
+				<label for="scaleDay">
+					{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
+					Dia &nbsp;
+				</label>
+			</div>
+			<div class="pull-right">
+				<label for="scaleMonth">
+					{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
+					Mes &nbsp;
+				</label>
+			</div>
+		</div>
+		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Des-suscritos de Correo"}}'}}
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
@@ -255,17 +264,19 @@
 					<table class="table table-normal">
 						<thead>
 							<tr>
-								<td>Fecha y hora</td>
 								<td>Dirección de correo</td>
-								<td>Sistema operativo?</td>
+								<td>Nombre</td>
+								<td>Apellido</td>
+								<td>Fecha y hora</td>
 							</tr>
 						</thead>
 						<tbody>
 						{{'{{#each App.detailsData}}'}}
 							<tr>
-								<td>{{'{{date}}'}}</td>
 								<td>{{'{{email}}'}}</td>
-								<td>{{'{{os}}'}}</td>
+								<td>{{'{{name}}'}}</td>
+								<td>{{'{{lastname}}'}}</td>
+								<td>{{'{{date}}'}}</td>
 							</tr>
 						{{ '{{/each}}' }}
 						</tbody>
