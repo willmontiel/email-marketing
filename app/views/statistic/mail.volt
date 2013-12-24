@@ -59,11 +59,11 @@
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
-			<div class="news span6">
+			<div class="news span7">
 				<div class="titleMail">
 					<h2>{{statisticsData.mailName}}</h2>
 				</div>
-				<div class="offset1 dataMailContacts">
+				<div class="dataMailContacts">
 					<div class="infoStat">
 						<table class="table-condensed">
 							<tr>
@@ -77,7 +77,7 @@
 
 											</td>
 											<td class="border-radious-blue-right">
-												{{statisticsData.total}}
+												<b>{{statisticsData.total}}</b>
 											</td>
 											<td>
 												<h4 class="totalColor">Totales</h4>
@@ -113,7 +113,7 @@
 												|
 											</td>
 											<td class="border-radious-cyan-right">
-												{{statisticsData.statclicks}}%
+												<b>{{statisticsData.statclicks}}%</b>
 											</td>
 											<td><h4 class="clicksColor subtitleColor">{{'{{#linkTo "drilldown.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clics</a>{{/linkTo}}'}}</h4></td>
 										</tr>
@@ -132,7 +132,7 @@
 												|
 											</td>
 											<td class="border-radious-gray-right">
-												{{statisticsData.statunsubscribed}}%
+												<b>{{statisticsData.statunsubscribed}}%</b>
 											</td>
 											<td><h4 class="unsubscribedColor subtitleColor">{{'{{#linkTo "drilldown.unsubscribed" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Des-suscritos</a>{{/linkTo}}'}}</h4></td>
 										</tr>
@@ -148,7 +148,7 @@
 												|
 											</td>
 											<td class="border-radious-scarlet-right">
-												{{statisticsData.statbounced}}%
+												<b>{{statisticsData.statbounced}}%</b>
 											</td>
 											<td><h4 class="bouncedColor subtitleColor">Rebotes</h4></td>
 										</tr>
@@ -176,7 +176,7 @@
 				</div>
 			</div>
 	
-			<div class="span6">
+			<div class="span5">
 				<div id="summaryChart" style="width: 640px; height: 400px;">
 				</div>
 			</div>

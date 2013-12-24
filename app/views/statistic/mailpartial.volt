@@ -22,18 +22,27 @@
 		<div class="span1">
 		</div>
 		<div class="pull-right scaleChart">
-			<label for="scaleHour">
-				{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
-				Hora
-			</label>
-			<label for="scaleDay">
-				{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
-				Dia
-			</label>
-			<label for="scaleMonth">
-				{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
-				Mes
-			</label>
+			<div class="pull-left">
+				Agrupar por: &nbsp;
+			</div>
+			<div class="pull-right">
+				<label for="scaleHour">
+					{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
+					Hora &nbsp;
+				</label>
+			</div>
+			<div class="pull-right">
+				<label for="scaleDay">
+					{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
+					Dia &nbsp;
+				</label>
+			</div>
+			<div class="pull-right">
+				<label for="scaleMonth">
+					{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
+					Mes &nbsp;
+				</label>
+			</div>
 		</div>
 		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar"}}'}}
 	</div>
