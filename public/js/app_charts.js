@@ -1,4 +1,4 @@
-function createBarChart(chart, chartData, dateFormat, minPeriod) {
+function createBarChart(chart, chartData, dateFormat, minPeriod, text) {
 	if(chart == undefined || chart == null) {
 		chart = new AmCharts.AmSerialChart();
 	}
@@ -15,11 +15,11 @@ function createBarChart(chart, chartData, dateFormat, minPeriod) {
 	var graph = new AmCharts.AmGraph();
 	graph.valueField = "value";
 	graph.type = "column";
-	graph.title = "Aperturas de correo 2013";
+	graph.title = text;
 	graph.lineColor = "#000000";
 	graph.fillColors = "#6eb056";
 	graph.fillAlphas = 0.7;
-	graph.balloonText = "<span style='font-size:13px;'>Aperturas de correo 2013 en [[category]]:<b>[[value]]</b></span>";
+	graph.balloonText = "<span style='font-size:13px;'>" + text + " en [[category]]:<b>[[value]]</b></span>";
 	chart.addGraph(graph);
 
 	// LEGEND
@@ -49,7 +49,7 @@ function createPieChart(chartData) {
 	return chart;
 }
 
-function createLineChart(chart, chartData, dateFormat, minPeriod) {
+function createLineChart(chart, chartData, dateFormat, minPeriod, text) {
 	if(chart == undefined || chart == null) {
 		chart = new AmCharts.AmSerialChart();
 	}
@@ -82,7 +82,8 @@ function createLineChart(chart, chartData, dateFormat, minPeriod) {
 	graph.bulletBorderAlpha = 1;
 	graph.bulletBorderThickness = 2;
 	graph.bulletSize = 7;
-	graph.title = "Value";
+	graph.title = text;
+	graph.balloonText = "<span style='font-size:13px;'>" + text + " en [[category]]:<b>[[value]]</b></span>";
 	graph.valueField = "value";
 	graph.lineThickness = 2;
 	graph.lineColor = "#00BBCC";
@@ -106,7 +107,7 @@ function createLineChart(chart, chartData, dateFormat, minPeriod) {
 	return chart;
 }
 
-function createLineStepChart(chart, chartData, dateFormat, minPeriod){
+function createLineStepChart(chart, chartData, dateFormat, minPeriod, text){
 	if(chart == undefined || chart == null) {
 		chart = new AmCharts.AmSerialChart();
 	}
@@ -138,7 +139,8 @@ function createLineStepChart(chart, chartData, dateFormat, minPeriod){
 	graph.type = "step"; // this line makes step graph
 	graph.valueField = "value";
 	graph.lineColor = "#000000";
-	graph.balloonText = "[[category]]<br><b><span style='font-size:14px;'>[[value]] C</span></b>";
+	graph.title = text;
+	graph.balloonText = "<span style='font-size:13px;'>" + text + " en [[category]]:<b>[[value]]</b></span>";
 	chart.addGraph(graph);
 
 	// CURSOR

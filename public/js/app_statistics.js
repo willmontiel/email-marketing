@@ -164,23 +164,28 @@ App.chartScale = [
 App.TimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
 	chart: null,
+	texto: null,
 	didInsertElement:function(){
 
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
 		
 		var chartData = createChartData('YYYY-MM');
 		
+		if(this.text == null) {
+			this.text = this.textChart;
+		}
+		
 		if(this.typeChart === 'Pie') {
 			chart = createPieChart(chartData);
 		}
 		else if(this.typeChart === 'Bar') {
-			chart = createBarChart(null, chartData, 'YYYY-MM', 'MM');
+			chart = createBarChart(null, chartData, 'YYYY-MM', 'MM', this.text);
 		}
 		else if(this.typeChart === 'Line') {
-			chart = createLineChart(null, chartData, 'YYYY-MM', 'MM');
+			chart = createLineChart(null, chartData, 'YYYY-MM', 'MM', this.text);
 		}
 		else if(this.typeChart === 'LineStep') {
-			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM');
+			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM', this.text);
 		}
 
 		chart.write(this.idChart);
@@ -192,16 +197,16 @@ App.TimeGraphView = Ember.View.extend({
 		switch(scale) {
 			case 'hh':
 				var chartData = createChartData('YYYY-MM-DD HH:mm');
-				chart = createLineStepChart(chart, chartData, 'YYYY-MM-DD JJ:NN', 'hh');
+				chart = createLineStepChart(chart, chartData, 'YYYY-MM-DD JJ:NN', 'hh', this.text);
 				break;
 			case 'DD':
 				var chartData = createChartData('YYYY-MM-DD');
-				chart = createLineChart(chart, chartData, 'YYYY-MM-DD', 'DD');
+				chart = createLineChart(chart, chartData, 'YYYY-MM-DD', 'DD', this.text);
 				break;
 			case 'MM':
 			default:
 				var chartData = createChartData('YYYY-MM');
-				chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM');
+				chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM', this.text);
 				break;
 		}
 

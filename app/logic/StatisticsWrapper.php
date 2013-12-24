@@ -200,29 +200,33 @@ class StatisticsWrapper extends BaseWrapper
 		$unsubscribedcontact[] = array(
 			'id' => 20,
 			'email' => 'newmail@new.mail',
-			'date' => date('Y-m-d', 1386687891),
-			'os' => 'Windows'
+			'date' => date('Y-m-d h:i', 1386687891),
+			'name' => 'fulano',
+			'lastname' => ''
 		);
 		
 		$unsubscribedcontact[] = array(
 			'id' => 240,
 			'email' => 'newmail1@new1.mail1',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
+			'date' => date('Y-m-d h:i',1386687891),
+			'name' => '',
+			'lastname' => 'perez2'
 		);
 		
 		$unsubscribedcontact[] = array(
 			'id' => 57,
 			'email' => 'newmail2@new2.mail2',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
+			'date' => date('Y-m-d h:i',1386687891),
+			'name' => 'fulano3',
+			'lastname' => 'perez3'
 		);
 		
 		$unsubscribedcontact[] = array(
 			'id' => 161,
 			'email' => 'otrocorreo3@otro3.correo3',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Mac'
+			'date' => date('Y-m-d h:i',1386687891),
+			'name' => '',
+			'lastname' => ''
 		);
 		
 		$response['statistics'] = $unsubscribed;
