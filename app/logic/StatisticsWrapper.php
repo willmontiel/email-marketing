@@ -37,15 +37,15 @@ class StatisticsWrapper extends BaseWrapper
 			$statisticsData->mailName = $mail->name;
 			$statisticsData->total = $total;
 			$statisticsData->opens = $opens;
-			$statisticsData->statopens = round(( $opens / $total ) * 100 );
+			$statisticsData->statopens = ( $opens / $total ) * 100 ;
 			$statisticsData->clicks = $clicks;
-			$statisticsData->statclicks = round(( $clicks / $opens ) * 100 );
+			$statisticsData->statclicks = ( $clicks / $opens ) * 100 ;
 			$statisticsData->bounced = $bounced;
-			$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
+			$statisticsData->statbounced = ( $bounced / $total ) * 100 ;
 			$statisticsData->unsubscribed = $unsubscribed;
-			$statisticsData->statunsubscribed = round(( $unsubscribed / $total ) * 100 );
+			$statisticsData->statunsubscribed = ( $unsubscribed / $total ) * 100 ;
 			$statisticsData->spam = $spam;
-			$statisticsData->statspam = round(( $spam / $total ) * 100 );
+			$statisticsData->statspam = ( $spam / $total ) * 100 ;
 
 			$response['summaryChartData'] = $summaryChartData;
 			$response['statisticsData'] = $statisticsData;
@@ -127,31 +127,45 @@ class StatisticsWrapper extends BaseWrapper
 		$clickcontact[] = array(
 			'id' => 100,
 			'email' => 'otrocorreo@otro.correo',
-			'date' => date('Y-m-d', 1386687891),
+			'date' => date('Y-m-d h:i', 1386878942),
 			'link' => 'https://www.google.com'
 		);
 		
 		$clickcontact[] = array(
 			'id' => 145,
 			'email' => 'otrocorreo2@otro2.correo2',
-			'date' => date('Y-m-d',1386687891),
+			'date' => date('Y-m-d h:i',1386747891),
 			'link' => 'https://www.facebook.com'
 		);
 		
 		$clickcontact[] = array(
 			'id' => 161,
 			'email' => 'otrocorreo3@otro3.correo3',
-			'date' => date('Y-m-d',1386687891),
+			'date' => date('Y-m-d h:i',1386698537),
 			'link' => 'https://www.google.com'
 		);
 		
 		$links[] = array(
 			'link' => 'https://www.google.com',
-			'clicks' => 20
+			'total' => 23,
+			'uniques' => 15,
+		);
+		
+		$links[] = array(
+			'link' => 'https://www.facebook.com',
+			'total' => 17,
+			'uniques' => 4,
+		);
+		
+		$links[] = array(
+			'link' => 'https://www.twitter.com',
+			'total' => 42,
+			'uniques' => 19,
 		);
 		
 		$response['statistics'] = $clicks;
 		$response['details'] = $clickcontact;
+		$response['links'] = $links;
 			
 		return $response;
 	}

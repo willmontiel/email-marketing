@@ -85,7 +85,8 @@ class ApistatisticsController extends ControllerBase
 		$statistics[] = array(
 			'id' => $idMail,
 			'statistics' => json_encode($stat['statistics']),
-			'details' => json_encode($stat['details'])
+			'details' => json_encode($stat['details']),
+			'links' => json_encode($stat['links']),
 		);
 		
 		return $this->setJsonResponse(array('drilldownclick' => $statistics));

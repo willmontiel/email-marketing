@@ -41,6 +41,7 @@ App.Drilldownopen = DS.Model.extend({
 App.Drilldownclick = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string'),
+	links: DS.attr('string')
 });
 
 App.Drilldownunsubscribed = DS.Model.extend({
@@ -127,6 +128,9 @@ App.DrilldownClicksController = Ember.ArrayController.extend({
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
 		App.set('detailsData', details);
+		
+		var links = JSON.parse(this.get('model').content[0].get('links'));
+		App.set('detailsLinks', links);
 	}
 });
 
