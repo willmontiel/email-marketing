@@ -119,6 +119,24 @@ class ApistatisticsController extends ControllerBase
 	}
 	
 	/**
+	 * @Get("/mail/{idMail:[0-9]+}/drilldownspams")
+	 */	
+	public function mailspamAction($idMail)
+	{
+		$statWrapper = new StatisticsWrapper();
+		
+		$stat = $statWrapper->findMailUnsubscribedStats($idMail);
+		
+		$statistics[] = array(
+			'id' => $idMail,
+			'statistics' => json_encode($stat['statistics']),
+			'details' => json_encode($stat['details'])
+		);
+		
+		return $this->setJsonResponse(array('drilldownspam' => $statistics));
+	}
+	
+	/**
 	 * @Get("/contactlist/{idContactlist:[0-9]+}/drilldownopens")
 	 */
 	public function contactlistopensAction($idContactList)

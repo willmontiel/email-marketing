@@ -284,3 +284,84 @@
 	</div>
 </script>
 
+<script type="text/x-handlebars" data-template-name="drilldown/spam">
+	<hr />
+	<div class="row-fluid">
+		<div class="news span3">
+			<label class="label-gray-light-percent"><i class="icon-remove"></i> Resumen de spam</label>
+			<div>
+				<label>
+					<table>
+						<tr>
+							<td class="border-radious-red-left"></td>
+							<td class="border-radious-red-center">{{statisticsData.spam}}</td>
+							<td class="border-radious-red-center">|</td>
+							<td class="border-radious-red-right">{{statisticsData.statspam}}%</td>
+						</tr>
+					</table>
+				</label>
+			</div>
+			<div class="titleMail">
+				<h4 class="spamColor">Spam</h4>
+			</div>
+		</div>
+		<div class="pull-right scaleChart">
+			<div class="pull-left">
+				Agrupar por: &nbsp;
+			</div>
+			<div class="pull-right">
+				<label for="scaleHour">
+					{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
+					Hora &nbsp;
+				</label>
+			</div>
+			<div class="pull-right">
+				<label for="scaleDay">
+					{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
+					Dia &nbsp;
+				</label>
+			</div>
+			<div class="pull-right">
+				<label for="scaleMonth">
+					{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
+					Mes &nbsp;
+				</label>
+			</div>
+		</div>
+		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Spam de Correo"}}'}}
+	</div>
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Lista de Spam
+					</div>
+				</div>
+				<div class="box-content">
+					<table class="table table-normal">
+						<thead>
+							<tr>
+								<td>Dirección de correo</td>
+								<td>Nombre</td>
+								<td>Apellido</td>
+								<td>Fecha y hora</td>
+							</tr>
+						</thead>
+						<tbody>
+						{{'{{#each App.detailsData}}'}}
+							<tr>
+								<td>{{'{{email}}'}}</td>
+								<td>{{'{{name}}'}}</td>
+								<td>{{'{{lastname}}'}}</td>
+								<td>{{'{{date}}'}}</td>
+							</tr>
+						{{ '{{/each}}' }}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+

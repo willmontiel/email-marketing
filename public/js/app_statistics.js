@@ -54,7 +54,8 @@ App.Router.map(function() {
   this.resource('drilldown', function(){
 	  this.route('opens'),
 	  this.route('clicks'),
-	  this.route('unsubscribed')
+	  this.route('unsubscribed'),
+	  this.route('spam')
   });
 });
 
@@ -95,6 +96,16 @@ App.DrilldownUnsubscribedRoute = Ember.Route.extend({
 	}
 });
 
+App.DrilldownSpamRoute = Ember.Route.extend({
+	model: function () {
+		return this.store.find('drilldownspam');	
+	},
+	setupController: function(controller, model) {
+		controller.set('model', model);
+		controller.loadDataChart();
+		controller.loadDataDetails();
+	}
+});
 
 /*Controllers*/
 App.DrilldownController = Ember.ObjectController.extend({});
@@ -143,6 +154,17 @@ App.DrilldownClicksController = Ember.ArrayController.extend({
 });
 
 App.DrilldownUnsubscribedController = Ember.ArrayController.extend({	
+	loadDataChart: function() {
+		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
+		App.set('chartData', statistics);
+	},
+	loadDataDetails: function() {
+		var details = JSON.parse(this.get('model').content[0].get('details'));
+		App.set('detailsData', details);
+	}
+});
+
+App.DrilldownSpamController = Ember.ArrayController.extend({	
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);

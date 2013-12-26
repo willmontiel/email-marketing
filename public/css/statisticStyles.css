@@ -127,6 +127,10 @@ label > table {
 	color: #81babd !important;
 }
 
+.spamColor a{
+	color: #d12929 !important;
+}
+
 .unsubscribedColor a{
 	color: #8c8689 !important;
 }
