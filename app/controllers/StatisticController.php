@@ -114,33 +114,25 @@ class StatisticController extends ControllerBase
 	{
 		switch ($resource) {
 			case 'mail':
-				$report = Mail::findFirst(array(
-					'conditions' => 'idMail = ?1',
-					'bind' => array(1 => $id)
+				$report = Mailreportfile::findFirst(array(
+					'conditions' => 'idMail = ?1 AND type = ?2',
+					'bind' => array(1 => $id,
+									2 => $type)
 				));
-//				$proccess = Importproccess::findFirstByIdImportproccess($idProccess);
 				break;
 			case 'dbase':
+				$report = Mailreportfile::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND type = ?2',
+					'bind' => array(1 => $id,
+									2 => $type)
+				));
 				break;
 			case 'contactlist':
-				break;
-			default:
-				$this->response->redirect('error');
-				break;
-		}
-		
-		switch ($type) {
-			case 'opens':
-				$dir = $this->mailReportsDir->opens;
-				break;
-			case 'clicks':
-				$dir = $this->mailReportsDir->clicks;
-				break;
-			case 'unsubscribed':
-				$dir = $this->mailReportsDir->unsubscribed;
-				break;
-			case 'bounced':
-				$dir = $this->mailReportsDir->bounced;
+				$report = Mailreportfile::findFirst(array(
+					'conditions' => 'idContactlist = ?1 AND type = ?2',
+					'bind' => array(1 => $id,
+									2 => $type)
+				));
 				break;
 			default:
 				$this->response->redirect('error');
@@ -150,11 +142,11 @@ class StatisticController extends ControllerBase
 		$this->view->disable();
 		
 		header('Content-type: application/csv');
-		header('Content-Disposition: attachment; filename=ContactosImportados.csv');
+		header('Content-Disposition: attachment; filename=ReporteDeCorreo.csv');
 		header('Pragma: public');
 		header('Expires: 0');
 		header('Content-Type: application/download');
-		echo 'Reporte de aperturas para el correo: "' . $report->name . '"' . PHP_EOL;
-		readfile($dir . '14_144_opens.csv');
+		echo 'Reporte de aperturas' . PHP_EOL;
+		readfile($this->mailReportsDir->reports . $report->name);
 	}
 }

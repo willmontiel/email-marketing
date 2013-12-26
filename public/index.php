@@ -206,10 +206,7 @@ try {
 	 * Directorio de resportes de correo
 	 */
 	$mailReportsDir = new stdClass();
-	$mailReportsDir->opens = $config->mailreports->tmpdirmailreportsopens;
-	$mailReportsDir->bounced = $config->mailreports->tmpdirmailreportsbounced;
-	$mailReportsDir->clicks = $config->mailreports->tmpdirmailreportsclicks;
-	$mailReportsDir->unsubscribed = $config->mailreports->tmpdirmailreportsunsubs;
+	$mailReportsDir->reports = $config->mailreports->tmpdirmailreports;
 	$di->set('mailReportsDir', $mailReportsDir);
 	
 	/*
