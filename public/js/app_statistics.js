@@ -125,7 +125,9 @@ App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginatio
 	}
 });
 
-App.DrilldownClicksController = Ember.ArrayController.extend({
+App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPagination, {
+	modelClass : App.Drilldownclick,
+			
 	selectedLink: [],
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
@@ -153,7 +155,9 @@ App.DrilldownClicksController = Ember.ArrayController.extend({
     }.observes('App.linkSelected')
 });
 
-App.DrilldownUnsubscribedController = Ember.ArrayController.extend({	
+App.DrilldownUnsubscribedController = Ember.ArrayController.extend(Ember.MixinPagination, {
+	modelClass : App.Drilldownunsubscribed,	
+			
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
