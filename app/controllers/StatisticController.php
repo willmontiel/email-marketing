@@ -109,4 +109,52 @@ class StatisticController extends ControllerBase
 			$this->view->setVar('stat', 0);
 		}
 	}
+	
+	public function downloadreportAction($resource, $id, $type)
+	{
+		switch ($resource) {
+			case 'mail':
+				$report = Mail::findFirst(array(
+					'conditions' => 'idMail = ?1',
+					'bind' => array(1 => $id)
+				));
+//				$proccess = Importproccess::findFirstByIdImportproccess($idProccess);
+				break;
+			case 'dbase':
+				break;
+			case 'contactlist':
+				break;
+			default:
+				$this->response->redirect('error');
+				break;
+		}
+		
+		switch ($type) {
+			case 'opens':
+				$dir = $this->mailReportsDir->opens;
+				break;
+			case 'clicks':
+				$dir = $this->mailReportsDir->clicks;
+				break;
+			case 'unsubscribed':
+				$dir = $this->mailReportsDir->unsubscribed;
+				break;
+			case 'bounced':
+				$dir = $this->mailReportsDir->bounced;
+				break;
+			default:
+				$this->response->redirect('error');
+				break;
+		}
+		
+		$this->view->disable();
+		
+		header('Content-type: application/csv');
+		header('Content-Disposition: attachment; filename=ContactosImportados.csv');
+		header('Pragma: public');
+		header('Expires: 0');
+		header('Content-Type: application/download');
+		echo 'Reporte de aperturas para el correo: "' . $report->name . '"' . PHP_EOL;
+		readfile($dir . '14_144_opens.csv');
+	}
 }
