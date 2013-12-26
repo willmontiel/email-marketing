@@ -263,6 +263,71 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownunsubscribed' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}
 	
+	public function findMailSpamStats($idMail)
+	{
+		$spam = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			$spam[] = array(
+				'title' =>$h1,
+				'value' => $value
+			);
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
+		
+		$spamcontact[] = array(
+			'id' => 20,
+			'email' => 'newmail@new.mail',
+			'date' => date('Y-m-d h:i', 1386687891),
+			'name' => 'fulano',
+			'lastname' => ''
+		);
+		
+		$spamcontact[] = array(
+			'id' => 240,
+			'email' => 'newmail1@new1.mail1',
+			'date' => date('Y-m-d h:i',1386687891),
+			'name' => '',
+			'lastname' => 'perez2'
+		);
+		
+		$spamcontact[] = array(
+			'id' => 57,
+			'email' => 'newmail2@new2.mail2',
+			'date' => date('Y-m-d h:i',1386687891),
+			'name' => 'fulano3',
+			'lastname' => 'perez3'
+		);
+		
+		$spamcontact[] = array(
+			'id' => 161,
+			'email' => 'otrocorreo3@otro3.correo3',
+			'date' => date('Y-m-d h:i',1386687891),
+			'name' => '',
+			'lastname' => ''
+		);
+		
+		$this->pager->setTotalRecords(count($spamcontact));
+		
+		$statistics[] = array(
+			'id' => $idMail,
+			'statistics' => json_encode($spam),
+			'details' => json_encode($spamcontact)
+		);
+		
+		$this->pager->setRowsInCurrentPage(count($spamcontact));
+		
+		return array('drilldownspam' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
+	}
+	
 	public function findDbaseOpenStats($idDbase)
 	{
 		$opens[] = array(
