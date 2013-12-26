@@ -166,7 +166,7 @@
 											<td class="border-radious-red-right">
 												<b>{{statisticsData.statspam}}%</b>
 											</td>
-											<td><h4 class="spamColor subtitleColor">Spam</h4></td>
+											<td><h4 class="spamColor subtitleColor">{{'{{#linkTo "drilldown.spam" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Spam</a>{{/linkTo}}'}}</h4></td>
 										</tr>
 									</table>
 								</td>
