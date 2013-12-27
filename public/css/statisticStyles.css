@@ -20,6 +20,10 @@
 	color: #74b35d;
 }
 
+.links-select {
+	margin-left: 380px;
+}
+
 .label-green-percent {
 	background: #8cc079;
 	font-size: 16px;
@@ -129,6 +133,10 @@ label > table {
 
 .spamColor a{
 	color: #d12929 !important;
+}
+
+.bouncedColor a{
+	color: #953B39 !important;
 }
 
 .unsubscribedColor a{

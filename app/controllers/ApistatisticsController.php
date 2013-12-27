@@ -157,6 +157,31 @@ class ApistatisticsController extends ControllerBase
 	}
 	
 	/**
+	 * @Get("/mail/{idMail:[0-9]+}/drilldownbounceds")
+	 */	
+	public function mailbouncedAction($idMail)
+	{
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+		
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
+		
+		$statWrapper = new StatisticsWrapper();
+		
+		$statWrapper->setPager($pager);
+		
+		$stat = $statWrapper->findMailBouncedStats($idMail);
+		
+		return $this->setJsonResponse($stat);
+	}
+	
+	/**
 	 * @Get("/contactlist/{idContactlist:[0-9]+}/drilldownopens")
 	 */
 	public function contactlistopensAction($idContactList)

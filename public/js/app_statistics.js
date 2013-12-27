@@ -32,7 +32,8 @@ App.Drilldownopen = DS.Model.extend({
 App.Drilldownclick = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string'),
-	links: DS.attr('string')
+	links: DS.attr('string'),
+	multvalchart: DS.attr('string'),
 });
 
 App.Drilldownunsubscribed = DS.Model.extend({
@@ -43,6 +44,7 @@ App.Drilldownunsubscribed = DS.Model.extend({
 App.Drilldownbounced = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string'),
+	multvalchart: DS.attr('string'),
 });
 
 App.Drilldownspam = DS.Model.extend({
@@ -55,7 +57,8 @@ App.Router.map(function() {
 	  this.route('opens'),
 	  this.route('clicks'),
 	  this.route('unsubscribed'),
-	  this.route('spam')
+	  this.route('spam'),
+	  this.route('bounced')
   });
 });
 
@@ -66,6 +69,11 @@ App.DrilldownIndexRoute = Ember.Route.extend({});
 App.DrilldownOpensRoute = Ember.Route.extend({
 	model: function () {
 		return this.store.find('drilldownopen');	
+	},
+	deactivate: function () {
+		App.set('scaleSelected', null);
+		App.set('multValChart', null);
+		App.set('chartData', null);
 	},
 	setupController: function(controller, model) {
 		controller.set('model', model);
@@ -78,6 +86,11 @@ App.DrilldownClicksRoute = Ember.Route.extend({
 	model: function () {
 		return this.store.find('drilldownclick');		
 	},
+	deactivate: function () {
+		App.set('scaleSelected', null);
+		App.set('multValChart', null);
+		App.set('chartData', null);
+	},
 	setupController: function(controller, model) {
 		controller.set('model', model);
 		controller.loadDataChart();
@@ -88,6 +101,11 @@ App.DrilldownClicksRoute = Ember.Route.extend({
 App.DrilldownUnsubscribedRoute = Ember.Route.extend({
 	model: function () {
 		return this.store.find('drilldownunsubscribed');	
+	},
+	deactivate: function () {
+		App.set('scaleSelected', null);
+		App.set('multValChart', null);
+		App.set('chartData', null);
 	},
 	setupController: function(controller, model) {
 		controller.set('model', model);
@@ -100,12 +118,34 @@ App.DrilldownSpamRoute = Ember.Route.extend({
 	model: function () {
 		return this.store.find('drilldownspam');	
 	},
+	deactivate: function () {
+		App.set('scaleSelected', null);
+		App.set('multValChart', null);
+		App.set('chartData', null);
+	},
 	setupController: function(controller, model) {
 		controller.set('model', model);
 		controller.loadDataChart();
 		controller.loadDataDetails();
 	}
 });
+
+App.DrilldownBouncedRoute = Ember.Route.extend({
+	model: function () {
+		return this.store.find('drilldownbounced');	
+	},
+	deactivate: function () {
+		App.set('scaleSelected', null);
+		App.set('multValChart', null);
+		App.set('chartData', null);
+	},
+	setupController: function(controller, model) {
+		controller.set('model', model);
+		controller.loadDataChart();
+		controller.loadDataDetails();
+	}
+});
+
 
 /*Controllers*/
 App.DrilldownController = Ember.ObjectController.extend({});
@@ -117,11 +157,10 @@ App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginatio
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
-		App.set('scaleSelected', null)
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
-		App.set('detailsData', details);
+		this.set('detailsData', details);
 	}
 });
 
@@ -129,30 +168,42 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 	modelClass : App.Drilldownclick,
 			
 	selectedLink: [],
+	linkSelected: null,
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
-		App.set('clicksData', statistics);
-		var dataByLink = groupByLink(statistics[0].link);
-		App.set('chartData', dataByLink);
+		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
+		App.set('chartData', statistics);
+		App.set('multValChart', info);
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
-		App.set('detailsData', details);
-		
+		this.set('allDetailsData', details);
+		this.set('detailsData', details);
 		var links = JSON.parse(this.get('model').content[0].get('links'));
-		App.set('detailsLinks', links);
+		this.set('detailsLinks', links);
 		
-		this.selectedLink = [];
-		App.set('linkSelected', App.get('clicksData')[0].link);
+		this.selectedLink = ['Todos'];
 		for(var i = 0; i < links.length; i++) {
 			this.selectedLink.push(links[i].link);
 		}
 	},
 	linkSelectChange: function () {	
-		var link = App.get('linkSelected');
-		var dataByLink = groupByLink(link);
-		App.set('chartData', dataByLink);
-    }.observes('App.linkSelected')
+		var link = this.get('linkSelected');
+		var links = this.get('allDetailsData');
+		var objArray = [];
+		if(link == 'Todos') {
+			objArray = links;
+		}
+		else {
+			for(var i = 0; i < links.length; i++) {
+				if(links[i].link == link) {
+					objArray.push(links[i]);
+				}
+			}
+		}
+		this.set('detailsData', objArray);
+		
+    }.observes('linkSelected')
 });
 
 App.DrilldownUnsubscribedController = Ember.ArrayController.extend(Ember.MixinPagination, {
@@ -164,7 +215,7 @@ App.DrilldownUnsubscribedController = Ember.ArrayController.extend(Ember.MixinPa
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
-		App.set('detailsData', details);
+		this.set('detailsData', details);
 	}
 });
 
@@ -175,9 +226,43 @@ App.DrilldownSpamController = Ember.ArrayController.extend({
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
-		App.set('detailsData', details);
+		this.set('detailsData', details);
 	}
 });
+
+App.DrilldownBouncedController = Ember.ArrayController.extend({	
+	selectedType: ['Todos', 'Temporal', 'Permanente', 'Otro'],
+	typeSelected: null,
+	loadDataChart: function() {
+		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
+		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
+		App.set('chartData', statistics);
+		App.set('multValChart', info);
+	},
+	loadDataDetails: function() {
+		var details = JSON.parse(this.get('model').content[0].get('details'));
+		this.set('allDetailsData', details);
+		this.set('detailsData', details);
+	},
+	linkSelectChange: function () {	
+		var bouncedType = this.get('typeSelected');
+		var types = this.get('allDetailsData');
+		var objArray = [];
+		if(bouncedType == 'Todos') {
+			objArray = types;
+		}
+		else {
+			for(var i = 0; i < types.length; i++) {
+				if(types[i].type == bouncedType) {
+					objArray.push(types[i]);
+				}
+			}
+		}
+		this.set('detailsData', objArray);
+		
+    }.observes('typeSelected')
+});
+
 
 App.scaleSelected = null;
 
@@ -188,12 +273,11 @@ App.chartScale = [
 App.TimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
 	chart: null,
-	texto: null,
 	didInsertElement:function(){
 
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
-		
-		var chartData = createChartData('YYYY-MM');
+
+		var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM');
 		
 		if(this.text == null) {
 			this.text = this.textChart;
@@ -203,13 +287,13 @@ App.TimeGraphView = Ember.View.extend({
 			chart = createPieChart(chartData);
 		}
 		else if(this.typeChart === 'Bar') {
-			chart = createBarChart(null, chartData, 'YYYY-MM', 'MM', this.text);
+			chart = createBarChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
 		}
 		else if(this.typeChart === 'Line') {
-			chart = createLineChart(null, chartData, 'YYYY-MM', 'MM', this.text);
+			chart = createLineChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
 		}
 		else if(this.typeChart === 'LineStep') {
-			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM', this.text);
+			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
 		}
 
 		chart.write(this.idChart);
@@ -220,45 +304,66 @@ App.TimeGraphView = Ember.View.extend({
 		removeLastChart(chart);
 		switch(scale) {
 			case 'hh':
-				var chartData = createChartData('YYYY-MM-DD HH:mm');
-				chart = createLineStepChart(chart, chartData, 'YYYY-MM-DD JJ:NN', 'hh', this.text);
+				var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM-DD HH:mm');
+				chart = createLineStepChart(chart, chartData, 'YYYY-MM-DD JJ:NN', 'hh', this.text, App.get('multValChart'));
 				break;
 			case 'DD':
-				var chartData = createChartData('YYYY-MM-DD');
-				chart = createLineChart(chart, chartData, 'YYYY-MM-DD', 'DD', this.text);
+				var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM-DD');
+				chart = createLineChart(chart, chartData, 'YYYY-MM-DD', 'DD', this.text, App.get('multValChart'));
 				break;
 			case 'MM':
 			default:
-				var chartData = createChartData('YYYY-MM');
-				chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM', this.text);
+				var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM');
+				chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
 				break;
 		}
 
 		chart.validateData();
 		chart.animateAgain();
 		
-	}.observes('App.scaleSelected', 'App.linkSelected'),		
+	}.observes('App.scaleSelected'),		
 			
 });
 
-function createChartData(format) {
+function createChartData(totalData, multVal, format) {
 	
-	var totalData = App.get('chartData');
 	var newData = [];
 	var result = [];
-	
+
 	for(var i = 0; i < totalData.length; i++) {
-		if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
-			newData[(moment.unix(totalData[i].title)).format(format)] = 0;
+		
+		if(multVal == undefined || multVal == null) {
+			if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
+				newData[(moment.unix(totalData[i].title)).format(format)] = 0;
+			}
+			newData[(moment.unix(totalData[i].title)).format(format)]+= totalData[i].value;
 		}
-		newData[(moment.unix(totalData[i].title)).format(format)]+= totalData[i].value;
+		else {
+			if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
+				newData[(moment.unix(totalData[i].title)).format(format)] = [];
+				for(var j = 0; j < multVal[0].amount; j++) {
+					newData[(moment.unix(totalData[i].title)).format(format)][j] = 0;
+				}
+			}
+			var values = JSON.parse(totalData[i].value);
+			for(var j = 0; j < multVal[0].amount; j++) {
+				newData[(moment.unix(totalData[i].title)).format(format)][j]+= values[j];
+			}
+		}
 	}
 
 	for (var key in newData) {
 		if(newData.hasOwnProperty(key)) {
 			var obj = new Object();
 			obj.title = '' + key;
-			obj.value = '' + newData[key];
+			if(multVal == undefined || multVal == null) {
+				obj.value = '' + newData[key];
+			}
+			else {
+				for(var j = 0; j < multVal[0].amount; j++) {
+					obj['value' + j] = '' + newData[key][j];
+				}
+			}
 			result.push(obj);
 		}
 	}
@@ -273,16 +378,48 @@ function removeLastChart(chart) {
 	chart.removeLegend();
 }
 
-function groupByLink(link) {
-	var statistics = App.get('clicksData');
-	var arrayObj = [];
-	for(var i=0; i < statistics.length; i++) {
-		if(statistics[i].link == link) {
-			var obj = new Object();
-			obj.title = '' + statistics[i].title;
-			obj.value = statistics[i].value;
-			arrayObj.push(obj);
-		}
-	}
-	return arrayObj;
-}
+
+//function createMultChartData(totalData, amount, format) {
+//	
+//	var newData = [];
+//	var result = [];
+//
+//	for(var i = 0; i < totalData.length; i++) {
+//		if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
+//			newData[(moment.unix(totalData[i].title)).format(format)] = [];
+//			for(var j = 0; j < amount; j++) {
+//				newData[(moment.unix(totalData[i].title)).format(format)][j] = 0;
+//			}
+//		}
+//		for(var j = 0; j < amount; j++) {
+//			newData[(moment.unix(totalData[i].title)).format(format)][j]+= totalData[i]['value' + j];
+//		}
+//	}
+//	
+//	for (var key in newData) {
+//		if(newData.hasOwnProperty(key)) {
+//			var obj = new Object();
+//			obj.title = '' + key;
+//			for(var j = 0; j < amount; j++) {
+//				obj['value' + j] = '' + newData[key][j];
+//			}
+//			result.push(obj);
+//		}
+//	}
+//	
+//	return result;
+//}
+
+//function groupByLink(link) {
+//	var statistics = App.get('clicksData');
+//	var arrayObj = [];
+//	for(var i=0; i < statistics.length; i++) {
+//		if(statistics[i].link == link) {
+//			var obj = new Object();
+//			obj.title = '' + statistics[i].title;
+//			obj.value = statistics[i].value;
+//			arrayObj.push(obj);
+//		}
+//	}
+//	return arrayObj;
+//}

@@ -91,6 +91,9 @@
 									<h4 class="red"><span>Rebotes</span> 0 </h4>
 								</li>
 							</ul>
+							<div class="news-time">
+								<a href="{{url('statistic/mail')}}/{{item.idMail}}"><i class="icon-bar-chart icon-2x"></i></a>
+							</div>
 						</td>
 						{%endif%}
 						<td class="span3">

@@ -179,6 +179,7 @@ class Security extends Plugin
 				'apistatistics::mailclicks' => array('statistic' => array('read')),
 				'apistatistics::mailunsubscribed' => array('statistic' => array('read')),
 				'apistatistics::mailspam' => array('statistic' => array('read')),
+				'apistatistics::mailbounced' => array('statistic' => array('read')),
 				'apistatistics::dbaseopens' => array('statistic' => array('read')),
 				'apistatistics::dbaseclicks' => array('statistic' => array('read')),
 				'apistatistics::dbaseunsubscribed' => array('statistic' => array('read')),
