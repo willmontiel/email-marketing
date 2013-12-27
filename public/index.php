@@ -201,6 +201,14 @@ try {
 	$mtaConfig->port = $config->mta->port;
 	$di->set('mtadata', $mtaConfig);
 	
+	
+	/*
+	 * Directorio de resportes de correo
+	 */
+	$mailReportsDir = new stdClass();
+	$mailReportsDir->reports = $config->mailreports->tmpdirmailreports;
+	$di->set('mailReportsDir', $mailReportsDir);
+	
 	/*
 	 * Log Object, utilizado para logging en general a archivo
 	 */

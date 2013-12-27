@@ -109,4 +109,44 @@ class StatisticController extends ControllerBase
 			$this->view->setVar('stat', 0);
 		}
 	}
+	
+	public function downloadreportAction($resource, $id, $type)
+	{
+		switch ($resource) {
+			case 'mail':
+				$report = Mailreportfile::findFirst(array(
+					'conditions' => 'idMail = ?1 AND type = ?2',
+					'bind' => array(1 => $id,
+									2 => $type)
+				));
+				break;
+			case 'dbase':
+				$report = Mailreportfile::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND type = ?2',
+					'bind' => array(1 => $id,
+									2 => $type)
+				));
+				break;
+			case 'contactlist':
+				$report = Mailreportfile::findFirst(array(
+					'conditions' => 'idContactlist = ?1 AND type = ?2',
+					'bind' => array(1 => $id,
+									2 => $type)
+				));
+				break;
+			default:
+				$this->response->redirect('error');
+				break;
+		}
+		
+		$this->view->disable();
+		
+		header('Content-type: application/csv');
+		header('Content-Disposition: attachment; filename=ReporteDeCorreo.csv');
+		header('Pragma: public');
+		header('Expires: 0');
+		header('Content-Type: application/download');
+		echo 'Reporte de aperturas' . PHP_EOL;
+		readfile($this->mailReportsDir->reports . $report->name);
+	}
 }
