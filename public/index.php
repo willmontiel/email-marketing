@@ -20,8 +20,19 @@ try {
 	));
 		// register autoloader
 	$loader->register();
-    //Create a DI
-    $di = new Phalcon\DI\FactoryDefault();
+   // Ruta de APP
+	$apppath = realpath('../');
+
+	//Create a DI
+	$di = new Phalcon\DI\FactoryDefault();
+
+	/* Ruta de APP */
+	$di->set('appPath', function () use ($apppath) {
+		$obj = new stdClass;
+		$obj->path = $apppath;
+
+		return $obj;
+	});
 	
 	// Create timer object
 	$timer = new TimerObject();
