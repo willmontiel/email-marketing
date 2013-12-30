@@ -21,7 +21,7 @@ function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) 
 			graph.lineColor = "#000000";
 			graph.fillColors = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
 			graph.fillAlphas = 0.7;
-			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value' + i] + " en [[category]]:<b>[[value]]</b></span>";
+			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value'][i] + " en [[category]]:<b>[[value]]</b></span>";
 			chart.addGraph(graph);
 		}
 	}
@@ -100,10 +100,10 @@ function createLineChart(chart, chartData, dateFormat, minPeriod, text, multVal)
 			graph.bulletBorderAlpha = 1;
 			graph.bulletBorderThickness = 2;
 			graph.bulletSize = 7;
-			graph.title = text + ' ' + multVal[0]['value' + i];
+			graph.title = text + ' ' + multVal[0]['value'][i];
 			graph.lineThickness = 2;
 			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
-			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value' + i] + " de [[category]]:<b>[[value]]</b></span>";
+			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value'][i] + " de [[category]]:<b>[[value]]</b></span>";
 			chart.addGraph(graph);
 		}
 	}
@@ -175,9 +175,9 @@ function createLineStepChart(chart, chartData, dateFormat, minPeriod, text, mult
 			var graph = new AmCharts.AmGraph();
 			graph.valueField = "value" + i;
 			graph.type = "step";
-			graph.title = text + ' ' + multVal[0]['value' + i];
+			graph.title = text + ' ' + multVal[0]['value'][i];
 			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
-			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value' + i] + " en [[category]]:<b>[[value]]</b></span>";
+			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value'][i] + " en [[category]]:<b>[[value]]</b></span>";
 			chart.addGraph(graph);
 		}
 	}

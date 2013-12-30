@@ -86,10 +86,19 @@
 					<table>
 						<tr>
 							<td></td>
-							<td>9</td>
+							<td>{{statisticsData.totalclicks}}</td>
 							<td>|</td>
-							<td>20%</td>
+							<td>{{statisticsData.stattotalclicks}}%</td>
 							<td>Clics Totales</td>
+						</tr>
+					</table>
+				</label>
+				<label class="label-click-percent">
+					<table>
+						<tr>
+							<td></td>
+							<td>{{statisticsData.statCTRclicks}}%</td>
+							<td>Tasa de Clics</td>
 						</tr>
 					</table>
 				</label>
@@ -304,9 +313,9 @@
 					<table>
 						<tr>
 							<td class="border-radious-scarlet-left"></td>
-							<td class="border-radious-scarlet-center">1</td>
+							<td class="border-radious-scarlet-center">{{statisticsData.softbounced}}</td>
 							<td class="border-radious-scarlet-center">|</td>
-							<td class="border-radious-scarlet-center">50%</td>
+							<td class="border-radious-scarlet-center">{{statisticsData.statsoftbounced}}%</td>
 							<td class="border-radious-scarlet-center">|</td>
 							<td class="border-radious-scarlet-right">Suaves</td>	
 						</tr>
@@ -316,17 +325,54 @@
 					<table>
 						<tr>
 							<td class="border-radious-scarlet-left"></td>
-							<td class="border-radious-scarlet-center">1</td>
+							<td class="border-radious-scarlet-center">{{statisticsData.hardbounced}}</td>
 							<td class="border-radious-scarlet-center">|</td>
-							<td class="border-radious-scarlet-center">50%</td>
+							<td class="border-radious-scarlet-center">{{statisticsData.stathardbounced}}%</td>
 							<td class="border-radious-scarlet-center">|</td>
 							<td class="border-radious-scarlet-right">Duros</td>
+						</tr>
+					</table>
+				</label>
+				<label>
+					<table>
+						<tr>
+							<td class="border-radious-scarlet-left"></td>
+							<td class="border-radious-scarlet-center">{{statisticsData.otherbounced}}</td>
+							<td class="border-radious-scarlet-center">|</td>
+							<td class="border-radious-scarlet-center">{{statisticsData.statotherbounced}}%</td>
+							<td class="border-radious-scarlet-center">|</td>
+							<td class="border-radious-scarlet-right">Otros</td>
 						</tr>
 					</table>
 				</label>
 			</div>
 		</div>
 		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Rebotes"}}'}}
+	</div>
+	<div class="row-fluid">
+		<div class="pull-left scaleChart">
+			<div class="pull-left">
+				Filtrar por: &nbsp;
+			</div>
+			<div class="pull-left">
+				<label for="typeFilter">
+					{{'{{view Ember.RadioButton id="typeFilter" name="filterBounced" selectionBinding="bouncedFilter" value="type" checked="checked"}}'}}
+					Tipo &nbsp;
+				</label>
+			</div>
+			<div class="pull-left">
+				<label for="categoryFilter">
+					{{'{{view Ember.RadioButton id="categoryFilter" name="filterBounced" selectionBinding="bouncedFilter" value="category"}}'}}
+					Categoria &nbsp;
+				</label>
+			</div>
+			<div class="pull-left">
+				<label for="domainFilter">
+					{{'{{view Ember.RadioButton id="domainFilter" name="filterBounced" selectionBinding="bouncedFilter" value="domain"}}'}}
+					Dominio &nbsp;
+				</label>
+			</div>
+		</div>
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
