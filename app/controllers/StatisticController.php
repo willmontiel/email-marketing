@@ -110,43 +110,35 @@ class StatisticController extends ControllerBase
 		}
 	}
 	
-	public function downloadreportAction($resource, $id, $type)
+	public function downloadreportAction($id, $type)
 	{
-		switch ($resource) {
-			case 'mail':
-				$report = Mailreportfile::findFirst(array(
-					'conditions' => 'idMail = ?1 AND type = ?2',
-					'bind' => array(1 => $id,
-									2 => $type)
-				));
-				break;
-			case 'dbase':
-				$report = Mailreportfile::findFirst(array(
-					'conditions' => 'idDbase = ?1 AND type = ?2',
-					'bind' => array(1 => $id,
-									2 => $type)
-				));
-				break;
-			case 'contactlist':
-				$report = Mailreportfile::findFirst(array(
-					'conditions' => 'idContactlist = ?1 AND type = ?2',
-					'bind' => array(1 => $id,
-									2 => $type)
-				));
-				break;
-			default:
-				$this->response->redirect('error');
-				break;
+		$account = $this->user->account;
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $id,
+							2 => $account->idAccount)
+		));
+
+		if ($mail) {
+			$createReport = new Reportingcreator($mail, $type);
+			$r = $createReport->createReport();
+
+			$report = Mailreportfile::findFirst(array(
+				'conditions' => 'idMailReportFile = ?1 AND idMail = ?2 AND type = ?3',
+				'bind' => array(1 => $r->idMailReportFile,
+								2 => $id,
+								3 => $type)
+			));
+		
+			$this->view->disable();
+
+			header('Content-type: application/csv');
+			header('Content-Disposition: attachment; filename=reportedecampaña.csv');
+			header('Pragma: public');
+			header('Expires: 0');
+			header('Content-Type: application/download');
+			echo 'Reporte de campaña' . PHP_EOL;
+			readfile($this->mailReportsDir->reports . $report->name);
 		}
-		
-		$this->view->disable();
-		
-		header('Content-type: application/csv');
-		header('Content-Disposition: attachment; filename=ReporteDeCorreo.csv');
-		header('Pragma: public');
-		header('Expires: 0');
-		header('Content-Type: application/download');
-		echo 'Reporte de aperturas' . PHP_EOL;
-		readfile($this->mailReportsDir->reports . $report->name);
 	}
 }
