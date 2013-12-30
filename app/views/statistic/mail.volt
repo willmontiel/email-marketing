@@ -150,7 +150,7 @@
 											<td class="border-radious-scarlet-right">
 												<b>{{statisticsData.statbounced}}%</b>
 											</td>
-											<td><h4 class="bouncedColor subtitleColor">Rebotes</h4></td>
+											<td><h4 class="bouncedColor subtitleColor">{{'{{#linkTo "drilldown.bounced" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Rebotes</a>{{/linkTo}}'}}</h4></td>
 										</tr>
 										<tr><td colspan="5"><td></tr>
 										<tr>
@@ -186,6 +186,29 @@
 		</script>
 		{{ partial("statistic/mailpartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
+		<div class="pull-right scaleChart">
+			<div class="pull-left">
+				Agrupar por: &nbsp;
+			</div>
+			<div class="pull-right">
+				<label for="scaleHour">
+					{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
+					Hora &nbsp;
+				</label>
+			</div>
+			<div class="pull-right">
+				<label for="scaleDay">
+					{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
+					Dia &nbsp;
+				</label>
+			</div>
+			<div class="pull-right">
+				<label for="scaleMonth">
+					{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
+					Mes &nbsp;
+				</label>
+			</div>
+		</div>
 		<div id="ChartContainer"></div>
 		</script>
 	</div>

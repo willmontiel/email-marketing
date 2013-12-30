@@ -1,4 +1,4 @@
-function createBarChart(chart, chartData, dateFormat, minPeriod, text) {
+function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) {
 	if(chart == undefined || chart == null) {
 		chart = new AmCharts.AmSerialChart();
 	}
@@ -12,15 +12,30 @@ function createBarChart(chart, chartData, dateFormat, minPeriod, text) {
 	categoryAxis.minPeriod = minPeriod; // our data is daily, so we set minPeriod to DD
 	categoryAxis.axisColor = "#DADADA";
 	
-	var graph = new AmCharts.AmGraph();
-	graph.valueField = "value";
-	graph.type = "column";
-	graph.title = text;
-	graph.lineColor = "#000000";
-	graph.fillColors = "#6eb056";
-	graph.fillAlphas = 0.7;
-	graph.balloonText = "<span style='font-size:13px;'>" + text + " en [[category]]:<b>[[value]]</b></span>";
-	chart.addGraph(graph);
+	if(multVal != undefined || multVal != null) {
+		for(var i = 0; i < multVal[0].amount; i++ ) {
+			var graph = new AmCharts.AmGraph();
+			graph.valueField = "value" + i;
+			graph.type = "column";
+			graph.title = text + ' ' + multVal[0].value[i];
+			graph.lineColor = "#000000";
+			graph.fillColors = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
+			graph.fillAlphas = 0.7;
+			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value' + i] + " en [[category]]:<b>[[value]]</b></span>";
+			chart.addGraph(graph);
+		}
+	}
+	else {
+		var graph = new AmCharts.AmGraph();
+		graph.valueField = "value";
+		graph.type = "column";
+		graph.title = text;
+		graph.lineColor = "#000000";
+		graph.fillColors = "#6eb056";
+		graph.fillAlphas = 0.7;
+		graph.balloonText = "<span style='font-size:13px;'>" + text + " en [[category]]:<b>[[value]]</b></span>";
+		chart.addGraph(graph);
+	}
 
 	// LEGEND
 	var legend = new AmCharts.AmLegend();
@@ -49,7 +64,7 @@ function createPieChart(chartData) {
 	return chart;
 }
 
-function createLineChart(chart, chartData, dateFormat, minPeriod, text) {
+function createLineChart(chart, chartData, dateFormat, minPeriod, text, multVal) {
 	if(chart == undefined || chart == null) {
 		chart = new AmCharts.AmSerialChart();
 	}
@@ -74,20 +89,40 @@ function createLineChart(chart, chartData, dateFormat, minPeriod, text) {
 	chart.addValueAxis(valueAxis);
 	
 	// GRAPH
-	var graph = new AmCharts.AmGraph();
-	graph.type = "line";
-	graph.bullet = "round";
-	graph.bulletColor = "#FFFFFF";
-	graph.useLineColorForBulletBorder = true;
-	graph.bulletBorderAlpha = 1;
-	graph.bulletBorderThickness = 2;
-	graph.bulletSize = 7;
-	graph.title = text;
-	graph.balloonText = "<span style='font-size:13px;'>" + text + " en [[category]]:<b>[[value]]</b></span>";
-	graph.valueField = "value";
-	graph.lineThickness = 2;
-	graph.lineColor = "#00BBCC";
-	chart.addGraph(graph);
+	if(multVal != undefined || multVal != null) {
+		for(var i = 0; i < multVal[0].amount; i++ ) {
+			var graph = new AmCharts.AmGraph();
+			graph.valueField = "value" + i;
+			graph.type = "line";
+			graph.bullet = "round";
+			graph.bulletColor = "#FFFFFF";
+			graph.useLineColorForBulletBorder = true;
+			graph.bulletBorderAlpha = 1;
+			graph.bulletBorderThickness = 2;
+			graph.bulletSize = 7;
+			graph.title = text + ' ' + multVal[0]['value' + i];
+			graph.lineThickness = 2;
+			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
+			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value' + i] + " de [[category]]:<b>[[value]]</b></span>";
+			chart.addGraph(graph);
+		}
+	}
+	else {
+		var graph = new AmCharts.AmGraph();
+		graph.type = "line";
+		graph.bullet = "round";
+		graph.bulletColor = "#FFFFFF";
+		graph.useLineColorForBulletBorder = true;
+		graph.bulletBorderAlpha = 1;
+		graph.bulletBorderThickness = 2;
+		graph.bulletSize = 7;
+		graph.title = text;
+		graph.balloonText = "<span style='font-size:13px;'>" + text + " en [[category]]:<b>[[value]]</b></span>";
+		graph.valueField = "value";
+		graph.lineThickness = 2;
+		graph.lineColor = "#00BBCC";
+		chart.addGraph(graph);
+	}
 
 	// CURSOR
 	var chartCursor = new AmCharts.ChartCursor();
@@ -107,7 +142,7 @@ function createLineChart(chart, chartData, dateFormat, minPeriod, text) {
 	return chart;
 }
 
-function createLineStepChart(chart, chartData, dateFormat, minPeriod, text){
+function createLineStepChart(chart, chartData, dateFormat, minPeriod, text, multVal){
 	if(chart == undefined || chart == null) {
 		chart = new AmCharts.AmSerialChart();
 	}
@@ -134,14 +169,27 @@ function createLineStepChart(chart, chartData, dateFormat, minPeriod, text){
 	valueAxis.inside = true;
 	chart.addValueAxis(valueAxis);
 
-	// GRAPH                 
-	var graph = new AmCharts.AmGraph();
-	graph.type = "step"; // this line makes step graph
-	graph.valueField = "value";
-	graph.lineColor = "#000000";
-	graph.title = text;
-	graph.balloonText = "<span style='font-size:13px;'>" + text + " en [[category]]:<b>[[value]]</b></span>";
-	chart.addGraph(graph);
+	// GRAPH
+	if(multVal != undefined || multVal != null) {
+		for(var i = 0; i < multVal[0].amount; i++ ) {
+			var graph = new AmCharts.AmGraph();
+			graph.valueField = "value" + i;
+			graph.type = "step";
+			graph.title = text + ' ' + multVal[0]['value' + i];
+			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
+			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value' + i] + " en [[category]]:<b>[[value]]</b></span>";
+			chart.addGraph(graph);
+		}
+	}
+	else {
+		var graph = new AmCharts.AmGraph();
+		graph.type = "step"; // this line makes step graph
+		graph.valueField = "value";
+		graph.lineColor = "#000000";
+		graph.title = text;
+		graph.balloonText = "<span style='font-size:13px;'>" + text + " en [[category]]:<b>[[value]]</b></span>";
+		chart.addGraph(graph);
+	}
 
 	// CURSOR
 	var chartCursor = new AmCharts.ChartCursor();

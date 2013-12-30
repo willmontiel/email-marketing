@@ -127,23 +127,37 @@ class StatisticsWrapper extends BaseWrapper
 		for ($i = 0; $i < 50; $i++) {
 			$value = rand($v1, $v2);
 			if($i < 15) {
-				$link = 'https://www.google.com';
+				$values[0] = $value;
+				$values[1] = 0;
+				$values[2] = 0;
 			}
 			else if($i < 35) {
-				$link = 'https://www.facebook.com';
+				$values[0] = 0;
+				$values[1] = $value;
+				$values[2] = 0;
 			}
 			else {
-				$link = 'https://www.twitter.com';
+				$values[0] = 0;
+				$values[1] = 0;
+				$values[2] = $value;
 			}
 			$clicks[] = array(
 				'title' =>$h1,
-				'value' => $value,
-				'link' => $link
-			);
+				'value' => json_encode($values)
+				);
 			$v1 = $v1 - 1;
 			$v2 = $v2 - 1;
 			$h1+=3600;
 		}
+		
+		$valueLinks[0] = 'https://www.google.com';
+		$valueLinks[1] = 'https://www.facebook.com';
+		$valueLinks[2] = 'https://www.twitter.com';
+		
+		$info[] = array(
+			'amount' => 3,
+			'value' => $valueLinks
+		);
 		
 		$clickcontact[] = array(
 			'id' => 100,
@@ -164,6 +178,13 @@ class StatisticsWrapper extends BaseWrapper
 			'email' => 'otrocorreo3@otro3.correo3',
 			'date' => date('Y-m-d h:i',1386698537),
 			'link' => 'https://www.google.com'
+		);
+		
+		$clickcontact[] = array(
+			'id' => 162,
+			'email' => 'otrocorreo67@otro67.correo67',
+			'date' => date('Y-m-d',1386687891),
+			'link' => 'https://www.twitter.com'
 		);
 		
 		$links[] = array(
@@ -191,6 +212,7 @@ class StatisticsWrapper extends BaseWrapper
 			'statistics' => json_encode($clicks),
 			'details' => json_encode($clickcontact),
 			'links' => json_encode($links),
+			'multvalchart' => json_encode($info),
 		);
 		
 		$this->pager->setRowsInCurrentPage(count($clickcontact));
@@ -326,6 +348,98 @@ class StatisticsWrapper extends BaseWrapper
 		$this->pager->setRowsInCurrentPage(count($spamcontact));
 		
 		return array('drilldownspam' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
+	}
+	
+	public function findMailBouncedStats($idMail)
+	{
+		$bounced = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			if($i < 598) {
+				$values[0] = $value;
+				$values[1] = 0;
+				$values[2] = 0;
+			}
+			else if($i < 1302) {
+				$values[0] = 0;
+				$values[1] = $value;
+				$values[2] = 0;
+
+			}
+			else {
+				$values[0] = 0;
+				$values[1] = 0;
+				$values[2] = $value;
+			}
+			$bounced[] = array(
+				'title' =>$h1,
+				'value' => json_encode($values)
+				);
+			
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
+		
+		$bouncedcontact[] = array(
+			'id' => 20,
+			'email' => 'newmail@new.mail',
+			'date' => date('Y-m-d h:i', 1386687891),
+			'type' => 'Temporal',
+			'category' => 'Buzon Lleno'
+		);
+		
+		$bouncedcontact[] = array(
+			'id' => 240,
+			'email' => 'newmail1@new1.mail1',
+			'date' => date('Y-m-d h:i',1386687891),
+			'type' => 'Otro',
+			'category' => 'Rebote General'
+		);
+		
+		$bouncedcontact[] = array(
+			'id' => 57,
+			'email' => 'newmail2@new2.mail2',
+			'date' => date('Y-m-d h:i',1386687891),
+			'type' => 'Permanente',
+			'category' => 'Direccion Mala'
+		);
+		
+		$bouncedcontact[] = array(
+			'id' => 59,
+			'email' => 'newmail54@new3.mail3',
+			'date' => date('Y-m-d h:i',1386687891),
+			'type' => 'Temporal',
+			'category' => 'Buzon Lleno'
+		);
+		
+		$valueType[0] = 'Temporales';
+		$valueType[1] = 'Permanentes';
+		$valueType[2] = 'Otros';
+		
+		$info[] = array(
+			'amount' => 3,
+			'value' => $valueType
+		);
+		
+		$this->pager->setTotalRecords(count($bouncedcontact));
+		
+		$statistics[] = array(
+			'id' => $idMail,
+			'statistics' => json_encode($bounced),
+			'details' => json_encode($bouncedcontact),
+			'multvalchart' => json_encode($info),
+		);
+		
+		$this->pager->setRowsInCurrentPage(count($bouncedcontact));
+		
+		return array('drilldownbounced' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}
 	
 	public function findDbaseOpenStats($idDbase)
