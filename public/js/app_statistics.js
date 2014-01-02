@@ -219,7 +219,9 @@ App.DrilldownUnsubscribedController = Ember.ArrayController.extend(Ember.MixinPa
 	}
 });
 
-App.DrilldownSpamController = Ember.ArrayController.extend({	
+App.DrilldownSpamController = Ember.ArrayController.extend(Ember.MixinPagination, {	
+	modelClass : App.Drilldownspam,
+				
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
@@ -230,7 +232,9 @@ App.DrilldownSpamController = Ember.ArrayController.extend({
 	}
 });
 
-App.DrilldownBouncedController = Ember.ArrayController.extend({	
+App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPagination, {	
+	modelClass : App.Drilldownbounced,
+				
 	selectedType: ['Todos', 'Temporal', 'Permanente', 'Otro'],
 	typeSelected: null,
 	bouncedFilter: null,
