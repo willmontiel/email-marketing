@@ -219,7 +219,9 @@ App.DrilldownUnsubscribedController = Ember.ArrayController.extend(Ember.MixinPa
 	}
 });
 
-App.DrilldownSpamController = Ember.ArrayController.extend({	
+App.DrilldownSpamController = Ember.ArrayController.extend(Ember.MixinPagination, {	
+	modelClass : App.Drilldownspam,
+				
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
@@ -230,9 +232,12 @@ App.DrilldownSpamController = Ember.ArrayController.extend({
 	}
 });
 
-App.DrilldownBouncedController = Ember.ArrayController.extend({	
+App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPagination, {	
+	modelClass : App.Drilldownbounced,
+				
 	selectedType: ['Todos', 'Temporal', 'Permanente', 'Otro'],
 	typeSelected: null,
+	bouncedFilter: null,
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
@@ -243,24 +248,67 @@ App.DrilldownBouncedController = Ember.ArrayController.extend({
 		var details = JSON.parse(this.get('model').content[0].get('details'));
 		this.set('allDetailsData', details);
 		this.set('detailsData', details);
+		this.set('bouncedFilter', null);
+		this.set('typeSelected', null);
 	},
-	linkSelectChange: function () {	
-		var bouncedType = this.get('typeSelected');
-		var types = this.get('allDetailsData');
+	typeSelectChange: function () {	
+		var bouncedType = (this.get('typeSelected') != undefined) ? this.get('typeSelected') : 'Todos';
+		var filter = this.get('bouncedFilter');
+		var data = this.get('allDetailsData');
 		var objArray = [];
 		if(bouncedType == 'Todos') {
-			objArray = types;
+			objArray = data;
 		}
 		else {
-			for(var i = 0; i < types.length; i++) {
-				if(types[i].type == bouncedType) {
-					objArray.push(types[i]);
+			for(var i = 0; i < data.length; i++) {
+				switch (filter) {
+					case 'category':
+						if(data[i].category == bouncedType) {
+							objArray.push(data[i]);
+						}
+						break;
+					case 'domain':
+						if(data[i].domain == bouncedType) {
+							objArray.push(data[i]);
+						}
+						break;
+					case 'type':
+					default:
+						if(data[i].type == bouncedType) {
+							objArray.push(data[i]);
+						}
+						break;
 				}
 			}
 		}
 		this.set('detailsData', objArray);
 		
-    }.observes('typeSelected')
+    }.observes('typeSelected'),
+			
+	filterSelectChange: function () {
+		var bouncedFilter = this.get('bouncedFilter');
+		var filters = App.get('multValChart');
+		var objArray = [];
+		objArray.push('Todos');
+		switch (bouncedFilter) {
+			case 'category':
+				for(var i = 0; i < filters[0].category.length; i++) {
+					objArray.push(filters[0].category[i]);
+				}
+				break;
+			case 'domain':
+				for(var i = 0; i < filters[0].domain.length; i++) {
+					objArray.push(filters[0].domain[i]);
+				}
+				break;
+			case 'type':
+			default:
+				objArray.push('Temporal', 'Permanente', 'Otro');
+				break;
+		}
+		this.set('selectedType', objArray);
+		
+	}.observes('bouncedFilter')
 });
 
 

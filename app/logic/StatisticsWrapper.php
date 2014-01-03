@@ -25,7 +25,7 @@ class StatisticsWrapper extends BaseWrapper
 			$summaryChartData[] = array(
 				'title' => "Rebotados",
 				'value' => $bounced,
-				'url' => '#'
+				'url' => '#/drilldown/bounced'
 			);
 			$summaryChartData[] = array(
 				'title' => "No Aperturas",
@@ -39,9 +39,18 @@ class StatisticsWrapper extends BaseWrapper
 			$statisticsData->opens = $opens;
 			$statisticsData->statopens = round(( $opens / $total ) * 100 );
 			$statisticsData->clicks = $clicks;
-			$statisticsData->statclicks = round(( $clicks / $opens ) * 100 );
+			$statisticsData->statclicks = round(( $clicks / $total ) * 100 );
+			$statisticsData->totalclicks = $clicks;
+			$statisticsData->stattotalclicks = round(( $clicks / $total ) * 100 );
+			$statisticsData->statCTRclicks = round(( $clicks / $opens ) * 100 );
 			$statisticsData->bounced = $bounced;
 			$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
+			$statisticsData->softbounced = 1;
+			$statisticsData->statsoftbounced = round(( $statisticsData->softbounced / $bounced ) * 100 );
+			$statisticsData->hardbounced = 1;
+			$statisticsData->stathardbounced = round(( $statisticsData->hardbounced / $bounced ) * 100 );
+			$statisticsData->otherbounced = 0;
+			$statisticsData->statotherbounced = round(( $statisticsData->otherbounced / $bounced ) * 100 );
 			$statisticsData->unsubscribed = $unsubscribed;
 			$statisticsData->statunsubscribed = round (( $unsubscribed / $total ) * 100 );
 			$statisticsData->spam = $spam;
@@ -392,7 +401,8 @@ class StatisticsWrapper extends BaseWrapper
 			'email' => 'newmail@new.mail',
 			'date' => date('Y-m-d h:i', 1386687891),
 			'type' => 'Temporal',
-			'category' => 'Buzon Lleno'
+			'category' => 'Buzon Lleno',
+			'domain' => 'new.mail'
 		);
 		
 		$bouncedcontact[] = array(
@@ -400,7 +410,8 @@ class StatisticsWrapper extends BaseWrapper
 			'email' => 'newmail1@new1.mail1',
 			'date' => date('Y-m-d h:i',1386687891),
 			'type' => 'Otro',
-			'category' => 'Rebote General'
+			'category' => 'Rebote General',
+			'domain' => 'new1.mail1'
 		);
 		
 		$bouncedcontact[] = array(
@@ -408,7 +419,8 @@ class StatisticsWrapper extends BaseWrapper
 			'email' => 'newmail2@new2.mail2',
 			'date' => date('Y-m-d h:i',1386687891),
 			'type' => 'Permanente',
-			'category' => 'Direccion Mala'
+			'category' => 'Direccion Mala',
+			'domain' => 'new2.mail2'
 		);
 		
 		$bouncedcontact[] = array(
@@ -416,16 +428,28 @@ class StatisticsWrapper extends BaseWrapper
 			'email' => 'newmail54@new3.mail3',
 			'date' => date('Y-m-d h:i',1386687891),
 			'type' => 'Temporal',
-			'category' => 'Buzon Lleno'
+			'category' => 'Buzon Lleno',
+			'domain' => 'new3.mail3'
 		);
 		
 		$valueType[0] = 'Temporales';
 		$valueType[1] = 'Permanentes';
 		$valueType[2] = 'Otros';
 		
+		$valueCategory[0] = 'Buzon Lleno';
+		$valueCategory[1] = 'Direccion Mala';
+		$valueCategory[2] = 'Rebote General';
+		
+		$valueDomain[0] = 'new.mail';
+		$valueDomain[1] = 'new1.mail1';
+		$valueDomain[2] = 'new2.mail2';
+		$valueDomain[3] = 'new3.mail3';
+		
 		$info[] = array(
 			'amount' => 3,
-			'value' => $valueType
+			'value' => $valueType,
+			'category' => $valueCategory,
+			'domain' => $valueDomain
 		);
 		
 		$this->pager->setTotalRecords(count($bouncedcontact));

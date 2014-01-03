@@ -59,7 +59,7 @@
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
-			<div class="news span7">
+			<div class="news span6">
 				<div class="titleMail">
 					<h2>{{statisticsData.mailName}}</h2>
 				</div>
