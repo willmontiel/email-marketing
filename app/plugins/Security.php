@@ -183,7 +183,12 @@ class Security extends Plugin
 				'apistatistics::dbaseopens' => array('statistic' => array('read')),
 				'apistatistics::dbaseclicks' => array('statistic' => array('read')),
 				'apistatistics::dbaseunsubscribed' => array('statistic' => array('read')),
-				
+				'apistatistics::comparemailopens' => array('statistic' => array('read')),
+				'apistatistics::comparemailclicks' => array('statistic' => array('read')),
+				'apistatistics::comparemailunsubscribed' => array('statistic' => array('read')),
+				'apistatistics::comparemailbounced' => array('statistic' => array('read')),
+				'apistatistics::comparemailspam' => array('statistic' => array('read')),
+
 			
 		//* RELEASE 0.2.0 *//
 				//Envío de correos

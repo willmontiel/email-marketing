@@ -198,5 +198,78 @@ class ApistatisticsController extends ControllerBase
 		$stat = $statWrapper->getOpenStats($statsContactList);
 
 		return $this->setJsonResponse($stat);
-	}	
+	}
+	
+	/**
+	 * @Get("/mail/{idMail:[0-9]+}/compareopens/{idMailCompare:[0-9]+}")
+	 */
+	public function comparemailopensAction($idMail, $idMailCompare)
+	{
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+		
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
+		
+		$statWrapper = new StatisticsWrapper();
+		
+		$statWrapper->setPager($pager);
+		
+		$stat = $statWrapper->findMailOpenCompareStats($idMail, $idMailCompare);
+		
+		return $this->setJsonResponse($stat);
+	}
+	
+	/**
+	 * @Get("/mail/{idMail:[0-9]+}/compareclicks/{idMailCompare:[0-9]+}")
+	 */
+	public function comparemailclicksAction($idMail, $idMailCompare)
+	{
+		$statWrapper = new StatisticsWrapper();
+		
+		$stat = $statWrapper->findMailClickCompareStats($idMail, $idMailCompare);
+		
+		return $this->setJsonResponse($stat);
+	}
+	
+	/**
+	 * @Get("/mail/{idMail:[0-9]+}/compareunsubscribeds/{idMailCompare:[0-9]+}")
+	 */
+	public function comparemailunsubscribedAction($idMail, $idMailCompare)
+	{
+		$statWrapper = new StatisticsWrapper();
+		
+		$stat = $statWrapper->findMailUnsubscribedCompareStats($idMail, $idMailCompare);
+		
+		return $this->setJsonResponse($stat);
+	}
+	
+	/**
+	 * @Get("/mail/{idMail:[0-9]+}/comparebounceds/{idMailCompare:[0-9]+}")
+	 */
+	public function comparemailbouncedAction($idMail, $idMailCompare)
+	{
+		$statWrapper = new StatisticsWrapper();
+		
+		$stat = $statWrapper->findMailBouncedCompareStats($idMail, $idMailCompare);
+		
+		return $this->setJsonResponse($stat);
+	}
+	
+	/**
+	 * @Get("/mail/{idMail:[0-9]+}/comparespams/{idMailCompare:[0-9]+}")
+	 */
+	public function comparemailspamAction($idMail, $idMailCompare)
+	{
+		$statWrapper = new StatisticsWrapper();
+		
+		$stat = $statWrapper->findMailSpamCompareStats($idMail, $idMailCompare);
+		
+		return $this->setJsonResponse($stat);
+	}
 }

@@ -14,11 +14,13 @@
 	{{ javascript_include('amcharts/amcharts.js')}}
 	{{ javascript_include('amcharts/serial.js')}}
 	{{ javascript_include('amcharts/pie.js')}}
+	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
+	{{ stylesheet_link ('css/select2.css') }}
 
 	<script>
 		var chartData = [];
-		
+		App.mails = ["", {id: 2, name:'Correo 1'},{id: 3, name:'Correo 2'}];
 		{%for data in summaryChartData %}
 			var data = new Object();
 			data.title = '{{ data['title'] }}';
@@ -26,31 +28,27 @@
 			data.url = '{{ data['url'] }}';
 			chartData.push(data);
 		{%endfor%}
-
+		
 		AmCharts.ready(function () {
-			var chart = new AmCharts.AmPieChart();
-			chart.dataProvider = chartData;
-			chart.titleField = "title";
-			chart.valueField = "value";
-			chart.urlField = "url";
-
-			chart.sequencedAnimation = true;
-			chart.startEffect = "easeOutSine";
-			chart.innerRadius = "40%";
-			chart.startDuration = 1;
-			chart.labelRadius = 2;
-			chart.balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
-			// this makes the chart 3D
-			chart.depth3D = 10;
-			chart.angle = 15;
-			
-			chart.addListener("clickSlice", function (event) {
-				
-			});
-			
+			chart = createPieChart(chartData);	
 			chart.write('summaryChart');
+			$("select").select2({
+				placeholder: "Seleccione Un Correo"
+			});
 		});
-
+		
+		function compareMails() {
+			if(App.mailCompare != undefined && App.mailCompare != null) {
+				window.location = "#/compare/opens/" + App.mailCompare
+				App.set('mailSelected', App.mailCompare)
+			}
+		};
+		
+		function stopCompare() {
+			window.location = "#/drilldown/opens"
+			App.set('mailSelected', null)
+		};
+		
 	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-bar-chart icon-2x"></i>Estadisticas{% endblock %}
@@ -97,9 +95,13 @@
 											<td class="border-radious-green-right">
 												<b>{{statisticsData.statopens}}%</b>
 											</td>
-											<td>
-												<h4 class="openColor subtitleColor">{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}</h4>
-											</td>
+											<td><h4 class="openColor subtitleColor">
+												{{'{{#if App.mailSelected}}'}}
+													{{'{{#linkTo "compare.opens" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}
+												{{'{{else}}'}}
+													{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}
+												{{ '{{/if}}' }}
+											</h4></td>
 										</tr>
 										<tr><td colspan="5"><td></tr>
 										<tr>
@@ -115,7 +117,13 @@
 											<td class="border-radious-cyan-right">
 												<b>{{statisticsData.statclicks}}%</b>
 											</td>
-											<td><h4 class="clicksColor subtitleColor">{{'{{#linkTo "drilldown.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clics</a>{{/linkTo}}'}}</h4></td>
+											<td><h4 class="clicksColor subtitleColor">
+												{{'{{#if App.mailSelected}}'}}
+													{{'{{#linkTo "compare.clicks" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clics</a>{{/linkTo}}'}}
+												{{'{{else}}'}}
+													{{'{{#linkTo "drilldown.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clics</a>{{/linkTo}}'}}
+												{{ '{{/if}}' }}	
+											</h4></td>
 										</tr>
 									</table>
 								</td>
@@ -134,7 +142,13 @@
 											<td class="border-radious-gray-right">
 												<b>{{statisticsData.statunsubscribed}}%</b>
 											</td>
-											<td><h4 class="unsubscribedColor subtitleColor">{{'{{#linkTo "drilldown.unsubscribed" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Des-suscritos</a>{{/linkTo}}'}}</h4></td>
+											<td><h4 class="unsubscribedColor subtitleColor">
+												{{'{{#if App.mailSelected}}'}}
+													{{'{{#linkTo "compare.unsubscribed" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Des-suscritos</a>{{/linkTo}}'}}
+												{{'{{else}}'}}
+													{{'{{#linkTo "drilldown.unsubscribed" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Des-suscritos</a>{{/linkTo}}'}}
+												{{ '{{/if}}' }}	
+											</h4></td>
 										</tr>
 										<tr><td colspan="5"><td></tr>
 										<tr>
@@ -150,7 +164,13 @@
 											<td class="border-radious-scarlet-right">
 												<b>{{statisticsData.statbounced}}%</b>
 											</td>
-											<td><h4 class="bouncedColor subtitleColor">{{'{{#linkTo "drilldown.bounced" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Rebotes</a>{{/linkTo}}'}}</h4></td>
+											<td><h4 class="bouncedColor subtitleColor">
+												{{'{{#if App.mailSelected}}'}}
+													{{'{{#linkTo "compare.bounced" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Rebotes</a>{{/linkTo}}'}}
+												{{'{{else}}'}}
+													{{'{{#linkTo "drilldown.bounced" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Rebotes</a>{{/linkTo}}'}}
+												{{ '{{/if}}' }}
+											</h4></td>
 										</tr>
 										<tr><td colspan="5"><td></tr>
 										<tr>
@@ -166,9 +186,38 @@
 											<td class="border-radious-red-right">
 												<b>{{statisticsData.statspam}}%</b>
 											</td>
-											<td><h4 class="spamColor subtitleColor">{{'{{#linkTo "drilldown.spam" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Spam</a>{{/linkTo}}'}}</h4></td>
+											<td><h4 class="spamColor subtitleColor">
+												{{'{{#if App.mailSelected}}'}}
+													{{'{{#linkTo "compare.spam" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Spam</a>{{/linkTo}}'}}
+												{{'{{else}}'}}
+													{{'{{#linkTo "drilldown.spam" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Spam</a>{{/linkTo}}'}}
+												{{ '{{/if}}' }}
+											</h4></td>
 										</tr>
 									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" style="text-align: center;">
+									<h3>Comparar</h3>
+									<div class="span6">
+									{{ '{{view Ember.Select
+											class="select"
+											contentBinding="App.mails"
+											optionValuePath="content.id"
+											optionLabelPath="content.name"
+											valueBinding="App.mailCompare"}}'
+									}}
+									</div>
+									<div class="span2">
+									<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
+									</div>
+									{{'{{#if App.mailSelected}}'}}
+										<div class="span3">
+										<button class="btn btn-black" onclick="stopCompare()">No Comparar</button>
+										</div>
+									{{ '{{/if}}' }}
+									</label>
 								</td>
 							</tr>
 						</table>
@@ -185,6 +234,7 @@
 			</div>
 		</script>
 		{{ partial("statistic/mailpartial") }}
+		{{ partial("statistic/comparemailpartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
 		<div class="pull-right scaleChart">
 			<div class="pull-left">

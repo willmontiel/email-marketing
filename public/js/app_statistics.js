@@ -60,6 +60,13 @@ App.Router.map(function() {
 	  this.route('spam'),
 	  this.route('bounced')
   });
+  this.resource('compare', function(){
+	  this.resource('compare.opens', { path: '/opens/:mail_id'})
+	  this.resource('compare.clicks', { path: '/clicks/:mail_id'})
+	  this.resource('compare.unsubscribed', { path: '/unsubscribed/:mail_id'})
+	  this.resource('compare.spam', { path: '/spam/:mail_id'})
+	  this.resource('compare.bounced', { path: '/bounced/:mail_id'})
+  });
 });
 
 /*Routes*/
@@ -426,48 +433,252 @@ function removeLastChart(chart) {
 	chart.removeLegend();
 }
 
+App.Compareopen = DS.Model.extend({
+	statistics: DS.attr('string'),
+	multvalchart: DS.attr('string'),
+	summary: DS.attr('string'),
+});
 
-//function createMultChartData(totalData, amount, format) {
-//	
-//	var newData = [];
-//	var result = [];
-//
-//	for(var i = 0; i < totalData.length; i++) {
-//		if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
-//			newData[(moment.unix(totalData[i].title)).format(format)] = [];
-//			for(var j = 0; j < amount; j++) {
-//				newData[(moment.unix(totalData[i].title)).format(format)][j] = 0;
-//			}
-//		}
-//		for(var j = 0; j < amount; j++) {
-//			newData[(moment.unix(totalData[i].title)).format(format)][j]+= totalData[i]['value' + j];
-//		}
-//	}
-//	
-//	for (var key in newData) {
-//		if(newData.hasOwnProperty(key)) {
-//			var obj = new Object();
-//			obj.title = '' + key;
-//			for(var j = 0; j < amount; j++) {
-//				obj['value' + j] = '' + newData[key][j];
-//			}
-//			result.push(obj);
-//		}
-//	}
-//	
-//	return result;
-//}
+App.Compareclick = DS.Model.extend({
+	statistics: DS.attr('string'),
+	multvalchart: DS.attr('string'),
+	summary: DS.attr('string'),
+});
 
-//function groupByLink(link) {
-//	var statistics = App.get('clicksData');
-//	var arrayObj = [];
-//	for(var i=0; i < statistics.length; i++) {
-//		if(statistics[i].link == link) {
-//			var obj = new Object();
-//			obj.title = '' + statistics[i].title;
-//			obj.value = statistics[i].value;
-//			arrayObj.push(obj);
-//		}
-//	}
-//	return arrayObj;
-//}
+App.Compareunsubscribed = DS.Model.extend({
+	statistics: DS.attr('string'),
+	multvalchart: DS.attr('string'),
+	summary: DS.attr('string'),
+});
+
+App.Comparebounced = DS.Model.extend({
+	statistics: DS.attr('string'),
+	multvalchart: DS.attr('string'),
+	summary: DS.attr('string'),
+});
+
+App.Comparespam = DS.Model.extend({
+	statistics: DS.attr('string'),
+	multvalchart: DS.attr('string'),
+	summary: DS.attr('string'),
+});
+
+App.CompareIndexRoute = Ember.Route.extend({});
+
+App.CompareOpensRoute = Ember.Route.extend({
+	model: function (params) {
+		return this.store.find('compareopen', params.mail_id);
+	},
+//	activate: function() {
+//		this.changeData();
+//	},
+	deactivate: function () {
+		App.set('multValChart', null);
+		App.set('chartData', null);
+	},
+	setupController: function(controller, model) {
+		if (App.mailSelected != null && App.mailSelected != undefined) {
+			controller.set('model', this.store.find('compareopen', App.mailSelected));
+		}
+		else {
+			controller.set('model', this.store.find('compareopen', model.get('id')));
+		}
+		controller.loadData();
+	},
+	changeData: function() {
+		if(this.controller != undefined && this.currentModel != undefined) {
+			this.setupController(this.controller, this.currentModel)
+		}
+	}.observes('App.mailSelected')
+});
+
+App.CompareClicksRoute = Ember.Route.extend({
+	model: function (params) {
+		return this.store.find('compareclick', params.mail_id);
+	},
+//	activate: function() {
+//		this.changeData();
+//	},
+	deactivate: function () {
+		App.set('multValChart', null);
+		App.set('chartData', null);
+	},
+	setupController: function(controller, model) {
+		if (App.mailSelected != null && App.mailSelected != undefined) {
+			controller.set('model', this.store.find('compareclick', App.mailSelected));
+		}
+		else {
+			controller.set('model', this.store.find('compareclick', model.get('id')));
+		}
+		controller.loadData();
+	},
+	changeData: function() {
+		if(this.controller != undefined && this.currentModel != undefined) {
+			this.setupController(this.controller, this.currentModel)
+		}
+	}.observes('App.mailSelected')
+});
+
+App.CompareUnsubscribedRoute = Ember.Route.extend({
+	model: function (params) {
+		return this.store.find('compareunsubscribed', params.mail_id);
+	},
+//	activate: function() {
+//		this.changeData();
+//	},
+	deactivate: function () {
+		App.set('multValChart', null);
+		App.set('chartData', null);
+	},
+	setupController: function(controller, model) {
+		if (App.mailSelected != null && App.mailSelected != undefined) {
+			controller.set('model', this.store.find('compareunsubscribed', App.mailSelected));
+		}
+		else {
+			controller.set('model', this.store.find('compareunsubscribed', model.get('id')));
+		}
+		controller.loadData();
+	},
+	changeData: function() {
+		if(this.controller != undefined && this.currentModel != undefined) {
+			this.setupController(this.controller, this.currentModel)
+		}
+	}.observes('App.mailSelected')
+});
+
+App.CompareBouncedRoute = Ember.Route.extend({
+	model: function (params) {
+		return this.store.find('comparebounced', params.mail_id);
+	},
+//	activate: function() {
+//		this.changeData();
+//	},
+	deactivate: function () {
+		App.set('multValChart', null);
+		App.set('chartData', null);
+	},
+	setupController: function(controller, model) {
+		if (App.mailSelected != null && App.mailSelected != undefined) {
+			controller.set('model', this.store.find('comparebounced', App.mailSelected));
+		}
+		else {
+			controller.set('model', this.store.find('comparebounced', model.get('id')));
+		}
+		controller.loadData();
+	},
+	changeData: function() {
+		if(this.controller != undefined && this.currentModel != undefined) {
+			this.setupController(this.controller, this.currentModel)
+		}
+	}.observes('App.mailSelected')
+});
+
+App.CompareSpamRoute = Ember.Route.extend({
+	model: function (params) {
+		return this.store.find('comparespam', params.mail_id);
+	},
+//	activate: function() {
+//		this.changeData();
+//	},
+	deactivate: function () {
+		App.set('multValChart', null);
+		App.set('chartData', null);
+	},
+	setupController: function(controller, model) {
+		if (App.mailSelected != null && App.mailSelected != undefined) {
+			controller.set('model', this.store.find('comparespam', App.mailSelected));
+		}
+		else {
+			controller.set('model', this.store.find('comparespam', model.get('id')));
+		}
+		controller.loadData();
+	},
+	changeData: function() {
+		if(this.controller != undefined && this.currentModel != undefined) {
+			this.setupController(this.controller, this.currentModel)
+		}
+	}.observes('App.mailSelected')
+});
+
+App.CompareController = Ember.ObjectController.extend({});
+App.CompareIndexController = Ember.ArrayController.extend({});
+
+App.CompareOpensController = Ember.ObjectController.extend({
+	modelClass : App.Compareopen,
+	loadData: function() {
+		var t = this;	
+		if(this.get('model') != null) {
+			this.get('model').then(function(data) {
+				App.set('chartData', JSON.parse(data.get('statistics')));
+				App.set('multValChart', JSON.parse(data.get('multvalchart')));
+				var summary = JSON.parse(data.get('summary'));
+				t.set('data1', summary[0]);
+				t.set('data2', summary[1]);
+			});
+		}
+	}
+});
+
+App.CompareClicksController = Ember.ObjectController.extend({
+	modelClass : App.Compareclick,
+	loadData: function() {
+		var t = this;	
+		if(this.get('model') != null) {
+			this.get('model').then(function(data) {
+				App.set('chartData', JSON.parse(data.get('statistics')));
+				App.set('multValChart', JSON.parse(data.get('multvalchart')));
+				var summary = JSON.parse(data.get('summary'));
+				t.set('data1', summary[0]);
+				t.set('data2', summary[1]);
+			});
+		}
+	}
+});
+
+App.CompareUnsubscribedController = Ember.ObjectController.extend({
+	modelClass : App.Compareunsubscribed,
+	loadData: function() {
+		var t = this;	
+		if(this.get('model') != null) {
+			this.get('model').then(function(data) {
+				App.set('chartData', JSON.parse(data.get('statistics')));
+				App.set('multValChart', JSON.parse(data.get('multvalchart')));
+				var summary = JSON.parse(data.get('summary'));
+				t.set('data1', summary[0]);
+				t.set('data2', summary[1]);
+			});
+		}
+	}
+});
+
+App.CompareBouncedController = Ember.ObjectController.extend({
+	modelClass : App.Comparebounced,
+	loadData: function() {
+		var t = this;	
+		if(this.get('model') != null) {
+			this.get('model').then(function(data) {
+				App.set('chartData', JSON.parse(data.get('statistics')));
+				App.set('multValChart', JSON.parse(data.get('multvalchart')));
+				var summary = JSON.parse(data.get('summary'));
+				t.set('data1', summary[0]);
+				t.set('data2', summary[1]);
+			});
+		}
+	}
+});
+
+App.CompareSpamController = Ember.ObjectController.extend({
+	modelClass : App.Comparespam,
+	loadData: function() {
+		var t = this;	
+		if(this.get('model') != null) {
+			this.get('model').then(function(data) {
+				App.set('chartData', JSON.parse(data.get('statistics')));
+				App.set('multValChart', JSON.parse(data.get('multvalchart')));
+				var summary = JSON.parse(data.get('summary'));
+				t.set('data1', summary[0]);
+				t.set('data2', summary[1]);
+			});
+		}
+	}
+});
