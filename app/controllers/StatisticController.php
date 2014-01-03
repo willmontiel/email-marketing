@@ -26,45 +26,60 @@ class StatisticController extends ControllerBase
 	
 	public function dbaseAction($idDbase)
 	{
-		$dbases = Dbase::findByIdAccount($this->user->account->idAccount);
-		$statsDbase = Statdbase::find(array(
-			'conditions' => 'idDbase = ?1',
-			'bind' => array(1 => $idDbase)
+		$account = $this->user->account;
+		
+		$dbase = Dbase::findFirst(array(
+			'conditions' => 'idAccount = ?1 AND idDbase = ?2',
+			'bind' => array(1 => $account->idAccount,
+							2 => $idDbase)
 		));
 		
-		if ($statsDbase) {
-			$stat = new stdClass();
-			
-			foreach ($statsDbase as $s) {
-				$idDbase =  $s->idDbase;
-				$sent +=  $s->sent;
-				$uniqueOpens +=  $s->uniqueOpens;
-				$clicks +=  $s->clicks;
-				$bounced +=  $s->bounced;
-				$spam +=  $s->spam;
-				$unsubscribed += $s->unsubscribed;
+		if ($dbase) {
+			$statsDbase = Statdbase::find(array(
+				'conditions' => 'idDbase = ?1',
+				'bind' => array(1 => $dbase->idDbase)
+			));
+
+			if (count($statsDbase) !== 0) {
+				$dbases = Dbase::findByIdAccount($account->idAccount);
+				
+				$stat = new stdClass();
+
+				foreach ($statsDbase as $s) {
+					$idDbase =  $s->idDbase;
+					$sent +=  $s->sent;
+					$uniqueOpens +=  $s->uniqueOpens;
+					$clicks +=  $s->clicks;
+					$bounced +=  $s->bounced;
+					$spam +=  $s->spam;
+					$unsubscribed += $s->unsubscribed;
+				}
+
+				$this->logger->log("Sent: " . $sent);
+				$stat->idDbase = $idDbase;
+				$stat->sent = $sent;
+				$stat->uniqueOpens = $uniqueOpens;
+				$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
+				$stat->clicks = $clicks;
+				$stat->bounced = $bounced;
+				$stat->percentageBounced = round(($bounced*100)/$sent);
+				$stat->spam = $spam;
+				$stat->percentageSpam = round(($spam*100)/$sent);
+				$stat->unsubscribed = $unsubscribed;
+				$stat->percentageUnsubscribed = round(($unsubscribed*100)/$sent);
+
+				$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
+
+				$this->view->setVar('stat', $stat);
+				$this->view->setVar('dbases', $dbases);
 			}
-			
-			$this->logger->log("Sent: " . $sent);
-			$stat->idDbase = $idDbase;
-			$stat->sent = $sent;
-			$stat->uniqueOpens = $uniqueOpens;
-			$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
-			$stat->clicks = $clicks;
-			$stat->bounced = $bounced;
-			$stat->percentageBounced = round(($bounced*100)/$sent);
-			$stat->spam = $spam;
-			$stat->percentageSpam = round(($spam*100)/$sent);
-			$stat->unsubscribed = $unsubscribed;
-			$stat->percentageUnsubscribed = round(($unsubscribed*100)/$sent);
-			
-			$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
-			
-			$this->view->setVar('stat', $stat);
-			$this->view->setVar('dbases', $dbases);
+			else {
+				$this->flashSession->warning("No hay estadisticas para base de datos seleccionada");
+				return $this->response->redirect("dbase/" . $idDbase);
+			}
 		}
 		else {
-			$this->view->setVar('stat', 0);
+			$this->response->redirect('error');
 		}
 	}
 	
@@ -75,7 +90,7 @@ class StatisticController extends ControllerBase
 			'bind' => array(1 => $idContactList)
 		));
 		
-		if ($statsContactList) {
+		if (count($statsContactList) !== 0) {
 			$stat = new stdClass();
 			
 			foreach ($statsContactList as $s) {
@@ -106,7 +121,8 @@ class StatisticController extends ControllerBase
 			$this->view->setVar('stat', $stat);
 		}
 		else {
-			$this->view->setVar('stat', 0);
+			$this->flashSession->warning("No hay estadisticas para la lista de contactos seleccionada");
+			return $this->response->redirect("contactlist#/lists");
 		}
 	}
 	
@@ -120,9 +136,16 @@ class StatisticController extends ControllerBase
 		));
 
 		if ($mail) {
-			$createReport = new Reportingcreator($mail, $type);
-			$r = $createReport->createReport();
-
+			
+			try {
+				$createReport = new Reportingcreator($mail, $type);
+				$r = $createReport->createReport();
+			}
+			catch (Exception $e) {
+				$this->logger->log("E: " . $e->getMessage());
+				$this->response->redirect('error');
+			}
+			
 			$report = Mailreportfile::findFirst(array(
 				'conditions' => 'idMailReportFile = ?1 AND idMail = ?2 AND type = ?3',
 				'bind' => array(1 => $r->idMailReportFile,
@@ -137,7 +160,14 @@ class StatisticController extends ControllerBase
 			header('Pragma: public');
 			header('Expires: 0');
 			header('Content-Type: application/download');
-			echo 'Reporte de campaña' . PHP_EOL;
+			echo $r->title . PHP_EOL;
+			echo PHP_EOL;
+			echo 'Correos enviados: 20000' . PHP_EOL;
+			echo 'Aperturas únicas: ' . $mail->uniqueOpens . " / " . ($mail->uniqueOpens*100)/20000 . "%" .PHP_EOL;
+			echo 'Clics sobre enlaces: ' . $mail->clicks . PHP_EOL;
+			echo 'Des-suscritos: ' . $mail->unsubscribed . " / " . ($mail->unsubscribed*100)/20000 . "%" .PHP_EOL;
+			echo 'Rebotes: ' . $mail->bounced . " / " . ($mail->bounced*100)/20000 . "%" .PHP_EOL;
+			echo PHP_EOL;
 			readfile($this->mailReportsDir->reports . $report->name);
 		}
 	}

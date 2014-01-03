@@ -329,6 +329,12 @@
 		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Rebotes"}}'}}
 	</div>
 	<div class="row-fluid">
+		<div class="span6">
+			<a href="{{url('statistic/downloadreport')}}/{{idMail}}/bounced" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
+		</div>
+	</div>
+	<br />
+	<div class="row-fluid">
 		<div class="span12">
 			<div class="pull-left">
 				{{ '{{view Ember.Select

@@ -38,6 +38,7 @@
 {%endblock%}
 {%block sectionsubtitle %}Administre sus bases de datos de contactos{% endblock %}
 {% block content %}
+{{flashSession.output()}}
 	<div id="emberApplistContainer">
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}
