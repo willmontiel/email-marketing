@@ -127,6 +127,258 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownopen' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
 	
+	
+	public function findMailOpenCompareStats($idMail, $idMailCompare)
+	{
+		$opens = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			if($i < 250) {
+				$values[0] = $value;
+				$values[1] = 0;
+			}
+			else {
+				$values[0] = 0;
+				$values[1] = $value;
+			}
+			$opens[] = array(
+				'title' =>$h1,
+				'value' => json_encode($values)
+				);
+			
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
+		
+		$valueType[0] = 'CorreoOpen1';
+		$valueType[1] = 'CorreoOpen2';
+		
+		$info[] = array(
+			'amount' => 2,
+			'value' => $valueType,
+		);
+		
+		$summary[0] = array ('name' => 'CorreoOpen1', 'quantity' => 56, 'percent' => 99);
+		$summary[1] = array ('name' => 'CorreoOpen2', 'quantity' => 1, 'percent' => 2);
+		
+		$statistics[] = array(
+			'id' => $idMailCompare,
+			'statistics' => json_encode($opens),
+			'multvalchart' => json_encode($info),
+			'summary' => json_encode($summary),
+		);
+		
+		return array('compareopens' => $statistics);
+	}
+	
+	public function findMailClickCompareStats($idMail, $idMailCompare)
+	{
+		$clicks = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			if($i < 1050) {
+				$values[0] = $value;
+				$values[1] = 0;
+			}
+			else {
+				$values[0] = 0;
+				$values[1] = $value;
+			}
+			$clicks[] = array(
+				'title' =>$h1,
+				'value' => json_encode($values)
+				);
+			
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
+		
+		$valueType[0] = 'CorreoClick1';
+		$valueType[1] = 'CorreoClick2';
+		
+		$info[] = array(
+			'amount' => 2,
+			'value' => $valueType,
+		);
+		
+		$summary[0] = array ('name' => 'CorreoClick1', 'quantity' => 0, 'percent' => 0);
+		$summary[1] = array ('name' => 'CorreoClick2', 'quantity' => 20, 'percent' => 13);
+		
+		$statistics[] = array(
+			'id' => $idMailCompare,
+			'statistics' => json_encode($clicks),
+			'multvalchart' => json_encode($info),
+			'summary' => json_encode($summary),
+		);
+	
+		return array('compareclicks' => $statistics);
+	}
+	
+	public function findMailUnsubscribedCompareStats($idMail, $idMailCompare)
+	{
+		$clicks = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			if($i < 1750) {
+				$values[0] = $value;
+				$values[1] = 0;
+			}
+			else {
+				$values[0] = 0;
+				$values[1] = $value;
+			}
+			$clicks[] = array(
+				'title' =>$h1,
+				'value' => json_encode($values)
+				);
+			
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
+		
+		$valueType[0] = 'CorreoUns1';
+		$valueType[1] = 'CorreoUns2';
+		
+		$info[] = array(
+			'amount' => 2,
+			'value' => $valueType,
+		);
+		
+		$summary[0] = array ('name' => 'CorreoUns1', 'quantity' => 1, 'percent' => 10);
+		$summary[1] = array ('name' => 'CorreoUns2', 'quantity' => 1, 'percent' => 1);
+		
+		$statistics[] = array(
+			'id' => $idMailCompare,
+			'statistics' => json_encode($clicks),
+			'multvalchart' => json_encode($info),
+			'summary' => json_encode($summary),
+		);
+		
+		return array('compareunsubscribeds' => $statistics);
+	}
+	
+	public function findMailBouncedCompareStats($idMail, $idMailCompare)
+	{
+		$clicks = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			if($i < 850) {
+				$values[0] = $value;
+				$values[1] = 0;
+			}
+			else {
+				$values[0] = 0;
+				$values[1] = $value;
+			}
+			$clicks[] = array(
+				'title' =>$h1,
+				'value' => json_encode($values)
+				);
+			
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
+		
+		$valueType[0] = 'CorreoBounced1';
+		$valueType[1] = 'CorreoBounced2';
+		
+		$info[] = array(
+			'amount' => 2,
+			'value' => $valueType,
+		);
+		
+		$summary[0] = array ('name' => 'CorreoBounced1', 'quantity' => 300, 'percent' => 100);
+		$summary[1] = array ('name' => 'CorreoBounced2', 'quantity' => 2, 'percent' => 1);
+		
+		$statistics[] = array(
+			'id' => $idMailCompare,
+			'statistics' => json_encode($clicks),
+			'multvalchart' => json_encode($info),
+			'summary' => json_encode($summary),
+		);
+		
+		return array('comparebounceds' => $statistics);
+	}
+	
+	public function findMailSpamCompareStats($idMail, $idMailCompare)
+	{
+		$clicks = array();
+		$h1 = 1380657600;
+		$v1 = 3000;
+		$v2 = 2900;
+		for ($i = 0; $i < 1800; $i++) {
+			$value = rand($v1, $v2);
+			if($i == 20 || $i == 100 || $i == 150) {
+				$value = 0;
+			}
+			if($i < 25) {
+				$values[0] = $value;
+				$values[1] = 0;
+			}
+			else {
+				$values[0] = 0;
+				$values[1] = $value;
+			}
+			$clicks[] = array(
+				'title' =>$h1,
+				'value' => json_encode($values)
+				);
+			
+			$v1 = $v1 - 1;
+			$v2 = $v2 - 1;
+			$h1+=3600;
+		}
+		
+		$valueType[0] = 'CorreoSpam1';
+		$valueType[1] = 'CorreoSpam2';
+		
+		$info[] = array(
+			'amount' => 2,
+			'value' => $valueType,
+		);
+		
+		$summary[0] = array ('name' => 'CorreoSpam1', 'quantity' => 232, 'percent' => 20);
+		$summary[1] = array ('name' => 'CorreoSpam2', 'quantity' => 70, 'percent' => 100);
+		
+		$statistics[] = array(
+			'id' => $idMailCompare,
+			'statistics' => json_encode($clicks),
+			'multvalchart' => json_encode($info),
+			'summary' => json_encode($summary),
+		);
+		
+		return array('comparespams' => $statistics);
+	}
+	
+	
 	public function findMailClickStats($idMail)
 	{
 		$clicks = array();
