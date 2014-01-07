@@ -55,9 +55,23 @@ class StatisticsWrapper extends BaseWrapper
 			$statisticsData->statunsubscribed = round (( $unsubscribed / $total ) * 100 );
 			$statisticsData->spam = $spam;
 			$statisticsData->statspam = round(( $spam / $total ) * 100 );
-
+			
+			$allMails = Mail::find(array(
+				'conditions' => 'idAccount = ?1 AND status = "Sent" AND idMail != ?2',
+				'bind' => array(1 => $this->account->idAccount, 2 => $idMail)
+			));
+			
+			$mailCompare = array();
+			foreach ($allMails as $m) {
+				$objfc = new stdClass();
+				$objfc->id = $m->idMail;
+				$objfc->name = $m->name;
+				$mailCompare[] = $objfc;				
+			}
+			
 			$response['summaryChartData'] = $summaryChartData;
 			$response['statisticsData'] = $statisticsData;
+			$response['compareMail'] = $mailCompare;
 			
 			return $response;
 		}

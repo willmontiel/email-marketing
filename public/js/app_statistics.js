@@ -469,9 +469,6 @@ App.CompareOpensRoute = Ember.Route.extend({
 	model: function (params) {
 		return this.store.find('compareopen', params.mail_id);
 	},
-//	activate: function() {
-//		this.changeData();
-//	},
 	deactivate: function () {
 		App.set('multValChart', null);
 		App.set('chartData', null);
@@ -484,21 +481,13 @@ App.CompareOpensRoute = Ember.Route.extend({
 			controller.set('model', this.store.find('compareopen', model.get('id')));
 		}
 		controller.loadData();
-	},
-	changeData: function() {
-		if(this.controller != undefined && this.currentModel != undefined) {
-			this.setupController(this.controller, this.currentModel)
-		}
-	}.observes('App.mailSelected')
+	}
 });
 
 App.CompareClicksRoute = Ember.Route.extend({
 	model: function (params) {
 		return this.store.find('compareclick', params.mail_id);
 	},
-//	activate: function() {
-//		this.changeData();
-//	},
 	deactivate: function () {
 		App.set('multValChart', null);
 		App.set('chartData', null);
@@ -511,21 +500,13 @@ App.CompareClicksRoute = Ember.Route.extend({
 			controller.set('model', this.store.find('compareclick', model.get('id')));
 		}
 		controller.loadData();
-	},
-	changeData: function() {
-		if(this.controller != undefined && this.currentModel != undefined) {
-			this.setupController(this.controller, this.currentModel)
-		}
-	}.observes('App.mailSelected')
+	}
 });
 
 App.CompareUnsubscribedRoute = Ember.Route.extend({
 	model: function (params) {
 		return this.store.find('compareunsubscribed', params.mail_id);
 	},
-//	activate: function() {
-//		this.changeData();
-//	},
 	deactivate: function () {
 		App.set('multValChart', null);
 		App.set('chartData', null);
@@ -538,21 +519,13 @@ App.CompareUnsubscribedRoute = Ember.Route.extend({
 			controller.set('model', this.store.find('compareunsubscribed', model.get('id')));
 		}
 		controller.loadData();
-	},
-	changeData: function() {
-		if(this.controller != undefined && this.currentModel != undefined) {
-			this.setupController(this.controller, this.currentModel)
-		}
-	}.observes('App.mailSelected')
+	}
 });
 
 App.CompareBouncedRoute = Ember.Route.extend({
 	model: function (params) {
 		return this.store.find('comparebounced', params.mail_id);
 	},
-//	activate: function() {
-//		this.changeData();
-//	},
 	deactivate: function () {
 		App.set('multValChart', null);
 		App.set('chartData', null);
@@ -565,21 +538,13 @@ App.CompareBouncedRoute = Ember.Route.extend({
 			controller.set('model', this.store.find('comparebounced', model.get('id')));
 		}
 		controller.loadData();
-	},
-	changeData: function() {
-		if(this.controller != undefined && this.currentModel != undefined) {
-			this.setupController(this.controller, this.currentModel)
-		}
-	}.observes('App.mailSelected')
+	}
 });
 
 App.CompareSpamRoute = Ember.Route.extend({
 	model: function (params) {
 		return this.store.find('comparespam', params.mail_id);
 	},
-//	activate: function() {
-//		this.changeData();
-//	},
 	deactivate: function () {
 		App.set('multValChart', null);
 		App.set('chartData', null);
@@ -592,12 +557,7 @@ App.CompareSpamRoute = Ember.Route.extend({
 			controller.set('model', this.store.find('comparespam', model.get('id')));
 		}
 		controller.loadData();
-	},
-	changeData: function() {
-		if(this.controller != undefined && this.currentModel != undefined) {
-			this.setupController(this.controller, this.currentModel)
-		}
-	}.observes('App.mailSelected')
+	}
 });
 
 App.CompareController = Ember.ObjectController.extend({});

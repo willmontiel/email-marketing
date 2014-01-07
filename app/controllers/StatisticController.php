@@ -12,12 +12,14 @@ class StatisticController extends ControllerBase
 		$log->log('El Id de Mail es: ' . $idMail);
 				
 		$statWrapper = new StatisticsWrapper();
+		$statWrapper->setAccount($this->user->account);
 		$mailStat = $statWrapper->showMailStatistics($idMail);
 		
 		if($mailStat) {
 			$this->view->setVar("idMail", $idMail);
 			$this->view->setVar("summaryChartData", $mailStat['summaryChartData']);
 			$this->view->setVar("statisticsData", $mailStat['statisticsData']);
+			$this->view->setVar("compareMail", $mailStat['compareMail']);
 		}
 		else {
 			$this->response->redirect('error');

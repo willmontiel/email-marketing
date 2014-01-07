@@ -20,7 +20,15 @@
 
 	<script>
 		var chartData = [];
-		App.mails = ["", {id: 2, name:'Correo 1'},{id: 3, name:'Correo 2'}];
+		App.mails = [""];
+		
+		{%for cmail in compareMail %}
+			var cmail = new Object();
+			cmail.id = {{ cmail.id }};
+			cmail.name = '{{ cmail.name }}';
+			App.mails.push(cmail);
+		{%endfor%}
+			
 		{%for data in summaryChartData %}
 			var data = new Object();
 			data.title = '{{ data['title'] }}';
@@ -39,14 +47,14 @@
 		
 		function compareMails() {
 			if(App.mailCompare != undefined && App.mailCompare != null) {
-				window.location = "#/compare/opens/" + App.mailCompare
-				App.set('mailSelected', App.mailCompare)
+				window.location = "#/compare/opens/" + App.mailCompare;
+				App.set('mailSelected', App.mailCompare);
 			}
 		};
 		
 		function stopCompare() {
-			window.location = "#/drilldown/opens"
-			App.set('mailSelected', null)
+			window.location = "#/drilldown/opens";
+			App.set('mailSelected', null);
 		};
 		
 	</script>
