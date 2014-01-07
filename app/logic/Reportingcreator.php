@@ -27,7 +27,7 @@ class Reportingcreator
 		
 		$filePath = Phalcon\DI::getDefault()->get('appPath')->path . '/tmp/mreports/';
 		$filesPath = str_replace("\\", "/", $filePath);
-		$this->getAndSaveReportData($name, $filesPath);
+		$title = $this->getAndSaveReportData($name, $filesPath);
 		
 		$db->execute($deletetable);
 		
@@ -42,6 +42,7 @@ class Reportingcreator
 			throw new \InvalidArgumentException('Error while creating report');
 		}
 		else {
+			$report->title = $title;
 			return $report;
 		}
 	}
@@ -51,14 +52,22 @@ class Reportingcreator
 		switch ($this->type) {
 			case 'opens':
 				$this->saveOpenReport($name, $dir);
+				return 'Reporte de aperturas';
 				break;
 			case 'clicks':
 				$this->saveClicksReport($name, $dir);
+				return 'Reporte de clics sobre enlaces';
 				break;
 			case 'unsubscribed':
 				$this->saveUnsubscribedReport($name, $dir);
+				return 'Reporte de correos des-suscritos';
 				break;
 			case 'bounced':
+				$this->saveBouncedReport($name, $dir);
+				return 'Reporte de correos rebotados';
+				break;
+			default :
+				throw new \InvalidArgumentException('There is not the type of report');
 				break;
 		}
 	}
@@ -111,7 +120,7 @@ class Reportingcreator
 						FIELDS TERMINATED BY ','
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
-
+						
 		$db->execute($report);
 	}
 	
@@ -222,6 +231,59 @@ class Reportingcreator
 	
 	protected function saveBouncedReport($name, $dir)
 	{
+		$db = Phalcon\DI::getDefault()->get('db');
 		
+		$bouncedcontact[] = array(
+			'id' => 20,
+			'email' => 'newmail@new.mail',
+			'date' => 1386687891,
+			'type' => 'Temporal',
+			'category' => 'Buzon Lleno'
+		);
+		
+		$bouncedcontact[] = array(
+			'id' => 240,
+			'email' => 'newmail1@new1.mail1',
+			'date' => 1386687891,
+			'type' => 'Otro',
+			'category' => 'Rebote General'
+		);
+		
+		$bouncedcontact[] = array(
+			'id' => 57,
+			'email' => 'newmail2@new2.mail2',
+			'date' => 1386687891,
+			'type' => 'Permanente',
+			'category' => 'Direccion Mala'
+		);
+		
+		$bouncedcontact[] = array(
+			'id' => 59,
+			'email' => 'newmail54@new3.mail3',
+			'date' => 1386687891,
+			'type' => 'Temporal',
+			'category' => 'Buzon Lleno'
+		);
+		
+		$v = " ";
+		
+		foreach ($bouncedcontact as $b) {
+			$v .= "(" . $this->mail->idMail . ", " . "'bounced'" . ", '" . $b['email'] . "', '" . $b['type'] . "', '" . $b['category'] . "', " . $b['date'] .")";
+		}
+		
+		$values = str_replace(")(", "),(", $v);
+		
+//		Phalcon\DI::getDefault()->get('logger')->log("Values: " . $values);
+		
+		$db->execute("INSERT INTO $this->tablename (idMail, reportType, email, bouncedType, category, date) VALUES $values");
+		
+		$report =  "SELECT email, bouncedType, category, FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s')
+						FROM {$this->tablename}
+						INTO OUTFILE  '{$dir}{$name}'
+						FIELDS TERMINATED BY ','
+						ENCLOSED BY '\"'
+						LINES TERMINATED BY '\n'";
+
+		$db->execute($report);
 	}
 }
