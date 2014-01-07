@@ -44,10 +44,10 @@
 			</div>
 		</div>
 		<div class="box-content">
-	{%for item in page.items%}
-			<table class="table table-normal">
+			<table class="table table-bordered">
 				<thead></thead>
 				<tbody>
+				{%for item in page.items%}
 					<tr>
 						<td class="span5">
 							<div class="box-section news with-icons">
@@ -103,9 +103,9 @@
 							</div>
 						</td>
 					</tr>
+			{%endfor%}
 				</tbody>
 			</table>
-	{%endfor%}
 		</div>
 		<div class="box-footer padded">
 			<div class="row-fluid">

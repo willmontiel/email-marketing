@@ -90,55 +90,73 @@
 					</ul>
 				</div>
 				<div class="box-content">
-				{{'{{#each model}}'}}
-					<div class="box-section news with-icons">
-						<div class="avatar blue">
-							<i class="icon-ok icon-2x"></i>
-						</div>
-						<div class="news-time">
-							<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}"><i class="icon-bar-chart icon-2x"></i></a>
-						</div>
-						<div class="news-time">
-							<span>{{ '{{infocontact.activeContacts}}' }}</span>
-							<span>{{'{{activeContactsF}}'}}</span> activos
-						</div>
-						<div class="news-content">
-							<div class="pull-right" style="margin-right: 10px;">
-								<div class="btn-group">
-									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li>{{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
-										<li><a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts"><i class="icon-search"></i> Ver detalles</a></li>
-										<li>{{ '{{#linkTo "lists.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}</li>
-									</ul>
-								</div>
-							</div>
-							<div class="news-title"><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a></div>
-							<div class="news-text">
-								{{ '{{description}}' }}
-							</div>
-							<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
-						</div>
-					</div>
-				{{ '{{else}}' }}
-					<div class="box-section news with-icons">
-						<div class="avatar green">
-							<i class="icon-lightbulb icon-2x"></i>
-						</div>
-						<div class="news-content">
-							<div class="news-title">
-								No hay listas de contactos
-							</div>
-							<div class="news-text">
-								<p>
-									Para empezar a administrar contactos, puede crear una lista de contactos,
-									haga clic en el siguiente enlace para crear una
-								</p>
-								{{'{{#linkTo "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/linkTo}}'}}
-							</div>
-						</div>
-					</div>
-				{{ '{{/each}}' }}
+					<table class="table table-bordered">
+						<thead>
+						</thead>
+						<tbody>
+					{{'{{#each model}}'}}
+							<tr>
+								<td>
+									<div class="box-section news with-icons">
+										<div class="avatar blue">
+											<i class="icon-ok icon-2x"></i>
+										</div>
+										<div class="news-content">
+											<div class="news-title"><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a></div>
+											<div class="news-text">
+												{{ '{{description}}' }}
+											</div>
+											<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
+										</div>
+									</div>
+								</td>
+								<td>
+									<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts" class="btn btn-blue"><i class="icon-search"></i> Detalles</a>
+									{{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}
+									{{ '{{#linkTo "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}
+									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default" title="Ver estadisticas"><i class="icon-bar-chart"></i></a>
+									
+
+									{# {{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}
+									<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts"><i class="icon-search"></i> Ver detalles</a>
+									{{ '{{#linkTo "lists.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}
+									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}"><i class="icon-bar-chart icon-2x"></i></a>
+										#}
+								</td>
+								<td>
+									<div class="box-section news with-icons">
+										<div class="news-time">
+											<span>{{ '{{infocontact.activeContacts}}' }}</span>
+											<span>{{'{{activeContactsF}}'}}</span> activos
+										</div>
+									</div>
+								</td>
+							</tr>
+					{{ '{{else}}' }}
+							<tr>
+								<td>
+									<div class="box-section news with-icons">
+										<div class="avatar green">
+											<i class="icon-lightbulb icon-2x"></i>
+										</div>
+										<div class="news-content">
+											<div class="news-title">
+												No hay listas de contactos
+											</div>
+											<div class="news-text">
+												<p>
+													Para empezar a administrar contactos, puede crear una lista de contactos,
+													haga clic en el siguiente enlace para crear una
+												</p>
+												{{'{{#linkTo "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/linkTo}}'}}
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+					{{ '{{/each}}' }}
+						</tbody>
+					</table>
 				</div>
 				<div class="box-footer flat"> 
 					{{ partial("partials/pagination_partial") }}
