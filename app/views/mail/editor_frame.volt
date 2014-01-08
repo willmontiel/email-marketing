@@ -56,6 +56,7 @@
 	<div class="span9">
 		<div id="edit-area" class="module-cont clearfix">
 			<div id="none-layout">
+				
 				<div class="none-layout-image"></div>
 				<h3>Seleccione un Layout</h3>
 			</div>
@@ -71,14 +72,16 @@
 					<a href="#components" data-toggle="tab">Componentes</a>
 				</li>
 				<li id="tabstyles" class="">
-					<a href="#styles" data-toggle="tab">Estilos</a>
+					<a href="#styles" data-toggle="tab">Diseño</a>
 				</li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="layouts">
+					Elija la estructura del correo
 				</div>
 				
 				<div class="tab-pane" id="components">
+					Agregue, campos de texto, imágenes y otros componentes para crear contenido
 					<div class="module-container">
 						<div class="module module-text-only">
 							<div class="tools">
@@ -220,7 +223,9 @@
 					</div>
 				</div>
 				<div class="tab-pane" id="styles">
+					Personalice el color de cada zona del correo
 					<div class="panel-group" id="accordion">
+						
 						
 					</div>
 				</div>
