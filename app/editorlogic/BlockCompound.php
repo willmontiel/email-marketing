@@ -14,6 +14,7 @@ class BlockCompound extends HtmlAbstract
 				$obj->height = $data->height;
 				$obj->align = $data->align;
 				$obj->vertalign = $data->vertalign;
+				$obj->imglink = $data->imglink;
 				
 				$block1->assignContent($obj);
 				

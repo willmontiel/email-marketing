@@ -162,6 +162,7 @@ MediaDisplayer.prototype.createSlider = function() {
 	var t = this;
 	
 	$('#imageslider').empty();
+	$('#link_image').empty();
 	
 	$('#imageslider').append($('<br/> <div>Aumentar o Disminuir el Tamaño de la Imagen</div>'));
 	
@@ -171,6 +172,10 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('#align_image').show();
 	$('#align_vertical_image').show();
+	$('#link_image').show();
+
+	$('#link_image').append('<label>Agregar Hipervinculo<br/><input id="link_to_image" type="text" placeholder="Escriba Link"></label>');
+	$('#link_to_image').val(this.block.imglink);
 	
 	var totalWidthBlock = (t.image.naturalWidth > t.widthZone) ? t.widthZone : t.image.naturalWidth;
 	var maxWidthZone = t.widthZone;
@@ -229,6 +234,10 @@ MediaDisplayer.prototype.createSlider = function() {
 	$('#cancel_change').on('click', function() {
 		t.block.unpersistImage(t.oldImage);
 	});
+	
+	$('#link_to_image').on('change', function() {
+		t.block.setLinkToImage($(this).val());
+	});
 };
 
 MediaDisplayer.prototype.valuesHW = function(height, width) {
@@ -245,10 +254,12 @@ MediaDisplayer.prototype.cleanMediaDisplayer = function() {
 	$('#heightImg').empty();
 	$('#widthImg').empty();
 	$('#imageslider').empty();
+	$('#link_image').empty();
 	$('#imagedisplayer').css('height', '');
 	$('#imagedisplayer').empty();
 	$('#align_image').hide();
 	$('#align_vertical_image').hide();
+	$('#link_image').hide();
 };
 
 function NoMediaDisplayer() {

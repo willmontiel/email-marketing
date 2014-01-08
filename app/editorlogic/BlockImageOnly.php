@@ -8,12 +8,16 @@ class BlockImageOnly extends HtmlAbstract
 		
 		$src = $imgTag->getElementsByTagName('img')->item(0)->getAttribute('src');
 		$alt = $imgTag->getElementsByTagName('img')->item(0)->getAttribute('alt');
+		$link = trim($data->imglink);
 		
 		$this->align = str_replace('pull-', '', $data->align);
 		$height = $data->height;
 		$this->width = $data->width;
 		$this->vertalign = $data->vertalign;
-		$this->children[] ='<img src="' . $src . '" alt="' . $alt . '" style="height: ' . $height . 'px; width: ' . $this->width . 'px;" height="' . $height . '" width="' . $this->width . '">';
+		
+		$image = '<img src="' . $src . '" alt="' . $alt . '" style="height: ' . $height . 'px; width: ' . $this->width . 'px;" height="' . $height . '" width="' . $this->width . '">';
+		
+		$this->children[] = (!empty($link)) ? '<a href= "http://' . $link . '">' . $image . '</a>' : $image;;
 	}
 	
 	public function renderObjPrefix()

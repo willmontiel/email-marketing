@@ -58,6 +58,10 @@ table {
 .module-cont .module .remove-tool {
 	left: 16px;
 }
+
+.module-cont .module .link-tool {
+	left: 32px;
+}
 /*.module-cont .module .edit-image-tool{
 	left: 32px;
 }*/
@@ -315,9 +319,21 @@ table {
 	text-align: center;
 }
 
-#align_image, #align_vertical_image {
+#align_image, #align_vertical_image, #link_image {
 	display: none;
 	margin-top: 25px;
+}
+
+#images {
+	width:600px;
+}
+
+.image-options {
+	margin-left: 10px;
+}
+
+.image-options input {
+	width: 165px;
 }
 
 .gallery-header {

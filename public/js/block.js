@@ -94,6 +94,7 @@ Block.prototype.persist = function() {
 		obj.displayer = this.displayer;
 		obj.align = this.align;
 		obj.vertalign = this.vertalign;
+		obj.imglink = this.imglink;
 		obj.widthZone = this.widthZone;
 	}
 
@@ -108,6 +109,7 @@ Block.prototype.unpersist = function(obj, dz) {
 		this.width = obj.width;
 		this.align = obj.align;
 		this.vertalign = obj.vertalign;
+		this.imglink = obj.imglink;
 		this.widthZone = obj.widthZone;
 	}
 	
@@ -258,6 +260,11 @@ Block.prototype.setAlignImgBlock = function(align) {
 	this.align = align;
 };
 
+Block.prototype.setLinkToImage = function(link) {
+	
+	this.imglink = link;
+};
+
 Block.prototype.addVerticalAlignToImage = function(vertalign) {
 	
 	this.htmlData.find('img').closest('td').css('vertical-align', vertalign);
@@ -286,6 +293,8 @@ Block.prototype.unpersistImage = function(obj) {
 		this.height = objimage.height;
 		this.width = objimage.width;
 		this.align = objimage.align;
+		this.vertalign = objimage.vertalign;
+		this.imglink = objimage.imglink;
 		this.displayer.height = objimage.heightDisplayer;
 		this.displayer.width = objimage.widthDisplayer;
 		this.displayer.imagesrc = objimage.imagesrc;
@@ -295,11 +304,13 @@ Block.prototype.unpersistImage = function(obj) {
 		this.changeAttrImgBlock('width', this.width);
 		this.changeAttrImgBlock('src', this.displayer.imagesrc);
 		this.addClassContentImgBlock(this.align);
+		this.addVerticalAlignToImage(this.vertalign);
 	}
 	else {
 		delete this.height;
 		delete this.width;
 		delete this.align;
+		delete this.vertalign;
 		delete this.displayer;
 
 		this.htmlData.find('img').removeAttr('height');
@@ -322,7 +333,9 @@ Block.prototype.persistImage = function() {
 	var obj = {	height: this.height,
 				width: this.width, 
 				align: this.align,
+				vertalign: this.vertalign,
 				imagesrc: this.displayer.imagesrc,
+				imglink: this.imglink,
 				heightDisplayer: this.displayer.height, 
 				widthDisplayer: this.displayer.width, 
 				percent: this.displayer.percent };

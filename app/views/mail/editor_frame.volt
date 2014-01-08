@@ -254,14 +254,14 @@
 
 							</div>
 						</div>
-						<div class="pull-left">
-							<div id="widthImg"></div>
+						<div class="pull-left image-options">
+							<div id="widthImg" style="float: right;"></div>
 							<div id="heightImg"></div>	
 
 							<div id="align_image">
 								<div class="btn-group">
-									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-									  Alinear <span class="caret"></span>
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 175px; text-align: right;">
+									  Alineación Horizontal <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" role="menu">
 										<li class="chose_align" data-dropdown="left"><a href="#">Izquierda</a></li>
@@ -272,8 +272,8 @@
 							</div>
 							<div id="align_vertical_image">
 								<div class="btn-group">
-									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-									  Alinear Vertical <span class="caret"></span>
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 175px; text-align: right;">
+									  Alineación Vertical <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" role="menu">
 										<li class="chose_vertical_align" data-dropdown="top"><a href="#">Arriba</a></li>
@@ -281,6 +281,11 @@
 										<li class="chose_vertical_align" data-dropdown="bottom"><a href="#">Abajo</a></li>
 									</ul>
 								</div>
+							</div>
+							<div id="link_image">
+								{#<label>Ingrese un Link
+									<br/>
+								<input id="link_to_image" type="text"></label>#}
 							</div>
 						</div>
 					</div>
