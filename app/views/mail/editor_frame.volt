@@ -270,6 +270,18 @@
 									</ul>
 								</div>
 							</div>
+							<div id="align_vertical_image">
+								<div class="btn-group">
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+									  Alinear Vertical <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										<li class="chose_vertical_align" data-dropdown="top"><a href="#">Arriba</a></li>
+										<li class="chose_vertical_align" data-dropdown="middle"><a href="#">Centro</a></li>
+										<li class="chose_vertical_align" data-dropdown="bottom"><a href="#">Abajo</a></li>
+									</ul>
+								</div>
+							</div>
 						</div>
 					</div>
 

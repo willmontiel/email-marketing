@@ -93,6 +93,7 @@ Block.prototype.persist = function() {
 		obj.width = this.width;
 		obj.displayer = this.displayer;
 		obj.align = this.align;
+		obj.vertalign = this.vertalign;
 		obj.widthZone = this.widthZone;
 	}
 
@@ -106,6 +107,7 @@ Block.prototype.unpersist = function(obj, dz) {
 		this.height = obj.height;
 		this.width = obj.width;
 		this.align = obj.align;
+		this.vertalign = obj.vertalign;
 		this.widthZone = obj.widthZone;
 	}
 	
@@ -122,17 +124,17 @@ Block.prototype.unpersist = function(obj, dz) {
 		
 		var table = $('<table><tr></tr><table/>');
 		
-		var imgWidth = this.width * this.parentBlock.$obj.width() / this.widthZone;
-
+		var imgWidth = (this.parentBlock.$obj.width() != 0) ? this.width * this.parentBlock.$obj.width() / this.widthZone : this.width;
+		
 		if(this.typeBlock.search('text-image') > 0) {
 			var column1 = $('<td/>');
-			var column2 = $('<td width="' + imgWidth + '"></td>');
+			var column2 = $('<td width="' + imgWidth + '" style="vertical-align: ' + obj.vertalign + ';"></td>');
 			
 			column1 = column1.append(contentText);
 			column2 = column2.append(contentImage);
 		}
 		else {
-			var column1 = $('<td width="' + imgWidth + '"></td>');
+			var column1 = $('<td width="' + imgWidth + '" style="vertical-align: ' + obj.vertalign + ';"></td>');
 			var column2 = $('<td/>');
 			
 			column1 = column1.append(contentImage);
@@ -254,6 +256,16 @@ Block.prototype.setTableColumn = function(name, value) {
 Block.prototype.setAlignImgBlock = function(align) {
 	
 	this.align = align;
+};
+
+Block.prototype.addVerticalAlignToImage = function(vertalign) {
+	
+	this.htmlData.find('img').closest('td').css('vertical-align', vertalign);
+};
+
+Block.prototype.setVerticalAlignImgBlock = function(vertalign) {
+	
+	this.vertalign = vertalign;
 };
 
 Block.prototype.changeAttrImgBlock = function(attr, value) {

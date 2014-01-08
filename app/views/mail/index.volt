@@ -76,19 +76,19 @@
 						<td>
 							<ul class="inline sparkline-box">
 								<li class="sparkline-row">
-									<h4 class="blue"><span>Destinatarios</span> 0 </h4>
+									<h4 class="blue"><span>Destinatarios</span> {{item.totalContacts}} </h4>
 								</li>
 								
 								<li class="sparkline-row">
-									<h4 class="green"><span>Aperturas</span> 0 </h4>
+									<h4 class="green"><span>Aperturas</span> {{item.uniqueOpens}} </h4>
 								</li>
 
 								<li class="sparkline-row">
-									<h4 class="gray"><span>Clicks</span> 0 </h4>
+									<h4 class="gray"><span>Clicks</span> {{item.clicks}} </h4>
 								</li>
 								
 								<li class="sparkline-row">
-									<h4 class="red"><span>Rebotes</span> 0 </h4>
+									<h4 class="red"><span>Rebotes</span> {{item.bounced}} </h4>
 								</li>
 							</ul>
 							<div class="news-time">
