@@ -51,6 +51,8 @@ function createPieChart(chartData) {
 	chart.titleField = "title";
 	chart.valueField = "value";
 
+	chart.colors = ["#8CC079", "#953B39", "#8C8689"];
+	
 	chart.sequencedAnimation = true;
 	chart.startEffect = "easeOutSine";
 	chart.innerRadius = "40%";
@@ -58,8 +60,8 @@ function createPieChart(chartData) {
 	chart.labelRadius = 2;
 	chart.balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
 	// this makes the chart 3D
-	chart.depth3D = 10;
-	chart.angle = 15;
+	chart.depth3D = 0;
+	chart.angle = 0;
 	
 	return chart;
 }

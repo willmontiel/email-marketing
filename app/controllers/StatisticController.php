@@ -73,6 +73,7 @@ class StatisticController extends ControllerBase
 				$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
 
 				$this->view->setVar('stat', $stat);
+				$this->view->setVar('dbase', $dbase);
 				$this->view->setVar('dbases', $dbases);
 			}
 			else {
@@ -86,44 +87,65 @@ class StatisticController extends ControllerBase
 	}
 	
 	public function contactlistAction($idContactList)
-	{
-		$statsContactList = Statcontactlist::find(array(
+	{	
+		$contactList = Contactlist::findFirst(array(
 			'conditions' => 'idContactlist = ?1',
 			'bind' => array(1 => $idContactList)
 		));
 		
-		if (count($statsContactList) !== 0) {
-			$stat = new stdClass();
+		if ($contactList) {
+			$dbase = Dbase::findFirstByIdDbase($contactList->idDbase);
 			
-			foreach ($statsContactList as $s) {
-				$idContactlist =  $s->idContactlist;
-				$sent +=  $s->sent;
-				$uniqueOpens +=  $s->uniqueOpens;
-				$clicks +=  $s->clicks;
-				$bounced +=  $s->bounced;
-				$spam +=  $s->spam;
-				$unsubscribed += $s->unsubscribed;
+			if ($dbase->idAccount == $this->user->account->idAccount) {
+				
+				$statsContactList = Statcontactlist::find(array(
+					'conditions' => 'idContactlist = ?1',
+					'bind' => array(1 => $idContactList)
+				));
+				
+				if (count($statsContactList) !== 0) {
+					$stat = new stdClass();
+
+					foreach ($statsContactList as $s) {
+						$idContactlist =  $s->idContactlist;
+						$sent +=  $s->sent;
+						$uniqueOpens +=  $s->uniqueOpens;
+						$clicks +=  $s->clicks;
+						$bounced +=  $s->bounced;
+						$spam +=  $s->spam;
+						$unsubscribed += $s->unsubscribed;
+					}
+
+					$this->logger->log("Sent: " . $sent);
+					$stat->idContactlist = $idContactlist;
+					$stat->sent = $sent;
+					$stat->uniqueOpens = $uniqueOpens;
+					$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
+					$stat->clicks = $clicks;
+					$stat->bounced = $bounced;
+					$stat->percentageBounced = round(($bounced*100)/$sent);
+					$stat->spam = $spam;
+					$stat->percentageSpam = round(($spam*100)/$sent);
+					$stat->unsubscribed = $unsubscribed;
+					$stat->percentageUnsubscribed = round(($unsubscribed*100)/$sent);
+
+					$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
+
+					$this->view->setVar('stat', $stat);
+					$this->view->setVar('contactList', $contactList);
+				}
+				else {
+					$this->flashSession->warning("No hay estadisticas para la lista de contactos seleccionada");
+					return $this->response->redirect("contactlist#/lists");
+				}
+			} 
+			else {
+				$this->flashSession->warning("No existe la lista de contactos");
+				return $this->response->redirect("contactlist#/lists");
 			}
-			
-			$this->logger->log("Sent: " . $sent);
-			$stat->idContactlist = $idContactlist;
-			$stat->sent = $sent;
-			$stat->uniqueOpens = $uniqueOpens;
-			$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
-			$stat->clicks = $clicks;
-			$stat->bounced = $bounced;
-			$stat->percentageBounced = round(($bounced*100)/$sent);
-			$stat->spam = $spam;
-			$stat->percentageSpam = round(($spam*100)/$sent);
-			$stat->unsubscribed = $unsubscribed;
-			$stat->percentageUnsubscribed = round(($unsubscribed*100)/$sent);
-			
-			$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
-			
-			$this->view->setVar('stat', $stat);
 		}
 		else {
-			$this->flashSession->warning("No hay estadisticas para la lista de contactos seleccionada");
+			$this->flashSession->warning("No existe la lista de contactos");
 			return $this->response->redirect("contactlist#/lists");
 		}
 	}

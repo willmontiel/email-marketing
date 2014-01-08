@@ -35,7 +35,7 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 		"Estadisticas" => array(
 			"controller" => array("statistic"),
 			"class" => "",
-			"url" => "statistic",
+			"url" => "",
 			"title" => "Estadísticas",
 			"icon" => "icon-bar-chart"
 		),

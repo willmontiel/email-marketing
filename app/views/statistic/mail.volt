@@ -17,7 +17,11 @@
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
-
+	<script>
+		function autoScroll() {
+			$('html, body').animate({scrollTop: '615px'}, 'slow');
+		}
+	</script>
 	<script>
 		var chartData = [];
 		App.mails = [""];
@@ -65,180 +69,138 @@
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
-			<div class="news span6">
-				<div class="titleMail">
-					<h2>{{statisticsData.mailName}}</h2>
-				</div>
-				<div class="dataMailContacts">
-					<div class="infoStat">
-						<table class="table-condensed">
+			<div class="row-fluid">
+				<div class="span12">
+					<table class="table" style="border: 0px !important;" >
+						<thead></thead>
+						<tbody>
 							<tr>
 								<td>
-									<table class="table-condensed">
-										<tr>
-											<td class="border-radious-blue-left">
-												<i class="icon-envelope" style="font-size: 20px;"></i>
-											</td>
-											<td class="border-radious-blue-center" colspan="2">
-
-											</td>
-											<td class="border-radious-blue-right">
-												<b>{{statisticsData.total}}</b>
-											</td>
-											<td>
-												<h4 class="totalColor">Totales</h4>
-											</td>
-										</tr>
-										<tr><td colspan="5"><td></tr>
-										<tr>
-											<td class="border-radious-green-left">
-												<i class="icon-search"></i>
-											</td>
-											<td class="border-radious-green-center">
-												{{statisticsData.opens}}
-											</td>
-											<td class="border-radious-green-center">
-												|
-											</td>
-											<td class="border-radious-green-right">
-												<b>{{statisticsData.statopens}}%</b>
-											</td>
-											<td><h4 class="openColor subtitleColor">
-												{{'{{#if App.mailSelected}}'}}
-													{{'{{#linkTo "compare.opens" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}
-												{{'{{else}}'}}
-													{{'{{#linkTo "drilldown.opens" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Aperturas</a>{{/linkTo}}'}}
-												{{ '{{/if}}' }}
-											</h4></td>
-										</tr>
-										<tr><td colspan="5"><td></tr>
-										<tr>
-											<td class="border-radious-cyan-left">
-												<i class="icon-hand-up"></i>
-											</td>
-											<td class="border-radious-cyan-center ">
-												{{statisticsData.clicks}}
-											</td>
-											<td class="border-radious-cyan-center">
-												|
-											</td>
-											<td class="border-radious-cyan-right">
-												<b>{{statisticsData.statclicks}}%</b>
-											</td>
-											<td><h4 class="clicksColor subtitleColor">
-												{{'{{#if App.mailSelected}}'}}
-													{{'{{#linkTo "compare.clicks" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clics</a>{{/linkTo}}'}}
-												{{'{{else}}'}}
-													{{'{{#linkTo "drilldown.clicks" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Clics</a>{{/linkTo}}'}}
-												{{ '{{/if}}' }}	
-											</h4></td>
-										</tr>
-									</table>
+									<div class="box">
+										<div class="box-section news with-icons">
+											<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
+											<div class="news-time">
+											  <span>{{statisticsData.statopens}}%</span>
+											</div>
+											<div class="news-content">
+												<label class="label-openings">
+													 {{statisticsData.opens|numberf}}
+												</label>
+												<div class="news-text">
+													{{'{{#if App.mailSelected}}'}}
+														{{'{{#linkTo "compare.opens" App.mailSelected href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Aperturas</span>{{/linkTo}}'}}
+													{{'{{else}}'}}
+														{{'{{#linkTo "drilldown.opens" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Aperturas</span>{{/linkTo}}'}}
+													{{ '{{/if}}' }}
+												</div>
+											</div>
+										</div>	
+									</div>
 								</td>
 								<td>
-									<table class="table-condensed">
-										<tr>
-											<td class="border-radious-gray-left">
-												<i class="icon-minus-sign"></i>
-											</td>
-											<td class="border-radious-gray-center ">
-												{{statisticsData.unsubscribed}}
-											</td>
-											<td class="border-radious-gray-center">
-												|
-											</td>
-											<td class="border-radious-gray-right">
-												<b>{{statisticsData.statunsubscribed}}%</b>
-											</td>
-											<td><h4 class="unsubscribedColor subtitleColor">
-												{{'{{#if App.mailSelected}}'}}
-													{{'{{#linkTo "compare.unsubscribed" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Des-suscritos</a>{{/linkTo}}'}}
-												{{'{{else}}'}}
-													{{'{{#linkTo "drilldown.unsubscribed" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Des-suscritos</a>{{/linkTo}}'}}
-												{{ '{{/if}}' }}	
-											</h4></td>
-										</tr>
-										<tr><td colspan="5"><td></tr>
-										<tr>
-											<td class="border-radious-scarlet-left">
-												<i class="icon-warning-sign"></i>
-											</td>
-											<td class="border-radious-scarlet-center ">
-												{{statisticsData.bounced}}
-											</td>
-											<td class="border-radious-scarlet-center">
-												|
-											</td>
-											<td class="border-radious-scarlet-right">
-												<b>{{statisticsData.statbounced}}%</b>
-											</td>
-											<td><h4 class="bouncedColor subtitleColor">
-												{{'{{#if App.mailSelected}}'}}
-													{{'{{#linkTo "compare.bounced" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Rebotes</a>{{/linkTo}}'}}
-												{{'{{else}}'}}
-													{{'{{#linkTo "drilldown.bounced" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Rebotes</a>{{/linkTo}}'}}
-												{{ '{{/if}}' }}
-											</h4></td>
-										</tr>
-										<tr><td colspan="5"><td></tr>
-										<tr>
-											<td class="border-radious-red-left">
-												<i class="icon-remove"></i>
-											</td>
-											<td class="border-radious-red-center ">
-												{{statisticsData.spam}}
-											</td>
-											<td class="border-radious-red-center">
-												|
-											</td>
-											<td class="border-radious-red-right">
-												<b>{{statisticsData.statspam}}%</b>
-											</td>
-											<td><h4 class="spamColor subtitleColor">
-												{{'{{#if App.mailSelected}}'}}
-													{{'{{#linkTo "compare.spam" App.mailSelected tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Spam</a>{{/linkTo}}'}}
-												{{'{{else}}'}}
-													{{'{{#linkTo "drilldown.spam" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Spam</a>{{/linkTo}}'}}
-												{{ '{{/if}}' }}
-											</h4></td>
-										</tr>
-									</table>
+									<div class="box">
+										<div class="box-section news with-icons">
+											<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
+											<div class="news-time">
+											  <span>{{statisticsData.statclicks}}%</span>
+											</div>
+											<div class="news-content">
+												<label class="label-clicks">{{statisticsData.clicks|numberf}}</label>
+												<div class="news-text">
+													{{'{{#if App.mailSelected}}'}}
+														{{'{{#linkTo "compare.clicks" App.mailSelected href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Clics</span>{{/linkTo}}'}}
+													{{'{{else}}'}}
+														{{'{{#linkTo "drilldown.clicks" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Clics</span>{{/linkTo}}'}}
+													{{ '{{/if}}' }}	
+												</div>
+											</div>
+										</div>	
+									</div>
+								</td>
+								<td>
+									<div class="box">
+										<div class="box-section news with-icons">
+											<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
+											<div class="news-time">
+											  <span>{{statisticsData.statunsubscribed}}%</span>
+											</div>
+											<div class="news-content">
+												<label class="label-unsubscribed">{{statisticsData.unsubscribed|numberf}}</label>
+												<div class="news-text">
+													{{'{{#if App.mailSelected}}'}}
+														{{'{{#linkTo "compare.unsubscribed" App.mailSelected href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Des-suscritos</span>{{/linkTo}}'}}
+													{{'{{else}}'}}
+														{{'{{#linkTo "drilldown.unsubscribed" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Des-suscritos</span>{{/linkTo}}'}}
+													{{ '{{/if}}' }}	
+												</div>
+											</div>
+										</div>	
+									</div>
+								</td>
+								<td>
+									<div class="box">
+										<div class="box-section news with-icons">
+											<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
+											<div class="news-time">
+											  <span>{{statisticsData.statbounced}}%</span>
+											</div>
+											<div class="news-content">
+												<label class="label-bounced">{{statisticsData.bounced|numberf}}</label>
+												<div class="news-text">
+													{{'{{#if App.mailSelected}}'}}
+														{{'{{#linkTo "compare.bounced" App.mailSelected href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Rebotes</span>{{/linkTo}}'}}
+													{{'{{else}}'}}
+														{{'{{#linkTo "drilldown.bounced" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Rebotes</span>{{/linkTo}}'}}
+													{{ '{{/if}}' }}
+												</div>
+											</div>
+										</div>	
+									</div>
 								</td>
 							</tr>
-							<tr>
-								<td colspan="2" style="text-align: center;">
-									<h3>Comparar</h3>
-									<div class="span6">
-									{{ '{{view Ember.Select
-											class="select"
-											contentBinding="App.mails"
-											optionValuePath="content.id"
-											optionLabelPath="content.name"
-											valueBinding="App.mailCompare"}}'
-									}}
-									</div>
-									<div class="span2">
-									<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-									</div>
-									{{'{{#if App.mailSelected}}'}}
-										<div class="span3">
-										<button class="btn btn-black" onclick="stopCompare()">No Comparar</button>
-										</div>
-									{{ '{{/if}}' }}
-									</label>
-								</td>
-							</tr>
-						</table>
-					</div>
+						</tbody>
+					</table>
 				</div>
 			</div>
-	
-			<div class="span5">
-				<div id="summaryChart" style="width: 640px; height: 400px;">
+			<div class="row-fluid">
+				<div class="span12">
+					<h3>{{statisticsData.mailName}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
 				</div>
 			</div>
-			<div class="span12">
-				{{ "{{outlet}}" }}
+			<div class="row-fluid">
+				<div class="span6">
+				</div>
+				<div class="span6">
+					<div id="summaryChart" style="width: 640px; height: 400px;"></div>
+				</div>
+			</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span2">
+					<h4>Comparar con: </h4>
+				</div>
+				<div class="span3">
+					{{ '{{view Ember.Select
+						class="select"
+						contentBinding="App.mails"
+						optionValuePath="content.id"
+						optionLabelPath="content.name"
+						valueBinding="App.mailCompare"}}'
+					}}
+				</div>
+				<div class="span2">
+					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
+				</div>
+			{{'{{#if App.mailSelected}}'}}
+				<div class="span2">
+					<button class="btn btn-black" onclick="stopCompare()">No Comparar</button>
+				</div>
+			{{ '{{/if}}' }}
+			</div>
+			<div class="row-fluid">
+				<div class="span12">
+					{{ "{{outlet}}" }}
+				</div>
 			</div>
 		</script>
 		{{ partial("statistic/mailpartial") }}
