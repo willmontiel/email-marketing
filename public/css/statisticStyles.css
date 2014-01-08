@@ -168,182 +168,6 @@ label > table {
 	margin-right: 50px;
 }
 
-/*--------------------------------------------------------------------------------------*/
-/*Green labels for open statistics in tr table*/
-.border-radious-green-left {
-	background: #8cc079;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-left-radius:5px;
-	border-bottom-left-radius:5px;
-}
-
-.border-radious-green-center {
-	background: #8cc079;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-}
-
-.border-radious-green-right {
-	background: #8cc079;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-right-radius:5px;
-	border-bottom-right-radius:5px;
-}
-
-/*Blue labels for total data statistics in tr table*/
-.border-radious-blue-left {
-	background: #85adc7;
-	font-size: 22px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-left-radius:5px;
-	border-bottom-left-radius:5px;
-}
-
-.border-radious-blue-center {
-	background: #85adc7;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-}
-
-.border-radious-blue-right {
-	background: #85adc7;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-right-radius:5px;
-	border-bottom-right-radius:5px;
-}
-
-/*Cyan labels for clicks statistics in tr table*/
-.border-radious-cyan-left {
-	background: #81babd;
-	font-size: 22px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-left-radius:5px;
-	border-bottom-left-radius:5px;
-}
-
-.border-radious-cyan-center {
-	background: #81babd;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-}
-
-.border-radious-cyan-right {
-	background: #81babd;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-right-radius:5px;
-	border-bottom-right-radius:5px;
-}
-
-/*Gray labels for unsubscribed statistics in tr table*/
-.border-radious-gray-left {
-	background: #8c8689;
-	font-size: 22px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-left-radius:5px;
-	border-bottom-left-radius:5px;
-}
-
-.border-radious-gray-center {
-	background: #8c8689;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-}
-
-.border-radious-gray-right {
-	background: #8c8689;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-right-radius:5px;
-	border-bottom-right-radius:5px;
-}
-
-/*Scarlet red labels for bounced statistics in tr table*/
-.border-radious-scarlet-left {
-	background: #953B39;
-	font-size: 22px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-left-radius:5px;
-	border-bottom-left-radius:5px;
-}
-
-.border-radious-scarlet-center {
-	background: #953B39;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-}
-
-.border-radious-scarlet-right {
-	background: #953B39;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-right-radius:5px;
-	border-bottom-right-radius:5px;
-}
-
-/*red labels for spam statistics in tr table*/
-.border-radious-red-left {
-	background: #d12929;
-	font-size: 22px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-left-radius:5px;
-	border-bottom-left-radius:5px;
-}
-
-.border-radious-red-center {
-	background: #d12929;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-}
-
-.border-radious-red-right {
-	background: #d12929;
-	font-size: 18px;
-	padding: 3px;
-	text-align: center;
-	color: white;
-	border-top-right-radius:5px;
-	border-bottom-right-radius:5px;
-}
-
-/*--------------------------------------------------------------------------------------*/
 .label-openings {
 	font-size: 30px;
 	font-weight: 600;
@@ -418,26 +242,21 @@ label > table {
 }
 
 .label-sent {
-	font-size: 60px;
+	font-size: 30px;
 	font-weight: 600;
 	color: #123d59;
-	padding: 10px;
 }
 
 .avatar-sent {
 	float: left;
 	border-radius: 50%;
-	width: 85px;
-	height: 85px;
+	width: 45px;
+	height: 45px;
 	background: #123d59;
 	text-align: center;
 	padding: 0px;
 	margin: 0px;
 	color: white;
-}
-
-.label-text-sent {
-	font-size: 25px;
 }
 
 .label-spam {

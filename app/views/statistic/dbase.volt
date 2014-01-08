@@ -2,199 +2,101 @@
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
-	{{ partial("partials/ember_partial") }}
-	<script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlstatistic.url ~ '/dbase/' ~ stat.idDbase }}';
-	</script>
-	{{ javascript_include('js/mixin_pagination.js') }}
-	{{ javascript_include('js/mixin_config.js') }}
-	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('amcharts/amcharts.js')}}
 	{{ javascript_include('amcharts/serial.js')}}
 	{{ javascript_include('amcharts/pie.js')}}
-	{{ stylesheet_link('css/statisticStyles.css') }}
-	<script>
-		App.types = [
-			{% for dbase in dbases%}
-				Ember.Object.create({id: "{{dbase.idDbase}}", name: "{{dbase.name}}"}),
-			{% endfor %}
-		];
-	</script>
-	<script>
-			var chartData = [{
-				type: "Aperturas",
-				amount: {{stat.uniqueOpens}}
-			}, {
-				type: "Rebotados",
-				amount: {{stat.bounced}}
-			},{
-				type: "No Aperturas",
-				amount: {{stat.sent - stat.uniqueOpens}}
-			}]; 
-
-			AmCharts.ready(function () {
-				var chart = new AmCharts.AmPieChart();
-				chart.dataProvider = chartData;
-				chart.titleField = "type";
-				chart.valueField = "amount";
-
-				chart.sequencedAnimation = true;
-				chart.startEffect = "easeOutSine";
-				chart.innerRadius = "40%";
-				chart.startDuration = 1;
-				chart.labelRadius = 2;
-				chart.balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
-				// this makes the chart 3D
-				chart.depth3D = 10;
-				chart.angle = 15;
-
-				chart.addListener("clickSlice", function (event) {
-
-				});
-
-				chart.write('summaryChart');
-			});
-	</script>
+	{{ partial("partials/statistic_charts") }}
 {% endblock %}
 {% block sectiontitle %}<i class="icon-signal icon-2x"></i>Estadisticas{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
-	<!------------------ Ember! ---------------------------------->
-	<div id="emberAppstatisticsContainer">
-		<script type="text/x-handlebars">
-			<div class="news span7">
-				<div class="titleMail">
-					<h2>Base de Datos XYZ</h2>
-				</div>
-				<div class="dataMailContacts">
-					<table class="table-condensed">
-						<tr>
-							<td>
-								<table class="table-condensed">
-									<tr>
-										<td class="border-radious-blue-left">
-											<i class="icon-envelope" style="font-size: 20px;"></i>
-										</td>
-										<td class="border-radious-blue-center" colspan="2">
-
-										</td>
-										<td class="border-radious-blue-right">
-											{{stat.sent}}
-										</td>
-										<td>
-											<h4 class="totalColor">Totales</h4>
-										</td>
-									</tr>
-									<tr><td colspan="5"><td></tr>
-									<tr>
-										<td class="border-radious-green-left">
-											<i class="icon-search"></i>
-										</td>
-										<td class="border-radious-green-center">
-											{{stat.uniqueOpens}}
-										</td>
-										<td class="border-radious-green-center">
-											|
-										</td>
-										<td class="border-radious-green-right">
-											{{stat.percentageUniqueOpens}}%
-										</td>
-										<td>
-											<h4 class="openColor subtitleColor">Aperturas</h4>
-										</td>
-									</tr>
-									<tr><td colspan="5"><td></tr>
-									<tr>
-										<td class="border-radious-cyan-left">
-											<i class="icon-hand-up"></i>
-										</td>
-										<td class="border-radious-cyan-center ">
-											{{stat.clicks}}
-										</td>
-										<td class="border-radious-cyan-center">
-											|
-										</td>
-										<td class="border-radious-cyan-right">
-											---
-										</td>
-										<td><h4 class="clicksColor subtitleColor">Clics</h4></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table class="table-condensed">
-									<tr>
-										<td class="border-radious-gray-left">
-											<i class="icon-minus-sign"></i>
-										</td>
-										<td class="border-radious-gray-center ">
-											{{stat.unsubscribed}}
-										</td>
-										<td class="border-radious-gray-center">
-											|
-										</td>
-										<td class="border-radious-gray-right">
-											{{stat.percentageUnsubscribed}}%
-										</td>
-										<td><h4 class="unsubscribedColor subtitleColor">Des-suscritos</h4></td>
-									</tr>
-									<tr><td colspan="5"><td></tr>
-									<tr>
-										<td class="border-radious-scarlet-left">
-											<i class="icon-warning-sign"></i>
-										</td>
-										<td class="border-radious-scarlet-center ">
-											{{stat.bounced}}
-										</td>
-										<td class="border-radious-scarlet-center">
-											|
-										</td>
-										<td class="border-radious-scarlet-right">
-											{{stat.percentageBounced}}%
-										</td>
-										<td><h4 class="bouncedColor subtitleColor">Rebotes</h4></td>
-									</tr>
-									<tr><td colspan="5"><td></tr>
-									<tr>
-										<td class="border-radious-red-left">
-											<i class="icon-remove"></i>
-										</td>
-										<td class="border-radious-red-center ">
-											{{stat.spam}}
-										</td>
-										<td class="border-radious-red-center">
-											|
-										</td>
-										<td class="border-radious-red-right">
-											{{stat.percentageSpam}}%
-										</td>
-										<td><h4 class="spamColor subtitleColor">Spam</h4></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-				</div>
+<div class="row-fluid">
+		<div class="span12">
+			<table class="table" style="border: 0px !important;" >
+				<thead></thead>
+				<tbody>
+					<tr>
+						<td>
+							<div class="box">
+								<div class="box-section news with-icons">
+									<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
+									<div class="news-time">
+									  <span>{{stat.percentageUniqueOpens}}%</span>
+									</div>
+									<div class="news-content">
+										<label class="label-openings">{{stat.uniqueOpens|numberf}}</label>
+										<div class="news-text">
+											Aperturas
+										</div>
+									</div>
+								</div>	
+							</div>
+						</td>
+						<td>
+							<div class="box">
+								<div class="box-section news with-icons">
+									<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
+									<div class="news-content">
+										<label class="label-clicks">{{stat.clicks|numberf}}</label>
+										<div class="news-text">
+											Clicks
+										</div>
+									</div>
+								</div>	
+							</div>
+						</td>
+						<td>
+							<div class="box">
+								<div class="box-section news with-icons">
+									<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
+									<div class="news-time">
+									  <span>{{stat.percentageUnsubscribed}}%</span>
+									</div>
+									<div class="news-content">
+										<label class="label-unsubscribed">{{stat.unsubscribed|numberf}}</label>
+										<div class="news-text">
+											Des-suscritos
+										</div>
+									</div>
+								</div>	
+							</div>
+						</td>
+						<td>
+							<div class="box">
+								<div class="box-section news with-icons">
+									<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
+									<div class="news-time">
+									  <span>{{stat.percentageBounced}}%</span>
+									</div>
+									<div class="news-content">
+										<label class="label-bounced">{{stat.bounced|numberf}}</label>
+										<div class="news-text">
+											Rebotes
+										</div>
+									</div>
+								</div>	
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span12">
+			<h3>{{dbase.name}} <small>{{stat.sent}} correos enviados</small></h3>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span6">
+			<div class="box">
+				<div id="summaryChart1" style="width: 600px; height: 400px;"></div>
 			</div>
-			<div class="span5">
-				<div id="summaryChart" style="width: 640px; height: 400px;">
-				</div>
+		</div>
+		<div class="span6">
+			<div class="box">
+				<div id="summaryChart2" style="width: 600px; height: 400px;"></div>
 			</div>
-			<div class="span12">
-				<button class="btn btn-default" {{ '{{action compare this }}' }}><i class="icon-retweet"></i> Comparar</button>
-				<button class="btn btn-default"><i class="icon-retweet"></i> Comparar</button>
-				{{ '{{view Ember.Select
-						contentBinding="App.types"
-						optionValuePath="content.id"
-						optionLabelPath="content.name"
-						valueBinding="name" id="id"
-						class="span3"}}'
-				}}
-			</div>
-			<div class="span12">
-				{{ "{{outlet}}" }}
-			</div>
-			
-		</script>
+		</div>	
 	</div>
 {% endblock %}

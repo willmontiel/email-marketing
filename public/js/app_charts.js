@@ -51,6 +51,8 @@ function createPieChart(chartData) {
 	chart.titleField = "title";
 	chart.valueField = "value";
 
+	chart.colors = ["#8CC079", "#953B39", "#8C8689"];
+	
 	chart.sequencedAnimation = true;
 	chart.startEffect = "easeOutSine";
 	chart.innerRadius = "40%";
