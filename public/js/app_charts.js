@@ -58,8 +58,8 @@ function createPieChart(chartData) {
 	chart.labelRadius = 2;
 	chart.balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
 	// this makes the chart 3D
-	chart.depth3D = 10;
-	chart.angle = 15;
+	chart.depth3D = 0;
+	chart.angle = 0;
 	
 	return chart;
 }
