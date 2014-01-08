@@ -86,19 +86,34 @@ class StatisticsWrapper extends BaseWrapper
 		$h1 = 1380657600;
 		$v1 = 3000;
 		$v2 = 2900;
-		for ($i = 0; $i < 1800; $i++) {
-			$value = rand($v1, $v2);
-			if($i == 20 || $i == 100 || $i == 150) {
-				$value = 0;
-			}
-			$opens[] = array(
-				'title' =>$h1,
-				'value' => $value
+//		for ($i = 0; $i < 1800; $i++) {
+//			$value = rand($v1, $v2);
+//			if($i == 20 || $i == 100 || $i == 150) {
+//				$value = 0;
+//			}
+//			$opens[] = array(
+//				'title' =>$h1,
+//				'value' => $value
+//			);
+//			$v1 = $v1 - 1;
+//			$v2 = $v2 - 1;
+//			$h1+=3600;
+//		}
+		
+		$opens[] = array(
+				'title' =>1380657600,
+				'value' => 50
 			);
-			$v1 = $v1 - 1;
-			$v2 = $v2 - 1;
-			$h1+=3600;
-		}
+		
+		$opens[] = array(
+				'title' =>1380661200,
+				'value' => 34
+			);
+		
+		$opens[] = array(
+				'title' =>1387137600,
+				'value' => 68
+			);		
 		
 		$opencontact[] = array(
 			'id' => 100,
