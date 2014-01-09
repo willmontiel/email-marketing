@@ -424,10 +424,11 @@ table {
 
 .btnmodalleft {
 	float: left;
+	width: 250;
 }
 
 .btnmodalright {
-	float: right;
+	float: left;
 }
 
 .colorpicker, .colorpicker * {
@@ -436,6 +437,10 @@ table {
 
 #btnradius {
 	width: 70px;
+}
+
+#btntext, #btnlink, #btnbgimage {
+	height: 30px;
 }
 
 #btnwidth, #btnheight {

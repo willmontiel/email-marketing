@@ -349,39 +349,69 @@
 				<h3>Botón</h3>
 			</div>
 			<div class="modal-body">
-				<div class="btnmodalleft">
-					<label>Texto</label><input id="btntext" type="text">
-					<label>Hipervinculo</label><input id="btnlink" type="text">
-					<label>Degradado</label><input id="btnbgimage" type="text">
-					<label>Borde Redondeado</label>
+				<div class="btn-text-area clearfix">
+					<div class="btnmodalleft">
+						<label>Texto</label><input id="btntext" type="text">
+					</div>
+					<div class="btnmodalright">
+						<label>Color de Texto</label>
+						<div class='input-append color' data-color='' data-color-format='hex' id='btntextcolor'>
+							<input id="field-btntextcolor" type='text' class='span8' value=''>
+							<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+						</div>
+					</div>
+				</div>
+				<div class="btn-color-area clearfix">
+					<div class="btnmodalleft">
+						<label>Degradado</label>
+						<select id="btnbgimage">
+							<option value="red">Rojo</option>
+							<option value="redligth">Rojo Claro</option>
+							<option value="blue">Azul</option>
+							<option value="bluelight">Azul Claro</option>
+							<option value="black">Negro</option>
+							<option value="yellow">Amarillo</option>
+							<option value="orange">Naranja</option>
+							<option value="gray">Gris</option>
+						</select>
+					</div>
+					<div class="btnmodalright">
+						<label>Color de Fondo</label>
+						<div class='input-append color' data-color='' data-color-format='hex' id='btnbgcolor'>
+							<input id="field-btnbgcolor" type='text' class='span8' value=''>
+							<span< class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+						</div>
+					</div>
+				</div>
+				<div class="btn-border-area clearfix">
+					<div class="btnmodalleft">
+						<label>Borde Redondeado</label>
 						<select id="btnradius">
 							<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
 							<option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
-						</select>
-					<div>
-						<div class="btnmodalleft"><label>Ancho</label><input id="btnwidth" type="text"> px </div>
-						<div class="btnmodalright"><label>Alto</label><input id="btnheight" type="text"> px </div>
+						</select> px
+					</div>
+					<div class="btnmodalright">
+						<label>Color de Borde</label>
+						<div class='input-append color' data-color='' data-color-format='hex' id='btnbordercolor'>
+							<input id="field-btnbordercolor" type='text' class='span8' value=''>
+							<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+						</div>
 					</div>
 				</div>
-				<div class="btnmodalright">
-					<label>Color de Texto</label>
-					<div class='input-append color' data-color='' data-color-format='hex' id='btntextcolor'>
-						<input id="field-btntextcolor" type='text' class='span8' value=''>
-						<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+				<div class="btn-size-area clearfix">
+					<div class="btnmodalleft">
+						<label>Ancho</label><input id="btnwidth" type="text"> px 
 					</div>
-					
-					<label>Color de Fondo</label>
-					<div class='input-append color' data-color='' data-color-format='hex' id='btnbgcolor'>
-						<input id="field-btnbgcolor" type='text' class='span8' value=''>
-						<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
-					</div>
-					
-					<label>Color de Borde</label>
-					<div class='input-append color' data-color='' data-color-format='hex' id='btnbordercolor'>
-						<input id="field-btnbordercolor" type='text' class='span8' value=''>
-						<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+					<div class="btnmodalright">
+						<label>Alto</label><input id="btnheight" type="text"> px 
 					</div>
 				</div>
+				<div class="btn-link-area clearfix">
+					<div class="btnmodalleft">
+						<label>Hipervinculo</label><input id="btnlink" type="text">
+					</div>
+				</div>	
 			</div>
 			<div class="modal-footer">
 				<a id="savebtndata" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
