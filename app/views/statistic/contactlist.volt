@@ -84,6 +84,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
+			<button class="new-btn-black">Clic aquí</button>
 			<h3>{{contactList.name}} <small>{{stat.sent}} correos enviados</small></h3>
 		</div>
 	</div>
