@@ -8,7 +8,11 @@ function Block (parentBlock, typeBlock, contentData, htmlData) {
 		
 		this.createSocialBlocks();
 	}
-	
+	else if(typeBlock != undefined && typeBlock.search('button') > 0) {
+		
+		this.createButtonBlock();
+	}
+		
 	newRedactor();
 }
 
@@ -400,5 +404,13 @@ Block.prototype.createSocialBlocks = function() {
 				t.contentData[i].showSocialInfo();
 			}
 		}
+	});
+};
+
+Block.prototype.createButtonBlock = function() {
+	var t = this;
+	this.htmlData.on('click', function() {
+		var btn = new BtnBlock(t);
+		btn.createFields();
 	});
 };
