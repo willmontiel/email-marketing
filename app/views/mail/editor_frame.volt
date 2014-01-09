@@ -32,7 +32,7 @@
 		function catchEditorData() {
 			editor.serializeDZ();
 			var editorToSend = JSON.stringify(editor);
-
+			
 			return editorToSend;
 		}
 		
@@ -45,6 +45,7 @@
 	
 	{{ javascript_include('js/block.js') }}
 	{{ javascript_include('js/social_block.js') }}
+	{{ javascript_include('js/button_block.js') }}
 	{{ javascript_include('js/dropzone.js') }}
 	{{ javascript_include('js/layout.js') }}
 	{{ javascript_include('js/editor.js') }}
@@ -188,6 +189,20 @@
 						</div>
 					</div>
 					<div class="module-container">
+						<div class="module module-button">
+							<div class="tools">
+								<div class="handle-tool icon-move tool"></div>
+								<div class="remove-tool icon-trash tool"></div>
+							</div>
+							<div class="content clearfix">
+								<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button">Show me the button!</span>
+							</div>
+						</div>
+						<div class="module-information">
+							<p>Botón</p>
+						</div>
+					</div>
+					<div class="module-container">
 						<div class="module module-social-follow">
 							<div class="tools">
 								<div class="handle-tool icon-move tool"></div>
@@ -326,6 +341,51 @@
 			</div>
 			<div class="modal-footer">
 				<a href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
+			</div>
+		</div>
+			
+		<div id="buttonaction" class="modal hide fade">
+			<div class="modal-header">
+				<h3>Botón</h3>
+			</div>
+			<div class="modal-body">
+				<div class="btnmodalleft">
+					<label>Texto</label><input id="btntext" type="text">
+					<label>Hipervinculo</label><input id="btnlink" type="text">
+					<label>Degradado</label><input id="btnbgimage" type="text">
+					<label>Borde Redondeado</label>
+						<select id="btnradius">
+							<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+							<option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+						</select>
+					<div>
+						<div class="btnmodalleft"><label>Ancho</label><input id="btnwidth" type="text"> px </div>
+						<div class="btnmodalright"><label>Alto</label><input id="btnheight" type="text"> px </div>
+					</div>
+				</div>
+				<div class="btnmodalright">
+					<label>Color de Texto</label>
+					<div class='input-append color' data-color='' data-color-format='hex' id='btntextcolor'>
+						<input id="field-btntextcolor" type='text' class='span8' value=''>
+						<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+					</div>
+					
+					<label>Color de Fondo</label>
+					<div class='input-append color' data-color='' data-color-format='hex' id='btnbgcolor'>
+						<input id="field-btnbgcolor" type='text' class='span8' value=''>
+						<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+					</div>
+					
+					<label>Color de Borde</label>
+					<div class='input-append color' data-color='' data-color-format='hex' id='btnbordercolor'>
+						<input id="field-btnbordercolor" type='text' class='span8' value=''>
+						<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a id="savebtndata" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
+				<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
 			</div>
 		</div>
 	</div>
