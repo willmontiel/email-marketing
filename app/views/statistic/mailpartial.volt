@@ -1,22 +1,19 @@
 <script type="text/x-handlebars" data-template-name="drilldown/opens">
 	<hr />
 	<div class="row-fluid">
-		<div class="news span3">
+		<div class="span3">
 			<label class="label-gray-light-percent"><i class="icon-search"></i> Resumen de aperturas</label>
 			<div>
 				<label class="label-open-percent">
 					<table>
 						<tr>
-							<td class="border-radious-green-left"></td>
-							<td class="border-radious-green-center">{{statisticsData.opens}}</td>
-							<td class="border-radious-green-center">|</td>
-							<td class="border-radious-green-right">{{statisticsData.statopens}}%</td>
+							<td></td>
+							<td><label class="label-openings">{{statisticsData.opens|numberf}}</label></td>
+							<td>|</td>
+							<td><label class="label-openings">{{statisticsData.statopens}}%</label></td>
 						</tr>
 					</table>
 				</label>
-			</div>
-			<div class="titleMail">
-				<h4 class="openColor">Aperturas</h4>
 			</div>
 		</div>
 		<div class="span1">

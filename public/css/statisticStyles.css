@@ -276,3 +276,14 @@ label > table {
 	color: #fbfbfb;
 	line-height: 80px;
 }
+
+.new-btn-black {
+	background-image: url('../images/btn-yellow.png');
+	background-repeat: repeat-x;
+	width: 150px;
+	height: 50px;
+	color: white;
+	font-size: 25px;
+	border-radius: 10px;
+	border: 1px solid transparent;
+}
