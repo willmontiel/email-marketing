@@ -261,10 +261,8 @@ label > table {
 
 .label-spam {
 	font-weight: 100;
-	background-color: #d12929;
-	color: white;
-	border-radius: 8px;
-	text-align: center;
+	color: #d12929;
+	text-align: left;
 }
 
 .icon-3x {

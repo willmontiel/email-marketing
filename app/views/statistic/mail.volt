@@ -165,6 +165,13 @@
 			<div class="row-fluid">
 				<div class="span12">
 					<h3>{{statisticsData.mailName}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
+					<label class="label-spam">
+						{{'{{#if App.mailSelected}}'}}
+							{{'{{#linkTo "compare.spam" App.mailSelected href=false}}<span style="text-decoration: underline; color: #d12929;" onClick="autoScroll()"> Reporte de spam</span>{{/linkTo}}'}}
+						{{'{{else}}'}}
+							{{'{{#linkTo "drilldown.spam" href=false}}<span style="text-decoration: underline; color: #d12929;" onClick="autoScroll()"> Reporte de spam</span>{{/linkTo}}'}}
+						{{ '{{/if}}' }} 
+					</label>
 				</div>
 			</div>
 			<div class="row-fluid">
