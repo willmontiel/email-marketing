@@ -344,8 +344,8 @@
 			</div>
 		</div>
 			
-		<div id="buttonaction" class="modal hide fade">
-			<div class="modal-header">
+		<div id="buttonaction" class="modal hide fade button-modal">
+			<div class="modal-header button-header">
 				<h3>Botón</h3>
 			</div>
 			<div class="modal-body">

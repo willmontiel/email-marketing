@@ -290,6 +290,7 @@ $(function() {
 	$('img').on('dragstart', function(event) { event.preventDefault(); });
 	
 	$('.gallery-modal').draggable({handle: ".gallery-header"});
+	$('.button-modal').draggable({handle: ".button-header"});
 	
 	$('.module-cont').on('click', '.module > .tools > .remove-tool', function (event) {
 		

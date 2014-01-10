@@ -28,6 +28,9 @@ BtnBlock.prototype.createFields = function() {
 	this.colorField('btnbordercolor');
 	
 	var t = this;
+	
+	$('#savebtndata').off('click');
+	
 	$('#savebtndata').on('click', function() {
 		t.saveBtn();
 		t.designBtn();

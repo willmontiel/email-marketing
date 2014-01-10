@@ -340,11 +340,11 @@ table {
 	width: 165px;
 }
 
-.gallery-header {
+.gallery-header, .button-header {
 	cursor: move;
 }
 
-.gallery-header h3 {
+.gallery-header h3, .button-header h3 {
 	text-align: center;
 }
 
