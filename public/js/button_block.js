@@ -80,7 +80,7 @@ BtnBlock.prototype.designBtn = function() {
 	}
 	
 	if(this.block.btnwithbgimage) {
-		content.css('background-image', 'url(../images/btn-' + this.block.btnbgimage + '.png)');
+		content.css('background-image', 'url(' + config.imagesUrl + '/btn-' + this.block.btnbgimage + '.png)');
 	}
 	else {
 		content.css('background-image', '');

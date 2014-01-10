@@ -455,7 +455,7 @@ Block.prototype.createSocialBlocks = function() {
 };
 
 Block.prototype.createButtonBlock = function() {
-	
+
 	this.btntext = (this.btntext != undefined) ? this.btntext : 'Clic Aqui!';
 	this.btnlink = (this.btnlink != undefined) ? this.btnlink : '';
 	this.btnbgcolor = (this.btnbgcolor != undefined) ? this.btnbgcolor : '#556270';

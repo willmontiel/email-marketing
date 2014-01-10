@@ -111,7 +111,7 @@ class TemplateController extends ControllerBase
 		$content = $this->request->getPost("editor");
 		$name = $this->request->getPost("name");
 		$category = $this->request->getPost("category");
-				
+
 		if (empty($content) || empty($name)) {
 			return $this->setJsonResponse(array('error' => 'Ha enviado campos vacíos, por favor verifique la información'), 404, 'failed');
 		}

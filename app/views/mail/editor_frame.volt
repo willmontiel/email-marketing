@@ -195,7 +195,7 @@
 								<div class="remove-tool icon-trash tool"></div>
 							</div>
 							<div class="content clearfix">
-								<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button pull-center" style="background-image:url('../images/btn-blue.png');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>
+								<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button pull-center" style="background-image:url('{{url('images')}}/btn-blue.png');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>
 							</div>
 						</div>
 						<div class="module-information">
