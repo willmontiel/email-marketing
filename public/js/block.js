@@ -88,6 +88,23 @@ Block.prototype.persist = function() {
 		}
 		obj.contentData = sb;
 	}
+	else if(this.typeBlock.search('button') > 0) {
+		obj.text = this.btntext;
+		obj.link = this.btnlink;
+		obj.bgcolor = this.btnbgcolor;
+		obj.textcolor = this.btntextcolor;
+		obj.withborderradius = this.btnwithborderradius;
+		obj.radius = this.btnradius;
+		obj.withbordercolor = this.btnwithbordercolor;
+		obj.bordercolor = this.btnbordercolor;
+		obj.withbgimage = this.btnwithbgimage;
+		obj.bgimage = this.btnbgimage;
+		obj.width = this.btnwidth;
+		obj.height = this.btnheight;
+		obj.align = this.btnalign;
+		obj.fontsize = this.btnfontsize;
+		obj.fontfamily = this.btnfontfamily;
+	}
 	else {
 		obj.contentData = $.trim(this.contentData.html());	
 	}
@@ -174,6 +191,10 @@ Block.prototype.unpersist = function(obj, dz) {
 										<div class="sub_social_content content_linkedin"></div>\n\
 										<div class="sub_social_content content_google_plus"></div>');
 	}
+	else if(this.typeBlock.search('button') > 0) {
+		var contentData = $('<div/>');
+		contentData = contentData.html('<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button pull-center" style="background-image:url(../images/btn-blue.png);border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>')
+	}
 	else {
 		var contentData = $('<div/>');
 		contentData = contentData.html('<hr>');
@@ -209,6 +230,10 @@ Block.prototype.unpersist = function(obj, dz) {
 		}
 		
 		this.createSocialBlocks();
+	}
+	else if(this.typeBlock.search('button') > 0) {
+		
+		this.unpersistButton(obj);
 	}
 };
 
@@ -332,6 +357,28 @@ Block.prototype.unpersistImage = function(obj) {
 	}
 };
 
+Block.prototype.unpersistButton = function(obj) {
+	this.btntext = obj.text;
+	this.btnlink = obj.link;
+	this.btnbgcolor = obj.bgcolor;
+	this.btntextcolor = obj.textcolor;
+	this.btnwithborderradius = obj.withborderradius;
+	this.btnradius = obj.radius;
+	this.btnwithbordercolor = obj.withbordercolor;
+	this.btnbordercolor = obj.bordercolor;
+	this.btnwithbgimage = obj.withbgimage;
+	this.btnbgimage = obj.bgimage;
+	this.btnwidth = obj.width;
+	this.btnheight = obj.height;
+	this.btnalign = obj.align;
+	this.btnfontsize = obj.fontsize;
+	this.btnfontfamily = obj.fontfamily;
+	
+	var btn = new BtnBlock(this);
+	btn.designBtn();
+	this.createButtonBlock();
+};
+
 Block.prototype.persistImage = function() {
 	
 	var obj = {	height: this.height,
@@ -408,7 +455,25 @@ Block.prototype.createSocialBlocks = function() {
 };
 
 Block.prototype.createButtonBlock = function() {
+	
+	this.btntext = (this.btntext != undefined) ? this.btntext : 'Clic Aqui!';
+	this.btnlink = (this.btnlink != undefined) ? this.btnlink : '';
+	this.btnbgcolor = (this.btnbgcolor != undefined) ? this.btnbgcolor : '#556270';
+	this.btntextcolor = (this.btntextcolor != undefined) ? this.btntextcolor : '#ffffff';;
+	this.btnwithborderradius = (this.btnwithborderradius != undefined) ? this.btnwithborderradius : true;
+	this.btnradius = (this.btnradius != undefined) ? this.btnradius : 4;
+	this.btnwithbordercolor = (this.btnwithbordercolor != undefined) ? this.btnwithbordercolor : true;
+	this.btnbordercolor = (this.btnbordercolor != undefined) ? this.btnbordercolor : '#1e3650';
+	this.btnwithbgimage = (this.btnwithbgimage != undefined) ? this.btnwithbgimage : true;
+	this.btnbgimage = (this.btnbgimage != undefined) ? this.btnbgimage : 'blue';
+	this.btnwidth = (this.btnwidth != undefined) ? this.btnwidth : 120;
+	this.btnheight = (this.btnheight != undefined) ? this.btnheight : 40;
+	this.btnalign = (this.btnalign != undefined) ? this.btnalign : 'center';
+	this.btnfontsize = (this.btnfontsize != undefined) ? this.btnfontsize : 14;
+	this.btnfontfamily = (this.btnfontfamily != undefined) ? this.btnfontfamily : 'arial';	
+	
 	var t = this;
+	
 	this.htmlData.on('click', function() {
 		var btn = new BtnBlock(t);
 		btn.createFields();
