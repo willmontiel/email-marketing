@@ -4,8 +4,8 @@ class StatisticsWrapper extends BaseWrapper
 	public function showMailStatistics($idMail)
 	{
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail, 2 => $this->account->idAccount)
 		));
 		
 		if($mail) {

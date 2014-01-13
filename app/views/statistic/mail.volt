@@ -24,7 +24,7 @@
 	</script>
 	<script>
 		var chartData = [];
-		App.mails = [""];
+		App.mails = [];
 		
 		{%for cmail in compareMail %}
 			var cmail = new Object();
@@ -44,22 +44,13 @@
 		AmCharts.ready(function () {
 			chart = createPieChart(chartData);	
 			chart.write('summaryChart');
-			$("select").select2({
-				placeholder: "Seleccione Un Correo"
-			});
+			$("select").select2();
 		});
 		
 		function compareMails() {
-			if(App.mailCompare != undefined && App.mailCompare != null) {
-				window.location = "#/compare/opens/" + App.mailCompare;
-				App.set('mailSelected', App.mailCompare);
-			}
-		};
+			window.location = "{{url('statistic/compare')}}/{{idMail}}/" + App.mailCompare;
+		}
 		
-		function stopCompare() {
-			window.location = "#/drilldown/opens";
-			App.set('mailSelected', null);
-		};
 		
 	</script>
 {% endblock %}
@@ -87,11 +78,7 @@
 													 {{statisticsData.opens|numberf}}
 												</label>
 												<div class="news-text">
-													{{'{{#if App.mailSelected}}'}}
-														{{'{{#linkTo "compare.opens" App.mailSelected href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Aperturas</span>{{/linkTo}}'}}
-													{{'{{else}}'}}
-														{{'{{#linkTo "drilldown.opens" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Aperturas</span>{{/linkTo}}'}}
-													{{ '{{/if}}' }}
+													{{'{{#linkTo "drilldown.opens" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Aperturas</span>{{/linkTo}}'}}
 												</div>
 											</div>
 										</div>	
@@ -107,11 +94,7 @@
 											<div class="news-content">
 												<label class="label-clicks">{{statisticsData.clicks|numberf}}</label>
 												<div class="news-text">
-													{{'{{#if App.mailSelected}}'}}
-														{{'{{#linkTo "compare.clicks" App.mailSelected href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Clics</span>{{/linkTo}}'}}
-													{{'{{else}}'}}
-														{{'{{#linkTo "drilldown.clicks" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Clics</span>{{/linkTo}}'}}
-													{{ '{{/if}}' }}	
+													{{'{{#linkTo "drilldown.clicks" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Clics</span>{{/linkTo}}'}}
 												</div>
 											</div>
 										</div>	
@@ -127,11 +110,7 @@
 											<div class="news-content">
 												<label class="label-unsubscribed">{{statisticsData.unsubscribed|numberf}}</label>
 												<div class="news-text">
-													{{'{{#if App.mailSelected}}'}}
-														{{'{{#linkTo "compare.unsubscribed" App.mailSelected href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Des-suscritos</span>{{/linkTo}}'}}
-													{{'{{else}}'}}
-														{{'{{#linkTo "drilldown.unsubscribed" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Des-suscritos</span>{{/linkTo}}'}}
-													{{ '{{/if}}' }}	
+													{{'{{#linkTo "drilldown.unsubscribed" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Des-suscritos</span>{{/linkTo}}'}}
 												</div>
 											</div>
 										</div>	
@@ -147,11 +126,7 @@
 											<div class="news-content">
 												<label class="label-bounced">{{statisticsData.bounced|numberf}}</label>
 												<div class="news-text">
-													{{'{{#if App.mailSelected}}'}}
-														{{'{{#linkTo "compare.bounced" App.mailSelected href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Rebotes</span>{{/linkTo}}'}}
-													{{'{{else}}'}}
-														{{'{{#linkTo "drilldown.bounced" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Rebotes</span>{{/linkTo}}'}}
-													{{ '{{/if}}' }}
+													{{'{{#linkTo "drilldown.bounced" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Rebotes</span>{{/linkTo}}'}}
 												</div>
 											</div>
 										</div>	
@@ -166,43 +141,25 @@
 				<div class="span12">
 					<h3>{{statisticsData.mailName}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
 					<label class="label-spam">
-						{{'{{#if App.mailSelected}}'}}
-							{{'{{#linkTo "compare.spam" App.mailSelected href=false}}<span style="text-decoration: underline; color: #d12929;" onClick="autoScroll()"> Reporte de spam</span>{{/linkTo}}'}}
-						{{'{{else}}'}}
-							{{'{{#linkTo "drilldown.spam" href=false}}<span style="text-decoration: underline; color: #d12929;" onClick="autoScroll()"> Reporte de spam</span>{{/linkTo}}'}}
-						{{ '{{/if}}' }} 
+						{{'{{#linkTo "drilldown.spam" href=false}}<span style="text-decoration: underline; color: #d12929;" onClick="autoScroll()"> Reporte de spam</span>{{/linkTo}}'}}
+						<br><br>
+						<div class="span3">
+							{{ '{{view Ember.Select
+								class="select"
+								contentBinding="App.mails"
+								optionValuePath="content.id"
+								optionLabelPath="content.name"
+								valueBinding="App.mailCompare"}}'
+							}}
+						</div>
+						<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
 					</label>
 				</div>
 			</div>
 			<div class="row-fluid">
 				<div class="span6">
-				</div>
-				<div class="span6">
 					<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 				</div>
-			</div>
-			</div>
-			<div class="row-fluid">
-				<div class="span2">
-					<h4>Comparar con: </h4>
-				</div>
-				<div class="span3">
-					{{ '{{view Ember.Select
-						class="select"
-						contentBinding="App.mails"
-						optionValuePath="content.id"
-						optionLabelPath="content.name"
-						valueBinding="App.mailCompare"}}'
-					}}
-				</div>
-				<div class="span2">
-					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-				</div>
-			{{'{{#if App.mailSelected}}'}}
-				<div class="span2">
-					<button class="btn btn-black" onclick="stopCompare()">No Comparar</button>
-				</div>
-			{{ '{{/if}}' }}
 			</div>
 			<div class="row-fluid">
 				<div class="span12">
@@ -211,7 +168,6 @@
 			</div>
 		</script>
 		{{ partial("statistic/mailpartial") }}
-		{{ partial("statistic/comparemailpartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
 		<div class="pull-right scaleChart">
 			<div class="pull-left">

@@ -195,4 +195,29 @@ class StatisticController extends ControllerBase
 			readfile($this->mailReportsDir->reports . $report->name);
 		}
 	}
+	
+	public function compareAction($idMail, $idMailCompare) {
+		$log = $this->logger;
+		$log->log('Los IDs son: ' . $idMail . ' y ' . $idMailCompare);
+		
+		$statWrapper = new StatisticsWrapper();
+		$statWrapper->setAccount($this->user->account);
+		$mailStat1 = $statWrapper->showMailStatistics($idMail);
+		$mailStat2 = $statWrapper->showMailStatistics($idMailCompare);
+		
+		if($mailStat1 && $mailStat2) {
+			$this->view->setVar("idMail1", $idMail);
+			$this->view->setVar("summaryChartData1", $mailStat1['summaryChartData']);
+			$this->view->setVar("statisticsData1", $mailStat1['statisticsData']);
+			$this->view->setVar("idMail2", $idMailCompare);
+			$this->view->setVar("summaryChartData2", $mailStat2['summaryChartData']);
+			$this->view->setVar("statisticsData2", $mailStat2['statisticsData']);
+			$this->view->setVar("compareMail", $mailStat1['compareMail']);
+		}
+		else {
+			$this->response->redirect('error');
+		}
+		
+		
+	}
 }
