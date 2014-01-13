@@ -116,7 +116,9 @@
 									{% if item.type%}
 										<li><a class="ShowDialogTemplate" data-backdrop="static" data-toggle="modal" href="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}"><i class="icon-magic"></i>Plantilla</a></li>
 									{%endif%}
+									{%if item.status == 'Sent'%}
 										<li><a href="{{url('statistic/mail')}}/{{item.idMail}}"><i class="icon-bar-chart"></i> Estadisticas</a></li>
+									{%endif%}
 									</ul>
 								</div>
 							</div>
