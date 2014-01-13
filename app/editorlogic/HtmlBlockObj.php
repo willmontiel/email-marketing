@@ -20,6 +20,9 @@ class HtmlBlockObj
 			case 'module-separator':
 				$block = new BlockSeparator();
 				break;
+			case 'module-button':
+				$block = new BlockButton();
+				break;
 			case 'module-social-follow':
 				$block = new BlockSocialFollow();
 				break;
