@@ -817,16 +817,75 @@ class MailController extends ControllerBase
 		return $result;
 	}
 	
-	public function previeweditorAction()
+	public function previeweditorAction($idMail, $type)
 	{
 		$content = $this->request->getPost("editor");
-
-		$editorObj = new HtmlObj;
+		
+		switch ($type) {
+			case 'mail':
+				$url = $this->url->get('mail/previewmail');
+				break;
+			
+			case 'template':
+				$url = $this->url->get('mail/previewtemplate');
+				break;
+			
+			default :
+				return $this->response->redirect('error');
+				break;
+		}
+		$editorObj = new HtmlObj(true, $idMail, $url);
 		$editorObj->assignContent(json_decode($content));
 		
 		return $this->setJsonResponse(array('response' => $editorObj->render()));
 	}
 	
+	public function previewmailAction($idMail)
+	{
+		$content = $this->request->getPost("img");
+//		$this->logger->log("Id: " . $idMail);
+//		$this->logger->log("Img: " . $content);
+		$imgObj = new ImageObject();
+		$imgObj->createFromBase64($content);
+		$imgObj->resizeImage(150, 200);
+		$newImg = $imgObj->getImageBase64();
+		
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		$mail->previewData = $newImg;
+		
+		if (!$mail->save()) {
+			
+		}
+//		$this->logger->log("NewImg: " . $newImg);
+	}
+	
+	public function previewtemplateAction()
+	{
+//		$content = $this->request->getPost("img");
+////		$this->logger->log("Id: " . $idMail);
+////		$this->logger->log("Img: " . $content);
+//		$imgObj = new ImageObject();
+//		$imgObj->createFromBase64($content);
+//		$imgObj->resizeImage(150, 200);
+//		$newImg = $imgObj->getImageBase64();
+//		
+//		$mail = Template::findFirst(array(
+//			'conditions' => 'idTemplate = ?1',
+//			'bind' => array(1 => $idTemplate)
+//		));
+//		
+//		$mail->previewData = $newImg;
+//		
+//		if (!$mail->save()) {
+//			
+//		}
+	}
+
+
 	public function converttotemplateAction($idMail)
 	{
 		$mail = Mailcontent::findFirstByIdMail($idMail);

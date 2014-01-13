@@ -48,8 +48,18 @@ class AssetObj
 			$image = new Image($this->account);
 			$dirImage = $image->saveImage($this->asset, $name, $tmp_dir);
 			
-			$thumbnail = new Thumbnail($this->account);
-			$thumbnail->createThumbnail($this->asset, $dirImage, $name);
+			$dir = $this->assetsrv->dir . $this->account->idAccount . '/images/' ;
+		
+			if (!file_exists($dir)) {
+				mkdir($dir, 0777, true);
+			}
+			
+			$dir .= $this->asset->idAsset . '_thumb.png';
+			
+			$imageObj = new ImageObject();
+			$imageObj->createFromImage($dirImage, $name);
+			$imageObj->resizeImage(100 ,74);
+			$imageObj->getImage('png', $dir);
 		}
 		catch (InvalidArgumentException $e) {
 			throw new InvalidArgumentException('we have a error...');
