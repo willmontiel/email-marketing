@@ -58,14 +58,18 @@
 					<tr>
 						<td class="span6">
 							<div class="preview-mail">
-								<img src="data: image/png;base64, {{item.previewData}}" />
+								{% if item.previewData == null%}
+									<div class="not-available"></div>
+								{% else %}
+									<img src="data: image/png;base64, {{item.previewData}}" />
+								{% endif %}	
 							</div>
 							<div class="box-section news with-icons">
 								<div class="news-content">
-									<div class="news-title">
+									<div class="news-title" style="padding-left: 40px;">
 										<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
 									</div>
-									<div class="news-text">
+									<div class="news-text" style="padding-left: 40px;">
 										{{item.status}} <br /> 
 										Creado el {{date('Y-m-d', item.createdon)}} 
 										{%if item.status == 'Sent'%}
@@ -94,9 +98,6 @@
 									<h4 class="red"><span>Rebotes</span> {{item.bounced}} </h4>
 								</li>
 							</ul>
-							<div class="news-time">
-								<a href="{{url('statistic/mail')}}/{{item.idMail}}"><i class="icon-bar-chart icon-2x"></i></a>
-							</div>
 						{%endif%}
 						</td>
 						<td class="span2">
@@ -115,6 +116,7 @@
 									{% if item.type%}
 										<li><a class="ShowDialogTemplate" data-backdrop="static" data-toggle="modal" href="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}"><i class="icon-magic"></i>Plantilla</a></li>
 									{%endif%}
+										<li><a href="{{url('statistic/mail')}}/{{item.idMail}}"><i class="icon-bar-chart"></i> Estadisticas</a></li>
 									</ul>
 								</div>
 							</div>

@@ -226,6 +226,7 @@ class Security extends Plugin
 				'template::edit' => array('template' => array('read', 'update')),
 				'template::preview' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewmail' => array('mail' => array('read', 'create', 'send')),
+				'mail::previewtemplate' => array('mail' => array('read', 'create', 'send')),
 				
 				//Sending processes
 				'sendingprocess::index' => array('mail' => array('read', 'create', 'send')),

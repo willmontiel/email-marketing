@@ -39,7 +39,7 @@
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		
 		$.ajax({
-			url: "{{url('mail/previeweditor')}}/{{mail.idMail}}",
+			url: "{{url('mail/previeweditor')}}/{{mail.idMail}}/mail",
 			type: "POST",			
 			data: { editor: editor},
 			error: function(msg){

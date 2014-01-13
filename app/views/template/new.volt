@@ -16,7 +16,7 @@
 		
 		$.ajax(
 			{
-			url: "{{url('mail/previeweditor')}}",
+			url: "{{url('mail/previeweditor')}}/template",
 			type: "POST",			
 			data: { editor: editor},
 			error: function(msg){

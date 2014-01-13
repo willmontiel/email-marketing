@@ -2,11 +2,12 @@
 class HtmlObj extends HtmlAbstract
 {	
 	protected $preview;
-	protected $id;
-	
-	public function __construct($preview = false, $id = null) 
+	protected $url;
+
+
+	public function __construct($preview = false, $id = null, $url = null) 
 	{
-		$this->id = $id;
+		$this->url = $url . '/' . $id;
 		$this->preview = $preview;
 		$this->log = Phalcon\DI::getDefault()->get('logger');
 	}
@@ -33,7 +34,7 @@ class HtmlObj extends HtmlAbstract
 			$pr .= '<script>function createPreviewImage(img) {
 				console.log(img);
 				$.ajax({
-					url: "/emarketing/mail/previewmail/'.$this->id.'",
+					url: "' . $this->url . '",
 					type: "POST",			
 					data: { img: img},
 					success: function(){}

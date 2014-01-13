@@ -349,6 +349,11 @@ a.inactive {
 	border-radius: 10px;
 }
 
+.not-available {
+	background-image: url(../images/notavailable.png);
+	width: 100px; 
+	height: 120px; 
+}
 #modal-simple-template h5 {
 	text-align: center;
 }
