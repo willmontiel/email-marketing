@@ -12,7 +12,7 @@
 	var objMail = {{objMail}};
 	
 	function sendData(value) {
-		
+		verHTML();
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$.ajax(
 			{
@@ -38,20 +38,18 @@
 		
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		
-		$.ajax(
-			{
-			url: "{{url('mail/previeweditor')}}",
+		$.ajax({
+			url: "{{url('mail/previeweditor')}}/{{mail.idMail}}",
 			type: "POST",			
 			data: { editor: editor},
 			error: function(msg){
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function(response) {
-				win = open("", "DisplayWindow", "toolbar=0, titlebar=yes , status=1, directories=yes, menubar=0, location=yes, directories=yes, width=700, height=650, left=1, top=0");
+				win = open("", "DisplayWindow", "toolbar=0, titlebar=yes , status=1, directories=yes, menubar=0, location=yes, directories=yes, width=550, height=650, left=1, top=0");
 				win.document.write("" + response.response + "");
 			}
 		});
-		
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
 	}
 	

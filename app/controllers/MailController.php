@@ -817,14 +817,37 @@ class MailController extends ControllerBase
 		return $result;
 	}
 	
-	public function previeweditorAction()
+	public function previeweditorAction($idMail)
 	{
 		$content = $this->request->getPost("editor");
 
-		$editorObj = new HtmlObj;
+		$editorObj = new HtmlObj(true, $idMail);
 		$editorObj->assignContent(json_decode($content));
 		
 		return $this->setJsonResponse(array('response' => $editorObj->render()));
+	}
+	
+	public function previewmailAction($idMail)
+	{
+		$content = $this->request->getPost("img");
+//		$this->logger->log("Id: " . $idMail);
+//		$this->logger->log("Img: " . $content);
+		$imgObj = new ImageObject();
+		$imgObj->createFromBase64($content);
+		$imgObj->resizeImage(150, 200);
+		$newImg = $imgObj->getImageBase64();
+		
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		$mail->previewData = $newImg;
+		
+		if (!$mail->save()) {
+			
+		}
+//		$this->logger->log("NewImg: " . $newImg);
 	}
 	
 	public function converttotemplateAction($idMail)

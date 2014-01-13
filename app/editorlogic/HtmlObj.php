@@ -1,8 +1,13 @@
 <?php
 class HtmlObj extends HtmlAbstract
 {	
-	public function __construct() 
+	protected $preview;
+	protected $id;
+	
+	public function __construct($preview = false, $id = null) 
 	{
+		$this->id = $id;
+		$this->preview = $preview;
 		$this->log = Phalcon\DI::getDefault()->get('logger');
 	}
 	
@@ -20,7 +25,25 @@ class HtmlObj extends HtmlAbstract
 	
 	public function renderObjPrefix()
 	{
-		return '<table style="background-color: '. $this->backgroundColor . '; width: 100%;"><tr><td style="padding: 20px;"><center><table style="width: 550px;" width="550px" cellspacing="0" cellpadding="0"><tbody>';
+		$pr = '<html><head>';
+		
+		if ($this->preview) {
+			$pr .= '<title>Preview</title><script type="text/javascript" src="/emarketing/js/html2canvas.js"></script><script type="text/javascript" src="/emarketing/js/jquery-1.8.3.min.js"></script>';
+//			$id = "'mail/previewmail'";
+			$pr .= '<script>function createPreviewImage(img) {
+				console.log(img);
+				$.ajax({
+					url: "/emarketing/mail/previewmail/'.$this->id.'",
+					type: "POST",			
+					data: { img: img},
+					success: function(){}
+				});
+			
+			}</script>';
+		}
+		$pr .= '</head><body>';
+		
+		return $pr . '<table style="background-color: '. $this->backgroundColor . '; width: 100%;"><tr><td style="padding: 20px;"><center><table style="width: 550px;" width="550px" cellspacing="0" cellpadding="0"><tbody>';
 	}
 	public function renderChildPrefix($i)
 	{
@@ -73,6 +96,12 @@ class HtmlObj extends HtmlAbstract
 	}
 	public function renderObjPostfix()
 	{
-		return '</tbody></table></center></td></tr></table>';
-	}
+		if ($this->preview) {
+			$pr = '<script>html2canvas(document.body, { onrendered: function (c) { c.getContext("2d"); createPreviewImage(c.toDataURL("image/png"));} });</script>';
+		}
+		else {
+			$pr = '';
+		}
+		$pr .= '</body></html>';
+		return '</tbody></table></center></td></tr></table>' . $pr;	}
 }

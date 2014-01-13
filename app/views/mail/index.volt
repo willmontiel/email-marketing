@@ -1,4 +1,7 @@
 {% extends "templates/index_new.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+{% endblock %}
 {% block sectiontitle %}<i class="icon-envelope icon-2x"></i>Correos{% endblock %}
 {%block sectionsubtitle %}Administre sus correos{% endblock %}
 {% block content %}
@@ -48,16 +51,16 @@
 			</div>
 		</div>
 		<div class="box-content">
-	{%for item in page.items%}
-			<table class="table table-normal">
+			<table class="table table-bordered">
 				<thead></thead>
 				<tbody>
+			{%for item in page.items%}
 					<tr>
-						<td>
+						<td class="span6">
+							<div class="preview-mail">
+								<img src="data: image/png;base64, {{item.previewData}}" />
+							</div>
 							<div class="box-section news with-icons">
-								<div class="avatar blue">
-									<i class="icon-envelope icon-2x"></i>
-								</div>
 								<div class="news-content">
 									<div class="news-title">
 										<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
@@ -72,8 +75,8 @@
 								</div>
 							</div>
 						</td>
+						<td class="span4">
 						{%if item.status == 'Sent'%}
-						<td>
 							<ul class="inline sparkline-box">
 								<li class="sparkline-row">
 									<h4 class="blue"><span>Destinatarios</span> {{item.totalContacts}} </h4>
@@ -94,9 +97,9 @@
 							<div class="news-time">
 								<a href="{{url('statistic/mail')}}/{{item.idMail}}"><i class="icon-bar-chart icon-2x"></i></a>
 							</div>
-						</td>
 						{%endif%}
-						<td class="span3">
+						</td>
+						<td class="span2">
 							<div class="offset3">
 								<div class="btn-group">
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
@@ -117,9 +120,9 @@
 							</div>
 						</td>
 					</tr>
+			{%endfor%}
 				</tbody>
 			</table>
-	{%endfor%}
 		</div>
 		<div class="box-footer padded">
 			<div class="row-fluid">
