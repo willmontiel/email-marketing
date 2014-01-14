@@ -29,6 +29,21 @@ class TestController extends ControllerBase
 
 	}
 	
+	public function assettestAction()
+	{
+		$asset = new Asset();
+		$asset->idAccount = 14;
+		$asset->fileName = 'lala.png';
+		$asset->fileSize = 122345;
+		$asset->dimensions = '100x100';
+		$asset->type = 'image/png';
+		$asset->createdon = 123456789;
+		
+		if (!$asset->save()) {
+			$this->logger->log('Error');
+		}
+		
+	}
 	public function testzmqAction()
 	{
 		$this->view->disable();
