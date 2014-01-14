@@ -5,7 +5,8 @@ class BlockSocialFollow extends HtmlAbstract
 	{
 		foreach ($data->contentData as $content) {
 			if($content->selected) {
-				$this->children[] = '<a href=" '. $content->url .'"><img src=""><label>' . $content->linktext . '</label></a>';
+				$domain = Urldomain::findFirstByIdUrlDomain(1);
+				$this->children[] = '<a href=" '. $content->url .'"><img src="' . $domain->imageUrl . '/images/' . $content->imageName .'_follow.png"><br><label>' . $content->linktext . '</label></a>';
 			}
 		}
 	}
@@ -15,7 +16,7 @@ class BlockSocialFollow extends HtmlAbstract
 	}
 	public function renderChildPrefix($i)
 	{
-		return '<td>';
+		return '<td style="text-align: center;">';
 	}
 	public function renderChildPostfix($i)
 	{
