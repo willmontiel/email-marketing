@@ -46,8 +46,10 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function(response) {
-				win = open("", "", "toolbar=0, titlebar=yes , status=1, directories=yes, menubar=0, location=yes, directories=yes, width=550, height=650, left=1, top=0");
-				win.document.write("" + response.response + "");
+				var e = document.createElement('div');
+				e.innerHTML = response.response;
+				$( "#content-template" ).empty();
+				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(e);
 			}
 		});
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
@@ -79,7 +81,7 @@
 					<button onclick="sendData('Previous')" type="button" value="Anterior" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</button>
 				</div>
 				<div class="pull-left VisualizeEditor">
-					<button onclick="verHTML()" type="button" value="Visualizar" class="btn btn-default">Visualizar  <i class="icon-eye-open"></i></button>
+					<a href="#preview-modal" data-toggle="modal" onclick="verHTML()" class="btn btn-default">Visualizar  <i class="icon-eye-open"></i></a>
 				</div>
 				<div class="pull-left SaveTemplate">
 					<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">Guardar como Plantilla <i class="icon-picture"></i></button>
@@ -89,6 +91,19 @@
 	</div>
 	<div class="row-fluid">
 		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}/{{mail.idMail}}" width="100%" onload="iframeResize()" seamless></iframe>
+	</div>
+	<div id="preview-modal" class="modal hide fade preview-modal">
+		<div class="modal-header">
+			Previsualización de plantilla
+		</div>
+		<div class="modal-body">
+			<div id="content-template">
+				
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-black" data-dismiss="modal">x</button>
+		</div>
 	</div>
 	<br />
 {% endblock %}
