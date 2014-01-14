@@ -3,15 +3,42 @@
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
 	{{ javascript_include('amcharts/amcharts.js')}}
+	{{ javascript_include('js/app_charts.js') }}
 	{{ javascript_include('amcharts/serial.js')}}
 	{{ javascript_include('amcharts/pie.js')}}
-	{{ partial("partials/statistic_charts") }}
+
+	<script>
+		var chartData = [];
+		
+		{%for data in summaryChartData %}
+			var data = new Object();
+			data.title = '{{ data['title'] }}';
+			data.value = {{ data['value'] }};
+			chartData.push(data);
+		{%endfor%}
+			
+		AmCharts.ready(function () {
+			chart = createPieChart(chartData);	
+			chart.write('summaryChart');
+			$("select").select2();
+		});
+		
+		function compareDbases() {
+			var id = $('#dbasetocompare').val();
+			window.location = "{{url('statistic/comparedbases')}}/{{dbase.idDbase}}/" + id;
+		}
+	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-signal icon-2x"></i>Estadisticas{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
-<div class="row-fluid">
+	<div class="row-fluid">
 		<div class="span12">
+			<h3>{{dbase.name}} <small>{{stat.sent}} correos enviados</small></h3>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span6">
 			<table class="table" style="border: 0px !important;" >
 				<thead></thead>
 				<tbody>
@@ -45,6 +72,8 @@
 								</div>	
 							</div>
 						</td>
+					</tr>
+					<tr>
 						<td>
 							<div class="box">
 								<div class="box-section news with-icons">
@@ -78,25 +107,43 @@
 							</div>
 						</td>
 					</tr>
+					<tr>
+						<td>
+							<div class="box">
+								<div class="box-section news with-icons">
+									<label class="avatar-spam"><i class="icon-warning-sign icon-3x"></i></label>
+									<div class="news-time">
+									  <span>{{stat.percentageSpam}}%</span>
+									</div>
+									<div class="news-content">
+										<label class="label-spam">{{stat.spam|numberf}}</label>
+										<div class="news-text">
+											Reportes de Spam
+										</div>
+									</div>
+								</div>	
+							</div>
+						</td>
+					</tr>
 				</tbody>
 			</table>
-		</div>
-	</div>
-	<div class="row-fluid">
-		<div class="span12">
-			<h3>{{dbase.name}} <small>{{stat.sent}} correos enviados</small></h3>
-		</div>
-	</div>
-	<div class="row-fluid">
-		<div class="span6">
-			<div class="box">
-				<div id="summaryChart1" style="width: 600px; height: 400px;"></div>
+			<div class="pull-left">
+				<div class="span3">
+					<select id="dbasestocompare" style="width: 150px;">
+						{%for cdb in compareDbase %}
+							<option value="{{cdb.id}}">{{cdb.name}}</option>
+						{%endfor%}
+					</select>
+				</div>
+				<div class="span2">
+					<button class="btn btn-blue" onclick="compareDbases()"  style="margin-left: 80px;">Comparar</button>
+				</div>
 			</div>
 		</div>
 		<div class="span6">
 			<div class="box">
-				<div id="summaryChart2" style="width: 600px; height: 400px;"></div>
+				<div id="summaryChart" style="width: 600px; height: 400px;"></div>
 			</div>
-		</div>	
-	</div>
+		</div>
+	</div>	
 {% endblock %}

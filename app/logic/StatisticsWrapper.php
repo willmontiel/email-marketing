@@ -80,6 +80,158 @@ class StatisticsWrapper extends BaseWrapper
 		}
 	}
 	
+	public function showContactlistStatistics(Contactlist $list, Dbase $dbase)
+	{
+		$statsContactList = Statcontactlist::find(array(
+			'conditions' => 'idContactlist = ?1',
+			'bind' => array(1 => $list->idContactlist)
+		));
+		
+		if(!$statsContactList) {
+			return FALSE;
+		}
+
+		$stat = new stdClass();
+		$sent = 0;
+		$uniqueOpens = 0;
+		$clicks = 0;
+		$bounced = 0;
+		$spam = 0;
+		$unsubscribed = 0;
+
+		foreach ($statsContactList as $s) {
+			$idContactlist =  $s->idContactlist;
+			$sent +=  $s->sent;
+			$uniqueOpens +=  $s->uniqueOpens;
+			$clicks +=  $s->clicks;
+			$bounced +=  $s->bounced;
+			$spam +=  $s->spam;
+			$unsubscribed += $s->unsubscribed;
+		}
+		
+		$summaryChartData[] = array(
+			'title' => "Aperturas",
+			'value' => $uniqueOpens,
+		);
+		$summaryChartData[] = array(
+			'title' => "Rebotados",
+			'value' => $bounced,
+		);
+		$summaryChartData[] = array(
+			'title' => "No Aperturas",
+			'value' => $sent - ( $uniqueOpens + $bounced ),
+		);
+
+		$stat->idContactlist = $idContactlist;
+		$stat->sent = $sent;
+		$stat->uniqueOpens = $uniqueOpens;
+		$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
+		$stat->clicks = $clicks;
+		$stat->bounced = $bounced;
+		$stat->percentageBounced = round(($bounced*100)/$sent);
+		$stat->spam = $spam;
+		$stat->percentageSpam = round(($spam*100)/$sent);
+		$stat->unsubscribed = $unsubscribed;
+		$stat->percentageUnsubscribed = round(($unsubscribed*100)/$sent);
+
+		$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
+					
+		$allLists = Contactlist::find(array(
+			'conditions' => 'idDbase = ?1 AND idContactlist != ?2',
+			'bind' => array(1 => $dbase->idDbase, 2 => $list->idContactlist)
+		));
+		
+		$listCompare = array();
+		foreach ($allLists as $l) {
+			$objfc = new stdClass();
+			$objfc->id = $l->idContactlist;
+			$objfc->name = $l->name;
+			$listCompare[] = $objfc;				
+		}
+		
+		$response['summaryChartData'] = $summaryChartData;
+		$response['statisticsData'] = $stat;
+		$response['compareList'] = $listCompare;
+		
+		return $response;
+	}
+	
+	public function showDbaseStatistics(Dbase $dbase, Account $account)
+	{
+		$statsDbase = Statdbase::find(array(
+			'conditions' => 'idDbase = ?1',
+			'bind' => array(1 => $dbase->idDbase)
+		));
+		
+		if(!$statsDbase) {
+			return FALSE;
+		}
+
+		$stat = new stdClass();
+		$sent = 0;
+		$uniqueOpens = 0;
+		$clicks = 0;
+		$bounced = 0;
+		$spam = 0;
+		$unsubscribed = 0;
+
+		foreach ($statsDbase as $s) {
+			$idDbase =  $s->idDbase;
+			$sent +=  $s->sent;
+			$uniqueOpens +=  $s->uniqueOpens;
+			$clicks +=  $s->clicks;
+			$bounced +=  $s->bounced;
+			$spam +=  $s->spam;
+			$unsubscribed += $s->unsubscribed;
+		}
+		
+		$summaryChartData[] = array(
+			'title' => "Aperturas",
+			'value' => $uniqueOpens,
+		);
+		$summaryChartData[] = array(
+			'title' => "Rebotados",
+			'value' => $bounced,
+		);
+		$summaryChartData[] = array(
+			'title' => "No Aperturas",
+			'value' => $sent - ( $uniqueOpens + $bounced ),
+		);
+
+		$stat->idDbase = $dbase->idDbase;
+		$stat->sent = $sent;
+		$stat->uniqueOpens = $uniqueOpens;
+		$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
+		$stat->clicks = $clicks;
+		$stat->bounced = $bounced;
+		$stat->percentageBounced = round(($bounced*100)/$sent);
+		$stat->spam = $spam;
+		$stat->percentageSpam = round(($spam*100)/$sent);
+		$stat->unsubscribed = $unsubscribed;
+		$stat->percentageUnsubscribed = round(($unsubscribed*100)/$sent);
+
+		$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
+					
+		$allDbs = Dbase::find(array(
+			'conditions' => 'idAccount = ?1 AND idDbase != ?2',
+			'bind' => array(1 => $account->idAccount, 2 => $dbase->idDbase)
+		));
+		
+		$dbaseCompare = array();
+		foreach ($allDbs as $db) {
+			$objfc = new stdClass();
+			$objfc->id = $db->idDbase;
+			$objfc->name = $db->name;
+			$dbaseCompare[] = $objfc;				
+		}
+		
+		$response['summaryChartData'] = $summaryChartData;
+		$response['statisticsData'] = $stat;
+		$response['compareDbase'] = $dbaseCompare;
+		
+		return $response;
+	}
+	
 	public function findMailOpenStats($idMail)
 	{
 		$opens = array();
@@ -155,258 +307,6 @@ class StatisticsWrapper extends BaseWrapper
 		
 		return array('drilldownopen' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
-	
-	
-	public function findMailOpenCompareStats($idMail, $idMailCompare)
-	{
-		$opens = array();
-		$h1 = 1380657600;
-		$v1 = 3000;
-		$v2 = 2900;
-		for ($i = 0; $i < 1800; $i++) {
-			$value = rand($v1, $v2);
-			if($i == 20 || $i == 100 || $i == 150) {
-				$value = 0;
-			}
-			if($i < 250) {
-				$values[0] = $value;
-				$values[1] = 0;
-			}
-			else {
-				$values[0] = 0;
-				$values[1] = $value;
-			}
-			$opens[] = array(
-				'title' =>$h1,
-				'value' => json_encode($values)
-				);
-			
-			$v1 = $v1 - 1;
-			$v2 = $v2 - 1;
-			$h1+=3600;
-		}
-		
-		$valueType[0] = 'CorreoOpen1';
-		$valueType[1] = 'CorreoOpen2';
-		
-		$info[] = array(
-			'amount' => 2,
-			'value' => $valueType,
-		);
-		
-		$summary[0] = array ('name' => 'CorreoOpen1', 'quantity' => 56, 'percent' => 99);
-		$summary[1] = array ('name' => 'CorreoOpen2', 'quantity' => 1, 'percent' => 2);
-		
-		$statistics[] = array(
-			'id' => $idMailCompare,
-			'statistics' => json_encode($opens),
-			'multvalchart' => json_encode($info),
-			'summary' => json_encode($summary),
-		);
-		
-		return array('compareopens' => $statistics);
-	}
-	
-	public function findMailClickCompareStats($idMail, $idMailCompare)
-	{
-		$clicks = array();
-		$h1 = 1380657600;
-		$v1 = 3000;
-		$v2 = 2900;
-		for ($i = 0; $i < 1800; $i++) {
-			$value = rand($v1, $v2);
-			if($i == 20 || $i == 100 || $i == 150) {
-				$value = 0;
-			}
-			if($i < 1050) {
-				$values[0] = $value;
-				$values[1] = 0;
-			}
-			else {
-				$values[0] = 0;
-				$values[1] = $value;
-			}
-			$clicks[] = array(
-				'title' =>$h1,
-				'value' => json_encode($values)
-				);
-			
-			$v1 = $v1 - 1;
-			$v2 = $v2 - 1;
-			$h1+=3600;
-		}
-		
-		$valueType[0] = 'CorreoClick1';
-		$valueType[1] = 'CorreoClick2';
-		
-		$info[] = array(
-			'amount' => 2,
-			'value' => $valueType,
-		);
-		
-		$summary[0] = array ('name' => 'CorreoClick1', 'quantity' => 0, 'percent' => 0);
-		$summary[1] = array ('name' => 'CorreoClick2', 'quantity' => 20, 'percent' => 13);
-		
-		$statistics[] = array(
-			'id' => $idMailCompare,
-			'statistics' => json_encode($clicks),
-			'multvalchart' => json_encode($info),
-			'summary' => json_encode($summary),
-		);
-	
-		return array('compareclicks' => $statistics);
-	}
-	
-	public function findMailUnsubscribedCompareStats($idMail, $idMailCompare)
-	{
-		$clicks = array();
-		$h1 = 1380657600;
-		$v1 = 3000;
-		$v2 = 2900;
-		for ($i = 0; $i < 1800; $i++) {
-			$value = rand($v1, $v2);
-			if($i == 20 || $i == 100 || $i == 150) {
-				$value = 0;
-			}
-			if($i < 1750) {
-				$values[0] = $value;
-				$values[1] = 0;
-			}
-			else {
-				$values[0] = 0;
-				$values[1] = $value;
-			}
-			$clicks[] = array(
-				'title' =>$h1,
-				'value' => json_encode($values)
-				);
-			
-			$v1 = $v1 - 1;
-			$v2 = $v2 - 1;
-			$h1+=3600;
-		}
-		
-		$valueType[0] = 'CorreoUns1';
-		$valueType[1] = 'CorreoUns2';
-		
-		$info[] = array(
-			'amount' => 2,
-			'value' => $valueType,
-		);
-		
-		$summary[0] = array ('name' => 'CorreoUns1', 'quantity' => 1, 'percent' => 10);
-		$summary[1] = array ('name' => 'CorreoUns2', 'quantity' => 1, 'percent' => 1);
-		
-		$statistics[] = array(
-			'id' => $idMailCompare,
-			'statistics' => json_encode($clicks),
-			'multvalchart' => json_encode($info),
-			'summary' => json_encode($summary),
-		);
-		
-		return array('compareunsubscribeds' => $statistics);
-	}
-	
-	public function findMailBouncedCompareStats($idMail, $idMailCompare)
-	{
-		$clicks = array();
-		$h1 = 1380657600;
-		$v1 = 3000;
-		$v2 = 2900;
-		for ($i = 0; $i < 1800; $i++) {
-			$value = rand($v1, $v2);
-			if($i == 20 || $i == 100 || $i == 150) {
-				$value = 0;
-			}
-			if($i < 850) {
-				$values[0] = $value;
-				$values[1] = 0;
-			}
-			else {
-				$values[0] = 0;
-				$values[1] = $value;
-			}
-			$clicks[] = array(
-				'title' =>$h1,
-				'value' => json_encode($values)
-				);
-			
-			$v1 = $v1 - 1;
-			$v2 = $v2 - 1;
-			$h1+=3600;
-		}
-		
-		$valueType[0] = 'CorreoBounced1';
-		$valueType[1] = 'CorreoBounced2';
-		
-		$info[] = array(
-			'amount' => 2,
-			'value' => $valueType,
-		);
-		
-		$summary[0] = array ('name' => 'CorreoBounced1', 'quantity' => 300, 'percent' => 100);
-		$summary[1] = array ('name' => 'CorreoBounced2', 'quantity' => 2, 'percent' => 1);
-		
-		$statistics[] = array(
-			'id' => $idMailCompare,
-			'statistics' => json_encode($clicks),
-			'multvalchart' => json_encode($info),
-			'summary' => json_encode($summary),
-		);
-		
-		return array('comparebounceds' => $statistics);
-	}
-	
-	public function findMailSpamCompareStats($idMail, $idMailCompare)
-	{
-		$clicks = array();
-		$h1 = 1380657600;
-		$v1 = 3000;
-		$v2 = 2900;
-		for ($i = 0; $i < 1800; $i++) {
-			$value = rand($v1, $v2);
-			if($i == 20 || $i == 100 || $i == 150) {
-				$value = 0;
-			}
-			if($i < 25) {
-				$values[0] = $value;
-				$values[1] = 0;
-			}
-			else {
-				$values[0] = 0;
-				$values[1] = $value;
-			}
-			$clicks[] = array(
-				'title' =>$h1,
-				'value' => json_encode($values)
-				);
-			
-			$v1 = $v1 - 1;
-			$v2 = $v2 - 1;
-			$h1+=3600;
-		}
-		
-		$valueType[0] = 'CorreoSpam1';
-		$valueType[1] = 'CorreoSpam2';
-		
-		$info[] = array(
-			'amount' => 2,
-			'value' => $valueType,
-		);
-		
-		$summary[0] = array ('name' => 'CorreoSpam1', 'quantity' => 232, 'percent' => 20);
-		$summary[1] = array ('name' => 'CorreoSpam2', 'quantity' => 70, 'percent' => 100);
-		
-		$statistics[] = array(
-			'id' => $idMailCompare,
-			'statistics' => json_encode($clicks),
-			'multvalchart' => json_encode($info),
-			'summary' => json_encode($summary),
-		);
-		
-		return array('comparespams' => $statistics);
-	}
-	
 	
 	public function findMailClickStats($idMail)
 	{
@@ -745,175 +645,5 @@ class StatisticsWrapper extends BaseWrapper
 		$this->pager->setRowsInCurrentPage(count($bouncedcontact));
 		
 		return array('drilldownbounced' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
-	}
-	
-	public function findDbaseOpenStats($idDbase)
-	{
-		$opens[] = array(
-			'title' =>'Enero',
-			'value' => 20
-		);
-		$opens[] = array(
-			'title' =>'Febrero',
-			'value' => 30
-		);
-		$opens[] = array(
-			'title' =>'Marzo',
-			'value' => 50
-		);
-		
-		$opencontact[] = array(
-			'id' => 100,
-			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
-			'date' => date('Y-m-d', 1386687891),
-			'os' => 'Ubuntu'
-		);
-		
-		$opencontact[] = array(
-			'id' => 145,
-			'email' => 'recipient00002@test002.local.discardallmail.drh.net',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
-		);
-		
-		$opencontact[] = array(
-			'id' => 161,
-			'email' => 'recipient00003@test003.local.discardallmail.drh.net',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Mac'
-		);
-		
-		$response['statistics'] = $opens;
-		$response['details'] = $opencontact;
-			
-		return $response;
-	}
-	
-	public function findDbaseClickStats($idDbase)
-	{
-		$clicks[] = array(
-			'title' =>'Julio',
-			'value' => 15
-		);
-		$clicks[] = array(
-			'title' =>'Agosto',
-			'value' => 45
-		);
-		$clicks[] = array(
-			'title' =>'Septiembre',
-			'value' => 40
-		);
-		
-		$clickcontact[] = array(
-			'id' => 100,
-			'email' => 'otrocorreo@otro.correo',
-			'date' => date('Y-m-d', 1386687891),
-			'os' => 'Ubuntu'
-		);
-		
-		$clickcontact[] = array(
-			'id' => 145,
-			'email' => 'otrocorreo2@otro2.correo2',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
-		);
-		
-		$clickcontact[] = array(
-			'id' => 161,
-			'email' => 'otrocorreo3@otro3.correo3',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
-		);
-		
-		$response['statistics'] = $clicks;
-		$response['details'] = $clickcontact;
-			
-		return $response;
-	}
-	
-	public function findDbaseUnsubscribedStats($idDbase)
-	{
-		$unsubscribed[] = array(
-			'title' =>'Septiembre',
-			'value' => 15
-		);
-		
-		$unsubscribed[] = array(
-			'title' =>'Octubre',
-			'value' => 15
-		);
-		$unsubscribed[] = array(
-			'title' =>'Noviembre',
-			'value' => 45
-		);
-		$unsubscribed[] = array(
-			'title' =>'Diciembre',
-			'value' => 40
-		);
-		
-		$unsubscribedcontact[] = array(
-			'id' => 20,
-			'email' => 'newmail@new.mail',
-			'date' => date('Y-m-d', 1386687891),
-			'os' => 'Windows'
-		);
-		
-		$unsubscribedcontact[] = array(
-			'id' => 240,
-			'email' => 'newmail1@new1.mail1',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
-		);
-		
-		$unsubscribedcontact[] = array(
-			'id' => 57,
-			'email' => 'newmail2@new2.mail2',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
-		);
-		
-		$unsubscribedcontact[] = array(
-			'id' => 161,
-			'email' => 'otrocorreo3@otro3.correo3',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Mac'
-		);
-		
-		$response['statistics'] = $unsubscribed;
-		$response['details'] = $unsubscribedcontact;
-			
-		return $response;
-	}
-	
-	public function getOpenStats($idContactList)
-	{
-		$statsContactList = Statcontactlist::find(array(
-			'conditions' => 'idContactlist = ?1',
-			'bind' => array(1 => $idContactList)
-		));
-		
-		$stats = array();
-		$mail = array();
-		
-		foreach ($statsContactList as $s) {
-			$dt = new DateTime();
-			$dt->setTimestamp($s->sentDate);
-			$idContactlist =  $s->idContactlist;
-			$mailStat = new stdClass();
-			$mailStat->idMail = $s->idMail;
-			$mailStat->title = $dt->format('d/M/Y');
-			$mailStat->value = $s->uniqueOpens;
-			
-			$mail[] = $mailStat;
-		}
-		
-		$stats[] = array(
-			'id' => intval($idContactlist),
-			'statistics' => json_encode($mail),
-			'details' => json_encode($det['opens'] = array('lala'))
-		);
-		
-		return array('drilldownopen' => $stats) ;
-	}
-	
+	}	
 }

@@ -18,7 +18,6 @@
 			var data = new Object();
 			data.title = '{{ data['title'] }}';
 			data.value = {{ data['value'] }};
-			data.url = '{{ data['url'] }}';
 			chartData1.push(data);
 		{%endfor%}
 			
@@ -26,7 +25,6 @@
 			var data = new Object();
 			data.title = '{{ data['title'] }}';
 			data.value = {{ data['value'] }};
-			data.url = '{{ data['url'] }}';
 			chartData2.push(data);
 		{%endfor%}
 		
@@ -40,7 +38,7 @@
 		
 		function compareMails() {
 			var id = $('#mailstocompare').val();
-			window.location = "{{url('statistic/compare')}}/{{idMail1}}/" + id;
+			window.location = "{{url('statistic/comparelists')}}/{{List1.idContactlist}}/" + id;
 		}
 			
 	</script>
@@ -55,8 +53,12 @@
 		</div>
 		<div class="span3 pull-right">
 			<select id="mailstocompare">
-				{%for cmail in compareMail %}
-					<option value="{{cmail.id}}">{{cmail.name}}</option>
+				{%for clt in compareList %}
+					<option value="{{clt.id}}"
+						{%if clt.id == List2.idContactlist%}
+							selected
+						{%endif%}
+					>{{clt.name}}</option>
 				{%endfor%}
 			</select>
 		</div>
@@ -66,7 +68,7 @@
 	<div class="span6">
 		<div class="leftComponent">
 			<div class="componentname">
-				<h3>{{statisticsData1.mailName}}</h3>
+				<h3>{{List1.name}}</h3>
 			</div>
 			<div class="box">
 				<div id="summaryChart1" style="width: 400px; height: 400px;"></div>
@@ -76,7 +78,7 @@
 	<div class="span6">
 		<div class="rightComponent">
 			<div class="componentname">
-				<h3>{{statisticsData1.mailName}}</h3>
+				<h3>{{List2.name}}</h3>
 			</div>
 			<div class="box">
 				<div id="summaryChart2" style="width: 400px; height: 400px;"></div>
@@ -89,12 +91,12 @@
 				<tr>
 					<td>
 						<div class="optiontotal pull-right">
-							{{statisticsData1.opens}}
+							{{statisticsData1.uniqueOpens}}
 						</div>
 					</td>
 					<td>
 						<div class="openscomponent optionpercent pull-right">
-							{{statisticsData1.statopens}}%
+							{{statisticsData1.percentageUniqueOpens}}%
 						</div>
 					</td>
 					<td>
@@ -104,12 +106,12 @@
 					</td>
 					<td>
 						<div class="openscomponent optionpercent pull-left">
-							{{statisticsData2.statopens}}%
+							{{statisticsData2.percentageUniqueOpens}}%
 						</div>
 					</td>
 					<td>
 						<div class="optiontotal pull-left">
-							{{statisticsData2.opens}}
+							{{statisticsData2.uniqueOpens}}
 						</div>
 					</td>
 				</tr>
@@ -121,7 +123,7 @@
 					</td>
 					<td>
 						<div class="clickscomponent optionpercent pull-right">
-							{{statisticsData1.statclicks}}%
+							{#{{statisticsData1.statclicks}}%#}0%
 						</div>
 					</td>
 					<td>
@@ -131,7 +133,7 @@
 					</td>
 					<td>
 						<div class="clickscomponent optionpercent pull-left">
-							{{statisticsData2.statclicks}}%
+							{#{{statisticsData2.statclicks}}%#}0%
 						</div>
 					</td>
 					<td>
@@ -148,7 +150,7 @@
 					</td>
 					<td>
 						<div class="unsubscribedcomponent optionpercent pull-right">
-							{{statisticsData1.statunsubscribed}}%
+							{{statisticsData1.percentageUnsubscribed}}%
 						</div>
 					</td>
 					<td>
@@ -158,7 +160,7 @@
 					</td>
 					<td>
 						<div class="unsubscribedcomponent optionpercent pull-left">
-							{{statisticsData2.statunsubscribed}}%
+							{{statisticsData2.percentageUnsubscribed}}%
 						</div>
 					</td>
 					<td>
@@ -175,7 +177,7 @@
 					</td>
 					<td>
 						<div class="bouncedcomponent optionpercent pull-right">
-							{{statisticsData1.statbounced}}%
+							{{statisticsData1.percentageSpam}}%
 						</div>
 					</td>
 					<td>
@@ -185,7 +187,7 @@
 					</td>
 					<td>
 						<div class="bouncedcomponent optionpercent pull-left">
-							{{statisticsData2.statbounced}}%
+							{{statisticsData2.percentageSpam}}%
 						</div>
 					</td>
 					<td>

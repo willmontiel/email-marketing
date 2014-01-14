@@ -62,6 +62,11 @@
 		<script type="text/x-handlebars">
 			<div class="row-fluid">
 				<div class="span12">
+					<h3>{{statisticsData.mailName}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span6">
 					<table class="table" style="border: 0px !important;" >
 						<thead></thead>
 						<tbody>
@@ -100,6 +105,8 @@
 										</div>	
 									</div>
 								</td>
+							</tr>
+							<tr>
 								<td>
 									<div class="box">
 										<div class="box-section news with-icons">
@@ -133,32 +140,48 @@
 									</div>
 								</td>
 							</tr>
+							<tr>
+								<td>
+									<div class="box">
+										<div class="box-section news with-icons">
+											<label class="avatar-spam"><i class="icon-warning-sign icon-3x"></i></label>
+											<div class="news-time">
+											  <span>{{statisticsData.statspam}}%</span>
+											</div>
+											<div class="news-content">
+												<label class="label-spam">{{statisticsData.spam|numberf}}</label>
+												<div class="news-text">
+													Reportes de Spam
+												</div>
+											</div>
+										</div>	
+									</div>
+								</td>
+							</tr>
 						</tbody>
 					</table>
+					<div class="span4">
+						{{ '{{view Ember.Select
+							class="select"
+							contentBinding="App.mails"
+							optionValuePath="content.id"
+							optionLabelPath="content.name"
+							valueBinding="App.mailCompare"}}'
+						}}
+					</div>
+					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
 				</div>
-			</div>
-			<div class="row-fluid">
-				<div class="span12">
-					<h3>{{statisticsData.mailName}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
-					<label class="label-spam">
-						{{'{{#linkTo "drilldown.spam" href=false}}<span style="text-decoration: underline; color: #d12929;" onClick="autoScroll()"> Reporte de spam</span>{{/linkTo}}'}}
-						<br><br>
-						<div class="span3">
-							{{ '{{view Ember.Select
-								class="select"
-								contentBinding="App.mails"
-								optionValuePath="content.id"
-								optionLabelPath="content.name"
-								valueBinding="App.mailCompare"}}'
-							}}
-						</div>
-						<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-					</label>
+			{#</div>
+			<div class="row-fluid">#}
+				<div class="span6">
+					<div class="box">
+						<div id="summaryChart" style="width: 640px; height: 400px;"></div>
+					</div>
 				</div>
 			</div>
 			<div class="row-fluid">
 				<div class="span6">
-					<div id="summaryChart" style="width: 640px; height: 400px;"></div>
+					{#<div id="summaryChart" style="width: 640px; height: 400px;"></div>#}
 				</div>
 			</div>
 			<div class="row-fluid">

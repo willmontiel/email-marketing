@@ -37,48 +37,20 @@ class StatisticController extends ControllerBase
 		));
 		
 		if ($dbase) {
-			$statsDbase = Statdbase::find(array(
-				'conditions' => 'idDbase = ?1',
-				'bind' => array(1 => $dbase->idDbase)
-			));
+			
+			$statWrapper = new StatisticsWrapper();
+			$statWrapper->setAccount($this->user->account);
+			$statistics = $statWrapper->showDbaseStatistics($dbase, $this->user->account);
 
-			if (count($statsDbase) !== 0) {
-				$dbases = Dbase::findByIdAccount($account->idAccount);
-				
-				$stat = new stdClass();
-
-				foreach ($statsDbase as $s) {
-					$idDbase =  $s->idDbase;
-					$sent +=  $s->sent;
-					$uniqueOpens +=  $s->uniqueOpens;
-					$clicks +=  $s->clicks;
-					$bounced +=  $s->bounced;
-					$spam +=  $s->spam;
-					$unsubscribed += $s->unsubscribed;
-				}
-
-				$this->logger->log("Sent: " . $sent);
-				$stat->idDbase = $idDbase;
-				$stat->sent = $sent;
-				$stat->uniqueOpens = $uniqueOpens;
-				$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
-				$stat->clicks = $clicks;
-				$stat->bounced = $bounced;
-				$stat->percentageBounced = round(($bounced*100)/$sent);
-				$stat->spam = $spam;
-				$stat->percentageSpam = round(($spam*100)/$sent);
-				$stat->unsubscribed = $unsubscribed;
-				$stat->percentageUnsubscribed = round(($unsubscribed*100)/$sent);
-
-				$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
-
-				$this->view->setVar('stat', $stat);
+			if($statistics) {
+				$this->view->setVar('stat', $statistics['statisticsData']);
+				$this->view->setVar('summaryChartData', $statistics['summaryChartData']);
+				$this->view->setVar('compareDbase', $statistics['compareDbase']);
 				$this->view->setVar('dbase', $dbase);
-				$this->view->setVar('dbases', $dbases);
 			}
 			else {
-				$this->flashSession->warning("No hay estadisticas para base de datos seleccionada");
-				return $this->response->redirect("dbase/" . $idDbase);
+				$this->flashSession->warning("No hay estadisticas para la lista de contactos seleccionada");
+				return $this->response->redirect("contactlist#/lists");
 			}
 		}
 		else {
@@ -98,40 +70,14 @@ class StatisticController extends ControllerBase
 			
 			if ($dbase->idAccount == $this->user->account->idAccount) {
 				
-				$statsContactList = Statcontactlist::find(array(
-					'conditions' => 'idContactlist = ?1',
-					'bind' => array(1 => $idContactList)
-				));
+				$statWrapper = new StatisticsWrapper();
+				$statWrapper->setAccount($this->user->account);
+				$statistics = $statWrapper->showContactlistStatistics($contactList, $dbase);
 				
-				if (count($statsContactList) !== 0) {
-					$stat = new stdClass();
-
-					foreach ($statsContactList as $s) {
-						$idContactlist =  $s->idContactlist;
-						$sent +=  $s->sent;
-						$uniqueOpens +=  $s->uniqueOpens;
-						$clicks +=  $s->clicks;
-						$bounced +=  $s->bounced;
-						$spam +=  $s->spam;
-						$unsubscribed += $s->unsubscribed;
-					}
-
-					$this->logger->log("Sent: " . $sent);
-					$stat->idContactlist = $idContactlist;
-					$stat->sent = $sent;
-					$stat->uniqueOpens = $uniqueOpens;
-					$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
-					$stat->clicks = $clicks;
-					$stat->bounced = $bounced;
-					$stat->percentageBounced = round(($bounced*100)/$sent);
-					$stat->spam = $spam;
-					$stat->percentageSpam = round(($spam*100)/$sent);
-					$stat->unsubscribed = $unsubscribed;
-					$stat->percentageUnsubscribed = round(($unsubscribed*100)/$sent);
-
-					$stat->undelivered = ($sent-$stat->percentageUniqueOpens);
-
-					$this->view->setVar('stat', $stat);
+				if($statistics) {
+					$this->view->setVar('stat', $statistics['statisticsData']);
+					$this->view->setVar('summaryChartData', $statistics['summaryChartData']);
+					$this->view->setVar('compareList', $statistics['compareList']);
 					$this->view->setVar('contactList', $contactList);
 				}
 				else {
@@ -217,7 +163,44 @@ class StatisticController extends ControllerBase
 		else {
 			$this->response->redirect('error');
 		}
+	}
+	
+	public function comparelistsAction($idList, $idListCompare) {
+		$log = $this->logger;
 		
+		$contactList1 = Contactlist::findFirst(array(
+			'conditions' => 'idContactlist = ?1',
+			'bind' => array(1 => $idList)
+		));
+		$contactList2 = Contactlist::findFirst(array(
+			'conditions' => 'idContactlist = ?1',
+			'bind' => array(1 => $idListCompare)
+		));
 		
+		$dbase = Dbase::findFirstByIdDbase($contactList1->idDbase);
+
+		if($dbase && $contactList1 && $contactList2) {
+			$statWrapper = new StatisticsWrapper();
+			$statWrapper->setAccount($this->user->account);
+			$listStat1 = $statWrapper->showContactlistStatistics($contactList1, $dbase);
+
+			$listStat2 = $statWrapper->showContactlistStatistics($contactList2, $dbase);
+
+			if($listStat1 && $listStat2) {
+				$this->view->setVar("List1", $contactList1);
+				$this->view->setVar("summaryChartData1", $listStat1['summaryChartData']);
+				$this->view->setVar("statisticsData1", $listStat1['statisticsData']);
+				$this->view->setVar("List2", $contactList2);
+				$this->view->setVar("summaryChartData2", $listStat2['summaryChartData']);
+				$this->view->setVar("statisticsData2", $listStat2['statisticsData']);
+				$this->view->setVar("compareList", $listStat1['compareList']);
+			}
+			else {
+				$this->response->redirect('error');
+			}
+		}
+		else {
+			$this->response->redirect('error');
+		}
 	}
 }
