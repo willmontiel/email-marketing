@@ -46,7 +46,7 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function(response) {
-				win = open("", "DisplayWindow", "toolbar=0, titlebar=yes , status=1, directories=yes, menubar=0, location=yes, directories=yes, width=550, height=650, left=1, top=0");
+				win = open("", "", "toolbar=0, titlebar=yes , status=1, directories=yes, menubar=0, location=yes, directories=yes, width=550, height=650, left=1, top=0");
 				win.document.write("" + response.response + "");
 			}
 		});
