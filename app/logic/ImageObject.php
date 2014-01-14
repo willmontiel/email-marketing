@@ -39,7 +39,7 @@ class ImageObject
 	 * @param string $path
 	 * @param string $name
 	 */
-	public function createFromImage($path, $name)
+	public function createImageFromFile($path, $name)
 	{
 		$this->ext = pathinfo($name, PATHINFO_EXTENSION);
 		
@@ -68,7 +68,7 @@ class ImageObject
 	 * @param int $green
 	 * @param int $blue
 	 */
-	public function resizeImage($w, $h, $red = null, $green = null, $blue = null)
+	public function resizeImage($w, $h, $color = null)
 	{
 		$width = imagesx ($this->img);
 		$height =imagesy($this->img);
@@ -77,12 +77,13 @@ class ImageObject
 		
 		$this->newImg = imagecreatetruecolor($w ,$h);
 		
-		if ($red == null || $green == null || $blue == null) {
+		if ($color == null) {
 			$transparent = imagecolorallocate($this->newImg, 0, 0, 0);
 			imagecolortransparent($this->newImg, $transparent);
 		}
 		else {
-			imagecolorallocate($this->newImg, $red, $green, $blue);
+			$rgb = $this->convertFromHexToRgbColor($color);
+			imagecolorallocate($this->newImg, $rgb->red, $rgb->green, $rgb->blue);
 		}
 		
 		ImageCopyResized($this->newImg, $this->img, $proportion['x'], $proportion['y'], 0, 0, $proportion['newWidth'], $proportion['newHeight'], $width, $height);	
@@ -118,6 +119,18 @@ class ImageObject
 		return $newProportion;
 	}
 	
+	protected function convertFromHexToRgbColor($color)
+	{
+		list($red, $green, $blue) = sscanf($color, "#%02x%02x%02x");
+	
+		$rgb = new stdClass();
+		$rgb->red = $red;
+		$rgb->green = $green;
+		$rgb->blue = $blue;
+		
+		return  $rgb;
+	}
+
 	/**
 	 * This function returns a base64 processed image
 	 * @return string
@@ -162,7 +175,7 @@ class ImageObject
 	 * @return type
 	 * @throws InvalidArgumentException
 	 */
-	public function getImage($type, $path)
+	public function saveImage($type, $path)
 	{
 		switch ($type) {
 			case 'png':
@@ -184,5 +197,19 @@ class ImageObject
 		}	
 		
 		return $this->path;
+	}
+	
+	/**
+	 * Moves a image from site to another site. Recieves:
+	 * the path where the image is, and the path where image will be moved
+	 * @param string $tmp_dir
+	 * @param string $dir
+	 * @throws InvalidArgumentException
+	 */
+	public function moveImageFromSiteToAnother ($tmp_dir, $dir) 
+	{
+		if (!move_uploaded_file($tmp_dir, $dir)){ 
+			throw new InvalidArgumentException('Image could not be uploaded on the server');
+		}
 	}
 }

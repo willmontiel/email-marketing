@@ -28,11 +28,22 @@ class AssetObj
 			$this->validateFile($name, $size);
 			$this->saveAssetInDb($name, $size, $type, $tmp_dir);
 			
-			$image = new Image($this->account);
-			$dirImage = $image->saveImage($this->asset, $name, $tmp_dir);
+			$dir = $this->assetsrv->dir . $this->account->idAccount . '/images/' ;
+		
+			if (!file_exists($dir)) {
+				mkdir($dir, 0777, true);
+			}
+
+			$ext = pathinfo($name, PATHINFO_EXTENSION);
+
+			$dir1 = $dir . $this->asset->idAsset . '.' .$ext;
+			$dir2 = $dir . $this->asset->idAsset . '_thumb.png';
 			
-			$thumbnail = new Thumbnail($this->account);
-			$thumbnail->createThumbnail($this->asset, $dirImage, $name);
+			$imageObj = new ImageObject();
+			$imageObj->moveImageFromSiteToAnother($tmp_dir, $dir1);
+			$imageObj->createImageFromFile($dir1, $name);
+			$imageObj->resizeImage(100 ,74);
+			$imageObj->saveImage('png', $dir2);
 		}
 		catch (InvalidArgumentException $e) {
 			throw new InvalidArgumentException('we have a error...');
@@ -57,9 +68,9 @@ class AssetObj
 			$dir .= $this->asset->idAsset . '_thumb.png';
 			
 			$imageObj = new ImageObject();
-			$imageObj->createFromImage($dirImage, $name);
+			$imageObj->createImageFromFile($dirImage, $name);
 			$imageObj->resizeImage(100 ,74);
-			$imageObj->getImage('png', $dir);
+			$imageObj->saveImage('png', $dir);
 		}
 		catch (InvalidArgumentException $e) {
 			throw new InvalidArgumentException('we have a error...');
