@@ -97,7 +97,7 @@ class AssetObj
 	}
 	
 	/**
-	 * Funcion que guarda un información de un asset en las base de datos y crea un objeto asset
+	 * Funcion que guarda información de un asset en la base de datos 
 	 * @param string $name nombre con extensión del archivo
 	 * @param int $size peso del archivo
 	 * @param string $type tipo mime del archivo

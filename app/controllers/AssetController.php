@@ -16,7 +16,7 @@ class AssetController extends ControllerBase
 		else if (empty($_FILES['file']['name'])) {
 			return $this->setJsonResponse(
 					array(
-						'error' => 'No ha enviado ningún archivo o ha enviado un archivo no soportado, por favor verifique la información'
+						'error' => 'No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información'
 						)
 					, 400 , 'Archivo vacio o incorrecto');
 		}
@@ -33,8 +33,8 @@ class AssetController extends ControllerBase
 			catch (InvalidArgumentException $e) {
 				return $this->setJsonResponse(
 					array(
-						'error' => 'Ha ocurrido un error mientras se cargaba la imágen, por favor asegurese
-									de que el archivo que intenta subir realmente sea una imágen (jpeg, jpg, gif, png)
+						'error' => 'Ha ocurrido un error mientras se cargaba la imagen, por favor asegurese
+									de que el archivo que intenta subir realmente sea una imagen (jpeg, jpg, gif, png)
 									y tenga un tamaño de archivo menor a 10 MB'
 						)
 					, 400 , 'Error en archivo!');
@@ -55,7 +55,7 @@ class AssetController extends ControllerBase
 	{
 		$account = $this->user->account;
 		
-		$phql = "SELECT SUM(asset.fileSize) cnt FROM asset WHERE asset.idAccount = :idAccount:";
+		$phql = "SELECT SUM(Asset.fileSize) cnt FROM Asset WHERE Asset.idAccount = :idAccount:";
 		$result = $this->modelsManager->executeQuery($phql, array('idAccount' => $account->idAccount));
 		
 		$space = ($result->getFirst()->cnt / 1048576 );
