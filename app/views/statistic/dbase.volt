@@ -24,7 +24,7 @@
 		});
 		
 		function compareDbases() {
-			var id = $('#dbasetocompare').val();
+			var id = $('#dbasestocompare').val();
 			window.location = "{{url('statistic/comparedbases')}}/{{dbase.idDbase}}/" + id;
 		}
 	</script>

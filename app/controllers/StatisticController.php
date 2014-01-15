@@ -40,7 +40,7 @@ class StatisticController extends ControllerBase
 			
 			$statWrapper = new StatisticsWrapper();
 			$statWrapper->setAccount($this->user->account);
-			$statistics = $statWrapper->showDbaseStatistics($dbase, $this->user->account);
+			$statistics = $statWrapper->showDbaseStatistics($dbase);
 
 			if($statistics) {
 				$this->view->setVar('stat', $statistics['statisticsData']);
@@ -194,6 +194,45 @@ class StatisticController extends ControllerBase
 				$this->view->setVar("summaryChartData2", $listStat2['summaryChartData']);
 				$this->view->setVar("statisticsData2", $listStat2['statisticsData']);
 				$this->view->setVar("compareList", $listStat1['compareList']);
+			}
+			else {
+				$this->response->redirect('error');
+			}
+		}
+		else {
+			$this->response->redirect('error');
+		}
+	}
+	
+	public function comparedbasesAction($idDbase, $idDbaseCompare) {
+		$log = $this->logger;
+		
+		$dbase1 = Dbase::findFirst(array(
+			'conditions' => 'idDbase = ?1',
+			'bind' => array(1 => $idDbase)
+		));
+		$dbase2 = Dbase::findFirst(array(
+			'conditions' => 'idDbase = ?1',
+			'bind' => array(1 => $idDbaseCompare)
+		));
+		
+
+		if($dbase1 && $dbase2) {
+			$statWrapper = new StatisticsWrapper();
+			$statWrapper->setAccount($this->user->account);
+			$dbaseStat1 = $statWrapper->showDbaseStatistics($dbase1);
+
+			$dbaseStat2 = $statWrapper->showDbaseStatistics($dbase2);
+
+			if($dbaseStat1 && $dbaseStat2) {
+				$log->log(print_r($dbaseStat1['compareDbase'], true));
+				$this->view->setVar("dbase1", $dbase1);
+				$this->view->setVar("summaryChartData1", $dbaseStat1['summaryChartData']);
+				$this->view->setVar("statisticsData1", $dbaseStat1['statisticsData']);
+				$this->view->setVar("dbase2", $dbase2);
+				$this->view->setVar("summaryChartData2", $dbaseStat2['summaryChartData']);
+				$this->view->setVar("statisticsData2", $dbaseStat2['statisticsData']);
+				$this->view->setVar("compareDbase", $dbaseStat1['compareDbase']);
 			}
 			else {
 				$this->response->redirect('error');

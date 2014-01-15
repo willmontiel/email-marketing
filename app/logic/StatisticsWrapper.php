@@ -156,7 +156,7 @@ class StatisticsWrapper extends BaseWrapper
 		return $response;
 	}
 	
-	public function showDbaseStatistics(Dbase $dbase, Account $account)
+	public function showDbaseStatistics(Dbase $dbase)
 	{
 		$statsDbase = Statdbase::find(array(
 			'conditions' => 'idDbase = ?1',
@@ -214,7 +214,7 @@ class StatisticsWrapper extends BaseWrapper
 					
 		$allDbs = Dbase::find(array(
 			'conditions' => 'idAccount = ?1 AND idDbase != ?2',
-			'bind' => array(1 => $account->idAccount, 2 => $dbase->idDbase)
+			'bind' => array(1 => $this->account->idAccount, 2 => $dbase->idDbase)
 		));
 		
 		$dbaseCompare = array();

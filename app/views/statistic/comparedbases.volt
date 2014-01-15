@@ -36,9 +36,9 @@
 			$("select").select2();
 		});
 		
-		function compareMails() {
-			var id = $('#liststocompare').val();
-			window.location = "{{url('statistic/comparelists')}}/{{List1.idContactlist}}/" + id;
+		function compareDbases() {
+			var id = $('#dbasestocompare').val();
+			window.location = "{{url('statistic/comparedbases')}}/{{dbase1.idDbase}}/" + id;
 		}
 			
 	</script>
@@ -49,16 +49,16 @@
 <div class="row-fluid">
 	<div class="span12">
 		<div class="span2 pull-right">
-			<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
+			<button class="btn btn-blue" onclick="compareDbases()">Comparar</button>
 		</div>
 		<div class="span3 pull-right">
-			<select id="liststocompare">
-				{%for clt in compareList %}
-					<option value="{{clt.id}}"
-						{%if clt.id == List2.idContactlist%}
+			<select id="dbasestocompare">
+				{%for cdb in compareDbase %}
+					<option value="{{cdb.id}}"
+						{%if cdb.id == dbase2.idDbase%}
 							selected
 						{%endif%}
-					>{{clt.name}}</option>
+					>{{cdb.name}}</option>
 				{%endfor%}
 			</select>
 		</div>
@@ -68,7 +68,7 @@
 	<div class="span6">
 		<div class="leftComponent">
 			<div class="componentname">
-				<h3>{{List1.name}}</h3>
+				<h3>{{dbase1.name}}</h3>
 			</div>
 			<div class="box">
 				<div id="summaryChart1" style="width: 400px; height: 400px;"></div>
@@ -78,7 +78,7 @@
 	<div class="span6">
 		<div class="rightComponent">
 			<div class="componentname">
-				<h3>{{List2.name}}</h3>
+				<h3>{{dbase2.name}}</h3>
 			</div>
 			<div class="box">
 				<div id="summaryChart2" style="width: 400px; height: 400px;"></div>
