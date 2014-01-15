@@ -40,7 +40,7 @@
 		
 		function compareMails() {
 			var id = $('#mailstocompare').val();
-			window.location = "{{url('statistic/compare')}}/{{idMail1}}/" + id;
+			window.location = "{{url('statistic/comparemails')}}/{{idMail1}}/" + id;
 		}
 			
 	</script>

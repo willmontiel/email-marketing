@@ -9,7 +9,6 @@ class StatisticController extends ControllerBase
 	public function mailAction($idMail)
 	{
 		$log = $this->logger;
-		$log->log('El Id de Mail es: ' . $idMail);
 				
 		$statWrapper = new StatisticsWrapper();
 		$statWrapper->setAccount($this->user->account);
@@ -142,9 +141,8 @@ class StatisticController extends ControllerBase
 		}
 	}
 	
-	public function compareAction($idMail, $idMailCompare) {
+	public function comparemailsAction($idMail, $idMailCompare) {
 		$log = $this->logger;
-		$log->log('Los IDs son: ' . $idMail . ' y ' . $idMailCompare);
 		
 		$statWrapper = new StatisticsWrapper();
 		$statWrapper->setAccount($this->user->account);
@@ -208,12 +206,12 @@ class StatisticController extends ControllerBase
 		$log = $this->logger;
 		
 		$dbase1 = Dbase::findFirst(array(
-			'conditions' => 'idDbase = ?1',
-			'bind' => array(1 => $idDbase)
+			'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idDbase, 2 => $this->user->account->idAccount)
 		));
 		$dbase2 = Dbase::findFirst(array(
-			'conditions' => 'idDbase = ?1',
-			'bind' => array(1 => $idDbaseCompare)
+			'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idDbaseCompare, 2 => $this->user->account->idAccount)
 		));
 		
 
@@ -225,7 +223,6 @@ class StatisticController extends ControllerBase
 			$dbaseStat2 = $statWrapper->showDbaseStatistics($dbase2);
 
 			if($dbaseStat1 && $dbaseStat2) {
-				$log->log(print_r($dbaseStat1['compareDbase'], true));
 				$this->view->setVar("dbase1", $dbase1);
 				$this->view->setVar("summaryChartData1", $dbaseStat1['summaryChartData']);
 				$this->view->setVar("statisticsData1", $dbaseStat1['statisticsData']);

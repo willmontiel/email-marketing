@@ -48,7 +48,7 @@
 		});
 		
 		function compareMails() {
-			window.location = "{{url('statistic/compare')}}/{{idMail}}/" + App.mailCompare;
+			window.location = "{{url('statistic/comparemails')}}/{{idMail}}/" + App.mailCompare;
 		}
 		
 		
