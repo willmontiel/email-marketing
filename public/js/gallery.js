@@ -190,6 +190,13 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	var realmax = Math.floor(maxwidthpx);
 	
+	$('#imageslider').append($('<div class="maxwidth"><label class="checkbox"><input id="maxwidthimg" class="target" type="checkbox">Tamaño Maximo</label></div>'));
+	
+	if(t.block.width == t.widthZone || ( (t.block.typeBlock.search('text') > 0) && (t.block.width == Math.floor(t.widthZone*3/4)))) {
+		
+		$('#maxwidthimg')[0].checked = true;
+	}
+
 	var value = maxwidthpx*t.image.naturalWidth/totalWidthBlock;;
 		
 	if(t.block.displayer.hasOwnProperty('percent')) {
@@ -199,6 +206,8 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('#sliderMedia').slider({min: 10, max: realmax, value: value, step: 1})
 		.on('slide', function(ev){
+	
+		$('#maxwidthimg')[0].checked = false;
 		
 		t.block.displayer.percent = ev.value;
 			
@@ -237,6 +246,32 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('#link_to_image').on('change', function() {
 		t.block.setLinkToImage($(this).val());
+	});
+	
+	$('#maxwidthimg').on('change', function(value) {
+		if($('#maxwidthimg')[0].checked) {
+			if(t.block.typeBlock.search('text') > 0) {
+				var widthNatural = t.widthZone*3/4;
+				var heightNatural = Math.floor(t.image.naturalHeight*(t.widthZone*3/4)/t.image.naturalWidth);
+			}
+			else {
+				var widthNatural = t.widthZone;
+				var heightNatural = Math.floor(t.image.naturalHeight*t.widthZone/t.image.naturalWidth);
+			}
+		}
+		else {
+			var widthNatural = Math.floor(t.image.naturalWidth*(t.block.displayer.percent/100));
+			var heightNatural = Math.floor(t.image.naturalHeight*(t.block.displayer.percent/100));
+		}
+		
+		t.block.setTableColumn('width', widthNatural);
+
+		t.valuesHW(heightNatural, widthNatural);
+
+		t.block.setSizeImage(heightNatural, widthNatural);
+
+		t.block.changeAttrImgBlock('width', widthNatural);
+		t.block.changeAttrImgBlock('height', heightNatural);
 	});
 };
 

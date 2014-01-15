@@ -86,6 +86,110 @@
 			<table class="table table-bordered">
 				<tr>
 					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData1.statopens}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-openings">{{statisticsData1.opens|numberf}}</label>
+									<div class="news-text">
+										Aperturas
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData2.statopens}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-openings">{{statisticsData2.opens|numberf}}</label>
+									<div class="news-text">
+										Aperturas
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData1.statopens}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-clicks">{{statisticsData1.opens|numberf}}</label>
+									<div class="news-text">
+										Clics
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData2.statclicks}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-clicks">{{statisticsData2.clicks|numberf}}</label>
+									<div class="news-text">
+										Clics
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData1.statbounced}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-bounced">{{statisticsData1.bounced|numberf}}</label>
+									<div class="news-text">
+										Rebotes
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData2.statbounced}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-bounced">{{statisticsData2.bounced|numberf}}</label>
+									<div class="news-text">
+										Rebotes
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<td>
 						<div class="optiontotal pull-right">
 							{{statisticsData1.opens}}
 						</div>
