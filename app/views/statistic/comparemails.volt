@@ -40,7 +40,7 @@
 		
 		function compareMails() {
 			var id = $('#mailstocompare').val();
-			window.location = "{{url('statistic/comparemails')}}/{{idMail1}}/" + id;
+			window.location = "{{url('statistic/comparemails')}}/{{mail1.idMail}}/" + id;
 		}
 			
 	</script>
@@ -66,7 +66,7 @@
 	<div class="span6">
 		<div class="leftComponent">
 			<div class="componentname">
-				<h3>{{statisticsData1.mailName}}</h3>
+				<h3>{{mail1.name}}</h3>
 			</div>
 			<div class="box">
 				<div id="summaryChart1" style="width: 400px; height: 400px;"></div>
@@ -76,7 +76,7 @@
 	<div class="span6">
 		<div class="rightComponent">
 			<div class="componentname">
-				<h3>{{statisticsData1.mailName}}</h3>
+				<h3>{{mail2.name}}</h3>
 			</div>
 			<div class="box">
 				<div id="summaryChart2" style="width: 400px; height: 400px;"></div>

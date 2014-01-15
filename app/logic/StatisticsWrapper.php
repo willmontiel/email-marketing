@@ -1,83 +1,72 @@
 <?php
 class StatisticsWrapper extends BaseWrapper
 {
-	public function showMailStatistics($idMail)
+	public function showMailStatistics(Mail $mail)
 	{
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
-			'bind' => array(1 => $idMail, 2 => $this->account->idAccount)
+		$total = $mail->totalContacts;
+		$opens = $mail->uniqueOpens;
+		$bounced = $mail->bounced;
+		$clicks = $mail->clicks;
+		$unopened = $total -($opens + $bounced);
+		$unsubscribed = $mail->unsubscribed;
+		$spam = $mail->spam;
+
+		$summaryChartData[] = array(
+			'title' => "Aperturas",
+			'value' => $opens,
+			'url' => '#/drilldown/opens'
+		);
+		$summaryChartData[] = array(
+			'title' => "Rebotados",
+			'value' => $bounced,
+			'url' => '#/drilldown/bounced'
+		);
+		$summaryChartData[] = array(
+			'title' => "No Aperturas",
+			'value' => $unopened,
+			'url' => '#'
+		);
+
+		$statisticsData = new stdClass();
+		$statisticsData->total = $total;
+		$statisticsData->opens = $opens;
+		$statisticsData->statopens = round(( $opens / $total ) * 100 );
+		$statisticsData->clicks = $clicks;
+		$statisticsData->statclicks = round(( $clicks / $total ) * 100 );
+		$statisticsData->totalclicks = $clicks;
+		$statisticsData->stattotalclicks = round(( $clicks / $total ) * 100 );
+		$statisticsData->statCTRclicks = round(( $clicks / $opens ) * 100 );
+		$statisticsData->bounced = $bounced;
+		$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
+		$statisticsData->softbounced = 1;
+		$statisticsData->statsoftbounced = round(( $statisticsData->softbounced / $bounced ) * 100 );
+		$statisticsData->hardbounced = 1;
+		$statisticsData->stathardbounced = round(( $statisticsData->hardbounced / $bounced ) * 100 );
+		$statisticsData->otherbounced = 0;
+		$statisticsData->statotherbounced = round(( $statisticsData->otherbounced / $bounced ) * 100 );
+		$statisticsData->unsubscribed = $unsubscribed;
+		$statisticsData->statunsubscribed = round (( $unsubscribed / $total ) * 100 );
+		$statisticsData->spam = $spam;
+		$statisticsData->statspam = round(( $spam / $total ) * 100 );
+
+		$allMails = Mail::find(array(
+			'conditions' => 'idAccount = ?1 AND status = "Sent" AND idMail != ?2',
+			'bind' => array(1 => $this->account->idAccount, 2 => $mail->idMail)
 		));
-		
-		if($mail) {
-			$total = $mail->totalContacts;
-			$opens = $mail->uniqueOpens;
-			$bounced = $mail->bounced;
-			$clicks = $mail->clicks;
-			$unopened = $total -($opens + $bounced);
-			$unsubscribed = $mail->unsubscribed;
-			$spam = $mail->spam;
-			
-			$summaryChartData[] = array(
-				'title' => "Aperturas",
-				'value' => $opens,
-				'url' => '#/drilldown/opens'
-			);
-			$summaryChartData[] = array(
-				'title' => "Rebotados",
-				'value' => $bounced,
-				'url' => '#/drilldown/bounced'
-			);
-			$summaryChartData[] = array(
-				'title' => "No Aperturas",
-				'value' => $unopened,
-				'url' => '#'
-			);
-			
-			$statisticsData = new stdClass();
-			$statisticsData->mailName = $mail->name;
-			$statisticsData->total = $total;
-			$statisticsData->opens = $opens;
-			$statisticsData->statopens = round(( $opens / $total ) * 100 );
-			$statisticsData->clicks = $clicks;
-			$statisticsData->statclicks = round(( $clicks / $total ) * 100 );
-			$statisticsData->totalclicks = $clicks;
-			$statisticsData->stattotalclicks = round(( $clicks / $total ) * 100 );
-			$statisticsData->statCTRclicks = round(( $clicks / $opens ) * 100 );
-			$statisticsData->bounced = $bounced;
-			$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
-			$statisticsData->softbounced = 1;
-			$statisticsData->statsoftbounced = round(( $statisticsData->softbounced / $bounced ) * 100 );
-			$statisticsData->hardbounced = 1;
-			$statisticsData->stathardbounced = round(( $statisticsData->hardbounced / $bounced ) * 100 );
-			$statisticsData->otherbounced = 0;
-			$statisticsData->statotherbounced = round(( $statisticsData->otherbounced / $bounced ) * 100 );
-			$statisticsData->unsubscribed = $unsubscribed;
-			$statisticsData->statunsubscribed = round (( $unsubscribed / $total ) * 100 );
-			$statisticsData->spam = $spam;
-			$statisticsData->statspam = round(( $spam / $total ) * 100 );
-			
-			$allMails = Mail::find(array(
-				'conditions' => 'idAccount = ?1 AND status = "Sent" AND idMail != ?2',
-				'bind' => array(1 => $this->account->idAccount, 2 => $idMail)
-			));
-			
-			$mailCompare = array();
-			foreach ($allMails as $m) {
-				$objfc = new stdClass();
-				$objfc->id = $m->idMail;
-				$objfc->name = $m->name;
-				$mailCompare[] = $objfc;				
-			}
-			
-			$response['summaryChartData'] = $summaryChartData;
-			$response['statisticsData'] = $statisticsData;
-			$response['compareMail'] = $mailCompare;
-			
-			return $response;
+
+		$mailCompare = array();
+		foreach ($allMails as $m) {
+			$objfc = new stdClass();
+			$objfc->id = $m->idMail;
+			$objfc->name = $m->name;
+			$mailCompare[] = $objfc;				
 		}
-		else {
-			return FALSE;
-		}
+
+		$response['summaryChartData'] = $summaryChartData;
+		$response['statisticsData'] = $statisticsData;
+		$response['compareMail'] = $mailCompare;
+
+		return $response;
 	}
 	
 	public function showContactlistStatistics(Contactlist $list, Dbase $dbase)
@@ -100,7 +89,6 @@ class StatisticsWrapper extends BaseWrapper
 		$unsubscribed = 0;
 
 		foreach ($statsContactList as $s) {
-			$idContactlist =  $s->idContactlist;
 			$sent +=  $s->sent;
 			$uniqueOpens +=  $s->uniqueOpens;
 			$clicks +=  $s->clicks;
@@ -122,7 +110,7 @@ class StatisticsWrapper extends BaseWrapper
 			'value' => $sent - ( $uniqueOpens + $bounced ),
 		);
 
-		$stat->idContactlist = $idContactlist;
+		$stat->idContactlist = $list->idContactlist;
 		$stat->sent = $sent;
 		$stat->uniqueOpens = $uniqueOpens;
 		$stat->percentageUniqueOpens = round(($uniqueOpens*100)/$sent);
@@ -176,7 +164,6 @@ class StatisticsWrapper extends BaseWrapper
 		$unsubscribed = 0;
 
 		foreach ($statsDbase as $s) {
-			$idDbase =  $s->idDbase;
 			$sent +=  $s->sent;
 			$uniqueOpens +=  $s->uniqueOpens;
 			$clicks +=  $s->clicks;

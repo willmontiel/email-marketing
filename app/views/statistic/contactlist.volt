@@ -34,7 +34,7 @@
 {% block content %}
 	<div class="row-fluid">
 		<div class="span12 ">
-			<h3>{{contactList.name}} <small>{{stat.sent}} correos enviados</small></h3>
+			<h3>{{contactList.name}} <small>{{statisticsData.sent}} correos enviados</small></h3>
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -48,10 +48,10 @@
 								<div class="box-section news with-icons">
 									<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
 									<div class="news-time">
-									  <span>{{stat.percentageUniqueOpens}}%</span>
+									  <span>{{statisticsData.percentageUniqueOpens}}%</span>
 									</div>
 									<div class="news-content">
-										<label class="label-openings">{{stat.uniqueOpens|numberf}}</label>
+										<label class="label-openings">{{statisticsData.uniqueOpens|numberf}}</label>
 										<div class="news-text">
 											Aperturas
 										</div>
@@ -64,7 +64,7 @@
 								<div class="box-section news with-icons">
 									<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
 									<div class="news-content">
-										<label class="label-clicks">{{stat.clicks|numberf}}</label>
+										<label class="label-clicks">{{statisticsData.clicks|numberf}}</label>
 										<div class="news-text">
 											Clicks
 										</div>
@@ -79,10 +79,10 @@
 								<div class="box-section news with-icons">
 									<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
 									<div class="news-time">
-									  <span>{{stat.percentageUnsubscribed}}%</span>
+									  <span>{{statisticsData.percentageUnsubscribed}}%</span>
 									</div>
 									<div class="news-content">
-										<label class="label-unsubscribed">{{stat.unsubscribed|numberf}}</label>
+										<label class="label-unsubscribed">{{statisticsData.unsubscribed|numberf}}</label>
 										<div class="news-text">
 											Des-suscritos
 										</div>
@@ -95,10 +95,10 @@
 								<div class="box-section news with-icons">
 									<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
 									<div class="news-time">
-									  <span>{{stat.percentageBounced}}%</span>
+									  <span>{{statisticsData.percentageBounced}}%</span>
 									</div>
 									<div class="news-content">
-										<label class="label-bounced">{{stat.bounced|numberf}}</label>
+										<label class="label-bounced">{{statisticsData.bounced|numberf}}</label>
 										<div class="news-text">
 											Rebotes
 										</div>
@@ -113,10 +113,10 @@
 								<div class="box-section news with-icons">
 									<label class="avatar-spam"><i class="icon-warning-sign icon-3x"></i></label>
 									<div class="news-time">
-									  <span>{{stat.percentageSpam}}%</span>
+									  <span>{{statisticsData.percentageSpam}}%</span>
 									</div>
 									<div class="news-content">
-										<label class="label-spam">{{stat.spam|numberf}}</label>
+										<label class="label-spam">{{statisticsData.spam|numberf}}</label>
 										<div class="news-text">
 											Reportes de Spam
 										</div>

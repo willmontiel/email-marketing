@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlstatistic.url ~ '/mail/' ~ idMail }}';
+		var MyDbaseUrl = '{{apiurlstatistic.url ~ '/mail/' ~ mail.idMail }}';
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
@@ -48,7 +48,7 @@
 		});
 		
 		function compareMails() {
-			window.location = "{{url('statistic/comparemails')}}/{{idMail}}/" + App.mailCompare;
+			window.location = "{{url('statistic/comparemails')}}/{{mail.idMail}}/" + App.mailCompare;
 		}
 		
 		
@@ -62,7 +62,7 @@
 		<script type="text/x-handlebars">
 			<div class="row-fluid">
 				<div class="span12">
-					<h3>{{statisticsData.mailName}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
+					<h3>{{mail.name}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
 				</div>
 			</div>
 			<div class="row-fluid">
@@ -151,7 +151,7 @@
 											<div class="news-content">
 												<label class="label-spam">{{statisticsData.spam|numberf}}</label>
 												<div class="news-text">
-													Reportes de Spam
+													{{'{{#linkTo "drilldown.spam" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Reportes de Spam</span>{{/linkTo}}'}}
 												</div>
 											</div>
 										</div>	
