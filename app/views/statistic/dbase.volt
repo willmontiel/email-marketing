@@ -43,7 +43,7 @@
 				<thead></thead>
 				<tbody>
 					<tr>
-						<td>
+						<td style="width: 50%;">
 							<div class="box">
 								<div class="box-section news with-icons">
 									<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
@@ -142,7 +142,7 @@
 		</div>
 		<div class="span6">
 			<div class="box">
-				<div id="summaryChart" style="width: 600px; height: 400px;"></div>
+				<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 			</div>
 		</div>
 	</div>	

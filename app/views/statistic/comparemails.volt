@@ -18,7 +18,6 @@
 			var data = new Object();
 			data.title = '{{ data['title'] }}';
 			data.value = {{ data['value'] }};
-			data.url = '{{ data['url'] }}';
 			chartData1.push(data);
 		{%endfor%}
 			
@@ -26,7 +25,6 @@
 			var data = new Object();
 			data.title = '{{ data['title'] }}';
 			data.value = {{ data['value'] }};
-			data.url = '{{ data['url'] }}';
 			chartData2.push(data);
 		{%endfor%}
 		
@@ -69,7 +67,7 @@
 				<h3>{{mail1.name}}</h3>
 			</div>
 			<div class="box">
-				<div id="summaryChart1" style="width: 400px; height: 400px;"></div>
+				<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
 			</div>
 		</div>
 	</div>
@@ -79,7 +77,7 @@
 				<h3>{{mail2.name}}</h3>
 			</div>
 			<div class="box">
-				<div id="summaryChart2" style="width: 400px; height: 400px;"></div>
+				<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
 			</div>
 		</div>
 	</div>

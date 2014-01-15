@@ -14,17 +14,14 @@ class StatisticsWrapper extends BaseWrapper
 		$summaryChartData[] = array(
 			'title' => "Aperturas",
 			'value' => $opens,
-			'url' => '#/drilldown/opens'
 		);
 		$summaryChartData[] = array(
 			'title' => "Rebotados",
 			'value' => $bounced,
-			'url' => '#/drilldown/bounced'
 		);
 		$summaryChartData[] = array(
 			'title' => "No Aperturas",
 			'value' => $unopened,
-			'url' => '#'
 		);
 
 		$statisticsData = new stdClass();

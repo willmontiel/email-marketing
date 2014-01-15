@@ -71,7 +71,7 @@
 				<h3>{{List1.name}}</h3>
 			</div>
 			<div class="box">
-				<div id="summaryChart1" style="width: 400px; height: 400px;"></div>
+				<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
 			</div>
 		</div>
 	</div>
@@ -81,7 +81,7 @@
 				<h3>{{List2.name}}</h3>
 			</div>
 			<div class="box">
-				<div id="summaryChart2" style="width: 400px; height: 400px;"></div>
+				<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
 			</div>
 		</div>
 	</div>

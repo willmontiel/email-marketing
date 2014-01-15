@@ -153,12 +153,12 @@ class StatisticController extends ControllerBase
 		$log = $this->logger;
 		
 		$mail1 = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'conditions' => 'idMail = ?1 AND idAccount = ?2 AND status = "Sent"',
 			'bind' => array(1 => $idMail, 2 => $this->user->account->idAccount)
 		));
 		
 		$mail2 = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'conditions' => 'idMail = ?1 AND idAccount = ?2 AND status = "Sent"',
 			'bind' => array(1 => $idMailCompare, 2 => $this->user->account->idAccount)
 		));
 		

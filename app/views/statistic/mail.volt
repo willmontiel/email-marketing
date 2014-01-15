@@ -37,7 +37,6 @@
 			var data = new Object();
 			data.title = '{{ data['title'] }}';
 			data.value = {{ data['value'] }};
-			data.url = '{{ data['url'] }}';
 			chartData.push(data);
 		{%endfor%}
 		
@@ -71,7 +70,7 @@
 						<thead></thead>
 						<tbody>
 							<tr>
-								<td>
+								<td style="width: 50%;">
 									<div class="box">
 										<div class="box-section news with-icons">
 											<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>

@@ -300,8 +300,13 @@ label > table {
 	border: 1px solid transparent;
 }
 
-.leftComponent, .rightComponent {
+.leftComponent {
 	margin-left: 5%;
+}
+
+.rightComponent {
+	margin-right: 5%;
+	margin-left: 2.5%;
 }
 
 .componentname {
