@@ -124,10 +124,10 @@
 							<div class="box-section news with-icons">
 								<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
 								<div class="news-time">
-								  <span>{{statisticsData1.statopens}}%</span>
+								  <span>{{statisticsData1.statclicks}}%</span>
 								</div>
 								<div class="news-content">
-									<label class="label-clicks">{{statisticsData1.opens|numberf}}</label>
+									<label class="label-clicks">{{statisticsData1.clicks|numberf}}</label>
 									<div class="news-text">
 										Clics
 									</div>
@@ -146,6 +146,40 @@
 									<label class="label-clicks">{{statisticsData2.clicks|numberf}}</label>
 									<div class="news-text">
 										Clics
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData1.statunsubscribed}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-unsubscribed">{{statisticsData1.unsubscribed|numberf}}</label>
+									<div class="news-text">
+										Des-suscritos
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData2.statunsubscribed}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-unsubscribed">{{statisticsData2.unsubscribed|numberf}}</label>
+									<div class="news-text">
+										Des-suscritos
 									</div>
 								</div>
 							</div>	
@@ -187,7 +221,7 @@
 					</td>
 				</tr>
 			</table>
-			<table class="table table-bordered">
+			{#<table class="table table-bordered">
 				<tr>
 					<td>
 						<div class="optiontotal pull-right">
@@ -296,7 +330,7 @@
 						</div>
 					</td>
 				</tr>
-			</table>
+			</table>#}
 		</div>
 	</div>
 </div>
