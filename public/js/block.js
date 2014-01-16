@@ -12,6 +12,10 @@ function Block (parentBlock, typeBlock, contentData, htmlData) {
 		
 		this.createButtonBlock();
 	}
+	else if(typeBlock != undefined && typeBlock.search('text-boxed') > 0) {
+		
+		this.createTextBoxed();
+	}
 		
 	newRedactor();
 }
@@ -105,6 +109,14 @@ Block.prototype.persist = function() {
 		obj.fontsize = this.btnfontsize;
 		obj.fontfamily = this.btnfontfamily;
 	}
+	else if(this.typeBlock.search('text-boxed') > 0) {
+		obj.boxedcolor = this.boxedcolor;
+		obj.boxedbrcolor = this.boxedbrcolor;
+		obj.boxedbrstyle = this.boxedbrstyle;
+		obj.boxedbrwidth = this.boxedbrwidth;
+		obj.boxedbrradius = this.boxedbrradius;
+		obj.contentData = $.trim(this.contentData.html());	
+	}
 	else {
 		obj.contentData = $.trim(this.contentData.html());	
 	}
@@ -172,7 +184,7 @@ Block.prototype.unpersist = function(obj, dz) {
 		
 		this.contentData = {image: contentImage, text: contentText};
 	}
-	else if(this.typeBlock.search('text') > 0) {
+	else if(this.typeBlock.search('text') > 0) {		
 		var contentData = $('<div/>');
 		contentData = contentData.html('<div class="content-text full-content">' + obj.contentData + '</div>');
 
@@ -234,6 +246,10 @@ Block.prototype.unpersist = function(obj, dz) {
 	else if(this.typeBlock.search('button') > 0) {
 		
 		this.unpersistButton(obj);
+	}
+	else if(this.typeBlock.search('text-boxed') > 0) {
+		
+		this.unpersistTextBoxed(obj);
 	}
 };
 
@@ -477,5 +493,37 @@ Block.prototype.createButtonBlock = function() {
 	this.htmlData.on('click', function() {
 		var btn = new BtnBlock(t);
 		btn.createFields();
+	});
+};
+
+Block.prototype.createTextBoxed = function() {
+	this.boxedcolor = (this.boxedcolor != undefined) ? this.boxedcolor : '#EBEBEB';
+	this.boxedbrcolor = (this.boxedbrcolor != undefined) ? this.boxedbrcolor : '#999999';
+	this.boxedbrstyle = (this.boxedbrstyle != undefined) ? this.boxedbrstyle : 'solid';
+	this.boxedbrwidth = (this.boxedbrwidth != undefined) ? this.boxedbrwidth : 1;
+	this.boxedbrradius = (this.boxedbrradius != undefined) ? this.boxedbrradius : 0;
+	
+	var bxtxt = new BoxedTextBlock(this);
+	bxtxt.designBox();
+
+	this.htmlData.find('.edit-box-tool').on('click', function() {
+		bxtxt.activateFields();
+	});
+};
+
+Block.prototype.unpersistTextBoxed = function(obj) {
+	this.boxedcolor = obj.boxedcolor;
+	this.boxedbrcolor = obj.boxedbrcolor;
+	this.boxedbrstyle = obj.boxedbrstyle;
+	this.boxedbrwidth = obj.boxedbrwidth;
+	this.boxedbrradius = obj.boxedbrradius;
+	
+	var bxtxt = new BoxedTextBlock(this);
+	bxtxt.designBox();
+	
+	this.htmlData.find('.tools').append('<span data-toggle="modal" href="#boxedtext" class="edit-box-tool icon-pencil tool"></span>')
+	
+	this.htmlData.find('.edit-box-tool').on('click', function() {
+		bxtxt.activateFields();
 	});
 };

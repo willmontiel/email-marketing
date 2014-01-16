@@ -8,6 +8,9 @@ class HtmlBlockObj
 			case 'module-text-only':
 				$block = new BlockTextOnly();
 				break;
+			case 'module-text-boxed':
+				$block = new BlockTextBoxed();
+				break;
 			case 'module-image-only':
 				$block = new BlockImageOnly();
 				break;
