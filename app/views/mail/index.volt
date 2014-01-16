@@ -7,7 +7,7 @@
 				var e = preview.preview;
 				console.log(e);
 				$( "#preview-modal" ).empty();
-				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#preview-modal').contents().find('body').append(e);
+				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal').contents().find('body').append(e);
 			});
 		}
 	</script>

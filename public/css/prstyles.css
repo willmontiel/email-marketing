@@ -296,6 +296,8 @@ a.inactive {
 	margin-left: auto !important;
 	margin-right: auto !important;
 	left: auto !important;
+	height: 90%;
+	margin-top: -35px;
 }
 
 .align-modal-body {

@@ -49,8 +49,8 @@
 			success: function(response) {
 				//var a = response.script;
 				//var x = response.response;
-				$("#content-template").empty();
-				$('<iframe frameborder="0" width="100%" height="390px" src="{{url('mail/previewdata')}}"/>').appendTo('#content-template');
+				$("#preview-modal").empty();
+				$('<iframe frameborder="0" width="100%" height="100%" src="{{url('mail/previewdata')}}"/>').appendTo('#preview-modal');
 				//$("#my-iframe").contents().find("head").append(a);
 				//$("#my-iframe").contents().find("body").append(x);
 			}
@@ -97,17 +97,6 @@
 		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}/{{mail.idMail}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
 	<div id="preview-modal" class="modal hide fade preview-modal">
-		<div class="modal-header">
-			Previsualización de plantilla
-		</div>
-		<div class="modal-body">
-			<div id="content-template">
-				un momento...
-			</div>
-		</div>
-		<div class="modal-footer">
-			<button class="btn btn-black" data-dismiss="modal">x</button>
-		</div>
 	</div>
 	<br />
 {% endblock %}
