@@ -80,7 +80,7 @@
 													<div id="thumbnail-div-{{t['id']}}" style="height: 200px">
 														
 													</div>
-													<div class="img-info">
+													<div class="img-info-x2">
 														<p><i class="icon-ok"></i> Elegir</p>
 													</div>
 												</div>
