@@ -57,11 +57,23 @@ function createPieChart(chartData) {
 	chart.startEffect = "easeOutSine";
 	chart.innerRadius = "40%";
 	chart.startDuration = 1;
-	chart.labelRadius = 2;
+	chart.labelRadius = -35;
+	chart.labelText = "[[percents]]%";
 	chart.balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
 	// this makes the chart 3D
 	chart.depth3D = 0;
 	chart.angle = 0;
+	chart.marginLeft = -80;
+	
+	// LEGEND
+	var legend = new AmCharts.AmLegend();
+	legend.align = "center";
+	legend.markerType = "circle";
+	legend.switchType = "v";
+	legend.labelText = "[[title]]";
+	legend.markerLabelGap = 7;
+	legend.valueText = "";
+	chart.addLegend(legend);
 	
 	return chart;
 }

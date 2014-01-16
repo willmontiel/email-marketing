@@ -260,9 +260,21 @@ label > table {
 }
 
 .label-spam {
-	font-weight: 100;
+	font-size: 30px;
+	font-weight: 600;
 	color: #d12929;
-	text-align: left;
+}
+
+.avatar-spam {
+	float: left;
+	border-radius: 50%;
+	width: 45px;
+	height: 45px;
+	background: #d12929;
+	text-align: center;
+	padding: 0px;
+	margin: 0px;
+	color: white;
 }
 
 .icon-3x {
@@ -288,8 +300,13 @@ label > table {
 	border: 1px solid transparent;
 }
 
-.leftComponent, .rightComponent {
+.leftComponent {
 	margin-left: 5%;
+}
+
+.rightComponent {
+	margin-right: 5%;
+	margin-left: 2.5%;
 }
 
 .componentname {

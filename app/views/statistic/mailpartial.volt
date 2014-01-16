@@ -22,7 +22,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
-			<a href="{{url('statistic/downloadreport')}}/{{idMail}}/opens" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
+			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/opens" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
 		</div>
 	</div>
 	<br />
@@ -130,7 +130,7 @@
 			</div>
 		</div>
 		<div class="span6">
-			<a href="{{url('statistic/downloadreport')}}/{{idMail}}/clicks" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
+			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/clicks" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -200,7 +200,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6">
-			<a href="{{url('statistic/downloadreport')}}/{{idMail}}/unsubscribed" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
+			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/unsubscribed" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
 		</div>
 	</div>
 	<br />

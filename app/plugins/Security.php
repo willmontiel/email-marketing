@@ -253,7 +253,9 @@ class Security extends Plugin
 				'statistic::contactlist' => array('statistic' => array('read')),
 				'statistic::mail' => array('statistic' => array('read')),
 				'statistic::downloadreport' => array('statistic' => array('read')),
-				'statistic::compare' => array('statistic' => array('read')),
+				'statistic::comparemails' => array('statistic' => array('read')),
+				'statistic::comparelists' => array('statistic' => array('read')),
+				'statistic::comparedbases' => array('statistic' => array('read')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
