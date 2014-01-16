@@ -64,11 +64,12 @@
 		</div>
 	</div>
 </div>
+<br />
 <div class="row-fluid">
 	<div class="span6">
 		<div class="leftComponent">
 			<div class="componentname">
-				<h3>{{dbase1.name}}</h3>
+				<h4>{{dbase1.name}}</h4>
 			</div>
 			<div class="box">
 				<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
@@ -78,13 +79,15 @@
 	<div class="span6">
 		<div class="rightComponent">
 			<div class="componentname">
-				<h3>{{dbase2.name}}</h3>
+				<h4>{{dbase2.name}}</h4>
 			</div>
 			<div class="box">
 				<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
 			</div>
 		</div>
 	</div>
+</div>
+<div class="row-fluid">
 	<div class="offset3 span6">
 		<div class="componentsummary">
 			<table class="table table-bordered">

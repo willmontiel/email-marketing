@@ -1,6 +1,16 @@
 {% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	<script type="text/javascript">
+		function verPreview(id) {
+			$.post("{{url('mail/previewindex')}}/" + id, function(preview){
+				var e = preview.preview;
+				console.log(e);
+				$( "#preview-modal" ).empty();
+				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#preview-modal').contents().find('body').append(e);
+			});
+		}
+	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-envelope icon-2x"></i>Correos{% endblock %}
 {%block sectionsubtitle %}Administre sus correos{% endblock %}
@@ -57,11 +67,16 @@
 			{%for item in page.items%}
 					<tr>
 						<td class="span6">
-							<div class="preview-mail">
+							<div class="preview-mail img-wrap">
 								{% if item.previewData == null%}
 									<div class="not-available"></div>
 								{% else %}
-									<img src="data: image/png;base64, {{item.previewData}}" />
+									<a href="#preview-modal" data-toggle="modal" onClick="verPreview({{item.idMail}})">
+										<img src="data: image/png;base64, {{item.previewData}}" />
+										<div class="img-info">
+											<p><i class="icon-search"></i> Previsualizar</p>
+										</div>
+									</a>
 								{% endif %}	
 							</div>
 							<div class="box-section news with-icons">
@@ -218,6 +233,21 @@
 	  <input class="btn btn-blue" type="submit" value="Crear">
 	</div>
 		</form>
+</div>
+
+
+<div id="preview-modal" class="modal hide fade preview-modal">
+	<div class="modal-header">
+		Previsualización de correo
+	</div>
+	<div class="modal-body">
+		<div id="content-template">
+			un momento...
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-black" data-dismiss="modal">x</button>
+	</div>
 </div>
 
 <script type="text/javascript">

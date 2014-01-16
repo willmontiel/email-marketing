@@ -841,6 +841,43 @@ class MailController extends ControllerBase
 		return $this->setJsonResponse(array('status' => 'Success'), 201, 'Success');
 	}
 	
+	public function previewindexAction($idMail)
+	{
+		$account = $this->user->account;
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 and idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $account->idAccount)
+		));
+		
+		if ($mail) {
+			$content = Mailcontent::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $mail->idMail)
+			));
+			
+			if ($content) {
+				switch ($mail->type) {
+					case 'Editor':
+						$editorObj = new HtmlObj();
+						$editorObj->assignContent(json_decode($content->content));
+						$response = $editorObj->render();
+						break;
+					case 'Html':
+						$response = html_entity_decode($content->content);
+						break;			
+				}
+				return $this->setJsonResponse(array('preview' => $response));
+			}
+			else {
+				return $this->setJsonResponse(array('status' => 'error'), 401, 'Error');
+			}
+		}
+		else {
+			return $this->setJsonResponse(array('status' => 'error'), 401, 'Error');
+		}
+	}
+	
 	public function previewdataAction()
 	{
 		$htmlObj = $this->session->get('htmlObj');

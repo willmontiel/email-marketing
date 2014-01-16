@@ -97,7 +97,15 @@ class HtmlObj extends HtmlAbstract
 	public function renderObjPostfix()
 	{
 		if ($this->preview) {
-			$pr = '<script> html2canvas(document.body, { onrendered: function (c) { c.getContext("2d"); createPreviewImage(c.toDataURL("image/png"));} });</script>';
+			$pr = '<script> 
+					html2canvas(document.body, { 
+						onrendered: function (c) { 
+							c.getContext("2d");	
+							createPreviewImage(c.toDataURL("image/png"));
+						},
+						height: 700
+					});
+				   </script>';
 		}
 		else {
 			$pr = '';
