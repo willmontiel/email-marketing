@@ -46,6 +46,7 @@
 	{{ javascript_include('js/block.js') }}
 	{{ javascript_include('js/social_block.js') }}
 	{{ javascript_include('js/button_block.js') }}
+	{{ javascript_include('js/boxed_text_block.js') }}
 	{{ javascript_include('js/dropzone.js') }}
 	{{ javascript_include('js/layout.js') }}
 	{{ javascript_include('js/editor.js') }}
@@ -97,6 +98,23 @@
 						</div>
 						<div class="module-information">
 							<p>Texto</p>
+						</div>
+					</div>
+					<div class="module-container">
+						<div class="module module-text-boxed">
+							<div class="tools">
+								<div class="handle-tool icon-move tool"></div>
+								<div class="remove-tool icon-trash tool"></div>
+								<span data-toggle="modal" href="#boxedtext" class="edit-box-tool icon-pencil tool"></span>
+							</div>
+							<div class="content">
+								<div class="content-text full-content">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+								</div>
+							</div>
+						</div>
+						<div class="module-information">
+							<p>Texto en Caja</p>
 						</div>
 					</div>
 					<div class="module-container">
@@ -400,7 +418,7 @@
 						<label>Color de Fondo</label>
 						<div class='input-append color' data-color='' data-color-format='hex' id='btnbgcolor'>
 							<input id="field-btnbgcolor" type='text' class='span8' value='#556270'>
-							<span< class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+							<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
 						</div>
 					</div>
 				</div>
@@ -465,7 +483,51 @@
 		<a id="saveTemplate" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
 		<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
 	</div>
-</div>	
+</div>
+	
+<div id="boxedtext" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Editar Caja</h3>
+	</div>
+	<div class="modal-body">
+		<div class="span6">
+			<label>Color de Fondo</label>
+			<div class='input-append color' data-color='' data-color-format='hex' id='boxbgcolor'>
+				<input id="field-boxbgcolor" type='text' value='#556270' style="width: 90px; height: 30px;">
+				<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+			</div>
+		</div>
+		<div class="span6">
+			<label for="boxborder">Borde</label>
+			<label>
+				<input type="text" id="boxborderwidth" value="0"> px
+				<select id="boxborderstyle" class="span2">
+					<option value="solid" selected>Solid</option>
+					<option value="dotted">Dotted</option>
+					<option value="dashed">Dashed</option>
+					<option value="double">Double</option>
+					<option value="groove">Groove</option>
+					<option value="ridge">Ridge</option>
+					<option value="inset">Inset</option>
+					<option value="outset">Outset</option>
+				</select>
+				<div class='input-append color' data-color='' data-color-format='hex' id='boxbordercolor'>
+					<input id="field-boxbordercolor" type='text' value='#556270' style="width: 90px; height: 30px;">
+					<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+				</div>
+			</label>
+		</div>
+		<div class="span3">
+			<label for="boxradius">Borde Redondeado</label>
+			<input type="text" id="boxborderradius" value="0"> px
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a id="acceptboxtext" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
+		<a id="cancelboxtext" href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
 	
 <div id="clipsmodal" style="display: none;">
 	

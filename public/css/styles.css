@@ -59,6 +59,10 @@ table {
 	left: 16px;
 }
 
+.module-cont .module .edit-box-tool {
+	left: 32px;
+}
+
 .module-cont .module .link-tool {
 	left: 32px;
 }
@@ -160,6 +164,10 @@ table {
 
 #components .module-text-only {
 	background-image: url('../images/text.png');
+}
+
+#components .module-text-boxed {
+	background-image: url('../images/boxedtext.png');
 }
 
 #components .module-image-only {
@@ -443,4 +451,21 @@ table {
 #btnwidth, #btnheight {
 	width: 70px;
 	height: 30px;
+}
+
+#edit-area .module-text-boxed {
+	border: 1px solid #999999;
+	background-color: #EBEBEB;
+	padding-top: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+#boxborderradius, #boxborderwidth {
+	width: 55px;
+	height: 30px;
+}
+
+#boxborderstyle {
+	margin-left: 15px;
+	margin-right: 15px;
 }

@@ -81,6 +81,8 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div class="row-fluid">
 	<div class="offset3 span6">
 		<div class="componentsummary">
 			<table class="table table-bordered">
