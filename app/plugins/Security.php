@@ -227,6 +227,7 @@ class Security extends Plugin
 				'template::preview' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewmail' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewtemplate' => array('mail' => array('read', 'create', 'send')),
+				'mail::previewdata' => array('mail' => array('read', 'create', 'send')),
 				
 				//Sending processes
 				'sendingprocess::index' => array('mail' => array('read', 'create', 'send')),
