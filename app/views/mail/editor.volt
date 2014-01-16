@@ -38,6 +38,7 @@
 		
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		
+		$('#preview-modal').modal('show');
 		$.ajax({
 			url: "{{url('mail/previeweditor')}}/{{mail.idMail}}/mail",
 			type: "POST",			
@@ -46,13 +47,16 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function(response) {
-				var e = document.createElement('div');
-				e.innerHTML = response.response;
-				$( "#content-template" ).empty();
-				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(e);
+				//var a = response.script;
+				//var x = response.response;
+				$("#content-template").empty();
+				$('<iframe frameborder="0" width="100%" height="390px" src="{{url('mail/previewdata')}}"/>').appendTo('#content-template');
+				//$("#my-iframe").contents().find("head").append(a);
+				//$("#my-iframe").contents().find("body").append(x);
 			}
 		});
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
+		return false;
 	}
 	
 	function createTemplate() {
@@ -81,7 +85,7 @@
 					<button onclick="sendData('Previous')" type="button" value="Anterior" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</button>
 				</div>
 				<div class="pull-left VisualizeEditor">
-					<a href="#preview-modal" data-toggle="modal" onclick="verHTML()" class="btn btn-default">Visualizar  <i class="icon-eye-open"></i></a>
+					<a href="#preview-modal" onclick="verHTML(); return false;" class="btn btn-default">Visualizar  <i class="icon-eye-open"></i></a>
 				</div>
 				<div class="pull-left SaveTemplate">
 					<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">Guardar como Plantilla <i class="icon-picture"></i></button>
@@ -98,7 +102,7 @@
 		</div>
 		<div class="modal-body">
 			<div id="content-template">
-				
+				un momento...
 			</div>
 		</div>
 		<div class="modal-footer">

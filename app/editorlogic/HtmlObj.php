@@ -3,12 +3,14 @@ class HtmlObj extends HtmlAbstract
 {	
 	protected $preview;
 	protected $url;
+	protected $idMail;
 
 
-	public function __construct($preview = false, $id = null, $url = null) 
+	public function __construct($preview = false, $url = null, $idMail = null) 
 	{
-		$this->url = $url . '/' . $id;
 		$this->preview = $preview;
+		$this->url = $url;
+		$this->idMail = $idMail;
 		$this->log = Phalcon\DI::getDefault()->get('logger');
 	}
 	
@@ -27,20 +29,17 @@ class HtmlObj extends HtmlAbstract
 	public function renderObjPrefix()
 	{
 		$pr = '<html><head>';
-		
 		if ($this->preview) {
 			$pr .= '<title>Preview</title><script type="text/javascript" src="/emarketing/js/html2canvas.js"></script><script type="text/javascript" src="/emarketing/js/jquery-1.8.3.min.js"></script>';
-//			$id = "'mail/previewmail'";
 			$pr .= '<script>function createPreviewImage(img) {
-				console.log(img);
-				$.ajax({
-					url: "' . $this->url . '",
-					type: "POST",			
-					data: { img: img},
-					success: function(){}
-				});
-			
-			}</script>';
+						console.log(img);
+						$.ajax({
+							url: "' . $this->url . '/' . $this->idMail .'",
+							type: "POST",			
+							data: { img: img},
+							success: function(){}
+						});
+					}</script>';
 		}
 		$pr .= '</head><body>';
 		
@@ -98,7 +97,7 @@ class HtmlObj extends HtmlAbstract
 	public function renderObjPostfix()
 	{
 		if ($this->preview) {
-			$pr = '<script>html2canvas(document.body, { onrendered: function (c) { c.getContext("2d"); createPreviewImage(c.toDataURL("image/png"));} });</script>';
+			$pr = '<script> html2canvas(document.body, { onrendered: function (c) { c.getContext("2d"); createPreviewImage(c.toDataURL("image/png"));} });</script>';
 		}
 		else {
 			$pr = '';

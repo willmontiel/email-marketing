@@ -820,7 +820,7 @@ class MailController extends ControllerBase
 	public function previeweditorAction($idMail, $type)
 	{
 		$content = $this->request->getPost("editor");
-		
+		$this->session->remove('htmlObj');
 		switch ($type) {
 			case 'mail':
 				$url = $this->url->get('mail/previewmail');
@@ -834,10 +834,20 @@ class MailController extends ControllerBase
 				return $this->response->redirect('error');
 				break;
 		}
-		$editorObj = new HtmlObj(true, $idMail, $url);
+		$editorObj = new HtmlObj(true, $url, $idMail);
 		$editorObj->assignContent(json_decode($content));
 		
-		return $this->setJsonResponse(array('response' => $editorObj->render()));
+		$this->session->set('htmlObj', $editorObj->render());
+		return $this->setJsonResponse(array('status' => 'Success'), 201, 'Success');
+	}
+	
+	public function previewdataAction()
+	{
+		$htmlObj = $this->session->get('htmlObj');
+		$this->session->remove('htmlObj');
+
+		$this->view->disable();
+		return $this->response->setContent($htmlObj);
 	}
 	
 	public function previewmailAction($idMail)
@@ -847,7 +857,7 @@ class MailController extends ControllerBase
 //		$this->logger->log("Img: " . $content);
 		$imgObj = new ImageObject();
 		$imgObj->createFromBase64($content);
-		$imgObj->resizeImage(150, 200);
+		$imgObj->resizeImage(200, 250);
 		$newImg = $imgObj->getImageBase64();
 		
 		$mail = Mail::findFirst(array(
