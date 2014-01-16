@@ -23,8 +23,9 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function(response) {
-				win = open("", "", "toolbar=0, titlebar=yes , status=1, directories=yes, menubar=0, location=yes, directories=yes, width=700, height=650, left=1, top=0");
-				win.document.write("" + response.response + "");
+				var e = response.preview;
+				$( "#content-template" ).empty();
+				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(e);
 			}
 		});
 		
@@ -136,7 +137,7 @@
 					<label><input type="checkbox" name="isglobal" id="isglobal"> Plantilla Global</label>
 				</div>
 				<div class="templatePreview pull-right">
-					<button class="btn btn-default" onclick="verHTML()">Visualizar</button>
+					<a href="#preview-modal" data-toggle="modal" onClick="verHTML()"><i class="icon-search"></i> Previsualizar</a>
 				</div>
 			</div>
 		</div>
@@ -149,4 +150,15 @@
 		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
 	<br />
+	<div id="preview-modal" class="modal hide fade preview-modal">
+		<div class="modal-header">
+			Previsualización de plantilla
+		</div>
+		<div class="modal-body">
+			<div id="content-template"></div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-black" data-dismiss="modal">x</button>
+		</div>
+	</div>
 {% endblock %}

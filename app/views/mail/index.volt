@@ -5,9 +5,8 @@
 		function verPreview(id) {
 			$.post("{{url('mail/previewindex')}}/" + id, function(preview){
 				var e = preview.preview;
-				console.log(e);
-				$( "#preview-modal" ).empty();
-				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#preview-modal').contents().find('body').append(e);
+				$( "#content-template" ).empty();
+				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(e);
 			});
 		}
 	</script>
