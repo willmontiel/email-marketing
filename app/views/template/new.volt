@@ -24,8 +24,8 @@
 			},
 			success: function(response) {
 				var e = response.preview;
-				$( "#content-template" ).empty();
-				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(e);
+				$( "#preview-modal" ).empty();
+				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#preview-modal').contents().find('body').append(e);
 			}
 		});
 		
@@ -137,7 +137,7 @@
 					<label><input type="checkbox" name="isglobal" id="isglobal"> Plantilla Global</label>
 				</div>
 				<div class="templatePreview pull-right">
-					<a href="#preview-modal" data-toggle="modal" onClick="verHTML()"><i class="icon-search"></i> Previsualizar</a>
+					<a class="btn btn-default" href="#preview-modal" data-toggle="modal" onClick="verHTML()"><i class="icon-search"></i> Previsualizar</a>
 				</div>
 			</div>
 		</div>
@@ -151,14 +151,6 @@
 	</div>
 	<br />
 	<div id="preview-modal" class="modal hide fade preview-modal">
-		<div class="modal-header">
-			Previsualización de plantilla
-		</div>
-		<div class="modal-body">
-			<div id="content-template"></div>
-		</div>
-		<div class="modal-footer">
-			<button class="btn btn-black" data-dismiss="modal">x</button>
-		</div>
+		
 	</div>
 {% endblock %}
