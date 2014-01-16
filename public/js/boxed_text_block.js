@@ -38,13 +38,17 @@ BoxedTextBlock.prototype.activateEvents = function() {
 	});
 	
 	$('#boxborderwidth').on('change', function() {
-		t.block.htmlData.css('border-width', $(this).val());
-		borderwidth = $(this).val();
+		if($.isNumeric( $(this).val() )) {
+			t.block.htmlData.css('border-width', $(this).val());
+			borderwidth = $(this).val();
+		}
 	});
 	
 	$('#boxborderradius').on('change', function() {
-		t.block.htmlData.css('border-radius', $(this).val());
-		borderradius = $(this).val();
+		if($.isNumeric( $(this).val() )) {
+			t.block.htmlData.css('border-radius', $(this).val());
+			borderradius = $(this).val();
+		}
 	});
 	
 	$('#acceptboxtext').on('click', function() {

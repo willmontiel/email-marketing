@@ -497,7 +497,7 @@ Block.prototype.createButtonBlock = function() {
 };
 
 Block.prototype.createTextBoxed = function() {
-	this.boxedcolor = (this.boxedcolor != undefined) ? this.boxedcolor : '#EBEBEB';
+	this.boxedcolor = (this.boxedcolor != undefined) ? this.boxedcolor : '#ebebeb';
 	this.boxedbrcolor = (this.boxedbrcolor != undefined) ? this.boxedbrcolor : '#999999';
 	this.boxedbrstyle = (this.boxedbrstyle != undefined) ? this.boxedbrstyle : 'solid';
 	this.boxedbrwidth = (this.boxedbrwidth != undefined) ? this.boxedbrwidth : 1;
