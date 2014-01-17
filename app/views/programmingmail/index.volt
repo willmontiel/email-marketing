@@ -139,7 +139,6 @@
 		$(function() {
 			$('.ShowDialogEditScheduled').click(function() {
 				var myURL = $(this).attr('data-id');
-				console.log(myURL);
 				$("#editScheduledMail").attr('href', myURL );
 			});
 		});
