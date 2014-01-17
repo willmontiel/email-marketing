@@ -84,6 +84,8 @@
 									<div class="news-title" style="padding-left: 40px;">
 										{%if item.status == 'Sent'%}
 											<a href="{{ url('statistic/mail') }}/{{item.idMail}}">{{item.name}}</a>
+										{%elseif item.status == 'Draft'%}
+											<a href="{{ url('mail/setup') }}/{{item.idMail}}">{{item.name}}</a>
 										{%else%}
 											<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
 										{%endif%}
