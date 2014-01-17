@@ -12,6 +12,7 @@ class HtmlObj extends HtmlAbstract
 		$this->url = $url;
 		$this->idMail = $idMail;
 		$this->log = Phalcon\DI::getDefault()->get('logger');
+		$this->path = Phalcon\DI::getDefault()->get('url');
 	}
 	
 	public function assignContent($content)
@@ -30,7 +31,9 @@ class HtmlObj extends HtmlAbstract
 	{
 		$pr = '<html><head>';
 		if ($this->preview) {
-			$pr .= '<title>Preview</title><script type="text/javascript" src="/emarketing/js/html2canvas.js"></script><script type="text/javascript" src="/emarketing/js/jquery-1.8.3.min.js"></script>';
+			$pr .= '<title>Preview</title>
+						<script type="text/javascript" src="' . $this->path->get('js/html2canvas.js'). '"></script>
+						<script type="text/javascript" src="' . $this->path->get('js/jquery-1.8.3.min.js') .'"></script>';
 			$pr .= '<script>function createPreviewImage(img) {
 						console.log(img);
 						$.ajax({
