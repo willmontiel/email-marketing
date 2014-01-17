@@ -82,7 +82,11 @@
 							<div class="box-section news with-icons">
 								<div class="news-content">
 									<div class="news-title" style="padding-left: 40px;">
-										<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
+										{%if item.status == 'Sent'%}
+											<a href="{{ url('statistic/mail') }}/{{item.idMail}}">{{item.name}}</a>
+										{%else%}
+											<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
+										{%endif%}
 									</div>
 									<div class="news-text" style="padding-left: 40px;">
 										{{item.status}} <br /> 

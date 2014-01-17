@@ -135,6 +135,20 @@
 						</div>
 					</div>
 					<div class="module-container">
+						<div class="module module-button">
+							<div class="tools">
+								<div class="handle-tool icon-move tool"></div>
+								<div class="remove-tool icon-trash tool"></div>
+							</div>
+							<div class="content clearfix">
+								<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button pull-center" style="background-image:url('{{url('images')}}/btn-blue.png');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>
+							</div>
+						</div>
+						<div class="module-information">
+							<p>Botón</p>
+						</div>
+					</div>
+					<div class="module-container">
 						<div class="module module-text-image">
 							<div class="tools">
 								<div class="handle-tool icon-move tool"></div>
@@ -193,34 +207,6 @@
 						</div>
 					</div>
 					<div class="module-container">
-						<div class="module module-separator">
-							<div class="tools">
-								<div class="handle-tool icon-move tool"></div>
-								<div class="remove-tool icon-trash tool"></div>
-							</div>
-							<div class="content full-content">
-								<hr />
-							</div>
-						</div>
-						<div class="module-information">
-							<p>Separador</p>
-						</div>
-					</div>
-					<div class="module-container">
-						<div class="module module-button">
-							<div class="tools">
-								<div class="handle-tool icon-move tool"></div>
-								<div class="remove-tool icon-trash tool"></div>
-							</div>
-							<div class="content clearfix">
-								<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button pull-center" style="background-image:url('{{url('images')}}/btn-blue.png');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>
-							</div>
-						</div>
-						<div class="module-information">
-							<p>Botón</p>
-						</div>
-					</div>
-					<div class="module-container">
 						<div class="module module-social-follow">
 							<div class="tools">
 								<div class="handle-tool icon-move tool"></div>
@@ -252,6 +238,20 @@
 						</div>
 						<div class="module-information">
 							<p>Social Share</p>
+						</div>
+					</div>
+					<div class="module-container">
+						<div class="module module-separator">
+							<div class="tools">
+								<div class="handle-tool icon-move tool"></div>
+								<div class="remove-tool icon-trash tool"></div>
+							</div>
+							<div class="content full-content">
+								<hr />
+							</div>
+						</div>
+						<div class="module-information">
+							<p>Separador</p>
 						</div>
 					</div>
 				</div>
