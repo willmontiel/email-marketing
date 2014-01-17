@@ -824,21 +824,25 @@ class MailController extends ControllerBase
 		switch ($type) {
 			case 'mail':
 				$url = $this->url->get('mail/previewmail');
+				
+				$editorObj = new HtmlObj(true, $url, $idMail);
+				$editorObj->assignContent(json_decode($content));
+				$this->session->set('htmlObj', $editorObj->render());
+				
+				return $this->setJsonResponse(array('status' => 'Success'), 201, 'Success');
 				break;
 			
 			case 'template':
-				$url = $this->url->get('mail/previewtemplate');
+				$editorObj = new HtmlObj();
+				$editorObj->assignContent(json_decode($content));
+				return $this->setJsonResponse(array('preview' => $editorObj->render()));
 				break;
 			
 			default :
 				return $this->response->redirect('error');
 				break;
 		}
-		$editorObj = new HtmlObj(true, $url, $idMail);
-		$editorObj->assignContent(json_decode($content));
 		
-		$this->session->set('htmlObj', $editorObj->render());
-		return $this->setJsonResponse(array('status' => 'Success'), 201, 'Success');
 	}
 	
 	public function previewindexAction($idMail)
