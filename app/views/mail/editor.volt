@@ -50,6 +50,7 @@
 				//var a = response.script;
 				//var x = response.response;
 				$("#preview-modal").empty();
+				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
 				$('<iframe frameborder="0" width="100%" height="100%" src="{{url('mail/previewdata')}}"/>').appendTo('#preview-modal');
 				//$("#my-iframe").contents().find("head").append(a);
 				//$("#my-iframe").contents().find("body").append(x);

@@ -421,3 +421,18 @@ table.tablesorter thead tr .headerSortDown {
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
 	background-color: #f2f3f7;
 }
+
+.close-preview {
+	background-color: gray;
+	color: white;
+	border-radius: 50%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 13px;
+	padding-right: 13px;
+	border: 1px solid lightgray;
+	position: absolute;
+	margin-left: 98%;
+	margin-top: -2%;
+	cursor: pointer;
+}

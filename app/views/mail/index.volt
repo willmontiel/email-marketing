@@ -7,6 +7,7 @@
 				var e = preview.preview;
 				console.log(e);
 				$( "#preview-modal" ).empty();
+				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
 				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal').contents().find('body').append(e);
 			});
 		}
