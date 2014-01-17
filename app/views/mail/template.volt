@@ -7,8 +7,9 @@
 				var e = document.createElement('div');
 				e.innerHTML = template.template;
 				var d = e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-				$( "#content-template" ).empty();
-				$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(d);
+				$( "#preview-modal" ).empty();
+				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
+				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal').contents().find('body').append(d);
 			});
 		}
 		$(function (){
@@ -126,16 +127,5 @@
 		</div>
 	</div>
 	<div id="preview-modal" class="modal hide fade preview-modal">
-		<div class="modal-header">
-			Previsualización de plantilla
-		</div>
-		<div class="modal-body">
-			<div id="content-template">
-				
-			</div>
-		</div>
-		<div class="modal-footer">
-			<button class="btn btn-black" data-dismiss="modal">x</button>
-		</div>
 	</div>
 {% endblock %}

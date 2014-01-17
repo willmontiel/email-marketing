@@ -105,7 +105,7 @@
 							<div class="tools">
 								<div class="handle-tool icon-move tool"></div>
 								<div class="remove-tool icon-trash tool"></div>
-								<span data-toggle="modal" href="#boxedtext" class="edit-box-tool icon-pencil tool"></span>
+								<span data-toggle="modal" data-backdrop="static" href="#boxedtext" class="edit-box-tool icon-pencil tool"></span>
 							</div>
 							<div class="content">
 								<div class="content-text full-content">
@@ -487,7 +487,6 @@
 	
 <div id="boxedtext" class="modal hide fade">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		<h3>Editar Caja</h3>
 	</div>
 	<div class="modal-body">
