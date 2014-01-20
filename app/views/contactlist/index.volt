@@ -47,7 +47,7 @@
 					<ul class="nav nav-tabs nav-tabs-left">
 						{{'{{#linkTo "lists" tagName="li" href=false disabledWhen="allowContactlist"}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
 						{{'{{#linkTo "segments" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Segmentos</a>{{/linkTo}}'}}
-						{{'{{#linkTo "blockedemails" tagName="li" href=false disabledWhen="allowBlockedemail" }}<a {{bindAttr href="view.href"}}> Listas de bloqueo</a>{{/linkTo}}'}}
+						{{'{{#linkTo "blockedemails" tagName="li" href=false disabledWhen="allowBlockedemail" }}<a {{bindAttr href="view.href"}}> Lista de bloqueo</a>{{/linkTo}}'}}
 					</ul>
 					<div class="title">
 						<a href="{{url('dbase')}}" class="pull-right" title="Configuracion avanzada"><i class="icon-cog"></i></a>
