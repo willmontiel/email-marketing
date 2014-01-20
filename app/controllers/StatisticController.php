@@ -11,7 +11,7 @@ class StatisticController extends ControllerBase
 		$log = $this->logger;
 		
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'conditions' => 'idMail = ?1 AND idAccount = ?2 AND status = "Sent"',
 			'bind' => array(1 => $idMail, 2 => $this->user->account->idAccount)
 		));
 
@@ -202,7 +202,7 @@ class StatisticController extends ControllerBase
 		
 		$dbase = Dbase::findFirstByIdDbase($contactList1->idDbase);
 
-		if($dbase && $contactList1 && $contactList2) {
+		if($dbase && $contactList1 && $contactList2 && ($contactList2->idDbase == $dbase->idDbase) && ($dbase->idAccount == $this->user->account->idAccount)) {
 			$statWrapper = new StatisticsWrapper();
 			$statWrapper->setAccount($this->user->account);
 			
