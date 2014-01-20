@@ -21,10 +21,12 @@ class AdministrativeMessages
 			'bind' => array(1 => 'Recoverpass')
 		));
 		
-		$link = '<a href = "http://localhost';
+		$link = '<a href="http://localhost';
 		$link .= $url;
-		$link .= '" style = "text-decoration: underline;">';
+		$link .= '" style="text-decoration: underline;">';
 		$link .= 'Click aqui</a>';
+		
+		Phalcon\DI::getDefault()->get('logger')->log("Url: " . $link);
 		
 		if ($msg) {
 			
@@ -49,9 +51,11 @@ class AdministrativeMessages
 //		Phalcon\DI::getDefault()->get('logger')->log("Html " . $this->html);
 //		Phalcon\DI::getDefault()->get('logger')->log("To " . $this->to);
 //		Phalcon\DI::getDefault()->get('logger')->log("Text " . $this->text);
-		
+//		Phalcon\DI::getDefault()->get('logger')->log("1 ");
 		$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
+//		Phalcon\DI::getDefault()->get('logger')->log("2 ");
 		$swift = Swift_Mailer::newInstance($transport);
+//		Phalcon\DI::getDefault()->get('logger')->log("3 ");
 		
 		$message = new Swift_Message($this->subject);
 		$message->setFrom($this->from);

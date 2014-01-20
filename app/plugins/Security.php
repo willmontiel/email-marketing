@@ -94,6 +94,7 @@ class Security extends Plugin
 				'session::login' => array(),
 				'session::logout' => array(),
 				'session::recoverpass' => array(),
+				'session::edituseraccount' => array(),
 				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
@@ -308,7 +309,8 @@ class Security extends Plugin
 			'session:signin', 
 			'session:login',
 			'session:logout',
-			'session:recoverpass'
+			'session:recoverpass',
+			'session:edituseraccount'
 		);
 		
 		$controller = $dispatcher->getControllerName();

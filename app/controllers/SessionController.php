@@ -62,12 +62,13 @@ class SessionController extends \Phalcon\Mvc\Controller
 				
 				$cod = uniqid();
 				$url = $this->url->get('session/edituseraccount');
+				$url .= '/' . $cod;
 				
 				$recoverObj = new Tmprecoverpass();
 				
 				$recoverObj->idTmpRecoverPass = $cod;
 				$recoverObj->idUser = $user->idUser;
-				$recoverObj->url = $url . '/' . $cod;
+				$recoverObj->url = $url;
 				$recoverObj->date = time();
 				
 				if (!$recoverObj->save()) {
@@ -86,10 +87,61 @@ class SessionController extends \Phalcon\Mvc\Controller
 		}
 	}
 	
-	public function edituseraccountAction()
+	public function edituseraccountAction($uniq = null)
 	{
+		$this->logger->log('Uniq' . $uniq);
+		
+		$this->view->setVar('uniq', $uniq);
 		if ($this->request->isPost()) {
+			$url = Tmprecoverpass::findFirst(array(
+				'conditions' => 'idTmpRecoverPass = ?1',
+				'bind' => array(1 => $uniq)
+			));
 			
+			$time = strtotime("-30 minutes");
+			
+			if ($url && ($url->date <= $time || $url->date >= $time)) {
+				$pass = $this->request->getPost("pass");
+				$pass2 = $this->request->getPost("pass2");
+
+				if (empty($pass)||empty($pass2)){
+					$this->flashSession->error("Ha enviado campos vacíos, por favor verifique la información");
+				}
+				else if (strlen($pass) < 8 || strlen($pass) > 40) {
+					$this->flashSession->error("La contraseña es muy corta o muy larga, esta debe tener mínimo 8 y máximo 40 caracteres, por favor verifique la información");
+				}	
+				else if ($pass !== $pass2) {
+					$this->flashSession->error("Las contraseñas no coinciden, por favor verifique la información");
+				}
+				else {
+					$idUser = $this->session->get('userid');
+
+					$user = User::findFirst(array(
+						'conditions' => 'idUser = ?1',
+						'bind' => array(1 => $idUser)
+					));
+
+					$user->password = $this->security2->hash($pass);
+
+					if (!$user->save()) {
+						$this->flashSession->notice('Ha ocurrido un error, contacte con el administrador');
+						foreach ($user->getMessages() as $msg) {
+							$this->logger->log('Error while recovering user password' . $msg);
+						}
+					}
+					else {
+						$idUser = $this->session->remove('userid');
+						
+						$url->delete();
+						
+						$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
+						return $this->response->redirect('index');
+					}
+				}
+			}
+			else {
+				return $this->response->redirect('error');
+			}
 		}
 	}
 }
