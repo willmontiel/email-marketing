@@ -95,7 +95,7 @@ class Security extends Plugin
 				'session::logout' => array(),
 				'session::recoverpass' => array(),
 				'session::setnewpass' => array(),
-				'session::validaterequest' => array(),
+				'session::reset' => array(),
 				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
@@ -312,7 +312,7 @@ class Security extends Plugin
 			'session:logout',
 			'session:recoverpass',
 			'session:setnewpass',
-			'session:validaterequest',
+			'session:reset',
 			'error:index'
 		);
 		

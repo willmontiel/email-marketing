@@ -21,17 +21,11 @@ class AdministrativeMessages
 			'bind' => array(1 => 'Recoverpass')
 		));
 		
-		$link = '<a href="http://localhost';
-		$link .= $url;
-		$link .= '" style="text-decoration: underline;">';
-		$link .= 'Click aqui</a>';
-		
-		Phalcon\DI::getDefault()->get('logger')->log("Url: " . $link);
+		Phalcon\DI::getDefault()->get('logger')->log("Url: " . $url);
 		
 		if ($msg) {
-			
-			$message = str_replace('tmpurl', $link, $msg->msg);
-			$plainText = str_replace('tmpurl', $link, $msg->text);
+			$message = str_replace('tmpurl', $url, $msg->msg);
+			$plainText = str_replace('tmpurl', $url, $msg->text);
 			
 			$this->subject = $msg->subject;
 			$this->from = $msg->from;
@@ -40,22 +34,14 @@ class AdministrativeMessages
 			$this->text = $plainText;
 		}
 		else {
-			Phalcon\DI::getDefault()->get('logger')->log("There's no data!");
+			throw new InvalidArgumentException('Administrative message not found!');
 		}
 	}
 	
 	public function sendMessage()
 	{
-//		Phalcon\DI::getDefault()->get('logger')->log("Subject " . $this->subject);
-//		Phalcon\DI::getDefault()->get('logger')->log("From " . $this->from);
-//		Phalcon\DI::getDefault()->get('logger')->log("Html " . $this->html);
-//		Phalcon\DI::getDefault()->get('logger')->log("To " . $this->to);
-//		Phalcon\DI::getDefault()->get('logger')->log("Text " . $this->text);
-//		Phalcon\DI::getDefault()->get('logger')->log("1 ");
 		$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
-//		Phalcon\DI::getDefault()->get('logger')->log("2 ");
 		$swift = Swift_Mailer::newInstance($transport);
-//		Phalcon\DI::getDefault()->get('logger')->log("3 ");
 		
 		$message = new Swift_Message($this->subject);
 		$message->setFrom($this->from);
@@ -69,8 +55,7 @@ class AdministrativeMessages
 			Phalcon\DI::getDefault()->get('logger')->log('Message successfully sent!');
 		}
 		else {
-			Phalcon\DI::getDefault()->get('logger')->log('Error while sending messages');
-			Phalcon\DI::getDefault()->get('logger')->log('Failures: ' . $failures);
+			throw new InvalidArgumentException('Error while sending message: ' . $failures);
 		}
 	}
 }

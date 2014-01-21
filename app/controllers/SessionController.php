@@ -76,16 +76,26 @@ class SessionController extends \Phalcon\Mvc\Controller
 					}
 				}
 				else {
-					$message = new AdministrativeMessages();
-					$message->createRecoverpassMessage($url, $user->email);
-//					$message->sendMessage();
+					$link = '<a href="http://localhost';
+					$link .= $url;
+					$link .= '" style="text-decoration: underline;">';
+					$link .= 'Click aqui</a>';
+					
+					try {
+						$message = new AdministrativeMessages();
+						$message->createRecoverpassMessage($link, $user->email);
+						$message->sendMessage();
+					}
+					catch (InvalidArgumentException $e) {
+						$this->logger->log('Error: ' . $e->getMessage());
+					}
 				}
 				$this->flashSession->success('Se ha enviado un correo electronico con instrucciones para recuperar la contraseña');
 			}
 		}
 	}
 	
-	public function validaterequestAction($unique)
+	public function resetAction($unique)
 	{
 		$this->logger->log('0');
 		$url = Tmprecoverpass::findFirst(array(
@@ -175,9 +185,8 @@ class SessionController extends \Phalcon\Mvc\Controller
 						}
 						else {
 							$this->logger->log('8');
-
-							$url->delete();
 							$idUser = $this->session->remove('idUser');
+							$url->delete();
 							$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
 							return $this->response->redirect('index');
 						}

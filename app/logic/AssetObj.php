@@ -46,7 +46,7 @@ class AssetObj
 			$imageObj->saveImage('png', $dir2);
 		}
 		catch (InvalidArgumentException $e) {
-			throw new InvalidArgumentException('we have a error...');
+			throw new InvalidArgumentException('Error: ' . $e->getMessage());
 		}
 	}
 	
