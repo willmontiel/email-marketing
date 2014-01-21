@@ -620,6 +620,7 @@ Block.prototype.setRowWidth = function() {
 	for(var i = 0; i < this.htmlData.find('.content table tr td').length; i++) {
 		this.htmlData.find('.content table tr td').css('width', Math.floor(100/this.htmlData.find('.content table tr td').length) + '%');
 	}
+	
 
 	if(this.htmlData.find('.content-text').length === 5) {
 		this.htmlData.find('.add-column-tool').hide();
