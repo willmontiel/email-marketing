@@ -66,6 +66,16 @@ table {
 .module-cont .module .link-tool {
 	left: 32px;
 }
+
+.module-cont .module .add-column-tool {
+	left: 32px;
+}
+
+.module-cont .module .remove-column-tool {
+	left: 48px;
+	display: none;
+}
+
 /*.module-cont .module .edit-image-tool{
 	left: 32px;
 }*/
@@ -468,4 +478,8 @@ table {
 #boxborderstyle {
 	margin-left: 15px;
 	margin-right: 15px;
+}
+
+.module-text-only .redactor_box, .module-text-mult .redactor_box {
+	float: left;
 }
