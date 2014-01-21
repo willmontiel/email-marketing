@@ -13,9 +13,11 @@ use Phalcon\Mvc\Model\Validator\Uniqueness;
 class User extends Modelbase
 {
 	public $idAccount;
-
+	public $idUser;
+	
     public function initialize()
     {
+		$this->hasMany("idUser", "Tmprecoverpass", "idUser");
         $this->belongsTo("idAccount", "Account", "idAccount", array(
             "foreignKey" => true,
         ));

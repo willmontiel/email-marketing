@@ -20,14 +20,14 @@
 				<div class="box-content padded">
 					{{ form('session/login', 'id': 'sessionlogin', 'class': "separate-sections" ) }}
 					<input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
-						<label style="text-align: center;">Usuario:</label>
+						<label style="text-align: center;">Usuario: </label>
 						<div class="input-prepend">
 							<span class="add-on" href="#">
 								<i class="icon-user"></i>
 							</span>
 							{{ text_field("username", 'type': "text", 'class': "span5", 'required': "required", 'autofocus': "autofocus", 'placeholder': "Nombre de Usuario" ) }}
 						</div>
-						<label style="text-align: center;">Contraseña:</label>
+						<label style="text-align: center;">Contraseña: </label>
 						<div class="input-prepend">
 							<span class="add-on" href="#">
 								<i class="icon-key"></i>
@@ -37,6 +37,9 @@
 
 						<div>
 							{{ submit_button("Ingresar", 'class' : "btn btn-blue btn-block") }}
+						</div>
+						<div>
+							<a href="{{url('session/recoverpass')}}" style="text-decoration: underline; text-align: center;">¿Ha olvidado la contraseña?</a>
 						</div>
 					</form>
 				</div>

@@ -93,6 +93,10 @@ class Security extends Plugin
 				'session::signin' => array(),
 				'session::login' => array(),
 				'session::logout' => array(),
+				'session::recoverpass' => array(),
+				'session::setnewpass' => array(),
+				'session::validaterequest' => array(),
+				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
 				//Account controller
@@ -305,7 +309,11 @@ class Security extends Plugin
 		$this->publicurls = array(
 			'session:signin', 
 			'session:login',
-			'session:logout'
+			'session:logout',
+			'session:recoverpass',
+			'session:setnewpass',
+			'session:validaterequest',
+			'error:index'
 		);
 		
 		$controller = $dispatcher->getControllerName();
