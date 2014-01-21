@@ -72,10 +72,13 @@ table {
 }
 
 .module-cont .module .remove-column-tool {
-	left: 48px;
+	left: 64px;
 	display: none;
 }
 
+.module-cont .module .add-image-tool {
+	left: 48px;
+}
 /*.module-cont .module .edit-image-tool{
 	left: 32px;
 }*/
