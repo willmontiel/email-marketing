@@ -153,11 +153,11 @@ DropzoneArea.prototype.ondrop = function() {
 			var objblk = object.item.data('smobj');
 			
 			for(var i = 0; i < t.content.length; i++) {
-				
+
 				if(t.content[i] == objblk) {
-					
+
 					t.content.splice(i, 1);
-				
+
 				}
 			}
 			
@@ -171,7 +171,7 @@ DropzoneArea.prototype.ondrop = function() {
 		receive: function(event, object) {
 
 			if (object.sender != object.item) {
-				
+
 				var newobj = new Block();
 				
 				newobj.unpersist($(object.sender).data('smobj').objSer, t);
@@ -193,9 +193,9 @@ DropzoneArea.prototype.ondrop = function() {
 				if(t.content[i] == blkobj) {
 
 					t.content[i].deleteBlock();
-					
+
 					t.content.splice(i, 1);
-				
+
 				}
 			}
 		}

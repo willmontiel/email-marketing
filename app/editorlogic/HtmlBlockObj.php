@@ -32,6 +32,9 @@ class HtmlBlockObj
 			case 'module-social-share':
 				$block = new BlockSocialShare();
 				break;
+			case 'module-text-mult':
+				$block = new BlockMultText();
+				break;
 		}
 		
 		return $block;

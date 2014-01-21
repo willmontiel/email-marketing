@@ -16,6 +16,10 @@ function Block (parentBlock, typeBlock, contentData, htmlData) {
 		
 		this.createTextBoxed();
 	}
+	else if(typeBlock != undefined && typeBlock.search('text') > 0) {
+		
+		this.createText();
+	}
 		
 	newRedactor();
 }
@@ -117,6 +121,14 @@ Block.prototype.persist = function() {
 		obj.boxedbrradius = this.boxedbrradius;
 		obj.contentData = $.trim(this.contentData.html());	
 	}
+	else if(this.typeBlock.search('text-mult') > 0) {
+		var txt = [];
+		
+		for(var i = 0; i < this.contentData.length; i++) {
+			txt[i] = $.trim($(this.contentData[i]).html());
+		}
+		obj.contentData = txt;
+	}
 	else {
 		obj.contentData = $.trim(this.contentData.html());	
 	}
@@ -184,11 +196,36 @@ Block.prototype.unpersist = function(obj, dz) {
 		
 		this.contentData = {image: contentImage, text: contentText};
 	}
-	else if(this.typeBlock.search('text') > 0) {		
+	else if(this.typeBlock.search('text-mult') > 0) {
+		var table = $('<table><tr></tr><table/>');
+		
+		var multvalues = '';
+		var contentvalues = [];
+		for(var i = 0; i < obj.contentData.length; i++) {
+			var value = $('<div class="content-text full-content" style="float: left;">' + obj.contentData[i] + '</div>')
+			contentvalues.push(value);
+			table.find('tr').append($('<td style="width:' + Math.floor(100/obj.contentData.length) + '%"/>').append(value));
+		}
+		
+		table.find('tr').append(multvalues);
+		
 		var contentData = $('<div/>');
-		contentData = contentData.html('<div class="content-text full-content">' + obj.contentData + '</div>');
+		contentData = contentData.html(table);
+		
+		this.contentData = contentvalues;
+		
+	}
+	else if(this.typeBlock.search('text') > 0) {		
+		var table = $('<table><tr><td></td></tr><table/>');
+		
+		var value = $('<div class="content-text full-content" style="float: left;">' + obj.contentData + '</div>');
 
-		this.contentData = contentData.children();
+		table.find('td').append(value);
+		
+		var contentData = $('<div/>');
+		contentData = contentData.html(table);
+
+		this.contentData = value;
 	}
 	else if(this.typeBlock.search('image') > 0){
 		var contentData = $('<div/>');
@@ -250,6 +287,11 @@ Block.prototype.unpersist = function(obj, dz) {
 	else if(this.typeBlock.search('text-boxed') > 0) {
 		
 		this.unpersistTextBoxed(obj);
+	}
+	else if(this.typeBlock.search('text') > 0) {
+		this.htmlData.find('.tools').append('<div class="add-column-tool icon-plus tool"></div>	<div class="remove-column-tool icon-minus tool"></div>');
+		this.setRowWidth();
+		this.createText();
 	}
 };
 
@@ -526,4 +568,72 @@ Block.prototype.unpersistTextBoxed = function(obj) {
 	this.htmlData.find('.edit-box-tool').on('click', function() {
 		bxtxt.activateFields();
 	});
+};
+
+Block.prototype.createText = function() {
+	var t = this;
+	
+	this.htmlData.find('.add-column-tool').on('click', function() {
+		
+		var contentData = $("<div class='content-text full-content' style='float: left;'><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p></div>");
+
+		t.contentData.push(contentData[0]);
+		
+		t.typeBlock = "module module-text-mult ui-draggable";
+
+		t.htmlData.find('.content table tr').append('<td/>');
+		t.htmlData.find('.content table tr td:last').append(contentData);
+		
+		t.htmlData.find('.remove-column-tool').show();
+		
+		t.setRowWidth();
+		
+		newRedactor();
+	});
+	
+	this.htmlData.find('.remove-column-tool').on('click', function() {
+		t.htmlData.find('.content table tr td:last').remove();
+		
+		t.contentData.splice(t.contentData.length - 1, 1);
+		
+		t.setRowWidth();
+	});
+	
+	this.htmlData.find('.add-image-tool').on('click', function() {
+		var contentData = $('<div class="content-image full-content pull-left"><img data-toggle="modal" data-backdrop="static" href="#images" class="media-object image-placeholder" /></div>');
+		
+		t.contentData.push(contentData[0]);
+		
+		t.typeBlock = "module module-text-mult ui-draggable";
+
+		t.htmlData.find('.content table tr').append('<td/>');
+		t.htmlData.find('.content table tr td:last').append(contentData);
+		
+		t.htmlData.find('.remove-column-tool').show();
+		
+		t.setRowWidth();
+	});
+};
+
+Block.prototype.setRowWidth = function() {
+
+	for(var i = 0; i < this.htmlData.find('.content table tr td').length; i++) {
+		this.htmlData.find('.content table tr td').css('width', Math.floor(100/this.htmlData.find('.content table tr td').length) + '%');
+	}
+
+	if(this.htmlData.find('.content-text').length === 5) {
+		this.htmlData.find('.add-column-tool').hide();
+		this.htmlData.find('.remove-column-tool').show();
+		this.htmlData.find('.remove-column-tool').css('left', '32px');
+	}
+	else if(this.htmlData.find('.content-text').length === 1) {
+		this.htmlData.find('.add-column-tool').show();
+		this.htmlData.find('.remove-column-tool').hide();
+	}
+	else {
+		this.htmlData.find('.add-column-tool').show();
+		this.htmlData.find('.remove-column-tool').css('left', '48px');
+		this.htmlData.find('.remove-column-tool').show();
+	}
+	
 };

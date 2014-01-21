@@ -89,11 +89,20 @@
 							<div class="tools">
 								<div class="handle-tool icon-move tool"></div>
 								<div class="remove-tool icon-trash tool"></div>
+								<div class="add-column-tool icon-plus tool"></div>
+								<div class="add-image-tool icon-picture tool"></div>
+								<div class="remove-column-tool icon-minus tool"></div>
 							</div>
-							<div class="content">
-								<div class="content-text full-content">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-								</div>
+							<div class="content clearfix">
+								<table>
+									<tr>
+										<td>
+											<div class="content-text full-content" style="float: left;">
+												<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+											</div>
+										</td>
+									</tr>
+								</table>
 							</div>
 						</div>
 						<div class="module-information">
