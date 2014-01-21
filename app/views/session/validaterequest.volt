@@ -18,20 +18,21 @@
 					Cambiar contraseña
 				</div>
 				<div class="box-content padded">
-					<form action="{{url('session/edituseraccount')}}/{{uniq}}" class="separate-sections">
+					{{ form('session/setnewpass', 'class': "separate-sections" ) }}
+						<input type="hidden" name="uniq" value="{{uniq}}"/>
 						<label style="text-align: center;">Contraseña:</label>
 						<div class="input-prepend">
 							<span class="add-on" href="#">
 								<i class="icon-key"></i>
 							</span>
-							{{ text_field("pass", 'type': "text", 'class': "span5", 'required': "required", 'autofocus': "autofocus", 'placeholder': "Contraseña" ) }}
+							{{ password_field("pass", 'type': "text", 'class': "span5", 'required': "required", 'autofocus': "autofocus", 'placeholder': "Contraseña" ) }}
 						</div>
 						<label style="text-align: center;">Repita la contraseña:</label>
 						<div class="input-prepend">
 							<span class="add-on" href="#">
 								<i class="icon-key"></i>
 							</span>
-							{{ text_field("pass2", 'type': "text", 'class': "span5", 'required': "required", 'placeholder': "Repita la contraseña" ) }}
+							{{ password_field("pass2", 'type': "text", 'class': "span5", 'required': "required", 'placeholder': "Repita la contraseña" ) }}
 						</div>
 						<div>
 							{{ submit_button("Enviar", 'class' : "btn btn-blue btn-block") }}
