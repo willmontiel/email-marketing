@@ -11,16 +11,33 @@ function DropzoneArea (name, color, parent, width) {
 DropzoneArea.prototype.createHtmlZone = function() {
 	
 	var htmltext = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"' style='background-color:" + this.color + ";'>\n\
-					<div class='info-guide'>\n\
-						<span class='label label-info'>" + this.name + "</span>\n\
-					</div>\n\
-				</div>";
+						<div class='info-guide'>\n\
+							<span class='label label-info'>" + this.name + "</span>\n\
+						</div>\n\
+						<div class='add-row-block' data-toggle='modal' data-backdrop='static' href='#add-element-block'>\n\
+							<div class='image-add icon-plus icon-white icon-2x'></div>\n\
+							<div class='add-element'>Adicionar Elemento</div>\n\
+						</div>\n\
+					</div>";
 	
 	$(this.parent).append(htmltext);
 	
 	this.$obj = $("#content-" + this.name);
 	
 	this.$obj.data('smobj', this);
+	
+	this.addElementToZone();
+	
+};
+
+DropzoneArea.prototype.addElementToZone = function() {
+	var t = this;
+	this.$obj.find('.add-row-block').on('click', function() {
+		t.createHtmlElements(true, true);
+	});
+};
+
+DropzoneArea.prototype.createHtmlElements = function(basic, compounds) {
 	
 };
 

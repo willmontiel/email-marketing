@@ -537,6 +537,72 @@
 	</div>
 </div>
 	
+	
+<div id="add-element-block" class="modal hide fade">
+	<div class="modal-header">
+		Seleccione Elemento
+	</div>
+	<div class="modal-body">
+		<div class="basic-elements clearfix">
+			<div class="element-block">
+				<div class="module module-text-only"></div>
+				<div class="module-information">
+					<p>Texto</p>
+				</div>
+			</div>
+			<div class="element-block">
+				<div class="module module-image-only"></div>
+				<div class="module-information">
+					<p>Imagen</p>
+				</div>
+			</div>
+			<div class="element-block">
+				<div class="module module-separator"></div>
+				<div class="module-information">
+					<p>Separador</p>
+				</div>
+			</div>
+			<div class="element-block">
+				<div class="module module-social-share"></div>
+				<div class="module-information">
+					<p>Social Share</p>
+				</div>
+			</div>
+			<div class="element-block">
+				<div class="module module-social-follow"></div>
+				<div class="module-information">
+					<p>Social Folloe</p>
+				</div>
+			</div>
+			<div class="element-block">
+				<div class="module module-button"></div>
+				<div class="module-information">
+					<p>Botón</p>
+				</div>
+			</div>
+		</div>
+		<hr />
+		<div class="compounds-elements clearfix">
+			<div class="element-block">
+				<div class="module module-text-image"></div>
+				<div class="module-information">
+					<p>Texto - Imagen</p>
+				</div>
+			</div>
+			<div class="element-block">
+				<div class="module module-image-text"></div>
+				<div class="module-information">
+					<p>Imagen - Texto</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
+		<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+	
 <div id="clipsmodal" style="display: none;">
 	
 	<section>
