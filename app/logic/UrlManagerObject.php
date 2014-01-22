@@ -18,7 +18,7 @@ class UrlManagerObject
 	{	
 		$config = new \Phalcon\Config\Adapter\Ini("../app/config/configuration.ini");
 		
-		if ($config) {
+		if (isset($config->urlmanager)) {
 			$this->protocol = $config->urlmanager->protocol;
 			$this->host = $config->urlmanager->host;
 			$this->port = $config->urlmanager->port;
