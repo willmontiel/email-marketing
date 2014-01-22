@@ -168,22 +168,35 @@ try {
 		return $connection;
 		
     });
-
+	
+	/*
+	 * Administrador de url's
+	 */
+	
+	
+	$urlManagerObj = new UrlManagerObject();
+	
+	
 	/*
 	 * Url Object, utilizado para crear URLs
 	 */
-    $di->set('url', function() use ($config) {
+    $di->set('url', function(){
+		$urlManagerObj = new UrlManagerObject();
         $url = new \Phalcon\Mvc\Url();
-        $url->setBaseUri($config->general->baseuri);
+        $url->setBaseUri('/' . $urlManagerObj->getBaseUri() . '/');
         return $url;
     });
 	
+	/*
+	 * Url de los API's
+	 */
+	
 	$apiurl = new stdClass;
-	$apiurl->url = $config->general->apiurlprefix;
+	$apiurl->url = $urlManagerObj->getApi_v1Url();
 	$di->set('apiurlbase', $apiurl);
 	
 	$apistatistics = new stdClass;
-	$apistatistics->url = $config->general->apiurlstatisticprefix;
+	$apistatistics->url = $urlManagerObj->getApi_v1_2Url();
 	$di->set('apiurlstatistic', $apistatistics);
 	
 	/*
@@ -191,7 +204,7 @@ try {
 	 */
 	$asset = new stdClass;
 	$asset->dir = $config->general->assetsfolder;
-	$asset->url = $config->general->assetsbaseuri;
+	$asset->url = '/' . $urlManagerObj->getAppUrlAsset() . '/';
 	$di->set('asset', $asset);
 	/*
 	 * Directorio de assets globales
@@ -214,12 +227,12 @@ try {
 	
 	
 	/*
-	 * Directorio de resportes de correo
+	 * Directorio de reportes de correo
 	 */
 	$mailReportsDir = new stdClass();
 	$mailReportsDir->reports = $config->mailreports->tmpdirmailreports;
 	$di->set('mailReportsDir', $mailReportsDir);
-	
+
 	/*
 	 * Log Object, utilizado para logging en general a archivo
 	 */
