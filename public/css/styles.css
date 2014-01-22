@@ -19,6 +19,7 @@ table {
 }
 .sub-mod-cont:hover {
 	border: solid 2px #68a6ce;
+	padding-bottom: 66px;
 }
 
 .module-cont .module {
@@ -567,10 +568,19 @@ table {
 .add-row-block {
 	height: 50px;
 	background-color: #96C4EB;
-	margin: 15px 120px;
 	border-radius: 8px;
 	margin-top: 25px;
 	cursor: pointer;
+	display: none;
+	position: absolute;
+	bottom: 8px;
+	width: 50%;
+	z-index: 10;
+	margin-left: 50%;
+}
+/* Mostrar boton de adicion cuando se pasa mouse sobre el dropzone */
+.sub-mod-cont:hover .add-row-block {
+	display: block;
 }
 
 .image-add {
