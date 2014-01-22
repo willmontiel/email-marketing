@@ -44,9 +44,16 @@
 	</script>
 	
 	{{ javascript_include('js/block.js') }}
-	{{ javascript_include('js/social_block.js') }}
+	{#{{ javascript_include('js/social_block.js') }}
 	{{ javascript_include('js/button_block.js') }}
-	{{ javascript_include('js/boxed_text_block.js') }}
+	{{ javascript_include('js/boxed_text_block.js') }}#}
+	{{ javascript_include('js/row_zone.js') }}
+	{{ javascript_include('js/block_text.js') }}
+	{{ javascript_include('js/block_image.js') }}
+	{{ javascript_include('js/block_separator.js') }}
+	{{ javascript_include('js/block_social_share.js') }}
+	{{ javascript_include('js/block_social_follow.js') }}
+	{{ javascript_include('js/block_button.js') }}
 	{{ javascript_include('js/dropzone.js') }}
 	{{ javascript_include('js/layout.js') }}
 	{{ javascript_include('js/editor.js') }}
@@ -544,61 +551,14 @@
 	</div>
 	<div class="modal-body">
 		<div class="basic-elements clearfix">
-			<div class="element-block">
-				<div class="module module-text-only"></div>
-				<div class="module-information">
-					<p>Texto</p>
-				</div>
-			</div>
-			<div class="element-block">
-				<div class="module module-image-only"></div>
-				<div class="module-information">
-					<p>Imagen</p>
-				</div>
-			</div>
-			<div class="element-block">
-				<div class="module module-separator"></div>
-				<div class="module-information">
-					<p>Separador</p>
-				</div>
-			</div>
-			<div class="element-block">
-				<div class="module module-social-share"></div>
-				<div class="module-information">
-					<p>Social Share</p>
-				</div>
-			</div>
-			<div class="element-block">
-				<div class="module module-social-follow"></div>
-				<div class="module-information">
-					<p>Social Folloe</p>
-				</div>
-			</div>
-			<div class="element-block">
-				<div class="module module-button"></div>
-				<div class="module-information">
-					<p>Botón</p>
-				</div>
-			</div>
+			
 		</div>
 		<hr />
 		<div class="compounds-elements clearfix">
-			<div class="element-block">
-				<div class="module module-text-image"></div>
-				<div class="module-information">
-					<p>Texto - Imagen</p>
-				</div>
-			</div>
-			<div class="element-block">
-				<div class="module module-image-text"></div>
-				<div class="module-information">
-					<p>Imagen - Texto</p>
-				</div>
-			</div>
+	
 		</div>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
 		<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
 	</div>
 </div>

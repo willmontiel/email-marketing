@@ -12,7 +12,7 @@ DropzoneArea.prototype.createHtmlZone = function() {
 	
 	var htmltext = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"' style='background-color:" + this.color + ";'>\n\
 						<div class='info-guide'>\n\
-							<span class='label label-info'>" + this.name + "</span>\n\
+							<span>" + this.name + "</span>\n\
 						</div>\n\
 						<div class='add-row-block' data-toggle='modal' data-backdrop='static' href='#add-element-block'>\n\
 							<div class='image-add icon-plus icon-white icon-2x'></div>\n\
@@ -33,11 +33,45 @@ DropzoneArea.prototype.createHtmlZone = function() {
 DropzoneArea.prototype.addElementToZone = function() {
 	var t = this;
 	this.$obj.find('.add-row-block').on('click', function() {
-		t.createHtmlElements(true, true);
+		$('#add-element-block .basic-elements').empty();
+		$('#add-element-block .compounds-elements').empty();
+		
+		var row = new rowZone(t);
+		
+		t.createHtmlElement('text-only', 'Texto', 'Basic', new TxtBlock(row), row);
+		t.createHtmlElement('image-only', 'Imagen', 'Basic', new ImgBlock(row), row);
+		t.createHtmlElement('separator', 'Separador', 'Basic', new HrBlock(row), row);
+		t.createHtmlElement('social-share', 'Compartir Redes', 'Basic', new SShareBlock(row), row);
+		t.createHtmlElement('social-follow', 'Seguir Redes', 'Basic', new SFollowBlock(row), row);
+		t.createHtmlElement('button', 'Botón', 'Basic', new BtnBlock(row), row);
+		
+		t.createHtmlElement('text-image', 'Texto - Imagen', 'Compound', null, row);
+		t.createHtmlElement('image-text', 'Imagen - Texto', 'Compound', null, row);
 	});
 };
 
-DropzoneArea.prototype.createHtmlElements = function(basic, compounds) {
+DropzoneArea.prototype.createHtmlElement = function(module, description, category, block, row) {
+	var element = $('<div class="element-block" data-dismiss="modal">\n\
+						<div class="module module-' + module + '"></div>\n\
+						<div class="module-information">\n\
+							<p>' + description + '</p>\n\
+						</div>\n\
+					</div>');
+	
+	if(category === 'Basic') {
+		$('#add-element-block .basic-elements').append(element);
+	}
+	else if(category === 'Compound') {
+		$('#add-element-block .compounds-elements').append(element);
+	}
+	
+	var t = this;
+	
+	element.on('click', function() {
+		t.content.push(row);
+		row.drawHtml();
+		row.addBlock(block);
+	});
 	
 };
 

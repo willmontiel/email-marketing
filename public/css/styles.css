@@ -594,3 +594,94 @@ table {
 	font-weight: bold;
 	margin-top: 5px;
 }
+
+.one-element:hover {
+	border: 3px solid #96C4EB;
+}
+
+.one-element {
+	border: 3px solid white;
+	padding: 10px;
+}
+
+.edit-block {
+	left: 3%;
+	background-color: #46B352;
+}
+
+.remove-block {
+	left: 92%;
+	background-color: #F74D4D;
+}
+
+.edit-block, .remove-block {
+	float: left;
+	position: absolute;
+	margin-top: -4%;
+	height: 25px;
+	width: 25px;
+	border-radius: 20px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.elements-options span, .row-icons-options span {
+	margin-top: 20%;
+}
+
+.elements-options {
+	display: none;
+}
+
+.one-element:hover .elements-options{
+	display: block;
+}
+
+.row-options {
+	border: 8px solid white;
+	border-collapse: separate; 
+	border-top-left-radius: 20px; 
+	border-top-right-radius: 20px; 
+	border-bottom-right-radius: 20px;
+	border-bottom-left-radius: 20px;
+}
+
+.row-options:hover {
+	border: 8px solid #A2C8E8;
+}
+
+.row-icons-options {
+	display: none;
+}
+
+row-of-blocks > .row-options:hover + .row-icons-options {
+	display: block;
+}
+
+.row-options td {
+	padding: 10px;
+}
+
+.edit-row, .remove-row, .add-column, .move-row {
+	float: left;
+	position: absolute;
+	height: 25px;
+	width: 25px;
+	border-radius: 20px;
+	text-align: center;
+	cursor: pointer;
+	background-color: #96C4EB;
+}
+
+.edit-row {
+	left: 5%;
+}
+.remove-row {
+	left: 93%;
+}
+.add-column {
+	left: 10%;
+}
+.move-row {
+	left: 50%;
+}
