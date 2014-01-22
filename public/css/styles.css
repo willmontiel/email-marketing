@@ -15,7 +15,7 @@ table {
 	min-height: 120px;
 	height: auto;
 	position: relative;
-	border: dashed 1px #d1cccc;
+	border: solid 2px white;
 }
 .sub-mod-cont:hover {
 	border: solid 2px #68a6ce;
@@ -38,6 +38,18 @@ table {
     text-align: center;
 	position: absolute;
 	width: 100%;
+	top: -1px;
+}
+
+.info-guide span {
+	background-color: #68a6ce;
+	font-family: helvetica, arial, sans-serif;
+	font-size: 12px;
+	padding: 4px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-color: #68a6ce;
+	color: whitesmoke;
 }
 
 .module-cont .module .tool {
@@ -210,6 +222,7 @@ table {
 	width: calc(100% - 4px);
 	width: 550px;
 	margin-left: 150px;
+	padding: 10px;
 }
 
 .half-width {
