@@ -576,7 +576,7 @@ table {
 	bottom: 8px;
 	width: 50%;
 	z-index: 10;
-	margin-left: 50%;
+	margin-left: 25%;
 }
 /* Mostrar boton de adicion cuando se pasa mouse sobre el dropzone */
 .sub-mod-cont:hover .add-row-block {
