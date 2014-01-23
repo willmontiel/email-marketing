@@ -10,6 +10,7 @@ class Mail extends Modelbase
 		$this->hasMany("idMail", "Mxc", "idMail");
 		$this->hasOne("idMail", "Mailcontent", "idMail");
 		$this->hasOne("idMail", "Mailschedule", "idMail");
+		$this->hasMany("idMail", "Mailevent", "idMail");
 		
 		$this->useDynamicUpdate(true);
 	}

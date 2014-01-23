@@ -97,12 +97,15 @@ class ChildCommunication extends BaseWrapper
 						$text = $content->text;
 					}
 					
+					$trackingObj = new TrackingUrlObject();
+					$htmlWithTracking = $trackingObj->getOpenTrackingUrl($html, $idMail, $contact['contact']['idContact']);
+					
 					$from = array($mail->fromEmail => $mail->fromName);
 					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
 					
 					$message = new Swift_Message($subject);
 					$message->setFrom($from);
-					$message->setBody($html, 'text/html');
+					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
 					$message->addPart($text, 'text/plain');
 

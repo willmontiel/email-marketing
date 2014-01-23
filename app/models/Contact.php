@@ -6,6 +6,7 @@ class Contact extends \Phalcon\Mvc\Model
 	public $subscribedon;
 	public $ipSubscribed;
 	public $ipActivated;
+	public $idContact;
 	
 	public function initialize()
     {
@@ -22,6 +23,7 @@ class Contact extends \Phalcon\Mvc\Model
         ));
 		
 		$this->hasMany("idContact", "Sxc", "idContact");
+		$this->hasMany("idContact", "Mailevent", "idContact");
 
 		$this->useDynamicUpdate(true);
 		
