@@ -21,16 +21,18 @@ rowZone.prototype.drawHtml = function() {
 rowZone.prototype.addBlock = function(block) {
 	this.content.push(block);
 	
-	var column = $('<td>\n\
-						<div class="one-element">\n\
-							<div class="elements-options">\n\
-								<div class="edit-block tool"><span class="icon-pencil icon-white"></span></div>\n\
-								<div class="remove-block tool"><span class="icon-minus icon-white"></span></div>\n\
-							</div>\n\
-						</div>\n\
-					</td>');
-	
-	this.htmlData.find('tr').append(column);
-	
 	block.drawHtml();
+};
+
+rowZone.prototype.removeBlock = function(block) {
+	for(var i = 0; i < this.content.length; i++) {
+		if(this.content[i] == block) {
+			this.content.splice(i, 1);
+		}
+	}
+	
+	if( this.content.length === 0 ) {
+		this.dz.removeRow(this);
+		this.htmlData.remove();
+	}
 };

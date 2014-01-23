@@ -17,7 +17,7 @@
 	{{ stylesheet_link('css/styles.css') }}
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	{{ stylesheet_link('javascripts/colorpicker/css/colorpicker.css') }}
-	{{ javascript_include('js/gallery.js') }}
+	{{ javascript_include('js/editor/gallery.js') }}
 
 <script>
 		var config = {imagesUrl: "{{url('images')}}", templateUrl : "{{url('template/create')}}"};
@@ -43,26 +43,27 @@
 
 	</script>
 	
-	{{ javascript_include('js/block.js') }}
-	{#{{ javascript_include('js/social_block.js') }}
-	{{ javascript_include('js/button_block.js') }}
-	{{ javascript_include('js/boxed_text_block.js') }}#}
-	{{ javascript_include('js/row_zone.js') }}
-	{{ javascript_include('js/block_text.js') }}
-	{{ javascript_include('js/block_image.js') }}
-	{{ javascript_include('js/block_separator.js') }}
-	{{ javascript_include('js/block_social_share.js') }}
-	{{ javascript_include('js/block_social_follow.js') }}
-	{{ javascript_include('js/block_button.js') }}
-	{{ javascript_include('js/dropzone.js') }}
-	{{ javascript_include('js/layout.js') }}
-	{{ javascript_include('js/editor.js') }}
+	{{ javascript_include('js/editor/block.js') }}
+	{#{{ javascript_include('js/editor/social_block.js') }}
+	{{ javascript_include('js/editor/button_block.js') }}
+	{{ javascript_include('js/editor/boxed_text_block.js') }}#}
+	{{ javascript_include('js/editor/row_zone.js') }}
+	{{ javascript_include('js/editor/block_text.js') }}
+	{{ javascript_include('js/editor/block_image.js') }}
+	{{ javascript_include('js/editor/block_separator.js') }}
+	{{ javascript_include('js/editor/block_social_share.js') }}
+	{{ javascript_include('js/editor/block_social_follow.js') }}
+	{{ javascript_include('js/editor/block_button.js') }}
+	{{ javascript_include('js/editor/toolbar.js') }}
+	{{ javascript_include('js/editor/dropzone.js') }}
+	{{ javascript_include('js/editor/layout.js') }}
+	{{ javascript_include('js/editor/editor.js') }}
 
 {% endblock %}
 {% block content %}
 	<br /><br />
 <div class="row-fluid">
-	<div class="span9">
+	<div class="span12">
 		<div id="edit-area" class="module-cont clearfix">
 			<div id="none-layout">
 				
@@ -71,7 +72,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="span3">
+	<div class="span3" style="display: none">
 		<div id="toolbar">
 			<ul class="nav nav-tabs">
 				<li id="tablayouts" class="active">

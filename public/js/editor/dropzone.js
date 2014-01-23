@@ -75,6 +75,14 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 	
 };
 
+DropzoneArea.prototype.removeRow = function(row) {
+	for(var i = 0; i < this.content.length; i++) {
+		if(this.content[i] == row) {
+			this.content.splice(i, 1);
+		}
+	}
+};
+
 DropzoneArea.prototype.deletezone = function() {
 
 	this.$obj.remove();
