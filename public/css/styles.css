@@ -734,6 +734,7 @@ table {
 .redactor_toolbar {
 	float: left;
 	position: absolute;
+	width: 500px;
 }
 
 .component-toolbar .components-list {
