@@ -697,6 +697,17 @@ table {
 .move-row {
 	left: 50%;
 }
+/* Estilos de controles durante HOVER */
+.edit-row:hover, .add-column:hover {
+	background-color: #46B352;
+}
+.remove-row:hover {
+	background-color: #F74D4D;
+}
+.move-row:hover {
+	background-color: #4886ce;
+	cursor: move;
+}
 
 .component-toolbar {
 	height: 60px;
