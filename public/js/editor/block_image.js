@@ -18,7 +18,7 @@ ImgBlock.prototype.drawHtml = function() {
 							</tr>\n\
 						</table>\n\
 					</td>');
-	this.row.htmlData.find('tr').append(this.content);
+	this.row.content.find('.in-row').append(this.content);
 	
 	this.editBlock();
 	this.removeBlock();
@@ -27,7 +27,7 @@ ImgBlock.prototype.drawHtml = function() {
 
 ImgBlock.prototype.editBlock = function() {
 	var t = this;
-	this.row.htmlData.find('td:last .edit-block').on('click', function(event) {
+	this.row.content.find('td:last .edit-block').on('click', function(event) {
 		var toolbar = new Toolbar(t);
 		toolbar.drawHtml();
 		toolbar.createBackground();
@@ -41,10 +41,18 @@ ImgBlock.prototype.editBlock = function() {
 
 ImgBlock.prototype.removeBlock = function() {
 	var t = this;
-	this.row.htmlData.find('td:last .remove-block').on('click', function() {
+	this.row.content.find('td:last .remove-block').on('click', function() {
 		t.row.removeBlock(t);
 		t.content.remove();
 	});
+};
+
+ImgBlock.prototype.updateBlockStyle = function(style, value) {
+	this.content.find('.full-block-element').css(style, value);
+};
+
+ImgBlock.prototype.updateContentStyle = function(style, value) {
+	this.content.find('img').css(style, value);
 };
 
 ImgBlock.prototype.createImage = function() {
@@ -69,12 +77,4 @@ ImgBlock.prototype.createImage = function() {
 	
 	media.setBlock(this);
 	media.Selected(this.content.find('img').attr('src'));
-};
-
-ImgBlock.prototype.updateBlockStyle = function(style, value) {
-	this.content.find('.full-block-element').css(style, value);
-};
-
-ImgBlock.prototype.updateContentStyle = function(style, value) {
-	this.content.find('img').css(style, value);
 };

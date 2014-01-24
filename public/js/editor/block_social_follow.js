@@ -12,7 +12,7 @@ SFollowBlock.prototype.drawHtml = function() {
 							\n\
 						</div>\n\
 					</td>');
-	this.row.htmlData.find('tr').append(this.content);
+	this.row.content.find('.in-row').append(this.content);
 	
 	this.editBlock();
 	this.removeBlock();
@@ -20,14 +20,14 @@ SFollowBlock.prototype.drawHtml = function() {
 
 SFollowBlock.prototype.editBlock = function() {
 	var t = this;
-	this.row.htmlData.find('td:last .edit-block').on('click', function() {
+	this.row.content.find('td:last .edit-block').on('click', function() {
 		
 	});
 };
 
 SFollowBlock.prototype.removeBlock = function() {
 	var t = this;
-	this.row.htmlData.find('td:last .remove-block').on('click', function() {
+	this.row.content.find('td:last .remove-block').on('click', function() {
 		t.row.removeBlock(t);
 		t.content.remove();
 	});

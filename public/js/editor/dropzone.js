@@ -68,8 +68,10 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 	var t = this;
 	
 	element.on('click', function() {
-		t.content.push(row);
-		row.drawHtml();
+		if(row.listofblocks.length === 0) {
+			t.content.push(row);
+			row.drawHtml();
+		}
 		row.addBlock(block);
 	});
 	

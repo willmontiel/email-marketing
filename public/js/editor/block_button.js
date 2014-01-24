@@ -12,7 +12,7 @@ BtnBlock.prototype.drawHtml = function() {
 							<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button pull-center" style="background-image:url(\'' + config.imagesUrl + '/btn-blue.png\');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>\n\
 						</div>\n\
 					</td>');
-	this.row.htmlData.find('tr').append(this.content);
+	this.row.content.find('.in-row').append(this.content);
 	
 	this.editBlock();
 	this.removeBlock();
@@ -20,14 +20,14 @@ BtnBlock.prototype.drawHtml = function() {
 
 BtnBlock.prototype.editBlock = function() {
 	var t = this;
-	this.row.htmlData.find('td:last .edit-block').on('click', function() {
+	this.row.content.find('td:last .edit-block').on('click', function() {
 		
 	});
 };
 
 BtnBlock.prototype.removeBlock = function() {
 	var t = this;
-	this.row.htmlData.find('td:last .remove-block').on('click', function() {
+	this.row.content.find('td:last .remove-block').on('click', function() {
 		t.row.removeBlock(t);
 		t.content.remove();
 	});

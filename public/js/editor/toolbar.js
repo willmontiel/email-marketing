@@ -93,10 +93,10 @@ Toolbar.prototype.createCorners = function() {
 	
 	this.toolbar.find('.components-list').append(elements);
 	
-	this.spinnerBlockChange('corner-top-left-spinner', 'border-top-left-radius');
-	this.spinnerBlockChange('corner-top-right-spinner', 'border-top-right-radius');
-	this.spinnerBlockChange('corner-bottom-left-spinner', 'border-bottom-left-radius');
-	this.spinnerBlockChange('corner-bottom-right-spinner', 'border-bottom-right-radius');
+	this.spinnerBlockChange('corner-top-left-spinner', 'border-top-left-radius', this.component.corner_top_left);
+	this.spinnerBlockChange('corner-top-right-spinner', 'border-top-right-radius', this.component.corner_top_right);
+	this.spinnerBlockChange('corner-bottom-left-spinner', 'border-bottom-left-radius', this.component.corner_bottom_left);
+	this.spinnerBlockChange('corner-bottom-right-spinner', 'border-bottom-right-radius', this.component.corner_bottom_right);
 };
 
 Toolbar.prototype.createMargins = function() {
@@ -115,10 +115,10 @@ Toolbar.prototype.createMargins = function() {
 	
 	this.toolbar.find('.components-list').append(elements);
 	
-	this.spinnerContentChange('margin-top-spinner', 'margin-top');
-	this.spinnerContentChange('margin-bottom-spinner', 'margin-bottom');
-	this.spinnerContentChange('margin-left-spinner', 'margin-left');
-	this.spinnerContentChange('margin-right-spinner', 'margin-right');
+	this.spinnerContentChange('margin-top-spinner', 'margin-top', this.component.corner_top_left);
+	this.spinnerContentChange('margin-bottom-spinner', 'margin-bottom', this.component.corner_top_left);
+	this.spinnerContentChange('margin-left-spinner', 'margin-left', this.component.corner_top_left);
+	this.spinnerContentChange('margin-right-spinner', 'margin-right', this.component.corner_top_left);
 };
 
 Toolbar.prototype.spinnerBlockChange = function(id, style) {
