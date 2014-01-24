@@ -675,7 +675,6 @@ table {
 }*/
 
 .edit-row, .remove-row, .add-column, .move-row {
-	float: left;
 	position: absolute;
 	height: 25px;
 	width: 25px;
@@ -683,13 +682,14 @@ table {
 	text-align: center;
 	cursor: pointer;
 	background-color: #96C4EB;
+	top: -8px;
 }
 
 .edit-row {
-	left: 5%;
+	left: -8px;
 }
 .remove-row {
-	left: 93%;
+	left: -8px;
 }
 .add-column {
 	left: 10%;
