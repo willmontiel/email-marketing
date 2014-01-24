@@ -665,12 +665,16 @@ table {
 	display: block;
 }
 
+.row-of-blocks {
+	position: relative;
+	z-index: 2;
+}
+
 /*.row-options td {
 	padding: 10px;
 }*/
 
 .edit-row, .remove-row, .add-column, .move-row {
-	float: left;
 	position: absolute;
 	height: 25px;
 	width: 25px;
@@ -678,19 +682,31 @@ table {
 	text-align: center;
 	cursor: pointer;
 	background-color: #96C4EB;
+	top: -8px;
 }
 
 .edit-row {
-	left: 5%;
+	left: -8px;
 }
 .remove-row {
-	left: 93%;
+	left: -8px;
 }
 .add-column {
 	left: 10%;
 }
 .move-row {
 	left: 50%;
+}
+/* Estilos de controles durante HOVER */
+.edit-row:hover, .add-column:hover {
+	background-color: #46B352;
+}
+.remove-row:hover {
+	background-color: #F74D4D;
+}
+.move-row:hover {
+	background-color: #4886ce;
+	cursor: move;
 }
 
 .component-toolbar {
