@@ -665,6 +665,11 @@ table {
 	display: block;
 }
 
+.row-of-blocks {
+	position: relative;
+	z-index: 2;
+}
+
 /*.row-options td {
 	padding: 10px;
 }*/
