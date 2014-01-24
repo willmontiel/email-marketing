@@ -22,7 +22,7 @@ Toolbar.prototype.drawHtml = function() {
 Toolbar.prototype.createBackground = function() {
 	var title = $("<div class='option-title-toolbar'>Fondo</div>");
 
-	var backgroundColor = $("<input type='text' value='000' id='color-background-toolbar' name='color-background-toolbar' class='pick-a-color'>");
+	var backgroundColor = $("<input type='text' value='" + this.component.background_color + "' id='color-background-toolbar' name='color-background-toolbar' class='pick-a-color'>");
 	
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(title);
@@ -31,11 +31,18 @@ Toolbar.prototype.createBackground = function() {
 	this.toolbar.find('.components-list').append(elements);
 	
 	$('#color-background-toolbar').pickAColor({showHexInput: false});
+	
+	var t = this;
+	
+	$("#color-background-toolbar input").on("change", function () {
+		t.component.updateBlockStyle('border-color', $(this).val());
+		t.component.background_color = $(this).val();
+	});
 };
 
 Toolbar.prototype.createBorder = function() {
 	var title = $("<div class='option-title-toolbar'>Borde</div>");
-	var color = $("<input type='text' value='000' id='color-border-toolbar' name='color-border-toolbar' class='pick-a-color'>");
+	var color = $("<input type='text' value='" + this.component.border_color + "' id='color-border-toolbar' name='color-border-toolbar' class='pick-a-color'>");
 	var style = $("<div class='medium-select'>\n\
 					<select id='style-border-toolbar'>\n\
 						<option value='dotted'>dotted</option>\n\
@@ -48,7 +55,7 @@ Toolbar.prototype.createBorder = function() {
 						<option value='outset'>outset</option>\n\
 					</select>\n\
 				</div>");
-	var width = $('<input id="border-width-spinner" name="width" class="toolbar-spinner" value=0>');
+	var width = $('<input id="border-width-spinner" name="width" class="toolbar-spinner" value=' + this.component.border_width +'>');
 	
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(title);
@@ -63,14 +70,11 @@ Toolbar.prototype.createBorder = function() {
 	$('#color-border-toolbar').pickAColor({showHexInput: false});
 	
 	$("#color-border-toolbar input").on("change", function () {
-		t.component.updateBlockStyle('border-color', $(this).val());
+		t.component.updateBlockStyle('background-color', $(this).val());
+		t.component.border_color = $(this).val();
 	});
 	
-	$('#border-width-spinner').spinner({min: 0, max: 100,
-		stop: function() {
-			t.component.updateBlockStyle('border-width', $(this).val());
-		}
-	});
+	this.spinnerBlockChange('border-width-spinner', 'border-width', 'border_width');
 	
 	$('#style-border-toolbar').on('change', function() {
 		t.component.updateBlockStyle('border-style', $(this).val());
@@ -79,10 +83,10 @@ Toolbar.prototype.createBorder = function() {
 
 Toolbar.prototype.createCorners = function() {
 	var title = $("<div class='option-title-toolbar'>Esquinas</div>");
-	var top_left = $('<input id="corner-top-left-spinner" name="top-left" class="toolbar-spinner" value=0>');
-	var top_right = $('<input id="corner-top-right-spinner" name="top-right" class="toolbar-spinner" value=0>');
-	var bottom_left = $('<input id="corner-bottom-left-spinner" name="bottom-left" class="toolbar-spinner" value=0>');
-	var bottom_right = $('<input id="corner-bottom-right-spinner" name="bottom-right" class="toolbar-spinner" value=0>');
+	var top_left = $('<input id="corner-top-left-spinner" name="top-left" class="toolbar-spinner" value=' + this.component.corner_top_left + '>');
+	var top_right = $('<input id="corner-top-right-spinner" name="top-right" class="toolbar-spinner" value=' + this.component.corner_top_right + '>');
+	var bottom_left = $('<input id="corner-bottom-left-spinner" name="bottom-left" class="toolbar-spinner" value=' + this.component.corner_bottom_left + '>');
+	var bottom_right = $('<input id="corner-bottom-right-spinner" name="bottom-right" class="toolbar-spinner" value=' + this.component.corner_bottom_right + '>');
 	
 	var elements = $('<li class="toolbar-elements toolbar-corners" />');
 	elements.append(title);
@@ -93,18 +97,18 @@ Toolbar.prototype.createCorners = function() {
 	
 	this.toolbar.find('.components-list').append(elements);
 	
-	this.spinnerBlockChange('corner-top-left-spinner', 'border-top-left-radius', this.component.corner_top_left);
-	this.spinnerBlockChange('corner-top-right-spinner', 'border-top-right-radius', this.component.corner_top_right);
-	this.spinnerBlockChange('corner-bottom-left-spinner', 'border-bottom-left-radius', this.component.corner_bottom_left);
-	this.spinnerBlockChange('corner-bottom-right-spinner', 'border-bottom-right-radius', this.component.corner_bottom_right);
+	this.spinnerBlockChange('corner-top-left-spinner', 'border-top-left-radius', 'corner_top_left');
+	this.spinnerBlockChange('corner-top-right-spinner', 'border-top-right-radius', 'corner_top_right');
+	this.spinnerBlockChange('corner-bottom-left-spinner', 'border-bottom-left-radius', 'corner_bottom_left');
+	this.spinnerBlockChange('corner-bottom-right-spinner', 'border-bottom-right-radius', 'corner_bottom_right');
 };
 
 Toolbar.prototype.createMargins = function() {
 	var title = $("<div class='option-title-toolbar'>Margenes</div>");
-	var top_left = $('<input id="margin-top-spinner" name="top" class="toolbar-spinner" value=0>');
-	var top_right = $('<input id="margin-bottom-spinner" name="bottom" class="toolbar-spinner" value=0>');
-	var bottom_left = $('<input id="margin-left-spinner" name="left" class="toolbar-spinner" value=0>');
-	var bottom_right = $('<input id="margin-right-spinner" name="right" class="toolbar-spinner" value=0>');
+	var top_left = $('<input id="margin-top-spinner" name="top" class="toolbar-spinner" value=' + this.component.margin_top + '>');
+	var top_right = $('<input id="margin-bottom-spinner" name="bottom" class="toolbar-spinner" value=' + this.component.margin_bottom + '>');
+	var bottom_left = $('<input id="margin-left-spinner" name="left" class="toolbar-spinner" value=' + this.component.margin_left + '>');
+	var bottom_right = $('<input id="margin-right-spinner" name="right" class="toolbar-spinner" value=' + this.component.margin_right + '>');
 	
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(title);
@@ -115,26 +119,28 @@ Toolbar.prototype.createMargins = function() {
 	
 	this.toolbar.find('.components-list').append(elements);
 	
-	this.spinnerContentChange('margin-top-spinner', 'margin-top', this.component.corner_top_left);
-	this.spinnerContentChange('margin-bottom-spinner', 'margin-bottom', this.component.corner_top_left);
-	this.spinnerContentChange('margin-left-spinner', 'margin-left', this.component.corner_top_left);
-	this.spinnerContentChange('margin-right-spinner', 'margin-right', this.component.corner_top_left);
+	this.spinnerContentChange('margin-top-spinner', 'margin-top', 'margin_top');
+	this.spinnerContentChange('margin-bottom-spinner', 'margin-bottom', 'margin_bottom');
+	this.spinnerContentChange('margin-left-spinner', 'margin-left', 'margin_left');
+	this.spinnerContentChange('margin-right-spinner', 'margin-right', 'margin_right');
 };
 
-Toolbar.prototype.spinnerBlockChange = function(id, style) {
+Toolbar.prototype.spinnerBlockChange = function(id, style, property) {
 	var t = this;
 	$('#' + id).spinner({min: 0, max: 99,
 		stop: function() {
 			t.component.updateBlockStyle(style, $(this).val());
+			t.component[property] = $(this).val();
 		}
 	});
 };
 
-Toolbar.prototype.spinnerContentChange = function(id, style) {
+Toolbar.prototype.spinnerContentChange = function(id, style, property) {
 	var t = this;
 	$('#' + id).spinner({min: 0, max: 99,
 		stop: function() {
 			t.component.updateContentStyle(style, $(this).val());
+			t.component.property = $(this).val();
 		}
 	});
 };

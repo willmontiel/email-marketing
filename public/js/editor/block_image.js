@@ -1,5 +1,16 @@
 function ImgBlock(row) {
 	this.row = row;
+	this.background_color = "000000";
+	this.border_width = 0;
+	this.border_color = "000000";
+	this.corner_top_left = 0;
+	this.corner_top_right = 0;
+	this.corner_bottom_left = 0;
+	this.corner_bottom_right = 0;
+	this.margin_top = 0;
+	this.margin_bottom = 0;
+	this.margin_left = 0;
+	this.margin_right = 0;
 }
 
 ImgBlock.prototype.drawHtml = function() {
