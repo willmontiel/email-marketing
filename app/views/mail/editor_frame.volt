@@ -1,9 +1,13 @@
 {% block header_javascript %}
 	{{ javascript_include('js/jquery-1.9.1.js') }}
 	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
-	{{ javascript_include('bootstrap/js/bootstrap.min.js') }}
+	{{ javascript_include('bootstrap/js/bootstrap.js') }}
 	{{ javascript_include('bootstrap/slider/js/bootstrap-slider.js') }}
+	{{ javascript_include('bootstrap/pick-a-color/1.1.5/js/tinycolor-0.9.14.min.js') }}
+	{{ javascript_include('bootstrap/pick-a-color/1.1.5/js/pick-a-color-1.1.5.min.js') }}
+	{{ stylesheet_link('css/jquery-ui.css') }}
 	{{ stylesheet_link('bootstrap/css/bootstrap.css') }}
+	{{ stylesheet_link('bootstrap/pick-a-color/1.1.5/css/pick-a-color-1.1.5.css') }}
 	{{ stylesheet_link('bootstrap/css/bootstrap-min.css') }}
 	{{ stylesheet_link('bootstrap/slider/css/slider.css') }}
 	{{ javascript_include('redactor/redactor.js')}}
@@ -564,6 +568,8 @@
 	</div>
 </div>
 	
+<div class="component-toolbar" style="display:none"></div>
+
 <div id="clipsmodal" style="display: none;">
 	
 	<section>

@@ -276,6 +276,17 @@ $(function() {
 		mediaGallery[l].mediaSelected();
 	}
 	
+	$('html').click(function(ev) {
+		if($(ev.target).parents('.component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'component-toolbar' ){
+			$('.component-toolbar').hide();
+			$('.element-in-edition').removeClass('element-in-edition');
+		}
+		
+		if($(ev.target).parents('.redactor_box')[0] === undefined && $(ev.target).attr('class') !== 'redactor_box' && $(ev.target).attr('class') !== undefined ){
+			$('.redactor_editor').destroyEditor();
+		}
+	});
+	
 	editor.objectExists(parent.objMail);
 	
 	editor.otherLayout();

@@ -36,3 +36,7 @@ rowZone.prototype.removeBlock = function(block) {
 		this.htmlData.remove();
 	}
 };
+
+rowZone.prototype.removeBlock = function(block) {
+	
+};
