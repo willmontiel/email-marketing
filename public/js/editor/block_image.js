@@ -13,8 +13,19 @@ function ImgBlock(row) {
 	this.margin_right = 0;
 }
 
+ImgBlock.prototype.createBlock = function() {
+	
+	this.content = this.drawHtml();
+	
+	this.row.content.find('.in-row').append(this.content);
+	
+	this.editBlock();
+	this.removeBlock();
+	this.createImage();
+};
+
 ImgBlock.prototype.drawHtml = function() {
-	this.content = $('<td>\n\
+	var block = $('<td>\n\
 						<table class="full-block-element" border="0" cellpadding="0">\n\
 							<tr>\n\
 								<td>\n\
@@ -29,11 +40,7 @@ ImgBlock.prototype.drawHtml = function() {
 							</tr>\n\
 						</table>\n\
 					</td>');
-	this.row.content.find('.in-row').append(this.content);
-	
-	this.editBlock();
-	this.removeBlock();
-	this.createImage();
+	return block;
 };
 
 ImgBlock.prototype.editBlock = function() {
@@ -117,36 +124,39 @@ ImgBlock.prototype.addClassContentImgBlock = function(value) {
 };
 
 ImgBlock.prototype.persist = function() {
-	var obj = {	height: this.height,
-				width: this.width, 
-				align: this.align,
-				vertalign: this.vertalign,
-				imagesrc: this.displayer.imagesrc,
-				imglink: this.imglink,
-				heightDisplayer: this.displayer.height, 
-				widthDisplayer: this.displayer.width, 
-				percent: this.displayer.percent };
+	var obj = {	
+		height: this.height,
+		width: this.width, 
+		align: this.align,
+		vertalign: this.vertalign,
+		imagesrc: this.displayer.imagesrc,
+		imglink: this.imglink,
+		heightDisplayer: this.displayer.height, 
+		widthDisplayer: this.displayer.width, 
+		percent: this.displayer.percent,
+		type : 'image'
+	};
+	console.log(this)
 	return obj;
 };
 
 ImgBlock.prototype.unpersist = function(obj) {
 	if(obj !== undefined) {
-		var objimage = JSON.parse(obj);
-		this.height = objimage.height;
-		this.width = objimage.width;
-		this.align = objimage.align;
-		this.vertalign = objimage.vertalign;
-		this.imglink = objimage.imglink;
-		this.displayer.height = objimage.heightDisplayer;
-		this.displayer.width = objimage.widthDisplayer;
-		this.displayer.imagesrc = objimage.imagesrc;
-		this.displayer.percent = objimage.percent;
-
-		this.changeAttrImgBlock('height', this.height);
-		this.changeAttrImgBlock('width', this.width);
-		this.changeAttrImgBlock('src', this.displayer.imagesrc);
-		this.addClassContentImgBlock(this.align);
-		this.addVerticalAlignToImage(this.vertalign);
+		if(typeof(obj) === 'string') {
+			var obj = JSON.parse(obj);
+		}
+		else {
+			this.displayer = {};
+		}
+		this.height = obj.height;
+		this.width = obj.width;
+		this.align = obj.align;
+		this.vertalign = obj.vertalign;
+		this.imglink = obj.imglink;
+		this.displayer.height = obj.heightDisplayer;
+		this.displayer.width = obj.widthDisplayer;
+		this.displayer.imagesrc = obj.imagesrc;
+		this.displayer.percent = obj.percent;
 	}
 	else {
 		delete this.height;
@@ -159,12 +169,8 @@ ImgBlock.prototype.unpersist = function(obj) {
 		this.content.find('img').removeAttr('width');
 		this.content.find('img').removeAttr('src');
 		this.content.find('img').removeAttr('alt');
-		
-		if(this.typeBlock.search('image-only') > 0) {
-			this.content.find('img').addClass('image-placeholder');
-		}
-		else {
-			this.content.find('img').addClass('image-text-placeholder');
-		}
+		this.content.find('img').addClass('image-placeholder');
 	}
+	
+	return this;
 };

@@ -169,7 +169,7 @@ Editor.prototype.createDZ = function(objdz) {
 		if(objdz[key] instanceof DropzoneArea) {
 			
 			objdz[key].createHtmlZone();
-			objdz[key].insertBlocks();
+			objdz[key].insertRows();
 			objdz[key].ondrop();
 			this.createZoneStyle(objdz[key], this.zoneHtmlColor(objdz[key].name, objdz[key].color));
 			objdz[key].zoneColor();

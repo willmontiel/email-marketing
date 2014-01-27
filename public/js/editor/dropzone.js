@@ -70,7 +70,7 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 	element.on('click', function() {
 		if(row.listofblocks.length === 0) {
 			t.content.push(row);
-			row.drawHtml();
+			row.createRow();
 		}
 		row.addBlock(block);
 	});
@@ -96,10 +96,10 @@ DropzoneArea.prototype.setWidth = function(newWidth) {
 	this.width = newWidth;
 };
 
-DropzoneArea.prototype.insertBlocks = function() {
+DropzoneArea.prototype.insertRows = function() {
 	
-	for (var bl = 0; bl < this.content.length; bl++) {
-		this.$obj.append(this.content[bl].createBlock());
+	for (var row = 0; row < this.content.length; row++) {
+		this.$obj.append(this.content[row].createRow());
 	}
 };
 
@@ -137,11 +137,11 @@ DropzoneArea.prototype.unpersist = function(obj) {
 	
 	for (var i=0; i< obj.content.length; i++) {
 		
-		var newblk = new Block();
+		var newrow = new rowZone(this);
 		
-		this.$obj.append(newblk.unpersist(obj.content[i], this));
+		this.$obj.append(newrow.unpersist(obj.content[i]));
 		
-		this.content.push(newblk);
+		this.content.push(newrow);
 	}
 	
 	return this.$obj;

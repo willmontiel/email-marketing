@@ -225,6 +225,11 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('#cancel_change').on('click', function() {
 		t.block.unpersist(t.oldImage);
+		t.block.changeAttrImgBlock('height', t.block.height);
+		t.block.changeAttrImgBlock('width', t.block.width);
+		t.block.changeAttrImgBlock('src', t.block.displayer.imagesrc);
+		t.block.addClassContentImgBlock(t.block.align);
+		t.block.addVerticalAlignToImage(t.block.vertalign);
 	});
 	
 	$('#link_to_image').on('change', function() {
