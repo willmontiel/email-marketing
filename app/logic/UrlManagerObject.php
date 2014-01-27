@@ -12,16 +12,9 @@ class UrlManagerObject
 	protected $protocol_mail;
 	protected $host_mail;
 	protected $host_assets;
-	protected $full;
 
-	public function __construct($full = false, $sender = false) 		
+	public function __construct($config)
 	{	
-		if ($sender) {
-			$config = new \Phalcon\Config\Adapter\Ini("../../config/configuration.ini");
-		}
-		else {
-			$config = new \Phalcon\Config\Adapter\Ini("../app/config/configuration.ini");
-		}
 		
 		if (isset($config->urlmanager)) {
 			$this->protocol = $config->urlmanager->protocol;
@@ -48,19 +41,13 @@ class UrlManagerObject
 			$this->host_assets = "files.sigmamovil.com";
 		}
 		
-		if ($full) {
-			$this->full = $this->protocol . '://' .$this->host . '/';
-		}
-		else {
-			$this->full = '';
-		}
 	}
 	
 	/**
 	 * Returns the url base ex: "emarketing"
 	 * @return type
 	 */
-	public function getBaseUri()
+	public function getBaseUri($full = false)
 	{
 		return $this->appbase;
 	}
@@ -70,7 +57,7 @@ class UrlManagerObject
 	 * @param type $full
 	 * @return string
 	 */
-	public function getAppUrlBase()
+	public function getAppUrlBase($full = false)
 	{
 		$url = $this->protocol . '://' .$this->host .'/' . $this->appbase;
 		return $url;
@@ -81,7 +68,7 @@ class UrlManagerObject
 	 * @param boolean $full
 	 * @return URL string
 	 */
-	public function getAppUrlAsset()
+	public function getAppUrlAsset($full = false)
 	{
 		$url = $this->full . $this->appbase . '/' .$this->assets;	
 		return $url;
@@ -91,7 +78,7 @@ class UrlManagerObject
 	 * Return uri for ember comunication (API_v1) ex: "emarketing/api"
 	 * @return URL string
 	 */
-	public function getApi_v1Url()
+	public function getApi_v1Url($full = false)
 	{
 		$url = $this->appbase . '/' .$this->api_v1;
 		return $url;
@@ -101,7 +88,7 @@ class UrlManagerObject
 	 * Return uri for ember comunication (API_v1_2) ex: "emarketing/apistatistics"
 	 * @return URL string
 	 */
-	public function getApi_v1_2Url()
+	public function getApi_v1_2Url($full = false)
 	{
 		$url = $this->appbase . '/' .$this->api_v1_2;
 		return $url;

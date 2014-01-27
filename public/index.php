@@ -172,33 +172,30 @@ try {
 	/*
 	 * Administrador de url's
 	 */
-	
-	
-	$urlManagerObj = new UrlManagerObject();
-	
+	$urlManagerObj = new UrlManagerObject($config);
+
 	
 	/*
 	 * Url Object, utilizado para crear URLs
 	 */
-    $di->set('url', function(){
-		$urlManagerObj = new UrlManagerObject();
+    $di->set('url', function() use ($urlManagerObj) {
         $url = new \Phalcon\Mvc\Url();
-        $url->setBaseUri('/' . $urlManagerObj->getBaseUri() . '/');
+        $uri = $urlManagerObj->getBaseUri();
+
+        // Adicionar / al inicio y al final
+        if (substr($uri, 0, 1) != '/') {
+        	$uri = '/' . $uri;
+        }
+        if (substr($uri, -1) != '/') {
+        	$uri .= '/';
+        }
+
+        $url->setBaseUri($uri);
         return $url;
     });
 	
-	/*
-	 * Url de los API's
-	 */
-	
-	$apiurl = new stdClass;
-	$apiurl->url = $urlManagerObj->getApi_v1Url();
-	$di->set('apiurlbase', $apiurl);
-	
-	$apistatistics = new stdClass;
-	$apistatistics->url = $urlManagerObj->getApi_v1_2Url();
-	$di->set('apiurlstatistic', $apistatistics);
-	
+	$di->set('urlManager', $urlManagerObj);    
+
 	/*
 	 * Directorio de assets
 	 */
@@ -206,6 +203,7 @@ try {
 	$asset->dir = $config->general->assetsfolder;
 	$asset->url = '/' . $urlManagerObj->getAppUrlAsset() . '/';
 	$di->set('asset', $asset);
+	
 	/*
 	 * Directorio de assets globales
 	 */
