@@ -40,27 +40,26 @@ class UrlManagerObject
 			$this->host_mail = "nmailer.sigmamovil.com";
 			$this->host_assets = "files.sigmamovil.com";
 		}
-		
+	}
+	
+	protected function getPrefix($full)
+	{
+		if ($full) {
+			$prefix = $this->protocol . '://' .$this->host . '/';
+		}
+		else {
+			$prefix = '';
+		}
+		return $prefix;
 	}
 	
 	/**
-	 * Returns the url base ex: "emarketing"
+	 * Returns the url base ex: "emarketing" and url full ex: "http://localhost/emarketing"
 	 * @return type
 	 */
 	public function getBaseUri($full = false)
 	{
-		return $this->appbase;
-	}
-	
-	/**
-	 * Return full url with protocol and host ex: "http://localhost/emarketing"
-	 * @param type $full
-	 * @return string
-	 */
-	public function getAppUrlBase($full = false)
-	{
-		$url = $this->protocol . '://' .$this->host .'/' . $this->appbase;
-		return $url;
+		return $this->getPrefix($full) . $this->appbase;
 	}
 	
 	/**
@@ -70,8 +69,7 @@ class UrlManagerObject
 	 */
 	public function getAppUrlAsset($full = false)
 	{
-		$url = $this->full . $this->appbase . '/' .$this->assets;	
-		return $url;
+		return $this->getPrefix($full) . $this->appbase . '/' .$this->assets;	
 	}
 	
 	/**
@@ -80,8 +78,7 @@ class UrlManagerObject
 	 */
 	public function getApi_v1Url($full = false)
 	{
-		$url = $this->appbase . '/' .$this->api_v1;
-		return $url;
+		return $this->getPrefix($full) . $this->appbase . '/' .$this->api_v1;
 	}
 	
 	/**
@@ -90,7 +87,6 @@ class UrlManagerObject
 	 */
 	public function getApi_v1_2Url($full = false)
 	{
-		$url = $this->appbase . '/' .$this->api_v1_2;
-		return $url;
+		return $this->getPrefix($full) . $this->appbase . '/' .$this->api_v1_2;
 	}
 }

@@ -7,7 +7,7 @@
 		{{ javascript_include('js/mixin_config.js') }}
 		{{ javascript_include('js/load_activecontacts.js')}}
 <script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlbase.url ~ '/segment/' ~ datasegment.idSegment}}';
+		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/segment/' ~ datasegment.idSegment}}';
 
 		var myContactModel = {
 			email: DS.attr( 'string' ),

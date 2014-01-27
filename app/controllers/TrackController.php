@@ -8,8 +8,8 @@ class TrackController extends ControllerBase
 		
 		list($idLink, $idMail, $idContact, $md5) = $idenfifiers;
 		
-		$urlManager = new UrlManagerObject(true);
-		$src = $urlManager->getAppUrlBase() . '/track/open/1_' . $idMail . '_' . $idContact;
+		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
+		$src = $urlManager->getBaseUri(true) . '/track/open/1_' . $idMail . '_' . $idContact;
 		$md5_2 = md5($src . '_Sigmamovil_Rules');
 		
 //		$this->logger->log('Iniciando validación de enlace');
@@ -29,7 +29,7 @@ class TrackController extends ControllerBase
 			 */
 			
 			$this->logger->log('Devolviendo imagen');
-			$img = $urlManager->getAppUrlBase() . '/images/tracking.gif';
+			$img = $urlManager->getBaseUri(true) . '/images/tracking.gif';
 
 			$this->response->setHeader("Content-Type", "image/gif");
 

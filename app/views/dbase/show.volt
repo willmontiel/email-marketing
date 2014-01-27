@@ -8,7 +8,7 @@
 	{{ javascript_include('js/mixin_config.js') }}
 
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlbase.url ~ '/dbase/' ~ sdbase.idDbase }}';
+		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/dbase/' ~ sdbase.idDbase }}';
 		
 		var myContactModel = {
 			list: DS.belongsTo('list'),

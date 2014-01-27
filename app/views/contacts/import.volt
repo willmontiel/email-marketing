@@ -6,7 +6,7 @@
 
 
 <script type="text/javascript">
-	var MyDbaseUrl = '{{apiurlbase.url ~ '/import/' ~ idContactlist}}';
+	var MyDbaseUrl = '{{urlManager.getBaseUri(true) ~ '/import/' ~ idContactlist}}';
 
 	var myImportModel = {
 		datas: DS.attr( 'string' ),

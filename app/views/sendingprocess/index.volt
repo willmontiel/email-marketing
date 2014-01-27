@@ -4,13 +4,13 @@
 	{{ javascript_include('tablesorter/jquery-latest.js')}}
 	{{ javascript_include('tablesorter/jquery.tablesorter.js')}}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlbase.url}}';
+		var MyDbaseUrl = '{{urlManager.getBaseUri()}}';
 		$(function() { 
 			$("#processes-table").tablesorter(); 
 		}); 
 		
 		var loadNow = function() {   
-							$.getJSON(MyBaseURL + 'sendingprocess/getprocessesinfo',function(data){
+							$.getJSON(MyBaseURL + '/sendingprocess/getprocessesinfo',function(data){
 							$('#resultado').empty();
 							if(data !== null) {
 								for(var f=0; f<data.length; f++){

@@ -4,7 +4,7 @@
 	{{ javascript_include('tablesorter/jquery-latest.js')}}
 	{{ javascript_include('tablesorter/jquery.tablesorter.js')}}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlbase.url}}';
+		{#var MyDbaseUrl = '{{urlManager.getApi_v1Url()}}';#}
 		$(function() { 
 			$("#processes-table").tablesorter(); 
 		}); 

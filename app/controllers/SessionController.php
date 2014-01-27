@@ -59,8 +59,8 @@ class SessionController extends \Phalcon\Mvc\Controller
 			
 			if ($user) {
 				$cod = uniqid();
-				$urlManager = new UrlManagerObject();
-				$url = $urlManager->getAppUrlBase();
+				$urlManager = $urlManager = Phalcon\DI::getDefault()->get('urlManager');
+				$url = $urlManager->getBaseUri(true);
 				$url .= '/session/reset/' . $cod;
 				
 				$recoverObj = new Tmprecoverpass();

@@ -3,7 +3,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{apiurlbase.url}}';
+		var MyDbaseUrl = '{{urlManager.getApi_v1Url()}}';
 	</script>
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
