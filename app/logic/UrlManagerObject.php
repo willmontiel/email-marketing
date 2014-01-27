@@ -14,9 +14,14 @@ class UrlManagerObject
 	protected $host_assets;
 	protected $full;
 
-	public function __construct($full = false) 		
+	public function __construct($full = false, $sender = false) 		
 	{	
-		$config = new \Phalcon\Config\Adapter\Ini("../app/config/configuration.ini");
+		if ($sender) {
+			$config = new \Phalcon\Config\Adapter\Ini("../../config/configuration.ini");
+		}
+		else {
+			$config = new \Phalcon\Config\Adapter\Ini("../app/config/configuration.ini");
+		}
 		
 		if (isset($config->urlmanager)) {
 			$this->protocol = $config->urlmanager->protocol;

@@ -48,6 +48,7 @@ class MailController extends ControllerBase
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
 			$mailClone->createdon = time();
+			$mailClone->previewData = $mail->previewData;
 			
 			if (!$mailClone->save()) {
 				foreach ($mailClone->getMessages() as $msg) {

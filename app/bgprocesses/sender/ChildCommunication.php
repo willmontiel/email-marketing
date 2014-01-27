@@ -1,5 +1,5 @@
 <?php
-require_once "../../../swiftmailer-5.0.3/lib/swift_required.php";
+require_once "../../../public/swiftmailer-5.0.3/lib/swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
 	protected $childprocess;

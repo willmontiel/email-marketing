@@ -8,15 +8,16 @@ class TrackingUrlObject
 	
 	public function getOpenTrackingUrl($html, $idMail, $idContact)
 	{
-		$urlManager = new UrlManagerObject(true);
-		$src = $urlManager->getAppUrlBase() . '/tracking/open/1_' . $idMail . '_' . $idContact;
+		$urlManager = new UrlManagerObject(true, true);
+		$src = $urlManager->getAppUrlBase() . '/track/open/1_' . $idMail . '_' . $idContact;
 		$md5 = md5($src . '_Sigmamovil_Rules');
 		$img = '<img src="' . $src . '_' . $md5 . '" /></body>'; 
 		
 		$search = array('</body>');
 		$replace = array($img);
-		
+		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track');
 		$htmlWithTracking = str_replace($search, $replace, $html);
+		Phalcon\DI::getDefault()->get('logger')->log('Html: ' . $htmlWithTracking);
 		
 		return $htmlWithTracking;
 	}
