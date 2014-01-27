@@ -32,9 +32,9 @@ class TrackController extends ControllerBase
 			$img = $urlManager->getBaseUri(true) . '/images/tracking.gif';
 
 			$this->response->setHeader("Content-Type", "image/gif");
-
+//			$this->response->setHeader("Content-Length", 43);
 			$this->view->disable();
-			return $this->response->setContent($img);
+			return $this->response->setContent(file_get_contents($img));
 		}
 		else {
 			$this->logger->log('Enlace reprobado');
