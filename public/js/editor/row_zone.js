@@ -16,8 +16,11 @@ rowZone.prototype.drawHtml = function() {
 	
 	this.content = row;
 	this.dz.$obj.append(row);
+	this.content.data('smobj', this);
+	
 	this.addColumn();
 	this.editRow();
+	this.removeRow();
 };
 
 rowZone.prototype.addBlock = function(block) {
@@ -67,10 +70,24 @@ rowZone.prototype.editRow = function() {
 	});
 };
 
+rowZone.prototype.removeRow = function() {
+	var t = this;
+	this.content.find('.remove-row').on('click', function(event) {
+		t.dz.removeRow(this);
+		t.content.remove();
+	});
+};
+
 rowZone.prototype.updateBlockStyle = function(style, value) {
 	this.content.css(style, value);
 };
 
 rowZone.prototype.updateContentStyle = function(style, value) {
 	this.content.css(style, value);
+};
+
+rowZone.prototype.persist = function() {
+	for(var i = 0; i < this.listofblocks.length; i++) {
+		this.listofblocks[i].persist();
+	}
 };

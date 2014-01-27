@@ -576,7 +576,7 @@ table {
 	position: absolute;
 	bottom: 8px;
 	width: 50%;
-	z-index: 10;
+	z-index: 2;
 	margin-left: 25%;
 }
 /* Mostrar boton de adicion cuando se pasa mouse sobre el dropzone */
@@ -689,7 +689,7 @@ table {
 	left: -8px;
 }
 .remove-row {
-	left: -8px;
+	right: -8px;
 }
 .add-column {
 	left: 10%;
@@ -711,7 +711,7 @@ table {
 
 .component-toolbar {
 	height: 60px;
-	width: 132%;
+	width: 140%;
 	background: lightgray;
 	padding: 4px;
 	border-radius: 5px;

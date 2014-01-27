@@ -35,9 +35,9 @@ Editor.prototype.otherLayout = function() {
 		parent.iframeResize();
 		
 		$('.drop-zone').sortable({ 
-			handle: '.handle-tool', 
+			handle: '.move-row', 
 			placeholder: 'placeholder', 
-			items: '> div.module',
+			items: '> div.row-of-blocks',
 			connectWith: '.drop-zone'
 		});
 
@@ -60,9 +60,9 @@ Editor.prototype.objectExists = function(objMail) {
 		NoMediaDisplayer();
 		
 		$('.drop-zone').sortable({ 
-			handle: '.handle-tool', 
+			handle: '.move-row', 
 			placeholder: 'placeholder', 
-			items: '> div.module',
+			items: '> div.row-of-blocks',
 			connectWith: '.drop-zone'
 		});
 

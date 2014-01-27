@@ -109,3 +109,13 @@ TxtBlock.prototype.updateBlockStyle = function(style, value) {
 TxtBlock.prototype.updateContentStyle = function(style, value) {
 	this.content.find('.content-text').css(style, value);
 };
+
+TxtBlock.prototype.persist = function() {
+	var obj = {};
+	obj.content = this.content.find('.content-text').html();
+	return obj;
+};
+
+TxtBlock.prototype.unpersist = function() {
+	
+};

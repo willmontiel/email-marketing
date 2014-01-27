@@ -35,7 +35,7 @@ Toolbar.prototype.createBackground = function() {
 	var t = this;
 	
 	$("#color-background-toolbar input").on("change", function () {
-		t.component.updateBlockStyle('border-color', $(this).val());
+		t.component.updateBlockStyle('background-color', $(this).val());
 		t.component.background_color = $(this).val();
 	});
 };
@@ -70,7 +70,7 @@ Toolbar.prototype.createBorder = function() {
 	$('#color-border-toolbar').pickAColor({showHexInput: false});
 	
 	$("#color-border-toolbar input").on("change", function () {
-		t.component.updateBlockStyle('background-color', $(this).val());
+		t.component.updateBlockStyle('border-color', $(this).val());
 		t.component.border_color = $(this).val();
 	});
 	

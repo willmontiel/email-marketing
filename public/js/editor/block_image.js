@@ -67,25 +67,104 @@ ImgBlock.prototype.updateContentStyle = function(style, value) {
 };
 
 ImgBlock.prototype.createImage = function() {
-//	switch (this.parentBlock.width) {
-//		case 'full-width':
-//			this.widthZone =  550;
-//			break;
-//		case 'half-width':
-//			this.widthZone = 550/2;
-//			break;
-//		case 'third-width':
-//			this.widthZone = Math.floor(550/3);
-//			break;
-//		case 'twothird-width':
-//			this.widthZone = Math.floor(550*2/3);
-//			break;
-//		default:
-//			console.log('3')
-			this.widthZone =  550;
-//			break;
-//	}
-	
-	media.setBlock(this);
-	media.Selected(this.content.find('img').attr('src'));
+	var t = this;
+	this.content.find('img').on('click', function() {
+		t.widthZone =  t.content.width();
+		media.setBlock(t);
+		media.imageSelected(t.content.find('img').attr('src'));
+	});
+};
+
+ImgBlock.prototype.changeAttrImgBlock = function(attr, value) {
+	this.content.find('img').attr(attr, value);
+};
+
+ImgBlock.prototype.assignDisplayer = function(displayer) {
+	this.displayer = displayer;
+};
+
+ImgBlock.prototype.setSizeImage = function(height, width) {
+	this.height = Math.floor(height);
+	this.width = Math.floor(width);
+};
+
+ImgBlock.prototype.setAlignImgBlock = function(align) {
+	this.align = align;
+};
+
+ImgBlock.prototype.setLinkToImage = function(link) {
+	this.imglink = link;
+};
+
+ImgBlock.prototype.setVerticalAlignImgBlock = function(vertalign) {
+	this.vertalign = vertalign;
+};
+
+ImgBlock.prototype.addVerticalAlignToImage = function(vertalign) {
+	this.content.css('vertical-align', vertalign);
+};
+
+ImgBlock.prototype.setTableColumn = function(name, value) {
+	this.content.attr(name, value);
+};
+
+ImgBlock.prototype.addClassContentImgBlock = function(value) {
+	var content = this.content.find('.one-element');
+	content.removeClass('pull-center');
+	content.removeClass('pull-left');
+	content.removeClass('pull-right');
+	content.addClass(value);
+};
+
+ImgBlock.prototype.persist = function() {
+	var obj = {	height: this.height,
+				width: this.width, 
+				align: this.align,
+				vertalign: this.vertalign,
+				imagesrc: this.displayer.imagesrc,
+				imglink: this.imglink,
+				heightDisplayer: this.displayer.height, 
+				widthDisplayer: this.displayer.width, 
+				percent: this.displayer.percent };
+	return obj;
+};
+
+ImgBlock.prototype.unpersist = function(obj) {
+	if(obj !== undefined) {
+		var objimage = JSON.parse(obj);
+		this.height = objimage.height;
+		this.width = objimage.width;
+		this.align = objimage.align;
+		this.vertalign = objimage.vertalign;
+		this.imglink = objimage.imglink;
+		this.displayer.height = objimage.heightDisplayer;
+		this.displayer.width = objimage.widthDisplayer;
+		this.displayer.imagesrc = objimage.imagesrc;
+		this.displayer.percent = objimage.percent;
+
+		this.changeAttrImgBlock('height', this.height);
+		this.changeAttrImgBlock('width', this.width);
+		this.changeAttrImgBlock('src', this.displayer.imagesrc);
+		this.addClassContentImgBlock(this.align);
+		this.addVerticalAlignToImage(this.vertalign);
+	}
+	else {
+		delete this.height;
+		delete this.width;
+		delete this.align;
+		delete this.vertalign;
+		delete this.displayer;
+
+		this.content.find('img').removeAttr('height');
+		this.content.find('img').removeAttr('width');
+		this.content.find('img').removeAttr('src');
+		this.content.find('img').removeAttr('alt');
+		
+		if(this.typeBlock.search('image-only') > 0) {
+			this.content.find('img').addClass('image-placeholder');
+		}
+		else {
+			this.content.find('img').addClass('image-text-placeholder');
+		}
+	}
 };

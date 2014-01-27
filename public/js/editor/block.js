@@ -317,7 +317,7 @@ Block.prototype.createImage = function() {
 	}
 	
 	media.setBlock(this);
-	media.Selected(this.htmlData.find('img').attr('src'));	
+	media.imageSelected(this.htmlData.find('img').attr('src'));	
 };
 
 Block.prototype.assignDisplayer = function(displayer) {

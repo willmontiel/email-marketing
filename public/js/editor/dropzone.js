@@ -187,76 +187,34 @@ DropzoneArea.prototype.ondrop = function() {
 		},
 				
 		stop: function(event, object) {
-
 			parent.iframeResize();
-
-			if (object.item.data('smobj') == undefined) {
-				
-				if(object.item.attr('class').search('text') > 0 && object.item.attr('class').search('image') > 0){
-					var content = {image: $(object.item).find('.content-image'), text: $(object.item).find('.content-text')};
-				}
-				else {
-					var content = $(object.item).find('.full-content');
-				}
-
-				var newobj = t.createBlock(object.item.attr('class'), content, object.item);
-
-				newobj.setMediaDisplayer();
-
-				object.item.data('smobj', newobj);
-				
-			}
-			else {
-				
-				object.item.data('smobj').setMediaDisplayer();
-			}
-			
-			var objblk = object.item.data('smobj');
+			var objrow = object.item.data('smobj');
 			
 			for(var i = 0; i < t.content.length; i++) {
-
-				if(t.content[i] == objblk) {
-
+				if(t.content[i] === objrow) {
 					t.content.splice(i, 1);
-
 				}
 			}
 			
-			objblk.parentBlock.content.splice(object.item.index() - 1, 0, objblk);
-			
+			objrow.dz.content.splice(object.item.index() - 2, 0, objrow);
 			$('#edit-area .drop-zone .info-guide').css("display", "");
-			
 			$('#edit-area .sub-mod-cont').removeClass('show-zones-draggable');
 		},
 				
 		receive: function(event, object) {
-
-			if (object.sender != object.item) {
-
-				var newobj = new Block();
-				
-				newobj.unpersist($(object.sender).data('smobj').objSer, t);
-				
-				newobj.setHtmlData(object.item);
-
-				object.item.data('smobj', newobj);
+			if (object.sender !== object.item) {
+				$(object.sender).data('smobj').objSer.dz = t;
 			}
 		},
 
 		remove: function(event, object) {
-			
-			var blkobj = object.item.data('smobj');
-			
-			t.objSer = blkobj.persist();
+			var rowobj = object.item.data('smobj');
+			t.objSer = rowobj;
 			
 			for(var i = 0; i < t.content.length; i++) {
-				
-				if(t.content[i] == blkobj) {
-
-					t.content[i].deleteBlock();
-
+				if(t.content[i] === rowobj) {
+					t.content[i].removeBlock();
 					t.content.splice(i, 1);
-
 				}
 			}
 		}
