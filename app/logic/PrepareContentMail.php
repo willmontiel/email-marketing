@@ -76,7 +76,7 @@ class PrepareContentMail
 				
 				$this->log->log("Partes : " . print_r($srcParts, true));
 				
-				$srcPre = '/' . $srcParts[2];
+				$srcPre = $srcParts[1];
 				$this->log->log("srcPrefi : " . $srcPre);
 				$this->log->log("srcPrivate : " . $srcPrivate);
 				$this->log->log("srcPublic : " . $srcPublic);

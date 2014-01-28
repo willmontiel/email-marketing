@@ -8,8 +8,8 @@ class UrlManagerObject
 	protected $appbase;
 	protected $api_v1;
 	protected $api_v1_2;
-	protected $asset;
-	protected $template;
+	protected $assets;
+	protected $templates;
 	protected $protocol_mail;
 	protected $host_mail;
 	protected $host_assets;
@@ -24,8 +24,8 @@ class UrlManagerObject
 			$this->appbase = $config->urlmanager->appbase;
 			$this->api_v1 = $config->urlmanager->api_v1;
 			$this->api_v1_2 = $config->urlmanager->api_v1_2;
-			$this->asset = $config->urlmanager->asset;
-			$this->template = $config->urlmanager->template;
+			$this->assets = $config->urlmanager->assets;
+			$this->templates = $config->urlmanager->templates;
 			$this->protocol_mail = $config->urlmanager->protocol_mail;
 			$this->host_mail = $config->urlmanager->host_mail;
 			$this->host_assets = $config->urlmanager->host_assets;;
@@ -37,8 +37,8 @@ class UrlManagerObject
 			$this->appbase = "emarketing";
 			$this->api_v1 = "api";
 			$this->api_v1_2 = "apistatistics";
-			$this->asset = "asset";
-			$this->template = "template";
+			$this->assets = "asset";
+			$this->templates = "template";
 			$this->protocol_mail = "http";
 			$this->host_mail = "nmailer.sigmamovil.com";
 			$this->host_assets = "files.sigmamovil.com";
@@ -78,7 +78,7 @@ class UrlManagerObject
 	
 	public function getAppUrlTemplate($full = false)
 	{
-		return $this->getPrefix($full) . $this->appbaseTrailing . $this->template;
+		return $this->getPrefix($full) . $this->appbaseTrailing . $this->templates;
 	}
 	
 	/**
