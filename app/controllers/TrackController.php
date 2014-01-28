@@ -3,7 +3,8 @@ class TrackController extends ControllerBase
 {
 	public function openAction($parameters)
 	{
-		$this->logger->log('Entré a track con: ' . $parameters);
+		$info = $_SERVER['HTTP_USER_AGENT'];
+		$this->logger->log('Info: ' . $info);
 		$idenfifiers = explode("_", $parameters);
 		
 		list($idLink, $idMail, $idContact, $md5) = $idenfifiers;
@@ -18,8 +19,11 @@ class TrackController extends ControllerBase
 		if ($md5 == $md5_2) {
 //			$this->logger->log('Enlace aprobado');
 			try {
+				$userAgent = new UserAgentDetectorObj();
+				$userAgent->setInfo($info);
+				
 				$trackingObj = new TrackingObject();
-				$trackingObj->updateTrackOpen($idMail, $idContact);
+				$trackingObj->updateTrackOpen($idMail, $idContact, $userAgent->getOperativeSystem(), $userAgent->getBrowser());
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');

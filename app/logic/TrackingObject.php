@@ -9,7 +9,7 @@ class TrackingObject
 		$this->log = Phalcon\DI::getDefault()->get('logger');
 	}
 	
-	public function updateTrackOpen($idMail, $idContact)
+	public function updateTrackOpen($idMail, $idContact, $so = null, $browser = null)
 	{
 		$mxc = Mxc::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idContact = ?2',
@@ -19,7 +19,7 @@ class TrackingObject
 		if ($mxc) {
 			if ($mxc->opening == 0 || $mxc->bounced == 0 || $mxc->spam == 0) {
 				$this->log->log('Es la primera apertura');
-				
+				$this->log->log('So: ' . $so . 'Browser: ' . $browser);
 				try {
 					$db = Phalcon\DI::getDefault()->get('db');
 					$db->begin();
@@ -40,6 +40,8 @@ class TrackingObject
 					$event->type = 'Opening';
 					$event->date = time();
 					$event->description = 'opening';
+					$event->userAgent = $so . ', ' . $browser;
+					$event->location = ' ';
 
 					if (!$event->save()) {
 						foreach ($event->getMessages() as $msg) {

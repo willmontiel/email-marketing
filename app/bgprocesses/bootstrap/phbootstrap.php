@@ -33,6 +33,12 @@ $di->set('appPath', function () use ($apppath) {
 $config = new \Phalcon\Config\Adapter\Ini("../../config/configuration.ini");
 
 /*
+ * Configuración de las URL's
+ */
+$urlManagerObj = new UrlManagerObject($config);
+$di->set('urlManager', $urlManagerObj); 
+
+/*
  * Profiler Object. Lo utilizamos en modo de depuracion/desarrollo para
  * determinar los tiempos de ejecucion de SQL
  */
