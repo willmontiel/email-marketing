@@ -71,16 +71,16 @@ class PrepareContentMail
 				
 				$srcParts = explode("/", $srcImg);
 				
-				$srcPrivate = $this->urlManager->getAppUrlAsset();
-				$srcPublic = $this->urlManager->getAppUrlTemplate();
+//				$srcPrivate = $this->urlManager->getAppUrlAsset();
+//				$srcPublic = $this->urlManager->getAppUrlTemplate();
 				
 				$this->log->log("Partes : " . print_r($srcParts, true));
 				
 				$srcPre = $srcParts[1];
-				$this->log->log("srcPrefi : " . $srcPre);
-				$this->log->log("srcPrivate : " . $srcPrivate);
-				$this->log->log("srcPublic : " . $srcPublic);
-				if ($srcPre == $srcPrivate) {
+//				$this->log->log("srcPrefi : " . $srcPre);
+//				$this->log->log("srcPrivate : " . $srcPrivate);
+//				$this->log->log("srcPublic : " . $srcPublic);
+				if ($srcPre == 'asset') {
 					$find[] = $srcImg;
 					$idAsset = filter_var($srcImg, FILTER_SANITIZE_NUMBER_INT);
 					$this->log->log("idAsset : " . $idAsset);
@@ -90,7 +90,7 @@ class PrepareContentMail
 					$replace[] = $srcConverted;
 					$this->log->log("srcConverted : " . $srcConverted);
 				}
-				else if ($srcPre == $srcPublic) {
+				else if ($srcPre == 'template') {
 					$find[] = $srcImg;
 					$idTemplateImage = filter_var($srcImg, FILTER_SANITIZE_NUMBER_INT);
 					$ids = explode("/", $srcImg);
