@@ -11,6 +11,7 @@ class PrepareContentMail
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 	
 		$this->url = $di['url'];
+		$this->urlManager = $di['urlManager'];
 		$this->account = $account;
 		$this->domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 	}
@@ -69,8 +70,9 @@ class PrepareContentMail
 				$this->log->log("SrcImg: " . $srcImg);
 				
 				$srcParts = explode("/", $srcImg);
-				$srcPrivate = $this->url->get('asset');
-				$srcPublic = $this->url->get('template');
+				
+				$srcPrivate = $this->urlManager->getAppUrlAsset();
+				$srcPublic = $this->urlManager->getAppUrlTemplate();
 				
 				$this->log->log("Partes : " . print_r($srcParts, true));
 				
@@ -117,7 +119,7 @@ class PrepareContentMail
 		
 		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
 		
-		$img = $this->domain->imageUrl . $this->url->get('assets') . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
+		$img = $this->domain->imageUrl . $this->urlManager->getAppUrlAsset() . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
 		
 		return $img;
 	}
@@ -130,7 +132,7 @@ class PrepareContentMail
 		));
 		
 		$ext = pathinfo( $tpImg->name, PATHINFO_EXTENSION);
-		$img = $this->domain->imageUrl . $this->url->get('templates') . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
+		$img = $this->domain->imageUrl . $this->urlManager->getAppUrlTemplate() . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
 	
 		return $img;
 	}

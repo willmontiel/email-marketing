@@ -17,7 +17,7 @@ class TrackingUrlObject
 		$replace = array($img);
 		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track');
 		$htmlWithTracking = str_replace($search, $replace, $html);
-		Phalcon\DI::getDefault()->get('logger')->log('Html: ' . $htmlWithTracking);
+//		Phalcon\DI::getDefault()->get('logger')->log('Html: ' . $htmlWithTracking);
 		
 		return $htmlWithTracking;
 	}
