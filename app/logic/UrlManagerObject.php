@@ -40,6 +40,7 @@ class UrlManagerObject
 			$this->host_mail = "nmailer.sigmamovil.com";
 			$this->host_assets = "files.sigmamovil.com";
 		}
+		$this->appbaseTrailing = $this->appbase . (($this->appbase != '')?'/':'');
 	}
 	
 	protected function getPrefix($full)
@@ -69,7 +70,7 @@ class UrlManagerObject
 	 */
 	public function getAppUrlAsset($full = false)
 	{
-		return $this->getPrefix($full) . $this->appbase . '/' .$this->assets;	
+		return $this->getPrefix($full) . $this->appbaseTrailing . $this->assets;
 	}
 	
 	/**
@@ -78,7 +79,7 @@ class UrlManagerObject
 	 */
 	public function getApi_v1Url($full = false)
 	{
-		return $this->getPrefix($full) . $this->appbase . '/' .$this->api_v1;
+		return $this->getPrefix($full) . $this->appbaseTrailing . $this->api_v1;
 	}
 	
 	/**
@@ -87,6 +88,6 @@ class UrlManagerObject
 	 */
 	public function getApi_v1_2Url($full = false)
 	{
-		return $this->getPrefix($full) . $this->appbase . '/' .$this->api_v1_2;
+		return $this->getPrefix($full) . $this->appbaseTrailing . $this->api_v1_2;
 	}
 }
