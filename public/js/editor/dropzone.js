@@ -100,6 +100,7 @@ DropzoneArea.prototype.insertRows = function() {
 	
 	for (var row = 0; row < this.content.length; row++) {
 		this.$obj.append(this.content[row].createRow());
+		this.content[row].updateChanges();
 	}
 };
 

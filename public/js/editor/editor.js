@@ -277,8 +277,8 @@ $(function() {
 	}
 	
 	$('html').click(function(ev) {
-		if($(ev.target).parents('.component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'component-toolbar' ){
-			$('.component-toolbar').hide();
+		if($(ev.target).parents('#my-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-component-toolbar' ){
+			$('#my-component-toolbar').remove();
 			$('.element-in-edition').removeClass('element-in-edition');
 		}
 		

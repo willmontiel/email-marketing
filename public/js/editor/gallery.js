@@ -107,6 +107,8 @@ MediaDisplayer.prototype.imageSelected = function(newsrc, title) {
 					
 					var heightDisplayer = 130*img.naturalHeight/img.naturalWidth;
 					
+					t.block.setImageSrc(newsrc);
+					
 					t.block.assignDisplayer({imagesrc: newsrc, percent: 100, width: widthDisplayer, height: heightDisplayer});
 					
 					t.block.setAlignImgBlock("pull-left");
@@ -227,7 +229,7 @@ MediaDisplayer.prototype.createSlider = function() {
 		t.block.unpersist(t.oldImage);
 		t.block.changeAttrImgBlock('height', t.block.height);
 		t.block.changeAttrImgBlock('width', t.block.width);
-		t.block.changeAttrImgBlock('src', t.block.displayer.imagesrc);
+		t.block.changeAttrImgBlock('src', t.block.imgsrc);
 		t.block.addClassContentImgBlock(t.block.align);
 		t.block.addVerticalAlignToImage(t.block.vertalign);
 	});

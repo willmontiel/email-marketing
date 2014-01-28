@@ -10,9 +10,9 @@ class HtmlZone extends HtmlAbstract
 		$this->width = $zone->width;
 		
 		foreach ($zone->content as $content) {
-			$block = HtmlBlockObj::createBlock($content->type);
-			$block->assignContent($content);
-			$this->children[] = $block->render();
+			$row = new HtmlRow();
+			$row->assignContent($content);
+			$this->children[] = $row->render();
 		}
 	}
 	

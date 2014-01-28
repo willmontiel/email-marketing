@@ -1,8 +1,10 @@
 function ImgBlock(row) {
 	this.row = row;
-	this.background_color = "000000";
+	this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object image-placeholder" />');
+	this.background_color = "FFFFFF";
 	this.border_width = 0;
-	this.border_color = "000000";
+	this.border_color = "FFFFFF";
+	this.border_style = "none";
 	this.corner_top_left = 0;
 	this.corner_top_right = 0;
 	this.corner_bottom_left = 0;
@@ -25,7 +27,7 @@ ImgBlock.prototype.createBlock = function() {
 };
 
 ImgBlock.prototype.drawHtml = function() {
-	var block = $('<td>\n\
+	var block = $('<td class="in-column">\n\
 						<table class="full-block-element" border="0" cellpadding="0">\n\
 							<tr>\n\
 								<td>\n\
@@ -34,12 +36,12 @@ ImgBlock.prototype.drawHtml = function() {
 											<div class="edit-block tool"><span class="icon-pencil icon-white"></span></div>\n\
 											<div class="remove-block tool"><span class="icon-minus icon-white"></span></div>\n\
 										</div>\n\
-										<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object image-placeholder" />\n\
 									</div>\n\
 								</td>\n\
 							</tr>\n\
 						</table>\n\
 					</td>');
+	block.find('.one-element').append(this.content_img);
 	return block;
 };
 
@@ -95,6 +97,10 @@ ImgBlock.prototype.setSizeImage = function(height, width) {
 	this.width = Math.floor(width);
 };
 
+ImgBlock.prototype.setImageSrc = function(imgsrc) {
+	this.imgsrc = imgsrc;
+};
+
 ImgBlock.prototype.setAlignImgBlock = function(align) {
 	this.align = align;
 };
@@ -125,18 +131,34 @@ ImgBlock.prototype.addClassContentImgBlock = function(value) {
 
 ImgBlock.prototype.persist = function() {
 	var obj = {	
+		background_color : this.background_color,
+		border_width : this.border_width,
+		border_color : this.border_color,
+		border_style : this.border_style ,
+		corner_top_left : this.corner_top_left,
+		corner_top_right : this.corner_top_right,
+		corner_bottom_left : this.corner_bottom_left,
+		corner_bottom_right : this.corner_bottom_right,
+		margin_top : this.margin_top,
+		margin_bottom : this.margin_bottom,
+		margin_left : this.margin_left,
+		margin_right : this.margin_right,
 		height: this.height,
 		width: this.width, 
 		align: this.align,
 		vertalign: this.vertalign,
-		imagesrc: this.displayer.imagesrc,
+		imgsrc: this.imgsrc,
+		imgalt: this.content.find('img').attr('alt'),
 		imglink: this.imglink,
-		heightDisplayer: this.displayer.height, 
-		widthDisplayer: this.displayer.width, 
-		percent: this.displayer.percent,
-		type : 'image'
+		type : 'Image'
 	};
-	console.log(this)
+
+	if(this.displayer !== undefined) {
+		obj.srcDisplayer= this.displayer.imagesrc;
+		obj.heightDisplayer= this.displayer.height; 
+		obj.widthDisplayer= this.displayer.width;
+		obj.percent= this.displayer.percent;
+	}
 	return obj;
 };
 
@@ -153,10 +175,25 @@ ImgBlock.prototype.unpersist = function(obj) {
 		this.align = obj.align;
 		this.vertalign = obj.vertalign;
 		this.imglink = obj.imglink;
+		this.imgsrc = obj.imgsrc;
 		this.displayer.height = obj.heightDisplayer;
 		this.displayer.width = obj.widthDisplayer;
-		this.displayer.imagesrc = obj.imagesrc;
+		this.displayer.imagesrc = obj.srcDisplayer;
 		this.displayer.percent = obj.percent;
+		this.background_color = obj.background_color,
+		this.border_width = obj.border_width;
+		this.border_color = obj.border_color;
+		this.border_style = obj.border_style;
+		this.corner_top_left = obj.corner_top_left;
+		this.corner_top_right = obj.corner_top_right;
+		this.corner_bottom_left = obj.corner_bottom_left;
+		this.corner_bottom_right = obj.corner_bottom_right;
+		this.margin_top = obj.margin_top;
+		this.margin_bottom = obj.margin_bottom;
+		this.margin_left = obj.margin_left;
+		this.margin_right = obj.margin_right;
+		
+		this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object" src="' + this.imgsrc + '" height="' + this.height + '" width="' + this.width + '" />');
 	}
 	else {
 		delete this.height;
@@ -164,6 +201,8 @@ ImgBlock.prototype.unpersist = function(obj) {
 		delete this.align;
 		delete this.vertalign;
 		delete this.displayer;
+		delete this.imgsrc;
+		delete this.imglink;
 
 		this.content.find('img').removeAttr('height');
 		this.content.find('img').removeAttr('width');
@@ -173,4 +212,22 @@ ImgBlock.prototype.unpersist = function(obj) {
 	}
 	
 	return this;
+};
+
+ImgBlock.prototype.updateChanges = function() {
+	this.updateBlockStyle('background-color', this.background_color);
+	
+	this.updateBlockStyle('border-color', this.border_color);
+	this.updateBlockStyle('border-width', this.border_width);
+	this.updateBlockStyle('border-style', this.border_style);
+	
+	this.updateBlockStyle('border-top-left-radius', this.corner_top_left);
+	this.updateBlockStyle('border-top-right-radius', this.corner_top_right);
+	this.updateBlockStyle('border-bottom-left-radius', this.corner_bottom_left);
+	this.updateBlockStyle('border-bottom-right-radius', this.corner_bottom_right);
+	
+	this.updateContentStyle('margin-top', this.margin_top);
+	this.updateContentStyle('margin-bottom', this.margin_bottom);
+	this.updateContentStyle('margin-left', this.margin_left);
+	this.updateContentStyle('margin-right', this.margin_right);
 };

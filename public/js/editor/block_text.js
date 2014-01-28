@@ -1,9 +1,10 @@
 function TxtBlock(row) {
 	this.row = row;
 	this.content_text = $('<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>');
-	this.background_color = "000000";
+	this.background_color = "FFFFFF";
 	this.border_width = 0;
-	this.border_color = "000000";
+	this.border_color = "FFFFFF";
+	this.border_style = "none";
 	this.corner_top_left = 0;
 	this.corner_top_right = 0;
 	this.corner_bottom_left = 0;
@@ -28,7 +29,7 @@ TxtBlock.prototype.createBlock = function() {
 
 
 TxtBlock.prototype.drawHtml = function() {
-	var block = $('<td>\n\
+	var block = $('<td class="in-column">\n\
 						<table class="full-block-element" border="0" cellpadding="0">\n\
 							<tr>\n\
 								<td>\n\
@@ -44,9 +45,8 @@ TxtBlock.prototype.drawHtml = function() {
 							</tr>\n\
 						</table>\n\
 					</td>');
-	block.find('.content-text').append(this.content_text)
+	block.find('.content-text').append(this.content_text);
 	return block;
-	
 };
 
 TxtBlock.prototype.newRedactor = function() {
@@ -123,6 +123,7 @@ TxtBlock.prototype.persist = function() {
 		background_color : this.background_color,
 		border_width : this.border_width,
 		border_color : this.border_color,
+		border_style : this.border_style ,
 		corner_top_left : this.corner_top_left,
 		corner_top_right : this.corner_top_right,
 		corner_bottom_left : this.corner_bottom_left,
@@ -131,8 +132,8 @@ TxtBlock.prototype.persist = function() {
 		margin_bottom : this.margin_bottom,
 		margin_left : this.margin_left,
 		margin_right : this.margin_right,
-		content : this.content.find('.content-text').html(),
-		type : 'text'
+		content : $.trim(this.content.find('.content-text').html()),
+		type : 'Text'
 	};
 	return obj;
 };
@@ -141,6 +142,7 @@ TxtBlock.prototype.unpersist = function(obj) {
 	this.background_color = obj.background_color,
 	this.border_width = obj.border_width;
 	this.border_color = obj.border_color;
+	this.border_style = obj.border_style;
 	this.corner_top_left = obj.corner_top_left;
 	this.corner_top_right = obj.corner_top_right;
 	this.corner_bottom_left = obj.corner_bottom_left;
@@ -152,4 +154,22 @@ TxtBlock.prototype.unpersist = function(obj) {
 	this.content_text = obj.content;
 	
 	return this;
+};
+
+TxtBlock.prototype.updateChanges = function() {
+	this.updateBlockStyle('background-color', this.background_color);
+	
+	this.updateBlockStyle('border-color', this.border_color);
+	this.updateBlockStyle('border-width', this.border_width);
+	this.updateBlockStyle('border-style', this.border_style);
+	
+	this.updateBlockStyle('border-top-left-radius', this.corner_top_left);
+	this.updateBlockStyle('border-top-right-radius', this.corner_top_right);
+	this.updateBlockStyle('border-bottom-left-radius', this.corner_bottom_left);
+	this.updateBlockStyle('border-bottom-right-radius', this.corner_bottom_right);
+	
+	this.updateContentStyle('margin-top', this.margin_top);
+	this.updateContentStyle('margin-bottom', this.margin_bottom);
+	this.updateContentStyle('margin-left', this.margin_left);
+	this.updateContentStyle('margin-right', this.margin_right);
 };

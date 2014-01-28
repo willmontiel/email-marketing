@@ -1,9 +1,10 @@
 function rowZone(dz) {
 	this.dz = dz;
 	this.listofblocks = [];
-	this.background_color = "000000";
+	this.background_color = "FFFFFF";
 	this.border_width = 0;
-	this.border_color = "000000";
+	this.border_color = "FFFFFF";
+	this.border_style = "none";
 	this.corner_top_left = 0;
 	this.corner_top_right = 0;
 	this.corner_bottom_left = 0;
@@ -27,6 +28,7 @@ rowZone.prototype.createRow = function() {
 
 	for(var blk = 0; blk < this.listofblocks.length; blk++) {
 		this.listofblocks[blk].createBlock();
+		this.listofblocks[blk].updateChanges();
 	}
 };
 
@@ -46,8 +48,8 @@ rowZone.prototype.drawHtml = function() {
 
 rowZone.prototype.addBlock = function(block) {
 	this.listofblocks.push(block);
-	
 	block.createBlock();
+	this.content.find('.in-column').css('width', (100/this.listofblocks.length) + '%');
 };
 
 rowZone.prototype.removeBlock = function(block) {
@@ -61,6 +63,7 @@ rowZone.prototype.removeBlock = function(block) {
 		this.dz.removeRow(this);
 		this.content.remove();
 	}
+	this.content.find('.in-column').css('width', (100/this.listofblocks.length) + '%');
 };
 
 rowZone.prototype.addColumn = function() {
@@ -112,6 +115,7 @@ rowZone.prototype.persist = function() {
 		background_color : this.background_color,
 		border_width : this.border_width,
 		border_color : this.border_color,
+		border_style : this.border_style ,
 		corner_top_left : this.corner_top_left,
 		corner_top_right : this.corner_top_right,
 		corner_bottom_left : this.corner_bottom_left,
@@ -126,7 +130,7 @@ rowZone.prototype.persist = function() {
 	for(var i = 0; i < this.listofblocks.length; i++) {
 		obj.content.push(this.listofblocks[i].persist());
 	}
-	
+	obj.amount = this.listofblocks.length;
 	return obj;
 };
 
@@ -134,6 +138,7 @@ rowZone.prototype.unpersist = function(obj) {
 	this.background_color = obj.background_color;
 	this.border_width = obj.border_width;
 	this.border_color = obj.border_color;
+	this.border_style = obj.border_style;
 	this.corner_top_left = obj.corner_top_left;
 	this.corner_top_right = obj.corner_top_right;
 	this.corner_bottom_left = obj.corner_bottom_left;
@@ -145,13 +150,39 @@ rowZone.prototype.unpersist = function(obj) {
 	
 	for(var i = 0; i < obj.content.length; i++) {
 		switch (obj.content[i].type) {
-			case 'text':
+			case 'Text':
 				var block = new TxtBlock(this);
 				break;
-			case 'image':
+			case 'Image':
 				var block = new ImgBlock(this);
+				break;
+			case 'Separator' :
+				var block = new HrBlock(this);
+				break;
+			case 'Button' :
+				var block = new BtnBlock(this);
 				break;
 		}
 		this.listofblocks.push(block.unpersist(obj.content[i]));
 	}
+};
+
+rowZone.prototype.updateChanges = function() {
+	this.updateBlockStyle('background-color', this.background_color);
+	
+	this.updateBlockStyle('border-color', this.border_color);
+	this.updateBlockStyle('border-width', this.border_width);
+	this.updateBlockStyle('border-style', this.border_style);
+	
+	this.updateBlockStyle('border-top-left-radius', this.corner_top_left);
+	this.updateBlockStyle('border-top-right-radius', this.corner_top_right);
+	this.updateBlockStyle('border-bottom-left-radius', this.corner_bottom_left);
+	this.updateBlockStyle('border-bottom-right-radius', this.corner_bottom_right);
+	
+	this.updateContentStyle('margin-top', this.margin_top);
+	this.updateContentStyle('margin-bottom', this.margin_bottom);
+	this.updateContentStyle('margin-left', this.margin_left);
+	this.updateContentStyle('margin-right', this.margin_right);
+	
+	this.content.find('.in-column').css('width', (100/this.listofblocks.length) + '%');
 };

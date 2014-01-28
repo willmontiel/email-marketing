@@ -1,7 +1,7 @@
 function Toolbar(component) {
 	this.component = component;
-	
-	this.toolbar = $('.component-toolbar');
+	$('#my-component-toolbar').remove();
+	this.toolbar = $('.component-toolbar').clone().attr('id', 'my-component-toolbar');
 	this.toolbar.empty();
 	this.toolbar.append('<ul class="components-list"/>');
 	
@@ -20,9 +20,12 @@ Toolbar.prototype.drawHtml = function() {
 };
 
 Toolbar.prototype.createBackground = function() {
-	var title = $("<div class='option-title-toolbar'>Fondo</div>");
+	var with_color = (this.component.background_color === 'transparent') ? '' : 'checked';
+	var what_color = (this.component.background_color === 'transparent') ? 'FFFFFF' : this.component.background_color;
+	
+	var title = $("<div class='option-title-toolbar'>Fondo <input type='checkbox' id='withbgcolor' " + with_color + "></label></div>");
 
-	var backgroundColor = $("<input type='text' value='" + this.component.background_color + "' id='color-background-toolbar' name='color-background-toolbar' class='pick-a-color'>");
+	var backgroundColor = $("<input type='text' value='" + what_color + "' id='color-background-toolbar' name='color-background-toolbar' class='pick-a-color'>");
 	
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(title);
@@ -37,6 +40,16 @@ Toolbar.prototype.createBackground = function() {
 	$("#color-background-toolbar input").on("change", function () {
 		t.component.updateBlockStyle('background-color', $(this).val());
 		t.component.background_color = $(this).val();
+	});
+	
+	$("#withbgcolor").on("click", function () {
+		if(!$(this)[0].checked) {
+			t.component.background_color = 'transparent';
+		}
+		else {
+			t.component.background_color = $('#color-background-toolbar input').val();
+		}
+		t.component.updateBlockStyle('background-color', t.component.background_color);
 	});
 };
 
@@ -78,6 +91,7 @@ Toolbar.prototype.createBorder = function() {
 	
 	$('#style-border-toolbar').on('change', function() {
 		t.component.updateBlockStyle('border-style', $(this).val());
+		t.component.border_style = $(this).val();
 	});
 };
 
@@ -140,7 +154,7 @@ Toolbar.prototype.spinnerContentChange = function(id, style, property) {
 	$('#' + id).spinner({min: 0, max: 99,
 		stop: function() {
 			t.component.updateContentStyle(style, $(this).val());
-			t.component.property = $(this).val();
+			t.component[property] = $(this).val();
 		}
 	});
 };
