@@ -1,6 +1,7 @@
 function BtnBlock(row) {
 	this.row = row;
-	this.content_button = '<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button pull-center" style="background-image:url(\'' + config.imagesUrl + '/btn-blue.png\');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>'
+//	this.content_button = '<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button pull-center" style="background-image:url(\'' + config.imagesUrl + '/btn-blue.png\');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>'
+	this.content_button = '<span class="content-button pull-center" style="background-image:url(\'' + config.imagesUrl + '/btn-blue.png\');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>'
 	
 	this.btntext = 'Clic Aqui!';
 	this.btnlink = '';
@@ -42,14 +43,14 @@ BtnBlock.prototype.createBlock = function() {
 	this.removeBlock();
 	
 	var t = this;
-	this.content.on('click', function() {
-		t.createFields();
+	this.content.find('.content-button').on('click', function() {
+		t.createToolbar();
 	});
 };
 
 BtnBlock.prototype.drawHtml = function() {
 	var block = $('<td>\n\
-						<div class="one-element">\n\
+						<div class="one-element clearfix">\n\
 							<div class="elements-options">\n\
 								<div class="edit-block tool"><span class="icon-pencil icon-white"></span></div>\n\
 								<div class="remove-block tool"><span class="icon-minus icon-white"></span></div>\n\
@@ -178,64 +179,6 @@ BtnBlock.prototype.updateChanges = function() {
 	this.designBtn();
 };
 
-BtnBlock.prototype.createFields = function() {
-	
-	$('#btntext').val(this.btntext);
-	$('#btnlink').val(this.btnlink);
-	$('#btnbgcolor').colorpicker('setValue', this.btnbgcolor);
-	$('#field-btnbgcolor').val(this.btnbgcolor);
-	$('#btntextcolor').colorpicker('setValue', this.btntextcolor);
-	$('#field-btntextcolor').val(this.btntextcolor);
-	$('#btnradius').val(this.btnradius);
-	$('#btnbordercolor').colorpicker('setValue', this.btnbordercolor);
-	$('#field-btnbordercolor').val(this.btnbordercolor);
-	$('#btnbgimage').val(this.btnbgimage);
-	$('#btnwidth').val(this.btnwidth);
-	$('#btnheight').val(this.btnheight);
-	$('#btnalign').val(this.btnalign);
-	$('#btnfontsize').val(this.btnfontsize);
-	$('#btnfontfamily').val(this.btnfontfamily);
-	$('#withborderradius')[0].checked = this.btnwithborderradius;
-	$('#withbordercolor')[0].checked = this.btnwithbordercolor;
-	$('#withbgimage')[0].checked = this.btnwithbgimage;
-
-	this.colorField('btnbgcolor');
-	this.colorField('btntextcolor');
-	this.colorField('btnbordercolor');
-	
-	var t = this;
-	
-	$('#savebtndata').off('click');
-	
-	$('#savebtndata').on('click', function() {
-		t.saveBtn();
-		t.designBtn();
-		$('#savebtndata').off('click');
-	});
-	
-	$('#cancelbtndata').on('click', function() {
-		$('#savebtndata').off('click');
-	});
-};
-
-BtnBlock.prototype.saveBtn = function() {
-	this.btntext = $('#btntext').val();
-	this.btnlink = $('#btnlink').val();
-	this.btnbgcolor = $('#field-btnbgcolor').val();
-	this.btntextcolor = $('#field-btntextcolor').val();
-	this.btnwithborderradius = $('#withborderradius')[0].checked;
-	this.btnradius = $('#btnradius').val();
-	this.btnwithbordercolor = $('#withbordercolor')[0].checked;
-	this.btnbordercolor = $('#field-btnbordercolor').val();
-	this.btnwithbgimage = $('#withbgimage')[0].checked;
-	this.btnbgimage = $('#btnbgimage').val();
-	this.btnwidth = $('#btnwidth').val();
-	this.btnheight = $('#btnheight').val();
-	this.btnalign = $('#btnalign').val();
-	this.btnfontsize = $('#btnfontsize').val();
-	this.btnfontfamily = $('#btnfontfamily').val();
-};
-
 BtnBlock.prototype.designBtn = function() {
 	var content = this.content.find('.content-button');
 	content.text(this.btntext);
@@ -276,8 +219,177 @@ BtnBlock.prototype.designBtn = function() {
 	content.addClass('pull-' + this.btnalign);
 };
 
-BtnBlock.prototype.colorField = function(field) {
-	$('#field-' + field).on('change', function(){
-		$('#' + field).colorpicker('setValue', $(this).val());
+BtnBlock.prototype.createToolbar = function() {
+	$('#my-btn-component-toolbar').remove();
+	
+	var toolbar =  $('.component-toolbar-button').clone().attr('id', 'my-btn-component-toolbar');
+	toolbar.empty();
+	toolbar.show();
+	this.content.find('.one-element').append(toolbar);
+	
+	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr><tr><td class="second_row"><ul class="second_elements"></ul></td></tr><tr><td class="third_row"><ul class="third_elements"></ul></td></tr></table>');
+	
+	var title = $("<div class='btn-toolbar-title'>Fondo</div>");
+	var backgroundColor = $("<input type='text' value='" + this.btnbgcolor + "' id='color-button-background-toolbar' name='color-button-background-toolbar' class='pick-a-color'>");
+	var backgroundStyle = $("<div class='medium-select'>\n\
+								<select id='style-button-background-toolbar'>\n\
+									<option value='blue' selected>Azul</option>\n\
+									<option value='bluelight'>Azul Claro</option>\n\
+									<option value='red'>Rojo</option>\n\
+									<option value='redlight'>Rojo Claro</option>\n\
+									<option value='black'>Negro</option>\n\
+									<option value='yellow'>Amarillo</option>\n\
+									<option value='orange'>Naranja</option>\n\
+									<option value='gray'>Gris</option>\n\
+								</select>\n\
+							</div>");
+	var checkedBGSty = (this.btnwithborderradius) ? 'checked' : '';
+	var withBackgroundStyle = $('<div><input type="checkbox" id="style-button-with-background-toolbar" ' + checkedBGSty + '></div>');
+	var elements = $('<li class="toolbar-elements" />');
+	elements.append(title);
+	elements.append(backgroundColor);
+	elements.append(backgroundStyle);
+	elements.append(withBackgroundStyle);
+	
+	var titleB = $("<div class='btn-toolbar-title'>Borde</div>");
+	var border_radius = $('<input id="button-border-radius-spinner" name="border-radius" class="toolbar-spinner spinner-button" value=' + this.btnradius + '>');
+	var border_color = $("<input type='text' value='" + this.btnbordercolor + "' id='color-button-border-toolbar' name='color-button-border-toolbar' class='pick-a-color'>");
+	elements.append(titleB);
+	elements.append(border_radius);
+	elements.append(border_color);
+	toolbar.find('.first_row ul').append(elements);
+	
+	this.colorPickerBlockChange('color-button-background-toolbar', 'background-color', 'btnbgcolor');
+	this.colorPickerBlockChange('color-button-border-toolbar', 'border-color', 'btnbordercolor');	
+	this.spinnerBlockChange('button-border-radius-spinner', 'border-radius', 'btnradius', 0, 20);
+	
+	
+	var title = $("<div class='btn-toolbar-title'>Texto</div>");
+	var font_family = $("<div class='medium-select'>\n\
+								<select id='font-family-button-toolbar'>\n\
+									<option value='arial'>Arial</option>\n\
+									<option value='helvetica'>Helvetica</option>\n\
+									<option value='georgia'>Georgia</option>\n\
+									<option value='times new roman'>Times New Roman</option>\n\
+									<option value='monospace'>Monospace</option>\n\
+								</select>\n\
+							</div>");
+	var font_color = $("<input type='text' value='" + this.btntextcolor +"' id='color-button-font-toolbar' name='color-button-font-toolbar' class='pick-a-color'>");
+	var font_size = $('<input id="button-font-size-spinner" name="font-size" class="toolbar-spinner spinner-button" value=' + this.btnfontsize + '>');
+	var text = $('<div class="btn-toolbar-field"><input type="text" id="button-text-toolbar" value="' + this.btntext + '"></div>');
+	var elements = $('<li class="toolbar-elements" />');
+	elements.append(title);
+	elements.append(text);
+	elements.append(font_family);
+	elements.append(font_color);
+	elements.append(font_size);
+	toolbar.find('.second_row ul').append(elements);
+	
+	this.spinnerBlockChange('button-font-size-spinner', 'font-size', 'btnfontsize', 0, 30);
+	this.colorPickerBlockChange('color-button-font-toolbar', 'color', 'btntextcolor');
+	
+	
+	var title = $("<div class='btn-toolbar-title'>Link &nbsp;</div>");
+	var link = $('<div class="btn-toolbar-field"><input type="text" id="button-link-toolbar" value="' + this.btnlink + '"></div>');
+	var elements = $('<li class="toolbar-elements" />');
+	elements.append(title);
+	elements.append(link);
+	toolbar.find('.third_row ul').append(elements);
+	
+	
+	var title = $("<div class='btn-toolbar-title'>Tamaño</div>");
+	var height = $('<div><input id="button-height-spinner" name="height-button" class="toolbar-spinner-larger spinner-button" value=' + this.btnheight +'></div>');
+	var width = $('<div><input id="button-width-spinner" name="width-button" class="toolbar-spinner-larger spinner-button-larger" value=' + this.btnwidth +'></div>');
+	var align = $('<div class="medium-select">\n\
+						<select id="align-button-toolbar">\n\
+							<option value="left">Izquierda</option>\n\
+							<option value="center" selected>Centro</option>\n\
+							<option value="right">Derecha</option>\n\
+						</select>\n\
+					</div>');
+	var elements = $('<li class="toolbar-elements" />');
+	elements.append(title);
+	elements.append(height);
+	elements.append(width);
+	elements.append(align);
+	toolbar.find('.third_row ul').append(elements);
+	
+	this.spinnerBlockChange('button-height-spinner', 'height', 'btnheight', 0, 200);
+	this.spinnerBlockChange('button-width-spinner', 'width', 'btnwidth', 0, 200);
+	
+		
+	var position = this.content.find('.one-element').position();
+	toolbar.css('top', position.top + this.content.find('.one-element').height() - 8);
+	toolbar.css('left', position.left - 116);
+	
+	this.eventsChange();
+	
+};
+
+BtnBlock.prototype.spinnerBlockChange = function(id, style, property, min, max) {
+	var t = this;
+	$('#' + id).spinner({min: min, max: max,
+		stop: function() {
+			t.content.find('.content-button').css(style, $(this).val());
+			t[property] = $(this).val();
+		}
+	});
+};
+
+BtnBlock.prototype.colorPickerBlockChange = function(id, style, property) {
+	var t = this;
+	
+	$('#' + id).pickAColor({showHexInput: false});
+	
+	$('#' + id + ' input').on("change", function () {
+		t.content.find('.content-button').css(style, $(this).val());
+		t[property] = $(this).val();
+	});
+};
+
+BtnBlock.prototype.eventsChange = function() {
+	var t = this;
+	
+	$('#style-button-background-toolbar').val(this.btnbgimage);
+	$('#style-button-background-toolbar').on('change', function() {
+		if($('#style-button-with-background-toolbar')[0].checked) {
+			t.content.find('.content-button').css('background-image', 'url(' + config.imagesUrl + '/btn-' + $(this).val() + '.png)');
+		}
+		t.btnbgimage = $(this).val();
+	});
+	
+	$('#style-button-with-background-toolbar').on('change', function() {
+		if($(this)[0].checked) {
+			t.content.find('.content-button').css('background-image', 'url(' + config.imagesUrl + '/btn-' + t.btnbgimage + '.png)');
+		}
+		else {
+			t.content.find('.content-button').css('background-image', '');
+		}
+		t.btnwithborderradius = $(this)[0].checked;
+	});
+	
+	$('#font-family-button-toolbar').val(this.btnfontfamily);
+	$('#font-family-button-toolbar').on('change', function() {
+		t.content.find('.content-button').css('font-family', $(this).val());
+		t.btnfontfamily = $(this).val();
+	});
+	
+	$('#button-text-toolbar').on('change', function() {
+		t.content.find('.content-button').text($(this).val());
+		t.btntext = $(this).val();
+	});
+	
+	$('#button-link-toolbar').on('change', function() {
+		t.btnlink = $(this).val();
+	});
+	
+	$('#align-button-toolbar').val(this.btnalign);
+	$('#align-button-toolbar').on('change', function() {
+		var content = t.content.find('.content-button')
+		content.removeClass('pull-center');
+		content.removeClass('pull-left');
+		content.removeClass('pull-right');
+		content.addClass('pull-' + $(this).val());
+		t.btnalign = $(this).val();
 	});
 };

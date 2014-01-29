@@ -17,6 +17,7 @@ Toolbar.prototype.drawHtml = function() {
 	this.toolbar.css('top', position.top - 68);
 	this.toolbar.css('left', position.left - 103);
 	this.component.content.append(this.toolbar);
+//	this.component.content.parents('.drop-zone').append(this.toolbar);
 };
 
 Toolbar.prototype.createBackground = function() {

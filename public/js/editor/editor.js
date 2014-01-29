@@ -282,6 +282,10 @@ $(function() {
 			$('.element-in-edition').removeClass('element-in-edition');
 		}
 		
+		if($(ev.target).parents('.one-element').find('#my-btn-component-toolbar')[0] === undefined && $(ev.target).parents('#my-btn-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-btn-component-toolbar' ){
+			$('#my-btn-component-toolbar').remove();
+		}
+		
 		if($(ev.target).parents('.redactor_box')[0] === undefined && $(ev.target).attr('class') !== 'redactor_box' && $(ev.target).attr('class') !== undefined ){
 			$('.redactor_editor').destroyEditor();
 		}
