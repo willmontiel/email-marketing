@@ -13,7 +13,7 @@ class SessionController extends \Phalcon\Mvc\Controller
         $this->session->remove("user-name");
         $this->session->destroy();
 		
-        $this->response->redirect("session/signin");
+        $this->response->redirect('session/signin');
     }
 	
     public function loginAction()
@@ -107,7 +107,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 			$this->view->setVar('uniq', $unique);
 		}
 		else {
-			return $this->response->redirect('error');
+			return $this->response->redirect('error/link');
 		}
 	}
 	
@@ -177,12 +177,12 @@ class SessionController extends \Phalcon\Mvc\Controller
 						}
 					}
 					else {
-						return $this->response->redirect('error');
+						return $this->response->redirect('error/link');
 					}
 				}
 			}
 			else {
-				return $this->response->redirect('error');
+				return $this->response->redirect('error/link');
 			}
 		}
 	}

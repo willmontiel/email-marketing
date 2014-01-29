@@ -5,4 +5,9 @@ class ErrorController extends ControllerBase
 	{
 		
 	}
+	
+	public function linkAction()
+	{
+		
+	}
 }

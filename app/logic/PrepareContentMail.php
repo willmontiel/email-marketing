@@ -1,16 +1,15 @@
 <?php
 class PrepareContentMail
 {
-	public $url;
 	public $account;
 	public $domain;
+	public $urlManager;
 	
 	public function __construct(Account $account) 
 	{
-		$this->log = Phalcon\DI::getDefault()->get('logger');
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
-	
-		$this->url = $di['url'];
+		
+		$this->log = $di['logger'];
 		$this->urlManager = $di['urlManager'];
 		$this->account = $account;
 		$this->domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
@@ -41,7 +40,7 @@ class PrepareContentMail
 			}
 //			$this->log->log("Content: " . $content);
 			$convertedSrc = $this->convertImageSrc($content);
-			$this->log->log("Content: " . $convertedSrc);
+//			$this->log->log("Content: " . $convertedSrc);
 			$mailContentProcessed = new stdClass();
 			$mailContentProcessed->html = $convertedSrc;
 			$mailContentProcessed->text = $mailContent->plainText;
@@ -55,7 +54,7 @@ class PrepareContentMail
 	
 	protected function convertImageSrc($content)
 	{
-		$this->log->log("srcPre : " . $content);
+//		$this->log->log("srcPre : " . $content);
 		$imgTag = new DOMDocument();
 		@$imgTag->loadHTML($content);
 
@@ -67,39 +66,33 @@ class PrepareContentMail
 			
 			foreach ($srcs as $src) {
 				$srcImg = $src->getAttribute('src');
-				$this->log->log("SrcImg: " . $srcImg);
 				
-				$srcParts = explode("/", $srcImg);
+//				$srcParts = explode("/", $srcImg);
+//
+//				$this->log->log("Partes : " . print_r($srcParts, true));
+
+//				$srcPre = $srcParts[1];
 				
-//				$srcPrivate = $this->urlManager->getAppUrlAsset();
-//				$srcPublic = $this->urlManager->getAppUrlTemplate();
-				
-				$this->log->log("Partes : " . print_r($srcParts, true));
-				
-				$srcPre = $srcParts[1];
-//				$this->log->log("srcPrefi : " . $srcPre);
-//				$this->log->log("srcPrivate : " . $srcPrivate);
-//				$this->log->log("srcPublic : " . $srcPublic);
-				if ($srcPre == 'asset') {
+				if (preg_match('/asset/i', $srcImg)) {
 					$find[] = $srcImg;
 					$idAsset = filter_var($srcImg, FILTER_SANITIZE_NUMBER_INT);
-					$this->log->log("idAsset : " . $idAsset);
+//					$this->log->log("idAsset : " . $idAsset);
 					
 					$srcConverted = $this->getCompletePrivateImageSrc($idAsset);
 					
 					$replace[] = $srcConverted;
-					$this->log->log("srcConverted : " . $srcConverted);
+//					$this->log->log("srcConverted : " . $srcConverted);
 				}
-				else if ($srcPre == 'template') {
+				else if (preg_match('/template/i', $srcImg)) {
 					$find[] = $srcImg;
 					$idTemplateImage = filter_var($srcImg, FILTER_SANITIZE_NUMBER_INT);
 					$ids = explode("/", $srcImg);
-					$this->log->log("idAsset : " . print_r($ids, true));
+//					$this->log->log("idAsset : " . print_r($ids, true));
 					
-					$srcConverted = $this->getCompletePublicImageSrc($ids[4], $ids[5]);
+					$srcConverted = $this->getCompletePublicImageSrc($ids[3], $ids[4]);
 					
 					$replace[] = $srcConverted;
-					$this->log->log("srcConverted : " . $srcConverted);
+//					$this->log->log("srcConverted : " . $srcConverted);
 				}
 			}
 			

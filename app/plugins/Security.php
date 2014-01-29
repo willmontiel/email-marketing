@@ -90,6 +90,7 @@ class Security extends Plugin
 				'test::transactionsegment' => array(),				
 				
 				'error::index' => array(),
+				'error::link' => array(),
 				'session::signin' => array(),
 				'session::login' => array(),
 				'session::logout' => array(),
@@ -315,6 +316,7 @@ class Security extends Plugin
 			'session:setnewpass',
 			'session:reset',
 			'error:index',
+			'error:link',
 			'track:open'
 		);
 		

@@ -104,6 +104,11 @@ class ChildCommunication extends BaseWrapper
 					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
 					
 					$message = new Swift_Message($subject);
+					
+					/*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
+					$headers = $message->getHeaders();
+					$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
+				
 					$message->setFrom($from);
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
