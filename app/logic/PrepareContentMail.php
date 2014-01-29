@@ -112,7 +112,7 @@ class PrepareContentMail
 		
 		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
 		
-		$img = $this->domain->imageUrl . '/' . $this->urlManager->getAppUrlAsset() . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
+		$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlAsset() . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
 		
 		return $img;
 	}
@@ -125,7 +125,7 @@ class PrepareContentMail
 		));
 		
 		$ext = pathinfo( $tpImg->name, PATHINFO_EXTENSION);
-		$img = $this->domain->imageUrl . '/' . $this->urlManager->getAppUrlTemplate() . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
+		$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlTemplate() . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
 	
 		return $img;
 	}

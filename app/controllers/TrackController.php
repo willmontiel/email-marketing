@@ -35,4 +35,10 @@ class TrackController extends ControllerBase
 			$this->response->redirect('error/link');
 		}
 	}
+	
+	public function clickAction($parameters)
+	{
+		$trackingObject = new TrackingObject();
+		$trackingObject->updateTrackClick();
+	}
 }

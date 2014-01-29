@@ -98,6 +98,7 @@ class Security extends Plugin
 				'session::setnewpass' => array(),
 				'session::reset' => array(),
 				'track::open' => array(),
+				'track::click' => array(),
 				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
@@ -317,7 +318,8 @@ class Security extends Plugin
 			'session:reset',
 			'error:index',
 			'error:link',
-			'track:open'
+			'track:open',
+			'track:click'
 		);
 		
 		$controller = $dispatcher->getControllerName();

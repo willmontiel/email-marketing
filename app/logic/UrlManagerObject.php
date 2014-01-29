@@ -21,7 +21,12 @@ class UrlManagerObject
 			$this->protocol = $config->urlmanager->protocol;
 			$this->host = $config->urlmanager->host;
 			$this->port = $config->urlmanager->port;
-			$this->appbase = $config->urlmanager->appbase;
+			if ($config->urlmanager->appbase != '') {
+				$this->appbase = $config->urlmanager->appbase . '/';
+			}
+			else {
+				$this->appbase = $config->urlmanager->appbase;
+			}
 			$this->api_v1 = $config->urlmanager->api_v1;
 			$this->api_v1_2 = $config->urlmanager->api_v1_2;
 			$this->assets = $config->urlmanager->assets;
@@ -76,9 +81,19 @@ class UrlManagerObject
 		return $this->getPrefix($full) . $this->appbaseTrailing . $this->assets;
 	}
 	
+	public function getUrlAsset()
+	{
+		return $this->assets;
+	}
+	
 	public function getAppUrlTemplate($full = false)
 	{
 		return $this->getPrefix($full) . $this->appbaseTrailing . $this->templates;
+	}
+	
+	public function getUrlTemplate()
+	{
+		return $this->templates;
 	}
 	
 	/**

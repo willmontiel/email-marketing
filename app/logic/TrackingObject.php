@@ -17,9 +17,9 @@ class TrackingObject
 							2 => $idContact)
 		));
 		if ($mxc) {
-			if ($mxc->opening == 0 || $mxc->bounced == 0 || $mxc->spam == 0) {
+			if ($mxc->opening == 0 && $mxc->bounced !== 0 && $mxc->spam !== 0 && $mxc->status == 'sent') {
 				$this->log->log('Es la primera apertura');
-				$this->log->log('So: ' . $so . 'Browser: ' . $browser);
+//				$this->log->log('So: ' . $so . 'Browser: ' . $browser);
 				try {
 					$db = Phalcon\DI::getDefault()->get('db');
 					$db->begin();
@@ -113,11 +113,17 @@ class TrackingObject
 			}
 			else {
 				$this->log->log('No es la primera apertura, ya se ha contabilizado');
+				return false;
 			}
 		}
 		else {
 			$this->log->log('No existe mxc');
 			return false;
 		}
+	}
+	
+	public function updateTrackClick()
+	{
+		
 	}
 }
