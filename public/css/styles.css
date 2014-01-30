@@ -838,26 +838,75 @@ table {
 	z-index: 100;
 	display: block;
 	position: absolute;
-	width: 640px;
+	width: 850px;
 	transition: opacity 0.5s;
 	box-shadow: inset 0 0 0 #969392, inset 0 -1px #969392;
 	padding: 4px;
 	border-radius: 5px;
 }
 
-.first_row {
+.first_row, .second_row, .third_row {
 	background-color: #c7c7c7;
-}
-
-.second_row {
-	background-color: #bababa;
-}
-
-.third_row {
-	background-color: #ababab;
 }
 
 .first_elements li:last-child, .second_elements li:last-child, .third_elements li:last-child {
 	border-right: none;
 	margin-left: 0px;
+}
+
+.button-background-toolbar-container, .button-corner-toolbar-container, .button-border-toolbar-container,
+.button-title-toolbar-container {
+	border: 1px solid darkgray;
+	padding: 3px 10px;
+	background-color: #E0E0E0;
+	margin-bottom: 5px;
+	border-radius: 3px;
+}
+
+.btn-toolbar-title {
+	float: left;
+	margin-right: 5px;
+}
+
+.component-toolbar-button div.pick-a-color-markup{
+	float: left;
+}
+.btn-toolbar-background-style{
+	float: left;
+	margin-right: 5px;
+	margin-top: 8px;
+}
+.btn-toolbar-background-style-options, .btn-toolbar-font-family-options{
+	float: left;
+	height: 32px;
+	margin-top: 3px;
+}
+.button-corner-toolbar-container {
+	padding-bottom: 6px;
+}
+.button-corner-toolbar-container .ui-spinner {
+	margin-top: 5px;
+}
+.color-font-container {
+	float: left;
+	margin-left: 5px;
+}
+.size-font-container, .btn-height-container, .btn-width-container, .btn-align-container{
+	float: left;
+	margin-top: 5px;
+}
+.btn-toolbar-field {
+	float: left;
+}
+.btn-align-container {
+	height: 32px;
+}
+.btn-height-container, .btn-width-container {
+	padding-bottom: 5px;
+}
+.list-no-right-line {
+	border-right: none;
+}
+.soc_net_share {
+	margin-right: 8px;
 }

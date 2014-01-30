@@ -1,7 +1,6 @@
 function BtnBlock(row) {
 	this.row = row;
-//	this.content_button = '<span data-toggle="modal" data-backdrop="static" href="#buttonaction" class="content-button pull-center" style="background-image:url(\'' + config.imagesUrl + '/btn-blue.png\');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>'
-	this.content_button = '<span class="content-button pull-center" style="background-image:url(\'' + config.imagesUrl + '/btn-blue.png\');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>'
+	this.content_button = '<span class="content-button pull-center" style="background-image:url(\'' + config.imagesUrl + '/btn-blue.png\');border:1px solid #1e3650;border-radius:4px;">Clic Aqui!</span>';
 	
 	this.btntext = 'Clic Aqui!';
 	this.btnlink = '';
@@ -50,12 +49,18 @@ BtnBlock.prototype.createBlock = function() {
 
 BtnBlock.prototype.drawHtml = function() {
 	var block = $('<td>\n\
-						<div class="one-element clearfix">\n\
-							<div class="elements-options">\n\
-								<div class="edit-block tool"><span class="icon-pencil icon-white"></span></div>\n\
-								<div class="remove-block tool"><span class="icon-minus icon-white"></span></div>\n\
-							</div>\n\
-						</div>\n\
+						<table class="full-block-element" border="0" cellpadding="0">\n\
+							<tr>\n\
+								<td>\n\
+									<div class="one-element clearfix">\n\
+										<div class="elements-options">\n\
+											<div class="edit-block tool"><span class="icon-pencil icon-white"></span></div>\n\
+											<div class="remove-block tool"><span class="icon-minus icon-white"></span></div>\n\
+										</div>\n\
+									</div>\n\
+								</td>\n\
+							</tr>\n\
+						</table>\n\
 					</td>');
 	block.find('.one-element').append(this.content_button);
 	return block;
@@ -229,9 +234,11 @@ BtnBlock.prototype.createToolbar = function() {
 	
 	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr><tr><td class="second_row"><ul class="second_elements"></ul></td></tr><tr><td class="third_row"><ul class="third_elements"></ul></td></tr></table>');
 	
-	var title = $("<div class='btn-toolbar-title'>Fondo</div>");
-	var backgroundColor = $("<input type='text' value='" + this.btnbgcolor + "' id='color-button-background-toolbar' name='color-button-background-toolbar' class='pick-a-color'>");
-	var backgroundStyle = $("<div class='medium-select'>\n\
+	var checkedBGSty = (this.btnwithborderradius) ? 'checked' : '';
+	var backgroundColor = $("<div class='button-background-toolbar-container'><div class='btn-toolbar-title'>Fondo</div><input type='text' value='" + this.btnbgcolor + "' id='color-button-background-toolbar' name='color-button-background-toolbar' class='pick-a-color'></div>");
+	var backgroundStyle = $("<div class='button-background-toolbar-container'>\n\
+								<div class='btn-toolbar-title'>Degradado</div><div class='btn-toolbar-background-style'><input type='checkbox' id='style-button-with-background-toolbar' " + checkedBGSty + "></div>\n\
+								<div class='medium-select btn-toolbar-background-style-options'>\n\
 								<select id='style-button-background-toolbar'>\n\
 									<option value='blue' selected>Azul</option>\n\
 									<option value='bluelight'>Azul Claro</option>\n\
@@ -242,19 +249,13 @@ BtnBlock.prototype.createToolbar = function() {
 									<option value='orange'>Naranja</option>\n\
 									<option value='gray'>Gris</option>\n\
 								</select>\n\
-							</div>");
-	var checkedBGSty = (this.btnwithborderradius) ? 'checked' : '';
-	var withBackgroundStyle = $('<div><input type="checkbox" id="style-button-with-background-toolbar" ' + checkedBGSty + '></div>');
+							</div></div>");
 	var elements = $('<li class="toolbar-elements" />');
-	elements.append(title);
 	elements.append(backgroundColor);
 	elements.append(backgroundStyle);
-	elements.append(withBackgroundStyle);
 	
-	var titleB = $("<div class='btn-toolbar-title'>Borde</div>");
-	var border_radius = $('<input id="button-border-radius-spinner" name="border-radius" class="toolbar-spinner spinner-button" value=' + this.btnradius + '>');
-	var border_color = $("<input type='text' value='" + this.btnbordercolor + "' id='color-button-border-toolbar' name='color-button-border-toolbar' class='pick-a-color'>");
-	elements.append(titleB);
+	var border_radius = $('<div class="button-corner-toolbar-container"><div class="btn-toolbar-title">Esquinas</div><input id="button-border-radius-spinner" name="border-radius" class="toolbar-spinner spinner-button" value=' + this.btnradius + '></div>');
+	var border_color = $("<div class='button-border-toolbar-container'><div class='btn-toolbar-title'>Borde</div><input type='text' value='" + this.btnbordercolor + "' id='color-button-border-toolbar' name='color-button-border-toolbar' class='pick-a-color'></div>");
 	elements.append(border_radius);
 	elements.append(border_color);
 	toolbar.find('.first_row ul').append(elements);
@@ -264,8 +265,9 @@ BtnBlock.prototype.createToolbar = function() {
 	this.spinnerBlockChange('button-border-radius-spinner', 'border-radius', 'btnradius', 0, 20);
 	
 	
-	var title = $("<div class='btn-toolbar-title'>Texto</div>");
-	var font_family = $("<div class='medium-select'>\n\
+	var font = $("<div class='button-title-toolbar-container'>\n\
+								<div class='btn-toolbar-title'>Texto</div>\n\
+								<div class='medium-select btn-toolbar-font-family-options'>\n\
 								<select id='font-family-button-toolbar'>\n\
 									<option value='arial'>Arial</option>\n\
 									<option value='helvetica'>Helvetica</option>\n\
@@ -273,42 +275,36 @@ BtnBlock.prototype.createToolbar = function() {
 									<option value='times new roman'>Times New Roman</option>\n\
 									<option value='monospace'>Monospace</option>\n\
 								</select>\n\
-							</div>");
-	var font_color = $("<input type='text' value='" + this.btntextcolor +"' id='color-button-font-toolbar' name='color-button-font-toolbar' class='pick-a-color'>");
-	var font_size = $('<input id="button-font-size-spinner" name="font-size" class="toolbar-spinner spinner-button" value=' + this.btnfontsize + '>');
-	var text = $('<div class="btn-toolbar-field"><input type="text" id="button-text-toolbar" value="' + this.btntext + '"></div>');
+							</div>\n\
+						<div class='color-font-container'><input type='text' value='" + this.btntextcolor +"' id='color-button-font-toolbar' name='color-button-font-toolbar' class='pick-a-color'></div>\n\
+						<div class='size-font-container'><input id='button-font-size-spinner' name='font-size' class='toolbar-spinner spinner-button' value=" + this.btnfontsize + "></div>\n\
+						</div>");
+	var text = $('<div class="button-title-toolbar-container"><div class="btn-toolbar-title">Titulo</div><div class="btn-toolbar-field"><input type="text" id="button-text-toolbar" value="' + this.btntext + '"></div></div>');
 	var elements = $('<li class="toolbar-elements" />');
-	elements.append(title);
+	elements.append(font);
 	elements.append(text);
-	elements.append(font_family);
-	elements.append(font_color);
-	elements.append(font_size);
 	toolbar.find('.second_row ul').append(elements);
 	
 	this.spinnerBlockChange('button-font-size-spinner', 'font-size', 'btnfontsize', 0, 30);
 	this.colorPickerBlockChange('color-button-font-toolbar', 'color', 'btntextcolor');
 	
 	
-	var title = $("<div class='btn-toolbar-title'>Link &nbsp;</div>");
-	var link = $('<div class="btn-toolbar-field"><input type="text" id="button-link-toolbar" value="' + this.btnlink + '"></div>');
-	var elements = $('<li class="toolbar-elements" />');
-	elements.append(title);
+	var link = $('<div class="button-title-toolbar-container"><div class="btn-toolbar-title">Hipervinculo</div><div class="btn-toolbar-field"><input type="text" id="button-link-toolbar" value="' + this.btnlink + '"></div></div>');
+	var elements = $('<li class="toolbar-elements list-no-right-line" />');
 	elements.append(link);
 	toolbar.find('.third_row ul').append(elements);
 	
 	
-	var title = $("<div class='btn-toolbar-title'>Tamaño</div>");
-	var height = $('<div><input id="button-height-spinner" name="height-button" class="toolbar-spinner-larger spinner-button" value=' + this.btnheight +'></div>');
-	var width = $('<div><input id="button-width-spinner" name="width-button" class="toolbar-spinner-larger spinner-button-larger" value=' + this.btnwidth +'></div>');
-	var align = $('<div class="medium-select">\n\
+	var height = $('<div class="button-title-toolbar-container"><div class="btn-toolbar-title">Altura</div><div class="btn-height-container"><input id="button-height-spinner" name="height-button" class="toolbar-spinner-larger spinner-button" value=' + this.btnheight +'></div></div>');
+	var width = $('<div class="button-title-toolbar-container"><div class="btn-toolbar-title">Ancho</div><div class="btn-width-container"><input id="button-width-spinner" name="width-button" class="toolbar-spinner-larger spinner-button-larger" value=' + this.btnwidth +'></div></div>');
+	var align = $('<div class="button-title-toolbar-container"><div class="btn-toolbar-title">Alineacion</div><div class="medium-select btn-align-container">\n\
 						<select id="align-button-toolbar">\n\
 							<option value="left">Izquierda</option>\n\
 							<option value="center" selected>Centro</option>\n\
 							<option value="right">Derecha</option>\n\
 						</select>\n\
-					</div>');
+					</div></div>');
 	var elements = $('<li class="toolbar-elements" />');
-	elements.append(title);
 	elements.append(height);
 	elements.append(width);
 	elements.append(align);
@@ -320,7 +316,7 @@ BtnBlock.prototype.createToolbar = function() {
 		
 	var position = this.content.find('.one-element').position();
 	toolbar.css('top', position.top + this.content.find('.one-element').height() - 8);
-	toolbar.css('left', position.left - 116);
+	toolbar.css('left', position.left - 206);
 	
 	this.eventsChange();
 	
