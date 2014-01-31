@@ -126,7 +126,7 @@ class TrackingObject
 	
 	public function updateTrackClick($idLink, $idMail, $idContact, $so = null, $browser = null)
 	{
-		$this->log->log('Inicio de tracking de clicks');
+//		$this->log->log('Inicio de tracking de clicks');
 		$mxl = Mxl::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idMailLink = ?2',
 			'bind' => array(1 => $idMail,
@@ -134,7 +134,7 @@ class TrackingObject
 		));
 		
 		if ($mxl) {
-			$this->log->log('Existe Mxl');
+//			$this->log->log('Existe Mxl');
 			$mxcxl = Mxcxl::findFirst(array(
 				'conditions' => 'idMail = ?1 AND idMailLink = ?2 AND idContact = ?3',
 				'bind' => array(1 => $idMail,
@@ -147,27 +147,26 @@ class TrackingObject
 			));
 			
 			if (!$mxcxl) {
-				
-				$this->log->log('No Existe Mxcxl');
+//				$this->log->log('No Existe Mxcxl');
 				$mail = Mail::findFirst(array(
 					'conditions' => 'idMail = ?1',
 					'bind' => array(1 => $idMail)
 				));
-				$this->log->log('Existe mail');
+//				$this->log->log('Existe mail');
 				$mxc = Mxc::findFirst(array(
 					'conditions' => 'idMail = ?1 AND idContact = ?2',
 					'bind' => array(1 => $idMail,
 									2 => $idContact)
 				));
-				$this->log->log('Existe Mxc');
+//				$this->log->log('Existe Mxc');
 				$event = Mailevent::findFirst(array(
 					'conditions' => 'idMail = ?1 AND idContact = ?2',
 					'bind' => array(1 => $idMail,
 									2 => $idContact)
 				));
-				$this->log->log('Verificando Event');
+//				$this->log->log('Verificando Event');
 				if (!$event) {
-					$this->log->log('No existe Event');
+//					$this->log->log('No existe Event');
 					unset($event);
 					$event = new Mailevent();
 					$event->idMail = $idMail;
@@ -187,6 +186,7 @@ class TrackingObject
 					$this->log->log('Si existe event');
 					$event->click = time();
 					$mxc->clicks = time();
+					
 					$mail->clicks += 1;
 				}
 				

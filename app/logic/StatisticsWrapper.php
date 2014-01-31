@@ -218,23 +218,23 @@ class StatisticsWrapper extends BaseWrapper
 	
 	public function findMailOpenStats($idMail)
 	{
+		$db = Phalcon\DI::getDefault()->get('db');
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		$sql = "SELECT v.idContact,  v.opening, v.userAgent, e.email
+					FROM mailevent AS v
+						JOIN contact as c ON (c.idContact = v.idContact)
+						JOIN email as e ON (c.idEmail = e.idEmail)
+					WHERE idMail = " . $idMail;
+		
+		
 		$opens = array();
 		$h1 = 1380657600;
 		$v1 = 3000;
 		$v2 = 2900;
-//		for ($i = 0; $i < 1800; $i++) {
-//			$value = rand($v1, $v2);
-//			if($i == 20 || $i == 100 || $i == 150) {
-//				$value = 0;
-//			}
-//			$opens[] = array(
-//				'title' =>$h1,
-//				'value' => $value
-//			);
-//			$v1 = $v1 - 1;
-//			$v2 = $v2 - 1;
-//			$h1+=3600;
-//		}
 		
 		$opens[] = array(
 				'title' =>1380657600,

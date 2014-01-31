@@ -38,13 +38,10 @@ class TrackController extends ControllerBase
 	
 	public function clickAction($parameters)
 	{
-//		$this->logger->log('Entró a tracking de click');
 		$info = $_SERVER['HTTP_USER_AGENT'];
 		
 		$idenfifiers = explode("-", $parameters);
 		
-//		$this->logger->log('Parameters' . $parameters);
-//		$this->logger->log('Parameters: ' . print_r($idenfifiers, true));
 		list($idTypeLink, $idLink, $idMail, $idContact, $md5) = $idenfifiers;
 		
 		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
