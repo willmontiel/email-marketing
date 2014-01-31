@@ -4,13 +4,13 @@ class TrackController extends ControllerBase
 	public function openAction($parameters)
 	{
 		$info = $_SERVER['HTTP_USER_AGENT'];
-		$idenfifiers = explode("_", $parameters);
+		$idenfifiers = explode("-", $parameters);
 		
 		list($idLink, $idMail, $idContact, $md5) = $idenfifiers;
 		
 		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-		$src = $urlManager->getBaseUri(true) . 'track/open/1_' . $idMail . '_' . $idContact;
-		$md5_2 = md5($src . '_Sigmamovil_Rules');
+		$src = $urlManager->getBaseUri(true) . 'track/open/1-' . $idMail . '-' . $idContact;
+		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		
 		if ($md5 == $md5_2) {
 			try {
@@ -38,7 +38,24 @@ class TrackController extends ControllerBase
 	
 	public function clickAction($parameters)
 	{
-		$trackingObject = new TrackingObject();
-		$trackingObject->updateTrackClick();
+		$info = $_SERVER['HTTP_USER_AGENT'];
+		
+		$idenfifiers = explode("-", $parameters);
+		
+		list($idTypeLink, $idLink, $idMail, $idContact, $md5) = $idenfifiers;
+		
+		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
+		$href = $urlManager->getBaseUri(true) . 'track/click/1-' . $idLink . '-' . $idMail . '-' . $idContact;
+		$md5_2 = md5($href . '-Sigmamovil_Rules');
+		
+		if ($md5 == $md5_2) {
+			try {
+				$trackingObject = new TrackingObject();
+				$trackingObject->updateTrackClick($idLink, $idMail, $idContact);
+			}
+			catch (InvalidArgumentException $e) {
+				$this->logger->log('Exception: [' . $e . ']');
+			}
+		}
 	}
 }

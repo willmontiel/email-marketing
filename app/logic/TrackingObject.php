@@ -20,8 +20,8 @@ class TrackingObject
 			if ($mxc->opening == 0 && $mxc->bounced !== 0 && $mxc->spam !== 0 && $mxc->status == 'sent') {
 				$this->log->log('Es la primera apertura');
 //				$this->log->log('So: ' . $so . 'Browser: ' . $browser);
+				$db = Phalcon\DI::getDefault()->get('db');
 				try {
-					$db = Phalcon\DI::getDefault()->get('db');
 					$db->begin();
 					$mxc->opening = time();
 					$mxc->bounced = time();
@@ -50,6 +50,9 @@ class TrackingObject
 						throw new \InvalidArgumentException('Error while updating event');
 					}
 					$this->log->log('Guardó event');
+					
+//					throw new \InvalidArgumentException('Tiene que hacer rollback!');
+					
 					$mail = Mail::findFirst(array(
 						'conditions' => 'idMail = ?1',
 						'bind' => array(1 => $idMail)
@@ -108,6 +111,7 @@ class TrackingObject
 					$db->commit();
 				}
 				catch (InvalidArgumentException $e) {
+					$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
 					$db->rollback();
 				}
 			}
@@ -122,8 +126,27 @@ class TrackingObject
 		}
 	}
 	
-	public function updateTrackClick()
+	public function updateTrackClick($idLink, $idMail, $idContact)
 	{
+		$mxl = Mxl::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idMailLink = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $idLink)
+		));
 		
+		if ($mxl) {
+			
+			$event
+			
+			$link = Maillink::findFirst(array(
+				'conditions' => 'idMailLink = ?1',
+				'bind' => array(1 => $idLink)
+			));
+			
+		}
+		else {
+			$this->log->log('No existe mxl');
+			return false;
+		}
 	}
 }

@@ -4,7 +4,9 @@ class PrepareContentMail
 	public $account;
 	public $domain;
 	public $urlManager;
-	
+	protected $mail;
+
+
 	public function __construct(Account $account) 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
@@ -17,6 +19,7 @@ class PrepareContentMail
 	
 	public function getContentMail(Mail $mail)
 	{
+		$this->mail = $mail;
 		$mailContent = Mailcontent::findFirst(array(
 			'conditions' => 'idMail = ?1',
 			'bind' => array(1 => $mail->idMail)
@@ -27,7 +30,7 @@ class PrepareContentMail
 				throw new \InvalidArgumentException("Error mail's content is empty");
 			}
 			else if ($mail->type == 'Editor') {
-//				$this->log->log("Hay editor");
+				$this->log->log("Hay editor");
 				$htmlObj = new HtmlObj();
 //				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
 				$htmlObj->assignContent(json_decode($mailContent->content));
@@ -40,9 +43,10 @@ class PrepareContentMail
 			}
 //			$this->log->log("Content: " . $content);
 			$convertedSrc = $this->convertImageSrc($content);
+			$newContent = $this->saveLinksForTracking($convertedSrc);
 //			$this->log->log("Content: " . $convertedSrc);
 			$mailContentProcessed = new stdClass();
-			$mailContentProcessed->html = $convertedSrc;
+			$mailContentProcessed->html = $newContent;
 			$mailContentProcessed->text = $mailContent->plainText;
 			
 			return $mailContentProcessed;
@@ -128,5 +132,80 @@ class PrepareContentMail
 		$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlTemplate() . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
 	
 		return $img;
+	}
+	
+	protected function saveLinksForTracking($content)
+	{
+		$this->log->log('Buscando enlaces...: ');
+		$imgTag = new DOMDocument();
+		@$imgTag->loadHTML($content);
+
+		$hrefs = $imgTag->getElementsByTagName('a');
+		$search = array();
+		$replace = array();
+		
+		if ($hrefs->length !== 0) {
+			foreach ($hrefs as $href) {
+				$l = $href->getAttribute('href');
+				$maillink = Maillink::findFirst(array(
+					'conditions' => 'link = ?1',
+					'bind' => array(1 => $l)
+				));
+				
+				$search[] = $l;
+				
+				if (!$maillink) {
+					$link = new Maillink();
+					
+					$link->link = $l;
+					$link->createdon = time();
+					
+					if (!$link->save()) {
+						foreach ($link->getMessages() as $msg) {
+							$this->log->log('Error saving link: ' . $msg);
+						}
+						throw new InvalidArgumentException('Error while saving Maillink');
+					}
+					else {
+						$mxl = new Mxl();
+				
+						$mxl->idMail = $this->mail->idMail;
+						$mxl->idMailLink = $link->idMailLink;
+
+						if (!$mxl->save()) {
+							foreach ($mxl->getMessages() as $msg) {
+								$this->log->log('Error saving Mxl: ' . $msg);
+							}
+							throw new InvalidArgumentException('Error while saving Mxl');
+						}
+					}
+				}
+				else {
+					$mxl = Mxl::findFirst(array(
+						'conditions' => 'idMail = ?1 AND idMailLink = ?2',
+						'bind' => array(1 => $this->mail->idMail,
+										2 => $maillink->idMailLink)
+					));
+					
+					if (!$mxl) {
+						$mxl = new Mxl();
+				
+						$mxl->idMail = $this->mail->idMail;
+						$mxl->idMailLink = $maillink->idMailLink;
+
+						if (!$mxl->save()) {
+							foreach ($mxl->getMessages() as $msg) {
+								$this->log->log('Error saving Mxl: ' . $msg);
+							}
+							throw new InvalidArgumentException('Error while saving Mxl');
+						}
+					}
+				}
+				$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
+			}
+			$newContent = str_replace($search, $replace, $content);
+			
+			return $newContent;
+		}
 	}
 }

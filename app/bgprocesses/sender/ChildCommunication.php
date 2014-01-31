@@ -100,7 +100,7 @@ class ChildCommunication extends BaseWrapper
 					$trackingObj = new TrackingUrlObject();
 					$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact']);
 					
-//					$log->log("HTML: " . $htmlWithTracking);
+					$log->log("HTML: " . $htmlWithTracking);
 					
 					$from = array($mail->fromEmail => $mail->fromName);
 					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
@@ -116,7 +116,7 @@ class ChildCommunication extends BaseWrapper
 					$message->setTo($to);
 					$message->addPart($text, 'text/plain');
 
-					$recipients = $swift->send($message, $failures);
+//					$recipients = $swift->send($message, $failures);
 
 					if ($recipients){
 						echo "Message {$i} successfully sent! \n";
