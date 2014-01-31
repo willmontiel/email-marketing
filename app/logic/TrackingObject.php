@@ -37,9 +37,7 @@ class TrackingObject
 					$event = new Mailevent();
 					$event->idMail = $idMail;
 					$event->idContact = $idContact;
-					$event->type = 'Opening';
-					$event->date = time();
-					$event->description = 'opening';
+					$event->opening = time();
 					$event->userAgent = $so . ', ' . $browser;
 					$event->location = ' ';
 
@@ -126,8 +124,9 @@ class TrackingObject
 		}
 	}
 	
-	public function updateTrackClick($idLink, $idMail, $idContact)
+	public function updateTrackClick($idLink, $idMail, $idContact, $so = null, $browser = null)
 	{
+		$this->log->log('Inicio de tracking de clicks');
 		$mxl = Mxl::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idMailLink = ?2',
 			'bind' => array(1 => $idMail,
@@ -135,17 +134,117 @@ class TrackingObject
 		));
 		
 		if ($mxl) {
-			
-			$event
-			
-			$link = Maillink::findFirst(array(
+			$this->log->log('Existe Mxl');
+			$mxcxl = Mxcxl::findFirst(array(
+				'conditions' => 'idMail = ?1 AND idMailLink = ?2 AND idContact = ?3',
+				'bind' => array(1 => $idMail,
+								2 => $idLink,
+								3 => $idContact)
+			));
+			$Maillink = Maillink::findFirst(array(
 				'conditions' => 'idMailLink = ?1',
 				'bind' => array(1 => $idLink)
 			));
 			
+			if (!$mxcxl) {
+				
+				$this->log->log('No Existe Mxcxl');
+				$mail = Mail::findFirst(array(
+					'conditions' => 'idMail = ?1',
+					'bind' => array(1 => $idMail)
+				));
+				$this->log->log('Existe mail');
+				$mxc = Mxc::findFirst(array(
+					'conditions' => 'idMail = ?1 AND idContact = ?2',
+					'bind' => array(1 => $idMail,
+									2 => $idContact)
+				));
+				$this->log->log('Existe Mxc');
+				$event = Mailevent::findFirst(array(
+					'conditions' => 'idMail = ?1 AND idContact = ?2',
+					'bind' => array(1 => $idMail,
+									2 => $idContact)
+				));
+				$this->log->log('Verificando Event');
+				if (!$event) {
+					$this->log->log('No existe Event');
+					unset($event);
+					$event = new Mailevent();
+					$event->idMail = $idMail;
+					$event->idContact = $idContact;
+					$event->opening = time();
+					$event->click = time();
+					$event->userAgent = $so . ', ' . $browser;
+					$event->location = ' ';
+					
+					$mxc->opening = time();
+					$mxc->clicks = time();
+					
+					$mail->uniqueOpens += 1;
+					$mail->clicks += 1;
+				}
+				else {
+					$this->log->log('Si existe event');
+					$event->click = time();
+					$mxc->clicks = time();
+					$mail->clicks += 1;
+				}
+				
+				if (!$event->save()) {
+					foreach ($event->getMessages() as $msg) {
+						$this->log->log('Error saving Mailevent: ' . $msg);
+					}
+					throw new \InvalidArgumentException('Error while updating MailEvent');
+				}
+				
+				if (!$mxc->save()) {
+					foreach ($mxc->getMessages() as $msg) {
+						$this->log->log('Error saving Mailevent: ' . $msg);
+					}
+					throw new \InvalidArgumentException('Error while updating MailEvent');
+				}
+				
+				if (!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->log->log('Error saving Mailevent: ' . $msg);
+					}
+					throw new \InvalidArgumentException('Error while updating MailEvent');
+				}
+				/*========================================
+				 * Hasta aqui se actualiza Mailevent, Mxc y Mail
+				 */
+				$mxl->totalClicks += 1;
+				
+				if (!$mxl->save()) {
+					foreach ($mxl->getMessages() as $msg) {
+						$this->log->log('Error saving Mxl: ' . $msg);
+					}
+					throw new \InvalidArgumentException('Error while updating Mxl');
+				}
+				
+				$mxCxL = new Mxcxl();
+				
+				$mxCxL->idMail = $idMail;
+				$mxCxL->idMailLink = $idLink;
+				$mxCxL->idContact = $idContact;
+				$mxCxL->click = time(); 
+			
+				if (!$mxCxL->save()) {
+					foreach ($mxCxL->getMessages() as $msg) {
+						$this->log->log('Error saving Mxl: ' . $msg);
+					}
+					throw new \InvalidArgumentException('Error while updating Mxcxl');
+				}
+				
+				return $Maillink->link;
+			}
+			else {
+				$this->log->log('Este usuario ya ha sido contabilizado');
+				return $Maillink->link;
+			}
 		}
 		else {
-			$this->log->log('No existe mxl');
+			$this->log->log('No existe registro del link ni del correo');
 			return false;
 		}
 	}

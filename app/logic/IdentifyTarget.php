@@ -29,7 +29,7 @@ class IdentifyTarget
 		$sql = "INSERT IGNORE INTO mxc ";
 		switch ($target->destination) {
 			case 'dbases':
-				$sql2 = "(SELECT " . $mail->idMail . ", c.idContact, 'scheduled', 0, 0, 0, GROUP_CONCAT(l.idContactlist)
+				$sql2 = "(SELECT " . $mail->idMail . ", c.idContact, 'scheduled', 0, 0, 0, 0, GROUP_CONCAT(l.idContactlist)
                         	FROM contact AS c 
                         		JOIN email AS e ON (c.idEmail = e.idEmail) 
 								JOIN coxcl AS l ON (c.idContact = l.idContact)
@@ -39,7 +39,7 @@ class IdentifyTarget
 				break;
 			
 			case 'contactlists':
-				$sql2 = "(SELECT " . $mail->idMail . ", cl.idContact, 'scheduled', 0, 0, 0, GROUP_CONCAT(l.idContactlist) 
+				$sql2 = "(SELECT " . $mail->idMail . ", cl.idContact, 'scheduled', 0, 0, 0, 0, GROUP_CONCAT(l.idContactlist) 
 							FROM coxcl AS cl
 								JOIN contact AS c ON (cl.idContact = c.idContact)
 								JOIN email AS e ON (c.idEmail = e.idEmail)
@@ -49,7 +49,7 @@ class IdentifyTarget
 				break;
 				
 			case 'segments':
-				$sql2 = "(SELECT " . $mail->idMail . ", sc.idContact, 'scheduled', 0, 0, 0, GROUP_CONCAT(l.idContactlist) 
+				$sql2 = "(SELECT " . $mail->idMail . ", sc.idContact, 'scheduled', 0, 0, 0, 0, GROUP_CONCAT(l.idContactlist) 
 							FROM sxc AS sc
 								JOIN contact AS c ON (sc.idContact = c.idContact)
 								JOIN email AS e ON (c.idEmail = e.idEmail)

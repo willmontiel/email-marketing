@@ -148,8 +148,9 @@ class PrepareContentMail
 			foreach ($hrefs as $href) {
 				$l = $href->getAttribute('href');
 				$maillink = Maillink::findFirst(array(
-					'conditions' => 'link = ?1',
-					'bind' => array(1 => $l)
+					'conditions' => 'idAccount = ?1 AND link = ?2',
+					'bind' => array(1 => $this->account->idAccount, 
+									2 => $l)
 				));
 				
 				$search[] = $l;
@@ -157,6 +158,7 @@ class PrepareContentMail
 				if (!$maillink) {
 					$link = new Maillink();
 					
+					$link->idAccount = $this->account->idAccount;
 					$link->link = $l;
 					$link->createdon = time();
 					

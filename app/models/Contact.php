@@ -24,6 +24,7 @@ class Contact extends \Phalcon\Mvc\Model
 		
 		$this->hasMany("idContact", "Sxc", "idContact");
 		$this->hasMany("idContact", "Mailevent", "idContact");
+		$this->hasMany("idContact", "Mxcxl", "idContact");
 
 		$this->useDynamicUpdate(true);
 		
