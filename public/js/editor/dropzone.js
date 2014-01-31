@@ -3,36 +3,51 @@ function DropzoneArea (name, color, parent, width) {
 	this.color = color;
 	this.parent = parent;
 	this.width = width;
-	this.content = [];
-	this.$obj = "";
-
+	this.listofrows = [];
+	this.content = "";
+	
+	this.background_color = "FFFFFF";
+	this.border_width = 0;
+	this.border_color = "FFFFFF";
+	this.border_style = "none";
+	this.corner_top_left = 0;
+	this.corner_top_right = 0;
+	this.corner_bottom_left = 0;
+	this.corner_bottom_right = 0;
 };
 
 DropzoneArea.prototype.createHtmlZone = function() {
 	
-	var htmltext = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"' style='background-color:" + this.color + ";'>\n\
-						<div class='info-guide'>\n\
-							<span>" + this.name + "</span>\n\
-						</div>\n\
-						<div class='add-row-block' data-toggle='modal' data-backdrop='static' href='#add-element-block'>\n\
-							<div class='image-add icon-plus icon-white icon-2x'></div>\n\
-							<div class='add-element'>Adicionar Elemento</div>\n\
+	var htmltext = "<div class='dropzone-container-border'>\n\
+						<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"' style='background-color:" + this.background_color + ";'>\n\
+							<div class='info-guide'>\n\
+								<span>" + this.name + "</span>\n\
+							</div>\n\
+							<div class='dz-icons-options'>\n\
+								<div class='edit-zone tool'><span class='icon-pencil icon-white'></span></div>\n\
+							</div>\n\
+							<div class='add-row-block' data-toggle='modal' data-backdrop='static' href='#add-element-block'>\n\
+								<div class='image-add icon-plus icon-white icon-2x'></div>\n\
+								<div class='add-element'>Adicionar Elemento</div>\n\
+							</div>\n\
 						</div>\n\
 					</div>";
 	
 	$(this.parent).append(htmltext);
 	
-	this.$obj = $("#content-" + this.name);
+	this.content = $("#content-" + this.name);
 	
-	this.$obj.data('smobj', this);
+	this.content.data('smobj', this);
 	
 	this.addElementToZone();
+	this.updateChanges();
+	this.editZone();
 	
 };
 
 DropzoneArea.prototype.addElementToZone = function() {
 	var t = this;
-	this.$obj.find('.add-row-block').on('click', function() {
+	this.content.find('.add-row-block').on('click', function() {
 		$('#add-element-block .basic-elements').empty();
 		$('#add-element-block .compounds-elements').empty();
 		
@@ -47,6 +62,21 @@ DropzoneArea.prototype.addElementToZone = function() {
 		
 		t.createHtmlElement('text-image', 'Texto - Imagen', 'Compound', null, row);
 		t.createHtmlElement('image-text', 'Imagen - Texto', 'Compound', null, row);
+	});
+};
+
+DropzoneArea.prototype.editZone = function() {
+	var t = this;
+	this.content.find('.dz-icons-options .edit-zone').on('click', function(event) {
+		console.log(t)
+		var toolbar = new Toolbar(t);
+		toolbar.drawHtml(false);
+		toolbar.createBackground();
+		toolbar.createBorder();
+		toolbar.createCorners();
+		toolbar.setWidthSize('510');
+		
+		event.stopPropagation();
 	});
 };
 
@@ -69,7 +99,7 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 	
 	element.on('click', function() {
 		if(row.listofblocks.length === 0) {
-			t.content.push(row);
+			t.listofrows.push(row);
 			row.createRow();
 		}
 		row.addBlock(block);
@@ -78,16 +108,24 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 };
 
 DropzoneArea.prototype.removeRow = function(row) {
-	for(var i = 0; i < this.content.length; i++) {
-		if(this.content[i] == row) {
-			this.content.splice(i, 1);
+	for(var i = 0; i < this.listofrows.length; i++) {
+		if(this.listofrows[i] == row) {
+			this.listofrows.splice(i, 1);
 		}
 	}
 };
 
+DropzoneArea.prototype.updateBlockStyle = function(style, value) {
+	this.content.css(style, value);
+};
+
+DropzoneArea.prototype.updateContentStyle = function(style, value) {
+	this.content.css(style, value);
+};
+
 DropzoneArea.prototype.deletezone = function() {
 
-	this.$obj.remove();
+	this.content.remove();
 	
 };
 
@@ -98,9 +136,9 @@ DropzoneArea.prototype.setWidth = function(newWidth) {
 
 DropzoneArea.prototype.insertRows = function() {
 	
-	for (var row = 0; row < this.content.length; row++) {
-		this.$obj.append(this.content[row].createRow());
-		this.content[row].updateChanges();
+	for (var row = 0; row < this.listofrows.length; row++) {
+		this.content.append(this.listofrows[row].createRow());
+		this.listofrows[row].updateChanges();
 	}
 };
 
@@ -111,14 +149,21 @@ DropzoneArea.prototype.createBlock = function(clase, content, html) {
 DropzoneArea.prototype.persist = function() {
 	var obj = {
 		name: this.name,
-		color: this.color,
 		width: this.width,
 		parent: this.parent,
+		background_color : this.background_color,
+		border_width : this.border_width,
+		border_color : this.border_color,
+		border_style : this.border_style ,
+		corner_top_left : this.corner_top_left,
+		corner_top_right : this.corner_top_right,
+		corner_bottom_left : this.corner_bottom_left,
+		corner_bottom_right : this.corner_bottom_right,
 		content: []
 	};
 	
-	for (var i=0; i< this.content.length; i++) {
-		obj.content.push(this.content[i].persist());
+	for (var i=0; i< this.listofrows.length; i++) {
+		obj.content.push(this.listofrows[i].persist());
 	}
 	return obj;
 };
@@ -129,23 +174,50 @@ DropzoneArea.prototype.unpersist = function(obj) {
 	this.color = obj.color;
 	this.parent = obj.parent;
 	
+	this.background_color = (obj.background_color === undefined) ? "FFFFFF" : obj.background_color;
+	this.border_width = (obj.border_width === undefined) ? 0 : obj.border_width;
+	this.border_color = (obj.border_color === undefined) ? 0 : obj.border_color;
+	this.border_style = (obj.border_style === undefined) ? 'none' : obj.border_style;
+	this.corner_top_left = (obj.corner_top_left === undefined) ? 0 : obj.corner_top_left;
+	this.corner_top_right = (obj.corner_top_right === undefined) ? 0 : obj.corner_top_right;
+	this.corner_bottom_left = (obj.corner_bottom_left === undefined) ? 0 : obj.corner_bottom_left;
+	this.corner_bottom_right = (obj.corner_bottom_right === undefined) ? 0 : obj.corner_bottom_right;
+	
 	if(this.width === undefined) {
 		
 		this.width = obj.width;
 	}
 	
-	this.$obj = $('<div id="' + this.name + '" class="sub-mod-cont drop-zone ' + this.width + ' ui-sortable"></div>');
+	this.content = $('<div id="' + this.name + '" class="sub-mod-cont drop-zone ' + this.width + ' ui-sortable"></div>');
 	
 	for (var i=0; i< obj.content.length; i++) {
 		
 		var newrow = new rowZone(this);
 		
-		this.$obj.append(newrow.unpersist(obj.content[i]));
+		this.content.append(newrow.unpersist(obj.content[i]));
 		
-		this.content.push(newrow);
+		this.listofrows.push(newrow);
 	}
 	
-	return this.$obj;
+	return this.content;
+};
+
+DropzoneArea.prototype.updateChanges = function() {
+	this.updateBlockStyle('background-color', this.background_color);
+	
+	this.updateBlockStyle('border-color', this.border_color);
+	this.updateBlockStyle('border-width', this.border_width);
+	this.updateBlockStyle('border-style', this.border_style);
+	
+	this.updateBlockStyle('border-top-left-radius', this.corner_top_left);
+	this.updateBlockStyle('border-top-right-radius', this.corner_top_right);
+	this.updateBlockStyle('border-bottom-left-radius', this.corner_bottom_left);
+	this.updateBlockStyle('border-bottom-right-radius', this.corner_bottom_right);
+	
+	this.updateContentStyle('margin-top', this.margin_top);
+	this.updateContentStyle('margin-bottom', this.margin_bottom);
+	this.updateContentStyle('margin-left', this.margin_left);
+	this.updateContentStyle('margin-right', this.margin_right);
 };
 
 DropzoneArea.prototype.zoneColor = function() {
@@ -153,25 +225,25 @@ DropzoneArea.prototype.zoneColor = function() {
 	this.oldColor = this.color;
 	
 	$('#color-' + this.name).colorpicker().on('changeColor', function(ev){
-		t.$obj.css('background-color', ev.color.toHex());
+		t.content.css('background-color', ev.color.toHex());
 		t.color = ev.color.toHex();
 		t.oldColor = ev.color.toHex();
 	});
 	
 	$('#field-color-' + this.name).on('change', function(){
 		$('#color-' + t.name).colorpicker('setValue', $(this).val());
-		t.$obj.css('background-color', $(this).val());
+		t.content.css('background-color', $(this).val());
 		t.color = $(this).val();
 		t.oldColor = $(this).val();
 	});
 	
 	$('input[name=color-trans-' + this.name + ']').on('change', function(){
 		if($( "input:checked" ).val()) {
-			t.$obj.css('background-color', 'transparent');
+			t.content.css('background-color', 'transparent');
 			t.color = 'transparent';
 		}
 		else {
-			t.$obj.css('background-color', t.oldColor);
+			t.content.css('background-color', t.oldColor);
 			t.color = t.oldColor;
 		}
 	});
@@ -180,7 +252,7 @@ DropzoneArea.prototype.zoneColor = function() {
 DropzoneArea.prototype.ondrop = function() {
 	var t = this;
 	
-	this.$obj.sortable({
+	this.content.sortable({
 		
 		sort: function() {
 			$('#edit-area .drop-zone .info-guide').show();
@@ -191,13 +263,13 @@ DropzoneArea.prototype.ondrop = function() {
 			parent.iframeResize();
 			var objrow = object.item.data('smobj');
 			
-			for(var i = 0; i < t.content.length; i++) {
-				if(t.content[i] === objrow) {
-					t.content.splice(i, 1);
+			for(var i = 0; i < t.listofrows.length; i++) {
+				if(t.listofrows[i] === objrow) {
+					t.listofrows.splice(i, 1);
 				}
 			}
 			
-			objrow.dz.content.splice(object.item.index() - 2, 0, objrow);
+			objrow.dz.listofrows.splice(object.item.index() - 2, 0, objrow);
 			$('#edit-area .drop-zone .info-guide').css("display", "");
 			$('#edit-area .sub-mod-cont').removeClass('show-zones-draggable');
 		},
@@ -212,10 +284,10 @@ DropzoneArea.prototype.ondrop = function() {
 			var rowobj = object.item.data('smobj');
 			t.objSer = rowobj;
 			
-			for(var i = 0; i < t.content.length; i++) {
-				if(t.content[i] === rowobj) {
-					t.content[i].removeBlock();
-					t.content.splice(i, 1);
+			for(var i = 0; i < t.listofrows.length; i++) {
+				if(t.listofrows[i] === rowobj) {
+					t.listofrows[i].removeBlock();
+					t.listofrows.splice(i, 1);
 				}
 			}
 		}

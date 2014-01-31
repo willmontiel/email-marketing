@@ -23,10 +23,10 @@ class HtmlBlockObj
 			case 'Button':
 				$block = new BlockButton();
 				break;
-			case 'module-social-follow':
+			case 'Social-Follow':
 				$block = new BlockSocialFollow();
 				break;
-			case 'module-social-share':
+			case 'Social-Share':
 				$block = new BlockSocialShare();
 				break;
 			case 'module-text-mult':

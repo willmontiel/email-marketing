@@ -21,7 +21,7 @@ class BlockImage extends HtmlAbstract
 		$alt = $data->imgalt;
 		$link = trim($data->imglink);
 		
-		$this->align = str_replace('pull-', '', $data->align);
+		$this->align = $data->align;
 		$height = $data->height;
 		$this->width = $data->width;
 		$this->vertalign = $data->vertalign;

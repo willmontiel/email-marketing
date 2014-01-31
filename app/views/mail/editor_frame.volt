@@ -383,6 +383,7 @@
 	
 <div class="component-toolbar" style="display:none"></div>
 <div class="component-toolbar-button" style="display:none"></div>
+<div class="component-toolbar-social" style="display:none"></div>
 
 <div id="buttonaction" class="modal hide fade button-modal">
 	<div class="modal-header button-header">

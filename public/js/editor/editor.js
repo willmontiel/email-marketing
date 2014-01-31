@@ -1,6 +1,7 @@
 function Editor() {
 	this.layout = {};
 	this.dz = {};
+	this.content = {};
 }
 var editor = new Editor(); 
 
@@ -18,6 +19,8 @@ Editor.prototype.otherLayout = function() {
 		t.layout = newLayout;
 		
 		t.colorLayout();
+		
+		t.createEditStyle();
 		
 		if(jQuery.isEmptyObject(oldLayout)) {
 			
@@ -95,7 +98,7 @@ Editor.prototype.changeLayout = function() {
 
 		objdz[newdz.name] = newdz;
 	}
-	
+	this.createEditStyle();
 	this.createDZ(objdz);
 	
 	newRedactor();
@@ -163,7 +166,7 @@ Editor.prototype.zoneHtmlColor = function(name, color) {
 };
 
 Editor.prototype.createDZ = function(objdz) {
-		
+	
 	for (var key in objdz) {
 		
 		if(objdz[key] instanceof DropzoneArea) {
@@ -177,6 +180,42 @@ Editor.prototype.createDZ = function(objdz) {
 	}
 	
 	this.dz = objdz;
+};
+
+Editor.prototype.createEditStyle = function() {
+	$('.dropzone-container-border').remove();
+	$('.layout-icons-options').remove();
+	$('.toolbar-to-edit').remove();
+	
+	var edit = '<div class="layout-icons-options">\n\
+					<div class="edit-layout tool"><span class="icon-pencil icon-white"></span></div>\n\
+				</div>\n\
+				<div class="toolbar-to-edit"></div>';
+	$('#edit-area').append(edit);
+	
+	var t = this;
+	var edition = new EditionArea($('#edit-area'), this);
+	$('.edit-layout').on('click', function(event) {
+		var toolbar = new Toolbar(edition);
+		toolbar.drawHtml(false);
+		toolbar.createBackground();
+		toolbar.setWidthSize('90');
+		event.stopPropagation();
+	});
+};
+
+function EditionArea(content, parent) {
+	this.content = content;
+	this.parent = parent;
+}
+
+EditionArea.prototype.updateBlockStyle = function(style, value) {
+	this.content.css(style, value);
+	this.parent.editorColor = value;
+};
+
+EditionArea.prototype.updateContentStyle = function(style, value) {
+	this.content.css(style, value);
 };
 
 Editor.prototype.createZoneStyle = function(objdz, bodytext) {
@@ -230,17 +269,17 @@ Editor.prototype.newDropZones = function() {
 
 Editor.prototype.deleteZoneByTool = function(name, objblk) {
 	
-	for(var i = 0; i < this.dz[name].content.length; i++) {
+	for(var i = 0; i < this.dz[name].listofrows.length; i++) {
 			
-			if(this.dz[name].content[i] == objblk) {
+			if(this.dz[name].listofrows[i] == objblk) {
 				
-				var oldObj = this.dz[name].content[i];
+				var oldObj = this.dz[name].listofrows[i];
 				
 				oldObj.deleteBlock();
 				
 				parent.iframeResize();
 				
-				this.dz[name].content.splice(i, 1);
+				this.dz[name].listofrows.splice(i, 1);
 			}
 		}	
 };
@@ -286,6 +325,14 @@ $(function() {
 			$('#my-btn-component-toolbar').remove();
 		}
 		
+		if($(ev.target).parents('.one-element').find('#my-social-share-component-toolbar')[0] === undefined && $(ev.target).parents('#my-social-share-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-social-share-component-toolbar' ){
+			$('#my-social-share-component-toolbar').remove();
+		}
+		
+		if($(ev.target).parents('.one-element').find('#my-social-follow-component-toolbar')[0] === undefined && $(ev.target).parents('#my-social-follow-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-social-follow-component-toolbar' ){
+			$('#my-social-follow-component-toolbar').remove();
+		}
+
 		if($(ev.target).parents('.redactor_box')[0] === undefined && $(ev.target).attr('class') !== 'redactor_box' && $(ev.target).attr('class') !== undefined ){
 			$('.redactor_editor').destroyEditor();
 		}

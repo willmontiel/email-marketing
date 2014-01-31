@@ -70,11 +70,12 @@ BtnBlock.prototype.editBlock = function() {
 	var t = this;
 	this.row.content.find('td:last .edit-block').on('click', function(event) {
 		var toolbar = new Toolbar(t);
-		toolbar.drawHtml();
+		toolbar.drawHtml('one-element');
 		toolbar.createBackground();
 		toolbar.createBorder();
 		toolbar.createCorners();
 		toolbar.createMargins();
+		toolbar.setWidthSize('750');
 		
 		event.stopPropagation();
 	});

@@ -216,8 +216,8 @@ MediaDisplayer.prototype.createSlider = function() {
 	});
 	
 	$('.chose_align').on('click', function() {
-		t.block.addClassContentImgBlock("pull-" + $(this).attr('data-dropdown'));
-		t.block.setAlignImgBlock("pull-" + $(this).attr('data-dropdown'));
+		t.block.addStyleContentImgBlock('text-align', $(this).attr('data-dropdown'));
+		t.block.setAlignImgBlock($(this).attr('data-dropdown'));
 	});
 	
 	$('.chose_vertical_align').on('click', function() {
@@ -230,7 +230,7 @@ MediaDisplayer.prototype.createSlider = function() {
 		t.block.changeAttrImgBlock('height', t.block.height);
 		t.block.changeAttrImgBlock('width', t.block.width);
 		t.block.changeAttrImgBlock('src', t.block.imgsrc);
-		t.block.addClassContentImgBlock(t.block.align);
+		t.block.addStyleContentImgBlock('text-align', t.block.align);
 		t.block.addVerticalAlignToImage(t.block.vertalign);
 	});
 	

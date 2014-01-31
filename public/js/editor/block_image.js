@@ -1,6 +1,6 @@
 function ImgBlock(row) {
 	this.row = row;
-	this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object image-placeholder" />');
+	this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object-img image-placeholder" />');
 	this.background_color = "FFFFFF";
 	this.border_width = 0;
 	this.border_color = "FFFFFF";
@@ -49,11 +49,12 @@ ImgBlock.prototype.editBlock = function() {
 	var t = this;
 	this.row.content.find('td:last .edit-block').on('click', function(event) {
 		var toolbar = new Toolbar(t);
-		toolbar.drawHtml();
+		toolbar.drawHtml('one-element');
 		toolbar.createBackground();
 		toolbar.createBorder();
 		toolbar.createCorners();
 		toolbar.createMargins();
+		toolbar.setWidthSize('750');
 		
 		event.stopPropagation();
 	});
@@ -121,12 +122,8 @@ ImgBlock.prototype.setTableColumn = function(name, value) {
 	this.content.attr(name, value);
 };
 
-ImgBlock.prototype.addClassContentImgBlock = function(value) {
-	var content = this.content.find('.one-element');
-	content.removeClass('pull-center');
-	content.removeClass('pull-left');
-	content.removeClass('pull-right');
-	content.addClass(value);
+ImgBlock.prototype.addStyleContentImgBlock = function(style, value) {
+	this.content.find('.one-element').css(style, value);
 };
 
 ImgBlock.prototype.persist = function() {
@@ -193,7 +190,7 @@ ImgBlock.prototype.unpersist = function(obj) {
 		this.margin_left = obj.margin_left;
 		this.margin_right = obj.margin_right;
 		
-		this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object" src="' + this.imgsrc + '" height="' + this.height + '" width="' + this.width + '" />');
+		this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object-img" src="' + this.imgsrc + '" height="' + this.height + '" width="' + this.width + '" />');
 	}
 	else {
 		delete this.height;
@@ -230,4 +227,6 @@ ImgBlock.prototype.updateChanges = function() {
 	this.updateContentStyle('margin-bottom', this.margin_bottom);
 	this.updateContentStyle('margin-left', this.margin_left);
 	this.updateContentStyle('margin-right', this.margin_right);
+	console.log(this.align)
+	this.addStyleContentImgBlock('text-align', this.align);
 };

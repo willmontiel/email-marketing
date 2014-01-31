@@ -19,7 +19,7 @@ rowZone.prototype.createRow = function() {
 	var row = this.drawHtml();
 	
 	this.content = row;
-	this.dz.$obj.append(row);
+	this.dz.content.append(row);
 	this.content.data('smobj', this);
 	
 	this.addColumn();
@@ -34,13 +34,13 @@ rowZone.prototype.createRow = function() {
 
 rowZone.prototype.drawHtml = function() {
 	var row = $('<div class="row-of-blocks">\n\
+					<table class="row-options" border="0" cellpadding="0"><tr class="in-row"></tr></table>\n\
 					<div class="row-icons-options">\n\
 						<div class="edit-row tool"><span class="icon-pencil icon-white"></span></div>\n\
 						<div class="remove-row tool"><span class="icon-minus icon-white"></span></div>\n\
 						<div class="add-column tool" data-toggle="modal" data-backdrop="static" href="#add-element-block"><span class="icon-plus icon-white"></span></div>\n\
 						<div class="move-row tool"><span class="icon-move icon-white"></span></div>\n\
 					</div>\n\
-					<table class="row-options" border="0" cellpadding="0"><tr class="in-row"></tr></table>\n\
 				</div>');
 	
 	return row;
@@ -84,11 +84,12 @@ rowZone.prototype.editRow = function() {
 	var t = this;
 	this.content.find('.edit-row').on('click', function(event) {
 		var toolbar = new Toolbar(t);
-		toolbar.drawHtml();
+		toolbar.drawHtml('row-options');
 		toolbar.createBackground();
 		toolbar.createBorder();
 		toolbar.createCorners();
 		toolbar.createMargins();
+		toolbar.setWidthSize('750');
 		
 		event.stopPropagation();
 	});
@@ -161,6 +162,12 @@ rowZone.prototype.unpersist = function(obj) {
 				break;
 			case 'Button' :
 				var block = new BtnBlock(this);
+				break;
+			case 'Social-Share' :
+				var block = new SShareBlock(this);
+				break;
+			case 'Social-Follow' :
+				var block = new SFollowBlock(this);
 				break;
 		}
 		this.listofblocks.push(block.unpersist(obj.content[i]));

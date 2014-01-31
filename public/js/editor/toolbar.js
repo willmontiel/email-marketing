@@ -8,16 +8,21 @@ function Toolbar(component) {
 	$('.element-in-edition').removeClass('element-in-edition');
 }
 
-Toolbar.prototype.drawHtml = function() {
-	var component = this.component.content.find('.one-element');
+Toolbar.prototype.drawHtml = function(obj_in_edit) {
+	if(!obj_in_edit) {
+		var component = this.component.content;
+	}
+	else {
+		var component = this.component.content.find('.' + obj_in_edit);
+	}
 	component.addClass('element-in-edition');
 
 	this.toolbar.show();
 	var position = component.position();
-	this.toolbar.css('top', position.top - 68);
-	this.toolbar.css('left', position.left - 103);
-	this.component.content.append(this.toolbar);
-//	this.component.content.parents('.drop-zone').append(this.toolbar);
+//	this.toolbar.css('top', position.top - 68);
+//	this.toolbar.css('left', position.left - 103);
+	
+	$('.toolbar-to-edit').append(this.toolbar);
 };
 
 Toolbar.prototype.createBackground = function() {
@@ -158,4 +163,8 @@ Toolbar.prototype.spinnerContentChange = function(id, style, property) {
 			t.component[property] = $(this).val();
 		}
 	});
+};
+
+Toolbar.prototype.setWidthSize = function(width) {
+	this.toolbar.css('width', width);
 };

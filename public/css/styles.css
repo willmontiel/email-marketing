@@ -353,6 +353,10 @@ table {
 	cursor: pointer
 }
 
+.media-object-img {
+	cursor: pointer
+}
+
 #imagedisplayer {
 	width: 260px;
 	background-color: white;
@@ -626,7 +630,7 @@ table {
 	top: -16px;
 }
 
-.elements-options span, .row-icons-options span {
+.elements-options span, .row-icons-options span, .dz-icons-options span, .layout-icons-options span {
 	margin-top: 20%;
 }
 
@@ -657,11 +661,11 @@ table {
 	border: 8px solid #A2C8E8;
 }
 
-.row-icons-options {
+.row-icons-options, .dz-icons-options {
 	display: none;
 }
 
-.row-of-blocks:hover .row-icons-options {
+.row-of-blocks:hover .row-icons-options, .sub-mod-cont:hover .dz-icons-options {
 	display: block;
 }
 
@@ -674,7 +678,7 @@ table {
 	padding: 10px;
 }*/
 
-.edit-row, .remove-row, .add-column, .move-row {
+.edit-row, .remove-row, .add-column, .move-row, .edit-zone, .edit-layout {
 	position: absolute;
 	height: 25px;
 	width: 25px;
@@ -685,7 +689,12 @@ table {
 	top: -8px;
 }
 
-.edit-row {
+.edit-layout {
+	top: 20px;
+	left: 80px;
+}
+
+.edit-row, .edit-zone {
 	left: -8px;
 }
 .remove-row {
@@ -698,7 +707,7 @@ table {
 	left: 50%;
 }
 /* Estilos de controles durante HOVER */
-.edit-row:hover, .add-column:hover {
+.edit-row:hover, .add-column:hover, .edit-zone:hover, .edit-layout:hover {
 	background-color: #46B352;
 }
 .remove-row:hover {
@@ -723,11 +732,15 @@ table {
 }
 
 .element-in-edition {
-	border: 3px solid lightgrey !important;
+	border-color: lightgrey !important;
 	border-radius: 3px;
 }
 
 .element-in-edition .elements-options {
+	display: none !important;
+}
+
+.element-in-edition ~ .row-icons-options {
 	display: none !important;
 }
 
@@ -833,16 +846,19 @@ table {
 	border-top-right-radius: 5px;
 }
 
-.component-toolbar-button {
+.component-toolbar-button, .component-toolbar-social {
 	float: left;
 	z-index: 100;
 	display: block;
 	position: absolute;
-	width: 850px;
 	transition: opacity 0.5s;
 	box-shadow: inset 0 0 0 #969392, inset 0 -1px #969392;
 	padding: 4px;
 	border-radius: 5px;
+}
+
+.component-toolbar-button {
+	width: 850px;
 }
 
 .first_row, .second_row, .third_row {
@@ -909,4 +925,105 @@ table {
 }
 .soc_net_share {
 	margin-right: 8px;
+}
+.social-toolbar-title, .social-toolbar-title {
+	float: left;
+	margin-top: 10px;
+	margin-right: 5px;
+}
+.social-toolbar-field {
+	float: left;
+	margin-top: 10px;
+}
+.social-align-container, .social-size-container {
+	float: left;
+	margin-top: 5px;	
+}
+.component-toolbar-social {
+	width: 680px;
+}
+.medium-large-select select {
+	width: 105px;
+}
+.social_share_net_container {
+	border: 1px dashed #656466;
+	padding: 5px 1px 5px 4px;
+	margin-bottom: 3px;
+	margin-top: 3px;
+	border-radius: 4px;
+}
+.with-social-net {
+	float: left;
+	margin-right: 5px;
+	margin-top: 4px;
+}
+.social_img_container {
+	float: left;
+}
+.social-network-selected {
+	border-style: solid !important;
+	background-color: #D7D8D9;
+}
+.not-label-bottom {
+	margin-bottom: 0;
+}
+.social-share-title {
+	margin-right: 15px;
+	margin-top: 5px;
+}
+.social_share_net_container input[type=checkbox] {
+	display: none;
+}
+.align-btn-toolbar {
+	float: left;
+	background-color: darkgray;
+	border-radius: 30px;
+	cursor: pointer;
+	margin-right: 5px;
+	margin-top: 5px;
+}
+.align-btn-toolbar:hover {
+	background-color: lightgray;
+}
+.align-btn-toolbar.align-left {
+	padding: 3px 4px 5px 5px;
+}
+.align-btn-toolbar.align-center {
+	padding: 3px 4px 5px 4px;
+}
+.align-btn-toolbar.align-right {
+	padding: 3px 5px 5px 4px;
+}
+.align-selected-toolbar {
+	background-color: #107fc8;
+}
+.social_follow_net_container {
+	border: 1px dashed #656466;
+	padding: 2px 1px 5px 4px;
+	margin-bottom: 3px;
+	margin-top: 3px;
+	border-radius: 4px;
+	height: 28px;
+	width: 74px;
+}
+.social-follow-text input {
+	width: 100px;
+}
+.social_follow_net_container {
+	margin-left: auto;
+	margin-right: auto;
+}
+.social_follow_net_container input[type=checkbox] {
+	display: none;
+}
+#my-social-follow-component-toolbar.component-toolbar-social {
+	width: 740px;
+}
+.soc_net_follow_container {
+	margin-right: 8px;
+	text-align: center;
+	float: left;
+}
+.social_follow_net_container img {
+	max-width: 70px;
 }
