@@ -7,7 +7,7 @@ function Layout (id, name, description, icon, zones) {
 }
 
 Layout.prototype.createlayout = function() {
-	var obj = $("<div class='layout' id='" + this.name + "'> \
+	var obj = $("<div class='layout' id='" + this.name + "' data-dismiss='modal'> \
 					<a href='#' data-toggle='tab'>\
 						<img src='" + this.icon + "' alt='64x64' />\
 					</a>\
@@ -15,7 +15,7 @@ Layout.prototype.createlayout = function() {
 	
 	obj.data('layoutObj', this);
 
-	$('#layouts').append(obj);
+	$('#select-layout .layout-list').append(obj);
 };
 
 var layouts = [

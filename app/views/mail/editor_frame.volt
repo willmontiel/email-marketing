@@ -380,6 +380,21 @@
 		<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
 	</div>
 </div>
+
+<div id="select-layout" class="modal hide fade">
+	<div class="modal-header">
+		Seleccione Layout
+	</div>
+	<div class="modal-body">
+		<div class="layout-list clearfix">
+			
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+	
 	
 <div class="component-toolbar" style="display:none"></div>
 <div class="component-toolbar-button" style="display:none"></div>

@@ -18,8 +18,8 @@ function DropzoneArea (name, color, parent, width) {
 
 DropzoneArea.prototype.createHtmlZone = function() {
 	
-	var htmltext = "<div class='dropzone-container-border'>\n\
-						<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"' style='background-color:" + this.background_color + ";'>\n\
+	var htmltext = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"' style='background-color:" + this.background_color + ";'>\n\
+						<div class='dropzone-container dropzone-container-border'>\n\
 							<div class='info-guide'>\n\
 								<span>" + this.name + "</span>\n\
 							</div>\n\
@@ -68,9 +68,8 @@ DropzoneArea.prototype.addElementToZone = function() {
 DropzoneArea.prototype.editZone = function() {
 	var t = this;
 	this.content.find('.dz-icons-options .edit-zone').on('click', function(event) {
-		console.log(t)
 		var toolbar = new Toolbar(t);
-		toolbar.drawHtml(false);
+		toolbar.drawHtml('dropzone-container-border');
 		toolbar.createBackground();
 		toolbar.createBorder();
 		toolbar.createCorners();
@@ -103,6 +102,7 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 			row.createRow();
 		}
 		row.addBlock(block);
+		row.updateImagesSize();
 	});
 	
 };
@@ -252,42 +252,37 @@ DropzoneArea.prototype.zoneColor = function() {
 DropzoneArea.prototype.ondrop = function() {
 	var t = this;
 	
-	this.content.sortable({
-		
+	this.content.find('.dropzone-container').sortable({
 		sort: function() {
 			$('#edit-area .drop-zone .info-guide').show();
-			$('#edit-area .sub-mod-cont').addClass('show-zones-draggable');			
+			$('#edit-area .sub-mod-cont').addClass('show-zones-draggable');	
 		},
-				
 		stop: function(event, object) {
 			parent.iframeResize();
 			var objrow = object.item.data('smobj');
 			
 			for(var i = 0; i < t.listofrows.length; i++) {
 				if(t.listofrows[i] === objrow) {
-					t.listofrows.splice(i, 1);
+					t.removeRow(t.listofrows[i]);
 				}
 			}
-			
-			objrow.dz.listofrows.splice(object.item.index() - 2, 0, objrow);
+			objrow.dz.listofrows.splice(object.item.index() - 3, 0, objrow);
 			$('#edit-area .drop-zone .info-guide').css("display", "");
 			$('#edit-area .sub-mod-cont').removeClass('show-zones-draggable');
 		},
 				
 		receive: function(event, object) {
 			if (object.sender !== object.item) {
-				$(object.sender).data('smobj').objSer.dz = t;
+				$(object.item).data('smobj').dz = t;
 			}
 		},
 
 		remove: function(event, object) {
 			var rowobj = object.item.data('smobj');
 			t.objSer = rowobj;
-			
 			for(var i = 0; i < t.listofrows.length; i++) {
 				if(t.listofrows[i] === rowobj) {
-					t.listofrows[i].removeBlock();
-					t.listofrows.splice(i, 1);
+					t.removeRow(t.listofrows[i]);
 				}
 			}
 		}

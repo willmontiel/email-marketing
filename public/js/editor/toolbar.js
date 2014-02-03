@@ -19,6 +19,7 @@ Toolbar.prototype.drawHtml = function(obj_in_edit) {
 
 	this.toolbar.show();
 	var position = component.position();
+	console.log(position)
 //	this.toolbar.css('top', position.top - 68);
 //	this.toolbar.css('left', position.left - 103);
 	
@@ -167,4 +168,19 @@ Toolbar.prototype.spinnerContentChange = function(id, style, property) {
 
 Toolbar.prototype.setWidthSize = function(width) {
 	this.toolbar.css('width', width);
+};
+
+Toolbar.prototype.setHeightSize = function(width) {
+	this.toolbar.css('height', width);
+};
+
+Toolbar.prototype.createLayout = function() {
+	var title = $("<div class='option-title-toolbar'>Layouts</div>");
+	var layouts = $("<div class='layout-option-toolbar'><img data-toggle='modal' class='change-layout-toolbar' data-backdrop='static' href='#select-layout' src='" + config.imagesUrl + "/n1.png' style='width: 45px;' width='45px'></div>");
+	
+	var elements = $('<li class="toolbar-elements" />');
+	elements.append(title);
+	elements.append(layouts);
+	
+	this.toolbar.find('.components-list').append(elements);
 };

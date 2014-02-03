@@ -82,9 +82,8 @@ TxtBlock.prototype.newRedactor = function() {
 		}
 		
 		var component = st.content.find('.one-element');
-		var position = component.position();
-		st.content.find('.redactor_toolbar').css('top', position.top - 13);
-		st.content.find('.redactor_toolbar').css('left', position.left - 14);
+		st.content.find('.redactor_toolbar').css('top', -20);
+		st.content.find('.redactor_toolbar').css('left', -100);
 	});
 };
 

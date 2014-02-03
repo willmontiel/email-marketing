@@ -37,11 +37,11 @@ Editor.prototype.otherLayout = function() {
 		
 		parent.iframeResize();
 		
-		$('.drop-zone').sortable({ 
+		$('.dropzone-container').sortable({ 
 			handle: '.move-row', 
 			placeholder: 'placeholder', 
 			items: '> div.row-of-blocks',
-			connectWith: '.drop-zone'
+			connectWith: '.dropzone-container'
 		});
 
 	});
@@ -62,11 +62,11 @@ Editor.prototype.objectExists = function(objMail) {
 		
 		NoMediaDisplayer();
 		
-		$('.drop-zone').sortable({ 
+		$('.dropzone-container').sortable({ 
 			handle: '.move-row', 
 			placeholder: 'placeholder', 
 			items: '> div.row-of-blocks',
-			connectWith: '.drop-zone'
+			connectWith: '.dropzone-container'
 		});
 
 		layoutChosen();
@@ -199,7 +199,9 @@ Editor.prototype.createEditStyle = function() {
 		var toolbar = new Toolbar(edition);
 		toolbar.drawHtml(false);
 		toolbar.createBackground();
-		toolbar.setWidthSize('90');
+		toolbar.createLayout();
+		toolbar.setWidthSize('160');
+		toolbar.setHeightSize('85');
 		event.stopPropagation();
 	});
 };
@@ -306,6 +308,7 @@ Dropzone.autoDiscover = false;
 
 $(function() {
 	
+	$('#select-layout .layout-list').empty();
 	for(var l = 0; l < layouts.length; l++) {
 		layouts[l].createlayout();
 	}
@@ -354,35 +357,6 @@ $(function() {
 	$('.gallery-modal').draggable({handle: ".gallery-header"});
 	$('.button-modal').draggable({handle: ".button-header"});
 	
-	$('.module-cont').on('click', '.module > .tools > .remove-tool', function (event) {
-		
-		var parent = $(this).parents('.module');
-		
-		var grandparent = $(this).parents('.drop-zone');
-		
-		var name = grandparent.attr('id').replace("content-","");
-		
-		editor.deleteZoneByTool(name, parent.data('smobj'));
-		
-		parent.remove();
-		
-		NoMediaDisplayer();
-		
-	});
-
-	$('#components .module').draggable({
-		drag: function() {
-			$('#edit-area .drop-zone .info-guide').show();
-
-			$('#edit-area .sub-mod-cont').addClass('show-zones-draggable');
-		},
-		stop: function() {
-			$('#edit-area .drop-zone .info-guide').css("display", "");
-
-			$('#edit-area .sub-mod-cont').removeClass('show-zones-draggable');
-		}
-	});
-	
 	$('#saveTemplate').on('click', function() {
 
 		editor.serializeDZ();
@@ -398,23 +372,11 @@ $(function() {
 		editor.objectExists(editor);
 	});
 	
-	$('.module-cont').on('click', '.content-image > .media-object', function() {
-		
-		var content = $(this).parents('.module');
-
-		content.data('smobj').createImage();
-		
-	});
-	
 	var myDropzone = new Dropzone("#my-dropzone");
-	
 	myDropzone.on("success", function(file, response) {
-		
 		var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);
-		
 		newMedia.createMedia();
 		newMedia.mediaSelected();
-
 	});	
 	
 });

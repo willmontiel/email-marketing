@@ -19,7 +19,7 @@ rowZone.prototype.createRow = function() {
 	var row = this.drawHtml();
 	
 	this.content = row;
-	this.dz.content.append(row);
+	this.dz.content.find('.dropzone-container').append(row);
 	this.content.data('smobj', this);
 	
 	this.addColumn();
@@ -192,4 +192,12 @@ rowZone.prototype.updateChanges = function() {
 	this.updateContentStyle('margin-right', this.margin_right);
 	
 	this.content.find('.in-column').css('width', (100/this.listofblocks.length) + '%');
+};
+
+rowZone.prototype.updateImagesSize = function() {
+	for(var i = 0; i < this.listofblocks.length; i++) {
+		if(this.listofblocks[i] instanceof ImgBlock) {
+			this.listofblocks[i].updateSize();
+		}
+	}
 };

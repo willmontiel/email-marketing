@@ -189,8 +189,9 @@ ImgBlock.prototype.unpersist = function(obj) {
 		this.margin_bottom = obj.margin_bottom;
 		this.margin_left = obj.margin_left;
 		this.margin_right = obj.margin_right;
-		
-		this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object-img" src="' + this.imgsrc + '" height="' + this.height + '" width="' + this.width + '" />');
+		if ( this.imgsrc !== undefined ) {
+			this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object-img" src="' + this.imgsrc + '" height="' + this.height + '" width="' + this.width + '" />');
+		}
 	}
 	else {
 		delete this.height;
@@ -227,6 +228,16 @@ ImgBlock.prototype.updateChanges = function() {
 	this.updateContentStyle('margin-bottom', this.margin_bottom);
 	this.updateContentStyle('margin-left', this.margin_left);
 	this.updateContentStyle('margin-right', this.margin_right);
-	console.log(this.align)
 	this.addStyleContentImgBlock('text-align', this.align);
+};
+
+ImgBlock.prototype.updateSize = function() {
+	if(this.width > this.content.width()) {
+		this.setSizeImage((this.height * this.content.width()) / this.width, this.content.width());
+		
+		this.setSizeImage((this.height * this.content.width()) / this.width, this.content.width());
+		
+		this.changeAttrImgBlock('width', this.content.width());
+		this.changeAttrImgBlock('height', (this.height * this.content.width()) / this.width);
+	}
 };

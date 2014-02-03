@@ -111,7 +111,7 @@ MediaDisplayer.prototype.imageSelected = function(newsrc, title) {
 					
 					t.block.assignDisplayer({imagesrc: newsrc, percent: 100, width: widthDisplayer, height: heightDisplayer});
 					
-					t.block.setAlignImgBlock("pull-left");
+					t.block.setAlignImgBlock("left");
 					
 					t.block.setVerticalAlignImgBlock("middle");
 				}
