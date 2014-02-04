@@ -25,6 +25,7 @@ rowZone.prototype.createRow = function() {
 	this.addColumn();
 	this.editRow();
 	this.removeRow();
+	this.updateChanges();
 
 	for(var blk = 0; blk < this.listofblocks.length; blk++) {
 		this.listofblocks[blk].createBlock();

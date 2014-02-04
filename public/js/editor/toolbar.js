@@ -142,8 +142,10 @@ Toolbar.prototype.createMargins = function() {
 	
 	this.spinnerContentChange('margin-top-spinner', 'margin-top', 'margin_top');
 	this.spinnerContentChange('margin-bottom-spinner', 'margin-bottom', 'margin_bottom');
-	this.spinnerContentChange('margin-left-spinner', 'margin-left', 'margin_left');
-	this.spinnerContentChange('margin-right-spinner', 'margin-right', 'margin_right');
+	var ml = (this.component instanceof ImgBlock) ? 'padding-left' : 'margin-left';
+	var mr = (this.component instanceof ImgBlock) ? 'padding-right' : 'margin-right';
+	this.spinnerBlockChange('margin-left-spinner', ml, 'margin_left');
+	this.spinnerBlockChange('margin-right-spinner', mr, 'margin_right');
 };
 
 Toolbar.prototype.spinnerBlockChange = function(id, style, property) {

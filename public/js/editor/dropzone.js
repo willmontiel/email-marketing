@@ -1,8 +1,9 @@
-function DropzoneArea (name, color, parent, width) {
+function DropzoneArea (name, color, parent, width, widthval) {
 	this.name = name;
 	this.color = color;
 	this.parent = parent;
 	this.width = width;
+	this.widthval = widthval;
 	this.listofrows = [];
 	this.content = "";
 	
@@ -60,8 +61,8 @@ DropzoneArea.prototype.addElementToZone = function() {
 		t.createHtmlElement('social-follow', 'Seguir Redes', 'Basic', new SFollowBlock(row), row);
 		t.createHtmlElement('button', 'Botón', 'Basic', new BtnBlock(row), row);
 		
-		t.createHtmlElement('text-image', 'Texto - Imagen', 'Compound', null, row);
-		t.createHtmlElement('image-text', 'Imagen - Texto', 'Compound', null, row);
+		t.createHtmlElement('text-image', 'Texto - Imagen', 'Compound', [new TxtBlock(row), new ImgBlock(row)], row);
+		t.createHtmlElement('image-text', 'Imagen - Texto', 'Compound', [new ImgBlock(row), new TxtBlock(row)], row);
 	});
 };
 
@@ -101,7 +102,14 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 			t.listofrows.push(row);
 			row.createRow();
 		}
-		row.addBlock(block);
+		if(category === 'Compound') {
+			for(var i = 0; i < block.length; i++) {
+				row.addBlock(block[i]);
+			}
+		}
+		else {
+			row.addBlock(block);
+		}
 		row.updateImagesSize();
 	});
 	
@@ -129,9 +137,10 @@ DropzoneArea.prototype.deletezone = function() {
 	
 };
 
-DropzoneArea.prototype.setWidth = function(newWidth) {
+DropzoneArea.prototype.setWidth = function(newWidth, newWidthval) {
 	
 	this.width = newWidth;
+	this.widthval = newWidthval;
 };
 
 DropzoneArea.prototype.insertRows = function() {
@@ -216,8 +225,8 @@ DropzoneArea.prototype.updateChanges = function() {
 	
 	this.updateContentStyle('margin-top', this.margin_top);
 	this.updateContentStyle('margin-bottom', this.margin_bottom);
-	this.updateContentStyle('margin-left', this.margin_left);
-	this.updateContentStyle('margin-right', this.margin_right);
+	this.updateBlockStyle('padding-left', this.margin_left);
+	this.updateBlockStyle('padding-right', this.margin_right);
 };
 
 DropzoneArea.prototype.zoneColor = function() {

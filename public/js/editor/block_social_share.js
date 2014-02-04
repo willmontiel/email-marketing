@@ -21,11 +21,8 @@ function SShareBlock(row) {
 }
 
 SShareBlock.prototype.createBlock = function() {
-	
 	this.content = this.drawHtml();
-	
 	this.row.content.find('.in-row').append(this.content);
-	
 	this.editBlock();
 	this.removeBlock();
 	

@@ -33,11 +33,9 @@ function BtnBlock(row) {
 }
 
 BtnBlock.prototype.createBlock = function() {
-	
 	this.content = this.drawHtml();
-	
 	this.row.content.find('.in-row').append(this.content);
-	
+	this.updateChanges();
 	this.editBlock();
 	this.removeBlock();
 	

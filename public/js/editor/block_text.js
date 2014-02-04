@@ -16,14 +16,11 @@ function TxtBlock(row) {
 }
 
 TxtBlock.prototype.createBlock = function() {
-	
 	this.content = this.drawHtml();
-	
 	this.row.content.find('.in-row').append(this.content);
-	
+	this.updateChanges();
 	this.editBlock();
 	this.removeBlock();
-	
 	this.newRedactor();
 };
 
@@ -47,44 +44,6 @@ TxtBlock.prototype.drawHtml = function() {
 					</td>');
 	block.find('.content-text').append(this.content_text);
 	return block;
-};
-
-TxtBlock.prototype.newRedactor = function() {
-	var st = this;
-	this.content.find('.content-text').on('click', function() {
-		var t = this;
-		
-		if (!$(t).hasClass('redactor_editor')) {
-			
-			$('.redactor_editor').destroyEditor();
-			
-			$(t).redactor({
-				focus: true,
-				buttons: [
-					'save', '|', 'formatting', '|', 
-					'bold', 'italic', 'deleted', '|', 
-					'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 
-					'link', '|', 
-					'alignment' 
-				],
-
-				plugins: ['fontcolor', 'fontfamily', 'fontsize', 'clips'],
-
-				buttonsCustom: {
-					save: {
-						title: 'save',
-						callback: function() {
-							$(t).destroyEditor();
-						}
-					}
-				}
-			});
-		}
-		
-		var component = st.content.find('.one-element');
-		st.content.find('.redactor_toolbar').css('top', -20);
-		st.content.find('.redactor_toolbar').css('left', -100);
-	});
 };
 
 TxtBlock.prototype.editBlock = function() {
@@ -172,4 +131,63 @@ TxtBlock.prototype.updateChanges = function() {
 	this.updateContentStyle('margin-bottom', this.margin_bottom);
 	this.updateContentStyle('margin-left', this.margin_left);
 	this.updateContentStyle('margin-right', this.margin_right);
+};
+
+TxtBlock.prototype.newRedactor = function() {
+	var t = this;
+	this.content.find('.content-text').on('click', function() {
+		$('.element-text-in-edition').removeClass('element-text-in-edition');
+		t.content.find('.one-element').addClass('element-text-in-edition');
+		t.textToolbar();
+	});
+};
+
+TxtBlock.prototype.textToolbar = function() {
+	$('#my-text-component-toolbar').remove();
+	
+	var toolbar =  $('.component-toolbar-text').clone().attr('id', 'my-text-component-toolbar');
+	toolbar.empty();
+	toolbar.show();
+	this.content.parents('.row-of-blocks').append(toolbar);
+	toolbar.append('<div class="content-text-toolbar"></div>');
+	toolbar.find('.content-text-toolbar').append(this.content.find('.content-text').html());
+	
+	var t = this;
+	$(toolbar.find('.content-text-toolbar')).redactor({
+		focus: true,
+		buttons: [
+			'save', '|', 'formatting', '|', 
+			'bold', 'italic', 'deleted', '|', 
+			'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 
+			'link', '|', 
+			'alignment' 
+		],
+
+		plugins: ['fontcolor', 'fontfamily', 'fontsize', 'clips'],
+
+		buttonsCustom: {
+			save: {
+				title: 'Save',
+				callback: function() {
+					var content = $(toolbar.find('.content-text-toolbar'));
+					t.content.find('.content-text').html(content.html());
+					content.destroyEditor();
+					$('#my-text-component-toolbar').remove();
+					$('.element-text-in-edition').removeClass('element-text-in-edition');
+				}
+			}
+		}
+	});
+	$('html').click(function(event) {
+		if($(event.target).parents('.one-element').hasClass('element-text-in-edition') === false && $(event.target).parents('#my-text-component-toolbar')[0] === undefined && $(event.target).attr('class') !== 'my-text-component-toolbar' ){
+			var content = $('#my-text-component-toolbar').find('.content-text-toolbar');
+			t.content.find('.content-text').html(content.html());
+			content.destroyEditor();
+			$('#my-text-component-toolbar').remove();
+			$('.element-text-in-edition').removeClass('element-text-in-edition');
+		}
+	});
+	
+	this.content.find('#my-text-component-toolbar').css('top', -20);
+	this.content.find('#my-text-component-toolbar').css('left', -100);
 };

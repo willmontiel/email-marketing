@@ -16,11 +16,8 @@ function ImgBlock(row) {
 }
 
 ImgBlock.prototype.createBlock = function() {
-	
 	this.content = this.drawHtml();
-	
 	this.row.content.find('.in-row').append(this.content);
-	
 	this.editBlock();
 	this.removeBlock();
 	this.createImage();
@@ -226,9 +223,10 @@ ImgBlock.prototype.updateChanges = function() {
 	
 	this.updateContentStyle('margin-top', this.margin_top);
 	this.updateContentStyle('margin-bottom', this.margin_bottom);
-	this.updateContentStyle('margin-left', this.margin_left);
-	this.updateContentStyle('margin-right', this.margin_right);
+	this.updateBlockStyle('padding-left', this.margin_left);
+	this.updateBlockStyle('padding-right', this.margin_right);
 	this.addStyleContentImgBlock('text-align', this.align);
+	this.addVerticalAlignToImage(this.vertalign);
 };
 
 ImgBlock.prototype.updateSize = function() {

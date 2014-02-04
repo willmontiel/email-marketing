@@ -20,11 +20,8 @@ function SFollowBlock(row) {
 }
 
 SFollowBlock.prototype.createBlock = function() {
-	
 	this.content = this.drawHtml();
-	
 	this.row.content.find('.in-row').append(this.content);
-	
 	this.editBlock();
 	this.removeBlock();
 	

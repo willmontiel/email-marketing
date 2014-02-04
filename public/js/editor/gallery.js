@@ -179,7 +179,7 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('#imageslider').append($('<div class="maxwidth"><label class="checkbox"><input id="maxwidthimg" class="target" type="checkbox">Tamaño Maximo</label></div>'));
 	
-	if(t.block.width === t.widthZone) {
+	if(t.block.width === t.block.row.dz.widthval/t.block.row.listofblocks.length) {
 		$('#maxwidthimg')[0].checked = true;
 	}
 
@@ -240,19 +240,23 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('#maxwidthimg').on('change', function(value) {
 		if($('#maxwidthimg')[0].checked) {
+			var width = t.block.row.dz.widthval/t.block.row.listofblocks.length;
 			var widthNatural = t.widthZone;
 			var heightNatural = Math.floor(t.image.naturalHeight*t.widthZone/t.image.naturalWidth);
+			t.block.setSizeImage( Math.floor(t.image.naturalHeight*width/t.image.naturalWidth), width);
+			var height =  Math.floor(t.image.naturalHeight*width/t.image.naturalWidth);
 		}
 		else {
 			var widthNatural = Math.floor(t.image.naturalWidth*(t.block.displayer.percent/100));
 			var heightNatural = Math.floor(t.image.naturalHeight*(t.block.displayer.percent/100));
+			t.block.setSizeImage(heightNatural, widthNatural);
+			var width = widthNatural;
+			var height = heightNatural;
 		}
 		
 		t.block.setTableColumn('width', widthNatural);
 
-		t.valuesHW(heightNatural, widthNatural);
-
-		t.block.setSizeImage(heightNatural, widthNatural);
+		t.valuesHW(height, width);
 
 		t.block.changeAttrImgBlock('width', widthNatural);
 		t.block.changeAttrImgBlock('height', heightNatural);
