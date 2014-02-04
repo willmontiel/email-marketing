@@ -255,6 +255,7 @@ class Security extends Plugin
 				'test::aperturas' => array('statistic' => array('read')),
 				'test::assettest' => array('statistic' => array('read')),
 				'test::transaction' => array('statistic' => array('read')),
+				'test::organizelinks' => array('statistic' => array('read')),
 				//statistics
 				'statistic::index' => array('statistic' => array('read')),
 				'statistic::show' => array('statistic' => array('read')),

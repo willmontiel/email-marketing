@@ -69,4 +69,14 @@ class TrackController extends ControllerBase
 			return $this->response->redirect('error/link');
 		}
 	}
+	
+	public function bouncedAction()
+	{
+		
+	}
+	
+	public function spamAction()
+	{
+		
+	}
 }
