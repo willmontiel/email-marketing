@@ -116,7 +116,7 @@ class ChildCommunication extends BaseWrapper
 					$message->setTo($to);
 					$message->addPart($text, 'text/plain');
 
-//					$recipients = $swift->send($message, $failures);
+					$recipients = $swift->send($message, $failures);
 
 					if ($recipients){
 						echo "Message {$i} successfully sent! \n";

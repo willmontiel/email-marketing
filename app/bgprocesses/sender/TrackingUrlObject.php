@@ -35,7 +35,7 @@ class TrackingUrlObject
 	
 		$this->links['search'][] = '</body>';
 		$this->links['replace'][] = $img;
-//		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track');
+		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track: ' . $img);
 //		$htmlWithTracking = str_replace($search, $replace, $html);
 //		
 //		return $htmlWithTracking;
@@ -43,7 +43,6 @@ class TrackingUrlObject
 	
 	public function getClicksTrackingUrl()
 	{
-		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track de clicks');
 		$links = Mxl::find(array(
 			'conditions' => 'idMail = ?1',
 			'bind' => array(1 => $this->idMail)
@@ -59,7 +58,7 @@ class TrackingUrlObject
 				$href = $urlManager->getBaseUri(true) . 'track/click/1-' . $l->idMailLink . '-' . $this->idMail . '-' . $this->idContact;
 				$md5 = md5($href . '-Sigmamovil_Rules');
 				$link = $href . '-' . $md5;
-//				Phalcon\DI::getDefault()->get('logger')->log('Replace: ' . $link);
+				Phalcon\DI::getDefault()->get('logger')->log('Insertando: ' . $link);
 				$this->links['replace'][] = $link;
 			}
 		}

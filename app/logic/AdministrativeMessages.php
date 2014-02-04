@@ -44,6 +44,11 @@ class AdministrativeMessages
 		$swift = Swift_Mailer::newInstance($transport);
 		
 		$message = new Swift_Message($this->subject);
+		
+		/*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
+		$headers = $message->getHeaders();
+		$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
+		
 		$message->setFrom($this->from);
 		$message->setBody($this->html, 'text/html');
 		$message->setTo($this->to);

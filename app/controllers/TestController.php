@@ -925,4 +925,10 @@ class TestController extends ControllerBase
 		
 		return utf8_encode($cadena);
 	}
+	
+	public function transactionAction()
+	{
+		$TestObj = new TestObj();
+		$TestObj->save();
+	}
 }

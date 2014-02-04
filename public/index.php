@@ -140,7 +140,7 @@ try {
 	/*
 	 * Database Object, conexion primaria a la base de datos
 	 */
-	$di->set('db', function() use ($di, $config) {
+	$di->setShared('db', function() use ($di, $config) {
 		// Events Manager para la base de datos
 		$eventsManager = new \Phalcon\Events\Manager();
 		

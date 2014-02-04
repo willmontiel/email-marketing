@@ -24,8 +24,6 @@ class TrackingObject
 				try {
 					$db->begin();
 					$mxc->opening = time();
-					$mxc->bounced = time();
-					$mxc->spam = time();
 
 					if (!$mxc->save()) {
 						foreach ($mxc->getMessages() as $msg) {
@@ -37,7 +35,7 @@ class TrackingObject
 					$event = new Mailevent();
 					$event->idMail = $idMail;
 					$event->idContact = $idContact;
-					$event->opening = time();
+					$event->description = 'opening';
 					$event->userAgent = $so . ', ' . $browser;
 					$event->location = ' ';
 
@@ -65,7 +63,7 @@ class TrackingObject
 						throw new \InvalidArgumentException('Error while updating mail');
 					}
 					$this->log->log('Guardó mail');
-
+//					throw new \InvalidArgumentException('transaction test');
 					$contact = Contact::findFirst(array(
 						'conditions' => 'idContact = ?1',
 						'bind' => array(1 => $idContact)
@@ -89,7 +87,6 @@ class TrackingObject
 					$idContactlists = explode(",", $mxc->contactlists);
 	
 					foreach ($idContactlists as $idContactlist) {
-	
 						$statcontactlist = Statcontactlist::findFirst(array(
 							'conditions' => 'idContactlist = ?1 AND idMail = ?2',
 							'bind' => array(1 => $idContactlist,
@@ -97,7 +94,7 @@ class TrackingObject
 						));
 						
 						$statcontactlist->uniqueOpens += 1;
-	
+						
 						if (!$statcontactlist->save()) {
 							$this->log->log('No se guardó');
 							foreach ($statcontactlist->getMessages() as $msg) {
@@ -147,96 +144,181 @@ class TrackingObject
 			));
 			
 			if (!$mxcxl) {
-//				$this->log->log('No Existe Mxcxl');
-				$mail = Mail::findFirst(array(
-					'conditions' => 'idMail = ?1',
-					'bind' => array(1 => $idMail)
-				));
-//				$this->log->log('Existe mail');
-				$mxc = Mxc::findFirst(array(
-					'conditions' => 'idMail = ?1 AND idContact = ?2',
-					'bind' => array(1 => $idMail,
-									2 => $idContact)
-				));
-//				$this->log->log('Existe Mxc');
-				$event = Mailevent::findFirst(array(
-					'conditions' => 'idMail = ?1 AND idContact = ?2',
-					'bind' => array(1 => $idMail,
-									2 => $idContact)
-				));
-//				$this->log->log('Verificando Event');
-				if (!$event) {
-//					$this->log->log('No existe Event');
-					unset($event);
-					$event = new Mailevent();
-					$event->idMail = $idMail;
-					$event->idContact = $idContact;
-					$event->opening = time();
-					$event->click = time();
-					$event->userAgent = $so . ', ' . $browser;
-					$event->location = ' ';
+				$db = Phalcon\DI::getDefault()->get('db');
+				try {
+					$db->begin();
 					
-					$mxc->opening = time();
-					$mxc->clicks = time();
+	//				$this->log->log('No Existe Mxcxl');
+					$mail = Mail::findFirst(array(
+						'conditions' => 'idMail = ?1',
+						'bind' => array(1 => $idMail)
+					));
+	//				$this->log->log('Existe mail');
+					$mxc = Mxc::findFirst(array(
+						'conditions' => 'idMail = ?1 AND idContact = ?2',
+						'bind' => array(1 => $idMail,
+										2 => $idContact)
+					));
+
+					$contact = Contact::findFirst(array(
+						'conditions' => 'idContact = ?1',
+						'bind' => array(1 => $idContact)
+					));
+
+					$statdbase = Statdbase::findFirst(array(
+						'conditions' => 'idDbase = ?1 AND idMail = ?2',
+						'bind' => array(1 => $contact->idDbase,
+										2 => $idMail)
+					));
+
+					$idContactlists = explode(",", $mxc->contactlists);
+
+	//				$this->log->log('Verificando Event');				
+
+					if ($mxc->opening == 0 && $mxc->bounced !== 0 && $mxc->spam !== 0 && $mxc->status == 'sent') {
+						$event1 = new Mailevent();
+						$event1->idMail = $idMail;
+						$event1->idContact = $idContact;
+						$event1->description = 'opening per click';
+						$event1->userAgent = $so . ', ' . $browser;
+						$event1->location = ' ';
+
+						if (!$event1->save()) {
+							foreach ($event1->getMessages() as $msg) {
+								$this->log->log('Error while saving event: ' . $msg);
+							}
+							throw new \InvalidArgumentException('Error while saving Mailevent');
+						}
+						$event2 = new Mailevent();
+						$event2->idMail = $idMail;
+						$event2->idContact = $idContact;
+						$event2->description = 'click';
+						$event2->userAgent = $so . ', ' . $browser;
+						$event2->location = ' ';
+
+						$mxc->opening = time();
+						$mxc->clicks = time();
+
+						$mail->uniqueOpens += 1;
+						$mail->clicks += 1;
+
+						$statdbase->uniqueOpens += 1;
+						$statdbase->clicks += 1;
+
+						foreach ($idContactlists as $idContactlist) {
+							$statcontactlist = Statcontactlist::findFirst(array(
+								'conditions' => 'idContactlist = ?1 AND idMail = ?2',
+								'bind' => array(1 => $idContactlist,
+												2 => $idMail)
+							));
+
+							$statcontactlist->uniqueOpens += 1;
+							$statcontactlist->clicks += 1;
+
+							if (!$statcontactlist->save()) {
+								$this->log->log('No se guardó');
+								foreach ($statcontactlist->getMessages() as $msg) {
+									$this->log->log('Error : '. $msg);
+								}
+								throw new \InvalidArgumentException('Error while updating statcontactlist');
+							}
+						}
+					}
+					else {
+						$event2 = new Mailevent();
+						$event2->idMail = $idMail;
+						$event2->idContact = $idContact;
+						$event2->description = 'click';
+						$event2->userAgent = $so . ', ' . $browser;
+						$event2->location = ' ';
+
+						$mxc->clicks = time();
+
+						$mail->clicks += 1;
+
+						$statdbase->clicks += 1;
+
+						foreach ($idContactlists as $idContactlist) {
+							$statcontactlist = Statcontactlist::findFirst(array(
+								'conditions' => 'idContactlist = ?1 AND idMail = ?2',
+								'bind' => array(1 => $idContactlist,
+												2 => $idMail)
+							));
+
+							$statcontactlist->uniqueOpens += 1;
+							$statcontactlist->clicks += 1;
+
+							if (!$statcontactlist->save()) {
+								$this->log->log('No se guardó');
+								foreach ($statcontactlist->getMessages() as $msg) {
+									$this->log->log('Error : '. $msg);
+								}
+								throw new \InvalidArgumentException('Error while updating statcontactlist');
+							}
+						}
+					}
+
+					if (!$event2->save()) {
+						foreach ($event2->getMessages() as $msg) {
+							$this->log->log('Error saving Mailevent: ' . $msg);
+						}
+						throw new \InvalidArgumentException('Error while updating MailEvent');
+					}
+
+					if (!$mxc->save()) {
+						foreach ($mxc->getMessages() as $msg) {
+							$this->log->log('Error saving Mailevent: ' . $msg);
+						}
+						throw new \InvalidArgumentException('Error while updating MailEvent');
+					}
+
+					if (!$mail->save()) {
+						foreach ($mail->getMessages() as $msg) {
+							$this->log->log('Error saving Mailevent: ' . $msg);
+						}
+						throw new \InvalidArgumentException('Error while updating MailEvent');
+					}
+
+					if (!$statdbase->save()) {
+						foreach ($statdbase->getMessages() as $msg) {
+							$this->log->log('Error saving Statdbase: ' . $msg);
+						}
+						throw new \InvalidArgumentException('Error while updating MailEvent');
+					}
+					/*========================================
+					 * Hasta aqui se actualiza Mailevent, Mxc y Mail
+					 */
+					$mxl->totalClicks += 1;
+
+					if (!$mxl->save()) {
+						foreach ($mxl->getMessages() as $msg) {
+							$this->log->log('Error saving Mxl: ' . $msg);
+						}
+						throw new \InvalidArgumentException('Error while updating Mxl');
+					}
+
+					$mxCxL = new Mxcxl();
+
+					$mxCxL->idMail = $idMail;
+					$mxCxL->idMailLink = $idLink;
+					$mxCxL->idContact = $idContact;
+					$mxCxL->click = time(); 
+
+					if (!$mxCxL->save()) {
+						foreach ($mxCxL->getMessages() as $msg) {
+							$this->log->log('Error saving Mxl: ' . $msg);
+						}
+						throw new \InvalidArgumentException('Error while updating Mxcxl');
+					}
 					
-					$mail->uniqueOpens += 1;
-					$mail->clicks += 1;
-				}
-				else {
-					$this->log->log('Si existe event');
-					$event->click = time();
-					$mxc->clicks = time();
+					$db->commit();
 					
-					$mail->clicks += 1;
+					return $Maillink->link;
 				}
-				
-				if (!$event->save()) {
-					foreach ($event->getMessages() as $msg) {
-						$this->log->log('Error saving Mailevent: ' . $msg);
-					}
-					throw new \InvalidArgumentException('Error while updating MailEvent');
+				catch (InvalidArgumentException $e) {
+					$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
+					$db->rollback();
 				}
-				
-				if (!$mxc->save()) {
-					foreach ($mxc->getMessages() as $msg) {
-						$this->log->log('Error saving Mailevent: ' . $msg);
-					}
-					throw new \InvalidArgumentException('Error while updating MailEvent');
-				}
-				
-				if (!$mail->save()) {
-					foreach ($mail->getMessages() as $msg) {
-						$this->log->log('Error saving Mailevent: ' . $msg);
-					}
-					throw new \InvalidArgumentException('Error while updating MailEvent');
-				}
-				/*========================================
-				 * Hasta aqui se actualiza Mailevent, Mxc y Mail
-				 */
-				$mxl->totalClicks += 1;
-				
-				if (!$mxl->save()) {
-					foreach ($mxl->getMessages() as $msg) {
-						$this->log->log('Error saving Mxl: ' . $msg);
-					}
-					throw new \InvalidArgumentException('Error while updating Mxl');
-				}
-				
-				$mxCxL = new Mxcxl();
-				
-				$mxCxL->idMail = $idMail;
-				$mxCxL->idMailLink = $idLink;
-				$mxCxL->idContact = $idContact;
-				$mxCxL->click = time(); 
-			
-				if (!$mxCxL->save()) {
-					foreach ($mxCxL->getMessages() as $msg) {
-						$this->log->log('Error saving Mxl: ' . $msg);
-					}
-					throw new \InvalidArgumentException('Error while updating Mxcxl');
-				}
-				
-				return $Maillink->link;
 			}
 			else {
 				$this->log->log('Este usuario ya ha sido contabilizado');

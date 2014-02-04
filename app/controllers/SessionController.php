@@ -61,7 +61,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 				$cod = uniqid();
 				$urlManager = $urlManager = Phalcon\DI::getDefault()->get('urlManager');
 				$url = $urlManager->getBaseUri(true);
-				$url .= '/session/reset/' . $cod;
+				$url .= 'session/reset/' . $cod;
 				
 				$recoverObj = new Tmprecoverpass();
 				
@@ -87,9 +87,9 @@ class SessionController extends \Phalcon\Mvc\Controller
 						$this->logger->log('Error: ' . $e->getMessage());
 					}
 				}
-				$this->flashSession->success('Se ha enviado un correo electronico con instrucciones para recuperar la contraseña');
-				return $this->response->redirect('session/signin');
 			}
+			$this->flashSession->success('Se ha enviado un correo electronico con instrucciones para recuperar la contraseña');
+			return $this->response->redirect('session/signin');
 		}
 	}
 	
@@ -132,7 +132,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 					$this->flashSession->error("Ha enviado campos vacíos, por favor verifique la información");
 					$this->dispatcher->forward(array(
 						"controller" => "session",
-						"action" => "validaterequest",
+						"action" => "reset",
 						"params" => array($uniq)
 					));
 				}
@@ -140,7 +140,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 					$this->flashSession->error("La contraseña es muy corta o muy larga, esta debe tener mínimo 8 y máximo 40 caracteres, por favor verifique la información");
 					$this->dispatcher->forward(array(
 						"controller" => "session",
-						"action" => "validaterequest",
+						"action" => "reset",
 						"params" => array($uniq)
 					));
 				}	
@@ -148,7 +148,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 					$this->flashSession->error("Las contraseñas no coinciden, por favor verifique la información");
 					$this->dispatcher->forward(array(
 						"controller" => "session",
-						"action" => "validaterequest",
+						"action" => "reset",
 						"params" => array($uniq)
 					));
 				}

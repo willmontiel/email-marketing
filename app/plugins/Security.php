@@ -254,6 +254,7 @@ class Security extends Plugin
 				'test::mailer' => array('mail' => array('read', 'create', 'send')),
 				'test::aperturas' => array('statistic' => array('read')),
 				'test::assettest' => array('statistic' => array('read')),
+				'test::transaction' => array('statistic' => array('read')),
 				//statistics
 				'statistic::index' => array('statistic' => array('read')),
 				'statistic::show' => array('statistic' => array('read')),

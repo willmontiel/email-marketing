@@ -219,18 +219,31 @@ class StatisticsWrapper extends BaseWrapper
 	public function findMailOpenStats($idMail)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
-		));
-		
+//		$mail = Mail::findFirst(array(
+//			'conditions' => 'idMail = ?1',
+//			'bind' => array(1 => $idMail)
+//		));
+//		
 		$sql = "SELECT v.idContact,  v.opening, v.userAgent, e.email
 					FROM mailevent AS v
 						JOIN contact as c ON (c.idContact = v.idContact)
 						JOIN email as e ON (c.idEmail = e.idEmail)
 					WHERE idMail = " . $idMail;
 		
-		
+		Phalcon\DI::getDefault()->get('logger')->log('Sql: ' . $sql);
+		$result = $db->query($sql);
+		$info = $result->fetchAll();
+		Phalcon\DI::getDefault()->get('logger')->log('Aqui viene la info');
+		Phalcon\DI::getDefault()->get('logger')->log('Info: ' . print_r($info, true));
+		$opencontact = array();
+		foreach ($info as $i) {
+			$opencontact[] = array(
+				'id' => $i->idContact,
+				'email' => $i->email,
+				'date' => date('Y-m-d', $i->opening),
+				'os' => $i->userAgent
+			);
+		}
 		$opens = array();
 		$h1 = 1380657600;
 		$v1 = 3000;
@@ -251,33 +264,33 @@ class StatisticsWrapper extends BaseWrapper
 				'value' => 68
 			);		
 		
-		$opencontact[] = array(
-			'id' => 100,
-			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
-			'date' => date('Y-m-d', 1386687891),
-			'os' => 'Ubuntu'
-		);
-		
-		$opencontact[] = array(
-			'id' => 145,
-			'email' => 'recipient00002@test002.local.discardallmail.drh.net',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
-		);
-		
-		$opencontact[] = array(
-			'id' => 161,
-			'email' => 'recipient00003@test003.local.discardallmail.drh.net',
-			'date' => date('Y-m-d',1386687891),
-			'os' => 'Windows'
-		);
-		
-		$opencontact[] = array(
-			'id' => 199,
-			'email' => 'recipient00003@test007.local.discardallmail.drh.net',
-			'date' => date('Y-m-d',1386688891),
-			'os' => 'Windows Phone'
-		);
+//		$opencontact[] = array(
+//			'id' => 100,
+//			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
+//			'date' => date('Y-m-d', 1386687891),
+//			'os' => 'Ubuntu'
+//		);
+//		
+//		$opencontact[] = array(
+//			'id' => 145,
+//			'email' => 'recipient00002@test002.local.discardallmail.drh.net',
+//			'date' => date('Y-m-d',1386687891),
+//			'os' => 'Windows'
+//		);
+//		
+//		$opencontact[] = array(
+//			'id' => 161,
+//			'email' => 'recipient00003@test003.local.discardallmail.drh.net',
+//			'date' => date('Y-m-d',1386687891),
+//			'os' => 'Windows'
+//		);
+//		
+//		$opencontact[] = array(
+//			'id' => 199,
+//			'email' => 'recipient00003@test007.local.discardallmail.drh.net',
+//			'date' => date('Y-m-d',1386688891),
+//			'os' => 'Windows Phone'
+//		);
 		
 		$this->pager->setTotalRecords(count($opencontact));
 		
