@@ -110,7 +110,7 @@ class IdentifyTarget
 								   JOIN mxc AS m ON (m.idContact = c.idContact )
 								WHERE m.idMail = ' . $mail->idMail . ')';
 				
-				$sql4 = 'INSERT INTO statdbase 
+				$sql4 = 'INSERT IGNORE INTO statdbase 
 							(SELECT c.idDbase, ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . '
 								FROM contact AS c
 								JOIN mxc AS m ON (m.idContact = c.idContact)

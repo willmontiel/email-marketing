@@ -124,7 +124,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 			
 			$time = strtotime("-30 minutes");
 			
-			if ($url && ($url->date <= $time || $url->date >= $time)) {
+			if ($url && $url->date >= $time) {
 				$pass = $this->request->getPost("pass");
 				$pass2 = $this->request->getPost("pass2");
 

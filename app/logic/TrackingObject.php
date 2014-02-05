@@ -85,7 +85,7 @@ class TrackingObject
 					}
 	
 					$idContactlists = explode(",", $mxc->contactlists);
-	
+//					$i = 0;
 					foreach ($idContactlists as $idContactlist) {
 						$statcontactlist = Statcontactlist::findFirst(array(
 							'conditions' => 'idContactlist = ?1 AND idMail = ?2',
@@ -94,7 +94,8 @@ class TrackingObject
 						));
 						
 						$statcontactlist->uniqueOpens += 1;
-						
+//						$i++;
+//						$this->log->log('Se contabilizó apertura para la lista: ' . $idContactlist);
 						if (!$statcontactlist->save()) {
 							$this->log->log('No se guardó');
 							foreach ($statcontactlist->getMessages() as $msg) {
@@ -103,6 +104,8 @@ class TrackingObject
 							throw new \InvalidArgumentException('Error while updating statcontactlist');
 						}
 					}
+//					$this->log->log('Se contabilizarón: ' . $i . ' En este request');
+					$this->log->log('Se guardó statcontactlist');
 					$db->commit();
 				}
 				catch (InvalidArgumentException $e) {
@@ -189,6 +192,8 @@ class TrackingObject
 							}
 							throw new \InvalidArgumentException('Error while saving Mailevent');
 						}
+						$this->log->log('Se guardó evento de apertura por click');
+						
 						$event2 = new Mailevent();
 						$event2->idMail = $idMail;
 						$event2->idContact = $idContact;
@@ -222,6 +227,7 @@ class TrackingObject
 								}
 								throw new \InvalidArgumentException('Error while updating statcontactlist');
 							}
+							$this->log->log('Apertura contablizada por click y tambien click contabilizado en statcontactlist');
 						}
 					}
 					else {
@@ -245,7 +251,6 @@ class TrackingObject
 												2 => $idMail)
 							));
 
-							$statcontactlist->uniqueOpens += 1;
 							$statcontactlist->clicks += 1;
 
 							if (!$statcontactlist->save()) {
@@ -255,6 +260,7 @@ class TrackingObject
 								}
 								throw new \InvalidArgumentException('Error while updating statcontactlist');
 							}
+							$this->log->log('click contabilizado en statcontactlist');
 						}
 					}
 
@@ -264,6 +270,8 @@ class TrackingObject
 						}
 						throw new \InvalidArgumentException('Error while updating MailEvent');
 					}
+					
+					$this->log->log('Guardó evento por click');
 
 					if (!$mxc->save()) {
 						foreach ($mxc->getMessages() as $msg) {
@@ -271,20 +279,21 @@ class TrackingObject
 						}
 						throw new \InvalidArgumentException('Error while updating MailEvent');
 					}
-
+					$this->log->log('Actualizado mxc');
 					if (!$mail->save()) {
 						foreach ($mail->getMessages() as $msg) {
 							$this->log->log('Error saving Mailevent: ' . $msg);
 						}
 						throw new \InvalidArgumentException('Error while updating MailEvent');
 					}
-
+					$this->log->log('Actualizado mail');
 					if (!$statdbase->save()) {
 						foreach ($statdbase->getMessages() as $msg) {
 							$this->log->log('Error saving Statdbase: ' . $msg);
 						}
 						throw new \InvalidArgumentException('Error while updating MailEvent');
 					}
+					$this->log->log('Actualizado statdbase');
 					/*========================================
 					 * Hasta aqui se actualiza Mailevent, Mxc y Mail
 					 */
@@ -296,7 +305,7 @@ class TrackingObject
 						}
 						throw new \InvalidArgumentException('Error while updating Mxl');
 					}
-
+					$this->log->log('Actualizado mxl');
 					$mxCxL = new Mxcxl();
 
 					$mxCxL->idMail = $idMail;
@@ -310,7 +319,7 @@ class TrackingObject
 						}
 						throw new \InvalidArgumentException('Error while updating Mxcxl');
 					}
-					
+					$this->log->log('Inserción en mxcxl');
 					$db->commit();
 					
 					return $Maillink->link;
