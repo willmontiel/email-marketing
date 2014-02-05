@@ -10,7 +10,7 @@ class MailForm extends Form
     public function initialize()
     {
 		$this->add(new Text('name', array(
-			'maxlength' => 50,
+			'maxlength' => 80,
 			'type' => 'text',
 			'required' => 'required',
 			'autofocus' => "autofocus" 

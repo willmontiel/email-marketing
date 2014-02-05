@@ -164,6 +164,7 @@ class StatisticsWrapper extends BaseWrapper
 			$sent +=  $s->sent;
 			$uniqueOpens +=  $s->uniqueOpens;
 			$clicks +=  $s->clicks;
+//			$clicks +=  ($s->sent/$s->clicks);
 			$bounced +=  $s->bounced;
 			$spam +=  $s->spam;
 			$unsubscribed += $s->unsubscribed;
