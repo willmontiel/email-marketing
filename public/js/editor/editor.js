@@ -104,11 +104,9 @@ Editor.prototype.createEditStyle = function() {
 	var t = this;
 	$('.dropzone-container-border').remove();
 	$('.layout-icons-options').remove();
-	$('.toolbar-to-edit').remove();
 	var edit = '<div class="layout-icons-options">\n\
 					<div class="edit-layout tool"><span class="icon-pencil icon-white"></span></div>\n\
-				</div>\n\
-				<div class="toolbar-to-edit"></div>';
+				</div>';
 	$('#edit-area').append(edit);
 	var edition = new EditionArea($('#edit-area'), this);
 	$('.edit-layout').on('click', function(event) {
@@ -185,14 +183,17 @@ function initEvents() {
 			$('#my-component-toolbar').remove();
 			$('.element-in-edition').removeClass('element-in-edition');
 		}
-		if($(ev.target).parents('.one-element').find('#my-btn-component-toolbar')[0] === undefined && $(ev.target).parents('#my-btn-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-btn-component-toolbar' ){
+		if($(ev.target).parents('.element-btn-in-edition')[0] === undefined && $(ev.target).parents('#my-btn-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-btn-component-toolbar' ){
 			$('#my-btn-component-toolbar').remove();
+			$('.element-btn-in-edition').removeClass('element-btn-in-edition');
 		}
-		if($(ev.target).parents('.one-element').find('#my-social-share-component-toolbar')[0] === undefined && $(ev.target).parents('#my-social-share-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-social-share-component-toolbar' ){
+		if($(ev.target).parents('.element-share-in-edition')[0] === undefined && $(ev.target).parents('#my-social-share-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-social-share-component-toolbar'){
 			$('#my-social-share-component-toolbar').remove();
+			$('.element-share-in-edition').removeClass('element-share-in-edition');
 		}
-		if($(ev.target).parents('.one-element').find('#my-social-follow-component-toolbar')[0] === undefined && $(ev.target).parents('#my-social-follow-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-social-follow-component-toolbar' ){
+		if($(ev.target).parents('.element-follow-in-edition')[0] === undefined && $(ev.target).parents('#my-social-follow-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-social-follow-component-toolbar' ){
 			$('#my-social-follow-component-toolbar').remove();
+			$('.element-follow-in-edition').removeClass('element-follow-in-edition');
 		}
 		if($(ev.target).parents('.redactor_box')[0] === undefined && $(ev.target).attr('class') !== 'redactor_box' && $(ev.target).attr('class') !== undefined ){
 			$('.redactor_editor').destroyEditor();

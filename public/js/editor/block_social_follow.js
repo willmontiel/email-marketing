@@ -155,11 +155,14 @@ SFollowBlock.prototype.updateChanges = function() {
 
 SFollowBlock.prototype.createToolbar = function() {
 	$('#my-social-follow-component-toolbar').remove();
+	$('.component-toolbar-social').remove();
 
-	var toolbar =  $('.component-toolbar-social').clone().attr('id', 'my-social-follow-component-toolbar');
-	toolbar.empty();
-	toolbar.show();
-	this.content.find('.one-element').append(toolbar);
+	var toolbar =  $('<div class="component-toolbar-social" id="my-social-follow-component-toolbar" />');
+	this.content.parents('.row-of-blocks').append(toolbar);
+	toolbar.css('margin-left', '-22px');
+	
+	$('.element-follow-in-edition').removeClass('element-follow-in-edition');
+	this.content.find('.one-element').addClass('element-follow-in-edition');
 	
 	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr></table>');
 
@@ -189,10 +192,6 @@ SFollowBlock.prototype.createToolbar = function() {
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(align);
 	toolbar.find('.first_row ul').append(elements);	
-	
-	var position = this.content.find('.one-element').position();
-	toolbar.css('top', position.top + this.content.find('.one-element').height() - 8);
-	toolbar.css('left', position.left - 136);
 	
 	this.eventsChange();
 };

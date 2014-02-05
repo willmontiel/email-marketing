@@ -18,12 +18,26 @@ Toolbar.prototype.drawHtml = function(obj_in_edit) {
 	component.addClass('element-in-edition');
 
 	this.toolbar.show();
-	var position = component.position();
-	console.log(position)
-//	this.toolbar.css('top', position.top - 68);
-//	this.toolbar.css('left', position.left - 103);
-	
-	$('.toolbar-to-edit').append(this.toolbar);
+	if(this.component instanceof DropzoneArea) {
+		this.component.content.find('.dropzone-container').prepend(this.toolbar);
+	}
+	else if(this.component instanceof rowZone) {
+		this.component.content.append(this.toolbar);
+		this.toolbar.css('margin-top', 4);
+		this.toolbar.css('margin-left', -90);
+	}
+	else if(this.component instanceof EditionArea) {
+		this.component.content.prepend(this.toolbar);
+		this.toolbar.css('float', 'left');
+		this.toolbar.css('position', 'absolute');
+		this.toolbar.css('top', 50);
+		this.toolbar.css('left', 20);
+	}
+	else {
+		this.component.content.parents('.row-of-blocks').append(this.toolbar);
+		this.toolbar.css('margin-top', 4);
+		this.toolbar.css('margin-left', -90);
+	}
 };
 
 Toolbar.prototype.createBackground = function() {

@@ -193,11 +193,14 @@ SShareBlock.prototype.updateChanges = function() {
 
 SShareBlock.prototype.createToolbar = function() {
 	$('#my-social-share-component-toolbar').remove();
+	$('.component-toolbar-social').remove();
 
-	var toolbar =  $('.component-toolbar-social').clone().attr('id', 'my-social-share-component-toolbar');
-	toolbar.empty();
-	toolbar.show();
-	this.content.find('.one-element').append(toolbar);
+	var toolbar =  $('<div class="component-toolbar-social" id="my-social-share-component-toolbar" />');
+	this.content.parents('.row-of-blocks').append(toolbar);
+	toolbar.css('margin-left', '-12px');
+	
+	$('.element-share-in-edition').removeClass('element-share-in-edition');
+	this.content.find('.one-element').addClass('element-share-in-edition');
 	
 	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr></table>');
 
@@ -238,10 +241,6 @@ SShareBlock.prototype.createToolbar = function() {
 	elements.append(size);
 	elements.append(align);
 	toolbar.find('.first_row ul').append(elements);	
-	
-	var position = this.content.find('.one-element').position();
-	toolbar.css('top', position.top + this.content.find('.one-element').height() - 8);
-	toolbar.css('left', position.left - 136);
 	
 	this.eventsChange();
 };

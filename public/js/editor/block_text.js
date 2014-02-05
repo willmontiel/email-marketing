@@ -148,10 +148,9 @@ TxtBlock.prototype.newRedactor = function() {
 
 TxtBlock.prototype.textToolbar = function() {
 	$('#my-text-component-toolbar').remove();
-	
-	var toolbar =  $('.component-toolbar-text').clone().attr('id', 'my-text-component-toolbar');
-	toolbar.empty();
-	toolbar.show();
+	$('.component-toolbar-text').remove();
+
+	var toolbar =  $('<div class="component-toolbar-text" id="my-text-component-toolbar" />');
 	this.content.parents('.row-of-blocks').append(toolbar);
 	toolbar.append('<div class="content-text-toolbar"></div>');
 	toolbar.find('.content-text-toolbar').append(this.content.find('.content-text').html());

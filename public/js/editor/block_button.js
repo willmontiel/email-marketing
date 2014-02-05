@@ -217,12 +217,15 @@ BtnBlock.prototype.designBtn = function() {
 
 BtnBlock.prototype.createToolbar = function() {
 	$('#my-btn-component-toolbar').remove();
+	$('.component-toolbar-button').remove();
+
+	var toolbar =  $('<div class="component-toolbar-button" id="my-btn-component-toolbar" />');
+	this.content.parents('.row-of-blocks').append(toolbar);
+	toolbar.css('margin-left', '-140px');
 	
-	var toolbar =  $('.component-toolbar-button').clone().attr('id', 'my-btn-component-toolbar');
-	toolbar.empty();
-	toolbar.show();
-	this.content.find('.one-element').append(toolbar);
-	
+	$('.element-btn-in-edition').removeClass('element-btn-in-edition');
+	this.content.find('.one-element').addClass('element-btn-in-edition');
+
 	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr><tr><td class="second_row"><ul class="second_elements"></ul></td></tr><tr><td class="third_row"><ul class="third_elements"></ul></td></tr></table>');
 	
 	var checkedBGSty = (this.btnwithbgimage) ? 'checked' : '';
@@ -319,11 +322,6 @@ BtnBlock.prototype.createToolbar = function() {
 	
 	this.spinnerBlockChange('button-height-spinner', 'height', 'btnheight', 0, 200);
 	this.spinnerBlockChange('button-width-spinner', 'width', 'btnwidth', 0, 200);
-	
-		
-	var position = this.content.find('.one-element').position();
-	toolbar.css('top', position.top + this.content.find('.one-element').height() - 8);
-	toolbar.css('left', position.left - 206);
 	
 	this.eventsChange();
 	
