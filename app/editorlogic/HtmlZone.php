@@ -17,6 +17,7 @@ class HtmlZone extends HtmlAbstract
 		$this->width = $zone->width;
 		
 		foreach ($zone->content as $content) {
+			$content->widthval = $zone->widthval;
 			$row = new HtmlRow();
 			$row->assignContent($content);
 			$this->children[] = $row->render();

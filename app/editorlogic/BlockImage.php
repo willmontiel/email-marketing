@@ -25,8 +25,11 @@ class BlockImage extends HtmlAbstract
 		$height = $data->height;
 		$this->width = $data->width;
 		$this->vertalign = $data->vertalign;
-		
-		$image = '<img src="' . $src . '" alt="' . $alt . '" style="height: ' . $height . 'px; width: ' . $this->width . 'px;" height="' . $height . '" width="' . $this->width . '">';
+		$maxwidth = ($data->widthval/$data->amount) - ( $data->margin_left + $data->margin_right + $data->border_width*2 );
+		$imgwidth = ( $maxwidth > $data->width) ? $data->width : $maxwidth;
+		$imgwidth = ($imgwidth < 0) ? 0 : $imgwidth;
+				
+		$image = '<img src="' . $src . '" alt="' . $alt . '" style="height: ' . $height . 'px; width: ' . $imgwidth . 'px;" height="' . $height . '" width="' . $imgwidth . '">';
 		
 		$this->children[] = (!empty($link)) ? '<a href= "http://' . $link . '">' . $image . '</a>' : $image;;
 	}

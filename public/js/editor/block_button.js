@@ -6,10 +6,10 @@ function BtnBlock(row) {
 	this.btnlink = '';
 	this.btnbgcolor = '#556270';
 	this.btntextcolor = '#ffffff';;
-	this.btnwithborderradius = true;
 	this.btnradius = 4;
-	this.btnwithbordercolor = true;
 	this.btnbordercolor = '#1e3650';
+	this.btnborderwidth = 1;
+	this.btnborderstyle = 'solid';
 	this.btnwithbgimage = true;
 	this.btnbgimage = 'blue';
 	this.btnwidth = 120;
@@ -46,7 +46,7 @@ BtnBlock.prototype.createBlock = function() {
 };
 
 BtnBlock.prototype.drawHtml = function() {
-	var block = $('<td>\n\
+	var block = $('<td class="in-column">\n\
 						<table class="full-block-element" border="0" cellpadding="0">\n\
 							<tr>\n\
 								<td>\n\
@@ -95,16 +95,20 @@ BtnBlock.prototype.updateContentStyle = function(style, value) {
 	this.content.find('.full-block-element').css(style, value);
 };
 
+BtnBlock.prototype.updateColumnStyle = function(style, value) {
+	this.content.css(style, value);
+};
+
 BtnBlock.prototype.persist = function() {
 	var obj = {
 		text : this.btntext,
 		link : this.btnlink,
 		bgcolor : this.btnbgcolor,
 		textcolor : this.btntextcolor,
-		withborderradius : this.btnwithborderradius,
 		radius : this.btnradius,
-		withbordercolor : this.btnwithbordercolor,
 		bordercolor : this.btnbordercolor,
+		borderwidth : this.btnborderwidth,
+		borderstyle : this.btnborderstyle,
 		withbgimage : this.btnwithbgimage,
 		bgimage : this.btnbgimage,
 		width : this.btnwidth,
@@ -135,10 +139,10 @@ BtnBlock.prototype.unpersist = function(obj) {
 	this.btnlink = obj.link;
 	this.btnbgcolor = obj.bgcolor;
 	this.btntextcolor = obj.textcolor;
-	this.btnwithborderradius = obj.withborderradius;
 	this.btnradius = obj.radius;
-	this.btnwithbordercolor = obj.withbordercolor;
 	this.btnbordercolor = obj.bordercolor;
+	this.btnborderwidth = obj.borderwidth;
+	this.btnborderstyle = obj.borderstyle;
 	this.btnwithbgimage = obj.withbgimage;
 	this.btnbgimage = obj.bgimage;
 	this.btnwidth = obj.width;
@@ -175,10 +179,10 @@ BtnBlock.prototype.updateChanges = function() {
 	this.updateBlockStyle('border-bottom-left-radius', this.corner_bottom_left);
 	this.updateBlockStyle('border-bottom-right-radius', this.corner_bottom_right);
 	
-	this.updateContentStyle('margin-top', this.margin_top);
-	this.updateContentStyle('margin-bottom', this.margin_bottom);
-	this.updateContentStyle('margin-left', this.margin_left);
-	this.updateContentStyle('margin-right', this.margin_right);
+	this.updateColumnStyle('padding-top', this.margin_top);
+	this.updateColumnStyle('padding-bottom', this.margin_bottom);
+	this.updateColumnStyle('padding-left', this.margin_left);
+	this.updateColumnStyle('padding-right', this.margin_right);
 	
 	this.designBtn();
 };
@@ -188,22 +192,10 @@ BtnBlock.prototype.designBtn = function() {
 	content.text(this.btntext);
 	content.css('background-color', this.btnbgcolor);
 	content.css('color', this.btntextcolor);
-
-	if(this.btnwithborderradius) {
-		content.css('border-radius', this.btnradius);
-	}
-	else {
-		content.css('border-radius', 0);
-	}
-	
-	if(this.btnwithbordercolor) {
-		content.css('border-color', this.btnbordercolor);
-		content.css('border-style', 'solid');
-	}
-	else {
-		content.css('border-color', '');
-		content.css('border-style', '');
-	}
+	content.css('border-radius', this.btnradius);
+	content.css('border-color', this.btnbordercolor);
+	content.css('border-style', this.btnborderstyle);
+	content.css('border-width', this.btnborderwidth);
 	
 	if(this.btnwithbgimage) {
 		content.css('background-image', 'url(' + config.imagesUrl + '/btn-' + this.btnbgimage + '.png)');
@@ -233,7 +225,7 @@ BtnBlock.prototype.createToolbar = function() {
 	
 	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr><tr><td class="second_row"><ul class="second_elements"></ul></td></tr><tr><td class="third_row"><ul class="third_elements"></ul></td></tr></table>');
 	
-	var checkedBGSty = (this.btnwithborderradius) ? 'checked' : '';
+	var checkedBGSty = (this.btnwithbgimage) ? 'checked' : '';
 	var backgroundColor = $("<div class='button-background-toolbar-container'><div class='btn-toolbar-title'>Fondo</div><input type='text' value='" + this.btnbgcolor + "' id='color-button-background-toolbar' name='color-button-background-toolbar' class='pick-a-color'></div>");
 	var backgroundStyle = $("<div class='button-background-toolbar-container'>\n\
 								<div class='btn-toolbar-title'>Degradado</div><div class='btn-toolbar-background-style'><input type='checkbox' id='style-button-with-background-toolbar' " + checkedBGSty + "></div>\n\
@@ -254,7 +246,22 @@ BtnBlock.prototype.createToolbar = function() {
 	elements.append(backgroundStyle);
 	
 	var border_radius = $('<div class="button-corner-toolbar-container"><div class="btn-toolbar-title">Esquinas</div><input id="button-border-radius-spinner" name="border-radius" class="toolbar-spinner spinner-button" value=' + this.btnradius + '></div>');
-	var border_color = $("<div class='button-border-toolbar-container'><div class='btn-toolbar-title'>Borde</div><input type='text' value='" + this.btnbordercolor + "' id='color-button-border-toolbar' name='color-button-border-toolbar' class='pick-a-color'></div>");
+	var border_color = $("<div class='button-border-toolbar-container'><div class='btn-toolbar-title'>Borde</div>\n\
+							<div class='btn-border-style-toolbar medium-select'>\n\
+								<select id='style-button-border-toolbar'>\n\
+									<option value='dotted'>Dotted</option>\n\
+									<option value='dashed'>Dashed</option>\n\
+									<option value='solid'>Solid</option>\n\
+									<option value='double'>Double</option>\n\
+									<option value='groove'>Groove</option>\n\
+									<option value='ridge'>Ridge</option>\n\
+									<option value='inset'>Inset</option>\n\
+									<option value='outset'>Outset</option>\n\
+								</select>\n\
+							</div>\n\
+							<div class='btn-color-border-container'><input type='text' value='" + this.btnbordercolor + "' id='color-button-border-toolbar' name='color-button-border-toolbar' class='pick-a-color'></div>\n\
+							<div class='btn-size-border-container'><input id='button-border-width-spinner' name='width' class='toolbar-spinner' value=" + this.btnborderwidth + "></div>\n\
+						</div>");
 	elements.append(border_radius);
 	elements.append(border_color);
 	toolbar.find('.first_row ul').append(elements);
@@ -262,6 +269,7 @@ BtnBlock.prototype.createToolbar = function() {
 	this.colorPickerBlockChange('color-button-background-toolbar', 'background-color', 'btnbgcolor');
 	this.colorPickerBlockChange('color-button-border-toolbar', 'border-color', 'btnbordercolor');	
 	this.spinnerBlockChange('button-border-radius-spinner', 'border-radius', 'btnradius', 0, 20);
+	this.spinnerBlockChange('button-border-width-spinner', 'border-width', 'btnborderwidth', 0, 20);
 	
 	
 	var font = $("<div class='button-title-toolbar-container'>\n\
@@ -353,6 +361,12 @@ BtnBlock.prototype.eventsChange = function() {
 		t.btnbgimage = $(this).val();
 	});
 	
+	$('#style-button-border-toolbar').val(this.btnborderstyle);
+	$('#style-button-border-toolbar').on('change', function() {
+		t.content.find('.content-button').css('border-style', $(this).val());
+		t.btnborderstyle = $(this).val();
+	});
+	
 	$('#style-button-with-background-toolbar').on('change', function() {
 		if($(this)[0].checked) {
 			t.content.find('.content-button').css('background-image', 'url(' + config.imagesUrl + '/btn-' + t.btnbgimage + '.png)');
@@ -360,7 +374,7 @@ BtnBlock.prototype.eventsChange = function() {
 		else {
 			t.content.find('.content-button').css('background-image', '');
 		}
-		t.btnwithborderradius = $(this)[0].checked;
+		t.btnwithbgimage = $(this)[0].checked;
 	});
 	
 	$('#font-family-button-toolbar').val(this.btnfontfamily);

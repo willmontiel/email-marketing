@@ -32,7 +32,7 @@ SFollowBlock.prototype.createBlock = function() {
 };
 
 SFollowBlock.prototype.drawHtml = function() {
-	var block = $('<td>\n\
+	var block = $('<td class="in-column">\n\
 						<table class="full-block-element" border="0" cellpadding="0">\n\
 							<tr>\n\
 								<td>\n\
@@ -83,7 +83,11 @@ SFollowBlock.prototype.updateBlockStyle = function(style, value) {
 };
 
 SFollowBlock.prototype.updateContentStyle = function(style, value) {
-	this.content.find('.content-text').css(style, value);
+	this.content.find('.full-block-element').css(style, value);
+};
+
+SFollowBlock.prototype.updateColumnStyle = function(style, value) {
+	this.content.css(style, value);
 };
 
 SFollowBlock.prototype.persist = function() {
@@ -143,10 +147,10 @@ SFollowBlock.prototype.updateChanges = function() {
 	this.updateBlockStyle('border-bottom-left-radius', this.corner_bottom_left);
 	this.updateBlockStyle('border-bottom-right-radius', this.corner_bottom_right);
 	
-	this.updateContentStyle('margin-top', this.margin_top);
-	this.updateContentStyle('margin-bottom', this.margin_bottom);
-	this.updateContentStyle('margin-left', this.margin_left);
-	this.updateContentStyle('margin-right', this.margin_right);
+	this.updateColumnStyle('padding-top', this.margin_top);
+	this.updateColumnStyle('padding-bottom', this.margin_bottom);
+	this.updateColumnStyle('padding-left', this.margin_left);
+	this.updateColumnStyle('padding-right', this.margin_right);
 };
 
 SFollowBlock.prototype.createToolbar = function() {

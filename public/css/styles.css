@@ -321,7 +321,16 @@ table {
 }
 
 .show-zones-draggable {
-	border: solid 2px #68a6ce;
+	border: solid 8px #68a6ce !important;
+	border-radius: 10px !important;
+	margin-top: 2px;
+}
+.show-zones-draggable .add-row-block, .show-zones-draggable .dz-icons-options {
+	display: none !important;
+}
+
+.show-zones-draggable .dropzone-container-border:hover {
+	border: 8px solid transparent  !important;
 }
 
 #tabcomponents {
@@ -344,6 +353,7 @@ table {
 .content-text {
 	position: initial;
 	word-break: break-word;
+	padding: 15px;
 }
 
 .content-image {
@@ -362,6 +372,12 @@ table {
 	width: 260px;
 	background-color: white;
 	margin-right: 35px;
+}
+
+.image-displayer-helper {
+	display: inline-block;
+	height: 100%;
+	vertical-align: top;
 }
 
 .module-container {
@@ -607,8 +623,8 @@ table {
 
 .one-element {
 	border: 3px solid transparent;
-	/*padding: 2px;*/
 	position: relative;
+	margin: -3px;
 }
 
 .edit-block {
@@ -650,8 +666,6 @@ table {
 	border-top-right-radius: 10px; 
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
-	padding: 2px;
-	/*border-spacing: 10px;*/
 }
 
 .full-block-element {
@@ -900,7 +914,7 @@ table {
 	margin-right: 5px;
 	margin-top: 8px;
 }
-.btn-toolbar-background-style-options, .btn-toolbar-font-family-options{
+.btn-toolbar-background-style-options, .btn-toolbar-font-family-options, .btn-border-style-toolbar{
 	float: left;
 	height: 32px;
 	margin-top: 3px;
@@ -911,11 +925,11 @@ table {
 .button-corner-toolbar-container .ui-spinner {
 	margin-top: 5px;
 }
-.color-font-container {
+.color-font-container, .btn-color-border-container {
 	float: left;
 	margin-left: 5px;
 }
-.size-font-container, .btn-height-container, .btn-width-container, .btn-align-container{
+.size-font-container, .btn-height-container, .btn-width-container, .btn-align-container, .btn-size-border-container{
 	float: left;
 	margin-top: 5px;
 }

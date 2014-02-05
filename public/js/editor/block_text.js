@@ -77,6 +77,10 @@ TxtBlock.prototype.updateContentStyle = function(style, value) {
 	this.content.find('.content-text').css(style, value);
 };
 
+TxtBlock.prototype.updateColumnStyle = function(style, value) {
+	this.content.css(style, value);
+};
+
 TxtBlock.prototype.persist = function() {
 	var obj = {
 		background_color : this.background_color,
@@ -127,10 +131,10 @@ TxtBlock.prototype.updateChanges = function() {
 	this.updateBlockStyle('border-bottom-left-radius', this.corner_bottom_left);
 	this.updateBlockStyle('border-bottom-right-radius', this.corner_bottom_right);
 	
-	this.updateContentStyle('margin-top', this.margin_top);
-	this.updateContentStyle('margin-bottom', this.margin_bottom);
-	this.updateContentStyle('margin-left', this.margin_left);
-	this.updateContentStyle('margin-right', this.margin_right);
+	this.updateColumnStyle('padding-top', this.margin_top);
+	this.updateColumnStyle('padding-bottom', this.margin_bottom);
+	this.updateColumnStyle('padding-left', this.margin_left);
+	this.updateColumnStyle('padding-right', this.margin_right);
 };
 
 TxtBlock.prototype.newRedactor = function() {
@@ -181,7 +185,7 @@ TxtBlock.prototype.textToolbar = function() {
 	$('html').click(function(event) {
 		if($(event.target).parents('.one-element').hasClass('element-text-in-edition') === false && $(event.target).parents('#my-text-component-toolbar')[0] === undefined && $(event.target).attr('class') !== 'my-text-component-toolbar' ){
 			var content = $('#my-text-component-toolbar').find('.content-text-toolbar');
-			t.content.find('.content-text').html(content.html());
+//			t.content.find('.content-text').html(content.html());
 			content.destroyEditor();
 			$('#my-text-component-toolbar').remove();
 			$('.element-text-in-edition').removeClass('element-text-in-edition');

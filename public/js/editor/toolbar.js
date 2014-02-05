@@ -140,12 +140,10 @@ Toolbar.prototype.createMargins = function() {
 	
 	this.toolbar.find('.components-list').append(elements);
 	
-	this.spinnerContentChange('margin-top-spinner', 'margin-top', 'margin_top');
-	this.spinnerContentChange('margin-bottom-spinner', 'margin-bottom', 'margin_bottom');
-	var ml = (this.component instanceof ImgBlock) ? 'padding-left' : 'margin-left';
-	var mr = (this.component instanceof ImgBlock) ? 'padding-right' : 'margin-right';
-	this.spinnerBlockChange('margin-left-spinner', ml, 'margin_left');
-	this.spinnerBlockChange('margin-right-spinner', mr, 'margin_right');
+	this.spinnerColumnChange('margin-top-spinner', 'padding-top', 'margin_top');
+	this.spinnerColumnChange('margin-bottom-spinner', 'padding-bottom', 'margin_bottom');
+	this.spinnerColumnChange('margin-left-spinner', 'padding-left', 'margin_left');
+	this.spinnerColumnChange('margin-right-spinner', 'padding-right', 'margin_right');
 };
 
 Toolbar.prototype.spinnerBlockChange = function(id, style, property) {
@@ -163,6 +161,16 @@ Toolbar.prototype.spinnerContentChange = function(id, style, property) {
 	$('#' + id).spinner({min: 0, max: 99,
 		stop: function() {
 			t.component.updateContentStyle(style, $(this).val());
+			t.component[property] = $(this).val();
+		}
+	});
+};
+
+Toolbar.prototype.spinnerColumnChange = function(id, style, property) {
+	var t = this;
+	$('#' + id).spinner({min: 0, max: 99,
+		stop: function() {
+			t.component.updateColumnStyle(style, $(this).val());
 			t.component[property] = $(this).val();
 		}
 	});

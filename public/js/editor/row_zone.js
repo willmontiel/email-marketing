@@ -99,7 +99,7 @@ rowZone.prototype.editRow = function() {
 rowZone.prototype.removeRow = function() {
 	var t = this;
 	this.content.find('.remove-row').on('click', function(event) {
-		t.dz.removeRow(this);
+		t.dz.removeRow(t);
 		t.content.remove();
 	});
 };
@@ -109,6 +109,10 @@ rowZone.prototype.updateBlockStyle = function(style, value) {
 };
 
 rowZone.prototype.updateContentStyle = function(style, value) {
+	this.content.css(style, value);
+};
+
+rowZone.prototype.updateColumnStyle = function(style, value) {
 	this.content.css(style, value);
 };
 

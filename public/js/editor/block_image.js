@@ -73,6 +73,10 @@ ImgBlock.prototype.updateContentStyle = function(style, value) {
 	this.content.find('img').css(style, value);
 };
 
+ImgBlock.prototype.updateColumnStyle = function(style, value) {
+	this.content.css(style, value);
+};
+
 ImgBlock.prototype.createImage = function() {
 	var t = this;
 	this.content.find('img').on('click', function() {
@@ -221,10 +225,10 @@ ImgBlock.prototype.updateChanges = function() {
 	this.updateBlockStyle('border-bottom-left-radius', this.corner_bottom_left);
 	this.updateBlockStyle('border-bottom-right-radius', this.corner_bottom_right);
 	
-	this.updateContentStyle('margin-top', this.margin_top);
-	this.updateContentStyle('margin-bottom', this.margin_bottom);
-	this.updateBlockStyle('padding-left', this.margin_left);
-	this.updateBlockStyle('padding-right', this.margin_right);
+	this.updateColumnStyle('padding-top', this.margin_top);
+	this.updateColumnStyle('padding-bottom', this.margin_bottom);
+	this.updateColumnStyle('padding-left', this.margin_left);
+	this.updateColumnStyle('padding-right', this.margin_right);
 	this.addStyleContentImgBlock('text-align', this.align);
 	this.addVerticalAlignToImage(this.vertalign);
 };

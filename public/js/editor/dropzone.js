@@ -159,6 +159,7 @@ DropzoneArea.prototype.persist = function() {
 	var obj = {
 		name: this.name,
 		width: this.width,
+		widthval: this.widthval,
 		parent: this.parent,
 		background_color : this.background_color,
 		border_width : this.border_width,
@@ -195,6 +196,7 @@ DropzoneArea.prototype.unpersist = function(obj) {
 	if(this.width === undefined) {
 		
 		this.width = obj.width;
+		this.widthval = obj.widthval;
 	}
 	
 	this.content = $('<div id="' + this.name + '" class="sub-mod-cont drop-zone ' + this.width + ' ui-sortable"></div>');

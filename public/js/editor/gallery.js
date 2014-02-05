@@ -111,7 +111,7 @@ MediaDisplayer.prototype.imageSelected = function(newsrc, title) {
 					
 					t.block.assignDisplayer({imagesrc: newsrc, percent: 100, width: widthDisplayer, height: heightDisplayer});
 					
-					t.block.setAlignImgBlock("left");
+					t.block.setAlignImgBlock("center");
 					
 					t.block.setVerticalAlignImgBlock("middle");
 				}
@@ -133,9 +133,10 @@ MediaDisplayer.prototype.imageSelected = function(newsrc, title) {
 				t.image = img;
 				
 				t.createSlider();
-				
+				$('#imagedisplayer').append('<span class="image-displayer-helper" />');
 				$('#imagedisplayer').append(img);
-				
+				$('#imagedisplayer').css('text-align', t.block.align);
+				$('#imagedisplayer .image-displayer-helper').css('vertical-align', t.block.vertalign);
 				$('#imagedisplayer').css('height', Math.round((130*img.naturalHeight/img.naturalWidth)*2) + 'px');
 			});
 		}
@@ -216,11 +217,13 @@ MediaDisplayer.prototype.createSlider = function() {
 	});
 	
 	$('.chose_align').on('click', function() {
+		$('#imagedisplayer').css('text-align', $(this).attr('data-dropdown'));
 		t.block.addStyleContentImgBlock('text-align', $(this).attr('data-dropdown'));
 		t.block.setAlignImgBlock($(this).attr('data-dropdown'));
 	});
 	
 	$('.chose_vertical_align').on('click', function() {
+		$('#imagedisplayer .image-displayer-helper').css('vertical-align', $(this).attr('data-dropdown'));
 		t.block.addVerticalAlignToImage($(this).attr('data-dropdown'));
 		t.block.setVerticalAlignImgBlock($(this).attr('data-dropdown'));
 	});

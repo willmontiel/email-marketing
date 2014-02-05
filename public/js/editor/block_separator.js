@@ -73,6 +73,10 @@ HrBlock.prototype.updateContentStyle = function(style, value) {
 	this.content.find('.full-block-element').css(style, value);
 };
 
+HrBlock.prototype.updateColumnStyle = function(style, value) {
+	this.content.css(style, value);
+};
+
 HrBlock.prototype.persist = function() {
 	var obj = {
 		background_color : this.background_color,
@@ -121,8 +125,8 @@ HrBlock.prototype.updateChanges = function() {
 	this.updateBlockStyle('border-bottom-left-radius', this.corner_bottom_left);
 	this.updateBlockStyle('border-bottom-right-radius', this.corner_bottom_right);
 	
-	this.updateContentStyle('margin-top', this.margin_top);
-	this.updateContentStyle('margin-bottom', this.margin_bottom);
-	this.updateContentStyle('margin-left', this.margin_left);
-	this.updateContentStyle('margin-right', this.margin_right);
+	this.updateColumnStyle('padding-top', this.margin_top);
+	this.updateColumnStyle('padding-bottom', this.margin_bottom);
+	this.updateColumnStyle('padding-left', this.margin_left);
+	this.updateColumnStyle('padding-right', this.margin_right);
 };

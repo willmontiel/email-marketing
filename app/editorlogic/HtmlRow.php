@@ -18,6 +18,7 @@ class HtmlRow extends HtmlAbstract
 		
 		foreach ($row->content as $content) {
 			$content->amount = $row->amount;
+			$content->widthval = $row->widthval -  $row->margin_left - $row->margin_right - ($row->border_width*2);
 			$block = HtmlBlockObj::createBlock($content->type);
 			$block->assignContent($content);
 			$this->children[] = $block->render();
