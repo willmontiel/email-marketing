@@ -12,6 +12,8 @@ class ApistatisticsController extends ControllerBase
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
+		$this->logger->log('limit: ' . $limit);
+		$this->logger->log('page: ' . $page);
 		$pager = new PaginationDecorator();
 		if ($limit) {
 			$pager->setRowsPerPage($limit);

@@ -138,7 +138,7 @@ class TrackingObject
 						}
 						$this->log->log('Click y apertura por click en statcontactlist');
 						
-						$mailEvent1 = $this->saveMailEvent($idMail, $idContact, 'opening per click', $userAgent);
+						$mailEvent1 = $this->saveMailEvent($idMail, $idContact, 'opening for click', $userAgent);
 						if (!$mailEvent1) {
 							throw new \InvalidArgumentException('Error while updating opening event');
 						}
@@ -309,6 +309,7 @@ class TrackingObject
 		$event->description = $description;
 		$event->userAgent = $userAgent;
 		$event->location = $location;
+		$event->date = time();
 
 		if (!$event->save()) {
 			foreach ($event->getMessages() as $msg) {

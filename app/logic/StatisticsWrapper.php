@@ -225,26 +225,28 @@ class StatisticsWrapper extends BaseWrapper
 //			'bind' => array(1 => $idMail)
 //		));
 //		
-		$sql = "SELECT v.idContact,  v.opening, v.userAgent, e.email
+		$sql = "SELECT v.idContact, v.userAgent, v.date, e.email 
 					FROM mailevent AS v
 						JOIN contact as c ON (c.idContact = v.idContact)
 						JOIN email as e ON (c.idEmail = e.idEmail)
-					WHERE idMail = " . $idMail;
+					WHERE v.idMail = ? AND v.description = 'opening'";
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Sql: ' . $sql);
-		$result = $db->query($sql);
+		$result = $db->query($sql, array($idMail));
 		$info = $result->fetchAll();
 		Phalcon\DI::getDefault()->get('logger')->log('Aqui viene la info');
-		Phalcon\DI::getDefault()->get('logger')->log('Info: ' . print_r($info, true));
+//		Phalcon\DI::getDefault()->get('logger')->log('Info: ' . print_r($info, true));
 		$opencontact = array();
 		foreach ($info as $i) {
+//			Phalcon\DI::getDefault()->get('logger')->log('email: ' . $i['email']);
 			$opencontact[] = array(
-				'id' => $i->idContact,
-				'email' => $i->email,
-				'date' => date('Y-m-d', $i->opening),
-				'os' => $i->userAgent
+				'id' => $i['idContact'],
+				'email' => $i['email'],
+				'date' => date('Y-m-d H:i', 1386687891),
+				'os' => $i['userAgent']
 			);
 		}
+		Phalcon\DI::getDefault()->get('logger')->log('contact: ' . print_r($opencontact, true));
 		$opens = array();
 		$h1 = 1380657600;
 		$v1 = 3000;
