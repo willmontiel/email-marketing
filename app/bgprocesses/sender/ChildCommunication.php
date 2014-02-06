@@ -110,7 +110,9 @@ class ChildCommunication extends BaseWrapper
 					/*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
 					$headers = $message->getHeaders();
 					$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
-				
+					$headers->addTextHeader('X-GreenArrow-InstanceID', 'em' . $this->account->idAccount);
+					$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', 'em' . $mail->idMail . 'x' . $contact['contact']['idContact']);
+					
 					$message->setFrom($from);
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);

@@ -70,9 +70,18 @@ class TrackController extends ControllerBase
 		}
 	}
 	
-	public function bouncedAction()
+	public function bouncedAction($parameters)
 	{
+		$mxc = substr("em123x321", 2);
+		$ids = explode('x', $mxc);
 		
+		try {
+			$trackingObj = new TrackingObject();
+			$trackingObj->updateTrackBounced($ids[0], $ids[1]);
+		}
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+		}
 	}
 	
 	public function spamAction()
