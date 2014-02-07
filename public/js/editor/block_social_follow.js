@@ -72,7 +72,7 @@ SFollowBlock.prototype.editBlock = function() {
 
 SFollowBlock.prototype.removeBlock = function() {
 	var t = this;
-	this.row.content.find('td:last .remove-block').on('click', function() {
+	this.row.content.find('.row-options .in-row > td:last .remove-block').on('click', function() {
 		t.row.removeBlock(t);
 		t.content.remove();
 	});
@@ -182,8 +182,11 @@ SFollowBlock.prototype.createToolbar = function() {
 	$('.component-toolbar-social').remove();
 
 	var toolbar =  $('<div class="component-toolbar-social" id="my-social-follow-component-toolbar" />');
-	this.content.parents('.row-of-blocks').append(toolbar);
-	toolbar.css('margin-left', '-22px');
+	$('#edit-area').prepend(toolbar);
+	var position = this.content.offset();
+	toolbar.css('position', 'absolute');
+	toolbar.css('top', position.top + this.content.height() - 20);
+	toolbar.css('left', 177);
 	
 	$('.element-follow-in-edition').removeClass('element-follow-in-edition');
 	this.content.find('.one-element').addClass('element-follow-in-edition');

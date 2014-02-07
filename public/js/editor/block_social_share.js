@@ -196,8 +196,11 @@ SShareBlock.prototype.createToolbar = function() {
 	$('.component-toolbar-social').remove();
 
 	var toolbar =  $('<div class="component-toolbar-social" id="my-social-share-component-toolbar" />');
-	this.content.parents('.row-of-blocks').append(toolbar);
-	toolbar.css('margin-left', '-12px');
+	$('#edit-area').prepend(toolbar);
+	var position = this.content.offset();
+	toolbar.css('position', 'absolute');
+	toolbar.css('top', position.top + this.content.height() - 20);
+	toolbar.css('left', 190);
 	
 	$('.element-share-in-edition').removeClass('element-share-in-edition');
 	this.content.find('.one-element').addClass('element-share-in-edition');

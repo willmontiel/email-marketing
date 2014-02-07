@@ -7,7 +7,6 @@ table {
 	min-height: 490px;
 	height: auto;
 	position: relative;
-	overflow: visible;
 	padding: 5px;
 }
 
@@ -415,8 +414,12 @@ table {
 .redactor_box, .redactor_editor, .redactor_editor:focus {
 	background-color: white !important;
 }
-#edit-area, #toolbar {
+/*#edit-area, #toolbar {
 	overflow-y: scroll;
+}*/
+
+.edit-area-container {
+	width: 950px;
 }
 
 #edit-area, .sub_social_content {
@@ -424,7 +427,7 @@ table {
 }
 
 .redactor_toolbar li a.redactor_btn_save  {
-    background: url('') no-repeat;
+    background: url('../images/ok-icon.png') no-repeat;
 }
 
 .pull-center img,  span.pull-center{

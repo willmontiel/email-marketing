@@ -200,7 +200,6 @@ function initEvents() {
 		});
 		editor.objectExists(editor);
 	});
-	$('#edit-area, #toolbar').css('height', '600px');
 	$('img').on('dragstart', function(event) { event.preventDefault(); });
 	$('.gallery-modal').draggable({handle: ".gallery-header"});
 	

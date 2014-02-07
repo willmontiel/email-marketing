@@ -68,7 +68,9 @@
 	<br /><br />
 <div class="row-fluid">
 	<div class="span12">
-		<div id="edit-area" class="module-cont clearfix">
+		<div class="edit-area-container">
+			<div id="edit-area" class="module-cont clearfix">
+			</div>
 		</div>
 	</div>
 <div id="newtemplatename" class="modal hide fade">

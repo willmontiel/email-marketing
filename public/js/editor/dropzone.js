@@ -63,6 +63,8 @@ DropzoneArea.prototype.addElementToZone = function() {
 		
 		t.createHtmlElement('text-image', 'Texto - Imagen', 'Compound', [new TxtBlock(row), new ImgBlock(row)], row);
 		t.createHtmlElement('image-text', 'Imagen - Texto', 'Compound', [new ImgBlock(row), new TxtBlock(row)], row);
+		
+		parent.iframeResize();
 	});
 };
 

@@ -220,8 +220,11 @@ BtnBlock.prototype.createToolbar = function() {
 	$('.component-toolbar-button').remove();
 
 	var toolbar =  $('<div class="component-toolbar-button" id="my-btn-component-toolbar" />');
-	this.content.parents('.row-of-blocks').append(toolbar);
-	toolbar.css('margin-left', '-140px');
+	$('#edit-area').prepend(toolbar);
+	var position = this.content.offset();
+	toolbar.css('position', 'absolute');
+	toolbar.css('top', position.top + this.content.height() - 20);
+	toolbar.css('left', 112);
 	
 	$('.element-btn-in-edition').removeClass('element-btn-in-edition');
 	this.content.find('.one-element').addClass('element-btn-in-edition');

@@ -1,6 +1,8 @@
 function Toolbar(component) {
 	this.component = component;
 	$('#my-component-toolbar').remove();
+	$('.component-toolbar-social').remove();
+	$('.component-toolbar-button').remove();
 	this.toolbar = $('.component-toolbar').clone().attr('id', 'my-component-toolbar');
 	this.toolbar.empty();
 	this.toolbar.append('<ul class="components-list"/>');
@@ -16,27 +18,26 @@ Toolbar.prototype.drawHtml = function(obj_in_edit) {
 		var component = this.component.content.find('.' + obj_in_edit);
 	}
 	component.addClass('element-in-edition');
-
+	
+	$('#edit-area').prepend(this.toolbar);
+	this.toolbar.css('position', 'absolute');
+	var position = this.component.content.offset();
 	this.toolbar.show();
-	if(this.component instanceof DropzoneArea) {
-		this.component.content.find('.dropzone-container').prepend(this.toolbar);
-	}
-	else if(this.component instanceof rowZone) {
-		this.component.content.append(this.toolbar);
-		this.toolbar.css('margin-top', 4);
-		this.toolbar.css('margin-left', -90);
-	}
-	else if(this.component instanceof EditionArea) {
-		this.component.content.prepend(this.toolbar);
-		this.toolbar.css('float', 'left');
-		this.toolbar.css('position', 'absolute');
+	if(this.component instanceof EditionArea) {
 		this.toolbar.css('top', 50);
 		this.toolbar.css('left', 20);
 	}
+	else if (this.component instanceof DropzoneArea) {
+		this.toolbar.css('top', position.top + this.component.content.height() - 30);
+		this.toolbar.css('left', 222);
+	}
+	else if(this.component instanceof rowZone) {
+		this.toolbar.css('top', position.top + this.component.content.height() - 30);
+		this.toolbar.css('left', 112);
+	}
 	else {
-		this.component.content.parents('.row-of-blocks').append(this.toolbar);
-		this.toolbar.css('margin-top', 4);
-		this.toolbar.css('margin-left', -90);
+		this.toolbar.css('top', position.top + this.component.content.height() - 20);
+		this.toolbar.css('left', 112);
 	}
 };
 
