@@ -354,6 +354,7 @@ table {
 	position: initial;
 	word-break: break-word;
 	padding: 15px;
+	cursor: pointer;
 }
 
 .content-image {
@@ -1085,4 +1086,11 @@ table {
 	border-radius: 5px;
 	background-color: #fafafa;
 	margin-top: 5px;
+}
+.one-element hr {
+	border-style: inset;
+	border-width: 1px;
+}
+.content-social-follow {
+	width: 0;
 }

@@ -108,6 +108,7 @@ Editor.prototype.createEditStyle = function() {
 					<div class="edit-layout tool"><span class="icon-pencil icon-white"></span></div>\n\
 				</div>';
 	$('#edit-area').append(edit);
+	$('#edit-area').css('background-color', this.editorColor);
 	var edition = new EditionArea($('#edit-area'), this);
 	$('.edit-layout').on('click', function(event) {
 		var toolbar = new Toolbar(edition);
@@ -164,17 +165,10 @@ $(function() {
 		mediaGallery[l].createMedia();
 		mediaGallery[l].mediaSelected();
 	}
-	
-	initEvents();
+
 	editor.objectExists(parent.objMail);
 	editor.otherLayout();
-	
-	var myDropzone = new Dropzone("#my-dropzone");
-	myDropzone.on("success", function(file, response) {
-		var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);
-		newMedia.createMedia();
-		newMedia.mediaSelected();
-	});	
+	initEvents();
 });
 
 function initEvents() {
@@ -195,9 +189,6 @@ function initEvents() {
 			$('#my-social-follow-component-toolbar').remove();
 			$('.element-follow-in-edition').removeClass('element-follow-in-edition');
 		}
-		if($(ev.target).parents('.redactor_box')[0] === undefined && $(ev.target).attr('class') !== 'redactor_box' && $(ev.target).attr('class') !== undefined ){
-			$('.redactor_editor').destroyEditor();
-		}
 	});
 	$('#saveTemplate').on('click', function() {
 		editor.serializeDZ();
@@ -209,12 +200,21 @@ function initEvents() {
 		});
 		editor.objectExists(editor);
 	});
-	$('#toolbar .module').draggable({
-		connectToSortable: ".drop-zone",
-		helper: "clone"
-	});
 	$('#edit-area, #toolbar').css('height', '600px');
 	$('img').on('dragstart', function(event) { event.preventDefault(); });
 	$('.gallery-modal').draggable({handle: ".gallery-header"});
-	$('.button-modal').draggable({handle: ".button-header"});
+	
+	$('.dropzone-container').sortable({ 
+		handle: '.move-row', 
+		placeholder: 'placeholder', 
+		items: '> div.row-of-blocks',
+		connectWith: '.dropzone-container'
+	});
+	
+	var myDropzone = new Dropzone("#my-dropzone");
+	myDropzone.on("success", function(file, response) {
+		var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);
+		newMedia.createMedia();
+		newMedia.mediaSelected();
+	});	
 }

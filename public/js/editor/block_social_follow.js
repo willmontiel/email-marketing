@@ -1,9 +1,9 @@
 function SFollowBlock(row) {
 	this.row = row;
-	this.content_fb = {html: $('<div class="soc_net_follow_container"><img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/follow_facebook_image.png" alt="64x64" /><p class="follow-text-container-fb">Facebook</p></div>'), selected: true, text: 'Facebook'};
-	this.content_tw = {html: $('<div class="soc_net_follow_container"><img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/follow_twitter_image.png" alt="64x64" /><p class="follow-text-container-tw">Twitter</p></div>'), selected: true, text: 'Twitter'};
-	this.content_li = {html: $('<div class="soc_net_follow_container"><img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/follow_linkedin_image.png" alt="64x64" /><p class="follow-text-container-li">LinkedIn</p></div>'), selected: true, text: 'LinkedIn'};
-	this.content_gp = {html: $('<div class="soc_net_follow_container"><img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/follow_google_plus_image.png" alt="64x64" /><p class="follow-text-container-gp">Google+</p></div>'), selected: true, text: 'Google+'};
+	this.content_fb = {html: $('<td class="soc_net_follow_container"><img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/follow_facebook_image.png" alt="64x64" /><p class="follow-text-container-fb">Facebook</p></td>'), selected: true, text: 'Facebook'};
+	this.content_tw = {html: $('<td class="soc_net_follow_container"><img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/follow_twitter_image.png" alt="64x64" /><p class="follow-text-container-tw">Twitter</p></td>'), selected: true, text: 'Twitter'};
+	this.content_li = {html: $('<td class="soc_net_follow_container"><img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/follow_linkedin_image.png" alt="64x64" /><p class="follow-text-container-li">LinkedIn</p></td>'), selected: true, text: 'LinkedIn'};
+	this.content_gp = {html: $('<td class="soc_net_follow_container"><img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/follow_google_plus_image.png" alt="64x64" /><p class="follow-text-container-gp">Google+</p></td>'), selected: true, text: 'Google+'};
 	this.align = 'left';
 	this.background_color = "FFFFFF";
 	this.border_width = 0;
@@ -36,28 +36,28 @@ SFollowBlock.prototype.drawHtml = function() {
 						<table class="full-block-element" border="0" cellpadding="0">\n\
 							<tr>\n\
 								<td>\n\
-									<div class="one-element">\n\
+									<div class="one-element clearfix">\n\
 										<div class="elements-options">\n\
 											<div class="edit-block tool"><span class="icon-pencil icon-white"></span></div>\n\
 											<div class="remove-block tool"><span class="icon-minus icon-white"></span></div>\n\
 										</div>\n\
-										<div class="content-social-follow media-object clearfix"></div>\n\
+										<table class="content-social-follow media-object"><tr></tr></table>\n\
 									</div>\n\
 								</td>\n\
 							</tr>\n\
 						</table>\n\
 					</td>');
-	block.find('.content-social-follow').append(this.content_fb.html);
-	block.find('.content-social-follow').append(this.content_tw.html);
-	block.find('.content-social-follow').append(this.content_li.html);
-	block.find('.content-social-follow').append(this.content_gp.html);
+	block.find('.content-social-follow tr').append(this.content_fb.html);
+	block.find('.content-social-follow tr').append(this.content_tw.html);
+	block.find('.content-social-follow tr').append(this.content_li.html);
+	block.find('.content-social-follow tr').append(this.content_gp.html);
 	block.find('.content-social-follow').css('text-align', this.align);
 	return block;
 };
 
 SFollowBlock.prototype.editBlock = function() {
 	var t = this;
-	this.row.content.find('td:last .edit-block').on('click', function(event) {
+	this.row.content.find('.row-options .in-row > td:last .edit-block').on('click', function(event) {
 		var toolbar = new Toolbar(t);
 		toolbar.drawHtml('one-element');
 		toolbar.createBackground();
@@ -119,7 +119,17 @@ SFollowBlock.prototype.persist = function() {
 };
 
 SFollowBlock.prototype.unpersist = function(obj) {
-	this.background_color = obj.background_color,
+	this.align = obj.align;
+	this.content_fb.text = obj.contentData[0].text;
+	this.content_fb.selected = obj.contentData[0].selected;
+	this.content_tw.text = obj.contentData[1].text;
+	this.content_tw.selected = obj.contentData[1].selected;
+	this.content_li.text = obj.contentData[2].text;
+	this.content_li.selected = obj.contentData[2].selected;
+	this.content_gp.text = obj.contentData[3].text;
+	this.content_gp.selected = obj.contentData[3].selected;
+	
+	this.background_color = obj.background_color;
 	this.border_width = obj.border_width;
 	this.border_color = obj.border_color;
 	this.border_style = obj.border_style;
@@ -151,6 +161,20 @@ SFollowBlock.prototype.updateChanges = function() {
 	this.updateColumnStyle('padding-bottom', this.margin_bottom);
 	this.updateColumnStyle('padding-left', this.margin_left);
 	this.updateColumnStyle('padding-right', this.margin_right);
+	
+	this.content.find('.content-social-follow').attr('align', this.align);
+	if(!this.content_fb.selected) {
+		this.content_fb.html.hide();
+	}
+	if(!this.content_tw.selected) {
+		this.content_tw.html.hide();
+	}
+	if(!this.content_li.selected) {
+		this.content_li.html.hide();
+	}
+	if(!this.content_gp.selected) {
+		this.content_gp.html.hide();
+	}
 };
 
 SFollowBlock.prototype.createToolbar = function() {
@@ -205,19 +229,19 @@ SFollowBlock.prototype.eventsChange = function() {
 	
 	$('.align-btn-toolbar.align-' + this.align).addClass('align-selected-toolbar')
 	$('.align-btn-toolbar.align-left').on('click', function() {
-		t.content.find('.content-social-follow').css('text-align', 'left');
+		t.content.find('.content-social-follow').attr('align', 'left');
 		t.align = 'left';
 		$('.align-selected-toolbar').removeClass('align-selected-toolbar');
 		$(this).addClass('align-selected-toolbar');
 	});
 	$('.align-btn-toolbar.align-center').on('click', function() {
-		t.content.find('.content-social-follow').css('text-align', 'center');
+		t.content.find('.content-social-follow').attr('align', 'center');
 		t.align = 'center';
 		$('.align-selected-toolbar').removeClass('align-selected-toolbar');
 		$(this).addClass('align-selected-toolbar');
 	});
 	$('.align-btn-toolbar.align-right').on('click', function() {
-		t.content.find('.content-social-follow').css('text-align', 'right');
+		t.content.find('.content-social-follow').attr('align', 'right');
 		t.align = 'right';
 		$('.align-selected-toolbar').removeClass('align-selected-toolbar');
 		$(this).addClass('align-selected-toolbar');

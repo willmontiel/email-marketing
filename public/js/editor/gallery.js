@@ -133,6 +133,7 @@ MediaDisplayer.prototype.imageSelected = function(newsrc, title) {
 				t.image = img;
 				
 				t.createSlider();
+				t.block.addStyleContentImgBlock('text-align', t.block.align);
 				$('#imagedisplayer').append('<span class="image-displayer-helper" />');
 				$('#imagedisplayer').append(img);
 				$('#imagedisplayer').css('text-align', t.block.align);
