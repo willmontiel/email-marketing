@@ -30,13 +30,14 @@ TxtBlock.prototype.drawHtml = function() {
 						<table class="full-block-element" border="0" cellpadding="0">\n\
 							<tr>\n\
 								<td>\n\
-									<div class="one-element">\n\
+									<div class="one-element clearfix">\n\
 										<div class="elements-options">\n\
 											<div class="edit-block tool"><span class="icon-pencil icon-white"></span></div>\n\
 											<div class="remove-block tool"><span class="icon-minus icon-white"></span></div>\n\
 										</div>\n\
 										<div class="content-text">\n\
 										</div>\n\
+										<div class="content-text-block"></div>\n\
 									</div>\n\
 								</td>\n\
 							</tr>\n\
@@ -139,7 +140,7 @@ TxtBlock.prototype.updateChanges = function() {
 
 TxtBlock.prototype.newRedactor = function() {
 	var t = this;
-	this.content.find('.content-text').on('click', function() {
+	this.content.find('.content-text-block').on('click', function() {
 		$('.element-text-in-edition').removeClass('element-text-in-edition');
 		t.content.find('.one-element').addClass('element-text-in-edition');
 		t.textToolbar();
@@ -182,7 +183,7 @@ TxtBlock.prototype.textToolbar = function() {
 		}
 	});
 	$('html').click(function(event) {
-		if($(event.target).parents('.one-element').hasClass('element-text-in-edition') === false && $(event.target).parents('#my-text-component-toolbar')[0] === undefined && $(event.target).attr('class') !== 'my-text-component-toolbar' ){
+		if($(event.target).parents('.one-element').hasClass('element-text-in-edition') === false && $(event.target).parents('#my-text-component-toolbar')[0] === undefined && $(event.target).attr('class') !== 'my-text-component-toolbar' && $(event.target).attr('id') !== 'redactor_modal' && $(event.target).parents('#redactor_modal')[0] === undefined){
 			var content = $('#my-text-component-toolbar').find('.content-text-toolbar');
 //			t.content.find('.content-text').html(content.html());
 			content.destroyEditor();

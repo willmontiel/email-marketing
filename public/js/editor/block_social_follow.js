@@ -163,6 +163,10 @@ SFollowBlock.prototype.updateChanges = function() {
 	this.updateColumnStyle('padding-right', this.margin_right);
 	
 	this.content.find('.content-social-follow').attr('align', this.align);
+	this.content.find('.follow-text-container-fb').text(this.content_fb.text);
+	this.content.find('.follow-text-container-tw').text(this.content_tw.text);
+	this.content.find('.follow-text-container-li').text(this.content_li.text);
+	this.content.find('.follow-text-container-gp').text(this.content_gp.text);
 	if(!this.content_fb.selected) {
 		this.content_fb.html.hide();
 	}
