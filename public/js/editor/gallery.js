@@ -23,7 +23,7 @@ Gallery.prototype.mediaSelected = function() {
 	$('#gallery a#media' + this.id).on('click', function() {
 		
 		media.setGallery(t);
-		media.Selected(t.srcImage, t.title);
+		media.imageSelected(t.srcImage, t.title);
 	});
 };
 
@@ -51,15 +51,15 @@ MediaDisplayer.prototype.setGallery = function(gallery) {
 	this.gallery = gallery;	
 };
 
-MediaDisplayer.prototype.Selected = function(newsrc, title) {
+MediaDisplayer.prototype.imageSelected = function(newsrc, title) {
 	
 	$('#imagedisplayer').empty();
 	
 	this.widthZone =  this.block.widthZone;
 	
-	if (this.block != null && this.block.hasOwnProperty('htmlData')) {
-		
-		if(newsrc == undefined) {
+	if (this.block !== null && this.block.hasOwnProperty('content')) {
+
+		if(newsrc === undefined) {
 			
 			delete this.oldImage;
 	
@@ -70,10 +70,8 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 			$('#imagedisplayer').append(msg);
 		}
 		else {
-			
-			this.block.htmlData.find('img').removeClass('image-placeholder');
-			
-			this.block.htmlData.find('img').removeClass('image-text-placeholder');
+
+			this.block.content.find('img').removeClass('image-placeholder');
 			
 			this.block.changeAttrImgBlock('src', newsrc);
 			
@@ -89,7 +87,7 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 
 				if(t.block.hasOwnProperty('displayer') && t.block.displayer.imagesrc === newsrc) {
 					
-					t.oldImage = JSON.stringify(t.block.persistImage());
+					t.oldImage = JSON.stringify(t.block.persist());
 					
 					var realHeight = t.block.height;
 					
@@ -101,14 +99,7 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 				}
 				else {
 				
-					if( t.block.typeBlock.search('text') > 0 ) {
-						
-						var realWidth = (img.naturalWidth > t.widthZone*3/4) ? t.widthZone*3/4 : img.naturalWidth;
-					}
-					else {
-						
-						var realWidth = (img.naturalWidth > t.widthZone) ? t.widthZone : img.naturalWidth;
-					}
+					var realWidth = (img.naturalWidth > t.widthZone) ? t.widthZone : img.naturalWidth;
 					
 					var realHeight = realWidth*img.naturalHeight/img.naturalWidth;
 					
@@ -116,9 +107,11 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 					
 					var heightDisplayer = 130*img.naturalHeight/img.naturalWidth;
 					
+					t.block.setImageSrc(newsrc);
+					
 					t.block.assignDisplayer({imagesrc: newsrc, percent: 100, width: widthDisplayer, height: heightDisplayer});
 					
-					t.block.setAlignImgBlock("pull-left");
+					t.block.setAlignImgBlock("center");
 					
 					t.block.setVerticalAlignImgBlock("middle");
 				}
@@ -140,9 +133,11 @@ MediaDisplayer.prototype.Selected = function(newsrc, title) {
 				t.image = img;
 				
 				t.createSlider();
-				
+				t.block.addStyleContentImgBlock('text-align', t.block.align);
+				$('#imagedisplayer').append('<span class="image-displayer-helper" />');
 				$('#imagedisplayer').append(img);
-				
+				$('#imagedisplayer').css('text-align', t.block.align);
+				$('#imagedisplayer .image-displayer-helper').css('vertical-align', t.block.vertalign);
 				$('#imagedisplayer').css('height', Math.round((130*img.naturalHeight/img.naturalWidth)*2) + 'px');
 			});
 		}
@@ -180,27 +175,19 @@ MediaDisplayer.prototype.createSlider = function() {
 	var totalWidthBlock = (t.image.naturalWidth > t.widthZone) ? t.widthZone : t.image.naturalWidth;
 	var maxWidthZone = t.widthZone;
 	
-	if( t.block.typeBlock.search('text') > 0 ) {
-		
-		totalWidthBlock = (t.image.naturalWidth > t.widthZone*3/4) ? t.widthZone*3/4 : t.image.naturalWidth;
-		maxWidthZone = t.widthZone*3/4;
-	}
-	
 	var maxwidthpx =maxWidthZone*100/t.image.naturalWidth;
 	
 	var realmax = Math.floor(maxwidthpx);
 	
 	$('#imageslider').append($('<div class="maxwidth"><label class="checkbox"><input id="maxwidthimg" class="target" type="checkbox">Tamaño Maximo</label></div>'));
 	
-	if(t.block.width == t.widthZone || ( (t.block.typeBlock.search('text') > 0) && (t.block.width == Math.floor(t.widthZone*3/4)))) {
-		
+	if(t.block.width === t.block.row.dz.widthval/t.block.row.listofblocks.length) {
 		$('#maxwidthimg')[0].checked = true;
 	}
 
 	var value = maxwidthpx*t.image.naturalWidth/totalWidthBlock;;
 		
 	if(t.block.displayer.hasOwnProperty('percent')) {
-		
 		value = t.block.displayer.percent;
 	}
 	
@@ -231,17 +218,24 @@ MediaDisplayer.prototype.createSlider = function() {
 	});
 	
 	$('.chose_align').on('click', function() {
-		t.block.addClassContentImgBlock("pull-" + $(this).attr('data-dropdown'));
-		t.block.setAlignImgBlock("pull-" + $(this).attr('data-dropdown'));
+		$('#imagedisplayer').css('text-align', $(this).attr('data-dropdown'));
+		t.block.addStyleContentImgBlock('text-align', $(this).attr('data-dropdown'));
+		t.block.setAlignImgBlock($(this).attr('data-dropdown'));
 	});
 	
 	$('.chose_vertical_align').on('click', function() {
+		$('#imagedisplayer .image-displayer-helper').css('vertical-align', $(this).attr('data-dropdown'));
 		t.block.addVerticalAlignToImage($(this).attr('data-dropdown'));
 		t.block.setVerticalAlignImgBlock($(this).attr('data-dropdown'));
 	});
 	
 	$('#cancel_change').on('click', function() {
-		t.block.unpersistImage(t.oldImage);
+		t.block.unpersist(t.oldImage);
+		t.block.changeAttrImgBlock('height', t.block.height);
+		t.block.changeAttrImgBlock('width', t.block.width);
+		t.block.changeAttrImgBlock('src', t.block.imgsrc);
+		t.block.addStyleContentImgBlock('text-align', t.block.align);
+		t.block.addVerticalAlignToImage(t.block.vertalign);
 	});
 	
 	$('#link_to_image').on('change', function() {
@@ -250,25 +244,23 @@ MediaDisplayer.prototype.createSlider = function() {
 	
 	$('#maxwidthimg').on('change', function(value) {
 		if($('#maxwidthimg')[0].checked) {
-			if(t.block.typeBlock.search('text') > 0) {
-				var widthNatural = t.widthZone*3/4;
-				var heightNatural = Math.floor(t.image.naturalHeight*(t.widthZone*3/4)/t.image.naturalWidth);
-			}
-			else {
-				var widthNatural = t.widthZone;
-				var heightNatural = Math.floor(t.image.naturalHeight*t.widthZone/t.image.naturalWidth);
-			}
+			var width = t.block.row.dz.widthval/t.block.row.listofblocks.length;
+			var widthNatural = t.widthZone;
+			var heightNatural = Math.floor(t.image.naturalHeight*t.widthZone/t.image.naturalWidth);
+			t.block.setSizeImage( Math.floor(t.image.naturalHeight*width/t.image.naturalWidth), width);
+			var height =  Math.floor(t.image.naturalHeight*width/t.image.naturalWidth);
 		}
 		else {
 			var widthNatural = Math.floor(t.image.naturalWidth*(t.block.displayer.percent/100));
 			var heightNatural = Math.floor(t.image.naturalHeight*(t.block.displayer.percent/100));
+			t.block.setSizeImage(heightNatural, widthNatural);
+			var width = widthNatural;
+			var height = heightNatural;
 		}
 		
 		t.block.setTableColumn('width', widthNatural);
 
-		t.valuesHW(heightNatural, widthNatural);
-
-		t.block.setSizeImage(heightNatural, widthNatural);
+		t.valuesHW(height, width);
 
 		t.block.changeAttrImgBlock('width', widthNatural);
 		t.block.changeAttrImgBlock('height', heightNatural);

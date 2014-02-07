@@ -335,6 +335,7 @@ App.TimeGraphView = Ember.View.extend({
 			chart = createPieChart(chartData);
 		}
 		else if(this.typeChart === 'Bar') {
+			console.log(chartData)
 			chart = createBarChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
 		}
 		else if(this.typeChart === 'Line') {

@@ -5,14 +5,11 @@ class HtmlBlockObj
 	public static function createBlock($type)
 	{
 		switch ($type) {
-			case 'module-text-only':
-				$block = new BlockTextOnly();
+			case 'Text':
+				$block = new BlockText();
 				break;
-			case 'module-text-boxed':
-				$block = new BlockTextBoxed();
-				break;
-			case 'module-image-only':
-				$block = new BlockImageOnly();
+			case 'Image':
+				$block = new BlockImage();
 				break;
 			case 'module-image-text':
 				$block = new BlockCompound();
@@ -20,16 +17,16 @@ class HtmlBlockObj
 			case 'module-text-image':
 				$block = new BlockCompound();
 				break;
-			case 'module-separator':
+			case 'Separator':
 				$block = new BlockSeparator();
 				break;
-			case 'module-button':
+			case 'Button':
 				$block = new BlockButton();
 				break;
-			case 'module-social-follow':
+			case 'Social-Follow':
 				$block = new BlockSocialFollow();
 				break;
-			case 'module-social-share':
+			case 'Social-Share':
 				$block = new BlockSocialShare();
 				break;
 			case 'module-text-mult':

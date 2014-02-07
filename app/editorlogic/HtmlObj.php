@@ -46,7 +46,7 @@ class HtmlObj extends HtmlAbstract
 		}
 		$pr .= '</head><body>';
 		
-		return $pr . '<table style="background-color: '. $this->backgroundColor . '; width: 100%;"><tr><td style="padding: 20px;"><center><table style="width: 550px;" width="550px" cellspacing="0" cellpadding="0"><tbody>';
+		return $pr . '<table style="background-color: '. $this->backgroundColor . '; width: 100%;"><tr><td style="padding: 20px;"><center><table style="width: 600px;" width="600px" cellspacing="0" cellpadding="0"><tbody>';
 	}
 	public function renderChildPrefix($i)
 	{
