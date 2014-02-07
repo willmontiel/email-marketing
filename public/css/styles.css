@@ -353,7 +353,6 @@ table {
 	position: initial;
 	word-break: break-word;
 	padding: 15px;
-	cursor: pointer;
 }
 
 .content-image {
@@ -649,6 +648,7 @@ table {
 	text-align: center;
 	cursor: pointer;
 	top: 5px;
+	z-index: 40;
 }
 
 .elements-options span, .row-icons-options span, .dz-icons-options span, .layout-icons-options span {
@@ -1105,4 +1105,5 @@ table {
 	border-width: 0;
 	float: left;
 	top: 0;
+	cursor: pointer;
 }
