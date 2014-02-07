@@ -11,12 +11,6 @@ class HtmlBlockObj
 			case 'Image':
 				$block = new BlockImage();
 				break;
-			case 'module-image-text':
-				$block = new BlockCompound();
-				break;
-			case 'module-text-image':
-				$block = new BlockCompound();
-				break;
 			case 'Separator':
 				$block = new BlockSeparator();
 				break;
@@ -28,9 +22,6 @@ class HtmlBlockObj
 				break;
 			case 'Social-Share':
 				$block = new BlockSocialShare();
-				break;
-			case 'module-text-mult':
-				$block = new BlockMultText();
 				break;
 		}
 		
