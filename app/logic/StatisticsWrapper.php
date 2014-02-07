@@ -220,23 +220,31 @@ class StatisticsWrapper extends BaseWrapper
 	public function findMailOpenStats($idMail)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
-//		$mail = Mail::findFirst(array(
-//			'conditions' => 'idMail = ?1',
-//			'bind' => array(1 => $idMail)
-//		));
-//		
+		
+		$sql1 = "SELECT COUNT(*) AS t
+					FROM mailevent AS v
+						JOIN contact as c ON (c.idContact = v.idContact)
+						JOIN email as e ON (c.idEmail = e.idEmail)
+					WHERE v.idMail = ? AND v.description = 'opening'";
+		
+		$result1 = $db->query($sql1, array($idMail));
+		$total = $result1->fetch();
+		
+//		Phalcon\DI::getDefault()->get('logger')->log('Total: ' . print_r($total, true));
+		
 		$sql = "SELECT v.idContact, v.userAgent, v.date, e.email 
 					FROM mailevent AS v
 						JOIN contact as c ON (c.idContact = v.idContact)
 						JOIN email as e ON (c.idEmail = e.idEmail)
 					WHERE v.idMail = ? AND v.description = 'opening'";
 		
-		Phalcon\DI::getDefault()->get('logger')->log('Sql: ' . $sql);
+		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+//		Phalcon\DI::getDefault()->get('logger')->log('Sql: ' . $sql);
 		$result = $db->query($sql, array($idMail));
 		$info = $result->fetchAll();
-		Phalcon\DI::getDefault()->get('logger')->log('Aqui viene la info');
 //		Phalcon\DI::getDefault()->get('logger')->log('Info: ' . print_r($info, true));
 		$opencontact = array();
+		
 		foreach ($info as $i) {
 //			Phalcon\DI::getDefault()->get('logger')->log('email: ' . $i['email']);
 			$opencontact[] = array(
@@ -246,7 +254,7 @@ class StatisticsWrapper extends BaseWrapper
 				'os' => $i['userAgent']
 			);
 		}
-		Phalcon\DI::getDefault()->get('logger')->log('contact: ' . print_r($opencontact, true));
+//		Phalcon\DI::getDefault()->get('logger')->log('contact: ' . print_r($opencontact, true));
 		$opens = array();
 		$h1 = 1380657600;
 		$v1 = 3000;
@@ -295,7 +303,7 @@ class StatisticsWrapper extends BaseWrapper
 //			'os' => 'Windows Phone'
 //		);
 		
-		$this->pager->setTotalRecords(count($opencontact));
+		$this->pager->setTotalRecords($total['t']);
 		
 		$statistics[] = array(
 			'id' => $idMail,
