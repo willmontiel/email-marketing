@@ -3,6 +3,7 @@ class TrackController extends ControllerBase
 {
 	public function openAction($parameters)
 	{
+		$this->logger->log('Inicio tracking de apertura');
 		$info = $_SERVER['HTTP_USER_AGENT'];
 		$idenfifiers = explode("-", $parameters);
 		
@@ -70,22 +71,36 @@ class TrackController extends ControllerBase
 		}
 	}
 	
-	public function bouncedAction($parameters)
+	public function mtaeventAction()
 	{
-		$mxc = substr("em123x321", 2);
-		$ids = explode('x', $mxc);
-		
-		try {
-			$trackingObj = new TrackingObject();
-			$trackingObj->updateTrackBounced($ids[0], $ids[1]);
+		$content = $this->request->getRawBody();
+		if ($content == '' || $content == null) {
+			$this->logger->log('No hay contenido, no se registró evento de rebote');
+			return false;
 		}
-		catch (InvalidArgumentException $e) {
-			$this->logger->log('Exception: [' . $e . ']');
-		}
-	}
-	
-	public function spamAction()
-	{
+		$cobject = json_decode($content, true);
+		$this->logger->log('Contenido: [' . $content . ']: [' .print_r($cobject, true) .  ']');
 		
+		foreach ($cobject as $c) {
+			$mxc = substr($c['click_tracking_id'], 2);
+			$ids = explode('x', $mxc);
+			$type = $c['event_type'];
+			$code = $c['bounce_code'];
+			$date = $c['event_time'];
+			
+			$this->logger->log('idMail: ' . $ids[0]);
+			$this->logger->log('idContact: ' . $ids[1]);
+			$this->logger->log('type: ' . $type);
+			$this->logger->log('code: ' . $code);
+			$this->logger->log('date: ' . $date);
+			
+			try {
+				$trackingObj = new TrackingObject();
+				$trackingObj->updateTrackBounced($ids[0], $ids[1], $type, $code, $date);
+			}
+			catch (InvalidArgumentException $e) {
+				$this->logger->log('Exception: [' . $e . ']');
+			}
+		}
 	}
 }

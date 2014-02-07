@@ -1,9 +1,9 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.0.4
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 04-02-2014 a las 11:13:56
+-- Tiempo de generación: 07-02-2014 a las 11:59:16
 -- Versión del servidor: 5.6.12-log
 -- Versión de PHP: 5.4.16
 
@@ -227,6 +227,19 @@ CREATE TABLE IF NOT EXISTS `blockedemail` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `bouncedcode`
+--
+
+CREATE TABLE IF NOT EXISTS `bouncedcode` (
+  `idBouncedCode` int(11) NOT NULL,
+  `type` enum('hard','soft') NOT NULL,
+  `description` tinytext NOT NULL,
+  PRIMARY KEY (`idBouncedCode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `contact`
 --
 
@@ -303,7 +316,7 @@ CREATE TABLE IF NOT EXISTS `criteria` (
   PRIMARY KEY (`idCriteria`),
   KEY `idSegment` (`idSegment`,`idCustomField`),
   KEY `criteriaAcustomfield` (`idCustomField`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -498,15 +511,18 @@ CREATE TABLE IF NOT EXISTS `mailevent` (
   `idMailEvent` int(11) NOT NULL AUTO_INCREMENT,
   `idMail` int(11) NOT NULL,
   `idContact` int(11) NOT NULL,
-  `description` varchar(20) NOT NULL,
+  `idBouncedCode` int(11) DEFAULT NULL,
+  `description` enum('opening','opening for click','bounced','spam','unsubscribed') NOT NULL,
   `userAgent` varchar(80) DEFAULT NULL,
   `location` varchar(100) DEFAULT NULL,
+  `date` int(11) DEFAULT NULL,
   PRIMARY KEY (`idMailEvent`),
   KEY `idMail` (`idMail`),
   KEY `idContact` (`idContact`),
   KEY `idMail_2` (`idMail`,`idContact`),
-  KEY `idMail_3` (`idMail`,`idContact`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  KEY `idMail_3` (`idMail`,`idContact`),
+  KEY `idBouncedCode` (`idBouncedCode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -896,7 +912,7 @@ ALTER TABLE `contactlist`
 --
 ALTER TABLE `coxcl`
   ADD CONSTRAINT `coxcl_ibfk_1` FOREIGN KEY (`idContact`) REFERENCES `contact` (`idContact`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_COxCL_contactlist1` FOREIGN KEY (`idContactlist`) REFERENCES `contactlist` (`idContactlist`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_COxCL_contactlist1` FOREIGN KEY (`idContactlist`) REFERENCES `contactlist` (`idContactlist`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `criteria`
@@ -909,7 +925,7 @@ ALTER TABLE `criteria`
 -- Filtros para la tabla `customfield`
 --
 ALTER TABLE `customfield`
-  ADD CONSTRAINT `fk_CustomField_Dbases1` FOREIGN KEY (`idDbase`) REFERENCES `dbase` (`idDbase`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_CustomField_Dbases1` FOREIGN KEY (`idDbase`) REFERENCES `dbase` (`idDbase`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `dbase`
@@ -962,6 +978,7 @@ ALTER TABLE `mailcontent`
 -- Filtros para la tabla `mailevent`
 --
 ALTER TABLE `mailevent`
+  ADD CONSTRAINT `mailevent_ibfk_3` FOREIGN KEY (`idBouncedCode`) REFERENCES `bouncedcode` (`idBouncedCode`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `mailevent_ibfk_1` FOREIGN KEY (`idMail`) REFERENCES `mail` (`idMail`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `mailevent_ibfk_2` FOREIGN KEY (`idContact`) REFERENCES `contact` (`idContact`) ON DELETE CASCADE ON UPDATE CASCADE;
 

@@ -99,6 +99,7 @@ class Security extends Plugin
 				'session::reset' => array(),
 				'track::open' => array(),
 				'track::click' => array(),
+				'track::mtaevent' => array(),
 				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
@@ -321,7 +322,8 @@ class Security extends Plugin
 			'error:index',
 			'error:link',
 			'track:open',
-			'track:click'
+			'track:click',
+			'track:mtaevent'
 		);
 		
 		$controller = $dispatcher->getControllerName();
