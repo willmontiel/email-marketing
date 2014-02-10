@@ -235,7 +235,7 @@ class TrackingObject
 				break;
 
 			case 'bounce_bad_address':
-				$this->saveHardReboundEvent($idMail, $idContact, $cod, $date);
+				$this->saveHardReboundEvent($idMail, $idContact, $date);
 				break;
 
 			case 'scomp':
@@ -304,7 +304,7 @@ class TrackingObject
 		}
 	}
 	
-	private function saveHardReboundEvent($idMail, $idContact, $cod, $date)
+	private function saveHardReboundEvent($idMail, $idContact, $date)
 	{
 		$this->log->log('Inicio de tracking de rebote duro');
 		
@@ -339,7 +339,7 @@ class TrackingObject
 		}
 	}
 	
-	private function saveSpamEvent($idMail, $idContact, $cod)
+	private function saveSpamEvent($idMail, $idContact, $cod, $date)
 	{
 		$this->log->log('Inicio de tracking de spam');
 		
@@ -382,13 +382,32 @@ class TrackingObject
 					throw new \InvalidArgumentException('Error while saving event');
 				}
 				$this->log->log('Se actualizó event');
+				$contact = Contact::findFirst(array(
+					'conditions' => 'idContact = ?1',
+					'bind' => array(1 => $idContact)
+				));
 
+				$sql = 'UPDATE email AS e JOIN contact AS c 
+							ON (c.idEmail = e.idEmail)
+							SET e.spam = ' . $date . ', c.spam = ' . $date . '
+						WHERE e.idEmail = ?';
+				$update = $db->execute($sql, array($contact->idEmail));
+				
+				if (!$update) {
+					throw new \InvalidArgumentException('Error while updating spam in contact and email');
+				}
+				
+				$this->log->log('Se actualizó contact y email'); 
+				
 				$db->commit();
 			}
 			catch (InvalidArgumentException $e) {
 				$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
 				$db->rollback();
 			}
+		}
+		else {
+			$this->log->log('No existe registro o ya ha sido marcado anteriormente');
 		}
 	}
 	
