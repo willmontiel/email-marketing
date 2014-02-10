@@ -122,12 +122,14 @@ table {
 }
 
 .module-cont .placeholder {
+	margin-top: 5%;
 	min-height: 80px;
-	background-color: skyblue;
+	background-image: url('../images/drop_here.png');
+	background-repeat: no-repeat;
 }
 
 .placeholder:before {
-	content: 'Drop here!';
+	/*content: 'Drop here!';*/
 }
 
 #toolbar {
@@ -247,6 +249,10 @@ table {
 
 .module-image-text {
 	background-image: url('../images/captionright.png');
+}
+
+.module-footer {
+	background-image: url('../images/footer.png');
 }
 
 .module {

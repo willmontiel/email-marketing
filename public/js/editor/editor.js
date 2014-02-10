@@ -53,8 +53,10 @@ Editor.prototype.objectExists = function(objMail) {
 	}
 	else {
 		this.layout = layouts[0];
+		this.editorColor = 'E6E6E6';
 		this.createEditStyle();
 		this.newDropZones();
+		this.createDefaultFooter();
 		parent.$('.btnoptions').show();
 	}
 };
@@ -151,6 +153,10 @@ Editor.prototype.newDropZones = function() {
 		dz.zoneColor();
 		this.dz[dz.name] = dz;
 	}
+};
+
+Editor.prototype.createDefaultFooter = function() {
+	this.dz['footer'].createFooter();
 };
 
 Dropzone.autoDiscover = false;

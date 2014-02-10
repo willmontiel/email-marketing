@@ -63,6 +63,7 @@ DropzoneArea.prototype.addElementToZone = function() {
 		
 		t.createHtmlElement('text-image', 'Texto - Imagen', 'Compound', [new TxtBlock(row), new ImgBlock(row)], row);
 		t.createHtmlElement('image-text', 'Imagen - Texto', 'Compound', [new ImgBlock(row), new TxtBlock(row)], row);
+		t.createHtmlElement('footer', 'Footer', 'Compound', [new ImgBlock(row), new TxtBlock(row), new SShareBlock(row)], row);
 		
 		parent.iframeResize();
 	});
@@ -113,14 +114,49 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 			row.addBlock(block);
 		}
 		row.updateImagesSize();
+		
+		if(module === 'footer') {
+			t.updateFooter(block);
+		}
 	});
 	
 };
 
 DropzoneArea.prototype.removeRow = function(row) {
 	for(var i = 0; i < this.listofrows.length; i++) {
-		if(this.listofrows[i] == row) {
+		if(this.listofrows[i] === row) {
 			this.listofrows.splice(i, 1);
+		}
+	}
+};
+
+DropzoneArea.prototype.createFooter = function() {
+	var row = new rowZone(this);
+	this.listofrows.push(row);
+	row.createRow();
+	var blocks = [new ImgBlock(row), new TxtBlock(row), new SShareBlock(row)];
+	for(var i = 0; i < blocks.length; i++) {
+		row.addBlock(blocks[i]);
+	}
+	row.updateImagesSize();
+	this.updateFooter(blocks);
+};
+
+DropzoneArea.prototype.updateFooter = function(block) {
+	for(var i = 0; i < block.length; i++) {
+		if(block[i] instanceof TxtBlock) {
+			block[i].updateText('<p><span data-redactor="verified" data-redactor-inlinemethods="" style="font-size: 11px;"><span style="font-size: 11px;">Este correo electrónico ha sido enviado a&nbsp;%%EMAIL%%</span></span></p><p style="text-align: right;"><span data-redactor="verified" data-redactor-inlinemethods="" style="font-size: 11px;"><a href="%%WEBVERSION%%">Versión web</a><span>  | </span></span><a href="%%UNSUBSCRIBE%%"><span data-redactor="verified" data-redactor-inlinemethods="" style="font-size: 11px;">Eliminar suscripción</span></a></p>');
+		}
+		else if(block[i] instanceof SShareBlock) {
+			block[i].content.find('.content-social-share').css('text-align', 'center');
+			block[i].align = 'center';
+			var imgs = block[i].content.find('.content-social-share img');
+			for (var j=0; j < imgs.length; j++ ) {
+				var src = $(imgs[j]).attr('src');
+				var newsrc = src.replace(block[i].size, 24);
+				block[i].content.find('.content-social-share img[src="' + src + '"]').attr('src', newsrc);
+			}
+			block[i].size = 24;
 		}
 	}
 };
