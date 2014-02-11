@@ -436,3 +436,69 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	margin-top: -2%;
 	cursor: pointer;
 }
+
+.flashmessage-info {
+	background-color: #ccdcea;
+	color: #3c6a95;
+	border-radius: 8px;
+	border: 1px solid #a8c3dc;
+	padding: 4px;
+}
+
+.flashmessage-block {
+	background-color: #f6e1a4;
+	color: #a37f11;
+	border-radius: 8px;
+	border: 1px solid #f1d276;
+	padding: 4px;
+}
+
+.flashmessage-error {
+	background-color: #e8a397;
+	color: #7d2a1c;
+	border-radius: 8px;
+	border: 1px solid #de7e6d;
+	padding: 4px;
+}
+
+.flashmessage-success {
+	background-color: #acd954;
+	color: #2b3a0d;
+	border-radius: 8px;
+	border: 1px solid #97cc2e;
+	padding: 4px;
+}
+
+.preview-message-info {
+	background-color: #ccdcea;
+	border-radius: 8px;
+	border: 1px solid #a8c3dc;
+	width: 40px;
+	height: 40px;
+}
+
+.preview-message-block {
+	background-color: #f6e1a4;
+	border-radius: 8px;
+	border: 1px solid #f1d276;
+	width: 40px;
+	height: 40px;
+}
+
+.preview-message-error {
+	background-color: #e8a397;
+	border-radius: 8px;
+	border: 1px solid #de7e6d;
+	width: 40px;
+	height: 40px;
+}
+
+.preview-message-success {
+	background-color: #acd954;
+	border-radius: 8px;
+	border: 1px solid #97cc2e;
+	width: 40px;
+	height: 40px;
+}
+
+/*Tooltip*/

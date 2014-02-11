@@ -90,6 +90,7 @@
 										<li><a href="{{ url('user') }}">Usuarios</a></li>
 										<li><a href="{{ url('sendingprocess') }}">Procesos de envío</a></li>
 										<li><a href="{{ url('programmingmail/manage') }}">Programación de correos</a></li>
+										<li><a href="{{ url('flashmessage/index') }}">Mensajes administrativos</a></li>
 									</ul>
 								</li>
 							</ul>
@@ -127,6 +128,19 @@
 				</div>
 			</div>
 			<div class="container-fluid padded">
+				<div class="row-fluid">
+					<div class="span12">
+						{% if flashMessage.getMessages() !== false%}
+							{% for msg in flashMessage.getMessages()%}
+								<div class="alert alert-{{msg.type}}">
+									<button type="button" class="close" data-dismiss="alert">×</button>
+									<h4>Atención!</h4>
+									{{msg.message}}
+								</div>
+							{% endfor %}
+						{% endif %}
+					</div>
+				</div>
 				<div class="row-fluid">
 					<!-- Inicio de contenido -->
 					{% block content %}

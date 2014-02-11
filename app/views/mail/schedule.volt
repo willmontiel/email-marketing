@@ -4,29 +4,29 @@
 	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
 	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
 	<script type="text/javascript">
-	$(function(){
-        $("input[name=schedule]").on('ifChecked', function () { 
-			$("#date").hide();
-			$("#dateSchedule").val("");
-			var val = $('input[name=schedule]:checked').val()
-			if (val == "after") {
-				$("#date").show();
-			}
-         });
-		
-		var nowTemp = new Date();
-		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
-	 //HH:mm PP
-		$('#scheduleArea').datetimepicker({
-			language: 'en',
-			maskInput: true,
-			pickTime: true,
-			format: "dd/MM/yyyy hh:mm",
-			//pick12HourFormat: true,
-			pickSeconds: false,
-			startDate: now
+		$(function(){
+			$("input[name=schedule]").on('ifChecked', function () { 
+				$("#date").hide();
+				$("#dateSchedule").val("");
+				var val = $('input[name=schedule]:checked').val()
+				if (val == "after") {
+					$("#date").show();
+				}
+			 });
+
+			var nowTemp = new Date();
+			var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
+		 //HH:mm PP
+			$('#scheduleArea').datetimepicker({
+				language: 'en',
+				maskInput: true,
+				pickTime: true,
+				format: "dd/MM/yyyy hh:mm",
+				//pick12HourFormat: true,
+				pickSeconds: false,
+				startDate: now
+			});
 		});
-	});
 	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}

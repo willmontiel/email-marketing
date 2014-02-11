@@ -337,7 +337,15 @@ try {
         ));
         return $flash;
     });
-
+	
+	/*
+	 * FlashMessage Object, para mostrar mensajes informativos y administrativos a los usuarios
+	 */
+	$di->set('flashMessage', function(){
+		$flashMessage = new FlashMessages();
+		return $flashMessage;
+	});
+	
     //Handle the request
     $application = new \Phalcon\Mvc\Application($di);
 

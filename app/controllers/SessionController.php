@@ -36,9 +36,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 					return $this->response->redirect("");
 
 				}
-      
 			}
-         
         }
         
 		$this->flashSession->error('Usuario o contraseña incorrecta!');
