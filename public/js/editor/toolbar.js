@@ -80,6 +80,7 @@ Toolbar.prototype.createBorder = function() {
 	var color = $("<input type='text' value='" + this.component.border_color + "' id='color-border-toolbar' name='color-border-toolbar' class='pick-a-color'>");
 	var style = $("<div class='medium-select'>\n\
 					<select id='style-border-toolbar'>\n\
+						<option value='none'>none</option>\n\
 						<option value='dotted'>dotted</option>\n\
 						<option value='dashed'>dashed</option>\n\
 						<option value='solid'>solid</option>\n\
@@ -111,6 +112,7 @@ Toolbar.prototype.createBorder = function() {
 	
 	this.spinnerBlockChange('border-width-spinner', 'border-width', 'border_width');
 	
+	$('#style-border-toolbar').val(this.component.border_style)
 	$('#style-border-toolbar').on('change', function() {
 		t.component.updateBlockStyle('border-style', $(this).val());
 		t.component.border_style = $(this).val();

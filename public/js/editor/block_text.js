@@ -70,6 +70,10 @@ TxtBlock.prototype.removeBlock = function() {
 	});
 };
 
+TxtBlock.prototype.updateText = function(text) {
+	this.content.find('.content-text').html(text)
+};
+
 TxtBlock.prototype.updateBlockStyle = function(style, value) {
 	this.content.find('.full-block-element').css(style, value);
 };
