@@ -48,7 +48,7 @@ class FlashmessageController extends ControllerBase
 			list($day2, $month2, $year2, $hour2, $minute2) = preg_split('/[\s\/|-|:]+/', $end);
 			$dateEnd = mktime($hour2, $minute2, 0, $month2, $day2, $year2);
 
-			if($dateBegin < time() || $dateEnd < time()) {
+			if($dateBegin < time() || $dateEnd < time() || $dateEnd < $dateBegin) {
 				$this->flashSession->error('Ha selecionado una fecha que ya ha pasado, por favor verifique la información');
 				return false;
 			}

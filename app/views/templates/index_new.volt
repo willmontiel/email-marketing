@@ -55,7 +55,13 @@
 										<span>
 											<img class="menu-avatar" src="{{ url('images/avatars/avatar1.jpg')}}" /> <span> {{ userObject.username }} <i class="icon-caret-down"></i></span>
 											{# Este es un indicador sobre numero de mensajes #}
-											<span class="badge badge-dark-red">0</span>
+											<span class="badge badge-dark-red">
+												{% if flashMessage.getMessages() !== false%}
+													{{flashMessage.getMessages()|length}}
+												{% else %}
+													0
+												{% endif %}
+											</span>
 											{# fin del indicador #}
 										</span>
 									</a>
@@ -75,7 +81,13 @@
 										<li>
 											<a href="#"><i class="icon-envelope"></i><span>Mensajes</span>
 												{# Mensajes para el usuario #}
-												<span class="label label-dark-red pull-right">0</span>
+												<span class="label label-dark-red pull-right">
+													{% if flashMessage.getMessages() !== false%}
+														{{flashMessage.getMessages()|length}}
+													{% else %}
+														0
+													{% endif %}
+												</span>
 											</a>
 										</li>
 										<li><a href="{{ url('session/logout') }}"><i class="icon-off"></i> <span>Logout</span></a></li>
