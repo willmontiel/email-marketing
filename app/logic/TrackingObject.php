@@ -389,7 +389,7 @@ class TrackingObject
 
 				$sql = 'UPDATE email AS e JOIN contact AS c 
 							ON (c.idEmail = e.idEmail)
-							SET e.spam = ' . $date . ', c.spam = ' . $date . '
+							SET e.spam = ' . $date . ', c.spam = ' . $date . ', c.unsubscribed = ' . $date . '
 						WHERE e.idEmail = ?';
 				$update = $db->execute($sql, array($contact->idEmail));
 				

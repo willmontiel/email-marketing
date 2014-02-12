@@ -55,7 +55,14 @@
 										<span>
 											<img class="menu-avatar" src="{{ url('images/avatars/avatar1.jpg')}}" /> <span> {{ userObject.username }} <i class="icon-caret-down"></i></span>
 											{# Este es un indicador sobre numero de mensajes #}
-											<span class="badge badge-dark-red">0</span>
+											<span class="badge badge-dark-red">
+												{% set messages = flashMessage.getMessages() %}
+												{% if messages !== false%}
+													{{messages|length}}
+												{% else %}
+													0
+												{% endif %}
+											</span>
 											{# fin del indicador #}
 										</span>
 									</a>
@@ -75,7 +82,13 @@
 										<li>
 											<a href="#"><i class="icon-envelope"></i><span>Mensajes</span>
 												{# Mensajes para el usuario #}
-												<span class="label label-dark-red pull-right">0</span>
+												<span class="label label-dark-red pull-right">
+													{% if messages !== false%}
+														{{messages|length}}
+													{% else %}
+														0
+													{% endif %}
+												</span>
 											</a>
 										</li>
 										<li><a href="{{ url('session/logout') }}"><i class="icon-off"></i> <span>Logout</span></a></li>
@@ -90,6 +103,7 @@
 										<li><a href="{{ url('user') }}">Usuarios</a></li>
 										<li><a href="{{ url('sendingprocess') }}">Procesos de envío</a></li>
 										<li><a href="{{ url('programmingmail/manage') }}">Programación de correos</a></li>
+										<li><a href="{{ url('flashmessage/index') }}">Mensajes administrativos</a></li>
 									</ul>
 								</li>
 							</ul>
@@ -127,6 +141,19 @@
 				</div>
 			</div>
 			<div class="container-fluid padded">
+				<div class="row-fluid">
+					<div class="span12">
+						{% if messages !== false%}
+							{% for msg in messages%}
+								<div class="alert alert-{{msg.type}}">
+									<button type="button" class="close" data-dismiss="alert">×</button>
+									<h4>Atención!</h4>
+									{{msg.message}}
+								</div>
+							{% endfor %}
+						{% endif %}
+					</div>
+				</div>
 				<div class="row-fluid">
 					<!-- Inicio de contenido -->
 					{% block content %}

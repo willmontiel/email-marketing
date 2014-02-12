@@ -73,4 +73,35 @@ class TrackingUrlObject
 	{
 		
 	}
+	
+	public function searchDomainsAndProtocols($html)
+	{
+		$imgTag = new DOMDocument();
+		@$imgTag->loadHTML($html);
+
+		$hrefs = $imgTag->getElementsByTagName('a');
+		
+		$urls = array();
+		if ($hrefs->length !== 0) {
+			foreach ($hrefs as $href) {
+				$link = $href->getAttribute('href');
+				$parts = parse_url($link);
+				Phalcon\DI::getDefault()->get('logger')->log('Links: ' . $parts['host']);
+				
+				if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
+					if (count($urls) == 0) {
+						$urls[] = $parts['scheme'] . '://' . $parts['host'];
+					}
+					else {
+						foreach ($urls as $url) {
+							if ($url !== $parts['scheme'] . '://' . $parts['host']) {
+								$urls[] = $parts['scheme'] . '://' . $parts['host'];
+							}
+						}
+					}
+				}
+			}
+		}
+		return $urls;
+	}
 }

@@ -54,4 +54,6 @@
 			</div>
 		</div>
 	</div>
+	<div id="preview-modal" class="modal hide fade preview-modal">
+	</div>
 {% endblock %}

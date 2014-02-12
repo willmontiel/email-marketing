@@ -270,6 +270,15 @@ class Security extends Plugin
 				'statistic::comparemails' => array('statistic' => array('read')),
 				'statistic::comparelists' => array('statistic' => array('read')),
 				'statistic::comparedbases' => array('statistic' => array('read')),
+				
+				//flash messages
+				'flashmessage::index' => array('flashmessage' => array('read')),
+				'flashmessage::new' => array('flashmessage' => array('create')),
+				'flashmessage::edit' => array('flashmessage' => array('update')),
+				'flashmessage::delete' => array('flashmessage' => array('delete')),
+				
+				//google analytics
+				'mail::analytics' => array('mail' => array('create'))
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
