@@ -43,7 +43,7 @@ class PrepareContentMail
 			}
 //			$this->log->log("Content: " . $content);
 			$convertedSrc = $this->convertImageSrc($content);
-			$newContent = $this->saveLinksForTracking($convertedSrc);
+			$newContent = $this->saveLinksForTracking($convertedSrc, json_decode($mailContent->googleAnalytics));
 //			$newContent = $this->searchGoogleAnalyticsUrl($convertedHref);
 //			$this->log->log("Content: " . $convertedSrc);
 			$mailContentProcessed = new stdClass();
@@ -135,7 +135,7 @@ class PrepareContentMail
 		return $img;
 	}
 	
-	protected function saveLinksForTracking($content)
+	protected function saveLinksForTracking($content, $analytics)
 	{
 		$this->log->log('Buscando enlaces...: ');
 		$imgTag = new DOMDocument();

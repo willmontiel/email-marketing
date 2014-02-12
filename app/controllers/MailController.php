@@ -260,10 +260,12 @@ class MailController extends ControllerBase
 				if ($objMail) {
 					$text = $objMail->plainText;
 					$this->view->setVar('objMail', $objMail->content);
+					$this->view->setVar('analytics', $objMail->googleAnalytics);
 				}
 				else  {
 					$text = null;
 					$this->view->setVar('objMail', 'null');
+					$this->view->setVar('analytics', 'null');
 				}
 			}
 			
@@ -277,10 +279,13 @@ class MailController extends ControllerBase
 				
 				$mailContent = new Mailcontent();
 				$content = $this->request->getPost("editor");
+				$analytics = json_encode($this->request->getPost("analytics"));
 //				$log->log($content);
+//				$log->log('Analytics: ' . $analytics);				
 				$mailContent->idMail = $idMail;
 				$mailContent->content = $content;
 				$mailContent->plainText = $text;
+				$mailContent->googleAnalytics = $analytics;
 				
 				$mail->type = "Editor";
 				$mail->wizardOption = $wizardOption;
