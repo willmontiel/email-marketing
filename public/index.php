@@ -10,6 +10,7 @@ try {
         '../app/models/',
         '../app/forms/',
         '../app/library/',
+        '../app/library/facebook/',
         '../app/logic/',
 		'../app/editorlogic/',
 		'../app/bgprocesses/sender/',

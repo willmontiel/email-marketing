@@ -11,6 +11,7 @@ $loader->registerDirs(array(
 	'../sender',
 	'../../models/',
 	'../../library/',
+	'../../library/facebook/',
 	'../../logic/',
 	'../../editorlogic/',
 ))->register();

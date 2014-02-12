@@ -189,6 +189,10 @@ class ChildCommunication extends BaseWrapper
 				if(!$mail->save()) {
 					$log->log('No se pudo actualizar el estado del MAIL');
 				}
+				
+				$socials = new SocialNetworkConnection($log);
+				$socials->setFacebookConnection('706764282697191', '969bfd05a58af3e68f76edd0548c6884');
+				$socials->postOnFacebook(json_decode($mail->socialnetworks));
 			}
 			catch (InvalidArgumentException $e) {
 				$log->log('Exception: [' . $e . ']');

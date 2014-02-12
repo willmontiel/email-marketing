@@ -83,6 +83,14 @@
 						
 						<label>Responder a este correo: </label>
 						{{ MailForm.render('replyTo') }}
+						
+						<label>Publicar y Compartir: </label>
+						<select multiple="multiple" name="facebookaccounts[]" id="accounts_facebook" class="chzn-select">
+							{% for social in socials %}
+								<option value="{{social.idSocialnetwork}}">{{social.name}}</option>
+							{% endfor %}
+						</select>
+						<div class="add_facebook_account"><a href="{{loginUrl}}">Añadir cuenta</a></div>
 					</div>
 					<div class="form-actions">
 						<a href="{{url('mail/index')}}" class="btn btn-default"><i class="icon-remove-sign"></i> Cancelar</a>

@@ -931,4 +931,92 @@ class TestController extends ControllerBase
 		$TestObj = new TestObj();
 		$TestObj->save();
 	}
+
+	public function facebooktestAction()
+	{
+		$log = $this->logger;
+		
+		// Create our Application instance (replace this with your appId and secret).
+		$facebook = new Facebook(array(
+		  'appId'  => '706764282697191',
+		  'secret' => '969bfd05a58af3e68f76edd0548c6884',
+		));
+
+		// Get User ID
+		$user = $facebook->getUser();
+		
+		// We may or may not have this data based on whether the user is logged in.
+		//
+		// If we have a $user id here, it means we know the user is logged into
+		// Facebook, but we don't know if the access token is valid. An access
+		// token is invalid if the user logged out of Facebook.
+
+		if ($user) {
+		  try {
+			// Proceed knowing you have a logged in user who's authenticated.
+			$user_profile = $facebook->api('/me');
+			$log->log('Id de contacto es: ' . $user_profile['id'] . ' y token access es: ' . $facebook->getAccessToken());
+			$this->view->setVar("user_profile", $user_profile);
+			//Ver la informacion del usuario
+			$log->log(print_r($facebook->api('/'.$user_profile['id']), true));
+			//Ver la informacion de las Fan Pages que estan relacionadas con el usuario
+			$log->log(print_r($facebook->api('/'.$user_profile['id'].'/accounts'), true));
+		  } catch (FacebookApiException $e) {
+			$log->log($e->getMessage());
+			$user = null;
+		  }
+		}
+		$this->view->setVar("user", $user);
+		// Login or logout url will be needed depending on current user state.
+		if ($user) {
+		  $logoutUrl = $facebook->getLogoutUrl(array( 'next' => 'http://localhost/emarketing/' ));
+		  $this->view->setVar("logoutUrl", $logoutUrl);
+		} else {
+		  $statusUrl = $facebook->getLoginStatusUrl();
+//		  $loginUrl = $facebook->getLoginUrl(array('scope' => 'manage_pages, publish_stream', 'redirect_uri' => 'http://localhost/emarketing/'));
+		  $loginUrl = $facebook->getLoginUrl(array('scope' => 'manage_pages, publish_stream'));
+		  $this->view->setVar("statusUrl", $statusUrl);
+		  $this->view->setVar("loginUrl", $loginUrl);
+		}
+
+		// This call will always work since we are fetching public data.
+		$naitik = $facebook->api('/naitik');
+		$this->view->setVar("naitik", $naitik);
+		$log->log(print_r($_SESSION, true));
+	}
+	
+	public function facebookpostingAction()
+	{
+		$log = $this->logger;
+		$userid = '601962656546574';
+		$access_token = 'CAAKCzGIClecBAD2ipXQVKUyjMT9lFTwz58eAdZCizc0pAtrRNRL4ZAAu38xraxLLFnzCp89wRvD05LEBtKeUiJu2hc6YzZByyeYkAQLbxKfFZAjHaxKr91fqLq9cwurFqnp0M1SWuWQe7B1s8EV20TV3PwWw6nn6MMBmIYXsB7GhGUnkFBOTsTxA27QmOEUZD';
+		$facebook = new Facebook(array(
+		  'appId'  => '706764282697191',
+		  'secret' => '969bfd05a58af3e68f76edd0548c6884',
+		));
+		//If we have $user_profile we can share on his facebook wall
+//		$log->log($facebook->getAccessToken());
+		$params = array(
+			"access_token" => $access_token, // see: https://developers.facebook.com/docs/facebook-login/access-tokens/
+			"message" => "Esta es el post NUMERO 9 generado en la prueba de email marketing",
+			"link" => "http://tstemail.sigmamovil.com/",
+			"picture" => "http://i.imgur.com/lHkOsiH.png",
+			"name" => "Prueba de Post en Facebook",
+			"caption" => "www.tstemail.sigmamovil.com",
+			"description" => "Este post de prueba NUMERO 9"
+		  );
+
+		  // post to Facebook
+		  // see: https://developers.facebook.com/docs/reference/php/facebook-api/
+		  try {
+			$ret = $facebook->api('/'.$userid.'/feed', 'POST', $params);
+			$log->log('Successfully posted to Facebook');
+		  } catch(Exception $e) {
+			echo $e->getMessage();
+			$log->log('No publico');
+			$log->log($e->getMessage());
+		  }
+		  
+		  return $this->response->redirect('');
+	}
 }

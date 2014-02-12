@@ -121,6 +121,7 @@ class MailController extends ControllerBase
 	
 	public function setupAction($idMail = null)
 	{
+		$log = $this->logger;
 		$mailExist = Mail::findFirst(array(
 			"conditions" => "idMail = ?1 AND idAccount = ?2",
 			"bind" => array(1 => $idMail,
@@ -136,6 +137,21 @@ class MailController extends ControllerBase
 			$form = new MailForm($mail);
 			$this->view->setVar('mail', "");
 		}
+		try {
+			$socialnet = new SocialNetworkConnection($log);
+			$socialnet->setUser($this->user);
+			$socialnet->setFacebookConnection('706764282697191', '969bfd05a58af3e68f76edd0548c6884');
+			$socialnet->saveFacebookUser();
+			$loginUrl = $socialnet->getUrlLogIn();
+			
+			$socials = $socialnet->findAllSocialAccounts();
+
+			$this->view->setVar('socials', $socials);
+			$this->view->setVar("loginUrl", $loginUrl);
+		} 
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+		}	
 		
 		if ($this->request->isPost()) {
 			if ($mailExist) {
@@ -146,12 +162,18 @@ class MailController extends ControllerBase
 				$wizardOption = "setup";
 			}
 			$form->bind($this->request->getPost(), $mail);
-			
+			$fbaccounts = $this->request->getPost("facebookaccounts");
 			$mail->idAccount = $this->user->account->idAccount;
 			$mail->fromEmail = strtolower($form->getValue('fromEmail'));
 			$mail->replyTo = strtolower($form->getValue('replyTo'));
 			$mail->status = "Draft";
 			$mail->wizardOption = $wizardOption;
+
+			if($fbaccounts) {
+				$socialsnetworks = new stdClass();
+				$socialsnetworks->facebook = $fbaccounts;
+				$mail->socialnetworks = json_encode($socialsnetworks);
+			}
 			
             if ($form->isValid() && $mail->save()) {
 				if(!$mail->type) {
