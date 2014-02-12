@@ -147,19 +147,21 @@ class PrepareContentMail
 				$l = $href->getAttribute('href');
 				
 				$parts = parse_url($l);
-//				Phalcon\DI::getDefault()->get('logger')->log('Links: ' . $parts['host']);
-				
-				if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
-					if (count($search) == 0) {
-						$mxl = $this->saveLinks($l);
-						$search[] = $l;
-						$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
-					}
-					else {
-						if (!in_array($l, $search)) {
+				Phalcon\DI::getDefault()->get('logger')->log('Url: ' . $l);
+				if (isset($parts['host'])) {
+					Phalcon\DI::getDefault()->get('logger')->log('Host: ' . $parts['host']);
+					if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
+						if (count($search) == 0) {
 							$mxl = $this->saveLinks($l);
 							$search[] = $l;
 							$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
+						}
+						else {
+							if (!in_array($l, $search)) {
+								$mxl = $this->saveLinks($l);
+								$search[] = $l;
+								$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
+							}
 						}
 					}
 				}

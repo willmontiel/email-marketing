@@ -5,16 +5,14 @@ class TrackingUrlObject
 	protected $idContact;
 	protected $links;
 	protected $html;
-	protected $analytics;
 
 
-	public function getTrackingUrl($html, $idMail, $idContact, $analytics) 
+	public function getTrackingUrl($html, $idMail, $idContact) 
 	{
 		$this->links = array();
 		$this->idMail = $idMail;
 		$this->idContact = $idContact;
 		$this->html = $html;
-		$this->analytics = $analytics;
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Empezando proceso de tracking');
 		

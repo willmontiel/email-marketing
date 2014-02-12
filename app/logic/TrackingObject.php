@@ -625,6 +625,7 @@ class TrackingObject
 		if (in_array($path['scheme'] . '://' . $path['host'], json_decode($content->googleAnalytics))) {
 			$googleAnalytics = Phalcon\DI::getDefault()->get('googleAnalytics');
 			$newUrl = $url . '?utm_source=' . $googleAnalytics->utm_source . '&utm_medium=' . $googleAnalytics->utm_medium . '&utm_campaign=' . $name;
+			Phalcon\DI::getDefault()->get('logger')->log('Url Analytics: ' . $newUrl);
 			return $newUrl;
 		}
 		else {
