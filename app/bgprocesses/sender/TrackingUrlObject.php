@@ -5,13 +5,16 @@ class TrackingUrlObject
 	protected $idContact;
 	protected $links;
 	protected $html;
-	
-	public function getTrackingUrl($html, $idMail, $idContact) 
+	protected $analytics;
+
+
+	public function getTrackingUrl($html, $idMail, $idContact, $analytics) 
 	{
 		$this->links = array();
 		$this->idMail = $idMail;
 		$this->idContact = $idContact;
 		$this->html = $html;
+		$this->analytics = $analytics;
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Empezando proceso de tracking');
 		
@@ -48,6 +51,7 @@ class TrackingUrlObject
 			'bind' => array(1 => $this->idMail)
 		));
 		
+		
 		if (count($links) != 0) {
 //			Phalcon\DI::getDefault()->get('logger')->log('Hay links');
 			$urlManager = Phalcon\DI::getDefault()->get('urlManager');
@@ -62,16 +66,6 @@ class TrackingUrlObject
 				$this->links['replace'][] = $link;
 			}
 		}
-	}
-	
-	public function getBounceTrackingUrl()
-	{
-		
-	}
-	
-	public function getSpamTrackingUrl()
-	{
-		
 	}
 	
 	public function searchDomainsAndProtocols($html)

@@ -209,7 +209,7 @@ class TrackingObject
 					
 					$db->commit();
 					
-					return $Maillink->link;
+					return $this->insertGoogleAnalyticsUrl($idMail, $Maillink->link, $mail->name);
 				}
 				catch (InvalidArgumentException $e) {
 					$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
@@ -218,7 +218,7 @@ class TrackingObject
 			}
 			else {
 				$this->log->log('Este usuario ya ha sido contabilizado');
-				return $Maillink->link;
+				return $this->insertGoogleAnalyticsUrl($idMail, $Maillink->link, $mail->name);
 			}
 		}
 		else {
@@ -607,6 +607,28 @@ class TrackingObject
 			}
 			return false;
 		}
-		return true;
+		return $mail;
+	}
+	
+	public function insertGoogleAnalyticsUrl($idMail, $url, $name)
+	{
+		$content = Mailcontent::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+
+		if (!$content) {
+			return $url;
+		}
+		$path = parse_url($url);
+		
+		if (in_array($path['scheme'] . '://' . $path['host'], json_decode($content->googleAnalytics))) {
+			$googleAnalytics = Phalcon\DI::getDefault()->get('googleAnalytics');
+			$newUrl = $url . '?utm_source=' . $googleAnalytics->utm_source . '&utm_medium=' . $googleAnalytics->utm_medium . '&utm_campaign=' . $name;
+			return $newUrl;
+		}
+		else {
+			return $url;
+		}
 	}
 }

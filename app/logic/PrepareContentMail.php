@@ -6,7 +6,6 @@ class PrepareContentMail
 	public $urlManager;
 	protected $mail;
 
-
 	public function __construct(Account $account) 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
@@ -43,13 +42,11 @@ class PrepareContentMail
 			}
 //			$this->log->log("Content: " . $content);
 			$convertedSrc = $this->convertImageSrc($content);
-			$newContent = $this->saveLinksForTracking($convertedSrc, json_decode($mailContent->googleAnalytics));
-//			$newContent = $this->searchGoogleAnalyticsUrl($convertedHref);
+			$newContent = $this->searchLinksForTracking($convertedSrc);
 //			$this->log->log("Content: " . $convertedSrc);
 			$mailContentProcessed = new stdClass();
 			$mailContentProcessed->html = $newContent;
 			$mailContentProcessed->text = $mailContent->plainText;
-			
 			return $mailContentProcessed;
 		}
 		else {
@@ -135,7 +132,7 @@ class PrepareContentMail
 		return $img;
 	}
 	
-	protected function saveLinksForTracking($content, $analytics)
+	protected function searchLinksForTracking($content)
 	{
 		$this->log->log('Buscando enlaces...: ');
 		$imgTag = new DOMDocument();
@@ -154,70 +151,18 @@ class PrepareContentMail
 				
 				if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
 					if (count($search) == 0) {
+						$mxl = $this->saveLinks($l);
 						$search[] = $l;
+						$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
 					}
 					else {
 						if (!in_array($l, $search)) {
+							$mxl = $this->saveLinks($l);
 							$search[] = $l;
+							$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
 						}
 					}
 				}
-	
-				$maillink = Maillink::findFirst(array(
-					'conditions' => 'idAccount = ?1 AND link = ?2',
-					'bind' => array(1 => $this->account->idAccount, 
-									2 => $l)
-				));
-				
-				if (!$maillink) {
-					$link = new Maillink();
-					
-					$link->idAccount = $this->account->idAccount;
-					$link->link = $l;
-					$link->createdon = time();
-					
-					if (!$link->save()) {
-						foreach ($link->getMessages() as $msg) {
-							$this->log->log('Error saving link: ' . $msg);
-						}
-						throw new InvalidArgumentException('Error while saving Maillink');
-					}
-					else {
-						$mxl = new Mxl();
-				
-						$mxl->idMail = $this->mail->idMail;
-						$mxl->idMailLink = $link->idMailLink;
-
-						if (!$mxl->save()) {
-							foreach ($mxl->getMessages() as $msg) {
-								$this->log->log('Error saving Mxl: ' . $msg);
-							}
-							throw new InvalidArgumentException('Error while saving Mxl');
-						}
-					}
-				}
-				else {
-					$mxl = Mxl::findFirst(array(
-						'conditions' => 'idMail = ?1 AND idMailLink = ?2',
-						'bind' => array(1 => $this->mail->idMail,
-										2 => $maillink->idMailLink)
-					));
-					
-					if (!$mxl) {
-						$mxl = new Mxl();
-				
-						$mxl->idMail = $this->mail->idMail;
-						$mxl->idMailLink = $maillink->idMailLink;
-
-						if (!$mxl->save()) {
-							foreach ($mxl->getMessages() as $msg) {
-								$this->log->log('Error saving Mxl: ' . $msg);
-							}
-							throw new InvalidArgumentException('Error while saving Mxl');
-						}
-					}
-				}
-				$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
 			}
 			$newContent = str_replace($search, $replace, $content);
 			
@@ -225,21 +170,54 @@ class PrepareContentMail
 		}
 	}
 	
-	private function searchGoogleAnalyticsUrl($content)
+	private function saveLinks($l)
 	{
-		$ex = 'http://www.sigmamovil.com/servicios/comunicacion/sms-masivo.html?utm_source=SigmaEmail&utm_medium=Email&utm_campaign=micampaign';
-		$this->log->log('Buscando google analytics...: ');
-		$imgTag = new DOMDocument();
-		@$imgTag->loadHTML($content);
-
-		$hrefs = $imgTag->getElementsByTagName('a');
-		$search = array();
-		$replace = array();
+		$maillink = Maillink::findFirst(array(
+			'conditions' => 'idAccount = ?1 AND link = ?2',
+			'bind' => array(1 => $this->account->idAccount, 
+							2 => $l)
+		));
 		
-		if ($hrefs->length !== 0) {
-			foreach ($hrefs as $href) {
-				$l = $href->getAttribute('href');
+		if (!$maillink) {
+			$link = new Maillink();
+
+			$link->idAccount = $this->account->idAccount;
+			$link->link = $l;
+			$link->createdon = time();
+
+			if (!$link->save()) {
+				foreach ($link->getMessages() as $msg) {
+					$this->log->log('Error saving link: ' . $msg);
+				}
+				throw new InvalidArgumentException('Error while saving Maillink');
 			}
+			
+			$mxl = new Mxl();
+
+			$mxl->idMail = $this->mail->idMail;
+			$mxl->idMailLink = $link->idMailLink;
+
+			if (!$mxl->save()) {
+				foreach ($mxl->getMessages() as $msg) {
+					$this->log->log('Error saving Mxl: ' . $msg);
+				}
+				throw new InvalidArgumentException('Error while saving Mxl');
+			}
+			return $mxl;
 		}
+		else {
+			$mxl = new Mxl();
+
+			$mxl->idMail = $this->mail->idMail;
+			$mxl->idMailLink = $maillink->idMailLink;
+
+			if (!$mxl->save()) {
+				foreach ($mxl->getMessages() as $msg) {
+					$this->log->log('Error saving Mxl: ' . $msg);
+				}
+				throw new InvalidArgumentException('Error while saving Mxl');
+			}
+			return $mxl;
+		}	
 	}
 }

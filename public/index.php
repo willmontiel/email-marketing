@@ -224,6 +224,13 @@ try {
 	$mtaConfig->port = $config->mta->port;
 	$di->set('mtadata', $mtaConfig);
 	
+	/*
+	 * Configuración Google Analytics 
+	 */
+	$googleAnalytics = new stdClass();
+	$googleAnalytics->utm_source = $config->googleanalytics->utm_source;
+	$googleAnalytics->utm_medium = $config->googleanalytics->utm_medium;
+	$di->set('googleAnalytics', $googleAnalytics);
 	
 	/*
 	 * Directorio de reportes de correo
