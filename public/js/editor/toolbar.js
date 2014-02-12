@@ -185,7 +185,7 @@ Toolbar.prototype.spinnerContentChange = function(id, style, property) {
 
 Toolbar.prototype.spinnerColumnChange = function(id, style, property) {
 	var t = this;
-	$('#' + id).spinner({min: 0, max: 99,
+	$('#' + id).spinner({min: -50, max: 99,
 		stop: function() {
 			t.component.updateColumnStyle(style, $(this).val());
 			t.component[property] = $(this).val();

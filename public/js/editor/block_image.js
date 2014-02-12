@@ -191,7 +191,7 @@ ImgBlock.prototype.unpersist = function(obj) {
 		this.margin_left = obj.margin_left;
 		this.margin_right = obj.margin_right;
 		if ( this.imgsrc !== undefined ) {
-			this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object-img" src="' + this.imgsrc + '" height="' + this.height + '" width="' + this.width + '" />');
+			this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" alt="' + obj.imgalt + '" class="media-object-img" src="' + this.imgsrc + '" height="' + this.height + '" width="' + this.width + '" />');
 		}
 	}
 	else {

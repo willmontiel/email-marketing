@@ -15,7 +15,7 @@ class SocialNetworkConnection
 
 	public function findAllSocialAccounts()
 	{
-		$socials = [];
+		$socials = array();
 		$arraysocials = Socialnetwork::findByIdUser($this->user->idUser);
 		foreach ($arraysocials as $soc) {
 			$obj = new stdClass();
