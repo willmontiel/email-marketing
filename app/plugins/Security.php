@@ -273,6 +273,9 @@ class Security extends Plugin
 				'flashmessage::new' => array('flashmessage' => array('create')),
 				'flashmessage::edit' => array('flashmessage' => array('update')),
 				'flashmessage::delete' => array('flashmessage' => array('delete')),
+				
+				//google analytics
+				'mail::analytics' => array('mail' => array('create'))
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

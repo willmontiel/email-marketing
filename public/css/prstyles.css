@@ -501,4 +501,11 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	height: 40px;
 }
 
+
+.google-analytics-logo {
+	background-image: url(../images/logo-google-analytics.png);
+	width: 180px;
+	height: 40px;
+	border: 1px solid #97cca4;
+}
 /*Tooltip*/

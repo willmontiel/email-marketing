@@ -60,8 +60,39 @@
 	}
 	
 	function createTemplate() {
-		
 		document.getElementById('iframeEditor').contentWindow.$('#newtemplatename').modal();
+	}
+	
+	function addGoogleAnalytics() {
+		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+		
+		$.ajax({
+			url: "{{url('mail/analytics')}}",
+			type: "POST",			
+			data: { editor: editor},
+			error: function(msg){
+				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
+			},
+			success: function(response) {
+				console.log(response);
+				//console.log(response);
+				//var a = response.script;
+				//var x = response.response;
+				$('#modal-simple').modal('show');
+				$("#modal-body").empty();
+				//$('#modal-body').append('<label>Agregar seguimiento de Google Analytics a los siguientes enlaces:</label>');
+				$('<label>Agregar seguimiento de Google Analytics a los siguientes enlaces: </label>').appendTo('#modal-body');
+				
+				for (var i = 0; i < response.links.length; i++) {
+					console.log(response.links[i]);
+					$('<input type="checkbox">' + response.links[i] + '<br />').appendTo('#modal-body');
+				}
+				//$("#my-iframe").contents().find("head").append(a);
+				//$("#my-iframe").contents().find("body").append(x);
+			}
+		});
+		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
+		return false;
 	}
 </script>
 {% endblock %}
@@ -90,6 +121,9 @@
 				<div class="pull-left SaveTemplate">
 					<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">Guardar como Plantilla <i class="icon-picture"></i></button>
 				</div>
+				<div class="pull-left SaveTemplate">
+					<a href="#modal-simple" onclick="addGoogleAnalytics()" type="button" class="btn btn-default">Seguir con Google Analytics <i class="icon-google-plus-sign"></i></a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -97,6 +131,21 @@
 		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}/{{mail.idMail}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
 	<div id="preview-modal" class="modal hide fade preview-modal">
+	</div>
+	
+	<div id="modal-simple" class="modal hide fade" aria-hidden="false">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h6 id="modal-tablesLabel">Google Analytics</h6>
+		</div>
+		<div class="modal-body" id="modal-body">
+			
+
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+			<button class="btn btn-blue">Agregar</button>
+		</div>
 	</div>
 	<br />
 {% endblock %}

@@ -1048,6 +1048,22 @@ class MailController extends ControllerBase
 		return $this->response->redirect("mail/index");
 	}
 	
+	public function analyticsAction()
+	{
+		$content = $this->request->getPost("editor");
+//		$this->logger->log(print_r($content, true));
+		$editor = new HtmlObj();
+		$editor->assignContent(json_decode($content));
+		$html = $editor->render();
+		$urlObj = new TrackingUrlObject();
+//		$this->logger->log($html);
+		$this->logger->log(print_r($urlObj->searchDomainsAndProtocols($html), true));
+		
+		return $this->setJsonResponse(array('links' => $urlObj->searchDomainsAndProtocols($html)), 202);
+//		$this->session->set('urlAnalytics', $urlObj->searchDomainsAndProtocols($html));
+//		$this->logger->log(print_r($content, true));
+	}
+	
 	protected function stopScheduledTask(Mail $mail)
 	{
 		$scheduled = Mailschedule::findFirstByIdMail($mail->idMail);

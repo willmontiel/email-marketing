@@ -44,6 +44,7 @@ class PrepareContentMail
 //			$this->log->log("Content: " . $content);
 			$convertedSrc = $this->convertImageSrc($content);
 			$newContent = $this->saveLinksForTracking($convertedSrc);
+//			$newContent = $this->searchGoogleAnalyticsUrl($convertedHref);
 //			$this->log->log("Content: " . $convertedSrc);
 			$mailContentProcessed = new stdClass();
 			$mailContentProcessed->html = $newContent;
@@ -208,6 +209,24 @@ class PrepareContentMail
 			$newContent = str_replace($search, $replace, $content);
 			
 			return $newContent;
+		}
+	}
+	
+	private function searchGoogleAnalyticsUrl($content)
+	{
+		$ex = 'http://www.sigmamovil.com/servicios/comunicacion/sms-masivo.html?utm_source=SigmaEmail&utm_medium=Email&utm_campaign=micampaign';
+		$this->log->log('Buscando google analytics...: ');
+		$imgTag = new DOMDocument();
+		@$imgTag->loadHTML($content);
+
+		$hrefs = $imgTag->getElementsByTagName('a');
+		$search = array();
+		$replace = array();
+		
+		if ($hrefs->length !== 0) {
+			foreach ($hrefs as $href) {
+				$l = $href->getAttribute('href');
+			}
 		}
 	}
 }

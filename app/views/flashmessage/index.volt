@@ -1,6 +1,6 @@
 {% extends "templates/index_new.volt" %}
-{% block sectiontitle %}<i class="icon-bullhorn"></i> Mensajes informativos{%endblock%}
-{% block sectionsubtitle %}Lista de mensajes informativos activos e inactivos{% endblock %}
+{% block sectiontitle %}<i class="icon-bullhorn"></i> Mensajes administrativos{%endblock%}
+{% block sectionsubtitle %}Lista de mensajes administrativos activos e inactivos{% endblock %}
 {% block content %}
 	<div class="row-fluid">
 		<div class="span6">
@@ -27,16 +27,12 @@
 							 {%for item in page.items%}
 								<tr>
 									<td>
-										<div class="row-fluid">
-											<div class="span1">
-												<div class="preview-message-{{item.type}}"></div>
-											</div>
-											<div class="span6">
-												<h5>{{item.name}}</h5>
-												{{ date('d/M/Y',item.createdon)}} <br />
-												Desde el <strong>{{ date('d/M/Y H:i',item.start)}}</strong>, Hasta el <strong>{{ date('d/M/Y H:i',item.end)}}</strong>
-											</div>
-										</div>
+										<div class="preview-message-{{item.type}}"></div>
+									</td>
+									<td>
+										<h5>{{item.name}}</h5>
+										{{ date('d/M/Y',item.createdon)}}<br />
+										Desde el <strong>{{ date('d/M/Y H:i',item.start)}}</strong>, Hasta el <strong>{{ date('d/M/Y H:i',item.end)}}</strong>
 									</td>
 									<td class="pull-right">
 										<a href="#" class="btn btn-green" rel="tooltip" data-placement="left" title="" data-original-title="{{item.message}}"><i class="icon-search"></i> Ver</a>
