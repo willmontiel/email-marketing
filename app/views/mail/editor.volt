@@ -11,9 +11,13 @@
 	};
 	var objMail = {{objMail}};
 	var GA_links = [];
+	var analytics = '';
 	
 	function sendData(value) {
 		verHTML();
+		if (analytics === '') {
+			GA_links.length = 0;
+		}
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$.ajax(
 			{
@@ -75,14 +79,9 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function(response) {
-				//console.log(response);
-				//console.log(response);
-				//var a = response.script;
-				//var x = response.response;
 				$('#modal-simple').modal('show');
 				$("#modal-body").empty();
-				//$('#modal-body').append('<label>Agregar seguimiento de Google Analytics a los siguientes enlaces:</label>');
-				$('<label>Agregar seguimiento de Google Analytics a los siguientes enlaces: </label>').appendTo('#modal-body');
+				$('<input type="checkbox" class="add-google-analytics"' + analytics + '> Agregar seguimiento de Google Analytics a los siguientes enlaces: <br /><br />').appendTo('#modal-body');
 				
 				for (var i = 0; i < response.links.length; i++) {
 					var checked = '';
@@ -91,7 +90,7 @@
 							checked = 'checked';
 						}
 					}
-					$('<div class="google_analytics_container"><input type="checkbox" class="google_analytics_checkbox" ' + checked + '><span class="google_analytics_link">' + response.links[i] + '</span></div><br />').appendTo('#modal-body');
+					$('<div class="google_analytics_container">&nbsp;&nbsp;&nbsp;<input type="checkbox" class="google_analytics_checkbox" ' + checked + '><span class="google_analytics_link">' + response.links[i] + '</span></div><br />').appendTo('#modal-body');
 				}
 				G_A_Select_Link();
 				//$("#my-iframe").contents().find("head").append(a);
@@ -103,6 +102,15 @@
 	};
 	
 	function G_A_Select_Link() {
+		$(".add-google-analytics").on("click", function () {
+			if (analytics === '') {
+				analytics = 'checked';
+			}
+			else {
+				analytics = '';
+			}
+		});
+		
 		$(".google_analytics_checkbox").off("click");
 		$(".google_analytics_checkbox").on("click", function () {
 			if(!$(this)[0].checked) {

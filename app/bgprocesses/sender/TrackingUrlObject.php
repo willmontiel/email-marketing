@@ -5,13 +5,16 @@ class TrackingUrlObject
 	protected $idContact;
 	protected $links;
 	protected $html;
-	
-	public function getTrackingUrl($html, $idMail, $idContact) 
+	protected $analytics;
+
+
+	public function getTrackingUrl($html, $idMail, $idContact, $analytics) 
 	{
 		$this->links = array();
 		$this->idMail = $idMail;
 		$this->idContact = $idContact;
 		$this->html = $html;
+		$this->analytics = $analytics;
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Empezando proceso de tracking');
 		
@@ -48,6 +51,7 @@ class TrackingUrlObject
 			'bind' => array(1 => $this->idMail)
 		));
 		
+		
 		if (count($links) != 0) {
 //			Phalcon\DI::getDefault()->get('logger')->log('Hay links');
 			$urlManager = Phalcon\DI::getDefault()->get('urlManager');
@@ -64,16 +68,6 @@ class TrackingUrlObject
 		}
 	}
 	
-	public function getBounceTrackingUrl()
-	{
-		
-	}
-	
-	public function getSpamTrackingUrl()
-	{
-		
-	}
-	
 	public function searchDomainsAndProtocols($html)
 	{
 		$imgTag = new DOMDocument();
@@ -86,17 +80,16 @@ class TrackingUrlObject
 			foreach ($hrefs as $href) {
 				$link = $href->getAttribute('href');
 				$parts = parse_url($link);
-				Phalcon\DI::getDefault()->get('logger')->log('Links: ' . $parts['host']);
+				Phalcon\DI::getDefault()->get('logger')->log('Dominio: ' . $parts['host']);
 				
 				if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
 					if (count($urls) == 0) {
+						Phalcon\DI::getDefault()->get('logger')->log('Es el primero se agrega');
 						$urls[] = $parts['scheme'] . '://' . $parts['host'];
 					}
 					else {
-						foreach ($urls as $url) {
-							if ($url !== $parts['scheme'] . '://' . $parts['host']) {
-								$urls[] = $parts['scheme'] . '://' . $parts['host'];
-							}
+						if (!in_array($parts['scheme'] . '://' . $parts['host'], $urls)) {
+							$urls[] = $parts['scheme'] . '://' . $parts['host'];
 						}
 					}
 				}
