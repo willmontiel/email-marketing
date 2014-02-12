@@ -10,6 +10,7 @@
 		iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
 	};
 	var objMail = {{objMail}};
+	var GA_links = [];
 	
 	function sendData(value) {
 		verHTML();
@@ -18,7 +19,7 @@
 			{
 			url: "{{url('mail/editor')}}/{{mail.idMail}}",
 			type: "POST",			
-			data: { editor: editor},
+			data: { editor: editor, analytics: GA_links},
 			error: function(msg){
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
@@ -74,7 +75,7 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function(response) {
-				console.log(response);
+				//console.log(response);
 				//console.log(response);
 				//var a = response.script;
 				//var x = response.response;
@@ -84,16 +85,38 @@
 				$('<label>Agregar seguimiento de Google Analytics a los siguientes enlaces: </label>').appendTo('#modal-body');
 				
 				for (var i = 0; i < response.links.length; i++) {
-					console.log(response.links[i]);
-					$('<input type="checkbox">' + response.links[i] + '<br />').appendTo('#modal-body');
+					var checked = '';
+					for(var j = 0; j < GA_links.length; j++) {
+						if(GA_links[j] === response.links[i]) {
+							checked = 'checked';
+						}
+					}
+					$('<div class="google_analytics_container"><input type="checkbox" class="google_analytics_checkbox" ' + checked + '><span class="google_analytics_link">' + response.links[i] + '</span></div><br />').appendTo('#modal-body');
 				}
+				G_A_Select_Link();
 				//$("#my-iframe").contents().find("head").append(a);
 				//$("#my-iframe").contents().find("body").append(x);
 			}
 		});
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
 		return false;
-	}
+	};
+	
+	function G_A_Select_Link() {
+		$(".google_analytics_checkbox").off("click");
+		$(".google_analytics_checkbox").on("click", function () {
+			if(!$(this)[0].checked) {
+				for(var i = 0; i < GA_links.length; i++) {
+					if(GA_links[i] === $(this).parent().find('.google_analytics_link').text()) {
+						GA_links.splice(i, 1);
+					}
+				}
+			}
+			else {
+				GA_links.push($(this).parent().find('.google_analytics_link').text())
+			}
+		});
+	};
 </script>
 {% endblock %}
 {% block content %}
@@ -143,8 +166,7 @@
 
 		</div>
 		<div class="modal-footer">
-			<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-			<button class="btn btn-blue">Aceptar</button>
+			<button class="btn btn-blue" data-dismiss="modal">Aceptar</button>
 		</div>
 	</div>
 	<br />
