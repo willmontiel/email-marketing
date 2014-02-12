@@ -157,10 +157,8 @@ class PrepareContentMail
 						$search[] = $l;
 					}
 					else {
-						foreach ($search as $url) {
-							if ($url !== $l) {
-								$search[] = $l;
-							}
+						if (!in_array($l, $search)) {
+							$search[] = $l;
 						}
 					}
 				}
