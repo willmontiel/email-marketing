@@ -148,13 +148,28 @@ class PrepareContentMail
 		if ($hrefs->length !== 0) {
 			foreach ($hrefs as $href) {
 				$l = $href->getAttribute('href');
+				
+				$parts = parse_url($l);
+//				Phalcon\DI::getDefault()->get('logger')->log('Links: ' . $parts['host']);
+				
+				if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
+					if (count($search) == 0) {
+						$search[] = $l;
+					}
+					else {
+						foreach ($search as $url) {
+							if ($url !== $l) {
+								$search[] = $l;
+							}
+						}
+					}
+				}
+	
 				$maillink = Maillink::findFirst(array(
 					'conditions' => 'idAccount = ?1 AND link = ?2',
 					'bind' => array(1 => $this->account->idAccount, 
 									2 => $l)
 				));
-				
-				$search[] = $l;
 				
 				if (!$maillink) {
 					$link = new Maillink();

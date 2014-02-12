@@ -144,7 +144,7 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-			<button class="btn btn-blue">Agregar</button>
+			<button class="btn btn-blue">Aceptar</button>
 		</div>
 	</div>
 	<br />
