@@ -119,8 +119,8 @@ class ChildCommunication extends BaseWrapper
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
 					$message->addPart($text, 'text/plain');
-//					$recipients = true;
-					$recipients = $swift->send($message, $failures);
+					$recipients = true;
+//					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
 
 					if ($recipients){
@@ -147,7 +147,7 @@ class ChildCommunication extends BaseWrapper
 					} 
 					else {
 						echo "There was an error in message {$i}: \n";
-						$log->log("Error while sending mail: " . $failures);
+						$log->log("Error while sending mail: " . print_r($failures));
 						print_r($failures);
 					}
 //					$log->log("HTML: " . $html);

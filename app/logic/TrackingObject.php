@@ -420,6 +420,14 @@ class TrackingObject
 		if ($date == null) {
 			$date = time();
 		}
+		$this->log->log('idMail : '. $idMail);
+		$this->log->log('idContact : '. $idContact);
+		$this->log->log('description : '. $description);
+		$this->log->log('UserAgent : '. $userAgent);
+		$this->log->log('Location : '. $location);
+		$this->log->log('Cod : '. $cod);
+		$this->log->log('Date : '. $date);
+		
 		$event = new Mailevent();
 		$event->idMail = $idMail;
 		$event->idContact = $idContact;
