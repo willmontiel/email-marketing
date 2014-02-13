@@ -140,14 +140,14 @@ class MailController extends ControllerBase
 		try {
 			$socialnet = new SocialNetworkConnection($log);
 			$socialnet->setUser($this->user);
-			$socialnet->setFacebookConnection('706764282697191', '969bfd05a58af3e68f76edd0548c6884');
+			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 			$socialnet->saveFacebookUser();
-			$loginUrl = $socialnet->getUrlLogIn();
 			
-			$socials = $socialnet->findAllSocialAccounts();
+			$fbloginUrl = $socialnet->getFbUrlLogIn();
+			$fbsocials = $socialnet->findAllFacebookAccounts();
 
-			$this->view->setVar('socials', $socials);
-			$this->view->setVar("loginUrl", $loginUrl);
+			$this->view->setVar('fbsocials', $fbsocials);
+			$this->view->setVar("fbloginUrl", $fbloginUrl);
 		} 
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
@@ -163,6 +163,7 @@ class MailController extends ControllerBase
 			}
 			$form->bind($this->request->getPost(), $mail);
 			$fbaccounts = $this->request->getPost("facebookaccounts");
+			$log->log(print_r($fbaccounts, true));
 			$mail->idAccount = $this->user->account->idAccount;
 			$mail->fromEmail = strtolower($form->getValue('fromEmail'));
 			$mail->replyTo = strtolower($form->getValue('replyTo'));
@@ -176,6 +177,22 @@ class MailController extends ControllerBase
 			}
 			
             if ($form->isValid() && $mail->save()) {
+				if($fbaccounts) {
+					$fbcontent = $this->request->getPost("fbpublicationcontent");
+					$fbdescription = isset($fbcontent) ? $fbcontent : '';
+					$socialmail = Socialmail::findFirstByIdMail($mail->idMail);
+	
+					if($socialmail) {
+						$socialmail->fbdescription = $fbdescription;
+						$socialmail->save();
+					}
+					else {
+						$newsocialmail = new Socialmail();
+						$newsocialmail->idMail = $mail->idMail;
+						$newsocialmail->fbdescription = $fbdescription;
+						$newsocialmail->save();
+					}
+				}
 				if(!$mail->type) {
 					return $this->response->redirect("mail/source/" .$mail->idMail);
 				}
@@ -334,6 +351,8 @@ class MailController extends ControllerBase
 		else {
 			$this->view->setVar('assets', $arrayAssets);
 		}
+		
+		$arrayCf = array();
 		
 		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
 		

@@ -225,6 +225,14 @@ try {
 	$di->set('mtadata', $mtaConfig);
 	
 	/*
+	 * Configuración Facebook App 
+	 */
+	$fbapp = new stdClass();
+	$fbapp->iduser = $config->fbapp->id;
+	$fbapp->token = $config->fbapp->token;
+	$di->set('fbapp', $fbapp);
+	
+	/*
 	 * Configuración Google Analytics 
 	 */
 	$googleAnalytics = new stdClass();

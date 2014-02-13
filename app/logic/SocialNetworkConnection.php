@@ -13,10 +13,29 @@ class SocialNetworkConnection
 		$this->user = $user;
 	}
 
-	public function findAllSocialAccounts()
+	public function findAllFacebookAccounts()
 	{
 		$socials = array();
-		$arraysocials = Socialnetwork::findByIdUser($this->user->idUser);
+		$arraysocials = Socialnetwork::find(array(
+							"conditions" => "idUser = ?1 AND type = 'Facebook'",
+							"bind" => array(1 => $this->user->idUser)
+						));
+		foreach ($arraysocials as $soc) {
+			$obj = new stdClass();
+			$obj->idSocialnetwork = $soc->idSocialnetwork;
+			$obj->name = $soc->name;
+			$socials[] = $obj;
+		}
+		return $socials;
+	}
+	
+	public function findAllTwitterAccounts()
+	{
+		$socials = array();
+		$arraysocials = Socialnetwork::find(array(
+							"conditions" => "idUser = ?1 AND type = 'Twitter'",
+							"bind" => array(1 => $this->user->idUser)
+						));
 		foreach ($arraysocials as $soc) {
 			$obj = new stdClass();
 			$obj->idSocialnetwork = $soc->idSocialnetwork;
@@ -34,7 +53,7 @@ class SocialNetworkConnection
 		));
 	}
 	
-	public function getUrlLogIn()
+	public function getFbUrlLogIn()
 	{
 		return $this->facebook->getLoginUrl(array('scope' => 'manage_pages, publish_stream'));
 	}
@@ -73,7 +92,7 @@ class SocialNetworkConnection
 		}
 	}
 	
-	public function postOnFacebook($idsobj)
+	public function postOnFacebook($idsobj, Socialmail $desc, Mail $mail)
 	{
 		$facebook_ids = $idsobj->facebook;
 		$first = TRUE;
@@ -86,7 +105,7 @@ class SocialNetworkConnection
 			$first = FALSE;
 		}
 		$phql.= ' )';
-		
+
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
 		foreach ($ids_tokens as $id_token){
@@ -94,12 +113,12 @@ class SocialNetworkConnection
 			$access_token = $id_token->token;
 			$params = array(
 				"access_token" => $access_token,
-				"message" => "Esta es el post NUMERO 9 generado en la prueba de email marketing",
-				"link" => "http://tstemail.sigmamovil.com/",
-				"picture" => "http://i.imgur.com/lHkOsiH.png",
-				"name" => "Prueba de Post en Facebook",
-				"caption" => "www.tstemail.sigmamovil.com",
-				"description" => "Este post de prueba NUMERO 9"
+				"message" => $desc->fbdescription,
+				"link" => "http://stage.sigmamovil.com/",
+				"picture" => "http://stage.sigmamovil.com/images/sigma_envelope.png",
+				"name" => $mail->name,
+				"caption" => "www.stage.sigmamovil.com",
+				"description" => "Correo enviado desde la plataforma de Sigma Movil"
 			  );
 
 			  try {
