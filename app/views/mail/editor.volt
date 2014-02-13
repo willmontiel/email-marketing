@@ -12,6 +12,15 @@
 	var objMail = {{objMail}};
 	var GA_links = [];
 	var analytics = '';
+	var googleAnalytics = {{analytics}};
+	$(function(){
+		if (googleAnalytics !== null) {
+			GA_links = googleAnalytics;
+			analytics = 'checked';
+			$("#analytics-active").show(); 
+			$("#analytics-inactive").hide();
+		}
+	});
 	
 	function sendData(value) {
 		verHTML();
@@ -105,9 +114,13 @@
 		$(".add-google-analytics").on("click", function () {
 			if (analytics === '') {
 				analytics = 'checked';
+				$("#analytics-active").show(); 
+				$("#analytics-inactive").hide();
 			}
 			else {
 				analytics = '';
+				$("#analytics-inactive").show(); 
+				$("#analytics-active").hide();
 			}
 		});
 		
@@ -153,7 +166,7 @@
 					<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">Guardar como Plantilla <i class="icon-picture"></i></button>
 				</div>
 				<div class="pull-left SaveTemplate">
-					<a href="#modal-simple" onclick="addGoogleAnalytics()" type="button" class="btn btn-default">Seguir con Google Analytics <i class="icon-google-plus-sign"></i></a>
+					<a href="#modal-simple" onclick="addGoogleAnalytics()" type="button" class="btn btn-default">Seguimiento con Google Analytics <i class="icon-google-plus-sign"></i> <span id="analytics-active" style="color: #acd954; display: none;">Activo</span> <span id="analytics-inactive" style="color: #e8a397;">Inactivo</span></a>
 				</div>
 			</div>
 		</div>

@@ -352,11 +352,15 @@ class Security extends Plugin
 		else{
 			$acl = $this->getAcl();
 			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
+			$this->logger->log("Controller: " . $controller);
+			$controller = strtolower($controller);
 			if (!isset($map[$controller .'::'. $action])) {
 				if($this->validateResponse($controller) == true){
+					$this->logger->log("Acción no permitida con Ember");
 					$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
 				}
 				else{
+					$this->logger->log("Redirect to error");
 					$this->response->redirect('error');
 				}
 				return false;

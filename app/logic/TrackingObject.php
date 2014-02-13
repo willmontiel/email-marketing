@@ -217,6 +217,10 @@ class TrackingObject
 				}
 			}
 			else {
+				$mail = Mail::findFirst(array(
+					'conditions' => 'idMail = ?1',
+					'bind' => array(1 => $idMail)
+				));
 				$this->log->log('Este usuario ya ha sido contabilizado');
 				return $this->insertGoogleAnalyticsUrl($idMail, $Maillink->link, $mail->name);
 			}
@@ -624,7 +628,13 @@ class TrackingObject
 		
 		if (in_array($path['scheme'] . '://' . $path['host'], json_decode($content->googleAnalytics))) {
 			$googleAnalytics = Phalcon\DI::getDefault()->get('googleAnalytics');
-			$newUrl = $url . '?utm_source=' . $googleAnalytics->utm_source . '&utm_medium=' . $googleAnalytics->utm_medium . '&utm_campaign=' . $name;
+			Phalcon\DI::getDefault()->get('logger')->log('Preparandose para insertar google analytics');
+//			$gA = urlencode('utm_source=' . $googleAnalytics->utm_source . '&utm_medium=' . $googleAnalytics->utm_medium . '&utm_campaign=' . $name);
+			$source = '?utm_source=' . urlencode($googleAnalytics->utm_source);
+			$medium = '&utm_medium=' . urlencode($googleAnalytics->utm_medium);
+			$campaign = '&utm_campaign=' . urlencode($name);
+			$newUrl = $url . $source . $medium . $campaign;
+			Phalcon\DI::getDefault()->get('logger')->log('Url Analytics: ' . $newUrl);
 			return $newUrl;
 		}
 		else {
