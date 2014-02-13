@@ -1,4 +1,18 @@
 {% extends "templates/index_new.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	<script type="text/javascript">
+		function showsocials(){
+			var container = $('.setup_socials_container');
+			if (container.css('display') === 'none') {
+				container.show();
+			}
+			else {
+				container.hide();
+			}
+		}
+	</script>
+{% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
 {% block content %}
@@ -84,13 +98,32 @@
 						<label>Responder a este correo: </label>
 						{{ MailForm.render('replyTo') }}
 						
-						<label>Publicar y Compartir: </label>
-						<select multiple="multiple" name="facebookaccounts[]" id="accounts_facebook" class="chzn-select">
-							{% for social in socials %}
-								<option value="{{social.idSocialnetwork}}">{{social.name}}</option>
-							{% endfor %}
-						</select>
-						<div class="add_facebook_account"><a href="{{loginUrl}}">Añadir cuenta</a></div>
+						<label onclick="showsocials()">Publicar y Compartir: </label>
+						<div class="setup_socials_container" style="display: none">
+							<label>Facebook</label>
+							<div class="facebook_account_container">
+								<select multiple="multiple" name="facebookaccounts[]" id="accounts_facebook" class="chzn-select">
+									{% for fbsocial in fbsocials %}
+										<option value="{{fbsocial.idSocialnetwork}}">{{fbsocial.name}}</option>
+									{% endfor %}
+								</select>
+								<div class="add_facebook_account"><a href="{{fbloginUrl}}">Añadir cuenta</a></div>
+
+								<label>Descripcion de Publicacion: </label>
+								<textarea rows="4" cols="20" name="fbpublicationcontent" id="fbpublicationcontent" >Este correo fue enviado desde Sigma Movil a sus contactos seleccionados</textarea>
+							</div>
+							<div class="twitter_account_container">
+								<select multiple="multiple" name="twitteraccounts[]" id="accounts_twitter" class="chzn-select">
+									{% for twsocial in twsocials %}
+										<option value="{{twsocial.idSocialnetwork}}">{{twsocial.name}}</option>
+									{% endfor %}
+								</select>
+								<div class="add_twitter_account"><a href="{{twloginUrl}}">Añadir cuenta</a></div>
+
+								<label>Descripcion de Tweet: </label>
+								<textarea rows="4" cols="20" name="twpublicationcontent" id="twpublicationcontent" >Este correo fue enviado desde Sigma Movil a sus contactos seleccionados</textarea>
+							</div>
+						</div>
 					</div>
 					<div class="form-actions">
 						<a href="{{url('mail/index')}}" class="btn btn-default"><i class="icon-remove-sign"></i> Cancelar</a>
