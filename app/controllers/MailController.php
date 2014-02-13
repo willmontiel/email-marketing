@@ -260,7 +260,12 @@ class MailController extends ControllerBase
 				if ($objMail) {
 					$text = $objMail->plainText;
 					$this->view->setVar('objMail', $objMail->content);
-					$this->view->setVar('analytics', $objMail->googleAnalytics);
+					if ($objMail->googleAnalytics == null) {
+						$this->view->setVar('analytics', 'null');
+					}
+					else {
+						$this->view->setVar('analytics', $objMail->googleAnalytics);
+					}
 				}
 				else  {
 					$text = null;
