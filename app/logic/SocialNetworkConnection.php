@@ -184,7 +184,7 @@ class SocialNetworkConnection
 				"link" => $this->urlObj->getBaseUri(TRUE), //"http://stage.sigmamovil.com/",
 				"picture" => $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png', //"http://stage.sigmamovil.com/images/sigma_envelope.png",
 				"name" => $fbcontent->title,
-				"caption" => $this->urlObj->getBaseUri(TRUE) . '.com', //"www.stage.sigmamovil.com",
+				"caption" => $this->urlObj->getBaseUri(TRUE), //"www.stage.sigmamovil.com/",
 				"description" => $fbcontent->description
 			  );
 
