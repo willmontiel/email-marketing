@@ -152,19 +152,11 @@ class PrepareContentMail
 					Phalcon\DI::getDefault()->get('logger')->log('Es un link válido: ');
 					Phalcon\DI::getDefault()->get('logger')->log('Host: ' . $parts['host']);
 					if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
-						if (count($search) == 0) {
-							Phalcon\DI::getDefault()->get('logger')->log('Es el primer link preparandose para guardar: ');
+						if (!in_array($l, $search)) {
+							Phalcon\DI::getDefault()->get('logger')->log('Link no esta registrado: ');
 							$mxl = $this->saveLinks($l);
 							$search[] = $l;
 							$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
-						}
-						else {
-							if (!in_array($l, $search)) {
-								Phalcon\DI::getDefault()->get('logger')->log('No es el primer link pero no esta registrado: ');
-								$mxl = $this->saveLinks($l);
-								$search[] = $l;
-								$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
-							}
 						}
 					}
 				}
@@ -172,7 +164,7 @@ class PrepareContentMail
 			$newContent = str_replace($search, $replace, $content);
 			Phalcon\DI::getDefault()->get('logger')->log('Buscar: ' . print_r($search, true));
 			Phalcon\DI::getDefault()->get('logger')->log('Reemplazar: ' . print_r($replace, true));
-			Phalcon\DI::getDefault()->get('logger')->log('Esto es content despúes del cambio de links: ' . $newContent);
+			Phalcon\DI::getDefault()->get('logger')->log('Esto es content despues del cambio de links: ' . $newContent);
 			return $newContent;
 		}
 	}
