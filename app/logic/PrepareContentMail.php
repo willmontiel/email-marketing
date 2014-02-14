@@ -141,7 +141,7 @@ class PrepareContentMail
 		$hrefs = $imgTag->getElementsByTagName('a');
 		$search = array();
 		$replace = array();
-		
+		Phalcon\DI::getDefault()->get('logger')->log('Esto es content antes del cambio de links: ' . $content);
 		if ($hrefs->length !== 0) {
 			foreach ($hrefs as $href) {
 				$l = $href->getAttribute('href');
@@ -170,7 +170,7 @@ class PrepareContentMail
 				}
 			}
 			$newContent = str_replace($search, $replace, $content);
-			
+			Phalcon\DI::getDefault()->get('logger')->log('Esto es content despúes del cambio de links: ' . $newContent);
 			return $newContent;
 		}
 	}
