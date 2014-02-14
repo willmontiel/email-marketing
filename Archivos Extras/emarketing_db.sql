@@ -1,9 +1,9 @@
-﻿-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 4.0.4
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 07-02-2014 a las 11:59:16
+-- Tiempo de generación: 13-02-2014 a las 15:18:53
 -- Versión del servidor: 5.6.12-log
 -- Versión de PHP: 5.4.16
 
@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `action` (
   `action` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`idAction`),
   KEY `idResource` (`idResource`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=90 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=94 ;
 
 -- --------------------------------------------------------
 
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `allowed` (
   KEY `idRole` (`idAction`),
   KEY `idAllow` (`idAction`),
   KEY `idRole_2` (`idRole`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=127 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=132 ;
 
 -- --------------------------------------------------------
 
@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `asset` (
   `createdon` int(11) DEFAULT NULL,
   PRIMARY KEY (`idAsset`),
   KEY `idAccount` (`idAccount`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=191 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=192 ;
 
 -- --------------------------------------------------------
 
@@ -413,6 +413,24 @@ CREATE TABLE IF NOT EXISTS `fieldinstance` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `flashmessage`
+--
+
+CREATE TABLE IF NOT EXISTS `flashmessage` (
+  `idFlashMessage` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `message` text NOT NULL,
+  `accounts` tinytext NOT NULL,
+  `type` tinytext CHARACTER SET utf16 NOT NULL,
+  `start` int(11) NOT NULL,
+  `end` int(11) NOT NULL,
+  `createdon` int(11) NOT NULL,
+  PRIMARY KEY (`idFlashMessage`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `importfile`
 --
 
@@ -485,7 +503,7 @@ CREATE TABLE IF NOT EXISTS `mail` (
   `previewData` text,
   PRIMARY KEY (`idMail`),
   KEY `fk_mail_account1_idx` (`idAccount`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=157 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=161 ;
 
 -- --------------------------------------------------------
 
@@ -497,6 +515,7 @@ CREATE TABLE IF NOT EXISTS `mailcontent` (
   `idMail` int(11) NOT NULL,
   `content` mediumtext NOT NULL,
   `plainText` mediumtext,
+  `googleAnalytics` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idMail`),
   KEY `fk_mailcontent_mail1_idx` (`idMail`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -632,7 +651,7 @@ CREATE TABLE IF NOT EXISTS `resource` (
   `idResource` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`idResource`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 -- --------------------------------------------------------
 
@@ -679,6 +698,24 @@ CREATE TABLE IF NOT EXISTS `sendhistory` (
   PRIMARY KEY (`idSendHistory`),
   KEY `idMail` (`idMail`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `socialnetwork`
+--
+
+CREATE TABLE IF NOT EXISTS `socialnetwork` (
+  `idSocialnetwork` int(11) NOT NULL AUTO_INCREMENT,
+  `idUser` int(11) NOT NULL,
+  `userid` varchar(200) NOT NULL,
+  `token` varchar(200) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `type` enum('Twitter','Facebook') NOT NULL,
+  `category` enum('Profile','Fan Page') NOT NULL,
+  PRIMARY KEY (`idSocialnetwork`),
+  KEY `fk_usuario_social` (`idUser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -978,9 +1015,9 @@ ALTER TABLE `mailcontent`
 -- Filtros para la tabla `mailevent`
 --
 ALTER TABLE `mailevent`
-  ADD CONSTRAINT `mailevent_ibfk_3` FOREIGN KEY (`idBouncedCode`) REFERENCES `bouncedcode` (`idBouncedCode`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `mailevent_ibfk_1` FOREIGN KEY (`idMail`) REFERENCES `mail` (`idMail`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mailevent_ibfk_2` FOREIGN KEY (`idContact`) REFERENCES `contact` (`idContact`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `mailevent_ibfk_2` FOREIGN KEY (`idContact`) REFERENCES `contact` (`idContact`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `mailevent_ibfk_3` FOREIGN KEY (`idBouncedCode`) REFERENCES `bouncedcode` (`idBouncedCode`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `maillink`
@@ -1027,6 +1064,12 @@ ALTER TABLE `mxl`
 --
 ALTER TABLE `segment`
   ADD CONSTRAINT `segment_ibfk_1` FOREIGN KEY (`idDbase`) REFERENCES `dbase` (`idDbase`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `socialnetwork`
+--
+ALTER TABLE `socialnetwork`
+  ADD CONSTRAINT `fk_usuario_social` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `statcontactlist`

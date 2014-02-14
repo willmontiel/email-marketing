@@ -140,8 +140,7 @@ class PrepareContentMail
 
 		$hrefs = $imgTag->getElementsByTagName('a');
 		$search = array();
-		$replace = array();
-		
+		Phalcon\DI::getDefault()->get('logger')->log('Esto es content antes del cambio de links: ' . $content);
 		if ($hrefs->length !== 0) {
 			foreach ($hrefs as $href) {
 				$l = $href->getAttribute('href');
@@ -149,25 +148,29 @@ class PrepareContentMail
 				$parts = parse_url($l);
 				Phalcon\DI::getDefault()->get('logger')->log('Url: ' . $l);
 				if (isset($parts['host'])) {
+					Phalcon\DI::getDefault()->get('logger')->log('Es un link válido: ');
 					Phalcon\DI::getDefault()->get('logger')->log('Host: ' . $parts['host']);
 					if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
-						if (count($search) == 0) {
+						if (!in_array($l, $search)) {
+							Phalcon\DI::getDefault()->get('logger')->log('Link no esta registrado: ');
 							$mxl = $this->saveLinks($l);
-							$search[] = $l;
-							$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
+							$href->setAttribute('href', $mxl->idMailLink . '_sigma_url_$$$');
+							$search[$mxl->idMailLink . '_sigma_url_$$$'] = $l;
 						}
 						else {
-							if (!in_array($l, $search)) {
-								$mxl = $this->saveLinks($l);
-								$search[] = $l;
-								$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
+							$key = array_keys($search, $l, true);
+							if (count($key) < 1) {
+								throw new Exception('Error: Although found, no key associated!');
 							}
+							$href->setAttribute('href', $key[0]);
 						}
 					}
 				}
 			}
-			$newContent = str_replace($search, $replace, $content);
-			
+			$newContent = $imgTag->saveHTML();
+			//$newContent = str_replace($search, $replace, $content);
+			Phalcon\DI::getDefault()->get('logger')->log('Listado de elementos: ' . print_r($search, true));
+			Phalcon\DI::getDefault()->get('logger')->log('Esto es content despues del cambio de links: ' . $newContent);
 			return $newContent;
 		}
 	}
@@ -181,6 +184,7 @@ class PrepareContentMail
 		));
 		
 		if (!$maillink) {
+			Phalcon\DI::getDefault()->get('logger')->log('No existe el link preparandose para inserción');
 			$link = new Maillink();
 
 			$link->idAccount = $this->account->idAccount;
@@ -193,9 +197,10 @@ class PrepareContentMail
 				}
 				throw new InvalidArgumentException('Error while saving Maillink');
 			}
+			Phalcon\DI::getDefault()->get('logger')->log('Se guardó el link');
 			
 			$mxl = new Mxl();
-
+			Phalcon\DI::getDefault()->get('logger')->log('Preparando inserción de enlace simbolico mxl');
 			$mxl->idMail = $this->mail->idMail;
 			$mxl->idMailLink = $link->idMailLink;
 
@@ -205,9 +210,11 @@ class PrepareContentMail
 				}
 				throw new InvalidArgumentException('Error while saving Mxl');
 			}
+			Phalcon\DI::getDefault()->get('logger')->log('Se guardo enlace simbolico mxl');
 			return $mxl;
 		}
 		else {
+			Phalcon\DI::getDefault()->get('logger')->log('Ya se ha contabilizado el link en la cuenta');
 			$mxl = new Mxl();
 
 			$mxl->idMail = $this->mail->idMail;
@@ -219,6 +226,7 @@ class PrepareContentMail
 				}
 				throw new InvalidArgumentException('Error while saving Mxl');
 			}
+			Phalcon\DI::getDefault()->get('logger')->log('Se guardó el en lace simbolico');
 			return $mxl;
 		}	
 	}
