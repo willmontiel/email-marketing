@@ -16,12 +16,12 @@ class TrackingUrlObject
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Empezando proceso de tracking');
 		
-//		Phalcon\DI::getDefault()->get('logger')->log('Antes: ' . print_r($this->links, true));
+		Phalcon\DI::getDefault()->get('logger')->log('Antes: ' . print_r($this->links, true));
 		$this->getOpenTrackingUrl();
 		$this->getClicksTrackingUrl();
 		
 		
-//		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
+		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
 		$htmlWithTracking = str_replace($this->links['search'], $this->links['replace'], $html);
 		
 		return $htmlWithTracking;
@@ -62,8 +62,6 @@ class TrackingUrlObject
 				$link = $href . '-' . $md5;
 				Phalcon\DI::getDefault()->get('logger')->log('Insertando: ' . $link);
 				$this->links['replace'][] = $link;
-				Phalcon\DI::getDefault()->get('logger')->log('Search: ' . $this->links['search']);
-				Phalcon\DI::getDefault()->get('logger')->log('Insertando: ' . $this->links['replace']);
 			}
 		}
 	}

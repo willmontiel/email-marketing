@@ -149,15 +149,18 @@ class PrepareContentMail
 				$parts = parse_url($l);
 				Phalcon\DI::getDefault()->get('logger')->log('Url: ' . $l);
 				if (isset($parts['host'])) {
+					Phalcon\DI::getDefault()->get('logger')->log('Es un link válido: ');
 					Phalcon\DI::getDefault()->get('logger')->log('Host: ' . $parts['host']);
 					if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
 						if (count($search) == 0) {
+							Phalcon\DI::getDefault()->get('logger')->log('Es el primer link preparandose para guardar: ');
 							$mxl = $this->saveLinks($l);
 							$search[] = $l;
 							$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
 						}
 						else {
 							if (!in_array($l, $search)) {
+								Phalcon\DI::getDefault()->get('logger')->log('No es el primer link pero no esta registrado: ');
 								$mxl = $this->saveLinks($l);
 								$search[] = $l;
 								$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
@@ -181,6 +184,7 @@ class PrepareContentMail
 		));
 		
 		if (!$maillink) {
+			Phalcon\DI::getDefault()->get('logger')->log('No existe el link preparandose para inserción');
 			$link = new Maillink();
 
 			$link->idAccount = $this->account->idAccount;
@@ -193,9 +197,10 @@ class PrepareContentMail
 				}
 				throw new InvalidArgumentException('Error while saving Maillink');
 			}
+			Phalcon\DI::getDefault()->get('logger')->log('Se guardó el link');
 			
 			$mxl = new Mxl();
-
+			Phalcon\DI::getDefault()->get('logger')->log('Preparando inserción de enlace simbolico mxl');
 			$mxl->idMail = $this->mail->idMail;
 			$mxl->idMailLink = $link->idMailLink;
 
@@ -205,9 +210,11 @@ class PrepareContentMail
 				}
 				throw new InvalidArgumentException('Error while saving Mxl');
 			}
+			Phalcon\DI::getDefault()->get('logger')->log('Se guardo enlace simbolico mxl');
 			return $mxl;
 		}
 		else {
+			Phalcon\DI::getDefault()->get('logger')->log('Ya se ha contabilizado el link en la cuenta');
 			$mxl = new Mxl();
 
 			$mxl->idMail = $this->mail->idMail;
@@ -219,6 +226,7 @@ class PrepareContentMail
 				}
 				throw new InvalidArgumentException('Error while saving Mxl');
 			}
+			Phalcon\DI::getDefault()->get('logger')->log('Se guardó el en lace simbolico');
 			return $mxl;
 		}	
 	}
