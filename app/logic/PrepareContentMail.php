@@ -140,7 +140,6 @@ class PrepareContentMail
 
 		$hrefs = $imgTag->getElementsByTagName('a');
 		$search = array();
-		$replace = array();
 		Phalcon\DI::getDefault()->get('logger')->log('Esto es content antes del cambio de links: ' . $content);
 		if ($hrefs->length !== 0) {
 			foreach ($hrefs as $href) {
@@ -155,15 +154,22 @@ class PrepareContentMail
 						if (!in_array($l, $search)) {
 							Phalcon\DI::getDefault()->get('logger')->log('Link no esta registrado: ');
 							$mxl = $this->saveLinks($l);
-							$search[] = $l;
-							$replace[] = $mxl->idMailLink . '_sigma_url_$$$';
+							$href->setAttribute('href', $mxl->idMailLink . '_sigma_url_$$$');
+							$search[$mxl->idMailLink . '_sigma_url_$$$'] = $l;
+						}
+						else {
+							$key = array_keys($search, $l, true);
+							if (count($key) < 1) {
+								throw new Exception('Error: Although found, no key associated!');
+							}
+							$href->setAttribute('href', $key[0]);
 						}
 					}
 				}
 			}
-			$newContent = str_replace($search, $replace, $content);
-			Phalcon\DI::getDefault()->get('logger')->log('Buscar: ' . print_r($search, true));
-			Phalcon\DI::getDefault()->get('logger')->log('Reemplazar: ' . print_r($replace, true));
+			$newContent = $imgTag->saveHTML();
+			//$newContent = str_replace($search, $replace, $content);
+			Phalcon\DI::getDefault()->get('logger')->log('Listado de elementos: ' . print_r($search, true));
 			Phalcon\DI::getDefault()->get('logger')->log('Esto es content despues del cambio de links: ' . $newContent);
 			return $newContent;
 		}
