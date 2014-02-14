@@ -62,6 +62,8 @@ class TrackingUrlObject
 				$link = $href . '-' . $md5;
 				Phalcon\DI::getDefault()->get('logger')->log('Insertando: ' . $link);
 				$this->links['replace'][] = $link;
+				Phalcon\DI::getDefault()->get('logger')->log('Search: ' . $this->links['search']);
+				Phalcon\DI::getDefault()->get('logger')->log('Insertando: ' . $this->links['replace']);
 			}
 		}
 	}
