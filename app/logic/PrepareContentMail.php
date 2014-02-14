@@ -170,6 +170,8 @@ class PrepareContentMail
 				}
 			}
 			$newContent = str_replace($search, $replace, $content);
+			Phalcon\DI::getDefault()->get('logger')->log('Buscar: ' . print_r($search, true));
+			Phalcon\DI::getDefault()->get('logger')->log('Reemplazar: ' . print_r($replace, true));
 			Phalcon\DI::getDefault()->get('logger')->log('Esto es content despúes del cambio de links: ' . $newContent);
 			return $newContent;
 		}
