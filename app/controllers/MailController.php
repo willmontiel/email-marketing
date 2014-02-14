@@ -141,13 +141,24 @@ class MailController extends ControllerBase
 			$socialnet = new SocialNetworkConnection($log);
 			$socialnet->setUser($this->user);
 			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
-			$socialnet->saveFacebookUser();
+			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
+			if(isset($_REQUEST['oauth_token']) && isset($_REQUEST['oauth_verifier'])) {
+				$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token, $_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
+				$socialnet->saveTwitterUser($_REQUEST['oauth_verifier']);
+			}
+			else {
+				$socialnet->saveFacebookUser();
+			}
 			
 			$fbloginUrl = $socialnet->getFbUrlLogIn();
 			$fbsocials = $socialnet->findAllFacebookAccounts();
+			$twloginUrl = $socialnet->getTwUrlLogIn($idMail);
+			$twsocials = $socialnet->findAllTwitterAccounts();
 
 			$this->view->setVar('fbsocials', $fbsocials);
 			$this->view->setVar("fbloginUrl", $fbloginUrl);
+			$this->view->setVar('twsocials', $twsocials);
+			$this->view->setVar("twloginUrl", $twloginUrl);
 		} 
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
@@ -163,35 +174,35 @@ class MailController extends ControllerBase
 			}
 			$form->bind($this->request->getPost(), $mail);
 			$fbaccounts = $this->request->getPost("facebookaccounts");
-			$log->log(print_r($fbaccounts, true));
+			$twaccounts = $this->request->getPost("twitteraccounts");
 			$mail->idAccount = $this->user->account->idAccount;
 			$mail->fromEmail = strtolower($form->getValue('fromEmail'));
 			$mail->replyTo = strtolower($form->getValue('replyTo'));
 			$mail->status = "Draft";
 			$mail->wizardOption = $wizardOption;
 
-			if($fbaccounts) {
-				$socialsnetworks = new stdClass();
-				$socialsnetworks->facebook = $fbaccounts;
-				$mail->socialnetworks = json_encode($socialsnetworks);
+			if($fbaccounts || $twaccounts) {
+				$mail->socialnetworks = $socialnet->saveSocialsIds($fbaccounts, $twaccounts);
 			}
 			
             if ($form->isValid() && $mail->save()) {
-				if($fbaccounts) {
-					$fbcontent = $this->request->getPost("fbpublicationcontent");
-					$fbdescription = isset($fbcontent) ? $fbcontent : '';
+				if($fbaccounts || $twaccounts) {
 					$socialmail = Socialmail::findFirstByIdMail($mail->idMail);
-	
-					if($socialmail) {
-						$socialmail->fbdescription = $fbdescription;
-						$socialmail->save();
+					if(!$socialmail) {
+						$socialmail = new Socialmail();
+						$socialmail->idMail = $mail->idMail;
 					}
-					else {
-						$newsocialmail = new Socialmail();
-						$newsocialmail->idMail = $mail->idMail;
-						$newsocialmail->fbdescription = $fbdescription;
-						$newsocialmail->save();
+					if($fbaccounts) {
+						$fbtitlecontent = $this->request->getPost("fbtitlecontent");
+						$fbdescriptioncontent = $this->request->getPost("fbdescriptioncontent");
+						$fbmsgcontent = $this->request->getPost("fbmessagecontent");
+						$socialmail->fbdescription = $socialnet->saveFacebookDescription($fbtitlecontent, $fbdescriptioncontent, $fbmsgcontent);;
 					}
+					if($twaccounts) {
+						$twmessagecontent = $this->request->getPost("twpublicationcontent");
+						$socialmail->twdescription = $socialnet->saveTwitterDescription($twmessagecontent);
+					}
+					$socialmail->save();
 				}
 				if(!$mail->type) {
 					return $this->response->redirect("mail/source/" .$mail->idMail);

@@ -259,6 +259,7 @@ class Security extends Plugin
 				'test::organizelinks' => array('statistic' => array('read')),
 				'test::facebooktest' => array('mail' => array('read')),
 				'test::facebookposting' => array('mail' => array('read')),
+				'test::twittertest' => array('mail' => array('read')),
 				
 				//statistics
 				'statistic::index' => array('statistic' => array('read')),

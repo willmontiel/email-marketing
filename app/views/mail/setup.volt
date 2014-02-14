@@ -11,6 +11,25 @@
 				container.hide();
 			}
 		}
+		$(function() {
+			$('#accounts_facebook').on('change', function() {
+				if($(this)[0].selectedOptions.length > 0) {
+					$('.fbdescription').show();
+				}
+				else {
+					$('.fbdescription').hide();
+				}
+			});
+			
+			$('#accounts_twitter').on('change', function() {
+				if($(this)[0].selectedOptions.length > 0) {
+					$('.twdescription').show();
+				}
+				else {
+					$('.twdescription').hide();
+				}
+			});
+		});
 	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
@@ -98,30 +117,37 @@
 						<label>Responder a este correo: </label>
 						{{ MailForm.render('replyTo') }}
 						
-						<label onclick="showsocials()">Publicar y Compartir: </label>
+						<label onclick="showsocials()">Publicar en Redes Sociales: </label>
 						<div class="setup_socials_container" style="display: none">
-							<label>Facebook</label>
 							<div class="facebook_account_container">
+								<label>Facebook</label>
 								<select multiple="multiple" name="facebookaccounts[]" id="accounts_facebook" class="chzn-select">
 									{% for fbsocial in fbsocials %}
 										<option value="{{fbsocial.idSocialnetwork}}">{{fbsocial.name}}</option>
 									{% endfor %}
 								</select>
-								<div class="add_facebook_account"><a href="{{fbloginUrl}}">Añadir cuenta</a></div>
-
-								<label>Descripcion de Publicacion: </label>
-								<textarea rows="4" cols="20" name="fbpublicationcontent" id="fbpublicationcontent" >Este correo fue enviado desde Sigma Movil a sus contactos seleccionados</textarea>
+								<div class="fbdescription" style="display: none">
+									<label>Titulo de la Publicacion: </label>
+									<input type="text" id="fbtitlecontent" name="fbtitlecontent">
+									<label>Descripcion de la Publicacion: </label>
+									<textarea rows="2" cols="20" name="fbdescriptioncontent" id="fbdescriptioncontent"></textarea>
+									<label>Mensaje de la Publicacion: </label>
+									<textarea rows="2" cols="20" name="fbmessagecontent" id="fbmessagecontent"></textarea>
+								</div>
+								<div class="add_facebook_account"><a href="{{fbloginUrl}}">Añadir cuenta de Facebook</a></div>
 							</div>
 							<div class="twitter_account_container">
+								<label>Twitter</label>
 								<select multiple="multiple" name="twitteraccounts[]" id="accounts_twitter" class="chzn-select">
 									{% for twsocial in twsocials %}
 										<option value="{{twsocial.idSocialnetwork}}">{{twsocial.name}}</option>
 									{% endfor %}
 								</select>
-								<div class="add_twitter_account"><a href="{{twloginUrl}}">Añadir cuenta</a></div>
-
-								<label>Descripcion de Tweet: </label>
-								<textarea rows="4" cols="20" name="twpublicationcontent" id="twpublicationcontent" >Este correo fue enviado desde Sigma Movil a sus contactos seleccionados</textarea>
+								<div class="twdescription" style="display: none">
+									<label>Mensaje del Tweet: </label>
+									<textarea rows="2" cols="20" name="twpublicationcontent" id="twpublicationcontent" ></textarea>
+								</div>
+								<div class="add_twitter_account"><a href="{{twloginUrl}}">Añadir cuenta de Twitter</a></div>
 							</div>
 						</div>
 					</div>

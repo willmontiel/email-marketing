@@ -17,16 +17,16 @@ class BlockImage extends HtmlAbstract
 		$this->margin_right = $data->margin_right;
 		$this->column_width = 100/$data->amount;
 		
-		$src = $data->imgsrc;
-		$alt = $data->imgalt;
+		$src = (isset($data->imgsrc)) ? $data->imgsrc : '';
+		$alt = (isset($data->imgalt)) ? $data->imgalt : '';
 		$link = (isset($data->imglink)) ? trim($data->imglink) : '';
 		
-		$this->align = $data->align;
-		$height = $data->height;
-		$this->width = $data->width;
-		$this->vertalign = $data->vertalign;
+		$this->align = (isset($data->align)) ? $data->align : '';
+		$height = (isset($data->height)) ? $data->height : 0;
+		$this->width = (isset($data->width)) ? $data->width : 0;
+		$this->vertalign = (isset($data->vertalign)) ? $data->vertalign : '';
 		$maxwidth = ($data->widthval/$data->amount) - ( $data->margin_left + $data->margin_right + $data->border_width*2 );
-		$imgwidth = ( $maxwidth > $data->width) ? $data->width : $maxwidth;
+		$imgwidth = ( $maxwidth > $this->width) ? $this->width : $maxwidth;
 		$imgwidth = ($imgwidth < 0) ? 0 : $imgwidth;
 				
 		$image = '<img src="' . $src . '" alt="' . $alt . '" style="height: ' . $height . 'px; width: ' . $imgwidth . 'px;" height="' . $height . '" width="' . $imgwidth . '">';

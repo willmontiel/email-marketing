@@ -11,6 +11,7 @@ try {
         '../app/forms/',
         '../app/library/',
         '../app/library/facebook/',
+		'../app/library/twitter/',
         '../app/logic/',
 		'../app/editorlogic/',
 		'../app/bgprocesses/sender/',
@@ -231,6 +232,14 @@ try {
 	$fbapp->iduser = $config->fbapp->id;
 	$fbapp->token = $config->fbapp->token;
 	$di->set('fbapp', $fbapp);
+	
+	/*
+	 * Configuración Twitter App 
+	 */
+	$twapp = new stdClass();
+	$twapp->iduser = $config->twapp->id;
+	$twapp->token = $config->twapp->token;
+	$di->set('twapp', $twapp);
 	
 	/*
 	 * Configuración Google Analytics 
