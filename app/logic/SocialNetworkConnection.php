@@ -72,7 +72,7 @@ class SocialNetworkConnection
 	
 	public function getTwUrlLogIn($idMail = '')
 	{
-		$tmp_cds = $this->twitter->getRequestToken($this->urlObj->getBaseUri(TRUE). '/mail/setup/' . $idMail);
+		$tmp_cds = $this->twitter->getRequestToken($this->urlObj->getBaseUri(TRUE). 'mail/setup/' . $idMail);
 //		$tmp_cds = $this->twitter->getRequestToken('http://192.168.18.165/' . $this->urlObj->getBaseUri(FALSE) . '/mail/setup/' . $idMail);
 		$url = $this->twitter->getAuthorizeURL($tmp_cds);
 		return $url;
@@ -181,8 +181,8 @@ class SocialNetworkConnection
 			$params = array(
 				"access_token" => $access_token,
 				"message" => $fbcontent->message,
-				"link" => $this->urlObj->getBaseUri(TRUE) . '.com', //"http://stage.sigmamovil.com/",
-				"picture" => $this->urlObj->getBaseUri(TRUE) . '.com/images/sigma_envelope.png', //"http://stage.sigmamovil.com/images/sigma_envelope.png",
+				"link" => $this->urlObj->getBaseUri(TRUE), //"http://stage.sigmamovil.com/",
+				"picture" => $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png', //"http://stage.sigmamovil.com/images/sigma_envelope.png",
 				"name" => $fbcontent->title,
 				"caption" => $this->urlObj->getBaseUri(TRUE) . '.com', //"www.stage.sigmamovil.com",
 				"description" => $fbcontent->description
