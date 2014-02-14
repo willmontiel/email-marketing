@@ -51,7 +51,7 @@ class TrackingObject
 					$this->log->log('Se guardó statcontactlist');
 					
 					$userAgent = $so . ', ' . $browser;
-					$mailEvent = $this->saveMailEvent($idMail, $idContact, 'openings', $userAgent);
+					$mailEvent = $this->saveMailEvent($idMail, $idContact, 'opening', $userAgent);
 					if (!$mailEvent) {
 						throw new \InvalidArgumentException('Error while updating event');
 					}
