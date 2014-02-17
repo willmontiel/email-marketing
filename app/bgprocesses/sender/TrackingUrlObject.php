@@ -5,14 +5,16 @@ class TrackingUrlObject
 	protected $idContact;
 	protected $links;
 	protected $html;
+	protected $urls;
 
 
-	public function getTrackingUrl($html, $idMail, $idContact) 
+	public function getTrackingUrl($html, $idMail, $idContact, $urls) 
 	{
 		$this->links = array();
 		$this->idMail = $idMail;
 		$this->idContact = $idContact;
 		$this->html = $html;
+		$this->urls = $urls;
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Empezando proceso de tracking');
 		
@@ -44,20 +46,16 @@ class TrackingUrlObject
 	
 	public function getClicksTrackingUrl()
 	{
-		$links = Mxl::find(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $this->idMail)
-		));
-		
-		
-		if (count($links) != 0) {
+		if (count($this->urls) !== 0) {
 //			Phalcon\DI::getDefault()->get('logger')->log('Hay links');
 			$urlManager = Phalcon\DI::getDefault()->get('urlManager');
+			$brands = array_keys($this->urls);
 			
-			foreach ($links as $l) {
-				$this->links['search'][] = $l->idMailLink . '_sigma_url_$$$';
-		
-				$href = $urlManager->getBaseUri(true) . 'track/click/1-' . $l->idMailLink . '-' . $this->idMail . '-' . $this->idContact;
+			foreach ($brands as $brand) {
+				$this->links['search'][] = $brand;
+			}
+			foreach ($this->urls as $url) {
+				$href = $url . '-' . $this->idMail . '-' . $this->idContact;
 				$md5 = md5($href . '-Sigmamovil_Rules');
 				$link = $href . '-' . $md5;
 				Phalcon\DI::getDefault()->get('logger')->log('Insertando: ' . $link);
@@ -80,15 +78,9 @@ class TrackingUrlObject
 				$parts = parse_url($link);
 				Phalcon\DI::getDefault()->get('logger')->log('Dominio: ' . $parts['host']);
 				if (isset($parts['host'])) {
-					if (!preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host']) && $parts['host'] !== null) {
-						if (count($urls) == 0) {
-							Phalcon\DI::getDefault()->get('logger')->log('Es el primero se agrega');
+					if ($parts['host'] !== null && !preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host'])) {
+						if (!in_array($parts['scheme'] . '://' . $parts['host'], $urls)) {
 							$urls[] = $parts['scheme'] . '://' . $parts['host'];
-						}
-						else {
-							if (!in_array($parts['scheme'] . '://' . $parts['host'], $urls)) {
-								$urls[] = $parts['scheme'] . '://' . $parts['host'];
-							}
 						}
 					}
 				}

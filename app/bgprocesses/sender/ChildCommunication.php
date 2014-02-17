@@ -25,11 +25,17 @@ class ChildCommunication extends BaseWrapper
 			'bind' => array(1 => $idMail)
 		));
 		
+		$mailContent = Mailcontent::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $mail->idMail)
+		));
+		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
-		if ($mail) {
+		if ($mail && $mailContent) {
 			
 			$account = Account::findFirstByIdAccount($mail->idAccount);
 			$this->setAccount($account);
+			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
 			
 			$dbases = Dbase::findByIdAccount($this->account->idAccount);
 			$id = array();
@@ -39,11 +45,31 @@ class ChildCommunication extends BaseWrapper
 			
 			$idDbases = implode(', ', $id);
 			try {
+				if (trim($mailContent->content) === '') {
+					throw new \InvalidArgumentException("Error mail's content is empty");
+				}
+				else if ($mail->type == 'Editor') {
+					$htmlObj = new HtmlObj();
+	//				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
+					$htmlObj->assignContent(json_decode($mailContent->content));
+					$html = $htmlObj->render();
+	//				$this->log->log('Json: ' . $content);
+				}
+				else {
+	//				$this->log->log("No Hay editor");
+					$html =  html_entity_decode($mailContent->content);
+				}
+				
 				$identifyTarget = new IdentifyTarget();
 				$identifyTarget->identifyTarget($mail);
-			
-				$prepareMail = new PrepareContentMail($this->account);
-				$content = $prepareMail->getContentMail($mail);
+				
+//				$prepareMail = new PrepareMailContent($this->account);
+//				$content = $prepareMail->getContentMail($html);
+				$urlManager = $this->urlManager;
+				$imageService = new ImageService($account, $domain, $urlManager);
+				$linkService = new LinkService($account, $urlManager);
+				$prepareMail = new PrepareMailContent($linkService, $imageService);
+				list($content, $links) = $prepareMail->processContent($html);
 				
 				$mailField = new MailField($content->html, $content->text, $mail->subject, $idDbases);
 				$cf = $mailField->getCustomFields();
@@ -98,7 +124,7 @@ class ChildCommunication extends BaseWrapper
 					}
 					
 					$trackingObj = new TrackingUrlObject();
-					$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact']);
+					$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact'], $links);
 					
 //					$log->log("HTML: " . $htmlWithTracking);
 					
@@ -119,8 +145,8 @@ class ChildCommunication extends BaseWrapper
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
 					$message->addPart($text, 'text/plain');
-//					$recipients = true;
-					$recipients = $swift->send($message, $failures);
+					$recipients = true;
+//					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
 
 					if ($recipients){
@@ -205,6 +231,9 @@ class ChildCommunication extends BaseWrapper
 					$log->log('No se pudo actualizar el estado del MAIL');
 				}
 			}
+		}
+		else {
+			$log->log('The Mail do not exist, or The html content is incomplete or invalid!');
 		}
 		
 	}
