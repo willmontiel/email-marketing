@@ -221,5 +221,6 @@ function initEvents() {
 		var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);
 		newMedia.createMedia();
 		newMedia.mediaSelected();
+		media.imageSelected(response.filelink, response.title);
 	});	
 }
