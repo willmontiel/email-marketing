@@ -34,32 +34,25 @@ class TrackingUrlObject
 		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
 		$src = $urlManager->getBaseUri(true) . 'track/open/1-' . $this->idMail . '-' . $this->idContact;
 		$md5 = md5($src . '-Sigmamovil_Rules');
-		$img = '<img src="' . $src . '-' . $md5 . '" /></body>'; 
+		$img = '<img src="' . $src . '-' . $md5 . '" />'; 
 	
-		$this->links['search'][] = '</body>';
+		$this->links['search'][] = '$$$_open_track_$$$';
 		$this->links['replace'][] = $img;
 		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track: ' . $img);
-//		$htmlWithTracking = str_replace($search, $replace, $html);
-//		
-//		return $htmlWithTracking;
 	}
 	
 	public function getClicksTrackingUrl()
 	{
 		if (count($this->urls) !== 0) {
-//			Phalcon\DI::getDefault()->get('logger')->log('Hay links');
-			$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-			$brands = array_keys($this->urls);
-			
-			foreach ($brands as $brand) {
-				$this->links['search'][] = $brand;
-			}
-			foreach ($this->urls as $url) {
-				$href = $url . '-' . $this->idMail . '-' . $this->idContact;
+			while ($true = current($this->urls)) {
+				$this->links['search'][] = key($this->urls);
+				$value = current($this->urls);
+				$href = $value . '-' . $this->idMail . '-' . $this->idContact;
 				$md5 = md5($href . '-Sigmamovil_Rules');
 				$link = $href . '-' . $md5;
-				Phalcon\DI::getDefault()->get('logger')->log('Insertando: ' . $link);
 				$this->links['replace'][] = $link;
+				Phalcon\DI::getDefault()->get('logger')->log('Insertando link de click: ' . $link);
+				next($this->urls);
 			}
 		}
 	}

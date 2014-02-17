@@ -45,11 +45,11 @@ class ImageService
 			"bind" => array(1 => $idAsset)
 		));
 		
-		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
-		
-		$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlAsset() . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
-		
-		return $img;
+		if ($asset) {
+			$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
+			$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlAsset() . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
+			return $img;
+		}
 	}
 	
 	protected function getCompletePublicImageSrc($idTemplate, $idTemplateImage)
@@ -59,9 +59,10 @@ class ImageService
 			'bind' => array(1 => $idTemplateImage)
 		));
 		
-		$ext = pathinfo( $tpImg->name, PATHINFO_EXTENSION);
-		$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlTemplate() . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
-	
-		return $img;
+		if ($tpImg) {
+			$ext = pathinfo( $tpImg->name, PATHINFO_EXTENSION);
+			$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlTemplate() . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
+			return $img;
+		}
 	}
 }

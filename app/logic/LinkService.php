@@ -3,13 +3,16 @@ class LinkService
 {
 	protected $account;
 	protected $urlManager;
-	
+	protected $mail;
+
+
 	protected $mappings;
 			
-	public function __construct(Account $account, UrlManagerObject $urlManager) 
+	public function __construct(Account $account, Mail $mail, UrlManagerObject $urlManager) 
 	{
 		$this->account = $account;
 		$this->urlManager = $urlManager;
+		$this->mail = $mail;
 		
 		$this->mappings = array();
 	}
@@ -85,14 +88,15 @@ class LinkService
 		));
 		
 		if (!$maillink) {
-			$link = new Maillink();
-			$link->idAccount = $this->account->idAccount;
-			$link->link = $url;
-			$link->createdon = time();
+			unset($maillink);
+			$maillink = new Maillink();
+			$maillink->idAccount = $this->account->idAccount;
+			$maillink->link = $url;
+			$maillink->createdon = time();
 
-			if (!$link->save()) {
-				foreach ($link->getMessages() as $msg) {
-					$this->log->log('Error saving link: ' . $msg);
+			if (!$maillink->save()) {
+				foreach ($maillink->getMessages() as $msg) {
+					Phalcon\DI::getDefault()->get('logger')->log('Error saving link: ' . $msg);
 				}
 				throw new InvalidArgumentException('Error while saving Maillink');
 			}
@@ -104,7 +108,7 @@ class LinkService
 
 		if (!$mxl->save()) {
 			foreach ($mxl->getMessages() as $msg) {
-				$this->log->log('Error saving Mxl: ' . $msg);
+				Phalcon\DI::getDefault()->get('logger')->log('Error saving Mxl: ' . $msg);
 			}
 			throw new InvalidArgumentException('Error while saving Mxl');
 		}

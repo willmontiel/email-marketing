@@ -26,16 +26,18 @@ class PrepareMailContent
 			foreach ($images as $image) {
 				$imageSrc = $image->getAttribute('src');
 				$newSrc = $this->imageService->transformImageUrl($imageSrc);
-				$image->setAttribute('src', $newSrc);
+				if ($newSrc) {
+					$image->setAttribute('src', $newSrc);
+				}
 			}
 		}
+		
+		$marks = null;
 		
 		if ($links->length !== 0) {
 			foreach ($links as $link) {
 				$linkHref = $link->getAttribute('href');
-				echo 'This is the link'. $linkHref . PHP_EOL;
 				$mark = $this->linkService->getPlatformUrl($linkHref);
-				echo 'This is the mark'. $mark . PHP_EOL;
 				if ($mark) {
 					$link->setAttribute('href', $mark);
 				}

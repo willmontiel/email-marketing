@@ -10,6 +10,7 @@ class ChildCommunication extends BaseWrapper
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 	
 		$this->mta = $di['mtadata'];
+		$this->urlManager = $di['urlManager'];
 	}
 	
 	public function setSocket($childprocess)
@@ -67,11 +68,11 @@ class ChildCommunication extends BaseWrapper
 //				$content = $prepareMail->getContentMail($html);
 				$urlManager = $this->urlManager;
 				$imageService = new ImageService($account, $domain, $urlManager);
-				$linkService = new LinkService($account, $urlManager);
+				$linkService = new LinkService($account, $mail, $urlManager);
 				$prepareMail = new PrepareMailContent($linkService, $imageService);
 				list($content, $links) = $prepareMail->processContent($html);
 				
-				$mailField = new MailField($content->html, $content->text, $mail->subject, $idDbases);
+				$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $idDbases);
 				$cf = $mailField->getCustomFields();
 				
 				switch ($cf) {
