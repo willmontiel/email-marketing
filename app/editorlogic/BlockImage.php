@@ -31,7 +31,7 @@ class BlockImage extends HtmlAbstract
 				
 		$image = '<img src="' . $src . '" alt="' . $alt . '" style="height: ' . $height . 'px; width: ' . $imgwidth . 'px;" height="' . $height . '" width="' . $imgwidth . '">';
 		
-		$this->children[] = (!empty($link)) ? '<a href= "http://' . $link . '">' . $image . '</a>' : $image;;
+		$this->children[] = (!empty($link)) ? '<a href= "http://' . $link . '" style="text-decoration: none;">' . $image . '</a>' : $image;;
 	}
 	
 	public function renderObjPrefix()
