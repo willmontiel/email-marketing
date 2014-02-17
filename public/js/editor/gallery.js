@@ -156,7 +156,6 @@ MediaDisplayer.prototype.createSlider = function() {
 	this.cleanslider();
 	var totalWidthBlock = (this.image.naturalWidth > this.widthZone) ? this.widthZone : this.image.naturalWidth;
 	var maxWidthZone = this.widthZone;
-	console.log(this.widthZone)
 	var maxwidthpx =maxWidthZone*100/this.image.naturalWidth;
 	var realmax = Math.round(maxwidthpx);
 	var value = (this.block.displayer.hasOwnProperty('percent')) ? this.block.displayer.percent : maxwidthpx*this.image.naturalWidth/totalWidthBlock;

@@ -62,7 +62,6 @@ Toolbar.prototype.createBackground = function() {
 	$("#color-background-toolbar input").on("change", function () {
 		t.component.updateBlockStyle('background-color', '#' + $(this).val());
 		t.component.background_color = '#' + $(this).val();
-		console.log(t.component.background_color)
 	});
 	
 	$("#withbgcolor").on("click", function () {
