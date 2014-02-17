@@ -12,6 +12,7 @@ $loader->registerDirs(array(
 	'../../models/',
 	'../../library/',
 	'../../library/facebook/',
+	'../../library/twitter/',
 	'../../logic/',
 	'../../editorlogic/',
 ))->register();
@@ -116,6 +117,14 @@ $fbapp->iduser = $config->fbapp->id;
 $fbapp->token = $config->fbapp->token;
 $di->set('fbapp', $fbapp);
 
+/*
+* Configuración Twitter App 
+*/
+$twapp = new stdClass();
+$twapp->iduser = $config->twapp->id;
+$twapp->token = $config->twapp->token;
+$di->set('twapp', $twapp);
+	
 /*
  * Log Object, utilizado para logging en general a archivo
  */

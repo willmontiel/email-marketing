@@ -2,10 +2,12 @@
 class SocialNetworkConnection
 {
 	public $facebook = null;
+	public $twitter = null;
 	public $user;
 	
 	function __construct($logger = null) {
 		$this->logger = $logger;
+		$this->urlObj = Phalcon\DI::getDefault()->get('urlManager');
 	}
 
 	public function setUser(User $user)
@@ -53,9 +55,27 @@ class SocialNetworkConnection
 		));
 	}
 	
+	public function setTwitterConnection($id, $secret, $oauth_token = null, $oauth_secret = null)
+	{
+		if($oauth_token != null && $oauth_secret != null ) {
+			$this->twitter = new TwitterOAuth($id, $secret, $oauth_token, $oauth_secret);
+		}
+		else {
+			$this->twitter = new TwitterOAuth($id, $secret);
+		}
+	}
+	
 	public function getFbUrlLogIn()
 	{
 		return $this->facebook->getLoginUrl(array('scope' => 'manage_pages, publish_stream'));
+	}
+	
+	public function getTwUrlLogIn($idMail = '')
+	{
+		$tmp_cds = $this->twitter->getRequestToken($this->urlObj->getBaseUri(TRUE). 'mail/setup/' . $idMail);
+//		$tmp_cds = $this->twitter->getRequestToken('http://192.168.18.165/' . $this->urlObj->getBaseUri(FALSE) . '/mail/setup/' . $idMail);
+		$url = $this->twitter->getAuthorizeURL($tmp_cds);
+		return $url;
 	}
 	
 	public function saveFacebookUser()
@@ -92,12 +112,59 @@ class SocialNetworkConnection
 		}
 	}
 	
-	public function postOnFacebook($idsobj, Socialmail $desc, Mail $mail)
+	public function saveTwitterUser($oauth_verifier)
 	{
-		$facebook_ids = $idsobj->facebook;
+		$token_cds = $this->twitter->getAccessToken($oauth_verifier);
+		if($token_cds['oauth_token']) {
+			$existing = Socialnetwork::findFirstByName($token_cds['screen_name']);
+			if(!$existing) {
+				$newuser = new Socialnetwork();
+				$newuser->idUser = $this->user->idUser;
+				$newuser->userid = $token_cds['oauth_token'];
+				$newuser->token = $token_cds['oauth_token_secret'];
+				$newuser->name = $token_cds['screen_name'];
+				$newuser->type = 'Twitter';
+				$newuser->category = 'Profile';
+				if(!$newuser->save()) {
+					$this->logger->log('No se pudo crear el usuario id = '. $this->user->idUser . ' token = ' . $token_cds['oauth_token'] . ' secret = ' . $token_cds['oauth_token_secret'] . ' name = ' . $token_cds['name']);
+				}
+			}
+		}
+	}
+	
+	public function saveSocialsIds($fbaccounts, $twaccounts)
+	{
+		$socialsnetworks = new stdClass();
+		if($fbaccounts) {
+			$socialsnetworks->facebook = $fbaccounts;
+		}
+		if($twaccounts){
+			$socialsnetworks->twitter = $twaccounts;
+		}
+		return json_encode($socialsnetworks);
+	}
+	
+	public function saveFacebookDescription($fbtitle = '', $fbdescription = '', $fbmsg = '')
+	{
+		$fbcontent = new stdClass();
+		$fbcontent->title = $fbtitle;
+		$fbcontent->description = $fbdescription;
+		$fbcontent->message = $fbmsg;
+		return json_encode($fbcontent);
+	}
+	
+	public function saveTwitterDescription($twmessage = '')
+	{
+		$twcontent = new stdClass();
+		$twcontent->message = $twmessage;
+		return json_encode($twcontent);
+	}
+
+	public function postOnFacebook($ids, Socialmail $desc, Mail $mail)
+	{
 		$first = TRUE;
 		$phql = "SELECT userid, token FROM Socialnetwork where idSocialnetwork in ( ";
-		foreach ($facebook_ids as $id) {
+		foreach ($ids as $id) {
 			if(!$first) {
 				$phql.= ', ';
 			}
@@ -105,7 +172,7 @@ class SocialNetworkConnection
 			$first = FALSE;
 		}
 		$phql.= ' )';
-
+		$fbcontent = json_decode($desc->fbdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
 		foreach ($ids_tokens as $id_token){
@@ -113,12 +180,12 @@ class SocialNetworkConnection
 			$access_token = $id_token->token;
 			$params = array(
 				"access_token" => $access_token,
-				"message" => $desc->fbdescription,
-				"link" => "http://stage.sigmamovil.com/",
-				"picture" => "http://stage.sigmamovil.com/images/sigma_envelope.png",
-				"name" => $mail->name,
-				"caption" => "www.stage.sigmamovil.com",
-				"description" => "Correo enviado desde la plataforma de Sigma Movil"
+				"message" => $fbcontent->message,
+				"link" => $this->urlObj->getBaseUri(TRUE), //"http://stage.sigmamovil.com/",
+				"picture" => $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png', //"http://stage.sigmamovil.com/images/sigma_envelope.png",
+				"name" => $fbcontent->title,
+				"caption" => $this->urlObj->getBaseUri(TRUE), //"www.stage.sigmamovil.com/",
+				"description" => $fbcontent->description
 			  );
 
 			  try {
@@ -128,6 +195,38 @@ class SocialNetworkConnection
 				  $this->logger->log('No publico');
 				  $this->logger->log($e->getMessage());
 			  }
+		}
+	}
+	
+	public function postOnTwitter($ids, Socialmail $desc, Mail $mail, $appids)
+	{
+		$first = TRUE;
+		$phql = "SELECT userid, token FROM Socialnetwork where idSocialnetwork in ( ";
+		foreach ($ids as $id) {
+			if(!$first) {
+				$phql.= ', ';
+			}
+			$phql.= $id;
+			$first = FALSE;
+		}
+		$phql.= ' )';
+		$twcontent = json_decode($desc->twdescription);
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		$ids_tokens = $mm->executeQuery($phql);
+		foreach ($ids_tokens as $id_token){
+			$oauth_token = $id_token->userid;
+			$oauth_secret = $id_token->token;
+			$this->setTwitterConnection($appids['id'], $appids['secret'], $oauth_token, $oauth_secret);
+			try {
+				$account = $this->twitter->get('account/verify_credentials');
+				$post = $this->twitter->post('statuses/update', array('status' => $twcontent->message . ' stage.sigmamovil.com'));
+				$this->logger->log('Successfully posted in Twitter');
+			} catch(Exception $e) {
+				$this->logger->log('No Tweet');
+				$this->logger->log($account);
+				$this->logger->log($post);
+				$this->logger->log($e->getMessage());
+			}
 		}
 	}
 }

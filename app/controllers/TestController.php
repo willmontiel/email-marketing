@@ -1019,4 +1019,25 @@ class TestController extends ControllerBase
 		  
 		  return $this->response->redirect('');
 	}
+	
+	public function twittertestAction()
+	{	
+		$log = $this->logger;
+//		$this->view->disable();
+		$connection = new TwitterOAuth('YOwc7cROtCFjvftKgSOLDA', '4Y07b71bpIhLAgEvQqCF5c58NRcG807UiWGvaYXwKA');
+		$temporary_credentials = $connection->getRequestToken("http://localhost/emarketing/test/twittertest");
+		$redirect_url = $connection->getAuthorizeURL($temporary_credentials);
+		$this->view->setVar("loginUrl", $redirect_url);
+		if($_REQUEST['oauth_verifier']) {
+			$connection = new TwitterOAuth('YOwc7cROtCFjvftKgSOLDA', '4Y07b71bpIhLAgEvQqCF5c58NRcG807UiWGvaYXwKA', $_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
+			$token_credentials = $connection->getAccessToken($_REQUEST['oauth_verifier']);
+			$log->log(print_r($token_credentials, true));
+			//las credenciales son las que se guardan en la base de datos
+			$connection = new TwitterOAuth('YOwc7cROtCFjvftKgSOLDA', '4Y07b71bpIhLAgEvQqCF5c58NRcG807UiWGvaYXwKA', $token_credentials['oauth_token'], $token_credentials['oauth_token_secret']);
+			
+			$account = $connection->get('account/verify_credentials');
+			$log->log(print_r($account, true));
+			$status = $connection->post('statuses/update', array('status' => 'Text of status here y mas pa a donde'));
+		}
+	}
 }

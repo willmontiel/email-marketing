@@ -437,7 +437,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	cursor: pointer;
 }
 
-.add_facebook_account {
+.add_facebook_account, .add_twitter_account {
 	text-align: end;
 	margin-top: 10px;
 }

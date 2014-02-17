@@ -218,9 +218,20 @@ class ChildCommunication extends BaseWrapper
 				
 				if($mail->socialnetworks != null) {
 					$socials = new SocialNetworkConnection($log);
-					$socials->setFacebookConnection(Phalcon\DI::getDefault()->get('fbapp')->iduser, Phalcon\DI::getDefault()->get('fbapp')->token);
 					$socialdesc = Socialmail::findFirstByIdMail($mail->idMail);
-					$socials->postOnFacebook(json_decode($mail->socialnetworks), $socialdesc, $mail);
+					$idsocials = json_decode($mail->socialnetworks);
+					if(isset($idsocials->facebook)) {
+						$socials->setFacebookConnection(Phalcon\DI::getDefault()->get('fbapp')->iduser, Phalcon\DI::getDefault()->get('fbapp')->token);
+						$socials->postOnFacebook($idsocials->facebook, $socialdesc, $mail);
+					}
+					if(isset($idsocials->twitter)) {
+						$socials->setTwitterConnection(Phalcon\DI::getDefault()->get('twapp')->iduser, Phalcon\DI::getDefault()->get('twapp')->token);
+						$appids = array(
+							'id' => Phalcon\DI::getDefault()->get('twapp')->iduser,
+							'secret' => Phalcon\DI::getDefault()->get('twapp')->token
+						);
+						$socials->postOnTwitter($idsocials->twitter, $socialdesc, $mail, $appids);
+					}
 				}
 			}
 			catch (InvalidArgumentException $e) {
