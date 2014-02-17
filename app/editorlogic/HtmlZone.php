@@ -41,7 +41,7 @@ class HtmlZone extends HtmlAbstract
 				break;
 		}
 		
-		return '<td style="width: ' . $width . '; vertical-align: top; padding:0;"><table style="border-color: #' . $this->border_color . '; border-style: ' . $this->border_style . '; border-width: ' . $this->border_width . 'px; background-color: #' . $this->background_color . '; border-top-left-radius: ' . $this->corner_top_left . 'px; border-top-right-radius: ' . $this->corner_top_right . 'px; border-bottom-right-radius: ' . $this->corner_bottom_right . 'px; border-bottom-left-radius: ' . $this->corner_bottom_left . 'px; table-layout: fixed; width:100%; border-spacing: 0px;" Width="100%" cellpadding="0"><tbody>';
+		return '<td style="width: ' . $width . '; vertical-align: top; padding:0;"><table style="border-color: ' . $this->border_color . '; border-style: ' . $this->border_style . '; border-width: ' . $this->border_width . 'px; background-color: ' . $this->background_color . '; border-top-left-radius: ' . $this->corner_top_left . 'px; border-top-right-radius: ' . $this->corner_top_right . 'px; border-bottom-right-radius: ' . $this->corner_bottom_right . 'px; border-bottom-left-radius: ' . $this->corner_bottom_left . 'px; table-layout: fixed; width:100%; border-spacing: 0px;" Width="100%" cellpadding="0"><tbody>';
 	}
 	public function renderChildPrefix($i)
 	{

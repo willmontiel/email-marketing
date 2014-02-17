@@ -346,8 +346,8 @@ BtnBlock.prototype.colorPickerBlockChange = function(id, style, property) {
 	$('#' + id).pickAColor({showHexInput: false});
 	
 	$('#' + id + ' input').on("change", function () {
-		t.content.find('.content-button').css(style, $(this).val());
-		t[property] = $(this).val();
+		t.content.find('.content-button').css(style, '#' + $(this).val());
+		t[property] = '#' + $(this).val();
 	});
 };
 

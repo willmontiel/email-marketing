@@ -53,7 +53,7 @@ Editor.prototype.objectExists = function(objMail) {
 	}
 	else {
 		this.layout = layouts[0];
-		this.editorColor = 'E6E6E6';
+		this.editorColor = '#E6E6E6';
 		this.createEditStyle();
 		this.newDropZones();
 		this.createDefaultFooter();
