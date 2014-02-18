@@ -329,7 +329,7 @@ class TrackingObject
 
 			$sql = 'UPDATE email AS e JOIN contact AS c 
 						ON (c.idEmail = e.idEmail)
-						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
+						SET e.bounced = ' . $date . ', c.unsubscribed = ' . $date . ', c.bounced = ' . $date . '
 					WHERE e.idEmail = ?';
 			$update = $db->execute($sql, array($contact->idEmail));
 //			
