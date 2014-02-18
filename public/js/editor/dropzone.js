@@ -7,9 +7,9 @@ function DropzoneArea (name, color, parent, width, widthval) {
 	this.listofrows = [];
 	this.content = "";
 	
-	this.background_color = "FFFFFF";
+	this.background_color = "#FFFFFF";
 	this.border_width = 0;
-	this.border_color = "FFFFFF";
+	this.border_color = "#FFFFFF";
 	this.border_style = "none";
 	this.corner_top_left = 0;
 	this.corner_top_right = 0;

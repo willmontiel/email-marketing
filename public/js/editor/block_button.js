@@ -12,8 +12,8 @@ function BtnBlock(row) {
 	this.btnborderstyle = 'solid';
 	this.btnwithbgimage = true;
 	this.btnbgimage = 'blue';
-	this.btnwidth = 120;
-	this.btnheight = 40;
+	this.btnwidth = 90;
+	this.btnheight = 20;
 	this.btnalign = 'center';
 	this.btnfontsize = 14;
 	this.btnfontfamily = 'arial';
@@ -204,8 +204,8 @@ BtnBlock.prototype.designBtn = function() {
 		content.css('background-image', '');
 	}
 	
-	content.css('width', this.btnwidth);
-	content.css('height', this.btnheight);
+	content.css('padding-top', this.btnheight/2);
+	content.css('padding-bottom', this.btnheight/2);
 	content.css('font-size', this.btnfontsize);
 	content.css('font-family', this.btnfontfamily);
 	
@@ -334,7 +334,13 @@ BtnBlock.prototype.spinnerBlockChange = function(id, style, property, min, max) 
 	var t = this;
 	$('#' + id).spinner({min: min, max: max,
 		stop: function() {
-			t.content.find('.content-button').css(style, $(this).val());
+			if(style === 'height') {
+				t.content.find('.content-button').css('padding-top', $(this).val()/2);
+				t.content.find('.content-button').css('padding-bottom', $(this).val()/2);
+			}
+			else {
+				t.content.find('.content-button').css(style, $(this).val());
+			}
 			t[property] = $(this).val();
 		}
 	});
@@ -346,8 +352,8 @@ BtnBlock.prototype.colorPickerBlockChange = function(id, style, property) {
 	$('#' + id).pickAColor({showHexInput: false});
 	
 	$('#' + id + ' input').on("change", function () {
-		t.content.find('.content-button').css(style, $(this).val());
-		t[property] = $(this).val();
+		t.content.find('.content-button').css(style, '#' + $(this).val());
+		t[property] = '#' + $(this).val();
 	});
 };
 

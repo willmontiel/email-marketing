@@ -31,12 +31,12 @@ class BlockImage extends HtmlAbstract
 				
 		$image = '<img src="' . $src . '" alt="' . $alt . '" style="height: ' . $height . 'px; width: ' . $imgwidth . 'px;" height="' . $height . '" width="' . $imgwidth . '">';
 		
-		$this->children[] = (!empty($link)) ? '<a href= "http://' . $link . '">' . $image . '</a>' : $image;;
+		$this->children[] = (!empty($link)) ? '<a href= "http://' . $link . '" style="text-decoration: none;">' . $image . '</a>' : $image;;
 	}
 	
 	public function renderObjPrefix()
 	{
-		return '<td style="width: ' . $this->column_width . '%; vertical-align: ' . $this->vertalign . '; padding-left: ' . $this->margin_left . 'px; padding-right: ' . $this->margin_right . 'px;" width="' . $this->column_width . '%"><table style="border-color: #' . $this->border_color . '; border-style: ' . $this->border_style . '; border-width: ' . $this->border_width . 'px; background-color: #' . $this->background_color . '; border-top-left-radius: ' . $this->corner_top_left . 'px; border-top-right-radius: ' . $this->corner_top_right . 'px; border-bottom-right-radius: ' . $this->corner_bottom_right . 'px; border-bottom-left-radius: ' . $this->corner_bottom_left . 'px; margin-top: ' . $this->margin_top . 'px; margin-bottom: ' . $this->margin_bottom . 'px; width: 100%; border-spacing: 0px;" cellpadding="0" width="100%"><tr><td align="' . $this->align . '" style="width: ' . $this->width . 'px;" width="' . $this->width . 'px">';
+		return '<td style="width: ' . $this->column_width . '%; vertical-align: ' . $this->vertalign . '; padding-left: ' . $this->margin_left . 'px; padding-right: ' . $this->margin_right . 'px;" width="' . $this->column_width . '%"><table style="border-color: ' . $this->border_color . '; border-style: ' . $this->border_style . '; border-width: ' . $this->border_width . 'px; background-color: ' . $this->background_color . '; border-top-left-radius: ' . $this->corner_top_left . 'px; border-top-right-radius: ' . $this->corner_top_right . 'px; border-bottom-right-radius: ' . $this->corner_bottom_right . 'px; border-bottom-left-radius: ' . $this->corner_bottom_left . 'px; margin-top: ' . $this->margin_top . 'px; margin-bottom: ' . $this->margin_bottom . 'px; width: 100%; border-spacing: 0px;" cellpadding="0" width="100%"><tr><td align="' . $this->align . '" style="width: ' . $this->width . 'px;" width="' . $this->width . 'px">';
 	}
 	public function renderChildPrefix($i)
 	{

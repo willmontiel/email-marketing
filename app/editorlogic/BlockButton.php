@@ -22,17 +22,19 @@ class BlockButton extends HtmlAbstract
 
 		$this->align = $data->align;
 		
-		$style = 'background-color:#' . $data->bgcolor . '; color:#' . $data->textcolor . '; display: inline-block; font-family:' . $data->fontfamily . '; font-size:' . $data->fontsize . 'px; font-weight:bold; line-height:' . $data->height . 'px; text-align:center; text-decoration:none; width:' . $data->width . 'px; border-radius:' . $data->radius . 'px; border:' . $data->borderwidth . 'px ' . $data->borderstyle . ' ' . $data->bordercolor . '; ';
+		$style = 'background-color:' . $data->bgcolor . '; color:' . $data->textcolor . '; display: inline-block; font-family:' . $data->fontfamily . '; font-size:' . $data->fontsize . 'px; font-weight:bold; padding-top:' . $data->height/2 . 'px; padding-bottom:' . $data->height/2 . 'px; padding-left: 10px; padding-right: 10px; text-align:center; text-decoration:none; width:' . $data->width . 'px; border-top-left-radius: ' . $data->radius . 'px; border-top-right-radius: ' . $data->radius . 'px; border-bottom-right-radius: ' . $data->radius . 'px; border-bottom-left-radius: ' . $data->radius . 'px; border:' . $data->borderwidth . 'px ' . $data->borderstyle . ' ' . $data->bordercolor . '; text-decoration: none; -webkit-text-size-adjust:none; mso-hide:all; ';
 		
 		if($data->withbgimage == 1) {
 			$style.= 'background-image:url(' . $domain->imageUrl . '/images/btn-' . $data->bgimage . '.png);';
 		}
 		
-		$this->children[] ='<a href="http://' . $data->link . '" style="' . $style . '">' . $data->text . '</a>';
+		$mso = '<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://' . $data->link . '" style="height:40px;v-text-anchor:middle;width:' . $data->width . 'px;" arcsize="10%" fillcolor="' . $data->bgcolor . '"><w:anchorlock/><center style="color:' . $data->textcolor . ';font-family:' . $data->fontfamily . ';font-size:' . $data->fontsize . 'px; font-weight:bold; padding-top:' . $data->height/2 . 'px; padding-bottom:' . $data->height/2 . 'px; padding-left: 10px; padding-right: 10px; border-color: ' . $this->border_color . '; border-style: ' . $this->border_style . '; border-width: ' . $this->border_width . 'px;">' . $data->text . '</center></v:roundrect><![endif]-->';
+		
+		$this->children[] ='<div>' . $mso . '<a href="http://' . $data->link . '" style="' . $style . '">' . $data->text . '</a></div>';
 	}
 	public function renderObjPrefix()
 	{
-		return '<td style="width: ' . $this->column_width . '%; padding-left: ' . $this->margin_left . 'px; padding-right: ' . $this->margin_right . 'px;" width="' . $this->column_width . '%"><table style="border-color: #' . $this->border_color . '; border-style: ' . $this->border_style . '; border-width: ' . $this->border_width . 'px; background-color: #' . $this->background_color . '; border-top-left-radius: ' . $this->corner_top_left . 'px; border-top-right-radius: ' . $this->corner_top_right . 'px; border-bottom-right-radius: ' . $this->corner_bottom_right . 'px; border-bottom-left-radius: ' . $this->corner_bottom_left . 'px; margin-top: ' . $this->margin_top . 'px; margin-bottom: ' . $this->margin_bottom . 'px; width: 100%; border-spacing: 0px;" cellpadding="0" width="100%"><tr><td style="text-align: ' . $this->align . ';">';
+		return '<td style="width: ' . $this->column_width . '%; padding-left: ' . $this->margin_left . 'px; padding-right: ' . $this->margin_right . 'px;" width="' . $this->column_width . '%"><table style="border-color: ' . $this->border_color . '; border-style: ' . $this->border_style . '; border-width: ' . $this->border_width . 'px; background-color: ' . $this->background_color . '; border-top-left-radius: ' . $this->corner_top_left . 'px; border-top-right-radius: ' . $this->corner_top_right . 'px; border-bottom-right-radius: ' . $this->corner_bottom_right . 'px; border-bottom-left-radius: ' . $this->corner_bottom_left . 'px; margin-top: ' . $this->margin_top . 'px; margin-bottom: ' . $this->margin_bottom . 'px; width: 100%; border-spacing: 0px;" cellpadding="0" width="100%"><tr><td style="text-align: ' . $this->align . ';">';
 	}
 	public function renderChildPrefix($i)
 	{

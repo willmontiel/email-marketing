@@ -6,9 +6,9 @@ function SShareBlock(row) {
 	this.content_gp = {html: $('<img class="soc_net_share button_google_plus" src="' + config.imagesUrl + '/share_google_plus_image_32.png" alt="64x64" />'), selected: true};
 	this.align = 'left';
 	this.size = '32';
-	this.background_color = "FFFFFF";
+	this.background_color = "#FFFFFF";
 	this.border_width = 0;
-	this.border_color = "FFFFFF";
+	this.border_color = "#FFFFFF";
 	this.border_style = "none";
 	this.corner_top_left = 0;
 	this.corner_top_right = 0;

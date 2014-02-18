@@ -1,9 +1,9 @@
 function ImgBlock(row) {
 	this.row = row;
 	this.content_img = $('<img data-toggle="modal" data-backdrop="static" href="#images" class="media-object-img image-placeholder" />');
-	this.background_color = "FFFFFF";
+	this.background_color = "#FFFFFF";
 	this.border_width = 0;
-	this.border_color = "FFFFFF";
+	this.border_color = "#FFFFFF";
 	this.border_style = "none";
 	this.corner_top_left = 0;
 	this.corner_top_right = 0;
