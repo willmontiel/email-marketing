@@ -288,17 +288,10 @@ class MailController extends ControllerBase
 				if ($objMail) {
 					$text = $objMail->plainText;
 					$this->view->setVar('objMail', $objMail->content);
-					if ($objMail->googleAnalytics == null) {
-						$this->view->setVar('analytics', 'null');
-					}
-					else {
-						$this->view->setVar('analytics', $objMail->googleAnalytics);
-					}
 				}
 				else  {
 					$text = null;
 					$this->view->setVar('objMail', 'null');
-					$this->view->setVar('analytics', 'null');
 				}
 			}
 			
@@ -312,13 +305,11 @@ class MailController extends ControllerBase
 				
 				$mailContent = new Mailcontent();
 				$content = $this->request->getPost("editor");
-				$analytics = json_encode($this->request->getPost("analytics"));
 //				$log->log($content);
 //				$log->log('Analytics: ' . $analytics);				
 				$mailContent->idMail = $idMail;
 				$mailContent->content = $content;
 				$mailContent->plainText = $text;
-				$mailContent->googleAnalytics = $analytics;
 				
 				$mail->type = "Editor";
 				$mail->wizardOption = $wizardOption;
@@ -626,6 +617,76 @@ class MailController extends ControllerBase
 		}
 	}
 	
+	public function trackAction($idMail = null)
+	{
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND status = ?2 AND (wizardOption = ?3 OR wizardOption = ?4 OR wizardOption = ?5)',
+			'bind' => array(1 => $idMail,
+							2 => 'Draft',
+							3 => 'source',
+							4 => 'target',
+							5 => 'schedule')
+		));
+	
+		if ($mail) {
+			$content = Mailcontent::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $idMail)
+			));
+			
+			if ($content) {
+				switch ($mail->type) {
+					case 'Html':
+						$html = html_entity_decode($content->content); 
+						break;
+
+					case 'Editor':
+						$editor = new HtmlObj();
+						$editor->assignContent(json_decode($content->content));
+						$html = $editor->render();
+						break;
+				}
+				$urlObj = new TrackingUrlObject();
+				$links = $urlObj->searchDomainsAndProtocols($html);
+				$this->logger->log(print_r($links, true));
+
+				$this->view->setVar('links', $links);
+				$this->view->setVar('mail', $mail);
+				if ($content->googleAnalytics !== null) {
+					$analytics = json_decode($content->googleAnalytics);
+					$x = 'true';
+				}
+				else {
+					$analytics = null;
+					$x = 'null';
+				}
+				$this->view->setVar('analytics', $analytics);
+				$this->view->setVar('x', $x);
+				
+				if ($this->request->isPost()) {
+					$googleAnalytics = $this->request->getPost("googleAnalytics");
+					$links = $this->request->getPost("links");
+					$direction = $this->request->getPost("direction");
+					
+					if ($googleAnalytics == 'googleAnalytics') {
+						$content->googleAnalytics = json_encode($links);
+					}
+					else {
+						$content->googleAnalytics = null;
+					}
+					if (!$content->save()) {
+						foreach ($content->getMessages() as $msg) {
+							$this->logger->log('Error: ' . $msg);
+						}
+						$this->flashSession->error('Ha ocurrido un error mientras se guardaba el seguimiento de Google Analytics');
+						return $this->response->redirect('mail/track/' . $idMail);
+					}
+					$this->routeRequest('track', $direction, $mail->idMail);
+				}
+			}
+		}
+	}
+	
 	public function targetAction($idMail = null)
 	{
 		$log = $this->logger;
@@ -642,23 +703,30 @@ class MailController extends ControllerBase
 			$this->view->setVar('mail', $mail);
 			
 			$dbases = Dbase::findByIdAccount($this->user->account->idAccount);
+			
+			if (count($dbases) > 0) {
+				$array = array();
+				foreach ($dbases as $dbase) {
+					$array[] = $dbase->idDbase;
+				}
+				
+				$idsDbase = implode(",", $array);
+				
+				$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
+				$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
+				
+				$contactlists = $this->modelsManager->executeQuery($phql1);
+				$segments = $this->modelsManager->executeQuery($phql2);
 
-			$array = array();
-			foreach ($dbases as $dbase) {
-				$array[] = $dbase->idDbase;
+				$this->view->setVar('dbases', $dbases);
+				$this->view->setVar('contactlists', $contactlists);
+				$this->view->setVar('segments', $segments);
+				$this->view->setVar('db', true);
 			}
-
-			$idsDbase = implode(",", $array);
-
-			$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
-			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
-
-			$contactlists = $this->modelsManager->executeQuery($phql1);
-			$segments = $this->modelsManager->executeQuery($phql2);
-
-			$this->view->setVar('dbases', $dbases);
-			$this->view->setVar('contactlists', $contactlists);
-			$this->view->setVar('segments', $segments);
+			else {
+				$this->view->setVar('db', false);
+			}
+			
 			
 			if ($this->request->isPost()) {
 				$direction = $this->request->getPost('direction');
@@ -1109,23 +1177,7 @@ class MailController extends ControllerBase
 		
 		return $this->response->redirect("mail/index");
 	}
-	
-	public function analyticsAction()
-	{
-		$content = $this->request->getPost("editor");
-//		$this->logger->log(print_r($content, true));
-		$editor = new HtmlObj();
-		$editor->assignContent(json_decode($content));
-		$html = $editor->render();
-		$urlObj = new TrackingUrlObject();
-//		$this->logger->log($html);
-		$this->logger->log(print_r($urlObj->searchDomainsAndProtocols($html), true));
-		
-		return $this->setJsonResponse(array('links' => $urlObj->searchDomainsAndProtocols($html)), 202);
-//		$this->session->set('urlAnalytics', $urlObj->searchDomainsAndProtocols($html));
-//		$this->logger->log(print_r($content, true));
-	}
-	
+
 	protected function stopScheduledTask(Mail $mail)
 	{
 		$scheduled = Mailschedule::findFirstByIdMail($mail->idMail);
@@ -1172,6 +1224,9 @@ class MailController extends ControllerBase
 					$go = 'mail/plaintext/';
 					break;
 				case 'plaintext':
+					$go = 'mail/track/';
+					break;
+				case 'track':
 					$go = 'mail/target/';
 					break;
 				case 'target':
@@ -1197,8 +1252,11 @@ class MailController extends ControllerBase
 				case 'plaintext':
 					$go = 'mail/source/';
 					break;
-				case 'target':
+				case 'track':
 					$go = 'mail/plaintext/';
+					break;
+				case 'target':
+					$go = 'mail/track/';
 					break;
 				case 'filter':
 					$go = 'mail/target/';

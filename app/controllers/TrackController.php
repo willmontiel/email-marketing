@@ -79,31 +79,34 @@ class TrackController extends ControllerBase
 			return false;
 		}
 		$cobject = json_decode($content, true);
-		$this->logger->log('Contenido: [' . $content . ']: [' .print_r($cobject, true) .  ']');
-		
+		$this->logger->log('[' .print_r($cobject, true) .  ']');
+		$i = 1;
 		foreach ($cobject as $c) {
 			$mxc = substr($c['click_tracking_id'], 2);
 			$ids = explode('x', $mxc);
 			$type = $c['event_type'];
 			$code = $c['bounce_code'];
 			$date = $c['event_time'];
-			
-			$this->logger->log('idMail: ' . $ids[0]);
-			$this->logger->log('idContact: ' . $ids[1]);
-			$this->logger->log('type: ' . $type);
-			$this->logger->log('code: ' . $code);
-			$this->logger->log('date: ' . $date);
+			$this->logger->log('Empezó track de bounced evento: ' . $i);
+//			$this->logger->log('idMail: ' . $ids[0]);
+//			$this->logger->log('idContact: ' . $ids[1]);
+//			$this->logger->log('type: ' . $type);
+//			$this->logger->log('code: ' . $code);
+//			$this->logger->log('date: ' . $date);
 			
 			try {
 				$trackingObj = new TrackingObject();
 				$trackingObj->updateTrackBounced($ids[0], $ids[1], $type, $code, $date);
 			}
 			catch (InvalidArgumentException $e) {
+				$this->logger->log('Va a ocurrir una excepción');
 				$this->logger->log('Exception: [' . $e . ']');
 				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Invalid Argument Exception'));
 			}
-			
-			return $this->setJsonResponse(array('status' => 'OK', 'description' => 'Everything seems to be fine!'));
+			$this->logger->log('Pasó la prueba: ' . $i);
+			$i ++;
 		}
+		$this->logger->log('Preparando para dar respuesta');
+		return $this->setJsonResponse(array('status' => 'OK', 'description' => 'Everything seems to be fine!'));
 	}
 }

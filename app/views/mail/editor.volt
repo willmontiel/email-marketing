@@ -10,29 +10,15 @@
 		iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
 	};
 	var objMail = {{objMail}};
-	var GA_links = [];
-	var analytics = '';
-	var googleAnalytics = {{analytics}};
-	$(function(){
-		if (googleAnalytics !== null) {
-			GA_links = googleAnalytics;
-			analytics = 'checked';
-			$("#analytics-active").show(); 
-			$("#analytics-inactive").hide();
-		}
-	});
 	
 	function sendData(value) {
-		verHTML();
-		if (analytics === '') {
-			GA_links.length = 0;
-		}
+		//verHTML();
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$.ajax(
 			{
 			url: "{{url('mail/editor')}}/{{mail.idMail}}",
 			type: "POST",			
-			data: { editor: editor, analytics: GA_links},
+			data: { editor: editor },
 			error: function(msg){
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
@@ -165,9 +151,11 @@
 				<div class="pull-left SaveTemplate">
 					<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">Guardar como Plantilla <i class="icon-picture"></i></button>
 				</div>
+				{#
 				<div class="pull-left SaveTemplate">
 					<a href="#modal-simple" onclick="addGoogleAnalytics()" type="button" class="btn btn-default">Seguimiento con Google Analytics <i class="icon-google-plus-sign"></i> <span id="analytics-active" style="color: #acd954; display: none;">Activo</span> <span id="analytics-inactive" style="color: #e8a397;">Inactivo</span></a>
 				</div>
+				#}
 			</div>
 		</div>
 	</div>

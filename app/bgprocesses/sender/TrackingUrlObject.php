@@ -69,8 +69,8 @@ class TrackingUrlObject
 			foreach ($hrefs as $href) {
 				$link = $href->getAttribute('href');
 				$parts = parse_url($link);
-				Phalcon\DI::getDefault()->get('logger')->log('Dominio: ' . $parts['host']);
 				if (isset($parts['host'])) {
+					Phalcon\DI::getDefault()->get('logger')->log('Dominio: ' . $parts['host']);
 					if ($parts['host'] !== null && !preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host'])) {
 						if (!in_array($parts['scheme'] . '://' . $parts['host'], $urls)) {
 							$urls[] = $parts['scheme'] . '://' . $parts['host'];

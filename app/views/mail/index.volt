@@ -112,7 +112,7 @@
 								</li>
 
 								<li class="sparkline-row">
-									<h4 class="gray"><span>Clicks</span> {{item.clicks/item.totalContacts}} </h4>
+									<h4 class="gray"><span>Clicks</span> {{item.clicks}} </h4>
 								</li>
 								
 								<li class="sparkline-row">
