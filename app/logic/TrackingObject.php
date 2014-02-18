@@ -339,6 +339,12 @@ class TrackingObject
 			));
 //			
 			$dbase->updateCountersInDbase();
+			
+//			$mxc = Mxc::findFirst(array(
+//				'conditions' => 'idMail = ?1 AND idContact = ?2',
+//				'bind' => array(1 => $idMail,
+//								2 => $idContact)
+//			));
 //			$list->updateCountersInContactlist();
 			
 			if (!$update) {
