@@ -20,16 +20,18 @@ function DropzoneArea (name, color, parent, width, widthval) {
 DropzoneArea.prototype.createHtmlZone = function() {
 	
 	var htmltext = "<div id='content-" + this.name + "' class='sub-mod-cont drop-zone " + this.width +"' style='background-color:" + this.background_color + ";'>\n\
-						<div class='dropzone-container dropzone-container-border'>\n\
-							<div class='info-guide'>\n\
-								<span>" + this.name + "</span>\n\
-							</div>\n\
-							<div class='dz-icons-options'>\n\
-								<div class='edit-zone tool'><span class='icon-pencil icon-white'></span></div>\n\
-							</div>\n\
-							<div class='add-row-block' data-toggle='modal' data-backdrop='static' href='#add-element-block'>\n\
-								<div class='image-add icon-plus icon-white icon-2x'></div>\n\
-								<div class='add-element'>Adicionar Elemento</div>\n\
+						<div class='zone-border-outline'>\n\
+							<div class='dropzone-container dropzone-container-border'>\n\
+								<div class='info-guide'>\n\
+									<span>" + this.name + "</span>\n\
+								</div>\n\
+								<div class='dz-icons-options'>\n\
+									<div class='edit-zone tool'><span class='icon-pencil icon-white'></span></div>\n\
+								</div>\n\
+								<div class='add-row-block' data-toggle='modal' data-backdrop='static' href='#add-element-block'>\n\
+									<div class='image-add icon-plus icon-white icon-2x'></div>\n\
+									<div class='add-element'>Adicionar Elemento</div>\n\
+								</div>\n\
 							</div>\n\
 						</div>\n\
 					</div>";

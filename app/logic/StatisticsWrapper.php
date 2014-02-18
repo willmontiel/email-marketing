@@ -4,12 +4,12 @@ class StatisticsWrapper extends BaseWrapper
 	public function showMailStatistics(Mail $mail)
 	{
 		$total = $mail->totalContacts;
-		$opens = $mail->uniqueOpens;
-		$bounced = $mail->bounced;
-		$clicks = $mail->clicks;
+		$opens = ($mail->uniqueOpens != null) ? $mail->uniqueOpens : 0;
+		$bounced = ($mail->bounced != null) ? $mail->bounced : 0;
+		$clicks = ($mail->clicks != null) ? $mail->clicks : 0;
 		$unopened = $total -($opens + $bounced);
-		$unsubscribed = $mail->unsubscribed;
-		$spam = $mail->spam;
+		$unsubscribed = ($mail->unsubscribed != null) ? $mail->unsubscribed : 0;
+		$spam = ($mail->spam != null) ? $mail->spam : 0;
 
 		$summaryChartData[] = array(
 			'title' => "Aperturas",
