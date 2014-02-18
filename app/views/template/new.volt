@@ -88,6 +88,7 @@
 				$(location).attr('href', "{{url('mail/index')}}"); 
 			}
 		});
+		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
 	}
 </script>
 {% endblock %}

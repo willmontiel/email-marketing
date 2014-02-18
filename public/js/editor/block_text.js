@@ -1,7 +1,7 @@
 function TxtBlock(row) {
 	this.row = row;
 	this.content_text = $('<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>');
-	this.background_color = "#FFFFFF";
+	this.background_color = "transparent";
 	this.border_width = 0;
 	this.border_color = "#FFFFFF";
 	this.border_style = "none";

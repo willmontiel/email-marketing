@@ -5,7 +5,7 @@ function SFollowBlock(row) {
 	this.content_li = {html: $('<td class="soc_net_follow_container"><img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/follow_linkedin_image.png" alt="64x64" /><p class="follow-text-container-li">LinkedIn</p></td>'), selected: true, text: 'LinkedIn'};
 	this.content_gp = {html: $('<td class="soc_net_follow_container"><img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/follow_google_plus_image.png" alt="64x64" /><p class="follow-text-container-gp">Google+</p></td>'), selected: true, text: 'Google+'};
 	this.align = 'left';
-	this.background_color = "#FFFFFF";
+	this.background_color = "transparent";
 	this.border_width = 0;
 	this.border_color = "#FFFFFF";
 	this.border_style = "none";

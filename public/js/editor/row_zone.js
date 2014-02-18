@@ -1,7 +1,7 @@
 function rowZone(dz) {
 	this.dz = dz;
 	this.listofblocks = [];
-	this.background_color = "#FFFFFF";
+	this.background_color = "transparent";
 	this.border_width = 0;
 	this.border_color = "#FFFFFF";
 	this.border_style = "none";

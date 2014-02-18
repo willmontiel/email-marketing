@@ -1,7 +1,7 @@
 function HrBlock(row) {
 	this.row = row;
 	this.content_hr = "<hr />";
-	this.background_color = "#FFFFFF";
+	this.background_color = "transparent";
 	this.border_width = 0;
 	this.border_color = "#FFFFFF";
 	this.border_style = "none";
