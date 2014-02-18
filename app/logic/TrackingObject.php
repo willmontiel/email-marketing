@@ -332,7 +332,10 @@ class TrackingObject
 						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
 					WHERE e.idEmail = ?';
 			$update = $db->execute($sql, array($contact->idEmail));
-
+//			
+//			$dbase->updateCountersInDbase();
+//			$list->updateCountersInContactlist();
+			
 			if (!$update) {
 				throw new \InvalidArgumentException('Error while updating contact and email');
 			}
