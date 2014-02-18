@@ -333,12 +333,14 @@ class TrackingObject
 					WHERE e.idEmail = ?';
 			$update = $db->execute($sql, array($contact->idEmail));
 			
-//			$dbase = Dbase::findFirst(array(
-//				'conditions' => 'idDbase = ?1',
-//				'bind' => array(1 => $contact->idDbase)
-//			));
+			$dbase = Dbase::findFirst(array(
+				'conditions' => 'idDbase = ?1',
+				'bind' => array(1 => $contact->idDbase)
+			));
 ////			
-//			$dbase->updateCountersInDbase();
+			if ($dbase) {
+				$this->log->log('Se encontró dbase');
+			}
 			
 //			$mxc = Mxc::findFirst(array(
 //				'conditions' => 'idMail = ?1 AND idContact = ?2',
@@ -351,6 +353,10 @@ class TrackingObject
 				throw new \InvalidArgumentException('Error while updating contact and email');
 			}
 			$this->log->log('Se actualizó contact y email');
+			
+			$this->log->log('Preparando actualizacion de contadores de dbase');
+			$dbase->updateCountersInDbase();
+			$this->log->log('Parece que actualizó');
 		}
 		else {
 			$this->log->log('No existe registro de evento de rebote');
