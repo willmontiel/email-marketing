@@ -320,8 +320,8 @@ class TrackingObject
 							2 => $idContact,
 							3 => 'bounced')
 		));
-		
 		if ($event) {
+			$this->log->log('Existe mail event');
 			$contact = Contact::findFirst(array(
 				'conditions' => 'idContact = ?1',
 				'bind' => array(1 => $idContact)
@@ -333,12 +333,12 @@ class TrackingObject
 					WHERE e.idEmail = ?';
 			$update = $db->execute($sql, array($contact->idEmail));
 			
-			$dbase = Dbase::findFirst(array(
-				'conditions' => 'idDbase = ?1',
-				'bind' => array(1 => $contact->idDbase)
-			));
-//			
-			$dbase->updateCountersInDbase();
+//			$dbase = Dbase::findFirst(array(
+//				'conditions' => 'idDbase = ?1',
+//				'bind' => array(1 => $contact->idDbase)
+//			));
+////			
+//			$dbase->updateCountersInDbase();
 			
 //			$mxc = Mxc::findFirst(array(
 //				'conditions' => 'idMail = ?1 AND idContact = ?2',
@@ -346,7 +346,7 @@ class TrackingObject
 //								2 => $idContact)
 //			));
 //			$list->updateCountersInContactlist();
-			
+			$this->log->log('Preparando para actualizar contact y email');
 			if (!$update) {
 				throw new \InvalidArgumentException('Error while updating contact and email');
 			}
