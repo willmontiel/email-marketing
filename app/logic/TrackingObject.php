@@ -332,8 +332,13 @@ class TrackingObject
 						SET e.bounced = ' . $date . ', c.unsubscribed = ' . $date . ', c.bounced = ' . $date . '
 					WHERE e.idEmail = ?';
 			$update = $db->execute($sql, array($contact->idEmail));
+			
+			$dbase = Dbase::findFirst(array(
+				'conditions' => 'idDbase = ?1',
+				'bind' => array(1 => $contact->idDbase)
+			));
 //			
-//			$dbase->updateCountersInDbase();
+			$dbase->updateCountersInDbase();
 //			$list->updateCountersInContactlist();
 			
 			if (!$update) {
