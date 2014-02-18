@@ -74,45 +74,54 @@
 			<div class="box-content">
 				<form action="{{url('mail/target')}}/{{mail.idMail}}" method="post">
 					<div class="padded">
-						{% if mail.targetName is empty AND mail.target is empty %}
-							<input type="radio" name="radios" class="icheck" value="0" id="dbRadio" >
-							<label for="dbRadio">Base de datos de contactos</label> <br />
-							<div id="db" style="display: none;">
-								<select multiple="multiple" name="dbases[]"  id="dbSelect" class="chzn-select">
-									{% for dbase in dbases %}
-										<option value="{{dbase.idDbase}}">{{dbase.name}}</option>
-									{% endfor %}
-								</select>
-							</div>
-							<br />
-							<input type="radio" name="radios" class="icheck" value="1" id="listRadio">
-							<label for="listRadio">Lista de contactos </label>
-							<div id="list" style="display: none;">
-								<select multiple="multiple" name="contactlists[]" id="listSelect" class="chzn-select">
-									{% for contactlist in contactlists %}
-										<option value="{{contactlist.idContactlist}}">{{contactlist.name}},  {{contactlist.Dbase}}</option>
-									{% endfor %}
-								</select>
-							</div>
-							<br /><br />
-							<input type="radio" name="radios" class="icheck" value="2" id="segmentRadio">
-							<label for="segmentRadio">Segmentos</label>
-							<br />
-							<div id="seg" style="display: none;">
-								<select multiple="multiple" name="segments[]" id="segSelect" class="chzn-select">
-									{% for segment in segments %}
-										<option value="{{segment.idSegment}}">{{segment.name}}</option>
-									{% endfor %}
-								</select>
-							</div>
+						{% if db == true%}
+							{% if mail.targetName is empty AND mail.target is empty %}
+								<input type="radio" name="radios" class="icheck" value="0" id="dbRadio" >
+								<label for="dbRadio">Base de datos de contactos</label> <br />
+								<div id="db" style="display: none;">
+									<select multiple="multiple" name="dbases[]"  id="dbSelect" class="chzn-select">
+										{% for dbase in dbases %}
+											<option value="{{dbase.idDbase}}">{{dbase.name}}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<br />
+								<input type="radio" name="radios" class="icheck" value="1" id="listRadio">
+								<label for="listRadio">Lista de contactos </label>
+								<div id="list" style="display: none;">
+									<select multiple="multiple" name="contactlists[]" id="listSelect" class="chzn-select">
+										{% for contactlist in contactlists %}
+											<option value="{{contactlist.idContactlist}}">{{contactlist.name}},  {{contactlist.Dbase}}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<br /><br />
+								<input type="radio" name="radios" class="icheck" value="2" id="segmentRadio">
+								<label for="segmentRadio">Segmentos</label>
+								<br />
+								<div id="seg" style="display: none;">
+									<select multiple="multiple" name="segments[]" id="segSelect" class="chzn-select">
+										{% for segment in segments %}
+											<option value="{{segment.idSegment}}">{{segment.name}}</option>
+										{% endfor %}
+									</select>
+								</div>
+							{% else %}
+								{{partial('partials/targetselect_partial')}}
+							{% endif %}
 						{% else %}
-							{{partial('partials/targetselect_partial')}}
+							No existen bases de datos ni contactos en la cuenta, para poder enviar un correo debe haber al menos un contacto. Por favor
+							haga click en contactos y siga las instrucciones
 						{% endif %}
 					</div>
 					<div class="form-actions">
-						<button button class="btn btn-blue" name="direction" value="prev"><i class="icon-circle-arrow-left"></i> Anterior</button>
+					{% if db == true%}
+						<button class="btn btn-blue" name="direction" value="prev"><i class="icon-circle-arrow-left"></i> Anterior</button>
 						<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
 						<button class="btn btn-black" name="direction" value="filter"><i class="icon-cogs"></i> Avanzado</button>
+					{% else %}
+						<a href="{{url('mail/track')}}/{{mail.idMail}}" class="btn btn-blue"><i class="icon-circle-arrow-left"></i> Anterior</a>
+					{% endif %}
 					</div>
 				</form>
 			</div>

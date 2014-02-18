@@ -77,6 +77,7 @@ class SmartWizard
 					case 'editor':
 					case 'html':
 					case 'plaintext':
+					case 'track':
 						$wizard['setup']['url'] = 'mail/setup';
 						$wizard['source']['wizard'] = 'breadcrumb-button blue';
 						break;
@@ -95,6 +96,7 @@ class SmartWizard
 						$wizard['target']['url'] = 'mail/target';
 						break;
 					case 'plaintext':
+					case 'track':
 					case 'editor':
 					case 'html':
 						$wizard['setup']['url'] = 'mail/setup';
@@ -124,6 +126,7 @@ class SmartWizard
 						$wizard['schedule']['url'] = 'mail/schedule';
 						break;
 					case 'plaintext':
+					case 'track':
 					case 'editor':
 					case 'html':
 						$wizard['setup']['url'] = 'mail/setup';
