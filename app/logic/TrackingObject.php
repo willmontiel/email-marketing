@@ -51,22 +51,31 @@ class TrackingObject
 		$time = time();// Tomar timestamp de ejecucion
 		try {
 			if ($this->canTrackOpenEvents()) { // Verificar que se puede hacer tracking de eventos open
+				$this->log->log('Se puede realizar el tracking');
 				$this->startTransaction();// Empezar transacción
-
+				$this->log->log('Se ha iniciado una transacción');
+				
 				$this->mxc->opening = $time;// Actualizar marcador de apertura (timestamp)
 				$this->addDirtyObject($this->mxc);//Se agregar el objeto mxc actualizado para su posterior grabación(esto se hace con todos los objetos)
+				$this->log->log('Se ha ensuaciado Mxc');
 				
 				$mailObj = $this->findRelatedMailObject();//Se incrementa el atributo correspondiente llamando al siguiente método que está en Mail.php (Modelo)
 				$mailObj->incrementUniqueOpens();//Se agregar el objeto Mail actualizado para su posterior grabación
+				$this->log->log('Se ha incrementado el obj Mail');
 				$this->addDirtyObject($mailObj);
+				$this->log->log('Se ha ensuaciado Mxc');
 				
 				$statDbaseObj = $this->findRelatedDbaseStatObject();
 				$statDbaseObj->incrementUniqueOpens();
+				$this->log->log('Se ha incrementado el obj Statdbase');
 				$this->addDirtyObject($statDbaseObj);
+				$this->log->log('Se ha ensuaciado el obj Statdbase');
 				
 				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
 					$statListObj->incrementUniqueOpens();
+					$this->log->log('Se ha incrementado statlist');
 					$this->addDirtyObject($statListObj);
+					$this->log->log('Se ha ensuciado');
 				}
 				
 				$event = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
@@ -74,7 +83,9 @@ class TrackingObject
 				$event->userAgent = $userinfo->getOperativeSystem() + ' ' + $userinfo->getBrowser();
 				$event->date = $time;
 				$this->addDirtyObject($event);
+				$this->log->log('Se ha ensuciado Mailevent');
 
+				$this->log->log('Preparandose para iniciar guardo simultaneo');
 				$this->flushChanges();//Se inicia proceso de grabado simultaneo de todos los objetos
 			}
 		}
@@ -111,6 +122,7 @@ class TrackingObject
 		if (!$mailobject) {
 			throw new Exception('Mail object not found!');
 		}
+		$this->log->log('Se encontró Mail');
 		return $mailobject;
 	}
 	
@@ -130,6 +142,7 @@ class TrackingObject
 		if (!$statdbase) {
 			throw new Exception('Statdbase object not found!');
 		}
+		$this->log->log('Se encontró el obj Statdbase');
 		return $statdbase;
 	}
 	
@@ -148,6 +161,7 @@ class TrackingObject
 			}
 			$stats[] = $statcontactlist;
 		}
+		$this->log->log('Se encontrarón Statlist');
 		return $stats;
 	}
 	
@@ -157,7 +171,7 @@ class TrackingObject
 		$event->idMail = $this->mxc->idMail;
 		$event->idContact = $this->idContact;
 		$event->idBouncedCode = $cod;
-
+		$this->log->log('Se ha creado Mailevent');
 		return $event;
 	}
 	
@@ -166,10 +180,12 @@ class TrackingObject
 		if (in_array($object, $this->dirtyObjects)) {
 			$this->dirtyObjects[] = $object;
 		}
+		$this->log->log('Se agregó obj sucio');
 	}
 
 	protected function flushChanges()
 	{
+		$i = 0;
 		foreach ($this->dirtyObjects as $object) {
 			if (!$object->save()) {
 				foreach ($object->getMessages() as $msg) {
@@ -177,9 +193,13 @@ class TrackingObject
 				}
 				throw new Exception('Error while saving changes to objects!');
 			}
+			$this->log->log('Se guardó el objeto: ' . $i);
+			$i++;
 		}
+		$this->log->log('Inicio de commit');
 		$this->commitTransaction();
 		$this->dirtyObjects = array();
+		$this->log->log('Obj Dirty destruido');
 	}
 	
 	/**
