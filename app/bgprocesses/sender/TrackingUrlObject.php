@@ -38,7 +38,7 @@ class TrackingUrlObject
 	
 		$this->links['search'][] = '$$$_open_track_$$$';
 		$this->links['replace'][] = $img;
-		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track: ' . $img);
+		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track apertura: ' . $img);
 	}
 	
 	public function getClicksTrackingUrl()

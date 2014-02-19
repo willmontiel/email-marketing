@@ -15,17 +15,21 @@ class TrackController extends ControllerBase
 		
 		if ($md5 == $md5_2) {
 			try {
+				//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
+				//petición
 				$userAgent = new UserAgentDetectorObj();
 				$userAgent->setInfo($info);
 				
 				$trackingObj = new TrackingObject();
-				$trackingObj->updateTrackOpen($idMail, $idContact, $userAgent->getOperativeSystem(), $userAgent->getBrowser());
+				$trackingObj->setSendIdentification($idMail, $idContact);
+				$trackingObj->trackOpenEvent($userAgent);	
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');
 			}
 			
-			$img = $urlManager->getBaseUri(true) . 'images/tracking.gif';
+			// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
+			$img = '../public/images/tracking.gif';
 
 			$this->response->setHeader("Content-Type", "image/gif");
 			
@@ -55,7 +59,7 @@ class TrackController extends ControllerBase
 				$userAgent->setInfo($info);
 				
 				$trackingObject = new TrackingObject();
-				$url = $trackingObject->updateTrackClick($idLink, $idMail, $idContact, $userAgent->getOperativeSystem(), $userAgent->getBrowser());
+				$url = $trackingObject->updateTrackClick($idLink, $idMail, $idContact, $userAgent);
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e . ']');

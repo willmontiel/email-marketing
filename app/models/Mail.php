@@ -14,6 +14,8 @@ class Mail extends Modelbase
 		$this->hasMany("idMail", "Mailevent", "idMail");
 		$this->hasMany("idMail", "Mxl", "idMail");
 		$this->hasMany("idMail", "Mxcxl", "idMail");
+		$this->hasMany("idMail", "Statdbase", "idMail");
+		$this->hasMany("idMail", "Statcontactlist", "idMail");
 		
 		$this->useDynamicUpdate(true);
 	}
@@ -53,5 +55,10 @@ class Mail extends Modelbase
 		if ($this->validationHasFailed() == true) {
 			return false;
 		}
+	}
+	
+	public function incrementUniqueOpens()
+	{
+		$this->uniqueOpens += 1;
 	}
 }

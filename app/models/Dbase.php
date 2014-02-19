@@ -22,10 +22,10 @@ class Dbase extends Modelbase
         ));
 
         $this->hasMany("idDbase", "Contact", "idDbase", array('alias' => 'Contacts'));
-		
 		$this->hasMany("idDbase", "Contactlist", "idDbase");
-		
 		$this->hasMany("idDbase", "Segment", "idDbase");
+		$this->hasMany("idDbase", "Statdbase", "idDbase");
+		$this->hasMany("idDbase", "Statcontactlist", "idDbase");
     }
     
 	public function validate() 
@@ -64,5 +64,4 @@ class Dbase extends Modelbase
 
 		$db->execute($sql);
 	}
-	
 }

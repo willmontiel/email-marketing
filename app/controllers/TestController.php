@@ -1040,4 +1040,14 @@ class TestController extends ControllerBase
 			$status = $connection->post('statuses/update', array('status' => 'Text of status here y mas pa a donde'));
 		}
 	}
+	
+	public function imagetestAction()
+	{
+		$img = '../public/images/tracking.gif';
+
+		$this->response->setHeader("Content-Type", "image/gif");
+			
+		$this->view->disable();
+		return $this->response->setContent(file_get_contents($img));
+	}
 }

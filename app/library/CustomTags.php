@@ -18,4 +18,8 @@ class CustomTags extends \Phalcon\Tag
 	{
 		return self::_inputField('email', $parameters);   
 	}
+	static public function radioField($parameters)
+	{
+		return self::_inputField('radio', $parameters);   
+	}
 }

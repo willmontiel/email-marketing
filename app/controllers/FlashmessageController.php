@@ -25,22 +25,16 @@ class FlashmessageController extends ControllerBase
 	
 	public function newAction()
 	{
-		$accounts = Account::find();
-		$this->view->setVar('accounts', $accounts);
+		$fm = new Flashmessage();
+		$form = new FlashMessageForm($fm);
 		
 		if ($this->request->isPost()) {
-			$name = $this->request->getPost('name');
-			$message = $this->request->getPost('message');
-			$allAccounts = $this->request->getPost('allAccounts');
-			$account = $this->request->getPost('accounts');
-			$type = $this->request->getPost('typeMessage');
-			$start = $this->request->getPost('start');
-			$end = $this->request->getPost('end');
 			
-			if (trim($name) === '' || trim($message) === '' || trim($allAccounts) === '' || trim($type) === '' || trim($start) === '' || trim($end) === '') {
-				$this->flashSession->error('Ha enviado campos vacios, por favor verifique la información');
-				return false;
-			}
+			$form->bind($this->request->getPost(), $fm);
+			
+			$start = $form->getValue('start');
+			$end = $form->getValue('end');
+			$allAccounts = $this->request->getPost('allAccounts');
 			
 			list($day1, $month1, $year1, $hour1, $minute1) = preg_split('/[\s\/|-|:]+/', $start);
 			$dateBegin = mktime($hour1, $minute1, 0, $month1, $day1, $year1);
@@ -48,43 +42,33 @@ class FlashmessageController extends ControllerBase
 			list($day2, $month2, $year2, $hour2, $minute2) = preg_split('/[\s\/|-|:]+/', $end);
 			$dateEnd = mktime($hour2, $minute2, 0, $month2, $day2, $year2);
 
-			if($dateBegin < time() || $dateEnd < time() || $dateEnd < $dateBegin) {
+			if($dateEnd < time() || $dateEnd < $dateBegin) {
 				$this->flashSession->error('Ha selecionado una fecha que ya ha pasado, por favor verifique la información');
-				return false;
 			}
-			
-			$msg = new Flashmessage();
-			
-			if ($allAccounts == 'any') {
-				if (count($account) == 0) {
-					$this->flashSession->error('No ha seleccionado una cuenta, por favor verifique la información');
-					return false;
-				}
-				else {
-					$msg->accounts = json_encode($account);
-				}
-
+			else if (trim($allAccounts) === ''){
+				$this->flashSession->error('No ha seleccionado una cuenta, por favor verifique la información');
 			}
 			else {
-				$msg->accounts = 'all';
-			}
-			$msg->name = $name;
-			$msg->message = $message;
-			$msg->type = $type;
-			$msg->start = $dateBegin;
-			$msg->end = $dateEnd;
-			$msg->createdon = time();
-			
-			if (!$msg->save()) {
-				foreach ($msg->getMessages() as $m) {
-					$this->logger->log("Error saving message: " . $m);
+				if ($allAccounts == 'all') {
+					$fm->accounts = 'all';
 				}
-				$this->flashSession->error('Ha ocurrido un error mientras se guardaba el mensaje');
-				return false;
+				$fm->start = $dateBegin;
+				$fm->end = $dateEnd;
+				$fm->createdon = time();
+				
+				if ($form->isValid() && $fm->save()) {
+					$this->flashSession->success('Mensaje creado exitosamente');
+					return $this->response->redirect('flashmessage/index');
+				}
+				else {
+					foreach ($fm->getMessages() as $m) {
+						$this->logger->log("Error saving message: " . $m);
+						$this->flashSession->error($m);
+					}
+				}
 			}
-			$this->flashSession->success('Mensaje creado exitosamente');
-			return $this->response->redirect('flashmessage/index');
 		}
+		$this->view->MessageForm = $form;
 	}
 	
 	public function editAction($idMessage)
@@ -103,18 +87,10 @@ class FlashmessageController extends ControllerBase
 				$type = $this->request->getPost('typeMessage');
 				$start = $this->request->getPost('start');
 				$end = $this->request->getPost('end');
-				
-//				$this->logger->log('name: ' . $name);
-//				$this->logger->log('msg: ' . $msg);
-//				$this->logger->log('type: ' . $type);
-//				$this->logger->log('AllAccount: ' . $allAccounts);
-//				$this->logger->log('accounts: ' . print_r($account, true));
-//				$this->logger->log('start: ' . $start);
-//				$this->logger->log('end: ' . $end);
 
 				if (trim($name) === '' || trim($message) === '' || trim($allAccounts) === '' || trim($type) === '' || trim($start) === '' || trim($end) === '') {
 					$this->flashSession->error('Ha enviado campos vacios, por favor verifique la información');
-					return false;
+					return $this->response->redirect('flashmessage/edit/' . $idMessage);
 				}
 
 				list($day1, $month1, $year1, $hour1, $minute1) = preg_split('/[\s\/|-|:]+/', $start);
@@ -123,15 +99,15 @@ class FlashmessageController extends ControllerBase
 				list($day2, $month2, $year2, $hour2, $minute2) = preg_split('/[\s\/|-|:]+/', $end);
 				$dateEnd = mktime($hour2, $minute2, 0, $month2, $day2, $year2);
 
-				if($dateBegin < time() || $dateEnd < time()) {
+				if($dateEnd < $dateBegin || $dateEnd < time()) {
 					$this->flashSession->error('Ha selecionado una fecha que ya ha pasado, por favor verifique la información');
-					return false;
+					return $this->response->redirect('flashmessage/edit/' . $idMessage);
 				}
 
 				if ($allAccounts == 'any') {
 					if (count($account) == 0) {
 						$this->flashSession->error('No ha seleccionado una cuenta, por favor verifique la información');
-						return false;
+						return $this->response->redirect('flashmessage/edit/' . $idMessage);
 					}
 					else {
 						$message->accounts = json_encode($account);
@@ -152,7 +128,7 @@ class FlashmessageController extends ControllerBase
 					foreach ($message->getMessages() as $m) {
 						$this->logger->log("Error editing message: " . $m);
 					}
-					return false;
+					return $this->response->redirect('flashmessage/edit/' . $idMessage);
 				}
 				$this->flashSession->success('Mensaje editado exitosamente');
 				return $this->response->redirect('flashmessage/index');
