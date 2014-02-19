@@ -262,6 +262,7 @@ class Security extends Plugin
 				'test::facebooktest' => array('mail' => array('read')),
 				'test::facebookposting' => array('mail' => array('read')),
 				'test::twittertest' => array('mail' => array('read')),
+				'test::imagetest' => array('mail' => array('read')),
 				
 				//statistics
 				'statistic::index' => array('statistic' => array('read')),
