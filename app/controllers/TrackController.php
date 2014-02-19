@@ -15,12 +15,16 @@ class TrackController extends ControllerBase
 		
 		if ($md5 == $md5_2) {
 			try {
+				//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
+				//petición
 				$userAgent = new UserAgentDetectorObj();
 				$userAgent->setInfo($info);
 				
 				$trackingObj = new TrackingObject();
+				$trackingObj->setSendIdentification($idMail, $idContact);
+				$trackingObj->updateTrackOpenN($userAgent);
 				// TODO: Inyectar todo el objeto $userAgent, y no solo los textos
-				$trackingObj->updateTrackOpen($idMail, $idContact, $userAgent);
+//				$trackingObj->updateTrackOpen($idMail, $idContact, $userAgent);
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');
