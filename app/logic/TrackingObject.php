@@ -3,11 +3,78 @@ class TrackingObject
 {
 	public $log;
 	public $db;
-	
-	public function __construct() 
+
+	/**
+	 * @var Mxc $mxc
+	 */
+	protected $mxc;
+
+	public function __construct()
 	{
 		$this->log = Phalcon\DI::getDefault()->get('logger');
 	}
+
+	/**
+	 * Este metodo se utiliza para inicializar la identificacion unica de
+	 * tracking. Esta identificacion se hace a traves de un ID de MAIL y un ID de CONTACTO
+	 * @param int $idMail
+	 * @param int $idContact
+	 * @throws InvalidArgumentException cuando no se puede encontrar un registro MxC con esa combinacion
+	 */
+	public function setSendIdentification($idMail, $idContact)
+	{
+		$this->mxc = Mxc::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idContact = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $idContact)
+		));
+
+		if (!$mxc) {
+			throw new InvalidArgumentException("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
+		}
+	}
+
+	/**
+	 *
+	 * @param UserAgentDetectorObj $userinfo
+	 */
+	public function updateTrackOpenN(UserAgentDetectorObj $userinfo)
+	{
+		// Tomar timestamp de ejecucion
+		$time = time();
+
+		// 1) Verificar que se puede hacer tracking de eventos open
+		if ($this->canTrackOpenEvents()) {
+			// Actualizar marcador de apertura (timestamp)
+			$this->mxc->opening = $time;
+			$this->findRelatedMailObject()->incrementUniqueOpens();
+			$this->findRelatedDbaseStatObject()->incrementUniqueOpens();
+			foreach ($this->findRelatedContactlistObjects() as $obj) {
+				$obj->incrementUniqueOpens();
+			}
+			$event = $this->createNewMailEvent();
+			$event->userAgent = $userinfo->getOperativeSystem() + ' ' + $userinfo->getBrowser();
+			$event->date = $time;
+			$this->saveEvent($event);
+		}
+	}
+
+	/**
+	 * Este metodo determina si se puede hacer tracking o no de aperturas sobre
+	 * el evento al cual hace referencia el objeto
+	 * @return boolean se puede o no hacer tracking de aperturas
+	 */
+	protected function canTrackOpenEvents()
+	{
+		if ($this->mxc->opening == 0 &&
+				  $this->mxc->bounced == 0 &&
+				  $this->mxc->spam == 0 &&
+				  $this->mxc->status == 'sent') {
+			return true;
+		}
+		return false;
+	}
+
 
 	public function updateTrackOpen($idMail, $idContact, $so = null, $browser = null)
 	{
@@ -23,40 +90,40 @@ class TrackingObject
 				$db = Phalcon\DI::getDefault()->get('db');
 				try {
 					$db->begin();
-					
+
 					$mailXcontact = $this->updateMxcStat($mxc, 'openings');
 					if (!$mailXcontact) {
 						throw new \InvalidArgumentException('Error while updating mxc');
 					}
 					$this->log->log('Guardó mxc');
-					
+
 					$mail = $this->updateMailStat($idMail, 'openings');
 					if (!$mail) {
 						throw new \InvalidArgumentException('Error while updating mail');
 					}
 					$this->log->log('Guardó mail');
-					
+
 //					throw new \InvalidArgumentException('transaction test');
-					
+
 					$statdbase = $this->updateStatDbase($idContact, $idMail, 'openings');
 					if (!$statdbase) {
 						throw new \InvalidArgumentException('Error while updating statdbase');
 					}
 					$this->log->log('Se guardó statdbase');
-					
+
 					$statcontactlist = $this->updateStatContactLists($mxc, 'openings');
 					if (!$statcontactlist) {
 						throw new \InvalidArgumentException('Error while updating statcontactlist');
 					}
 					$this->log->log('Se guardó statcontactlist');
-					
+
 					$userAgent = $so . ', ' . $browser;
 					$mailEvent = $this->saveMailEvent($idMail, $idContact, 'opening', $userAgent);
 					if (!$mailEvent) {
 						throw new \InvalidArgumentException('Error while updating event');
 					}
 					$this->log->log('Guardó event');
-					
+
 					$db->commit();
 				}
 				catch (InvalidArgumentException $e) {
@@ -74,7 +141,7 @@ class TrackingObject
 			return false;
 		}
 	}
-	
+
 	public function updateTrackClick($idLink, $idMail, $idContact, $so = null, $browser = null)
 	{
 		$this->log->log('Inicio de tracking de clicks');
@@ -83,27 +150,27 @@ class TrackingObject
 			'bind' => array(1 => $idMail,
 							2 => $idLink)
 		));
-		
+
 		if ($mxl) {
 			$userAgent = $so . ', ' . $browser;
-			
+
 			$mxcxl = Mxcxl::findFirst(array(
 				'conditions' => 'idMail = ?1 AND idMailLink = ?2 AND idContact = ?3',
 				'bind' => array(1 => $idMail,
 								2 => $idLink,
 								3 => $idContact)
 			));
-			
+
 			$Maillink = Maillink::findFirst(array(
 				'conditions' => 'idMailLink = ?1',
 				'bind' => array(1 => $idLink)
 			));
-			
+
 			if (!$mxcxl) {
 				$db = Phalcon\DI::getDefault()->get('db');
 				try {
 					$db->begin();
-					
+
 					$mxc = Mxc::findFirst(array(
 						'conditions' => 'idMail = ?1 AND idContact = ?2',
 						'bind' => array(1 => $idMail,
@@ -111,13 +178,13 @@ class TrackingObject
 					));
 
 					if ($mxc && ($mxc->opening == 0 && $mxc->bounced == 0 && $mxc->spam == 0 && $mxc->status == 'sent')) {
-						
+
 						$mailXcontact = $this->updateMxcStat($mxc, 'openingsxclick');
 						if (!$mailXcontact) {
 							throw new \InvalidArgumentException('Error while updating mxc');
 						}
 						$this->log->log('Click y apertura por click mxc');
-						
+
 						$mail = $this->updateMailStat($idMail, 'openingsxclick');
 						if (!$mail) {
 							throw new \InvalidArgumentException('Error while updating mail');
@@ -129,15 +196,15 @@ class TrackingObject
 							throw new \InvalidArgumentException('Error while updating statdbase');
 						}
 						$this->log->log('Click y apertura por click en statdbase');
-						
+
 //						throw new \InvalidArgumentException('transaction test');
-						
+
 						$statcontactlist = $this->updateStatContactLists($mxc, 'openingsxclick');
 						if (!$statcontactlist) {
 							throw new \InvalidArgumentException('Error while updating statcontactlist');
 						}
 						$this->log->log('Click y apertura por click en statcontactlist');
-						
+
 						$mailEvent1 = $this->saveMailEvent($idMail, $idContact, 'opening for click', $userAgent);
 						if (!$mailEvent1) {
 							throw new \InvalidArgumentException('Error while updating opening event');
@@ -150,28 +217,28 @@ class TrackingObject
 							throw new \InvalidArgumentException('Error while updating mxc');
 						}
 						$this->log->log('click en mxc');
-						
+
 						$mail = $this->updateMailStat($idMail, 'clicks');
 						if (!$mail) {
 							throw new \InvalidArgumentException('Error while updating mail');
 						}
 						$this->log->log('click en mail');
-						
+
 						$statdbase = $this->updateStatDbase($idContact, $idMail, 'clicks');
 						if (!$statdbase) {
 							throw new \InvalidArgumentException('Error while updating statdbase');
 						}
 						$this->log->log('click contabilizado en statdbase');
-						
+
 //						throw new \InvalidArgumentException('transaction test');
-						
+
 						$statcontactlist = $this->updateStatContactLists($mxc, 'clicks');
 						if (!$statcontactlist) {
 							throw new \InvalidArgumentException('Error while updating statcontactlist');
 						}
 						$this->log->log('click contabilizado en statcontactlist');
 					}
-					
+
 					$mailEvent2 = $this->saveMailEvent($idMail, $idContact, 'click', $userAgent);
 					if (!$mailEvent2) {
 						throw new \InvalidArgumentException('Error while updating click event');
@@ -189,15 +256,15 @@ class TrackingObject
 						throw new \InvalidArgumentException('Error while updating Mxl');
 					}
 //					throw new \InvalidArgumentException('transaction test');
-					
+
 					$this->log->log('Actualizado mxl');
-					
+
 					$mxcxl = new Mxcxl();
 
 					$mxcxl->idMail = $idMail;
 					$mxcxl->idMailLink = $idLink;
 					$mxcxl->idContact = $idContact;
-					$mxcxl->click = time(); 
+					$mxcxl->click = time();
 
 					if (!$mxcxl->save()) {
 						foreach ($mxcxl->getMessages() as $msg) {
@@ -206,9 +273,9 @@ class TrackingObject
 						throw new \InvalidArgumentException('Error while updating Mxcxl');
 					}
 					$this->log->log('Inserción en mxcxl');
-					
+
 					$db->commit();
-					
+
 					return $this->insertGoogleAnalyticsUrl($idMail, $Maillink->link, $mail->name);
 				}
 				catch (InvalidArgumentException $e) {
@@ -230,7 +297,7 @@ class TrackingObject
 			return false;
 		}
 	}
-	
+
 	public function updateTrackBounced($idMail, $idContact, $type, $cod, $date)
 	{
 		switch ($type) {
@@ -251,8 +318,8 @@ class TrackingObject
 				break;
 		}
 	}
-	
-	
+
+
 	private function saveSoftReboundEvent($idMail, $idContact, $cod, $date)
 	{
 		$this->log->log('Inicio de tracking de rebote suave');
@@ -261,7 +328,7 @@ class TrackingObject
 			'bind' => array(1 => $idMail,
 							2 => $idContact)
 		));
-		
+
 		if ($mxc && ($mxc->opening == 0 && $mxc->bounced == 0 && $mxc->spam == 0 && $mxc->status == 'sent')) {
 			$db = Phalcon\DI::getDefault()->get('db');
 			try {
@@ -307,13 +374,13 @@ class TrackingObject
 			$this->log->log('El contacto ya ha sido marcado como rebotado');
 		}
 	}
-	
+
 	private function saveHardReboundEvent($idMail, $idContact, $date)
 	{
 		$this->log->log('Inicio de tracking de rebote duro');
-		
+
 		$db = Phalcon\DI::getDefault()->get('db');
-		
+
 		$event = Mailevent::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idContact = ?2 AND description = ?3',
 			'bind' => array(1 => $idMail,
@@ -327,21 +394,21 @@ class TrackingObject
 				'bind' => array(1 => $idContact)
 			));
 
-			$sql = 'UPDATE email AS e JOIN contact AS c 
+			$sql = 'UPDATE email AS e JOIN contact AS c
 						ON (c.idEmail = e.idEmail)
 						SET e.bounced = ' . $date . ', c.unsubscribed = ' . $date . ', c.bounced = ' . $date . '
 					WHERE e.idEmail = ?';
 			$update = $db->execute($sql, array($contact->idEmail));
-			
+
 			$dbase = Dbase::findFirst(array(
 				'conditions' => 'idDbase = ?1',
 				'bind' => array(1 => $contact->idDbase)
 			));
-////			
+////
 			if ($dbase) {
 				$this->log->log('Se encontró dbase');
 			}
-			
+
 //			$mxc = Mxc::findFirst(array(
 //				'conditions' => 'idMail = ?1 AND idContact = ?2',
 //				'bind' => array(1 => $idMail,
@@ -353,7 +420,7 @@ class TrackingObject
 				throw new \InvalidArgumentException('Error while updating contact and email');
 			}
 			$this->log->log('Se actualizó contact y email');
-			
+
 			$this->log->log('Preparando actualizacion de contadores de dbase');
 			$dbase->updateCountersInDbase();
 			$this->log->log('Parece que actualizó');
@@ -362,17 +429,17 @@ class TrackingObject
 			$this->log->log('No existe registro de evento de rebote');
 		}
 	}
-	
+
 	private function saveSpamEvent($idMail, $idContact, $cod, $date)
 	{
 		$this->log->log('Inicio de tracking de spam');
-		
+
 		$mxc = Mxc::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idContact = ?2',
 			'bind' => array(1 => $idMail,
 							2 => $idContact)
 		));
-		
+
 		if ($mxc && ($mxc->bounced == 0 && $mxc->spam == 0 && $mxc->status == 'sent')) {
 			$db = Phalcon\DI::getDefault()->get('db');
 			try {
@@ -411,18 +478,18 @@ class TrackingObject
 					'bind' => array(1 => $idContact)
 				));
 
-				$sql = 'UPDATE email AS e JOIN contact AS c 
+				$sql = 'UPDATE email AS e JOIN contact AS c
 							ON (c.idEmail = e.idEmail)
 							SET e.spam = ' . $date . ', c.spam = ' . $date . ', c.unsubscribed = ' . $date . '
 						WHERE e.idEmail = ?';
 				$update = $db->execute($sql, array($contact->idEmail));
-				
+
 				if (!$update) {
 					throw new \InvalidArgumentException('Error while updating spam in contact and email');
 				}
-				
-				$this->log->log('Se actualizó contact y email'); 
-				
+
+				$this->log->log('Se actualizó contact y email');
+
 				$db->commit();
 			}
 			catch (InvalidArgumentException $e) {
@@ -434,7 +501,7 @@ class TrackingObject
 			$this->log->log('No existe registro o ya ha sido marcado anteriormente');
 		}
 	}
-	
+
 	private function saveMailEvent($idMail, $idContact, $description, $userAgent = null, $location = null, $cod = null, $date = null)
 	{
 		if ($date == null) {
@@ -447,7 +514,7 @@ class TrackingObject
 		$this->log->log('Location : '. $location);
 		$this->log->log('Cod : '. $cod);
 		$this->log->log('Date : '. $date);
-		
+
 		$event = new Mailevent();
 		$event->idMail = $idMail;
 		$event->idContact = $idContact;
@@ -465,39 +532,39 @@ class TrackingObject
 		}
 		return true;
 	}
-	
+
 	private function updateStatContactLists(Mxc $mxc, $type)
 	{
 		$idContactlists = explode(",", $mxc->contactlists);
-		
+
 		foreach ($idContactlists as $idContactlist) {
 			$statcontactlist = Statcontactlist::findFirst(array(
 				'conditions' => 'idContactlist = ?1 AND idMail = ?2',
 				'bind' => array(1 => $idContactlist,
 								2 => $mxc->idMail)
 			));
-			
+
 			switch ($type) {
 				case 'openings':
 					$statcontactlist->uniqueOpens += 1;
 					break;
-				
+
 				case 'clicks':
 					$statcontactlist->clicks += 1;
 					break;
-				
+
 				case 'bounced':
 					$statcontactlist->bounced += 1;
 					break;
-				
+
 				case 'spam':
 					$statcontactlist->spam += 1;
 					break;
-				
+
 				case 'unsubscribed':
 					$statcontactlist->unsubscribed += 1;
 					break;
-				
+
 				case 'openingsxclick':
 					$statcontactlist->uniqueOpens += 1;
 					$statcontactlist->clicks += 1;
@@ -515,7 +582,7 @@ class TrackingObject
 			return true;
 		}
 	}
-	
+
 	private function updateStatDbase($idContact, $idMail, $type)
 	{
 		$contact = Contact::findFirst(array(
@@ -528,7 +595,7 @@ class TrackingObject
 			'bind' => array(1 => $contact->idDbase,
 							2 => $idMail)
 		));
-		
+
 		switch ($type) {
 			case 'openings':
 				$statdbase->uniqueOpens += 1;
@@ -564,7 +631,7 @@ class TrackingObject
 		}
 		return true;
 	}
-	
+
 	private function updateMxcStat(Mxc $mxc, $type)
 	{
 		switch ($type) {
@@ -605,7 +672,7 @@ class TrackingObject
 			'conditions' => 'idMail = ?1',
 			'bind' => array(1 => $idMail)
 		));
-		
+
 		switch ($type) {
 			case 'openings':
 				$mail->uniqueOpens += 1;
@@ -641,7 +708,7 @@ class TrackingObject
 		}
 		return $mail;
 	}
-	
+
 	public function insertGoogleAnalyticsUrl($idMail, $url, $name)
 	{
 		$content = Mailcontent::findFirst(array(
@@ -653,7 +720,7 @@ class TrackingObject
 			return $url;
 		}
 		$path = parse_url($url);
-		
+
 		if (in_array($path['scheme'] . '://' . $path['host'], json_decode($content->googleAnalytics))) {
 			$googleAnalytics = Phalcon\DI::getDefault()->get('googleAnalytics');
 			Phalcon\DI::getDefault()->get('logger')->log('Preparandose para insertar google analytics');
