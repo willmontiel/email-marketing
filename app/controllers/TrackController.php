@@ -22,9 +22,7 @@ class TrackController extends ControllerBase
 				
 				$trackingObj = new TrackingObject();
 				$trackingObj->setSendIdentification($idMail, $idContact);
-				$trackingObj->updateTrackOpenN($userAgent);
-				// TODO: Inyectar todo el objeto $userAgent, y no solo los textos
-//				$trackingObj->updateTrackOpen($idMail, $idContact, $userAgent);
+				$trackingObj->trackOpenEvent($userAgent);	
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');

@@ -10,6 +10,8 @@ class TrackingObject
 	 */
 	protected $mxc;
 	protected $dirtyObjects;
+	protected $idMail;
+	protected $idContact;
 
 	public function __construct()
 	{
@@ -36,6 +38,8 @@ class TrackingObject
 		if (!$this->mxc) {
 			throw new InvalidArgumentException("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
 		}
+		$this->idMail = $idMail;
+		$this->idContact = $idContact;
 	}
 
 	/**
@@ -44,95 +48,43 @@ class TrackingObject
 	 */
 	public function trackOpenEvent(UserAgentDetectorObj $userinfo)
 	{
-		// TODO: Incluir codigo de try {} catch() {} para hacer rollback
-		// y enviar a log el mensaje de la excepcion
+		$time = time();// Tomar timestamp de ejecucion
+		try {
+			if ($this->canTrackOpenEvents()) { // Verificar que se puede hacer tracking de eventos open
+				$this->startTransaction();// Empezar transacción
 
-		// Tomar timestamp de ejecucion
-		$time = time();
-
-		// 1) Verificar que se puede hacer tracking de eventos open
-		if ($this->canTrackOpenEvents()) {
-			// TODO: crear metodo
-			$this->startTransaction();
-
-			// Actualizar marcador de apertura (timestamp)
-			$this->mxc->opening = $time;
-			$this->addDirtyObject($this->mxc);
-			$obj = $this->findRelatedMailObject();
-			// TODO: Crear metodo incrementUniqueOpens (o cambiar por atributo)
-			$obj->incrementUniqueOpens();
-			$this->addDirtyObject($obj);
-			// TODO: registrar objeto en lista dirty
-			$this->findRelatedDbaseStatObject()->incrementUniqueOpens();
-			foreach ($this->findRelatedContactlistObjects() as $obj) {
-			// TODO: registrar objeto en lista dirty
-				$obj->incrementUniqueOpens();
-			}
-			// TODO: crear metodo que crea nuevos eventos (y los asocia con el mxc interno)
-			$event = $this->createNewMailEvent();
-			$event->description = 'open';
-			$event->userAgent = $userinfo->getOperativeSystem() + ' ' + $userinfo->getBrowser();
-			$event->date = $time;
-			$this->addDirtyObject($event);
-
-			$this->flushChanges();
-		}
-	}
-
-
-	public function findRelatedMailObject()
-	{
-		$mailobject = Mail::findFirst(
-				  array(
-						'conditions' => 'idMail = ?1',
-						'bind' =>
-							array(
-								1 => $this->mxc->idMail
-							)
-					)
-			  );
-
-		if (!$mailobject) {
-			throw new Exception('Mail object not found!');
-		}
-		return $mailobject;
-	}
-
-	protected function addDirtyObject($object)
-	{
-		if (in_array($object, $this->dirtyObjects)) {
-			$this->dirtyObjects[] = $object;
-		}
-	}
-
-	protected function flushChanges()
-	{
-		foreach ($this->dirtyObjects as $object) {
-			if (!$object->save()) {
-				foreach ($object->getMessages() as $msg) {
-					$this->log->log('Error saving Object: ' . $msg);
+				$this->mxc->opening = $time;// Actualizar marcador de apertura (timestamp)
+				$this->addDirtyObject($this->mxc);//Se agregar el objeto mxc actualizado para su posterior grabación(esto se hace con todos los objetos)
+				
+				$mailObj = $this->findRelatedMailObject();//Se incrementa el atributo correspondiente llamando al siguiente método que está en Mail.php (Modelo)
+				$mailObj->incrementUniqueOpens();//Se agregar el objeto Mail actualizado para su posterior grabación
+				$this->addDirtyObject($mailObj);
+				
+				$statDbaseObj = $this->findRelatedDbaseStatObject();
+				$statDbaseObj->incrementUniqueOpens();
+				$this->addDirtyObject($statDbaseObj);
+				
+				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
+					$statListObj->incrementUniqueOpens();
+					$this->addDirtyObject($statListObj);
 				}
+				
+				$event = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
+				$event->description = 'open';
+				$event->userAgent = $userinfo->getOperativeSystem() + ' ' + $userinfo->getBrowser();
+				$event->date = $time;
+				$this->addDirtyObject($event);
 
-				throw new Exception('Error while saving changes to objects!');
+				$this->flushChanges();//Se inicia proceso de grabado simultaneo de todos los objetos
 			}
 		}
-		// TODO: Crear este metodo
-		// TODO: Crear metodo "$this->rollbackTransaction()"
-		$this->commitTransaction();
-		$this->dirtyObjects = array();
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			$this->rollbackTransaction();
+		}
 	}
-
-	/**
-	 *
-	 * @param int $idLink
-	 * @param UserAgentDetectorObj $userinfo
-	 */
-	public function trackClickEvent($idLink, UserAgentDetectorObj $userinfo)
-	{
-		list($mxl, $ml, $mxlxc) = $this->locateRelatedLinkRecords($idLink);
-
-	}
-
+	
+	
 	/**
 	 * Este metodo determina si se puede hacer tracking o no de aperturas sobre
 	 * el evento al cual hace referencia el objeto
@@ -148,7 +100,108 @@ class TrackingObject
 		}
 		return false;
 	}
+	
+	public function findRelatedMailObject()
+	{
+		$mailobject = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $this->mxc->idMail)
+		));
 
+		if (!$mailobject) {
+			throw new Exception('Mail object not found!');
+		}
+		return $mailobject;
+	}
+	
+	public function findRelatedDbaseStatObject()
+	{
+		$contact = Contact::findFirst(array(
+			'conditions' => 'idContact = ?1',
+			'bind' => array(1 => $this->idContact)
+		));
+
+		$statdbase = Statdbase::findFirst(array(
+			'conditions' => 'idDbase = ?1 AND idMail = ?2',
+			'bind' => array(1 => $contact->idDbase,
+							2 => $this->idMail)
+		));
+		
+		if (!$statdbase) {
+			throw new Exception('Statdbase object not found!');
+		}
+		return $statdbase;
+	}
+	
+	public function findRelatedContactlistObjects()
+	{
+		$stats = array();
+		$idContactlists = explode(",", $this->mxc->contactlists);
+		foreach ($idContactlists as $idContactlist) {
+			$statcontactlist = Statcontactlist::findFirst(array(
+				'conditions' => 'idContactlist = ?1 AND idMail = ?2',
+				'bind' => array(1 => $idContactlist,
+								2 => $this->mxc->idMail)
+			));
+			if (!$statcontactlist) {
+				throw new Exception('Statcontactlist object not found!');
+			}
+			$stats[] = $statcontactlist;
+		}
+		return $stats;
+	}
+	
+	public function createNewMailEvent($cod = null)
+	{
+		$event = new Mailevent();
+		$event->idMail = $this->mxc->idMail;
+		$event->idContact = $this->idContact;
+		$event->idBouncedCode = $cod;
+
+		return $event;
+	}
+	
+	protected function addDirtyObject($object)
+	{
+		if (in_array($object, $this->dirtyObjects)) {
+			$this->dirtyObjects[] = $object;
+		}
+	}
+
+	protected function flushChanges()
+	{
+		foreach ($this->dirtyObjects as $object) {
+			if (!$object->save()) {
+				foreach ($object->getMessages() as $msg) {
+					$this->log->log('Error saving Object: ' . $msg);
+				}
+				throw new Exception('Error while saving changes to objects!');
+			}
+		}
+		$this->commitTransaction();
+		$this->dirtyObjects = array();
+	}
+	
+	/**
+	 * =====================================================================================
+	 * Inicio de tracking
+	 * =====================================================================================
+	 */
+	
+	
+	
+	
+	
+	/**
+	 *
+	 * @param int $idLink
+	 * @param UserAgentDetectorObj $userinfo
+	 */
+	public function trackClickEvent($idLink, UserAgentDetectorObj $userinfo)
+	{
+		list($mxl, $ml, $mxlxc) = $this->locateRelatedLinkRecords($idLink);
+
+	}
 
 	public function updateTrackClick($idLink, $idMail, $idContact, $so = null, $browser = null)
 	{
@@ -737,5 +790,20 @@ class TrackingObject
 		else {
 			return $url;
 		}
+	}
+	
+	protected function startTransaction()
+	{
+		Phalcon\DI::getDefault()->get('db')->begin();
+	}
+	
+	protected function commitTransaction()
+	{
+		Phalcon\DI::getDefault()->get('db')->commit();
+	}
+	
+	protected function rollbackTransaction()
+	{
+		Phalcon\DI::getDefault()->get('db')->rollback();
 	}
 }
