@@ -44,21 +44,31 @@ class TrackingObject
 	 */
 	public function trackOpenEvent(UserAgentDetectorObj $userinfo)
 	{
+		// TODO: Incluir codigo de try {} catch() {} para hacer rollback
+		// y enviar a log el mensaje de la excepcion
+
 		// Tomar timestamp de ejecucion
 		$time = time();
 
 		// 1) Verificar que se puede hacer tracking de eventos open
 		if ($this->canTrackOpenEvents()) {
+			// TODO: crear metodo
 			$this->startTransaction();
 
 			// Actualizar marcador de apertura (timestamp)
 			$this->mxc->opening = $time;
 			$this->addDirtyObject($this->mxc);
-			$this->findRelatedMailObject()->incrementUniqueOpens();
+			$obj = $this->findRelatedMailObject();
+			// TODO: Crear metodo incrementUniqueOpens (o cambiar por atributo)
+			$obj->incrementUniqueOpens();
+			$this->addDirtyObject($obj);
+			// TODO: registrar objeto en lista dirty
 			$this->findRelatedDbaseStatObject()->incrementUniqueOpens();
 			foreach ($this->findRelatedContactlistObjects() as $obj) {
+			// TODO: registrar objeto en lista dirty
 				$obj->incrementUniqueOpens();
 			}
+			// TODO: crear metodo que crea nuevos eventos (y los asocia con el mxc interno)
 			$event = $this->createNewMailEvent();
 			$event->description = 'open';
 			$event->userAgent = $userinfo->getOperativeSystem() + ' ' + $userinfo->getBrowser();
@@ -102,11 +112,12 @@ class TrackingObject
 				foreach ($object->getMessages() as $msg) {
 					$this->log->log('Error saving Object: ' . $msg);
 				}
-				$this->rollbackTransaction();
 
 				throw new Exception('Error while saving changes to objects!');
 			}
 		}
+		// TODO: Crear este metodo
+		// TODO: Crear metodo "$this->rollbackTransaction()"
 		$this->commitTransaction();
 		$this->dirtyObjects = array();
 	}
