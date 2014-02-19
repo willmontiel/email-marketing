@@ -19,12 +19,14 @@ class TrackController extends ControllerBase
 				$userAgent->setInfo($info);
 				
 				$trackingObj = new TrackingObject();
+				// TODO: Inyectar todo el objeto $userAgent, y no solo los textos
 				$trackingObj->updateTrackOpen($idMail, $idContact, $userAgent->getOperativeSystem(), $userAgent->getBrowser());
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');
 			}
 			
+			// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
 			$img = $urlManager->getBaseUri(true) . 'images/tracking.gif';
 
 			$this->response->setHeader("Content-Type", "image/gif");
