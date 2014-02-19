@@ -85,59 +85,54 @@ class TrackingObject
 		));
 		if ($mxc) {
 			if ($mxc->opening == 0 && $mxc->bounced == 0 && $mxc->spam == 0 && $mxc->status == 'sent') {
-				$this->log->log('Es la primera apertura del contacto: ' . $idContact);
+			$this->log->log('Es la primera apertura del contacto: ' . $idContact);
 //				$this->log->log('So: ' . $so . 'Browser: ' . $browser);
-				$db = Phalcon\DI::getDefault()->get('db');
-				try {
-					$db->begin();
+			$db = Phalcon\DI::getDefault()->get('db');
+			try {
+				$db->begin();
 
-					$mailXcontact = $this->updateMxcStat($mxc, 'openings');
-					if (!$mailXcontact) {
-						throw new \InvalidArgumentException('Error while updating mxc');
-					}
-					$this->log->log('Guardó mxc');
+				$mailXcontact = $this->updateMxcStat($mxc, 'openings');
+				if (!$mailXcontact) {
+					throw new \InvalidArgumentException('Error while updating mxc');
+				}
+				$this->log->log('Guardó mxc');
 
-					$mail = $this->updateMailStat($idMail, 'openings');
-					if (!$mail) {
-						throw new \InvalidArgumentException('Error while updating mail');
-					}
-					$this->log->log('Guardó mail');
+				$mail = $this->updateMailStat($idMail, 'openings');
+				if (!$mail) {
+					throw new \InvalidArgumentException('Error while updating mail');
+				}
+				$this->log->log('Guardó mail');
 
 //					throw new \InvalidArgumentException('transaction test');
 
-					$statdbase = $this->updateStatDbase($idContact, $idMail, 'openings');
-					if (!$statdbase) {
-						throw new \InvalidArgumentException('Error while updating statdbase');
-					}
-					$this->log->log('Se guardó statdbase');
-
-					$statcontactlist = $this->updateStatContactLists($mxc, 'openings');
-					if (!$statcontactlist) {
-						throw new \InvalidArgumentException('Error while updating statcontactlist');
-					}
-					$this->log->log('Se guardó statcontactlist');
-
-					$userAgent = $so . ', ' . $browser;
-					$mailEvent = $this->saveMailEvent($idMail, $idContact, 'opening', $userAgent);
-					if (!$mailEvent) {
-						throw new \InvalidArgumentException('Error while updating event');
-					}
-					$this->log->log('Guardó event');
-
-					$db->commit();
+				$statdbase = $this->updateStatDbase($idContact, $idMail, 'openings');
+				if (!$statdbase) {
+					throw new \InvalidArgumentException('Error while updating statdbase');
 				}
-				catch (InvalidArgumentException $e) {
-					$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
-					$db->rollback();
+				$this->log->log('Se guardó statdbase');
+
+				$statcontactlist = $this->updateStatContactLists($mxc, 'openings');
+				if (!$statcontactlist) {
+					throw new \InvalidArgumentException('Error while updating statcontactlist');
 				}
+				$this->log->log('Se guardó statcontactlist');
+
+				$userAgent = $so . ', ' . $browser;
+				$mailEvent = $this->saveMailEvent($idMail, $idContact, 'opening', $userAgent);
+				if (!$mailEvent) {
+					throw new \InvalidArgumentException('Error while updating event');
+				}
+				$this->log->log('Guardó event');
+
+				$db->commit();
 			}
-			else {
-				$this->log->log('No es la primera apertura, ya se ha contabilizado');
-				return false;
+			catch (InvalidArgumentException $e) {
+				$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
+				$db->rollback();
 			}
 		}
 		else {
-			$this->log->log('No existe mxc');
+			$this->log->log('No existe mxc o ya se contabilizo');
 			return false;
 		}
 	}
@@ -302,11 +297,11 @@ class TrackingObject
 	{
 		switch ($type) {
 			case 'bounce_all':
-				$this->saveSoftReboundEvent($idMail, $idContact, $cod, $date);
+				$this->saveSoftBounceEvent($idMail, $idContact, $cod, $date);
 				break;
 
 			case 'bounce_bad_address':
-				$this->saveHardReboundEvent($idMail, $idContact, $date);
+				$this->saveHardBounceEvent($idMail, $idContact, $date);
 				break;
 
 			case 'scomp':
@@ -320,7 +315,7 @@ class TrackingObject
 	}
 
 
-	private function saveSoftReboundEvent($idMail, $idContact, $cod, $date)
+	private function saveSoftBounceEvent($idMail, $idContact, $cod, $date)
 	{
 		$this->log->log('Inicio de tracking de rebote suave');
 		$mxc = Mxc::findFirst(array(
@@ -375,7 +370,7 @@ class TrackingObject
 		}
 	}
 
-	private function saveHardReboundEvent($idMail, $idContact, $date)
+	private function saveHardBounceEvent($idMail, $idContact, $date)
 	{
 		$this->log->log('Inicio de tracking de rebote duro');
 
@@ -396,8 +391,9 @@ class TrackingObject
 
 			$sql = 'UPDATE email AS e JOIN contact AS c
 						ON (c.idEmail = e.idEmail)
-						SET e.bounced = ' . $date . ', c.unsubscribed = ' . $date . ', c.bounced = ' . $date . '
+						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
 					WHERE e.idEmail = ?';
+
 			$update = $db->execute($sql, array($contact->idEmail));
 
 			$dbase = Dbase::findFirst(array(
@@ -444,16 +440,10 @@ class TrackingObject
 			$db = Phalcon\DI::getDefault()->get('db');
 			try {
 				$db->begin();
-				$mailXcontact = $this->updateMxcStat($mxc, 'spam');
-				if (!$mailXcontact) {
-					throw new \InvalidArgumentException('Error while updating mxc');
-				}
+				$this->updateMxcStat($mxc, 'spam');
 				$this->log->log('Se actualizó mxc');
 
 				$mail = $this->updateMailStat($idMail, 'spam');
-				if (!$mail) {
-					throw new \InvalidArgumentException('Error while updating mail');
-				}
 				$this->log->log('Se actualizó Mail');
 
 				$statdbase = $this->updateStatDbase($idContact, $idMail, 'spam');
@@ -661,9 +651,8 @@ class TrackingObject
 			foreach ($mxc->getMessages() as $msg) {
 				$this->log->log('Error : '. $msg);
 			}
-			return false;
+			throw new \InvalidArgumentException('Error while updating mxc');
 		}
-		return true;
 	}
 
 	private function updateMailStat($idMail, $type)
@@ -704,7 +693,7 @@ class TrackingObject
 			foreach ($mail->getMessages() as $msg) {
 				$this->log->log('Error : '. $msg);
 			}
-			return false;
+			throw new \InvalidArgumentException('Error while updating mail');
 		}
 		return $mail;
 	}
