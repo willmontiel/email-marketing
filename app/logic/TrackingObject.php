@@ -61,26 +61,29 @@ class TrackingObject
 				
 				$mailObj = $this->findRelatedMailObject();//Se incrementa el atributo correspondiente llamando al siguiente método que está en Mail.php (Modelo)
 				$mailObj->incrementUniqueOpens();//Se agregar el objeto Mail actualizado para su posterior grabación
+//				$mailObj->uniqueOpens += 1;
 				$this->log->log('Se ha incrementado el obj Mail');
 				$this->addDirtyObject($mailObj);
 				$this->log->log('Se ha ensuaciado Mxc');
 				
 				$statDbaseObj = $this->findRelatedDbaseStatObject();
 				$statDbaseObj->incrementUniqueOpens();
+//				$statDbaseObj->uniqueOpens += 1;
 				$this->log->log('Se ha incrementado el obj Statdbase');
 				$this->addDirtyObject($statDbaseObj);
 				$this->log->log('Se ha ensuaciado el obj Statdbase');
 				
 				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
 					$statListObj->incrementUniqueOpens();
+//					$statListObj->uniqueOpens += 1;
 					$this->log->log('Se ha incrementado statlist');
 					$this->addDirtyObject($statListObj);
 					$this->log->log('Se ha ensuciado');
 				}
 				
 				$event = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
-				$event->description = 'open';
-				$event->userAgent = $userinfo->getOperativeSystem() + ' ' + $userinfo->getBrowser();
+				$event->description = 'opening';
+				$event->userAgent = $userinfo->getOperativeSystem() . ', ' . $userinfo->getBrowser();
 				$event->date = $time;
 				$this->addDirtyObject($event);
 				$this->log->log('Se ha ensuciado Mailevent');
@@ -88,9 +91,10 @@ class TrackingObject
 				$this->log->log('Preparandose para iniciar guardo simultaneo');
 				$this->flushChanges();//Se inicia proceso de grabado simultaneo de todos los objetos
 			}
+			$this->log->log('ya se contabilizó tracking');
 		}
 		catch (InvalidArgumentException $e) {
-			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			$this->logger->log('Exception: [' . $e . ']');
 			$this->rollbackTransaction();
 		}
 	}
@@ -177,15 +181,16 @@ class TrackingObject
 	
 	protected function addDirtyObject($object)
 	{
-		if (in_array($object, $this->dirtyObjects)) {
+		if (!in_array($object, $this->dirtyObjects)) {
 			$this->dirtyObjects[] = $object;
+			$this->log->log('Se agregó obj sucio');
 		}
-		$this->log->log('Se agregó obj sucio');
 	}
 
 	protected function flushChanges()
 	{
 		$i = 0;
+		$this->log->log('Total dirty Obj: ' . count($this->dirtyObjects));
 		foreach ($this->dirtyObjects as $object) {
 			if (!$object->save()) {
 				foreach ($object->getMessages() as $msg) {

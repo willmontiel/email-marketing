@@ -3,12 +3,14 @@ use Phalcon\Mvc\Model\Validator\PresenceOf;
 class Contactlist extends Modelbase 
 {
 	public $idDbase;
+	public $idContactlist;
 	public function initialize()
 	{
 		$this->belongsTo("idDbase", "Dbase", "idDbase", array(
             "foreignKey" => true,
         ));
 		
+		$this->hasMany("idContactlist", "Statcontactlist", "idContactlist");
 	}
 	
 	public function validation()
