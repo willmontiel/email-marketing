@@ -4,14 +4,18 @@ class TrackingObject
 	public $log;
 	public $db;
 
+
 	/**
 	 * @var Mxc $mxc
 	 */
 	protected $mxc;
+	protected $dirtyObjects;
 
 	public function __construct()
 	{
 		$this->log = Phalcon\DI::getDefault()->get('logger');
+
+		$this->dirtyObjects = array();
 	}
 
 	/**
@@ -45,8 +49,11 @@ class TrackingObject
 
 		// 1) Verificar que se puede hacer tracking de eventos open
 		if ($this->canTrackOpenEvents()) {
+			$this->startTransaction();
+
 			// Actualizar marcador de apertura (timestamp)
 			$this->mxc->opening = $time;
+			$this->addDirtyObject($this->mxc);
 			$this->findRelatedMailObject()->incrementUniqueOpens();
 			$this->findRelatedDbaseStatObject()->incrementUniqueOpens();
 			foreach ($this->findRelatedContactlistObjects() as $obj) {
@@ -56,7 +63,9 @@ class TrackingObject
 			$event->description = 'open';
 			$event->userAgent = $userinfo->getOperativeSystem() + ' ' + $userinfo->getBrowser();
 			$event->date = $time;
-			$this->saveEvent($event);
+			$this->addDirtyObject($event);
+
+			$this->flushChanges();
 		}
 	}
 
@@ -68,7 +77,7 @@ class TrackingObject
 						'conditions' => 'idMail = ?1',
 						'bind' =>
 							array(
-								1 => $this->idMail
+								1 => $this->mxc->idMail
 							)
 					)
 			  );
@@ -77,6 +86,29 @@ class TrackingObject
 			throw new Exception('Mail object not found!');
 		}
 		return $mailobject;
+	}
+
+	protected function addDirtyObject($object)
+	{
+		if (in_array($object, $this->dirtyObjects)) {
+			$this->dirtyObjects[] = $object;
+		}
+	}
+
+	protected function flushChanges()
+	{
+		foreach ($this->dirtyObjects as $object) {
+			if (!$object->save()) {
+				foreach ($object->getMessages() as $msg) {
+					$this->log->log('Error saving Object: ' . $msg);
+				}
+				$this->rollbackTransaction();
+
+				throw new Exception('Error while saving changes to objects!');
+			}
+		}
+		$this->commitTransaction();
+		$this->dirtyObjects = array();
 	}
 
 	/**
