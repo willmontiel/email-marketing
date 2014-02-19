@@ -61,6 +61,24 @@ class TrackingObject
 	}
 
 
+	public function findRelatedMailObject()
+	{
+		$mailobject = Mail::findFirst(
+				  array(
+						'conditions' => 'idMail = ?1',
+						'bind' =>
+							array(
+								1 => $this->idMail
+							)
+					)
+			  );
+
+		if (!$mailobject) {
+			throw new Exception('Mail object not found!');
+		}
+		return $mailobject;
+	}
+
 	/**
 	 *
 	 * @param int $idLink
@@ -69,7 +87,7 @@ class TrackingObject
 	public function trackClickEvent($idLink, UserAgentDetectorObj $userinfo)
 	{
 		list($mxl, $ml, $mxlxc) = $this->locateRelatedLinkRecords($idLink);
-		
+
 	}
 
 	/**
