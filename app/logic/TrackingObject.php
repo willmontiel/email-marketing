@@ -136,7 +136,7 @@ class TrackingObject
 			return false;
 		}
 	}
-
+	
 	public function updateTrackClick($idLink, $idMail, $idContact, $so = null, $browser = null)
 	{
 		$this->log->log('Inicio de tracking de clicks');
