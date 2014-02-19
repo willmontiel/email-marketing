@@ -50,5 +50,24 @@ class MailForm extends Form
 			'required' => 'required',
 			'id' => 'redactor_content'
         )));
+		
+		$this->add(new Text('fbtitlecontent', array(
+			'type' => 'text',
+        )));
+		
+		$this->add(new TextArea('fbdescriptioncontent', array(
+			'rows' => 2,
+			'id' => 'fbdescriptioncontent'
+        )));
+		
+		$this->add(new TextArea('fbmessagecontent', array(
+			'rows' => 2,
+			'id' => 'fbmessagecontent'
+        )));
+		
+		$this->add(new TextArea('twpublicationcontent', array(
+			'rows' => 2,
+			'id' => 'twpublicationcontent'
+        )));
 	}
 }

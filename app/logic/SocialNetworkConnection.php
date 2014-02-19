@@ -72,8 +72,9 @@ class SocialNetworkConnection
 	
 	public function getTwUrlLogIn($idMail = '')
 	{
-		$tmp_cds = $this->twitter->getRequestToken($this->urlObj->getBaseUri(TRUE). 'mail/setup/' . $idMail);
-//		$tmp_cds = $this->twitter->getRequestToken('http://192.168.18.165/' . $this->urlObj->getBaseUri(FALSE) . '/mail/setup/' . $idMail);
+		do {
+			$tmp_cds = $this->twitter->getRequestToken($this->urlObj->getBaseUri(TRUE). 'mail/setup/' . $idMail);
+		} while (!isset($tmp_cds['oauth_token']));
 		$url = $this->twitter->getAuthorizeURL($tmp_cds);
 		return $url;
 	}
