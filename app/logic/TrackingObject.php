@@ -29,7 +29,7 @@ class TrackingObject
 							2 => $idContact)
 		));
 
-		if (!$mxc) {
+		if (!$this->mxc) {
 			throw new InvalidArgumentException("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
 		}
 	}
@@ -38,7 +38,7 @@ class TrackingObject
 	 *
 	 * @param UserAgentDetectorObj $userinfo
 	 */
-	public function updateTrackOpenN(UserAgentDetectorObj $userinfo)
+	public function trackOpenEvent(UserAgentDetectorObj $userinfo)
 	{
 		// Tomar timestamp de ejecucion
 		$time = time();
@@ -53,10 +53,23 @@ class TrackingObject
 				$obj->incrementUniqueOpens();
 			}
 			$event = $this->createNewMailEvent();
+			$event->description = 'open';
 			$event->userAgent = $userinfo->getOperativeSystem() + ' ' + $userinfo->getBrowser();
 			$event->date = $time;
 			$this->saveEvent($event);
 		}
+	}
+
+
+	/**
+	 *
+	 * @param int $idLink
+	 * @param UserAgentDetectorObj $userinfo
+	 */
+	public function trackClickEvent($idLink, UserAgentDetectorObj $userinfo)
+	{
+		list($mxl, $ml, $mxlxc) = $this->locateRelatedLinkRecords($idLink);
+		
 	}
 
 	/**
@@ -76,67 +89,6 @@ class TrackingObject
 	}
 
 
-	public function updateTrackOpen($idMail, $idContact, $so = null, $browser = null)
-	{
-		$mxc = Mxc::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idContact = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $idContact)
-		));
-		if ($mxc) {
-			if ($mxc->opening == 0 && $mxc->bounced == 0 && $mxc->spam == 0 && $mxc->status == 'sent') {
-			$this->log->log('Es la primera apertura del contacto: ' . $idContact);
-//				$this->log->log('So: ' . $so . 'Browser: ' . $browser);
-			$db = Phalcon\DI::getDefault()->get('db');
-			try {
-				$db->begin();
-
-				$mailXcontact = $this->updateMxcStat($mxc, 'openings');
-				if (!$mailXcontact) {
-					throw new \InvalidArgumentException('Error while updating mxc');
-				}
-				$this->log->log('Guardó mxc');
-
-				$mail = $this->updateMailStat($idMail, 'openings');
-				if (!$mail) {
-					throw new \InvalidArgumentException('Error while updating mail');
-				}
-				$this->log->log('Guardó mail');
-
-//					throw new \InvalidArgumentException('transaction test');
-
-				$statdbase = $this->updateStatDbase($idContact, $idMail, 'openings');
-				if (!$statdbase) {
-					throw new \InvalidArgumentException('Error while updating statdbase');
-				}
-				$this->log->log('Se guardó statdbase');
-
-				$statcontactlist = $this->updateStatContactLists($mxc, 'openings');
-				if (!$statcontactlist) {
-					throw new \InvalidArgumentException('Error while updating statcontactlist');
-				}
-				$this->log->log('Se guardó statcontactlist');
-
-				$userAgent = $so . ', ' . $browser;
-				$mailEvent = $this->saveMailEvent($idMail, $idContact, 'opening', $userAgent);
-				if (!$mailEvent) {
-					throw new \InvalidArgumentException('Error while updating event');
-				}
-				$this->log->log('Guardó event');
-
-				$db->commit();
-			}
-			catch (InvalidArgumentException $e) {
-				$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
-				$db->rollback();
-			}
-		}
-		else {
-			$this->log->log('No existe mxc o ya se contabilizo');
-			return false;
-		}
-	}
-	
 	public function updateTrackClick($idLink, $idMail, $idContact, $so = null, $browser = null)
 	{
 		$this->log->log('Inicio de tracking de clicks');
