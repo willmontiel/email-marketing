@@ -11,7 +11,26 @@
 				container.hide();
 			}
 		}
+		function new_sn_account(redirect){
+			$.ajax(
+				{
+				url: "{{url('mail/savetmpdata')}}",
+				type: "POST",			
+				data: $('#setupform').serialize(),
+				success: function(){
+					window.location.href = redirect;
+				}
+			});
+		}
 		$(function() {
+			if($('#accounts_facebook')[0].selectedOptions.length > 0){
+				$('.fbdescription').show();
+				$('.setup_socials_container').show();
+			}	
+			if($('#accounts_twitter')[0].selectedOptions.length > 0){
+				$('.twdescription').show();
+				$('.setup_socials_container').show();
+			}
 			$('#accounts_facebook').on('change', function() {
 				if($(this)[0].selectedOptions.length > 0) {
 					$('.fbdescription').show();
@@ -20,7 +39,7 @@
 					$('.fbdescription').hide();
 				}
 			});
-			
+	
 			$('#accounts_twitter').on('change', function() {
 				if($(this)[0].selectedOptions.length > 0) {
 					$('.twdescription').show();
@@ -100,7 +119,7 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<form action="{% if mail is empty %}{{url('mail/setup')}}{% else %}{{url('mail/setup')}}/{{mail.idMail}}{% endif %}" method="post" class="fill-up">
+				<form action="{% if mail is empty %}{{url('mail/setup')}}{% else %}{{url('mail/setup')}}/{{mail.idMail}}{% endif %}" method="post" class="fill-up" id="setupform">
 					<div class="padded">
 						<label>*Nombre: </label>
 						{{ MailForm.render('name') }}
@@ -123,31 +142,39 @@
 								<label>Facebook</label>
 								<select multiple="multiple" name="facebookaccounts[]" id="accounts_facebook" class="chzn-select">
 									{% for fbsocial in fbsocials %}
-										<option value="{{fbsocial.idSocialnetwork}}">{{fbsocial.name}}</option>
+										{%if value_in_array(fbsocial.idSocialnetwork, fbids) is true%}
+											<option value="{{fbsocial.idSocialnetwork}}" selected>{{fbsocial.name}}</option>
+										{%else%}
+											<option value="{{fbsocial.idSocialnetwork}}">{{fbsocial.name}}</option>
+										{%endif%}
 									{% endfor %}
 								</select>
 								<div class="fbdescription" style="display: none">
 									<label>Titulo de la Publicacion: </label>
-									<input type="text" id="fbtitlecontent" name="fbtitlecontent">
+									{{ MailForm.render('fbtitlecontent') }}
 									<label>Descripcion de la Publicacion: </label>
-									<textarea rows="2" cols="20" name="fbdescriptioncontent" id="fbdescriptioncontent"></textarea>
+									{{ MailForm.render('fbdescriptioncontent') }}
 									<label>Mensaje de la Publicacion: </label>
-									<textarea rows="2" cols="20" name="fbmessagecontent" id="fbmessagecontent"></textarea>
+									{{ MailForm.render('fbmessagecontent') }}
 								</div>
-								<div class="add_facebook_account"><a href="{{fbloginUrl}}">Añadir cuenta de Facebook</a></div>
+								<div class="add_facebook_account"><a onclick="new_sn_account('{{fbloginUrl}}')">Añadir cuenta de Facebook</a></div>
 							</div>
 							<div class="twitter_account_container">
 								<label>Twitter</label>
 								<select multiple="multiple" name="twitteraccounts[]" id="accounts_twitter" class="chzn-select">
 									{% for twsocial in twsocials %}
-										<option value="{{twsocial.idSocialnetwork}}">{{twsocial.name}}</option>
+										{%if value_in_array(twsocial.idSocialnetwork, twids) is true%}
+											<option value="{{twsocial.idSocialnetwork}}" selected>{{twsocial.name}}</option>
+										{%else%}
+											<option value="{{twsocial.idSocialnetwork}}">{{twsocial.name}}</option>
+										{%endif%}
 									{% endfor %}
 								</select>
 								<div class="twdescription" style="display: none">
 									<label>Mensaje del Tweet: </label>
-									<textarea rows="2" cols="20" name="twpublicationcontent" id="twpublicationcontent" ></textarea>
+									{{ MailForm.render('twpublicationcontent') }}
 								</div>
-								<div class="add_twitter_account"><a href="{{twloginUrl}}">Añadir cuenta de Twitter</a></div>
+								<div class="add_twitter_account"><a onclick="new_sn_account('{{twloginUrl}}')">Añadir cuenta de Twitter</a></div>
 							</div>
 						</div>
 					</div>

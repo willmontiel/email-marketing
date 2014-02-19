@@ -286,6 +286,10 @@ try {
 		$compiler->addFilter('change_spaces_in_between', function ($resolvedArgs, $exprArgs){
 				return 'str_replace(" ", "_", ' . $resolvedArgs . ')';
 			});
+			
+		$compiler->addFunction('value_in_array', function ($resolvedArgs, $exprArgs) use ($compiler){
+						return 'in_array(' . $resolvedArgs . ')';
+					});
 		
 		$compiler->addFunction('ember_customfield', function ($resolvedArgs, $exprArgs) {
                         return 'CreateViewEmber::createField(' . $resolvedArgs . ')';

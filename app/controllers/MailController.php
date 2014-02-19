@@ -128,8 +128,26 @@ class MailController extends ControllerBase
 							2 => $this->user->account->idAccount)
 		));
 		
-		if ($mailExist) {
-			$form = new MailForm($mailExist);			
+		if(isset ($_SESSION['tmpData'])) {
+			$form = new MailForm($_SESSION['tmpData']);
+			$this->view->setVar('fbids', $_SESSION['tmpData']->facebookaccounts);
+			$this->view->setVar('twids', $_SESSION['tmpData']->twitteraccounts);
+			unset($_SESSION['tmpData']);
+		}
+		else if ($mailExist) {
+			$sm = Socialmail::findFirstByIdMail($mailExist->idMail);
+			if($sm) {
+				$fbdesc = json_decode($sm->fbdescription);
+				$twdesc = json_decode($sm->twdescription);
+				$mailExist->fbtitlecontent = $fbdesc->title;
+				$mailExist->fbdescriptioncontent = $fbdesc->description;
+				$mailExist->fbmessagecontent = $fbdesc->message;
+				$mailExist->twpublicationcontent = $twdesc->message;
+			}
+			$form = new MailForm($mailExist);
+			$netwids = json_decode($mailExist->socialnetworks);
+			$this->view->setVar('fbids', $netwids->facebook);
+			$this->view->setVar('twids', $netwids->twitter);
 			$this->view->setVar('mail', $mailExist);
 		}
 		else {
@@ -231,6 +249,26 @@ class MailController extends ControllerBase
 			
 		}
 		$this->view->MailForm = $form;
+	}
+	
+	public function savetmpdataAction()
+	{
+		$log = $this->logger;
+		if($this->request->isPost()){
+			$setuptmpdata = new stdClass();
+			$setuptmpdata->name = $this->request->getPost('name');
+			$setuptmpdata->subject = $this->request->getPost('subject');
+			$setuptmpdata->fromName = $this->request->getPost('fromName');
+			$setuptmpdata->fromEmail = $this->request->getPost('fromEmail');
+			$setuptmpdata->replyTo = $this->request->getPost('replyTo');
+			$setuptmpdata->fbtitlecontent = $this->request->getPost('fbtitlecontent');
+			$setuptmpdata->fbdescriptioncontent = $this->request->getPost('fbdescriptioncontent');
+			$setuptmpdata->fbmessagecontent = $this->request->getPost('fbmessagecontent');
+			$setuptmpdata->twpublicationcontent = $this->request->getPost('twpublicationcontent');
+			$setuptmpdata->facebookaccounts = $this->request->getPost("facebookaccounts");
+			$setuptmpdata->twitteraccounts = $this->request->getPost("twitteraccounts");
+			$_SESSION['tmpData'] = $setuptmpdata;
+		}
 	}
 	
 	public function sourceAction($idMail = null)
