@@ -250,7 +250,7 @@ class StatisticsWrapper extends BaseWrapper
 			$opencontact[] = array(
 				'id' => $i['idContact'],
 				'email' => $i['email'],
-				'date' => date('Y-m-d H:i', 1386687891),
+				'date' => date('Y-m-d H:i', $i['date']),
 				'os' => $i['userAgent']
 			);
 		}
