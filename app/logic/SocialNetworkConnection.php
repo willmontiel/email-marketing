@@ -100,9 +100,8 @@ class SocialNetworkConnection
 		$this->logger->log($userid);
 		if($userid) {
 			$existing = Socialnetwork::findFirstByUserid($userid);
-			
+			$user = $this->facebook->api('/'.$userid);
 			if(!$existing) {
-				$user = $this->facebook->api('/'.$userid);
 				$this->saveNewAccount($userid, $this->facebook->getAccessToken(), $user['name'], 'Facebook', 'Profile');
 			}
 			else if($existing->status === 'Deactivated'){
