@@ -568,3 +568,9 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .social-media-new-account a {
 	margin-right: 10px;
 }
+.social-account-name.socil-account-deactivated {
+	color: red;
+}
+.social-account-name.socil-account-deactivated > span{
+	font-size: 14px;
+}

@@ -56,10 +56,19 @@
 										{%endif%}
 									</td>
 									<td class="social-account-name-column">
-										<div class="social-account-name">{{account.name}}</div>
+										{%if account.status is 'Deactivated'%}
+											<div class="social-account-name socil-account-deactivated">{{account.name}} <span>(Desactivado)</span></div>
+										{%else%}
+											<div class="social-account-name">{{account.name}}</div>
+										{%endif%}
 									</td>
 									<td class="btns-social-column">
 										<a class="ShowDialog btn btn-default" data-toggle="modal" href="#delete-modal-social" data-id="{{url('socialmedia/delete')}}/{{account.idSocialnetwork}}"><i class="icon-trash"></i> Eliminar</a>
+										{%if account.status is 'Deactivated' and account.type is 'Facebook'%}
+											<a class="ShowDialog btn btn-default" href="{{fbloginUrl}}" style="width: 58px;"><i class="icon-pencil"></i> Activar</a>
+										{%elseif account.status is 'Deactivated' and account.type is 'Twitter'%}
+											<a class="ShowDialog btn btn-default" href="{{twloginUrl}}" style="width: 58px;"><i class="icon-pencil"></i> Activar</a>
+										{%endif%}
 									</td>
 								</tr>
 							{%endfor%}

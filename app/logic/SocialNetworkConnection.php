@@ -28,7 +28,7 @@ class SocialNetworkConnection
 	public function findAllFacebookAccountsByUser()
 	{
 		$socials = Socialnetwork::find(array(
-							"conditions" => "idUser = ?1 AND type = 'Facebook'",
+							"conditions" => "idUser = ?1 AND type = 'Facebook' AND status = 'Activated'",
 							"bind" => array(1 => $this->user->idUser)
 						));
 		return $socials;
@@ -100,32 +100,22 @@ class SocialNetworkConnection
 		$this->logger->log($userid);
 		if($userid) {
 			$existing = Socialnetwork::findFirstByUserid($userid);
-			
+			$user = $this->facebook->api('/'.$userid);
 			if(!$existing) {
-				$user = $this->facebook->api('/'.$userid);
-
-				$newuser = new Socialnetwork();
-				$newuser->idUser = $this->user->idUser;
-				$newuser->userid = $userid;
-				$newuser->token = $this->facebook->getAccessToken();
-				$newuser->name = $user['name'];
-				$newuser->type = 'Facebook';
-				$newuser->category = 'Profile';
-				$newuser->save();
-
-				$accounts = $this->facebook->api('/'.$userid.'/accounts');
-				foreach ($accounts['data'] as $account) {
-					$fanpage = Socialnetwork::findFirstByUserid($account['id']);
-					if(!$fanpage) {
-						$newaccount = new Socialnetwork();
-						$newaccount->idUser = $this->user->idUser;
-						$newaccount->userid = $account['id'];
-						$newaccount->token = $account['access_token'];
-						$newaccount->name = $account['name'];
-						$newaccount->type = 'Facebook';
-						$newaccount->category = 'Fan Page';
-						$newaccount->save();
-					}
+				$this->saveNewAccount($userid, $this->facebook->getAccessToken(), $user['name'], 'Facebook', 'Profile');
+			}
+			else if($existing->status === 'Deactivated'){
+				$this->activateAccount($existing, $existing->userid, $this->facebook->getAccessToken(), $user['name']);
+			}
+			
+			$accounts = $this->facebook->api('/'.$userid.'/accounts');
+			foreach ($accounts['data'] as $account) {
+				$fanpage = Socialnetwork::findFirstByUserid($account['id']);
+				if(!$fanpage) {
+					$this->saveNewAccount($account['id'], $account['access_token'], $account['name'], 'Facebook', 'Fan Page');
+				}
+				else if($fanpage->status === 'Deactivated'){
+					$this->activateAccount($fanpage, $fanpage->userid, $account['access_token'], $account['name']);
 				}
 			}
 		}
@@ -137,20 +127,40 @@ class SocialNetworkConnection
 		if($token_cds['oauth_token']) {
 			$existing = Socialnetwork::findFirstByName($token_cds['screen_name']);
 			if(!$existing) {
-				$newuser = new Socialnetwork();
-				$newuser->idUser = $this->user->idUser;
-				$newuser->userid = $token_cds['oauth_token'];
-				$newuser->token = $token_cds['oauth_token_secret'];
-				$newuser->name = $token_cds['screen_name'];
-				$newuser->type = 'Twitter';
-				$newuser->category = 'Profile';
-				if(!$newuser->save()) {
-					$this->logger->log('No se pudo crear el usuario id = '. $this->user->idUser . ' token = ' . $token_cds['oauth_token'] . ' secret = ' . $token_cds['oauth_token_secret'] . ' name = ' . $token_cds['name']);
-				}
+				$this->saveNewAccount($token_cds['oauth_token'], $token_cds['oauth_token_secret'], $token_cds['screen_name'], 'Twitter', 'Profile');
+			}
+			else if($existing->status === 'Deactivated'){
+				$this->activateAccount($existing, $token_cds['oauth_token'], $token_cds['oauth_token_secret'], $token_cds['screen_name']);
 			}
 		}
 	}
 	
+	protected function saveNewAccount($userid, $token, $name, $type, $category)
+	{
+		$newsaccount = new Socialnetwork();
+		$newsaccount->idUser = $this->user->idUser;
+		$newsaccount->userid = $userid;
+		$newsaccount->token = $token;
+		$newsaccount->name = $name;
+		$newsaccount->type = $type;
+		$newsaccount->category = $category;
+		$newsaccount->status = 'Activated';
+		if(!$newsaccount->save()) {
+			$this->logger->log('Error al crear la cuenta de ' . $category);
+		}
+	}
+	
+	protected function activateAccount($saccount, $userid, $token, $name)
+	{
+		$saccount->userid = $userid;
+		$saccount->token = $token;
+		$saccount->name = $name;
+		$saccount->status = 'Activated';
+		if(!$saccount->save()) {
+			$this->logger->log('Error al actualizar la cuenta de ' . $saccount->category);
+		}
+	}
+
 	public function saveSocialsIds($fbaccounts, $twaccounts)
 	{
 		$socialsnetworks = new stdClass();
@@ -182,7 +192,7 @@ class SocialNetworkConnection
 	public function postOnFacebook($ids, Socialmail $desc, Mail $mail)
 	{
 		$first = TRUE;
-		$phql = "SELECT userid, token FROM Socialnetwork where idSocialnetwork in ( ";
+		$phql = "SELECT idSocialnetwork, userid, token FROM Socialnetwork where idSocialnetwork in ( ";
 		foreach ($ids as $id) {
 			if(!$first) {
 				$phql.= ', ';
@@ -208,13 +218,14 @@ class SocialNetworkConnection
 			  );
 
 			  try {
-				  $result = $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
+				  $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
 				  $this->logger->log('Successfully posted to Facebook');
 			  } catch(Exception $e) {
 				  $this->logger->log('No publico');
-				  $this->logger->log($result);
-				  $this->logger->log(print_r($result, true));
 				  $this->logger->log($e->getMessage());
+				  $socialnetwork = Socialnetwork::findFirstByIdSocialnetwork($id_token->idSocialnetwork);
+				  $socialnetwork->status = 'Deactivated';
+				  $socialnetwork->save();
 			  }
 		}
 	}
