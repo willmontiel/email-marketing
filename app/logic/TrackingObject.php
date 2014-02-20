@@ -41,7 +41,7 @@ class TrackingObject
 		$this->idMail = $idMail;
 		$this->idContact = $idContact;
 	}
-
+	
 	/**
 	 *
 	 * @param UserAgentDetectorObj $userinfo
@@ -214,9 +214,6 @@ class TrackingObject
 	 */
 	
 	
-	
-	
-	
 	/**
 	 *
 	 * @param int $idLink
@@ -224,10 +221,151 @@ class TrackingObject
 	 */
 	public function trackClickEvent($idLink, UserAgentDetectorObj $userinfo)
 	{
-		list($mxl, $ml, $mxlxc) = $this->locateRelatedLinkRecords($idLink);
-
+		$time = time();// Tomar timestamp de ejecucion
+		try {
+			if ($this->canTrackClickEvents($idLink)) {
+				$this->startTransaction();
+				
+				$this->mxc->clicks = $time;
+				
+				$mailObj = $this->findRelatedMailObject();
+				$mailObj->incrementClicks();
+				
+				$statDbaseObj = $this->findRelatedDbaseStatObject();
+				$statDbaseObj->incrementClicks();
+				
+				list($mxl, $ml) = $this->locateRelatedLinkRecords($idLink);
+				$mxl->incrementClicks();
+				
+				//Esta función valida si el usuario no hecho apertura, y si no es asi se marca apertura por click 
+				if ($this->validateOpenForClick()) {
+					$this->mxc->opening = $time;
+					
+					$mailObj->incrementUniqueOpens();
+					$statDbaseObj->incrementUniqueOpens();
+					
+					foreach ($this->findRelatedContactlistObjects() as $statListObj) {
+						$statListObj->incrementUniqueOpens();
+						$statListObj->incrementClicks();
+						$this->addDirtyObject($statListObj);
+					}
+					
+					$eventForClick = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
+					$eventForClick->description = 'opening for click';
+					$eventForClick->userAgent = $userinfo->getOperativeSystem() . ', ' . $userinfo->getBrowser();
+					$eventForClick->date = $time;
+					$this->addDirtyObject($eventForClick);
+				}
+				else {
+					foreach ($this->findRelatedContactlistObjects() as $statListObj) {
+						$statListObj->incrementClicks();
+						$this->addDirtyObject($statListObj);
+					}
+				}
+				
+				$this->addDirtyObject($this->mxc);
+				$this->addDirtyObject($mxl);
+				$this->addDirtyObject($mailObj);
+				$this->addDirtyObject($statDbaseObj);
+			
+				$event = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
+				$event->description = 'click';
+				$event->userAgent = $userinfo->getOperativeSystem() . ', ' . $userinfo->getBrowser();
+				$event->date = $time;
+				$this->addDirtyObject($event);
+				
+				$this->flushChanges();
+				
+				return $ml->link;
+			}
+			else {
+				return $this->getLinkToRedirect($idLink);
+			}
+		}
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->rollbackTransaction();
+		}
+	}
+	
+	
+	public function canTrackClickEvents($idLink)
+	{
+		$mxcxl = Mxcxl::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idMailLink = ?2 AND idContact = ?3',
+			'bind' => array(1 => $this->idMail,
+							2 => $idLink,
+							3 => $this->idContact)
+		));
+		
+		if (!$mxcxl) {
+			return true;
+		}
+		return false;
+	}
+	
+	private function validateOpenForClick()
+	{
+		if ($this->mxc->opening == 0 && $this->mxc->bounced == 0 && $this->mxc->spam == 0 && $this->mxc->status == 'sent') {
+			return true;
+		}
+		else if ($this->mxc->opening !== 0 && $this->mxc->bounced == 0 && $this->mxc->spam == 0 && $this->mxc->status == 'sent') {
+			return false;
+		}
+	}
+	
+	private function locateRelatedLinkRecords($idLink)
+	{
+		$records = array();
+		
+		$mxl = Mxl::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idMailLink = ?2',
+			'bind' => array(1 => $this->idMail,
+							2 => $idLink)
+		));
+		
+		if (!$mxl) {
+			throw new Exception('Mxl object not found!');
+		}
+		
+		$records[] = $mxl;
+		
+		$ml = Maillink::findFirst(array(
+			'conditions' => 'idMailLink = ?1',
+			'bind' => array(1 => $idLink)
+		));
+		
+		if (!$ml) {
+			throw new Exception('Ml object not found!');
+		}
+		
+		$records[] = $ml;
+		
+		return $records;
+	}
+	
+	private function getLinkToRedirect($idLink)
+	{
+		$ml = Maillink::findFirst(array(
+			'conditions' => 'idMailLink = ?1',
+			'bind' => array(1 => $idLink)
+		));
+		
+		if (!$ml) {
+			throw new Exception('Ml object not found!');
+		}
+		
+		return $ml->link;
 	}
 
+	/**
+	 * ==========================================================================================
+	 */
+	
+	
+	
+	
+	
 	public function updateTrackClick($idLink, $idMail, $idContact, $so = null, $browser = null)
 	{
 		$this->log->log('Inicio de tracking de clicks');

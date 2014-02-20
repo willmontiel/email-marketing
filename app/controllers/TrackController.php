@@ -60,8 +60,9 @@ class TrackController extends ControllerBase
 				$userAgent = new UserAgentDetectorObj();
 				$userAgent->setInfo($info);
 				
-				$trackingObject = new TrackingObject();
-				$url = $trackingObject->updateTrackClick($idLink, $idMail, $idContact, $userAgent);
+				$trackingObj = new TrackingObject();
+				$trackingObj->setSendIdentification($idMail, $idContact);
+				$url = $trackingObj->trackClickEvent($idLink, $userAgent);	
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e . ']');

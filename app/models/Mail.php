@@ -61,4 +61,9 @@ class Mail extends Modelbase
 	{
 		$this->uniqueOpens += 1;
 	}
+	
+	public function incrementClicks()
+	{
+		$this->clicks += 1;
+	}
 }
