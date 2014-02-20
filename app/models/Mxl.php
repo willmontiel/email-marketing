@@ -13,4 +13,9 @@ class Mxl extends \Phalcon\Mvc\Model
             "foreignKey" => true,
         ));
 	}
+	
+	public function incrementClicks()
+	{
+		$this->totalClicks += 1;
+	}
 }

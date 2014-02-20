@@ -14,6 +14,7 @@ class TrackController extends ControllerBase
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		
 		if ($md5 == $md5_2) {
+			$this->logger->log('El link es valido');
 			try {
 				//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
 				//petición
@@ -27,7 +28,7 @@ class TrackController extends ControllerBase
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');
 			}
-			
+			$this->logger->log('Preparando para retornar img');
 			// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
 			$img = '../public/images/tracking.gif';
 
@@ -37,6 +38,7 @@ class TrackController extends ControllerBase
 			return $this->response->setContent(file_get_contents($img));
 		}
 		else {
+			$this->logger->log('Link inválido');
 			$this->response->redirect('error/link');
 		}
 	}
@@ -58,8 +60,9 @@ class TrackController extends ControllerBase
 				$userAgent = new UserAgentDetectorObj();
 				$userAgent->setInfo($info);
 				
-				$trackingObject = new TrackingObject();
-				$url = $trackingObject->updateTrackClick($idLink, $idMail, $idContact, $userAgent);
+				$trackingObj = new TrackingObject();
+				$trackingObj->setSendIdentification($idMail, $idContact);
+				$url = $trackingObj->trackClickEvent($idLink, $userAgent);	
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e . ']');

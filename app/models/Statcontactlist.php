@@ -2,7 +2,7 @@
 class Statcontactlist extends \Phalcon\Mvc\Model
 {
 	public $idMail;
-	public $idDbase;
+	public $idContactlist;
 
 	public function initialize()
     {
@@ -10,7 +10,7 @@ class Statcontactlist extends \Phalcon\Mvc\Model
             "foreignKey" => true,
         ));
 		
-		$this->belongsTo("idDbase", "Dbase", "idDbase", array(
+		$this->belongsTo("idContactlist", "Contactlist", "idContactlist", array(
             "foreignKey" => true,
         ));
 	}
@@ -18,5 +18,10 @@ class Statcontactlist extends \Phalcon\Mvc\Model
 	public function incrementUniqueOpens()
 	{
 		$this->uniqueOpens += 1;
+	}
+	
+	public function incrementClicks()
+	{
+		$this->clicks += 1;
 	}
 }
