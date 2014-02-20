@@ -94,8 +94,6 @@ class TrackingUrlObject
 	
 	private function validateDomain($link)
 	{
-		Phalcon\DI::getDefault()->get('logger')->log('Link: ' . $link);
-		
 		$invalidDomains = array(
 			'facebook' => '/[^\/]*\.*facebook.com.*$/',
 			'twiter' => '/[^\/]*\.*twitter.com.*$/',
@@ -104,15 +102,13 @@ class TrackingUrlObject
 		);
 		
 		$parts = parse_url($link);
-		
-		Phalcon\DI::getDefault()->get('logger')->log('host: ' . $parts['host']);
-		
 		foreach ($invalidDomains as $domain) {
 			if (!isset($parts['host']) || empty($parts['host']) || preg_match($domain, $link)) {
 				return false;
 			}
-			return $parts['scheme'] . '://' . $parts['host'];
 		}
+		
+		return $parts['scheme'] . '://' . $parts['host'];
 	}		
 	
 }
