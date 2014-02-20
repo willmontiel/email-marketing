@@ -208,10 +208,12 @@ class SocialNetworkConnection
 			  );
 
 			  try {
-				  $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
+				  $result = $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
 				  $this->logger->log('Successfully posted to Facebook');
 			  } catch(Exception $e) {
 				  $this->logger->log('No publico');
+				  $this->logger->log($result);
+				  $this->logger->log(print_r($result, true));
 				  $this->logger->log($e->getMessage());
 			  }
 		}
