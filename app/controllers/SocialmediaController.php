@@ -32,6 +32,24 @@ class SocialmediaController extends ControllerBase
 		return $this->response->redirect("socialmedia");
 	}
 	
+	public function createAction($idMail = '')
+	{
+		$this->view->disable();
+		$socialnet = new SocialNetworkConnection($this->logger);
+		$socialnet->setUser($this->user);
+		$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
+		$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
+		if(isset($_REQUEST['oauth_token']) && isset($_REQUEST['oauth_verifier'])) {
+			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token, $_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
+			$socialnet->saveTwitterUser($_REQUEST['oauth_verifier']);
+		}
+		else {
+			$socialnet->saveFacebookUser();
+		}
+		$this->logger->log('Llego con idMail ' . $idMail);
+		return $this->response->redirect("mail/setup/" . $idMail);
+	}
+	
 	public function deleteAction($idSocialnetwork)
 	{
 		$socialaccount = Socialnetwork::findFirst(array(

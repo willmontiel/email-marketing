@@ -288,6 +288,7 @@ class Security extends Plugin
 				//Redes Sociales
 				'socialmedia::index' => array('socialmedia' => array('read')),
 				'socialmedia::new' => array('socialmedia' => array('create')),
+				'socialmedia::create' => array('socialmedia' => array('create')),
 				'socialmedia::delete' => array('socialmedia' => array('delete'))
 			);
 		}

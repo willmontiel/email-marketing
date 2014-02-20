@@ -160,19 +160,13 @@ class MailController extends ControllerBase
 			$socialnet->setUser($this->user);
 			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
-			if(isset($_REQUEST['oauth_token']) && isset($_REQUEST['oauth_verifier'])) {
-				$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token, $_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
-				$socialnet->saveTwitterUser($_REQUEST['oauth_verifier']);
-			}
-			else {
-				$socialnet->saveFacebookUser();
-			}
-			
-			$fbloginUrl = $socialnet->getFbUrlLogIn();
+
 			$fbsocials = $socialnet->getSocialIdNameArray($socialnet->findAllFacebookAccountsByUser());
-			$redirect = ($idMail != null) ? '/mail/setup/' . $idMail : '/mail/setup/' ;
-			$twloginUrl = $socialnet->getTwUrlLogIn($redirect);
 			$twsocials = $socialnet->getSocialIdNameArray($socialnet->findAllTwitterAccountsByUser());
+			
+			$redirect = ($idMail != null) ? '/socialmedia/create/' . $idMail : '/socialmedia/create/' ;
+			$fbloginUrl = $socialnet->getFbUrlLogIn($redirect);
+			$twloginUrl = $socialnet->getTwUrlLogIn($redirect);
 
 			$this->view->setVar('fbsocials', $fbsocials);
 			$this->view->setVar("fbloginUrl", $fbloginUrl);
