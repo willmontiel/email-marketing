@@ -627,6 +627,7 @@ class TrackingObject
 			return $newUrl;
 		}
 		else {
+			$this->log->log('Redirigiendo a: ' . $link);
 			return $link;
 		}
 	}
