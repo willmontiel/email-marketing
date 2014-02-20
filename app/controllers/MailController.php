@@ -450,6 +450,7 @@ class MailController extends ControllerBase
 			));
 			
 			if ($mailContentExist) {
+				$mailContentExist->content = html_entity_decode($mailContentExist->content);
 				$this->view->setVar("mailContent", $mailContentExist);
 				$form = new MailForm($mailContentExist);
 			}
@@ -665,62 +666,69 @@ class MailController extends ControllerBase
 							4 => 'target',
 							5 => 'schedule')
 		));
-	
-		if ($mail) {
-			$content = Mailcontent::findFirst(array(
-				'conditions' => 'idMail = ?1',
-				'bind' => array(1 => $idMail)
-			));
-			
-			if ($content) {
-				switch ($mail->type) {
-					case 'Html':
-						$html = html_entity_decode($content->content); 
-						break;
+		
+		$content = Mailcontent::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		if ($mail && $content) {
+			switch ($mail->type) {
+				case 'Html':
+					$html = html_entity_decode($content->content); 
+					break;
 
-					case 'Editor':
-						$editor = new HtmlObj();
-						$editor->assignContent(json_decode($content->content));
-						$html = $editor->render();
-						break;
+				case 'Editor':
+					$editor = new HtmlObj();
+					$editor->assignContent(json_decode($content->content));
+					$html = $editor->render();
+					break;
+			}
+			$urlObj = new TrackingUrlObject();
+			$links = $urlObj->searchDomainsAndProtocols($html, $content->plainText);
+			$this->logger->log(print_r($links, true));
+
+			$this->view->setVar('links', $links);
+			$this->view->setVar('mail', $mail);
+			if ($content->googleAnalytics !== null) {
+				$analytics = json_decode($content->googleAnalytics);
+				$campaignName = $content->campaignName;
+				$x = 'true';
+			}
+			else {
+				$campaignName = null;
+				$analytics = null;
+				$x = 'null';
+			}
+			$this->view->setVar('analytics', $analytics);
+			$this->view->setVar('campaignName', $campaignName);
+			$this->view->setVar('x', $x);
+
+			if ($this->request->isPost()) {
+				$campaignName = $this->request->getPost('campaignName');
+				if ($campaignName == null) {
+					$campaignName = $mail->name;
 				}
-				$urlObj = new TrackingUrlObject();
-				$links = $urlObj->searchDomainsAndProtocols($html);
-				$this->logger->log(print_r($links, true));
+				$googleAnalytics = $this->request->getPost("googleAnalytics");
+				$links = $this->request->getPost("links");
+				$direction = $this->request->getPost("direction");
 
-				$this->view->setVar('links', $links);
-				$this->view->setVar('mail', $mail);
-				if ($content->googleAnalytics !== null) {
-					$analytics = json_decode($content->googleAnalytics);
-					$x = 'true';
+				if ($googleAnalytics == 'googleAnalytics') {
+					$content->campaignName = $campaignName;
+					$content->googleAnalytics = json_encode($links);
 				}
 				else {
-					$analytics = null;
-					$x = 'null';
+					$content->campaignName = null;
+					$content->googleAnalytics = null;
 				}
-				$this->view->setVar('analytics', $analytics);
-				$this->view->setVar('x', $x);
-				
-				if ($this->request->isPost()) {
-					$googleAnalytics = $this->request->getPost("googleAnalytics");
-					$links = $this->request->getPost("links");
-					$direction = $this->request->getPost("direction");
-					
-					if ($googleAnalytics == 'googleAnalytics') {
-						$content->googleAnalytics = json_encode($links);
+				if (!$content->save()) {
+					foreach ($content->getMessages() as $msg) {
+						$this->logger->log('Error: ' . $msg);
 					}
-					else {
-						$content->googleAnalytics = null;
-					}
-					if (!$content->save()) {
-						foreach ($content->getMessages() as $msg) {
-							$this->logger->log('Error: ' . $msg);
-						}
-						$this->flashSession->error('Ha ocurrido un error mientras se guardaba el seguimiento de Google Analytics');
-						return $this->response->redirect('mail/track/' . $idMail);
-					}
-					$this->routeRequest('track', $direction, $mail->idMail);
+					$this->flashSession->error('Ha ocurrido un error mientras se guardaba el seguimiento de Google Analytics');
+					return $this->response->redirect('mail/track/' . $idMail);
 				}
+				$this->routeRequest('track', $direction, $mail->idMail);
 			}
 		}
 	}

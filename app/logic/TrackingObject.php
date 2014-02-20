@@ -209,10 +209,9 @@ class TrackingObject
 	
 	/**
 	 * =====================================================================================
-	 * Inicio de tracking
+	 * Inicio de tracking de Clicks
 	 * =====================================================================================
 	 */
-	
 	
 	/**
 	 *
@@ -224,6 +223,7 @@ class TrackingObject
 		$time = time();// Tomar timestamp de ejecucion
 		try {
 			if ($this->canTrackClickEvents($idLink)) {
+				$this->log->log('No se ha contabilizado');
 				$this->startTransaction();
 				
 				$this->mxc->clicks = $time;
@@ -239,6 +239,7 @@ class TrackingObject
 				
 				//Esta función valida si el usuario no hecho apertura, y si no es asi se marca apertura por click 
 				if ($this->validateOpenForClick()) {
+					$this->log->log('Apertura por click');
 					$this->mxc->opening = $time;
 					
 					$mailObj->incrementUniqueOpens();
@@ -257,17 +258,20 @@ class TrackingObject
 					$this->addDirtyObject($eventForClick);
 				}
 				else {
+					$this->log->log('Contablización de click sin apertura');
 					foreach ($this->findRelatedContactlistObjects() as $statListObj) {
 						$statListObj->incrementClicks();
 						$this->addDirtyObject($statListObj);
 					}
 				}
-				
 				$this->addDirtyObject($this->mxc);
 				$this->addDirtyObject($mxl);
 				$this->addDirtyObject($mailObj);
 				$this->addDirtyObject($statDbaseObj);
-			
+				
+				$mxcxl = $this->createNewMxcxl($idLink, $time);
+				$this->addDirtyObject($mxcxl);
+				
 				$event = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
 				$event->description = 'click';
 				$event->userAgent = $userinfo->getOperativeSystem() . ', ' . $userinfo->getBrowser();
@@ -276,14 +280,15 @@ class TrackingObject
 				
 				$this->flushChanges();
 				
-				return $ml->link;
+				return $this->insertGoogleAnalyticsUrl($ml->link);
 			}
 			else {
+				$this->log->log('Ya se contabilizó');
 				return $this->getLinkToRedirect($idLink);
 			}
 		}
 		catch (InvalidArgumentException $e) {
-			$this->logger->log('Exception: [' . $e . ']');
+			$this->log->log('Exception: [' . $e . ']');
 			$this->rollbackTransaction();
 		}
 	}
@@ -299,8 +304,10 @@ class TrackingObject
 		));
 		
 		if (!$mxcxl) {
+			$this->log->log('No hay registro Mxcxl se puede hacer click');
 			return true;
 		}
+		$this->log->log('Ya hay registro Mxcxl no se puede hacer click');
 		return false;
 	}
 	
@@ -355,173 +362,24 @@ class TrackingObject
 			throw new Exception('Ml object not found!');
 		}
 		
-		return $ml->link;
+		return $this->insertGoogleAnalyticsUrl($ml->link);
 	}
+	
+	
+	private function createNewMxcxl($idLink, $date)
+	{
+		$mxcxl = new Mxcxl();
+		$mxcxl->idMail = $this->idMail;
+		$mxcxl->idMailLink = $idLink;
+		$mxcxl->idContact = $this->idContact;
+		$mxcxl->click = $date;
 
+		return $mxcxl;
+	}
 	/**
 	 * ==========================================================================================
 	 */
 	
-	
-	
-	
-	
-	public function updateTrackClick($idLink, $idMail, $idContact, $so = null, $browser = null)
-	{
-		$this->log->log('Inicio de tracking de clicks');
-		$mxl = Mxl::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idMailLink = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $idLink)
-		));
-
-		if ($mxl) {
-			$userAgent = $so . ', ' . $browser;
-
-			$mxcxl = Mxcxl::findFirst(array(
-				'conditions' => 'idMail = ?1 AND idMailLink = ?2 AND idContact = ?3',
-				'bind' => array(1 => $idMail,
-								2 => $idLink,
-								3 => $idContact)
-			));
-
-			$Maillink = Maillink::findFirst(array(
-				'conditions' => 'idMailLink = ?1',
-				'bind' => array(1 => $idLink)
-			));
-
-			if (!$mxcxl) {
-				$db = Phalcon\DI::getDefault()->get('db');
-				try {
-					$db->begin();
-
-					$mxc = Mxc::findFirst(array(
-						'conditions' => 'idMail = ?1 AND idContact = ?2',
-						'bind' => array(1 => $idMail,
-										2 => $idContact)
-					));
-
-					if ($mxc && ($mxc->opening == 0 && $mxc->bounced == 0 && $mxc->spam == 0 && $mxc->status == 'sent')) {
-
-						$mailXcontact = $this->updateMxcStat($mxc, 'openingsxclick');
-						if (!$mailXcontact) {
-							throw new \InvalidArgumentException('Error while updating mxc');
-						}
-						$this->log->log('Click y apertura por click mxc');
-
-						$mail = $this->updateMailStat($idMail, 'openingsxclick');
-						if (!$mail) {
-							throw new \InvalidArgumentException('Error while updating mail');
-						}
-						$this->log->log('Click y apertura por click en mail');
-
-						$statdbase = $this->updateStatDbase($idContact, $idMail, 'openingsxclick');
-						if (!$statdbase) {
-							throw new \InvalidArgumentException('Error while updating statdbase');
-						}
-						$this->log->log('Click y apertura por click en statdbase');
-
-//						throw new \InvalidArgumentException('transaction test');
-
-						$statcontactlist = $this->updateStatContactLists($mxc, 'openingsxclick');
-						if (!$statcontactlist) {
-							throw new \InvalidArgumentException('Error while updating statcontactlist');
-						}
-						$this->log->log('Click y apertura por click en statcontactlist');
-
-						$mailEvent1 = $this->saveMailEvent($idMail, $idContact, 'opening for click', $userAgent);
-						if (!$mailEvent1) {
-							throw new \InvalidArgumentException('Error while updating opening event');
-						}
-						$this->log->log('Se guardó evento de apertura por click');
-					}
-					else {
-						$mailXcontact = $this->updateMxcStat($mxc, 'clicks');
-						if (!$mailXcontact) {
-							throw new \InvalidArgumentException('Error while updating mxc');
-						}
-						$this->log->log('click en mxc');
-
-						$mail = $this->updateMailStat($idMail, 'clicks');
-						if (!$mail) {
-							throw new \InvalidArgumentException('Error while updating mail');
-						}
-						$this->log->log('click en mail');
-
-						$statdbase = $this->updateStatDbase($idContact, $idMail, 'clicks');
-						if (!$statdbase) {
-							throw new \InvalidArgumentException('Error while updating statdbase');
-						}
-						$this->log->log('click contabilizado en statdbase');
-
-//						throw new \InvalidArgumentException('transaction test');
-
-						$statcontactlist = $this->updateStatContactLists($mxc, 'clicks');
-						if (!$statcontactlist) {
-							throw new \InvalidArgumentException('Error while updating statcontactlist');
-						}
-						$this->log->log('click contabilizado en statcontactlist');
-					}
-
-					$mailEvent2 = $this->saveMailEvent($idMail, $idContact, 'click', $userAgent);
-					if (!$mailEvent2) {
-						throw new \InvalidArgumentException('Error while updating click event');
-					}
-					$this->log->log('Guardó evento por click');
-					/*========================================
-					 * Hasta aqui se actualiza Mxc, Mail, stadbase, statcontactlist y mailevent
-					 */
-					$mxl->totalClicks += 1;
-
-					if (!$mxl->save()) {
-						foreach ($mxl->getMessages() as $msg) {
-							$this->log->log('Error saving Mxl: ' . $msg);
-						}
-						throw new \InvalidArgumentException('Error while updating Mxl');
-					}
-//					throw new \InvalidArgumentException('transaction test');
-
-					$this->log->log('Actualizado mxl');
-
-					$mxcxl = new Mxcxl();
-
-					$mxcxl->idMail = $idMail;
-					$mxcxl->idMailLink = $idLink;
-					$mxcxl->idContact = $idContact;
-					$mxcxl->click = time();
-
-					if (!$mxcxl->save()) {
-						foreach ($mxcxl->getMessages() as $msg) {
-							$this->log->log('Error saving Mxl: ' . $msg);
-						}
-						throw new \InvalidArgumentException('Error while updating Mxcxl');
-					}
-					$this->log->log('Inserción en mxcxl');
-
-					$db->commit();
-
-					return $this->insertGoogleAnalyticsUrl($idMail, $Maillink->link, $mail->name);
-				}
-				catch (InvalidArgumentException $e) {
-					$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
-					$db->rollback();
-				}
-			}
-			else {
-				$mail = Mail::findFirst(array(
-					'conditions' => 'idMail = ?1',
-					'bind' => array(1 => $idMail)
-				));
-				$this->log->log('Este usuario ya ha sido contabilizado');
-				return $this->insertGoogleAnalyticsUrl($idMail, $Maillink->link, $mail->name);
-			}
-		}
-		else {
-			$this->log->log('No existe registro del link ni del correo');
-			return false;
-		}
-	}
-
 	public function updateTrackBounced($idMail, $idContact, $type, $cod, $date)
 	{
 		switch ($type) {
@@ -726,14 +584,6 @@ class TrackingObject
 		if ($date == null) {
 			$date = time();
 		}
-		$this->log->log('idMail : '. $idMail);
-		$this->log->log('idContact : '. $idContact);
-		$this->log->log('description : '. $description);
-		$this->log->log('UserAgent : '. $userAgent);
-		$this->log->log('Location : '. $location);
-		$this->log->log('Cod : '. $cod);
-		$this->log->log('Date : '. $date);
-
 		$event = new Mailevent();
 		$event->idMail = $idMail;
 		$event->idContact = $idContact;
@@ -751,207 +601,33 @@ class TrackingObject
 		}
 		return true;
 	}
-
-	private function updateStatContactLists(Mxc $mxc, $type)
-	{
-		$idContactlists = explode(",", $mxc->contactlists);
-
-		foreach ($idContactlists as $idContactlist) {
-			$statcontactlist = Statcontactlist::findFirst(array(
-				'conditions' => 'idContactlist = ?1 AND idMail = ?2',
-				'bind' => array(1 => $idContactlist,
-								2 => $mxc->idMail)
-			));
-
-			switch ($type) {
-				case 'openings':
-					$statcontactlist->uniqueOpens += 1;
-					break;
-
-				case 'clicks':
-					$statcontactlist->clicks += 1;
-					break;
-
-				case 'bounced':
-					$statcontactlist->bounced += 1;
-					break;
-
-				case 'spam':
-					$statcontactlist->spam += 1;
-					break;
-
-				case 'unsubscribed':
-					$statcontactlist->unsubscribed += 1;
-					break;
-
-				case 'openingsxclick':
-					$statcontactlist->uniqueOpens += 1;
-					$statcontactlist->clicks += 1;
-					break;
-			}
-//						$i++;
-			if (!$statcontactlist->save()) {
-				foreach ($statcontactlist->getMessages() as $msg) {
-					$this->log->log('Error : '. $msg);
-				}
-				return false;
-			}
-			$this->log->log('Se contabilizó evento para la lista: ' . $idContactlist);
-			$this->log->log('Contacto: ' . $mxc->idContact);
-			return true;
-		}
-	}
-
-	private function updateStatDbase($idContact, $idMail, $type)
-	{
-		$contact = Contact::findFirst(array(
-			'conditions' => 'idContact = ?1',
-			'bind' => array(1 => $idContact)
-		));
-
-		$statdbase = Statdbase::findFirst(array(
-			'conditions' => 'idDbase = ?1 AND idMail = ?2',
-			'bind' => array(1 => $contact->idDbase,
-							2 => $idMail)
-		));
-
-		switch ($type) {
-			case 'openings':
-				$statdbase->uniqueOpens += 1;
-				break;
-
-			case 'clicks':
-				$statdbase->clicks += 1;
-				break;
-
-			case 'bounced':
-				$statdbase->bounced += 1;
-				break;
-
-			case 'spam':
-				$statdbase->spam += 1;
-				break;
-
-			case 'unsubscribed':
-				$statdbase->unsubscribed += 1;
-				break;
-
-			case 'openingsxclick':
-				$statdbase->uniqueOpens += 1;
-				$statdbase->clicks += 1;
-				break;
-		}
-
-		if (!$statdbase->save()) {
-			foreach ($statdbase->getMessages() as $msg) {
-				$this->log->log('Error : '. $msg);
-			}
-			return false;
-		}
-		return true;
-	}
-
-	private function updateMxcStat(Mxc $mxc, $type)
-	{
-		switch ($type) {
-			case 'openings':
-				$mxc->opening = time();
-				break;
-
-			case 'clicks':
-				$mxc->clicks = time();
-				break;
-
-			case 'bounced':
-				$mxc->bounced = time();
-				break;
-
-			case 'spam':
-				$mxc->spam = time();
-				break;
-
-			case 'openingsxclick':
-				$mxc->opening = time();
-				$mxc->clicks = time();
-				break;
-		}
-
-		if (!$mxc->save()) {
-			foreach ($mxc->getMessages() as $msg) {
-				$this->log->log('Error : '. $msg);
-			}
-			throw new \InvalidArgumentException('Error while updating mxc');
-		}
-	}
-
-	private function updateMailStat($idMail, $type)
-	{
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
-		));
-
-		switch ($type) {
-			case 'openings':
-				$mail->uniqueOpens += 1;
-				break;
-
-			case 'clicks':
-				$mail->clicks += 1;
-				break;
-
-			case 'bounced':
-				$mail->bounced += 1;
-				break;
-
-			case 'spam':
-				$mail->spam += 1;
-				break;
-
-			case 'unsubscribed':
-				$mail->unsubscribed += 1;
-				break;
-
-			case 'openingsxclick':
-				$mail->uniqueOpens += 1;
-				$mail->clicks += 1;
-				break;
-		}
-
-		if (!$mail->save()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->log->log('Error : '. $msg);
-			}
-			throw new \InvalidArgumentException('Error while updating mail');
-		}
-		return $mail;
-	}
-
-	public function insertGoogleAnalyticsUrl($idMail, $url, $name)
+	
+	public function insertGoogleAnalyticsUrl($link)
 	{
 		$content = Mailcontent::findFirst(array(
 			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
+			'bind' => array(1 => $this->idMail)
 		));
 
-		if (!$content) {
-			return $url;
+		if (!$content || trim($content->googleAnalytics) === '' || $content->googleAnalytics == null) {
+			return $link;
 		}
-		$path = parse_url($url);
+		$path = parse_url($link);
 
 		if (in_array($path['scheme'] . '://' . $path['host'], json_decode($content->googleAnalytics))) {
 			$googleAnalytics = Phalcon\DI::getDefault()->get('googleAnalytics');
-			Phalcon\DI::getDefault()->get('logger')->log('Preparandose para insertar google analytics');
-//			$gA = urlencode('utm_source=' . $googleAnalytics->utm_source . '&utm_medium=' . $googleAnalytics->utm_medium . '&utm_campaign=' . $name);
+			$this->log->log('Preparandose para insertar google analytics');
+
 			$source = '?utm_source=' . urlencode($googleAnalytics->utm_source);
 			$medium = '&utm_medium=' . urlencode($googleAnalytics->utm_medium);
-			$campaign = '&utm_campaign=' . urlencode($name);
-			$newUrl = $url . $source . $medium . $campaign;
-			Phalcon\DI::getDefault()->get('logger')->log('Url Analytics: ' . $newUrl);
+			$campaign = '&utm_campaign=' . urlencode($content->campaignName);
+			$newUrl = $link . $source . $medium . $campaign;
+
+			$this->log->log('Url Analytics: ' . $newUrl);
 			return $newUrl;
 		}
 		else {
-			return $url;
+			return $link;
 		}
 	}
 	
