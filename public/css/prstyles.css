@@ -540,4 +540,31 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border-radius: 50%;
 	border: 1px solid #6c6c6c;
 }
-/*Tooltip*/
+.social-account-icon {
+	width: 60px;
+	text-align: center !important;
+	vertical-align: middle !important;
+}
+.btns-social-column {
+	width: 85px;
+}
+.social-account-name-column {
+	vertical-align: middle !important;
+}
+.social-account-name {
+	font-size: 17px;
+	text-align: center;
+	font-weight: 600;
+}
+.table-container-social-media-list {
+	width: 550px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+.social-media-new-account {
+	margin-top: 10px;
+}
+.social-media-new-account a {
+	margin-right: 10px;
+}

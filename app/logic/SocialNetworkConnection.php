@@ -15,36 +15,45 @@ class SocialNetworkConnection
 		$this->user = $user;
 	}
 
-	public function findAllFacebookAccounts()
+	public function findAllAccountsByUser()
 	{
-		$socials = array();
-		$arraysocials = Socialnetwork::find(array(
-							"conditions" => "idUser = ?1 AND type = 'Facebook'",
-							"bind" => array(1 => $this->user->idUser)
+		$socials = Socialnetwork::find(array(
+							"conditions" => "idUser = ?1",
+							"bind" => array(1 => $this->user->idUser),
+							"order" => "type DESC, category"
 						));
-		foreach ($arraysocials as $soc) {
-			$obj = new stdClass();
-			$obj->idSocialnetwork = $soc->idSocialnetwork;
-			$obj->name = $soc->name;
-			$socials[] = $obj;
-		}
 		return $socials;
 	}
 	
-	public function findAllTwitterAccounts()
+	public function findAllFacebookAccountsByUser()
 	{
-		$socials = array();
-		$arraysocials = Socialnetwork::find(array(
+		$socials = Socialnetwork::find(array(
+							"conditions" => "idUser = ?1 AND type = 'Facebook'",
+							"bind" => array(1 => $this->user->idUser)
+						));
+		return $socials;
+	}
+	
+	public function findAllTwitterAccountsByUser()
+	{
+		$socials = Socialnetwork::find(array(
 							"conditions" => "idUser = ?1 AND type = 'Twitter'",
 							"bind" => array(1 => $this->user->idUser)
 						));
-		foreach ($arraysocials as $soc) {
-			$obj = new stdClass();
-			$obj->idSocialnetwork = $soc->idSocialnetwork;
-			$obj->name = $soc->name;
-			$socials[] = $obj;
-		}
 		return $socials;
+	}
+	
+	public function getSocialIdNameArray($socials)
+	{
+		$arraysocials = array();
+		foreach ($socials as $social) {
+			$obj = new stdClass();
+			$obj->idSocialnetwork = $social->idSocialnetwork;
+			$obj->name = $social->name;
+			$obj->category = $social->category;
+			$arraysocials[] = $obj;
+		}
+		return $arraysocials;
 	}
 	
 	public function setFacebookConnection($id, $secret)
@@ -65,15 +74,21 @@ class SocialNetworkConnection
 		}
 	}
 	
-	public function getFbUrlLogIn()
+	public function getFbUrlLogIn($redirect = false)
 	{
-		return $this->facebook->getLoginUrl(array('scope' => 'manage_pages, publish_stream'));
+		if($redirect) {
+			$url = $this->facebook->getLoginUrl(array('scope' => 'manage_pages, publish_stream', 'redirect_uri' => $this->urlObj->getBaseUri(TRUE). $redirect));
+		}
+		else {
+			$url = $this->facebook->getLoginUrl(array('scope' => 'manage_pages, publish_stream'));
+		}
+		return $url;
 	}
 	
-	public function getTwUrlLogIn($idMail = '')
+	public function getTwUrlLogIn($redirect)
 	{
 		do {
-			$tmp_cds = $this->twitter->getRequestToken($this->urlObj->getBaseUri(TRUE). 'mail/setup/' . $idMail);
+			$tmp_cds = $this->twitter->getRequestToken($this->urlObj->getBaseUri(TRUE). $redirect);
 		} while (!isset($tmp_cds['oauth_token']));
 		$url = $this->twitter->getAuthorizeURL($tmp_cds);
 		return $url;
@@ -100,14 +115,17 @@ class SocialNetworkConnection
 
 				$accounts = $this->facebook->api('/'.$userid.'/accounts');
 				foreach ($accounts['data'] as $account) {
-					$newaccount = new Socialnetwork();
-					$newaccount->idUser = $this->user->idUser;
-					$newaccount->userid = $account['id'];
-					$newaccount->token = $account['access_token'];
-					$newaccount->name = $account['name'];
-					$newaccount->type = 'Facebook';
-					$newaccount->category = 'Fan Page';
-					$newaccount->save();
+					$fanpage = Socialnetwork::findFirstByUserid($account['id']);
+					if(!$fanpage) {
+						$newaccount = new Socialnetwork();
+						$newaccount->idUser = $this->user->idUser;
+						$newaccount->userid = $account['id'];
+						$newaccount->token = $account['access_token'];
+						$newaccount->name = $account['name'];
+						$newaccount->type = 'Facebook';
+						$newaccount->category = 'Fan Page';
+						$newaccount->save();
+					}
 				}
 			}
 		}
@@ -190,10 +208,12 @@ class SocialNetworkConnection
 			  );
 
 			  try {
-				  $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
+				  $result = $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
 				  $this->logger->log('Successfully posted to Facebook');
 			  } catch(Exception $e) {
 				  $this->logger->log('No publico');
+				  $this->logger->log($result);
+				  $this->logger->log(print_r($result, true));
 				  $this->logger->log($e->getMessage());
 			  }
 		}
