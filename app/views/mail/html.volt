@@ -77,7 +77,7 @@
 						<div class="padded">
 							<!---<input type="hidden" name="idMail" value="">-->
 							<label>Cree su propio código HTML: </label>
-							{{ MailForm.render('content') |slashes}}
+							{{ MailForm.render('content')}}
 						</div>
 						<div class="form-actions">
 							<button class="btn btn-default" value="prev" name="direction"><i class="icon-circle-arrow-left"></i> Anterior</button>

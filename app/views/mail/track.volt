@@ -76,19 +76,27 @@
 							Agregar seguimiento de Google Analytics a los siguientes enlaces: <br /><br />
 							{% if analytics !== null %}
 								<div id="allLinks" style="display: none;">
-								   <select multiple="multiple" name="links[]"  id="links" class="chzn-select">
-									   {% for link in links%}
-											<option value="{{link}}" {% for analytic in analytics%}{% if analytic == link %}selected{% endif %}{% endfor %}>{{link}}</option>
-									   {% endfor %}
-								   </select>
+									<label>Nombre de campaña: </label>
+									<input type="text" name="campaignName" autofocus="autofocus" value="{{campaignName}}" class="span10"> <br />
+
+									<label>Enlaces: </label>
+									<select multiple="multiple" name="links[]"  id="links" class="chzn-select">
+										{% for link in links%}
+											 <option value="{{link}}" {% for analytic in analytics%}{% if analytic == link %}selected{% endif %}{% endfor %}>{{link}}</option>
+										{% endfor %}
+									</select>
 								</div>
 							{% else %}
 								<div id="allLinks" style="display: none;">
-								   <select multiple="multiple" name="links[]"  id="links" class="chzn-select">
-									   {% for link in links%}
-										   <option value="{{link}}">{{link}}</option>
-									   {% endfor %}
-								   </select>
+									<label>Nombre de campaña: </label>
+									<input type="text" name="campaignName" autofocus="autofocus" class="span10"> <br />
+
+									<label>Enlaces: </label>
+									<select multiple="multiple" name="links[]"  id="links" class="chzn-select">
+										{% for link in links%}
+											<option value="{{link}}">{{link}}</option>
+										{% endfor %}
+									</select>
 								</div>
 							{% endif%}
 						{% else %}

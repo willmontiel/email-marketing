@@ -57,7 +57,7 @@ class TrackingUrlObject
 		}
 	}
 	
-	public function searchDomainsAndProtocols($html)
+	public function searchDomainsAndProtocols($html, $text)
 	{
 		$imgTag = new DOMDocument();
 		@$imgTag->loadHTML($html);

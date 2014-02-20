@@ -45,6 +45,7 @@ class TrackController extends ControllerBase
 	
 	public function clickAction($parameters)
 	{
+		$this->logger->log('Inicio tracking de click');
 		$info = $_SERVER['HTTP_USER_AGENT'];
 		
 		$idenfifiers = explode("-", $parameters);
