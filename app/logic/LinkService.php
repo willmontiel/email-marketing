@@ -127,13 +127,19 @@ class LinkService
 	
 	private function validateHost($url)
 	{
-		$parts = parse_url($url);
+		$invalidDomains = array(
+			'facebook' => '/[^\/]*\.*facebook.com.*$/',
+			'twiter' => '/[^\/]*\.*twitter.com.*$/',
+			'linkedin' => '/[^\/]*\.*linkedin.com.*$/',
+			'google-plus' => '/[^\/]*\.*plus.google.com.*$/'
+		);
 		
-		if (isset($parts['host'])) {
-			if ($parts['host'] !== null && !preg_match('/[^\/]*\.*facebook.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*twitter.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*linkedin.com.*$/', $parts['host']) && !preg_match('/[^\/]*\.*plus.google.com.*$/', $parts['host'])) {
-				return true;
+		$parts = parse_url($url);
+		foreach ($invalidDomains as $domain) {
+			if (!isset($parts['host']) || empty($parts['host']) || preg_match($domain, $url)) {
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 }
