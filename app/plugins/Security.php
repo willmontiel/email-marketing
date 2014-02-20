@@ -283,7 +283,12 @@ class Security extends Plugin
 				'flashmessage::delete' => array('flashmessage' => array('delete')),
 				
 				//google analytics
-				'mail::analytics' => array('mail' => array('create'))
+				'mail::analytics' => array('mail' => array('create')),
+				
+				//Redes Sociales
+				'socialmedia::index' => array('socialmedia' => array('read')),
+				'socialmedia::new' => array('socialmedia' => array('create')),
+				'socialmedia::delete' => array('socialmedia' => array('delete'))
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

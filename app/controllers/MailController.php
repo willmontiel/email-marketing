@@ -169,9 +169,10 @@ class MailController extends ControllerBase
 			}
 			
 			$fbloginUrl = $socialnet->getFbUrlLogIn();
-			$fbsocials = $socialnet->findAllFacebookAccounts();
-			$twloginUrl = $socialnet->getTwUrlLogIn($idMail);
-			$twsocials = $socialnet->findAllTwitterAccounts();
+			$fbsocials = $socialnet->getSocialIdNameArray($socialnet->findAllFacebookAccountsByUser());
+			$redirect = ($idMail != null) ? '/mail/setup/' . $idMail : '/mail/setup/' ;
+			$twloginUrl = $socialnet->getTwUrlLogIn($redirect);
+			$twsocials = $socialnet->getSocialIdNameArray($socialnet->findAllTwitterAccountsByUser());
 
 			$this->view->setVar('fbsocials', $fbsocials);
 			$this->view->setVar("fbloginUrl", $fbloginUrl);
