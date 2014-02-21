@@ -58,151 +58,135 @@ class Reportingcreator
 	{
 		switch ($this->type) {
 			case 'opens':
-				$this->saveOpenReport($name, $dir);
-				return 'Reporte de aperturas';
+				$data = $this->getDataOpenReport();
+				$title = 'Reporte de aperturas';
 				break;
+			
 			case 'clicks':
-				$this->saveClicksReport($name, $dir);
-				return 'Reporte de clics sobre enlaces';
+				$this->getDataClicksReport();
+				$title = 'Reporte de clics sobre enlaces';
 				break;
+			
 			case 'unsubscribed':
-				$this->saveUnsubscribedReport($name, $dir);
-				return 'Reporte de correos des-suscritos';
+				$this->getDataUnsubscribedReport();
+				$title = 'Reporte de correos des-suscritos';
 				break;
+			
 			case 'bounced':
-				$this->saveBouncedReport($name, $dir);
-				return 'Reporte de correos rebotados';
+				$this->getDataBouncedReport();
+				$title = 'Reporte de correos rebotados';
 				break;
+			
 			default :
 				throw new \InvalidArgumentException('There is not the type of report');
 				break;
 		}
+		
+		$this->saveReport($data, $name, $dir);
+		return $title;
 	}
 	
-	protected function saveOpenReport($name, $dir)
+	protected function getDataOpenReport()
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$sql1 = "SELECT e.email, v.userAgent, v.date
+		$sql = "SELECT e.email, v.userAgent, v.date
 					FROM mailevent AS v
 						JOIN contact AS c ON ( c.idContact = v.idContact )
 						JOIN email AS e ON ( e.idEmail = c.idEmail )
 					WHERE v.idMail = ?
 						AND (v.description = 'opening' OR v.description = 'opening for click')";
 		
-		$result1 = $db->query($sql1, array($this->mail->idMail));
-		$opencontact = $result1->fetchAll();
+		$result = $db->query($sql, array($this->mail->idMail));
+		$info = $result->fetchAll();
 		
-//		$opencontact[] = array(
-//			'id' => 100,
-//			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
-//			'date' => 1386687891,
-//			'os' => 'Ubuntu'
-//		);
+		$data = array();
+		if (count($info) < 0) {
+			foreach ($info as $i) {
+				$data[] = array(
+					'type' => 'opens',
+					'email' => $i['email'],
+					'userAgent' => $i['userAgent'],
+					'date' => $i['date']
+				);
+			}
+		}
 		
 		$v = " ";
-		foreach ($opencontact as $o) {
-			$v .= "(" . $this->mail->idMail . ", " . "'opens'" . ", '" . $o['email'] . "', '" . $o['userAgent'] . "', " .$o['date'] .")";
+		foreach ($data as $o) {
+			$v .= "(" . $this->mail->idMail . ", '" . $o['type'] . "', '" . $o['email'] . "', '" . $o['userAgent'] . "', " .$o['date'] .")";
 		}
 		
 		$values = str_replace(")(", "),(", $v);
-		Phalcon\DI::getDefault()->get('logger')->log("Dir: " . $dir . $name);
-	
-		$db->execute("INSERT INTO $this->tablename (idMail, reportType, email, os, date) VALUES $values");
 		
-		$report =  "SELECT email, name, lastName, os, FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s')
-						FROM {$this->tablename}
-						INTO OUTFILE  '{$dir}{$name}'
-						FIELDS TERMINATED BY ','
-						ENCLOSED BY '\"'
-						LINES TERMINATED BY '\n'";
-						
-		$ok = $db->execute($report);
-		
-		if (!$ok) {
-			throw new \InvalidArgumentException('Error while generting info in tmp db');
-		}
+		$data = '(idMail, reportType, email, os, date) VALUES ' . $values;
+		return $data;
 	}
 	
-	protected function saveClicksReport($name, $dir)
+	protected function getDataClicksReport()
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		
-		
-		$clickcontact[] = array(
-			'id' => 100,
+		$data[] = array(
 			'email' => 'otrocorreo@otro.correo',
 			'date' => 1386878942,
 			'link' => 'https://www.google.com'
 		);
 
-		$clickcontact[] = array(
-			'id' => 145,
+		$data[] = array(
 			'email' => 'otrocorreo2@otro2.correo2',
 			'date' => 1386747891,
 			'link' => 'https://www.facebook.com'
 		);
 
-		$clickcontact[] = array(
-			'id' => 161,
+		$data[] = array(
 			'email' => 'otrocorreo3@otro3.correo3',
 			'date' => 1386698537,
 			'link' => 'https://www.google.com'
 		);
-
+		
 		$v = " ";
 		
-		foreach ($clickcontact as $c) {
+		foreach ($data as $c) {
 			$v .= "(" . $this->mail->idMail . ", " . "'clicks'" . ", '" . $c['email'] . "', '" . $c['link'] . "', " .$c['date'] .")";
 		}
 		
 		$values = str_replace(")(", "),(", $v);
+		$report = ' (idMail, reportType, email, link, date) VALUES ' . $values;
 		
-//		Phalcon\DI::getDefault()->get('logger')->log("Values: " . $values);
-		
-		$db->execute("INSERT INTO $this->tablename (idMail, reportType, email, link, date) VALUES $values");
-		
-		$report =  "SELECT email, link, FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s')
-						FROM {$this->tablename}
-						INTO OUTFILE  '{$dir}{$name}'
-						FIELDS TERMINATED BY ','
-						ENCLOSED BY '\"'
-						LINES TERMINATED BY '\n'";
-
-		$db->execute($report);
+		return $report;
 	}
 	
-	protected function saveUnsubscribedReport($name, $dir)
+	protected function getDataUnsubscribedReport()
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$unsubscribedcontact[] = array(
-			'id' => 20,
+		$data[] = array(
+			'type' => 'unsubcribed',
 			'email' => 'newmail@new.mail',
 			'date' => 1386687891,
 			'name' => 'fulano',
 			'lastname' => ''
 		);
 		
-		$unsubscribedcontact[] = array(
-			'id' => 240,
+		$data[] = array(
+			'type' => 'unsubcribed',
 			'email' => 'newmail1@new1.mail1',
 			'date' => 1386687891,
 			'name' => '',
 			'lastname' => 'perez2'
 		);
 		
-		$unsubscribedcontact[] = array(
-			'id' => 57,
+		$data[] = array(
+			'type' => 'unsubcribed',
 			'email' => 'newmail2@new2.mail2',
 			'date' => 1386687891,
 			'name' => 'fulano3',
 			'lastname' => 'perez3'
 		);
 		
-		$unsubscribedcontact[] = array(
-			'id' => 161,
+		$data[] = array(
+			'type' => 'unsubcribed',
 			'email' => 'otrocorreo3@otro3.correo3',
 			'date' => 1386687891,
 			'name' => '',
@@ -211,24 +195,14 @@ class Reportingcreator
 		
 		$v = " ";
 		
-		foreach ($unsubscribedcontact as $u) {
+		foreach ($data as $u) {
 			$v .= "(" . $this->mail->idMail . ", " . "'unsubscribed'" . ", '" . $u['email'] . "', '" . $u['name'] . "', '" . $u['lastname'] . "', " . $u['date'] .")";
 		}
 		
 		$values = str_replace(")(", "),(", $v);
+		$report = ' (idMail, reportType, email, name, lastName, date) VALUES ' . $values;
 		
-//		Phalcon\DI::getDefault()->get('logger')->log("Values: " . $values);
-		
-		$db->execute("INSERT INTO $this->tablename (idMail, reportType, email, name, lastName, date) VALUES $values");
-		
-		$report =  "SELECT email, name, lastName, FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s')
-						FROM {$this->tablename}
-						INTO OUTFILE  '{$dir}{$name}'
-						FIELDS TERMINATED BY ','
-						ENCLOSED BY '\"'
-						LINES TERMINATED BY '\n'";
-
-		$db->execute($report);
+		return $report;
 	}
 	
 	protected function saveBouncedReport($name, $dir)
@@ -275,17 +249,30 @@ class Reportingcreator
 		
 		$values = str_replace(")(", "),(", $v);
 		
-//		Phalcon\DI::getDefault()->get('logger')->log("Values: " . $values);
+		$report = ' (idMail, reportType, email, bouncedType, category, date) VALUES ' . $values;
 		
-		$db->execute("INSERT INTO $this->tablename (idMail, reportType, email, bouncedType, category, date) VALUES $values");
+		return $report;
+	}
+	
+	protected function saveReport($data, $name, $dir) 
+	{
+		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$report =  "SELECT email, bouncedType, category, FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s')
+		Phalcon\DI::getDefault()->get('logger')->log("Dir: " . $dir . $name);
+	
+		$db->execute("INSERT INTO $this->tablename $data");
+		
+		$report =  "SELECT email, name, lastName, os, FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s')
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
-
-		$db->execute($report);
+						
+		$ok = $db->execute($report);
+		
+		if (!$ok) {
+			throw new \InvalidArgumentException('Error while generting info in tmp db');
+		}
 	}
 }
