@@ -357,20 +357,16 @@ class StatisticsWrapper extends BaseWrapper
 			'amount' => count($valueLinks),
 			'value' => $valueLinks
 		);
-		Phalcon\DI::getDefault()->get('logger')->log('1');
 		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
 					FROM mxcxl AS m
 				 WHERE m.idMail = ?
 				 GROUP BY m.idMailLink, m.click";
-		Phalcon\DI::getDefault()->get('logger')->log('2');
+		
 		Phalcon\DI::getDefault()->get('logger')->log('SQL2: ' . $sql2);
 		$result2 = $db->query($sql2, array($idMail));
 		$linkValues = $result2->fetchAll();
 		
-		Phalcon\DI::getDefault()->get('logger')->log('3');
-		Phalcon\DI::getDefault()->get('logger')->log('Antes Values: ' . print_r($linkValues, true));
 		$values = array();
-		Phalcon\DI::getDefault()->get('logger')->log('4');
 		if (count($linkValues) > 0 ) {
 			foreach ($linkValues as $l) {
 				if (!isset($values[$l['click']])) {
@@ -386,7 +382,6 @@ class StatisticsWrapper extends BaseWrapper
 				}
 			}
 		}
-		Phalcon\DI::getDefault()->get('logger')->log('5');
 		foreach ($values as $value) {
 			$clicks[] = array(
 				'title' => $value['title'],
@@ -394,8 +389,9 @@ class StatisticsWrapper extends BaseWrapper
 			);
 		}
 		Phalcon\DI::getDefault()->get('logger')->log('Values: ' . print_r($values, true));
+		Phalcon\DI::getDefault()->get('logger')->log('1');
 		Phalcon\DI::getDefault()->get('logger')->log('Array: ' . print_r($clicks, true));
-
+		Phalcon\DI::getDefault()->get('logger')->log('2');
 		$sql = "SELECT v.idContact, v.userAgent, v.date, e.email, l.link 
 					FROM mailevent AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
@@ -404,7 +400,7 @@ class StatisticsWrapper extends BaseWrapper
                         JOIN maillink AS l ON (l.idMailLink = m.idMailLink)
  					WHERE v.idMail = ? AND v.description = 'click'
 					GROUP BY l.idMailLink";
-		
+		Phalcon\DI::getDefault()->get('logger')->log('SQL: ' . $sql);
 		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		$result = $db->query($sql, array($idMail));
 		$info = $result->fetchAll();
