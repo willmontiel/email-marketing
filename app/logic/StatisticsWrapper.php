@@ -330,8 +330,8 @@ class StatisticsWrapper extends BaseWrapper
 		 * SQL para extraer información sobre los links en el correo
 		 */
 		$sqlForLinks = "SELECT m.idMailLink, m.totalClicks, l.link 
-				FROM mxl as m 
-				JOIN maillink as l ON (l.idMailLink = m.idMailLink)
+				FROM mxl AS m 
+				JOIN maillink AS l ON (l.idMailLink = m.idMailLink)
 			 WHERE idMail = ?";
 		
 		$allLinks = $db->query($sqlForLinks, array($idMail));
@@ -357,7 +357,7 @@ class StatisticsWrapper extends BaseWrapper
 			'value' => $valueLinks
 		);
 		
-		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) as total
+		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
 					FROM mxcxl AS m
 				 WHERE m.idMail = ?
 				 GROUP BY m.idMailLink";
@@ -392,10 +392,10 @@ class StatisticsWrapper extends BaseWrapper
 
 		$sql = "SELECT v.idContact, v.userAgent, v.date, e.email, l.link 
 					FROM mailevent AS v
-						JOIN contact as c ON (c.idContact = v.idContact)
-						JOIN email as e ON (c.idEmail = e.idEmail)
-                        JOIN mxl as m ON (m.idMail = v.idMail)
-                        JOIN maillink as l ON (l.idMailLink = m.idMailLink)
+						JOIN contact AS c ON (c.idContact = v.idContact)
+						JOIN email AS e ON (c.idEmail = e.idEmail)
+                        JOIN mxl AS m ON (m.idMail = v.idMail)
+                        JOIN maillink AS l ON (l.idMailLink = m.idMailLink)
  					WHERE v.idMail = ? AND v.description = 'click'
 					GROUP BY l.idMailLink";
 		
