@@ -63,17 +63,17 @@ class Reportingcreator
 				break;
 			
 			case 'clicks':
-				$this->getDataClicksReport();
+				$data = $this->getDataClicksReport();
 				$title = 'Reporte de clics sobre enlaces';
 				break;
 			
 			case 'unsubscribed':
-				$this->getDataUnsubscribedReport();
+				$data = $this->getDataUnsubscribedReport();
 				$title = 'Reporte de correos des-suscritos';
 				break;
 			
 			case 'bounced':
-				$this->getDataBouncedReport();
+				$data = $this->getDataBouncedReport();
 				$title = 'Reporte de correos rebotados';
 				break;
 			
@@ -82,8 +82,11 @@ class Reportingcreator
 				break;
 		}
 		
-		$this->saveReport($data, $name, $dir);
-		return $title;
+		if ($data !== false) {
+			$this->saveReport($data, $name, $dir);
+			return $title;
+		}
+		return 'No hay valores para mostrar';
 	}
 	
 	protected function getDataOpenReport()
@@ -101,7 +104,7 @@ class Reportingcreator
 		$info = $result->fetchAll();
 		
 		$data = array();
-		if (count($info) < 0) {
+		if (count($info) > 0) {
 			foreach ($info as $i) {
 				$data[] = array(
 					'type' => 'opens',
@@ -110,17 +113,18 @@ class Reportingcreator
 					'date' => $i['date']
 				);
 			}
+			
+			$v = " ";
+			foreach ($data as $o) {
+				$v .= "(" . $this->mail->idMail . ", '" . $o['type'] . "', '" . $o['email'] . "', '" . $o['userAgent'] . "', " .$o['date'] .")";
+			}
+			
+			$values = str_replace(")(", "),(", $v);
+			$report = '(idMail, reportType, email, os, date) VALUES ' . $values;
+			
+			return $report;
 		}
-		
-		$v = " ";
-		foreach ($data as $o) {
-			$v .= "(" . $this->mail->idMail . ", '" . $o['type'] . "', '" . $o['email'] . "', '" . $o['userAgent'] . "', " .$o['date'] .")";
-		}
-		
-		$values = str_replace(")(", "),(", $v);
-		
-		$data = '(idMail, reportType, email, os, date) VALUES ' . $values;
-		return $data;
+		return false;
 	}
 	
 	protected function getDataClicksReport()
@@ -259,7 +263,7 @@ class Reportingcreator
 		$db = Phalcon\DI::getDefault()->get('db');
 		
 		Phalcon\DI::getDefault()->get('logger')->log("Dir: " . $dir . $name);
-	
+		
 		$db->execute("INSERT INTO $this->tablename $data");
 		
 		$report =  "SELECT email, name, lastName, os, FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s')
@@ -268,7 +272,8 @@ class Reportingcreator
 						FIELDS TERMINATED BY ','
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
-						
+			
+		
 		$ok = $db->execute($report);
 		
 		if (!$ok) {
