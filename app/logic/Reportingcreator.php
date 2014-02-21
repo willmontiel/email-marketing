@@ -131,131 +131,117 @@ class Reportingcreator
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$data[] = array(
-			'email' => 'otrocorreo@otro.correo',
-			'date' => 1386878942,
-			'link' => 'https://www.google.com'
-		);
-
-		$data[] = array(
-			'email' => 'otrocorreo2@otro2.correo2',
-			'date' => 1386747891,
-			'link' => 'https://www.facebook.com'
-		);
-
-		$data[] = array(
-			'email' => 'otrocorreo3@otro3.correo3',
-			'date' => 1386698537,
-			'link' => 'https://www.google.com'
-		);
+		$sql = "SELECT e.email, v.date, l.link
+					FROM mailevent AS v 
+						JOIN contact AS c ON (c.idContact = v.idContact)
+						JOIN email AS e ON (c.idEmail = e.idEmail)
+						JOIN mxl AS m ON (m.idMail = v.idMail)
+						JOIN maillink AS l ON (l.idMailLink= m.idMailLink)
+					WHERE v.idMail = ? AND v.description = 'click'
+				GROUP BY l.idMailLink";
 		
-		$v = " ";
+		$result = $db->query($sql, array($this->mail->idMail));
+		$info = $result->fetchAll();
 		
-		foreach ($data as $c) {
-			$v .= "(" . $this->mail->idMail . ", " . "'clicks'" . ", '" . $c['email'] . "', '" . $c['link'] . "', " .$c['date'] .")";
+		$data = array();
+		if (count($info) > 0) {
+			foreach ($info as $i) {
+				$data[] = array(
+					'email' => $i['email'],
+					'date' => $i['date'],
+					'link' => $i['link']
+				);
+			}
+			$v = " ";
+
+			foreach ($data as $c) {
+				$v .= "(" . $this->mail->idMail . ", " . "'clicks'" . ", '" . $c['email'] . "', '" . $c['link'] . "', " .$c['date'] .")";
+			}
+
+			$values = str_replace(")(", "),(", $v);
+			$report = ' (idMail, reportType, email, link, date) VALUES ' . $values;
+			return $report;
 		}
-		
-		$values = str_replace(")(", "),(", $v);
-		$report = ' (idMail, reportType, email, link, date) VALUES ' . $values;
-		
-		return $report;
+		return false;
 	}
 	
 	protected function getDataUnsubscribedReport()
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$data[] = array(
-			'type' => 'unsubcribed',
-			'email' => 'newmail@new.mail',
-			'date' => 1386687891,
-			'name' => 'fulano',
-			'lastname' => ''
-		);
+		$sql = "SELECT e.email, v.date, c.name, c.lastName
+					FROM mailevent AS v
+						JOIN contact AS c ON (c.idContact = v.idContact)
+						JOIN email AS e ON (c.idEmail = e.idEmail)
+				WHERE v.idMail = ? AND v.description = 'unsubscribed'";
 		
-		$data[] = array(
-			'type' => 'unsubcribed',
-			'email' => 'newmail1@new1.mail1',
-			'date' => 1386687891,
-			'name' => '',
-			'lastname' => 'perez2'
-		);
+		$result = $db->query($sql, array($this->mail->idMail));
+		$info = $result->fetchAll();
 		
-		$data[] = array(
-			'type' => 'unsubcribed',
-			'email' => 'newmail2@new2.mail2',
-			'date' => 1386687891,
-			'name' => 'fulano3',
-			'lastname' => 'perez3'
-		);
+		if (count($info) > 0) {
+			$data = array();
+			
+			foreach ($info as $i) {
+				$data[] = array(
+					'email' => $i['email'],
+					'date' => $i['date'],
+					'name' => $i['name'],
+					'lastname' => $i['lastName']
+				);
+			}
+			
+			$v = " ";
 		
-		$data[] = array(
-			'type' => 'unsubcribed',
-			'email' => 'otrocorreo3@otro3.correo3',
-			'date' => 1386687891,
-			'name' => '',
-			'lastname' => ''
-		);
-		
-		$v = " ";
-		
-		foreach ($data as $u) {
-			$v .= "(" . $this->mail->idMail . ", " . "'unsubscribed'" . ", '" . $u['email'] . "', '" . $u['name'] . "', '" . $u['lastname'] . "', " . $u['date'] .")";
+			foreach ($data as $u) {
+				$v .= "(" . $this->mail->idMail . ", " . "'unsubscribed'" . ", '" . $u['email'] . "', '" . $u['name'] . "', '" . $u['lastname'] . "', " . $u['date'] .")";
+			}
+
+			$values = str_replace(")(", "),(", $v);
+			$report = ' (idMail, reportType, email, name, lastName, date) VALUES ' . $values;
+
+			return $report;
 		}
-		
-		$values = str_replace(")(", "),(", $v);
-		$report = ' (idMail, reportType, email, name, lastName, date) VALUES ' . $values;
-		
-		return $report;
+		return false;
 	}
 	
-	protected function saveBouncedReport($name, $dir)
+	protected function getDataBouncedReport()
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$bouncedcontact[] = array(
-			'id' => 20,
-			'email' => 'newmail@new.mail',
-			'date' => 1386687891,
-			'type' => 'Temporal',
-			'category' => 'Buzon Lleno'
-		);
+		$sql = "SELECT e.email, v.date, b.type, b.description
+					FROM mailevent AS v
+						JOIN contact AS c ON (c.idContact = v.idContact)
+						JOIN email AS e ON (e.idEmail = c.idEmail)
+						JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
+				WHERE v.idMail = ? AND v.description = 'bounced'";
 		
-		$bouncedcontact[] = array(
-			'id' => 240,
-			'email' => 'newmail1@new1.mail1',
-			'date' => 1386687891,
-			'type' => 'Otro',
-			'category' => 'Rebote General'
-		);
+		$result = $db->query($sql, array($this->mail->idMail));
+		$info = $result->fetchAll();
 		
-		$bouncedcontact[] = array(
-			'id' => 57,
-			'email' => 'newmail2@new2.mail2',
-			'date' => 1386687891,
-			'type' => 'Permanente',
-			'category' => 'Direccion Mala'
-		);
-		
-		$bouncedcontact[] = array(
-			'id' => 59,
-			'email' => 'newmail54@new3.mail3',
-			'date' => 1386687891,
-			'type' => 'Temporal',
-			'category' => 'Buzon Lleno'
-		);
-		
-		$v = " ";
-		
-		foreach ($bouncedcontact as $b) {
-			$v .= "(" . $this->mail->idMail . ", " . "'bounced'" . ", '" . $b['email'] . "', '" . $b['type'] . "', '" . $b['category'] . "', " . $b['date'] .")";
+		if (count($info) > 0) {
+			$bouncedcontact = array();
+			
+			foreach ($info as $i) {
+				$bouncedcontact[] = array(
+					'email' => $i['email'],
+					'date' => $i['date'],
+					'type' => $i['type'],
+					'category' => $i['description']
+				);
+			}
+			
+			$v = " ";
+
+			foreach ($bouncedcontact as $b) {
+				$v .= "(" . $this->mail->idMail . ", " . "'bounced'" . ", '" . $b['email'] . "', '" . $b['type'] . "', '" . $b['category'] . "', " . $b['date'] .")";
+			}
+
+			$values = str_replace(")(", "),(", $v);
+			$report = ' (idMail, reportType, email, bouncedType, category, date) VALUES ' . $values;
+
+			return $report;
 		}
-		
-		$values = str_replace(")(", "),(", $v);
-		
-		$report = ' (idMail, reportType, email, bouncedType, category, date) VALUES ' . $values;
-		
-		return $report;
+		return false;
 	}
 	
 	protected function saveReport($data, $name, $dir) 
