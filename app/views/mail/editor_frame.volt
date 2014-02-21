@@ -173,14 +173,10 @@
 
 <div id="images" class="modal hide fade gallery-modal">
 	<div class="modal-header gallery-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		<h3>Imagenes</h3>
 	</div>
 
 	<ul class="nav nav-tabs nav-tabs-in-modal">
-		<li id="taboneimage" class="active">
-			<a href="#oneimage" data-toggle="tab">Editar</a>
-		</li>
 		<li id="tabgallery" class="">
 			<a href="#gallery" data-toggle="tab">Galeria</a>
 		</li>
@@ -191,50 +187,7 @@
 
 	<div class="modal-body">
 		<div class="tab-content imagesbody">
-			<div id="oneimage" class="tab-pane active well clearfix">
-				<div class="pull-left">
-					<div id="imagedisplayer"></div>
-					<div id="imageslider">
-
-					</div>
-				</div>
-				<div class="pull-left image-options">
-					<div id="widthImg" style="float: right;"></div>
-					<div id="heightImg"></div>	
-
-					<div id="align_image">
-						<div class="btn-group">
-							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 175px; text-align: right;">
-							  Alineación Horizontal <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" role="menu">
-								<li class="chose_align" data-dropdown="left"><a href="#">Izquierda</a></li>
-								<li class="chose_align" data-dropdown="center"><a href="#">Centro</a></li>
-								<li class="chose_align" data-dropdown="right"><a href="#">Derecha</a></li>
-							</ul>
-						</div>
-					</div>
-					<div id="align_vertical_image">
-						<div class="btn-group">
-							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 175px; text-align: right;">
-							  Alineación Vertical <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" role="menu">
-								<li class="chose_vertical_align" data-dropdown="top"><a href="#">Arriba</a></li>
-								<li class="chose_vertical_align" data-dropdown="middle"><a href="#">Centro</a></li>
-								<li class="chose_vertical_align" data-dropdown="bottom"><a href="#">Abajo</a></li>
-							</ul>
-						</div>
-					</div>
-					<div id="link_image">
-						{#<label>Ingrese un Link
-							<br/>
-						<input id="link_to_image" type="text"></label>#}
-					</div>
-				</div>
-			</div>
-
-			<div id="gallery" class="tab-pane">
+			<div id="gallery" class="tab-pane active">
 
 			</div>
 

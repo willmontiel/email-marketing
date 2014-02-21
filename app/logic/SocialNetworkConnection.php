@@ -97,7 +97,6 @@ class SocialNetworkConnection
 	public function saveFacebookUser()
 	{
 		$userid = $this->facebook->getUser();
-		$this->logger->log($userid);
 		if($userid) {
 			$existing = Socialnetwork::findFirstByUserid($userid);
 			$user = $this->facebook->api('/'.$userid);

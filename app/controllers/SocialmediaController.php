@@ -46,7 +46,6 @@ class SocialmediaController extends ControllerBase
 		else {
 			$socialnet->saveFacebookUser();
 		}
-		$this->logger->log('Llego con idMail ' . $idMail);
 		return $this->response->redirect("mail/setup/" . $idMail);
 	}
 	
