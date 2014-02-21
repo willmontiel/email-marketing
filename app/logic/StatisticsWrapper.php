@@ -361,11 +361,12 @@ class StatisticsWrapper extends BaseWrapper
 		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
 					FROM mxcxl AS m
 				 WHERE m.idMail = ?
-				 GROUP BY m.idMailLink";
+				 GROUP BY m.idMailLink, m.click";
 		Phalcon\DI::getDefault()->get('logger')->log('2');
 		Phalcon\DI::getDefault()->get('logger')->log('SQL2: ' . $sql2);
 		$result2 = $db->query($sql2, array($idMail));
 		$linkValues = $result2->fetchAll();
+		
 		Phalcon\DI::getDefault()->get('logger')->log('3');
 		Phalcon\DI::getDefault()->get('logger')->log('Antes Values: ' . print_r($linkValues, true));
 		$values = array();
