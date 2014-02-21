@@ -177,7 +177,7 @@
 	</div>
 
 	<ul class="nav nav-tabs nav-tabs-in-modal">
-		<li id="tabgallery" class="">
+		<li id="tabgallery" class="active">
 			<a href="#gallery" data-toggle="tab">Galeria</a>
 		</li>
 		<li id="tabuploadimage" class="">

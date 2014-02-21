@@ -10,7 +10,7 @@ function Gallery(srcThumb, srcImage, title, id) {
 }
 
 Gallery.prototype.createMedia = function() {
-	var obj = $("<a id = \"media" + this.id + "\" class=\"medias\" href=\"#\" data-toggle=\"tab\"><img src=\"" + this.srcThumb + "\" alt=\"" + this.title + "\"> </a>");
+	var obj = $("<a id = \"media" + this.id + "\" class=\"medias\" href=\"#\" data-toggle=\"tab\"><img class='image-from-gallery' src=\"" + this.srcThumb + "\" alt=\"" + this.title + "\"> </a>");
 	obj.data('mediaObj', this);
 	$('#gallery').append(obj);
 };
