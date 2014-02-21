@@ -146,8 +146,8 @@ class ChildCommunication extends BaseWrapper
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
 					$message->addPart($text, 'text/plain');
-					$recipients = true;
-//					$recipients = $swift->send($message, $failures);
+//					$recipients = true;
+					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
 
 					if ($recipients){
@@ -209,6 +209,7 @@ class ChildCommunication extends BaseWrapper
 				
 				if(!$disruptedProcess) {
 					$log->log('Estado: Me enviaron');
+					$mail->totalContacts = $i;
 					$mail->status = 'Sent';
 					$mail->finishedon = time();
 				}

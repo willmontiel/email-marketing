@@ -225,7 +225,7 @@ class StatisticsWrapper extends BaseWrapper
 					FROM mailevent AS v
 						JOIN contact as c ON (c.idContact = v.idContact)
 						JOIN email as e ON (c.idEmail = e.idEmail)
-					WHERE v.idMail = ? AND v.description = 'opening'";
+					WHERE v.idMail = ? AND (v.description = 'opening' OR v.description = 'opening for click')";
 		
 		$result1 = $db->query($sql1, array($idMail));
 		$total = $result1->fetch();
@@ -236,7 +236,7 @@ class StatisticsWrapper extends BaseWrapper
 					FROM mailevent AS v
 						JOIN contact as c ON (c.idContact = v.idContact)
 						JOIN email as e ON (c.idEmail = e.idEmail)
-					WHERE v.idMail = ? AND v.description = 'opening'";
+					WHERE v.idMail = ? AND (v.description = 'opening' OR v.description = 'opening for click')";
 		
 		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 //		Phalcon\DI::getDefault()->get('logger')->log('Sql: ' . $sql);
@@ -318,91 +318,102 @@ class StatisticsWrapper extends BaseWrapper
 	
 	public function findMailClickStats($idMail)
 	{
+		$db = Phalcon\DI::getDefault()->get('db');
+		
 		$clicks = array();
-		$h1 = 1380657600;
-		$v1 = 3000;
-		$v2 = 2900;
-		for ($i = 0; $i < 50; $i++) {
-			$value = rand($v1, $v2);
-			if($i < 15) {
-				$values[0] = $value;
-				$values[1] = 0;
-				$values[2] = 0;
-			}
-			else if($i < 35) {
-				$values[0] = 0;
-				$values[1] = $value;
-				$values[2] = 0;
-			}
-			else {
-				$values[0] = 0;
-				$values[1] = 0;
-				$values[2] = $value;
-			}
-			$clicks[] = array(
-				'title' =>$h1,
-				'value' => json_encode($values)
+		$clickcontact = array();
+		$valueLinks = array();
+		$links = array();
+		
+		
+		/*
+		 * SQL para extraer información sobre los links en el correo
+		 */
+		$sqlForLinks = "SELECT m.idMailLink, m.totalClicks, l.link 
+				FROM mxl as m 
+				JOIN maillink as l ON (l.idMailLink = m.idMailLink)
+			 WHERE idMail = ?";
+		
+		$allLinks = $db->query($sqlForLinks, array($idMail));
+		$total = $allLinks->fetchAll();
+		
+		$arrayLinks = array();
+		if (count($total) > 0 ) {
+			foreach ($total as $t) {
+				$valueLinks[] = $t['link'];
+				
+				$links[] = array(
+					'link' => $t['link'],
+					'total' => $t['totalClicks'],
+					'uniques' => 15,
 				);
-			$v1 = $v1 - 1;
-			$v2 = $v2 - 1;
-			$h1+=3600;
+				
+				$arrayLinks[$t['idMailLink']] = 0;
+			}
 		}
-		
-		$valueLinks[0] = 'https://www.google.com';
-		$valueLinks[1] = 'https://www.facebook.com';
-		$valueLinks[2] = 'https://www.twitter.com';
-		
+		Phalcon\DI::getDefault()->get('logger')->log('Array: ' . print_r($arrayLinks, true));
 		$info[] = array(
-			'amount' => 3,
+			'amount' => count($valueLinks),
 			'value' => $valueLinks
 		);
 		
-		$clickcontact[] = array(
-			'id' => 100,
-			'email' => 'otrocorreo@otro.correo',
-			'date' => date('Y-m-d h:i', 1386878942),
-			'link' => 'https://www.google.com'
-		);
+		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) as total
+					FROM mxcxl AS m
+				 WHERE m.idMail = ?
+				 GROUP BY m.idMailLink";
 		
-		$clickcontact[] = array(
-			'id' => 145,
-			'email' => 'otrocorreo2@otro2.correo2',
-			'date' => date('Y-m-d h:i',1386747891),
-			'link' => 'https://www.facebook.com'
-		);
+		$result2 = $db->query($sql2, array($idMail));
+		$linkValues = $result2->fetchAll();
+		Phalcon\DI::getDefault()->get('logger')->log('Antes Values: ' . print_r($linkValues, true));
+		$values = array();
+		if (count($linkValues) > 0 ) {
+			foreach ($linkValues as $l) {
+				if (!isset($values[$l['click']])) {
+					$al = $arrayLinks;
+					$values[$l['click']]['title'] = $l['click'];
+					$al[$l['idMailLink']] = $l['total'];
+					$values[$l['click']]['value'] = json_encode($al);
+				}
+				else {
+					$a = json_decode($values[$l['click']]['value']);
+					$a->$l['idMailLink'] += $l['total'];
+					$values[$l['click']]['value'] = json_encode($a);
+				}
+			}
+		}
+		foreach ($values as $value) {
+			$clicks[] = array(
+				'title' => $value['title'],
+				'value' => $value['value']
+			);
+		}
+		Phalcon\DI::getDefault()->get('logger')->log('Values: ' . print_r($values, true));
+		Phalcon\DI::getDefault()->get('logger')->log('Array: ' . print_r($clicks, true));
+
+		$sql = "SELECT v.idContact, v.userAgent, v.date, e.email, l.link 
+					FROM mailevent AS v
+						JOIN contact as c ON (c.idContact = v.idContact)
+						JOIN email as e ON (c.idEmail = e.idEmail)
+                        JOIN mxl as m ON (m.idMail = v.idMail)
+                        JOIN maillink as l ON (l.idMailLink = m.idMailLink)
+ 					WHERE v.idMail = ? AND v.description = 'click'
+					GROUP BY l.idMailLink";
 		
-		$clickcontact[] = array(
-			'id' => 161,
-			'email' => 'otrocorreo3@otro3.correo3',
-			'date' => date('Y-m-d h:i',1386698537),
-			'link' => 'https://www.google.com'
-		);
+		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+		$result = $db->query($sql, array($idMail));
+		$info = $result->fetchAll();
 		
-		$clickcontact[] = array(
-			'id' => 162,
-			'email' => 'otrocorreo67@otro67.correo67',
-			'date' => date('Y-m-d',1386687891),
-			'link' => 'https://www.twitter.com'
-		);
-		
-		$links[] = array(
-			'link' => 'https://www.google.com',
-			'total' => 23,
-			'uniques' => 15,
-		);
-		
-		$links[] = array(
-			'link' => 'https://www.facebook.com',
-			'total' => 17,
-			'uniques' => 4,
-		);
-		
-		$links[] = array(
-			'link' => 'https://www.twitter.com',
-			'total' => 42,
-			'uniques' => 19,
-		);
-		
+		if (count($info) > 0) {
+			foreach ($info as $i) {
+				$clickcontact[] = array(
+					'id' => $i['idContact'],
+					'email' => $i['email'],
+					'date' => date('Y-m-d h:i', $i['date']),
+					'link' => $i['link']
+				);
+			}
+		}
+
 		$this->pager->setTotalRecords(count($clickcontact));
 		
 		$statistics[] = array(

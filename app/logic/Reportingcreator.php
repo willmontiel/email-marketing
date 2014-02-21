@@ -6,12 +6,13 @@ class Reportingcreator
 	public $tablename;
 	public $dir;
 	
+	
 	public function __construct(Mail $mail, $type) 
 	{
 		$this->mail = $mail;
 		$this->type = $type;
-	}
-	
+	}	
+
 	public function createReport()
 	{
 		$internalNumber = uniqid();
@@ -27,9 +28,15 @@ class Reportingcreator
 		
 		$filePath = Phalcon\DI::getDefault()->get('appPath')->path . '/tmp/mreports/';
 		$filesPath = str_replace("\\", "/", $filePath);
-		$title = $this->getAndSaveReportData($name, $filesPath);
 		
-		$db->execute($deletetable);
+		try {
+			$title = $this->getAndSaveReportData($name, $filesPath);
+			$db->execute($deletetable);
+		}
+		catch (Exception $e) {
+			$db->execute($deletetable);
+			Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e->getMessage());
+		}
 		
 		$report = new Mailreportfile();
 		
@@ -76,41 +83,30 @@ class Reportingcreator
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$opencontact[] = array(
-			'id' => 100,
-			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
-			'date' => 1386687891,
-			'os' => 'Ubuntu'
-		);
-
-		$opencontact[] = array(
-			'id' => 145,
-			'email' => 'recipient00002@test002.local.discardallmail.drh.net',
-			'date' => 1386687891,
-			'os' => 'Windows'
-		);
-
-		$opencontact[] = array(
-			'id' => 161,
-			'email' => 'recipient00003@test003.local.discardallmail.drh.net',
-			'date' => 1386687891,
-			'os' => 'Windows'
-		);
-
-		$opencontact[] = array(
-			'id' => 199,
-			'email' => 'recipient00003@test007.local.discardallmail.drh.net',
-			'date' => 1386688891,
-			'os' => 'Windows Phone'
-		);
+		$sql1 = "SELECT e.email, v.userAgent, v.date
+					FROM mailevent AS v
+						JOIN contact AS c ON ( c.idContact = v.idContact )
+						JOIN email AS e ON ( e.idEmail = c.idEmail )
+					WHERE v.idMail = ?
+						AND (v.description = 'opening' OR v.description = 'opening for click')";
+		
+		$result1 = $db->query($sql1, array($this->mail->idMail));
+		$opencontact = $result1->fetchAll();
+		
+//		$opencontact[] = array(
+//			'id' => 100,
+//			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
+//			'date' => 1386687891,
+//			'os' => 'Ubuntu'
+//		);
 		
 		$v = " ";
 		foreach ($opencontact as $o) {
-			$v .= "(" . $this->mail->idMail . ", " . "'opens'" . ", '" . $o['email'] . "', '" . $o['os'] . "', " .$o['date'] .")";
+			$v .= "(" . $this->mail->idMail . ", " . "'opens'" . ", '" . $o['email'] . "', '" . $o['userAgent'] . "', " .$o['date'] .")";
 		}
 		
 		$values = str_replace(")(", "),(", $v);
-//		Phalcon\DI::getDefault()->get('logger')->log("Values: " . $values);
+		Phalcon\DI::getDefault()->get('logger')->log("Dir: " . $dir . $name);
 	
 		$db->execute("INSERT INTO $this->tablename (idMail, reportType, email, os, date) VALUES $values");
 		
@@ -121,12 +117,18 @@ class Reportingcreator
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
 						
-		$db->execute($report);
+		$ok = $db->execute($report);
+		
+		if (!$ok) {
+			throw new \InvalidArgumentException('Error while generting info in tmp db');
+		}
 	}
 	
 	protected function saveClicksReport($name, $dir)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
+		
+		
 		
 		$clickcontact[] = array(
 			'id' => 100,
