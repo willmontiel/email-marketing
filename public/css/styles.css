@@ -977,8 +977,15 @@ table {
 	margin-top: 5px;	
 }
 .image-galery-selected {
-	border: 4px solid #0FBF1B;
+	border: 4px solid #0FBF1B !important;
 	border-radius: 5px;
+}
+.image-from-gallery {
+	border: 1px dashed #68a6ce;
+}
+.image-from-gallery:hover {
+	border: 1px dashed transparent !important;
+	background-color: #CDDCF0;
 }
 .component-toolbar-social {
 	width: 580px;
