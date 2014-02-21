@@ -23,10 +23,10 @@ class ChildSender
 		$context = new ZMQContext();
 		
 		$this->subscriber = new ZMQSocket($context, ZMQ::SOCKET_SUB);
-		$this->subscriber->connect(SocketConstants::PUB2CHILDREN_ENDPOINT);
+		$this->subscriber->connect(SocketConstants::getPub2ChildrenEndPoint());
 		
 		$this->push = new ZMQSocket($context, ZMQ::SOCKET_PUSH);
-		$this->push->connect(SocketConstants::PULLFROMCHILD_ENDPOINT);
+		$this->push->connect(SocketConstants::getPullFromChildEndPoint());
 		
 		$filter = "$this->pid";
 		$this->subscriber->setSockOpt(ZMQ::SOCKOPT_SUBSCRIBE, $filter);

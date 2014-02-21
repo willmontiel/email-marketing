@@ -4,7 +4,7 @@
 	$context = new ZMQContext();
 		
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$requester->connect(SocketConstants::MAILREQUESTS_ENDPOINT);
+	$requester->connect(SocketConstants::getMailRequestsEndPoint());
 	
 //	$requester->send(sprintf("%s", 'Show-Status'));
 //	$request = $requester->recv();

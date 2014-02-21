@@ -124,6 +124,16 @@ $twapp = new stdClass();
 $twapp->iduser = $config->twapp->id;
 $twapp->token = $config->twapp->token;
 $di->set('twapp', $twapp);
+
+/*
+* Configuración Twitter App 
+*/
+$sockets = new stdClass();
+$sockets->import = $config->sockets->import;
+$sockets->request = $config->sockets->request;
+$sockets->tochildren = $config->sockets->tochildren;
+$sockets->fromchild = $config->sockets->fromchild;
+$di->set('sockets', $sockets);
 	
 /*
  * Log Object, utilizado para logging en general a archivo
