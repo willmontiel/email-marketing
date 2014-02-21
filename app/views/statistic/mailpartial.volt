@@ -105,7 +105,7 @@
 		{{'{{view App.TimeGraphView idChart="clickPieChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
 	</div>
 	<div class="row-fluid">
-		<div class="clickstotalsandunique span6">
+		<div class="clickstotalsandunique span10">
 			<div class="box">
 				<div class="box-content">
 					<table class="table table-normal">
@@ -113,7 +113,7 @@
 							<tr>
 								<td>Vinculos</td>
 								<td>Total Clics</td>
-								<td>Total Clics Unicos</td>
+								{#<td>Total Clics Unicos</td>#}
 							</tr>
 						</thead>
 						<tbody>
@@ -121,7 +121,7 @@
 							<tr>
 								<td>{{'{{link}}'}}</td>
 								<td>{{'{{total}}'}}</td>
-								<td>{{'{{uniques}}'}}</td>
+								{#<td>{{'{{uniques}}'}}</td>#}
 							</tr>
 							{{ '{{/each}}' }}
 						</tbody>
@@ -129,7 +129,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="span6">
+		<div class="span2">
 			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/clicks" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
 		</div>
 	</div>

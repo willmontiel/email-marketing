@@ -209,6 +209,7 @@ class ChildCommunication extends BaseWrapper
 				
 				if(!$disruptedProcess) {
 					$log->log('Estado: Me enviaron');
+					$mail->totalContacts = $i;
 					$mail->status = 'Sent';
 					$mail->finishedon = time();
 				}
