@@ -89,7 +89,7 @@
 							{% else %}
 								<div id="allLinks" style="display: none;">
 									<label>Nombre de campaña: </label>
-									<input type="text" name="campaignName" autofocus="autofocus" class="span10"> <br />
+									<input type="text" name="campaignName" value="{{mail.name}}" autofocus="autofocus" class="span10"> <br />
 
 									<label>Enlaces: </label>
 									<select multiple="multiple" name="links[]"  id="links" class="chzn-select">
