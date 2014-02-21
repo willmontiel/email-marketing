@@ -187,6 +187,10 @@ function initEvents() {
 			$('#my-btn-component-toolbar').remove();
 			$('.element-btn-in-edition').removeClass('element-btn-in-edition');
 		}
+		if($(ev.target).parents('.element-img-in-edition')[0] === undefined && $(ev.target).parents('#my-img-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-img-component-toolbar' ){
+			$('#my-img-component-toolbar').remove();
+			$('.element-img-in-edition').removeClass('element-img-in-edition');
+		}
 		if($(ev.target).parents('.element-share-in-edition')[0] === undefined && $(ev.target).parents('#my-social-share-component-toolbar')[0] === undefined && $(ev.target).attr('class') !== 'my-social-share-component-toolbar'){
 			$('#my-social-share-component-toolbar').remove();
 			$('.element-share-in-edition').removeClass('element-share-in-edition');
