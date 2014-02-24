@@ -130,14 +130,14 @@ class Reportingcreator
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$phql = "SELECT $this->mail->idMail, 'clicks', e.email, l.link, ml.click
+		$phql = "SELECT 1, " . $this->mail->idMail . ", 191, 'clicks', e.email, null, null, null, l.link, null, null, ml.click
 				 FROM mxcxl AS ml
 					JOIN contact AS c ON (c.idContact = ml.idContact)
 					JOIN email AS e ON (e.idEmail = c.idEmail)
 					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = $this->mail->idMail";
+				 WHERE ml.idMail = " . $this->mail->idMail;
 		
-		$sql = "INSERT INTO $this->tablename (idMail, reportType, email, link, date) VALUES ($phql)";
+		$sql = "INSERT INTO $this->tablename ($phql)";
 		
 		$db->execute($sql);
 		
