@@ -534,92 +534,85 @@ class StatisticsWrapper extends BaseWrapper
 	
 	public function findMailBouncedStats($idMail)
 	{
+		$db = Phalcon\DI::getDefault()->get('db');
+		
+		$sql1 = "SELECT v.date, e.email, b.type, b.description, d.name 
+				FROM mailevent AS v 
+					JOIN contact AS c ON (c.idContact = v.idContact)
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN domain AS d ON (d.idDomain = e.idDomain)
+					JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
+				WHERE v.idMail = ? AND v.description = 'bounced'";
+		
+		$sql1 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();	
+		$query1 = $db->query($sql1, array($idMail));
+		$result1 = $query1->fetchAll();
+		
 		$bounced = array();
-		$h1 = 1380657600;
-		$v1 = 3000;
-		$v2 = 2900;
-		for ($i = 0; $i < 1800; $i++) {
-			$value = rand($v1, $v2);
-			if($i == 20 || $i == 100 || $i == 150) {
-				$value = 0;
-			}
-			if($i < 598) {
-				$values[0] = $value;
-				$values[1] = 0;
-				$values[2] = 0;
-			}
-			else if($i < 1302) {
-				$values[0] = 0;
-				$values[1] = $value;
-				$values[2] = 0;
-
-			}
-			else {
-				$values[0] = 0;
-				$values[1] = 0;
-				$values[2] = $value;
-			}
-			$bounced[] = array(
-				'title' =>$h1,
-				'value' => json_encode($values)
+		$bouncedcontact = array();
+		$valueDomain = array();
+		if (count($result1) > 0) {
+			$values = array();
+			foreach ($result1 as $r) {
+				$bouncedcontact[] = array(
+					'email' => $r['email'],
+					'date' => date('Y-m-d h:i', $r['date']),
+					'type' => $r['type'],
+					'category' => $r['description'],
+					'domain' => $r['name']
 				);
+
+				if (!in_array($r['name'], $valueDomain)) {
+					$valueDomain[] = $r['name'];
+				}
+				
+				if ($r['type'] == 'hard') {
+					$values[$r['date']][0] += 1;
+					$values[$r['date']][1] += 0;
+					$values[$r['date']]['date'] = $r['date'];
+				}
+				else if ($r['type'] == 'soft') {
+					$values[$r['date']][0] += 0;
+					$values[$r['date']][1] += 1;
+					$values[$r['date']]['date'] = $r['date'];
+				}
+			}
 			
-			$v1 = $v1 - 1;
-			$v2 = $v2 - 1;
-			$h1+=3600;
+			foreach ($values as $v) {
+				$x = array(
+					0 => $v[0],
+					1 => $v[1]
+				);
+				if (count($bounced) == 0) {
+					$bounced[0]['title'] = $v['date'];
+					$bounced[0]['value'] = json_encode($x);
+				}
+				else {
+					if (!in_array($v['date'], $bounced)) {
+						$bounced[] = array(
+							'title' => $v['date'],
+							'value' => json_encode($x)
+						);
+					}
+				}
+			}
 		}
 		
-		$bouncedcontact[] = array(
-			'id' => 20,
-			'email' => 'newmail@new.mail',
-			'date' => date('Y-m-d h:i', 1386687891),
-			'type' => 'Temporal',
-			'category' => 'Buzon Lleno',
-			'domain' => 'new.mail'
-		);
-		
-		$bouncedcontact[] = array(
-			'id' => 240,
-			'email' => 'newmail1@new1.mail1',
-			'date' => date('Y-m-d h:i',1386687891),
-			'type' => 'Otro',
-			'category' => 'Rebote General',
-			'domain' => 'new1.mail1'
-		);
-		
-		$bouncedcontact[] = array(
-			'id' => 57,
-			'email' => 'newmail2@new2.mail2',
-			'date' => date('Y-m-d h:i',1386687891),
-			'type' => 'Permanente',
-			'category' => 'Direccion Mala',
-			'domain' => 'new2.mail2'
-		);
-		
-		$bouncedcontact[] = array(
-			'id' => 59,
-			'email' => 'newmail54@new3.mail3',
-			'date' => date('Y-m-d h:i',1386687891),
-			'type' => 'Temporal',
-			'category' => 'Buzon Lleno',
-			'domain' => 'new3.mail3'
-		);
-		
-		$valueType[0] = 'Temporales';
-		$valueType[1] = 'Permanentes';
-		$valueType[2] = 'Otros';
-		
-		$valueCategory[0] = 'Buzon Lleno';
-		$valueCategory[1] = 'Direccion Mala';
-		$valueCategory[2] = 'Rebote General';
-		
-		$valueDomain[0] = 'new.mail';
-		$valueDomain[1] = 'new1.mail1';
-		$valueDomain[2] = 'new2.mail2';
-		$valueDomain[3] = 'new3.mail3';
+	
+		$bouncedTypes = Bouncedcode::find();
+		$valueType = array();
+		$valueCategory = array();
+		if (count($bouncedTypes) > 0) {
+			foreach ($bouncedTypes as $b) {
+				if (!in_array($b->type, $valueType)) {
+					$valueType[] = $b->type;
+				}
+				$valueCategory[] = $b->description;
+			}
+		}
 		
 		$info[] = array(
-			'amount' => 3,
+			'amount' => count($valueType),
 			'value' => $valueType,
 			'category' => $valueCategory,
 			'domain' => $valueDomain
