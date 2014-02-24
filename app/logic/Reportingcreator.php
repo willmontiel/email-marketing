@@ -92,9 +92,9 @@ class Reportingcreator
 	{
 		$phql = "SELECT null, ". $this->mail->idMail .", 'opens', e.email, null, null, v.userAgent, null, null, null, v.date
 					FROM mailevent AS v
-						JOIN contact AS c ON ( c.idContact = v.idContact )
-						JOIN email AS e ON ( e.idEmail = c.idEmail )
-					WHERE v.idMail = ?
+						JOIN contact AS c ON (c.idContact = v.idContact)
+						JOIN email AS e ON (e.idEmail = c.idEmail)
+					WHERE v.idMail = ". $this->mail->idMail ."
 						AND (v.description = 'opening' OR v.description = 'opening for click')";
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
@@ -146,7 +146,7 @@ class Reportingcreator
 					FROM mailevent AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (c.idEmail = e.idEmail)
-				WHERE v.idMail = ? AND v.description = 'unsubscribed'";
+				WHERE v.idMail = " . $this->mail->idMail . " AND v.description = 'unsubscribed'";
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
@@ -172,7 +172,7 @@ class Reportingcreator
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
 						JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
-				WHERE v.idMail = ? AND v.description = 'bounced'";
+				WHERE v.idMail = " . $this->mail->idMail . " AND v.description = 'bounced'";
 		
 		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, bouncedType, category
 						FROM {$this->tablename}
