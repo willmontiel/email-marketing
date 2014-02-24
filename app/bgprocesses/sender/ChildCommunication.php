@@ -152,7 +152,7 @@ class ChildCommunication extends BaseWrapper
 
 					if ($recipients){
 						echo "Message {$i} successfully sent! \n";
-//						$log->log("HTML: " . $html);
+						$log->log("HTML: " . $html);
 //						$log->log("Headers: " . $this->lastsendheaders);
 						$log->log("Message successfully sent! with idContact: " . $contact['contact']['idContact']);
 						$sentContacts[] = $contact['contact']['idContact'];
