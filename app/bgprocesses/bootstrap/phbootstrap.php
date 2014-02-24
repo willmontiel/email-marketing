@@ -126,7 +126,7 @@ $twapp->token = $config->twapp->token;
 $di->set('twapp', $twapp);
 
 /*
-* Configuración Twitter App 
+* Configuración Sockets
 */
 $sockets = new stdClass();
 $sockets->import = $config->sockets->import;
