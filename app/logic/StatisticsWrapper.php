@@ -309,7 +309,7 @@ class StatisticsWrapper extends BaseWrapper
 		
 		if (count($total) > 0 ) {
 			foreach ($total as $t) {
-				$valueLinks[] = $t['link'];
+				$valueLinks[$t['idMailLink']] = $t['link'];
 				if ($t['totalClicks'] == null) {
 					$t['totalClicks'] = 0;
 				}

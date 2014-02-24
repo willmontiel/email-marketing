@@ -13,16 +13,18 @@ function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) 
 	categoryAxis.axisColor = "#DADADA";
 	
 	if(multVal != undefined || multVal != null) {
-		for(var i = 0; i < multVal[0].amount; i++ ) {
-			var graph = new AmCharts.AmGraph();
-			graph.valueField = "value" + i;
-			graph.type = "column";
-			graph.title = text + ' ' + multVal[0].value[i];
-			graph.lineColor = "#000000";
-			graph.fillColors = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
-			graph.fillAlphas = 0.7;
-			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value'][i] + " en [[category]]:<b>[[value]]</b></span>";
-			chart.addGraph(graph);
+		for (var index in chartData[0]) {
+			if(multVal[0].value[index] !== undefined) {
+				var graph = new AmCharts.AmGraph();
+				graph.valueField = index;
+				graph.type = "column";
+				graph.title = text + ' ' + multVal[0].value[index];
+				graph.lineColor = "#000000";
+				graph.fillColors = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
+				graph.fillAlphas = 0.7;
+				graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0][index] + " en [[category]]:<b>[[value]]</b></span>";
+				chart.addGraph(graph);
+			}
 		}
 	}
 	else {

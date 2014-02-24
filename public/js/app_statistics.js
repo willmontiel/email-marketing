@@ -172,6 +172,7 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
+		info = info.length > 0 ? info : null;
 		App.set('chartData', statistics);
 		App.set('multValChart', info);
 	},
@@ -198,7 +199,7 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 			for(var i = 0; i < links.length; i++) {
 				if(links[i].link == link) {
 					objArray.push(links[i]);
-				}
+		}
 			}
 		}
 		this.set('detailsData', objArray);
@@ -335,7 +336,6 @@ App.TimeGraphView = Ember.View.extend({
 			chart = createPieChart(chartData);
 		}
 		else if(this.typeChart === 'Bar') {
-			console.log(chartData)
 			chart = createBarChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
 		}
 		else if(this.typeChart === 'Line') {
@@ -378,7 +378,7 @@ function createChartData(totalData, multVal, format) {
 	
 	var newData = [];
 	var result = [];
-
+	
 	for(var i = 0; i < totalData.length; i++) {
 		
 		if(multVal == undefined || multVal == null) {
@@ -388,19 +388,25 @@ function createChartData(totalData, multVal, format) {
 			newData[(moment.unix(totalData[i].title)).format(format)]+= totalData[i].value;
 		}
 		else {
+			var values = JSON.parse(totalData[i].value);
 			if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
 				newData[(moment.unix(totalData[i].title)).format(format)] = [];
-				for(var j = 0; j < multVal[0].amount; j++) {
-					newData[(moment.unix(totalData[i].title)).format(format)][j] = 0;
+//				for(var j = 0; j < multVal[0].amount; j++) {
+//					newData[(moment.unix(totalData[i].title)).format(format)][j] = 0;
+//				}
+				for (var index in values) {
+					newData[(moment.unix(totalData[i].title)).format(format)][index] = 0;
 				}
 			}
-			var values = JSON.parse(totalData[i].value);
-			for(var j = 0; j < multVal[0].amount; j++) {
-				newData[(moment.unix(totalData[i].title)).format(format)][j]+= values[j];
+			for (var index in values) {
+				newData[(moment.unix(totalData[i].title)).format(format)][index]+= values[index];
 			}
+//			for(var j = 0; j < multVal[0].amount; j++) {
+//				newData[(moment.unix(totalData[i].title)).format(format)][j]+= values[j];
+//			}
 		}
 	}
-
+	
 	for (var key in newData) {
 		if(newData.hasOwnProperty(key)) {
 			var obj = new Object();
@@ -409,8 +415,11 @@ function createChartData(totalData, multVal, format) {
 				obj.value = '' + newData[key];
 			}
 			else {
-				for(var j = 0; j < multVal[0].amount; j++) {
-					obj['value' + j] = '' + newData[key][j];
+//				for(var j = 0; j < multVal[0].amount; j++) {
+//					obj['value' + j] = '' + newData[key][j];
+//				}
+				for (var index in values) {
+					obj[index] = '' + newData[key][index];
 				}
 			}
 			result.push(obj);
