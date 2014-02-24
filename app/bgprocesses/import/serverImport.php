@@ -6,7 +6,7 @@ $context = new ZMQContext(1);
 
 //  Socket to talk to clients
 $responder = new ZMQSocket($context, ZMQ::SOCKET_REP);
-$responder->bind(SocketConstants::getImportProcessEndPoint());
+$responder->bind(SocketConstants::getImportServerProcessEndPoint());
 
 $timer = Phalcon\DI::getDefault()->get('timerObject');
 $log   = Phalcon\DI::getDefault()->get('logger');
