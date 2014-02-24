@@ -24,4 +24,9 @@ class Statcontactlist extends \Phalcon\Mvc\Model
 	{
 		$this->clicks += 1;
 	}
+	
+	public function incrementBounced()
+	{
+		$this->bounced += 1;
+	}
 }

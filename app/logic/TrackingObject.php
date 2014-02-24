@@ -377,22 +377,25 @@ class TrackingObject
 		return $mxcxl;
 	}
 	/**
+	 * Inicio tracking de bounced
 	 * ==========================================================================================
 	 */
 	
-	public function updateTrackBounced($idMail, $idContact, $type, $cod, $date)
+	public function updateTrackBounced($type, $cod, $date)
 	{
 		switch ($type) {
 			case 'bounce_all':
-				$this->saveSoftBounceEvent($idMail, $idContact, $cod, $date);
+				$this->trackSoftBounceEvent($cod, $date);
 				break;
 
 			case 'bounce_bad_address':
-				$this->saveHardBounceEvent($idMail, $idContact, $date);
+				$this->trackHardBounceEvent($date);
 				break;
 
 			case 'scomp':
-				$this->saveSpamEvent($idMail, $idContact, $cod, $date);
+				if ($this->canTrackSpamEvent()) {
+					$this->saveSpamEvent($cod, $date);
+				}
 				break;
 
 			default :
@@ -402,85 +405,104 @@ class TrackingObject
 	}
 
 
-	private function saveSoftBounceEvent($idMail, $idContact, $cod, $date)
+	private function canTrackSoftBounceEvent()
 	{
-		$this->log->log('Inicio de tracking de rebote suave');
-		$mxc = Mxc::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idContact = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $idContact)
-		));
-
-		if ($mxc && ($mxc->opening == 0 && $mxc->bounced == 0 && $mxc->spam == 0 && $mxc->status == 'sent')) {
-			$db = Phalcon\DI::getDefault()->get('db');
-			try {
-				$db->begin();
-				$mailXcontact = $this->updateMxcStat($mxc, 'bounced');
-				if (!$mailXcontact) {
-					throw new \InvalidArgumentException('Error while updating mxc');
-				}
-				$this->log->log('Se actualizó mxc');
-
-				$mail = $this->updateMailStat($idMail, 'bounced');
-				if (!$mail) {
-					throw new \InvalidArgumentException('Error while updating mail');
-				}
-				$this->log->log('Se actualizó Mail');
-
-				$statdbase = $this->updateStatDbase($idContact, $idMail, 'bounced');
-				if (!$statdbase) {
-					throw new \InvalidArgumentException('Error while updating statdbase');
-				}
-				$this->log->log('Se actualizó statDbase');
-
-				$statcontactlist = $this->updateStatContactLists($mxc, 'bounced');
-				if (!$statcontactlist) {
-					throw new \InvalidArgumentException('Error while updating statcontactlist');
-				}
-				$this->log->log('Se actualizó statContactlist');
-
-				$mailEvent = $this->saveMailEvent($idMail, $idContact, 'bounced', null, null, $cod, $date);
-				if (!$mailEvent) {
-					throw new \InvalidArgumentException('Error while saving event');
-				}
-				$this->log->log('Se actualizó event');
-
-				$db->commit();
-			}
-			catch (InvalidArgumentException $e) {
-				$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
-				$db->rollback();
-			}
+		if ($this->mxc->opening == 0 && 
+				$this->mxc->bounced == 0 && 
+				$this->mxc->spam == 0 && 
+				$this->mxc->status == 'sent') {
+			return true;
 		}
-		else {
-			$this->log->log('El contacto ya ha sido marcado como rebotado');
+		return false;
+	}
+	
+	private function canTrackHardBounceEvent()
+	{
+		if ($this->mxc->opening == 0 && 
+				$this->mxc->bounced > 0 && 
+				$this->mxc->spam == 0 && 
+				$this->mxc->status == 'sent') {
+			return true;
+		}
+		return false;
+	}
+	
+	private function canTrackSpamEvent()
+	{
+		$event = Mailevent::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idContact = ?2 AND description = ?3',
+			'bind' => array(1 => $this->idMail,
+							2 => $this->idContact,
+							3 => 'bounced')
+		));
+		
+		if ($event) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	private function trackSoftBounceEvent($cod, $date)
+	{
+		try {
+			if ($this->canTrackSoftBounceEvent()) {
+				$this->startTransaction();
+				$this->mxc->bounced = $date;
+				$this->addDirtyObject($this->mxc);
+				
+				$mailObj = $this->findRelatedMailObject();
+				$mailObj->incrementBounced();
+				$this->addDirtyObject($mailObj);
+				
+				$statDbaseObj = $this->findRelatedDbaseStatObject();
+				$statDbaseObj->incrementBounced();
+				$this->addDirtyObject($statDbaseObj);
+				
+				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
+					$statListObj->incrementBounced();
+					$this->addDirtyObject($statListObj);
+				}
+				
+				$event = $this->createNewMailEvent();
+				$event->idBouncedCode = $cod;
+				$event->description = 'bounced';
+				$event->userAgent = null;
+				$event->date = $date;
+				$this->addDirtyObject($event);
+				
+				$this->flushChanges();
+			}
+			$this->log->log('ya se contabilizó bounced tracking');
+		}
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->rollbackTransaction();
 		}
 	}
 
-	private function saveHardBounceEvent($idMail, $idContact, $date)
+	private function trackHardBounceEvent($date)
 	{
 		$this->log->log('Inicio de tracking de rebote duro');
-
-		$db = Phalcon\DI::getDefault()->get('db');
-
-		$event = Mailevent::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idContact = ?2 AND description = ?3',
-			'bind' => array(1 => $idMail,
-							2 => $idContact,
-							3 => 'bounced')
-		));
-		if ($event) {
-			$this->log->log('Existe mail event');
+		if ($this->canTrackHardBounceEvent()) {
+			$db = Phalcon\DI::getDefault()->get('db');
+			
 			$contact = Contact::findFirst(array(
 				'conditions' => 'idContact = ?1',
 				'bind' => array(1 => $idContact)
 			));
-
+			
 			$sql = 'UPDATE email AS e JOIN contact AS c
 						ON (c.idEmail = e.idEmail)
 						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
 					WHERE e.idEmail = ?';
 
+		}
+		
+	
+			
+			
+			
 			$update = $db->execute($sql, array($contact->idEmail));
 
 			$dbase = Dbase::findFirst(array(
@@ -507,10 +529,7 @@ class TrackingObject
 			$this->log->log('Preparando actualizacion de contadores de dbase');
 			$dbase->updateCountersInDbase();
 			$this->log->log('Parece que actualizó');
-		}
-		else {
-			$this->log->log('No existe registro de evento de rebote');
-		}
+		
 	}
 
 	private function saveSpamEvent($idMail, $idContact, $cod, $date)
