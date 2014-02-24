@@ -130,7 +130,7 @@ class Reportingcreator
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$phql = "SELECT 1, " . $this->mail->idMail . ", 191, 'clicks', e.email, null, null, null, l.link, null, null, ml.click
+		$phql = "SELECT 1, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
 				 FROM mxcxl AS ml
 					JOIN contact AS c ON (c.idContact = ml.idContact)
 					JOIN email AS e ON (e.idEmail = c.idEmail)
