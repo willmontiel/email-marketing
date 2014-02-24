@@ -129,27 +129,38 @@ class Reportingcreator
 	
 	protected function getDataClicksReport()
 	{
-		$db = Phalcon\DI::getDefault()->get('db');
+		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		$sql = "SELECT e.email, v.date, l.link
-					FROM mailevent AS v 
-						JOIN contact AS c ON (c.idContact = v.idContact)
-						JOIN email AS e ON (c.idEmail = e.idEmail)
-						JOIN mxl AS m ON (m.idMail = v.idMail)
-						JOIN maillink AS l ON (l.idMailLink= m.idMailLink)
-					WHERE v.idMail = ? AND v.description = 'click'
-				GROUP BY l.idMailLink";
+		$phql = "SELECT ml.click, e.email, l.link
+				 FROM Mxcxl AS ml
+					JOIN Contact AS c ON (c.idContact = ml.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
+				 WHERE ml.idMail = :idMail:";
 		
-		$result = $db->query($sql, array($this->mail->idMail));
-		$info = $result->fetchAll();
+//		$sql = "SELECT e.email, v.date, l.link
+//					FROM mailevent AS v 
+//						JOIN contact AS c ON (c.idContact = v.idContact)
+//						JOIN email AS e ON (c.idEmail = e.idEmail)
+//						JOIN mxl AS m ON (m.idMail = v.idMail)
+//						JOIN maillink AS l ON (l.idMailLink= m.idMailLink)
+//					WHERE v.idMail = ? AND v.description = 'click'
+//				GROUP BY l.idMailLink";
+		
+//		$result = $db->query($sql, array($this->mail->idMail));
+//		$info = $result->fetchAll();
+		$query = $manager->createQuery($phql);
+		$result = $query->execute(array(
+			'idMail' => $this->mail->idMail
+		));
 		
 		$data = array();
-		if (count($info) > 0) {
-			foreach ($info as $i) {
+		if (count($result) > 0) {
+			foreach ($result as $i) {
 				$data[] = array(
-					'email' => $i['email'],
-					'date' => $i['date'],
-					'link' => $i['link']
+					'email' => $i->email,
+					'date' => $i->click,
+					'link' => $i->link
 				);
 			}
 			$v = " ";
