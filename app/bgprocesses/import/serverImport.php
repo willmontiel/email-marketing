@@ -56,7 +56,7 @@ while (true) {
 	print_timer($timer, $log);
 	print_dbase_profile();
 }
-
+printf ("Process Complete");
 
 function print_timer(TimerObject $timer, $log)
 {
