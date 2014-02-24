@@ -21,8 +21,7 @@ class Reportingcreator
 		
 		$this->tablename = "tmp". $this->mail->idMail;
 		
-		$newtable = "CREATE TABLE $this->tablename LIKE tmpreport";
-		$deletetable = "DROP TABLE $this->tablename";
+		$newtable = "CREATE TEMPORARY TABLE $this->tablename LIKE tmpreport";
 		
 		$db->execute($newtable);
 		
@@ -31,10 +30,9 @@ class Reportingcreator
 		
 		try {
 			$title = $this->getAndSaveReportData($name, $filesPath);
-			$db->execute($deletetable);
 		}
 		catch (Exception $e) {
-			$db->execute($deletetable);
+			$db->execute("DROP TEMPORARY TABLE $this->tablename");
 			Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e->getMessage());
 		}
 		
@@ -58,22 +56,22 @@ class Reportingcreator
 	{
 		switch ($this->type) {
 			case 'opens':
-				$data = $this->getDataOpenReport();
+				$data = $this->getQueryForOpenReport($name, $dir);
 				$title = 'Reporte de aperturas';
 				break;
 			
 			case 'clicks':
-				$data = $this->saveClicksReportOnDisc($name, $dir);
+				$data = $this->getQueryForClicksReport($name, $dir);
 				$title = 'Reporte de clics sobre enlaces';
 				break;
 			
 			case 'unsubscribed':
-				$data = $this->getDataUnsubscribedReport();
+				$data = $this->getQueryForUnsubscribedReport($name, $dir);
 				$title = 'Reporte de correos des-suscritos';
 				break;
 			
 			case 'bounced':
-				$data = $this->getDataBouncedReport();
+				$data = $this->getQueryForBouncedReport($name, $dir);
 				$title = 'Reporte de correos rebotados';
 				break;
 			
@@ -82,54 +80,40 @@ class Reportingcreator
 				break;
 		}
 		
-		if ($data) {
+		if ($this->saveReport($data['generate'], $data['save'])) {
 			return $title;
 		}
 		return 'No hay valores para mostrar';
 	}
 	
-	protected function getDataOpenReport()
+	protected function getQueryForOpenReport($name, $dir)
 	{
-		$db = Phalcon\DI::getDefault()->get('db');
-		
-		$sql = "SELECT e.email, v.userAgent, v.date
+		$phql = "SELECT null, ". $this->mail->idMail .", 'opens', e.email, null, null, v.userAgent, null, null, null, v.date
 					FROM mailevent AS v
-						JOIN contact AS c ON ( c.idContact = v.idContact )
-						JOIN email AS e ON ( e.idEmail = c.idEmail )
-					WHERE v.idMail = ?
+						JOIN contact AS c ON (c.idContact = v.idContact)
+						JOIN email AS e ON (e.idEmail = c.idEmail)
+					WHERE v.idMail = ". $this->mail->idMail ."
 						AND (v.description = 'opening' OR v.description = 'opening for click')";
 		
-		$result = $db->query($sql, array($this->mail->idMail));
-		$info = $result->fetchAll();
+		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$data = array();
-		if (count($info) > 0) {
-			foreach ($info as $i) {
-				$data[] = array(
-					'type' => 'opens',
-					'email' => $i['email'],
-					'userAgent' => $i['userAgent'],
-					'date' => $i['date']
-				);
-			}
-			
-			$v = " ";
-			foreach ($data as $o) {
-				$v .= "(" . $this->mail->idMail . ", '" . $o['type'] . "', '" . $o['email'] . "', '" . $o['userAgent'] . "', " .$o['date'] .")";
-			}
-			
-			$values = str_replace(")(", "),(", $v);
-			$report = '(idMail, reportType, email, os, date) VALUES ' . $values;
-			
-			return $report;
-		}
-		return false;
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, os 
+						FROM {$this->tablename}
+						INTO OUTFILE  '{$dir}{$name}'
+						FIELDS TERMINATED BY ','
+						ENCLOSED BY '\"'
+						LINES TERMINATED BY '\n'";
+						
+		$data = array(
+			'generate' => $sql,
+			'save' => $report
+		);
+		
+		return $data;
 	}
 	
-	protected function saveClicksReportOnDisc($name, $dir)
+	protected function getQueryForClicksReport($name, $dir)
 	{
-		$db = Phalcon\DI::getDefault()->get('db');
-		
 		$phql = "SELECT null, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
 				 FROM mxcxl AS ml
 					JOIN contact AS c ON (c.idContact = ml.idContact)
@@ -139,9 +123,6 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		Phalcon\DI::getDefault()->get('logger')->log('SQL: ' . $sql);
-		$db->execute($sql);
-		
 		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, link 
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
@@ -149,114 +130,76 @@ class Reportingcreator
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
 			
+		$data = array(
+			'generate' => $sql,
+			'save' => $report
+		);
 		
-		$ok = $db->execute($report);
-		
-		if (!$ok) {
-			throw new \InvalidArgumentException('Error while generting info in tmp db');
-		}
-		return true;
+		return $data;
 	}
 	
-	protected function getDataUnsubscribedReport()
+	protected function getQueryForUnsubscribedReport($name, $dir)
 	{
-		$db = Phalcon\DI::getDefault()->get('db');
-		
-		$sql = "SELECT e.email, v.date, c.name, c.lastName
+		$phql = "SELECT null, " . $this->mail->idMail. ", 'unsubscribed', e.email, c.name, c.lastName, null, null, null, null, v.date
 					FROM mailevent AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (c.idEmail = e.idEmail)
-				WHERE v.idMail = ? AND v.description = 'unsubscribed'";
+				WHERE v.idMail = " . $this->mail->idMail . " AND v.description = 'unsubscribed'";
 		
-		$result = $db->query($sql, array($this->mail->idMail));
-		$info = $result->fetchAll();
+		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		if (count($info) > 0) {
-			$data = array();
-			
-			foreach ($info as $i) {
-				$data[] = array(
-					'email' => $i['email'],
-					'date' => $i['date'],
-					'name' => $i['name'],
-					'lastname' => $i['lastName']
-				);
-			}
-			
-			$v = " ";
-		
-			foreach ($data as $u) {
-				$v .= "(" . $this->mail->idMail . ", " . "'unsubscribed'" . ", '" . $u['email'] . "', '" . $u['name'] . "', '" . $u['lastname'] . "', " . $u['date'] .")";
-			}
-
-			$values = str_replace(")(", "),(", $v);
-			$report = ' (idMail, reportType, email, name, lastName, date) VALUES ' . $values;
-
-			return $report;
-		}
-		return false;
-	}
-	
-	protected function getDataBouncedReport()
-	{
-		$db = Phalcon\DI::getDefault()->get('db');
-		
-		$sql = "SELECT e.email, v.date, b.type, b.description
-					FROM mailevent AS v
-						JOIN contact AS c ON (c.idContact = v.idContact)
-						JOIN email AS e ON (e.idEmail = c.idEmail)
-						JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
-				WHERE v.idMail = ? AND v.description = 'bounced'";
-		
-		$result = $db->query($sql, array($this->mail->idMail));
-		$info = $result->fetchAll();
-		
-		if (count($info) > 0) {
-			$bouncedcontact = array();
-			
-			foreach ($info as $i) {
-				$bouncedcontact[] = array(
-					'email' => $i['email'],
-					'date' => $i['date'],
-					'type' => $i['type'],
-					'category' => $i['description']
-				);
-			}
-			
-			$v = " ";
-
-			foreach ($bouncedcontact as $b) {
-				$v .= "(" . $this->mail->idMail . ", " . "'bounced'" . ", '" . $b['email'] . "', '" . $b['type'] . "', '" . $b['category'] . "', " . $b['date'] .")";
-			}
-
-			$values = str_replace(")(", "),(", $v);
-			$report = ' (idMail, reportType, email, bouncedType, category, date) VALUES ' . $values;
-
-			return $report;
-		}
-		return false;
-	}
-	
-	protected function saveReport($data, $name, $dir) 
-	{
-		$db = Phalcon\DI::getDefault()->get('db');
-		
-		Phalcon\DI::getDefault()->get('logger')->log("Dir: " . $dir . $name);
-		
-		$db->execute("INSERT INTO $this->tablename $data");
-		
-		$report =  "SELECT email, name, lastName, os, FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s')
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, name, lastName 
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
-			
 		
-		$ok = $db->execute($report);
+		$data = array(
+			'generate' => $sql,
+			'save' => $report
+		);
 		
-		if (!$ok) {
+		return $data;
+	}
+	
+	protected function getQueryForBouncedReport($name, $dir)
+	{
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'bounced', e.email, null, null, null, null, b.type, b.description, v.date
+					FROM mailevent AS v
+						JOIN contact AS c ON (c.idContact = v.idContact)
+						JOIN email AS e ON (e.idEmail = c.idEmail)
+						JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
+				WHERE v.idMail = " . $this->mail->idMail . " AND v.description = 'bounced'";
+		
+		$sql = "INSERT INTO $this->tablename ($phql)";
+		
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, bouncedType, category
+						FROM {$this->tablename}
+						INTO OUTFILE  '{$dir}{$name}'
+						FIELDS TERMINATED BY ','
+						ENCLOSED BY '\"'
+						LINES TERMINATED BY '\n'";
+		
+		$data = array(
+			'generate' => $sql,
+			'save' => $report
+		);
+		
+		return $data;
+		
+	}
+	
+	protected function saveReport($generate,$save) 
+	{
+		$db = Phalcon\DI::getDefault()->get('db');
+		$s = $db->execute($generate);
+		$g = $db->execute($save);
+		
+		if (!$s || !$g) {
 			throw new \InvalidArgumentException('Error while generting info in tmp db');
 		}
+		$db->execute("DROP TEMPORARY TABLE $this->tablename");
+		return true;
 	}
 }

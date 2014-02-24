@@ -373,6 +373,10 @@
 				</label>
 			</div>
 		</div>
+		<div class="pull-right">
+			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/bounced" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
+			<br />
+		</div>
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
