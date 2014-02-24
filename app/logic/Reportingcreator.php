@@ -130,16 +130,16 @@ class Reportingcreator
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$phql = "SELECT ml.click, e.email, l.link
+		$phql = "SELECT $this->mail->idMail, 'clicks', e.email, l.link, ml.click
 				 FROM mxcxl AS ml
 					JOIN contact AS c ON (c.idContact = ml.idContact)
 					JOIN email AS e ON (e.idEmail = c.idEmail)
 					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = ?";
+				 WHERE ml.idMail = $this->mail->idMail";
 		
-		$sql = "INSERT INTO $this->tablename ($phql)";
+		$sql = "INSERT INTO $this->tablename (idMail, reportType, email, link, date) VALUES ($phql)";
 		
-		$db->execute($sql, array($this->mail->idMail));
+		$db->execute($sql);
 		
 		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, link 
 						FROM {$this->tablename}
