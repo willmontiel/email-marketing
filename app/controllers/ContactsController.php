@@ -274,7 +274,7 @@ class ContactsController extends ControllerBase
 		$open = fopen("../tmp/ifiles/".$nameFile, "r");
 		
 		if(!$open) {
-			Phalcon\DI::getDefault()->get('logger')->log("Error al abrir el archivo original");
+			$log->log('Error al abrir el archivo original');
 		}
 		
 		if($header) {
@@ -301,6 +301,7 @@ class ContactsController extends ControllerBase
 		$newproccess->processLines = 0;
 		
 		if(!$newproccess->save()) {
+			$log->log('No se creo ningun proceso de importaction');
 			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
 		}		
 		
