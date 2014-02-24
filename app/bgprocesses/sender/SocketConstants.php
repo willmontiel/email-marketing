@@ -27,8 +27,13 @@ class SocketConstants
 		return Phalcon\DI::getDefault()->get('sockets')->fromchild;
 	}
 	
-	public static function getImportProcessEndPoint()
+	public static function getImportServerProcessEndPoint()
 	{
-		return Phalcon\DI::getDefault()->get('sockets')->import;
+		return Phalcon\DI::getDefault()->get('sockets')->importserver;
+	}
+	
+	public static function getImportClientProcessEndPoint()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->importclient;
 	}
 }

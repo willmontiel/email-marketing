@@ -324,7 +324,7 @@ class ContactsController extends ControllerBase
 			$log->log('Contexto');
 			$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 			$log->log('Socket');
-			$requester->connect(SocketConstants::getImportProcessEndPoint());
+			$requester->connect(SocketConstants::getImportClientProcessEndPoint());
 			$log->log('Conexion');
 			$requester->send($toSend);
 			$log->log('Envio');

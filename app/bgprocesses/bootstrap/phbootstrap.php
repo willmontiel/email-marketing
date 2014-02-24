@@ -129,7 +129,8 @@ $di->set('twapp', $twapp);
 * Configuración Sockets
 */
 $sockets = new stdClass();
-$sockets->import = $config->sockets->import;
+$sockets->importserver = $config->sockets->importserver;
+$sockets->importclient = $config->sockets->importclient;
 $sockets->request = $config->sockets->request;
 $sockets->tochildren = $config->sockets->tochildren;
 $sockets->fromchild = $config->sockets->fromchild;
