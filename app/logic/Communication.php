@@ -8,9 +8,9 @@ class Communication
 
 		$this->requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 		if ($log) {
-			$log->log("Connecting to: [" . SocketConstants::MAILREQUESTS_ENDPOINT_PEER . "]");
+			$log->log("Connecting to: [" . SocketConstants::getMailRequestsEndPointPeer() . "]");
 		}
-		$this->requester->connect(SocketConstants::MAILREQUESTS_ENDPOINT_PEER);
+		$this->requester->connect(SocketConstants::getMailRequestsEndPointPeer());
 	}
 	
 	public function getStatus()
