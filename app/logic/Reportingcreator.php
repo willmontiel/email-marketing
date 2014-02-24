@@ -21,8 +21,7 @@ class Reportingcreator
 		
 		$this->tablename = "tmp". $this->mail->idMail;
 		
-		$newtable = "CREATE TABLE $this->tablename LIKE tmpreport";
-		$deletetable = "DROP TABLE $this->tablename";
+		$newtable = "CREATE TEMPORARY TABLE $this->tablename LIKE tmpreport";
 		
 		$db->execute($newtable);
 		
@@ -31,10 +30,9 @@ class Reportingcreator
 		
 		try {
 			$title = $this->getAndSaveReportData($name, $filesPath);
-			$db->execute($deletetable);
 		}
 		catch (Exception $e) {
-			$db->execute($deletetable);
+			$db->execute("DROP TEMPORARY TABLE $this->tablename");
 			Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e->getMessage());
 		}
 		
@@ -201,6 +199,7 @@ class Reportingcreator
 		if (!$s || !$g) {
 			throw new \InvalidArgumentException('Error while generting info in tmp db');
 		}
+		$db->execute("DROP TEMPORARY TABLE $this->tablename");
 		return true;
 	}
 }
