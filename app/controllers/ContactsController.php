@@ -319,10 +319,22 @@ class ContactsController extends ControllerBase
 		$toSend = json_encode($arrayToSend);
 		
 		
-		$context = new ZMQContext();
-		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-		$requester->connect(SocketConstants::getImportProcessEndPoint());
-		$requester->send($toSend);
+		try{
+			$context = new ZMQContext();
+			$log->log('Contexto');
+			$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
+			$log->log('Socket');
+			$requester->connect(SocketConstants::getImportProcessEndPoint());
+			$log->log('Conexion');
+			$requester->send($toSend);
+			$log->log('Envio');
+		}
+		catch (\InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+		}
+		catch (\Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+		}
 		
 		return $this->response->redirect("proccess/show/$newproccess->idImportproccess");
 	}
