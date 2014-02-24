@@ -321,12 +321,6 @@ class StatisticsWrapper extends BaseWrapper
 		$db = Phalcon\DI::getDefault()->get('db');
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		$clicks = array();
-		$clickcontact = array();
-		$valueLinks = array();
-		$links = array();
-		
-		
 		/*
 		 * SQL para extraer información sobre los links en el correo
 		 */
@@ -338,7 +332,10 @@ class StatisticsWrapper extends BaseWrapper
 		$allLinks = $db->query($sqlForLinks, array($idMail));
 		$total = $allLinks->fetchAll();
 		
+		$links = array();
+		$valueLinks = array();
 		$arrayLinks = array();
+		
 		if (count($total) > 0 ) {
 			foreach ($total as $t) {
 				$valueLinks[] = $t['link'];
@@ -352,12 +349,12 @@ class StatisticsWrapper extends BaseWrapper
 				$arrayLinks[$t['idMailLink']] = 0;
 			}
 		}
-		Phalcon\DI::getDefault()->get('logger')->log('Array: ' . print_r($arrayLinks, true));
 		
 		$info[] = array(
 			'amount' => count($valueLinks),
 			'value' => $valueLinks
 		);
+		
 		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
 					FROM mxcxl AS m
 				 WHERE m.idMail = ?
@@ -383,6 +380,7 @@ class StatisticsWrapper extends BaseWrapper
 			}
 		}
 		
+		$clicks = array();
 		foreach ($values as $value) {
 			$clicks[] = array(
 				'title' => $value['title'],
@@ -391,22 +389,23 @@ class StatisticsWrapper extends BaseWrapper
 		}
 		
 		$phql = "SELECT ml.click, e.email, l.link
-				 FROM mxcxl AS ml
-					JOIN contact AS c ON (c.idContact = ml.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
-					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = :idMail:";
+				 FROM Mxcxl AS ml
+					JOIN Contact AS c ON (c.idContact = ml.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
+				 WHERE ml.idMail = :idMail: LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
 		$query = $manager->createQuery($phql);
 		Phalcon\DI::getDefault()->get('logger')->log('3');
-		$info = $query->execute(array(
+		$result = $query->execute(array(
 			'idMail' => $idMail
 		));
-
+		Phalcon\DI::getDefault()->get('logger')->log('4');
 //		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
-		if (count($info) > 0) {
-			foreach ($info as $i) {
+		$clickcontact = array();
+		if (count($result) > 0) {
+			foreach ($result as $i) {
 				$clickcontact[] = array(
 					'email' => $i->email,
 					'date' => date('Y-m-d h:i', $i->click),
