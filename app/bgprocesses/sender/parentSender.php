@@ -72,7 +72,7 @@ function isRunning()
 {
 	$context = new ZMQContext(1);
 	$selfrequester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$selfrequester->connect(SocketConstants::MAILREQUESTS_ENDPOINT);
+	$selfrequester->connect(SocketConstants::getMailRequestsEndPoint());
 	
 	$poll = new ZMQPoll();
 	$poll->add($selfrequester, ZMQ::POLL_OUT);
@@ -108,7 +108,7 @@ function killProcess()
 {
 	$context = new ZMQContext(1);
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$requester->connect(SocketConstants::MAILREQUESTS_ENDPOINT);
+	$requester->connect(SocketConstants::getMailRequestsEndPoint());
 	$requester->send('Time-To-Die');
 	$r = $requester->recv();
 	printf('Recibi: ' . $r . PHP_EOL);
@@ -118,7 +118,7 @@ function processStatus()
 {
 	$context = new ZMQContext(1);
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$requester->connect(SocketConstants::MAILREQUESTS_ENDPOINT);
+	$requester->connect(SocketConstants::getMailRequestsEndPoint());
 	$requester->send('Show-Status-Console');
 	$r = $requester->recv();
 	printf($r);
@@ -140,11 +140,11 @@ class ParentSender
 		$context = $this->context;
 
 		$publisher = new ZMQSocket($context, ZMQ::SOCKET_PUB);
-		$publisher->bind(SocketConstants::PUB2CHILDREN_ENDPOINT);
+		$publisher->bind(SocketConstants::getPub2ChildrenEndPoint());
 		$this->di->set('publisher', $publisher);
 
 		$reply = new ZMQSocket($context, ZMQ::SOCKET_REP);
-		$reply->bind(SocketConstants::MAILREQUESTS_ENDPOINT);
+		$reply->bind(SocketConstants::getMailRequestsEndPoint());
 		$this->di->set('reply', $reply);
 	}
 
@@ -172,7 +172,7 @@ class ParentSender
 		$context = $this->context;
 		
 		$pull = new ZMQSocket($context, ZMQ::SOCKET_PULL);
-		$pull->bind(SocketConstants::PULLFROMCHILD_ENDPOINT);		
+		$pull->bind(SocketConstants::getPullFromChildEndPoint());		
 				
 		$reply = $this->di['reply'];
 		
