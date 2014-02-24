@@ -165,7 +165,7 @@ class Reportingcreator
 	
 	protected function getQueryForBouncedReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail . ", e.email, null, null, null, null, b.type, b.description, v.date
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'bounced', e.email, null, null, null, null, b.type, b.description, v.date
 					FROM mailevent AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
