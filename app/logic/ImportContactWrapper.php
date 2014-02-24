@@ -211,7 +211,7 @@ class ImportContactWrapper extends BaseWrapper
 		$newcontact = "UPDATE $this->tablename SET new = 1 WHERE idContact IS NULL AND blocked IS NULL";
 		
 		$db->begin();
-		
+		Phalcon\DI::getDefault()->get('logger')->log($tabletmp);
 		$db->execute($tabletmp);
 		
 		$db->execute($findidemailblocked);
