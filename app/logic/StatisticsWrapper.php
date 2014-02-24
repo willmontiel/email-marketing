@@ -389,11 +389,11 @@ class StatisticsWrapper extends BaseWrapper
 		}
 		
 		$phql = "SELECT ml.click, e.email, l.link
-				 FROM mxcxl AS ml
-					JOIN contact AS c ON (c.idContact = ml.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
-					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = :idMail:";
+				 FROM Mxcxl AS ml
+					JOIN Contact AS c ON (c.idContact = ml.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
+				 WHERE ml.idMail = :idMail: LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
 		$query = $manager->createQuery($phql);
 		Phalcon\DI::getDefault()->get('logger')->log('3');
