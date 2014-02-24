@@ -63,7 +63,7 @@ class Reportingcreator
 				break;
 			
 			case 'clicks':
-				$data = $this->getDataClicksReport();
+				$data = $this->getDataClicksReport($name, $dir);
 				$title = 'Reporte de clics sobre enlaces';
 				break;
 			
@@ -82,8 +82,7 @@ class Reportingcreator
 				break;
 		}
 		
-		if ($data !== false) {
-			$this->saveReport($data, $name, $dir);
+		if ($data) {
 			return $title;
 		}
 		return 'No hay valores para mostrar';
@@ -127,42 +126,35 @@ class Reportingcreator
 		return false;
 	}
 	
-	protected function getDataClicksReport()
+	protected function getDataClicksReport($name, $dir)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$sql = "SELECT e.email, v.date, l.link
-					FROM mailevent AS v 
-						JOIN contact AS c ON (c.idContact = v.idContact)
-						JOIN email AS e ON (c.idEmail = e.idEmail)
-						JOIN mxl AS m ON (m.idMail = v.idMail)
-						JOIN maillink AS l ON (l.idMailLink= m.idMailLink)
-					WHERE v.idMail = ? AND v.description = 'click'
-				GROUP BY l.idMailLink";
+		$phql = "SELECT $this->mail->idMail, 'clicks', e.email, l.link, ml.click
+				 FROM mxcxl AS ml
+					JOIN contact AS c ON (c.idContact = ml.idContact)
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
+				 WHERE ml.idMail = $this->mail->idMail";
 		
-		$result = $db->query($sql, array($this->mail->idMail));
-		$info = $result->fetchAll();
+		$sql = "INSERT INTO $this->tablename (idMail, reportType, email, link, date) VALUES ($phql)";
 		
-		$data = array();
-		if (count($info) > 0) {
-			foreach ($info as $i) {
-				$data[] = array(
-					'email' => $i['email'],
-					'date' => $i['date'],
-					'link' => $i['link']
-				);
-			}
-			$v = " ";
-
-			foreach ($data as $c) {
-				$v .= "(" . $this->mail->idMail . ", " . "'clicks'" . ", '" . $c['email'] . "', '" . $c['link'] . "', " .$c['date'] .")";
-			}
-
-			$values = str_replace(")(", "),(", $v);
-			$report = ' (idMail, reportType, email, link, date) VALUES ' . $values;
-			return $report;
+		$db->execute($sql);
+		
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, link 
+						FROM {$this->tablename}
+						INTO OUTFILE  '{$dir}{$name}'
+						FIELDS TERMINATED BY ','
+						ENCLOSED BY '\"'
+						LINES TERMINATED BY '\n'";
+			
+		
+		$ok = $db->execute($report);
+		
+		if (!$ok) {
+			throw new \InvalidArgumentException('Error while generting info in tmp db');
 		}
-		return false;
+		return true;
 	}
 	
 	protected function getDataUnsubscribedReport()

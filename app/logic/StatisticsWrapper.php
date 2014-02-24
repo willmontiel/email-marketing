@@ -230,8 +230,6 @@ class StatisticsWrapper extends BaseWrapper
 		$result1 = $db->query($sql1, array($idMail));
 		$total = $result1->fetch();
 		
-//		Phalcon\DI::getDefault()->get('logger')->log('Total: ' . print_r($total, true));
-		
 		$sql = "SELECT v.idContact, v.userAgent, v.date, e.email 
 					FROM mailevent AS v
 						JOIN contact as c ON (c.idContact = v.idContact)
@@ -239,69 +237,41 @@ class StatisticsWrapper extends BaseWrapper
 					WHERE v.idMail = ? AND (v.description = 'opening' OR v.description = 'opening for click')";
 		
 		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-//		Phalcon\DI::getDefault()->get('logger')->log('Sql: ' . $sql);
 		$result = $db->query($sql, array($idMail));
 		$info = $result->fetchAll();
-//		Phalcon\DI::getDefault()->get('logger')->log('Info: ' . print_r($info, true));
+
 		$opencontact = array();
-		
-		foreach ($info as $i) {
-//			Phalcon\DI::getDefault()->get('logger')->log('email: ' . $i['email']);
-			$opencontact[] = array(
-				'id' => $i['idContact'],
-				'email' => $i['email'],
-				'date' => date('Y-m-d H:i', $i['date']),
-				'os' => $i['userAgent']
-			);
-		}
-//		Phalcon\DI::getDefault()->get('logger')->log('contact: ' . print_r($opencontact, true));
 		$opens = array();
-		$h1 = 1380657600;
-		$v1 = 3000;
-		$v2 = 2900;
 		
-		$opens[] = array(
-				'title' =>1380657600,
-				'value' => 50
-			);
-		
-		$opens[] = array(
-				'title' =>1380661200,
-				'value' => 34
-			);
-		
-		$opens[] = array(
-				'title' =>1387137600,
-				'value' => 68
-			);		
-		
-//		$opencontact[] = array(
-//			'id' => 100,
-//			'email' => 'recipient00001@test001.local.discardallmail.drh.net',
-//			'date' => date('Y-m-d', 1386687891),
-//			'os' => 'Ubuntu'
-//		);
-//		
-//		$opencontact[] = array(
-//			'id' => 145,
-//			'email' => 'recipient00002@test002.local.discardallmail.drh.net',
-//			'date' => date('Y-m-d',1386687891),
-//			'os' => 'Windows'
-//		);
-//		
-//		$opencontact[] = array(
-//			'id' => 161,
-//			'email' => 'recipient00003@test003.local.discardallmail.drh.net',
-//			'date' => date('Y-m-d',1386687891),
-//			'os' => 'Windows'
-//		);
-//		
-//		$opencontact[] = array(
-//			'id' => 199,
-//			'email' => 'recipient00003@test007.local.discardallmail.drh.net',
-//			'date' => date('Y-m-d',1386688891),
-//			'os' => 'Windows Phone'
-//		);
+		if (count($info) > 0) {
+				Phalcon\DI::getDefault()->get('logger')->log('Entra');
+			foreach ($info as $i) {
+				$opencontact[] = array(
+					'id' => $i['idContact'],
+					'email' => $i['email'],
+					'date' => date('Y-m-d H:i', $i['date']),
+					'os' => $i['userAgent']
+				);
+				
+				$openArray = array();
+				if (!isset($openArray[$i['date']])) {
+					$openArray[$i['date']] = array(
+						'title' => $i['date'],
+						'value' => 1
+					);
+				}
+				else {
+					$openArray[$i['date']]['value'] += 1;
+				}
+				
+				foreach ($openArray as $o) {
+					$opens[] = array (
+						'title' => $o['title'],
+						'value' => $o['value']
+					);
+				}
+			}
+		}
 		
 		$this->pager->setTotalRecords($total['t']);
 		
@@ -322,7 +292,7 @@ class StatisticsWrapper extends BaseWrapper
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		
 		/*
-		 * SQL para extraer información sobre los links en el correo
+		 * SQL para extraer los enlaces que se encontrarón en el correo
 		 */
 		$sqlForLinks = "SELECT m.idMailLink, m.totalClicks, l.link 
 				FROM mxl AS m 
@@ -335,11 +305,14 @@ class StatisticsWrapper extends BaseWrapper
 		$links = array();
 		$valueLinks = array();
 		$arrayLinks = array();
+		$info = array();
 		
 		if (count($total) > 0 ) {
 			foreach ($total as $t) {
 				$valueLinks[] = $t['link'];
-				
+				if ($t['totalClicks'] == null) {
+					$t['totalClicks'] = 0;
+				}
 				$links[] = array(
 					'link' => $t['link'],
 					'total' => $t['totalClicks'],
@@ -348,13 +321,16 @@ class StatisticsWrapper extends BaseWrapper
 				
 				$arrayLinks[$t['idMailLink']] = 0;
 			}
+			
+			$info[] = array(
+				'amount' => count($valueLinks),
+				'value' => $valueLinks
+			);
 		}
 		
-		$info[] = array(
-			'amount' => count($valueLinks),
-			'value' => $valueLinks
-		);
-		
+		/**
+		 * SQL para extraer los links y el total de clicks por cada uno
+		 */
 		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
 					FROM mxcxl AS m
 				 WHERE m.idMail = ?
@@ -364,6 +340,7 @@ class StatisticsWrapper extends BaseWrapper
 		$linkValues = $result2->fetchAll();
 		
 		$values = array();
+		$clicks = array();
 		if (count($linkValues) > 0 ) {
 			foreach ($linkValues as $l) {
 				if (!isset($values[$l['click']])) {
@@ -378,14 +355,13 @@ class StatisticsWrapper extends BaseWrapper
 					$values[$l['click']]['value'] = json_encode($a);
 				}
 			}
-		}
-		
-		$clicks = array();
-		foreach ($values as $value) {
-			$clicks[] = array(
-				'title' => $value['title'],
-				'value' => $value['value']
-			);
+			
+			foreach ($values as $value) {
+				$clicks[] = array(
+					'title' => $value['title'],
+					'value' => $value['value']
+				);
+			}
 		}
 		
 		$phql = "SELECT ml.click, e.email, l.link
@@ -396,12 +372,9 @@ class StatisticsWrapper extends BaseWrapper
 				 WHERE ml.idMail = :idMail: LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
 		$query = $manager->createQuery($phql);
-		Phalcon\DI::getDefault()->get('logger')->log('3');
 		$result = $query->execute(array(
 			'idMail' => $idMail
 		));
-		Phalcon\DI::getDefault()->get('logger')->log('4');
-//		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
 		$clickcontact = array();
 		if (count($result) > 0) {
