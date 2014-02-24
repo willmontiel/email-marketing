@@ -402,7 +402,7 @@ class StatisticsWrapper extends BaseWrapper
 		$info = $query->execute(array(
 			'idMail' => $idMail
 		));
-
+		Phalcon\DI::getDefault()->get('logger')->log('4');
 //		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
 		if (count($info) > 0) {
