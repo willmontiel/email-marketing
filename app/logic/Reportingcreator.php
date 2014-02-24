@@ -63,7 +63,7 @@ class Reportingcreator
 				break;
 			
 			case 'clicks':
-				$data = $this->getDataClicksReport($name, $dir);
+				$data = $this->saveClicksReportOnDisc($name, $dir);
 				$title = 'Reporte de clics sobre enlaces';
 				break;
 			
@@ -126,11 +126,11 @@ class Reportingcreator
 		return false;
 	}
 	
-	protected function getDataClicksReport($name, $dir)
+	protected function saveClicksReportOnDisc($name, $dir)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$phql = "SELECT 1, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
 				 FROM mxcxl AS ml
 					JOIN contact AS c ON (c.idContact = ml.idContact)
 					JOIN email AS e ON (e.idEmail = c.idEmail)
@@ -139,6 +139,7 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
+		Phalcon\DI::getDefault()->get('logger')->log('SQL: ' . $sql);
 		$db->execute($sql);
 		
 		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, link 
