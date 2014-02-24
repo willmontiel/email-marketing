@@ -250,7 +250,7 @@ class ContactsController extends ControllerBase
 	{
 		$this->view->disable();
 		$log = $this->logger;
-
+		$log->log('Proceso de Importacion');
 		$file = Importfile::findFirstByIdImportfile($idImportfile);
 		$nameFile = $file->internalName;
 		$header = $this->request->getPost('header');
@@ -261,16 +261,16 @@ class ContactsController extends ControllerBase
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		$customfields = Customfield::findByIdDbase($list->idDbase);
-		
+		$log->log('Casting de Campos');
 		foreach ($customfields as $field) {
 			$namefield= "campo".$field->idCustomField;
 			$fields[$field->idCustomField] = $this->request->getPost($namefield);
 		}
-
+		$log->log('Creacion de Destino');
 		$destiny =  "../../../tmp/ifiles/".$nameFile;
 		$idAccount = $this->user->account->idAccount;
 		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);
-	
+		$log->log('Abrir archivo original');
 		$open = fopen("../tmp/ifiles/".$nameFile, "r");
 		
 		if(!$open) {
@@ -291,7 +291,7 @@ class ContactsController extends ControllerBase
 				$linecount++;
 			}
 		}
-		
+		$log->log('Creacion de nuevo proceso');
 		$newproccess = new Importproccess();
 						
 		$newproccess->idAccount = $idAccount;
@@ -304,7 +304,7 @@ class ContactsController extends ControllerBase
 			$log->log('No se creo ningun proceso de importaction');
 			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
 		}		
-		
+		$log->log('Arreglo a enviar');
 		$arrayToSend = array(
 			'fields' => $fields,
 			'destiny' => $destiny,
@@ -320,7 +320,7 @@ class ContactsController extends ControllerBase
 		
 		
 		$context = new ZMQContext();
-
+		$log->log('Iniciara la conexion con ZMQ para la importacion de contactos');
 		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 		$requester->connect(SocketConstants::getImportProcessEndPoint());
 		$requester->send($toSend);
