@@ -113,7 +113,6 @@ class StatisticController extends ControllerBase
 		));
 
 		if ($mail) {
-			
 			try {
 				$createReport = new Reportingcreator($mail, $type);
 				$r = $createReport->createReport();

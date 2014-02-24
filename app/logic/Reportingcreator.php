@@ -167,12 +167,14 @@ class Reportingcreator
 	
 	protected function getQueryForBouncedReport($name, $dir)
 	{
-		$sql = "SELECT null, " . $this->mail->idMail . ", e.email, null, null, null, null, b.type, b.description, v.date
+		$phql = "SELECT null, " . $this->mail->idMail . ", e.email, null, null, null, null, b.type, b.description, v.date
 					FROM mailevent AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
 						JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
 				WHERE v.idMail = " . $this->mail->idMail . " AND v.description = 'bounced'";
+		
+		$sql = "INSERT INTO $this->tablename ($phql)";
 		
 		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, bouncedType, category
 						FROM {$this->tablename}
