@@ -36,7 +36,7 @@ class TrackingObject
 		));
 
 		if (!$this->mxc) {
-			throw new InvalidArgumentException("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
+			throw new Exception("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
 		}
 		$this->idMail = $idMail;
 		$this->idContact = $idContact;
@@ -93,7 +93,7 @@ class TrackingObject
 			}
 			$this->log->log('ya se contabilizó tracking');
 		}
-		catch (InvalidArgumentException $e) {
+		catch (Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
 			$this->rollbackTransaction();
 		}
@@ -401,7 +401,7 @@ class TrackingObject
 				break;
 
 			default :
-				throw new \InvalidArgumentException('Unknown bounced type');
+				throw new Exception('Unknown bounced type');
 				break;
 		}
 	}
@@ -511,7 +511,7 @@ class TrackingObject
 			$update = $db->execute($sql, array($contact->idEmail));
 			
 			if (!$update) {
-				throw new \InvalidArgumentException('Error while updating contact and email');
+				throw new Exception('Error while updating contact and email');
 			}
 			
 //			$dbase = Dbase::findFirst(array(
@@ -547,19 +547,19 @@ class TrackingObject
 
 				$statdbase = $this->updateStatDbase($idContact, $idMail, 'spam');
 				if (!$statdbase) {
-					throw new \InvalidArgumentException('Error while updating statdbase');
+					throw new Exception('Error while updating statdbase');
 				}
 				$this->log->log('Se actualizó statDbase');
 
 				$statcontactlist = $this->updateStatContactLists($mxc, 'spam');
 				if (!$statcontactlist) {
-					throw new \InvalidArgumentException('Error while updating statcontactlist');
+					throw new Exception('Error while updating statcontactlist');
 				}
 				$this->log->log('Se actualizó statContactlist');
 
 				$mailEvent = $this->saveMailEvent($idMail, $idContact, 'spam', null, null, $cod, $date);
 				if (!$mailEvent) {
-					throw new \InvalidArgumentException('Error while saving event');
+					throw new Exception('Error while saving event');
 				}
 				$this->log->log('Se actualizó event');
 				$contact = Contact::findFirst(array(
@@ -574,7 +574,7 @@ class TrackingObject
 				$update = $db->execute($sql, array($contact->idEmail));
 
 				if (!$update) {
-					throw new \InvalidArgumentException('Error while updating spam in contact and email');
+					throw new Exception('Error while updating spam in contact and email');
 				}
 
 				$this->log->log('Se actualizó contact y email');
@@ -591,29 +591,6 @@ class TrackingObject
 		}
 	}
 
-	private function saveMailEvent($idMail, $idContact, $description, $userAgent = null, $location = null, $cod = null, $date = null)
-	{
-		if ($date == null) {
-			$date = time();
-		}
-		$event = new Mailevent();
-		$event->idMail = $idMail;
-		$event->idContact = $idContact;
-		$event->idBouncedCode = $cod;
-		$event->description = $description;
-		$event->userAgent = $userAgent;
-		$event->location = $location;
-		$event->date = $date;
-
-		if (!$event->save()) {
-			foreach ($event->getMessages() as $msg) {
-				$this->log->log('Error : '. $msg);
-			}
-			return false;
-		}
-		return true;
-	}
-	
 	public function insertGoogleAnalyticsUrl($link)
 	{
 		$content = Mailcontent::findFirst(array(
