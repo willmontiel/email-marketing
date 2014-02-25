@@ -105,7 +105,7 @@ class ChildCommunication extends BaseWrapper
 					$log->log('No se pudo actualizar el estado del MAIL');
 				}				
 				
-				$i = 1;
+				$i = 0;
 				$sentContacts = array();
 				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
 				foreach ($contactIterator as $contact) {
