@@ -105,9 +105,9 @@ class TrackController extends ControllerBase
 			try {
 				$trackingObj = new TrackingObject();
 				$trackingObj->setSendIdentification($ids[0], $ids[1]);
-				$trackingObj->updateTrackBounced($type, $code, $date);
+				$trackingObj->updateTrackMta($type, $code, $date);
 			}
-			catch (InvalidArgumentException $e) {
+			catch (Exception $e) {
 				$this->logger->log('Va a ocurrir una excepción');
 				$this->logger->log('Exception: [' . $e . ']');
 				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Invalid Argument Exception'));

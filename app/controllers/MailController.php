@@ -9,13 +9,17 @@ class MailController extends ControllerBase
 		
 		$idAccount = $this->user->account->idAccount;
 		
-		$paginator = new \Phalcon\Paginator\Adapter\Model(
-			array(
-				"data"  => Mail::find("idAccount = $idAccount"),
-				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
-				"page"  => $currentPage
-			)
-		);
+
+		$builder = $this->modelsManager->createBuilder()
+			->from('Mail')
+			->where("idAccount = $idAccount")
+			->orderBy('createdon');
+
+		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			"builder"  => $builder,
+			"limit"=> PaginationDecorator::DEFAULT_LIMIT,
+			"page"  => $currentPage
+		));
 		
 		$page = $paginator->getPaginate();
 		

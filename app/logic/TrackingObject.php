@@ -381,7 +381,7 @@ class TrackingObject
 	 * ==========================================================================================
 	 */
 	
-	public function updateTrackBounced($type, $cod, $date)
+	public function updateTrackMta($type, $cod, $date)
 	{
 		switch ($type) {
 			case 'bounce_all':
@@ -395,9 +395,8 @@ class TrackingObject
 				break;
 
 			case 'scomp':
-				if ($this->canTrackSpamEvent()) {
-					$this->saveSpamEvent($cod, $date);
-				}
+				$this->log->log('Inicio de tracking de spam');
+				$this->trackSpamEvent($cod, $date);
 				break;
 
 			default :
@@ -414,7 +413,7 @@ class TrackingObject
 				$this->mxc->spam == 0 && 
 				$this->mxc->status == 'sent') {
 			return true;
-			$this->log->log('Validación declinada');
+			$this->log->log('Validación aceptada');
 		}
 		$this->log->log('Validacion declinada');
 		return false;
@@ -426,23 +425,22 @@ class TrackingObject
 				$this->mxc->bounced > 0 && 
 				$this->mxc->spam == 0 && 
 				$this->mxc->status == 'sent') {
+				$this->log->log('Validación aceptada');
 			return true;
 		}
+		$this->log->log('Validación declinada');
 		return false;
 	}
 	
 	private function canTrackSpamEvent()
 	{
-		$event = Mailevent::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idContact = ?2 AND description = ?3',
-			'bind' => array(1 => $this->idMail,
-							2 => $this->idContact,
-							3 => 'bounced')
-		));
-		
-		if ($event) {
+		if ($this->mxc->bounced == 0 && 
+				$this->mxc->spam == 0 && 
+				$this->mxc->status == 'sent') {
+			$this->log->log('Validación aceptada');
 			return true;
 		}
+		$this->log->log('Validación declinada');
 		return false;
 	}
 	
@@ -486,7 +484,7 @@ class TrackingObject
 			}
 			$this->log->log('ya se contabilizó bounced tracking');
 		}
-		catch (InvalidArgumentException $e) {
+		catch (Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
 			$this->rollbackTransaction();
 		}
@@ -496,12 +494,17 @@ class TrackingObject
 	{
 		$this->log->log('Inicio de tracking de rebote duro');
 		if ($this->canTrackHardBounceEvent()) {
+			$this->log->log('Es válido');
 			$db = Phalcon\DI::getDefault()->get('db');
 			
 			$contact = Contact::findFirst(array(
 				'conditions' => 'idContact = ?1',
 				'bind' => array(1 => $this->idContact)
 			));
+			
+			if (!$contact) {
+				throw new Exception('contact not found!');
+			}
 			
 			$sql = 'UPDATE email AS e JOIN contact AS c
 						ON (c.idEmail = e.idEmail)
@@ -514,80 +517,85 @@ class TrackingObject
 				throw new Exception('Error while updating contact and email');
 			}
 			
-//			$dbase = Dbase::findFirst(array(
-//				'conditions' => 'idDbase = ?1',
-//				'bind' => array(1 => $contact->idDbase)
-//			));
-//			if ($dbase) {
-//				$this->log->log('Se encontró dbase');
-//			}
-//			$dbase->updateCountersInDbase();
+			$dbase = Dbase::findFirst(array(
+				'conditions' => 'idDbase = ?1',
+				'bind' => array(1 => $contact->idDbase)
+			));
+			
+			if (!$dbase) {
+				throw new Exception('dbase not found!');
+			}
+			$dbase->updateCountersInDbase();
+			
+			$this->log->log('Se actualizó rebote duro');
 		}
 	}
 
-	private function saveSpamEvent($idMail, $idContact, $cod, $date)
+	private function trackSpamEvent($cod, $date)
 	{
-		$this->log->log('Inicio de tracking de spam');
-
-		$mxc = Mxc::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idContact = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $idContact)
-		));
-
-		if ($mxc && ($mxc->bounced == 0 && $mxc->spam == 0 && $mxc->status == 'sent')) {
-			$db = Phalcon\DI::getDefault()->get('db');
-			try {
-				$db->begin();
-				$this->updateMxcStat($mxc, 'spam');
-				$this->log->log('Se actualizó mxc');
-
-				$mail = $this->updateMailStat($idMail, 'spam');
-				$this->log->log('Se actualizó Mail');
-
-				$statdbase = $this->updateStatDbase($idContact, $idMail, 'spam');
-				if (!$statdbase) {
-					throw new Exception('Error while updating statdbase');
+		try {
+			if ($this->canTrackSpamEvent()) {
+				$this->startTransaction();
+				$this->mxc->spam = $date;
+				$this->addDirtyObject($this->mxc);
+				$this->log->log('Se agregó mxc');
+				
+				$mailObj = $this->findRelatedMailObject();
+				$mailObj->incrementSpam();
+				$this->addDirtyObject($mailObj);
+				$this->log->log('Se agregó mail');
+				
+				$statDbaseObj = $this->findRelatedDbaseStatObject();
+				$statDbaseObj->incrementSpam();
+				$this->addDirtyObject($statDbaseObj);
+				$this->log->log('Se agregó statDbase');
+				
+				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
+					$statListObj->incrementSpam();
+					$this->addDirtyObject($statListObj);
+					$this->log->log('Se agregó un statContactlist');
 				}
-				$this->log->log('Se actualizó statDbase');
-
-				$statcontactlist = $this->updateStatContactLists($mxc, 'spam');
-				if (!$statcontactlist) {
-					throw new Exception('Error while updating statcontactlist');
-				}
-				$this->log->log('Se actualizó statContactlist');
-
-				$mailEvent = $this->saveMailEvent($idMail, $idContact, 'spam', null, null, $cod, $date);
-				if (!$mailEvent) {
-					throw new Exception('Error while saving event');
-				}
-				$this->log->log('Se actualizó event');
+				
+				$event = $this->createNewMailEvent();
+				$event->idBouncedCode = $cod;
+				$event->description = 'spam';
+				$event->userAgent = null;
+				$event->date = $date;
+				$this->addDirtyObject($event);
+				$this->log->log('Se agregó event');
+				
+				$db = Phalcon\DI::getDefault()->get('db');
+				
 				$contact = Contact::findFirst(array(
 					'conditions' => 'idContact = ?1',
-					'bind' => array(1 => $idContact)
+					'bind' => array(1 => $this->idContact)
 				));
-
+				
+				if (!$contact) {
+					throw new Exception('contact not found!');
+				}	
+				
 				$sql = 'UPDATE email AS e JOIN contact AS c
-							ON (c.idEmail = e.idEmail)
-							SET e.spam = ' . $date . ', c.spam = ' . $date . ', c.unsubscribed = ' . $date . '
-						WHERE e.idEmail = ?';
+						ON (c.idEmail = e.idEmail)
+						SET e.spam = ' . $date . ', c.spam = ' . $date . ', c.unsubscribed = ' . $date . '
+					WHERE e.idEmail = ?';
+				
 				$update = $db->execute($sql, array($contact->idEmail));
-
+				
 				if (!$update) {
 					throw new Exception('Error while updating spam in contact and email');
 				}
 
 				$this->log->log('Se actualizó contact y email');
-
-				$db->commit();
-			}
-			catch (InvalidArgumentException $e) {
-				$this->log->log('Excepcion, realizando ROLLBACK: '. $e);
-				$db->rollback();
+				
+				$this->log->log('Preparandose para guardar');
+				$this->flushChanges();
+				$this->log->log('Se guardó con exito');
 			}
 		}
-		else {
-			$this->log->log('No existe registro o ya ha sido marcado anteriormente');
+		catch (Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->rollbackTransaction();
 		}
 	}
 
