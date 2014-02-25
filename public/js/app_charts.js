@@ -54,7 +54,7 @@ function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) 
 				graph.lineColor = "#000000";
 				graph.fillColors = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length === 6) ?  lor : co(lor); })('');
 				graph.fillAlphas = 0.7;
-				graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0][index] + " en [[category]]:<b>[[value]]</b></span>";
+				graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0].value[index] + " en [[category]]:<b>[[value]]</b></span>";
 				chart.addGraph(graph);
 			}
 		}
