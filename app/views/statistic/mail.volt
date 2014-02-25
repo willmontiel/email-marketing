@@ -41,8 +41,12 @@
 		{%endfor%}
 		
 		AmCharts.ready(function () {
-			chart = createPieChart(chartData);	
-			chart.write('summaryChart');
+			var chart = createPieChart(chartData);	
+			try{
+				chart.write('summaryChart');
+			}catch(err){
+				console.log(err.message);
+			}
 			$("select").select2();
 		});
 		
