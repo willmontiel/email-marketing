@@ -580,8 +580,8 @@ class StatisticsWrapper extends BaseWrapper
 			
 			foreach ($values as $v) {
 				$x = array(
-					0 => $v[0],
-					1 => $v[1]
+					'hard' => $v[0],
+					'soft' => $v[1]
 				);
 				if (count($bounced) == 0) {
 					$bounced[0]['title'] = $v['date'];
@@ -605,7 +605,7 @@ class StatisticsWrapper extends BaseWrapper
 		if (count($bouncedTypes) > 0) {
 			foreach ($bouncedTypes as $b) {
 				if (!in_array($b->type, $valueType)) {
-					$valueType[] = $b->type;
+					$valueType[$b->type] = ucfirst($b->type);
 				}
 				$valueCategory[] = $b->description;
 			}
