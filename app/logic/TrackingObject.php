@@ -385,10 +385,12 @@ class TrackingObject
 	{
 		switch ($type) {
 			case 'bounce_all':
+				$this->log->log('Inicio de tracking de rebote suave');
 				$this->trackSoftBounceEvent($cod, $date);
 				break;
 
 			case 'bounce_bad_address':
+				$this->log->log('Inicio de tracking de rebote duro');
 				$this->trackHardBounceEvent($date);
 				break;
 
@@ -412,7 +414,9 @@ class TrackingObject
 				$this->mxc->spam == 0 && 
 				$this->mxc->status == 'sent') {
 			return true;
+			$this->log->log('Validación declinada');
 		}
+		$this->log->log('Validacion declinada');
 		return false;
 	}
 	
@@ -450,18 +454,22 @@ class TrackingObject
 				$this->startTransaction();
 				$this->mxc->bounced = $date;
 				$this->addDirtyObject($this->mxc);
+				$this->log->log('Se agregó mxc');
 				
 				$mailObj = $this->findRelatedMailObject();
 				$mailObj->incrementBounced();
 				$this->addDirtyObject($mailObj);
+				$this->log->log('Se agregó mail');
 				
 				$statDbaseObj = $this->findRelatedDbaseStatObject();
 				$statDbaseObj->incrementBounced();
 				$this->addDirtyObject($statDbaseObj);
+				$this->log->log('Se agregó statDbase');
 				
 				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
 					$statListObj->incrementBounced();
 					$this->addDirtyObject($statListObj);
+					$this->log->log('Se agregó un statContactlist');
 				}
 				
 				$event = $this->createNewMailEvent();
@@ -470,8 +478,11 @@ class TrackingObject
 				$event->userAgent = null;
 				$event->date = $date;
 				$this->addDirtyObject($event);
+				$this->log->log('Se agregó event');
 				
+				$this->log->log('Preparandose para guardar');
 				$this->flushChanges();
+				$this->log->log('Se guardó con exito');
 			}
 			$this->log->log('ya se contabilizó bounced tracking');
 		}
@@ -489,47 +500,29 @@ class TrackingObject
 			
 			$contact = Contact::findFirst(array(
 				'conditions' => 'idContact = ?1',
-				'bind' => array(1 => $idContact)
+				'bind' => array(1 => $this->idContact)
 			));
 			
 			$sql = 'UPDATE email AS e JOIN contact AS c
 						ON (c.idEmail = e.idEmail)
 						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
 					WHERE e.idEmail = ?';
-
-		}
-		
-	
-			
-			
 			
 			$update = $db->execute($sql, array($contact->idEmail));
-
-			$dbase = Dbase::findFirst(array(
-				'conditions' => 'idDbase = ?1',
-				'bind' => array(1 => $contact->idDbase)
-			));
-////
-			if ($dbase) {
-				$this->log->log('Se encontró dbase');
-			}
-
-//			$mxc = Mxc::findFirst(array(
-//				'conditions' => 'idMail = ?1 AND idContact = ?2',
-//				'bind' => array(1 => $idMail,
-//								2 => $idContact)
-//			));
-//			$list->updateCountersInContactlist();
-			$this->log->log('Preparando para actualizar contact y email');
+			
 			if (!$update) {
 				throw new \InvalidArgumentException('Error while updating contact and email');
 			}
-			$this->log->log('Se actualizó contact y email');
-
-			$this->log->log('Preparando actualizacion de contadores de dbase');
-			$dbase->updateCountersInDbase();
-			$this->log->log('Parece que actualizó');
-		
+			
+//			$dbase = Dbase::findFirst(array(
+//				'conditions' => 'idDbase = ?1',
+//				'bind' => array(1 => $contact->idDbase)
+//			));
+//			if ($dbase) {
+//				$this->log->log('Se encontró dbase');
+//			}
+//			$dbase->updateCountersInDbase();
+		}
 	}
 
 	private function saveSpamEvent($idMail, $idContact, $cod, $date)

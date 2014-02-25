@@ -95,7 +95,7 @@ class TrackController extends ControllerBase
 			$type = $c['event_type'];
 			$code = $c['bounce_code'];
 			$date = $c['event_time'];
-			$this->logger->log('Empezó track de bounced evento: ' . $i);
+			$this->logger->log('Empezó track de evento: ' . $i);
 //			$this->logger->log('idMail: ' . $ids[0]);
 //			$this->logger->log('idContact: ' . $ids[1]);
 //			$this->logger->log('type: ' . $type);
