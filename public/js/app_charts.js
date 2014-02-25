@@ -1,3 +1,36 @@
+function createPieChart(chartData) {
+	var chart = new AmCharts.AmPieChart();
+	chart.dataProvider = chartData;
+	chart.titleField = "title";
+	chart.valueField = "value";
+
+	chart.colors = ["#8CC079", "#953B39", "#8C8689"];
+	
+	chart.sequencedAnimation = true;
+	chart.startEffect = "easeOutSine";
+	chart.innerRadius = "40%";
+	chart.startDuration = 1;
+	chart.labelRadius = -35;
+	chart.labelText = "[[percents]]%";
+	chart.balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
+	// this makes the chart 3D
+	chart.depth3D = 0;
+	chart.angle = 0;
+	chart.marginLeft = -80;
+	
+	// LEGEND
+	var legend = new AmCharts.AmLegend();
+	legend.align = "center";
+	legend.markerType = "circle";
+	legend.switchType = "v";
+	legend.labelText = "[[title]]";
+	legend.markerLabelGap = 7;
+	legend.valueText = "";
+	chart.addLegend(legend);
+	
+	return chart;
+}
+
 function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) {
 	if(chart === undefined || chart === null) {
 		chart = new AmCharts.AmSerialChart();
@@ -11,8 +44,7 @@ function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) 
 	categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
 	categoryAxis.minPeriod = minPeriod; // our data is daily, so we set minPeriod to DD
 	categoryAxis.axisColor = "#DADADA";
-	
-	if(multVal !== undefined || multVal !== null) {
+	if(multVal !== undefined && multVal !== null) {
 		for (var index in chartData[0]) {
 			if(multVal[0].value[index] !== undefined) {
 				var graph = new AmCharts.AmGraph();
@@ -47,39 +79,6 @@ function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) 
 	return chart;
 }
 
-function createPieChart(chartData) {
-	var chart = new AmCharts.AmPieChart();
-	chart.dataProvider = chartData;
-	chart.titleField = "title";
-	chart.valueField = "value";
-
-	chart.colors = ["#8CC079", "#953B39", "#8C8689"];
-	
-	chart.sequencedAnimation = true;
-	chart.startEffect = "easeOutSine";
-	chart.innerRadius = "40%";
-	chart.startDuration = 1;
-	chart.labelRadius = -35;
-	chart.labelText = "[[percents]]%";
-	chart.balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
-	// this makes the chart 3D
-	chart.depth3D = 0;
-	chart.angle = 0;
-	chart.marginLeft = -80;
-	
-	// LEGEND
-	var legend = new AmCharts.AmLegend();
-	legend.align = "center";
-	legend.markerType = "circle";
-	legend.switchType = "v";
-	legend.labelText = "[[title]]";
-	legend.markerLabelGap = 7;
-	legend.valueText = "";
-	chart.addLegend(legend);
-	
-	return chart;
-}
-
 function createLineChart(chart, chartData, dateFormat, minPeriod, text, multVal) {
 	if(chart === undefined || chart === null) {
 		chart = new AmCharts.AmSerialChart();
@@ -105,22 +104,24 @@ function createLineChart(chart, chartData, dateFormat, minPeriod, text, multVal)
 	chart.addValueAxis(valueAxis);
 	
 	// GRAPH
-	if(multVal !== undefined || multVal !== null) {
+	if(multVal !== undefined && multVal !== null) {
 		for (var index in chartData[0]) {
-			var graph = new AmCharts.AmGraph();
-			graph.valueField = index;
-			graph.type = "line";
-			graph.bullet = "round";
-			graph.bulletColor = "#FFFFFF";
-			graph.useLineColorForBulletBorder = true;
-			graph.bulletBorderAlpha = 1;
-			graph.bulletBorderThickness = 2;
-			graph.bulletSize = 7;
-			graph.title = text + ' ' + multVal[0].value[index];
-			graph.lineThickness = 2;
-			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length === 6) ?  lor : co(lor); })('');
-			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0].value[index] + " de [[category]]:<b>[[value]]</b></span>";
-			chart.addGraph(graph);
+			if(multVal[0].value[index] !== undefined) {
+				var graph = new AmCharts.AmGraph();
+				graph.valueField = index;
+				graph.type = "line";
+				graph.bullet = "round";
+				graph.bulletColor = "#FFFFFF";
+				graph.useLineColorForBulletBorder = true;
+				graph.bulletBorderAlpha = 1;
+				graph.bulletBorderThickness = 2;
+				graph.bulletSize = 7;
+				graph.title = text + ' ' + multVal[0].value[index];
+				graph.lineThickness = 2;
+				graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length === 6) ?  lor : co(lor); })('');
+				graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0].value[index] + " de [[category]]:<b>[[value]]</b></span>";
+				chart.addGraph(graph);
+			}
 		}
 	}
 	else {
@@ -186,15 +187,17 @@ function createLineStepChart(chart, chartData, dateFormat, minPeriod, text, mult
 	chart.addValueAxis(valueAxis);
 
 	// GRAPH
-	if(multVal !== undefined || multVal !== null) {
+	if(multVal !== undefined && multVal !== null) {
 		for (var index in chartData[0]) {
-			var graph = new AmCharts.AmGraph();
-			graph.valueField = index;
-			graph.type = "step";
-			graph.title = text + ' ' + multVal[0].value[index];
-			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length === 6) ?  lor : co(lor); })('');
-			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0].value[index] + " en [[category]]:<b>[[value]]</b></span>";
-			chart.addGraph(graph);
+			if(multVal[0].value[index] !== undefined) {
+				var graph = new AmCharts.AmGraph();
+				graph.valueField = index;
+				graph.type = "step";
+				graph.title = text + ' ' + multVal[0].value[index];
+				graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length === 6) ?  lor : co(lor); })('');
+				graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0].value[index] + " en [[category]]:<b>[[value]]</b></span>";
+				chart.addGraph(graph);
+			}
 		}
 	}
 	else {

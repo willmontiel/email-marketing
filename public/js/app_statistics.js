@@ -3,7 +3,7 @@ App = Ember.Application.create({
 });
 
 DS.RESTAdapter.reopen({
-	namespace: MyDbaseUrl,
+	namespace: MyDbaseUrl
 });
 
 App.Store = DS.Store.extend({});
@@ -17,39 +17,39 @@ Ember.RadioButton = Ember.View.extend({
     type : "radio",
     attributeBindings : [ "name", "type", "value", "checked:checked:" ],
     click : function() {
-        this.set("selection", this.$().val())
+        this.set("selection", this.$().val());
     },
     checked : function() {
-        return this.get("value") == this.get("selection");   
+        return this.get("value") === this.get("selection");   
     }.property()
 });
 
 App.Drilldownopen = DS.Model.extend({
 	details: DS.attr('string'),
-	statistics: DS.attr('string'),
+	statistics: DS.attr('string')
 });
 
 App.Drilldownclick = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string'),
 	links: DS.attr('string'),
-	multvalchart: DS.attr('string'),
+	multvalchart: DS.attr('string')
 });
 
 App.Drilldownunsubscribed = DS.Model.extend({
 	details: DS.attr('string'),
-	statistics: DS.attr('string'),
+	statistics: DS.attr('string')
 });
 
 App.Drilldownbounced = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string'),
-	multvalchart: DS.attr('string'),
+	multvalchart: DS.attr('string')
 });
 
 App.Drilldownspam = DS.Model.extend({
 	details: DS.attr('string'),
-	statistics: DS.attr('string'),
+	statistics: DS.attr('string')
 });
 
 App.Router.map(function() {
@@ -58,7 +58,7 @@ App.Router.map(function() {
 	  this.route('clicks'),
 	  this.route('unsubscribed'),
 	  this.route('spam'),
-	  this.route('bounced')
+	  this.route('bounced');
   });
 });
 
@@ -192,12 +192,12 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 		var link = this.get('linkSelected');
 		var links = this.get('allDetailsData');
 		var objArray = [];
-		if(link == 'Todos') {
+		if(link === 'Todos') {
 			objArray = links;
 		}
 		else {
 			for(var i = 0; i < links.length; i++) {
-				if(links[i].link == link) {
+				if(links[i].link === link) {
 					objArray.push(links[i]);
 		}
 			}
@@ -253,29 +253,29 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		this.set('typeSelected', null);
 	},
 	typeSelectChange: function () {	
-		var bouncedType = (this.get('typeSelected') != undefined) ? this.get('typeSelected') : 'Todos';
+		var bouncedType = (this.get('typeSelected') !== undefined) ? this.get('typeSelected') : 'Todos';
 		var filter = this.get('bouncedFilter');
 		var data = this.get('allDetailsData');
 		var objArray = [];
-		if(bouncedType == 'Todos') {
+		if(bouncedType === 'Todos') {
 			objArray = data;
 		}
 		else {
 			for(var i = 0; i < data.length; i++) {
 				switch (filter) {
 					case 'category':
-						if(data[i].category == bouncedType) {
+						if(data[i].category === bouncedType) {
 							objArray.push(data[i]);
 						}
 						break;
 					case 'domain':
-						if(data[i].domain == bouncedType) {
+						if(data[i].domain === bouncedType) {
 							objArray.push(data[i]);
 						}
 						break;
 					case 'type':
 					default:
-						if(data[i].type == bouncedType) {
+						if(data[i].type === bouncedType) {
 							objArray.push(data[i]);
 						}
 						break;
@@ -323,15 +323,11 @@ App.TimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
 	chart: null,
 	didInsertElement:function(){
-
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
-
 		var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM');
-		
-		if(this.text == null) {
+		if(this.text === undefined || this.text === null) {
 			this.text = this.textChart;
 		}
-		
 		if(this.typeChart === 'Pie') {
 			chart = createPieChart(chartData);
 		}
@@ -344,8 +340,11 @@ App.TimeGraphView = Ember.View.extend({
 		else if(this.typeChart === 'LineStep') {
 			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
 		}
-
-		chart.write(this.idChart);
+		try{
+			chart.write(this.idChart);
+		}catch(err){
+			console.log(err.message);
+		}
 	},
 			
 	changeScale: function()	{
@@ -366,22 +365,17 @@ App.TimeGraphView = Ember.View.extend({
 				chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
 				break;
 		}
-
 		chart.validateData();
 		chart.animateAgain();
-		
-	}.observes('App.scaleSelected'),		
+	}.observes('App.scaleSelected')		
 			
 });
 
-function createChartData(totalData, multVal, format) {
-	
+function createChartData(totalData, multVal, format) {	
 	var newData = [];
 	var result = [];
-	
 	for(var i = 0; i < totalData.length; i++) {
-		
-		if(multVal == undefined || multVal == null) {
+		if(multVal === undefined || multVal === null) {
 			if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
 				newData[(moment.unix(totalData[i].title)).format(format)] = 0;
 			}
@@ -391,9 +385,6 @@ function createChartData(totalData, multVal, format) {
 			var values = JSON.parse(totalData[i].value);
 			if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
 				newData[(moment.unix(totalData[i].title)).format(format)] = [];
-//				for(var j = 0; j < multVal[0].amount; j++) {
-//					newData[(moment.unix(totalData[i].title)).format(format)][j] = 0;
-//				}
 				for (var index in values) {
 					newData[(moment.unix(totalData[i].title)).format(format)][index] = 0;
 				}
@@ -401,9 +392,6 @@ function createChartData(totalData, multVal, format) {
 			for (var index in values) {
 				newData[(moment.unix(totalData[i].title)).format(format)][index]+= parseInt(values[index]);
 			}
-//			for(var j = 0; j < multVal[0].amount; j++) {
-//				newData[(moment.unix(totalData[i].title)).format(format)][j]+= values[j];
-//			}
 		}
 	}
 	
@@ -411,13 +399,10 @@ function createChartData(totalData, multVal, format) {
 		if(newData.hasOwnProperty(key)) {
 			var obj = new Object();
 			obj.title = '' + key;
-			if(multVal == undefined || multVal == null) {
+			if(multVal === undefined || multVal === null) {
 				obj.value = '' + newData[key];
 			}
 			else {
-//				for(var j = 0; j < multVal[0].amount; j++) {
-//					obj['value' + j] = '' + newData[key][j];
-//				}
 				for (var index in values) {
 					obj[index] = '' + newData[key][index];
 				}
