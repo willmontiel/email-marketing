@@ -96,16 +96,22 @@ class TrackController extends ControllerBase
 			$code = $c['bounce_code'];
 			$date = $c['event_time'];
 			$this->logger->log('Empezó track de evento: ' . $i);
-//			$this->logger->log('idMail: ' . $ids[0]);
-//			$this->logger->log('idContact: ' . $ids[1]);
-//			$this->logger->log('type: ' . $type);
-//			$this->logger->log('code: ' . $code);
-//			$this->logger->log('date: ' . $date);
-			
 			try {
 				$trackingObj = new TrackingObject();
 				$trackingObj->setSendIdentification($ids[0], $ids[1]);
-				$trackingObj->updateTrackMta($type, $code, $date);
+				switch ($c['event_type']) {
+					case 'bounce_all':
+						$trackingObj->trackSoftBounceEvent($c['bounce_code'], $date);
+						break;
+					case 'bounce_bad_address':
+						$trackingObj->trackHardBounceEvent($date);
+						break;
+					case 'scomp':
+						$trackingObj->trackSpamEvent($c['bounce_code'], $date);
+						break;
+				}
+				$this->logger->log('Update funciono para : ' . $ids[0] . ', ' . $ids[1]);
+				
 			}
 			catch (Exception $e) {
 				$this->logger->log('Va a ocurrir una excepción');

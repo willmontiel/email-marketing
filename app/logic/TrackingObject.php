@@ -380,32 +380,6 @@ class TrackingObject
 	 * Inicio tracking de bounced
 	 * ==========================================================================================
 	 */
-	
-	public function updateTrackMta($type, $cod, $date)
-	{
-		switch ($type) {
-			case 'bounce_all':
-				$this->log->log('Inicio de tracking de rebote suave');
-				$this->trackSoftBounceEvent($cod, $date);
-				break;
-
-			case 'bounce_bad_address':
-				$this->log->log('Inicio de tracking de rebote duro');
-				$this->trackHardBounceEvent($date);
-				break;
-
-			case 'scomp':
-				$this->log->log('Inicio de tracking de spam');
-				$this->trackSpamEvent($cod, $date);
-				break;
-
-			default :
-				throw new Exception('Unknown bounced type');
-				break;
-		}
-	}
-
-
 	private function canTrackSoftBounceEvent()
 	{
 		if ($this->mxc->opening == 0 && 
@@ -445,7 +419,7 @@ class TrackingObject
 	}
 	
 	
-	private function trackSoftBounceEvent($cod, $date)
+	public function trackSoftBounceEvent($cod, $date)
 	{
 		try {
 			if ($this->canTrackSoftBounceEvent()) {
@@ -490,33 +464,47 @@ class TrackingObject
 		}
 	}
 
-	private function trackHardBounceEvent($date)
+	public function trackHardBounceEvent($date)
 	{
 		$this->log->log('Inicio de tracking de rebote duro');
 		if ($this->canTrackHardBounceEvent()) {
+			
+//			$this->startTransaction();
+			
 			$this->log->log('Es válido');
-			$db = Phalcon\DI::getDefault()->get('db');
+//			$db = Phalcon\DI::getDefault()->get('db');
 			
-			$contact = Contact::findFirst(array(
-				'conditions' => 'idContact = ?1',
-				'bind' => array(1 => $this->idContact)
-			));
+//			$contact = Contact::findFirst(array(
+//				'conditions' => 'idContact = ?1',
+//				'bind' => array(1 => $this->mxc->idContact)
+//			));
+//			$contact = $this->mxc->contact;
+//			
+//			if (!$contact) {
+//				$this->rollbackTransaction();
+//				throw new Exception('contact not found!');
+//			}
+//			
+//			$contact->bounced = $date;
+//			$contact->email->bounced = $date;
+//
+//			$this->addDirtyObject($contact);
+//			$this->addDirtyObject($contact->email);
 			
-			if (!$contact) {
-				throw new Exception('contact not found!');
-			}
+//			$sql = 'UPDATE email AS e JOIN contact AS c
+//						ON (c.idEmail = e.idEmail)
+//						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
+//					WHERE e.idEmail = ?';
+//			
+//			$update = $db->execute($sql, array($contact->idEmail));
+//			
+//			if (!$update) {
+//				$this->rollbackTransaction();
+//				throw new Exception('Error while updating contact and email');
+//			}
 			
-			$sql = 'UPDATE email AS e JOIN contact AS c
-						ON (c.idEmail = e.idEmail)
-						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
-					WHERE e.idEmail = ?';
-			
-			$update = $db->execute($sql, array($contact->idEmail));
-			
-			if (!$update) {
-				throw new Exception('Error while updating contact and email');
-			}
-			
+//			$this->flushChanges();
+//
 //			$dbase = Dbase::findFirst(array(
 //				'conditions' => 'idDbase = ?1',
 //				'bind' => array(1 => $contact->idDbase)
@@ -526,12 +514,12 @@ class TrackingObject
 //				throw new Exception('dbase not found!');
 //			}
 //			$dbase->updateCountersInDbase();
-			
+
 			$this->log->log('Se actualizó rebote duro');
 		}
 	}
 
-	private function trackSpamEvent($cod, $date)
+	public function trackSpamEvent($cod, $date)
 	{
 		try {
 			if ($this->canTrackSpamEvent()) {
