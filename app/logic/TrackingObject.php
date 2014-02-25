@@ -233,7 +233,7 @@ class TrackingObject
 				
 				$statDbaseObj = $this->findRelatedDbaseStatObject();
 				$statDbaseObj->incrementClicks();
-				
+
 				list($mxl, $ml) = $this->locateRelatedLinkRecords($idLink);
 				$mxl->incrementClicks();
 				
@@ -324,7 +324,7 @@ class TrackingObject
 	private function locateRelatedLinkRecords($idLink)
 	{
 		$records = array();
-		
+
 		$mxl = Mxl::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idMailLink = ?2',
 			'bind' => array(1 => $this->idMail,
@@ -334,7 +334,7 @@ class TrackingObject
 		if (!$mxl) {
 			throw new Exception('Mxl object not found!');
 		}
-		
+
 		$records[] = $mxl;
 		
 		$ml = Maillink::findFirst(array(
