@@ -29,4 +29,9 @@ class Statdbase extends \Phalcon\Mvc\Model
 	{
 		$this->bounced += 1;
 	}
+	
+	public function incrementSpam()
+	{
+		$this->spam += 1;
+	}
 }

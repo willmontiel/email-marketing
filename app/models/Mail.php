@@ -71,4 +71,9 @@ class Mail extends Modelbase
 	{
 		$this->bounced += 1;
 	}
+	
+	public function incrementSpam()
+	{
+		$this->spam += 1;
+	}
 }
