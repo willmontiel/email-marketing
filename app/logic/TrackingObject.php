@@ -517,15 +517,15 @@ class TrackingObject
 				throw new Exception('Error while updating contact and email');
 			}
 			
-			$dbase = Dbase::findFirst(array(
-				'conditions' => 'idDbase = ?1',
-				'bind' => array(1 => $contact->idDbase)
-			));
-			
-			if (!$dbase) {
-				throw new Exception('dbase not found!');
-			}
-			$dbase->updateCountersInDbase();
+//			$dbase = Dbase::findFirst(array(
+//				'conditions' => 'idDbase = ?1',
+//				'bind' => array(1 => $contact->idDbase)
+//			));
+//			
+//			if (!$dbase) {
+//				throw new Exception('dbase not found!');
+//			}
+//			$dbase->updateCountersInDbase();
 			
 			$this->log->log('Se actualizó rebote duro');
 		}
