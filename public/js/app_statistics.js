@@ -399,7 +399,7 @@ function createChartData(totalData, multVal, format) {
 				}
 			}
 			for (var index in values) {
-				newData[(moment.unix(totalData[i].title)).format(format)][index]+= values[index];
+				newData[(moment.unix(totalData[i].title)).format(format)][index]+= parseInt(values[index]);
 			}
 //			for(var j = 0; j < multVal[0].amount; j++) {
 //				newData[(moment.unix(totalData[i].title)).format(format)][j]+= values[j];

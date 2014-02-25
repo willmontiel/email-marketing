@@ -1,5 +1,5 @@
 function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) {
-	if(chart == undefined || chart == null) {
+	if(chart === undefined || chart === null) {
 		chart = new AmCharts.AmSerialChart();
 	}
 	chart.dataProvider = chartData;
@@ -12,7 +12,7 @@ function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) 
 	categoryAxis.minPeriod = minPeriod; // our data is daily, so we set minPeriod to DD
 	categoryAxis.axisColor = "#DADADA";
 	
-	if(multVal != undefined || multVal != null) {
+	if(multVal !== undefined || multVal !== null) {
 		for (var index in chartData[0]) {
 			if(multVal[0].value[index] !== undefined) {
 				var graph = new AmCharts.AmGraph();
@@ -20,7 +20,7 @@ function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) 
 				graph.type = "column";
 				graph.title = text + ' ' + multVal[0].value[index];
 				graph.lineColor = "#000000";
-				graph.fillColors = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
+				graph.fillColors = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length === 6) ?  lor : co(lor); })('');
 				graph.fillAlphas = 0.7;
 				graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0][index] + " en [[category]]:<b>[[value]]</b></span>";
 				chart.addGraph(graph);
@@ -81,7 +81,7 @@ function createPieChart(chartData) {
 }
 
 function createLineChart(chart, chartData, dateFormat, minPeriod, text, multVal) {
-	if(chart == undefined || chart == null) {
+	if(chart === undefined || chart === null) {
 		chart = new AmCharts.AmSerialChart();
 	}
 	chart.pathToImages = "../../amcharts/images/";
@@ -105,10 +105,10 @@ function createLineChart(chart, chartData, dateFormat, minPeriod, text, multVal)
 	chart.addValueAxis(valueAxis);
 	
 	// GRAPH
-	if(multVal != undefined || multVal != null) {
-		for(var i = 0; i < multVal[0].amount; i++ ) {
+	if(multVal !== undefined || multVal !== null) {
+		for (var index in chartData[0]) {
 			var graph = new AmCharts.AmGraph();
-			graph.valueField = "value" + i;
+			graph.valueField = index;
 			graph.type = "line";
 			graph.bullet = "round";
 			graph.bulletColor = "#FFFFFF";
@@ -116,10 +116,10 @@ function createLineChart(chart, chartData, dateFormat, minPeriod, text, multVal)
 			graph.bulletBorderAlpha = 1;
 			graph.bulletBorderThickness = 2;
 			graph.bulletSize = 7;
-			graph.title = text + ' ' + multVal[0]['value'][i];
+			graph.title = text + ' ' + multVal[0].value[index];
 			graph.lineThickness = 2;
-			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
-			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value'][i] + " de [[category]]:<b>[[value]]</b></span>";
+			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length === 6) ?  lor : co(lor); })('');
+			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0].value[index] + " de [[category]]:<b>[[value]]</b></span>";
 			chart.addGraph(graph);
 		}
 	}
@@ -159,7 +159,7 @@ function createLineChart(chart, chartData, dateFormat, minPeriod, text, multVal)
 }
 
 function createLineStepChart(chart, chartData, dateFormat, minPeriod, text, multVal){
-	if(chart == undefined || chart == null) {
+	if(chart === undefined || chart === null) {
 		chart = new AmCharts.AmSerialChart();
 	}
 	chart.pathToImages = "../../amcharts/images/";
@@ -186,14 +186,14 @@ function createLineStepChart(chart, chartData, dateFormat, minPeriod, text, mult
 	chart.addValueAxis(valueAxis);
 
 	// GRAPH
-	if(multVal != undefined || multVal != null) {
-		for(var i = 0; i < multVal[0].amount; i++ ) {
+	if(multVal !== undefined || multVal !== null) {
+		for (var index in chartData[0]) {
 			var graph = new AmCharts.AmGraph();
-			graph.valueField = "value" + i;
+			graph.valueField = index;
 			graph.type = "step";
-			graph.title = text + ' ' + multVal[0]['value'][i];
-			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length == 6) ?  lor : co(lor); })('');
-			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0]['value'][i] + " en [[category]]:<b>[[value]]</b></span>";
+			graph.title = text + ' ' + multVal[0].value[index];
+			graph.lineColor = '#' + (function co(lor){   return (lor += [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'][Math.floor(Math.random()*16)]) && (lor.length === 6) ?  lor : co(lor); })('');
+			graph.balloonText = "<span style='font-size:13px;'>" + text + ' ' + multVal[0].value[index] + " en [[category]]:<b>[[value]]</b></span>";
 			chart.addGraph(graph);
 		}
 	}
@@ -223,5 +223,5 @@ function createLineStepChart(chart, chartData, dateFormat, minPeriod, text, mult
 	legend.useGraphSettings = true;
 	chart.addLegend(legend);
 	
-	return chart
+	return chart;
 }
