@@ -419,8 +419,12 @@ class TrackingObject
 	}
 	
 	
-	public function trackSoftBounceEvent($cod, $date)
+	public function trackSoftBounceEvent($cod, $date = null)
 	{
+		if ($date == null) {
+			$date = time();
+		}
+		
 		try {
 			if ($this->canTrackSoftBounceEvent()) {
 				$this->startTransaction();
@@ -464,8 +468,12 @@ class TrackingObject
 		}
 	}
 
-	public function trackHardBounceEvent($date)
+	public function trackHardBounceEvent($date = null)
 	{
+		if ($date == null) {
+			$date = time();
+		}
+		
 		$this->log->log('Inicio de tracking de rebote duro');
 		if ($this->canTrackHardBounceEvent()) {
 			
@@ -519,8 +527,11 @@ class TrackingObject
 		}
 	}
 
-	public function trackSpamEvent($cod, $date)
+	public function trackSpamEvent($cod, $date = null)
 	{
+		if ($date == null) {
+			$date = time();
+		}
 		try {
 			if ($this->canTrackSpamEvent()) {
 				$this->startTransaction();

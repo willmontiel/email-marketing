@@ -1043,11 +1043,62 @@ class TestController extends ControllerBase
 	
 	public function imagetestAction()
 	{
-		$img = '../public/images/tracking.gif';
-
-		$this->response->setHeader("Content-Type", "image/gif");
-			
-		$this->view->disable();
-		return $this->response->setContent(file_get_contents($img));
+		$date = time();
+		
+		$mxc = Mxc::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idContact = ?2',
+			'bind' => array(1 => 217,
+							2 => 25441)
+		));
+		$this->logger->log('despues de mxc');
+		$contact = $mxc->contact;
+		
+		$contact->bounced = $date;
+		$contact->email->bounced = $date;
+		
+		$this->logger->log('agregando bounced');
+		$dirtyObjects = array();
+		$dirtyObjects[] = $contact;
+		$dirtyObjects[] = $contact->email;
+		$this->logger->log('agregando al objeto padre');
+		
+		$i = 1;
+		foreach ($dirtyObjects as $object) {
+			if (!$object->save()) {
+				foreach ($object->getMessages() as $msg) {
+					$this->logger->log('Error saving Object: ' . $msg);
+				}
+			}
+			$this->logger->log('Se guardó el objeto: ' . $i);
+			$i++;
+		}
+		$this->logger->log('Despues de guardar');
+		unset($dirtyObjects);
+		
+		$this->logger->log('Obj Dirty destruido');
+		
+		$dbase = Dbase::findFirst(array(
+			'conditions' => 'idDbase = ?1',
+			'bind' => array(1 => $contact->idDbase)
+		));
+		
+		$this->logger->log('Inicio actualización de contadores');
+		$dbase->updateCountersInDbase();
+		$this->logger->log('despues de la actualización de contadores');
+		
+		
+		unset($dbase);
+		
+		try {
+		$mxc = Mxc::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idContact = ?2',
+			'bind' => array(1 => 217,
+							2 => 25443)
+		));
+		}
+		catch (Exception $e) {
+			$this->logger->log('Error' . $e);
+		}
+		$this->logger->log('Depues de buscar otro mxc');
 	}
 }

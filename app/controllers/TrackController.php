@@ -92,8 +92,6 @@ class TrackController extends ControllerBase
 		foreach ($cobject as $c) {
 			$mxc = substr($c['click_tracking_id'], 2);
 			$ids = explode('x', $mxc);
-			$type = $c['event_type'];
-			$code = $c['bounce_code'];
 			$date = $c['event_time'];
 			$this->logger->log('Empezó track de evento: ' . $i);
 			try {
