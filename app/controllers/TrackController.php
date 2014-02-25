@@ -82,7 +82,7 @@ class TrackController extends ControllerBase
 	public function mtaeventAction()
 	{
 		$content = $this->request->getRawBody();
-		if ($content == '' || $content == null) {
+		if (trim($content) === '' || $content == null) {
 			$this->logger->log('No hay contenido, no se registró evento de rebote');
 			return false;
 		}
@@ -95,7 +95,7 @@ class TrackController extends ControllerBase
 			$type = $c['event_type'];
 			$code = $c['bounce_code'];
 			$date = $c['event_time'];
-			$this->logger->log('Empezó track de bounced evento: ' . $i);
+			$this->logger->log('Empezó track de evento: ' . $i);
 //			$this->logger->log('idMail: ' . $ids[0]);
 //			$this->logger->log('idContact: ' . $ids[1]);
 //			$this->logger->log('type: ' . $type);
@@ -104,7 +104,8 @@ class TrackController extends ControllerBase
 			
 			try {
 				$trackingObj = new TrackingObject();
-				$trackingObj->updateTrackBounced($ids[0], $ids[1], $type, $code, $date);
+				$trackingObj->setSendIdentification($ids[0], $ids[1]);
+				$trackingObj->updateTrackBounced($type, $code, $date);
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Va a ocurrir una excepción');
