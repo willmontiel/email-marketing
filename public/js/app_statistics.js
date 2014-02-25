@@ -371,7 +371,7 @@ App.TimeGraphView = Ember.View.extend({
 			
 });
 
-function createChartData(totalData, multVal, format) {	
+function createChartData(totalData, multVal, format) {
 	var newData = [];
 	var result = [];
 	for(var i = 0; i < totalData.length; i++) {
@@ -394,7 +394,7 @@ function createChartData(totalData, multVal, format) {
 			}
 		}
 	}
-	
+
 	for (var key in newData) {
 		if(newData.hasOwnProperty(key)) {
 			var obj = new Object();
