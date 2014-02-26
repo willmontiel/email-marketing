@@ -38,8 +38,6 @@ class TrackingObject
 		if (!$this->mxc) {
 			throw new Exception("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
 		}
-		$this->idMail = $idMail;
-		$this->idContact = $idContact;
 	}
 	
 	/**
@@ -134,13 +132,13 @@ class TrackingObject
 	{
 		$contact = Contact::findFirst(array(
 			'conditions' => 'idContact = ?1',
-			'bind' => array(1 => $this->idContact)
+			'bind' => array(1 => $this->mxc->idContact)
 		));
 
 		$statdbase = Statdbase::findFirst(array(
 			'conditions' => 'idDbase = ?1 AND idMail = ?2',
 			'bind' => array(1 => $contact->idDbase,
-							2 => $this->idMail)
+							2 => $this->mxc->idMail)
 		));
 		
 		if (!$statdbase) {
@@ -173,7 +171,7 @@ class TrackingObject
 	{
 		$event = new Mailevent();
 		$event->idMail = $this->mxc->idMail;
-		$event->idContact = $this->idContact;
+		$event->idContact = $this->mxc->idContact;
 		$event->idBouncedCode = $cod;
 		$this->log->log('Se ha creado Mailevent');
 		return $event;
@@ -298,9 +296,9 @@ class TrackingObject
 	{
 		$mxcxl = Mxcxl::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idMailLink = ?2 AND idContact = ?3',
-			'bind' => array(1 => $this->idMail,
+			'bind' => array(1 => $this->mxc->idMail,
 							2 => $idLink,
-							3 => $this->idContact)
+							3 => $this->mxc->idContact)
 		));
 		
 		if (!$mxcxl) {
@@ -327,7 +325,7 @@ class TrackingObject
 
 		$mxl = Mxl::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idMailLink = ?2',
-			'bind' => array(1 => $this->idMail,
+			'bind' => array(1 => $this->mxc->idMail,
 							2 => $idLink)
 		));
 		
@@ -369,9 +367,9 @@ class TrackingObject
 	private function createNewMxcxl($idLink, $date)
 	{
 		$mxcxl = new Mxcxl();
-		$mxcxl->idMail = $this->idMail;
+		$mxcxl->idMail = $this->mxc->idMail;
 		$mxcxl->idMailLink = $idLink;
-		$mxcxl->idContact = $this->idContact;
+		$mxcxl->idContact = $this->mxc->idContact;
 		$mxcxl->click = $date;
 
 		return $mxcxl;
@@ -480,48 +478,48 @@ class TrackingObject
 //			$this->startTransaction();
 			
 			$this->log->log('Es válido');
-//			$db = Phalcon\DI::getDefault()->get('db');
+			$db = Phalcon\DI::getDefault()->get('db');
 			
 //			$contact = Contact::findFirst(array(
 //				'conditions' => 'idContact = ?1',
 //				'bind' => array(1 => $this->mxc->idContact)
 //			));
-//			$contact = $this->mxc->contact;
+			$contact = $this->mxc->contact;
 //			
-//			if (!$contact) {
-//				$this->rollbackTransaction();
-//				throw new Exception('contact not found!');
-//			}
+			if (!$contact) {
+				$this->rollbackTransaction();
+				throw new Exception('contact not found!');
+			}
 //			
 //			$contact->bounced = $date;
 //			$contact->email->bounced = $date;
-//
+////
 //			$this->addDirtyObject($contact);
 //			$this->addDirtyObject($contact->email);
 			
-//			$sql = 'UPDATE email AS e JOIN contact AS c
-//						ON (c.idEmail = e.idEmail)
-//						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
-//					WHERE e.idEmail = ?';
+			$sql = 'UPDATE email AS e JOIN contact AS c
+						ON (c.idEmail = e.idEmail)
+						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
+					WHERE e.idEmail = ?';
 //			
-//			$update = $db->execute($sql, array($contact->idEmail));
+			$update = $db->execute($sql, array($contact->idEmail));
 //			
-//			if (!$update) {
-//				$this->rollbackTransaction();
-//				throw new Exception('Error while updating contact and email');
-//			}
+			if (!$update) {
+				$this->rollbackTransaction();
+				throw new Exception('Error while updating contact and email');
+			}
 			
 //			$this->flushChanges();
 //
-//			$dbase = Dbase::findFirst(array(
-//				'conditions' => 'idDbase = ?1',
-//				'bind' => array(1 => $contact->idDbase)
-//			));
+			$dbase = Dbase::findFirst(array(
+				'conditions' => 'idDbase = ?1',
+				'bind' => array(1 => $contact->idDbase)
+			));
 //			
-//			if (!$dbase) {
-//				throw new Exception('dbase not found!');
-//			}
-//			$dbase->updateCountersInDbase();
+			if (!$dbase) {
+				throw new Exception('dbase not found!');
+			}
+			$dbase->updateCountersInDbase();
 
 			$this->log->log('Se actualizó rebote duro');
 		}
@@ -563,11 +561,15 @@ class TrackingObject
 				$this->addDirtyObject($event);
 				$this->log->log('Se agregó event');
 				
+				$this->log->log('Preparandose para guardar');
+				$this->flushChanges();
+				$this->log->log('Se guardó con exito');
+				
 				$db = Phalcon\DI::getDefault()->get('db');
 				
 				$contact = Contact::findFirst(array(
 					'conditions' => 'idContact = ?1',
-					'bind' => array(1 => $this->idContact)
+					'bind' => array(1 => $this->mxc->idContact)
 				));
 				
 				if (!$contact) {
@@ -586,10 +588,6 @@ class TrackingObject
 				}
 
 				$this->log->log('Se actualizó contact y email');
-				
-				$this->log->log('Preparandose para guardar');
-				$this->flushChanges();
-				$this->log->log('Se guardó con exito');
 			}
 		}
 		catch (Exception $e) {
@@ -602,7 +600,7 @@ class TrackingObject
 	{
 		$content = Mailcontent::findFirst(array(
 			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $this->idMail)
+			'bind' => array(1 => $this->mxc->idMail)
 		));
 
 		if (!$content || trim($content->googleAnalytics) === '' || $content->googleAnalytics == null) {
