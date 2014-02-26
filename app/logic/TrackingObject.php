@@ -10,8 +10,7 @@ class TrackingObject
 	 */
 	protected $mxc;
 	protected $dirtyObjects;
-	protected $idMail;
-	protected $idContact;
+	protected $contact;
 
 	public function __construct()
 	{
@@ -474,19 +473,10 @@ class TrackingObject
 		
 		$this->log->log('Inicio de tracking de rebote duro');
 		if ($this->canTrackHardBounceEvent()) {
-			
-//			$this->startTransaction();
-			
 			$this->log->log('Es válido');
-			$db = Phalcon\DI::getDefault()->get('db');
-			
-//			$contact = Contact::findFirst(array(
-//				'conditions' => 'idContact = ?1',
-//				'bind' => array(1 => $this->mxc->idContact)
-//			));
-			$contact = $this->mxc->contact;
-//			
-			if (!$contact) {
+//			$this->startTransaction();
+			$this->contact = $this->mxc->contact;
+			if (!$this->contact) {
 				$this->rollbackTransaction();
 				throw new Exception('contact not found!');
 			}
@@ -501,26 +491,19 @@ class TrackingObject
 						ON (c.idEmail = e.idEmail)
 						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
 					WHERE e.idEmail = ?';
-//			
-			$update = $db->execute($sql, array($contact->idEmail));
+			
+			$db = Phalcon\DI::getDefault()->get('db');
+			$update = $db->execute($sql, array($this->contact->idEmail));
 //			
 			if (!$update) {
 				$this->rollbackTransaction();
 				throw new Exception('Error while updating contact and email');
 			}
 			
+			$this->log->log('Preparandose para actualizar contadores de bases de datos y listas de contactos');
+			$this->updateCounters();
+			
 //			$this->flushChanges();
-//
-			$dbase = Dbase::findFirst(array(
-				'conditions' => 'idDbase = ?1',
-				'bind' => array(1 => $contact->idDbase)
-			));
-//			
-			if (!$dbase) {
-				throw new Exception('dbase not found!');
-			}
-			$dbase->updateCountersInDbase();
-
 			$this->log->log('Se actualizó rebote duro');
 		}
 	}
@@ -567,12 +550,9 @@ class TrackingObject
 				
 				$db = Phalcon\DI::getDefault()->get('db');
 				
-				$contact = Contact::findFirst(array(
-					'conditions' => 'idContact = ?1',
-					'bind' => array(1 => $this->mxc->idContact)
-				));
+				$this->contact = $this->mxc->contact;
 				
-				if (!$contact) {
+				if (!$this->contact) {
 					throw new Exception('contact not found!');
 				}	
 				
@@ -581,13 +561,16 @@ class TrackingObject
 						SET e.spam = ' . $date . ', c.spam = ' . $date . ', c.unsubscribed = ' . $date . '
 					WHERE e.idEmail = ?';
 				
-				$update = $db->execute($sql, array($contact->idEmail));
+				$update = $db->execute($sql, array($this->contact->idEmail));
 				
 				if (!$update) {
 					throw new Exception('Error while updating spam in contact and email');
 				}
 
 				$this->log->log('Se actualizó contact y email');
+				$this->log->log('Preparandose para actualizar contadores');
+				$this->updateCounters();
+				$this->log->log('Se actualizó spam');
 			}
 		}
 		catch (Exception $e) {
@@ -595,7 +578,46 @@ class TrackingObject
 			$this->rollbackTransaction();
 		}
 	}
+	
+	private function updateCounters()
+	{
+		$dbase = Dbase::findFirst(array(
+			'conditions' => 'idDbase = ?1',
+			'bind' => array(1 => $this->contact->idDbase)
+		));
+//			
+		if (!$dbase) {
+			throw new Exception('dbase not found!');
+		}
+		
+		$dbase->updateCountersInDbase();
+		$this->log->log('Se actualizarón contadores de Dbase');
 
+		foreach ($this->findContactlistObjects() as $contactList) {
+			$contactList->updateCountersInContactlist();
+			$this->log->log('Se actualizarón contadores de Contactlist: ' . $contactList->idContactlist);
+		}
+	}
+	
+	private function findContactlistObjects()
+	{
+		$lists = array();
+		$idContactlists = explode(",", $this->mxc->contactlists);
+		foreach ($idContactlists as $idContactlist) {
+			$contactlist = Contactlist::findFirst(array(
+				'conditions' => 'idContactlist = ?1',
+				'bind' => array(1 => $idContactlist)
+			));
+			
+			if (!$contactlist) {
+				throw new Exception('Contactlist object not found!');
+			}
+			$lists[] = $contactlist;
+		}
+		$this->log->log('Se encontrarón Contactlists');
+		return $contactlist;
+	}
+	
 	public function insertGoogleAnalyticsUrl($link)
 	{
 		$content = Mailcontent::findFirst(array(
