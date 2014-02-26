@@ -41,9 +41,14 @@
 		{%endfor%}
 		
 		AmCharts.ready(function () {
-			var chart = createPieChart(chartData);	
+			var chart = createPieChart(chartData);
 			try{
-				chart.write('summaryChart');
+				if($('#summaryChart')[0] === undefined) {
+					setTimeout(function(){chart.write('summaryChart');},1000);
+				}
+				else {
+					chart.write('summaryChart');
+				}
 			}catch(err){
 				console.log(err.message);
 			}

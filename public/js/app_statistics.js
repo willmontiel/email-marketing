@@ -410,6 +410,12 @@ function createChartData(totalData, multVal, format) {
 			result.push(obj);
 		}
 	}
+	if(result.length === 0) {
+		var obj = new Object();
+		obj.title = (moment()).format(format);
+		obj.value = "0";
+		result.push(obj);
+	}
 	return result;
 }
 
