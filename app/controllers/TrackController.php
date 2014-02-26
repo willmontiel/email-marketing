@@ -116,6 +116,11 @@ class TrackController extends ControllerBase
 				$this->logger->log('Exception: [' . $e . ']');
 				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Invalid Argument Exception'));
 			}
+			catch (InvalidArgumentException $e) {
+				$this->logger->log('Va a ocurrir una excepción');
+				$this->logger->log('Exception: [' . $e . ']');
+				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Invalid Argument Exception'));
+			}
 			$this->logger->log('Pasó la prueba: ' . $i);
 			$i ++;
 		}

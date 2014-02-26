@@ -499,6 +499,7 @@ class TrackingObject
 				$this->rollbackTransaction();
 				throw new Exception('Error while updating contact and email');
 			}
+			$this->log->log('Se marcó como rebotado email y contact');
 			
 			$this->log->log('Preparandose para actualizar contadores de bases de datos y listas de contactos');
 			$this->updateCounters();
@@ -595,7 +596,7 @@ class TrackingObject
 
 		foreach ($this->findContactlistObjects() as $contactList) {
 			$contactList->updateCountersInContactlist();
-			$this->log->log('Se actualizarón contadores de Contactlist: ' . $contactList->idContactlist);
+			$this->log->log('Se actualizarón contadores de Contactlist: ');
 		}
 	}
 	
@@ -615,7 +616,7 @@ class TrackingObject
 			$lists[] = $contactlist;
 		}
 		$this->log->log('Se encontrarón Contactlists');
-		return $contactlist;
+		return $lists;
 	}
 	
 	public function insertGoogleAnalyticsUrl($link)
