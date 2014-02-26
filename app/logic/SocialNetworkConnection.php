@@ -98,6 +98,7 @@ class SocialNetworkConnection
 	{
 		$userid = $this->facebook->getUser();
 		if($userid) {
+			try{
 			$existing = Socialnetwork::findFirstByUserid($userid);
 			$user = $this->facebook->api('/'.$userid);
 			if(!$existing) {
@@ -116,6 +117,13 @@ class SocialNetworkConnection
 				else if($fanpage->status === 'Deactivated'){
 					$this->activateAccount($fanpage, $fanpage->userid, $account['access_token'], $account['name']);
 				}
+			}
+			} 
+			catch (InvalidArgumentException $e) {
+				$this->logger->log('Exception: [' . $e . ']');
+			}
+			catch (Exception $e) {
+				$this->logger->log('Exception: [' . $e . ']');
 			}
 		}
 	}
@@ -146,6 +154,7 @@ class SocialNetworkConnection
 		$newsaccount->status = 'Activated';
 		if(!$newsaccount->save()) {
 			$this->logger->log('Error al crear la cuenta de ' . $category);
+			throw new InvalidArgumentException('Error al crear la cuenta de ' . $category);
 		}
 	}
 	
@@ -157,6 +166,7 @@ class SocialNetworkConnection
 		$saccount->status = 'Activated';
 		if(!$saccount->save()) {
 			$this->logger->log('Error al actualizar la cuenta de ' . $saccount->category);
+			throw new InvalidArgumentException('Error al actualizar la cuenta de ' . $saccount->category);
 		}
 	}
 
