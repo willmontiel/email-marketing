@@ -161,7 +161,7 @@ class MailController extends ControllerBase
 		}
 		try {
 			$socialnet = new SocialNetworkConnection($log);
-			$socialnet->setUser($this->user);
+			$socialnet->setAccount($this->user->account);
 			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
 

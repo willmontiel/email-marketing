@@ -4,7 +4,7 @@ class SocialmediaController extends ControllerBase
 	public function indexAction()
 	{
 		$socialnet = new SocialNetworkConnection($this->logger);
-		$socialnet->setUser($this->user);
+		$socialnet->setAccount($this->user->account);
 		$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 		$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
 		$fbloginUrl = $socialnet->getFbUrlLogIn('/socialmedia/new/');
@@ -19,7 +19,7 @@ class SocialmediaController extends ControllerBase
 	{
 		$this->view->disable();
 		$socialnet = new SocialNetworkConnection($this->logger);
-		$socialnet->setUser($this->user);
+		$socialnet->setAccount($this->user->account);
 		$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 		$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
 		if(isset($_REQUEST['oauth_token']) && isset($_REQUEST['oauth_verifier'])) {
@@ -36,7 +36,7 @@ class SocialmediaController extends ControllerBase
 	{
 		$this->view->disable();
 		$socialnet = new SocialNetworkConnection($this->logger);
-		$socialnet->setUser($this->user);
+		$socialnet->setAccount($this->user->account);
 		$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 		$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
 		if(isset($_REQUEST['oauth_token']) && isset($_REQUEST['oauth_verifier'])) {

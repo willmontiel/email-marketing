@@ -10,16 +10,16 @@ class SocialNetworkConnection
 		$this->urlObj = Phalcon\DI::getDefault()->get('urlManager');
 	}
 
-	public function setUser(User $user)
+	public function setAccount(Account $account)
 	{
-		$this->user = $user;
+		$this->account = $account;
 	}
 
 	public function findAllAccountsByUser()
 	{
 		$socials = Socialnetwork::find(array(
-							"conditions" => "idUser = ?1",
-							"bind" => array(1 => $this->user->idUser),
+							"conditions" => "idAccount = ?1",
+							"bind" => array(1 => $this->account->idAccount),
 							"order" => "type DESC, category"
 						));
 		return $socials;
@@ -28,8 +28,8 @@ class SocialNetworkConnection
 	public function findAllFacebookAccountsByUser()
 	{
 		$socials = Socialnetwork::find(array(
-							"conditions" => "idUser = ?1 AND type = 'Facebook' AND status = 'Activated'",
-							"bind" => array(1 => $this->user->idUser)
+							"conditions" => "idAccount = ?1 AND type = 'Facebook' AND status = 'Activated'",
+							"bind" => array(1 => $this->account->idAccount)
 						));
 		return $socials;
 	}
@@ -37,8 +37,8 @@ class SocialNetworkConnection
 	public function findAllTwitterAccountsByUser()
 	{
 		$socials = Socialnetwork::find(array(
-							"conditions" => "idUser = ?1 AND type = 'Twitter'",
-							"bind" => array(1 => $this->user->idUser)
+							"conditions" => "idAccount = ?1 AND type = 'Twitter'",
+							"bind" => array(1 => $this->account->idAccount)
 						));
 		return $socials;
 	}
@@ -145,7 +145,7 @@ class SocialNetworkConnection
 	protected function saveNewAccount($userid, $token, $name, $type, $category)
 	{
 		$newsaccount = new Socialnetwork();
-		$newsaccount->idUser = $this->user->idUser;
+		$newsaccount->idAccount = $this->account->idAccount;
 		$newsaccount->userid = $userid;
 		$newsaccount->token = $token;
 		$newsaccount->name = $name;
@@ -213,29 +213,34 @@ class SocialNetworkConnection
 		$fbcontent = json_decode($desc->fbdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
-		foreach ($ids_tokens as $id_token){
-			$userid = $id_token->userid;
-			$access_token = $id_token->token;
-			$params = array(
-				"access_token" => $access_token,
-				"message" => $fbcontent->message,
-				"link" => $this->urlObj->getBaseUri(TRUE), //"http://stage.sigmamovil.com/",
-				"picture" => $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png', //"http://stage.sigmamovil.com/images/sigma_envelope.png",
-				"name" => $fbcontent->title,
-				"caption" => $this->urlObj->getBaseUri(TRUE), //"www.stage.sigmamovil.com/",
-				"description" => $fbcontent->description
-			  );
+		if (count($ids_tokens) > 0) {
+			foreach ($ids_tokens as $id_token){
+				$userid = $id_token->userid;
+				$access_token = $id_token->token;
+				$params = array(
+					"access_token" => $access_token,
+					"message" => $fbcontent->message,
+					"link" => $this->urlObj->getBaseUri(TRUE), //"http://stage.sigmamovil.com/",
+					"picture" => $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png', //"http://stage.sigmamovil.com/images/sigma_envelope.png",
+					"name" => $fbcontent->title,
+					"caption" => $this->urlObj->getBaseUri(TRUE), //"www.stage.sigmamovil.com/",
+					"description" => $fbcontent->description
+				  );
 
-			  try {
-				  $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
-				  $this->logger->log('Successfully posted to Facebook');
-			  } catch(Exception $e) {
-				  $this->logger->log('No publico');
-				  $this->logger->log($e->getMessage());
-				  $socialnetwork = Socialnetwork::findFirstByIdSocialnetwork($id_token->idSocialnetwork);
-				  $socialnetwork->status = 'Deactivated';
-				  $socialnetwork->save();
-			  }
+				  try {
+					  $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
+					  $this->logger->log('Successfully posted to Facebook');
+				  } catch(Exception $e) {
+					  $this->logger->log('No publico');
+					  $this->logger->log($e->getMessage());
+					  $socialnetwork = Socialnetwork::findFirstByIdSocialnetwork($id_token->idSocialnetwork);
+					  $socialnetwork->status = 'Deactivated';
+					  $socialnetwork->save();
+				  }
+			}
+		}
+		else {
+			$this->logger->log('There are no social facebook accounts to post');
 		}
 	}
 	
@@ -254,20 +259,25 @@ class SocialNetworkConnection
 		$twcontent = json_decode($desc->twdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
-		foreach ($ids_tokens as $id_token){
-			$oauth_token = $id_token->userid;
-			$oauth_secret = $id_token->token;
-			$this->setTwitterConnection($appids['id'], $appids['secret'], $oauth_token, $oauth_secret);
-			try {
-				$account = $this->twitter->get('account/verify_credentials');
-				$post = $this->twitter->post('statuses/update', array('status' => $twcontent->message . ' stage.sigmamovil.com'));
-				$this->logger->log('Successfully posted in Twitter');
-			} catch(Exception $e) {
-				$this->logger->log('No Tweet');
-				$this->logger->log($account);
-				$this->logger->log($post);
-				$this->logger->log($e->getMessage());
+		if (count($ids_tokens) > 0) {
+			foreach ($ids_tokens as $id_token){
+				$oauth_token = $id_token->userid;
+				$oauth_secret = $id_token->token;
+				$this->setTwitterConnection($appids['id'], $appids['secret'], $oauth_token, $oauth_secret);
+				try {
+					$account = $this->twitter->get('account/verify_credentials');
+					$post = $this->twitter->post('statuses/update', array('status' => $twcontent->message . ' stage.sigmamovil.com'));
+					$this->logger->log('Successfully posted in Twitter');
+				} catch(Exception $e) {
+					$this->logger->log('No Tweet');
+					$this->logger->log($account);
+					$this->logger->log($post);
+					$this->logger->log($e->getMessage());
+				}
 			}
+		}
+		else {
+			$this->logger->log('There are no social twitter accounts to post');
 		}
 	}
 }

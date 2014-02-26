@@ -221,18 +221,23 @@ class ChildCommunication extends BaseWrapper
 				if($mail->socialnetworks != null) {
 					$socials = new SocialNetworkConnection($log);
 					$socialdesc = Socialmail::findFirstByIdMail($mail->idMail);
-					$idsocials = json_decode($mail->socialnetworks);
-					if(isset($idsocials->facebook)) {
-						$socials->setFacebookConnection(Phalcon\DI::getDefault()->get('fbapp')->iduser, Phalcon\DI::getDefault()->get('fbapp')->token);
-						$socials->postOnFacebook($idsocials->facebook, $socialdesc, $mail);
+					if($socialdesc) {
+						$idsocials = json_decode($mail->socialnetworks);
+						if(isset($idsocials->facebook)) {
+							$socials->setFacebookConnection(Phalcon\DI::getDefault()->get('fbapp')->iduser, Phalcon\DI::getDefault()->get('fbapp')->token);
+							$socials->postOnFacebook($idsocials->facebook, $socialdesc, $mail);
+						}
+						if(isset($idsocials->twitter)) {
+							$socials->setTwitterConnection(Phalcon\DI::getDefault()->get('twapp')->iduser, Phalcon\DI::getDefault()->get('twapp')->token);
+							$appids = array(
+								'id' => Phalcon\DI::getDefault()->get('twapp')->iduser,
+								'secret' => Phalcon\DI::getDefault()->get('twapp')->token
+							);
+							$socials->postOnTwitter($idsocials->twitter, $socialdesc, $mail, $appids);
+						}
 					}
-					if(isset($idsocials->twitter)) {
-						$socials->setTwitterConnection(Phalcon\DI::getDefault()->get('twapp')->iduser, Phalcon\DI::getDefault()->get('twapp')->token);
-						$appids = array(
-							'id' => Phalcon\DI::getDefault()->get('twapp')->iduser,
-							'secret' => Phalcon\DI::getDefault()->get('twapp')->token
-						);
-						$socials->postOnTwitter($idsocials->twitter, $socialdesc, $mail, $appids);
+					else {
+						$log->log('No se encontro descripcion de la publicacion en las redes sociales');
 					}
 				}
 			}
