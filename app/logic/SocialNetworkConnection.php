@@ -113,7 +113,10 @@ class SocialNetworkConnection
 			
 			$accounts = $this->facebook->api('/'.$userid.'/accounts');
 			foreach ($accounts['data'] as $account) {
-				$fanpage = Socialnetwork::findFirstByUserid($account['id']);
+				$fanpage = Socialnetwork::findFirst(array(
+								"conditions" => "userid = ?1 AND idAccount = ?2",
+								"bind" => array(1 => $account['id'], 2 => $this->account->idAccount)
+				));
 				if(!$fanpage) {
 					$this->saveNewAccount($account['id'], $account['access_token'], $account['name'], 'Facebook', 'Fan Page');
 				}
