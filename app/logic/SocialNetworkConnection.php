@@ -99,7 +99,10 @@ class SocialNetworkConnection
 		$userid = $this->facebook->getUser();
 		if($userid) {
 			try{
-			$existing = Socialnetwork::findFirstByUserid($userid);
+			$existing = Socialnetwork::findFirst(array(
+							"conditions" => "userid = ?1 AND idAccount = ?2",
+							"bind" => array(1 => $userid, 2 => $this->account->idAccount)
+			));
 			$user = $this->facebook->api('/'.$userid);
 			if(!$existing) {
 				$this->saveNewAccount($userid, $this->facebook->getAccessToken(), $user['name'], 'Facebook', 'Profile');
@@ -132,7 +135,10 @@ class SocialNetworkConnection
 	{
 		$token_cds = $this->twitter->getAccessToken($oauth_verifier);
 		if($token_cds['oauth_token']) {
-			$existing = Socialnetwork::findFirstByName($token_cds['screen_name']);
+			$existing = Socialnetwork::findFirst(array(
+							"conditions" => "name = ?1 AND idAccount = ?2",
+							"bind" => array(1 => $token_cds['screen_name'], 2 => $this->account->idAccount)
+			));
 			if(!$existing) {
 				$this->saveNewAccount($token_cds['oauth_token'], $token_cds['oauth_token_secret'], $token_cds['screen_name'], 'Twitter', 'Profile');
 			}
