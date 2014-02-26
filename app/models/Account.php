@@ -24,6 +24,7 @@ class Account extends Modelbase
 		$this->hasMany("idAccount", "Dbase", "idAccount", array('alias' => 'Dbases'));
 		$this->hasMany("idAccount", "Template", "idAccount");
 		$this->hasMany("idAccount", "Maillink", "idAccount");
+		$this->hasMany("idAccount", "Socialnetwork", "idAccount");
     }
     
     public function validation()
