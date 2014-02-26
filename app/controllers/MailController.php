@@ -688,6 +688,7 @@ class MailController extends ControllerBase
 			$this->logger->log(print_r($links, true));
 
 			$this->view->setVar('links', $links);
+			$mail->name = substr($mail->name, 0, 24);
 			$this->view->setVar('mail', $mail);
 			if ($content->googleAnalytics !== null) {
 				$analytics = json_decode($content->googleAnalytics);
@@ -707,6 +708,10 @@ class MailController extends ControllerBase
 				$campaignName = $this->request->getPost('campaignName');
 				if ($campaignName == null) {
 					$campaignName = $mail->name;
+				}
+				else if (strlen($campaignName) > 25) {
+					$this->flashSession->error('El nombre de campaña para google analytics es demasiado largo, debe tener máximo 15 caracteres');
+					return $this->response->redirect('mail/track/' . $idMail);
 				}
 				$googleAnalytics = $this->request->getPost("googleAnalytics");
 				$links = $this->request->getPost("links");
