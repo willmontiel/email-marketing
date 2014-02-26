@@ -52,6 +52,9 @@
 
 						<label>*Modo de Pago: </label>
 						{{ editFormAccount.render('subscriptionMode') }}
+						
+						<label>*MTA: </label>
+						{{ editFormAccount.render('virtualMta') }}
 					</div>
 					<div class="form-actions">
 						<a href="{{ url('account') }}" class="btn btn-default">Cancelar</a>

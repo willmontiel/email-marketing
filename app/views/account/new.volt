@@ -33,7 +33,7 @@
 				</div>
 			</div>
 			<div class="box-content padded">
-				{{ form('account/new', 'id': 'registerAccount', 'method': 'Post', 'class': 'fill-up') }}
+				{{ form('account/new', 'method': 'Post', 'class': 'fill-up') }}
 					<div class="row-fluid">
 						<div class="span6">
 							<label for="companyName">*Nombre de la cuenta:</label>
@@ -53,6 +53,9 @@
 
 							<label for="modeAccounting">*Modo de pago:</label>
 							{{ newFormAccount.render('subscriptionMode') }}	
+							
+							<label>*MTA: <label/>
+							{{ newFormAccount.render('virtualMta')}}
 						</div>
 						<div class="span6">
 							<label for="firstName">*Nombre:</label>
@@ -64,7 +67,7 @@
 							<label for="email">*Dirección de correo electronico:</label> 
 							 {{ newFormAccount.render('email') }}
 
-							<label for="username">*Nombre de usuario:</label>
+							<label>*Nombre de usuario:</label>
 							{{ newFormAccount.render('username') }}
 
 							<label for="password">*Contraseña:</label>
