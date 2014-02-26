@@ -51,7 +51,7 @@ class AccountController extends ControllerBase
 	public function newAction()
     {
         $account = new Account();
-        $form = new NewAccountForm($account);
+        $form = new AccountForm($account);
       
         if ($this->request->isPost()) {
             
@@ -168,7 +168,7 @@ class AccountController extends ControllerBase
 		
 		if ($account) {
             $this->view->setVar("allAccount", $account);
-			$editform = new EditAccountForm($account);
+			$editform = new AccountForm($account);
 
  			if ($this->request->isPost()) {   
 					$editform->bind($this->request->getPost(), $account);
@@ -178,7 +178,7 @@ class AccountController extends ControllerBase
 						$this->db->rollback();
 						foreach ($account->getMessages() as $msg) {
 							$this->flashSession->error($msg);
-						}
+						} 
 					}
 					else {
 						$this->db->commit();

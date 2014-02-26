@@ -44,6 +44,7 @@
 									<td>Espacio en disco (Mb)</td>
 									<td>Limite de contactos</td>
 									<td>Limite de mensajes</td>
+									<td>MTA</td>
 									<td>Fecha de registro</td>
 									<td>Última actualización</td>
 									<td></td>
@@ -71,6 +72,7 @@
 									<td>{{item.fileSpace}}</td>
 									<td>{{item.contactLimit}}</td>
 									<td>{{item.messageLimit}}</td>
+									<td>{{item.virtualMta}}</td>
 									<td>{{date('d/m/Y', item.createdon)}}</td>
 									<td>{{date('d/m/Y', item.updatedon)}}</td>
 									<td>

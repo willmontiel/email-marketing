@@ -5,7 +5,7 @@ use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Password,
 	Phalcon\Forms\Element;
 
-class NewAccountForm extends Form
+class AccountForm extends Form
 {
     public function initialize()
     {
@@ -14,6 +14,12 @@ class NewAccountForm extends Form
 			'type' => 'text',
 			'required' => 'required',
 			'autofocus' => "autofocus" 
+        )));
+		
+		$this->add(new Text('virtualMta', array(
+			'maxlength' => 50,
+			'type' => 'text',
+			'required' => 'required',
         )));
 		
         $this->add(new EmailElement('email', array(

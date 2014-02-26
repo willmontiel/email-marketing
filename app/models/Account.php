@@ -35,6 +35,13 @@ class Account extends Modelbase
             )
         ));
 		
+		$this->validate(new PresenceOf(
+            array(
+                "field"   => "virtualMta",
+				"message" => "Debe ingresar un nombre para el MTA virtual de la cuenta"
+            )
+        ));
+		
 		$this->validate(new Uniqueness(
 				array(
                 "field"   => "companyName",
