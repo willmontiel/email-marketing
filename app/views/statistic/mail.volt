@@ -6,7 +6,7 @@
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/' ~ mail.idMail }}';
 	</script>
-	{{ javascript_include('js/mixin_pagination.js') }}
+	{{ javascript_include('js/mixin_pagination_statistics.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('javascripts/moment/moment-with-langs.min.js') }}
 	{{ javascript_include('js/app_statistics.js') }}

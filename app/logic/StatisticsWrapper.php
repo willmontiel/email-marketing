@@ -1,4 +1,5 @@
 <?php
+//Phalcon\DI::getDefault()->get('logger')->log('Entra');
 class StatisticsWrapper extends BaseWrapper
 {
 	public function showMailStatistics(Mail $mail)
@@ -244,7 +245,6 @@ class StatisticsWrapper extends BaseWrapper
 		$opens = array();
 		
 		if (count($info) > 0) {
-				Phalcon\DI::getDefault()->get('logger')->log('Entra');
 			foreach ($info as $i) {
 				$opencontact[] = array(
 					'id' => $i['idContact'],
@@ -386,8 +386,20 @@ class StatisticsWrapper extends BaseWrapper
 				);
 			}
 		}
+		
+		$phqlcount = "SELECT COUNT(*) AS total
+						FROM Mxcxl AS ml
+						   JOIN Contact AS c ON (c.idContact = ml.idContact)
+						   JOIN Email AS e ON (e.idEmail = c.idEmail)
+						   JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
+						WHERE ml.idMail = :idMail:";
+		
+		$querycount = $manager->createQuery($phqlcount);
+		$resultcount = $querycount->execute(array(
+			'idMail' => $idMail
+		));
 
-		$this->pager->setTotalRecords(count($clickcontact));
+		$this->pager->setTotalRecords($resultcount['total']->total);
 		
 		$statistics[] = array(
 			'id' => $idMail,
@@ -618,7 +630,17 @@ class StatisticsWrapper extends BaseWrapper
 			'domain' => $valueDomain
 		);
 		
-		$this->pager->setTotalRecords(count($bouncedcontact));
+		$phqlcount = "	SELECT COUNT(*) AS total 
+						FROM mailevent AS v 
+							JOIN contact AS c ON (c.idContact = v.idContact)
+							JOIN email AS e ON (e.idEmail = c.idEmail)
+							JOIN domain AS d ON (d.idDomain = e.idDomain)
+							JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
+						WHERE v.idMail = ? AND v.description = 'bounced'";
+		
+		$querycount = $db->query($phqlcount, array($idMail));
+		$resultcount = $querycount->fetchAll();
+		$this->pager->setTotalRecords($resultcount[0]['total']);
 		
 		$statistics[] = array(
 			'id' => $idMail,

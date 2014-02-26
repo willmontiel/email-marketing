@@ -95,7 +95,7 @@ App.DrilldownClicksRoute = Ember.Route.extend({
 		controller.set('model', model);
 		controller.loadDataChart();
 		controller.loadDataDetails();
-	}
+    }
 });
 
 App.DrilldownUnsubscribedRoute = Ember.Route.extend({
@@ -151,7 +151,7 @@ App.DrilldownBouncedRoute = Ember.Route.extend({
 App.DrilldownController = Ember.ObjectController.extend({});
 App.DrilldownIndexController = Ember.ArrayController.extend({});	
 
-App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPagination, {
+App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {
 	modelClass : App.Drilldownopen,
 			
 	loadDataChart: function() {
@@ -164,7 +164,7 @@ App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginatio
 	}
 });
 
-App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPagination, {
+App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {
 	modelClass : App.Drilldownclick,
 			
 	selectedLink: [],
@@ -207,7 +207,7 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
     }.observes('linkSelected')
 });
 
-App.DrilldownUnsubscribedController = Ember.ArrayController.extend(Ember.MixinPagination, {
+App.DrilldownUnsubscribedController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {
 	modelClass : App.Drilldownunsubscribed,	
 			
 	loadDataChart: function() {
@@ -220,7 +220,7 @@ App.DrilldownUnsubscribedController = Ember.ArrayController.extend(Ember.MixinPa
 	}
 });
 
-App.DrilldownSpamController = Ember.ArrayController.extend(Ember.MixinPagination, {	
+App.DrilldownSpamController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {	
 	modelClass : App.Drilldownspam,
 				
 	loadDataChart: function() {
@@ -233,7 +233,7 @@ App.DrilldownSpamController = Ember.ArrayController.extend(Ember.MixinPagination
 	}
 });
 
-App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPagination, {	
+App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {	
 	modelClass : App.Drilldownbounced,
 				
 	selectedType: ['Todos', 'Temporal', 'Permanente', 'Otro'],
