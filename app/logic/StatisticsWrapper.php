@@ -484,9 +484,9 @@ class StatisticsWrapper extends BaseWrapper
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		
 		$phql = "SELECT e.email, v.date, c.name, c.lastName
-				FROM mailevent AS v 
-					JOIN contact AS c ON (c.idContact = v.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
+				FROM Mailevent AS v 
+					JOIN Contact AS c ON (c.idContact = v.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
 				WHERE v.idMail = :idMail: AND v.description = 'spam' LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
 		$query = $manager->createQuery($phql);
@@ -526,9 +526,9 @@ class StatisticsWrapper extends BaseWrapper
 		}
 		
 		$phql2 = "SELECT COUNT(*) AS total
-				FROM mailevent AS v 
-					JOIN contact AS c ON (c.idContact = v.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
+				FROM Mailevent AS v 
+					JOIN Contact AS c ON (c.idContact = v.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
 				WHERE v.idMail = :idMail: AND v.description = 'spam'";
 		$query2 = $manager->createQuery($phql2);
 		$total = $query2->execute(array(
