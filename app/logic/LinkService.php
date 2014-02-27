@@ -102,15 +102,23 @@ class LinkService
 			}
 		}
 		
-		$mxl = new Mxl();
-		$mxl->idMail = $this->mail->idMail;
-		$mxl->idMailLink = $maillink->idMailLink;
+		$mxl = Mxl::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idMailLink = ?2',
+			'bind' => array(1 => $this->mail->idMail,
+							2 => $maillink->idMailLink)
+		));
+		
+		if (!$mxl) {
+			$mxl = new Mxl();
+			$mxl->idMail = $this->mail->idMail;
+			$mxl->idMailLink = $maillink->idMailLink;
 
-		if (!$mxl->save()) {
-			foreach ($mxl->getMessages() as $msg) {
-				Phalcon\DI::getDefault()->get('logger')->log('Error saving Mxl: ' . $msg);
+			if (!$mxl->save()) {
+				foreach ($mxl->getMessages() as $msg) {
+					Phalcon\DI::getDefault()->get('logger')->log('Error saving Mxl: ' . $msg);
+				}
+				throw new InvalidArgumentException('Error while saving Mxl');
 			}
-			throw new InvalidArgumentException('Error while saving Mxl');
 		}
 		return $mxl->idMailLink;
 	}
