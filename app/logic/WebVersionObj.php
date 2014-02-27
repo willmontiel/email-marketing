@@ -9,7 +9,7 @@ class WebVersionObj extends BaseWrapper
 		$this->dbase = $dbase;
 	}
 	
-	public function setDomain(Domain $domain) {
+	public function setUrlDomain(Urldomain $domain) {
 		$this->domain = $domain;
 	}
 

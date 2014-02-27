@@ -28,11 +28,19 @@ class WebversionController extends ControllerBase
 				$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
 				$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
 				
-				$webversionobj = new WebVersionObj();
-				$webversionobj->setAccount($account);
-				$webversionobj->setDbase($dbase);
-				$webversionobj->setDomain($domain);
-				$html = $webversionobj->createWebVersion($mail, $mailContent, $contact);
+				try{
+					$webversionobj = new WebVersionObj();
+					$webversionobj->setAccount($account);
+					$webversionobj->setDbase($dbase);
+					$webversionobj->setUrlDomain($domain);
+					$html = $webversionobj->createWebVersion($mail, $mailContent, $contact);
+				}
+				catch (Exception $e) {
+					$this->logger->log('Exception ' . $e);
+				}
+				catch (InvalidArgumentException $e) {
+					$this->logger->log('Exception ' . $e);
+				}
 				
 				$this->view->setVar('html', $html);
 			}
