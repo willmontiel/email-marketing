@@ -86,8 +86,8 @@ class WebVersionObj extends BaseWrapper
 		$metatype =      '<meta property="og:description" content="Subscribe to SaturdayNightLive: http://j.mp/1bjU39d Celebrity Impressions: http://j.mp/1bEY4ok Movie Parodies: http://j.mp/14Mjfxh SEASON 36: http://j.mp/16I...">';
 		$metaapp =         '<meta property="og:video" content="http://www.youtube.com/v/9Idt_YiY7kM?version=3&amp;autohide=1">';
 		
-		$search = array('</head>');
-		$replace = array($metaname . $metaurl . $metatitle . $metaimage . $metadescritpion . $metatype . $metaapp . '</head>');
+		$search = array('<html>', '</head>');
+		$replace = array('<html lang="es" data-cast-api-enabled="true">', $metaname . $metaurl . $metatitle . $metaimage . $metadescritpion . $metatype . $metaapp . '</head>');
 		
 		return str_ireplace($search, $replace, $html);
 	}
