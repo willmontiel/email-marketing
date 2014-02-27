@@ -3,11 +3,10 @@ class WebversionController extends ControllerBase
 {
 	public function showAction($parameters)
 	{
-		$info = $_SERVER['HTTP_USER_AGENT'];
 		$idenfifiers = explode("-", $parameters);
 		list($idLink, $idMail, $idContact, $md5) = $idenfifiers;
-		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-		$src = $urlManager->getBaseUri(true) . 'webversion/show/1-' . $idMail . '-' . $idContact;
+		
+		$src = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $idMail . '-' . $idContact;
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		if ($md5 == $md5_2) {
 			$mail = Mail::findFirst(array(
@@ -29,51 +28,20 @@ class WebversionController extends ControllerBase
 				$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
 				$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
 				
-				if (trim($mailContent->content) === '') {
-					throw new \InvalidArgumentException("Error mail's content is empty");
-				}
-				else if ($mail->type == 'Editor') {
-					$htmlObj = new HtmlObj();
-					$htmlObj->assignContent(json_decode($mailContent->content));
-					$html = $htmlObj->render();
-				}
-				else {
-					$html =  html_entity_decode($mailContent->content);
-				}
-				$urlManager = $this->urlManager;
-				$imageService = new ImageService($account, $domain, $urlManager);
-				$linkService = new LinkService($account, $mail, $urlManager);
-				$prepareMail = new PrepareMailContent($linkService, $imageService);
-				list($content, $links) = $prepareMail->processContent($html);
-				$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $dbase->idDbase);
-				$cf = $mailField->getCustomFields();
+				$webversionobj = new WebVersionObj();
+				$webversionobj->setAccount($account);
+				$webversionobj->setDbase($dbase);
+				$webversionobj->setDomain($domain);
+				$html = $webversionobj->createWebVersion($mail, $mailContent, $contact);
 				
-				switch ($cf) {
-					case 'No Fields':
-						$customFields = false;
-						$fields = false;
-						break;
-					case 'No Custom':
-						$fields = true;
-						$customFields = false;
-						break;
-					default:
-						$fields = true;
-						$customFields = $cf;
-						break;
-				}
-				$contact = get_object_vars($contact);
-				if ($fields) {
-					$c = $mailField->processCustomFields($contact);
-					$html = $c['html'];
-				}
-				else {
-					$html = $content->html;
-				}
-				$trackingObj = new TrackingUrlObject();
-				$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['idContact'], $links);
-				$this->view->setVar('html', $htmlWithTracking);
+				$this->view->setVar('html', $html);
 			}
+			else {
+				return $this->response->redirect('error/link');
+			}
+		}
+		else {
+			return $this->response->redirect('error/link');
 		}
 	}
 }
