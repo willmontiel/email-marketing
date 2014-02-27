@@ -70,13 +70,21 @@ class WebVersionObj extends BaseWrapper
 		$src = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $mail->idMail . '-' . $idContact;
 		$md5 = md5($src . '-Sigmamovil_Rules');
 		$url = $src . '-' . $md5;
-		$metaname = '<meta property="og:site_name" content="Sigma Movil" />';
-		$metaurl = '<meta property="og:url" content="' . $url . '" />';
-		$metatitle = '<meta property="og:title" content="' . $title . '" />';
-		$metaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/sigma_envelope.png" />';
-		$metadescritpion = '<meta property="og:description" content="' . $description . '" />';
-		$metatype = '<meta property="og:type" content="website" />';
-		$metaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '" />';
+//		$metaname = '<meta property="og:site_name" content="Sigma Movil" />';
+//		$metaurl = '<meta property="og:url" content="' . $url . '" />';
+//		$metatitle = '<meta property="og:title" content="' . $title . '" />';
+//		$metaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/sigma_envelope.png" />';
+//		$metadescritpion = '<meta property="og:description" content="' . $description . '" />';
+//		$metatype = '<meta property="og:type" content="website" />';
+//		$metaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '" />';
+		
+		$metaname =         '<meta property="og:site_name" content="YouTube">';
+		$metaurl = '    <meta property="og:url" content="http://www.youtube.com/watch?v=9Idt_YiY7kM">';
+		$metatitle =    '<meta property="og:title" content="Back to the Future Screen Test, Part 1 - Saturday Night Live">';
+		$metaimage =    '<meta property="og:type" content="video">';
+		$metadescritpion =     '<meta property="og:image" content="https://i1.ytimg.com/vi/9Idt_YiY7kM/hqdefault.jpg">';
+		$metatype =      '<meta property="og:description" content="Subscribe to SaturdayNightLive: http://j.mp/1bjU39d Celebrity Impressions: http://j.mp/1bEY4ok Movie Parodies: http://j.mp/14Mjfxh SEASON 36: http://j.mp/16I...">';
+		$metaapp =         '<meta property="og:video" content="http://www.youtube.com/v/9Idt_YiY7kM?version=3&amp;autohide=1">';
 		
 		$search = array('</head>');
 		$replace = array($metaname . $metaurl . $metatitle . $metaimage . $metadescritpion . $metatype . $metaapp . '</head>');
