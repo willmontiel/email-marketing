@@ -21,6 +21,7 @@ class TrackingUrlObject
 		Phalcon\DI::getDefault()->get('logger')->log('Antes: ' . print_r($this->links, true));
 		$this->getOpenTrackingUrl();
 		$this->getClicksTrackingUrl();
+		$this->getWebVersionTrack();
 		
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
@@ -39,6 +40,18 @@ class TrackingUrlObject
 		$this->links['search'][] = '$$$_open_track_$$$';
 		$this->links['replace'][] = $img;
 		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track apertura: ' . $img);
+	}
+	
+	public function getWebVersionTrack()
+	{
+		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
+		$src = $urlManager->getBaseUri(true) . 'webversion/show/1-' . $this->idMail . '-' . $this->idContact;
+		$md5 = md5($src . '-Sigmamovil_Rules');
+		$a = $src . '-' . $md5; 
+	
+		$this->links['search'][] = '$$$_webversion_track_$$$';
+		$this->links['replace'][] = $a;
+		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $a);
 	}
 	
 	public function getClicksTrackingUrl()
