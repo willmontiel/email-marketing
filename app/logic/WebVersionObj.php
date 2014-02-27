@@ -67,15 +67,19 @@ class WebVersionObj extends BaseWrapper
 		$socialdesc = json_decode($socialmail->fbdescription);
 		$title = (isset($socialdesc->title)) ? $socialdesc->title : $mail->subject;
 		$description = (isset($socialdesc->descritpion)) ? $socialdesc->descritpion : 'Mira mi correo';
-		$metaname = '<meta property="og:site_name" content="Sigma Movil">';
-		$metaurl = '<meta property="og:url" content="' . $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $mail->idMail . '-' . $idContact . '">';
-		$metatitle = '<meta property="og:title" content="' . $title . '">';
-		$metaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/sigma_envelope.png">';
-		$metadescritpion = '<meta property="og:description" content="' . $description . '">';
-		$metaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '">';
+		$src = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $mail->idMail . '-' . $idContact;
+		$md5 = md5($src . '-Sigmamovil_Rules');
+		$url = $src . '-' . $md5;
+		$metaname = '<meta property="og:site_name" content="Sigma Movil" />';
+		$metaurl = '<meta property="og:url" content="' . $url . '" />';
+		$metatitle = '<meta property="og:title" content="' . $title . '" />';
+		$metaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/sigma_envelope.png" />';
+		$metadescritpion = '<meta property="og:description" content="' . $description . '" />';
+		$metatype = '<meta property="og:type" content="website" />';
+		$metaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '" />';
 		
 		$search = array('</head>');
-		$replace = array($metaname . $metaurl . $metatitle . $metaimage . $metadescritpion . $metaapp . '</head>');
+		$replace = array($metaname . $metaurl . $metatitle . $metaimage . $metadescritpion . $metatype . $metaapp . '</head>');
 		
 		return str_ireplace($search, $replace, $html);
 	}
