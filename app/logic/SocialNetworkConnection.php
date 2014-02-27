@@ -222,6 +222,9 @@ class SocialNetworkConnection
 		$fbcontent = json_decode($desc->fbdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
+		$url = $this->urlObj->getBaseUri(TRUE) . 'webversion/show/1-' . $mail->idMail . '-25';
+		$md5 = md5($url . '-Sigmamovil_Rules');
+		$link = $url . '-' . $md5; 
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$userid = $id_token->userid;
@@ -229,10 +232,10 @@ class SocialNetworkConnection
 				$params = array(
 					"access_token" => $access_token,
 					"message" => $fbcontent->message,
-					"link" => $this->urlObj->getBaseUri(TRUE), //"http://stage.sigmamovil.com/",
+					"link" => $link, //$this->urlObj->getBaseUri(TRUE) "http://stage.sigmamovil.com/",
 					"picture" => $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png', //"http://stage.sigmamovil.com/images/sigma_envelope.png",
 					"name" => $fbcontent->title,
-					"caption" => $this->urlObj->getBaseUri(TRUE), //"www.stage.sigmamovil.com/",
+					"caption" => $link, //$this->urlObj->getBaseUri(TRUE) "www.stage.sigmamovil.com/",
 					"description" => $fbcontent->description
 				  );
 
@@ -268,6 +271,9 @@ class SocialNetworkConnection
 		$twcontent = json_decode($desc->twdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
+		$url = $this->urlObj->getBaseUri(TRUE) . 'webversion/show/1-' . $mail->idMail . '-25';
+		$md5 = md5($url . '-Sigmamovil_Rules');
+		$link = $url . '-' . $md5; 
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$oauth_token = $id_token->userid;
@@ -275,7 +281,7 @@ class SocialNetworkConnection
 				$this->setTwitterConnection($appids['id'], $appids['secret'], $oauth_token, $oauth_secret);
 				try {
 					$account = $this->twitter->get('account/verify_credentials');
-					$post = $this->twitter->post('statuses/update', array('status' => $twcontent->message . ' stage.sigmamovil.com'));
+					$post = $this->twitter->post('statuses/update', array('status' => $twcontent->message . ' ' . $link));
 					$this->logger->log('Successfully posted in Twitter');
 				} catch(Exception $e) {
 					$this->logger->log('No Tweet');

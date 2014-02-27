@@ -101,6 +101,7 @@ class Security extends Plugin
 				'track::open' => array(),
 				'track::click' => array(),
 				'track::mtaevent' => array(),
+				'webversion::show' => array(),
 				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
@@ -346,7 +347,8 @@ class Security extends Plugin
 			'error:link',
 			'track:open',
 			'track:click',
-			'track:mtaevent'
+			'track:mtaevent',
+			'webversion:show'
 		);
 		
 		$controller = $dispatcher->getControllerName();
