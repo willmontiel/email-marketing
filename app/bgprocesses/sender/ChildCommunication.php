@@ -157,7 +157,7 @@ class ChildCommunication extends BaseWrapper
 //					$recipients = true;
 					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
-
+					$log->log("Headers: " . print_r($this->lastsendheaders, true));
 					if ($recipients){
 						echo "Message " . $i . " successfully sent! \n";
 //						$log->log("HTML: " . $html);
