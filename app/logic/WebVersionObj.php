@@ -57,7 +57,26 @@ class WebVersionObj extends BaseWrapper
 		}
 		$trackingObj = new TrackingUrlObject();
 		$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $contact['idContact'], $links);
-
-		return $htmlWithTracking;
+		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $contact['idContact']);
+		return $htmlFinal;
+	}
+	
+	public function insertSocialMediaMetadata(Mail $mail, $html, $idContact)
+	{
+		$socialmail = Socialmail::findFirstByIdMail($mail->idMail);
+		$socialdesc = json_decode($socialmail->fbdescription);
+		$title = (isset($socialdesc->title)) ? $socialdesc->title : $mail->subject;
+		$description = (isset($socialdesc->descritpion)) ? $socialdesc->descritpion : 'Mira mi correo';
+		$metaname = '<meta property="og:site_name" content="Sigma Movil">';
+		$metaurl = '<meta property="og:url" content="' . $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $mail->idMail . '-' . $idContact . '">';
+		$metatitle = '<meta property="og:title" content="' . $title . '">';
+		$metaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/sigma_envelope.png">';
+		$metadescritpion = '<meta property="og:description" content="' . $description . '">';
+		$metaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '">';
+		
+		$search = array('</head>');
+		$replace = array($metaname . $metaurl . $metatitle . $metaimage . $metadescritpion . $metaapp . '</head>');
+		
+		return str_ireplace($search, $replace, $html);
 	}
 }
