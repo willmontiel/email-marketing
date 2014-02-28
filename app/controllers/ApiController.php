@@ -519,14 +519,14 @@ class ApiController extends ControllerBase
 		try {
 			$wrapper = new ContactWrapper();
 			$result = $wrapper->deleteContactFromDB($contact, $db);
-			return $this->setJsonResponse(array ('contact' => $result), 202, 'contact deleted success');	
 		}
 		catch (Exception $e) {
-			return $this->setJsonResponse(array('contact' => $result), 422, 'Problemas al borrar el contacto' . $e->getMessage());	
+			return $this->setJsonResponse(array('status' => 'failed'), 500, 'Problemas al borrar el contacto' . $e->getMessage());	
 		}
 		catch (InvalidArgumentException $e) {
-			return $this->setJsonResponse(array('contact' => $result), 422, 'Problemas al borrar el contacto' . $e->getMessage());	
+			return $this->setJsonResponse(array('status' => 'falied'), 500, 'Problemas al borrar el contacto' . $e->getMessage());	
 		}
+		return $this->setJsonResponse(array ('contact' => $result), 202, 'contact deleted success');
 	}
 	
 	/* Inicio de listas de contactos*/
