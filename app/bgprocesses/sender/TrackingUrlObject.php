@@ -22,6 +22,7 @@ class TrackingUrlObject
 		$this->getOpenTrackingUrl();
 		$this->getClicksTrackingUrl();
 		$this->getWebVersionTrack();
+		$this->getSocialMediaShare();
 		
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
@@ -52,6 +53,18 @@ class TrackingUrlObject
 		$this->links['search'][] = '$$$_webversion_track_$$$';
 		$this->links['replace'][] = $a;
 		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $a);
+	}
+	
+	public function getSocialMediaShare()
+	{
+		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
+		$src = $urlManager->getBaseUri(true) . 'socialmedia/share/' . $this->idMail . '-' . $this->idContact;
+		$md5 = md5($src . '-Sigmamovil_Rules');
+		$share = $src . '-' . $md5 . '-'; 
+	
+		$this->links['search'][] = '$$$_social_media_share_$$$';
+		$this->links['replace'][] = $share;
+		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $share);
 	}
 	
 	public function getClicksTrackingUrl()
