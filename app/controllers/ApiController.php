@@ -502,7 +502,6 @@ class ApiController extends ControllerBase
 	 */
 	public function deletecontactAction($idDbase, $idContact)
 	{
-		
 		$contact = Contact::findFirst(array(
 			"conditions" => "idContact = ?1",
 			"bind" => array(1 => $idContact)

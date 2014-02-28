@@ -201,7 +201,7 @@ class ContactWrapper extends BaseWrapper
 						}
 					}
 					Phalcon\DI::getDefault()->get('logger')->log('Se borrarón asociaciones');
-//					$this->counter->deleteContactFromList($contact, $list);
+					$this->counter->deleteContactFromList($contact, $list);
 					Phalcon\DI::getDefault()->get('logger')->log('Se borró contact from list');
 				}
 			}
@@ -220,19 +220,29 @@ class ContactWrapper extends BaseWrapper
 			}
 			
 			Phalcon\DI::getDefault()->get('logger')->log('Preparandose para eliminar contacto de la base de datos');
-			if (!$contact->delete()) {
-				Phalcon\DI::getDefault()->get('logger')->log('Errror');
-				foreach ($contact->getMessages() as $msg) {
-					Phalcon\DI::getDefault()->get('logger')->log('Error while deleting contact: ' . $msg);
+			
+			
+			try {
+				if (!$contact->delete()) {
+					Phalcon\DI::getDefault()->get('logger')->log('Errror');
+					foreach ($contact->getMessages() as $msg) {
+						Phalcon\DI::getDefault()->get('logger')->log('Error while deleting contact: ' . $msg);
+					}
 				}
+				else {
+					Phalcon\DI::getDefault()->get('logger')->log('Se borró contacto');
+					$this->counter->deleteContactFromDbase($contact);
+					Phalcon\DI::getDefault()->get('logger')->log('Se borró conytactFromDbase');
+				}
+				$this->counter->saveCounters();
+				Phalcon\DI::getDefault()->get('logger')->log('Se actualizarón contadores');
 			}
-			else {
-				Phalcon\DI::getDefault()->get('logger')->log('Se borró contacto');
-				$this->counter->deleteContactFromDbase($contact);
-				Phalcon\DI::getDefault()->get('logger')->log('Se borró conytactFromDbase');
+			catch(Exception $e) {
+				Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e);
 			}
-			$this->counter->saveCounters();
-			Phalcon\DI::getDefault()->get('logger')->log('Se actualizarón contadores');
+			catch (InvalidArgumentException $e) {
+				Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e);
+			}
 		}
 	}
 
