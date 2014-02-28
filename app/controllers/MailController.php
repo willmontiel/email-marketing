@@ -1003,9 +1003,8 @@ class MailController extends ControllerBase
 		$content = $this->request->getPost("editor");
 		$this->session->remove('htmlObj');
 		switch ($type) {
-			case 'mail':
+			case 'editor':
 				$url = $this->url->get('mail/previewmail');
-				
 				$editorObj = new HtmlObj(true, $url, $idMail);
 				$editorObj->assignContent(json_decode($content));
 				$this->session->set('htmlObj', $editorObj->render());
@@ -1019,6 +1018,8 @@ class MailController extends ControllerBase
 				return $this->setJsonResponse(array('preview' => $editorObj->render()));
 				break;
 			
+			case 'html':
+				break;
 			default :
 				return $this->response->redirect('error');
 				break;
@@ -1072,6 +1073,50 @@ class MailController extends ControllerBase
 		return $this->response->setContent($htmlObj);
 	}
 	
+	public function previewhtmlAction($idMail)
+	{
+		$html = $this->request->getPost("html");
+		$this->session->remove('htmlObj');
+		
+		if (trim($html) === '' || $html == null || empty($html)) {
+			return $this->setJsonResponse(array('status' => 'Error'), 401, 'No hay html que previsualizar por favor verfique la informacion');
+		}
+		$url = $this->url->get('mail/previewmail');
+		$script1 =  '<head>
+						<title>Preview</title>
+						<script type="text/javascript" src="' . $this->url->get('js/html2canvas.js'). '"></script>
+						<script type="text/javascript" src="' . $this->url->get('js/jquery-1.8.3.min.js') .'"></script>
+						<script>
+							function createPreviewImage(img) {
+							console.log(img);
+							$.ajax({
+								url: "' . $url . '/' . $idMail .'",
+								type: "POST",			
+								data: { img: img},
+								success: function(){}
+								});
+							}
+						</script>';
+		
+		$script2 = '<script> 
+						html2canvas(document.body, { 
+							onrendered: function (c) { 
+								c.getContext("2d");	
+								createPreviewImage(c.toDataURL("image/png"));
+							},
+							height: 700
+						});
+				   </script></body>';
+		
+		$search = array('<head>', '</body>');
+		$replace = array($script1, $script2);
+		
+		$htmlFinal = str_ireplace($search, $replace, $html);
+		
+		$this->session->set('htmlObj', $htmlFinal);
+//		return $this->setJsonResponse(array('response' => $htmlFinal));
+	}
+	
 	public function previewmailAction($idMail)
 	{
 		$content = $this->request->getPost("img");
@@ -1090,7 +1135,10 @@ class MailController extends ControllerBase
 		$mail->previewData = $newImg;
 		
 		if (!$mail->save()) {
-			
+			$this->logger->log("Error while saving image base64");
+			foreach ($mail->getMessages() as $msg) {
+				$this->logger->log("Error: " . $msg);
+			}
 		}
 //		$this->logger->log("NewImg: " . $newImg);
 	}
