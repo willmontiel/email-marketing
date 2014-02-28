@@ -186,28 +186,48 @@ class ContactWrapper extends BaseWrapper
 	
 	public function deleteContactFromDB($contact, $db)
 	{
+		Phalcon\DI::getDefault()->get('logger')->log('Buscando listas');
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
-		
-		foreach ($allLists as $list)
-		{
-			$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
-			
-			if($association){
-				$association->delete();
-				$this->counter->deleteContactFromList($contact, $list);
+		if (count($allLists) > 0) {
+			Phalcon\DI::getDefault()->get('logger')->log('Se encontrarón listas');
+			foreach ($allLists as $list) {
+				$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
+
+				if($association){
+					Phalcon\DI::getDefault()->get('logger')->log('Se encontrarón listas');
+					if (!$association->delete()) {
+						foreach ($association->getMessages() as $msg) {
+							Phalcon\DI::getDefault()->get('logger')->log('Error while deleting assoc: ' . $msg);
+						}
+					}
+					Phalcon\DI::getDefault()->get('logger')->log('Se borrarón asociaciones');
+					$this->counter->deleteContactFromList($contact, $list);
+					Phalcon\DI::getDefault()->get('logger')->log('Se borró contact from list');
+				}
 			}
+			
+			$customfields = Fieldinstance::findByIdContact($contact->idContact);
+			Phalcon\DI::getDefault()->get('logger')->log('Buscando customfields');
+			if (count($customfields) > 0) {
+				Phalcon\DI::getDefault()->get('logger')->log('Se encontrarón customfields');
+				foreach ($customfields as $field){
+					if (!$field->delete()) {
+						foreach ($association->getMessages() as $msg) {
+							Phalcon\DI::getDefault()->get('logger')->log('Error while deleting assoc: ' . $msg);
+						}
+					}
+				}
+			}
+			
+			Phalcon\DI::getDefault()->get('logger')->log('Preparandose para eliminar contacto de la base de datos');
+			if($contact->delete()) {
+				Phalcon\DI::getDefault()->get('logger')->log('Se borró contacto');
+				$this->counter->deleteContactFromDbase($contact);
+				Phalcon\DI::getDefault()->get('logger')->log('Se borró conytactFromDbase');
+			}
+			$this->counter->saveCounters();
+			Phalcon\DI::getDefault()->get('logger')->log('Se actualizarón contadores');
 		}
-		
-		$customfields = Fieldinstance::findByIdContact($contact->idContact);
-		
-		foreach ($customfields as $field){
-			$field->delete();
-		}
-		
-		if($contact->delete()) {
-			$this->counter->deleteContactFromDbase($contact);
-		}
-		$this->counter->saveCounters();
 	}
 
 	public function addExistingContactToListFromDbase($email, Contactlist $list, $saveCounters = true)
