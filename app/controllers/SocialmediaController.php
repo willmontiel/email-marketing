@@ -82,7 +82,25 @@ class SocialmediaController extends ControllerBase
 		$src = $this->urlManager->getBaseUri(true) . 'socialmedia/share/' . $idMail . '-' . $idContact;
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		if ($md5 == $md5_2) {
-			$this->logger->log('IdMail: ' . $idMail . ' idContact: ' . $idContact . ' Red Social: ' . $socialtype);
+			$url_1 = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $idMail . '-' . $idContact . '-' . $socialtype;
+			$md5_3 = md5($url_1 . '-Sigmamovil_Rules');
+			$url_2 = $url_1 . '-' . $md5_3;
+			$url = urlencode($url_2);
+			switch ($socialtype) {
+				case 'facebook':
+						$urlFinal = 'https://facebook.com/sharer/sharer.php?u=' . $url . '&display=popup';
+					break;
+				case 'twitter':
+						$urlFinal = 'https://twitter.com/intent/tweet?text=' . $url . '&source=webclient';
+					break;
+				case 'linkedin':
+						$urlFinal = 'https://linkedin.com/cws/share?url=' . $url;
+					break;
+				case 'googleplus':
+						$urlFinal = 'https://plus.google.com/share?url=' . $url;
+					break;
+			}
+			return $this->response->redirect($urlFinal, true);
 		}
 		else {
 			return $this->response->redirect('error/link');
