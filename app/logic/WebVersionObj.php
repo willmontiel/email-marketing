@@ -95,9 +95,10 @@ class WebVersionObj extends BaseWrapper
 		$twmetacreator = '<meta name="twitter:creator" content="@dariosigma">';
 		$twmetatitle = '<meta name="twitter:title" content="' . $twtitle . '">';
 		$twmetadescription = '<meta name="twitter:description" content="' . $twdescription . '">';
-		$twmetaimage = '<meta name="twitter:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png">';
+		$twmetaimage = '<meta name="twitter:image:src" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png">';
+		$twmetaothers = '<meta name="twitter:app:name:iphone" content=""><meta name="twitter:app:name:ipad" content=""><meta name="twitter:app:name:googleplay" content=""><meta name="twitter:app:url:iphone" content=""><meta name="twitter:app:url:ipad" content=""><meta name="twitter:app:url:googleplay" content=""><meta name="twitter:app:id:iphone" content=""><meta name="twitter:app:id:ipad" content=""><meta name="twitter:app:id:googleplay" content="">';
 		
-		$twMeta = $twmetacard . $twmetasite . $twmetacreator . $twmetatitle . $twmetadescription . $twmetaimage . $twmetadomain;
+		$twMeta = $twmetacard . $twmetasite . $twmetatitle . $twmetadescription . $twmetacreator . $twmetaimage . $twmetadomain . $twmetaothers;
 		
 		//----Add MetaData----//
 		$search = array('</head>');
