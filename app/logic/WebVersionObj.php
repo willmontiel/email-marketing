@@ -73,7 +73,7 @@ class WebVersionObj extends BaseWrapper
 		$metaname = '<meta property="og:site_name" content="Sigma Movil" />';
 		$metaurl = '<meta property="og:url" content="' . $url . '" />';
 		$metatitle = '<meta property="og:title" content="' . $title . '" />';
-		$metaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/sigma_envelope.png" />';
+		$metaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png" />';
 		$metadescritpion = '<meta property="og:description" content="' . $description . '" />';
 		$metatype = '<meta property="og:type" content="website" />';
 		$metaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '" />';
