@@ -189,59 +189,52 @@ class ContactWrapper extends BaseWrapper
 		Phalcon\DI::getDefault()->get('logger')->log('Buscando listas');
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
 		if (count($allLists) > 0) {
-			Phalcon\DI::getDefault()->get('logger')->log('Se encontrarón listas');
-			foreach ($allLists as $list) {
-				$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
-
-				if($association){
-					Phalcon\DI::getDefault()->get('logger')->log('Se encontrarón listas');
-					if (!$association->delete()) {
-						foreach ($association->getMessages() as $msg) {
-							Phalcon\DI::getDefault()->get('logger')->log('Error while deleting assoc: ' . $msg);
-						}
-					}
-					Phalcon\DI::getDefault()->get('logger')->log('Se borrarón asociaciones');
-					$this->counter->deleteContactFromList($contact, $list);
-					Phalcon\DI::getDefault()->get('logger')->log('Se borró contact from list');
-				}
-			}
-			
-			$customfields = Fieldinstance::findByIdContact($contact->idContact);
-			Phalcon\DI::getDefault()->get('logger')->log('Buscando customfields');
-			if (count($customfields) > 0) {
-				Phalcon\DI::getDefault()->get('logger')->log('Se encontrarón customfields');
-				foreach ($customfields as $field){
-					if (!$field->delete()) {
-						foreach ($association->getMessages() as $msg) {
-							Phalcon\DI::getDefault()->get('logger')->log('Error while deleting assoc: ' . $msg);
-						}
-					}
-				}
-			}
-			
-			Phalcon\DI::getDefault()->get('logger')->log('Preparandose para eliminar contacto de la base de datos');
-			
-			
 			try {
+				Phalcon\DI::getDefault()->get('db')->begin();
+				foreach ($allLists as $list) {
+					$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
+					if($association){
+						if (!$association->delete()) {
+							foreach ($association->getMessages() as $msg) {
+								Phalcon\DI::getDefault()->get('logger')->log('Error while deleting assoc: ' . $msg);
+								throw new Exception('Error while deleting assoc between contact and list!');
+							}
+						}
+						$this->counter->deleteContactFromList($contact, $list);
+					}
+				}
+
+				$customfields = Fieldinstance::findByIdContact($contact->idContact);
+				if (count($customfields) > 0) {
+					foreach ($customfields as $field){
+						if (!$field->delete()) {
+							foreach ($association->getMessages() as $msg) {
+								Phalcon\DI::getDefault()->get('logger')->log('Error while deleting assoc: ' . $msg);
+								throw new Exception('Error while deleting assoc between contact and customfields!');
+							}
+						}
+					}
+				}
 				if (!$contact->delete()) {
-					Phalcon\DI::getDefault()->get('logger')->log('Errror');
 					foreach ($contact->getMessages() as $msg) {
 						Phalcon\DI::getDefault()->get('logger')->log('Error while deleting contact: ' . $msg);
+						throw new Exception('Error while deleting contact');
 					}
 				}
 				else {
-					Phalcon\DI::getDefault()->get('logger')->log('Se borró contacto');
 					$this->counter->deleteContactFromDbase($contact);
-					Phalcon\DI::getDefault()->get('logger')->log('Se borró conytactFromDbase');
+					$this->counter->saveCounters();
 				}
-				$this->counter->saveCounters();
-				Phalcon\DI::getDefault()->get('logger')->log('Se actualizarón contadores');
+				Phalcon\DI::getDefault()->get('db')->commit();
+				Phalcon\DI::getDefault()->get('logger')->log('Se borró contacto exitosamente');
 			}
 			catch(Exception $e) {
 				Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e);
+				Phalcon\DI::getDefault()->get('db')->rollback();
 			}
 			catch (InvalidArgumentException $e) {
 				Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e);
+				Phalcon\DI::getDefault()->get('db')->rollback();
 			}
 		}
 	}
