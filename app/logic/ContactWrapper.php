@@ -186,7 +186,6 @@ class ContactWrapper extends BaseWrapper
 	
 	public function deleteContactFromDB($contact, $db)
 	{
-		Phalcon\DI::getDefault()->get('logger')->log('Buscando listas');
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
 		if (count($allLists) > 0) {
 			try {

@@ -516,12 +516,15 @@ class ApiController extends ControllerBase
 		}
 		
 		// Eliminar el Contacto de la Base de Datos
-		$wrapper = new ContactWrapper();
-
-		$result = $wrapper->deleteContactFromDB($contact, $db);
-		
-		return $this->setJsonResponse(array ('contact' => $result), 202, 'contact deleted success');	
-	
+		try {
+			$wrapper = new ContactWrapper();
+			$result = $wrapper->deleteContactFromDB($contact, $db);
+			return $this->setJsonResponse(array ('contact' => $result), 202, 'contact deleted success');	
+		}
+		catch (Exception $e) {
+			$this->logger->log('Exception: ' . $e);
+			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al borrar el contacto')), 422, 'Error: ' . $e->getMessage());	
+		}
 	}
 	
 	/* Inicio de listas de contactos*/
