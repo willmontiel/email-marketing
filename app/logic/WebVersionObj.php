@@ -72,7 +72,7 @@ class WebVersionObj extends BaseWrapper
 		
 		$fbsocialdesc = json_decode($socialmail->fbdescription);
 		$fbtitle = (isset($fbsocialdesc->title)) ? $fbsocialdesc->title : $mail->subject;
-		$fbdescription = (isset($fbsocialdesc->descritpion)) ? $fbsocialdesc->descritpion : 'Mira mi correo';
+		$fbdescription = (isset($fbsocialdesc->description)) ? $fbsocialdesc->description : 'Mira mi correo';
 		$fbmetaname = '<meta property="og:site_name" content="Sigma Movil" />';
 		$fbmetaurl = '<meta property="og:url" content="' . $url . '" />';
 		$fbmetatitle = '<meta property="og:title" content="' . $fbtitle . '" />';
@@ -96,7 +96,6 @@ class WebVersionObj extends BaseWrapper
 		$twmetatitle = '<meta name="twitter:title" content="' . $twtitle . '">';
 		$twmetadescription = '<meta name="twitter:description" content="' . $twdescription . '">';
 		$twmetaimage = '<meta name="twitter:image:src" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png">';
-//		$twmetaothers = '<meta name="twitter:app:name:iphone" content=""><meta name="twitter:app:name:ipad" content=""><meta name="twitter:app:name:googleplay" content=""><meta name="twitter:app:url:iphone" content=""><meta name="twitter:app:url:ipad" content=""><meta name="twitter:app:url:googleplay" content=""><meta name="twitter:app:id:iphone" content=""><meta name="twitter:app:id:ipad" content=""><meta name="twitter:app:id:googleplay" content="">';
 		
 		$twMeta = $twmetacard . $twmetasite . $twmetaurl . $twmetatitle . $twmetadescription . $twmetacreator . $twmetaimage;
 		
