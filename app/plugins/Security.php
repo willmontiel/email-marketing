@@ -102,6 +102,7 @@ class Security extends Plugin
 				'track::click' => array(),
 				'track::mtaevent' => array(),
 				'webversion::show' => array(),
+				'webversion::share' => array(),
 				'socialmedia::share' => array(),
 				
 				//Dashboard
@@ -351,6 +352,7 @@ class Security extends Plugin
 			'track:click',
 			'track:mtaevent',
 			'webversion:show',
+			'webversion::share',
 			'socialmedia:share'
 		);
 		
