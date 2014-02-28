@@ -508,7 +508,7 @@ class TrackingObject
 			$this->log->log('Se actualizó rebote duro');
 		}
 	}
-
+	
 	public function trackSpamEvent($cod, $date = null)
 	{
 		if ($date == null) {
@@ -518,21 +518,46 @@ class TrackingObject
 			if ($this->canTrackSpamEvent()) {
 				$this->startTransaction();
 				$this->mxc->spam = $date;
-				$this->addDirtyObject($this->mxc);
-				$this->log->log('Se agregó mxc');
 				
 				$mailObj = $this->findRelatedMailObject();
 				$mailObj->incrementSpam();
-				$this->addDirtyObject($mailObj);
-				$this->log->log('Se agregó mail');
 				
 				$statDbaseObj = $this->findRelatedDbaseStatObject();
 				$statDbaseObj->incrementSpam();
+				
+				$statListObjs = $this->findRelatedContactlistObjects();
+				
+				foreach ($statListObjs as $statListObj) {
+					$statListObj->incrementSpam();
+				}
+				
+				if ($this->canTrackOpenEvents()) {
+					$this->mxc->opening = $date;// Actualizar marcador de apertura (timestamp)
+					$mailObj->incrementUniqueOpens();//Se agregar el objeto Mail actualizado para su posterior grabación
+					$statDbaseObj->incrementUniqueOpens();
+
+					foreach ($statListObjs as $statListObj) {
+						$statListObj->incrementUniqueOpens();
+					}
+
+					$event = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
+					$event->idBouncedCode = null;
+					$event->description = 'opening';
+					$event->userAgent = null;
+					$event->date = $date;
+					$this->addDirtyObject($event);
+				}
+				
+				$this->addDirtyObject($this->mxc);
+				$this->log->log('Se agregó mxc');
+				
+				$this->addDirtyObject($mailObj);
+				$this->log->log('Se agregó mail');
+				
 				$this->addDirtyObject($statDbaseObj);
 				$this->log->log('Se agregó statDbase');
 				
-				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
-					$statListObj->incrementSpam();
+				foreach ($statListObjs as $statListObj) {
 					$this->addDirtyObject($statListObj);
 					$this->log->log('Se agregó un statContactlist');
 				}
