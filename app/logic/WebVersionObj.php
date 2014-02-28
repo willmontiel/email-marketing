@@ -89,14 +89,15 @@ class WebVersionObj extends BaseWrapper
 		$twtitle = $mail->subject;
 		$twdescription = (isset($twsocialdesc->message)) ? $twsocialdesc->message : 'Mira mi correo';
 		$twmetacard = '<meta name="twitter:card" content="summary">';
-		$twmetaurl = '<meta name="twitter:url" content="' . $url . '">';
+//		$twmetaurl = '<meta name="twitter:url" content="' . $url . '">';
+		$twmetadomain = '<meta name="twitter:domain" content="' . $this->urlManager->getBaseUri(TRUE) . '">';
 		$twmetasite = '<meta name="twitter:site" content="@dariosigma">';
 		$twmetacreator = '<meta name="twitter:creator" content="@dariosigma">';
 		$twmetatitle = '<meta name="twitter:title" content="' . $twtitle . '">';
-		$twmetadescription = '<meta name="twitter:description" content="' . $twdescription . ' ">';
+		$twmetadescription = '<meta name="twitter:description" content="' . $twdescription . '">';
 		$twmetaimage = '<meta name="twitter:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png">';
 		
-		$twMeta = $twmetacard . $twmetaurl . $twmetasite . $twmetacreator . $twmetatitle . $twmetadescription . $twmetaimage;
+		$twMeta = $twmetacard . $twmetasite . $twmetacreator . $twmetatitle . $twmetadescription . $twmetaimage . $twmetadomain;
 		
 		//----Add MetaData----//
 		$search = array('</head>');
