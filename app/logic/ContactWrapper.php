@@ -187,27 +187,55 @@ class ContactWrapper extends BaseWrapper
 	public function deleteContactFromDB($contact, $db)
 	{
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
-		
-		foreach ($allLists as $list)
-		{
-			$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
-			
-			if($association){
-				$association->delete();
-				$this->counter->deleteContactFromList($contact, $list);
+		if (count($allLists) > 0) {
+			try {
+				Phalcon\DI::getDefault()->get('db')->begin();
+				foreach ($allLists as $list) {
+					$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
+					if($association){
+						if (!$association->delete()) {
+							foreach ($association->getMessages() as $msg) {
+								Phalcon\DI::getDefault()->get('logger')->log('Error while deleting assoc: ' . $msg);
+								throw new Exception('Error while deleting assoc between contact and list!');
+							}
+						}
+						$this->counter->deleteContactFromList($contact, $list);
+					}
+				}
+
+				$customfields = Fieldinstance::findByIdContact($contact->idContact);
+				if (count($customfields) > 0) {
+					foreach ($customfields as $field){
+						if (!$field->delete()) {
+							foreach ($association->getMessages() as $msg) {
+								Phalcon\DI::getDefault()->get('logger')->log('Error while deleting assoc: ' . $msg);
+								throw new Exception('Error while deleting assoc between contact and customfields!');
+							}
+						}
+					}
+				}
+				if (!$contact->delete()) {
+					foreach ($contact->getMessages() as $msg) {
+						Phalcon\DI::getDefault()->get('logger')->log('Error while deleting contact: ' . $msg);
+						throw new Exception('Error while deleting contact');
+					}
+				}
+				else {
+					$this->counter->deleteContactFromDbase($contact);
+					$this->counter->saveCounters();
+				}
+				Phalcon\DI::getDefault()->get('db')->commit();
+				Phalcon\DI::getDefault()->get('logger')->log('Se borró contacto exitosamente');
+			}
+			catch(Exception $e) {
+				Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e);
+				Phalcon\DI::getDefault()->get('db')->rollback();
+			}
+			catch (InvalidArgumentException $e) {
+				Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e);
+				Phalcon\DI::getDefault()->get('db')->rollback();
 			}
 		}
-		
-		$customfields = Fieldinstance::findByIdContact($contact->idContact);
-		
-		foreach ($customfields as $field){
-			$field->delete();
-		}
-		
-		if($contact->delete()) {
-			$this->counter->deleteContactFromDbase($contact);
-		}
-		$this->counter->saveCounters();
 	}
 
 	public function addExistingContactToListFromDbase($email, Contactlist $list, $saveCounters = true)

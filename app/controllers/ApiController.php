@@ -502,7 +502,6 @@ class ApiController extends ControllerBase
 	 */
 	public function deletecontactAction($idDbase, $idContact)
 	{
-		
 		$contact = Contact::findFirst(array(
 			"conditions" => "idContact = ?1",
 			"bind" => array(1 => $idContact)
@@ -517,12 +516,17 @@ class ApiController extends ControllerBase
 		}
 		
 		// Eliminar el Contacto de la Base de Datos
-		$wrapper = new ContactWrapper();
-
-		$result = $wrapper->deleteContactFromDB($contact, $db);
-		
-		return $this->setJsonResponse(array ('contact' => $result), 202, 'contact deleted success');	
-	
+		try {
+			$wrapper = new ContactWrapper();
+			$result = $wrapper->deleteContactFromDB($contact, $db);
+		}
+		catch (Exception $e) {
+			return $this->setJsonResponse(array('status' => 'failed'), 500, 'Problemas al borrar el contacto' . $e->getMessage());	
+		}
+		catch (InvalidArgumentException $e) {
+			return $this->setJsonResponse(array('status' => 'falied'), 500, 'Problemas al borrar el contacto' . $e->getMessage());	
+		}
+		return $this->setJsonResponse(array ('contact' => $result), 202, 'contact deleted success');
 	}
 	
 	/* Inicio de listas de contactos*/
