@@ -13,7 +13,7 @@ class MailController extends ControllerBase
 		$builder = $this->modelsManager->createBuilder()
 			->from('Mail')
 			->where("idAccount = $idAccount")
-			->orderBy('createdon');
+			->orderBy('createdon DESC');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
 			"builder"  => $builder,
