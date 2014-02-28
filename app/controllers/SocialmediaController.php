@@ -74,4 +74,18 @@ class SocialmediaController extends ControllerBase
 			return $this->response->redirect('socialmedia');
 		}
 	}
+	
+	public function shareAction($parameters)
+	{
+		$idenfifiers = explode("-", $parameters);
+		list($idMail, $idContact, $md5, $socialtype) = $idenfifiers;
+		$src = $this->urlManager->getBaseUri(true) . 'socialmedia/share/' . $idMail . '-' . $idContact;
+		$md5_2 = md5($src . '-Sigmamovil_Rules');
+		if ($md5 == $md5_2) {
+			$this->logger->log('IdMail: ' . $idMail . ' idContact: ' . $idContact . ' Red Social: ' . $socialtype);
+		}
+		else {
+			return $this->response->redirect('error/link');
+		}
+	}
 }
