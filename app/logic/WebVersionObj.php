@@ -70,13 +70,16 @@ class WebVersionObj extends BaseWrapper
 	{
 		$socialmail = Socialmail::findFirstByIdMail($mail->idMail);
 		if($social) {
-			$src = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $mail->idMail . '-' . $idContact . '-' . $social;
+			$src['facebook'] = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $mail->idMail . '-' . $idContact . '-facebook';
+			$src['twitter'] = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $mail->idMail . '-' . $idContact . '-twitter';
 		}
 		else {
-			$src = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $mail->idMail . '-' . $idContact;
+			$src['facebook'] = $src['twitter'] = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $mail->idMail . '-' . $idContact;
 		}
-		$md5 = md5($src . '-Sigmamovil_Rules');
-		$url = $src . '-' . $md5;
+		foreach ($src as $key => $value) {
+			$md5 = md5($value . '-Sigmamovil_Rules');
+			$url[$key] = $value . '-' . $md5;
+		}
 		
 		//----Facebook MetaData----//
 		
@@ -84,7 +87,7 @@ class WebVersionObj extends BaseWrapper
 		$fbtitle = (isset($fbsocialdesc->title)) ? $fbsocialdesc->title : $mail->subject;
 		$fbdescription = (isset($fbsocialdesc->description)) ? $fbsocialdesc->description : 'Mira mi correo';
 		$fbmetaname = '<meta property="og:site_name" content="Sigma Movil" />';
-		$fbmetaurl = '<meta property="og:url" content="' . $url . '" />';
+		$fbmetaurl = '<meta property="og:url" content="' . $url['facebook'] . '" />';
 		$fbmetatitle = '<meta property="og:title" content="' . $fbtitle . '" />';
 		$fbmetaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png" />';
 		$fbmetadescritpion = '<meta property="og:description" content="' . $fbdescription . '" />';
@@ -99,7 +102,7 @@ class WebVersionObj extends BaseWrapper
 		$twtitle = $mail->subject;
 		$twdescription = (isset($twsocialdesc->message)) ? $twsocialdesc->message : 'Mira mi correo';
 		$twmetacard = '<meta name="twitter:card" content="summary">';
-		$twmetaurl = '<meta name="twitter:url" content="' . $url . '">';
+		$twmetaurl = '<meta name="twitter:url" content="' . $url['twitter'] . '">';
 //		$twmetadomain = '<meta name="twitter:domain" content="' . $this->urlManager->getBaseUri(TRUE) . '">';
 		$twmetasite = '<meta name="twitter:site" content="@dariosigma">';
 		$twmetacreator = '<meta name="twitter:creator" content="@dariosigma">';
