@@ -72,7 +72,7 @@ class WebVersionObj extends BaseWrapper
 		
 		$fbsocialdesc = json_decode($socialmail->fbdescription);
 		$fbtitle = (isset($fbsocialdesc->title)) ? $fbsocialdesc->title : $mail->subject;
-		$fbdescription = (isset($fbsocialdesc->descritpion)) ? $fbsocialdesc->descritpion : 'Mira mi correo';
+		$fbdescription = (isset($fbsocialdesc->description)) ? $fbsocialdesc->description : 'Mira mi correo';
 		$fbmetaname = '<meta property="og:site_name" content="Sigma Movil" />';
 		$fbmetaurl = '<meta property="og:url" content="' . $url . '" />';
 		$fbmetatitle = '<meta property="og:title" content="' . $fbtitle . '" />';
