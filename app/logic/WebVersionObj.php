@@ -64,30 +64,45 @@ class WebVersionObj extends BaseWrapper
 	public function insertSocialMediaMetadata(Mail $mail, $html, $idContact)
 	{
 		$socialmail = Socialmail::findFirstByIdMail($mail->idMail);
-		$socialdesc = json_decode($socialmail->fbdescription);
-		$title = (isset($socialdesc->title)) ? $socialdesc->title : $mail->subject;
-		$description = (isset($socialdesc->descritpion)) ? $socialdesc->descritpion : 'Mira mi correo';
 		$src = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $mail->idMail . '-' . $idContact;
 		$md5 = md5($src . '-Sigmamovil_Rules');
 		$url = $src . '-' . $md5;
-//		$metaname = '<meta property="og:site_name" content="Sigma Movil" />';
-//		$metaurl = '<meta property="og:url" content="' . $url . '" />';
-//		$metatitle = '<meta property="og:title" content="' . $title . '" />';
-//		$metaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/sigma_envelope.png" />';
-//		$metadescritpion = '<meta property="og:description" content="' . $description . '" />';
-//		$metatype = '<meta property="og:type" content="website" />';
-//		$metaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '" />';
 		
-		$metaname =         '<meta property="og:site_name" content="YouTube">';
-		$metaurl = '    <meta property="og:url" content="http://www.youtube.com/watch?v=9Idt_YiY7kM">';
-		$metatitle =    '<meta property="og:title" content="Back to the Future Screen Test, Part 1 - Saturday Night Live">';
-		$metaimage =    '<meta property="og:type" content="video">';
-		$metadescritpion =     '<meta property="og:image" content="https://i1.ytimg.com/vi/9Idt_YiY7kM/hqdefault.jpg">';
-		$metatype =      '<meta property="og:description" content="Subscribe to SaturdayNightLive: http://j.mp/1bjU39d Celebrity Impressions: http://j.mp/1bEY4ok Movie Parodies: http://j.mp/14Mjfxh SEASON 36: http://j.mp/16I...">';
-		$metaapp =         '<meta property="og:video" content="http://www.youtube.com/v/9Idt_YiY7kM?version=3&amp;autohide=1">';
+		//----Facebook MetaData----//
 		
-		$search = array('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">','<html>', '</head>');
-		$replace = array('<!DOCTYPE html>','<html lang="es" data-cast-api-enabled="true">', $metaname . $metaurl . $metatitle . $metaimage . $metadescritpion . $metatype . $metaapp . '</head>');
+		$fbsocialdesc = json_decode($socialmail->fbdescription);
+		$fbtitle = (isset($fbsocialdesc->title)) ? $fbsocialdesc->title : $mail->subject;
+		$fbdescription = (isset($fbsocialdesc->descritpion)) ? $fbsocialdesc->descritpion : 'Mira mi correo';
+		$fbmetaname = '<meta property="og:site_name" content="Sigma Movil" />';
+		$fbmetaurl = '<meta property="og:url" content="' . $url . '" />';
+		$fbmetatitle = '<meta property="og:title" content="' . $fbtitle . '" />';
+		$fbmetaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png" />';
+		$fbmetadescritpion = '<meta property="og:description" content="' . $fbdescription . '" />';
+		$fbmetatype = '<meta property="og:type" content="website" />';
+		$fbmetaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '" />';
+		
+		$fbMeta = $fbmetaname . $fbmetaurl . $fbmetatitle . $fbmetaimage . $fbmetadescritpion . $fbmetatype . $fbmetaapp;
+		
+		//----Twitter MetaData----//
+		
+		$twsocialdesc = json_decode($socialmail->twdescription);
+		$twtitle = $mail->subject;
+		$twdescription = (isset($twsocialdesc->message)) ? $twsocialdesc->message : 'Mira mi correo';
+		$twmetacard = '<meta name="twitter:card" content="summary">';
+		$twmetaurl = '<meta name="twitter:url" content="' . $url . '">';
+//		$twmetadomain = '<meta name="twitter:domain" content="' . $this->urlManager->getBaseUri(TRUE) . '">';
+		$twmetasite = '<meta name="twitter:site" content="@dariosigma">';
+		$twmetacreator = '<meta name="twitter:creator" content="@dariosigma">';
+		$twmetatitle = '<meta name="twitter:title" content="' . $twtitle . '">';
+		$twmetadescription = '<meta name="twitter:description" content="' . $twdescription . '">';
+		$twmetaimage = '<meta name="twitter:image:src" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png">';
+//		$twmetaothers = '<meta name="twitter:app:name:iphone" content=""><meta name="twitter:app:name:ipad" content=""><meta name="twitter:app:name:googleplay" content=""><meta name="twitter:app:url:iphone" content=""><meta name="twitter:app:url:ipad" content=""><meta name="twitter:app:url:googleplay" content=""><meta name="twitter:app:id:iphone" content=""><meta name="twitter:app:id:ipad" content=""><meta name="twitter:app:id:googleplay" content="">';
+		
+		$twMeta = $twmetacard . $twmetasite . $twmetaurl . $twmetatitle . $twmetadescription . $twmetacreator . $twmetaimage;
+		
+		//----Add MetaData----//
+		$search = array('</head>');
+		$replace = array($fbMeta . $twMeta . '</head>');
 		
 		return str_ireplace($search, $replace, $html);
 	}
