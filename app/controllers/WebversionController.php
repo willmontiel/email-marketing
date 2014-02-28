@@ -9,7 +9,11 @@ class WebversionController extends ControllerBase
 		$src = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $idMail . '-' . $idContact;
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		if ($md5 == $md5_2) {
-			$this->startWebVersionProcess($idLink, $idMail, $idContact, FALSE);
+			$html = $this->startWebVersionProcess($idLink, $idMail, $idContact, FALSE);
+			if(!$html) {
+				return $this->response->redirect('error/link');
+			}
+			$this->view->setVar('html', $html);
 		}
 		else {
 			return $this->response->redirect('error/link');
@@ -24,7 +28,11 @@ class WebversionController extends ControllerBase
 		$src = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $idMail . '-' . $idContact . '-' .$social;
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		if ($md5 == $md5_2) {
-			$this->startWebVersionProcess($idLink, $idMail, $idContact, $social);
+			$html = $this->startWebVersionProcess($idLink, $idMail, $idContact, $social);
+			if(!$html) {
+				return $this->response->redirect('error/link');
+			}
+			$this->view->setVar('html', $html);
 		}
 		else {
 			return $this->response->redirect('error/link');
@@ -65,11 +73,11 @@ class WebversionController extends ControllerBase
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception ' . $e);
 			}
-
-			$this->view->setVar('html', $html);
+			
+			return $html;
 		}
 		else {
-			return $this->response->redirect('error/link');
+			return FALSE;
 		}
 	}
 }
