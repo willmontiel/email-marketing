@@ -201,7 +201,7 @@ class ContactWrapper extends BaseWrapper
 						}
 					}
 					Phalcon\DI::getDefault()->get('logger')->log('Se borrarón asociaciones');
-					$this->counter->deleteContactFromList($contact, $list);
+//					$this->counter->deleteContactFromList($contact, $list);
 					Phalcon\DI::getDefault()->get('logger')->log('Se borró contact from list');
 				}
 			}
