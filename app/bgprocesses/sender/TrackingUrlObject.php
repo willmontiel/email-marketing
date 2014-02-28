@@ -41,6 +41,7 @@ class TrackingUrlObject
 		
 		$this->getOpenTrackingUrl($social);
 		$this->getClicksTrackingUrl($social);
+		$this->getSocialMediaShare();
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
 		$htmlWithTracking = str_replace($this->links['search'], $this->links['replace'], $html);

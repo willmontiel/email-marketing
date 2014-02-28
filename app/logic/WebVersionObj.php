@@ -62,14 +62,19 @@ class WebVersionObj extends BaseWrapper
 		else {
 			$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $contact['idContact'], $links);
 		}
-		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $contact['idContact']);
+		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $contact['idContact'], $social);
 		return $htmlFinal;
 	}
 	
-	public function insertSocialMediaMetadata(Mail $mail, $html, $idContact)
+	public function insertSocialMediaMetadata(Mail $mail, $html, $idContact, $social = FALSE)
 	{
 		$socialmail = Socialmail::findFirstByIdMail($mail->idMail);
-		$src = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $mail->idMail . '-' . $idContact;
+		if($social) {
+			$src = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $mail->idMail . '-' . $idContact . '-' . $social;
+		}
+		else {
+			$src = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $mail->idMail . '-' . $idContact;
+		}
 		$md5 = md5($src . '-Sigmamovil_Rules');
 		$url = $src . '-' . $md5;
 		
