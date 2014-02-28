@@ -522,8 +522,10 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array ('contact' => $result), 202, 'contact deleted success');	
 		}
 		catch (Exception $e) {
-			$this->logger->log('Exception: ' . $e);
-			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al borrar el contacto')), 422, 'Error: ' . $e->getMessage());	
+			return $this->setJsonResponse(array('contact' => $result), 422, 'Problemas al borrar el contacto' . $e->getMessage());	
+		}
+		catch (InvalidArgumentException $e) {
+			return $this->setJsonResponse(array('contact' => $result), 422, 'Problemas al borrar el contacto' . $e->getMessage());	
 		}
 	}
 	
