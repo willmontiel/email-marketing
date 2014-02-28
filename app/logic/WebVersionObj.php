@@ -13,7 +13,7 @@ class WebVersionObj extends BaseWrapper
 		$this->domain = $domain;
 	}
 
-	public function createWebVersion(Mail $mail, Mailcontent $mailContent, Contact $contact)
+	public function createWebVersion(Mail $mail, Mailcontent $mailContent, Contact $contact, $social = false)
 	{
 		if (trim($mailContent->content) === '') {
 			throw new \InvalidArgumentException("Error mail's content is empty");
@@ -56,7 +56,12 @@ class WebVersionObj extends BaseWrapper
 			$html = $content->html;
 		}
 		$trackingObj = new TrackingUrlObject();
-		$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $contact['idContact'], $links);
+		if($social) {
+			$htmlWithTracking = $trackingObj->getSocialTrackingUrl($html, $mail->idMail, $contact['idContact'], $links, $social);
+		}
+		else {
+			$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $contact['idContact'], $links);
+		}
 		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $contact['idContact']);
 		return $htmlFinal;
 	}

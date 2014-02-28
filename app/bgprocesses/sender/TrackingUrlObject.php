@@ -31,10 +31,35 @@ class TrackingUrlObject
 		return $htmlWithTracking;
 	}
 	
-	public function getOpenTrackingUrl()
+	public function getSocialTrackingUrl($html, $idMail, $idContact, $urls, $social) 
+	{
+		$this->links = array();
+		$this->idMail = $idMail;
+		$this->idContact = $idContact;
+		$this->html = $html;
+		$this->urls = $urls;
+		
+		$this->getOpenTrackingUrl($social);
+		
+		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
+		$htmlWithTracking = str_replace($this->links['search'], $this->links['replace'], $html);
+		
+		return $htmlWithTracking;
+	}
+	
+	public function getOpenTrackingUrl($social = false)
 	{
 		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-		$src = $urlManager->getBaseUri(true) . 'track/open/1-' . $this->idMail . '-' . $this->idContact;
+		if ($social !== false) {
+			$base = 'track/opensocial/1-';
+			$type = '-' . $social;
+		}
+		else {
+			$base = 'track/open/1-';
+			$type = '';
+		}
+		
+		$src = $urlManager->getBaseUri(true) . $base . $this->idMail . '-' . $this->idContact . $type;
 		$md5 = md5($src . '-Sigmamovil_Rules');
 		$img = '<img src="' . $src . '-' . $md5 . '" />'; 
 	
@@ -67,13 +92,23 @@ class TrackingUrlObject
 		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $share);
 	}
 	
-	public function getClicksTrackingUrl()
+	public function getClicksTrackingUrl($social = false)
 	{
 		if (count($this->urls) !== 0) {
 			while ($true = current($this->urls)) {
 				$this->links['search'][] = key($this->urls);
-				$value = current($this->urls);
-				$href = $value . '-' . $this->idMail . '-' . $this->idContact;
+				
+				if ($social !== false) {
+					$urlManager = Phalcon\DI::getDefault()->get('urlManager');
+					$value = $urlManager->getBaseUri(true) . 'track/clicksocial/1-';
+					$type = '-' . $social;
+				}
+				else {
+					$value = current($this->urls);
+					$type = '';
+				}
+				
+				$href = $value . '-' . $this->idMail . '-' . $this->idContact . $type;
 				$md5 = md5($href . '-Sigmamovil_Rules');
 				$link = $href . '-' . $md5;
 				$this->links['replace'][] = $link;
