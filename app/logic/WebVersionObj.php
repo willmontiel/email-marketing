@@ -89,16 +89,16 @@ class WebVersionObj extends BaseWrapper
 		$twtitle = $mail->subject;
 		$twdescription = (isset($twsocialdesc->message)) ? $twsocialdesc->message : 'Mira mi correo';
 		$twmetacard = '<meta name="twitter:card" content="summary">';
-//		$twmetaurl = '<meta name="twitter:url" content="' . $url . '">';
-		$twmetadomain = '<meta name="twitter:domain" content="' . $this->urlManager->getBaseUri(TRUE) . '">';
+		$twmetaurl = '<meta name="twitter:url" content="' . $url . '">';
+//		$twmetadomain = '<meta name="twitter:domain" content="' . $this->urlManager->getBaseUri(TRUE) . '">';
 		$twmetasite = '<meta name="twitter:site" content="@dariosigma">';
 		$twmetacreator = '<meta name="twitter:creator" content="@dariosigma">';
 		$twmetatitle = '<meta name="twitter:title" content="' . $twtitle . '">';
 		$twmetadescription = '<meta name="twitter:description" content="' . $twdescription . '">';
 		$twmetaimage = '<meta name="twitter:image:src" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png">';
-		$twmetaothers = '<meta name="twitter:app:name:iphone" content=""><meta name="twitter:app:name:ipad" content=""><meta name="twitter:app:name:googleplay" content=""><meta name="twitter:app:url:iphone" content=""><meta name="twitter:app:url:ipad" content=""><meta name="twitter:app:url:googleplay" content=""><meta name="twitter:app:id:iphone" content=""><meta name="twitter:app:id:ipad" content=""><meta name="twitter:app:id:googleplay" content="">';
+//		$twmetaothers = '<meta name="twitter:app:name:iphone" content=""><meta name="twitter:app:name:ipad" content=""><meta name="twitter:app:name:googleplay" content=""><meta name="twitter:app:url:iphone" content=""><meta name="twitter:app:url:ipad" content=""><meta name="twitter:app:url:googleplay" content=""><meta name="twitter:app:id:iphone" content=""><meta name="twitter:app:id:ipad" content=""><meta name="twitter:app:id:googleplay" content="">';
 		
-		$twMeta = $twmetacard . $twmetasite . $twmetatitle . $twmetadescription . $twmetacreator . $twmetaimage . $twmetadomain . $twmetaothers;
+		$twMeta = $twmetacard . $twmetasite . $twmetaurl . $twmetatitle . $twmetadescription . $twmetacreator . $twmetaimage;
 		
 		//----Add MetaData----//
 		$search = array('</head>');
