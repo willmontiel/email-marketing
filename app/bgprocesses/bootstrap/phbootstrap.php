@@ -45,7 +45,8 @@ $di->set('urlManager', $urlManagerObj);
  * determinar los tiempos de ejecucion de SQL
  */
 $di->set('profiler', function(){
-	return new \Phalcon\Db\Profiler();
+	$pr = new \Phalcon\Db\Profiler();
+	return $pr;
 }, true);	
 
 // Create timer object
@@ -69,7 +70,7 @@ $di->set('modelsMetadata', function() {
 /*
  * Database Object, conexion primaria a la base de datos
  */
-$di->set('db', function() use ($di, $config) {
+$di->setShared('db', function() use ($di, $config) {
 	// Events Manager para la base de datos
 	$eventsManager = new \Phalcon\Events\Manager();
 
@@ -168,4 +169,28 @@ function print_dbase_profile()
 		}
 		$dblogger->log("==================== Application Profiling Information End ====================", \Phalcon\Logger::INFO);
 	}
+	Phalcon\DI::getDefault()->get('profiler')->reset();
+}
+
+function get_dbase_profile()
+{
+	$profiles = Phalcon\DI::getDefault()->get('profiler')->getProfiles();
+
+	if (count($profiles) > 0) {
+
+		$str = "==================== Application Profiling Information ========================\n";
+		foreach ($profiles as $profile) {
+			$str .= '******************************************************' . PHP_EOL .
+				   \sprintf('SQL Statement: [%s]', $profile->getSQLStatement()) . PHP_EOL .
+				   \sprintf('Start time: [%d]', $profile->getInitialTime()) . PHP_EOL .
+				   \sprintf('End time: [%d]', $profile->getFinalTime()) . PHP_EOL .
+				   \sprintf('Total elapsed time: [%f]', $profile->getTotalElapsedSeconds()) . PHP_EOL .
+				   '******************************************************' . PHP_EOL;
+
+		}
+		$str .= "==================== Application Profiling Information End ====================\n";
+	}
+	Phalcon\DI::getDefault()->get('profiler')->reset();
+	
+	return $str;
 }
