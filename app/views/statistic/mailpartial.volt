@@ -40,7 +40,6 @@
 							<tr>
 								<td>Fecha y hora</td>
 								<td>Dirección de correo</td>
-								<td>Sistema operativo?</td>
 							</tr>
 						</thead>
 						<tbody>

@@ -482,11 +482,11 @@ class StatisticsWrapper extends BaseWrapper
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		$phql = "SELECT e.email, v.date, c.name, c.lastName
-				FROM Mailevent AS v 
-					JOIN Contact AS c ON (c.idContact = v.idContact)
+		$phql = "SELECT e.email, m.spam, c.name, c.lastName
+				FROM Mxc AS m 
+					JOIN Contact AS c ON (c.idContact = m.idContact)
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
-				WHERE v.idMail = :idMail: AND v.description = 'spam' LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+				WHERE m.idMail = :idMail: AND m.spam != 0 LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
 		$query = $manager->createQuery($phql);
 		$spams = $query->execute(array(
@@ -525,10 +525,10 @@ class StatisticsWrapper extends BaseWrapper
 		}
 		
 		$phql2 = "SELECT COUNT(*) AS total
-				FROM Mailevent AS v 
-					JOIN Contact AS c ON (c.idContact = v.idContact)
+				FROM Mxc AS m 
+					JOIN Contact AS c ON (c.idContact = m.idContact)
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
-				WHERE v.idMail = :idMail: AND v.description = 'spam'";
+				WHERE m.idMail = :idMail: AND m.spam != 0";
 		$query2 = $manager->createQuery($phql2);
 		$total = $query2->execute(array(
 			'idMail' => $idMail
@@ -551,13 +551,13 @@ class StatisticsWrapper extends BaseWrapper
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$sql1 = "SELECT v.date, e.email, b.type, b.description, d.name 
-				FROM mailevent AS v 
-					JOIN contact AS c ON (c.idContact = v.idContact)
+		$sql1 = "SELECT m.bounced AS date, e.email, b.type, b.description, d.name 
+				FROM mxc AS m 
+					JOIN contact AS c ON (c.idContact = m.idContact)
 					JOIN email AS e ON (e.idEmail = c.idEmail)
 					JOIN domain AS d ON (d.idDomain = e.idDomain)
-					JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
-				WHERE v.idMail = ? AND v.description = 'bounced'";
+					JOIN bouncedcode AS b ON (b.idBouncedCode = m.idBouncedCode)
+				WHERE m.idMail = ? AND m.bounced != 0";
 		
 		$sql1 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();	
 		$query1 = $db->query($sql1, array($idMail));
@@ -634,12 +634,12 @@ class StatisticsWrapper extends BaseWrapper
 		);
 		
 		$phqlcount = "	SELECT COUNT(*) AS total 
-						FROM mailevent AS v 
-							JOIN contact AS c ON (c.idContact = v.idContact)
+						FROM mxc AS m 
+							JOIN contact AS c ON (c.idContact = m.idContact)
 							JOIN email AS e ON (e.idEmail = c.idEmail)
 							JOIN domain AS d ON (d.idDomain = e.idDomain)
-							JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
-						WHERE v.idMail = ? AND v.description = 'bounced'";
+							JOIN bouncedcode AS b ON (b.idBouncedCode = m.idBouncedCode)
+						WHERE m.idMail = ? AND m.bounced != 0";
 		
 		$querycount = $db->query($phqlcount, array($idMail));
 		$resultcount = $querycount->fetchAll();
