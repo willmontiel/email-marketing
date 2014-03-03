@@ -159,15 +159,15 @@ class TrackingObject
 		return $stats;
 	}
 	
-	public function createNewMailEvent($cod = null)
-	{
-		$event = new Mailevent();
-		$event->idMail = $this->mxc->idMail;
-		$event->idContact = $this->mxc->idContact;
-		$event->idBouncedCode = $cod;
-		$this->log->log('Se ha creado Mailevent');
-		return $event;
-	}
+//	public function createNewMailEvent($cod = null)
+//	{
+//		$event = new Mailevent();
+//		$event->idMail = $this->mxc->idMail;
+//		$event->idContact = $this->mxc->idContact;
+//		$event->idBouncedCode = $cod;
+//		$this->log->log('Se ha creado Mailevent');
+//		return $event;
+//	}
 	
 	protected function addDirtyObject($object)
 	{

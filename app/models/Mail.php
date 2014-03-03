@@ -11,7 +11,6 @@ class Mail extends Modelbase
 		$this->hasMany("idMail", "Mail", "idMail");
 		$this->hasOne("idMail", "Mailcontent", "idMail");
 		$this->hasOne("idMail", "Mailschedule", "idMail");
-		$this->hasMany("idMail", "Mailevent", "idMail");
 		$this->hasMany("idMail", "Mxl", "idMail");
 		$this->hasMany("idMail", "Mxcxl", "idMail");
 		$this->hasMany("idMail", "Statdbase", "idMail");
