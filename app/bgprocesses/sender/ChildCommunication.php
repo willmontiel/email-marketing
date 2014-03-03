@@ -95,7 +95,7 @@ class ChildCommunication extends BaseWrapper
 				
 				// Crear transport y mailer
 				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
-				$swift = Swift_Mailer::newInstance($transport);
+				Swift_Mailer::newInstance($transport);
 				
 //				if($mail->status == 'Scheduled') {
 //					$mail->startedon = time();
@@ -154,8 +154,8 @@ class ChildCommunication extends BaseWrapper
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
 					$message->addPart($text, 'text/plain');
-					$recipients = true;
-//					$recipients = $swift->send($message, $failures);
+//					$recipients = true;
+					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
 //					$log->log("Headers: " . print_r($this->lastsendheaders, true));
 					if ($recipients){
