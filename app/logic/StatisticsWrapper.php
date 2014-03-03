@@ -583,7 +583,7 @@ class StatisticsWrapper extends BaseWrapper
 		}
 		
 		$sql1 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();	
-
+		
 		$query1 = $db->query($sql1, array($idMail));
 		$result1 = $query1->fetchAll();
 		
@@ -663,22 +663,22 @@ class StatisticsWrapper extends BaseWrapper
 							JOIN email AS e ON (e.idEmail = c.idEmail)
 							JOIN domain AS d ON (d.idDomain = e.idDomain)
 							JOIN bouncedcode AS b ON (b.idBouncedCode = m.idBouncedCode)
-						WHERE m.idMail = ? AND m.bounced != 0";
+						WHERE m.idMail = ? AND m.bounced != 0 ";
 		
 		if($filter && $filter != 'Todos') {
 			switch ($type) {
 				case 'category':
-					$phqlcount.= "b.description = '{$filter}'";
+					$phqlcount.= "AND b.description = '{$filter}'";
 					break;
 				case 'domain':
-					$phqlcount.= "d.name = '{$filter}'";
+					$phqlcount.= "AND d.name = '{$filter}'";
 					break;
 				case 'type':
-					$phqlcount.= "b.type = '{$filter}'";
+					$phqlcount.= "AND b.type = '{$filter}'";
 					break;
 			}
 		}
-		
+		Phalcon\DI::getDefault()->get('logger')->log($phqlcount);
 		$querycount = $db->query($phqlcount, array($idMail));
 		$resultcount = $querycount->fetchAll();
 		$this->pager->setTotalRecords($resultcount[0]['total']);
