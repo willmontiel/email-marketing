@@ -18,10 +18,5 @@ class Mxcxl extends \Phalcon\Mvc\Model
 		$this->belongsTo("idContact", "Contact", "idContact", array(
             "foreignKey" => true,
         ));
-		
-		$this->click_fb = 0;
-		$this->click_tw = 0;
-		$this->click_gp = 0;
-		$this->click_li = 0;
 	}
 }

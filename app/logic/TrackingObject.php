@@ -351,6 +351,10 @@ class TrackingObject
 		$mxcxl->idMailLink = $idLink;
 		$mxcxl->idContact = $this->mxc->idContact;
 		$mxcxl->click = $date;
+		$mxcxl->click_fb = 0;
+		$mxcxl->click_tw = 0;
+		$mxcxl->click_gp = 0;
+		$mxcxl->click_li = 0;
 
 		return $mxcxl;
 	}
