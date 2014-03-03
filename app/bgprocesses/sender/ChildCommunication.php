@@ -147,7 +147,7 @@ class ChildCommunication extends BaseWrapper
 					$headers->addTextHeader('X-GreenArrow-MtaID', $mta);
 					$headers->addTextHeader('X-GreenArrow-InstanceID', '0em' . $mail->idMail);
 					$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', 'em' . $mail->idMail . 'x' . $contact['contact']['idContact']);
-					$headers->addTextHeader('X-GreenArrow-ListID', 'em' . $this->account->idAccount);
+					$headers->addTextHeader('X-GreenArrow-ListID', 't0em' . $this->account->idAccount);
 					
 					
 					$message->setFrom($from);
