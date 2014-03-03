@@ -125,7 +125,7 @@ class IdentifyTarget
 //		$this->log->log('SQL Dbase: ' . $sql4);
 		
 		$db = Phalcon\DI::getDefault()->get('db');
-		
+
 		$destination = $db->execute($sql);
 		$statcontactlist = $db->execute($sql3);
 		$statdbase = $db->execute($sql4);

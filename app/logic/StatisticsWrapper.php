@@ -285,7 +285,7 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownopen' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
 	
-	public function findMailClickStats($idMail)
+	public function findMailClickStats($idMail, $filter)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -368,7 +368,13 @@ class StatisticsWrapper extends BaseWrapper
 					JOIN Contact AS c ON (c.idContact = ml.idContact)
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
 					JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = :idMail: LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+				 WHERE ml.idMail = :idMail: ";
+		
+		if ($filter && $filter != 'Todos') {
+			$phql.= "AND l.link = '" . $filter . "' ";
+		}
+				
+		$phql.= "LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
 		$query = $manager->createQuery($phql);
 		$result = $query->execute(array(
@@ -392,6 +398,9 @@ class StatisticsWrapper extends BaseWrapper
 						   JOIN Email AS e ON (e.idEmail = c.idEmail)
 						   JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
 						WHERE ml.idMail = :idMail:";
+		if ($filter && $filter != 'Todos') {
+			$phqlcount.= "AND l.link = '" . $filter . "' ";
+		}
 		
 		$querycount = $manager->createQuery($phqlcount);
 		$resultcount = $querycount->execute(array(
@@ -547,7 +556,7 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownspam' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}
 	
-	public function findMailBouncedStats($idMail)
+	public function findMailBouncedStats($idMail, $type, $filter)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
@@ -557,9 +566,24 @@ class StatisticsWrapper extends BaseWrapper
 					JOIN email AS e ON (e.idEmail = c.idEmail)
 					JOIN domain AS d ON (d.idDomain = e.idDomain)
 					JOIN bouncedcode AS b ON (b.idBouncedCode = m.idBouncedCode)
-				WHERE m.idMail = ? AND m.bounced != 0";
+				WHERE m.idMail = ? AND m.bounced != 0 ";
+
+		if($filter && $filter != 'Todos') {
+			switch ($type) {
+				case 'category':
+					$sql1.= "AND b.description = '{$filter}'";
+					break;
+				case 'domain':
+					$sql1.= "AND d.name = '{$filter}'";
+					break;
+				case 'type':
+					$sql1.= "AND b.type = '{$filter}'";
+					break;
+			}
+		}
 		
 		$sql1 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();	
+		
 		$query1 = $db->query($sql1, array($idMail));
 		$result1 = $query1->fetchAll();
 		
@@ -639,8 +663,22 @@ class StatisticsWrapper extends BaseWrapper
 							JOIN email AS e ON (e.idEmail = c.idEmail)
 							JOIN domain AS d ON (d.idDomain = e.idDomain)
 							JOIN bouncedcode AS b ON (b.idBouncedCode = m.idBouncedCode)
-						WHERE m.idMail = ? AND m.bounced != 0";
+						WHERE m.idMail = ? AND m.bounced != 0 ";
 		
+		if($filter && $filter != 'Todos') {
+			switch ($type) {
+				case 'category':
+					$phqlcount.= "AND b.description = '{$filter}'";
+					break;
+				case 'domain':
+					$phqlcount.= "AND d.name = '{$filter}'";
+					break;
+				case 'type':
+					$phqlcount.= "AND b.type = '{$filter}'";
+					break;
+			}
+		}
+		Phalcon\DI::getDefault()->get('logger')->log($phqlcount);
 		$querycount = $db->query($phqlcount, array($idMail));
 		$resultcount = $querycount->fetchAll();
 		$this->pager->setTotalRecords($resultcount[0]['total']);

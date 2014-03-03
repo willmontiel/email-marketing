@@ -36,6 +36,7 @@ class ApistatisticsController extends ControllerBase
 	{
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
+		$filter = $this->request->getQuery('filter');
 		
 		$pager = new PaginationDecorator();
 		if ($limit) {
@@ -49,7 +50,7 @@ class ApistatisticsController extends ControllerBase
 		
 		$statWrapper->setPager($pager);
 		
-		$stat = $statWrapper->findMailClickStats($idMail);
+		$stat = $statWrapper->findMailClickStats($idMail, $filter);
 		
 		return $this->setJsonResponse($stat);
 	}
@@ -111,6 +112,8 @@ class ApistatisticsController extends ControllerBase
 	{
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
+		$type = $this->request->getQuery('type');
+		$filter = $this->request->getQuery('filter');
 		
 		$pager = new PaginationDecorator();
 		if ($limit) {
@@ -124,7 +127,7 @@ class ApistatisticsController extends ControllerBase
 		
 		$statWrapper->setPager($pager);
 		
-		$stat = $statWrapper->findMailBouncedStats($idMail);
+		$stat = $statWrapper->findMailBouncedStats($idMail, $type, $filter);
 		
 		return $this->setJsonResponse($stat);
 	}
