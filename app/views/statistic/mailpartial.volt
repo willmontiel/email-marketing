@@ -81,17 +81,6 @@
 					<table>
 						<tr>
 							<td></td>
-							<td>{{statisticsData.totalclicks}}</td>
-							<td>|</td>
-							<td>{{statisticsData.stattotalclicks}}%</td>
-							<td>Clics Totales</td>
-						</tr>
-					</table>
-				</label>
-				<label class="label-click-percent">
-					<table>
-						<tr>
-							<td></td>
 							<td>{{statisticsData.statCTRclicks}}%</td>
 							<td>Tasa de Clics</td>
 						</tr>
