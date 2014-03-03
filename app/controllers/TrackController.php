@@ -127,4 +127,9 @@ class TrackController extends ControllerBase
 		$this->logger->log('Preparando para dar respuesta');
 		return $this->setJsonResponse(array('status' => 'OK', 'description' => 'Everything seems to be fine!'));
 	}
+	
+	public function opensocial($parameters)
+	{
+		
+	}
 }

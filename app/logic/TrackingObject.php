@@ -77,13 +77,6 @@ class TrackingObject
 					$this->addDirtyObject($statListObj);
 					$this->log->log('Se ha ensuciado');
 				}
-				
-				$event = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
-				$event->description = 'opening';
-				$event->userAgent = $userinfo->getOperativeSystem() . ', ' . $userinfo->getBrowser();
-				$event->date = $time;
-				$this->addDirtyObject($event);
-				$this->log->log('Se ha ensuciado Mailevent');
 
 				$this->log->log('Preparandose para iniciar guardo simultaneo');
 				$this->flushChanges();//Se inicia proceso de grabado simultaneo de todos los objetos
@@ -247,12 +240,6 @@ class TrackingObject
 						$statListObj->incrementClicks();
 						$this->addDirtyObject($statListObj);
 					}
-					
-					$eventForClick = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
-					$eventForClick->description = 'opening for click';
-					$eventForClick->userAgent = $userinfo->getOperativeSystem() . ', ' . $userinfo->getBrowser();
-					$eventForClick->date = $time;
-					$this->addDirtyObject($eventForClick);
 				}
 				else {
 					$this->log->log('Contablización de click sin apertura');
@@ -268,12 +255,6 @@ class TrackingObject
 				
 				$mxcxl = $this->createNewMxcxl($idLink, $time);
 				$this->addDirtyObject($mxcxl);
-				
-				$event = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
-				$event->description = 'click';
-				$event->userAgent = $userinfo->getOperativeSystem() . ', ' . $userinfo->getBrowser();
-				$event->date = $time;
-				$this->addDirtyObject($event);
 				
 				$this->flushChanges();
 				
@@ -425,6 +406,7 @@ class TrackingObject
 		try {
 			if ($this->canTrackSoftBounceEvent()) {
 				$this->startTransaction();
+				$this->mxc->idBouncedCode = $cod;
 				$this->mxc->bounced = $date;
 				$this->addDirtyObject($this->mxc);
 				$this->log->log('Se agregó mxc');
@@ -444,14 +426,6 @@ class TrackingObject
 					$this->addDirtyObject($statListObj);
 					$this->log->log('Se agregó un statContactlist');
 				}
-				
-				$event = $this->createNewMailEvent();
-				$event->idBouncedCode = $cod;
-				$event->description = 'bounced';
-				$event->userAgent = null;
-				$event->date = $date;
-				$this->addDirtyObject($event);
-				$this->log->log('Se agregó event');
 				
 				$this->log->log('Preparandose para guardar');
 				$this->flushChanges();
@@ -517,6 +491,7 @@ class TrackingObject
 		try {
 			if ($this->canTrackSpamEvent()) {
 				$this->startTransaction();
+				$this->mxc->idBouncedCode = $cod;
 				$this->mxc->spam = $date;
 				
 				$mailObj = $this->findRelatedMailObject();
@@ -539,13 +514,6 @@ class TrackingObject
 					foreach ($statListObjs as $statListObj) {
 						$statListObj->incrementUniqueOpens();
 					}
-
-					$event = $this->createNewMailEvent();//Se crea el evento para su posterior grabación
-					$event->idBouncedCode = null;
-					$event->description = 'opening';
-					$event->userAgent = null;
-					$event->date = $date;
-					$this->addDirtyObject($event);
 				}
 				
 				$this->addDirtyObject($this->mxc);
@@ -561,14 +529,6 @@ class TrackingObject
 					$this->addDirtyObject($statListObj);
 					$this->log->log('Se agregó un statContactlist');
 				}
-				
-				$event = $this->createNewMailEvent();
-				$event->idBouncedCode = $cod;
-				$event->description = 'spam';
-				$event->userAgent = null;
-				$event->date = $date;
-				$this->addDirtyObject($event);
-				$this->log->log('Se agregó event');
 				
 				$this->log->log('Preparandose para guardar');
 				$this->flushChanges();
