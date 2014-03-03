@@ -34,14 +34,19 @@ class StatisticsWrapper extends BaseWrapper
 		$statisticsData->totalclicks = $clicks;
 		$statisticsData->stattotalclicks = round(( $clicks / $total ) * 100 );
 		$statisticsData->statCTRclicks = round(( $clicks / $opens ) * 100 );
+		
+		$sql = "SELECT COUNT(*) AS total
+				FROM Mxc AS m 
+				WHERE m.idMail = {$mail->idMail} AND m.idBouncecode = 10";
+		$hardBounced = Phalcon\DI::getDefault()->get('modelsManager')->executeQuery($sql);
+		
 		$statisticsData->bounced = $bounced;
 		$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
-		$statisticsData->softbounced = 1;
+		$statisticsData->hardbounced = $hardBounced->total;
+		$statisticsData->stathardbounced = round(( $hardBounced->total / $bounced ) * 100 );
+		$statisticsData->softbounced = $bounced - $hardBounced->total;
 		$statisticsData->statsoftbounced = round(( $statisticsData->softbounced / $bounced ) * 100 );
-		$statisticsData->hardbounced = 1;
-		$statisticsData->stathardbounced = round(( $statisticsData->hardbounced / $bounced ) * 100 );
-		$statisticsData->otherbounced = 0;
-		$statisticsData->statotherbounced = round(( $statisticsData->otherbounced / $bounced ) * 100 );
+		
 		$statisticsData->unsubscribed = $unsubscribed;
 		$statisticsData->statunsubscribed = round (( $unsubscribed / $total ) * 100 );
 		$statisticsData->spam = $spam;
