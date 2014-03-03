@@ -352,7 +352,7 @@ class Security extends Plugin
 			'track:click',
 			'track:mtaevent',
 			'webversion:show',
-			'webversion::share',
+			'webversion:share',
 			'socialmedia:share'
 		);
 		
