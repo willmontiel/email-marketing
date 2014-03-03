@@ -223,19 +223,19 @@ class StatisticsWrapper extends BaseWrapper
 		$db = Phalcon\DI::getDefault()->get('db');
 		
 		$sql1 = "SELECT COUNT(*) AS t
-					FROM mailevent AS v
-						JOIN contact as c ON (c.idContact = v.idContact)
+					FROM mxc AS m
+						JOIN contact as c ON (c.idContact = m.idContact)
 						JOIN email as e ON (c.idEmail = e.idEmail)
-					WHERE v.idMail = ? AND (v.description = 'opening' OR v.description = 'opening for click')";
+					WHERE m.idMail = ? AND m.opening != 0";
 		
 		$result1 = $db->query($sql1, array($idMail));
 		$total = $result1->fetch();
 		
-		$sql = "SELECT v.idContact, v.userAgent, v.date, e.email 
-					FROM mailevent AS v
-						JOIN contact as c ON (c.idContact = v.idContact)
+		$sql = "SELECT m.idContact, m.opening AS date, e.email 
+					FROM mxc AS m
+						JOIN contact as c ON (c.idContact = m.idContact)
 						JOIN email as e ON (c.idEmail = e.idEmail)
-					WHERE v.idMail = ? AND (v.description = 'opening' OR v.description = 'opening for click')";
+					WHERE m.idMail = ? AND m.opening != 0";
 		
 		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		$result = $db->query($sql, array($idMail));
@@ -250,7 +250,6 @@ class StatisticsWrapper extends BaseWrapper
 					'id' => $i['idContact'],
 					'email' => $i['email'],
 					'date' => date('Y-m-d H:i', $i['date']),
-					'os' => $i['userAgent']
 				);
 				
 				$openArray = array();

@@ -48,7 +48,6 @@
 							<tr>
 								<td>{{'{{date}}'}}</td>
 								<td>{{'{{email}}'}}</td>
-								<td>{{'{{os}}'}}</td>
 							</tr>
 						{{ '{{/each}}' }}
 						</tbody>
