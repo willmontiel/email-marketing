@@ -3,6 +3,7 @@ class Mxc extends \Phalcon\Mvc\Model
 {
 	public $idContact;
 	public $idMail;
+	public $idBouncedCode;
 	
 	public function initialize()
 	{
@@ -11,6 +12,10 @@ class Mxc extends \Phalcon\Mvc\Model
 		));
 		
 		$this->belongsTo("idMail", "Mail", "idMail", array(
+			"foreignKey" => true,
+		));
+		
+		$this->belongsTo("idBouncedCode", "Bouncedcode", "idBouncedCode", array(
 			"foreignKey" => true,
 		));
 	}
