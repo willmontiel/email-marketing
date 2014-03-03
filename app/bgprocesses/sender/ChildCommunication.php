@@ -179,6 +179,7 @@ class ChildCommunication extends BaseWrapper
 								$log->log("Error guardando");
 							}
 						}
+						$i++;
 					} 
 					else {
 						echo "There was an error in message {$i}: \n";
@@ -211,7 +212,6 @@ class ChildCommunication extends BaseWrapper
 							$this->childprocess->responseToParent('Work-Checked' , $i);
 							break;
 					}
-					$i++;
 				}
 				Phalcon\DI::getDefault()->get('timerObject')->endTimer('all messages sent!');
 				
