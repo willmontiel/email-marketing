@@ -95,7 +95,7 @@ class ChildCommunication extends BaseWrapper
 				
 				// Crear transport y mailer
 				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
-				Swift_Mailer::newInstance($transport);
+				$swift = Swift_Mailer::newInstance($transport);
 				
 //				if($mail->status == 'Scheduled') {
 //					$mail->startedon = time();
