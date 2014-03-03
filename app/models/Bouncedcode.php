@@ -1,10 +1,10 @@
 <?php
 class Bouncedcode extends \Phalcon\Mvc\Model
 {
-	public $idBouncedCode;
+//	public $idBouncedCode;
 
     public function initialize()
     {
-        $this->hasMany("idBouncedCode", "Mxc", "idBouncedCode");
+//        $this->hasMany("idBouncedCode", "Mxc", "idBouncedCode");
     }
 }

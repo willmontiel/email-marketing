@@ -154,10 +154,10 @@ class ChildCommunication extends BaseWrapper
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
 					$message->addPart($text, 'text/plain');
-//					$recipients = true;
-					$recipients = $swift->send($message, $failures);
+					$recipients = true;
+//					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
-					$log->log("Headers: " . print_r($this->lastsendheaders, true));
+//					$log->log("Headers: " . print_r($this->lastsendheaders, true));
 					if ($recipients){
 						echo "Message " . $i . " successfully sent! \n";
 //						$log->log("HTML: " . $html);
@@ -167,9 +167,11 @@ class ChildCommunication extends BaseWrapper
 						$lastContact = end(end($contactIterator));
 						if (count($sentContacts) == self::CONTACTS_PER_UPDATE || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact'] || $msg == "Stop") {
 							$idsContact = implode(', ', $sentContacts);
-							$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = " . $mail->idMail . " AND idContact IN (" . $idsContact . ")";
+							$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = {$mail->idMail} AND idContact IN ({$idsContact})";
+							
 							$mm = Phalcon\DI::getDefault()->get('modelsManager');
 							$mm->executeQuery($phql);
+					
 							if ($mm) {
 //								echo "state's the first 20 changed successfully! \n";
 								unset($sentContacts);
