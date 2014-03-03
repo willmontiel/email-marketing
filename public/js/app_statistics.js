@@ -189,21 +189,14 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 		}
 	},
 	linkSelectChange: function () {	
+		var t = this;
 		var link = this.get('linkSelected');
-		var links = this.get('allDetailsData');
-		var objArray = [];
-		if(link === 'Todos') {
-			objArray = links;
-		}
-		else {
-			for(var i = 0; i < links.length; i++) {
-				if(links[i].link === link) {
-					objArray.push(links[i]);
-		}
-			}
-		}
-		this.set('detailsData', objArray);
-		
+		this.filter = link;
+		var obj = {filter: link};
+		this.store.find(this.modelClass, obj).then(function(info) {
+			var data = info.get('content');
+			t.set('detailsData', JSON.parse(data[0].get('details')));
+		});
     }.observes('linkSelected')
 });
 
@@ -253,36 +246,45 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		this.set('typeSelected', null);
 	},
 	typeSelectChange: function () {	
-		var bouncedType = (this.get('typeSelected') !== undefined) ? this.get('typeSelected') : 'Todos';
-		var filter = this.get('bouncedFilter');
-		var data = this.get('allDetailsData');
-		var objArray = [];
-		if(bouncedType === 'Todos') {
-			objArray = data;
-		}
-		else {
-			for(var i = 0; i < data.length; i++) {
-				switch (filter) {
-					case 'category':
-						if(data[i].category === bouncedType) {
-							objArray.push(data[i]);
-						}
-						break;
-					case 'domain':
-						if(data[i].domain === bouncedType) {
-							objArray.push(data[i]);
-						}
-						break;
-					case 'type':
-					default:
-						if(data[i].type === bouncedType) {
-							objArray.push(data[i]);
-						}
-						break;
-				}
-			}
-		}
-		this.set('detailsData', objArray);
+		var t = this;
+		var filter = (this.get('typeSelected') !== undefined) ? this.get('typeSelected') : 'Todos';
+		var type = this.get('bouncedFilter');
+		this.type = type;
+		this.filter = filter;
+		var obj = {type: type, filter: filter};
+		this.store.find(this.modelClass, obj).then(function(info) {
+			var data = info.get('content');
+			t.set('detailsData', JSON.parse(data[0].get('details')));
+		});
+		
+//		var data = this.get('allDetailsData');
+//		var objArray = [];
+//		if(bouncedType === 'Todos') {
+//			objArray = data;
+//		}
+//		else {
+//			for(var i = 0; i < data.length; i++) {
+//				switch (filter) {
+//					case 'category':
+//						if(data[i].category === bouncedType) {
+//							objArray.push(data[i]);
+//						}
+//						break;
+//					case 'domain':
+//						if(data[i].domain === bouncedType) {
+//							objArray.push(data[i]);
+//						}
+//						break;
+//					case 'type':
+//					default:
+//						if(data[i].type === bouncedType) {
+//							objArray.push(data[i]);
+//						}
+//						break;
+//				}
+//			}
+//		}
+//		this.set('detailsData', objArray);
 		
     }.observes('typeSelected'),
 			

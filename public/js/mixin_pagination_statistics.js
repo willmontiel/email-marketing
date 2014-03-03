@@ -46,6 +46,12 @@ Ember.MixinPaginationStatistics = Ember.Mixin.create({
 			
 	refreshModel: function (obj) {
 		var t = this;
+		if(this.type) {
+			obj.type = this.type;
+		}
+		if(this.filter) {
+			obj.filter = this.filter;
+		}
 		this.store.find(this.modelClass, obj).then(function(info) {
 			var data = info.get('content');
 			t.set('detailsData', JSON.parse(data[0].get('details')))
