@@ -306,7 +306,7 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 				break;
 			case 'type':
 			default:
-				objArray.push('Temporal', 'Permanente', 'Otro');
+				objArray.push('soft', 'hard');
 				break;
 		}
 		this.set('selectedType', objArray);
