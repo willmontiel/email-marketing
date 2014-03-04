@@ -255,37 +255,7 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		this.store.find(this.modelClass, obj).then(function(info) {
 			var data = info.get('content');
 			t.set('detailsData', JSON.parse(data[0].get('details')));
-		});
-		
-//		var data = this.get('allDetailsData');
-//		var objArray = [];
-//		if(bouncedType === 'Todos') {
-//			objArray = data;
-//		}
-//		else {
-//			for(var i = 0; i < data.length; i++) {
-//				switch (filter) {
-//					case 'category':
-//						if(data[i].category === bouncedType) {
-//							objArray.push(data[i]);
-//						}
-//						break;
-//					case 'domain':
-//						if(data[i].domain === bouncedType) {
-//							objArray.push(data[i]);
-//						}
-//						break;
-//					case 'type':
-//					default:
-//						if(data[i].type === bouncedType) {
-//							objArray.push(data[i]);
-//						}
-//						break;
-//				}
-//			}
-//		}
-//		this.set('detailsData', objArray);
-		
+		});		
     }.observes('typeSelected'),
 			
 	filterSelectChange: function () {

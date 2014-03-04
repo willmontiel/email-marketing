@@ -300,9 +300,9 @@
 					<table>
 						<tr>
 							<td class="border-radious-scarlet-left"></td>
-							<td class="border-radious-scarlet-center">{{statisticsData.softbounced}}</td>
+							<td class="border-radious-scarlet-center"><label class="label-bounced">{{statisticsData.softbounced}}</label></td>
 							<td class="border-radious-scarlet-center">|</td>
-							<td class="border-radious-scarlet-center">{{statisticsData.statsoftbounced}}%</td>
+							<td class="border-radious-scarlet-center"><label class="label-bounced">{{statisticsData.statsoftbounced}}%</label></td>
 							<td class="border-radious-scarlet-center">|</td>
 							<td class="border-radious-scarlet-right">Suaves</td>	
 						</tr>
@@ -312,9 +312,9 @@
 					<table>
 						<tr>
 							<td class="border-radious-scarlet-left"></td>
-							<td class="border-radious-scarlet-center">{{statisticsData.hardbounced}}</td>
+							<td class="border-radious-scarlet-center"><label class="label-bounced">{{statisticsData.hardbounced}}</label></td>
 							<td class="border-radious-scarlet-center">|</td>
-							<td class="border-radious-scarlet-center">{{statisticsData.stathardbounced}}%</td>
+							<td class="border-radious-scarlet-center"><label class="label-bounced">{{statisticsData.stathardbounced}}%</label></td>
 							<td class="border-radious-scarlet-center">|</td>
 							<td class="border-radious-scarlet-right">Duros</td>
 						</tr>
