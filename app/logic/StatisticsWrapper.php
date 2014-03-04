@@ -341,7 +341,7 @@ class StatisticsWrapper extends BaseWrapper
 		 */
 		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
 					FROM mxcxl AS m
-				 WHERE m.idMail = ?
+				 WHERE m.idMail = ? AND m.click != 0
 				 GROUP BY m.idMailLink, m.click";
 		
 		$result2 = $db->query($sql2, array($idMail));
@@ -377,7 +377,7 @@ class StatisticsWrapper extends BaseWrapper
 					JOIN Contact AS c ON (c.idContact = ml.idContact)
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
 					JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = :idMail: ";
+				 WHERE ml.idMail = :idMail: AND ml.click != 0 ";
 		
 		if ($filter && $filter != 'Todos') {
 			$phql.= "AND l.link = '" . $filter . "' ";
@@ -406,7 +406,7 @@ class StatisticsWrapper extends BaseWrapper
 						   JOIN Contact AS c ON (c.idContact = ml.idContact)
 						   JOIN Email AS e ON (e.idEmail = c.idEmail)
 						   JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
-						WHERE ml.idMail = :idMail:";
+						WHERE ml.idMail = :idMail: AND ml.click != 0 ";
 		if ($filter && $filter != 'Todos') {
 			$phqlcount.= "AND l.link = '" . $filter . "' ";
 		}

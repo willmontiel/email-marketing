@@ -115,7 +115,6 @@ class TrackController extends ControllerBase
 	{
 		$this->logger->log('Inicio tracking de apertura por red social');
 		$info = $_SERVER['HTTP_USER_AGENT'];
-
 		try {
 			// Decodificar enlace
 			$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
@@ -123,35 +122,73 @@ class TrackController extends ControllerBase
 			$parts = $linkdecoder->decodeLink('track/opensocial', $parameters);
 			list($v, $idMail, $idContact, $socialType) = $parts;
 			$this->logger->log('El link es valido');
-
+			
 			//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
 			//petición
 			$userAgent = new UserAgentDetectorObj();
 			$userAgent->setInfo($info);
-
+				
 			$trackingObj = new TrackingObject();
 			$trackingObj->setSendIdentification($idMail, $idContact);
 			$mxc = $trackingObj->getMxC();
-
-			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($mxc, $socialType);
-
+				
+			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialType);
+			$instance->setMxc($mxc);
 			$instance->trackOpen();
 			$instance->save();
+		}
+		catch (Exception $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
 		}
 		catch (InvalidArgumentException $e) {
 			$this->logger->log('Link inválido');
 			$this->response->redirect('error/link');
 		}
-		catch (Exception $e) {
-			$this->logger->log('Exception: [' . $e->getMessage() . ']');
-		}
+		
 		$this->logger->log('Preparando para retornar img');
-		// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
-		$img = '../public/images/tracking.gif';
-
+			// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
+		$img = '../public/images/tracking.gif';	
 		$this->response->setHeader("Content-Type", "image/gif");
 
 		$this->view->disable();
 		return $this->response->setContent(file_get_contents($img));
+	}
+	
+	public function clicksocialAction($parameters)
+	{
+		$this->logger->log('Inicio tracking de apertura por red social');
+		$info = $_SERVER['HTTP_USER_AGENT'];
+		$idenfifiers = explode("-", $parameters);
+		
+		list($idTypeLink, $idLink, $idMail, $idContact, $socialType, $md5) = $idenfifiers;
+		
+		$src = $this->urlManager->getBaseUri(true) . 'track/clicksocial/1-' . $idLink . '-' . $idMail . '-' . $idContact . '-' . $socialType;
+		$md5_2 = md5($src . '-Sigmamovil_Rules');
+		
+		if ($md5 == $md5_2) {
+			$this->logger->log('El link es valido');
+			try {
+				
+				$trackingObj = new TrackingObject();
+				$trackingObj->setSendIdentification($idMail, $idContact);
+				$url = $trackingObj->getLinkToRedirect($idLink);	
+				$mxcxl = $trackingObj->getMxCxL($idLink);
+				if (!$mxcxl) {
+					$mxcxl = $trackingObj->createNewMxcxl($idLink, 0);
+				}
+				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialType);
+				$instance->setMxcxl($mxcxl);
+				$instance->trackClick();
+				$instance->saveClick();
+			}
+			catch (Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}			
+			return $this->response->redirect($url, true);
+		}
+		else {
+			$this->logger->log('Link inválido');
+			$this->response->redirect('error/link');
+		}
 	}
 }

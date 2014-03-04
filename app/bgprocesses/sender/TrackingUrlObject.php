@@ -102,7 +102,9 @@ class TrackingUrlObject
 				
 				if ($social !== false) {
 					$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-					$value = $urlManager->getBaseUri(true) . 'track/clicksocial/1';
+					$v = current($this->urls);
+					$x = explode('-', $v);
+					$value = $urlManager->getBaseUri(true) . 'track/clicksocial/1-' . $x[1];
 					$type = '-' . $social;
 				}
 				else {

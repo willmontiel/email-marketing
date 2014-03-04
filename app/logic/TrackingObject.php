@@ -217,7 +217,8 @@ class TrackingObject
 	{
 		$time = time();// Tomar timestamp de ejecucion
 		try {
-			if ($this->canTrackClickEvents($idLink)) {
+			$mxcxl = $this->getMxCxL($idLink);
+			if (!$mxcxl || $mxcxl->click == 0) {
 				$this->log->log('No se ha contabilizado');
 				$this->startTransaction();
 				
@@ -277,7 +278,7 @@ class TrackingObject
 	}
 	
 	
-	public function canTrackClickEvents($idLink)
+	public function getMxCxL($idLink)
 	{
 		$mxcxl = Mxcxl::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idMailLink = ?2 AND idContact = ?3',
@@ -285,13 +286,7 @@ class TrackingObject
 							2 => $idLink,
 							3 => $this->mxc->idContact)
 		));
-		
-		if (!$mxcxl || $mxcxl->click == 0) {
-			$this->log->log('No hay registro Mxcxl se puede hacer click');
-			return true;
-		}
-		$this->log->log('Ya hay registro Mxcxl no se puede hacer click');
-		return false;
+		return $mxcxl;
 	}
 	
 	private function validateOpenForClick()
@@ -334,7 +329,7 @@ class TrackingObject
 		return $records;
 	}
 	
-	private function getLinkToRedirect($idLink)
+	public function getLinkToRedirect($idLink)
 	{
 		$ml = Maillink::findFirst(array(
 			'conditions' => 'idMailLink = ?1',
@@ -349,7 +344,7 @@ class TrackingObject
 	}
 	
 	
-	private function createNewMxcxl($idLink, $date)
+	public function createNewMxcxl($idLink, $date)
 	{
 		$mxcxl = new Mxcxl();
 		$mxcxl->idMail = $this->mxc->idMail;

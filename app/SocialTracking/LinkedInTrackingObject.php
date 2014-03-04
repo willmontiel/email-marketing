@@ -7,5 +7,9 @@ class LinkedInTrackingObject extends TrackingSocialAbstract
 	{
 		$this->mxc->open_li += 1;
 	}
+	public function trackClick() 
+	{
+		$this->mxcxl->click_li += 1;
+	}
 }
 
