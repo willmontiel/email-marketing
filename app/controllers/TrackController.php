@@ -180,7 +180,7 @@ class TrackController extends ControllerBase
 		
 		list($idTypeLink, $idLink, $idMail, $idContact, $socialType, $md5) = $idenfifiers;
 		
-		$src = $this->urlManager->getBaseUri(true) . 'track/clicksocial/1-' . $idMail . '-' . $idContact . '-' . $socialType;
+		$src = $this->urlManager->getBaseUri(true) . 'track/clicksocial/1-' . $idLink . '-' . $idMail . '-' . $idContact . '-' . $socialType;
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		
 		if ($md5 == $md5_2) {
