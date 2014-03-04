@@ -574,3 +574,9 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .social-account-name.socil-account-deactivated > span{
 	font-size: 14px;
 }
+.unsubscribe-button {
+	height: 42px;
+	width: 170px;
+	border-radius: 5px;
+	font-size: 18px;
+}
