@@ -38,6 +38,7 @@ abstract class TrackingSocialAbstract
 	
 	abstract public function trackOpen();
 	abstract public function trackClick();
+	abstract public function trackShare();
 	
 	public function save()
 	{
