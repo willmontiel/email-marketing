@@ -47,8 +47,8 @@ class PrepareMailContent
 
 		$html = $htmlObj->saveHTML();
 		$html1 = str_replace('%24%24%24', '$$$', $html);
-		$search = array('</body>', '%%WEBVERSION%%');
-		$replace = array('$$$_open_track_$$$</body>', '$$$_webversion_track_$$$');
+		$search = array('</body>', '%%WEBVERSION%%', '%%UNSUBSCRIBE%%');
+		$replace = array('$$$_open_track_$$$</body>', '$$$_webversion_track_$$$', '$$$_unsubscribe_track_$$$');
 		$html2 = str_ireplace($search, $replace, $html1);
 		$result[] = $html2;
 		$result[] = $marks;
