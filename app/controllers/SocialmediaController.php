@@ -88,8 +88,7 @@ class SocialmediaController extends ControllerBase
 		try {
 			$p = explode('-', $parameters);
 			array_pop($p);
-			$this->logger->log(print_r($p, true));
-			$parts = $linkdecoder->decodeLink('socialmedia/share', $p);
+			$parts = $linkdecoder->decodeLink('socialmedia/share', implode('-',$p));
 			list($v, $idMail, $idContact, $md5, $socialType) = $parts;
 			
 			$p = array(1, $idMail, $idContact, $socialType);
