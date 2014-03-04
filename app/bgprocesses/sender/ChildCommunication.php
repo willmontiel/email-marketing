@@ -154,8 +154,8 @@ class ChildCommunication extends BaseWrapper
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
 					$message->addPart($text, 'text/plain');
-					$recipients = true;
-//					$recipients = $swift->send($message, $failures);
+//					$recipients = true;
+					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
 //					$log->log("Headers: " . print_r($this->lastsendheaders, true));
 					if ($recipients){
