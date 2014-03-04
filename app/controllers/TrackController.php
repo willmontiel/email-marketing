@@ -194,7 +194,7 @@ class TrackController extends ControllerBase
 				if (!$mxcxl) {
 					$mxcxl = $trackingObj->createNewMxcxl($idLink, 0);
 				}
-				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($mxc, $socialType);
+				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialType);
 				$instance->setMxcxl($mxcxl);
 				$instance->trackClick();
 				$instance->saveClick();

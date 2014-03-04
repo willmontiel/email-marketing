@@ -11,6 +11,8 @@ class FacebookTrackingObject extends TrackingSocialAbstract
 	}
 	public function trackClick() 
 	{
+		\Phalcon\DI::getDefault()->get('logger')->log('ANTES Mxcxl->click_fb= ' . $this->mxcxl->click_fb);
 		$this->mxcxl->click_fb += 1;
+		\Phalcon\DI::getDefault()->get('logger')->log('DESPUES Mxcxl->click_fb= ' . $this->mxcxl->click_fb);
 	}
 }
