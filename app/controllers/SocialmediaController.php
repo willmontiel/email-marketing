@@ -91,8 +91,8 @@ class SocialmediaController extends ControllerBase
 			$this->logger->log(print_r($p, true));
 			$data = array_pop($p);
 			$this->logger->log('Inicia');
-			$this->logger->log(print_r($data));
-			$this->logger->log($data);
+			$this->logger->log(print_r($data, true));
+			$this->logger->log(print_r($p, true));
 			$this->logger->log('Finaliza');
 			$parts = $linkdecoder->decodeLink('socialmedia/share', $data);
 			list($v, $idMail, $idContact, $md5, $socialType) = $parts;
