@@ -98,7 +98,7 @@ class TrackingUrlObject
 		$url = $linkdecoder->encodeLink('socialmedia/share', $parameters);
 		
 		$this->links['search'][] = '$$$_social_media_share_$$$';
-		$this->links['replace'][] = $url;
+		$this->links['replace'][] = $url . '-';
 		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $url);
 	}
 	
