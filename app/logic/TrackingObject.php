@@ -39,6 +39,11 @@ class TrackingObject
 		}
 	}
 	
+	
+	public function getMxC()
+	{
+		return $this->mxc;
+	}
 	/**
 	 *
 	 * @param UserAgentDetectorObj $userinfo
@@ -281,7 +286,7 @@ class TrackingObject
 							3 => $this->mxc->idContact)
 		));
 		
-		if (!$mxcxl) {
+		if (!$mxcxl || $mxcxl->click == 0) {
 			$this->log->log('No hay registro Mxcxl se puede hacer click');
 			return true;
 		}

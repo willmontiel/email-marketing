@@ -17,6 +17,12 @@ try {
 		'../app/bgprocesses/sender/',
     ));
 	
+	$loader->registerNamespaces(
+			array(
+				'EmailMarketing\\SocialTracking' => '../app/SocialTracking'
+			)
+	);
+	
 	$loader->registerClasses(array(
 		"simple_html_dom" => "../app/library/simple_html_dom.php",
 	));
