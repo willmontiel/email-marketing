@@ -17,6 +17,13 @@ $loader->registerDirs(array(
 	'../../editorlogic/',
 ))->register();
 
+$loader->registerNamespaces(
+	array(
+		'EmailMarketing\\General' => '../../general/'
+	),
+	true
+);
+
 // Ruta de APP
 $apppath = realpath('../../../');
 

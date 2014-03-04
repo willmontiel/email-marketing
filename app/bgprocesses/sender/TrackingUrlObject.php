@@ -6,8 +6,13 @@ class TrackingUrlObject
 	protected $links;
 	protected $html;
 	protected $urls;
+	protected $urlManager;
 
-
+	public function __construct() 
+	{
+		$this->urlManager = Phalcon\DI::getDefault()->get('urlManager');
+	}
+	
 	public function getTrackingUrl($html, $idMail, $idContact, $urls) 
 	{
 		$this->links = array();
@@ -51,19 +56,20 @@ class TrackingUrlObject
 	
 	public function getOpenTrackingUrl($social = false)
 	{
-		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		
 		if ($social !== false) {
-			$base = 'track/opensocial/1-';
-			$type = '-' . $social;
+			$action = 'track/opensocial';
+			$parameters = array(1, $this->idMail, $this->idContact, $social);
 		}
 		else {
-			$base = 'track/open/1-';
-			$type = '';
+			$action = 'track/open';
+			$parameters = array(1, $this->idMail, $this->idContact);
 		}
 		
-		$src = $urlManager->getBaseUri(true) . $base . $this->idMail . '-' . $this->idContact . $type;
-		$md5 = md5($src . '-Sigmamovil_Rules');
-		$img = '<img src="' . $src . '-' . $md5 . '" />'; 
+		$url = $linkdecoder->encodeLink($action, $parameters);
+		$img = '<img src="' . $url . '" />'; 
 	
 		$this->links['search'][] = '$$$_open_track_$$$';
 		$this->links['replace'][] = $img;
@@ -72,51 +78,53 @@ class TrackingUrlObject
 	
 	public function getWebVersionTrack()
 	{
-		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-		$src = $urlManager->getBaseUri(true) . 'webversion/show/1-' . $this->idMail . '-' . $this->idContact;
-		$md5 = md5($src . '-Sigmamovil_Rules');
-		$a = $src . '-' . $md5; 
-	
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		
+		$parameters = array(1, $this->idMail, $this->idContact);
+		$url = $linkdecoder->encodeLink('webversion/show', $parameters);
+		
 		$this->links['search'][] = '$$$_webversion_track_$$$';
-		$this->links['replace'][] = $a;
-		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $a);
+		$this->links['replace'][] = $url;
+		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $url);
 	}
 	
 	public function getSocialMediaShare()
 	{
-		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-		$src = $urlManager->getBaseUri(true) . 'socialmedia/share/' . $this->idMail . '-' . $this->idContact;
-		$md5 = md5($src . '-Sigmamovil_Rules');
-		$share = $src . '-' . $md5 . '-'; 
-	
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		
+		$parameters = array(1, $this->idMail, $this->idContact);
+		$url = $linkdecoder->encodeLink('socialmedia/share', $parameters);
+		
 		$this->links['search'][] = '$$$_social_media_share_$$$';
-		$this->links['replace'][] = $share;
-		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $share);
+		$this->links['replace'][] = $url;
+		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $url);
 	}
 	
 	public function getClicksTrackingUrl($social = false)
 	{
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		
 		if (count($this->urls) !== 0) {
 			while ($true = current($this->urls)) {
 				$this->links['search'][] = key($this->urls);
+				$idMailLink = current($this->urls);
 				
 				if ($social !== false) {
-					$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-					$v = current($this->urls);
-					$x = explode('-', $v);
-					$value = $urlManager->getBaseUri(true) . 'track/clicksocial/1-' . $x[1];
-					$type = '-' . $social;
+					$action = 'track/clicksocial';
+					$parameters = array(1, $idMailLink, $this->idMail, $this->idContact, $social);
 				}
 				else {
-					$value = current($this->urls);
-					$type = '';
+					$action = 'track/click';
+					$parameters = array(1, $idMailLink, $this->idMail, $this->idContact);
 				}
 				
-				$href = $value . '-' . $this->idMail . '-' . $this->idContact . $type;
-				$md5 = md5($href . '-Sigmamovil_Rules');
-				$link = $href . '-' . $md5;
-				$this->links['replace'][] = $link;
-				Phalcon\DI::getDefault()->get('logger')->log('Insertando link de click: ' . $link);
+				$url = $linkdecoder->encodeLink($action, $parameters);
+				
+				$this->links['replace'][] = $url;
+				Phalcon\DI::getDefault()->get('logger')->log('Insertando link de click: ' . $url);
 				next($this->urls);
 			}
 		}

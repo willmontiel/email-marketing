@@ -9,7 +9,7 @@ class TrackController extends ControllerBase
 		try {
 			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
 			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
-			$idenfifiers = $linkEncoder->decodeLink($parameters);
+			$idenfifiers = $linkEncoder->decodeLink('track/open', $parameters);
 			list($idLink, $idMail, $idContact) = $idenfifiers;
 			//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
 			//petición
@@ -41,7 +41,7 @@ class TrackController extends ControllerBase
 		try {
 			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
 			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
-			$idenfifiers = $linkEncoder->decodeLink($parameters);
+			$idenfifiers = $linkEncoder->decodeLink('track/click', $parameters);
 			list($v, $idLink, $idMail, $idContact) = $idenfifiers;
 				
 			$userAgent = new UserAgentDetectorObj();
@@ -158,37 +158,30 @@ class TrackController extends ControllerBase
 	{
 		$this->logger->log('Inicio tracking de apertura por red social');
 		$info = $_SERVER['HTTP_USER_AGENT'];
-		$idenfifiers = explode("-", $parameters);
 		
-		list($idTypeLink, $idLink, $idMail, $idContact, $socialType, $md5) = $idenfifiers;
-		
-		$src = $this->urlManager->getBaseUri(true) . 'track/clicksocial/1-' . $idLink . '-' . $idMail . '-' . $idContact . '-' . $socialType;
-		$md5_2 = md5($src . '-Sigmamovil_Rules');
-		
-		if ($md5 == $md5_2) {
+		try {		
+			// Decodificar enlace
+			$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+			$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+			$parts = $linkdecoder->decodeLink('track/clicksocial', $parameters);
+			list($v, $idLink, $idMail, $idContact, $socialType) = $parts;
 			$this->logger->log('El link es valido');
-			try {
 				
-				$trackingObj = new TrackingObject();
-				$trackingObj->setSendIdentification($idMail, $idContact);
-				$url = $trackingObj->getLinkToRedirect($idLink);	
-				$mxcxl = $trackingObj->getMxCxL($idLink);
-				if (!$mxcxl) {
-					$mxcxl = $trackingObj->createNewMxcxl($idLink, 0);
-				}
-				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialType);
-				$instance->setMxcxl($mxcxl);
-				$instance->trackClick();
-				$instance->saveClick();
+			$trackingObj = new TrackingObject();
+			$trackingObj->setSendIdentification($idMail, $idContact);
+			$url = $trackingObj->getLinkToRedirect($idLink);	
+			$mxcxl = $trackingObj->getMxCxL($idLink);
+			if (!$mxcxl) {
+				$mxcxl = $trackingObj->createNewMxcxl($idLink, 0);
 			}
-			catch (Exception $e) {
-				$this->logger->log('Exception: [' . $e->getMessage() . ']');
-			}			
-			return $this->response->redirect($url, true);
+			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialType);
+			$instance->setMxcxl($mxcxl);
+			$instance->trackClick();
+			$instance->saveClick();
 		}
-		else {
-			$this->logger->log('Link inválido');
-			$this->response->redirect('error/link');
-		}
+		catch (Exception $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+		}			
+		return $this->response->redirect($url, true);
 	}
 }

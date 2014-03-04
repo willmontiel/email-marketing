@@ -11,10 +11,15 @@ class ParametersEncoder
 		$this->baseUri = $baseUri;
 	}
 	
+	/**
+	 * This function return a link decoded with a md5 in the end
+	 * @param string $action
+	 * @param array $parameters
+	 * @return string
+	 */
 	public function encodeLink($action, $parameters)
 	{
 		$src = $this->baseUri . $action . '/' . implode('-', $parameters);
-		
 		return $src . '-' . $this->getMD5($src);
 	}
 	

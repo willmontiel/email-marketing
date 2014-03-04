@@ -2,16 +2,14 @@
 class LinkService
 {
 	protected $account;
-	protected $urlManager;
 	protected $mail;
 
 
 	protected $mappings;
 			
-	public function __construct(Account $account, Mail $mail, UrlManagerObject $urlManager) 
+	public function __construct(Account $account, Mail $mail) 
 	{
 		$this->account = $account;
-		$this->urlManager = $urlManager;
 		$this->mail = $mail;
 		
 		$this->mappings = array();
@@ -32,12 +30,12 @@ class LinkService
 		$map = array();
 		foreach ($this->mappings as $maps) {
 			// $maps[0] = '$$$1_sigma$$$'
-			// $maps[1] = 'http://,......../track/click/etc...'
+			// $maps[1] = 'idMailLink'
 			$map[$maps[0]] = $maps[1];
 		}
 		/*
 		 * El resultado debe ser:
-		 * [   '$$$1_sigma$$$' => 'base',
+		 * [   '$$$1_sigma$$$' => 'idLink',
 		 *		...
 		 * ]
 		 */
@@ -73,8 +71,7 @@ class LinkService
 		/* 4) No esta en BD, crear en BD y etc */
 			$idMailLink = $this->saveLink($url);
 			$mark = $this->createMark($idMailLink);
-			$base = $this->createUrlBase($idMailLink);
-			$this->mappings[$url] = array($mark, $base);
+			$this->mappings[$url] = array($mark, $idMailLink);
 		}
 		return $mark;
 	}
@@ -128,10 +125,10 @@ class LinkService
 		return $newUrl = '$$$' . $id . '_sigma_url_$$$';
 	}
 	
-	private function createUrlBase($id)
-	{
-		return $this->urlManager->getBaseUri(true) . 'track/click/1-' . $id;
-	}
+//	private function createUrlBase($id)
+//	{
+//		return $this->urlManager->getBaseUri(true) . 'track/click/1-' . $id;
+//	}
 	
 	private function validateHost($url)
 	{
