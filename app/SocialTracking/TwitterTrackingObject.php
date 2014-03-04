@@ -12,5 +12,10 @@ class TwitterTrackingObject extends TrackingSocialAbstract
 	{
 		$this->mxcxl->click_tw += 1;
 	}
+	
+	public function trackShare() 
+	{
+		$this->mxc->share_tw += 1;
+	}
 }
 

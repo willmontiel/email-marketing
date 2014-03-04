@@ -10,7 +10,11 @@ class GooglePlusTrackingObject extends TrackingSocialAbstract
 	}
 	public function trackClick() 
 	{
-		$this->mxcxl->click_fb += 1;
+		$this->mxcxl->click_gp += 1;
+	}
+	public function trackShare() 
+	{
+		$this->mxc->share_gp += 1;
 	}
 }
 

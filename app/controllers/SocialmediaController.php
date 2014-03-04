@@ -86,6 +86,16 @@ class SocialmediaController extends ControllerBase
 			$md5_3 = md5($url_1 . '-Sigmamovil_Rules');
 			$url_2 = $url_1 . '-' . $md5_3;
 			$url = urlencode($url_2);
+			
+			$trackingObj = new TrackingObject();
+			$trackingObj->setSendIdentification($idMail, $idContact);
+			$mxc = $trackingObj->getMxC();
+
+			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialtype);
+			$instance->setMxc($mxc);
+			$instance->trackShare();
+			$instance->save();
+			
 			switch ($socialtype) {
 				case 'facebook':
 						$urlFinal = 'https://facebook.com/sharer/sharer.php?u=' . $url . '&display=popup';
