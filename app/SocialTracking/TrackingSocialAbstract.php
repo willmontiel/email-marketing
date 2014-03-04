@@ -5,20 +5,20 @@ namespace EmailMarketing\SocialTracking;
 
 abstract class TrackingSocialAbstract
 {
-	public static function createInstanceTracking(\Mxc $mxc, $social)
+	public static function createInstanceTracking($social)
 	{
 		switch ($social) {
 			case 'facebook':
-				$instance = new FacebookTrackingObject($mxc);
+				$instance = new FacebookTrackingObject();
 				break;
 			case 'twitter':
-				$instance = new TwitterTrackingObject($mxc);
+				$instance = new TwitterTrackingObject();
 				break;
 			case 'googleplus':
-				$instance = new GooglePlusTrackingObject($mxc);
+				$instance = new GooglePlusTrackingObject();
 				break;
 			case 'linkedin':
-				$instance = new LinkedInTrackingObject($mxc);
+				$instance = new LinkedInTrackingObject();
 				break;
 			default :
 				throw new Exception('Red social desconocida: ' . $social);
@@ -26,12 +26,18 @@ abstract class TrackingSocialAbstract
 		}
 		return $instance;
 	}
-	
-	public function __construct($mxc)
+	public function setMxc(\Mxc $mxc)
 	{
 		$this->mxc = $mxc;
 	}
+	
+	public function setMxcxl(\Mxcxl $mxcxl)
+	{
+		$this->mxcxl = $mxcxl;
+	}
+	
 	abstract public function trackOpen();
+	abstract public function trackClick();
 	
 	public function save()
 	{
@@ -41,6 +47,16 @@ abstract class TrackingSocialAbstract
 				\Phalcon\DI::getDefault()->get('logger')->log('Error: ' . $msg);
 			}
 			throw new \Exception('Exception: Error while saving tracking open social in Mxc');
+		}
+	}
+	
+	public function saveClick()
+	{
+		if(!$this->mxcxl->save()) {
+			foreach ($this->mxcxl->getMessages() as $msg) {
+				\Phalcon\DI::getDefault()->get('logger')->log('Error: ' . $msg);
+			}
+			throw new \Exception('Exception: Error while saving tracking open social in Mxcxl');
 		}
 	}
 }

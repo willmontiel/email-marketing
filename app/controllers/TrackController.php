@@ -149,8 +149,8 @@ class TrackController extends ControllerBase
 				$trackingObj->setSendIdentification($idMail, $idContact);
 				$mxc = $trackingObj->getMxC();
 				
-				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($mxc, $socialType);
-				
+				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialType);
+				$instance->setMxc($mxc);
 				$instance->trackOpen();
 				$instance->save();
 			}
@@ -165,6 +165,44 @@ class TrackController extends ControllerBase
 			
 			$this->view->disable();
 			return $this->response->setContent(file_get_contents($img));
+		}
+		else {
+			$this->logger->log('Link inválido');
+			$this->response->redirect('error/link');
+		}
+	}
+	
+	public function clicksocialAction($parameters)
+	{
+		$this->logger->log('Inicio tracking de apertura por red social');
+		$info = $_SERVER['HTTP_USER_AGENT'];
+		$idenfifiers = explode("-", $parameters);
+		
+		list($idTypeLink, $idLink, $idMail, $idContact, $socialType, $md5) = $idenfifiers;
+		
+		$src = $this->urlManager->getBaseUri(true) . 'track/clicksocial/1-' . $idMail . '-' . $idContact . '-' . $socialType;
+		$md5_2 = md5($src . '-Sigmamovil_Rules');
+		
+		if ($md5 == $md5_2) {
+			$this->logger->log('El link es valido');
+			try {
+				
+				$trackingObj = new TrackingObject();
+				$trackingObj->setSendIdentification($idMail, $idContact);
+				$url = $trackingObj->getLinkToRedirect($idLink);	
+				$mxcxl = $trackingObj->getMxCxL($idLink);
+				if (!$mxcxl) {
+					$mxcxl = $trackingObj->createNewMxcxl($idLink, 0);
+				}
+				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($mxc, $socialType);
+				$instance->setMxcxl($mxcxl);
+				$instance->trackClick();
+				$instance->saveClick();
+			}
+			catch (Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}			
+			return $this->response->redirect($url, true);
 		}
 		else {
 			$this->logger->log('Link inválido');
