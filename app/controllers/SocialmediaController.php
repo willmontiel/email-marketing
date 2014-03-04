@@ -77,26 +77,29 @@ class SocialmediaController extends ControllerBase
 	
 	public function shareAction($parameters)
 	{
-		$idenfifiers = explode("-", $parameters);
-		list($v, $idMail, $idContact, $md5, $socialtype) = $idenfifiers;
-		$src = $this->urlManager->getBaseUri(true) . 'socialmedia/share/1-' . $idMail . '-' . $idContact;
-		$md5_2 = md5($src . '-Sigmamovil_Rules');
-		if ($md5 == $md5_2) {
-			$url_1 = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $idMail . '-' . $idContact . '-' . $socialtype;
-			$md5_3 = md5($url_1 . '-Sigmamovil_Rules');
-			$url_2 = $url_1 . '-' . $md5_3;
-			$url = urlencode($url_2);
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		
+		try {
+			$p = explode('-', $parameters);
+			$social = array_pop($p);
+			$parts = $linkdecoder->decodeLink('socialmedia/share', implode('-',$p));
+			list($v, $idMail, $idContact, $md5) = $parts;
+			
+			$p = array(1, $idMail, $idContact, $social);
+			$u = $linkdecoder->encodeLink('webversion/share', $p);
+			$url = urlencode($u);
 			
 			$trackingObj = new TrackingObject();
 			$trackingObj->setSendIdentification($idMail, $idContact);
 			$mxc = $trackingObj->getMxC();
 
-			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialtype);
+			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($social);
 			$instance->setMxc($mxc);
 			$instance->trackShare();
 			$instance->save();
 			
-			switch ($socialtype) {
+			switch ($social) {
 				case 'facebook':
 						$urlFinal = 'https://facebook.com/sharer/sharer.php?u=' . $url . '&display=popup';
 					break;
