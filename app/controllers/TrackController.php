@@ -126,7 +126,7 @@ class TrackController extends ControllerBase
 		return $this->setJsonResponse(array('status' => 'OK', 'description' => 'Everything seems to be fine!'));
 	}
 	
-	public function opensocial($parameters)
+	public function opensocialAction($parameters)
 	{
 		$this->logger->log('Inicio tracking de apertura por red social');
 		$info = $_SERVER['HTTP_USER_AGENT'];
