@@ -78,7 +78,7 @@ class SocialmediaController extends ControllerBase
 	public function shareAction($parameters)
 	{
 		$idenfifiers = explode("-", $parameters);
-		list($idMail, $idContact, $md5, $socialtype) = $idenfifiers;
+		list($v, $idMail, $idContact, $md5, $socialtype) = $idenfifiers;
 		$src = $this->urlManager->getBaseUri(true) . 'socialmedia/share/1-' . $idMail . '-' . $idContact;
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		if ($md5 == $md5_2) {
