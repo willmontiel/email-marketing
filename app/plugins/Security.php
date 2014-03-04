@@ -106,6 +106,7 @@ class Security extends Plugin
 				'webversion::show' => array(),
 				'webversion::share' => array(),
 				'socialmedia::share' => array(),
+				'unsubscribe::contact' => array(),
 				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
@@ -357,7 +358,8 @@ class Security extends Plugin
 			'track:clicksocial',
 			'webversion:show',
 			'webversion:share',
-			'socialmedia:share'
+			'socialmedia:share',
+			'unsubscribe:contact'
 		);
 		
 		$controller = $dispatcher->getControllerName();
