@@ -148,7 +148,7 @@ class ChildCommunication extends BaseWrapper
 					$headers->addTextHeader('X-GreenArrow-InstanceID', '0em' . $mail->idMail);
 					$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', 'em' . $mail->idMail . 'x' . $contact['contact']['idContact']);
 					$headers->addTextHeader('X-GreenArrow-ListID', 't0em' . $this->account->idAccount);
-					
+					$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
 					
 					$message->setFrom($from);
 					$message->setBody($htmlWithTracking, 'text/html');

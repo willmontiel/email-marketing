@@ -7,6 +7,7 @@ class TrackingUrlObject
 	protected $html;
 	protected $urls;
 	protected $urlManager;
+	protected $unsubscribe_link;
 
 	public function __construct() 
 	{
@@ -112,6 +113,8 @@ class TrackingUrlObject
 		
 		$this->links['search'][] = '$$$_unsubscribe_track_$$$';
 		$this->links['replace'][] = $url;
+		
+		$this->unsubscribe_link = $url;
 	}
 	
 	public function getClicksTrackingUrl($social = false)
@@ -196,4 +199,8 @@ class TrackingUrlObject
 		return $parts['scheme'] . '://' . $parts['host'];
 	}		
 	
+	public function getUnsubscribeLink()
+	{
+		return $this->unsubscribe_link;
+	}
 }
