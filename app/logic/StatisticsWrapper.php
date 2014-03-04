@@ -48,7 +48,7 @@ class StatisticsWrapper extends BaseWrapper
 		$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
 		$statisticsData->hardbounced = $hardBounced['total']->total;
 		$statisticsData->stathardbounced = round(( $hardBounced['total']->total / $bounced ) * 100 );
-		$statisticsData->softbounced = $bounced - $hardBounced->total;
+		$statisticsData->softbounced = $bounced -  $hardBounced['total']->total;
 		$statisticsData->statsoftbounced = round(( $statisticsData->softbounced / $bounced ) * 100 );
 		
 		$statisticsData->unsubscribed = $unsubscribed;
