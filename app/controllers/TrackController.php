@@ -150,6 +150,8 @@ class TrackController extends ControllerBase
 				$mxc = $trackingObj->getMxC();
 				
 				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($mxc, $socialType);
+				
+				$this->logger->log('Objeto de tracking de red social: [' . print_r($instance, true) . ']');
 				$instance->trackOpen();
 				$instance->save();
 			}

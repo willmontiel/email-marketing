@@ -21,7 +21,7 @@ abstract class TrackingSocialAbstract
 				$instance = new LinkedInTrackingObject($mxc);
 				break;
 			default :
-				throw new Exception('');
+				throw new Exception('Red social desconocida: ' . $social);
 				break;
 		}
 		return $instance;
