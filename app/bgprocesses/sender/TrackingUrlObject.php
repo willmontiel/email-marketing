@@ -28,7 +28,7 @@ class TrackingUrlObject
 		$this->getClicksTrackingUrl();
 		$this->getWebVersionTrack();
 		$this->getSocialMediaShare();
-		
+		$this->getUnsubscribeTracking();
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
 		$htmlWithTracking = str_replace($this->links['search'], $this->links['replace'], $html);
@@ -47,6 +47,7 @@ class TrackingUrlObject
 		$this->getOpenTrackingUrl($social);
 		$this->getClicksTrackingUrl($social);
 		$this->getSocialMediaShare();
+		$this->getUnsubscribeTracking();
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
 		$htmlWithTracking = str_replace($this->links['search'], $this->links['replace'], $html);
@@ -100,6 +101,18 @@ class TrackingUrlObject
 		$this->links['search'][] = '$$$_social_media_share_$$$';
 		$this->links['replace'][] = $url . '-';
 		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $url);
+	}
+	
+	public function getUnsubscribeTracking()
+	{
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		
+		$parameters = array(1, $this->idMail, $this->idContact);
+		$url = $linkdecoder->encodeLink('unsubscribe/contact', $parameters);
+		
+		$this->links['search'][] = '$$$_unsubscribe_track_$$$';
+		$this->links['replace'][] = $url;
 	}
 	
 	public function getClicksTrackingUrl($social = false)
