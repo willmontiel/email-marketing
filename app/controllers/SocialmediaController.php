@@ -83,7 +83,7 @@ class SocialmediaController extends ControllerBase
 		try {
 			$p = explode('-', $parameters);
 			$social = array_pop($p);
-			$parts = $linkdecoder->decodeLink('socialmedia/share', implode('-',$p));
+			$parts = $linkdecoder->decodeLink('socialmedia/share', implode('-', $p));
 			list($v, $idMail, $idContact, $md5) = $parts;
 			
 			$p = array(1, $idMail, $idContact, $social);
@@ -115,7 +115,8 @@ class SocialmediaController extends ControllerBase
 			}
 			return $this->response->redirect($urlFinal, true);
 		}
-		else {
+		catch (Exception $e) {
+			$this->logger->log('Exception: ' . $e);
 			return $this->response->redirect('error/link');
 		}
 	}
