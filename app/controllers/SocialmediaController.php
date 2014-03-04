@@ -86,6 +86,7 @@ class SocialmediaController extends ControllerBase
 		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
 		
 		try {
+			$this->logger->log($parameters);
 			$p = implode('-', $parameters);
 			$data = array_pop($p);
 			$this->logger->log('Inicia');
