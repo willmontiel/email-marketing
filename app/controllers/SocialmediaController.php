@@ -99,12 +99,12 @@ class SocialmediaController extends ControllerBase
 			$trackingObj->setSendIdentification($idMail, $idContact);
 			$mxc = $trackingObj->getMxC();
 
-			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialType);
+			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($social);
 			$instance->setMxc($mxc);
 			$instance->trackShare();
 			$instance->save();
 			
-			switch ($socialType) {
+			switch ($social) {
 				case 'facebook':
 						$urlFinal = 'https://facebook.com/sharer/sharer.php?u=' . $url . '&display=popup';
 					break;
