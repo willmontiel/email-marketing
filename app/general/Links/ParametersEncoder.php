@@ -40,7 +40,25 @@ class ParametersEncoder
 		}
 		
 		return $parameters;
+	}
+	
+	public function decodeSocialLink($action, $paramstr)
+	{
+		$parameters = explode("-", $paramstr);
+		$version = $parameters[0];
 		
+		$md5 = $parameters[count($parameters)-2];
+		unset($parameters[count($parameters)-2]);
+		
+		
+		$src = $this->baseUri . $action . '/' . implode('-', $parameters);
+		$vermd5 = $this->getMD5($src);
+		
+		if ($md5 !== $vermd5) {
+			throw new \InvalidArgumentException('MD5 no concuerda');
+		}
+		
+		return $parameters;
 	}
 	
 	private function getMD5($data)
