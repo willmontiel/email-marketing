@@ -155,7 +155,7 @@ class TrackController extends ControllerBase
 				$instance->trackOpen();
 				$instance->save();
 			}
-			catch (InvalidArgumentException $e) {
+			catch (Exception $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');
 			}
 			$this->logger->log('Preparando para retornar img');
