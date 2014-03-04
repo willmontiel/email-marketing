@@ -4,6 +4,7 @@ class StatisticsWrapper extends BaseWrapper
 {
 	public function showMailStatistics(Mail $mail)
 	{
+		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		$total = $mail->totalContacts;
 		$opens = ($mail->uniqueOpens != null) ? $mail->uniqueOpens : 0;
 		$bounced = ($mail->bounced != null) ? $mail->bounced : 0;
@@ -37,14 +38,17 @@ class StatisticsWrapper extends BaseWrapper
 		
 		$sql = "SELECT COUNT(*) AS total
 				FROM Mxc AS m 
-				WHERE m.idMail = {$mail->idMail} AND m.idBouncecode = 10";
-		$hardBounced = Phalcon\DI::getDefault()->get('modelsManager')->executeQuery($sql);
-		
+				WHERE m.idMail = :idMail: AND m.idBouncedcode = 10";
+		$sqlHardBounced = $manager->createQuery($sql);
+		$hardBounced = $sqlHardBounced->execute(array(
+			'idMail' => $mail->idMail
+		));
+		Phalcon\DI::getDefault()->get('logger')->log($hardBounced['total']->total);
 		$statisticsData->bounced = $bounced;
 		$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
-		$statisticsData->hardbounced = $hardBounced->total;
-		$statisticsData->stathardbounced = round(( $hardBounced->total / $bounced ) * 100 );
-		$statisticsData->softbounced = $bounced - $hardBounced->total;
+		$statisticsData->hardbounced = $hardBounced['total']->total;
+		$statisticsData->stathardbounced = round(( $hardBounced['total']->total / $bounced ) * 100 );
+		$statisticsData->softbounced = $bounced -  $hardBounced['total']->total;
 		$statisticsData->statsoftbounced = round(( $statisticsData->softbounced / $bounced ) * 100 );
 		
 		$statisticsData->unsubscribed = $unsubscribed;
@@ -683,7 +687,6 @@ class StatisticsWrapper extends BaseWrapper
 					break;
 			}
 		}
-		Phalcon\DI::getDefault()->get('logger')->log($phqlcount);
 		$querycount = $db->query($phqlcount, array($idMail));
 		$resultcount = $querycount->fetchAll();
 		$this->pager->setTotalRecords($resultcount[0]['total']);
