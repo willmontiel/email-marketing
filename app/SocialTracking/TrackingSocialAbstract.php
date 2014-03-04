@@ -35,6 +35,7 @@ abstract class TrackingSocialAbstract
 	
 	public function save()
 	{
+		Phalcon\DI::getDefault()->get('logger')->log('Saving');
 		if(!$this->mxc->save()) {
 			foreach ($this->mxc->getMessages() as $msg) {
 				Phalcon\DI::getDefault()->get('logger')->log('Error: ' . $msg);
