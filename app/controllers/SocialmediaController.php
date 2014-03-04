@@ -79,7 +79,7 @@ class SocialmediaController extends ControllerBase
 	{
 		$idenfifiers = explode("-", $parameters);
 		list($idMail, $idContact, $md5, $socialtype) = $idenfifiers;
-		$src = $this->urlManager->getBaseUri(true) . 'socialmedia/share/' . $idMail . '-' . $idContact;
+		$src = $this->urlManager->getBaseUri(true) . 'socialmedia/share/1-' . $idMail . '-' . $idContact;
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		if ($md5 == $md5_2) {
 			$url_1 = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $idMail . '-' . $idContact . '-' . $socialtype;
