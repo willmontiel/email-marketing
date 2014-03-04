@@ -229,7 +229,7 @@ App.DrilldownSpamController = Ember.ArrayController.extend(Ember.MixinPagination
 App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {	
 	modelClass : App.Drilldownbounced,
 				
-	selectedType: ['Todos', 'Temporal', 'Permanente', 'Otro'],
+	selectedType: ['Todos', 'soft', 'hard'],
 	typeSelected: null,
 	bouncedFilter: null,
 	loadDataChart: function() {
