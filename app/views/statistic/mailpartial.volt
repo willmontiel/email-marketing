@@ -320,18 +320,6 @@
 						</tr>
 					</table>
 				</label>
-				<label>
-					<table>
-						<tr>
-							<td class="border-radious-scarlet-left"></td>
-							<td class="border-radious-scarlet-center">{{statisticsData.otherbounced}}</td>
-							<td class="border-radious-scarlet-center">|</td>
-							<td class="border-radious-scarlet-center">{{statisticsData.statotherbounced}}%</td>
-							<td class="border-radious-scarlet-center">|</td>
-							<td class="border-radious-scarlet-right">Otros</td>
-						</tr>
-					</table>
-				</label>
 			</div>
 		</div>
 		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Rebotes"}}'}}
