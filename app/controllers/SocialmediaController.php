@@ -86,7 +86,9 @@ class SocialmediaController extends ControllerBase
 		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
 		
 		try {
-			$parts = $linkdecoder->decodeSocialLink('socialmedia/share', $parameters);
+			$p = implode('-', $parameters);
+			$data = array_pop($p);
+			$parts = $linkdecoder->decodeLink('socialmedia/share', $data);
 			list($v, $idMail, $idContact, $md5, $socialType) = $parts;
 			
 			$p = array(1, $idMail, $idContact, $socialType);
