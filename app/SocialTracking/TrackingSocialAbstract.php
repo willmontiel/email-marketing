@@ -5,7 +5,7 @@ namespace EmailMarketing\SocialTracking;
 
 abstract class TrackingSocialAbstract
 {
-	public static function createInstanceTracking(Mxc $mxc, $social)
+	public static function createInstanceTracking(\Mxc $mxc, $social)
 	{
 		switch ($social) {
 			case 'facebook':
