@@ -20,7 +20,8 @@ try {
 	$loader->registerNamespaces(
 			array(
 				'EmailMarketing\\SocialTracking' => '../app/SocialTracking/'
-			)
+			),
+			true
 	);
 	
 	$loader->registerClasses(array(
