@@ -13,6 +13,13 @@ $loader->registerDirs(array(
 	$dir . '/../editorlogic/',
 ));
 
+$loader->registerNamespaces(
+		array(
+			'EmailMarketing\\SocialTracking' => $dir . '/../SocialTracking/',
+			'EmailMarketing\\General' => $dir .'/../general/'
+		),
+		true
+);
 // register autoloader
 $loader->register();
 

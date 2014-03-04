@@ -5,41 +5,32 @@ class TrackController extends ControllerBase
 	{
 		$this->logger->log('Inicio tracking de apertura');
 		$info = $_SERVER['HTTP_USER_AGENT'];
-		$idenfifiers = explode("-", $parameters);
 		
-		list($idLink, $idMail, $idContact, $md5) = $idenfifiers;
-//		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-		$src = $this->urlManager->getBaseUri(true) . 'track/open/1-' . $idMail . '-' . $idContact;
-		$md5_2 = md5($src . '-Sigmamovil_Rules');
-		
-		if ($md5 == $md5_2) {
-			$this->logger->log('El link es valido');
-			try {
-				//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
-				//petición
-				$userAgent = new UserAgentDetectorObj();
-				$userAgent->setInfo($info);
-				
-				$trackingObj = new TrackingObject();
-				$trackingObj->setSendIdentification($idMail, $idContact);
-				$trackingObj->trackOpenEvent($userAgent);	
-			}
-			catch (InvalidArgumentException $e) {
-				$this->logger->log('Exception: [' . $e->getMessage() . ']');
-			}
-			$this->logger->log('Preparando para retornar img');
-			// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
-			$img = '../public/images/tracking.gif';
+		try {
+			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
+			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
+			$idenfifiers = $linkEncoder->decodeLink($parameters);
+			list($idLink, $idMail, $idContact) = $idenfifiers;
+			//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
+			//petición
+			$userAgent = new UserAgentDetectorObj();
+			$userAgent->setInfo($info);
 
-			$this->response->setHeader("Content-Type", "image/gif");
-			
-			$this->view->disable();
-			return $this->response->setContent(file_get_contents($img));
+			$trackingObj = new TrackingObject();
+			$trackingObj->setSendIdentification($idMail, $idContact);
+			$trackingObj->trackOpenEvent($userAgent);	
 		}
-		else {
-			$this->logger->log('Link inválido');
-			$this->response->redirect('error/link');
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
 		}
+		$this->logger->log('Preparando para retornar img');
+		// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
+		$img = '../public/images/tracking.gif';
+
+		$this->response->setHeader("Content-Type", "image/gif");
+
+		$this->view->disable();
+		return $this->response->setContent(file_get_contents($img));
 	}
 	
 	public function clickAction($parameters)
@@ -47,32 +38,26 @@ class TrackController extends ControllerBase
 		$this->logger->log('Inicio tracking de click');
 		$info = $_SERVER['HTTP_USER_AGENT'];
 		
-		$idenfifiers = explode("-", $parameters);
-		
-		list($idTypeLink, $idLink, $idMail, $idContact, $md5) = $idenfifiers;
-//		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-		$href = $this->urlManager->getBaseUri(true) . 'track/click/1-' . $idLink . '-' . $idMail . '-' . $idContact;
-		$md5_2 = md5($href . '-Sigmamovil_Rules');
-		
-		if ($md5 == $md5_2) {
-			try {
-				$userAgent = new UserAgentDetectorObj();
-				$userAgent->setInfo($info);
+		try {
+			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
+			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
+			$idenfifiers = $linkEncoder->decodeLink($parameters);
+			list($v, $idLink, $idMail, $idContact) = $idenfifiers;
 				
-				$trackingObj = new TrackingObject();
-				$trackingObj->setSendIdentification($idMail, $idContact);
-				$url = $trackingObj->trackClickEvent($idLink, $userAgent);	
-			}
-			catch (InvalidArgumentException $e) {
-				$this->logger->log('Exception: [' . $e . ']');
-			}
+			$userAgent = new UserAgentDetectorObj();
+			$userAgent->setInfo($info);
+				
+			$trackingObj = new TrackingObject();
+			$trackingObj->setSendIdentification($idMail, $idContact);
+			$url = $trackingObj->trackClickEvent($idLink, $userAgent);	
+				
 			if (!$url) {
 				return $this->response->redirect('error/link');
 			}
 			return $this->response->redirect($url, true);
 		}
-		else {
-			$this->logger->log('Enlace de tracking click inválido');
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
 			return $this->response->redirect('error/link');
 		}
 	}
@@ -130,45 +115,43 @@ class TrackController extends ControllerBase
 	{
 		$this->logger->log('Inicio tracking de apertura por red social');
 		$info = $_SERVER['HTTP_USER_AGENT'];
-		$idenfifiers = explode("-", $parameters);
-		
-		list($idLink, $idMail, $idContact, $socialType, $md5) = $idenfifiers;
-		
-		$src = $this->urlManager->getBaseUri(true) . 'track/opensocial/1-' . $idMail . '-' . $idContact . '-' . $socialType;
-		$md5_2 = md5($src . '-Sigmamovil_Rules');
-		
-		if ($md5 == $md5_2) {
-			$this->logger->log('El link es valido');
-			try {
-				//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
-				//petición
-				$userAgent = new UserAgentDetectorObj();
-				$userAgent->setInfo($info);
-				
-				$trackingObj = new TrackingObject();
-				$trackingObj->setSendIdentification($idMail, $idContact);
-				$mxc = $trackingObj->getMxC();
-				
-				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($mxc, $socialType);
-				
-				$instance->trackOpen();
-				$instance->save();
-			}
-			catch (Exception $e) {
-				$this->logger->log('Exception: [' . $e->getMessage() . ']');
-			}
-			$this->logger->log('Preparando para retornar img');
-			// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
-			$img = '../public/images/tracking.gif';
 
-			$this->response->setHeader("Content-Type", "image/gif");
-			
-			$this->view->disable();
-			return $this->response->setContent(file_get_contents($img));
+		try {
+			// Decodificar enlace
+			$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+			$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+			$parts = $linkdecoder->decodeLink('track/opensocial', $parameters);
+			list($v, $idMail, $idContact, $socialType) = $parts;
+			$this->logger->log('El link es valido');
+
+			//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
+			//petición
+			$userAgent = new UserAgentDetectorObj();
+			$userAgent->setInfo($info);
+
+			$trackingObj = new TrackingObject();
+			$trackingObj->setSendIdentification($idMail, $idContact);
+			$mxc = $trackingObj->getMxC();
+
+			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($mxc, $socialType);
+
+			$instance->trackOpen();
+			$instance->save();
 		}
-		else {
+		catch (InvalidArgumentException $e) {
 			$this->logger->log('Link inválido');
 			$this->response->redirect('error/link');
 		}
+		catch (Exception $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+		}
+		$this->logger->log('Preparando para retornar img');
+		// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
+		$img = '../public/images/tracking.gif';
+
+		$this->response->setHeader("Content-Type", "image/gif");
+
+		$this->view->disable();
+		return $this->response->setContent(file_get_contents($img));
 	}
 }

@@ -19,7 +19,8 @@ try {
 	
 	$loader->registerNamespaces(
 			array(
-				'EmailMarketing\\SocialTracking' => '../app/SocialTracking/'
+				'EmailMarketing\\SocialTracking' => '../app/SocialTracking/',
+				'EmailMarketing\\General' => '../app/general/'
 			),
 			true
 	);
