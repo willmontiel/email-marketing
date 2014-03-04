@@ -87,7 +87,7 @@ class SocialmediaController extends ControllerBase
 		
 		try {
 			$this->logger->log($parameters);
-			$p = implode('-', $parameters);
+			$p = explode('-', $parameters);
 			$this->logger->log(print_r($p, true));
 			$data = array_pop($p);
 			$this->logger->log('Inicia');
