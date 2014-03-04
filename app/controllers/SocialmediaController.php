@@ -87,11 +87,11 @@ class SocialmediaController extends ControllerBase
 		
 		try {
 			$p = explode('-', $parameters);
-			array_pop($p);
+			$social = array_pop($p);
 			$parts = $linkdecoder->decodeLink('socialmedia/share', implode('-',$p));
-			list($v, $idMail, $idContact, $md5, $socialType) = $parts;
+			list($v, $idMail, $idContact, $md5) = $parts;
 			
-			$p = array(1, $idMail, $idContact, $socialType);
+			$p = array(1, $idMail, $idContact, $social);
 			$u = $linkdecoder->encodeLink('webversion/share', $p);
 			$url = urlencode($u);
 			
