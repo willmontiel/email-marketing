@@ -89,7 +89,7 @@ class SocialmediaController extends ControllerBase
 			$p = implode('-', $parameters);
 			$data = array_pop($p);
 			$this->logger->log('Inicia');
-			$this->logger->log(print_r($data, true));
+			$this->logger->log(print_r($p, true));
 			$this->logger->log(print_r($data));
 			$this->logger->log($data);
 			$this->logger->log('Finaliza');
