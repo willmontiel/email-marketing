@@ -9,7 +9,8 @@ class UnsubscribeController extends ControllerBase
 
 			try {
 				$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
-				$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
+				$linkEncoder->setBaseUri($this->urlManager->getBaseUri(true));
+				
 				$idenfifiers = $linkEncoder->decodeLink('unsubscribe/contact', $parameters);
 				list($v, $idMail, $idContact) = $idenfifiers;
 
@@ -18,8 +19,12 @@ class UnsubscribeController extends ControllerBase
 
 				$trackingObj = new TrackingObject();
 				$trackingObj->setSendIdentification($idMail, $idContact);
-
+				$trackingObj->trackUnsubscribedEvent();
 				//return $this->response->redirect('unsubscribe/success');
+			}
+			catch (Exception $e) {
+				$this->logger->log('Exception: [' . $e . ']');
+				return $this->response->redirect('error/link');
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e . ']');

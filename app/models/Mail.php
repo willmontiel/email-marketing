@@ -75,4 +75,9 @@ class Mail extends Modelbase
 	{
 		$this->spam += 1;
 	}
+	
+	public function incrementUnsubscribed()
+	{
+		$this->unsubscribed += 1;
+	}
 }

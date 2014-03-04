@@ -34,4 +34,9 @@ class Statdbase extends \Phalcon\Mvc\Model
 	{
 		$this->spam += 1;
 	}
+	
+	public function incrementUnsubscribed()
+	{
+		$this->unsubscribed += 1;
+	}
 }
