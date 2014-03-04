@@ -8,9 +8,8 @@ class TrackController extends ControllerBase
 		$idenfifiers = explode("-", $parameters);
 		
 		list($idLink, $idMail, $idContact, $md5) = $idenfifiers;
-		
-		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-		$src = $urlManager->getBaseUri(true) . 'track/open/1-' . $idMail . '-' . $idContact;
+//		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
+		$src = $this->urlManager->getBaseUri(true) . 'track/open/1-' . $idMail . '-' . $idContact;
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		
 		if ($md5 == $md5_2) {
@@ -51,9 +50,8 @@ class TrackController extends ControllerBase
 		$idenfifiers = explode("-", $parameters);
 		
 		list($idTypeLink, $idLink, $idMail, $idContact, $md5) = $idenfifiers;
-		
-		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
-		$href = $urlManager->getBaseUri(true) . 'track/click/1-' . $idLink . '-' . $idMail . '-' . $idContact;
+//		$urlManager = Phalcon\DI::getDefault()->get('urlManager');
+		$href = $this->urlManager->getBaseUri(true) . 'track/click/1-' . $idLink . '-' . $idMail . '-' . $idContact;
 		$md5_2 = md5($href . '-Sigmamovil_Rules');
 		
 		if ($md5 == $md5_2) {
@@ -128,8 +126,49 @@ class TrackController extends ControllerBase
 		return $this->setJsonResponse(array('status' => 'OK', 'description' => 'Everything seems to be fine!'));
 	}
 	
-	public function opensocial($parameters)
+	public function opensocialAction($parameters)
 	{
+		$this->logger->log('Inicio tracking de apertura por red social');
+		$info = $_SERVER['HTTP_USER_AGENT'];
+		$idenfifiers = explode("-", $parameters);
 		
+		list($idLink, $idMail, $idContact, $socialType, $md5) = $idenfifiers;
+		
+		$src = $this->urlManager->getBaseUri(true) . 'track/opensocial/1-' . $idMail . '-' . $idContact . '-' . $socialType;
+		$md5_2 = md5($src . '-Sigmamovil_Rules');
+		
+		if ($md5 == $md5_2) {
+			$this->logger->log('El link es valido');
+			try {
+				//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
+				//petición
+				$userAgent = new UserAgentDetectorObj();
+				$userAgent->setInfo($info);
+				
+				$trackingObj = new TrackingObject();
+				$trackingObj->setSendIdentification($idMail, $idContact);
+				$mxc = $trackingObj->getMxC();
+				
+				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($mxc, $socialType);
+				
+				$instance->trackOpen();
+				$instance->save();
+			}
+			catch (Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}
+			$this->logger->log('Preparando para retornar img');
+			// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
+			$img = '../public/images/tracking.gif';
+
+			$this->response->setHeader("Content-Type", "image/gif");
+			
+			$this->view->disable();
+			return $this->response->setContent(file_get_contents($img));
+		}
+		else {
+			$this->logger->log('Link inválido');
+			$this->response->redirect('error/link');
+		}
 	}
 }
