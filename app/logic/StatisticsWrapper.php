@@ -434,25 +434,6 @@ class StatisticsWrapper extends BaseWrapper
 	public function findMailUnsubscribedStats($idMail)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
-		
-		$unsubscribed = array();
-		$h1 = 1380657600;
-		$v1 = 3000;
-		$v2 = 2900;
-		for ($i = 0; $i < 1800; $i++) {
-			$value = rand($v1, $v2);
-			if($i == 20 || $i == 100 || $i == 150) {
-				$value = 0;
-			}
-			$unsubscribed[] = array(
-				'title' =>$h1,
-				'value' => $value
-			);
-			$v1 = $v1 - 1;
-			$v2 = $v2 - 1;
-			$h1+=3600;
-		}
-		
 		$phql = "SELECT m.idContact, m.unsubscribe AS date, c.name, c.lastName, e.email 
 				FROM Mxc AS m
 					JOIN Contact AS c ON (c.idContact = m.idContact)
@@ -464,30 +445,54 @@ class StatisticsWrapper extends BaseWrapper
 			'idMail' => $idMail
 		));
 		
+		$unsubscribed = array();
 		$unsubscribedcontact = array();
+		$count = count($unsubscribeds);
 		
-		foreach ($unsubscribeds as $u) {
-			$unsubscribedcontact[] = array(
-				'id' => $u->idContact,
-				'email' => $u->email,
-				'date' => date('Y-m-d h:i', $u->date),
-				'name' => $u->name,
-				'lastname' => $u->lastName
-			);
-		}
-		
-		$phqlCount = "SELECT COUNT(*) AS total
+		if ($count) {
+			foreach ($unsubscribeds as $u) {
+				$unsubscribedcontact[] = array(
+					'id' => $u->idContact,
+					'email' => $u->email,
+					'date' => date('Y-m-d h:i', $u->date),
+					'name' => $u->name,
+					'lastname' => $u->lastName
+				);
+			
+				$unsubsArray = array();
+				if (!isset($unsubsArray[$u->date])) {
+					$unsubsArray[$u->date] = array(
+						'title' => $u->date,
+						'value' => 1
+					);
+				}
+				else {
+					$unsubsArray[$u->date]['value'] += 1;
+				}
+				
+				foreach ($unsubsArray as $o) {
+					$unsubscribed[] = array (
+						'title' => $o['title'],
+						'value' => $o['value']
+					);
+				}
+			}
+			
+			$phqlCount = "SELECT COUNT(*) AS total
 						FROM Mxc AS m
 							JOIN Contact AS c ON (c.idContact = m.idContact)
 							JOIN Email AS e ON (c.idEmail = e.idEmail)
 						WHERE m.idMail = :idMail: AND m.unsubscribe != 0";
 		
-		$queryCount = $manager->createQuery($phqlCount);
-		$total = $queryCount->execute(array(
-			'idMail' => $idMail
-		));
+			$queryCount = $manager->createQuery($phqlCount);
+			$total = $queryCount->execute(array(
+				'idMail' => $idMail
+			));
+			
+			$count = $total['total']->total;
+		}
 		
-		$this->pager->setTotalRecords($total['total']->total);
+		$this->pager->setTotalRecords($count);
 		
 		$statistics[] = array(
 			'id' => $idMail,
