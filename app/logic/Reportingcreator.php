@@ -75,6 +75,11 @@ class Reportingcreator
 				$title = 'Reporte de correos rebotados';
 				break;
 			
+			case 'spam':
+				$data = $this->getQueryForSpamReport($name, $dir);
+				$title = 'Reporte de correos que han marcado como spam';
+				break;
+			
 			default :
 				throw new \InvalidArgumentException('There is not the type of report');
 				break;
@@ -88,12 +93,12 @@ class Reportingcreator
 	
 	protected function getQueryForOpenReport($name, $dir)
 	{
-		$phql = "SELECT null, ". $this->mail->idMail .", 'opens', e.email, null, null, v.userAgent, null, null, null, v.date
-					FROM mailevent AS v
+		$phql = "SELECT null, ". $this->mail->idMail .", 'opens', e.email, null, null, null, null, null, null, v.opening
+					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
 					WHERE v.idMail = ". $this->mail->idMail ."
-						AND (v.description = 'opening' OR v.description = 'opening for click')";
+						AND v.opening != 0";
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
@@ -140,11 +145,11 @@ class Reportingcreator
 	
 	protected function getQueryForUnsubscribedReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail. ", 'unsubscribed', e.email, c.name, c.lastName, null, null, null, null, v.date
-					FROM mailevent AS v
+		$phql = "SELECT null, " . $this->mail->idMail. ", 'unsubscribed', e.email, c.name, c.lastName, null, null, null, null, v.unsubscribe
+					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (c.idEmail = e.idEmail)
-				WHERE v.idMail = " . $this->mail->idMail . " AND v.description = 'unsubscribed'";
+				WHERE v.idMail = " . $this->mail->idMail . " AND v.unsubscribe != 0";
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
@@ -165,12 +170,12 @@ class Reportingcreator
 	
 	protected function getQueryForBouncedReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail . ", 'bounced', e.email, null, null, null, null, b.type, b.description, v.date
-					FROM mailevent AS v
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'bounced', e.email, null, null, null, null, b.type, b.description, v.bounced
+					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
 						JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
-				WHERE v.idMail = " . $this->mail->idMail . " AND v.description = 'bounced'";
+				WHERE v.idMail = " . $this->mail->idMail . " AND v.bounced != 0";
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
@@ -188,6 +193,32 @@ class Reportingcreator
 		
 		return $data;
 		
+	}
+	
+	protected function getQueryForSpamReport($name, $dir)
+	{
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'spam', e.email, null, null, null, null, b.type, b.description, v.bounced
+					FROM mxc AS v
+						JOIN contact AS c ON (c.idContact = v.idContact)
+						JOIN email AS e ON (e.idEmail = c.idEmail)
+						JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
+				WHERE v.idMail = " . $this->mail->idMail . " AND v.spam != 0";
+		
+		$sql = "INSERT INTO $this->tablename ($phql)";
+		
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, bouncedType, category
+						FROM {$this->tablename}
+						INTO OUTFILE  '{$dir}{$name}'
+						FIELDS TERMINATED BY ','
+						ENCLOSED BY '\"'
+						LINES TERMINATED BY '\n'";
+		
+		$data = array(
+			'generate' => $sql,
+			'save' => $report
+		);
+		
+		return $data;
 	}
 	
 	protected function saveReport($generate,$save) 
