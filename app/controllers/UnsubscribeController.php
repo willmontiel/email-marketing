@@ -21,6 +21,7 @@ class UnsubscribeController extends ControllerBase
 			if($trackingObj->canTrackUnsubscribedEvents() && $contact->unsubscribed == 0) {
 				$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
 				$this->view->setVar('dbase', $dbase);
+				$this->view->setVar('parameters', $parameters);
 			}
 			
 			$this->view->setVar('email', $email);
