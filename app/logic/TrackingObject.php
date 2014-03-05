@@ -620,37 +620,36 @@ class TrackingObject
 	{
 		$date = time();
 		try {
+			$this->startTransaction();
+			
+			$this->contact = $this->mxc->contact;
+			$this->contact->unsubscribed = $date;
+			$this->addDirtyObject($this->contact);
+			
 			if ($this->canTrackUnsubscribedEvents()) {
-				$this->log->log('Se puede realizar el tracking de des-suscripción');
-				$this->startTransaction();
-				
+				$this->log->log('Se puede realizar el tracking de des-suscripción');				
 				$this->mxc->unsubscribe = $date;
 				$this->addDirtyObject($this->mxc);
 				
 				$mailObj = $this->findRelatedMailObject();
 				$mailObj->incrementUnsubscribed();
 				$this->addDirtyObject($mailObj);
-				
-				$statDbaseObj = $this->findRelatedDbaseStatObject();
-				$statDbaseObj->incrementUnsubscribed();
-				$this->addDirtyObject($statDbaseObj);
-				
-				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
-					$statListObj->incrementUnsubscribed();
-					$this->addDirtyObject($statListObj);
-				}
-				
-				$this->contact = $this->mxc->contact;
-				$this->contact->unsubscribed = $date;
-				$this->addDirtyObject($this->contact);
-				
-				$this->log->log('Preparandose para iniciar guardado simultaneo');
-				$this->flushChanges();
-				
-				$this->log->log('Preparandose para actualizar contadores');
-				$this->updateCounters();
 			}
-			$this->log->log('ya se contabilizó tracking de unsubscribed y se des-suscribió el contacto');
+			
+			$statDbaseObj = $this->findRelatedDbaseStatObject();
+			$statDbaseObj->incrementUnsubscribed();
+			$this->addDirtyObject($statDbaseObj);
+
+			foreach ($this->findRelatedContactlistObjects() as $statListObj) {
+				$statListObj->incrementUnsubscribed();
+				$this->addDirtyObject($statListObj);
+			}
+
+			$this->log->log('Preparandose para iniciar guardado simultaneo');
+			$this->flushChanges();
+
+			$this->log->log('Preparandose para actualizar contadores');
+			$this->updateCounters();
 		}
 		catch (Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
