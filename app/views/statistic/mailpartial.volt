@@ -98,7 +98,7 @@
 			</div>
 			
 		</div>
-		{{'{{view App.TimeGraphView idChart="clickPieChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
+		{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
 	</div>
 	<div class="row-fluid">
 		<div class="clickstotalsandunique span10">
