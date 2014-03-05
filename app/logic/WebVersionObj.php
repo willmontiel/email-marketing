@@ -70,7 +70,8 @@ class WebVersionObj extends BaseWrapper
 	{
 		$socialmail = Socialmail::findFirstByIdMail($mail->idMail);
 		if($social) {
-			$src['facebook'] = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $mail->idMail . '-' . $idContact . '-facebook';
+			$og_url = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $mail->idMail . '-' . $idContact;
+			$src['facebook'] = ($social == 'linkedin') ? $og_url . '-linkedin' : $og_url . '-facebook';
 			$src['twitter'] = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $mail->idMail . '-' . $idContact . '-twitter';
 		}
 		else {
