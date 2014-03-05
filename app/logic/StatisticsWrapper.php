@@ -439,7 +439,7 @@ class StatisticsWrapper extends BaseWrapper
 					JOIN Contact AS c ON (c.idContact = m.idContact)
 					JOIN Email AS e ON (c.idEmail = e.idEmail)
 				WHERE m.idMail = :idMail: AND m.unsubscribe != 0";
-		
+		$phql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		$query = $manager->createQuery($phql);
 		$unsubscribeds = $query->execute(array(
 			'idMail' => $idMail
