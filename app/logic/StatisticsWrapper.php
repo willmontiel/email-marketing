@@ -30,11 +30,19 @@ class StatisticsWrapper extends BaseWrapper
 		$statisticsData->total = $total;
 		$statisticsData->opens = $opens;
 		$statisticsData->statopens = round(( $opens / $total ) * 100 );
-		$statisticsData->clicks = $clicks;
-		$statisticsData->statclicks = round(( $clicks / $total ) * 100 );
-		$statisticsData->totalclicks = $clicks;
-		$statisticsData->stattotalclicks = round(( $clicks / $total ) * 100 );
-		$statisticsData->statCTRclicks = round(( $clicks / $opens ) * 100 );
+		
+		$clicksql = "SELECT SUM(clicks) AS total, SUM(IF(clicks != 0, 1, 0)) AS ctr
+					FROM Mxc 
+					WHERE m.idMail = :idMail:";
+		$clicksql1 = $manager->createQuery($clicksql);
+		$click_r = $clicksql1->execute(array(
+			'idMail' => $mail->idMail
+		));
+		
+		$statisticsData->clicks = $click_r['total']->total;
+		$statisticsData->statclicks = round(( $click_r['total']->total / $total ) * 100 );
+		$statisticsData->click_CTR = round(($click_r['ctr']->ctr / ($total - $bounced)) * 100);
+		$statisticsData->click_CTO = round(($click_r['ctr']->ctr / $opens) * 100);
 		
 		$sql = "SELECT COUNT(*) AS total
 				FROM Mxc AS m 
