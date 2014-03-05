@@ -222,7 +222,7 @@ class TrackingObject
 				$this->log->log('No se ha contabilizado');
 				$this->startTransaction();
 				
-				$this->mxc->clicks = $time;
+				$this->mxc->clicks += 1;
 				
 				$mailObj = $this->findRelatedMailObject();
 				$mailObj->incrementClicks();
