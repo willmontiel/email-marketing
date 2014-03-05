@@ -621,7 +621,7 @@ class TrackingObject
 		$date = time();
 		try {
 			$this->contact = $this->mxc->contact;
-			if($this->contact->unsubscribed === 0) {
+			if($this->contact->unsubscribed == 0) {
 				$this->startTransaction();
 
 				$this->contact->unsubscribed = $date;
