@@ -33,7 +33,7 @@ class StatisticsWrapper extends BaseWrapper
 		
 		$clicksql = "SELECT SUM(clicks) AS total, SUM(IF(clicks != 0, 1, 0)) AS ctr
 					FROM Mxc 
-					WHERE m.idMail = :idMail:";
+					WHERE idMail = :idMail:";
 		$clicksql1 = $manager->createQuery($clicksql);
 		$click_r = $clicksql1->execute(array(
 			'idMail' => $mail->idMail
