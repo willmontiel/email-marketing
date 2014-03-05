@@ -102,7 +102,7 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, os 
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, os 
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
@@ -128,7 +128,7 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, link 
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, link 
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
@@ -153,7 +153,7 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, name, lastName 
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, name, lastName 
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
@@ -179,7 +179,7 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, bouncedType, category
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, bouncedType, category
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
@@ -206,7 +206,7 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%M-%Y %H:%i:%s'), email, bouncedType, category
+		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, bouncedType, category
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
