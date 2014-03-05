@@ -140,11 +140,11 @@ class Reportingcreator
 	
 	protected function getQueryForUnsubscribedReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail. ", 'unsubscribed', e.email, c.name, c.lastName, null, null, null, null, v.date
-					FROM mailevent AS v
+		$phql = "SELECT null, " . $this->mail->idMail. ", 'unsubscribed', e.email, c.name, c.lastName, null, null, null, null, v.unsubscribe
+					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (c.idEmail = e.idEmail)
-				WHERE v.idMail = " . $this->mail->idMail . " AND v.description = 'unsubscribed'";
+				WHERE v.idMail = " . $this->mail->idMail . " AND v.unsubscribe != 0";
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
@@ -165,12 +165,12 @@ class Reportingcreator
 	
 	protected function getQueryForBouncedReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail . ", 'bounced', e.email, null, null, null, null, b.type, b.description, v.date
-					FROM mailevent AS v
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'bounced', e.email, null, null, null, null, b.type, b.description, v.bounced
+					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
 						JOIN bouncedcode AS b ON (b.idBouncedCode = v.idBouncedCode)
-				WHERE v.idMail = " . $this->mail->idMail . " AND v.description = 'bounced'";
+				WHERE v.idMail = " . $this->mail->idMail . " AND v.bounced != 0";
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
