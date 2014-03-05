@@ -88,12 +88,12 @@ class Reportingcreator
 	
 	protected function getQueryForOpenReport($name, $dir)
 	{
-		$phql = "SELECT null, ". $this->mail->idMail .", 'opens', e.email, null, null, v.userAgent, null, null, null, v.date
-					FROM mailevent AS v
+		$phql = "SELECT null, ". $this->mail->idMail .", 'opens', e.email, null, null, null, null, null, null, v.opening
+					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
 					WHERE v.idMail = ". $this->mail->idMail ."
-						AND (v.description = 'opening' OR v.description = 'opening for click')";
+						AND v.opening != 0";
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
