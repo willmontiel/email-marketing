@@ -1101,4 +1101,9 @@ class TestController extends ControllerBase
 		}
 		$this->logger->log('Depues de buscar otro mxc');
 	}
+	
+	public function unsubscribedAction()
+	{
+		
+	}
 }

@@ -17,7 +17,9 @@ class UnsubscribeController extends ControllerBase
 			$email = Email::findFirstByIdEmail($contact->idEmail);
 			if($contact->unsubscribed == 0) {
 				$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
+				$account = Account::findFirstByIdAccount($dbase->idAccount);
 				$this->view->setVar('dbase', $dbase);
+				$this->view->setVar('account', $account);
 				$this->view->setVar('parameters', $parameters);
 			}
 			
