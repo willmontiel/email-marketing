@@ -21,6 +21,7 @@ class UnsubscribeController extends ControllerBase
 				$this->view->setVar('dbase', $dbase);
 				$this->view->setVar('parameters', $parameters);
 			}
+			
 			$this->view->setVar('account', $account);
 			$this->view->setVar('email', $email);
 			$this->view->setVar('contact', $contact);

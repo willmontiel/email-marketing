@@ -12,8 +12,20 @@
 		<div class="container">
 			<div class="row-fluid">
 				<div class="span8 offset2">
-					<div class="error-box">
-						<div class="unsubscribe-contact-success">El contacto ha sido desuscrito exitosamente</div>
+					<div class="box">
+						<div class="box-header"></div>
+						<div class="box-content padded">
+							<ul class="chat-box timeline">
+								<li class="arrow-box-left gray">
+									<div class="avatar blue"><i class="icon-minus-sign icon-2x"></i></div>
+									<div class="info">
+										<span class="name" style="font-size: 14px;">
+											El contacto ha sido des-suscrito exitosamente
+										</span>
+									</div>
+								</li>
+							 </ul>
+						</div>
 					</div>
 				</div>
 			</div>

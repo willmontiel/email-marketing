@@ -60,7 +60,7 @@
 										<span class="time"><i class="icon-briefcase"></i> Compañia <strong>{{account.companyName}}</strong></span>
 									</div>
 									<div class="content">
-										<blockquote style="font-size: 14px;">El contacto con nombres {{contact.name}} {{contact.lastName}} ya se encuentra desuscrito, para suscribirse de nuevo contacte con la compañia indicada en la parte superior izquierda</blockquote>
+										<blockquote style="font-size: 14px;">El contacto con nombres {{contact.name}} {{contact.lastName}} ya se encuentra desuscrito, para suscribirlo de nuevo contacte con la compañia indicada en la parte superior izquierda</blockquote>
 									</div>
 								</li>
 							 </ul>
