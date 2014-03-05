@@ -17,33 +17,17 @@
 							<span class="title">Des-suscribirse</span>
 						</div>
 						<div class="box-content padded">
-							¿Esta seguro que desea desuscribirse? <br /><br />
-							El correo electrónico esta relacionado con la base de datos <strong>American Fans Arsenal</strong>
-							y esta suscrito a la lista <strong>Boletín semanal de resultados para america latina</strong><br /><br />
-							
-							compañia <strong>Arsenal FC</strong>
-							
-
-							<br /><br />
-							<div class="table table-bordered span8 offset2">
-								<table>
-									<tr>
-										<td>Email</td>
-										<td><strong>pepitoperez@live.com</strong></td>
-									</tr>
-									<tr>
-										<td>Nombre</td>
-										<td><strong>Pepito</strong></td>
-									</tr>
-									<tr>
-										<td>Apellido</td>
-										<td><strong>Perez</strong></td>
-									</tr>
-								</table>
-							</div>
-
-							<br /><br /><br />
-							<center><a href="#" class="btn btn-blue"><i class="icon-warning-sign"></i> Desuscribirse</a></center>
+							<ul class="chat-box timeline">
+								<li class="arrow-box-left gray">
+									<div class="avatar blue"><i class="icon-circle-blank icon-2x"></i></div>
+									<div class="info">
+										<span class="name" style="font-size: 12px;">
+										  El contacto indicado ya no existe en la base de datos
+										</span>
+										<span class="time" style="font-size: 12px;"><i class="icon-briefcase"></i> Compañia <strong>Arsenal FC</strong></span>
+									</div>
+								</li>
+							 </ul>
 						</div>
 					</div>
 				</div>	

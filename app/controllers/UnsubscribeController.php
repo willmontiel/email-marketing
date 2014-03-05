@@ -15,14 +15,13 @@ class UnsubscribeController extends ControllerBase
 				'bind' => array(1 => $idContact)
 			));
 			$email = Email::findFirstByIdEmail($contact->idEmail);
+			$account = Account::findFirstByIdAccount($email->idAccount);
 			if($contact->unsubscribed == 0) {
 				$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
-				$account = Account::findFirstByIdAccount($dbase->idAccount);
 				$this->view->setVar('dbase', $dbase);
-				$this->view->setVar('account', $account);
 				$this->view->setVar('parameters', $parameters);
 			}
-			
+			$this->view->setVar('account', $account);
 			$this->view->setVar('email', $email);
 			$this->view->setVar('contact', $contact);
 		}
