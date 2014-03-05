@@ -81,15 +81,24 @@
 					<table>
 						<tr>
 							<td></td>
-							<td>{{statisticsData.statCTRclicks}}%</td>
+							<td>{{statisticsData.click_CTR}}%</td>
 							<td>Tasa de Clics</td>
+						</tr>
+					</table>
+				</label>
+				<label class="label-click-percent">
+					<table>
+						<tr>
+							<td></td>
+							<td>{{statisticsData.click_CTO}}%</td>
+							<td>Tasa de Clics en Apeturas</td>
 						</tr>
 					</table>
 				</label>
 			</div>
 			
 		</div>
-		{{'{{view App.TimeGraphView idChart="clickPieChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
+		{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
 	</div>
 	<div class="row-fluid">
 		<div class="clickstotalsandunique span10">
