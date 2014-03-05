@@ -138,14 +138,14 @@ class StatisticController extends ControllerBase
 			header('Content-Type: application/download');
 			echo $r->title . PHP_EOL;
 			echo PHP_EOL;
-			echo ' , Total, Porcentaje' . PHP_EOL;
+			echo ' ,Total,Porcentaje' . PHP_EOL;
 			echo 'Correos enviados:, ' . $mail->totalContacts . PHP_EOL;
 			echo 'Aperturas únicas:, ' . $mail->uniqueOpens . " , " . ($mail->uniqueOpens*100)/$mail->totalContacts . "%" .PHP_EOL;
 			echo 'Clics sobre enlaces:, ' . $mail->clicks . " , " . ($mail->clicks*100)/$mail->totalContacts . "%" . PHP_EOL;
 			echo 'Des-suscritos:, ' . $mail->unsubscribed . " , " . ($mail->unsubscribed*100)/$mail->totalContacts . "%" .PHP_EOL;
 			echo 'Rebotes:, ' . $mail->bounced . " , " . ($mail->bounced*100)/$mail->totalContacts . "%" .PHP_EOL;
 			echo PHP_EOL;
-			echo 'FECHA, DIRECCIÓN DE CORREO ELÉCTRONICO' .PHP_EOL;
+			echo 'FECHA,DIRECCIÓN DE CORREO ELÉCTRONICO' .PHP_EOL;
 			readfile($this->mailReportsDir->reports . $report->name);
 		}
 	}
