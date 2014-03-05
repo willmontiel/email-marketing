@@ -433,6 +433,8 @@ class StatisticsWrapper extends BaseWrapper
 	
 	public function findMailUnsubscribedStats($idMail)
 	{
+		$manager = Phalcon\DI::getDefault()->get('modelsManager');
+		
 		$unsubscribed = array();
 		$h1 = 1380657600;
 		$v1 = 3000;
@@ -451,39 +453,41 @@ class StatisticsWrapper extends BaseWrapper
 			$h1+=3600;
 		}
 		
-		$unsubscribedcontact[] = array(
-			'id' => 20,
-			'email' => 'newmail@new.mail',
-			'date' => date('Y-m-d h:i', 1386687891),
-			'name' => 'fulano',
-			'lastname' => ''
-		);
+		$phql = "SELECT m.idContact, m.unsubscribe AS date, c.name, c.lastName, e.email 
+				FROM Mxc AS m
+					JOIN Contact AS c ON (c.idContact = m.idContact)
+					JOIN Email AS e ON (c.idEmail = e.idEmail)
+				WHERE m.idMail = :idMail: AND m.unsubscribe != 0";
 		
-		$unsubscribedcontact[] = array(
-			'id' => 240,
-			'email' => 'newmail1@new1.mail1',
-			'date' => date('Y-m-d h:i',1386687891),
-			'name' => '',
-			'lastname' => 'perez2'
-		);
+		$query = $manager->createQuery($phql);
+		$unsubscribeds = $query->execute(array(
+			'idMail' => $idMail
+		));
 		
-		$unsubscribedcontact[] = array(
-			'id' => 57,
-			'email' => 'newmail2@new2.mail2',
-			'date' => date('Y-m-d h:i',1386687891),
-			'name' => 'fulano3',
-			'lastname' => 'perez3'
-		);
+		$unsubscribedcontact = array();
 		
-		$unsubscribedcontact[] = array(
-			'id' => 161,
-			'email' => 'otrocorreo3@otro3.correo3',
-			'date' => date('Y-m-d h:i',1386687891),
-			'name' => '',
-			'lastname' => ''
-		);
+		foreach ($unsubscribeds as $u) {
+			$unsubscribedcontact[] = array(
+				'id' => $u->idContact,
+				'email' => $u->email,
+				'date' => date('Y-m-d h:i', $u->date),
+				'name' => $u->name,
+				'lastname' => $u->lastName
+			);
+		}
 		
-		$this->pager->setTotalRecords(count($unsubscribedcontact));
+		$phqlCount = "SELECT COUNT(*) AS total
+						FROM Mxc AS m
+							JOIN Contact AS c ON (c.idContact = m.idContact)
+							JOIN Email AS e ON (c.idEmail = e.idEmail)
+						WHERE m.idMail = :idMail: AND m.unsubscribe != 0";
+		
+		$queryCount = $manager->createQuery($phqlCount);
+		$total = $queryCount->execute(array(
+			'idMail' => $idMail
+		));
+		
+		$this->pager->setTotalRecords($total['total']->total);
 		
 		$statistics[] = array(
 			'id' => $idMail,
