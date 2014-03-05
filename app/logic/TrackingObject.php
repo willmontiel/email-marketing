@@ -39,10 +39,6 @@ class TrackingObject
 		}
 	}
 	
-	public function getContact()
-	{
-		return $this->contact;
-	}
 	
 	public function getMxC()
 	{
@@ -614,8 +610,7 @@ class TrackingObject
 	
 	public function canTrackUnsubscribedEvents()
 	{
-		$this->contact = $this->mxc->contact;
-		if ($this->mxc->unsubscribe == 0 && $this->contact->unsubscribed == 0) {
+		if ($this->mxc->unsubscribe == 0) {
 			return true;
 		}
 		return false;
@@ -645,6 +640,7 @@ class TrackingObject
 					$this->addDirtyObject($statListObj);
 				}
 				
+				$this->contact = $this->mxc->contact;
 				$this->contact->unsubscribed = $date;
 				$this->addDirtyObject($this->contact);
 				

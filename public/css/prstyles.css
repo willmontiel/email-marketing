@@ -580,3 +580,12 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border-radius: 5px;
 	font-size: 18px;
 }
+.unsubscribe-contact-information {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 20px;
+}
+.unsubscribe-contact-information table {
+	width: 100%;
+}
