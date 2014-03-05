@@ -91,7 +91,7 @@ Toolbar.prototype.createBorder = function() {
 						<option value='outset'>outset</option>\n\
 					</select>\n\
 				</div>");
-	var width = $('<input id="border-width-spinner" name="width" class="toolbar-spinner" value=' + this.component.border_width +'>');
+	var width = $('<div><input id="border-width-spinner" name="width" class="toolbar-spinner" value=' + this.component.border_width +'></div>');
 	
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(title);

@@ -79,7 +79,7 @@ DropzoneArea.prototype.editZone = function() {
 		toolbar.createBackground();
 		toolbar.createBorder();
 		toolbar.createCorners();
-		toolbar.setWidthSize('510');
+		toolbar.setWidthSize('525');
 		
 		event.stopPropagation();
 	});
