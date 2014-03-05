@@ -32,7 +32,7 @@
 						</tr>
 					</table>
 					<br />
-					<a href="{{url('unsubscribe/success')}}/{{parameters}}" class="btn btn-blue unsubscribe-button"><i class="icon-warning-sign"></i> Desuscribirse</button>
+					<a href="{{url('unsubscribe/success')}}/{{parameters}}" class="btn btn-blue unsubscribe-button"><i class="icon-warning-sign"></i> Desuscribirse</a>
 					{% else %}
 						<div class="message-small">El contacto {{contact.name}} {{contact.lastName}} ({{email.email}}) ya se encuentra desuscrito</div>
 					{%endif%}
