@@ -17,7 +17,7 @@
 					{% if dbase%}
 					<div class="message-small">¿Esta seguro que desea desuscribirse?</div>
 					<div class="message-small">
-						</div>Este contacto pertenece a la base de datos: <strong>{{dbase.name}}</strong></div>
+						<div>Este contacto pertenece a la base de datos: <strong>{{dbase.name}}</strong></div>
 						<br />
 						<div>porque {{dbase.Cdescription}}</div>
 					</div>
