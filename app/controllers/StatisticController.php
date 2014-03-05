@@ -145,6 +145,8 @@ class StatisticController extends ControllerBase
 			echo 'Des-suscritos:, ' . $mail->unsubscribed . " , " . ($mail->unsubscribed*100)/$mail->totalContacts . "%" .PHP_EOL;
 			echo 'Rebotes:, ' . $mail->bounced . " , " . ($mail->bounced*100)/$mail->totalContacts . "%" .PHP_EOL;
 			echo PHP_EOL;
+			echo 'FECHA, DIRECCIÓN DE CORREO ELÉCTRONICO' .PHP_EOL;
+			echo PHP_EOL;
 			readfile($this->mailReportsDir->reports . $report->name);
 		}
 	}

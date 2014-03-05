@@ -57,27 +57,27 @@ class Reportingcreator
 		switch ($this->type) {
 			case 'opens':
 				$data = $this->getQueryForOpenReport($name, $dir);
-				$title = 'Reporte de aperturas';
+				$title = 'REPORTE DE APERTURAS DE CORREO';
 				break;
 			
 			case 'clicks':
 				$data = $this->getQueryForClicksReport($name, $dir);
-				$title = 'Reporte de clics sobre enlaces';
+				$title = 'REPORTE DE CLICS SOBRE ENLACE';
 				break;
 			
 			case 'unsubscribed':
 				$data = $this->getQueryForUnsubscribedReport($name, $dir);
-				$title = 'Reporte de correos des-suscritos';
+				$title = 'REPORTE CORREOS DES-SUSCRITOS';
 				break;
 			
 			case 'bounced':
 				$data = $this->getQueryForBouncedReport($name, $dir);
-				$title = 'Reporte de correos rebotados';
+				$title = 'REPORTE CORREOS REBOTADOS';
 				break;
 			
 			case 'spam':
 				$data = $this->getQueryForSpamReport($name, $dir);
-				$title = 'Reporte de correos que han marcado como spam';
+				$title = 'REPORTE CORREOS QUE HAN MARCADO SPAM';
 				break;
 			
 			default :
