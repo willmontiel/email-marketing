@@ -298,7 +298,12 @@ class Security extends Plugin
 				'socialmedia::index' => array('socialmedia' => array('read')),
 				'socialmedia::new' => array('socialmedia' => array('create')),
 				'socialmedia::create' => array('socialmedia' => array('create')),
-				'socialmedia::delete' => array('socialmedia' => array('delete'))
+				'socialmedia::delete' => array('socialmedia' => array('delete')),
+				
+				//Formularios
+				'form::index' => array('form' => array('read')),
+				'form::new' => array('form' => array('create')),
+				'form::delete' => array('form' => array('delete')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
