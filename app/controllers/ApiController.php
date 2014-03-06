@@ -321,7 +321,6 @@ class ApiController extends ControllerBase
 			
 			return $this->setJsonResponse($contacts);
 		}
-		
 	}
 	
 	/**
@@ -1189,5 +1188,38 @@ class ApiController extends ControllerBase
 		$contactdata = $wrapper->convertContactToJson($contact);
 
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
+	}
+	
+	/**
+	 * 
+	 * @Get("/contacts")
+	 */
+	public function searchcontactAction()
+	{
+		$limit = $this->request->getQuery('limit');
+		$page = $this->request->getQuery('page');
+		
+		$pager = new PaginationDecorator();
+		if ($limit) {
+			$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+			$pager->setCurrentPage($page);
+		}
+		
+		$wrapper = new ContactWrapper();
+		$wrapper->setAccount($this->user->account);
+		$wrapper->setPager($pager);		
+		
+		$valueSearch = $this->request->getQuery('text', null, null);
+		
+		if($valueSearch == null) {
+			$this->logger->log('No hay coincidencias');
+			$contacts = array();
+			return $this->setJsonResponse(array('contact' => $contacts));
+		}
+		else {
+			return $wrapper->findContactByAnyValue($valueSearch);
+		}
 	}
 }

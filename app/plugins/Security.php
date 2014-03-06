@@ -177,6 +177,8 @@ class Security extends Plugin
 				'api::updatecontact' => array('contact' => array('read', 'update')),
 				'api::deletecontact' => array ('contact' => array('read', 'delete')),
 				'api::getonelist' => array('contactlist' => array('read')),
+				//Busquedad de contactos en general
+				'Api::searchcontact' => array('contact' => array('read')),
 				//Segmentos 
 				'segment::show' => array('segment' => array('read')),
 				'api::segment' => array('segment' => array('read')),
@@ -385,10 +387,9 @@ class Security extends Plugin
 		else{
 			$acl = $this->getAcl();
 			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
-			$this->logger->log("Controller: " . $controller);
-			$controller = strtolower($controller);
+			$this->logger->log("controller: " . strtolower($controller));
 			if (!isset($map[$controller .'::'. $action])) {
-				if($this->validateResponse($controller) == true){
+				if($this->validateResponse(strtolower($controller)) == true){
 					$this->logger->log("Acción no permitida con Ember");
 					$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
 				}

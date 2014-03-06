@@ -846,4 +846,64 @@ class ContactWrapper extends BaseWrapper
 		}
 		return array('contacts' => $contactos, 'meta' => $this->pager->getPaginationObject());
 	}
+	
+	public function findContactByAnyValue($valueSearch)
+	{
+		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$sql = $this->getSqlbySearchPattern($valueSearch);
+		
+		$query = $modelsManager->createQuery($sql['sql']);
+        $result = $query->execute(array('value' => $sql['value']));
+		Phalcon\DI::getDefault()->get('logger')->log("Se ejecutó la consulta");
+		$count = count($result);
+		Phalcon\DI::getDefault()->get('logger')->log("Se encontrarón tantos datos: " . $count);
+		$contacts = array();
+		
+		if($count > 0) {
+			Phalcon\DI::getDefault()->get('logger')->log("Entró");
+			$this->pager->setTotalRecords($count);
+			foreach ($result as $r) {
+				$contacts[] = array(
+					$object['id'] = $r->idContact,
+					$object['email'] = $r->email,
+					$object['name'] = $r->name,
+					$object['lastName'] = $r->lastName
+				);
+			}
+		}
+		
+		$this->pager->setRowsInCurrentPage($count);
+		return array('contact' => $contacts);
+	}
+	
+	private function getSqlbySearchPattern($value)
+	{
+		if(filter_var($value, FILTER_VALIDATE_EMAIL)) {
+			$sql = "SELECT e.email, c.idContact, c.name, c.lastName 
+					FROM Email AS e
+						JOIN Contact AS c ON (c.idEmail = e.idEmail)
+					WHERE e.email = :value:";
+			
+			$v = $value;	
+			Phalcon\DI::getDefault()->get('logger')->log("por email el sql es: " . $sql);
+		}
+		else if (substr($value, 0, 1) == '@') {
+			$domain = substr($value, 1);
+			$sql = "SELECT e.email, c.idContact, c.name, c.lastName 
+					FROM Domain AS d 
+						JOIN Email AS e ON (e.idDomain = d.idDomain)
+						JOIN Contact AS c ON (c.idEmail = e.idEmail)
+					WHERE d.name = :value:";
+			
+			$v = $domain;
+			Phalcon\DI::getDefault()->get('logger')->log("por dominio el sql es: " . $sql);
+		}
+		
+		$data = array();
+		$data['sql'] = $sql;
+		$data['value'] = $v;
+		
+		return $data;
+	}
 }

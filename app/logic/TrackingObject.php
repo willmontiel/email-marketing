@@ -675,7 +675,7 @@ class TrackingObject
 			$googleAnalytics = Phalcon\DI::getDefault()->get('googleAnalytics');
 			$this->log->log('Preparandose para insertar google analytics');
 
-			$source = '?utm_source=' . urlencode($googleAnalytics->utm_source);
+			$source = '&utm_source=' . urlencode($googleAnalytics->utm_source);
 			$medium = '&utm_medium=' . urlencode($googleAnalytics->utm_medium);
 			$campaign = '&utm_campaign=' . urlencode($content->campaignName);
 			$newUrl = $link . $source . $medium . $campaign;
