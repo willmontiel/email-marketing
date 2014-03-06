@@ -589,3 +589,12 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .unsubscribe-contact-information table {
 	width: 100%;
 }
+
+.title-search {
+	font-size: 35px;
+	text-align: center;
+	color: #6e97aa;
+	font-weight: lighter;
+	text-shadow: 0 1px #aaa;
+	padding-bottom: 20px;
+}

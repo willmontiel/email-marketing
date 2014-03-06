@@ -7,6 +7,11 @@ class ContactsController extends ControllerBase
 		
 	}
 	
+	public function searchAction()
+	{
+		
+	}
+
 	public function newbatchAction($idContactlist)
 	{
 		$this->flashSession->error('');

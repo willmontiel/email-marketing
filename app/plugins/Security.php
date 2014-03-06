@@ -128,6 +128,7 @@ class Security extends Plugin
 				'contactlist::show' => array('contactlist' => array('read')),
 				//Contacts controller
 				'contacts::index' => array('contact' => array('read')),
+				'contacts::search' => array('contact' => array('read')),
 				'contacts::newbatch' => array('contact' => array('read','importbatch')),
 				'contacts::importbatch' => array('contact' => array('read', 'importbatch')),
 				'contacts::import' => array('contact' => array('read','importbatch')),

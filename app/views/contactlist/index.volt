@@ -39,6 +39,12 @@
 {%block sectionsubtitle %}Administre sus bases de datos de contactos{% endblock %}
 {% block content %}
 {{flashSession.output()}}
+	<div class="row-fluid">
+		<div class="span12">
+			<a href="{{url('contacts/search')}}" class="btn btn-blue"><i class="icon-search"></i> Buscar contactos</a>
+		</div>	
+	</div>	
+	<br />
 	<div id="emberApplistContainer">
 		<script type="text/x-handlebars">
 			{# Tabs de navegacion #}
