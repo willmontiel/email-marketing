@@ -865,14 +865,15 @@ class ContactWrapper extends BaseWrapper
 			$this->pager->setTotalRecords($count);
 			foreach ($result as $r) {
 				$contacts[] = array(
-					$object['id'] = $r->idContact,
-					$object['email'] = $r->email,
-					$object['name'] = $r->name,
-					$object['lastName'] = $r->lastName
+					'id' => $r->idContact,
+					'email' => $r->email,
+					'name' => $r->name,
+					'lastName' => $r->lastName
 				);
 			}
 		}
 		
+		Phalcon\DI::getDefault()->get('logger')->log("Datos: " . print_r($contacts, true));
 		$this->pager->setRowsInCurrentPage($count);
 		return array('contact' => $contacts);
 	}

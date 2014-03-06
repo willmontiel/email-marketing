@@ -1216,10 +1216,11 @@ class ApiController extends ControllerBase
 		if($valueSearch == null) {
 			$this->logger->log('No hay coincidencias');
 			$contacts = array();
+			$this->logger->log('datos: ' . print_r($contacts, true));
 			return $this->setJsonResponse(array('contact' => $contacts));
 		}
 		else {
-			return $wrapper->findContactByAnyValue($valueSearch);
+			return $this->setJsonResponse($wrapper->findContactByAnyValue($valueSearch));
 		}
 	}
 }
