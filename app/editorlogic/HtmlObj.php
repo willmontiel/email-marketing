@@ -116,4 +116,12 @@ class HtmlObj extends HtmlAbstract
 		$pr .= '</body></html>';
 		return '</tbody></table></center></td></tr></table>' . $pr;
 	}
+	
+	public function replacespecialchars($html)
+	{
+		$search = array("\xe2\x80\x8b", "\xe2\x80\x9c", "\xe2\x80\x9d", "Ã¡", "Ã©", "Ã­", "Ã³", "Ãº", "Ã±", "ÃÃ¡", "ÃÃ©", "ÃÃ­", "ÃÃ³", "ÃÃº", "ÃÃ±");
+		$replace = array('', '"', '"', "á", "é", "í" ,"ó", "ú", "ñ", "Á", "É", "Í", "Ó", "Ú", "Ñ");
+		$response= str_replace($search, $replace, $html);
+		return $response;
+	}
 }

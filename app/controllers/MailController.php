@@ -341,7 +341,7 @@ class MailController extends ControllerBase
 				}
 				
 				$mailContent = new Mailcontent();
-				$content = utf8_decode($this->request->getPost("editor"));
+				$content = $this->request->getPost("editor");
 //				$log->log($content);
 //				$log->log('Analytics: ' . $analytics);				
 				$mailContent->idMail = $idMail;
