@@ -228,3 +228,11 @@ function initEvents() {
 		media.imageSelected(response.filelink, response.title);
 	});	
 }
+
+function removeTextEditor() {
+	var content = $('#my-text-component-toolbar').find('.content-text-toolbar');
+	content.destroyEditor();
+	$('#my-text-component-toolbar').remove();
+	$('.redactor-link-tooltip').remove();
+	$('.element-text-in-edition').removeClass('element-text-in-edition');	
+}

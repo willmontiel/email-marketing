@@ -8,6 +8,7 @@ function Toolbar(component) {
 	this.toolbar.append('<ul class="components-list"/>');
 	
 	$('.element-in-edition').removeClass('element-in-edition');
+	removeTextEditor();
 }
 
 Toolbar.prototype.drawHtml = function(obj_in_edit) {
@@ -93,7 +94,7 @@ Toolbar.prototype.createBorder = function() {
 				</div>");
 	var width = $('<div><input id="border-width-spinner" name="width" class="toolbar-spinner" value=' + this.component.border_width +'></div>');
 	
-	var elements = $('<li class="toolbar-elements" />');
+	var elements = $('<li class="toolbar-elements" style="width: 195px;"/>');
 	elements.append(title);
 	elements.append(color);
 	elements.append(style);
