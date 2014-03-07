@@ -34,7 +34,7 @@
 									</div>
 								</div>
 								<div class="form-actions" style="text-align: center !important;">
-									<button class="btn btn-default" type="reset"><i class="icon-bolt"></i> Limpiar</button>
+									<button class="btn btn-default" {{ '{{action reset this}}' }}><i class="icon-bolt"></i> Limpiar</button>
 									<button class="btn btn-lightblue" {{ '{{action search this}}' }}><i class="icon-search"></i> Buscar</button>
 								</div>
 							</form>
