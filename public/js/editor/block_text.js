@@ -65,6 +65,7 @@ TxtBlock.prototype.editBlock = function() {
 TxtBlock.prototype.removeBlock = function() {
 	var t = this;
 	this.row.content.find('td:last .remove-block').on('click', function() {
+		removeTextEditor();
 		t.row.removeBlock(t);
 		t.content.remove();
 	});
@@ -156,7 +157,11 @@ TxtBlock.prototype.textToolbar = function() {
 	$('.component-toolbar-text').remove();
 
 	var toolbar =  $('<div class="component-toolbar-text" id="my-text-component-toolbar" />');
-	this.content.parents('.row-of-blocks').append(toolbar);
+	$('#edit-area').prepend(toolbar);
+	var position = this.content.offset();
+	toolbar.css('position', 'absolute');
+	toolbar.css('top', position.top + this.content.height() - 50);
+	toolbar.css('left', 225);
 	toolbar.append('<div class="content-text-toolbar"></div>');
 	toolbar.find('.content-text-toolbar').append(this.content.find('.content-text').html());
 	
@@ -181,18 +186,10 @@ TxtBlock.prototype.textToolbar = function() {
 					t.content.find('.content-text').html(content.html());
 					content.destroyEditor();
 					$('#my-text-component-toolbar').remove();
+					$('.redactor-link-tooltip').remove();
 					$('.element-text-in-edition').removeClass('element-text-in-edition');
 				}
 			}
-		}
-	});
-	$('html').click(function(event) {
-		if($(event.target).parents('.one-element').hasClass('element-text-in-edition') === false && $(event.target).parents('#my-text-component-toolbar')[0] === undefined && $(event.target).attr('class') !== 'my-text-component-toolbar' && $(event.target).attr('id') !== 'redactor_modal' && $(event.target).parents('#redactor_modal')[0] === undefined){
-			var content = $('#my-text-component-toolbar').find('.content-text-toolbar');
-//			t.content.find('.content-text').html(content.html());
-			content.destroyEditor();
-			$('#my-text-component-toolbar').remove();
-			$('.element-text-in-edition').removeClass('element-text-in-edition');
 		}
 	});
 	

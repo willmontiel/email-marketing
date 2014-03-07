@@ -28,6 +28,7 @@ SShareBlock.prototype.createBlock = function() {
 	
 	var t = this;
 	this.content.find('.content-social-share').on('click', function() {
+		removeTextEditor();
 		t.createToolbar();
 	});
 };
@@ -74,6 +75,7 @@ SShareBlock.prototype.editBlock = function() {
 SShareBlock.prototype.removeBlock = function() {
 	var t = this;
 	this.row.content.find('td:last .remove-block').on('click', function() {
+		removeTextEditor();
 		t.row.removeBlock(t);
 		t.content.remove();
 	});

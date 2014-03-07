@@ -41,6 +41,7 @@ BtnBlock.prototype.createBlock = function() {
 	
 	var t = this;
 	this.content.find('.content-button').on('click', function() {
+		removeTextEditor();
 		t.createToolbar();
 	});
 };
@@ -82,6 +83,7 @@ BtnBlock.prototype.editBlock = function() {
 BtnBlock.prototype.removeBlock = function() {
 	var t = this;
 	this.row.content.find('td:last .remove-block').on('click', function() {
+		removeTextEditor();
 		t.row.removeBlock(t);
 		t.content.remove();
 	});

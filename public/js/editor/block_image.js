@@ -60,6 +60,7 @@ ImgBlock.prototype.editBlock = function() {
 ImgBlock.prototype.removeBlock = function() {
 	var t = this;
 	this.row.content.find('td:last .remove-block').on('click', function() {
+		removeTextEditor();
 		t.row.removeBlock(t);
 		t.content.remove();
 	});
@@ -80,6 +81,7 @@ ImgBlock.prototype.updateColumnStyle = function(style, value) {
 ImgBlock.prototype.createImage = function() {
 	var t = this;
 	this.content.find('img').on('click', function() {
+		removeTextEditor();
 		if($(this).attr('src') === undefined) {
 			t.widthZone =  t.content.width();
 			media.setBlock(t);

@@ -60,6 +60,7 @@ HrBlock.prototype.editBlock = function() {
 HrBlock.prototype.removeBlock = function() {
 	var t = this;
 	this.row.content.find('td:last .remove-block').on('click', function() {
+		removeTextEditor();
 		t.row.removeBlock(t);
 		t.content.remove();
 	});

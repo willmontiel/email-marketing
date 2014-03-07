@@ -70,6 +70,7 @@ rowZone.prototype.removeBlock = function(block) {
 rowZone.prototype.addColumn = function() {
 	var t = this;
 	this.content.find('.add-column').on('click', function() {
+		removeTextEditor();
 		$('#add-element-block .basic-elements').empty();
 		$('#add-element-block .compounds-elements').empty();
 		
@@ -99,6 +100,7 @@ rowZone.prototype.editRow = function() {
 rowZone.prototype.removeRow = function() {
 	var t = this;
 	this.content.find('.remove-row').on('click', function(event) {
+		removeTextEditor();
 		t.dz.removeRow(t);
 		t.content.remove();
 	});

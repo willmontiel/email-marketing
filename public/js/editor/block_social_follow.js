@@ -27,6 +27,7 @@ SFollowBlock.prototype.createBlock = function() {
 	
 	var t = this;
 	this.content.find('.content-social-follow').on('click', function() {
+		removeTextEditor();
 		t.createToolbar();
 	});
 };
@@ -73,6 +74,7 @@ SFollowBlock.prototype.editBlock = function() {
 SFollowBlock.prototype.removeBlock = function() {
 	var t = this;
 	this.row.content.find('.row-options .in-row > td:last .remove-block').on('click', function() {
+		removeTextEditor();
 		t.row.removeBlock(t);
 		t.content.remove();
 	});
