@@ -34,6 +34,10 @@ App.ContactsIndexController = Ember.ArrayController.extend({
 		search: function(){
 			var resultado = this.store.find('contact', {text: this.get('searchText') });
 			this.set('content', resultado);
+		},
+
+		reset: function(){
+			this.set('searchText', "");
 		}
 	}
 });		
