@@ -161,7 +161,7 @@ TxtBlock.prototype.textToolbar = function() {
 	var position = this.content.offset();
 	toolbar.css('position', 'absolute');
 	toolbar.css('top', position.top + this.content.height() - 50);
-	toolbar.css('left', 230);
+	toolbar.css('left', 225);
 	toolbar.append('<div class="content-text-toolbar"></div>');
 	toolbar.find('.content-text-toolbar').append(this.content.find('.content-text').html());
 	
