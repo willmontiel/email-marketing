@@ -341,7 +341,7 @@ class MailController extends ControllerBase
 				}
 				
 				$mailContent = new Mailcontent();
-				$content = str_replace("\xe2\x80\x8b", '', $this->request->getPost("editor"));
+				$content = $this->request->getPost("editor");
 //				$log->log($content);
 //				$log->log('Analytics: ' . $analytics);				
 				$mailContent->idMail = $idMail;

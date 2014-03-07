@@ -114,5 +114,6 @@ class HtmlObj extends HtmlAbstract
 			$pr = '';
 		}
 		$pr .= '</body></html>';
-		return '</tbody></table></center></td></tr></table>' . $pr;	}
+		return '</tbody></table></center></td></tr></table>' . $pr;
+	}
 }

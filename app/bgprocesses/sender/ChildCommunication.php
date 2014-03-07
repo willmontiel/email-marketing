@@ -53,7 +53,7 @@ class ChildCommunication extends BaseWrapper
 					$htmlObj = new HtmlObj();
 	//				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
 					$htmlObj->assignContent(json_decode($mailContent->content));
-					$html = $htmlObj->render();
+					$html = html_entity_decode($htmlObj->render());
 	//				$this->log->log('Json: ' . $content);
 				}
 				else {
