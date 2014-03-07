@@ -15,7 +15,6 @@
 {% block content %}
 	<div id="emberApplistContainer">
 		<script type="text/x-handlebars">
-			{{'{{#linkTo "contacts" href=false}}<a {{bindAttr href="view.href"}}> </a>{{/linkTo}}'}}
 			{{ '{{outlet}}' }}
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/index">

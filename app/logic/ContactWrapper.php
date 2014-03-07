@@ -849,26 +849,43 @@ class ContactWrapper extends BaseWrapper
 	
 	public function findContactByAnyValue($valueSearch)
 	{
-		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+		$search = $this->validateAndGetSearchPatterns($valueSearch);
 		
-		$sql = $this->getSqlbySearchPattern($valueSearch);
+		$byEmail = $this->getSqlForEmailSearch($search->email);
+		$byDomain = $this->getSqlForDomainSearch($search->domain);
+		$byText = $this->getSqlForTextSearch($search->text);
 		
-		$query = $modelsManager->createQuery($sql['sql']);
-        $result = $query->execute(array('value' => $sql['value']));
-		Phalcon\DI::getDefault()->get('logger')->log("Se ejecutó la consulta");
-		$count = count($result);
-		Phalcon\DI::getDefault()->get('logger')->log("Se encontrarón tantos datos: " . $count);
+		$result = array_merge($byEmail, $byDomain, $byText);
+		$ics = array_unique($result);
+		$ic = array();
+		foreach ($ics as $i) {
+			$ic[] = $i;
+		}
+		Phalcon\DI::getDefault()->get('logger')->log("id: " . print_r($ic, true));
+		$idsContact = implode(', ', $ic);
+		
+		$sql = "SELECT c.idContact, e.email, c.name, c.lastName, d.name AS dbase
+				FROM email AS e
+					JOIN contact AS c ON(c.idEmail = e.idEmail)
+					JOIN dbase AS d ON(d.idDbase = c.idDbase)
+				WHERE c.idEmail IN (" . $idsContact . ")";
+		
+		$r = $this->db->query($sql);
+		$allContacts = $r->fetchAll();
+		$count = count($allContacts);
+
 		$contacts = array();
 		
 		if($count > 0) {
 			Phalcon\DI::getDefault()->get('logger')->log("Entró");
 			$this->pager->setTotalRecords($count);
-			foreach ($result as $r) {
+			foreach ($allContacts as $c) {
 				$contacts[] = array(
-					'id' => $r->idContact,
-					'email' => $r->email,
-					'name' => $r->name,
-					'lastName' => $r->lastName
+					'id' => $c['idContact'],
+					'email' => $c['email'],
+					'name' => $c['name'],
+					'lastName' => $c['lastName'],
+					'dbase' => $c['dbase']
 				);
 			}
 		}
@@ -878,33 +895,123 @@ class ContactWrapper extends BaseWrapper
 		return array('contact' => $contacts);
 	}
 	
-	private function getSqlbySearchPattern($value)
+	private function validateAndGetSearchPatterns($text)
 	{
-		if(filter_var($value, FILTER_VALIDATE_EMAIL)) {
-			$sql = "SELECT e.email, c.idContact, c.name, c.lastName 
-					FROM Email AS e
-						JOIN Contact AS c ON (c.idEmail = e.idEmail)
-					WHERE e.email = :value:";
-			
-			$v = $value;	
-			Phalcon\DI::getDefault()->get('logger')->log("por email el sql es: " . $sql);
-		}
-		else if (substr($value, 0, 1) == '@') {
-			$domain = substr($value, 1);
-			$sql = "SELECT e.email, c.idContact, c.name, c.lastName 
-					FROM Domain AS d 
-						JOIN Email AS e ON (e.idDomain = d.idDomain)
-						JOIN Contact AS c ON (c.idEmail = e.idEmail)
-					WHERE d.name = :value:";
-			
-			$v = $domain;
-			Phalcon\DI::getDefault()->get('logger')->log("por dominio el sql es: " . $sql);
+		$array = explode(' ', $text);
+		
+		$emails = array();
+		$domains = array();
+		$texts = array();
+		$values = array();
+		foreach ($array as $a) {
+			if (!empty($a) && !in_array($a, $values)) {
+				if (filter_var($a, FILTER_VALIDATE_EMAIL)) {
+					list($user, $edomain) = preg_split("/@/", $a, 2);
+					if (in_array($edomain, $values)) {
+						$key = array_search($edomain, $values);
+						 unset($values[$key]);
+					}
+					$values[] = $a;
+					$emails[] = $a;
+				}
+				else if (substr($a, 0, 1) == '@') {
+					$domain = substr($a, 1);
+					$emails = array();
+					foreach ($values as $v) {
+						if(filter_var($v, FILTER_VALIDATE_EMAIL)) {
+							list($user, $edomain) = preg_split("/@/", $v, 2);
+							$emails[] = $edomain;
+						}
+					}
+					
+					if (!in_array($domain, $emails)) {
+						$values[] = $a;
+						$domains[] = $a;
+					}
+				}
+				else {
+					$values[] = $a;
+					$texts[] = $a;
+				}
+			}
 		}
 		
-		$data = array();
-		$data['sql'] = $sql;
-		$data['value'] = $v;
+		$search = new stdClass();
 		
-		return $data;
+		$search->email = $emails;
+		$search->domain = $domains;
+		$search->text = $texts;
+		
+		return $search;
+	}
+	
+	private function getSqlForEmailSearch($array)
+	{
+		if (count($array) > 0) {
+			$sql = '';
+			$union = false;
+			foreach ($array as $value) {
+				if (!$union) {
+					$union = true;
+				}
+				else {
+					$sql .= " UNION ";
+				}
+				$sql .= 'SELECT e.idEmail
+						 FROM email AS e
+						 WHERE e.email = "' . $value . '" AND e.idAccount = ' . $this->account->idAccount;
+			}
+			$result = $this->db->query($sql);
+			$byEmail = $result->fetchAll();
+			return $byEmail;
+		}
+		return array();
+	}
+	
+	
+	private function getSqlForDomainSearch($array)
+	{
+		if (count($array) > 0) {
+			$sql = '';
+			$union = false;
+			foreach ($array as $value) {
+				if (!$union) {
+					$union = true;
+				}
+				else {
+					$sql .= " UNION ";
+				}
+				$sql .= 'SELECT e.idEmail
+						 FROM domain AS d
+							JOIN email AS e ON (e.idDomain = d.idDomain)
+						 WHERE d.name = "' . $value . '" AND e.idAccount = ' . $this->account->idAccount;
+			}
+			$result = $this->db->query($sql);
+			$byDomain = $result->fetchAll();
+			return $byDomain;
+		}
+		return array();
+	}
+	
+	private function getSqlForTextSearch($array)
+	{
+		if (count($array) > 0) {
+			$sql = '';
+			
+			$criteria = implode(' ', $array);
+			
+			$sql = "SELECT c.idEmail
+					FROM contact AS c
+						JOIN dbase AS b 0ON(b.idDbase = c.idDbase)
+						JOIN account AS a ON(a.idAccount = b.idAccount)
+					WHERE 
+						MATCH(c.name, c.lastname) AGAINST ('" . $criteria . "' IN BOOLEAN MODE) 
+						AND a.idAccount = " . $this->account->idAccount;
+			
+			$result = $this->db->query($sql);
+			$byText = $result->fetchAll();
+			return $byText;
+		}
+		return array();
 	}
 }
