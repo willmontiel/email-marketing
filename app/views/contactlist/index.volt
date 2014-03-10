@@ -41,7 +41,7 @@
 {{flashSession.output()}}
 	<div class="row-fluid">
 		<div class="span12">
-			<a href="{{url('contacts/search')}}" class="btn btn-blue"><i class="icon-search"></i> Buscar contactos</a>
+			<a href="{{url('contacts/search')}}#/contacts" class="btn btn-blue"><i class="icon-search"></i> Buscar contactos</a>
 		</div>	
 	</div>	
 	<br />
