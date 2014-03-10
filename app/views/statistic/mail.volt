@@ -102,10 +102,10 @@
 										<div class="box-section news with-icons">
 											<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
 											<div class="news-time">
-											  <span>{{statisticsData.statclicks}}%</span>
+											  <span>{{statisticsData.clicks_CTR / ( statisticsData.total - statisticsData.bounced ) * 100}}%</span>
 											</div>
 											<div class="news-content">
-												<label class="label-clicks">{{statisticsData.clicks|numberf}}</label>
+												<label class="label-clicks">{{statisticsData.clicks_CTR|numberf}}</label>
 												<div class="news-text">
 													{{'{{#linkTo "drilldown.clicks" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Clics</span>{{/linkTo}}'}}
 												</div>

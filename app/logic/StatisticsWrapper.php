@@ -39,7 +39,8 @@ class StatisticsWrapper extends BaseWrapper
 			'idMail' => $mail->idMail
 		));
 		
-		$statisticsData->clicks = $click_r['total']->total;
+		$statisticsData->clicks_CTR = $click_r['ctr']->ctr;
+		$statisticsData->totalclicks = $click_r['total']->total;
 		$statisticsData->statclicks = round(( $click_r['total']->total / $total ) * 100 );
 		$statisticsData->click_CTR = round(($click_r['ctr']->ctr / ($total - $bounced)) * 100);
 		$statisticsData->click_CTO = round(($click_r['ctr']->ctr / $opens) * 100);
