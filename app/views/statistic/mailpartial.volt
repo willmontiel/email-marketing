@@ -71,7 +71,6 @@
 						<tr>
 							<td></td>
 							<td>{{statisticsData.totalclicks}}</td>
-							<td>|</td>
 							<td>Total de Clics Unicos</td>
 						</tr>
 					</table>
