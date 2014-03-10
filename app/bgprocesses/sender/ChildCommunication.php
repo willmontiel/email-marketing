@@ -264,13 +264,11 @@ class ChildCommunication extends BaseWrapper
 					$log->log('No se pudo actualizar el estado del MAIL');
 				}
 			}
+			catch (MailStatusException $e) {
+				$log->log('Exception de Estado de Correo: [' . $e . ']');
+			}
 			catch (Exception $e) {
-				$log->log('Exception: [' . $e . ']');
-				$mail->status = 'Cancelled';
-				$mail->finishedon = time();
-				if(!$mail->save()) {
-					$log->log('No se pudo actualizar el estado del MAIL');
-				}
+				$log->log('Exception General: [' . $e . ']');
 			}
 		}
 		else {
@@ -282,7 +280,7 @@ class ChildCommunication extends BaseWrapper
 	protected function checkMailStatus($mail)
 	{
 		if($mail != 'Paused' && $mail != 'Scheduled') {
-			throw new \InvalidArgumentException('El correo no tiene estados Pausado o Programado. Estados no permitidos');
+			throw new MailStatusException('El correo no tiene estados Pausado o Programado. Estados no permitidos, en el Mail con ID '. $mail->idMail);
 		}
 	}
 }
