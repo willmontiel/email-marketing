@@ -69,19 +69,19 @@
 				<label class="label-click-percent">
 					<table>
 						<tr>
-							<td></td>
-							<td>{{statisticsData.clicks}}</td>
-							<td>|</td>
-							<td>{{statisticsData.statclicks}}%</td>
-							<td>Clics Unicos</td>
+							<td class="clicks_percent_information">{{statisticsData.totalclicks}}</td>
+							<td>Total de Clics Unicos</td>
 						</tr>
 					</table>
 				</label>
 				<label class="label-click-percent">
 					<table>
 						<tr>
-							<td></td>
-							<td>{{statisticsData.click_CTR}}%</td>
+							<td class="clicks_percent_information">
+								{{statisticsData.clicks_CTR}} de {{statisticsData.total - statisticsData.bounced}}
+								<br />
+								({{statisticsData.percent_clicks_CTR}}%)
+							</td>
 							<td>Tasa de Clics</td>
 						</tr>
 					</table>
@@ -89,9 +89,12 @@
 				<label class="label-click-percent">
 					<table>
 						<tr>
-							<td></td>
-							<td>{{statisticsData.click_CTO}}%</td>
-							<td>Tasa de Clics en Apeturas</td>
+							<td class="clicks_percent_information">
+								{{statisticsData.clicks_CTR}} de {{statisticsData.opens}}
+								<br />
+								({{statisticsData.percent_clicks_CTO}}%)
+							</td>
+							<td>Click To Open Rate</td>
 						</tr>
 					</table>
 				</label>
