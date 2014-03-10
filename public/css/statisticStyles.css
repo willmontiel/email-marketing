@@ -353,3 +353,7 @@ label > table {
 .componentsummary tr, .componentsummary td, .componentsummary table {
 	border: 0px !important;
 }
+td.clicks_percent_information {
+	width: 70px;
+	text-align: center;
+}
