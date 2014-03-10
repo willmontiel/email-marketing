@@ -102,7 +102,7 @@
 										<div class="box-section news with-icons">
 											<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
 											<div class="news-time">
-											  <span>{{statisticsData.clicks_CTR / ( statisticsData.total - statisticsData.bounced ) * 100}}%</span>
+											  <span>{{statisticsData.percent_clicks_CTR}}%</span>
 											</div>
 											<div class="news-content">
 												<label class="label-clicks">{{statisticsData.clicks_CTR|numberf}}</label>

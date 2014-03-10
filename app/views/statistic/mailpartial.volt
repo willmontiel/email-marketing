@@ -80,7 +80,7 @@
 					<table>
 						<tr>
 							<td></td>
-							<td>{{statisticsData.clicks_CTR}} de {{statisticsData.total - statisticsData.bounced}} ({{statisticsData.clicks_CTR / ( statisticsData.total - statisticsData.bounced ) * 100}}%)</td>
+							<td>{{statisticsData.clicks_CTR}} de {{statisticsData.total - statisticsData.bounced}} ({{statisticsData.percent_clicks_CTR}}%)</td>
 							<td>Tasa de Clics</td>
 						</tr>
 					</table>
@@ -89,7 +89,7 @@
 					<table>
 						<tr>
 							<td></td>
-							<td>{{statisticsData.clicks_CTR}} de {{statisticsData.opens}} ({{statisticsData.clicks_CTR / statisticsData.opens ) * 100}}%)</td>
+							<td>{{statisticsData.clicks_CTR}} de {{statisticsData.opens}} ({{statisticsData.percent_clicks_CTO}}%)</td>
 							<td>Click to Open Rate</td>
 						</tr>
 					</table>

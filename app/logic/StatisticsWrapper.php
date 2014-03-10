@@ -41,9 +41,8 @@ class StatisticsWrapper extends BaseWrapper
 		
 		$statisticsData->clicks_CTR = $click_r['ctr']->ctr;
 		$statisticsData->totalclicks = $click_r['total']->total;
-		$statisticsData->statclicks = round(( $click_r['total']->total / $total ) * 100 );
-		$statisticsData->click_CTR = round(($click_r['ctr']->ctr / ($total - $bounced)) * 100);
-		$statisticsData->click_CTO = round(($click_r['ctr']->ctr / $opens) * 100);
+		$statisticsData->percent_clicks_CTR = round(($click_r['ctr']->ctr / ($total - $bounced)) * 100);
+		$statisticsData->percent_clicks_CTO = round(($click_r['ctr']->ctr / $opens) * 100);
 		
 		$sql = "SELECT COUNT(*) AS total
 				FROM Mxc AS m 
