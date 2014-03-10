@@ -93,6 +93,9 @@ class ChildCommunication extends BaseWrapper
 				$contactIterator = new ContactIterator($mail, $customFields);
 				$disruptedProcess = FALSE;
 				
+				$_ENV['TMPDIR']='/memorydisk/tmp';
+				$_ENV['TMP']=$_ENV['TMPDIR'];
+				
 				// Crear transport y mailer
 				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
 				$swift = Swift_Mailer::newInstance($transport);
