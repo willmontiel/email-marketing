@@ -37,6 +37,7 @@ class ChildCommunication extends BaseWrapper
 				$this->checkMailStatus($mail);
 				$oldstatus = $mail->status;
 				$mail->status = 'Sending';
+				$mail->startedon = time();
 				if(!$mail->save()) {
 					$log->log('No se pudo actualizar el estado del MAIL');
 				}		
