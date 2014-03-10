@@ -429,8 +429,8 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/_select">
-		<label for="values">Opciones de la lista</label>
-		{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor" id="values"}}' }}
+	<label for="values">Opciones de la lista</label>
+	{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor" id="values"}}' }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="fields/_text">
