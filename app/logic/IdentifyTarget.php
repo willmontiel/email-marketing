@@ -86,7 +86,7 @@ class IdentifyTarget
 					}
 				}
 				
-				$sql3 = 'INSERT INTO statcontactlist VALUES ' . $values;
+				$sql3 = 'INSERT IGNORE INTO statcontactlist VALUES ' . $values;
 				
 				$sql4 = 'INSERT IGNORE INTO statdbase 
 							(SELECT c.idDbase, ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . '
