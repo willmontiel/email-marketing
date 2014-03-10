@@ -26,15 +26,15 @@
 								<div class="padded">
 									<div class="title-search">Buscar Contactos</div>
 									<div class="input-prepend">
-										<a class="add-on" href="#" style="pointer-events: none;cursor: default;">
-											<i class="icon-search"></i>
-										</a>
-										{{' {{view Ember.TextField valueBinding="searchText" type="text" placeholder="Dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}
+										{{' {{view Ember.TextField valueBinding="searchText" onEvent="enter" action=search type="text" placeholder="Dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}
 									</div>
 								</div>
 								<div class="form-actions" style="text-align: center !important;">
-									<button class="btn btn-default" {{ '{{action reset this}}' }}><i class="icon-bolt"></i> Limpiar</button>
+									{#<button class="btn btn-default" {{ '{{action reset this}}' }}><i class="icon-bolt"></i> Limpiar</button>#}
 									<button class="btn btn-lightblue" {{ '{{action search this}}' }}><i class="icon-search"></i> Buscar</button>
+									{{ '{{#if totalrecords}}' }}
+										<button {{ '{{action seeMore this}}' }} class="btn btn-default">Ver más</button>
+									{{ '{{/if}}' }}
 								</div>
 							</form>
 						</div>
@@ -51,14 +51,16 @@
 										<td>Dirección de correo</td>
 										<td>Nombre</td>
 										<td>Apellido</td>
+										<td>Base de datos</td>
 									</tr>
 								</thead>
 								<tbody>
 									{{' {{#each controller}} '}}
 										<tr>
-											<td><b>{{'{{email}}'}}</b></td>
+											<td><b><a href="{{url('dbase/show')}}/{{ '{{unbound idDbase}}' }}#/contacts/show/{{ '{{unbound id}}' }}" target="_blank">{{'{{email}}'}}</a></b></td>
 											<td>{{'{{name}}'}}</td>
 											<td>{{'{{lastName}}'}}</td>
+											<td>{{'{{dbase}}'}}</td>	
 										</tr>
 									{{' {{else}} ' }}
 										<tr>

@@ -1196,31 +1196,23 @@ class ApiController extends ControllerBase
 	 */
 	public function searchcontactAction()
 	{
-		$limit = $this->request->getQuery('limit');
-		$page = $this->request->getQuery('page');
-		
-		$pager = new PaginationDecorator();
-		if ($limit) {
-			$pager->setRowsPerPage($limit);
-		}
-		if ($page) {
-			$pager->setCurrentPage($page);
-		}
-		
-		$wrapper = new ContactWrapper();
-		$wrapper->setAccount($this->user->account);
-		$wrapper->setPager($pager);		
-		
 		$valueSearch = $this->request->getQuery('text', null, null);
 		
 		if($valueSearch == null) {
-			$this->logger->log('No hay coincidencias');
 			$contacts = array();
-			$this->logger->log('datos: ' . print_r($contacts, true));
-			return $this->setJsonResponse(array('contact' => $contacts));
+			$total = array('total' => 0);
+			return $this->setJsonResponse(array('contact' => $contacts, 'meta' => $total));
 		}
-		else {
+		
+		try {
+			$wrapper = new ContactWrapper();
+			$wrapper->setAccount($this->user->account);
 			return $this->setJsonResponse($wrapper->findContactByAnyValue($valueSearch));
+		}
+		catch (Exception $e) {
+			$this->logger->log('Exception: ' . $e);
+			$contacts = array();
+			return $this->setJsonResponse(array('contact' => $contacts));
 		}
 	}
 }

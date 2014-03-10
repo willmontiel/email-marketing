@@ -161,7 +161,7 @@ class ContactsController extends ControllerBase
 	protected function validateImportedFile($file) 
 	{
 		$extensions = array('csv');
-		$maxSizeFile = 8388608; //Máximo tamaño del archivo en bytes
+		$maxSizeFile = 8388608; //Máximo tamaño del archivo en bytes (8 mb)
 		
 		$fileName = strtolower($file['name']);
 		$tmp = (explode('.', $fileName));

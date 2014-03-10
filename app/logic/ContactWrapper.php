@@ -22,6 +22,7 @@ class ContactWrapper extends BaseWrapper
 
 
 	const PAGE_DEFAULT = 5;
+	const DEFAULT_LIMIT_SEARCH = 200;
 
 	public function __construct()
 	{
@@ -849,54 +850,47 @@ class ContactWrapper extends BaseWrapper
 	
 	public function findContactByAnyValue($valueSearch)
 	{
-		$search = $this->validateAndGetSearchPatterns($valueSearch);
-		
-		$byEmail = $this->getSqlForEmailSearch($search->email);
-		$byDomain = $this->getSqlForDomainSearch($search->domain);
-		$byText = $this->getSqlForTextSearch($search->text);
-		
-		$result = array_merge($byEmail, $byDomain, $byText);
-		$ics = array_unique($result);
-		$ic = array();
-		foreach ($ics as $i) {
-			$ic[] = $i;
-		}
-		Phalcon\DI::getDefault()->get('logger')->log("id: " . print_r($ic, true));
-		$idsContact = implode(', ', $ic);
-		
-		$sql = "SELECT c.idContact, e.email, c.name, c.lastName, d.name AS dbase
-				FROM email AS e
-					JOIN contact AS c ON(c.idEmail = e.idEmail)
-					JOIN dbase AS d ON(d.idDbase = c.idDbase)
-				WHERE c.idEmail IN (" . $idsContact . ")";
-		
-		$r = $this->db->query($sql);
-		$allContacts = $r->fetchAll();
-		$count = count($allContacts);
-
+		$this->md5 = md5($valueSearch);
 		$contacts = array();
 		
-		if($count > 0) {
-			Phalcon\DI::getDefault()->get('logger')->log("Entró");
-			$this->pager->setTotalRecords($count);
-			foreach ($allContacts as $c) {
-				$contacts[] = array(
-					'id' => $c['idContact'],
-					'email' => $c['email'],
-					'name' => $c['name'],
-					'lastName' => $c['lastName'],
-					'dbase' => $c['dbase']
-				);
+		$search = $this->validateAndGetSearchPatterns($valueSearch);
+		$c = $this->getContactIds($search);
+		
+		if (count($c) > 0) {
+			$idsContact = implode(', ', $c);
+			
+			$sql = "SELECT c.idContact, e.email, c.name, c.lastName, d.idDbase, d.name AS dbase
+				FROM contact AS c
+					JOIN email AS e ON(e.idEmail = c.idEmail)
+					JOIN dbase AS d ON(d.idDbase = c.idDbase)
+				WHERE c.idContact IN (" . $idsContact . ")";
+		
+			Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
+			$r = $this->db->query($sql);
+			$allContacts = $r->fetchAll();
+			$count = count($allContacts);
+
+			if($count > 0) {
+				foreach ($allContacts as $c) {
+					$contacts[] = array(
+						'id' => $c['idContact'],
+						'email' => $c['email'],
+						'name' => $c['name'],
+						'lastName' => $c['lastName'],
+						'idDbase' => $c['idDbase'],
+						'dbase' => $c['dbase']
+					);
+				}
 			}
 		}
+		$total = array('total' => $this->countContact);
 		
-		Phalcon\DI::getDefault()->get('logger')->log("Datos: " . print_r($contacts, true));
-		$this->pager->setRowsInCurrentPage($count);
-		return array('contact' => $contacts);
+		return array('contact' => $contacts, 'meta' => $total);
 	}
 	
 	private function validateAndGetSearchPatterns($text)
 	{
+		Phalcon\DI::getDefault()->get('logger')->log("Text: " . $text);
 		$array = explode(' ', $text);
 		
 		$emails = array();
@@ -926,7 +920,7 @@ class ContactWrapper extends BaseWrapper
 					
 					if (!in_array($domain, $emails)) {
 						$values[] = $a;
-						$domains[] = $a;
+						$domains[] = $domain;
 					}
 				}
 				else {
@@ -942,76 +936,133 @@ class ContactWrapper extends BaseWrapper
 		$search->domain = $domains;
 		$search->text = $texts;
 		
+		Phalcon\DI::getDefault()->get('logger')->log("Search: " . print_r($search, true));
 		return $search;
 	}
 	
-	private function getSqlForEmailSearch($array)
+	
+	private function getContactIds($search)
 	{
-		if (count($array) > 0) {
-			$sql = '';
-			$union = false;
-			foreach ($array as $value) {
-				if (!$union) {
-					$union = true;
-				}
-				else {
-					$sql .= " UNION ";
-				}
-				$sql .= 'SELECT e.idEmail
-						 FROM email AS e
-						 WHERE e.email = "' . $value . '" AND e.idAccount = ' . $this->account->idAccount;
-			}
+		$this->countContact = 0;
+		$cache = Phalcon\DI::getDefault()->get('cache');
+		$memContacts = $cache->get($this->md5);
+		
+		if (!$memContacts) {
+//			Phalcon\DI::getDefault()->get('logger')->log("No hay memcache");
+			$byEd = $this->getSqlForEmailAndDomainSearch($search->email, $search->domain);
+			$byText = $this->getSqlForTextSearch($search->text);
+
+			$sql = $this->getFinalSql($byEd, $byText);
+
 			$result = $this->db->query($sql);
-			$byEmail = $result->fetchAll();
-			return $byEmail;
+			$allContacts = $result->fetchAll();
+			
+			$contacts = array();
+			if (count($allContacts) > 0) {
+				foreach ($allContacts as $contact) {
+					$contacts[] = $contact['idContact'];
+				}
+				
+				$this->countContact = count($contacts);
+				if ($this->countContact > 50) {
+					$cache->save($this->md5, $contacts, 300);
+					$c = $contacts;
+					unset($contacts);
+					for ($i = 0; $i < 50; $i++) {
+						$contacts[] = $c[$i];
+					}
+				}
+			}
 		}
-		return array();
+		else {
+			Phalcon\DI::getDefault()->get('logger')->log("Hay memcache");
+			$contacts = $memContacts;
+			$cache->delete($this->md5);
+		}
+		return $contacts;
 	}
 	
 	
-	private function getSqlForDomainSearch($array)
+	private function getSqlForEmailAndDomainSearch($email, $domain)
 	{
-		if (count($array) > 0) {
-			$sql = '';
+		$sqlEmail = '';
+		if (count($email) > 0) {
 			$union = false;
-			foreach ($array as $value) {
+			foreach ($email as $value) {
 				if (!$union) {
 					$union = true;
 				}
 				else {
-					$sql .= " UNION ";
+					$sqlEmail .= " UNION ";
 				}
-				$sql .= 'SELECT e.idEmail
+				$sqlEmail .= 'SELECT e.idEmail
+						 FROM email AS e
+						 WHERE e.email = "' . $value . '" AND e.idAccount = ' . $this->account->idAccount;
+			}
+		}
+		
+		$sqlDomain = '';
+		if (count($domain) > 0) {
+			$union = false;
+			foreach ($domain as $value) {
+				if (!$union) {
+					$union = true;
+				}
+				else {
+					$sqlDomain .= " UNION ";
+				}
+				$sqlDomain .= 'SELECT e.idEmail
 						 FROM domain AS d
 							JOIN email AS e ON (e.idDomain = d.idDomain)
 						 WHERE d.name = "' . $value . '" AND e.idAccount = ' . $this->account->idAccount;
 			}
-			$result = $this->db->query($sql);
-			$byDomain = $result->fetchAll();
-			return $byDomain;
 		}
-		return array();
+		
+		if ($sqlEmail == '' || $sqlDomain == '') {
+			$union = '';
+		}
+		else {
+			$union = ' UNION ';
+		}
+		
+		$sql = $sqlEmail . $union . $sqlDomain;
+		
+//		Phalcon\DI::getDefault()->get('logger')->log("sql: " . $sql);
+		return $sql;
 	}
 	
 	private function getSqlForTextSearch($array)
 	{
+		$sql = '';
 		if (count($array) > 0) {
-			$sql = '';
-			
 			$criteria = implode(' ', $array);
+//			Phalcon\DI::getDefault()->get('logger')->log("Criteria: " . $criteria);
 			
-			$sql = "SELECT c.idEmail
+			$sql = "SELECT c.idContact, c.idEmail
 					FROM contact AS c
-						JOIN dbase AS b 0ON(b.idDbase = c.idDbase)
-						JOIN account AS a ON(a.idAccount = b.idAccount)
+						JOIN dbase AS b ON(b.idDbase = c.idDbase)
 					WHERE 
 						MATCH(c.name, c.lastname) AGAINST ('" . $criteria . "' IN BOOLEAN MODE) 
-						AND a.idAccount = " . $this->account->idAccount;
-			
-			$result = $this->db->query($sql);
-			$byText = $result->fetchAll();
-			return $byText;
+						AND b.idAccount = " . $this->account->idAccount;
 		}
-		return array();
+		Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
+		return $sql;
+	}
+	
+	private function getFinalSql($c1, $c2)
+	{
+		if ($c1 == '') {
+			$sql = $c2 . " LIMIT " . self::DEFAULT_LIMIT_SEARCH;
+		}
+		else if ($c2 == '') {
+			$sql = "SELECT c.idContact FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) LIMIT " . self::DEFAULT_LIMIT_SEARCH;
+		}
+		else {
+			$sql = "SELECT idContact FROM (" . $c1 . ") AS c1 JOIN (" . $c2 . ") AS c2 ON (c1.idEmail = c2.idEmail) LIMIT " . self::DEFAULT_LIMIT_SEARCH;
+		}
+		
+		Phalcon\DI::getDefault()->get('logger')->log("Final Sql: " . $sql);
+		
+		return $sql;
 	}
 }
