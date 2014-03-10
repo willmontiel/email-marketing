@@ -61,8 +61,11 @@ class ChildCommunication extends BaseWrapper
 					$html =  html_entity_decode($mailContent->content);
 				}
 				
-				$identifyTarget = new IdentifyTarget();
-				$identifyTarget->identifyTarget($mail);
+				if ($mail->status !== 'Paused') {
+					$this->log->log("Paso por aqui");
+					$identifyTarget = new IdentifyTarget();
+					$identifyTarget->identifyTarget($mail);
+				}
 				
 //				$prepareMail = new PrepareMailContent($this->account);
 //				$content = $prepareMail->getContentMail($html);
