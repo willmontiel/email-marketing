@@ -33,19 +33,32 @@ class ChildCommunication extends BaseWrapper
 		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
 		if ($mail && $mailContent) {
-			
-			$account = Account::findFirstByIdAccount($mail->idAccount);
-			$this->setAccount($account);
-			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
-			
-			$dbases = Dbase::findByIdAccount($this->account->idAccount);
-			$id = array();
-			foreach ($dbases as $dbase) {
-				$id[] = $dbase->idDbase;
-			}
-			
-			$idDbases = implode(', ', $id);
 			try {
+				$this->checkMailStatus($mail);
+				$oldstatus = $mail->status;
+				$mail->status = 'Sending';
+				if(!$mail->save()) {
+					$log->log('No se pudo actualizar el estado del MAIL');
+				}		
+
+				$account = Account::findFirstByIdAccount($mail->idAccount);
+				$this->setAccount($account);
+				$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
+
+				$dbases = Dbase::findByIdAccount($this->account->idAccount);
+				$id = array();
+				foreach ($dbases as $dbase) {
+					$id[] = $dbase->idDbase;
+				}
+
+				$idDbases = implode(', ', $id);
+				
+				if ($oldstatus === 'Scheduled') {
+					$log->log("Identificando destinatarios");
+					$identifyTarget = new IdentifyTarget();
+					$identifyTarget->identifyTarget($mail);
+				}
+				
 				if (trim($mailContent->content) === '') {
 					throw new \InvalidArgumentException("Error mail's content is empty");
 				}
@@ -59,12 +72,6 @@ class ChildCommunication extends BaseWrapper
 				else {
 	//				$this->log->log("No Hay editor");
 					$html =  html_entity_decode($mailContent->content);
-				}
-				
-				if ($mail->status !== 'Paused') {
-					$this->log->log("Paso por aqui");
-					$identifyTarget = new IdentifyTarget();
-					$identifyTarget->identifyTarget($mail);
 				}
 				
 //				$prepareMail = new PrepareMailContent($this->account);
@@ -102,14 +109,6 @@ class ChildCommunication extends BaseWrapper
 				// Crear transport y mailer
 				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
 				$swift = Swift_Mailer::newInstance($transport);
-				
-//				if($mail->status == 'Scheduled') {
-//					$mail->startedon = time();
-//				}
-				$mail->status = 'Sending';
-				if(!$mail->save()) {
-					$log->log('No se pudo actualizar el estado del MAIL');
-				}				
 				
 				$i = 0;
 				$sentContacts = array();
@@ -265,10 +264,25 @@ class ChildCommunication extends BaseWrapper
 					$log->log('No se pudo actualizar el estado del MAIL');
 				}
 			}
+			catch (Exception $e) {
+				$log->log('Exception: [' . $e . ']');
+				$mail->status = 'Cancelled';
+				$mail->finishedon = time();
+				if(!$mail->save()) {
+					$log->log('No se pudo actualizar el estado del MAIL');
+				}
+			}
 		}
 		else {
 			$log->log('The Mail do not exist, or The html content is incomplete or invalid!');
 		}
 		
+	}
+	
+	protected function checkMailStatus($mail)
+	{
+		if($mail != 'Paused' && $mail != 'Scheduled') {
+			throw new \InvalidArgumentException('El correo no tiene estados Pausado o Programado. Estados no permitidos');
+		}
 	}
 }
