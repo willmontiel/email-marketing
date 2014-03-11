@@ -156,6 +156,22 @@ $di->set('modelsManager', function(){
 	return new Phalcon\Mvc\Model\Manager();
 });
 
+/*
+ * Cache, se encarga de comunicarse con Memcache
+ */
+$di->set('cache', function (){
+
+	$frontCache = new Phalcon\Cache\Frontend\Data(array(
+		"lifetime" => 172800
+	));
+
+	$cache = new Phalcon\Cache\Backend\Memcache($frontCache, array(
+		"host" => "localhost",
+		"port" => "11211"
+	));
+	return $cache;
+});
+
 function print_dbase_profile()
 {
 	$dblogger = new \Phalcon\Logger\Adapter\File("../../logs/bgdbdebug.log");
