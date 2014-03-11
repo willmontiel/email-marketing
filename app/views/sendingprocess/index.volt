@@ -4,7 +4,7 @@
 	{{ javascript_include('tablesorter/jquery-latest.js')}}
 	{{ javascript_include('tablesorter/jquery.tablesorter.js')}}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{urlManager.getBaseUri(true)}}';
+		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		$(function() { 
 			$("#processes-table").tablesorter(); 
 		}); 
