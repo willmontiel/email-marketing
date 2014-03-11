@@ -72,7 +72,7 @@
 											{% if value.url == 'null'%}	
 												&nbsp;<i class="icon-minus-sign"></i> No hay acciones disponibles&nbsp;
 											{% elseif value.text == 'Pausar'%}
-												<li><a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{url('mail/stop')}}/programming/{{item.idMail}}"><i class="{{value.icon}}"></i> Pausar</a></li>
+												<li><a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{url('mail/stop')}}/scheduledmail/{{item.idMail}}"><i class="{{value.icon}}"></i> Pausar</a></li>
 											{% else %}
 												<li><a href="{{url(value.url)}}index/{{item.idMail}}"><i class="{{value.icon}}"></i> {{value.text}}</a></li>
 											{% endif %}
@@ -94,16 +94,16 @@
 									<li class="previous"><a href="#" class="inactive"><<</a></li>
 									<li class="previous"><a href="#" class="inactive"><</a></li>
 								{% else %}
-									<li class="previous active"><a href="{{ url('programmingmail/index') }}"><<</a></li>
-									<li class="previous active"><a href="{{ url('programmingmail/index') }}?page={{ page.before }}"><</a></li>
+									<li class="previous active"><a href="{{ url('scheduledmail/index') }}"><<</a></li>
+									<li class="previous active"><a href="{{ url('scheduledmail/index') }}?page={{ page.before }}"><</a></li>
 								{% endif %}
 
 								{% if page.current >= page.total_pages %}
 									<li class="next"><a href="#" class="inactive">></a></li>
 									<li class="next"><a href="#" class="inactive">>></a></li>
 								{% else %}
-									<li class="next active"><a href="{{ url('programmingmail/index') }}?page={{page.next}}">></a></li>
-									<li class="next active"><a href="{{ url('programmingmail/index') }}?page={{page.last}}">>></a></li>		
+									<li class="next active"><a href="{{ url('scheduledmail/index') }}?page={{page.next}}">></a></li>
+									<li class="next active"><a href="{{ url('scheduledmail/index') }}?page={{page.last}}">>></a></li>		
 								{% endif %}
 							</ul>
 						 </div>

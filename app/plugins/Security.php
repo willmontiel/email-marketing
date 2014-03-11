@@ -258,11 +258,11 @@ class Security extends Plugin
 				'sendingprocess::stop' => array('mail' => array('read', 'create', 'send')),
 				
 				//Programming mail
-				'programmingmail::index' => array('mail' => array('read', 'create', 'send')),
-				'programmingmail::stop' => array('mail' => array('read', 'create', 'send')),
-				'programmingmail::play' => array('mail' => array('read', 'create', 'send')),
-				'programmingmail::cancel' => array('mail' => array('read', 'create', 'send')),
-				'programmingmail::manage' => array('mail' => array('read', 'create', 'send')),
+				'scheduledmail::index' => array('mail' => array('read', 'create', 'send')),
+				'scheduledmail::stop' => array('mail' => array('read', 'create', 'send')),
+				'scheduledmail::play' => array('mail' => array('read', 'create', 'send')),
+				'scheduledmail::cancel' => array('mail' => array('read', 'create', 'send')),
+				'scheduledmail::manage' => array('mail' => array('read', 'create', 'send')),
 
 				//tests
 				'test::start' => array('mail' => array('read', 'create', 'send')),
