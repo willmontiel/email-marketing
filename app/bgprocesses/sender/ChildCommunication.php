@@ -223,6 +223,7 @@ class ChildCommunication extends BaseWrapper
 							$disruptedProcess = TRUE;
 							break 2;
 						case 'Checking-Work':
+							$log->log('Estado: Verificando');
 							$this->childprocess->responseToParent('Work-Checked' , $i);
 							break;
 					}
