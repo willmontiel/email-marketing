@@ -67,14 +67,6 @@ class Communication
 
 			$this->requester->send(sprintf("%s $idMail", 'Play-Task'));
 			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
-
-			$mail->status = 'Sending';
-
-			if(!$mail->save()) {
-				foreach ($mail->getMessages() as $msg) {
-					$this->flashSession->error($msg);
-				}
-			}
 		}
 	}
 	
@@ -87,13 +79,6 @@ class Communication
 			$this->requester->send(sprintf("%s $idMail", 'Stop-Process'));
 			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 		}
-		$mail->status = 'Paused';
-
-		if(!$mail->save()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-			}
-		}
 	}
 	
 	public function sendCancelToParent($idMail)
@@ -104,12 +89,22 @@ class Communication
 			if($mail->status == 'Sending') {
 				$this->requester->send(sprintf("%s $idMail", 'Cancel-Process'));
 				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+				//No necesito cambiar el estado del Mail, porque el proceso dueño del Mail se hara cargo de esto
 			}
 			else if($mail->status == 'Scheduled') {
 				$scheduled = Mailschedule::findFirstByIdMail($idMail);
 				$scheduled->delete();
 				$this->requester->send(sprintf("%s $idMail", 'Scheduled-Task'));
 				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+				
+				//Debo cambiar explicitamente el estado del Mail, porque aun no hay un proceso manejando el envio
+				$mail->status = 'Cancelled';
+
+				if(!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
 			}
 			else {
 				$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $idMail;
@@ -117,14 +112,6 @@ class Communication
 				$mm->executeQuery($phql);
 				if (!$mm) {
 					$log->log("Error updating MxC to Cancel");
-				}
-			}
-
-			$mail->status = 'Cancelled';
-
-			if(!$mail->save()) {
-				foreach ($mail->getMessages() as $msg) {
-					$this->flashSession->error($msg);
 				}
 			}
 		}
