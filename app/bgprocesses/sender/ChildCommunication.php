@@ -40,7 +40,7 @@ class ChildCommunication extends BaseWrapper
 				$mail->startedon = time();
 				if(!$mail->save()) {
 					$log->log('No se pudo actualizar el estado del MAIL');
-					// Generar excepcion
+					throw new MailStatusException('No se pudo actualizar el estado del MAIL a SENDING');
 				}		
 
 				$mail = Mail::findFirst(array(
@@ -238,6 +238,7 @@ class ChildCommunication extends BaseWrapper
 				$log->log('Se actualizara el estado del MAIL como ' . $mail->status);
 				if(!$mail->save()) {
 					$log->log('No se pudo actualizar el estado del MAIL');
+					throw new MailStatusException('No se pudo actualizar el estado del MAIL a Terminado o finalizacion Abrupta');
 				}
 				// Grabar profiling de la base de datos
 				print_dbase_profile();
