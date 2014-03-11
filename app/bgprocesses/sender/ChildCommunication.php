@@ -40,8 +40,14 @@ class ChildCommunication extends BaseWrapper
 				$mail->startedon = time();
 				if(!$mail->save()) {
 					$log->log('No se pudo actualizar el estado del MAIL');
+					// Generar excepcion
 				}		
 
+				$mail = Mail::findFirst(array(
+					'conditions' => 'idMail = ?1',
+					'bind' => array(1 => $idMail)
+				));
+				
 				$account = Account::findFirstByIdAccount($mail->idAccount);
 				$this->setAccount($account);
 				$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
