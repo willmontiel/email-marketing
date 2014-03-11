@@ -214,6 +214,7 @@ class Security extends Plugin
 				'mail::index' => array('mail' => array('read')),
 				'mail::setup' => array('mail' => array('read', 'create')),
 				'mail::savetmpdata' => array('mail' => array('read', 'create')),
+				'mail::savecontent' => array('mail' => array('read', 'create')),
 				'mail::source' => array('mail' => array('read', 'create')),
 				'mail::editor' => array('mail' => array('read', 'create')),
 				'mail::html' => array('mail' => array('read', 'create')),

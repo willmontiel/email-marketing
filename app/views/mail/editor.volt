@@ -63,6 +63,20 @@
 		document.getElementById('iframeEditor').contentWindow.$('#newtemplatename').modal();
 	}
 	
+	function saveContent() {
+		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+		$.ajax({
+			url: "{{url('mail/savecontent')}}/{{mail.idMail}}",
+			type: "POST",			
+			data: { editor: editor},
+			error: function(msg){
+				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
+			}
+		});
+		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
+		return false;
+	}
+	
 	function addGoogleAnalytics() {
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		
@@ -150,6 +164,9 @@
 				</div>
 				<div class="pull-left SaveTemplate">
 					<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-black">Guardar como Plantilla <i class="icon-picture"></i></button>
+				</div>
+				<div class="pull-left SaveContent">
+					<button onclick="saveContent()" type="button" value="Guardar" class="btn btn-blue">Guardar  <i class="icon-save"></i></button>
 				</div>
 				{#
 				<div class="pull-left SaveTemplate">

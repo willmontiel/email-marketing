@@ -250,6 +250,57 @@ class MailController extends ControllerBase
 		$this->view->MailForm = $form;
 	}
 	
+	public function savecontentAction($idMail)
+	{
+		$log = $this->logger;
+		if ($this->request->isPost()) {
+			$mail = Mail::findFirst(array(
+				"conditions" => "idMail = ?1 AND idAccount = ?2",
+				"bind" => array(1 => $idMail,
+								2 => $this->user->account->idAccount)
+			));
+			$content = $this->request->getPost("editor");
+			if($mail && !empty($content)) {
+				$objMail = Mailcontent::findFirst(array(
+					"conditions" => "idMail = ?1",
+					"bind" => array(1 => $mail->idMail)
+				));
+
+				if ($objMail) {
+					$text = $objMail->plainText;
+				}
+				else  {
+					$text = null;
+				}
+				
+				if ($mail->wizardOption == 'source' || $mail->wizardOption == 'setup') {
+					$wizardOption = 'source';
+				}
+				else{
+					$wizardOption = $mail->wizardOption;
+				}
+				
+				$mailContent = new Mailcontent();
+				$content = $this->request->getPost("editor");
+				$mailContent->idMail = $idMail;
+				$mailContent->content = $content;
+				$mailContent->plainText = $text;
+				
+				$mail->type = "Editor";
+				$mail->wizardOption = $wizardOption;
+				
+				if(!$mailContent->save() || !$mail->save()) {
+					$log->log('No guardo');
+					return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
+				}
+			}
+			else {
+				$log->log('No existe el mail o contenido');
+				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
+			}
+		}
+	}
+	
 	public function savetmpdataAction()
 	{
 		$log = $this->logger;
