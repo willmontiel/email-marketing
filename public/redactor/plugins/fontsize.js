@@ -3,7 +3,7 @@ if (!RedactorPlugins) var RedactorPlugins = {};
 RedactorPlugins.fontsize = {
 	init: function()
 	{
-		var fonts = [10, 11, 12, 14, 16, 18, 20, 24, 28, 30];
+		var fonts = [10, 11, 12, 14, 16, 18, 20, 24, 28, 30, 36, 45, 52, 63, 72, 84, 90];
 		var that = this;
 		var dropdown = {};
 
