@@ -32,17 +32,17 @@ class ProgrammingOptions
 		switch ($option) {
 			case 'Reanudar':
 				$object->text = "Reanudar";
-				$object->url = "programmingmail/play/";
+				$object->url = "scheduledmail/play/";
 				$object->icon = "icon-play";
 				break;
 			case 'Detener':
 				$object->text = "Detener";
-				$object->url = "programmingmail/stop/";
+				$object->url = "scheduledmail/stop/";
 				$object->icon = "icon-pause";
 				break;
 			case 'Cancelar':
 				$object->text = "Cancelar";
-				$object->url = "programmingmail/cancel/";
+				$object->url = "scheduledmail/cancel/";
 				$object->icon = "icon-remove";
 				break;
 			case 'Pausar':

@@ -1,17 +1,17 @@
 <?php
-class ProgrammingmailController extends ControllerBase
+class ScheduledmailController extends ControllerBase
 {
 	protected function router($action)
 	{
 		switch ($action) {
 			case 'index':
-				return $this->response->redirect('programmingmail/index');
+				return $this->response->redirect('scheduledmail/index');
 				break;
 			case 'manage':
-				return $this->response->redirect('programmingmail/manage');
+				return $this->response->redirect('scheduledmail/manage');
 				break;
 			default :
-				return $this->response->redirect('programmingmail/index');
+				return $this->response->redirect('scheduledmail/index');
 				break;
 		}
 	}

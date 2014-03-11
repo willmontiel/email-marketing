@@ -92,16 +92,16 @@
 									<li class="previous"><a href="#" class="inactive"><<</a></li>
 									<li class="previous"><a href="#" class="inactive"><</a></li>
 								{% else %}
-									<li class="previous active"><a href="{{ url('programmingmail/index') }}"><<</a></li>
-									<li class="previous active"><a href="{{ url('programmingmail/index') }}?page={{ page.before }}"><</a></li>
+									<li class="previous active"><a href="{{ url('scheduledmail/index') }}"><<</a></li>
+									<li class="previous active"><a href="{{ url('scheduledmail/index') }}?page={{ page.before }}"><</a></li>
 								{% endif %}
 
 								{% if page.current >= page.total_pages %}
 									<li class="next"><a href="#" class="inactive">></a></li>
 									<li class="next"><a href="#" class="inactive">>></a></li>
 								{% else %}
-									<li class="next active"><a href="{{ url('programmingmail/index') }}?page={{page.next}}">></a></li>
-									<li class="next active"><a href="{{ url('programmingmail/index') }}?page={{page.last}}">>></a></li>		
+									<li class="next active"><a href="{{ url('scheduledmail/index') }}?page={{page.next}}">></a></li>
+									<li class="next active"><a href="{{ url('scheduledmail/index') }}?page={{page.last}}">>></a></li>		
 								{% endif %}
 							</ul>
 						 </div>
