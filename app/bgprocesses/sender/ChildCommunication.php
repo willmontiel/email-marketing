@@ -233,6 +233,8 @@ class ChildCommunication extends BaseWrapper
 				if(!$mail->save()) {
 					$log->log('No se pudo actualizar el estado del MAIL');
 				}
+				// Grabar profiling de la base de datos
+				print_dbase_profile();
 				
 				if($mail->socialnetworks != null) {
 					$socials = new SocialNetworkConnection($log);
