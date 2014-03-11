@@ -23,8 +23,8 @@ class Security extends Plugin
 		/*
 		 * Buscar ACL en cache
 		 */
-		$acl = null; 
-//		$acl = $this->cache->get('acl-cache');
+//		$acl = null; 
+		$acl = $this->cache->get('acl-cache');
 		
 		if (!$acl) {
 			// No existe, crear objeto ACL
@@ -83,7 +83,7 @@ class Security extends Plugin
 	
 	protected function getControllerMap()
 	{
-		$map = null; //$this->cache->get('controllermap-cache');
+		$map = $this->cache->get('controllermap-cache');
 		if (!$map) {
 			$map = array(
 		//* RELEASE 0.1.0 *//
@@ -177,7 +177,7 @@ class Security extends Plugin
 				'api::updatecontact' => array('contact' => array('read', 'update')),
 				'api::deletecontact' => array ('contact' => array('read', 'delete')),
 				'api::getonelist' => array('contactlist' => array('read')),
-				//Busquedad de contactos en general
+				//Búsqueda de contactos en general
 				'api::searchcontact' => array('contact' => array('read')),
 				//Segmentos 
 				'segment::show' => array('segment' => array('read')),
@@ -283,7 +283,7 @@ class Security extends Plugin
 				'statistic::dbase' => array('statistic' => array('read')),
 				'statistic::contactlist' => array('statistic' => array('read')),
 				'statistic::mail' => array('statistic' => array('read')),
-				'statistic::downloadreport' => array('statistic' => array('read')),
+				'statistic::downloadreport' => array('statistic' => array('download')),
 				'statistic::comparemails' => array('statistic' => array('read')),
 				'statistic::comparelists' => array('statistic' => array('read')),
 				'statistic::comparedbases' => array('statistic' => array('read')),
@@ -295,7 +295,7 @@ class Security extends Plugin
 				'flashmessage::delete' => array('flashmessage' => array('delete')),
 				
 				//google analytics
-				'mail::analytics' => array('mail' => array('create')),
+				'mail::analytics' => array('mail' => array('read', 'create')),
 				
 				//Redes Sociales
 				'socialmedia::index' => array('socialmedia' => array('read')),
@@ -387,11 +387,11 @@ class Security extends Plugin
 		else{
 			$acl = $this->getAcl();
 			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
-//			$this->logger->log("controller: " . strtolower($controller));
 			$controller = strtolower($controller);
 			if (!isset($map[$controller .'::'. $action])) {
 				if($this->validateResponse($controller) == true){
-					$this->logger->log("Acción no permitida con Ember");
+					$this->logger->log("Acción no permitida accesando desde ember");
+					$this->logger->log("Controller: {$controller}, Action: {$action}");
 					$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
 				}
 				else{
@@ -407,8 +407,12 @@ class Security extends Plugin
 			foreach($reg as $resources => $actions){
 				foreach ($actions as $act) {
 					if (!$acl->isAllowed($role, $resources, $act)) {
-						$this->logger->log(print_r($acl, true));
+						$this->logger->log('Accion no permitida');
+						$this->logger->log("Controller: {$controller}, Action: {$action}");
+//						$this->logger->log(print_r($acl, true));
 						if($this->validateResponse($controller) == true){
+							$this->logger->log('Accion no permitida accesando desde ember');
+							$this->logger->log("Controller: {$controller}, Action: {$action}");
 							$this->setJsonResponse('Denegado', 404, 'Acción no permitida');
 						}
 						else{
