@@ -229,7 +229,7 @@ class ChildCommunication extends BaseWrapper
 					$mail->status = 'Sent';
 					$mail->finishedon = time();
 				}
-
+				$log->log('Se actualizara el estado del MAIL');
 				if(!$mail->save()) {
 					$log->log('No se pudo actualizar el estado del MAIL');
 				}
