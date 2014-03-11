@@ -823,15 +823,31 @@ class MailController extends ControllerBase
 	public function filterAction($idMail)
 	{
 		$log = $this->logger;
+		$account = $this->user->account;
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND status = ?2 AND (wizardOption = ?3 OR wizardOption = ?4)',
+			'conditions' => 'idMail = ?1 AND idAccount = ?2 AND status = ?3 AND (wizardOption = ?4 OR wizardOption = ?5)',
 			'bind' => array(1 => $idMail,
-							2 => 'Draft',
-							3 => 'target',
-							4 => 'schedule')
+							2 => $account->idAccount,
+							3 => 'Draft',
+							4 => 'target',
+							5 => 'schedule')
 		));
 		if ($mail) {
+			$mails = Mail::find(array(
+				'conditions' => 'idAccount = ?1 AND status = ?2',
+				'bind' => array(1 => $account->idAccount,
+								2 => 'Sent')
+			));
+			
+			$links = Maillink::find(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $account->idAccount)
+			));
+			
 			$this->view->setVar('mail', $mail);
+			$this->view->setVar('mails', $mails);
+			$this->view->setVar('links', $links);
+			
 			if ($this->request->isPost()) {
 				
 				$targetJson = json_decode($mail->target);
@@ -845,7 +861,7 @@ class MailController extends ControllerBase
 //				$log->log("mail: " . $byMail . ", open: " . $byOpen . ", click: " . $byClick . ", exclude: " . print_r($byExclude, true));
 				if ($byMail !== "" ) { 
 					$filter = array(
-						'type' => 'mail',
+						'type' => 'email',
 						'criteria' => $byMail
 					);
 					$targetJson->filter = $filter;
@@ -860,14 +876,14 @@ class MailController extends ControllerBase
 				else if ($byClick !== null ) {
 					$filter = array(
 						'type' => 'click',
-						'criteria' => $byOpen
+						'criteria' => $byClick
 					);
 					$targetJson->filter = $filter;
 				}
 				else if ($byExclude !== null ) {
 					$filter = array(
-						'type' => 'exclude',
-						'criteria' => $byOpen
+						'type' => 'mailExclude',
+						'criteria' => $byExclude
 					);
 					$targetJson->filter = $filter;
 				}
@@ -1212,7 +1228,7 @@ class MailController extends ControllerBase
 			return $this->response->redirect("mail/index");
 		}
 		
-		$mail->status = 'Sending';
+		$mail->status = 'Scheduled';
 		$mail->startedon = time();
 		
 		if(!$mail->save()) {

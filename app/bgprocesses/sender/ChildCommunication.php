@@ -60,7 +60,7 @@ class ChildCommunication extends BaseWrapper
 
 				$idDbases = implode(', ', $id);
 				
-				if ($oldstatus === 'Scheduled') {
+				if ($oldstatus == 'Scheduled') {
 					$log->log("Identificando destinatarios");
 					$identifyTarget = new IdentifyTarget();
 					$identifyTarget->identifyTarget($mail);

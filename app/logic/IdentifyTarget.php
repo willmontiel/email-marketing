@@ -1,138 +1,246 @@
 <?php
 class IdentifyTarget
 {
+	public $mail;
+	public $identifiers;
+	public $target;
+	
 	public function __construct() 
 	{
 		$this->log = Phalcon\DI::getDefault()->get('logger');
 	}
 	
-	public function identifyTarget($mail)
+	public function identifyTarget(Mail $mail)
 	{
-		if($mail->target){
-			$target = json_decode($mail->target);
+		
+		$this->mail = $mail;
+		$this->validateMail();
+	
+		if (!empty($this->target->filter)){
+			$this->processTarget(true);
+		}
+		else {
+			$this->processTarget();
+		}
+	}
+	
+	private function validateMail()
+	{
+		if($this->mail->target){
+			$this->target = json_decode($this->mail->target);
 //			$this->log->log('Target: ' . print_r($target, true));
-			$ids = implode(',', $target->ids);
+			$this->identifiers = implode(',', $this->target->ids);
 //			$this->log->log('Ids: ' . $ids);
 		}
 		else {
-			throw new \InvalidArgumentException('Error while checking target');
+			throw new Exception('Error while checking target');
 		}
-		
-		if (!empty($target->filter)){
-			$this->log->log('Hay filtro');
-		}
-		else {
-			$this->log->log('No hay filtro');
-		}
-		
-//		$this->log->log('Iniciando Consulta e inserción target');
-		$sql = "INSERT IGNORE INTO mxc ";
-		switch ($target->destination) {
+	}
+	
+	private function processTarget($filter = false)
+	{
+		$generalSql = "INSERT IGNORE INTO mxc ";
+		switch ($this->target->destination) {
 			case 'dbases':
-				$sql2 = "(SELECT " . $mail->idMail . ", c.idContact, null, 'scheduled', 0, 0, 0, 0, 0, GROUP_CONCAT(l.idContactlist), 0, 0, 0, 0, 0, 0, 0, 0
-                        	FROM contact AS c 
-                        		JOIN email AS e ON (c.idEmail = e.idEmail) 
-								JOIN coxcl AS l ON (c.idContact = l.idContact)
-                        	WHERE c.idDbase IN (" . $ids . ") AND e.bounced <= 0 AND e.spam <= 0 AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0
-							GROUP BY 1, 2)";
-				
-				/**
-				 * Inserting data into statdbase for statistics.
-				 */
-				$values = ' ';
-				$comma = true;
-				foreach ($target->ids as $id) {
-					if ($comma) {
-						$values .= '(' . $id . ', ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . ')';
-						$comma = false;
-					}
-					else{
-						$values .= ', (' . $id . ', ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . ')';
-					}
-				}
-				
-				$sql4 = 'INSERT INTO statdbase VALUES ' . $values;
-				
-				/**
-				 * Inserting data into statcontactlist for statistics
-				 */
-				$sql3 = 'INSERT IGNORE INTO statcontactlist 
-							(SELECT c.idContactlist, ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . '
-								FROM coxcl AS c
-								   JOIN mxc AS m ON (m.idContact = c.idContact )
-								WHERE m.idMail = ' . $mail->idMail . ')';
+				$sql = $this->getSqlByDbase($filter);
 				break;
 			
 			case 'contactlists':
-				$sql2 = "(SELECT " . $mail->idMail . ", cl.idContact, null, 'scheduled', 0, 0, 0, 0, 0, GROUP_CONCAT(cl.idContactlist), 0, 0, 0, 0, 0, 0, 0, 0
-							FROM coxcl AS cl
-								JOIN contact AS c ON (cl.idContact = c.idContact)
-								JOIN email AS e ON (c.idEmail = e.idEmail)
-							WHERE cl.idContactlist IN (" . $ids . ") AND e.bounced <= 0 AND e.spam <= 0 AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0
-							GROUP BY 1, 2)";
-				
-				/**
-				 * Inserting data into statcontactlist for statistics
-				 */
-				$values = ' ';
-				$comma = true;
-				foreach ($target->ids as $id) {
-					if ($comma) {
-						$values .= '(' . $id . ', ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . ')';
-						$comma = false;
-					}
-					else{
-						$values .= ', (' . $id . ', ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . ')';
-					}
-				}
-				
-				$sql3 = 'INSERT IGNORE INTO statcontactlist VALUES ' . $values;
-				
-				$sql4 = 'INSERT IGNORE INTO statdbase 
-							(SELECT c.idDbase, ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . '
-								FROM contact AS c
-								JOIN mxc AS m ON (m.idContact = c.idContact)
-							WHERE m.idMail = ' . $mail->idMail . ')';
+				$sql = $this->getSqlByContactList($filter);
 				break;
 				
 			case 'segments':
-				$sql2 = "(SELECT " . $mail->idMail . ", sc.idContact, null, 'scheduled', 0, 0, 0, 0, 0, GROUP_CONCAT(l.idContactlist), 0, 0, 0, 0, 0, 0, 0, 0
-							FROM sxc AS sc
-								JOIN contact AS c ON (sc.idContact = c.idContact)
-								JOIN email AS e ON (c.idEmail = e.idEmail)
-								JOIN coxcl AS l ON (c.idContact = l.idContact)
-							WHERE sc.idSegment IN (" . $ids . ") AND e.bounced <= 0 AND e.spam <= 0 AND e.blocked <= 0 AND c.spam <=0 AND c.bounced <= 0 AND c.unsubscribed <= 0 
-							GROUP BY 1, 2)";
-				
-				$sql3 = 'INSERT IGNORE INTO statcontactlist 
-							(SELECT c.idContactlist, ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . '
-								FROM coxcl AS c
-								   JOIN mxc AS m ON (m.idContact = c.idContact )
-								WHERE m.idMail = ' . $mail->idMail . ')';
-				
-				$sql4 = 'INSERT IGNORE INTO statdbase 
-							(SELECT c.idDbase, ' . $mail->idMail . ', 0, 0, 0, 0, 0, ' . $mail->totalContacts . ', ' . time() . '
-								FROM contact AS c
-								JOIN mxc AS m ON (m.idContact = c.idContact)
-							WHERE m.idMail = ' . $mail->idMail . ' LIMIT 0, 1)';
+				$sql = $this->getSqlBySegment($filter);
 				break;
 		}
 		
-		$sql .= $sql2;
+		$generalSql .= $sql->general;
 		
-//		$this->log->log('SQL Mxc: ' . $sql);
-//		$this->log->log('SQL Contact: ' . $sql3);
-//		$this->log->log('SQL Dbase: ' . $sql4);
+		$this->log->log('SQL General: ' . $generalSql);
+		$this->log->log('SQL Contactlist: ' . $sql->contactlist);
+		$this->log->log('SQL Dbase: ' . $sql->dbase);
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 
-		$destination = $db->execute($sql);
-		$statcontactlist = $db->execute($sql3);
-		$statdbase = $db->execute($sql4);
-		
+		$destination = $db->execute($generalSql);
+		$statcontactlist = $db->execute($sql->contactlist);
+		$statdbase = $db->execute($sql->dbase);
 		
 		if (!$destination || !$statcontactlist || !$statdbase) {
-			throw new InvalidArgumentException('Error while consulting recipients');
+			throw new Exception('Error while consulting recipients');
 		}
+	}
+	
+	private function getSqlByDbase($filter = false)
+	{
+		if ($filter) {
+			$filters = $this->getFilterSql();
+		}
+		else {
+			$filters = new stdClass();
+			$filters->join = '';
+			$filters->and = '';
+		}	
+		
+		$sql1 = "(SELECT " . $this->mail->idMail . ", c.idContact, null, 'scheduled', 0, 0, 0, 0, 0, GROUP_CONCAT(l.idContactlist), 0, 0, 0, 0, 0, 0, 0, 0
+				  FROM contact AS c 
+					 JOIN email AS e ON (c.idEmail = e.idEmail) 
+					 JOIN coxcl AS l ON (c.idContact = l.idContact) " . $filters->join . "
+					 WHERE c.idDbase IN (" . $this->identifiers . ") " . $filters->and . " AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.spam = 0 AND c.bounced = 0 AND c.unsubscribed = 0 
+				   GROUP BY 1, 2)";
+		/**
+		 * Inserting data into statdbase for statistics.
+		 */
+		$values = ' ';
+		$comma = true;
+		foreach ($this->target->ids as $id) {
+			if ($comma) {
+				$values .= '(' . $id . ', ' . $this->mail->idMail . ', 0, 0, 0, 0, 0, ' . $this->mail->totalContacts . ', ' . time() . ')';
+				$comma = false;
+			}
+			else{
+				$values .= ', (' . $id . ', ' . $this->mail->idMail . ', 0, 0, 0, 0, 0, ' . $this->mail->totalContacts . ', ' . time() . ')';
+			}
+		}
+		$sql2 = 'INSERT INTO statdbase VALUES ' . $values;
+		/**
+		 * Inserting data into statcontactlist for statistics
+		 */
+		$sql3 = 'INSERT IGNORE INTO statcontactlist 
+					(SELECT c.idContactlist, ' . $this->mail->idMail . ', 0, 0, 0, 0, 0, ' . $this->mail->totalContacts . ', ' . time() . '
+					 FROM coxcl AS c
+					    JOIN mxc AS m ON (m.idContact = c.idContact )
+					 WHERE m.idMail = ' . $this->mail->idMail . ')';
+		
+		$sql = new stdClass();
+		
+		$sql->general = $sql1;
+		$sql->contactlist = $sql2;
+		$sql->dbase = $sql3;
+		
+		return $sql;
+	}
+	
+	private function getSqlByContactList($filter = false)
+	{
+		if ($filter) {
+		    $filters = $this->getFilterSql();
+		}
+		else {
+			$filters = new stdClass();
+			$filters->join = '';
+			$filters->and = '';
+		}
+		
+		$sql1 = "(SELECT " . $this->mail->idMail . ", cl.idContact, null, 'scheduled', 0, 0, 0, 0, 0, GROUP_CONCAT(cl.idContactlist), 0, 0, 0, 0, 0, 0, 0, 0
+				  FROM coxcl AS cl
+					 JOIN contact AS c ON (cl.idContact = c.idContact)
+				     JOIN email AS e ON (c.idEmail = e.idEmail) " . $filters->join . "
+				     WHERE cl.idContactlist IN (" . $this->identifiers . ") " . $filters->and . "AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.spam =0 AND c.bounced = 0 AND c.unsubscribed = 0
+				  GROUP BY 1, 2)";
+
+		/**
+		 * Inserting data into statcontactlist for statistics
+		 */
+		$values = ' ';
+		$comma = true;
+		foreach ($this->target->ids as $id) {
+			if ($comma) {
+				$values .= '(' . $id . ', ' . $this->mail->idMail . ', 0, 0, 0, 0, 0, ' . $this->mail->totalContacts . ', ' . time() . ')';
+				$comma = false;
+			}
+			else{
+				$values .= ', (' . $id . ', ' . $this->mail->idMail . ', 0, 0, 0, 0, 0, ' . $this->mail->totalContacts . ', ' . time() . ')';
+			}
+		}
+
+		$sql2 = 'INSERT IGNORE INTO statcontactlist VALUES ' . $values;
+
+		$sql3 = 'INSERT IGNORE INTO statdbase 
+					(SELECT c.idDbase, ' . $this->mail->idMail . ', 0, 0, 0, 0, 0, ' . $this->mail->totalContacts . ', ' . time() . '
+						FROM contact AS c
+						JOIN mxc AS m ON (m.idContact = c.idContact)
+					WHERE m.idMail = ' . $this->mail->idMail . ')';
+		
+		$sql = new stdClass();
+		
+		$sql->general = $sql1;
+		$sql->contactlist = $sql2;
+		$sql->dbase = $sql3;
+		
+		return $sql;
+	}
+	
+	private function getSqlBySegment($filter = false)
+	{
+		if ($filter) {
+			$filters = $this->getFilterSql();
+		}
+		else {
+			$filters = new stdClass();
+			$filters->join = '';
+			$filters->and = '';
+		}
+		
+		$sql1 = "(SELECT " . $this->mail->idMail . ", sc.idContact, null, 'scheduled', 0, 0, 0, 0, 0, GROUP_CONCAT(l.idContactlist), 0, 0, 0, 0, 0, 0, 0, 0
+					FROM sxc AS sc
+						JOIN contact AS c ON (sc.idContact = c.idContact)
+						JOIN email AS e ON (c.idEmail = e.idEmail)
+						JOIN coxcl AS l ON (c.idContact = l.idContact) " . $filters->join . "
+					WHERE sc.idSegment IN (" . $this->identifiers . ") " . $filters->and . " AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.spam =0 AND c.bounced = 0 AND c.unsubscribed = 0
+					GROUP BY 1, 2)";
+
+		$sql2 = 'INSERT IGNORE INTO statcontactlist 
+					(SELECT c.idContactlist, ' . $this->mail->idMail . ', 0, 0, 0, 0, 0, ' . $this->mail->totalContacts . ', ' . time() . '
+						FROM coxcl AS c
+						   JOIN mxc AS m ON (m.idContact = c.idContact )
+						WHERE m.idMail = ' . $this->mail->idMail . ')';
+
+		$sql3 = 'INSERT IGNORE INTO statdbase 
+					(SELECT c.idDbase, ' . $this->mail->idMail . ', 0, 0, 0, 0, 0, ' . $this->mail->totalContacts . ', ' . time() . '
+						FROM contact AS c
+						JOIN mxc AS m ON (m.idContact = c.idContact)
+					WHERE m.idMail = ' . $this->mail->idMail . ' LIMIT 0, 1)';
+		
+		$sql = new stdClass();
+		
+		$sql->general = $sql1;
+		$sql->contactlist = $sql2;
+		$sql->dbase = $sql3;
+		
+		return $sql;
+	}
+	
+	private function getFilterSql()
+	{
+		switch ($this->target->filter->type) {
+			case 'email':
+				$join = '';
+				$and = " AND e.email = '" . $this->target->filter->criteria . "' ";
+				break;
+			
+			case 'open':
+				$ids = implode(',', $this->target->filter->criteria);
+				$join = " JOIN mxc AS m ON (m.idContact = c.idContact) ";
+				$and = " AND m.idMail IN (" . $ids . ") AND m.opening != 0 ";
+				break;
+			
+			case 'click':
+				$ids = implode(',', $this->target->filter->criteria);
+				$join = " JOIN mxcxl AS m ON (m.idContact = c.idContact) ";
+				$and = " AND m.idMailLink IN (" . $ids . ") ";
+				break;
+			
+			case 'mailExclude':
+				$ids = implode(',', $this->target->filter->criteria);
+				$join = " JOIN mxc AS m ON (m.idContact = c.idContact) ";
+				$and = " AND m.idMail NOT IN (" . $ids . ") ";
+				break;
+		}
+		$filters = new stdClass();
+		$filters->join = $join;
+		$filters->and = $and;
+		
+		return $filters;
 	}
 }

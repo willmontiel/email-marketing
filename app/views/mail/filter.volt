@@ -85,10 +85,11 @@
 							<label for="byOpen">Enviar a contactos que hayan abierto el siguiente correo electrónico: </label><br />
 							<div id="open" style="display: none;">
 								<select multiple="multiple" name="sendByOpen[]" id="sendOpen" class="chzn-select">
-									<option value="any">Cualquier correo enviado</option>
-									<option value="week10">Boletin informativo semana 10</option>
-									<option value="week11">Boletin informativo semana 11</option>
-									<option value="week12">Boletin informativo semana 12</option>
+									{% if mails %}
+										{% for m in mails%}
+											<option value="{{m.idMail}}">{{m.name}}</option>
+										{% endfor %}	
+									{% endif%}
 								</select>
 							</div>
 							
@@ -96,10 +97,11 @@
 							<label for="byClick">Enviar a contactos que hayan hecho click en el siguiente enlace: </label><br />
 							<div id="click" style="display: none;">
 								<select multiple="multiple" name="sendByClick[]" id="sendClick" class="chzn-select">
-									<option value="any">Cualquier correo enviado</option>
-									<option value="week10">Boletin informativo semana 10</option>
-									<option value="week11">Boletin informativo semana 11</option>
-									<option value="week12">Boletin informativo semana 12</option>
+									{% if links %}
+										{% for link in links %}
+											<option value="{{link.idMailLink}}">{{link.link}}</option>
+										{% endfor%}
+									{% endif %}
 								</select>
 							</div>
 							
@@ -107,16 +109,17 @@
 							<label for="byExclude">No enviar a aquellos contactos que hayan abierto el siguiente correo electrónico: </label>
 							<div id="exclude" style="display: none;">
 								<select multiple="multiple" name="excludeContact[]" id="sendExclude" class="chzn-select">
-									<option value="any">Cualquier correo enviado</option>
-									<option value="week10">Boletin informativo semana 10</option>
-									<option value="week11">Boletin informativo semana 11</option>
-									<option value="week12">Boletin informativo semana 12</option>
+									{% if mails %}
+										{% for m2 in mails%}
+											<option value="{{m2.idMail}}">{{m2.name}}</option>
+										{% endfor %}	
+									{% endif%}
 								</select>
 							</div>
 							
 						</div>
 						<div class="form-actions">
-							<a class="btn btn-default" href="{{url('mail/target/')}}/{{mail.idMail}}" ><i class="icon-circle-arrow-left"></i> Anterior</a>
+							<a class="btn btn-default" href="{{url('mail/target')}}/{{mail.idMail}}" ><i class="icon-circle-arrow-left"></i> Anterior</a>
 							<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
 						</div>	
 					</form>
