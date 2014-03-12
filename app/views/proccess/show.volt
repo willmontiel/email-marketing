@@ -4,7 +4,7 @@
 	<script type="text/javascript">
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		function loadNow () {   
-			$.getJSON(MyBaseURL + '/proccess/refresh/{{ res['idProcces'] }}',function(data){
+			$.getJSON(MyBaseURL + 'proccess/refresh/{{ res['idProcces'] }}',function(data){
 				$('#progress-bar').empty();
 				$('#status-progress').empty();
 				if(data !== null) {
