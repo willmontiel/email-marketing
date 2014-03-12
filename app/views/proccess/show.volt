@@ -11,7 +11,7 @@
 					var percent = Math.round((data.linesprocess/data.totalReg)*100);{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
 					
 					$('#progress-bar').append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
-					$('#status').append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
+					$('#status-progress').append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
 					
 					if (data.status === 'Finalizado') {
 						location.reload(true);
