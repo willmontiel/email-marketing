@@ -80,9 +80,20 @@ class AccountForm extends Form
             'Contacto' => 'Por Contacto',
             'Envio' => 'Envío',
         )));
+		
         $this->add(new Select("subscriptionMode", array(
             'Prepago' => 'Prepago',
             'Pospago' => 'Pospago',
         )));
+		
+		$this->add(new Select('idUrlDomain', Urldomain::find(), array(
+			'using' => array('idUrlDomain', 'trackUrl'),
+			'class' => 'chzn-select'
+		)));
+		
+		$this->add(new Select('idReturnPath', Returnpath::find(), array(
+			'using' => array('idReturnPath', 'path'),
+			'class' => 'chzn-select'
+		)));
     }
 }

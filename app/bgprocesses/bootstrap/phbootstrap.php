@@ -115,6 +115,7 @@ $di->set('tmppath', $tmpdir);
 $mtaConfig = new stdClass();
 $mtaConfig->domain = $config->mta->domain;
 $mtaConfig->port = $config->mta->port;
+$mtaConfig->mailClass = $config->mta->mailclass;
 $di->set('mtadata', $mtaConfig);
 
 /*

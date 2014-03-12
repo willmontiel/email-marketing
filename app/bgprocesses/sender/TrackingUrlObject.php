@@ -24,14 +24,14 @@ class TrackingUrlObject
 		
 		Phalcon\DI::getDefault()->get('logger')->log('Empezando proceso de tracking');
 		
-		Phalcon\DI::getDefault()->get('logger')->log('Antes: ' . print_r($this->links, true));
+//		Phalcon\DI::getDefault()->get('logger')->log('Antes: ' . print_r($this->links, true));
 		$this->getOpenTrackingUrl();
 		$this->getClicksTrackingUrl();
 		$this->getWebVersionTrack();
 		$this->getSocialMediaShare();
 		$this->getUnsubscribeTracking();
 		
-		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
+//		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
 		$htmlWithTracking = str_replace($this->links['search'], $this->links['replace'], $html);
 		
 		return $htmlWithTracking;
