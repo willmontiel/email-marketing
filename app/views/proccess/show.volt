@@ -6,10 +6,9 @@
 		function loadNow () {   
 			$.getJSON(MyBaseURL + '/proccess/refresh/{{ res['idProcces'] }}',function(data){
 				$('#progress-bar').empty();
-				$('#status').empty();
+				$('#status-progress').empty();
 				if(data !== null) {
 					var percent = Math.round((data.linesprocess/data.totalReg)*100);{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
-					console.log(percent);
 					
 					$('#progress-bar').append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
 					$('#status').append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
@@ -34,8 +33,8 @@
 		<div class="span8 offset2">
 			<div class="well relative">
 				<p>Importacion de Archivo: {{res['name']}}</p>
-				<p id="status"></p>
-				<div class="progress progress-striped progress-blue active" id="progress-bar">
+				<p id="status-progress"></p>
+				<div id="progress-bar" class="progress progress-striped progress-blue active">
                     
 				</div>
 				<p>Estado: {{res['status']}}</p>
