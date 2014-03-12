@@ -8,17 +8,15 @@
 				$('#progress-bar').empty();
 				$('#status').empty();
 				if(data !== null) {
-					var title = (data.linesprocess/data.totalReg)*100;
-					var percent = (data.linesprocess/data.totalReg)*100;{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
-					{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
+					var percent = Math.round((data.linesprocess/data.totalReg)*100);{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
+					console.log(percent);
 					
-					$('#progress-bar').append('<div class="bar tip" title="' + title + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
+					$('#progress-bar').append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
 					$('#status').append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
 					
 					if (data.status === 'Finalizado') {
 						location.reload(true);
 					}
-					console.log(data);
 				}
 			});
 		};
