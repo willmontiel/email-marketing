@@ -1,3 +1,4 @@
+-- Comentario de Mayte
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS `update_counters_list`//
