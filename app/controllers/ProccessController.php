@@ -39,6 +39,38 @@ class ProccessController extends ControllerBase
 		$this->view->setVar("res", $res);
 	}
 	
+	public function refreshAction($idImportproccess)
+	{
+		$newproccess = Importproccess::findFirstByIdImportproccess($idImportproccess);
+		$inputFile = Importfile::findFirstByIdImportfile($newproccess->inputFile);
+		
+		$count = array(
+			"linesprocess" => $newproccess->processLines,
+			"exist" => $newproccess->exist,
+			"invalid" => $newproccess->invalid,
+			"bloqued" => $newproccess->bloqued,
+			"limit" => $newproccess->limitcontact,
+			"repeated" => $newproccess->repeated
+		);
+		
+		$res = array(
+			"name" => $inputFile->originalName,
+			"totalReg" => $newproccess->totalReg,
+			"status" => $newproccess->status,
+			"linesprocess" => $count['linesprocess'],
+			"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
+			"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
+			"exist" => $count['exist'],
+			"invalid" => $count['invalid'],
+			"bloqued" => $count['bloqued'],
+			"limit" => $count['limit'],
+			"repeated" => $count['repeated'],
+			"idProcces" => $newproccess->idImportproccess
+		);
+		
+		return $this->setJsonResponse($res);
+	}
+	
 	public function downoladsuccessAction($idProccess)
 	{
 		$this->view->disable();

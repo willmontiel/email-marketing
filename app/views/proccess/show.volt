@@ -1,13 +1,44 @@
 {% extends "templates/index_new.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	<script type="text/javascript">
+		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
+		function loadNow () {   
+			$.getJSON(MyBaseURL + '/proccess/refresh/{{ res['idProcces'] }}',function(data){
+				$('#progress-bar').empty();
+				$('#status').empty();
+				if(data !== null) {
+					var title = (data.linesprocess/data.totalReg)*100;
+					var percent = (data.linesprocess/data.totalReg)*100;{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
+					{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
+					
+					$('#progress-bar').append('<div class="bar tip" title="' + title + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
+					$('#status').append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
+					
+					if (data.status === 'Finalizado') {
+						location.reload(true);
+					}
+					console.log(data);
+				}
+			});
+		};
+		
+		$(function() {
+			loadNow();
+			setInterval(loadNow, 5000);
+		});
+		
+	</script>
+{% endblock %}
 {% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
 	<div class="row-fluid">
 		<div class="span8 offset2">
 			<div class="well relative">
 				<p>Importacion de Archivo: {{res['name']}}</p>
-				<p>Registros Importados: {{res['linesprocess']}} de {{res['totalReg']}}</p>
-				<div class="progress progress-striped progress-blue active">
-                    <div class="bar tip" title="{{((res['linesprocess'] / res['totalReg']) * 100)|int}}%" data-percent="{{((res['linesprocess'] / res['totalReg']) * 100)|int}}" style="width: {{((res['linesprocess'] / res['totalReg']) * 100)|int}}%;" data-original-title="{{((res['linesprocess'] / res['totalReg']) * 100)|int}}%"></div>
+				<p id="status"></p>
+				<div class="progress progress-striped progress-blue active" id="progress-bar">
+                    
 				</div>
 				<p>Estado: {{res['status']}}</p>
 				{%if res['status'] == "Finalizado"%}
