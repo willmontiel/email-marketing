@@ -505,7 +505,7 @@ class ContactWrapper extends BaseWrapper
 				$a[] = $msg;
 			}
 			$txt = implode(',', $msg);
-			throw new \Exception('Error al asociar el contacto a la lista con idContactlist: '.$idContactlist. ' y idContact: ' .$idContact. '!' . PHP_EOL . '[' . $txt . ']');
+			throw new \Exception('Error al asociar el contacto a la lista con idContactlist: '.$list->idContactlist. ' y idContact: ' .$contact->idContact. '!' . PHP_EOL . '[' . $txt . ']');
 		} else {
 			
 			$this->counter->newContactToList($contact, $list);
@@ -690,7 +690,6 @@ class ContactWrapper extends BaseWrapper
 					ORDER BY m.createdon";
 		$r = $this->db->query($query);
 		$alldata = $r->fetchAll();
-		Phalcon\DI::getDefault()->get('logger')->log(print_r($alldata, true));
 		$count = count($alldata);
 		if($count > 0) {
 			foreach ($alldata as $a) {
