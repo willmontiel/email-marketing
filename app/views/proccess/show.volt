@@ -47,8 +47,8 @@
 					<p id="status-title"></p>
 				{% endif %}
 				{%if res['status'] == "Finalizado"%}
+				<p>Estado: {{res['status']}}</p>
 				<div class="text-right">
-					<p>Estado: {{res['status']}}</p>
 					<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
 					  Ver Detalles
 					</a>
