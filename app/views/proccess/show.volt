@@ -8,11 +8,14 @@
 			$.getJSON(MyBaseURL + 'proccess/refresh/{{ res['idProcces'] }}',function(data){
 				$('#progress-bar').empty();
 				$('#status-progress').empty();
+				$('#status-title').empty();
+				
 				if(data !== null) {
 					var percent = Math.round((data.linesprocess/data.totalReg)*100);{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
 					
 					$('#progress-bar').append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
 					$('#status-progress').append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
+					$('#status-title').append('Estado: ' + data.status);
 					
 					if (data.status === 'Finalizado') {
 						location.reload(true);
@@ -22,9 +25,10 @@
 		};
 		
 		$(function() {
-			console.log(status);
-			loadNow();
-			setInterval(loadNow, 5000);
+			if (status !== 'Finalizado') {
+				loadNow();
+				setInterval(loadNow, 5000);
+			}
 		});
 		
 	</script>
@@ -39,7 +43,7 @@
 				<div id="progress-bar" class="progress progress-striped progress-blue active">
                     
 				</div>
-				<p>Estado: {{res['status']}}</p>
+				<p id="status-title"></p>
 				{%if res['status'] == "Finalizado"%}
 				<div class="text-right">
 					<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
