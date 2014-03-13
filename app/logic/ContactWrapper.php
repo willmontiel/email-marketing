@@ -648,7 +648,7 @@ class ContactWrapper extends BaseWrapper
 		$object['ipActivated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
 		$object['isEmailBlocked'] = ($contact->email->blocked != 0);
-		
+		$object['mailHistory'] = $this->getMailHistory($contact, $object);
 		$customfields = Customfield::findByIdDbase($this->idDbase);
 
 		// Consultar la lista de campos personalizados para esos contactos
@@ -679,6 +679,32 @@ class ContactWrapper extends BaseWrapper
 		}
 		
 		return $object;
+	}
+	
+	protected function getMailHistory(Contact $contact)
+	{
+		$mailh = array();
+		$query = "SELECT m.name, c.opening, c.clicks, c.bounced, c.spam, c.unsubscribe
+					FROM mxc AS c JOIN mail AS m ON (c.idMail = m.idMail)
+					WHERE c.idContact = {$contact->idContact}
+					ORDER BY m.createdon";
+		$r = $this->db->query($query);
+		$alldata = $r->fetchAll();
+		Phalcon\DI::getDefault()->get('logger')->log(print_r($alldata, true));
+		$count = count($alldata);
+		if($count > 0) {
+			foreach ($alldata as $a) {
+				$mailh[] = array(
+					'name' => $a['name'],
+					'opening' => $c['opening'],
+					'clicks' => $c['clicks'],
+					'bounced' => $c['bounced'],
+					'spam' => $c['spam'],
+					'unsubscribe' => $c['unsubscribe']
+				);
+			}
+		}
+		return json_encode($mailh);
 	}
 
 	/**

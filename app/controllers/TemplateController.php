@@ -29,7 +29,8 @@ class TemplateController extends ControllerBase
 			}
 			
 			if ($templateDone) {
-				return $this->setJsonResponse(array('msg' => 'Se ha creado la cuenta exitosamente'), 200, 'success');
+				$this->flashSession->success('Se ha creado la plantilla exitosamente');
+				return $this->setJsonResponse(array('msg' => 'Se ha creado la plantilla exitosamente'), 200, 'success');
 			}
 		}
 		else { 
@@ -89,9 +90,7 @@ class TemplateController extends ControllerBase
 		}
 		
 		if($idAccount) {
-			
 			$img = $this->asset->dir . $idAccount . "/templates/" . $idTemplate . "/images/thumbnail_" . $idTemplate . ".png";
-			$log->log($img);
 		}
 		else {
 			$img = $this->templatesfolder->dir . $idTemplate . "/images/thumbnail_" . $idTemplate . ".png";
