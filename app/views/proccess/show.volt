@@ -2,6 +2,7 @@
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
+		var status = '{{res['status']}}';
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		function loadNow () {   
 			$.getJSON(MyBaseURL + 'proccess/refresh/{{ res['idProcces'] }}',function(data){
@@ -21,6 +22,7 @@
 		};
 		
 		$(function() {
+			console.log(status);
 			loadNow();
 			setInterval(loadNow, 5000);
 		});

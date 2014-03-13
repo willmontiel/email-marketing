@@ -178,8 +178,8 @@ class ChildCommunication extends BaseWrapper
 					$message->setFrom($from);
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
-					$message->setSender($returnPath);
-//					$message->setReturnPath($returnPath);
+//					$message->setSender($returnPath);
+					$message->setReturnPath($returnPath);
 					$message->addPart($text, 'text/plain');
 					
 //					$recipients = true;
