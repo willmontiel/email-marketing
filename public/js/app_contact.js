@@ -175,8 +175,9 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
-	history: function(){
-		console.log(this.content.get('mailHistory'))
+	historyMail: function(){
+		var mailHistory = JSON.parse(this.content.get('mailHistory'));
+		this.set('history', mailHistory);
 	}.observes(this.content),
 	actions :{
 		subscribedcontact: function () {

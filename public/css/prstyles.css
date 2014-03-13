@@ -602,3 +602,39 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	text-shadow: 0 1px #aaa;
 	padding-bottom: 20px;
 }
+.full-contact-information {
+	margin-left: 18%
+}
+.contact-information {
+	width: 400px;
+	float: left;
+}
+.contact-details {
+	width: 300px;
+	float: left;
+	margin-left: 25px;
+}
+.contact-information .box-header, .contact-information .box-footer, .contact-details .box-header {
+	text-align: center;
+}
+.contact-history-span {
+	margin-left: 0 !important;
+}
+.contact-information .title, .contact-details .title {
+	float: none !important;
+}
+.table-for-contact-events, .table-for-contact-mails {
+	width: 550px;
+}
+.contact-history-span > .box {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 750px;
+}
+.contact-event-type, .contact-event-date {
+	width: 20%;
+}
+.contact-history-event-text {
+	text-align: center !important;
+}

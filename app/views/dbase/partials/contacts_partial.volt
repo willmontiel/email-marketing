@@ -230,153 +230,243 @@
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/show">
 <div class="row-fluid">
-	<div class="span6">
-		<div class="box">
-			<div class="box-header">
-				<div class="title">
-					Detalles de Contacto
-				</div>
-			</div>
-			<div class="box-content">
-				<table class="table table-normal">
-					<tr> 
-						<td >Email:</td>
-						<td>{{'{{email}}'}}</td>
-					</tr>
-					<tr>
-						<td>Nombre:</td>
-						<td>{{'{{name}}'}}</td>
-					</tr>
-					<tr>
-						<td>Apellido:</td>
-						<td>{{'{{lastName}}'}}</td>
-					</tr>
-					<tr>
-						<td>
-							{{ '{{#if isActive}}' }}
-								<span class="green-label">Activo</span>
-							{{ '{{else}}' }}
-								<span class="orange-label">Inactivo</span>
-							{{ '{{/if}}' }}
-						</td>
-						<td>
+		<div class="span12">
+			<div class="full-contact-information clearfix">
+				<div class="contact-information">
+					<div class="box">
+						<div class="box-header">
+							<div class="title">
+								Informacion de Contacto
+							</div>
+						</div>
+						<div class="box-content">
+							<table class="table table-normal">
+								<tr>
+									<td>Email:</td>
+									<td>{{'{{email}}'}}
+										{{' {{#if isEmailBlocked}} '}}
+											<span class="badge badge-dark-red">Correo bloqueado</span>
+										{{' {{/if }} '}}
+										{{' {{#if errors.email}} '}}
+											<span class="text text-error">{{'{{errors.email}}'}}</span>
+										{{' {{/if }} '}}
+									</td>
+								</tr>
+								<tr>
+									<td>Nombre:</td>
+									<td>{{'{{name}}'}}</td>
+								</tr>
+								<tr>
+									<td>Apellido:</td>
+									<td>{{'{{lastName}}'}}</td>
+								</tr>
+								<tr>
+									<td>
+										{{ '{{#if isActive}}' }}
+											<span class="green-label">Activo</span>
+										{{ '{{else}}' }}
+											<span class="orange-label">Inactivo</span>
+										{{ '{{/if}}' }}
+									</td>
+									<td>
+										{{ '{{#if isSubscribed}}' }}
+
+											<span class="green-label">Suscrito</span>
+										{{ '{{else}}' }}
+
+											<span class="orange-label">Des-Suscrito</span>
+										{{ '{{/if}}' }}
+									</td>
+								</tr>
+							{%for field in fields%}
+								<tr>
+									<td>{{field.name}}</td>
+										<td>{{'{{campo'~field.idCustomField~'}}'}}</td>
+								</tr>
+							{%endfor%}
+							</table>
+						</div>
+						<div class="box-footer padded">
 							{{ '{{#if isSubscribed}}' }}
-
-								<span class="green-label">Suscrito</span>
+								<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Des-suscribir</button>
 							{{ '{{else}}' }}
-
-								<span class="orange-label">Des-Suscrito</span>
+								{{'{{#unless isEmailBlocked}}'}}
+									<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
+								{{'{{/unless}}'}}
 							{{ '{{/if}}' }}
-						</td>
-					</tr>
-				{%for field in fields%}
-					<tr>
-						<td>{{field.name}}</td>
-						<td>{{'{{campo'~field.idCustomField~'}}'}}</td>
-					</tr>
-				{%endfor%}
-				</table>
-			</div>
-			<div class="box-footer padded">
-					{{ '{{#if isSubscribed}}' }}
-						<button class="btn btn-blue" {{' {{action unsubscribedcontact this}} '}}>Des-suscribir</button>
-					{{ '{{else}}' }}
-						<button class="btn btn-blue" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
-					{{ '{{/if}}' }}
-
-					{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-blue">Editar</button>{{/linkTo}}' }}
-					{{ '{{#linkTo "contacts"}}<button class="btn btn-default">Regresar</button>{{/linkTo}}' }}
-				
-			</div>
-		</div>
-	</div>
-	<div class="span6">
-		<div class="box">
-			<div class="box-header">
-				<div class="title">
-					Historial
+						{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
+						{{ '{{#linkTo "contacts"}}<button class="btn btn-default">Regresar</button>{{/linkTo}}' }}
+						</div>
+					</div>
+				</div>
+				<div class="contact-details">
+					<div class="box">
+						<div class="box-header">
+							<div class="title">
+								Detalles de Contacto
+							</div>
+						</div>
+						<div class="box-content">
+							<table class="table table-normal">
+								{{ '{{#if subscribedOn}}' }}
+									<tr>
+										<td><span class="text-green-color">Suscrito:&nbsp</span></td>
+										<td><span class="number-small">{{'{{subscribedOn}}'}}</span></td>
+									</tr>
+								{{ '{{/if}}' }}
+								{{ '{{#if ipSubscribed}}' }}
+									<tr>
+										<td><span class="text-green-color">IP de Suscripcion:&nbsp</span></td>
+										<td><span class="number-small">{{'{{ipSubscribed}}'}}</span></td>
+									</tr>
+								{{ '{{/if}}' }}
+								{{ '{{#if isActive}}' }}
+									<tr>
+										<td><span class="text-blue-color">Activado:&nbsp</span></td>
+										<td><span class="number-small">{{'{{activatedOn}}'}}</span></td>
+									</tr>
+								{{ '{{/if}}' }}
+								{{ '{{#if ipActive}}' }}
+									<tr>
+										<td><span class="text-blue-color">IP de Activacion:&nbsp</span></td>
+										<td><span class="number-small">{{'{{ipActive}}'}}</span></td>
+									</tr>
+								{{ '{{/if}}' }}
+								{{ '{{#if isBounced}}' }}
+									<tr>
+										<td><span class="text-brown-color">Rebotado:&nbsp</span></td>
+										<td><span class="number-small">{{'{{bouncedOn}}'}}</span></td>
+									</tr>
+								{{ '{{/if}}' }}
+								{{ '{{#if isSpam}}' }}
+									<tr>
+										<td><span class="text-red-color">Reportado Spam:&nbsp</span></td>
+										<td><span class="number-small">{{'{{spamOn}}'}}</span></td>
+									<tr>
+								{{ '{{/if}}' }}
+								{{ '{{#if unsubscribedOn}}' }}
+									<tr>
+										<td><span class="text-gray-color">Des-suscrito:&nbsp</span></td>
+										<td><span class="number-small">{{'{{unsubscribedOn}}'}}</span></td>
+									</tr>
+								{{ '{{/if}}' }}
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="box-content padded">
-				<div class="box-section news with-icons">
-					<div class="avatar green">
-						<i class="icon-globe icon-2x"></i>
+		</div>
+		<div class="span12 contact-history-span">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Historial
 					</div>
-						<div class="news-time">	
+				</div>
+				<div class="box-content padded">
+					<div class="box-section news with-icons">
+						<div class="avatar green">
+							<i class="icon-globe icon-2x"></i>
 						</div>
-					<div class="news-content">
-						<div class="news-title">
-							Ultimas Campañas
-						</div>
-						<div class="news-text">
-							----------------------------------
-						</div>
-					</div>
-				 </div>
-				 
-				 <div class="box-section news with-icons">
-					<div class="avatar green">
-						<i class="icon-lightbulb icon-2x"></i>
-					</div>
-						<div class="news-time">	
-						</div>
-					<div class="news-content">
-						<div class="news-title">
-							Ultimos Eventos
-						</div>
-						<div class="news-text">
-							----------------------------------
-						</div>
-					</div>
-				 </div>
-				 
-				 <div class="box-section news with-icons">
-					<div class="avatar blue">
-						<i class="icon-info-sign icon-2x"></i>
-					</div>
-					<div class="news-time">	
-					</div>
-					<div class="news-content">
-						<div class="news-title">
-							Información de Contacto
-						</div>
-						<div class="news-text">
-							{{ '{{#if subscribedOn}}' }}
-								<span class="text-green-color">Suscrito:&nbsp</span> 
-								<span class="number-small">{{'{{subscribedOn}}'}}</span>
-								<br />
-								<span class="text-green-color">IP de Suscripcion:&nbsp</span>
-								<span class="number-small">{{'{{ipSubscribed}}'}}</span>
-							{{ '{{/if}}' }}
+							<div class="news-time">	
+							</div>
+						<div class="news-content">
+							<div class="news-title">
+								Ultimas Campañas
+							</div>
 							<br />
-							{{ '{{#if isActive}}' }}
-								<span class="text-blue-color">Activado:&nbsp</span>
-								<span class="number-small">{{'{{activatedOn}}'}}</span>
-								<br />
-								<span class="text-blue-color">IP de Activacion:&nbsp</span> 
-								<span class="number-small">{{'{{ipActive}}'}}</span>
-							{{ '{{/if}}' }}
-							<br />
-							{{ '{{#if isBounced}}' }}
-								<span class="text-brown-color">Rebotado:&nbsp</span>
-								<span class="number-small">{{'{{bouncedOn}}'}}</span>
-								<br />
-							{{ '{{/if}}' }}
-							
-							{{ '{{#if isSpam}}' }}
-								<span class="text-red-color">Reportado Spam:&nbsp</span>
-								<span class="number-small">{{'{{spamOn}}'}}</span>
-								<br />
-							{{ '{{/if}}' }}
-							
-							<span class="text-gray-color">Des-suscrito:&nbsp</span>
-							<span class="number-small">{{'{{unsubscribedOn}}'}}</span>
+							<div class="news-text">
+								<table class="table table-normal table-for-contact-mails">
+								{{' {{#each history}} '}}
+									<tr><td>{{' {{name}} '}}</td></tr>
+								{{' {{/each}} '}}
+								</table>
+							</div>
 						</div>
-					</div>
-				 </div>
-				
+					 </div>
+
+					 <div class="box-section news with-icons">
+						<div class="avatar green">
+							<i class="icon-lightbulb icon-2x"></i>
+						</div>
+							<div class="news-time">	
+							</div>
+						<div class="news-content">
+							<div class="news-title">
+								Ultimos Eventos
+							</div>
+							<br />
+							<div class="news-text">
+							<!-- Historial de Aperturas -->
+								<table class="table table-normal table-for-contact-events">
+								<thead>
+									<tr>
+										<td class="contact-event-type">Evento</td>
+										<td>Correo</td>
+										<td class="contact-event-date">Fecha</td>
+								   </tr>
+								</thead>
+								<tbody>
+								{{' {{#each history}} '}}
+									{{' {{#if opening}} '}}
+									<tr>
+										<td class="contact-history-event-text">Apertura</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{opening}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+								{{' {{/each}} '}}
+
+								<!-- Historial de Clics -->
+								{{' {{#each history}} '}}
+									{{' {{#if clicks}} '}}
+									<tr>
+										<td class="contact-history-event-text">Clic</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{clicks}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+								{{' {{/each}} '}}
+
+								<!-- Historial de Desuscripciones -->
+								{{' {{#each history}} '}}
+									{{' {{#if unsubscribe}} '}}
+									<tr>
+										<td class="contact-history-event-text">Desuscripcion</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{unsubscribe}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+								{{' {{/each}} '}}
+
+								<!-- Historial de Rebotes -->
+								{{' {{#each history}} '}}
+									{{' {{#if bounced}} '}}
+									<tr>
+										<td class="contact-history-event-text">Rebote</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{bounced}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+								{{' {{/each}} '}}
+
+								<!-- Historial de Spam -->
+								{{' {{#each history}} '}}
+									{{' {{#if spam}} '}}
+									<tr>
+										<td class="contact-history-event-text">Spam</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{spam}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+								{{' {{/each}} '}}
+								</tbody>
+								</table>
+							</div>
+						</div>
+					 </div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </script>
