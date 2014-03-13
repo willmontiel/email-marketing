@@ -49,13 +49,19 @@
 							{{ newFormAccount.render('messageLimit') }}
 
 							<label for="modeUse">*Modo de uso:</label>
-							{{ newFormAccount.render('accountingMode') }}
+							{{ newFormAccount.render('accountingMode', {'class': 'chzn-select'}) }}<br /> <br />
 
 							<label for="modeAccounting">*Modo de pago:</label>
-							{{ newFormAccount.render('subscriptionMode') }}	
+							{{ newFormAccount.render('subscriptionMode', {'class': 'chzn-select'}) }}<br /> <br />
 							
 							<label>*MTA: <label/>
-							{{ newFormAccount.render('virtualMta')}}
+							{{ newFormAccount.render('virtualMta')}}<br />
+									
+							<label>*Url de dominio: <label/>
+							{{ newFormAccount.render('idUrlDomain')}}<br /> <br />
+									
+							<label>*Retornar correos rebotados a: <label/>
+							{{ newFormAccount.render('idReturnPath')}}
 						</div>
 						<div class="span6">
 							<label for="firstName">*Nombre:</label>
@@ -69,7 +75,7 @@
 
 							<label>*Nombre de usuario:</label>
 							{{ newFormAccount.render('username') }}
-
+							
 							<label for="password">*Contraseña:</label>
 							{{ newFormAccount.render('password') }}
 

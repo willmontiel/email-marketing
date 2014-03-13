@@ -55,6 +55,12 @@
 						
 						<label>*MTA: </label>
 						{{ editFormAccount.render('virtualMta') }}
+						
+						<label>*Url de dominio: <label/>
+						{{ editFormAccount.render('idUrlDomain')}}<br /> <br />
+									
+						<label>*Retornar correos rebotados a: <label/>
+						{{ editFormAccount.render('idReturnPath')}}
 					</div>
 					<div class="form-actions">
 						<a href="{{ url('account') }}" class="btn btn-default">Cancelar</a>

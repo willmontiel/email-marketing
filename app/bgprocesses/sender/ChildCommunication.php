@@ -155,21 +155,37 @@ class ChildCommunication extends BaseWrapper
 					else {
 						$mta = $this->account->virtualMta;
 					}
+					
+					$rp = Returnpath::findFirstByIdReturnPath($this->account->idReturnPath);
+					
+					$listID = 't0em' . $this->account->idAccount;
+					$sendID = '0em' . $mail->idMail;
+					$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'];
+					
+					$verpFormat = str_replace('@', '=', $contact['email']['email']);
+					$mailClass = $this->mta->mailClass . $sendID;
+					$returnPathData = $listID . '-' . $mailClass . '-' . $verpFormat;
+					$returnPath = str_replace('(verp)', $returnPathData, $rp->path);
+					
 //					$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
 					$headers->addTextHeader('X-GreenArrow-MtaID', $mta);
-					$headers->addTextHeader('X-GreenArrow-InstanceID', '0em' . $mail->idMail);
-					$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', 'em' . $mail->idMail . 'x' . $contact['contact']['idContact']);
-					$headers->addTextHeader('X-GreenArrow-ListID', 't0em' . $this->account->idAccount);
+					$headers->addTextHeader('X-GreenArrow-InstanceID', $sendID);
+//					$headers->addTextHeader('X-GreenArrow-SendID', $sendID);
+					$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', $trackingID);
+					$headers->addTextHeader('X-GreenArrow-ListID', $listID);
 					$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
 					
 					$message->setFrom($from);
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
+//					$message->setSender($returnPath);
+					$message->setReturnPath($returnPath);
 					$message->addPart($text, 'text/plain');
+					
 //					$recipients = true;
 					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
-//					$log->log("Headers: " . print_r($this->lastsendheaders, true));
+					$log->log("Headers: " . print_r($this->lastsendheaders, true));
 					if ($recipients){
 						echo "Message " . $i . " successfully sent! \n";
 //						$log->log("HTML: " . $html);

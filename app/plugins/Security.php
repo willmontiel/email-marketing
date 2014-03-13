@@ -83,7 +83,8 @@ class Security extends Plugin
 	
 	protected function getControllerMap()
 	{
-		$map = $this->cache->get('controllermap-cache');
+		$map = null;
+//		$map = $this->cache->get('controllermap-cache');
 		if (!$map) {
 			$map = array(
 		//* RELEASE 0.1.0 *//
@@ -135,6 +136,7 @@ class Security extends Plugin
 				'contacts::processfile' => array('contact' => array('read','importbatch')),
 				//Página de procesos
 				'proccess::show' => array('process' => array('read')),
+				'proccess::refresh' => array('process' => array('read')),
 				'proccess::downoladsuccess' => array('process' => array('download')),
 				'proccess::downoladerror' => array('process' => array('download')),
 				//Dbase controller

@@ -1,3 +1,4 @@
+-- Comentario de Mayte
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS `update_counters_list`//
@@ -36,3 +37,4 @@ END//
 
 DELIMITER ;
 
+-- segundo comentario

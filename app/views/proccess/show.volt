@@ -1,16 +1,53 @@
 {% extends "templates/index_new.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	<script type="text/javascript">
+		var status = '{{res['status']}}';
+		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
+		function loadNow () {   
+			$.getJSON(MyBaseURL + 'proccess/refresh/{{ res['idProcces'] }}', function(data){
+				$('#progress-bar').empty();
+				$('#status-progress').empty();
+				$('#status-title').empty();
+				
+				if(data.length !== 0) {
+					var percent = Math.round((data.linesprocess/data.totalReg)*100);{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
+					
+					$('#progress-bar').append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
+					$('#status-progress').append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
+					$('#status-title').append('Estado: ' + data.status);
+					
+					if (data.status === 'Finalizado') {
+						$('#progress-bar').empty();
+						$('#status-progress').empty();
+						location.reload(true);
+					}
+				}
+			});
+		};
+		
+		$(function() {
+			if (status !== 'Finalizado') {
+				loadNow();
+				setInterval(loadNow, 5000);
+			}
+		});
+		
+	</script>
+{% endblock %}
 {% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
 	<div class="row-fluid">
 		<div class="span8 offset2">
 			<div class="well relative">
 				<p>Importacion de Archivo: {{res['name']}}</p>
-				<p>Registros Importados: {{res['linesprocess']}} de {{res['totalReg']}}</p>
-				<div class="progress progress-striped progress-blue active">
-                    <div class="bar tip" title="{{((res['linesprocess'] / res['totalReg']) * 100)|int}}%" data-percent="{{((res['linesprocess'] / res['totalReg']) * 100)|int}}" style="width: {{((res['linesprocess'] / res['totalReg']) * 100)|int}}%;" data-original-title="{{((res['linesprocess'] / res['totalReg']) * 100)|int}}%"></div>
-				</div>
-				<p>Estado: {{res['status']}}</p>
+				{%if res['status'] == "En Ejecucion"%}
+					<p id="status-progress"></p>
+					<div id="progress-bar" class="progress progress-striped progress-blue active"></div>
+					<p id="status-title"></p>
+				{% endif %}
 				{%if res['status'] == "Finalizado"%}
+				<p>Estado: {{res['status']}}</p>
 				<div class="text-right">
 					<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
 					  Ver Detalles
