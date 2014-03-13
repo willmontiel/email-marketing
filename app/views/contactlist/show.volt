@@ -110,7 +110,7 @@
 					<h4 class="gray"><span>Inactivos</span> {{'{{lista.inactiveContactsF}}'}}</h4>
 				</li>
 				<li class="sparkline-row">
-					<h4 class="gray"><span>Des-suscritos</span> {{'{{lista.unsubscribedContactsF}}'}}</h4>
+					<h4 class="gray"><span>Desuscritos</span> {{'{{lista.unsubscribedContactsF}}'}}</h4>
 				</li>
 				<li class="sparkline-row">
 					<h4 class="red"><span>Rebotados</span> {{'{{lista.bouncedContactsF}}'}}</h4>
@@ -267,7 +267,7 @@
 							</div>
 							<div class="news-text">
 								Aqui podrá editar/actualizar la información un contacto,  como nombre, apellido o simplemente
-								des-suscribirlo, recuerde que al editar cualquier dato, esto se actualizará a nivel de base de datos
+								desuscribirlo, recuerde que al editar cualquier dato, esto se actualizará a nivel de base de datos
 								sin importar en que lista este.
 							</div>
 						</div>
@@ -418,7 +418,7 @@
 											<span class="green-label">Suscrito</span>
 										{{ '{{else}}' }}
 
-											<span class="orange-label">Des-Suscrito</span>
+											<span class="orange-label">Desuscrito</span>
 										{{ '{{/if}}' }}
 									</td>
 								</tr>
@@ -432,7 +432,7 @@
 						</div>
 						<div class="box-footer padded">
 							{{ '{{#if isSubscribed}}' }}
-								<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Des-suscribir</button>
+								<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Desuscribir</button>
 							{{ '{{else}}' }}
 								{{'{{#unless isEmailBlocked}}'}}
 									<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
@@ -490,7 +490,7 @@
 								{{ '{{/if}}' }}
 								{{ '{{#if unsubscribedOn}}' }}
 									<tr>
-										<td><span class="text-gray-color">Des-suscrito:&nbsp</span></td>
+										<td><span class="text-gray-color"><strong>Desuscrito:&nbsp</strong></span></td>
 										<td><span class="number-small">{{'{{unsubscribedOn}}'}}</span></td>
 									</tr>
 								{{ '{{/if}}' }}

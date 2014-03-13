@@ -283,7 +283,7 @@
 							</tr>
 
 							<tr>
-								<td><i class="icon-check-empty"></i> Contactos Des-suscritos</td>
+								<td><i class="icon-check-empty"></i> Contactos Desuscritos</td>
 								<td class="status-success"><span class="label label-warning"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
 							</tr>
 

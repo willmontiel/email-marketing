@@ -13,7 +13,7 @@
 							</div>
 							<div class="news-text">
 								Aqui esta toda la información necesaria para gestionar los datos de tus contactos, recuerda que al editar, 
-								eliminar o des-suscribir un contacto, estos cambios se aplicaran a nivel de todas las listas con las que este
+								eliminar o desuscribir un contacto, estos cambios se aplicaran a nivel de todas las listas con las que este
 								relacionado
 								ese contacto, que a su vez estan relacionadas con esta base de datos. 
 							</div>
@@ -38,7 +38,7 @@
 			</ul>
 			<ul class="inline pull-right sparkline-box">
 				<li class="sparkline-row">
-					<h4 class="orange"><span>Des-suscritos</span>{{ sdbase.Cunsubscribed|numberf }}</h4>
+					<h4 class="orange"><span>Desuscritos</span>{{ sdbase.Cunsubscribed|numberf }}</h4>
 				</li>
 
 				<li class="sparkline-row">
@@ -274,7 +274,7 @@
 											<span class="green-label">Suscrito</span>
 										{{ '{{else}}' }}
 
-											<span class="orange-label">Des-Suscrito</span>
+											<span class="orange-label">Desuscrito</span>
 										{{ '{{/if}}' }}
 									</td>
 								</tr>
@@ -288,7 +288,7 @@
 						</div>
 						<div class="box-footer padded">
 							{{ '{{#if isSubscribed}}' }}
-								<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Des-suscribir</button>
+								<button class="btn btn-sm btn-info" {{' {{action unsubscribedcontact this}} '}}>Desuscribir</button>
 							{{ '{{else}}' }}
 								{{'{{#unless isEmailBlocked}}'}}
 									<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
@@ -346,7 +346,7 @@
 								{{ '{{/if}}' }}
 								{{ '{{#if unsubscribedOn}}' }}
 									<tr>
-										<td><span class="text-gray-color">Des-suscrito:&nbsp</span></td>
+										<td><span class="text-gray-color"><strong>Desuscrito:&nbsp</strong></span></td>
 										<td><span class="number-small">{{'{{unsubscribedOn}}'}}</span></td>
 									</tr>
 								{{ '{{/if}}' }}
