@@ -112,24 +112,16 @@ class ChildHandler extends Handler
 		$this->publisher->send($send);
 	}
 
-	public function forkChild()
+	public function forkChild($childProcess)
 	{
 		$pid = pcntl_fork();
-		
 		if ($pid > 0) {
-			
-//			echo "---New Child Process {$pid}\n";
-
 			$this->pid = $pid;
-			
 		}
 		else if ($pid == 0) {
-			
-			pcntl_exec('/usr/bin/php', array('childSender.php'));
-			
+			pcntl_exec('/usr/bin/php', $childProcess);
 		}
 		else {
-			
 			echo "Error! \n";
 		}
 		

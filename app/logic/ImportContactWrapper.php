@@ -25,7 +25,7 @@ class ImportContactWrapper extends BaseWrapper
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		$mode = $this->account->accountingMode;
-		
+
 		if ($mode == "Contacto") {
 			$contactLimit = $this->account->contactLimit;
 			$activeContacts = $this->account->countActiveContactsInAccount();
@@ -33,7 +33,7 @@ class ImportContactWrapper extends BaseWrapper
 			$contactLimit = 1;
 			$activeContacts = 0;
 		}
-		
+
 		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
 		$dbase = Dbase::findFirstByIdDbase($list->idDbase);
 		$posCol = (array) $fields;
@@ -41,11 +41,11 @@ class ImportContactWrapper extends BaseWrapper
 		if(empty($posCol['email']) && $posCol['email'] != '0') {
 			$newproccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
 			$newproccess->status = "Importacion no realizada";
-			
+
 			if(!$newproccess->save()) {
 				throw new \InvalidArgumentException('No se pudo actualizar el estado del proceso');
 			}
-			
+
 			throw new \InvalidArgumentException('No hay Mapeo de los Campos y las Columnas del Archivo');
 		}
 
@@ -55,26 +55,26 @@ class ImportContactWrapper extends BaseWrapper
 		if(!$newproccess->save()) {
 			throw new \InvalidArgumentException('No se pudo actualizar el estado del proceso');
 		}
-		
+
 		$this->tablename = "tmp". $newproccess->idImportproccess;
-		
+
 		$newtable = "CREATE TABLE $this->tablename LIKE tmpimport";
 		$deletetable = "DROP TABLE $this->tablename";
 
 		$db->execute($newtable);
-				
+
 		$this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
 
 		$dbase->updateCountersInDbase();
 		$list->updateCountersInContactlist();
-		
+
 		$db->execute($deletetable);
 		
 		$swrapper = new SegmentWrapper;
 		
-		$swrapper->contactsImported($dbase->idDbase);		
+		$swrapper->contactsImported($dbase->idDbase);
 	}
-	
+
 	protected function createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $idDbase)
 	{	
 		$db = Phalcon\DI::getDefault()->get('db');

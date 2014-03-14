@@ -5,10 +5,22 @@ class PoolHandler extends Handler
 	protected $tmpChildren = array();
 	protected $engagedProcesses = array();
 	protected $client;
-	const MAX_OF_TMP_CHILDREN = 4;
-	const INITIAL_CHILDREN = 4;
-
 	protected $tasks;
+	
+	public function setMaxOfTmpChildren($max)
+	{
+		$this->maxOfTmpChildren = $max;
+	}
+	
+	public function setInitialChildren($initial)
+	{
+		$this->initialChildren = $initial;
+	}
+	
+	public function setChildProcess($child)
+	{
+		$this->childProcess = $child;
+	}
 	
 	public function getEvents()
 	{
@@ -43,7 +55,7 @@ class PoolHandler extends Handler
 	}
 	public function createInitialChildren()
 	{
-		for ($i=0; $i<self::INITIAL_CHILDREN; $i++) {
+		for ($i=0; $i < $this->initialChildren; $i++) {
 			$this->newChild();
 		}
 	}
@@ -51,10 +63,10 @@ class PoolHandler extends Handler
 	{
 		$child = new ChildHandler($this->registry);
 		if (!$temporary) {
-			$this->children[] = $child->forkChild();
+			$this->children[] = $child->forkChild(array($this->childProcess));
 		}
 		else {
-			$this->tmpChildren[] = $child->forkChild();
+			$this->tmpChildren[] = $child->forkChild(array($this->childProcess));
 		}
 		$child->setPool($this);
 		$child->setTmp($temporary);
@@ -104,7 +116,7 @@ class PoolHandler extends Handler
 			}
 		}
 		
-		if( (count($this->tmpChildren) < self::MAX_OF_TMP_CHILDREN) && (count($this->childrenWithOutConfirmation()) <= 0) ) {
+		if( (count($this->tmpChildren) < $this->maxOfTmpChildren) && (count($this->childrenWithOutConfirmation()) <= 0) ) {
 			$this->newChild(true);
 		}
 		

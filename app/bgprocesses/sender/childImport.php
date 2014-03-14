@@ -1,11 +1,11 @@
 <?php
 require_once '../bootstrap/phbootstrap.php';
 
-$child = new ChildSender();
+$child = new ChildImport();
 
 $child->startProcess();
 
-class ChildSender
+class ChildImport
 {
 	protected $pid;
 	protected $mode ='NORMAL';
@@ -18,15 +18,13 @@ class ChildSender
 	public function startProcess()
 	{
 		$this->pid = getmypid();
-		$communication = new ChildCommunication();
-		$communication->setSocket($this);
 		$context = new ZMQContext();
 		
 		$this->subscriber = new ZMQSocket($context, ZMQ::SOCKET_SUB);
-		$this->subscriber->connect(SocketConstants::getMailPub2ChildrenEndPoint());
+		$this->subscriber->connect(SocketConstants::getImportPub2ChildrenEndPoint());
 		
 		$this->push = new ZMQSocket($context, ZMQ::SOCKET_PUSH);
-		$this->push->connect(SocketConstants::getMailPullFromChildEndPoint());
+		$this->push->connect(SocketConstants::getImportPullFromChildEndPoint());
 		
 		$filter = "$this->pid";
 		$this->subscriber->setSockOpt(ZMQ::SOCKOPT_SUBSCRIBE, $filter);
@@ -57,7 +55,25 @@ class ChildSender
 						case 'Processing-Task':
 							printf('Soy el PID ' . $pid . ' Y me Llego Esto: ' . $data . PHP_EOL);
 
-							$communication->startProcess($data);
+							$arrayDecode = json_decode($data);
+	
+							$idContactlist = $arrayDecode->idContactlist;
+							$idImportproccess = $arrayDecode->idImportproccess;
+							$fields = $arrayDecode->fields;
+							$destiny = $arrayDecode->destiny;
+							$delimiter = $arrayDecode->delimiter;
+							$header = $arrayDecode->header;
+							$idAccount = $arrayDecode->idAccount;
+							$ipaddress = $arrayDecode->ipaddress;
+							
+							$account = Account::findFirstByIdAccount($idAccount);
+							$wrapper = new ImportContactWrapper();
+							
+							$wrapper->setIdProccess($idImportproccess);
+							$wrapper->setIdContactlist($idContactlist);
+							$wrapper->setAccount($account);
+							$wrapper->setIpaddress($ipaddress);
+							$wrapper->startImport($fields, $destiny, $delimiter, $header);
 							
 							printf('PID ' . $pid . ' Acabo' . PHP_EOL);
 							
@@ -110,3 +126,4 @@ class ChildSender
 }
 
 return 0;
+
