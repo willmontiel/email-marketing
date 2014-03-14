@@ -43,7 +43,11 @@
 											<h5 style="text-align: center;">{{t['name']}}</h5>
 											{#<a href="{{url('mail/editor')}}/{{mail.idMail}}/{{t['id']}}" class="thumbnail">#}
 												<div class="img-wrap" style="width: 200px; height: 300px">
-													<img src="data: image/png;base64, {{t['preview']}}" />
+													{% if t['preview'] == null%}
+														<div class="not-available"></div>
+													{% else %}
+														<img src="data: image/png;base64, {{t['preview']}}" />
+													{%endif%}
 													{% if t['idMail'] != null %}
 														<a href="{{url('mail/editor')}}/{{t['idMail']}}/{{t['id']}}">
 													{% else %}

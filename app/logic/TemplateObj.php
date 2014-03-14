@@ -69,7 +69,7 @@ class TemplateObj
 		
 		if (!$template->save()) {
 			$this->rollbackTransaction();
-			throw new Exception('we have a error...');
+			throw new Exception('we have a error while saving new template...');
 		}
 		return $template;
 	}
