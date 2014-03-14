@@ -30,7 +30,7 @@ class FlashMessageForm extends Form
 			'class' => 'chzn-select'
 		)));
 		
-		$this->add(new RadioElement('mtype', array(
+		$this->add(new RadioElement('type', array(
 			'required' => 'required',
 			'class' => 'icheck'
         )));

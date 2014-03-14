@@ -119,7 +119,7 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<form action="{% if mail is empty %}{{url('mail/setup')}}{% else %}{{url('mail/setup')}}/{{mail.idMail}}{% endif %}" method="post" class="fill-up" id="setupform">
+				<form action="{% if mail is empty %}{% if new == true %}{{url('mail/setup')}}/0/{{idTemplate}}/new{% else %}{{url('mail/setup')}}{% endif %}{% else %}{{url('mail/setup')}}/{{mail.idMail}}{% endif %}" method="post" class="fill-up" id="setupform">
 					<div class="padded">
 						<label>*Nombre: </label>
 						{{ MailForm.render('name') }}

@@ -10,6 +10,8 @@
 		iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
 	};
 
+	var objMail = {{template.content}};
+	
 	function verHTML() {
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$('#preview-modal').modal('show');
@@ -28,6 +30,7 @@
 		});
 		
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
+		return false;
 	}
 	
 	$(function() {
@@ -64,7 +67,7 @@
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$.ajax(
 			{
-			url: "{{url('template/new')}}",
+			url: "{{url('template/edit')}}/{{template.idTemplate}}",
 			type: "POST",			
 			data: { 
 				name: name,
@@ -107,14 +110,14 @@
 			<div class="box span12 btnoptions">
 				<div class="templateName pull-left">
 					<label>Nombre de la plantilla: 
-					<input type="text" name="name" id="name"></label>
+					<input type="text" name="name" id="name" value="{{template.name}}"></label>
 				</div>
 				<div class="templateCategory pull-left">
 					<label class="selectcategory" >Categoría: 
 					<select class="uniform" name="categoria" id="category">
 						<option value="Mis Templates">Mis Templates</option>
 						{%for category in categories%}
-							<option value="{{category}}">{{category}}</option>
+							<option value="{{category}}" {% if category == template.category %}selected{% endif %}>{{category}}</option>
 						{%endfor%}
 					</select></label>
 					<label class="newcategory" style="margin-left: -40px;">Nueva Categoria: 
@@ -129,10 +132,10 @@
 				</div>
 				<div class="templateBtns pull-left">
 					<a href="{{url('template/index')}}" class="btn btn-default">Cancelar</a>
-					<input type="submit" class="btn btn-blue" value="Guardar" onclick="sendData()">
+					<input type="submit" class="btn btn-blue" value="Editar" onclick="sendData()">
 				</div>
 				<div class="globalTemplateOpt pull-left">
-					<label><input type="checkbox" name="isglobal" id="isglobal"> Plantilla Global</label>
+					<label><input type="checkbox" name="isglobal" id="isglobal" {% if template.idAccount == ''%}checked{% endif %}> Plantilla Global</label>
 				</div>
 				<div class="templatePreview pull-right">
 					<a class="btn btn-default" onClick="verHTML()"><i class="icon-search"></i> Previsualizar</a>
