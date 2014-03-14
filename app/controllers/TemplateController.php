@@ -88,7 +88,7 @@ class TemplateController extends ControllerBase
 					
 			$arrayTemplate = array();
 			foreach ($templates as $template) {
-				if (!in_array($arrayTemplate, $template->category)) {
+				if (!in_array($template->category, $arrayTemplate)) {
 					$arrayTemplate[]= $template->category;
 				}
 			}
@@ -210,7 +210,8 @@ class TemplateController extends ControllerBase
 				$this->logger->log('Exception: ' . $e);
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
-			return $this->setJsonResponse(array('msg' => 'Se ha creado la cuenta exitosamente'), 200, 'success');
+			$this->flashSession->notice("Se ha editado la plantilla exitosamente");
+			return $this->setJsonResponse(array('msg' => 'Se ha editado la plantilla exitosamente'), 200, 'success');
 		}
 		else {
 			if ($template && $template->idAccount == '') {
@@ -301,6 +302,7 @@ class TemplateController extends ControllerBase
 				$img = $this->asset->dir . $account->idAccount. "/templates/" . $template->idTemplate . '/images/' . $image->idTemplateImage . "." . $ext;
 			}
 			
+			$this->logger->log($img);
 			$info = getimagesize($img);
 			$this->response->setHeader("Content-Type:", $info['mime']);
 	//		$this->response->setHeader("Content-Length:", filesize($img));

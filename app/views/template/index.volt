@@ -37,14 +37,14 @@
 						<div class="tab-content">
 							{% for category, template in arrayTemplate %}
 								<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category|change_spaces_in_between}}">
-									<ul class="thumbnails padded">
+									<ul class="thumbnails">
 										{% for t in template %}
-										<li class="span3">
+										<li>
 											<h5 style="text-align: center;">{{t['name']}}</h5>
 											{#<a href="{{url('mail/editor')}}/{{mail.idMail}}/{{t['id']}}" class="thumbnail">#}
-												<div class="img-wrap" style="width: 200px; height: 300px">
+												<div class="preview-template img-wrap">
 													{% if t['preview'] == null%}
-														<div class="not-available"></div>
+														<div class="not-available-template"></div>
 													{% else %}
 														<img src="data: image/png;base64, {{t['preview']}}" />
 													{%endif%}
@@ -57,8 +57,8 @@
 														</a>
 												</div>
 											</a>
-											<div class="btn-toolbar" style="margin-left: 40%; margin-top: 10%;">
-												<div class="btn-group ">
+											<div class="btn-toolbar" style="text-align: center !important;">
+												<div class="btn-group template-tools">
 													<a href="#preview-modal" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Previsualizar"><i class="icon-eye-open"></i></a>
 													{% if t['idMail'] == null %}
 														{% if t['idAccount'] == null%}
