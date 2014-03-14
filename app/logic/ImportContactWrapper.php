@@ -1,6 +1,8 @@
 <?php
-//		Phalcon\DI::getDefault()->get('logger')->log("");
-class ImportContactWrapper extends BaseWrapper
+/**
+ * 
+ */
+class ImportContactWrapper
 {
 	protected $idContactlist;
 	protected $newcontact;
@@ -8,6 +10,26 @@ class ImportContactWrapper extends BaseWrapper
 	protected $ipaddress;
 	protected $tablename;
 
+	protected $temporaryMode;
+	protected $debugMode;
+	/**
+	 *
+	 * @var \Phalcon\Db\Adapter
+	 */
+	protected $db;
+	/**
+	 *
+	 * @var Importprocess
+	 */
+	protected $process;
+
+	public function __construct()
+	{
+		// Por defecto las tablas temporales son "TEMPORALES"
+		// Por defecto el modo debug esta apagado
+		$this->temporaryMode = true;
+		$this->debugMode = false;
+	}
 
 	public function setIdProccess($idProccess) {
 		$this->idProccess = $idProccess;
@@ -20,12 +42,68 @@ class ImportContactWrapper extends BaseWrapper
 	public function setIpaddress($ipaddress) {
 		$this->ipaddress = $ipaddress;
 	}
-	
-	public function startImport($fields, $destiny, $delimiter, $header) {
-		
-		$db = Phalcon\DI::getDefault()->get('db');
-		$mode = $this->account->accountingMode;
 
+	/**
+	 * Cargar la instancia de la base de datos
+	 */
+	protected function getDB()
+	{
+		if (!$this->db) {
+			$this->db = Phalcon\DI::getDefault()->get('db');
+		}
+	}
+	
+	public function setAccount(Account $account) {
+		$this->account = $account;
+	}
+	
+
+	/**
+	 * Activar/desactivar modo de tabla temporal (para que no sea una tabla global)
+	 * Si esta activo, se utiliza el DML "CREATE TEMPORARY TABLE"
+	 * y "DELETE TEMPORARY TABLE"
+	 * 
+	 * Si no esta activo, entonces se utiliza el DML estandar "CREATE TABLE"
+	 * 
+	 * @param boolean $active
+	 */
+	public function setTemporaryTableMode($active) 
+	{
+		$this->temporaryMode = $active;
+	}
+
+	/**
+	 * Activar/desactivar el mode de depuracion
+	 * 
+	 * Si esta activo el modo de depuracion, la tabla temporal no se elimina
+	 * 
+	 * @param type $active
+	 */
+	public function setDebugImportMode($active)
+	{
+		$this->debugMode = $active;
+		if ($active) {
+			// Modo temporal no puede estar activo
+			$this->temporaryMode = false;
+		}
+			
+	}
+			
+	/**
+	 * Metodo que realiza la importacion de los registros
+	 * 
+	 * @param array $fields
+	 * @param type $destiny
+	 * @param type $delimiter
+	 * @param type $header
+	 * @throws \InvalidArgumentException
+	 */
+	public function startImport($fields, $destiny, $delimiter, $header) {
+		$mode = $this->account->accountingMode;
+	
+		// Cual es el proposito de esto?
+		// Controlar la importacion de contactos para que no exceda el limite
+		// ?
 		if ($mode == "Contacto") {
 			$contactLimit = $this->account->contactLimit;
 			$activeContacts = $this->account->countActiveContactsInAccount();
@@ -33,46 +111,108 @@ class ImportContactWrapper extends BaseWrapper
 			$contactLimit = 1;
 			$activeContacts = 0;
 		}
-
+		
+		// Buscar la lista de contactos
 		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+		// Buscar la base de datos
 		$dbase = Dbase::findFirstByIdDbase($list->idDbase);
+
+		// En que formato se presentan los campos (de que forma esta codificado
+		//esto?
 		$posCol = (array) $fields;
-
+		
+		// Cargar el proceso de importacion
+		$this->loadProcess();
+		
+		// Validar que se haya mapeado el campo de correo electronico (requerido)
 		if(empty($posCol['email']) && $posCol['email'] != '0') {
-			$newproccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
-			$newproccess->status = "Importacion no realizada";
-
-			if(!$newproccess->save()) {
-				throw new \InvalidArgumentException('No se pudo actualizar el estado del proceso');
-			}
-
+			$this->updateProcessStatus('Importacion no realizada');
+			$this->saveProcess();
+			
 			throw new \InvalidArgumentException('No hay Mapeo de los Campos y las Columnas del Archivo');
 		}
 
-		$newproccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
-		$newproccess->status = "En Ejecucion";
-
-		if(!$newproccess->save()) {
-			throw new \InvalidArgumentException('No se pudo actualizar el estado del proceso');
-		}
-
-		$this->tablename = "tmp". $newproccess->idImportproccess;
-
-		$newtable = "CREATE TABLE $this->tablename LIKE tmpimport";
-		$deletetable = "DROP TABLE $this->tablename";
-
-		$db->execute($newtable);
-
+		$this->updateProcessStatus('En Ejecucion');
+		$this->saveProcess();
+		
+		$this->createTemporaryTable();
+		
 		$this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
 
 		$dbase->updateCountersInDbase();
 		$list->updateCountersInContactlist();
-
-		$db->execute($deletetable);
+		
+		$this->destroyTemporaryTable();
 		
 		$swrapper = new SegmentWrapper;
 		
-		$swrapper->contactsImported($dbase->idDbase);
+		// Recrear los segmentos de esta base de datos para tener en cuenta los nuevos contactos importados
+		$swrapper->recreateSegmentsInDbase($dbase->idDbase);		
+	}
+	
+	
+	/**
+	 * Crea el nombre de la tabla temporal
+	 */
+	protected function createTemporaryTableName()
+	{
+		if (!$this->tablename) {
+			$this->tablename = "import_tmp_{$this->proccess->idImportproccess}";
+		}
+	}
+	/**
+	 * Crea la tabla temporal
+	 */
+	protected function createTemporaryTable()
+	{
+		$this->createTemporaryTableName();
+		$this->getDB();
+		$tmp = ($this->temporaryMode)?' TEMPORARY ':'';
+		
+		$this->db->execute("CREATE {$tmp} TABLE {$this->tablename} LIKE tmpimport");
+	}
+	
+	protected function destroyTemporaryTable()
+	{
+		$this->getDB();
+		if (!$this->debugMode) {
+			$this->createTemporaryTableName();
+			$tmp = ($this->temporaryMode)?' TEMPORARY ':'';
+
+			$this->db->execute("DROP {$tmp} TABLE {$this->tablename}");
+		}
+	}
+	
+	protected function loadProcess()
+	{
+		$this->process = Importproccess::findFirstByIdImportproccess($this->idProccess);
+		
+		if (!$this->process) {
+			throw new \InvalidArgumentException("El id de proceso {$this->idProccess} es invalido.");
+		}
+	}
+	
+	/**
+	 * Cambiar el estatus del proceso
+	 * @param string $status
+	 */
+	protected function updateProcessStatus($status)
+	{
+		$this->process->status = $status;
+	}
+	
+	/**
+	 * Grabar el proceso (intentar)
+	 * si falla genera una excepcion
+	 * @throws \Exception
+	 */
+	protected function saveProcess()
+	{
+		if(!$this->process->save()) {
+			$str = implode(PHP_EOL, $this->process->getMessages());
+			throw new \Exception('Error al actualizar el estado del proceso:' . $str);
+		}
+
 	}
 
 	protected function createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $idDbase)
