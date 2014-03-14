@@ -505,7 +505,7 @@ class ContactWrapper extends BaseWrapper
 				$a[] = $msg;
 			}
 			$txt = implode(',', $msg);
-			throw new \Exception('Error al asociar el contacto a la lista con idContactlist: '.$idContactlist. ' y idContact: ' .$idContact. '!' . PHP_EOL . '[' . $txt . ']');
+			throw new \Exception('Error al asociar el contacto a la lista con idContactlist: '.$list->idContactlist. ' y idContact: ' .$contact->idContact. '!' . PHP_EOL . '[' . $txt . ']');
 		} else {
 			
 			$this->counter->newContactToList($contact, $list);
@@ -648,7 +648,7 @@ class ContactWrapper extends BaseWrapper
 		$object['ipActivated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
 		$object['isEmailBlocked'] = ($contact->email->blocked != 0);
-		
+		$object['mailHistory'] = $this->getMailHistory($contact);
 		$customfields = Customfield::findByIdDbase($this->idDbase);
 
 		// Consultar la lista de campos personalizados para esos contactos
@@ -679,6 +679,31 @@ class ContactWrapper extends BaseWrapper
 		}
 		
 		return $object;
+	}
+	
+	protected function getMailHistory(Contact $contact)
+	{
+		$mailh = array();
+		$query = "SELECT m.name, c.opening, c.clicks, c.bounced, c.spam, c.unsubscribe
+					FROM mxc AS c JOIN mail AS m ON (c.idMail = m.idMail)
+					WHERE c.idContact = {$contact->idContact}
+					ORDER BY m.createdon";
+		$r = $this->db->query($query);
+		$alldata = $r->fetchAll();
+		$count = count($alldata);
+		if($count > 0) {
+			foreach ($alldata as $a) {
+				$mailh[] = array(
+					'name' => $a['name'],
+					'opening' => ($a['opening'] != 0) ? date('d-m-Y', $a['opening']) : NULL,
+					'clicks' => ($a['clicks'] != 0) ? date('d-m-Y', $a['clicks']) : NULL,
+					'bounced' => ($a['bounced'] != 0) ? date('d-m-Y', $a['bounced']) : NULL,
+					'spam' => ($a['spam'] != 0) ? date('d-m-Y', $a['spam']) : NULL,
+					'unsubscribe' => ($a['unsubscribe'] != 0) ? date('d-m-Y', $a['unsubscribe']) : NULL,
+				);
+			}
+		}
+		return json_encode($mailh);
 	}
 
 	/**
@@ -713,7 +738,7 @@ class ContactWrapper extends BaseWrapper
 		$object['ipActivated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
 		$object['isEmailBlocked'] = ($email->blocked != 0);
-		
+		$object['mailHistory'] = $this->getMailHistory($contact);
 		
 		foreach ($customfields as $field) {
 			$key = $contact->idContact . ':' . $field['id'];

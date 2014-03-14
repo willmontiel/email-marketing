@@ -573,8 +573,6 @@ class ApiController extends ControllerBase
 	 */
 	public function createcontactListAction()
 	{
-		$log = $this->logger;
-
 		$contentsraw = $this->request->getRawBody();
 		$contentsT = json_decode($contentsraw);
 		
@@ -671,9 +669,6 @@ class ApiController extends ControllerBase
 	 */	
 	public function listbylistAction($idContactlist, $other)
 	{
-		
-		$limit = $this->request->getQuery('limit');
-		$page = $this->request->getQuery('page');
 		
 		$list = Contactlist::findFirst(array(
 			"conditions" => "idContactlist = ?1",
@@ -993,11 +988,10 @@ class ApiController extends ControllerBase
 	/*Inicio de segmentos*/
 	
 	/**
-	 * @Get ("/segments")
+	 * @Get("/segments")
 	 */
-	public function segmentsAction()
+	public function listsegmentsAction()
 	{
-		$log = $this->logger;
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 
@@ -1018,12 +1012,10 @@ class ApiController extends ControllerBase
 	}
 	
 	/**
-	 * @Get ("/segment/{idSegment:[0-9]+}/show")
+	 * @Get("/segment/{idSegment:[0-9]+}/contacts")
 	 */
-	public function segmentAction($idSegment)
+	public function listcontactsbysegmentAction($idSegment)
 	{
-		$log = $this->logger;
-		
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
@@ -1047,6 +1039,34 @@ class ApiController extends ControllerBase
 		$contacts = $segmentwrapper->findContactsInSegment($segment);
 
 		return $this->setJsonResponse($contacts);
+	}
+	
+	/**
+	 * @Get("/segment/{idSegment:[0-9]+}/contacts/{idContact:[0-9]+}")
+	 */
+	public function getcontactbysegmentAction($idSegment, $idContact)
+	{
+		$this->logger->log('contacto por segmento');
+		$contact = Contact::findFirst(array(
+			"conditions" => "idContact = ?1",
+			"bind" => array(1 => $idContact)
+		));
+		
+		$segment = Segment::findFirst(array(
+			"conditions" => "idSegment = ?1",
+			"bind" => array(1 => $idSegment)
+		));
+			
+		if (!$contact || !$segment) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+		}
+		
+		$wrapper = new ContactWrapper();
+        $wrapper->setIdDbase($contact->idDbase);
+		
+		$fielddata = $wrapper->convertContactToJson($contact);
+		
+		return $this->setJsonResponse(array('contact' => $fielddata) );	
 	}
 	
 	/**
@@ -1120,7 +1140,7 @@ class ApiController extends ControllerBase
 	public function deletesegmentAction($idSegment)
 	{
 		$log = $this->logger;
-		$log->log('llego a la eliminacion');
+
 		$wrapper = new SegmentWrapper();
 		
 		try {
@@ -1184,7 +1204,7 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
 		}
-
+		
 		$contactdata = $wrapper->convertContactToJson($contact);
 
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');

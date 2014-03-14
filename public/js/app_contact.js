@@ -41,7 +41,7 @@ App.ContactsIndexRoute = Ember.Route.extend({
 	}
 });
 
-App.ContactsShowRoute = Ember.Route.extend({	
+App.ContactsShowRoute = Ember.Route.extend({
 });
 
 App.ContactsNewRoute = Ember.Route.extend({
@@ -175,6 +175,10 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 });
 
 App.ContactsShowController = Ember.ObjectController.extend({
+	historyMail: function(){
+		var mailHistory = JSON.parse(this.content.get('mailHistory'));
+		this.set('history', mailHistory);
+	}.observes(this.content),
 	actions :{
 		subscribedcontact: function () {
 			//this.set("isSubscribed", true);

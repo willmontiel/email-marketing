@@ -183,8 +183,9 @@ class Security extends Plugin
 				'api::searchcontact' => array('contact' => array('read')),
 				//Segmentos 
 				'segment::show' => array('segment' => array('read')),
-				'api::segment' => array('segment' => array('read')),
-				'api::segments' => array('segment' => array('read')),
+				'api::listsegments' => array('segment' => array('read')),
+				'api::listcontactsbysegment' => array('segment' => array('read')),
+				'api::getcontactbysegment' => array('segment' => array('read')),
 				'api::dbases' => array('segment' => array('read', 'update')),
 				'api::getcustomfieldsalias' => array('segment' => array('create')),
 				'api::createsegment' => array('segment' => array('read', 'create')),

@@ -28,7 +28,9 @@
 			isBounced: DS.attr('boolean'),
 			isSubscribed: DS.attr('boolean'),
 			isSpam: DS.attr('boolean'),
-			isActive: DS.attr('boolean')
+			isActive: DS.attr('boolean'),
+			isEmailBlocked: DS.attr('boolean'),
+			mailHistory: DS.attr('string')
 			{%for field in fields%}
 			,
 				{% if field.type == "Text" %}
@@ -281,7 +283,7 @@
 							</tr>
 
 							<tr>
-								<td><i class="icon-check-empty"></i> Contactos Des-suscritos</td>
+								<td><i class="icon-check-empty"></i> Contactos Desuscritos</td>
 								<td class="status-success"><span class="label label-warning"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
 							</tr>
 
