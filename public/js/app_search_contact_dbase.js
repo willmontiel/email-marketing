@@ -1,3 +1,16 @@
+App = Ember.Application.create({
+	rootElement: '#emberApplistContainer'
+});
+
+//Adaptador
+
+DS.RESTAdapter.reopen({
+	namespace: SearchContactUrl
+});
+
+// Store (class)
+App.Store = DS.Store.extend({});
+
 /* 
  * Ember Model for to search contacts.
  */
