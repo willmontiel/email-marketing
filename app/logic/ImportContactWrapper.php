@@ -379,6 +379,8 @@ class ImportContactWrapper
 		
 		// Recorrer todo el archivo
 		// o hasta que se acabe el saldo que tiene el usuario
+		$this->timer->startTimer('insert-rows', 'Insert rows into temporary table!');
+
 		while(!feof($open) && ($recordsinserted < $contacts2insert)) {
 			
 			// Leer linea
@@ -456,6 +458,9 @@ class ImportContactWrapper
 			// Informar avance
 			$this->incrementProcessAdvance($recordsinserted);
 		}
+		$this->timer->endTimer('insert-rows');
+		
+		$this->timer->startTimer('process-rows', 'Process rows from temporary table!');
 		
 		// Segundo y tercer paso:
 		// Procesar los registros insertados
@@ -464,11 +469,14 @@ class ImportContactWrapper
 		// Insertar los contactos a partir de los registros insertados
 		// que son validos
 		$this->cleanInsertedRecords($idAccount, $idDbase);
+		$this->timer->endTimer('process-rows');
 		
 		// Correr los reportes...
 		// El parametro que se pasa es el numero de registros del archivo
 		// que no se procesaron
+		$this->timer->startTimer('report', 'Report results!');
 		$this->runReports($linecount - $lineInFile + 1);
+		$this->timer->endTimer('report');
 	}
 
 	protected function incrementProcessAdvance($adv)
