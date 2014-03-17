@@ -18,7 +18,7 @@ class Communication
 		}
 	}
 	
-	public function getStatus()
+	public function getStatus($type)
 	{
 		$poll = new ZMQPoll();
 		$poll->add($this->requester, ZMQ::POLL_IN);
@@ -35,28 +35,7 @@ class Communication
 
 			$processesArray = array();
 			foreach ($status as $key => $value) {
-				$obj = new stdClass();
-				$obj->pid = $key;
-				$obj->type = $value->Type;
-				$obj->confirm = $value->Confirm;
-				if ($value->Status == '---') {
-					$obj->status = 'Free';
-					$obj->totalContacts = '---';
-					$obj->sentContacts = '---';
-					$obj->pause = false;
-				}
-				else {
-					$obj->status = 'Working';
-					$mail = Mail::findFirstByIdMail($value->Status);
-					$this->requester->send(sprintf("%s $key", 'Checking-Work'));
-					$request = $this->requester->recv();
-					sscanf($request, '%s %s', $header, $work);
-					$obj->totalContacts = $mail->totalContacts;
-					$obj->sentContacts = $work;
-					$obj->pause = true;
-				}
-				$obj->task = $value->Status;
-				$processesArray[] = $obj;
+				$processesArray[] = $this->getStatusArray($key, $value, $type);
 			}
 
 			return $processesArray;
@@ -64,6 +43,43 @@ class Communication
 		return NULL;
 	}
 	
+	
+	protected function getStatusArray($key, $value, $type)
+	{
+		$obj = new stdClass();
+		$obj->pid = $key;
+		$obj->type = $value->Type;
+		$obj->confirm = $value->Confirm;
+		$obj->task = $value->Status;
+		if ($value->Status == '---') {
+			$obj->status = 'Free';
+			$obj->totalContacts = '---';
+			$obj->sentContacts = '---';
+			$obj->pause = false;
+		}
+		else{
+			if($type === 'Mail') {
+				$mail = Mail::findFirstByIdMail($value->Status);
+				$this->requester->send(sprintf("%s $key", 'Checking-Work'));
+				$request = $this->requester->recv();
+				sscanf($request, '%s %s', $header, $work);
+				$obj->totalContacts = $mail->totalContacts;
+				$obj->sentContacts = $work;
+			}
+			else if($type === 'Import') {
+				$importdetails = json_decode($value->Status);
+				$obj->task = $importdetails->idImportproccess;
+				$import = Importproccess::findFirstByIdImportproccess($importdetails->idImportproccess);
+				$obj->totalContacts = $import->totalReg;
+				$obj->sentContacts = $import->processLines;
+			}
+			$obj->status = 'Working';
+			$obj->pause = true;
+		}
+		
+		return $obj;
+	}
+
 	public function sendPlayToParent($idMail)
 	{
 		$mail = Mail::findFirstByIdMail($idMail);
@@ -116,7 +132,7 @@ class Communication
 				$mm = Phalcon\DI::getDefault()->get('modelsManager');
 				$mm->executeQuery($phql);
 				if (!$mm) {
-					$log->log("Error updating MxC to Cancel");
+					Phalcon\DI::getDefault()->get('logger')->log("Error updating MxC to Cancel");
 				}
 			}
 		}
@@ -135,5 +151,16 @@ class Communication
 		}
 		
 		return FALSE;
+	}
+	
+	public function sendPausedImportToParent($idImport)
+	{		
+		$import = Importproccess::findFirstByIdImportproccess($idImport);
+
+		if($import->totalReg != $import->processLines) {
+			
+			$this->requester->send(sprintf("%s $idImport", 'Stop-Process'));
+			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+		}
 	}
 }

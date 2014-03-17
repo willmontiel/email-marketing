@@ -34,13 +34,13 @@
 					for(var f=0; f<importdata.length; f++){
 						var stopimport;
 						if (importdata[f].pause){
-							stopimport = '<a href="{{url('process/stopsending')}}/' + importdata[f].task +'"><span class="label label-dark-red">Stop</span></a>'; 
+							stopimport = '<a href="{{url('process/stopimport')}}/' + importdata[f].task +'"><span class="label label-dark-red">Stop</span></a>'; 
 						}
 						else{
 						stopimport = '---';
 						}
 						$("#resultadoimport").append(
-							'<tr><td style="text-align: center;">' + importdata[f].pid + '</td><td style="text-align: center;">' + importdata[f].type + '</td><td style="text-align: center;">' + importdata[f].confirm + '</td><td style="text-align: center;">' + importdata[f].status + '</td><td style="text-align: center;">' + importdata[f].task +'</td><td style="text-align: center;">' + stopimport + '</td></tr>'
+							'<tr><td style="text-align: center;">' + importdata[f].pid + '</td><td style="text-align: center;">' + importdata[f].type + '</td><td style="text-align: center;">' + importdata[f].confirm + '</td><td style="text-align: center;">' + importdata[f].status + '</td><td style="text-align: center;">' + importdata[f].task +'</td><td style="text-align: center;">' + importdata[f].totalContacts + '</td><td style="text-align: center;">' + importdata[f].sentContacts + '</td><td style="text-align: center;">' + stopimport + '</td></tr>'
 						); 
 					}
 				}
@@ -116,6 +116,8 @@
 							<th>Confirm</th>
 							<th>Status</th>
 							<th>Task</th>
+							<th>Total contacts</th>
+							<th>Contacts Imported</th>
 							<th>Actions</th>
 						</tr>
 					</thead>

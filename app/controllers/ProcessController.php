@@ -117,7 +117,7 @@ class ProcessController extends ControllerBase
 	public function getSendingProcesses()
 	{
 		$communication = new Communication();
-		$status = $communication->getStatus();
+		$status = $communication->getStatus('Mail');
 		if ($status !== null) {
 			return $status;
 		}
@@ -127,7 +127,7 @@ class ProcessController extends ControllerBase
 	public function getImportProcesses()
 	{
 		$communication = new Communication(null, SocketConstants::getImportRequestsEndPointPeer());
-		$status = $communication->getStatus();
+		$status = $communication->getStatus('Import');
 		if ($status !== null) {
 			return $status;
 		}
@@ -142,6 +142,17 @@ class ProcessController extends ControllerBase
 		
 		sleep(1);
 		
-		return $this->response->redirect('sendingprocess');
+		return $this->response->redirect('process');
 	}
+	
+	public function stopimport($idTask)
+	{
+		$communication = new Communication(null, SocketConstants::getImportRequestsEndPointPeer());
+		
+		$communication->sendPausedImportToParent($idTask);
+		
+		sleep(1);
+		
+		return $this->response->redirect('process');
+	}	
 }
