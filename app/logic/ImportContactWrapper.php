@@ -473,8 +473,12 @@ class ImportContactWrapper
 
 	protected function incrementProcessAdvance($adv)
 	{
-		$this->process->processLines = $adv;
-		$this->saveProcess();
+		try {
+			$this->db->execute("UPDATE importproccess SET processLines = {$adv} WHERE idImportproccess = {$this->idProccess}");
+		}
+		catch (\Exception $e) {
+			$this->log->log('Error incrementando avance de proceso: [' . $e . ']');
+		}
 	}
 	
 	/**
