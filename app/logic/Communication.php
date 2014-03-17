@@ -3,14 +3,19 @@ class Communication
 {
 	protected $requester;
 	
-	public function __construct($log = null) {
+	public function __construct($log = null, $socket = null) {
 		$context = new ZMQContext();
 
 		$this->requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 		if ($log) {
 			$log->log("Connecting to: [" . SocketConstants::getMailRequestsEndPointPeer() . "]");
 		}
-		$this->requester->connect(SocketConstants::getMailRequestsEndPointPeer());
+		if(!$socket) {
+			$this->requester->connect(SocketConstants::getMailRequestsEndPointPeer());
+		}
+		else {
+			$this->requester->connect($socket);
+		}
 	}
 	
 	public function getStatus()
