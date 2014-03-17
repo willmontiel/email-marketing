@@ -4,12 +4,23 @@
  */
 class ImportContactWrapper
 {
+
+	// Numero de registros que hacen parte del lote
+	// para insercion
+	const BATCH_SIZE = 100;
+
 	protected $idContactlist;
 	protected $newcontact;
 	protected $idProccess;
 	protected $ipaddress;
 	protected $tablename;
+
+	protected $repeated;
+	protected $errors;
+	protected $invalid;
+	protected $emailbuffers;
 	
+
 	/**
 	 *
 	 * @var TimerObject
@@ -37,9 +48,18 @@ class ImportContactWrapper
 		$this->debugMode = false;
 		
 		$this->timer = Phalcon\DI::getDefault()->get('timerObject');
+		$this->log = Phalcon\DI::getDefault()->get('logger');
 
 	}
 
+	protected function resetProcess()
+	{
+		$this->repeated = 0;
+		$this->invalid = 0;
+		$this->errors = array();
+		$this->emailbuffers = array();
+	}
+	
 	public function setIdProccess($idProccess) {
 		$this->idProccess = $idProccess;
 	}
@@ -109,6 +129,8 @@ class ImportContactWrapper
 	 */
 	public function startImport($fields, $destiny, $delimiter, $header) {
 		$mode = $this->account->accountingMode;
+		
+		$this->resetProcess();
 	
 		// Cual es el proposito de esto?
 		// Controlar la importacion de contactos para que no exceda el limite
@@ -238,179 +260,313 @@ class ImportContactWrapper
 	}
 
 	/**
+	 * 
+	 * @param string $fn
+	 * @return int
+	 */
+	protected function countFileRecords($fn)
+	{
+		$output = shell_exec("wc -l '{$fn}'");
+		
+		return intval($output);
+	}
+
+
+	/**
+	 * Verifica correo electronico
+	 * Si es invalido incrementa contador y graba error
+	 * Si ya esta en el archivo, incrementa contador y graba error
+	 * 
+	 * Si alguno de los dos se cumple retorna null, de lo contrario
+	 * retorna el email en minusculas
+	 * 
+	 * @param string $email
+	 * @param int $line
+	 * @return string
+	 */
+	protected function verifyEmailAddress($email, $line)
+	{
+		$email = strtolower($email);
+		if ( \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
+			if (empty($this->emailbuffers) || !in_array($email, $this->emailbuffers)) {
+				array_push($this->emailbuffers, $email);	
+			}
+			else {
+				// Email repetido en el archivo
+				$this->errors[] = \sprintf('Correo [%s] repetido en linea %d', $email, $line);
+				$this->repeated++;
+				$email = null;
+			}
+		}
+		else {
+			$this->errors[] = \sprintf('Correo [%s] invalido en linea %d', $email, $line);
+			$this->invalid++;
+			$email = null;
+		}
+
+		return $email;
+	}
+
+	/**
 	 * Este metodo lee las lineas del archivo CSV y las convierte en contactos
 	 * @param string $destiny
 	 * @param type $header
-	 * @param type $delimiter
+	 * @param string $delimiter
 	 * @param type $posCol
-	 * @param type $activeContacts
-	 * @param type $contactLimit
-	 * @param type $mode
-	 * @param type $idDbase
+	 * @param int $activeContacts
+	 * @param int $contactLimit
+	 * @param string $mode
+	 * @param int $idDbase
 	 * @throws InvalidArgumentException
 	 */
 	protected function createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $idDbase)
 	{	
-		$db = Phalcon\DI::getDefault()->get('db');
 		$idAccount = $this->account->idAccount;
 		$customfields = array();
-		$emails = array();
-		$errors = array();
-		$repeated = 0;
-		$invalid = 0;
-		$limit = 0;
 		$line = 0;
-		$totalLine = 0;
-		$oldActiveContacts = 0;
-		$thisActiveContacts = $activeContacts;
-		$values = "";
+		$recordsinserted = 0;
+		
+		// Cuantas lineas tiene el archivo?
+		$linecount = $this->countFileRecords($destiny);
 		
 		$open = @fopen($destiny, "r");
 		
 		if (!$open) {
-			throw new InvalidArgumentException("Error al abrir el archivo original");
+			throw new \ErrorException("Error al abrir el archivo de origen de importacion");
 		}
 		
+		// Validar que al menos el campo de email este mapeados
+		if (empty($posCol['email']) ) {
+			throw new \InvalidArgumentException('Campo email no esta mapeado en la informacion a importar y es requerido!');
+		}
+		
+		$emailPos = $posCol['email'];
+		$namePos  = (isset($posCol['name']))?$posCol['name']:-1;
+		$lastPos  = (isset($posCol['lastname']))?$posCol['lastname']:-1;
+
+		$lineInFile = 0;
+		// Si hay header, leer la primera linea y no tenerla en cuenta
 		if ($header) {
+			$lineInFile++;
 			$linew = fgetcsv($open, 0, $delimiter);
+			$contacts2insert = $linecount-1;
+		}
+		else {
+			$contacts2insert = $linecount;
 		}
 		
-		while(! feof($open)) {
-			
-			$linew = fgetcsv($open, 0, $delimiter);
-			
-			$email = (!empty($posCol['email']) || $posCol['email'] == '0')?$linew[$posCol['email']]:"";
-			$name = ((!empty($posCol['name']) || $posCol['name'] == '0') && isset($linew[$posCol['name']]))?$linew[$posCol['name']]:"";
-			$lastname = ((!empty($posCol['lastname']) || $posCol['lastname'] == '0') && isset($linew[$posCol['lastname']]))?$linew[$posCol['lastname']]:"";
-			
-			if ( !empty($linew) ) {
-				
-				if ( $thisActiveContacts < $contactLimit ) {
-					$email = strtolower($email);
-					
-					if ( \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
-						
-						if (empty($emails) || !in_array($email, $emails)) {
-							array_push($emails, $email);	
-							
-							if ( $line != 0 ) {
-								$values.=", ";
-							}
-							
-							list($user, $edomain) = preg_split("/@/", $email, 2);
-							
-							$fieldEmail = $db->escapeString($email);
-							$fieldDomain = $db->escapeString($edomain);
-							$fieldName = $db->escapeString($name);
-							$fieldLastname = $db->escapeString($lastname);
-							$lineInFile = ($header)?$totalLine+1:$totalLine;
-							$values.= "($lineInFile, $fieldEmail, find_or_create_email($fieldEmail, $fieldDomain, $idAccount), $fieldName, $fieldLastname)";
-							
-							foreach ($posCol as $key => $value) {
-								
-								if(is_numeric($key) && !empty($linew[$value])){
-									$valuescf = array ($lineInFile, $key, $linew[$value]);
-									array_push($customfields, $valuescf);
-								}
-								
-							} 
-							
-							$line++;
-							
-							if ($mode == "Contacto") {
-								
-								$thisActiveContacts++;
-								
-							}
-						}
-						else {
-							$lineInFile = ($header)?$totalLine+1:$totalLine;
-							array_push($errors, $lineInFile.','.$email.',Correo Repetido en Archivo');
-							$repeated++;
-						}
-					}
-					else {
-						$lineInFile = ($header)?$totalLine+1:$totalLine;
-						array_push($errors, $lineInFile.','.$email.',Correo Invalido');
-						$invalid++;
-					}
-				}
-				else {
-					$lineInFile = ($header)?$totalLine+1:$totalLine;
-					array_push($errors, $lineInFile.','.$email.',Limite de Contactos Excedido');
-					$limit++;
-				}
-				$totalLine++;
-			}
-			
-			if ($line == 50 || feof($open) || ($thisActiveContacts == $contactLimit && $mode == "Contacto")) {
-				if(!empty($values)) {
-					$this->timer->startTimer('sqlrun', 'Inserting a batch of records!');
-
-					$contactsInserted = $this->runSQLs($values, $idAccount, $idDbase);
-					if ($mode == "Contacto") {
-
-						$thisActiveContacts = $activeContacts + $contactsInserted + $oldActiveContacts;
-						$oldActiveContacts += $contactsInserted;
-					}
-					$this->timer->endTimer('sqlrun');
-					$this->timer->startTimer('finstance', 'Creating field instances!');
-
-					$this->createFieldInstances($customfields, $idDbase);
-					
-					$this->timer->endTimer('finstance');
-				}
-				$queryToAdd = "UPDATE importproccess SET processLines = $totalLine WHERE idImportproccess = $this->idProccess";
-				$db->execute($queryToAdd);
-				
-				$line = 0;
-				$values = "";
-				$customfields = array();
-			}
+		/*
+		 * La carga se hace en 3 pasos:
+		 * 1) Se leen e insertan registros de N en N hasta llegar al tope maximo
+		 * 2) Se procesan los registros en la tabla temporal
+		 * 3) Se insertan los registros a la tabla de contactos
+		 * 
+		 * Cual es el tope maximo? Depende del modo de la cuenta, 
+		 *	si el modo es "Contacto" entonces es el numero de contactos disponibles
+		 *  actualmente en la cuenta
+		 *  de lo contrario es el numero de registros que tiene el archivo
+		 * 
+		 */
+		if ($mode == 'Contacto') {
+			// Modo contactos, verificar que es menor, el numero de registros
+			// del archivo, o el numero de contactos que se pueden insertar en
+			// la cuenta
+			$dif = $contactLimit - $activeContacts;
+			$contacts2insert = ($dif < $contacts2insert)?$dif:$contacts2insert;
 		}
 		
+		$recordbuffer = array();
+		
+		// Recorrer todo el archivo
+		// o hasta que se acabe el saldo que tiene el usuario
+		while(!feof($open) && ($recordsinserted < $contacts2insert)) {
+			
+			// Leer linea
+			$linew = fgetcsv($open, 0, $delimiter);
+			// Incrementar contador de linea
+			$lineInFile++;
+			
+			if ( empty($linew) ) {
+				// Linea erronea
+				$this->log->log('Linea vacia!');
+				// Registro invalido
+				$this->invalid++;
+				continue;
+			}
+			
+			// Leer campos primarios
+			$email = $this->verifyEmailAddress($linew[$emailPos], $lineInFile);
+			if (!$email) {
+				// Email invalido o repetido
+				// continuar con el siguiente registro
+				// el metodo adiciona el error e incrementa invalid o repeated
+				continue;
+			}
+			$name = ($namePos>=0)?$linew[$namePos]:'';
+			$lastname = ($lastPos>=0)?$linew[$lastPos]:'';
+
+			// Revisar el saldo
+			if ( $recordsinserted < $contacts2insert ) {
+				// Se puede insertar (todavia hay saldo)
+				list($user, $edomain) = preg_split("/@/", $email, 2);
+				// Escapar los campos para la insercion y evitar asi problemas
+				// que pueden romper la ejecucion
+				$fieldEmail = $this->db->escapeString($email);
+				$fieldDomain = $this->db->escapeString($edomain);
+				$fieldName = $this->db->escapeString($name);
+				$fieldLastname = $this->db->escapeString($lastname);
+				
+				$recordbuffer[] = "({$lineInFile}, {$fieldEmail}, find_or_create_email({$fieldEmail}, {$fieldDomain}, {$idAccount}), {$fieldName}, {$fieldLastname})";
+
+				/*
+				 * Campos personalizados!!!
+				 * Quedan temporalmente des-habilitados
+				foreach ($posCol as $key => $value) {
+
+					if(is_numeric($key) && !empty($linew[$value])){
+						$valuescf = array ($lineInFile, $key, $linew[$value]);
+						array_push($customfields, $valuescf);
+					}
+
+				} 
+				 * 
+				 */
+			}
+			// Incrementar contador de registros insertados
+			$recordsinserted++;
+			
+			// Cuando se llegue al numero de lineas por lote
+			// Grabar en la tabla, limpiar el buffer y continuar
+			if (count($recordbuffer) > self::BATCH_SIZE) {
+				$this->saveRecordBuffer($recordbuffer);
+				$recordbuffer = array();
+
+				// Informar avance
+				$this->incrementProcessAdvance($recordsinserted);
+			}
+		}
+		// Cerrar archivo
 		fclose($open);
-		$this->runReports($errors, $repeated, $invalid, $limit);
+
+		// Verificar que no hayan registros en el buffer
+		if (count($recordbuffer) > 0) {
+			$this->saveRecordBuffer($recordbuffer);
+			$recordbuffer = array();
+
+			// Informar avance
+			$this->incrementProcessAdvance($recordsinserted);
+		}
+		
+		// Segundo y tercer paso:
+		// Procesar los registros insertados
+		// Esto marca los emails bloqueados
+		// tambien marca los que ya existen, etc.
+		// Insertar los contactos a partir de los registros insertados
+		// que son validos
+		$this->cleanInsertedRecords($idAccount, $idDbase);
+		
+		// Correr los reportes...
+		// El parametro que se pasa es el numero de registros del archivo
+		// que no se procesaron
+		$this->runReports($linecount - $lineInFile + 1);
+	}
+
+	protected function incrementProcessAdvance($adv)
+	{
+		$this->process->processLines = $adv;
+		$this->saveProcess();
 	}
 	
-	protected function runSQLs($values, $idAccount, $idDbase)
+	/**
+	 * Graba un buffer de registros
+	 * @param array $buffer
+	 */
+	protected function saveRecordBuffer($buffer)
 	{
-		$db = Phalcon\DI::getDefault()->get('db');
-		$hora = time();
-		
-		$tabletmp = "INSERT INTO $this->tablename (idArray, email, idEmail, name, lastName) VALUES $values;";
-		$findidemailblocked = "UPDATE $this->tablename t JOIN email e ON (t.idEmail = e.idEmail) SET t.blocked = 1 WHERE t.idEmail IS NOT NULL AND e.blocked > 0 AND e.idAccount = $idAccount;";
-		$findidcontactinDB = "UPDATE $this->tablename t JOIN contact c ON (t.idEmail = c.idEmail) SET t.idContact = c.idContact, t.dbase = 1 WHERE t.idEmail IS NOT NULL AND c.idDbase = $idDbase;";
-		$findidcontact = "UPDATE $this->tablename t JOIN contact c ON (t.idEmail = c.idEmail) SET t.idContact = c.idContact WHERE t.idEmail IS NOT NULL AND c.idDbase = $idDbase;";
-		$findcoxcl = "UPDATE $this->tablename t JOIN coxcl x ON (t.idContact = x.idContact) SET t.coxcl = 1 WHERE t.idContact IS NOT NULL AND x.idContactlist = $this->idContactlist;";
-		$countemailsavailables = "SELECT COUNT(*) AS cnt FROM $this->tablename WHERE idContact IS NULL AND blocked IS NULL";
-		$createcontacts = "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, bounced, spam, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) SELECT $idDbase, t.idEmail, t.name, t.lastName, $hora, 0, 0, 0, $this->ipaddress, $this->ipaddress, $hora, $hora, $hora FROM $this->tablename t WHERE t.idContact IS NULL AND t.blocked IS NULL;";
-		$createcoxcl = "INSERT INTO coxcl (idContactlist, idContact, createdon) SELECT $this->idContactlist, t.idContact, $hora FROM $this->tablename t WHERE t.coxcl IS NULL AND t.blocked IS NULL";
-		$status = "UPDATE $this->tablename SET status = 1 WHERE coxcl IS NULL AND blocked IS NULL;";
-		$newcontact = "UPDATE $this->tablename SET new = 1 WHERE idContact IS NULL AND blocked IS NULL";
-		
-		$db->begin();
-		
-		$db->execute($tabletmp);
-		
-		$db->execute($findidemailblocked);
-		
-		$db->execute($findidcontactinDB);
-		$db->execute($createcontacts);
-		$db->execute($newcontact);
-		
-		$contactsToCreate = $db->fetchAll($countemailsavailables);
-		
-		$db->execute($findidcontact);
-		
-		$db->execute($findcoxcl);
-		$db->execute($createcoxcl);
-		$db->execute($status);
-		
-		$db->commit();
-		
-		return $contactsToCreate[0]['cnt'];
+		$values = implode(',', $buffer);
+		$tabletmp = "INSERT INTO $this->tablename (idArray, email, idEmail, name, lastName) VALUES {$values}";
+		$this->db->execute($tabletmp);
 	}
+	
+	/**
+	 * Limpia los registros insertados y los marca
+	 * 
+	 * @param int $idAccount
+	 * @param int $idDbase
+	 */
+	protected function cleanInsertedRecords($idAccount, $idDbase)
+	{
+		$hora = time();
+		// Marcar emails bloqueados en la tabla temporal (para no importar contactos nuevos)
+		$findidemailblocked = "UPDATE {$this->tablename} t "
+							. "   JOIN email e ON (t.idEmail = e.idEmail) "
+							. "SET t.blocked = 1 "
+							. "WHERE t.idEmail IS NOT NULL "
+							. "   AND e.blocked > 0 "
+							. "   AND e.idAccount = {$idAccount}";
+
+		// Marcar ID de contacto en la tabla temporal para contactos que ya 
+		// estan en la base de datos (primera vuelta)
+		$findidcontactinDB =  "UPDATE {$this->tablename} t "
+							. "   JOIN contact c ON (t.idEmail = c.idEmail) "
+							. "SET t.idContact = c.idContact, "
+							. "   t.dbase = 1 "
+							. "WHERE t.idEmail IS NOT NULL "
+							. "   AND c.idDbase = {$idDbase}";
+		// Insertar contactos nuevos (ID nulo y no bloqueados)
+		$createcontacts    =  "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, bounced, spam, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) "
+							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, {$hora}, 0, 0, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
+							. "    FROM {$this->tablename} t "
+							. "    WHERE t.idContact IS NULL "
+							. "        AND t.blocked IS NULL;";
+		// Marcar los registros que se insertaron como nuevos contactos
+		// idcontact es nulo y no estan bloqueados
+		$newcontact		   =  "UPDATE $this->tablename "
+							. "SET new = 1 "
+							. "WHERE idContact IS NULL "
+							. "    AND blocked IS NULL";
+		// Marcar ID de contacto en la tabla temporal para contactos que ya
+		// estan en la base de datos (segunda vuelta)
+		$findidcontact     =  "UPDATE {$this->tablename} t "
+							. "   JOIN contact c ON (t.idEmail = c.idEmail) "
+							. "SET t.idContact = c.idContact "
+							. "WHERE t.idEmail IS NOT NULL "
+							. "    AND c.idDbase = {$idDbase}";
+		// Marcar en la tabla temporal los que ya estan en la lista de contactos
+		$findcoxcl        =   "UPDATE {$this->tablename} t "
+							. "    JOIN coxcl x ON (t.idContact = x.idContact) "
+							. "SET t.coxcl = 1 "
+							. "WHERE t.idContact IS NOT NULL "
+							. "    AND x.idContactlist = {$this->idContactlist}";
+		// Insertar los contactos de la tabla temporal que aun no estan en la
+		// lista
+		$createcoxcl	   =  "INSERT INTO coxcl (idContactlist, idContact, createdon) "
+							. "    SELECT {$this->idContactlist}, t.idContact, {$hora} "
+							. "    FROM {$this->tablename} t "
+							. "    WHERE t.coxcl IS NULL "
+							. "        AND t.blocked IS NULL";
+		// Marcar los registros que se adicionaran a la lista
+		// coxcl es nulo (no estan en la lista) y no estan bloqueados
+		$status			   =  "UPDATE $this->tablename "
+							. "SET status = 1 "
+							. "WHERE coxcl IS NULL "
+							. "    AND blocked IS NULL;";
+		
+//		$this->db->begin();
+		
+		$this->db->execute($findidemailblocked);
+		$this->db->execute($findidcontactinDB);
+		$this->db->execute($createcontacts);
+		$this->db->execute($newcontact);
+		$this->db->execute($findidcontact);
+		$this->db->execute($findcoxcl);
+		$this->db->execute($createcoxcl);
+		$this->db->execute($status);
+		
+//		$this->db->commit();
+		
+	}
+
 	
 	protected function createFieldInstances ($customfields, $idDbase) 
 	{
@@ -470,8 +626,7 @@ class ImportContactWrapper
 		}
 	}
 
-	protected function runReports($errors, $repeated, $invalid, $limit) {
-		$db = Phalcon\DI::getDefault()->get('db');
+	protected function runReports($limit) {
 		$exist = 0;
 		$bloqued = 0;
 		$uniquecode = uniqid();
@@ -506,10 +661,10 @@ class ImportContactWrapper
 
 			$db->execute($queryForErrors);							
 
-			if(!empty($errors)) {
+			if(!empty($this->errors)) {
 				$fp = fopen($filesPath . $nameNimported, 'a');
 
-				foreach ($errors as $error) {
+				foreach ($this->errors as $error) {
 					$tmp = explode(",", $error);
 					fputcsv($fp, $tmp);
 				}
@@ -546,7 +701,7 @@ class ImportContactWrapper
 		$bloqued = $bloquedCount[0]['bloqueados'];
 		$exist = $existCount[0]['existentes'];
 		
-		$queryInfo = "UPDATE importproccess SET exist = $exist, invalid = $invalid, bloqued = $bloqued, limitcontact = $limit, repeated = $repeated WHERE idImportproccess = $this->idProccess";
+		$queryInfo = "UPDATE importproccess SET exist = $exist, invalid = {$this->invalid}, bloqued = $bloqued, limitcontact = $limit, repeated = $this->repeated WHERE idImportproccess = $this->idProccess";
 		$db->execute($queryInfo);
 		
 		$proccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
