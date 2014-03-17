@@ -336,7 +336,7 @@ class ImportContactWrapper
 		}
 		
 		// Validar que al menos el campo de email este mapeados
-		if (empty($posCol['email']) ) {
+		if (!isset($posCol['email']) ) {
 			throw new \InvalidArgumentException('Campo email no esta mapeado en la informacion a importar y es requerido!');
 		}
 		
