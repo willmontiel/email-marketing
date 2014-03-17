@@ -179,7 +179,7 @@ class ImportContactWrapper
 	protected function createTemporaryTableName()
 	{
 		if (!$this->tablename) {
-			$this->tablename = "import_tmp_{$this->proccess->idImportproccess}";
+			$this->tablename = "import_tmp_{$this->process->idImportproccess}";
 		}
 	}
 	/**
@@ -341,10 +341,12 @@ class ImportContactWrapper
 						$thisActiveContacts = $activeContacts + $contactsInserted + $oldActiveContacts;
 						$oldActiveContacts += $contactsInserted;
 					}
+					$this->timer->endTimer('sqlrun');
+					$this->timer->startTimer('finstance', 'Creating field instances!');
 
 					$this->createFieldInstances($customfields, $idDbase);
 					
-					$this->timer->endTimer('sqlrun');
+					$this->timer->endTimer('finstance');
 				}
 				$queryToAdd = "UPDATE importproccess SET processLines = $totalLine WHERE idImportproccess = $this->idProccess";
 				$db->execute($queryToAdd);
