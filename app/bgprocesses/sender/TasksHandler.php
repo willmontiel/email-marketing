@@ -50,15 +50,15 @@ class TasksHandler extends Handler
 		}
 	}
 	
-	public function sendTask($task, ChildHandler $process)
+	public function sendTask(Event $event, ChildHandler $process)
 	{
-		$send = sprintf("%d Processing-Task %s", $process->getPid(), $task);
+		$send = sprintf("%d Processing-Task %s", $process->getPid(), $event->data);
 		
 		$this->publisher->send($send);
 		
 		$process->setAvailable(FALSE);
 		
-		$this->pool->processGotTask($process, $task);
+		$this->pool->processGotTask($process, $event);
 	}
 	
 	public function taskScheduling()
@@ -74,16 +74,16 @@ class TasksHandler extends Handler
 	{
 		foreach ($this->scheduledTasks as $task) {
 			if($task->scheduleDate <= time()) {
-				$this->saveReadyTask($task->idMail);
+				$this->saveReadyTask(new Event('Play-Task', $task->idMail, NULL, $task->idMail));
 				$task->delete();
 			}
 		}
 		$this->SendReadyTasks();
 	}
 	
-	public function saveReadyTask($task)
+	public function saveReadyTask(Event $event)
 	{
-		$this->readyTasks[] = $task;
+		$this->readyTasks[] = $event;
 	}
 	
 	public function sendCommandToProcess($command, $pid)
@@ -103,10 +103,10 @@ class TasksHandler extends Handler
 		}
 	}
 	
-	public function removeSaveTask($task)
+	public function removeSaveTask(Event $event)
 	{
 		foreach ($this->readyTasks as $k => $t) {
-			if($t == $task) {
+			if($t->code === $event->code) {
 				unset($this->readyTasks[$k]);
 			}
 		}

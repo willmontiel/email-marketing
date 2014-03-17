@@ -123,9 +123,9 @@ class PoolHandler extends Handler
 		return NULL;
 	}
 	
-	public function processGotTask(ChildHandler $process, $task)
+	public function processGotTask(ChildHandler $process, Event $event)
 	{
-		$this->engagedProcesses[$process->getPid()] = $task;
+		$this->engagedProcesses[$process->getPid()] = $event;
 	}
 	
 	public function processAvailable(ChildHandler $process)
@@ -133,11 +133,11 @@ class PoolHandler extends Handler
 		unset($this->engagedProcesses[$process->getPid()]);
 	}
 	
-	public function findPidFromTask($task)
+	public function findPidFromTask(Event $event)
 	{
 		if(count($this->engagedProcesses) > 0) {
 			foreach ($this->engagedProcesses as $pid => $content){
-				if($content == $task) {
+				if($content->code == $event->code) {
 					return $pid;
 				}
 			}
@@ -211,17 +211,17 @@ class PoolHandler extends Handler
 		}
 	}
 	
-	public function checkingChildWork($childPID)
+	public function checkingChildWork(Event $event)
 	{
 		foreach ($this->children as $child) {
-			if($child->getPid() == $childPID) {
+			if($child->getPid() == $event->data) {
 				$child->askHowsMyWork();
 			}
 		}
 		
 		if(count($this->tmpChildren) > 0) {
 			foreach ($this->tmpChildren as $tmpchild) {
-				if($tmpchild->getPid() == $childPID) {
+				if($tmpchild->getPid() == $event->data) {
 					$tmpchild->askHowsMyWork();
 				}
 			}
@@ -260,8 +260,8 @@ class PoolHandler extends Handler
 		
 		if(count($this->engagedProcesses) > 0) {			
 			
-			foreach ($this->engagedProcesses as $process => $data) {
-				$Engstatus.= 'Process ' . $process . ' working data: ' . $data . PHP_EOL;
+			foreach ($this->engagedProcesses as $process => $event) {
+				$Engstatus.= 'Process ' . $process . ' working data: ' . $event->data . PHP_EOL;
 			}
 		}
 		
@@ -300,8 +300,8 @@ class PoolHandler extends Handler
 		
 		if(count($this->engagedProcesses) > 0) {			
 			
-			foreach ($this->engagedProcesses as $process => $data) {
-				$status[$process]['Status'] = $data;
+			foreach ($this->engagedProcesses as $process => $event) {
+				$status[$process]['Status'] = $event->data;
 			}
 		}
 		

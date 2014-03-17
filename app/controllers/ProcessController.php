@@ -145,7 +145,7 @@ class ProcessController extends ControllerBase
 		return $this->response->redirect('process');
 	}
 	
-	public function stopimport($idTask)
+	public function stopimportAction($idTask)
 	{
 		$communication = new Communication(null, SocketConstants::getImportRequestsEndPointPeer());
 		

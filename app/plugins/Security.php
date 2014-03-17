@@ -256,6 +256,7 @@ class Security extends Plugin
 				'process::getprocesses' => array('mail' => array('read', 'create', 'send')),
 				'process::stopsending' => array('mail' => array('read', 'create', 'send')),
 				'process::import' => array('process' => array('read')),
+				'process::stopimport' => array('process' => array('read')),
 				'process::refresh' => array('process' => array('read')),
 				'process::downoladsuccess' => array('process' => array('download')),
 				'process::downoladerror' => array('process' => array('download')),

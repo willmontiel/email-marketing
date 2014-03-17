@@ -328,7 +328,7 @@ class ContactsController extends ControllerBase
 			$context = new ZMQContext();
 			$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 			$requester->connect(SocketConstants::getImportRequestsEndPointPeer());
-			$requester->send(sprintf("%s $toSend", 'Play-Task'));
+			$requester->send(sprintf("%s $toSend $newproccess->idImportproccess", 'Play-Task'));
 			$response = $requester->recv(ZMQ::MODE_NOBLOCK);
 		}
 		catch (\InvalidArgumentException $e) {
