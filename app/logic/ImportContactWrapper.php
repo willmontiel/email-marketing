@@ -570,15 +570,14 @@ class ImportContactWrapper
 	
 	protected function createFieldInstances ($customfields, $idDbase) 
 	{
-		$db = Phalcon\DI::getDefault()->get('db');
 		$values = "";
 		$line = 0;
 		
 		$DateCF = "SELECT idCustomField FROM customfield WHERE type = 'DATE' AND idDbase = $idDbase;";
 		$idcontactsfromtmp = "SELECT t.idArray, t.idContact FROM $this->tablename t WHERE t.idContact IS NOT NULL AND t.new IS NOT NULL;";
 		
-		$idscontactwithcf = $db->fetchAll($idcontactsfromtmp);
-		$idsDateCF = $db->fetchAll($DateCF);
+		$idscontactwithcf = $this->db->fetchAll($idcontactsfromtmp);
+		$idsDateCF = $this->db->fetchAll($DateCF);
 		
 		foreach ($idscontactwithcf as $ids){
 	
@@ -604,7 +603,7 @@ class ImportContactWrapper
 					}
 					
 					if (!$done) {
-						$value = $db->escapeString($cf[2]);
+						$value = $this->db->escapeString($cf[2]);
 						$values.= "($cf[1], $idtoContact, $value, NULL)";
 					}
 					
@@ -613,7 +612,7 @@ class ImportContactWrapper
 				
 				if ((!empty($values)) && $line == 100) {
 					$createFieldinstances = "INSERT INTO fieldinstance (idCustomField, idContact, textValue, numberValue) VALUES ".$values.";";
-					$db->execute($createFieldinstances);
+					$this->db->execute($createFieldinstances);
 					$line = 0;
 					$values = "";
 				}
@@ -622,7 +621,7 @@ class ImportContactWrapper
 		
 		if(!empty($values) && $line != 0){
 			$createFieldinstances = "INSERT INTO fieldinstance (idCustomField, idContact, textValue, numberValue) VALUES ".$values.";";
-			$db->execute($createFieldinstances);
+			$this->db->execute($createFieldinstances);
 		}
 	}
 
@@ -659,7 +658,7 @@ class ImportContactWrapper
 								ENCLOSED BY '\"'
 								LINES TERMINATED BY '\n'";
 
-			$db->execute($queryForErrors);							
+			$this->db->execute($queryForErrors);							
 
 			if(!empty($this->errors)) {
 				$fp = fopen($filesPath . $nameNimported, 'a');
@@ -690,19 +689,19 @@ class ImportContactWrapper
 								ENCLOSED BY '\"'
 								LINES TERMINATED BY '\n'";
 
-			$db->execute($queryForSuccess);
+			$this->db->execute($queryForSuccess);
 		}
 		$queryBloqued = "SELECT COUNT(*) AS 'bloqueados' FROM {$this->tablename} WHERE blocked = 1 AND status IS NULL";
 		$queryExist = "SELECT COUNT(*)	AS 'existentes' FROM {$this->tablename} WHERE status IS NULL AND coxcl = 1 AND blocked IS NULL";
 		
-		$bloquedCount = $db->fetchAll($queryBloqued);
-		$existCount = $db->fetchAll($queryExist);
+		$bloquedCount = $this->db->fetchAll($queryBloqued);
+		$existCount = $this->db->fetchAll($queryExist);
 		
 		$bloqued = $bloquedCount[0]['bloqueados'];
 		$exist = $existCount[0]['existentes'];
 		
 		$queryInfo = "UPDATE importproccess SET exist = $exist, invalid = {$this->invalid}, bloqued = $bloqued, limitcontact = $limit, repeated = $this->repeated WHERE idImportproccess = $this->idProccess";
-		$db->execute($queryInfo);
+		$this->db->execute($queryInfo);
 		
 		$proccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
 		
