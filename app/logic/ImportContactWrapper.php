@@ -333,7 +333,8 @@ class ImportContactWrapper
 			
 			if ($line == 50 || feof($open) || ($thisActiveContacts == $contactLimit && $mode == "Contacto")) {
 				if(!empty($values)) {
-					
+					$this->timer->startTimer('sqlrun', 'Inserting a batch of records!');
+
 					$contactsInserted = $this->runSQLs($values, $idAccount, $idDbase);
 					if ($mode == "Contacto") {
 
@@ -342,6 +343,8 @@ class ImportContactWrapper
 					}
 
 					$this->createFieldInstances($customfields, $idDbase);
+					
+					$this->timer->endTimer('sqlrun');
 				}
 				$queryToAdd = "UPDATE importproccess SET processLines = $totalLine WHERE idImportproccess = $this->idProccess";
 				$db->execute($queryToAdd);
