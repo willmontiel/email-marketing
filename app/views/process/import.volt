@@ -5,7 +5,7 @@
 		var status = '{{res['status']}}';
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		function loadNow () {   
-			$.getJSON(MyBaseURL + 'proccess/refresh/{{ res['idProcces'] }}', function(data){
+			$.getJSON(MyBaseURL + 'process/refresh/{{ res['idProcces'] }}', function(data){
 				$('#progress-bar').empty();
 				$('#status-progress').empty();
 				$('#status-title').empty();
