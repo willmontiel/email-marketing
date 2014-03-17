@@ -9,6 +9,12 @@ class ImportContactWrapper
 	protected $idProccess;
 	protected $ipaddress;
 	protected $tablename;
+	
+	/**
+	 *
+	 * @var TimerObject
+	 */
+	protected $timer;
 
 	protected $temporaryMode;
 	protected $debugMode;
@@ -29,6 +35,9 @@ class ImportContactWrapper
 		// Por defecto el modo debug esta apagado
 		$this->temporaryMode = true;
 		$this->debugMode = false;
+		
+		$this->timer = Phalcon\DI::getDefault()->get('timerObject');
+
 	}
 
 	public function setIdProccess($idProccess) {
@@ -104,6 +113,7 @@ class ImportContactWrapper
 		// Cual es el proposito de esto?
 		// Controlar la importacion de contactos para que no exceda el limite
 		// ?
+		$this->timer->startTimer('phase1', 'Prepare to import!');
 		if ($mode == "Contacto") {
 			$contactLimit = $this->account->contactLimit;
 			$activeContacts = $this->account->countActiveContactsInAccount();
@@ -123,7 +133,7 @@ class ImportContactWrapper
 		
 		// Cargar el proceso de importacion
 		$this->loadProcess();
-		
+
 		// Validar que se haya mapeado el campo de correo electronico (requerido)
 		if(empty($posCol['email']) && $posCol['email'] != '0') {
 			$this->updateProcessStatus('Importacion no realizada');
@@ -135,19 +145,31 @@ class ImportContactWrapper
 		$this->updateProcessStatus('En Ejecucion');
 		$this->saveProcess();
 		
+		$this->timer->endTimer('phase1');
+
+		$this->timer->startTimer('phase2', 'Create values to import!');
+		
 		$this->createTemporaryTable();
 		
 		$this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
 
+		$this->timer->endTimer('phase2');
+
+		$this->timer->startTimer('phase3', 'Update Dbase counters!');
 		$dbase->updateCountersInDbase();
+		$this->timer->endTimer('phase3');
+		$this->timer->startTimer('phase4', 'Update contact lists counters!');
 		$list->updateCountersInContactlist();
+		$this->timer->endTimer('phase4');
 		
 		$this->destroyTemporaryTable();
 		
 		$swrapper = new SegmentWrapper;
 		
 		// Recrear los segmentos de esta base de datos para tener en cuenta los nuevos contactos importados
+		$this->timer->startTimer('phase5', 'Recreate segments!');
 		$swrapper->recreateSegmentsInDbase($dbase->idDbase);		
+		$this->timer->endTimer('phase5');
 	}
 	
 	
@@ -251,7 +273,7 @@ class ImportContactWrapper
 			
 			if ( !empty($linew) ) {
 				
-				if ( ($thisActiveContacts < $contactLimit) ) {
+				if ( $thisActiveContacts < $contactLimit ) {
 					$email = strtolower($email);
 					
 					if ( \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
