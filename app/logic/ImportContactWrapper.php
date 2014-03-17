@@ -237,6 +237,18 @@ class ImportContactWrapper
 
 	}
 
+	/**
+	 * Este metodo lee las lineas del archivo CSV y las convierte en contactos
+	 * @param string $destiny
+	 * @param type $header
+	 * @param type $delimiter
+	 * @param type $posCol
+	 * @param type $activeContacts
+	 * @param type $contactLimit
+	 * @param type $mode
+	 * @param type $idDbase
+	 * @throws InvalidArgumentException
+	 */
 	protected function createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $idDbase)
 	{	
 		$db = Phalcon\DI::getDefault()->get('db');
