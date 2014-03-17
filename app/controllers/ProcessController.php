@@ -1,13 +1,21 @@
 <?php
 
-class ProccessController extends ControllerBase
+class ProcessController extends ControllerBase
 {
     public function indexAction()
     {
        
     }
 	
-	public function showAction($idImportproccess)
+	public function getprocessesAction()
+    {
+		$status = array();
+		$status['mail'] = $this->getSendingProcesses();
+		$status['import'] = $this->getImportProcesses();
+		return $this->setJsonResponse($status);
+    }
+	
+	public function importAction($idImportproccess)
 	{
 		$newproccess = Importproccess::findFirstByIdImportproccess($idImportproccess);
 		$inputFile = Importfile::findFirstByIdImportfile($newproccess->inputFile);
@@ -105,4 +113,46 @@ class ProccessController extends ControllerBase
 		echo "Contactos No Importados".PHP_EOL;
 		readfile("../tmp/ifiles/".$errorProccess->internalName);
 	}
+	
+	public function getSendingProcesses()
+	{
+		$communication = new Communication();
+		$status = $communication->getStatus('Mail');
+		if ($status !== null) {
+			return $status;
+		}
+		return null; 
+	}
+	
+	public function getImportProcesses()
+	{
+		$communication = new Communication(null, SocketConstants::getImportRequestsEndPointPeer());
+		$status = $communication->getStatus('Import');
+		if ($status !== null) {
+			return $status;
+		}
+		return null; 
+	}
+	
+	public function stopsendingAction($idTask)
+	{
+		$communication = new Communication();
+		
+		$communication->sendPausedToParent($idTask);
+		
+		sleep(1);
+		
+		return $this->response->redirect('process');
+	}
+	
+	public function stopimport($idTask)
+	{
+		$communication = new Communication(null, SocketConstants::getImportRequestsEndPointPeer());
+		
+		$communication->sendPausedImportToParent($idTask);
+		
+		sleep(1);
+		
+		return $this->response->redirect('process');
+	}	
 }

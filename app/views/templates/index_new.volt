@@ -101,7 +101,7 @@
 									<ul class="dropdown-menu">
 										<li><a href="{{ url('account') }}">Cuentas</a></li>
 										<li><a href="{{ url('user') }}">Usuarios</a></li>
-										<li><a href="{{ url('sendingprocess') }}">Procesos de envío</a></li>
+										<li><a href="{{ url('process') }}">Procesos</a></li>
 										<li><a href="{{ url('scheduledmail/manage') }}">Programación de correos</a></li>
 										<li><a href="{{ url('flashmessage/index') }}">Mensajes administrativos</a></li>
 										<li><a href="{{ url('socialmedia/index') }}">Cuentas de Redes Sociales</a></li>

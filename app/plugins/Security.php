@@ -134,11 +134,6 @@ class Security extends Plugin
 				'contacts::importbatch' => array('contact' => array('read', 'importbatch')),
 				'contacts::import' => array('contact' => array('read','importbatch')),
 				'contacts::processfile' => array('contact' => array('read','importbatch')),
-				//Página de procesos
-				'proccess::show' => array('process' => array('read')),
-				'proccess::refresh' => array('process' => array('read')),
-				'proccess::downoladsuccess' => array('process' => array('download')),
-				'proccess::downoladerror' => array('process' => array('download')),
 				//Dbase controller
 				'dbase::index' => array('dbase' => array('read')),
 				'dbase::new' => array('dbase' => array('read','create')),
@@ -256,10 +251,14 @@ class Security extends Plugin
 				'mail::previewindex' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewhtml' => array('mail' => array('read', 'create')),
 				
-				//Sending processes
-				'sendingprocess::index' => array('mail' => array('read', 'create', 'send')),
-				'sendingprocess::getprocessesinfo' => array('mail' => array('read', 'create', 'send')),
-				'sendingprocess::stop' => array('mail' => array('read', 'create', 'send')),
+				//Processes
+				'process::index' => array('mail' => array('read', 'create', 'send')),
+				'process::getprocesses' => array('mail' => array('read', 'create', 'send')),
+				'process::stopsending' => array('mail' => array('read', 'create', 'send')),
+				'process::import' => array('process' => array('read')),
+				'process::refresh' => array('process' => array('read')),
+				'process::downoladsuccess' => array('process' => array('download')),
+				'process::downoladerror' => array('process' => array('download')),
 				
 				//Programming mail
 				'scheduledmail::index' => array('mail' => array('read', 'create', 'send')),
