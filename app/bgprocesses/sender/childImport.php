@@ -75,6 +75,9 @@ class ChildImport
 							$wrapper->setIpaddress($ipaddress);
 							$wrapper->startImport($fields, $destiny, $delimiter, $header);
 							
+							
+							Phalcon\DI::getDefault()->get('logger')->log(Phalcon\DI::getDefault()->get('timerObject'));
+							
 							printf('PID ' . $pid . ' Acabo' . PHP_EOL);
 							
 							$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
