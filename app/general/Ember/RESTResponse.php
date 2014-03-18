@@ -4,7 +4,7 @@ namespace EmailMarketing\General\Ember;
 
 use EmailMarketing\General\ModelAccess\DataSource;
 
-class RecordSet 
+class RESTResponse 
 {
 	protected $sources;
 	protected $code;
@@ -16,7 +16,7 @@ class RecordSet
 		$this->primary = null;
 	}
 
-	public function addDataSource(DataSource $dataSource, $primary = false)
+	public function addDataSource(DataSource $dataSource, $primary = true)
 	{
 		$this->sources[] = $dataSource;
 		if ($primary) {

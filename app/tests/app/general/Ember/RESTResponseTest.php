@@ -1,8 +1,8 @@
 <?php
 
-require_once '../../../../general/Ember/RecordSet.php';
+require_once '../../../../general/Ember/RESTResponse.php';
 
-class RecordSetTest extends PHPUnit_Framework_TestCase {
+class RESTResponseTest extends PHPUnit_Framework_TestCase {
 
 	protected $object;
 
@@ -230,11 +230,14 @@ class RecordSetTest extends PHPUnit_Framework_TestCase {
 		return $datasourceMockup;
 	}
 	
+	/*
+	 * Probar la estructura de datos devuelta por el RecorSet con un DataSource
+	 */
 	public function testStructureDataForOneDataSource() {
 		
 		$dataSource = $this->getMockUpDataSource('contacts', $this->getSourceData(), 1, 1, 1);
 		
-		$object = new \EmailMarketing\General\Ember\RecordSet();
+		$object = new \EmailMarketing\General\Ember\RESTResponse();
 		
 		$dss = array($dataSource);
 		
@@ -245,31 +248,36 @@ class RecordSetTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($object->getRecords(), $this->getDataOutPut(), 'Datos de contactos');
 	}
 
+	/*
+	 * Probar la estructura de datos devuelta por el RecorSet con varios DataSources
+	 */
 	public function testStructureDataForMultiplesDataSource() {
 		
 		$dataSource1 = $this->getMockUpDataSource('contacts', $this->getSourceDataForContacts(), 1, 2, 6);
 		$dataSource2 = $this->getMockUpDataSource('dbases', $this->getSourceDataForDbases(), 1, 2, 1);
 		$dataSource3 = $this->getMockUpDataSource('lists', $this->getSourceDataForLists(), 1, 1, 3);
 		
-		$object = new \EmailMarketing\General\Ember\RecordSet();
+		$object = new \EmailMarketing\General\Ember\RESTResponse();
 		
 		$dss = array($dataSource1, $dataSource2, $dataSource3);
-		$count = count($dss);
 		
-		for ($i = 0; $i < $count; $i ++) {
-			$t = false;
-			if ($i == ($count - 1)) {
-				echo 'Es el ultimo' . PHP_EOL;
-				$t = true;
-			}
-			else {
-				echo 'No es el ultimo' . PHP_EOL;
-			}
-			$object->addDataSource($dss[$i], $t);
-		}
-//		foreach ($dss as $ds) {
-//			$object->addDataSource($ds);
+//		$count = count($dss);
+//		for ($i = 0; $i < $count; $i ++) {
+//			$last = false;
+//			if ($i == ($count - 1)) {
+//				echo 'Es el ultimo' . $last . PHP_EOL;
+//				$object->addDataSource($dss[$i], true);
+//			}
+//			else {
+//				echo 'No es el ultimo' . $last . PHP_EOL;
+//				$object->addDataSource($dss[$i], false);
+//			}
+//			
 //		}
+		
+		foreach ($dss as $ds) {
+			$object->addDataSource($ds);
+		}
 
 		$this->assertEquals($object->getRecords(), $this->getDataOutPutForMultiplesDataSources(), 'Datos de contactos');
 	}
