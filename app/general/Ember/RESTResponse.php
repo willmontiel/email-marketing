@@ -40,8 +40,6 @@ class RESTResponse
 		));
 		
 		$contacts['meta'] = $pagination;
-		
-		echo print_r($contacts);
 		return $contacts;
 	}
 }

@@ -10,12 +10,15 @@ class ContactSearchCriteria
 	public $emails = array();
 	public $domains = array();
 	public $freeText = array();
+	public $criteria;
 	
 	public function __construct($text) 
 	{
 		if (trim($text) === '') {
 			throw new \InvalidArgumentException('Search criteria empty!!');
 		}
+		
+		$this->criteria = $text;
 		
 		$criterias = explode(' ', $text);
 		
@@ -89,5 +92,14 @@ class ContactSearchCriteria
 	public function getFreeText()
 	{
 		return $this->freeText;
+	}
+	
+	/**
+	 * Returns the original criteria
+	 * @return string
+	 */
+	public function getCriteria()
+	{
+		return $this->criteria;
 	}
 }
