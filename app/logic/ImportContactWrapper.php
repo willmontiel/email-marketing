@@ -377,7 +377,7 @@ class ImportContactWrapper
 		// Numero de lineas que tiene ahora el archivo final
 		// Esto elimina duplicados, invalidos, etc
 		$flines = $this->countFileRecords($tmpFilename);
-		$this->log("Temporary file rows: {$flines}");
+		$this->log->log("Temporary file rows: {$flines}");
 		
 		$this->timer->startTimer('load-rows', 'Load rows from temporary file into database!');
 		// Crear sentencia SQL que hace la importacion de los registros desde el
