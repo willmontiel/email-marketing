@@ -20,6 +20,11 @@ class ImportContactWrapper
 	protected $invalid;
 	protected $emailbuffers;
 	
+	/**
+	 *
+	 * @var Account
+	 */
+	protected $account;
 
 	/**
 	 *
@@ -39,6 +44,8 @@ class ImportContactWrapper
 	 * @var Importprocess
 	 */
 	protected $process;
+	
+	protected $log;
 
 	public function __construct()
 	{
@@ -173,8 +180,15 @@ class ImportContactWrapper
 		
 		$this->createTemporaryTable();
 		
-		$this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
+		// Creacion de contactos insertando registros desde PHP
+		// utilizando INSERT INTO, con bloques de correos
+		// Muy lento
+		//$this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
 
+		// Creacion de contactos utilizando LOAD DATA INFILE
+		// Preprocesando el archivo CSV
+		$this->importDataFromCSV($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase);
+				
 		$this->timer->endTimer('phase2');
 
 		$this->timer->startTimer('phase3', 'Update Dbase counters!');
@@ -307,6 +321,131 @@ class ImportContactWrapper
 		return $email;
 	}
 
+	/**
+	 * 
+	 * @param string $sourcefile
+	 * @param boolean $hasHeader
+	 * @param string $delimiter
+	 * @param array $fieldMapping
+	 * @param int $currentActiveContacts
+	 * @param int $contactLimit
+	 * @param string $mode
+	 * @param Dbase $dbase
+	 * @throws \InvalidArgumentException
+	 */
+	protected function importDataFromCSV($sourcefile, $hasHeader, $delimiter, $fieldMapping, $activeContacts, $contactLimit, $mode, $dbase)
+	{
+		// Validar que al menos el campo de email este mapeados
+		if (!isset($fieldMapping['email']) ) {
+			throw new \InvalidArgumentException('Campo email no esta mapeado en la informacion a importar y es requerido!');
+		}
+		// Cuantas lineas tiene el archivo?
+		$linecount = $this->countFileRecords($sourcefile);
+
+		$maxrows = ($hasHeader)?$linecount:$linecount+1;
+		
+		if ($mode == 'Contacto') {
+			// Modo contactos, verificar que es menor, el numero de registros
+			// del archivo, o el numero de contactos que se pueden insertar en
+			// la cuenta
+			$dif = $contactLimit - $activeContacts;
+			$maxrows = ($dif < $maxrows)?$dif:$maxrows;
+		}
+		
+		// Metodo mas simple:
+		// =================
+		// Leer linea por linea el archivo fuente
+		// Grabar en un archivo destino con los campos a importar (solamente)
+		// y con el orden correcto de importacion (ej: email,name,lastname,etc)
+		// Validar el email
+		// Extraer el dominio
+		// Esto hace mas sencillo armar la sentencia de carga... probar tiempo de ejecucion
+		// El orden de los campos sera:
+		// email,domain,name,lastname
+		
+		// Archivo temporal donde se guardaran los registros a importar
+		// con los campos que se importan y eliminando registros de
+		// email invalido
+		$tmpFilename = $sourcefile . '.pr';
+		$this->timer->startTimer('copy-rows', 'Copy csv file to temporary file!');
+		// Ejecutar la copia de registros
+		$this->copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $fieldMapping, $hasHeader);
+		$this->timer->endTimer('copy-rows');
+
+		
+		// Numero de lineas que tiene ahora el archivo final
+		// Esto elimina duplicados, invalidos, etc
+		$flines = $this->countFileRecords($tmpFilename);
+		
+		$this->timer->startTimer('load-rows', 'Load rows from temporary file into database!');
+		// Crear sentencia SQL que hace la importacion de los registros desde el
+		// archivo temporal
+		$importfile = "LOAD DATA INFILE '{$tmpFilename}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
+					. "(email, domain, name, lastname)";
+		
+		// Ejecutar sentencia SQL
+		$this->db->execute($importfile);
+		$this->timer->endTimer('load-rows');
+		
+		$this->timer->startTimer('update-rows', 'Find or create emails in temporary table!');
+		// Procesar todos los registros, asignando un idEmail
+		$this->db->execute("UPDATE {$this->tablename} SET idEmail = find_or_create_email(email, domain, {$this->account->idAccount})");
+		$this->timer->endTimer('update-rows');
+		
+		$this->timer->startTimer('clean-rows', 'Clean rows and insert contacts!');
+		// Limpiar los registros e insertarlos
+		$this->cleanInsertedRecords($this->account->idAccount, $dbase->idDbase);
+		$this->timer->endTimer('clean-rows');
+	
+		// Reporte
+		$this->timer->startTimer('report', 'Run reports!');
+		$this->runReports($flines);
+		$this->timer->endTimer('report');
+	}
+	
+	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $fieldMapping, $hasHeader)
+	{
+		// Indices de posicion de los campos primarios
+		$emailPos = $fieldMapping['email'];
+		$namePos  = (isset($fieldMapping['name']))?$fieldMapping['name']:-1;
+		$lastPos  = (isset($fieldMapping['lastname']))?$fieldMapping['lastname']:-1;
+		
+		$fp = fopen($sourcefile, 'r');
+		$nfp = fopen($tmpFilename, 'w');
+		
+		$skipped = 0;
+		$rows = 0;
+		
+		$line = fgetcsv($fp, 0, $delimiter);
+		if ($hasHeader) {
+			$line = fgetcsv($fp, 0, $delimiter);
+		}
+		while (!feof($fp) && ($rows - $skipped) <= $maxrows) {
+			$rows++;
+			// Validar EMAIL (correcto y que no este repetido)
+			$email = $this->verifyEmailAddress($line[$emailPos], $rows);
+			if ($email) {
+				$lineOut = array();
+				list($user, $domain) = explode('@', $email);
+				$lineOut[] = $email;
+				$lineOut[] = $domain;
+				$lineOut[] = $line[$namePos];
+				$lineOut[] = $line[$lastPos];
+				
+				fputcsv($nfp, $lineOut, $delimiter);
+			}
+			else {
+				$skipped++;
+			}
+			$line = fgetcsv($fp, 0, $delimiter);
+		}
+		fclose($fp);
+		fclose($nfp);
+
+		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed, {$skipped} rows skipped!");
+	}
+	
+	
 	/**
 	 * Este metodo lee las lineas del archivo CSV y las convierte en contactos
 	 * @param string $destiny
