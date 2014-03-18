@@ -54,6 +54,10 @@ class ImportContactWrapper
 		$this->temporaryMode = true;
 		$this->debugMode = false;
 		
+		// Prueba temporalmente (borrar 2 lineas para produccion)
+		$this->temporaryMode = false;
+		$this->debugMode = true;
+
 		$this->timer = Phalcon\DI::getDefault()->get('timerObject');
 		$this->log = Phalcon\DI::getDefault()->get('logger');
 
