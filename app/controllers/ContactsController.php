@@ -338,7 +338,7 @@ class ContactsController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 		}
 		
-		return $this->response->redirect("process/import/$newproccess->idImportproccess");
+		return $this->response->redirect("process/import");
 	}
 			
 }

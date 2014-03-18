@@ -2,24 +2,31 @@
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
-		var status = '{{res['status']}}';
+
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
-		function loadNow () {   
-			$.getJSON(MyBaseURL + 'proccess/refresh/{{ res['idProcces'] }}', function(data){
-				$('#progress-bar').empty();
-				$('#status-progress').empty();
-				$('#status-title').empty();
+		function checkUnfinishedImports() {
+			{%for res in result%}
+				if('{{res['status']}}' !== 'Finalizado') {
+					loadNow('{{res['idProcces']}}');
+				}	
+			{%endfor%}
+		}
+		function loadNow (idProcess) {   
+			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
+				$('#progress-bar-' + data.idProcces).empty();
+				$('#status-progress-' + data.idProcces).empty();
+				$('#status-title-' + data.idProcces).empty();
 				
 				if(data.length !== 0) {
 					var percent = Math.round((data.linesprocess/data.totalReg)*100);{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
 					
-					$('#progress-bar').append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
-					$('#status-progress').append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
-					$('#status-title').append('Estado: ' + data.status);
+					$('#progress-bar-' + data.idProcces).append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
+					$('#status-progress-' + data.idProcces).append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
+					$('#status-title-' + data.idProcces).append('Estado: ' + data.status);
 					
 					if (data.status === 'Finalizado') {
-						$('#progress-bar').empty();
-						$('#status-progress').empty();
+						$('#progress-bar' + data.idProcces).empty();
+						$('#status-progress' + data.idProcces).empty();
 						location.reload(true);
 					}
 				}
@@ -27,29 +34,27 @@
 		};
 		
 		$(function() {
-			if (status !== 'Finalizado') {
-				loadNow();
-				setInterval(loadNow, 5000);
-			}
+			setInterval(checkUnfinishedImports, 5000);
 		});
 		
 	</script>
 {% endblock %}
 {% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
+{%for res in result%}
 	<div class="row-fluid">
 		<div class="span8 offset2">
 			<div class="well relative">
 				<p>Importacion de Archivo: {{res['name']}}</p>
 				{%if res['status'] == "En Ejecucion"%}
-					<p id="status-progress"></p>
-					<div id="progress-bar" class="progress progress-striped progress-blue active"></div>
-					<p id="status-title"></p>
+					<p id="status-progress-{{res['idProcces']}}"></p>
+					<div id="progress-bar-{{res['idProcces']}}" class="progress progress-striped progress-blue active"></div>
+					<p id="status-title-{{res['idProcces']}}"></p>
 				{% endif %}
 				{%if res['status'] == "Finalizado"%}
 				<p>Estado: {{res['status']}}</p>
 				<div class="text-right">
-					<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
+					<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo-{{res['idProcces']}}">
 					  Ver Detalles
 					</a>
 				</div>
@@ -58,7 +63,7 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div id="collapseInfo" class="accordion-body collapse" style="height: 0px;">
+		<div id="collapseInfo-{{res['idProcces']}}" class="accordion-body collapse" style="height: 0px;">
 			<div class="span8 offset2">
 				<div class="box">
 					<div class="box-header">
@@ -131,4 +136,5 @@
 			</div>
 		</div>
 	</div>
+{%endfor%}
 {% endblock %}

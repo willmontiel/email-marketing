@@ -15,58 +15,32 @@ class ProcessController extends ControllerBase
 		return $this->setJsonResponse($status);
     }
 	
-	public function importAction($idImportproccess)
+	public function importAction()
 	{
-		$newproccess = Importproccess::findFirstByIdImportproccess($idImportproccess);
-		$inputFile = Importfile::findFirstByIdImportfile($newproccess->inputFile);
+		$processes = Importproccess::find(array(
+			"conditions" => "idAccount = ?1",
+			"bind" => array(1 => $this->user->account->idAccount),
+			"order" => "idImportproccess DESC"
+		));
 		
-		$count = array(
-			"linesprocess" => $newproccess->processLines,
-			"exist" => $newproccess->exist,
-			"invalid" => $newproccess->invalid,
-			"bloqued" => $newproccess->bloqued,
-			"limit" => $newproccess->limitcontact,
-			"repeated" => $newproccess->repeated
-		);
-		
-		$res = array(
-			"name" => $inputFile->originalName,
-			"totalReg" => $newproccess->totalReg,
-			"status" => $newproccess->status,
-			"linesprocess" => $count['linesprocess'],
-			"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
-			"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
-			"exist" => $count['exist'],
-			"invalid" => $count['invalid'],
-			"bloqued" => $count['bloqued'],
-			"limit" => $count['limit'],
-			"repeated" => $count['repeated'],
-			"idProcces" => $newproccess->idImportproccess
-		);
-		
-		$this->view->setVar("res", $res);
-	}
-	
-	public function refreshAction($idImportproccess)
-	{
-		$newproccess = Importproccess::findFirstByIdImportproccess($idImportproccess);
-		$inputFile = Importfile::findFirstByIdImportfile($newproccess->inputFile);
-		
-		$res = array();
-		if ($newproccess && $inputFile) {
+		$result = array();
+		foreach ($processes as $process) {
+			
+			$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
+
 			$count = array(
-				"linesprocess" => $newproccess->processLines,
-				"exist" => $newproccess->exist,
-				"invalid" => $newproccess->invalid,
-				"bloqued" => $newproccess->bloqued,
-				"limit" => $newproccess->limitcontact,
-				"repeated" => $newproccess->repeated
+				"linesprocess" => $process->processLines,
+				"exist" => $process->exist,
+				"invalid" => $process->invalid,
+				"bloqued" => $process->bloqued,
+				"limit" => $process->limitcontact,
+				"repeated" => $process->repeated
 			);
 
-			$res = array(
+			$result[] = array(
 				"name" => $inputFile->originalName,
-				"totalReg" => $newproccess->totalReg,
-				"status" => $newproccess->status,
+				"totalReg" => $process->totalReg,
+				"status" => $process->status,
 				"linesprocess" => $count['linesprocess'],
 				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
 				"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
@@ -75,7 +49,45 @@ class ProcessController extends ControllerBase
 				"bloqued" => $count['bloqued'],
 				"limit" => $count['limit'],
 				"repeated" => $count['repeated'],
-				"idProcces" => $newproccess->idImportproccess
+				"idProcces" => $process->idImportproccess
+			);		
+		}
+		$this->view->setVar("result", $result);
+	}
+	
+	public function refreshimportAction($idImportproccess)
+	{
+		$proccess = Importproccess::findFirst(array(
+			"conditions" => "idImportproccess = ?1",
+			"bind" => array(1 => $idImportproccess),
+		));
+		
+		$inputFile = Importfile::findFirstByIdImportfile($proccess->inputFile);
+		
+		$res = array();
+		if ($proccess && $inputFile) {
+			$count = array(
+				"linesprocess" => $proccess->processLines,
+				"exist" => $proccess->exist,
+				"invalid" => $proccess->invalid,
+				"bloqued" => $proccess->bloqued,
+				"limit" => $proccess->limitcontact,
+				"repeated" => $proccess->repeated
+			);
+
+			$res = array(
+				"name" => $inputFile->originalName,
+				"totalReg" => $proccess->totalReg,
+				"status" => $proccess->status,
+				"linesprocess" => $count['linesprocess'],
+				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
+				"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
+				"exist" => $count['exist'],
+				"invalid" => $count['invalid'],
+				"bloqued" => $count['bloqued'],
+				"limit" => $count['limit'],
+				"repeated" => $count['repeated'],
+				"idProcces" => $proccess->idImportproccess
 			);
 		}
 		
