@@ -302,8 +302,8 @@ class ImportContactWrapper
 	{
 		$email = strtolower($email);
 		if ( \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
-			if (empty($this->emailbuffers) || !in_array($email, $this->emailbuffers)) {
-				array_push($this->emailbuffers, $email);	
+			if (empty($this->emailbuffers) || !isset($this->emailbuffers[$email]) ) {
+				$this->emailbuffers[$email] = true;	
 			}
 			else {
 				// Email repetido en el archivo
