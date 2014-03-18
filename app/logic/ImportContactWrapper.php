@@ -252,7 +252,7 @@ class ImportContactWrapper
 		// Nombres de campos en tabla temporal
 		$fieldnames = array('email', 'domain');
 		// Reordenamiento al escribir en CSV
-		$fieldpos   = array($fieldMappings['email'] => 0);
+		$fieldpos   = array(0 => $fieldMappings['email']);
 		
 		unset($fieldMappings['email']);
 		
@@ -262,18 +262,18 @@ class ImportContactWrapper
 		// Recorrer la lista
 		foreach ($fieldMappings as $idfield => $position) {
 			$fieldnames[] = $idfield;
-			$fieldpos[$position] = $stposition;
+			$fieldpos[$stposition] = $position;
 			$stposition++;
 		}
 		// Suponiendo que la entrada es asi:
 		// [ 'email' => 3, 'name' => 2, '123' => '7', '124' => '5' ]
 		// Al final debe tener algo similar a esto:
 		// fieldnames: ['email', 'domain', 'name', '123', '124']
-		// fieldpos:   [3 => 0, 2 => 2, 7 => 3, 5 => 4 ]
+		// fieldpos:   [0 => 3, 2 => 2, 3 => 7, 4 => 5 ]
 		// Esto significa: los campos que se van a importar son <fieldnames>
 		// fieldnames puede utilizarse directamente en LOAD DATA INFILE...
 		// Y el proceso de grabacion del CSV temporal debe
-		// Tomar los campos del key de fieldpos y grabarlos en value
+		// Tomar los campos del value de fieldpos y grabarlos en key
 		// En el ejemplo de arriba, $lineOut[0] = $lineIn[3]
 		
 		return array($fieldnames, $fieldpos);
@@ -398,7 +398,7 @@ class ImportContactWrapper
 						$t = 'VARCHAR(100) DEFAULT NULL';
 						break;
 				}
-				$cfdefinition[$f->idCustomfield] = $t;
+				$cfdefinition[$f->idCustomField] = $t;
 			}
 			
 			$fnames = array();
@@ -529,11 +529,11 @@ class ImportContactWrapper
 	
 	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $fieldMapping, $hasHeader)
 	{
-		// Indices de posicion de los campos primarios
-		$emailPos = $fieldMapping['email'];
-		$namePos  = (isset($fieldMapping['name']))?$fieldMapping['name']:-1;
-		$lastPos  = (isset($fieldMapping['lastname']))?$fieldMapping['lastname']:-1;
-		
+		// El mapeado de posicion de campos es asi:
+		// [0 => 3, 2 => 2, 3 => 7, 4 => 5 ]
+		// Esto significa: 
+		// Tomar los campos del value y grabarlos en key
+		// Ejemplo de arriba: $lineOut[0] = $lineIn[3]
 		$fp = fopen($sourcefile, 'r');
 		$nfp = fopen($tmpFilename, 'w');
 		
@@ -547,15 +547,15 @@ class ImportContactWrapper
 		while (!feof($fp) && ($rows - $skipped) <= $maxrows) {
 			$rows++;
 			// Validar EMAIL (correcto y que no este repetido)
-			$email = $this->verifyEmailAddress($line[$emailPos], $rows);
+			$email = $this->verifyEmailAddress($line[$fieldMapping[0]], $rows);
 			if ($email) {
 				$lineOut = array();
+				foreach ($fieldMapping as $d => $o) {
+					$lineOut[$d] = $line[$o];
+				}
+				$lineOut[0] = $email;
 				list($user, $domain) = explode('@', $email);
-				$lineOut[] = $email;
-				$lineOut[] = $domain;
-				$lineOut[] = $line[$namePos];
-				$lineOut[] = $line[$lastPos];
-				
+				$lineOut[1] = $domain;
 				fputcsv($nfp, $lineOut, $delimiter);
 			}
 			else {
