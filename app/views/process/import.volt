@@ -13,12 +13,11 @@
 		}
 		function loadNow (idProcess) {   
 			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
-				$('#progress-bar-' + data.idProcess).empty();
-				$('#status-progress-' + data.idProcess).empty();
-				$('#status-title-' + data.idProcess).empty();
-				
 				if(data.length !== 0) {
 					var percent = Math.round((data.linesprocess/data.totalReg)*100);{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
+					$('#progress-bar-' + data.idProcess).empty();
+					$('#status-progress-' + data.idProcess).empty();
+					$('#status-title-' + data.idProcess).empty();
 					
 					$('#progress-bar-' + data.idProcess).append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
 					$('#status-progress-' + data.idProcess).append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
@@ -49,10 +48,11 @@
 				{%if res['status'] == "En Ejecucion"%}
 					<p id="status-progress-{{res['idProcess']}}"></p>
 					<div id="progress-bar-{{res['idProcess']}}" class="progress progress-striped progress-blue active"></div>
-					<p id="status-title-{{res['idProcess']}}"></p>
 				{% endif %}
+					
+				<p id="status-title-{{res['idProcess']}}">Estado: {{res['status']}}</p>
+				
 				{%if res['status'] == "Finalizado"%}
-				<p>Estado: {{res['status']}}</p>
 				<div class="text-right">
 					<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo-{{res['idProcess']}}">
 					  Ver Detalles
