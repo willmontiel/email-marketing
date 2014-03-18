@@ -351,7 +351,7 @@ class ImportContactWrapper
 			$dif = $contactLimit - $activeContacts;
 			$maxrows = ($dif < $maxrows)?$dif:$maxrows;
 		}
-		$this->log("File rows: {$linecount}, maxrows: {$maxrows}");
+		$this->log->log("File rows: {$linecount}, maxrows: {$maxrows}");
 		
 		// Metodo mas simple:
 		// =================
