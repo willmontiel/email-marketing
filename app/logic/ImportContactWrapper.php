@@ -65,6 +65,7 @@ class ImportContactWrapper
 		$this->invalid = 0;
 		$this->errors = array();
 		$this->emailbuffers = array();
+		$this->timer->reset();
 	}
 	
 	public function setIdProccess($idProccess) {
@@ -138,6 +139,7 @@ class ImportContactWrapper
 		$mode = $this->account->accountingMode;
 		
 		$this->resetProcess();
+		$this->timer->startTimer('all-import', 'Import process');
 	
 		// Cual es el proposito de esto?
 		// Controlar la importacion de contactos para que no exceda el limite
@@ -206,6 +208,9 @@ class ImportContactWrapper
 		$this->timer->startTimer('phase5', 'Recreate segments!');
 		$swrapper->recreateSegmentsInDbase($dbase->idDbase);		
 		$this->timer->endTimer('phase5');
+		
+		
+		$this->timer->endTimer('all-import');
 	}
 	
 	
