@@ -130,9 +130,9 @@ class ImportContactWrapper
 	 * Metodo que realiza la importacion de los registros
 	 * 
 	 * @param array $fields
-	 * @param type $destiny
-	 * @param type $delimiter
-	 * @param type $header
+	 * @param string $destiny
+	 * @param string $delimiter
+	 * @param boolean $header
 	 * @throws \InvalidArgumentException
 	 */
 	public function startImport($fields, $destiny, $delimiter, $header) {
@@ -193,12 +193,10 @@ class ImportContactWrapper
 				
 		$this->timer->endTimer('phase2');
 
-		$this->timer->startTimer('phase3', 'Update Dbase counters!');
+		$this->timer->startTimer('phase3', 'Update counters!');
 		$dbase->updateCountersInDbase();
-		$this->timer->endTimer('phase3');
-		$this->timer->startTimer('phase4', 'Update contact lists counters!');
 		$list->updateCountersInContactlist();
-		$this->timer->endTimer('phase4');
+		$this->timer->endTimer('phase3');
 		
 		$this->destroyTemporaryTable();
 		
@@ -208,7 +206,6 @@ class ImportContactWrapper
 		$this->timer->startTimer('phase5', 'Recreate segments!');
 		$swrapper->recreateSegmentsInDbase($dbase->idDbase);		
 		$this->timer->endTimer('phase5');
-		
 		
 		$this->timer->endTimer('all-import');
 	}
@@ -234,6 +231,51 @@ class ImportContactWrapper
 		
 		$this->db->execute("CREATE {$tmp} TABLE {$this->tablename} LIKE tmpimport");
 	}
+
+	/**
+	 * Este metodo analiza el arreglo de mapeo de campos
+	 * Determina la configuracion de campos y el reposicionamiento que deben
+	 * tener en el archivo CSV para cumplir con su ubicacion en tabla temporal
+	 * @param array $fieldMappings
+	 * @return array con dos partes:
+	 *			array con campos para mapear de CSV a nuevo CSV
+	 *			array de nombres de campos para LOAD DATA INFILE
+	 */
+	protected function configureMappings($fieldMappings)
+	{
+		// El primer campo SIEMPRE DEBE ser $email
+		
+		// Nombres de campos en tabla temporal
+		$fieldnames = array('email', 'domain');
+		// Reordenamiento al escribir en CSV
+		$fieldpos   = array($fieldMappings['email'] => 0);
+		
+		unset($fieldMappings['email']);
+		
+		// Posicion donde debe moverse el nuevo campo
+		$stposition = 2;
+		
+		// Recorrer la lista
+		foreach ($fieldMappings as $idfield => $position) {
+			$fieldnames[] = $idfield;
+			$fieldpos[$position] = $stposition;
+			$stposition++;
+		}
+		// Suponiendo que la entrada es asi:
+		// [ 'email' => 3, 'name' => 2, '123' => '7', '124' => '5' ]
+		// Al final debe tener algo similar a esto:
+		// fieldnames: ['email', 'domain', 'name', '123', '124']
+		// fieldpos:   [3 => 0, 2 => 2, 7 => 3, 5 => 4 ]
+		// Esto significa: los campos que se van a importar son <fieldnames>
+		// fieldnames puede utilizarse directamente en LOAD DATA INFILE...
+		// Y el proceso de grabacion del CSV temporal debe
+		// Tomar los campos del key de fieldpos y grabarlos en value
+		// En el ejemplo de arriba, $lineOut[0] = $lineIn[3]
+		
+		return array($fieldnames, $fieldpos);
+		
+	}
+//		$customfieldpos = array_diff_key($fieldMappings, array('email', 'name', 'lastname'));
 	
 	protected function destroyTemporaryTable()
 	{
@@ -279,7 +321,7 @@ class ImportContactWrapper
 	}
 
 	/**
-	 * 
+	 * Cuenta el numero de lineas que tiene el archivo
 	 * @param string $fn
 	 * @return int
 	 */
@@ -326,6 +368,65 @@ class ImportContactWrapper
 		return $email;
 	}
 
+	protected function alterTemporaryTable($names, $dbase)
+	{
+		$standard = array('email', 'domain', 'name', 'lastname');
+		// Quitar los campos estandar de la lista
+		$custom = array_diff($names, $standard);
+		
+		// Hay campos personalizados?
+		if (count($custom) > 0) {
+			// Tomar lista de campos personalizados en la base de datos y 
+			// obtener su tipo (para definir el tipo de campo)
+			$cfieldsdef = $dbase->customFields;
+			$cfdefinition = array();
+			foreach ($cfieldsdef as $f) {
+				switch ($f->type) {
+					case 'Date':
+					case 'Numerical':
+						$t = 'INT(10) DEFAULT 0'; 
+						break;
+					case 'Text':
+					case 'TextArea':
+					case 'Select':
+					case 'MultiSelect':
+					default:
+						$t = 'VARCHAR(100) DEFAULT NULL';
+						break;
+				}
+				$cfdefinition[$f->idCustomfield] = $t;
+			}
+			
+			$fnames = array();
+			$cfnames = array();
+			foreach ($custom as $cf => $position) {
+				// De acuerdo al tipo de campo
+				if (isset($cfdefinition[$cf])) {
+					$n = 'cf' . $cf;
+					$fnames[] = $n . ' ' . $cfdefinition[$cf];
+					$cfnames[] = $n;
+				}
+				else {
+					$n = 'xf' . $cf;
+					$fnames[] = $n . ' VARCHAR(100) DEFAULT NULL';
+					$cfnames[] = $n;
+				}
+			}
+			$fields = implode(',', $fnames);
+			$alter = "ALTER TABLE {$this->tablename} ADD COLUMN ({$fields})";
+			
+			$this->db->execute($alter);
+			
+			// Cambiar la lista de campos con los nuevos nombres
+			$base = array_diff($names, $custom);
+			$result = array_merge($base, $cfnames);
+		}
+		else {
+			$result = $names;
+		}
+		return $result;
+	}
+	
 	/**
 	 * 
 	 * @param string $sourcefile
@@ -358,24 +459,34 @@ class ImportContactWrapper
 		}
 		$this->log->log("File rows: {$linecount}, maxrows: {$maxrows}");
 		
-		// Metodo mas simple:
-		// =================
-		// Leer linea por linea el archivo fuente
-		// Grabar en un archivo destino con los campos a importar (solamente)
-		// y con el orden correcto de importacion (ej: email,name,lastname,etc)
-		// Validar el email
-		// Extraer el dominio
-		// Esto hace mas sencillo armar la sentencia de carga... probar tiempo de ejecucion
-		// El orden de los campos sera:
-		// email,domain,name,lastname
+		/*
+		 * 
+		 * Metodo mas simple:
+		 * =================
+		 * Leer linea por linea el archivo fuente
+		 * Grabar en un archivo destino con los campos a importar (solamente)
+		 * y con el orden correcto de importacion (ej: email,name,lastname,etc)
+		 * Validar el email
+		 * Extraer el dominio
+		 * Esto hace mas sencillo armar la sentencia de carga... probar tiempo de ejecucion
+		 * El orden de los campos sera:
+		 * email,domain,name,lastname
+		 * 
+		 * Archivo temporal donde se guardaran los registros a importar
+		 * con los campos que se importan y eliminando registros de
+		 * email invalido
+		 */
 		
-		// Archivo temporal donde se guardaran los registros a importar
-		// con los campos que se importan y eliminando registros de
-		// email invalido
+		// Crear lista de mapeo de campos para archivo CSV temporal
+		// [0] = nombres de campos para LOAD DATA INFILE
+		// [1] = map de posiciones de CSV 1 a CSV 2
+		$map = $this->configureMappings($fieldMapping);
+		$mapnames = $this->alterTemporaryTable($map[0], $dbase);
+		
 		$tmpFilename = $sourcefile . '.pr';
 		$this->timer->startTimer('copy-rows', 'Copy csv file to temporary file!');
 		// Ejecutar la copia de registros
-		$this->copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $fieldMapping, $hasHeader);
+		$this->copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $map[1], $hasHeader);
 		$this->timer->endTimer('copy-rows');
 
 		
@@ -388,8 +499,9 @@ class ImportContactWrapper
 		// Crear sentencia SQL que hace la importacion de los registros desde el
 		// archivo temporal
 		$rpath = realpath($tmpFilename);
+		$fields = implode(',', $mapnames);
 		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
-					. "(email, domain, name, lastname)";
+					. "({$fields})";
 		
 		// Ejecutar sentencia SQL
 		$this->db->execute($importfile);
