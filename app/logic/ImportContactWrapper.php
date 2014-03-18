@@ -252,7 +252,8 @@ class ImportContactWrapper
 		// Nombres de campos en tabla temporal
 		$fieldnames = array('email', 'domain');
 		// Reordenamiento al escribir en CSV
-		$fieldpos   = array(0 => $fieldMappings['email']);
+		// Email y dominio apuntan al email (aunque al final el dominio se reescribe)
+		$fieldpos   = array(0 => $fieldMappings['email'], 1 => $fieldMappings['email']);
 		
 		unset($fieldMappings['email']);
 		
@@ -276,6 +277,7 @@ class ImportContactWrapper
 		// Tomar los campos del value de fieldpos y grabarlos en key
 		// En el ejemplo de arriba, $lineOut[0] = $lineIn[3]
 		
+		$this->log->log('Field Mappings: [' . print_r($fieldMappings, true) . '] => [' . print_r($fieldpos, true) . ']');
 		return array($fieldnames, $fieldpos);
 		
 	}
@@ -553,8 +555,8 @@ class ImportContactWrapper
 				foreach ($fieldMapping as $d => $o) {
 					$lineOut[$d] = $line[$o];
 				}
-				$lineOut[0] = $email;
 				list($user, $domain) = explode('@', $email);
+				$lineOut[0] = $email;
 				$lineOut[1] = $domain;
 				fputcsv($nfp, $lineOut, $delimiter);
 			}
