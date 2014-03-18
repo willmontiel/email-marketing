@@ -380,7 +380,8 @@ class ImportContactWrapper
 		$this->timer->startTimer('load-rows', 'Load rows from temporary file into database!');
 		// Crear sentencia SQL que hace la importacion de los registros desde el
 		// archivo temporal
-		$importfile = "LOAD DATA INFILE '{$tmpFilename}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
+		$rpath = realpath($tmpFilename);
+		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
 					. "(email, domain, name, lastname)";
 		
 		// Ejecutar sentencia SQL
