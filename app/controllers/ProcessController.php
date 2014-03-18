@@ -49,36 +49,36 @@ class ProcessController extends ControllerBase
 				"bloqued" => $count['bloqued'],
 				"limit" => $count['limit'],
 				"repeated" => $count['repeated'],
-				"idProcces" => $process->idImportproccess
+				"idProcess" => $process->idImportproccess
 			);		
 		}
 		$this->view->setVar("result", $result);
 	}
 	
-	public function refreshimportAction($idImportproccess)
+	public function refreshimportAction($idImportprocess)
 	{
-		$proccess = Importproccess::findFirst(array(
+		$process = Importproccess::findFirst(array(
 			"conditions" => "idImportproccess = ?1",
-			"bind" => array(1 => $idImportproccess),
+			"bind" => array(1 => $idImportprocess),
 		));
 		
-		$inputFile = Importfile::findFirstByIdImportfile($proccess->inputFile);
+		$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
 		
 		$res = array();
-		if ($proccess && $inputFile) {
+		if ($process && $inputFile) {
 			$count = array(
-				"linesprocess" => $proccess->processLines,
-				"exist" => $proccess->exist,
-				"invalid" => $proccess->invalid,
-				"bloqued" => $proccess->bloqued,
-				"limit" => $proccess->limitcontact,
-				"repeated" => $proccess->repeated
+				"linesprocess" => $process->processLines,
+				"exist" => $process->exist,
+				"invalid" => $process->invalid,
+				"bloqued" => $process->bloqued,
+				"limit" => $process->limitcontact,
+				"repeated" => $process->repeated
 			);
 
 			$res = array(
 				"name" => $inputFile->originalName,
-				"totalReg" => $proccess->totalReg,
-				"status" => $proccess->status,
+				"totalReg" => $process->totalReg,
+				"status" => $process->status,
 				"linesprocess" => $count['linesprocess'],
 				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
 				"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
@@ -87,19 +87,19 @@ class ProcessController extends ControllerBase
 				"bloqued" => $count['bloqued'],
 				"limit" => $count['limit'],
 				"repeated" => $count['repeated'],
-				"idProcces" => $proccess->idImportproccess
+				"idProcess" => $process->idImportproccess
 			);
 		}
 		
 		return $this->setJsonResponse($res);
 	}
 	
-	public function downoladsuccessAction($idProccess)
+	public function downoladsuccessAction($idProcess)
 	{
 		$this->view->disable();
 		
-		$proccess = Importproccess::findFirstByIdImportproccess($idProccess);
-		$successProccess = Importfile::findFirstByIdImportfile($proccess->successFile);
+		$process = Importproccess::findFirstByIdImportproccess($idProcess);
+		$successProcess = Importfile::findFirstByIdImportfile($process->successFile);
 		
 		header('Content-type: application/csv');
 		header('Content-Disposition: attachment; filename=ContactosImportados.csv');
@@ -107,15 +107,15 @@ class ProcessController extends ControllerBase
 		header('Expires: 0');
 		header('Content-Type: application/download');
 		echo "Contactos Importados".PHP_EOL;
-		readfile("../tmp/ifiles/".$successProccess->internalName);
+		readfile("../tmp/ifiles/".$successProcess->internalName);
 	}
 	
-	public function downoladerrorAction($idProccess)
+	public function downoladerrorAction($idProcess)
 	{
 		$this->view->disable();
 		
-		$proccess = Importproccess::findFirstByIdImportproccess($idProccess);
-		$errorProccess = Importfile::findFirstByIdImportfile($proccess->errorFile);
+		$process = Importproccess::findFirstByIdImportproccess($idProcess);
+		$errorProcess = Importfile::findFirstByIdImportfile($process->errorFile);
 		
 		header('Content-type: application/csv');
 		header('Content-Disposition: attachment; filename=ContactosNoImportados.csv');
@@ -123,7 +123,7 @@ class ProcessController extends ControllerBase
 		header('Expires: 0');
 		header('Content-Type: application/download');
 		echo "Contactos No Importados".PHP_EOL;
-		readfile("../tmp/ifiles/".$errorProccess->internalName);
+		readfile("../tmp/ifiles/".$errorProcess->internalName);
 	}
 	
 	public function getSendingProcesses()
