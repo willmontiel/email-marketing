@@ -381,7 +381,7 @@ class ImportContactWrapper
 		// Quitar los campos estandar de la lista
 		$custom = array_diff($names, $standard);
 		
-		$this->log->log('Names: [' . print_r($names, true) . ']');
+		$this->log->log('Names: [' . print_r($names, true) . '], custom: [' . print_r($custom, true) . ']');
 		
 		// Hay campos personalizados?
 		if (count($custom) > 0) {
@@ -405,25 +405,28 @@ class ImportContactWrapper
 				}
 				$cfdefinition[$f->idCustomField] = $t;
 			}
+			$this->log->log('Definitions: [' . print_r($cfdefinition, true) . ']');
 			
 			$fnames = array();
 			$cfnames = array();
-			foreach ($custom as $cf => $position) {
+			foreach ($custom as $cf) {
 				// De acuerdo al tipo de campo
 				if (isset($cfdefinition[$cf])) {
-					$n = 'cf' . $cf;
+					$n = 'cf_' . $cf;
 					$fnames[] = $n . ' ' . $cfdefinition[$cf];
 					$cfnames[] = $n;
 				}
 				else {
-					$n = 'xf' . $cf;
+					$n = 'xf_' . $cf;
 					$fnames[] = $n . ' VARCHAR(100) DEFAULT NULL';
 					$cfnames[] = $n;
 				}
 			}
 			$fields = implode(',', $fnames);
 			$alter = "ALTER TABLE {$this->tablename} ADD COLUMN ({$fields})";
-			
+
+			$this->log->log('Alter: [' . $alter . ']');
+
 			$this->db->execute($alter);
 			
 			// Cambiar la lista de campos con los nuevos nombres
