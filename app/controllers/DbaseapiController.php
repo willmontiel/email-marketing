@@ -53,5 +53,9 @@ class DbaseapiController extends ControllerBase
 			
 			return $this->setJsonResponse($rest->getRecords());
 		}	
+                else {
+                    $contacts = array();
+                    return $this->setJsonResponse(array('contact' => $contacts));
+                }
 	}
 }

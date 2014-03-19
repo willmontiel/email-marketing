@@ -10,9 +10,6 @@
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/dbase/' ~ sdbase.idDbase }}';
 		
-		//URL para buscar contactos desde base de datos
-		var SearchContactUrl = '{{urlManager.getApi_v1_3Url() ~ '/dbase/' ~ sdbase.idDbase }}';
-		
 		var myContactModel = {
 			list: DS.belongsTo('list'),
 			email: DS.attr( 'string' ),
@@ -53,7 +50,6 @@
 			{%endfor%}
 		};
 	</script>
-	{{ javascript_include('js/app_search_contact_dbase.js') }}
 	{{ javascript_include('js/app.js') }}
 	<script type="text/javascript">
 		//ACL de los campos personalizados
