@@ -56,7 +56,7 @@
 			<form>
 				<label>
 					{{' {{view Ember.TextField valueBinding="searchCriteria" class="span12" onEvent="enter" action=search type="text" placeholder="Buscar por dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}
-					{#<button class="submit-icon" {{ '{{action search this}}' }}><i class="icon-search"></i></button>#}
+					<button class="submit-icon" {{ '{{action search this}}' }}><i class="icon-search"></i></button>
 				</label>
 			</form>
 		</div>
