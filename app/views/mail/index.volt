@@ -6,7 +6,7 @@
 			$.post("{{url('mail/previewindex')}}/" + id, function(preview){
 				var e = preview.preview;
 				$( "#preview-modal" ).empty();
-				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
+				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>');
 				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal').contents().find('body').append(e);
 			});
 		}
@@ -36,18 +36,18 @@
 	</div>
 </div>
 <div class="row-fluid">
-	<div class="span7">
+	<div class="span6">
 	{{ flashSession.output() }}
 	</div>
-	<div class="span5 text-right"> 
-		<a href="{{ url('programmingmail') }}" class="btn btn-default">
+	<div class="span6 text-right"> 
+		<a href="{{ url('scheduledmail') }}" class="btn btn-default">
 			<i class="icon-calendar"></i> Administrar Programación
 		</a>
 		<a href="{{ url('mail/setup') }}" class="btn btn-default">
 			<i class="icon-plus"></i> Nuevo Correo
 		</a>
-		<a href="{{ url('template/new') }}" class="btn btn-default">
-			<i class="icon-plus"></i> Nueva Plantilla
+		<a href="{{ url('template/index') }}" class="btn btn-default">
+			<i class="icon-magic"></i> Administrar Plantillas
 		</a>
 	</div>
 </div>
@@ -186,7 +186,7 @@
 <div id="modal-simple" class="modal hide fade" aria-hidden="false">
 	<div class="modal-header">
 	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	  <h6 id="modal-tablesLabel">Eliminar Base de Datos</h6>
+	  <h6 id="modal-tablesLabel">Eliminar correo y sus estadisticas</h6>
 	</div>
 	<div class="modal-body">
 		<p>

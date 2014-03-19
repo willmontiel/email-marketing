@@ -52,14 +52,12 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span3">
+		<div class="span6">
 			<form>
-				<p>
-					<label class="input-with-submit">
-						{{' {{view Ember.TextField valueBinding="searchText" type="text" placeholder="Buscar" autofocus="autofocus"}} '}}
-						<button class="submit-icon" {{ '{{action search this}}' }}><i class="icon-search"></i></button>
-					</label>
-				</p>
+				<label>
+					{{' {{view Ember.TextField valueBinding="searchCriteria" class="span12" onEvent="enter" action=search type="text" placeholder="Buscar por dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}
+					{#<button class="submit-icon" {{ '{{action search this}}' }}><i class="icon-search"></i></button>#}
+				</label>
 			</form>
 		</div>
 	</div>

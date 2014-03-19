@@ -984,6 +984,7 @@ class ContactWrapper extends BaseWrapper
 			
 			$contacts = array();
 			if (count($allContacts) > 0) {
+//				Phalcon\DI::getDefault()->get('logger')->log("Contacts: " . print_r($allContacts, true));
 				foreach ($allContacts as $contact) {
 					$contacts[] = $contact['idContact'];
 				}

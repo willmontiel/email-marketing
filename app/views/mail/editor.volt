@@ -35,24 +35,19 @@
 	}
 	
 	function verHTML() {
-		
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$('#preview-modal').modal('show');
 		$.ajax({
-			url: "{{url('mail/previeweditor')}}/{{mail.idMail}}/editor",
+			url: "{{url('mail/previeweditor')}}/{{mail.idMail}}",
 			type: "POST",			
 			data: { editor: editor},
 			error: function(msg){
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
-			success: function(response) {
-				//var a = response.script;
-				//var x = response.response;
+			success: function() {
 				$("#preview-modal").empty();
 				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
 				$('<iframe frameborder="0" width="100%" height="100%" src="{{url('mail/previewdata')}}"/>').appendTo('#preview-modal');
-				//$("#my-iframe").contents().find("head").append(a);
-				//$("#my-iframe").contents().find("body").append(x);
 			}
 		});
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
@@ -179,21 +174,5 @@
 	<div class="row-fluid">
 		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}/{{mail.idMail}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
-	<div id="preview-modal" class="modal hide fade preview-modal">
-	</div>
-	
-	<div id="modal-simple" class="modal hide fade" aria-hidden="false">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h6 id="modal-tablesLabel">Google Analytics</h6>
-		</div>
-		<div class="modal-body" id="modal-body">
-			
-
-		</div>
-		<div class="modal-footer">
-			<button class="btn btn-blue" data-dismiss="modal">Aceptar</button>
-		</div>
-	</div>
-	<br />
+	<div id="preview-modal" class="modal hide fade preview-modal"></div>
 {% endblock %}

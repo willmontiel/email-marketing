@@ -56,6 +56,16 @@ class PaginationDecorator {
 		return ceil(($this->currentpage -1 )*$this->rowsperpage);
 	}
 	
+	public function getTotalPages()
+	{
+		return ceil($this->total / $this->rowsperpage);
+	}
+
+	public function getTotalRecords()
+	{
+		return $this->total;
+	}
+	
 	public function getPaginationObject()
 	{
 		//array( 'pagination' => array('page' => $page, 'limit' => $limit, 'total' => $total, 'availablepages' => $availablepages)

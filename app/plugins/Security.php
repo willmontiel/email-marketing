@@ -23,8 +23,8 @@ class Security extends Plugin
 		/*
 		 * Buscar ACL en cache
 		 */
-//		$acl = null; 
-		$acl = $this->cache->get('acl-cache');
+		$acl = null; 
+//		$acl = $this->cache->get('acl-cache');
 		
 		if (!$acl) {
 			// No existe, crear objeto ACL
@@ -237,14 +237,23 @@ class Security extends Plugin
 				'mail::play' => array('mail' => array('read', 'send')),
 				'mail::stop' => array('mail' => array('read', 'send')),
 				'mail::cancel' => array('mail' => array('read', 'send')),
-				'template::image' => array('mail' => array('read', 'create')),
-				'template::thumbnail' => array('mail' => array('read', 'create')),
-				'template::create' => array('mail' => array('create')),
-				'template::preview' => array('mail' => array('read', 'create')),
-				'template::new' => array('template' => array('read', 'create')),
+				
+				//Plantillas
+				'template::image' => array('template' => array('read')),
+				'template::thumbnail' => array('template' => array('read')),
+				'template::create' => array('template' => array('create')),
+				'template::preview' => array('template' => array('read')),
+				'template::previewtemplate' => array('template' => array('read')),
+				'template::createpreview' => array('template' => array('read', 'create')),
+				'template::previewdata' => array('template' => array('read')),
+				'template::index' => array('template' => array('read')),
+				'template::new' => array('template' => array('create')),
+				'template::edit' => array('template' => array('update')),
+				'template::delete' => array('template' => array('delete')),
 				'template::editor_frame' => array('template' => array('read', 'create')),
 				'template::edit' => array('template' => array('read', 'update')),
-				'template::preview' => array('mail' => array('read', 'create', 'send')),
+				//Fin plantillas
+				
 				'mail::previewmail' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewtemplate' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewdata' => array('mail' => array('read', 'create', 'send')),
