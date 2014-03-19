@@ -213,7 +213,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	private function createSqlForFreeTextSearch($queryKey)
 	{
 		$sql = '';
-		$freeText = $this->searchCriteria->getFreeText;
+		$freeText = $this->searchCriteria->getFreeText();
 		
 		if (count($freeText) > 0) {
 			$criteriaText = implode(' ', $freeText);
