@@ -660,3 +660,6 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .contact-history-event-text {
 	text-align: center !important;
 }
+.list-import-process {
+	margin-right: 15px;
+}

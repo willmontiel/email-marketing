@@ -609,7 +609,7 @@ class SegmentWrapper extends BaseWrapper
 		return $meets;
 	}
 	
-	public function contactsImported($idDbase)
+	public function recreateSegmentsInDbase($idDbase)
 	{
 		$segments = Segment::findByIdDbase($idDbase);
 		

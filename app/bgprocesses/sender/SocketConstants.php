@@ -2,38 +2,47 @@
 
 class SocketConstants
 {
-//	const PUB2CHILDREN_ENDPOINT = 'ipc:///tmp/pub2children.sock';
-//	const MAILREQUESTS_ENDPOINT = 'ipc:///tmp/requests.sock';
-//	const MAILREQUESTS_ENDPOINT_PEER = 'ipc:///tmp/requests.sock';
-//	const PULLFROMCHILD_ENDPOINT = 'ipc:///tmp/pullfromchildren.sock';
-		
-	public static function getPub2ChildrenEndPoint()
+// ************** - Mail Sockets - **************
+	
+	public static function getMailPub2ChildrenEndPoint()
 	{
-		return Phalcon\DI::getDefault()->get('sockets')->tochildren;
+		return Phalcon\DI::getDefault()->get('sockets')->mailtochildren;
 	}
 	
 	public static function getMailRequestsEndPoint()
 	{
-		return Phalcon\DI::getDefault()->get('sockets')->request;
+		return Phalcon\DI::getDefault()->get('sockets')->mailrequest;
 	}
 	
 	public static function getMailRequestsEndPointPeer()
 	{
-		return Phalcon\DI::getDefault()->get('sockets')->request;
+		return Phalcon\DI::getDefault()->get('sockets')->mailrequest;
 	}
 	
-	public static function getPullFromChildEndPoint()
+	public static function getMailPullFromChildEndPoint()
 	{
-		return Phalcon\DI::getDefault()->get('sockets')->fromchild;
+		return Phalcon\DI::getDefault()->get('sockets')->mailfromchild;
 	}
 	
-	public static function getImportServerProcessEndPoint()
+// ************** - Import Sockets - **************
+	
+	public static function getImportPub2ChildrenEndPoint()
 	{
-		return Phalcon\DI::getDefault()->get('sockets')->importserver;
+		return Phalcon\DI::getDefault()->get('sockets')->importtochildren;
 	}
 	
-	public static function getImportClientProcessEndPoint()
+	public static function getImportRequestsEndPoint()
 	{
-		return Phalcon\DI::getDefault()->get('sockets')->importclient;
+		return Phalcon\DI::getDefault()->get('sockets')->importrequest;
+	}
+	
+	public static function getImportRequestsEndPointPeer()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->importrequest;
+	}
+	
+	public static function getImportPullFromChildEndPoint()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->importfromchild;
 	}
 }

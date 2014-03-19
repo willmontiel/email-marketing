@@ -3,49 +3,88 @@ require_once '../bootstrap/phbootstrap.php';
 
 umask(0000);
 
-if(isset($argv[1])) {
-	switch ($argv[1]) {
-		case '-d':
-			demonize();
-			if (isRunning()) {
-				echo "The process is already running!\n";
+if(isset($argv[1]) && isset($argv[2])) {
+	if($argv[1] === '-m') {
+		switch ($argv[2]) {
+			case '-d':
+				demonize();
+				if (isRunning(SocketConstants::getMailRequestsEndPoint())) {
+					echo "The process is already running!\n";
+					exit(0);
+				}
+				printf('Daemon' .PHP_EOL);
+				fclose(STDIN);
+				fclose(STDOUT);
+				fclose(STDERR);
+				$processObj = new SenderProcess();
+				break;
+			case '-r':
+				if (isRunning(SocketConstants::getMailRequestsEndPoint())) {
+					echo "The process is already running!\n";
+					exit(0);
+				}
+				printf('Directo' .PHP_EOL);
+				$processObj = new SenderProcess();
+				break;
+			case '-k':
+				if (!isRunning(SocketConstants::getMailRequestsEndPoint())) {
+					echo "There's no process to terminate\n";
+					exit(0);
+				}
+				killProcess(SocketConstants::getMailRequestsEndPoint());
 				exit(0);
-			}
-			printf('Daemon' .PHP_EOL);
-			fclose(STDIN);
-			fclose(STDOUT);
-			fclose(STDERR);
-			break;
-		case '-r':
-			if (isRunning()) {
-				echo "The process is already running!\n";
+				break;
+			case '-s':
+				if (!isRunning(SocketConstants::getMailRequestsEndPoint())) {
+					echo "There's no process\n";
+					exit(0);
+				}
+				processStatus(SocketConstants::getMailRequestsEndPoint());
 				exit(0);
-			}
-			printf('Directo' .PHP_EOL);
-			break;
-		case '-k':
-			if (!isRunning()) {
-				echo "There's no process to terminate\n";
+				break;
+			default :
+				printf('Comando no reconocido' .PHP_EOL);
 				exit(0);
-			}
-			killProcess();
-			exit(0);
-			break;
-		case '-s':
-			if (!isRunning()) {
-				echo "There's no process\n";
-				exit(0);
-			}
-			processStatus();
-			exit(0);
-			break;
-		default :
-			printf('Comando no reconocido' .PHP_EOL);
-			exit(0);
-			break;
+				break;
+		}
 	}
-
-	$parent = new ParentSender();
+	else if($argv[1] === '-i') {
+		switch ($argv[2]) {
+			case '-r':
+				if (isRunning(SocketConstants::getImportRequestsEndPoint())) {
+					echo "The process is already running!\n";
+					exit(0);
+				}
+				printf('Directo' .PHP_EOL);
+				$processObj = new ImportProcess();
+				break;
+			case '-k':
+				if (!isRunning(SocketConstants::getImportRequestsEndPoint())) {
+					echo "There's no process to terminate\n";
+					exit(0);
+				}
+				killProcess(SocketConstants::getImportRequestsEndPoint());
+				exit(0);
+				break;
+			case '-s':
+				if (!isRunning(SocketConstants::getImportRequestsEndPoint())) {
+					echo "There's no process\n";
+					exit(0);
+				}
+				processStatus(SocketConstants::getImportRequestsEndPoint());
+				exit(0);
+				break;
+			default :
+				printf('Comando no reconocido' .PHP_EOL);
+				exit(0);
+				break;
+		}
+	}
+	else {
+		printf('Comando no reconocido' .PHP_EOL);
+		exit(0);
+	}
+	$parent = new ParentProcess($processObj);
 	$parent->startProcess();
 }
 else {
@@ -68,11 +107,11 @@ function demonize()
 	}
 }
 
-function isRunning()
+function isRunning($socket)
 {
 	$context = new ZMQContext(1);
 	$selfrequester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$selfrequester->connect(SocketConstants::getMailRequestsEndPoint());
+	$selfrequester->connect($socket);
 	
 	$poll = new ZMQPoll();
 	$poll->add($selfrequester, ZMQ::POLL_OUT);
@@ -104,47 +143,45 @@ function isRunning()
 	return false;
 }
 
-function killProcess()
+function killProcess($socket)
 {
 	$context = new ZMQContext(1);
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$requester->connect(SocketConstants::getMailRequestsEndPoint());
+	$requester->connect($socket);
 	$requester->send('Time-To-Die');
 	$r = $requester->recv();
 	printf('Recibi: ' . $r . PHP_EOL);
 }
 
-function processStatus()
+function processStatus($socket)
 {
 	$context = new ZMQContext(1);
 	$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-	$requester->connect(SocketConstants::getMailRequestsEndPoint());
+	$requester->connect($socket);
 	$requester->send('Show-Status-Console');
 	$r = $requester->recv();
 	printf($r);
 }
 
-class ParentSender
+class ParentProcess
 {
 	protected $di;
-	protected $pool;
-	protected $client;
-	protected $tasks;
-	
+	protected $processObj;
 	protected $context;
 
-	public function __construct() {
+	public function __construct($processObj) {
+		$this->processObj = $processObj;
 		$this->di =  \Phalcon\DI\FactoryDefault::getDefault();
 		$this->context = new ZMQContext(3);
 		
 		$context = $this->context;
 
 		$publisher = new ZMQSocket($context, ZMQ::SOCKET_PUB);
-		$publisher->bind(SocketConstants::getPub2ChildrenEndPoint());
+		$publisher->bind($this->processObj->getPublisherToChildrenSocket());
 		$this->di->set('publisher', $publisher);
 
 		$reply = new ZMQSocket($context, ZMQ::SOCKET_REP);
-		$reply->bind(SocketConstants::getMailRequestsEndPoint());
+		$reply->bind($this->processObj->getReplyToClientSocket());
 		$this->di->set('reply', $reply);
 	}
 
@@ -154,25 +191,13 @@ class ParentSender
 		
 		$registry = new Registry();
 		
-		// Crear los objetos
-		$this->client = new ClientHandler($registry);
-		$this->pool = new PoolHandler($registry);
-		$this->tasks = new TasksHandler($registry);
-		$this->client->register();
-		$this->pool->register();
-		$this->tasks->register();
-		
-		$this->tasks->setPool($this->pool);
-		$this->client->setTasks($this->tasks);
-		$this->client->setPool($this->pool);
-		$this->pool->setClient($this->client);
-		
-		$this->pool->createInitialChildren();
+		$this->processObj->createHandlers($registry);
+		$this->processObj->setPoolConditions();
 		
 		$context = $this->context;
 		
 		$pull = new ZMQSocket($context, ZMQ::SOCKET_PULL);
-		$pull->bind(SocketConstants::getPullFromChildEndPoint());		
+		$pull->bind($this->processObj->getPullFromChildSocket());
 				
 		$reply = $this->di['reply'];
 		
@@ -183,13 +208,9 @@ class ParentSender
 		$readable = $writeable = array();
 			
 		while (true) {
-
 			$events = $poll->poll($readable, $writeable, 1000);
-
 			if ($events > 0) {
-
 				foreach ($readable as $socket) {
-
 					$request = $socket->recv();
 					echo 'Parent:: Recibi esto -> ' . $request . PHP_EOL;
 					$log->log('Parent:: Recibi esto -> ' . $request);

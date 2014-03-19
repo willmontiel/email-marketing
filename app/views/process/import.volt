@@ -2,24 +2,30 @@
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
-		var status = '{{res['status']}}';
+
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
-		function loadNow () {   
-			$.getJSON(MyBaseURL + 'proccess/refresh/{{ res['idProcces'] }}', function(data){
-				$('#progress-bar').empty();
-				$('#status-progress').empty();
-				$('#status-title').empty();
-				
+		function checkUnfinishedImports() {
+			{%for res in result%}
+				if('{{res['status']}}' !== 'Finalizado') {
+					loadNow('{{res['idProcess']}}');
+				}	
+			{%endfor%}
+		}
+		function loadNow (idProcess) {   
+			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
 				if(data.length !== 0) {
 					var percent = Math.round((data.linesprocess/data.totalReg)*100);{#{{((res['linesprocess'] / res['totalReg']) * 100)|int}}#}
+					$('#progress-bar-' + data.idProcess).empty();
+					$('#status-progress-' + data.idProcess).empty();
+					$('#status-title-' + data.idProcess).empty();
 					
-					$('#progress-bar').append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
-					$('#status-progress').append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
-					$('#status-title').append('Estado: ' + data.status);
+					$('#progress-bar-' + data.idProcess).append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
+					$('#status-progress-' + data.idProcess).append('Registros Importados: ' + data.linesprocess + ' de ' + data.totalReg + '');
+					$('#status-title-' + data.idProcess).append('Estado: ' + data.status);
 					
 					if (data.status === 'Finalizado') {
-						$('#progress-bar').empty();
-						$('#status-progress').empty();
+						$('#progress-bar' + data.idProcess).empty();
+						$('#status-progress' + data.idProcess).empty();
 						location.reload(true);
 					}
 				}
@@ -27,29 +33,28 @@
 		};
 		
 		$(function() {
-			if (status !== 'Finalizado') {
-				loadNow();
-				setInterval(loadNow, 5000);
-			}
+			setInterval(checkUnfinishedImports, 5000);
 		});
 		
 	</script>
 {% endblock %}
 {% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
+{%for res in result%}
 	<div class="row-fluid">
 		<div class="span8 offset2">
 			<div class="well relative">
 				<p>Importacion de Archivo: {{res['name']}}</p>
 				{%if res['status'] == "En Ejecucion"%}
-					<p id="status-progress"></p>
-					<div id="progress-bar" class="progress progress-striped progress-blue active"></div>
-					<p id="status-title"></p>
+					<p id="status-progress-{{res['idProcess']}}"></p>
+					<div id="progress-bar-{{res['idProcess']}}" class="progress progress-striped progress-blue active"></div>
 				{% endif %}
+					
+				<p id="status-title-{{res['idProcess']}}">Estado: {{res['status']}}</p>
+				
 				{%if res['status'] == "Finalizado"%}
-				<p>Estado: {{res['status']}}</p>
 				<div class="text-right">
-					<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
+					<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo-{{res['idProcess']}}">
 					  Ver Detalles
 					</a>
 				</div>
@@ -58,7 +63,7 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div id="collapseInfo" class="accordion-body collapse" style="height: 0px;">
+		<div id="collapseInfo-{{res['idProcess']}}" class="accordion-body collapse" style="height: 0px;">
 			<div class="span8 offset2">
 				<div class="box">
 					<div class="box-header">
@@ -82,7 +87,7 @@
 									<td class="icon"><i class="icon-ok"></i></td>
 									<td>
 										<span class="news-title">Importados exitosamente </span>
-										<a href="{{ url('proccess/downoladsuccess/') }}{{ res['idProcces'] }}" target="_blank">(Descargar reporte)</a>
+										<a href="{{ url('process/downoladsuccess/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
 									</td>
 									<td><b style="font-size: 20px;">{{res['import']}}</b></td>
 								</tr>
@@ -120,7 +125,7 @@
 									<td class="icon"><i class="icon-warning-sign"></i></td>
 									<td>
 										<span class="news-title">Total contactos no importados</span>
-										<a href="{{ url('proccess/downoladerror/') }}{{ res['idProcces'] }}" target="_blank">(Descargar reporte)</a>
+										<a href="{{ url('process/downoladerror/') }}{{ res['idProces'] }}" target="_blank">(Descargar reporte)</a>
 									</td>
 									<td><b style="font-size: 20px;">{{res['Nimport']}}</b></td>
 								</tr>
@@ -131,4 +136,5 @@
 			</div>
 		</div>
 	</div>
+{%endfor%}
 {% endblock %}
