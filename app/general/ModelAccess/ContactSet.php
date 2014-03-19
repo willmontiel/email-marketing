@@ -52,7 +52,8 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	}
 	
 	public function load()
-	{
+	{   
+                $this->validateQueryCriteria();
 		$contactIds = $this->findContactIds($this->createCoreQuery());
 		$query = $this->createQuery($contactIds);
 		
@@ -99,6 +100,32 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		return $sql;
 	}
 	
+        
+        private function findContactIds($sql)
+	{
+		$cache = \Phalcon\DI::getDefault()->get('cache');
+		$queryKey = $this->getQueryKey();
+		$contactIds = $cache->get($queryKey);
+		
+		if (!$contactIds) {
+			$contactIds = array();
+			$db = \Phalcon\DI::getDefault()->get('db');
+			
+			$query = $db->query($sql);
+			$result = $query->fetchAll();
+			$count = count($result);
+
+			if ($count > 0) {
+				foreach ($result as $r) {
+					$contactIds[] = $r['idContact'];
+				}
+			}
+			$cache->save($queryKey, $contactIds, 1800);
+		}
+		return $contactIds;
+	}
+        
+        
 	private function createQuery($contactIds)
 	{
 		$sql = '';
@@ -126,33 +153,11 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		$count = count($result);
 		
 		if ($count > 0) {
+                        \Phalcon\DI::getDefault()->get('logger')->log("Matches: " . print_r($result, true));
 			$this->createStructureForReturns($result);
 		}
 	}
 	
-	private function findContactIds($sql)
-	{
-		$cache = \Phalcon\DI::getDefault()->get('cache');
-		$queryKey = $this->getQueryKey();
-		$contactIds = $cache->get($queryKey);
-		
-		if (!$contactIds) {
-			$contactIds = array();
-			$db = \Phalcon\DI::getDefault()->get('db');
-			
-			$query = $db->query($sql);
-			$result = $query->fetchAll();
-			$count = count($result);
-
-			if ($count > 0) {
-				foreach ($result as $r) {
-					$contactIds[] = $r['idContact'];
-				}
-			}
-			$cache->save($queryKey, $contactIds, 1800);
-		}
-		return $contactIds;
-	}
 
 	/**
 	 * Returns the first CoreSql part created with emails and domains found in the search text
@@ -236,7 +241,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	{
 		$query = new \stdClass();
 		
-		switch ($this->validateQueryCriteria()) {
+		switch ($this->queryCriteria) {
 			case 'account':
 				$query->join = '';
 				$query->and = '';
