@@ -1,4 +1,5 @@
 *.volt.php
+/nbproject
 app/cache/metadata/*
 /app/config/configuration.ini
 /app/logs/dbdebug.log
