@@ -11,7 +11,7 @@
 		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/dbase/' ~ sdbase.idDbase }}';
 		
 		//URL para buscar contactos desde base de datos
-		var SearchContactUrl = '{{urlManager.getApi_v3Url() ~ '/dbase/' ~ sdbase.idDbase }}';
+		var SearchContactUrl = '{{urlManager.getApi_v1_3Url() ~ '/dbase/' ~ sdbase.idDbase }}';
 		
 		var myContactModel = {
 			list: DS.belongsTo('list'),
