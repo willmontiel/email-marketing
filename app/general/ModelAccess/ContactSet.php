@@ -300,26 +300,31 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	private function createStructureForReturns($contacts)
 	{   
                 $object = array();
-		$object['id'] = $contacts->idContact;
-		$object['email'] = $contacts->email;
-		$object['name'] = $contacts->name;
-		$object['lastName'] = $contacts->lastName;
-		$object['isActive'] = ($contacts->status != 0);
-		$object['activatedOn'] = (($contacts->status != 0)?date('d/m/Y H:i', $contact->status):'');
-		$object['isSubscribed'] = ($contacts->unsubscribed == 0);
-		$object['subscribedOn'] = (($contacts->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
-		$object['unsubscribedOn'] = (($contacts->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
-		$object['isBounced'] = ($contacts->bounced != 0);
-		$object['bouncedOn'] = (($contacts->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
-		$object['isSpam'] = ($contacts->spam != 0);
-		$object['spamOn'] = (($contacts->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
-		$object['createdOn'] = (($contacts->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
-		$object['updatedOn'] = (($contacts->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
-		
-		$object['ipSubscribed'] = (($contacts->ipSubscribed)?long2ip($contact->ipSubscribed):'');
-		$object['ipActivated'] = (($contacts->ipActivated)?long2ip($contact->ipActivated):'');
-		
-		$object['isEmailBlocked'] = ($contacts->blocked != 0);
+                foreach ($contacts as $contact) {
+                    $c = array();
+                    $c['id'] = $contacts->idContact;
+                    $c['email'] = $contacts->email;
+                    $c['name'] = $contacts->name;
+                    $c['lastName'] = $contacts->lastName;
+                    $c['isActive'] = ($contacts->status != 0);
+                    $c['activatedOn'] = (($contacts->status != 0)?date('d/m/Y H:i', $contact->status):'');
+                    $c['isSubscribed'] = ($contacts->unsubscribed == 0);
+                    $c['subscribedOn'] = (($contacts->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
+                    $c['unsubscribedOn'] = (($contacts->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
+                    $c['isBounced'] = ($contacts->bounced != 0);
+                    $c['bouncedOn'] = (($contacts->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
+                    $c['isSpam'] = ($contacts->spam != 0);
+                    $c['spamOn'] = (($contacts->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
+                    $c['createdOn'] = (($contacts->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
+                    $c['updatedOn'] = (($contacts->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
+
+                    $c['ipSubscribed'] = (($contacts->ipSubscribed)?long2ip($contact->ipSubscribed):'');
+                    $c['ipActivated'] = (($contacts->ipActivated)?long2ip($contact->ipActivated):'');
+
+                    $c['isEmailBlocked'] = ($contacts->blocked != 0);
+                    
+                    $object[] = $c;
+                }
                 
                 $this->rows = $object;
 	}
