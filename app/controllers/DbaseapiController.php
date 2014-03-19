@@ -37,24 +37,28 @@ class DbaseapiController extends ControllerBase
 		}
 		
 		if ($search != null) {
-//			try {   
+			try {   
                                 $this->logger->log('search no esta vacio');
 				$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
+                                $this->logger->log('se instancio search criteria');
 				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
+                                $this->logger->log('se instancio contact set');
 				$contactset->setSearchCriteria($searchCriteria);
 				$contactset->setAccount($account);
 				$contactset->setDbase($dbase);
 				$contactset->setPaginator($pager);
+                                $this->logger->log('se seteó todo');
 				$contactset->load();
-//			}
-//			catch (Exception $e) {
-//                            $this->logger->log('Exception: ' . $e);
-//                            return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
-//			}
-//                        catch (InvalidArgumentException $e) {
-//                            $this->logger->log('Invalid Argument Exception: ' . $e);
-//                            return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
-//                        }
+                                $this->logger->log('déspues de load');
+			}
+			catch (Exception $e) {
+                            $this->logger->log('Exception: ' . $e);
+                            return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
+			}
+                        catch (InvalidArgumentException $e) {
+                            $this->logger->log('Invalid Argument Exception: ' . $e);
+                            return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
+                        }
 			
 			$rest = new \EmailMarketing\General\Ember\RESTResponse();
 			$rest->addDataSource($contactset);
