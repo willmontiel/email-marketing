@@ -125,7 +125,7 @@
 									<td class="icon"><i class="icon-warning-sign"></i></td>
 									<td>
 										<span class="news-title">Total contactos no importados</span>
-										<a href="{{ url('process/downoladerror/') }}{{ res['idProces'] }}" target="_blank">(Descargar reporte)</a>
+										<a href="{{ url('process/downoladerror/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
 									</td>
 									<td><b style="font-size: 20px;">{{res['Nimport']}}</b></td>
 								</tr>
