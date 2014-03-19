@@ -297,15 +297,15 @@ class ContactsController extends ControllerBase
 			}
 		}
 		
-		$newproccess = new Importproccess();
+		$newprocess = new Importproccess();
 						
-		$newproccess->idAccount = $idAccount;
-		$newproccess->inputFile = $idImportfile;
-		$newproccess->status = "Pendiente";
-		$newproccess->totalReg = $linecount;
-		$newproccess->processLines = 0;
+		$newprocess->idAccount = $idAccount;
+		$newprocess->inputFile = $idImportfile;
+		$newprocess->status = "Pendiente";
+		$newprocess->totalReg = $linecount;
+		$newprocess->processLines = 0;
 		
-		if(!$newproccess->save()) {
+		if(!$newprocess->save()) {
 			$log->log('No se creo ningun proceso de importaction');
 			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
 		}		
@@ -316,7 +316,7 @@ class ContactsController extends ControllerBase
 			'delimiter' => $delimiter,
 			'header' => $header,
 			'idContactlist' => $idContactlist,
-			'idImportproccess' => $newproccess->idImportproccess,
+			'idImportproccess' => $newprocess->idImportproccess,
 			'idAccount' => $idAccount,
 			'ipaddress' => $ipaddress
 			);
@@ -325,11 +325,8 @@ class ContactsController extends ControllerBase
 		
 		
 		try{
-			$context = new ZMQContext();
-			$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-			$requester->connect(SocketConstants::getImportRequestsEndPointPeer());
-			$requester->send(sprintf("%s $toSend $newproccess->idImportproccess", 'Play-Task'));
-			$response = $requester->recv(ZMQ::MODE_NOBLOCK);
+			$objcomm = new Communication(SocketConstants::getImportRequestsEndPointPeer());
+			$objcomm->sendImportToParent($toSend, $newprocess->idImportproccess);
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
@@ -338,7 +335,7 @@ class ContactsController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 		}
 		
-		return $this->response->redirect("process/import/$newproccess->idImportproccess");
+		return $this->response->redirect("process/import");
 	}
 			
 }

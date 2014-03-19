@@ -3,19 +3,12 @@ class Communication
 {
 	protected $requester;
 	
-	public function __construct($log = null, $socket = null) {
+	public function __construct($socket) {
 		$context = new ZMQContext();
 
 		$this->requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-		if ($log) {
-			$log->log("Connecting to: [" . SocketConstants::getMailRequestsEndPointPeer() . "]");
-		}
-		if(!$socket) {
-			$this->requester->connect(SocketConstants::getMailRequestsEndPointPeer());
-		}
-		else {
-			$this->requester->connect($socket);
-		}
+		$this->requester->connect($socket);
+		Phalcon\DI::getDefault()->get('logger')->log("Connecting to: [" . $socket . "]");
 	}
 	
 	public function getStatus($type)
@@ -86,9 +79,15 @@ class Communication
 		
 		if(!$this->verifySentStatus($mail)) {
 
-			$this->requester->send(sprintf("%s $idMail", 'Play-Task'));
+			$this->requester->send(sprintf("%s $idMail $idMail", 'Play-Task'));
 			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 		}
+	}
+	
+	public function sendImportToParent($data, $code)
+	{
+		$this->requester->send(sprintf("%s $data $code", 'Play-Task'));
+		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 	}
 	
 	public function sendPausedToParent($idMail)
@@ -97,7 +96,7 @@ class Communication
 
 		if(!$this->verifySentStatus($mail)) {
 			
-			$this->requester->send(sprintf("%s $idMail", 'Stop-Process'));
+			$this->requester->send(sprintf("%s $idMail $idMail", 'Stop-Process'));
 			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 		}
 	}
@@ -108,14 +107,14 @@ class Communication
 		
 		if(!$this->verifySentStatus($mail)) {
 			if($mail->status == 'Sending') {
-				$this->requester->send(sprintf("%s $idMail", 'Cancel-Process'));
+				$this->requester->send(sprintf("%s $idMail $idMail", 'Cancel-Process'));
 				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 				//No necesito cambiar el estado del Mail, porque el proceso dueño del Mail se hara cargo de esto
 			}
 			else if($mail->status == 'Scheduled') {
 				$scheduled = Mailschedule::findFirstByIdMail($idMail);
 				$scheduled->delete();
-				$this->requester->send(sprintf("%s $idMail", 'Scheduled-Task'));
+				$this->requester->send(sprintf("%s $idMail $idMail", 'Scheduled-Task'));
 				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 				
 				//Debo cambiar explicitamente el estado del Mail, porque aun no hay un proceso manejando el envio
@@ -140,7 +139,7 @@ class Communication
 
 	public function sendSchedulingToParent($idMail)
 	{
-		$this->requester->send(sprintf("%s $idMail", 'Scheduled-Task'));
+		$this->requester->send(sprintf("%s $idMail $idMail", 'Scheduled-Task'));
 		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 	}
 	
@@ -159,7 +158,7 @@ class Communication
 
 		if($import->totalReg != $import->processLines) {
 			
-			$this->requester->send(sprintf("%s $idImport", 'Stop-Process'));
+			$this->requester->send(sprintf("%s $idImport $idImport", 'Stop-Process'));
 			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 		}
 	}
