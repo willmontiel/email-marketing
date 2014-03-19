@@ -205,6 +205,8 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		
 		$sql = $sqlEmail . $union . $sqlDomain;
 		
+                 \Phalcon\DI::getDefault()->get('logger')->log("Domains and email sql: " . $sql);
+                 
 		return $sql;
 	}
 	
@@ -224,7 +226,8 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 						MATCH(c.name, c.lastname) AGAINST ('" . $criteriaText . "' IN BOOLEAN MODE) 
 						AND b.idAccount = " . $this->account->idAccount . " " . $queryKey->andForFreeText;
 		}
-//		\Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
+                
+                \Phalcon\DI::getDefault()->get('logger')->log("Free text sql: " . $sql);
 		return $sql;
 	}
 	

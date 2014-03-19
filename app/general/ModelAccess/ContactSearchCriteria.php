@@ -18,8 +18,6 @@ class ContactSearchCriteria
                     throw new \InvalidArgumentException('Search criteria empty!!');
             }
             
-            \Phalcon\DI::getDefault()->get('logger')->log("ContactSearchCriteria recibio esto: " . $text);
-            
             $this->criteria = $text;
 
             $criterias = explode(' ', $text);
