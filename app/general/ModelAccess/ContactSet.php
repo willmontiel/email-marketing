@@ -133,9 +133,9 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$ids = implode(', ', $contactIds);
 		
 			$sql .= "SELECT c.*, e.email, e.blocked, d.idDbase, d.name AS dbase
-					FROM Contact AS c
-						JOIN Email AS e ON(e.idEmail = c.idEmail)
-						JOIN Dbase AS d ON(d.idDbase = c.idDbase)
+					FROM Contact c
+						JOIN Email e ON(e.idEmail = c.idEmail)
+						JOIN Dbase d ON(d.idDbase = c.idDbase)
 					WHERE c.idContact IN (" . $ids . ")";
 		}
                 
