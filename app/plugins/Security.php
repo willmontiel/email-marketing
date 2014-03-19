@@ -188,6 +188,9 @@ class Security extends Plugin
 				'api::updatesegment' => array('segment' => array('read', 'update')),
 				'api::updatecontactbysegment' => array('contact' => array('read', 'update')),
 				
+                                //Dbaseapi
+                                'dbaseapi::searchcontacts' => array('contact' => array('read')),
+                            
 				//Apistatistics
 				//Estadisticas
 				'apistatistics::dbase' => array('statistic' => array('read')),

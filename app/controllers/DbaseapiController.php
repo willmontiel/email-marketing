@@ -5,7 +5,7 @@
 class DbaseapiController extends ControllerBase
 {
 	/**
-	 * @Get("/api/dbase/{idDbase:[0-9]+}/contacts")
+	 * @Get("/dbase/{idDbase:[0-9]+}/contacts")
 	 */
 	public function searchcontactsAction($idDbase)
 	{
