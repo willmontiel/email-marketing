@@ -81,7 +81,7 @@ try {
 		$router = new \Phalcon\Mvc\Router\Annotations();
 		
 		$router->addResource('Field', '/field');
-//		$router->addResource('Api', '/api');
+		$router->addResource('Api', '/api');
 		$router->addResource('Dbaseapi', '/api/dbase');
 		$router->addResource('Apistatistics', '/apistatistics');
 		
