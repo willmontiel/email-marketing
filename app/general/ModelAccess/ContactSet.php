@@ -253,7 +253,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				break;
 
 			case 'dbase':
-				$query->join = ' JOIN dbase AS db ON (db.idAccount = d.idAccount) ';
+				$query->join = ' JOIN dbase AS db ON (db.idAccount = e.idAccount) ';
 				$query->and = ' AND db.idDbase = ' . $this->dbase->idDbase;
 				
 				$query->joinForFreeText = '';
