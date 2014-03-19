@@ -255,13 +255,15 @@ class ImportContactWrapper
 		// Email y dominio apuntan al email (aunque al final el dominio se reescribe)
 		$fieldpos   = array(0 => $fieldMappings['email'], 1 => $fieldMappings['email']);
 		
-		unset($fieldMappings['email']);
+		// Copia de $fieldMappings para modificar
+		$tmpfm = $fieldMappings;
+		unset($tmpfm['email']);
 		
 		// Posicion donde debe moverse el nuevo campo
 		$stposition = 2;
 		
 		// Recorrer la lista
-		foreach ($fieldMappings as $idfield => $position) {
+		foreach ($tmpfm as $idfield => $position) {
 			$fieldnames[] = $idfield;
 			$fieldpos[$stposition] = $position;
 			$stposition++;
@@ -277,11 +279,10 @@ class ImportContactWrapper
 		// Tomar los campos del value de fieldpos y grabarlos en key
 		// En el ejemplo de arriba, $lineOut[0] = $lineIn[3]
 		
-		$this->log->log('Field Mappings: [' . print_r($fieldMappings, true) . '] => [' . print_r($fieldpos, true) . ']');
+		$this->log->log('Field names: [' . print_r($fieldMappings, true) . ']/[' . print_r($tmpfm, true) . '] => [' . print_r($fieldnames, true) . ']');
 		return array($fieldnames, $fieldpos);
 		
 	}
-//		$customfieldpos = array_diff_key($fieldMappings, array('email', 'name', 'lastname'));
 	
 	protected function destroyTemporaryTable()
 	{
@@ -379,6 +380,8 @@ class ImportContactWrapper
 		$standard = array('email', 'domain', 'name', 'lastname');
 		// Quitar los campos estandar de la lista
 		$custom = array_diff($names, $standard);
+		
+		$this->log->log('Names: [' . print_r($names, true) . ']');
 		
 		// Hay campos personalizados?
 		if (count($custom) > 0) {
@@ -529,6 +532,18 @@ class ImportContactWrapper
 		$this->timer->endTimer('report');
 	}
 	
+	/**
+	 * Metodo que ejecuta la copia linea a linea de los registros del archivo
+	 * CSV a un CSV temporal, cambiando el orden de los campos, validando
+	 * que las direcciones de email esten correctas, y eliminando duplicados
+	 * y solo copiando los campos importantes.
+	 * @param string $sourcefile
+	 * @param string $tmpFilename
+	 * @param string $delimiter
+	 * @param int $maxrows
+	 * @param array $fieldMapping
+	 * @param boolean $hasHeader
+	 */
 	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $fieldMapping, $hasHeader)
 	{
 		// El mapeado de posicion de campos es asi:
@@ -542,11 +557,12 @@ class ImportContactWrapper
 		$skipped = 0;
 		$rows = 0;
 		
-		$line = fgetcsv($fp, 0, $delimiter);
+
 		if ($hasHeader) {
 			$line = fgetcsv($fp, 0, $delimiter);
 		}
 		while (!feof($fp) && ($rows - $skipped) <= $maxrows) {
+			$line = fgetcsv($fp, 0, $delimiter);
 			$rows++;
 			// Validar EMAIL (correcto y que no este repetido)
 			$email = $this->verifyEmailAddress($line[$fieldMapping[0]], $rows);
@@ -563,7 +579,6 @@ class ImportContactWrapper
 			else {
 				$skipped++;
 			}
-			$line = fgetcsv($fp, 0, $delimiter);
 		}
 		fclose($fp);
 		fclose($nfp);
