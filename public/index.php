@@ -83,6 +83,8 @@ try {
 		$router->addResource('Field', '/field');
 		$router->addResource('Api', '/api');
 		$router->addResource('Dbaseapi', '/api/dbase');
+                $router->addResource('Contactlistapi', '/api/contactlist');
+                $router->addResource('Segmentapi', '/api/segment');
 		$router->addResource('Apistatistics', '/apistatistics');
 		
 		return $router;
