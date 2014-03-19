@@ -13,6 +13,10 @@ class DbaseapiController extends ControllerBase
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
+                $this->logger->log('Criterio de búsqueda: ' . $search);
+                $this->logger->log('Limit: ' . $limit);
+                $this->logger->log('Page: ' . $page);
+                
                 $pager = new PaginationDecorator();
                 if ($limit) {
                         $pager->setRowsPerPage($limit);
@@ -33,20 +37,24 @@ class DbaseapiController extends ControllerBase
 		}
 		
 		if ($search != null) {
-			try {
+			try {   
+                                $this->logger->log('search no esta vacio');
 				$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
-				$contactset = new \EmailMarketing\General\ContactsSearcher\ContactSet();
+				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
 				$contactset->setSearchCriteria($searchCriteria);
 				$contactset->setAccount($account);
 				$contactset->setDbase($dbase);
 				$contactset->setPaginator($pager);
 				$contactset->load();
 			}
-			catch (Exception $e)
-			{
+			catch (Exception $e) {
                             $this->logger->log('Exception: ' . $e);
                             return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
 			}
+                        catch (InvalidArgumentException $e) {
+                            $this->logger->log('Invalid Argument Exception: ' . $e);
+                            return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
+                        }
 			
 			$rest = new \EmailMarketing\General\Ember\RESTResponse();
 			$rest->addDataSource($contactset);
@@ -55,6 +63,7 @@ class DbaseapiController extends ControllerBase
 		}	
                 else {
                     try {
+                        $this->logger->log('search esta vacio');
                         $wrapper = new ContactWrapper();
                         $wrapper->setAccount($account);
                         $wrapper->setIdDbase($dbase->idDbase);
@@ -64,6 +73,10 @@ class DbaseapiController extends ControllerBase
                     } 
                     catch (Exception $e) {
                         $this->logger->log('Exception: ' . $e);
+                        return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
+                    }
+                    catch (InvalidArgumentException $e) {
+                        $this->logger->log('Invalid Argument Exception: ' . $e);
                         return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
                     }
                 }
