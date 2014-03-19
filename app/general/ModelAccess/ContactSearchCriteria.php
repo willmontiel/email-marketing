@@ -15,7 +15,7 @@ class ContactSearchCriteria
 	public function __construct($text) 
 	{
             if (trim($text) === '') {
-                    throw new \InvalidArgumentException('Search criteria empty!!');
+                throw new \InvalidArgumentException('Search criteria empty!!');
             }
             
             $this->criteria = $text;
@@ -65,6 +65,8 @@ class ContactSearchCriteria
                             }
                     }
             }
+            
+            \Phalcon\DI::getDefault()->get('logger')->log("values: " . print_r($values, true));
 	}
 	
 	/*
@@ -73,6 +75,7 @@ class ContactSearchCriteria
 	 */
 	public function getEmails()
 	{
+                \Phalcon\DI::getDefault()->get('logger')->log("Emails: " . print_r($this->emails, true));
 		return $this->emails;
 	}
 	
@@ -82,6 +85,7 @@ class ContactSearchCriteria
 	 */
 	public function getDomains()
 	{
+                \Phalcon\DI::getDefault()->get('logger')->log("Domains: " . print_r($this->domains, true));
 		return $this->domains;
 	}
 	
@@ -91,6 +95,7 @@ class ContactSearchCriteria
 	 */
 	public function getFreeText()
 	{
+                \Phalcon\DI::getDefault()->get('logger')->log("Freetext: " . print_r($this->freeText, true));
 		return $this->freeText;
 	}
 	
