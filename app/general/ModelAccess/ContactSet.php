@@ -133,9 +133,9 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$ids = implode(', ', $contactIds);
 		
 			$sql .= "SELECT c.*, e.email, e.blocked, d.idDbase, d.name AS dbase
-					FROM Contact c
-						JOIN Email e ON(e.idEmail = c.idEmail)
-						JOIN Dbase d ON(d.idDbase = c.idDbase)
+					FROM contact AS c
+						JOIN email AS e ON(e.idEmail = c.idEmail)
+						JOIN dbase AS d ON(d.idDbase = c.idDbase)
 					WHERE c.idContact IN (" . $ids . ")";
 		}
                 
@@ -144,13 +144,13 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	}
 	
 	
-	private function findContacts($phql)
+	private function findContacts($sql)
 	{
-		$manager = \Phalcon\DI::getDefault()->get('modelsManager');
+		$db = \Phalcon\DI::getDefault()->get('db');
 		
-                $result = $manager->executeQuery($phql);
-		
-		$count = count($result);
+                $query = $db->query($sql);
+                $result = $query->fetchAll();
+                $count = count($result);
 		
 		if ($count > 0) {
 //                        \Phalcon\DI::getDefault()->get('logger')->log("Matches: " . print_r($result, true));
@@ -302,26 +302,26 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
                 $object = array();
                 foreach ($contacts as $contact) {
                     $c = array();
-                    $c['id'] = $contact->idContact;
-                    $c['email'] = $contact->email;
-                    $c['name'] = $contact->name;
-                    $c['lastName'] = $contact->lastName;
-                    $c['isActive'] = ($contact->status != 0);
-                    $c['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
-                    $c['isSubscribed'] = ($contact->unsubscribed == 0);
-                    $c['subscribedOn'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
-                    $c['unsubscribedOn'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
-                    $c['isBounced'] = ($contact->bounced != 0);
-                    $c['bouncedOn'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
-                    $c['isSpam'] = ($contact->spam != 0);
-                    $c['spamOn'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
-                    $c['createdOn'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
-                    $c['updatedOn'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
+                    $c['id'] = $contact['idContact'];
+                    $c['email'] = $contact['email'];
+                    $c['name'] = $contact['name'];
+                    $c['lastName'] = $contact['lastName'];
+                    $c['isActive'] = ($contact['status'] != 0);
+                    $c['activatedOn'] = (($contact['status'] != 0)?date('d/m/Y H:i', $contact['status']):'');
+                    $c['isSubscribed'] = ($contact['unsubscribed'] == 0);
+                    $c['subscribedOn'] = (($contact['subscribedon'] != 0)?date('d/m/Y H:i', $contact['subscribedon']):'');
+                    $c['unsubscribedOn'] = (($contact['unsubscribed'] != 0)?date('d/m/Y H:i', $contact['unsubscribed']):'');
+                    $c['isBounced'] = ($contact['bounced'] != 0);
+                    $c['bouncedOn'] = (($contact['bounced'] != 0)?date('d/m/Y H:i', $contact['bounced']):'');
+                    $c['isSpam'] = ($contact['spam'] != 0);
+                    $c['spamOn'] = (($contact['spam'] != 0)?date('d/m/Y H:i', $contact['spam']):'');
+                    $c['createdOn'] = (($contact['createdon'] != 0)?date('d/m/Y H:i', $contact['createdon']):'');
+                    $c['updatedOn'] = (($contact['updatedon'] != 0)?date('d/m/Y H:i', $contact['updatedon']):'');
 
-                    $c['ipSubscribed'] = (($contact->ipSubscribed)?long2ip($contact->ipSubscribed):'');
-                    $c['ipActivated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
+                    $c['ipSubscribed'] = (($contact['ipSubscribed'])?long2ip($contact['ipSubscribed']):'');
+                    $c['ipActivated'] = (($contact['ipActivated'])?long2ip($contact['ipActivated']):'');
 
-                    $c['isEmailBlocked'] = ($contact->blocked != 0);
+                    $c['isEmailBlocked'] = ($contact['blocked'] != 0);
                     
                     $object[] = $c;
                 }
