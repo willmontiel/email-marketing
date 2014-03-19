@@ -3,19 +3,12 @@ class Communication
 {
 	protected $requester;
 	
-	public function __construct($log = null, $socket = null) {
+	public function __construct($socket) {
 		$context = new ZMQContext();
 
 		$this->requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-		if ($log) {
-			$log->log("Connecting to: [" . SocketConstants::getMailRequestsEndPointPeer() . "]");
-		}
-		if(!$socket) {
-			$this->requester->connect(SocketConstants::getMailRequestsEndPointPeer());
-		}
-		else {
-			$this->requester->connect($socket);
-		}
+		$this->requester->connect($socket);
+		Phalcon\DI::getDefault()->get('logger')->log("Connecting to: [" . $socket . "]");
 	}
 	
 	public function getStatus($type)
@@ -89,6 +82,12 @@ class Communication
 			$this->requester->send(sprintf("%s $idMail $idMail", 'Play-Task'));
 			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 		}
+	}
+	
+	public function sendImportToParent($data, $code)
+	{
+		$this->requester->send(sprintf("%s $data $code", 'Play-Task'));
+		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 	}
 	
 	public function sendPausedToParent($idMail)

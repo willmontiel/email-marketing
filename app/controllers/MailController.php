@@ -1273,7 +1273,7 @@ class MailController extends ControllerBase
 				}
 				return $this->response->redirect('mail/preview/' . $idMail);
 			}
-			$commObj = new Communication();
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 			$commObj->sendSchedulingToParent($idMail);	
 			
 			return $this->response->redirect("mail/index");
@@ -1289,7 +1289,7 @@ class MailController extends ControllerBase
 			return $this->response->redirect('mail/preview/' . $idMail);
 		}
 		
-		$commObj = new Communication();
+		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 		$commObj->sendPlayToParent($idMail);
 		
 		return $this->response->redirect("mail/index");
@@ -1297,7 +1297,7 @@ class MailController extends ControllerBase
 	
 	public function stopAction($direction, $idMail)
 	{
-		$commObj = new Communication($this->logger);
+		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 		
 		$mail = Mail::findFirst(array(
 			"conditions" => "idMail = ?1 AND idAccount = ?2",
@@ -1329,7 +1329,7 @@ class MailController extends ControllerBase
 	
 	public function playAction($idMail)
 	{
-		$commObj = new Communication($this->logger);
+		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 		$commObj->sendPlayToParent($idMail);
 		
 		return $this->response->redirect("mail/index");
@@ -1337,7 +1337,7 @@ class MailController extends ControllerBase
 	
 	public function cancelAction($idMail)
 	{
-		$commObj = new Communication($this->logger);
+		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 		$commObj->sendCancelToParent($idMail);
 		
 		return $this->response->redirect("mail/index");
