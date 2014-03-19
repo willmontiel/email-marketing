@@ -94,7 +94,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$sql = "SELECT idContact FROM (" . $c1 . ") AS c1 JOIN (" . $c2 . ") AS c2 ON (c1.idEmail = c2.idEmail) " . $limit;
 		}
 		
-		Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
+//		Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
 		
 		return $sql;
 	}
@@ -112,7 +112,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					WHERE c.idContact IN (" . $ids . ")";
 		}
                 
-                Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
+//                Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
 		return $sql;
 	}
 	
