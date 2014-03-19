@@ -94,7 +94,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$sql = "SELECT idContact FROM (" . $c1 . ") AS c1 JOIN (" . $c2 . ") AS c2 ON (c1.idEmail = c2.idEmail) " . $limit;
 		}
 		
-//		Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
+		\Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
 		
 		return $sql;
 	}
@@ -112,14 +112,14 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					WHERE c.idContact IN (" . $ids . ")";
 		}
                 
-//                Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
+                \Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
 		return $sql;
 	}
 	
 	
 	private function findContacts($sql)
 	{
-		$db = Phalcon\DI::getDefault()->get('db');
+		$db = \Phalcon\DI::getDefault()->get('db');
 			
 		$query = $db->query($sql);
 		$result = $query->fetchAll();
@@ -132,13 +132,13 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	
 	private function findContactIds($sql)
 	{
-		$cache = Phalcon\DI::getDefault()->get('cache');
+		$cache = \Phalcon\DI::getDefault()->get('cache');
 		$queryKey = $this->getQueryKey();
 		$contactIds = $cache->get($queryKey);
 		
 		if (!$contactIds) {
 			$contactIds = array();
-			$db = Phalcon\DI::getDefault()->get('db');
+			$db = \Phalcon\DI::getDefault()->get('db');
 			
 			$query = $db->query($sql);
 			$result = $query->fetchAll();
@@ -224,7 +224,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 						MATCH(c.name, c.lastname) AGAINST ('" . $criteriaText . "' IN BOOLEAN MODE) 
 						AND b.idAccount = " . $this->account->idAccount . " " . $queryKey->andForFreeText;
 		}
-//		Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
+//		\Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
 		return $sql;
 	}
 	
