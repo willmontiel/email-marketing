@@ -236,9 +236,10 @@ class ImportContactWrapper
 	 * Determina la configuracion de campos y el reposicionamiento que deben
 	 * tener en el archivo CSV para cumplir con su ubicacion en tabla temporal
 	 * @param array $fieldMappings
-	 * @return array con dos partes:
+	 * @return array con tres partes:
 	 *			array con campos para mapear de CSV a nuevo CSV
 	 *			array de nombres de campos para LOAD DATA INFILE
+	 *			array con booleans que indican si un campo es custom o no
 	 */
 	protected function configureMappings($fieldMappings)
 	{
@@ -249,7 +250,8 @@ class ImportContactWrapper
 		// Reordenamiento al escribir en CSV
 		// Email y dominio apuntan al email (aunque al final el dominio se reescribe)
 		$fieldpos   = array(0 => $fieldMappings['email'], 1 => $fieldMappings['email']);
-		
+		// Indicador de campo personalizado
+		$custom = array(false, false);
 		// Copia de $fieldMappings para modificar
 		$tmpfm = $fieldMappings;
 		unset($tmpfm['email']);
@@ -262,6 +264,7 @@ class ImportContactWrapper
 			$fieldnames[] = $idfield;
 			$fieldpos[$stposition] = $position;
 			$stposition++;
+			$custom[] = is_numeric($idfield);
 		}
 		// Suponiendo que la entrada es asi:
 		// [ 'email' => 3, 'name' => 2, '123' => '7', '124' => '5' ]
@@ -275,7 +278,7 @@ class ImportContactWrapper
 		// En el ejemplo de arriba, $lineOut[0] = $lineIn[3]
 		
 		$this->log->log('Field names: [' . print_r($fieldMappings, true) . ']/[' . print_r($tmpfm, true) . '] => [' . print_r($fieldnames, true) . ']');
-		return array($fieldnames, $fieldpos);
+		return array($fieldnames, $fieldpos, $custom);
 		
 	}
 	
@@ -370,7 +373,18 @@ class ImportContactWrapper
 		return $email;
 	}
 
-	protected function alterTemporaryTable($names, $dbase)
+	protected function getCustomFields()
+	{
+		
+	}
+	
+	/**
+	 * 
+	 * @param array $names
+	 * @param array $cftypes
+	 * @return array
+	 */
+	protected function alterTemporaryTable($names, $cftypes)
 	{
 		$standard = array('email', 'domain', 'name', 'lastname');
 		// Quitar los campos estandar de la lista
@@ -380,35 +394,23 @@ class ImportContactWrapper
 		
 		// Hay campos personalizados?
 		if (count($custom) > 0) {
-			// Tomar lista de campos personalizados en la base de datos y 
-			// obtener su tipo (para definir el tipo de campo)
-			$cfieldsdef = $dbase->customFields;
-			$cfdefinition = array();
-			foreach ($cfieldsdef as $f) {
-				switch ($f->type) {
-					case 'Date':
-					case 'Numerical':
-						$t = 'INT(10) DEFAULT 0'; 
-						break;
-					case 'Text':
-					case 'TextArea':
-					case 'Select':
-					case 'MultiSelect':
-					default:
-						$t = 'VARCHAR(100) DEFAULT NULL';
-						break;
-				}
-				$cfdefinition[$f->idCustomField] = $t;
-			}
-			$this->log->log('Definitions: [' . print_r($cfdefinition, true) . ']');
 			
 			$fnames = array();
 			$cfnames = array();
 			foreach ($custom as $cf) {
 				// De acuerdo al tipo de campo
-				if (isset($cfdefinition[$cf])) {
+				if (isset($cftypes[$cf])) {
+					switch ($cftypes[$cf]) {
+						case 'Date':
+						case 'Numerical':
+							 $t = ' INT(10) DEFAULT 0';
+							break;
+						default:
+							 $t = ' VARCHAR(100) DEFAULT NULL';
+							break;
+					}
 					$n = 'cf_' . $cf;
-					$fnames[] = $n . ' ' . $cfdefinition[$cf];
+					$fnames[] = $n . ' ' . $t;
 					$cfnames[] = $n;
 				}
 				else {
@@ -487,13 +489,17 @@ class ImportContactWrapper
 		// Crear lista de mapeo de campos para archivo CSV temporal
 		// [0] = nombres de campos para LOAD DATA INFILE
 		// [1] = map de posiciones de CSV 1 a CSV 2
+		// [2] = boolean de custom. Ej: [false, false, true, true, true]
+		//       indica que los tres ult campos son custom 
 		$map = $this->configureMappings($fieldMapping);
-		$mapnames = $this->alterTemporaryTable($map[0], $dbase);
+		// Este metodo identifica el tipo de los campos personalizados
+		$cftypes = $this->getCustomFieldTypes($dbase);
+		$mapnames = $this->alterTemporaryTable($map[0], $cftypes);
 		
 		$tmpFilename = $sourcefile . '.pr';
 		$this->timer->startTimer('copy-rows', 'Copy csv file to temporary file!');
 		// Ejecutar la copia de registros
-		$this->copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $map[1], $hasHeader);
+		$this->copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $map[1], $hasHeader, $cftypes, $map[2]);
 		$this->timer->endTimer('copy-rows');
 
 		
@@ -530,6 +536,19 @@ class ImportContactWrapper
 		$this->timer->endTimer('report');
 	}
 	
+	protected function getCustomFieldTypes($dbase)
+	{
+		// Tomar lista de campos personalizados en la base de datos y 
+		// obtener su tipo (para definir el tipo de campo)
+		$cfieldsdef = $dbase->customFields;
+		$cfdefinition = array();
+		foreach ($cfieldsdef as $f) {
+			$cfdefinition[$f->idCustomField] = $f->type;
+		}
+		return $cfdefinition;
+	}
+
+
 	/**
 	 * Metodo que ejecuta la copia linea a linea de los registros del archivo
 	 * CSV a un CSV temporal, cambiando el orden de los campos, validando
@@ -541,8 +560,10 @@ class ImportContactWrapper
 	 * @param int $maxrows
 	 * @param array $fieldMapping
 	 * @param boolean $hasHeader
+	 * @param array $cftypes
+	 * @param array $custom
 	 */
-	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $fieldMapping, $hasHeader)
+	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $fieldMapping, $hasHeader, $cftypes, $custom)
 	{
 		// El mapeado de posicion de campos es asi:
 		// [0 => 3, 2 => 2, 3 => 7, 4 => 5 ]
@@ -567,7 +588,14 @@ class ImportContactWrapper
 			if ($email) {
 				$lineOut = array();
 				foreach ($fieldMapping as $d => $o) {
-					$lineOut[$d] = $line[$o];
+					if ($custom[$d]) {
+						// Campo custom, convertir
+						$lineOut[$d] = $this->processFieldData($cftypes, $line[$o]);
+					}
+					else {
+						// No custom, copia directa
+						$lineOut[$d] = $line[$o];
+					}
 				}
 				list($user, $domain) = explode('@', $email);
 				$lineOut[0] = $email;
