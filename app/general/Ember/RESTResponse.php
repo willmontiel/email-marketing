@@ -34,7 +34,7 @@ class RESTResponse
 		
 		$pagination = array('pagination' => array(
 			'page' => $this->primary->getCurrentPage(),
-			'limit' => 20,
+			'limit' => $this->primary->getRowsPerPage(),
 			'total' => $this->primary->getTotalRecords(),
 			'availablepages' => $this->primary->getTotalPages(),			
 		));

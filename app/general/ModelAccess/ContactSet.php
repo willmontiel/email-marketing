@@ -352,6 +352,11 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		return $this->paginator->getCurrentPage();
 	}
 	
+	public function getRowsPerPage()
+	{
+		return $this->paginator->getRowsPerPage();
+	}
+	
 	public function getTotalPages()
 	{
 		return $this->paginator->getTotalPages();

@@ -1,3 +1,28 @@
+<tr>
+	<td>
+		<label {{ '{{action expand this}}' }}>{{ '{{email}}' }}</label>
+	</td>
+	<td>
+		{{'{{name}}'}} {{'{{lastName}}'}}
+	</td>
+	<td>
+		<div class="btn-group pull-right">
+			<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li>{{ '{{#linkTo "contacts.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
+				<li>{{ '{{#linkTo "contacts.show" this}}' }}<i class="icon-search"></i> Ver detalles{{ '{{/linkTo}}' }}</li>
+				<li>{{ '{{#linkTo "contacts.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}</li>
+			</ul>
+		</div>
+	</td>
+</tr>
+{{ '{{#if isExpanded}}' }}
+<tr>
+	<td>Soprise!!</td><td></td><td></td>
+</tr>
+{{ '{{/if}}' }}
+
+{#
 <div class="box-section news with-icons relative">
 		{{'{{#if isSpam}}'}}
 		<span class="triangle-button red">
@@ -40,3 +65,4 @@
 		</div>
 	</div>
 </div>
+#}

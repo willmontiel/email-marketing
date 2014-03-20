@@ -5,7 +5,7 @@
  * modelClass : App.contact
  */
 
-Ember.MixinPagination = Ember.Mixin.create({
+Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 	totalrecords: 0,
 	currentpage: 0,
 	recordsperpage: 0,
@@ -59,6 +59,7 @@ Ember.MixinPagination = Ember.Mixin.create({
 			else{
 				var page=parseInt(this.get("currentpage"))+1;
 				var obj = {
+					searchCriteria: this.criteria,
 					page: page,
 					limit: this.get("recordsperpage")
 				};
@@ -76,6 +77,7 @@ Ember.MixinPagination = Ember.Mixin.create({
 				var page=parseInt(this.get("currentpage"))-1;
 
 				var obj = {
+					searchCriteria: this.criteria,
 					page: page,
 					limit: this.get("recordsperpage")
 				};
@@ -91,6 +93,7 @@ Ember.MixinPagination = Ember.Mixin.create({
 			}
 			else{
 				var obj = {
+					searchCriteria: this.criteria,
 					page: 1,
 					limit: this.get("recordsperpage")
 				};
@@ -107,6 +110,7 @@ Ember.MixinPagination = Ember.Mixin.create({
 			}
 			else{
 				var obj = {
+					searchCriteria: this.criteria,
 					page: availablepages,
 					limit: this.get("recordsperpage")
 				};

@@ -161,16 +161,28 @@ App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 	
 });
 
-App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, Ember.AclMixin,{
-	init: function () 
-	{
+App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchReferencePagination, Ember.AclMixin,{
+	init: function () {
 		this.set('acl', App.contactACL);
 	},
 	searchCriteria: '',
     search: function(){
-		var resultado = this.store.find('contact', { searchCriteria: this.get('searchCriteria') });
+		this.criteria = this.get('searchCriteria');
+
+		var resultado = this.store.find('contact', { searchCriteria: this.criteria });
 		this.set('content', resultado);
 	},
+	
+	reset: function(){
+		this.criteria = '';
+		var resultado = this.store.find('contact', { searchCriteria: null });
+		this.set('content', resultado);
+	},
+			
+	expand: function () {
+		this.render('contacts/show');
+	},
+			
 	modelClass: App.Contact
 });
 
@@ -179,6 +191,7 @@ App.ContactsShowController = Ember.ObjectController.extend({
 		var mailHistory = JSON.parse(this.content.get('mailHistory'));
 		this.set('history', mailHistory);
 	}.observes(this.content),
+			
 	actions :{
 		subscribedcontact: function () {
 			//this.set("isSubscribed", true);

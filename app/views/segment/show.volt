@@ -3,7 +3,7 @@
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
 		{{ partial("partials/date_view_partial") }}
-		{{ javascript_include('js/mixin_pagination.js') }}
+		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
 		{{ javascript_include('js/load_activecontacts.js')}}
 <script type="text/javascript">
@@ -82,13 +82,14 @@
 	</script>
 	<script type="text/x-handlebars" data-template-name="contacts/index">
 		<div class="row-fluid">
-			<div class="span6">
+			<div class="span8">
 				<form>
-					{{' {{view Ember.TextField valueBinding="searchCriteria" class="span12" onEvent="enter" action=search type="text" placeholder="Buscar por dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}
+					{{' {{view Ember.TextField valueBinding="searchCriteria" class="span8" onEvent="enter" action=search type="text" placeholder="Buscar por dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}
 					<button class="btn btn-default" {{ '{{action search this}}' }}><i class="icon-search"></i></button>
+					<button class="btn btn-blue" {{ '{{action reset this}}' }}><i class="icon-exchange"></i></button>
 				</form>
 			</div>
-			<div class="span6 text-right" style="margin-bottom: 5px;">
+			<div class="span4 text-right" style="margin-bottom: 5px;">
 				<a href="{{url('contactlist#/segments')}}" class="btn btn-blue"><i class="icon-home"></i> Todos los segmentos</a>
 			</div>
 		</div>
