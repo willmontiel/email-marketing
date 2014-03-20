@@ -166,9 +166,9 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 	{
 		this.set('acl', App.contactACL);
 	},
-	searchText: '',
+	searchCriteria: '',
     search: function(){
-		var resultado = this.store.find('contact', { email: this.get('searchText') });
+		var resultado = this.store.find('contact', { searchCriteria: this.get('searchCriteria') });
 		this.set('content', resultado);
 	},
 	modelClass: App.Contact

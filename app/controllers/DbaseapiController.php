@@ -13,17 +13,17 @@ class DbaseapiController extends ControllerBase
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
-                $this->logger->log('Criterio de búsqueda: ' . $search);
-                $this->logger->log('Limit: ' . $limit);
-                $this->logger->log('Page: ' . $page);
+//                $this->logger->log('Criterio de búsqueda: ' . $search);
+//                $this->logger->log('Limit: ' . $limit);
+//                $this->logger->log('Page: ' . $page);
                 
-                $pager = new PaginationDecorator();
-                if ($limit) {
-                        $pager->setRowsPerPage($limit);
-                }
-                if ($page) {
-                        $pager->setCurrentPage($page);
-                }
+		$pager = new PaginationDecorator();
+		if ($limit) {
+				$pager->setRowsPerPage($limit);
+		}
+		if ($page) {
+				$pager->setCurrentPage($page);
+		}
                 
 		$account = $this->user->account;
 		$dbase = Dbase::findFirst(array(
@@ -36,53 +36,46 @@ class DbaseapiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la base de datos');
 		}
 		
-		if ($search != null) {
-			try {   
-                                $this->logger->log('search no esta vacio');
+//		$contactlists = Contactlist::findByIdDbase($dbase->idDbase);
+//		$contactlists = $dbase->contactlist;
+
+		try { 
+			if ($search != null) {
 				$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
-                                $this->logger->log('se instancio search criteria');
 				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
-                                $this->logger->log('se instancio contact set');
 				$contactset->setSearchCriteria($searchCriteria);
 				$contactset->setAccount($account);
 				$contactset->setDbase($dbase);
 				$contactset->setPaginator($pager);
-                                $this->logger->log('se seteó todo');
 				$contactset->load();
-                                $this->logger->log('déspues de load');
-			}
-			catch (Exception $e) {
-                            $this->logger->log('Exception: ' . $e);
-                            return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
-			}
-                        catch (InvalidArgumentException $e) {
-                            $this->logger->log('Invalid Argument Exception: ' . $e);
-                            return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
-                        }
+				
+//				$contactlistSet = new \EmailMarketing\General\ModelAccess\ContactlistSet();
+//				$contactlistSet->setContactlist($contactlists);
+//				$contactlistSet->load();
+				$rest = new \EmailMarketing\General\Ember\RESTResponse();
+				
+	//			$rest->addDataSource($contactlistSet);
+				$rest->addDataSource($contactset);
 			
-			$rest = new \EmailMarketing\General\Ember\RESTResponse();
-			$rest->addDataSource($contactset);
-			
-			return $this->setJsonResponse($rest->getRecords());
-		}	
-                else {
-                    try {
-                        $this->logger->log('search esta vacio');
-                        $wrapper = new ContactWrapper();
-                        $wrapper->setAccount($account);
-                        $wrapper->setIdDbase($dbase->idDbase);
-                        $wrapper->setPager($pager);
-                        $result = $wrapper->findContacts($dbase);
-			return $this->setJsonResponse($result);	
-                    } 
-                    catch (Exception $e) {
-                        $this->logger->log('Exception: ' . $e);
-                        return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
-                    }
-                    catch (InvalidArgumentException $e) {
-                        $this->logger->log('Invalid Argument Exception: ' . $e);
-                        return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
-                    }
-                }
+				return $this->setJsonResponse($rest->getRecords());
+			}	
+			else {
+				$wrapper = new ContactWrapper();
+				$wrapper->setAccount($account);
+				$wrapper->setIdDbase($dbase->idDbase);
+				$wrapper->setPager($pager);
+				$result = $wrapper->findContacts($dbase);
+				
+				return $this->setJsonResponse($result);	
+			}
+		}
+		catch (Exception $e) {
+			$this->logger->log('Exception: ' . $e);
+			return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
+		}
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Invalid Argument Exception: ' . $e);
+			 return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
+		}
 	}
 }

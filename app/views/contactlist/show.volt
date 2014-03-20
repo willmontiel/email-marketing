@@ -125,7 +125,16 @@
 			{{'{{outlet}}'}}
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/index">
-
+			<div class="row-fluid">
+				<div class="span6">
+					<form>
+						<label>
+							{{' {{view Ember.TextField valueBinding="searchCriteria" class="span12" onEvent="enter" action=search type="text" placeholder="Buscar por dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}
+							<button class="btn btn-default" {{ '{{action search this}}' }}><i class="icon-search"></i></button>
+						</label>
+					</form>
+				</div>
+			</div>
 			<div class="pull-right" style="margin-bottom: 5px;">
 				<a href="{{url('contactlist#/lists')}}" class="btn btn-blue"><i class="icon-home"></i> Todas las listas</a>
 				{{'{{#linkTo "contacts.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/linkTo}}'}}

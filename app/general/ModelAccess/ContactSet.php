@@ -16,7 +16,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	protected $segment;
 	protected $paginator;
 	
-	protected $rows;
+	protected $rows = array();
 	protected $name;
 	
 	protected $id;
@@ -53,27 +53,10 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	
 	public function load()
 	{   
-                $this->validateQueryCriteria();
 		$contactIds = $this->findContactIds($this->createCoreQuery());
 		$query = $this->createQuery($contactIds);
 		
 		$this->findContacts($query);
-	}
-	
-	private function validateQueryCriteria()
-	{
-		if ($this->dbase == null && $this->contactlist == null && $this->segment == null) {
-			$this->queryCriteria = 'account';
-		}
-		else if ($this->dbase !== null) {
-			$this->queryCriteria = 'dbase';
-		}
-		else if ($this->contactlist !== null) {
-			$this->queryCriteria = 'contactlist';
-		}
-		else if ($this->segment !== null){
-			$this->queryCriteria = 'segment';
-		}
 	}
 	
 	private function createCoreQuery()
@@ -85,23 +68,31 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		
 		$limit = " LIMIT " . $this->paginator->getRowsPerPage() . ' OFFSET ' . $this->paginator->getStartIndex();
 		
+		$sql = '';
+		$sqlTotalRecords = '';
+		
 		if ($c1 == '') {
+			$sqlTotalRecords = str_replace('c.idContact, c.idEmail', 'COUNT(*) AS total', $c2);
 			$sql = $c2 . $limit;
 		}
 		else if ($c2 == '') {
+			$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) ";
 			$sql = "SELECT c.idContact FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) " . $limit;
 		}
 		else {
+			$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) ";
 			$sql = "SELECT idContact FROM (" . $c1 . ") AS c1 JOIN (" . $c2 . ") AS c2 ON (c1.idEmail = c2.idEmail) " . $limit;
 		}
 		
-		\Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
+		$this->setTotalMatches($sqlTotalRecords);
 		
+		\Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
+		\Phalcon\DI::getDefault()->get('logger')->log("Total query: " . $sqlTotalRecords);
 		return $sql;
 	}
 	
         
-        private function findContactIds($sql)
+    private function findContactIds($sql)
 	{
 		$cache = \Phalcon\DI::getDefault()->get('cache');
 		$queryKey = $this->getQueryKey();
@@ -139,25 +130,38 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					WHERE c.idContact IN (" . $ids . ")";
 		}
                 
-                \Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
+        \Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
 		return $sql;
 	}
 	
 	
 	private function findContacts($sql)
 	{
-		$db = \Phalcon\DI::getDefault()->get('db');
-		
-                $query = $db->query($sql);
-                $result = $query->fetchAll();
-                $count = count($result);
-		
-		if ($count > 0) {
-//                        \Phalcon\DI::getDefault()->get('logger')->log("Matches: " . print_r($result, true));
-			$this->createStructureForReturns($result);
+		if ($sql != '') {
+			$db = \Phalcon\DI::getDefault()->get('db');
+			$query = $db->query($sql);
+			$result = $query->fetchAll();
+			$count = count($result);
+
+			if ($count > 0) {
+				$this->createStructureForReturns($result);
+			}
 		}
 	}
 	
+	
+	private function setTotalMatches($sql)
+	{
+		if ($sql != '') {
+			$db = \Phalcon\DI::getDefault()->get('db');
+			
+			$query = $db->query($sql);
+			$result = $query->fetch();
+			\Phalcon\DI::getDefault()->get('logger')->log("Total: " . $result['total']);
+			$this->paginator->setTotalRecords($result['total']);
+		}
+	}
+
 
 	/**
 	 * Returns the first CoreSql part created with emails and domains found in the search text
@@ -210,8 +214,6 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		
 		$sql = $sqlEmail . $union . $sqlDomain;
 		
-//                 \Phalcon\DI::getDefault()->get('logger')->log("Domains and email sql: " . $sql);
-                 
 		return $sql;
 	}
 	
@@ -241,51 +243,54 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	{
 		$query = new \stdClass();
 		
-		switch ($this->queryCriteria) {
-			case 'account':
-				$query->join = '';
-				$query->and = '';
-				$query->joinForFreeText = '';
-				$query->andForFreeText = '';
-				
-				$this->name = 'contacts';
-				$this->id = $this->account->idAccount;
-				break;
+		if ($this->dbase == null && $this->contactlist == null && $this->segment == null) {
+			$query->join = '';
+			$query->and = '';
+			$query->joinForFreeText = '';
+			$query->andForFreeText = '';
 
-			case 'dbase':
-				$query->join = ' JOIN dbase AS db ON (db.idAccount = e.idAccount) ';
-				$query->and = ' AND db.idDbase = ' . $this->dbase->idDbase;
-				
-				$query->joinForFreeText = '';
-				$query->andForFreeText = ' AND b.idDbase = ' . $this->dbase->idDbase;
-				
-				$this->name = 'contacts';
-				$this->id = $this->dbase->idDbase;
-				break;
+			$this->name = 'contacts';
+			$this->id = $this->account->idAccount;
 			
-			case 'contactlist':
-				$query->join = ' JOIN contact AS a ON (c.idEmail = e.idEmail) 
-									      JOIN coxcl AS cl ON (cl.idContact = c.idContact) ';
-				$query->and = ' AND cl.idContactlist = ' . $this->contactlist->idContactlist;
-				
-				$query->joinForFreeText = ' JOIN coxcl AS cl ON (cl.idContact = c.idContact) ';
-				$query->andForFreeText = ' AND cl.idContactlist = ' . $this->contactlist->idContactlist;
-				
-				$this->name = 'contacts';
-				$this->id = $this->contactlist->idContactlist;
-				break;
+			$this->queryCriteria = 'account';
+		}
+		else if ($this->dbase !== null) {
+			$query->join = ' JOIN dbase AS db ON (db.idAccount = e.idAccount) ';
+			$query->and = ' AND db.idDbase = ' . $this->dbase->idDbase;
+
+			$query->joinForFreeText = '';
+			$query->andForFreeText = ' AND b.idDbase = ' . $this->dbase->idDbase;
+
+			$this->name = 'contacts';
+			$this->id = $this->dbase->idDbase;
 			
-			case 'segment':
-				$query->join = ' JOIN contact AS c ON (c.idEmail = e.idEmail) 
-										  JOIN sxc AS sc ON (sc.idContact = c.idContact) ';
-				$query->and = ' AND sc.idSegment = ' . $this->segment->idSegment;
-				
-				$query->joinForFreeText = ' JOIN sxc AS sc ON (sc.idContact = c.idContact) ';
-				$query->andForFreeText = ' AND sc.idSegment = ' . $this->segment->idSegment;
-				
-				$this->name = 'contacts';
-				$this->id = $this->segment->idSegment;
-				break;
+			$this->queryCriteria = 'dbase';
+		}
+		else if ($this->contactlist !== null) {
+			$query->join = ' JOIN contact AS c ON (c.idEmail = e.idEmail) 
+									  JOIN coxcl AS cl ON (cl.idContact = c.idContact) ';
+			$query->and = ' AND cl.idContactlist = ' . $this->contactlist->idContactlist;
+
+			$query->joinForFreeText = ' JOIN coxcl AS cl ON (cl.idContact = c.idContact) ';
+			$query->andForFreeText = ' AND cl.idContactlist = ' . $this->contactlist->idContactlist;
+
+			$this->name = 'contacts';
+			$this->id = $this->contactlist->idContactlist;
+			
+			$this->queryCriteria = 'contactlist';
+		}
+		else if ($this->segment !== null){
+			$query->join = ' JOIN contact AS c ON (c.idEmail = e.idEmail) 
+									  JOIN sxc AS sc ON (sc.idContact = c.idContact) ';
+			$query->and = ' AND sc.idSegment = ' . $this->segment->idSegment;
+
+			$query->joinForFreeText = ' JOIN sxc AS sc ON (sc.idContact = c.idContact) ';
+			$query->andForFreeText = ' AND sc.idSegment = ' . $this->segment->idSegment;
+
+			$this->name = 'contacts';
+			$this->id = $this->segment->idSegment;
+			
+			$this->queryCriteria = 'segment';
 		}
 		
 		return $query;
@@ -299,34 +304,34 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	
 	private function createStructureForReturns($contacts)
 	{   
-                $object = array();
-                foreach ($contacts as $contact) {
-                    $c = array();
-                    $c['id'] = $contact['idContact'];
-                    $c['email'] = $contact['email'];
-                    $c['name'] = $contact['name'];
-                    $c['lastName'] = $contact['lastName'];
-                    $c['isActive'] = ($contact['status'] != 0);
-                    $c['activatedOn'] = (($contact['status'] != 0)?date('d/m/Y H:i', $contact['status']):'');
-                    $c['isSubscribed'] = ($contact['unsubscribed'] == 0);
-                    $c['subscribedOn'] = (($contact['subscribedon'] != 0)?date('d/m/Y H:i', $contact['subscribedon']):'');
-                    $c['unsubscribedOn'] = (($contact['unsubscribed'] != 0)?date('d/m/Y H:i', $contact['unsubscribed']):'');
-                    $c['isBounced'] = ($contact['bounced'] != 0);
-                    $c['bouncedOn'] = (($contact['bounced'] != 0)?date('d/m/Y H:i', $contact['bounced']):'');
-                    $c['isSpam'] = ($contact['spam'] != 0);
-                    $c['spamOn'] = (($contact['spam'] != 0)?date('d/m/Y H:i', $contact['spam']):'');
-                    $c['createdOn'] = (($contact['createdon'] != 0)?date('d/m/Y H:i', $contact['createdon']):'');
-                    $c['updatedOn'] = (($contact['updatedon'] != 0)?date('d/m/Y H:i', $contact['updatedon']):'');
+		$object = array();
+		foreach ($contacts as $contact) {
+			$c = array();
+			$c['id'] = $contact['idContact'];
+			$c['email'] = $contact['email'];
+			$c['name'] = $contact['name'];
+			$c['lastName'] = $contact['lastName'];
+			$c['isActive'] = ($contact['status'] != 0);
+			$c['activatedOn'] = (($contact['status'] != 0)?date('d/m/Y H:i', $contact['status']):'');
+			$c['isSubscribed'] = ($contact['unsubscribed'] == 0);
+			$c['subscribedOn'] = (($contact['subscribedon'] != 0)?date('d/m/Y H:i', $contact['subscribedon']):'');
+			$c['unsubscribedOn'] = (($contact['unsubscribed'] != 0)?date('d/m/Y H:i', $contact['unsubscribed']):'');
+			$c['isBounced'] = ($contact['bounced'] != 0);
+			$c['bouncedOn'] = (($contact['bounced'] != 0)?date('d/m/Y H:i', $contact['bounced']):'');
+			$c['isSpam'] = ($contact['spam'] != 0);
+			$c['spamOn'] = (($contact['spam'] != 0)?date('d/m/Y H:i', $contact['spam']):'');
+			$c['createdOn'] = (($contact['createdon'] != 0)?date('d/m/Y H:i', $contact['createdon']):'');
+			$c['updatedOn'] = (($contact['updatedon'] != 0)?date('d/m/Y H:i', $contact['updatedon']):'');
 
-                    $c['ipSubscribed'] = (($contact['ipSubscribed'])?long2ip($contact['ipSubscribed']):'');
-                    $c['ipActivated'] = (($contact['ipActivated'])?long2ip($contact['ipActivated']):'');
+			$c['ipSubscribed'] = (($contact['ipSubscribed'])?long2ip($contact['ipSubscribed']):'');
+			$c['ipActivated'] = (($contact['ipActivated'])?long2ip($contact['ipActivated']):'');
 
-                    $c['isEmailBlocked'] = ($contact['blocked'] != 0);
-                    
-                    $object[] = $c;
-                }
-                
-                $this->rows = $object;
+			$c['isEmailBlocked'] = ($contact['blocked'] != 0);
+
+			$object[] = $c;
+		}
+
+		$this->rows = $object;
 	}
 
 	/**
@@ -334,7 +339,6 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	 */
 	public function getName()
 	{
-                \Phalcon\DI::getDefault()->get('logger')->log("Name: " . $this->name);
 		return $this->name;
 	}
 	

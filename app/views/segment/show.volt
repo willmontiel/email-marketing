@@ -81,9 +81,18 @@
 		{{'{{outlet}}'}}
 	</script>
 	<script type="text/x-handlebars" data-template-name="contacts/index">
-		<div class="pull-right" style="margin-bottom: 5px;">
-			<a href="{{url('contactlist#/segments')}}" class="btn btn-blue"><i class="icon-home"></i> Todos los segmentos</a>
+		<div class="row-fluid">
+			<div class="span6">
+				<form>
+					{{' {{view Ember.TextField valueBinding="searchCriteria" class="span12" onEvent="enter" action=search type="text" placeholder="Buscar por dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}
+					<button class="btn btn-default" {{ '{{action search this}}' }}><i class="icon-search"></i></button>
+				</form>
+			</div>
+			<div class="span6 text-right" style="margin-bottom: 5px;">
+				<a href="{{url('contactlist#/segments')}}" class="btn btn-blue"><i class="icon-home"></i> Todos los segmentos</a>
+			</div>
 		</div>
+		
 		<div class="clearfix"></div>
 
 		<div class="box">

@@ -286,10 +286,14 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 	},
 	
 	actions: {
-		searchText: '',
+		searchCriteria: '',
 		search: function(){
-			var resultado = this.store.find('contact', {searchCriteria: this.get('searchCriteria') });
-			this.set('content', resultado);
+//			var resultado = this.store.find('contact', {searchCriteria: this.get('searchCriteria') });
+//			this.set('content', resultado);
+			var t = this;
+			this.store.find('contact', {searchCriteria: this.get('searchCriteria') }).then(function(d) {
+				t.set('content', d.content);
+			});	
 		}
 	},
 			
