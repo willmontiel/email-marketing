@@ -186,11 +186,6 @@ class ImportContactWrapper
 		
 		$this->createTemporaryTable();
 		
-		// Creacion de contactos insertando registros desde PHP
-		// utilizando INSERT INTO, con bloques de correos
-		// Muy lento
-		//$this->createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase->idDbase);
-
 		// Creacion de contactos utilizando LOAD DATA INFILE
 		// Preprocesando el archivo CSV
 		$this->importDataFromCSV($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase);
@@ -451,7 +446,7 @@ class ImportContactWrapper
 	 * @param Dbase $dbase
 	 * @throws \InvalidArgumentException
 	 */
-	protected function importDataFromCSV($sourcefile, $hasHeader, $delimiter, $fieldMapping, $activeContacts, $contactLimit, $mode, $dbase)
+	protected function importDataFromCSV($sourcefile, $hasHeader, $delimiter, $fieldMapping, $activeContacts, $contactLimit, $mode, Dbase $dbase)
 	{
 		// Validar que al menos el campo de email este mapeados
 		if (!isset($fieldMapping['email']) ) {
@@ -948,7 +943,7 @@ class ImportContactWrapper
 									END
 								FROM {$this->tablename}
 								WHERE status IS NULL
-								INTO OUTFILE  '/tmp/{$nameNimported}'
+								INTO OUTFILE  '{$filesPath}{$nameNimported}'
 								FIELDS TERMINATED BY ','
 								ENCLOSED BY '\"'
 								LINES TERMINATED BY '\n'";
@@ -979,7 +974,7 @@ class ImportContactWrapper
 			$queryForSuccess = "SELECT idArray, email
 								FROM {$this->tablename}
 								WHERE status = 1
-								INTO OUTFILE  '/tmp/{$nameImported}'
+								INTO OUTFILE  '{$filesPath}{$nameImported}'
 								FIELDS TERMINATED BY ','
 								ENCLOSED BY '\"'
 								LINES TERMINATED BY '\n'";
