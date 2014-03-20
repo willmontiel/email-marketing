@@ -83,6 +83,8 @@ try {
 		$router->addResource('Field', '/field');
 		$router->addResource('Api', '/api');
 		$router->addResource('Dbaseapi', '/api/dbase');
+                $router->addResource('Contactlistapi', '/api/contactlist');
+                $router->addResource('Segmentapi', '/api/segment');
 		$router->addResource('Apistatistics', '/apistatistics');
 		
 		return $router;
@@ -255,11 +257,12 @@ try {
 	* Configuración Sockets
 	*/
 	$sockets = new stdClass();
-	$sockets->importserver = $config->sockets->importserver;
-	$sockets->importclient = $config->sockets->importclient;
-	$sockets->request = $config->sockets->request;
-	$sockets->tochildren = $config->sockets->tochildren;
-	$sockets->fromchild = $config->sockets->fromchild;
+	$sockets->importrequest = $config->sockets->importrequest;
+	$sockets->importtochildren = $config->sockets->importtochildren;
+	$sockets->importfromchild = $config->sockets->importfromchild;
+	$sockets->mailrequest = $config->sockets->mailrequest;
+	$sockets->mailtochildren = $config->sockets->mailtochildren;
+	$sockets->mailfromchild = $config->sockets->mailfromchild;
 	$di->set('sockets', $sockets);
 	
 	/*

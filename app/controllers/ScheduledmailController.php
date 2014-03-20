@@ -37,7 +37,7 @@ class ScheduledmailController extends ControllerBase
 	
 	public function stopAction($action, $idMail)
 	{
-		$communication = new Communication();
+		$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 		
 		$communication->sendPausedToParent($idMail);
 		
@@ -46,7 +46,7 @@ class ScheduledmailController extends ControllerBase
 
 	public function playAction($action, $idMail)
 	{
-		$communication = new Communication();
+		$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 		
 		$communication->sendPlayToParent($idMail);
 		
@@ -73,7 +73,7 @@ class ScheduledmailController extends ControllerBase
 			}
 		}
 		else {
-			$communication = new Communication();
+			$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 		
 			$communication->sendCancelToParent($idMail);
 		}

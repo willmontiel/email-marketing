@@ -52,7 +52,8 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	}
 	
 	public function load()
-	{
+	{   
+                $this->validateQueryCriteria();
 		$contactIds = $this->findContactIds($this->createCoreQuery());
 		$query = $this->createQuery($contactIds);
 		
@@ -94,49 +95,21 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$sql = "SELECT idContact FROM (" . $c1 . ") AS c1 JOIN (" . $c2 . ") AS c2 ON (c1.idEmail = c2.idEmail) " . $limit;
 		}
 		
-//		Phalcon\DI::getDefault()->get('logger')->log("Final Sql: " . $sql);
+		\Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
 		
 		return $sql;
 	}
 	
-	private function createQuery($contactIds)
+        
+        private function findContactIds($sql)
 	{
-		$sql = '';
-		if (count($contactIds) > 0) {
-			$ids = implode(', ', $contactIds);
-		
-			$sql .= "SELECT c.idContact, e.email, c.name, c.lastName, d.idDbase, d.name AS dbase
-					FROM contact AS c
-						JOIN email AS e ON(e.idEmail = c.idEmail)
-						JOIN dbase AS d ON(d.idDbase = c.idDbase)
-					WHERE c.idContact IN (" . $ids . ")";
-		}
-		return $sql;
-	}
-	
-	
-	private function findContacts($sql)
-	{
-		$db = Phalcon\DI::getDefault()->get('db');
-			
-		$query = $db->query($sql);
-		$result = $query->fetchAll();
-		$count = count($result);
-		
-		if ($count > 0) {
-			$this->createStructureForReturns($result);
-		}
-	}
-	
-	private function findContactIds($sql)
-	{
-		$cache = Phalcon\DI::getDefault()->get('cache');
+		$cache = \Phalcon\DI::getDefault()->get('cache');
 		$queryKey = $this->getQueryKey();
 		$contactIds = $cache->get($queryKey);
 		
 		if (!$contactIds) {
 			$contactIds = array();
-			$db = Phalcon\DI::getDefault()->get('db');
+			$db = \Phalcon\DI::getDefault()->get('db');
 			
 			$query = $db->query($sql);
 			$result = $query->fetchAll();
@@ -151,6 +124,40 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		}
 		return $contactIds;
 	}
+        
+        
+	private function createQuery($contactIds)
+	{
+		$sql = '';
+		if (count($contactIds) > 0) {
+			$ids = implode(', ', $contactIds);
+		
+			$sql .= "SELECT c.*, e.email, e.blocked, d.idDbase, d.name AS dbase
+					FROM contact AS c
+						JOIN email AS e ON(e.idEmail = c.idEmail)
+						JOIN dbase AS d ON(d.idDbase = c.idDbase)
+					WHERE c.idContact IN (" . $ids . ")";
+		}
+                
+                \Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
+		return $sql;
+	}
+	
+	
+	private function findContacts($sql)
+	{
+		$db = \Phalcon\DI::getDefault()->get('db');
+		
+                $query = $db->query($sql);
+                $result = $query->fetchAll();
+                $count = count($result);
+		
+		if ($count > 0) {
+//                        \Phalcon\DI::getDefault()->get('logger')->log("Matches: " . print_r($result, true));
+			$this->createStructureForReturns($result);
+		}
+	}
+	
 
 	/**
 	 * Returns the first CoreSql part created with emails and domains found in the search text
@@ -203,13 +210,15 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		
 		$sql = $sqlEmail . $union . $sqlDomain;
 		
+//                 \Phalcon\DI::getDefault()->get('logger')->log("Domains and email sql: " . $sql);
+                 
 		return $sql;
 	}
 	
 	private function createSqlForFreeTextSearch($queryKey)
 	{
 		$sql = '';
-		$freeText = $this->searchCriteria->getFreeText;
+		$freeText = $this->searchCriteria->getFreeText();
 		
 		if (count($freeText) > 0) {
 			$criteriaText = implode(' ', $freeText);
@@ -222,7 +231,8 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 						MATCH(c.name, c.lastname) AGAINST ('" . $criteriaText . "' IN BOOLEAN MODE) 
 						AND b.idAccount = " . $this->account->idAccount . " " . $queryKey->andForFreeText;
 		}
-//		Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
+                
+//                \Phalcon\DI::getDefault()->get('logger')->log("Free text sql: " . $sql);
 		return $sql;
 	}
 	
@@ -231,7 +241,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	{
 		$query = new \stdClass();
 		
-		switch ($this->validateQueryCriteria()) {
+		switch ($this->queryCriteria) {
 			case 'account':
 				$query->join = '';
 				$query->and = '';
@@ -239,19 +249,17 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				$query->andForFreeText = '';
 				
 				$this->name = 'contacts';
-				
 				$this->id = $this->account->idAccount;
 				break;
 
 			case 'dbase':
-				$query->join = ' JOIN dbase AS db ON (db.idAccount = d.idAccount) ';
+				$query->join = ' JOIN dbase AS db ON (db.idAccount = e.idAccount) ';
 				$query->and = ' AND db.idDbase = ' . $this->dbase->idDbase;
 				
 				$query->joinForFreeText = '';
 				$query->andForFreeText = ' AND b.idDbase = ' . $this->dbase->idDbase;
 				
 				$this->name = 'contacts';
-				
 				$this->id = $this->dbase->idDbase;
 				break;
 			
@@ -264,7 +272,6 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				$query->andForFreeText = ' AND cl.idContactlist = ' . $this->contactlist->idContactlist;
 				
 				$this->name = 'contacts';
-				
 				$this->id = $this->contactlist->idContactlist;
 				break;
 			
@@ -277,7 +284,6 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				$query->andForFreeText = ' AND sc.idSegment = ' . $this->segment->idSegment;
 				
 				$this->name = 'contacts';
-				
 				$this->id = $this->segment->idSegment;
 				break;
 		}
@@ -292,8 +298,35 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	}
 	
 	private function createStructureForReturns($contacts)
-	{
-		$this->rows = $contacts;
+	{   
+                $object = array();
+                foreach ($contacts as $contact) {
+                    $c = array();
+                    $c['id'] = $contact['idContact'];
+                    $c['email'] = $contact['email'];
+                    $c['name'] = $contact['name'];
+                    $c['lastName'] = $contact['lastName'];
+                    $c['isActive'] = ($contact['status'] != 0);
+                    $c['activatedOn'] = (($contact['status'] != 0)?date('d/m/Y H:i', $contact['status']):'');
+                    $c['isSubscribed'] = ($contact['unsubscribed'] == 0);
+                    $c['subscribedOn'] = (($contact['subscribedon'] != 0)?date('d/m/Y H:i', $contact['subscribedon']):'');
+                    $c['unsubscribedOn'] = (($contact['unsubscribed'] != 0)?date('d/m/Y H:i', $contact['unsubscribed']):'');
+                    $c['isBounced'] = ($contact['bounced'] != 0);
+                    $c['bouncedOn'] = (($contact['bounced'] != 0)?date('d/m/Y H:i', $contact['bounced']):'');
+                    $c['isSpam'] = ($contact['spam'] != 0);
+                    $c['spamOn'] = (($contact['spam'] != 0)?date('d/m/Y H:i', $contact['spam']):'');
+                    $c['createdOn'] = (($contact['createdon'] != 0)?date('d/m/Y H:i', $contact['createdon']):'');
+                    $c['updatedOn'] = (($contact['updatedon'] != 0)?date('d/m/Y H:i', $contact['updatedon']):'');
+
+                    $c['ipSubscribed'] = (($contact['ipSubscribed'])?long2ip($contact['ipSubscribed']):'');
+                    $c['ipActivated'] = (($contact['ipActivated'])?long2ip($contact['ipActivated']):'');
+
+                    $c['isEmailBlocked'] = ($contact['blocked'] != 0);
+                    
+                    $object[] = $c;
+                }
+                
+                $this->rows = $object;
 	}
 
 	/**
@@ -301,6 +334,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	 */
 	public function getName()
 	{
+                \Phalcon\DI::getDefault()->get('logger')->log("Name: " . $this->name);
 		return $this->name;
 	}
 	

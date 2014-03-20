@@ -57,6 +57,7 @@
 					</ul>
 					<div class="title">
 						<a href="{{url('dbase')}}" class="pull-right" title="Configuracion avanzada"><i class="icon-cog"></i></a>
+						<a href="{{url('process/import')}}" class="pull-right btn btn-default list-import-process">Lista de Importaciones</a>
 					</div>
 				</div>
 				<div class="box-content padded">

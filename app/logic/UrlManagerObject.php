@@ -113,4 +113,13 @@ class UrlManagerObject
 	{
 		return $this->getPrefix($full) . $this->appbaseTrailing . $this->api_v1_2;
 	}
+        
+        /**
+	 * Return uri for ember comunication (API_v1_2) ex: "emarketing/apistatistics"
+	 * @return URL string
+	 */
+	public function getApi_v1_3Url($full = false)
+	{
+		return $this->getPrefix($full) . $this->appbaseTrailing . 'dbaseapi';
+	}
 }
