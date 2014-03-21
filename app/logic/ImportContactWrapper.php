@@ -392,6 +392,8 @@ class ImportContactWrapper
 		
 		$tmpFilename = $sourcefile . '.pr';
 		$this->timer->startTimer('copy-rows', 'Copy csv file to temporary file!');
+		$this->updateProcessStatus('Preprocesando registros');
+		$this->saveProcess();
 		// Ejecutar la copia de registros
 		$this->copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $hasHeader);
 		$this->timer->endTimer('copy-rows');
@@ -405,6 +407,8 @@ class ImportContactWrapper
 		$this->timer->startTimer('load-rows', 'Load rows from temporary file into database!');
 		// Crear sentencia SQL que hace la importacion de los registros desde el
 		// archivo temporal
+		$this->updateProcessStatus('Cargando registros en base de datos');
+		$this->saveProcess();
 		$rpath = realpath($tmpFilename);
 		$fields = implode(',', $this->fieldmapper->getFieldnames() );
 		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
@@ -413,7 +417,10 @@ class ImportContactWrapper
 		// Ejecutar sentencia SQL
 		$this->db->execute($importfile);
 		$this->timer->endTimer('load-rows');
-		
+
+		$this->updateProcessStatus('Mapeando contactos');
+		$this->saveProcess();
+
 		$this->timer->startTimer('update-rows', 'Find or create emails in temporary table!');
 		// Procesar todos los registros, asignando un idEmail
 		$this->db->execute("UPDATE {$this->tablename} SET idEmail = find_or_create_email(email, domain, {$this->account->idAccount})");
@@ -425,6 +432,9 @@ class ImportContactWrapper
 		$this->timer->endTimer('clean-rows');
 	
 		// Actualizar/insertar campos personalizados
+		$this->updateProcessStatus('Actualizando campos personalizados');
+		$this->saveProcess();
+		
 		$this->timer->startTimer('custom-fields', 'Insert Custom Fields!');
 		$this->updateCustomFields();
 		$this->timer->endTimer('custom-fields');
@@ -471,6 +481,10 @@ class ImportContactWrapper
 		if ($hasHeader) {
 			$line = fgetcsv($fp, 0, $delimiter);
 		}
+		// cada cierta cantidad de registros se debe informar avance
+		$every = (int)($maxrows/10);
+		$this->incrementProgress(0);
+		
 		while (!feof($fp) && ($rows - $skipped) <= $maxrows) {
 			$line = fgetcsv($fp, 0, $delimiter);
 			$rows++;
@@ -486,14 +500,18 @@ class ImportContactWrapper
 			if ( $this->verifyEmailAddress($lineOut[0], $rows) ) {
 				fputcsv($nfp, $lineOut, $delimiter);
 			}
+			if (! $rows % $every) {
+				$this->incrementProgress($rows);
+			}
 		}
 		fclose($fp);
 		fclose($nfp);
 
+		$this->incrementProgress($rows);
 		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed, {$skipped} rows skipped!");
 	}
 	
-	protected function incrementProcessAdvance($adv)
+	protected function incrementProgress($adv)
 	{
 		try {
 			$this->db->execute("UPDATE importproccess SET processLines = {$adv} WHERE idImportproccess = {$this->idProccess}");
