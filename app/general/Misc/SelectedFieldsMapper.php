@@ -199,7 +199,8 @@ class SelectedFieldsMapper
 		
 		$cfieldsdef = $this->dbase->customFields;
 		foreach ($cfieldsdef as $f) {
-			$this->dbfields[$f->idCustomField] = $f->type;
+			$cfid = $f->idCustomField;
+			$this->dbfields[$cfid] = $f->type;
 			switch ($f->type) {
 				case 'Date':
 					$t = ' INT(10) DEFAULT 0';
@@ -211,11 +212,14 @@ class SelectedFieldsMapper
 					$it = 'textValue';
 					break;
 			}
-			if (isset($this->rawMap[$f->idCustomField]) && $this->rawMap[$f->idCustomField] !== null) {
+			if (isset($this->rawMap[$cfid]) && $this->rawMap[$cfid] !== null) {
 				$cfname = $this->getCustomFieldName($f->idCustomField);
 				$this->cfieldsmetadata[$cfname] = $t;
 				$this->cfieldstransform[$cfname] = $f->type;
 				$this->cfieldsforinsert[$cfname] = array($f->idCustomField, $it);
+			}
+			else {
+				echo "{$cfid} in dbase is not in the array: " . print_r($this->rawMap, true) . "!\n";
 			}
 		}
 	}
