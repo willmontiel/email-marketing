@@ -103,8 +103,8 @@ class DashboardSummary
 			'share_tw' => (isset($result1[0]->share_tw)) ? $result1[0]->share_tw : 0,
 			'open_fb' => (isset($result1[0]->open_fb)) ? $result1[0]->open_fb : 0,
 			'open_tw' => (isset($result1[0]->open_tw)) ? $result1[0]->open_tw : 0,
-			'click_fb' => (isset($result2[0]->click_fb)) ? $result1[0]->click_fb : 0,
-			'click_tw' => (isset($result2[0]->click_tw)) ? $result1[0]->click_tw : 0
+			'click_fb' => (isset($result2[0]->click_fb)) ? $result2[0]->click_fb : 0,
+			'click_tw' => (isset($result2[0]->click_tw)) ? $result2[0]->click_tw : 0
 		);
 
 		return $result;

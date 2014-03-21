@@ -63,6 +63,46 @@
 	</div>
 <br />
 <br />
+	<div class="row-fluid">
+		<div class="span2">
+			<div class="box-dashboard-summary summary-fb">
+				<div>
+					<p>Facebook</p>
+					<div class="number-stats-dashboard-summary">
+						{{values['share_fb']}}
+					</div>
+				</div>
+				<div>
+					{{values['open_fb']}}
+					Aperturas
+				</div>
+				<div>
+					{{values['click_fb']}}
+					Clics
+				</div>
+			</div>
+		</div>
+		<div class="span2">
+			<div class="box-dashboard-summary summary-tw">
+				<div>
+					<p>Twitter</p>
+					<div class="number-stats-dashboard-summary">
+						{{values['share_tw']}}
+					</div>
+				</div>
+				<div>
+					{{values['open_tw']}}
+					Aperturas
+				</div>
+				<div>
+					{{values['click_tw']}}
+					Clics
+				</div>
+			</div>
+		</div>
+	</div>
+<br />
+<br />
 <br />
 <br />
 	<div class="row-fluid">
