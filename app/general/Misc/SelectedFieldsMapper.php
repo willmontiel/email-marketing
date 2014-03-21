@@ -154,6 +154,10 @@ class SelectedFieldsMapper
 							}
 							$d->setTime(0,0,0);
 						}
+						if ($d->getTimestamp() < 0) {
+							$d = new \DateTime('now');
+							$d->setTime(0,0,0);
+						}
 						$result = ($d)?$d->getTimestamp():0;
 					} catch (Exception $ex) {
 						$result = 0;
