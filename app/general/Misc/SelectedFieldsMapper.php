@@ -149,6 +149,9 @@ class SelectedFieldsMapper
 						if (!$d) {
 							// Intentar solo con fecha
 							$d = \DateTime::createFromFormat('Y-m-d', $value);
+							if (!$d) {
+								$d = new \DateTime('now');
+							}
 							$d->setTime(0,0,0);
 						}
 						$result = ($d)?$d->getTimestamp():0;
