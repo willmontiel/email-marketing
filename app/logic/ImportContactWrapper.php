@@ -336,6 +336,7 @@ class ImportContactWrapper
 		// [ fieldname => metadata, ... ]
 		// Ej: [ 'cf_1' => ' VARCHAR(100) DEFAULT NULL' ]
 		$fields = $this->fieldmapper->getAdditionalFields();
+		$this->log->log('Additional fields: [' . print_r($fields, true) . ']');
 		
 		if (count($fields) > 0) {
 			$af = implode(',', array_map(function ($k, $v) { return $k . $v; }, array_keys($fields), $fields));
