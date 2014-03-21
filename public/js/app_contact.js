@@ -6,15 +6,15 @@ App.set('errormessage', '');
 
 //Definiendo Rutas
 App.Router.map(function() {
-  this.resource('contacts', function(){
-	  this.route('new'),
-	  this.route('newbatch'),
-	  this.route('import'),
-	  this.route('newimport'),
-	  this.resource('contacts.show', { path: '/show/:contact_id'}),
-	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
-	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
-  });
+	this.resource('contacts', function(){
+		this.route('new'),
+		this.route('newbatch'),
+		this.route('import'),
+		this.route('newimport'),
+			this.resource('contacts.show', { path: '/show/:contact_id'}),
+			this.resource('contacts.edit', { path: '/edit/:contact_id'}),
+			this.resource('contacts.delete', { path: '/delete/:contact_id'});
+	});
 });
 
 //Adaptador
@@ -38,6 +38,19 @@ App.Contact = DS.Model.extend(
 App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.find('contact');
+	},
+	deactivate: function () {
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && !model.get('isSaving') ) {
+			model.get('transaction').rollback();
+		}
 	}
 });
 
@@ -161,7 +174,7 @@ App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 	
 });
 
-App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchReferencePagination, Ember.AclMixin,{
+App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchReferencePagination, Ember.AclMixin, Ember.SaveHandlerMixin,{
 	init: function () {
 		this.set('acl', App.contactACL);
 	},
@@ -179,10 +192,40 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		this.set('content', resultado);
 	},
 			
-	expand: function () {
-		this.render('contacts/show');
+	expand: function (contact) {
+		if(contact.get('isExpanded')) {
+			contact.set('isExpanded', false);
+		}
+		else {
+			contact.set('isExpanded', true);
+		}
+		$('.username').editable();
+	},
+	
+	subscribedcontact: function (contact) {
+		contact.set('isSubscribed', true);
+		contact.save();
+	},
+	unsubscribedcontact: function (contact) {
+		contact.set('isSubscribed', false);
+		contact.save();
 	},
 			
+	edit: function(contact) {
+		var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+		if (filter.test(contact.get('email'))) {
+			App.set('errormessage', '');
+			this.handleSavePromise(contact.save(), 'contacts', 'El contacto fue actualizado exitosamente');
+		}
+		else {
+			App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
+		}
+	},
+			
+	discard: function(contact) {
+		
+	},
+
 	modelClass: App.Contact
 });
 

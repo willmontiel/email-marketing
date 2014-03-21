@@ -8,7 +8,7 @@ class CreateViewEmber
 		switch ($field->type) {
 			case "Text":
 			case "Numerical":
-				$valor = "{{view Ember.TextField valueBinding='{$fieldname}'  id='{$fieldname}'";
+				$valor = "{{view Ember.TextField valueBinding='{$fieldname}'  id='{$fieldname}' class='edit-contact-online'";
 				break;
 			case "TextArea":
 				$valor = "{{view Ember.TextArea valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}'";

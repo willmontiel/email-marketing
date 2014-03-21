@@ -148,7 +148,7 @@
 					</ul>
 				</div>
 				<div class="box-content">
-					<table class="table table-normal bordered">
+					<table class="table table-bordered" style="border: 0px !important;">
 						<thead></thead>
 						<tbody>
 							{{'{{#each model}}'}}
