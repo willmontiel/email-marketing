@@ -107,9 +107,10 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 			'email' => 1,
 			'name'  => 3,
 			'3'     => 4,
+			'12'	=> null,
 			'17'    => 5,
 			'6'		=> 7,
-			'24'	=> 8
+			'24'	=> 8,
 		);
 	}
 	
@@ -196,7 +197,7 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 	{
 		return array(
 			'cf_3'  => ' VARCHAR(100) DEFAULT NULL',
-			'cf_17' => ' INT(10) DEFAULT 0',
+			'cf_17' => ' VARCHAR(100) DEFAULT NULL',
 			'cf_6'  => ' INT(10) DEFAULT 0',
 		);
 	}
@@ -205,7 +206,7 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 	{
 		return array(
 			'cf_3'  => array(3, 'textValue'),
-			'cf_17' => array(17, 'numberValue'),
+			'cf_17' => array(17, 'textValue'),
 			'cf_6'  => array(6, 'numberValue'),
 		);
 	}
@@ -214,7 +215,7 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 	{
 		$mock = $this->getMock('\Dbase');
 		// CustomFields
-		$cf = json_decode('[{"idCustomField": 3, "type": "Text"},{"idCustomField": 17, "type": "Numerical"},{"idCustomField": 6, "type": "Date"}]');
+		$cf = json_decode('[{"idCustomField": 3, "type": "Text"},{"idCustomField": 17, "type": "Numerical"},{"idCustomField": 6, "type": "Date"},{"idCustomField": 12, "type": "Text"},{"idCustomField": 40, "type": "Select"}]');
 
 		// El campo customFields es dinamico
 		$mock->expects($this->any())

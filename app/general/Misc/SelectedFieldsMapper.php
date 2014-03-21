@@ -68,6 +68,9 @@ class SelectedFieldsMapper
 
 		// Recorrer la lista
 		foreach ($m as $idfield => $position) {
+			if ($position == null) {
+				continue;
+			}
 			if (is_numeric($idfield)) {
 				$name = $this->getCustomFieldName($idfield);
 				if ($name) {
@@ -208,10 +211,12 @@ class SelectedFieldsMapper
 					$it = 'textValue';
 					break;
 			}
-			$cfname = $this->getCustomFieldName($f->idCustomField);
-			$this->cfieldsmetadata[$cfname] = $t;
-			$this->cfieldstransform[$cfname] = $f->type;
-			$this->cfieldsforinsert[$cfname] = array($f->idCustomField, $it);
+			if (isset($this->rawMap[$f->idCustomField]) && $this->rawMap[$f->idCustomField] !== null) {
+				$cfname = $this->getCustomFieldName($f->idCustomField);
+				$this->cfieldsmetadata[$cfname] = $t;
+				$this->cfieldstransform[$cfname] = $f->type;
+				$this->cfieldsforinsert[$cfname] = array($f->idCustomField, $it);
+			}
 		}
 	}
 }
