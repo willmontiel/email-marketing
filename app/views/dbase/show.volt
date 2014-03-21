@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	{{ partial("partials/date_view_partial") }}
-	{{ javascript_include('js/mixin_pagination.js') }}
+	{{ javascript_include('js/search-reference-pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 
 	<script type="text/javascript">
@@ -50,7 +50,8 @@
 			{%endfor%}
 		};
 	</script>
-	{{ javascript_include('js/app.js') }}
+	{{ javascript_include('js/app_dbase.js') }}
+	{{ javascript_include('js/app_contact.js') }}
 	<script type="text/javascript">
 		//ACL de los campos personalizados
 		App.customFieldACL = {
