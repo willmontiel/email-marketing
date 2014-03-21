@@ -59,6 +59,7 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 	{
 		$this->prepareFirstDataSet();
 		$this->assertEquals($this->getDataSet1_Extrafields(), $this->object->getAdditionalFields());
+		$this->assertEquals($this->getDataSet1_Extrafields_Insert(), $this->object->getAdditionalFieldsForInsert());
 	}
 
 //	public function testSimpleMappingVars()
@@ -197,6 +198,15 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 			'cf_3'  => ' VARCHAR(100) DEFAULT NULL',
 			'cf_17' => ' INT(10) DEFAULT 0',
 			'cf_6'  => ' INT(10) DEFAULT 0',
+		);
+	}
+
+	protected function getDataSet1_Extrafields_Insert()
+	{
+		return array(
+			'cf_3'  => array(3, 'textValue'),
+			'cf_17' => array(17, 'numberValue'),
+			'cf_6'  => array(6, 'numberValue'),
 		);
 	}
 

@@ -11,6 +11,7 @@ class SelectedFieldsMapper
 	protected $fieldnames;
 	protected $dbfields;
 	protected $cfieldsmetadata;
+	protected $cfieldsforinsert;
 	protected $cfieldstransform;
 	protected $transformations;
 
@@ -97,6 +98,11 @@ class SelectedFieldsMapper
 		return $this->cfieldsmetadata;
 	}
 
+	public function getAdditionalFieldsForInsert()
+	{
+		return $this->cfieldsforinsert;
+	}
+	
 	/**
 	 * Retorna nombre de los campos
 	 * @return array
@@ -179,6 +185,7 @@ class SelectedFieldsMapper
 		$this->dbfields = array();
 		$this->cfieldsmetadata = array();
 		$this->cfieldstransform = array();
+		$this->cfieldsforinsert = array();
 		
 		$cfieldsdef = $this->dbase->customFields;
 		foreach ($cfieldsdef as $f) {
@@ -186,15 +193,18 @@ class SelectedFieldsMapper
 			switch ($f->type) {
 				case 'Date':
 				case 'Numerical':
-					 $t = ' INT(10) DEFAULT 0';
+					$t = ' INT(10) DEFAULT 0';
+					$it = 'numberValue';
 					break;
 				default:
-					 $t = ' VARCHAR(100) DEFAULT NULL';
+					$t = ' VARCHAR(100) DEFAULT NULL';
+					$it = 'textValue';
 					break;
 			}
 			$cfname = $this->getCustomFieldName($f->idCustomField);
 			$this->cfieldsmetadata[$cfname] = $t;
 			$this->cfieldstransform[$cfname] = $f->type;
+			$this->cfieldsforinsert[$cfname] = array($f->idCustomField, $it);
 		}
 	}
 }

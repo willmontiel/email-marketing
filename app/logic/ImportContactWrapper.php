@@ -424,13 +424,29 @@ class ImportContactWrapper
 		$this->cleanInsertedRecords($this->account->idAccount, $dbase->idDbase);
 		$this->timer->endTimer('clean-rows');
 	
-		// Actualizar campos personalizados
-
+		// Actualizar/insertar campos personalizados
+		$this->timer->startTimer('custom-fields', 'Insert Custom Fields!');
+		$this->updateCustomFields();
+		$this->timer->endTimer('custom-fields');
 		
 		// Reporte
 		$this->timer->startTimer('report', 'Run reports!');
 		$this->runReports($flines);
 		$this->timer->endTimer('report');
+	}
+
+	protected function updateCustomFields()
+	{
+		// Por cada campo personalizado
+		foreach ($this->fieldmapper->getAdditionalFieldsForInsert() as $fn => $data) {
+			$sql = "INSERT INTO fieldinstance (idCustomField, idContact, {$data[1]}) "
+					. "SELECT {$data[0]}, idContact, {$fn} "
+					. "FROM {$this->tablename} "
+					. "WHERE idContact IS NOT NULL"
+					. "ON DUPLICATE KEY UPDATE {$data[1]} = {$fn}";
+			$this->log->log("Excuting SQL: [{$sql}]");
+			$this->db->execute($sql);
+		}
 	}
 
 	/**
@@ -564,64 +580,6 @@ class ImportContactWrapper
 		
 //		$this->db->commit();
 		
-	}
-
-	
-	protected function createFieldInstances ($customfields, $idDbase) 
-	{
-		$values = "";
-		$line = 0;
-		
-		$DateCF = "SELECT idCustomField FROM customfield WHERE type = 'DATE' AND idDbase = $idDbase;";
-		$idcontactsfromtmp = "SELECT t.idArray, t.idContact FROM $this->tablename t WHERE t.idContact IS NOT NULL AND t.new IS NOT NULL;";
-		
-		$idscontactwithcf = $this->db->fetchAll($idcontactsfromtmp);
-		$idsDateCF = $this->db->fetchAll($DateCF);
-		
-		foreach ($idscontactwithcf as $ids){
-	
-			$done = FALSE;
-			$idForArray = $ids['idArray'];
-			$idtoContact = $ids['idContact'];
-			foreach ($customfields as $cf) {
-				
-				if ($cf[0] == $idForArray) {
-					
-					if($line != 0) {
-						$values.=", ";
-					}
-					
-					foreach ($idsDateCF as $dates) {
-						
-						if ($cf[1] == $dates['idCustomField']) {
-							$date = strtotime($cf[2]);
-							$value = (is_numeric($date))?$date:"NULL";
-							$values.= "($cf[1], $idtoContact, NULL, $value)";
-							$done = TRUE;
-						}
-					}
-					
-					if (!$done) {
-						$value = $this->db->escapeString($cf[2]);
-						$values.= "($cf[1], $idtoContact, $value, NULL)";
-					}
-					
-					$line++;
-				}
-				
-				if ((!empty($values)) && $line == 100) {
-					$createFieldinstances = "INSERT INTO fieldinstance (idCustomField, idContact, textValue, numberValue) VALUES ".$values.";";
-					$this->db->execute($createFieldinstances);
-					$line = 0;
-					$values = "";
-				}
-			}
-		}
-		
-		if(!empty($values) && $line != 0){
-			$createFieldinstances = "INSERT INTO fieldinstance (idCustomField, idContact, textValue, numberValue) VALUES ".$values.";";
-			$this->db->execute($createFieldinstances);
-		}
 	}
 
 	protected function runReports($limit) {
