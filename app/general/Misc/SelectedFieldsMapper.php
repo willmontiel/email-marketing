@@ -192,10 +192,10 @@ class SelectedFieldsMapper
 			$this->dbfields[$f->idCustomField] = $f->type;
 			switch ($f->type) {
 				case 'Date':
-				case 'Numerical':
 					$t = ' INT(10) DEFAULT 0';
 					$it = 'numberValue';
 					break;
+				case 'Numerical':
 				default:
 					$t = ' VARCHAR(100) DEFAULT NULL';
 					$it = 'textValue';
