@@ -60,12 +60,12 @@ class ImportContactWrapper
 	{
 		// Por defecto las tablas temporales son "TEMPORALES"
 		// Por defecto el modo debug esta apagado
-		$this->temporaryMode = true;
-		$this->debugMode = false;
+//		$this->temporaryMode = true;
+//		$this->debugMode = false;
 		
 		// Prueba temporalmente (borrar 2 lineas para produccion)
-//		$this->temporaryMode = false;
-//		$this->debugMode = true;
+		$this->temporaryMode = false;
+		$this->debugMode = true;
 
 		$this->timer = Phalcon\DI::getDefault()->get('timerObject');
 		$this->log = Phalcon\DI::getDefault()->get('logger');
@@ -327,11 +327,6 @@ class ImportContactWrapper
 		}
 	}
 
-	protected function getCustomFields()
-	{
-		
-	}
-	
 	/**
 	 * Altera la base de datos
 	 */
@@ -429,24 +424,14 @@ class ImportContactWrapper
 		$this->cleanInsertedRecords($this->account->idAccount, $dbase->idDbase);
 		$this->timer->endTimer('clean-rows');
 	
+		// Actualizar campos personalizados
+
+		
 		// Reporte
 		$this->timer->startTimer('report', 'Run reports!');
 		$this->runReports($flines);
 		$this->timer->endTimer('report');
 	}
-	
-	protected function getCustomFieldTypes($dbase)
-	{
-		// Tomar lista de campos personalizados en la base de datos y 
-		// obtener su tipo (para definir el tipo de campo)
-		$cfieldsdef = $dbase->customFields;
-		$cfdefinition = array();
-		foreach ($cfieldsdef as $f) {
-			$cfdefinition[$f->idCustomField] = $f->type;
-		}
-		return $cfdefinition;
-	}
-
 
 	/**
 	 * Metodo que ejecuta la copia linea a linea de los registros del archivo
@@ -492,179 +477,6 @@ class ImportContactWrapper
 		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed, {$skipped} rows skipped!");
 	}
 	
-	
-	/**
-	 * Este metodo lee las lineas del archivo CSV y las convierte en contactos
-	 * @param string $destiny
-	 * @param type $header
-	 * @param string $delimiter
-	 * @param type $posCol
-	 * @param int $activeContacts
-	 * @param int $contactLimit
-	 * @param string $mode
-	 * @param int $idDbase
-	 * @throws InvalidArgumentException
-	 */
-	protected function createValuesToInsertInTmp($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $idDbase)
-	{	
-		$idAccount = $this->account->idAccount;
-		$customfields = array();
-		$line = 0;
-		$recordsinserted = 0;
-		
-		// Cuantas lineas tiene el archivo?
-		$linecount = $this->countFileRecords($destiny);
-		
-		$open = @fopen($destiny, "r");
-		
-		if (!$open) {
-			throw new \ErrorException("Error al abrir el archivo de origen de importacion");
-		}
-		
-		// Validar que al menos el campo de email este mapeados
-		if (!isset($posCol['email']) ) {
-			throw new \InvalidArgumentException('Campo email no esta mapeado en la informacion a importar y es requerido!');
-		}
-		
-		$emailPos = $posCol['email'];
-		$namePos  = (isset($posCol['name']))?$posCol['name']:-1;
-		$lastPos  = (isset($posCol['lastname']))?$posCol['lastname']:-1;
-
-		$lineInFile = 0;
-		// Si hay header, leer la primera linea y no tenerla en cuenta
-		if ($header) {
-			$lineInFile++;
-			$linew = fgetcsv($open, 0, $delimiter);
-			$contacts2insert = $linecount-1;
-		}
-		else {
-			$contacts2insert = $linecount;
-		}
-		
-		/*
-		 * La carga se hace en 3 pasos:
-		 * 1) Se leen e insertan registros de N en N hasta llegar al tope maximo
-		 * 2) Se procesan los registros en la tabla temporal
-		 * 3) Se insertan los registros a la tabla de contactos
-		 * 
-		 * Cual es el tope maximo? Depende del modo de la cuenta, 
-		 *	si el modo es "Contacto" entonces es el numero de contactos disponibles
-		 *  actualmente en la cuenta
-		 *  de lo contrario es el numero de registros que tiene el archivo
-		 * 
-		 */
-		if ($mode == 'Contacto') {
-			// Modo contactos, verificar que es menor, el numero de registros
-			// del archivo, o el numero de contactos que se pueden insertar en
-			// la cuenta
-			$dif = $contactLimit - $activeContacts;
-			$contacts2insert = ($dif < $contacts2insert)?$dif:$contacts2insert;
-		}
-		
-		$recordbuffer = array();
-		
-		// Recorrer todo el archivo
-		// o hasta que se acabe el saldo que tiene el usuario
-		$this->timer->startTimer('insert-rows', 'Insert rows into temporary table!');
-
-		while(!feof($open) && ($recordsinserted < $contacts2insert)) {
-			
-			// Leer linea
-			$linew = fgetcsv($open, 0, $delimiter);
-			// Incrementar contador de linea
-			$lineInFile++;
-			
-			if ( empty($linew) ) {
-				// Linea erronea
-				$this->log->log('Linea vacia!');
-				// Registro invalido
-				$this->invalid++;
-				continue;
-			}
-			
-			// Leer campos primarios
-			$email = $this->verifyEmailAddress($linew[$emailPos], $lineInFile);
-			if (!$email) {
-				// Email invalido o repetido
-				// continuar con el siguiente registro
-				// el metodo adiciona el error e incrementa invalid o repeated
-				continue;
-			}
-			$name = ($namePos>=0)?$linew[$namePos]:'';
-			$lastname = ($lastPos>=0)?$linew[$lastPos]:'';
-
-			// Revisar el saldo
-			if ( $recordsinserted < $contacts2insert ) {
-				// Se puede insertar (todavia hay saldo)
-				list($user, $edomain) = preg_split("/@/", $email, 2);
-				// Escapar los campos para la insercion y evitar asi problemas
-				// que pueden romper la ejecucion
-				$fieldEmail = $this->db->escapeString($email);
-				$fieldDomain = $this->db->escapeString($edomain);
-				$fieldName = $this->db->escapeString($name);
-				$fieldLastname = $this->db->escapeString($lastname);
-				
-				$recordbuffer[] = "({$lineInFile}, {$fieldEmail}, find_or_create_email({$fieldEmail}, {$fieldDomain}, {$idAccount}), {$fieldName}, {$fieldLastname})";
-
-				/*
-				 * Campos personalizados!!!
-				 * Quedan temporalmente des-habilitados
-				foreach ($posCol as $key => $value) {
-
-					if(is_numeric($key) && !empty($linew[$value])){
-						$valuescf = array ($lineInFile, $key, $linew[$value]);
-						array_push($customfields, $valuescf);
-					}
-
-				} 
-				 * 
-				 */
-			}
-			// Incrementar contador de registros insertados
-			$recordsinserted++;
-			
-			// Cuando se llegue al numero de lineas por lote
-			// Grabar en la tabla, limpiar el buffer y continuar
-			if (count($recordbuffer) > self::BATCH_SIZE) {
-				$this->saveRecordBuffer($recordbuffer);
-				$recordbuffer = array();
-
-				// Informar avance
-				$this->incrementProcessAdvance($recordsinserted);
-			}
-		}
-		// Cerrar archivo
-		fclose($open);
-
-		// Verificar que no hayan registros en el buffer
-		if (count($recordbuffer) > 0) {
-			$this->saveRecordBuffer($recordbuffer);
-			$recordbuffer = array();
-
-			// Informar avance
-			$this->incrementProcessAdvance($recordsinserted);
-		}
-		$this->timer->endTimer('insert-rows');
-		
-		$this->timer->startTimer('process-rows', 'Process rows from temporary table!');
-		
-		// Segundo y tercer paso:
-		// Procesar los registros insertados
-		// Esto marca los emails bloqueados
-		// tambien marca los que ya existen, etc.
-		// Insertar los contactos a partir de los registros insertados
-		// que son validos
-		$this->cleanInsertedRecords($idAccount, $idDbase);
-		$this->timer->endTimer('process-rows');
-		
-		// Correr los reportes...
-		// El parametro que se pasa es el numero de registros del archivo
-		// que no se procesaron
-		$this->timer->startTimer('report', 'Report results!');
-		$this->runReports($linecount - $lineInFile + 1);
-		$this->timer->endTimer('report');
-	}
-
 	protected function incrementProcessAdvance($adv)
 	{
 		try {
@@ -674,20 +486,9 @@ class ImportContactWrapper
 			$this->log->log('Error incrementando avance de proceso: [' . $e . ']');
 		}
 	}
-	
+
 	/**
-	 * Graba un buffer de registros
-	 * @param array $buffer
-	 */
-	protected function saveRecordBuffer($buffer)
-	{
-		$values = implode(',', $buffer);
-		$tabletmp = "INSERT INTO $this->tablename (idArray, email, idEmail, name, lastName) VALUES {$values}";
-		$this->db->execute($tabletmp);
-	}
-	
-	/**
-	 * Limpia los registros insertados y los marca
+	 * Limpia los registros insertados y luego inserta los contactos
 	 * 
 	 * @param int $idAccount
 	 * @param int $idDbase
