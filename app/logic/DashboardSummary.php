@@ -79,32 +79,34 @@ class DashboardSummary
 	{
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids = array();
-		
+
 		foreach ($mails as $mail) {
 			$ids[] = $mail->idMail;
 		}
-		$idsbycomma = implode(',', $ids);
-		$query1 = "	SELECT SUM(m.share_fb) AS share_fb, SUM(m.share_tw) AS share_tw, SUM(m.open_fb) AS open_fb, SUM(m.open_tw) AS open_tw
-					FROM mxc AS m 
-					WHERE m.idMail IN ({$idsbycomma})";
-		$query2 = $modelManager->createQuery($query1);
-		$result1 = $query2->execute();
-		
-		$query3 = "	SELECT IF(SUM(l.click_fb),SUM(l.click_fb),0) AS click_fb, IF(SUM(l.click_tw),SUM(l.click_tw),0) AS click_tw
-					FROM mxcxl AS l
-					WHERE l.idMail IN ({$idsbycomma})";
-		$query4 = $modelManager->createQuery($query3);
-		$result2 = $query4->execute();
+		if(!empty($ids)) {
+			$idsbycomma = implode(',', $ids);
+			$query1 = "	SELECT SUM(m.share_fb) AS share_fb, SUM(m.share_tw) AS share_tw, SUM(m.open_fb) AS open_fb, SUM(m.open_tw) AS open_tw
+						FROM mxc AS m 
+						WHERE m.idMail IN ({$idsbycomma})";
+			$query2 = $modelManager->createQuery($query1);
+			$result1 = $query2->execute();
+
+			$query3 = "	SELECT IF(SUM(l.click_fb),SUM(l.click_fb),0) AS click_fb, IF(SUM(l.click_tw),SUM(l.click_tw),0) AS click_tw
+						FROM mxcxl AS l
+						WHERE l.idMail IN ({$idsbycomma})";
+			$query4 = $modelManager->createQuery($query3);
+			$result2 = $query4->execute();
+		}
 		
 		$result = array(
-			'share_fb' => $result1[0]->share_fb,
-			'share_tw' => $result1[0]->share_tw,
-			'open_fb' => $result1[0]->open_fb,
-			'open_tw' => $result1[0]->open_tw,
-			'click_fb' => $result2[0]->click_fb,
-			'click_tw' => $result2[0]->click_tw,
+			'share_fb' => (isset($result1[0]->share_fb)) ? $result1[0]->share_fb : 0,
+			'share_tw' => (isset($result1[0]->share_tw)) ? $result1[0]->share_tw : 0,
+			'open_fb' => (isset($result1[0]->open_fb)) ? $result1[0]->open_fb : 0,
+			'open_tw' => (isset($result1[0]->open_tw)) ? $result1[0]->open_tw : 0,
+			'click_fb' => (isset($result2[0]->click_fb)) ? $result1[0]->click_fb : 0,
+			'click_tw' => (isset($result2[0]->click_tw)) ? $result1[0]->click_tw : 0
 		);
-		
+
 		return $result;
 	}
 	
@@ -119,7 +121,7 @@ class DashboardSummary
 	 * @param int $intervals
 	 * @return array
 	 */	
-	public function geStatsValuesFromMailsInPeriods($mails, $intervals)
+	public function getStatsValuesFromMailsInPeriods($mails, $intervals)
 	{
 		$stats = array();
 		for($i = 0; $i < $intervals; $i++) {

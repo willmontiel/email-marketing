@@ -9,7 +9,7 @@ class IndexController extends ControllerBase
 		$mails = $dashboard->lastPeriodMails('15', 'day');
 		$allstats = $dashboard->fullPeriodStats($mails);
 		$socialstats = $dashboard->fullSocialStats($mails);
-		$values = $dashboard->geStatsValuesFromMailsInPeriods($mails, 15);
+		$values = $dashboard->getStatsValuesFromMailsInPeriods($mails, 15);
 		$lastmails = $dashboard->getLastMailsWithStats(3);
 		$stats = array_merge($allstats, $socialstats);
 		$this->logger->log('Estadisticas totales del periodo ' . print_r($stats, true));
