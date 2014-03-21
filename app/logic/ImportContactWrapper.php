@@ -442,7 +442,7 @@ class ImportContactWrapper
 			$sql = "INSERT INTO fieldinstance (idCustomField, idContact, {$data[1]}) "
 					. "SELECT {$data[0]}, idContact, {$fn} "
 					. "FROM {$this->tablename} "
-					. "WHERE idContact IS NOT NULL"
+					. "WHERE idContact IS NOT NULL "
 					. "ON DUPLICATE KEY UPDATE {$data[1]} = {$fn}";
 			$this->log->log("Excuting SQL: [{$sql}]");
 			$this->db->execute($sql);
