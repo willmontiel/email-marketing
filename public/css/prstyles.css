@@ -641,3 +641,28 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .list-import-process {
 	margin-right: 15px;
 }
+.box-dashboard-summary {
+	text-align: center;
+	padding: 15px 0px 15px 0px;
+	border-radius: 5px;
+	width: 135px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.number-stats-dashboard-summary {
+	font-size: 22px;
+	font-weight: 600;
+	color: white;
+}
+.box-dashboard-summary.summary-opens {
+	background-color: #62BD62;
+}
+.box-dashboard-summary.summary-clicks {
+	background-color: #598DAF;
+}
+.box-dashboard-summary.summary-unsubscribed {
+	background-color: #7CE7FC;
+}
+.box-dashboard-summary.summary-bounced {
+	background-color: #F0AA41;
+}
