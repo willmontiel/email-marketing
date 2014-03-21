@@ -78,6 +78,19 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 		}
 	}
 	
+	/**
+	 * @expectedException InvalidArgumentException
+	 * @expectedExceptionMessage Invalid Email Address
+	 */
+	public function testSimpleEmailValidation()
+	{
+		$this->prepareFirstDataSet();
+		$data = $this->getDataSet1_InvalidEmails();
+		
+		$this->object->mapValues($data);
+		
+	}
+	
 	protected function prepareFirstDataSet()
 	{
 		$this->object->setDbase($this->createDbaseMock());
@@ -149,7 +162,23 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-
+	protected function getDataSet1_InvalidEmails()
+	{
+		// Entrada de datos
+		// Salida esperada
+		return array(
+			'dummy0',
+			'invalidemail.com',
+			'dummy2',
+			'some name',
+			'Custom field 3',
+			'1234A23',
+			'dummy 5',
+			'2014-01-01 23:00:00',
+			'dummy extra'
+		);
+	}
+	
 	protected function getDataSet1_Names()
 	{
 		return array(

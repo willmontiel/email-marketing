@@ -110,6 +110,12 @@ class SelectedFieldsMapper
 	{
 		$result = array();
 
+		// Validar correo
+		$email = $values[$this->mapping[0]];
+		if (! \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
+			throw new \InvalidArgumentException("Invalid Email Address: [{$email}]");
+		}
+		
 		foreach ($this->mapping as $to => $from) {
 			if (isset($values[$from])) {
 				$result[$to] = $this->transformValue($to, $values[$from]);

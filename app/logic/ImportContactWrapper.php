@@ -2,6 +2,9 @@
 /**
  * 
  */
+
+use EmailMarketing\General\Misc\SelectedFieldsMapper;
+
 class ImportContactWrapper
 {
 
@@ -19,6 +22,12 @@ class ImportContactWrapper
 	protected $errors;
 	protected $invalid;
 	protected $emailbuffers;
+	
+	/**
+	 *
+	 * @var SelectedFieldsMapper
+	 */
+	protected $fieldmapper;
 	
 	/**
 	 *
@@ -168,13 +177,18 @@ class ImportContactWrapper
 		
 		// Cargar el proceso de importacion
 		$this->loadProcess();
-
-		// Validar que se haya mapeado el campo de correo electronico (requerido)
-		if(empty($posCol['email']) && $posCol['email'] != '0') {
+		
+		// Crear el mapper
+		$this->fieldmapper = new SelectedFieldsMapper;
+		try {
+			$this->fieldmapper->setDbase($dbase);
+			$this->fieldmapper->assignMapping($posCol);
+			$this->fieldmapper->processMapping();
+		} catch (Exception $ex) {
 			$this->updateProcessStatus('Importacion no realizada');
 			$this->saveProcess();
-			
-			throw new \InvalidArgumentException('No hay Mapeo de los Campos y las Columnas del Archivo');
+
+			throw new \InvalidArgumentException("Error al crear objeto de mapeo de columnas: [{$ex->getMessage()}]");
 		}
 
 		$this->updateProcessStatus('En Ejecucion');
@@ -188,7 +202,7 @@ class ImportContactWrapper
 		
 		// Creacion de contactos utilizando LOAD DATA INFILE
 		// Preprocesando el archivo CSV
-		$this->importDataFromCSV($destiny, $header, $delimiter, $posCol, $activeContacts, $contactLimit, $mode, $dbase);
+		$this->importDataFromCSV($destiny, $header, $delimiter, $activeContacts, $contactLimit, $mode, $dbase);
 				
 		$this->timer->endTimer('phase2');
 
@@ -231,57 +245,6 @@ class ImportContactWrapper
 		$this->db->execute("CREATE {$tmp} TABLE {$this->tablename} LIKE tmpimport");
 	}
 
-	/**
-	 * Este metodo analiza el arreglo de mapeo de campos
-	 * Determina la configuracion de campos y el reposicionamiento que deben
-	 * tener en el archivo CSV para cumplir con su ubicacion en tabla temporal
-	 * @param array $fieldMappings
-	 * @return array con tres partes:
-	 *			array con campos para mapear de CSV a nuevo CSV
-	 *			array de nombres de campos para LOAD DATA INFILE
-	 *			array con booleans que indican si un campo es custom o no
-	 */
-	protected function configureMappings($fieldMappings)
-	{
-		// El primer campo SIEMPRE DEBE ser $email
-		
-		// Nombres de campos en tabla temporal
-		$fieldnames = array('email', 'domain');
-		// Reordenamiento al escribir en CSV
-		// Email y dominio apuntan al email (aunque al final el dominio se reescribe)
-		$fieldpos   = array(0 => $fieldMappings['email'], 1 => $fieldMappings['email']);
-		// Indicador de campo personalizado
-		$custom = array(false, false);
-		// Copia de $fieldMappings para modificar
-		$tmpfm = $fieldMappings;
-		unset($tmpfm['email']);
-		
-		// Posicion donde debe moverse el nuevo campo
-		$stposition = 2;
-		
-		// Recorrer la lista
-		foreach ($tmpfm as $idfield => $position) {
-			$fieldnames[] = $idfield;
-			$fieldpos[$stposition] = $position;
-			$stposition++;
-			$custom[] = is_numeric($idfield);
-		}
-		// Suponiendo que la entrada es asi:
-		// [ 'email' => 3, 'name' => 2, '123' => '7', '124' => '5' ]
-		// Al final debe tener algo similar a esto:
-		// fieldnames: ['email', 'domain', 'name', '123', '124']
-		// fieldpos:   [0 => 3, 2 => 2, 3 => 7, 4 => 5 ]
-		// Esto significa: los campos que se van a importar son <fieldnames>
-		// fieldnames puede utilizarse directamente en LOAD DATA INFILE...
-		// Y el proceso de grabacion del CSV temporal debe
-		// Tomar los campos del value de fieldpos y grabarlos en key
-		// En el ejemplo de arriba, $lineOut[0] = $lineIn[3]
-		
-		$this->log->log('Field names: [' . print_r($fieldMappings, true) . ']/[' . print_r($tmpfm, true) . '] => [' . print_r($fieldnames, true) . ']');
-		return array($fieldnames, $fieldpos, $custom);
-		
-	}
-	
 	protected function destroyTemporaryTable()
 	{
 		$this->getDB();
@@ -340,7 +303,6 @@ class ImportContactWrapper
 
 	/**
 	 * Verifica correo electronico
-	 * Si es invalido incrementa contador y graba error
 	 * Si ya esta en el archivo, incrementa contador y graba error
 	 * 
 	 * Si alguno de los dos se cumple retorna null, de lo contrario
@@ -348,29 +310,21 @@ class ImportContactWrapper
 	 * 
 	 * @param string $email
 	 * @param int $line
-	 * @return string
+	 * @return boolean
 	 */
 	protected function verifyEmailAddress($email, $line)
 	{
 		$email = strtolower($email);
-		if ( \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
-			if (empty($this->emailbuffers) || !isset($this->emailbuffers[$email]) ) {
-				$this->emailbuffers[$email] = true;	
-			}
-			else {
-				// Email repetido en el archivo
-				$this->errors[] = \sprintf('Correo [%s] repetido en linea %d', $email, $line);
-				$this->repeated++;
-				$email = null;
-			}
+		if (empty($this->emailbuffers) || !isset($this->emailbuffers[$email]) ) {
+			$this->emailbuffers[$email] = true;
+			return true;
 		}
 		else {
-			$this->errors[] = \sprintf('Correo [%s] invalido en linea %d', $email, $line);
-			$this->invalid++;
-			$email = null;
+			// Email repetido en el archivo
+			$this->errors[] = \sprintf('Correo [%s] repetido en linea %d', $email, $line);
+			$this->repeated++;
+			return false;
 		}
-
-		return $email;
 	}
 
 	protected function getCustomFields()
@@ -379,61 +333,19 @@ class ImportContactWrapper
 	}
 	
 	/**
-	 * 
-	 * @param array $names
-	 * @param array $cftypes
-	 * @return array
+	 * Altera la base de datos
 	 */
-	protected function alterTemporaryTable($names, $cftypes)
+	protected function alterTemporaryTable()
 	{
-		$standard = array('email', 'domain', 'name', 'lastname');
-		// Quitar los campos estandar de la lista
-		$custom = array_diff($names, $standard);
+		// Campos adicionales:
+		// [ fieldname => metadata, ... ]
+		// Ej: [ 'cf_1' => ' VARCHAR(100) DEFAULT NULL' ]
+		$fields = $this->fieldmapper->getAdditionalFields();
 		
-		$this->log->log('Names: [' . print_r($names, true) . '], custom: [' . print_r($custom, true) . ']');
-		
-		// Hay campos personalizados?
-		if (count($custom) > 0) {
-			
-			$fnames = array();
-			$cfnames = array();
-			foreach ($custom as $cf) {
-				// De acuerdo al tipo de campo
-				if (isset($cftypes[$cf])) {
-					switch ($cftypes[$cf]) {
-						case 'Date':
-						case 'Numerical':
-							 $t = ' INT(10) DEFAULT 0';
-							break;
-						default:
-							 $t = ' VARCHAR(100) DEFAULT NULL';
-							break;
-					}
-					$n = 'cf_' . $cf;
-					$fnames[] = $n . ' ' . $t;
-					$cfnames[] = $n;
-				}
-				else {
-					$n = 'xf_' . $cf;
-					$fnames[] = $n . ' VARCHAR(100) DEFAULT NULL';
-					$cfnames[] = $n;
-				}
-			}
-			$fields = implode(',', $fnames);
-			$alter = "ALTER TABLE {$this->tablename} ADD COLUMN ({$fields})";
-
-			$this->log->log('Alter: [' . $alter . ']');
-
-			$this->db->execute($alter);
-			
-			// Cambiar la lista de campos con los nuevos nombres
-			$base = array_diff($names, $custom);
-			$result = array_merge($base, $cfnames);
-		}
-		else {
-			$result = $names;
-		}
-		return $result;
+		$af = implode(',', array_map(function ($k, $v) { return $k . $v; }, array_keys($fields), $fields));
+		$alter = "ALTER TABLE {$this->tablename} ADD COLUMN ({$af})";
+		$this->log->log('Alter: [' . $alter . ']');
+		$this->db->execute($alter);
 	}
 	
 	/**
@@ -441,19 +353,14 @@ class ImportContactWrapper
 	 * @param string $sourcefile
 	 * @param boolean $hasHeader
 	 * @param string $delimiter
-	 * @param array $fieldMapping
 	 * @param int $currentActiveContacts
 	 * @param int $contactLimit
 	 * @param string $mode
 	 * @param Dbase $dbase
 	 * @throws \InvalidArgumentException
 	 */
-	protected function importDataFromCSV($sourcefile, $hasHeader, $delimiter, $fieldMapping, $activeContacts, $contactLimit, $mode, Dbase $dbase)
+	protected function importDataFromCSV($sourcefile, $hasHeader, $delimiter, $activeContacts, $contactLimit, $mode, Dbase $dbase)
 	{
-		// Validar que al menos el campo de email este mapeados
-		if (!isset($fieldMapping['email']) ) {
-			throw new \InvalidArgumentException('Campo email no esta mapeado en la informacion a importar y es requerido!');
-		}
 		// Cuantas lineas tiene el archivo?
 		$linecount = $this->countFileRecords($sourcefile);
 
@@ -485,21 +392,13 @@ class ImportContactWrapper
 		 * con los campos que se importan y eliminando registros de
 		 * email invalido
 		 */
-		
-		// Crear lista de mapeo de campos para archivo CSV temporal
-		// [0] = nombres de campos para LOAD DATA INFILE
-		// [1] = map de posiciones de CSV 1 a CSV 2
-		// [2] = boolean de custom. Ej: [false, false, true, true, true]
-		//       indica que los tres ult campos son custom 
-		$map = $this->configureMappings($fieldMapping);
-		// Este metodo identifica el tipo de los campos personalizados
-		$cftypes = $this->getCustomFieldTypes($dbase);
-		$mapnames = $this->alterTemporaryTable($map[0], $cftypes);
+
+		$this->alterTemporaryTable();
 		
 		$tmpFilename = $sourcefile . '.pr';
 		$this->timer->startTimer('copy-rows', 'Copy csv file to temporary file!');
 		// Ejecutar la copia de registros
-		$this->copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $map[1], $hasHeader, $cftypes, $map[2]);
+		$this->copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $hasHeader);
 		$this->timer->endTimer('copy-rows');
 
 		
@@ -512,7 +411,7 @@ class ImportContactWrapper
 		// Crear sentencia SQL que hace la importacion de los registros desde el
 		// archivo temporal
 		$rpath = realpath($tmpFilename);
-		$fields = implode(',', $mapnames);
+		$fields = implode(',', $this->fieldmapper->getFieldnames() );
 		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
 					. "({$fields})";
 		
@@ -558,24 +457,15 @@ class ImportContactWrapper
 	 * @param string $tmpFilename
 	 * @param string $delimiter
 	 * @param int $maxrows
-	 * @param array $fieldMapping
 	 * @param boolean $hasHeader
-	 * @param array $cftypes
-	 * @param array $custom
 	 */
-	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $fieldMapping, $hasHeader, $cftypes, $custom)
+	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $hasHeader)
 	{
-		// El mapeado de posicion de campos es asi:
-		// [0 => 3, 2 => 2, 3 => 7, 4 => 5 ]
-		// Esto significa: 
-		// Tomar los campos del value y grabarlos en key
-		// Ejemplo de arriba: $lineOut[0] = $lineIn[3]
 		$fp = fopen($sourcefile, 'r');
 		$nfp = fopen($tmpFilename, 'w');
 		
 		$skipped = 0;
 		$rows = 0;
-		
 
 		if ($hasHeader) {
 			$line = fgetcsv($fp, 0, $delimiter);
@@ -583,27 +473,17 @@ class ImportContactWrapper
 		while (!feof($fp) && ($rows - $skipped) <= $maxrows) {
 			$line = fgetcsv($fp, 0, $delimiter);
 			$rows++;
-			// Validar EMAIL (correcto y que no este repetido)
-			$email = $this->verifyEmailAddress($line[$fieldMapping[0]], $rows);
-			if ($email) {
-				$lineOut = array();
-				foreach ($fieldMapping as $d => $o) {
-					if ($custom[$d]) {
-						// Campo custom, convertir
-						$lineOut[$d] = $this->processFieldData($cftypes, $line[$o]);
-					}
-					else {
-						// No custom, copia directa
-						$lineOut[$d] = $line[$o];
-					}
-				}
-				list($user, $domain) = explode('@', $email);
-				$lineOut[0] = $email;
-				$lineOut[1] = $domain;
-				fputcsv($nfp, $lineOut, $delimiter);
+			try {
+				$lineOut = $this->fieldmapper->mapValues($line);
 			}
-			else {
+			catch (\InvalidArgumentException $e) {
+				$this->errors[] = \sprintf('%s en linea %d', $e->getMessage(), $line);
 				$skipped++;
+				continue;
+			}
+			// Validar que el EMAIL no este repetido
+			if ( $this->verifyEmailAddress($lineOut[0], $rows) ) {
+				fputcsv($nfp, $lineOut, $delimiter);
 			}
 		}
 		fclose($fp);
