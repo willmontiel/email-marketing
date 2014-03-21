@@ -337,10 +337,12 @@ class ImportContactWrapper
 		// Ej: [ 'cf_1' => ' VARCHAR(100) DEFAULT NULL' ]
 		$fields = $this->fieldmapper->getAdditionalFields();
 		
-		$af = implode(',', array_map(function ($k, $v) { return $k . $v; }, array_keys($fields), $fields));
-		$alter = "ALTER TABLE {$this->tablename} ADD COLUMN ({$af})";
-		$this->log->log('Alter: [' . $alter . ']');
-		$this->db->execute($alter);
+		if (count($fields) > 0) {
+			$af = implode(',', array_map(function ($k, $v) { return $k . $v; }, array_keys($fields), $fields));
+			$alter = "ALTER TABLE {$this->tablename} ADD COLUMN ({$af})";
+			$this->log->log('Alter: [' . $alter . ']');
+			$this->db->execute($alter);
+		}
 	}
 	
 	/**
