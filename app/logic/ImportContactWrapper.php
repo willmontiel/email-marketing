@@ -180,6 +180,8 @@ class ImportContactWrapper
 		
 		// Crear el mapper
 		$this->fieldmapper = new SelectedFieldsMapper;
+		$this->log->log('Position fields for mapping object: [' . print_r($posCol, true) . ']');
+
 		try {
 			$this->fieldmapper->setDbase($dbase);
 			$this->fieldmapper->assignMapping($posCol);
