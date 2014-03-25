@@ -45,7 +45,11 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 	}.observes('content.length'),
 			
 	refreshModel: function (obj) {
-		this.set('content', this.store.find(this.modelClass, obj));
+		//
+		var t = this;
+		this.store.find(this.modelClass, obj).then(function(d) {
+			t.set('content', d.content);
+		});
 	}
 	,
 	actions: {

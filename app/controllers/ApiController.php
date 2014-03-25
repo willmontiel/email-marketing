@@ -864,6 +864,7 @@ class ApiController extends ControllerBase
 		$contentsraw = $this->request->getRawBody();
 		$contentsT = json_decode($contentsraw);
 		
+		$log->log('Content: ' . print_r($contentsT, true));
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		
@@ -1118,31 +1119,48 @@ class ApiController extends ControllerBase
 	 */
 	public function createsegmentAction()
     {
-		$log = $this->logger;
-
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		$contents = $contentsT->segment;
+		$account = $this->user->account;
 		
-		$Wrapper = new SegmentWrapper();
+		$dbase = Dbase::findFirst(array(
+			"conditions" => "idDbase = ?1 and idAccount = ?2",
+			"bind" => array(1 => $contents->dbase,
+							2 => $account->idAccount)
+		));
+		
+		if (!$dbase) {
+			return $this->setJsonResponse(array('status' => 'error'), 404, 'Dbase not found!');
+		}
+		
+		$segment = Segment::findFirst(array(
+			"conditions" => "name = ?1 and idDbase = ?2",
+			"bind" => array(1 => $contents->name,
+							2 => $dbase->idDbase)
+		));
+		
+		if ($segment) {
+			return $this->setJsonResponse(array('errors' => array('segmentname' => 'Ya existe un segmento con el nombre enviado, por favor verifique la información')), 422, 'Invalid data!');
+		}
+		
+		$wrapper = new SegmentWrapper();
+		$wrapper->setAccount($account);
 		
 		try {
-			$segment = $Wrapper->createSegment($contents, $this->user->account);
+			$response = $wrapper->createSegment($contents);
+			return $this->setJsonResponse(array('segment' => $response), 201, 'Success');
 		}
-		
 		catch (\InvalidArgumentException $e) {
-			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('errors' => $Wrapper->getFieldErrors()), 422, 'Invalid data');
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors()), 422, 'Invalid data');
 		}
 		catch (\Exception $e) {
-			$log->log('Exception: [' . $e . ']');
+			$this->logger->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating segment!');	
 		}
-		
-		return $this->setJsonResponse(array('segment' => $segment), 201, 'Success');
 	}	
 	
 	/**
@@ -1151,20 +1169,41 @@ class ApiController extends ControllerBase
 	 */
 	public function updatesegmentAction($idSegment)
 	{
-		$log = $this->logger;
-		
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->segment;
 		$account = $this->user->account;
+		
+		$dbase = Dbase::findFirst(array(
+			"conditions" => "idDbase = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $contents->dbase,
+							2 => $account->idAccount)
+		));
+		
+		if (!$dbase) {
+			return $this->setJsonResponse(array('status' => 'error'), 404, 'Dbase not found!');
+		}
+		
+		$segment = Segment::findFirst(array(
+			"conditions" => "idSegment = ?1 AND idDbase = ?2",
+			"bind" => array(1 => $idSegment,
+							2 => $dbase->idDbase)
+		));
+		
+		if (!$segment) {
+			return $this->setJsonResponse(array('status' => 'error'), 404, 'Segment not found!');
+		}
+		
 		$wrapper = new SegmentWrapper();
+		$wrapper->setAccount($account);
+		$wrapper->setSegment($segment);
+		$wrapper->setDbase($dbase);
 		
 		try {
-			$response = $wrapper->updateSegment($contents, $idSegment, $account);
+			$response = $wrapper->updateSegment($contents);
 		}
 		catch (InvalidArgumentException $e) {
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());

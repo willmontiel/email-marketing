@@ -322,7 +322,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$c['spamOn'] = (($contact['spam'] != 0)?date('d/m/Y H:i', $contact['spam']):'');
 			$c['createdOn'] = (($contact['createdon'] != 0)?date('d/m/Y H:i', $contact['createdon']):'');
 			$c['updatedOn'] = (($contact['updatedon'] != 0)?date('d/m/Y H:i', $contact['updatedon']):'');
-
+			$c['mailHistory'] = json_encode(array());
 			$c['ipSubscribed'] = (($contact['ipSubscribed'])?long2ip($contact['ipSubscribed']):'');
 			$c['ipActivated'] = (($contact['ipActivated'])?long2ip($contact['ipActivated']):'');
 

@@ -87,9 +87,9 @@
 				<div class="box">
 					<div class="box-header">
 						<ul class="nav nav-tabs nav-tabs-left">
-							{{'{{#linkTo "index" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bindAttr href="view.href"}}>General</a>{{/linkTo}}'}}
-							{{'{{#linkTo "fields" tagName="li" href=false}}<a {{bindAttr href="view.href"}}>Campos</a>{{/linkTo}}'}}
-							{{'{{#linkTo "contacts" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bindAttr href="view.href"}}>Contactos</a>{{/linkTo}}'}}                                                                
+							{{'{{#link-to "index" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>General</a>{{/link-to}}'}}
+							{{'{{#link-to "fields" tagName="li" href=false}}<a {{bind-attr href="view.href"}}>Campos</a>{{/link-to}}'}}
+							{{'{{#link-to "contacts" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Contactos</a>{{/link-to}}'}}                                                                
 						</ul>
 					</div>
 					<div class="box-content padded">
@@ -126,7 +126,7 @@
 		</div>
 		<div class="row-fluid">
 			<div class="span12 padded text-right">
-				{{'{{#linkTo "fields.add" class="btn btn-default" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/linkTo}}'}}
+				{{'{{#link-to "fields.add" class="btn btn-default" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/link-to}}'}}
 			</div>
 		</div>
 		<div class="row-fluid">
@@ -193,8 +193,8 @@
 											<div class="btn-group">
 												<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 												<ul class="dropdown-menu">
-													<li>{{ '{{#linkTo "fields.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{'{{/linkTo}}'}}</li>
-													<li>{{'{{#linkTo "fields.remove" this disabledWhen="controller.deleteDisabled"}}'}}<i class="icon-trash"></i> Eliminar {{'{{/linkTo}}'}}</li>
+													<li>{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{'{{/link-to}}'}}</li>
+													<li>{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled"}}'}}<i class="icon-trash"></i> Eliminar {{'{{/link-to}}'}}</li>
 												</ul>
 											</div>
 										</div>

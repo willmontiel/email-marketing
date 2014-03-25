@@ -20,5 +20,7 @@ App.Contact = DS.Model.extend(
 
 //Definiendo Rutas
 App.Router.map(function() {
-	this.resource('contacts', function(){});
+	this.resource('contacts', function(){
+		this.resource('contacts.delete', { path: '/delete/:contact_id'});
+	});
 });

@@ -257,8 +257,8 @@
 									<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
 								{{'{{/unless}}'}}
 							{{ '{{/if}}' }}
-						{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
-						{{ '{{#linkTo "contacts"}}<button class="btn btn-default">Regresar</button>{{/linkTo}}' }}
+						{{ '{{#link-to "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/link-to}}' }}
+						{{ '{{#link-to "contacts"}}<button class="btn btn-default">Regresar</button>{{/link-to}}' }}
 						</div>
 					</div>
 				</div>

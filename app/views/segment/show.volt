@@ -101,19 +101,24 @@
 				</ul>
 			</div>
 			<div class="box-content">
-			{{'{{#each model}}'}}
-				{{ partial("partials/contact_view_partial") }}
-			{{ '{{else}}' }}
-				<div class="padded">
-					No existen coincidencias para el criterio de busqueda.
-				</div>
-			{{ '{{/each}}' }}
+				<table class="table table-bordered" style="border: 0px !important;">
+					<thead></thead>
+					<tbody>
+					{{'{{#each model}}'}}
+						{{ partial("partials/contact_view_partial") }}
+					{{ '{{else}}' }}
+						<tr>
+							<td colspan="3">No existen coincidencias para el criterio de busqueda.</td>
+						</tr>
+					{{ '{{/each}}' }}
+					</tbody>
+				</table>
 			</div>
 			<div class="box-footer flat"> 
 				{{ partial("partials/pagination_partial") }}
 			</div>
 		</div>
-	</script>	
+	</script>
 	{#
 	<script type="text/x-handlebars" data-template-name="contacts/show">
 	<br />
@@ -203,8 +208,8 @@
 									<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
 								{{'{{/unless}}'}}
 							{{ '{{/if}}' }}
-						{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
-						{{ '{{#linkTo "contacts"}}<button class="btn btn-default">Regresar</button>{{/linkTo}}' }}
+						{{ '{{#link-to "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/link-to}}' }}
+						{{ '{{#link-to "contacts"}}<button class="btn btn-default">Regresar</button>{{/link-to}}' }}
 						</div>
 					</div>
 				</div>

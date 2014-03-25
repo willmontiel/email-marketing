@@ -36,6 +36,7 @@ class RESTResponse
 			'page' => $this->primary->getCurrentPage(),
 			'limit' => $this->primary->getRowsPerPage(),
 			'total' => $this->primary->getTotalRecords(),
+			'rows' => $this->primary->getRowsPerPage(),
 			'availablepages' => $this->primary->getTotalPages(),			
 		));
 		

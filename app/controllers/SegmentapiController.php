@@ -48,6 +48,7 @@ class SegmentapiController extends ControllerBase
 				return $this->setJsonResponse($rest->getRecords());
 			}	
 			else {
+				$this->logger->log('Va null');
 				$segmentwrapper = new SegmentWrapper();
 				$segmentwrapper->setPager($pager);
 				$contacts = $segmentwrapper->findContactsInSegment($segment);

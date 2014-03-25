@@ -20,7 +20,7 @@
 		</div>
 		<div class="span2 text-right">
 			<div class="padded">
-				{{ '{{#linkTo "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger"}}Bloquear{{/linkTo}}' }}
+				{{ '{{#link-to "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger"}}Bloquear{{/link-to}}' }}
 			</div>
 		</div>
 	</div>
@@ -52,7 +52,7 @@
 									<td>{{'{{blockedDate}}' }}</td>
 									<td>{{ '{{blockedReason}}'}}</td>
 									<td>
-										{{'{{#linkTo "blockedemails.unblock" this disabledWhen="controller.deleteDisabled" }}Desbloquear{{/linkTo}}'}}
+										{{'{{#link-to "blockedemails.unblock" this disabledWhen="controller.deleteDisabled" }}Desbloquear{{/link-to}}'}}
 									</td>
 								</tr>
 							{{ '{{else}}' }}

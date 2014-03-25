@@ -3,9 +3,12 @@
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
 		{{ partial("partials/date_view_partial") }}
+		{{ partial("partials/xeditable_view_partial") }}
+		{{ partial("partials/xeditable_select_view_partial") }}
+		{{ javascript_include('js/load_activecontacts.js')}}
 		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
-		{{ javascript_include('js/load_activecontacts.js')}}
+		{#{{ javascript_include('javascripts/moment/moment.min.js')}}#}
 <script type="text/javascript">
 		var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};
@@ -73,8 +76,10 @@
 	<script>
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
+			{{ ember_customfield_options_xeditable(field) }}
 		{%endfor%}
 	</script>
+	{{ javascript_include('js/editable-ember-view.js')}}
 {% endblock %}
 
 {% block sectiontitle %}Lista: <strong>{{datalist.name}}</strong>{% endblock %}
@@ -125,9 +130,9 @@
 		<script type="text/x-handlebars" data-template-name="contacts/index">
 			<div class="pull-right" style="margin-bottom: 5px;">
 				<a href="{{url('contactlist#/lists')}}" class="btn btn-blue"><i class="icon-home"></i> Todas las listas</a>
-				{{'{{#linkTo "contacts.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/linkTo}}'}}
-				{{'{{#linkTo "contacts.newbatch" class="btn btn-default" disabledWhen="importBatchDisabled"}}'}}<i class="icon-align-justify"></i> Crear Varios Contactos{{'{{/linkTo}}'}}
-				{{ '{{#linkTo "contacts.import" class="btn btn-default" disabledWhen="importDisabled"}}'}}<i class="icon-file-alt"></i> Importar Contactos{{'{{/linkTo}}'}}			
+				{{'{{#link-to "contacts.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/link-to}}'}}
+				{{'{{#link-to "contacts.newbatch" class="btn btn-default" disabledWhen="importBatchDisabled"}}'}}<i class="icon-align-justify"></i> Crear Varios Contactos{{'{{/link-to}}'}}
+				{{ '{{#link-to "contacts.import" class="btn btn-default" disabledWhen="importDisabled"}}'}}<i class="icon-file-alt"></i> Importar Contactos{{'{{/link-to}}'}}			
 				<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="btn btn-default" title="Configuracion avanzada"><i class="icon-cog"></i></a>
 			</div>
 			<div class="clearfix"></div>
@@ -224,8 +229,11 @@
 							<!--  Fin de campos personalizados -->
 						</div>
 						<div class="form-actions">
-							<button class="btn btn-default" {{'{{action cancel this}}'}}>Cancelar</button>
-							<button  data-loading-text="saving..." {{'{{bindAttr class=":btn :btn-blue isSaving:loading"}}'}} {{'{{bindAttr disabled="isSaving"}}'}} {{'{{action save this}}'}}>Guardar</button>
+							<button class="btn btn-default" {{'{{action "cancel" this}}'}}>Cancelar</button>
+							<button class="btn btn-blue" {{'{{action "save" this}}'}}>Guardar</button>
+{#
+							<button  data-loading-text="saving..." {{'{{bindAttr class=":btn :btn-blue isSaving:loading"}}'}} {{'{bindAttr disabled="isSaving"}}'}} {{'{{action "save" this}}'}}>Guardar</button>
+#}
 						</div>
 					</form>
 				</div>
@@ -256,7 +264,7 @@
 						{{ text_area("arraybatch", '', 'cols': '40', 'rows': '6', 'class': 'span10') }}
 					</div>
 					<div class="box-footer flat padded">
-						{{ '{{#linkTo "contacts"}}<button class="btn btn-sm btn-default">Cancelar</button>{{/linkTo}}' }}
+						{{ '{{#link-to "contacts"}}<button class="btn btn-sm btn-default">Cancelar</button>{{/link-to}}' }}
 						<input class="btn btn-blue" type="submit" value="Continuar">
 					</div>
 				</form>

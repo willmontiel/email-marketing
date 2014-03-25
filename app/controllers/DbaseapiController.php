@@ -12,10 +12,6 @@ class DbaseapiController extends ControllerBase
 		$search = $this->request->getQuery('searchCriteria', null, null);
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
-		
-//                $this->logger->log('Criterio de búsqueda: ' . $search);
-//                $this->logger->log('Limit: ' . $limit);
-//                $this->logger->log('Page: ' . $page);
                 
 		$pager = new PaginationDecorator();
 		if ($limit) {
@@ -36,7 +32,7 @@ class DbaseapiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la base de datos');
 		}
 		
-//		$contactlists = Contactlist::findByIdDbase($dbase->idDbase);
+		$contactlists = Contactlist::findByIdDbase($dbase->idDbase);
 //		$contactlists = $dbase->contactlist;
 
 		try { 
@@ -49,12 +45,13 @@ class DbaseapiController extends ControllerBase
 				$contactset->setPaginator($pager);
 				$contactset->load();
 				
-//				$contactlistSet = new \EmailMarketing\General\ModelAccess\ContactlistSet();
-//				$contactlistSet->setContactlist($contactlists);
-//				$contactlistSet->load();
+				$contactlistSet = new \EmailMarketing\General\ModelAccess\ContactlistSet();
+				$contactlistSet->setContactlist($contactlists);
+				$contactset->setPaginator($pager);
+				$contactlistSet->load();
 				$rest = new \EmailMarketing\General\Ember\RESTResponse();
 				
-	//			$rest->addDataSource($contactlistSet);
+				$rest->addDataSource($contactlistSet);
 				$rest->addDataSource($contactset);
 			
 				return $this->setJsonResponse($rest->getRecords());

@@ -16,22 +16,21 @@ class ContactlistSet implements \EmailMarketing\General\ModelAccess\DataSource
 		$this->contactlists = null;
 	}
 	
-	public function setContactlist($x)
+	public function setContactlist(/*\Contactlist*/ $contactlist)
 	{
-		$this->contactlists = $x;
+		$this->contactlists = $contactlist;
 	}
 	
 	public function load()
 	{
-//		foreach ($this->contactlists as $list) {
-//			$list = array();
-//			\Phalcon\DI::getDefault()->get('logger')->log("id: " . $list->idContactlist);
-//			$list['id'] = $list->idContactlist;
-//			$list['name'] = $list->name;
-//			
-//			$this->rows[] = $list;
-//		}
-		$this->rows = $this->contactlists;
+		foreach ($this->contactlists as $list) {
+			$lists = array();
+			\Phalcon\DI::getDefault()->get('logger')->log("id: " . $list->idContactlist);
+			$lists['id'] = $list->idContactlist;
+			$lists['name'] = $list->name;
+			
+			$this->rows[] = $lists;
+		}
 		$this->name = 'lists';
 	}
 
@@ -56,6 +55,11 @@ class ContactlistSet implements \EmailMarketing\General\ModelAccess\DataSource
 	}
 	
 	public function getTotalRecords()
+	{
+		
+	}
+	
+	public function getRowsPerPage() 
 	{
 		
 	}

@@ -1,8 +1,8 @@
 <tr>
 	<td>
-		<label {{ '{{action expand this}}' }}>
+		<label {{ '{{action "expand" this}}' }}>
 		{#<label>#}
-			{#{{ '{{#linkTo "contacts.show" this}}' }}{{ '{{email}}' }}{{ '{{/linkTo}}' }}#}
+			{#{{ '{{#link-to "contacts.show" this}}' }}{{ '{{email}}' }}{{ '{{/link-to}}' }}#}
 			{{ '{{email}}' }}
 			{{' {{#if isEmailBlocked}} '}}
 				<span class="badge badge-dark-red">Correo bloqueado</span>
@@ -18,15 +18,15 @@
 	<td>
 		<div class="text-right">
 	{{ '{{#if isSubscribed}}' }}
-			<button class="btn btn-sm btn-default" {{' {{action unsubscribedcontact this}} '}}>Desuscribir</button>
+			<button class="btn btn-sm btn-default" {{' {{action "unsubscribedcontact" this}} '}}>Desuscribir</button>
 	{{ '{{else}}' }}
 		{{'{{#unless isEmailBlocked}}'}}
-			<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
+			<button class="btn btn-sm btn-info" {{' {{action "subscribedcontact" this}} '}}>Suscribir</button>
 		{{'{{/unless}}'}}
 	{{ '{{/if}}' }}
-		{#{{ '{{#linkTo "contacts.show" this}}' }}<i class="icon-search"></i> Ver detalles{{ '{{/linkTo}}' }}#}
-		{#{{ '{{#linkTo "contacts.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default"}}' }}Editar{{ '{{/linkTo}}' }}#}
-			{{ '{{#linkTo "contacts.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-danger"}}' }}Eliminar{{ '{{/linkTo}}' }}
+		{#{{ '{{#link-to "contacts.show" this}}' }}<i class="icon-search"></i> Ver detalles{{ '{{/link-to}}' }}#}
+		{#{{ '{{#link-to "contacts.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default"}}' }}Editar{{ '{{/link-to}}' }}#}
+			{{ '{{#link-to "contacts.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-danger"}}' }}Eliminar{{ '{{/link-to}}' }}
 		</div>
 	</td>
 </tr>
@@ -46,21 +46,30 @@
 							<thead></thead>
 							<tbody>
 								<tr>
-									<td>Dirección de correo: {#<a href="#/contacts" class="username" data-type="text" data-pk="1" data-url="/post" data-title="Enter username">superuser</a>#}</td>
+									<td>Dirección de correo: </td>
+									<td>{{' {{ view App.EmberXEditableTextView value=email field="email" title="Editar correo del contacto" }} '}}</td>
+{#									
 									<td>{{' {{view Ember.TextField valueBinding="email" required="required" class="edit-contact-online"}} '}}</td>
+#}
 								</tr>
 								<tr>
 									<td>Nombre {#<a href="#/contacts" class="username" data-type="text" data-pk="1" data-url="/post" data-title="Enter username">superuser</a>#}</td>
+{#
 									<td>{{' {{view Ember.TextField valueBinding="name" required="required" class="edit-contact-online"}} '}}</td>
+#}
+									<td>{{' {{ view App.EmberXEditableTextView value=name field="name" title="Editar nombre de contacto" }} '}}</td>
 								</tr>
 								<tr>
 									<td>Apellido</td>
-									<td>{{' {{view Ember.TextField valueBinding="lastName" required="required" class="edit-contact-online"}} '}}</td>
+									<td>{{' {{ view App.EmberXEditableTextView value=lastName field="lastName" title="Editar apellido de contacto" }} '}}</td>
+{#
+									<td>{{' {{view Ember.TextField valueBinding="lastName" required="required" class="edit-contact-online"}} '}}</td> 
+#}
 								</tr>
-							{%for field in fields%}
+								{%for field in fields%}
 								<tr>
 									<td>{{field.name}}</td>
-									<td>{{ember_customfield(field)}}</td>
+									<td>{{ember_customfield_xeditable(field)}}</td>
 								</tr>
 								{%endfor%}
 								<tr>
@@ -139,13 +148,16 @@
 					</div>
 				</div>
 			</div>
-		</div>	
+		</div>
+			{{ '{{App.isEditable}}' }}
+		{{ '{{#if App.isEditable}}' }}
 		<div class="row-fluid">
 			<div class="span12 text-right">
-				<button class="btn btn-default" {{ '{{action discard this}}' }}>descartar<br />cambios</button>
-				<button class="btn btn-green" {{ '{{action edit this}}' }}>guardar<br />cambios</button>
+				<button class="btn btn-default" {{ '{{action "discard" this}}' }}>descartar<br />cambios</button>
+				<button class="btn btn-green" {{ '{{action "edit" this}}' }}>guardar<br />cambios</button>
 			</div>
 		</div>
+		{{ '{{/if}}' }}
 		<div class="row-fluid">
 			<div class="span12">
 				<h4>Historial</h4>
@@ -243,7 +255,7 @@
 			<i class="icon-warning-sign"></i>
 		</span>
 		{{'{{/if}}'}}
-	<div {{'{{bindAttr class=":avatar isReallyActive:green:blue"}}'}}>
+	<div {{'{{bind-attr class=":avatar isReallyActive:green:blue"}}'}}>
 		<i class="icon-user icon-2x"></i>
 	</div>
 	<div class="news-content">
@@ -251,13 +263,13 @@
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 				<ul class="dropdown-menu">
-					<li>{{ '{{#linkTo "contacts.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
-					<li>{{ '{{#linkTo "contacts.show" this}}' }}<i class="icon-search"></i> Ver detalles{{ '{{/linkTo}}' }}</li>
-					<li>{{ '{{#linkTo "contacts.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}</li>
+					<li>{{ '{{#link-to "contacts.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/link-to}}' }}</li>
+					<li>{{ '{{#link-to "contacts.show" this}}' }}<i class="icon-search"></i> Ver detalles{{ '{{/link-to}}' }}</li>
+					<li>{{ '{{#link-to "contacts.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/link-to}}' }}</li>
 				</ul>
 			</div>
 		</div>
-		<div class="news-title">{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</div>
+		<div class="news-title">{{ '{{#link-to "contacts.show" this}}{{email}}{{/link-to}}' }}</div>
 		{{ '{{#if isEmailBlocked}}' }}
 		<span class="badge badge-dark-red">Correo bloqueado</span>
 		{{ '{{/if}}' }}

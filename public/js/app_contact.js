@@ -150,52 +150,61 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		this.set('acl', App.contactACL);
 	},
 	searchCriteria: '',
-    search: function(){
+	criteria: '',
+	refreshRecords: function() {
 		this.criteria = this.get('searchCriteria');
+		var t = this;
+		this.store.find('contact', {searchCriteria: this.criteria }).then(function(d) {
+			t.set('content', d.content);
+		});
+	},
+	
+	actions: {
+		search: function() {
+			this.refreshRecords();
+		},
 
-		var resultado = this.store.find('contact', { searchCriteria: this.criteria });
-		this.set('content', resultado);
-	},
-	
-	reset: function(){
-		this.criteria = '';
-		var resultado = this.store.find('contact', { searchCriteria: null });
-		this.set('content', resultado);
+		reset: function() {
+			this.set('searchCriteria', '');
+			this.criteria = '';
+			this.refreshRecords();	
+		},
+		expand: function (contact) {
+			if(contact.get('isExpanded')) {
+				contact.set('isExpanded', false);
+			}
+			else {
+				contact.set('isExpanded', true);
+			}
+		},
+
+		subscribedcontact: function (contact) {
+			contact.set('isSubscribed', true);
+			contact.save();
+		},
+		unsubscribedcontact: function (contact) {
+			contact.set('isSubscribed', false);
+			contact.save();
+		},
+
+		edit: function(contact) {
+			var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+			if (filter.test(contact.get('email'))) {
+				App.set('errormessage', '');
+				App.set('isEditable', false);
+				this.handleSavePromise(contact.save(), 'contacts', 'El contacto fue actualizado exitosamente');
+			}
+			else {
+				App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
+			}
+		},
+
+		discard: function(contact) {
+
+		},
+				
 	},
 			
-	expand: function (contact) {
-		if(contact.get('isExpanded')) {
-			contact.set('isExpanded', false);
-		}
-		else {
-			contact.set('isExpanded', true);
-		}
-		$('.username').editable();
-	},
-	
-	subscribedcontact: function (contact) {
-		contact.set('isSubscribed', true);
-		contact.save();
-	},
-	unsubscribedcontact: function (contact) {
-		contact.set('isSubscribed', false);
-		contact.save();
-	},
-			
-	edit: function(contact) {
-		var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
-		if (filter.test(contact.get('email'))) {
-			App.set('errormessage', '');
-			this.handleSavePromise(contact.save(), 'contacts', 'El contacto fue actualizado exitosamente');
-		}
-		else {
-			App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
-		}
-	},
-			
-	discard: function(contact) {
-		
-	},
 
 	modelClass: App.Contact
 });
@@ -231,7 +240,7 @@ App.ContactsImportController = Ember.ObjectController.extend({
 
 App.ContactsNewView = Ember.View.extend({
   didInsertElement: function() {
-        jQuery("select").select2({
+        this.$("select").select2({
 			placeholder: "Seleccione las Opciones"
 		});
     }
@@ -239,7 +248,7 @@ App.ContactsNewView = Ember.View.extend({
 
 App.ContactsEditView = Ember.View.extend({
   didInsertElement: function() {
-        jQuery("select").select2({
+        this.$("select").select2({
 			placeholder: "Seleccione las Opciones"
 		});
     }

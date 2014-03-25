@@ -318,10 +318,19 @@ try {
 		$compiler->addFunction('ember_customfield', function ($resolvedArgs, $exprArgs) {
                         return 'CreateViewEmber::createField(' . $resolvedArgs . ')';
                     });
+					
+		$compiler->addFunction('ember_customfield_xeditable', function ($resolvedArgs, $exprArgs) {
+                        return 'CreateViewEmber::createCustomFieldXeditable(' . $resolvedArgs . ')';
+                    });
 
 		$compiler->addFunction('ember_customfield_options', function ($resolvedArgs, $exprArgs) {
                         return 'CreateViewEmber::createOptions(' . $resolvedArgs . ')';
                     });
+		
+		$compiler->addFunction('ember_customfield_options_xeditable', function ($resolvedArgs, $exprArgs) {
+                        return 'CreateViewEmber::createOptionsForXeditable(' . $resolvedArgs . ')';
+                    });
+					
 		$compiler->addFunction('ember_textfield', function ($resolvedArgs, $exprArgs) {
 						return 'CreateViewEmber::createEmberTextField(' . $resolvedArgs . ')';
 					});
