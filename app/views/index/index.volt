@@ -1,105 +1,50 @@
 {% extends "templates/index_new.volt" %}
-{% block sectiontitle %}<i class="icon-envelope-alt icon-2x"></i>Bienvenido a Mail Station{% endblock %}
-{%block sectionsubtitle %}Su sistema de marketing digital{% endblock %}
 {% block content %}
 {{flashSession.output()}}
 	<div class="row-fluid">
+		{%for widget in stats.fullPeriodStats()%}
 		<div class="span2">
 			<div class="box-dashboard-summary summary-opens">
+				<div class="title-stats-dashboard-summary">
+					{{widget.getTitle()}}
+				</div>
 				<div class="number-stats-dashboard-summary">
-					{{values['opens']}}
+					{{widget.getTotal()}}
 				</div>
 				<div class="sparkline big" data-color="green">
 					<!--
-					{%for statvalue in statvalues%}
-						{{statvalue['opens']}},
+					{%for statvalue in widget.getSecondaryValues()%}
+						{{statvalue.value}},
 					{%endfor%}
 					-->
 				</div>
 			</div>
 		</div>
-		<div class="span2">
-			<div class="box-dashboard-summary summary-clicks">
-				<div class="number-stats-dashboard-summary">
-					{{values['clicks']}}
-				</div>
-				<div class="sparkline big" data-color="blue">
-					<!--
-					{%for statvalue in statvalues%}
-						{{statvalue['clicks']}},
-					{%endfor%}
-					-->
-				</div>
-			</div>
-		</div>
-		<div class="span2">
-			<div class="box-dashboard-summary summary-unsubscribed">
-				<div class="number-stats-dashboard-summary">
-					{{values['unsubscribed']}}
-				</div>
-				<div class="sparkline big" data-color="white">
-					<!--
-					{%for statvalue in statvalues%}
-						{{statvalue['unsubscribed']}},
-					{%endfor%}
-					-->
-				</div>
-			</div>
-		</div>
-		<div class="span2">
-			<div class="box-dashboard-summary summary-bounced">
-				<div class="number-stats-dashboard-summary">
-					{{values['bounced']}}
-				</div>
-				<div class="sparkline big" data-color="orange">
-					<!--
-					{%for statvalue in statvalues%}
-						{{statvalue['bounced']}},
-					{%endfor%}
-					-->
-				</div>
-			</div>
-		</div>
+		{%endfor%}
 	</div>
 <br />
 <br />
 	<div class="row-fluid">
+		{%for widget in stats.fullSocialStats()%}
 		<div class="span2">
 			<div class="box-dashboard-summary summary-fb">
 				<div>
-					<p>Facebook</p>
-					<div class="number-stats-dashboard-summary">
-						{{values['share_fb']}}
+					<p>{{widget.getTitle()}}</p>
+				</div>
+				<div class="number-stats-dashboard-summary">
+					{{widget.getTotal()}}
+				</div>
+				{%for value in widget.getSecondaryValues()%}
+					<div class="title-stats-dashboard-summary">
+						{{value.name}}
 					</div>
-				</div>
-				<div>
-					{{values['open_fb']}}
-					Aperturas
-				</div>
-				<div>
-					{{values['click_fb']}}
-					Clics
-				</div>
+					<div class="number-stats-dashboard-summary">
+						{{value.value}}
+					</div>
+				{%endfor%}
 			</div>
 		</div>
-		<div class="span2">
-			<div class="box-dashboard-summary summary-tw">
-				<div>
-					<p>Twitter</p>
-					<div class="number-stats-dashboard-summary">
-						{{values['share_tw']}}
-					</div>
-				</div>
-				<div>
-					{{values['open_tw']}}
-					Aperturas
-				</div>
-				<div>
-					{{values['click_tw']}}
-					Clics
-				</div>
-			</div>
-		</div>
+		{%endfor%}
 	</div>
 <br />
 <br />
@@ -118,7 +63,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{%for mail in lastmails%}
+					{%for mail in stats.getLastMailsWithStats()%}
 						<tr>
 							<td>{{mail.name}}</td>
 							<td>{{mail.uniqueOpens}}</td>
