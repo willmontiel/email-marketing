@@ -24,7 +24,7 @@ class Security extends Plugin
 		 * Buscar ACL en cache
 		 */
 //		$acl = null; 
-		$acl = $this->cache->get('acl-cache');
+//		$acl = $this->cache->get('acl-cache');
 		
 		if (!$acl) {
 			// No existe, crear objeto ACL
@@ -73,7 +73,7 @@ class Security extends Plugin
 				$acl->allow($role->rolename, $role->resname, $role->actname);
 			}
 			
-			$this->cache->save('acl-cache', $acl);
+//			$this->cache->save('acl-cache', $acl);
 		}
 
 		// Retornar ACL
@@ -313,7 +313,7 @@ class Security extends Plugin
 				'form::delete' => array('form' => array('delete')),
 			);
 		}
-		$this->cache->save('controllermap-cache', $map);
+//		$this->cache->save('controllermap-cache', $map);
 		return $map;
 	}
 	
