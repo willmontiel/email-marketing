@@ -12,72 +12,48 @@ class DashboardSummary
 	}
 	
 	/**
-	 * Metodo para obtener los ultimos correos que se han enviado.
+	 * Metodo para obtener los Widgets que seran implementados en la vista.
 	 * 
-	 * Recibe los numeros de dias o meses, junto con el periodo que puede ser dias, meses o años
-	 * Estos dos ultimos se establecen globales para ser utilizados por otros metodos
+	 * Retorna los Widgtes.
 	 * 
-	 * Retorna los correos que cumplen con estas condiciones
-	 * 
-	 * @param string $days
-	 * @param string $period
-	 */	
-	public function lastPeriodMails($days, $period)
-	{
-		$this->days = $days;
-		$this->period = $period;
-		
-		$this->mails = \Mail::find(array(
-				"conditions" => "idAccount = ?1 AND finishedon > ?2 AND status = 'Sent'",
-				"bind" => array(
-						1 => $this->account->idAccount,
-						2 => strtotime('-' . $days . ' ' . $period) //strtotime('-15 day')
-					),
-				));
-	}
-	
-	/**
-	 * Metodo para obtener el estado total de todos los correos enviados en el ultimo periodo.
-	 * 
-	 * Recibe los correos que deben ser evaluados sus estados.
-	 * 
-	 * Retorna los estados de Apertura, Clics, Desuscritos y Rebotados
-	 * 
-	 * @param type $mails
 	 * @return array
 	 */	
 	public function fullPeriodStats()
 	{
 		$widgets = array();
 		
-		$widgets[] = new SimpleWidget($this->account, 'opening', 'Aperturas', $this->period);
-		$widgets[] = new SimpleWidget($this->account, 'clicks', 'Clics', $this->period);
-		$widgets[] = new SimpleWidget($this->account, 'unsubscribe', 'Desuscripciones', $this->period);
-		$widgets[] = new SimpleWidget($this->account, 'bounced', 'Rebotes', $this->period);
+		$widgets[] = new SimpleWidget($this->account, 'opening', 'Aperturas');
+		$widgets[] = new SimpleWidget($this->account, 'clicks', 'Clics');
+		$widgets[] = new SimpleWidget($this->account, 'unsubscribe', 'Desuscripciones');
+		$widgets[] = new SimpleWidget($this->account, 'bounced', 'Rebotes');
 		
 		return $widgets;
 	}
 	
 	/**
-	 * Metodo para obtener el estado total de las redes sociales en los correos enviados en el ultimo periodo.
+	 * Metodo para obtener los Widgets de las redes sociales que seran implementados en la vista.
 	 * 
-	 * Recibe los correos que deben ser evaluados sus estados sociales.
+	 * Retorna los Widgtes de las redes sociales.
 	 * 
-	 * Retorna los estados de Compartido, Apertura y Clics en Facebook y Twitter.
-	 * 
-	 * @param type $mails
 	 * @return array
 	 */	
 	public function fullSocialStats()
 	{
 		$widgets = array();
 		
-		$widgets[] = new SocialWidget($this->account, 'fb', 'Shared', $this->period);
-		$widgets[] = new SocialWidget($this->account, 'tw', 'Tweets', $this->period);
+		$widgets[] = new SocialWidget($this->account, 'fb', 'Shared');
+		$widgets[] = new SocialWidget($this->account, 'tw', 'Tweets');
 		
 		return $widgets;
 	}
-		
+	
+	/**
+	 * Metodo para obtener los ultimos correos que se han enviado en esta cuenta, con sus estadisticas.
+	 * 
+	 * Retorna los correos.
+	 * 
+	 * @return array
+	 */			
 	public function getLastMailsWithStats($howmany)
 	{
 		$mails = \Mail::find(array(

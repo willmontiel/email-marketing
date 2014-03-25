@@ -12,11 +12,10 @@ abstract class BaseWidget
 	protected $secondaryValues;
 	protected $title;
 			
-	function __construct($account, $property, $name, $period, $classname = null) {
+	function __construct($account, $property, $name, $classname = null) {
 		$this->account = $account;
 		$this->property = $property;
 		$this->title = $name;
-		$this->period = $period;
 		$this->className = $classname;
 		$this->totalValue = 0;
 		$this->secondaryValues = array();
