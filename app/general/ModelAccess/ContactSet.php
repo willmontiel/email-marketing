@@ -9,6 +9,7 @@ namespace EmailMarketing\General\ModelAccess;
 class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 {
 	protected $searchCriteria;
+	protected $searchFilter;
 	protected $queryCriteria;
 	protected $account;
 	protected $dbase;
@@ -25,9 +26,14 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	protected $cfields;
 	protected $finstances;
 	
-	public function setSearchCriteria(\EmailMarketing\General\ModelAccess\ContactSearchCriteria $search)
+	public function setSearchCriteria(\EmailMarketing\General\ModelAccess\ContactSearchCriteria $search = null)
 	{
 		$this->searchCriteria = $search;
+	}
+	
+	public function setSearchFilter(\EmailMarketing\General\ModelAccess\ContactSearchFilter $filter)
+	{
+		$this->searchFilter = $filter->getFilter();
 	}
 	
 	public function setAccount(\Account $account)
@@ -87,42 +93,65 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	
 	private function createCoreQuery()
 	{
-		$queryCriteria = $this->getSqlByQueryCriteria();
-		
-		$c1 = $this->createSqlForEmailAndDomainSearch($queryCriteria);
-		$c2 = $this->createSqlForFreeTextSearch($queryCriteria);
-		
-		$limit = " LIMIT " . $this->paginator->getRowsPerPage() . ' OFFSET ' . $this->paginator->getStartIndex();
-		
 		$sql = '';
 		$sqlTotalRecords = '';
+		$limit = " LIMIT " . $this->paginator->getRowsPerPage() . ' OFFSET ' . $this->paginator->getStartIndex();
 		
-		if ($c1 == '') {
-			$sqlTotalRecords = str_replace('c.idContact, c.idEmail', 'COUNT(*) AS total', $c2);
-			$sql = $c2 . $limit;
-		}
-		else if ($c2 == '') {
-			$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) ";
-			$sql = "SELECT c.idContact FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) " . $limit;
+		$queryCriteria = $this->getSqlByQueryCriteria();
+		
+		if ($this->searchCriteria != null) {
+			$c1 = $this->createSqlForEmailAndDomainSearch($queryCriteria);
+			$c2 = $this->createSqlForFreeTextSearch($queryCriteria);
+
+			if ($c1 == '') {
+				$sqlTotalRecords = str_replace('c.idContact, c.idEmail', 'COUNT(*) AS total', $c2);
+				$sql = $c2 . $limit;
+			}
+			else if ($c2 == '') {
+				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) ";
+				$sql = "SELECT c.idContact FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) " . $limit;
+			}
+			else {
+				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) ";
+				$sql = "SELECT idContact FROM (" . $c1 . ") AS c1 JOIN (" . $c2 . ") AS c2 ON (c1.idEmail = c2.idEmail) " . $limit;
+			}
 		}
 		else {
-			$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) ";
-			$sql = "SELECT idContact FROM (" . $c1 . ") AS c1 JOIN (" . $c2 . ") AS c2 ON (c1.idEmail = c2.idEmail) " . $limit;
+			$filter = "";
+			if ($this->searchFilter[0] != 'all') {
+				if ($this->searchFilter[0] == 'blocked') {
+					$filter .= " AND e.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+				}
+				else{
+					$filter .= " AND c.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+				}
+			}
+			
+			$sqlTotalRecords = "SELECT COUNT(*) AS total 
+						FROM contact as c
+						JOIN email as e ON(e.idEmail = c.idEmail) {$queryCriteria->joinFilter}
+					WHERE e.idAccount = {$this->account->idAccount} {$queryCriteria->andFilter} $filter";
+			
+			$sql = "SELECT c.idContact 
+						FROM contact as c
+						JOIN email as e ON(e.idEmail = c.idEmail) {$queryCriteria->joinFilter}
+					WHERE e.idAccount = {$this->account->idAccount} {$queryCriteria->andFilter} $filter $limit";
 		}
 		
 		$this->setTotalMatches($sqlTotalRecords);
-		
 		\Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
 		\Phalcon\DI::getDefault()->get('logger')->log("Total query: " . $sqlTotalRecords);
+		
 		return $sql;
 	}
 	
         
     private function findContactIds($sql)
 	{
-		$cache = \Phalcon\DI::getDefault()->get('cache');
-		$queryKey = $this->getQueryKey();
-		$contactIds = $cache->get($queryKey);
+//		$cache = \Phalcon\DI::getDefault()->get('cache');
+//		$queryKey = $this->getQueryKey();
+//		$contactIds = $cache->get($queryKey);
+		$contactIds = null;
 		
 		if (!$contactIds) {
 			$contactIds = array();
@@ -137,7 +166,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					$contactIds[] = $r['idContact'];
 				}
 			}
-			$cache->save($queryKey, $contactIds, 1800);
+//			$cache->save($queryKey, $contactIds, 1800);
 		}
 		return $contactIds;
 	}
@@ -224,14 +253,23 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		}
 	}
 
-
 	/**
 	 * Returns the first CoreSql part created with emails and domains found in the search text
 	 */
 	private function createSqlForEmailAndDomainSearch($queryKey)
 	{
+		$queryFilter = '';
 		$sqlEmail = '';
 		$emails = $this->searchCriteria->getEmails();
+		
+		if ($this->searchFilter[0] != 'all') {
+			if ($this->searchFilter[0] == 'unsubscribed') {
+				$queryFilter .= " AND c.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+			}
+			else {
+				$queryFilter .= " AND e.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+			}
+		}
 		
 		if (count($emails) > 0) {
 			$union = false;
@@ -244,7 +282,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				}
 				$sqlEmail .= "SELECT e.idEmail
 						 FROM email AS e " . $queryKey->join . " 
-						 WHERE e.email = '" . $email . "' AND e.idAccount = " . $this->account->idAccount . " " . $queryKey->and;
+						 WHERE e.email = '" . $email . "'" . $queryFilter . " AND e.idAccount = " . $this->account->idAccount . " " . $queryKey->and;
 			}
 		}
 		
@@ -263,7 +301,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				$sqlDomain .= "SELECT e.idEmail
 						 FROM domain AS d
 							JOIN email AS e ON (e.idDomain = d.idDomain) " . $queryKey->join . " 
-						 WHERE d.name = '" . $domain . "' AND e.idAccount = " . $this->account->idAccount . " " . $queryKey->and;
+						 WHERE d.name = '" . $domain . "'" . $queryFilter . " AND e.idAccount = " . $this->account->idAccount . " " . $queryKey->and;
 			}
 		}
 		
@@ -282,18 +320,31 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	private function createSqlForFreeTextSearch($queryKey)
 	{
 		$sql = '';
+		$queryFilter = '';
+		$joinFilter = '';
 		$freeText = $this->searchCriteria->getFreeText();
+		
+		if ($this->searchFilter[0] != 'all') {
+			if ($this->searchFilter[0] == 'blocked') {
+				$joinFilter .= "JOIN email AS e ON (e.idEmail = c.idEmail)";
+				$queryFilter .= " AND e.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+			}
+			else {
+				$queryFilter .= " AND c.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+			}
+		}
 		
 		if (count($freeText) > 0) {
 			$criteriaText = implode(' ', $freeText);
 //			Phalcon\DI::getDefault()->get('logger')->log("Criteria: " . $criteria);
 			
 			$sql .= "SELECT c.idContact, c.idEmail
-					FROM contact AS c
-						JOIN dbase AS b ON(b.idDbase = c.idDbase) " . $queryKey->joinForFreeText . " 
+					FROM contact AS c 
+						$joinFilter 
+						JOIN dbase AS b ON(b.idDbase = c.idDbase) {$queryKey->joinForFreeText}  
 					WHERE 
 						MATCH(c.name, c.lastname) AGAINST ('" . $criteriaText . "' IN BOOLEAN MODE) 
-						AND b.idAccount = " . $this->account->idAccount . " " . $queryKey->andForFreeText;
+						AND b.idAccount = " . $this->account->idAccount . " " . $queryFilter . " " . $queryKey->andForFreeText;
 		}
                 
 //                \Phalcon\DI::getDefault()->get('logger')->log("Free text sql: " . $sql);
@@ -310,7 +361,9 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$query->and = '';
 			$query->joinForFreeText = '';
 			$query->andForFreeText = '';
-
+			$query->joinFilter = '';
+			$query->andFilter = '';
+			
 			$this->name = 'contacts';
 			$this->id = $this->account->idAccount;
 			
@@ -318,11 +371,14 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		}
 		else if ($this->dbase !== null) {
 			$query->join = ' JOIN dbase AS db ON (db.idAccount = e.idAccount) ';
-			$query->and = ' AND db.idDbase = ' . $this->dbase->idDbase;
+			$query->and = " AND db.idDbase = {$this->dbase->idDbase} ";
 
 			$query->joinForFreeText = '';
-			$query->andForFreeText = ' AND b.idDbase = ' . $this->dbase->idDbase;
-
+			$query->andForFreeText = " AND b.idDbase = {$this->dbase->idDbase} ";
+			
+			$query->joinFilter = " JOIN dbase AS db ON (db.idDbase = c.idDbase) ";
+			$query->andFilter = " AND db.idDbase = {$this->dbase->idDbase} ";
+			
 			$this->name = 'contacts';
 			$this->id = $this->dbase->idDbase;
 			
@@ -335,7 +391,10 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 
 			$query->joinForFreeText = ' JOIN coxcl AS cl ON (cl.idContact = c.idContact) ';
 			$query->andForFreeText = ' AND cl.idContactlist = ' . $this->contactlist->idContactlist;
-
+			
+			$query->joinFilter = " JOIN coxcl AS cl ON (cl.idContact = c.idContact) ";
+			$query->andFilter = " AND cl.idContactlist = {$this->contactlist->idContactlist} ";
+			
 			$this->name = 'contacts';
 			$this->id = $this->contactlist->idContactlist;
 			
@@ -344,11 +403,14 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		else if ($this->segment !== null){
 			$query->join = ' JOIN contact AS c ON (c.idEmail = e.idEmail) 
 									  JOIN sxc AS sc ON (sc.idContact = c.idContact) ';
-			$query->and = ' AND sc.idSegment = ' . $this->segment->idSegment;
+			$query->and = " AND sc.idSegment = {$this->segment->idSegment} ";
 
-			$query->joinForFreeText = ' JOIN sxc AS sc ON (sc.idContact = c.idContact) ';
-			$query->andForFreeText = ' AND sc.idSegment = ' . $this->segment->idSegment;
-
+			$query->joinForFreeText = " JOIN sxc AS sc ON (sc.idContact = c.idContact) ";
+			$query->andForFreeText = " AND sc.idSegment = {$this->segment->idSegment} ";
+			
+			$query->joinFilter = " JOIN sxc AS sc ON (sc.idContact = c.idContact) ";
+			$query->andFilter = " AND sc.idSegment = {$this->segment->idSegment} ";
+			
 			$this->name = 'contacts';
 			$this->id = $this->segment->idSegment;
 			

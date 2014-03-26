@@ -39,10 +39,15 @@ class ContactlistapiController extends ControllerBase
 		}
 		
 		try { 
-			if ($search != null) {
-				$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
+			if ($filter != null) {
+				if (!empty($search)) {
+					$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
+				}
+				$searchFilter = new \EmailMarketing\General\ModelAccess\ContactSearchFilter($filter);
+				
 				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
 				$contactset->setSearchCriteria($searchCriteria);
+				$contactset->setSearchFilter($searchFilter);
 				$contactset->setAccount($account);
 				$contactset->setContactlist($contactlist);
 				$contactset->setPaginator($pager);
@@ -52,7 +57,7 @@ class ContactlistapiController extends ControllerBase
 				$rest->addDataSource($contactset);
 			
 				return $this->setJsonResponse($rest->getRecords());
-			}	
+			}
 			else {
 				$wrapper = new ContactWrapper();
 				$wrapper->setAccount($account);

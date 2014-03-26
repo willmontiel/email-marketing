@@ -153,17 +153,16 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		{name: "Rebotados",    value: "bounced"},
 		{name: "Spam",    value: "spam"},
 		{name: "Bloqueados",    value: "blocked"},
-		{name: "Suscritos",    value: "subscribed"},
 		{name: "Todos",    value: "all"}
 	],
-	currentFilter: {
+	filter: {
 		value: "all"
 	},
 	refreshRecords: function() {
 		this.criteria = this.get('searchCriteria');
-		this.filter = this.get('filter');
+		this.finalFilter = this.get('filter.value');
 		var t = this;
-		this.store.find('contact', {searchCriteria: this.criteria, filter: this.filter}).then(function(d) {
+		this.store.find('contact', {searchCriteria: this.criteria, filter: this.finalFilter}).then(function(d) {
 			t.set('content', d.content);
 		});
 	},
@@ -175,7 +174,9 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 
 		reset: function() {
 			this.set('searchCriteria', '');
+			this.set('filter.value', "all");
 			this.criteria = '';
+			this.finalFilter = '';
 			this.refreshRecords();	
 		},
 		expand: function (contact) {
@@ -217,7 +218,10 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		}
 
 	},
-			
+	
+	onChangedFilter: function() {
+		this.refreshRecords();
+	}.observes('filter.value')		,
 
 	modelClass: App.Contact
 });

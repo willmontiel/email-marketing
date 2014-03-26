@@ -14,7 +14,7 @@
 				content=filters
 				optionValuePath="content.value"
 				optionLabelPath="content.name"
-				value=currentFilter.value
+				value=filter.value
 				class="span6"
 			}}'}}
 		</div>
