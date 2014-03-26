@@ -212,10 +212,10 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		},
 
 		discard: function(contact) {
-			console.log(this.get('model', contact.id))
-			//contact.rollback();
-		},
-				
+			contact.rollback();
+			$('.x-editable.editable-unsaved').removeClass('editable-unsaved');
+		}
+
 	},
 			
 
