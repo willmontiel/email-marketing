@@ -215,7 +215,8 @@ class SelectedFieldsMapper
 					break;
 			}
 
-			echo "-- isset(this->rawMap[{$cfid}]) {" . (isset($this->rawMap[$cfid]))?'Yipee':'sorry:(' . "}\n-- {$this->rawMap[$cfid]}\n";
+			echo "-- isset(this->rawMap[{$cfid}]) {" . (isset($this->rawMap[$cfid])?'Yipee':'sorry:(') . "}\n-- {$this->rawMap[$cfid]}\n";
+			
 			if (isset($this->rawMap[$cfid]) && $this->rawMap[$cfid] !== null) {
 				$cfname = $this->getCustomFieldName($cfid);
 				$this->cfieldsmetadata[$cfname] = $t;
@@ -223,8 +224,8 @@ class SelectedFieldsMapper
 				$this->cfieldsforinsert[$cfname] = array($cfid, $it);
 			}
 			else {
-				var_dump($cfid);
-				echo "{$cfid} in dbase is not in the array: " . print_r($this->rawMap, true) . "!\n";
+				//var_dump($cfid);
+				//echo "{$cfid} in dbase is not in the array: " . print_r($this->rawMap, true) . "!\n";
 			}
 		}
 	}
