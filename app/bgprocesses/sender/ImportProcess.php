@@ -20,7 +20,7 @@ class ImportProcess extends ProcessAbstract{
 	{
 		$this->pool->setInitialChildren(2);
 		$this->pool->setMaxOfTmpChildren(0);
-		$this->pool->setChildProcess('childImport.php');
+		$this->pool->setChildProcess('ChildImport.php');
 		$this->pool->createInitialChildren();
 	}
 }

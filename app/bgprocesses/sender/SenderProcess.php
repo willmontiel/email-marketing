@@ -20,7 +20,7 @@ class SenderProcess extends ProcessAbstract {
 	{
 		$this->pool->setInitialChildren(4);
 		$this->pool->setMaxOfTmpChildren(4);
-		$this->pool->setChildProcess('childSender.php');
+		$this->pool->setChildProcess('ChildSender.php');
 		$this->pool->createInitialChildren();
 	}
 }
