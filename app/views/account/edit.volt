@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-edit"></i> Editar información de las cuentas{%endblock%}
 {%block sectionsubtitle %}Edite la configuración de la cuenta{% endblock %}
 

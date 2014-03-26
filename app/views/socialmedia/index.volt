@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-facebook-sign icon-2x"></i><i class="icon-twitter-sign icon-2x"></i>Administración de redes sociales{% endblock %}
 {%block sectionsubtitle %}Cree o elimine sus cuentas de redes sociales{% endblock %}
 
