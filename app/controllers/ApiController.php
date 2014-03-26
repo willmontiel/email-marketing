@@ -280,85 +280,82 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse($response);	
 	
 	}
-		
-	/**
-	 * 
-	 * @Get("/dbase/{idDbase:[0-9]+}/contacts")
-	 */
-	public function listcontactsAction($idDbase)
-	{
-		$db = Dbase::findFirstByIdDbase($idDbase);
-		$limit = $this->request->getQuery('limit');
-		$page = $this->request->getQuery('page');
-		
-		$pager = new PaginationDecorator();
-		if ($limit) {
-			$pager->setRowsPerPage($limit);
-		}
-		if ($page) {
-			$pager->setCurrentPage($page);
-		}
-		
-		$wrapper = new ContactWrapper();
-		$wrapper->setAccount($this->user->account);
-		$wrapper->setIdDbase($idDbase);
-		$wrapper->setPager($pager);		
-		
-		$valueSearch = $this->request->getQuery('email', null, null);
-		
-		if($valueSearch == null) {
-			if (!$db || $db->account != $this->user->account) {
-				return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
-			}
-			$result = $wrapper->findContacts($db);
-
-			return $this->setJsonResponse($result);		
-		}
-		
-		else {
-			
-			$contacts = $wrapper->findContactsByValueSearch($valueSearch);
-			
-			return $this->setJsonResponse($contacts);
-		}
-	}
 	
+//	/**
+//	 * 
+//	 * @Get("/dbase/{idDbase:[0-9]+}/contacts")
+//	 */
+
+//	public function listcontactsAction($idDbase)
+//	{
+//		$db = Dbase::findFirstByIdDbase($idDbase);
+//		$limit = $this->request->getQuery('limit');
+//		$page = $this->request->getQuery('page');
+//
+//		$pager = new PaginationDecorator();
+//		if ($limit) {
+//			$pager->setRowsPerPage($limit);
+//		}
+//		if ($page) {
+//			$pager->setCurrentPage($page);
+//		}
+//
+//		$wrapper = new ContactWrapper();
+//		$wrapper->setAccount($this->user->account);
+//		$wrapper->setIdDbase($idDbase);
+//		$wrapper->setPager($pager);		
+//
+//		$valueSearch = $this->request->getQuery('email', null, null);
+//
+//		if($valueSearch == null) {
+//			if (!$db || $db->account != $this->user->account) {
+//				return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+//			}
+//			$result = $wrapper->findContacts($db);
+//			return $this->setJsonResponse($result);		
+//		}
+//		else {
+//			$contacts = $wrapper->findContactsByValueSearch($valueSearch);
+//			return $this->setJsonResponse($contacts);
+//		}
+//	}
+
+	
+
 	/**
 	 * 
 	 * @Get("/dbase/{idDbase:[0-9]+}/contacts/{idContact:[0-9]+}")
 	 */	
 	public function getcontactAction($idDbase, $idContact)
 	{
-		
 		$contact = Contact::findFirstByIdContact($idContact);
-		
+
 		if (!$contact || $contact->dbase->idDbase != $idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
 		}
-		
+
 		$wrapper = new ContactWrapper();
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($idDbase);
-		
-		
+
 		$fielddata = $wrapper->convertContactToJson($contact);
 		
 		return $this->setJsonResponse(array('contact' => $fielddata) );	
-	
 	}
+
 		
+
 	/**
-	 * 
+	 *
 	 * @Post("/dbase/{idDbase:[0-9]+}/contacts")
 	 */
 	public function createcontactAction($idDbase)
 	{
 		$db = Dbase::findFirstByIdDbase($idDbase);
-		
 		if (!$db || $db->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
 		}
-		
+
 		$log = $this->logger;
 
 		/*
@@ -375,25 +372,40 @@ class ApiController extends ControllerBase
 		 * con "_" (underscore) a las letras mayusculas
 		 * 
 		 * Por ejemplo, si se define un modelo asi:
+
 		 * App.Contact = DS.Model.extend({
+
 		 *					email: DS.attr('string'),
+
 		 *					lastName: DS.attr('string')
+
 		 * });
+
 		 * 
+
 		 * 
+
 		 * RESTAdapter lo va a transferir como un objeto JSON asi:
+
 		 * 
+
 		 * { "contact": { "email": "email@aqui.com", "last_name": "apellido aqui" } } 
+
 		 * 
+
 		 * NOTESE el cambio de lastName a last_name
+
 		 * 
+
 		 */
+
 		$contentsraw = $this->request->getRawBody();
 		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
-		
+
 		// Tomar el objeto dentro de la raiz
+
 		$contents = $contentsT->contact;
 		
 		$wrapper = new ContactWrapper();
@@ -401,11 +413,13 @@ class ApiController extends ControllerBase
 		$wrapper->setIdDbase($idDbase);
 		$wrapper->setIdContactlist($contents->list_id);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
-		
+
 		// Crear el nuevo contacto:
+
 		try {
 			$contact = $wrapper->createNewContactFromJsonData($contents);
 			$contactdata = $wrapper->convertContactToJson($contact);
+			return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 		}
 		catch (\InvalidArgumentException $e) {
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
@@ -414,72 +428,98 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
 		}
-		
-		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
-		
 	}
-		
+	
 	/**
 	 * 
 	 * @Put("/dbase/{idDbase:[0-9]+}/contacts/{idContact:[0-9]+}")
 	 */
+
 	public function updatecontactAction($idDbase, $idContact)
 	{
 		$db = Dbase::findFirstByIdDbase($idDbase);
-		
 		if (!$db || $db->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
 		}
 		
 		$log = $this->logger;
-
 		/*
+
 		 * Tomar el "payload" en formato JSON y convertirlo a un objeto de PHP (usando json_decode)
+
 		 * Por convencion del RESTAdapter de EMBERJS, el objeto esta embebido dentro de un atributo
+
 		 * "root" que tiene el mismo nombre que el tipo de objeto (modelo de Ember)
+
 		 * En este caso:
+
 		 * 
+
 		 * { contact:
+
 		 *		{ id: ___, email: _____, name: _____, last_name: _____ , ... }
+
 		 * }
+
 		 * 
+
 		 * Los nombres de atributos se convierten a minusculas, y se adiciona un prefijo
+
 		 * con "_" (underscore) a las letras mayusculas
+
 		 * 
+
 		 * Por ejemplo, si se define un modelo asi:
+
 		 * App.Contact = DS.Model.extend({
+
 		 *					email: DS.attr('string'),
+
 		 *					lastName: DS.attr('string')
+
 		 * });
+
 		 * 
+
 		 * 
+
 		 * RESTAdapter lo va a transferir como un objeto JSON asi:
+
 		 * 
+
 		 * { "contact": { "email": "email@aqui.com", "last_name": "apellido aqui" } } 
+
 		 * 
+
 		 * NOTESE el cambio de lastName a last_name
+
 		 * 
+
 		 */
+
 		$contentsraw = $this->request->getRawBody();
 		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
-		
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
-		
+
 		$wrapper = new ContactWrapper();
 		
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($idDbase);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
-		
+
+
 		// Editar el contacto existente
+
 		if (!isset($contents->email) || trim($contents->email) == '') {
 			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
 		}
 		try {
 			$contact = $wrapper->updateContactFromJsonData($idContact, $contents);
+			$contactdata = $wrapper->convertContactToJson($contact);
+			return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
@@ -489,37 +529,41 @@ class ApiController extends ControllerBase
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
 		}
-		$contactdata = $wrapper->convertContactToJson($contact);
-
-		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
-		
 	}
+
 	
+
 	 /**
 	 * 
 	 * @Route("/dbase/{idDbase:[0-9]+}/contacts/{idContact:[0-9]+}", methods="DELETE")
 	 */
+
 	public function deletecontactAction($idDbase, $idContact)
 	{
 		$contact = Contact::findFirst(array(
 			"conditions" => "idContact = ?1",
 			"bind" => array(1 => $idContact)
 		));
+
 		$db = Dbase::findFirst(array(
 			"conditions" => "idDbase = ?1",
 			"bind" => array(1 => $idDbase)
 		));
-		
+
 		if (!$contact || $contact->dbase->idDbase != $db->idDbase || $contact->dbase->account != $this->user->account) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
 		}
-		
+
 		// Eliminar el Contacto de la Base de Datos
+
 		$wrapper = new ContactWrapper();
 		$result = $wrapper->deleteContactFromDB($contact, $db);
 		
 		return $this->setJsonResponse(array ('contact' => $result->status), $result->type, $result->msg);
 	}
+
+
+	
 	
 	/* Inicio de listas de contactos*/
 	/**
@@ -820,6 +864,7 @@ class ApiController extends ControllerBase
 		$contentsraw = $this->request->getRawBody();
 		$contentsT = json_decode($contentsraw);
 		
+		$log->log('Content: ' . print_r($contentsT, true));
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		
@@ -1074,31 +1119,48 @@ class ApiController extends ControllerBase
 	 */
 	public function createsegmentAction()
     {
-		$log = $this->logger;
-
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		$contents = $contentsT->segment;
+		$account = $this->user->account;
 		
-		$Wrapper = new SegmentWrapper();
+		$dbase = Dbase::findFirst(array(
+			"conditions" => "idDbase = ?1 and idAccount = ?2",
+			"bind" => array(1 => $contents->dbase,
+							2 => $account->idAccount)
+		));
+		
+		if (!$dbase) {
+			return $this->setJsonResponse(array('status' => 'error'), 404, 'Dbase not found!');
+		}
+		
+		$segment = Segment::findFirst(array(
+			"conditions" => "name = ?1 and idDbase = ?2",
+			"bind" => array(1 => $contents->name,
+							2 => $dbase->idDbase)
+		));
+		
+		if ($segment) {
+			return $this->setJsonResponse(array('errors' => array('segmentname' => 'Ya existe un segmento con el nombre enviado, por favor verifique la información')), 422, 'Invalid data!');
+		}
+		
+		$wrapper = new SegmentWrapper();
+		$wrapper->setAccount($account);
 		
 		try {
-			$segment = $Wrapper->createSegment($contents, $this->user->account);
+			$response = $wrapper->createSegment($contents);
+			return $this->setJsonResponse(array('segment' => $response), 201, 'Success');
 		}
-		
 		catch (\InvalidArgumentException $e) {
-			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('errors' => $Wrapper->getFieldErrors()), 422, 'Invalid data');
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors()), 422, 'Invalid data');
 		}
 		catch (\Exception $e) {
-			$log->log('Exception: [' . $e . ']');
+			$this->logger->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating segment!');	
 		}
-		
-		return $this->setJsonResponse(array('segment' => $segment), 201, 'Success');
 	}	
 	
 	/**
@@ -1107,20 +1169,41 @@ class ApiController extends ControllerBase
 	 */
 	public function updatesegmentAction($idSegment)
 	{
-		$log = $this->logger;
-		
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->segment;
 		$account = $this->user->account;
+		
+		$dbase = Dbase::findFirst(array(
+			"conditions" => "idDbase = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $contents->dbase,
+							2 => $account->idAccount)
+		));
+		
+		if (!$dbase) {
+			return $this->setJsonResponse(array('status' => 'error'), 404, 'Dbase not found!');
+		}
+		
+		$segment = Segment::findFirst(array(
+			"conditions" => "idSegment = ?1 AND idDbase = ?2",
+			"bind" => array(1 => $idSegment,
+							2 => $dbase->idDbase)
+		));
+		
+		if (!$segment) {
+			return $this->setJsonResponse(array('status' => 'error'), 404, 'Segment not found!');
+		}
+		
 		$wrapper = new SegmentWrapper();
+		$wrapper->setAccount($account);
+		$wrapper->setSegment($segment);
+		$wrapper->setDbase($dbase);
 		
 		try {
-			$response = $wrapper->updateSegment($contents, $idSegment, $account);
+			$response = $wrapper->updateSegment($contents);
 		}
 		catch (InvalidArgumentException $e) {
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());

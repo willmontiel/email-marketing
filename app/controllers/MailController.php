@@ -123,13 +123,47 @@ class MailController extends ControllerBase
 		
 	}
 	
-	public function setupAction($idMail = null)
+	private function validateTemplate($template, $account)
+	{
+		if ($template && $template->idAccount == null) {
+			return true;
+		}
+		else if ($template && $template->idAccount == $account->idAccount) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public function setupAction($idMail = null, $idTemplate = null, $new = null)
 	{
 		$log = $this->logger;
+		$account = $this->user->account;
+		
+		if ($new != null) {
+			$template = Template::findFirst(array(
+				'conditions' => 'idTemplate = ?1',
+				'bind' => array(1 => $idTemplate)
+			));
+			
+			if ($this->validateTemplate($template, $account)) {
+				$this->view->setVar('new', true);
+				$this->view->setVar('idTemplate', $idTemplate);
+			}
+			else {
+				$this->flashSession->error('El template seleccionado no existe, por favor verifique la información');
+				return $this->response->redirect('template');
+			}
+		}
+		else {
+			$this->view->setVar('new', false);
+		}
+		
 		$mailExist = Mail::findFirst(array(
 			"conditions" => "idMail = ?1 AND idAccount = ?2",
 			"bind" => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
+							2 => $account->idAccount)
 		));
 		
 		if(isset ($_SESSION['tmpData'])) {
@@ -161,7 +195,7 @@ class MailController extends ControllerBase
 		}
 		try {
 			$socialnet = new SocialNetworkConnection($log);
-			$socialnet->setAccount($this->user->account);
+			$socialnet->setAccount($account);
 			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
 
@@ -187,7 +221,16 @@ class MailController extends ControllerBase
 				$wizardOption = $mail->wizardOption;
 			}
 			else {
-				$wizardOption = "setup";
+				if ($new != false) {
+					$wizardOption = "source";
+					$previewData = $template->previewData;
+					$type = 'Editor';
+				}
+				else {
+					$wizardOption = "setup";
+					$previewData = null;
+					$type = null;
+				}
 			}
 			$form->bind($this->request->getPost(), $mail);
 			$fbaccounts = $this->request->getPost("facebookaccounts");
@@ -196,13 +239,33 @@ class MailController extends ControllerBase
 			$mail->fromEmail = strtolower($form->getValue('fromEmail'));
 			$mail->replyTo = strtolower($form->getValue('replyTo'));
 			$mail->status = "Draft";
+			$mail->type = $type;
 			$mail->wizardOption = $wizardOption;
+			$mail->previewData = $previewData;
 
 			if($fbaccounts || $twaccounts) {
 				$mail->socialnetworks = $socialnet->saveSocialsIds($fbaccounts, $twaccounts);
 			}
 			
             if ($form->isValid() && $mail->save()) {
+				if ($new != false) {
+					$text = new PlainText();
+					$plainText = $text->getPlainText($template->contentHtml);
+
+					$content = new Mailcontent();
+
+					$content->idMail = $mail->idMail;
+					$content->content = $template->content;
+					$content->plainText = $plainText;
+
+					if (!$content->save()) {
+						foreach ($content->getMessages() as $msg) {
+							$this->logger->log('Error while creating content mail from template: ' . $msg);
+						}
+						return false;
+					}
+				}
+				
 				if($fbaccounts || $twaccounts) {
 					$socialmail = Socialmail::findFirstByIdMail($mail->idMail);
 					if(!$socialmail) {
@@ -352,8 +415,6 @@ class MailController extends ControllerBase
 	
 	public function editorAction($idMail = null, $idTemplate = null) 
 	{
-		$log = $this->logger;
-		
 		$mail = $this->validateProcess($idMail);
 		
 		if ($mail) {
@@ -1065,33 +1126,16 @@ class MailController extends ControllerBase
 		return $result;
 	}
 	
-	public function previeweditorAction($idMail, $type)
+	public function previeweditorAction($idMail)
 	{
 		$content = $this->request->getPost("editor");
 		$this->session->remove('htmlObj');
-		switch ($type) {
-			case 'editor':
-				$url = $this->url->get('mail/previewmail');
-				$editorObj = new HtmlObj(true, $url, $idMail);
-				$editorObj->assignContent(json_decode($content));
-				$this->session->set('htmlObj', $editorObj->render());
-				
-				return $this->setJsonResponse(array('status' => 'Success'), 201, 'Success');
-				break;
-			
-			case 'template':
-				$editorObj = new HtmlObj();
-				$editorObj->assignContent(json_decode($content));
-				return $this->setJsonResponse(array('preview' => $editorObj->render()));
-				break;
-			
-			case 'html':
-				break;
-			default :
-				return $this->response->redirect('error');
-				break;
-		}
+		$url = $this->url->get('mail/previewmail');		
+		$editorObj = new HtmlObj(true, $url, $idMail);
+		$editorObj->assignContent(json_decode($content));
+		$this->session->set('htmlObj', $editorObj->render());
 		
+		return $this->setJsonResponse(array('status' => 'Success'), 201, 'Success');
 	}
 	
 	public function previewindexAction($idMail)

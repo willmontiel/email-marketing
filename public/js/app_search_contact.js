@@ -1,6 +1,3 @@
-/* 
- * Ember Model for to search contacts.
- */
 App.set('errormessage', '');
 
 //Definiendo Rutas

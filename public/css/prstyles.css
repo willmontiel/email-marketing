@@ -388,6 +388,28 @@ a.inactive {
 	width: 100px; 
 	height: 120px; 
 }
+
+.preview-template {
+	float: left;
+	width: 180px; 
+	height: 230px; 
+	overflow: hidden !important; 
+	border: 1px solid;
+	border-radius: 3px;
+}
+
+.template-tools {
+	margin-top: 10%;
+	margin-left: auto; 
+	margin-right: auto;
+}
+
+.not-available-template {
+	background-image: url(../images/notavailabletemplate.png);
+	width: 180px; 
+	height: 230px; 
+}
+
 #modal-simple-template h5 {
 	text-align: center;
 }
@@ -641,3 +663,12 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .list-import-process {
 	margin-right: 15px;
 }
+
+.edit-contact-online {
+	background-color: transparent !important;
+    border: none !important;
+	border-bottom: 1px dotted #999 !important;
+	border-top: none !important; 
+	border-left: none !important; 
+	border-right: none !important;
+}}

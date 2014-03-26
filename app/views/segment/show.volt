@@ -3,11 +3,11 @@
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
 		{{ partial("partials/date_view_partial") }}
-		{{ javascript_include('js/mixin_pagination.js') }}
+		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
 		{{ javascript_include('js/load_activecontacts.js')}}
 <script type="text/javascript">
-		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/segment/' ~ datasegment.idSegment}}';
+		var MySegmentUrl = '{{urlManager.getApi_v1Url() ~ '/segment/' ~ datasegment.idSegment}}';
 
 		var myContactModel = {
 			email: DS.attr( 'string' ),
@@ -55,6 +55,7 @@
 			{%endfor%}
 		};
 	</script>
+	{{ javascript_include('js/app_segment_show.js') }}
 	{{ javascript_include('js/app_contact.js') }}
 	<script type="text/javascript">
 		App.contactACL = {
@@ -81,9 +82,15 @@
 		{{'{{outlet}}'}}
 	</script>
 	<script type="text/x-handlebars" data-template-name="contacts/index">
-		<div class="pull-right" style="margin-bottom: 5px;">
-			<a href="{{url('contactlist#/segments')}}" class="btn btn-blue"><i class="icon-home"></i> Todos los segmentos</a>
+		<div class="row-fluid">
+			<div class="span8">
+				{{ partial("partials/search_contacts_partial") }}
+			</div>
+			<div class="span4 text-right" style="margin-bottom: 5px;">
+				<a href="{{url('contactlist#/segments')}}" class="btn btn-blue"><i class="icon-home"></i> Todos los segmentos</a>
+			</div>
 		</div>
+		
 		<div class="clearfix"></div>
 
 		<div class="box">
@@ -94,59 +101,25 @@
 				</ul>
 			</div>
 			<div class="box-content">
-			{{'{{#each model}}'}}
-			<div class="box-section news with-icons relative">
-				{{'{{#if isSpam}}'}}
-				<span class="triangle-button red">
-					<i class="icon-warning-sign"></i>
-				</span>
-				{{'{{/if}}'}}
-				<div {{'{{bindAttr class=":avatar isReallyActive:green:blue"}}'}}>
-					<i class="icon-user icon-2x"></i>
-				</div>
-				<div class="news-content">
-					<div class="pull-right">
-						<div class="btn-group">
-							<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-							<ul class="dropdown-menu">
-								<li>{{ '{{#linkTo "contacts.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}</li>
-								<li>{{ '{{#linkTo "contacts.show" this}}' }}<i class="icon-search"></i> Ver detalles{{ '{{/linkTo}}' }}</li>
-							</ul>
-						</div>
-					</div>
-					<div class="news-title">{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}</div>
-					{{ '{{#if isEmailBlocked}}' }}
-					<span class="badge badge-dark-red">Correo bloqueado</span>
-					{{ '{{/if}}' }}
-					{{ '{{#if isSpam}}' }}
-					<span class="badge badge-dark-red">Spam</span>
-					{{ '{{/if}}' }}
-					{{ '{{#if isBounced}}' }}
-					<span class="badge badge-red">Rebotado</span>
-					{{ '{{/if}}' }}
-					{{ '{{#unless isSubscribed}}' }}
-					<span class="badge badge-gray">Desuscrito</span>
-					{{ '{{/unless}}' }}
-					{{ '{{#unless isActive}}' }}
-					<span class="badge badge-blue">Sin confirmar</span>	
-					{{ '{{/unless}}' }}
-					<div class="news-text">
-						{{'{{name}}'}}<br/>
-						{{'{{lastName}}'}}
-					</div>
-				</div>
-			</div>
-			{{ '{{else}}' }}
-				<div class="padded">
-					No existen coincidencias para el criterio de busqueda.
-				</div>
-			{{ '{{/each}}' }}
+				<table class="table table-bordered" style="border: 0px !important;">
+					<thead></thead>
+					<tbody>
+					{{'{{#each model}}'}}
+						{{ partial("partials/contact_view_partial") }}
+					{{ '{{else}}' }}
+						<tr>
+							<td colspan="3">No existen coincidencias para el criterio de busqueda.</td>
+						</tr>
+					{{ '{{/each}}' }}
+					</tbody>
+				</table>
 			</div>
 			<div class="box-footer flat"> 
 				{{ partial("partials/pagination_partial") }}
 			</div>
 		</div>
-	</script>	
+	</script>
+	{#
 	<script type="text/x-handlebars" data-template-name="contacts/show">
 	<br />
 	<div class="row-fluid">
@@ -235,8 +208,8 @@
 									<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
 								{{'{{/unless}}'}}
 							{{ '{{/if}}' }}
-						{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
-						{{ '{{#linkTo "contacts"}}<button class="btn btn-default">Regresar</button>{{/linkTo}}' }}
+						{{ '{{#link-to "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/link-to}}' }}
+						{{ '{{#link-to "contacts"}}<button class="btn btn-default">Regresar</button>{{/link-to}}' }}
 						</div>
 					</div>
 				</div>
@@ -484,4 +457,5 @@
 		</div>
 	</script>
 </div>
+#}
 {% endblock%}

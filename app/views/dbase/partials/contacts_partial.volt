@@ -52,15 +52,8 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span3">
-			<form>
-				<p>
-					<label class="input-with-submit">
-						{{' {{view Ember.TextField valueBinding="searchText" type="text" placeholder="Buscar" autofocus="autofocus"}} '}}
-						<button class="submit-icon" {{ '{{action search this}}' }}><i class="icon-search"></i></button>
-					</label>
-				</p>
-			</form>
+		<div class="span8">
+			{{ partial("partials/search_contacts_partial") }}
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -76,40 +69,7 @@
 							</thead>
 							<tbody>
 							{{'{{#each model}}'}}
-							<tr>
-								<td>
-									{{ '{{#linkTo "contacts.show" this}}{{email}}{{/linkTo}}' }}
-									{{ '{{#if isEmailBlocked}}' }}<br/>
-									<span class="badge badge-dark-red">Correo bloqueado</span>
-									{{ '{{/if}}' }}
-									{{ '{{#if isSpam}}' }}<br/>
-									<span class="badge badge-dark-red">Spam</span>
-									{{ '{{/if}}' }}
-									{{ '{{#if isBounced}}' }}<br/>
-									<span class="badge badge-red">Rebotado</span>
-									{{ '{{/if}}' }}
-									{{ '{{#unless isSubscribed}}' }}<br/>
-									<span class="badge badge-gray">Desuscrito</span>
-									{{ '{{/unless}}' }}
-									{{ '{{#unless isActive}}' }}<br/>
-									<span class="badge badge-blue">Sin confirmar</span>	
-									{{ '{{/unless}}' }}
-								</td>
-								<td>{{'{{name}}'}}</td>
-								<td>{{'{{lastName}}'}}</td>
-								<td>
-									<div class="pull-right" style="margin-right: 10px;">
-										<div class="btn-group">
-											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-											<ul class="dropdown-menu">
-												<li>{{ '{{#linkTo "contacts.show" this}}<i class="icon-search"></i> Ver{{/linkTo}}' }}</li>
-												<li>{{ '{{#linkTo "contacts.edit" this disabledWhen="controller.updateDisabled"}}<i class="icon-pencil"></i> Editar{{/linkTo}}' }}</li>
-												<li>{{ '{{#linkTo "contacts.delete" this disabledWhen="controller.deleteDisabled"}}<i class="icon-trash"></i> Eliminar{{/linkTo}}' }}</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-							</tr>
+								{{ partial("partials/contact_view_partial") }}
 							{{ '{{else}}' }}
 								<div class="box-section news with-icons">
 									<div class="avatar green">
@@ -142,6 +102,7 @@
 <script type="text/x-handlebars" data-template-name="contacts">
 	{{'{{outlet}}'}}
 </script>
+{#
 <script type="text/x-handlebars" data-template-name="contacts/edit">	
 	{{ '{{#if App.errormessage }}' }}
 		<div class="alert alert-message alert-error">
@@ -199,6 +160,7 @@
 		</div>
 	</div>
 </script>
+#}
 <script type="text/x-handlebars" data-template-name="contacts/delete">
 	<div class="row-fluid">
 		<div class="span12">
@@ -228,6 +190,7 @@
 		</div>
 	</div>
 </script>
+{#
 <script type="text/x-handlebars" data-template-name="contacts/show">
 <div class="row-fluid">
 		<div class="span12">
@@ -294,8 +257,8 @@
 									<button class="btn btn-sm btn-info" {{' {{action subscribedcontact this}} '}}>Suscribir</button>
 								{{'{{/unless}}'}}
 							{{ '{{/if}}' }}
-						{{ '{{#linkTo "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/linkTo}}' }}
-						{{ '{{#linkTo "contacts"}}<button class="btn btn-default">Regresar</button>{{/linkTo}}' }}
+						{{ '{{#link-to "contacts.edit" this}}<button class="btn btn-sm btn-info">Editar</button>{{/link-to}}' }}
+						{{ '{{#link-to "contacts"}}<button class="btn btn-default">Regresar</button>{{/link-to}}' }}
 						</div>
 					</div>
 				</div>
@@ -470,3 +433,4 @@
 		</div>
 	</div>
 </script>
+#}

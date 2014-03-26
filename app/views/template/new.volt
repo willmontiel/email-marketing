@@ -11,22 +11,19 @@
 	};
 
 	function verHTML() {
-		
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
-		
-		$.ajax(
-			{
-			url: "{{url('mail/previeweditor')}}/0/template",
+		$('#preview-modal').modal('show');
+		$.ajax({
+			url: "{{url('template/previewtemplate')}}",
 			type: "POST",			
 			data: { editor: editor},
 			error: function(msg){
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
-			success: function(response) {
-				var e = response.preview;
-				$( "#preview-modal" ).empty();
+			success: function() {
+				$("#preview-modal").empty();
 				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
-				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal').contents().find('body').append(e);
+				$('<iframe frameborder="0" width="100%" height="100%" src="{{url('template/previewdata')}}"/>').appendTo('#preview-modal');
 			}
 		});
 		
@@ -34,8 +31,7 @@
 	}
 	
 	$(function() {
-		if( '{{ userObject.userrole }}' == 'ROLE_SUDO') {
-		
+		if( '{{ userObject.userrole }}' === 'ROLE_SUDO') {
 			$('.globalTemplateOpt').show();
 		}
 	});	
@@ -85,7 +81,7 @@
 				}
 			},
 			success: function(){
-				$(location).attr('href', "{{url('mail/index')}}"); 
+				$(location).attr('href', "{{url('template/index')}}"); 
 			}
 		});
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
@@ -132,14 +128,14 @@
 					<button class="btn btn-default" onclick="selectcategory()"><i class="icon-th-list"></i></button>
 				</div>
 				<div class="templateBtns pull-left">
-					<a href="{{url('mail/index')}}" class="btn btn-default">Cancelar</a>
+					<a href="{{url('template/index')}}" class="btn btn-default">Cancelar</a>
 					<input type="submit" class="btn btn-blue" value="Guardar" onclick="sendData()">
 				</div>
 				<div class="globalTemplateOpt pull-left">
 					<label><input type="checkbox" name="isglobal" id="isglobal"> Plantilla Global</label>
 				</div>
 				<div class="templatePreview pull-right">
-					<a class="btn btn-default" href="#preview-modal" data-toggle="modal" onClick="verHTML()"><i class="icon-search"></i> Previsualizar</a>
+					<a class="btn btn-default" onClick="verHTML()"><i class="icon-search"></i> Previsualizar</a>
 				</div>
 			</div>
 		</div>
@@ -152,7 +148,5 @@
 		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
 	<br />
-	<div id="preview-modal" class="modal hide fade preview-modal">
-		
-	</div>
+	<div id="preview-modal" class="modal hide fade preview-modal"></div>
 {% endblock %}

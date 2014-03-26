@@ -53,9 +53,9 @@
 			<div class="box">
 				<div class="box-header">
 					<ul class="nav nav-tabs nav-tabs-left">
-						{{'{{#linkTo "lists" tagName="li" href=false disabledWhen="allowContactlist"}}<a {{bindAttr href="view.href"}}> Listas de contactos</a>{{/linkTo}}'}}
-						{{'{{#linkTo "segments" tagName="li" href=false}}<a {{bindAttr href="view.href"}}> Segmentos</a>{{/linkTo}}'}}
-						{{'{{#linkTo "blockedemails" tagName="li" href=false disabledWhen="allowBlockedemail" }}<a {{bindAttr href="view.href"}}> Lista de bloqueo</a>{{/linkTo}}'}}
+						{{'{{#link-to "lists" tagName="li" href=false disabledWhen="allowContactlist"}}<a {{bind-attr href="view.href"}}> Listas de contactos</a>{{/link-to}}'}}
+						{{'{{#link-to "segments" tagName="li" href=false}}<a {{bind-attr href="view.href"}}> Segmentos</a>{{/link-to}}'}}
+						{{'{{#link-to "blockedemails" tagName="li" href=false disabledWhen="allowBlockedemail" }}<a {{bind-attr href="view.href"}}> Lista de bloqueo</a>{{/link-to}}'}}
 					</ul>
 					<div class="title">
 						<a href="{{url('dbase')}}" class="pull-right" title="Configuracion avanzada"><i class="icon-cog"></i></a>
@@ -87,7 +87,7 @@
 				</div>
 				<div class="span5">
 					<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
-						{{'{{#linkTo "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/linkTo}}'}}
+						{{'{{#link-to "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/link-to}}'}}
 					</div>
 				</div>	
 			</div>
@@ -121,14 +121,17 @@
 								</td>
 								<td>
 									<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts" class="btn btn-blue"><i class="icon-search"></i> Detalles</a>
+									{{ '{{#link-to "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/link-to}}' }}
+									{{ '{{#link-to "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/link-to}}' }}
+									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default" title="Ver estadisticas"><i class="icon-bar-chart"></i></a>
 									{{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}
 									{{ '{{#linkTo "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}
 									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default" title="Ver estadisticas"><i class="fa fa-bar-chart-o"></i></a>
 									
 
-									{# {{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}
+									{# {{ '{{#link-to "lists.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/link-to}}' }}
 									<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts"><i class="icon-search"></i> Ver detalles</a>
-									{{ '{{#linkTo "lists.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}
+									{{ '{{#link-to "lists.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}"><i class="icon-bar-chart icon-2x"></i></a>
 										#}
 								</td>
@@ -157,7 +160,7 @@
 													Para empezar a administrar contactos, puede crear una lista de contactos,
 													haga clic en el siguiente enlace para crear una
 												</p>
-												{{'{{#linkTo "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/linkTo}}'}}
+												{{'{{#link-to "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/link-to}}'}}
 											</div>
 										</div>
 									</div>

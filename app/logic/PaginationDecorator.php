@@ -11,7 +11,7 @@ class PaginationDecorator {
 	protected $rows;
 	
 	const START_PAGE = 1;
-	const DEFAULT_LIMIT = 20;
+	const DEFAULT_LIMIT = 4;
 	
 	public function __construct()
 	{
@@ -53,7 +53,17 @@ class PaginationDecorator {
 	
 	public function getStartIndex()
 	{
-		return ceil(($this->currentpage -1 )*$this->rowsperpage);
+            return ceil(($this->currentpage -1 )*$this->rowsperpage);
+	}
+	
+	public function getTotalPages()
+	{
+		return ceil($this->total / $this->rowsperpage);
+	}
+
+	public function getTotalRecords()
+	{
+		return $this->total;
 	}
 	
 	public function getPaginationObject()

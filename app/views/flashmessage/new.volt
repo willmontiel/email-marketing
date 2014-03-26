@@ -91,23 +91,21 @@
 									<div class="row-fluid">
 										<div class="span6">
 											<div>
-												{{ MessageForm.render('mtype', {'value': 'info'} ) }}
+												{{ MessageForm.render('type', {'value': 'info'} ) }}
 												<label for="info" class="flashmessage-info">Informativo</label>
 											</div>
 											<div>
-												{{ MessageForm.render('mtype', {'value': 'warning'}) }}
+												{{ MessageForm.render('type', {'value': 'warning'}) }}
 												<label for="warning" class="flashmessage-block">Advertencia</label>
 											</div>
 										</div>
 										<div class="span6">
 											<div>
-												{% set success = {'value': 'success'} %}
-												{{ MessageForm.render('mtype', success) }}
+												{{ MessageForm.render('type', {'value': 'success'}) }}
 												<label for="success" class="flashmessage-success">Confirmación</label>
 											</div>
 											<div>
-												{% set error = {'value': 'error'} %}
-												{{ MessageForm.render('mtype', error) }}
+												{{ MessageForm.render('type', {'value': 'error'}) }}
 												<label for="error" class="flashmessage-error">Riesgo</label>
 											</div>
 										</div>
