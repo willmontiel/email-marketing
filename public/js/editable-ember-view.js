@@ -3,7 +3,7 @@
 App.EmberXEditableTextView = Em.View.extend({
   templateName: 'xeditable',
   title: 'Editar informacion',
-  didInsertElement: function(contact) {
+  didInsertElement: function() {
 	var self = this;
     return this.$('.x-editable').editable({ 
 		type: 'text', 
@@ -33,6 +33,7 @@ App.EmberXEditableTextAreaView = Em.View.extend({
 			//console.log('Este es el nuevo valor que debe ir a Ember: ' + newValue);
 			self.set('value', newValue);
 			self.get('controller').set(self.field, self.value);
+			App.set('isEditable', true);
 		} 
 	});
   }
@@ -54,6 +55,7 @@ App.EmberXEditableSelectView = Em.View.extend({
 			//console.log('Este es el nuevo valor que debe ir a Ember: ' + newValue);
 			self.set('value', newValue);
 			self.get('controller').set(self.field, self.value);
+			App.set('isEditable', true);
 		} 
 	});
   }
@@ -74,6 +76,7 @@ App.EmberXEditableMultiSelectView = Em.View.extend({
 		success: function (resp, newValue) {
 			self.set('value', newValue);
 			self.get('controller').set(self.field, self.value);
+			App.set('isEditable', true);
 		} 
 	});
   }
@@ -98,6 +101,7 @@ App.EmberXEditableDateView = Em.View.extend({
 //			console.log('Out ' + newDate);
 			self.set('value', newValue);
 			self.get('controller').set(self.field, self.value);
+			App.set('isEditable', true);
 		} 
 	});
   }

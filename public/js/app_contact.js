@@ -125,7 +125,6 @@ App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 
 App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
     actions : {
-		
 		delete: function() {
 			this.get('model').deleteRecord();
 			this.handleSavePromise(this.content.save(), 'contacts', 'El contacto ha sido eliminado con exito!');
@@ -200,7 +199,8 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		},
 
 		discard: function(contact) {
-
+			console.log(this.get('model', contact.id))
+			//contact.rollback();
 		},
 				
 	},
