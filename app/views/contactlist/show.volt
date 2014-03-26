@@ -137,11 +137,9 @@
 			</div>
 			<div class="clearfix"></div>
 			<br />
-			<div class="row-fluid">
-				<div class="span8">
-					{{ partial("partials/search_contacts_partial") }}
-				</div>
-			</div>
+			
+			{{ partial("partials/search_contacts_partial") }}
+			
 			<div class="box">
 				<div class="box-header">
 					<span class="title">Contactos</span>

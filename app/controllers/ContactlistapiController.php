@@ -10,10 +10,12 @@ class ContactlistapiController extends ControllerBase
 	public function searchcontactsAction($idContactlist)
 	{
 		$search = $this->request->getQuery('searchCriteria', null, null);
+		$filter = $this->request->getQuery('filter', null, null);
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
-//		$this->logger->log('Criterio de búsqueda: ' . $search);
+		$this->logger->log('Criterio de búsqueda: ' . $search);
+		$this->logger->log('Filtro: ' . $filter);
 //		$this->logger->log('Limit: ' . $limit);
 //		$this->logger->log('Page: ' . $page);
                 

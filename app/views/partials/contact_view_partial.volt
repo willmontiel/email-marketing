@@ -24,9 +24,9 @@
 			<button class="btn btn-sm btn-info" {{' {{action "subscribedcontact" this}} '}}>Suscribir</button>
 		{{'{{/unless}}'}}
 	{{ '{{/if}}' }}
-		{#{{ '{{#link-to "contacts.show" this}}' }}<i class="icon-search"></i> Ver detalles{{ '{{/link-to}}' }}#}
-		{#{{ '{{#link-to "contacts.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default"}}' }}Editar{{ '{{/link-to}}' }}#}
-			{{ '{{#link-to "contacts.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-danger"}}' }}Eliminar{{ '{{/link-to}}' }}
+			{% if datasegment is not defined%}
+				{{ '{{#link-to "contacts.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-danger"}}' }}Eliminar{{ '{{/link-to}}' }}
+			{% endif %}
 		</div>
 	</td>
 </tr>

@@ -12,6 +12,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	protected $queryCriteria;
 	protected $account;
 	protected $dbase;
+	protected $database;
 	protected $contactlist;
 	protected $segment;
 	protected $paginator;
@@ -37,16 +38,19 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	public function setDbase(\Dbase $dbase = null)
 	{
 		$this->dbase = $dbase;
+		$this->database = $dbase;
 	}
 	
 	public function setContactlist(\Contactlist $contactlist = null)
 	{
 		$this->contactlist = $contactlist;
+		$this->database = $contactlist->dbase;
 	}
 	
 	public function setSegment(\Segment $segment = null)
 	{
 		$this->segment = $segment;
+		$this->database = $segment->dbase;
 	}
 	
 	public function setPaginator(\PaginationDecorator $paginator)
@@ -167,7 +171,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$finstancesO = \Fieldinstance::findInstancesForMultipleContacts($contactIds);
 			
 			// Consultar lista de campos personalizados de la base de datos
-			$cfieldsO = \Customfield::findCustomfieldsForDbase($this->contactlist->dbase);
+			$cfieldsO = \Customfield::findCustomfieldsForDbase($this->database);
 			
 			// Convertir la lista de campos personalizados y de instancias a arreglos
 			$this->cfields = array();
@@ -390,29 +394,32 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$c['ipActivated'] = (($contact['ipActivated'])?long2ip($contact['ipActivated']):'');
 
 			$c['isEmailBlocked'] = ($contact['blocked'] != 0);
-
-			foreach ($this->cfields as $field) {
-				$key = $contact['idContact'] . ':' . $field['id'];
-				$value = '';
-				if (isset($this->finstances[$key])) {
-					$fvalue = $this->finstances[$key];
-					switch ($field['type']) {
-						case 'Date':
-							if($fvalue['numberValue']) {
-								$value = date('Y-m-d',$fvalue['numberValue']);
-							} else {
-								$value = "";
-							}
-							break;
-						case 'Number':
-							$value = $fvalue['numberValue'];
-							break;
-						default:
-							$value = $fvalue['textValue'];
+			
+			if (count($this->cfields) > 0) {
+				foreach ($this->cfields as $field) {
+					$key = $contact['idContact'] . ':' . $field['id'];
+					$value = '';
+					if (isset($this->finstances[$key])) {
+						$fvalue = $this->finstances[$key];
+						switch ($field['type']) {
+							case 'Date':
+								if($fvalue['numberValue']) {
+									$value = date('Y-m-d',$fvalue['numberValue']);
+								} else {
+									$value = "";
+								}
+								break;
+							case 'Number':
+								$value = $fvalue['numberValue'];
+								break;
+							default:
+								$value = $fvalue['textValue'];
+						}
 					}
+					$c[$field['name']] = $value;
 				}
-				$c[$field['name']] = $value;
 			}
+			
 			$object[] = $c;
 		}
 		$this->rows = $object;

@@ -148,12 +148,22 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 	init: function () {
 		this.set('acl', App.contactACL);
 	},
-	searchCriteria: '',
-	criteria: '',
+	filters: [
+		{name: "Des-suscritos", value: "unsubscribed"},
+		{name: "Rebotados",    value: "bounced"},
+		{name: "Spam",    value: "spam"},
+		{name: "Bloqueados",    value: "blocked"},
+		{name: "Suscritos",    value: "subscribed"},
+		{name: "Todos",    value: "all"}
+	],
+	currentFilter: {
+		value: "all"
+	},
 	refreshRecords: function() {
 		this.criteria = this.get('searchCriteria');
+		this.filter = this.get('filter');
 		var t = this;
-		this.store.find('contact', {searchCriteria: this.criteria }).then(function(d) {
+		this.store.find('contact', {searchCriteria: this.criteria, filter: this.filter}).then(function(d) {
 			t.set('content', d.content);
 		});
 	},
@@ -270,3 +280,13 @@ App.DatePickerField = Em.View.extend({
     }).on("changeDate", onChangeDate);
   }
 });
+
+
+//App.filter = [
+//  Ember.Object.create({name: "Des-suscritos", value: "unsubscribed"}),
+//  Ember.Object.create({name: "Rebotados",    value: "bounced"}),
+//  Ember.Object.create({name: "Spam",    value: "spam"}),
+//  Ember.Object.create({name: "Bloqueados",    value: "blocked"}),
+//  Ember.Object.create({name: "Suscritos",    value: "subscribed"}),
+//  Ember.Object.create({name: "Todos",    value: "all"})
+//];
