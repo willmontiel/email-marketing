@@ -481,7 +481,6 @@ class ImportContactWrapper
 		$fp = fopen($sourcefile, 'r');
 		$nfp = fopen($tmpFilename, 'w');
 		
-		$skipped = 0;
 		$rows = 0;
 
 		if ($hasHeader) {
@@ -490,16 +489,15 @@ class ImportContactWrapper
 		// cada cierta cantidad de registros se debe informar avance
 		$every = (int)($maxrows/10);
 		$this->incrementProgress(0);
-		
-		while (!feof($fp) && ($rows - $skipped) <= $maxrows) {
+		while (!feof($fp) && $rows <= $maxrows) {
 			$line = fgetcsv($fp, 0, $delimiter);
 			$rows++;
 			try {
 				$lineOut = $this->fieldmapper->mapValues($line);
 			}
 			catch (\InvalidArgumentException $e) {
-				$this->errors[] = \sprintf('%s en linea %d', $e->getMessage(), $line);
-				$skipped++;
+				$this->errors[] = \sprintf('%s en linea %d', $e->getMessage(), $rows);
+				$this->invalid++;
 				continue;
 			}
 			// Validar que el EMAIL no este repetido
@@ -514,7 +512,7 @@ class ImportContactWrapper
 		fclose($nfp);
 
 		$this->incrementProgress($rows);
-		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed, {$skipped} rows skipped!");
+		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed!");
 	}
 	
 	protected function incrementProgress($adv)
