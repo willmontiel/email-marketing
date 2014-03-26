@@ -39,7 +39,7 @@
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span6">
+			<div class="span10 offset1">
 				<div class="box">
 					<div class="box-content">
 						<table class="table table-condensed">
@@ -95,6 +95,7 @@
 					</div>
 				</div>
 			</div>	
+			{#
 			<div class="span6">
 				<div class="box">
 					<div class="box-content">
@@ -148,18 +149,46 @@
 					</div>
 				</div>
 			</div>
+			#}
 		</div>
 		{{ '{{#if App.isEditable}}' }}
 		<div class="row-fluid">
-			<div class="span12 text-right">
+			<div class="span10 offset1 text-right">
 				<button class="btn btn-default" {{ '{{action "discard" this}}' }}>descartar<br />cambios</button>
 				<button class="btn btn-green" {{ '{{action "edit" this}}' }}>guardar<br />cambios</button>
 			</div>
 		</div>
 		{{ '{{/if}}' }}
 		<div class="row-fluid">
-			<div class="span12">
+			<div class="span10 offset1">
 				<h4>Historial</h4>
+				<div class="box">
+					<div class="box-content padded">
+				{{ '{{#if subscribedOn}}' }}
+						<span class="text-blue-color">Suscrito:&nbsp</span>
+						<span class="number-small">{{'{{subscribedOn}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+				{{ '{{/if}}' }}
+						
+				{{ '{{#if ipSubscribed}}' }}
+						<span class="text-blue-color">IP de Suscripcion:&nbsp</span>
+						<span class="number-small">{{'{{ipSubscribed}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+				{{ '{{/if}}' }}
+						
+				{{ '{{#if isActive}}' }}
+						<span class="text-blue-color">Activado:&nbsp</span>
+						<span class="number-small">{{'{{activatedOn}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+				{{ '{{/if}}' }}
+								
+				{{ '{{#if ipActive}}' }}
+						<span class="text-blue-color">IP de Activacion:&nbsp</span>
+						<span class="number-small">{{'{{ipActive}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+				{{ '{{/if}}' }}
+					</div>	
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span10 offset1">
 				<div class="box">
 					<div class="box-content">
 						<h5 class="padded">Últimas campañas</h5>
