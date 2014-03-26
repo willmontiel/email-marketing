@@ -149,7 +149,6 @@
 				</div>
 			</div>
 		</div>
-			{{ '{{App.isEditable}}' }}
 		{{ '{{#if App.isEditable}}' }}
 		<div class="row-fluid">
 			<div class="span12 text-right">

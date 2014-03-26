@@ -59,7 +59,7 @@ class CreateViewEmber
 				$valor = "{{view App.EmberXEditableMultiSelectView source=App.{$fieldname}_options_xeditable value={$fieldname} field='{$fieldname}' title='Editar {$field->name}'";
 				break;
 			case "Date":
-				$valor = "{{view App.EmberXEditableDateView value=''  field='{$fieldname}' title='Editar {$field->name}'";
+				$valor = "{{view App.EmberXEditableDateView value={$fieldname}  field='{$fieldname}' title='Editar {$field->name}'";
 				break;
 		}
 		
