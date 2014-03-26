@@ -188,10 +188,13 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 
 		edit: function(contact) {
 			var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+			var self = this;
 			if (filter.test(contact.get('email'))) {
 				App.set('errormessage', '');
 				App.set('isEditable', false);
-				this.handleSavePromise(contact.save(), 'contacts', 'El contacto fue actualizado exitosamente');
+				this.handleSavePromise(contact.save(), 'contacts', 'El contacto fue actualizado exitosamente', function () {
+					$('.x-editable.editable-unsaved').removeClass('editable-unsaved');
+				});
 			}
 			else {
 				App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')

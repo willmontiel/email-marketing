@@ -92,14 +92,19 @@ App.EmberXEditableDateView = Em.View.extend({
     return this.$('.x-editable').editable({ 
 		type: 'date', 
 		title: self.title,
-		format: 'dd/mm/yyyy',    
-        viewformat: 'dd/mm/yyyy',
+		format: 'yyyy/mm/dd',    
+        viewformat: 'yyyy/mm/dd',
 		datepicker: {weekStart: 1},
 		success: function (resp, newValue) { 
-			console.log('In ' + newValue);
-//			var newDate = moment(newValue).format('yyyy/mm/dd');
-//			console.log('Out ' + newDate);
-			self.set('value', newValue);
+			var mes_tmp = "0" + (newValue.getUTCMonth()+1);
+			mes_tmp = mes_tmp.substring(mes_tmp.length-2);
+			
+			var fecha_total = newValue.getUTCFullYear() + '-' + mes_tmp + '-' + newValue.getUTCDate();
+			
+			self.set('value', fecha_total);
+			
+			console.log(self.value);
+			console.log(self.field);
 			self.get('controller').set(self.field, self.value);
 			App.set('isEditable', true);
 		} 

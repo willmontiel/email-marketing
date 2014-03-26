@@ -59,7 +59,7 @@ class CreateViewEmber
 				$valor = "{{view App.EmberXEditableMultiSelectView source=App.{$fieldname}_options_xeditable value={$fieldname} field='{$fieldname}' title='Editar {$field->name}'";
 				break;
 			case "Date":
-				$valor = "{{view App.EmberXEditableDateView value=''  field='{$fieldname}' title='Editar {$field->name}'";
+				$valor = "{{view App.EmberXEditableDateView value={$fieldname}  field='{$fieldname}' title='Editar {$field->name}'";
 				break;
 		}
 		
@@ -92,6 +92,7 @@ class CreateViewEmber
 			$resultado = 'App.' . $oname . ' = [' . PHP_EOL;
 			$valores = explode(',', $field->values);
 			$valores = array_merge(array($field->defaultValue), $valores);
+			$valores = array_unique($valores);
 			$resultado .= '"' . implode('",' . PHP_EOL . '"', $valores) . '"' . PHP_EOL . '];';
 		}
 		return $resultado;
@@ -105,6 +106,7 @@ class CreateViewEmber
 			$resultado = 'App.' . $oname . ' = [' . PHP_EOL;
 			$valores = explode(',', $field->values);
 			$valores = array_merge(array($field->defaultValue), $valores);
+			$valores = array_unique($valores);
 			foreach ($valores as $valor) {
 				$resultado .= " {value: '" . $valor . "', text: '" . $valor . "'}, " . PHP_EOL;
 			}

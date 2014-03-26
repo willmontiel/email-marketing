@@ -20,7 +20,10 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	protected $name;
 	
 	protected $id;
-
+	
+	protected $cfields;
+	protected $finstances;
+	
 	public function setSearchCriteria(\EmailMarketing\General\ModelAccess\ContactSearchCriteria $search)
 	{
 		$this->searchCriteria = $search;
@@ -53,10 +56,29 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	
 	public function load()
 	{   
-		$contactIds = $this->findContactIds($this->createCoreQuery());
+		//1. Se crea el core query con los parametros de busqueda
+		$coreQuery = $this->createCoreQuery();
+		
+		//2. Ejecutamos el coreQuey para obtener las identificaciones de los contactos que coinciden con los
+		//parametros de búsqueda
+		$contactIds = $this->findContactIds($coreQuery);
+		
+		//4. Buscamos los campos personalizados que pertenecen a cada contacto. Estos se cargaran a una variable global
+		//para despues compararlos con cada contacto
+		$this->findCustomFields($contactIds);
+		
+		//5. Creamos el query final con las identificaciones de contactos que nos arrojó el coreQuery
 		$query = $this->createQuery($contactIds);
 		
-		$this->findContacts($query);
+		//5. Ejecutamos el query final y obtenemos todos los contactos
+		$contacts = $this->findContacts($query);
+		
+		//6. validamos que se hayan encontrado contactos y luego creamos la estructura final emparejando 
+		//cada contacto con su respectivo campo personalizado
+		if (count($contacts) > 0) {
+			$this->createStructureForReturns($contacts);
+		}
+		
 	}
 	
 	private function createCoreQuery()
@@ -128,12 +150,46 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 						JOIN email AS e ON(e.idEmail = c.idEmail)
 						JOIN dbase AS d ON(d.idDbase = c.idDbase)
 					WHERE c.idContact IN (" . $ids . ")";
-		}
-                
+			
+		}      
         \Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
 		return $sql;
 	}
 	
+	/**
+	 * Funcion para encontrar los campos personalizados en la base datos
+	 * @param type $contactIds
+	 */
+	private function findCustomFields($contactIds)
+	{
+		if(!empty($contactIds)) {
+			// Consultar la lista de campos personalizados para esos contactos
+			$finstancesO = \Fieldinstance::findInstancesForMultipleContacts($contactIds);
+			
+			// Consultar lista de campos personalizados de la base de datos
+			$cfieldsO = \Customfield::findCustomfieldsForDbase($this->contactlist->dbase);
+			
+			// Convertir la lista de campos personalizados y de instancias a arreglos
+			$this->cfields = array();
+			foreach ($cfieldsO as $cf) {
+				$this->cfields[$cf->idCustomField] = array('id' => $cf->idCustomField, 'type' => $cf->type, 'name' => 'campo' . $cf->idCustomField);
+			}
+			unset($cfieldsO);
+			
+			$this->finstances = $this->createFieldInstanceMap($finstancesO);
+		}
+	}
+	
+	
+	private function createFieldInstanceMap($finstancesO)
+	{
+		$finstances = array();
+		foreach ($finstancesO as $fi) {
+			$key = $fi->idContact . ':' . $fi->idCustomField;
+			$finstances[$key] = array('numberValue' => $fi->numberValue, 'textValue' => $fi->textValue);
+		}
+		return $finstances;
+	}
 	
 	private function findContacts($sql)
 	{
@@ -141,12 +197,14 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$db = \Phalcon\DI::getDefault()->get('db');
 			$query = $db->query($sql);
 			$result = $query->fetchAll();
-			$count = count($result);
-
-			if ($count > 0) {
-				$this->createStructureForReturns($result);
-			}
+			
+			$contacts = $result;
 		}
+		else {
+			$contacts = array();
+		}
+		
+		return $contacts;
 	}
 	
 	
@@ -302,6 +360,11 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		return $key;
 	}
 	
+	/**
+	 * Empareja cada contacto con su respectivo campo personalizado y crea la estructura final del arreglo que contiene los
+	 * contactos
+	 * @param array $contacts
+	 */
 	private function createStructureForReturns($contacts)
 	{   
 		$object = array();
@@ -328,9 +391,30 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 
 			$c['isEmailBlocked'] = ($contact['blocked'] != 0);
 
+			foreach ($this->cfields as $field) {
+				$key = $contact['idContact'] . ':' . $field['id'];
+				$value = '';
+				if (isset($this->finstances[$key])) {
+					$fvalue = $this->finstances[$key];
+					switch ($field['type']) {
+						case 'Date':
+							if($fvalue['numberValue']) {
+								$value = date('Y-m-d',$fvalue['numberValue']);
+							} else {
+								$value = "";
+							}
+							break;
+						case 'Number':
+							$value = $fvalue['numberValue'];
+							break;
+						default:
+							$value = $fvalue['textValue'];
+					}
+				}
+				$c[$field['name']] = $value;
+			}
 			$object[] = $c;
 		}
-
 		$this->rows = $object;
 	}
 

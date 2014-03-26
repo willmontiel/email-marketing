@@ -816,7 +816,6 @@ class ContactWrapper extends BaseWrapper
 			$key = $fi->idContact . ':' . $fi->idCustomField;
 			$finstances[$key] = array('numberValue' => $fi->numberValue, 'textValue' => $fi->textValue);
 		}
-		
 		return $finstances;
 	}
 
