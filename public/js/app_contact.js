@@ -202,7 +202,7 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 			console.log(this.get('model', contact.id))
 			//contact.rollback();
 		},
-				
+
 	},
 			
 
