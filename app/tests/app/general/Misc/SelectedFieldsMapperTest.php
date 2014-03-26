@@ -109,7 +109,7 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 			3       => 4,
 			12  	=> null,
 			40	    => null,
-			17      => 5,
+			"17"      => 5,
 			6		=> 7,
 			24	    => 8,
 		);

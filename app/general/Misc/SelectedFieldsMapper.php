@@ -201,7 +201,7 @@ class SelectedFieldsMapper
 		
 		var_dump($this->rawMap);
 		foreach ($cfieldsdef as $f) {
-			$cfid = $f->idCustomField;
+			$cfid = (string)$f->idCustomField;
 			$this->dbfields[$cfid] = $f->type;
 			switch ($f->type) {
 				case 'Date':
