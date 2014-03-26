@@ -221,7 +221,7 @@ class SelectedFieldsMapper
 				$this->cfieldsforinsert[$cfname] = array($f->idCustomField, $it);
 			}
 			else {
-				echo "{$cfid} in dbase is not in the array: " . print_r($this->rawMap, true) . "!\n";
+				echo "{$cfid} in dbase is not in the array: " . print_r($this->rawMap, true) . "!\n-- isset() {isset($this->rawMap[$cfid])}\n-- {$this->rawMap[$cfid]}\n";
 			}
 		}
 	}
