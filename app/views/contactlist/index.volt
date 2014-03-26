@@ -1,4 +1,6 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
+
+
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
@@ -121,7 +123,7 @@
 									<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts" class="btn btn-blue"><i class="icon-search"></i> Detalles</a>
 									{{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}
 									{{ '{{#linkTo "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}
-									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default" title="Ver estadisticas"><i class="icon-bar-chart"></i></a>
+									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default" title="Ver estadisticas"><i class="fa fa-bar-chart-o"></i></a>
 									
 
 									{# {{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}

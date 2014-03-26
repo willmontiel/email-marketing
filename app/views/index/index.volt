@@ -1,17 +1,19 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
+
+{% block sectiontitle %}Dashboard{% endblock %}
 {% block content %}
 {{flashSession.output()}}
-	<div class="row-fluid">
+	<div class="row">
 		{%for widget in stats.fullPeriodStats()%}
-		<div class="span2">
-			<div class="box-dashboard-summary summary-opens">
+		<div class="col-xs-6 col-md-3 col-lg-2">
+			<div class="box-dashboard-summary summary-{{ widget.getClassName() }}" style="margin-bottom: 20px;">
 				<div class="title-stats-dashboard-summary">
 					{{widget.getTitle()}}
 				</div>
 				<div class="number-stats-dashboard-summary">
 					{{widget.getTotal()}}
 				</div>
-				<div class="sparkline big" data-color="green">
+				<div class="sparkline big" data-color="white">
 					<!--
 					{%for statvalue in widget.getSecondaryValues()%}
 						{{statvalue.value}},
@@ -21,12 +23,8 @@
 			</div>
 		</div>
 		{%endfor%}
-	</div>
-<br />
-<br />
-	<div class="row-fluid">
 		{%for widget in stats.fullSocialStats()%}
-		<div class="span2">
+		<div class="col-xs-6 col-md-3 col-lg-2">
 			<div class="box-dashboard-summary summary-fb">
 				<div>
 					<p>{{widget.getTitle()}}</p>
@@ -51,7 +49,7 @@
 <br />
 <br />
 	<div class="row-fluid">
-		<div class="span8">
+		<div class="col-sm-12 col-lg-10">
 			<table class="table table-normal">
 				<thead>
 					<tr>
