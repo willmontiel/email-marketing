@@ -173,7 +173,7 @@ class ImportContactWrapper
 
 		// En que formato se presentan los campos (de que forma esta codificado
 		//esto?
-		$posCol = (array) $fields;
+		$posCol = json_decode(json_encode($fields), true);
 		
 		// Cargar el proceso de importacion
 		$this->loadProcess();

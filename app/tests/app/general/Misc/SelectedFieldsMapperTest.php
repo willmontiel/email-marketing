@@ -103,16 +103,17 @@ class SelectedFieldsMapperTest extends \PHPUnit_Framework_TestCase {
 	protected function getDataSet1_Input()
 	{
 		// 
-		return array(
-			'email' => 1,
-			'name'  => 3,
-			3       => 4,
-			12  	=> null,
-			40	    => null,
-			"17"      => 5,
-			6		=> 7,
-			24	    => 8,
-		);
+		return json_decode('{"email": "1", "name": "3", "3": "4", "12":null, "40":null, "17":"5", "6":"7", "24":"8"}', true);
+//		return array(
+//			'email' => 1,
+//			"name"  => 3,
+//			"3"       => 4,
+//			"12"  	=> null,
+//			"40"	    => null,
+//			"17"      => 5,
+//			"6"		=> 7,
+//			"24"	    => 8,
+//		);
 	}
 	
 	protected function getDataSet1_CSVMapping()
