@@ -198,6 +198,8 @@ class SelectedFieldsMapper
 		$this->cfieldsforinsert = array();
 		
 		$cfieldsdef = $this->dbase->customFields;
+		
+		var_dump($this->rawMap);
 		foreach ($cfieldsdef as $f) {
 			$cfid = $f->idCustomField;
 			$this->dbfields[$cfid] = $f->type;
