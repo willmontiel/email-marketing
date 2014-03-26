@@ -92,6 +92,7 @@ class CreateViewEmber
 			$resultado = 'App.' . $oname . ' = [' . PHP_EOL;
 			$valores = explode(',', $field->values);
 			$valores = array_merge(array($field->defaultValue), $valores);
+			$valores = array_unique($valores);
 			$resultado .= '"' . implode('",' . PHP_EOL . '"', $valores) . '"' . PHP_EOL . '];';
 		}
 		return $resultado;
@@ -105,6 +106,7 @@ class CreateViewEmber
 			$resultado = 'App.' . $oname . ' = [' . PHP_EOL;
 			$valores = explode(',', $field->values);
 			$valores = array_merge(array($field->defaultValue), $valores);
+			$valores = array_unique($valores);
 			foreach ($valores as $valor) {
 				$resultado .= " {value: '" . $valor . "', text: '" . $valor . "'}, " . PHP_EOL;
 			}
