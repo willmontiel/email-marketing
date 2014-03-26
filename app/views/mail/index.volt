@@ -95,6 +95,8 @@
 										Creado el {{date('Y-m-d', item.createdon)}} 
 										{%if item.status == 'Sent'%}
 										- Enviado el {{date('Y-m-d, g:i a', item.startedon)}}
+										{%elseif item.status == 'Scheduled'%}
+										- Programado {{date('Y-m-d, g:i a', item.scheduleDate)}}
 										{%endif%}
 									</div>
 								</div>
