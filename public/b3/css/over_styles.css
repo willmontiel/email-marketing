@@ -110,3 +110,10 @@
 .table-normal tbody td.left {
 	text-align: left;
 }
+/* --- Para resolver el problema de los tooltips de sparklines --- */
+.jqstooltip {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+/* --- Fin para resolver el problema de los tooltips de sparklines --- */
