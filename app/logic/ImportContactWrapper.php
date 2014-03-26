@@ -365,13 +365,14 @@ class ImportContactWrapper
 		$linecount = $this->countFileRecords($sourcefile);
 
 		$maxrows = ($hasHeader)?$linecount:$linecount+1;
-		
+		$notimported = 0;
 		if ($mode == 'Contacto') {
 			// Modo contactos, verificar que es menor, el numero de registros
 			// del archivo, o el numero de contactos que se pueden insertar en
 			// la cuenta
 			$dif = $contactLimit - $activeContacts;
 			$maxrows = ($dif < $maxrows)?$dif:$maxrows;
+			$notimported = ($linecount>$maxrows)?($linecount - $maxrows):0;
 		}
 		$this->log->log("File rows: {$linecount}, maxrows: {$maxrows}");
 		
@@ -446,7 +447,7 @@ class ImportContactWrapper
 		
 		// Reporte
 		$this->timer->startTimer('report', 'Run reports!');
-		$this->runReports($flines);
+		$this->runReports($notimported);
 		$this->timer->endTimer('report');
 	}
 
@@ -627,6 +628,7 @@ class ImportContactWrapper
 			throw new \InvalidArgumentException('No se pudo crear el archivo de Errores');
 		} 
 		else {
+			// OK
 			$queryForErrors =  "SELECT idArray, email, 
 									CASE WHEN blocked = 1 THEN 'Correo Bloqueado'
 										WHEN coxcl = 1 AND blocked IS NULL THEN 'Existente'
@@ -671,8 +673,8 @@ class ImportContactWrapper
 
 			$this->db->execute($queryForSuccess);
 		}
-		$queryBloqued = "SELECT COUNT(*) AS 'bloqueados' FROM {$this->tablename} WHERE blocked = 1 AND status IS NULL";
-		$queryExist = "SELECT COUNT(*)	AS 'existentes' FROM {$this->tablename} WHERE status IS NULL AND coxcl = 1 AND blocked IS NULL";
+		$queryBloqued = "SELECT COUNT(*) AS bloqueados FROM {$this->tablename} WHERE blocked = 1 AND status IS NULL";
+		$queryExist = "SELECT COUNT(*)	AS existentes FROM {$this->tablename} WHERE status IS NULL AND coxcl = 1 AND blocked IS NULL";
 		
 		$bloquedCount = $this->db->fetchAll($queryBloqued);
 		$existCount = $this->db->fetchAll($queryExist);
@@ -680,7 +682,7 @@ class ImportContactWrapper
 		$bloqued = $bloquedCount[0]['bloqueados'];
 		$exist = $existCount[0]['existentes'];
 		
-		$queryInfo = "UPDATE importproccess SET exist = $exist, invalid = {$this->invalid}, bloqued = $bloqued, limitcontact = $limit, repeated = $this->repeated WHERE idImportproccess = $this->idProccess";
+		$queryInfo = "UPDATE importproccess SET exist = {$exist}, invalid = {$this->invalid}, bloqued = {$bloqued}, limitcontact = {$limit}, repeated = {$this->repeated} WHERE idImportproccess = {$this->idProccess}";
 		$this->db->execute($queryInfo);
 		
 		$proccess = Importproccess::findFirstByIdImportproccess($this->idProccess);

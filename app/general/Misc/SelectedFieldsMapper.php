@@ -199,8 +199,6 @@ class SelectedFieldsMapper
 		
 		$cfieldsdef = $this->dbase->customFields;
 		
-		var_dump($this->rawMap);
-		
 		foreach ($cfieldsdef as $f) {
 			$cfid = $f->idCustomField;
 			$this->dbfields[$cfid] = $f->type;
@@ -216,8 +214,6 @@ class SelectedFieldsMapper
 					break;
 			}
 
-			echo "-- isset(this->rawMap[{$cfid}]) {" . (isset($this->rawMap[$cfid])?'Yipee':'sorry:(') . "}\n-- {$this->rawMap[$cfid]}\n";
-			
 			if (isset($this->rawMap[$cfid]) && $this->rawMap[$cfid] !== null) {
 				$cfname = $this->getCustomFieldName($cfid);
 				$this->cfieldsmetadata[$cfname] = $t;
