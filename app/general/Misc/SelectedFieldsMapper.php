@@ -201,7 +201,7 @@ class SelectedFieldsMapper
 		
 		var_dump($this->rawMap);
 		foreach ($cfieldsdef as $f) {
-			$cfid = (string)$f->idCustomField;
+			$cfid = $f->idCustomField;
 			$this->dbfields[$cfid] = $f->type;
 			switch ($f->type) {
 				case 'Date':
@@ -214,15 +214,17 @@ class SelectedFieldsMapper
 					$it = 'textValue';
 					break;
 			}
+
+			echo "-- isset(this->rawMap[{$cfid}]) {" . (isset($this->rawMap[$cfid]))?'Yipee':'sorry:(' . "}\n-- {$this->rawMap[$cfid]}\n";
 			if (isset($this->rawMap[$cfid]) && $this->rawMap[$cfid] !== null) {
-				$cfname = $this->getCustomFieldName($f->idCustomField);
+				$cfname = $this->getCustomFieldName($cfid);
 				$this->cfieldsmetadata[$cfname] = $t;
 				$this->cfieldstransform[$cfname] = $f->type;
-				$this->cfieldsforinsert[$cfname] = array($f->idCustomField, $it);
+				$this->cfieldsforinsert[$cfname] = array($cfid, $it);
 			}
 			else {
 				var_dump($cfid);
-				echo "{$cfid} in dbase is not in the array: " . print_r($this->rawMap, true) . "!\n-- isset(this->rawMap[{$cfid}]) {" . isset($this->rawMap[$cfid]) . "}\n-- {$this->rawMap[$cfid]}\n";
+				echo "{$cfid} in dbase is not in the array: " . print_r($this->rawMap, true) . "!\n";
 			}
 		}
 	}
