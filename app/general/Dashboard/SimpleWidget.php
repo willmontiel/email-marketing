@@ -42,10 +42,18 @@ class SimpleWidget extends BaseWidget
 				$o = new \stdClass();
 				$o->name = $i;
 				$o->value = 0;
-				$next = ($i >= 1) ? strtotime('-' . $i . ' day') : time();
-				$prev = strtotime('-' . ( $i + 1 ) . ' day');
+				if($i >= 1) {
+					$nexttime = new \DateTime('-' . $i . ' day');
+					$nexttime->setTime(0, 0, 0);
+					$next = $nexttime->getTimestamp();
+				}
+				else {
+					$next = time();
+				}
+				$prev = new \DateTime('-' . ( $i + 1 ) . ' day');
+				$prev->setTime(0, 0, 0);				
 				foreach ($result1 as $row) {
-					if( $prev < $row->date && $row->date < $next ) {
+					if( $prev->getTimestamp() < $row->date && $row->date < $next ) {
 						$this->logger->log($row->date);
 						$o->value = $row->cnt;
 					}
