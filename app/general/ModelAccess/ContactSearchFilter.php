@@ -10,7 +10,10 @@ class ContactSearchFilter
 	public $filter;
 	
 	public function __construct($filter) 
-	{
+	{	
+		if (trim($filter) === '') {
+			$filter = 'all';
+		}
 		$this->filter = array($filter, 0);
 	}
 	

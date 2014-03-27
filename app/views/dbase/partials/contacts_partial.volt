@@ -51,11 +51,9 @@
 			</ul>
 		</div>
 	</div>
-	<div class="row-fluid">
-		<div class="span8">
-			{{ partial("partials/search_contacts_partial") }}
-		</div>
-	</div>
+	
+	{{ partial("partials/search_contacts_partial") }}
+	
 	<div class="row-fluid">
         <div class="span12">
 			<div class="box">

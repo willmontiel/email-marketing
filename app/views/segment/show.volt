@@ -87,14 +87,12 @@
 	</script>
 	<script type="text/x-handlebars" data-template-name="contacts/index">
 		<div class="row-fluid">
-			<div class="span8">
-				{{ partial("partials/search_contacts_partial") }}
-			</div>
-			<div class="span4 text-right" style="margin-bottom: 5px;">
+			<div class="span12 text-right" style="margin-bottom: 5px;">
 				<a href="{{url('contactlist#/segments')}}" class="btn btn-blue"><i class="icon-home"></i> Todos los segmentos</a>
 			</div>
 		</div>
-		
+		<br />
+		{{ partial("partials/search_contacts_partial") }}
 		<div class="clearfix"></div>
 
 		<div class="box">
