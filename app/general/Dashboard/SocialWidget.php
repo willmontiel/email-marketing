@@ -8,7 +8,8 @@ class SocialWidget extends BaseWidget
 	{
 		try {
 			// Calcular totales
-			$time = strtotime('-15 day');
+			$time = new \DateTime('-' . BaseWidget::CHART_INTERVALS . ' day');
+			$time->setTime(0, 0, 0);
 			$share = 'share_' . $this->property;
 			$open = 'open_' . $this->property;
 			$click = 'click_' . $this->property;
@@ -16,7 +17,7 @@ class SocialWidget extends BaseWidget
 			$sql1 = "	SELECT SUM(c." . $share . ") AS share, SUM(c." . $open . ") AS open
 						FROM Mxc AS c
 							JOIN Mail AS m ON (c.idMail = m.idMail)
-						WHERE m.finishedon > {$time}
+						WHERE m.finishedon > {$time->getTimestamp()}
 						AND m.status = 'Sent'
 						AND m.idAccount = {$this->account->idAccount}";
 			$query1 = $this->modelManager->createQuery($sql1);
@@ -25,7 +26,7 @@ class SocialWidget extends BaseWidget
 			$sql2 = "	SELECT IF(SUM(l." . $click . "),SUM(l." . $click . "),0) AS click
 						FROM Mxcxl AS l
 							JOIN Mail AS m ON (l.idMail = m.idMail)
-						WHERE m.finishedon > {$time}
+						WHERE m.finishedon > {$time->getTimestamp()}
 						AND m.status = 'Sent'
 						AND m.idAccount = {$this->account->idAccount}";
 			$query2 = $this->modelManager->createQuery($sql2);

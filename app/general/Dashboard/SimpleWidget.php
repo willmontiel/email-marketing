@@ -10,7 +10,7 @@ class SimpleWidget extends BaseWidget
 		try {
 			// Calcular totales
 			$property = $this->property;
-			$time = new \DateTime('-15 day');
+			$time = new \DateTime('-' . BaseWidget::CHART_INTERVALS . ' day');
 			$time->setTime(0, 0, 0);
 			$query = "	SELECT COUNT(c.{$property}) AS cnt
 						FROM Mxc AS c 
@@ -33,21 +33,29 @@ class SimpleWidget extends BaseWidget
 						AND m.status = 'Sent'
 						AND m.idAccount = {$this->account->idAccount}
 						AND c.{$property} > {$time->getTimestamp()}
-						GROUP BY FROM_UNIXTIME(c.{$property},'%Y %D %M')";
+						GROUP BY c.{$property}, FROM_UNIXTIME(c.{$property},'%Y %D %M')";
 			$sql1 = $this->modelManager->createQuery($query1);
 			$result1 = $sql1->execute();
-				
+
 			$a = array();
 			for($i = 0; $i < BaseWidget::CHART_INTERVALS; $i++) {
 				$o = new \stdClass();
 				$o->name = $i;
 				$o->value = 0;
-				$next = ($i >= 1) ? strtotime('-' . $i . ' day') : time();
-				$prev = strtotime('-' . ( $i + 1 ) . ' day');
+				if($i >= 1) {
+					$nexttime = new \DateTime('-' . $i . ' day');
+					$nexttime->setTime(0, 0, 0);
+					$next = $nexttime->getTimestamp();
+				}
+				else {
+					$next = time();
+				}
+				$prev = new \DateTime('-' . ( $i + 1 ) . ' day');
+				$prev->setTime(0, 0, 0);
 				foreach ($result1 as $row) {
-					if( $prev < $row->date && $row->date < $next ) {
+					if( $prev->getTimestamp() < $row->date && $row->date < $next ) {
 						$this->logger->log($row->date);
-						$o->value = $row->cnt;
+						$o->value+= $row->cnt;
 					}
 				}
 				$a[] = $o;
