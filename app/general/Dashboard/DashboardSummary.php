@@ -6,6 +6,8 @@ class DashboardSummary
 	protected $account;
 	protected $mails;
 	
+	const NUMBER_OF_MAILS = 3;
+	
 	public function setAccount(\Account $account)
 	{
 		$this->account = $account;
@@ -54,7 +56,7 @@ class DashboardSummary
 	 * 
 	 * @return array
 	 */			
-	public function getLastMailsWithStats($howmany)
+	public function getLastMailsWithStats()
 	{
 		$mails = \Mail::find(array(
 			"conditions" => "idAccount = ?1 AND status = 'Sent'",
@@ -62,7 +64,7 @@ class DashboardSummary
 						1 => $this->account->idAccount,
 					),
 			"order" => "finishedon DESC",
-			"limit" => $howmany
+			"limit" => self::NUMBER_OF_MAILS
 		));
 		
 		return $mails;

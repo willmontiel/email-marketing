@@ -23,7 +23,7 @@ class SocialWidget extends BaseWidget
 			$result1 = $query1->execute();
 
 			$sql2 = "	SELECT IF(SUM(l." . $click . "),SUM(l." . $click . "),0) AS click
-						FROM mxcxl AS l
+						FROM Mxcxl AS l
 							JOIN Mail AS m ON (l.idMail = m.idMail)
 						WHERE m.finishedon > {$time}
 						AND m.status = 'Sent'
