@@ -10,7 +10,7 @@ class SimpleWidget extends BaseWidget
 		try {
 			// Calcular totales
 			$property = $this->property;
-			$time = new \DateTime('-15 day');
+			$time = new \DateTime('-' . BaseWidget::CHART_INTERVALS . ' day');
 			$time->setTime(0, 0, 0);
 			$query = "	SELECT COUNT(c.{$property}) AS cnt
 						FROM Mxc AS c 
