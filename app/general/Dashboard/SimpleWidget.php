@@ -36,7 +36,7 @@ class SimpleWidget extends BaseWidget
 						GROUP BY c.{$property}, FROM_UNIXTIME(c.{$property},'%Y %D %M')";
 			$sql1 = $this->modelManager->createQuery($query1);
 			$result1 = $sql1->execute();
-			
+
 			$a = array();
 			for($i = 0; $i < BaseWidget::CHART_INTERVALS; $i++) {
 				$o = new \stdClass();
@@ -51,11 +51,11 @@ class SimpleWidget extends BaseWidget
 					$next = time();
 				}
 				$prev = new \DateTime('-' . ( $i + 1 ) . ' day');
-				$prev->setTime(0, 0, 0);				
+				$prev->setTime(0, 0, 0);
 				foreach ($result1 as $row) {
 					if( $prev->getTimestamp() < $row->date && $row->date < $next ) {
 						$this->logger->log($row->date);
-						$o->value = $row->cnt;
+						$o->value+= $row->cnt;
 					}
 				}
 				$a[] = $o;
