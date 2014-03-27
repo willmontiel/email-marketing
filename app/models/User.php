@@ -41,7 +41,7 @@ class User extends Modelbase
 		$this->validate(new Uniqueness(
 				array(
                 "field"   => "email",
-                "message" => "La dirección de correo electrónico ya se enceuntra registrada, por favor verifique la información"
+                "message" => "La dirección de correo electrónico ya se encuentra registrada, por favor verifique la información"
         )));
 
 		$this->validate(new PresenceOf(
