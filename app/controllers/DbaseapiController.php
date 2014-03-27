@@ -10,6 +10,7 @@ class DbaseapiController extends ControllerBase
 	public function searchcontactsAction($idDbase)
 	{
 		$search = $this->request->getQuery('searchCriteria', null, null);
+		$filter = $this->request->getQuery('filter', null, null);
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
                 
@@ -36,10 +37,15 @@ class DbaseapiController extends ControllerBase
 //		$contactlists = $dbase->contactlist;
 
 		try { 
-			if ($search != null) {
-				$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
+			if ($filter != null) {
+				if (!empty($search)) {
+					$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
+				}
+				$searchFilter = new \EmailMarketing\General\ModelAccess\ContactSearchFilter($filter);
+				
 				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
 				$contactset->setSearchCriteria($searchCriteria);
+				$contactset->setSearchFilter($searchFilter);
 				$contactset->setAccount($account);
 				$contactset->setDbase($dbase);
 				$contactset->setPaginator($pager);
