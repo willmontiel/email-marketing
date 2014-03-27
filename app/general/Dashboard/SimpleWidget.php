@@ -33,10 +33,10 @@ class SimpleWidget extends BaseWidget
 						AND m.status = 'Sent'
 						AND m.idAccount = {$this->account->idAccount}
 						AND c.{$property} > {$time->getTimestamp()}
-						GROUP BY FROM_UNIXTIME(c.{$property},'%Y %D %M')";
+						GROUP BY c.{$property}, FROM_UNIXTIME(c.{$property},'%Y %D %M')";
 			$sql1 = $this->modelManager->createQuery($query1);
 			$result1 = $sql1->execute();
-				
+			
 			$a = array();
 			for($i = 0; $i < BaseWidget::CHART_INTERVALS; $i++) {
 				$o = new \stdClass();
