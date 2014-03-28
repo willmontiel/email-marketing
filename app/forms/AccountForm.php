@@ -92,8 +92,8 @@ class AccountForm extends Form
 			'class' => 'chzn-select'
 		)));
 		
-		$this->add(new Select('idReturnPath', Returnpath::find(), array(
-			'using' => array('idReturnPath', 'path'),
+		$this->add(new Select('idMailClass', Mailclass::find(), array(
+			'using' => array('idMailClass', 'name'),
 			'class' => 'chzn-select'
 		)));
     }

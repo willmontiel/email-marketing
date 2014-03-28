@@ -219,9 +219,11 @@ class MailController extends ControllerBase
 			if ($mailExist) {
 				$mail = $mailExist;
 				$wizardOption = $mail->wizardOption;
+				$previewData = $mail->previewData;
+				$type = $mail->type;
 			}
 			else {
-				if ($new != false) {
+				if ($new != null) {
 					$wizardOption = "source";
 					$previewData = $template->previewData;
 					$type = 'Editor';
@@ -1279,22 +1281,32 @@ class MailController extends ControllerBase
 
 	public function converttotemplateAction($idMail)
 	{
-		$mail = Mailcontent::findFirstByIdMail($idMail);
+		$mail = Mail::findFirstByIdMail($idMail);
+		$mailContent = Mailcontent::findFirstByIdMail($idMail);
 		
-		$name = $this->request->getPost("nametemplate");
+		if ($mail && $mailContent) {
+			$name = $this->request->getPost("nametemplate");
 		
-		$category = $this->request->getPost("category");
-		
-		try {
-			
-			$template = new TemplateObj();
-			$template->createTemplate($name, $category, $mail->content, $this->user->account);
-		}
-		catch (InvalidArgumentException $e) {
+			$category = $this->request->getPost("category");
 
+			try {
+				$template = new TemplateObj();
+				$template->setAccount($this->user->account);
+				$template->setMail($mail);
+				$template->convertMailToTemplate($name, $category, $mailContent);
+				$this->flashSession->success("Se ha creado la plantilla a partir del correo exitosamente");
+				$this->response->redirect('template');
+			}
+			catch (InvalidArgumentException $e) {
+				$this->flashSession->error("Ha ocurrido un error mientras se creaba una plantilla a partir de un correo, contacte al administrador");
+				$this->response->redirect('mail');
+				$this->logger->log('Exception: ' . $e);
+			}
 		}
-		
-		return $this->response->redirect('mail');
+		else {
+			$this->flashSession->success("El correo base no existe por favor verifique la información");
+			$this->response->redirect('mail');
+		}
 	}
 	
 	public function confirmAction($idMail)

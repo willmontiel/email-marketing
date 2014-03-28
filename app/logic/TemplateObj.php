@@ -2,6 +2,7 @@
 class TemplateObj
 {
 	private $account;
+	private $mail;
 	private $user;
 	private $templatesfolder;
 	private $asset;
@@ -37,6 +38,20 @@ class TemplateObj
 	public function setTemplate(Template $template)
 	{
 		$this->template = $template;
+	}
+	
+	public function setMail(Mail $mail = null)
+	{
+		$this->mail = $mail;
+	}
+	
+	public function convertMailToTemplate($name, $category, Mailcontent $mailContent)
+	{
+		$this->logger->log('Empezando proceso de creacion de plantilla a partir de un correo');
+		
+		$template = $this->saveTemplateInDb($name, $category);
+		$content = $this->saveTemplateInFolder($template->idTemplate, $mailContent->content);
+		$this->updateContentHtmlFromMail($template, $content->content, $content->contentHtml);
 	}
 	
 	public function createTemplate($name, $category, $editorContent)
@@ -210,6 +225,27 @@ class TemplateObj
 			$preview = null;
 		}
 		$this->cache->delete('preview-img64-cache-' . $this->user->idUser);
+		
+		$template->previewData = $preview;
+		
+		if (!$template->save()) {
+			$this->rollbackTransaction();
+			throw new Exception('Error while updating template');
+		}
+		$this->commitTransaction();
+	}
+	
+	private function updateContentHtmlFromMail($template, $newContent, $newContentHtml)
+	{
+		$template->content = $newContent;
+		$template->contentHtml = htmlspecialchars($newContentHtml, ENT_QUOTES);
+		
+		if ($this->mail == null) {
+			$preview = null;
+		}
+		else {
+			$preview = $this->mail->previewData;
+		}
 		
 		$template->previewData = $preview;
 		

@@ -11,7 +11,7 @@ class Account extends Modelbase
 {
     public $idAccount;
 	public $idUrlDomain;
-	public $idReturnPath;
+	public $idMailClass;
 	
     public function initialize()
     {
@@ -19,7 +19,7 @@ class Account extends Modelbase
 			array("foreignKey" => true)
 		);
 		
-		$this->belongsTo("idReturnPath", "Returnpath", "idReturnPath",
+		$this->belongsTo("idMailClass", "Mailclass", "idMailClass",
 			array("foreignKey" => true)
 		);
 		
