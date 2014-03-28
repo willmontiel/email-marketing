@@ -10,6 +10,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 {
 	protected $searchCriteria;
 	protected $searchFilter;
+	protected $mailHistory;
 	protected $queryCriteria;
 	protected $account;
 	protected $dbase;
@@ -34,6 +35,11 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	public function setSearchFilter(\EmailMarketing\General\ModelAccess\ContactSearchFilter $filter)
 	{
 		$this->searchFilter = $filter->getFilter();
+	}
+	
+	public function setContactMailHistory(\EmailMarketing\General\ModelAccess\ContactMailHistory $mailhistory)
+	{
+		$this->mailHistory = $mailhistory;
 	}
 	
 	public function setAccount(\Account $account)
@@ -451,7 +457,8 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$c['spamOn'] = (($contact['spam'] != 0)?date('d/m/Y H:i', $contact['spam']):'');
 			$c['createdOn'] = (($contact['createdon'] != 0)?date('d/m/Y H:i', $contact['createdon']):'');
 			$c['updatedOn'] = (($contact['updatedon'] != 0)?date('d/m/Y H:i', $contact['updatedon']):'');
-			$c['mailHistory'] = json_encode(array());
+								$this->mailHistory->findMailHistory($contact['idContact']);
+			$c['mailHistory'] = $this->mailHistory->getMailHistory();
 			$c['ipSubscribed'] = (($contact['ipSubscribed'])?long2ip($contact['ipSubscribed']):'');
 			$c['ipActivated'] = (($contact['ipActivated'])?long2ip($contact['ipActivated']):'');
 

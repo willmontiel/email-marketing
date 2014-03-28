@@ -16,6 +16,7 @@ class ContactWrapper extends BaseWrapper
 	protected $ipaddress;
 	protected $db;
 	protected $pager;
+	protected $mailHistory;
 
     protected $_di;
 	protected $counter;
@@ -30,6 +31,11 @@ class ContactWrapper extends BaseWrapper
 		$this->counter = new ContactCounter();
 		$this->db = Phalcon\DI::getDefault()->get('db');
 		
+	}
+	
+	public function setContactMailHistory(\EmailMarketing\General\ModelAccess\ContactMailHistory $mailhistory)
+	{
+		$this->mailHistory = $mailhistory;
 	}
 	
 	public function startTransaction()
@@ -648,7 +654,9 @@ class ContactWrapper extends BaseWrapper
 		$object['ipActivated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
 		$object['isEmailBlocked'] = ($contact->email->blocked != 0);
-		$object['mailHistory'] = $this->getMailHistory($contact);
+		
+		$this->mailHistory->findMailHistory($contact->idContact);
+		$object['mailHistory'] = $this->mailHistory->getMailHistory();
 		$customfields = Customfield::findByIdDbase($this->idDbase);
 
 		// Consultar la lista de campos personalizados para esos contactos
@@ -738,7 +746,9 @@ class ContactWrapper extends BaseWrapper
 		$object['ipActivated'] = (($contact->ipActivated)?long2ip($contact->ipActivated):'');
 		
 		$object['isEmailBlocked'] = ($email->blocked != 0);
-		$object['mailHistory'] = $this->getMailHistory($contact);
+		
+		$this->mailHistory->findMailHistory($contact->idContact);
+		$object['mailHistory'] = $this->mailHistory->getMailHistory();
 		
 		foreach ($customfields as $field) {
 			$key = $contact->idContact . ':' . $field['id'];

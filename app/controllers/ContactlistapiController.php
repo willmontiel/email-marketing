@@ -38,6 +38,8 @@ class ContactlistapiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la lista de contactos');
 		}
 		
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		
 		try { 
 			if ($filter != null) {
 				if (!empty($search)) {
@@ -48,6 +50,7 @@ class ContactlistapiController extends ControllerBase
 				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
 				$contactset->setSearchCriteria($searchCriteria);
 				$contactset->setSearchFilter($searchFilter);
+				$contactset->setContactMailHistory($mailhistory);
 				$contactset->setAccount($account);
 				$contactset->setContactlist($contactlist);
 				$contactset->setPaginator($pager);
@@ -64,6 +67,7 @@ class ContactlistapiController extends ControllerBase
 				$wrapper->setIdDbase($contactlist->idDbase);
 				$wrapper->setPager($pager);
 				$wrapper->setIdContactlist($contactlist->idContactlist);
+				$wrapper->setContactMailHistory($mailhistory);
 
 				$contacts = $wrapper->findContactsComplete($contactlist);
 				$contacts['lists'] = array(ContactListWrapper::convertListToJson($contactlist, $contactlist->dbase->account));
