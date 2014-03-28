@@ -49,10 +49,6 @@
 
 	</script>
 	
-	{#{{ javascript_include('js/editor/block.js') }}
-	{{ javascript_include('js/editor/social_block.js') }}
-	{{ javascript_include('js/editor/button_block.js') }}
-	{{ javascript_include('js/editor/boxed_text_block.js') }}#}
 	{{ javascript_include('js/editor/row_zone.js') }}
 	{{ javascript_include('js/editor/block_text.js') }}
 	{{ javascript_include('js/editor/block_image.js') }}
