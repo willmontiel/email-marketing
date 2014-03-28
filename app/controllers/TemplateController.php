@@ -75,7 +75,8 @@ class TemplateController extends ControllerBase
 				$this->logger->log("Exception: " . $e);
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
-			return $this->setJsonResponse(array('msg' => 'Se ha creado la cuenta exitosamente'), 200, 'success');
+//			$this->flashSession->notice("Se ha creado la plantilla exitosamente");
+			return $this->setJsonResponse(array('msg' => 'Se ha creado la plantilla exitosamente'), 200, 'success');
 		}
 		else { 
 			
@@ -210,7 +211,7 @@ class TemplateController extends ControllerBase
 				$this->logger->log('Exception: ' . $e);
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
-			$this->flashSession->notice("Se ha editado la plantilla exitosamente");
+//			$this->flashSession->notice("Se ha editado la plantilla exitosamente");
 			return $this->setJsonResponse(array('msg' => 'Se ha editado la plantilla exitosamente'), 200, 'success');
 		}
 		else {

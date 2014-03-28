@@ -54,7 +54,6 @@ class SimpleWidget extends BaseWidget
 				$prev->setTime(0, 0, 0);
 				foreach ($result1 as $row) {
 					if( $prev->getTimestamp() < $row->date && $row->date < $next ) {
-						$this->logger->log($row->date);
 						$o->value+= $row->cnt;
 					}
 				}
