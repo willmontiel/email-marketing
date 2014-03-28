@@ -18,6 +18,9 @@
 	<div class="row-fluid">
 		<div class="span6">{{ flashSession.output()}}</div>
 		<div class="span6 text-right">
+			<a href="{{ url('mail') }}" class="btn btn-default">
+				<i class="icon-plus"></i> Regresar a correos
+			</a>
 			<a href="{{ url('template/new') }}" class="btn btn-default">
 				<i class="icon-plus"></i> Nueva Plantilla
 			</a>
