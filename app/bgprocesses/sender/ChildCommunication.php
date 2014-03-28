@@ -165,6 +165,9 @@ class ChildCommunication extends BaseWrapper
 					$message->setFrom($from);
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
+					if ($mail->replyTo != null) {
+						$message->setReplyTo($mail->replyTo);
+					}
 					$message->addPart($text, 'text/plain');
 //					$recipients = true;
 					$recipients = $swift->send($message, $failures);
