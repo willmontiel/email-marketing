@@ -35,7 +35,9 @@ class DbaseapiController extends ControllerBase
 		
 		$contactlists = Contactlist::findByIdDbase($dbase->idDbase);
 //		$contactlists = $dbase->contactlist;
-
+		
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		
 		try { 
 			if ($filter != null) {
 				if (!empty($search)) {
@@ -46,6 +48,7 @@ class DbaseapiController extends ControllerBase
 				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
 				$contactset->setSearchCriteria($searchCriteria);
 				$contactset->setSearchFilter($searchFilter);
+				$contactset->setContactMailHistory($mailhistory);
 				$contactset->setAccount($account);
 				$contactset->setDbase($dbase);
 				$contactset->setPaginator($pager);
@@ -67,6 +70,7 @@ class DbaseapiController extends ControllerBase
 				$wrapper->setAccount($account);
 				$wrapper->setIdDbase($dbase->idDbase);
 				$wrapper->setPager($pager);
+				$wrapper->setContactMailHistory($mailhistory);
 				$result = $wrapper->findContacts($dbase);
 				
 				return $this->setJsonResponse($result);	
