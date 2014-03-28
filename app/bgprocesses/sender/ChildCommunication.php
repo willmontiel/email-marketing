@@ -168,7 +168,7 @@ class ChildCommunication extends BaseWrapper
 //					$returnPath = str_replace('(verp)', $returnPathData, $rp->path);
 					
 //					$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
-					$headers->addTextHeader('X-GreenArrow-MailClass', $mailclass);
+					$headers->addTextHeader('X-GreenArrow-MailClass', $mailclass->name);
 					$headers->addTextHeader('X-GreenArrow-MtaID', $mta);
 					$headers->addTextHeader('X-GreenArrow-InstanceID', $sendID);
 //					$headers->addTextHeader('X-GreenArrow-SendID', $sendID);
