@@ -156,19 +156,19 @@ class ChildCommunication extends BaseWrapper
 						$mta = $this->account->virtualMta;
 					}
 					
-					$rp = Returnpath::findFirstByIdReturnPath($this->account->idReturnPath);
-					
+//					$rp = Returnpath::findFirstByIdReturnPath($this->account->idReturnPath);
+					$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
 					$listID = 't0em' . $this->account->idAccount;
 					$sendID = '0em' . $mail->idMail;
 					$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'];
 					
-					$verpFormat = str_replace('@', '=', $contact['email']['email']);
-					$mailClass = $this->mta->mailClass . $sendID;
-					$returnPathData = $listID . '-' . $mailClass . '-' . $verpFormat;
-					$returnPath = str_replace('(verp)', $returnPathData, $rp->path);
+//					$verpFormat = str_replace('@', '=', $contact['email']['email']);
+//					$mailClass = $this->mta->mailClass . $sendID;
+//					$returnPathData = $listID . '-' . $mailClass . '-' . $verpFormat;
+//					$returnPath = str_replace('(verp)', $returnPathData, $rp->path);
 					
 //					$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
-//					$headers->addTextHeader('X-GreenArrow-MailClass', 'SM_EM_SIGMADOMAIN');
+					$headers->addTextHeader('X-GreenArrow-MailClass', $mailclass);
 					$headers->addTextHeader('X-GreenArrow-MtaID', $mta);
 					$headers->addTextHeader('X-GreenArrow-InstanceID', $sendID);
 //					$headers->addTextHeader('X-GreenArrow-SendID', $sendID);
@@ -183,7 +183,7 @@ class ChildCommunication extends BaseWrapper
 						$message->setReplyTo($mail->replyTo);
 					}
 //					$message->setSender($returnPath);
-					$message->setReturnPath($returnPath);
+//					$message->setReturnPath($returnPath);
 					$message->addPart($text, 'text/plain');
 					
 //					$recipients = true;

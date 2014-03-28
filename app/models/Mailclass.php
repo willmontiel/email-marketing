@@ -1,9 +1,9 @@
 <?php
-class Urldomain extends \Phalcon\Mvc\Model
+class Mailclass extends \Phalcon\Mvc\Model
 {
-	public $idUrlDomain;
+	public $idMailClass;
 	public function initialize()
 	{
-		$this->hasMany("idUrlDomain", "Account", "idUrlDomain");
+		$this->hasMany("idMailClass", "Account", "idMailClass");
 	}
 }
