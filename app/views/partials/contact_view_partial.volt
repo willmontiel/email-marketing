@@ -196,7 +196,7 @@
 							<thead></thead>
 							<tbody>
 								<tr>
-									{{' {{#each history}} '}}
+									{{' {{#each mailHistory}} '}}
 									<tr><td>{{' {{name}} '}}</td></tr>
 									{{' {{else}} '}}
 									<tr><td class="padded">Este contacto no tiene un historial de envíos</td></tr>
@@ -204,16 +204,9 @@
 								</tr>
 							</tbody>
 						</table>
-						<h5 class="padded">Últimas eventos</h5>
+						<h5 class="padded">Últimos eventos</h5>
 						<table class="table table-condensed">
-						{{' {{#each history}} '}}
-							<thead>
-								<tr>
-									<td class="contact-event-type">Evento</td>
-									<td>Correo</td>
-									<td class="contact-event-date">Fecha</td>
-							   </tr>
-							</thead>
+						{{' {{#each mailHistory}} '}}
 							<tbody>
 								<!-- Historial de Aperturas -->
 								{{' {{#if opening}} '}}
