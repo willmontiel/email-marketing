@@ -159,110 +159,120 @@
 			</div>
 		</div>
 		{{ '{{/if}}' }}
-		<div class="row-fluid">
-			<div class="span10 offset1">
-				<h4>Historial</h4>
-				<div class="box">
-					<div class="box-content padded">
-				{{ '{{#if subscribedOn}}' }}
-						<span class="text-blue-color">Suscrito:&nbsp</span>
-						<span class="number-small">{{'{{subscribedOn}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
-				{{ '{{/if}}' }}
-						
-				{{ '{{#if ipSubscribed}}' }}
-						<span class="text-blue-color">IP de Suscripcion:&nbsp</span>
-						<span class="number-small">{{'{{ipSubscribed}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
-				{{ '{{/if}}' }}
-						
-				{{ '{{#if isActive}}' }}
-						<span class="text-blue-color">Activado:&nbsp</span>
-						<span class="number-small">{{'{{activatedOn}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
-				{{ '{{/if}}' }}
-								
-				{{ '{{#if ipActive}}' }}
-						<span class="text-blue-color">IP de Activacion:&nbsp</span>
-						<span class="number-small">{{'{{ipActive}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
-				{{ '{{/if}}' }}
-					</div>	
+		<div id="collapse-history-contact-{{'{{unbound id}}'}}" class="panel-collapse collapse">
+			<div class="row-fluid">
+				<div class="span10 offset1">
+					<h4>Historial</h4>
+					<div class="box">
+						<div class="box-content padded">
+					{{ '{{#if subscribedOn}}' }}
+							<span class="text-blue-color">Suscrito:&nbsp</span>
+							<span class="number-small">{{'{{subscribedOn}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+					{{ '{{/if}}' }}
+
+					{{ '{{#if ipSubscribed}}' }}
+							<span class="text-blue-color">IP de Suscripcion:&nbsp</span>
+							<span class="number-small">{{'{{ipSubscribed}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+					{{ '{{/if}}' }}
+
+					{{ '{{#if isActive}}' }}
+							<span class="text-blue-color">Activado:&nbsp</span>
+							<span class="number-small">{{'{{activatedOn}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+					{{ '{{/if}}' }}
+
+					{{ '{{#if ipActive}}' }}
+							<span class="text-blue-color">IP de Activacion:&nbsp</span>
+							<span class="number-small">{{'{{ipActive}}'}}</span>&nbsp&nbsp&nbsp&nbsp&nbsp
+					{{ '{{/if}}' }}
+						</div>	
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span10 offset1">
+					<div class="box">
+						<div class="box-content">
+							<h5 class="padded">Últimas campañas</h5>
+							<table class="table table-condensed">
+								<thead></thead>
+								<tbody>
+									<tr>
+										{{' {{#each mailHistory}} '}}
+										<tr><td>{{' {{name}} '}}</td></tr>
+										{{' {{else}} '}}
+										<tr><td class="padded">Este contacto no tiene un historial de envíos</td></tr>
+										{{' {{/each}} '}}
+									</tr>
+								</tbody>
+							</table>
+							<h5 class="padded">Últimos eventos</h5>
+							<table class="table table-condensed">
+							{{' {{#each mailHistory}} '}}
+								<tbody>
+									<!-- Historial de Aperturas -->
+									{{' {{#if opening}} '}}
+									<tr>
+										<td class="contact-history-event-text">Apertura</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{opening}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+
+									<!-- Historial de Clics -->
+									{{' {{#if clicks}} '}}
+									<tr>
+										<td class="contact-history-event-text">Clic</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{clicks}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+
+									<!-- Historial de Desuscripciones -->		
+									{{' {{#if unsubscribe}} '}}
+									<tr>
+										<td class="contact-history-event-text">Desuscripcion</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{unsubscribe}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+
+									<!-- Historial de Rebotes -->
+									{{' {{#if bounced}} '}}
+									<tr>
+										<td class="contact-history-event-text">Rebote</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{bounced}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+
+									<!-- Historial de Spam -->
+									{{' {{#if spam}} '}}
+									<tr>
+										<td class="contact-history-event-text">Spam</td>
+										<td>{{' {{name}} '}}</td>
+										<td class="contact-history-event-text">{{' {{spam}} '}}</td>
+									</tr>
+									{{ '{{/if}}' }}
+								</tbody>
+							{{' {{else}} '}}
+								</tbody>
+									<tr>
+										<td colspan="3" class="padded">Este contacto no tiene un historial de eventos</td>
+								   </tr>
+								</tbody>
+							{{' {{/each}} '}}
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span10 offset1">
-				<div class="box">
-					<div class="box-content">
-						<h5 class="padded">Últimas campañas</h5>
-						<table class="table table-condensed">
-							<thead></thead>
-							<tbody>
-								<tr>
-									{{' {{#each mailHistory}} '}}
-									<tr><td>{{' {{name}} '}}</td></tr>
-									{{' {{else}} '}}
-									<tr><td class="padded">Este contacto no tiene un historial de envíos</td></tr>
-									{{' {{/each}} '}}
-								</tr>
-							</tbody>
-						</table>
-						<h5 class="padded">Últimos eventos</h5>
-						<table class="table table-condensed">
-						{{' {{#each mailHistory}} '}}
-							<tbody>
-								<!-- Historial de Aperturas -->
-								{{' {{#if opening}} '}}
-								<tr>
-									<td class="contact-history-event-text">Apertura</td>
-									<td>{{' {{name}} '}}</td>
-									<td class="contact-history-event-text">{{' {{opening}} '}}</td>
-								</tr>
-								{{ '{{/if}}' }}
-								
-								<!-- Historial de Clics -->
-								{{' {{#if clicks}} '}}
-								<tr>
-									<td class="contact-history-event-text">Clic</td>
-									<td>{{' {{name}} '}}</td>
-									<td class="contact-history-event-text">{{' {{clicks}} '}}</td>
-								</tr>
-								{{ '{{/if}}' }}
-								
-								<!-- Historial de Desuscripciones -->		
-								{{' {{#if unsubscribe}} '}}
-								<tr>
-									<td class="contact-history-event-text">Desuscripcion</td>
-									<td>{{' {{name}} '}}</td>
-									<td class="contact-history-event-text">{{' {{unsubscribe}} '}}</td>
-								</tr>
-								{{ '{{/if}}' }}
-
-								<!-- Historial de Rebotes -->
-								{{' {{#if bounced}} '}}
-								<tr>
-									<td class="contact-history-event-text">Rebote</td>
-									<td>{{' {{name}} '}}</td>
-									<td class="contact-history-event-text">{{' {{bounced}} '}}</td>
-								</tr>
-								{{ '{{/if}}' }}
-
-								<!-- Historial de Spam -->
-								{{' {{#if spam}} '}}
-								<tr>
-									<td class="contact-history-event-text">Spam</td>
-									<td>{{' {{name}} '}}</td>
-									<td class="contact-history-event-text">{{' {{spam}} '}}</td>
-								</tr>
-								{{ '{{/if}}' }}
-							</tbody>
-						{{' {{else}} '}}
-							</tbody>
-								<tr>
-									<td colspan="3" class="padded">Este contacto no tiene un historial de eventos</td>
-							   </tr>
-							</tbody>
-						{{' {{/each}} '}}
-						</table>
-					</div>
-				</div>
+			<div class="span12 text-center">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapse-history-contact-{{'{{unbound id}}'}}">
+					<span {{ '{{action "collapse" this}}' }}>- Colapsar</span>
+					<span onclick="collapse_contact({{'{{unbound id}}'}});" class="collapse-link-{{'{{unbound id}}'}}">+ Ver Historial</span>
+				</a>
 			</div>
 		</div>
 	</td>
