@@ -1377,8 +1377,16 @@ class MailController extends ControllerBase
 	
 	public function cancelAction($idMail)
 	{
-		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		$commObj->sendCancelToParent($idMail);
+		try {
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$commObj->sendCancelToParent($idMail);
+		}
+		catch(\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+		}
+		catch(\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+		}
 		
 		return $this->response->redirect("mail/index");
 	}
