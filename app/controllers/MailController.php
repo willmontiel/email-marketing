@@ -1410,6 +1410,11 @@ class MailController extends ControllerBase
 			$target = $this->request->getPost("target");
 			$msg = $this->request->getPost("message");
 			
+			if (trim($target) === '') {
+				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
+				return $this->response->redirect('mail/target/' . $idMail);
+			}
+			
 			$recipients = explode(', ', $target);
 			
 			$emails = array();
@@ -1418,6 +1423,11 @@ class MailController extends ControllerBase
 				if (!empty($r) && !in_array($r, $emails) && filter_var($r, FILTER_VALIDATE_EMAIL)) {
 					$emails[] = $r;
 				}
+			}
+			
+			if (count($emails) == 0) {
+				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
+				return $this->response->redirect('mail/target/' . $idMail);
 			}
 			
 			$transport = Swift_SendmailTransport::newInstance();
