@@ -663,13 +663,6 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .list-import-process {
 	margin-right: 15px;
 }
-.box-dashboard-summary {
-	text-align: center;
-	padding: 15px 0px 15px 0px;
-	border-radius: 5px;
-	width: 135px;
-	margin-left: auto;
-	margin-right: auto;
 
 .edit-contact-online {
 	background-color: transparent !important;
