@@ -111,12 +111,21 @@ class Communication
 				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 				//No necesito cambiar el estado del Mail, porque el proceso dueño del Mail se hara cargo de esto
 			}
-			else if($mail->status == 'Scheduled') {
-				$scheduled = Mailschedule::findFirstByIdMail($idMail);
-				$scheduled->delete();
-				$this->requester->send(sprintf("%s $idMail $idMail", 'Scheduled-Task'));
-				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
-				
+			else {
+				if($mail->status == 'Scheduled') {
+					$scheduled = Mailschedule::findFirstByIdMail($idMail);
+					$scheduled->delete();
+					$this->requester->send(sprintf("%s $idMail $idMail", 'Scheduled-Task'));
+					$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+
+				}else {
+					$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $idMail;
+					$mm = Phalcon\DI::getDefault()->get('modelsManager');
+					$mm->executeQuery($phql);
+					if (!$mm) {
+						Phalcon\DI::getDefault()->get('logger')->log("Error updating MxC to Cancel");
+					}
+				}
 				//Debo cambiar explicitamente el estado del Mail, porque aun no hay un proceso manejando el envio
 				$mail->status = 'Cancelled';
 
@@ -124,14 +133,6 @@ class Communication
 					foreach ($mail->getMessages() as $msg) {
 						$this->flashSession->error($msg);
 					}
-				}
-			}
-			else {
-				$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $idMail;
-				$mm = Phalcon\DI::getDefault()->get('modelsManager');
-				$mm->executeQuery($phql);
-				if (!$mm) {
-					Phalcon\DI::getDefault()->get('logger')->log("Error updating MxC to Cancel");
 				}
 			}
 		}

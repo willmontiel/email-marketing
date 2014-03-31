@@ -98,8 +98,8 @@ class MailController extends ControllerBase
 			$process->setAccount($this->user->account);
 			$process->deleteMail($idMail);
 		} catch (\InvalidArgumentException $e) {
-			$this->logger->log('Exception: [' . $e . ']');
-			$this->flashSession->error($e);
+			$this->flashSession->error($e->getMessage());
+			return $this->response->redirect("mail");
 		}
 		$this->flashSession->warning("Se ha eliminado el correo exitosamente");
 		return $this->response->redirect("mail");

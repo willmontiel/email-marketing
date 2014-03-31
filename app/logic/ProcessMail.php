@@ -24,6 +24,7 @@ class ProcessMail
 				throw new InvalidArgumentException("Lo sentimos pero el correo esta siendo procesado");
 				break;
 			case 'Sent':
+			case 'Cancelled':
 				$this->markedAsDeleted($mail);
 				break;
 			default :
