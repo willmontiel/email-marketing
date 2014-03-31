@@ -135,7 +135,7 @@
 										<li><a href="{{ url(value.url) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
 									{% endfor %}
 										<li><a href="{{ url('mail/clone/') }}{{item.idMail}}"><i class="icon-copy"></i>Duplicar</a></li>
-									{%if item.status != 'Paused'%}
+									{%if item.status != 'Paused' OR item.status != 'Sending'%}
 										<li><a class="ShowDialog" data-backdrop="static" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}"><i class="icon-trash"></i>Eliminar </a></li>
 									{%endif%}
 									{% if item.type%}

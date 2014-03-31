@@ -21,6 +21,7 @@ class ProcessMail
 		
 		switch ($mail->status) {
 			case 'Sending':
+			case 'Paused':
 				throw new InvalidArgumentException("Lo sentimos pero el correo esta siendo procesado");
 				break;
 			case 'Sent':
