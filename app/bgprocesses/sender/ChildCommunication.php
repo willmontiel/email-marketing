@@ -1,5 +1,5 @@
 <?php
-require_once "../../../public/swiftmailer-5.0.3/lib/swift_required.php";
+require_once "/../../library/swiftmailer/lib/swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
 	protected $childprocess;
@@ -120,6 +120,8 @@ class ChildCommunication extends BaseWrapper
 				$i = 0;
 				$sentContacts = array();
 				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
+				
+				$from = array($mail->fromEmail => $mail->fromName);
 				foreach ($contactIterator as $contact) {
 					
 					$msg = $this->childprocess->Messages();
@@ -141,7 +143,6 @@ class ChildCommunication extends BaseWrapper
 					
 //					$log->log("HTML: " . $htmlWithTracking);
 					
-					$from = array($mail->fromEmail => $mail->fromName);
 					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
 					
 					$message = new Swift_Message($subject);

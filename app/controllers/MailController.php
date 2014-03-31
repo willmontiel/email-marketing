@@ -1,4 +1,5 @@
 <?php
+require_once "/../library/swiftmailer/lib/swift_required.php";
 class MailController extends ControllerBase
 {
 	protected $image_map = array();
@@ -1391,6 +1392,86 @@ class MailController extends ControllerBase
 		return $this->response->redirect("mail/index");
 	}
 	
+	
+	public function sendtestAction($idMail)
+	{
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		if ($this->request->isPost() && $mail) {
+			$mailContent = Mailcontent::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $idMail)
+			));
+			
+			$target = $this->request->getPost("target");
+			$msg = $this->request->getPost("message");
+			
+			$this->logger->log('Target: ' . $target);
+			$this->logger->log('Message: ' . $msg);
+			
+			$recipients = explode(', ', $target);
+			
+			$emails = array();
+			foreach ($recipients as $recipient) {
+				if (!empty($recipient) && !in_array($recipient, $emails) && filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+					$emails[] = $emails;
+				}
+			}
+			
+			$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
+			$swift = Swift_Mailer::newInstance($transport);
+			
+			$testMail = new TestMail();
+			$testMail->setMail($mail);
+			$testMail->setMailContent($mailContent);
+			$testMail->setPersonalMessage($msg);
+			
+			$testMail->load();
+			
+			$subject = $mail->subject;
+			$from = array($mail->fromEmail => $mail->fromName);
+			$content = $testMail->getBody();
+			$text = $testMail->getPlainText();
+			$replyTo = $mail->replyTo;
+			
+			$this->logger->log('Content: ' . $content);
+			$this->logger->log('Plaintext: ' . $text);
+			
+			foreach ($emails as $email) {
+				$to = array($email => 'Nombre Apellido');
+				
+				$message = new Swift_Message($subject);
+				$headers = $message->getHeaders();
+				
+				$message->setFrom($from);
+				$message->setTo($to);
+				$message->setBody($content, 'text/html');
+				$message->addPart($text, 'text/plain');
+				
+				if ($replyTo != null) {
+					$message->setReplyTo($replyTo);
+				}
+				
+				$sendMail = true;
+//				$sendMail = $swift->send($message, $failures);
+				
+				$this->lastsendheaders = $message->getHeaders()->toString();
+				$this->logger->log("Headers: " . print_r($this->lastsendheaders, true));
+				
+				if ($sendMail){
+					return $this->setJsonResponse(array('msg' => 'Se ha enviado el mensaje de prueba exitosamente'), 200 , 'success');
+				}
+				else {
+					return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador'), 500 , 'failed');
+					$this->logger->log("Error while sending test mail: " . print_r($failures));
+				}
+			}
+		}
+	}
+
 	public function cancelAction($idMail)
 	{
 		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());

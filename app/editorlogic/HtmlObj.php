@@ -5,7 +5,6 @@ class HtmlObj extends HtmlAbstract
 	protected $url;
 	protected $idMail;
 
-
 	public function __construct($preview = false, $url = null, $idMail = null) 
 	{
 		$this->preview = $preview;

@@ -244,6 +244,7 @@ class Security extends Plugin
 				'mail::play' => array('mail' => array('read', 'send')),
 				'mail::stop' => array('mail' => array('read', 'send')),
 				'mail::cancel' => array('mail' => array('read', 'send')),
+				'mail::sendtest' => array('mail' => array('read', 'send')),
 				
 				//Plantillas
 				'template::image' => array('template' => array('read')),
