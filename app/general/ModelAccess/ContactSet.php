@@ -101,7 +101,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	{
 		$sql = '';
 		$sqlTotalRecords = '';
-		$limit = " LIMIT " . $this->paginator->getRowsPerPage() . ' OFFSET ' . $this->paginator->getStartIndex();
+		$limit = " LIMIT {$this->paginator->getRowsPerPage()} OFFSET {$this->paginator->getStartIndex()} ";
 		
 		$queryCriteria = $this->getSqlByQueryCriteria();
 		
@@ -114,12 +114,12 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				$sql = $c2 . $limit;
 			}
 			else if ($c2 == '') {
-				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idContact = {$this->database->idDbase}";
-				$sql = "SELECT c.idContact FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idDbase = {$this->database->idDbase}  {$limit}";
+				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) ";
+				$sql = "SELECT c.idContact FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) {$limit} ";
 			}
 			else {
-				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail)";
-				$sql = "SELECT idContact FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) WHERE idDbase = {$this->database->idDbase} {$limit}";
+				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) ";
+				$sql = "SELECT idContact FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) {$limit} ";
 			}
 		}
 		else {
