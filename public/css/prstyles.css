@@ -672,23 +672,3 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border-left: none !important; 
 	border-right: none !important;
 }
-.number-stats-dashboard-summary {
-	font-size: 22px;
-	font-weight: 600;
-	color: white;
-}
-.box-dashboard-summary.summary-opens {
-	background-color: #62BD62;
-}
-.box-dashboard-summary.summary-clicks {
-	background-color: #598DAF;
-}
-.box-dashboard-summary.summary-unsubscribed {
-	background-color: #7CE7FC;
-}
-.box-dashboard-summary.summary-bounced {
-	background-color: #F0AA41;
-}
-.summary-fb, .summary-tw {
-	background-color: lightgray;
-}
