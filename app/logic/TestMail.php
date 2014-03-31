@@ -61,17 +61,17 @@ class TestMail
 		
 		if ($this->message != null || !empty($this->message)) {
 			$replace = '<body>
-						<center>
-							<table border="0" cellpadding="0" cellspacing="0" width="600px" style="border-collapse:collapse;background-color:#444444;border-top:0;border-bottom:0">
-								<tbody>
-									<tr>
-										<td align="center" valign="top" style="border-collapse:collapse">
-											<span style="padding-bottom:9px;color:#eeeeee;font-family:Helvetica;font-size:12px;line-height:150%">"' . $this->message . '" — ' . $this->mail->fromName . '</span>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</center>';
+							<center>
+								<table border="0" cellpadding="0" cellspacing="0" width="600px" style="border-collapse:collapse;background-color:#444444;border-top:0;border-bottom:0">
+									<tbody>
+										<tr>
+											<td align="center" valign="top" style="border-collapse:collapse">
+												<span style="padding-bottom:9px;color:#eeeeee;font-family:Helvetica;font-size:12px;line-height:150%">"' . $this->message . '" — ' . $this->mail->fromName . '</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</center>';
 		
 			$this->body = str_replace('<body>', $replace, $content);
 		}
