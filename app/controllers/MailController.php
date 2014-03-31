@@ -1452,10 +1452,6 @@ class MailController extends ControllerBase
 			$text = $testMail->getPlainText();
 			$replyTo = $mail->replyTo;
 			
-//			$this->logger->log('Recipients: ' . print_r($emails, true));
-//			$this->logger->log('Content: ' . $content);
-//			$this->logger->log('Plaintext: ' . $text);
-			
 			foreach ($emails as $email) {
 				$to = array($email => 'Nombre Apellido');
 				
@@ -1469,11 +1465,7 @@ class MailController extends ControllerBase
 					$message->setReplyTo($replyTo);
 				}
 				
-//				$sendMail = true;
 				$sendMail = $swift->send($message, $failures);
-				
-//				$this->lastsendheaders = $message->getHeaders()->toString();
-//				$this->logger->log("Headers: " . print_r($this->lastsendheaders, true));
 				
 				if (!$sendMail){
 					$this->logger->log("Error while sending test mail: " . print_r($failures));
