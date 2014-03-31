@@ -77,7 +77,7 @@ class TestMail
 		$search = array_unique($result);
 		$replace = array();
 		foreach ($search as $s) {
-			$replace[] = substr($s, 2, -2);
+			$replace[] = strtolower(substr($s, 2, -2));
 		}
 		
 		$this->body = str_replace($search, $replace, $this->body);
