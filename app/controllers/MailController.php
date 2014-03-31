@@ -1417,11 +1417,11 @@ class MailController extends ControllerBase
 			$emails = array();
 			foreach ($recipients as $recipient) {
 				if (!empty($recipient) && !in_array($recipient, $emails) && filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
-					$emails[] = $emails;
+					$emails[] = $recipient;
 				}
 			}
 			
-			$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
+			$transport = Swift_SmtpTransport::newInstance($this->mtadata->domain, $this->mtadata->port);
 			$swift = Swift_Mailer::newInstance($transport);
 			
 			$testMail = new TestMail();
@@ -1437,6 +1437,7 @@ class MailController extends ControllerBase
 			$text = $testMail->getPlainText();
 			$replyTo = $mail->replyTo;
 			
+			$this->logger->log('Recipients: ' . print_r($emails, true));
 			$this->logger->log('Content: ' . $content);
 			$this->logger->log('Plaintext: ' . $text);
 			
@@ -1455,20 +1456,23 @@ class MailController extends ControllerBase
 					$message->setReplyTo($replyTo);
 				}
 				
-				$sendMail = true;
-//				$sendMail = $swift->send($message, $failures);
+//				$sendMail = true;
+				$sendMail = $swift->send($message, $failures);
 				
 				$this->lastsendheaders = $message->getHeaders()->toString();
 				$this->logger->log("Headers: " . print_r($this->lastsendheaders, true));
 				
-				if ($sendMail){
-					return $this->setJsonResponse(array('msg' => 'Se ha enviado el mensaje de prueba exitosamente'), 200 , 'success');
-				}
-				else {
-					return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador'), 500 , 'failed');
+				if (!$sendMail){
 					$this->logger->log("Error while sending test mail: " . print_r($failures));
 				}
 			}
+			if ($sendMail){
+				$this->flashSession->success("Se ha enviado el mensaje de prueba exitosamente");
+				return $this->response->redirect('mail/target/' . $idMail);
+			}
+			
+			$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
+			return $this->response->redirect('mail/target/' . $idMail);
 		}
 	}
 
