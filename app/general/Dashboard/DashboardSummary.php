@@ -24,10 +24,10 @@ class DashboardSummary
 	{
 		$widgets = array();
 		
-		$widgets[] = new SimpleWidget($this->account, 'opening', 'Aperturas');
-		$widgets[] = new SimpleWidget($this->account, 'clicks', 'Clics');
-		$widgets[] = new SimpleWidget($this->account, 'unsubscribe', 'Desuscripciones');
-		$widgets[] = new SimpleWidget($this->account, 'bounced', 'Rebotes');
+		$widgets[] = new SimpleWidget($this->account, 'opening', 'Aperturas', 'opens');
+		$widgets[] = new SimpleWidget($this->account, 'clicks', 'Clics', 'clicks');
+		$widgets[] = new SimpleWidget($this->account, 'unsubscribe', 'Desuscripciones', 'unsubscribed');
+		$widgets[] = new SimpleWidget($this->account, 'bounced', 'Rebotes', 'bounced');
 		
 		return $widgets;
 	}
@@ -43,8 +43,8 @@ class DashboardSummary
 	{
 		$widgets = array();
 		
-		$widgets[] = new SocialWidget($this->account, 'fb', 'Shared');
-		$widgets[] = new SocialWidget($this->account, 'tw', 'Tweets');
+		$widgets[] = new SocialWidget($this->account, 'fb', 'Shared', 'fb');
+		$widgets[] = new SocialWidget($this->account, 'tw', 'Tweets', 'tw');
 		
 		return $widgets;
 	}
