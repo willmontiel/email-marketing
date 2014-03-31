@@ -141,8 +141,15 @@ App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 
 App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchReferencePagination, Ember.AclMixin, Ember.SaveHandlerMixin,{
 	historyMail: function(){
-		for(var i = 0; i < this.content.content.length; i++) {
-			this.content.content[i].set('mailHistory', JSON.parse(this.content.content[i].get('mailHistory')))
+		var content = null;
+		if(this.content.content === undefined) {
+			content = this.content;
+		}
+		else {
+			content = this.content.content;
+		}
+		for(var i = 0; i < content.length; i++) {
+			content[i].set('mailHistory', JSON.parse(content[i].get('mailHistory')))
 		}
 	}.observes('this.content'),
 	
@@ -216,6 +223,10 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		discard: function(contact) {
 			contact.rollback();
 			$('.x-editable.editable-unsaved').removeClass('editable-unsaved');
+		},
+		
+		collapse: function(contact) {
+			contact.set('isExpanded', false);
 		}
 
 	},
@@ -286,12 +297,6 @@ App.DatePickerField = Em.View.extend({
   }
 });
 
-
-//App.filter = [
-//  Ember.Object.create({name: "Des-suscritos", value: "unsubscribed"}),
-//  Ember.Object.create({name: "Rebotados",    value: "bounced"}),
-//  Ember.Object.create({name: "Spam",    value: "spam"}),
-//  Ember.Object.create({name: "Bloqueados",    value: "blocked"}),
-//  Ember.Object.create({name: "Suscritos",    value: "subscribed"}),
-//  Ember.Object.create({name: "Todos",    value: "all"})
-//];
+function collapse_contact(id) {
+	$('.collapse-link-' + id).hide();
+}
