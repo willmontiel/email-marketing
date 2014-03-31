@@ -115,11 +115,11 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			}
 			else if ($c2 == '') {
 				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idContact = {$this->database->idDbase}";
-				$sql = "SELECT c.idContact FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idContact = {$this->database->idDbase}  {$limit}";
+				$sql = "SELECT c.idContact FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idDbase = {$this->database->idDbase}  {$limit}";
 			}
 			else {
 				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail)";
-				$sql = "SELECT idContact FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) WHERE idContact = {$this->database->idDbase} {$limit}";
+				$sql = "SELECT idContact FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) WHERE idDbase = {$this->database->idDbase} {$limit}";
 			}
 		}
 		else {
