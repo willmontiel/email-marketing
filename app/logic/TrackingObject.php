@@ -11,6 +11,8 @@ class TrackingObject
 	protected $mxc;
 	protected $dirtyObjects;
 	protected $contact;
+	protected $mail;
+	protected $email;
 
 	public function __construct()
 	{
@@ -26,7 +28,7 @@ class TrackingObject
 	 * @param int $idContact
 	 * @throws InvalidArgumentException cuando no se puede encontrar un registro MxC con esa combinacion
 	 */
-	public function setSendIdentification($idMail, $idContact)
+	public function setSendIdentification($idMail, $idContact, $idEmail = null)
 	{
 		$this->mxc = Mxc::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idContact = ?2',
@@ -36,6 +38,17 @@ class TrackingObject
 
 		if (!$this->mxc) {
 			throw new Exception("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
+		}
+		
+		if ($idEmail != null) {
+			$this->email = Email::findFirst(array(
+				'conditions' => 'idEmail = ?1',
+				'bind' => array(1 => $idEmail)
+			));
+			
+			if (!$this->email) {
+				throw new Exception("The email with idEmail {$idEmail} do not exists");
+			}
 		}
 	}
 	
@@ -400,6 +413,13 @@ class TrackingObject
 		return false;
 	}
 	
+	private function validateCoincidenceBetweenEmailAndContact()
+	{
+		if ($this->contact) {
+			return true;
+		}
+		return false;
+	}
 	
 	public function trackSoftBounceEvent($cod, $date = null)
 	{

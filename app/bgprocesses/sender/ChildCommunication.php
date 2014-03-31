@@ -161,7 +161,7 @@ class ChildCommunication extends BaseWrapper
 					$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
 					$listID = 't0em' . $this->account->idAccount;
 					$sendID = '0em' . $mail->idMail;
-					$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'];
+					$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'] . 'x' . $contact['email']['idEmail'];
 					
 //					$verpFormat = str_replace('@', '=', $contact['email']['email']);
 //					$mailClass = $this->mta->mailClass . $sendID;

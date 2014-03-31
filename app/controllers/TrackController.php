@@ -66,7 +66,7 @@ class TrackController extends ControllerBase
 	{
 		$content = $this->request->getRawBody();
 		if (trim($content) === '' || $content == null) {
-			$this->logger->log('No hay contenido, no se registró evento de rebote');
+			$this->logger->log('No hay contenido, no se registró evento de mta (Rebote, Spam)');
 			return false;
 		}
 		$cobject = json_decode($content, true);
@@ -79,7 +79,7 @@ class TrackController extends ControllerBase
 			$this->logger->log('Empezó track de evento: ' . $i);
 			try {
 				$trackingObj = new TrackingObject();
-				$trackingObj->setSendIdentification($ids[0], $ids[1]);
+				$trackingObj->setSendIdentification($ids[0], $ids[1], $ids[2]);
 				switch ($c['event_type']) {
 					case 'bounce_all':
 						$trackingObj->trackSoftBounceEvent($c['bounce_code'], $date);
@@ -95,12 +95,10 @@ class TrackController extends ControllerBase
 				
 			}
 			catch (Exception $e) {
-				$this->logger->log('Va a ocurrir una excepción');
 				$this->logger->log('Exception: [' . $e . ']');
-				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Invalid Argument Exception'));
+				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Exception'));
 			}
 			catch (InvalidArgumentException $e) {
-				$this->logger->log('Va a ocurrir una excepción');
 				$this->logger->log('Exception: [' . $e . ']');
 				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Invalid Argument Exception'));
 			}
