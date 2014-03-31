@@ -18,13 +18,18 @@ class ScheduledmailController extends ControllerBase
 
 	public function indexAction()
 	{
-		$idAccount = $this->user->account->idAccount;
+		if($this->user->userrole == 'ROLE_SUDO') {
+			$account = "";
+		}
+		else {
+			$account = "idAccount = {$this->user->account->idAccount} AND deleted = 0";
+		}
 		
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
-				"data" => Mail::find("idAccount = $idAccount AND status != 'Draft' AND deleted = 0"),
+				"data" => Mail::find("{$account}status != 'Draft' ORDER BY scheduleDate"),
 				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page" => $currentPage
 			)
