@@ -6,6 +6,9 @@ class TestMail
 	public $body;
 	public $plainText;
 	public $message;
+	public $account;
+	public $domain;
+	public $urlManager;
 	
 	public function setMail(Mail $mail)
 	{
@@ -22,11 +25,27 @@ class TestMail
 		$this->message = $message;
 	}
 	
+	public function setAccount(Account $account)
+	{
+		$this->account = $account;
+	}
+	
+	public function setDomain(Urldomain $domain)
+	{
+		$this->domain = $domain;
+	}
+	
+	public function setUrlManager($urlManager)
+	{
+		$this->urlManager = $urlManager;
+	}
+	
 	public function load()
 	{
 		$this->createBody();
 		$this->createPlaintext();
 		$this->replaceCustomFields();
+		$this->replaceUrlImages();
 	}
 	
 	protected function createBody()
@@ -83,7 +102,14 @@ class TestMail
 		$this->body = str_replace($search, $replace, $this->body);
 		$this->plainText = str_replace($search, $replace, $this->plainText);
 	}
-
+	
+	protected function replaceUrlImages()
+	{
+		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
+		$linkService = new LinkService($this->account, $this->mail);
+		$prepareMail = new PrepareMailContent($linkService, $imageService);
+		list($this->body, $links) = $prepareMail->processContent($this->body);
+	}
 
 	public function getBody()
 	{

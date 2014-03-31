@@ -1433,7 +1433,13 @@ class MailController extends ControllerBase
 			$transport = Swift_SendmailTransport::newInstance();
 			$swift = Swift_Mailer::newInstance($transport);
 			
+			$account = $this->user->account;
+			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
+			
 			$testMail = new TestMail();
+			$testMail->setAccount($account);
+			$testMail->setDomain($domain);
+			$testMail->setUrlManager($this->urlManager);
 			$testMail->setMail($mail);
 			$testMail->setMailContent($mailContent);
 			$testMail->setPersonalMessage($msg);
