@@ -105,9 +105,9 @@ class Communication
 	{
 		$log = Phalcon\DI::getDefault()->get('logger');
 		$mail = Mail::findFirstByIdMail($idMail);
-		$log->log('Verificando estado de correo');
+		
 		if(!$this->verifySentStatus($mail)) {
-			$log->log('Estado de correo verificado');
+
 			if($mail->status == 'Sending') {
 				$this->requester->send(sprintf("%s $idMail $idMail", 'Cancel-Process'));
 				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
@@ -121,18 +121,22 @@ class Communication
 					$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 
 				}else {
-					$log->log('Estado no es Scheduled o Sending');
-					$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = {$idMail}";
-					$mm = Phalcon\DI::getDefault()->get('modelsManager');
-					$log->log('Apunto de ejecutar query ' . $phql);
-					$mm->executeQuery($phql);
-					$log->log('Query ejecutado');
-					if (!$mm) {
+					$sql = "UPDATE mxc SET status = 'canceled' WHERE idMail = {$idMail}";
+					$db = Phalcon\DI::getDefault()->get('db');
+					$query = $db->query($sql);
+					$result = $query->execute();
+//					$mm = Phalcon\DI::getDefault()->get('modelsManager');
+//					$log->log('Apunto de ejecutar query ' . $phql);
+//					$mm->executeQuery($phql);
+//					$log->log('Query ejecutado');
+//					if (!$mm) {
+//						$log->log("Error updating MxC to Cancel");
+//					}
+					if (!$result) {
 						$log->log("Error updating MxC to Cancel");
 					}
 				}
 				//Debo cambiar explicitamente el estado del Mail, porque aun no hay un proceso manejando el envio
-				$log->log('Cambiando estado del correo');
 				$mail->status = 'Cancelled';
 
 				if(!$mail->save()) {
