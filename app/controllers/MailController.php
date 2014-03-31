@@ -27,6 +27,7 @@ class MailController extends ControllerBase
 		$this->view->setVar("page", $page);
 	}
 	
+	
 	public function cloneAction($idMail = null)
 	{
 		$idAccount = $this->user->account->idAccount;
