@@ -1,0 +1,258 @@
+/* Colores */
+@brand-white: #f5f5f5;
+@brand-green: #97c86b;
+@brand-soft-color: #adadad;
+
+
+@background-color: #20526e;
+
+
+
+@social-network-bg: @brand-soft-color;
+
+@summary-icons-height: 46px;
+@summary-icons-width: 46px;
+
+@shortcuts-icons-height:134px;
+@shortcuts-icons-width:134px;
+
+
+
+@orange:#df660c;
+
+/* MIXINS */
+
+
+/* Estilos */
+
+.box-dashboard-summary {
+	border-radius: 6px;
+	margin: 0 0 30px 0;
+	padding: 20px 0;
+	text-align: center;
+	color: @brand-white;
+}
+[class^="sm-icons-summary-"] {
+	background: transparent url('../images/sm-icons.png') no-repeat 0 0;
+	height: @summary-icons-height;
+	width: @summary-icons-width;
+}
+.pos-icons(@idx, @w: @summary-icons-width) {
+	@position: -(@idx * (@w + 1));
+}
+.sm-icons-summary-opens {
+	background-position: 0 0;
+}
+.sm-icons-summary-clicks {
+	.pos-icons(1);
+	background-position: @position 0;
+}
+.sm-icons-summary-unsubscribed {
+	.pos-icons(2);
+	background-position: @position 0;
+}
+.sm-icons-summary-bounced {
+	.pos-icons(3);
+	background-position: @position 0;
+}
+.sm-icons-summary-fb {
+	.pos-icons(4);
+	background-position: @position 0;
+}
+.sm-icons-summary-tw {
+	.pos-icons(5);
+	background-position: @position 0;
+}
+
+.summary-opens {
+	background: @brand-green;
+}
+.number-stats-dashboard-summary {
+	font-size: 48px;
+	color: @brand-white;
+	padding: 20px 8px;
+	text-align: center;
+}
+@media screen and (max-width:1280px) {
+	.number-stats-dashboard-summary {
+		font-size: 36px;
+	}
+}
+@media screen and (max-width:1024px) {
+	.number-stats-dashboard-summary {
+		font-size: 32px;
+	}
+}
+@media screen and (max-width:800px) {
+	.number-stats-dashboard-summary {
+		font-size: 26px;
+	}
+}
+
+.summary-unsubscribed {
+	background-color: #a1dcfb;
+}
+.summary-clicks {
+	background-color: #6e97ac;
+}
+.summary-bounced {
+	background-color: #ffa100;
+}
+.summary-box-social {
+	background-color: @social-network-bg;
+	padding-bottom: 0px;
+}
+.border-top {
+	border-top:1px solid @brand-white;
+}
+.social-sec-box {
+	padding-bottom: 5px;
+	padding-top: 5px;
+	border-left: 1px solid @brand-white;
+}
+.social-sec-box:first-child {
+	border-left: 0px;
+}
+.summary-fb p {
+	padding-right: 10px;
+	text-align: right;
+	font-size: 20px;
+}
+.table-normal thead th {
+	height: 100px;
+	vertical-align: bottom;
+	text-align: center;
+	font-weight: normal;
+}
+.table-normal thead th.opens {
+	background: transparent url('../images/icon-email-open-color.png') no-repeat center 12px;
+	color: @brand-green;
+}
+.table-normal thead th.clics {
+	background: transparent url('../images/icon-clics-color.png') no-repeat center 12px;
+	color: #6e97ac;
+}
+.table-normal thead th.desusc {
+	background: transparent url('../images/icon-desusc-color.png') no-repeat center 12px;
+	color: #a1dcfb;
+}
+.table-normal thead th.bounced {
+	background: transparent url('../images/icon-bounced-color.png') no-repeat center 12px;
+	color: #ffa100;
+}
+.table-normal tbody td {
+	text-align: center;
+}
+.table-normal tbody td.left {
+	text-align: left;
+}
+/* --- Para resolver el problema de los tooltips de sparklines --- */
+.jqstooltip {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+/* --- Fin para resolver el problema de los tooltips de sparklines --- */
+
+
+
+/* Ejemplo de sprite */
+[class^="sm-icon-"] {
+	background-repeat: none;
+	background-image: url();
+	height: 40px;
+	width: 40px;
+	padding: 2px;
+}
+.sm-icon-opens {
+	background-position: 0 40px;
+}
+/* Estilos para botones de shortcuts */
+.to-do {
+	text-align: center;
+	display: block;
+	border-radius: 6px;
+	padding: 32px;
+	background-color: @orange;
+	width: 190px;
+	height: 190px;
+}
+.to-do:hover {
+	background-color: #adadad;
+}
+.sm-button-large-base {
+	background: transparent url('../images/icon-buttons-2.png') no-repeat center center;
+	height: @shortcuts-icons-height;
+	width: @shortcuts-icons-width;
+	display: inline-block;
+}
+
+
+.sm-button-large-email:extend(.sm-button-large-base) {
+	.pos-icons(1, @shortcuts-icons-width);
+	background-position: 0 0;
+	background-color: #df660c;
+}
+a.do-import-contacts {
+	.pos-icons(2, @shortcuts-icons-width);
+	background-position: @position 0;
+	background-color: #6e97ac;
+}
+a.do-database {
+	.pos-icons(3, @shortcuts-icons-width);
+	background-position: @position 0;
+	background-color: #c75e5b;
+}
+
+
+
+/* Estilos para la navegacion vertical principal */
+#sidebar-background-object{
+	position:fixed;
+	height:100%; 
+	top: 0; 
+	background-color:@background-color;
+}
+
+.sidebar {
+	background-color: @background-color;
+	height: 100%;
+	float: left;
+	margin: 0px;
+	padding: 0px;
+
+}
+#main-navigation li {
+	border-left:6px solid #f5f5f5; 
+	margin-top: 0px;
+}
+#main-navigation li a {
+	color:#e6ba7b;
+	font-size: 15px;
+	padding: 15px;
+}
+#main-navigation li.active ,
+#main-navigation li:hover {
+	background-color: #f5f5f5;
+	border-left:6px solid #20526e;
+	border-radius: 0px;
+}
+#main-navigation li.active a,
+#main-navigation li:hover a {
+	background-color: #f5f5f5;
+	border-radius: 0px;
+	color:#20526e;
+}
+/* Estilos para la navegacion horizontal */
+.navbar-default {
+	background-color: @background-color;
+	border-radius: 0px;
+	border-color:#20526e;
+	margin-bottom: 0px;
+}
+#top-nav li a {
+	color:#f5f5f5;
+}
+#top-nav li:hover a {
+	color:#777;
+}

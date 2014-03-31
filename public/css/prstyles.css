@@ -233,11 +233,11 @@ a.inactive {
 	width: 0% !important;
 }
 
-
+/*
 .nav-template > .active > a, .nav-pills > .active > a:hover {
 	background-color: #60a1ca !important;
 }
-
+*/
 
 .img-wrap{
 	overflow:hidden;
@@ -663,13 +663,6 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .list-import-process {
 	margin-right: 15px;
 }
-.box-dashboard-summary {
-	text-align: center;
-	padding: 15px 0px 15px 0px;
-	border-radius: 5px;
-	width: 135px;
-	margin-left: auto;
-	margin-right: auto;
 
 .edit-contact-online {
 	background-color: transparent !important;
@@ -678,24 +671,4 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border-top: none !important; 
 	border-left: none !important; 
 	border-right: none !important;
-}
-.number-stats-dashboard-summary {
-	font-size: 22px;
-	font-weight: 600;
-	color: white;
-}
-.box-dashboard-summary.summary-opens {
-	background-color: #62BD62;
-}
-.box-dashboard-summary.summary-clicks {
-	background-color: #598DAF;
-}
-.box-dashboard-summary.summary-unsubscribed {
-	background-color: #7CE7FC;
-}
-.box-dashboard-summary.summary-bounced {
-	background-color: #F0AA41;
-}
-.summary-fb, .summary-tw {
-	background-color: lightgray;
 }

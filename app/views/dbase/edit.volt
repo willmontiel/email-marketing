@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}
 	<i class="icon-book"></i> {{edbase.name}}
 {% endblock %}
