@@ -12,7 +12,6 @@ try {
         '../app/library/',
         '../app/library/facebook/',
 		'../app/library/twitter/',
-		'../app/library/swiftmailer/lib/',
         '../app/logic/',
 		'../app/editorlogic/',
 		'../app/bgprocesses/sender/',
