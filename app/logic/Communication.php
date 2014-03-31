@@ -124,8 +124,9 @@ class Communication
 					$log->log('Estado no es Scheduled o Sending');
 					$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = {$idMail}";
 					$mm = Phalcon\DI::getDefault()->get('modelsManager');
-					$log->log('Apunto de ejecutar query' . $phql);
+					$log->log('Apunto de ejecutar query ' . $phql);
 					$mm->executeQuery($phql);
+					$log->log('Query ejecutado');
 					if (!$mm) {
 						$log->log("Error updating MxC to Cancel");
 					}
