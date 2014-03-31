@@ -92,35 +92,16 @@ class MailController extends ControllerBase
 	
 	public function deleteAction($idMail)
 	{
-		$time = strtotime("-31 days");
-		
-		$mail = Mail::findFirst(array(
-			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR (idMail = ?1 AND idAccount = ?2 AND (status = ?4 OR status = ?5 OR status = ?6))",
-			"bind" => array(1 => $idMail,
-							2 => $this->user->account->idAccount,
-							3 => $time,
-							4 => "Draft",
-							5 => "Scheduled" ,
-							6 => "Cancelled" )
-		));
-		
-		if (!$mail) {
-			$this->flashSession->error("No se ha encontrado el correo, por favor verifique la información");
+		try {
+			$process = new ProcessMail();
+			$process->setAccount($this->user->account);
+			$process->deleteMail($idMail);
+		} catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->flashSession->error($e);
 			return $this->response->redirect("mail");
 		}
-		
-		else if (!$mail->delete()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-			}
-			return $this->response->redirect("mail");
-		}
-		
-		else {
-			$this->flashSession->warning("Se ha eliminado el correo exitosamente");
-			return $this->response->redirect("mail");
-		}
-		
+		$this->flashSession->warning("Se ha eliminado el correo exitosamente");		
 	}
 	
 	private function validateTemplate($template, $account)
@@ -918,7 +899,8 @@ class MailController extends ControllerBase
 					$response = $target->createTargetObj($idDbases, $idContactlists, $idSegments, $mail);
 				}
 				catch (InvalidArgumentException $e) {
-					throw new InvalidArgumentException("Error while saving targetObj in db");
+					$this->logger->log('Error while saving targetObj in db');
+					$this->logger->log('Exception: [' . $e . ']');
 				}
 				
 				if (!$response) {
