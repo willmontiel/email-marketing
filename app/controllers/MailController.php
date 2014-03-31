@@ -12,7 +12,7 @@ class MailController extends ControllerBase
 
 		$builder = $this->modelsManager->createBuilder()
 			->from('Mail')
-			->where("idAccount = $idAccount")
+			->where("idAccount = $idAccount AND deleted = 0")
 			->orderBy('createdon DESC');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
@@ -52,6 +52,7 @@ class MailController extends ControllerBase
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
 			$mailClone->createdon = time();
+			$mailClone->deleted = 0;
 			$mailClone->previewData = $mail->previewData;
 			
 			if (!$mailClone->save()) {
@@ -99,9 +100,9 @@ class MailController extends ControllerBase
 		} catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e . ']');
 			$this->flashSession->error($e);
-			return $this->response->redirect("mail");
 		}
-		$this->flashSession->warning("Se ha eliminado el correo exitosamente");		
+		$this->flashSession->warning("Se ha eliminado el correo exitosamente");
+		return $this->response->redirect("mail");
 	}
 	
 	private function validateTemplate($template, $account)
@@ -222,6 +223,7 @@ class MailController extends ControllerBase
 			$mail->fromEmail = strtolower($form->getValue('fromEmail'));
 			$mail->replyTo = strtolower($form->getValue('replyTo'));
 			$mail->status = "Draft";
+			$mail->deleted = 0;
 			$mail->type = $type;
 			$mail->wizardOption = $wizardOption;
 			$mail->previewData = $previewData;

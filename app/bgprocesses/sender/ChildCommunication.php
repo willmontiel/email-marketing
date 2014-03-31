@@ -22,13 +22,13 @@ class ChildCommunication extends BaseWrapper
 	{
 		$log = Phalcon\DI::getDefault()->get('logger');
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
+			'conditions' => 'idMail = ?1 AND deleted = 0',
 			'bind' => array(1 => $idMail)
 		));
 		
 		$mailContent = Mailcontent::findFirst(array(
 			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $mail->idMail)
+			'bind' => array(1 => $idMail)
 		));
 		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
@@ -44,7 +44,7 @@ class ChildCommunication extends BaseWrapper
 				}		
 
 				$mail = Mail::findFirst(array(
-					'conditions' => 'idMail = ?1',
+					'conditions' => 'idMail = ?1 AND deleted = 0',
 					'bind' => array(1 => $idMail)
 				));
 				
