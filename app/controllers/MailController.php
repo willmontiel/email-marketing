@@ -1421,7 +1421,7 @@ class MailController extends ControllerBase
 				}
 			}
 			
-			$transport = Swift_SmtpTransport::newInstance($this->mtadata->domain, $this->mtadata->port);
+			$transport = Swift_SendmailTransport::newInstance();
 			$swift = Swift_Mailer::newInstance($transport);
 			
 			$testMail = new TestMail();
