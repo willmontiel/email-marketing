@@ -125,13 +125,6 @@ class Communication
 					$db = Phalcon\DI::getDefault()->get('db');
 					$query = $db->query($sql);
 					$result = $query->execute();
-//					$mm = Phalcon\DI::getDefault()->get('modelsManager');
-//					$log->log('Apunto de ejecutar query ' . $phql);
-//					$mm->executeQuery($phql);
-//					$log->log('Query ejecutado');
-//					if (!$mm) {
-//						$log->log("Error updating MxC to Cancel");
-//					}
 					if (!$result) {
 						$log->log("Error updating MxC to Cancel");
 					}
