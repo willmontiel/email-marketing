@@ -232,7 +232,7 @@ try {
 	 * Configuración MTA
 	 */
 	$mtaConfig = new stdClass();
-	$mtaConfig->domain = $config->mta->domain;
+	$mtaConfig->address = $config->mta->address;
 	$mtaConfig->port = $config->mta->port;
 	$mtaConfig->mailClass = $config->mta->mailclass;
 	$di->set('mtadata', $mtaConfig);

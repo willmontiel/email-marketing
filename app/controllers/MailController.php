@@ -1410,15 +1410,13 @@ class MailController extends ControllerBase
 			$target = $this->request->getPost("target");
 			$msg = $this->request->getPost("message");
 			
-			$this->logger->log('Target: ' . $target);
-			$this->logger->log('Message: ' . $msg);
-			
 			$recipients = explode(', ', $target);
 			
 			$emails = array();
 			foreach ($recipients as $recipient) {
-				if (!empty($recipient) && !in_array($recipient, $emails) && filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
-					$emails[] = $recipient;
+				$r = trim($recipient);
+				if (!empty($r) && !in_array($r, $emails) && filter_var($r, FILTER_VALIDATE_EMAIL)) {
+					$emails[] = $r;
 				}
 			}
 			
@@ -1438,16 +1436,14 @@ class MailController extends ControllerBase
 			$text = $testMail->getPlainText();
 			$replyTo = $mail->replyTo;
 			
-			$this->logger->log('Recipients: ' . print_r($emails, true));
-			$this->logger->log('Content: ' . $content);
-			$this->logger->log('Plaintext: ' . $text);
+//			$this->logger->log('Recipients: ' . print_r($emails, true));
+//			$this->logger->log('Content: ' . $content);
+//			$this->logger->log('Plaintext: ' . $text);
 			
 			foreach ($emails as $email) {
 				$to = array($email => 'Nombre Apellido');
 				
 				$message = new Swift_Message($subject);
-				$headers = $message->getHeaders();
-				
 				$message->setFrom($from);
 				$message->setTo($to);
 				$message->setBody($content, 'text/html');
@@ -1460,8 +1456,8 @@ class MailController extends ControllerBase
 //				$sendMail = true;
 				$sendMail = $swift->send($message, $failures);
 				
-				$this->lastsendheaders = $message->getHeaders()->toString();
-				$this->logger->log("Headers: " . print_r($this->lastsendheaders, true));
+//				$this->lastsendheaders = $message->getHeaders()->toString();
+//				$this->logger->log("Headers: " . print_r($this->lastsendheaders, true));
 				
 				if (!$sendMail){
 					$this->logger->log("Error while sending test mail: " . print_r($failures));

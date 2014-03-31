@@ -114,7 +114,7 @@ class ChildCommunication extends BaseWrapper
 				$_ENV['TMP']=$_ENV['TMPDIR'];
 				
 				// Crear transport y mailer
-				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
+				$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 				$swift = Swift_Mailer::newInstance($transport);
 				
 				$i = 0;

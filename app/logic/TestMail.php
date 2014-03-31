@@ -26,6 +26,7 @@ class TestMail
 	{
 		$this->createBody();
 		$this->createPlaintext();
+		$this->replaceCustomFields();
 	}
 	
 	protected function createBody()
@@ -66,11 +67,24 @@ class TestMail
 		$this->plainText = $text->getPlainText($this->body);
 	}
 	
-//	protected function createFeedBack()
-//	{
-//		
-//	}
-	
+	protected function replaceCustomFields()
+	{
+		preg_match_all('/%%([a-zA-Z0-9_\-]*)%%/', $this->plainText, $textFields);
+		preg_match_all('/%%([a-zA-Z0-9_\-]*)%%/', $this->body, $htmlFields);
+
+		$result = array_merge($textFields[0], $htmlFields[0]);	
+
+		$search = array_unique($result);
+		$replace = array();
+		foreach ($search as $s) {
+			$replace[] = substr($s, 2, -2);
+		}
+		
+		$this->body = str_replace($search, $replace, $this->body);
+		$this->plainText = str_replace($search, $replace, $this->plainText);
+	}
+
+
 	public function getBody()
 	{
 		return $this->body;
