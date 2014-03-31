@@ -10,10 +10,12 @@ class ContactlistapiController extends ControllerBase
 	public function searchcontactsAction($idContactlist)
 	{
 		$search = $this->request->getQuery('searchCriteria', null, null);
+		$filter = $this->request->getQuery('filter', null, null);
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
-//		$this->logger->log('Criterio de búsqueda: ' . $search);
+		$this->logger->log('Criterio de búsqueda: ' . $search);
+		$this->logger->log('Filtro: ' . $filter);
 //		$this->logger->log('Limit: ' . $limit);
 //		$this->logger->log('Page: ' . $page);
                 
@@ -36,11 +38,19 @@ class ContactlistapiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la lista de contactos');
 		}
 		
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		
 		try { 
-			if ($search != null) {
-				$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
+			if ($filter != null) {
+				if (!empty($search)) {
+					$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
+				}
+				$searchFilter = new \EmailMarketing\General\ModelAccess\ContactSearchFilter($filter);
+				
 				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
 				$contactset->setSearchCriteria($searchCriteria);
+				$contactset->setSearchFilter($searchFilter);
+				$contactset->setContactMailHistory($mailhistory);
 				$contactset->setAccount($account);
 				$contactset->setContactlist($contactlist);
 				$contactset->setPaginator($pager);
@@ -50,13 +60,14 @@ class ContactlistapiController extends ControllerBase
 				$rest->addDataSource($contactset);
 			
 				return $this->setJsonResponse($rest->getRecords());
-			}	
+			}
 			else {
 				$wrapper = new ContactWrapper();
 				$wrapper->setAccount($account);
 				$wrapper->setIdDbase($contactlist->idDbase);
 				$wrapper->setPager($pager);
 				$wrapper->setIdContactlist($contactlist->idContactlist);
+				$wrapper->setContactMailHistory($mailhistory);
 
 				$contacts = $wrapper->findContactsComplete($contactlist);
 				$contacts['lists'] = array(ContactListWrapper::convertListToJson($contactlist, $contactlist->dbase->account));

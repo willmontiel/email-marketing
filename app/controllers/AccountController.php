@@ -81,7 +81,6 @@ class AccountController extends ControllerBase
 							foreach ($user->getMessages() as $msg) {
 								$this->flashSession->error($msg);
 							}
-							return $this->response->redirect("account/new");
 						}
 						else {
 							$dbase = new Dbase();

@@ -37,6 +37,7 @@ class PrepareMailContent
 		if ($links->length !== 0) {
 			foreach ($links as $link) {
 				$linkHref = $link->getAttribute('href');
+				Phalcon\DI::getDefault()->get('logger')->log('Link: ' . $linkHref);
 				$mark = $this->linkService->getPlatformUrl($linkHref);
 				if ($mark) {
 					$link->setAttribute('href', $mark);

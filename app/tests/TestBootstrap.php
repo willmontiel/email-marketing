@@ -35,9 +35,9 @@ function initialize($dir)
 
 	/* Configuracion */
 	$config = new \Phalcon\Config\Adapter\Ini("{$dir}/../config/configuration.tests.ini");
-	$connection = new \Phalcon\Db\Adapter\Pdo\Mysql($config->database->toArray());
-
-	$di->set('db', $connection);
+//	$connection = new \Phalcon\Db\Adapter\Pdo\Mysql($config->database->toArray());
+//
+//	$di->set('db', $connection);
 	
 }
 

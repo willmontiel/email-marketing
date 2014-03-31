@@ -84,7 +84,7 @@
 				}
 			},
 			success: function(){
-				$(location).attr('href', "{{url('template/index')}}"); 
+				$.gritter.add({class_name: 'success', title: '<i class="icon-save"></i> Atención', text: 'Se ha guardado la plantilla exitosamente', sticky: false, time: 10000});
 			}
 		});
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
@@ -115,10 +115,13 @@
 				<div class="templateCategory pull-left">
 					<label class="selectcategory" >Categoría: 
 					<select class="uniform" name="categoria" id="category">
-						<option value="Mis Templates">Mis Templates</option>
-						{%for category in categories%}
-							<option value="{{category}}" {% if category == template.category %}selected{% endif %}>{{category}}</option>
-						{%endfor%}
+						{%if categories%}
+							{%for category in categories%}
+								<option value="{{category}}" {% if category == template.category %}selected{% endif %}>{{category}}</option>
+							{%endfor%}
+						{%else%}
+							<option value="Mis Templates">Mis Templates</option>
+						{%endif%}
 					</select></label>
 					<label class="newcategory" style="margin-left: -40px;">Nueva Categoria: 
 					<input type="text" name="categoria" id="category" style="width: 124px;">
@@ -131,8 +134,8 @@
 					<button class="btn btn-default" onclick="selectcategory()"><i class="icon-th-list"></i></button>
 				</div>
 				<div class="templateBtns pull-left">
-					<a href="{{url('template/index')}}" class="btn btn-default">Cancelar</a>
-					<input type="submit" class="btn btn-blue" value="Editar" onclick="sendData()">
+					<a href="{{url('template/index')}}" class="btn btn-default">Salir</a>
+					<a type="submit" class="btn btn-blue" value="Guardar" onclick="sendData()"><i class="icon-2x icon-save"></i></a>
 				</div>
 				<div class="globalTemplateOpt pull-left">
 					<label><input type="checkbox" name="isglobal" id="isglobal" {% if template.idAccount == ''%}checked{% endif %}> Plantilla Global</label>

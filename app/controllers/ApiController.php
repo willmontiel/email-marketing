@@ -747,14 +747,13 @@ class ApiController extends ControllerBase
 
 			$deletedList = $wrapper->deleteContactList($idContactlist);	
 		}
-		
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
+			return $this->setJsonResponse(array('status' => 'error'), 422, "Error: {$e}");	
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while deleting list!');	
+			return $this->setJsonResponse(array('status' => 'error'), 400, "Error while deleting list! {$e}");	
 		}
 		return $this->setJsonResponse($deletedList);
 	}
@@ -1262,6 +1261,7 @@ class ApiController extends ControllerBase
 		$contentsraw = $this->request->getRawBody();
 		$contentsT = json_decode($contentsraw);
 		
+		$this->logger->log('Contact: ' . print_r($contentsT, true));
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		

@@ -55,7 +55,8 @@ class AccountForm extends Form
         $this->add(new Text ('username', array(
 			'maxlength' => 50,
 			'type' => 'text',
-			'required' => 'required' 
+			'required' => 'required',
+			'id' => 'user'
         )));
 		
         $this->add(new Text ('fileSpace', array(
@@ -91,8 +92,8 @@ class AccountForm extends Form
 			'class' => 'chzn-select'
 		)));
 		
-		$this->add(new Select('idReturnPath', Returnpath::find(), array(
-			'using' => array('idReturnPath', 'path'),
+		$this->add(new Select('idMailClass', Mailclass::find(), array(
+			'using' => array('idMailClass', 'name'),
 			'class' => 'chzn-select'
 		)));
     }

@@ -7,7 +7,6 @@ class IndexController extends ControllerBase
 		try{
 			$dashboard = new \EmailMarketing\General\Dashboard\DashboardSummary();
 			$dashboard->setAccount($this->user->account);
-			$dashboard->lastPeriodMails('15', 'day');
 		} 
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log($e);

@@ -4,6 +4,8 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	{{ partial("partials/date_view_partial") }}
+	{{ partial("partials/xeditable_view_partial") }}
+	{{ partial("partials/xeditable_select_view_partial") }}
 	{{ javascript_include('js/search-reference-pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 
@@ -71,8 +73,10 @@
 	<script>
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
+			{{ ember_customfield_options_xeditable(field) }}
 		{%endfor%}
 	</script>
+	{{ javascript_include('js/editable-ember-view.js')}}
 {% endblock %}
 {% block sectiontitle %}
 	<i class="icon-book"></i> {{sdbase.name}}

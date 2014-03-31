@@ -10,6 +10,7 @@ class SegmentapiController extends ControllerBase
 	public function searchcontactsAction($idSegment)
 	{
 		$search = $this->request->getQuery('searchCriteria', null, null);
+		$filter = $this->request->getQuery('filter', null, null);
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
                 
@@ -32,11 +33,19 @@ class SegmentapiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró el segmento');
 		}
 		
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		
 		try { 
-			if ($search != null) {
-				$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
+			if ($filter != null) {
+				if (!empty($search)) {
+					$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
+				}
+				$searchFilter = new \EmailMarketing\General\ModelAccess\ContactSearchFilter($filter);
+				
 				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
 				$contactset->setSearchCriteria($searchCriteria);
+				$contactset->setSearchFilter($searchFilter);
+				$contactset->setContactMailHistory($mailhistory);
 				$contactset->setAccount($account);
 				$contactset->setSegment($segment);
 				$contactset->setPaginator($pager);
@@ -51,6 +60,8 @@ class SegmentapiController extends ControllerBase
 				$this->logger->log('Va null');
 				$segmentwrapper = new SegmentWrapper();
 				$segmentwrapper->setPager($pager);
+				$segmentwrapper->setContactMailHistory($mailhistory);
+				
 				$contacts = $segmentwrapper->findContactsInSegment($segment);
 				
 				return $this->setJsonResponse($contacts);

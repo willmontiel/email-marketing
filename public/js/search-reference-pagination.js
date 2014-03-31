@@ -64,6 +64,7 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 				var page=parseInt(this.get("currentpage"))+1;
 				var obj = {
 					searchCriteria: this.criteria,
+					filter: this.finalFilter,
 					page: page,
 					limit: this.get("recordsperpage")
 				};
@@ -82,6 +83,7 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 
 				var obj = {
 					searchCriteria: this.criteria,
+					filter: this.finalFilter,
 					page: page,
 					limit: this.get("recordsperpage")
 				};
@@ -98,6 +100,7 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 			else{
 				var obj = {
 					searchCriteria: this.criteria,
+					filter: this.finalFilter,
 					page: 1,
 					limit: this.get("recordsperpage")
 				};
@@ -115,6 +118,7 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 			else{
 				var obj = {
 					searchCriteria: this.criteria,
+					filter: this.finalFilter,
 					page: availablepages,
 					limit: this.get("recordsperpage")
 				};

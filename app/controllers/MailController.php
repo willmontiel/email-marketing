@@ -1,4 +1,5 @@
 <?php
+require_once "/../library/swiftmailer/lib/swift_required.php";
 class MailController extends ControllerBase
 {
 	protected $image_map = array();
@@ -25,6 +26,7 @@ class MailController extends ControllerBase
 		
 		$this->view->setVar("page", $page);
 	}
+	
 	
 	public function cloneAction($idMail = null)
 	{
@@ -219,9 +221,11 @@ class MailController extends ControllerBase
 			if ($mailExist) {
 				$mail = $mailExist;
 				$wizardOption = $mail->wizardOption;
+				$previewData = $mail->previewData;
+				$type = $mail->type;
 			}
 			else {
-				if ($new != false) {
+				if ($new != null) {
 					$wizardOption = "source";
 					$previewData = $template->previewData;
 					$type = 'Editor';
@@ -1279,22 +1283,32 @@ class MailController extends ControllerBase
 
 	public function converttotemplateAction($idMail)
 	{
-		$mail = Mailcontent::findFirstByIdMail($idMail);
+		$mail = Mail::findFirstByIdMail($idMail);
+		$mailContent = Mailcontent::findFirstByIdMail($idMail);
 		
-		$name = $this->request->getPost("nametemplate");
+		if ($mail && $mailContent) {
+			$name = $this->request->getPost("nametemplate");
 		
-		$category = $this->request->getPost("category");
-		
-		try {
-			
-			$template = new TemplateObj();
-			$template->createTemplate($name, $category, $mail->content, $this->user->account);
-		}
-		catch (InvalidArgumentException $e) {
+			$category = $this->request->getPost("category");
 
+			try {
+				$template = new TemplateObj();
+				$template->setAccount($this->user->account);
+				$template->setMail($mail);
+				$template->convertMailToTemplate($name, $category, $mailContent);
+				$this->flashSession->success("Se ha creado la plantilla a partir del correo exitosamente");
+				$this->response->redirect('template');
+			}
+			catch (InvalidArgumentException $e) {
+				$this->flashSession->error("Ha ocurrido un error mientras se creaba una plantilla a partir de un correo, contacte al administrador");
+				$this->response->redirect('mail');
+				$this->logger->log('Exception: ' . $e);
+			}
 		}
-		
-		return $this->response->redirect('mail');
+		else {
+			$this->flashSession->success("El correo base no existe por favor verifique la información");
+			$this->response->redirect('mail');
+		}
 	}
 	
 	public function confirmAction($idMail)
@@ -1379,6 +1393,90 @@ class MailController extends ControllerBase
 		return $this->response->redirect("mail/index");
 	}
 	
+	
+	public function sendtestAction($idMail)
+	{
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		if ($this->request->isPost() && $mail) {
+			$mailContent = Mailcontent::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $idMail)
+			));
+			
+			$target = $this->request->getPost("target");
+			$msg = $this->request->getPost("message");
+			
+			$this->logger->log('Target: ' . $target);
+			$this->logger->log('Message: ' . $msg);
+			
+			$recipients = explode(', ', $target);
+			
+			$emails = array();
+			foreach ($recipients as $recipient) {
+				if (!empty($recipient) && !in_array($recipient, $emails) && filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+					$emails[] = $recipient;
+				}
+			}
+			
+			$transport = Swift_SendmailTransport::newInstance();
+			$swift = Swift_Mailer::newInstance($transport);
+			
+			$testMail = new TestMail();
+			$testMail->setMail($mail);
+			$testMail->setMailContent($mailContent);
+			$testMail->setPersonalMessage($msg);
+			
+			$testMail->load();
+			
+			$subject = $mail->subject;
+			$from = array($mail->fromEmail => $mail->fromName);
+			$content = $testMail->getBody();
+			$text = $testMail->getPlainText();
+			$replyTo = $mail->replyTo;
+			
+			$this->logger->log('Recipients: ' . print_r($emails, true));
+			$this->logger->log('Content: ' . $content);
+			$this->logger->log('Plaintext: ' . $text);
+			
+			foreach ($emails as $email) {
+				$to = array($email => 'Nombre Apellido');
+				
+				$message = new Swift_Message($subject);
+				$headers = $message->getHeaders();
+				
+				$message->setFrom($from);
+				$message->setTo($to);
+				$message->setBody($content, 'text/html');
+				$message->addPart($text, 'text/plain');
+				
+				if ($replyTo != null) {
+					$message->setReplyTo($replyTo);
+				}
+				
+//				$sendMail = true;
+				$sendMail = $swift->send($message, $failures);
+				
+				$this->lastsendheaders = $message->getHeaders()->toString();
+				$this->logger->log("Headers: " . print_r($this->lastsendheaders, true));
+				
+				if (!$sendMail){
+					$this->logger->log("Error while sending test mail: " . print_r($failures));
+				}
+			}
+			if ($sendMail){
+				$this->flashSession->success("Se ha enviado el mensaje de prueba exitosamente");
+				return $this->response->redirect('mail/target/' . $idMail);
+			}
+			
+			$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
+			return $this->response->redirect('mail/target/' . $idMail);
+		}
+	}
+
 	public function cancelAction($idMail)
 	{
 		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());

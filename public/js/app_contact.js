@@ -141,19 +141,36 @@ App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 
 App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchReferencePagination, Ember.AclMixin, Ember.SaveHandlerMixin,{
 	historyMail: function(){
-		var mailHistory = JSON.parse(this.content.get('mailHistory'));
-		this.set('history', mailHistory);
-	}.observes(this.content),
+		var content = null;
+		if(this.content.content === undefined) {
+			content = this.content;
+		}
+		else {
+			content = this.content.content;
+		}
+		for(var i = 0; i < content.length; i++) {
+			content[i].set('mailHistory', JSON.parse(content[i].get('mailHistory')))
+		}
+	}.observes('this.content'),
 	
 	init: function () {
 		this.set('acl', App.contactACL);
 	},
-	searchCriteria: '',
-	criteria: '',
+	filters: [
+		{name: "Des-suscritos", value: "unsubscribed"},
+		{name: "Rebotados",    value: "bounced"},
+		{name: "Spam",    value: "spam"},
+		{name: "Bloqueados",    value: "blocked"},
+		{name: "Todos",    value: "all"}
+	],
+	filter: {
+		value: "all"
+	},
 	refreshRecords: function() {
 		this.criteria = this.get('searchCriteria');
+		this.finalFilter = this.get('filter.value');
 		var t = this;
-		this.store.find('contact', {searchCriteria: this.criteria }).then(function(d) {
+		this.store.find('contact', {searchCriteria: this.criteria, filter: this.finalFilter}).then(function(d) {
 			t.set('content', d.content);
 		});
 	},
@@ -165,7 +182,9 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 
 		reset: function() {
 			this.set('searchCriteria', '');
+			this.set('filter.value', "all");
 			this.criteria = '';
+			this.finalFilter = '';
 			this.refreshRecords();	
 		},
 		expand: function (contact) {
@@ -202,12 +221,19 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		},
 
 		discard: function(contact) {
-			console.log(this.get('model', contact.id))
-			//contact.rollback();
+			contact.rollback();
+			$('.x-editable.editable-unsaved').removeClass('editable-unsaved');
 		},
-				
+		
+		collapse: function(contact) {
+			contact.set('isExpanded', false);
+		}
+
 	},
-			
+	
+	onChangedFilter: function() {
+		this.refreshRecords();
+	}.observes('filter.value')		,
 
 	modelClass: App.Contact
 });
@@ -270,3 +296,7 @@ App.DatePickerField = Em.View.extend({
     }).on("changeDate", onChangeDate);
   }
 });
+
+function collapse_contact(id) {
+	$('.collapse-link-' + id).hide();
+}

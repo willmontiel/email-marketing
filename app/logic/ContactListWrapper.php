@@ -186,6 +186,7 @@ class ContactListWrapper extends BaseWrapper
 		
 		$idDbase = $list->idDbase;
 		
+		//1. Borramos las relaciones entre lista y contactos (coxcl y contaclist)
 		$query = 'DELETE CO
 					FROM coxcl CL	
 						JOIN contact CO ON CL.idContact = CO.idContact
@@ -198,17 +199,20 @@ class ContactListWrapper extends BaseWrapper
 		
 		$db->begin();
 		$cascadeDelete = $db->execute($query, array($idContactlist, $idContactlist));
+		
+		//2. Borramos la lista de contactos
 		$deleteContaclist = $db->execute('DELETE FROM contactlist WHERE idContactlist = ?', array($idContactlist));
 		
 		if ($cascadeDelete == false || $deleteContaclist == false) {
 			$db->rollback();
-			throw new \InvalidArgumentException('Ha ocurrido un error, contacta al administrador !');
+			throw new \Exception('Ha ocurrido un error, contacta al administrador !');
 		}
 		
 		$db->commit();		
 
 		$dbase = Dbase::findFirstByIdDbase($idDbase);
 		
+		//3. Se actualizan los contadores
 		$dbase->updateCountersInDbase();		
 
 		return $deleteContaclist;

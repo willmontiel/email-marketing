@@ -119,6 +119,7 @@
 						<button class="btn btn-blue" name="direction" value="prev"><i class="icon-circle-arrow-left"></i> Anterior</button>
 						<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
 						<button class="btn btn-black" name="direction" value="filter"><i class="icon-cogs"></i> Avanzado</button>
+						<a class="ShowDialogSendTest btn btn-default" data-backdrop="static" data-toggle="modal" href="#modal-simple" data-id="{{url('mail/sendtest')}}/{{mail.idMail}}"><i class="icon-thumbs-up"></i> Enviar prueba</a>
 					{% else %}
 						<a href="{{url('mail/track')}}/{{mail.idMail}}" class="btn btn-blue"><i class="icon-circle-arrow-left"></i> Anterior</a>
 					{% endif %}
@@ -127,4 +128,38 @@
 			</div>
 		</div>
 	</div>
+	
+	
+	<div id="modal-simple" class="modal hide fade" aria-hidden="false">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		  <h6 id="modal-tablesLabel">Enviar una prueba</h6>
+		</div>
+		<form id="testmail" method="post">
+			<div class="modal-body">
+				<p>
+					Enviar una prueba a: <br />
+					<input type="text" class="span12" id="target" name="target"/><br />
+					Escriba las direcciones de correo a enviar la prueba separadas por comas
+				</p>
+				<br />
+				<p>
+					Incluir instrucciones o un mensaje personal (opcional) <br />
+					<textarea class="span12" rows="3" cols="30" id="message" name="message"></textarea>
+				</p>
+			</div>
+			<div class="modal-footer">
+			  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+			  <input class="btn btn-blue" type="submit" value="Enviar">
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript">
+		$(function() {
+			$('.ShowDialogSendTest').on('click', function() {
+				var myURL = $(this).data('id');
+				$("#testmail").attr('action', myURL );
+			});
+		});
+	</script>
 {% endblock %}

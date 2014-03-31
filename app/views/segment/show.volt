@@ -3,6 +3,8 @@
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
 		{{ partial("partials/date_view_partial") }}
+		{{ partial("partials/xeditable_view_partial") }}
+		{{ partial("partials/xeditable_select_view_partial") }}
 		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
 		{{ javascript_include('js/load_activecontacts.js')}}
@@ -69,8 +71,10 @@
 	<script>
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
+			{{ ember_customfield_options_xeditable(field) }}
 		{%endfor%}
 	</script>
+	{{ javascript_include('js/editable-ember-view.js')}}
 {% endblock %}
 {% block sectiontitle %}Segmento: <strong>{{datasegment.name}}</strong>{% endblock %}
 
@@ -83,14 +87,12 @@
 	</script>
 	<script type="text/x-handlebars" data-template-name="contacts/index">
 		<div class="row-fluid">
-			<div class="span8">
-				{{ partial("partials/search_contacts_partial") }}
-			</div>
-			<div class="span4 text-right" style="margin-bottom: 5px;">
+			<div class="span12 text-right" style="margin-bottom: 5px;">
 				<a href="{{url('contactlist#/segments')}}" class="btn btn-blue"><i class="icon-home"></i> Todos los segmentos</a>
 			</div>
 		</div>
-		
+		<br />
+		{{ partial("partials/search_contacts_partial") }}
 		<div class="clearfix"></div>
 
 		<div class="box">

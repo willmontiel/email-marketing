@@ -66,6 +66,9 @@
 			data: { editor: editor},
 			error: function(msg){
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
+			},
+			success: function(){
+				$.gritter.add({class_name: 'success', text: '<i class="icon-save"></i> Se ha guardado el contenido', sticky: false, time: 3000});
 			}
 		});
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();

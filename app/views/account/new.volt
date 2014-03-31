@@ -61,14 +61,12 @@
 							{{ newFormAccount.render('idUrlDomain')}}<br /> <br />
 									
 							<label>*Retornar correos rebotados a: <label/>
-							{{ newFormAccount.render('idReturnPath')}}
+							{{ newFormAccount.render('idMailClass')}}
 						</div>
 						<div class="span6">
 							<label for="firstName">*Nombre:</label>
 							{{ newFormAccount.render('firstName') }}
-							
-							
-							<a href="" class="editable" id="username" data-type="text" data-pk="1" data-original-title="Enter username">superuser</a>
+						
 							<label for="lastName">*Apellido:</label>
 							{{ newFormAccount.render('lastName') }}
 

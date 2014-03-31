@@ -206,7 +206,10 @@ function initEvents() {
 		$.ajax({
 			url: config.templateUrl,
 			type: "POST",			
-			data: { editor: editorToSend, name: $('#templatename').val(), category: $('#templatecategory').val()}
+			data: { editor: editorToSend, name: $('#templatename').val(), category: $('#templatecategory').val()},
+			success: function(){
+				$.gritter.add({text: 'Se ha guardado la plantilla exitosamente', sticky: false, time: 1000});
+			}
 		});
 		editor.objectExists(editor);
 	});

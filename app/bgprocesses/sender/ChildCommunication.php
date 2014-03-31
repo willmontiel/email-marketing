@@ -1,5 +1,5 @@
 <?php
-require_once "../../../public/swiftmailer-5.0.3/lib/swift_required.php";
+require_once "/../../library/swiftmailer/lib/swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
 	protected $childprocess;
@@ -120,6 +120,8 @@ class ChildCommunication extends BaseWrapper
 				$i = 0;
 				$sentContacts = array();
 				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
+				
+				$from = array($mail->fromEmail => $mail->fromName);
 				foreach ($contactIterator as $contact) {
 					
 					$msg = $this->childprocess->Messages();
@@ -141,7 +143,6 @@ class ChildCommunication extends BaseWrapper
 					
 //					$log->log("HTML: " . $htmlWithTracking);
 					
-					$from = array($mail->fromEmail => $mail->fromName);
 					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
 					
 					$message = new Swift_Message($subject);
@@ -156,19 +157,19 @@ class ChildCommunication extends BaseWrapper
 						$mta = $this->account->virtualMta;
 					}
 					
-					$rp = Returnpath::findFirstByIdReturnPath($this->account->idReturnPath);
-					
+//					$rp = Returnpath::findFirstByIdReturnPath($this->account->idReturnPath);
+					$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
 					$listID = 't0em' . $this->account->idAccount;
 					$sendID = '0em' . $mail->idMail;
 					$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'];
 					
-					$verpFormat = str_replace('@', '=', $contact['email']['email']);
-					$mailClass = $this->mta->mailClass . $sendID;
-					$returnPathData = $listID . '-' . $mailClass . '-' . $verpFormat;
-					$returnPath = str_replace('(verp)', $returnPathData, $rp->path);
+//					$verpFormat = str_replace('@', '=', $contact['email']['email']);
+//					$mailClass = $this->mta->mailClass . $sendID;
+//					$returnPathData = $listID . '-' . $mailClass . '-' . $verpFormat;
+//					$returnPath = str_replace('(verp)', $returnPathData, $rp->path);
 					
 //					$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
-//					$headers->addTextHeader('X-GreenArrow-MailClass', 'SM_EM_SIGMADOMAIN');
+					$headers->addTextHeader('X-GreenArrow-MailClass', $mailclass->name);
 					$headers->addTextHeader('X-GreenArrow-MtaID', $mta);
 					$headers->addTextHeader('X-GreenArrow-InstanceID', $sendID);
 //					$headers->addTextHeader('X-GreenArrow-SendID', $sendID);
@@ -179,12 +180,15 @@ class ChildCommunication extends BaseWrapper
 					$message->setFrom($from);
 					$message->setBody($htmlWithTracking, 'text/html');
 					$message->setTo($to);
+					if ($mail->replyTo != null) {
+						$message->setReplyTo($mail->replyTo);
+					}
 //					$message->setSender($returnPath);
-					$message->setReturnPath($returnPath);
+//					$message->setReturnPath($returnPath);
 					$message->addPart($text, 'text/plain');
 					
-					$recipients = true;
-//					$recipients = $swift->send($message, $failures);
+//					$recipients = true;
+					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
 					$log->log("Headers: " . print_r($this->lastsendheaders, true));
 					if ($recipients){
