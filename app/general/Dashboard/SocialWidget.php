@@ -43,5 +43,7 @@ class SocialWidget extends BaseWidget
 
 		// Secondary queda asi
 		// [ { name: 'Aperturas', value: 123456.4 }, { name: 'Clics': value: 121212 } ]
+		$this->secondaryValues = json_decode('[{"name": "Aperturas", "value": 12},{"name": "Clics", "value": 18}]');
+		$this->totalValue = rand(20, 20000);
 	}
 }

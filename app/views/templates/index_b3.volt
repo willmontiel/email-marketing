@@ -1,4 +1,4 @@
-{# Nuevo template usando Bootstrap 3 #} 
+{# Nuevo template usando Bootstrap 3 #}
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,7 +13,9 @@
         {{ stylesheet_link('b3/css/bootstrap.css') }}
         {{ stylesheet_link('b3/css/font-awesome.css') }}
         {{ stylesheet_link('css/prstyles.css') }}
-        {{ stylesheet_link('b3/css/over_styles.css') }}
+        {{ stylesheet_link('b3/css/sm-email-theme.css') }}
+        {{ stylesheet_link('b3/vendors/css/bootstrap-editable.css') }}
+        {{ stylesheet_link('b3/vendors/css/jquery.gritter.css') }}
 
 		<!--[if lt IE 9]>
 		{{ javascript_include('javascripts/vendor/html5shiv.js') }}
@@ -28,6 +30,8 @@
 		{{ javascript_include('b3/js/bootstrap.js') }}
 		{{ javascript_include('b3/vendors/js/jquery.sparkline.js') }}
 		{{ javascript_include('b3/vendors/js/spark_auto.js') }}
+		{{ javascript_include('b3/vendors/js/bootstrap-editable.js') }}
+		{{ javascript_include('b3/vendors/js/jquery.gritter.js') }}
 		{% endblock %}
 
         <style>
@@ -37,6 +41,8 @@
         </style>
     </head>
     <body>
+		<div id="sidebar-background-object" class="col-sm-3 col-md-2 hidden-xs"></div>
+
 		<!-- nav bar -->
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
@@ -51,25 +57,17 @@
 					<a class="navbar-brand" href="{{url('')}}">Email Sigma</a>
 				</div>
 
-				<p class="navbar-text">{% block sectiontitle %}Titulo de pagina{% endblock %}</p>
+				<!-- <p class="navbar-text">{% block sectiontitle %}Titulo de pagina{% endblock %}</p> -->
 				<div class="collapse navbar-collapse" id="nav-collapse-01">
-					<ul class="nav navbar-nav navbar-right">
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Mi Cuenta <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else here</a></li>
-								<li class="divider"></li>
-								<li><a href="{{ url('session/logout') }}">Cerrar Sesión</a></li>
-							</ul>
-						</li>
+					<ul id="top-nav" class="nav navbar-nav navbar-right">
+						<li><a href="">Mi Cuenta</a></li>
+						<li><a href="">Ayuda</a></li>
+						<li><a href="">Cerrar sesión</a></li>
 					</ul>					
 				</div>	
 			</div>
 		</nav>
 		<!-- /nav bar -->
-
 <!-- ****** ELEMENTOS POR UBICAR ********* ->
 
 <!--												{# Nombre del usuario #}
@@ -103,18 +101,19 @@
 							</li>
 						</ul>
 -->
-<!-- ****** FIN ELEMENTOS POR UBICAR ********* ->
+<!-- ****** FIN ELEMENTOS POR UBICAR ********* -->
+		
 
 		<!-- Contenedor principal -->
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-sm-3 col-md-2">
+				<div class="col-xs-12 col-sm-3 col-md-2 sidebar" style="height: 100%;">
 					<div>
 						<!-- Main nav -->
 						{{ partial("partials/menu_partial_b3") }}
 					</div>
 				</div>
-				<div class="col-sm-9 col-md-10">
+				<div class="col-sx-12 col-sm-9 col-md-10">
 					{# Zona de mensajes #}
 					{% if messages !== false%}
 						<div class="row">

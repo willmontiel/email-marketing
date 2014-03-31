@@ -72,8 +72,8 @@ class DashboardSummary
 	{
 		$widgets = array();
 		
-		$widgets[] = new SocialWidget($this->account, 'fb', 'Shared', $this->period);
-		$widgets[] = new SocialWidget($this->account, 'tw', 'Tweets', $this->period);
+		$widgets[] = new SocialWidget($this->account, 'fb', 'Shared', $this->period, 'fb');
+		$widgets[] = new SocialWidget($this->account, 'tw', 'Tweets', $this->period, 'tw');
 		
 		return $widgets;
 	}

@@ -41,33 +41,44 @@
 {%block sectionsubtitle %}Administre sus bases de datos de contactos{% endblock %}
 {% block content %}
 {{flashSession.output()}}
-	<div class="row-fluid">
-		<div class="span12">
-			<a href="{{url('contacts/search')}}#/contacts" class="btn btn-blue"><i class="icon-search"></i> Buscar contactos</a>
-		</div>	
-	</div>	
-	<br />
 	<div id="emberApplistContainer">
+		{# handlebars de APP #}
 		<script type="text/x-handlebars">
-			{# Tabs de navegacion #}
-			<div class="box">
-				<div class="box-header">
-					<ul class="nav nav-tabs nav-tabs-left">
-						{{'{{#link-to "lists" tagName="li" href=false disabledWhen="allowContactlist"}}<a {{bind-attr href="view.href"}}> Listas de contactos</a>{{/link-to}}'}}
-						{{'{{#link-to "segments" tagName="li" href=false}}<a {{bind-attr href="view.href"}}> Segmentos</a>{{/link-to}}'}}
-						{{'{{#link-to "blockedemails" tagName="li" href=false disabledWhen="allowBlockedemail" }}<a {{bind-attr href="view.href"}}> Lista de bloqueo</a>{{/link-to}}'}}
-					</ul>
-					<div class="title">
-						<a href="{{url('dbase')}}" class="pull-right" title="Configuracion avanzada"><i class="icon-cog"></i></a>
-						<a href="{{url('process/import')}}" class="pull-right btn btn-default list-import-process">Lista de Importaciones</a>
-					</div>
+				{{ "{{outlet}}" }}
+		</script>
+		{# /handlebars de APP #}
+		{# handlebars de index #}
+		<script type="text/x-handlebars" data-template-name="index">
+			{# Botones de navegacion #}
+
+			<div class="row">
+				<h4>Opciones</h4>
+				<div class="col-xs-6 col-md-3 col-lg-2 to-do">
+					{{'{{#link-to "lists" class="shortcuts"}}<span class="sm-button-large-email"></span><br/>Listas de contactos</a>{{/link-to}}'}}
 				</div>
-				<div class="box-content padded">
-					<div class="tab-content">
-						{{ "{{outlet}}" }}
-					</div>
+				<div class="col-xs-6 col-md-3 col-lg-2 to-do">
+					{{'{{#link-to "segments" class="shortcuts"}}<span class="sm-button-large-email"></span><br/>Segmentos</a>{{/link-to}}'}}
+				</div>
+				<div class="col-xs-6 col-md-3 col-lg-2 to-do">
+					{{'{{#link-to "blockedemails" class="shortcuts"}} <span class="sm-button-large-email"></span><br/>Lista de bloqueo</a>{{/link-to}}'}}
+				</div>
+				<div class="col-xs-6 col-md-3 col-lg-2 to-do">
+					<a href="{{url('contacts/search')}}#/contacts" class="shortcuts"><span class="sm-button-large-email"></span><br/>Buscar contactos</a>
+				</div>	
+			</div>
+
+			
+			<div class="row">
+				<h4>Avanzadas</h4>
+				<div class="col-xs-6 col-md-3 col-lg-2 to-do">
+					<a href="{{url('dbase')}}" class="shortcuts" title="Configuracion avanzada"><span class="sm-button-large-email"></span><br/>Configuracion avanzada</a>
+				</div>
+
+				<div class="col-xs-6 col-md-3 col-lg-2 to-do">
+					<a href="{{url('process/import')}}" class="shortcuts"><span class="sm-button-large-email"></span><br/>Lista de Importaciones</a>
 				</div>
 			</div>
+
 		</script>
 		{# /handlebars de index #}
 		{# handlebars de listas #}

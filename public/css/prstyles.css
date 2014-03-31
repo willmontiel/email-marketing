@@ -233,11 +233,11 @@ a.inactive {
 	width: 0% !important;
 }
 
-
+/*
 .nav-template > .active > a, .nav-pills > .active > a:hover {
 	background-color: #60a1ca !important;
 }
-
+*/
 
 .img-wrap{
 	overflow:hidden;

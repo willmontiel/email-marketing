@@ -116,10 +116,11 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
         
     private function findContactIds($sql)
 	{
+		/*
 		$cache = \Phalcon\DI::getDefault()->get('cache');
 		$queryKey = $this->getQueryKey();
 		$contactIds = $cache->get($queryKey);
-		
+		*/
 		if (!$contactIds) {
 			$contactIds = array();
 			$db = \Phalcon\DI::getDefault()->get('db');
@@ -133,7 +134,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					$contactIds[] = $r['idContact'];
 				}
 			}
-			$cache->save($queryKey, $contactIds, 1800);
+		//	$cache->save($queryKey, $contactIds, 1800);
 		}
 		return $contactIds;
 	}
