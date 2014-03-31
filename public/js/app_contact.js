@@ -140,18 +140,18 @@ App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 });
 
 App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchReferencePagination, Ember.AclMixin, Ember.SaveHandlerMixin,{
-	historyMail: function(){
-		var content = null;
-		if(this.content.content === undefined) {
-			content = this.content;
-		}
-		else {
-			content = this.content.content;
-		}
-		for(var i = 0; i < content.length; i++) {
-			content[i].set('mailHistory', JSON.parse(content[i].get('mailHistory')))
-		}
-	}.observes('this.content'),
+//	historyMail: function(){
+//		var content = null;
+//		if(this.content.content === undefined) {
+//			content = this.content;
+//		}
+//		else {
+//			content = this.content.content;
+//		}
+//		for(var i = 0; i < content.length; i++) {
+//			content[i].set('mailHistory', JSON.parse(content[i].get('mailHistory')))
+//		}
+//	}.observes('this.content'),
 	
 	init: function () {
 		this.set('acl', App.contactACL);
