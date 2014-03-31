@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-user-md"></i> Informacion de usuarios de cuentas{%endblock%}
 {%block sectionsubtitle %}Administre la información de los usuarios de la cuenta{% endblock %}
 
