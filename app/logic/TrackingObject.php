@@ -12,7 +12,7 @@ class TrackingObject
 	protected $dirtyObjects;
 	protected $contact;
 	protected $mail;
-	protected $email;
+	protected $email = null;
 
 	public function __construct()
 	{
@@ -415,7 +415,7 @@ class TrackingObject
 	
 	private function validateCoincidenceBetweenEmailAndContact()
 	{
-		if ($this->contact) {
+		if ($this->mail != null && $this->contact->idEmail == $this->mail->idEmail) {
 			return true;
 		}
 		return false;
@@ -485,13 +485,21 @@ class TrackingObject
 //			$this->addDirtyObject($contact);
 //			$this->addDirtyObject($contact->email);
 			
-			$sql = 'UPDATE email AS e JOIN contact AS c
-						ON (c.idEmail = e.idEmail)
-						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
-					WHERE e.idEmail = ?';
+			$sql = "UPDATE email AS e 
+						JOIN contact AS c ON (c.idEmail = e.idEmail) 
+					SET e.bounced = {$date}, c.bounced = {$date} 
+					WHERE e.idEmail = ?";
 			
 			$db = Phalcon\DI::getDefault()->get('db');
-			$update = $db->execute($sql, array($this->contact->idEmail));
+					
+			if ($this->validateCoincidenceBetweenEmailAndContact()) {
+				$idEmail = $this->email->idEmail;
+			}
+			else {
+				$idEmail = $this->contact->idEmail;
+			}
+			
+			$update = $db->execute($sql, array($idEmail));
 //			
 			if (!$update) {
 				$this->rollbackTransaction();
@@ -558,20 +566,25 @@ class TrackingObject
 				$this->flushChanges();
 				$this->log->log('Se guardó con exito');
 				
-				$db = Phalcon\DI::getDefault()->get('db');
-				
 				$this->contact = $this->mxc->contact;
-				
 				if (!$this->contact) {
 					throw new Exception('contact not found!');
 				}	
 				
-				$sql = 'UPDATE email AS e JOIN contact AS c
-						ON (c.idEmail = e.idEmail)
-						SET e.spam = ' . $date . ', c.spam = ' . $date . ', c.unsubscribed = ' . $date . '
-					WHERE e.idEmail = ?';
+				$sql = "UPDATE email AS e  
+							JOIN contact AS c ON (c.idEmail = e.idEmail) 
+						SET e.spam = {$date}, c.spam = {$date}, c.unsubscribed = {$date} 
+						WHERE e.idEmail = ?";
 				
-				$update = $db->execute($sql, array($this->contact->idEmail));
+				if ($this->validateCoincidenceBetweenEmailAndContact()) {
+					$idEmail = $this->email->idEmail;
+				}
+				else {
+					$idEmail = $this->contact->idEmail;
+				}
+				
+				$db = Phalcon\DI::getDefault()->get('db');
+				$update = $db->execute($sql, array($idEmail));
 				
 				if (!$update) {
 					throw new Exception('Error while updating spam in contact and email');

@@ -91,7 +91,7 @@ class TrackController extends ControllerBase
 						$trackingObj->trackSpamEvent($c['bounce_code'], $date);
 						break;
 				}
-				$this->logger->log('Update funciono para : ' . $ids[0] . ', ' . $ids[1]);
+				$this->logger->log("Update funciono para : idMail: {$ids[0]}, idContact: {$ids[1]}, idEmail: {$ids[2]} ");
 				
 			}
 			catch (Exception $e) {
