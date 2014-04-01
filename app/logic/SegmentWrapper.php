@@ -13,7 +13,7 @@ class SegmentWrapper extends BaseWrapper
 	{
 		$this->dbase = $dbase;
 	}
-
+	
 	/**
 	 * Funcion que valida los datos del segmento y luego inicia el guardado
 	 * @param json $contents
@@ -452,6 +452,8 @@ class SegmentWrapper extends BaseWrapper
 		$result = array();
 		
 		$cwrapper = new ContactWrapper();
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		$cwrapper->setContactMailHistory($mailhistory);
 		
 		$ids = array();
 		foreach ($contacts as $c) {
