@@ -935,7 +935,7 @@ class ApiController extends ControllerBase
 	{
 		$dbs = array();
 		foreach ($this->user->account->dbases as $db) {
-			$dbs[] = array('id'=> $db->idDbase, 'name' => $db->name);
+			$dbs[] = array('id'=> $db->idDbase, 'name' => $db->name, 'color' => $db->color);
 		}
 		return $this->setJsonResponse(array('dbase' => $dbs));
 	}

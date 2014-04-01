@@ -51,6 +51,43 @@
 
 							<label for="Cdescription">*Descripcion de los Contactos</label>
 							{{editform.render("Cdescription")}}
+							
+							<label>*Color de Etiqueta</label>
+							{{editform.render("color")}}
+							<table id="colorchart">
+								<tr>
+									<td class="color-FF0000" bgcolor="#FF0000"></td>
+									<td class="color-FF4000" bgcolor="#FF4000"></td>
+									<td class="color-FF8000" bgcolor="#FF8000"></td>
+									<td class="color-FFBF00" bgcolor="#FFBF00"></td>
+									<td class="color-FFFF00" bgcolor="#FFFF00"></td>
+									<td class="color-BFFF00" bgcolor="#BFFF00"></td>
+								</tr>
+								<tr>
+									<td class="color-80FF00" bgcolor="#80FF00"></td>
+									<td class="color-40FF00" bgcolor="#40FF00"></td>
+									<td class="color-00FF00" bgcolor="#00FF00"></td>
+									<td class="color-00FF40" bgcolor="#00FF40"></td>
+									<td class="color-00FF80" bgcolor="#00FF80"></td>
+									<td class="color-00FFBF" bgcolor="#00FFBF"></td>
+								</tr>
+								<tr>
+									<td class="color-00FFFF" bgcolor="#00FFFF"></td>
+									<td class="color-00BFFF" bgcolor="#00BFFF"></td>
+									<td class="color-0080FF" bgcolor="#0080FF"></td>
+									<td class="color-0040FF" bgcolor="#0040FF"></td>
+									<td class="color-0000FF" bgcolor="#0000FF"></td>
+									<td class="color-4000FF" bgcolor="#4000FF"></td>
+								</tr>
+								<tr>
+									<td class="color-8000FF" bgcolor="#8000FF"></td>
+									<td class="color-BF00FF" bgcolor="#BF00FF"></td>
+									<td class="color-FF00FF" bgcolor="#FF00FF"></td>
+									<td class="color-FF00BF" bgcolor="#FF00BF"></td>
+									<td class="color-FF0080" bgcolor="#FF0080"></td>
+									<td class="color-FF0040" bgcolor="#FF0040"></td>
+								</tr>
+							</table>
 						</div>
 						<div class="form-actions">
 							<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default">Cancelar</a>
@@ -61,4 +98,24 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		$(function() {
+			setColor();
+			$('#colorchart td').on('click', function() {
+				$('.color-selected').removeClass('color-selected');
+				$(this).addClass('color-selected');
+				$('#color').val($(this)[0].bgColor);
+			});
+
+			function setColor() {
+				if($('#color').val() === "") {
+					$('#color').val("#FF0000");
+					$('.color-FF0000').addClass('color-selected');
+				}
+				else {
+					$('.color-' + $('#color').val().replace('#', '')).addClass('color-selected');
+				}
+			}
+		});
+	</script>
 {% endblock %}

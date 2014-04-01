@@ -15,6 +15,7 @@ class DbaseWrapper extends BaseWrapper
 		$object = array();
 		$object['id'] = $dbase->idDbase;
 		$object['name'] = $dbase->name;
+		$object['color'] = $dbase->color;
 		return $object;
 	}
 }
