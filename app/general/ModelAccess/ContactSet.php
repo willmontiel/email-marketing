@@ -114,12 +114,12 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				$sql = $c2 . $limit;
 			}
 			else if ($c2 == '') {
-				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) ";
-				$sql = "SELECT c.idContact FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) {$limit} ";
+				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idDbase = {$this->database->idDbase}";
+				$sql = "SELECT c.idContact FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idDbase = {$this->database->idDbase} {$limit} ";
 			}
 			else {
-				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) ";
-				$sql = "SELECT idContact FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) {$limit} ";
+				$sqlTotalRecords = "SELECT COUNT(*) FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) WHERE idDbase = {$this->database->idDbase}";
+				$sql = "SELECT idContact FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) WHERE idDbase = {$this->database->idDbase} {$limit} ";
 			}
 		}
 		else {
@@ -144,9 +144,10 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					WHERE e.idAccount = {$this->account->idAccount} {$queryCriteria->andFilter} $filter $limit";
 		}
 		
-		$this->setTotalMatches($sqlTotalRecords);
 		\Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
 		\Phalcon\DI::getDefault()->get('logger')->log("Total query: " . $sqlTotalRecords);
+		
+		$this->setTotalMatches($sqlTotalRecords);
 		
 		return $sql;
 	}
@@ -349,7 +350,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 						$joinFilter 
 						JOIN dbase AS b ON(b.idDbase = c.idDbase) {$queryKey->joinForFreeText}  
 					WHERE 
-						MATCH(c.name, c.lastname) AGAINST ('" . $criteriaText . "' IN BOOLEAN MODE) 
+						MATCH(c.name, c.lastName) AGAINST ('" . $criteriaText . "' IN BOOLEAN MODE) 
 						AND b.idAccount = " . $this->account->idAccount . " " . $queryFilter . " " . $queryKey->andForFreeText;
 		}
                 
