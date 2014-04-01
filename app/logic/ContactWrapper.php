@@ -137,9 +137,18 @@ class ContactWrapper extends BaseWrapper
 			if (!$email) {
 				$email = $this->createEmail($data->email);
 			}
-			
+			Phalcon\DI::getDefault()->get('logger')->log("Se crea email [id: {$email->idEmail}, email: {$email->email}]");
+			Phalcon\DI::getDefault()->get('logger')->log("Email anterior {$contact->idEmail}");
 			// Asignar el nuevo email
 			$contact->email = $email;
+			
+			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo {$contact->idEmail}");
+			
+			if (!$contact->save()) {
+				foreach ($contact->getMessages() as $msg) {
+					throw new \Exception('Error al actualizar el email del contacto: >>' . $msg . '<<');
+				}
+			}
 		}
 
 		$this->contact = $contact;
@@ -155,7 +164,7 @@ class ContactWrapper extends BaseWrapper
 			foreach ($errmsg as $err) {
 				$msg .= $err . PHP_EOL;
 			}
-			throw new \Exception('Error al crear el contacto: >>' . $msg . '<<');
+			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
 		} else {
 			$this->assignDataToCustomField($data);
 			

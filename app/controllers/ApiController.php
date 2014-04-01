@@ -869,10 +869,13 @@ class ApiController extends ControllerBase
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		
 		$wrapper = new ContactWrapper();
 
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
+		$wrapper->setContactMailHistory($mailhistory);
 		$wrapper->setIdContactlist($idContactlist);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
