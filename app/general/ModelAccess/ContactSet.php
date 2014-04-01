@@ -111,16 +111,15 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 
 			if ($c1 == '') {
 				$sqlTotalRecords = str_replace('c.idContact, c.idEmail', 'COUNT(*) AS total', $c2);
-				$sqlTotalRecords .= " AND c.idDbase = {$this->database->idDbase} ";
-				$sql = $c2 . " AND c.idDbase = {$this->database->idDbase} " . $limit;
+				$sql = $c2 . $limit;
 			}
 			else if ($c2 == '') {
 				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idDbase = {$this->database->idDbase}";
 				$sql = "SELECT c.idContact FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idDbase = {$this->database->idDbase} {$limit} ";
 			}
 			else {
-				$sqlTotalRecords = "SELECT COUNT(*) FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) WHERE idDbase = {$this->database->idDbase}";
-				$sql = "SELECT idContact FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) WHERE idDbase = {$this->database->idDbase} {$limit} ";
+				$sqlTotalRecords = "SELECT COUNT(*) FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) ";
+				$sql = "SELECT idContact FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) {$limit} ";
 			}
 		}
 		else {
@@ -346,13 +345,15 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$criteriaText = implode(' ', $freeText);
 //			Phalcon\DI::getDefault()->get('logger')->log("Criteria: " . $criteria);
 			
-			$sql .= "SELECT c.idContact, c.idEmail
-					FROM contact AS c 
-						$joinFilter 
+			$sql .= "SELECT c.idContact, c.idEmail 
+						FROM contact AS c  
+						{$joinFilter} 
 						JOIN dbase AS b ON(b.idDbase = c.idDbase) {$queryKey->joinForFreeText}  
 					WHERE 
-						MATCH(c.name, c.lastName) AGAINST ('" . $criteriaText . "' IN BOOLEAN MODE) 
-						AND b.idAccount = " . $this->account->idAccount . " " . $queryFilter . " " . $queryKey->andForFreeText;
+						b.idDbase = {$this->database->idDbase} 
+						AND b.idAccount = {$this->account->idAccount} 
+						MATCH(c.name, c.lastName) AGAINST ('{$criteriaText}' IN BOOLEAN MODE)  
+						{$queryFilter}  {$queryKey->andForFreeText} ";
 		}
                 
 //                \Phalcon\DI::getDefault()->get('logger')->log("Free text sql: " . $sql);

@@ -42,7 +42,8 @@ class UserForm extends Form
         $this->add(new Text ('username', array(
 			'maxlength' => 50,
 			'type' => 'text',
-			'required' => 'required' 
+			'required' => 'required',
+			'id' => 'user'
         )));
 		
         $this->add(new Select("userrole", array(
