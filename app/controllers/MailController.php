@@ -53,6 +53,7 @@ class MailController extends ControllerBase
 			$mailClone->type = $mail->type;
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
+			$mailClone->deleted = 0;
 			$mailClone->createdon = time();
 			$mailClone->previewData = $mail->previewData;
 			
