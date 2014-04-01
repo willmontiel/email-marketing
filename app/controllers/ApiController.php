@@ -558,7 +558,7 @@ class ApiController extends ControllerBase
 
 		$wrapper = new ContactWrapper();
 		$result = $wrapper->deleteContactFromDB($contact, $db);
-		
+			
 		return $this->setJsonResponse(array ('contact' => $result->status), $result->type, $result->msg);
 	}
 
@@ -920,9 +920,12 @@ class ApiController extends ControllerBase
 		
 		// Eliminar el Contacto de la Lista
 		$wrapper = new ContactWrapper();
-		
-		$response = $wrapper->deleteContactFromList($contact, $list);
-		
+		try {
+			$response = $wrapper->deleteContactFromList($contact, $list);
+		} catch(\Exception $e) {
+			return $this->setJsonResponse(array('status' => 'error'), 400, $e->getMessage());
+			
+		}
 		return $this->setJsonResponse(array ('contact' => $response), 202, 'contact deleted success');	
 	
 	}

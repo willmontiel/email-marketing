@@ -96,6 +96,7 @@ class MailController extends ControllerBase
 		try {
 			$process = new ProcessMail();
 			$process->setAccount($this->user->account);
+			$process->setUser($this->user);
 			$process->deleteMail($idMail);
 		} catch (\InvalidArgumentException $e) {
 			$this->flashSession->error($e->getMessage());
