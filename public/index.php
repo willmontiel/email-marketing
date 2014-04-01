@@ -295,7 +295,7 @@ try {
 	/*
 	 * Volt Object, engine de templates
 	 */
-    $di->set('volt', function($view, $di) {
+    $di->setShared('volt', function($view, $di) {
 	    $volt = new Phalcon\Mvc\View\Engine\Volt($view, $di);
 		$compiler = $volt->getCompiler();
 		
@@ -356,7 +356,7 @@ try {
         $volt->setOptions(array(
             "compileAlways" => true,
 			"compiledPath" => "../app/compiled-templates/",
-			"compiledExtension" => ".compiled"
+			'stat' => true
         ));
 
 		return $volt;

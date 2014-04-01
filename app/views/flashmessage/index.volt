@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-bullhorn"></i> Mensajes administrativos{%endblock%}
 {% block sectionsubtitle %}Lista de mensajes administrativos activos e inactivos{% endblock %}
 {% block content %}
