@@ -189,7 +189,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					FROM contact AS c
 						JOIN email AS e ON(e.idEmail = c.idEmail)
 						JOIN dbase AS d ON(d.idDbase = c.idDbase)
-					WHERE c.idContact IN (" . $ids . ")";
+					WHERE c.idContact IN ({$ids})";
 			
 		}      
         \Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
@@ -287,9 +287,9 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				else {
 					$sqlEmail .= " UNION ";
 				}
-				$sqlEmail .= "SELECT e.idEmail
-						 FROM email AS e " . $queryKey->join . " 
-						 WHERE e.email = '" . $email . "'" . $queryFilter . " AND e.idAccount = " . $this->account->idAccount . " " . $queryKey->and;
+				$sqlEmail .= "SELECT e.idEmail 
+								 FROM email AS e {$queryKey->join}  
+							  WHERE e.email = '{$email}' {$queryFilter} AND e.idAccount = {$this->account->idAccount} {$queryKey->and} ";
 			}
 		}
 		
@@ -305,10 +305,10 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				else {
 					$sqlDomain .= " UNION ";
 				}
-				$sqlDomain .= "SELECT e.idEmail
-						 FROM domain AS d
-							JOIN email AS e ON (e.idDomain = d.idDomain) " . $queryKey->join . " 
-						 WHERE d.name = '" . $domain . "'" . $queryFilter . " AND e.idAccount = " . $this->account->idAccount . " " . $queryKey->and;
+				$sqlDomain .=  "SELECT e.idEmail 
+									FROM domain AS d 
+									JOIN email AS e ON (e.idDomain = d.idDomain) {$queryKey->join}  
+								WHERE d.name = '{$domain}' {$queryFilter} AND e.idAccount = {$this->account->idAccount} {$queryKey->and} ";
 			}
 		}
 		
@@ -350,9 +350,9 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 						{$joinFilter} 
 						JOIN dbase AS b ON(b.idDbase = c.idDbase) {$queryKey->joinForFreeText}  
 					WHERE 
-						b.idDbase = {$this->database->idDbase} 
-						AND b.idAccount = {$this->account->idAccount} 
-						MATCH(c.name, c.lastName) AGAINST ('{$criteriaText}' IN BOOLEAN MODE)  
+						b.idAccount = {$this->account->idAccount}  
+						AND b.idDbase = {$this->database->idDbase} 
+						AND MATCH(c.name, c.lastName) AGAINST ('{$criteriaText}' IN BOOLEAN MODE)  
 						{$queryFilter}  {$queryKey->andForFreeText} ";
 		}
                 
