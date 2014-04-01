@@ -149,7 +149,9 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 			content = this.content.content;
 		}
 		for(var i = 0; i < content.length; i++) {
-			content[i].set('mailHistory', JSON.parse(content[i].get('mailHistory')))
+			if(typeof content[i].get('mailHistory') === 'string') {
+				content[i].set('mailHistory', JSON.parse(content[i].get('mailHistory')));
+			}
 		}
 	}.observes('this.content'),
 	
