@@ -102,7 +102,9 @@
 						</thead>
 						<tbody>
 					{{'{{#each model}}'}}
-							<tr {{' {{bind-attr style="dbase.style"}} '}}>
+							<tr>
+								<td {{' {{bind-attr style="dbase.style"}} '}}>
+								</td>
 								<td>
 									<div class="box-section news with-icons">
 										<div class="avatar blue">
