@@ -111,7 +111,8 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 
 			if ($c1 == '') {
 				$sqlTotalRecords = str_replace('c.idContact, c.idEmail', 'COUNT(*) AS total', $c2);
-				$sql = $c2 . $limit;
+				$sqlTotalRecords .= " WHERE c.idDbase = {$this->database->idDbase} ";
+				$sql = $c2 . " WHERE c.idDbase = {$this->database->idDbase} " . $limit;
 			}
 			else if ($c2 == '') {
 				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idDbase = {$this->database->idDbase}";
