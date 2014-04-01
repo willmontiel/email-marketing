@@ -102,7 +102,7 @@
 						</thead>
 						<tbody>
 					{{'{{#each model}}'}}
-							<tr>
+							<tr {{' {{bind-attr style="dbase.style"}} '}}>
 								<td>
 									<div class="box-section news with-icons">
 										<div class="avatar blue">
@@ -113,7 +113,7 @@
 											<div class="news-text">
 												{{ '{{description}}' }}
 											</div>
-											<span class="label label-filling" {{' {{bind-attr style="dbase.style"}} '}}>{{ '{{dbase.name }}' }}</span>
+											<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
 										</div>
 									</div>
 								</td>

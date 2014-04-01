@@ -703,7 +703,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	width: 25px !important;
 	height: 25px !important;
 	cursor: pointer;
-	border: 2px white solid;
+	border: 2px lightgray solid;
 }
 #colorchart {
 	border-collapse: separate;
@@ -716,5 +716,5 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	opacity: 0.5;
 }
 .color-selected {
-	border: 2px gray solid !important;
+	border: 2px blue solid !important;
 }
