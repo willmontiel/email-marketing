@@ -446,8 +446,8 @@ class ContactWrapper extends BaseWrapper
 			$contact->ipSubscribed = $this->ipaddress;
 			$contact->status = ($data->isActive)?$hora:0;
 			$contact->ipActivated = ($data->isActive)?$this->ipaddress:0;
-			$contact->bounced = ($data->isBounced)?$hora:0;
-			$contact->spam = ($data->isSpam)?$hora:0;
+			$contact->email->bounced = ($data->isBounced)?$hora:0;
+			$contact->email->spam = ($data->isSpam)?$hora:0;
 		}
 		else {
 			if ($contact->unsubscribed != 0 && $data->isSubscribed) {
@@ -476,22 +476,22 @@ class ContactWrapper extends BaseWrapper
 				$contact->ipActivated = $this->ipaddress;
 			}
 			
-			if ($contact->bounced != 0 && !$data->isBounced) {
+			if ($contact->email->bounced != 0 && !$data->isBounced) {
 				// Actualmente rebotado y se actualiza a no rebotado
-				$contact->bounced = 0;
+				$contact->email->bounced = 0;
 			}
-			else if ($contact->bounced == 0 && $data->isBounced) {
+			else if ($contact->email->bounced == 0 && $data->isBounced) {
 				// Actualmente no rebotado, y se actualiza a rebotado
-				$contact->bounced = $hora;
+				$contact->email->bounced = $hora;
 			}
 			
-			if ($contact->spam != 0 && !$data->isSpam) {
+			if ($contact->email->spam != 0 && !$data->isSpam) {
 				// Actualmente spam y se actualiza a no spam
-				$contact->spam = 0;
+				$contact->email->spam = 0;
 			}
 			else if ($contact->spam == 0 && $data->isSpam) {
 				// Actualmente no spam, y se actualiza a spam
-				$contact->spam = $hora;
+				$contact->email->spam = $hora;
 			}
 		}
 	}
@@ -675,10 +675,10 @@ class ContactWrapper extends BaseWrapper
 		$object['isSubscribed'] = ($contact->unsubscribed == 0);
 		$object['subscribedOn'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
 		$object['unsubscribedOn'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
-		$object['isBounced'] = ($contact->bounced != 0);
-		$object['bouncedOn'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
-		$object['isSpam'] = ($contact->spam != 0);
-		$object['spamOn'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
+		$object['isBounced'] = ($contact->email->bounced != 0);
+		$object['bouncedOn'] = (($contact->email->bounced != 0)?date('d/m/Y H:i', $contact->email->bounced):'');
+		$object['isSpam'] = ($contact->email->spam != 0);
+		$object['spamOn'] = (($contact->email->spam != 0)?date('d/m/Y H:i', $contact->email->spam):'');
 		$object['createdOn'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
 		$object['updatedOn'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
 		
@@ -767,10 +767,10 @@ class ContactWrapper extends BaseWrapper
 		$object['isSubscribed'] = ($contact->unsubscribed == 0);
 		$object['subscribedOn'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
 		$object['unsubscribedOn'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
-		$object['isBounced'] = ($contact->bounced != 0);
-		$object['bouncedOn'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
-		$object['isSpam'] = ($contact->spam != 0);
-		$object['spamOn'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
+		$object['isBounced'] = ($email->bounced != 0);
+		$object['bouncedOn'] = (($email->bounced != 0)?date('d/m/Y H:i', $email->bounced):'');
+		$object['isSpam'] = ($email->spam != 0);
+		$object['spamOn'] = (($email->spam != 0)?date('d/m/Y H:i', $email->spam):'');
 		$object['createdOn'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
 		$object['updatedOn'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
 		

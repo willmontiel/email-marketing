@@ -34,8 +34,6 @@ class Contact extends \Phalcon\Mvc\Model
 		$this->unsubscribed = 0;
 		$this->status = 0;
 		$this->subscribedon = 0;
-		$this->spam = 0;
-		$this->bounced = 0;
     }
 	
 	/**
