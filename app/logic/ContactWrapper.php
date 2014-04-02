@@ -284,8 +284,8 @@ class ContactWrapper extends BaseWrapper
 		$time->setTime(0, 0, 0);
 		$modelManager = \Phalcon\DI::getDefault()->get('modelsManager');
 		$sql = "SELECT *
-				FROM mxc AS x 
-					JOIN mail AS m ON (x.idMail = m.idMail)
+				FROM Mxc AS x 
+					JOIN Mail AS m ON (x.idMail = m.idMail)
 				WHERE x.idContact = {$contact->idContact}
 				AND m.finishedon > {$time->getTimestamp()}";
 		$query = $modelManager->createQuery($sql);
