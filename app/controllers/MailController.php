@@ -13,7 +13,7 @@ class MailController extends ControllerBase
 
 		$builder = $this->modelsManager->createBuilder()
 			->from('Mail')
-			->where("idAccount = $idAccount")
+			->where("idAccount = $idAccount AND deleted = 0")
 			->orderBy('createdon DESC');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
@@ -55,6 +55,7 @@ class MailController extends ControllerBase
 			$mailClone->wizardOption = "source";
 			$mailClone->deleted = 0;
 			$mailClone->createdon = time();
+			$mailClone->deleted = 0;
 			$mailClone->previewData = $mail->previewData;
 			
 			if (!$mailClone->save()) {
@@ -95,35 +96,17 @@ class MailController extends ControllerBase
 	
 	public function deleteAction($idMail)
 	{
-		$time = strtotime("-31 days");
-		
-		$mail = Mail::findFirst(array(
-			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR (idMail = ?1 AND idAccount = ?2 AND (status = ?4 OR status = ?5 OR status = ?6))",
-			"bind" => array(1 => $idMail,
-							2 => $this->user->account->idAccount,
-							3 => $time,
-							4 => "Draft",
-							5 => "Scheduled" ,
-							6 => "Cancelled" )
-		));
-		
-		if (!$mail) {
-			$this->flashSession->error("No se ha encontrado el correo, por favor verifique la información");
+		try {
+			$process = new ProcessMail();
+			$process->setAccount($this->user->account);
+			$process->setUser($this->user);
+			$process->deleteMail($idMail);
+		} catch (\InvalidArgumentException $e) {
+			$this->flashSession->error($e->getMessage());
 			return $this->response->redirect("mail");
 		}
-		
-		else if (!$mail->delete()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-			}
-			return $this->response->redirect("mail");
-		}
-		
-		else {
-			$this->flashSession->warning("Se ha eliminado el correo exitosamente");
-			return $this->response->redirect("mail");
-		}
-		
+		$this->flashSession->warning("Se ha eliminado el correo exitosamente");
+		return $this->response->redirect("mail");
 	}
 	
 	private function validateTemplate($template, $account)
@@ -244,6 +227,7 @@ class MailController extends ControllerBase
 			$mail->fromEmail = strtolower($form->getValue('fromEmail'));
 			$mail->replyTo = strtolower($form->getValue('replyTo'));
 			$mail->status = "Draft";
+			$mail->deleted = 0;
 			$mail->type = $type;
 			$mail->wizardOption = $wizardOption;
 			$mail->previewData = $previewData;
@@ -921,7 +905,8 @@ class MailController extends ControllerBase
 					$response = $target->createTargetObj($idDbases, $idContactlists, $idSegments, $mail);
 				}
 				catch (InvalidArgumentException $e) {
-					throw new InvalidArgumentException("Error while saving targetObj in db");
+					$this->logger->log('Error while saving targetObj in db');
+					$this->logger->log('Exception: [' . $e . ']');
 				}
 				
 				if (!$response) {
@@ -1484,8 +1469,16 @@ class MailController extends ControllerBase
 
 	public function cancelAction($idMail)
 	{
-		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		$commObj->sendCancelToParent($idMail);
+		try {
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$commObj->sendCancelToParent($idMail);
+		}
+		catch(\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+		}
+		catch(\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+		}
 		
 		return $this->response->redirect("mail/index");
 	}

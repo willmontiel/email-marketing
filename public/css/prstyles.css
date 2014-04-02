@@ -670,7 +670,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	width: 135px;
 	margin-left: auto;
 	margin-right: auto;
-
+}
 .edit-contact-online {
 	background-color: transparent !important;
     border: none !important;
@@ -698,4 +698,23 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 }
 .summary-fb, .summary-tw {
 	background-color: lightgray;
+}
+#colorchart td {
+	width: 25px !important;
+	height: 25px !important;
+	cursor: pointer;
+	border: 2px lightgray solid;
+}
+#colorchart {
+	border-collapse: separate;
+	border: 4px gray solid;
+}
+#color.text-for-db-color {
+	display: none !important;
+}
+#colorchart td:hover {
+	opacity: 0.5;
+}
+.color-selected {
+	border: 2px blue solid !important;
 }

@@ -103,6 +103,8 @@
 						<tbody>
 					{{'{{#each model}}'}}
 							<tr>
+								<td {{' {{bind-attr style="dbase.style"}} '}}>
+								</td>
 								<td>
 									<div class="box-section news with-icons">
 										<div class="avatar blue">

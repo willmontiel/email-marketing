@@ -51,6 +51,18 @@
 
 							<label for="Cdescription">*Descripcion de los Contactos</label>
 							{{editform.render("Cdescription")}}
+							
+							<label>*Color de Etiqueta</label>
+							{{editform.render("color")}}
+							<table id="colorchart">
+						{% for color in colors %}
+							<tr>
+							{% for col in color %}
+									<td class="color-{{col}}" bgcolor="#{{col}}"></td>
+							{% endfor %}
+							</tr>
+						{% endfor %}
+						</table>
 						</div>
 						<div class="form-actions">
 							<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default">Cancelar</a>
@@ -61,4 +73,24 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		$(function() {
+			setColor();
+			$('#colorchart td').on('click', function() {
+				$('.color-selected').removeClass('color-selected');
+				$(this).addClass('color-selected');
+				$('#color').val($(this)[0].bgColor);
+			});
+
+			function setColor() {
+				if($('#color').val() === "") {
+					$('#color').val("#FF0000");
+					$('.color-FF0000').addClass('color-selected');
+				}
+				else {
+					$('.color-' + $('#color').val().replace('#', '')).addClass('color-selected');
+				}
+			}
+		});
+	</script>
 {% endblock %}

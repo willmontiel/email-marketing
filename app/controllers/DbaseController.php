@@ -83,7 +83,7 @@ class DbaseController extends ControllerBase
 				}	
 			}
 		}
-		
+			$this->view->setVar('colors', DbaseWrapper::getColors());
 			$this->view->editform = $editform;
     }
     
@@ -137,6 +137,7 @@ class DbaseController extends ControllerBase
 					}
 				}
 			}
+			$this->view->setVar('colors', DbaseWrapper::getColors());
 			$this->view->editform = $editform;
         } 
 

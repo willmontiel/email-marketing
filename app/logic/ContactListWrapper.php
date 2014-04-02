@@ -2,6 +2,9 @@
 class ContactListWrapper extends BaseWrapper
 {
 
+	public function setUser(User $user) {
+		$this->user = $user;
+	}
 
 	/**
 	 * Crea un arreglo con la informacion del objeto Contactlist
@@ -186,33 +189,66 @@ class ContactListWrapper extends BaseWrapper
 		
 		$idDbase = $list->idDbase;
 		
-		//1. Borramos las relaciones entre lista y contactos (coxcl y contaclist)
-		$query = 'DELETE CO
+		$query = "DELETE CO
 					FROM coxcl CL	
 						JOIN contact CO ON CL.idContact = CO.idContact
 					WHERE CL.idContactlist = ?
-						AND NOT EXISTS 
-							(SELECT C1.idContact
-							FROM coxcl C1
-							WHERE C1.idContact = CO.idContact
-								AND idContactlist != ?)';
+					AND NOT EXISTS 
+						(SELECT C1.idContact
+						FROM coxcl C1
+						WHERE C1.idContact = CO.idContact
+							AND idContactlist != ?)";
+		
+		$query3  = "DELETE FROM contactlist WHERE idContactlist = ?";
+		$query3Array = array($idContactlist);
+		
+		if($this->user->userrole != 'ROLE_SUDO') {
+			$time = new \DateTime('-30 day');
+			$time->setTime(0, 0, 0);
+			$query.=" AND NOT EXISTS
+						(SELECT MC.idContact
+						FROM mxc MC
+							JOIN mail MA ON MC.idMail = MA.idMail
+						WHERE MC.idContact = CO.idContact
+						AND MA.finishedon > {$time->getTimestamp()})";
+						
+			$query2 = "DELETE CL
+					FROM coxcl CL	
+						JOIN contact CO ON CL.idContact = CO.idContact
+						JOIN coxcl C1 ON C1.idContact = CO.idContact
+					WHERE CL.idContactlist = ?
+					AND C1.idContactlist != ?
+					AND NOT EXISTS
+						(SELECT MC.idContact
+						FROM mxc MC
+							JOIN mail MA ON MC.idMail = MA.idMail
+						WHERE MC.idContact = CO.idContact
+						AND MA.finishedon > {$time->getTimestamp()})";
+						
+			$query3.= " AND ( SELECT COUNT(*) FROM coxcl WHERE idContactlist = ? ) < 1";
+			array_push($query3Array, $idContactlist);
+		}
 		
 		$db->begin();
+		//1. Borramos las relaciones entre lista y contactos (coxcl y contaclist)
+			//1.1 Borrar el contacto en caso de no tener asociaciones con otras listas y tampoco se le haya realizado un envio en los ultimos 30 dias
 		$cascadeDelete = $db->execute($query, array($idContactlist, $idContactlist));
+			//1.2 Borrar las relaciones con los contactos existentes en otras listas y que no hayan realizado un envio en los ultimos 30 dias
+		$relationsDelete = (isset($query2)) ? $db->execute($query2, array($idContactlist, $idContactlist)): true;
+			//2. Borramos la lista de contactos si no tiene contactos asociados
+		$deleteContaclist = $db->execute($query3, $query3Array);
 		
-		//2. Borramos la lista de contactos
-		$deleteContaclist = $db->execute('DELETE FROM contactlist WHERE idContactlist = ?', array($idContactlist));
-		
-		if ($cascadeDelete == false || $deleteContaclist == false) {
+		if ($cascadeDelete == false || $deleteContaclist == false || $relationsDelete == false) {
 			$db->rollback();
 			throw new \Exception('Ha ocurrido un error, contacta al administrador !');
 		}
 		
 		$db->commit();		
-
+		
 		$dbase = Dbase::findFirstByIdDbase($idDbase);
 		
-		//3. Se actualizan los contadores
+		//3. Se actualizan los contadores (Los contadores de lista se actualizan en caso de que quede al menos un contacto)
+		$list->updateCountersInContactlist();
 		$dbase->updateCountersInDbase();		
 
 		return $deleteContaclist;
