@@ -115,8 +115,6 @@ class ContactWrapper extends BaseWrapper
 	public function updateContactFromJsonData($idContact, $data)
 	{
 		// Actualizar contacto:
-		// 0) Cargar el contacto Antigua para comparaciones 
-		$oldContact = Contact::findFirstByIdContact($idContact);
 		
 		// 1) Cargar el contacto
 		$contact = Contact::findFirstByIdContact($idContact);
@@ -140,18 +138,24 @@ class ContactWrapper extends BaseWrapper
 			Phalcon\DI::getDefault()->get('logger')->log("Se crea email [id: {$email->idEmail}, email: {$email->email}]");
 			Phalcon\DI::getDefault()->get('logger')->log("Email anterior {$contact->idEmail}");
 			// Asignar el nuevo email
-			$contact->email = $email;
 			
-			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo {$contact->idEmail}");
+			
+			$contact->idEmail = $email->idEmail;
+			
+			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo antes grabar {$contact->idEmail}");
 			
 			if (!$contact->save()) {
 				foreach ($contact->getMessages() as $msg) {
 					throw new \Exception('Error al actualizar el email del contacto: >>' . $msg . '<<');
 				}
 			}
+			
+			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo despúes de grabar {$contact->idEmail}");
 		}
 
 		$this->contact = $contact;
+		// 0) Cargar el contacto Antigua para comparaciones 
+		$oldContact = Contact::findFirstByIdContact($idContact);
 		
 		// 6) Actualizar los otros campos
 		$this->assignDataToContact($this->contact, $data);

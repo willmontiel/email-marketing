@@ -585,16 +585,24 @@ class ApiController extends ControllerBase
 		
 		$name = $this->request->getQuery('name', null);
 		$idDbase = $this->request->getQuery('dbase', null, null);
-		$contactWrapper = new ContactListWrapper();
-		$contactWrapper->setPager($pager);
 		
-		if($idDbase == 0) {
-			$lists = $contactWrapper->findContactListByAccount($this->user->account, $name);
+		try {
+			$contactWrapper = new ContactListWrapper();
+			$contactWrapper->setPager($pager);
+
+			if($idDbase == 0) {
+				$lists = $contactWrapper->findContactListByAccount($this->user->account, $name);
+			}
+			else {
+				$lists = $contactWrapper->findContactListByIdDbase($this->user->account, $idDbase);
+			}
+			return $this->setJsonResponse($lists);
 		}
-		else {
-			$lists = $contactWrapper->findContactListByIdDbase($this->user->account, $idDbase);
+		catch (Exception $e) {
+			$this->logger->log("Exception {$e}");
+			return $this->setJsonResponse(array('status' => 'failed'), 500, 'Internal error');
 		}
-		return $this->setJsonResponse($lists);
+		
 	}
 	/**
 	 * 

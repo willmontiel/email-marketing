@@ -287,6 +287,7 @@ class Security extends Plugin
 
 				//tests
 				'test::start' => array('mail' => array('read', 'create', 'send')),
+				'test::testemailcontact' => array('mail' => array('read', 'create', 'send')),
 				'test::mailer' => array('mail' => array('read', 'create', 'send')),
 				'test::aperturas' => array('statistic' => array('read')),
 				'test::assettest' => array('statistic' => array('read')),
