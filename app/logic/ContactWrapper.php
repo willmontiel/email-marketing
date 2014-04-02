@@ -194,10 +194,10 @@ class ContactWrapper extends BaseWrapper
 	
 	public function deleteContactFromDB($contact, $db)
 	{
+		$this->checkSendingStatusContact($contact);
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
 		if (count($allLists) > 0) {
 			try {
-				$this->checkSendingStatusContact($contact);
 				Phalcon\DI::getDefault()->get('db')->begin();
 				foreach ($allLists as $list) {
 					$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
@@ -278,7 +278,7 @@ class ContactWrapper extends BaseWrapper
 		$query = $modelManager->createQuery($sql);
 		$result = $query->execute();
 		if( count($result) > 0) {
-			throw new \Exception('El Contacto no puede ser eliminado');
+			throw new \Exception('El contacto no puede ser eliminado');
 		}
 	}
 

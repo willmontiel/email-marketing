@@ -555,9 +555,12 @@ class ApiController extends ControllerBase
 		}
 
 		// Eliminar el Contacto de la Base de Datos
-
-		$wrapper = new ContactWrapper();
-		$result = $wrapper->deleteContactFromDB($contact, $db);
+		try {
+			$wrapper = new ContactWrapper();
+			$result = $wrapper->deleteContactFromDB($contact, $db);
+		} catch(\Exception $e) {
+			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
+		} 
 			
 		return $this->setJsonResponse(array ('contact' => $result->status), $result->type, $result->msg);
 	}
@@ -744,7 +747,7 @@ class ApiController extends ControllerBase
 			if(!$wrapper->validateListBelongsToAccount($this->user->account, $idContactlist)) {
 				return $this->setJsonResponse(null, 422, 'Lista invalida');
 			}
-
+			$wrapper->setUser($this->user);
 			$deletedList = $wrapper->deleteContactList($idContactlist);	
 		}
 		catch (\InvalidArgumentException $e) {
@@ -923,8 +926,7 @@ class ApiController extends ControllerBase
 		try {
 			$response = $wrapper->deleteContactFromList($contact, $list);
 		} catch(\Exception $e) {
-			return $this->setJsonResponse(array('status' => 'error'), 400, $e->getMessage());
-			
+			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
 		}
 		return $this->setJsonResponse(array ('contact' => $response), 202, 'contact deleted success');	
 	
