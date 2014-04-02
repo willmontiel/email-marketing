@@ -185,7 +185,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		if (count($contactIds) > 0) {
 			$ids = implode(', ', $contactIds);
 		
-			$sql .= "SELECT c.*, e.email, e.blocked, d.idDbase, d.name AS dbase
+			$sql .= "SELECT c.*, e.email, e.bounced, e.spam, e.blocked, d.idDbase, d.name AS dbase
 					FROM contact AS c
 						JOIN email AS e ON(e.idEmail = c.idEmail)
 						JOIN dbase AS d ON(d.idDbase = c.idDbase)

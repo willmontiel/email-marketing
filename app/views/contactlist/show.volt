@@ -39,7 +39,10 @@
 					return true;
 				}
 				return false;
-			}.property('isSubscribed,isActive')
+			}.property('isSubscribed,isActive'),
+			mailHistoryArray: function () {
+				return JSON.parse(this.get('mailHistory'))
+			}.property()
 
 		{%for field in fields%}
 			,

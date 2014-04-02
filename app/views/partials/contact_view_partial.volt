@@ -197,7 +197,7 @@
 								<thead></thead>
 								<tbody>
 									<tr>
-										{{' {{#each mailHistory}} '}}
+										{{' {{#each mailHistoryArray}} '}}
 										<tr><td>{{' {{name}} '}}</td></tr>
 										{{' {{else}} '}}
 										<tr><td class="padded">Este contacto no tiene un historial de envíos</td></tr>
@@ -207,9 +207,9 @@
 							</table>
 							<h5 class="padded">Últimos eventos</h5>
 							<table class="table table-condensed">
-							{{' {{#each mailHistory}} '}}
+							{{' {{#each mailHistoryArray}} '}}
 								<tbody>
-									<!-- Historial de Aperturas -->
+									{# Historial de Aperturas #}
 									{{' {{#if opening}} '}}
 									<tr>
 										<td class="contact-history-event-text">Apertura</td>
@@ -218,7 +218,7 @@
 									</tr>
 									{{ '{{/if}}' }}
 
-									<!-- Historial de Clics -->
+									{# Historial de Clics #}
 									{{' {{#if clicks}} '}}
 									<tr>
 										<td class="contact-history-event-text">Clic</td>
@@ -227,7 +227,7 @@
 									</tr>
 									{{ '{{/if}}' }}
 
-									<!-- Historial de Desuscripciones -->		
+									{# Historial de Desuscripciones #}		
 									{{' {{#if unsubscribe}} '}}
 									<tr>
 										<td class="contact-history-event-text">Desuscripcion</td>
@@ -236,7 +236,7 @@
 									</tr>
 									{{ '{{/if}}' }}
 
-									<!-- Historial de Rebotes -->
+									{# Historial de Rebotes #}
 									{{' {{#if bounced}} '}}
 									<tr>
 										<td class="contact-history-event-text">Rebote</td>
@@ -245,7 +245,7 @@
 									</tr>
 									{{ '{{/if}}' }}
 
-									<!-- Historial de Spam -->
+									{# Historial de Spam #}
 									{{' {{#if spam}} '}}
 									<tr>
 										<td class="contact-history-event-text">Spam</td>
