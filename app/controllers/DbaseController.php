@@ -148,7 +148,13 @@ class DbaseController extends ControllerBase
         //Recuperar la informacion de la BD que se desea SI existe
         $db = $this->findAndValidateDbaseAccount($id);
 		if ($db) {
-			$db->delete();
+			if($this->user->userrole === 'ROLE_SUDO') {
+				$db->delete();
+			}
+			else {
+				$wrapper = new DbaseWrapper();
+				$wrapper->deleteDBAsUser($db);
+			}
 			$this->flashSession->warning('Base de Datos Eliminada!');
 		} 
 		else {
