@@ -291,7 +291,7 @@ class ContactWrapper extends BaseWrapper
 		$query = $modelManager->createQuery($sql);
 		$result = $query->execute();
 		if( count($result) > 0) {
-			throw new \Exception('El contacto no puede ser eliminado');
+			throw new \Exception('El contacto no puede ser eliminado debido a envíos realizados en los últimos 30 días');
 		}
 	}
 
