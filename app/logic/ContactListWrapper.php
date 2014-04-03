@@ -248,8 +248,16 @@ class ContactListWrapper extends BaseWrapper
 		$dbase = Dbase::findFirstByIdDbase($idDbase);
 		
 		//3. Se actualizan los contadores (Los contadores de lista se actualizan en caso de que quede al menos un contacto)
-		$list->updateCountersInContactlist();
 		$dbase->updateCountersInDbase();		
+		
+		$chklist = Contactlist::findFirst(array(
+			"conditions" => "idContactlist = ?1",
+			"bind" => array(1 => $idContactlist)
+		));
+		if( $chklist ) {
+			$chklist->updateCountersInContactlist();
+			throw new \Exception('La lista no se pudo eliminar ya que aun contiene contactos');
+		}
 
 		return $deleteContaclist;
 	}

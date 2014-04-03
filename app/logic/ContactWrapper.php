@@ -69,10 +69,11 @@ class ContactWrapper extends BaseWrapper
 		$this->idContactlist =$idContactlist;
 	}
 
-	public function setIPAdress($ipaddress) {
+	public function setIPAdress($ipaddress)
+	{
 		$this->ipaddress = ip2long($ipaddress);
 	}
-
+	
 	public function updateContact($idEmail, $updates, $transaction = null)
 	{
 		$contacts = Contact::find(array(
@@ -184,9 +185,11 @@ class ContactWrapper extends BaseWrapper
 		return $this->contact;
 	}
 	
-	public function deleteContactFromList($contact, $list) 
+	public function deleteContactFromList($contact, $list, $override = FALSE) 
 	{
-		$this->checkSendingStatusContact($contact);
+		if(!$override) {
+			$this->checkSendingStatusContact($contact);
+		}
 		$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
 		
 		if($association->delete()) {
@@ -205,9 +208,11 @@ class ContactWrapper extends BaseWrapper
 		$this->counter->saveCounters();
 	}
 	
-	public function deleteContactFromDB($contact, $db)
+	public function deleteContactFromDB($contact, $db, $override = FALSE)
 	{
-		$this->checkSendingStatusContact($contact);
+		if(!$override) {
+			$this->checkSendingStatusContact($contact);
+		}
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
 		if (count($allLists) > 0) {
 			try {

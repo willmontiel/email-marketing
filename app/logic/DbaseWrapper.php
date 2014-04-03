@@ -62,12 +62,14 @@ class DbaseWrapper extends BaseWrapper
 		
 		$db->commit();	
 		
-		$dbase->updateCountersInDbase();
-		if(isset($dbase->idDbase)) {
+		$chkdbase = Dbase::findFirstByIdDbase($dbase->idDbase);
+		if($chkdbase) {
+			$chkdbase->updateCountersInDbase();
 			$lists = Contactlist::findByIdDbase($dbase->idDbase);
 			foreach ($lists as $list) {
 				$list->updateCountersInContactlist();
 			}
+			throw new \Exception('La base de datos no se pudo eliminar ya que aun contiene contactos');
 		}
 	}
 }

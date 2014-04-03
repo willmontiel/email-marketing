@@ -150,12 +150,18 @@ class DbaseController extends ControllerBase
 		if ($db) {
 			if($this->user->userrole === 'ROLE_SUDO') {
 				$db->delete();
+				$response = 'Base de Datos Eliminada!';
 			}
 			else {
-				$wrapper = new DbaseWrapper();
-				$wrapper->deleteDBAsUser($db);
+				try {
+					$wrapper = new DbaseWrapper();
+					$wrapper->deleteDBAsUser($db);
+					$response = 'Base de Datos Eliminada!';
+				} catch(\Exception $e) {
+					$response = $e->getMessage();
+				}
 			}
-			$this->flashSession->warning('Base de Datos Eliminada!');
+			$this->flashSession->warning($response);
 		} 
 		else {
 			$this->flashSession->error('Base de Datos no existe');
