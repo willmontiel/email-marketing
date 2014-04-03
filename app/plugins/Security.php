@@ -13,11 +13,15 @@ use Phalcon\Events\Event,
 class Security extends Plugin
 {
 	protected $serverStatus;
-	
-	public function __construct($dependencyInjector, $serverStatus = 0)
+	protected $allowed_ips;
+	protected $ip;
+
+	public function __construct($dependencyInjector, $serverStatus = 0, $allowed_ips = null, $ip = null)
 	{
 		$this->_dependencyInjector = $dependencyInjector;
 		$this->serverStatus = $serverStatus;
+		$this->allowed_ips = $allowed_ips;
+		$this->ip = $ip;
 	}
 
 	public function getAcl()
@@ -371,8 +375,13 @@ class Security extends Plugin
 	{
 		$controller = $dispatcher->getControllerName();
 		$action = $dispatcher->getActionName();
+		$this->logger->log("Server Status: {$this->serverStatus}");
+		$this->logger->log("Allowed Ip's: ". print_r($this->allowed_ips, true));
+		$this->logger->log("Ip: {$this->ip}");
 		
-		if ($this->serverStatus == 0) {
+		
+		if ($this->serverStatus == 0 && !in_array($this->ip, $this->allowed_ips)) {
+			$this->logger->log("Es un usuario normal, plataforma no disponible");
 			$this->publicurls = array(
 				'error:notavailable', 
 			);
@@ -429,6 +438,12 @@ class Security extends Plugin
 			$acl = $this->getAcl();
 			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
 			$controller = strtolower($controller);
+			
+			if ("$controller::$action" == "error::notavailable") {
+				$this->response->redirect('index');
+				return false;
+			}
+			
 			if (!isset($map[$controller .'::'. $action])) {
 				if($this->validateResponse($controller) == true){
 					$this->logger->log("Acción no permitida accesando desde ember");

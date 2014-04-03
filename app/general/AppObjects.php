@@ -8,7 +8,9 @@ class AppObjects
 	protected $di;
 	protected $status;
 	protected $urlManager;
-	
+	protected $allowed_ips;
+	protected $ip;
+
 	/**
 	 * Archivo de configuración del sistema necesario para iniciar la plataforma 
 	 * @param String ruta del archivo de configuración
@@ -17,6 +19,11 @@ class AppObjects
 	{
 		$this->config = new \Phalcon\Config\Adapter\Ini($configPath);
 		$this->status = $this->config->system->status;
+		$this->allowed_ips = array();
+		foreach ($this->config->system->override_ip as $ip) {
+			$this->allowed_ips[] = $ip;
+		}
+		$this->ip = $_SERVER['SERVER_ADDR'];
 	}
 	
 	public function configure()
@@ -158,11 +165,14 @@ class AppObjects
 	{
 		$di = $this->di;
 		$status = $this->status;
-		$di->set('dispatcher', function() use ($di, $status) {
+		$allowed_ips = $this->allowed_ips;
+		$ip = $this->ip;
+		
+		$di->set('dispatcher', function() use ($di, $status, $allowed_ips, $ip) {
 
 			$eventsManager = $di->getShared('eventsManager');
 
-			$security = new \Security($di, $status);
+			$security = new \Security($di, $status, $allowed_ips, $ip);
 			/**
 			 * We listen for events in the dispatcher using the Security plugin
 			 */
