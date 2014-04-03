@@ -375,13 +375,12 @@ class Security extends Plugin
 	{
 		$controller = $dispatcher->getControllerName();
 		$action = $dispatcher->getActionName();
+		
 		$this->logger->log("Server Status: {$this->serverStatus}");
 		$this->logger->log("Allowed Ip's: ". print_r($this->allowed_ips, true));
 		$this->logger->log("Ip: {$this->ip}");
 		
-		
 		if ($this->serverStatus == 0 && !in_array($this->ip, $this->allowed_ips)) {
-			$this->logger->log("Es un usuario normal, plataforma no disponible");
 			$this->publicurls = array(
 				'error:notavailable', 
 			);

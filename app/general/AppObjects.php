@@ -30,7 +30,15 @@ class AppObjects
 	{
 		$this->createDi();
 		
-		if ($this->config->system->status) {
+		if (!$this->config->system->status && !in_array($this->ip, $this->allowed_ips)) {
+			$this->setAppPath();
+			$this->setLogger();
+			$this->setUrlManagerObject();
+			$this->setUri();
+			$this->setDispatcher();
+			$this->setViewSystemNotAvailable();
+		}
+		else {
 			$this->setAppPath();
 			$this->setUrlManagerObject();
 			$this->setUri();
@@ -67,15 +75,6 @@ class AppObjects
 			$this->setElements();
 			$this->setView();
 			$this->setVoltCompiler();
-			
-		}
-		else {
-			$this->setAppPath();
-			$this->setLogger();
-			$this->setUrlManagerObject();
-			$this->setUri();
-			$this->setDispatcher();
-			$this->setViewSystemNotAvailable();
 		}
 	}
 	
