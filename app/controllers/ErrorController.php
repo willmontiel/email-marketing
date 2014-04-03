@@ -1,5 +1,5 @@
 <?php
-class ErrorController extends ControllerBase
+class ErrorController extends \Phalcon\Mvc\Controller
 {
 	public function indexAction()
 	{
@@ -9,5 +9,10 @@ class ErrorController extends ControllerBase
 	public function linkAction()
 	{
 		
+	}
+	
+	public function notavailableAction()
+	{
+		$this->response->setStatusCode(503, 'System unavailable');
 	}
 }

@@ -12,10 +12,12 @@ use Phalcon\Events\Event,
  */
 class Security extends Plugin
 {
-
-	public function __construct($dependencyInjector)
+	protected $serverStatus;
+	
+	public function __construct($dependencyInjector, $serverStatus = 0)
 	{
 		$this->_dependencyInjector = $dependencyInjector;
+		$this->serverStatus = $serverStatus;
 	}
 
 	public function getAcl()
@@ -92,6 +94,7 @@ class Security extends Plugin
 				'test::transactionsegment' => array(),				
 				
 				'error::index' => array(),
+				'error::notavailable' => array(),
 				'error::link' => array(),
 				'session::signin' => array(),
 				'session::login' => array(),
@@ -329,6 +332,10 @@ class Security extends Plugin
 				'form::index' => array('form' => array('read')),
 				'form::new' => array('form' => array('create')),
 				'form::delete' => array('form' => array('delete')),
+				
+				//Sistema
+				'system::index' => array('system' => array('read')),
+				'system::configure' => array('system' => array('update')),
 			);
 		}
 //		$this->cache->save('controllermap-cache', $map);
@@ -362,6 +369,20 @@ class Security extends Plugin
 	 */
 	public function beforeDispatch(Event $event, Dispatcher $dispatcher)
 	{
+		$controller = $dispatcher->getControllerName();
+		$action = $dispatcher->getActionName();
+		
+		if ($this->serverStatus == 0) {
+			$this->publicurls = array(
+				'error:notavailable', 
+			);
+			$accessdir = $controller . ':' . $action;
+			if (!in_array($accessdir, $this->publicurls)) {
+				$this->response->redirect("error/notavailable"); 
+				return false;
+			}
+		}
+		
 		$role = 'ROLE_GUEST';
 		if ($this->session->get('authenticated')) {
 			$user = User::findFirstByIdUser($this->session->get('userid'));
@@ -383,6 +404,7 @@ class Security extends Plugin
 			'session:reset',
 			'error:index',
 			'error:link',
+			'error:notavailable',
 			'track:open',
 			'track:click',
 			'track:mtaevent',
@@ -394,9 +416,6 @@ class Security extends Plugin
 			'unsubscribe:contact',
 			'unsubscribe:success'
 		);
-		
-		$controller = $dispatcher->getControllerName();
-		$action = $dispatcher->getActionName();
 
 		if ($role == 'ROLE_GUEST') {
 			$accessdir = $controller . ':' . $action;
