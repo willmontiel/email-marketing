@@ -608,6 +608,9 @@ class TrackingObject
 				
 				$this->log->log("Inicio de proceso para marcar email como spam");
 				
+				$this->log->log("Contact: [idContact: {$contact->idContact}, idEmail: {$contact->idEmail}]");
+				$this->log->log("Email: [idEmail: {$this->idEmail}]");
+				
 				$db = Phalcon\DI::getDefault()->get('db');
 				
 				$sql = "UPDATE email AS e LEFT JOIN contact AS c 
