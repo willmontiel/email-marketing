@@ -125,11 +125,15 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		else {
 			$filter = "";
 			if ($this->searchFilter[0] != 'all') {
-				if ($this->searchFilter[0] == 'blocked') {
+				switch ($this->searchFilter[0]) {
+					case 'blocked':
+					case 'bounced':
+					case 'spam':
 					$filter .= " AND e.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
-				}
-				else{
-					$filter .= " AND c.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+						break;
+					default:
+						$filter .= " AND c.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+						break;
 				}
 			}
 			
@@ -285,7 +289,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					$union = true;
 				}
 				else {
-					$sqlEmail .= " UNION ";
+					$sqlEmail .= " UNION ALL ";
 				}
 				$sqlEmail .= "SELECT e.idEmail 
 								 FROM email AS e {$queryKey->join}  
@@ -303,7 +307,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					$union = true;
 				}
 				else {
-					$sqlDomain .= " UNION ";
+					$sqlDomain .= " UNION ALL ";
 				}
 				$sqlDomain .=  "SELECT e.idEmail 
 									FROM domain AS d 
@@ -316,7 +320,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$union = '';
 		}
 		else {
-			$union = ' UNION ';
+			$union = ' UNION ALL ';
 		}
 		
 		$sql = $sqlEmail . $union . $sqlDomain;
