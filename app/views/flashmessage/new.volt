@@ -6,6 +6,7 @@
 	<script type="text/javascript">
 		$(function(){
 			$("input[name=allAccounts]").on('ifChecked', function () { 
+				console.log('Aqui estoy');
 				$('#accountSelect').prop('selectedIndex',-1);
 				$("#accountSelect").val('').trigger("liszt:updated");
 
@@ -119,7 +120,7 @@
 					<label class="col-sm-4 control-label">*Fecha y hora de inicio:</label>
 					<div class="col-sm-8">
 						<div id="date">
-							<div id="scheduleArea1" class="input-append date" style="width: 400px;">
+							<div id="scheduleArea1" class="input-append date" class="col-sm-12">
 								{{ MessageForm.render('start', {'id': 'begin'}) }}
 							</div>
 						</div>
@@ -130,25 +131,19 @@
 					<label class="col-sm-4 control-label">*Fecha y hora de fin:</label>
 					<div class="col-sm-8">
 						<div id="date">
-							<div id="scheduleArea2" class="input-append date" style="width: 400px;">
+							<div id="scheduleArea2" class="input-append date" class="col-sm-12">
 								{{ MessageForm.render('end', {'id': 'end'}) }}
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Sign in</button>
-    </div>
-  </div>
-</form>
-					
-						<div class="form-actions">
-							<a href="{{ url('flashmessage/index') }}" class="btn btn-default">Cancelar</a>
-							{{ submit_button("Guardar", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
-						</div>
-					</form>
+				<div class="form-group">
+					<div class="col-sm-offset-4 col-sm-8">
+						<a href="{{ url('flashmessage/index') }}" class="btn btn-default">Cancelar</a>
+						{{ submit_button("Guardar", 'class' : "btn btn-primary", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+					</div>
+				</div>
+			</form>
 		</div>
 		<div class="col-md-2"></div>
 	</div>
