@@ -46,7 +46,8 @@ class DbaseWrapper extends BaseWrapper
 						FROM mxc MC
 							JOIN mail MA ON MC.idMail = MA.idMail
 						WHERE MC.idContact = CO.idContact
-						AND MA.finishedon > {$time->getTimestamp()})";
+						AND MA.startedon > {$time->getTimestamp()}
+						AND ( MA.finishedon = 0 OR MA.finishedon > {$time->getTimestamp()} )";
 		
 		$query2  = "DELETE FROM dbase WHERE idDbase = ? AND ( SELECT COUNT(*) FROM contact WHERE idDbase = ? ) < 1";
 		
