@@ -425,6 +425,11 @@ class Security extends Plugin
 			'unsubscribe:success'
 		);
 
+		if ("$controller::$action" == "error::notavailable") {
+			$this->response->redirect('index');
+			return false;
+		}
+
 		if ($role == 'ROLE_GUEST') {
 			$accessdir = $controller . ':' . $action;
 			
@@ -437,11 +442,6 @@ class Security extends Plugin
 			$acl = $this->getAcl();
 			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
 			$controller = strtolower($controller);
-			
-			if ("$controller::$action" == "error::notavailable") {
-				$this->response->redirect('index');
-				return false;
-			}
 			
 			if (!isset($map[$controller .'::'. $action])) {
 				if($this->validateResponse($controller) == true){
