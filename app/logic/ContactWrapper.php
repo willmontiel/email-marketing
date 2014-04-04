@@ -481,24 +481,6 @@ class ContactWrapper extends BaseWrapper
 				$contact->status = $hora;
 				$contact->ipActivated = $this->ipaddress;
 			}
-			
-			if ($contact->email->bounced != 0 && !$data->isBounced) {
-				// Actualmente rebotado y se actualiza a no rebotado
-				$contact->email->bounced = 0;
-			}
-			else if ($contact->email->bounced == 0 && $data->isBounced) {
-				// Actualmente no rebotado, y se actualiza a rebotado
-				$contact->email->bounced = $hora;
-			}
-			
-			if ($contact->email->spam != 0 && !$data->isSpam) {
-				// Actualmente spam y se actualiza a no spam
-				$contact->email->spam = 0;
-			}
-			else if ($contact->spam == 0 && $data->isSpam) {
-				// Actualmente no spam, y se actualiza a spam
-				$contact->email->spam = $hora;
-			}
 		}
 	}
 	
