@@ -224,7 +224,7 @@ class ContactListWrapper extends BaseWrapper
 							JOIN mail MA ON MC.idMail = MA.idMail
 						WHERE MC.idContact = CO.idContact
 						AND MA.startedon > {$time->getTimestamp()}
-						AND ( MA.finishedon = 0 OR MA.finishedon > {$time->getTimestamp()} )";
+						AND ( MA.finishedon = 0 OR MA.finishedon > {$time->getTimestamp()}) )";
 						
 			$query3.= " AND ( SELECT COUNT(*) FROM coxcl WHERE idContactlist = ? ) < 1";
 			array_push($query3Array, $idContactlist);
