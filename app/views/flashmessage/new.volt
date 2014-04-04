@@ -5,10 +5,11 @@
 	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
 	<script type="text/javascript">
 		$(function(){
-			$("input[name=allAccounts]").on('ifChecked', function () { 
-				console.log('Aqui estoy');
-				$('#accountSelect').prop('selectedIndex',-1);
-				$("#accountSelect").val('').trigger("liszt:updated");
+			$("input[name=allAccounts]").on('click', function () { 
+				$('#accounts').val("");
+;
+				//$('#accountSelect').prop('selectedIndex',0);
+				//$("#accountSelect").val('').trigger("liszt:updated");
 
 				var val = $('input[name=allAccounts]:checked').val();
 				switch (val) {

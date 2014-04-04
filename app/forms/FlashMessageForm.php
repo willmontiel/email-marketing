@@ -30,7 +30,6 @@ class FlashMessageForm extends Form
 		$this->add(new Select('accounts', Account::find(), array(
 			'using' => array('idAccount', 'companyName'),
 			'multiple' => 'multiple',
-			'class' => 'chzn-select',
 			'id' => 'accounts'
 		)));
 		
