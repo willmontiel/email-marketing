@@ -53,7 +53,7 @@ class MailController extends ControllerBase
 			$mailClone->type = $mail->type;
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
-			$mailClone->deleted = 0;
+			$mailClone->finishedon = 0;
 			$mailClone->createdon = time();
 			$mailClone->deleted = 0;
 			$mailClone->previewData = $mail->previewData;
@@ -228,6 +228,7 @@ class MailController extends ControllerBase
 			$mail->replyTo = strtolower($form->getValue('replyTo'));
 			$mail->status = "Draft";
 			$mail->deleted = 0;
+			$mail->finishedon = 0;
 			$mail->type = $type;
 			$mail->wizardOption = $wizardOption;
 			$mail->previewData = $previewData;
