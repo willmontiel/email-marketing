@@ -292,6 +292,7 @@ class ContactWrapper extends BaseWrapper
 				FROM Mxc AS x 
 					JOIN Mail AS m ON (x.idMail = m.idMail)
 				WHERE x.idContact = {$contact->idContact}
+				AND m.startedon > {$time->getTimestamp()}
 				AND m.finishedon > {$time->getTimestamp()}";
 		$query = $modelManager->createQuery($sql);
 		$result = $query->execute();
