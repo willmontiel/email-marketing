@@ -7,6 +7,12 @@
 			{{' {{#if isEmailBlocked}} '}}
 				<span class="badge badge-dark-red">Correo bloqueado</span>
 			{{' {{/if }} '}}
+			{{ '{{#if isBounced}}' }}
+				<span class="badge badge badge-red">Rebotado</span>
+			{{ '{{/if}}' }}	
+			{{ '{{#if isSpam}}' }}
+				<span class="badge badge badge-red">Reportado Spam:&nbsp</span>
+			{{ '{{/if}}' }}
 			{{' {{#if errors.email}} '}}
 				<span class="text text-error">{{'{{errors.email}}'}}</span>
 			{{' {{/if }} '}}
@@ -82,10 +88,8 @@
 									</td>
 									<td>
 										{{ '{{#if isSubscribed}}' }}
-
 											<span class="green-label">Suscrito</span>
 										{{ '{{else}}' }}
-
 											<span class="orange-label">Desuscrito</span>
 										{{ '{{/if}}' }}
 									</td>

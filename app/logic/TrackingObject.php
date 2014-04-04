@@ -475,18 +475,6 @@ class TrackingObject
 		return false;
 	}
 	
-	private function validateCoincidenceBetweenEmailAndContact()
-	{
-		$this->log->log("Contacto: [idContact: {$this->contact->idContact}, idEmail: {$this->contact->idEmail}]");
-		$this->log->log("Email: [idEmail: {$this->email->idEmail}]");
-		if ($this->contact->idEmail == $this->email->idEmail) {
-			$this->log->log("No se ha cambiado el correo del contacto recientemente, se hará proceso de tracking basandose en la identificación del contacto");
-			return true;
-		}
-		$this->log->log("Hay un cambio en el correo del contacto, no es el mismo correo con el que se envió, se hará proceso de tracking basandose en la identificación del correo");
-		return false;
-	}
-	
 	public function trackSoftBounceEvent($cod, $date = null)
 	{
 		if ($date == null) {
@@ -705,24 +693,6 @@ class TrackingObject
 		}
 	}
 	
-	private function findContactlistObjects()
-	{
-		$lists = array();
-		$idContactlists = explode(",", $this->mxc->contactlists);
-		foreach ($idContactlists as $idContactlist) {
-			$contactlist = Contactlist::findFirst(array(
-				'conditions' => 'idContactlist = ?1',
-				'bind' => array(1 => $idContactlist)
-			));
-			
-			if (!$contactlist) {
-				throw new Exception('Contactlist object not found!');
-			}
-			$lists[] = $contactlist;
-		}
-		$this->log->log('Se encontrarón Contactlists');
-		return $lists;
-	}
 	
 	public function canTrackUnsubscribedEvents()
 	{
