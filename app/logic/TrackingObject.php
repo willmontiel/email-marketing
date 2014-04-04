@@ -117,6 +117,16 @@ class TrackingObject
 		return false;
 	}
 	
+	protected function canTrackOpenEventsForSpam()
+	{
+		if ($this->mxc->opening == 0 &&
+				  $this->mxc->bounced == 0 &&
+				  $this->mxc->status == 'sent') {
+			return true;
+		}
+		return false;
+	}
+	
 	public function findRelatedMailObject()
 	{
 		$mailobject = Mail::findFirst(array(
@@ -577,7 +587,8 @@ class TrackingObject
 					$statListObj->incrementSpam();
 				}
 				
-				if ($this->canTrackOpenEvents()) {
+				if ($this->canTrackOpenEventsForSpam()) {
+					$this->log->log("Se contabilizará apertura");
 					$this->mxc->opening = $date;// Actualizar marcador de apertura (timestamp)
 					$mailObj->incrementUniqueOpens();//Se agregar el objeto Mail actualizado para su posterior grabación
 					$statDbaseObj->incrementUniqueOpens();
@@ -607,6 +618,9 @@ class TrackingObject
 				
 				
 				$this->log->log("Inicio de proceso para marcar email como spam");
+				$contact = $this->mxc->contact;
+				$this->log->log("Contact: [idContact: {$contact->idContact}, idEmail: {$contact->idEmail}]");
+				$this->log->log("Email: [idEmail: {$this->idEmail}]");
 				
 				$db = Phalcon\DI::getDefault()->get('db');
 				
