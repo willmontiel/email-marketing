@@ -718,3 +718,6 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .color-selected {
 	border: 2px blue solid !important;
 }
+.number-of-tweet-characters {
+	text-align: right;
+}
