@@ -48,6 +48,12 @@
 					$('.twdescription').hide();
 				}
 			});
+			
+			$('#tweet-char-number').text($('#twpublicationcontent').attr('maxlength'));
+			$('#twpublicationcontent').keyup(function() {
+				var text = $(this).val();
+				$('#tweet-char-number').text($(this).attr('maxlength') - text.length);
+			});
 		});
 	</script>
 {% endblock %}
@@ -173,6 +179,9 @@
 								<div class="twdescription" style="display: none">
 									<label>Mensaje del Tweet: </label>
 									{{ MailForm.render('twpublicationcontent') }}
+									<div class="number-of-tweet-characters">
+									<span id="tweet-char-number" class="label label-blue">1</span>
+									</div>
 								</div>
 								<div class="add_twitter_account"><a onclick="new_sn_account('{{twloginUrl}}')">Añadir cuenta de Twitter</a></div>
 							</div>

@@ -223,7 +223,8 @@ class ContactListWrapper extends BaseWrapper
 						FROM mxc MC
 							JOIN mail MA ON MC.idMail = MA.idMail
 						WHERE MC.idContact = CO.idContact
-						AND MA.finishedon > {$time->getTimestamp()})";
+						AND MA.startedon > {$time->getTimestamp()}
+						AND ( MA.finishedon = 0 OR MA.finishedon > {$time->getTimestamp()}) )";
 						
 			$query3.= " AND ( SELECT COUNT(*) FROM coxcl WHERE idContactlist = ? ) < 1";
 			array_push($query3Array, $idContactlist);
@@ -248,8 +249,16 @@ class ContactListWrapper extends BaseWrapper
 		$dbase = Dbase::findFirstByIdDbase($idDbase);
 		
 		//3. Se actualizan los contadores (Los contadores de lista se actualizan en caso de que quede al menos un contacto)
-		$list->updateCountersInContactlist();
 		$dbase->updateCountersInDbase();		
+		
+		$chklist = Contactlist::findFirst(array(
+			"conditions" => "idContactlist = ?1",
+			"bind" => array(1 => $idContactlist)
+		));
+		if( $chklist ) {
+			$chklist->updateCountersInContactlist();
+			throw new \Exception('La lista no se pudo eliminar ya que aun contiene contactos');
+		}
 
 		return $deleteContaclist;
 	}

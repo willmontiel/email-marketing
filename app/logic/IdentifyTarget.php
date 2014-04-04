@@ -86,7 +86,7 @@ class IdentifyTarget
 				  FROM contact AS c 
 					 JOIN email AS e ON (c.idEmail = e.idEmail) 
 					 JOIN coxcl AS l ON (c.idContact = l.idContact) " . $filters->join . "
-					 WHERE c.idDbase IN (" . $this->identifiers . ") " . $filters->and . " AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.spam = 0 AND c.bounced = 0 AND c.unsubscribed = 0 
+					 WHERE c.idDbase IN (" . $this->identifiers . ") " . $filters->and . " AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0 
 				   GROUP BY 1, 2)";
 		/**
 		 * Inserting data into statdbase for statistics.
@@ -136,7 +136,7 @@ class IdentifyTarget
 				  FROM coxcl AS cl
 					 JOIN contact AS c ON (cl.idContact = c.idContact)
 				     JOIN email AS e ON (c.idEmail = e.idEmail) " . $filters->join . "
-				     WHERE cl.idContactlist IN (" . $this->identifiers . ") " . $filters->and . "AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.spam =0 AND c.bounced = 0 AND c.unsubscribed = 0
+				     WHERE cl.idContactlist IN (" . $this->identifiers . ") " . $filters->and . "AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0
 				  GROUP BY 1, 2)";
 
 		/**
@@ -187,7 +187,7 @@ class IdentifyTarget
 						JOIN contact AS c ON (sc.idContact = c.idContact)
 						JOIN email AS e ON (c.idEmail = e.idEmail)
 						JOIN coxcl AS l ON (c.idContact = l.idContact) " . $filters->join . "
-					WHERE sc.idSegment IN (" . $this->identifiers . ") " . $filters->and . " AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.spam =0 AND c.bounced = 0 AND c.unsubscribed = 0
+					WHERE sc.idSegment IN (" . $this->identifiers . ") " . $filters->and . " AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0
 					GROUP BY 1, 2)";
 
 		$sql2 = 'INSERT IGNORE INTO statcontactlist 

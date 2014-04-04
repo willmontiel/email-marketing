@@ -556,8 +556,9 @@ class ApiController extends ControllerBase
 
 		// Eliminar el Contacto de la Base de Datos
 		try {
+			$override = ($this->user->userrole == 'ROLE_SUDO') ? TRUE : FALSE;
 			$wrapper = new ContactWrapper();
-			$result = $wrapper->deleteContactFromDB($contact, $db);
+			$result = $wrapper->deleteContactFromDB($contact, $db, $override);
 		} catch(\Exception $e) {
 			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
 		} 
@@ -764,7 +765,7 @@ class ApiController extends ControllerBase
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, "Error while deleting list! {$e}");	
+			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
 		}
 		return $this->setJsonResponse($deletedList);
 	}
@@ -935,9 +936,10 @@ class ApiController extends ControllerBase
 		}
 		
 		// Eliminar el Contacto de la Lista
-		$wrapper = new ContactWrapper();
 		try {
-			$response = $wrapper->deleteContactFromList($contact, $list);
+			$override = ($this->user->userrole == 'ROLE_SUDO') ? TRUE : FALSE;
+			$wrapper = new ContactWrapper();
+			$response = $wrapper->deleteContactFromList($contact, $list, $override);
 		} catch(\Exception $e) {
 			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
 		}

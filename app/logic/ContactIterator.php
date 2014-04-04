@@ -27,7 +27,7 @@ class ContactIterator implements Iterator
 						FROM (' . $sql1 . ') AS l 
 							JOIN contact AS c ON(l.idContact = c.idContact)
 							JOIN email AS e ON(c.idEmail = e.idEmail)
-						WHERE  c.bounced = 0 AND c.unsubscribed = 0 AND c.spam = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0';
+						WHERE  c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0';
 		}
 		else {
 			$sql = 'SELECT c.idContact, c.name, c.lastName, e.idEmail, e.email, f.name AS field, f.textValue, f.numberValue 
@@ -35,7 +35,7 @@ class ContactIterator implements Iterator
 							JOIN contact AS c ON(l.idContact = c.idContact)
 							JOIN email AS e ON(c.idEmail = e.idEmail)
 							LEFT JOIN (SELECT cf.name, fi.idContact, fi.textValue, fi.numberValue FROM customfield AS cf JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) WHERE cf.idCustomField IN (' . $this->fields . ')) AS f ON(c.idContact = f.idContact)
-						WHERE  c.bounced = 0 AND c.unsubscribed = 0 AND c.spam = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0';
+						WHERE  c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0';
 		}
 		
 		unset($this->contacts);
