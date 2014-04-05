@@ -11,7 +11,9 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 			if (error.status == 422) {
 				try {
 					var obj = $.parseJSON(error.responseText);
-					self.set('errors', obj.errors);
+					self.get("model").rollback();
+					self.transitionToRoute(troute);
+					$.gritter.add({title: 'Error', text: obj.errors, sticky: false, time: 3000});
 				}
 				catch (e) {
 				}

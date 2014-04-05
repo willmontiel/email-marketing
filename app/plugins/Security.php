@@ -12,10 +12,16 @@ use Phalcon\Events\Event,
  */
 class Security extends Plugin
 {
+	protected $serverStatus;
+	protected $allowed_ips;
+	protected $ip;
 
-	public function __construct($dependencyInjector)
+	public function __construct($dependencyInjector, $serverStatus = 0, $allowed_ips = null, $ip = null)
 	{
 		$this->_dependencyInjector = $dependencyInjector;
+		$this->serverStatus = $serverStatus;
+		$this->allowed_ips = $allowed_ips;
+		$this->ip = $ip;
 	}
 
 	public function getAcl()
@@ -92,6 +98,7 @@ class Security extends Plugin
 				'test::transactionsegment' => array(),				
 				
 				'error::index' => array(),
+				'error::notavailable' => array(),
 				'error::link' => array(),
 				'session::signin' => array(),
 				'session::login' => array(),
@@ -288,6 +295,7 @@ class Security extends Plugin
 
 				//tests
 				'test::start' => array('mail' => array('read', 'create', 'send')),
+				'test::testemailcontact' => array('mail' => array('read', 'create', 'send')),
 				'test::mailer' => array('mail' => array('read', 'create', 'send')),
 				'test::aperturas' => array('statistic' => array('read')),
 				'test::assettest' => array('statistic' => array('read')),
@@ -329,6 +337,10 @@ class Security extends Plugin
 				'form::index' => array('form' => array('read')),
 				'form::new' => array('form' => array('create')),
 				'form::delete' => array('form' => array('delete')),
+				
+				//Sistema
+				'system::index' => array('system' => array('read')),
+				'system::configure' => array('system' => array('update')),
 			);
 		}
 //		$this->cache->save('controllermap-cache', $map);
@@ -362,6 +374,24 @@ class Security extends Plugin
 	 */
 	public function beforeDispatch(Event $event, Dispatcher $dispatcher)
 	{
+		$controller = $dispatcher->getControllerName();
+		$action = $dispatcher->getActionName();
+		
+		$this->logger->log("Server Status: {$this->serverStatus}");
+		$this->logger->log("Allowed Ip's: ". print_r($this->allowed_ips, true));
+		$this->logger->log("Ip: {$this->ip}");
+		
+		if ($this->serverStatus == 0 && !in_array($this->ip, $this->allowed_ips)) {
+			$this->publicurls = array(
+				'error:notavailable', 
+			);
+			$accessdir = $controller . ':' . $action;
+			if (!in_array($accessdir, $this->publicurls)) {
+				$this->response->redirect("error/notavailable"); 
+				return false;
+			}
+		}
+		
 		$role = 'ROLE_GUEST';
 		if ($this->session->get('authenticated')) {
 			$user = User::findFirstByIdUser($this->session->get('userid'));
@@ -383,6 +413,7 @@ class Security extends Plugin
 			'session:reset',
 			'error:index',
 			'error:link',
+			'error:notavailable',
 			'track:open',
 			'track:click',
 			'track:mtaevent',
@@ -394,9 +425,11 @@ class Security extends Plugin
 			'unsubscribe:contact',
 			'unsubscribe:success'
 		);
-		
-		$controller = $dispatcher->getControllerName();
-		$action = $dispatcher->getActionName();
+
+		if ("$controller::$action" == "error::notavailable") {
+			$this->response->redirect('index');
+			return false;
+		}
 
 		if ($role == 'ROLE_GUEST') {
 			$accessdir = $controller . ':' . $action;
@@ -410,6 +443,7 @@ class Security extends Plugin
 			$acl = $this->getAcl();
 			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
 			$controller = strtolower($controller);
+			
 			if (!isset($map[$controller .'::'. $action])) {
 				if($this->validateResponse($controller) == true){
 					$this->logger->log("Acción no permitida accesando desde ember");

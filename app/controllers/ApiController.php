@@ -555,10 +555,14 @@ class ApiController extends ControllerBase
 		}
 
 		// Eliminar el Contacto de la Base de Datos
-
-		$wrapper = new ContactWrapper();
-		$result = $wrapper->deleteContactFromDB($contact, $db);
-		
+		try {
+			$override = ($this->user->userrole == 'ROLE_SUDO') ? TRUE : FALSE;
+			$wrapper = new ContactWrapper();
+			$result = $wrapper->deleteContactFromDB($contact, $db, $override);
+		} catch(\Exception $e) {
+			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
+		} 
+			
 		return $this->setJsonResponse(array ('contact' => $result->status), $result->type, $result->msg);
 	}
 
@@ -585,16 +589,24 @@ class ApiController extends ControllerBase
 		
 		$name = $this->request->getQuery('name', null);
 		$idDbase = $this->request->getQuery('dbase', null, null);
-		$contactWrapper = new ContactListWrapper();
-		$contactWrapper->setPager($pager);
 		
-		if($idDbase == 0) {
-			$lists = $contactWrapper->findContactListByAccount($this->user->account, $name);
+		try {
+			$contactWrapper = new ContactListWrapper();
+			$contactWrapper->setPager($pager);
+
+			if($idDbase == 0) {
+				$lists = $contactWrapper->findContactListByAccount($this->user->account, $name);
+			}
+			else {
+				$lists = $contactWrapper->findContactListByIdDbase($this->user->account, $idDbase);
+			}
+			return $this->setJsonResponse($lists);
 		}
-		else {
-			$lists = $contactWrapper->findContactListByIdDbase($this->user->account, $idDbase);
+		catch (Exception $e) {
+			$this->logger->log("Exception {$e}");
+			return $this->setJsonResponse(array('status' => 'failed'), 500, 'Internal error');
 		}
-		return $this->setJsonResponse($lists);
+		
 	}
 	/**
 	 * 
@@ -744,7 +756,7 @@ class ApiController extends ControllerBase
 			if(!$wrapper->validateListBelongsToAccount($this->user->account, $idContactlist)) {
 				return $this->setJsonResponse(null, 422, 'Lista invalida');
 			}
-
+			$wrapper->setUser($this->user);
 			$deletedList = $wrapper->deleteContactList($idContactlist);	
 		}
 		catch (\InvalidArgumentException $e) {
@@ -753,7 +765,7 @@ class ApiController extends ControllerBase
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, "Error while deleting list! {$e}");	
+			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
 		}
 		return $this->setJsonResponse($deletedList);
 	}
@@ -810,9 +822,11 @@ class ApiController extends ControllerBase
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
 		$wrapper = new ContactWrapper();
 		
 		$wrapper->setAccount($this->user->account);
+		$wrapper->setContactMailHistory($mailhistory);
 		$wrapper->setIdDbase($list->idDbase);
 		$wrapper->setIdContactlist($idContactlist);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
@@ -867,10 +881,13 @@ class ApiController extends ControllerBase
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		
 		$wrapper = new ContactWrapper();
 
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
+		$wrapper->setContactMailHistory($mailhistory);
 		$wrapper->setIdContactlist($idContactlist);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		
@@ -919,10 +936,13 @@ class ApiController extends ControllerBase
 		}
 		
 		// Eliminar el Contacto de la Lista
-		$wrapper = new ContactWrapper();
-		
-		$response = $wrapper->deleteContactFromList($contact, $list);
-		
+		try {
+			$override = ($this->user->userrole == 'ROLE_SUDO') ? TRUE : FALSE;
+			$wrapper = new ContactWrapper();
+			$response = $wrapper->deleteContactFromList($contact, $list, $override);
+		} catch(\Exception $e) {
+			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
+		}
 		return $this->setJsonResponse(array ('contact' => $response), 202, 'contact deleted success');	
 	
 	}
@@ -935,7 +955,7 @@ class ApiController extends ControllerBase
 	{
 		$dbs = array();
 		foreach ($this->user->account->dbases as $db) {
-			$dbs[] = array('id'=> $db->idDbase, 'name' => $db->name);
+			$dbs[] = array('id'=> $db->idDbase, 'name' => $db->name, 'color' => $db->color);
 		}
 		return $this->setJsonResponse(array('dbase' => $dbs));
 	}

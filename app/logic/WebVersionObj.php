@@ -106,8 +106,8 @@ class WebVersionObj extends BaseWrapper
 		$twmetacard = '<meta name="twitter:card" content="summary">';
 		$twmetaurl = '<meta name="twitter:url" content="' . $url['twitter'] . '">';
 //		$twmetadomain = '<meta name="twitter:domain" content="' . $this->urlManager->getBaseUri(TRUE) . '">';
-		$twmetasite = '<meta name="twitter:site" content="@dariosigma">';
-		$twmetacreator = '<meta name="twitter:creator" content="@dariosigma">';
+		$twmetasite = '<meta name="twitter:site" content="@SigmaMovil1">';
+		$twmetacreator = '<meta name="twitter:creator" content="@SigmaMovil1">';
 		$twmetatitle = '<meta name="twitter:title" content="' . $twtitle . '">';
 		$twmetadescription = '<meta name="twitter:description" content="' . $twdescription . '">';
 		$twmetaimage = '<meta name="twitter:image:src" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png">';

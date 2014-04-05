@@ -1,5 +1,5 @@
 <?php
-//require_once "/../library/swiftmailer/lib/swift_required.php";
+require_once "../app/library/swiftmailer/lib/swift_required.php";
 class MailController extends ControllerBase
 {
 	protected $image_map = array();
@@ -17,7 +17,7 @@ class MailController extends ControllerBase
 
 		$builder = $this->modelsManager->createBuilder()
 			->from('Mail')
-			->where("idAccount = $idAccount")
+			->where("idAccount = $idAccount AND deleted = 0")
 			->orderBy('createdon DESC');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
@@ -56,7 +56,9 @@ class MailController extends ControllerBase
 			$mailClone->type = $mail->type;
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
+			$mailClone->finishedon = 0;
 			$mailClone->createdon = time();
+			$mailClone->deleted = 0;
 			$mailClone->previewData = $mail->previewData;
 			
 			if (!$mailClone->save()) {
@@ -97,35 +99,17 @@ class MailController extends ControllerBase
 	
 	public function deleteAction($idMail)
 	{
-		$time = strtotime("-31 days");
-		
-		$mail = Mail::findFirst(array(
-			"conditions" => "(idMail = ?1 AND idAccount = ?2 AND finishedon <= ?3) OR (idMail = ?1 AND idAccount = ?2 AND (status = ?4 OR status = ?5 OR status = ?6))",
-			"bind" => array(1 => $idMail,
-							2 => $this->user->account->idAccount,
-							3 => $time,
-							4 => "Draft",
-							5 => "Scheduled" ,
-							6 => "Cancelled" )
-		));
-		
-		if (!$mail) {
-			$this->flashSession->error("No se ha encontrado el correo, por favor verifique la información");
+		try {
+			$process = new ProcessMail();
+			$process->setAccount($this->user->account);
+			$process->setUser($this->user);
+			$process->deleteMail($idMail);
+		} catch (\InvalidArgumentException $e) {
+			$this->flashSession->error($e->getMessage());
 			return $this->response->redirect("mail");
 		}
-		
-		else if (!$mail->delete()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-			}
-			return $this->response->redirect("mail");
-		}
-		
-		else {
-			$this->flashSession->warning("Se ha eliminado el correo exitosamente");
-			return $this->response->redirect("mail");
-		}
-		
+		$this->flashSession->warning("Se ha eliminado el correo exitosamente");
+		return $this->response->redirect("mail");
 	}
 	
 	private function validateTemplate($template, $account)
@@ -246,6 +230,8 @@ class MailController extends ControllerBase
 			$mail->fromEmail = strtolower($form->getValue('fromEmail'));
 			$mail->replyTo = strtolower($form->getValue('replyTo'));
 			$mail->status = "Draft";
+			$mail->deleted = 0;
+			$mail->finishedon = 0;
 			$mail->type = $type;
 			$mail->wizardOption = $wizardOption;
 			$mail->previewData = $previewData;
@@ -923,7 +909,8 @@ class MailController extends ControllerBase
 					$response = $target->createTargetObj($idDbases, $idContactlists, $idSegments, $mail);
 				}
 				catch (InvalidArgumentException $e) {
-					throw new InvalidArgumentException("Error while saving targetObj in db");
+					$this->logger->log('Error while saving targetObj in db');
+					$this->logger->log('Exception: [' . $e . ']');
 				}
 				
 				if (!$response) {
@@ -1413,22 +1400,36 @@ class MailController extends ControllerBase
 			$target = $this->request->getPost("target");
 			$msg = $this->request->getPost("message");
 			
-			$this->logger->log('Target: ' . $target);
-			$this->logger->log('Message: ' . $msg);
+			if (trim($target) === '') {
+				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
+				return $this->response->redirect('mail/target/' . $idMail);
+			}
 			
 			$recipients = explode(', ', $target);
 			
 			$emails = array();
 			foreach ($recipients as $recipient) {
-				if (!empty($recipient) && !in_array($recipient, $emails) && filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
-					$emails[] = $recipient;
+				$r = trim($recipient);
+				if (!empty($r) && !in_array($r, $emails) && filter_var($r, FILTER_VALIDATE_EMAIL)) {
+					$emails[] = $r;
 				}
+			}
+			
+			if (count($emails) == 0) {
+				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
+				return $this->response->redirect('mail/target/' . $idMail);
 			}
 			
 			$transport = Swift_SendmailTransport::newInstance();
 			$swift = Swift_Mailer::newInstance($transport);
 			
+			$account = $this->user->account;
+			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
+			
 			$testMail = new TestMail();
+			$testMail->setAccount($account);
+			$testMail->setDomain($domain);
+			$testMail->setUrlManager($this->urlManager);
 			$testMail->setMail($mail);
 			$testMail->setMailContent($mailContent);
 			$testMail->setPersonalMessage($msg);
@@ -1441,16 +1442,10 @@ class MailController extends ControllerBase
 			$text = $testMail->getPlainText();
 			$replyTo = $mail->replyTo;
 			
-			$this->logger->log('Recipients: ' . print_r($emails, true));
-			$this->logger->log('Content: ' . $content);
-			$this->logger->log('Plaintext: ' . $text);
-			
 			foreach ($emails as $email) {
 				$to = array($email => 'Nombre Apellido');
 				
 				$message = new Swift_Message($subject);
-				$headers = $message->getHeaders();
-				
 				$message->setFrom($from);
 				$message->setTo($to);
 				$message->setBody($content, 'text/html');
@@ -1460,11 +1455,7 @@ class MailController extends ControllerBase
 					$message->setReplyTo($replyTo);
 				}
 				
-//				$sendMail = true;
 				$sendMail = $swift->send($message, $failures);
-				
-				$this->lastsendheaders = $message->getHeaders()->toString();
-				$this->logger->log("Headers: " . print_r($this->lastsendheaders, true));
 				
 				if (!$sendMail){
 					$this->logger->log("Error while sending test mail: " . print_r($failures));
@@ -1482,8 +1473,16 @@ class MailController extends ControllerBase
 
 	public function cancelAction($idMail)
 	{
-		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		$commObj->sendCancelToParent($idMail);
+		try {
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$commObj->sendCancelToParent($idMail);
+		}
+		catch(\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+		}
+		catch(\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+		}
 		
 		return $this->response->redirect("mail/index");
 	}

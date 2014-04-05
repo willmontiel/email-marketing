@@ -33,13 +33,12 @@ class SegmentapiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró el segmento');
 		}
 		
-		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
-		
 		try { 
 			if ($filter != null) {
 				if (!empty($search)) {
 					$searchCriteria = new \EmailMarketing\General\ModelAccess\ContactSearchCriteria($search);
 				}
+				$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
 				$searchFilter = new \EmailMarketing\General\ModelAccess\ContactSearchFilter($filter);
 				
 				$contactset = new \EmailMarketing\General\ModelAccess\ContactSet();
@@ -60,7 +59,6 @@ class SegmentapiController extends ControllerBase
 				$this->logger->log('Va null');
 				$segmentwrapper = new SegmentWrapper();
 				$segmentwrapper->setPager($pager);
-				$segmentwrapper->setContactMailHistory($mailhistory);
 				
 				$contacts = $segmentwrapper->findContactsInSegment($segment);
 				

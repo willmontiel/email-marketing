@@ -103,35 +103,39 @@ class Communication
 	
 	public function sendCancelToParent($idMail)
 	{
+		$log = Phalcon\DI::getDefault()->get('logger');
 		$mail = Mail::findFirstByIdMail($idMail);
 		
 		if(!$this->verifySentStatus($mail)) {
+
 			if($mail->status == 'Sending') {
 				$this->requester->send(sprintf("%s $idMail $idMail", 'Cancel-Process'));
 				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
 				//No necesito cambiar el estado del Mail, porque el proceso dueño del Mail se hara cargo de esto
 			}
-			else if($mail->status == 'Scheduled') {
-				$scheduled = Mailschedule::findFirstByIdMail($idMail);
-				$scheduled->delete();
-				$this->requester->send(sprintf("%s $idMail $idMail", 'Scheduled-Task'));
-				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
-				
+			else {
+				if($mail->status == 'Scheduled') {
+					$scheduled = Mailschedule::findFirstByIdMail($idMail);
+					$scheduled->delete();
+					$this->requester->send(sprintf("%s $idMail $idMail", 'Scheduled-Task'));
+					$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+
+				}else {
+					$sql = "UPDATE mxc SET status = 'canceled' WHERE idMail = {$idMail}";
+					$db = Phalcon\DI::getDefault()->get('db');
+					$query = $db->query($sql);
+					$result = $query->execute();
+					if (!$result) {
+						$log->log("Error updating MxC to Cancel");
+					}
+				}
 				//Debo cambiar explicitamente el estado del Mail, porque aun no hay un proceso manejando el envio
 				$mail->status = 'Cancelled';
 
 				if(!$mail->save()) {
 					foreach ($mail->getMessages() as $msg) {
-						$this->flashSession->error($msg);
+						$log->log($msg);
 					}
-				}
-			}
-			else {
-				$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $idMail;
-				$mm = Phalcon\DI::getDefault()->get('modelsManager');
-				$mm->executeQuery($phql);
-				if (!$mm) {
-					Phalcon\DI::getDefault()->get('logger')->log("Error updating MxC to Cancel");
 				}
 			}
 		}

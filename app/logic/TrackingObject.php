@@ -11,6 +11,8 @@ class TrackingObject
 	protected $mxc;
 	protected $dirtyObjects;
 	protected $contact;
+	protected $mail;
+	protected $idEmail = null;
 
 	public function __construct()
 	{
@@ -26,7 +28,7 @@ class TrackingObject
 	 * @param int $idContact
 	 * @throws InvalidArgumentException cuando no se puede encontrar un registro MxC con esa combinacion
 	 */
-	public function setSendIdentification($idMail, $idContact)
+	public function setSendIdentification($idMail, $idContact, $idEmail = null)
 	{
 		$this->mxc = Mxc::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idContact = ?2',
@@ -36,6 +38,10 @@ class TrackingObject
 
 		if (!$this->mxc) {
 			throw new Exception("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
+		}
+		
+		if ($idEmail != null) {
+			$this->idEmail = $idEmail;
 		}
 	}
 	
@@ -111,6 +117,16 @@ class TrackingObject
 		return false;
 	}
 	
+	protected function canTrackOpenEventsForSpam()
+	{
+		if ($this->mxc->opening == 0 &&
+				  $this->mxc->bounced == 0 &&
+				  $this->mxc->status == 'sent') {
+			return true;
+		}
+		return false;
+	}
+	
 	public function findRelatedMailObject()
 	{
 		$mailobject = Mail::findFirst(array(
@@ -127,22 +143,55 @@ class TrackingObject
 	
 	public function findRelatedDbaseStatObject()
 	{
+		
 		$contact = Contact::findFirst(array(
 			'conditions' => 'idContact = ?1',
 			'bind' => array(1 => $this->mxc->idContact)
 		));
+
+		if (!$contact) {
+			throw new Exception('Contact object not found!');
+		}
 
 		$statdbase = Statdbase::findFirst(array(
 			'conditions' => 'idDbase = ?1 AND idMail = ?2',
 			'bind' => array(1 => $contact->idDbase,
 							2 => $this->mxc->idMail)
 		));
-		
+
 		if (!$statdbase) {
 			throw new Exception('Statdbase object not found!');
 		}
+
 		$this->log->log('Se encontró el obj Statdbase');
 		return $statdbase;
+			
+	}
+	
+	public function findRelatedDbaseStatObjectForMtaEvent($idEmail)
+	{
+		$statdbases = array();
+		
+		$contacts = Contact::find(array(
+			'conditions' => 'idEmail = ?1',
+			'bind' => array(1 => $idEmail)
+		));
+		
+		if (count($contacts) > 0) {
+			foreach ($contacts as $contact) {
+				$statdbase = Statdbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idMail = ?2',
+					'bind' => array(1 => $contact->idDbase,
+									2 => $this->mxc->idMail)
+				));	
+
+				if ($statdbase) {
+					$statdbases[] = $statdbase;
+				}
+			}
+		}
+
+		return $statdbases;
 	}
 	
 	public function findRelatedContactlistObjects()
@@ -161,18 +210,44 @@ class TrackingObject
 			$stats[] = $statcontactlist;
 		}
 		$this->log->log('Se encontrarón Statlist');
+		
 		return $stats;
 	}
 	
-//	public function createNewMailEvent($cod = null)
-//	{
-//		$event = new Mailevent();
-//		$event->idMail = $this->mxc->idMail;
-//		$event->idContact = $this->mxc->idContact;
-//		$event->idBouncedCode = $cod;
-//		$this->log->log('Se ha creado Mailevent');
-//		return $event;
-//	}
+	public function findRelatedContactlistObjectsByEmail() 
+	{
+		$stats = array();
+		
+		$sql =  "SELECT cl.idContactlist 
+							FROM email AS e
+							JOIN contact AS c ON (c.idEmail = e.idEmail)
+							JOIN coxcl AS cx ON (cx.idContact = c.idContact)
+							JOIN contactlist AS cl ON (cl.idContactlist = cx.idContactlist)
+						WHERE e.idEmail = ?";
+		
+		$db = Phalcon\DI::getDefault()->get('db');
+		$result = $db->query($sql, array($this->email->idEmail));
+		$idsContact = $result->fetchAll();
+		
+		if (count($idsContact) > 0) {
+			$ids = explode(",", $idsContact);
+			foreach ($ids as $id) {
+				$statcontactlist = Statcontactlist::findFirst(array(
+					'conditions' => 'idContactlist = ?1 AND idMail = ?2',
+					'bind' => array(1 => $id,
+									2 => $this->mxc->idMail)
+				));
+				if (!$statcontactlist) {
+					throw new Exception('Statcontactlist object not found!');
+				}
+				$stats[] = $statcontactlist;
+			}
+			$this->log->log('Se encontrarón Statlist');
+		}
+		
+
+		return $stats;
+	}
 	
 	protected function addDirtyObject($object)
 	{
@@ -400,7 +475,6 @@ class TrackingObject
 		return false;
 	}
 	
-	
 	public function trackSoftBounceEvent($cod, $date = null)
 	{
 		if ($date == null) {
@@ -413,22 +487,22 @@ class TrackingObject
 				$this->mxc->idBouncedCode = $cod;
 				$this->mxc->bounced = $date;
 				$this->addDirtyObject($this->mxc);
-				$this->log->log('Se agregó mxc');
+				$this->log->log("Se agregó mxc: [idContact: {$this->mxc->idContact}, idMail: {$this->mxc->idMail}]");
 				
 				$mailObj = $this->findRelatedMailObject();
 				$mailObj->incrementBounced();
 				$this->addDirtyObject($mailObj);
-				$this->log->log('Se agregó mail');
+				$this->log->log("Se agregó mail: [idMail: {$this->mxc->idMail}]");
 				
 				$statDbaseObj = $this->findRelatedDbaseStatObject();
 				$statDbaseObj->incrementBounced();
 				$this->addDirtyObject($statDbaseObj);
-				$this->log->log('Se agregó statDbase');
+				$this->log->log("Se agregó statDbase : [idDbase: {$statDbaseObj->idDbase}, idMail: {$statDbaseObj->idMail}]");
 				
 				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
 					$statListObj->incrementBounced();
 					$this->addDirtyObject($statListObj);
-					$this->log->log('Se agregó un statContactlist');
+					$this->log->log("Se agregó un statContactlist: [idContactlist: {$statListObj->idContactlist}, idMail: {$statListObj->idMail}]");
 				}
 				
 				$this->log->log('Preparandose para guardar');
@@ -448,41 +522,32 @@ class TrackingObject
 		if ($date == null) {
 			$date = time();
 		}
-		
 		$this->log->log('Inicio de tracking de rebote duro');
+		$contact = $this->mxc->contact;
+		$this->log->log("Contact: [idContact: {$contact->idContact}, idEmail: {$contact->idEmail}]");
+		$this->log->log("Email: [idEmail: {$this->idEmail}]");
 		if ($this->canTrackHardBounceEvent()) {
 			$this->log->log('Es válido');
-//			$this->startTransaction();
-			$this->contact = $this->mxc->contact;
-			if (!$this->contact) {
-				$this->rollbackTransaction();
-				throw new Exception('contact not found!');
-			}
-//			
-//			$contact->bounced = $date;
-//			$contact->email->bounced = $date;
-////
-//			$this->addDirtyObject($contact);
-//			$this->addDirtyObject($contact->email);
 			
-			$sql = 'UPDATE email AS e JOIN contact AS c
-						ON (c.idEmail = e.idEmail)
-						SET e.bounced = ' . $date . ', c.bounced = ' . $date . '
-					WHERE e.idEmail = ?';
+			$email = Email::findFirst(array(
+				'conditions' => 'idEmail = ?1',
+				'bind' => array(1 => $this->idEmail)
+			));
 			
-			$db = Phalcon\DI::getDefault()->get('db');
-			$update = $db->execute($sql, array($this->contact->idEmail));
-//			
-			if (!$update) {
-				$this->rollbackTransaction();
-				throw new Exception('Error while updating contact and email');
+			$email->bounced = $date;
+			
+			if (!$email->save()) {
+				foreach ($email->getMessages() as $msg) {
+					$this->log->log("Error: {$msg}");
+				}
+				throw new Exception('Error while updating bounced on email');
 			}
-			$this->log->log('Se marcó como rebotado email y contact');
+			
+			$this->log->log("Se marcó como rebotado el email con identificación: {$this->idEmail}");
 			
 			$this->log->log('Preparandose para actualizar contadores de bases de datos y listas de contactos');
 			$this->updateCounters();
-			
-//			$this->flushChanges();
+		
 			$this->log->log('Se actualizó rebote duro');
 		}
 	}
@@ -510,7 +575,8 @@ class TrackingObject
 					$statListObj->incrementSpam();
 				}
 				
-				if ($this->canTrackOpenEvents()) {
+				if ($this->canTrackOpenEventsForSpam()) {
+					$this->log->log("Se contabilizará apertura");
 					$this->mxc->opening = $date;// Actualizar marcador de apertura (timestamp)
 					$mailObj->incrementUniqueOpens();//Se agregar el objeto Mail actualizado para su posterior grabación
 					$statDbaseObj->incrementUniqueOpens();
@@ -521,43 +587,43 @@ class TrackingObject
 				}
 				
 				$this->addDirtyObject($this->mxc);
-				$this->log->log('Se agregó mxc');
+				$this->log->log("Se agregó mxc: [idContact: {$this->mxc->idContact}, idMail: {$this->mxc->idMail}]");
 				
 				$this->addDirtyObject($mailObj);
-				$this->log->log('Se agregó mail');
+				$this->log->log("Se agregó mail: [idMail: {$this->mxc->idMail}]");
 				
 				$this->addDirtyObject($statDbaseObj);
-				$this->log->log('Se agregó statDbase');
+				$this->log->log("Se agregó statDbase : [idDbase: {$statDbaseObj->idDbase}, idMail: {$statDbaseObj->idMail}]");
 				
 				foreach ($statListObjs as $statListObj) {
 					$this->addDirtyObject($statListObj);
-					$this->log->log('Se agregó un statContactlist');
+					$this->log->log("Se agregó un statContactlist: [idContactlist: {$statListObj->idContactlist}, idMail: {$statListObj->idMail}]");
 				}
 				
 				$this->log->log('Preparandose para guardar');
 				$this->flushChanges();
 				$this->log->log('Se guardó con exito');
 				
+				
+				$this->log->log("Inicio de proceso para marcar email como spam");
+				$contact = $this->mxc->contact;
+				$this->log->log("Contact: [idContact: {$contact->idContact}, idEmail: {$contact->idEmail}]");
+				$this->log->log("Email: [idEmail: {$this->idEmail}]");
+				
 				$db = Phalcon\DI::getDefault()->get('db');
 				
-				$this->contact = $this->mxc->contact;
+				$sql = "UPDATE email AS e LEFT JOIN contact AS c 
+							ON (c.idEmail = e.idEmail) 
+							SET e.spam = {$date}, c.unsubscribed = {$date} 
+						WHERE e.idEmail = ?";
 				
-				if (!$this->contact) {
-					throw new Exception('contact not found!');
-				}	
-				
-				$sql = 'UPDATE email AS e JOIN contact AS c
-						ON (c.idEmail = e.idEmail)
-						SET e.spam = ' . $date . ', c.spam = ' . $date . ', c.unsubscribed = ' . $date . '
-					WHERE e.idEmail = ?';
-				
-				$update = $db->execute($sql, array($this->contact->idEmail));
+				$update = $db->execute($sql, array($this->idEmail));
 				
 				if (!$update) {
 					throw new Exception('Error while updating spam in contact and email');
 				}
 
-				$this->log->log('Se actualizó contact y email');
+				$this->log->log("Se marcarón como spam a todos los contactos con idEmail: {$this->idEmail}");
 				$this->log->log('Preparandose para actualizar contadores');
 				$this->updateCounters();
 				$this->log->log('Se actualizó spam');
@@ -571,42 +637,62 @@ class TrackingObject
 	
 	private function updateCounters()
 	{
-		$dbase = Dbase::findFirst(array(
-			'conditions' => 'idDbase = ?1',
-			'bind' => array(1 => $this->contact->idDbase)
+		$contacts = Contact::find(array(
+			'conditions' => 'idEmail = ?1',
+			'bind' => array(1 => $this->idEmail)
 		));
-//			
-		if (!$dbase) {
-			throw new Exception('dbase not found!');
-		}
-		
-		$dbase->updateCountersInDbase();
-		$this->log->log('Se actualizarón contadores de Dbase');
 
-		foreach ($this->findContactlistObjects() as $contactList) {
-			$contactList->updateCountersInContactlist();
-			$this->log->log('Se actualizarón contadores de Contactlist: ');
+		if (count($contacts) == 0) {
+			$this->log->log("No existen contactos asociados al email con identificación {$this->idEmail}");
+		}
+		else {
+			$idsDbase = array();
+			$idsContactlist = array();
+
+			foreach ($contacts as $contact) {
+				$idsDbase[] = $contact->idDbase;
+
+				$coxcl = Coxcl::find(array(
+					'conditions' => 'idContact = ?1',
+					'bind' => array(1 => $contact->idContact)
+				));
+
+				if (count($coxcl) > 0) {
+					foreach ($coxcl as $cl) {
+						$idsContactlist[] = $cl->idContactlist;
+					}
+				}
+			}
+
+			if (count($idsDbase) > 0) {
+				foreach ($idsDbase as $id) {
+					$dbase = Dbase::findFirst(array(
+						'conditions' => 'idDbase = ?1',
+						'bind' => array(1 => $id)
+					));
+					if ($dbase) {
+						$dbase->updateCountersInDbase();
+						$this->log->log("Se actualizarón contadores de Dbase: {$dbase->idDbase}");
+					}
+				}
+			}
+
+			if (count($idsContactlist) > 0) {
+				foreach ($idsContactlist as $idContactlist) {
+					$contactlist = Contactlist::findFirst(array(
+						'conditions' => 'idContactlist = ?1',
+						'bind' => array(1 => $idContactlist)
+					));
+
+					if ($contactlist) {
+						$contactlist->updateCountersInContactlist();
+						$this->log->log("Se actualizarón contadores de Contactlist: {$contactlist->idContactlist}");
+					}
+				}
+			}
 		}
 	}
 	
-	private function findContactlistObjects()
-	{
-		$lists = array();
-		$idContactlists = explode(",", $this->mxc->contactlists);
-		foreach ($idContactlists as $idContactlist) {
-			$contactlist = Contactlist::findFirst(array(
-				'conditions' => 'idContactlist = ?1',
-				'bind' => array(1 => $idContactlist)
-			));
-			
-			if (!$contactlist) {
-				throw new Exception('Contactlist object not found!');
-			}
-			$lists[] = $contactlist;
-		}
-		$this->log->log('Se encontrarón Contactlists');
-		return $lists;
-	}
 	
 	public function canTrackUnsubscribedEvents()
 	{

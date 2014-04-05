@@ -139,13 +139,13 @@
 			<div class="modal-body">
 				<p>
 					Enviar una prueba a: <br />
-					<input type="text" class="span12" id="target" name="target"/><br />
+					<input type="text" class="span12" id="target" name="target" required="required" autofocus="autofocus"/><br />
 					Escriba las direcciones de correo a enviar la prueba separadas por comas
 				</p>
 				<br />
 				<p>
 					Incluir instrucciones o un mensaje personal (opcional) <br />
-					<textarea class="span12" rows="3" cols="30" id="message" name="message"></textarea>
+					<textarea class="span12" rows="3" cols="30" id="message" name="message" required="required"></textarea>
 				</p>
 			</div>
 			<div class="modal-footer">

@@ -101,7 +101,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	{
 		$sql = '';
 		$sqlTotalRecords = '';
-		$limit = " LIMIT " . $this->paginator->getRowsPerPage() . ' OFFSET ' . $this->paginator->getStartIndex();
+		$limit = " LIMIT {$this->paginator->getRowsPerPage()} OFFSET {$this->paginator->getStartIndex()} ";
 		
 		$queryCriteria = $this->getSqlByQueryCriteria();
 		
@@ -114,22 +114,26 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 				$sql = $c2 . $limit;
 			}
 			else if ($c2 == '') {
-				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) ";
-				$sql = "SELECT c.idContact FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) " . $limit;
+				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idDbase = {$this->database->idDbase}";
+				$sql = "SELECT c.idContact FROM contact AS c JOIN ({$c1}) AS c1 ON (c1.idEmail = c.idEmail) WHERE c.idDbase = {$this->database->idDbase} {$limit} ";
 			}
 			else {
-				$sqlTotalRecords = "SELECT COUNT(*) AS total FROM contact AS c JOIN (" . $c1 . ") AS c1 ON (c1.idEmail = c.idEmail) ";
-				$sql = "SELECT idContact FROM (" . $c1 . ") AS c1 JOIN (" . $c2 . ") AS c2 ON (c1.idEmail = c2.idEmail) " . $limit;
+				$sqlTotalRecords = "SELECT COUNT(*) FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) ";
+				$sql = "SELECT idContact FROM ({$c1}) AS c1 JOIN ({$c2}) AS c2 ON (c1.idEmail = c2.idEmail) {$limit} ";
 			}
 		}
 		else {
 			$filter = "";
 			if ($this->searchFilter[0] != 'all') {
-				if ($this->searchFilter[0] == 'blocked') {
+				switch ($this->searchFilter[0]) {
+					case 'blocked':
+					case 'bounced':
+					case 'spam':
 					$filter .= " AND e.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
-				}
-				else{
-					$filter .= " AND c.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+						break;
+					default:
+						$filter .= " AND c.{$this->searchFilter[0]} != {$this->searchFilter[1]} ";
+						break;
 				}
 			}
 			
@@ -144,9 +148,10 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					WHERE e.idAccount = {$this->account->idAccount} {$queryCriteria->andFilter} $filter $limit";
 		}
 		
-		$this->setTotalMatches($sqlTotalRecords);
 		\Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
 		\Phalcon\DI::getDefault()->get('logger')->log("Total query: " . $sqlTotalRecords);
+		
+		$this->setTotalMatches($sqlTotalRecords);
 		
 		return $sql;
 	}
@@ -184,11 +189,11 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		if (count($contactIds) > 0) {
 			$ids = implode(', ', $contactIds);
 		
-			$sql .= "SELECT c.*, e.email, e.blocked, d.idDbase, d.name AS dbase
+			$sql .= "SELECT c.*, e.email, e.blocked, e.bounced, e.spam, d.idDbase, d.name AS dbase
 					FROM contact AS c
 						JOIN email AS e ON(e.idEmail = c.idEmail)
 						JOIN dbase AS d ON(d.idDbase = c.idDbase)
-					WHERE c.idContact IN (" . $ids . ")";
+					WHERE c.idContact IN ({$ids})";
 			
 		}      
         \Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
@@ -284,11 +289,11 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					$union = true;
 				}
 				else {
-					$sqlEmail .= " UNION ";
+					$sqlEmail .= " UNION ALL ";
 				}
-				$sqlEmail .= "SELECT e.idEmail
-						 FROM email AS e " . $queryKey->join . " 
-						 WHERE e.email = '" . $email . "'" . $queryFilter . " AND e.idAccount = " . $this->account->idAccount . " " . $queryKey->and;
+				$sqlEmail .= "SELECT e.idEmail 
+								 FROM email AS e {$queryKey->join}  
+							  WHERE e.email = '{$email}' {$queryFilter} AND e.idAccount = {$this->account->idAccount} {$queryKey->and} ";
 			}
 		}
 		
@@ -302,12 +307,12 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					$union = true;
 				}
 				else {
-					$sqlDomain .= " UNION ";
+					$sqlDomain .= " UNION ALL ";
 				}
-				$sqlDomain .= "SELECT e.idEmail
-						 FROM domain AS d
-							JOIN email AS e ON (e.idDomain = d.idDomain) " . $queryKey->join . " 
-						 WHERE d.name = '" . $domain . "'" . $queryFilter . " AND e.idAccount = " . $this->account->idAccount . " " . $queryKey->and;
+				$sqlDomain .=  "SELECT e.idEmail 
+									FROM domain AS d 
+									JOIN email AS e ON (e.idDomain = d.idDomain) {$queryKey->join}  
+								WHERE d.name = '{$domain}' {$queryFilter} AND e.idAccount = {$this->account->idAccount} {$queryKey->and} ";
 			}
 		}
 		
@@ -315,7 +320,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$union = '';
 		}
 		else {
-			$union = ' UNION ';
+			$union = ' UNION ALL ';
 		}
 		
 		$sql = $sqlEmail . $union . $sqlDomain;
@@ -344,13 +349,15 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$criteriaText = implode(' ', $freeText);
 //			Phalcon\DI::getDefault()->get('logger')->log("Criteria: " . $criteria);
 			
-			$sql .= "SELECT c.idContact, c.idEmail
-					FROM contact AS c 
-						$joinFilter 
+			$sql .= "SELECT c.idContact, c.idEmail 
+						FROM contact AS c  
+						{$joinFilter} 
 						JOIN dbase AS b ON(b.idDbase = c.idDbase) {$queryKey->joinForFreeText}  
 					WHERE 
-						MATCH(c.name, c.lastname) AGAINST ('" . $criteriaText . "' IN BOOLEAN MODE) 
-						AND b.idAccount = " . $this->account->idAccount . " " . $queryFilter . " " . $queryKey->andForFreeText;
+						b.idAccount = {$this->account->idAccount}  
+						AND b.idDbase = {$this->database->idDbase} 
+						AND MATCH(c.name, c.lastName) AGAINST ('{$criteriaText}' IN BOOLEAN MODE)  
+						{$queryFilter}  {$queryKey->andForFreeText} ";
 		}
                 
 //                \Phalcon\DI::getDefault()->get('logger')->log("Free text sql: " . $sql);

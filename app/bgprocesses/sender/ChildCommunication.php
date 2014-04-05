@@ -1,5 +1,5 @@
 <?php
-require_once "/../../library/swiftmailer/lib/swift_required.php";
+require_once "../../library/swiftmailer/lib/swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
 	protected $childprocess;
@@ -22,13 +22,13 @@ class ChildCommunication extends BaseWrapper
 	{
 		$log = Phalcon\DI::getDefault()->get('logger');
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
+			'conditions' => 'idMail = ?1 AND deleted = 0',
 			'bind' => array(1 => $idMail)
 		));
 		
 		$mailContent = Mailcontent::findFirst(array(
 			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $mail->idMail)
+			'bind' => array(1 => $idMail)
 		));
 		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
@@ -44,7 +44,7 @@ class ChildCommunication extends BaseWrapper
 				}		
 
 				$mail = Mail::findFirst(array(
-					'conditions' => 'idMail = ?1',
+					'conditions' => 'idMail = ?1 AND deleted = 0',
 					'bind' => array(1 => $idMail)
 				));
 				
@@ -114,7 +114,7 @@ class ChildCommunication extends BaseWrapper
 				$_ENV['TMP']=$_ENV['TMPDIR'];
 				
 				// Crear transport y mailer
-				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
+				$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 				$swift = Swift_Mailer::newInstance($transport);
 				
 				$i = 0;
@@ -161,7 +161,7 @@ class ChildCommunication extends BaseWrapper
 					$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
 					$listID = 't0em' . $this->account->idAccount;
 					$sendID = '0em' . $mail->idMail;
-					$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'];
+					$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'] . 'x' . $contact['email']['idEmail'];
 					
 //					$verpFormat = str_replace('@', '=', $contact['email']['email']);
 //					$mailClass = $this->mta->mailClass . $sendID;

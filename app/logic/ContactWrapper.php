@@ -69,10 +69,11 @@ class ContactWrapper extends BaseWrapper
 		$this->idContactlist =$idContactlist;
 	}
 
-	public function setIPAdress($ipaddress) {
+	public function setIPAdress($ipaddress)
+	{
 		$this->ipaddress = ip2long($ipaddress);
 	}
-
+	
 	public function updateContact($idEmail, $updates, $transaction = null)
 	{
 		$contacts = Contact::find(array(
@@ -115,8 +116,6 @@ class ContactWrapper extends BaseWrapper
 	public function updateContactFromJsonData($idContact, $data)
 	{
 		// Actualizar contacto:
-		// 0) Cargar el contacto Antigua para comparaciones 
-		$oldContact = Contact::findFirstByIdContact($idContact);
 		
 		// 1) Cargar el contacto
 		$contact = Contact::findFirstByIdContact($idContact);
@@ -130,6 +129,7 @@ class ContactWrapper extends BaseWrapper
 		// 3) Verificar si cambia el email
 
 		if ($data->email != $contact->email->email) {
+			$contact = Contact::findFirstByIdContact($idContact);
 			// 4) Si cambia => validar si existe o no dentro de la BD
 			$email = $this->findEmailNotRepeated($data->email, $contact);
 			
@@ -137,12 +137,27 @@ class ContactWrapper extends BaseWrapper
 			if (!$email) {
 				$email = $this->createEmail($data->email);
 			}
-			
+			Phalcon\DI::getDefault()->get('logger')->log("Se crea email [id: {$email->idEmail}, email: {$email->email}]");
+			Phalcon\DI::getDefault()->get('logger')->log("Email anterior {$contact->idEmail}");
 			// Asignar el nuevo email
-			$contact->email = $email;
+			
+			
+			$contact->idEmail = $email->idEmail;
+			
+			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo antes grabar {$contact->idEmail}");
+			
+			if (!$contact->save()) {
+				foreach ($contact->getMessages() as $msg) {
+					throw new \Exception('Error al actualizar el email del contacto: >>' . $msg . '<<');
+				}
+			}
+			
+			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo despúes de grabar {$contact->idEmail}");
 		}
 
 		$this->contact = $contact;
+		// 0) Cargar el contacto Antigua para comparaciones 
+		$oldContact = Contact::findFirstByIdContact($idContact);
 		
 		// 6) Actualizar los otros campos
 		$this->assignDataToContact($this->contact, $data);
@@ -155,7 +170,7 @@ class ContactWrapper extends BaseWrapper
 			foreach ($errmsg as $err) {
 				$msg .= $err . PHP_EOL;
 			}
-			throw new \Exception('Error al crear el contacto: >>' . $msg . '<<');
+			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
 		} else {
 			$this->assignDataToCustomField($data);
 			
@@ -171,8 +186,11 @@ class ContactWrapper extends BaseWrapper
 		return $this->contact;
 	}
 	
-	public function deleteContactFromList($contact, $list) 
+	public function deleteContactFromList($contact, $list, $override = FALSE) 
 	{
+		if(!$override) {
+			$this->checkSendingStatusContact($contact);
+		}
 		$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
 		
 		if($association->delete()) {
@@ -191,8 +209,11 @@ class ContactWrapper extends BaseWrapper
 		$this->counter->saveCounters();
 	}
 	
-	public function deleteContactFromDB($contact, $db)
+	public function deleteContactFromDB($contact, $db, $override = FALSE)
 	{
+		if(!$override) {
+			$this->checkSendingStatusContact($contact);
+		}
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
 		if (count($allLists) > 0) {
 			try {
@@ -260,6 +281,24 @@ class ContactWrapper extends BaseWrapper
 				
 				return $response;
 			}
+		}
+	}
+	
+	protected function checkSendingStatusContact(Contact $contact)
+	{
+		$time = new \DateTime('-30 day');
+		$time->setTime(0, 0, 0);
+		$modelManager = \Phalcon\DI::getDefault()->get('modelsManager');
+		$sql = "SELECT *
+				FROM Mxc AS x 
+					JOIN Mail AS m ON (x.idMail = m.idMail)
+				WHERE x.idContact = {$contact->idContact}
+				AND m.startedon > {$time->getTimestamp()}
+				AND ( m.finishedon = 0 OR m.finishedon > {$time->getTimestamp()} )";
+		$query = $modelManager->createQuery($sql);
+		$result = $query->execute();
+		if( count($result) > 0) {
+			throw new \Exception('El contacto no puede ser eliminado debido a envíos realizados en los últimos 30 días');
 		}
 	}
 
@@ -414,8 +453,8 @@ class ContactWrapper extends BaseWrapper
 			$contact->ipSubscribed = $this->ipaddress;
 			$contact->status = ($data->isActive)?$hora:0;
 			$contact->ipActivated = ($data->isActive)?$this->ipaddress:0;
-			$contact->bounced = ($data->isBounced)?$hora:0;
-			$contact->spam = ($data->isSpam)?$hora:0;
+			$contact->email->bounced = ($data->isBounced)?$hora:0;
+			$contact->email->spam = ($data->isSpam)?$hora:0;
 		}
 		else {
 			if ($contact->unsubscribed != 0 && $data->isSubscribed) {
@@ -442,24 +481,6 @@ class ContactWrapper extends BaseWrapper
 				// Actualmente desactivado y se activa
 				$contact->status = $hora;
 				$contact->ipActivated = $this->ipaddress;
-			}
-			
-			if ($contact->bounced != 0 && !$data->isBounced) {
-				// Actualmente rebotado y se actualiza a no rebotado
-				$contact->bounced = 0;
-			}
-			else if ($contact->bounced == 0 && $data->isBounced) {
-				// Actualmente no rebotado, y se actualiza a rebotado
-				$contact->bounced = $hora;
-			}
-			
-			if ($contact->spam != 0 && !$data->isSpam) {
-				// Actualmente spam y se actualiza a no spam
-				$contact->spam = 0;
-			}
-			else if ($contact->spam == 0 && $data->isSpam) {
-				// Actualmente no spam, y se actualiza a spam
-				$contact->spam = $hora;
 			}
 		}
 	}
@@ -643,10 +664,10 @@ class ContactWrapper extends BaseWrapper
 		$object['isSubscribed'] = ($contact->unsubscribed == 0);
 		$object['subscribedOn'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
 		$object['unsubscribedOn'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
-		$object['isBounced'] = ($contact->bounced != 0);
-		$object['bouncedOn'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
-		$object['isSpam'] = ($contact->spam != 0);
-		$object['spamOn'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
+		$object['isBounced'] = ($contact->email->bounced != 0);
+		$object['bouncedOn'] = (($contact->email->bounced != 0)?date('d/m/Y H:i', $contact->email->bounced):'');
+		$object['isSpam'] = ($contact->email->spam != 0);
+		$object['spamOn'] = (($contact->email->spam != 0)?date('d/m/Y H:i', $contact->email->spam):'');
 		$object['createdOn'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
 		$object['updatedOn'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
 		
@@ -735,10 +756,10 @@ class ContactWrapper extends BaseWrapper
 		$object['isSubscribed'] = ($contact->unsubscribed == 0);
 		$object['subscribedOn'] = (($contact->subscribedon != 0)?date('d/m/Y H:i', $contact->subscribedon):'');
 		$object['unsubscribedOn'] = (($contact->unsubscribed != 0)?date('d/m/Y H:i', $contact->unsubscribed):'');
-		$object['isBounced'] = ($contact->bounced != 0);
-		$object['bouncedOn'] = (($contact->bounced != 0)?date('d/m/Y H:i', $contact->bounced):'');
-		$object['isSpam'] = ($contact->spam != 0);
-		$object['spamOn'] = (($contact->spam != 0)?date('d/m/Y H:i', $contact->spam):'');
+		$object['isBounced'] = ($email->bounced != 0);
+		$object['bouncedOn'] = (($email->bounced != 0)?date('d/m/Y H:i', $email->bounced):'');
+		$object['isSpam'] = ($email->spam != 0);
+		$object['spamOn'] = (($email->spam != 0)?date('d/m/Y H:i', $email->spam):'');
 		$object['createdOn'] = (($contact->createdon != 0)?date('d/m/Y H:i', $contact->createdon):'');
 		$object['updatedOn'] = (($contact->updatedon != 0)?date('d/m/Y H:i', $contact->updatedon):'');
 		

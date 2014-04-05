@@ -14,25 +14,27 @@ class FlashMessageForm extends Form
 			'type' => 'text',
 			'required' => 'required',
 			'autofocus' => "autofocus",
-			'class' => 'span12'
+			'class' => 'form-control',
+			'id' => 'name'
         )));
 		
 		$this->add(new TextArea('message', array(
 			'maxlength' => 50,
 			'type' => 'text',
+			'rows' => 3,
 			'required' => 'required' ,
-			'class' => 'span12'
+			'class' => 'form-control',
+			'id' => 'message'
         )));
 		
 		$this->add(new Select('accounts', Account::find(), array(
 			'using' => array('idAccount', 'companyName'),
 			'multiple' => 'multiple',
-			'class' => 'chzn-select'
+			'id' => 'accounts'
 		)));
 		
 		$this->add(new RadioElement('type', array(
 			'required' => 'required',
-			'class' => 'icheck'
         )));
 		
 		$this->add(new Text('start', array(

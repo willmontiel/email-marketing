@@ -5,9 +5,11 @@
 	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
 	<script type="text/javascript">
 		$(function(){
-			$("input[name=allAccounts]").on('ifChecked', function () { 
-				$('#accountSelect').prop('selectedIndex',-1);
-				$("#accountSelect").val('').trigger("liszt:updated");
+			$("input[name=allAccounts]").on('click', function () { 
+				$('#accounts').val("");
+;
+				//$('#accountSelect').prop('selectedIndex',0);
+				//$("#accountSelect").val('').trigger("liszt:updated");
 
 				var val = $('input[name=allAccounts]:checked').val();
 				switch (val) {
@@ -51,99 +53,99 @@
 {% block sectiontitle %}<i class="icon-bullhorn"></i> Crear un nuevo mensaje informativo{%endblock%}
 {% block sectionsubtitle %}Cree un pequeño mensaje para informar sobre algo a una cuenta determinada o todas las cuentas{% endblock %}
 {% block content %}
-	<div class="row-fluid">
-		<div class="span12">
-			{{flashSession.output()}}
+	<br />
+	<div class="row">
+		<div class="col-md-12">
+			<blockquote>
+				<h2 class="text-center">Nuevo mensaje flash</h2>
+			</blockquote>
 		</div>
 	</div>
-	<div class="row-fluid">
-		<div class="span5 offset3">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Nuevo mensaje flash
+	<br />
+	<div class="row">
+		<div class="col-md-12">{{flashSession.output()}}</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<form action="{{url('flashmessage/new')}}" method="post" class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="name" class="col-sm-4 control-label">*Nombre del mensaje: </label>
+					<div class="col-sm-8">
+						{{ MessageForm.render('name')}}
+					</div>
+				</div>	
+					
+				<div class="form-group">
+					<label for="message" class="col-sm-4 control-label">*Mensaje:</label>
+					<div class="col-sm-8">
+						{{ MessageForm.render('message') }}
 					</div>
 				</div>
-				<div class="box-content">
-					{{ form('flashmessage/new', 'method': 'post') }}
-						<div class="padded">
-							<label>*Nombre del mensaje: </label>
-							{{ MessageForm.render('name') }}
-
-							<label>*Mensaje: </label>
-							{{ MessageForm.render('message') }}
-
-							<label>*Mostrar en: </label>
-							<input type="radio" name="allAccounts" class="icheck" value="all" id="all">
-							<label for="all">Todas las cuentas</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="allAccounts" class="icheck" value="any" id="any">
-							<label for="any">Determinadas cuentas</label>
-							
-							<div id="selectAccount" style="display: none;">
-								<label></label>
-								{{ MessageForm.render('accounts') }}
-							</div>	
-							<br />
-							<label>*Tipo de mensaje: </label>
-						
-							<ul class="padded separate-sections">
-								<li>
-									<div class="row-fluid">
-										<div class="span6">
-											<div>
-												{{ MessageForm.render('type', {'value': 'info'} ) }}
-												<label for="info" class="flashmessage-info">Informativo</label>
-											</div>
-											<div>
-												{{ MessageForm.render('type', {'value': 'warning'}) }}
-												<label for="warning" class="flashmessage-block">Advertencia</label>
-											</div>
-										</div>
-										<div class="span6">
-											<div>
-												{{ MessageForm.render('type', {'value': 'success'}) }}
-												<label for="success" class="flashmessage-success">Confirmación</label>
-											</div>
-											<div>
-												{{ MessageForm.render('type', {'value': 'error'}) }}
-												<label for="error" class="flashmessage-error">Riesgo</label>
-											</div>
-										</div>
-									</div>
-								</li>
-							</ul>
-							<ul class="padded separate-sections">
-								<li>
-									<div class="row-fluid">
-										<div class="span6">
-											<div id="date">
-												<label>*Fecha y hora de inicio:</label>
-												<div id="scheduleArea1" class="input-append date" style="width: 400px;">
-													{% set start = {'id': 'begin'} %}
-													{{ MessageForm.render('start', start) }}
-												</div>
-											</div>
-										</div>
-										<div class="span6">
-											<div id="date">
-												<label>*Fecha y hora de fin:</label>
-												<div id="scheduleArea2" class="input-append date" style="width: 400px;">
-													{% set end = {'id': 'end'} %}
-													{{ MessageForm.render('end', end) }}
-												</div>
-											</div>
-										</div>
-									</div>
-								</li>
-							</ul>
+				
+				<div class="form-group">
+					<label for="allAccounts" class="col-sm-4 control-label">*Mostrar en:</label>
+					<div class="col-sm-8">
+						<input type="radio" name="allAccounts"  value="all" id="all">
+						<label for="all">Todas las cuentas</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="allAccounts" value="any" id="any">
+						<label for="any">Determinadas cuentas</label>
+						<div id="selectAccount" style="display: none;">
+							<label></label>
+							{{ MessageForm.render('accounts') }}
 						</div>
-						<div class="form-actions">
-							<a href="{{ url('flashmessage/index') }}" class="btn btn-default">Cancelar</a>
-							{{ submit_button("Guardar", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
-						</div>
-					</form>
+					</div>
 				</div>
-			</div>
+					
+				<div class="form-group">
+					<label class="col-sm-4 control-label">*Tipo de mensaje:</label>
+					<div class="col-sm-8">
+						<div class="checkbox">
+							{{ MessageForm.render('type', {'id': 'info', 'value': 'info'} ) }}
+							<label for="info" class="flashmessage-info">Informativo</label>
+							
+							{{ MessageForm.render('type', {'id': 'warning', 'value': 'warning'}) }}
+							<label for="warning" class="flashmessage-block">Advertencia</label>
+							
+							{{ MessageForm.render('type', {'id': 'success', 'value': 'success'}) }}
+							<label for="success" class="flashmessage-success">Confirmación</label>
+							
+							{{ MessageForm.render('type', {'id': 'error', 'value': 'error'}) }}
+							<label for="error" class="flashmessage-error">Riesgo</label>
+						</div>
+					</div>
+				</div>
+					
+				<div class="form-group">
+					<label class="col-sm-4 control-label">*Fecha y hora de inicio:</label>
+					<div class="col-sm-8">
+						<div id="date">
+							<div id="scheduleArea1" class="input-append date" class="col-sm-12">
+								{{ MessageForm.render('start', {'id': 'begin'}) }}
+							</div>
+						</div>
+					</div>
+				</div>
+					
+				<div class="form-group">
+					<label class="col-sm-4 control-label">*Fecha y hora de fin:</label>
+					<div class="col-sm-8">
+						<div id="date">
+							<div id="scheduleArea2" class="input-append date" class="col-sm-12">
+								{{ MessageForm.render('end', {'id': 'end'}) }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-4 col-sm-8">
+						<a href="{{ url('flashmessage/index') }}" class="btn btn-default">Cancelar</a>
+						{{ submit_button("Guardar", 'class' : "btn btn-primary", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+					</div>
+				</div>
+			</form>
 		</div>
+		<div class="col-md-2"></div>
 	</div>
 {% endblock %}

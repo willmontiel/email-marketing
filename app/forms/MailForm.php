@@ -67,6 +67,7 @@ class MailForm extends Form
 		
 		$this->add(new TextArea('twpublicationcontent', array(
 			'rows' => 2,
+			'maxlength' => 140,
 			'id' => 'twpublicationcontent'
         )));
 	}
