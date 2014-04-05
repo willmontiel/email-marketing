@@ -1,4 +1,8 @@
 <script type="text/x-handlebars" data-template-name="blockedemails/index">
+			{# Insertar botones de navegacion #}
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'blockedemails']) }}
+
+
 	<div class="row-fluid">
 		<div class="span10">
 			<div class="box">

@@ -6,6 +6,10 @@ class MailController extends ControllerBase
 	
 	public function indexAction()
 	{	
+	}
+	
+	public function listAction()
+	{	
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 		
 		$idAccount = $this->user->account->idAccount;
@@ -26,7 +30,6 @@ class MailController extends ControllerBase
 		
 		$this->view->setVar("page", $page);
 	}
-	
 	
 	public function cloneAction($idMail = null)
 	{

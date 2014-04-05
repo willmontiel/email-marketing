@@ -18,6 +18,11 @@
 			{{ '{{outlet}}' }}
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/index">
+
+			{# Menu de navegacion pequeño #}
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'search']) }}
+			{# /Menu de navegacion pequeño #}
+
 			<div class="row-fluid">
 				<div class="span8 offset2">
 					<div class="box">
