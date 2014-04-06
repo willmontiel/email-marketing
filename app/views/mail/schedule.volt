@@ -1,4 +1,4 @@
-{% extends "templates/index_b3.volt" %}
+{% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
