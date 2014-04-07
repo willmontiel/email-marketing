@@ -48,9 +48,9 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 			"icon" => "icon-bar-chart"
 		),
 		"Herramientas" => array(
-			"controller" => array("account", "user", "flashmessage"),
+			"controller" => array('tools', 'process', "account", "user", "flashmessage", "socialmedia", 'scheduledmail'),
 			"class" => "",
-			"url" => "",
+			"url" => "tools",
 			"title" => "Herramientas",
 			"icon" => "icon-cog"
 		)

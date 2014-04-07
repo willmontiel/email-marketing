@@ -1,4 +1,8 @@
 <script type="text/x-handlebars" data-template-name="segments/index">
+
+			{# Insertar botones de navegacion #}
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
+
 	<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
 		{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
 	</div>

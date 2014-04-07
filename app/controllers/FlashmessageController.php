@@ -34,7 +34,7 @@ class FlashmessageController extends ControllerBase
 			
 			$start = $form->getValue('start');
 			$end = $form->getValue('end');
-			$allAccounts = $this->request->getPost('allAccounts');
+			$allAccounts = $form->getValue('allAccounts');
 			
 			list($day1, $month1, $year1, $hour1, $minute1) = preg_split('/[\s\/|-|:]+/', $start);
 			$dateBegin = mktime($hour1, $minute1, 0, $month1, $day1, $year1);
@@ -49,9 +49,10 @@ class FlashmessageController extends ControllerBase
 				$this->flashSession->error('No ha seleccionado una cuenta, por favor verifique la información');
 			}
 			else {
-				if ($allAccounts == 'all') {
+				if (!empty($allAccounts) || trim($allAccounts) === '') {
 					$fm->accounts = 'all';
 				}
+				
 				$fm->start = $dateBegin;
 				$fm->end = $dateEnd;
 				$fm->createdon = time();

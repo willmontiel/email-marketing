@@ -86,6 +86,11 @@
 		{{'{{outlet}}'}}
 	</script>
 	<script type="text/x-handlebars" data-template-name="contacts/index">
+	
+		{# Botones de navegacion pequeños #}
+		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
+		{# /Botones de navegacion pequeños  #}
+
 		<div class="row-fluid">
 			<div class="span12 text-right" style="margin-bottom: 5px;">
 				<a href="{{url('contactlist#/segments')}}" class="btn btn-blue"><i class="icon-home"></i> Todos los segmentos</a>

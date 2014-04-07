@@ -92,6 +92,11 @@
 	{{ partial("partials/contactlimitinfo_partial") }}
 {%endblock%}	
 {% block content %}
+
+	{# Botones de navegacion pequeños #}
+	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
+	{# /Botones de navegacion pequeños  #}
+
 	<script type="text/x-handlebars" >
 		{{' {{#if errors.email}} '}}
 			<span class="text text-error">{{'{{errors.email}}'}}</span>

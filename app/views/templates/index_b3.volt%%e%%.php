@@ -1,4 +1,4 @@
-a:7:{i:0;s:1160:"
+a:7:{i:0;s:1136:"
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,17 +22,17 @@ a:7:{i:0;s:1160:"
 		<?php echo $this->tag->javascriptInclude('javascripts/vendor/excanvas.js'); ?>
 		<![endif]-->
 		
-		";s:17:"header_javascript";a:15:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:57:"
+		";s:17:"header_javascript";a:15:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:55:"
 		<script type="text/javascript">
-			var MyBaseURL = '";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}i:1;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:3:"url";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:0:"";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}i:2;a:4:{s:4:"type";i:357;s:5:"value";s:19:"';
+			var MyBaseURL = '";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}i:1;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:3:"url";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:0:"";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:27;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}i:2;a:4:{s:4:"type";i:357;s:5:"value";s:17:"';
 		</script>
-		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}i:3;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:21:"b3/js/jquery-1.9.1.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}i:4;a:4:{s:4:"type";i:357;s:5:"value";s:4:"
-		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}i:5;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:18:"b3/js/bootstrap.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}i:6;a:4:{s:4:"type";i:357;s:5:"value";s:4:"
-		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}i:7;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:33:"b3/vendors/js/jquery.sparkline.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}i:8;a:4:{s:4:"type";i:357;s:5:"value";s:4:"
-		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}i:9;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:27:"b3/vendors/js/spark_auto.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}i:10;a:4:{s:4:"type";i:357;s:5:"value";s:4:"
-		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}i:11;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:35:"b3/vendors/js/bootstrap-editable.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}i:12;a:4:{s:4:"type";i:357;s:5:"value";s:4:"
-		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}i:13;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:31:"b3/vendors/js/jquery.gritter.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:35;}i:14;a:4:{s:4:"type";i:357;s:5:"value";s:4:"
-		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:35;}}i:1;s:812:"
+		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}i:3;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:21:"b3/js/jquery-1.9.1.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:29;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}i:4;a:4:{s:4:"type";i:357;s:5:"value";s:3:"
+		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}i:5;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:18:"b3/js/bootstrap.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:30;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}i:6;a:4:{s:4:"type";i:357;s:5:"value";s:3:"
+		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}i:7;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:33:"b3/vendors/js/jquery.sparkline.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:31;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}i:8;a:4:{s:4:"type";i:357;s:5:"value";s:3:"
+		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}i:9;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:27:"b3/vendors/js/spark_auto.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:32;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}i:10;a:4:{s:4:"type";i:357;s:5:"value";s:3:"
+		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}i:11;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:35:"b3/vendors/js/bootstrap-editable.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:33;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}i:12;a:4:{s:4:"type";i:357;s:5:"value";s:3:"
+		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}i:13;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:18:"javascript_include";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:31:"b3/vendors/js/jquery.gritter.js";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:34;}s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:35;}i:14;a:4:{s:4:"type";i:357;s:5:"value";s:3:"
+		";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:35;}}i:1;s:787:"
 
         <style>
 			select {
@@ -57,7 +57,7 @@ a:7:{i:0;s:1160:"
 					<a class="navbar-brand" href="<?php echo $this->url->get(''); ?>">Email Sigma</a>
 				</div>
 
-				<!-- <p class="navbar-text">";s:12:"sectiontitle";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:16:"Titulo de pagina";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:60;}}i:2;s:2815:"</p> -->
+				<!-- <p class="navbar-text">";s:12:"sectiontitle";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:16:"Titulo de pagina";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:60;}}i:2;s:2739:"</p> -->
 				<div class="collapse navbar-collapse" id="nav-collapse-01">
 					<ul id="top-nav" class="nav navbar-nav navbar-right">
 						<li><a href="">Mi Cuenta</a></li>
@@ -103,7 +103,6 @@ a:7:{i:0;s:1160:"
 -->
 <!-- ****** FIN ELEMENTOS POR UBICAR ********* -->
 		
-
 		<!-- Contenedor principal -->
 		<div class="container-fluid">
 			<div class="row">
@@ -132,9 +131,9 @@ a:7:{i:0;s:1160:"
 
 					<div class="container-fluid">
 						<!-- Inicio de contenido -->
-						";s:7:"content";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:46:"
+						";s:7:"content";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:44:"
 							<!-- Aqui va el contenido -->
-						";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:137;}}i:3;s:107:"
+						";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:136;}}i:3;s:97:"
 						<!-- Fin de contenido -->
 					</div>
 

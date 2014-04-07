@@ -1,29 +1,55 @@
 /* Colores */
 @brand-white: #f5f5f5;
 @brand-green: #97c86b;
+@brand-orange:#ffc766;
 @brand-soft-color: #adadad;
 
 
-@background-color: #20526e;
-
-
+@menu-background: #20526e;
 
 @social-network-bg: @brand-soft-color;
+
+
+/*  Colores para botones de accion grandes*/
+@orange-action-button: @brand-orange;
+@orange-action-strong: #ffab1a;
+@border:2px solid @orange-action-strong;
+@bgcolor: #a4c3d4;
 
 @summary-icons-height: 46px;
 @summary-icons-width: 46px;
 
-@shortcuts-icons-height:134px;
-@shortcuts-icons-width:134px;
+@shortcuts-big-icons-height:134px;
+@shortcuts-big-icons-width:134px;
 
+/*  botones small de accion */
 
+@shortcuts-small-icons-height:34px;
+@shortcuts-small-icons-width:34px;
 
-@orange:#df660c;
+@sm-icon-pos-y:-135px;
 
 /* MIXINS */
+.pos-icons(@idx, @w: @summary-icons-width) {
+	@position: -(@idx * (@w + 1));
+}
 
 
 /* Estilos */
+body {
+	background-color: #f5f5f5;
+}
+.space {
+	margin-bottom: 40px;
+}
+
+/* Estilos para los titulos de seccion */
+h4.sectiontitle {
+	background-color: #e8e8e8;
+	padding: 10px;
+	color: #20526e;
+	margin-bottom: 30px;
+}
 
 .box-dashboard-summary {
 	border-radius: 6px;
@@ -36,9 +62,6 @@
 	background: transparent url('../images/sm-icons.png') no-repeat 0 0;
 	height: @summary-icons-height;
 	width: @summary-icons-width;
-}
-.pos-icons(@idx, @w: @summary-icons-width) {
-	@position: -(@idx * (@w + 1));
 }
 .sm-icons-summary-opens {
 	background-position: 0 0;
@@ -154,73 +177,21 @@
 }
 /* --- Fin para resolver el problema de los tooltips de sparklines --- */
 
-
-
-/* Ejemplo de sprite */
-[class^="sm-icon-"] {
-	background-repeat: none;
-	background-image: url();
-	height: 40px;
-	width: 40px;
-	padding: 2px;
-}
-.sm-icon-opens {
-	background-position: 0 40px;
-}
-/* Estilos para botones de shortcuts */
-.to-do {
-	text-align: center;
-	display: block;
-	border-radius: 6px;
-	padding: 32px;
-	background-color: @orange;
-	width: 190px;
-	height: 190px;
-}
-.to-do:hover {
-	background-color: #adadad;
-}
-.sm-button-large-base {
-	background: transparent url('../images/icon-buttons-2.png') no-repeat center center;
-	height: @shortcuts-icons-height;
-	width: @shortcuts-icons-width;
-	display: inline-block;
-}
-
-
-.sm-button-large-email:extend(.sm-button-large-base) {
-	.pos-icons(1, @shortcuts-icons-width);
-	background-position: 0 0;
-	background-color: #df660c;
-}
-a.do-import-contacts {
-	.pos-icons(2, @shortcuts-icons-width);
-	background-position: @position 0;
-	background-color: #6e97ac;
-}
-a.do-database {
-	.pos-icons(3, @shortcuts-icons-width);
-	background-position: @position 0;
-	background-color: #c75e5b;
-}
-
-
-
 /* Estilos para la navegacion vertical principal */
 #sidebar-background-object{
 	position:fixed;
 	height:100%; 
 	top: 0; 
-	background-color:@background-color;
+	background-color:@menu-background;
 }
 
 .sidebar {
-	background-color: @background-color;
+	background-color: @menu-background;
 	height: 100%;
 	float: left;
 	margin: 0px;
 	padding: 0px;
-
+	z-index: 2;
 }
 #main-navigation li {
 	border-left:6px solid #f5f5f5; 
@@ -245,7 +216,7 @@ a.do-database {
 }
 /* Estilos para la navegacion horizontal */
 .navbar-default {
-	background-color: @background-color;
+	background-color: @menu-background;
 	border-radius: 0px;
 	border-color:#20526e;
 	margin-bottom: 0px;
@@ -256,3 +227,166 @@ a.do-database {
 #top-nav li:hover a {
 	color:#777;
 }
+
+/* Estilos para los botones grandes de accion */
+
+.sm-btn-color-base(@bgcolor) {
+	& {
+		background-color: @bgcolor;
+	}
+	&:hover {
+		background-color: darken(@bgcolor, 44%);
+	}
+}
+
+.sm-btn-blue {
+	.sm-btn-color-base(@bgcolor);
+}
+.sm-btn-blue.active {
+	background-color: @brand-soft-color;
+}
+
+.to-do {
+	text-align: center;
+	display: block;
+	border-radius: 3px;
+	padding: 32px;
+	background-color: @bgcolor;
+	width: 190px;
+	height: 190px;
+}
+.small-btn {
+	width: 42px;
+	height: 42px;
+	margin: 0;
+	padding-top: 2px;
+}
+.small-btn a {
+	display: inline-block;
+}
+.sm-button-large-base {
+	background: transparent url('../images/icon-buttons.png') no-repeat center center;
+	height: @shortcuts-big-icons-height;
+	width: @shortcuts-big-icons-width;
+	display: inline-block;
+}
+.sm-button-large-email:extend(.sm-button-large-base) {
+	.pos-icons(0, @shortcuts-big-icons-width);
+	background-position: 0 0;
+}
+.sm-button-large-import-contacts:extend(.sm-button-large-base) {
+	.pos-icons(1, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-database:extend(.sm-button-large-base) {
+	.pos-icons(2, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-contact-list:extend(.sm-button-large-base) {
+	.pos-icons(1, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-segment:extend(.sm-button-large-base) {
+	.pos-icons(9, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-bloq-list:extend(.sm-button-large-base) {
+	.pos-icons(12, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-contact-search:extend(.sm-button-large-base) {
+	.pos-icons(13, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-settings:extend(.sm-button-large-base) {
+	.pos-icons(14, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-import-list:extend(.sm-button-large-base) {
+	.pos-icons(15, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-admin-prog:extend(.sm-button-large-base) {
+	.pos-icons(16, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-email-new:extend(.sm-button-large-base) {
+	.pos-icons(17, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-plantillas:extend(.sm-button-large-base) {
+	.pos-icons(18, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-email-list:extend(.sm-button-large-base) {
+	.pos-icons(19, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.btn-actn {
+	color:#123377;
+	font-size: 18px;
+	text-align: center;
+}
+
+/* Estilos para botones de accion pequeños */
+
+.sm-button-small-base {
+	background: transparent url('../images/icon-buttons.png') no-repeat center center;
+	height: @shortcuts-small-icons-height;
+	width: @shortcuts-small-icons-width;
+	display: inline-block;
+}
+.sm-button-small-email:extend(.sm-button-small-base) {
+	.pos-icons(0, @shortcuts-small-icons-width);
+	background-position: 0 @sm-icon-pos-y;
+}
+.sm-button-small-contact-list:extend(.sm-button-small-base) {
+	.pos-icons(1, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-database:extend(.sm-button-small-base) {
+	.pos-icons(3, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-bloq-list:extend(.sm-button-small-base) {
+	.pos-icons(4, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-settings:extend(.sm-button-small-base) {
+	.pos-icons(5, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-import-contacts:extend(.sm-button-small-base) {
+	.pos-icons(6, @shortcuts-small-icons-width);
+	background-position: @position -129;
+}
+.sm-button-small-import-list:extend(.sm-button-small-base) {
+	.pos-icons(7, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-segment:extend(.sm-button-small-base) {
+	.pos-icons(9, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-contact-search:extend(.sm-button-small-base) {
+	.pos-icons(13, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-admin-prog:extend(.sm-button-small-base) {
+	.pos-icons(16, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-email-new:extend(.sm-button-small-base) {
+	.pos-icons(17, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-plantillas:extend(.sm-button-small-base) {
+	.pos-icons(18, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-email-list:extend(.sm-button-small-base) {
+	.pos-icons(19, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+/* Estilos para la navegación interna con iconos pequeños */
+

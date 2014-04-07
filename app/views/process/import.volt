@@ -40,6 +40,11 @@
 {% endblock %}
 {% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
+
+{# Menu de navegacion pequeño #}
+{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'import']) }}
+{# /Menu de navegacion pequeño #}
+
 {%for res in result%}
 	<div class="row-fluid">
 		<div class="span8 offset2">

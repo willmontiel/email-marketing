@@ -129,6 +129,7 @@ class ContactWrapper extends BaseWrapper
 		// 3) Verificar si cambia el email
 
 		if ($data->email != $contact->email->email) {
+			$contact = Contact::findFirstByIdContact($idContact);
 			// 4) Si cambia => validar si existe o no dentro de la BD
 			$email = $this->findEmailNotRepeated($data->email, $contact);
 			
