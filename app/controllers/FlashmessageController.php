@@ -116,46 +116,38 @@ class FlashmessageController extends ControllerBase
 				$name = $this->request->getPost('name');
 				$msg = $this->request->getPost('message');
 				$allAccounts = $this->request->getPost('allAccounts');
-				$account = $this->request->getPost('accounts');
+				$accounts = $this->request->getPost('accounts');
 				$type = $this->request->getPost('type');
 				$start = $this->request->getPost('start');
 				$end = $this->request->getPost('end');
 				
-				$this->logger->log("Begin: {$start}");
-				$this->logger->log("End: {$end}");
+				$this->logger->log("Accounts: " . print_r($accounts, true));
 				
 				if (trim($name) === '' || trim($msg) === '' || trim($allAccounts) === '' || trim($type) === '' || trim($start) === '' || trim($end) === '') {
 					$this->flashSession->error('Ha enviado campos vacios, por favor verifique la información');
 				}
 				else {
-					list($day1, $month1, $year1, $hour1, $minute1) = preg_split('/[\s\/|-|:]+/', $start);
+					list($month1, $day1, $year1, $hour1, $minute1) = preg_split('/[\s\/|-|:]+/', $start);
 					$dateBegin = mktime($hour1, $minute1, 0, $month1, $day1, $year1);
 					
 //					$dateBegin	= strtotime($start);
 					
-					list($day2, $month2, $year2, $hour2, $minute2) = preg_split('/[\s\/|-|:]+/', $end);
+					list($month2, $day2, $year2, $hour2, $minute2) = preg_split('/[\s\/|-|:]+/', $end);
 					$dateEnd = mktime($hour2, $minute2, 0, $month2, $day2, $year2);
 					
 //					$dateEnd = strtotime($end);
-					
-					$this->logger->log("Begin: {$dateBegin}");
-					$this->logger->log("End: {$dateEnd}");
-					
-					$this->logger->log("Begin again: " . date('m/d/Y H:s', $dateBegin));
-					$this->logger->log("End again: ". date('m/d/Y H:s', $dateEnd));
-					$this->logger->log("Now: ". date('m/d/Y H:s', time()));
 					
 					if($dateEnd < $dateBegin || $dateEnd < time()) {
 						$this->flashSession->error('Ha selecionado una fecha que ya ha pasado, por favor verifique la información');
 					}
 					else {
 						if ($allAccounts == 'any') {
-							if (count($account) == 0) {
+							if (count($accounts) == 0) {
 								$this->flashSession->error('No ha seleccionado una cuenta, por favor verifique la información');
 								return $this->response->redirect('flashmessage/edit/' . $idMessage);
 							}
 							else {
-								$message->accounts = json_encode($account);
+								$message->accounts = json_encode($accounts);
 							}
 
 						}
