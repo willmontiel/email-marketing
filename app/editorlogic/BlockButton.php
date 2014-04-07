@@ -22,7 +22,7 @@ class BlockButton extends HtmlAbstract
 
 		$this->align = $data->align;
 		
-		$style = 'background-color:' . $data->bgcolor . '; color:' . $data->textcolor . '; display: inline-block; font-family:' . $data->fontfamily . '; font-size:' . $data->fontsize . 'px; font-weight:bold; padding-top:' . $data->height/2 . 'px; padding-bottom:' . $data->height/2 . 'px; padding-left: 10px; padding-right: 10px; text-align:center; text-decoration:none; width:' . $data->width . 'px; border-top-left-radius: ' . $data->radius . 'px; border-top-right-radius: ' . $data->radius . 'px; border-bottom-right-radius: ' . $data->radius . 'px; border-bottom-left-radius: ' . $data->radius . 'px; border:' . $data->borderwidth . 'px ' . $data->borderstyle . ' ' . $data->bordercolor . '; text-decoration: none; -webkit-text-size-adjust:none; mso-hide:all; ';
+		$style = 'background-color:' . $data->bgcolor . '; color:' . $data->textcolor . '; display: inline-block; font-family:' . $data->fontfamily . '; font-size:' . $data->fontsize . 'px; font-weight:bold; padding-top:' . $data->height/2 . 'px; padding-bottom:' . $data->height/2 . 'px; padding-left: 10px; padding-right: 10px; text-align:center; width:' . $data->width . 'px; border-top-left-radius: ' . $data->radius . 'px; border-top-right-radius: ' . $data->radius . 'px; border-bottom-right-radius: ' . $data->radius . 'px; border-bottom-left-radius: ' . $data->radius . 'px; border:' . $data->borderwidth . 'px ' . $data->borderstyle . ' ' . $data->bordercolor . '; text-decoration: none; -webkit-text-size-adjust:none; mso-hide:all; ';
 		
 		if($data->withbgimage == 1) {
 			$style.= 'background-image:url(' . $domain->imageUrl . '/images/btn-' . $data->bgimage . '.png);';

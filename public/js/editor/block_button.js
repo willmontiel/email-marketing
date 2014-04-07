@@ -198,6 +198,7 @@ BtnBlock.prototype.designBtn = function() {
 	content.css('border-color', this.btnbordercolor);
 	content.css('border-style', this.btnborderstyle);
 	content.css('border-width', this.btnborderwidth);
+	content.css('width', this.btnwidth);
 	
 	if(this.btnwithbgimage) {
 		content.css('background-image', 'url(' + config.imagesUrl + '/btn-' + this.btnbgimage + '.png)');
