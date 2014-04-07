@@ -191,16 +191,24 @@ class AppObjects
 	 */
 	private function setMemcache()
 	{
-		$this->di->set('cache', function (){
+		$conf = $this->config;
+		$this->di->set('cache', function () use ($conf){
 
 			$frontCache = new \Phalcon\Cache\Frontend\Data(array(
 				"lifetime" => 172800
 			));
 
-			$cache = new \Phalcon\Cache\Backend\Memcache($frontCache, array(
-				"host" => "localhost",
-				"port" => "11211"
-			));
+			if (class_exists('Memcache')) {
+				$cache = new \Phalcon\Cache\Backend\Memcache($frontCache, array(
+					"host" => "localhost",
+					"port" => "11211"
+				));
+			}
+			else {
+				$cache = new \Phalcon\Cache\Backend\File($frontCache, array(
+				    "cacheDir" => $conf->general->tmpdir
+				));
+			}
 			return $cache;
 		});
 	}

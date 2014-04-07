@@ -25,6 +25,7 @@
 				</div>
 			</div>
 		</div>
+
 		{%endfor%}
 		{%for widget in stats.fullSocialStats()%}
 		<div class="col-xs-6 col-md-3 col-lg-3">
@@ -56,6 +57,7 @@
 		</div>
 		{%endfor%}
 	</div>
+	<div class="row-fluid space"></div>
 	<div class="row">
 		<h4>Interacciones de los últimos 3 envíos</h4>
 		<div class="row-fluid">
@@ -85,27 +87,31 @@
 			</div>
 		</div>
 	</div>
+	<div class="row-fluid space"></div>
 	<div class="row">
 		<h4>Qué quieres hacer hoy?</h4>
 		<div class="row-fluid">
 			<div class="col-xs-6 col-md-3">
-				<div class="to-do">
+				<div class="to-do sm-btn-blue">
 					<a href=""  class="shortcuts"><span class="sm-button-large-email"></span></a>
 				</div>
-				<a href="">Crear un nuevo mail</a>
+				<a href="" class="btn-actn">Crear un nuevo email</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<div class="to-do">
-					<a href=""  class="shortcuts"><span class="sm-button-large-import-contacts"></span><br/>Crear contactos</a>
+				<div class="to-do sm-btn-blue">
+					<a href=""  class="shortcuts"><span class="sm-button-large-import-contacts"></span></a>
 				</div>
+				<a href="" class="btn-actn">Crear contactos</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<div class="to-do">
-					<a href=""  class="shortcuts"><span class="sm-button-large-database"></span><br/>Bases de datos</a>
+				<div class="to-do sm-btn-blue">
+					<a href=""  class="shortcuts"><span class="sm-button-large-database"></span></a>
 				</div>
+				<a href="" class="btn-actn">Bases de datos</a>
 			</div>
 		</div>
 	</div>
+	<div class="row-fluid space"></div>
 </div>
 
 {% endblock %}

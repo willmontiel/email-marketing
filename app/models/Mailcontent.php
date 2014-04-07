@@ -9,7 +9,10 @@ class Mailcontent extends \Phalcon\Mvc\Model
 		
 		$this->useDynamicUpdate(true);
 	}
-	
+
+    // Genera un mensaje particular cuando el contenido del correo es vacio
+    // Deshabilitado porque no funciona correctamente en equipo Mayte
+/*	
 	public function getMessages()
     {
         $messages = array();
@@ -22,4 +25,5 @@ class Mailcontent extends \Phalcon\Mvc\Model
         }
         return $messages;
     }
+    */
 }

@@ -15,8 +15,8 @@ class CreateAclEmber
 		$role = User::findFirstByIdUser($idSession->get('userid'));
 		
 		$cache = $di['cache'];
-		$cacheMap = null; // $cache->get('controllermap-cache');
-		$acl = null; // $cache->get('acl-cache');
+		$cacheMap = $cache->get('controllermap-cache');
+		$acl = $cache->get('acl-cache');
 		
 		if(!isset($cacheMap[$allow])){
 			return 0;
