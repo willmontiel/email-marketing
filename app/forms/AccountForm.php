@@ -85,6 +85,7 @@ class AccountForm extends Form
         $this->add(new Select("subscriptionMode", array(
             'Prepago' => 'Prepago',
             'Pospago' => 'Pospago',
+			'class' => 'chzn-select'
         )));
 		
 		$this->add(new Select('idUrlDomain', Urldomain::find(), array(

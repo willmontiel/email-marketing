@@ -37,6 +37,14 @@ class FlashMessageForm extends Form
 			'required' => 'required',
         )));
 		
+		$this->add(new Select("type", array(
+            'info' => 'Info',
+            'warning' => 'warning',
+			'success' => 'success',
+			'error' => 'error',
+			'class' => 'chzn-select'
+        )));
+		
 		$this->add(new Text('start', array(
 			'maxlength' => 80,
 			'type' => 'text',
