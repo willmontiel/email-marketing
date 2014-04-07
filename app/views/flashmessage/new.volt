@@ -5,22 +5,26 @@
 	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
 	<script type="text/javascript">
 		$(function(){
-			$("input[name=allAccounts]").on('click', function () { 
+			if ($('#all').prop('checked')) {
+				$("#selectAccount").hide();
+			}
+			
+			if ($('#any').prop('checked')) {
+				$("#selectAccount").show();
+			}
+			
+			$("input[name=allAccounts]").on('click', function () {
+				$('input[name=certainAccounts]').attr('checked', false);
+				console.log('lala');
 				$('#accounts').val("");
-;
-				//$('#accountSelect').prop('selectedIndex',0);
-				//$("#accountSelect").val('').trigger("liszt:updated");
-
-				var val = $('input[name=allAccounts]:checked').val();
-				switch (val) {
-					case "all":
-						$("#selectAccount").hide();
-						break;
-					case "any":
-						$("#selectAccount").show();
-						break;
-				}
-			 });
+				$("#selectAccount").hide();
+			});
+			
+			$("input[name=certainAccounts]").on('click', function () {
+				$('input[name=allAccounts]').attr('checked', false);
+				console.log('lala');
+				$("#selectAccount").show();
+			});
 		});
 	</script>
 	<script type="text/javascript">
@@ -87,9 +91,16 @@
 				<div class="form-group">
 					<label for="allAccounts" class="col-sm-4 control-label">*Mostrar en:</label>
 					<div class="col-sm-8">
+						{{ MessageForm.render('allAccounts') }}
+						<label for="all">Todas las cuentas</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						{#
 						<input type="radio" name="allAccounts"  value="all" id="all">
 						<label for="all">Todas las cuentas</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
 						<input type="radio" name="allAccounts" value="any" id="any">
+						<label for="any">Determinadas cuentas</label>
+						#}
+						{{ MessageForm.render('certainAccounts') }}
 						<label for="any">Determinadas cuentas</label>
 						<div id="selectAccount" style="display: none;">
 							<label></label>
@@ -101,6 +112,8 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">*Tipo de mensaje:</label>
 					<div class="col-sm-8">
+						{{ MessageForm.render('type', {'class' : 'form-control'} ) }}
+						{#
 						<div class="checkbox">
 							{{ MessageForm.render('type', {'id': 'info', 'value': 'info'} ) }}
 							<label for="info" class="flashmessage-info">Informativo</label>
@@ -114,6 +127,7 @@
 							{{ MessageForm.render('type', {'id': 'error', 'value': 'error'}) }}
 							<label for="error" class="flashmessage-error">Riesgo</label>
 						</div>
+						#}
 					</div>
 				</div>
 					

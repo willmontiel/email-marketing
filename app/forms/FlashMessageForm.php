@@ -3,7 +3,8 @@ use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Text,
 	Phalcon\Forms\Element\Select,
 	Phalcon\Forms\Element,
-	Phalcon\Forms\Element\TextArea;
+	Phalcon\Forms\Element\TextArea,
+	Phalcon\Forms\Element\Check;
 
 class FlashMessageForm extends Form
 {
@@ -30,19 +31,25 @@ class FlashMessageForm extends Form
 		$this->add(new Select('accounts', Account::find(), array(
 			'using' => array('idAccount', 'companyName'),
 			'multiple' => 'multiple',
+			'class' => 'form-control',
 			'id' => 'accounts'
 		)));
 		
-		$this->add(new RadioElement('type', array(
-			'required' => 'required',
+		$this->add(new Check('allAccounts', array(
+			'value' => 'all',
+			'id' => 'all'
+        )));
+		
+		$this->add(new Check('certainAccounts', array(
+			'value' => 'any',
+			'id' => 'any'
         )));
 		
 		$this->add(new Select("type", array(
             'info' => 'Info',
             'warning' => 'warning',
 			'success' => 'success',
-			'error' => 'error',
-			'class' => 'chzn-select'
+			'error' => 'error'
         )));
 		
 		$this->add(new Text('start', array(
