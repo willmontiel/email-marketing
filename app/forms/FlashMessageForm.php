@@ -32,6 +32,7 @@ class FlashMessageForm extends Form
 			'using' => array('idAccount', 'companyName'),
 			'multiple' => 'multiple',
 			'class' => 'form-control',
+			'name' => 'accounts[]',
 			'id' => 'accounts'
 		)));
 		

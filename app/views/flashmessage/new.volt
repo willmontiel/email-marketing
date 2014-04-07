@@ -1,8 +1,10 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ javascript_include('javascripts/moment/moment.min.js')}}
 	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
 	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
+	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.es.js')}}
 	<script type="text/javascript">
 		$(function(){
 			if ($('#all').prop('checked')) {
@@ -15,14 +17,12 @@
 			
 			$("input[name=allAccounts]").on('click', function () {
 				$('input[name=certainAccounts]').attr('checked', false);
-				console.log('lala');
 				$('#accounts').val("");
 				$("#selectAccount").hide();
 			});
 			
 			$("input[name=certainAccounts]").on('click', function () {
 				$('input[name=allAccounts]').attr('checked', false);
-				console.log('lala');
 				$("#selectAccount").show();
 			});
 		});
@@ -33,20 +33,20 @@
 			var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
 		 //HH:mm PP
 			$('#scheduleArea1').datetimepicker({
-				language: 'en',
+				language: 'es',
 				maskInput: true,
 				pickTime: true,
-				format: "dd/MM/yyyy hh:mm",
+				format: "MM/DD/YYYY H:mm",
 				//pick12HourFormat: true,
 				pickSeconds: false,
 				startDate: now
 			});
 			
 			$('#scheduleArea2').datetimepicker({
-				language: 'en',
+				language: 'es',
 				maskInput: true,
 				pickTime: true,
-				format: "dd/MM/yyyy hh:mm",
+				format: "MM/DD/YYYY H:mm",
 				//pick12HourFormat: true,
 				pickSeconds: false,
 				startDate: now
@@ -67,7 +67,8 @@
 	</div>
 	<br />
 	<div class="row">
-		<div class="col-md-12">{{flashSession.output()}}</div>
+		<div class="col-md-9">{{flashSession.output()}}</div>
+		<div class="col-md-3"><a href="{{url('flashmessage/index')}}" class="btn btn-default text-left">Lista de mensajes administrativos</a></div>
 	</div>
 	<br />
 	<div class="row">
@@ -103,7 +104,6 @@
 						{{ MessageForm.render('certainAccounts') }}
 						<label for="any">Determinadas cuentas</label>
 						<div id="selectAccount" style="display: none;">
-							<label></label>
 							{{ MessageForm.render('accounts') }}
 						</div>
 					</div>
@@ -136,7 +136,7 @@
 					<div class="col-sm-8">
 						<div id="date">
 							<div id="scheduleArea1" class="input-append date" class="col-sm-12">
-								{{ MessageForm.render('start', {'id': 'begin'}) }}
+								{{ MessageForm.render('start', {'id': 'begin', 'class' : 'form-control'}) }}
 							</div>
 						</div>
 					</div>
@@ -147,7 +147,7 @@
 					<div class="col-sm-8">
 						<div id="date">
 							<div id="scheduleArea2" class="input-append date" class="col-sm-12">
-								{{ MessageForm.render('end', {'id': 'end'}) }}
+								{{ MessageForm.render('end', {'id': 'end', 'class' : 'form-control'}) }}
 							</div>
 						</div>
 					</div>
