@@ -26,9 +26,10 @@ class BlockButton extends HtmlAbstract
 		
 		if($data->withbgimage == 1) {
 			$style.= 'background-image:url(' . $domain->imageUrl . '/images/btn-' . $data->bgimage . '.png);';
+			$bckgrdimg = 'src="' . $domain->imageUrl . '/images/btn-' . $data->bgimage . '.png"';
 		}
 		
-		$mso = '<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://' . $data->link . '" style="v-text-anchor:middle; height:' . ($data->height+20+($data->borderwidth*2)) . 'px; width:' . ($data->width+20+($data->borderwidth*2)) . 'px;" arcsize="' . round( $data->radius / 170 * 100 ) . '%" strokecolor="' . $data->bordercolor . '" strokeweight="' . $data->borderwidth . 'px" fillcolor="' . $data->bgcolor . '"><w:anchorlock/><center style="color:' . $data->textcolor . ';font-family:' . $data->fontfamily . ';font-size:' . $data->fontsize . 'px; font-weight:bold; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px;">' . $data->text . '</center></v:roundrect><![endif]-->';
+		$mso = '<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://' . $data->link . '" style="v-text-anchor:middle; height:' . ($data->height+20+($data->borderwidth*2)) . 'px; width:' . ($data->width+20+($data->borderwidth*2)) . 'px;" arcsize="' . round( $data->radius / 170 * 100 ) . '%" strokecolor="' . $data->bordercolor . '" strokeweight="' . $data->borderwidth . 'px" fill="t"><v:fill type="tile" ' . $bckgrdimg . ' color="' . $data->bgcolor . '" /><w:anchorlock/><center style="color:' . $data->textcolor . ';font-family:' . $data->fontfamily . ';font-size:' . $data->fontsize . 'px; font-weight:bold; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px;">' . $data->text . '</center></v:roundrect><![endif]-->';
 		
 		$this->children[] ='<div>' . $mso . '<a href="http://' . $data->link . '" style="' . $style . '">' . $data->text . '</a></div>';
 	}
