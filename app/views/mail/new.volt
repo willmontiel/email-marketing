@@ -1,6 +1,10 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ javascript_include('javascripts/moment/moment.min.js')}}
+	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
+	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
+	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.es.js')}}
 	<script>
 		$(function(){
 			$('#name').editable({
@@ -70,6 +74,31 @@
 				}
 			});
 		});
+	</script>
+	
+	<script type="text/javascript">
+		$(function(){
+			$("input[name=schedule]").on('click', function () { 
+				$("#programmer").hide();
+				$("#scheduleDate").val("");
+				var val = $('input[name=schedule]:checked').val();
+				if (val == "later") {
+					$("#programmer").show();
+				}
+			 });
+			
+			var nowTemp = new Date();
+			var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
+		 //HH:mm PP
+			$('#schedule').datetimepicker({
+				language: 'es',
+				maskInput: true,
+				pickTime: true,
+				format: "MM/DD/YYYY H:mm",
+				pickSeconds: false,
+				startDate: now
+			});
+		});	
 	</script>
 {% endblock %}
 {% block content %}
@@ -170,7 +199,7 @@
 			</blockquote>
 			<div class="panel panel-default">
 				<div class="panel-heading">
-				  <h3 class="panel-title">Configure google analytics con los enlaces que haya insertado en el contenido correo</h3>
+				  <h3 class="panel-title">Envíe el correo ahora, programelo para que se envíde déspues</h3>
 				</div>
 				<div class="panel-body">
 					{{ partial("mail/partials/schedule_partial") }}

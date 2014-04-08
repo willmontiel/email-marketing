@@ -57,7 +57,9 @@
 						<div id="mail" style="display: none;">
 							<input type="email" name="sendByMail" id="sendMail" class="form-control">
 						</div>
-
+						
+						<br />
+						
 						<input type="radio" name="filter" id="byOpen" value="byOpen" />
 						<label for="byOpen">Enviar a contactos que hayan abierto el siguiente correo electrónico: </label><br />
 						<div id="open" style="display: none;">
@@ -69,7 +71,9 @@
 								{% endif%}
 							</select>
 						</div>
-
+						
+						<br />
+						
 						<input type="radio" name="filter" id="byClick" value="byClick" />
 						<label for="byClick">Enviar a contactos que hayan hecho click en el siguiente enlace: </label><br />
 						<div id="click" style="display: none;">
@@ -81,7 +85,9 @@
 								{% endif %}
 							</select>
 						</div>
-
+						
+						<br />
+						
 						<input type="radio" name="filter" id="byExclude" class="icheck" value="byExclude" />
 						<label for="byExclude">No enviar a aquellos contactos que hayan abierto el siguiente correo electrónico: </label>
 						<div id="exclude" style="display: none;">
