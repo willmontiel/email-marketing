@@ -5,7 +5,7 @@
 {% block content %}
 {{flashSession.output()}}
 	<div class="row">
-		<h4>Interacciones de los últimos quince días</h4>
+		<h4 class="sectiontitle">Interacciones de los últimos quince días</h4>
 		{%for widget in stats.fullPeriodStats()%}
 		<div class="col-xs-6 col-md-3 col-lg-3">
 			<div class="box-dashboard-summary summary-{{ widget.getClassName() }}">
@@ -59,7 +59,7 @@
 	</div>
 	<div class="row-fluid space"></div>
 	<div class="row">
-		<h4>Interacciones de los últimos 3 envíos</h4>
+		<h4 class="sectiontitle">Interacciones de los últimos 3 envíos</h4>
 		<div class="row-fluid">
 			<div class="col-sm-12 col-lg-10">
 				<table class="table table-normal table-striped table-bordered">
@@ -89,7 +89,7 @@
 	</div>
 	<div class="row-fluid space"></div>
 	<div class="row">
-		<h4>Qué quieres hacer hoy?</h4>
+		<h4 class="sectiontitle">Qué quieres hacer hoy?</h4>
 		<div class="row-fluid">
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">

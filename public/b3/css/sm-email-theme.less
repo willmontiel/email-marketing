@@ -1,16 +1,24 @@
 /* Colores */
 @brand-white: #f5f5f5;
+@brand-blue: #6e97ac;
+@brand-sad-blue: #b3e3e4;
+@brand-gray: #9d9d9d;
 @brand-green: #97c86b;
 @brand-orange:#ffc766;
+@brand-red:#bd1b06;
 @brand-soft-color: #adadad;
 
+@bg-default-btn: #eee;
+@bg-delete-btn: #ac1905;
+@text-color-btn: #428bca;
 
 @menu-background: #20526e;
 
 @social-network-bg: @brand-soft-color;
 
 
-/*  Colores para botones de accion grandes*/
+/*  botones de accion grandes  */
+
 @orange-action-button: @brand-orange;
 @orange-action-strong: #ffab1a;
 @border:2px solid @orange-action-strong;
@@ -22,7 +30,7 @@
 @shortcuts-big-icons-height:134px;
 @shortcuts-big-icons-width:134px;
 
-/*  botones small de accion */
+/*  botones small de accion  */
 
 @shortcuts-small-icons-height:34px;
 @shortcuts-small-icons-width:34px;
@@ -37,7 +45,7 @@
 
 /* Estilos */
 body {
-	background-color: #f5f5f5;
+	background-color: @brand-white;
 }
 .space {
 	margin-bottom: 40px;
@@ -49,6 +57,12 @@ h4.sectiontitle {
 	padding: 10px;
 	color: #20526e;
 	margin-bottom: 30px;
+}
+/* BG color gris */
+.bg {
+	background-color: #eeeeee;
+	margin-bottom: 10px;
+	padding: 15px 0 0 0;
 }
 
 .box-dashboard-summary {
@@ -259,7 +273,8 @@ h4.sectiontitle {
 	width: 42px;
 	height: 42px;
 	margin: 0;
-	padding-top: 2px;
+	padding-top: 3px;
+	border-radius: 2px;
 }
 .small-btn a {
 	display: inline-block;
@@ -345,7 +360,7 @@ h4.sectiontitle {
 	background-position: @position @sm-icon-pos-y;
 }
 .sm-button-small-database:extend(.sm-button-small-base) {
-	.pos-icons(3, @shortcuts-small-icons-width);
+	.pos-icons(8, @shortcuts-small-icons-width);
 	background-position: @position @sm-icon-pos-y;
 }
 .sm-button-small-bloq-list:extend(.sm-button-small-base) {
@@ -361,15 +376,15 @@ h4.sectiontitle {
 	background-position: @position -129;
 }
 .sm-button-small-import-list:extend(.sm-button-small-base) {
-	.pos-icons(7, @shortcuts-small-icons-width);
+	.pos-icons(6, @shortcuts-small-icons-width);
 	background-position: @position @sm-icon-pos-y;
 }
 .sm-button-small-segment:extend(.sm-button-small-base) {
-	.pos-icons(9, @shortcuts-small-icons-width);
+	.pos-icons(3, @shortcuts-small-icons-width);
 	background-position: @position @sm-icon-pos-y;
 }
 .sm-button-small-contact-search:extend(.sm-button-small-base) {
-	.pos-icons(13, @shortcuts-small-icons-width);
+	.pos-icons(2, @shortcuts-small-icons-width);
 	background-position: @position @sm-icon-pos-y;
 }
 .sm-button-small-admin-prog:extend(.sm-button-small-base) {
@@ -388,5 +403,53 @@ h4.sectiontitle {
 	.pos-icons(19, @shortcuts-small-icons-width);
 	background-position: @position @sm-icon-pos-y;
 }
-/* Estilos para la navegación interna con iconos pequeños */
+/* Fin estilos para la navegación interna con iconos pequeños */
 
+/* Estilos para la info sobre contactos */
+.numbers-contacts li {
+	text-align: center;
+	padding: 0 15px;
+}
+.numbers-contacts li span {
+	font-size: 30px;
+}
+span.blue {
+	color: @brand-blue;
+}
+span.sad-blue {
+	color: @brand-sad-blue;
+}
+span.gray {
+	color: @brand-gray;
+}
+span.green {
+	color: @brand-green;
+}
+span.orange {
+	color: @brand-orange;
+}
+span.red {
+	color: @brand-red;
+}
+
+/* botones standar de toda la aplicacion */
+
+/*** Sobre escritura de estilos de botones ***/
+.btn-default {
+	background-color: @bg-default-btn;
+	color: @text-color-btn;
+	border: none;
+}
+.btn-default:hover {
+	text-decoration: underline;
+	color: @brand-white;
+	background-color: darken(@bg-default-btn, 30%);
+}
+.btn-default.extra-padding {
+	padding-right: 18px;
+	padding-left: 18px;
+}
+.btn-delete:hover {
+	background-color: @bg-delete-btn;
+	color: @brand-white;
+}

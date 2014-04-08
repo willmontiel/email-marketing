@@ -54,7 +54,7 @@
 			{# Botones de navegacion primarios #}
 
 			<div class="row">
-				<h4>Básicas</h4>
+				<h4 class="sectiontitle">Básicas</h4>
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						{{'{{#link-to "lists" class="shortcuts"}}<span class="sm-button-large-contact-list"></span>{{/link-to}}'}}
@@ -82,7 +82,7 @@
 			</div>
 			<div class="row-fluid space"></div>
 			<div class="row">
-				<h4>Avanzadas</h4>
+				<h4 class="sectiontitle">Avanzadas</h4>
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						<a href="{{url('dbase')}}" class="shortcuts" title="Configuracion avanzada"><span class="sm-button-large-settings"></span></a>
@@ -107,7 +107,7 @@
 			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
 
 			<div class="row">
-				<h4>Listas de contactos</h4>
+				<h4  class="sectiontitle">Listas de contactos</h4>
 				<div class="col-md-3">
 					<form>
 						<p>

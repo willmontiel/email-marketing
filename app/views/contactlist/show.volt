@@ -106,55 +106,58 @@
 	<div id="emberAppContactContainer">
 		<script type="text/x-handlebars" data-template-name="contacts">
 			<div class="padded">
-				<div class="clearfix">
-					<ul class="inline sparkline-box" style="">
-
-						<li class="sparkline-row">
-							<h4 class="blue"><span>Contactos totales</span> {{'{{lista.totalContactsF}}'}}</h4>
-						</li>
-
-						<li class="sparkline-row">
-							<h4 class="green"><span>Activos</span> {{'{{lista.activeContactsF}}'}}</h4>
-						</li>
-
-						<li class="sparkline-row">
-							<h4 class="gray"><span>Inactivos</span> {{'{{lista.inactiveContactsF}}'}}</h4>
-						</li>
-						<li class="sparkline-row">
-							<h4 class="gray"><span>Desuscritos</span> {{'{{lista.unsubscribedContactsF}}'}}</h4>
-						</li>
-						<li class="sparkline-row">
-							<h4 class="red"><span>Rebotados</span> {{'{{lista.bouncedContactsF}}'}}</h4>
-						</li>
-						<li class="sparkline-row">
-							<h4 class="red"><span>Spam</span> {{'{{lista.spamContactsF}}'}}</h4>
-						</li>
-
+				<div class="row bg">
+					<div class="sparkline-row col-xs-3">
+						<h4 class="blue">Lista de Iván </h4>
+						<span>Lista de prueba para iván</span>
+					</div>
+					<ul class="list-inline numbers-contacts pull-right">
+						<li>Contactos totales <br/> <span class="blue"> {{'{{lista.totalContactsF}}'}} </span></li>
+						<li>Activos <br/> <span class="green"> {{'{{lista.activeContactsF}}'}} </span></li>
+						<li>Inactivos <br/><span class="sad-blue"> {{'{{lista.inactiveContactsF}}'}} </span></li>
+						<li>Desuscritos <br/><span class="gray"> {{'{{lista.unsubscribedContactsF}}'}} </span></li>
+						<li>Rebotados <br/><span class="orange"> {{'{{lista.bouncedContactsF}}'}} </span></li>
+						<li>Spam <br/><span class="red"> {{'{{lista.spamContactsF}}'}} </span></li>
 					</ul>
 				</div>
 			</div>
 			{{'{{outlet}}'}}
 		</script>
+
 		<script type="text/x-handlebars" data-template-name="contacts/index">
-			<div class="pull-right" style="margin-bottom: 5px;">
-				<a href="{{url('contactlist#/lists')}}" class="btn btn-blue"><i class="icon-home"></i> Todas las listas</a>
-				{{'{{#link-to "contacts.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/link-to}}'}}
-				{{'{{#link-to "contacts.newbatch" class="btn btn-default" disabledWhen="importBatchDisabled"}}'}}<i class="icon-align-justify"></i> Crear Varios Contactos{{'{{/link-to}}'}}
-				{{ '{{#link-to "contacts.import" class="btn btn-default" disabledWhen="importDisabled"}}'}}<i class="icon-file-alt"></i> Importar Contactos{{'{{/link-to}}'}}			
-				<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="btn btn-default" title="Configuracion avanzada"><i class="icon-cog"></i></a>
-			</div>
-			<div class="clearfix"></div>
-			<br />
-			
-			{{ partial("partials/search_contacts_partial") }}
-			
-			<div class="box">
-				<div class="box-header">
-					<span class="title">Contactos</span>
- 					<ul class="box-toolbar">
-						<li><span class="label label-green">{{'{{totalrecords}}'}}</span></li>
+			{# formulario para busqueda #}
+			<div class="row">
+				<div class="col-md-5 col-sm-12 form-search">
+					<form role="form">
+						<div class="form-group">
+							<label class="sr-only" for="search"> buscar </label>
+							<input type="text_area" class="form-control" id="search" placeholder="Buscar">
+						</div>
+					</form>
+				</div>
+				<div class="col-md-7 col-sm-12">
+					<ul class="list-inline pull-right">
+						<li>
+							<a href="{{url('contactlist#/lists')}}" class="btn btn-default btn-sm" role="button"><i class="icon-home"></i> Todas las listas</a>
+						</li>
+						<li>
+							{{'{{#link-to "contacts.new" class="btn btn-default btn-sm" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/link-to}}'}}
+						</li>
+						<li>
+							{{'{{#link-to "contacts.newbatch" class="btn btn-default btn-sm" disabledWhen="importBatchDisabled"}}'}}<i class="icon-align-justify"></i> Crear Varios Contactos{{'{{/link-to}}'}}
+						</li>
+						<li>
+							{{ '{{#link-to "contacts.import" class="btn btn-default btn-sm" disabledWhen="importDisabled"}}'}}<i class="icon-file-alt"></i> Importar Contactos{{'{{/link-to}}'}}	
+						</li>
+
+						{#	<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="btn btn-default btn-sm" title="Configuracion avanzada"><i class="icon-cog"></i></a> #}
 					</ul>
 				</div>
+			</div>
+			
+			{# {{ partial("partials/search_contacts_partial") }} #}
+			
+			<div class="row">
 				<div class="box-content">
 					<table class="table table-bordered" style="border: 0px !important;">
 						<thead></thead>

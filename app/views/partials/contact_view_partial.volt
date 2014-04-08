@@ -24,14 +24,14 @@
 	<td>
 		<div class="text-right">
 	{{ '{{#if isSubscribed}}' }}
-			<button class="btn btn-sm btn-default" {{' {{action "unsubscribedcontact" this}} '}}>Desuscribir</button>
+			<button class="btn btn-xs btn-default extra-padding" {{' {{action "unsubscribedcontact" this}} '}}>Desuscribir</button>
 	{{ '{{else}}' }}
 		{{'{{#unless isEmailBlocked}}'}}
-			<button class="btn btn-sm btn-info" {{' {{action "subscribedcontact" this}} '}}>Suscribir</button>
+			<button class="btn btn-xs btn-default extra-padding" {{' {{action "subscribedcontact" this}} '}}>Suscribir</button>
 		{{'{{/unless}}'}}
 	{{ '{{/if}}' }}
 			{% if datasegment is not defined%}
-				{{ '{{#link-to "contacts.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-danger"}}' }}Eliminar{{ '{{/link-to}}' }}
+				{{ '{{#link-to "contacts.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-xs btn-delete extra-padding"}}' }}Eliminar{{ '{{/link-to}}' }}
 			{% endif %}
 		</div>
 	</td>

@@ -6,7 +6,7 @@
 <!-- aqui inicia mi contenido -->
 <div class="row">
 	<!-- menu de opciones -->
-	<h4>Qué quieres hacer hoy?</h4>
+	<h4 class="sectiontitle">Qué quieres hacer hoy?</h4>
 	<div class="row-fluid">
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
@@ -24,13 +24,13 @@
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('template/index') }}"  class="shortcuts"><span class="sm-button-large-plantillas"></span></a>
 			</div>
-			<a href="" class="btn-actn">Administrar plantillas</a>
+			<a href="" class="btn-actn">Plantillas</a>
 		</div>
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('scheduledmail') }}"  class="shortcuts"><span class="sm-button-large-admin-prog"></span></a>
 			</div>
-			<a href="" class="btn-actn">Administrar programación</a>
+			<a href="" class="btn-actn">Programación de envíos</a>
 		</div>
 	</div>
 </div>
