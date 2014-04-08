@@ -47,7 +47,7 @@ class ContactIterator implements Iterator
 		if (count($contacts) <= 0) {
 			return false;
 		}
-//		Phalcon\DI::getDefault()->get('logger')->log('SQl: '. $sql);
+
 		$this->offset = 0;
 		
 		if (!$this->fields) {
@@ -80,8 +80,6 @@ class ContactIterator implements Iterator
 	{
 		return $this->contact[$this->offset]['idContact'];
 	}
-	
-	
 	
 	public function next()
 	{
