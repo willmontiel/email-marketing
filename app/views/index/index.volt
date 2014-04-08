@@ -1,6 +1,4 @@
 {% extends "templates/index_b3.volt" %}
-
-
 {% block sectiontitle %}Dashboard{% endblock %}
 {% block content %}
 {{flashSession.output()}}
