@@ -324,23 +324,22 @@ class SocialNetworkConnection
 			'conditions' => 'idAsset = ?1',
 			'bind' => array(1 => basename($imagepath))
 		));
-		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
+
 		$imgObj = new ImageObject();
-		$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . $ext, $asset->fileName);
+		$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . pathinfo($asset->fileName, PATHINFO_EXTENSION), $asset->fileName);
 		$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT);
 		
 		$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
-		Phalcon\DI::getDefault()->get('logger')->log('Verificando si el directorio existe ' . $dir);
+
 		if (!file_exists($dir)) {
-			Phalcon\DI::getDefault()->get('logger')->log('Creando el directorio en ' . $dir);
 			mkdir($dir, 0777, true);
 		}
 		
-		$imgname = basename($imagepath) . '.' . $ext;
+		$imgname = basename($imagepath) . '.png';
 		$dir .= $imgname;
 		
-		$imgObj->saveImage($ext, $dir);
-		Phalcon\DI::getDefault()->get('logger')->log($this->urlObj->getAppUrlAsset(TRUE) . '/' . $this->account->idAccount . '/sn/' . $imgname);
+		$imgObj->saveImage('png', $dir);
+
 		return $imgname;
 	}
 }
