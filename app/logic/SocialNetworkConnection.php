@@ -327,7 +327,7 @@ class SocialNetworkConnection
 
 		$imgObj = new ImageObject();
 		$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . pathinfo($asset->fileName, PATHINFO_EXTENSION), $asset->fileName);
-		$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT, '#FFFFFF');
+		$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT);
 		
 		$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
 
