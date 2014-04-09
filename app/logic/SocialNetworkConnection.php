@@ -332,6 +332,7 @@ class SocialNetworkConnection
 		$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
 		
 		if (!file_exists($dir)) {
+			Phalcon\DI::getDefault()->get('logger')->log('Creando el directori en ' . $dir);
 			mkdir($dir, 0777, true);
 		}
 		
