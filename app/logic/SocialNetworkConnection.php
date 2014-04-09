@@ -324,10 +324,10 @@ class SocialNetworkConnection
 			'conditions' => 'idAsset = ?1',
 			'bind' => array(1 => basename($imagepath))
 		));
-		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
+
 		$imgObj = new ImageObject();
-		$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . $ext, $asset->fileName);
-		$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT);
+		$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . pathinfo($asset->fileName, PATHINFO_EXTENSION), $asset->fileName);
+		$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT, '#FFFFFF');
 		
 		$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
 
@@ -335,10 +335,10 @@ class SocialNetworkConnection
 			mkdir($dir, 0777, true);
 		}
 		
-		$imgname = basename($imagepath) . '.' . $ext;
+		$imgname = basename($imagepath) . '.jpg';
 		$dir .= $imgname;
 		
-		$imgObj->saveImage($ext, $dir);
+		$imgObj->saveImage('jpg', $dir);
 
 		return $imgname;
 	}
