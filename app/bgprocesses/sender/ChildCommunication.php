@@ -267,6 +267,7 @@ class ChildCommunication extends BaseWrapper
 				
 				if($mail->socialnetworks != null) {
 					$socials = new SocialNetworkConnection($log);
+					$socials->setAccount($this->account);
 					$socialdesc = Socialmail::findFirstByIdMail($mail->idMail);
 					if($socialdesc) {
 						$idsocials = json_decode($mail->socialnetworks);

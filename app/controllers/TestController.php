@@ -1108,4 +1108,12 @@ class TestController extends ControllerBase
 	{
 		
 	}
+	
+	public function testsnimageresizeAction($idAsset)
+	{
+		$imagepath = '/emarketing/asset/show/' . $idAsset;
+		$social = new SocialNetworkConnection();
+		$social->setAccount($this->user->account);
+		$social->setImageToIdealSize($imagepath);
+	}
 }

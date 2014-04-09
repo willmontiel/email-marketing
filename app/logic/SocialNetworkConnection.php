@@ -5,9 +5,13 @@ class SocialNetworkConnection
 	public $twitter = null;
 	public $user;
 	
+	const IMG_SN_WIDTH = 650;
+	const IMG_SN_HEIGHT = 277;
+	
 	function __construct($logger = null) {
 		$this->logger = $logger;
 		$this->urlObj = Phalcon\DI::getDefault()->get('urlManager');
+		$this->assetsrv = Phalcon\DI::getDefault()->get('asset');
 	}
 
 	public function setAccount(Account $account)
@@ -191,12 +195,13 @@ class SocialNetworkConnection
 		return json_encode($socialsnetworks);
 	}
 	
-	public function saveFacebookDescription($fbtitle = '', $fbdescription = '', $fbmsg = '')
+	public function saveFacebookDescription($fbtitle = '', $fbdescription = '', $fbmsg = '', $fbimage = '')
 	{
 		$fbcontent = new stdClass();
 		$fbcontent->title = $fbtitle;
 		$fbcontent->description = $fbdescription;
 		$fbcontent->message = $fbmsg;
+		$fbcontent->image = $fbimage;
 		return json_encode($fbcontent);
 	}
 	
@@ -222,9 +227,17 @@ class SocialNetworkConnection
 		$fbcontent = json_decode($desc->fbdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
-		$url = $this->urlObj->getBaseUri(TRUE) . 'webversion/show/1-' . $mail->idMail . '-25';
-		$md5 = md5($url . '-Sigmamovil_Rules');
-		$link = $url . '-' . $md5; 
+		
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
+		
+		$action = 'webversion/show';
+		$parameters = array(1, $mail->idMail, '25');
+		$link = $linkdecoder->encodeLink($action, $parameters);
+		
+		// Ajustar Tamaño de Imagen
+		$imgname = $this->setImageToIdealSize($fbcontent->image);
+		
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$userid = $id_token->userid;
@@ -233,7 +246,7 @@ class SocialNetworkConnection
 					"access_token" => $access_token,
 					"message" => $fbcontent->message,
 					"link" => $link, //$this->urlObj->getBaseUri(TRUE) "http://stage.sigmamovil.com/",
-					"picture" => $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png', //"http://stage.sigmamovil.com/images/sigma_envelope.png",
+					"picture" => $this->urlObj->getAppUrlAsset(TRUE) . '/' . $this->account->idAccount . '/sn/' . $imgname, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
 					"name" => $fbcontent->title,
 					"caption" => $link, //$this->urlObj->getBaseUri(TRUE) "www.stage.sigmamovil.com/",
 					"description" => $fbcontent->description
@@ -271,9 +284,18 @@ class SocialNetworkConnection
 		$twcontent = json_decode($desc->twdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
-		$url = $this->urlObj->getBaseUri(TRUE) . 'webversion/show/1-' . $mail->idMail . '-25';
-		$md5 = md5($url . '-Sigmamovil_Rules');
-		$link = $url . '-' . $md5; 
+		
+//		$url = $this->urlObj->getBaseUri(TRUE) . 'webversion/show/1-' . $mail->idMail . '-25';
+//		$md5 = md5($url . '-Sigmamovil_Rules');
+//		$link = $url . '-' . $md5; 
+		
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
+		
+		$action = 'webversion/show';
+		$parameters = array(1, $mail->idMail, '25');
+		$link = $linkdecoder->encodeLink($action, $parameters);
+		
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$oauth_token = $id_token->userid;
@@ -294,5 +316,30 @@ class SocialNetworkConnection
 		else {
 			$this->logger->log('There are no social twitter accounts to post');
 		}
+	}
+	
+	public function setImageToIdealSize($imagepath)
+	{
+		$asset = Asset::findFirst(array(
+			'conditions' => 'idAsset = ?1',
+			'bind' => array(1 => basename($imagepath))
+		));
+		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
+		$imgObj = new ImageObject();
+		$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . $ext, $asset->fileName);
+		$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT);
+		
+		$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
+		
+		if (!file_exists($dir)) {
+			mkdir($dir, 0777, true);
+		}
+		
+		$imgname = basename($imagepath) . '.' . $ext;
+		$dir .= $imgname;
+		
+		$imgObj->saveImage($ext, $dir);
+		Phalcon\DI::getDefault()->get('logger')->log($this->urlObj->getAppUrlAsset(TRUE) . '/' . $this->account->idAccount . '/sn/' . $imgname);
+		return $imgname;
 	}
 }
