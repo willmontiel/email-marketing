@@ -232,7 +232,7 @@ class SocialNetworkConnection
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
 		$action = 'webversion/show';
-		$parameters = array(1, $mail->idMail, '25');
+		$parameters = array(1, $mail->idMail, '1329266');
 		$link = $linkdecoder->encodeLink($action, $parameters);
 		
 		// Ajustar Tamaño de Imagen
@@ -293,7 +293,7 @@ class SocialNetworkConnection
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
 		$action = 'webversion/show';
-		$parameters = array(1, $mail->idMail, '25');
+		$parameters = array(1, $mail->idMail, '1329266');
 		$link = $linkdecoder->encodeLink($action, $parameters);
 		
 		if (count($ids_tokens) > 0) {
@@ -330,9 +330,9 @@ class SocialNetworkConnection
 		$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT);
 		
 		$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
-		
+		Phalcon\DI::getDefault()->get('logger')->log('Verificando si el directorio existe ' . $dir);
 		if (!file_exists($dir)) {
-			Phalcon\DI::getDefault()->get('logger')->log('Creando el directori en ' . $dir);
+			Phalcon\DI::getDefault()->get('logger')->log('Creando el directorio en ' . $dir);
 			mkdir($dir, 0777, true);
 		}
 		
