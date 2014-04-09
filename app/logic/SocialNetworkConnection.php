@@ -6,7 +6,7 @@ class SocialNetworkConnection
 	public $user;
 	
 	const IMG_SN_WIDTH = 600;
-	const IMG_SN_HEIGHT = 600;
+	const IMG_SN_HEIGHT = 300;
 	
 	function __construct($logger = null) {
 		$this->logger = $logger;
