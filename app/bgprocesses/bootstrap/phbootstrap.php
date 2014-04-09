@@ -114,7 +114,7 @@ $di->set('tmppath', $tmpdir);
  */
 
 $asset = new \stdClass;
-$asset->dir = $config->general->assetsfolder;
+$asset->dir = '../../' .$config->general->assetsfolder;
 $asset->url = '/' . $di->get('urlManager')->getAppUrlAsset() . '/';
 $di->set('asset', $asset);
 
