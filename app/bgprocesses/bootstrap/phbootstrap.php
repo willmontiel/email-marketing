@@ -114,9 +114,9 @@ $di->set('tmppath', $tmpdir);
  */
 
 $asset = new \stdClass;
-$asset->dir = $this->config->general->assetsfolder;
-$asset->url = '/' . $this->urlManager->getAppUrlAsset() . '/';
-$this->di->set('asset', $asset);
+$asset->dir = $config->general->assetsfolder;
+$asset->url = '/' . $di->get('urlManager')->getAppUrlAsset() . '/';
+$di->set('asset', $asset);
 
 /*
  * Configuración MTA
