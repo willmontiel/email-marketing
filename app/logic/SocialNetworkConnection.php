@@ -335,10 +335,10 @@ class SocialNetworkConnection
 			mkdir($dir, 0777, true);
 		}
 		
-		$imgname = basename($imagepath) . '.png';
+		$imgname = basename($imagepath) . '.jpg';
 		$dir .= $imgname;
 		
-		$imgObj->saveImage('png', $dir);
+		$imgObj->saveImage('jpg', $dir);
 
 		return $imgname;
 	}
