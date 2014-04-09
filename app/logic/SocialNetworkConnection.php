@@ -5,8 +5,8 @@ class SocialNetworkConnection
 	public $twitter = null;
 	public $user;
 	
-	const IMG_SN_WIDTH = 650;
-	const IMG_SN_HEIGHT = 277;
+	const IMG_SN_WIDTH = 470;
+	const IMG_SN_HEIGHT = 245;
 	
 	function __construct($logger = null) {
 		$this->logger = $logger;
