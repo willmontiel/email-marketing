@@ -218,7 +218,7 @@ class ChildCommunication extends BaseWrapper
 					} 
 					else {
 						echo "There was an error in message {$i}: \n";
-						$log->log("Error while sending mail: " . print_r($failures));
+						$log->log("Error while sending mail: " . print_r($failures, true));
 						print_r($failures);
 					}
 //					$log->log("HTML: " . $html);

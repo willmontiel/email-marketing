@@ -1,23 +1,36 @@
-<form class="form-horizontal" role="form">
+<form class="form-horizontal" role="form" id="header">
+	{{'{{mail.id}}'}}
 	<div class="form-group">
 		<label for="fromName" class="col-sm-2 control-label">De: </label>
 		<div class="col-sm-5">
-			<input type="text" class="form-control" id="fromName" placeholder="Enviar desde este nombre">
+			{{'{{view Ember.TextField valueBinding="fromName" id="fromName" required="required" autofocus="autofocus" class="form-control"}}'}}
+			{#
+			<input type="text" class="form-control" name="fromName" id="fromName" placeholder="Enviar desde este nombre">
+			#}
 		</div>
 		<div class="col-sm-5">
-			<input type="email" class="form-control" id="fromEmail" placeholder="Enviar desde esta dirección de correo">
+			{{'{{view Ember.TextField valueBinding="fromEmail" id="fromEmail" class="form-control"}}'}}
+			{#
+			<input type="email" class="form-control" name="fromEmail" id="fromEmail" placeholder="Enviar desde esta dirección de correo">
+			#}
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="replyTo" class="col-sm-2 control-label">Responder a: </label>
 		<div class="col-sm-10">
-		  <input type="text" class="form-control" id="replyTo" placeholder="Responder a este correo">
+			{{'{{view Ember.TextField valueBinding="replyTo" id="replyTo" class="form-control"}}'}}
+			{#
+			<input type="text" class="form-control" name="replyTo" id="replyTo" placeholder="Responder a este correo">
+			#}
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="subject" class="col-sm-2 control-label">Asunto: </label>
 		<div class="col-sm-10">
-		  <input type="text" class="form-control" id="subject" placeholder="Asunto">
+			{{'{{view Ember.TextField valueBinding="subject" id="subject" class="form-control"}}'}}
+			{#
+			<input type="text" class="form-control" name="subject" id="subject" placeholder="Asunto">
+			#}
 		</div>
 	</div>
 	<div class="form-group">
@@ -90,7 +103,10 @@
 	<div class="form-group">
 		<div class="col-sm-6 col-md-offset-6 text-right">
 			<a href="#" class="btn btn-default">Descartar cambios</a>
-			<a href="#" class="btn btn-primary">Aplicar cambios</a>
+			<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
+			{#
+			<input type="button" class="btn btn-primary" value="Aplicar cambios" onClick="createBlock(this.form, 'header')">
+			#}
 		</div>
 	</div>
 </form>

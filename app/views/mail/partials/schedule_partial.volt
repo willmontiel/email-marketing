@@ -13,16 +13,14 @@
 		<div class="col-sm-10">
 			<input type="radio" name="schedule" value="now" id="now">
 			<label for="now">De inmediato:</label>
-			<br />
+			<br /><br />
 			
 			<input type="radio" name="schedule" {{checked}} value="later" id="later">
 			<label for="later">En la siguiente fecha:</label>
 			<div id="programmer" style="{{display}}">
 				<br />
-				<div id="date">
-					<div id="schedule" class="input-append date col-sm-4">
-						<input type="text" name="scheduleDate" id="date" class="form-control" value="{{value}}">
-					</div>
+				<div id="schedule" class="input-append date col-sm-4">
+					<input type="text" name="scheduleDate" id="date" class="form-control" value="{{value}}">
 				</div>
 			</div>
 		</div>

@@ -1,25 +1,64 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('javascripts/moment/moment.min.js')}}
 	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
 	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
 	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.es.js')}}
-	<script>
-		$(function(){
-			$('#name').editable({
-				title: 'Ingrese un nombre para el correo'
-			});
-			
-			if($('#accounts_facebook')[0].selectedOptions.length > 0){
-				$('.fbdescription').show();
-			}	
-			else {
-				$('.fbdescription').hide();
-			}
-		});
+	<script type="text/javascript">
+		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 	</script>
-	
+	{{ javascript_include('js/mixin_save.js') }}
+	{{ javascript_include('js/app_mail.js') }}
+	<script type="text/javascript">
+		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios
+		{% if db == true%}
+			App.dbs = [
+				{% for dbase in dbases %}
+					Ember.Object.create({name: "{{dbase.name}}", id: {{dbase.idDbase}}}),
+				{% endfor %}
+			];
+			
+			App.lists = [
+				{% for contactlist in contactlists %}
+					Ember.Object.create({name: "{{contactlist.Dbase}}", id: {{contactlist.idContactlist}}}),
+				{% endfor %}
+			];
+			
+			App.segments = [
+				{% for segment in segments %}
+					Ember.Object.create({name: "{{segment.name}}", id: {{segment.idSegment}}}),
+				{% endfor %}
+			];
+			
+			{% if mails %}
+				App.sendByOpen = [
+					{% for m in mails%}
+						Ember.Object.create({name: "{{m.name}}", id: {{m.idMail}}}),
+					{% endfor %}
+				];
+			{% endif%}
+			
+			
+			{% if links %}
+				App.sendByClick = [
+					{% for link in links %}
+						Ember.Object.create({name: "{{link.link}}", id: {{link.idMailLink}}}),
+					{% endfor%}
+				];
+			{% endif %}
+			
+			{% if mails %}
+				App.excludeContact = [
+					{% for m2 in mails%}
+						Ember.Object.create({name: "{{m2.name}}", id: {{m2.idMail}}}),
+					{% endfor %}	
+				];
+			{% endif%}
+									
+		{% endif %}
+	</script>
 	<script type="text/javascript">
 		$(function(){
 			$("input[name=radios]").on('click', function () { 
@@ -27,20 +66,20 @@
 				$("#list").hide();
 				$("#seg").hide();
 
-				$("#dbSelect").val('');
-				$('#listSelect').val('');
-				$('#segSelect').val('');
+				$("#dbases").val('');
+				$('#segments').val('');
+				$('#contactlists').val('');
 
 				var val = $('input[name=radios]:checked').val();
 
 				switch (val) {
-					case "0":
+					case "dataBase":
 						$("#db").show();
 						break;
-					case "1":
+					case "contactList":
 						$("#list").show();
 						break;
-					case "2":
+					case "segment":
 						$("#seg").show();
 						break;
 				}
@@ -73,32 +112,22 @@
 						break;
 				}
 			});
-		});
-	</script>
-	
-	<script type="text/javascript">
-		$(function(){
+			
 			$("input[name=schedule]").on('click', function () { 
 				$("#programmer").hide();
-				$("#scheduleDate").val("");
+				$("#date").val('');
+				
 				var val = $('input[name=schedule]:checked').val();
-				if (val == "later") {
-					$("#programmer").show();
+				switch (val) {
+					case "now":
+						break;
+						
+					case "later":
+						$("#programmer").show();
+						break;
 				}
-			 });
-			
-			var nowTemp = new Date();
-			var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
-		 //HH:mm PP
-			$('#schedule').datetimepicker({
-				language: 'es',
-				maskInput: true,
-				pickTime: true,
-				format: "MM/DD/YYYY H:mm",
-				pickSeconds: false,
-				startDate: now
 			});
-		});	
+		});
 	</script>
 {% endblock %}
 {% block content %}
@@ -109,110 +138,114 @@
 		</div>
 	</div>
 	<br />
-	
-	<div class="row">
-		<div class="col-md-12">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<form class="form-horizontal" role="form">
-						<div class="form-group">
-							<label for="fromName" class="col-sm-2 control-label">Nombre del correo: </label>
-							<div class="col-sm-10">
-								<a href="#" id="name" data-type="text" data-pk="1">Nuevo correo</a>
-							</div>
+	<div id="emberAppContainer">
+	</script>
+		<script type="text/x-handlebars" data-template-name="index">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<label for="fromName" class="col-sm-2 control-label">Nombre del correo: </label>
+									<div class="col-sm-10">
+										{{'{{view Ember.TextField valueBinding="name" id="name" required="required" class="form-control"}}'}}
+									</div>
+								</div>
+							</form>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-md-12">
-			<blockquote>
-				<h3>Encabezado</h3>
-			</blockquote>
-				
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Nuevo correo</h3>
-				</div>
-				<div class="panel-body">
-					{{ partial("mail/partials/header_partial") }}
-				</div>
-			</div>
-		</div>
-	</div>	
-	
-	<div class="row">
-		<div class="col-md-12">
-			<blockquote>
-				<h3>Destinatarios</h3>
-			</blockquote>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-				  <h3 class="panel-title">Seleccione destinatarios</h3>
-				</div>
-				<div class="panel-body">
-					{{ partial("mail/partials/target_partial") }}
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-md-12">
-			<blockquote>
-				<h3>Contenido</h3>
-			</blockquote>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-				  <h3 class="panel-title">Cree el contenido del correo</h3>
-				</div>
-				<div class="panel-body">
-					{{ partial("mail/partials/content_partial") }}
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-md-12">
-			<blockquote>
-				<h3>Tracking con Google Analytics</h3>
-			</blockquote>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-				  <h3 class="panel-title">Configure google analytics con los enlaces que haya insertado en el contenido correo</h3>
-				</div>
-				<div class="panel-body">
-					{{ partial("mail/partials/googleanalytics_partial") }}
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-md-12">
-			<blockquote>
-				<h3>Programación</h3>
-			</blockquote>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-				  <h3 class="panel-title">Envíe el correo ahora, programelo para que se envíde déspues</h3>
-				</div>
-				<div class="panel-body">
-					{{ partial("mail/partials/schedule_partial") }}
+
+			<div class="row">
+				<div class="col-md-12">
+					<blockquote>
+						<h3>Encabezado</h3>
+					</blockquote>
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Nuevo correo</h3>
+						</div>
+						<div class="panel-body">
+							{{ partial("mail/partials/header_partial") }}
+						</div>
+					</div>
 				</div>
 			</div>	
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-md-12 text-right">
-			<a href="#" class="btn btn-default">Confirmar luego</a>
-			<a href="#" class="btn btn-primary">Confirmar</a>
-		</div>
-	</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<blockquote>
+						<h3>Destinatarios</h3>
+					</blockquote>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+						  <h3 class="panel-title">Seleccione destinatarios</h3>
+						</div>
+						<div class="panel-body">
+							{{ partial("mail/partials/target_partial") }}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<blockquote>
+						<h3>Contenido</h3>
+					</blockquote>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+						  <h3 class="panel-title">Cree el contenido del correo</h3>
+						</div>
+						<div class="panel-body">
+							{{ partial("mail/partials/content_partial") }}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<blockquote>
+						<h3>Tracking con Google Analytics</h3>
+					</blockquote>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+						  <h3 class="panel-title">Configure google analytics con los enlaces que haya insertado en el contenido correo</h3>
+						</div>
+						<div class="panel-body">
+							{{ partial("mail/partials/googleanalytics_partial") }}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<blockquote>
+						<h3>Programación</h3>
+					</blockquote>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+						  <h3 class="panel-title">Envíe el correo ahora, programelo para que se envíde déspues</h3>
+						</div>
+						<div class="panel-body">
+							{{ partial("mail/partials/schedule_partial") }}
+						</div>
+					</div>	
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 text-right">
+					<a href="#" class="btn btn-default">Confirmar luego</a>
+					<a href="#" class="btn btn-primary">Confirmar</a>
+				</div>
+			</div>
+		</script>
+	</div>	
 	<br />
 {% endblock %}

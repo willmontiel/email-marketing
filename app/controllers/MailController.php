@@ -1,8 +1,61 @@
 <?php
 require_once "../app/library/swiftmailer/lib/swift_required.php";
+
 class MailController extends ControllerBase
 {
 	protected $image_map = array();
+	
+	public function savemailAction($mails = null, $idMail = null)
+	{
+		$account = $this->user->account;
+		
+		$contentsraw = $this->request->getRawBody();
+		$contentsT = json_decode($contentsraw);
+		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		$this->logger->log('idMail: ' . $idMail);
+		$content = $contentsT->mail;
+		
+		if ($this->request->isPost()) {
+			try {
+				$MailWrapper = new MailWrapper();
+				$MailWrapper->setAccount($account);
+				$MailWrapper->setContent($content);
+				$MailWrapper->processData();
+				$response = $MailWrapper->saveMail();
+				
+				return $this->setJsonResponse(array($response->key => $response->data), $response->code);
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: {$e}");
+				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador'), 500);
+			}
+		}
+		else if ($this->request->isPut()) {
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1 AND idAccount = ?2',
+				'bind' => array(1 => $idMail,
+								2 => $account->idAccount)
+			));
+			
+			if (!$mail) {
+				return $this->setJsonResponse(array('status' => 'failed'), 404, 'Mail not found!');
+			}
+			
+			try {
+				$MailWrapper = new MailWrapper();
+				$MailWrapper->setMail($mail);
+				$MailWrapper->setContent($content);
+				$MailWrapper->processData();
+				$response = $MailWrapper->updateMail();
+				
+				return $this->setJsonResponse(array($response->key => $response->data), $response->code);
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: {$e}");
+				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador'), 500);
+			}
+		}
+	}
 	
 	public function indexAction()
 	{	
@@ -1581,46 +1634,46 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function newAction()
+	public function newAction($idMail = null)
 	{
 		$account = $this->user->account;
 		$dbases = Dbase::findByIdAccount($account->idAccount);
 		
 		if (count($dbases) > 0) {
-				$array = array();
-				foreach ($dbases as $dbase) {
-					$array[] = $dbase->idDbase;
-				}
-				
-				$idsDbase = implode(",", $array);
-				
-				$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
-				$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
-				
-				$contactlists = $this->modelsManager->executeQuery($phql1);
-				$segments = $this->modelsManager->executeQuery($phql2);
+			$array = array();
+			foreach ($dbases as $dbase) {
+				$array[] = $dbase->idDbase;
+			}
 
-				$mails = Mail::find(array(
-					'conditions' => 'idAccount = ?1 AND status = ?2',
-					'bind' => array(1 => $account->idAccount,
-									2 => 'Sent')
-				));
-			
-				$links = Maillink::find(array(
-					'conditions' => 'idAccount = ?1',
-					'bind' => array(1 => $account->idAccount)
-				));
-			
-			
-				$this->view->setVar('mails', $mails);
-				$this->view->setVar('links', $links);
-				$this->view->setVar('dbases', $dbases);
-				$this->view->setVar('contactlists', $contactlists);
-				$this->view->setVar('segments', $segments);
-				$this->view->setVar('db', true);
-			}
-			else {
-				$this->view->setVar('db', false);
-			}
+			$idsDbase = implode(",", $array);
+
+			$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
+			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
+
+			$contactlists = $this->modelsManager->executeQuery($phql1);
+			$segments = $this->modelsManager->executeQuery($phql2);
+
+			$mails = Mail::find(array(
+				'conditions' => 'idAccount = ?1 AND status = ?2',
+				'bind' => array(1 => $account->idAccount,
+								2 => 'Sent')
+			));
+
+			$links = Maillink::find(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $account->idAccount)
+			));
+
+
+			$this->view->setVar('mails', $mails);
+			$this->view->setVar('links', $links);
+			$this->view->setVar('dbases', $dbases);
+			$this->view->setVar('contactlists', $contactlists);
+			$this->view->setVar('segments', $segments);
+			$this->view->setVar('db', true);
+		}
+		else {
+			$this->view->setVar('db', false);
+		}
 	}
 }

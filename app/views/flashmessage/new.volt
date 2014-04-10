@@ -134,10 +134,8 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">*Fecha y hora de inicio:</label>
 					<div class="col-sm-8">
-						<div id="date">
-							<div id="scheduleArea1" class="input-append date" class="col-sm-12">
-								{{ MessageForm.render('start', {'id': 'begin', 'class' : 'form-control'}) }}
-							</div>
+						<div id="scheduleArea1" class="input-append date" class="col-sm-12">
+							{{ MessageForm.render('start', {'id': 'begin', 'class' : 'form-control'}) }}
 						</div>
 					</div>
 				</div>
@@ -145,10 +143,8 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">*Fecha y hora de fin:</label>
 					<div class="col-sm-8">
-						<div id="date">
-							<div id="scheduleArea2" class="input-append date" class="col-sm-12">
-								{{ MessageForm.render('end', {'id': 'end', 'class' : 'form-control'}) }}
-							</div>
+						<div id="scheduleArea2" class="input-append date" class="col-sm-12">
+							{{ MessageForm.render('end', {'id': 'end', 'class' : 'form-control'}) }}
 						</div>
 					</div>
 				</div>

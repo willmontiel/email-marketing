@@ -344,6 +344,8 @@ class Security extends Plugin
 
 				// Herramientas de administracion
 				'tools::index' => array('tools' => array('read')),
+				
+				'mail::savemail' => array('mail' => array('create')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
@@ -449,9 +451,9 @@ class Security extends Plugin
 			
 			if (!isset($map[$controller .'::'. $action])) {
 				if($this->validateResponse($controller) == true){
-					$this->logger->log("Acción no permitida accesando desde ember");
+					$this->logger->log("Accion no permitida accesando desde ember");
 					$this->logger->log("Controller: {$controller}, Action: {$action}");
-					$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
+					$this->setJsonResponse(array('status' => 'deny'), 404, 'Accion no permitida');
 				}
 				else{
 					$this->logger->log("Redirect to error");
@@ -472,7 +474,7 @@ class Security extends Plugin
 						if($this->validateResponse($controller) == true){
 							$this->logger->log('Accion no permitida accesando desde ember');
 							$this->logger->log("Controller: {$controller}, Action: {$action}");
-							$this->setJsonResponse('Denegado', 404, 'Acción no permitida');
+							$this->setJsonResponse('Denegado', 404, 'Accion no permitida');
 						}
 						else{
 							$this->response->redirect('error');
