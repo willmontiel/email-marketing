@@ -17,7 +17,7 @@ class SocialImageCreator
 	
 	public function createImageToIdealSize($imageid, $width, $height, $header)
 	{
-		$image = $this->urlObj->getBaseUri(TRUE) . 'images/' . $header . '_' . self::IMG_TYPE_DEFAULT . '.jpg';
+		$image = $this->urlObj->getBaseUri(TRUE) . 'images/' . $header . '_' . self::IMG_TYPE_DEFAULT . '.png';
 		if($imageid != self::IMG_TYPE_DEFAULT) {
 			$asset = Asset::findFirst(array(
 				'conditions' => 'idAsset = ?1',
@@ -35,10 +35,10 @@ class SocialImageCreator
 					mkdir($dir, 0777, true);
 				}
 
-				$imgname = $header . '_' . $imageid . '.jpg';
+				$imgname = $header . '_' . $imageid . '.png';
 				$dir .= $imgname;
 
-				$imgObj->saveImage('jpg', $dir);
+				$imgObj->saveImage('png', $dir);
 
 				$image = $this->urlObj->getAppUrlAsset(TRUE) . '/' . $this->account->idAccount . '/sn/' . $imgname;
 			}
