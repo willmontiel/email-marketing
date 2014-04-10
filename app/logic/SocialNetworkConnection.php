@@ -7,7 +7,7 @@ class SocialNetworkConnection
 	
 	const IMG_SN_WIDTH = 600;
 	const IMG_SN_HEIGHT = 300;
-	const IMG_TYPE_DEFAULT = 'Default';
+	const IMG_TYPE_DEFAULT = 'default';
 	
 	function __construct($logger = null) {
 		$this->logger = $logger;
@@ -233,11 +233,13 @@ class SocialNetworkConnection
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
 		$action = 'webversion/show';
-		$parameters = array(1, $mail->idMail, '1329266');
+		$parameters = array(1, $mail->idMail, '1329278');
 		$link = $linkdecoder->encodeLink($action, $parameters);
 		
-		// Ajustar Tamaño de Imagen
-		$image = $this->setImageToIdealSize($fbcontent->image, $mail);
+		// Ajustar Tamaño de Imagen para Publicar
+		$socialImg = new SocialImageCreator();
+		$socialImg->setAccount($this->account);
+		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'post');
 		
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
@@ -294,7 +296,7 @@ class SocialNetworkConnection
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
 		$action = 'webversion/show';
-		$parameters = array(1, $mail->idMail, '1329266');
+		$parameters = array(1, $mail->idMail, '1329278');
 		$link = $linkdecoder->encodeLink($action, $parameters);
 		
 		if (count($ids_tokens) > 0) {
@@ -317,37 +319,5 @@ class SocialNetworkConnection
 		else {
 			$this->logger->log('There are no social twitter accounts to post');
 		}
-	}
-	
-	public function setImageToIdealSize($imagepath)
-	{
-		if($imagepath == self::IMG_TYPE_DEFAULT) {
-			$image = $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png';
-		}
-		else {
-			$asset = Asset::findFirst(array(
-				'conditions' => 'idAsset = ?1',
-				'bind' => array(1 => basename($imagepath))
-			));
-			
-			$imgObj = new ImageObject();
-			$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . pathinfo($asset->fileName, PATHINFO_EXTENSION), $asset->fileName);
-			$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT);
-			
-			$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
-
-			if (!file_exists($dir)) {
-				mkdir($dir, 0777, true);
-			}
-			
-			$imgname = basename($imagepath) . '.jpg';
-			$dir .= $imgname;
-			
-			$imgObj->saveImage('jpg', $dir);
-			
-			$image = $this->urlObj->getAppUrlAsset(TRUE) . '/' . $this->account->idAccount . '/sn/' . $imgname;
-		}
-		
-		return $image;
 	}
 }

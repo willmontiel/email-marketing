@@ -20,14 +20,21 @@ SocialMediaDisplayer.prototype.imageSelected = function() {
 	var t = this;
 	$('#accept_change').on('click', function() {
 		$('#fb-share-image').attr('src', t.gallery.srcImage);
-		$('#fbimagepublication').val(t.gallery.srcImage);
+		$('#fbimagepublication').val(t.gallery.id);
 	});
 };
 
 Dropzone.autoDiscover = false;
 
 $(function() {
-	$('#fb-share-image').attr('src', $('#fbimagepublication').val());
+	var src = config.imagesUrl + "/default.png";
+	
+	if($('#fbimagepublication').val() !== 'default' && $('#fbimagepublication').val() !== '') {
+		src = config.assetsUrl + "/" + $('#fbimagepublication').val();
+	}
+	
+	$('#fb-share-image').attr('src', src);
+	
 	var myDropzone = new Dropzone("#my-dropzone");
 	myDropzone.on("success", function(file, response) {
 		var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);

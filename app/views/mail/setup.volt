@@ -6,6 +6,7 @@
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	<script type="text/javascript">
+		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}"};
 		function showsocials(){
 			var container = $('.setup_socials_container');
 			if (container.css('display') === 'none') {

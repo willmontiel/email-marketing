@@ -1111,9 +1111,11 @@ class TestController extends ControllerBase
 	
 	public function testsnimageresizeAction($idAsset)
 	{
-		$imagepath = '/emarketing/asset/show/' . $idAsset;
-		$social = new SocialNetworkConnection();
-		$social->setAccount($this->user->account);
-		$social->setImageToIdealSize($imagepath);
+		$socialImg = new SocialImageCreator();
+		$socialImg->setAccount($this->user->account);
+		$imageshare = $socialImg->createImageToIdealSize($idAsset, 450, 340, 'share');
+		$imagepost = $socialImg->createImageToIdealSize($idAsset, 600, 300, 'post');
+		$this->logger->log('La ruta absoluta de la imagen para share es: ' . $imageshare);
+		$this->logger->log('La ruta absoluta de la imagen para post es: ' . $imagepost);
 	}
 }

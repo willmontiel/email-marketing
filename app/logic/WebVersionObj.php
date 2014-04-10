@@ -1,6 +1,10 @@
 <?php
 class WebVersionObj extends BaseWrapper
 {
+	const IMG_SN_WIDTH = 450;
+	const IMG_SN_HEIGHT = 340;
+	const IMG_TYPE_DEFAULT = 'default';
+	
 	function __construct() {
 		$this->urlManager = Phalcon\DI::getDefault()->get('urlManager');
 	}
@@ -70,7 +74,6 @@ class WebVersionObj extends BaseWrapper
 	{
 		$socialmail = Socialmail::findFirstByIdMail($mail->idMail);
 		if($social) {
-			Phalcon\DI::getDefault()->get('logger')->log('La red social es: ' . $social);
 			$og_url = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $mail->idMail . '-' . $idContact;
 			$src['facebook'] = ($social == 'linkedin') ? $og_url . '-linkedin' : $og_url . '-facebook';
 			$src['twitter'] = $this->urlManager->getBaseUri(true) . 'webversion/share/1-' . $mail->idMail . '-' . $idContact . '-twitter';
@@ -83,15 +86,19 @@ class WebVersionObj extends BaseWrapper
 			$url[$key] = $value . '-' . $md5;
 		}
 		
+		$fbsocialdesc = json_decode($socialmail->fbdescription);
+		
+		// Ajustar Tamaño de Imagen para Compartir
+		$image = $this->getImageForShare($fbsocialdesc);
+		
 		//----Facebook MetaData----//
 		
-		$fbsocialdesc = json_decode($socialmail->fbdescription);
 		$fbtitle = (isset($fbsocialdesc->title)) ? $fbsocialdesc->title : $mail->subject;
 		$fbdescription = (isset($fbsocialdesc->description)) ? $fbsocialdesc->description : 'Mira mi correo';
 		$fbmetaname = '<meta property="og:site_name" content="Sigma Movil" />';
 		$fbmetaurl = '<meta property="og:url" content="' . $url['facebook'] . '" />';
 		$fbmetatitle = '<meta property="og:title" content="' . $fbtitle . '" />';
-		$fbmetaimage = '<meta property="og:image" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png" />';
+		$fbmetaimage = '<meta property="og:image" content="' . $image . '" />';
 		$fbmetadescritpion = '<meta property="og:description" content="' . $fbdescription . '" />';
 		$fbmetatype = '<meta property="og:type" content="website" />';
 		$fbmetaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '" />';
@@ -105,12 +112,11 @@ class WebVersionObj extends BaseWrapper
 		$twdescription = (isset($twsocialdesc->message)) ? $twsocialdesc->message : 'Mira mi correo';
 		$twmetacard = '<meta name="twitter:card" content="summary">';
 		$twmetaurl = '<meta name="twitter:url" content="' . $url['twitter'] . '">';
-//		$twmetadomain = '<meta name="twitter:domain" content="' . $this->urlManager->getBaseUri(TRUE) . '">';
 		$twmetasite = '<meta name="twitter:site" content="@SigmaMovil1">';
 		$twmetacreator = '<meta name="twitter:creator" content="@SigmaMovil1">';
 		$twmetatitle = '<meta name="twitter:title" content="' . $twtitle . '">';
 		$twmetadescription = '<meta name="twitter:description" content="' . $twdescription . '">';
-		$twmetaimage = '<meta name="twitter:image:src" content="' . $this->urlManager->getBaseUri(TRUE) . 'images/260.png">';
+		$twmetaimage = '<meta name="twitter:image:src" content="' . $image . '">';
 		
 		$twMeta = $twmetacard . $twmetasite . $twmetaurl . $twmetatitle . $twmetadescription . $twmetacreator . $twmetaimage;
 		
@@ -119,5 +125,16 @@ class WebVersionObj extends BaseWrapper
 		$replace = array($fbMeta . $twMeta . '</head>');
 		
 		return str_ireplace($search, $replace, $html);
+	}
+	
+	public function getImageForShare($fbcontent)
+	{
+		$img = (isset($fbcontent)) ? $fbcontent->image : self::IMG_TYPE_DEFAULT;
+		
+		$socialImg = new SocialImageCreator();
+		$socialImg->setAccount($this->account);
+		$image = $socialImg->createImageToIdealSize($img, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'share');
+		
+		return $image;
 	}
 }
