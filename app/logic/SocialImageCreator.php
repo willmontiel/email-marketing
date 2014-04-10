@@ -17,7 +17,7 @@ class SocialImageCreator
 	
 	public function createImageToIdealSize($imageid, $width, $height, $header)
 	{
-		$image = $this->urlObj->getBaseUri(TRUE) . 'images/' . $header . '_' . self::IMG_TYPE_DEFAULT . '.png';
+		$image = $this->urlObj->getBaseUri(TRUE) . 'images/' . $header . '_' . self::IMG_TYPE_DEFAULT . '.jpg';
 		if($imageid != self::IMG_TYPE_DEFAULT) {
 			$asset = Asset::findFirst(array(
 				'conditions' => 'idAsset = ?1',
