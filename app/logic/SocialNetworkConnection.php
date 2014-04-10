@@ -240,7 +240,7 @@ class SocialNetworkConnection
 		$socialImg = new SocialImageCreator();
 		$socialImg->setAccount($this->account);
 		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'post');
-		
+		Phalcon\DI::getDefault()->get('logger')->log('Direccion de imagen para post: ' . $image);
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$userid = $id_token->userid;
