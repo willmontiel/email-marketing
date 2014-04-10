@@ -19,15 +19,13 @@
 			<label for="later">En la siguiente fecha:</label>
 			<div id="programmer" style="{{display}}">
 				<br />
-				<div id="schedule" class="input-append date col-sm-4">
-					<input type="text" name="scheduleDate" id="date" class="form-control" value="{{value}}">
-				</div>
+				{{' {{ view App.DateTimePicker }}' }}
 			</div>
 		</div>
 	</div>
 		
 	<div class="form-group text-right">
 		<a href="#" class="btn btn-default">Descartar cambios</a>
-		<a href="#" class="btn btn-primary">Aplicar cambios</a>
+		<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 	</div>
 </form>

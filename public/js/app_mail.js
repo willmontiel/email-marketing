@@ -64,12 +64,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	segmentlist: [],
 	open: [],
 	click: [],
-	exclude: [],
-	
-	scheduleRadio: [
-        {label: 'De inmediato:', value: 'now'},
-        {label: 'En la siguiente fecha:', value: 'later'},
-	],
 	
 	actions: {
 		save: function(mail) {
@@ -130,8 +124,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 					mail.set('scheduleDate', value);
 				}
 				else {
-					
-					mail.set('scheduleDate', excludeArray.toString());
+					mail.set('scheduleDate', $('#date').val());
 				}
 				
 				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
@@ -140,18 +133,21 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}
 });
 
-App.DatePicker = Em.View.extend({
-  templateName: 'datepicker',
-  didInsertElement: function() {
-    var onChangeDate, self;
-    self = this;
-    onChangeDate = function(ev) {
-      return self.set("value", moment.utc(ev.date).format("YYYY-MM-DD"));
-    };
-    return this.$('.datepicker').datepicker({
-      separator: "-"
-    }).on("changeDate", onChangeDate);
-  }
+App.DateTimePicker = Em.View.extend({
+	templateName: 'datetimepicker',
+	didInsertElement: function() {
+		var nowTemp = new Date();
+		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
+		
+		$('#schedule').datetimepicker({
+			language: 'es',
+			maskInput: true,
+			pickTime: true,
+			format: "MM/DD/YYYY H:mm",
+			pickSeconds: false,
+			startDate: now
+		});
+	}
 });
 
 //App.Mail.FIXTURES = [

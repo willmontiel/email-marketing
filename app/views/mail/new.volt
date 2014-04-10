@@ -6,6 +6,7 @@
 	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
 	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
 	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.es.js')}}
+	{{ partial("partials/datetimepicker_view_partial") }}
 	<script type="text/javascript">
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 	</script>
@@ -115,15 +116,17 @@
 			
 			$("input[name=schedule]").on('click', function () { 
 				$("#programmer").hide();
-				$("#date").val('');
+				$('#schedule').data("DateTimePicker").hide();
+				$("#schedule").val('');
 				
-				var val = $('input[name=schedule]:checked').val();
-				switch (val) {
+				var v = $('input[name=schedule]:checked').val();
+				switch (v) {
 					case "now":
 						break;
 						
 					case "later":
 						$("#programmer").show();
+						$('#schedule').data("DateTimePicker").show();
 						break;
 				}
 			});

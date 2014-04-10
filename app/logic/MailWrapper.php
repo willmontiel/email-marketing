@@ -6,7 +6,9 @@ class MailWrapper
 	protected $content;
 	protected $mail;
 	protected $target = null;
-	
+	protected $scheduleDate;
+
+
 	public function __construct() 
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
@@ -30,6 +32,7 @@ class MailWrapper
 	public function processData()
 	{
 		$this->getTarget();
+		$this->processScheduleDate();
 	}
 
 	public function getTarget()
@@ -61,6 +64,22 @@ class MailWrapper
 		}
 	}
 	
+	protected function processScheduleDate()
+	{
+		$schedule = $this->content->scheduleDate;
+		$this->logger->log("Schedule: {$schedule}");
+		if ($schedule == 'now') {
+			$this->logger->log("now");
+			$this->scheduleDate = time();
+		}
+		else if ($schedule !== '' || !empty($schedule)) {
+			$this->logger->log("later");
+			list($month, $day, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
+			$this->scheduleDate = mktime($hour, $minute, 0, $month, $day, $year);
+		}
+		$this->logger->log("Schedule: {$this->scheduleDate}");
+	}
+
 	public function saveMail()
 	{
 		$date = time();
@@ -83,7 +102,7 @@ class MailWrapper
 		$mail->status = 'draft';
 		$mail->wizardOption = 'setup';
 		$mail->totalContacts = $this->target->totalContacts;
-		$mail->scheduleDate = $this->content->scheduleDate;
+		$mail->scheduleDate = $this->scheduleDate;
 		$mail->createdon = $date;
 		$mail->updatedon = $date;
 		$mail->deleted = 0;
