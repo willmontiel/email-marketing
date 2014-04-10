@@ -5,8 +5,9 @@ class SocialNetworkConnection
 	public $twitter = null;
 	public $user;
 	
-	const IMG_SN_WIDTH = 600;
-	const IMG_SN_HEIGHT = 300;
+	const IMG_SN_WIDTH = 450;
+	const IMG_SN_HEIGHT = 340;
+	const IMG_TYPE_DEFAULT = 'Default';
 	
 	function __construct($logger = null) {
 		$this->logger = $logger;
@@ -201,7 +202,7 @@ class SocialNetworkConnection
 		$fbcontent->title = $fbtitle;
 		$fbcontent->description = $fbdescription;
 		$fbcontent->message = $fbmsg;
-		$fbcontent->image = $fbimage;
+		$fbcontent->image = (!empty($fbimage)) ? $fbimage : self::IMG_TYPE_DEFAULT;
 		return json_encode($fbcontent);
 	}
 	
@@ -236,7 +237,7 @@ class SocialNetworkConnection
 		$link = $linkdecoder->encodeLink($action, $parameters);
 		
 		// Ajustar Tamaño de Imagen
-		$imgname = $this->setImageToIdealSize($fbcontent->image);
+		$image = $this->setImageToIdealSize($fbcontent->image, $mail);
 		
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
@@ -246,7 +247,7 @@ class SocialNetworkConnection
 					"access_token" => $access_token,
 					"message" => $fbcontent->message,
 					"link" => $link, //$this->urlObj->getBaseUri(TRUE) "http://stage.sigmamovil.com/",
-					"picture" => $this->urlObj->getAppUrlAsset(TRUE) . '/' . $this->account->idAccount . '/sn/' . $imgname, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
+					"picture" => $image, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
 					"name" => $fbcontent->title,
 					"caption" => $link, //$this->urlObj->getBaseUri(TRUE) "www.stage.sigmamovil.com/",
 					"description" => $fbcontent->description
@@ -320,26 +321,33 @@ class SocialNetworkConnection
 	
 	public function setImageToIdealSize($imagepath)
 	{
-		$asset = Asset::findFirst(array(
-			'conditions' => 'idAsset = ?1',
-			'bind' => array(1 => basename($imagepath))
-		));
+		if($imagepath == self::IMG_TYPE_DEFAULT) {
+			$image = $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png';
+		}
+		else {
+			$asset = Asset::findFirst(array(
+				'conditions' => 'idAsset = ?1',
+				'bind' => array(1 => basename($imagepath))
+			));
+			
+			$imgObj = new ImageObject();
+			$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . pathinfo($asset->fileName, PATHINFO_EXTENSION), $asset->fileName);
+			$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT);
+			
+			$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
 
-		$imgObj = new ImageObject();
-		$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . pathinfo($asset->fileName, PATHINFO_EXTENSION), $asset->fileName);
-		$imgObj->resizeImage(self::IMG_SN_WIDTH ,  self::IMG_SN_HEIGHT);
-		
-		$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
-
-		if (!file_exists($dir)) {
-			mkdir($dir, 0777, true);
+			if (!file_exists($dir)) {
+				mkdir($dir, 0777, true);
+			}
+			
+			$imgname = basename($imagepath) . '.jpg';
+			$dir .= $imgname;
+			
+			$imgObj->saveImage('jpg', $dir);
+			
+			$image = $this->urlObj->getAppUrlAsset(TRUE) . '/' . $this->account->idAccount . '/sn/' . $imgname;
 		}
 		
-		$imgname = basename($imagepath) . '.jpg';
-		$dir .= $imgname;
-		
-		$imgObj->saveImage('jpg', $dir);
-
-		return $imgname;
+		return $image;
 	}
 }

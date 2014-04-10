@@ -169,6 +169,7 @@ class MailController extends ControllerBase
 				$mailExist->fbtitlecontent = $fbdesc->title;
 				$mailExist->fbdescriptioncontent = $fbdesc->description;
 				$mailExist->fbmessagecontent = $fbdesc->message;
+				$mailExist->fbimagepublication = $fbdesc->image;
 				$mailExist->twpublicationcontent = $twdesc->message;
 			}
 			$form = new MailForm($mailExist);
