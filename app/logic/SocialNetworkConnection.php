@@ -240,7 +240,7 @@ class SocialNetworkConnection
 		$socialImg = new SocialImageCreator();
 		$socialImg->setAccount($this->account);
 		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'post');
-
+		Phalcon\DI::getDefault()->get('logger')->log($image);
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$userid = $id_token->userid;
@@ -287,10 +287,6 @@ class SocialNetworkConnection
 		$twcontent = json_decode($desc->twdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
-		
-//		$url = $this->urlObj->getBaseUri(TRUE) . 'webversion/show/1-' . $mail->idMail . '-25';
-//		$md5 = md5($url . '-Sigmamovil_Rules');
-//		$link = $url . '-' . $md5; 
 		
 		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
