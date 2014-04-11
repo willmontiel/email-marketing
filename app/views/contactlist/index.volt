@@ -54,49 +54,50 @@
 			{# Botones de navegacion primarios #}
 
 			<div class="row">
-				<h4>Básicas</h4>
+				<h4 class="sectiontitle">Básicas</h4>
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						{{'{{#link-to "lists" class="shortcuts"}}<span class="sm-button-large-contact-list"></span>{{/link-to}}'}}
 					</div>
-					<a href="" class="btn-actn">Listas de contactos</a>
+					{{'{{#link-to "lists" class="btn-actn"}}Listas de contactos{{/link-to}}'}}
 				</div>
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						{{'{{#link-to "segments" class="shortcuts"}}<span class="sm-button-large-segment"></span>{{/link-to}}'}}
 					</div>
-					<a href="" class="btn-actn">Segmentos</a>
+						{{'{{#link-to "segments" class="btn-actn"}}Segmentos{{/link-to}}'}}
 				</div>
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						{{'{{#link-to "blockedemails" class="shortcuts"}} <span class="sm-button-large-bloq-list"></span>{{/link-to}}'}}
 					</div>
-					<a href="" class="btn-actn">Lista de bloqueo</a>
+						{{'{{#link-to "blockedemails" class="btn-actn"}}Lista de bloqueo{{/link-to}}'}}
 				</div>
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						<a href="{{url('contacts/search')}}#/contacts" class="shortcuts"><span class="sm-button-large-contact-search"></span></a>
 					</div>
-					<a href="" class="btn-actn">Búsqueda de contactos</a>
+					<a href="{{url('contacts/search')}}#/contacts" class="btn-actn">Búsqueda de contactos</a>
 				</div>	
 			</div>
 			<div class="row-fluid space"></div>
 			<div class="row">
-				<h4>Avanzadas</h4>
+				<h4 class="sectiontitle">Avanzadas</h4>
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						<a href="{{url('dbase')}}" class="shortcuts" title="Configuracion avanzada"><span class="sm-button-large-settings"></span></a>
 					</div>
-					<a href="" class="btn-actn">Configuración avanzada</a>
+					<a href="{{url('dbase')}}" class="btn-actn">Configuración avanzada</a>
 				</div>
 
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						<a href="{{url('process/import')}}" class="shortcuts"><span class="sm-button-large-import-list"></span></a>
 					</div>
-					<a href="" class="btn-actn">Lista de importaciones</a>
+					<a href="{{url('process/import')}}" class="btn-actn">Lista de importaciones</a>
 				</div>
 			</div>
+			<div class="space"></div>
 		</script>
 		{# /handlebars de index #}
 
@@ -107,7 +108,7 @@
 			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
 
 			<div class="row">
-				<h4>Listas de contactos</h4>
+				<h4  class="sectiontitle">Listas de contactos</h4>
 				<div class="col-md-3">
 					<form>
 						<p>
@@ -121,83 +122,61 @@
 					</form>
 				</div>
 			</div>				
-			<div class="box">
-				<div class="box-content">
-					<table class="table table-bordered">
-						<thead>
-						</thead>
-						<tbody>
-					{{'{{#each model}}'}}
-							<tr>
-								<td {{' {{bind-attr style="dbase.style"}} '}}>
-								</td>
-								<td>
-									<div class="box-section news with-icons">
-										<div class="avatar blue">
-											<i class="icon-ok icon-2x"></i>
-										</div>
-										<div class="news-content">
-											<div class="news-title"><a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a></div>
-											<div class="news-text">
-												{{ '{{description}}' }}
-											</div>
-											<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
-										</div>
-									</div>
-								</td>
-								<td>
-									<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts" class="btn btn-blue"><i class="icon-search"></i> Detalles</a>
-									{{ '{{#link-to "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/link-to}}' }}
-									{{ '{{#link-to "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/link-to}}' }}
-									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default" title="Ver estadisticas"><i class="icon-bar-chart"></i></a>
-									{{ '{{#linkTo "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/linkTo}}' }}
-									{{ '{{#linkTo "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/linkTo}}' }}
-									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default" title="Ver estadisticas"><i class="fa fa-bar-chart-o"></i></a>
-									
+			<div class="row">
+				<table class="table table-bordered">
+					<thead>
+					</thead>
+					<tbody>
+				{{'{{#each model}}'}}
+						<tr>
+							<td {{' {{bind-attr style="dbase.style"}} '}}>
+							</td>
+							<td>
+								<a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a>
+								<br/>
+								{{ '{{description}}' }}
+							</td>
+							<td>
+								<!-- Detalles de la lista -->
+								<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts" class="btn btn-default btn-sm">
+								<i class="glyphicon glyphicon-search"></i> Detalles</a>
 
-									{# {{ '{{#link-to "lists.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{ '{{/link-to}}' }}
-									<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts"><i class="icon-search"></i> Ver detalles</a>
-									{{ '{{#link-to "lists.delete" this disabledWhen="controller.deleteDisabled"}}' }}<i class="icon-trash"></i> Eliminar{{ '{{/link-to}}' }}
-									<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}"><i class="icon-bar-chart icon-2x"></i></a>
-										#}
-								</td>
-								<td>
-									<div class="box-section news with-icons">
-										<div class="news-time">
-											<span>{{ '{{infocontact.activeContacts}}' }}</span>
-											<span>{{'{{activeContactsF}}'}}</span> activos
-										</div>
+								<!-- Editar la lista -->
+								{{ '{{#link-to "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+
+								<!-- Eliminar la lista -->
+								{{ '{{#link-to "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
+
+								<!-- Estadisticas de la lista -->
+								<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default btn-sm" title="Ver estadisticas"><i class="fa fa-bar-chart-o"></i></a>
+
+							</td>
+							<td>
+								<div class="box-section news with-icons">
+									<div class="news-time">
+										<span>{{ '{{infocontact.activeContacts}}' }}</span>
+										<span>{{'{{activeContactsF}}'}}</span> activos
 									</div>
-								</td>
-							</tr>
-					{{ '{{else}}' }}
-							<tr>
-								<td>
-									<div class="box-section news with-icons">
-										<div class="avatar green">
-											<i class="icon-lightbulb icon-2x"></i>
-										</div>
-										<div class="news-content">
-											<div class="news-title">
-												No hay listas de contactos
-											</div>
-											<div class="news-text">
-												<p>
-													Para empezar a administrar contactos, puede crear una lista de contactos,
-													haga clic en el siguiente enlace para crear una
-												</p>
-												{{'{{#link-to "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/link-to}}'}}
-											</div>
-										</div>
-									</div>
-								</td>
-							</tr>
-					{{ '{{/each}}' }}
-						</tbody>
-					</table>
-				</div>
-				<div class="box-footer flat"> 
-					{{ partial("partials/pagination_partial") }}
+								</div>
+							</td>
+						</tr>
+				{{ '{{else}}' }}
+						<tr>
+							<td>
+								<div class="bs-callout bs-callout-warning">
+									<h4>No se encontraron listas</h4>
+									<p>Verifique el filtro de bases de datos.</p>
+									<p>Todos los contactos se organizan en listas. Si desea crear una lista de contactos,
+										haga {{'{{#link-to "lists.new" disabledWhen="createDisabled"}}'}} clic aquí {{'{{/link-to}}'}} o elija el botón de la parte superior
+									</p>
+								</div>
+							</td>
+						</tr>
+				{{ '{{/each}}' }}
+					</tbody>
+				</table>
+				<div class="row">
+				{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
 

@@ -16,7 +16,7 @@
 				{% if activelnk != 'segments' %}
 				<a href="{{ url('contactlist') }}#/segments">
 				{% endif %}
-					<span class="sm-button-small-contact-list"></span></a>
+					<span class="sm-button-small-segment"></span></a>
 				{% if activelnk != 'segments' %}
 				</a>
 				{% endif %}
@@ -25,7 +25,7 @@
 				{% if activelnk != 'blockedemails' %}
 				<a href="{{ url('contactlist') }}#/blockedemails">
 				{% endif %}
-					<span class="sm-button-small-contact-list"></span></a>
+					<span class="sm-button-small-bloq-list"></span></a>
 				{% if activelnk != 'blockedemails' %}
 				</a>
 				{% endif %}
@@ -34,7 +34,7 @@
 				{% if activelnk != 'search' %}
 				<a href="{{ url('contacts/search') }}#/contacts">
 				{% endif %}
-					<span class="sm-button-small-contact-list"></span></a>
+					<span class="sm-button-small-contact-search"></span></a>
 				{% if activelnk != 'search' %}
 				</a>
 				{% endif %}
@@ -43,7 +43,7 @@
 				{% if activelnk != 'dbase' %}
 				<a href="{{ url('dbase') }}">
 				{% endif %}
-					<span class="sm-button-small-contact-list"></span></a>
+					<span class="sm-button-small-database"></span></a>
 				{% if activelnk != 'dbase' %}
 				</a>
 				{% endif %}
@@ -52,7 +52,7 @@
 				{% if activelnk != 'import' %}
 				<a href="{{ url('process/import') }}">
 				{% endif %}
-					<span class="sm-button-small-contact-list"></span></a>
+					<span class="sm-button-small-import-list"></span></a>
 				{% if activelnk != 'import' %}
 				</a>
 				{% endif %}

@@ -1,9 +1,32 @@
 <tr>
 	<td>
+		<div class="col-md-1 estado-contact">
+			<div class="row">
+				<div class="col-xs-1">
+					<div {{'{{ bind-attr class="isActive:active:inactive"}}'}}>&nbsp
+					</div>
+				</div>
+				<div class="col-xs-1">
+					<div {{'{{ bind-attr class="isSubscribed:suscribed:unsubscribed"}}'}}>&nbsp
+					</div>
+				</div>
+			</div>
+		</div>
+	</td>
+	<td>
+		<form role="form">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox">
+				</label>
+			</div>
+		</form>
+	</td>
+	<td>
 		<label {{ '{{action "expand" this}}' }}>
 		{#<label>#}
 			{#{{ '{{#link-to "contacts.show" this}}' }}{{ '{{email}}' }}{{ '{{/link-to}}' }}#}
-			{{ '{{email}}' }}
+			<a href="">{{ '{{email}}' }}</a>
 			{{' {{#if isEmailBlocked}} '}}
 				<span class="badge badge-dark-red">Correo bloqueado</span>
 			{{' {{/if }} '}}
@@ -24,14 +47,14 @@
 	<td>
 		<div class="text-right">
 	{{ '{{#if isSubscribed}}' }}
-			<button class="btn btn-sm btn-default" {{' {{action "unsubscribedcontact" this}} '}}>Desuscribir</button>
+			<button class="btn btn-xs btn-default extra-padding" {{' {{action "unsubscribedcontact" this}} '}}>Desuscribir</button>
 	{{ '{{else}}' }}
 		{{'{{#unless isEmailBlocked}}'}}
-			<button class="btn btn-sm btn-info" {{' {{action "subscribedcontact" this}} '}}>Suscribir</button>
+			<button class="btn btn-xs btn-default extra-padding" {{' {{action "subscribedcontact" this}} '}}>Suscribir</button>
 		{{'{{/unless}}'}}
 	{{ '{{/if}}' }}
 			{% if datasegment is not defined%}
-				{{ '{{#link-to "contacts.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-danger"}}' }}Eliminar{{ '{{/link-to}}' }}
+				{{ '{{#link-to "contacts.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-xs btn-delete extra-padding"}}' }}Eliminar{{ '{{/link-to}}' }}
 			{% endif %}
 		</div>
 	</td>
@@ -78,22 +101,6 @@
 									<td>{{ember_customfield_xeditable(field)}}</td>
 								</tr>
 								{%endfor%}
-								<tr>
-									<td>
-										{{ '{{#if isActive}}' }}
-											<span class="green-label">Activo</span>
-										{{ '{{else}}' }}
-											<span class="orange-label">Inactivo</span>
-										{{ '{{/if}}' }}
-									</td>
-									<td>
-										{{ '{{#if isSubscribed}}' }}
-											<span class="green-label">Suscrito</span>
-										{{ '{{else}}' }}
-											<span class="orange-label">Desuscrito</span>
-										{{ '{{/if}}' }}
-									</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>

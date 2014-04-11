@@ -6,7 +6,7 @@
 
 <div class="row">
 	<!-- menu de opciones -->
-	<h4>Herramientas de administracion</h4>
+	<h4 class="sectiontitle">Herramientas de administración</h4>
 	<div class="container-fluid space">
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
@@ -39,7 +39,7 @@
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('scheduledmail') }}"  class="shortcuts"><span class="sm-button-large-admin-prog"></span></a>
 			</div>
-			<a href="{{ url('scheduledmail') }}" class="btn-actn">Programacion de Correos</a>
+			<a href="{{ url('scheduledmail') }}" class="btn-actn">Programación de Correos</a>
 		</div>
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
@@ -48,6 +48,7 @@
 			<a href="{{ url('socialmedia') }}" class="btn-actn">Cuentas de redes sociales</a>
 		</div>
 	</div>
+	<div class="space"></div>
 </div>
 
 
