@@ -1,10 +1,11 @@
 <?php
 
-class MailWrapper
+class MailWrapper extends BaseWrapper
 {
 	protected $account;
 	protected $content;
 	protected $mail;
+	protected $mailcontent;
 	protected $target = null;
 	protected $scheduleDate;
 
@@ -29,13 +30,23 @@ class MailWrapper
 		$this->mail = $mail;
 	}
 	
-	public function processData()
+	public function setMailContent(Mailcontent $mailcontent)
 	{
-		$this->getTarget();
+		$this->mailcontent = $mailcontent;
+	}
+	
+	public function processDataForMail()
+	{
+		$this->processTarget();
 		$this->processScheduleDate();
 	}
-
-	public function getTarget()
+	
+	public function processDataForMailContent()
+	{
+		$this->processMailContent();
+	}
+	
+	public function processTarget()
 	{
 		$idsDbase = $this->content->dbases;
 		$idsContactlist = $this->content->contactlists;
@@ -47,95 +58,115 @@ class MailWrapper
 		$byExclude = $this->content->filterByExclude;
 				
 		if (!empty($idsDbase) || !empty($idsContactlist) || !empty($idsSegment)) {
-			try {
-				$target = new TargetObj();
-				$target->setIdsDbase($idsDbase);
-				$target->setIdsContactlist($idsContactlist);
-				$target->setIdsSegment($idsSegment);
-				$target->setFilters($byEmail, $byOpen, $byClick, $byExclude);
-				$target->createTargetObj();
-				$this->target = $target->getTargetObject();
-				
-				$this->logger->log("Target: " . print_r($this->target, true));
-			}
-			catch (InvalidArgumentException $e) {
-				$this->logger->log('Exception: [' . $e . ']');
-			}
+			$target = new TargetObj();
+			$target->setIdsDbase($idsDbase);
+			$target->setIdsContactlist($idsContactlist);
+			$target->setIdsSegment($idsSegment);
+			$target->setFilters($byEmail, $byOpen, $byClick, $byExclude);
+			$target->createTargetObj();
+			$this->target = $target->getTargetObject();
+
+			$this->logger->log("Target: " . print_r($this->target, true));
 		}
 	}
 	
+	protected function processMailContent()
+	{
+		if ($this->content->content != '') {
+			switch ($this->content->type) {
+				case 'Editor':
+					if ($this->content->plainText == '') {
+						$editorObj = new HtmlObj;
+						$editorObj->assignContent(json_decode($this->content->content));
+						$content = $editorObj->render();
+						
+						$text = new PlainText();
+						$this->content->plainText = $text->getPlainText($content);;
+					}
+					break;
+				
+				case 'html':
+					$this->content->plainText = $this->content->content;
+					break;
+			}
+		}
+	}
+
+
 	protected function processScheduleDate()
 	{
 		$schedule = $this->content->scheduleDate;
-		$this->logger->log("Schedule: {$schedule}");
 		if ($schedule == 'now') {
-			$this->logger->log("now");
 			$this->scheduleDate = time();
 		}
 		else if ($schedule !== '' || !empty($schedule)) {
-			$this->logger->log("later");
 			list($month, $day, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
 			$this->scheduleDate = mktime($hour, $minute, 0, $month, $day, $year);
 		}
-		$this->logger->log("Schedule: {$this->scheduleDate}");
 	}
-
+	
+	
 	public function saveMail()
 	{
 		$date = time();
 		
 //		if ($this->target == false) {
 //			$message = 'No hay contactos registrados, por favor seleccione otra base de datos, lista o segmento';
-//			
-//			$response = new stdClass();
-//			$response->key = 'errors';
-//			$response->data = $message;
-//			$response->code = 400;
-//			
-//			return $response;
+//			$this->addMessageError('errors', $message, 400);
+//			throw new \InvalidArgumentException($message);
 //		}
 		
-		$mail = new Mail();
-			
-		$mail->idAccount = $this->account->idAccount;
-		$mail->type = $this->content->type;
-		$mail->status = 'draft';
-		$mail->wizardOption = 'setup';
-		$mail->totalContacts = $this->target->totalContacts;
-		$mail->scheduleDate = $this->scheduleDate;
-		$mail->createdon = $date;
-		$mail->updatedon = $date;
-		$mail->deleted = 0;
-		$mail->name = $this->content->name;
-		$mail->subject = $this->content->subject;
-		$mail->fromName = $this->content->fromName;
-		$mail->fromEmail = $this->content->fromEmail;
-		$mail->replyTo = $this->content->replyTo;
-		$mail->target = $this->target->target;
-		$mail->previewData = $this->content->previewData;
-		$mail->socialNetworks = $this->content->socialNetworks;
+		$this->mail = new Mail();
+		
+		$this->mail->idAccount = $this->account->idAccount;
+		$this->mail->type = $this->content->type;
+		$this->mail->status = 'draft';
+		$this->mail->wizardOption = 'setup';
+		$this->mail->totalContacts = $this->target->totalContacts;
+		$this->mail->scheduleDate = $this->scheduleDate;
+		$this->mail->createdon = $date;
+		$this->mail->updatedon = $date;
+		$this->mail->deleted = 0;
+		$this->mail->name = $this->content->name;
+		$this->mail->subject = $this->content->subject;
+		$this->mail->fromName = $this->content->fromName;
+		$this->mail->fromEmail = $this->content->fromEmail;
+		$this->mail->replyTo = $this->content->replyTo;
+		$this->mail->target = $this->target->target;
+		$this->mail->previewData = $this->content->previewData;
+		$this->mail->socialNetworks = $this->content->socialNetworks;
 
-		if (!$mail->save()) {
+		if (!$this->mail->save()) {
 			$e = array();
-			foreach ($mail->getMessages() as $msg) {
-				$this->logger->log("Error while saving mail: {$msg}");
+			foreach ($this->mail->getMessages() as $msg) {
 				$e[] = $msg;
 			}
 			$messages = implode(", ", $e);
 			
-			$response = new stdClass();
-			$response->key = 'errors';
-			$response->data = $messages;
-			$response->code = 400;
-			return $response;
+			$this->addMessageError('errors', $messages, 400);
+			throw new \InvalidArgumentException($messages);
 		}
+	}
+	
+	public function saveContent()
+	{
+		$this->mailcontent = new Mailcontent();
 		
-		$response = new stdClass();
-		$response->key = 'mails';
-		$response->data = $this->convertMailToJson($mail);
-		$response->code = 200;
-
-		return $response;
+		$this->mailcontent->idMail = $this->mail->idMail;
+		$this->mailcontent->content = $this->content->content;
+		$this->mailcontent->plainText = $this->content->plainText;
+		$this->mailcontent->googleAnalytics = $this->content->googleAnalytics;
+		$this->mailcontent->campaignName = $this->content->campaignName;
+		
+		if (!$this->mailcontent->save()) {
+			$e = array();
+			foreach ($this->mailcontent->getMessages() as $msg) {
+				$e[] = $msg;
+			}
+			$messages = implode(", ", $e);
+			$this->addMessageError('errors', $messages, 400);
+			throw new \InvalidArgumentException($messages);
+		}
 	}
 	
 	public function updateMail()
@@ -183,47 +214,64 @@ class MailWrapper
 			return $response;
 		}
 		
+		
+	}
+	
+	private function convertMailToJson()
+	{
+		$this->mail; $this->content;
+		$jsonObject = array();
+		//Header
+		$jsonObject['id'] = $this->mail->idMail;                  
+//		$jsonObject['idAccount'] = $this->mail->idAccount;
+//		$jsonObject['status'] = $this->mail->status;
+//		$jsonObject['wizardOption'] = $this->mail->wizardOption;
+//		$jsonObject['createdon'] = $this->mail->createdon;
+//		$jsonObject['updatedon'] = $this->mail->updatedon;
+//		$jsonObject['deleted'] = $this->mail->deleted;
+		$jsonObject['name'] = $this->mail->name;
+		$jsonObject['subject'] = $this->mail->subject;
+		$jsonObject['fromName'] = $this->mail->fromName;
+		$jsonObject['fromEmail'] = $this->mail->fromEmail;
+		$jsonObject['replyTo'] = $this->mail->replyTo;
+		
+		$jsonObject['dbases'] = $this->content->dbases;
+		$jsonObject['contactlists'] = $this->content->contactlists;
+		$jsonObject['segments'] = $this->content->segments;
+		$jsonObject['filterByEmail'] = $this->content->filterByEmail;
+		$jsonObject['filterByOpen'] = $this->content->filterByOpen;
+		$jsonObject['filterByClick'] = $this->content->filterByClick;
+		$jsonObject['filterByExclude'] = $this->content->filterByExclude;
+		
+		$jsonObject['content'] = $this->mailcontent->content;
+		$jsonObject['plainText'] = $this->mailcontent->plainText;
+		
+		$jsonObject['scheduleDate'] = $this->mailcontent->scheduleDate;
+		
+//		$jsonObject['clicks'] = $this->mail->clicks;
+//		$jsonObject['bounced'] = $this->mail->bounced;
+//		$jsonObject['spam'] = $this->mail->spam;
+//		$jsonObject['unsubscribed'] = $this->mail->unsubscribed;
+		
+//		$jsonObject['target'] = $this->mail->target;
+//		$jsonObject['previewData'] = $this->mail->previewData;
+//		$jsonObject['socialnetworks'] = $this->mail->socialnetworks;
+//		$jsonObject['totalContacts'] = $this->mail->totalContacts;
+//		$jsonObject['scheduleDate'] = $this->mail->scheduleDate;
+//		$jsonObject['finishedon'] = $this->mail->finishedon;
+//		$jsonObject['uniqueOpens'] = $this->mail->uniqueOpens;
+//		$jsonObject['startedon'] = $this->mail->startedon;
+
+		return $jsonObject;
+	}
+	
+	public function getResponse() 
+	{
 		$response = new stdClass();
 		$response->key = 'mails';
-		$response->data = $this->convertMailToJson($this->mail);
+		$response->data = $this->convertMailToJson();
 		$response->code = 200;
 
 		return $response;
-	}
-	
-	private function convertMailToJson($mail)
-	{
-		$jsonObject = array();
-		//Header
-		$jsonObject['id'] = $mail->idMail;
-		$jsonObject['idAccount'] = $mail->idAccount;
-		$jsonObject['status'] = $mail->status;
-		$jsonObject['wizardOption'] = $mail->wizardOption;
-		$jsonObject['createdon'] = $mail->createdon;
-		$jsonObject['updatedon'] = $mail->updatedon;
-		$jsonObject['deleted'] = $mail->deleted;
-		$jsonObject['name'] = $mail->name;
-		$jsonObject['subject'] = $mail->subject;
-		$jsonObject['fromName'] = $mail->fromName;
-		$jsonObject['fromEmail'] = $mail->fromEmail;
-		$jsonObject['replyTo'] = $mail->replyTo;
-		
-		//
-		$jsonObject['clicks'] = $mail->clicks;
-		$jsonObject['bounced'] = $mail->bounced;
-		$jsonObject['spam'] = $mail->spam;
-		$jsonObject['unsubscribed'] = $mail->unsubscribed;
-		
-		
-		$jsonObject['target'] = $mail->target;
-		$jsonObject['previewData'] = $mail->previewData;
-		$jsonObject['socialnetworks'] = $mail->socialnetworks;
-		$jsonObject['totalContacts'] = $mail->totalContacts;
-		$jsonObject['scheduleDate'] = $mail->scheduleDate;
-		$jsonObject['finishedon'] = $mail->finishedon;
-		$jsonObject['uniqueOpens'] = $mail->uniqueOpens;
-		$jsonObject['startedon'] = $mail->startedon;
-
-		return $jsonObject;
 	}
 }

@@ -263,6 +263,7 @@ class Security extends Plugin
 				'template::createpreview' => array('template' => array('read', 'create')),
 				'template::previewdata' => array('template' => array('read')),
 				'template::index' => array('template' => array('read')),
+				'template::select' => array('template' => array('read')),
 				'template::new' => array('template' => array('create')),
 				'template::edit' => array('template' => array('update')),
 				'template::delete' => array('template' => array('delete')),

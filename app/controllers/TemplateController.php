@@ -28,6 +28,36 @@ class TemplateController extends ControllerBase
 		$this->view->setVar('arrayTemplate', $arrayTemplate);
 	}
 	
+	public function selectAction($idMail = null)
+	{
+		if ($idMail != null) {
+			$mail = $this->validateProcess($idMail);
+			$idMail = $mail->idMail;
+		}
+		
+		$templates = Template::findGlobalsAndPrivateTemplates($this->user->account);
+
+		$arrayTemplate = array();
+		foreach ($templates as $template) {
+			$templateInfo = array(
+				"id" => $template->idTemplate, 
+				"name" => $template->name, 
+				"content" => $template->content,
+				"html" => $template->contentHtml,
+				"preview" => $template->previewData,
+				"idMail" => $idMail,
+				"idAccount" => $template->idAccount
+			);
+			$arrayTemplate[$template->category][] = $templateInfo;
+		}
+
+		$this->view->setVar('templates', $templates);
+		$this->view->setVar('arrayTemplate', $arrayTemplate);
+	}
+
+
+
+
 	protected function validateProcess($idMail)
 	{
 		$mail = Mail::findFirst(array(

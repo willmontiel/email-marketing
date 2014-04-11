@@ -13,6 +13,54 @@
 	{{ javascript_include('js/mixin_save.js') }}
 	{{ javascript_include('js/app_mail.js') }}
 	<script type="text/javascript">
+		function iframeResize() {
+			var iFrame = document.getElementById('iframeEditor');
+			//iFrame.height = '';
+			iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
+		};
+		
+		$(function(){
+			$("#editor").click(function() {
+				$("#choose-content").hide();
+				$("#buttons-content").show();
+				$('<iframe />');  // Create an iframe element
+				$('<iframe />', {
+					id: 'iframeEditor',
+					src: "{{url('mail/editor_frame')}}",
+					width: "100%",
+					onload: "iframeResize()",
+					seamless: "seamless"
+				}).appendTo('#show-content');
+			});
+			
+			$("#template").click(function() {
+				$("#choose-content").hide();
+				$("#buttons-content").show();
+				$('<iframe />');  // Create an iframe element
+				$('<iframe />', {
+					id: 'iframeEditor',
+					src: "{{url('template/select')}}",
+					width: "100%",
+					onload: "iframeResize()",
+					seamless: "seamless"
+				}).appendTo('#show-content');
+			});
+			
+			$("#html").click(function() {
+				$("#choose-content").hide();
+				$("#buttons-content").show();
+				$('<iframe />');  // Create an iframe element
+				$('<iframe />', {
+					id: 'iframeEditor',
+					src: "{{url('template/select')}}",
+					width: "100%",
+					onload: "iframeResize()",
+					seamless: "seamless"
+				}).appendTo('#show-content');
+			});
+		});
+	</script>
+	<script type="text/javascript">
 		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios
 		{% if db == true%}
 			App.dbs = [

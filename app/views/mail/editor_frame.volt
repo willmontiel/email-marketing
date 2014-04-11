@@ -25,7 +25,11 @@
 	{{ stylesheet_link('javascripts/gritter/css/jquery.gritter.css') }}
 	{{ javascript_include('js/editor/gallery.js') }}
 
-<script>
+<script type="text/javascript">
+		{% if objMail is defined %}
+			var objMail = {{objMail}};
+		{% endif %}
+	
 		var config = {imagesUrl: "{{url('images')}}", templateUrl : "{{url('template/create')}}"};
 		
 		var mediaGallery = [

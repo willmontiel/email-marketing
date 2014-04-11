@@ -16,14 +16,23 @@ class MailController extends ControllerBase
 		$content = $contentsT->mail;
 		
 		if ($this->request->isPost()) {
-			try {
-				$MailWrapper = new MailWrapper();
-				$MailWrapper->setAccount($account);
-				$MailWrapper->setContent($content);
-				$MailWrapper->processData();
-				$response = $MailWrapper->saveMail();
+			$MailWrapper = new MailWrapper();
+			$MailWrapper->setAccount($account);
+			$MailWrapper->setContent($content);
+			
+			try {	
+				$MailWrapper->processDataForMail();
+				$MailWrapper->saveMail();
+				$MailWrapper->processDataForMailContent();
+				$MailWrapper->saveContent();
+				$response = $MailWrapper->getResponse();
 				
 				return $this->setJsonResponse(array($response->key => $response->data), $response->code);
+			}
+			catch (InvalidArgumentException $e) {
+				$this->logger->log("InvalidArgumentException: {$e}");
+				$response = $MailWrapper->getResponseMessageForEmber();
+				return $this->setJsonResponse(array($response->key => $response->message), $response->code);
 			}
 			catch (Exception $e) {
 				$this->logger->log("Exception: {$e}");
@@ -525,7 +534,7 @@ class MailController extends ControllerBase
 		
 	}
 	
-	public function editor_frameAction($idMail = NULL) 
+	public function editor_frameAction($idMail = NULL, $idTemplate = null) 
 	{
 		$log = $this->logger;
 		
@@ -566,6 +575,21 @@ class MailController extends ControllerBase
 		
 			$this->view->setVar('idMail', $idMail);
 		}
+		
+		$this->logger->log("IdTemplate: {$idTemplate}");
+		
+		if ($idTemplate != null) {
+			$objTemplate = Template::findFirst(array(
+				"conditions" => "idTemplate = ?1",
+				"bind" => array(1 => $idTemplate)
+			));
+			
+			$this->logger->log('Entra');
+			
+			if ($objTemplate) {
+				$this->view->setVar('objMail', $objTemplate->content);
+			}
+		}	
 	}
 	
 	public function templateAction($idMail)

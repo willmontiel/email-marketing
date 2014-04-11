@@ -5,8 +5,8 @@ class BaseWrapper
 {
 	protected $pager;
 	protected $account;
-	
 	protected $fieldErrors;
+	protected $messageError;
 
 	public function __construct()
 	{
@@ -36,6 +36,19 @@ class BaseWrapper
 		else {
 			$this->fieldErrors[$fieldname] = array($errormsg);
 		}
+	}
+	
+	protected function addMessageError($key, $message, $code)
+	{
+		$this->messageError = new stdClass();
+		$this->messageError->key = $key;
+		$this->messageError->message = $message;
+		$this->messageError->code = $code;
+	}
+	
+	public function getResponseMessageForEmber()
+	{
+		return $this->messageError;
 	}
 
 }

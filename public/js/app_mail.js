@@ -27,6 +27,8 @@ App.Mail = DS.Model.extend({
 	filterByClick: DS.attr('string'),
 	filterByExclude: DS.attr('string'),
 	content: DS.attr('string'),
+	plainText: DS.attr('string'),
+	
 });
 
 App.IndexRoute = Ember.Route.extend({
@@ -113,18 +115,25 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				
 				var value = $('input[name=schedule]:checked').val();
 				
-				console.log('Date: ' + value);
 				mail.set('dbases', dbaseArray.toString());
 				mail.set('contactlists', contactlistArray.toString());
 				mail.set('segments', segmentArray.toString());
 				mail.set('filterByOpen', openArray.toString());
 				mail.set('filterByClick', clickArray.toString());
 				mail.set('filterByExclude', excludeArray.toString());
+				
 				if (value === 'now') {
 					mail.set('scheduleDate', value);
 				}
 				else {
 					mail.set('scheduleDate', $('#date').val());
+				}
+				
+				if (document.getElementById('iframeEditor') != null) {
+					var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+					mail.set('type', 'Editor');
+					mail.set('content', editor);
+					document.getElementById('iframeEditor').contentWindow.RecreateEditor();
 				}
 				
 				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
