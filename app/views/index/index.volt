@@ -93,9 +93,9 @@
 		<div class="row-fluid">
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">
-					<a href=""  class="shortcuts"><span class="sm-button-large-email"></span></a>
+					<a href="{{url('mail/setup')}}"  class="shortcuts"><span class="sm-button-large-email"></span></a>
 				</div>
-				<a href="" class="btn-actn">Crear un nuevo email</a>
+				<a href="{{url('mail/setup')}}" class="btn-actn">Crear un nuevo email</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">
@@ -105,9 +105,9 @@
 			</div>
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">
-					<a href=""  class="shortcuts"><span class="sm-button-large-database"></span></a>
+					<a href="{{url('dbase')}}"  class="shortcuts"><span class="sm-button-large-database"></span></a>
 				</div>
-				<a href="" class="btn-actn">Bases de datos</a>
+				<a href="{{url('dbase')}}" class="btn-actn">Bases de datos</a>
 			</div>
 		</div>
 	</div>

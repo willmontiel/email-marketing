@@ -300,6 +300,15 @@ App.DatePickerField = Em.View.extend({
   }
 });
 
+App.DropDownSelect = Ember.View.Extend({
+	templateName: 'dropdown',
+	didInsertElement: function() {
+		$('.dropdown-toggle').dropdown({
+
+		});
+	}
+});
+
 function collapse_contact(id) {
 	$('.collapse-link-' + id).hide();
 }

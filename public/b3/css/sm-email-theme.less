@@ -7,12 +7,20 @@
 @brand-orange:#ffc766;
 @brand-red:#bd1b06;
 @brand-soft-color: #adadad;
+@brand-gray-light: #eeeeee;
 
 @bg-default-btn: #eee;
 @bg-delete-btn: #ac1905;
 @text-color-btn: #428bca;
+@bg-guardar-btn: #189308;
 
 @menu-background: #20526e;
+
+/* Bg titulos  */
+@bg-info-yellow: #ffedd1;
+
+/* Bg informacion cuenta  */
+@bg-info-blue: #e9eff2;
 
 @social-network-bg: @brand-soft-color;
 
@@ -50,19 +58,19 @@ body {
 .space {
 	margin-bottom: 40px;
 }
+.wrap {
+	background-color: @bg-info-blue;
+	padding: 12px 0;
+	margin-bottom: 20px;
+
+}
 
 /* Estilos para los titulos de seccion */
 h4.sectiontitle {
-	background-color: #e8e8e8;
+	background-color: @bg-info-blue;
 	padding: 10px;
 	color: #20526e;
 	margin-bottom: 30px;
-}
-/* BG color gris */
-.bg {
-	background-color: #eeeeee;
-	margin-bottom: 10px;
-	padding: 15px 0 0 0;
 }
 
 .box-dashboard-summary {
@@ -337,6 +345,8 @@ h4.sectiontitle {
 	.pos-icons(19, @shortcuts-big-icons-width);
 	background-position: @position 0;
 }
+/*  */
+
 .btn-actn {
 	color:#123377;
 	font-size: 18px;
@@ -406,7 +416,11 @@ h4.sectiontitle {
 /* Fin estilos para la navegación interna con iconos pequeños */
 
 /* Estilos para la info sobre contactos */
+.numbers-contacts {
+	margin-bottom: 0px;
+}
 .numbers-contacts li {
+	margin-bottom: 0px;
 	text-align: center;
 	padding: 0 15px;
 }
@@ -442,8 +456,10 @@ span.red {
 }
 .btn-default:hover {
 	text-decoration: underline;
-	color: @brand-white;
-	background-color: darken(@bg-default-btn, 30%);
+	color: darken(@bg-default-btn, 40%);
+	transition: background-color 0.5s ease;
+	text-decoration: none;
+	background-color: darken(@bg-default-btn, 10%);
 }
 .btn-default.extra-padding {
 	padding-right: 18px;
@@ -452,4 +468,49 @@ span.red {
 .btn-delete:hover {
 	background-color: @bg-delete-btn;
 	color: @brand-white;
+	text-decoration: none;
 }
+.btn-guardar {
+	background-color: @bg-guardar-btn;
+	color: @brand-white;
+}
+.btn-guardar:hover {
+	transition: background-color 0.5s ease;
+	background-color:#137406;
+	text-decoration: none;
+}
+/* Estilos para la tabla de contactos */
+table.table-contacts tbody tr td {
+	vertical-align: middle;
+}
+/* Estilos para contenedor con bg y paddings */
+.frame-bg-pd {
+	background-color: @brand-gray-light;
+	padding: 9px 0;
+	margin-bottom: 15px;
+}
+/* Estilos para los select de acciones en la tabla de contactos */
+
+.alert-success span {
+	font-size:40px;
+}
+/* Estilos formularios */
+.form-actions {
+	padding: 25px 80px 25px 0;
+}
+.sm-textarea {
+	min-height: 200px;
+	max-height: 200px;
+	min-width: 427px;
+	max-width: 427px;
+}
+/* Estilos para los flags de colores indicadores del estado de cada contacto */
+.estado-contact .inactive {
+	background-color: #b3e3e4;
+	width: 15px;
+}
+.estado-contact .unsubscribed {
+	background-color: #9d9d9d;
+	width: 15px;
+}
+

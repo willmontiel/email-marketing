@@ -2,13 +2,20 @@
 
 class CreateViewEmber
 {
-	public static function createField(Customfield $field)
+	public static function createField(Customfield $field, $options = null)
 	{
+		$options = (!$options)?array():$options;
+
 		$fieldname = "campo".$field->idCustomField;
+
+		$optionstxt = '';
+		foreach ($options as $key => $value) {
+			$optionstxt .= " {$key}='{$value}' ";
+		}
 		switch ($field->type) {
 			case "Text":
 			case "Numerical": 
-				$valor = "{{view Ember.TextField valueBinding='{$fieldname}' id='{$fieldname}'";
+				$valor = "{{view Ember.TextField valueBinding='{$fieldname}' id='{$fieldname}' {$optionstxt}";
 				break;
 			case "TextArea":
 				$valor = "{{view Ember.TextArea valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}'";

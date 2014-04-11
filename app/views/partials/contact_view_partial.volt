@@ -1,9 +1,32 @@
 <tr>
 	<td>
+		<div class="col-md-1 estado-contact">
+			<div class="row">
+				<div class="col-xs-1">
+					<div {{'{{ bind-attr class="isActive:active:inactive"}}'}}>&nbsp
+					</div>
+				</div>
+				<div class="col-xs-1">
+					<div {{'{{ bind-attr class="isSubscribed:suscribed:unsubscribed"}}'}}>&nbsp
+					</div>
+				</div>
+			</div>
+		</div>
+	</td>
+	<td>
+		<form role="form">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox">
+				</label>
+			</div>
+		</form>
+	</td>
+	<td>
 		<label {{ '{{action "expand" this}}' }}>
 		{#<label>#}
 			{#{{ '{{#link-to "contacts.show" this}}' }}{{ '{{email}}' }}{{ '{{/link-to}}' }}#}
-			{{ '{{email}}' }}
+			<a href="">{{ '{{email}}' }}</a>
 			{{' {{#if isEmailBlocked}} '}}
 				<span class="badge badge-dark-red">Correo bloqueado</span>
 			{{' {{/if }} '}}
@@ -78,22 +101,6 @@
 									<td>{{ember_customfield_xeditable(field)}}</td>
 								</tr>
 								{%endfor%}
-								<tr>
-									<td>
-										{{ '{{#if isActive}}' }}
-											<span class="green-label">Activo</span>
-										{{ '{{else}}' }}
-											<span class="orange-label">Inactivo</span>
-										{{ '{{/if}}' }}
-									</td>
-									<td>
-										{{ '{{#if isSubscribed}}' }}
-											<span class="green-label">Suscrito</span>
-										{{ '{{else}}' }}
-											<span class="orange-label">Desuscrito</span>
-										{{ '{{/if}}' }}
-									</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>

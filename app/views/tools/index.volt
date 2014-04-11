@@ -48,6 +48,7 @@
 			<a href="{{ url('socialmedia') }}" class="btn-actn">Cuentas de redes sociales</a>
 		</div>
 	</div>
+	<div class="space"></div>
 </div>
 
 
