@@ -240,7 +240,7 @@ class SocialNetworkConnection
 		$socialImg = new SocialImageCreator();
 		$socialImg->setAccount($this->account);
 		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'post');
-		$this->logger->log('Direccion ' . $image);
+		
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$userid = $id_token->userid;
@@ -249,7 +249,7 @@ class SocialNetworkConnection
 					"access_token" => $access_token,
 					"message" => $fbcontent->message,
 					"link" => $link, //$this->urlObj->getBaseUri(TRUE) "http://stage.sigmamovil.com/",
-					"picture" => $image, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
+					"picture" => "http://stage.sigmamovil.com/images/sigma_envelope.png", //$image,
 					"name" => $fbcontent->title,
 					"caption" => $link, //$this->urlObj->getBaseUri(TRUE) "www.stage.sigmamovil.com/",
 					"description" => $fbcontent->description
