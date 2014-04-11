@@ -98,7 +98,7 @@ Ember.MixinPagination = Ember.Mixin.create({
 			}
 		},
 
-		lastPage: function(){
+		lastPage: function() {
 			var currentpage=parseInt(this.get("currentpage"));
 			var availablepages=parseInt(this.get("availablepages"));
 
@@ -112,6 +112,11 @@ Ember.MixinPagination = Ember.Mixin.create({
 				};
 				this.refreshModel(obj);
 			}
+		},
+
+		setRxP: function(pages) {
+			console.log(pages);
+			return false;
 		}
 	
 	}

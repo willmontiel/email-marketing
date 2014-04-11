@@ -50,10 +50,19 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 		this.store.find(this.modelClass, obj).then(function(d) {
 			t.set('content', d.content);
 		});
-	}
-	,
+	},
+
+	crobject: function (p) {
+		return  {
+			searchCriteria: this.criteria,
+			filter: this.finalFilter,
+			page: p,
+			limit: this.get("recordsperpage")
+		};
+	},
+
 	actions: {
-		nextPage: function(){
+		nextPage: function (){
 			var currentpage=parseInt(this.get("currentpage"));
 			var availablepages=parseInt(this.get("availablepages"));
 
@@ -62,12 +71,7 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 			}
 			else{
 				var page=parseInt(this.get("currentpage"))+1;
-				var obj = {
-					searchCriteria: this.criteria,
-					filter: this.finalFilter,
-					page: page,
-					limit: this.get("recordsperpage")
-				};
+				var obj = this.crobject(page);
 				this.refreshModel(obj);
 			}
 		},
@@ -81,12 +85,7 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 			else{
 				var page=parseInt(this.get("currentpage"))-1;
 
-				var obj = {
-					searchCriteria: this.criteria,
-					filter: this.finalFilter,
-					page: page,
-					limit: this.get("recordsperpage")
-				};
+				var obj = this.crobject(page);
 				this.refreshModel(obj);
 			}
 		},
@@ -98,12 +97,7 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 	//				Hacer nada
 			}
 			else{
-				var obj = {
-					searchCriteria: this.criteria,
-					filter: this.finalFilter,
-					page: 1,
-					limit: this.get("recordsperpage")
-				};
+				var obj = this.crobject(1);
 				this.refreshModel(obj);
 			}
 		},
@@ -116,14 +110,15 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 	//				Hacer nada
 			}
 			else{
-				var obj = {
-					searchCriteria: this.criteria,
-					filter: this.finalFilter,
-					page: availablepages,
-					limit: this.get("recordsperpage")
-				};
+				var obj = this.crobject(availablepages);
 				this.refreshModel(obj);
 			}
+		},
+
+		setRxP: function(me, pages) {
+			this.set('recordsperpage', pages);
+			this.refreshModel(this.crobject(this.get('currentpage')));
+			return false;
 		}
 	
 	}

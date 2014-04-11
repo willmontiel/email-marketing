@@ -123,6 +123,11 @@ Ember.MixinPaginationStatistics = Ember.Mixin.create({
 				};
 				this.refreshModel(obj);
 			}
+		},
+
+		setRxP: function(pages) {
+			console.log(pages);
+			return false;
 		}
 	
 	}

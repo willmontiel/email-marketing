@@ -163,35 +163,21 @@
 				{{ '{{else}}' }}
 						<tr>
 							<td>
-								<div class="box-section news with-icons">
-									<div class="avatar green">
-										<i class="icon-lightbulb icon-2x"></i>
-									</div>
-									<div class="news-content">
-										<div class="news-title">
-											No hay listas de contactos
-										</div>
-										<div class="news-text">
-											<p>
-												Para empezar a administrar contactos, puede crear una lista de contactos,
-												haga clic en el siguiente enlace para crear una
-											</p>
-											{{'{{#link-to "lists.new" class="btn btn-default" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear nueva Lista{{'{{/link-to}}'}}
-										</div>
-									</div>
+								<div class="bs-callout bs-callout-warning">
+									<h4>No se encontraron listas</h4>
+									<p>Verifique el filtro de bases de datos.</p>
+									<p>Todos los contactos se organizan en listas. Si desea crear una lista de contactos,
+										haga {{'{{#link-to "lists.new" disabledWhen="createDisabled"}}'}} clic aquí {{'{{/link-to}}'}} o elija el botón de la parte superior
+									</p>
 								</div>
 							</td>
 						</tr>
 				{{ '{{/each}}' }}
 					</tbody>
-					<tfoot>
-						<tr>
-							<td colspan="4">
-							{{ partial("partials/pagination_partial") }}
-							</td>
-						</tr>
-					</tfoot>
 				</table>
+				<div class="row">
+				{{ partial("partials/pagination_partial") }}
+				</div>
 			</div>
 
 		</script>

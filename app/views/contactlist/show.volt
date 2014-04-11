@@ -142,8 +142,10 @@
 				<div class="col-md-5 col-sm-12 form-search">
 					<form role="form">
 						<div class="form-group">
-							<label class="sr-only" for="search"> buscar </label>
-							{{' {{view Ember.TextField valueBinding="searchCriteria" onEvent="enter" action="search" type="text" autofocus="autofocus" class="form-control" id="search" placeholder="Buscar"}}'}}
+							<div class="input-group">
+								{{' {{view Ember.TextField valueBinding="searchCriteria" onEvent="enter" action="search" type="text" autofocus="autofocus" class="form-control" id="search" placeholder="Correo, @dominio, nombres, apellidos, combinaciones"}}'}}
+								<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -235,9 +237,17 @@
 							{{ '{{else}}' }}
 								<tr>
 									<td>
-										No tiene contactos en esta lista, para crearlos haga click en "crear contacto", para crear
-										un solo contacto, "crear varios contactos", para crear hasta 30 contactos e "importar contactos",
-										para importar un archivo .csv con hasta 100000 contactos.
+										<div class="bs-callout bs-callout-warning">
+											<h4>No se encontraron contactos</h4>
+											<p>Puede ser que su búsqueda no arrojó resultados, que no existen contactos que cumplan todas las condiciones de filtro o que no hay contactos en esta lista.</p>
+											<p>Si desea crear nuevos contactos elija una de las opciones de arriba.
+												<ul>
+													<li><b>Crear un nuevo contacto:</b> para ingresar datos de un solo contacto</li>
+													<li><b>Crear varios contactos:</b> puede crear múltiples contactos rapidamente</li>
+													<li><b>Importar contactos:</b> copie contactos de otros sistemas fácilmente</li>
+												</ul>
+											</p>
+										</div>
 									</td>
 								</tr>
 							{{ '{{/each}}' }}
