@@ -1,7 +1,12 @@
-<div class="bs-callout bs-callout-info">
+<div {{'{{bind-attr class=":bs-callout headerEmpty:bs-callout-warning:bs-callout-success"}}'}}>
 	<div class="panel-body">
-		<p><strong>De:</strong> {{'{{ fromName }}  &lt;{{ fromEmail }}&gt; '}}</p>
+		{{'{{#if headerEmpty }}'}}
+		<p><strong>De:</strong> _______________________________</p>
+		<p><strong>Asunto:</strong> ______________________________ </p>
+		{{'{{else}}'}}
+		<p><strong>De:</strong> {{' {{fromName}}  &lt; {{fromEmail}} &gt; '}}</p>
 		<p><strong>Asunto:</strong> {{'  {{subject}} '}}</p>
+		{{'{{/if}}'}}
 	</div>
 </div>
 <div class="panel panel-default">

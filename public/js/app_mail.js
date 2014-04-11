@@ -67,9 +67,23 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	open: [],
 	click: [],
 	
+	headerEmpty: function () {
+		var n, e, s;
+		n = this.get('model.fromName');
+		e = this.get('content.fromEmail');
+		s = this.get('content.subject');
+		e = (e == '')?null:e;
+		n = (n == '')?null:n;
+		s = (s == '')?null:s;
+		if (!e ||  !n || !s) {
+			return true;
+		}
+		return false;
+	}.property('content.fromName', 'content.fromEmail', 'content.subject'),
+	
 	actions: {
 		save: function(mail) {
-			console.log(mail.get('name'));
+			console.log('Nombre: ' + mail.get('name'));
 			if (mail.get('name') === undefined) {
 				$.gritter.add({title: 'Error', text: 'No ha ingresado un nombre para el correo, por favor verifique la información', sticky: false, time: 3000});
 			}
