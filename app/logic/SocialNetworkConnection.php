@@ -257,7 +257,7 @@ class SocialNetworkConnection
 
 				  try {
 					  $someid = $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
-					  $this->logger->log('Id que retorna ' . $someid);
+					  $this->logger->log('Id que retorna ' . print_r($someid, true));
 					  $this->logger->log('Successfully posted to Facebook');
 				  } catch(Exception $e) {
 					  $this->logger->log('No publico');
