@@ -249,14 +249,15 @@ class SocialNetworkConnection
 					"access_token" => $access_token,
 					"message" => $fbcontent->message,
 					"link" => $link, //$this->urlObj->getBaseUri(TRUE) "http://stage.sigmamovil.com/",
-					"picture" => "http://stage.sigmamovil.com/images/sigma_envelope.png", //$image,
+					"picture" => $image, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
 					"name" => $fbcontent->title,
 					"caption" => $link, //$this->urlObj->getBaseUri(TRUE) "www.stage.sigmamovil.com/",
 					"description" => $fbcontent->description
 				  );
 
 				  try {
-					  $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
+					  $someid = $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
+					  $this->logger->log('Id que retorna ' . $someid);
 					  $this->logger->log('Successfully posted to Facebook');
 				  } catch(Exception $e) {
 					  $this->logger->log('No publico');
