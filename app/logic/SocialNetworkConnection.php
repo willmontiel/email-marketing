@@ -249,7 +249,7 @@ class SocialNetworkConnection
 					"access_token" => $access_token,
 					"message" => $fbcontent->message,
 					"link" => $link, //$this->urlObj->getBaseUri(TRUE) "http://stage.sigmamovil.com/",
-					"picture" => $image, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
+					//"picture" => $image, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
 					"name" => $fbcontent->title,
 					"caption" => $link, //$this->urlObj->getBaseUri(TRUE) "www.stage.sigmamovil.com/",
 					"description" => $fbcontent->description

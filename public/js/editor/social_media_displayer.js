@@ -27,7 +27,7 @@ SocialMediaDisplayer.prototype.imageSelected = function() {
 Dropzone.autoDiscover = false;
 
 $(function() {
-	var src = config.imagesUrl + "/post_default.jpg";
+	var src = config.imagesUrl + "/post_default.png";
 	
 	if($('#fbimagepublication').val() !== 'default' && $('#fbimagepublication').val() !== '') {
 		src = config.assetsUrl + "/" + $('#fbimagepublication').val();
