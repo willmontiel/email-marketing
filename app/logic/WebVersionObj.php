@@ -89,7 +89,7 @@ class WebVersionObj extends BaseWrapper
 		$fbsocialdesc = json_decode($socialmail->fbdescription);
 		
 		// Ajustar Tamaño de Imagen para Compartir
-		$image = $this->getImageForShare($fbsocialdesc);
+		$imagefb = $this->getImageForShare($fbsocialdesc, 'fb');
 		
 		//----Facebook MetaData----//
 		
@@ -98,7 +98,7 @@ class WebVersionObj extends BaseWrapper
 		$fbmetaname = '<meta property="og:site_name" content="Sigma Movil" />';
 		$fbmetaurl = '<meta property="og:url" content="' . $url['facebook'] . '" />';
 		$fbmetatitle = '<meta property="og:title" content="' . $fbtitle . '" />';
-		$fbmetaimage = '<meta property="og:image" content="' . $image . '" />';
+		$fbmetaimage = '<meta property="og:image" content="' . $imagefb . '" />';
 		$fbmetadescritpion = '<meta property="og:description" content="' . $fbdescription . '" />';
 		$fbmetatype = '<meta property="og:type" content="website" />';
 		$fbmetaapp = '<meta property="fb:app_id" content="' . Phalcon\DI::getDefault()->get('fbapp')->iduser . '" />';
@@ -106,6 +106,8 @@ class WebVersionObj extends BaseWrapper
 		$fbMeta = $fbmetaname . $fbmetaurl . $fbmetatitle . $fbmetaimage . $fbmetadescritpion . $fbmetatype . $fbmetaapp;
 		
 		//----Twitter MetaData----//
+		
+		$imagetw = $this->getImageForShare($fbsocialdesc, 'tw');
 		
 		$twsocialdesc = json_decode($socialmail->twdescription);
 		$twtitle = $mail->subject;
@@ -116,7 +118,7 @@ class WebVersionObj extends BaseWrapper
 		$twmetacreator = '<meta name="twitter:creator" content="@SigmaMovil1">';
 		$twmetatitle = '<meta name="twitter:title" content="' . $twtitle . '">';
 		$twmetadescription = '<meta name="twitter:description" content="' . $twdescription . '">';
-		$twmetaimage = '<meta name="twitter:image:src" content="' . $image . '">';
+		$twmetaimage = '<meta name="twitter:image:src" content="' . $imagetw . '">';
 		
 		$twMeta = $twmetacard . $twmetasite . $twmetaurl . $twmetatitle . $twmetadescription . $twmetacreator . $twmetaimage;
 		
@@ -127,13 +129,13 @@ class WebVersionObj extends BaseWrapper
 		return str_ireplace($search, $replace, $html);
 	}
 	
-	public function getImageForShare($fbcontent)
+	public function getImageForShare($fbcontent, $header)
 	{
 		$img = (isset($fbcontent)) ? $fbcontent->image : self::IMG_TYPE_DEFAULT;
 		
 		$socialImg = new SocialImageCreator();
 		$socialImg->setAccount($this->account);
-		$image = $socialImg->createImageToIdealSize($img, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'share');
+		$image = $socialImg->createImageToIdealSize($img, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, $header);
 		
 		return $image;
 	}

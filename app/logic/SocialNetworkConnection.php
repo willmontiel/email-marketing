@@ -239,7 +239,7 @@ class SocialNetworkConnection
 		// Ajustar Tamaño de Imagen para Publicar
 		$socialImg = new SocialImageCreator();
 		$socialImg->setAccount($this->account);
-		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'share');
+		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'fb');
 		
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){

@@ -25,9 +25,6 @@ class SocialImageCreator
 			));
 			
 			if($asset) {
-				$imgObj = new ImageObject();
-				$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . pathinfo($asset->fileName, PATHINFO_EXTENSION), $asset->fileName);
-				$imgObj->resizeImage($width, $height);
 
 				$dir = $this->assetsrv->dir . $this->account->idAccount . '/sn/' ;
 
@@ -37,9 +34,14 @@ class SocialImageCreator
 
 				$imgname = $header . '_' . $imageid . '.png';
 				$dir .= $imgname;
-
-				$imgObj->saveImage('png', $dir);
-
+				
+				if (!file_exists($dir)) {
+					$imgObj = new ImageObject();
+					$imgObj->createImageFromFile($this->assetsrv->dir . $this->account->idAccount . '/images/' . $asset->idAsset . '.' . pathinfo($asset->fileName, PATHINFO_EXTENSION), $asset->fileName);
+					$imgObj->resizeImage($width, $height);
+					$imgObj->saveImage('png', $dir);
+				}
+				
 				$image = $this->urlObj->getAppUrlAsset(TRUE) . '/' . $this->account->idAccount . '/sn/' . $imgname;
 			}
 		}
