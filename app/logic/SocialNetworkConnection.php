@@ -9,8 +9,8 @@ class SocialNetworkConnection
 	const IMG_SN_HEIGHT = 300;
 	const IMG_TYPE_DEFAULT = 'default';
 	
-	function __construct($logger = null) {
-		$this->logger = $logger;
+	function __construct() {
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
 		$this->urlObj = Phalcon\DI::getDefault()->get('urlManager');
 		$this->assetsrv = Phalcon\DI::getDefault()->get('asset');
 	}
@@ -240,7 +240,7 @@ class SocialNetworkConnection
 		$socialImg = new SocialImageCreator();
 		$socialImg->setAccount($this->account);
 		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'post');
-
+		$this->logger->log('Direccion ' . $image);
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$userid = $id_token->userid;

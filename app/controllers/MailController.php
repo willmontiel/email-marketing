@@ -184,7 +184,7 @@ class MailController extends ControllerBase
 			$this->view->setVar('mail', "");
 		}
 		try {
-			$socialnet = new SocialNetworkConnection($log);
+			$socialnet = new SocialNetworkConnection();
 			$socialnet->setAccount($account);
 			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
