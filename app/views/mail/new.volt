@@ -21,44 +21,38 @@
 		
 		$(function(){
 			$("#editor").click(function() {
-				$("#choose-content").hide();
-				$("#buttons-content").show();
-				$('<iframe />');  // Create an iframe element
-				$('<iframe />', {
-					id: 'iframeEditor',
-					src: "{{url('mail/editor_frame')}}",
-					width: "100%",
-					onload: "iframeResize()",
-					seamless: "seamless"
-				}).appendTo('#show-content');
+				createIframe("iframeEditor", "{{url('mail/editor_frame')}}", "100%", "", "iframeResize()");
 			});
 			
 			$("#template").click(function() {
-				$("#choose-content").hide();
-				$("#buttons-content").show();
-				$('<iframe />');  // Create an iframe element
-				$('<iframe />', {
-					id: 'iframeEditor',
-					src: "{{url('template/select')}}",
-					width: "100%",
-					onload: "iframeResize()",
-					seamless: "seamless"
-				}).appendTo('#show-content');
+				createIframe("iframeEditor", "{{url('template/select')}}", "100%", "", "iframeResize()");
 			});
 			
 			$("#html").click(function() {
-				$("#choose-content").hide();
-				$("#buttons-content").show();
-				$('<iframe />');  // Create an iframe element
-				$('<iframe />', {
-					id: 'iframeEditor',
-					src: "{{url('template/select')}}",
-					width: "100%",
-					onload: "iframeResize()",
-					seamless: "seamless"
-				}).appendTo('#show-content');
+				createIframe("iframeHtml", "{{url('mail/contenthtml')}}", "100%", "600", "");
 			});
+			
+			$("#import").click(function() {
+				createIframe("iframeHtml", "{{url('mail/contenthtml')}}", "100%", "600", "");
+			});
+			
 		});
+		
+		function createIframe(id, url, width, height, fn) {
+			$("#choose-content").hide();
+			$("#plaintext-content").show();
+			$("#buttons-content").show();
+		
+			$('<iframe />');  // Create an iframe element
+			$('<iframe />', {
+				id: id,
+				src: url,
+				width: width,
+				height: height,
+				onload: fn,
+				seamless: "seamless"
+			}).appendTo('#show-content');
+		}
 	</script>
 	<script type="text/javascript">
 		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios
@@ -211,18 +205,7 @@
 
 			<div class="row">
 				<div class="col-md-12">
-					<blockquote>
-						<h3>Encabezado</h3>
-					</blockquote>
-
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">Nuevo correo</h3>
-						</div>
-						<div class="panel-body">
-							{{ partial("mail/partials/header_partial") }}
-						</div>
-					</div>
+					{{ partial("mail/partials/header_partial") }}
 				</div>
 			</div>	
 

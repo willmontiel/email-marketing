@@ -113,6 +113,19 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 					console.log(excludeObj[d].name);
 				}
 				
+				var type;
+				var content;
+				
+				if (document.getElementById('iframeEditor') != null) {
+					type = 'Editor';
+					content = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+					document.getElementById('iframeEditor').contentWindow.RecreateEditor();
+				}
+				else if (document.getElementById('iframeHtml') != null) {
+					type = 'Html';
+					content = document.getElementById('iframeHtml').contentWindow.$('#redactor_content').val();
+				}
+				
 				var value = $('input[name=schedule]:checked').val();
 				
 				mail.set('dbases', dbaseArray.toString());
@@ -128,13 +141,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				else {
 					mail.set('scheduleDate', $('#date').val());
 				}
-				
-				if (document.getElementById('iframeEditor') != null) {
-					var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
-					mail.set('type', 'Editor');
-					mail.set('content', editor);
-					document.getElementById('iframeEditor').contentWindow.RecreateEditor();
-				}
+			
+				mail.set('type', type);
+				mail.set('content', content);
 				
 				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
 			}

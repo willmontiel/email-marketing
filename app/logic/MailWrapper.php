@@ -81,12 +81,13 @@ class MailWrapper extends BaseWrapper
 						$content = $editorObj->render();
 						
 						$text = new PlainText();
-						$this->content->plainText = $text->getPlainText($content);;
+						$this->content->plainText = $text->getPlainText($content);
 					}
 					break;
 				
-				case 'html':
-					$this->content->plainText = $this->content->content;
+				case 'Html':
+					$text = new PlainText();
+					$this->content->plainText = $text->getPlainText($this->content->content);
 					break;
 			}
 		}

@@ -23,19 +23,28 @@
 	</div>
 </div>		
 <br />
-<div id="show-content"></div>
-<div id="buttons-content" style="display: none;">
-	<br />
-	<div class="row">
-		<h4>Texto plano</h4>
-		{{ '{{view Ember.TextArea valueBinding="plainText" name="plainText" id="plainText" rows="4" class="col-sm-12"}}' }}
+<div class="row">
+	<div class="col-md-12">
+		<div id="show-content"></div>
 	</div>
-	<br />
-	<div class="row text-right">
+</div>
+<br />
+<div class="row" id="plaintext-content" style="display: none;">
+	<div class="col-md-12">
+		<div  >
+			<h4>Texto plano</h4>
+			{{ '{{view Ember.TextArea valueBinding="plainText" name="plainText" id="plainText" rows="10" class="col-sm-12"}}' }}
+		</div>
+	</div>	
+</div>
+<br />
+<div class="row" id="buttons-content" style="display: none;">
+	<div class="col-md-12  text-right">
 		<a href="#" class="btn btn-default">Descartar cambios</a>
 		<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 	</div>
 </div>
+
 	{#
 	<div class="span3 action-nav-button">
 		<a href="#" title="New Project">

@@ -572,7 +572,6 @@ class MailController extends ControllerBase
 		$this->view->setVar('cfs', $arrayCf);
 		
 		if($idMail) {
-		
 			$this->view->setVar('idMail', $idMail);
 		}
 		
@@ -589,7 +588,13 @@ class MailController extends ControllerBase
 			if ($objTemplate) {
 				$this->view->setVar('objMail', $objTemplate->content);
 			}
-		}	
+			else {
+				$this->view->setVar('objMail', 'null');
+			}
+		}
+		else {
+			$this->view->setVar('objMail', 'null');
+		}
 	}
 	
 	public function templateAction($idMail)
@@ -697,6 +702,44 @@ class MailController extends ControllerBase
 		}
 	}
 	
+	public function contenthtmlAction($idMail = null)
+	{
+		if ($idMail != null) {
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $idMail)
+			));
+			
+			if ($mail) {
+				$mailContentExist = Mailcontent::findFirst(array(
+					"conditions" => "idMail = ?1",
+					"bind" => array(1 => $idMail)
+				));
+
+				if ($mailContentExist) {
+					$mailContentExist->content = html_entity_decode($mailContentExist->content);
+					$this->view->setVar("mailContent", $mailContentExist);
+					$form = new MailForm($mailContentExist);
+				}
+				else {
+					$mailContent = new Mailcontent();
+					$form = new MailForm($mailContent);
+				}
+
+				$this->view->setVar('mail', $mail);
+			}
+		}
+		
+		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
+		foreach ($cfs as $cf) {
+			$linkname = strtoupper(str_replace(array ("á", "é", "í", "ó", "ú", "ñ", " ", "&", ), 
+											   array ("a", "e", "i", "o", "u", "n", "_"), $cf[0]));
+			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
+		}
+		$this->view->setVar('cfs', $arrayCf);
+	}
+	
+	
 	public function importAction($idMail = null)
 	{
 		$mail = $this->validateProcess($idMail);
@@ -759,6 +802,11 @@ class MailController extends ControllerBase
 				}
 			}
 		}
+	}
+	
+	public function importcontentAction()
+	{
+		
 	}
 	
 	public function plaintextAction($idMail)

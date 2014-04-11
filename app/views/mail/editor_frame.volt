@@ -26,9 +26,8 @@
 	{{ javascript_include('js/editor/gallery.js') }}
 
 <script type="text/javascript">
-		{% if objMail is defined %}
-			var objMail = {{objMail}};
-		{% endif %}
+		var objMail = {{objMail}};
+		
 	
 		var config = {imagesUrl: "{{url('images')}}", templateUrl : "{{url('template/create')}}"};
 		
