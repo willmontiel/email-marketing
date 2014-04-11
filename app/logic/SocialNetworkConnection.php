@@ -239,7 +239,7 @@ class SocialNetworkConnection
 		// Ajustar Tamaño de Imagen para Publicar
 		$socialImg = new SocialImageCreator();
 		$socialImg->setAccount($this->account);
-		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'post');
+		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'share');
 		
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
@@ -249,7 +249,7 @@ class SocialNetworkConnection
 					"access_token" => $access_token,
 					"message" => $fbcontent->message,
 					"link" => $link, //$this->urlObj->getBaseUri(TRUE) "http://stage.sigmamovil.com/",
-					//"picture" => $image, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
+					"picture" => $image, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
 					"name" => $fbcontent->title,
 					"caption" => $link, //$this->urlObj->getBaseUri(TRUE) "www.stage.sigmamovil.com/",
 					"description" => $fbcontent->description
