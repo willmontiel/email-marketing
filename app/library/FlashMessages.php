@@ -12,7 +12,7 @@ class FlashMessages
 		if (count($messages) !== 0) {
 			$message = array();
 			foreach ($messages as $msg) {
-				if ($msg->accounts == 'all') {
+				if ($msg->accounts == 'all' || $msg->accounts == null) {
 					$message[] = $msg;
 				}
 				else {

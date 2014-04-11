@@ -12,13 +12,10 @@
 				
 			if (a !== null) {
 				$("#allLinks").show();
-				console.log('1')
 			}
 			$("#googleAnalytics").on('click', function () {
-				console.log('2')
 				if ($(this)[0].checked) {
 					$("#allLinks").show();
-					console.log('3')
 				}
 				else {
 					$("#allLinks").hide();

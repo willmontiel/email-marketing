@@ -1,26 +1,30 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ javascript_include('javascripts/moment/moment.min.js')}}
 	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
 	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
+	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.es.js')}}
 	<script type="text/javascript">
 		$(function(){
-			$("input[name=allAccounts]").on('click', function () { 
+			if ($('#all').prop('checked')) {
+				$("#selectAccount").hide();
+			}
+			
+			if ($('#any').prop('checked')) {
+				$("#selectAccount").show();
+			}
+			
+			$("input[name=allAccounts]").on('click', function () {
+				$('input[name=certainAccounts]').attr('checked', false);
 				$('#accounts').val("");
-;
-				//$('#accountSelect').prop('selectedIndex',0);
-				//$("#accountSelect").val('').trigger("liszt:updated");
-
-				var val = $('input[name=allAccounts]:checked').val();
-				switch (val) {
-					case "all":
-						$("#selectAccount").hide();
-						break;
-					case "any":
-						$("#selectAccount").show();
-						break;
-				}
-			 });
+				$("#selectAccount").hide();
+			});
+			
+			$("input[name=certainAccounts]").on('click', function () {
+				$('input[name=allAccounts]').attr('checked', false);
+				$("#selectAccount").show();
+			});
 		});
 	</script>
 	<script type="text/javascript">
@@ -29,20 +33,20 @@
 			var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
 		 //HH:mm PP
 			$('#scheduleArea1').datetimepicker({
-				language: 'en',
+				language: 'es',
 				maskInput: true,
 				pickTime: true,
-				format: "dd/MM/yyyy hh:mm",
+				format: "MM/DD/YYYY H:mm",
 				//pick12HourFormat: true,
 				pickSeconds: false,
 				startDate: now
 			});
 			
 			$('#scheduleArea2').datetimepicker({
-				language: 'en',
+				language: 'es',
 				maskInput: true,
 				pickTime: true,
-				format: "dd/MM/yyyy hh:mm",
+				format: "MM/DD/YYYY H:mm",
 				//pick12HourFormat: true,
 				pickSeconds: false,
 				startDate: now
@@ -63,7 +67,8 @@
 	</div>
 	<br />
 	<div class="row">
-		<div class="col-md-12">{{flashSession.output()}}</div>
+		<div class="col-md-9">{{flashSession.output()}}</div>
+		<div class="col-md-3"><a href="{{url('flashmessage/index')}}" class="btn btn-default text-left">Lista de mensajes administrativos</a></div>
 	</div>
 	<br />
 	<div class="row">
@@ -87,12 +92,18 @@
 				<div class="form-group">
 					<label for="allAccounts" class="col-sm-4 control-label">*Mostrar en:</label>
 					<div class="col-sm-8">
+						{{ MessageForm.render('allAccounts') }}
+						<label for="all">Todas las cuentas</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						{#
 						<input type="radio" name="allAccounts"  value="all" id="all">
 						<label for="all">Todas las cuentas</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
 						<input type="radio" name="allAccounts" value="any" id="any">
 						<label for="any">Determinadas cuentas</label>
+						#}
+						{{ MessageForm.render('certainAccounts') }}
+						<label for="any">Determinadas cuentas</label>
 						<div id="selectAccount" style="display: none;">
-							<label></label>
 							{{ MessageForm.render('accounts') }}
 						</div>
 					</div>
@@ -101,6 +112,8 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">*Tipo de mensaje:</label>
 					<div class="col-sm-8">
+						{{ MessageForm.render('type', {'class' : 'form-control'} ) }}
+						{#
 						<div class="checkbox">
 							{{ MessageForm.render('type', {'id': 'info', 'value': 'info'} ) }}
 							<label for="info" class="flashmessage-info">Informativo</label>
@@ -114,16 +127,15 @@
 							{{ MessageForm.render('type', {'id': 'error', 'value': 'error'}) }}
 							<label for="error" class="flashmessage-error">Riesgo</label>
 						</div>
+						#}
 					</div>
 				</div>
 					
 				<div class="form-group">
 					<label class="col-sm-4 control-label">*Fecha y hora de inicio:</label>
 					<div class="col-sm-8">
-						<div id="date">
-							<div id="scheduleArea1" class="input-append date" class="col-sm-12">
-								{{ MessageForm.render('start', {'id': 'begin'}) }}
-							</div>
+						<div id="scheduleArea1" class="input-append date" class="col-sm-12">
+							{{ MessageForm.render('start', {'id': 'begin', 'class' : 'form-control'}) }}
 						</div>
 					</div>
 				</div>
@@ -131,10 +143,8 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">*Fecha y hora de fin:</label>
 					<div class="col-sm-8">
-						<div id="date">
-							<div id="scheduleArea2" class="input-append date" class="col-sm-12">
-								{{ MessageForm.render('end', {'id': 'end'}) }}
-							</div>
+						<div id="scheduleArea2" class="input-append date" class="col-sm-12">
+							{{ MessageForm.render('end', {'id': 'end', 'class' : 'form-control'}) }}
 						</div>
 					</div>
 				</div>
