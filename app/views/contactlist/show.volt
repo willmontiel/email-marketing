@@ -144,16 +144,13 @@
 						<div class="form-group">
 							<div class="input-group">
 								{{' {{view Ember.TextField valueBinding="searchCriteria" onEvent="enter" action="search" type="text" autofocus="autofocus" class="form-control" id="search" placeholder="Correo, @dominio, nombres, apellidos, combinaciones"}}'}}
-								<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+								<span class="input-group-addon"><i class="glyphicon glyphicon-search" {{ '{{action "search" this}}' }}></i></span>
 							</div>
 						</div>
 					</form>
 				</div>
 				<div class="col-md-7 col-sm-12">
 					<ul class="list-inline pull-right">
-						<li>
-							<a href="{{url('contactlist#/lists')}}" class="btn btn-default extra-padding btn-sm" role="button"><i class="icon-home"></i> Todas las listas</a>
-						</li>
 						<li>
 							{{'{{#link-to "contacts.new" class="btn btn-default extra-padding btn-sm" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/link-to}}'}}
 						</li>
@@ -363,7 +360,7 @@
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</div>
 							<div class="col-md-9">
-								<p>Cree varios contactos a la vez.  Escriba en el cuadro de texto una línea de contenido por cada contacto que desee crear separando los campos por comas</p>
+								<p>Cree varios contactos a la vez.  Escriba en el cuadro de texto una línea de contenido por cada contacto que desee crear separando los campos por comas.</p>
 								<p><strong>Ejemplo:</strong></p>
 								<dl>
 									<dd>email1@email.com,Nombre1,Apellido1</dd>

@@ -109,21 +109,27 @@
 
 			<div class="row">
 				<h4  class="sectiontitle">Listas de contactos</h4>
-				<div class="col-md-3">
-					<form>
-						<p>
-							{{ '{{view Ember.Select
-									contentBinding="dbaseSelect"
-									optionValuePath="content.id"
-									optionLabelPath="content.name"
-									valueBinding="selectedDbase"}}'
-							}}
-						</p>
-					</form>
+				<div class="row">
+					<div class="col-xs-6 col-sm-5 col-md-4">
+						<form>
+							<p>
+								{{ '{{view Ember.Select
+										contentBinding="dbaseSelect"
+										optionValuePath="content.id"
+										optionLabelPath="content.name"
+										valueBinding="selectedDbase" class="sm-select"}}'
+								}}
+							</p>
+						</form>
+					</div>
+					<div class="col-md-3 pull-right">
+						<a class="btn btn-default extra-padding btn-sm" href="{{ url('contactlist') }}#/lists/new">Crear una nueva lista</a>
+					</div>
 				</div>
+				<div class="space"></div>
 			</div>				
 			<div class="row">
-				<table class="table table-bordered">
+				<table class="table table-striped table-contacts">
 					<thead>
 					</thead>
 					<tbody>
@@ -192,41 +198,63 @@
 		
 		{#  ######## Handlebars de crear nueva lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/new">
-			<div class="box span4">
-				<div class="box-header"><span class="title">Agregar una nueva lista</span></div>
-				<div class="box-content padded">
-					<form>
+			<div class="row">
+				<h4 class="sectiontitle">Agregar una nueva lista</h4>
+				<div class="col-md-5">
+					<form  class="form-horizontal" role="form">
 						{{'{{#if errors.errormsg}}'}}
-							<div class="alert alert-error">
-								{{'{{errors.errormsg}}'}}
-							</div>
-						{{'{{/if}}'}}
-						<label>Nombre *
-							{{' {{#if errors.name }} '}}
-								<span class="text text-error">{{'{{errors.name}}'}}</span>
-							{{' {{/if }} '}}
-						</label>				
-
-							{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}
-							<label>Descripción
-								{{' {{#if errors.description }} '}}
-									<span class="text text-error">{{'{{errors.description}}'}}</span>
-								{{' {{/if }} '}}
-							</label>
-							{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
-							<label>Base de datos</label>
-							{{ '{{view Ember.Select
-								contentBinding="controllers.dbase.content"
-								optionValuePath="content.id"
-								optionLabelPath="content.name"
-								selectionBinding="dbase"
-								prompt="Seleccione una base de datos"
-								}}'
-							}}
+						<div class="alert alert-error">
+							{{'{{errors.errormsg}}'}}
 						</div>
-						<div class="form-actions">
-							<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
-							<button class="btn btn-blue" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
+						{{'{{/if}}'}}
+
+						{{' {{#if errors.name }} '}}
+						<span class="text text-error">{{'{{errors.name}}'}}</span>
+						{{' {{/if }} '}}
+
+						{{' {{#if errors.description }} '}}
+							<span class="text text-error">{{'{{errors.description}}'}}</span>
+						{{' {{/if }} '}}
+
+						<div class="form-group">
+							<label for="name" class="col-sm-4 control-label">* Nombre</label>
+							<div class="col-md-8">
+								{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus" class="form-control"}}' }}
+							</div>
+						</div>
+											
+
+						<div class="form-group">
+							<label for="description" class="col-sm-4 control-label">Descripción</label>
+							<div class="col-md-8">
+								{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required" class="form-control"}}' }}
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="dbases" class="col-sm-4 control-label">Base de datos</label>
+							<div class="col-md-8">
+								{{ '{{view Ember.Select
+									contentBinding="controllers.dbase.content"
+									optionValuePath="content.id"
+									optionLabelPath="content.name"
+									selectionBinding="dbase"
+									id="dbases"
+									prompt="Seleccione una base de datos"
+									class="sm-select"}}'
+								}}
+							</div>
+						</div>
+						<div class="form-actions pull-right">
+							<div class="row">
+								<div class="col-xs-6">
+									<button class="btn btn-sm btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+								</div>
+
+								<div class="col-xs-6">
+									<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
+								</div>
+							</div>	
 						</div>
 					</form>
 				</div>

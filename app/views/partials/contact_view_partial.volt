@@ -1,5 +1,5 @@
 <tr>
-	<td>
+	<td class="no-pad">
 		<div class="col-md-1 estado-contact">
 			<div class="row">
 				<div class="col-xs-1">

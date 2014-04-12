@@ -3,78 +3,67 @@
 			{# Insertar botones de navegacion #}
 			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
 
-	<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
-		{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
-	</div>
-	<div class="row-fluid">
-        <div class="span12">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Segmentos
+	<div class="row">
+		<h4 class="sectiontitle">Segmentos</h4>
+			<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
+				{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
+			</div>
+		</div>
+		<table class="table table-striped">
+		{{'{{#each model}}'}}
+		{{' {{# unless isNew }}' }}
+			<div class="avatar purple">
+				<i class="icon-resize-horizontal icon-2x"></i>
+			</div>
+			<div class="news-content">
+				<div class="pull-right" style="margin-right: 10px;">
+					<div class="btn-group">
+						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li>{{ '{{#link-to "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/link-to}}' }}</li>
+							<li>{{ '{{#link-to "segments.edit" this}}<i class="icon-pencil"></i> Editar{{/link-to}}' }}</li>
+						</ul>
 					</div>
 				</div>
-				<div class="box-content">
-				{{'{{#each model}}'}}
-					{{' {{# unless isNew }}' }}
-					<div class="box-section news with-icons">
-						<div class="avatar purple">
-							<i class="icon-resize-horizontal icon-2x"></i>
-						</div>
-						<div class="news-content">
-							<div class="pull-right" style="margin-right: 10px;">
-								<div class="btn-group">
-									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li>{{ '{{#link-to "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/link-to}}' }}</li>
-										<li>{{ '{{#link-to "segments.edit" this}}<i class="icon-pencil"></i> Editar{{/link-to}}' }}</li>
-									</ul>
-								</div>
-							</div>
-							<div class="news-title">
-							<a href="{{url('segment/show/')}}{{ '{{unbound id}}' }}#/contacts">{{' {{name}} '}}</a>
-							</div>
-							<div class="news-text">
-								{{' {{description}}'}}
-								<br />
-								<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
-							</div>
-						</div>
-					</div>
-					{{' {{/unless}}'}}
+				<div class="news-title">
+				<a href="{{url('segment/show/')}}{{ '{{unbound id}}' }}#/contacts">{{' {{name}} '}}</a>
+				</div>
+				<div class="news-text">
+					{{' {{description}}'}}
+					<br />
+					<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
+				</div>
+				{{' {{/unless}}'}}
 				{{ '{{else}}' }}
-					<div class="box-section news with-icons">
-						<div class="avatar green">
-							<i class="icon-lightbulb icon-2x"></i>
+				<div class="box-section news with-icons">
+					<div class="avatar green">
+						<i class="icon-lightbulb icon-2x"></i>
+					</div>
+					<div class="news-content">
+						<div class="news-title">
+							No hay segmentos
 						</div>
-						<div class="news-content">
-							<div class="news-title">
-								No hay segmentos
-							</div>
-							<div class="news-text">
-								No tiene segmentos de contactos creados, para crear uno haga click en el siguiente enlace
-								<br /><br />
-								{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
-							</div>
+						<div class="news-text">
+							No tiene segmentos de contactos creados, para crear uno haga click en el siguiente enlace
+							<br /><br />
+							{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
 						</div>
 					</div>
+				</div>
 				{{ '{{/each}}' }}
 				<div class="box-footer flat"> 
 					{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
-		</div>
+		</table>
 	</div>
-</div>
 </script>
 <script type="text/x-handlebars" data-template-name="segments">
 	{{'{{outlet}}'}}
 </script>
 <script type="text/x-handlebars" data-template-name="segments/new">
-	<div class="box">
-		<div class="box-header">
-			<div class="title">Agregar un nuevo segmento</div>
-		</div>
+	<div class="row">
+		<h4 class="sectiontitle">Agregar un nuevo segmento</h4>
 		<div class="box-content padded">
 			{{ '{{#if App.errormessage }}' }}
 				<div class="row-fluid">
