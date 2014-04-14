@@ -1,18 +1,21 @@
 <?php
 class Contact extends \Phalcon\Mvc\Model
 {
+	public $idDbase;
+	public $idEmail;
+	public $idContact;
 	public $unsubscribed;
 	public $status;
 	public $subscribedon;
 	public $ipSubscribed;
 	public $ipActivated;
-	public $idContact;
 	
 	public function initialize()
     {
 		$this->belongsTo("idDbase", "Dbase", "idDbase", array(
             "foreignKey" => true,
         ));
+		
 		$this->belongsTo("idEmail", "Email", "idEmail", array(
             "foreignKey" => true,
 			'alias' => 'Email'
@@ -31,8 +34,6 @@ class Contact extends \Phalcon\Mvc\Model
 		$this->unsubscribed = 0;
 		$this->status = 0;
 		$this->subscribedon = 0;
-		$this->spam = 0;
-		$this->bounced = 0;
     }
 	
 	/**

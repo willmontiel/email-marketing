@@ -171,8 +171,13 @@ $(function() {
 		mediaGallery[l].createMedia();
 		mediaGallery[l].mediaSelected();
 	}
-
-	editor.objectExists(parent.objMail);
+	
+	var obj = parent.objMail;
+	
+	if(obj === undefined) {
+		obj = objMail;
+	}
+	editor.objectExists(obj);
 	editor.otherLayout();
 	initEvents();
 });
@@ -206,7 +211,10 @@ function initEvents() {
 		$.ajax({
 			url: config.templateUrl,
 			type: "POST",			
-			data: { editor: editorToSend, name: $('#templatename').val(), category: $('#templatecategory').val()}
+			data: { editor: editorToSend, name: $('#templatename').val(), category: $('#templatecategory').val()},
+			success: function(){
+				$.gritter.add({text: 'Se ha guardado la plantilla exitosamente', sticky: false, time: 1000});
+			}
 		});
 		editor.objectExists(editor);
 	});

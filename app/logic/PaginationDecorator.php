@@ -53,7 +53,17 @@ class PaginationDecorator {
 	
 	public function getStartIndex()
 	{
-		return ceil(($this->currentpage -1 )*$this->rowsperpage);
+            return ceil(($this->currentpage -1 )*$this->rowsperpage);
+	}
+	
+	public function getTotalPages()
+	{
+		return ceil($this->total / $this->rowsperpage);
+	}
+
+	public function getTotalRecords()
+	{
+		return $this->total;
 	}
 	
 	public function getPaginationObject()

@@ -12,10 +12,16 @@ use Phalcon\Events\Event,
  */
 class Security extends Plugin
 {
+	protected $serverStatus;
+	protected $allowed_ips;
+	protected $ip;
 
-	public function __construct($dependencyInjector)
+	public function __construct($dependencyInjector, $serverStatus = 0, $allowed_ips = null, $ip = null)
 	{
 		$this->_dependencyInjector = $dependencyInjector;
+		$this->serverStatus = $serverStatus;
+		$this->allowed_ips = $allowed_ips;
+		$this->ip = $ip;
 	}
 
 	public function getAcl()
@@ -23,7 +29,6 @@ class Security extends Plugin
 		/*
 		 * Buscar ACL en cache
 		 */
-//		$acl = null; 
 		$acl = $this->cache->get('acl-cache');
 		
 		if (!$acl) {
@@ -91,6 +96,7 @@ class Security extends Plugin
 				'test::transactionsegment' => array(),				
 				
 				'error::index' => array(),
+				'error::notavailable' => array(),
 				'error::link' => array(),
 				'session::signin' => array(),
 				'session::login' => array(),
@@ -133,10 +139,6 @@ class Security extends Plugin
 				'contacts::importbatch' => array('contact' => array('read', 'importbatch')),
 				'contacts::import' => array('contact' => array('read','importbatch')),
 				'contacts::processfile' => array('contact' => array('read','importbatch')),
-				//Página de procesos
-				'proccess::show' => array('process' => array('read')),
-				'proccess::downoladsuccess' => array('process' => array('download')),
-				'proccess::downoladerror' => array('process' => array('download')),
 				//Dbase controller
 				'dbase::index' => array('dbase' => array('read')),
 				'dbase::new' => array('dbase' => array('read','create')),
@@ -181,8 +183,9 @@ class Security extends Plugin
 				'api::searchcontact' => array('contact' => array('read')),
 				//Segmentos 
 				'segment::show' => array('segment' => array('read')),
-				'api::segment' => array('segment' => array('read')),
-				'api::segments' => array('segment' => array('read')),
+				'api::listsegments' => array('segment' => array('read')),
+				'api::listcontactsbysegment' => array('segment' => array('read')),
+				'api::getcontactbysegment' => array('segment' => array('read')),
 				'api::dbases' => array('segment' => array('read', 'update')),
 				'api::getcustomfieldsalias' => array('segment' => array('create')),
 				'api::createsegment' => array('segment' => array('read', 'create')),
@@ -190,8 +193,15 @@ class Security extends Plugin
 				'api::updatesegment' => array('segment' => array('read', 'update')),
 				'api::updatecontactbysegment' => array('contact' => array('read', 'update')),
 				
-				//Apistatistics
-				//Estadisticas
+				//Dbaseapi
+				'dbaseapi::searchcontacts' => array('contact' => array('read')),
+                //Contactlistapi
+				'contactlistapi::searchcontacts' => array('contact' => array('read')),
+				//Segmentapi
+				'segmentapi::searchcontacts' => array('contact' => array('read')),
+				
+				
+				//Apistatistics Estadisticas
 				'apistatistics::dbase' => array('statistic' => array('read')),
 				'apistatistics::contactlistopens' => array('statistic' => array('read')),
 				'apistatistics::mailopens' => array('statistic' => array('read')),
@@ -212,17 +222,20 @@ class Security extends Plugin
 		//* RELEASE 0.2.0 *//
 				//Envío de correos
 				'mail::index' => array('mail' => array('read')),
+				'mail::list' => array('mail' => array('read')),
 				'mail::setup' => array('mail' => array('read', 'create')),
 				'mail::savetmpdata' => array('mail' => array('read', 'create')),
 				'mail::savecontent' => array('mail' => array('read', 'create')),
 				'mail::source' => array('mail' => array('read', 'create')),
 				'mail::editor' => array('mail' => array('read', 'create')),
 				'mail::html' => array('mail' => array('read', 'create')),
+				'mail::contenthtml' => array('mail' => array('read', 'create')),
 				'mail::target' => array('mail' => array('read', 'create')),
 				'mail::track' => array('mail' => array('read', 'create')),
 				'mail::schedule' => array('mail' => array('read', 'create')),
 				'mail::delete' => array('mail' => array('read', 'delete')),
 				'mail::import' => array('mail' => array('read', 'create')),
+				'mail::importcontent' => array('mail' => array('read', 'create')),
 				'mail::clone' => array('mail' => array('read', 'clone')),
 				'asset::upload' => array('mail' => array('read', 'create')),
 				'asset::show' => array('mail' => array('read', 'create')),
@@ -239,24 +252,42 @@ class Security extends Plugin
 				'mail::play' => array('mail' => array('read', 'send')),
 				'mail::stop' => array('mail' => array('read', 'send')),
 				'mail::cancel' => array('mail' => array('read', 'send')),
-				'template::image' => array('mail' => array('read', 'create')),
-				'template::thumbnail' => array('mail' => array('read', 'create')),
-				'template::create' => array('mail' => array('create')),
-				'template::preview' => array('mail' => array('read', 'create')),
-				'template::new' => array('template' => array('read', 'create')),
+				'mail::sendtest' => array('mail' => array('read', 'send')),
+				
+				'mail::new' => array('mail' => array('read', 'send')),
+				
+				//Plantillas
+				'template::image' => array('template' => array('read')),
+				'template::thumbnail' => array('template' => array('read')),
+				'template::create' => array('template' => array('create')),
+				'template::preview' => array('template' => array('read')),
+				'template::previewtemplate' => array('template' => array('read')),
+				'template::createpreview' => array('template' => array('read', 'create')),
+				'template::previewdata' => array('template' => array('read')),
+				'template::index' => array('template' => array('read')),
+				'template::select' => array('template' => array('read')),
+				'template::new' => array('template' => array('create')),
+				'template::edit' => array('template' => array('update')),
+				'template::delete' => array('template' => array('delete')),
 				'template::editor_frame' => array('template' => array('read', 'create')),
 				'template::edit' => array('template' => array('read', 'update')),
-				'template::preview' => array('mail' => array('read', 'create', 'send')),
+				//Fin plantillas
+				
 				'mail::previewmail' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewtemplate' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewdata' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewindex' => array('mail' => array('read', 'create', 'send')),
 				'mail::previewhtml' => array('mail' => array('read', 'create')),
 				
-				//Sending processes
-				'sendingprocess::index' => array('mail' => array('read', 'create', 'send')),
-				'sendingprocess::getprocessesinfo' => array('mail' => array('read', 'create', 'send')),
-				'sendingprocess::stop' => array('mail' => array('read', 'create', 'send')),
+				//Processes
+				'process::index' => array('mail' => array('read', 'create', 'send')),
+				'process::getprocesses' => array('mail' => array('read', 'create', 'send')),
+				'process::stopsending' => array('mail' => array('read', 'create', 'send')),
+				'process::import' => array('process' => array('read')),
+				'process::stopimport' => array('process' => array('read')),
+				'process::refreshimport' => array('process' => array('read')),
+				'process::downoladsuccess' => array('process' => array('download')),
+				'process::downoladerror' => array('process' => array('download')),
 				
 				//Programming mail
 				'scheduledmail::index' => array('mail' => array('read', 'create', 'send')),
@@ -267,6 +298,7 @@ class Security extends Plugin
 
 				//tests
 				'test::start' => array('mail' => array('read', 'create', 'send')),
+				'test::testemailcontact' => array('mail' => array('read', 'create', 'send')),
 				'test::mailer' => array('mail' => array('read', 'create', 'send')),
 				'test::aperturas' => array('statistic' => array('read')),
 				'test::assettest' => array('statistic' => array('read')),
@@ -277,6 +309,7 @@ class Security extends Plugin
 				'test::twittertest' => array('mail' => array('read')),
 				'test::imagetest' => array('mail' => array('read')),
 				'test::unsubscribed' => array('mail' => array('read')),
+				'test::testsnimageresize' => array('mail' => array('read')),
 				
 				//statistics
 				'statistic::index' => array('statistic' => array('read')),
@@ -308,6 +341,15 @@ class Security extends Plugin
 				'form::index' => array('form' => array('read')),
 				'form::new' => array('form' => array('create')),
 				'form::delete' => array('form' => array('delete')),
+				
+				//Sistema
+				'system::index' => array('system' => array('read')),
+				'system::configure' => array('system' => array('update')),
+
+				// Herramientas de administracion
+				'tools::index' => array('tools' => array('read')),
+				
+				'mail::savemail' => array('mail' => array('create')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
@@ -341,6 +383,24 @@ class Security extends Plugin
 	 */
 	public function beforeDispatch(Event $event, Dispatcher $dispatcher)
 	{
+		$controller = $dispatcher->getControllerName();
+		$action = $dispatcher->getActionName();
+		
+		$this->logger->log("Server Status: {$this->serverStatus}");
+		$this->logger->log("Allowed Ip's: ". print_r($this->allowed_ips, true));
+		$this->logger->log("Ip: {$this->ip}");
+		
+		if ($this->serverStatus == 0 && !in_array($this->ip, $this->allowed_ips)) {
+			$this->publicurls = array(
+				'error:notavailable', 
+			);
+			$accessdir = $controller . ':' . $action;
+			if (!in_array($accessdir, $this->publicurls)) {
+				$this->response->redirect("error/notavailable"); 
+				return false;
+			}
+		}
+		
 		$role = 'ROLE_GUEST';
 		if ($this->session->get('authenticated')) {
 			$user = User::findFirstByIdUser($this->session->get('userid'));
@@ -362,6 +422,7 @@ class Security extends Plugin
 			'session:reset',
 			'error:index',
 			'error:link',
+			'error:notavailable',
 			'track:open',
 			'track:click',
 			'track:mtaevent',
@@ -373,9 +434,11 @@ class Security extends Plugin
 			'unsubscribe:contact',
 			'unsubscribe:success'
 		);
-		
-		$controller = $dispatcher->getControllerName();
-		$action = $dispatcher->getActionName();
+
+		if ("$controller::$action" == "error::notavailable") {
+			$this->response->redirect('index');
+			return false;
+		}
 
 		if ($role == 'ROLE_GUEST') {
 			$accessdir = $controller . ':' . $action;
@@ -389,11 +452,12 @@ class Security extends Plugin
 			$acl = $this->getAcl();
 			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
 			$controller = strtolower($controller);
+			
 			if (!isset($map[$controller .'::'. $action])) {
 				if($this->validateResponse($controller) == true){
-					$this->logger->log("Acción no permitida accesando desde ember");
+					$this->logger->log("Accion no permitida accesando desde ember");
 					$this->logger->log("Controller: {$controller}, Action: {$action}");
-					$this->setJsonResponse(array('status' => 'deny'), 404, 'Acción no permitida');
+					$this->setJsonResponse(array('status' => 'deny'), 404, 'Accion no permitida');
 				}
 				else{
 					$this->logger->log("Redirect to error");
@@ -414,7 +478,7 @@ class Security extends Plugin
 						if($this->validateResponse($controller) == true){
 							$this->logger->log('Accion no permitida accesando desde ember');
 							$this->logger->log("Controller: {$controller}, Action: {$action}");
-							$this->setJsonResponse('Denegado', 404, 'Acción no permitida');
+							$this->setJsonResponse('Denegado', 404, 'Accion no permitida');
 						}
 						else{
 							$this->response->redirect('error');

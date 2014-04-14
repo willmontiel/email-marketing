@@ -55,7 +55,8 @@ class AccountForm extends Form
         $this->add(new Text ('username', array(
 			'maxlength' => 50,
 			'type' => 'text',
-			'required' => 'required' 
+			'required' => 'required',
+			'id' => 'user'
         )));
 		
         $this->add(new Text ('fileSpace', array(
@@ -80,9 +81,20 @@ class AccountForm extends Form
             'Contacto' => 'Por Contacto',
             'Envio' => 'Envío',
         )));
+		
         $this->add(new Select("subscriptionMode", array(
             'Prepago' => 'Prepago',
             'Pospago' => 'Pospago',
         )));
+		
+		$this->add(new Select('idUrlDomain', Urldomain::find(), array(
+			'using' => array('idUrlDomain', 'trackUrl'),
+			'class' => 'chzn-select'
+		)));
+		
+		$this->add(new Select('idMailClass', Mailclass::find(), array(
+			'using' => array('idMailClass', 'name'),
+			'class' => 'chzn-select'
+		)));
     }
 }

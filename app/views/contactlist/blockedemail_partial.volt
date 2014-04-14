@@ -1,4 +1,8 @@
 <script type="text/x-handlebars" data-template-name="blockedemails/index">
+			{# Insertar botones de navegacion #}
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'blockedemails']) }}
+
+
 	<div class="row-fluid">
 		<div class="span10">
 			<div class="box">
@@ -20,7 +24,7 @@
 		</div>
 		<div class="span2 text-right">
 			<div class="padded">
-				{{ '{{#linkTo "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger"}}Bloquear{{/linkTo}}' }}
+				{{ '{{#link-to "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger"}}Bloquear{{/link-to}}' }}
 			</div>
 		</div>
 	</div>
@@ -52,7 +56,7 @@
 									<td>{{'{{blockedDate}}' }}</td>
 									<td>{{ '{{blockedReason}}'}}</td>
 									<td>
-										{{'{{#linkTo "blockedemails.unblock" this disabledWhen="controller.deleteDisabled" }}Desbloquear{{/linkTo}}'}}
+										{{'{{#link-to "blockedemails.unblock" this disabledWhen="controller.deleteDisabled" }}Desbloquear{{/link-to}}'}}
 									</td>
 								</tr>
 							{{ '{{else}}' }}

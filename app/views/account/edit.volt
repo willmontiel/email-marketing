@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-edit"></i> Editar información de las cuentas{%endblock%}
 {%block sectionsubtitle %}Edite la configuración de la cuenta{% endblock %}
 
@@ -55,6 +55,12 @@
 						
 						<label>*MTA: </label>
 						{{ editFormAccount.render('virtualMta') }}
+						
+						<label>*Url de dominio: <label/>
+						{{ editFormAccount.render('idUrlDomain')}}<br /> <br />
+									
+						<label>*Retornar correos rebotados a: <label/>
+						{{ editFormAccount.render('idMailClass')}}
 					</div>
 					<div class="form-actions">
 						<a href="{{ url('account') }}" class="btn btn-default">Cancelar</a>

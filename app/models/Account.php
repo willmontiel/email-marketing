@@ -11,12 +11,18 @@ class Account extends Modelbase
 {
     public $idAccount;
 	public $idUrlDomain;
-
+	public $idMailClass;
+	
     public function initialize()
     {
 		$this->belongsTo("idUrlDomain", "Urldomain", "idUrlDomain",
 			array("foreignKey" => true)
 		);
+		
+		$this->belongsTo("idMailClass", "Mailclass", "idMailClass",
+			array("foreignKey" => true)
+		);
+		
         $this->hasMany("idAccount", "User", "idAccount");
 		$this->hasMany("idAccount", "Importfile","idAccount");
 		$this->hasMany("idAccount", "Importprocess", "idAccount");

@@ -14,6 +14,7 @@
 	{{ stylesheet_link('redactor/redactor.css') }}
 	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
 	{{ javascript_include('javascripts/colorpicker/js/bootstrap-colorpicker.js')}}
+	{{ javascript_include('javascripts/gritter/js/jquery.gritter.js') }}
 	{{ javascript_include('redactor/plugins/clips.js') }}
 	{{ javascript_include('redactor/plugins/fontcolor.js') }}
 	{{ javascript_include('redactor/plugins/fontfamily.js') }}
@@ -21,9 +22,14 @@
 	{{ stylesheet_link('css/styles.css') }}
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	{{ stylesheet_link('javascripts/colorpicker/css/colorpicker.css') }}
+	{{ stylesheet_link('javascripts/gritter/css/jquery.gritter.css') }}
 	{{ javascript_include('js/editor/gallery.js') }}
+	{{ javascript_include('js/editor/media_displayer.js') }}
 
-<script>
+<script type="text/javascript">
+		var objMail = {{objMail}};
+		
+	
 		var config = {imagesUrl: "{{url('images')}}", templateUrl : "{{url('template/create')}}"};
 		
 		var mediaGallery = [
@@ -47,10 +53,6 @@
 
 	</script>
 	
-	{{ javascript_include('js/editor/block.js') }}
-	{#{{ javascript_include('js/editor/social_block.js') }}
-	{{ javascript_include('js/editor/button_block.js') }}
-	{{ javascript_include('js/editor/boxed_text_block.js') }}#}
 	{{ javascript_include('js/editor/row_zone.js') }}
 	{{ javascript_include('js/editor/block_text.js') }}
 	{{ javascript_include('js/editor/block_image.js') }}

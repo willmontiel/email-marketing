@@ -792,7 +792,7 @@ class TestController extends ControllerBase
 			return false;
 		}
 		
-		$txt[] = "Contact: [{$contact->idDbase} - {$contact->idContact}], [{$contact->name} - {$contact->lastName}]";
+		$txt[] = "Old Contact: [idDbase: {$contact->idDbase}, idContact: {$contact->idContact}, name: {$contact->name}, lastName: {$contact->lastName}, idEmail: {$contact->idEmail}]";
 		
 		$email2 = $this->addEmail($account);
 		
@@ -808,13 +808,15 @@ class TestController extends ControllerBase
 			return false;
 		}
 		
+		$txt[] = "New Contact: [idDbase: {$contact->idDbase}, idContact: {$contact->idContact}, name: {$contact->name}, lastName: {$contact->lastName}, idEmail: {$contact->idEmail}]";
+		
 		$log->log('Txt: ' . print_r($txt, true));
 	}
 	
 	
 	protected function addEmail($account)
 	{
-		$x = rand(5, 15);
+		$x = rand(15, 35);
 		$log = $this->logger;
 		$email = new Email;
 		
@@ -1105,5 +1107,15 @@ class TestController extends ControllerBase
 	public function unsubscribedAction()
 	{
 		
+	}
+	
+	public function testsnimageresizeAction($idAsset)
+	{
+		$socialImg = new SocialImageCreator();
+		$socialImg->setAccount($this->user->account);
+		$imageshare = $socialImg->createImageToIdealSize($idAsset, 450, 340, 'share');
+		$imagepost = $socialImg->createImageToIdealSize($idAsset, 600, 300, 'post');
+		$this->logger->log('La ruta absoluta de la imagen para share es: ' . $imageshare);
+		$this->logger->log('La ruta absoluta de la imagen para post es: ' . $imagepost);
 	}
 }

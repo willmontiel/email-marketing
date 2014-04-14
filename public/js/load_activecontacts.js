@@ -1,8 +1,6 @@
-var loadNow = 
-	function() 
-	{   
+function loadNow() {   
 		$.getJSON(MyBaseURL + 'account/loadcontactsinfo',function(data){ 
-			if (data.accountingMode == 'Contacto') {
+			if (data.accountingMode === 'Contacto') {
 				$("#contactsInfo").empty();
 				$('#contactsInfo').append(data.activeContacts +'/'+data.contactLimit);
 			}
@@ -11,7 +9,7 @@ var loadNow =
 				$('#contactsInfo').append(data.activeContacts);
 			}
 		});
-	};
+};
 		
 $(function() {
 	loadNow();

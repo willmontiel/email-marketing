@@ -233,11 +233,11 @@ a.inactive {
 	width: 0% !important;
 }
 
-
+/*
 .nav-template > .active > a, .nav-pills > .active > a:hover {
 	background-color: #60a1ca !important;
 }
-
+*/
 
 .img-wrap{
 	overflow:hidden;
@@ -388,6 +388,28 @@ a.inactive {
 	width: 100px; 
 	height: 120px; 
 }
+
+.preview-template {
+	float: left;
+	width: 180px; 
+	height: 230px; 
+	overflow: hidden !important; 
+	border: 1px solid;
+	border-radius: 3px;
+}
+
+.template-tools {
+	margin-top: 10%;
+	margin-left: auto; 
+	margin-right: auto;
+}
+
+.not-available-template {
+	background-image: url(../images/notavailabletemplate.png);
+	width: 180px; 
+	height: 230px; 
+}
+
 #modal-simple-template h5 {
 	text-align: center;
 }
@@ -601,4 +623,52 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	font-weight: lighter;
 	text-shadow: 0 1px #aaa;
 	padding-bottom: 20px;
+}
+.full-contact-information {
+	margin-left: 18%
+}
+.contact-information {
+	width: 400px;
+	float: left;
+}
+.contact-details {
+	width: 300px;
+	float: left;
+	margin-left: 25px;
+}
+.contact-information .box-header, .contact-information .box-footer, .contact-details .box-header {
+	text-align: center;
+}
+.contact-history-span {
+	margin-left: 0 !important;
+}
+.contact-information .title, .contact-details .title {
+	float: none !important;
+}
+.table-for-contact-events, .table-for-contact-mails {
+	width: 550px;
+}
+.contact-history-span > .box {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 750px;
+}
+.contact-event-type, .contact-event-date {
+	width: 20%;
+}
+.contact-history-event-text {
+	text-align: center !important;
+}
+.list-import-process {
+	margin-right: 15px;
+}
+
+.edit-contact-online {
+	background-color: transparent !important;
+    border: none !important;
+	border-bottom: 1px dotted #999 !important;
+	border-top: none !important; 
+	border-left: none !important; 
+	border-right: none !important;
 }

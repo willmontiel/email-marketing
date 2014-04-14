@@ -1,5 +1,5 @@
 <?php
-require_once "../../../public/swiftmailer-5.0.3/lib/swift_required.php";
+require_once "../../library/swiftmailer/lib/swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
 	protected $childprocess;
@@ -22,13 +22,13 @@ class ChildCommunication extends BaseWrapper
 	{
 		$log = Phalcon\DI::getDefault()->get('logger');
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
+			'conditions' => 'idMail = ?1 AND deleted = 0',
 			'bind' => array(1 => $idMail)
 		));
 		
 		$mailContent = Mailcontent::findFirst(array(
 			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $mail->idMail)
+			'bind' => array(1 => $idMail)
 		));
 		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
@@ -44,7 +44,7 @@ class ChildCommunication extends BaseWrapper
 				}		
 
 				$mail = Mail::findFirst(array(
-					'conditions' => 'idMail = ?1',
+					'conditions' => 'idMail = ?1 AND deleted = 0',
 					'bind' => array(1 => $idMail)
 				));
 				
@@ -114,12 +114,14 @@ class ChildCommunication extends BaseWrapper
 				$_ENV['TMP']=$_ENV['TMPDIR'];
 				
 				// Crear transport y mailer
-				$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
+				$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 				$swift = Swift_Mailer::newInstance($transport);
 				
 				$i = 0;
 				$sentContacts = array();
 				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
+				
+				$from = array($mail->fromEmail => $mail->fromName);
 				foreach ($contactIterator as $contact) {
 					
 					$msg = $this->childprocess->Messages();
@@ -141,7 +143,6 @@ class ChildCommunication extends BaseWrapper
 					
 //					$log->log("HTML: " . $htmlWithTracking);
 					
-					$from = array($mail->fromEmail => $mail->fromName);
 					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
 					
 					$message = new Swift_Message($subject);
@@ -155,11 +156,25 @@ class ChildCommunication extends BaseWrapper
 					else {
 						$mta = $this->account->virtualMta;
 					}
+					
+//					$rp = Returnpath::findFirstByIdReturnPath($this->account->idReturnPath);
+					$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
+					$listID = 't0em' . $this->account->idAccount;
+					$sendID = '0em' . $mail->idMail;
+					$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'] . 'x' . $contact['email']['idEmail'];
+					
+//					$verpFormat = str_replace('@', '=', $contact['email']['email']);
+//					$mailClass = $this->mta->mailClass . $sendID;
+//					$returnPathData = $listID . '-' . $mailClass . '-' . $verpFormat;
+//					$returnPath = str_replace('(verp)', $returnPathData, $rp->path);
+					
 //					$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
+					$headers->addTextHeader('X-GreenArrow-MailClass', $mailclass->name);
 					$headers->addTextHeader('X-GreenArrow-MtaID', $mta);
-					$headers->addTextHeader('X-GreenArrow-InstanceID', '0em' . $mail->idMail);
-					$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', 'em' . $mail->idMail . 'x' . $contact['contact']['idContact']);
-					$headers->addTextHeader('X-GreenArrow-ListID', 't0em' . $this->account->idAccount);
+					$headers->addTextHeader('X-GreenArrow-InstanceID', $sendID);
+//					$headers->addTextHeader('X-GreenArrow-SendID', $sendID);
+					$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', $trackingID);
+					$headers->addTextHeader('X-GreenArrow-ListID', $listID);
 					$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
 					
 					$message->setFrom($from);
@@ -169,10 +184,11 @@ class ChildCommunication extends BaseWrapper
 						$message->setReplyTo($mail->replyTo);
 					}
 					$message->addPart($text, 'text/plain');
+					
 //					$recipients = true;
 					$recipients = $swift->send($message, $failures);
 					$this->lastsendheaders = $message->getHeaders()->toString();
-//					$log->log("Headers: " . print_r($this->lastsendheaders, true));
+					$log->log("Headers: " . print_r($this->lastsendheaders, true));
 					if ($recipients){
 						echo "Message " . $i . " successfully sent! \n";
 //						$log->log("HTML: " . $html);
@@ -200,7 +216,7 @@ class ChildCommunication extends BaseWrapper
 					} 
 					else {
 						echo "There was an error in message {$i}: \n";
-						$log->log("Error while sending mail: " . print_r($failures));
+						$log->log("Error while sending mail: " . print_r($failures, true));
 						print_r($failures);
 					}
 //					$log->log("HTML: " . $html);
@@ -248,7 +264,8 @@ class ChildCommunication extends BaseWrapper
 				print_dbase_profile();
 				
 				if($mail->socialnetworks != null) {
-					$socials = new SocialNetworkConnection($log);
+					$socials = new SocialNetworkConnection();
+					$socials->setAccount($this->account);
 					$socialdesc = Socialmail::findFirstByIdMail($mail->idMail);
 					if($socialdesc) {
 						$idsocials = json_decode($mail->socialnetworks);

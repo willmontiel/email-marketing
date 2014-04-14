@@ -1,14 +1,19 @@
 Ember.SaveHandlerMixin = Ember.Mixin.create({
-	handleSavePromise: function(p, troute, message) {
+	handleSavePromise: function(p, troute, message, fn) {
 		var self = this;
 		p.then(function() {
 			self.transitionToRoute(troute);
 			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
+			if (typeof fn == 'function') {
+				fn();
+			}
 		}, function(error) {
 			if (error.status == 422) {
 				try {
 					var obj = $.parseJSON(error.responseText);
-					self.set('errors', obj.errors);
+					self.get("model").rollback();
+					self.transitionToRoute(troute);
+					$.gritter.add({title: 'Error', text: obj.errors, sticky: false, time: 3000});
 				}
 				catch (e) {
 				}

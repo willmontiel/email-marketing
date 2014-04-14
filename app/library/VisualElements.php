@@ -14,18 +14,18 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 		"Contactos" => array(
 			"controller" => array("contactlist", "dbase", "contacts"),
 			"class" => "",
-			"url" => "contactlist#/lists",
+			"url" => "contactlist",
 			"title" => "Contactos",
 			"icon" => "icon-user"
 		),
 		"Correos" => array(
-			"controller" => array("mail"),
+			"controller" => array("mail", "template"),
 			"class" => "",
 			"url" => "mail",
 			"title" => "Correos",
 			"icon" => "icon-envelope"
 		),
-		"Formularios" => array(
+/*		"Formularios" => array(
 			"controller" => array("form"),
 			"class" => "",
 			"url" => "form",
@@ -39,6 +39,7 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 			"title" => "Autorespuestas",
 			"icon" => "icon-share"
 		),
+*/
 		"Estadisticas" => array(
 			"controller" => array("statistic"),
 			"class" => "",
@@ -47,9 +48,9 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 			"icon" => "icon-bar-chart"
 		),
 		"Herramientas" => array(
-			"controller" => array("account", "user", "flashmessage"),
+			"controller" => array('tools', 'process', "account", "user", "flashmessage", "socialmedia", 'scheduledmail'),
 			"class" => "",
-			"url" => "",
+			"url" => "tools",
 			"title" => "Herramientas",
 			"icon" => "icon-cog"
 		)

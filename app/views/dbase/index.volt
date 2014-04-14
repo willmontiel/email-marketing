@@ -1,8 +1,13 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-book icon-2x"></i>Bases de Datos{% endblock %}
 {%block sectionsubtitle %}Configuración avanzada{% endblock %}
 {% block content %}
-<!-- aqui inicia mi contenido -->
+
+{# Menu de navegacion pequeño #}
+{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
+{# /Menu de navegacion pequeño #}
+
+
 <div class="row-fluid">
 	<div class="box">
 		<div class="box-section news with-icons">

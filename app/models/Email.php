@@ -9,7 +9,9 @@ use Phalcon\Mvc\Model\Validator\Email as EmailV;
  */
 class Email extends Modelbase
 {
-	public  $idDomain;
+	public $idEmail;
+	public $idAccount;
+	public $idDomain;
 
 	public function initialize()
 	{

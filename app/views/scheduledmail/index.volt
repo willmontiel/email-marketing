@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	{{ javascript_include('tablesorter/jquery-latest.js')}}
@@ -61,7 +61,12 @@
 						 {% for item in page.items %}
 							<tr>
 								<td>{{item.name}}</td>
-								<td>{{item.status}}</td>
+								<td>
+									{{item.status}}
+										{%if item.deleted != 0%}
+											( Eliminado {{date('d-M-Y, g:i A', item.deleted)}} )
+										{% endif %}
+								</td>
 								<td>{{item.totalContacts}}</td>
 								<td>{{date('d-M-Y, g:i A', item.scheduleDate)}}</td>
 								<td style="text-align: center;">

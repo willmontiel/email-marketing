@@ -1,139 +1,134 @@
 <?php
 class TargetObj 
 {
+	protected $logger;
+	protected $modelsManager;
+	protected $idsDbase;
+	protected $idsContactlist;
+	protected $idsSegment;
+	protected $target;
+	protected $byEmail;
+	protected $byOpen;
+	protected $byClick;
+	protected $byExclude;
+			
 	function __construct() 
 	{
-		$di =  \Phalcon\DI\FactoryDefault::getDefault();
-		
-		$this->log = $di['logger'];
-		$this->modelsManager = $di['modelsManager'];
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
+		$this->modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 	}
 	
-	public function setDbases ($dbases)
+	public function setIdsDbase($idsDbase)
 	{
-		$this->dbases = $dbases;
+		$this->idsDbase = $idsDbase;
 	}
 	
-	public function setContactlists ($contactlists)
+	public function setIdsContactlist($idsContactlist)
 	{
-		$this->contactlists = $contactlists;
+		$this->idsContactlist = $idsContactlist;
 	}
 	
-	public function setSegments ($segments)
+	public function setIdsSegment($idsSegment)
 	{
-		$this->segments = $segments;
+		$this->idsSegment = $idsSegment;
 	}
-	
-	public function createTargetObj ($idDbases, $idContactlists, $idSegments, Mail $mail)
+
+	public function setFilters($byEmail, $byOpen, $byClick, $byExclude)
+	{
+		$this->byEmail = $byEmail;
+		$this->byOpen = $byOpen;
+		$this->byClick = $byClick;
+		$this->byExclude = $byExclude;
+	}
+
+	public function createTargetObj()
 	{	
-		$targetInfo = $this->collectTargetInfo($idDbases, $idContactlists, $idSegments);
+		//1. Creamos el objeto target y creamos una consulta SQL para validar si existen contactos
+		$targetInfo = $this->collectTargetInfo();
 		
+		$this->logger->log('SQL: ' . $targetInfo['phql']);
 		$contacts = $this->modelsManager->executeQuery($targetInfo['phql']);
 		
-		$totalContacts = count($contacts);
-		if ($totalContacts < 1) {
-			return false;
-		}
-		
-//		$targetsName = $this->findTargetsName($idDbases, $idContactlists, $idSegments, $targetInfo['type']);
-		$response = $this->saveTargetDataInDB($mail, $targetInfo['destinationJson'], $totalContacts);
-		
-		return $response;
+		$this->target = new stdClass();
+		$this->target->target = json_encode($targetInfo['destinationJson']);
+		$this->target->totalContacts = count($contacts);
 	}
 	
-	protected function collectTargetInfo($idDbases, $idContactlists, $idSegments)
+	protected function processFilter()
 	{
+		$filter = '';
+		
+		if ($this->byEmail !== null || !empty($this->byEmail)) { 
+			$filter = array(
+				'type' => 'email',
+				'criteria' => $this->byEmail
+			);
+		}
+		else if ($this->byOpen !== '' || !empty($this->byOpen)) {
+			$this->logger->log("Open: {$this->byOpen}");
+			$filter = array(
+				'type' => 'open',
+				'criteria' => $this->byOpen
+			);
+		}
+		else if ($this->byClick !== '' || !empty($this->byClick)) {
+			$filter = array(
+				'type' => 'click',
+				'criteria' => $this->byClick
+			);
+		}
+		else if ($this->byExclude !== '' || !empty($this->byExclude)) {
+			$filter = array(
+				'type' => 'mailExclude',
+				'criteria' => $this->byExclude
+			);
+		}
+		
+		return $filter;
+	}
+
+	protected function collectTargetInfo()
+	{
+		$filter = $this->processFilter();
 		$destinationJson = new stdClass();
 		
-		if ($idDbases != null) {
-			$dbase = implode(',', $idDbases);
+		if ($this->idsDbase != null) {
 			
 			$destinationJson->destination = "dbases";
-			$destinationJson->ids = $idDbases;
-			$destinationJson->filter = "";
+			$destinationJson->ids = explode(",", $this->idsDbase);
 			
 			$type = 'dbase';
-			$phql = "SELECT Contact.idContact FROM Contact WHERE Contact.idDbase IN (" . $dbase . ")";
+			$phql = "SELECT Contact.idContact FROM Contact WHERE Contact.idDbase IN ({$this->idsDbase})";
 		}
 
-		else if ($idContactlists != null) {
-			$contactlist = implode(',', $idContactlists);
-			
+		else if ($this->idsContactlist != null) {
 			$destinationJson->destination = "contactlists";
-			$destinationJson->ids = $idContactlists;
-			$destinationJson->filter = "";
+			$destinationJson->ids = explode(",", $this->idsContactlist);
 			
 			$type = 'list';
-			$phql= "SELECT Coxcl.idContact FROM Coxcl WHERE Coxcl.idContactlist IN (" . $contactlist . ")";
+			$phql= "SELECT Coxcl.idContact FROM Coxcl WHERE Coxcl.idContactlist IN ({$this->idsContactlist})";
 		}
 
-		else if ($idSegments != null) {
-			$segment = implode(',', $idSegments);
-			
+		else if ($this->idsSegment != null) {
 			$destinationJson->destination = "segments";
-			$destinationJson->ids = $idSegments;
-			$destinationJson->filter = "";
+			$destinationJson->ids = explode(",", $this->idsSegment);
 			
 			$type = 'segment';
-			$phql .= "SELECT Sxc.idContact FROM Sxc WHERE Sxc.idSegment IN (" . $segment . ")";
+			$phql .= "SELECT Sxc.idContact FROM Sxc WHERE Sxc.idSegment IN ({$this->idsSegment})";
 		}
 		
+		$destinationJson->filter = $filter;
+		
 		$targetInfo = array('destinationJson' => $destinationJson, 'type' => $type, 'phql' => $phql);
+		
 		return $targetInfo;
 	}
 	
-	protected function findTargetsName($idDbases, $idContactlists, $idSegments, $target)
+	public function getTargetObject()
 	{
-		$targetsName = array();
-		switch ($target) {
-			case 'dbase':
-				foreach ($idDbases as $id) {
-					foreach ($this->dbases as $dbase)
-					if ($id == $dbase->idDbase) {
-						$targetsName[] = $dbase->name;
-					}
-				}
-				break;
-			
-			case 'list':
-				foreach ($idContactlists as $id) {
-					foreach ($this->contactlists as $contactlist)
-					if ($id == $contactlist->idContactlist) {
-						$targetsName[] = $contactlist->name;
-					}
-				}
-				break;;
-				
-			case 'segment':
-				foreach ($idSegments as $id) {
-					foreach ($this->segments as $segment)
-					if ($id == $segment->idSegment) {
-						$targetsName[] = $segment->name;
-					}
-				}
-				break;
+		if ($this->target->totalContacts < 0) {
+			return null;
 		}
-		return $targetsName;
-	}
-
-
-	protected function saveTargetDataInDB(Mail $mail, $destinationJson, $totalContacts)
-	{
-		if ($mail->wizardOption == 'target' || $mail->wizardOption == 'source') {
-			$wizardOption = 'target';
-		}
-		else{
-			$wizardOption = $mail->wizardOption;
-		}
-		
-		$mail->wizardOption = $wizardOption;
-		$mail->target = json_encode($destinationJson);
-		$mail->totalContacts = $totalContacts;
-		
-		if (!$mail->save()) {
-			throw new InvalidArgumentException("Error while saving targetObj in db");
-		}
-		
-		return true;
+		return $this->target;
 	}
 }

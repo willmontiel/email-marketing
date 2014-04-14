@@ -54,7 +54,7 @@ while (true) {
 	$timer->endTimer('processing');
 
 	print_timer($timer, $log);
-	print_dbase_profile();
+	//print_dbase_profile();
 }
 printf ("Process Complete");
 

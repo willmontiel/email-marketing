@@ -5,10 +5,22 @@ class PoolHandler extends Handler
 	protected $tmpChildren = array();
 	protected $engagedProcesses = array();
 	protected $client;
-	const MAX_OF_TMP_CHILDREN = 4;
-	const INITIAL_CHILDREN = 4;
-
 	protected $tasks;
+	
+	public function setMaxOfTmpChildren($max)
+	{
+		$this->maxOfTmpChildren = $max;
+	}
+	
+	public function setInitialChildren($initial)
+	{
+		$this->initialChildren = $initial;
+	}
+	
+	public function setChildProcess($child)
+	{
+		$this->childProcess = $child;
+	}
 	
 	public function getEvents()
 	{
@@ -43,7 +55,7 @@ class PoolHandler extends Handler
 	}
 	public function createInitialChildren()
 	{
-		for ($i=0; $i<self::INITIAL_CHILDREN; $i++) {
+		for ($i=0; $i < $this->initialChildren; $i++) {
 			$this->newChild();
 		}
 	}
@@ -51,10 +63,10 @@ class PoolHandler extends Handler
 	{
 		$child = new ChildHandler($this->registry);
 		if (!$temporary) {
-			$this->children[] = $child->forkChild();
+			$this->children[] = $child->forkChild(array($this->childProcess));
 		}
 		else {
-			$this->tmpChildren[] = $child->forkChild();
+			$this->tmpChildren[] = $child->forkChild(array($this->childProcess));
 		}
 		$child->setPool($this);
 		$child->setTmp($temporary);
@@ -104,16 +116,16 @@ class PoolHandler extends Handler
 			}
 		}
 		
-		if( (count($this->tmpChildren) < self::MAX_OF_TMP_CHILDREN) && (count($this->childrenWithOutConfirmation()) <= 0) ) {
+		if( (count($this->tmpChildren) < $this->maxOfTmpChildren) && (count($this->childrenWithOutConfirmation()) <= 0) ) {
 			$this->newChild(true);
 		}
 		
 		return NULL;
 	}
 	
-	public function processGotTask(ChildHandler $process, $task)
+	public function processGotTask(ChildHandler $process, Event $event)
 	{
-		$this->engagedProcesses[$process->getPid()] = $task;
+		$this->engagedProcesses[$process->getPid()] = $event;
 	}
 	
 	public function processAvailable(ChildHandler $process)
@@ -121,11 +133,11 @@ class PoolHandler extends Handler
 		unset($this->engagedProcesses[$process->getPid()]);
 	}
 	
-	public function findPidFromTask($task)
+	public function findPidFromTask(Event $event)
 	{
 		if(count($this->engagedProcesses) > 0) {
 			foreach ($this->engagedProcesses as $pid => $content){
-				if($content == $task) {
+				if($content->code == $event->code) {
 					return $pid;
 				}
 			}
@@ -199,17 +211,17 @@ class PoolHandler extends Handler
 		}
 	}
 	
-	public function checkingChildWork($childPID)
+	public function checkingChildWork(Event $event)
 	{
 		foreach ($this->children as $child) {
-			if($child->getPid() == $childPID) {
+			if($child->getPid() == $event->data) {
 				$child->askHowsMyWork();
 			}
 		}
 		
 		if(count($this->tmpChildren) > 0) {
 			foreach ($this->tmpChildren as $tmpchild) {
-				if($tmpchild->getPid() == $childPID) {
+				if($tmpchild->getPid() == $event->data) {
 					$tmpchild->askHowsMyWork();
 				}
 			}
@@ -248,8 +260,8 @@ class PoolHandler extends Handler
 		
 		if(count($this->engagedProcesses) > 0) {			
 			
-			foreach ($this->engagedProcesses as $process => $data) {
-				$Engstatus.= 'Process ' . $process . ' working data: ' . $data . PHP_EOL;
+			foreach ($this->engagedProcesses as $process => $event) {
+				$Engstatus.= 'Process ' . $process . ' working data: ' . $event->data . PHP_EOL;
 			}
 		}
 		
@@ -288,8 +300,8 @@ class PoolHandler extends Handler
 		
 		if(count($this->engagedProcesses) > 0) {			
 			
-			foreach ($this->engagedProcesses as $process => $data) {
-				$status[$process]['Status'] = $data;
+			foreach ($this->engagedProcesses as $process => $event) {
+				$status[$process]['Status'] = $event->data;
 			}
 		}
 		

@@ -3,7 +3,8 @@ use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Text,
 	Phalcon\Forms\Element\Select,
 	Phalcon\Forms\Element,
-	Phalcon\Forms\Element\TextArea;
+	Phalcon\Forms\Element\TextArea,
+	Phalcon\Forms\Element\Check;
 
 class FlashMessageForm extends Form
 {
@@ -14,25 +15,42 @@ class FlashMessageForm extends Form
 			'type' => 'text',
 			'required' => 'required',
 			'autofocus' => "autofocus",
-			'class' => 'span12'
+			'class' => 'form-control',
+			'id' => 'name'
         )));
 		
 		$this->add(new TextArea('message', array(
 			'maxlength' => 50,
 			'type' => 'text',
+			'rows' => 3,
 			'required' => 'required' ,
-			'class' => 'span12'
+			'class' => 'form-control',
+			'id' => 'message'
         )));
 		
 		$this->add(new Select('accounts', Account::find(), array(
 			'using' => array('idAccount', 'companyName'),
 			'multiple' => 'multiple',
-			'class' => 'chzn-select'
+			'class' => 'form-control',
+			'name' => 'accounts[]',
+			'id' => 'accounts'
 		)));
 		
-		$this->add(new RadioElement('mtype', array(
-			'required' => 'required',
-			'class' => 'icheck'
+		$this->add(new Check('allAccounts', array(
+			'value' => 'all',
+			'id' => 'all'
+        )));
+		
+		$this->add(new Check('certainAccounts', array(
+			'value' => 'any',
+			'id' => 'any'
+        )));
+		
+		$this->add(new Select("type", array(
+            'info' => 'Info',
+            'warning' => 'warning',
+			'success' => 'success',
+			'error' => 'error'
         )));
 		
 		$this->add(new Text('start', array(

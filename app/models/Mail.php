@@ -19,42 +19,48 @@ class Mail extends Modelbase
 		$this->useDynamicUpdate(true);
 	}
 	
-	public function validation()
-    {
-		$this->validate(new PresenceOf(
-		   array(
-				"field"   => "name",
-				"message" => "No ha ingresado un nombre para el correo, por favor verifique la información"
-		)));
+//	public function validation()
+//    {
+//		$this->validate(new PresenceOf(
+//		   array(
+//				"field"   => "name",
+//				"message" => "No ha ingresado un nombre para el correo, por favor verifique la información"
+//		)));
+//		
+//		$this->validate(new PresenceOf(
+//		   array(
+//				"field"   => "subject",
+//				"message" => "No ha ingresado un asunto para el correo, por favor verifique la información"
+//		)));
+//		
+//		$this->validate(new PresenceOf(
+//		   array(
+//				"field"   => "fromName",
+//				"message" => "Debe ingresar el nombre del remitente, por favor verifique la información"
+//		)));
+//		
+//		$this->validate(new PresenceOf(
+//		   array(
+//				"field"   => "fromEmail",
+//				"message" => "Debe ingresar la dirección de correo del remitente, por favor verifique la información"
+//		)));
+//
+//		$this->validate(new Email(
+//			   array(
+//					"field" => "fromEmail",
+//					"message" => "La direccion de correo electronico no es valida, por favor verifique la información"
+//		)));
 		
-		$this->validate(new PresenceOf(
-		   array(
-				"field"   => "subject",
-				"message" => "No ha ingresado un asunto para el correo, por favor verifique la información"
-		)));
+//		$this->validate(new Email(
+//			   array(
+//					"field" => "replyTo",
+//					"message" => "La dirección ingresada en 'Responser a:' no es válida por favor verifique la información"
+//		)));
 		
-		$this->validate(new PresenceOf(
-		   array(
-				"field"   => "fromName",
-				"message" => "Debe ingresar el nombre del remitente, por favor verifique la información"
-		)));
-		
-		$this->validate(new PresenceOf(
-		   array(
-				"field"   => "fromEmail",
-				"message" => "Debe ingresar la dirección de correo del remitente, por favor verifique la información"
-		)));
-
-		$this->validate(new Email(
-			   array(
-					"field" => "fromEmail",
-					"message" => "La direccion de correo electronico no es valida, por favor verifique la información"
-		)));
-		
-		if ($this->validationHasFailed() == true) {
-			return false;
-		}
-	}
+//		if ($this->validationHasFailed() == true) {
+//			return false;
+//		}
+//	}
 	
 	public function incrementUniqueOpens()
 	{

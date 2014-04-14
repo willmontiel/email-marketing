@@ -1,6 +1,10 @@
 <script type="text/x-handlebars" data-template-name="segments/index">
+
+			{# Insertar botones de navegacion #}
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
+
 	<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
-		{{'{{#linkTo "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/linkTo}}'}}
+		{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
 	</div>
 	<div class="row-fluid">
         <div class="span12">
@@ -22,8 +26,8 @@
 								<div class="btn-group">
 									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li>{{ '{{#linkTo "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/linkTo}}' }}</li>
-										<li>{{ '{{#linkTo "segments.edit" this}}<i class="icon-pencil"></i> Editar{{/linkTo}}' }}</li>
+										<li>{{ '{{#link-to "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/link-to}}' }}</li>
+										<li>{{ '{{#link-to "segments.edit" this}}<i class="icon-pencil"></i> Editar{{/link-to}}' }}</li>
 									</ul>
 								</div>
 							</div>
@@ -50,7 +54,7 @@
 							<div class="news-text">
 								No tiene segmentos de contactos creados, para crear uno haga click en el siguiente enlace
 								<br /><br />
-								{{'{{#linkTo "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/linkTo}}'}}
+								{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
 							</div>
 						</div>
 					</div>

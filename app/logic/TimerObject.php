@@ -56,4 +56,13 @@ class TimerObject {
 		
 		return $txt;
 	}
+	
+	/**
+	 * Resets (sets to empty) the timer data
+	 */
+	public function reset()
+	{
+		$this->timerdata = array();
+	}
+	
 }

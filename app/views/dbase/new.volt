@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-book icon-2x"> </i> Nueva base de datos{% endblock %}
 {%block sectionsubtitle %}Cree una base de datos, y administre listas de contactos{% endblock %}
 {% block content %}
@@ -47,6 +47,18 @@
 
 						<label>*Descripcion de los Contactos</label>
 						{{editform.render("Cdescription")}}
+						
+						<label>*Color de Etiqueta</label>
+						{{editform.render("color")}}
+						<table id="colorchart">
+						{% for color in colors %}
+							<tr>
+							{% for col in color %}
+									<td class="color-{{col}}" bgcolor="#{{col}}"></td>
+							{% endfor %}
+							</tr>
+						{% endfor %}
+						</table>
 					</div>
 					<div class="form-actions">
 						<a href="{{ url('dbase') }}" class="btn btn-default">Cancelar</a>
@@ -56,4 +68,15 @@
 			</div>
 		</div>
 	</div>
+<script>
+	$(function() {
+		$('#color').val("#FF0000");
+		$('.color-FF0000').addClass('color-selected');
+		$('#colorchart td').on('click', function() {
+			$('.color-selected').removeClass('color-selected');
+			$(this).addClass('color-selected');
+			$('#color').val($(this)[0].bgColor);
+		});
+	});
+</script>
 {% endblock %}

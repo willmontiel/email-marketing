@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
 	<div class="row-fluid">
@@ -36,7 +36,7 @@
 								<td class="icon"><i class="icon-ok"></i></td>
 								<td>
 									<span class="news-title">Importados exitosamente </span>
-									<a href="{{ url('proccess/downoladsuccess/') }}{{ count['idProcces'] }}" target="_blank">(Descargar reporte)</a>
+									<a href="{{ url('process/downoladsuccess/') }}{{ count['idProcess'] }}" target="_blank">(Descargar reporte)</a>
 								</td>
 								<td><b style="font-size: 20px;">{{count['import']}}</b></td>
 							</tr>
@@ -74,7 +74,7 @@
 								<td class="icon"><i class="icon-warning-sign"></i></td>
 								<td>
 									<span class="news-title">Total contactos no importados</span>
-									<a href="{{ url('proccess/downoladerror/') }}{{ count['idProcces'] }}" target="_blank">(Descargar reporte)</a>
+									<a href="{{ url('process/downoladerror/') }}{{ count['idProcess'] }}" target="_blank">(Descargar reporte)</a>
 								</td>
 								<td><b style="font-size: 20px;">{{count['Nimport']}}</b></td>
 							</tr>

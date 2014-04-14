@@ -1,48 +1,27 @@
-App = Ember.Application.create({
-	rootElement: '#emberAppContactContainer'
-});
-
 App.set('errormessage', '');
 
-//Definiendo Rutas
-App.Router.map(function() {
-  this.resource('contacts', function(){
-	  this.route('new'),
-	  this.route('newbatch'),
-	  this.route('import'),
-	  this.route('newimport'),
-	  this.resource('contacts.show', { path: '/show/:contact_id'}),
-	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
-	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
-  });
-});
-
-//Adaptador
-App.ApplicationAdapter = DS.RESTAdapter.extend();
-
-App.ApplicationAdapter.reopen({
-	namespace: MyDbaseUrl,
-	serializer: App.ApplicationSerializer
-});
-
-// Store (class)
-App.Store = DS.Store.extend();
-
-//Inicio contactos
-App.Contact = DS.Model.extend(
-	myContactModel
-);
-
 //Rutas
-
 App.ContactsIndexRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.find('contact');
+	},
+	deactivate: function () {
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && !model.get('isSaving') ) {
+			model.get('transaction').rollback();
+		}
 	}
 });
 
-App.ContactsShowRoute = Ember.Route.extend({	
-});
+//App.ContactsShowRoute = Ember.Route.extend({
+//});
 
 App.ContactsNewRoute = Ember.Route.extend({
 	model: function(){
@@ -59,21 +38,21 @@ App.ContactsNewRoute = Ember.Route.extend({
 
 App.ContactsNewbatchRoute = Ember.Route.extend();
 
-App.ContactsEditRoute = Ember.Route.extend({
-	deactivate: function () {
-		this.doRollBack();
-	},
-	contextDidChange: function() {
-		this.doRollBack();
-		this._super();
-    },
-	doRollBack: function () {
-		var model = this.get('currentModel');
-		if (model && model.get('isDirty') && !model.get('isSaving') ) {
-			model.get('transaction').rollback();
-		}
-	}
-});
+//App.ContactsEditRoute = Ember.Route.extend({
+//	deactivate: function () {
+//		this.doRollBack();
+//	},
+//	contextDidChange: function() {
+//		this.doRollBack();
+//		this._super();
+//    },
+//	doRollBack: function () {
+//		var model = this.get('currentModel');
+//		if (model && model.get('isDirty') && !model.get('isSaving') ) {
+//			model.get('transaction').rollback();
+//		}
+//	}
+//});
 
 App.ContactsImportRoute = Ember.Route.extend();
 
@@ -124,29 +103,28 @@ App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 	}.observes('content.email')
 });
 
-App.ContactsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
-	actions : {
-		edit: function() {
-			var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
-			if (filter.test(this.get('email'))) {
-				App.set('errormessage', '');
-				this.handleSavePromise(this.content.save(), 'contacts', 'El contacto fue actualizado exitosamente');
-			}
-			else {
-				App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
-			}
-		},
-		cancel: function(){
-			App.set('errormessage', '');
-			this.get('model').rollback();
-			this.transitionToRoute("contacts");
-		}
-	}
-});
+//App.ContactsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
+//	actions : {
+//		edit: function() {
+//			var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+//			if (filter.test(this.get('email'))) {
+//				App.set('errormessage', '');
+//				this.handleSavePromise(this.content.save(), 'contacts', 'El contacto fue actualizado exitosamente');
+//			}
+//			else {
+//				App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
+//			}
+//		},
+//		cancel: function(){
+//			App.set('errormessage', '');
+//			this.get('model').rollback();
+//			this.transitionToRoute("contacts");
+//		}
+//	}
+//});
 
 App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
     actions : {
-		
 		delete: function() {
 			this.get('model').deleteRecord();
 			this.handleSavePromise(this.content.save(), 'contacts', 'El contacto ha sido eliminado con exito!');
@@ -161,34 +139,128 @@ App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 	
 });
 
-App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinPagination, Ember.AclMixin,{
-	init: function () 
-	{
+App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchReferencePagination, Ember.AclMixin, Ember.SaveHandlerMixin,{
+/*
+	historyMail: function(){
+		var content = null;
+		if(this.content.content === undefined) {
+			content = this.content;
+		}
+		else {
+			content = this.content.content;
+		}
+		for(var i = 0; i < content.length; i++) {
+			if(typeof content[i].get('mailHistory') === 'string') {
+				content[i].set('mailHistory', JSON.parse(content[i].get('mailHistory')));
+			}
+		}
+	}.observes('this.content'),
+*/	
+	init: function () {
 		this.set('acl', App.contactACL);
 	},
-	searchText: '',
-    search: function(){
-		var resultado = this.store.find('contact', { email: this.get('searchText') });
-		this.set('content', resultado);
+	filters: [
+		{name: "Des-suscritos", value: "unsubscribed"},
+		{name: "Rebotados",    value: "bounced"},
+		{name: "Spam",    value: "spam"},
+		{name: "Bloqueados",    value: "blocked"},
+		{name: "Todos",    value: "all"}
+	],
+	filter: {
+		value: "all"
 	},
+	refreshRecords: function() {
+		this.criteria = this.get('searchCriteria');
+		this.finalFilter = this.get('filter.value');
+		var t = this;
+		this.store.find('contact', {searchCriteria: this.criteria, filter: this.finalFilter}).then(function(d) {
+			t.set('content', d.content);
+		});
+	},
+	
+	actions: {
+		search: function() {
+			this.refreshRecords();
+		},
+
+		reset: function() {
+			this.set('searchCriteria', '');
+			this.set('filter.value', "all");
+			this.criteria = '';
+			this.finalFilter = '';
+			this.refreshRecords();	
+		},
+		expand: function (contact) {
+			if(contact.get('isExpanded')) {
+				contact.set('isExpanded', false);
+			}
+			else {
+				contact.set('isExpanded', true);
+			}
+		},
+
+		subscribedcontact: function (contact) {
+			contact.set('isSubscribed', true);
+			contact.save();
+		},
+		unsubscribedcontact: function (contact) {
+			contact.set('isSubscribed', false);
+			contact.save();
+		},
+
+		edit: function(contact) {
+			var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+			var self = this;
+			if (filter.test(contact.get('email'))) {
+				App.set('errormessage', '');
+				App.set('isEditable', false);
+				this.handleSavePromise(contact.save(), 'contacts', 'El contacto fue actualizado exitosamente', function () {
+					$('.x-editable.editable-unsaved').removeClass('editable-unsaved');
+				});
+			}
+			else {
+				App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
+			}
+		},
+
+		discard: function(contact) {
+			contact.rollback();
+			$('.x-editable.editable-unsaved').removeClass('editable-unsaved');
+		},
+		
+		collapse: function(contact) {
+			contact.set('isExpanded', false);
+		}
+
+	},
+	
+	onChangedFilter: function() {
+		this.refreshRecords();
+	}.observes('filter.value')		,
+
 	modelClass: App.Contact
 });
 
-App.ContactsShowController = Ember.ObjectController.extend({
-	actions :{
-		subscribedcontact: function () {
-			//this.set("isSubscribed", true);
-			var self = this;
-			self.content.set('isSubscribed', true);
-			self.content.save();
-		},
-		unsubscribedcontact: function () {
-			var self = this;
-			self.content.set('isSubscribed', false);
-			self.content.save();
-		}
-	}
-});
+//App.ContactsShowController = Ember.ObjectController.extend({
+//	historyMail: function(){
+//		var mailHistory = JSON.parse(this.content.get('mailHistory'));
+//		this.set('history', mailHistory);
+//	}.observes(this.content),
+//			
+//	actions :{
+//		subscribedcontact: function () {
+//			//this.set("isSubscribed", true);
+//			var self = this;
+//			self.content.set('isSubscribed', true);
+//			self.content.save();
+//		},
+//		unsubscribedcontact: function () {
+//			var self = this;
+//			self.content.set('isSubscribed', false);
+//			self.content.save();
+//		}
+//	}
+//});
 
 App.ContactsImportController = Ember.ObjectController.extend({
 	cancel: function() {
@@ -200,7 +272,7 @@ App.ContactsImportController = Ember.ObjectController.extend({
 
 App.ContactsNewView = Ember.View.extend({
   didInsertElement: function() {
-        jQuery("select").select2({
+        this.$("select").select2({
 			placeholder: "Seleccione las Opciones"
 		});
     }
@@ -208,7 +280,7 @@ App.ContactsNewView = Ember.View.extend({
 
 App.ContactsEditView = Ember.View.extend({
   didInsertElement: function() {
-        jQuery("select").select2({
+        this.$("select").select2({
 			placeholder: "Seleccione las Opciones"
 		});
     }
@@ -227,3 +299,16 @@ App.DatePickerField = Em.View.extend({
     }).on("changeDate", onChangeDate);
   }
 });
+
+App.DropDownSelect = Ember.View.Extend({
+	templateName: 'dropdown',
+	didInsertElement: function() {
+		$('.dropdown-toggle').dropdown({
+
+		});
+	}
+});
+
+function collapse_contact(id) {
+	$('.collapse-link-' + id).hide();
+}

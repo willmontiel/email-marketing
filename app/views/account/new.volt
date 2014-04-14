@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-sitemap"></i> Crear una nueva cuenta{%endblock%}
 {%block sectionsubtitle %}Cree una cuenta asignandole al mismo tiempo un usuario administrador{% endblock %}
 
@@ -49,18 +49,24 @@
 							{{ newFormAccount.render('messageLimit') }}
 
 							<label for="modeUse">*Modo de uso:</label>
-							{{ newFormAccount.render('accountingMode') }}
+							{{ newFormAccount.render('accountingMode', {'class': 'chzn-select'}) }}<br /> <br />
 
 							<label for="modeAccounting">*Modo de pago:</label>
-							{{ newFormAccount.render('subscriptionMode') }}	
+							{{ newFormAccount.render('subscriptionMode', {'class': 'chzn-select'}) }}<br /> <br />
 							
 							<label>*MTA: <label/>
-							{{ newFormAccount.render('virtualMta')}}
+							{{ newFormAccount.render('virtualMta')}}<br />
+									
+							<label>*Url de dominio: <label/>
+							{{ newFormAccount.render('idUrlDomain')}}<br /> <br />
+									
+							<label>*Retornar correos rebotados a: <label/>
+							{{ newFormAccount.render('idMailClass')}}
 						</div>
 						<div class="span6">
 							<label for="firstName">*Nombre:</label>
 							{{ newFormAccount.render('firstName') }}
-
+						
 							<label for="lastName">*Apellido:</label>
 							{{ newFormAccount.render('lastName') }}
 
@@ -69,7 +75,7 @@
 
 							<label>*Nombre de usuario:</label>
 							{{ newFormAccount.render('username') }}
-
+							
 							<label for="password">*Contraseña:</label>
 							{{ newFormAccount.render('password') }}
 

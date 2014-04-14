@@ -1,6 +1,19 @@
 <?php
 class SegmentWrapper extends BaseWrapper
 {
+	public $segment;
+	public $dbase;
+	
+	public function setSegment(Segment $segment)
+	{
+		$this->segment = $segment;
+	}
+	
+	public function setDbase(Dbase $dbase)
+	{
+		$this->dbase = $dbase;
+	}
+	
 	/**
 	 * Funcion que valida los datos del segmento y luego inicia el guardado
 	 * @param json $contents
@@ -8,37 +21,15 @@ class SegmentWrapper extends BaseWrapper
 	 * @throws InvalidArgumentException
 	 * @throws \Exception
 	 */
-	public function createSegment($contents, Account $account)
+	public function createSegment($contents)
 	{
 		if(!isset($contents->name) || trim($contents->name) == '' || $contents->name == null) {
 			$this->addFieldError('segmentname', 'El segmento debe tener nombre');
 			throw new \InvalidArgumentException('El segmento debe tener nombre');
 		}
 		
-		$dbaseExist = Dbase::findFirst(array(
-			"conditions" => "idDbase = ?1 and idAccount = ?2",
-			"bind" => array(1 => $contents->dbase,
-							2 => $account->idAccount)
-		));
-		if (!$dbaseExist) {
-			$this->addFieldError('segment', 'La base de datos no existe por favor verifique la información');
-			throw new \InvalidArgumentException('La base de datos no existe por favor verifique la información');
-		}
-		else {
-			$segment = Segment::findFirst(array(
-				"conditions" => "name = ?1 and idDbase = ?2",
-				"bind" => array(1 => $contents->name,
-								2 => $dbaseExist->idDbase)
-			));
-			if ($segment) {
-				$this->addFieldError('segmentname', 'Ya existe un segmento con el nombre enviado, por favor verifique la información');
-				throw new \InvalidArgumentException('Ya existe un segmento con el nombre enviado, por favor verifique la información');
-			}
-			else {
-				$segment = $this->saveSegmentAndCriteriaInDb($contents);
-				return self::convertSegmentToJson($segment);
-			}
-		}
+		$segment = $this->saveSegmentAndCriteriaInDb($contents);
+		return self::convertSegmentToJson($segment);
 	}
 	/**
 	 * Esta funcion agrega los datos del segmento, nombre, descripción, etc, y los datos del criterio, en cada tabla respectivamente
@@ -107,85 +98,51 @@ class SegmentWrapper extends BaseWrapper
 	 * @param type $contents
 	 * @param Account $account
 	 */
-	public function updateSegment($contents, $idSegment,  Account $account)
+	public function updateSegment($contents)
 	{
 		if(!isset($contents->name) || trim($contents->name) == '' || $contents->name == null) {
 			$this->addFieldError('segmentname', 'El segmento debe tener nombre');
 			throw new \InvalidArgumentException('El segmento debe tener nombre');
 		}
 		
-		$dbase = Dbase::findFirst(array(
-			"conditions" => "idDbase = ?1 AND idAccount = ?2",
-			"bind" => array(1 => $contents->dbase,
-							2 => $account->idAccount)
-		));
+		$sxc = Sxc::findByIdSegment($this->segment->idSegment);
+		$sxc->delete();
+		$this->saveSxC($this->segment, $contents);
 		
-		if (!$dbase) {
-			throw new \Exception('La base de datos no existe');
-		}
-		
-		$segment = Segment::findFirst(array(
-			"conditions" => "idSegment = ?1 AND idDbase = ?2",
-			"bind" => array(1 => $idSegment,
-							2 => $dbase->idDbase)
-		));
-		
-		if (!$segment) {
-			throw new \Exception('El segmento no existe');
-		}
-		
-		$nameExist = Segment::findFirst(array(
-			"conditions" => "idSegment != ?1 AND idDbase = ?2 AND name = ?3",
-			"bind" => array(1 => $idSegment,
-							2 => $segment->idDbase,
-							3 => $contents->name)
-		));
-		
-		if ($nameExist) {
-			$this->addFieldError('segmentname', "El nombre del segmento ingresado ya existe, por favor verifique la información");
-			throw new \InvalidArgumentException("El nombre ya existe");
-		}
-		
-		$response = $this->updateSegmentData($contents, $segment);
-
-		$allSxC = Sxc::findByIdSegment($idSegment);
-
-		$allSxC->delete();
-
-		$this->saveSxC($segment);
+		$response = $this->updateSegmentData($contents);
 		
 		return $response;
 	}
 	
-	protected function updateSegmentData($contents, Segment $segment)
+	protected function updateSegmentData($contents)
 	{
-		$segment->name = $contents->name;
-		$segment->description = $contents->description;
-		$segment->criterion = $contents->criterion;
+		$this->segment->name = $contents->name;
+		$this->segment->description = $contents->description;
+		$this->segment->criterion = $contents->criterion;
 		
-		$c = $this->updateCriteria($contents, $segment->idSegment);
+		$criteria = $this->updateCriteria($contents);
 		
-		$segment->criteria = $c;
+		$this->segment->criteria = $criteria;
 		
-		if (!$segment->save()) {
-			$txt = implode(PHP_EOL,  $segment->getMessages());
+		if (!$this->segment->save()) {
+			$txt = implode(PHP_EOL,  $this->segment->getMessages());
 			Phalcon\DI::getDefault()->get('logger')->log($txt);
 			throw new ErrorException('Ha ocurrido un error');
 		}
 		
-		$response = $this->convertSegmentToJson($segment);
+		$response = $this->convertSegmentToJson($this->segment);
 		
 		return $response;	
 	}
 
-	protected function updateCriteria($contents, $idSegment)
+	protected function updateCriteria($contents)
 	{
 		$arrayFields = json_decode($contents->criteria, true);
 		$c = array();
 		
 		$objCriterias = Criteria::find(array(
 			"conditions" => "idSegment = ?1",
-			"bind" => array(1 => $idSegment)
+			"bind" => array(1 => $this->segment->idSegment)
 		));
 		foreach ($objCriterias as $objcr) {
 			$done = FALSE;
@@ -339,8 +296,16 @@ class SegmentWrapper extends BaseWrapper
 					);
 	}
 	
-	protected function saveSxC(Segment $segment)
+	protected function saveSxC(Segment $segment, $contents = null)
 	{
+		if ($contents != null) {
+			$crit = $contents->criterion;
+		}
+		else {
+			$crit = $segment->criterion;
+		}
+		
+		
 		$allcriterias = Criteria::findByIdSegment($segment->idSegment);
 		$join = "";
 		$conditions = "";
@@ -349,8 +314,9 @@ class SegmentWrapper extends BaseWrapper
 		$multTables = ($segment->criterion == 'all')?TRUE:FALSE;
 		$tablenumber = 1;
 		
-		if($allcriterias){
-			
+		$types = array();
+		
+		if ($allcriterias) {
 			foreach ($allcriterias as $criteria) {
 				switch ($criteria->type) {
 					case 'custom' :
@@ -366,16 +332,27 @@ class SegmentWrapper extends BaseWrapper
 							}
 							$value = "( f.idCustomField = $criteria->idCustomField AND f.textValue ";
 						}
+						$types[] = 'custom';
 						break;
+						
 					case 'contact' :
 						$value = "( c.$criteria->fieldName ";
+						$types[] = 'contact';
 						break;
+					
 					case 'email' :
-						$join.="JOIN email e ON (c.idEmail = e.idEmail) ";
+						if (!in_array('email', $types)) {
+							$join.="JOIN email e ON (c.idEmail = e.idEmail) ";
+							$types[] = 'email';
+						}
 						$value = "( e.$criteria->fieldName ";
 						break;
+						
 					case 'domain' :
-						$join.="JOIN email em ON (c.idEmail = em.idEmail) JOIN domain d ON (em.idDomain = d.idDomain) ";
+						if (!in_array('domain', $types)) {
+							$join.="JOIN email em ON (c.idEmail = em.idEmail) JOIN domain d ON (em.idDomain = d.idDomain) ";
+							$types[] = 'domain';
+						}
 						$value = "( d.name ";
 						break;
 				}
@@ -409,7 +386,7 @@ class SegmentWrapper extends BaseWrapper
 					$firstCondition = FALSE;
 				} 
 				else {
-					if($segment->criterion == 'any') {
+					if($crit == 'any') {
 						$conditions.= " OR " . $value . $relation;
 					} 
 					else {
@@ -475,6 +452,8 @@ class SegmentWrapper extends BaseWrapper
 		$result = array();
 		
 		$cwrapper = new ContactWrapper();
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		$cwrapper->setContactMailHistory($mailhistory);
 		
 		$ids = array();
 		foreach ($contacts as $c) {
@@ -609,7 +588,7 @@ class SegmentWrapper extends BaseWrapper
 		return $meets;
 	}
 	
-	public function contactsImported($idDbase)
+	public function recreateSegmentsInDbase($idDbase)
 	{
 		$segments = Segment::findByIdDbase($idDbase);
 		

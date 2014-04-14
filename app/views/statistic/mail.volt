@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
@@ -91,7 +91,7 @@
 													 {{statisticsData.opens|numberf}}
 												</label>
 												<div class="news-text">
-													{{'{{#linkTo "drilldown.opens" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Aperturas</span>{{/linkTo}}'}}
+													{{'{{#link-to "drilldown.opens" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Aperturas</span>{{/link-to}}'}}
 												</div>
 											</div>
 										</div>	
@@ -107,7 +107,7 @@
 											<div class="news-content">
 												<label class="label-clicks">{{statisticsData.clicks_CTR|numberf}}</label>
 												<div class="news-text">
-													{{'{{#linkTo "drilldown.clicks" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Clics</span>{{/linkTo}}'}}
+													{{'{{#link-to "drilldown.clicks" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Clics</span>{{/link-to}}'}}
 												</div>
 											</div>
 										</div>	
@@ -125,7 +125,7 @@
 											<div class="news-content">
 												<label class="label-unsubscribed">{{statisticsData.unsubscribed|numberf}}</label>
 												<div class="news-text">
-													{{'{{#linkTo "drilldown.unsubscribed" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Des-suscritos</span>{{/linkTo}}'}}
+													{{'{{#link-to "drilldown.unsubscribed" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Des-suscritos</span>{{/link-to}}'}}
 												</div>
 											</div>
 										</div>	
@@ -141,7 +141,7 @@
 											<div class="news-content">
 												<label class="label-bounced">{{statisticsData.bounced|numberf}}</label>
 												<div class="news-text">
-													{{'{{#linkTo "drilldown.bounced" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Rebotes</span>{{/linkTo}}'}}
+													{{'{{#link-to "drilldown.bounced" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Rebotes</span>{{/link-to}}'}}
 												</div>
 											</div>
 										</div>	
@@ -159,7 +159,7 @@
 											<div class="news-content">
 												<label class="label-spam">{{statisticsData.spam|numberf}}</label>
 												<div class="news-text">
-													{{'{{#linkTo "drilldown.spam" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Reportes de Spam</span>{{/linkTo}}'}}
+													{{'{{#link-to "drilldown.spam" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Reportes de Spam</span>{{/link-to}}'}}
 												</div>
 											</div>
 										</div>	

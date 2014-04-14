@@ -22,7 +22,7 @@ class ClientHandler extends Handler
 	{
 		switch ($event->type) {
 			case 'Play-Task':
-				$this->sendNewTask($event->data);
+				$this->sendNewTask($event);
 				$this->reply->send("Playing One..");
 				break;
 			case 'Scheduled-Task':
@@ -30,11 +30,11 @@ class ClientHandler extends Handler
 				$this->reply->send("Scheduling..");
 				break;
 			case 'Cancel-Process':
-				$this->cancelTaskInProcess($event->data);
+				$this->cancelTaskInProcess($event);
 				$this->reply->send("Canceling..");
 				break;
 			case 'Stop-Process':
-				$this->stopTaskInProcess($event->data);
+				$this->stopTaskInProcess($event);
 				$this->reply->send("Stopping..");
 				break;
 			case 'Are-You-There':
@@ -55,7 +55,7 @@ class ClientHandler extends Handler
 				$this->reply->send($poolStatus);
 				break;
 			case 'Checking-Work':
-				$this->pool->checkingChildWork($event->data);
+				$this->pool->checkingChildWork($event);
 				break;
 		}
 	}
@@ -70,15 +70,15 @@ class ClientHandler extends Handler
 		$this->tasks = $tasks;
 	}
 	
-	public function sendNewTask($data)
+	public function sendNewTask(Event $event)
 	{
 		$process = $this->pool->getAvailableChild();
 		
 		if($process && !$this->tasks->checkReadyTasks()) {
-			$this->tasks->sendTask($data, $process);	
+			$this->tasks->sendTask($event, $process);	
 		}
 		else {
-			$this->tasks->saveReadyTask($data);
+			$this->tasks->saveReadyTask($event);
 		}
 	}
 	
@@ -87,11 +87,11 @@ class ClientHandler extends Handler
 		$this->tasks->taskScheduling();
 	}
 	
-	public function cancelTaskInProcess($data)
+	public function cancelTaskInProcess(Event $event)
 	{
-		$pid = $this->pool->findPidFromTask($data);
+		$pid = $this->pool->findPidFromTask($event);
 		if($pid === NULL) {
-			$this->tasks->removeSaveTask($data);
+			$this->tasks->removeSaveTask($event);
 		}
 		else {
 			$this->tasks->sendCommandToProcess('Cancel', $pid);
@@ -99,11 +99,11 @@ class ClientHandler extends Handler
 		
 	}
 	
-	public function stopTaskInProcess($data)
+	public function stopTaskInProcess(Event $event)
 	{
-		$pid = $this->pool->findPidFromTask($data);
+		$pid = $this->pool->findPidFromTask($event);
 		if($pid === NULL) {
-			$this->tasks->removeSaveTask($data);
+			$this->tasks->removeSaveTask($event);
 		}
 		else {
 			$this->tasks->sendCommandToProcess('Stop', $pid);

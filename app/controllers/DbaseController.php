@@ -83,7 +83,7 @@ class DbaseController extends ControllerBase
 				}	
 			}
 		}
-		
+			$this->view->setVar('colors', DbaseWrapper::getColors());
 			$this->view->editform = $editform;
     }
     
@@ -137,6 +137,7 @@ class DbaseController extends ControllerBase
 					}
 				}
 			}
+			$this->view->setVar('colors', DbaseWrapper::getColors());
 			$this->view->editform = $editform;
         } 
 
@@ -147,8 +148,20 @@ class DbaseController extends ControllerBase
         //Recuperar la informacion de la BD que se desea SI existe
         $db = $this->findAndValidateDbaseAccount($id);
 		if ($db) {
-			$db->delete();
-			$this->flashSession->warning('Base de Datos Eliminada!');
+			if($this->user->userrole === 'ROLE_SUDO') {
+				$db->delete();
+				$response = 'Base de Datos Eliminada!';
+			}
+			else {
+				try {
+					$wrapper = new DbaseWrapper();
+					$wrapper->deleteDBAsUser($db);
+					$response = 'Base de Datos Eliminada!';
+				} catch(\Exception $e) {
+					$response = $e->getMessage();
+				}
+			}
+			$this->flashSession->warning($response);
 		} 
 		else {
 			$this->flashSession->error('Base de Datos no existe');

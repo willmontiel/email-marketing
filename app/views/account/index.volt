@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-sitemap"></i> Cuentas{%endblock%}
 {%block sectionsubtitle %}Administre las cuentas en la aplicación{% endblock %}
 
