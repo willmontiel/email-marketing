@@ -220,6 +220,7 @@ class MailController extends ControllerBase
 				$mailExist->fbtitlecontent = $fbdesc->title;
 				$mailExist->fbdescriptioncontent = $fbdesc->description;
 				$mailExist->fbmessagecontent = $fbdesc->message;
+				$mailExist->fbimagepublication = $fbdesc->image;
 				$mailExist->twpublicationcontent = $twdesc->message;
 			}
 			$form = new MailForm($mailExist);
@@ -234,7 +235,7 @@ class MailController extends ControllerBase
 			$this->view->setVar('mail', "");
 		}
 		try {
-			$socialnet = new SocialNetworkConnection($log);
+			$socialnet = new SocialNetworkConnection();
 			$socialnet->setAccount($account);
 			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
@@ -320,7 +321,8 @@ class MailController extends ControllerBase
 						$fbtitlecontent = $this->request->getPost("fbtitlecontent");
 						$fbdescriptioncontent = $this->request->getPost("fbdescriptioncontent");
 						$fbmsgcontent = $this->request->getPost("fbmessagecontent");
-						$socialmail->fbdescription = $socialnet->saveFacebookDescription($fbtitlecontent, $fbdescriptioncontent, $fbmsgcontent);;
+						$fbimage = $this->request->getPost("fbimagepublication");
+						$socialmail->fbdescription = $socialnet->saveFacebookDescription($fbtitlecontent, $fbdescriptioncontent, $fbmsgcontent, $fbimage);
 					}
 					if($twaccounts) {
 						$twmessagecontent = $this->request->getPost("twpublicationcontent");
@@ -354,6 +356,20 @@ class MailController extends ControllerBase
 			}
 			
 		}
+		
+		$assets = AssetObj::findAllAssetsInAccount($this->user->account);
+		if(empty($assets)) {
+				$arrayAssets = array();
+		}
+		else {
+			foreach ($assets as $a) {
+				$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
+									'image' => $a->getImagePrivateUrl(),
+									'title' => $a->getFileName(),
+									'id' => $a->getIdAsset());								
+			}
+		}
+		$this->view->setVar('assets', $arrayAssets);
 		$this->view->MailForm = $form;
 	}
 	
@@ -902,7 +918,7 @@ class MailController extends ControllerBase
 						else {
 							$this->routeRequest('plaintext', $direction, $mail->idMail);
 						}
-						break;;
+						break;
 				}
 			}
 		}
@@ -1261,7 +1277,7 @@ class MailController extends ControllerBase
 			case 'contactlists':
 				$query = $this->modelsManager->createQuery("SELECT name FROM Contactlist WHERE idContactlist IN (" . $ids . ")");
 				$result = $query->execute();
-				break;;
+				break;
 				
 			case 'segments':
 				$query = $this->modelsManager->createQuery("SELECT name FROM Segment WHERE idSegment IN (" . $ids . ")");

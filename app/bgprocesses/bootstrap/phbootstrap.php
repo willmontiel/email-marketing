@@ -110,6 +110,15 @@ $tmpdir->dir = dirname(__FILE__) . '/../../../tmp';
 $di->set('tmppath', $tmpdir);
 
 /*
+ * Directorio de assets privados
+ */
+
+$asset = new \stdClass;
+$asset->dir = '../../' .$config->general->assetsfolder;
+$asset->url = '/' . $di->get('urlManager')->getAppUrlAsset() . '/';
+$di->set('asset', $asset);
+
+/*
  * Configuración MTA
  */
 $mtaConfig = new stdClass();
