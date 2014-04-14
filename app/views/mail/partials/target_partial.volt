@@ -119,7 +119,7 @@
 					<br />
 					<div class="form-group">
 						<div class="col-sm-6 col-md-offset-6 text-right">
-							<a href="#" class="btn btn-default">Descartar cambios</a>
+							<button class="btn btn-default" {{'{{action "discardTarget" this}}'}}>Descartar cambios</button>
 							<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 							{#
 							<input type="button" class="btn btn-primary" value="Aplicar cambios" onClick="createBlock(this.form, 'target')">

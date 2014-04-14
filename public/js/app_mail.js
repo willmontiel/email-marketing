@@ -215,6 +215,26 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		expandSchedule: function () {
 			setExpandAttr(this, 'isScheduleExpanded');
 		},
+		
+		discardHeader: function () {
+			console.log(this.get('fromName'));
+			this.set('fromName', '');
+			this.set('fromEmail', '');
+			this.set('replyTo', '');
+			this.set('subject', '');
+			console.log(this.get('fromName'));
+			setExpandAttr(this, 'isHeaderExpanded');
+		},
+				
+		discardTarget: function () {
+			this.set('dbaselist', []);
+			this.set('list', []);
+			this.set('segmentlist',[]);
+			this.set('open',[]);
+			this.set('click',[]);
+			this.set('exclude',[]);
+			setExpandAttr(this, 'isTargetExpanded');
+		},
 	}
 });
 
