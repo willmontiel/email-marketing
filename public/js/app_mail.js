@@ -192,8 +192,16 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 					content = document.getElementById('iframeHtml').contentWindow.$('#redactor_content').val();
 				}
 				
-				console.log('Selection ' + mail.get('selection'));
-				var value = $('input[name=schedule]:checked').val();
+				var value = this.get('scheduleRadio');
+				
+				if (value === 'now') {
+					console.log('its now')
+					mail.set('scheduleDate', value);
+				}
+				else {
+					console.log('its not now')
+					console.log(mail.get('scheduleDate'));
+				}
 				
 				mail.set('dbases', dbaseArray.toString());
 				mail.set('contactlists', contactlistArray.toString());
@@ -201,14 +209,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				mail.set('filterByOpen', openArray.toString());
 				mail.set('filterByClick', clickArray.toString());
 				mail.set('filterByExclude', excludeArray.toString());
-				
-				if (value === 'now') {
-					mail.set('scheduleDate', value);
-				}
-				else {
-					mail.set('scheduleDate', $('#date').val());
-				}
-			
 				mail.set('type', type);
 				mail.set('content', content);
 				

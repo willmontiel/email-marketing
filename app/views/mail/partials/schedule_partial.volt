@@ -46,7 +46,7 @@
 								<label for="later">En la siguiente fecha:</label>
 								<div id="programmer" style="{{display}}">
 									<br />
-									{{' {{ view App.DateTimePicker }}' }}
+									{{' {{ view App.DateTimePicker valueBinding="scheduleDate" id="scheduleDate"}}' }}
 								</div>
 							</div>
 						</div>
