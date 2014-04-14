@@ -5,6 +5,10 @@ namespace EmailMarketing\General;
 class AppObjects
 {
 	protected $config;
+	/**
+	 *
+	 * @var \Phalcon\DI
+	 */
 	protected $di;
 	protected $status;
 	protected $urlManager;
@@ -29,6 +33,8 @@ class AppObjects
 	public function configure()
 	{
 		$this->createDi();
+
+		$this->setChatConfig();
 		
 		if (!$this->config->system->status && !in_array($this->ip, $this->allowed_ips)) {
 			$this->setAppPath();
@@ -78,6 +84,21 @@ class AppObjects
 		}
 	}
 	
+	
+	protected function setChatConfig()
+	{
+		$chat = new \stdClass();
+		if (isset($this->config->olark) && isset($this->config->olark->enabled)) {
+			$chat->enabled = $this->config->olark->enabled;
+		}
+		else {
+			$chat->enabled = false;
+		}
+		
+		$this->di->set('chat', $chat);
+	}
+
+
 	/**
 	 * Creación del inyector de dependencias
 	 */
