@@ -6,64 +6,13 @@
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	<script type="text/javascript">
-		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}"};
-		function showsocials(){
-			var container = $('.setup_socials_container');
-			if (container.css('display') === 'none') {
-				container.show();
-			}
-			else {
-				container.hide();
-			}
-		}
-		function new_sn_account(redirect){
-			$.ajax(
-				{
-				url: "{{url('mail/savetmpdata')}}",
-				type: "POST",			
-				data: $('#setupform').serialize(),
-				success: function(){
-					window.location.href = redirect;
-				}
-			});
-		}
+		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}"};
 		$(function() {
 			{%for asset in assets%}
 				var media = new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}});
 				media.createMedia();
 				media.mediaSelected();
 			{%endfor%}
-			if($('#accounts_facebook')[0].selectedOptions.length > 0){
-				$('.fbdescription').show();
-				$('.setup_socials_container').show();
-			}	
-			if($('#accounts_twitter')[0].selectedOptions.length > 0){
-				$('.twdescription').show();
-				$('.setup_socials_container').show();
-			}
-			$('#accounts_facebook').on('change', function() {
-				if($(this)[0].selectedOptions.length > 0) {
-					$('.fbdescription').show();
-				}
-				else {
-					$('.fbdescription').hide();
-				}
-			});
-	
-			$('#accounts_twitter').on('change', function() {
-				if($(this)[0].selectedOptions.length > 0) {
-					$('.twdescription').show();
-				}
-				else {
-					$('.twdescription').hide();
-				}
-			});
-			
-			$('#tweet-char-number').text($('#twpublicationcontent').attr('maxlength'));
-			$('#twpublicationcontent').keyup(function() {
-				var text = $(this).val();
-				$('#tweet-char-number').text($(this).attr('maxlength') - text.length);
-			});
 		});
 	</script>
 {% endblock %}
