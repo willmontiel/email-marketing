@@ -164,6 +164,8 @@
 			/* custom configuration goes here (www.olark.com/documentation) */
 			olark.identify('1459-326-10-6576');/*]]>*/</script><noscript><a href="https://www.olark.com/site/1459-326-10-6576/contact" title="Contact us" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
 			<!-- end olark code -->		
+		{% else %}
+			<!-- No chat available -->
 		{% endif %}
 		{# /OLARK #}
     </body>
