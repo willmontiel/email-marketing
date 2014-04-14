@@ -1,6 +1,6 @@
-<div {{'{{bind-attr class=":bs-callout headerEmpty:bs-callout-warning:bs-callout-success"}}'}}>
+<div {{'{{bind-attr class=":bs-callout GAEmpty:bs-callout-warning:bs-callout-success"}}'}}>
 	<div class="panel-body">
-		{{'{{#if headerEmpty }}'}}
+		{{'{{#if GAEmpty }}'}}
 			<p><strong>Google Analytics:</strong> _______________________________</p>
 			<label style="cursor: pointer;" {{ '{{action "expandGA" this}}' }}>Click aqui para configurar</label>
 		{{'{{else}}'}}

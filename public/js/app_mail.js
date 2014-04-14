@@ -68,6 +68,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	click: [],
 	exclude: [],
 	scheduleRadio: '',
+	fromSummary: '',
 	
 	headerEmpty: function () {
 		var n, e, s;
@@ -80,8 +81,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		s = (s == '')?null:s;
 		
 		if (!e ||  !n || !s) {
+			this.set('fromSummary', 'Sin definir <email@domain.com>');
 			return true;
 		}
+		this.set('fromSummary', n + '<' + e + '>');
 		return false;
 	}.property('content.fromName', 'content.fromEmail', 'content.subject'),
 			
@@ -122,6 +125,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return false;
 	}.property('content.filterByEmail'), 
 	
+	GAEmpty: function () {
+		return true;
+	}.property(),
+	
 	scheduleEmpty: function () {
 		var schedule;
 		
@@ -140,44 +147,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				$.gritter.add({title: 'Error', text: 'No ha ingresado un nombre para el correo, por favor verifique la información', sticky: false, time: 3000});
 			}
 			else {
-				var dbaseArray = [];
-				dbaseObj = this.get('dbaselist').toArray();
-				for (var d=0; d<dbaseObj.length; d++) {
-					dbaseArray.push(dbaseObj[d].id);
-				}
-				
-				var contactlistArray = [];
-				listObj = this.get('list').toArray();
-				for (var d=0; d<listObj.length; d++) {
-					contactlistArray.push(listObj[d].id);
-				}
-				
-				var segmentArray = [];
-				segmentObj = this.get('segmentlist').toArray();
-				for (var d=0; d<segmentObj.length; d++) {
-					segmentArray.push(segmentObj[d].id);
-				}
-				
-				var openArray = [];
-				openObj = this.get('open').toArray();
-				for (var d=0; d<openObj.length; d++) {
-					openArray.push(openObj[d].id);
-					console.log(openObj[d].name);
-				}
-				
-				var clickArray = [];
-				clickObj = this.get('click').toArray();
-				for (var d=0; d<clickObj.length; d++) {
-					clickArray.push(clickObj[d].id);
-					console.log(clickObj[d].name);
-				}
-				
-				var excludeArray = [];
-				excludeObj = this.get('exclude').toArray();
-				for (var d=0; d<excludeObj.length; d++) {
-					excludeArray.push(excludeObj[d].id);
-					console.log(excludeObj[d].name);
-				}
+				var dbases = getArrayValue(this.get('dbaselist'));
+				var contactlists = getArrayValue(this.get('list'));
+				var segments = getArrayValue(this.get('segmentlist'));
+				var open = getArrayValue(this.get('open'));
+				var click = getArrayValue(this.get('click'));
+				var exclude = getArrayValue(this.get('exclude'));
 				
 				var type;
 				var content;
@@ -203,66 +178,69 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 					console.log(mail.get('scheduleDate'));
 				}
 				
-				mail.set('dbases', dbaseArray.toString());
-				mail.set('contactlists', contactlistArray.toString());
-				mail.set('segments', segmentArray.toString());
-				mail.set('filterByOpen', openArray.toString());
-				mail.set('filterByClick', clickArray.toString());
-				mail.set('filterByExclude', excludeArray.toString());
+				mail.set('dbases', dbases);
+				mail.set('contactlists', contactlists);
+				mail.set('segments', segments);
+				mail.set('filterByOpen', open);
+				mail.set('filterByClick', click);
+				mail.set('filterByExclude', exclude);
 				mail.set('type', type);
 				mail.set('content', content);
 				
 //				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
 				this.set('isHeaderExpanded', false);
+				this.set('isTargetExpanded', false);
+				this.set('isContentExpanded', false);
+				this.set('isGAExpanded', false);
+				this.set('isScheduleExpanded', false);
 			}
 		},
 		
 		expandHeader: function () {
-			if(this.get('isHeaderExpanded')) {
-				this.set('isHeaderExpanded', false);
-			}
-			else {
-				this.set('isHeaderExpanded', true);
-			}
+			setExpandAttr(this, 'isHeaderExpanded');
 		},
 				
 		expandTarget: function () {
-			if(this.get('isTargetExpanded')) {
-				this.set('isTargetExpanded', false);
-			}
-			else {
-				this.set('isTargetExpanded', true);
-			}
+			setExpandAttr(this, 'isTargetExpanded');
 		},
 		
 		expandContent: function () {
-			if(this.get('isContentExpanded')) {
-				this.set('isContentExpanded', false);
-			}
-			else {
-				this.set('isContentExpanded', true);
-			}
+			setExpandAttr(this, 'isContentExpanded');
 		},
 				
 		expandGA: function () {
-			if(this.get('isGAExpanded')) {
-				this.set('isGAExpanded', false);
-			}
-			else {
-				this.set('isGAExpanded', true);
-			}
+			setExpandAttr(this, 'isGAExpanded');
 		},
 				
 		expandSchedule: function () {
-			if(this.get('isScheduleExpanded')) {
-				this.set('isScheduleExpanded', false);
-			}
-			else {
-				this.set('isScheduleExpanded', true);
-			}
+			setExpandAttr(this, 'isScheduleExpanded');
 		},
 	}
 });
+
+function getArrayValue(value) {
+	var array = [];
+	var obj = value.toArray();
+	for (var i = 0; i < obj.length; i++) {
+		array.push(obj[i].id);
+	}
+	return array.toString();
+}
+
+function setExpandAttr(self, expand) {
+//	self.set('isHeaderExpanded', false);
+//	self.set('isTargetExpanded', false);
+//	self.set('isContentExpanded', false);
+//	self.set('isGAExpanded', false);
+//	self.set('isScheduleExpanded', false);
+	
+	if(self.get(expand)) {
+		self.set(expand, false);
+	}
+	else {
+		self.set(expand, true);
+	}
+}
 
 App.DateTimePicker = Em.View.extend({
 	templateName: 'datetimepicker',
@@ -305,6 +283,68 @@ Ember.RadioButton = Ember.View.extend({
     checked : function() {
         return this.get("value") == this.get("selection");   
     }.property()
+});
+
+Ember.RadioButtonTarget = Ember.View.extend({
+    tagName : "input",
+    type : "radio",
+    attributeBindings : [ "name", "type", "value", "id"],
+    click : function() {
+        $("#db").hide();
+		$("#list").hide();
+		$("#seg").hide();
+		
+		$("#dbases").val('');
+		$('#segments').val('');
+		$('#contactlists').val('');
+		
+		var value = this.$().val();
+		switch (value) {
+			case "dataBase":
+				$("#db").show();
+				break;
+			case "contactList":
+				$("#list").show();
+				break;
+			case "segment":
+				$("#seg").show();
+				break;
+		}
+    },
+});
+
+Ember.RadioFilter = Ember.View.extend({
+    tagName : "input",
+    type : "radio",
+    attributeBindings : [ "name", "type", "value", "id"],
+    click : function() {
+		$("#mail").hide();
+		$("#open").hide();
+		$("#click").hide();
+		$("#exclude").hide();
+
+		$("#sendMail").val('');
+		$('#sendOpen').val('');
+		$('#sendClick').val('');
+		$('#sendExclude').val('');
+		
+		var value = this.$().val();
+		
+		switch (value) {
+			case "byMail":
+				$("#mail").show();
+				break;
+			case "byOpen":
+				$("#open").show();
+				break;
+			case "byClick":
+				$("#click").show();
+				break;
+			case "byExclude":
+				$("#exclude").show();
+				break;
+		}
+    },
 });
 
 //App.Mail.FIXTURES = [
