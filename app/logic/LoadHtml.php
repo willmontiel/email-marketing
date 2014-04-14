@@ -141,6 +141,7 @@ class LoadHtml
 		if (!$asset->save()) {
 			foreach ($asset->getMessages() as $msg) {
 				$this->log->log("Error: ". $msg);
+				throw new \Exception("Exception: {$msg}");
 			}
 		}
 		return $asset;

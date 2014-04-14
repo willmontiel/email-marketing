@@ -8,6 +8,7 @@ class MailController extends ControllerBase
 	public function savemailAction($mails = null, $idMail = null)
 	{
 		$account = $this->user->account;
+		$mail = null;
 		
 		$contentsraw = $this->request->getRawBody();
 		$contentsT = json_decode($contentsraw);
@@ -15,9 +16,22 @@ class MailController extends ControllerBase
 		$this->logger->log('idMail: ' . $idMail);
 		$content = $contentsT->mail;
 		
-		if ($this->request->isPost()) {
+		if ($idMail != null) {
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1 AND idAccount = ?2',
+				'bind' => array(1 => $idMail,
+								2 => $account->idAccount)
+			));
+			
+			if (!$mail) {
+				return $this->setJsonResponse(array('errors' => 'No se ha encontrado el correo por favor verifique la información'), 404, 'Mail not found!');
+			}
+		}
+		
+		if ($this->request->isPost() || $this->request->isPut()) {
 			$MailWrapper = new MailWrapper();
 			$MailWrapper->setAccount($account);
+			$MailWrapper->setMail($mail);
 			$MailWrapper->setContent($content);
 			
 			try {	
@@ -38,32 +52,7 @@ class MailController extends ControllerBase
 				$this->logger->log("Exception: {$e}");
 				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador'), 500);
 			}
-		}
-		else if ($this->request->isPut()) {
-			$mail = Mail::findFirst(array(
-				'conditions' => 'idMail = ?1 AND idAccount = ?2',
-				'bind' => array(1 => $idMail,
-								2 => $account->idAccount)
-			));
-			
-			if (!$mail) {
-				return $this->setJsonResponse(array('status' => 'failed'), 404, 'Mail not found!');
-			}
-			
-			try {
-				$MailWrapper = new MailWrapper();
-				$MailWrapper->setMail($mail);
-				$MailWrapper->setContent($content);
-				$MailWrapper->processData();
-				$response = $MailWrapper->updateMail();
-				
-				return $this->setJsonResponse(array($response->key => $response->data), $response->code);
-			}
-			catch (Exception $e) {
-				$this->logger->log("Exception: {$e}");
-				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador'), 500);
-			}
-		}
+		}	
 	}
 	
 	public function indexAction()
@@ -737,6 +726,12 @@ class MailController extends ControllerBase
 			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
 		}
 		$this->view->setVar('cfs', $arrayCf);
+		$content = $this->session->get("{$this->user->account->idAccount}-{$this->user->idUser}-createMail");
+		
+		if ($content) {
+			$this->view->setVar('content', $content);
+			$this->session->remove("{$this->user->account->idAccount}-{$this->user->idUser}-createMail");
+		}
 	}
 	
 	
@@ -805,8 +800,39 @@ class MailController extends ControllerBase
 	}
 	
 	public function importcontentAction()
-	{
-		
+	{	
+		if ($this->request->isPost()) {
+			
+			$user = $this->user;
+			$account = $user->account;
+
+			$url = $this->request->getPost("url");
+			$image = $this->request->getPost("image");
+
+			$dir = $this->asset->dir . $account->idAccount . "/images";
+
+			if(!filter_var($url, FILTER_VALIDATE_URL)) {
+				$this->logger->log("Error url no válida {$url}");
+				return $this->setJsonResponse(array('errors' => 'La url ingresada no es válida, por favor verifique la información'), 400);
+			}
+
+			if (!file_exists($dir)) {
+				mkdir($dir, 0777, true);
+			} 
+			
+			try {
+				$getHtml = new LoadHtml();
+				$html = $getHtml->gethtml($url, $image, $dir, $account);
+				
+				$this->session->set("{$account->idAccount}-{$user->idUser}-createMail", htmlspecialchars($html, ENT_QUOTES));
+						
+				return $this->setJsonResponse(array('status' => 'success'), 200);
+			}
+			catch (Exception $e){
+				$this->logger->log("Exception {$e}");
+				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error, contacte al administrador'), 500);
+			}
+		}
 	}
 	
 	public function plaintextAction($idMail)

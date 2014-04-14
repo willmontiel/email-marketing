@@ -1,5 +1,4 @@
 {% block header_javascript %}
-	{{ super() }}
 	{{ stylesheet_link('b3/css/bootstrap.css') }}
 	{{ stylesheet_link('b3/css/font-awesome.css') }}
 	{{ stylesheet_link('css/prstyles.css') }}
@@ -18,12 +17,7 @@
 	{{ javascript_include('b3/vendors/js/spark_auto.js') }}
 	{{ javascript_include('b3/vendors/js/bootstrap-editable.js') }}
 	{{ javascript_include('b3/vendors/js/jquery.gritter.js') }}
-
-
-	{{ javascript_include('js/jquery-1.9.1.js') }}
-	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
-	{{ javascript_include('bootstrap/js/bootstrap.js') }}
-
+	
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ javascript_include('redactor/langs/es.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
@@ -82,7 +76,7 @@
 			<div class="col-sm-12">
 				<form id="html-content-form">
 						<label>Cree contenido para el correo con HTML base: </label>
-						<textarea rows="50" required id="redactor_content"></textarea>
+						<textarea rows="50" required id="redactor_content">{% if content is defined%} {{content}} {% endif %}</textarea>
 						<br />
 						<input onclick="verHTML(this.form)" href="#preview-modal" data-toggle="modal" type="button" value="Visualizar" class="btn btn-black">
 				</form>

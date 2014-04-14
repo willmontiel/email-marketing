@@ -4,7 +4,7 @@ class MailWrapper extends BaseWrapper
 {
 	protected $account;
 	protected $content;
-	protected $mail;
+	protected $mail = null;
 	protected $mailcontent;
 	protected $target = null;
 	protected $scheduleDate;
@@ -25,7 +25,7 @@ class MailWrapper extends BaseWrapper
 		$this->content = $content;
 	}
 	
-	public function setMail(Mail $mail)
+	public function setMail(Mail $mail = null)
 	{
 		$this->mail = $mail;
 	}
@@ -117,7 +117,9 @@ class MailWrapper extends BaseWrapper
 //			throw new \InvalidArgumentException($message);
 //		}
 		
-		$this->mail = new Mail();
+		if ($this->mail == null) {
+			$this->mail = new Mail();
+		}
 		
 		$this->mail->idAccount = $this->account->idAccount;
 		$this->mail->type = $this->content->type;
@@ -168,54 +170,6 @@ class MailWrapper extends BaseWrapper
 			$this->addMessageError('errors', $messages, 400);
 			throw new \InvalidArgumentException($messages);
 		}
-	}
-	
-	public function updateMail()
-	{
-		$date = time();
-		
-//		if ($this->target == false) {
-//			$message = 'No hay contactos registrados, por favor seleccione otra base de datos, lista o segmento';
-//			
-//			$response = new stdClass();
-//			$response->key = 'errors';
-//			$response->data = $message;
-//			$response->code = 400;
-//			
-//			return $response;
-//		}
-		
-		$this->mail->type = $this->content->type;
-		$this->mail->status = 'draft';
-		$this->mail->wizardOption = 'setup';
-		$this->mail->totalContacts = $this->target->totalContacts;
-		$this->mail->scheduleDate = $this->content->scheduleDate;
-		$this->mail->updatedon = $date;
-		$this->mail->name = $this->content->name;
-		$this->mail->subject = $this->content->subject;
-		$this->mail->fromName = $this->content->fromName;
-		$this->mail->fromEmail = $this->content->fromEmail;
-		$this->mail->replyTo = $this->content->replyTo;
-		$this->mail->target = $this->target->target;
-		$this->mail->previewData = $this->content->previewData;
-		$this->mail->socialNetworks = $this->content->socialNetworks;
-
-		if (!$this->mail->save()) {
-			$e = array();
-			foreach ($this->mail->getMessages() as $msg) {
-				$this->logger->log("Error while saving mail: {$msg}");
-				$e[] = $msg;
-			}
-			$messages = implode(", ", $e);
-			
-			$response = new stdClass();
-			$response->key = 'errors';
-			$response->data = $messages;
-			$response->code = 400;
-			return $response;
-		}
-		
-		
 	}
 	
 	private function convertMailToJson()

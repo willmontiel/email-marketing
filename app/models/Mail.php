@@ -19,8 +19,8 @@ class Mail extends Modelbase
 		$this->useDynamicUpdate(true);
 	}
 	
-	public function validation()
-    {
+//	public function validation()
+//    {
 //		$this->validate(new PresenceOf(
 //		   array(
 //				"field"   => "name",
@@ -39,17 +39,17 @@ class Mail extends Modelbase
 //				"message" => "Debe ingresar el nombre del remitente, por favor verifique la información"
 //		)));
 //		
-		$this->validate(new PresenceOf(
-		   array(
-				"field"   => "fromEmail",
-				"message" => "Debe ingresar la dirección de correo del remitente, por favor verifique la información"
-		)));
+//		$this->validate(new PresenceOf(
+//		   array(
+//				"field"   => "fromEmail",
+//				"message" => "Debe ingresar la dirección de correo del remitente, por favor verifique la información"
+//		)));
 //
-		$this->validate(new Email(
-			   array(
-					"field" => "fromEmail",
-					"message" => "La direccion de correo electronico no es valida, por favor verifique la información"
-		)));
+//		$this->validate(new Email(
+//			   array(
+//					"field" => "fromEmail",
+//					"message" => "La direccion de correo electronico no es valida, por favor verifique la información"
+//		)));
 		
 //		$this->validate(new Email(
 //			   array(
@@ -57,10 +57,10 @@ class Mail extends Modelbase
 //					"message" => "La dirección ingresada en 'Responser a:' no es válida por favor verifique la información"
 //		)));
 		
-		if ($this->validationHasFailed() == true) {
-			return false;
-		}
-	}
+//		if ($this->validationHasFailed() == true) {
+//			return false;
+//		}
+//	}
 	
 	public function incrementUniqueOpens()
 	{

@@ -160,8 +160,27 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				mail.set('content', content);
 				
 				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
+				this.set('isHeaderExpanded', false);
 			}
-		}
+		},
+		
+		expandHeader: function () {
+			if(this.get('isHeaderExpanded')) {
+				this.set('isHeaderExpanded', false);
+			}
+			else {
+				this.set('isHeaderExpanded', true);
+			}
+		},
+				
+		expandTarget: function () {
+			if(this.get('isHeaderExpanded')) {
+				this.set('isHeaderExpanded', false);
+			}
+			else {
+				this.set('isHeaderExpanded', true);
+			}
+		},
 	}
 });
 

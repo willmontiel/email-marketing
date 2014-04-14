@@ -33,7 +33,7 @@
 			});
 			
 			$("#import").click(function() {
-				createIframe("iframeHtml", "{{url('mail/contenthtml')}}", "100%", "600", "");
+				createIframe("iframeHtml", "{{url('mail/importcontent')}}", "100%", "600", "");
 			});
 			
 		});
@@ -208,71 +208,31 @@
 					{{ partial("mail/partials/header_partial") }}
 				</div>
 			</div>	
-
+	
 			<div class="row">
 				<div class="col-md-12">
-					<blockquote>
-						<h3>Destinatarios</h3>
-					</blockquote>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-						  <h3 class="panel-title">Seleccione destinatarios</h3>
-						</div>
-						<div class="panel-body">
-							{{ partial("mail/partials/target_partial") }}
-						</div>
-					</div>
+					{{ partial("mail/partials/target_partial") }}
 				</div>
-			</div>
-
+			</div>	
+	
 			<div class="row">
 				<div class="col-md-12">
-					<blockquote>
-						<h3>Contenido</h3>
-					</blockquote>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-						  <h3 class="panel-title">Cree el contenido del correo</h3>
-						</div>
-						<div class="panel-body">
-							{{ partial("mail/partials/content_partial") }}
-						</div>
-					</div>
+					{{ partial("mail/partials/content_partial") }}
 				</div>
-			</div>
-
+			</div>	
+			
 			<div class="row">
 				<div class="col-md-12">
-					<blockquote>
-						<h3>Tracking con Google Analytics</h3>
-					</blockquote>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-						  <h3 class="panel-title">Configure google analytics con los enlaces que haya insertado en el contenido correo</h3>
-						</div>
-						<div class="panel-body">
-							{{ partial("mail/partials/googleanalytics_partial") }}
-						</div>
-					</div>
+					{{ partial("mail/partials/googleanalytics_partial") }}
 				</div>
 			</div>
-
+			
 			<div class="row">
 				<div class="col-md-12">
-					<blockquote>
-						<h3>Programación</h3>
-					</blockquote>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-						  <h3 class="panel-title">Envíe el correo ahora, programelo para que se envíde déspues</h3>
-						</div>
-						<div class="panel-body">
-							{{ partial("mail/partials/schedule_partial") }}
-						</div>
-					</div>	
+					{{ partial("mail/partials/schedule_partial") }}
 				</div>
 			</div>
-
+	
 			<div class="row">
 				<div class="col-md-12 text-right">
 					<a href="#" class="btn btn-default">Confirmar luego</a>
