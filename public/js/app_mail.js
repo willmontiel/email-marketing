@@ -66,20 +66,72 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	segmentlist: [],
 	open: [],
 	click: [],
+	exclude: [],
+	scheduleRadio: '',
 	
 	headerEmpty: function () {
 		var n, e, s;
-		n = this.get('model.fromName');
+		n = this.get('content.fromName');
 		e = this.get('content.fromEmail');
 		s = this.get('content.subject');
-		e = (e == '')?null:e;
+		
 		n = (n == '')?null:n;
+		e = (e == '')?null:e;
 		s = (s == '')?null:s;
+		
 		if (!e ||  !n || !s) {
 			return true;
 		}
 		return false;
 	}.property('content.fromName', 'content.fromEmail', 'content.subject'),
+			
+	targetEmpty: function () {
+		var d, l, s;
+		
+		d = this.get('this.dbaselist');
+		l = this.get('this.list');
+		s = this.get('this.segmentlist');
+		
+		d = (d == '')?null:d;
+		l = (l == '')?null:l;
+		s = (s == '')?null:s;
+		
+		if (!d && !l && !s) {
+			return true;
+		}
+		return false;
+	}.property('dbaselist.[]', 'list.[]', 'segmentlist.[]'), 
+			
+	filterEmpty: function () {
+		var byEmail, byOpen, byClick, byEx;
+		
+		byEmail = this.get('content.filterByEmail');
+//		byOpen = this.get('this.open');
+//		byClick = this.get('this.click');
+//		byEx = this.get('this.exclude');
+		
+		byEmail = (byEmail == '')?null:byEmail;
+//		byOpen = (byOpen == '')?null:byOpen;
+//		byClick = (byClick == '')?null:byClick;
+//		byEx = (byEx == '')?null:byEx;
+		
+//		if (!byEmail && !byOpen && !byClick && !byEx) {
+		if (!byEmail) {
+			return true;
+		}
+		return false;
+	}.property('content.filterByEmail'), 
+	
+	scheduleEmpty: function () {
+		var schedule;
+		
+		schedule = this.get('this.scheduleRadio');
+		
+		if (!schedule) {
+			return true;
+		}
+		return false;
+	}.property('scheduleRadio'),
 	
 	actions: {
 		save: function(mail) {
@@ -140,6 +192,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 					content = document.getElementById('iframeHtml').contentWindow.$('#redactor_content').val();
 				}
 				
+				console.log('Selection ' + mail.get('selection'));
 				var value = $('input[name=schedule]:checked').val();
 				
 				mail.set('dbases', dbaseArray.toString());
@@ -159,7 +212,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				mail.set('type', type);
 				mail.set('content', content);
 				
-				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
+//				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
 				this.set('isHeaderExpanded', false);
 			}
 		},
@@ -174,11 +227,38 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 				
 		expandTarget: function () {
-			if(this.get('isHeaderExpanded')) {
-				this.set('isHeaderExpanded', false);
+			if(this.get('isTargetExpanded')) {
+				this.set('isTargetExpanded', false);
 			}
 			else {
-				this.set('isHeaderExpanded', true);
+				this.set('isTargetExpanded', true);
+			}
+		},
+		
+		expandContent: function () {
+			if(this.get('isContentExpanded')) {
+				this.set('isContentExpanded', false);
+			}
+			else {
+				this.set('isContentExpanded', true);
+			}
+		},
+				
+		expandGA: function () {
+			if(this.get('isGAExpanded')) {
+				this.set('isGAExpanded', false);
+			}
+			else {
+				this.set('isGAExpanded', true);
+			}
+		},
+				
+		expandSchedule: function () {
+			if(this.get('isScheduleExpanded')) {
+				this.set('isScheduleExpanded', false);
+			}
+			else {
+				this.set('isScheduleExpanded', true);
 			}
 		},
 	}
@@ -199,6 +279,32 @@ App.DateTimePicker = Em.View.extend({
 			startDate: now
 		});
 	}
+});
+
+Ember.RadioButton = Ember.View.extend({
+    tagName : "input",
+    type : "radio",
+    attributeBindings : [ "name", "type", "value", "id"],
+    click : function() {
+        this.set("selection", this.$().val())
+		
+		$("#programmer").hide();
+		$('#schedule').data("DateTimePicker").hide();
+		$("#schedule").val('');
+
+		switch (this.get('selection')) {
+			case "now":
+				break;
+
+			case "later":
+				$("#programmer").show();
+				$('#schedule').data("DateTimePicker").show();
+				break;
+		}
+    },
+    checked : function() {
+        return this.get("value") == this.get("selection");   
+    }.property()
 });
 
 //App.Mail.FIXTURES = [

@@ -3,11 +3,11 @@
 		{{'{{#if headerEmpty }}'}}
 			<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;De:</strong> _______________________________</p>
 			<p><strong>Asunto:</strong> _______________________________</p>
-			<label style="cursor: pointer;" {{ '{{action "expandHeader" this}}' }}>Click aqui para configurar</label>
+			<label style="cursor: pointer;" {{ '{{action "expandHeader" this}}' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Click aqui para configurar</label>
 		{{'{{else}}'}}
 			<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;De:</strong> {{' {{fromName}}  &lt; {{fromEmail}} &gt; '}}</p>
 			<p><strong>Asunto:</strong> {{'  {{subject}} '}}</p>
-			<label style="cursor: pointer;" {{ '{{action "expandHeader" this}}' }}>Click aqui para configurar</label>
+			<label style="cursor: pointer;" {{ '{{action "expandHeader" this}}' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Click aqui para configurar</label>
 		{{'{{/if}}'}}
 	</div>
 </div>

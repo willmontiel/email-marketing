@@ -155,23 +155,6 @@
 						break;
 				}
 			});
-			
-			$("input[name=schedule]").on('click', function () { 
-				$("#programmer").hide();
-				$('#schedule').data("DateTimePicker").hide();
-				$("#schedule").val('');
-				
-				var v = $('input[name=schedule]:checked').val();
-				switch (v) {
-					case "now":
-						break;
-						
-					case "later":
-						$("#programmer").show();
-						$('#schedule').data("DateTimePicker").show();
-						break;
-				}
-			});
 		});
 	</script>
 {% endblock %}
