@@ -1,4 +1,22 @@
 <?php
+
+/**
+ * How to catch unable connection with simple_html_dom
+ * 
+ * $ctx = stream_context_create(array(
+ *	'http' => array('timeout' => 10)
+ * ));
+ * 
+ * $html = file_get_html('http://mailing.sigmamovil.com/ss/display.php?M=6895334&C=7727f4803272bc13f058855d4f6249d2&L=1280&N=6035', false, $ctx);
+ *
+ * if (!$html) {
+ *		echo "Unable connection\n";
+ * }
+ * else {
+ *		Do your things
+ * }
+ */
+
 class LoadHtml
 {
 	protected $logger;
@@ -19,11 +37,17 @@ class LoadHtml
 	 */
 	public function gethtml($url, $image, $dir, Account $account)
 	{
-		$this->logger->log("Iniciando proceso");
 		$some = new simple_html_dom();
 		
-		$this->logger->log("Se instanció simple_html_dom");
-		$html = file_get_html($url);
+		$ctx = stream_context_create(array(
+			'http' => array('timeout' => 8)
+		));
+		
+		$html = file_get_html($url, false, $ctx);
+		
+		if (!$html) {
+			throw new Exception("Unable to connect with the server");
+		}
 		
 		$this->logger->log("Se importó el html");
 		

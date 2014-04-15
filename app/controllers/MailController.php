@@ -784,6 +784,7 @@ class MailController extends ControllerBase
 				catch (Exception $e) {
 					$this->db->rollback();
 					$this->logger->log("Exception: {$e}");
+					$this->flashSession->error("No se pudo conectar con el servidor solicitado, por favor intente más tarde");
 				}
 				
 				if ($mail->wizardOption == 'source' || $mail->wizardOption == 'setup') {
