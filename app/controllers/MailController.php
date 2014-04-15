@@ -15,8 +15,9 @@ class MailController extends ControllerBase
 		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		$this->logger->log('idMail: ' . $idMail);
 		$content = $contentsT->mail;
-		
+
 		if ($idMail != null) {
+			
 			$mail = Mail::findFirst(array(
 				'conditions' => 'idMail = ?1 AND idAccount = ?2',
 				'bind' => array(1 => $idMail,
@@ -536,7 +537,11 @@ class MailController extends ControllerBase
 				}
 			}		
 		}
-		
+	}
+	
+	public function contenteditorAction() 
+	{
+		$this->view->setVar('objMail', 'null');
 	}
 	
 	public function editor_frameAction($idMail = NULL, $idTemplate = null) 
@@ -1534,6 +1539,62 @@ class MailController extends ControllerBase
 		return $this->response->redirect("mail/index");
 	}
 	
+	public function confirmmailAction($idMail)
+	{
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		$mailcontent = Mailcontent::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		if ($mail && $mailcontent) {
+			
+		}
+		
+		$schedule = Mailschedule::findFirstByIdMail($idMail);
+		$mail = Mail::findFirstByIdMail($idMail);
+		
+		if($schedule) {
+			$mail->status = 'Scheduled';
+			if(!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+				return $this->response->redirect('mail/preview/' . $idMail);
+			}
+			$schedule->confirmationStatus = 'Yes';
+			if(!$schedule->save()){
+				foreach ($schedule->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+				return $this->response->redirect('mail/preview/' . $idMail);
+			}
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$commObj->sendSchedulingToParent($idMail);	
+			
+			return $this->response->redirect("mail/index");
+		}
+		
+		$mail->status = 'Scheduled';
+		$mail->startedon = time();
+		
+		if(!$mail->save()) {
+			foreach ($mail->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+			}
+			return $this->response->redirect('mail/preview/' . $idMail);
+		}
+		
+		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+		$commObj->sendPlayToParent($idMail);
+		
+		return $this->response->redirect("mail/index");
+	}
+	
 	public function stopAction($direction, $idMail)
 	{
 		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
@@ -1813,5 +1874,18 @@ class MailController extends ControllerBase
 		else {
 			$this->view->setVar('db', false);
 		}
+		
+//		$mail = Mail::findFirst(array(
+//			'conditions' => 'idMail = ?1',
+//			'bind' => array(1 => $idMail)
+//		));
+//		
+//		if ($mail) {
+//			$MailWrapper = new MailWrapper();
+//			
+//			$MailWrapper->setMail($mail);
+//			$response = $MailWrapper->getResponse();
+//			$this->setJsonResponse($response->key, $response->data, $response->code);
+//		}
 	}
 }

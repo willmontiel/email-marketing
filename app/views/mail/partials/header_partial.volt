@@ -7,7 +7,7 @@
 					<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
 					<dt>Asunto:</dt> <dd>_______________________________</dd>
 				{{'{{else}}'}}
-					<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
+					<dt>De:</dt> <dd>{{'{{fromSummary}}'}}</dd>
 					<dt>Asunto:</dt> <dd>{{'  {{subject}} '}}</dd>
 				{{'{{/if}}'}}
 				</dl>

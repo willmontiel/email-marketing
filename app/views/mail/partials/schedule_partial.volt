@@ -17,7 +17,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-				  <h3 class="panel-title">Envíe el correo ahora, programelo para que se envíde déspues</h3>
+				  <h3 class="panel-title">Envíe el correo ahora o programelo para que se envíe déspues</h3>
 				</div>
 				<div class="panel-body">
 					{% if mail is not defined or mail.scheduleDate == null %}
@@ -54,8 +54,10 @@
 						</div>
 
 						<div class="form-group text-right">
-							<button class="btn btn-default" {{'{{action "discardSchedule" this}}'}}>Descartar cambios</button>
-							<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
+							<div class="col-sm-12">
+								<button class="btn btn-default" {{'{{action "discardSchedule" this}}'}}>Descartar cambios</button>
+								<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
+							</div>
 						</div>
 					</form>
 				</div>

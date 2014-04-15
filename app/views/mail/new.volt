@@ -161,8 +161,8 @@
 	
 			<div class="row">
 				<div class="col-md-12 text-right">
-					<a href="#" class="btn btn-default">Confirmar luego</a>
-					<a href="#" class="btn btn-primary">Confirmar</a>
+					<a href="{{url('mail/list')}}" class="btn btn-default">Confirmar luego </a>
+					<a href="{{url('mail/confirmmail')}}/{{ '{{id}}' }}" class="btn btn-primary">Confirmar</a>
 				</div>
 			</div>
 		</script>

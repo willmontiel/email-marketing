@@ -5,7 +5,7 @@ class MailWrapper extends BaseWrapper
 	protected $account;
 	protected $content;
 	protected $mail = null;
-	protected $mailcontent;
+	protected $mailcontent = null;
 	protected $target = null;
 	protected $scheduleDate;
 
@@ -172,7 +172,7 @@ class MailWrapper extends BaseWrapper
 		}
 	}
 	
-	private function convertMailToJson()
+	public function convertMailToJson()
 	{
 		$this->mail; $this->content;
 		$jsonObject = array();

@@ -8,9 +8,9 @@
 				<div id="choose-content" style="display: block;">
 					<div class="row">
 						<div class="col-md-3 text-center">
-							<button type="button" class="btn btn-default btn-lg" id="editor">
+							<a href="{{url('mail/editorcontent')}}" class="btn btn-default btn-lg">
 								<span class="glyphicon glyphicon-star"></span> Editor avanzado
-							</button>
+							</a>
 						</div>
 						<div class="col-md-3 text-center">
 							<button type="button" class="btn btn-default btn-lg" id="template">

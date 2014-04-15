@@ -230,6 +230,7 @@ class Security extends Plugin
 				'mail::editor' => array('mail' => array('read', 'create')),
 				'mail::html' => array('mail' => array('read', 'create')),
 				'mail::contenthtml' => array('mail' => array('read', 'create')),
+				'mail::contenteditor' => array('mail' => array('read', 'create')),
 				'mail::target' => array('mail' => array('read', 'create')),
 				'mail::track' => array('mail' => array('read', 'create')),
 				'mail::schedule' => array('mail' => array('read', 'create')),
