@@ -759,8 +759,14 @@ class MailController extends ControllerBase
 					mkdir($dir, 0777, true);
 				} 
 
-				$getHtml = new LoadHtml();
-				$html = $getHtml->gethtml($url, $image, $dir, $account);
+				try {
+					$getHtml = new LoadHtml();
+					$html = $getHtml->gethtml($url, $image, $dir, $account);
+				}
+				catch (Exception $e) {
+					$this->db->rollback();
+					$this->logger->log("Exception: {$e}");
+				}
 				
 				if ($mail->wizardOption == 'source' || $mail->wizardOption == 'setup') {
 					$wizardOption = 'source';
