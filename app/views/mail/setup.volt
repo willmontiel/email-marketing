@@ -1,59 +1,18 @@
 {% extends "templates/index_new.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
+	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
+	{{ javascript_include('js/editor/gallery.js') }}
+	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	<script type="text/javascript">
-		function showsocials(){
-			var container = $('.setup_socials_container');
-			if (container.css('display') === 'none') {
-				container.show();
-			}
-			else {
-				container.hide();
-			}
-		}
-		function new_sn_account(redirect){
-			$.ajax(
-				{
-				url: "{{url('mail/savetmpdata')}}",
-				type: "POST",			
-				data: $('#setupform').serialize(),
-				success: function(){
-					window.location.href = redirect;
-				}
-			});
-		}
+		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}"};
 		$(function() {
-			if($('#accounts_facebook')[0].selectedOptions.length > 0){
-				$('.fbdescription').show();
-				$('.setup_socials_container').show();
-			}	
-			if($('#accounts_twitter')[0].selectedOptions.length > 0){
-				$('.twdescription').show();
-				$('.setup_socials_container').show();
-			}
-			$('#accounts_facebook').on('change', function() {
-				if($(this)[0].selectedOptions.length > 0) {
-					$('.fbdescription').show();
-				}
-				else {
-					$('.fbdescription').hide();
-				}
-			});
-	
-			$('#accounts_twitter').on('change', function() {
-				if($(this)[0].selectedOptions.length > 0) {
-					$('.twdescription').show();
-				}
-				else {
-					$('.twdescription').hide();
-				}
-			});
-			
-			$('#tweet-char-number').text($('#twpublicationcontent').attr('maxlength'));
-			$('#twpublicationcontent').keyup(function() {
-				var text = $(this).val();
-				$('#tweet-char-number').text($(this).attr('maxlength') - text.length);
-			});
+			{%for asset in assets%}
+				var media = new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}});
+				media.createMedia();
+				media.mediaSelected();
+			{%endfor%}
 		});
 	</script>
 {% endblock %}
@@ -156,12 +115,25 @@
 									{% endfor %}
 								</select>
 								<div class="fbdescription" style="display: none">
-									<label>Titulo de la Publicacion: </label>
-									{{ MailForm.render('fbtitlecontent') }}
-									<label>Descripcion de la Publicacion: </label>
-									{{ MailForm.render('fbdescriptioncontent') }}
-									<label>Mensaje de la Publicacion: </label>
-									{{ MailForm.render('fbmessagecontent') }}
+									<br />
+									<div>
+										<div>
+											{{ MailForm.render('fbmessagecontent') }}
+										</div>
+										<div class="clearfix">
+											<div style="float: left;margin-right: 15px;width: 154px;height: 154px;background-color: #FAFAFA;">
+												<div>
+													<div data-toggle="modal" data-backdrop="static" href="#images" class="edit-fb-image-tool icon-pencil icon-2x" style="position: relative;left: 2px;top: 4px;padding: 2px;border-radius: 4px;cursor: pointer;border: 1px solid #E4E4E4;background-color: #F5F5F5;"></div>
+												</div>
+												{{ MailForm.render('fbimagepublication') }}
+												<img id="fb-share-image" src="/emarketing/images/260.png" width="154" height="154">
+											</div>
+											<div style="float: left;width: 67%;">
+												{{ MailForm.render('fbtitlecontent') }}
+												{{ MailForm.render('fbdescriptioncontent') }}
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="add_facebook_account"><a onclick="new_sn_account('{{fbloginUrl}}')">Añadir cuenta de Facebook</a></div>
 							</div>
@@ -192,6 +164,41 @@
 						<button class="btn btn-blue" name="direction" value="next">Siguiente <i class="icon-circle-arrow-right"></i></button>
 					</div>
 				</form>
+			</div>
+		</div>
+	</div>
+	<div id="images" class="modal hide fade gallery-modal">
+		<div class="modal-header gallery-header">
+			<h3>Imagenes</h3>
+		</div>
+
+		<ul class="nav nav-tabs nav-tabs-in-modal">
+			<li id="tabgallery" class="active">
+				<a href="#gallery" data-toggle="tab">Galeria</a>
+			</li>
+			<li id="tabuploadimage" class="">
+				<a href="#uploadimage" data-toggle="tab">Cargar</a>
+			</li>
+		</ul>
+
+		<div class="modal-body">
+			<div class="tab-content imagesbody">
+				<div id="gallery" class="tab-pane active">
+
+				</div>
+
+				<div id="uploadimage" class="tab-pane well">
+					<h2 class="text-center">Cargar Imagen</h2>
+					<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
+						<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<div id="accept_cancel_image">
+				<a href="#" class="btn btn-default" id="accept_change" data-dismiss="modal">Aplicar</a>
+				<a href="#" class="btn btn-default" id="cancel_change" data-dismiss="modal">Cancelar</a>
 			</div>
 		</div>
 	</div>

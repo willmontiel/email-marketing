@@ -54,6 +54,7 @@
 	</script>
 	{{ javascript_include('js/app_dbase.js') }}
 	{{ javascript_include('js/app_contact.js') }}
+	{{ javascript_include('js/app_forms.js') }}
 	<script type="text/javascript">
 		//ACL de los campos personalizados
 		App.customFieldACL = {
@@ -93,7 +94,8 @@
 						<ul class="nav nav-tabs nav-tabs-left">
 							{{'{{#link-to "index" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>General</a>{{/link-to}}'}}
 							{{'{{#link-to "fields" tagName="li" href=false}}<a {{bind-attr href="view.href"}}>Campos</a>{{/link-to}}'}}
-							{{'{{#link-to "contacts" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Contactos</a>{{/link-to}}'}}                                                                
+							{{'{{#link-to "contacts" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Contactos</a>{{/link-to}}'}}
+							{{'{{#link-to "forms" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Formularios</a>{{/link-to}}'}}
 						</ul>
 					</div>
 					<div class="box-content padded">
@@ -457,5 +459,8 @@
 
 	<!---------------------- Contacts Template -------------------------->
 		{{ partial("dbase/partials/contacts_partial") }}
+	
+	<!---------------------- Forms Template -------------------------->
+		{{ partial("dbase/partials/forms_partial") }}
 </div>
 {% endblock %}

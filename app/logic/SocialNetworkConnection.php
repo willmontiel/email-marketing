@@ -5,9 +5,14 @@ class SocialNetworkConnection
 	public $twitter = null;
 	public $user;
 	
-	function __construct($logger = null) {
-		$this->logger = $logger;
+	const IMG_SN_WIDTH = 600;
+	const IMG_SN_HEIGHT = 300;
+	const IMG_TYPE_DEFAULT = 'default';
+	
+	function __construct() {
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
 		$this->urlObj = Phalcon\DI::getDefault()->get('urlManager');
+		$this->assetsrv = Phalcon\DI::getDefault()->get('asset');
 	}
 
 	public function setAccount(Account $account)
@@ -191,12 +196,13 @@ class SocialNetworkConnection
 		return json_encode($socialsnetworks);
 	}
 	
-	public function saveFacebookDescription($fbtitle = '', $fbdescription = '', $fbmsg = '')
+	public function saveFacebookDescription($fbtitle = '', $fbdescription = '', $fbmsg = '', $fbimage = '')
 	{
 		$fbcontent = new stdClass();
 		$fbcontent->title = $fbtitle;
 		$fbcontent->description = $fbdescription;
 		$fbcontent->message = $fbmsg;
+		$fbcontent->image = (!empty($fbimage)) ? $fbimage : self::IMG_TYPE_DEFAULT;
 		return json_encode($fbcontent);
 	}
 	
@@ -222,9 +228,19 @@ class SocialNetworkConnection
 		$fbcontent = json_decode($desc->fbdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
-		$url = $this->urlObj->getBaseUri(TRUE) . 'webversion/show/1-' . $mail->idMail . '-25';
-		$md5 = md5($url . '-Sigmamovil_Rules');
-		$link = $url . '-' . $md5; 
+		
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
+		
+		$action = 'webversion/show';
+		$parameters = array(1, $mail->idMail, '1329278');
+		$link = $linkdecoder->encodeLink($action, $parameters);
+		
+		// Ajustar Tamaño de Imagen para Publicar
+		$socialImg = new SocialImageCreator();
+		$socialImg->setAccount($this->account);
+		$image = $socialImg->createImageToIdealSize($fbcontent->image, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, 'fb');
+		
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$userid = $id_token->userid;
@@ -233,14 +249,15 @@ class SocialNetworkConnection
 					"access_token" => $access_token,
 					"message" => $fbcontent->message,
 					"link" => $link, //$this->urlObj->getBaseUri(TRUE) "http://stage.sigmamovil.com/",
-					"picture" => $this->urlObj->getBaseUri(TRUE) . 'images/sigma_envelope.png', //"http://stage.sigmamovil.com/images/sigma_envelope.png",
+					"picture" => $image, //"http://stage.sigmamovil.com/images/sigma_envelope.png",
 					"name" => $fbcontent->title,
 					"caption" => $link, //$this->urlObj->getBaseUri(TRUE) "www.stage.sigmamovil.com/",
 					"description" => $fbcontent->description
 				  );
 
 				  try {
-					  $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
+					  $someid = $this->facebook->api('/'.$userid.'/feed', 'POST', $params);
+					  $this->logger->log('Id que retorna ' . print_r($someid, true));
 					  $this->logger->log('Successfully posted to Facebook');
 				  } catch(Exception $e) {
 					  $this->logger->log('No publico');
@@ -271,9 +288,14 @@ class SocialNetworkConnection
 		$twcontent = json_decode($desc->twdescription);
 		$mm = Phalcon\DI::getDefault()->get('modelsManager');
 		$ids_tokens = $mm->executeQuery($phql);
-		$url = $this->urlObj->getBaseUri(TRUE) . 'webversion/show/1-' . $mail->idMail . '-25';
-		$md5 = md5($url . '-Sigmamovil_Rules');
-		$link = $url . '-' . $md5; 
+		
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
+		
+		$action = 'webversion/show';
+		$parameters = array(1, $mail->idMail, '1329278');
+		$link = $linkdecoder->encodeLink($action, $parameters);
+		
 		if (count($ids_tokens) > 0) {
 			foreach ($ids_tokens as $id_token){
 				$oauth_token = $id_token->userid;

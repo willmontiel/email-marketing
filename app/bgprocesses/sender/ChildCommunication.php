@@ -264,7 +264,8 @@ class ChildCommunication extends BaseWrapper
 				print_dbase_profile();
 				
 				if($mail->socialnetworks != null) {
-					$socials = new SocialNetworkConnection($log);
+					$socials = new SocialNetworkConnection();
+					$socials->setAccount($this->account);
 					$socialdesc = Socialmail::findFirstByIdMail($mail->idMail);
 					if($socialdesc) {
 						$idsocials = json_decode($mail->socialnetworks);

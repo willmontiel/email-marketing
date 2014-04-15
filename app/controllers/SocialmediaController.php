@@ -3,7 +3,7 @@ class SocialmediaController extends ControllerBase
 {
 	public function indexAction()
 	{
-		$socialnet = new SocialNetworkConnection($this->logger);
+		$socialnet = new SocialNetworkConnection();
 		$socialnet->setAccount($this->user->account);
 		$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 		$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
@@ -18,7 +18,7 @@ class SocialmediaController extends ControllerBase
 	public function newAction()
 	{
 		$this->view->disable();
-		$socialnet = new SocialNetworkConnection($this->logger);
+		$socialnet = new SocialNetworkConnection();
 		$socialnet->setAccount($this->user->account);
 		$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 		$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
@@ -35,7 +35,7 @@ class SocialmediaController extends ControllerBase
 	public function createAction($idMail = '')
 	{
 		$this->view->disable();
-		$socialnet = new SocialNetworkConnection($this->logger);
+		$socialnet = new SocialNetworkConnection();
 		$socialnet->setAccount($this->user->account);
 		$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 		$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
