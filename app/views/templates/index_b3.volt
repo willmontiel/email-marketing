@@ -60,9 +60,10 @@
 				<!-- <p class="navbar-text">{% block sectiontitle %}Titulo de pagina{% endblock %}</p> -->
 				<div class="collapse navbar-collapse" id="nav-collapse-01">
 					<ul id="top-nav" class="nav navbar-nav navbar-right">
-						<li><a href="">Mi Cuenta</a></li>
+<!--						<li><a href="">Mi Cuenta</a></li>
 						<li><a href="">Ayuda</a></li>
-						<li><a href="">Cerrar sesión</a></li>
+-->
+						<li><a href="{{url('session/logout')}}">Cerrar sesión</a></li>
 					</ul>					
 				</div>	
 			</div>
