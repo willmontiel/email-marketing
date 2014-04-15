@@ -5,7 +5,7 @@
 				{{'{{#if scheduleEmpty }}'}}
 					<dt>Enviar el correo el:</dt><dd> _______________________________</dd>
 				{{'{{else}}'}}
-					<dt>Enviar el correo el:</dt><dd>{{ '{{scheduleRadio}}' }}</dd>
+					<dt>Enviar el correo el:</dt><dd>{{'{{scheduleSummary}}'}}</dd>
 				{{'{{/if}}'}}
 			</dl>
 		</div>

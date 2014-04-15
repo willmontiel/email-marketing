@@ -135,6 +135,14 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		if (!schedule) {
 			return true;
 		}
+		
+		if (schedule === 'now') {
+			this.set('scheduleSummary', 'De inmediato');
+		}
+		else {
+			var dateTime = this.sche
+			this.set('scheduleSummary', 'De inmediato');
+		}
 		return false;
 	}.property('scheduleRadio'),
 	
@@ -271,12 +279,10 @@ App.DateTimePicker = Em.View.extend({
 		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
 		
 		$('#schedule').datetimepicker({
-			language: 'es',
-			maskInput: true,
-			pickTime: true,
-			format: "MM/DD/YYYY H:mm",
-			pickSeconds: false,
-			startDate: now
+			format:'m/d/Y H:i',
+			inline:true,
+			lang:'es',
+//			startDate: now
 		});
 	}
 });
@@ -288,8 +294,9 @@ Ember.RadioButton = Ember.View.extend({
     click : function() {
         this.set("selection", this.$().val())
 		
+		
 		$("#programmer").hide();
-		$('#schedule').data("DateTimePicker").hide();
+//		$('#schedule').data("DateTimePicker").hide();
 		$("#schedule").val('');
 
 		switch (this.get('selection')) {
@@ -298,7 +305,7 @@ Ember.RadioButton = Ember.View.extend({
 
 			case "later":
 				$("#programmer").show();
-				$('#schedule').data("DateTimePicker").show();
+//				$('#schedule').data("DateTimePicker").show();
 				break;
 		}
     },
