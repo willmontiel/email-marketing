@@ -65,7 +65,13 @@ App.ContactsImportView = Ember.View.extend({
 
 App.ContactController = Ember.ObjectController.extend();
 
-App.ContactsNewbatchController = Ember.ObjectController.extend();
+App.ContactsNewbatchController = Ember.ObjectController.extend({
+	actions: {
+		cancel: function() {
+			this.transitionToRoute("contacts");
+		}
+	}
+});
 
 App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	actions: {
