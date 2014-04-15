@@ -139,6 +139,7 @@ class PermissionsDataBase
 	public function loadAllowed()
 	{
 		$this->allowed = array(
+//			----------//----------**ROLE_SUDO**----------//----------
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'contact::create'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'contact::read'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'contact::update'),
@@ -222,6 +223,122 @@ class PermissionsDataBase
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'tools::read'),
 			
+			
+//			----------//----------**ROLE_ADMIN**----------//----------
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contact::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contact::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contact::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contact::delete'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contact::(un)subscribe'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contact::importbatch'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contact::import'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contactlist::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contactlist::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contactlist::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contactlist::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'user::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'user::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'user::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'user::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'segment::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'segment::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'segment::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'segment::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'blockemail::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'blockemail::block email'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'blockemail::unblock email'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dashboard::read'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'mail::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'mail::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'mail::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'mail::delete'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'mail::send'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'mail::clone'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'template::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'template::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'template::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'template::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'statistic::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'statistic::download'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'form::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'form::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'form::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'form::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'socialmedia::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'socialmedia::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'socialmedia::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'tools::read'),
+			
+			
+//			----------//----------**ROLE_USER**----------//----------
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contact::create'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contact::read'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contact::update'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contact::delete'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contact::(un)subscribe'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contact::importbatch'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contact::import'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contactlist::create'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contactlist::read'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contactlist::update'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'contactlist::delete'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'segment::create'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'segment::read'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'segment::update'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'segment::delete'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'blockemail::read'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'blockemail::block email'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'blockemail::unblock email'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'dashboard::read'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'mail::create'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'mail::read'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'mail::update'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'mail::delete'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'mail::send'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'mail::clone'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'template::create'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'template::read'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'template::update'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'template::delete'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'statistic::read'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'statistic::download'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'form::create'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'form::read'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'form::update'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'form::delete'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'socialmedia::create'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'socialmedia::read'),
+			array( 'Role' => 'ROLE_USER', 'Action' => 'socialmedia::delete'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'tools::read'),
+			
 		);
 	}
 	
@@ -272,11 +389,20 @@ class PermissionsDataBase
 		$db = Phalcon\DI::getDefault()->get('db');
 		
 		$db->begin();
-
+		
+		$db->execute('SET foreign_key_checks = 0');
+		
+		$db->execute('TRUNCATE TABLE role');
+		$db->execute('TRUNCATE TABLE resource');
+		$db->execute('TRUNCATE TABLE action');
+		$db->execute('TRUNCATE TABLE allowed');
+		
 		$execRole = $db->execute($sqlRoles);
 		$execResource = $db->execute($sqlResource);
 		$execAction = $db->execute($sqlAction);
 		$execAllowed = $db->execute($sqlAllowed);
+		
+		$db->execute('SET foreign_key_checks = 1');
 		
 		if (!$execRole || !$execResource || !$execAction || !$execAllowed) {
 			$db->rollback();
