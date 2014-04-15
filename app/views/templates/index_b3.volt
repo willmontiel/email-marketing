@@ -171,7 +171,7 @@
 						emailAddress: '{{ userObject.email }}'
 				});
 				olark('api.visitor.updateFullName', {
-						fullName: {{ userObject.firstName }} {{ userObject.lastName }}'
+						fullName: '{{ userObject.firstName }} {{ userObject.lastName }}'
 				});
 				olark('api.chat.updateVisitorNickname', {
 					snippet: '{{ userObject.firstName }}'
