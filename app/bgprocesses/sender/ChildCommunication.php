@@ -183,8 +183,6 @@ class ChildCommunication extends BaseWrapper
 					if ($mail->replyTo != null) {
 						$message->setReplyTo($mail->replyTo);
 					}
-//					$message->setSender($returnPath);
-//					$message->setReturnPath($returnPath);
 					$message->addPart($text, 'text/plain');
 					
 //					$recipients = true;
