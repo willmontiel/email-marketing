@@ -53,6 +53,9 @@
 		}
 	</script>
 	<script type="text/javascript">
+		//Full Mail Content
+		App.maildata = [{id: {{mail.idMail}}, name: "{{mail.name}}"}];
+		
 		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios
 		{% if db == true%}
 			App.dbs = [

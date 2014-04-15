@@ -33,7 +33,14 @@ App.Mail = DS.Model.extend({
 
 App.IndexRoute = Ember.Route.extend({
 	model: function(){
-		return this.store.createRecord('mail');
+		var m = this.store.createRecord('mail');
+		this.loadData(m);
+		return m;
+	},
+			
+	loadData: function(m){
+		m.set('id', App.maildata[0].id)
+		m.set('name', App.maildata[0].name)
 	},
 			
 	deactivate: function () {
@@ -41,23 +48,6 @@ App.IndexRoute = Ember.Route.extend({
 			this.currentModel.rollback();
 		}
 	}
-//	model: function(){
-//		console.log('lala');
-//		return this.store.find('mail');
-//	},
-////	deactivate: function () {
-////		this.doRollBack();
-////	},
-////	contextDidChange: function() {
-////		this.doRollBack();
-////		this._super();
-////    },
-////	doRollBack: function () {
-////		var model = this.get('currentModel');
-////		if (model && model.get('isDirty') && !model.get('isSaving') ) {
-////			model.get('transaction').rollback();
-////		}
-////	}
 });
 
 App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{

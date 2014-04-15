@@ -1862,6 +1862,15 @@ class MailController extends ControllerBase
 				'conditions' => 'idAccount = ?1',
 				'bind' => array(1 => $account->idAccount)
 			));
+			
+			if($idMail != null) {
+				$mail = Mail::findFirst(array(
+					'conditions' => 'idAccount = ?1 AND idMail = ?2',
+					'bind' => array(1 => $account->idAccount,
+									2 => $idMail)
+				));
+				$this->view->setVar('mail', $mail);
+			}
 
 
 			$this->view->setVar('mails', $mails);
