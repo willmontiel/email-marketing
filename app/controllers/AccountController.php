@@ -93,6 +93,7 @@ class AccountController extends ControllerBase
 							$dbase->Cunsubscribed = 0;
 							$dbase->Cbounced = 0;
 							$dbase->Cspam = 0;
+							$dbase->color = '#0080FF';
 							$dbase->createdon = time();
 							$dbase->update = time();
 							
