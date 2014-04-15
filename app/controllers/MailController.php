@@ -776,8 +776,10 @@ class MailController extends ControllerBase
 				} 
 
 				try {
+					$this->logger->log('Iniciando importacion de contenido html a traves de una url');
 					$getHtml = new LoadHtml();
 					$html = $getHtml->gethtml($url, $image, $dir, $account);
+					$this->logger->log('Se cargó el contenido exitosamente');
 				}
 				catch (Exception $e) {
 					$this->db->rollback();
