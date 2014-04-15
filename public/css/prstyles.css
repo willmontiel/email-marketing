@@ -672,3 +672,34 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border-left: none !important; 
 	border-right: none !important;
 }
+
+/*-----------------//-----------------// FORMULARIOS //-----------------//-----------------*/
+
+.form-options {
+	background-color: rgb(228, 228, 228);
+	height: 40px;
+	width: 150px;
+	text-align: center;
+	padding: 10px;
+	border: 1px dashed lightgray;
+	cursor: pointer;
+}
+.form-full-content {
+	text-align: center;
+	width: 400px;
+}
+.form-title-name {
+	padding: 10px;
+	font-weight: bold;
+	font-size: 17px;
+}
+.field-zone-name {
+	font-size: 15px;
+}
+.field-content-zone {
+	padding-bottom: 10px;
+}
+.field-option-disabled {
+	color: rgb(180, 180, 180) !important;
+	background-color: rgb(243, 243, 243) !important;
+}

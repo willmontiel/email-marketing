@@ -28,7 +28,7 @@ App.Router.map(function() {
 	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
   });
   this.resource('forms', function(){
-	  
+	   this.route('new');
   });
 });
 

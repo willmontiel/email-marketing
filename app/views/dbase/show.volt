@@ -55,6 +55,8 @@
 	{{ javascript_include('js/app_dbase.js') }}
 	{{ javascript_include('js/app_contact.js') }}
 	{{ javascript_include('js/app_forms.js') }}
+	{{ javascript_include('js/forms/text_block.js') }}
+	{{ javascript_include('js/forms/form_zone.js') }}
 	<script type="text/javascript">
 		//ACL de los campos personalizados
 		App.customFieldACL = {

@@ -195,6 +195,7 @@ class Security extends Plugin
 				
 				//Dbaseapi
 				'dbaseapi::searchcontacts' => array('contact' => array('read')),
+				'dbaseapi::getforms' => array('contact' => array('read')),
                 //Contactlistapi
 				'contactlistapi::searchcontacts' => array('contact' => array('read')),
 				//Segmentapi

@@ -6,4 +6,13 @@ App.FormsIndexRoute = Ember.Route.extend({
 	}
 });
 
-App.ContactsEditController = Ember.ObjectController.extend({});
+App.FormsIndexController = Ember.ObjectController.extend({});
+
+App.FormsNewRoute = Ember.Route.extend({});
+
+App.FormsNewController = Ember.ObjectController.extend({
+	init: function() {
+		console.log('inicio')
+		formeditor.starEvents();
+	}
+});

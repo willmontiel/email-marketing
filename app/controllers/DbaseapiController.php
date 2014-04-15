@@ -85,4 +85,12 @@ class DbaseapiController extends ControllerBase
 			 return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
 		}
 	}
+	
+	/**
+	 * @Get("/{idDbase:[0-9]+}/forms")
+	 */
+	public function getformsAction($idDbase)
+	{
+		return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
+	}
 }
