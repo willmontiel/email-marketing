@@ -63,6 +63,15 @@
 <!--						<li><a href="">Mi Cuenta</a></li>
 						<li><a href="">Ayuda</a></li>
 -->
+						{% if chat.enabled %}
+						<!-- BEGIN OLARK CHAT LINK -->
+						<li>
+							<a href="javascript:void(0);" onclick="olark('api.box.expand')">
+								Necesitas ayuda? <i class="fa fa-comments"></i>
+							</a>
+						</li>
+						<!-- END OLARK CHAT LINK -->
+						{% endif %}
 						<li><a href="{{url('session/logout')}}">Cerrar sesión</a></li>
 					</ul>					
 				</div>	
