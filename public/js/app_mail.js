@@ -28,7 +28,6 @@ App.Mail = DS.Model.extend({
 	filterByExclude: DS.attr('string'),
 	content: DS.attr('string'),
 	plainText: DS.attr('string'),
-	
 });
 
 App.IndexRoute = Ember.Route.extend({
@@ -39,8 +38,25 @@ App.IndexRoute = Ember.Route.extend({
 	},
 			
 	loadData: function(m){
-		m.set('id', App.maildata[0].id)
-		m.set('name', App.maildata[0].name)
+		if (App.maildata != undefined) {
+			m.set('id', App.maildata[0].id);
+			m.set('name', App.maildata[0].name);
+			m.set('type', App.maildata[0].type);
+			m.set('scheduleDate', App.maildata[0].scheduleDate);
+			m.set('fromName', App.maildata[0].fromName);
+			m.set('fromEmail', App.maildata[0].fromEmail);
+			m.set('replyTo', App.maildata[0].replyTo);
+			m.set('subject', App.maildata[0].subject);
+			m.set('dbases', App.maildata[0].dbases);
+			m.set('contactlists', App.maildata[0].contactlists);
+			m.set('segments', App.maildata[0].segments);
+			m.set('filterByEmail', App.maildata[0].filterByEmail);
+			m.set('filterByOpen', App.maildata[0].filterByOpen);
+			m.set('filterByClick', App.maildata[0].filterByClick);
+			m.set('filterByExclude', App.maildata[0].filterByExclude);
+			m.set('content', App.maildata[0].content);
+			m.set('plainText', App.maildata[0].plainText);
+		}
 	},
 			
 	deactivate: function () {
