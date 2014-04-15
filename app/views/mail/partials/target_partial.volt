@@ -1,36 +1,4 @@
-<div {{'{{bind-attr class=":bs-callout targetEmpty:bs-callout-warning:bs-callout-success"}}'}}>
-	<div class="panel-body">
-		{{'{{#if targetEmpty }}'}}
-			<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para:</strong> _______________________________</p>
-			<label style="cursor: pointer;" {{ '{{action "expandTarget" this}}' }}>Click aqui para configurar</label>
-		{{'{{else}}'}}
-			<p>
-				<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para: </strong> 
-				{{ '{{#if dbaselist}}' }}
-					{{ '{{#each dbaselist}}' }}
-						Base de datos: {{' {{name}} '}}, 
-					{{ '{{/each}}' }}
-				{{ '{{/if}}' }}
-						
-				{{ '{{#if list}}' }}
-					{{ '{{#each list}}' }}
-						Lista de contactos: {{' {{name}} '}}, 
-					{{ '{{/each}}' }}
-				{{ '{{/if}}' }}
-					
-				{{ '{{#if segmentlist}}' }}
-					{{ '{{#each segmentlist}}' }}
-						Segmento: {{' {{name}} '}}, 
-					{{ '{{/each}}' }}
-				{{ '{{/if}}' }}
-			</p>
-			<label style="cursor: pointer;" {{ '{{action "expandTarget" this}}' }}>Click aqui para configurar</label>
-		{{'{{/if}}'}}
-	</div>
-</div>
-{#
 {{ '{{#if isTargetExpanded}}' }}
-#}
 	<div class="panel panel-default">
 		<div class="panel-heading">
 		  <h3 class="panel-title">Seleccione destinatarios</h3>
@@ -49,7 +17,7 @@
 								<div class="tab-pane fade in active" id="target">
 									<br />
 									{% if mail.targetName is empty AND mail.target is empty %}
-										<input type="radio" name="radios" value="dataBase" id="dbRadio">
+										{{ ' {{view Ember.RadioButtonTarget name="radioTarget" value="dataBase" id="dbRadio"}}' }}
 										<label for="dbRadio">Base de datos de contactos</label> <br />
 										<div id="db" style="display: none;">
 											{{ '{{view Ember.Select
@@ -63,7 +31,7 @@
 											 }}
 										</div>
 										<br />
-										<input type="radio" name="radios" value="contactList" id="listRadio">
+										{{ ' {{view Ember.RadioButtonTarget name="radioTarget" value="contactList" id="listRadio"}}' }}
 										<label for="listRadio">Lista de contactos </label>
 										<div id="list" style="display: none;">
 											{{ '{{view Ember.Select
@@ -77,7 +45,7 @@
 											 }}
 										</div>
 										<br /><br />
-										<input type="radio" name="radios" value="segment" id="segmentRadio">
+										{{ ' {{view Ember.RadioButtonTarget name="radioTarget" value="segment" id="segmentRadio"}}' }}
 										<label for="segmentRadio">Segmentos</label>
 										<br />
 										<div id="seg" style="display: none;">
@@ -97,15 +65,13 @@
 								</div>
 								<div class="tab-pane fade" id="filter">
 									<br />
-										<input type="radio" name="filter" id="byMail" value="byMail" />
+										{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byMail" id="byMail"}}' }}
 										<label for="byMail">Enviar a contactos que tenga el siguiente correo: </label><br />
 										<div id="mail" style="display: none;">
 											{{'{{view Ember.TextField valueBinding="filterByEmail" id="sendByMail" class="form-control"}}'}}
-										</div>
+										</div><br />
 
-										<br />
-
-										<input type="radio" name="filter" id="byOpen" value="byOpen" />
+										{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byOpen" id="byOpen"}}' }}
 										<label for="byOpen">Enviar a contactos que hayan abierto el siguiente correo electrónico: </label><br />
 										<div id="open" style="display: none;">
 											{{ '{{view Ember.Select
@@ -117,11 +83,9 @@
 													id="sendByOpen"
 													class="form-control"}}'
 											 }}
-										</div>
+										</div><br />
 
-										<br />
-
-										<input type="radio" name="filter" id="byClick" value="byClick" />
+										{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byClick" id="byClick"}}' }}
 										<label for="byClick">Enviar a contactos que hayan hecho click en el siguiente enlace: </label><br />
 										<div id="click" style="display: none;">
 											{{ '{{view Ember.Select
@@ -133,11 +97,9 @@
 													id="sendByClick"
 													class="form-control"}}'
 											 }}
-										</div>
-
-										<br />
-
-										<input type="radio" name="filter" id="byExclude" class="icheck" value="byExclude" />
+										</div><br />
+										
+										{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byExclude" id="byExclude"}}' }}
 										<label for="byExclude">No enviar a aquellos contactos que hayan abierto el siguiente correo electrónico: </label>
 										<div id="exclude" style="display: none;">
 											{{ '{{view Ember.Select
@@ -157,7 +119,7 @@
 					<br />
 					<div class="form-group">
 						<div class="col-sm-6 col-md-offset-6 text-right">
-							<a href="#" class="btn btn-default">Descartar cambios</a>
+							<button class="btn btn-default" {{'{{action "discardTarget" this}}'}}>Descartar cambios</button>
 							<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 							{#
 							<input type="button" class="btn btn-primary" value="Aplicar cambios" onClick="createBlock(this.form, 'target')">
@@ -172,6 +134,4 @@
 			{% endif %}
 		</div>
 	</div>
-{#
 {{ '{{/if}}' }}
-#}

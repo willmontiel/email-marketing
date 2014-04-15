@@ -102,61 +102,6 @@
 									
 		{% endif %}
 	</script>
-	<script type="text/javascript">
-		$(function(){
-			$("input[name=radios]").on('click', function () { 
-				$("#db").hide();
-				$("#list").hide();
-				$("#seg").hide();
-
-				$("#dbases").val('');
-				$('#segments').val('');
-				$('#contactlists').val('');
-
-				var val = $('input[name=radios]:checked').val();
-
-				switch (val) {
-					case "dataBase":
-						$("#db").show();
-						break;
-					case "contactList":
-						$("#list").show();
-						break;
-					case "segment":
-						$("#seg").show();
-						break;
-				}
-			 });
-			 
-			$("input[name=filter]").on('click', function () { 
-				$("#mail").hide();
-				$("#open").hide();
-				$("#click").hide();
-				$("#exclude").hide();
-			
-				$("#sendMail").val('');
-				$('#sendOpen').val('');
-				$('#sendClick').val('');
-				$('#sendExclude').val('');
-			
-				var val = $('input[name=filter]:checked').val();
-				switch (val) {
-					case "byMail":
-						$("#mail").show();
-						break;
-					case "byOpen":
-						$("#open").show();
-						break;
-					case "byClick":
-						$("#click").show();
-						break;
-					case "byExclude":
-						$("#exclude").show();
-						break;
-				}
-			});
-		});
-	</script>
 {% endblock %}
 {% block content %}
 	<br />

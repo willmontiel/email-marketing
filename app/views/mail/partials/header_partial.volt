@@ -1,16 +1,47 @@
-<div {{'{{bind-attr class=":bs-callout headerEmpty:bs-callout-warning:bs-callout-success"}}'}}>
-	<div class="panel-body">
-		{{'{{#if headerEmpty }}'}}
-			<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;De:</strong> _______________________________</p>
-			<p><strong>Asunto:</strong> _______________________________</p>
-			<label style="cursor: pointer;" {{ '{{action "expandHeader" this}}' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Click aqui para configurar</label>
-		{{'{{else}}'}}
-			<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;De:</strong> {{' {{fromName}}  &lt; {{fromEmail}} &gt; '}}</p>
-			<p><strong>Asunto:</strong> {{'  {{subject}} '}}</p>
-			<label style="cursor: pointer;" {{ '{{action "expandHeader" this}}' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Click aqui para configurar</label>
-		{{'{{/if}}'}}
-	</div>
-</div>
+{{'{{#unless isHeaderExpanded }}'}}
+	{{'{{#unless isTargetExpanded }}'}}
+		<div {{'{{bind-attr class=":bs-callout headerEmpty:bs-callout-warning:bs-callout-success"}}'}}>
+			<div class="panel-body">
+				<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }}>
+				{{'{{#if headerEmpty }}'}}
+					<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
+					<dt>Asunto:</dt> <dd>_______________________________</dd>
+				{{'{{else}}'}}
+					<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
+					<dt>Asunto:</dt> <dd>{{'  {{subject}} '}}</dd>
+				{{'{{/if}}'}}
+				</dl>
+				<dl class="dl-horizontal" {{ '{{action "expandTarget" this}}' }}>
+				{{'{{#if targetEmpty }}'}}
+					<dt>Para:</dt>
+					<dd><i>Elija los destinatarios...</i></dd>
+				{{'{{else}}'}}
+					<dt>Para:</dt>
+					<dd>
+						{{ '{{#if dbaselist}}' }}
+							{{ '{{#each dbaselist}}' }}
+								Base de datos: {{' {{name}} '}}, 
+							{{ '{{/each}}' }}
+						{{ '{{/if}}' }}
+
+						{{ '{{#if list}}' }}
+							{{ '{{#each list}}' }}
+								Lista de contactos: {{' {{name}} '}}, 
+							{{ '{{/each}}' }}
+						{{ '{{/if}}' }}
+
+						{{ '{{#if segmentlist}}' }}
+							{{ '{{#each segmentlist}}' }}
+								Segmento: {{' {{name}} '}}, 
+							{{ '{{/each}}' }}
+						{{ '{{/if}}' }}
+					</dd>
+				{{'{{/if}}'}}
+				</dl>
+			</div>
+		</div>
+	{{ '{{/unless}}' }}
+{{ '{{/unless}}' }}
 
 {{ '{{#if isHeaderExpanded}}' }}
 	<div class="panel panel-default">
@@ -121,7 +152,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-6 col-md-offset-6 text-right">
-						<a href="#" class="btn btn-default">Descartar cambios</a>
+						<button class="btn btn-default" {{ '{{action "discardHeader" this}}' }}>Descartar cambios</button>
 						<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 						{#
 						<input type="button" class="btn btn-primary" value="Aplicar cambios" onClick="createBlock(this.form, 'header')">
