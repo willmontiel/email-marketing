@@ -2,10 +2,8 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
-	{{ javascript_include('javascripts/moment/moment.min.js')}}
-	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
-	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
-	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.es.js')}}
+	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
 	<script type="text/javascript">
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
