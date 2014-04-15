@@ -67,7 +67,7 @@
 						<!-- BEGIN OLARK CHAT LINK -->
 						<li>
 							<a href="javascript:void(0);" onclick="olark('api.box.expand')">
-								Necesitas ayuda? Clic aquí!
+								Necesitas ayuda? <i class="fa fa-comments"></i>
 							</a>
 						</li>
 						<!-- END OLARK CHAT LINK -->
