@@ -1053,22 +1053,37 @@ class MailController extends ControllerBase
 				try {
 					$target = new TargetObj();
 					
-					$target->setDbases($dbases);
-					$target->setContactlists($contactlists);
-					$target->setSegments($segments);
+					$target->setIdsDbase(implode(",", $idDbases));
+					$target->setIdsContactlist(implode(",", $idContactlists));
+					$target->setIdsSegment(implode(",", $idSegments));
 					
-					$response = $target->createTargetObj($idDbases, $idContactlists, $idSegments, $mail);
+					$target->createTargetObj();
+					
+					$response = $target->getTargetObject();
+					
+					if ($response == null) {
+						$this->flashSession->error("No hay contactos registrados, por favor seleccione otra base de datos, lista o segmento");
+					}
+					else {
+						$mail->target = $response->target;
+						$mail->totalContacts = $response->totalContacts;
+						$mail->wizardOption = 'target';
+						
+						if (!$mail->save()) {
+							foreach ($mail->getMessages() as $msg) {
+								throw new \Exception("Exception while saving target mail: {$msg}");
+							}	
+						}
+
+						$this->routeRequest('target', $direction, $mail->idMail);
+					}
 				}
 				catch (InvalidArgumentException $e) {
 					$this->logger->log('Error while saving targetObj in db');
+					$this->logger->log('InvalidArgumentException: [' . $e . ']');
+				}
+				catch (Exception $e) {
 					$this->logger->log('Exception: [' . $e . ']');
-				}
-				
-				if (!$response) {
-					$this->flashSession->error("No hay contactos registrados, por favor seleccione otra base de datos, lista o segmento");
-				}
-				else {
-					$this->routeRequest('target', $direction, $mail->idMail);
 				}
 			}
 		}

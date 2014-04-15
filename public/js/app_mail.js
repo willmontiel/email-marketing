@@ -131,9 +131,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	
 	scheduleEmpty: function () {
 		var schedule;
-		
 		schedule = this.get('this.scheduleRadio');
-		
 		if (!schedule) {
 			return true;
 		}
@@ -217,12 +215,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 		
 		discardHeader: function () {
-			console.log(this.get('fromName'));
 			this.set('fromName', '');
 			this.set('fromEmail', '');
 			this.set('replyTo', '');
 			this.set('subject', '');
-			console.log(this.get('fromName'));
 			setExpandAttr(this, 'isHeaderExpanded');
 		},
 				
@@ -235,6 +231,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('exclude',[]);
 			setExpandAttr(this, 'isTargetExpanded');
 		},
+				
+		discardSchedule: function () {
+			this.set('scheduleRadio', '');
+			setExpandAttr(this, 'isScheduleExpanded');
+	
+		}
 	}
 });
 

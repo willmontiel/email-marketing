@@ -1,12 +1,12 @@
 <div {{'{{bind-attr class=":bs-callout GAEmpty:bs-callout-warning:bs-callout-success"}}'}}>
 	<div class="panel-body">
-		{{'{{#if GAEmpty }}'}}
-			<p><strong>Google Analytics:</strong> _______________________________</p>
-			<label style="cursor: pointer;" {{ '{{action "expandGA" this}}' }}>Click aqui para configurar</label>
-		{{'{{else}}'}}
-			<p><strong>Google Analytics:</strong> _______________________________</p>
-			<label style="cursor: pointer;" {{ '{{action "expandGA" this}}' }}>Click aqui para configurar</label>
-		{{'{{/if}}'}}
+		<dl class="dl-horizontal" {{ '{{action "expandGA" this}}' }}>
+			{{'{{#if GAEmpty }}'}}
+				<dt>Google Analytics:</dt><dd> _______________________________</dd>
+			{{'{{else}}'}}
+				<dt>Google Analytics:</dt><dd> _______________________________</dd>
+			{{'{{/if}}'}}
+		</dl>
 	</div>
 </div>
 

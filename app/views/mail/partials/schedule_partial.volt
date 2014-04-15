@@ -1,14 +1,16 @@
-<div {{'{{bind-attr class=":bs-callout scheduleEmpty:bs-callout-warning:bs-callout-success"}}'}}>
-	<div class="panel-body">
-		{{'{{#if scheduleEmpty }}'}}
-			<p><strong>Enviar el correo el:</strong> _______________________________</p>
-			<label style="cursor: pointer;" {{ '{{action "expandSchedule" this}}' }}>Click aqui para configurar</label>
-		{{'{{else}}'}}
-			<p><strong>Enviar el correo el:</strong> {{ '{{scheduleRadio}}' }}</p>
-			<label style="cursor: pointer;" {{ '{{action "expandSchedule" this}}' }}>Click aqui para configurar</label>
-		{{'{{/if}}'}}
+{{ '{{#unless isScheduleExpanded'}}}}
+	<div {{'{{bind-attr class=":bs-callout scheduleEmpty:bs-callout-warning:bs-callout-success"}}'}}>
+		<div class="panel-body">
+			<dl class="dl-horizontal" {{ '{{action "expandSchedule" this}}' }}>
+				{{'{{#if scheduleEmpty }}'}}
+					<dt>Enviar el correo el:</dt><dd> _______________________________</dd>
+				{{'{{else}}'}}
+					<dt>Enviar el correo el:</dt><dd>{{ '{{scheduleRadio}}' }}</dd>
+				{{'{{/if}}'}}
+			</dl>
+		</div>
 	</div>
-</div>
+{{ '{{/unless}}' }}
 
 {{ '{{#if isScheduleExpanded}}' }}
 	<div class="row">
@@ -52,7 +54,7 @@
 						</div>
 
 						<div class="form-group text-right">
-							<a href="#" class="btn btn-default">Descartar cambios</a>
+							<button class="btn btn-default" {{'{{action "discardSchedule" this}}'}}>Descartar cambios</button>
 							<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 						</div>
 					</form>
