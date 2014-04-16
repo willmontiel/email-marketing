@@ -117,7 +117,7 @@
 										contentBinding="dbaseSelect"
 										optionValuePath="content.id"
 										optionLabelPath="content.name"
-										valueBinding="selectedDbase" class="sm-select"}}'
+										valueBinding="selectedDbase" class="sm-select form-control"}}'
 								}}
 							</p>
 						</form>
@@ -160,8 +160,8 @@
 							<td>
 								<div class="box-section news with-icons">
 									<div class="news-time">
-										<span>{{ '{{infocontact.activeContacts}}' }}</span>
-										<span>{{'{{activeContactsF}}'}}</span> activos
+										<span class="blue big-number">{{ '{{infocontact.activeContacts}}' }}</span>
+										<span class="blue big-number">{{'{{activeContactsF}}'}}</span> activos
 									</div>
 								</div>
 							</td>
@@ -227,7 +227,7 @@
 						<div class="form-group">
 							<label for="description" class="col-sm-4 control-label">Descripción</label>
 							<div class="col-md-8">
-								{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required" class="form-control"}}' }}
+								{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required" class="form-control sm-textarea-description"}}' }}
 							</div>
 						</div>
 
@@ -334,7 +334,12 @@
 		{#  ######## /Handlebars de eliminar lista de contactos ######### #}
 
 
+
 	{{ partial("contactlist/blockedemail_partial") }}
+
+		<!-- SM -->
+	<div class="prueba"></div>
+
 	{{ partial("contactlist/segment_partial")}}
 </div>
 {% endblock %}

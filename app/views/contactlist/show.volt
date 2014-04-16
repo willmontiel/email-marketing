@@ -125,12 +125,12 @@
 					<span>Lista de prueba para iván</span>
 				</div>
 				<ul class="list-inline numbers-contacts pull-right">
-					<li>Contactos totales <br/> <span class="blue"> {{'{{lista.totalContactsF}}'}} </span></li>
-					<li>Activos <br/> <span class="green"> {{'{{lista.activeContactsF}}'}} </span></li>
-					<li>Inactivos <br/><span class="sad-blue"> {{'{{lista.inactiveContactsF}}'}} </span></li>
-					<li>Desuscritos <br/><span class="gray"> {{'{{lista.unsubscribedContactsF}}'}} </span></li>
-					<li>Rebotados <br/><span class="orange"> {{'{{lista.bouncedContactsF}}'}} </span></li>
-					<li>Spam <br/><span class="red"> {{'{{lista.spamContactsF}}'}} </span></li>
+					<li>Contactos totales <br/> <span class="blue big-number"> {{'{{lista.totalContactsF}}'}} </span></li>
+					<li>Activos <br/> <span class="green big-number"> {{'{{lista.activeContactsF}}'}} </span></li>
+					<li>Inactivos <br/><span class="sad-blue big-number"> {{'{{lista.inactiveContactsF}}'}} </span></li>
+					<li>Desuscritos <br/><span class="gray big-number"> {{'{{lista.unsubscribedContactsF}}'}} </span></li>
+					<li>Rebotados <br/><span class="orange big-number"> {{'{{lista.bouncedContactsF}}'}} </span></li>
+					<li>Spam <br/><span class="red big-number"> {{'{{lista.spamContactsF}}'}} </span></li>
 				</ul>
 			</div>
 		{{'{{outlet}}'}}

@@ -5,7 +5,7 @@
 @brand-info:    #5bc0de;
 @brand-warning: #f0ad4e;
 @brand-danger:  #d9534f;
-// ______
+
 
 @brand-white: #f5f5f5;
 @brand-blue: #6e97ac;
@@ -16,11 +16,13 @@
 @brand-red:#bd1b06;
 @brand-soft-color: #adadad;
 @brand-gray-light: #eeeeee;
+@brand-gray-dark: #505050;
 
-@bg-default-btn: #eee;
+@bg-default-btn: #cccccc;
 @bg-delete-btn: #ac1905;
 @text-color-btn: #428bca;
 @bg-guardar-btn: #189308;
+@bg-add-btn: #78cae9;
 
 @menu-background: #20526e;
 
@@ -456,7 +458,7 @@ h4.sectiontitle {
 	text-align: center;
 	padding: 0 15px;
 }
-.numbers-contacts li span {
+span.big-number {
 	font-size: 30px;
 }
 span.blue {
@@ -502,19 +504,22 @@ span.red {
 	color: @brand-white;
 	text-decoration: none;
 }
-.btn-guardar {
-	background-color: @bg-guardar-btn;
-	color: @brand-white;
-}
 .btn-guardar:hover {
 	transition: background-color 0.5s ease;
-	background-color:#137406;
+	background-color:#5eab07;
+	text-decoration: none;
+}
+.btn-add:hover {
+	transition: background-color 0.5s ease;
+	background-color:#58abca;
+	color: @brand-gray-light;
 	text-decoration: none;
 }
 /* Estilos para la tabla de contactos */
 table.table-contacts tbody tr td {
 	vertical-align: middle;
 }
+
 /* Estilos para contenedor con bg y paddings */
 .frame-bg-pd {
 	background-color: @brand-gray-light;
@@ -536,8 +541,20 @@ table.table-contacts tbody tr td {
 	min-width: 427px;
 	max-width: 427px;
 }
+/*
+.sm-textarea-description {
+	min-height: 54px;
+	max-height: 54px;
+	min-width: 260px;
+	max-width: 260px;
+}
+*/
 .sm-select {
 	margin-top: 7px;
+}
+.text-form {
+	margin: 0px;
+	padding-top: 8px;
 }
 /* Estilos para los flags de colores indicadores del estado de cada contacto */
 .estado-contact .inactive {
