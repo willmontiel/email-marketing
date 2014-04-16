@@ -1,49 +1,43 @@
 {% extends "templates/signin.volt" %}
 {% block content %}
-	<br />
-	<div class="row-fluid">
-		<div class="span12">
-			<div class="text-center">
-				<font face="ArdleysHand" size="20">
-					Mail Station
-				</font>
-			</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="text-center">
+			<h2>Sigma Email<br/><small>Bienvenido a Email Marketing de Sigma Movil</small></h2>
 		</div>
 	</div>
-	<div class="row-fluid">
-		<div class="padded span4 offset4">
-			{{ flashSession.output() }}
-			<div class="login box">
-				<div class="box-header">
-					<span class="title">Iniciar sesión</span>
+	<div class="row">
+		<div class="col-lg-4 col-md-6 col-sm-8 col-xs-12 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<div class="panel-title">Inicio de sesión</div>
 				</div>
-				<div class="box-content padded">
-					{{ form('session/login', 'id': 'sessionlogin', 'class': "separate-sections" ) }}
-					<input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
-						<label style="text-align: center;">Usuario: </label>
-						<div class="input-prepend">
-							<span class="add-on" href="#">
-								<i class="icon-user"></i>
-							</span>
-							{{ text_field("username", 'type': "text", 'class': "span5", 'required': "required", 'autofocus': "autofocus", 'placeholder': "Nombre de Usuario" ) }}
+				<div class="panel-body">
+					{{ flashSession.output() }}
+					<form class="form-horizontal" role="form" id="sessionlogin" action="{{ url('session/login') }}">
+						<input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
+						<div class="form-group">
+							<label for="username" class="col-sm-3 control-label">Usuario</label>
+							<div class="col-sm-9 ">
+								<input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required="required" autofocus="autofocus" />
+							</div>
 						</div>
-						<label style="text-align: center;">Contraseña: </label>
-						<div class="input-prepend">
-							<span class="add-on" href="#">
-								<i class="icon-key"></i>
-							</span>
-							{{ password_field('pass', 'type': "password", 'class':"span5",  'required': "required", 'placeholder': "Contraseña") }}
-						</div>
-
-						<div>
-							{{ submit_button("Ingresar", 'class' : "btn btn-blue btn-block") }}
-						</div>
-						<div>
-							<a href="{{url('session/recoverpass')}}" style="text-decoration: underline; text-align: center;">¿Ha olvidado la contraseña?</a>
-						</div>
+						<div class="form-group">
+							<label for="pass" class="col-sm-3 control-label">Contraseña</label>
+							<div class="col-sm-9">
+								<input type="password" class="form-control" id="pass" name="pass" placeholder="Contraseña">
+							</div>
+						</div>						
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-9 ">
+								{{ submit_button("Ingresar", 'class' : "btn btn-primary btn-block") }}
+							</div>
+						</div>					
+						<a href="{{url('session/recoverpass')}}" style="text-decoration: underline; text-align: center;">¿Ha olvidado su contraseña?</a>
 					</form>
 				</div>
 			</div>
-		</div>
+		</div>	
 	</div>
+</div>
 {% endblock %}
