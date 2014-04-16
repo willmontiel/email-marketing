@@ -1,4 +1,4 @@
-{% extends "templates/index_b3.volt" %}
+{% extends "templates/index_new.volt" %}
 {% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
 	<div class="row-fluid">

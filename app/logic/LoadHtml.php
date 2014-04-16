@@ -1,17 +1,31 @@
 <?php
+
+/**
+ * How to catch unable connection with simple_html_dom
+ * 
+ * $ctx = stream_context_create(array(
+ *	'http' => array('timeout' => 10)
+ * ));
+ * 
+ * $html = file_get_html('http://mailing.sigmamovil.com/ss/display.php?M=6895334&C=7727f4803272bc13f058855d4f6249d2&L=1280&N=6035', false, $ctx);
+ *
+ * if (!$html) {
+ *		echo "Unable connection\n";
+ * }
+ * else {
+ *		Do your things
+ * }
+ */
+
 class LoadHtml
 {
-	/**
-	 *
-	 * @var \Phalcon\Logger\Adapter\File
-	 */
-	protected $log = null;
-	
+	protected $logger;
+	protected $asset;
+
 	public function __construct() 
 	{
-		$this->log = new Phalcon\Logger\Adapter\File("../app/logs/debug.log");
-		$di = \Phalcon\DI\FactoryDefault::getDefault();
-		$this->asset = $di['asset'];
+		$this->asset = Phalcon\DI::getDefault()->get('asset');
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}
 
 	/**
@@ -25,9 +39,21 @@ class LoadHtml
 	{
 		$some = new simple_html_dom();
 		
-		$html = file_get_html($url);
+		$ctx = stream_context_create(array(
+			'http' => array('timeout' => 10)
+		));
+		
+		$html = file_get_html($url, false, $ctx);
+		
+		if (!$html) {
+			throw new Exception("Unable to connect with the server");
+		}
+		
+		$this->logger->log("Se importó el html");
 		
 		$htmlbase = $html->find('head base');
+		
+		$this->logger->log("recorriendo las cabeceras html");
 		if (count($htmlbase) > 0) {
 			$htmlbase = $htmlbase[0];
 		}
@@ -58,6 +84,8 @@ class LoadHtml
 		$reemplazar = array("<!-- ", " -->");
 		
 		$newhtml = str_replace($busqueda,$reemplazar, $html->__toString());
+		
+		$this->logger->log("Proceso finalizado");
 		return $newhtml;
 		
 	}
@@ -140,7 +168,8 @@ class LoadHtml
 		
 		if (!$asset->save()) {
 			foreach ($asset->getMessages() as $msg) {
-				$this->log->log("Error: ". $msg);
+				$this->logger->log("Error: ". $msg);
+				throw new \Exception("Exception: {$msg}");
 			}
 		}
 		return $asset;

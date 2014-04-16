@@ -525,11 +525,13 @@ table {
 	mso-hide:all;
 	padding-left: 10px !important;
 	padding-right: 10px !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
 }
 
 .btnmodalleft {
 	float: left;
-	width: 250;
+	width: 250px;
 }
 
 .btnmodalright {

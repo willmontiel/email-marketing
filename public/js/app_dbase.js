@@ -27,6 +27,9 @@ App.Router.map(function() {
 //	  this.resource('contacts.edit', { path: '/edit/:contact_id'}),
 	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
   });
+  this.resource('forms', function(){
+	  
+  });
 });
 
 App.Field = DS.Model.extend({

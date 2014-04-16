@@ -24,8 +24,12 @@
 	{{ stylesheet_link('javascripts/colorpicker/css/colorpicker.css') }}
 	{{ stylesheet_link('javascripts/gritter/css/jquery.gritter.css') }}
 	{{ javascript_include('js/editor/gallery.js') }}
+	{{ javascript_include('js/editor/media_displayer.js') }}
 
-<script>
+<script type="text/javascript">
+		var objMail = {{objMail}};
+		
+	
 		var config = {imagesUrl: "{{url('images')}}", templateUrl : "{{url('template/create')}}"};
 		
 		var mediaGallery = [

@@ -183,8 +183,6 @@ class ChildCommunication extends BaseWrapper
 					if ($mail->replyTo != null) {
 						$message->setReplyTo($mail->replyTo);
 					}
-//					$message->setSender($returnPath);
-//					$message->setReturnPath($returnPath);
 					$message->addPart($text, 'text/plain');
 					
 //					$recipients = true;
@@ -266,7 +264,8 @@ class ChildCommunication extends BaseWrapper
 				print_dbase_profile();
 				
 				if($mail->socialnetworks != null) {
-					$socials = new SocialNetworkConnection($log);
+					$socials = new SocialNetworkConnection();
+					$socials->setAccount($this->account);
 					$socialdesc = Socialmail::findFirstByIdMail($mail->idMail);
 					if($socialdesc) {
 						$idsocials = json_decode($mail->socialnetworks);

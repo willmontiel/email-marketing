@@ -23,17 +23,17 @@ class TargetObj
 		$this->idsDbase = $idsDbase;
 	}
 	
-	public function setIdsContactlist($idsContactlist)
+	public function setIdsContactlist($idsContactlist = null)
 	{
 		$this->idsContactlist = $idsContactlist;
 	}
 	
-	public function setIdsSegment($idsSegment)
+	public function setIdsSegment($idsSegment = null)
 	{
 		$this->idsSegment = $idsSegment;
 	}
 
-	public function setFilters($byEmail, $byOpen, $byClick, $byExclude)
+	public function setFilters($byEmail = null, $byOpen = null, $byClick = null, $byExclude = null)
 	{
 		$this->byEmail = $byEmail;
 		$this->byOpen = $byOpen;
@@ -49,6 +49,7 @@ class TargetObj
 		$this->logger->log('SQL: ' . $targetInfo['phql']);
 		$contacts = $this->modelsManager->executeQuery($targetInfo['phql']);
 		
+		$this->logger->log('Target: ' . count($contacts));
 		$this->target = new stdClass();
 		$this->target->target = json_encode($targetInfo['destinationJson']);
 		$this->target->totalContacts = count($contacts);
@@ -58,26 +59,26 @@ class TargetObj
 	{
 		$filter = '';
 		
-		if ($this->byEmail !== null || !empty($this->byEmail)) { 
+		if ($this->byEmail != null || !empty($this->byEmail)) { 
 			$filter = array(
 				'type' => 'email',
 				'criteria' => $this->byEmail
 			);
 		}
-		else if ($this->byOpen !== '' || !empty($this->byOpen)) {
+		else if ($this->byOpen != '' || !empty($this->byOpen)) {
 			$this->logger->log("Open: {$this->byOpen}");
 			$filter = array(
 				'type' => 'open',
 				'criteria' => $this->byOpen
 			);
 		}
-		else if ($this->byClick !== '' || !empty($this->byClick)) {
+		else if ($this->byClick != '' || !empty($this->byClick)) {
 			$filter = array(
 				'type' => 'click',
 				'criteria' => $this->byClick
 			);
 		}
-		else if ($this->byExclude !== '' || !empty($this->byExclude)) {
+		else if ($this->byExclude != '' || !empty($this->byExclude)) {
 			$filter = array(
 				'type' => 'mailExclude',
 				'criteria' => $this->byExclude
@@ -126,7 +127,7 @@ class TargetObj
 	
 	public function getTargetObject()
 	{
-		if ($this->target->totalContacts < 0) {
+		if ($this->target->totalContacts == 0) {
 			return null;
 		}
 		return $this->target;

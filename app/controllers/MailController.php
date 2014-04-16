@@ -8,29 +8,16 @@ class MailController extends ControllerBase
 	public function savemailAction($mails = null, $idMail = null)
 	{
 		$account = $this->user->account;
+		$mail = null;
 		
 		$contentsraw = $this->request->getRawBody();
 		$contentsT = json_decode($contentsraw);
 		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		$this->logger->log('idMail: ' . $idMail);
 		$content = $contentsT->mail;
-		
-		if ($this->request->isPost()) {
-			try {
-				$MailWrapper = new MailWrapper();
-				$MailWrapper->setAccount($account);
-				$MailWrapper->setContent($content);
-				$MailWrapper->processData();
-				$response = $MailWrapper->saveMail();
-				
-				return $this->setJsonResponse(array($response->key => $response->data), $response->code);
-			}
-			catch (Exception $e) {
-				$this->logger->log("Exception: {$e}");
-				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador'), 500);
-			}
-		}
-		else if ($this->request->isPut()) {
+
+		if ($idMail != null) {
+			
 			$mail = Mail::findFirst(array(
 				'conditions' => 'idMail = ?1 AND idAccount = ?2',
 				'bind' => array(1 => $idMail,
@@ -38,23 +25,35 @@ class MailController extends ControllerBase
 			));
 			
 			if (!$mail) {
-				return $this->setJsonResponse(array('status' => 'failed'), 404, 'Mail not found!');
+				return $this->setJsonResponse(array('errors' => 'No se ha encontrado el correo por favor verifique la información'), 404, 'Mail not found!');
 			}
+		}
+		
+		if ($this->request->isPost() || $this->request->isPut()) {
+			$MailWrapper = new MailWrapper();
+			$MailWrapper->setAccount($account);
+			$MailWrapper->setMail($mail);
+			$MailWrapper->setContent($content);
 			
-			try {
-				$MailWrapper = new MailWrapper();
-				$MailWrapper->setMail($mail);
-				$MailWrapper->setContent($content);
-				$MailWrapper->processData();
-				$response = $MailWrapper->updateMail();
+			try {	
+				$MailWrapper->processDataForMail();
+				$MailWrapper->saveMail();
+				$MailWrapper->processDataForMailContent();
+				$MailWrapper->saveContent();
+				$response = $MailWrapper->getResponse();
 				
 				return $this->setJsonResponse(array($response->key => $response->data), $response->code);
+			}
+			catch (InvalidArgumentException $e) {
+				$this->logger->log("InvalidArgumentException: {$e}");
+				$response = $MailWrapper->getResponseMessageForEmber();
+				return $this->setJsonResponse(array($response->key => $response->message), $response->code);
 			}
 			catch (Exception $e) {
 				$this->logger->log("Exception: {$e}");
 				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador'), 500);
 			}
-		}
+		}	
 	}
 	
 	public function indexAction()
@@ -222,6 +221,7 @@ class MailController extends ControllerBase
 				$mailExist->fbtitlecontent = $fbdesc->title;
 				$mailExist->fbdescriptioncontent = $fbdesc->description;
 				$mailExist->fbmessagecontent = $fbdesc->message;
+				$mailExist->fbimagepublication = $fbdesc->image;
 				$mailExist->twpublicationcontent = $twdesc->message;
 			}
 			$form = new MailForm($mailExist);
@@ -236,7 +236,7 @@ class MailController extends ControllerBase
 			$this->view->setVar('mail', "");
 		}
 		try {
-			$socialnet = new SocialNetworkConnection($log);
+			$socialnet = new SocialNetworkConnection();
 			$socialnet->setAccount($account);
 			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
 			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
@@ -322,7 +322,8 @@ class MailController extends ControllerBase
 						$fbtitlecontent = $this->request->getPost("fbtitlecontent");
 						$fbdescriptioncontent = $this->request->getPost("fbdescriptioncontent");
 						$fbmsgcontent = $this->request->getPost("fbmessagecontent");
-						$socialmail->fbdescription = $socialnet->saveFacebookDescription($fbtitlecontent, $fbdescriptioncontent, $fbmsgcontent);;
+						$fbimage = $this->request->getPost("fbimagepublication");
+						$socialmail->fbdescription = $socialnet->saveFacebookDescription($fbtitlecontent, $fbdescriptioncontent, $fbmsgcontent, $fbimage);
 					}
 					if($twaccounts) {
 						$twmessagecontent = $this->request->getPost("twpublicationcontent");
@@ -356,6 +357,20 @@ class MailController extends ControllerBase
 			}
 			
 		}
+		
+		$assets = AssetObj::findAllAssetsInAccount($this->user->account);
+		if(empty($assets)) {
+				$arrayAssets = array();
+		}
+		else {
+			foreach ($assets as $a) {
+				$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
+									'image' => $a->getImagePrivateUrl(),
+									'title' => $a->getFileName(),
+									'id' => $a->getIdAsset());								
+			}
+		}
+		$this->view->setVar('assets', $arrayAssets);
 		$this->view->MailForm = $form;
 	}
 	
@@ -522,10 +537,14 @@ class MailController extends ControllerBase
 				}
 			}		
 		}
-		
 	}
 	
-	public function editor_frameAction($idMail = NULL) 
+	public function contenteditorAction() 
+	{
+		$this->view->setVar('objMail', 'null');
+	}
+	
+	public function editor_frameAction($idMail = NULL, $idTemplate = null) 
 	{
 		$log = $this->logger;
 		
@@ -563,8 +582,28 @@ class MailController extends ControllerBase
 		$this->view->setVar('cfs', $arrayCf);
 		
 		if($idMail) {
-		
 			$this->view->setVar('idMail', $idMail);
+		}
+		
+		$this->logger->log("IdTemplate: {$idTemplate}");
+		
+		if ($idTemplate != null) {
+			$objTemplate = Template::findFirst(array(
+				"conditions" => "idTemplate = ?1",
+				"bind" => array(1 => $idTemplate)
+			));
+			
+			$this->logger->log('Entra');
+			
+			if ($objTemplate) {
+				$this->view->setVar('objMail', $objTemplate->content);
+			}
+			else {
+				$this->view->setVar('objMail', 'null');
+			}
+		}
+		else {
+			$this->view->setVar('objMail', 'null');
 		}
 	}
 	
@@ -673,6 +712,50 @@ class MailController extends ControllerBase
 		}
 	}
 	
+	public function contenthtmlAction($idMail = null)
+	{
+		if ($idMail != null) {
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $idMail)
+			));
+			
+			if ($mail) {
+				$mailContentExist = Mailcontent::findFirst(array(
+					"conditions" => "idMail = ?1",
+					"bind" => array(1 => $idMail)
+				));
+
+				if ($mailContentExist) {
+					$mailContentExist->content = html_entity_decode($mailContentExist->content);
+					$this->view->setVar("mailContent", $mailContentExist);
+					$form = new MailForm($mailContentExist);
+				}
+				else {
+					$mailContent = new Mailcontent();
+					$form = new MailForm($mailContent);
+				}
+
+				$this->view->setVar('mail', $mail);
+			}
+		}
+		
+		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
+		foreach ($cfs as $cf) {
+			$linkname = strtoupper(str_replace(array ("á", "é", "í", "ó", "ú", "ñ", " ", "&", ), 
+											   array ("a", "e", "i", "o", "u", "n", "_"), $cf[0]));
+			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
+		}
+		$this->view->setVar('cfs', $arrayCf);
+		$content = $this->session->get("{$this->user->account->idAccount}-{$this->user->idUser}-createMail");
+		
+		if ($content) {
+			$this->view->setVar('content', $content);
+			$this->session->remove("{$this->user->account->idAccount}-{$this->user->idUser}-createMail");
+		}
+	}
+	
+	
 	public function importAction($idMail = null)
 	{
 		$mail = $this->validateProcess($idMail);
@@ -697,8 +780,17 @@ class MailController extends ControllerBase
 					mkdir($dir, 0777, true);
 				} 
 
-				$getHtml = new LoadHtml();
-				$html = $getHtml->gethtml($url, $image, $dir, $account);
+				try {
+					$this->logger->log('Iniciando importacion de contenido html a traves de una url');
+					$getHtml = new LoadHtml();
+					$html = $getHtml->gethtml($url, $image, $dir, $account);
+					$this->logger->log('Se cargó el contenido exitosamente');
+				}
+				catch (Exception $e) {
+					$this->logger->log("Exception: {$e}");
+					$this->flashSession->error("No se pudo conectar con el servidor solicitado, por favor intente más tarde");
+					return $this->response->redirect("mail/import/" . $idMail);
+				}
 				
 				if ($mail->wizardOption == 'source' || $mail->wizardOption == 'setup') {
 					$wizardOption = 'source';
@@ -733,6 +825,42 @@ class MailController extends ControllerBase
 					$this->db->commit();
 					return $this->response->redirect("mail/html/" . $idMail);
 				}
+			}
+		}
+	}
+	
+	public function importcontentAction()
+	{	
+		if ($this->request->isPost()) {
+			
+			$user = $this->user;
+			$account = $user->account;
+
+			$url = $this->request->getPost("url");
+			$image = $this->request->getPost("image");
+
+			$dir = $this->asset->dir . $account->idAccount . "/images";
+
+			if(!filter_var($url, FILTER_VALIDATE_URL)) {
+				$this->logger->log("Error url no válida {$url}");
+				return $this->setJsonResponse(array('errors' => 'La url ingresada no es válida, por favor verifique la información'), 400);
+			}
+
+			if (!file_exists($dir)) {
+				mkdir($dir, 0777, true);
+			} 
+			
+			try {
+				$getHtml = new LoadHtml();
+				$html = $getHtml->gethtml($url, $image, $dir, $account);
+				
+				$this->session->set("{$account->idAccount}-{$user->idUser}-createMail", htmlspecialchars($html, ENT_QUOTES));
+						
+				return $this->setJsonResponse(array('status' => 'success'), 200);
+			}
+			catch (Exception $e){
+				$this->logger->log("Exception {$e}");
+				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error, contacte al administrador'), 500);
 			}
 		}
 	}
@@ -804,7 +932,7 @@ class MailController extends ControllerBase
 						else {
 							$this->routeRequest('plaintext', $direction, $mail->idMail);
 						}
-						break;;
+						break;
 				}
 			}
 		}
@@ -955,22 +1083,37 @@ class MailController extends ControllerBase
 				try {
 					$target = new TargetObj();
 					
-					$target->setDbases($dbases);
-					$target->setContactlists($contactlists);
-					$target->setSegments($segments);
+					$target->setIdsDbase(implode(",", $idDbases));
+					$target->setIdsContactlist(implode(",", $idContactlists));
+					$target->setIdsSegment(implode(",", $idSegments));
 					
-					$response = $target->createTargetObj($idDbases, $idContactlists, $idSegments, $mail);
+					$target->createTargetObj();
+					
+					$response = $target->getTargetObject();
+					
+					if ($response == null) {
+						$this->flashSession->error("No hay contactos registrados, por favor seleccione otra base de datos, lista o segmento");
+					}
+					else {
+						$mail->target = $response->target;
+						$mail->totalContacts = $response->totalContacts;
+						$mail->wizardOption = 'target';
+						
+						if (!$mail->save()) {
+							foreach ($mail->getMessages() as $msg) {
+								throw new \Exception("Exception while saving target mail: {$msg}");
+							}	
+						}
+
+						$this->routeRequest('target', $direction, $mail->idMail);
+					}
 				}
 				catch (InvalidArgumentException $e) {
 					$this->logger->log('Error while saving targetObj in db');
+					$this->logger->log('InvalidArgumentException: [' . $e . ']');
+				}
+				catch (Exception $e) {
 					$this->logger->log('Exception: [' . $e . ']');
-				}
-				
-				if (!$response) {
-					$this->flashSession->error("No hay contactos registrados, por favor seleccione otra base de datos, lista o segmento");
-				}
-				else {
-					$this->routeRequest('target', $direction, $mail->idMail);
 				}
 			}
 		}
@@ -1163,7 +1306,7 @@ class MailController extends ControllerBase
 			case 'contactlists':
 				$query = $this->modelsManager->createQuery("SELECT name FROM Contactlist WHERE idContactlist IN (" . $ids . ")");
 				$result = $query->execute();
-				break;;
+				break;
 				
 			case 'segments':
 				$query = $this->modelsManager->createQuery("SELECT name FROM Segment WHERE idSegment IN (" . $ids . ")");
@@ -1356,6 +1499,62 @@ class MailController extends ControllerBase
 	
 	public function confirmAction($idMail)
 	{
+		$schedule = Mailschedule::findFirstByIdMail($idMail);
+		$mail = Mail::findFirstByIdMail($idMail);
+		
+		if($schedule) {
+			$mail->status = 'Scheduled';
+			if(!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+				return $this->response->redirect('mail/preview/' . $idMail);
+			}
+			$schedule->confirmationStatus = 'Yes';
+			if(!$schedule->save()){
+				foreach ($schedule->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+				return $this->response->redirect('mail/preview/' . $idMail);
+			}
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$commObj->sendSchedulingToParent($idMail);	
+			
+			return $this->response->redirect("mail/index");
+		}
+		
+		$mail->status = 'Scheduled';
+		$mail->startedon = time();
+		
+		if(!$mail->save()) {
+			foreach ($mail->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+			}
+			return $this->response->redirect('mail/preview/' . $idMail);
+		}
+		
+		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+		$commObj->sendPlayToParent($idMail);
+		
+		return $this->response->redirect("mail/index");
+	}
+	
+	public function confirmmailAction($idMail)
+	{
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		$mailcontent = Mailcontent::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		if ($mail && $mailcontent) {
+			
+		}
+		
 		$schedule = Mailschedule::findFirstByIdMail($idMail);
 		$mail = Mail::findFirstByIdMail($idMail);
 		
@@ -1675,5 +1874,18 @@ class MailController extends ControllerBase
 		else {
 			$this->view->setVar('db', false);
 		}
+		
+//		$mail = Mail::findFirst(array(
+//			'conditions' => 'idMail = ?1',
+//			'bind' => array(1 => $idMail)
+//		));
+//		
+//		if ($mail) {
+//			$MailWrapper = new MailWrapper();
+//			
+//			$MailWrapper->setMail($mail);
+//			$response = $MailWrapper->getResponse();
+//			$this->setJsonResponse($response->key, $response->data, $response->code);
+//		}
 	}
 }

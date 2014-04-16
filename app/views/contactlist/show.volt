@@ -347,7 +347,7 @@
 									<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
 								</div>
 								<div class="col-xs-6">
-									<button class="btn btn-sm btn-default btn-guardar extra-padding" {{'{{action "save" this}}'}}>Guardar</button>
+									<button class="btn btn-sm btn-default btn-guardar extra-padding">Guardar</button>
 								</div>
 							</div>
 						</div>

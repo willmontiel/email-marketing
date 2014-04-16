@@ -51,18 +51,31 @@ class MailForm extends Form
 			'id' => 'redactor_content'
         )));
 		
-		$this->add(new Text('fbtitlecontent', array(
+		$this->add(new TextArea('fbtitlecontent', array(
+			'rows' => 2,
+			'id' => 'fbtitlecontent',
 			'type' => 'text',
+			'style' => 'resize: none;',
+			'placeholder' => 'Da un titulo a tu publicacion...'
         )));
 		
 		$this->add(new TextArea('fbdescriptioncontent', array(
-			'rows' => 2,
-			'id' => 'fbdescriptioncontent'
+			'rows' => 4,
+			'id' => 'fbdescriptioncontent',
+			'style' => 'resize: none;',
+			'placeholder' => 'Describe tu publicacion...'
         )));
 		
 		$this->add(new TextArea('fbmessagecontent', array(
 			'rows' => 2,
-			'id' => 'fbmessagecontent'
+			'id' => 'fbmessagecontent',
+			'style' => 'resize: none;',
+			'placeholder' => 'Haz un comentario...'
+        )));
+		
+		$this->add(new Text('fbimagepublication', array(
+			'id' => 'fbimagepublication',
+			'style' => 'display: none;'
         )));
 		
 		$this->add(new TextArea('twpublicationcontent', array(

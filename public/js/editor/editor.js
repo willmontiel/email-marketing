@@ -171,8 +171,13 @@ $(function() {
 		mediaGallery[l].createMedia();
 		mediaGallery[l].mediaSelected();
 	}
-
-	editor.objectExists(parent.objMail);
+	
+	var obj = parent.objMail;
+	
+	if(obj === undefined) {
+		obj = objMail;
+	}
+	editor.objectExists(obj);
 	editor.otherLayout();
 	initEvents();
 });

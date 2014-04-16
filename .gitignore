@@ -38,3 +38,6 @@ app/library/SmartSelect.php
 /tmp/mreports/
 /app/views/templates/index_b3.volt%%e%%.php
 app/logs/.debug.log.swp
+/public/assets/1/
+/public/assets/3/
+public/images/260.png
