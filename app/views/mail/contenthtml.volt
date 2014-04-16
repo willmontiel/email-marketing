@@ -1,23 +1,6 @@
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
-	{{ stylesheet_link('b3/css/bootstrap.css') }}
-	{{ stylesheet_link('b3/css/font-awesome.css') }}
-	{{ stylesheet_link('css/prstyles.css') }}
-	{{ stylesheet_link('b3/css/sm-email-theme.css') }}
-	{{ stylesheet_link('b3/vendors/css/bootstrap-editable.css') }}
-	{{ stylesheet_link('b3/vendors/css/jquery.gritter.css') }}
-
-	<!--[if lt IE 9]>
-	{{ javascript_include('javascripts/vendor/html5shiv.js') }}
-	{{ javascript_include('javascripts/vendor/excanvas.js') }}
-	<![endif]-->
-	
-	{{ javascript_include('b3/js/jquery-1.9.1.js') }}
-	{{ javascript_include('b3/js/bootstrap.js') }}
-	{{ javascript_include('b3/vendors/js/jquery.sparkline.js') }}
-	{{ javascript_include('b3/vendors/js/spark_auto.js') }}
-	{{ javascript_include('b3/vendors/js/bootstrap-editable.js') }}
-	{{ javascript_include('b3/vendors/js/jquery.gritter.js') }}
-	
+	{{ super() }}
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ javascript_include('redactor/langs/es.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
@@ -29,44 +12,74 @@
 	{{ javascript_include('redactor/plugins/textdirection.js') }}
 
 	<script type="text/javascript">
-	$(document).ready(
-		function()
-		{
-			$('#redactor_content').redactor({
-				imageUpload: '{{ url('asset/upload') }}/',
-				imageGetJson: '{{ url ('asset/list') }}/',
-				imageUploadErrorCallback: function(json) {
-					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: json.error, sticky: false, time: 10000});
-				},
-				lang: 'es',
-				plugins: ['fontcolor', 'fontfamily', 'fontsize', 'fullscreen', 'clips'],
-				fullpage: true
-			});
-		}
-	);
+		var idMail;
+		{% if mail is defined%}
+			idMail = {{mail.idMail}};
+		{% else %}
+			idMail = null;
+		{% endif %}
+		$(document).ready(
+			function() {
+				$('#redactor_content').redactor({
+					imageUpload: '{{ url('asset/upload') }}/',
+					imageGetJson: '{{ url ('asset/list') }}/',
+					imageUploadErrorCallback: function(json) {
+						$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: json.error, sticky: false, time: 10000});
+					},
+					lang: 'es',
+					plugins: ['fontcolor', 'fontfamily', 'fontsize', 'fullscreen', 'clips'],
+					fullpage: true
+				});
+			}
+		);
 	
-	function verHTML(form) {
-		var inf = form.content.value;
+	function verHTML() {
+		var content = $('#redactor_content').val();
 		$.ajax({
-			url: "{{url('mail/previewhtml')}}",
+			url: "{{url('mail/previewhtml')}}/" + idMail,
 			type: "POST",			
-			data: { html: inf},
+			data: { html: content},
 			error: function(msg){
 				console.log(msg);
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg.statusText, sticky: false, time: 10000});
 			},
-			success: function(response) {
-				$("#preview-modal").empty();
-				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
-				$('<iframe frameborder="0" width="100%" height="100%" src="{{url('mail/previewdata')}}"/>').appendTo('#preview-modal');
-			
-				//var r = response.response;
-				//console.log(inf);
-				//$( "#content-template" ).empty();
-				//$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(r);
+			success: function() {
+				$("#modal-body-preview").empty();
+				$('#modal-body-preview').append($('<iframe frameborder="0" width="100%" height="100%" src="{{url('mail/previewdata')}}"/>'));
 			}
 		});
-		
+	}
+	
+	function sendData() {
+		var content = $('#redactor_content').val();
+		$.ajax({
+			url: "{{url('mail/contenthtml')}}/" + idMail,
+			type: "POST",			
+			data: { content: content},
+			error: function(msg){
+				var obj = $.parseJSON(msg.responseText);
+				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.msg, sticky: false, time: 10000});
+			},
+			success: function(msg) {
+				$(location).attr('href', "{{url('mail/new')}}/" + msg.msg);
+			}
+		});
+	}
+	
+	function saveData() {
+		var content = $('#redactor_content').val();
+		$.ajax({
+			url: "{{url('mail/contenthtml')}}/" + idMail,
+			type: "POST",			
+			data: { content: content},
+			error: function(msg){
+				var obj = $.parseJSON(msg.responseText);
+				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.msg, sticky: false, time: 10000});
+			},
+			success: function(msg) {
+				$.gritter.add({class_name: 'Exitoso', title: '<i class="icon-warning-sign"></i> Atención', text: 'Se han guardado los datos exitosamente', sticky: false, time: 10000});
+			}
+		});
 	}
 	</script>
 {% endblock %}
@@ -74,12 +87,15 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<form id="html-content-form">
-						<label>Cree contenido para el correo con HTML base: </label>
-						<textarea rows="50" required id="redactor_content">{% if content is defined%} {{content}} {% endif %}</textarea>
-						<br />
-						<input onclick="verHTML(this.form)" href="#preview-modal" data-toggle="modal" type="button" value="Visualizar" class="btn btn-black">
-				</form>
+				<div class="text-right">
+					<button onclick="verHTML()" class="btn btn-black" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
+					<button onclick="saveData()" class="btn btn-info">Guardar</button>
+					<button onclick="sendData()" class="btn btn-primary">Guradar y volver</button>
+				</div>
+				<br />
+				<label>Cree contenido para el correo con HTML base: </label>
+				<textarea rows="25" required id="redactor_content">{% if content is defined%} {{content}} {% endif %}</textarea>
+				<br />
 			</div>
 		</div>
 	
@@ -146,6 +162,18 @@
 			<a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
 		</footer>
 	</div>
-	<div id="preview-modal" class="modal hide fade preview-modal">
+	
+	<div id="preview-modal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Previsualización</h4>
+				</div>
+				<div class="modal-body" id="modal-body-preview">
+
+				</div>
+			</div>
+		</div>
 	</div>
 {% endblock %}

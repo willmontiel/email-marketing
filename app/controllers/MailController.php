@@ -27,6 +27,11 @@ class MailController extends ControllerBase
 			if (!$mail) {
 				return $this->setJsonResponse(array('errors' => 'No se ha encontrado el correo por favor verifique la información'), 404, 'Mail not found!');
 			}
+			
+			$mailcontent = Mailcontent::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $mail->idMail)
+			));
 		}
 		
 		if ($this->request->isPost() || $this->request->isPut()) {
@@ -34,12 +39,13 @@ class MailController extends ControllerBase
 			$MailWrapper->setAccount($account);
 			$MailWrapper->setMail($mail);
 			$MailWrapper->setContent($content);
+			if ($mailcontent) {
+				$MailWrapper->setMailContent($mailcontent);
+			}
 			
 			try {	
 				$MailWrapper->processDataForMail();
 				$MailWrapper->saveMail();
-				$MailWrapper->processDataForMailContent();
-				$MailWrapper->saveContent();
 				$response = $MailWrapper->getResponse();
 				
 				return $this->setJsonResponse(array($response->key => $response->data), $response->code);
@@ -497,8 +503,12 @@ class MailController extends ControllerBase
 
 				if ($objMail) {
 					$text = $objMail->plainText;
-					$objMailContent = 
-					$this->view->setVar('objMail', $objMail->content);
+					if (empty($objMail->content)) {
+						$objMailContent = 'null';
+					}
+					else {
+						$objMailContent = $objMail->content;
+					}
 				}
 				else  {
 					$text = null;
@@ -541,7 +551,7 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function contenteditorAction($idMail) 
+	public function contenteditorAction($idMail = null, $idTemplate = null) 
 	{
 		$account = $this->user->account;
 		
@@ -551,52 +561,94 @@ class MailController extends ControllerBase
 							2 => $account->idAccount)
 		));
 		
+		$objTemplate = Template::findFirst(array(
+			"conditions" => "idTemplate = ?1",
+			"bind" => array(1 => $idTemplate)
+		));
+		
 		if ($mail) {
 			$this->view->setVar('mail', $mail);
+			
 			$mailcontent = Mailcontent::findFirst(array(
 				'conditions' => 'idMail = ?1',
 				'bind' => array(1 => $mail->idMail)
 			));
 			
-			if ($mailcontent) {
-				$text = $mailcontent->plaintext;
-				$objContent = $mailcontent->content;
+			if ($objTemplate) {
+				if (empty($objTemplate->content)) {
+					$objContent = 'null';
+				}
+				else {
+					$objContent = $objTemplate->content;
+				}
+			}
+			else if($mailcontent) {
+				$text = $mailcontent->plainText;
+				if (empty($mailcontent->content)) {
+					$objContent = 'null';
+				}
+				else {
+					$objContent = $mailcontent->content;
+				}
 			}
 			else {
 				$text = null;
 				$objContent = 'null';
 			}
 		}
+		else if ($objTemplate){
+			if (empty($objTemplate->content)) {
+				$objContent = 'null';
+			}
+			else {
+				$objContent = $objTemplate->content;
+			}
+		}
+		else {
+			$objContent = 'null';
+		}
+		
 		
 		$this->view->setVar('objMail', $objContent);
 		
 		if ($this->request->isPost()) {
-			
+			$this->db->begin();
 			$content = $this->request->getPost('editor');
 			
 			if (!$mail) {
 				$mail = new Mail();
 				$mail->idAccount = $account->idAccount;
+				$mail->type = 'Editor';
 				$mail->status = 'Draft';
 				$mail->wizardOption = 'setup';
 				$mail->createdon = time();
 				$mail->updatedon = time();
 				$mail->deleted = 0;
 				
+				if (!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->logger->log("Error while saving mail {$msg}");
+					}
+					$this->db->rollback();
+					return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
+				}
+				
 				$mailcontent = new Mailcontent();
 				$mailcontent->idMail = $mail->idMail;
 				$mailcontent->content = $content;
 				$mailcontent->plaintext = $text;
+			}
+			else {
+				$mail->type = 'Editor';
 				
 				if (!$mail->save()) {
 					foreach ($mail->getMessages() as $msg) {
 						$this->logger->log("Error while saving mail {$msg}");
 					}
+					$this->db->rollback();
 					return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 				}
 				
-			}
-			else {
 				if (!$mailcontent) {
 					$mailcontent = new Mailcontent();
 					$mailcontent->idMail = $mail->idMail;
@@ -615,9 +667,10 @@ class MailController extends ControllerBase
 				foreach ($mailcontent->getMessages() as $msg) {
 					$this->logger->log("Error while saving content mail {$msg}");
 				}
+				$this->db->rollback();
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			} 
-			
+			$this->db->commit();
 			return $this->setJsonResponse(array('msg' => "{$mail->idMail}"), 200);
 		}
 	}
@@ -792,6 +845,12 @@ class MailController extends ControllerBase
 	
 	public function contenthtmlAction($idMail = null)
 	{
+		$content = $this->session->get("{$this->user->account->idAccount}-{$this->user->idUser}-createMail");
+		if ($content) {
+			$this->view->setVar('content', $content);
+			$this->session->remove("{$this->user->account->idAccount}-{$this->user->idUser}-createMail");
+		}
+		
 		if ($idMail != null) {
 			$mail = Mail::findFirst(array(
 				'conditions' => 'idMail = ?1',
@@ -803,17 +862,11 @@ class MailController extends ControllerBase
 					"conditions" => "idMail = ?1",
 					"bind" => array(1 => $idMail)
 				));
-
-				if ($mailContentExist) {
-					$mailContentExist->content = html_entity_decode($mailContentExist->content);
-					$this->view->setVar("mailContent", $mailContentExist);
-					$form = new MailForm($mailContentExist);
+				
+				if ($mailContentExist && !$content) {
+					$content = html_entity_decode($mailContentExist->content);
+					$this->view->setVar("content", $content);
 				}
-				else {
-					$mailContent = new Mailcontent();
-					$form = new MailForm($mailContent);
-				}
-
 				$this->view->setVar('mail', $mail);
 			}
 		}
@@ -825,15 +878,68 @@ class MailController extends ControllerBase
 			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
 		}
 		$this->view->setVar('cfs', $arrayCf);
-		$content = $this->session->get("{$this->user->account->idAccount}-{$this->user->idUser}-createMail");
 		
-		if ($content) {
-			$this->view->setVar('content', $content);
-			$this->session->remove("{$this->user->account->idAccount}-{$this->user->idUser}-createMail");
+		if ($this->request->isPost()) {
+			$this->db->begin();
+			if (!$mail) {
+				$mail = $this->createNewMail('Html');
+				if (!$mail) {
+					return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
+				}
+			}
+			
+			if ($mailContentExist) {
+				$mailContent = $mailContentExist;
+			}
+			else {
+				$mailContent = new Mailcontent();
+				$mailContent->idMail = $mail->idMail;
+			}
+
+			$content = $this->request->getPost("content");
+			
+			$buscar = array("<script" , "</script>");
+			$reemplazar = array("<!-- ", " -->");
+
+			$newContent = str_replace($buscar,$reemplazar, $content);
+
+			$mailContent->content = htmlspecialchars($newContent, ENT_QUOTES);
+
+			if(!$mailContent->save()) {
+				foreach ($mailContentExist->getMessages() as $msg) {
+					$this->logger->log("Error while saving mail html content {$msg}");
+				}
+				$this->db->rollback();
+				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte con el administrador'), 500);
+			}
+			
+			$this->db->commit();
+			return $this->setJsonResponse(array('msg' => $mail->idMail), 200);
 		}
 	}
 	
-	
+	protected function createNewMail($type)
+	{
+		$mail = new Mail();
+		$mail->idAccount = $this->user->account->idAccount;
+		$mail->type = $type;
+		$mail->status = 'Draft';
+		$mail->wizardOption = 'setup';
+		$mail->createdon = time();
+		$mail->updatedon = time();
+		$mail->deleted = 0;
+
+		if (!$mail->save()) {
+			foreach ($mail->getMessages() as $msg) {
+				$this->logger->log("Error while saving mail {$msg}");
+			}
+			$this->db->rollback();
+			return false;
+		}
+		return $mail;
+	}
+
+
 	public function importAction($idMail = null)
 	{
 		$mail = $this->validateProcess($idMail);
@@ -907,10 +1013,9 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function importcontentAction()
+	public function importcontentAction($idMail = null)
 	{	
 		if ($this->request->isPost()) {
-			
 			$user = $this->user;
 			$account = $user->account;
 
@@ -933,8 +1038,8 @@ class MailController extends ControllerBase
 				$html = $getHtml->gethtml($url, $image, $dir, $account);
 				
 				$this->session->set("{$account->idAccount}-{$user->idUser}-createMail", htmlspecialchars($html, ENT_QUOTES));
-						
-				return $this->setJsonResponse(array('status' => 'success'), 200);
+				$this->view->setVar('idMail', $idMail);
+				return $this->setJsonResponse(array('msg' => $idMail), 200);
 			}
 			catch (Exception $e){
 				$this->logger->log("Exception {$e}");
@@ -1493,6 +1598,8 @@ class MailController extends ControllerBase
 		$htmlFinal = str_ireplace($search, $replace, $html);
 		
 		$this->session->set('htmlObj', $htmlFinal);
+		
+		return $this->setJsonResponse(array('status' => 'success'), 200);
 //		return $this->setJsonResponse(array('response' => $htmlFinal));
 	}
 	
@@ -1844,7 +1951,7 @@ class MailController extends ControllerBase
 		if ($mail) {
 			return $mail;
 		}
-		else if(!$mail || count($mail) < 0) {
+		else if(!$mail) {
 			return $this->response->redirect("mail/setup");
 		}
 	}
@@ -2018,10 +2125,23 @@ class MailController extends ControllerBase
 					}
 				}
 				
-				$mailember->content = $mailcontent->content;
-				$mailember->plainText = $mailcontent->plainText;
+				if (empty($mail->previewData)) {
+					$preview = 'null';
+				}
+				else {
+					$preview = $mail->previewData;
+				}
+				$mailember->previewData = $preview;
+				
+				if (empty($mailcontent->content)) {
+					$mailember->content = 0;
+				}
+				else {
+					$mailember->content = 1;
+				}
+//				$mailember->content = $mailcontent->content;
+//				$mailember->plainText = $mailcontent->plainText;
 				$mailember->scheduleDate = date('d/m/Y H:i', $mail->scheduleDate);
-				$this->logger->log("Date: {$mail->scheduleDate}");
 				$this->logger->log("Mail for ember: " . print_r($mailember, true));
 				$this->view->setVar('mail', $mailember);
 			}

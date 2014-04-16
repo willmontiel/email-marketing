@@ -10,23 +10,23 @@
 		iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
 	};
 	var objMail = {{objMail}};
+	var idMail = {{mail.idMail}};
 	
 	function sendData() {
 		//verHTML();
-		var idMail = null;
-		{% if mail is defined %}
-			idMail = {{mail.idMail}};
-		{% endif %}
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$.ajax({
-			url: "{{url('mail/editor')}}" + idMail,
+			url: "{{url('mail/contenteditor')}}/" + idMail,
 			type: "POST",			
 			data: { editor: editor },
 			error: function(msg){
-				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
+				var obj = $.parseJSON(msg.responseText);
+				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.msg, sticky: false, time: 10000});
+				document.getElementById('iframeEditor').contentWindow.RecreateEditor();
+				return false;
 			},
 			success: function(msg){
-				console.log(msg)
+				$(location).attr('href', "{{url('mail/new')}}/" + idMail);
 			}
 		});
 	}
@@ -35,16 +35,16 @@
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$('#preview-modal').modal('show');
 		$.ajax({
-			url: "{{url('mail/previeweditor')}}",
+			url: "{{url('mail/previeweditor')}}/" + idMail,
 			type: "POST",			
 			data: { editor: editor},
 			error: function(msg){
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function() {
-				$("#preview-modal").empty();
-				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
-				$('<iframe frameborder="0" width="100%" height="100%" src="{{url('mail/previewdata')}}"/>').appendTo('#preview-modal');
+				$("#modal-body-preview").empty();
+				$('#modal-body-preview').append($('<iframe frameborder="0" width="100%" height="100%" src="{{url('mail/previewdata')}}"/>'));
+				
 			}
 		});
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
@@ -58,7 +58,7 @@
 	function saveContent() {
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$.ajax({
-			url: "{{url('mail/savecontent')}}",
+			url: "{{url('mail/savecontent')}}/" + idMail,
 			type: "POST",			
 			data: { editor: editor},
 			error: function(msg){
@@ -144,10 +144,11 @@
 			<div class="btnoptions">
 				<div class="box span12 optionsEditor">
 					<div class="pull-right NextFromEditor">
-						<button onclick="sendData()" type="button" value="Siguiente" class="btn btn-primary">Guardar y volver <i class="icon-circle-arrow-right"></i></button>
+						<a href="{{url('mail/new')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar <i class="icon-circle-arrow-right"></i></a>
+						<button onclick="sendData()" type="button" class="btn btn-primary">Guardar y regresar <i class="icon-circle-arrow-right"></i></button>
 					</div>
 					<div class="pull-left VisualizeEditor">
-						<a href="#preview-modal" onclick="verHTML(); return false;" class="btn btn-default">Visualizar  <i class="icon-eye-open"></i></a>
+						<button onclick="verHTML()" class="btn btn-default" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
 					</div>
 					<div class="pull-left SaveTemplate">
 						<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-default">Guardar como Plantilla <i class="icon-picture"></i></button>
@@ -170,5 +171,17 @@
 			<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
 		</div>
 	</div>
-	<div id="preview-modal" class="modal hide fade preview-modal"></div>
+	<div id="preview-modal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Previsualización</h4>
+				</div>
+				<div class="modal-body" id="modal-body-preview">
+
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

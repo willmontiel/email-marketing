@@ -71,8 +71,12 @@
 				filterByOpen: "{{mail.filterByOpen}}",
 				filterByClick: "{{mail.filterByClick}}",
 				filterByExclude: "{{mail.filterByExclude}}",
-				content: {{mail.content}},
-				{#plainText: "{{mail.plainText}}",#}
+				previewData: "{{mail.previewData}}",
+				mailcontent: {{mail.content}},
+				{#
+				content: "{{content}}",
+				plainText: "{{mail.plainText}}",
+				#}
 			}];
 		{% endif %}
 		
@@ -133,7 +137,6 @@
 	</div>
 	<br />
 	<div id="emberAppContainer">
-	</script>
 		<script type="text/x-handlebars" data-template-name="index">
 			<div class="row">
 				<div class="col-md-12">

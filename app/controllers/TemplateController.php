@@ -28,11 +28,14 @@ class TemplateController extends ControllerBase
 		$this->view->setVar('arrayTemplate', $arrayTemplate);
 	}
 	
-	public function selectAction($idMail = null)
+	public function selectAction($idMail = 0)
 	{
-		if ($idMail != null) {
+		if ($idMail != 0) {
 			$mail = $this->validateProcess($idMail);
 			$idMail = $mail->idMail;
+			if ($idMail == null) {
+				$idMail = 0;
+			}
 		}
 		
 		$templates = Template::findGlobalsAndPrivateTemplates($this->user->account);

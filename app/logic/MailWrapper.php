@@ -29,8 +29,8 @@ class MailWrapper extends BaseWrapper
 	{
 		$this->mail = $mail;
 	}
-	
-	public function setMailContent(Mailcontent $mailcontent)
+
+	public function setMailContent(Mailcontent $mailcontent = null)
 	{
 		$this->mailcontent = $mailcontent;
 	}
@@ -136,7 +136,6 @@ class MailWrapper extends BaseWrapper
 		$this->mail->fromEmail = $this->content->fromEmail;
 		$this->mail->replyTo = $this->content->replyTo;
 		$this->mail->target = $this->target->target;
-		$this->mail->previewData = $this->content->previewData;
 		$this->mail->socialNetworks = $this->content->socialNetworks;
 
 		if (!$this->mail->save()) {
@@ -198,8 +197,12 @@ class MailWrapper extends BaseWrapper
 		$jsonObject['filterByClick'] = $this->content->filterByClick;
 		$jsonObject['filterByExclude'] = $this->content->filterByExclude;
 		
-		$jsonObject['content'] = $this->mailcontent->content;
-		$jsonObject['plainText'] = $this->mailcontent->plainText;
+		if ($this->mailcontent != null) {
+			$jsonObject['content'] = (empty($this->mailcontent->content))?0:1;
+		}
+		else {
+			$jsonObject['content'] = 0;
+		}
 		
 		$jsonObject['scheduleDate'] = $this->mailcontent->scheduleDate;
 		
