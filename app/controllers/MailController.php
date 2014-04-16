@@ -551,7 +551,7 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function contenteditorAction($idMail = null, $idTemplate = null) 
+	public function contenteditorAction($idMail, $idTemplate = null) 
 	{
 		$account = $this->user->account;
 		
@@ -561,13 +561,11 @@ class MailController extends ControllerBase
 							2 => $account->idAccount)
 		));
 		
-		$objTemplate = Template::findFirst(array(
-			"conditions" => "idTemplate = ?1",
-			"bind" => array(1 => $idTemplate)
-		));
-		
 		if ($mail) {
-			$this->view->setVar('mail', $mail);
+			$objTemplate = Template::findFirst(array(
+				"conditions" => "idTemplate = ?1",
+				"bind" => array(1 => $idTemplate)
+			));
 			
 			$mailcontent = Mailcontent::findFirst(array(
 				'conditions' => 'idMail = ?1',
@@ -596,19 +594,11 @@ class MailController extends ControllerBase
 				$objContent = 'null';
 			}
 		}
-		else if ($objTemplate){
-			if (empty($objTemplate->content)) {
-				$objContent = 'null';
-			}
-			else {
-				$objContent = $objTemplate->content;
-			}
-		}
 		else {
-			$objContent = 'null';
+			return $this->response->redirect('error');
 		}
 		
-		
+		$this->view->setVar('mail', $mail);
 		$this->view->setVar('objMail', $objContent);
 		
 		if ($this->request->isPost()) {

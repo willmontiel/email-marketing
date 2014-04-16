@@ -11,48 +11,6 @@
 	{{ javascript_include('js/mixin_save.js') }}
 	{{ javascript_include('js/app_mail.js') }}
 	<script type="text/javascript">
-		function iframeResize() {
-			var iFrame = document.getElementById('iframeEditor');
-			//iFrame.height = '';
-			iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
-		};
-		
-		$(function(){
-			$("#editor").click(function() {
-				createIframe("iframeEditor", "{{url('mail/editor_frame')}}", "100%", "", "iframeResize()");
-			});
-			
-			$("#template").click(function() {
-				createIframe("iframeEditor", "{{url('template/select')}}", "100%", "", "iframeResize()");
-			});
-			
-			$("#html").click(function() {
-				createIframe("iframeHtml", "{{url('mail/contenthtml')}}", "100%", "600", "");
-			});
-			
-			$("#import").click(function() {
-				createIframe("iframeHtml", "{{url('mail/importcontent')}}", "100%", "600", "");
-			});
-			
-		});
-		
-		function createIframe(id, url, width, height, fn) {
-			$("#choose-content").hide();
-			$("#plaintext-content").show();
-			$("#buttons-content").show();
-		
-			$('<iframe />');  // Create an iframe element
-			$('<iframe />', {
-				id: id,
-				src: url,
-				width: width,
-				height: height,
-				onload: fn,
-				seamless: "seamless"
-			}).appendTo('#show-content');
-		}
-	</script>
-	<script type="text/javascript">
 		//Full Mail Content
 		{% if mail is defined %}
 			App.maildata = [{
