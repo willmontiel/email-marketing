@@ -225,32 +225,30 @@
 			</div>
 
 			<div class="row">
-				<div class="box-content">
-					<table class="table table-striped table-contacts">
-						<thead></thead>
-						<tbody>
-							{{'{{#each model}}'}}
-								{{ partial("partials/contact_view_partial") }}
-							{{ '{{else}}' }}
-								<tr>
-									<td>
-										<div class="bs-callout bs-callout-warning">
-											<h4>No se encontraron contactos</h4>
-											<p>Puede ser que su búsqueda no arrojó resultados, que no existen contactos que cumplan todas las condiciones de filtro o que no hay contactos en esta lista.</p>
-											<p>Si desea crear nuevos contactos elija una de las opciones de arriba.
-												<ul>
-													<li><b>Crear un nuevo contacto:</b> para ingresar datos de un solo contacto</li>
-													<li><b>Crear varios contactos:</b> puede crear múltiples contactos rapidamente</li>
-													<li><b>Importar contactos:</b> copie contactos de otros sistemas fácilmente</li>
-												</ul>
-											</p>
-										</div>
-									</td>
-								</tr>
-							{{ '{{/each}}' }}
-						</tbody>
-					</table>
-				</div>
+				<table class="table table-striped table-contacts">
+					<thead></thead>
+					<tbody>
+						{{'{{#each model}}'}}
+							{{ partial("partials/contact_view_partial") }}
+						{{ '{{else}}' }}
+							<tr>
+								<td>
+									<div class="bs-callout bs-callout-warning">
+										<h4>No se encontraron contactos</h4>
+										<p>Puede ser que su búsqueda no arrojó resultados, que no existen contactos que cumplan todas las condiciones de filtro o que no hay contactos en esta lista.</p>
+										<p>Si desea crear nuevos contactos elija una de las opciones de arriba.
+											<ul>
+												<li><b>Crear un nuevo contacto:</b> para ingresar datos de un solo contacto</li>
+												<li><b>Crear varios contactos:</b> puede crear múltiples contactos rapidamente</li>
+												<li><b>Importar contactos:</b> copie contactos de otros sistemas fácilmente</li>
+											</ul>
+										</p>
+									</div>
+								</td>
+							</tr>
+						{{ '{{/each}}' }}
+					</tbody>
+				</table>
 				<div class="box-footer flat"> 
 					{{ partial("partials/pagination_partial") }}
 				</div>
