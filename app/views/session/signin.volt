@@ -14,7 +14,7 @@
 				</div>
 				<div class="panel-body">
 					{{ flashSession.output() }}
-					<form class="form-horizontal" role="form" id="sessionlogin" action="{{ url('session/login') }}">
+					<form class="form-horizontal" role="form" id="sessionlogin" action="{{ url('session/login') }}" method="post">
 						<input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
 						<div class="form-group">
 							<label for="username" class="col-sm-3 control-label">Usuario</label>
