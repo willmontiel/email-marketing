@@ -14,7 +14,7 @@
 				</div>
 				<div class="panel-body">
 					{{ flashSession.output() }}
-					<form class="form-horizontal" role="form" id="sessionlogin" action="{{ url('session/recoverpass') }}">
+					<form class="form-horizontal" role="form" id="sessionlogin" action="{{ url('session/recoverpass') }}" method="post">
 						<div class="form-group">
 							<label for="email" class="col-sm-3 control-label">Email:</label>
 							<div class="col-sm-9 ">
