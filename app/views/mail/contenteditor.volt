@@ -13,20 +13,22 @@
 	
 	function sendData() {
 		//verHTML();
+		var idMail = null;
+		{% if mail is defined %}
+			idMail = {{mail.idMail}};
+		{% endif %}
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
-		$.ajax(
-			{
-			url: "{{url('mail/editor')}}",
+		$.ajax({
+			url: "{{url('mail/editor')}}" + idMail,
 			type: "POST",			
 			data: { editor: editor },
 			error: function(msg){
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
-			success: function(){
-				$(location).attr('href', "{{url('mail/new')}}"); 
+			success: function(msg){
+				console.log(msg)
 			}
 		});
-		
 	}
 	
 	function verHTML() {

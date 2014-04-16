@@ -20,6 +20,7 @@
 				  <h3 class="panel-title">Envíe el correo ahora o programelo para que se envíe déspues</h3>
 				</div>
 				<div class="panel-body">
+					{#
 					{% if mail is not defined or mail.scheduleDate == null %}
 						{% set display = 'display: none;'%}
 						{% set checked = '' %}
@@ -29,6 +30,7 @@
 						{% set checked = 'checked' %}
 						{% set value = date('d/m/Y G:i', mail.scheduleDate) %}
 					{% endif %}
+					#}
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Envíar correo: </label>
@@ -46,7 +48,7 @@
 								<input type="radio" name="schedule" {{checked}} value="later" id="later">
 								#}
 								<label for="later">En la siguiente fecha:</label>
-								<div id="programmer" style="{{display}}">
+								<div id="programmer" style="">
 									<br />
 									{{' {{ view App.DateTimePicker valueBinding="scheduleDate" id="scheduleDate"}}' }}
 								</div>

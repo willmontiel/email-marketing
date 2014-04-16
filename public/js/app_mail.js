@@ -28,12 +28,35 @@ App.Mail = DS.Model.extend({
 	filterByExclude: DS.attr('string'),
 	content: DS.attr('string'),
 	plainText: DS.attr('string'),
-	
 });
 
 App.IndexRoute = Ember.Route.extend({
 	model: function(){
-		return this.store.createRecord('mail');
+		var m = this.store.createRecord('mail');
+		this.loadData(m);
+		return m;
+	},
+			
+	loadData: function(m){
+		if (App.maildata != undefined) {
+			m.set('id', App.maildata[0].id);
+			m.set('name', App.maildata[0].name);
+			m.set('type', App.maildata[0].type);
+			m.set('scheduleDate', App.maildata[0].scheduleDate);
+			m.set('fromName', App.maildata[0].fromName);
+			m.set('fromEmail', App.maildata[0].fromEmail);
+			m.set('replyTo', App.maildata[0].replyTo);
+			m.set('subject', App.maildata[0].subject);
+			m.set('dbases', App.maildata[0].dbases);
+			m.set('contactlists', App.maildata[0].contactlists);
+			m.set('segments', App.maildata[0].segments);
+			m.set('filterByEmail', App.maildata[0].filterByEmail);
+			m.set('filterByOpen', App.maildata[0].filterByOpen);
+			m.set('filterByClick', App.maildata[0].filterByClick);
+			m.set('filterByExclude', App.maildata[0].filterByExclude);
+			m.set('content', App.maildata[0].content);
+			m.set('plainText', App.maildata[0].plainText);
+		}
 	},
 			
 	deactivate: function () {
@@ -41,23 +64,6 @@ App.IndexRoute = Ember.Route.extend({
 			this.currentModel.rollback();
 		}
 	}
-//	model: function(){
-//		console.log('lala');
-//		return this.store.find('mail');
-//	},
-////	deactivate: function () {
-////		this.doRollBack();
-////	},
-////	contextDidChange: function() {
-////		this.doRollBack();
-////		this._super();
-////    },
-////	doRollBack: function () {
-////		var model = this.get('currentModel');
-////		if (model && model.get('isDirty') && !model.get('isSaving') ) {
-////			model.get('transaction').rollback();
-////		}
-////	}
 });
 
 App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
@@ -194,7 +200,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				mail.set('type', type);
 				mail.set('content', content);
 				
-//				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
+				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
 				this.set('isHeaderExpanded', false);
 				this.set('isTargetExpanded', false);
 				this.set('isContentExpanded', false);
