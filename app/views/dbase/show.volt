@@ -8,6 +8,7 @@
 	{{ partial("partials/xeditable_select_view_partial") }}
 	{{ javascript_include('js/search-reference-pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
+	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
 
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/dbase/' ~ sdbase.idDbase }}';
@@ -74,9 +75,15 @@
 		}
 	</script>
 	<script>
+		App.formfields = new Array();
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
 			{{ ember_customfield_options_xeditable(field) }}
+			App.formfields.push({id: {{field.idCustomField}}, 
+								name: '{{field.name}}', 
+								type: '{{field.type}}',
+								required: '{{field.required}}',
+								values: '{{field.values}}'});
 		{%endfor%}
 	</script>
 	{{ javascript_include('js/editable-ember-view.js')}}
