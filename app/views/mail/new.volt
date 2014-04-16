@@ -53,6 +53,29 @@
 		}
 	</script>
 	<script type="text/javascript">
+		//Full Mail Content
+		{% if mail is defined %}
+			App.maildata = [{
+				id: {{mail.idMail}}, 
+				name: "{{mail.name}}",
+				type: "{{mail.type}}",
+				scheduleDate: "{{mail.scheduleDate}}",
+				fromName: "{{mail.fromName}}",
+				fromEmail: "{{mail.fromEmail}}",
+				replyTo: "{{mail.replyTo}}",
+				subject: "{{mail.subject}}",
+				dbases: "{{mail.dbases}}",
+				contactlists: "{{mail.contactlists}}",
+				segments: "{{mail.segments}}",
+				filterByEmail: "{{mail.filterByEmail}}",
+				filterByOpen: "{{mail.filterByOpen}}",
+				filterByClick: "{{mail.filterByClick}}",
+				filterByExclude: "{{mail.filterByExclude}}",
+				content: {{mail.content}},
+				{#plainText: "{{mail.plainText}}",#}
+			}];
+		{% endif %}
+		
 		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios
 		{% if db == true%}
 			App.dbs = [
