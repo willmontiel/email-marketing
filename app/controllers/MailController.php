@@ -497,12 +497,14 @@ class MailController extends ControllerBase
 
 				if ($objMail) {
 					$text = $objMail->plainText;
+					$objMailContent = 
 					$this->view->setVar('objMail', $objMail->content);
 				}
 				else  {
 					$text = null;
-					$this->view->setVar('objMail', 'null');
+					$objMailContent = 'null' ;
 				}
+				$this->view->setVar('objMail', $objMailContent);
 			}
 			
 			if ($this->request->isPost()) {
@@ -539,9 +541,85 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function contenteditorAction() 
+	public function contenteditorAction($idMail) 
 	{
-		$this->view->setVar('objMail', 'null');
+		$account = $this->user->account;
+		
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $account->idAccount)
+		));
+		
+		if ($mail) {
+			$this->view->setVar('mail', $mail);
+			$mailcontent = Mailcontent::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $mail->idMail)
+			));
+			
+			if ($mailcontent) {
+				$text = $mailcontent->plaintext;
+				$objContent = $mailcontent->content;
+			}
+			else {
+				$text = null;
+				$objContent = 'null';
+			}
+		}
+		
+		$this->view->setVar('objMail', $objContent);
+		
+		if ($this->request->isPost()) {
+			
+			$content = $this->request->getPost('editor');
+			
+			if (!$mail) {
+				$mail = new Mail();
+				$mail->idAccount = $account->idAccount;
+				$mail->status = 'Draft';
+				$mail->wizardOption = 'setup';
+				$mail->createdon = time();
+				$mail->updatedon = time();
+				$mail->deleted = 0;
+				
+				$mailcontent = new Mailcontent();
+				$mailcontent->idMail = $mail->idMail;
+				$mailcontent->content = $content;
+				$mailcontent->plaintext = $text;
+				
+				if (!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->logger->log("Error while saving mail {$msg}");
+					}
+					return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
+				}
+				
+			}
+			else {
+				if (!$mailcontent) {
+					$mailcontent = new Mailcontent();
+					$mailcontent->idMail = $mail->idMail;
+					$mailcontent->content = $content;
+					$mailcontent->plaintext = $text;
+					
+				}
+				else {
+					$mailcontent->idMail = $mail->idMail;
+					$mailcontent->content = $content;
+					$mailcontent->plaintext = $text;
+				}
+			}
+			
+			if (!$mailcontent->save()) {
+				foreach ($mailcontent->getMessages() as $msg) {
+					$this->logger->log("Error while saving content mail {$msg}");
+				}
+				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
+			} 
+			
+			return $this->setJsonResponse(array('msg' => "{$mail->idMail}"), 200);
+		}
 	}
 	
 	public function editor_frameAction($idMail = NULL, $idTemplate = null) 

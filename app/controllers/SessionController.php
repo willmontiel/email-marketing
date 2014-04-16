@@ -62,7 +62,6 @@ class SessionController extends \Phalcon\Mvc\Controller
 				$url .= 'session/reset/' . $cod;
 				
 				$recoverObj = new Tmprecoverpass();
-				
 				$recoverObj->idTmpRecoverPass = $cod;
 				$recoverObj->idUser = $user->idUser;
 				$recoverObj->url = $url;

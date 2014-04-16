@@ -71,8 +71,8 @@
 				filterByOpen: "{{mail.filterByOpen}}",
 				filterByClick: "{{mail.filterByClick}}",
 				filterByExclude: "{{mail.filterByExclude}}",
-				content: "{{mail.content}}",
-				plainText: "{{mail.plainText}}",
+				content: {{mail.content}},
+				{#plainText: "{{mail.plainText}}",#}
 			}];
 		{% endif %}
 		
