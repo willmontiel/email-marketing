@@ -1,5 +1,5 @@
 <?php
-require_once "swiftmailer-5.0.3/lib/swift_required.php";
+require_once "../app/library/swiftmailer/lib/swift_required.php";
 class AdministrativeMessages
 {
 	public $subject;
@@ -40,7 +40,7 @@ class AdministrativeMessages
 	
 	public function sendMessage()
 	{
-		$transport = Swift_SmtpTransport::newInstance($this->mta->domain, $this->mta->port);
+		$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 		$swift = Swift_Mailer::newInstance($transport);
 		
 		$message = new Swift_Message($this->subject);
@@ -57,7 +57,7 @@ class AdministrativeMessages
 		$recipients = $swift->send($message, $failures);
 		
 		if ($recipients){
-			Phalcon\DI::getDefault()->get('logger')->log('Message successfully sent!');
+			Phalcon\DI::getDefault()->get('logger')->log('Recovery pass message successfully sent!');
 		}
 		else {
 			throw new InvalidArgumentException('Error while sending message: ' . $failures);

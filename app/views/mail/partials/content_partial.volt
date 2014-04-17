@@ -8,7 +8,7 @@
 				<div id="choose-content" style="display: block;">
 					<div class="row">
 						<div class="col-md-3 text-center">
-							<a href="{{url('mail/editorcontent')}}" class="btn btn-default btn-lg">
+							<a href="{{url('mail/contenteditor')}}/{{'{{unbound id}}'}}" class="btn btn-default btn-lg">
 								<span class="glyphicon glyphicon-star"></span> Editor avanzado
 							</a>
 						</div>
