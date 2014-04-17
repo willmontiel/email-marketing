@@ -11,14 +11,12 @@ class SegmentController extends ControllerBase
 		));
 		
 		if ($segment) {
-			$this->logger->log('Hay segmento');
 			$dbase = Dbase::findFirst(array(
 				'conditions' => 'idDbase = ?1',
 				'bind' => array(1 => $segment->idDbase)
 			));
 			
 			if ($dbase->idAccount == $account->idAccount) {
-				$this->logger->log('Hay segmento 2');
 				$fields = Customfield::findByIdDbase($segment->idDbase);
 				$this->view->setVar("fields", $fields);
 				$this->view->setVar('datasegment', $segment);

@@ -8,6 +8,8 @@
 		{{ javascript_include('js/load_activecontacts.js')}}
 		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
+		{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js') }}
+		{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 		{#{{ javascript_include('javascripts/moment/moment.min.js')}}#}
 <script type="text/javascript">
 		var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
@@ -152,13 +154,13 @@
 				<div class="col-md-7 col-sm-12">
 					<ul class="list-inline pull-right">
 						<li>
-							{{'{{#link-to "contacts.new" class="btn btn-default extra-padding btn-sm" disabledWhen="createDisabled"}}'}}<i class="icon-plus"></i> Crear Contacto{{'{{/link-to}}'}}
+							{{'{{#link-to "contacts.new" class="btn btn-default extra-padding btn-sm" disabledWhen="createDisabled"}}'}} Crear Contacto{{'{{/link-to}}'}}
 						</li>
 						<li>
-							{{'{{#link-to "contacts.newbatch" class="btn btn-default extra-padding btn-sm" disabledWhen="importBatchDisabled"}}'}}<i class="icon-align-justify"></i> Crear Varios Contactos{{'{{/link-to}}'}}
+							{{'{{#link-to "contacts.newbatch" class="btn btn-default extra-padding btn-sm" disabledWhen="importBatchDisabled"}}'}} Crear Varios Contactos{{'{{/link-to}}'}}
 						</li>
 						<li>
-							{{ '{{#link-to "contacts.import" class="btn btn-default extra-padding btn-sm" disabledWhen="importDisabled"}}'}}<i class="icon-file-alt"></i> Importar Contactos{{'{{/link-to}}'}}	
+							{{ '{{#link-to "contacts.import" class="btn btn-default extra-padding btn-sm" disabledWhen="importDisabled"}}'}} Importar Contactos{{'{{/link-to}}'}}	
 						</li>
 
 						{#	<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="btn btn-default extra-padding btn-sm" title="Configuracion avanzada"><i class="icon-cog"></i></a> #}
@@ -169,57 +171,43 @@
 			{# {{ partial("partials/search_contacts_partial") }} #}
 			<div class="row frame-bg-pd">
 				<div class="col-md-3">
-					<div class="dropdown">
-						<button class="btn dropdown-toggle sr-only" type="button" id="dropdownMenu1" data-toggle="dropdown">
-							<span class="caret">Marcar</span>
+					<div class="btn-group">
+						<button type="button" class="btn btn-default dropdown-toggle no-bg" data-toggle="dropdown">
+						Marcar <span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Todos</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Activos</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Suscritos</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Rebotados</a></li>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#">Todos</a></li>
+							<li><a href="#">Activos</a></li>
+							<li><a href="#">Suscritos</a></li>
+							<li><a href="#">Rebotados</a></li>
 						</ul>
 					</div>
 				</div>
 
 				<div class="col-md-3">
-					<div class="dropdown">
-						<button class="btn dropdown-toggle sr-only" type="button" id="dropdownMenu1" data-toggle="dropdown">
-							<span class="caret">Acciones</span>
+					<div class="btn-group">
+						<button type="button" class="btn btn-default dropdown-toggle no-bg" data-toggle="dropdown">
+						Acciones <span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Todos</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Activos</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Suscritos</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Rebotados</a></li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="col-md-3">
-					<div class="dropdown">
-						<button class="btn dropdown-toggle sr-only" type="button" id="dropdownMenu1" data-toggle="dropdown">
-							<span class="caret">Mostrar</span>
-						</button>
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Todos</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Activos</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Suscritos</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Rebotados</a></li>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#">Borrar</a></li>
+							<li><a href="#">Duplicar</a></li>
+							<li><a href="#">Copiar</a></li>
+							<li><a href="#">Mover</a></li>
 						</ul>
 					</div>
 				</div>
 
 				<div class="col-md-3">
 					{#{{' {{ view App.DropDownSelect }} '}}#}
-					
+					<label>Mostrar</label>
 					{{'{{
 					view Ember.Select
 					content=filters
 					optionValuePath="content.value"
 					optionLabelPath="content.name"
 					value=filter.value
-					class="span6"
+					class="form-control"
 					}}'}}
 				</div>
 			</div>
@@ -256,79 +244,78 @@
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="contacts/new">
-			<div class="row-fluid">
-				{{ '{{#if App.errormessage }}' }}
-					<div class="alert alert-message alert-error">
-						{{ '{{ App.errormessage }}' }}
+		<div class="row">
+			{{ '{{#if App.errormessage }}' }}
+				<div class="alert alert-message alert-error">
+					{{ '{{ App.errormessage }}' }}
+				</div>
+		</div>
+		{{ '{{/if}} '}}
+		<h4 class="sectiontitle">Crear nuevo contacto</h4>
+		<div class="col-md-5">
+			<form  class="form-horizontal" role="form">
+				{{ '{{#if errors.errormsg}}' }}
+					<div class="alert alert-error">
+						{{ '{{errors.errormsg}}' }}
 					</div>
-				{{ '{{/if}} '}}
-				<div class="row">
-					<h4 class="sectiontitle">Crear nuevo contacto</h4>
-					<div class="col-md-5">
-						<form  class="form-horizontal" role="form">
-							{{ '{{#if errors.errormsg}}' }}
-								<div class="alert alert-error">
-									{{ '{{errors.errormsg}}' }}
-								</div>
-							{{ '{{/if}}' }}
-							{{' {{#if errors.email}} '}}
-									<span class="text text-error">{{'{{errors.email}}'}}</span>
-							{{' {{/if }} '}}
-							<div class="form-group">
-								<label for="Email" class="col-sm-2 control-label">*Email:</label>
-								<div class="col-md-8">
-									{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus" id="email" class="form-control" placeholder="Email"}}'}}
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="nombre" class="col-sm-2 control-label">Nombre:</label>
-								<div class="col-md-8">
-									{{'{{view Ember.TextField valueBinding="name" id="name" class="form-control" placeholder="Nombre"}}'}}
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="apellido" class="col-sm-2 control-label">Apellido:</label>
-								<div class="col-md-8">
-									{{'{{view Ember.TextField valueBinding="lastName" id="lastName" class="form-control" id="Apellido" placeholder="Apellido"}}'}}
-								</div>
-							</div>
-							<!-- Campos Personalizados -->
-							{%for field in fields%}
-								<div class="form-group">
-									<label for="campo{{field.idCustomField }}" class="col-sm-2 control-label">{{field.name}}:</label>
-									<div class="col-md-8">
-										{{ember_customfield(field, ['class': 'form-control'] )}}
-									</div>
-								</div>
-							{%endfor%}
-							<!--  Fin de campos personalizados -->
+				{{ '{{/if}}' }}
+				{{' {{#if errors.email}} '}}
+						<span class="text text-error">{{'{{errors.email}}'}}</span>
+				{{' {{/if }} '}}
+				<div class="form-group">
+					<label for="Email" class="col-sm-4 control-label"><span class="required">*</span>Email:</label>
+					<div class="col-md-8">
+						{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus" id="email" class="form-control" placeholder="Email"}}'}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="nombre" class="col-sm-4 control-label">Nombre:</label>
+					<div class="col-md-8">
+						{{'{{view Ember.TextField valueBinding="name" id="name" class="form-control" placeholder="Nombre"}}'}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="apellido" class="col-sm-4 control-label">Apellido:</label>
+					<div class="col-md-8">
+						{{'{{view Ember.TextField valueBinding="lastName" id="lastName" class="form-control" id="Apellido" placeholder="Apellido"}}'}}
+					</div>
+				</div>
+				<!-- Campos Personalizados -->
+				{%for field in fields%}
+					<div class="form-group">
+						<label for="campo{{field.idCustomField }}" class="col-sm-4 control-label">{{field.name}}:</label>
+						<div class="col-md-8">
+							{{ember_customfield(field, ['class': 'form-control'] )}}
+						</div>
+					</div>
+				{%endfor%}
+				<!--  Fin de campos personalizados -->
 
-							<div class="form-actions pull-right">
-								<div class="row">
-									<div class="col-xs-6">
-										<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
-									</div>
-									<div class="col-xs-6">
-										<button class="btn btn-sm btn-default btn-guardar extra-padding" {{'{{action "save" this}}'}}>Guardar</button>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="col-md-7">
-						<div class="alert alert-success">
-							<div class="row">
-								<div class="col-sm-2">
-									<span class="glyphicon glyphicon-info-sign"></span>
-								</div>
-								<div class="col-md-9">
-									<p>Cree un nuevo contacto, basta con una dirección de correo electrónico y si desea otros datos básicos como nombre y apellido.</p>
-								</div>
-							</div>
+				<div class="form-actions pull-right">
+					<div class="row">
+						<div class="col-xs-6">
+							<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
+						</div>
+						<div class="col-xs-6">
+							<button class="btn btn-sm btn-default btn-guardar extra-padding" {{'{{action "save" this}}'}}>Guardar</button>
 						</div>
 					</div>
 				</div>
+			</form>
+		</div>
+		<div class="col-md-6">
+			<div class="alert alert-success">
+				<div class="row">
+					<div class="col-sm-2">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</div>
+					<div class="col-md-9">
+						<p>Cree un nuevo contacto, basta con una dirección de correo electrónico y si desea otros datos básicos como nombre y apellido.</p>
+					</div>
+				</div>
 			</div>
+		</div>
+
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/newbatch">
 			<div class="row">
@@ -351,7 +338,7 @@
 						</div>
 					</form>
 				</div>
-				<div class="col-md-7">
+				<div class="col-md-6">
 					<div class="alert alert-success">
 						<div class="row">
 							<div class="col-sm-2">

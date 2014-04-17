@@ -111,15 +111,16 @@
 				<h4  class="sectiontitle">Listas de contactos</h4>
 				<div class="row">
 					<div class="col-xs-6 col-sm-5 col-md-4">
-						<form>
-							<p>
-								{{ '{{view Ember.Select
-										contentBinding="dbaseSelect"
-										optionValuePath="content.id"
-										optionLabelPath="content.name"
-										valueBinding="selectedDbase" class="sm-select form-control"}}'
-								}}
-							</p>
+						<form role="form">
+							{{ '{{view Ember.Select
+									contentBinding="dbaseSelect"
+									optionValuePath="content.id"
+									optionLabelPath="content.name"
+									valueBinding="selectedDbase"
+									class="sm-select form-control"
+									placeholder="Todas las bases de datos"
+								}}'
+							}}
 						</form>
 					</div>
 					<div class="col-md-3 pull-right">
@@ -182,7 +183,7 @@
 					</tbody>
 				</table>
 				<div class="row">
-				{{ partial("partials/pagination_partial") }}
+					{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
 
@@ -241,7 +242,7 @@
 									selectionBinding="dbase"
 									id="dbases"
 									prompt="Seleccione una base de datos"
-									class="sm-select"}}'
+									class="sm-select form-contro"}}'
 								}}
 							</div>
 						</div>

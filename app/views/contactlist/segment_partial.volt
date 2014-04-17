@@ -2,78 +2,89 @@
 
 <script type="text/x-handlebars" data-template-name="segments/index">
 
-			{# Insertar botones de navegacion #}
-			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
+	{# Insertar botones de navegacion #}
+	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
 
 	<div class="row">
 		<h4 class="sectiontitle">Segmentos</h4>
-			<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
-				{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
+		<div class="row">
+			<div class="col-xs-6 col-sm-5 col-md-4">
+				<form role="form">
+					{{ '{{view Ember.Select
+							contentBinding="dbaseSelect"
+							optionValuePath="content.id"
+							optionLabelPath="content.name"
+							valueBinding="selectedDbase"
+							class="form-control"
+							prompt="Seleccione una base de datos"
+							placeholder="Todas las bases de datos"
+						}}'
+					}}
+				</form>
+			</div>
+			<div class="col-md-3 pull-right">
+				{{'{{#link-to "segments.new" class="btn btn-default btn-sm extra-padding"}}'}} Crear nuevo segmento{{'{{/link-to}}'}}
 			</div>
 		</div>
-
-
-		
-		
-		<table class="table table-striped table-contacts">
-
-
-		{{'{{#each model}}'}}
-		{{' {{# unless isNew }}' }}
-			<div class="avatar purple">
-				<i class="icon-resize-horizontal icon-2x"></i>
-			</div>
-			<div class="news-content">
-				<div class="pull-right" style="margin-right: 10px;">
-					<div class="btn-group">
-						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-						<ul class="dropdown-menu">
-							<li>{{ '{{#link-to "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/link-to}}' }}</li>
-							<li>{{ '{{#link-to "segments.edit" this}}<i class="icon-pencil"></i> Editar{{/link-to}}' }}</li>
-						</ul>
-					</div>
-				</div>
-				<div class="news-title">
-				<a href="{{url('segment/show/')}}{{ '{{unbound id}}' }}#/contacts">{{' {{name}} '}}</a>
-				</div>
-				<div class="news-text">
-					{{' {{description}}'}}
-					<br />
-					<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
-				</div>
-				{{' {{/unless}}'}}
-				{{ '{{else}}' }}
-				<div class="box-section news with-icons">
-					<div class="avatar green">
-						<i class="icon-lightbulb icon-2x"></i>
-					</div>
-					<div class="news-content">
-						<div class="news-title">
-							No hay segmentos
-						</div>
-						<div class="news-text">
-							No tiene segmentos de contactos creados, para crear uno haga click en el siguiente enlace
-							<br /><br />
-							{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
-						</div>
-					</div>
-				</div>
-			{{ '{{/each}}' }}
-				<div class="box-footer flat"> 
-					{{ partial("partials/pagination_partial") }}
-				</div>
-			</div>
-		</table>
+		<div class="space"></div>
 	</div>
+	<table class="table table-striped table-contacts">
+		<thead>
+		</thead>
+		<tbody>
+			{{'{{#each model}}'}}
+
+			<tr>
+				<td {{' {{bind-attr style="dbase.style"}} '}}>
+
+				</td>
+				<td>
+					<a href="{{url('segment/show/')}}{{ '{{unbound id}}' }}#/contacts">{{' {{name}} '}}</a>
+					<p>{{' {{description}}'}}</p>
+				</td>
+
+				<td>
+					{{ '{{#link-to "segments.delete" this class="btn btn-default btn-delete btn-sm extra-padding"}} <span class="glyphicon glyphicon-trash"></span> Eliminar{{/link-to}}' }}
+
+					{{ '{{#link-to "segments.edit" this class="btn btn-default btn-sm extra-padding"}} <span class="glyphicon glyphicon-pencil"></span> Editar{{/link-to}}' }}
+
+				</td>
+			</tr>
+			{{ '{{else}}' }}
+			<tr>
+				<td>
+					<div class="">
+						<h4>Aun no tienes segmentos para tus contactos</h4>
+						<p>Lorem Ipsum
+						</p>
+					</div>
+				</td>
+			</tr>
+			{{ '{{/each}}' }}				
+
+		</tbody>
+		<tfoot>
+		</tfoot>
+	</table>
+
+	{{' {{# unless isNew }}' }}
+	{{' {{/unless}}'}}
+	
+	{# ########## inserta paginacion ########## #}
+	<div class="row">
+	{{ partial("partials/pagination_partial") }}
+	</div>
+
 </script>
 
 <script type="text/x-handlebars" data-template-name="segments">
 	{{'{{outlet}}'}}
+
 </script>
 
 <script type="text/x-handlebars" data-template-name="segments/new">
 	<div class="row">
-		<h4 class="sectiontitle">Agregar un nuevo segmento</h4>
+		<h4 class="sectiontitle">Crear nuevo segmento</h4>
 		{{ '{{#if App.errormessage }}' }}
 		<div class="row">
 			<div class="alert alert-error">
@@ -106,13 +117,13 @@
 				<div class="col-md-6 col-sm-12">
 					<div class="form-group">
 						<label for="name" class="col-sm-4 control-label">*Nombre: </label>
-						<div class="col-md-6">
+						<div class="col-md-7">
 							{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" class="form-control"}}' }}
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="description" class="col-sm-4 control-label">Descripción: </label>
-						<div class="col-md-8">
+						<div class="col-md-7">
 							{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" class="form-control sm-textarea-description"}}' }}
 						</div>
 					</div>
@@ -122,11 +133,11 @@
 						<div class="col-md-6">
 							{{ '{{view Ember.Select
 									selectionBinding="dbase" 
-									contentBinding="controllers.dbase.content" 
+									contentBinding="controllers.dbase.content"
+									placeholder="Seleccione una base de datos"
 									optionValuePath="content.id" 
 									optionLabelPath="content.name" 
 									prompt="Seleccione una base de datos"
-									placeholder="Seleccione una base de datos"
 									class="form-control"
 								}}' 
 							}}
@@ -144,7 +155,7 @@
 					</div>
 					{{ '{{/unless}}' }}
 				</div>
-				<div class="hidden-xs hidden-sm col-md-6">
+				<div class="hidden-xs hidden-sm col-md-5">
 					<div class="alert alert-success">
 						<div class="row">
 							<div class="col-sm-2">
@@ -175,7 +186,7 @@
 								  class="form-control"}}'
 							}}
 						</div>
-						<p class="col-sm-4 text-form">condiciones a continuación:</p>
+						<p class="form-control-static">condiciones a continuación:</p>
 					</div>
 				</div>
 				<div class="clearfix"></div>
@@ -246,24 +257,14 @@
 
 
 <script type="text/x-handlebars" data-template-name="segments/delete">
-	<div class="box">
-		<div class="box-header">
-			<div class="title">
-				Borrar segmento
-			</div>
-		</div>
-		<div class="box-content">
-			<div class="padded">
-				<p>
-					Esta a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos,
-					pero no los contactos .Si esta seguro que desea continuar haga clic en botón eliminar de lo contrario
-					haga en clic en cancelar.
-				</p>
-				<button class="btn btn-red" {{ '{{action delete this}}' }}>Eliminar</button>
-				<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-			</div>
-		</div>
-	</div>
+	<h4 class="sectiontitle">Borrar segmento</h4>
+		<p>
+			Esta a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos,
+			pero no los contactos .Si esta seguro que desea continuar haga clic en botón eliminar de lo contrario
+			haga en clic en cancelar.
+		</p>
+		<button class="btn btn-red" {{ '{{action delete this}}' }}>Eliminar</button>
+		<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
 </script>
 
 
@@ -284,6 +285,7 @@
 			</div>
 		</div>
 		{{'{{/if}}'}}
+
 		<div class="col-sm-12 hidden-md hidden-lg">
 			<div class="alert alert-success">
 				<div class="row">
@@ -302,18 +304,18 @@
 				<div class="col-md-6 col-sm-12">
 					<div class="form-group">
 						<label for="name" class="col-sm-4 control-label">*Nombre: </label>
-						<div class="col-md-8">
+						<div class="col-md-7">
 							{{'{{view Ember.TextField valueBinding="name" class="form-control"}}'}}
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="description" class="col-sm-4 control-label">Descripción: </label>
-						<div class="col-md-8">
+						<div class="col-md-7">
 							{{'{{view Ember.TextArea valueBinding="description" class="form-control"}}'}}
 						</div>
 					</div>
 				</div>
-				<div class="hidden-xs hidden-sm col-md-6">
+				<div class="hidden-xs hidden-sm col-md-5">
 					<div class="alert alert-success">
 						<div class="row">
 							<div class="col-sm-2">
@@ -341,7 +343,7 @@
 								class="form-control"}}'
 							}}
 						</div>
-						<p class="text-form">condiciones a continuacion:</p>
+						<p class="form-control-static">condiciones a continuacion:</p>
 					</div>
 				</div>
 				<div class="clearfix"></div>
@@ -399,7 +401,7 @@
 							<button class="btn btn-default btn-sm" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</div>
 						<div class="col-xs-6">
-							<button class="btn btn-default btn-sm" {{ '{{action edit this}}' }}>Editar</button>
+							<button class="btn btn-sm btn-guardar" {{ '{{action edit this}}' }}>Guardar</button>
 						</div>
 					</div>
 				</div>

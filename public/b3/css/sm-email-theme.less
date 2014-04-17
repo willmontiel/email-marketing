@@ -504,6 +504,11 @@ span.red {
 	color: @brand-white;
 	text-decoration: none;
 }
+.btn-guardar {
+	background-color: @brand-success;
+	color: @brand-white;
+	text-decoration: none;
+}
 .btn-guardar:hover {
 	transition: background-color 0.5s ease;
 	background-color:#5eab07;
@@ -515,11 +520,29 @@ span.red {
 	color: @brand-gray-light;
 	text-decoration: none;
 }
+.no-bg {
+	background-color: transparent;
+}
+.no-bg:hover {
+	background-color: transparent;
+	border:none;
+	box-shadow: none;
+}
+.btn-group.open .dropdown-toggle {
+	box-shadow: none;
+}
 /* Estilos para la tabla de contactos */
 table.table-contacts tbody tr td {
 	vertical-align: middle;
 }
-
+.inactive {
+	background-color: gray;
+	width: 15px;
+}
+.unsubscribed {
+	background-color: #333;
+	width: 15px;
+}
 /* Estilos para contenedor con bg y paddings */
 .frame-bg-pd {
 	background-color: @brand-gray-light;
@@ -535,27 +558,12 @@ table.table-contacts tbody tr td {
 .form-actions {
 	padding: 25px 80px 25px 0;
 }
-.sm-textarea {
-	min-height: 200px;
-	max-height: 200px;
-	min-width: 427px;
-	max-width: 427px;
+
+span.required {
+	color:@brand-danger;
+	padding-right: 4px;
 }
-/*
-.sm-textarea-description {
-	min-height: 54px;
-	max-height: 54px;
-	min-width: 260px;
-	max-width: 260px;
-}
-*/
-.sm-select {
-	margin-top: 7px;
-}
-.text-form {
-	margin: 0px;
-	padding-top: 8px;
-}
+
 /* Estilos para los flags de colores indicadores del estado de cada contacto */
 .estado-contact .inactive {
 	background-color: #b3e3e4;
@@ -565,9 +573,6 @@ table.table-contacts tbody tr td {
 	background-color: #9d9d9d;
 	width: 15px;
 }
-
-
-
 
 /* *** Callouts tomados de Bootstrap3 *** */
 .bs-callout(@color, @bgcolor: lighten(@color, 35%)) {
