@@ -154,11 +154,15 @@ class MailWrapper extends BaseWrapper
 		if ($this->mail->target != null) {
 			$target = json_decode($this->mail->target);
 			$filter = $target->filter;
+			
+			$this->logger->log('Filter: ' . print_r($filter, true));
 			$type = $filter->type;
 			
-			$criteria = implode(','. $filter->criteria);
+			$criteria = $filter->criteria;
 			$ids = implode(',', $target->ids);
-
+			
+			$this->logger->log('Criteria: ' . $criteria);
+			
 			if ($target->destination == 'dbases') {
 				$jsonObject['dbases'] = $ids;
 			}

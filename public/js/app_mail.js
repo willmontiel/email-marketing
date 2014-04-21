@@ -80,6 +80,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		this.set('dbaselist', arrayDbase);
 		this.set('list', arrayList);
 		this.set('segmentlist', arraySegment);
+		
+		var arrayOpen = setTargetValues(this.get('this.filterByOpen'), App.sendByOpen);
+		var arrayClick = setTargetValues(this.get('this.filterByClick'), App.sendByClick);
+		console.log(this.get('this.filterByClick'));
+		this.set('open', arrayOpen);
+		this.set('click', arrayClick);
 	}.observes('this.content'),
 			
 	headerEmpty: function () {
@@ -309,11 +315,12 @@ function setTargetValues(values, select) {
 	var array = values.split(",");
 	var newArray = [];
 	
+	console.log(array);
 	for (var i = 0; i < select.length; i++) {
 		for (var j = 0; j < array.length; j++) {
 			if (select[i].id == array[j]) {
-				var obj = {id: select[i].id, name: select[i].name};
-				newArray.push(obj);
+				//var obj = {id: select[i].id, name: select[i].name};
+				newArray.push(select[i]);
 			}
 		}
 	}
@@ -322,7 +329,6 @@ function setTargetValues(values, select) {
 
 function setFilterValues(values, checked, self) {
 	values = (values === '')?null:values;
-
 	if (values) {
 		self.set(checked, 'display: block;');
 		return true;

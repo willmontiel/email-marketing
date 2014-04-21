@@ -31,7 +31,6 @@
 												optionLabelPath="content.name"
 												selectionBinding="dbaselist"
 												id="dbases"
-												
 												class="form-control"}}'
 										 }}
 									</div>

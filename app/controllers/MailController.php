@@ -2052,6 +2052,9 @@ class MailController extends ControllerBase
 			if ($mail) {
 				$this->view->setVar('mail', $mail);
 			}
+			else {
+				$this->response->redirect('error');
+			}
 		}
 	}
 }
