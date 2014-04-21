@@ -1,14 +1,14 @@
-function TxtBlock(zone, id, name, required) {
+function SlctBlock(zone, id, name, required, values) {
 	this.zone = zone;
 	this.id = id;
 	this.name = name;
-	this.placeholder = 'Escribe ' + name.toLowerCase();
 	this.required = required;
 	this.defaultvalue = '';
 	this.hide = false;
+	this.values = values;
 }
 
-TxtBlock.prototype.designOptionField = function() {
+SlctBlock.prototype.designOptionField = function() {
 	this.option = $('<div class="form-options ' + this.id + '-option">\n\
 						' + this.name + '\n\
 					</div>');
@@ -20,7 +20,12 @@ TxtBlock.prototype.designOptionField = function() {
 	});
 };
 
-TxtBlock.prototype.designField = function() {
+SlctBlock.prototype.designField = function() {
+	var slctoptions = '';
+	var valuesarray = this.values.split(",");
+	for(var i = 0; i < valuesarray.length; i++) {
+		slctoptions+= '<option>' + valuesarray[i] + '</option>';
+	}
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
 						<div class="row field-content-zone">\n\
@@ -28,7 +33,9 @@ TxtBlock.prototype.designField = function() {
 								' + required + this.name + '\n\
 							</div>\n\
 							<div class="col-md-7">\n\
-								<input type="text" class="form-control field-label-placeholder" placeholder="' + this.placeholder + '">\n\
+								<select class="form-control field-label-select-options">\n\
+									' + slctoptions + '\n\
+								</select>\n\
 							</div>\n\
 							<div class="col-md-1 btn btn-default btn-sm edit-field">\n\
 								<span class="glyphicon glyphicon-pencil"></span>\n\
@@ -44,7 +51,7 @@ TxtBlock.prototype.designField = function() {
 	this.startFieldEvents();
 };
 
-TxtBlock.prototype.startFieldEvents = function() {
+SlctBlock.prototype.startFieldEvents = function() {
 	var t = this;
 	this.content.find('.edit-field').on('click', function(){
 		t.zone.editField(t);	
@@ -55,15 +62,13 @@ TxtBlock.prototype.startFieldEvents = function() {
 	});
 };
 
-TxtBlock.prototype.changeValues = function(editzone) {
+SlctBlock.prototype.changeValues = function(editzone) {
 	this.name = editzone.find('.field-label-name').val();
-	this.placeholder = editzone.find('.field-placeholder').val();
 	this.required = (editzone.find('.field-required-option')[0].checked) ? 'Si' : 'No';
 	this.hide = editzone.find('.field-hide-option')[0].checked;
 	this.defaultvalue = editzone.find('.field-default-value').val();
 	
 	this.content.find('.field-zone-name').text(this.name);
-	this.content.find('.field-label-placeholder').attr('placeholder', this.placeholder);
 	
 	if( this.required === 'Si' ) {
 		var required = $('<span class="required">*</span>');
@@ -78,7 +83,13 @@ TxtBlock.prototype.changeValues = function(editzone) {
 	}
 };
 
-TxtBlock.prototype.getEditZone = function() {
+SlctBlock.prototype.getEditZone = function() {
+	var slctoptions = '';
+	var valuesarray = this.values.split(",");
+	for(var i = 0; i < valuesarray.length; i++) {
+		var selected = (valuesarray[i] === this.defaultvalue) ? 'selected' : '' ;
+		slctoptions+= '<option ' + selected + '>' + valuesarray[i] + '</option>';
+	}
 	var required = (this.required === 'Si') ? 'checked' : '';
 	var hide = (this.hide) ? 'checked' : '';
 	var defaultvalue = (!this.hide) ? 'hide-form-field' : '';
@@ -88,16 +99,13 @@ TxtBlock.prototype.getEditZone = function() {
 							<div class="col-md-4">Label</div><div class="col-md-8"><input type="text" class="form-control field-label-name" value="' + this.name + '"></div>\n\
 						</div>\n\
 						<div class="row edit-row-in-zone">\n\
-							<div class="col-md-4">Placeholder</div><div class="col-md-8"><input type="text" class="form-control field-placeholder" value="' + this.placeholder + '"></div>\n\
-						</div>\n\
-						<div class="row edit-row-in-zone">\n\
 							<div class="col-md-4">Requerido</div><div class="col-md-8"><input type="checkbox" class="field-required-option" ' + required + '></div>\n\
 						</div>\n\
 						<div class="row edit-row-in-zone">\n\
 							<div class="col-md-4">Oculto</div><div class="col-md-8"><input type="checkbox" class="field-hide-option" ' + hide + '></div>\n\
 						</div>\n\
 						<div class="row edit-row-in-zone ' + defaultvalue + '">\n\
-							<div class="col-md-4">Valor de campo</div><div class="col-md-8"><input type="text" class="form-control field-default-value" value="' + this.defaultvalue + '" placeholder="Valor campo oculto"></div>\n\
+							<div class="col-md-4">Valor de campo</div><div class="col-md-8"><select class="form-control field-default-value">' + slctoptions + '</select></div>\n\
 						</div>\n\
 						<div class="row edit-button-row-in-zone">\n\
 							<a class="accept-form-field-changes btn btn-default btn-sm">Aceptar</a>\n\

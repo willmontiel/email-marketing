@@ -26,7 +26,7 @@ FormEditor.prototype.createZones = function() {
 };
 
 FormEditor.prototype.designDefaultFields = function() {
-	var email = new TxtBlock(this, 'email', 'Email', 'Si');
+	var email = new EmailBlock(this, 'email', 'Email');
 	email.designOptionField();
 	email.designField();
 	
@@ -43,17 +43,16 @@ FormEditor.prototype.designCustomFields = function() {
 	for(var i = 0; i < App.formfields.length; i++) {
 		switch(App.formfields[i].type) {
 			case 'Select':
+				var field = new SlctBlock(this, App.formfields[i].id, App.formfields[i].name, App.formfields[i].required,  App.formfields[i].values);
 				break;
 			case 'MultiSelect':
+				var field = new MultSlctBlock(this, App.formfields[i].id, App.formfields[i].name, App.formfields[i].required,  App.formfields[i].values);
 				break;
 			default:
 				var field = new TxtBlock(this, App.formfields[i].id, App.formfields[i].name, App.formfields[i].required);
-//		Mientras no esten creados todas las opciones de campos SI SE utiliza esta forma
-				field.designOptionField();
 				break;
 		}
-//		Mientras no esten creados todas las opciones de campos NO SE utiliza esta forma
-//		field.designOptionField();
+		field.designOptionField();
 	}
 };
 
@@ -82,8 +81,11 @@ FormEditor.prototype.editField = function(field) {
 	
 		this.editorzone.sortable({ disabled: true });
 
-		var editzone = this.getEditZone(field);
+		var editzone = field.getEditZone();
 		this.editorzone.find(field.content).append(editzone);
+		if( field.id === 'email' ) {
+			this.modifyEmailField(editzone);
+		}
 
 		editzone.find('.field-hide-option').on('click', function() {
 			if($(this)[0].checked) {
@@ -97,7 +99,10 @@ FormEditor.prototype.editField = function(field) {
 		var t = this;
 		
 		editzone.find('.accept-form-field-changes').on('click', function() {
-			if( t.checkIfCanSave(editzone) ) {
+			if(editzone.find('.field-label-name').val() === '') {
+				$.gritter.add({title: 'Error', text: 'El nombre del label no puede estar vacio', sticky: false, time: 2000});
+			}
+			else if( t.checkIfCanSave(editzone) ) {
 				field.changeValues(editzone);
 				$(this).parents('.row.field-edit-zone-row').remove();
 				$(this).off('click');
@@ -111,37 +116,14 @@ FormEditor.prototype.editField = function(field) {
 	}
 };
 
-FormEditor.prototype.getEditZone = function(field) {
-	var required = (field.required === 'Si') ? 'checked' : '';
-	var hide = (field.hide) ? 'checked' : '';
-	var defaultvalue = (!field.hide) ? 'hide-form-field' : '';
-	var edit = $('<div class="row field-edit-zone-row">\n\
-					<div class="col-md-8 col-md-offset-2 field-edit-zone">\n\
-						<div class="row edit-row-in-zone">\n\
-							<div class="col-md-4">Label</div><div class="col-md-8"><input type="text" class="form-control field-label-name" value="' + field.name + '"></div>\n\
-						</div>\n\
-						<div class="row edit-row-in-zone">\n\
-							<div class="col-md-4">Placeholder</div><div class="col-md-8"><input type="text" class="form-control field-placeholder" value="' + field.placeholder + '"></div>\n\
-						</div>\n\
-						<div class="row edit-row-in-zone">\n\
-							<div class="col-md-4">Requerido</div><div class="col-md-8"><input type="checkbox" class="field-required-option" ' + required + '></div>\n\
-						</div>\n\
-						<div class="row edit-row-in-zone">\n\
-							<div class="col-md-4">Oculto</div><div class="col-md-8"><input type="checkbox" class="field-hide-option" ' + hide + '></div>\n\
-						</div>\n\
-						<div class="row edit-row-in-zone ' + defaultvalue + '">\n\
-							<div class="col-md-4">Valor de campo</div><div class="col-md-8"><input type="text" class="form-control field-default-value" value="' + field.defaultvalue + '" placeholder="Valor campo oculto"></div>\n\
-						</div>\n\
-						<div class="row edit-button-row-in-zone">\n\
-							<a class="accept-form-field-changes btn btn-default btn-sm">Aceptar</a>\n\
-						</div>\n\
-					</div>\n\
-				</div>');
-	return edit;
+FormEditor.prototype.modifyEmailField = function(editzone) {
+	editzone.find('.field-required-option').closest('.row').remove();
+	editzone.find('.field-hide-option').closest('.row').remove();
+	editzone.find('.field-default-value').closest('.row').remove();
 };
 
 FormEditor.prototype.checkIfCanSave = function(editzone) {
-	if(editzone.find('.field-hide-option')[0].checked && editzone.find('.field-default-value').val() === '') {
+	if(editzone.find('.field-hide-option').length > 0 && editzone.find('.field-hide-option')[0].checked && editzone.find('.field-default-value').val() === '') {
 		return false;
 	}
 	return true;
