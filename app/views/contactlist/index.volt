@@ -80,7 +80,7 @@
 					<a href="{{url('contacts/search')}}#/contacts" class="btn-actn">Búsqueda de contactos</a>
 				</div>	
 			</div>
-			<div class="row-fluid space"></div>
+			<div class="row space"></div>
 			<div class="row">
 				<h4 class="sectiontitle">Avanzadas</h4>
 				<div class="col-xs-6 col-md-3">
@@ -183,7 +183,7 @@
 					</tbody>
 				</table>
 				<div class="row">
-					{{ partial("partials/pagination_partial") }}
+				{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
 
@@ -200,7 +200,7 @@
 		{#  ######## Handlebars de crear nueva lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/new">
 			<div class="row">
-				<h4 class="sectiontitle">Agregar una nueva lista</h4>
+				<h4 class="sectiontitle">Crear una nueva lista</h4>
 				<div class="col-md-5">
 					<form  class="form-horizontal" role="form">
 						{{'{{#if errors.errormsg}}'}}
@@ -242,7 +242,7 @@
 									selectionBinding="dbase"
 									id="dbases"
 									prompt="Seleccione una base de datos"
-									class="sm-select form-contro"}}'
+									class="sm-select form-control"}}'
 								}}
 							</div>
 						</div>
@@ -265,29 +265,26 @@
 		
 		{#  ######## Handlebars de editar lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/edit">
-			<div class="box span4">
-				<div class="box-header"><span class="title">Editar lista <strong>{{'{{name}}'}}</strong></span></div>
-				<div class="box-content">
-					<form>
-						<div class="padded">
-							{{'{{#if errors.errormsg}}'}}
-								<div class="alert alert-error">
-									{{'{{errors.errormsg}}'}}
-								</div>
-							{{'{{/if}}'}}
-							<label>*Nombre
-								{{' {{#if errors.name }} '}}
-									<span class="text text-error">{{'{{errors.name}}'}}</span>
-								{{' {{/if }} '}}
-							</label>
-							{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" required="required" autofocus="autofocus"}}' }}
-							<label>Descripción
-								{{' {{#if errors.description }} '}}
-									<span class="text text-error">{{'{{errors.description}}'}}</span>
-								{{' {{/if }} '}}
-							</label>
-							{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
-						</div>
+			<div class="row">
+				<h4 class="sectiontitle">Edicion de listas <strong>{{'{{name}}'}}</strong></span></div>
+					<form class="">
+						{{'{{#if errors.errormsg}}'}}
+							<div class="alert alert-error">
+								{{'{{errors.errormsg}}'}}
+							</div>
+						{{'{{/if}}'}}
+						<label>*Nombre
+							{{' {{#if errors.name }} '}}
+								<span class="text text-error">{{'{{errors.name}}'}}</span>
+							{{' {{/if }} '}}
+						</label>
+						{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" required="required" autofocus="autofocus"}}' }}
+						<label>Descripción
+							{{' {{#if errors.description }} '}}
+								<span class="text text-error">{{'{{errors.description}}'}}</span>
+							{{' {{/if }} '}}
+						</label>
+						{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
 						<div class="form-actions">
 							<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
 							<button class="btn btn-blue" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
@@ -300,37 +297,30 @@
 
 		{#  ######## Handlebars de eliminar lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/delete">
-			<div class="row-fluid">
-				<div class="box">
-					<div class="box-header">
-						<div class="title">
-							Eliminar una lista de contactos
-						</div>
-					</div>
-					<div class="box-content padded">
-						<div class="row-fluid">
-							<p>
-								Aqui podrá eliminar listas de contactos, recuerde que al eliminar una lista de contactos
-								<strong>no perderá los contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso
-								de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado
-								por completo.</strong>
-							</p>
-							<p>
-								Si está <strong>completamente seguro</strong> y desea continuar haga clic en el botón eliminar para
-								proceder
-							</p>
-							{{'{{#if errors.errormsg}}'}}
-								<div class="alert alert-error">
-									{{'{{errors.errormsg}}'}}
-								</div>
-							{{'{{/if}}'}}
-							<br>
-							<button class="btn btn-danger" {{ '{{action delete this}}' }}>Eliminar</button>
-							<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-						</div>
-					</div>
-				</div>
+		<div class="row">
+			<h4 class="sectiontitle">Eliminar una lista de contactos</h4>
+			<div class="">
+				<p>
+					Aqui podrá eliminar listas de contactos, recuerde que al eliminar una lista de contactos
+					<strong>no perderá los contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso
+					de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado
+					por completo.</strong>
+				</p>
+				<p>
+					Si está <strong>completamente seguro</strong> y desea continuar haga clic en el botón eliminar para
+					proceder
+				</p>
 			</div>
+			{{'{{#if errors.errormsg}}'}}
+				<div class="alert alert-error">
+					{{'{{errors.errormsg}}'}}
+				</div>
+			{{'{{/if}}'}}
+			<div class="form-actions">
+				<button class="btn btn-danger" {{ '{{action delete this}}' }}>Eliminar</button>
+				<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+			</div>
+		</div>
 		</script>
 		{#  ######## /Handlebars de eliminar lista de contactos ######### #}
 

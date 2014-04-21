@@ -123,7 +123,7 @@
 	{#
 	<script type="text/x-handlebars" data-template-name="contacts/show">
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -144,7 +144,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="full-contact-information clearfix">
 				<div class="contact-information">
@@ -387,7 +387,7 @@
 	</script>
 	<script type="text/x-handlebars" data-template-name="contacts/edit">
 		<br />
-		<div class="row-fluid">
+		<div class="row">
 			<div class="box">
 				<div class="box-content">
 					<div class="box-section news with-icons">
@@ -408,7 +408,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="box span3">
 				<div class="box-header">
 					<div class="title">

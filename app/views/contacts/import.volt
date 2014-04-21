@@ -55,7 +55,7 @@
 {% block content %}
 <div id="emberAppImportContainer">
 	<script type="text/x-handlebars" data-template-name="contacts/index">
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span8">
 				<div class="well relative">
 					Esta es la segunda parte del proceso, aqui podrá relacionar los datos del archivo que acaba de importar, con los
@@ -74,7 +74,7 @@
 			</div>
 		</div>
 		<form method="POST" action="{{url('contacts/processfile/')}}{{idContactlist~'/'~idImportfile}}">
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span6">
 				<div class="box">
 					<div class="box-header">
@@ -160,7 +160,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 			<div class="span12">
 				<div class="box">
 					<div class="box-header">

@@ -87,7 +87,7 @@
 <div id="emberAppContainer">
 	<script type="text/x-handlebars"> 
 		<br />
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span12">
 				<div class="box">
 					<div class="box-header">
@@ -106,7 +106,7 @@
 		</div>
 	</script>
 	<script type="text/x-handlebars" data-template-name="fields/index">       
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span12">
 				<div class="box">
 					<div class="box-content">
@@ -130,12 +130,12 @@
 				</div>
 			</div>
 		</div>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span12 padded text-right">
 				{{'{{#link-to "fields.add" class="btn btn-default" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/link-to}}'}}
 			</div>
 		</div>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span12">
 				<div class="box">
 					<div class="box-content">
@@ -222,8 +222,8 @@
 	<script type="text/x-handlebars" data-template-name="fields">
 		{{'{{outlet}}'}}
 	</script>
-	<div class="row-fluid">
-		<div class="row-fluid">
+	<div class="row">
+		<div class="row">
 			<div class="span12 text-right">
 				<a href="{{url('dbase')}}" class="btn btn-default"><i class="icon-reply"></i> Bases de datos</a>
 			</div>
@@ -232,7 +232,7 @@
 		<!------------------ Ember! ---------------------------------->
 	<div id="emberAppContainer">
 	<script type="text/x-handlebars" data-template-name="index">
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span6">
 				<div class="box">
 					<div class="box-header">
@@ -258,7 +258,7 @@
 							</div>
 						</div>
 						<br />
-						<div class="row-fluid">
+						<div class="row">
 							<div class="span2">
 								<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default">Editar</a>
 							</div>
@@ -312,7 +312,7 @@
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/add">
-		<div class="row-fluid">
+		<div class="row">
 			<div class="box span4">
 				<div class="box-header">
 					<div class="title">
@@ -367,7 +367,7 @@
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/edit">
-		<div class="row-fluid">
+		<div class="row">
 			<div class="box span4">
 				<div class="box-header">
 					<div class="title">
@@ -415,7 +415,7 @@
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/remove">
-		<div class="row-fluid">
+		<div class="row">
 			<div class="box">
 				<div class="box-header">
 					<div class="title">

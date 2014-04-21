@@ -2,7 +2,7 @@
 {% block sectiontitle %}<i class="icon-book icon-2x"> </i> Nueva base de datos{% endblock %}
 {%block sectionsubtitle %}Cree una base de datos, y administre listas de contactos{% endblock %}
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-section news with-icons">
 				<div class="avatar purple">
@@ -26,10 +26,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		{{ flashSession.output() }}
 	</div>
-    <div class="row-fluid span4">
+    <div class="row span4">
 		<div class="box">
 			<div class="box-header">
 				<div class="title">

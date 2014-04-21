@@ -9,7 +9,7 @@
 		</div>
 	</div>
 	<div class="container">
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span8 offset2">
 				<div class="error-box">
 					<div class="message-small">Enlace no disponible</div>

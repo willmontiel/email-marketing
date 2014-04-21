@@ -42,7 +42,7 @@
     </head>
     <body>
 		<div class="container-fluid">
-			<div class="row-fluid">
+			<div class="row">
 				<!-- Inicio de contenido -->
 				{% block content %}
 					<!-- Aqui va el contenido -->

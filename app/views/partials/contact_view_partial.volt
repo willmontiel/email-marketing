@@ -1,13 +1,13 @@
 <tr>
-	<td class="no-pad">
+	<td>
 		<div class="col-md-1 estado-contact">
 			<div class="row">
 				<div class="col-xs-1">
-					<div {{'{{ bind-attr class="isActive:active:inactive"}}'}}>&nbsp
+					<div {{'{{ bind-attr class="isActive:active:inactive inactive"}}'}}>&nbsp
 					</div>
 				</div>
 				<div class="col-xs-1">
-					<div {{'{{ bind-attr class="isSubscribed:suscribed:unsubscribed"}}'}}>&nbsp
+					<div {{'{{ bind-attr class="isSubscribed:suscribed:unsubscribed unsubscribed"}}'}}>&nbsp
 					</div>
 				</div>
 			</div>
@@ -62,12 +62,12 @@
 {{ '{{#if isExpanded}}' }}
 <tr>
 	<td colspan="3">
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span12">
 				<h4>Información de contacto</h4>
 			</div>
 		</div>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span10 offset1">
 				<div class="box">
 					<div class="box-content">
@@ -163,7 +163,7 @@
 			#}
 		</div>
 		{{ '{{#if App.isEditable}}' }}
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span10 offset1 text-right">
 				<button class="btn btn-default" {{ '{{action "discard" this}}' }}>descartar<br />cambios</button>
 				<button class="btn btn-green" {{ '{{action "edit" this}}' }}>guardar<br />cambios</button>
@@ -171,7 +171,7 @@
 		</div>
 		{{ '{{/if}}' }}
 		<div id="collapse-history-contact-{{'{{unbound id}}'}}" class="panel-collapse collapse">
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span10 offset1">
 					<h4>Historial</h4>
 					<div class="box">
@@ -199,7 +199,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span10 offset1">
 					<div class="box">
 						<div class="box-content">
@@ -278,7 +278,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span12 text-center">
 				<a data-toggle="collapse" data-parent="#accordion" href="#collapse-history-contact-{{'{{unbound id}}'}}">
 					<span {{ '{{action "collapse" this}}' }}>- Colapsar</span>

@@ -23,7 +23,7 @@
 			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'search']) }}
 			{# /Menu de navegacion pequeño #}
 
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span8 offset2">
 					<div class="box">
 						<div class="box-content">
@@ -46,7 +46,7 @@
 					</div>	
 				</div>
 			</div>
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span12">
 					<div class="box">
 						<div class="box-content">

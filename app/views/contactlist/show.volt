@@ -89,14 +89,14 @@
 		<div class="dropdown">
 			<button class="btn dropdown-toggle sr-only" type="button" id="dropdownMenu1" data-toggle="dropdown">
 				  <span class="caret">Mostrar</span>
-				  </button>
-				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Todos</a></li>
-				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Activos</a></li>
-				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Suscritos</a></li>
-				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Rebotados</a></li>
-				  </ul>
-				</div>
+			</button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Todos</a></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Activos</a></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Suscritos</a></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Rebotados</a></li>
+			</ul>
+		</div>
 	</script>
 
 {% endblock %}
@@ -154,13 +154,13 @@
 				<div class="col-md-7 col-sm-12">
 					<ul class="list-inline pull-right">
 						<li>
-							{{'{{#link-to "contacts.new" class="btn btn-default extra-padding btn-sm" disabledWhen="createDisabled"}}'}} Crear Contacto{{'{{/link-to}}'}}
+							{{'{{#link-to "contacts.new" class="btn btn-default extra-padding btn-sm" disabledWhen="createDisabled"}}'}} Crear un contacto{{'{{/link-to}}'}}
 						</li>
 						<li>
-							{{'{{#link-to "contacts.newbatch" class="btn btn-default extra-padding btn-sm" disabledWhen="importBatchDisabled"}}'}} Crear Varios Contactos{{'{{/link-to}}'}}
+							{{'{{#link-to "contacts.newbatch" class="btn btn-default extra-padding btn-sm" disabledWhen="importBatchDisabled"}}'}} Crear contactos rápidamente{{'{{/link-to}}'}}
 						</li>
 						<li>
-							{{ '{{#link-to "contacts.import" class="btn btn-default extra-padding btn-sm" disabledWhen="importDisabled"}}'}} Importar Contactos{{'{{/link-to}}'}}	
+							{{ '{{#link-to "contacts.import" class="btn btn-default extra-padding btn-sm" disabledWhen="importDisabled"}}'}} Importar contactos{{'{{/link-to}}'}}	
 						</li>
 
 						{#	<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="btn btn-default extra-padding btn-sm" title="Configuracion avanzada"><i class="icon-cog"></i></a> #}
@@ -172,8 +172,8 @@
 			<div class="row frame-bg-pd">
 				<div class="col-md-3">
 					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle no-bg" data-toggle="dropdown">
-						Marcar <span class="caret"></span>
+						<button type="button" class="btn btn-default dropdown-toggle no-bg" data-toggle="dropdown">Marcar
+							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="#">Todos</a></li>
@@ -186,8 +186,8 @@
 
 				<div class="col-md-3">
 					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle no-bg" data-toggle="dropdown">
-						Acciones <span class="caret"></span>
+						<button type="button" class="btn btn-default dropdown-toggle no-bg" data-toggle="dropdown">Acciones
+							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="#">Borrar</a></li>
@@ -319,7 +319,7 @@
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/newbatch">
 			<div class="row">
-				<h4 class="sectiontitle">Crear varios contactos</h4>
+				<h4 class="sectiontitle">Crear contactos rápidamente</h4>
 				<div class="col-md-5">
 					<form method="post" action="{{url('contacts/newbatch')}}/{{datalist.idContactlist}}" role="form">
 						<div class="form-group">
@@ -340,28 +340,16 @@
 				</div>
 				<div class="col-md-6">
 					<div class="alert alert-success">
-						<div class="row">
-							<div class="col-sm-2">
-								<span class="glyphicon glyphicon-info-sign"></span>
-							</div>
-							<div class="col-md-9">
-								<p>Cree varios contactos a la vez.  Escriba en el cuadro de texto una línea de contenido por cada contacto que desee crear separando los campos por comas.</p>
-								<p><strong>Ejemplo:</strong></p>
-								<dl>
-									<dd>email1@email.com,Nombre1,Apellido1</dd>
-									<dd>email2@otroemail.com,Nombre2</dd>
-									<dd>email3@hotmail.com</dd>
-								</dl>
-								<p>No es necesario incluir todos los campos, el único <strong>campo requerido es "email"</strong>.</p>
-								<p class="text-success">Cree máximo 30 contactos por este medio, si requiere crear más, diríjase a "Importación desde archico .csv".</p>							
-							</div>
-						</div>
+						<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block" alt="" />
+						<div class="space"></div>
+						<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
+						<p>Cree hasta 30 contactos por este medio</p>
 					</div>
 				</div>
 			</div>
 		</script>
 		<script type="text/x-handlebars" data-template-name="contacts/delete">
-			<div class="row-fluid">
+			<div class="row">
 				<div class="box">
 					<div class="box-header">
 						<div class="title">
@@ -369,7 +357,7 @@
 						</div>
 					</div>
 					<div class="box-content padded">
-						<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminara por completo de la 
+						<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminará por completo de la 
 						Base de Datos</p>
 						<p>¿Esta seguro que desea Eliminar el Contacto <strong>{{'{{name}}'}} ?</strong></p>
 						{{ '{{#if errors.errormsg}}' }}
@@ -385,19 +373,24 @@
 		</script>
 		
 		<script type="text/x-handlebars" data-template-name="contacts/import">
-			<div class="row">
-				<h4 class="sectiontitle">Importar contactos desde archivo .csv a <span>Lista de Iván</span></h4>
-				<div class="col-md-6">
-					<div class="">
-						<img src="images/file-choice.png" alt="" class="" />
-					</div>
-					<div class="">
-						<span>1</span>
-					</div>
-					<div class="">
-						<p>Seleccione el archivo .csv</p> 
-					</div>
-				</div>	
+		<div class="row">
+			<h4 class="sectiontitle">Importar contactos desde archivo .csv a <span>Lista de Iván</span></h4>
+			<div class="col-md-6">
+				<div class="">
+					<img src="{{url('')}}b3/images/file-choice.png" class="" alt="" />
+				</div>
+			</div>
+			<div class="col-md-5">
+				<form method="post" class="form-horizontal"  action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data" role="form">
+					<div class="form-group">
+							<input name="importFile" type="file">
+							<input type="hidden" name="idcontactlist" value={{datalist.idContactlist}}>
+						</div>
+						<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default">Cancelar</a>
+						{{submit_button('class': "btn btn-default btn-sm", "Cargar")}}
+					</form>
+			</div>
+
 				<div class="well relative span8">
 					<p>
 						Aqui puede importar contactos desde un archivo 
@@ -418,7 +411,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span12">
 					{{ flashSession.output() }}
 					<div class="accordion-heading">
@@ -443,7 +436,7 @@
 								<li>El archivo debe incluir al menos un campo para la dirección de correo electrónico, por ejemplo:</li>
 							</ul>
 							<br>
-							<div class="row-fluid">
+							<div class="row">
 								<div class="span6">
 									<div class="box">
 										<div class="box-header">
@@ -500,7 +493,7 @@
 									separarlos, eso si asegurese de cumplir los criterios, por ejemplo:
 								</li>
 							</ul>
-							<div class="row-fluid">
+							<div class="row">
 								<div class="span6">
 									<div class="box">
 										<div class="box-header">
@@ -560,7 +553,7 @@
 				</div>
 			</div>
 			<br><br>
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span6">
 					<form method="POST" action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data">
 						<input name="importFile" type="file"><br /><br />
@@ -573,9 +566,9 @@
 		</script>
 
 		<script type="text/x-handlebars" data-template-name="contacts/newimport">
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span8">
-					<div class="row-fluid">
+					<div class="row">
 						<div class="span7">
 						{{' {{#with App.records}} '}}
 									{{' {{#each row1}} '}}
@@ -604,7 +597,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="row-fluid">
+					<div class="row">
 						<div class="span7">
 
 							<table>

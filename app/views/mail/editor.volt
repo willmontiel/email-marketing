@@ -139,16 +139,16 @@
 </script>
 {% endblock %}
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8 offset2">
 			{{partial('partials/wizard_partial')}}
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		{{ flashSession.output()}}
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="btnoptions">
 			<div class="box span12 optionsEditor">
 				<div class="pull-right NextFromEditor">
@@ -174,7 +174,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}/{{mail.idMail}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
 	<div id="preview-modal" class="modal hide fade preview-modal"></div>

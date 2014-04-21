@@ -29,7 +29,7 @@
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -49,17 +49,17 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8 offset2">
 			{{partial('partials/wizard_partial')}}
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		{{ flashSession.output()}}
 		<br />
 	</div>
 	<hr class="divider">
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span10">
 			<div class="box">
 				<div class="box-header">
@@ -121,7 +121,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12 padded">
 			<a href="{{url('mail/source')}}/{{mail.idMail}}" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</a>
 		</div>

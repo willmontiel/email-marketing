@@ -14,7 +14,7 @@
 
 {#  ############ search viejo + select mostrar viejo
 
-<div class="row-fluid">
+<div class="row">
 	<div class="span8">
 		<form>
 			{{' {{view Ember.TextField valueBinding="searchCriteria" class="span8" onEvent="enter" action="search" type="text" placeholder="Buscar por dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}

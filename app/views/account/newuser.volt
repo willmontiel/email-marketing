@@ -3,7 +3,7 @@
 {%block sectionsubtitle %}Cree, edite o proporcione permisos a los usuarios de cualquier cuenta{% endblock %}
 
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8">
 			{{ flashSession.output() }}
 		</div>
@@ -33,7 +33,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span4">
 			<div class="box">
 				<div class="box-header">

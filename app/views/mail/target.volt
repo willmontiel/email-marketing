@@ -34,7 +34,7 @@
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -54,17 +54,17 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8 offset2">
 			{{partial('partials/wizard_partial')}}
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		{{ flashSession.output()}}
 	</div>
 	<br />
-	<div class="row-fluid offset3 span5">
+	<div class="row offset3 span5">
 		<div class="box">
 			<div class="box-header">
 				<div class="title">

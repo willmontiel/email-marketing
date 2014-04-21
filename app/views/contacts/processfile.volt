@@ -1,7 +1,7 @@
 {% extends "templates/index_new.volt" %}
 {% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8 offset2">
 			<div class="well relative">
 				Este es el resultado de la importación de contactos que ha sido efectuada, en donde podrá consultar,
@@ -12,7 +12,7 @@
 		</div>
 	</div>
 	<br>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8 offset2">
 			<div class="box">
 				<div class="box-header">

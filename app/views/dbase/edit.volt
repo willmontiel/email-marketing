@@ -5,7 +5,7 @@
 {%block sectionsubtitle %} {{edbase.description}} {% endblock %}
 {% block content %}
 {{ content() }}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-section news with-icons">
 				<div class="avatar purple">
@@ -29,10 +29,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		{{ flashSession.output() }}
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span3">
 			<div class="box">
 				<div class="box-header">

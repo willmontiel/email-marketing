@@ -68,12 +68,12 @@
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span12">
 					<h3>{{mail.name}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
 				</div>
 			</div>
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span6">
 					<table class="table" style="border: 0px !important;" >
 						<thead></thead>
@@ -180,19 +180,19 @@
 					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
 				</div>
 			{#</div>
-			<div class="row-fluid">#}
+			<div class="row">#}
 				<div class="span6">
 					<div class="box">
 						<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 					</div>
 				</div>
 			</div>
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span6">
 					{#<div id="summaryChart" style="width: 640px; height: 400px;"></div>#}
 				</div>
 			</div>
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span12">
 					{{ "{{outlet}}" }}
 				</div>

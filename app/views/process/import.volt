@@ -46,7 +46,7 @@
 {# /Menu de navegacion pequeño #}
 
 {%for res in result%}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8 offset2">
 			<div class="well relative">
 				<p>Importacion de Archivo: {{res['name']}}</p>
@@ -67,7 +67,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div id="collapseInfo-{{res['idProcess']}}" class="accordion-body collapse" style="height: 0px;">
 			<div class="span8 offset2">
 				<div class="box">

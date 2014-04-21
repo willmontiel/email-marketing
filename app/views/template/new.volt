@@ -89,7 +89,7 @@
 </script>
 {% endblock %}
 {% block content %}
-    <div class="row-fluid">
+    <div class="row">
 		<div class="area-top clearfix">
 			<div class="pull-left header">
 				<h3 class="title">
@@ -102,7 +102,7 @@
 			</div>
 		</div>
     </div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="btnoptions">
 			<div class="box span12 btnoptions">
 				<div class="templateName pull-left">
@@ -143,11 +143,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		{{ flashSession.output()}}
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
 	<br />
