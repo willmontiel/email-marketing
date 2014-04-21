@@ -127,9 +127,6 @@ class TargetObj
 	
 	public function getTargetObject()
 	{
-		if ($this->target->totalContacts == 0) {
-			return null;
-		}
 		return $this->target;
 	}
 }

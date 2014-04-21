@@ -14,27 +14,7 @@
 		//Full Mail Content
 		{% if mail is defined %}
 			App.maildata = [{
-				id: {{mail.idMail}}, 
-				name: "{{mail.name}}",
-				type: "{{mail.type}}",
-				scheduleDate: "{{mail.scheduleDate}}",
-				fromName: "{{mail.fromName}}",
-				fromEmail: "{{mail.fromEmail}}",
-				replyTo: "{{mail.replyTo}}",
-				subject: "{{mail.subject}}",
-				dbases: "{{mail.dbases}}",
-				contactlists: "{{mail.contactlists}}",
-				segments: "{{mail.segments}}",
-				filterByEmail: "{{mail.filterByEmail}}",
-				filterByOpen: "{{mail.filterByOpen}}",
-				filterByClick: "{{mail.filterByClick}}",
-				filterByExclude: "{{mail.filterByExclude}}",
-				previewData: "{{mail.previewData}}",
-				mailcontent: {{mail.content}},
-				{#
-				content: "{{content}}",
-				plainText: "{{mail.plainText}}",
-				#}
+				id: {{mail.idMail}}
 			}];
 		{% endif %}
 		

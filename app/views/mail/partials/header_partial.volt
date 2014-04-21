@@ -36,6 +36,9 @@
 							{{ '{{/each}}' }}
 						{{ '{{/if}}' }}
 					</dd>
+					<dd>
+						Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong>
+					</dd>
 				{{'{{/if}}'}}
 				</dl>
 			</div>

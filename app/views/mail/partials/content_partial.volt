@@ -63,7 +63,7 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-xs-6 col-md-3">
+							<div class="col-md-3">
 								{{ '{{#if isEditor}}' }}
 									<a href="{{url('mail/contenteditor')}}/{{'{{unbound id}}'}}" class="thumbnail">
 								{{ '{{else}}' }}
@@ -71,6 +71,20 @@
 								{{ '{{/if}}' }}
 									<img data-src="holder.js/100%x180" alt="100%x180" src="{{'{{unbound contentSummary}}'}}">
 								</a>
+							</div>
+							<div class="col-md-9">
+								<div class="row">
+									<div class="col-sm-12">
+										<label>Texto plano</label> <br />
+										{{ '{{view Ember.TextArea valueBinding="plainText" id="plainText" class="form-control" rows="11"}}' }}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 text-right">
+								<button class="btn btn-default" {{ '{{action "discardHeader" this}}' }}>Descartar cambios</button>
+								<button class="btn btn-primary" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 							</div>
 						</div>
 					</div>
