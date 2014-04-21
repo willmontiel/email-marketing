@@ -60,6 +60,7 @@
 	{{ javascript_include('js/forms/text_block.js') }}
 	{{ javascript_include('js/forms/select_block.js') }}
 	{{ javascript_include('js/forms/multiple_select_block.js') }}
+	{{ javascript_include('js/forms/date_block.js') }}
 	{{ javascript_include('js/forms/form_zone.js') }}
 	<script type="text/javascript">
 		//ACL de los campos personalizados
@@ -88,6 +89,13 @@
 								required: '{{field.required}}',
 								values: '{{field.values}}'});
 		{%endfor%}
+		
+		var config = {baseUrl: "{{url('')}}"};
+		
+		function iframeResize() {
+			var iFrame = document.getElementById('iframeEditor');
+			iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
+		};
 	</script>
 	{{ javascript_include('js/editable-ember-view.js')}}
 {% endblock %}

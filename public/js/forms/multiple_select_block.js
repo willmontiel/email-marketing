@@ -58,6 +58,9 @@ MultSlctBlock.prototype.startFieldEvents = function() {
 	});
 	
 	this.content.find('.delete-field').on('click', function(){
+		t.name = t.option.text().trim();
+		t.defaultvalue = '';
+		t.hide = false;
 		t.zone.deleteField(t);	
 	});
 };
@@ -93,7 +96,7 @@ MultSlctBlock.prototype.getEditZone = function() {
 	var hide = (this.hide) ? 'checked' : '';
 	var defaultvalue = (!this.hide) ? 'hide-form-field' : '';
 	var edit = $('<div class="row field-edit-zone-row">\n\
-					<div class="col-md-8 col-md-offset-2 field-edit-zone">\n\
+					<div class="col-md-10 col-md-offset-1 field-edit-zone">\n\
 						<div class="row edit-row-in-zone">\n\
 							<div class="col-md-4">Label</div><div class="col-md-8"><input type="text" class="form-control field-label-name" value="' + this.name + '"></div>\n\
 						</div>\n\
@@ -112,4 +115,25 @@ MultSlctBlock.prototype.getEditZone = function() {
 					</div>\n\
 				</div>');
 	return edit;
+};
+
+MultSlctBlock.prototype.checkIfCanSave = function(editzone) {
+	if(editzone.find('.field-hide-option').length > 0 && editzone.find('.field-hide-option')[0].checked && editzone.find('.field-default-value').val() === '') {
+		return false;
+	}
+	return true;
+};
+
+MultSlctBlock.prototype.persist = function() {
+	var obj = {
+		id: this.id,
+		name: this.name,
+		placeholder: this.placeholder,
+		required: this.required,
+		defaultvalue: this.defaultvalue,
+		hide: this.hide,
+		values: this.values
+	};
+	
+	return obj;
 };

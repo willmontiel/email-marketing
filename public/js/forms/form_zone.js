@@ -12,10 +12,11 @@ FormEditor.prototype.startEvents = function() {
 	this.designDefaultFields();
 	this.designCustomFields();
 	this.sortableEvent();
+	this.title_xeditable();
 };
 
 FormEditor.prototype.createZones = function() {
-	this.titlezone = $('<div class="form-title-name">' + this.title + '</div>');
+	this.titlezone = $('<div class="container-form-title-name"><a href="#" class="editable editable-click" id="form-title-name" data-type="text" data-pk="1" data-original-title="Nombre del Formulario">' + this.title + '</a></div>');
 	$('.form-full-content').append(this.titlezone);
 	
 	this.editorzone = $('<div class="form-content-zone"></div>');
@@ -26,15 +27,15 @@ FormEditor.prototype.createZones = function() {
 };
 
 FormEditor.prototype.designDefaultFields = function() {
-	var email = new EmailBlock(this, 'email', 'Email');
+	var email = new EmailBlock(this, 'email', 'Email', false);
 	email.designOptionField();
 	email.designField();
 	
-	var name = new TxtBlock(this, 'nombre', 'Nombre', 'Si');
+	var name = new TxtBlock(this, 'nombre', 'Nombre', 'Si', false);
 	name.designOptionField();
 	name.designField();
 	
-	var lastname = new TxtBlock(this, 'apellido', 'Apellido', 'Si');
+	var lastname = new TxtBlock(this, 'apellido', 'Apellido', 'Si', false);
 	lastname.designOptionField();
 	lastname.designField();
 };
@@ -48,8 +49,14 @@ FormEditor.prototype.designCustomFields = function() {
 			case 'MultiSelect':
 				var field = new MultSlctBlock(this, App.formfields[i].id, App.formfields[i].name, App.formfields[i].required,  App.formfields[i].values);
 				break;
+			case 'TextArea':
+				var field = new TxtBlock(this, App.formfields[i].id, App.formfields[i].name, App.formfields[i].required, true);
+				break;
+			case 'Date':
+				var field = new DateBlock(this, App.formfields[i].id, App.formfields[i].name, App.formfields[i].required, true);
+				break;
 			default:
-				var field = new TxtBlock(this, App.formfields[i].id, App.formfields[i].name, App.formfields[i].required);
+				var field = new TxtBlock(this, App.formfields[i].id, App.formfields[i].name, App.formfields[i].required, false);
 				break;
 		}
 		field.designOptionField();
@@ -83,9 +90,6 @@ FormEditor.prototype.editField = function(field) {
 
 		var editzone = field.getEditZone();
 		this.editorzone.find(field.content).append(editzone);
-		if( field.id === 'email' ) {
-			this.modifyEmailField(editzone);
-		}
 
 		editzone.find('.field-hide-option').on('click', function() {
 			if($(this)[0].checked) {
@@ -102,7 +106,7 @@ FormEditor.prototype.editField = function(field) {
 			if(editzone.find('.field-label-name').val() === '') {
 				$.gritter.add({title: 'Error', text: 'El nombre del label no puede estar vacio', sticky: false, time: 2000});
 			}
-			else if( t.checkIfCanSave(editzone) ) {
+			else if( field.checkIfCanSave(editzone) ) {
 				field.changeValues(editzone);
 				$(this).parents('.row.field-edit-zone-row').remove();
 				$(this).off('click');
@@ -114,19 +118,6 @@ FormEditor.prototype.editField = function(field) {
 			}
 		});
 	}
-};
-
-FormEditor.prototype.modifyEmailField = function(editzone) {
-	editzone.find('.field-required-option').closest('.row').remove();
-	editzone.find('.field-hide-option').closest('.row').remove();
-	editzone.find('.field-default-value').closest('.row').remove();
-};
-
-FormEditor.prototype.checkIfCanSave = function(editzone) {
-	if(editzone.find('.field-hide-option').length > 0 && editzone.find('.field-hide-option')[0].checked && editzone.find('.field-default-value').val() === '') {
-		return false;
-	}
-	return true;
 };
 
 FormEditor.prototype.deleteField = function(field) {
@@ -161,3 +152,27 @@ FormEditor.prototype.sortableEvent = function() {
 		}
 	});
 };
+
+FormEditor.prototype.title_xeditable = function() {
+	var t = this;
+	this.titlezone.find('#form-title-name').editable({ 
+		type: 'text', 
+		success: function (resp, newValue) { 
+			t.title = newValue;
+		} 
+	  });
+};
+
+FormEditor.prototype.persist = function() {
+	var obj = {title: this.title, content : []};
+	
+	for(var i = 0; i < this.content.length; i++) {
+		obj.content.push(this.content[i].persist());
+	}
+	return obj;
+};
+
+function sendFormData() {
+	var obj = JSON.stringify(formeditor.persist());
+	
+}

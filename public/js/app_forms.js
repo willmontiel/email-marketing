@@ -17,3 +17,16 @@ App.FormsNewController = Ember.ObjectController.extend({
 		});
 	}
 });
+
+App.FormsSetupRoute = Ember.Route.extend({});
+
+App.FormsSetupController = Ember.ObjectController.extend({
+	init : function() {
+		$(function(){
+			$('#double-optin').on('click', function() {
+				$('.form-setup-content').hide();
+				$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			});
+		});
+	}
+});

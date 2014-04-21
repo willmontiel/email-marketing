@@ -43,6 +43,8 @@ EmailBlock.prototype.startFieldEvents = function() {
 	});
 	
 	this.content.find('.delete-field').on('click', function(){
+		t.name = t.option.text().trim();
+		t.placeholder = 'Escribe ' + t.name.toLowerCase();
 		t.zone.deleteField(t);	
 	});
 };
@@ -57,7 +59,7 @@ EmailBlock.prototype.changeValues = function(editzone) {
 
 EmailBlock.prototype.getEditZone = function() {
 	var edit = $('<div class="row field-edit-zone-row">\n\
-					<div class="col-md-8 col-md-offset-2 field-edit-zone">\n\
+					<div class="col-md-10 col-md-offset-1 field-edit-zone">\n\
 						<div class="row edit-row-in-zone">\n\
 							<div class="col-md-4">Label</div><div class="col-md-8"><input type="text" class="form-control field-label-name" value="' + this.name + '"></div>\n\
 						</div>\n\
@@ -70,4 +72,21 @@ EmailBlock.prototype.getEditZone = function() {
 					</div>\n\
 				</div>');
 	return edit;
+};
+
+EmailBlock.prototype.checkIfCanSave = function(editzone) {
+	return true;
+};
+
+EmailBlock.prototype.persist = function() {
+	var obj = {
+		id: this.id,
+		name: this.name,
+		placeholder: this.placeholder,
+		required: this.required,
+		defaultvalue: this.defaultvalue,
+		hide: this.hide
+	};
+	
+	return obj;
 };

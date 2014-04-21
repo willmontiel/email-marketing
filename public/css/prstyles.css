@@ -740,3 +740,13 @@ span.required {
 	font-style: italic;
 	background-color: rgb(233, 233, 233);
 }
+.col-without-padding {
+	padding: 0px;
+	margin-right: 5px;
+}
+.select-day-number-form {
+	padding: 6px 9px;
+}
+.field-zone-name {
+	word-break: break-word;
+}

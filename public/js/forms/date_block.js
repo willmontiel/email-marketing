@@ -1,14 +1,14 @@
-function SlctBlock(zone, id, name, required, values) {
+function DateBlock(zone, id, name, required) {
 	this.zone = zone;
 	this.id = id;
 	this.name = name;
 	this.required = required;
-	this.defaultvalue = '';
+	this.defaultvalue = {day: '1', month: 'Enero', year: ''};
 	this.hide = false;
-	this.values = values;
+	this.months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 }
 
-SlctBlock.prototype.designOptionField = function() {
+DateBlock.prototype.designOptionField = function() {
 	this.option = $('<div class="form-options ' + this.id + '-option">\n\
 						' + this.name + '\n\
 					</div>');
@@ -16,18 +16,18 @@ SlctBlock.prototype.designOptionField = function() {
 	
 	var t = this;
 	this.option.on('click', function() {
-		t.name = t.option.text().trim();
-		t.defaultvalue = '';
-		t.hide = false;
 		t.designField();
 	});
 };
 
-SlctBlock.prototype.designField = function() {
-	var slctoptions = '';
-	var valuesarray = this.values.split(",");
-	for(var i = 0; i < valuesarray.length; i++) {
-		slctoptions+= '<option>' + valuesarray[i] + '</option>';
+DateBlock.prototype.designField = function() {
+	var days = '';
+	var months = '';
+	for (var i = 1; i <= 31; i++) {
+		days+= '<option>' + i + '</option>';
+	}
+	for (var i = 0; i < this.months.length; i++) {
+		months+= '<option>' + this.months[i] + '</option>';
 	}
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
@@ -36,9 +36,17 @@ SlctBlock.prototype.designField = function() {
 								' + required + this.name + '\n\
 							</div>\n\
 							<div class="col-md-7">\n\
-								<select class="form-control field-label-select-options">\n\
-									' + slctoptions + '\n\
-								</select>\n\
+								<div class="row">\n\
+									<div class="col-md-3 col-without-padding">\n\
+										<select class="form-control select-day-number-form">' + days + '</select>\n\
+									</div>\n\
+									<div class="col-md-5 col-without-padding">\n\
+										<select class="form-control select-month-number-form">' + months + '</select>\n\
+									</div>\n\
+									<div class="col-md-3 col-without-padding">\n\
+										<input type="text" class="form-control select-year-number-form">\n\
+									</div>\n\
+								</div>\n\
 							</div>\n\
 							<div class="col-md-1 btn btn-default btn-sm edit-field">\n\
 								<span class="glyphicon glyphicon-pencil"></span>\n\
@@ -54,22 +62,27 @@ SlctBlock.prototype.designField = function() {
 	this.startFieldEvents();
 };
 
-SlctBlock.prototype.startFieldEvents = function() {
+DateBlock.prototype.startFieldEvents = function() {
 	var t = this;
 	this.content.find('.edit-field').on('click', function(){
 		t.zone.editField(t);	
 	});
 	
 	this.content.find('.delete-field').on('click', function(){
+		t.name = t.option.text().trim();
+		t.defaultvalue = {day: '1', month: 'Enero', year: ''};
+		t.hide = false;
 		t.zone.deleteField(t);	
 	});
 };
 
-SlctBlock.prototype.changeValues = function(editzone) {
+DateBlock.prototype.changeValues = function(editzone) {
 	this.name = editzone.find('.field-label-name').val();
 	this.required = (editzone.find('.field-required-option')[0].checked) ? 'Si' : 'No';
 	this.hide = editzone.find('.field-hide-option')[0].checked;
-	this.defaultvalue = editzone.find('.field-default-value').val();
+	this.defaultvalue.day = editzone.find('.select-day-number-form').val();
+	this.defaultvalue.month = editzone.find('.select-month-number-form').val();
+	this.defaultvalue.year = editzone.find('.select-year-number-form').val();
 	
 	this.content.find('.field-zone-name').text(this.name);
 	
@@ -86,12 +99,16 @@ SlctBlock.prototype.changeValues = function(editzone) {
 	}
 };
 
-SlctBlock.prototype.getEditZone = function() {
-	var slctoptions = '';
-	var valuesarray = this.values.split(",");
-	for(var i = 0; i < valuesarray.length; i++) {
-		var selected = (valuesarray[i] === this.defaultvalue) ? 'selected' : '' ;
-		slctoptions+= '<option ' + selected + '>' + valuesarray[i] + '</option>';
+DateBlock.prototype.getEditZone = function() {
+	var days = '';
+	var months = '';
+	for (var i = 1; i <= 31; i++) {
+		var selected = (i == this.defaultvalue.day) ? 'selected' : '';
+		days+= '<option ' + selected + '>' + i + '</option>';
+	}
+	for (var i = 0; i < this.months.length; i++) {
+		var selected = (this.months[i] === this.defaultvalue.month) ? 'selected' : '';
+		months+= '<option ' + selected + '>' + this.months[i] + '</option>';
 	}
 	var required = (this.required === 'Si') ? 'checked' : '';
 	var hide = (this.hide) ? 'checked' : '';
@@ -108,7 +125,19 @@ SlctBlock.prototype.getEditZone = function() {
 							<div class="col-md-4">Oculto</div><div class="col-md-8"><input type="checkbox" class="field-hide-option" ' + hide + '></div>\n\
 						</div>\n\
 						<div class="row edit-row-in-zone ' + defaultvalue + '">\n\
-							<div class="col-md-4">Valor de campo</div><div class="col-md-8"><select class="form-control field-default-value">' + slctoptions + '</select></div>\n\
+							<div class="col-md-4">Valor de campo</div><div class="col-md-8">\n\
+								<div class="row field-default-value">\n\
+									<div class="col-md-3 col-without-padding">\n\
+										<select class="form-control select-day-number-form">' + days + '</select>\n\
+									</div>\n\
+									<div class="col-md-5 col-without-padding">\n\
+										<select class="form-control select-month-number-form">' + months + '</select>\n\
+									</div>\n\
+									<div class="col-md-3 col-without-padding">\n\
+										<input type="text" class="form-control select-year-number-form" value="' + this.defaultvalue.year + '">\n\
+									</div>\n\
+								</div>\n\
+							</div>\n\
 						</div>\n\
 						<div class="row edit-button-row-in-zone">\n\
 							<a class="accept-form-field-changes btn btn-default btn-sm">Aceptar</a>\n\
@@ -118,22 +147,24 @@ SlctBlock.prototype.getEditZone = function() {
 	return edit;
 };
 
-SlctBlock.prototype.checkIfCanSave = function(editzone) {
-	if(editzone.find('.field-hide-option').length > 0 && editzone.find('.field-hide-option')[0].checked && editzone.find('.field-default-value').val() === '') {
+DateBlock.prototype.checkIfCanSave = function(editzone) {
+	if(editzone.find('.field-hide-option')[0].checked && editzone.find('.select-year-number-form').val() === '') {
 		return false;
 	}
 	return true;
 };
 
-SlctBlock.prototype.persist = function() {
+DateBlock.prototype.persist = function() {
+	
 	var obj = {
 		id: this.id,
 		name: this.name,
 		placeholder: this.placeholder,
 		required: this.required,
-		defaultvalue: this.defaultvalue,
-		hide: this.hide,
-		values: this.values
+		defaultday: this.defaultvalue.day,
+		defaultmonth: this.defaultvalue.month,
+		defaultyear: this.defaultvalue.year,
+		hide: this.hide
 	};
 	
 	return obj;

@@ -29,6 +29,7 @@ App.Router.map(function() {
   });
   this.resource('forms', function(){
 	   this.route('new');
+	   this.route('setup');
   });
 });
 
