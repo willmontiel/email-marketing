@@ -51,7 +51,7 @@
 			
 			App.lists = [
 				{% for contactlist in contactlists %}
-					Ember.Object.create({name: "{{contactlist.Dbase}}", id: {{contactlist.idContactlist}}}),
+					Ember.Object.create({name: "{{contactlist.name}}", id: {{contactlist.idContactlist}}}),
 				{% endfor %}
 			];
 			

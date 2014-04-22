@@ -829,9 +829,11 @@ class MailController extends ControllerBase
 	
 	public function contenthtmlAction($idMail)
 	{
+		$account = $this->user->account;
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
+			'conditions' => "idMail = ?1 AND idAccount = ?2 AND status = 'Draft'",
+			'bind' => array(1 => $idMail,
+							2 => $account->idAccount)
 		));
 			
 		if (!$mail) {
@@ -1817,6 +1819,7 @@ class MailController extends ControllerBase
 				throw new Exception("Error while updating status schedule's");
 			}
 			
+			$this->db->commit();
 			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 			$commObj->sendSchedulingToParent($mail->idMail);	
 			
@@ -2154,7 +2157,7 @@ class MailController extends ControllerBase
 		
 		if($idMail != null) {
 			$mail = Mail::findFirst(array(
-				'conditions' => 'idAccount = ?1 AND idMail = ?2',
+				'conditions' => "idAccount = ?1 AND idMail = ?2 AND status = 'Draft'",
 				'bind' => array(1 => $account->idAccount,
 								2 => $idMail)
 			));

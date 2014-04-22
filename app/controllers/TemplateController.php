@@ -28,34 +28,44 @@ class TemplateController extends ControllerBase
 		$this->view->setVar('arrayTemplate', $arrayTemplate);
 	}
 	
-	public function selectAction($idMail = 0)
+	public function selectAction($idMail)
 	{
-		if ($idMail != 0) {
-			$mail = $this->validateProcess($idMail);
-			$idMail = $mail->idMail;
-			if ($idMail == null) {
-				$idMail = 0;
-			}
+		$account = $this->user->account;
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $account->idAccount)
+		));
+		
+		if (!$mail) {
+			return $this->response->redirect('error');
 		}
 		
-		$templates = Template::findGlobalsAndPrivateTemplates($this->user->account);
+		try {
+			$this->logger->log("Antes");
+			$templates = Template::findGlobalsAndPrivateTemplates($account);
+			$this->logger->log("Despúes");
+			$arrayTemplate = array();
+			foreach ($templates as $template) {
+				$templateInfo = array(
+					"id" => $template->idTemplate, 
+					"name" => $template->name, 
+					"content" => $template->content,
+					"html" => $template->contentHtml,
+					"preview" => $template->previewData,
+					"idMail" => $mail->idMail,
+					"idAccount" => $template->idAccount
+				);
+				$arrayTemplate[$template->category][] = $templateInfo;
+			}
 
-		$arrayTemplate = array();
-		foreach ($templates as $template) {
-			$templateInfo = array(
-				"id" => $template->idTemplate, 
-				"name" => $template->name, 
-				"content" => $template->content,
-				"html" => $template->contentHtml,
-				"preview" => $template->previewData,
-				"idMail" => $idMail,
-				"idAccount" => $template->idAccount
-			);
-			$arrayTemplate[$template->category][] = $templateInfo;
+			$this->view->setVar('templates', $templates);
+			$this->view->setVar('arrayTemplate', $arrayTemplate);
 		}
-
-		$this->view->setVar('templates', $templates);
-		$this->view->setVar('arrayTemplate', $arrayTemplate);
+		catch (Exception $e) {
+			$this->logger->log("Exception {$e}");
+			return $this->response->redirect('error');
+		}
 	}
 
 

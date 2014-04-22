@@ -89,7 +89,7 @@ class Security extends Plugin
 	protected function getControllerMap()
 	{
 		$map = $this->cache->get('controllermap-cache');
-		if (!$map) {
+		if (true) {
 			$map = array(
 		//* RELEASE 0.1.0 *//
 				//Tests
