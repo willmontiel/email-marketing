@@ -2,10 +2,7 @@
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
-		var idMail = null;
-		{% if idMail is defined and idMail is numeric%}
-			idMail = {{idMail}};
-		{% endif %}
+		var idMail = {{mail.idMail}};
 		function sendData() {
 			var url = $('#url').val();
 			var image = $('#image').val();
@@ -21,8 +18,8 @@
 					var obj = $.parseJSON(msg.responseText);
 					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.errors, sticky: false, time: 10000});
 				},
-				success: function(msg){
-					$(location).attr('href', "{{url('mail/contenthtml')}}/" + msg.idMail); 
+				success: function(){
+					$(location).attr('href', "{{url('mail/contenthtml')}}/" + idMail); 
 				}
 			});
 		}

@@ -91,7 +91,9 @@ class MailWrapper extends BaseWrapper
 		$this->mail->status = 'draft';
 		$this->mail->wizardOption = 'setup';
 		$this->mail->totalContacts = $this->target->totalContacts;
-		$this->mail->scheduleDate = $this->scheduleDate;
+		if ($this->scheduleDate != null) {
+			$this->mail->scheduleDate = $this->scheduleDate;
+		}
 		$this->mail->createdon = $date;
 		$this->mail->updatedon = $date;
 		$this->mail->deleted = 0;
@@ -118,10 +120,17 @@ class MailWrapper extends BaseWrapper
 	private function saveContent()
 	{
 		if ($this->mailcontent != null) {
+			$campaignName = $this->content->campaignName;
+			$googleAnalytics = explode(',', $this->content->googleAnalytics);
+			
+			if (strlen($campaignName) > 25) {
+				$campaignName = substr($campaignName, 0, 24);
+			}
+			
 			$this->mailcontent->plainText = $this->content->plainText;
-//			$this->mailcontent->googleAnalytics = $this->content->googleAnalytics;
-//			$this->mailcontent->campaignName = $this->content->campaignName;
-
+			$this->mailcontent->campaignName = $campaignName;
+			$this->mailcontent->googleAnalytics = json_encode($googleAnalytics);
+			
 			if (!$this->mailcontent->save()) {
 				$e = array();
 				foreach ($this->mailcontent->getMessages() as $msg) {
@@ -194,11 +203,23 @@ class MailWrapper extends BaseWrapper
 			}
 		}
 		
+		
+		$jsonObject['mailcontent'] = 0;
+		$jsonObject['campaignName'] = '';
+		$jsonObject['googleAnalytics'] = '';
+		
 		if ($this->mailcontent != null) {
 			$jsonObject['mailcontent'] = (empty($this->mailcontent->content))?0:1;
-		}
-		else {
-			$jsonObject['mailcontent'] = 0;
+			
+			$campaignName = $this->mailcontent->campaignName;
+			if ($campaignName != null) {
+				$jsonObject['campaignName'] = $campaignName;
+			}
+			
+			if ($this->mailcontent->googleAnalytics != null) {
+				$googleAnalytics = json_decode($this->mailcontent->googleAnalytics);
+				$jsonObject['googleAnalytics'] = implode(',', $googleAnalytics);
+			}
 		}
 		
 		if (empty($this->mail->previewData)) {
@@ -211,7 +232,15 @@ class MailWrapper extends BaseWrapper
 		$jsonObject['previewData'] = $preview;
 		$jsonObject['plainText'] = $this->mailcontent->plainText;
 		$jsonObject['totalContacts'] = $this->mail->totalContacts;
-		$jsonObject['scheduleDate'] = date('d/m/Y H:i', $this->mail->scheduleDate);
+		
+		if ($this->mail->scheduleDate != null || $this->mail->scheduleDate != 0)  {
+			$schedule = date('d/m/Y H:i', $this->mail->scheduleDate);
+		}
+		else {
+			$schedule = null;
+		}
+		
+		$jsonObject['scheduleDate'] = $schedule;
 		
 		$this->logger->log('Mail: ' . print_r($jsonObject, true));
 		return $jsonObject;

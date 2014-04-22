@@ -61,8 +61,17 @@
 						Ember.Object.create({name: "{{m2.name}}", id: {{m2.idMail}}}),
 					{% endfor %}	
 				];
-			{% endif%}
-									
+			{% endif%}				
+		{% endif %}
+		
+		{% if linksForTrack is defined%}
+			{% if linksForTrack|length !== 0 %}
+				App.googleAnalyticsLinks = [
+					{% for link in linksForTrack%}
+						Ember.Object.create({name: "{{link}}"}),
+					{% endfor %}
+				];
+			{% endif %}
 		{% endif %}
 	</script>
 {% endblock %}
@@ -111,13 +120,12 @@
 				</div>
 			</div>	
 			
-			{#
 			<div class="row">
 				<div class="col-md-12">
 					{{ partial("mail/partials/googleanalytics_partial") }}
 				</div>
 			</div>
-			#}
+		
 
 			<div class="row">
 				<div class="col-md-12">

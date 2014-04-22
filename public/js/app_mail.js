@@ -24,6 +24,8 @@ App.Mail = DS.Model.extend({
 	filterByOpen: DS.attr('string'),
 	filterByClick: DS.attr('string'),
 	filterByExclude: DS.attr('string'),
+	googleAnalytics: DS.attr('string'),
+	campaignName: DS.attr('string'),
 	previewData: DS.attr('string'),
 	mailcontent: DS.attr('boolean'),
 	plainText: DS.attr('string'),
@@ -63,6 +65,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	click: [],
 	exclude: [],
 	scheduleRadio: '',
+	linksAnalytics: [],
 	fromSummary: '',
 	idMail: function () {
 		return this.get('id');
@@ -73,19 +76,28 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}.property('id'),
 	
 	setSelectsContent: function () {
-		var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
-		var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
-		var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
-		
-		this.set('dbaselist', arrayDbase);
-		this.set('list', arrayList);
-		this.set('segmentlist', arraySegment);
-		
-		var arrayOpen = setTargetValues(this.get('this.filterByOpen'), App.sendByOpen);
-		var arrayClick = setTargetValues(this.get('this.filterByClick'), App.sendByClick);
-		console.log(this.get('this.filterByClick'));
-		this.set('open', arrayOpen);
-		this.set('click', arrayClick);
+		if (this.get('id') !== null) {
+			var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
+			var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
+			var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
+			
+			this.set('dbaselist', arrayDbase);
+			this.set('list', arrayList);
+			this.set('segmentlist', arraySegment);
+			
+			var arrayOpen = setTargetValues(this.get('this.filterByOpen'), App.sendByOpen);
+			var arrayClick = setTargetValues(this.get('this.filterByClick'), App.sendByClick);
+			var arrayExclude = setTargetValues(this.get('this.filterByExclude'), App.excludeContact);
+			
+			this.set('open', arrayOpen);
+			this.set('click', arrayClick);
+			this.set('exclude', arrayExclude);
+			
+			if (App.googleAnalyticsLinks !== undefined) {
+				var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
+				this.set('linksAnalytics', arrayAnalytics);
+			}	
+		}
 	}.observes('this.content'),
 			
 	headerEmpty: function () {
@@ -185,9 +197,27 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}.property('content.type'),
 	
 	GAEmpty: function () {
-		return true;
-	}.property(),
+		var g;
+		g = this.get('this.linksAnalytics');
+		g = (g.length === 0)?null:g;
+		if (!g) {
+			return true;
+		}
+		return false;
+	}.property('linksAnalytics.[]'),
 	
+	isGaAvailable: function () {
+		if (this.get('id') !== null) {
+			if (App.googleAnalyticsLinks !== undefined) {
+				console.log('Es verdadero');
+				return true;
+			}
+			console.log('Es falso');
+			return false;
+		}
+		return false;
+	}.property('this.content'),
+			
 	scheduleEmpty: function () {
 		var schedule;
 		schedule = this.get('content.scheduleDate');
@@ -201,27 +231,27 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	isTargetBydbases: function () {
 		return setFilterValues(this.get('this.dbases'), 'dbaseChecked', this);
 	}.property('content.dbases'),
-	
+//	
 	isTargetByLists: function () {
 		return setFilterValues(this.get('this.contactlists'), 'listChecked', this);
 	}.property('content.contactlists'),
-	
+//	
 	isTargetBySegments: function () {
 		return setFilterValues(this.get('this.segments'), 'segmentChecked', this);
 	}.property('content.segments'),
-		
+//		
 	isFilterByEmail: function () {
 		return setFilterValues(this.get('this.filterByEmail'), 'filterEmailChecked', this);
 	}.property('content.filterByEmail'),
-			
+//			
 	isFilterByOpen: function () {
 		return setFilterValues(this.get('this.filterByOpen'), 'filterOpenChecked', this);
 	}.property('content.filterByOpen'),
-	
+//	
 	isFilterByClick: function () {
 		return setFilterValues(this.get('this.filterByClick'), 'filterClickChecked', this);
 	}.property('content.filterByClick'),
-	
+//	
 	isFilterByExclude: function () {
 		return setFilterValues(this.get('this.filterByExclude'), 'filterExcludeChecked', this);
 	}.property('content.filterByExclude'),
@@ -239,6 +269,13 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				var click = getArrayValue(this.get('click'));
 				var exclude = getArrayValue(this.get('exclude'));
 				
+				var array = [];
+					var obj = this.get('linksAnalytics').toArray();
+					for (var i = 0; i < obj.length; i++) {
+						array.push(obj[i].name);
+					}
+				var analitycs = array.toString();
+				
 				var value = this.get('scheduleRadio');
 				
 				if (value === 'now') {
@@ -251,6 +288,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				mail.set('filterByOpen', open);
 				mail.set('filterByClick', click);
 				mail.set('filterByExclude', exclude);
+				mail.set('googleAnalytics', analitycs);
 				
 				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
 				this.set('isHeaderExpanded', false);
@@ -314,12 +352,22 @@ function setExpandAttr(self, expand) {
 function setTargetValues(values, select) {
 	var array = values.split(",");
 	var newArray = [];
-	
-	console.log(array);
 	for (var i = 0; i < select.length; i++) {
 		for (var j = 0; j < array.length; j++) {
 			if (select[i].id == array[j]) {
-				//var obj = {id: select[i].id, name: select[i].name};
+				newArray.push(select[i]);
+			}
+		}
+	}
+	return newArray;
+}
+
+function setGoogleAnalyticsValues(values, select) {
+	var array = values.split(",");
+	var newArray = [];
+	for (var i = 0; i < select.length; i++) {
+		for (var j = 0; j < array.length; j++) {
+			if (select[i].name == array[j]) {
 				newArray.push(select[i]);
 			}
 		}
@@ -344,11 +392,11 @@ App.DateTimePicker = Em.View.extend({
 		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
 		
 		$('#schedule').datetimepicker({
-			format:'m/d/Y H:i',
+			format:'d/m/Y H:i',
 			inline:true,
 			lang:'es',
 			minDate: 0,
-			minTime: 0,
+//			minTime: 0,
 			startDate: 0,
 //			allowTimes:[
 //				'7:00', '7:15', '7:30', '7:45',

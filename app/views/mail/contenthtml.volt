@@ -12,12 +12,8 @@
 	{{ javascript_include('redactor/plugins/textdirection.js') }}
 
 	<script type="text/javascript">
-		var idMail;
-		{% if mail is defined%}
-			idMail = {{mail.idMail}};
-		{% else %}
-			idMail = null;
-		{% endif %}
+		var idMail = {{mail.idMail}};
+		
 		$(document).ready(
 			function() {
 				$('#redactor_content').redactor({
@@ -61,7 +57,7 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.msg, sticky: false, time: 10000});
 			},
 			success: function(msg) {
-				$(location).attr('href', "{{url('mail/new')}}/" + msg.msg);
+				$(location).attr('href', "{{url('mail/new')}}/" + idMail);
 			}
 		});
 	}
@@ -86,33 +82,29 @@
 {% block content %}
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-12">
-				<div class="text-right">
+			<div class="col-sm-6">
+				<div class="text-left">
 					<button onclick="verHTML()" class="btn btn-black" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
+				</div>
+			</div>	
+			<div class="col-sm-6">
+				<div class="text-right">
+					<a href="{{url('mail/new')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar</a>
 					<button onclick="saveData()" class="btn btn-info">Guardar</button>
 					<button onclick="sendData()" class="btn btn-primary">Guradar y volver</button>
 				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
 				<br />
 				<label>Cree contenido para el correo con HTML base: </label>
 				<textarea rows="25" required id="redactor_content">{% if content is defined%} {{content}} {% endif %}</textarea>
 				<br />
 			</div>
 		</div>
-	
 	</div>
-	{#<div id="preview-modal" class="modal hide fade preview-modal">
-		<div class="modal-header">
-			Previsualización de plantilla
-		</div>
-		<div class="modal-body">
-			<div id="content-template" class="align-modal-body">
-				
-			</div>
-		</div>
-		<div class="modal-footer">
-			<button class="btn btn-black" data-dismiss="modal">x</button>
-		</div>
-	</div>#}
+	
 	<div id="clipsmodal" style="display: none;">
 		<section>
 			<ul class="redactor_clips_box">
