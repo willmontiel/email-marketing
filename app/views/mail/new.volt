@@ -11,6 +11,29 @@
 	{{ javascript_include('js/mixin_save.js') }}
 	{{ javascript_include('js/app_mail.js') }}
 	<script type="text/javascript">
+		var idMail;
+		{% if mail is defined%}
+			idMail = {{mail.idMail}}
+		{% endif %}
+		
+		function sendMail() {
+			$(function() {
+				$.ajax({
+					url: "{{url('mail/confirmmail')}}/" + idMail,
+					type: "POST",			
+					data: {},
+					error: function(msg){
+						var obj = $.parseJSON(msg.responseText);
+						$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
+					},
+					success: function(msg){
+						$(location).attr('href', "{{url('mail/list')}}"); 
+					}
+				});
+			});
+		}
+	</script>
+	<script type="text/javascript">
 		//Full Mail Content
 		{% if mail is defined %}
 			App.maildata = [{
@@ -85,6 +108,12 @@
 	<br />
 	<div id="emberAppContainer">
 		<script type="text/x-handlebars" data-template-name="index">
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/mailstatus_partial") }}
+				</div>
+			</div>
+			
 			<div class="row">
 				<div class="col-md-12">
 					<div class="panel panel-default">

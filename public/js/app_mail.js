@@ -67,6 +67,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	scheduleRadio: '',
 	linksAnalytics: [],
 	fromSummary: '',
+	summaryMail: '',
 	idMail: function () {
 		return this.get('id');
 	}.property('id'),
@@ -151,21 +152,20 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var byEmail, byOpen, byClick, byEx;
 		
 		byEmail = this.get('content.filterByEmail');
-//		byOpen = this.get('this.open');
-//		byClick = this.get('this.click');
-//		byEx = this.get('this.exclude');
+		byOpen = this.get('this.open');
+		byClick = this.get('this.click');
+		byEx = this.get('this.exclude');
 		
-		byEmail = (byEmail == '')?null:byEmail;
-//		byOpen = (byOpen == '')?null:byOpen;
-//		byClick = (byClick == '')?null:byClick;
-//		byEx = (byEx == '')?null:byEx;
+		byEmail = (byEmail === '')?null:byEmail;
+		byOpen = (byOpen.length === 0)?null:byOpen;
+		byClick = (byClick.length === 0)?null:byClick;
+		byEx = (byEx.length === 0)?null:byEx;
 		
-//		if (!byEmail && !byOpen && !byClick && !byEx) {
-		if (!byEmail) {
+		if (!byEmail && !byOpen && !byClick && !byEx) {
 			return true;
 		}
 		return false;
-	}.property('content.filterByEmail'), 
+	}.property('content.filterByEmail','open.[]', 'click.[]', 'exclude.[]'), 
 	
 	contentEmpty: function () {
 		var mailcontent, preview;
@@ -199,7 +199,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	GAEmpty: function () {
 		var g;
 		g = this.get('this.linksAnalytics');
-		g = (g.length === 0)?null:g;
+		g = (g.length === 0)?0:g;
 		if (!g) {
 			return true;
 		}
@@ -216,7 +216,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			return false;
 		}
 		return false;
-	}.property('this.content'),
+	}.property('content.mailcontent'),
 			
 	scheduleEmpty: function () {
 		var schedule;
@@ -255,6 +255,59 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	isFilterByExclude: function () {
 		return setFilterValues(this.get('this.filterByExclude'), 'filterExcludeChecked', this);
 	}.property('content.filterByExclude'),
+	
+	isMailReadyToSend: function () {
+		var name, fromName, fromEmail, subject, mailcontent, plainText, totalContacts, scheduleDate;
+		
+		name = this.get('this.name');
+		fromName = this.get('this.fromName');
+		fromEmail = this.get('this.fromEmail');
+		subject = this.get('this.subject');
+		mailcontent = this.get('this.mailcontent');
+		plainText = this.get('this.plainText');
+		totalContacts = this.get('this.totalContacts');
+		scheduleDate = this.get('this.scheduleDate');
+
+		name = (name === '')?0:name;
+		fromName = (fromName === '')?0:fromName;
+		fromEmail = (fromEmail === '')?0:fromEmail;
+		subject = (subject === '')?0:subject;
+		mailcontent = (mailcontent === 0)?0:mailcontent;
+		plainText = (plainText === '')?0:plainText;
+		totalContacts = (totalContacts === '')?0:totalContacts;
+		scheduleDate = (scheduleDate === '')?0:scheduleDate;
+
+		if (!name) {
+			this.set('summaryMail', 'El campo "Nombre" se encuentra vacío');
+			return false;
+		}
+		else if (!fromName || !fromEmail) {
+			this.set('summaryMail', 'El campo "De" se encuentra vacío');
+			return false;
+		}
+		else if (!subject) {
+			this.set('summaryMail', 'El campo "Asunto" se encuentra vacío');
+			return false;
+		}
+		else if (!totalContacts || totalContacts === '0') {
+			this.set('summaryMail', 'No hay destinatarios');
+			return false;
+		}
+		else if (!mailcontent) {
+			this.set('summaryMail', 'Aún no hay contenido');
+			return false;
+		}
+		else if (!plainText) {
+			this.set('summaryMail', 'Aún no hay contenido');
+			return false;
+		}
+		else if (!scheduleDate) {
+			this.set('summaryMail', 'Aún no se ha programado la fecha y hora de envío');
+			return false;
+		}
+		
+		return true;
+	}.property('content.name', 'content.fromName', 'content.fromEmail', 'content.subject', 'content.mailcontent', 'content.plainText', 'content.totalContacts', 'content.scheduleDate'),
 			
 	actions: {
 		save: function(mail) {

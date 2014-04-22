@@ -1,15 +1,16 @@
 {{ '{{#unless contentEmpty}}' }}
-	<div {{'{{bind-attr class=":bs-callout GAEmpty:bs-callout-warning:bs-callout-success"}}'}}>
-		<div class="panel-body">
-			<dl class="dl-horizontal" {{ '{{action "expandGA" this}}' }}>
-				{{'{{#if GAEmpty }}'}}
-					<dt>Google Analytics:</dt><dd> _______________________________</dd>
-				{{'{{else}}'}}
-					<dt>Google Analytics:</dt><dd> Se esta haciendo seguimiento <span class="glyphicon glyphicon-thumbs-up"></span></dd>
-				{{'{{/if}}'}}
-			</dl>
+	
+		<div {{'{{bind-attr class=":bs-callout GAEmpty:bs-callout-warning:bs-callout-success"}}'}}>
+			<div class="panel-body">
+				<dl class="dl-horizontal" {{ '{{action "expandGA" this}}' }}>
+					{{'{{#if GAEmpty }}'}}
+						<dt>Google Analytics:</dt><dd> _______________________________</dd>
+					{{'{{else}}'}}
+						<dt>Google Analytics:</dt><dd> Se esta haciendo seguimiento <span class="glyphicon glyphicon-thumbs-up"></span></dd>
+					{{'{{/if}}'}}
+				</dl>
+			</div>
 		</div>
-	</div>
 	{{ '{{#if isGAExpanded}}' }}
 		<div class="row">
 			<div class="col-md-12">
@@ -46,6 +47,10 @@
 							</form>
 						{{ '{{else}}' }}
 							No se encontrarón enlaces en el contenido html, para empezar agregue al menos uno.
+							<br />
+							<div class="text-right">
+								<button class="btn btn-default" {{ '{{action "expandGA" this}}' }}>Regresar</button>
+							</div>
 						{{ '{{/if}}' }}
 					</div>
 				</div>

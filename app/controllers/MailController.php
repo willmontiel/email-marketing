@@ -1756,6 +1756,7 @@ class MailController extends ControllerBase
 	
 	public function confirmmailAction($idMail)
 	{
+		$this->logger->log("idMail {$idMail}");
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1',
 			'bind' => array(1 => $idMail)
@@ -1766,48 +1767,108 @@ class MailController extends ControllerBase
 			'bind' => array(1 => $idMail)
 		));
 		
-		if ($mail && $mailcontent) {
-			
+		$schedule = Mailschedule::findFirst(array(
+			'conditions' => 'idMail = ?1',
+			'bind' => array(1 => $idMail)
+		));
+		
+		if (!$mail) {
+			$this->logger->log("Error mail not found, user: {$this->user->idUser} / idAccount: {$this->user->account->idAccount}");
+			return $this->setJsonResponse(array('error' => 'No se ha encontrado el correo, por favor contacte al administrador'), 500);
 		}
 		
-		$schedule = Mailschedule::findFirstByIdMail($idMail);
-		$mail = Mail::findFirstByIdMail($idMail);
+		if (!$mailcontent) {
+			$this->logger->log("Error mailcontent not found, user: {$this->user->idUser} / idAccount: {$this->user->account->idAccount}");
+			return $this->setJsonResponse(array('error' => 'No se ha encontrado el contenido del correo, por favor contacte al administrador'), 500);
+		}
 		
-		if($schedule) {
+		if (!$schedule) {
+			$this->logger->log("Error schedule not found, user: {$this->user->idUser} / idAccount: {$this->user->account->idAccount}");
+			return $this->setJsonResponse(array('error' => 'No se ha programado el correo, favor contacte al administrador'), 500);
+		}
+		
+		$status = $this->validateMailStatus($mail, $mailcontent);
+		
+		if (!$status) {
+			return $this->setJsonResponse(array('error' => $this->errorMsg), 400);
+		}
+		
+		$this->db->begin();
+		
+		try {
 			$mail->status = 'Scheduled';
+			$mail->startedon = time();
+			
 			if(!$mail->save()) {
 				foreach ($mail->getMessages() as $msg) {
-					$this->flashSession->error($msg);
+					$this->logger->log("Error while updating mail {$msg}");
 				}
-				return $this->response->redirect('mail/preview/' . $idMail);
+				throw new Exception("Error while updating scheduleDate in mail");
 			}
+			
 			$schedule->confirmationStatus = 'Yes';
+			
 			if(!$schedule->save()){
 				foreach ($schedule->getMessages() as $msg) {
-					$this->flashSession->error($msg);
+					$this->logger->log("Error while updating schedule {$msg}");
 				}
-				return $this->response->redirect('mail/preview/' . $idMail);
+				throw new Exception("Error while updating status schedule's");
 			}
-			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-			$commObj->sendSchedulingToParent($idMail);	
 			
-			return $this->response->redirect("mail/index");
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$commObj->sendSchedulingToParent($mail->idMail);	
+			
+			$this->flashSession->success('Se ha programado existosamente el correo');
+			return $this->setJsonResponse(array('status' => 'success'), 200);
+		}
+		catch (Exception $e) {
+			$this->db->rollback();
+			$this->logger->log("Exception: {$e}");
+			$this->logger->log("idUser: {$this->user->idUser} / idAccount: {$this->user->account->idAccount}");
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error por favor contacte al administrador'), 500);
+		}
+	}
+	
+	protected function validateMailStatus(Mail $mail, Mailcontent $mailcontent)
+	{
+		if ($mail->totalContacts == 0) {
+			$this->errorMsg = 'La lista, base de datos o segmento seleccionado no contiene contactos, por favor verifique la información';
+			return false;
+		}
+		else if (empty($mail->scheduleDate)) {
+			$this->errorMsg = 'El correo aún no tiene fecha de programación, por favor verifique la información';
+			return false;
+		}
+		else if ($mail->deleted != 0) {
+			$this->errorMsg = 'El correo que desea enviar no existe, por favor verifique la información';
+			return false;
+		}
+		else if (empty($mail->subject)) {
+			$this->errorMsg = 'No se ha configurado el asunto, por favor verifique la información';
+			return false;
+		}
+		else if (empty($mail->fromName)) {
+			$this->errorMsg = 'No se ha configurado a nombre de quien se va a enviar por favor verifique la información';
+			return false;
+		}
+		else if (empty($mail->fromEmail)) {
+			$this->errorMsg = 'No se ha configurado el correo de origen, por favor verifique la información';
+			return false;
+		}
+		else if (empty($mail->target)) {
+			$this->errorMsg = 'No se ha configurado un destino, por favor verifique la información';
+			return false;
+		}
+		else if (empty($mailcontent->content)) {
+			$this->errorMsg = 'No hay contenido que enviar, por favor verifique la información';
+			return false;
+		}
+	    else if (empty($mailcontent->plainText)) {
+			$this->errorMsg = 'No hay un texto plano, por favor verifique la información';
+			return false;
 		}
 		
-		$mail->status = 'Scheduled';
-		$mail->startedon = time();
-		
-		if(!$mail->save()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-			}
-			return $this->response->redirect('mail/preview/' . $idMail);
-		}
-		
-		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		$commObj->sendPlayToParent($idMail);
-		
-		return $this->response->redirect("mail/index");
+		return true;
 	}
 	
 	public function stopAction($direction, $idMail)

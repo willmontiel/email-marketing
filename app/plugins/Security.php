@@ -250,6 +250,7 @@ class Security extends Plugin
 				'mail::template' => array('mail' => array('read', 'create')),
 				'mail::converttotemplate' => array('mail' => array('read', 'create')),
 				'mail::confirm' => array('mail' => array('read', 'create')),
+				'mail::confirmmail' => array('mail' => array('send')),
 				'mail::play' => array('mail' => array('read', 'send')),
 				'mail::stop' => array('mail' => array('read', 'send')),
 				'mail::cancel' => array('mail' => array('read', 'send')),

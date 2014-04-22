@@ -69,6 +69,7 @@ class MailWrapper extends BaseWrapper
 	protected function processScheduleDate()
 	{
 		$schedule = $this->content->scheduleDate;
+		
 		if ($schedule == 'now') {
 			$this->scheduleDate = time();
 		}
@@ -114,6 +115,17 @@ class MailWrapper extends BaseWrapper
 			
 			$this->addMessageError('errors', $messages, 400);
 			throw new \InvalidArgumentException($messages);
+		}
+		
+		if ($this->scheduleDate != null) {
+			$mailSchedule = new MailScheduleObj($this->mail);
+			$scheduled = $mailSchedule->scheduleTask();
+			
+			if (!$scheduled) {
+				$this->addMessageError('errors', 'Ha ocurrido un error por favor contacte al administrador', 500);
+				$this->logger->log("Error while saving mail {$this->mail->idMail} scheduleDate in Mailschedule table account {$this->mail->idAccount}");
+				throw new \Exception('Error while saving mail scheduleDate in Mailschedule table');
+			}
 		}
 	}
 	

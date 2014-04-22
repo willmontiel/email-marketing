@@ -35,6 +35,10 @@
 								Segmento: {{' {{name}} '}}, 
 							{{ '{{/each}}' }}
 						{{ '{{/if}}' }}
+						
+						{{ '{{#unless filterEmpty}}' }}
+							(filtro)
+						{{ '{{/unless}}' }}
 					</dd>
 					<dd>
 						Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong>
