@@ -196,6 +196,11 @@ class Security extends Plugin
 				//Dbaseapi
 				'dbaseapi::searchcontacts' => array('contact' => array('read')),
 				'dbaseapi::getforms' => array('contact' => array('read')),
+				
+				//Dbaseapi -- Formularios
+				'dbaseapi::createforminformation' => array('form' => array('create')),
+				'dbaseapi::createformcontent' => array('form' => array('create')),
+				
                 //Contactlistapi
 				'contactlistapi::searchcontacts' => array('contact' => array('read')),
 				//Segmentapi

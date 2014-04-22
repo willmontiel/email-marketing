@@ -37,7 +37,7 @@
 					<label for="optin" class="col-sm-3 control-label">Doble Optin:</label>
 					<div class="col-md-7">
 						<label>
-							<input id="optin" type="checkbox" {{ '{{action "show_field_url_welcome" this}}' }}>
+							{{' {{input type="checkbox" id="optin" name="optin" checked=optin valueBinding="optin"}}' }}
 						</label>
 						<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "optin"}}' }}></span>
 					</div>
@@ -56,7 +56,7 @@
 					<label for="welcome" class="col-sm-3 control-label">Mensaje de Bienvenida:</label>
 					<div class="col-md-7">
 						<label>
-							<input id="welcome" type="checkbox">
+							{{' {{input type="checkbox" id="welcome" name="welcome" checked=welcome valueBinding="welcome"}}' }}
 						</label>
 						<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "welcome"}}' }}></span>
 					</div>
@@ -81,7 +81,7 @@
 							<button class="btn btn-sm btn-default extra-padding">Cancelar</button>
 						</div>
 						<div class="col-xs-4">
-							<button class="btn btn-sm btn-default btn-guardar extra-padding">Guardar</button>
+							<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "next" this}}' }}>Siguiente</button>
 						</div>
 					</div>
 				</div>
@@ -111,8 +111,8 @@
 			<div class="form-full-content">
 			
 			</div>
-			<div onclick="sendFormData()" class="btn btn-default btn-sm">
-				<span>Crear Formulario</span>
+			<div class="btn btn-default btn-sm">
+				<span {{ '{{action "sendData"}}' }}>Crear Formulario</span>
 			</div>
 		</div>
 		<div class="col-md-3">

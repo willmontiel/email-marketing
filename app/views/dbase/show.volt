@@ -8,6 +8,7 @@
 	{{ partial("partials/xeditable_select_view_partial") }}
 	{{ javascript_include('js/search-reference-pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
+	{{ javascript_include('js/mixin_save_form.js') }}
 	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
 
 	<script type="text/javascript">

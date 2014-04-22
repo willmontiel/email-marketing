@@ -171,8 +171,3 @@ FormEditor.prototype.persist = function() {
 	}
 	return obj;
 };
-
-function sendFormData() {
-	var obj = JSON.stringify(formeditor.persist());
-	
-}

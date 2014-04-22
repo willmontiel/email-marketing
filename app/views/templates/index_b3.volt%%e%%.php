@@ -57,7 +57,7 @@ a:7:{i:0;s:1169:"
 					<a class="navbar-brand" href="<?php echo $this->url->get(''); ?>">Email Sigma</a>
 				</div>
 
-				<!-- <p class="navbar-text">";s:12:"sectiontitle";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:16:"Titulo de pagina";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:60;}}i:2;s:2813:"</p> -->
+				<!-- <p class="navbar-text">";s:12:"sectiontitle";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:16:"Titulo de pagina";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:60;}}i:2;s:2839:"</p> -->
 				<div class="collapse navbar-collapse" id="nav-collapse-01">
 					<ul id="top-nav" class="nav navbar-nav navbar-right">
 						<li><a href="">Mi Cuenta</a></li>
@@ -77,6 +77,7 @@ a:7:{i:0;s:1169:"
 										<img class="menu-avatar" src="<?php echo $this->url->get('images/avatars/avatar1.jpg'); ?>" /> <span> <?php echo $this->userObject->username; ?> <i class="icon-caret-down"></i></span>
 										
 										<span class="badge badge-dark-red">
+											--><br /><!--
 											<?php $messages = $this->flashMessage->getMessages(); ?>
 											<?php if ($messages !== false) { ?>
 												<?php echo $this->length($messages); ?>
@@ -133,7 +134,7 @@ a:7:{i:0;s:1169:"
 						<!-- Inicio de contenido -->
 						";s:7:"content";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:46:"
 							<!-- Aqui va el contenido -->
-						";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:136;}}i:3;s:107:"
+						";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:137;}}i:3;s:107:"
 						<!-- Fin de contenido -->
 					</div>
 

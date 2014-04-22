@@ -93,4 +93,76 @@ class DbaseapiController extends ControllerBase
 	{
 		return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
 	}
+	
+	/**
+	 * 
+	 * @Post("/{idDbase:[0-9]+}/forms")
+	 */
+	public function createforminformationAction($idDbase)
+	{
+		$dbase = Dbase::findFirst(array(
+			'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idDbase,
+							2 => $this->user->account->idAccount)
+		));
+		
+		if (!$dbase) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la base de datos');
+		}
+		
+		$contentsraw = $this->request->getRawBody();
+		$contentsT = json_decode($contentsraw);
+//		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		try {
+			$wrapper = new FormWrapper();
+			$wrapper->setDbase($dbase);
+			$form = $wrapper->saveInformation($contentsT->form);
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, $e);	
+		}
+		
+		return $this->setJsonResponse(array('form' => $form), 201, 'Success');	
+	}
+	
+	/**
+	 * 
+	 * @Post("/{idDbase:[0-9]+}/forms/{idForm:[0-9]+}")
+	 */
+	public function createformcontentAction($idDbase, $idForm)
+	{
+		$dbase = Dbase::findFirst(array(
+			'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idDbase,
+							2 => $this->user->account->idAccount)
+		));
+		
+		$form = Form::findFirst(array(
+			'conditions' => 'idForm = ?1 AND idDbase = ?2',
+			'bind' => array(1 => $idForm,
+							2 => $idDbase)
+		));
+		
+		if (!$dbase && !$form) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró el formulario');
+		}
+		
+		$contentsraw = $this->request->getRawBody();
+		$contentsT = json_decode($contentsraw);
+//		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		try {
+			$wrapper = new FormWrapper();
+			$wrapper->setDbase($dbase);
+			$form = $wrapper->saveInformation($contentsT->form);
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, $e);	
+		}
+		
+		return $this->setJsonResponse(array('form' => $form), 201, 'Success');	
+	}
 }

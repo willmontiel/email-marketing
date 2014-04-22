@@ -1,5 +1,6 @@
 App.Form = DS.Model.extend({
 	name: DS.attr('string', { required: true }),
+	title: DS.attr( 'string' ), 
 	urlsuccess: DS.attr( 'string' ),
 	urlerror: DS.attr( 'string' ),
 	urlwelcome: DS.attr( 'string' ),
@@ -8,7 +9,8 @@ App.Form = DS.Model.extend({
 	welcome: DS.attr( 'boolean' ),
 	welcomemail: DS.attr( 'string' ),
 	notify: DS.attr( 'string' ),
-	notifymail: DS.attr( 'string' )
+	notifymail: DS.attr( 'string' ),
+	content: DS.attr( 'string' )
 });
 
 App.FormsIndexRoute = Ember.Route.extend({
@@ -19,14 +21,26 @@ App.FormsIndexRoute = Ember.Route.extend({
 
 App.FormsIndexController = Ember.ObjectController.extend({});
 
-App.FormsNewRoute = Ember.Route.extend({});
+App.FormsNewRoute = Ember.Route.extend({
+	
+});
 
 App.FormsNewController = Ember.ObjectController.extend({
-	init : function() {
-		$(function(){
-			formeditor.startEvents();
-		});
+//	something: function() {
+//		console.log(this.get('content'))
+//	}
+	sendData: function() {
+		console.log($('#form-title-name'))
+		var obj = JSON.stringify(formeditor.persist());
+		this.content.set('content', obj);
+		this.handleSavePromise(this.content.save(), 'forms.index', 'El Formulario se ha creado');
 	}
+});
+
+App.FormsNewView = Ember.View.extend({
+	didInsertElement: function() {
+		formeditor.startEvents();
+    }
 });
 
 App.FormsSetupRoute = Ember.Route.extend({
@@ -35,19 +49,15 @@ App.FormsSetupRoute = Ember.Route.extend({
 	}
 });
 
-App.FormsSetupController = Ember.ObjectController.extend({
-	init : function() {
-		$(function(){
-			$('#double-optin').on('click', function() {
-				
-			});
-		});
-	},
-	show_field_url_welcome: function(form) {
-		$('div.welcome-url-field').show();
-		$('#optin')[0].checked = ( $('#optin')[0].checked ) ? false : true ;
-		form.set('optin', $('#optin')[0].checked);
-	} ,
+App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
+	show_field_url_welcome: function() {
+		if( this.get('optin') ) {
+			$('div.welcome-url-field').show();
+		}
+		else {
+			$('div.welcome-url-field').hide();
+		}
+	}.observes('content.optin'),
 	show_editor: function(option) {
 		$('.form-setup-content').hide();
 		$('.create-email-spot').show();
@@ -74,7 +84,10 @@ App.FormsSetupController = Ember.ObjectController.extend({
 		$('.title-advanced-editor').empty();
 		$('.here-comes-frame').empty();
 		$('.create-email-spot').hide();
-		$('#btn-for-optin').hide();
+		$('.btn-form-email-creator-save').hide();
 		$('.form-setup-content').show();
+	},
+	next: function() {
+		this.handleSavePromise(this.content.save(), 'forms.new', 'El Formulario se ha creado');
 	}
 });
