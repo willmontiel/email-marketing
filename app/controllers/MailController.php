@@ -241,8 +241,10 @@ class MailController extends ControllerBase
 			}
 			$form = new MailForm($mailExist);
 			$netwids = json_decode($mailExist->socialnetworks);
-			$this->view->setVar('fbids', $netwids->facebook);
-			$this->view->setVar('twids', $netwids->twitter);
+			$fbids = (isset($netwids->facebook)) ? $netwids->facebook : array();
+			$twids = (isset($netwids->twitter)) ? $netwids->twitter : array();
+			$this->view->setVar('fbids', $fbids);
+			$this->view->setVar('twids', $twids);
 			$this->view->setVar('mail', $mailExist);
 		}
 		else {
