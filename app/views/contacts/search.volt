@@ -24,59 +24,46 @@
 			{# /Menu de navegacion pequeño #}
 
 			<div class="row">
-				<div class="span8 offset2">
-					<div class="box">
-						<div class="box-content">
-							<form>
-								<div class="padded">
-									<div class="title-search">Buscar Contactos</div>
-									<div class="input-prepend">
-										{{' {{view Ember.TextField valueBinding="searchText" onEvent="enter" action=search type="text" placeholder="Dirección de correo, nombre, apellido, dominio..." autofocus="autofocus"}} '}}
-									</div>
-								</div>
-								<div class="form-actions" style="text-align: center !important;">
-									{#<button class="btn btn-default" {{ '{{action reset this}}' }}><i class="icon-bolt"></i> Limpiar</button>#}
-									<button class="btn btn-lightblue" {{ '{{action search this}}' }}><i class="icon-search"></i> Buscar</button>
-									{{ '{{#if totalrecords}}' }}
-										<button {{ '{{action seeMore this}}' }} class="btn btn-default">Ver más</button>
-									{{ '{{/if}}' }}
-								</div>
-							</form>
+				<h4 class="sectiontitle">Búsqueda global de contactos</h4>
+					<form class="form-horizontal" role="form">
+						<div class="col-sm-4">
+							{{' {{view Ember.TextField valueBinding="searchText" onEvent="enter" action=search type="text" placeholder="Dirección de correo, nombre, apellido, dominio..." autofocus="autofocus" class="form-control"}} '}}
 						</div>
-					</div>	
+						<div class="form-actions" style="text-align: center !important;">
+							{#<button class="btn btn-default" {{ '{{action reset this}}' }}><i class="icon-bolt"></i> Limpiar</button>#}
+							<button class="btn btn-lightblue" {{ '{{action search this}}' }}><i class="icon-search"></i> Buscar</button>
+							{{ '{{#if totalrecords}}' }}
+								<button {{ '{{action seeMore this}}' }} class="btn btn-default">Ver más</button>
+							{{ '{{/if}}' }}
+						</div>
+					</form>
 				</div>
 			</div>
 			<div class="row">
-				<div class="span12">
-					<div class="box">
-						<div class="box-content">
-							<table class="table table-normal">
-								<thead>
-									<tr>
-										<td>Dirección de correo</td>
-										<td>Nombre</td>
-										<td>Apellido</td>
-										<td>Base de datos</td>
-									</tr>
-								</thead>
-								<tbody>
-									{{' {{#each controller}} '}}
-										<tr>
-											<td><b><a href="{{url('dbase/show')}}/{{ '{{unbound idDbase}}' }}#/contacts/show/{{ '{{unbound id}}' }}" target="_blank">{{'{{email}}'}}</a></b></td>
-											<td>{{'{{name}}'}}</td>
-											<td>{{'{{lastName}}'}}</td>
-											<td>{{'{{dbase}}'}}</td>	
-										</tr>
-									{{' {{else}} ' }}
-										<tr>
-											<td colspan="3"><b>No se encontrarón coincidencias</b></td>
-										</tr>
-									{{' {{/each}} ' }}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
+				<table class="table table-normal">
+					<thead>
+						<tr>
+							<td>Dirección de correo</td>
+							<td>Nombre</td>
+							<td>Apellido</td>
+							<td>Base de datos</td>
+						</tr>
+					</thead>
+					<tbody>
+						{{' {{#each controller}} '}}
+							<tr>
+								<td><b><a href="{{url('dbase/show')}}/{{ '{{unbound idDbase}}' }}#/contacts/show/{{ '{{unbound id}}' }}" target="_blank">{{'{{email}}'}}</a></b></td>
+								<td>{{'{{name}}'}}</td>
+								<td>{{'{{lastName}}'}}</td>
+								<td>{{'{{dbase}}'}}</td>	
+							</tr>
+						{{' {{else}} ' }}
+							<tr>
+								<td colspan="3"><b>No se encontrarón coincidencias</b></td>
+							</tr>
+						{{' {{/each}} ' }}
+					</tbody>
+				</table>
 			</div>
 		</script>
 	</div>

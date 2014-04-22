@@ -12,7 +12,7 @@
 			que esté listada abajo, esta recibiendo campañas de envío.
 		</p>
 		<div class="col-md-3 col-md-offset-8">
-			{{ '{{#link-to "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger btn-sm extra-padding"}}Bloquear un correo electronico{{/link-to}}' }}
+			{{ '{{#link-to "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger btn-delete btn-sm extra-padding"}}Bloquear un correo electronico{{/link-to}}' }}
 		</div>
 	</div>
 	<div class="space"></div>

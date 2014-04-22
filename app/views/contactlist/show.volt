@@ -243,7 +243,7 @@
 			</div>
 		</script>
 		
-		<script type="text/x-handlebars" data-template-name="contacts/new">
+	<script type="text/x-handlebars" data-template-name="contacts/new">
 		<div class="row">
 			{{ '{{#if App.errormessage }}' }}
 				<div class="alert alert-message alert-error">
@@ -316,262 +316,213 @@
 			</div>
 		</div>
 
-		</script>
-		<script type="text/x-handlebars" data-template-name="contacts/newbatch">
-			<div class="row">
-				<h4 class="sectiontitle">Crear contactos rápidamente</h4>
-				<div class="col-md-5">
-					<form method="post" action="{{url('contacts/newbatch')}}/{{datalist.idContactlist}}" role="form">
-						<div class="form-group">
-							<label for="info-cont" class="control-label">Información de los contactos:</label>
-							<textarea name="arraybatch" class="form-control sm-textarea" rows="3"></textarea>
-						</div>
-						<div class="form-actions pull-right">
-							<div class="row">
-								<div class="col-xs-6">
-									<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
-								</div>
-								<div class="col-xs-6">
-									<button class="btn btn-sm btn-default btn-guardar extra-padding">Guardar</button>
-								</div>
+	</script>
+	<script type="text/x-handlebars" data-template-name="contacts/newbatch">
+		<div class="row">
+			<h4 class="sectiontitle">Crear contactos rápidamente</h4>
+			<div class="col-md-5">
+				<form method="post" action="{{url('contacts/newbatch')}}/{{datalist.idContactlist}}" role="form">
+					<div class="form-group">
+						<label for="info-cont" class="control-label">Información de los contactos:</label>
+						<textarea name="arraybatch" class="form-control sm-textarea" rows="3"></textarea>
+					</div>
+					<div class="form-actions pull-right">
+						<div class="row">
+							<div class="col-xs-6">
+								<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
+							</div>
+							<div class="col-xs-6">
+								<button class="btn btn-sm btn-default btn-guardar extra-padding">Guardar</button>
 							</div>
 						</div>
-					</form>
-				</div>
-				<div class="col-md-6">
-					<div class="alert alert-success">
-						<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block" alt="" />
-						<div class="space"></div>
-						<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
-						<p>Cree hasta 30 contactos por este medio</p>
 					</div>
+				</form>
+			</div>
+			<div class="col-md-6">
+				<div class="alert alert-success">
+					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block" alt="" />
+					<div class="space"></div>
+					<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
+					<p>Cree hasta 30 contactos por este medio</p>
 				</div>
 			</div>
-		</script>
-		<script type="text/x-handlebars" data-template-name="contacts/delete">
-			<div class="row">
-				<div class="box">
-					<div class="box-header">
-						<div class="title">
-							Eliminar un contacto
-						</div>
-					</div>
-					<div class="box-content padded">
-						<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminará por completo de la 
-						Base de Datos</p>
-						<p>¿Esta seguro que desea Eliminar el Contacto <strong>{{'{{name}}'}} ?</strong></p>
-						{{ '{{#if errors.errormsg}}' }}
-							<div class="alert alert-error">
-								{{ '{{errors.errormsg}}' }}
-							</div>
-						{{ '{{/if}}' }}
-						<button {{'{{action delete this}}'}} class="btn btn-danger">Eliminar</button>
-						<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-					</div>
-				</div>
+		</div>
+	</script>
+
+	<script type="text/x-handlebars" data-template-name="contacts/delete">
+		<div class="row">
+			<h4 class="sectiontitle">Eliminar un contacto</h4>
+								
+							
+			<div class="bs-callout bs-callout-danger">
+				<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminará por completo de la 
+				Base de Datos</p>
+				<p>¿Esta seguro que desea Eliminar el Contacto <strong>{{'{{name}}'}} ?</strong></p>
 			</div>
-		</script>
+			{{ '{{#if errors.errormsg}}' }}
+				<div class="alert alert-error">
+					{{ '{{errors.errormsg}}' }}
+				</div>
+			{{ '{{/if}}' }}
+			<button {{'{{action delete this}}'}} class="btn btn-danger btn-sm">Eliminar</button>
+			<button class="btn btn-default btn-sm" {{ '{{action cancel this}}' }}>Cancelar</button>
+		</div>
+	</script>
 		
-		<script type="text/x-handlebars" data-template-name="contacts/import">
+	<script type="text/x-handlebars" data-template-name="contacts/import">
 		<div class="row">
 			<h4 class="sectiontitle">Importar contactos desde archivo .csv a <span>Lista de Iván</span></h4>
-			<div class="col-md-6">
-				<div class="">
-					<img src="{{url('')}}b3/images/file-choice.png" class="" alt="" />
-				</div>
+			<div class="">
+				<img src="{{url('')}}b3/images/step1-import.png" class="center-block" alt="" />
 			</div>
 			<div class="col-md-5">
 				<form method="post" class="form-horizontal"  action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data" role="form">
 					<div class="form-group">
-							<input name="importFile" type="file">
-							<input type="hidden" name="idcontactlist" value={{datalist.idContactlist}}>
-						</div>
-						<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default">Cancelar</a>
-						{{submit_button('class': "btn btn-default btn-sm", "Cargar")}}
-					</form>
-			</div>
-
-				<div class="well relative span8">
-					<p>
-						Aqui puede importar contactos desde un archivo 
-						<a rel="tooltip" data-placement="right" data-original-title="La extensión de archivo CSV significa Comma Separated Values (Valores separados por comas). El formato es utilizado en muchos programas de bases de datos, hojas de cálculo y gestores de contactos para almacenar listas de información. Como un archivo de texto, el formato es ampliamente compatible">
-							.csv
-						</a>
-						Haga clic en el botón más (+) elija el archivo .csv que desea cargar y a continuación haga clic en el botón cargar, o en cancelar si
-						no desea continuar.
-					</p>
-				</div>
-				<div class="span4">
-					<div class="well relative span12">
-						<div class="easy-pie-step span6"  data-percent="50"><span>1/2</span></div>
-						<span class="triangle-button blue"><i class="icon-lightbulb"></i></span>
-						<div class="span7"><strong>Primer paso: </strong><br />
-						Seleccionar el archivo .csv que contiene los contactos
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					{{ flashSession.output() }}
-					<div class="accordion-heading">
-					  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-						Haga clic aqui para más información
-					  </a>
-					</div>
-					<div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
-						<div class="accordion-inner box">
-							<p>
-								Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc 
-								permiten crear y editar archivos CSV fácilmente.
-							</p>
-							<p>
-								El formato de este archivo debe ser una tabla con una cabecera o línea de título 
-								(No es obligatorio) que defina los campos que contiene, por ejemplo: nombre, dirección de correo electrónico, etc. 
-								Si desea cargar un archivo existente, asegurese de que siga los criterios que le mostraremos 
-								a continuación, de lo contrario, si desea crear un nuevo archivo y necesita alguna orientación,
-								a continuación le ofrecemos algunas pautas que le servirán como guía:
-							</p>
-							<ul>
-								<li>El archivo debe incluir al menos un campo para la dirección de correo electrónico, por ejemplo:</li>
-							</ul>
-							<br>
-							<div class="row">
-								<div class="span6">
-									<div class="box">
-										<div class="box-header">
-											<span class="title">Archivo .csv con cabecera</span>				
-										</div>
-										<div class="box-content">
-											<table class="table table-normal">
-												<thead></thead>
-												<tbody>
-													<tr class="status-pending">
-														<td>Cabecera</td>
-														<td><strong>Email</strong></td>
-													</tr>
-													<tr class="status-pending">
-														<td>Datos de contactos</td>
-														<td>micorreo@noreply.com</td>
-													</tr>
-													<tr class="status-pending">
-														<td></td>
-														<td>micorreo2@noreply.com</td>
-													</tr>
-												</tbody>
-											</table>
-									  </div>
-									</div>
-								</div>
-								<div class="span6">
-									<div class="box">
-										<div class="box-header">
-											<span class="title">Archivo .csv sin cabecera</span>				
-										</div>
-										<div class="box-content">
-											<table class="table table-normal">
-												<thead></thead>
-												<tbody>
-													<tr class="status-pending">
-													  <td>Datos de contactos</td>
-													  <td>micorreo@noreply.com</td>
-													</tr>
-													<tr class="status-pending">
-													  <td></td>
-													  <td>micorreo2@noreply.com</td>
-													</tr>
-												</tbody>
-											</table>
-									  </div>
-									</div>
-								</div>
-							</div>
-							<ul>
-								<li>
-									Si desea ingresar mas campos, y no desea poner cabecera puede separar por comas (,), punto 
-									y coma (;), o barras (/),  cada uno de los campos, luego la aplicación se encargará de
-									separarlos, eso si asegurese de cumplir los criterios, por ejemplo:
-								</li>
-							</ul>
-							<div class="row">
-								<div class="span6">
-									<div class="box">
-										<div class="box-header">
-											<span class="title">Archivo .csv con cabecera</span>				
-										</div>
-										<div class="box-content">
-											<table class="table table-normal">
-												<thead></thead>
-												<tbody>
-													<tr class="status-pending">
-														<td>Cabecera</td>
-														<td><strong>Email, Nombre, Apellido</strong></td>
-													</tr>
-													<tr class="status-pending">
-													  <td>Datos de contactos</td>
-													  <td>micorreo@noreply.com, Antonio, Lopez</td>
-													</tr>
-													<tr class="status-pending">
-													  <td></td>
-													  <td>micorreo2@noreply.com, Luz María, Rodriguez</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-								<div class="span6">
-									<div class="box">
-										<div class="box-header">
-											<span class="title">Archivo .csv sin cabecera</span>				
-										</div>
-										<div class="box-content">
-											<table class="table table-normal">
-												<thead></thead>
-												<tbody>
-													<tr class="status-pending">
-													  <td>Datos de contactos</td>
-													  <td>micorreo@noreply.com, Antonio, Caicedo</td>
-													</tr>
-													<tr class="status-pending">
-													  <td></td>
-													  <td>micorreo2@noreply.com, Luz María, Rodriguez</td>
-													</tr>
-												</tbody>
-											</table>
-									  </div>
-									</div>
-								</div>
-							</div>
-							<p>
-								Una vez que haya introducido todos los contactos en una tabla, guarde el documento y seleccione CSV (delimitado por comas) 
-								(*.csv) como el tipo de archivo que desea guardar.
-								Una vez que haya guardado el archivo, y este seguro de haber seguido los criterios anteriores puede pasar a importar sus contactos a la aplicación.
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<br><br>
-			<div class="row">
-				<div class="span6">
-					<form method="POST" action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data">
-						<input name="importFile" type="file"><br /><br />
+						<button for="import-file-btn" class="btn btn-default extra-padding">Elija el archivo a importar</button>
+						<input id="import-file-btn" name="importFile" type="file" class="" style="display: none" >
 						<input type="hidden" name="idcontactlist" value={{datalist.idContactlist}}>
-						<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default">Cancelar</a>
-						{{submit_button('class': "btn btn-blue", "Cargar")}}
-					</form>
+					</div>
+					<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default">Cancelar</a>
+					{{submit_button('class': "btn btn-default btn-sm", "Cargar")}}
+				</form>
+			</div>
+{#
+			<div class="well relative span8">
+				<p>
+					Aqui puede importar contactos desde un archivo 
+					<a rel="tooltip" data-placement="right" data-original-title="La extensión de archivo CSV significa Comma Separated Values (Valores separados por comas). El formato es utilizado en muchos programas de bases de datos, hojas de cálculo y gestores de contactos para almacenar listas de información. Como un archivo de texto, el formato es ampliamente compatible">
+						.csv
+					</a>
+					Haga clic en el botón más (+) elija el archivo .csv que desea cargar y a continuación haga clic en el botón cargar, o en cancelar si
+					no desea continuar.
+				</p>
+			</div>
+
+			<div class="">
+				<div class="well relative span12">
+					<div class="easy-pie-step span6"  data-percent="50"><span>1/2</span></div>
+					<span class="triangle-button blue"><i class="icon-lightbulb"></i></span>
+					<div class="span7"><strong>Primer paso: </strong><br />
+					Seleccionar el archivo .csv que contiene los contactos
+					</div>
 				</div>
 			</div>
-		</script>
+#}	
+		</div>
 
-		<script type="text/x-handlebars" data-template-name="contacts/newimport">
-			<div class="row">
-				<div class="span8">
+		<div class="row">
+			{{ flashSession.output() }}
+			<div class="accordion-heading">
+
+			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+				Haga clic aqui para más información
+			  </a>
+			</div>
+			<div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
+				<div class="accordion-inner box">
+					<p>
+						Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc 
+						permiten crear y editar archivos CSV fácilmente.
+					</p>
+					<p>
+						El formato de este archivo debe ser una tabla con una cabecera o línea de título 
+						(No es obligatorio) que defina los campos que contiene, por ejemplo: nombre, dirección de correo electrónico, etc. 
+						Si desea cargar un archivo existente, asegurese de que siga los criterios que le mostraremos 
+						a continuación, de lo contrario, si desea crear un nuevo archivo y necesita alguna orientación,
+						a continuación le ofrecemos algunas pautas que le servirán como guía:
+					</p>
+					<ul>
+						<li>El archivo debe incluir al menos un campo para la dirección de correo electrónico, por ejemplo:</li>
+					</ul>
 					<div class="row">
-						<div class="span7">
-						{{' {{#with App.records}} '}}
-									{{' {{#each row1}} '}}
+						<h4 class="sectiontitle">Archivo .csv con cabecera</h4>				
+						<table class="table table-striped table-contacts">
+							<thead></thead>
+							<tbody>
+								<tr class="status-pending">
+									<td>Cabecera</td>
+									<td><strong>Email</strong></td>
+								</tr>
+								<tr class="status-pending">
+									<td>Datos de contactos</td>
+									<td>micorreo@noreply.com</td>
+								</tr>
+								<tr class="status-pending">
+									<td></td>
+									<td>micorreo2@noreply.com</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<h4 class="sectiontitle">Archivo .csv sin cabecera</h4>				
+				<table class="table table-striped table-contacts">
+					<thead></thead>
+					<tbody>
+						<tr class="status-pending">
+						  <td>Datos de contactos</td>
+						  <td>micorreo@noreply.com</td>
+						</tr>
+						<tr class="status-pending">
+						  <td></td>
+						  <td>micorreo2@noreply.com</td>
+						</tr>
+					</tbody>
+				</table>
+				<ul>
+					<li>
+						Si desea ingresar mas campos, y no desea poner cabecera puede separar por comas (,), punto 
+						y coma (;), o barras (/),  cada uno de los campos, luego la aplicación se encargará de
+						separarlos, eso si asegurese de cumplir los criterios, por ejemplo:
+					</li>
+				</ul>
+				<div class="row">
+					<h4 class="sectiontitle">Archivo .csv con cabecera</h4>				
+					<table class="table table-striped table-contacts">
+						<thead></thead>
+						<tbody>
+							<tr class="status-pending">
+								<td>Cabecera</td>
+								<td><strong>Email, Nombre, Apellido</strong></td>
+							</tr>
+							<tr class="status-pending">
+							  <td>Datos de contactos</td>
+							  <td>micorreo@noreply.com, Antonio, Lopez</td>
+							</tr>
+							<tr class="status-pending">
+							  <td></td>
+							  <td>micorreo2@noreply.com, Luz María, Rodriguez</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<h4 class="sectiontitle">Archivo .csv sin cabecera</h4>				
+				<table class="table table-striped table-contacts">
+					<thead></thead>
+					<tbody>
+						<tr class="status-pending">
+						  <td>Datos de contactos</td>
+						  <td>micorreo@noreply.com, Antonio, Caicedo</td>
+						</tr>
+						<tr class="status-pending">
+						  <td></td>
+						  <td>micorreo2@noreply.com, Luz María, Rodriguez</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>
+					Una vez que haya introducido todos los contactos en una tabla, guarde el documento y seleccione CSV (delimitado por comas) 
+					(*.csv) como el tipo de archivo que desea guardar.
+					Una vez que haya guardado el archivo, y este seguro de haber seguido los criterios anteriores puede pasar a importar sus contactos a la aplicación.
+				</p>
+			</div>
+		</div>
+	</script>
+
+{#		<script type="text/x-handlebars" data-template-name="contacts/newimport">
+			<div class="row">
+				{{' {{#with App.records}} '}}
+				{{' {{#each row1}} '}}
 										<tr>
 											<td>{{' {{this}} '}}</td>
 											<td>
@@ -638,5 +589,5 @@
 				</div>
 			</div>
 		</script>
-	</div>
+#}
 {% endblock %}

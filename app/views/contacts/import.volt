@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
@@ -56,24 +56,28 @@
 <div id="emberAppImportContainer">
 	<script type="text/x-handlebars" data-template-name="contacts/index">
 		<div class="row">
-			<div class="span8">
-				<div class="well relative">
-					Esta es la segunda parte del proceso, aqui podrá relacionar los datos del archivo que acaba de importar, con los
-					campos obligatorios (direccion de correo electrónico), y los campos personalizados que ha creado en cada base de datos,
-					la previsualización de como queda la relacion la podrá ver en la parte superior derecha de la pantalla.
-				</div>
+			<h4 class="sectiontitle">Importar contactos desde archivo .csv a <span>Lista de Iván</span></h4>
+			<div class="">
+				<img src="{{url('')}}b3/images/step2-import.png" class="center-block" alt="" />
 			</div>
-			<div class="span4">
-				<div class="well relative span12">
-					<div class="easy-pie-step span6"  data-percent="100"><span>2/2</span></div>
-					<span class="triangle-button blue"><i class="icon-lightbulb"></i></span>
-					<div class="span7"><strong>Segundo paso: </strong><br />
-						Elegir y relacionar los campos a importar
-					</div>
-				</div>
+{#
+			<div class="well relative">
+				Esta es la segunda parte del proceso, aqui podrá relacionar los datos del archivo que acaba de importar, con los
+				campos obligatorios (direccion de correo electrónico), y los campos personalizados que ha creado en cada base de datos,
+				la previsualización de como queda la relacion la podrá ver en la parte superior derecha de la pantalla.
+			</div>
+#}
+		</div>
+{#
+		<div class="well relative span12">
+			<div class="easy-pie-step span6"  data-percent="100"><span>2/2</span></div>
+			<span class="triangle-button blue"><i class="icon-lightbulb"></i></span>
+			<div class="span7"><strong>Segundo paso: </strong><br />
+				Elegir y relacionar los campos a importar
 			</div>
 		</div>
-		<form method="POST" action="{{url('contacts/processfile/')}}{{idContactlist~'/'~idImportfile}}">
+#}
+	<form method="POST" action="{{url('contacts/processfile/')}}{{idContactlist~'/'~idImportfile}}">
 		<div class="row">
 			<div class="span6">
 				<div class="box">

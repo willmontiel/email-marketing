@@ -258,12 +258,11 @@
 
 <script type="text/x-handlebars" data-template-name="segments/delete">
 	<div class"row">
-		<h4 class="sectiontitle">Borrar segmento</h4>
-		<p>
-			Esta a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos,
-			pero no los contactos .Si esta seguro que desea continuar haga clic en botón eliminar de lo contrario
-			haga en clic en cancelar.
-		</p>
+		<h4 class="sectiontitle">Eliminar un segmento</h4>
+		<div class="bs-callout bs-callout-danger">
+			<p>Está a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos, pero no los contactos .Si está seguro que desea continuar haga clic en el botón eliminar, de lo contrario haga en clic en cancelar.</p>
+		</div>
+		
 		<button class="btn btn-default btn-sm" {{ '{{action cancel this}}' }}>Cancelar</button>
 		<button class="btn btn-delete btn-sm" {{ '{{action delete this}}' }}>Eliminar</button>
 	</div>
