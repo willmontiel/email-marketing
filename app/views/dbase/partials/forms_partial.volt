@@ -10,50 +10,55 @@
 				<div class="form-group">
 					<label for="name" class="col-sm-3 control-label">* Nombre:</label>
 					<div class="col-md-6">
-						<input id="name" class="form-control" placeholder="Nombre" type="text" required="required">
+						{#<input id="name" class="form-control" placeholder="Nombre" type="text" required="required">#}
+						{{'{{view Ember.TextField valueBinding="name" id="name" class="form-control" placeholder="Nombre"}}'}}
 					</div>
 				</div>
 					
 				{#URLs de Redireccionamiento#}
 					
 				<div class="form-group">
-					<label for="url-form" class="col-sm-3 control-label">* URL:</label>
-					<div class="col-md-6">
-						<input id="url-form" class="form-control" placeholder="URL" type="text" required="required">
-					</div>
-				</div>
-				<div class="form-group">
 					<label for="url-success" class="col-sm-3 control-label">* URL de Exito:</label>
 					<div class="col-md-6">
-						<input id="url-success" class="form-control" placeholder="URL de Exito" type="text" required="required">
+						{#<input id="url-success" class="form-control" placeholder="URL de Exito" type="text" required="required">#}
+						{{'{{view Ember.TextField valueBinding="urlsuccess" id="url-success" class="form-control" placeholder="URL de Exito"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="url-error" class="col-sm-3 control-label">* URL de Error:</label>
 					<div class="col-md-6">
-						<input id="url-error" class="form-control" placeholder=" URL de Error" type="text" required="required">
+						{#<input id="url-error" class="form-control" placeholder=" URL de Error" type="text" required="required">#}
+						{{'{{view Ember.TextField valueBinding="urlerror" id="url-error" class="form-control" placeholder="URL de Error"}}'}}
 					</div>
 				</div>
 					
 				{#Doble Optin#}
 				<div class="form-group">
-					<label for="double-optin" class="col-sm-3 control-label">Doble Optin:</label>
+					<label for="optin" class="col-sm-3 control-label">Doble Optin:</label>
 					<div class="col-md-7">
 						<label>
-							<input id="double-optin" type="checkbox">
+							<input id="optin" type="checkbox" {{ '{{action "show_field_url_welcome" this}}' }}>
 						</label>
-						<span class="glyphicon glyphicon-envelope"></span>
+						<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "optin"}}' }}></span>
+					</div>
+				</div>
+				
+				<div class="form-group welcome-url-field">
+					<label for="url-welcome" class="col-sm-3 control-label">* URL de Bienvenida:</label>
+					<div class="col-md-6">
+						{#<input id="url-welcome" class="form-control" placeholder="URL de Bienvenida" type="text" required="required">#}
+						{{'{{view Ember.TextField valueBinding="urlwelcome" id="url-welcome" class="form-control" placeholder="URL de Bienvenida"}}'}}
 					</div>
 				</div>
 					
 				{#Mensaje de Bienvenida#}
 				<div class="form-group">
-					<label for="welcome-msj" class="col-sm-3 control-label">Mensaje de Bienvenida:</label>
+					<label for="welcome" class="col-sm-3 control-label">Mensaje de Bienvenida:</label>
 					<div class="col-md-7">
 						<label>
-							<input id="welcome-msj" type="checkbox">
+							<input id="welcome" type="checkbox">
 						</label>
-						<span class="glyphicon glyphicon-envelope"></span>
+						<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "welcome"}}' }}></span>
 					</div>
 				</div>
 					
@@ -61,10 +66,11 @@
 				<div class="form-group">
 					<label for="notify" class="col-sm-3 control-label">Notificar a: </label>
 					<div class="col-md-6">
-						<input id="notify" class="form-control" placeholder="Direccion de correo" type="text">
+						{#<input id="notify" class="form-control" placeholder="Direccion de correo" type="text">#}
+						{{'{{view Ember.TextField valueBinding="notify" id="notify" class="form-control" placeholder="Direccion de correo"}}'}}
 					</div>
 					<div class="col-md-1">
-						<span class="glyphicon glyphicon-envelope"></span>
+						<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "notify"}}' }} ></span>
 					</div>
 				</div>
 				
@@ -83,7 +89,17 @@
 			</form>
 		</div>
 	</div>
-	<div class="here-comes-frame">
+	<div class="create-email-spot">
+		<div class="title-advanced-editor">
+		</div>
+		<div class="here-comes-frame">
+		</div>
+		<div class="advanced-editor-buttons pull-right">
+			<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cleanEditor"}}' }} >Cancelar</button>
+			<button id="btn-for-optin" class="btn btn-sm btn-default btn-guardar extra-padding btn-form-email-creator-save" {{ '{{action "create_optin_mail" this}}' }} >Guardar</button>
+			<button id="btn-for-welcome" class="btn btn-sm btn-default btn-guardar extra-padding btn-form-email-creator-save" {{ '{{action "create_welcome_mail" this}}' }} >Guardar</button>
+			<button id="btn-for-notify" class="btn btn-sm btn-default btn-guardar extra-padding btn-form-email-creator-save" {{ '{{action "create_notify_mail" this}}' }} >Guardar</button>
+		</div>
 	</div>
 </script>
 

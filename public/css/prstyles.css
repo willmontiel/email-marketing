@@ -750,3 +750,6 @@ span.required {
 .field-zone-name {
 	word-break: break-word;
 }
+.create-email-spot, button.btn-form-email-creator-save, div.welcome-url-field {
+	display: none;
+}
