@@ -22,7 +22,7 @@ class ScheduledmailController extends ControllerBase
 			$account = "";
 		}
 		else {
-			$account = "idAccount = {$this->user->account->idAccount} AND deleted = 0";
+			$account = "idAccount = {$this->user->account->idAccount} AND deleted = 0 AND ";
 		}
 		
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
