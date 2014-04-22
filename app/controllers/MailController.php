@@ -499,8 +499,7 @@ class MailController extends ControllerBase
 
 				if ($objMail) {
 					$text = $objMail->plainText;
-					$objMailContent = 
-					$this->view->setVar('objMail', $objMail->content);
+					$objMailContent = $objMail->content;
 				}
 				else  {
 					$text = null;
