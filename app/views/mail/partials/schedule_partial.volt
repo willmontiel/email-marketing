@@ -40,7 +40,7 @@
 									<div id="programmer" style="display: block">			
 								{{ '{{/if}}' }}
 									<br />
-									{{' {{ view App.DateTimePicker valueBinding="scheduleDate" id="scheduleDate"}}' }}
+									{{' {{ view App.DateTimePicker}}' }}
 								</div>
 							</div>
 						</div>
