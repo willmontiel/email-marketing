@@ -30,6 +30,7 @@ App.Router.map(function() {
   this.resource('forms', function(){
 	   this.route('new', { path: '/editor/:form_id'});
 	   this.route('setup');
+	   this.route('index');
   });
 });
 

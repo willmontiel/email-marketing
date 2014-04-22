@@ -17,14 +17,14 @@ class FormWrapper extends BaseWrapper
 		$form = new Form();
 		$form->idDbase = $this->dbase->idDbase;
 		$form->name = $content->name;
-		$form->title = '';
-		$form->content = '';
+		$form->title = $content->title;
+		$form->content = $content->content;
 		$form->urlSuccess = $content->urlsuccess;
 		$form->urlError = $content->urlerror;
 		$form->urlWelcome = $content->urlwelcome;
-		$form->optin = $content->optin;
+		$form->optin = ($content->optin)?'Si':'No';
 		$form->optinMail = $content->optinmail;
-		$form->welcome = $content->welcome;
+		$form->welcome = ($content->welcome)?'Si':'No';
 		$form->welcomeMail = $content->welcomemail;
 		$form->notify = $content->notify;
 		$form->notifyMail = $content->notifymail;
@@ -40,10 +40,21 @@ class FormWrapper extends BaseWrapper
 		
 	}
 	
-	public function saveFormContent(Form $form, $content)
+	public function updateFormContent(Form $form, $content)
 	{
+		$form->idDbase = $this->dbase->idDbase;
+		$form->name = $content->name;
 		$form->title = $content->title;
 		$form->content = $content->content;
+		$form->urlSuccess = $content->urlsuccess;
+		$form->urlError = $content->urlerror;
+		$form->urlWelcome = $content->urlwelcome;
+		$form->optin = ($content->optin)?'Si':'No';
+		$form->optinMail = $content->optinmail;
+		$form->welcome = ($content->welcome)?'Si':'No';
+		$form->welcomeMail = $content->welcomemail;
+		$form->notify = $content->notify;
+		$form->notifyMail = $content->notifymail;
 		
 		if (!$form->save()) {
 			foreach ($form->getMessages() as $message) {
@@ -65,9 +76,9 @@ class FormWrapper extends BaseWrapper
 		$jsonObject['urlsuccess'] = $phObject->urlSuccess;
 		$jsonObject['urlerror'] = $phObject->urlError;
 		$jsonObject['urlwelcome'] = $phObject->urlWelcome;
-		$jsonObject['optin'] = $phObject->optin;
+		$jsonObject['optin'] = ($phObject->optin=='Si');
 		$jsonObject['optinmail'] = $phObject->optinMail;
-		$jsonObject['welcome'] = $phObject->welcome;
+		$jsonObject['welcome'] = ($phObject->welcome=='Si');
 		$jsonObject['welcomemail'] = $phObject->welcomeMail;
 		$jsonObject['notify'] = $phObject->notify;
 		$jsonObject['notifymail'] = $phObject->notifyMail;

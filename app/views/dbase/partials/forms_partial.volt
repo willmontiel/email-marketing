@@ -1,5 +1,12 @@
 <script type="text/x-handlebars" data-template-name="forms/index">
-	
+	<div class="row">
+		<h4 class="sectiontitle">Formularios</h4>
+			{{'{{#each model}}'}}
+				<div>
+					{{'{{name}}'}}
+				</div>
+			{{'{{/each}}'}}
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/setup">

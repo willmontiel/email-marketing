@@ -91,6 +91,27 @@ class DbaseapiController extends ControllerBase
 	 */
 	public function getformsAction($idDbase)
 	{
+		$dbase = Dbase::findFirst(array(
+			'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idDbase,
+							2 => $this->user->account->idAccount)
+		));
+		
+		if (!$dbase) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la base de datos');
+		}
+		
+		$formlist = array();
+		
+		$forms = Form::findByIdDbase($dbase->idDbase);
+		
+		if ($forms) {
+			$wrapper = new FormWrapper();
+			foreach ($forms as $form) {
+				$formlist[] = $wrapper->fromPObjectToJObject($form);
+			}
+			return $this->setJsonResponse(array('forms' => $formlist), 201, 'Success');
+		}
 		return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
 	}
 	
@@ -129,7 +150,7 @@ class DbaseapiController extends ControllerBase
 	
 	/**
 	 * 
-	 * @Post("/{idDbase:[0-9]+}/forms/{idForm:[0-9]+}")
+	 * @Put("/{idDbase:[0-9]+}/forms/{idForm:[0-9]+}")
 	 */
 	public function createformcontentAction($idDbase, $idForm)
 	{
@@ -156,13 +177,13 @@ class DbaseapiController extends ControllerBase
 		try {
 			$wrapper = new FormWrapper();
 			$wrapper->setDbase($dbase);
-			$form = $wrapper->saveInformation($contentsT->form);
+			$result = $wrapper->updateFormContent($form, $contentsT->form);
 		}
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, $e);	
 		}
 		
-		return $this->setJsonResponse(array('form' => $form), 201, 'Success');	
+		return $this->setJsonResponse(array('form' => $result), 201, 'Success');	
 	}
 }

@@ -25,14 +25,11 @@ App.FormsNewRoute = Ember.Route.extend({
 	
 });
 
-App.FormsNewController = Ember.ObjectController.extend({
-//	something: function() {
-//		console.log(this.get('content'))
-//	}
+App.FormsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	sendData: function() {
-		console.log($('#form-title-name'))
 		var obj = JSON.stringify(formeditor.persist());
 		this.content.set('content', obj);
+		this.content.set('title', $('#form-title-name').text());
 		this.handleSavePromise(this.content.save(), 'forms.index', 'El Formulario se ha creado');
 	}
 });
