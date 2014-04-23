@@ -88,3 +88,11 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 		this.handleSavePromise(this.content.save(), 'forms.new', 'El Formulario se ha creado');
 	}
 });
+
+App.FormsEditRoute = Ember.Route.extend({
+
+});
+
+App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
+	
+});

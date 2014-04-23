@@ -1,11 +1,22 @@
 <script type="text/x-handlebars" data-template-name="forms/index">
 	<div class="row">
 		<h4 class="sectiontitle">Formularios</h4>
+		<table class="table table-condensed table-striped table-contacts">
 			{{'{{#each model}}'}}
-				<div>
-					{{'{{name}}'}}
-				</div>
+			<tr>
+				<td>
+					<div>
+						{{'{{name}}'}}
+					</div>
+				</td>
+				<td>
+					<div>
+						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+					</div>
+				</td>
+			</tr>
 			{{'{{/each}}'}}
+		</table>
 	</div>
 </script>
 
@@ -128,4 +139,8 @@
 			</div>
 		</div>
 	</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/edit">
+
 </script>
