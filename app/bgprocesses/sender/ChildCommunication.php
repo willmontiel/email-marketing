@@ -141,7 +141,7 @@ class ChildCommunication extends BaseWrapper
 					$trackingObj = new TrackingUrlObject();
 					$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact'], $links);
 					
-//					$log->log("HTML: " . $htmlWithTracking);
+					$log->log("HTML: " . $htmlWithTracking);
 					
 					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
 					
