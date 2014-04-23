@@ -48,8 +48,8 @@ App.FormsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 		previous: function(form) {
 //			this.get("model").rollback();
 //			this.transitionToRoute('forms.index');
-			console.log(this)
-			console.log(form)
+			console.log(this.get('target'))
+			console.log(this.get('target').get('renderedName'))
 		},
 		cancel: function() {
 			this.get("model").rollback();
