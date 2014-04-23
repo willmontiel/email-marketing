@@ -75,7 +75,7 @@ class MailWrapper extends BaseWrapper
 			$this->scheduleDate = time();
 		}
 		else if ($schedule !== '' || !empty($schedule)) {
-			list($month, $day, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
+			list($day, $month, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
 			$this->scheduleDate = mktime($hour, $minute, 0, $month, $day, $year);
 		}
 	}

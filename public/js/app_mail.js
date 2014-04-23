@@ -74,7 +74,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return '/' + this.get('id');
 	}.property('id'),
 	
-	//Si hay un id se encargar se recrear el correo para su edición
+	//Si hay un id se encargara se recrear el correo para su edición
 	setSelectsContent: function () {
 		if (this.get('id') !== null) {
 			var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
@@ -347,6 +347,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				
 				var value = this.get('scheduleRadio');
 				
+				
 				if (value === 'now') {
 					mail.set('scheduleDate', value);
 				}
@@ -399,11 +400,11 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 					this.set('linksgoogleanalytics', arrayAnalytics);
 				}
 			}	
-			this.set('isGoogleAnalitycsExpanded', true);
+			setExpandAttr(this, 'isGoogleAnalitycsExpanded');
 		},
 				
 		expandSchedule: function () {
-			this.set('isScheduleExpanded', false);
+			this.set('isScheduleExpanded', true);
 		},
 		
 		discardChanges: function () {
@@ -538,11 +539,11 @@ Ember.RadioButton = Ember.View.extend({
     attributeBindings : [ "name", "type", "value", "id", "checked"],
     click : function() {
         this.set("selection", this.$().val());
-		
+		var selection = this.get("selection");
 		$("#programmer").hide();
 		$("#schedule").val('');
-
-		switch (this.get('selection')) {
+		
+		switch (selection) {
 			case "now":
 				break;
 
@@ -552,6 +553,10 @@ Ember.RadioButton = Ember.View.extend({
 		}
     },
     checked : function() {
+		if (this.get("selection") === 'now') {
+			this.set("selection", 'later');
+		}
+		console.log('esto' + this.get("selection"));
         return this.get("value") === this.get("selection");   
     }.property()
 });

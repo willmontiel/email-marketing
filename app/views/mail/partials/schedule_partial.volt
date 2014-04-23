@@ -38,7 +38,7 @@
 									<div id="programmer" style="display: block">			
 								{{ '{{/if}}' }}
 									<br />
-									{{' {{view App.DateTimePicker}}' }}
+									{{' {{view App.DateTimePicker valueBinding="scheduleDate" }}' }}
 								</div>
 							</div>
 						</div>
