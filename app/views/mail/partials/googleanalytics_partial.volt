@@ -1,17 +1,17 @@
 {{ '{{#unless contentEmpty}}' }}
-	
-		<div {{'{{bind-attr class=":bs-callout GAEmpty:bs-callout-warning:bs-callout-success"}}'}}>
+	{{ '{{#unless isGoogleAnalitycsExpanded}}' }}
+		<div {{'{{bind-attr class=":bs-callout GoogleAnalitycsEmpty:bs-callout-warning:bs-callout-success"}}'}}>
 			<div class="panel-body">
 				<dl class="dl-horizontal" {{ '{{action "expandGA" this}}' }}>
-					{{'{{#if GAEmpty }}'}}
+					{{ '{{#if GoogleAnalitycsEmpty}}' }}
 						<dt>Google Analytics:</dt><dd> _______________________________</dd>
-					{{'{{else}}'}}
-						<dt>Google Analytics:</dt><dd> Se esta haciendo seguimiento <span class="glyphicon glyphicon-thumbs-up"></span></dd>
-					{{'{{/if}}'}}
+					{{ '{{/if}}' }}
+						
+					
 				</dl>
 			</div>
 		</div>
-	{{ '{{#if isGAExpanded}}' }}
+	{{ '{{else}}' }}
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
@@ -40,7 +40,7 @@
 								</div>
 								<div class="form-group">
 									<div class="col-sm-12 text-right">
-										<button class="btn btn-default" {{'{{action "discardTarget" this}}'}}>Descartar cambios</button>
+										<button class="btn btn-default" {{'{{action "expandGA" this}}'}}>Descartar cambios</button>
 										<button class="btn btn-primary" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 									</div>
 								</div>
@@ -56,5 +56,5 @@
 				</div>
 			</div>
 		</div>
-	{{ '{{/if}}' }}
+	{{ '{{/unless}}' }}
 {{ '{{/unless}}' }}

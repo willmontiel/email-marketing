@@ -100,10 +100,10 @@ class TargetObj
 				'type' => 'mailExclude',
 				'criteria' => $this->byExclude
 			);
+			
+			$filter->join = " JOIN Mxc AS m ON m.idContact = c.idContact ";
+			$filter->and = " AND m.idMail NOT IN ({$this->byExclude})";
 		}
-		
-		$filter->join = " JOIN Mxc AS m ON m.idContact = c.idContact ";
-		$filter->and = " AND m.idMail NOT IN ({$this->byExclude})";
 		
 		return $filter;
 	}

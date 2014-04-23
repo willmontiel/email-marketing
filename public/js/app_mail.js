@@ -68,14 +68,13 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	linksAnalytics: [],
 	fromSummary: '',
 	summaryMail: '',
-	idMail: function () {
-		return this.get('id');
-	}.property('id'),
 	
+	//Retorna el id del correo para crear las url's
 	url: function () {
 		return '/' + this.get('id');
 	}.property('id'),
 	
+	//Si hay un id se encargar se recrear el correo para su edición
 	setSelectsContent: function () {
 		if (this.get('id') !== null) {
 			var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
@@ -100,7 +99,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			}	
 		}
 	}.observes('this.content'),
-			
+		
+	//Observa el contenido del header (fromName, fromEmail, etc)
 	headerEmpty: function () {
 		var n, e, s;
 		n = this.get('content.fromName');
@@ -119,7 +119,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		
 		return false;
 	}.property('content.fromName', 'content.fromEmail', 'content.subject'),
-			
+		
+	//Observa que se hayan seleccionado destinatarios
 	targetEmpty: function () {
 		var d, l, s;
 		
@@ -137,6 +138,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return false;
 	}.property('dbaselist.[]', 'list.[]', 'segmentlist.[]'), 
 		
+	//Si hay un id de correo la seleccion de contenido (editor, plantillas, html, importar contenido) se habilita de lo contrario no
 	isContentAvailable: function () {
 		var id;
 		id = this.get('content.id');
@@ -147,7 +149,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		}
 		return true;
 	}.property('content.id'),
-			
+		
+	//Observa si hay filtro en selección de destinatarios
 	filterEmpty: function () {
 		var byEmail, byOpen, byClick, byEx;
 		
@@ -167,6 +170,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return false;
 	}.property('content.filterByEmail','open.[]', 'click.[]', 'exclude.[]'), 
 	
+	//Observa el contenido del correo
 	contentEmpty: function () {
 		var mailcontent, preview;
 		mailcontent = this.get('this.mailcontent');
@@ -186,6 +190,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		
 	}.property('content.mailcontent'),
 	
+	//Valida si el contenido se hizo en el editor avanzado o es html puro para recrear las url's
 	isEditor: function () {
 		var t;
 		t = this.get('this.type');
@@ -196,7 +201,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return false;
 	}.property('content.type'),
 	
-	GAEmpty: function () {
+	//Observa si no se ha configurado google analitycs
+	GoogleAnalitycsEmpty: function () {
 		var g;
 		g = this.get('this.linksAnalytics');
 		g = (g.length === 0)?0:g;
@@ -206,6 +212,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return false;
 	}.property('linksAnalytics.[]'),
 	
+	//Valida si hay links en el contenido, si es asi se habilita
 	isGaAvailable: function () {
 		if (this.get('id') !== null) {
 			if (App.googleAnalyticsLinks !== undefined) {
@@ -217,7 +224,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		}
 		return false;
 	}.property('content.mailcontent'),
-			
+		
+	//Observa si se ha programado el correo
 	scheduleEmpty: function () {
 		var schedule;
 		schedule = this.get('content.scheduleDate');
@@ -256,6 +264,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return setFilterValues(this.get('this.filterByExclude'), 'filterExcludeChecked', this);
 	}.property('content.filterByExclude'),
 	
+	//Observa el contenido del correo y una vez este completo habilita el botón para enviarlo
 	isMailReadyToSend: function () {
 		var name, fromName, fromEmail, subject, mailcontent, plainText, totalContacts, scheduleDate;
 		
@@ -360,7 +369,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 				
 		expandGA: function () {
-			setExpandAttr(this, 'isGAExpanded');
+			setExpandAttr(this, 'isGoogleAnalitycsExpanded');
 		},
 				
 		expandSchedule: function () {
