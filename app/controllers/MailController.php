@@ -1162,9 +1162,17 @@ class MailController extends ControllerBase
 				try {
 					$target = new TargetObj();
 					
-					$target->setIdsDbase(implode(",", $idDbases));
-					$target->setIdsContactlist(implode(",", $idContactlists));
-					$target->setIdsSegment(implode(",", $idSegments));
+					if (!empty($idDbases)) {
+						$target->setIdsDbase(implode(",", $idDbases));
+					}
+					
+					if (!empty($idContactlists)) {
+						$target->setIdsContactlist(implode(",", $idContactlists));
+					}
+					
+					if (!empty($idSegments)) {
+						$target->setIdsSegment(implode(",", $idSegments));
+					}
 					
 					$target->createTargetObj();
 					

@@ -18,7 +18,7 @@ class TargetObj
 		$this->modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 	}
 	
-	public function setIdsDbase($idsDbase)
+	public function setIdsDbase($idsDbase = null)
 	{
 		$this->idsDbase = $idsDbase;
 	}
