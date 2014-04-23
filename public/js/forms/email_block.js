@@ -17,8 +17,9 @@ EmailBlock.prototype.designOptionField = function() {
 
 EmailBlock.prototype.designField = function() {
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
+	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
-						<div class="row field-content-zone">\n\
+						<div class="row field-content-zone ' + hide + '">\n\
 							<div class="col-md-3 field-zone-name">\n\
 								' + required + this.name + '\n\
 							</div>\n\
@@ -85,8 +86,17 @@ EmailBlock.prototype.persist = function() {
 		placeholder: this.placeholder,
 		required: this.required,
 		defaultvalue: this.defaultvalue,
-		hide: this.hide
+		hide: this.hide,
+		type: 'Email'
 	};
 	
 	return obj;
+};
+
+EmailBlock.prototype.unpersist = function(obj) {
+	this.name = obj.name;
+	this.placeholder = obj.placeholder;
+	this.required = obj.required;
+	this.defaultvalue = obj.defaultvalue;
+	this.hide = obj.hide;
 };

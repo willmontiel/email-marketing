@@ -5,14 +5,17 @@ function FormEditor() {
 	this.title = 'Formulario';
 }
 
-var formeditor = new FormEditor();
-
-FormEditor.prototype.startEvents = function() {
+FormEditor.prototype.startEvents = function(obj) {
 	this.createZones();
-	this.designDefaultFields();
 	this.designCustomFields();
 	this.sortableEvent();
 	this.title_xeditable();
+	if(obj === null) {
+		this.designDefaultFields();
+	}
+	else {
+		this.unpersist(obj);
+	}
 };
 
 FormEditor.prototype.createZones = function() {
@@ -26,21 +29,24 @@ FormEditor.prototype.createZones = function() {
 	$('.form-menu').append(this.optionzone);
 };
 
-FormEditor.prototype.designDefaultFields = function() {
-	var email = new EmailBlock(this, 'email', 'Email', false);
-	email.designOptionField();
-	email.designField();
-	
-	var name = new TxtBlock(this, 'nombre', 'Nombre', 'Si', false);
-	name.designOptionField();
-	name.designField();
-	
-	var lastname = new TxtBlock(this, 'apellido', 'Apellido', 'Si', false);
-	lastname.designOptionField();
-	lastname.designField();
+FormEditor.prototype.designDefaultFields = function() {	
+	for(var i = 0; i < this.options.length; i++) {
+		if( this.options[i].id === 'email' ||  this.options[i].id === 'nombre' ||  this.options[i].id === 'apellido') {
+			this.options[i].designField();
+		}
+	}
 };
 
 FormEditor.prototype.designCustomFields = function() {
+	var email = new EmailBlock(this, 'email', 'Email', false);
+	email.designOptionField();
+	
+	var name = new TxtBlock(this, 'nombre', 'Nombre', 'Si', false);
+	name.designOptionField();
+	
+	var lastname = new TxtBlock(this, 'apellido', 'Apellido', 'Si', false);
+	lastname.designOptionField();
+	
 	for(var i = 0; i < App.formfields.length; i++) {
 		switch(App.formfields[i].type) {
 			case 'Select':
@@ -170,4 +176,18 @@ FormEditor.prototype.persist = function() {
 		obj.content.push(this.content[i].persist());
 	}
 	return obj;
+};
+
+FormEditor.prototype.unpersist = function(obj) {
+	var jsonobj = JSON.parse(obj);
+	var content = jsonobj.content;
+	this.title = jsonobj.title;
+	for(var i = 0; i < content.length; i++) {
+		for(var j = 0; j < this.options.length; j++) {
+			if(content[i].id === this.options[j].id) {
+				this.options[j].unpersist(content[i]);
+				this.options[j].designField();
+			}
+		}
+	}
 };

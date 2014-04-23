@@ -27,8 +27,9 @@ TxtBlock.prototype.designField = function() {
 		input = '<textarea class="form-control field-label-placeholder" placeholder="' + this.placeholder + '"></textarea>';
 	}
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
+	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
-						<div class="row field-content-zone">\n\
+						<div class="row field-content-zone ' + hide + '">\n\
 							<div class="col-md-3 field-zone-name">\n\
 								' + required + this.name + '\n\
 							</div>\n\
@@ -128,6 +129,7 @@ TxtBlock.prototype.checkIfCanSave = function(editzone) {
 };
 
 TxtBlock.prototype.persist = function() {
+	var type = (this.area) ? 'TextArea' : 'Text';
 	var obj = {
 		id: this.id,
 		name: this.name,
@@ -135,8 +137,18 @@ TxtBlock.prototype.persist = function() {
 		required: this.required,
 		defaultvalue: this.defaultvalue,
 		hide: this.hide,
-		area: this.area
+		area: this.area,
+		type: type
 	};
 	
 	return obj;
+};
+
+TxtBlock.prototype.unpersist = function(obj) {
+	this.name = obj.name;
+	this.placeholder = obj.placeholder;
+	this.required = obj.required;
+	this.defaultvalue = obj.defaultvalue;
+	this.hide = obj.hide;
+	this.area = obj.area;
 };

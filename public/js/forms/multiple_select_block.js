@@ -27,8 +27,9 @@ MultSlctBlock.prototype.designField = function() {
 		slctoptions+= '<option>' + valuesarray[i] + '</option>';
 	}
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
+	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
-						<div class="row field-content-zone">\n\
+						<div class="row field-content-zone ' + hide + '">\n\
 							<div class="col-md-3 field-zone-name">\n\
 								' + required + this.name + '\n\
 							</div>\n\
@@ -132,8 +133,17 @@ MultSlctBlock.prototype.persist = function() {
 		required: this.required,
 		defaultvalue: this.defaultvalue,
 		hide: this.hide,
-		values: this.values
+		values: this.values,
+		type: 'MultiSelect'
 	};
 	
 	return obj;
+};
+
+MultSlctBlock.prototype.unpersist = function(obj) {
+	this.name = obj.name;
+	this.required = obj.required;
+	this.defaultvalue = obj.defaultvalue;
+	this.hide = obj.hide;
+	this.values = obj.values;
 };

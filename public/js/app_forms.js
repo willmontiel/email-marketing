@@ -22,7 +22,7 @@ App.FormsIndexRoute = Ember.Route.extend({
 App.FormsIndexController = Ember.ObjectController.extend({});
 
 App.FormsNewRoute = Ember.Route.extend({
-	
+
 });
 
 App.FormsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
@@ -36,7 +36,8 @@ App.FormsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 
 App.FormsNewView = Ember.View.extend({
 	didInsertElement: function() {
-		formeditor.startEvents();
+		formeditor = new FormEditor();
+		formeditor.startEvents(this.controller.content.get('content'));
     }
 });
 
@@ -90,9 +91,60 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 });
 
 App.FormsEditRoute = Ember.Route.extend({
-
+	deactivate: function () {
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && model.get('isSaving') == false) {
+			model.rollback();
+		}
+	}
 });
 
 App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
-	
+	show_field_url_welcome: function() {
+		if( this.get('optin') ) {
+			$('div.welcome-url-field').show();
+		}
+		else {
+			$('div.welcome-url-field').hide();
+		}
+	}.observes('content.optin'),
+	show_editor: function(option) {
+		$('.form-setup-content').hide();
+		$('.create-email-spot').show();
+		$('.title-advanced-editor').html('<h5>Correo de Doble Optin</h5>');
+		$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+		$('#btn-for-' + option).show();
+	},
+	create_optin_mail: function(form) {
+		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+		form.set('optinmail', editor);
+		this.cleanEditor();
+	},
+	create_welcome_mail: function(form) {
+		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+		form.set('welcomemail', editor);
+		this.cleanEditor();
+	},
+	create_notify_mail: function(form) {
+		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+		form.set('notifymail', editor);
+		this.cleanEditor();
+	},
+	cleanEditor: function() {
+		$('.title-advanced-editor').empty();
+		$('.here-comes-frame').empty();
+		$('.create-email-spot').hide();
+		$('.btn-form-email-creator-save').hide();
+		$('.form-setup-content').show();
+	},
+	next: function() {
+		this.handleSavePromise(this.content.save(), 'forms.new', 'El Formulario se ha creado');
+	}
 });

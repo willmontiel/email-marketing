@@ -30,8 +30,9 @@ DateBlock.prototype.designField = function() {
 		months+= '<option>' + this.months[i] + '</option>';
 	}
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
+	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
-						<div class="row field-content-zone">\n\
+						<div class="row field-content-zone ' + hide + '">\n\
 							<div class="col-md-3 field-zone-name">\n\
 								' + required + this.name + '\n\
 							</div>\n\
@@ -159,13 +160,20 @@ DateBlock.prototype.persist = function() {
 	var obj = {
 		id: this.id,
 		name: this.name,
-		placeholder: this.placeholder,
 		required: this.required,
 		defaultday: this.defaultvalue.day,
 		defaultmonth: this.defaultvalue.month,
 		defaultyear: this.defaultvalue.year,
-		hide: this.hide
+		hide: this.hide,
+		type: 'Date'
 	};
 	
 	return obj;
+};
+
+DateBlock.prototype.unpersist = function(obj) {
+	this.name = obj.name;
+	this.required = obj.required;
+	this.defaultvalue = {day: obj.defaultday, month: obj.defaultmonth, year: obj.defaultyear};
+	this.hide = obj.hide;
 };
