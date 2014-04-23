@@ -203,16 +203,23 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	
 	//Observa si no se ha configurado google analitycs
 	GoogleAnalitycsEmpty: function () {
-		var g;
+		var g, c;
 		g = this.get('this.linksAnalytics');
+		c = this.get('this.campaignName');
+		
 		g = (g.length === 0)?0:g;
-		if (!g) {
-			this.set('summaryAnalytics', 'inactivo');
+		c = (c === '')?0:c;
+		if (!c) {
+			this.set('summaryAnalytics', 'inactivo, falta el nombre de la campaña');
+			return true;
+		}
+		else if (!g) {
+			this.set('summaryAnalytics', 'inactivo, no se han seleccionado los enlaces');
 			return true;
 		}
 		this.set('summaryAnalytics', 'activo');
 		return false;
-	}.property('linksAnalytics.[]'),
+	}.property('linksAnalytics.[]', 'content.campaignName'),
 	
 	//Valida si hay links en el contenido, si es asi se habilita
 	isGaAvailable: function () {
@@ -361,7 +368,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 		
 		expandHeader: function () {
-			setExpandAttr(this, 'isHeaderExpanded');
+			this.set('isHeaderExpanded', true);
 		},
 				
 		expandTarget: function () {
@@ -382,7 +389,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('filterclicks', arrayClick);
 				this.set('filterexcludes', arrayExclude);
 			}
-			setExpandAttr(this, 'isTargetExpanded');
+			this.set('isTargetExpanded', true);
 		},
 				
 		expandGA: function () {
@@ -396,14 +403,18 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 				
 		expandSchedule: function () {
-			setExpandAttr(this, 'isScheduleExpanded');
+			this.set('isScheduleExpanded', false);
 		},
 		
 		discardChanges: function () {
 			if (this.get('this.id') !== null) {
 				this.get('model').rollback();
-			}	
-		
+			}
+			this.set('isHeaderExpanded', false);
+			this.set('isScheduleExpanded', false);
+		},
+			
+		discardTarget: function() {
 			this.set('dbaselist', this.get('databases'));
 			this.set('list', this.get('clists'));
 			this.set('segmentlist', this.get('csegments'));
@@ -412,8 +423,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('exclude', this.get('filterexcludes'));
 			
 			this.set('isTargetExpanded', false);
-			this.set('isHeaderExpanded', false);
-			this.set('isScheduleExpanded', false);
 		},
 				
 		discardGoogleAnalytics: function () {
@@ -424,6 +433,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			if (App.googleAnalyticsLinks !== undefined) {
 				this.set('linksAnalytics', this.get('linksgoogleanalytics'));
 			}
+			
 			this.set('isGoogleAnalitycsExpanded', false);
 		},
 				
@@ -432,7 +442,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('linksAnalytics', []);
 				this.set('campaignName', '');
 			}
-			this.set('isGoogleAnalitycsExpanded', false);
 		}
 	}
 });

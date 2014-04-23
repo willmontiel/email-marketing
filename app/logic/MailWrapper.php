@@ -133,16 +133,27 @@ class MailWrapper extends BaseWrapper
 	private function saveContent()
 	{
 		if ($this->mailcontent != null) {
-			$campaignName = $this->content->campaignName;
-			$googleAnalytics = explode(',', $this->content->googleAnalytics);
-			
-			if (strlen($campaignName) > 25) {
-				$campaignName = substr($campaignName, 0, 24);
+			if (!empty($this->content->googleAnalytics)) {
+				$campaignName = $this->content->campaignName;
+				$googleAnalytics = explode(',', $this->content->googleAnalytics);
+				
+				if (empty($campaignName)) {
+					$campaignName = substr($this->mail->name, 0, 24);
+				}
+				else if (strlen($campaignName) > 25) {
+					$campaignName = substr($campaignName, 0, 24);
+				}
+				
+				$this->mailcontent->campaignName = $campaignName;
+				$this->mailcontent->googleAnalytics = json_encode($googleAnalytics);
+			}
+			else {
+				$this->mailcontent->campaignName = null;
+				$this->mailcontent->googleAnalytics = null;
 			}
 			
 			$this->mailcontent->plainText = $this->content->plainText;
-			$this->mailcontent->campaignName = $campaignName;
-			$this->mailcontent->googleAnalytics = json_encode($googleAnalytics);
+			
 			
 			if (!$this->mailcontent->save()) {
 				$e = array();
