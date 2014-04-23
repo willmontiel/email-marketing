@@ -6,6 +6,7 @@ class TargetObj
 	protected $idsDbase;
 	protected $idsContactlist;
 	protected $idsSegment;
+	protected $account;
 	protected $target;
 	protected $byEmail;
 	protected $byOpen;
@@ -16,6 +17,11 @@ class TargetObj
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
 		$this->modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+	}
+	
+	public function setAccount(Account $account)
+	{
+		$this->account = $account;
 	}
 	
 	public function setIdsDbase($idsDbase)
@@ -69,19 +75,25 @@ class TargetObj
 			);
 			
 			$filter->join = " JOIN Email AS e ON e.idEmail = c.idEmail ";
-			$filter->and = " AND e.email = '{$this->byEmail}'";
+			$filter->and = " AND e.idAccount = {$this->account->idAccount} AND e.email = '{$this->byEmail}'";
 		}
 		else if ($this->byOpen != '' || !empty($this->byOpen)) {
 			$filter->filter = array(
 				'type' => 'open',
 				'criteria' => $this->byOpen
 			);
+			
+			$filter->join = " JOIN Mxc AS m ON m.idContact = c.idContact ";
+			$filter->and = " AND m.idMail IN ({$this->byOpen})";
 		}
 		else if ($this->byClick != '' || !empty($this->byClick)) {
 			$filter->filter = array(
 				'type' => 'click',
 				'criteria' => $this->byClick
 			);
+			
+			$filter->join = " JOIN Mxcxl AS ml ON ml.idContact = c.idContact ";
+			$filter->and = " AND ml.idMailLink IN ({$this->byClick}) ";
 		}
 		else if ($this->byExclude != '' || !empty($this->byExclude)) {
 			$filter->filter = array(
@@ -89,6 +101,9 @@ class TargetObj
 				'criteria' => $this->byExclude
 			);
 		}
+		
+		$filter->join = " JOIN Mxc AS m ON m.idContact = c.idContact ";
+		$filter->and = " AND m.idMail NOT IN ({$this->byExclude})";
 		
 		return $filter;
 	}

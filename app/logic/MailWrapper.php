@@ -55,6 +55,7 @@ class MailWrapper extends BaseWrapper
 				
 		if (!empty($idsDbase) || !empty($idsContactlist) || !empty($idsSegment)) {
 			$target = new TargetObj();
+			$target->setAccount($this->account);
 			$target->setIdsDbase($idsDbase);
 			$target->setIdsContactlist($idsContactlist);
 			$target->setIdsSegment($idsSegment);

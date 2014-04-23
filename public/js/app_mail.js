@@ -441,8 +441,8 @@ function setFilterValues(values, checked, self) {
 App.DateTimePicker = Em.View.extend({
 	templateName: 'datetimepicker',
 	didInsertElement: function() {
-		var nowTemp = new Date();
-		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
+//		var nowTemp = new Date();
+//		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
 		
 		$('#schedule').datetimepicker({
 			format:'d/m/Y H:i',
@@ -532,7 +532,12 @@ Ember.RadioFilter = Ember.View.extend({
 		$("#open").hide();
 		$("#click").hide();
 		$("#exclude").hide();
-
+		
+		this.set('controller.filterByEmail', '');
+		this.set('controller.open', []);
+		this.set('controller.click', []);
+		this.set('controller.exclude', []);
+	
 		$("#sendByMail").val('');
 		$('#sendOpen').val('');
 		$('#sendClick').val('');

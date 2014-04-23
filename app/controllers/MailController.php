@@ -37,9 +37,9 @@ class MailController extends ControllerBase
 			$content = $contentsT->mail;
 			
 			$MailWrapper = new MailWrapper();
-			$MailWrapper->setAccount($account);
 			$MailWrapper->setMail($mail);
 			$MailWrapper->setContent($content);
+			$MailWrapper->setAccount($account);
 			if ($mailcontent) {
 				$MailWrapper->setMailContent($mailcontent);
 			}
@@ -1299,6 +1299,7 @@ class MailController extends ControllerBase
 				}
 				try {
 					$target = new TargetObj();
+					$target->setAccount($this->user->account);
 					
 					$target->setIdsDbase(implode(",", $idDbases));
 					$target->setIdsContactlist(implode(",", $idContactlists));
