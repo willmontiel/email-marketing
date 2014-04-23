@@ -161,13 +161,6 @@
 					{{ partial("mail/partials/schedule_partial") }}
 				</div>
 			</div>
-	
-			<div class="row">
-				<div class="col-md-12 text-right">
-					<a href="{{url('mail/list')}}" class="btn btn-default">Confirmar luego </a>
-					<a href="{{url('mail/confirmmail')}}/{{ '{{id}}' }}" class="btn btn-primary">Confirmar</a>
-				</div>
-			</div>
 		</script>
 	</div>	
 	<br />
