@@ -24,6 +24,8 @@ class BlockButton extends HtmlAbstract
 		
 		$style = 'background-color:' . $data->bgcolor . '; color:' . $data->textcolor . '; display: inline-block; font-family:' . $data->fontfamily . '; font-size:' . $data->fontsize . 'px; font-weight:bold; padding-top:10px; padding-bottom:10px; padding-left: 10px; padding-right: 10px; text-align:center; height:' . $data->height . 'px; width:' . $data->width . 'px; border-top-left-radius: ' . $data->radius . 'px; border-top-right-radius: ' . $data->radius . 'px; border-bottom-right-radius: ' . $data->radius . 'px; border-bottom-left-radius: ' . $data->radius . 'px; border:' . $data->borderwidth . 'px ' . $data->borderstyle . ' ' . $data->bordercolor . '; text-decoration: none; -webkit-text-size-adjust:none; mso-hide:all; ';
 		
+		$bckgrdimg = '';
+		
 		if($data->withbgimage == 1) {
 			$style.= 'background-image:url(' . $domain->imageUrl . '/images/btn-' . $data->bgimage . '.png);';
 			$bckgrdimg = 'src="' . $domain->imageUrl . '/images/btn-' . $data->bgimage . '.png"';
