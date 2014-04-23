@@ -45,12 +45,12 @@ App.FormsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 			this.content.set('title', $('#form-title-name').text());
 			this.handleSavePromise(this.content.save(), 'forms.index', 'El Formulario se ha modificado exitosamente');
 		},
-		previous: function(form) {
+//		previous: function(form) {
 //			this.get("model").rollback();
 //			this.transitionToRoute('forms.index');
-			console.log(this.get('target'))
-			console.log(this.get('target').get('renderedName'))
-		},
+//			console.log(this.get('target'))
+//			console.log(this.get('target').router.oldState.get('name'))
+//		},
 		cancel: function() {
 			this.get("model").rollback();
 			this.transitionToRoute('forms.index');
@@ -87,10 +87,10 @@ App.FormsSetupRoute = Ember.Route.extend({
 App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
 	show_field_url_welcome: function() {
 		if( this.get('optin') ) {
-			$('div.welcome-url-field').show();
+			$('div.optin-information-container').show();
 		}
 		else {
-			$('div.welcome-url-field').hide();
+			$('div.optin-information-container').hide();
 		}
 	}.observes('content.optin'),
 	cleanEditor: function() {
@@ -108,17 +108,20 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 			switch (option) {
 				case 'optin':
 					msj = 'Doble Optin';
-					objMail = JSON.parse(this.get('optinmail'));
+					var mail = this.get('optinmail');
 					break;
 				case 'welcome':
 					msj = 'Bienvenida';
-					objMail = JSON.parse(this.get('welcomemail'));
+					var mail = this.get('welcomemail');
 					break;
 				case 'notify':
 					msj = 'Notificacion';
-					objMail = JSON.parse(this.get('notifymail'));
+					var mail = this.get('notifymail');
 					break;
 			}
+
+			objMail = ( mail == 'undefined' ) ? JSON.parse(mail) : null;
+			
 			$('.title-advanced-editor').html('<h5>Correo de ' + msj + ' </h5>');
 			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();
@@ -167,10 +170,10 @@ App.FormsEditRoute = Ember.Route.extend({
 App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
 	show_field_url_welcome: function() {
 		if( this.get('optin') ) {
-			$('div.welcome-url-field').show();
+			$('div.optin-information-container').show();
 		}
 		else {
-			$('div.welcome-url-field').hide();
+			$('div.optin-information-container').hide();
 		}
 	}.observes('content.optin'),
 	cleanEditor: function() {
@@ -188,17 +191,20 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 			switch (option) {
 				case 'optin':
 					msj = 'Doble Optin';
-					objMail = JSON.parse(this.get('optinmail'));
+					var mail = this.get('optinmail');
 					break;
 				case 'welcome':
 					msj = 'Bienvenida';
-					objMail = JSON.parse(this.get('welcomemail'));
+					var mail = this.get('welcomemail');
 					break;
 				case 'notify':
 					msj = 'Notificacion';
-					objMail = JSON.parse(this.get('notifymail'));
+					var mail = this.get('notifymail');
 					break;
 			}
+			
+			objMail = ( mail === undefined ) ? JSON.parse(mail) : null;
+			
 			$('.title-advanced-editor').html('<h5>Correo de ' + msj + ' </h5>');
 			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();

@@ -56,17 +56,55 @@
 				<div class="form-group">
 					<label for="optin" class="col-sm-3 control-label">Doble Optin:</label>
 					<div class="col-md-7">
-						<label>
-							{{' {{input type="checkbox" id="optin" name="optin" checked=optin valueBinding="optin"}}' }}
-						</label>
-						<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "optin"}}' }}></span>
+						{{' {{input type="checkbox" id="optin" name="optin" checked=optin valueBinding="optin"}}' }}
+						<label for="optin"><span class="text-muted">Esta opción exige confirmación a través de un correo!</span></label>
 					</div>
 				</div>
 				
-				<div class="form-group welcome-url-field">
-					<label for="url-welcome" class="col-sm-3 control-label">* URL de Bienvenida:</label>
-					<div class="col-md-6">
-						{{'{{view Ember.TextField valueBinding="urlwelcome" id="url-welcome" class="form-control" placeholder="URL de Bienvenida"}}'}}
+				<div class="optin-information-container col-sm-offset-1 col-sm-11" style="background-color: #fceedb;">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="bs-callout bs-callout-info">
+								<h4>Información de Doble Optin</h4>
+								<p>El doble optin requiere que el usuario que se suscribe, confirme 
+								su suscripción haciendo clic en un enlace enviado por correo. Selecciona aquí
+								el contenido del correo, el asunto, origen y la página que se mostrará al contacto
+								cuando confirme.
+								</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group">
+								<label for="optin-mail-subject" class="col-sm-3 control-label">Asunto: </label>
+								<div class="col-md-6">
+									<input type="text" id="optin-mail-subject" class="form-control">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="optin-mail-from-name" class="col-sm-3 control-label">De: </label>
+								<div class="col-md-3">
+									<input type="text" id="optin-mail-from-name" class="form-control">
+								</div>
+								<div class="col-md-3">
+									<input type="text" id="optin-mail-from-email" class="form-control">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="optin-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
+								<div class="col-md-6">
+									<input type="text" id="optin-mail-reply-to" class="form-control">
+								</div>
+							</div>
+							<div class="form-group">
+								<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "optin"}}' }}></span>
+							</div>
+							<div class="form-group welcome-url-field">
+								<label for="url-welcome" class="col-sm-3 control-label">* URL de Bienvenida:</label>
+								<div class="col-md-6">
+									{{'{{view Ember.TextField valueBinding="urlwelcome" id="url-welcome" class="form-control" placeholder="URL de Bienvenida"}}'}}
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 					
@@ -141,9 +179,6 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="btn btn-default btn-sm">
-			<span {{ '{{action "previous" this}}' }}>Anterior</span>
-		</div>
 		<div class="btn btn-default btn-sm">
 			<span {{ '{{action "cancel" this}}' }}>Cancelar</span>
 		</div>
