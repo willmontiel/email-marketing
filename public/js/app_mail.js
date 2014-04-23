@@ -216,10 +216,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	isGaAvailable: function () {
 		if (this.get('id') !== null) {
 			if (App.googleAnalyticsLinks !== undefined) {
-				console.log('Es verdadero');
 				return true;
 			}
-			console.log('Es falso');
 			return false;
 		}
 		return false;
@@ -355,7 +353,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
 				this.set('isHeaderExpanded', false);
 				this.set('isTargetExpanded', false);
-				this.set('isGAExpanded', false);
+				this.set('isGoogleAnalitycsExpanded', false);
 				this.set('isScheduleExpanded', false);
 			}
 		},
@@ -365,6 +363,28 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 				
 		expandTarget: function () {
+			if (this.get('this.id') !== null) {
+				var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
+				var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
+				var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
+
+				this.set('databases', arrayDbase);
+				this.set('clists', arrayList);
+				this.set('csegments', arraySegment);
+
+				var arrayOpen = setTargetValues(this.get('this.filterByOpen'), App.sendByOpen);
+				var arrayClick = setTargetValues(this.get('this.filterByClick'), App.sendByClick);
+				var arrayExclude = setTargetValues(this.get('this.filterByExclude'), App.excludeContact);
+
+				this.set('fiteropens', arrayOpen);
+				this.set('filterclicks', arrayClick);
+				this.set('filterexcludes', arrayExclude);
+
+//				if (App.googleAnalyticsLinks !== undefined) {
+//					var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
+//					this.set('linksgoogleanalytics', arrayAnalytics);
+//				}	
+			}
 			setExpandAttr(this, 'isTargetExpanded');
 		},
 				
@@ -376,20 +396,24 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			setExpandAttr(this, 'isScheduleExpanded');
 		},
 		
-		discardHeader: function () {
-			setExpandAttr(this, 'isHeaderExpanded');
+		discardChanges: function () {
+			if (this.get('this.id') !== null) {
+				this.get('model').rollback();
+			}	
+		
+			this.set('dbaselist', this.get('databases'));
+			this.set('list', this.get('clists'));
+			this.set('segmentlist', this.get('csegments'));
+			this.set('open', this.get('fiteropens'));
+			this.set('click', this.get('filterclicks'));
+			this.set('exclude', this.get('filterexcludes'));
+			
+			
+			this.set('isTargetExpanded', false);
+			this.set('isHeaderExpanded', false);
+			this.set('isGoogleAnalitycsExpanded', false);
+			this.set('isScheduleExpanded', false);
 		},
-				
-		discardTarget: function () {
-			this.get('model').rollback();
-			setExpandAttr(this, 'isTargetExpanded');
-		},
-				
-		discardSchedule: function () {
-			this.set('scheduleRadio', '');
-			setExpandAttr(this, 'isScheduleExpanded');
-	
-		}
 	}
 });
 

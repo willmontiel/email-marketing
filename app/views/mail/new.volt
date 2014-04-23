@@ -6,6 +6,7 @@
 	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
 	<script type="text/javascript">
+		var db;
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 	</script>
 	{{ javascript_include('js/mixin_save.js') }}

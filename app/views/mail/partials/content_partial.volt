@@ -83,7 +83,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12 text-right">
-								<button class="btn btn-default" {{ '{{action "discardHeader" this}}' }}>Descartar cambios</button>
+								<button class="btn btn-default" {{'{{action "discardChanges" this}}'}}>Descartar cambios</button>
 								<button class="btn btn-primary" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 							</div>
 						</div>

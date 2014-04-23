@@ -45,7 +45,7 @@
 
 						<div class="form-group text-right">
 							<div class="col-sm-12">
-								<button class="btn btn-default" {{'{{action "discardSchedule" this}}'}}>Descartar cambios</button>
+								<button class="btn btn-default" {{'{{action "discardChanges" this}}'}}>Descartar cambios</button>
 								<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 							</div>
 						</div>
