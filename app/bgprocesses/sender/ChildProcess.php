@@ -98,6 +98,17 @@ abstract class ChildProcess {
 			sscanf($request, "%d %s %s", $pid, $type, $data);
 			switch ($type) {
 				case 'Echo-Kill':
+					
+					/*
+					 * ================================================================
+					 * ERROR
+					 * ADVERTENCIA: Esto no debe suceder de esta manera...
+					 * No podemos dejar que el proceso hijo muera sin cerrar
+					 * correctamente su estado
+					 * REVISAR!!!
+					 * ================================================================
+					 */
+					
 					printf($pid . ' Estoy trabajando pero debo morir' . PHP_EOL);
 					exit(0);
 					break;

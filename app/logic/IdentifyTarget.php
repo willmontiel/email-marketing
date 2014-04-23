@@ -39,6 +39,13 @@ class IdentifyTarget
 	
 	private function processTarget($filter = false)
 	{
+		/* 
+		 * ===============================================================
+		 * ERROR
+		 * ADVERTENCIA:Este codigo se rompe si se modifica el orden y/o
+		 * el numero de campos que tiene mxc!!!
+		 * ===============================================================
+		 */
 		$generalSql = "INSERT IGNORE INTO mxc ";
 		switch ($this->target->destination) {
 			case 'dbases':
