@@ -3,11 +3,7 @@
 		<div {{'{{bind-attr class=":bs-callout GoogleAnalitycsEmpty:bs-callout-warning:bs-callout-success"}}'}}>
 			<div class="panel-body">
 				<dl class="dl-horizontal" {{ '{{action "expandGA" this}}' }}>
-					{{ '{{#if GoogleAnalitycsEmpty}}' }}
-						<dt>Google Analitycs:</dt><dd> inactivo</dd>
-					{{ '{{else}}' }}
-						<dt>Google Analitycs:</dt><dd> activo</dd>
-					{{ '{{/if}}' }}
+					<dt>Google Analitycs:</dt><dd>{{ '{{summaryAnalytics}}' }}</dd>
 				</dl>
 			</div>
 		</div>
@@ -40,7 +36,8 @@
 								</div>
 								<div class="form-group">
 									<div class="col-sm-12 text-right">
-										<button class="btn btn-default" {{'{{action "discardChanges" this}}'}}>Descartar cambios</button>
+										<button class="btn btn-default" {{'{{action "cleanGoogleAnalytics" this}}'}}>Limpiar Cambios</button>
+										<button class="btn btn-default" {{'{{action "discardGoogleAnalytics" this}}'}}>Descartar cambios</button>
 										<button class="btn btn-primary" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 									</div>
 								</div>

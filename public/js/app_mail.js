@@ -68,7 +68,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	linksAnalytics: [],
 	fromSummary: '',
 	summaryMail: '',
-	
+	summaryAnalytics: '',
 	//Retorna el id del correo para crear las url's
 	url: function () {
 		return '/' + this.get('id');
@@ -207,8 +207,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		g = this.get('this.linksAnalytics');
 		g = (g.length === 0)?0:g;
 		if (!g) {
+			this.set('summaryAnalytics', 'inactivo');
 			return true;
 		}
+		this.set('summaryAnalytics', 'activo');
 		return false;
 	}.property('linksAnalytics.[]'),
 	
@@ -379,17 +381,18 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('fiteropens', arrayOpen);
 				this.set('filterclicks', arrayClick);
 				this.set('filterexcludes', arrayExclude);
-
-//				if (App.googleAnalyticsLinks !== undefined) {
-//					var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
-//					this.set('linksgoogleanalytics', arrayAnalytics);
-//				}	
 			}
 			setExpandAttr(this, 'isTargetExpanded');
 		},
 				
 		expandGA: function () {
-			setExpandAttr(this, 'isGoogleAnalitycsExpanded');
+			if (this.get('this.id') !== null) {
+				if (App.googleAnalyticsLinks !== undefined) {
+					var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
+					this.set('linksgoogleanalytics', arrayAnalytics);
+				}
+			}	
+			this.set('isGoogleAnalitycsExpanded', true);
 		},
 				
 		expandSchedule: function () {
@@ -408,12 +411,29 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('click', this.get('filterclicks'));
 			this.set('exclude', this.get('filterexcludes'));
 			
-			
 			this.set('isTargetExpanded', false);
 			this.set('isHeaderExpanded', false);
-			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},
+				
+		discardGoogleAnalytics: function () {
+			if (this.get('this.id') !== null) {
+				this.get('model').rollback();
+			}
+			
+			if (App.googleAnalyticsLinks !== undefined) {
+				this.set('linksAnalytics', this.get('linksgoogleanalytics'));
+			}
+			this.set('isGoogleAnalitycsExpanded', false);
+		},
+				
+		cleanGoogleAnalytics: function () {
+			if (App.googleAnalyticsLinks !== undefined) {
+				this.set('linksAnalytics', []);
+				this.set('campaignName', '');
+			}
+			this.set('isGoogleAnalitycsExpanded', false);
+		}
 	}
 });
 
