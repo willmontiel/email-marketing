@@ -14,6 +14,11 @@
 						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
 					</div>
 				</td>
+				<td>
+					<div>
+						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
+					</div>
+				</td>
 			</tr>
 			{{'{{/each}}'}}
 		</table>
@@ -28,7 +33,6 @@
 				<div class="form-group">
 					<label for="name" class="col-sm-3 control-label">* Nombre:</label>
 					<div class="col-md-6">
-						{#<input id="name" class="form-control" placeholder="Nombre" type="text" required="required">#}
 						{{'{{view Ember.TextField valueBinding="name" id="name" class="form-control" placeholder="Nombre"}}'}}
 					</div>
 				</div>
@@ -38,14 +42,12 @@
 				<div class="form-group">
 					<label for="url-success" class="col-sm-3 control-label">* URL de Exito:</label>
 					<div class="col-md-6">
-						{#<input id="url-success" class="form-control" placeholder="URL de Exito" type="text" required="required">#}
 						{{'{{view Ember.TextField valueBinding="urlsuccess" id="url-success" class="form-control" placeholder="URL de Exito"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="url-error" class="col-sm-3 control-label">* URL de Error:</label>
 					<div class="col-md-6">
-						{#<input id="url-error" class="form-control" placeholder=" URL de Error" type="text" required="required">#}
 						{{'{{view Ember.TextField valueBinding="urlerror" id="url-error" class="form-control" placeholder="URL de Error"}}'}}
 					</div>
 				</div>
@@ -64,7 +66,6 @@
 				<div class="form-group welcome-url-field">
 					<label for="url-welcome" class="col-sm-3 control-label">* URL de Bienvenida:</label>
 					<div class="col-md-6">
-						{#<input id="url-welcome" class="form-control" placeholder="URL de Bienvenida" type="text" required="required">#}
 						{{'{{view Ember.TextField valueBinding="urlwelcome" id="url-welcome" class="form-control" placeholder="URL de Bienvenida"}}'}}
 					</div>
 				</div>
@@ -96,7 +97,7 @@
 				<div class="form-actions">
 					<div class="row">
 						<div class="col-xs-2 col-md-offset-6">
-							<button class="btn btn-sm btn-default extra-padding">Cancelar</button>
+							<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
 						</div>
 						<div class="col-xs-4">
 							<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "next" this}}' }}>Siguiente</button>
@@ -129,14 +130,25 @@
 			<div class="form-full-content">
 			
 			</div>
-			<div class="btn btn-default btn-sm">
-				<span {{ '{{action "sendData"}}' }}>Crear Formulario</span>
+			<div class="form-full-button col-md-offset-8">
+				
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="form-menu">
 			
 			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="btn btn-default btn-sm">
+			<span {{ '{{action "previous" this}}' }}>Anterior</span>
+		</div>
+		<div class="btn btn-default btn-sm">
+			<span {{ '{{action "cancel" this}}' }}>Cancelar</span>
+		</div>
+		<div class="btn btn-default btn-sm">
+			<span {{ '{{action "sendData" this}}' }}>Crear Formulario</span>
 		</div>
 	</div>
 </script>
@@ -149,7 +161,6 @@
 				<div class="form-group">
 					<label for="name" class="col-sm-3 control-label">* Nombre:</label>
 					<div class="col-md-6">
-						{#<input id="name" class="form-control" placeholder="Nombre" type="text" required="required">#}
 						{{'{{view Ember.TextField valueBinding="name" id="name" class="form-control"}}'}}
 					</div>
 				</div>
@@ -159,14 +170,12 @@
 				<div class="form-group">
 					<label for="url-success" class="col-sm-3 control-label">* URL de Exito:</label>
 					<div class="col-md-6">
-						{#<input id="url-success" class="form-control" placeholder="URL de Exito" type="text" required="required">#}
 						{{'{{view Ember.TextField valueBinding="urlsuccess" id="url-success" class="form-control" placeholder="URL de Exito"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="url-error" class="col-sm-3 control-label">* URL de Error:</label>
 					<div class="col-md-6">
-						{#<input id="url-error" class="form-control" placeholder=" URL de Error" type="text" required="required">#}
 						{{'{{view Ember.TextField valueBinding="urlerror" id="url-error" class="form-control" placeholder="URL de Error"}}'}}
 					</div>
 				</div>
@@ -185,7 +194,6 @@
 				<div class="form-group welcome-url-field">
 					<label for="url-welcome" class="col-sm-3 control-label">* URL de Bienvenida:</label>
 					<div class="col-md-6">
-						{#<input id="url-welcome" class="form-control" placeholder="URL de Bienvenida" type="text" required="required">#}
 						{{'{{view Ember.TextField valueBinding="urlwelcome" id="url-welcome" class="form-control" placeholder="URL de Bienvenida"}}'}}
 					</div>
 				</div>
@@ -205,7 +213,6 @@
 				<div class="form-group">
 					<label for="notify" class="col-sm-3 control-label">Notificar a: </label>
 					<div class="col-md-6">
-						{#<input id="notify" class="form-control" placeholder="Direccion de correo" type="text">#}
 						{{'{{view Ember.TextField valueBinding="notify" id="notify" class="form-control" placeholder="Direccion de correo"}}'}}
 					</div>
 					<div class="col-md-1">
@@ -217,7 +224,7 @@
 				<div class="form-actions">
 					<div class="row">
 						<div class="col-xs-2 col-md-offset-6">
-							<button class="btn btn-sm btn-default extra-padding">Cancelar</button>
+							<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
 						</div>
 						<div class="col-xs-4">
 							<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "next" this}}' }}>Siguiente</button>
@@ -240,4 +247,26 @@
 			<button id="btn-for-notify" class="btn btn-sm btn-default btn-guardar extra-padding btn-form-email-creator-save" {{ '{{action "create_notify_mail" this}}' }} >Guardar</button>
 		</div>
 	</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/remove">
+	<div class="row">
+			<div class="box">
+				<div class="box-header">
+					<div class="title">
+						Eliminar un formulario
+					</div>
+				</div>
+				<div class="box-content padded">			
+					<p>¿Esta seguro que desea eliminar el Formulario <strong>{{'{{name}}'}}</strong>?</p>
+					{{ '{{#if errors.errormsg}}' }}
+						<div class="alert alert-error">
+							{{ '{{errors.errormsg}}' }}
+						</div>
+					{{ '{{/if}}' }}
+					<button {{'{{action eliminate this}}'}} class="btn btn-danger">Eliminar</button>
+					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>	
+				</div>
+			</div>
+		</div>	
 </script>

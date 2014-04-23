@@ -3,6 +3,7 @@ function FormEditor() {
 	this.content = [];
 	this.options = [];
 	this.title = 'Formulario';
+	this.button = 'Aceptar';
 }
 
 FormEditor.prototype.startEvents = function(obj) {
@@ -10,6 +11,7 @@ FormEditor.prototype.startEvents = function(obj) {
 	this.designCustomFields();
 	this.sortableEvent();
 	this.title_xeditable();
+	this.button_xeditable();
 	if(obj === null) {
 		this.designDefaultFields();
 	}
@@ -27,6 +29,9 @@ FormEditor.prototype.createZones = function() {
 	
 	this.optionzone = $('<div class="form-fields-menu"></div>');
 	$('.form-menu').append(this.optionzone);
+	
+	this.buttonzone = $('<div class="container-form-button-name btn btn-default btn-sm"><a href="#" class="editable editable-click" id="form-button-name" data-type="text" data-pk="1" data-original-title="Nombre del Boton">' + this.button + '</a></div>');
+	$('.form-full-button').append(this.buttonzone);
 };
 
 FormEditor.prototype.designDefaultFields = function() {	
@@ -166,11 +171,26 @@ FormEditor.prototype.title_xeditable = function() {
 		success: function (resp, newValue) { 
 			t.title = newValue;
 		} 
-	  });
+	});
+};
+
+FormEditor.prototype.button_xeditable = function() {
+	var t = this;
+	this.buttonzone.find('#form-button-name').editable({ 
+		type: 'text', 
+		success: function (resp, newValue) { 
+			t.button = newValue;
+		} 
+	});
+};
+
+FormEditor.prototype.modifyTitleAndButton = function() {
+	$('#form-title-name').text(this.title);
+	$('#form-button-name').text(this.button);
 };
 
 FormEditor.prototype.persist = function() {
-	var obj = {title: this.title, content : []};
+	var obj = {title: this.title, button: this.button, content : []};
 	
 	for(var i = 0; i < this.content.length; i++) {
 		obj.content.push(this.content[i].persist());
@@ -182,6 +202,8 @@ FormEditor.prototype.unpersist = function(obj) {
 	var jsonobj = JSON.parse(obj);
 	var content = jsonobj.content;
 	this.title = jsonobj.title;
+	this.button = jsonobj.button;
+	this.modifyTitleAndButton();
 	for(var i = 0; i < content.length; i++) {
 		for(var j = 0; j < this.options.length; j++) {
 			if(content[i].id === this.options[j].id) {

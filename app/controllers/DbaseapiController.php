@@ -117,6 +117,45 @@ class DbaseapiController extends ControllerBase
 	
 	/**
 	 * 
+	 * @Get("/{idDbase:[0-9]+}/forms/{idForm:[0-9]+}")
+	 */
+	public function getforminformationAction($idDbase, $idForm)
+	{
+		$dbase = Dbase::findFirst(array(
+			'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idDbase,
+							2 => $this->user->account->idAccount)
+		));
+		
+		if (!$dbase) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la base de datos');
+		}
+		
+		$form = Form::findFirst(array(
+			'conditions' => 'idForm = ?1 AND idDbase = ?2',
+			'bind' => array(1 => $idForm,
+							2 => $idDbase)
+		));
+		
+		if (!$form) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró el formulario');
+		}
+		
+		try {
+			$wrapper = new FormWrapper();
+			$wrapper->setDbase($dbase);
+			$formjson = $wrapper->fromPObjectToJObject($form);
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, $e);	
+		}
+		
+		return $this->setJsonResponse(array('form' => $formjson), 201, 'Success');	
+	}
+	
+	/**
+	 * 
 	 * @Post("/{idDbase:[0-9]+}/forms")
 	 */
 	public function createforminformationAction($idDbase)
@@ -185,5 +224,27 @@ class DbaseapiController extends ControllerBase
 		}
 		
 		return $this->setJsonResponse(array('form' => $result), 201, 'Success');	
+	}
+	
+	/**
+	 * 
+	 * @Route("/{idDbase:[0-9]+}/forms/{idForm:[0-9]+}", methods="DELETE")
+	 */
+	
+	public function deleteformAction($idDbase, $idForm)
+	{
+		$form = Form::findFirst(array(
+			'conditions' => 'idForm = ?1 AND idDbase = ?2',
+			'bind' => array(1 => $idForm,
+							2 => $idDbase)
+		));
+		
+		if (!$form) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró el formulario');
+		}
+		
+		$response = $form->delete();
+		
+		return $this->setJsonResponse($response);	
 	}
 }

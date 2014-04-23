@@ -195,11 +195,13 @@ class Security extends Plugin
 				
 				//Dbaseapi
 				'dbaseapi::searchcontacts' => array('contact' => array('read')),
-				'dbaseapi::getforms' => array('contact' => array('read')),
 				
 				//Dbaseapi -- Formularios
+				'dbaseapi::getforms' => array('form' => array('read')),
+				'dbaseapi::getforminformation' => array('form' => array('read')),
 				'dbaseapi::createforminformation' => array('form' => array('create')),
-				'dbaseapi::createformcontent' => array('form' => array('create')),
+				'dbaseapi::createformcontent' => array('form' => array('update')),
+				'dbaseapi::deleteform' => array('form' => array('delete')),
 				
                 //Contactlistapi
 				'contactlistapi::searchcontacts' => array('contact' => array('read')),

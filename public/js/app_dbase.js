@@ -32,6 +32,7 @@ App.Router.map(function() {
 	  this.route('index');
 	  this.route('new', { path: '/editor/:form_id'});
 	  this.route('edit', { path: '/edit/:form_id'});
+	  this.route('remove', { path: '/remove/:form_id'});
   });
 });
 
