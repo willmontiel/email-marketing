@@ -416,26 +416,22 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 			
 		discardTarget: function() {
-			this.set('dbaselist', this.get('databases'));
-			this.set('list', this.get('clists'));
-			this.set('segmentlist', this.get('csegments'));
-			this.set('open', this.get('fiteropens'));
-			this.set('click', this.get('filterclicks'));
-			this.set('exclude', this.get('filterexcludes'));
-			
+			if (this.get('this.id') !== null) {
+				this.set('dbaselist', this.get('databases'));
+				this.set('list', this.get('clists'));
+				this.set('segmentlist', this.get('csegments'));
+				this.set('open', this.get('fiteropens'));
+				this.set('click', this.get('filterclicks'));
+				this.set('exclude', this.get('filterexcludes'));
+			}
 			this.set('isTargetExpanded', false);
 		},
 				
 		discardGoogleAnalytics: function () {
-			if (this.get('this.id') !== null) {
-				this.get('model').rollback();
-			}
-			
+			this.get('model').rollback();
 			if (App.googleAnalyticsLinks !== undefined) {
 				this.set('linksAnalytics', this.get('linksgoogleanalytics'));
-			}
-			
-			this.set('isGoogleAnalitycsExpanded', false);
+			}			
 		},
 				
 		cleanGoogleAnalytics: function () {
