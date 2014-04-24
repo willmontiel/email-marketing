@@ -225,12 +225,9 @@ class ChildCommunication extends BaseWrapper
 				 * de correo)
 				 * ================================================================
 				 */
-				if ((!$contact['contact']['name'] || trim($contact['contact']['name']) == '') && 
-					(!$contact['contact']['lastName'] || trim($contact['contact']['lastName']) == '') ) {
+				$toName = trim($contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
+				if (!$toName || $toName == '') {
 					$toName = $contact['email']['email'];
-				}
-				else {
-					$toName = trim($contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
 				}
 				$to = array($contact['email']['email'] => $toName);
 
