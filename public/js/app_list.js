@@ -112,16 +112,16 @@ App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	
 	actions: {
 		save: function(){
-			if(this.get('name')==null){
-				App.set('errormessage', 'El nombre de la lista es requerido');
+			if(this.get('name') == null || this.get('name') == ''){
+				this.set('errors.errormsg', 'El nombre de la lista es requerido');
 				this.transitionToRoute('lists.new');
 			}
 			else if(this.get("dbase.id") == null) {
-				App.set('errormessage', 'Recuerde seleccionar una Base de Datos');
+				this.set('errors.errormsg', 'Recuerde seleccionar una Base de Datos');
 				this.transitionToRoute('lists.new');
 			}
 			else{
-				App.set('errormessage', '');
+				this.set('errors.errormsg', '');
 				this.handleSavePromise(this.content.save(), 'lists', 'Se ha creado la lista exitosamente');
 			}
 		},
@@ -139,11 +139,11 @@ App.ListsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, 
 	actions: {
 		edit: function() {
 			if(this.get('name') == ""){
-				App.set('errormessage', 'El campo nombre esta vacío, debe ingresar un nombre');
+				this.set('errors.errormsg', 'El nombre de la lista es requerido');
 				this.transitionToRoute("lists.edit");
 			}
 			else{
-				App.set('errormessage', '');
+				this.set('errors.errormsg', '');
 				this.handleSavePromise(this.content.save(), 'lists', 'Se ha actualizado la lista!');
 			}
 		},

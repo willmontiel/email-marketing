@@ -3,7 +3,7 @@
 {%block sectionsubtitle %}Edite la configuración de la cuenta{% endblock %}
 
 {% block content %} 
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -22,10 +22,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		{{ flashSession.output() }}
 	</div>
-	<div class="row-fluid padded">
+	<div class="row padded">
 		<div class="box span4">
 			<div class="box-header">
 				<div class="title">

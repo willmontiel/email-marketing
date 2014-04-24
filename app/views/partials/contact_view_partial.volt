@@ -1,16 +1,8 @@
-<tr>
+<tr {{ ' {{bind-attr class="isExpanded:spreadout"}} ' }} >
 	<td>
-		<div class="col-md-1 estado-contact">
-			<div class="row">
-				<div class="col-xs-1">
-					<div {{'{{ bind-attr class="isActive:active:inactive"}}'}}>&nbsp
-					</div>
-				</div>
-				<div class="col-xs-1">
-					<div {{'{{ bind-attr class="isSubscribed:suscribed:unsubscribed"}}'}}>&nbsp
-					</div>
-				</div>
-			</div>
+		<div class="estado-contact">
+			<div {{'{{ bind-attr class="isActive:active:inactive inactive"}}'}}>&nbsp
+			<div {{'{{ bind-attr class="isSubscribed:suscribed:unsubscribed unsubscribed"}}'}}>&nbsp
 		</div>
 	</td>
 	<td>
@@ -60,52 +52,48 @@
 	</td>
 </tr>
 {{ '{{#if isExpanded}}' }}
-<tr>
-	<td colspan="3">
-		<div class="row-fluid">
-			<div class="span12">
-				<h4>Información de contacto</h4>
+<tr class="spreadout">
+	<td colspan="6">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-12 col-md-10 col-md-offset-1 col-lg-offset-2 col-lg-8">
+					<h4 class="text-center">Información de contacto</h4>
+					<table class="table table-condensed table-striped table-bordered">
+						<thead></thead>
+						<tbody>
+							<tr>
+								<td>Dirección de correo: </td>
+								<td>{{' {{ view App.EmberXEditableTextView value=email field="email" title="Editar correo del contacto" }} '}}</td>
+			</div>
+	{#									
+							<td>{{' {{view Ember.TextField valueBinding="email" required="required" class="edit-contact-online"}} '}}</td>
+	#}
+						</tr>
+						<tr>
+							<td>Nombre {#<a href="#/contacts" class="username" data-type="text" data-pk="1" data-url="/post" data-title="Enter username">superuser</a>#}</td>
+	{#
+							<td>{{' {{view Ember.TextField valueBinding="name" required="required" class="edit-contact-online"}} '}}</td>
+	#}
+							<td>{{' {{ view App.EmberXEditableTextView value=name field="name" title="Editar nombre de contacto" }} '}}</td>
+						</tr>
+						<tr>
+							<td>Apellido</td>
+							<td>{{' {{ view App.EmberXEditableTextView value=lastName field="lastName" title="Editar apellido de contacto" }} '}}</td>
+	{#
+							<td>{{' {{view Ember.TextField valueBinding="lastName" required="required" class="edit-contact-online"}} '}}</td> 
+	#}
+						</tr>
+						{%for field in fields%}
+						<tr>
+							<td>{{field.name}}</td>
+							<td>{{ember_customfield_xeditable(field)}}</td>
+						</tr>
+						{%endfor%}
+					</tbody>
+				</table>				
 			</div>
 		</div>
-		<div class="row-fluid">
-			<div class="span10 offset1">
-				<div class="box">
-					<div class="box-content">
-						<table class="table table-condensed">
-							<thead></thead>
-							<tbody>
-								<tr>
-									<td>Dirección de correo: </td>
-									<td>{{' {{ view App.EmberXEditableTextView value=email field="email" title="Editar correo del contacto" }} '}}</td>
-{#									
-									<td>{{' {{view Ember.TextField valueBinding="email" required="required" class="edit-contact-online"}} '}}</td>
-#}
-								</tr>
-								<tr>
-									<td>Nombre {#<a href="#/contacts" class="username" data-type="text" data-pk="1" data-url="/post" data-title="Enter username">superuser</a>#}</td>
-{#
-									<td>{{' {{view Ember.TextField valueBinding="name" required="required" class="edit-contact-online"}} '}}</td>
-#}
-									<td>{{' {{ view App.EmberXEditableTextView value=name field="name" title="Editar nombre de contacto" }} '}}</td>
-								</tr>
-								<tr>
-									<td>Apellido</td>
-									<td>{{' {{ view App.EmberXEditableTextView value=lastName field="lastName" title="Editar apellido de contacto" }} '}}</td>
-{#
-									<td>{{' {{view Ember.TextField valueBinding="lastName" required="required" class="edit-contact-online"}} '}}</td> 
-#}
-								</tr>
-								{%for field in fields%}
-								<tr>
-									<td>{{field.name}}</td>
-									<td>{{ember_customfield_xeditable(field)}}</td>
-								</tr>
-								{%endfor%}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>	
+
 			{#
 			<div class="span6">
 				<div class="box">
@@ -161,18 +149,15 @@
 				</div>
 			</div>
 			#}
-		</div>
 		{{ '{{#if App.isEditable}}' }}
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span10 offset1 text-right">
-				<button class="btn btn-default" {{ '{{action "discard" this}}' }}>descartar<br />cambios</button>
-				<button class="btn btn-green" {{ '{{action "edit" this}}' }}>guardar<br />cambios</button>
+				<button class="btn btn-default extra-padding" {{ '{{action "discard" this}}' }}>descartar<br />cambios</button>
+				<button class="btn btn-green extra-padding" {{ '{{action "edit" this}}' }}>guardar<br />cambios</button>
 			</div>
 		</div>
 		{{ '{{/if}}' }}
 		<div id="collapse-history-contact-{{'{{unbound id}}'}}" class="panel-collapse collapse">
-			<div class="row-fluid">
-				<div class="span10 offset1">
 					<h4>Historial</h4>
 					<div class="box">
 						<div class="box-content padded">
@@ -197,88 +182,78 @@
 					{{ '{{/if}}' }}
 						</div>	
 					</div>
-				</div>
-			</div>
-			<div class="row-fluid">
-				<div class="span10 offset1">
-					<div class="box">
-						<div class="box-content">
-							<h5 class="padded">Últimas campañas</h5>
-							<table class="table table-condensed">
-								<thead></thead>
-								<tbody>
-									<tr>
-										{{' {{#each mailHistoryArray}} '}}
-										<tr><td>{{' {{name}} '}}</td></tr>
-										{{' {{else}} '}}
-										<tr><td class="padded">Este contacto no tiene un historial de envíos</td></tr>
-										{{' {{/each}} '}}
-									</tr>
-								</tbody>
-							</table>
-							<h5 class="padded">Últimos eventos</h5>
-							<table class="table table-condensed">
+				<h4>Últimas campañas</h4>
+				<table class="table table-condensed table-bordered table-contacts">
+					<thead></thead>
+					<tbody>
+						<tr>
 							{{' {{#each mailHistoryArray}} '}}
-								<tbody>
-									{# Historial de Aperturas #}
-									{{' {{#if opening}} '}}
-									<tr>
-										<td class="contact-history-event-text">Apertura</td>
-										<td>{{' {{name}} '}}</td>
-										<td class="contact-history-event-text">{{' {{opening}} '}}</td>
-									</tr>
-									{{ '{{/if}}' }}
-
-									{# Historial de Clics #}
-									{{' {{#if clicks}} '}}
-									<tr>
-										<td class="contact-history-event-text">Clic</td>
-										<td>{{' {{name}} '}}</td>
-										<td class="contact-history-event-text">{{' {{clicks}} '}}</td>
-									</tr>
-									{{ '{{/if}}' }}
-
-									{# Historial de Desuscripciones #}		
-									{{' {{#if unsubscribe}} '}}
-									<tr>
-										<td class="contact-history-event-text">Desuscripcion</td>
-										<td>{{' {{name}} '}}</td>
-										<td class="contact-history-event-text">{{' {{unsubscribe}} '}}</td>
-									</tr>
-									{{ '{{/if}}' }}
-
-									{# Historial de Rebotes #}
-									{{' {{#if bounced}} '}}
-									<tr>
-										<td class="contact-history-event-text">Rebote</td>
-										<td>{{' {{name}} '}}</td>
-										<td class="contact-history-event-text">{{' {{bounced}} '}}</td>
-									</tr>
-									{{ '{{/if}}' }}
-
-									{# Historial de Spam #}
-									{{' {{#if spam}} '}}
-									<tr>
-										<td class="contact-history-event-text">Spam</td>
-										<td>{{' {{name}} '}}</td>
-										<td class="contact-history-event-text">{{' {{spam}} '}}</td>
-									</tr>
-									{{ '{{/if}}' }}
-								</tbody>
+							<tr><td>{{' {{name}} '}}</td></tr>
 							{{' {{else}} '}}
-								</tbody>
-									<tr>
-										<td colspan="3" class="padded">Este contacto no tiene un historial de eventos</td>
-								   </tr>
-								</tbody>
+							<tr><td class="padded">Este contacto no tiene un historial de envíos</td></tr>
 							{{' {{/each}} '}}
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
+						</tr>
+					</tbody>
+				</table>
+				<h4>Últimos eventos</h4>
+				<table class="table table-condensed table-bordered table-contacts">
+				{{' {{#each mailHistoryArray}} '}}
+					<tbody>
+						{# Historial de Aperturas #}
+						{{' {{#if opening}} '}}
+						<tr>
+							<td class="contact-history-event-text">Apertura</td>
+							<td>{{' {{name}} '}}</td>
+							<td class="contact-history-event-text">{{' {{opening}} '}}</td>
+						</tr>
+						{{ '{{/if}}' }}
+
+						{# Historial de Clics #}
+						{{' {{#if clicks}} '}}
+						<tr>
+							<td class="contact-history-event-text">Clic</td>
+							<td>{{' {{name}} '}}</td>
+							<td class="contact-history-event-text">{{' {{clicks}} '}}</td>
+						</tr>
+						{{ '{{/if}}' }}
+
+						{# Historial de Desuscripciones #}		
+						{{' {{#if unsubscribe}} '}}
+						<tr>
+							<td class="contact-history-event-text">Desuscripcion</td>
+							<td>{{' {{name}} '}}</td>
+							<td class="contact-history-event-text">{{' {{unsubscribe}} '}}</td>
+						</tr>
+						{{ '{{/if}}' }}
+
+						{# Historial de Rebotes #}
+						{{' {{#if bounced}} '}}
+						<tr>
+							<td class="contact-history-event-text">Rebote</td>
+							<td>{{' {{name}} '}}</td>
+							<td class="contact-history-event-text">{{' {{bounced}} '}}</td>
+						</tr>
+						{{ '{{/if}}' }}
+
+						{# Historial de Spam #}
+						{{' {{#if spam}} '}}
+						<tr>
+							<td class="contact-history-event-text">Spam</td>
+							<td>{{' {{name}} '}}</td>
+							<td class="contact-history-event-text">{{' {{spam}} '}}</td>
+						</tr>
+						{{ '{{/if}}' }}
+					</tbody>
+				{{' {{else}} '}}
+					</tbody>
+						<tr>
+							<td colspan="3" class="padded">Este contacto no tiene un historial de eventos</td>
+					   </tr>
+					</tbody>
+				{{' {{/each}} '}}
+				</table>
 		</div>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span12 text-center">
 				<a data-toggle="collapse" data-parent="#accordion" href="#collapse-history-contact-{{'{{unbound id}}'}}">
 					<span {{ '{{action "collapse" this}}' }}>- Colapsar</span>

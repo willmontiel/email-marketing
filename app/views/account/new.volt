@@ -3,7 +3,7 @@
 {%block sectionsubtitle %}Cree una cuenta asignandole al mismo tiempo un usuario administrador{% endblock %}
 
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -22,10 +22,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		{{ flashSession.output() }}
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-header">
 				<div class="title">
@@ -34,7 +34,7 @@
 			</div>
 			<div class="box-content padded">
 				{{ form('account/new', 'method': 'Post', 'class': 'fill-up') }}
-					<div class="row-fluid">
+					<div class="row">
 						<div class="span6">
 							<label for="companyName">*Nombre de la cuenta:</label>
 							{{ newFormAccount.render('companyName') }}

@@ -129,7 +129,7 @@
 		<!-- content -->
 		<div class="main-content">
 			<div class="container-fluid">
-				<div class="row-fluid">
+				<div class="row">
 					<div class="area-top clearfix">
 						<div class="pull-left header">
 							<h3 class="title">
@@ -142,7 +142,7 @@
 				</div>
 			</div>
 			<div class="container-fluid padded">
-				<div class="row-fluid">
+				<div class="row">
 					<div class="span12">
 						{% if messages !== false%}
 							{% for msg in messages%}
@@ -155,7 +155,7 @@
 						{% endif %}
 					</div>
 				</div>
-				<div class="row-fluid">
+				<div class="row">
 					<!-- Inicio de contenido -->
 					{% block content %}
 						<!-- Aqui va el contenido -->

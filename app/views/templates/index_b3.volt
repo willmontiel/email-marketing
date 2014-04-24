@@ -114,43 +114,43 @@
 -->
 <!-- ****** FIN ELEMENTOS POR UBICAR ********* -->
 		
-		<!-- Contenedor principal -->
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-xs-12 col-sm-3 col-md-2 sidebar" style="height: 100%;">
-					<div>
-						<!-- Main nav -->
-						{{ partial("partials/menu_partial_b3") }}
-					</div>
-				</div>
-				<div class="col-sx-12 col-sm-9 col-md-10">
-					{# Zona de mensajes #}
-					{% if messages !== false%}
-						<div class="row">
-							<div class="col-sm-12">
-								{% for msg in messages%}
-									<div class="alert alert-{{msg.type}}">
-										<button type="button" class="close" data-dismiss="alert">×</button>
-										<h4>Atención!</h4>
-										{{msg.message}}
-									</div>
-								{% endfor %}
-							</div>
-						</div>
-					{% endif %}
-					{# Fin de zona de mensajes #}
-
-					<div class="container-fluid">
-						<!-- Inicio de contenido -->
-						{% block content %}
-							<!-- Aqui va el contenido -->
-						{% endblock %}
-						<!-- Fin de contenido -->
-					</div>
-
+<!-- Contenedor principal -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12 col-sm-3 col-md-2 sidebar" style="height: 100%;">
+				<div>
+					<!-- Main nav -->
+					{{ partial("partials/menu_partial_b3") }}
 				</div>
 			</div>
+			<div class="col-sx-12 col-sm-9 col-md-10">
+				{# Zona de mensajes #}
+				{% if messages !== false%}
+					<div class="row">
+						<div class="col-sm-12">
+							{% for msg in messages%}
+								<div class="alert alert-{{msg.type}}">
+									<button type="button" class="close" data-dismiss="alert">×</button>
+									<h4>Atención!</h4>
+									{{msg.message}}
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				{% endif %}
+				{# Fin de zona de mensajes #}
+
+				<div class="container-fluid">
+					<!-- Inicio de contenido -->
+					{% block content %}
+						<!-- Aqui va el contenido -->
+					{% endblock %}
+					<!-- Fin de contenido -->
+				</div>
+			</div>
+
 		</div>
+	</div>
 
 		{# OLARK #}
 		{% if chat.enabled %}

@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
@@ -32,12 +32,12 @@
 {% block sectiontitle %}<i class="icon-signal icon-2x"></i>Estadisticas{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12 ">
 			<h3>{{contactList.name}} <small>{{statisticsData.sent}} correos enviados</small></h3>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span6">
 			<table class="table" style="border: 0px !important;" >
 				<thead></thead>

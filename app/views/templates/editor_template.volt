@@ -115,7 +115,7 @@
 		<!-- content -->
 		<div class="main-content main-content-editor">
 			<div class="container-fluid padded">
-				<div class="row-fluid">
+				<div class="row">
 					<!-- Inicio de contenido -->
 					{% block content %}
 						<!-- Aqui va el contenido -->

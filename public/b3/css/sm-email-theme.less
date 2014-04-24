@@ -5,22 +5,26 @@
 @brand-info:    #5bc0de;
 @brand-warning: #f0ad4e;
 @brand-danger:  #d9534f;
-// ______
+
 
 @brand-white: #f5f5f5;
 @brand-blue: #6e97ac;
 @brand-sad-blue: #b3e3e4;
 @brand-gray: #9d9d9d;
 @brand-green: #97c86b;
-@brand-orange:#ffc766;
+@brand-orange:#EF8807;
 @brand-red:#bd1b06;
 @brand-soft-color: #adadad;
 @brand-gray-light: #eeeeee;
+@brand-gray-dark: #505050;
+@brand-sectiontitle: #20526e;
 
-@bg-default-btn: #eee;
+
+@bg-default-btn: #cccccc;
 @bg-delete-btn: #ac1905;
 @text-color-btn: #428bca;
 @bg-guardar-btn: #189308;
+@bg-add-btn: #78cae9;
 
 @menu-background: #20526e;
 
@@ -77,7 +81,7 @@ body {
 h4.sectiontitle {
 	background-color: @bg-info-blue;
 	padding: 10px;
-	color: #20526e;
+	color: @brand-sectiontitle;
 	margin-bottom: 30px;
 }
 
@@ -284,6 +288,7 @@ h4.sectiontitle {
 	background-color: @bgcolor;
 	width: 190px;
 	height: 190px;
+	margin-bottom: 10px;
 }
 .small-btn {
 	width: 42px;
@@ -305,7 +310,7 @@ h4.sectiontitle {
 	.pos-icons(0, @shortcuts-big-icons-width);
 	background-position: 0 0;
 }
-.sm-button-large-import-contacts:extend(.sm-button-large-base) {
+.sm-button-large-add-contacts:extend(.sm-button-large-base) {
 	.pos-icons(1, @shortcuts-big-icons-width);
 	background-position: @position 0;
 }
@@ -313,8 +318,32 @@ h4.sectiontitle {
 	.pos-icons(2, @shortcuts-big-icons-width);
 	background-position: @position 0;
 }
+.sm-button-large-accounts:extend(.sm-button-large-base) {
+	.pos-icons(3, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-users:extend(.sm-button-large-base) {
+	.pos-icons(4, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-msj:extend(.sm-button-large-base) {
+	.pos-icons(5, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-send-process:extend(.sm-button-large-base) {
+	.pos-icons(6, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-program-envios:extend(.sm-button-large-base) {
+	.pos-icons(7, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
+.sm-button-large-socialnet:extend(.sm-button-large-base) {
+	.pos-icons(8, @shortcuts-big-icons-width);
+	background-position: @position 0;
+}
 .sm-button-large-contact-list:extend(.sm-button-large-base) {
-	.pos-icons(1, @shortcuts-big-icons-width);
+	.pos-icons(20, @shortcuts-big-icons-width);
 	background-position: @position 0;
 }
 .sm-button-large-segment:extend(.sm-button-large-base) {
@@ -432,25 +461,25 @@ h4.sectiontitle {
 	text-align: center;
 	padding: 0 15px;
 }
-.numbers-contacts li span {
+.big-number {
 	font-size: 30px;
 }
-span.blue {
+.blue {
 	color: @brand-blue;
 }
-span.sad-blue {
+.sad-blue {
 	color: @brand-sad-blue;
 }
-span.gray {
+.gray {
 	color: @brand-gray;
 }
-span.green {
+.green {
 	color: @brand-green;
 }
-span.orange {
+.orange {
 	color: @brand-orange;
 }
-span.red {
+.red {
 	color: @brand-red;
 }
 
@@ -469,9 +498,12 @@ span.red {
 	text-decoration: none;
 	background-color: darken(@bg-default-btn, 10%);
 }
-.btn-default.extra-padding {
-	padding-right: 18px;
-	padding-left: 18px;
+.extra-padding {
+	padding-right: 25px;
+	padding-left: 25px;
+}
+.btn-danger {
+	border:none;
 }
 .btn-delete:hover {
 	background-color: @bg-delete-btn;
@@ -479,17 +511,43 @@ span.red {
 	text-decoration: none;
 }
 .btn-guardar {
-	background-color: @bg-guardar-btn;
+	background-color: @brand-success;
 	color: @brand-white;
+	text-decoration: none;
 }
 .btn-guardar:hover {
 	transition: background-color 0.5s ease;
-	background-color:#137406;
+	background-color:#5eab07;
 	text-decoration: none;
+}
+.btn-add:hover {
+	transition: background-color 0.5s ease;
+	background-color:#58abca;
+	color: @brand-gray-light;
+	text-decoration: none;
+}
+.no-bg {
+	background-color: transparent;
+}
+.no-bg:hover {
+	background-color: transparent;
+	border:none;
+	box-shadow: none;
+}
+.btn-group.open .dropdown-toggle {
+	box-shadow: none;
 }
 /* Estilos para la tabla de contactos */
 table.table-contacts tbody tr td {
 	vertical-align: middle;
+}
+.inactive {
+	background-color: gray;
+	width: 15px;
+}
+.unsubscribed {
+	background-color: #333;
+	width: 15px;
 }
 /* Estilos para contenedor con bg y paddings */
 .frame-bg-pd {
@@ -506,12 +564,12 @@ table.table-contacts tbody tr td {
 .form-actions {
 	padding: 25px 80px 25px 0;
 }
-.sm-textarea {
-	min-height: 200px;
-	max-height: 200px;
-	min-width: 427px;
-	max-width: 427px;
+
+span.required {
+	color:@brand-danger;
+	padding-right: 4px;
 }
+
 /* Estilos para los flags de colores indicadores del estado de cada contacto */
 .estado-contact .inactive {
 	background-color: #b3e3e4;
@@ -521,9 +579,6 @@ table.table-contacts tbody tr td {
 	background-color: #9d9d9d;
 	width: 15px;
 }
-
-
-
 
 /* *** Callouts tomados de Bootstrap3 *** */
 .bs-callout(@color, @bgcolor: lighten(@color, 35%)) {
@@ -562,4 +617,47 @@ table.table-contacts tbody tr td {
 
 .bs-callout-success {
     .bs-callout(@brand-success);
+}
+.spreadout(@color) {
+	background-color: @color;
+}
+.table-striped tbody tr.spreadout  > td { 
+	.spreadout(#f0eedf);
+}
+.table-striped tbody tr.spreadout:nth-child(odd) > td { 
+	.spreadout(#f0eedf);
+}
+.report h4 {
+	color:@brand-sectiontitle;
+}
+
+.mini-icon {
+	color:@brand-sectiontitle;
+	font-size: 20px;
+	padding-top: 6px;
+}
+table.hight-line > tbody > tr > th {
+	line-height: 2.2;
+}
+
+
+
+#colorchart td {
+ width: 25px !important;
+ height: 25px !important;
+ cursor: pointer;
+ border: 2px lightgray solid;
+}
+#colorchart {
+ border-collapse: separate;
+ border: 4px gray solid;
+}
+#color.text-for-db-color {
+ display: none !important;
+}
+#colorchart td:hover {
+ opacity: 0.5;
+}
+.color-selected {
+ border: 2px blue solid !important;
 }

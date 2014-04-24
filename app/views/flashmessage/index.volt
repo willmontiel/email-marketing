@@ -2,7 +2,7 @@
 {% block sectiontitle %}<i class="icon-bullhorn"></i> Mensajes administrativos{%endblock%}
 {% block sectionsubtitle %}Lista de mensajes administrativos activos e inactivos{% endblock %}
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span6">
 			{{flashSession.output()}}
 		</div>
@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="box">
 				<div class="box-header">
@@ -45,7 +45,7 @@
 					</table>
 				</div>
 				<div class="box-footer padded">
-					<div class="row-fluid">
+					<div class="row">
 						<div class="span5">
 							<div class="pagination">
 								<ul>

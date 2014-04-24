@@ -1,6 +1,6 @@
 <script type="text/x-handlebars" data-template-name="drilldown/opens">
 	<hr />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span3">
 			<label class="label-gray-light-percent"><i class="icon-search"></i> Resumen de aperturas</label>
 			<div>
@@ -20,13 +20,13 @@
 		</div>
 		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar" textChart="Aperturas de Correo"}}'}}
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/opens" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="box">
 				<div class="box-header">
@@ -62,7 +62,7 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">
 	<hr />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="news span3">
 			<label class="label-gray-light-percent"><i class="icon-hand-up"></i> Resumen de clics</label>
 			<div>
@@ -103,7 +103,7 @@
 		</div>
 		{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="clickstotalsandunique span10">
 			<div class="box">
 				<div class="box-content">
@@ -132,7 +132,7 @@
 			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/clicks" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="pull-left">
 				{{ '{{view Ember.Select
@@ -176,7 +176,7 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
 	<hr />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="news span3">
 			<label class="label-gray-light-percent"><i class="icon-minus-sign"></i> Resumen de des-suscritos</label>
 			<div>
@@ -197,13 +197,13 @@
 		</div>
 		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Des-suscritos de Correo"}}'}}
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span6">
 			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/unsubscribed" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="box">
 				<div class="box-header">
@@ -243,7 +243,7 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/spam">
 	<hr />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="news span3">
 			<label class="label-gray-light-percent"><i class="icon-remove"></i> Resumen de spam</label>
 			<div>
@@ -264,7 +264,7 @@
 		</div>
 		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Reportes de Spam"}}'}}
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="box">
 				<div class="box-header">
@@ -304,7 +304,7 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/bounced">
 	<hr />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="news span3">
 			<label class="label-gray-light-percent"><i class="icon-warning-sign"></i> Resumen de rebotes</label>
 			<div>
@@ -336,7 +336,7 @@
 		</div>
 		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Rebotes"}}'}}
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="pull-left scaleChart">
 			<div class="pull-left">
 				Filtrar por: &nbsp;
@@ -365,7 +365,7 @@
 			<br />
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="pull-left">
 				{{ '{{view Ember.Select

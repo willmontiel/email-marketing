@@ -97,6 +97,7 @@ class Security extends Plugin
 				
 				'error::index' => array(),
 				'error::notavailable' => array(),
+				'error::unauthorized' => array(),
 				'error::link' => array(),
 				'session::signin' => array(),
 				'session::login' => array(),
@@ -397,7 +398,7 @@ class Security extends Plugin
 			);
 			$accessdir = $controller . ':' . $action;
 			if (!in_array($accessdir, $this->publicurls)) {
-				$this->response->redirect("error/notavailable"); 
+				$dispatcher->forward(array('controller' => 'error', 'action' => 'notavailable')); 
 				return false;
 			}
 		}
@@ -424,6 +425,7 @@ class Security extends Plugin
 			'error:index',
 			'error:link',
 			'error:notavailable',
+			'error:unauthorized',
 			'track:open',
 			'track:click',
 			'track:mtaevent',
@@ -462,7 +464,9 @@ class Security extends Plugin
 				}
 				else{
 					$this->logger->log("Redirect to error");
-					$this->response->redirect('error');
+					// Uso forward para que la URL se mantenga, y así el usuario pueda
+					// saber cual es la que da problemas
+					$dispatcher->forward(array('controller' => 'error', 'action' => 'index'));
 				}
 				return false;
 			}
@@ -482,7 +486,9 @@ class Security extends Plugin
 							$this->setJsonResponse('Denegado', 404, 'Accion no permitida');
 						}
 						else{
-							$this->response->redirect('error');
+							// Uso forward para que la URL se mantenga, y así el usuario pueda
+							// saber cual es la que da problemas
+							$dispatcher->forward(array('controller' => 'error', 'action' => 'unauthorized'));
 						}
 						return false;
 					}

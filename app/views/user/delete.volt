@@ -4,7 +4,7 @@
 
 {% block content %}
 	{{ content() }}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -25,7 +25,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-header">
 				<div class="title">

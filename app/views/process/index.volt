@@ -65,7 +65,7 @@
 			</h5>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span7">
 		{{ flashSession.output() }}
 		</div>
@@ -74,7 +74,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-header padded">
 				<div class="pull-left">

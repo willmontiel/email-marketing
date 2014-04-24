@@ -80,7 +80,7 @@
 					<a href="{{url('contacts/search')}}#/contacts" class="btn-actn">Búsqueda de contactos</a>
 				</div>	
 			</div>
-			<div class="row-fluid space"></div>
+			<div class="row space"></div>
 			<div class="row">
 				<h4 class="sectiontitle">Avanzadas</h4>
 				<div class="col-xs-6 col-md-3">
@@ -109,21 +109,28 @@
 
 			<div class="row">
 				<h4  class="sectiontitle">Listas de contactos</h4>
-				<div class="col-md-3">
-					<form>
-						<p>
+				<div class="row">
+					<div class="col-xs-6 col-sm-5 col-md-4">
+						<form role="form">
 							{{ '{{view Ember.Select
 									contentBinding="dbaseSelect"
 									optionValuePath="content.id"
 									optionLabelPath="content.name"
-									valueBinding="selectedDbase"}}'
+									valueBinding="selectedDbase"
+									class="sm-select form-control"
+									placeholder="Todas las bases de datos"
+								}}'
 							}}
-						</p>
-					</form>
+						</form>
+					</div>
+					<div class="col-md-3 pull-right">
+						<a class="btn btn-default extra-padding btn-sm" href="{{ url('contactlist') }}#/lists/new">Crear una nueva lista</a>
+					</div>
 				</div>
+				<div class="space"></div>
 			</div>				
 			<div class="row">
-				<table class="table table-bordered">
+				<table class="table table-striped table-contacts">
 					<thead>
 					</thead>
 					<tbody>
@@ -132,15 +139,15 @@
 							<td {{' {{bind-attr style="dbase.style"}} '}}>
 							</td>
 							<td>
-								<a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a>
+								<a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts"><strong>{{ '{{name}}' }}</strong></a>
 								<br/>
 								{{ '{{description}}' }}
 							</td>
 							<td>
-								<!-- Detalles de la lista -->
+{#								<!-- Detalles de la lista -->
 								<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts" class="btn btn-default btn-sm">
 								<i class="glyphicon glyphicon-search"></i> Detalles</a>
-
+#}
 								<!-- Editar la lista -->
 								{{ '{{#link-to "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
 
@@ -154,8 +161,8 @@
 							<td>
 								<div class="box-section news with-icons">
 									<div class="news-time">
-										<span>{{ '{{infocontact.activeContacts}}' }}</span>
-										<span>{{'{{activeContactsF}}'}}</span> activos
+										<span class="blue big-number">{{ '{{infocontact.activeContacts}}' }}</span>
+										<span class="blue big-number">{{'{{activeContactsF}}'}}</span> activos
 									</div>
 								</div>
 							</td>
@@ -183,7 +190,7 @@
 		</script>
 		<script type="text/x-handlebars" data-template-name="lists">
 				{{ '{{#if App.errormessage }}' }}
-					<div class="alert alert-message alert-error">
+					<div class="bs-callout bs-callout-danger">
 					{{ '{{ App.errormessage }}' }}
 					</div>
 				{{ '{{/if}} '}}	
@@ -192,43 +199,76 @@
 		
 		{#  ######## Handlebars de crear nueva lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/new">
-			<div class="box span4">
-				<div class="box-header"><span class="title">Agregar una nueva lista</span></div>
-				<div class="box-content padded">
-					<form>
-						{{'{{#if errors.errormsg}}'}}
-							<div class="alert alert-error">
-								{{'{{errors.errormsg}}'}}
-							</div>
-						{{'{{/if}}'}}
-						<label>Nombre *
-							{{' {{#if errors.name }} '}}
-								<span class="text text-error">{{'{{errors.name}}'}}</span>
-							{{' {{/if }} '}}
-						</label>				
+			<div class="row">
+				<h4 class="sectiontitle">Crear una nueva lista</h4>
+				{{'{{#if errors.errormsg}}'}}
+				<div class="bs-callout bs-callout-danger">
+					{{'{{errors.errormsg}}'}}
+				</div>
+				{{'{{/if}}'}}
+				<div class="col-md-5">
+					<form  class="form-horizontal" role="form">
+						{{' {{#if errors.name }} '}}
+						<span class="text text-error">{{'{{errors.name}}'}}</span>
+						{{' {{/if }} '}}
 
-							{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}}' }}
-							<label>Descripción
-								{{' {{#if errors.description }} '}}
-									<span class="text text-error">{{'{{errors.description}}'}}</span>
-								{{' {{/if }} '}}
-							</label>
-							{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
-							<label>Base de datos</label>
-							{{ '{{view Ember.Select
-								contentBinding="controllers.dbase.content"
-								optionValuePath="content.id"
-								optionLabelPath="content.name"
-								selectionBinding="dbase"
-								prompt="Seleccione una base de datos"
-								}}'
-							}}
+						{{' {{#if errors.description }} '}}
+							<span class="text text-error">{{'{{errors.description}}'}}</span>
+						{{' {{/if }} '}}
+
+						<div class="form-group">
+							<label for="name" class="col-sm-4 control-label">* Nombre</label>
+							<div class="col-md-8">
+								{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus" class="form-control"}}' }}
+							</div>
 						</div>
-						<div class="form-actions">
-							<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
-							<button class="btn btn-blue" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
+											
+
+						<div class="form-group">
+							<label for="description" class="col-sm-4 control-label">Descripción</label>
+							<div class="col-md-8">
+								{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required" class="form-control sm-textarea-description"}}' }}
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="dbases" class="col-sm-4 control-label">Base de datos</label>
+							<div class="col-md-8">
+								{{ '{{view Ember.Select
+									contentBinding="controllers.dbase.content"
+									optionValuePath="content.id"
+									optionLabelPath="content.name"
+									selectionBinding="dbase"
+									id="dbases"
+									prompt="Seleccione una base de datos"
+									class="sm-select form-control"}}'
+								}}
+							</div>
+						</div>
+						<div class="form-actions pull-right">
+							<div class="row">
+								<div class="col-xs-6">
+									<button class="btn btn-sm btn-default" {{ '{{action "cancel" this }}' }}>Cancelar</button>
+								</div>
+
+								<div class="col-xs-6">
+									<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "save" this }}' }}>Guardar</button>
+								</div>
+							</div>	
 						</div>
 					</form>
+				</div>
+				<div class="col-md-6">
+					<div class="alert alert-success">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="glyphicon glyphicon-info-sign"></span>
+							</div>
+							<div class="col-md-9">
+								<p>Cree una nueva lista</p>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>	
 		</script>
@@ -236,34 +276,58 @@
 		
 		{#  ######## Handlebars de editar lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/edit">
-			<div class="box span4">
-				<div class="box-header"><span class="title">Editar lista <strong>{{'{{name}}'}}</strong></span></div>
-				<div class="box-content">
-					<form>
-						<div class="padded">
-							{{'{{#if errors.errormsg}}'}}
-								<div class="alert alert-error">
-									{{'{{errors.errormsg}}'}}
-								</div>
-							{{'{{/if}}'}}
-							<label>*Nombre
+			<div class="row">
+				<h4 class="sectiontitle">Editar la lista <strong>{{'{{name}}'}}</strong></h4>
+				{{'{{#if errors.errormsg}}'}}
+				<div class="bs-callout bs-callout-danger">
+					{{'{{errors.errormsg}}'}}
+				</div>
+				{{'{{/if}}'}}
+				<div class="col-md-5">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="" class="col-sm-4 control-label">*Nombre
 								{{' {{#if errors.name }} '}}
 									<span class="text text-error">{{'{{errors.name}}'}}</span>
 								{{' {{/if }} '}}
 							</label>
-							{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" required="required" autofocus="autofocus"}}' }}
-							<label>Descripción
+							<div class="col-md-8">
+								{{ '{{view Ember.TextField valueBinding="name" class="form-control" placeholder="Nombre" required="required" autofocus="autofocus"}}' }}
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-4 control-label">Descripción
 								{{' {{#if errors.description }} '}}
 									<span class="text text-error">{{'{{errors.description}}'}}</span>
 								{{' {{/if }} '}}
 							</label>
-							{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" required="required"}}' }}
+							<div class="col-md-8">
+								{{ '{{view Ember.TextArea valueBinding="description" class="form-control" placeholder="Descripción" required="required"}}' }}
+							</div>
 						</div>
-						<div class="form-actions">
-							<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-							<button class="btn btn-blue" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
+						<div class="form-actions pull-right">
+							<div class="row">
+								<div class="col-xs-6">
+									<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+								</div>
+								<div class="col-xs-6">
+									<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
+								</div>
+							</div>
 						</div>
 					</form>
+				</div>
+				<div class="col-md-6">
+					<div class="alert alert-success">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="glyphicon glyphicon-info-sign"></span>
+							</div>
+							<div class="col-md-9">
+								<p>Cambie el nombre y/o la descripción de la lista</p>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</script>
@@ -271,42 +335,37 @@
 
 		{#  ######## Handlebars de eliminar lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/delete">
-			<div class="row-fluid">
-				<div class="box">
-					<div class="box-header">
-						<div class="title">
-							Eliminar una lista de contactos
-						</div>
+			<div class="row">
+				<h4 class="sectiontitle">Eliminar una lista de contactos</h4>
+				<div class="bs-callout bs-callout-danger">
+					
+					<p>Al eliminar una lista de contactos <strong>no perderá los contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso
+						de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado por completo.</strong></p>
+					
+					
+					<p>Si está <strong>completamente seguro</strong> y desea continuar haga clic en el botón eliminar para proceder</p>
+					
+				</div>
+				{{'{{#if errors.errormsg}}'}}
+					<div class="bs-callout bs-callout-danger">
+						{{'{{errors.errormsg}}'}}
 					</div>
-					<div class="box-content padded">
-						<div class="row-fluid">
-							<p>
-								Aqui podrá eliminar listas de contactos, recuerde que al eliminar una lista de contactos
-								<strong>no perderá los contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso
-								de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado
-								por completo.</strong>
-							</p>
-							<p>
-								Si está <strong>completamente seguro</strong> y desea continuar haga clic en el botón eliminar para
-								proceder
-							</p>
-							{{'{{#if errors.errormsg}}'}}
-								<div class="alert alert-error">
-									{{'{{errors.errormsg}}'}}
-								</div>
-							{{'{{/if}}'}}
-							<br>
-							<button class="btn btn-danger" {{ '{{action delete this}}' }}>Eliminar</button>
-							<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-						</div>
-					</div>
+				{{'{{/if}}'}}
+				<div class="form-actions">
+					<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+					<button class="btn btn-danger btn-sm extra-padding" {{ '{{action delete this}}' }}>Eliminar</button>
 				</div>
 			</div>
 		</script>
 		{#  ######## /Handlebars de eliminar lista de contactos ######### #}
 
 
+
 	{{ partial("contactlist/blockedemail_partial") }}
+
+		<!-- SM -->
+	<div class="prueba"></div>
+
 	{{ partial("contactlist/segment_partial")}}
 </div>
 {% endblock %}

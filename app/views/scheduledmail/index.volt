@@ -13,7 +13,7 @@
 {% block sectiontitle %}<i class="icon-calendar icon-2x"></i>Programación de correos{% endblock %}
 {%block sectionsubtitle %}Administre cuando se deben enviar los correos{% endblock %}
 {% block content%}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-section news with-icons">
 				<div class="avatar green">
@@ -30,7 +30,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span7">
 		{{ flashSession.output() }}
 		</div>
@@ -39,7 +39,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-header">
 				<div class="title">
@@ -91,7 +91,7 @@
 				</table>
 			</div>
 			<div class="box-footer padded">
-				<div class="row-fluid">
+				<div class="row">
 					<div class="span5">
 						<div class="pagination">
 							<ul>

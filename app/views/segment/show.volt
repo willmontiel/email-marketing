@@ -91,37 +91,31 @@
 		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
 		{# /Botones de navegacion pequeños  #}
 
-		<div class="row-fluid">
-			<div class="span12 text-right" style="margin-bottom: 5px;">
-				<a href="{{url('contactlist#/segments')}}" class="btn btn-blue"><i class="icon-home"></i> Todos los segmentos</a>
-			</div>
-		</div>
-		<br />
-		{{ partial("partials/search_contacts_partial") }}
-		<div class="clearfix"></div>
+		<div class="row">
+			<h4 class="sectiontitle">Contactos del segmento {{datasegment.name}} <small>({{'{{totalrecords}}'}})</small></h4>
+				{{ partial("partials/search_contacts_partial") }}
 
-		<div class="box">
-			<div class="box-header">
-				<span class="title">Contactos</span>
-				<ul class="box-toolbar">
-					<li><span class="label label-green">{{'{{totalrecords}}'}}</span></li>
-				</ul>
-			</div>
-			<div class="box-content">
-				<table class="table table-bordered" style="border: 0px !important;">
-					<thead></thead>
-					<tbody>
+				{{ partial("partials/select_contacts_search_partial") }}
+
+			<table class="table table-striped table-contacts">
+				<thead></thead>
+				<tbody>
 					{{'{{#each model}}'}}
 						{{ partial("partials/contact_view_partial") }}
 					{{ '{{else}}' }}
 						<tr>
-							<td colspan="3">No existen coincidencias para el criterio de busqueda.</td>
+							<td>
+								<div class="bs-callout bs-callout-warning">
+									<h4>No se encontraron contactos</h4>
+									<p>Puede ser que su búsqueda no arrojó resultados, que no existen contactos que cumplan todas las condiciones de filtro o que no hay contactos en este segmento.</p>
+								</div>
+							</td>
 						</tr>
 					{{ '{{/each}}' }}
-					</tbody>
-				</table>
-			</div>
-			<div class="box-footer flat"> 
+				</tbody>
+				<tfoot></tfoot>
+			</table>
+			<div class="row"> 
 				{{ partial("partials/pagination_partial") }}
 			</div>
 		</div>
@@ -129,7 +123,7 @@
 	{#
 	<script type="text/x-handlebars" data-template-name="contacts/show">
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -150,7 +144,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="full-contact-information clearfix">
 				<div class="contact-information">
@@ -393,7 +387,7 @@
 	</script>
 	<script type="text/x-handlebars" data-template-name="contacts/edit">
 		<br />
-		<div class="row-fluid">
+		<div class="row">
 			<div class="box">
 				<div class="box-content">
 					<div class="box-section news with-icons">
@@ -414,7 +408,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="box span3">
 				<div class="box-header">
 					<div class="title">

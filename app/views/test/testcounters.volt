@@ -11,7 +11,7 @@
                 {{ stylesheet_link ('css/emarketingstyle.css') }}
     </head>
     <body>
-                <div class="row-fluid">
+                <div class="row">
                          <div class="span6" >
                                 <table class="table table-bordered">
                                         <thead>

@@ -9,7 +9,7 @@
 		</div>
 	</div>
 	<div class="container">
-		<div class="row-fluid">
+		<div class="row">
 			<div class="span8 offset2">
 				<div class="padded">
 						<div class="login box" style="margin-top: 80px;">
