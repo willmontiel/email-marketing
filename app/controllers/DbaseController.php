@@ -49,42 +49,40 @@ class DbaseController extends ControllerBase
 			
 			if(!isset($name) || trim($name) === '' || $name == NULL) {
 				$this->flashSession->error('Debe ingresar un nombre para la base de datos');
-				return $this->response->redirect('dbase/new');
-			}
-		
-			$nameExist = Dbase::findFirst(array(
-				"conditions" => "idAccount = ?1 AND name = ?2",
-				"bind" => array(1 => $idAccount,
-								2 => $name)
-			));
-			if ($nameExist) {
-				$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrado, por favor verifique la información');
-				return $this->response->redirect('dbase/new');
 			}
 			else {
-				$db->idAccount = $idAccount;
-				$db->Ctotal = 0;
-				$db->Cactive = 0;
-				$db->Cinactive = 0;
-				$db->Cunsubscribed  = 0;
-				$db->Cbounced  = 0;
-				$db->Cspam   = 0;
-
-				if ($editform->isValid() && $db->save()) {
-					$this->flashSession->success('Base de Datos Creada Exitosamente!');
-					$this->response->redirect('dbase/show/'. $db->idDbase);
+				$nameExist = Dbase::findFirst(array(
+					"conditions" => "idAccount = ?1 AND name = ?2",
+					"bind" => array(1 => $idAccount,
+									2 => $name)
+				));
+				if ($nameExist) {
+					$this->flashSession->error('El nombre de la Base de Datos ya se encuentra registrado, por favor verifique la información');
 				}
 				else {
-					foreach ($db->getMessages() as $msg) {
-						$this->flashSession->error($msg);
+					$db->idAccount = $idAccount;
+					$db->Ctotal = 0;
+					$db->Cactive = 0;
+					$db->Cinactive = 0;
+					$db->Cunsubscribed  = 0;
+					$db->Cbounced  = 0;
+					$db->Cspam   = 0;
+
+					if ($editform->isValid() && $db->save()) {
+						$this->traceSuccess("Create dbase, idDbase: {$db->idDbase}");
+						$this->flashSession->success('Base de Datos Creada Exitosamente!');
+						$this->response->redirect('dbase/show/'. $db->idDbase);
 					}
-					return $this->response->redirect('dbase/new');
-					
+					else {
+						foreach ($db->getMessages() as $msg) {
+							$this->flashSession->error($msg);
+						}
+					}	
 				}	
 			}
 		}
-			$this->view->setVar('colors', DbaseWrapper::getColors());
-			$this->view->editform = $editform;
+		$this->view->setVar('colors', DbaseWrapper::getColors());
+		$this->view->editform = $editform;
     }
     
     public function showAction($id)
@@ -126,6 +124,7 @@ class DbaseController extends ControllerBase
 				}
 				else {
 					if ($editform->isValid() && $db->save()) {
+						$this->traceSuccess("Edit Dbase, idDbase: {$id}");
 						$this->flashSession->success('Base de Datos Actualizada Exitosamente!');
 						$this->response->redirect('dbase/show/'. $id);
 					}
@@ -151,13 +150,18 @@ class DbaseController extends ControllerBase
 			if($this->user->userrole === 'ROLE_SUDO') {
 				$db->delete();
 				$response = 'Base de Datos Eliminada!';
+				$this->traceSuccess("Dbase deleted like sudo, idDbase: {$id}");
 			}
 			else {
 				try {
 					$wrapper = new DbaseWrapper();
 					$wrapper->deleteDBAsUser($db);
 					$response = 'Base de Datos Eliminada!';
-				} catch(\Exception $e) {
+					$this->traceSuccess("Dbase deleted, idDbase: {$id}");
+				} 
+				catch(\Exception $e) {
+					$this->logger->log("Exception {$e}");
+					$this->traceFail("Dbase cant be deleted, still have contacts, idDbase: {$id}");
 					$response = $e->getMessage();
 				}
 			}

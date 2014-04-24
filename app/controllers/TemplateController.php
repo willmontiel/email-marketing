@@ -108,17 +108,19 @@ class TemplateController extends ControllerBase
 				$template = new TemplateObj();
 				$template->setAccount($account);
 				$template->setUser($this->user);
-				$template->createTemplate($name, $category, $content);
+				$idTemplate = $template->createTemplate($name, $category, $content);
 			}
 			catch (Exception $e) {
 				$this->logger->log("Exception: " . $e);
+				$this->traceFail("Error creating template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log("Exception: " . $e);
+				$this->traceFail("Error creating template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
-//			$this->flashSession->notice("Se ha creado la plantilla exitosamente");
+			$this->traceSuccess("Create template, idTemplate: {$idTemplate}");
 			return $this->setJsonResponse(array('msg' => 'Se ha creado la plantilla exitosamente'), 200, 'success');
 		}
 		else { 
@@ -152,7 +154,6 @@ class TemplateController extends ControllerBase
 	
 	public function deleteAction($idTemplate)
 	{
-		$this->logger->log('Eliminando plantilla');
 		$account = $this->user->account;
 		
 		$template = Template::findFirst(array(
@@ -163,42 +164,42 @@ class TemplateController extends ControllerBase
 		$response = 'error';
 		
 		if ($template && $template->idAccount == '') {
-			$this->logger->log('Plantilla global');
-			$response = $this->deleteGlobalTemplate($template);
+			$response = $this->deletePublicTemplate($template);
 		}
 		else if ($template && $template->idAccount == $account->idAccount) {
-			$this->logger->log('Plantilla pública');
-			$response = $this->deletePublicTemplate($template);
+			$response = $this->deletePrivateTemplate($template);
 		}
 		
 		return $this->response->redirect($response);
 	}
 	
-	private function deleteGlobalTemplate(Template $template)
+	private function deletePublicTemplate(Template $template)
 	{
 		if ($this->validateRoleUser()) {
 			if (!$template->delete()) {
 				foreach ($template->getMessages() as $msg) {
 					$this->logger->log('Error: ' . $msg );
-					$this->flashSession->error("Ha ocurrido un error, contacte con el administrador");
+					$this->flashSession->error($msg);
 				}
 				return 'template';
 			}
+			$this->traceSuccess("Template public deleted by sudo. idTemplate: {$template->idTemplate}");
 			$this->flashSession->warning("Se ha eliminado la plantilla exitosamente");
 			return 'template';
 		}
 		return 'error';
 	}
 	
-	private function deletePublicTemplate(Template $template)
+	private function deletePrivateTemplate(Template $template)
 	{
 		if (!$template->delete()) {
 			foreach ($template->getMessages() as $msg) {
 				$this->logger->log('Error: ' . $msg);
-				$this->flashSession->error("Ha ocurrido un error, contacte con el administrador");
+				$this->flashSession->error($msg);
 			}
 			return 'template';
 		}
+		$this->traceSuccess("Template private deleted. idTemplate: {$template->idTemplate}");
 		$this->flashSession->warning("Se ha eliminado la plantilla exitosamente");
 		return 'template';
 	}
@@ -206,10 +207,8 @@ class TemplateController extends ControllerBase
 	private function validateRoleUser()
 	{
 		if ($this->user->userrole == 'ROLE_SUDO') {
-			$this->logger->log('Es un usuario sudo');
 			return true;
 		}
-		$this->logger->log('No es un usuario sudo, ERROR');
 		return false;
 	}
 	
@@ -242,19 +241,17 @@ class TemplateController extends ControllerBase
 			try {
 				$templateObj = new TemplateObj();
 				$templateObj->setAccount($account);
+				$templateObj->setFinalAccount($this->user->account);
 				$templateObj->setUser($this->user);
 				$templateObj->setTemplate($template);
 				$templateObj->updateTemplate($name, $category, $content);
 			}
 			catch (Exception $e) {
+				$this->traceFail("Edit template, idTemplate: {$idTemplate}");
 				$this->logger->log('Exception: ' . $e);
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
-			catch (InvalidArgumentException $e) {
-				$this->logger->log('Exception: ' . $e);
-				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
-			}
-//			$this->flashSession->notice("Se ha editado la plantilla exitosamente");
+			$this->traceSuccess("Edit template, idTemplate: {$idTemplate}");
 			return $this->setJsonResponse(array('msg' => 'Se ha editado la plantilla exitosamente'), 200, 'success');
 		}
 		else {
@@ -349,7 +346,7 @@ class TemplateController extends ControllerBase
 			$this->logger->log($img);
 			$info = getimagesize($img);
 			$this->response->setHeader("Content-Type:", $info['mime']);
-	//		$this->response->setHeader("Content-Length:", filesize($img));
+//			$this->response->setHeader("Content-Length:", filesize($img));
 			$this->view->disable();
 			return $this->response->setContent(file_get_contents($img));
 		}

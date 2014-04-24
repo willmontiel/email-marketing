@@ -138,6 +138,7 @@ class UserController extends ControllerBase
 		$idUser = $this->session->get('userid');
 		
 		if($id == $idUser){
+			$this->traceFail("Trying to delete an user in session, idUser: {$id} - account: {$this->user->account->idAccount}");
 			$this->flashSession->error("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
 			return $this->response->redirect("user/index");
 		}
