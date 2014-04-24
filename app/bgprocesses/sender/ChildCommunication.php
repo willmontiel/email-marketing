@@ -188,7 +188,7 @@ class ChildCommunication extends BaseWrapper
 				else {
 					/*
 					 * ================================================================
-					 * ERROR (CORREGIDO??)
+					 * ERROR (CORREGIDO)
 					 * REVISAR: En este punto se hace referencia a: $content->text
 					 * Pero $content es una variable que se crea arriba a partir
 					 * del código HTML SOLAMENTE!
@@ -219,12 +219,20 @@ class ChildCommunication extends BaseWrapper
 
 				/*
 				 * ================================================================
-				 * ERROR
+				 * ERROR (CORREGIDO)
 				 * REVISAR: Qué sucede cuando el contacto NO tiene nombre ni apellido?
-				 * Cómo le llega el correo?
+				 * Cómo le llega el correo? (verificado, se ve mal en algunos programas
+				 * de correo)
 				 * ================================================================
 				 */
-				$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
+				if ((!$contact['contact']['name'] || trim($contact['contact']['name']) == '') && 
+					(!$contact['contact']['lastName'] || trim($contact['contact']['lastName']) == '') ) {
+					$toName = $contact['email']['email'];
+				}
+				else {
+					trim($contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
+				}
+				$to = array($contact['email']['email'] => $toName);
 
 				$message = new Swift_Message($subject);
 
