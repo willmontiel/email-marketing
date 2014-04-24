@@ -83,7 +83,12 @@
 	<i class="icon-book"></i> {{sdbase.name}}
 {% endblock %}
 {% block sectionsubtitle %} {{sdbase.description}} {% endblock %}
+
 {% block content %}
+
+{# Botones de navegacion interna #}
+{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
+
 <div id="emberAppContainer">
 	<script type="text/x-handlebars"> 
 		<div class="row">
@@ -99,113 +104,99 @@
 		</div>
 	</script>
 	<script type="text/x-handlebars" data-template-name="fields/index">       
-		<div class="row">
-			<div class="span12">
-				<div class="box">
-					<div class="box-content">
-						<div class="box-section news with-icons">
-							<div class="avatar blue">
-								<i class="icon-tags icon-2x"></i>
-							</div>
-							<div class="news-time">
-							</div>
-							<div class="news-content">
-								<div class="news-title">
-									Campos de la Base de Datos
-								</div>
-								<div class="news-text">
-									Esta seccion esta dedicada a la Lectura
-									y Edicion de los Campos Personalizados
-								</div>
-							</div>
-						</div>
-					</div>
+		<div class="box-section news with-icons">
+			<div class="news-time">
+			</div>
+			<div class="news-content">
+				<div class="news-title">
+					Campos de la Base de Datos
+				</div>
+				<div class="news-text">
+					Esta seccion esta dedicada a la Lectura
+					y Edicion de los Campos Personalizados
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="span12 padded text-right">
+			<div class="pull-right">
 				{{'{{#link-to "fields.add" class="btn btn-default" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/link-to}}'}}
 			</div>
 		</div>
 		<div class="row">
-						<table class="table table-normal">
-							<thead>
-								<tr>
-									<td>Etiqueta</td>
-									<td>Tipo</td>
-									<td>Requerido</td>
-									<td>Valor por Defecto</td>
-									<td>Accion</td>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Email</td>
-									<td>Text</td>
-									<td>
-										<div class="icheckbox_flat-aero checked hover">
-										</div>
-									</td>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Nombre</td>
-									<td>Text</td>
-									<td>
-										<div class="icheckbox_flat-aero hover">
-										</div>
-									</td>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Apellido</td>
-									<td>Text</td>
-									<td>
-										<div class="icheckbox_flat-aero hover">
-										</div>
-									</td>
-									<td></td>
-									<td></td>
-								</tr>
-							{{'{{#each model}}'}}
-								<tr>
-									<td>{{'{{name}}'}}</td>
-									<td>{{'{{type}}'}}</td>
-									<td>
-										{{ '{{#if required}}' }}
-											<div class="icheckbox_flat-aero checked hover">
-											</div>
-										{{ '{{else}}' }}
-											<div class="icheckbox_flat-aero hover">
-											</div>
-										{{ '{{/if}}' }}
-									</td>
-									<td>{{'{{defaultValue}}'}}</td>
-									<td>
-										<div class="pull-right">
-											<div class="btn-group">
-												<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-												<ul class="dropdown-menu">
-													<li>{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{'{{/link-to}}'}}</li>
-													<li>{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled"}}'}}<i class="icon-trash"></i> Eliminar {{'{{/link-to}}'}}</li>
-												</ul>
-											</div>
-										</div>
+			<table class="table table-normal">
+				<thead>
+					<tr>
+						<td>Etiqueta</td>
+						<td>Tipo</td>
+						<td>Requerido</td>
+						<td>Valor por Defecto</td>
+						<td>Accion</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Email</td>
+						<td>Text</td>
+						<td>
+							<div class="icheckbox_flat-aero checked hover">
+							</div>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Nombre</td>
+						<td>Text</td>
+						<td>
+							<div class="icheckbox_flat-aero hover">
+							</div>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Apellido</td>
+						<td>Text</td>
+						<td>
+							<div class="icheckbox_flat-aero hover">
+							</div>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+				{{'{{#each model}}'}}
+					<tr>
+						<td>{{'{{name}}'}}</td>
+						<td>{{'{{type}}'}}</td>
+						<td>
+							{{ '{{#if required}}' }}
+								<div class="icheckbox_flat-aero checked hover">
+								</div>
+							{{ '{{else}}' }}
+								<div class="icheckbox_flat-aero hover">
+								</div>
+							{{ '{{/if}}' }}
+						</td>
+						<td>{{'{{defaultValue}}'}}</td>
+						<td>
+							<div class="pull-right">
+								<div class="btn-group">
+									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li>{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{'{{/link-to}}'}}</li>
+										<li>{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled"}}'}}<i class="icon-trash"></i> Eliminar {{'{{/link-to}}'}}</li>
+									</ul>
+								</div>
+							</div>
 
 
-									</td>
-								</tr>
-							{{'{{else}}'}}
-								<tr><td colspan="5">No hay campos personalizados</td></tr>
-							{{'{{/each}}'}}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
+						</td>
+					</tr>
+				{{'{{else}}'}}
+					<tr><td colspan="5">No hay campos personalizados</td></tr>
+				{{'{{/each}}'}}
+				</tbody>
+			</table>
 		</div>
 	</script>
 
@@ -213,92 +204,64 @@
 		{{'{{outlet}}'}}
 	</script>
 	<div class="row">
-		<div class="row">
-			<div class="span12 text-right">
-				<a href="{{url('dbase')}}" class="btn btn-default"><i class="icon-reply"></i> Bases de datos</a>
-			</div>
+		<div class="pull-right">
+			<a href="{{url('dbase')}}" class="btn btn-default"><i class="icon-reply"></i> Bases de datos</a>
 		</div>
 	</div>
 		<!------------------ Ember! ---------------------------------->
 	<div id="emberAppContainer">
 	<script type="text/x-handlebars" data-template-name="index">
+		<h4>Información de la base de datos</h4>
+		<div class="news-title">
+			{{sdbase.name}}
+		</div>
+		<div class="news-text">
+			<p>{{sdbase.description}}</p>
+			<p>{{sdbase.Cdescription}}</p>
+			Creada en {{date('Y-m-d', sdbase.createdon)}}<br />
+			Actualizada en {{date('Y-m-d', sdbase.updatedon)}}
+		</div>
 		<div class="row">
-			<div class="span6">
-				<div class="box">
-					<div class="box-header">
-						<div class="title">
-							Información de la base de datos
-						</div>
-					</div>
-					<div class="box-content padded">
-						<div class="box-section news with-icons">
-							<div class="avatar purple">
-								<i class="icon-book icon-2x"></i>
-							</div>
-							<div class="news-content">
-								<div class="news-title">
-									{{sdbase.name}}
-								</div>
-								<div class="news-text">
-									<p>{{sdbase.description}}</p>
-									<p>{{sdbase.Cdescription}}</p>
-									Creada en {{date('Y-m-d', sdbase.createdon)}}<br />
-									Actualizada en {{date('Y-m-d', sdbase.updatedon)}}
-								</div>
-							</div>
-						</div>
-						<br />
-						<div class="row">
-							<div class="span2">
-								<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default">Editar</a>
-							</div>
-						</div>
-					</div>
-				</div>	
-			</div>
-			<div class="span6">
-				<div class="box">
-					<div class="box-header">
-						<div class="title">Información de contactos</div>
-					</div>
-					<div class="box-content">
-						<table class="table table-normal">
-							<tbody>
-								<tr>
-									<td><i class="icon-user"></i> Contactos totales</td>
-									<td class="status-success"><span class="label label-blue">{{ sdbase.Ctotal|numberf }}</span></td>
-								</tr>
-
-								<tr>
-									<td><i class="icon-ok"></i> Contactos Activos</td>
-									<td class="status-success"><span class="label label-green">{{ sdbase.Cactive|numberf }}</span></td>
-								</tr>
-
-								<tr>
-									<td><i class="icon-question-sign"></i> Contactos Inactivos</td>
-									<td class="status-error"><span class="label label-gray"> {{ get_inactive(sdbase)|numberf }}</span></td>
-								</tr>
-
-								<tr>
-									<td><i class="icon-check-empty"></i> Contactos Desuscritos</td>
-									<td class="status-success"><span class="label label-warning"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
-								</tr>
-
-								<tr>
-									<td><i class="icon-retweet"></i> Contactos Rebotados</td>
-									<td class="status-success"><span class="label label-red"> {{sdbase.Cbounced|numberf }}</span></td>
-								</tr>
-
-								<tr>
-									<td><i class="icon-exclamation-sign"></i> Contactos Spam</td>
-									<td class="status-success"><span class="label label-red"> {{sdbase.Cspam|numberf }}</span></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
+			<div class="col-md-3">
+				<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default">Editar</a>
 			</div>
 		</div>
+		<h4>Información de contactos</h4>
+		<table class="table table-normal">
+			<thead></thead>
+			<tbody>
+				<tr>
+					<td><i class="icon-user"></i> Contactos totales</td>
+					<td class="status-success"><span class="label label-blue">{{ sdbase.Ctotal|numberf }}</span></td>
+				</tr>
+
+				<tr>
+					<td><i class="icon-ok"></i> Contactos Activos</td>
+					<td class="status-success"><span class="label label-green">{{ sdbase.Cactive|numberf }}</span></td>
+				</tr>
+
+				<tr>
+					<td><i class="icon-question-sign"></i> Contactos Inactivos</td>
+					<td class="status-error"><span class="label label-gray"> {{ get_inactive(sdbase)|numberf }}</span></td>
+				</tr>
+
+				<tr>
+					<td><i class="icon-check-empty"></i> Contactos Desuscritos</td>
+					<td class="status-success"><span class="label label-warning"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
+				</tr>
+
+				<tr>
+					<td><i class="icon-retweet"></i> Contactos Rebotados</td>
+					<td class="status-success"><span class="label label-red"> {{sdbase.Cbounced|numberf }}</span></td>
+				</tr>
+
+				<tr>
+					<td><i class="icon-exclamation-sign"></i> Contactos Spam</td>
+					<td class="status-success"><span class="label label-red"> {{sdbase.Cspam|numberf }}</span></td>
+				</tr>
+			</tbody>
+			<tfooter></tfooter>
+		</table>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/add">
