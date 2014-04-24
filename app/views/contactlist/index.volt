@@ -139,15 +139,15 @@
 							<td {{' {{bind-attr style="dbase.style"}} '}}>
 							</td>
 							<td>
-								<a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts">{{ '{{name}}' }}</a>
+								<a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts"><strong>{{ '{{name}}' }}</strong></a>
 								<br/>
 								{{ '{{description}}' }}
 							</td>
 							<td>
-								<!-- Detalles de la lista -->
+{#								<!-- Detalles de la lista -->
 								<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts" class="btn btn-default btn-sm">
 								<i class="glyphicon glyphicon-search"></i> Detalles</a>
-
+#}
 								<!-- Editar la lista -->
 								{{ '{{#link-to "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
 
@@ -190,7 +190,7 @@
 		</script>
 		<script type="text/x-handlebars" data-template-name="lists">
 				{{ '{{#if App.errormessage }}' }}
-					<div class="alert alert-message alert-error">
+					<div class="bs-callout bs-callout-danger">
 					{{ '{{ App.errormessage }}' }}
 					</div>
 				{{ '{{/if}} '}}	
@@ -201,14 +201,13 @@
 		<script type="text/x-handlebars" data-template-name="lists/new">
 			<div class="row">
 				<h4 class="sectiontitle">Crear una nueva lista</h4>
+				{{'{{#if errors.errormsg}}'}}
+				<div class="bs-callout bs-callout-danger">
+					{{'{{errors.errormsg}}'}}
+				</div>
+				{{'{{/if}}'}}
 				<div class="col-md-5">
 					<form  class="form-horizontal" role="form">
-						{{'{{#if errors.errormsg}}'}}
-						<div class="alert alert-error">
-							{{'{{errors.errormsg}}'}}
-						</div>
-						{{'{{/if}}'}}
-
 						{{' {{#if errors.name }} '}}
 						<span class="text text-error">{{'{{errors.name}}'}}</span>
 						{{' {{/if }} '}}
@@ -249,15 +248,27 @@
 						<div class="form-actions pull-right">
 							<div class="row">
 								<div class="col-xs-6">
-									<button class="btn btn-sm btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+									<button class="btn btn-sm btn-default" {{ '{{action "cancel" this }}' }}>Cancelar</button>
 								</div>
 
 								<div class="col-xs-6">
-									<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action save this }}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
+									<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "save" this }}' }}>Guardar</button>
 								</div>
 							</div>	
 						</div>
 					</form>
+				</div>
+				<div class="col-md-6">
+					<div class="alert alert-success">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="glyphicon glyphicon-info-sign"></span>
+							</div>
+							<div class="col-md-9">
+								<p>Cree una nueva lista</p>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>	
 		</script>
@@ -268,7 +279,7 @@
 			<div class="row">
 				<h4 class="sectiontitle">Editar la lista <strong>{{'{{name}}'}}</strong></h4>
 				{{'{{#if errors.errormsg}}'}}
-				<div class="alert alert-error">
+				<div class="bs-callout bs-callout-danger">
 					{{'{{errors.errormsg}}'}}
 				</div>
 				{{'{{/if}}'}}
@@ -306,6 +317,18 @@
 						</div>
 					</form>
 				</div>
+				<div class="col-md-6">
+					<div class="alert alert-success">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="glyphicon glyphicon-info-sign"></span>
+							</div>
+							<div class="col-md-9">
+								<p>Cambie el nombre y/o la descripción de la lista</p>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</script>
 		{#  ######## /Handlebars de editar lista de contactos ######### #}
@@ -324,7 +347,7 @@
 					
 				</div>
 				{{'{{#if errors.errormsg}}'}}
-					<div class="alert alert-error">
+					<div class="bs-callout bs-callout-danger">
 						{{'{{errors.errormsg}}'}}
 					</div>
 				{{'{{/if}}'}}

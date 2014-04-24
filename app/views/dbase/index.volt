@@ -16,111 +16,85 @@
 		dependiendo de las necesidades.
 		
 	</div>
-	<div class="span7">
+	<div class="">
 		{{ flashSession.output() }}
 	</div>
-	<div class="span5 text-right"> 
-		<a href="{{ url('dbase/new') }}" class="btn btn-default">
-			<i class="icon-plus"></i> Crear Base de Datos
+	<div class="col-md-3 col-md-offset-8">
+		<a href="{{ url('dbase/new') }}" class="btn btn-default btn-sm extra-padding">
+			<i class="glyphicon glyphicon-plus"></i> Crear base de datos
 		</a>
-		<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
 	</div>
-</div>
-<div class="row">
+	<div class="space"></div>
 		<!-- Lista de mis bases de datos -->
-	<table class="table table-strepead table-contacts">
+	<table class="table table-strepead">
 		<thead></thead>
 		<tbody>
 		{%for item in page.items%}
 			<tr>
-				<td class="span5">
-					<div class="box-section news with-icons">
-						<div class="avatar purple">
-							<i class="icon-book icon-2x"></i>
-						</div>
-						<div class="news-time">
-							<span>&nbsp;</span>
-							<a href="{{url('statistic/dbase')}}/{{item.idDbase}}"><i class="icon-bar-chart icon-2x"></i></a>
-						</div>
-						<div class="news-content">
-							<div class="news-title">
-								<a href="{{ url('dbase/show') }}/{{item.idDbase}}">{{item.name}}</a>
-							</div>
-							<div class="news-text">
-								{{item.description}}
-							</div>
-						</div>
-					</div>
+				<td>
+					<a href="{{url('statistic/dbase')}}/{{item.idDbase}}"><i class="icon-bar-chart icon-2x"></i></a><br/>
+					<a href="{{ url('dbase/show') }}/{{item.idDbase}}"><strong>{{item.name}}</strong></a>
+					{{item.description}}
 				</td>
-				<td class="span5">
-					<ul class="inline pull-right sparkline-box">
-						<li class="sparkline-row">
-							<h4 class="green"><span>Activos</span> {{item.Cactive|numberf}}</h4>
+				<td>
+					<ul class="list-inline pull-right">
+						<li>
+							<h4 class="green"><span>Activos:</span> {{item.Cactive|numberf}}</h4>
 						</li>
 
-						<li class="sparkline-row">
-							<h4 class="gray"><span>Inactivos</span> {{get_inactive(item)|numberf}}</h4>
+						<li>
+							<h4 class="gray"><span>Inactivos:</span> {{get_inactive(item)|numberf}}</h4>
 						</li>
 
-						<li class="sparkline-row">
-							<h4 class="blue"><span>Des-suscritos</span> {{item.Cunsubscribed|numberf}}</h4>
+						<li>
+							<h4 class="blue"><span>Des-suscritos:</span> {{item.Cunsubscribed|numberf}}</h4>
 						</li>
 
-						<li class="sparkline-row">
-							<h4 class="red"><span>Rebotados</span> {{item.Cbounced|numberf}}</h4>
+						<li>
+							<h4 class="orange"><span>Rebotados:</span> {{item.Cbounced|numberf}}</h4>
 						</li>
 
-						<li class="sparkline-row">
-							<h4 class="red"><span>Spam</span> {{item.Cspam|numberf}}</h4>
+						<li>
+							<h4 class="red"><span>Spam:</span> {{item.Cspam|numberf}}</h4>
 						</li>
 					</ul>
 				</td>
-				<td class="span2">
-					<div class="pull-right">
-						<div class="btn-group">
-							<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-							<ul class="dropdown-menu">
-								<li><a href="{{ url('dbase/edit/') }}{{item.idDbase}}"><i class="icon-pencil"></i> Editar</a></li>
-								<li><a class="ShowDialog" data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item.idDbase}}"><i class="icon-trash"></i> Eliminar </a></li>
-							</ul>
-						</div>
-					</div>
+				<td>
+					<a href="{{ url('dbase/edit/') }}{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+					<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
 				</td>
 			</tr>
 	{%endfor%}
 		</tbody>
 	</table>
-</div>
-		<div class="box-footer padded">
-			<div class="row">
-				<div class="span5">
-					<div class="pagination">
-						<ul>
-							{% if page.current == 1 %}
-								<li class="previous"><a href="#" class="inactive"><<</a></li>
-								<li class="previous"><a href="#" class="inactive"><</a></li>
-							{% else %}
-								<li class="previous active"><a href="{{ url('dbase/index') }}"><<</a></li>
-								<li class="previous active"><a href="{{ url('dbase/index') }}?page={{ page.before }}"><</a></li>
-							{% endif %}
+	
+	{{ partial("partials/pagination_partial") }}
 
-							{% if page.current >= page.total_pages %}
-								<li class="next"><a href="#" class="inactive">></a></li>
-								<li class="next"><a href="#" class="inactive">>></a></li>
-							{% else %}
-								<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.next}}">></a></li>
-								<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.last}}">>></a></li>		
-							{% endif %}
-						</ul>
-					 </div>
-				 </div>
-				 <div class="span5">
-					 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
-					 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
-				 </div>
-			</div>
-		</div>
+	<div class="box-footer padded">
+		<div class="pagination">
+			<ul>
+				{% if page.current == 1 %}
+					<li class="previous"><a href="#" class="inactive"><<</a></li>
+					<li class="previous"><a href="#" class="inactive"><</a></li>
+				{% else %}
+					<li class="previous active"><a href="{{ url('dbase/index') }}"><<</a></li>
+					<li class="previous active"><a href="{{ url('dbase/index') }}?page={{ page.before }}"><</a></li>
+				{% endif %}
+
+				{% if page.current >= page.total_pages %}
+					<li class="next"><a href="#" class="inactive">></a></li>
+					<li class="next"><a href="#" class="inactive">>></a></li>
+				{% else %}
+					<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.next}}">></a></li>
+					<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.last}}">>></a></li>		
+				{% endif %}
+			</ul>
+		 </div>
 	</div>
+	 <div class="">
+		 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
+		 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
+	 </div>
 		<!-- Fin de mi lista de bases de datos -->
 </div>
 <div class="row">

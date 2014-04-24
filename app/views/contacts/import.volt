@@ -60,6 +60,7 @@
 			<div class="">
 				<img src="{{url('')}}b3/images/step2-import.png" class="center-block" alt="" />
 			</div>
+			<div class="space"></div>
 {#
 			<div class="well relative">
 				Esta es la segunda parte del proceso, aqui podrá relacionar los datos del archivo que acaba de importar, con los
@@ -77,66 +78,52 @@
 			</div>
 		</div>
 #}
-	<form method="POST" action="{{url('contacts/processfile/')}}{{idContactlist~'/'~idImportfile}}">
-		<div class="row">
-			<div class="span6">
-				<div class="box">
-					<div class="box-header">
-						<span class="title">Relaciones entre campos</span>
-						<ul class="box-toolbar">
-							<li><span class="label label-black"><i class="icon-exchange"></i></span></li>
-						</ul>
-					</div>
-					<div class="box-content">
-						<table class="table table-normal">
-							<tbody>
-								<tr>
-									<th>Email</th>
-									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="email" id="email" name="email"}}'}}
-									</th>
-								</tr>
-								<tr>		
-									<th>Nombre</th>
-									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="name" id="name" name="name"}}'}}
-									</th>
-								</tr>
-								<tr>		
-									<th>Apellido</th>
-									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="lastname" id="lastname" name="lastname"}}'}}
-									</th>
-								</tr>
-								{%for field in customfields %}
-								<tr>		
-									<th>{{field.name}}</th>
-									<th>
-										{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" class="uniform" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'"}}'}}
-						
-									</th>
-								</tr>
-								{%endfor%}
-							</tbody>
-						</table>
-					</div>
-				<div class="box-footer">
-					<span class="title">Delimitador: </span>
-					{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" class="span2"}} '}}
-					<span class="title">Encabezado: </span>
-					{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
+
+		<form method="POST" class="" action="{{url('contacts/processfile/')}}{{idContactlist~'/'~idImportfile}}" role="form">
+			<div class="row">
+				<div class="col-md-5">
+					<h4>Asignación de campos</h4>
+					<ul class="box-toolbar">
+						<li><span class="label label-black"><i class="icon-exchange"></i></span></li>
+					</ul>
+					<table class="table table-condensed table-striped table-contacts">
+						<tbody>
+							<tr>
+								<th>Email</th>
+								<th>
+									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="email" id="email" name="email" class="form-control"}}'}}
+								</th>
+							</tr>
+							<tr>		
+								<th>Nombre</th>
+								<th>
+									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="name" id="name" name="name" class="form-control"}}'}}
+								</th>
+							</tr>
+							<tr>		
+								<th>Apellido</th>
+								<th>
+									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="lastname" id="lastname" name="lastname" class="form-control"}}'}}
+								</th>
+							</tr>
+							{%for field in customfields %}
+							<tr>		
+								<th>{{field.name}}</th>
+								<th>
+									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" class="uniform form-control" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'" }}'}}
+					
+								</th>
+							</tr>
+							{%endfor%}
+						</tbody>
+					</table>
 				</div>
-			</div>
-		</div>
-		<div class="span6">
-			<div class="box">
-				<div class="box-header">
-					<span class="title">Previsualización</span>
+				<div class="col-md-1"></div>
+				<div class="col-md-6">
+					<h4>Previsualización</h4>
 					<ul class="box-toolbar">
 						<li><span class="label label-blue"><i class="icon-eye-open"></i></span></li>
 					</ul>
-				</div>
-				<div class="box-content">
 					<table class="table table-normal">
 						<tbody>
 							<tr>
@@ -161,63 +148,59 @@
 						</tbody>
 					</table>
 				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-			<div class="span12">
-				<div class="box">
-					<div class="box-header">
-						<span class="title">Información de archivo, 5 primeras filas</span>
-						<ul class="box-toolbar">
-							<li><span class="label label-green"><i class="icon-thumbs-up"></i></span></li>
-						</ul>
-					</div>
-					<div class="box-content">
-						<table class="table table-normal">
-							<tbody>
-								{{' {{#unless hasheader}} '}}
-								<tr>
-									{{' {{#each App.firstline}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-								{{ '{{/unless}}' }}
-								<tr>
-									{{' {{#each App.secondline}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-								<tr>
-									{{' {{#each App.thirdline}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-								<tr>
-									{{' {{#each App.fourthline}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-								<tr>
-									{{' {{#each App.fifthline}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-							</tbody>
-						</table>
-					</div>
+				<div class="clearfix"></div>
+				<div class="box-footer">
+					<span class="title">Delimitador: </span>
+					{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}
+					<span class="title">Encabezado: </span>
+					{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
 				</div>
 			</div>
-		</div>
-		<a href="{{ url('contactlist/show/'~ idContactlist ~'#/contacts/import') }}" class="btn btn-default">Cancelar</a>
-		{{submit_button('class': "btn btn-blue", "Enviar")}}
+			<h4>Información de archivo, 5 primeras filas</h4>
+			<ul class="box-toolbar">
+				<li><span class="label label-green"><i class="icon-thumbs-up"></i></span></li>
+			</ul>
+			<table class="table table-condensed table-striped table-contacts">
+				<tbody>
+					{{' {{#unless hasheader}} '}}
+					<tr>
+						{{' {{#each App.firstline}} '}}
+							<td>{{' {{this}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+					{{ '{{/unless}}' }}
+					<tr>
+						{{' {{#each App.secondline}} '}}
+							<td>{{' {{this}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+					<tr>
+						{{' {{#each App.thirdline}} '}}
+							<td>{{' {{this}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+					<tr>
+						{{' {{#each App.fourthline}} '}}
+							<td>{{' {{this}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+					<tr>
+						{{' {{#each App.fifthline}} '}}
+							<td>{{' {{this}} '}}</td>
+						{{' {{/each}} '}}
+					</tr>
+				</tbody>
+			</table>
+			<a href="{{ url('contactlist/show/'~ idContactlist ~'#/contacts/import') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
+			{{submit_button('class': "btn btn-default btn-sm btn-guardar extra-padding", "Guardar")}}
 		</form>
+		<div class="space"></div>
 	</script>
-	
+		
 	<script type="text/x-handlebars" data-template-name="select">
 		{{' {{view App.DelimiterView name="delimiter" contentBinding="App.delimiter_opt"}} '}}
 	</script>
-	
+
 	<script type="text/x-handlebars" data-template-name="contacts">
 		{{' {{outlet}} '}}
 	</script>

@@ -246,7 +246,7 @@
 	<script type="text/x-handlebars" data-template-name="contacts/new">
 		<div class="row">
 			{{ '{{#if App.errormessage }}' }}
-				<div class="alert alert-message alert-error">
+				<div class="bs-callout bs-callout-danger">
 					{{ '{{ App.errormessage }}' }}
 				</div>
 		</div>
@@ -255,7 +255,7 @@
 		<div class="col-md-5">
 			<form  class="form-horizontal" role="form">
 				{{ '{{#if errors.errormsg}}' }}
-					<div class="alert alert-error">
+					<div class="bs-callout bs-callout-danger">
 						{{ '{{errors.errormsg}}' }}
 					</div>
 				{{ '{{/if}}' }}
@@ -360,12 +360,12 @@
 				<p>¿Esta seguro que desea Eliminar el Contacto <strong>{{'{{name}}'}} ?</strong></p>
 			</div>
 			{{ '{{#if errors.errormsg}}' }}
-				<div class="alert alert-error">
+				<div class="bs-callout bs-callout-danger">
 					{{ '{{errors.errormsg}}' }}
 				</div>
 			{{ '{{/if}}' }}
-			<button {{'{{action delete this}}'}} class="btn btn-danger btn-sm">Eliminar</button>
-			<button class="btn btn-default btn-sm" {{ '{{action cancel this}}' }}>Cancelar</button>
+			<button {{'{{action delete this}}'}} class="btn btn-danger btn-sm extra-padding">Eliminar</button>
+			<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
 		</div>
 	</script>
 		
@@ -375,15 +375,15 @@
 			<div class="">
 				<img src="{{url('')}}b3/images/step1-import.png" class="center-block" alt="" />
 			</div>
+			<div class="space"></div>
 			<div class="col-md-5">
 				<form method="post" class="form-horizontal"  action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data" role="form">
 					<div class="form-group">
-						<button for="import-file-btn" class="btn btn-default extra-padding">Elija el archivo a importar</button>
-						<input id="import-file-btn" name="importFile" type="file" class="" style="display: none" >
+						<input name="importFile" type="file" >
 						<input type="hidden" name="idcontactlist" value={{datalist.idContactlist}}>
 					</div>
-					<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default">Cancelar</a>
-					{{submit_button('class': "btn btn-default btn-sm", "Cargar")}}
+					<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default btn-sm extra-padding">Cancelar</a>
+					{{submit_button('class': "btn btn-default btn-sm btn-guardar extra-padding", "Cargar")}}
 				</form>
 			</div>
 {#

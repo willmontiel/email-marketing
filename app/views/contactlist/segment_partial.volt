@@ -86,18 +86,14 @@
 	<div class="row">
 		<h4 class="sectiontitle">Crear nuevo segmento</h4>
 		{{ '{{#if App.errormessage }}' }}
-		<div class="row">
-			<div class="alert alert-error">
+			<div class="bs-callout bs-callout-danger">
 				{{ '{{ App.errormessage }}' }}
 			</div>
-		</div>
 		{{ '{{/if}} '}}
 		{{'{{#if errors.segmentname}}'}}
-		<div class="row">
-			<div class="alert alert-error">
+			<div class="bs-callout bs-callout-danger">
 				{{'{{errors.segmentname}}'}}
 			</div>
-		</div>
 		{{'{{/if}}'}}
 		<div class="col-sm-12 hidden-md hidden-lg">
 			<div class="alert alert-success">
@@ -151,7 +147,7 @@
 								<option>{{' {{dbase.name}} '}}</option>
 							</select>
 						</div>
-						<button class="btn btn-default" {{ '{{action reset this }}' }}><i class="icon-bolt"></i> Reset</button>
+						<button class="btn btn-default btn-sm extra-padding" {{ '{{action reset this }}' }}><i class="icon-bolt"></i> Reset</button>
 					</div>
 					{{ '{{/unless}}' }}
 				</div>
@@ -191,7 +187,7 @@
 				</div>
 				<div class="clearfix"></div>
 				{{'{{#if errors.segment}}'}}
-				<div class="alert alert-error">
+				<div class="bs-callout bs-callout-danger">
 					{{'{{errors.segment}}'}}
 				</div>
 				{{'{{/if}}'}}
@@ -227,7 +223,7 @@
 						<div class="col-md-3">
 							<div class="row">
 								{{ '{{#unless defaultCriteria}}' }}
-									<button class="btn btn-default btn-sm" {{ '{{action aConditionLess cr}}' }}><i class="glyphicon glyphicon-trash"></i></button>
+									<button class="btn btn-default btn-sm extra-padding" {{ '{{action aConditionLess cr}}' }}><i class="glyphicon glyphicon-trash"></i></button>
 							
 								{{ '{{#unless limitCriteria}}' }}
 								<button class="btn btn-sm btn-default btn-add extra-padding" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
@@ -242,7 +238,7 @@
 				<div class="form-actions pull-right">
 					<div class="row">
 						<div class="col-xs-6">
-							<button class="btn btn-sm btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
+							<button class="btn btn-sm btn-default extra-padding" {{ '{{action cancel this }}' }}>Cancelar</button>
 						</div>
 						<div class="col-xs-6">
 							<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action save this }}' }}>Grabar</button>
@@ -263,8 +259,8 @@
 			<p>Está a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos, pero no los contactos .Si está seguro que desea continuar haga clic en el botón eliminar, de lo contrario haga en clic en cancelar.</p>
 		</div>
 		
-		<button class="btn btn-default btn-sm" {{ '{{action cancel this}}' }}>Cancelar</button>
-		<button class="btn btn-delete btn-sm" {{ '{{action delete this}}' }}>Eliminar</button>
+		<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+		<button class="btn btn-delete btn-sm extra-padding" {{ '{{action delete this}}' }}>Eliminar</button>
 	</div>
 </script>
 
@@ -273,18 +269,14 @@
 	<div class="row">
 		<h4 class="sectiontitle">Editar un segmento</h4>
 		{{ '{{#if App.errormessage }}' }}
-		<div class="row">
-			<div class="alert alert-error">
+			<div class="bs-callout bs-callout-danger">
 				{{ '{{ App.errormessage }}' }}
 			</div>
-		</div>
 		{{ '{{/if}} '}}	
 		{{'{{#if errors.segmentname}}'}}
-		<div class="row">
-			<div class="alert alert-error">
+			<div class="bs-callout bs-callout-danger">
 				{{'{{errors.segmentname}}'}}
 			</div>
-		</div>
 		{{'{{/if}}'}}
 
 		<div class="col-sm-12 hidden-md hidden-lg">
@@ -349,7 +341,7 @@
 				</div>
 				<div class="clearfix"></div>
 				{{'{{#if errors.segment}}'}}
-					<div class="alert alert-error">
+					<div class="bs-callout bs-callout-danger">
 						{{'{{errors.segment}}'}}
 					</div>
 				{{'{{/if}}'}}
@@ -384,7 +376,7 @@
 						<div class="col-md-3">
 							<div class="row">
 								{{ '{{#unless defaultCriteria}}' }}
-									<button class="btn btn-default btn-sm" {{ '{{action aConditionLess cr}}' }}><i class="glyphicon glyphicon-trash"></i></button>
+									<button class="btn btn-default btn-sm extra-padding" {{ '{{action aConditionLess cr}}' }}><i class="glyphicon glyphicon-trash"></i></button>
 								{{ '{{/unless}}' }}
 
 								{{ '{{#unless limitCriteria}}' }}
@@ -399,10 +391,10 @@
 				<div class="form-actions pull-right">
 					<div class="row">
 						<div class="col-xs-6">
-							<button class="btn btn-default btn-sm" {{ '{{action cancel this}}' }}>Cancelar</button>
+							<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</div>
 						<div class="col-xs-6">
-							<button class="btn btn-sm btn-guardar" {{ '{{action edit this}}' }}>Guardar</button>
+							<button class="btn btn-sm btn-guardar extra-padding" {{ '{{action edit this}}' }}>Guardar</button>
 						</div>
 					</div>
 				</div>

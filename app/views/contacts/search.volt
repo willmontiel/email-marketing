@@ -25,22 +25,23 @@
 
 			<div class="row">
 				<h4 class="sectiontitle">Búsqueda global de contactos</h4>
-					<form class="form-horizontal" role="form">
-						<div class="col-sm-4">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<div class="col-md-8">
 							{{' {{view Ember.TextField valueBinding="searchText" onEvent="enter" action=search type="text" placeholder="Dirección de correo, nombre, apellido, dominio..." autofocus="autofocus" class="form-control"}} '}}
 						</div>
-						<div class="form-actions" style="text-align: center !important;">
+						<div class="col-sm-4">
 							{#<button class="btn btn-default" {{ '{{action reset this}}' }}><i class="icon-bolt"></i> Limpiar</button>#}
-							<button class="btn btn-lightblue" {{ '{{action search this}}' }}><i class="icon-search"></i> Buscar</button>
+							<button class="btn btn-default btn-guardar extra-padding" {{ '{{action search this}}' }}><i class="glyphicon glyphicon-search"></i> Buscar</button>
 							{{ '{{#if totalrecords}}' }}
 								<button {{ '{{action seeMore this}}' }} class="btn btn-default">Ver más</button>
 							{{ '{{/if}}' }}
 						</div>
-					</form>
-				</div>
+					</div>
+				</form>
 			</div>
 			<div class="row">
-				<table class="table table-normal">
+				<table class="table table-striped table-contacts">
 					<thead>
 						<tr>
 							<td>Dirección de correo</td>

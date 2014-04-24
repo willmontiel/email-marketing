@@ -80,12 +80,12 @@
 						<span class="glyphicon glyphicon-info-sign"></span>
 					</div>
 					<div class="col-md-9">
-						<p>Cuando bloquee una dirección de correo, este se marcará como des-suscrito, y por consiguiente sera omitido de todas las listas y bases de datos de la cuenta.</p>
+						<p>Cuando bloquee una dirección de correo, éste se marcará como des-suscrito, y por consiguiente será omitido de todas las listas y bases de datos de la cuenta.</p>
 					
 						<p>Configure el sistema para eliminar los contactos asociados a esa dirección por medio de una casilla de verificación, si no se configura esa opción, por defecto se marcarán como des-suscritos y en el futuro podrá revertirlo.</p>
 
 						<p>Si la dirección de correo electrónico que ingrese no existe, se creará automáticamente como bloqueada
-						y luego podrá desbloquearla, e ingresara los datos necesarios para crear un contacto para vincularlo
+						y luego podrá desbloquearla, e ingresar los datos necesarios para crear un contacto para vincularlo
 						a esta dirección de correo.</p>
 					</div>
 				</div>
@@ -107,16 +107,16 @@
 				</div>
 				<div class="space"></div>
 				<div class="bs-callout bs-callout-danger">
-					<p>Si estas seguro dale click al botón <strong>Bloquear</strong> para continuar.</p>
+					<p>Si está seguro dele click al botón <strong>Bloquear</strong> para continuar.</p>
 				</div>
 				<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact" class="icheckbox_flat-aero hover"}}' }} Eliminar contactos asociados al email</p>
 				<div class="form-actions pull-right">
 					<div class="row">
 						<div class="col-xs-6">
-							<button class="btn btn-default btn-sm" {{ '{{action cancel this }}' }}>Cancelar</button>
+							<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this }}' }}>Cancelar</button>
 						</div>
 						<div class="col-xs-6">
-							<button class="btn btn-danger btn-sm" {{ '{{action block this }}' }}>Bloquear</button>
+							<button class="btn btn-danger btn-sm extra-padding" {{ '{{action block this }}' }}>Bloquear</button>
 						</div>
 					</div>
 				</div>
@@ -129,12 +129,12 @@
 						<span class="glyphicon glyphicon-info-sign"></span>
 					</div>
 					<div class="col-md-9">
-						<p>Cuando bloquee una dirección de correo, este se marcará como des-suscrito, y por consiguiente sera omitido de todas las listas y bases de datos de la cuenta.</p>
+						<p>Cuando bloquee una dirección de correo, éste se marcará como des-suscrito, y por consiguiente será omitido de todas las listas y bases de datos de la cuenta.</p>
 					
 						<p>Configure el sistema para eliminar los contactos asociados a esa dirección por medio de una casilla de verificación, si no se configura esa opción, por defecto se marcarán como des-suscritos y en el futuro podrá revertirlo.</p>
 
 						<p>Si la dirección de correo electrónico que ingrese no existe, se creará automáticamente como bloqueada
-						y luego podrá desbloquearla, e ingresara los datos necesarios para crear un contacto para vincularlo
+						y luego podrá desbloquearla, e ingresarlos datos necesarios para crear un contacto para vincularlo
 						a esta dirección de correo.</p>
 					</div>
 				</div>
@@ -164,8 +164,8 @@
 			{{'{{/if}}'}}
 		</div>
 		<div class="col-xs-6">
-	 		<button class="btn btn-default btn-sm" {{ '{{action cancel this}}' }}>Cancelar </button>
-			<button class="btn btn-guardar btn-sm" {{'{{action unblock this}}'}} >Desbloquear</button>
+	 		<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar </button>
+			<button class="btn btn-guardar btn-sm extra-padding" {{'{{action unblock this}}'}} >Desbloquear</button>
 		</div>
 	</div>
 </script>

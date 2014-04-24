@@ -12,7 +12,7 @@
 @brand-sad-blue: #b3e3e4;
 @brand-gray: #9d9d9d;
 @brand-green: #97c86b;
-@brand-orange:#ffc766;
+@brand-orange:#EF8807;
 @brand-red:#bd1b06;
 @brand-soft-color: #adadad;
 @brand-gray-light: #eeeeee;
@@ -459,25 +459,25 @@ h4.sectiontitle {
 	text-align: center;
 	padding: 0 15px;
 }
-span.big-number {
+.big-number {
 	font-size: 30px;
 }
-span.blue {
+.blue {
 	color: @brand-blue;
 }
-span.sad-blue {
+.sad-blue {
 	color: @brand-sad-blue;
 }
-span.gray {
+.gray {
 	color: @brand-gray;
 }
-span.green {
+.green {
 	color: @brand-green;
 }
-span.orange {
+.orange {
 	color: @brand-orange;
 }
-span.red {
+.red {
 	color: @brand-red;
 }
 
@@ -615,4 +615,13 @@ span.required {
 
 .bs-callout-success {
     .bs-callout(@brand-success);
+}
+.spreadout(@color) {
+	background-color: @color;
+}
+.table-striped tbody tr.spreadout  > td { 
+	.spreadout(#f0eedf);
+}
+.table-striped tbody tr.spreadout:nth-child(odd) > td { 
+	.spreadout(#f0eedf);
 }

@@ -78,15 +78,15 @@
 						</ul>
 					</div>
 					<div class="box-content">
-						<table class="table table-normal">
+						<table class="table table-striped table-contacts">
 							<thead></thead>
 							<tbody>
 								<tr class="status-info">
 									<td class="icon"><i class="icon-cloud-upload"></i></td>
-									<td>
-										<span class="news-title">Contactos totales en archivo</span>
-									</td>
-									<td><b style="font-size: 20px;">{{res['linesprocess']}}</b></td>
+									<td>Contactos totales en archivo</td>
+										
+									
+									<td><span class="big-number">{{res['linesprocess']}}</span></td>
 								</tr>
 								<tr class="status-success">
 									<td class="icon"><i class="icon-ok"></i></td>
@@ -94,37 +94,37 @@
 										<span class="news-title">Importados exitosamente </span>
 										<a href="{{ url('process/downoladsuccess/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
 									</td>
-									<td><b style="font-size: 20px;">{{res['import']}}</b></td>
+									<td><span class="big-number">{{res['import']}}</span></td>
 								</tr>
 
 								<tr class="status-warning">
 									<td class="icon"><i class="icon-refresh"></i></td>
 									<td>No importados porque ya existen</td>
-									<td><b>{{res['exist']}}</b></td>
+									<td><span class="big-number">{{res['exist']}}</span></td>
 								</tr>
 
 								<tr class="status-error">
 									<td class="icon"><i class="icon-remove"></i></td>
 									<td>No importados por correo inválido </td>
-									<td><b>{{res['invalid']}}</b></td>
+									<td><span class="big-number">{{res['invalid']}}</span></td>
 								</tr>
 
 								<tr class="status-error">
 									<td class="icon"><i class="icon-ban-circle"></i></td>
 									<td>No importados por correo bloqueado </td>
-									<td><b>{{res['bloqued']}}</b></td>
+									<td><span class="big-number">{{res['bloqued']}}</span></td>
 								</tr>
 
 								<tr class="status-warning">
 									<td class="icon"><i class="icon-random"></i></td>
 									<td>No importados porque estan duplicados en el archivo </td>
-									<td><b>{{res['repeated']}}</b></td>
+									<td><span class="big-number">{{res['repeated']}}</span></td>
 								</tr>
 
 								<tr class="status-pending">
 									<td class="icon"><i class="icon-exclamation-sign"></i></td>
 									<td>No importados por limite de contactos excedido </td>
-									<td><b>{{res['limit']}}</b></td>
+									<td><span class="big-number">{{res['limit']}}</span></td>
 								</tr>
 								<tr class="status-error">
 									<td class="icon"><i class="icon-warning-sign"></i></td>
@@ -132,7 +132,7 @@
 										<span class="news-title">Total contactos no importados</span>
 										<a href="{{ url('process/downoladerror/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
 									</td>
-									<td><b style="font-size: 20px;">{{res['Nimport']}}</b></td>
+									<td><span class="big-number">{{res['Nimport']}}</span></td>
 								</tr>
 							</tbody>
 						</table>
