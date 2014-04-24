@@ -91,7 +91,7 @@ SlctBlock.prototype.getEditZone = function() {
 	var slctoptions = '';
 	var valuesarray = this.values.split(",");
 	for(var i = 0; i < valuesarray.length; i++) {
-		var selected = (valuesarray[i] === this.defaultvalue) ? 'selected' : '' ;
+		var selected = (valuesarray[i] === this.defaultvalue) ? 'selected' : '';
 		slctoptions+= '<option ' + selected + '>' + valuesarray[i] + '</option>';
 	}
 	var required = (this.required === 'Si') ? 'checked' : '';

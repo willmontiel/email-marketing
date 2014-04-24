@@ -19,7 +19,7 @@ class DbaseWrapper extends BaseWrapper
 		return $object;
 	}
 	
-	public function getColors()
+	public static function getColors()
 	{
 		$colors = array(
 			0 => array('EBF7FE', 'E3F4FC', 'FFF8E4', 'FFEAE4', 'E6E8FC', 'F1F3FE'),

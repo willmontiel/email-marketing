@@ -106,11 +106,19 @@ class DbaseapiController extends ControllerBase
 		$forms = Form::findByIdDbase($dbase->idDbase);
 		
 		if ($forms) {
-			$wrapper = new FormWrapper();
-			foreach ($forms as $form) {
-				$formlist[] = $wrapper->fromPObjectToJObject($form);
+			try {
+				$wrapper = new FormWrapper();
+				foreach ($forms as $form) {
+					$formlist[] = $wrapper->fromPObjectToJObject($form);
+				}
+
+				$lists = $wrapper->getListsInJson($dbase);
 			}
-			return $this->setJsonResponse(array('forms' => $formlist), 201, 'Success');
+			catch (\Exception $e) {
+				$this->logger->log('Exception: [' . $e . ']');
+				return $this->setJsonResponse(array('status' => 'error'), 400, $e);	
+			}
+			return $this->setJsonResponse(array('forms' => $formlist, 'lists' => $lists,), 201, 'Success');
 		}
 		return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
 	}
@@ -246,5 +254,32 @@ class DbaseapiController extends ControllerBase
 		$response = $form->delete();
 		
 		return $this->setJsonResponse($response);	
+	}
+	
+	/**
+	 * @Get("/{idDbase:[0-9]+}/lists")
+	 */
+	public function getcontactlistsAction($idDbase)
+	{
+		$dbase = Dbase::findFirst(array(
+			'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idDbase,
+							2 => $this->user->account->idAccount)
+		));
+		
+		if (!$dbase) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la base de datos');
+		}
+		
+		try{
+			$wrapper = new FormWrapper();
+			$lists = $wrapper->getListsInJson($dbase);
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('status' => 'error'), 400, $e);	
+		}	
+		
+		return $this->setJsonResponse(array('lists' => $lists,), 201, 'Success');
 	}
 }
