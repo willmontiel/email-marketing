@@ -52,7 +52,7 @@ class AccountController extends ControllerBase
     {
         $account = new Account();
         $form = new AccountForm($account);
-      
+		
         if ($this->request->isPost()) {
             
             $form->bind($this->request->getPost(), $account);
@@ -105,6 +105,8 @@ class AccountController extends ControllerBase
 							}
 							else {
 								$this->db->commit();
+								$this->traceSuccess('Create account: ' . $account->idAccount);
+								
 								$this->flashSession->notice('Se ha creado la cuenta exitosamente');
 								return $this->response->redirect("account/index");
 							}
@@ -182,6 +184,7 @@ class AccountController extends ControllerBase
 					}
 					else {
 						$this->db->commit();
+						$this->traceSuccess("Edit account: {$id}");
 						$this->flashSession->notice('Se ha editado la cuenta exitosamente');
 						return $this->response->redirect("account");
 					}
@@ -190,6 +193,7 @@ class AccountController extends ControllerBase
 			$this->view->editFormAccount = $editform;
         } 
 		else {
+			$this->traceFail("Edit account do not exists: {$id}");
 			$this->flashSession->error('La cuenta no existe, por favor verifique la información');
 			return $this->response->redirect("account");
 		}
@@ -205,89 +209,93 @@ class AccountController extends ControllerBase
 			"conditions" => "idAccount = ?1",
 			"bind" => array(1 => $id)
 		));
+		
 		$user = User::findFirst(array(
 			"conditions" => "idAccount = ?1",
 			"bind" => array(1 => $id)
 		));
 
-			if ($account !== null) {
-				if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
-				   $account->delete();
-				   $user->deleted();
-				   $this->flashSession->success('Base de Datos Eliminada!');
+		if ($account !== null) {
+			if ($this->request->isPost() && ($this->request->getPost('delete')=="DELETE")) {
+			   $account->delete();
+			   if (!$user->deleted()) {
+				   foreach ($user->getMessages() as $msg) {
+					   $this->logger->log("Error while deleting account {$msg}");
+				   }
+				   $this->traceFail("Error deleting account {$id}");
+				   $this->flashSession->error('Ha ocurrido un error contacte al administrador');
 				   return $this->response->redirect("account/index");
-				} 
-
-			   else {
-				   $this->flashSession->error('Escriba la palabra "DELETE" correctamente');
-				    return $this->response->redirect("account/index");
 			   }
-       }
+			   $this->traceSuccess("Account deleted {$id}");
+			   $this->flashSession->success('Base de Datos Eliminada!');
+			   return $this->response->redirect("account/index");
+			} 
 
+		   else {
+				$this->traceFail("Error deleting account {$id}");
+				$this->flashSession->error('Escriba la palabra "DELETE" correctamente');
+				return $this->response->redirect("account/index");
+		   }
+		}
      }
 	 
-	 /*
-	  * Esta funcion se encarga de crear usuarios a partir del id de la cuenta
-	  */
-	public function newuserAction($id)
+	/*
+	 * Esta funcion se encarga de crear usuarios a partir del id de la cuenta
+	 */
+	public function newuserAction($idAccount)
 	{
 		$user = new User();
 		$form = new UserForm($user);
 		
 		$account = Account::findFirst(array(
-			"conditions" => "idAccount = ?1",
-			"bind" => array(1 => $id)
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $idAccount)
 		));
 		
-		if(!$account){
-			$this->flashSession->error("Ha intentado crear un usuario en una cuenta que no existe, por favor verifique la información");
-			return $this->response->redirect("account/index");
+		if (!$account) {
+			$this->flashSession->error("La cuenta enviada no existe, por favor verifique la información");
+			return $this->response->redirect("account/show/{$this->user->account->idAccount}");
 		}
 		
-		else {
-			if ($this->request->isPost()) {
-				$form->bind($this->request->getPost(), $user);
+		if ($this->request->isPost()) {
+			$form->bind($this->request->getPost(), $user);
 
-				$pass = $form->getValue('password');
-				$pass2 = $form->getValue('password2');
+			$pass = $form->getValue('password');
+			$pass2 = $form->getValue('password2');
 
-				if(strlen($pass) < 8) {
-					$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 caracteres y máximo 40");
+			if(strlen($pass) < 8) {
+				$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 caracteres y máximo 40");
+			}
+			else {
+				if($pass !== $pass2) {
+					$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
 				}
-
 				else {
-					if($pass !== $pass2) {
-						$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
+					$email = strtolower($form->getValue('email'));
+
+					$user->idAccount = $account->idAccount;
+					$user->email = $email;
+					$user->password = $this->security2->hash($pass);
+
+					if ($form->isValid() && $user->save()) {
+						$this->traceSuccess("Create user like sudo, account {$account->idAccount}");
+						$this->flashSession->notice("Se ha creado el usuario exitosamente en la cuenta {$account->companyName}");
+						return $this->response->redirect("account/show/{$account->idAccount}");
 					}
+
 					else {
-
-						$this->db->begin();
-						$email = strtolower($form->getValue('email'));
-						
-						$user->idAccount = $id;
-						$user->email = $email;
-						$user->password = $this->security2->hash($pass);
-
-						if ($form->isValid() && $user->save()) {
-							$this->db->commit();
-							$this->flashSession->notice("Se ha creado el usuario exitosamente en la cuenta ". $account->companyName);
-							return $this->response->redirect("account/show/".$account->idAccount);
+						foreach ($user->getMessages() as $msg) {
+							$this->flashSession->error($msg);
+							$this->logger->log("Error while creating user account {$account->idAccount}");
 						}
-
-						else {
-							$this->db->rollback();
-							foreach ($user->getMessages() as $msg) {
-								$this->flashSession->error($msg);
-							}
-						}
+						$this->traceFail("Create user like sudo, account {$account->idAccount}");
 					}
 				}
-			 }
+			}
+		 }
 
-			 $this->view->UserForm = $form;
-			 $this->view->setVar('account', $account);
-			
-		}
+		 $this->view->UserForm = $form;
+		 $this->view->setVar('account', $account);
 	}
 	
 	
@@ -306,59 +314,50 @@ class AccountController extends ControllerBase
 			$this->flashSession->error("El usuario que intenta editar no existe, por favor verifique la información");
 			return $this->response->redirect("account/index");
 		}
-		else {
-			if ($userExist !== null) {
-				$this->view->setVar("user", $userExist);
-				$form = new UserForm($userExist);
+		
+		$this->view->setVar("user", $userExist);
+		$form = new UserForm($userExist);
 
-				if ($this->request->isPost()) {   
-					
-					$form->bind($this->request->getPost(), $userExist);
-					
-					$pass = $form->getValue('passForEdit');
-					$pass2 = $form->getValue('pass2ForEdit');
-					$email = strtolower($form->getValue('email'));
-					
-					if((!empty($pass)||!empty($pass2)) && ($pass == $pass2) && (strlen($pass) >= 8)){
-						$this->db->begin();
-						$userExist->email = $email;
-						$userExist->password = $this->security2->hash($pass);
-						
-						if (!$form->isValid() OR !$userExist->save()) {
-							$this->db->rollback();
+		if ($this->request->isPost()) {   
+			$form->bind($this->request->getPost(), $userExist);
 
-							foreach ($userExist->getMessages() as $msg) {
-								$this->flashSession->error($msg);
-							}
-						}
-						else {
-							$this->db->commit();
-							$this->flashSession->notice('Se ha editado exitosamente el usuario <strong>' .$userExist->username. '</strong> de la cuenta <strong>' .$userExist->idAccount. '</strong>');
-							return $this->response->redirect("account/show/".$userExist->idAccount);
-						}
+			$pass = $form->getValue('passForEdit');
+			$pass2 = $form->getValue('pass2ForEdit');
+			$email = strtolower($form->getValue('email'));
+
+			if((!empty($pass)||!empty($pass2)) && ($pass == $pass2) && (strlen($pass) >= 8)){
+				$userExist->email = $email;
+				$userExist->password = $this->security2->hash($pass);
+
+				if (!$form->isValid() || !$userExist->save()) {
+					foreach ($userExist->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+						$this->logger->log("Error while editing user {$id} in account {$userExist->idAccount} {$msg}");
 					}
-					else{
-						$this->db->begin();
-						
-						$userExist->email = $email;
-						if (!$form->isValid() OR !$userExist->save()) {
-							$this->db->rollback();
-
-							foreach ($userExist->getMessages() as $msg) {
-								$this->flashSession->error($msg);
-							}
-						}
-						else {
-							$this->db->commit();
-							$this->flashSession->notice('Se ha editado exitosamente el usuario <strong>' .$userExist->username. '</strong> de la cuenta <strong>' .$userExist->idAccount. '</strong>');
-							return $this->response->redirect("account/show/".$userExist->idAccount);
-						}
-					}
-					
 				}
-				$this->view->UserForm = $form;
-			} 	
+				else {
+					$this->traceSuccess("Edit user {$id} like sudo, account {$userExist->idAccount}");
+					$this->flashSession->notice('Se ha editado exitosamente el usuario <strong>' .$userExist->username. '</strong> de la cuenta <strong>' .$userExist->idAccount. '</strong>');
+					return $this->response->redirect("account/show/{$userExist->idAccount}");
+				}
+			}
+			else{
+				$userExist->email = $email;
+				if (!$form->isValid() OR !$userExist->save()) {
+					foreach ($userExist->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+						$this->logger->log("Error while editing user {$id} in account {$this->user->account->idAccount} {$msg}");
+					}
+				}
+				else {
+					$this->traceSuccess("Edit user {$id} like sudo, account {$userExist->idAccount}");
+					$this->flashSession->notice('Se ha editado exitosamente el usuario <strong>' .$userExist->username. '</strong> de la cuenta <strong>' .$userExist->idAccount. '</strong>');
+					return $this->response->redirect("account/show/{$userExist->idAccount}");
+				}
+			}
+
 		}
+		$this->view->UserForm = $form;
 	}
 	
 	/*
@@ -371,28 +370,30 @@ class AccountController extends ControllerBase
 		
 		if($id == $idUser){
 			$this->flashSession->error("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
+			$this->traceFail("Trying to delete user in session, user: {$idUser}");
+			return $this->response->redirect("account/show/{$this->user->account->idAccount}");
+		}
+		
+		$user = User::findFirst(array(
+			"conditions" => "idUser = ?1",
+			"bind" => array(1 => $id)
+		));
+
+		if(!$user){
+			$this->flashSession->error('El usuario que ha intentado eliminar no existe, por favor verifique la información');
+			$this->traceFail("User do not exist, idUser: {$idUser}");
 			return $this->response->redirect("account/index");
 		}
-		else {
-			$user = User::findFirst(array(
-				"conditions" => "idUser = ?1",
-				"bind" => array(1 => $id)
-			));
-
-			if(!$user){
-				$this->flashSession->error('El usuario que ha intentado eliminar no existe, por favor verifique la información');
-				return $this->response->redirect("account/index");
+		
+		if(!$user->delete()) {
+			foreach ($user->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+				$this->logger->log("Error while deleting user {$msg}, user: {$user->idUser}/{$user->username}");
 			}
-			else {
-				if(!$user->delete()) {
-					foreach ($user->getMessages() as $msg) {
-						$this->flashSession->error($msg);
-					}
-					return $this->response->redirect("account/show/".$user->idAccount);
-				}
-				$this->flashSession->warning('Se ha eliminado el usuario <strong>' .$user->username. '</strong> exitosamente');
-				return $this->response->redirect("account/show/".$user->idAccount);
-			}	
+			return $this->response->redirect("account/show/{$user->idAccount}");
 		}
+		$this->traceSuccess("User deleted, idUser: {$id}");
+		$this->flashSession->warning('Se ha eliminado el usuario <strong>' .$user->username. '</strong> exitosamente');
+		return $this->response->redirect("account/show/{$user->idAccount}");
 	}
  }  

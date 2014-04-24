@@ -38,32 +38,26 @@ class UserController extends ControllerBase
 			
 			if(strlen($pass) < 8 || strlen($pass) > 40) {
 				$this->flashSession->error("La contraseña es muy corta, esta debe tener mínimo 8 y máximo 40 caracteres");
-				return $this->response->redirect("user/new");
 			}
 			else {
 				if($pass !== $pass2) {
 					$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
-					return $this->response->redirect("user/new");
 				}
 				else {
-					
-					$this->db->begin();
-					$user->idAccount = $this->user->account->idAccount;
+					$account = $this->user->account;
+					$user->idAccount = $account->idAccount;
 					$user->email = $email;
 					$user->password = $this->security2->hash($pass);
 				
 					if ($form->isValid() && $user->save()) {
-						$this->db->commit();
 						$this->flashSession->notice("Se ha creado el usuario exitosamente");
+						$this->traceSuccess("Create user, account {$account->idAccount}");
 						return $this->response->redirect("user/index");
 					}
-					
 					else {
-						$this->db->rollback();
 						foreach ($user->getMessages() as $msg) {
 							$this->flashSession->error($msg);
 						}
-						return $this->response->redirect("user/index");
 					}
 				}
 			}
@@ -86,70 +80,57 @@ class UserController extends ControllerBase
 			return $this->response->redirect("user/index");
 		}
 		
-		else {
-			$form = new UserForm($user);
+		$form = new UserForm($user);
+
+		if ($this->request->isPost()) {   
+			$form->bind($this->request->getPost(), $user);
 			
-			if ($this->request->isPost()) {   
-				
-				$form->bind($this->request->getPost(), $user);
-				
-				$pass = $form->getValue('passForEdit');
-				$pass2 = $form->getValue('pass2ForEdit');
-				$email = strtolower($form->getValue('email'));
-				
-				if(!empty($pass)||!empty($pass2)){
-					
-					if(strlen($pass) < 8 || strlen($pass) > 40) {
-						$this->flashSession->error("La contraseña es muy corta o muy larga, esta debe tener mínimo 8 y máximo 40 caracteres");
-						return $this->response->redirect("user/edit/".$user->idUser);
-					}
-					else{
-						if($pass !== $pass2) {
-							$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
-							return $this->response->redirect("user/edit/".$user->idUser);
-						}
-						else{
-							$this->db->begin();
-							
-							$user->password = $this->security2->hash($pass);
-							$user->email = $email;
-							
-							if (!$form->isValid()||!$user->save()) {
-								$this->db->rollback();
-								foreach ($user->getMessages() as $msg) {
-									$this->flashSession->error($msg);
-								}
-								return $this->response->redirect("user/edit/".$user->idUser);
-							}
-							else {
-								$this->db->commit();
-								$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
-								return $this->response->redirect("user");
-							}
-						}
-					}
+			$pass = $form->getValue('passForEdit');
+			$pass2 = $form->getValue('pass2ForEdit');
+			$email = strtolower($form->getValue('email'));
+
+			if(!empty($pass)||!empty($pass2)){
+				if(strlen($pass) < 8 || strlen($pass) > 40) {
+					$this->flashSession->error("La contraseña es muy corta o muy larga, esta debe tener mínimo 8 y máximo 40 caracteres");
 				}
 				else{
-					$this->db->begin();
-					$user->email = $email;
-					if (!$form->isValid() OR !$user->save()) {
-						$this->db->rollback();
-						foreach ($user->getMessages() as $msg) {
-							$this->flashSession->error($msg);
-						}
-						return $this->response->redirect("user/edit/".$user->idUser);
+					if($pass !== $pass2) {
+						$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
 					}
-					else {
-						$this->db->commit();
-						$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
-						return $this->response->redirect("user/index");
+					else{
+						$user->password = $this->security2->hash($pass);
+						$user->email = $email;
+
+						if (!$form->isValid()||!$user->save()) {
+							foreach ($user->getMessages() as $msg) {
+								$this->flashSession->error($msg);
+							}
+						}
+						else {
+							$this->traceSuccess("Edit user: {$id}, account {$idAccount}");
+							$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
+							return $this->response->redirect("user");
+						}
 					}
 				}
- 			}
-			
-			$this->view->setVar("user", $user);
-			$this->view->UserForm = $form;
+			}
+			else{
+				$user->email = $email;
+				
+				if (!$form->isValid() OR !$user->save()) {
+					foreach ($user->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+				}
+				else {
+					$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
+					$this->traceSuccess("Edit user: {$id}, account {$idAccount}");
+					return $this->response->redirect("user/index");
+				}
+			}
 		}
+		$this->view->setVar("user", $user);
+		$this->view->UserForm = $form;
 	}
 	
 	public function deleteAction($id)
@@ -160,27 +141,29 @@ class UserController extends ControllerBase
 			$this->flashSession->error("No se puede eliminar el usuario que esta actualmente en sesión, por favor verifique la información");
 			return $this->response->redirect("user/index");
 		}
-		else {
-			$idAccount = $this->user->account->idAccount;
-			$user = User::findFirst(array(
-				"conditions" => "idUser = ?1 AND idAccount = ?2",
-				"bind" => array(1 => $id, 2 => $idAccount)
-			));
+		
+		$account = $this->user->account;
+		
+		$user = User::findFirst(array(
+			"conditions" => "idUser = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $id, 2 => $account->idAccount)
+		));
 
-			if($user){
-				if(!$user->delete()){
-					foreach ($user->getMessages() as $msg) {
-						$this->flashSession->error($msg);
-					}
-					return $this->response->redirect("user/index");
+		if($user){
+			if(!$user->delete()){
+				foreach ($user->getMessages() as $msg) {
+					$this->flashSession->error($msg);
 				}
-				$this->flashSession->warning("El usuario <strong>" .$user->username. "</strong> ha sido eliminado exitosamente");
 				return $this->response->redirect("user/index");
 			}
-			else{
-				$this->flashSession->error("El usuario que intenta borrar no existe, por favor verifique la información");
-				return $this->response->redirect("user/index");
-			}
+			$this->traceSuccess("User deleted, idUser: {$id} - account: {$account->idAccount}");
+			$this->flashSession->warning("El usuario <strong>" .$user->username. "</strong> ha sido eliminado exitosamente");
+			return $this->response->redirect("user/index");
+		}
+		else{
+			$this->traceFail("Trying to delete a user that dont exists idUser: {$id}, account: {$account->idAccount}");
+			$this->flashSession->error("El usuario que intenta borrar no existe, por favor verifique la información");
+			return $this->response->redirect("user/index");
 		}
 	}
 }

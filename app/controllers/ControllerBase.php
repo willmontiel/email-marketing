@@ -16,9 +16,9 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 
 	public function initialize()
 	{
-		$this->user = $this->userObject;
-		//$this->user = User::findFirstByIdUser(3);
-		
+	//	if (isset($this->userObject)) {
+			$this->user = $this->userObject;
+	//	}
 	}
 
 	/**
@@ -87,6 +87,41 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 	{
 		$this->timerObject->endTimer('controller');
 	}
-
+	
+	/**
+	 * Lógica para rastros de auditoría
+	 */
+	
+	/**
+	 * 
+	 * @param string $controller
+	 * @param string $action
+	 * @param int $date
+	 * @param int $ip
+	 */
+	protected function traceSuccess($msg)
+	{
+		$controller = $this->dispatcher->getControllerName();
+		$action = $this->dispatcher->getActionName();
+		$date = time();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		
+		$operation = $controller . '::' .$action;
+		
+		AuditTrace::createAuditTrace($this->user, 'Success', $operation, $msg, $date, $ip);
+	}
+	
+	
+	protected function traceFail($msg)
+	{
+		$controller = $this->dispatcher->getControllerName();
+		$action = $this->dispatcher->getActionName();
+		$date = time();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		
+		$operation = $controller . '::' .$action;
+		
+		AuditTrace::createAuditTrace($this->user, 'Fail', $operation, $msg, $date, $ip);
+	}
 }
 
