@@ -4,71 +4,83 @@
 {% endblock %}
 {%block sectionsubtitle %} {{edbase.description}} {% endblock %}
 {% block content %}
+
+{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
+
 {{ content() }}
 	<div class="row">
-		<div class="box">
-			<div class="box-section news with-icons">
-				<div class="avatar purple">
-					<i class="icon-book icon-2x"></i>
-				</div>
-				<div class="news-content">
-					<div class="news-title">
-						Edite una base de datos de contactos
-					</div>
-					<div class="news-text">
-						<p>
-							Con las bases de datos, podrá administrar los contactos de la cuenta, en donde cada base de datos tendrá
-							sus propios campos personalizados y segmentos ademas de sus propios contactos, esto quiere decir que un contacto
-							que este guardado en dos bases de datos distintas será contado como 2 contactos diferentes.
-						</p>
-						<p>
-							Una vez editada la base de datos no afectará la configuración si ya la ha realizado.
-						</p>
-					</div>
-				</div>
-			</div>
+		<h4 class="sectiontitle">Editar una base de datos</h4>
+		<div class="bs-callout bs-callout-info">
+			<p>
+				A través de las bases de datos, podrá administrar los contactos de la cuenta, cada base de datos tendrá
+				sus propios campos personalizados y segmentos ademas de sus propios contactos, esto quiere decir que un contacto
+				que este guardado en dos bases de datos distintas será contado como 2 contactos diferentes.
+			</p>
+			<p>
+				Una vez editada la base de datos no afectará la configuración si ya la ha realizado.
+			</p>
 		</div>
-	</div>
-	<div class="row">
-		{{ flashSession.output() }}
-	</div>
-	<div class="row">
-		<div class="span3">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Editar una base de datos
-					</div>
-				</div>
-				<div class="box-content">
-					<form action = "{{url('dbase/edit')}}/{{edbase.idDbase}}" method="post">
-						<div class="padded">
-							<label for="name">*Nombre</label>
+		<div class="row">
+			{{ flashSession.output() }}
+		</div>
+		<div class="row">
+			<div class="col-md-5">
+				<form action = "{{url('dbase/edit')}}/{{edbase.idDbase}}" method="post" role="form" class="form-horizontal">
+					<div class="form-group">
+						<label for="name" class="col-md-5 control-label">*Nombre</label>
+						<div class="col-md-7">
 							{{editform.render("name")}}
-
-							<label for="description">*Descripcion</label>                
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="description" class="col-md-5 control-label">*Descripcion</label>
+						<div class="col-md-7">       
 							{{editform.render("description")}}
-
-							<label for="Cdescription">*Descripcion de los Contactos</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="Cdescription" class="col-md-5 control-label">*Descripcion de los Contactos</label>
+						<div class="col-md-7">
 							{{editform.render("Cdescription")}}
-							
-							<label>*Color de Etiqueta</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-5 control-label">*Color de Etiqueta</label>
+						<div class="col-md-7">
 							{{editform.render("color")}}
-							<table id="colorchart">
+						<table id="colorchart">
 						{% for color in colors %}
 							<tr>
 							{% for col in color %}
-									<td class="color-{{col}}" bgcolor="#{{col}}"></td>
+								<td class="color-{{col}}" bgcolor="#{{col}}"></td>
 							{% endfor %}
 							</tr>
 						{% endfor %}
 						</table>
+					</div>
+					<div class="form-actions pull-right">
+						<div class="row">
+							<div class="col-xs-6">
+								<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default btn-sm">Cancelar</a>
+							</div>
+							<div class="col-xs-6">
+								{{submit_button("Guardar", 'class' : "btn btn-default btn-guardar btn-sm", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
+							</div>
 						</div>
-						<div class="form-actions">
-							<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default">Cancelar</a>
-							{{submit_button("Guardar", 'class' : "btn btn-blue", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
-						</div>	
-					</form>
+					</div>	
+				</form>
+			</div>
+			</div>
+			<div class="col-md-6">
+				<div class="alert alert-success">
+					<div class="row">
+						<div class="col-sm-2">
+							<span class="glyphicon glyphicon-info-sign"></span>
+						</div>
+						<div class="col-md-9">
+							<p>Cree una nueva lista</p>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

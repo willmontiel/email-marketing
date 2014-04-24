@@ -12,17 +12,20 @@ class EditForm extends Form
 			'maxlength' => 50,
 			'type' => 'text',
 			'required' => 'required',
-			'autofocus' => "autofocus"
+			'autofocus' => "autofocus",
+			'class' => "form-control"
         )));
         $this->add(new TextArea('description', array(
 			'maxlength' => 150,
 			'type' => 'text',
-			'required' => 'required'
+			'required' => 'required',
+			'class' => "form-control"
         )));
         $this->add(new TextArea('Cdescription', array(
 			'maxlength' => 150,
 			'type' => 'text',
-			'required' => 'required'
+			'required' => 'required',
+			'class' => "form-control"
         )));
 		$this->add(new Text('color',array(
 			'type' => 'text',

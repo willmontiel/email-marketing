@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 
 {% block header_javascript %}
 	{{ super() }}
@@ -86,23 +86,16 @@
 {% block content %}
 <div id="emberAppContainer">
 	<script type="text/x-handlebars"> 
-		<br />
 		<div class="row">
-			<div class="span12">
-				<div class="box">
-					<div class="box-header">
-						<ul class="nav nav-tabs nav-tabs-left">
-							{{'{{#link-to "index" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>General</a>{{/link-to}}'}}
-							{{'{{#link-to "fields" tagName="li" href=false}}<a {{bind-attr href="view.href"}}>Campos</a>{{/link-to}}'}}
-							{{'{{#link-to "contacts" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Contactos</a>{{/link-to}}'}}
-							{{'{{#link-to "forms" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Formularios</a>{{/link-to}}'}}
-						</ul>
-					</div>
-					<div class="box-content padded">
-						{{ "{{outlet}}" }}
-					</div>
-				</div>
+			<div class="box-header">
+				<ul class="nav nav-tabs nav-tabs-left">
+					{{'{{#link-to "index" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>General</a>{{/link-to}}'}}
+					{{'{{#link-to "fields" tagName="li" href=false}}<a {{bind-attr href="view.href"}}>Campos</a>{{/link-to}}'}}
+					{{'{{#link-to "contacts" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Contactos</a>{{/link-to}}'}}
+					{{'{{#link-to "forms" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Formularios</a>{{/link-to}}'}}
+				</ul>
 			</div>
+			{{ "{{outlet}}" }}
 		</div>
 	</script>
 	<script type="text/x-handlebars" data-template-name="fields/index">       
@@ -136,9 +129,6 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="span12">
-				<div class="box">
-					<div class="box-content">
 						<table class="table table-normal">
 							<thead>
 								<tr>

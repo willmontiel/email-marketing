@@ -11,30 +11,30 @@
 <div class="row">
 	<h4 class="sectiontitle">Bases de datos de contactos</h4>
 	<div class="bs-callout bs-callout-info">
-		Esta es la página principal de las bases de datos en la cuenta, aqui podrá encontrar información acerca de la configuración
-		de cada base de datos, los contactos activos e inactivos, etc. Además podrá crear campos personalizados y configurar las bases
-		dependiendo de las necesidades.
+		Esta son las bases de datos de la cuenta, aqui podrá encontrar información acerca de la configuración
+		de cada base de datos, los contactos activos e inactivos, etc. Además podrá crear campos personalizados y configurar las bases de datos.
 		
 	</div>
-	<div class="">
+	<div class="row">
 		{{ flashSession.output() }}
 	</div>
 	<div class="col-md-3 col-md-offset-8">
 		<a href="{{ url('dbase/new') }}" class="btn btn-default btn-sm extra-padding">
 			<i class="glyphicon glyphicon-plus"></i> Crear base de datos
 		</a>
+		<div class="space"></div>
 	</div>
-	<div class="space"></div>
+	
 		<!-- Lista de mis bases de datos -->
-	<table class="table table-strepead">
+	<table class="table table-striped">
 		<thead></thead>
 		<tbody>
 		{%for item in page.items%}
 			<tr>
 				<td>
-					<a href="{{url('statistic/dbase')}}/{{item.idDbase}}"><i class="icon-bar-chart icon-2x"></i></a><br/>
-					<a href="{{ url('dbase/show') }}/{{item.idDbase}}"><strong>{{item.name}}</strong></a>
-					{{item.description}}
+					<a href="{{url('statistic/dbase')}}/{{item.idDbase}}"><i class="icon-bar-chart icon-2x"></i></a>
+					<a href="{{ url('dbase/show') }}/{{item.idDbase}}"><strong>{{item.name}}</strong></a><br>
+						{{item.description}}
 				</td>
 				<td>
 					<ul class="list-inline pull-right">
@@ -61,41 +61,34 @@
 				</td>
 				<td>
 					<a href="{{ url('dbase/edit/') }}{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
-					<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
+					<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
 				</td>
 			</tr>
 	{%endfor%}
 		</tbody>
 	</table>
 	
-	{{ partial("partials/pagination_partial") }}
-
-	<div class="box-footer padded">
-		<div class="pagination">
-			<ul>
-				{% if page.current == 1 %}
-					<li class="previous"><a href="#" class="inactive"><<</a></li>
-					<li class="previous"><a href="#" class="inactive"><</a></li>
-				{% else %}
-					<li class="previous active"><a href="{{ url('dbase/index') }}"><<</a></li>
-					<li class="previous active"><a href="{{ url('dbase/index') }}?page={{ page.before }}"><</a></li>
-				{% endif %}
-
-				{% if page.current >= page.total_pages %}
-					<li class="next"><a href="#" class="inactive">></a></li>
-					<li class="next"><a href="#" class="inactive">>></a></li>
-				{% else %}
-					<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.next}}">></a></li>
-					<li class="next active"><a href="{{ url('dbase/index') }}?page={{page.last}}">>></a></li>		
-				{% endif %}
-			</ul>
-		 </div>
+	<div class="col-sm-12 text-center">
+		<ul class="pagination">
+			<li class="{{ (page.current == 1)?'disabled':'enabled' }}">
+				<a href="{{ url('dbase/index') }}"><i class="glyphicon glyphicon-fast-backward"></i></a>
+			</li>
+			<li class="{{ (page.current == 1)?'disabled':'enabled' }}">
+				<a href="{{ url('dbase/index') }}?page={{ page.before }}"><i class="glyphicon glyphicon-step-backward"></i></a>
+			</li>
+			<li>
+				<span><b>{{page.total_items}}</b> registros.</span><span>Página <b>{{page.current}}</b> de <b>{{page.total_pages}}</b></span>
+			</li>
+			<li class="{{ (page.current >= page.total_pages)?'disabled':'enabled' }}">
+				<a href="{{ url('dbase/index') }}?page={{page.next}}"><i class="glyphicon glyphicon-step-forward"></i></a>
+			</li>
+			<li class="{{ (page.current >= page.total_pages)?'disabled':'enabled' }}">
+				<a href="{{ url('dbase/index') }}?page={{page.last}}"><i class="glyphicon glyphicon-fast-forward"></i></a>
+			</li>
+		</ul>
 	</div>
-	 <div class="">
-		 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
-		 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
-	 </div>
-		<!-- Fin de mi lista de bases de datos -->
+
+	<!-- Fin de mi lista de bases de datos -->
 </div>
 <div class="row">
 	<div class="span5 text-right"> 
@@ -105,22 +98,28 @@
 	</div>
 </div>
 
-<div id="modal-simple" class="modal hide fade" aria-hidden="false">
-	<div class="modal-header">
-	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	  <h6 id="modal-tablesLabel">Eliminar Base de Datos</h6>
-	</div>
-	<div class="modal-body">
-		<p>
-			¿Esta seguro que desea eliminar esta base de datos?
-		</p>
-		<p>
-			Recuerde que si elimina la base de datos se perderan todos los contactos, listas de contactos y segmentos que pertenezcan a ella
-		</p>
-	</div>
-	<div class="modal-footer">
-	  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-	  <a href="" id="deleteDb" class="btn btn-danger" >Eliminar</a>
+{#  Este es el modal (lightbox) que se activa al hacer clic en el boton eliminar   #}
+<div id="modal-simple" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Eliminar Base de Datos</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					¿Esta seguro que desea eliminar esta base de datos?
+				</p>
+				<p>
+					Recuerde que si elimina la base de datos se perderan todos los contactos, listas de contactos y segmentos que pertenezcan a ella
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				<a href="" id="deleteDb" class="btn btn-danger" >Eliminar</a>
+			</div>
+
+		</div>
 	</div>
 </div>
 

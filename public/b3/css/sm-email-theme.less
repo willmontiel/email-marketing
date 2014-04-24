@@ -17,6 +17,8 @@
 @brand-soft-color: #adadad;
 @brand-gray-light: #eeeeee;
 @brand-gray-dark: #505050;
+@brand-sectiontitle: #20526e;
+
 
 @bg-default-btn: #cccccc;
 @bg-delete-btn: #ac1905;
@@ -79,7 +81,7 @@ body {
 h4.sectiontitle {
 	background-color: @bg-info-blue;
 	padding: 10px;
-	color: #20526e;
+	color: @brand-sectiontitle;
 	margin-bottom: 30px;
 }
 
@@ -624,4 +626,38 @@ span.required {
 }
 .table-striped tbody tr.spreadout:nth-child(odd) > td { 
 	.spreadout(#f0eedf);
+}
+.report h4 {
+	color:@brand-sectiontitle;
+}
+
+.mini-icon {
+	color:@brand-sectiontitle;
+	font-size: 20px;
+	padding-top: 6px;
+}
+table.hight-line > tbody > tr > th {
+	line-height: 2.2;
+}
+
+
+
+#colorchart td {
+ width: 25px !important;
+ height: 25px !important;
+ cursor: pointer;
+ border: 2px lightgray solid;
+}
+#colorchart {
+ border-collapse: separate;
+ border: 4px gray solid;
+}
+#color.text-for-db-color {
+ display: none !important;
+}
+#colorchart td:hover {
+ opacity: 0.5;
+}
+.color-selected {
+ border: 2px blue solid !important;
 }

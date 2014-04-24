@@ -372,11 +372,9 @@
 	<script type="text/x-handlebars" data-template-name="contacts/import">
 		<div class="row">
 			<h4 class="sectiontitle">Importar contactos desde archivo .csv a <span>Lista de Iván</span></h4>
-			<div class="">
-				<img src="{{url('')}}b3/images/step1-import.png" class="center-block" alt="" />
-			</div>
-			<div class="space"></div>
-			<div class="col-md-5">
+			<div class="col-md-6">
+				<img src="{{url('')}}b3/images/step1-import.png" class="" alt="" />
+				<div class="space"></div>
 				<form method="post" class="form-horizontal"  action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data" role="form">
 					<div class="form-group">
 						<input name="importFile" type="file" >
@@ -385,41 +383,59 @@
 					<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default btn-sm extra-padding">Cancelar</a>
 					{{submit_button('class': "btn btn-default btn-sm btn-guardar extra-padding", "Cargar")}}
 				</form>
-			</div>
+				<div class="clearfix"></div>
+				<div class="space"></div>
 {#
-			<div class="well relative span8">
-				<p>
-					Aqui puede importar contactos desde un archivo 
-					<a rel="tooltip" data-placement="right" data-original-title="La extensión de archivo CSV significa Comma Separated Values (Valores separados por comas). El formato es utilizado en muchos programas de bases de datos, hojas de cálculo y gestores de contactos para almacenar listas de información. Como un archivo de texto, el formato es ampliamente compatible">
-						.csv
-					</a>
-					Haga clic en el botón más (+) elija el archivo .csv que desea cargar y a continuación haga clic en el botón cargar, o en cancelar si
-					no desea continuar.
-				</p>
+				<div class="well relative span8">
+					<p>
+						Aqui puede importar contactos desde un archivo 
+						<a rel="tooltip" data-placement="right" data-original-title="La extensión de archivo CSV significa Comma Separated Values (Valores separados por comas). El formato es utilizado en muchos programas de bases de datos, hojas de cálculo y gestores de contactos para almacenar listas de información. Como un archivo de texto, el formato es ampliamente compatible">
+							.csv
+						</a>
+						Haga clic en el botón más (+) elija el archivo .csv que desea cargar y a continuación haga clic en el botón cargar, o en cancelar si
+						no desea continuar.
+					</p>
+				</div>
+
+				<div class="">
+					<div class="well relative span12">
+						<div class="easy-pie-step span6"  data-percent="50"><span>1/2</span></div>
+						<span class="triangle-button blue"><i class="icon-lightbulb"></i></span>
+						<div class="span7"><strong>Primer paso: </strong><br />
+						Seleccionar el archivo .csv que contiene los contactos
+						</div>
+					</div>
+				</div>
+#}	
 			</div>
 
-			<div class="">
-				<div class="well relative span12">
-					<div class="easy-pie-step span6"  data-percent="50"><span>1/2</span></div>
-					<span class="triangle-button blue"><i class="icon-lightbulb"></i></span>
-					<div class="span7"><strong>Primer paso: </strong><br />
-					Seleccionar el archivo .csv que contiene los contactos
+			<div class="col-md-6">
+				<div class="alert alert-success">
+					<div class="row">
+						<div class="col-sm-2">
+							<span class="glyphicon glyphicon-info-sign"></span>
+						</div>
+						<div class="col-md-9">
+							<p>Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc permiten crear y editar archivos CSV fácilmente.</p>
+						<p>El archivo debe ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
+						<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block" alt="" /></p>
+						<p>También puede ser una tabla sin encabezados.</p>
+						<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
+						<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
+						<p></p>
+						</div>
 					</div>
 				</div>
 			</div>
-#}	
-		</div>
 
-		<div class="row">
-			{{ flashSession.output() }}
-			<div class="accordion-heading">
-
-			  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-				Haga clic aqui para más información
-			  </a>
-			</div>
-			<div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
-				<div class="accordion-inner box">
+				{{ flashSession.output() }}
+{#
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Haga clic aqui para más información</a>
+				</div>
+				<div class="clearfix"></div>
+				<div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
+					<div class="accordion-inner box">
 					<p>
 						Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc 
 						permiten crear y editar archivos CSV fácilmente.
@@ -517,6 +533,7 @@
 				</p>
 			</div>
 		</div>
+#}
 	</script>
 
 {#		<script type="text/x-handlebars" data-template-name="contacts/newimport">

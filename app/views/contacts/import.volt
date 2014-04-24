@@ -81,11 +81,14 @@
 
 		<form method="POST" class="" action="{{url('contacts/processfile/')}}{{idContactlist~'/'~idImportfile}}" role="form">
 			<div class="row">
-				<div class="col-md-5">
-					<h4>Asignación de campos</h4>
-					<ul class="box-toolbar">
-						<li><span class="label label-black"><i class="icon-exchange"></i></span></li>
-					</ul>
+				<div class="col-md-1"></div>
+				<div class="col-md-4">
+					<div class="col-md-10 report">
+						<h4>Asignación de campos</h4>
+					</div>
+					<div class="col-md-1 mini-icon pull-right">
+						<span class="glyphicon glyphicon-hand-left"></span>
+					</div>
 					<table class="table table-condensed table-striped table-contacts">
 						<tbody>
 							<tr>
@@ -119,12 +122,14 @@
 					</table>
 				</div>
 				<div class="col-md-1"></div>
-				<div class="col-md-6">
-					<h4>Previsualización</h4>
-					<ul class="box-toolbar">
-						<li><span class="label label-blue"><i class="icon-eye-open"></i></span></li>
-					</ul>
-					<table class="table table-normal">
+				<div class="col-md-4">
+					<div class="col-md-10 report">
+						<h4>Previsualización</h4>
+					</div>
+					<div class="col-md-1 mini-icon pull-right">
+						<span class="glyphicon glyphicon-eye-open"></span>
+					</div>
+					<table class="table table-normal hight-line">
 						<tbody>
 							<tr>
 								<th>Email: </th>
@@ -148,18 +153,38 @@
 						</tbody>
 					</table>
 				</div>
+
 				<div class="clearfix"></div>
-				<div class="box-footer">
-					<span class="title">Delimitador: </span>
-					{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}
-					<span class="title">Encabezado: </span>
-					{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
+				<div class="space"></div>
+				<div class="col-md-1"></div>
+				<div class="col-sm-4 col-sm-offset-3 col-md-3 col-md-offset-3">
+					<table class="table table-normal">
+						<thead></thead>
+						<tbody>
+							<tr>
+							<th><strong>Delimitador: </strong></th>
+							<td>{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}</td>
+							</tr>
+							<tr>
+							<th><strong>Encabezado: </strong></th>
+							<td>{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}</td>
+							</tr>
+						</tbody>
+						<tfoot>
+						</tfoot>
+					</table>
+				</div>
+			<div class="clearfix"></div>
+			<div class="space"></div>
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-11 report">
+					<h4>Información de archivo, 5 primeras filas</h4>
+				</div>
+				<div class="col-md-1 mini-icon pull-right">
+					<span class="glyphicon glyphicon-th-list"></span>
 				</div>
 			</div>
-			<h4>Información de archivo, 5 primeras filas</h4>
-			<ul class="box-toolbar">
-				<li><span class="label label-green"><i class="icon-thumbs-up"></i></span></li>
-			</ul>
 			<table class="table table-condensed table-striped table-contacts">
 				<tbody>
 					{{' {{#unless hasheader}} '}}
