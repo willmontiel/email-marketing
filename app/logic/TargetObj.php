@@ -6,6 +6,7 @@ class TargetObj
 	protected $idsDbase;
 	protected $idsContactlist;
 	protected $idsSegment;
+	protected $account;
 	protected $target;
 	protected $byEmail;
 	protected $byOpen;
@@ -18,6 +19,11 @@ class TargetObj
 		$this->modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 	}
 	
+	public function setAccount(Account $account)
+	{
+		$this->account = $account;
+	}
+
 	public function setIdsDbase($idsDbase = null)
 	{
 		$this->idsDbase = $idsDbase;
@@ -45,44 +51,58 @@ class TargetObj
 	{	
 		//1. Creamos el objeto target y creamos una consulta SQL para validar si existen contactos
 		$targetInfo = $this->collectTargetInfo();
-		
-		$this->logger->log('SQL: ' . $targetInfo['phql']);
 		$contacts = $this->modelsManager->executeQuery($targetInfo['phql']);
+		$total = $contacts->getFirst()->total;
 		
-		$this->logger->log('Target: ' . count($contacts));
+		$this->logger->log('Target: ' . $total);
 		$this->target = new stdClass();
 		$this->target->target = json_encode($targetInfo['destinationJson']);
-		$this->target->totalContacts = count($contacts);
+		$this->target->totalContacts = $total;
 	}
 	
 	protected function processFilter()
 	{
-		$filter = '';
+		$filter = new stdClass();
+		
+		$filter->filter = "";
+		$filter->join = "";
+		$filter->and = "";
 		
 		if ($this->byEmail != null || !empty($this->byEmail)) { 
-			$filter = array(
+			$filter->filter = array(
 				'type' => 'email',
 				'criteria' => $this->byEmail
 			);
+			
+			$filter->join = " JOIN Email AS e ON e.idEmail = c.idEmail ";
+			$filter->and = " AND e.idAccount = {$this->account->idAccount} AND e.email = '{$this->byEmail}'";
 		}
 		else if ($this->byOpen != '' || !empty($this->byOpen)) {
-			$this->logger->log("Open: {$this->byOpen}");
-			$filter = array(
+			$filter->filter = array(
 				'type' => 'open',
 				'criteria' => $this->byOpen
 			);
+			
+			$filter->join = " JOIN Mxc AS m ON m.idContact = c.idContact ";
+			$filter->and = " AND m.idMail IN ({$this->byOpen})";
 		}
 		else if ($this->byClick != '' || !empty($this->byClick)) {
-			$filter = array(
+			$filter->filter = array(
 				'type' => 'click',
 				'criteria' => $this->byClick
 			);
+			
+			$filter->join = " JOIN Mxcxl AS ml ON ml.idContact = c.idContact ";
+			$filter->and = " AND ml.idMailLink IN ({$this->byClick}) ";
 		}
 		else if ($this->byExclude != '' || !empty($this->byExclude)) {
-			$filter = array(
+			$filter->filter = array(
 				'type' => 'mailExclude',
 				'criteria' => $this->byExclude
 			);
+			
+			$filter->join = " JOIN Mxc AS m ON m.idContact = c.idContact ";
+			$filter->and = " AND m.idMail NOT IN ({$this->byExclude})";
 		}
 		
 		return $filter;
@@ -99,7 +119,9 @@ class TargetObj
 			$destinationJson->ids = explode(",", $this->idsDbase);
 			
 			$type = 'dbase';
-			$phql = "SELECT Contact.idContact FROM Contact WHERE Contact.idDbase IN ({$this->idsDbase})";
+			$phql = "SELECT COUNT(DISTINCT c.idContact) AS total 
+						FROM Contact AS c {$filter->join} 
+					 WHERE c.idDbase IN ({$this->idsDbase}) {$filter->and} ";
 		}
 
 		else if ($this->idsContactlist != null) {
@@ -107,7 +129,10 @@ class TargetObj
 			$destinationJson->ids = explode(",", $this->idsContactlist);
 			
 			$type = 'list';
-			$phql= "SELECT Coxcl.idContact FROM Coxcl WHERE Coxcl.idContactlist IN ({$this->idsContactlist})";
+			$phql= "SELECT COUNT(DISTINCT c.idContact) AS total 
+				    FROM Contact AS c 
+						JOIN Coxcl as cl ON cl.idContact = c.idContact {$filter->join} 
+					WHERE cl.idContactlist IN ({$this->idsContactlist}) {$filter->and} ";
 		}
 
 		else if ($this->idsSegment != null) {
@@ -115,11 +140,15 @@ class TargetObj
 			$destinationJson->ids = explode(",", $this->idsSegment);
 			
 			$type = 'segment';
-			$phql .= "SELECT Sxc.idContact FROM Sxc WHERE Sxc.idSegment IN ({$this->idsSegment})";
+			$phql = "SELECT COUNT(DISTINCT c.idContact) AS total 
+					 FROM Contact AS c 
+						JOIN Sxc AS s ON s.idContact = c.idContact {$filter->join} 
+					 WHERE s.idSegment IN ({$this->idsSegment}) {$filter->and} ";
 		}
 		
-		$destinationJson->filter = $filter;
+		$destinationJson->filter = $filter->filter;
 		
+		$this->logger->log("PHQL: {$phql}");
 		$targetInfo = array('destinationJson' => $destinationJson, 'type' => $type, 'phql' => $phql);
 		
 		return $targetInfo;
@@ -127,9 +156,6 @@ class TargetObj
 	
 	public function getTargetObject()
 	{
-		if ($this->target->totalContacts == 0) {
-			return null;
-		}
 		return $this->target;
 	}
 }

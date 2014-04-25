@@ -220,6 +220,13 @@ class IdentifyTarget
 	
 	private function getFilterSql()
 	{
+		if (is_array($this->target->filter->criteria)) {
+			$ids = implode(',', $this->target->filter->criteria);
+		}
+		else {
+			$ids = $this->target->filter->criteria;
+		}
+		
 		switch ($this->target->filter->type) {
 			case 'email':
 				$join = '';
@@ -227,19 +234,16 @@ class IdentifyTarget
 				break;
 			
 			case 'open':
-				$ids = implode(',', $this->target->filter->criteria);
 				$join = " JOIN mxc AS m ON (m.idContact = c.idContact) ";
 				$and = " AND m.idMail IN (" . $ids . ") AND m.opening != 0 ";
 				break;
 			
 			case 'click':
-				$ids = implode(',', $this->target->filter->criteria);
 				$join = " JOIN mxcxl AS m ON (m.idContact = c.idContact) ";
 				$and = " AND m.idMailLink IN (" . $ids . ") ";
 				break;
 			
 			case 'mailExclude':
-				$ids = implode(',', $this->target->filter->criteria);
 				$join = " JOIN mxc AS m ON (m.idContact = c.idContact) ";
 				$and = " AND m.idMail NOT IN (" . $ids . ") ";
 				break;

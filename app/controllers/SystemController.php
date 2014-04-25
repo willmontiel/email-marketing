@@ -34,17 +34,25 @@ class SystemController extends ControllerBase
 				return $this->setJsonResponse(array('msg' => 'No ha enviado datos, por favor verifique la información'), 400 , 'failed');
 			}
 			
-			$config = fopen("../app/config/configuration.ini", "w") or exit("Unable to open file!");
-			$fwrite = fwrite($config, $configData);
-			
-			if (!$fwrite) {
+			try {
+				$config = fopen("../app/config/configuration.ini", "w") or exit("Unable to open file!");
+				$fwrite = fwrite($config, $configData);
+
+				if (!$fwrite) {
+					$this->traceFail("Error while editing file config by sudo");
+					return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error mientras se editaba el archivo de configuración'), 500 , 'failed');
+				}
+				else {
+					$this->traceSuccess("Edit config file, by sudo");
+					$this->flashSession->success('Se ha editado el archivo de configuración exitosamente');
+					return $this->setJsonResponse(array('msg' => 'Se ha editado el archivo de configuración exitosamente'), 202 , 'success');
+				}
+				fclose($config);
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: {$e}");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error mientras se editaba el archivo de configuración'), 500 , 'failed');
 			}
-			else {
-				$this->flashSession->success('Se ha editado el archivo de configuración exitosamente');
-				return $this->setJsonResponse(array('msg' => 'Se ha editado el archivo de configuración exitosamente'), 202 , 'success');
-			}
-			fclose($config);
 		}
 	}
 }

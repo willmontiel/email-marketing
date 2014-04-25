@@ -1,110 +1,95 @@
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-			  <h3 class="panel-title">Cree el contenido del correo</h3>
-			</div>
-			<div class="panel-body">
-				<div id="choose-content" style="display: block;">
-					<div class="row">
-						<div class="col-md-3 text-center">
-							<a href="{{url('mail/contenteditor')}}/{{'{{unbound id}}'}}" class="btn btn-default btn-lg">
-								<span class="glyphicon glyphicon-star"></span> Editor avanzado
-							</a>
+{{ '{{#if isContentAvailable}}' }}
+	{{ '{{#if contentEmpty}}' }}
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+					  <h3 class="panel-title">Cree el contenido del correo</h3>
+					</div>
+					<div class="panel-body">
+						<div id="choose-content" style="display: block;">
+							<div class="row">
+								<div class="col-md-3 text-center">
+									{{' {{#external-link content=this pattern="' ~ url('mail/contenteditor') ~ '/%@" class="btn btn-primary btn-lg"}}'}}
+										<span class="glyphicon glyphicon-star"></span> Editor Avanzado
+									{{'{{/external-link}}'}}
+								</div>
+								<div class="col-md-3 text-center">
+									{{' {{#external-link content=this pattern="' ~ url('template/select') ~ '/%@" class="btn btn-default btn-lg"}}'}}
+										<span class="glyphicon glyphicon-star"></span> Plantillas prediseñadas
+									{{'{{/external-link}}'}}
+								</div>
+								<div class="col-md-3 text-center">
+									{{' {{#external-link content=this pattern="' ~ url('mail/contenthtml') ~ '/%@" class="btn btn-default btn-lg"}}'}}
+										<span class="glyphicon glyphicon-star"></span> Html desde cero
+									{{'{{/external-link}}'}}
+								</div>
+								<div class="col-md-3 text-center">
+									{{' {{#external-link content=this pattern="' ~ url('mail/importcontent') ~ '/%@" class="btn btn-default btn-lg"}}'}}
+										<span class="glyphicon glyphicon-star"></span> Importar desde una url
+									{{'{{/external-link}}'}}
+								</div>
+							</div>
+						</div>		
+						<br />
+						<div class="row">
+							<div class="col-md-12">
+								<div id="show-content"></div>
+							</div>
 						</div>
-						<div class="col-md-3 text-center">
-							<button type="button" class="btn btn-default btn-lg" id="template">
-								<span class="glyphicon glyphicon-star"></span> Plantillas prediseñadas
-							</button>
+						<br />
+						<div class="row" id="plaintext-content" style="display: none;">
+							<div class="col-md-12">
+								<div  >
+									<h4>Texto plano</h4>
+									{{ '{{view Ember.TextArea valueBinding="plainText" name="plainText" id="plainText" rows="10" class="col-sm-12"}}' }}
+								</div>
+							</div>	
 						</div>
-						<div class="col-md-3 text-center">
-							<button type="button" class="btn btn-default btn-lg" id="html">
-								<span class="glyphicon glyphicon-star"></span> Html desde cero
-							</button>
-						</div>
-						<div class="col-md-3 text-center">
-							<button type="button" class="btn btn-default btn-lg" id="import">
-								<span class="glyphicon glyphicon-star"></span> Importar desde una url
-							</button>
+						<br />
+						<div class="row" id="buttons-content" style="display: none;">
+							<div class="col-md-12  text-right">
+								<a href="#" class="btn btn-default">Descartar cambios</a>
+								<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
+							</div>
 						</div>
 					</div>
-				</div>		
-				<br />
-				<div class="row">
-					<div class="col-md-12">
-						<div id="show-content"></div>
-					</div>
 				</div>
-				<br />
-				<div class="row" id="plaintext-content" style="display: none;">
-					<div class="col-md-12">
-						<div  >
-							<h4>Texto plano</h4>
-							{{ '{{view Ember.TextArea valueBinding="plainText" name="plainText" id="plainText" rows="10" class="col-sm-12"}}' }}
-						</div>
-					</div>	
-				</div>
-				<br />
-				<div class="row" id="buttons-content" style="display: none;">
-					<div class="col-md-12  text-right">
-						<a href="#" class="btn btn-default">Descartar cambios</a>
-						<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
-					</div>
-				</div>
-
-					{#
-					<div class="span3 action-nav-button">
-						<a href="#" title="New Project">
-							<i class="icon-picture"></i>
-							<span>Editor avanzado</span>
-						</a>
-						<span class="triangle-button green"><i class="icon-plus"></i></span>
-						<br />
-						<p>
-							Cree contenido con estilo, bien estructurado y con los mejores estandares
-							de forma muy sencilla en unos pocos minutos.
-						</p>
-						</div>
-
-						<div class="span3 action-nav-button">
-						<a href="#" title="Messages">
-							<i class="icon-magic"></i>
-							<span>Plantillas prediseñadas</span>
-						</a>
-						<span class="triangle-button green"><i class="icon-ok"></i></span>
-						<br />
-						<p>
-							Utilice alguna de nuestras plantillas prediseñadas, que le servirán de guía para 
-							crear un contenido con estilo y llamativo a los correos.
-						</p>
-						</div>
-
-						<div class="span3 action-nav-button">
-						<a href="#" title="Files">
-							<i class="icon-pencil"></i>
-							<span>Html desde cero (avanzado)</span>
-						</a>
-						<span class="triangle-button blue"><i class="icon-align-left"></i></span>
-						<br />
-						<p>
-							Utilice nuestro editor de código html, para crear contenido de correos desde código fuente
-							(recomendado solo a usuarios avanzados).
-						</p>
-						</div>
-
-						<div class="span3 action-nav-button">
-						<a href="#" title="Users">
-							<i class="icon-upload-alt"></i>
-							<span>Importar desde una url</span>
-						</a>
-						<span class="triangle-button blue"><i class="icon-download-alt"></i></span>
-						<br />
-						<p>
-							Importe contenido html desde un enlace externo
-						</p>
-					</div>	
-					#}
 			</div>
 		</div>
-	</div>
-</div>
+	{{ '{{else}}' }}
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-3">
+								{{ '{{#if isEditor}}' }}
+									<a href="{{url('mail/contenteditor')}}/{{'{{unbound id}}'}}" class="thumbnail">
+								{{ '{{else}}' }}
+									<a href="{{url('mail/contenthtml')}}/{{'{{unbound id}}'}}" class="thumbnail">
+								{{ '{{/if}}' }}
+									<img data-src="holder.js/100%x180" alt="100%x180" src="{{'{{unbound contentSummary}}'}}">
+								</a>
+							</div>
+							<div class="col-md-9">
+								<div class="row">
+									<div class="col-sm-12">
+										<label>Texto plano</label> <br />
+										{{ '{{view Ember.TextArea valueBinding="plainText" id="plainText" class="form-control" rows="11"}}' }}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 text-right">
+								<button class="btn btn-default" {{'{{action "discardChanges" this}}'}}>Descartar cambios</button>
+								<button class="btn btn-primary" {{'{{action "save" this}}'}}>Aplicar cambios</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{{'{{/if}}'}}
+{{ '{{/if}}' }}

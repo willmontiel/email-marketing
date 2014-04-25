@@ -35,6 +35,13 @@
 								Segmento: {{' {{name}} '}}, 
 							{{ '{{/each}}' }}
 						{{ '{{/if}}' }}
+						
+						{{ '{{#unless filterEmpty}}' }}
+							(filtro)
+						{{ '{{/unless}}' }}
+					</dd>
+					<dd>
+						Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podria variar)
 					</dd>
 				{{'{{/if}}'}}
 				</dl>
@@ -152,7 +159,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-6 col-md-offset-6 text-right">
-						<button class="btn btn-default" {{ '{{action "discardHeader" this}}' }}>Descartar cambios</button>
+						<button class="btn btn-default" {{ '{{action "discardChanges" this}}' }}>Descartar cambios</button>
 						<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 						{#
 						<input type="button" class="btn btn-primary" value="Aplicar cambios" onClick="createBlock(this.form, 'header')">

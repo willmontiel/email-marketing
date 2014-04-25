@@ -6,8 +6,6 @@ DS.RESTAdapter.reopen({
 	namespace: MyUrl
 });
 
-//App.ApplicationAdapter = DS.FixtureAdapter;
-
 App.Store = DS.Store.extend({});
 
 
@@ -26,45 +24,38 @@ App.Mail = DS.Model.extend({
 	filterByOpen: DS.attr('string'),
 	filterByClick: DS.attr('string'),
 	filterByExclude: DS.attr('string'),
-	content: DS.attr('string'),
+	googleAnalytics: DS.attr('string'),
+	campaignName: DS.attr('string'),
+	previewData: DS.attr('string'),
+	mailcontent: DS.attr('boolean'),
 	plainText: DS.attr('string'),
+	totalContacts: DS.attr('string'),
 });
 
 App.IndexRoute = Ember.Route.extend({
-	model: function(){
-		var m = this.store.createRecord('mail');
-		this.loadData(m);
-		return m;
-	},
-			
-	loadData: function(m){
-		if (App.maildata != undefined) {
-			m.set('id', App.maildata[0].id);
-			m.set('name', App.maildata[0].name);
-			m.set('type', App.maildata[0].type);
-			m.set('scheduleDate', App.maildata[0].scheduleDate);
-			m.set('fromName', App.maildata[0].fromName);
-			m.set('fromEmail', App.maildata[0].fromEmail);
-			m.set('replyTo', App.maildata[0].replyTo);
-			m.set('subject', App.maildata[0].subject);
-			m.set('dbases', App.maildata[0].dbases);
-			m.set('contactlists', App.maildata[0].contactlists);
-			m.set('segments', App.maildata[0].segments);
-			m.set('filterByEmail', App.maildata[0].filterByEmail);
-			m.set('filterByOpen', App.maildata[0].filterByOpen);
-			m.set('filterByClick', App.maildata[0].filterByClick);
-			m.set('filterByExclude', App.maildata[0].filterByExclude);
-			m.set('content', App.maildata[0].content);
-			m.set('plainText', App.maildata[0].plainText);
-		}
-	},
-			
-	deactivate: function () {
-		if (this.currentModel.get('isNew') && this.currentModel.get('isSaving') == false) {
-			this.currentModel.rollback();
-		}
+	model: function() {
+	   if (App.maildata !== undefined) {
+		   var id = App.maildata[0].id;
+		   return this.store.find('mail', id);
+	   }
+	   else {
+		   return this.store.createRecord('mail');
+	   }
 	}
 });
+// ****************************
+App.ExternalLinkComponent = Ember.Component.extend({
+  tagName: "a",
+  classNames: [],
+  attributeBindings: ["href"],
+  href: (function() {
+    return this.get('pattern').fmt(this.get('content.id'));
+  }).property("content.id")
+});
+
+Ember.Handlebars.helper("external-link", App.ExternalLinkComponent);
+// ****************************
+
 
 App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	dbaselist: [],
@@ -74,26 +65,62 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	click: [],
 	exclude: [],
 	scheduleRadio: '',
+	linksAnalytics: [],
 	fromSummary: '',
+	summaryMail: '',
+	summaryAnalytics: '',
+	//Retorna el id del correo para crear las url's
+	url: function () {
+		return '/' + this.get('id');
+	}.property('id'),
 	
+	//Si hay un id se encargara se recrear el correo para su edición
+	setSelectsContent: function () {
+		if (this.get('id') !== null) {
+			var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
+			var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
+			var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
+			
+			this.set('dbaselist', arrayDbase);
+			this.set('list', arrayList);
+			this.set('segmentlist', arraySegment);
+			
+			var arrayOpen = setTargetValues(this.get('this.filterByOpen'), App.sendByOpen);
+			var arrayClick = setTargetValues(this.get('this.filterByClick'), App.sendByClick);
+			var arrayExclude = setTargetValues(this.get('this.filterByExclude'), App.excludeContact);
+			
+			this.set('open', arrayOpen);
+			this.set('click', arrayClick);
+			this.set('exclude', arrayExclude);
+			
+			if (App.googleAnalyticsLinks !== undefined) {
+				var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
+				this.set('linksAnalytics', arrayAnalytics);
+			}	
+		}
+	}.observes('this.content'),
+		
+	//Observa el contenido del header (fromName, fromEmail, etc)
 	headerEmpty: function () {
 		var n, e, s;
 		n = this.get('content.fromName');
 		e = this.get('content.fromEmail');
 		s = this.get('content.subject');
 		
-		n = (n == '')?null:n;
-		e = (e == '')?null:e;
-		s = (s == '')?null:s;
+		n = (n === '')?null:n;
+		e = (e === '')?null:e;
+		s = (s === '')?null:s;
 		
 		if (!e ||  !n || !s) {
 			this.set('fromSummary', 'Sin definir <email@domain.com>');
 			return true;
 		}
 		this.set('fromSummary', n + '<' + e + '>');
+		
 		return false;
 	}.property('content.fromName', 'content.fromEmail', 'content.subject'),
-			
+		
+	//Observa que se hayan seleccionado destinatarios
 	targetEmpty: function () {
 		var d, l, s;
 		
@@ -101,61 +128,205 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		l = this.get('this.list');
 		s = this.get('this.segmentlist');
 		
-		d = (d == '')?null:d;
-		l = (l == '')?null:l;
-		s = (s == '')?null:s;
+		d = (d.length === 0)?null:d;
+		l = (l.length === 0)?null:l;
+		s = (s.length === 0)?null:s;
 		
 		if (!d && !l && !s) {
 			return true;
 		}
 		return false;
 	}.property('dbaselist.[]', 'list.[]', 'segmentlist.[]'), 
-			
+		
+	//Si hay un id de correo la seleccion de contenido (editor, plantillas, html, importar contenido) se habilita de lo contrario no
+	isContentAvailable: function () {
+		var id;
+		id = this.get('content.id');
+		id = (id === '')?null:id;
+		
+		if (!id) {
+			return false;
+		}
+		return true;
+	}.property('content.id'),
+		
+	//Observa si hay filtro en selección de destinatarios
 	filterEmpty: function () {
 		var byEmail, byOpen, byClick, byEx;
 		
 		byEmail = this.get('content.filterByEmail');
-//		byOpen = this.get('this.open');
-//		byClick = this.get('this.click');
-//		byEx = this.get('this.exclude');
+		byOpen = this.get('this.open');
+		byClick = this.get('this.click');
+		byEx = this.get('this.exclude');
 		
-		byEmail = (byEmail == '')?null:byEmail;
-//		byOpen = (byOpen == '')?null:byOpen;
-//		byClick = (byClick == '')?null:byClick;
-//		byEx = (byEx == '')?null:byEx;
+		byEmail = (byEmail === '')?null:byEmail;
+		byOpen = (byOpen.length === 0)?null:byOpen;
+		byClick = (byClick.length === 0)?null:byClick;
+		byEx = (byEx.length === 0)?null:byEx;
 		
-//		if (!byEmail && !byOpen && !byClick && !byEx) {
-		if (!byEmail) {
+		if (!byEmail && !byOpen && !byClick && !byEx) {
 			return true;
 		}
 		return false;
-	}.property('content.filterByEmail'), 
+	}.property('content.filterByEmail','open.[]', 'click.[]', 'exclude.[]'), 
 	
-	GAEmpty: function () {
-		return true;
-	}.property(),
+	//Observa el contenido del correo
+	contentEmpty: function () {
+		var mailcontent, preview;
+		mailcontent = this.get('this.mailcontent');
+		preview = this.get('this.previewData');
+		preview = (preview === 'null')?null:preview;
+		if (!mailcontent) {
+			return true;
+		}
+		if (!preview) {
+			preview = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNzEiIGhlaWdodD0iMTgwIj48cmVjdCB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2VlZSI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9Ijg1LjUiIHk9IjkwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MTcxeDE4MDwvdGV4dD48L3N2Zz4=";
+		}
+		else {
+			preview = 'data:image/png;base64,' + preview;
+		}
+		this.set('contentSummary', preview);
+		return false;
+		
+	}.property('content.mailcontent'),
 	
+	//Valida si el contenido se hizo en el editor avanzado o es html puro para recrear las url's
+	isEditor: function () {
+		var t;
+		t = this.get('this.type');
+		
+		if (t === 'Editor') {
+			return true;
+		}
+		return false;
+	}.property('content.type'),
+	
+	//Observa si no se ha configurado google analitycs
+	GoogleAnalitycsEmpty: function () {
+		var g, c;
+		g = this.get('this.linksAnalytics');
+		c = this.get('this.campaignName');
+		
+		g = (g.length === 0)?0:g;
+		c = (c === '')?0:c;
+		if (!c) {
+			this.set('summaryAnalytics', 'inactivo, falta el nombre de la campaña');
+			return true;
+		}
+		else if (!g) {
+			this.set('summaryAnalytics', 'inactivo, no se han seleccionado los enlaces');
+			return true;
+		}
+		this.set('summaryAnalytics', 'activo');
+		return false;
+	}.property('linksAnalytics.[]', 'content.campaignName'),
+	
+	//Valida si hay links en el contenido, si es asi se habilita
+	isGaAvailable: function () {
+		if (this.get('id') !== null) {
+			if (App.googleAnalyticsLinks !== undefined) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}.property('content.mailcontent'),
+		
+	//Observa si se ha programado el correo
 	scheduleEmpty: function () {
 		var schedule;
-		schedule = this.get('this.scheduleRadio');
+		schedule = this.get('content.scheduleDate');
 		if (!schedule) {
 			return true;
 		}
-		
-		if (schedule === 'now') {
-			this.set('scheduleSummary', 'De inmediato');
-		}
-		else {
-			var dateTime = this.get('scheduleDate');
-			console.log(dateTime)
-			this.set('scheduleSummary', dateTime);
-		}
+		this.set('scheduleSummary', schedule);
 		return false;
-	}.property('scheduleRadio'),
+	}.property('content.scheduleDate'),
 	
+	isTargetBydbases: function () {
+		return setFilterValues(this.get('this.dbases'), 'dbaseChecked', this);
+	}.property('content.dbases'),
+//	
+	isTargetByLists: function () {
+		return setFilterValues(this.get('this.contactlists'), 'listChecked', this);
+	}.property('content.contactlists'),
+//	
+	isTargetBySegments: function () {
+		return setFilterValues(this.get('this.segments'), 'segmentChecked', this);
+	}.property('content.segments'),
+//		
+	isFilterByEmail: function () {
+		return setFilterValues(this.get('this.filterByEmail'), 'filterEmailChecked', this);
+	}.property('content.filterByEmail'),
+//			
+	isFilterByOpen: function () {
+		return setFilterValues(this.get('this.filterByOpen'), 'filterOpenChecked', this);
+	}.property('content.filterByOpen'),
+//	
+	isFilterByClick: function () {
+		return setFilterValues(this.get('this.filterByClick'), 'filterClickChecked', this);
+	}.property('content.filterByClick'),
+//	
+	isFilterByExclude: function () {
+		return setFilterValues(this.get('this.filterByExclude'), 'filterExcludeChecked', this);
+	}.property('content.filterByExclude'),
+	
+	//Observa el contenido del correo y una vez este completo habilita el botón para enviarlo
+	isMailReadyToSend: function () {
+		var name, fromName, fromEmail, subject, mailcontent, plainText, totalContacts, scheduleDate;
+		
+		name = this.get('this.name');
+		fromName = this.get('this.fromName');
+		fromEmail = this.get('this.fromEmail');
+		subject = this.get('this.subject');
+		mailcontent = this.get('this.mailcontent');
+		plainText = this.get('this.plainText');
+		totalContacts = this.get('this.totalContacts');
+		scheduleDate = this.get('this.scheduleDate');
+
+		name = (name === '')?0:name;
+		fromName = (fromName === '')?0:fromName;
+		fromEmail = (fromEmail === '')?0:fromEmail;
+		subject = (subject === '')?0:subject;
+		mailcontent = (mailcontent === 0)?0:mailcontent;
+		plainText = (plainText === '')?0:plainText;
+		totalContacts = (totalContacts === '')?0:totalContacts;
+		scheduleDate = (scheduleDate === '')?0:scheduleDate;
+
+		if (!name) {
+			this.set('summaryMail', 'El campo "Nombre" se encuentra vacío');
+			return false;
+		}
+		else if (!fromName || !fromEmail) {
+			this.set('summaryMail', 'El campo "De" se encuentra vacío');
+			return false;
+		}
+		else if (!subject) {
+			this.set('summaryMail', 'El campo "Asunto" se encuentra vacío');
+			return false;
+		}
+		else if (!totalContacts || totalContacts === '0') {
+			this.set('summaryMail', 'No hay destinatarios');
+			return false;
+		}
+		else if (!mailcontent) {
+			this.set('summaryMail', 'Aún no hay contenido');
+			return false;
+		}
+		else if (!plainText) {
+			this.set('summaryMail', 'Aún no hay contenido');
+			return false;
+		}
+		else if (!scheduleDate) {
+			this.set('summaryMail', 'Aún no se ha programado la fecha y hora de envío');
+			return false;
+		}
+		
+		return true;
+	}.property('content.name', 'content.fromName', 'content.fromEmail', 'content.subject', 'content.mailcontent', 'content.plainText', 'content.totalContacts', 'content.scheduleDate'),
+			
 	actions: {
 		save: function(mail) {
-			console.log('Nombre: ' + mail.get('name'));
 			if (mail.get('name') === undefined) {
 				$.gritter.add({title: 'Error', text: 'No ha ingresado un nombre para el correo, por favor verifique la información', sticky: false, time: 3000});
 			}
@@ -167,28 +338,18 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				var click = getArrayValue(this.get('click'));
 				var exclude = getArrayValue(this.get('exclude'));
 				
-				var type;
-				var content;
-				
-				if (document.getElementById('iframeEditor') != null) {
-					type = 'Editor';
-					content = document.getElementById('iframeEditor').contentWindow.catchEditorData();
-					document.getElementById('iframeEditor').contentWindow.RecreateEditor();
-				}
-				else if (document.getElementById('iframeHtml') != null) {
-					type = 'Html';
-					content = document.getElementById('iframeHtml').contentWindow.$('#redactor_content').val();
-				}
+				var array = [];
+					var obj = this.get('linksAnalytics').toArray();
+					for (var i = 0; i < obj.length; i++) {
+						array.push(obj[i].name);
+					}
+				var analitycs = array.toString();
 				
 				var value = this.get('scheduleRadio');
 				
+				
 				if (value === 'now') {
-					console.log('its now')
 					mail.set('scheduleDate', value);
-				}
-				else {
-					console.log('its not now')
-					console.log(mail.get('scheduleDate'));
 				}
 				
 				mail.set('dbases', dbases);
@@ -197,60 +358,87 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				mail.set('filterByOpen', open);
 				mail.set('filterByClick', click);
 				mail.set('filterByExclude', exclude);
-				mail.set('type', type);
-				mail.set('content', content);
+				mail.set('googleAnalytics', analitycs);
 				
 				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
 				this.set('isHeaderExpanded', false);
 				this.set('isTargetExpanded', false);
-				this.set('isContentExpanded', false);
-				this.set('isGAExpanded', false);
+				this.set('isGoogleAnalitycsExpanded', false);
 				this.set('isScheduleExpanded', false);
 			}
 		},
 		
 		expandHeader: function () {
-			setExpandAttr(this, 'isHeaderExpanded');
+			this.set('isHeaderExpanded', true);
 		},
 				
 		expandTarget: function () {
-			setExpandAttr(this, 'isTargetExpanded');
-		},
-		
-		expandContent: function () {
-			setExpandAttr(this, 'isContentExpanded');
+			if (this.get('this.id') !== null) {
+				var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
+				var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
+				var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
+
+				this.set('databases', arrayDbase);
+				this.set('clists', arrayList);
+				this.set('csegments', arraySegment);
+
+				var arrayOpen = setTargetValues(this.get('this.filterByOpen'), App.sendByOpen);
+				var arrayClick = setTargetValues(this.get('this.filterByClick'), App.sendByClick);
+				var arrayExclude = setTargetValues(this.get('this.filterByExclude'), App.excludeContact);
+
+				this.set('fiteropens', arrayOpen);
+				this.set('filterclicks', arrayClick);
+				this.set('filterexcludes', arrayExclude);
+			}
+			this.set('isTargetExpanded', true);
 		},
 				
 		expandGA: function () {
-			setExpandAttr(this, 'isGAExpanded');
+			if (this.get('this.id') !== null) {
+				if (App.googleAnalyticsLinks !== undefined) {
+					var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
+					this.set('linksgoogleanalytics', arrayAnalytics);
+				}
+			}	
+			setExpandAttr(this, 'isGoogleAnalitycsExpanded');
 		},
 				
 		expandSchedule: function () {
-			setExpandAttr(this, 'isScheduleExpanded');
+			this.set('isScheduleExpanded', true);
 		},
 		
-		discardHeader: function () {
-			this.set('fromName', '');
-			this.set('fromEmail', '');
-			this.set('replyTo', '');
-			this.set('subject', '');
-			setExpandAttr(this, 'isHeaderExpanded');
+		discardChanges: function () {
+			if (this.get('this.id') !== null) {
+				this.get('model').rollback();
+			}
+			this.set('isHeaderExpanded', false);
+			this.set('isScheduleExpanded', false);
+		},
+			
+		discardTarget: function() {
+			if (this.get('this.id') !== null) {
+				this.set('dbaselist', this.get('databases'));
+				this.set('list', this.get('clists'));
+				this.set('segmentlist', this.get('csegments'));
+				this.set('open', this.get('fiteropens'));
+				this.set('click', this.get('filterclicks'));
+				this.set('exclude', this.get('filterexcludes'));
+			}
+			this.set('isTargetExpanded', false);
 		},
 				
-		discardTarget: function () {
-			this.set('dbaselist', []);
-			this.set('list', []);
-			this.set('segmentlist',[]);
-			this.set('open',[]);
-			this.set('click',[]);
-			this.set('exclude',[]);
-			setExpandAttr(this, 'isTargetExpanded');
+		discardGoogleAnalytics: function () {
+			this.get('model').rollback();
+			if (App.googleAnalyticsLinks !== undefined) {
+				this.set('linksAnalytics', this.get('linksgoogleanalytics'));
+			}			
 		},
 				
-		discardSchedule: function () {
-			this.set('scheduleRadio', '');
-			setExpandAttr(this, 'isScheduleExpanded');
-	
+		cleanGoogleAnalytics: function () {
+			if (App.googleAnalyticsLinks !== undefined) {
+				this.set('linksAnalytics', []);
+				this.set('campaignName', '');
+			}
 		}
 	}
 });
@@ -265,12 +453,6 @@ function getArrayValue(value) {
 }
 
 function setExpandAttr(self, expand) {
-//	self.set('isHeaderExpanded', false);
-//	self.set('isTargetExpanded', false);
-//	self.set('isContentExpanded', false);
-//	self.set('isGAExpanded', false);
-//	self.set('isScheduleExpanded', false);
-	
 	if(self.get(expand)) {
 		self.set(expand, false);
 	}
@@ -279,18 +461,54 @@ function setExpandAttr(self, expand) {
 	}
 }
 
+function setTargetValues(values, select) {
+	var array = values.split(",");
+	var newArray = [];
+	for (var i = 0; i < select.length; i++) {
+		for (var j = 0; j < array.length; j++) {
+			if (select[i].id == array[j]) {
+				newArray.push(select[i]);
+			}
+		}
+	}
+	return newArray;
+}
+
+function setGoogleAnalyticsValues(values, select) {
+	var array = values.split(",");
+	var newArray = [];
+	for (var i = 0; i < select.length; i++) {
+		for (var j = 0; j < array.length; j++) {
+			if (select[i].name == array[j]) {
+				newArray.push(select[i]);
+			}
+		}
+	}
+	return newArray;
+}
+
+function setFilterValues(values, checked, self) {
+	values = (values === '')?null:values;
+	if (values) {
+		self.set(checked, 'display: block;');
+		return true;
+	}	
+	self.set(checked, 'display: none;');
+	return false;
+}
+
 App.DateTimePicker = Em.View.extend({
 	templateName: 'datetimepicker',
 	didInsertElement: function() {
-		var nowTemp = new Date();
-		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
+//		var nowTemp = new Date();
+//		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), nowTemp.getHours(), nowTemp.getMinutes(), nowTemp.getSeconds(), 0);
 		
 		$('#schedule').datetimepicker({
-			format:'m/d/Y H:i',
+			format:'d/m/Y H:i',
 			inline:true,
 			lang:'es',
 			minDate: 0,
-			minTime: 0,
+//			minTime: 0,
 			startDate: 0,
 //			allowTimes:[
 //				'7:00', '7:15', '7:30', '7:45',
@@ -307,7 +525,6 @@ App.DateTimePicker = Em.View.extend({
 //				'18:00', '18:15', '18:30', '18:45',
 //				'19:00'
 //			]
-//			startDate: now
 		});
 	}
 });
@@ -315,44 +532,46 @@ App.DateTimePicker = Em.View.extend({
 Ember.RadioButton = Ember.View.extend({
     tagName : "input",
     type : "radio",
-    attributeBindings : [ "name", "type", "value", "id"],
+    attributeBindings : [ "name", "type", "value", "id", "checked"],
     click : function() {
-        this.set("selection", this.$().val())
-		
-		
+        this.set("selection", this.$().val());
+		var selection = this.get("selection");
 		$("#programmer").hide();
-//		$('#schedule').data("DateTimePicker").hide();
 		$("#schedule").val('');
-
-		switch (this.get('selection')) {
+		
+		switch (selection) {
 			case "now":
 				break;
 
 			case "later":
 				$("#programmer").show();
-//				$('#schedule').data("DateTimePicker").show();
 				break;
 		}
     },
     checked : function() {
-        return this.get("value") == this.get("selection");   
+		if (this.get("selection") === 'now') {
+			this.set("selection", 'later');
+		}
+		console.log('esto' + this.get("selection"));
+        return this.get("value") === this.get("selection");   
     }.property()
 });
 
 Ember.RadioButtonTarget = Ember.View.extend({
     tagName : "input",
     type : "radio",
-    attributeBindings : [ "name", "type", "value", "id"],
+    attributeBindings : [ "name", "type", "value", "id", "checked"],
     click : function() {
         $("#db").hide();
 		$("#list").hide();
 		$("#seg").hide();
 		
-		$("#dbases").val('');
-		$('#segments').val('');
-		$('#contactlists').val('');
+		this.set('controller.dbaselist', []);
+		this.set('controller.list', []);
+		this.set('controller.segmentlist', []);
 		
 		var value = this.$().val();
+		
 		switch (value) {
 			case "dataBase":
 				$("#db").show();
@@ -364,20 +583,25 @@ Ember.RadioButtonTarget = Ember.View.extend({
 				$("#seg").show();
 				break;
 		}
-    },
+    }
 });
 
 Ember.RadioFilter = Ember.View.extend({
     tagName : "input",
     type : "radio",
-    attributeBindings : [ "name", "type", "value", "id"],
+    attributeBindings : [ "name", "type", "value", "id", "checked"],
     click : function() {
 		$("#mail").hide();
 		$("#open").hide();
 		$("#click").hide();
 		$("#exclude").hide();
-
-		$("#sendMail").val('');
+		
+		this.set('controller.filterByEmail', '');
+		this.set('controller.open', []);
+		this.set('controller.click', []);
+		this.set('controller.exclude', []);
+	
+		$("#sendByMail").val('');
 		$('#sendOpen').val('');
 		$('#sendClick').val('');
 		$('#sendExclude').val('');
@@ -398,9 +622,5 @@ Ember.RadioFilter = Ember.View.extend({
 				$("#exclude").show();
 				break;
 		}
-    },
+    }	
 });
-
-//App.Mail.FIXTURES = [
-//  {id: 1, name: 'Mi nuevo correo', fromName: 'Will Montiel', fromEmail: 'william.montiel@sigmamovil.com', replyTo: 'noreply@noreply.com', subject: 'Este es un correo de prueba' }
-//];

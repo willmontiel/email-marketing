@@ -7,7 +7,7 @@ class MailWrapper extends BaseWrapper
 	protected $mail = null;
 	protected $mailcontent = null;
 	protected $target = null;
-	protected $scheduleDate;
+	protected $scheduleDate = null;
 
 
 	public function __construct() 
@@ -29,8 +29,8 @@ class MailWrapper extends BaseWrapper
 	{
 		$this->mail = $mail;
 	}
-	
-	public function setMailContent(Mailcontent $mailcontent)
+
+	public function setMailContent($mailcontent = null)
 	{
 		$this->mailcontent = $mailcontent;
 	}
@@ -39,11 +39,7 @@ class MailWrapper extends BaseWrapper
 	{
 		$this->processTarget();
 		$this->processScheduleDate();
-	}
-	
-	public function processDataForMailContent()
-	{
-		$this->processMailContent();
+		$this->saveContent();
 	}
 	
 	public function processTarget()
@@ -59,6 +55,7 @@ class MailWrapper extends BaseWrapper
 				
 		if (!empty($idsDbase) || !empty($idsContactlist) || !empty($idsSegment)) {
 			$target = new TargetObj();
+			$target->setAccount($this->account);
 			$target->setIdsDbase($idsDbase);
 			$target->setIdsContactlist($idsContactlist);
 			$target->setIdsSegment($idsSegment);
@@ -69,39 +66,16 @@ class MailWrapper extends BaseWrapper
 			$this->logger->log("Target: " . print_r($this->target, true));
 		}
 	}
-	
-	protected function processMailContent()
-	{
-		if ($this->content->content != '') {
-			switch ($this->content->type) {
-				case 'Editor':
-					if ($this->content->plainText == '') {
-						$editorObj = new HtmlObj;
-						$editorObj->assignContent(json_decode($this->content->content));
-						$content = $editorObj->render();
-						
-						$text = new PlainText();
-						$this->content->plainText = $text->getPlainText($content);
-					}
-					break;
-				
-				case 'Html':
-					$text = new PlainText();
-					$this->content->plainText = $text->getPlainText($this->content->content);
-					break;
-			}
-		}
-	}
-
 
 	protected function processScheduleDate()
 	{
 		$schedule = $this->content->scheduleDate;
+		
 		if ($schedule == 'now') {
 			$this->scheduleDate = time();
 		}
 		else if ($schedule !== '' || !empty($schedule)) {
-			list($month, $day, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
+			list($day, $month, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
 			$this->scheduleDate = mktime($hour, $minute, 0, $month, $day, $year);
 		}
 	}
@@ -110,13 +84,6 @@ class MailWrapper extends BaseWrapper
 	public function saveMail()
 	{
 		$date = time();
-		
-//		if ($this->target == false) {
-//			$message = 'No hay contactos registrados, por favor seleccione otra base de datos, lista o segmento';
-//			$this->addMessageError('errors', $message, 400);
-//			throw new \InvalidArgumentException($message);
-//		}
-		
 		if ($this->mail == null) {
 			$this->mail = new Mail();
 		}
@@ -126,7 +93,9 @@ class MailWrapper extends BaseWrapper
 		$this->mail->status = 'draft';
 		$this->mail->wizardOption = 'setup';
 		$this->mail->totalContacts = $this->target->totalContacts;
-		$this->mail->scheduleDate = $this->scheduleDate;
+		if ($this->scheduleDate != null) {
+			$this->mail->scheduleDate = $this->scheduleDate;
+		}
 		$this->mail->createdon = $date;
 		$this->mail->updatedon = $date;
 		$this->mail->deleted = 0;
@@ -136,7 +105,6 @@ class MailWrapper extends BaseWrapper
 		$this->mail->fromEmail = $this->content->fromEmail;
 		$this->mail->replyTo = $this->content->replyTo;
 		$this->mail->target = $this->target->target;
-		$this->mail->previewData = $this->content->previewData;
 		$this->mail->socialNetworks = $this->content->socialNetworks;
 
 		if (!$this->mail->save()) {
@@ -149,26 +117,53 @@ class MailWrapper extends BaseWrapper
 			$this->addMessageError('errors', $messages, 400);
 			throw new \InvalidArgumentException($messages);
 		}
+		
+		if ($this->scheduleDate != null) {
+			$mailSchedule = new MailScheduleObj($this->mail);
+			$scheduled = $mailSchedule->scheduleTask();
+			
+			if (!$scheduled) {
+				$this->addMessageError('errors', 'Ha ocurrido un error por favor contacte al administrador', 500);
+				$this->logger->log("Error while saving mail {$this->mail->idMail} scheduleDate in Mailschedule table account {$this->mail->idAccount}");
+				throw new \Exception('Error while saving mail scheduleDate in Mailschedule table');
+			}
+		}
 	}
 	
-	public function saveContent()
+	private function saveContent()
 	{
-		$this->mailcontent = new Mailcontent();
-		
-		$this->mailcontent->idMail = $this->mail->idMail;
-		$this->mailcontent->content = $this->content->content;
-		$this->mailcontent->plainText = $this->content->plainText;
-		$this->mailcontent->googleAnalytics = $this->content->googleAnalytics;
-		$this->mailcontent->campaignName = $this->content->campaignName;
-		
-		if (!$this->mailcontent->save()) {
-			$e = array();
-			foreach ($this->mailcontent->getMessages() as $msg) {
-				$e[] = $msg;
+		if ($this->mailcontent != null) {
+			if (!empty($this->content->googleAnalytics)) {
+				$campaignName = $this->content->campaignName;
+				$googleAnalytics = explode(',', $this->content->googleAnalytics);
+				
+				if (empty($campaignName)) {
+					$campaignName = substr($this->mail->name, 0, 24);
+				}
+				else if (strlen($campaignName) > 25) {
+					$campaignName = substr($campaignName, 0, 24);
+				}
+				
+				$this->mailcontent->campaignName = $campaignName;
+				$this->mailcontent->googleAnalytics = json_encode($googleAnalytics);
 			}
-			$messages = implode(", ", $e);
-			$this->addMessageError('errors', $messages, 400);
-			throw new \InvalidArgumentException($messages);
+			else {
+				$this->mailcontent->campaignName = null;
+				$this->mailcontent->googleAnalytics = null;
+			}
+			
+			$this->mailcontent->plainText = $this->content->plainText;
+			
+			
+			if (!$this->mailcontent->save()) {
+				$e = array();
+				foreach ($this->mailcontent->getMessages() as $msg) {
+					$e[] = $msg;
+				}
+				$messages = implode(", ", $e);
+				$this->addMessageError('errors', $messages, 400);
+				throw new \InvalidArgumentException($messages);
+			}
 		}
 	}
 	
@@ -176,47 +171,102 @@ class MailWrapper extends BaseWrapper
 	{
 		$this->mail; $this->content;
 		$jsonObject = array();
-		//Header
-		$jsonObject['id'] = $this->mail->idMail;                  
-//		$jsonObject['idAccount'] = $this->mail->idAccount;
-//		$jsonObject['status'] = $this->mail->status;
-//		$jsonObject['wizardOption'] = $this->mail->wizardOption;
-//		$jsonObject['createdon'] = $this->mail->createdon;
-//		$jsonObject['updatedon'] = $this->mail->updatedon;
-//		$jsonObject['deleted'] = $this->mail->deleted;
+		
+		$jsonObject['id'] = $this->mail->idMail;      
 		$jsonObject['name'] = $this->mail->name;
 		$jsonObject['subject'] = $this->mail->subject;
 		$jsonObject['fromName'] = $this->mail->fromName;
 		$jsonObject['fromEmail'] = $this->mail->fromEmail;
 		$jsonObject['replyTo'] = $this->mail->replyTo;
+		$jsonObject['type'] = $this->mail->type;
+		$jsonObject['dbases'] = '';
+		$jsonObject['contactlists'] = '';
+		$jsonObject['segments'] = '';
 		
-		$jsonObject['dbases'] = $this->content->dbases;
-		$jsonObject['contactlists'] = $this->content->contactlists;
-		$jsonObject['segments'] = $this->content->segments;
-		$jsonObject['filterByEmail'] = $this->content->filterByEmail;
-		$jsonObject['filterByOpen'] = $this->content->filterByOpen;
-		$jsonObject['filterByClick'] = $this->content->filterByClick;
-		$jsonObject['filterByExclude'] = $this->content->filterByExclude;
+		$filter = null;
+		if ($this->mail->target != null) {
+			$target = json_decode($this->mail->target);
+			$filter = $target->filter;
+			
+			$this->logger->log('Filter: ' . print_r($filter, true));
+			$type = $filter->type;
+			
+			$criteria = $filter->criteria;
+			$ids = implode(',', $target->ids);
+			
+			$this->logger->log('Criteria: ' . $criteria);
+			
+			if ($target->destination == 'dbases') {
+				$jsonObject['dbases'] = $ids;
+			}
+			else if ($target->destination == 'contactlists') {
+				$jsonObject['contactlists'] = $ids;
+			}
+			else if ($target->destination == 'segments') {
+				$jsonObject['segments'] = $ids;
+			}
+		}
 		
-		$jsonObject['content'] = $this->mailcontent->content;
+		$jsonObject['filterByEmail'] = '';
+		$jsonObject['filterByOpen'] = '';
+		$jsonObject['filterByClick'] = '';
+		$jsonObject['filterByExclude'] = '';
+		
+		if ($filter != null) {
+			if ($type == 'email') {
+				$jsonObject['filterByEmail'] = $filter->criteria;
+			}
+			else if ($type == 'open') {
+				$jsonObject['filterByOpen'] = $criteria;
+			}
+			else if ($type == 'click') {
+				$jsonObject['filterByClick'] = $criteria;
+			}
+			else if ($type == 'mailExclude') {
+				$jsonObject['filterByExclude'] = $criteria;
+			}
+		}
+		
+		
+		$jsonObject['mailcontent'] = 0;
+		$jsonObject['campaignName'] = '';
+		$jsonObject['googleAnalytics'] = '';
+		
+		if ($this->mailcontent != null) {
+			$jsonObject['mailcontent'] = (empty($this->mailcontent->content))?0:1;
+			
+			$campaignName = $this->mailcontent->campaignName;
+			if ($campaignName != null) {
+				$jsonObject['campaignName'] = $campaignName;
+			}
+			
+			if ($this->mailcontent->googleAnalytics != null) {
+				$googleAnalytics = json_decode($this->mailcontent->googleAnalytics);
+				$jsonObject['googleAnalytics'] = implode(',', $googleAnalytics);
+			}
+		}
+		
+		if (empty($this->mail->previewData)) {
+			$preview = 'null';
+		}
+		else {
+			$preview = $this->mail->previewData;
+		}
+		
+		$jsonObject['previewData'] = $preview;
 		$jsonObject['plainText'] = $this->mailcontent->plainText;
+		$jsonObject['totalContacts'] = $this->mail->totalContacts;
 		
-		$jsonObject['scheduleDate'] = $this->mailcontent->scheduleDate;
+		if ($this->mail->scheduleDate != null || $this->mail->scheduleDate != 0)  {
+			$schedule = date('d/m/Y H:i', $this->mail->scheduleDate);
+		}
+		else {
+			$schedule = null;
+		}
 		
-//		$jsonObject['clicks'] = $this->mail->clicks;
-//		$jsonObject['bounced'] = $this->mail->bounced;
-//		$jsonObject['spam'] = $this->mail->spam;
-//		$jsonObject['unsubscribed'] = $this->mail->unsubscribed;
+		$jsonObject['scheduleDate'] = $schedule;
 		
-//		$jsonObject['target'] = $this->mail->target;
-//		$jsonObject['previewData'] = $this->mail->previewData;
-//		$jsonObject['socialnetworks'] = $this->mail->socialnetworks;
-//		$jsonObject['totalContacts'] = $this->mail->totalContacts;
-//		$jsonObject['scheduleDate'] = $this->mail->scheduleDate;
-//		$jsonObject['finishedon'] = $this->mail->finishedon;
-//		$jsonObject['uniqueOpens'] = $this->mail->uniqueOpens;
-//		$jsonObject['startedon'] = $this->mail->startedon;
-
+		$this->logger->log('Mail: ' . print_r($jsonObject, true));
 		return $jsonObject;
 	}
 	

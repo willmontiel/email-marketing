@@ -42,7 +42,7 @@
 				language: 'es',
 				maskInput: true,
 				pickTime: true,
-				format: "DD/MM/YYYY H:mm",
+				format: "MM/DD/YYYY H:mm",
 				pickSeconds: false,
 				startDate: now
 			});
@@ -51,7 +51,7 @@
 				language: 'es',
 				maskInput: true,
 				pickTime: true,
-				format: "DD/MM/YYYY H:mm",
+				format: "MM/DD/YYYY H:mm",
 				pickSeconds: false,
 				startDate: now
 			});
@@ -148,9 +148,8 @@
 					<label class="col-sm-4 control-label">*Fecha y hora de inicio:</label>
 					<div class="col-sm-8">
 						<div id="date">
-							<div id="scheduleArea1" class="input-append date" class="col-sm-12">
-								<input type="text" class="form-control add-on input-date-picker" name="start" value="{{date('m/d/Y H:i',message.start)}}" id="begin">
-							</div>
+							<input type="text" class="form-control col-sm-12" name="start" value="{{date('m/d/Y H:i',message.start)}}" id="scheduleArea1">
+							
 						</div>
 					</div>
 				</div>
@@ -159,9 +158,7 @@
 					<label class="col-sm-4 control-label">*Fecha y hora de fin:</label>
 					<div class="col-sm-8">
 						<div id="date">
-							<div id="scheduleArea2" class="input-append date" class="col-sm-12">
-								<input type="text" class="form-control add-on input-date-picker" name="end" value="{{date('m/d/Y H:i',message.end)}}" id="end">
-							</div>
+							<input type="text" class="form-control col-sm-12" name="end" value="{{date('m/d/Y H:i',message.end)}}" id="scheduleArea2">
 						</div>
 					</div>
 				</div>
