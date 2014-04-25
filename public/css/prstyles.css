@@ -772,3 +772,6 @@ span.required {
 .color-selected {
 	border: 2px blue solid !important;
 }
+.field-element-form-hide {
+	display: none;
+}

@@ -337,5 +337,56 @@ class ContactsController extends ControllerBase
 		
 		return $this->response->redirect("process/import");
 	}
-			
+	
+	public function formAction($parameters)
+	{
+		try {
+			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
+			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
+			$idenfifiers = $linkEncoder->decodeLink('contacts/form', $parameters);
+			list($idLink, $idContactlist, $idForm) = $idenfifiers;
+			  
+			if ($this->request->isPost()) {
+				$fields = $this->request->getPost();
+				$contactlist = Contactlist::findFirst(array(
+					'conditions' => 'idContactlist = ?1',
+					'bind' => array(1 => $idContactlist)
+				));
+
+				$form = Form::findFirst(array(
+					'conditions' => 'idForm = ?1',
+					'bind' => array(1 => $idForm)
+				));
+				
+				if( !$contactlist || !$form ) {
+					return $this->response->redirect('error/link');
+				}
+				
+				$wrapper = new ContactFormWrapper();
+				$wrapper->setContactlist($contactlist);
+				$wrapper->setForm($form);
+				$wrapper->setAccount($contactlist->dbase->account);
+				$wrapper->setIdDbase($contactlist->dbase->idDbase);
+				$wrapper->setIdContactlist($contactlist->idContactlist);
+				$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
+				$wrapper->createContactFromForm($fields);
+			}
+		}
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			if( !isset($form) && !$form) {
+				return $this->response->redirect('error/link');
+			}
+			return $this->response->redirect($form->urlError, true);
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			if( !isset($form) && !$form) {
+				return $this->response->redirect('error/link');
+			}
+			return $this->response->redirect($form->urlError, true);
+		}
+		
+		return $this->response->redirect($form->urlSuccess, true);
+	}
 }

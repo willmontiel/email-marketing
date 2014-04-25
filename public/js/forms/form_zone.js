@@ -36,7 +36,7 @@ FormEditor.prototype.createZones = function() {
 
 FormEditor.prototype.designDefaultFields = function() {	
 	for(var i = 0; i < this.options.length; i++) {
-		if( this.options[i].id === 'email' ||  this.options[i].id === 'nombre' ||  this.options[i].id === 'apellido') {
+		if( this.options[i].id === 'email' ||  this.options[i].id === 'name' ||  this.options[i].id === 'lastName') {
 			this.options[i].designField();
 		}
 	}
@@ -46,10 +46,10 @@ FormEditor.prototype.designCustomFields = function() {
 	var email = new EmailBlock(this, 'email', 'Email', false);
 	email.designOptionField();
 	
-	var name = new TxtBlock(this, 'nombre', 'Nombre', 'Si', false);
+	var name = new TxtBlock(this, 'name', 'Nombre', 'Si', false);
 	name.designOptionField();
 	
-	var lastname = new TxtBlock(this, 'apellido', 'Apellido', 'Si', false);
+	var lastname = new TxtBlock(this, 'lastName', 'Apellido', 'Si', false);
 	lastname.designOptionField();
 	
 	for(var i = 0; i < App.formfields.length; i++) {

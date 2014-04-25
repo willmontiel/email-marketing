@@ -52,12 +52,6 @@ App.FormsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 			this.content.set('title', $('#form-title-name').text());
 			this.handleSavePromise(this.content.save(), 'forms.index', 'El Formulario se ha modificado exitosamente');
 		},
-//		previous: function(form) {
-//			this.get("model").rollback();
-//			this.transitionToRoute('forms.index');
-//			console.log(this.get('target'))
-//			console.log(this.get('target').router.oldState.get('name'))
-//		},
 		cancel: function() {
 			this.get("model").rollback();
 			this.transitionToRoute('forms.index');
@@ -92,14 +86,6 @@ App.FormsSetupRoute = Ember.Route.extend({
 });
 
 App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
-//	show_field_url_welcome: function() {
-//		if( this.get('optin') ) {
-//			$('div.optin-information-container').show();
-//		}
-//		else {
-//			$('div.optin-information-container').hide();
-//		}
-//	}.observes('content.optin'),
 	selectoflists: [],
 	setSelectOfLists: function() {
 		var t = this;
@@ -246,15 +232,18 @@ App.FormsEditRoute = Ember.Route.extend({
 });
 
 App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
-selectoflists: [],
+	selectoflists: [],
 	setSelectOfLists: function() {
-		
-	}.observes('content'),
+		if(this.content.get('listselected') === undefined) {
+			this.content.set('listselected', this.get('listselectedvalue'));
+		}
+	}.observes('content.listselected'),
 	loadData: function() {
 		var t = this;
+		this.set('listselectedvalue', this.content.get('listselected'));
 		this.store.find('list').then(function(list) {
 			var lists = list.get('content');
-			var values = [{id: 0, name:'Seleccione una lista'}];
+			var values = [];
 			for(var i = 0; i < lists.length; i++) {
 				var obj = {id: lists[i].get('id'), name: lists[i].get('name')};
 				values.push(obj);

@@ -115,6 +115,7 @@ class Security extends Plugin
 				'unsubscribe::contact' => array(),
 				'unsubscribe::success' => array(),
 				'form::frame' => array(),
+				'contacts::form' => array(),
 				
 				
 				
@@ -440,7 +441,8 @@ class Security extends Plugin
 			'socialmedia:share',
 			'unsubscribe:contact',
 			'unsubscribe:success',
-			'form:frame'
+			'form:frame',
+			'contacts:form'
 		);
 
 		if ("$controller::$action" == "error::notavailable") {

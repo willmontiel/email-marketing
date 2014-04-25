@@ -2,16 +2,22 @@
 
 class FormCreator
 {	
+	function __construct() {
+		$this->urlObj = Phalcon\DI::getDefault()->get('urlManager');
+	}
+
+	
 	public function getHtmlForm(Form $form)
 	{
 		$jsoncontent = json_decode($form->content);
 		$content = $jsoncontent->content;
 		
 		$htmlelements = array();
-		
+	
 		foreach ($content as $element) {
 			$block = array();
 			$block['label'] = $this->getLabelElement($element);
+			$block['hide'] = ($element->hide) ? 'field-element-form-hide' : '';
 			switch ($element->type) {
 				case 'Text':
 				case 'Email':
@@ -30,8 +36,11 @@ class FormCreator
 					$block['field'] = $this->getDateElement($element);
 					break;
 			}
-			$htmlelements[] = $block;
+			$htmlelements['fields'][] = $block;
 		}
+		
+		$htmlelements['title'] = $jsoncontent->title;
+		$htmlelements['button'] = $jsoncontent->button;
 		
 		return $htmlelements;
 	}
@@ -39,13 +48,13 @@ class FormCreator
 	
 	protected function getLabelElement($element)
 	{
-		$label = ($element->required === 'Si') ? '<span class="required">*</span>' . $element->name : $element->name;
+		$label = ($element->required === 'Si') ? '<span class="required">* </span>' . $element->name : $element->name;
 		return '<label for="c_' . $element->id . '">' . $label . '</label>';
 	}
 	
 	protected function getTextElement($element)
 	{
-		$field = '<input type="text" id="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '">';
+		$field = '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '">';
 		if($element->hide) {
 			$field = '<input type="text" class="form-control" value="' . $element->defaultvalue . '">';
 		}
@@ -55,7 +64,7 @@ class FormCreator
 	
 	protected function getTextAreaElement($element)
 	{
-		$field = '<textarea id="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '"></textarea>';
+		$field = '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '"></textarea>';
 		if($element->hide) {
 			$field = '<textarea class="form-control" value="' . $element->defaultvalue . '"></textarea>';
 		}
@@ -65,7 +74,7 @@ class FormCreator
 	
 	protected function getSelectElement($element)
 	{
-		$field = '<select id="c_' . $element->id . '" class="form-control">';
+		$field = '<select id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control">';
 
 		$values = explode(',', $element->values);
 		$options = '';
@@ -83,7 +92,7 @@ class FormCreator
 	
 	protected function getMultiSelectElement($element)
 	{
-		$field = '<select id="c_' . $element->id . '" class="form-control" multiple="true">';
+		$field = '<select id="c_' . $element->id . '" name="c_' . $element->id . '[]" class="form-control" multiple="true">';
 
 		$values = explode(',', $element->values);
 		$defaultvalues = explode(',', $element->defaultvalue);
@@ -103,5 +112,17 @@ class FormCreator
 	protected function getDateElement($element)
 	{
 		
+	}
+	
+	public function getLinkAction(Form $form)
+	{
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
+		
+		$action = 'contacts/form';
+		$parameters = array(1, $form->target, $form->idForm);
+		$link = $linkdecoder->encodeLink($action, $parameters);
+		
+		return $link;
 	}
 }

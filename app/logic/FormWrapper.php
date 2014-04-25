@@ -97,9 +97,37 @@ class FormWrapper extends BaseWrapper
 			return null;
 		}
 		
-		$url = $this->urlObj->getBaseUri(TRUE) . 'form/frame/' . $form->idForm;
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
-		return '<iframe src="' . $url . '"></iframe>';
+		$action = 'form/frame';
+		$parameters = array(1, $form->idForm, $form->idDbase);
+		$link = $linkdecoder->encodeLink($action, $parameters);
+		
+		return '<iframe src="' . $link . '" style="height: ' . $this->getHeightForFrame(json_decode($form->content)) . 'px"></iframe>';
+	}
+	
+	public function getHeightForFrame($fullcontent)
+	{
+		$content = $fullcontent->content;
+		$total = 30;
+		$total+= ( $fullcontent->title ) ? 40 : 5 ;
+		foreach ($content as $cont){
+			if(!$cont->hide) {
+				switch ($cont->type) {
+					case 'MultiSelect':
+						$total+= 90;
+						break;
+					default:
+						$total+= 90;
+						break;
+				}
+			}
+		}
+		
+		$total+= 40;
+		
+		return $total;
 	}
 	
 	public function getListsInJson(Dbase $dbase)

@@ -198,6 +198,7 @@
 							optionValuePath="content.id"
 							optionLabelPath="content.name"
 							valueBinding="listselected"
+							prompt="Seleccione una lista"
 						}}'
 					}}
 				</div>
