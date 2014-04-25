@@ -20,15 +20,36 @@ class BlockedEmailWrapper extends BaseWrapper
 	 */
 	public function removeEmailFromBlockedList(Account $account, $idBlockemail)
 	{
-		$bemail = Blockedemail::findFirst($idBlockemail);
+		$blocked = Blockedemail::findFirst(array(
+			'conditions' => 'idBlockedemail = ?1',
+			'bind' => array(1 => $idBlockemail)
+		));
 		
-		if (!$bemail || $bemail->email->account != $account) {
-			throw new Exception('No existe email');
+		if (!$blocked) {
+			throw new Exception('Blockedemail not found!');
 		}
-		$bemail->email->blocked = 0;
-		$bemail->email->save();
 		
-		return $bemail->delete();
+		$email = Email::findFirst(array(
+			'conditions' => 'idEmail = ?1',
+			'bind' => array(1 => $blocked->idEmail)
+		));
+		
+		if (!$email || $email->idAccount != $account->idAccount) {
+			throw new Exception('Email not found!');
+		}
+		
+		$email->blocked = 0;
+		
+		if (!$email->save()) {
+			foreach ($email->getMessages() as $msg) {
+				throw new Exception("Error while updating mail blocked status, {$msg}!");
+			}
+		}
+		
+		$response = $this->convertBlockedEmailListAfterDelete($blocked, $email);
+		$blocked->delete();
+		
+		return $response;
 	}
 
 	//esta funcion valida que el email a bloquear exista y que no se encuentre bloqueado
@@ -109,14 +130,11 @@ class BlockedEmailWrapper extends BaseWrapper
 		}
 		
 		else {
-			$email = Email::findFirst(
-					array(
-						'conditions' => 'email = ?1 AND idAccount = ?2',
-						'bind' => array(
-							1 => $contents->email, 
-							2 => $account->idAccount
-						)
-					)
+			$email = Email::findFirst(array(
+							'conditions' => 'email = ?1 AND idAccount = ?2',
+							'bind' => array(1 => $contents->email, 
+											2 => $account->idAccount
+					))
 			);
 			$blockedEmail = $this->addEmailToBlockedList($contents, $email);
 			
@@ -133,7 +151,18 @@ class BlockedEmailWrapper extends BaseWrapper
 		$object['email'] = $Blockedemail->email;
 		$object['blockedReason'] = $Blockedemail->blockedReason;
 		$object['blockedDate'] = date('d/m/Y H:i', $Blockedemail->blockedDate);
-
+		
+		return $object;
+	}
+	
+	public function convertBlockedEmailListAfterDelete($Blockedemail, $email)
+	{
+		$object = array();
+		$object['id'] = intval($Blockedemail->idBlockedemail);
+		$object['email'] = $email->email;
+		$object['blockedReason'] = $Blockedemail->blockedReason;
+		$object['blockedDate'] = date('d/m/Y H:i', $Blockedemail->blockedDate);
+		
 		return $object;
 	}
 	

@@ -1025,7 +1025,6 @@ class ApiController extends ControllerBase
 		$log = $this->logger;
 
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -1039,13 +1038,16 @@ class ApiController extends ControllerBase
 		
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
+			$this->traceFail("Error adding email to the blocked list, email: {$contents->email}");
 			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
 		}
 		catch (\Exception $e) {
+			$this->traceFail("Error adding email to the blocked list, email: {$contents->email}");
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while blocking email!');	
 		}
 		
+		$this->traceSuccess("Add email to the blocked list, email: {$contents->email}");
 		return $this->setJsonResponse(array('blockedemail' => $blockedEmail), 201, 'Success');
 	}
 	
@@ -1061,18 +1063,19 @@ class ApiController extends ControllerBase
 		
 		try {
 			$response = $wrapper->removeEmailFromBlockedList($this->user->account, $idBlockedemail);
+			$this->traceSuccess("Email removed from the blocked list, email: {$response['email']}");
+			return $this->setJsonResponse(array('blockedemails' => $response), 202, 'email unblocked success');
 		}
-		
 		catch (\InvalidArgumentException $e) {
-			$log->log('Exception: [' . $e . ']');
+			$log->log('InvalidArgumentException: [' . $e . ']');
+			$this->traceFail("Error removing email from the blocked list, idBlockedemail: {$idBlockedemail}");
 			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
+			$this->traceFail("Error removing email from the blocked list, idBlockedemail: {$idBlockedemail}");
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while deleting blocked email!');	
 		}
-		
-		return $this->setJsonResponse(array ('blockedemails' => $response), 202, 'email unblocked success');
 	}
 	
 	/*Finaliza todo lo que tiene que ver con listas de bloqueo globales*/
@@ -1198,14 +1201,17 @@ class ApiController extends ControllerBase
 		
 		try {
 			$response = $wrapper->createSegment($contents);
+			$this->traceSuccess("Create segment, idSegment:{$response['id']} / idDbase: {$response['dbase']}");
 			return $this->setJsonResponse(array('segment' => $response), 201, 'Success');
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e . ']');
+			$this->traceFail("Error creating segment, idDbase: {$contents->dbase}");
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors()), 422, 'Invalid data');
 		}
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
+			$this->traceFail("Error creating segment, idDbase: {$contents->dbase}");
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating segment!');	
 		}
 	}	
@@ -1253,12 +1259,17 @@ class ApiController extends ControllerBase
 			$response = $wrapper->updateSegment($contents);
 		}
 		catch (InvalidArgumentException $e) {
+			$this->logger->log("InvalidArgumentException: error while updating segment: {$e}");
+			$this->traceFail("Error updating segment, idSegment: {$idSegment}");
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (Exception $e) {
+			$this->traceFail("Error updating segment, idSegment: {$idSegment}");
+			$this->logger->log("Exception: error while updating segment: {$e}");
 			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Error while updating segment')), 422, 'Error: ' . $e->getMessage());
 		}
 		
+		$this->traceSuccess("Edit segment, idSegment: {$idSegment}");
 		return $this->setJsonResponse(array('segment' => $response), 201, 'Success');
 		
 	}
@@ -1276,16 +1287,18 @@ class ApiController extends ControllerBase
 		try {
 			$response = $wrapper->deleteSegment($this->user->account, $idSegment);
 		}
-		
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
+			$this->traceFail("Error deleting segment, idSegment: {$idSegment}");
 			return $this->setJsonResponse(array('status' => 'error'), 422, 'Error: ' . $e->getMessage());	
 		}
 		catch (\Exception $e) {
+			$this->traceFail("Error deleting segment, idSegment: {$idSegment}");
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while deleting segment!');	
 		}
 		
+		$this->traceSuccess("Segment deleted, idSegment: {$idSegment}");
 		return $this->setJsonResponse($response);	
 	}
 	
