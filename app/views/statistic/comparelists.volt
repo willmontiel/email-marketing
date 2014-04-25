@@ -46,7 +46,7 @@
 {% block sectiontitle %}<i class="icon-bar-chart icon-2x"></i>Estadisticas{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
-<div class="row-fluid">
+<div class="row">
 	<div class="span12">
 		<div class="span2 pull-right">
 			<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
@@ -64,7 +64,7 @@
 		</div>
 	</div>
 </div>
-<div class="row-fluid">
+<div class="row">
 	<div class="span6">
 		<div class="leftComponent">
 			<div class="componentname">

@@ -15,4 +15,9 @@ class ErrorController extends \Phalcon\Mvc\Controller
 	{
 		$this->response->setStatusCode(503, 'System unavailable');
 	}
+	
+	public function unauthorizedAction()
+	{
+		
+	}
 }

@@ -16,7 +16,7 @@
 {%block sectionsubtitle %}Administre sus correos{% endblock %}
 {% block content %}
 <!-- aqui inicia mi contenido -->
-<div class="row-fluid">
+<div class="row">
 	<div class="box">
 		<div class="box-section news with-icons">
 			<div class="avatar green">
@@ -35,7 +35,7 @@
 		</div>
 	</div>
 </div>
-<div class="row-fluid">
+<div class="row">
 	<div class="span6">
 	{{ flashSession.output() }}
 	</div>
@@ -52,7 +52,7 @@
 	</div>
 </div>
 <br />
-<div class="row-fluid">
+<div class="row">
 		<!-- Lista de mis correos -->
 	<div class="box">
 		<div class="box-header">
@@ -153,7 +153,7 @@
 			</table>
 		</div>
 		<div class="box-footer padded">
-			<div class="row-fluid">
+			<div class="row">
 				<div class="span5">
 					<div class="pagination">
 						<ul>

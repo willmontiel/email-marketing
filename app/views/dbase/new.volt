@@ -2,55 +2,51 @@
 {% block sectiontitle %}<i class="icon-book icon-2x"> </i> Nueva base de datos{% endblock %}
 {%block sectionsubtitle %}Cree una base de datos, y administre listas de contactos{% endblock %}
 {% block content %}
-	<div class="row-fluid">
-		<div class="box">
-			<div class="box-section news with-icons">
-				<div class="avatar purple">
-					<i class="icon-book icon-2x"></i>
-				</div>
-				<div class="news-content">
-					<div class="news-title">
-						Crear una nueva base de datos de contactos
-					</div>
-					<div class="news-text">
-						<p>
-							Con las bases de datos, podrá administrar los contactos de la cuenta, en donde cada base de datos tendrá
-							sus propios campos personalizados y segmentos ademas de sus propios contactos, esto quiere decir que un contacto
-							que este guardado en dos bases de datos distintas será contado como 2 contactos diferentes.
-						</p>
-						<p>
-							Una vez creada la base de datos podrá confugurarla
-						</p>
-					</div>
-				</div>
-			</div>
+
+{# Botones de navegacion interna #}
+{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
+
+	<div class="row">
+		<h4 class="sectiontitle">Crear una nueva base de datos de contactos</h4>					
+		<div class="bs-callout bs-callout-info">
+			<p>
+				Con las bases de datos, podrá administrar los contactos de la cuenta, en donde cada base de datos tendrá
+				sus propios campos personalizados y segmentos además de sus propios contactos, esto quiere decir que un contacto
+				que esté guardado en dos bases de datos distintas será contado como 2 contactos diferentes.
+			</p>
+			<p>
+				Una vez creada la base de datos podrá configurarla
+			</p>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		{{ flashSession.output() }}
 	</div>
-    <div class="row-fluid span4">
-		<div class="box">
-			<div class="box-header">
-				<div class="title">
-					Crear una base de datos
+	<div class="col-md-5">
+		<form action = "{{url('dbase/new')}}" method="post" class="form-horizontal" role="form">
+			<div class="form-group">
+				<label class="col-sm-5">*Nombre</label>
+				<div class="col-sm-7">
+					{{editform.render("name")}}
 				</div>
 			</div>
-			<div class="box-content">
-				<form action = "{{url('dbase/new')}}" method="post">
-					<div class="padded">
-						<label>*Nombre</label>
-						{{editform.render("name")}}
-
-						<label>*Descripcion</label>                
-						{{editform.render("description")}}
-
-						<label>*Descripcion de los Contactos</label>
-						{{editform.render("Cdescription")}}
-						
-						<label>*Color de Etiqueta</label>
-						{{editform.render("color")}}
-						<table id="colorchart">
+			<div class="form-group">
+				<label class="col-sm-5">*Descripcion</label>
+				<div class="col-sm-7">
+					{{editform.render("description")}}
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-5">*Descripcion de los Contactos</label>
+				<div class="col-sm-7">
+					{{editform.render("Cdescription")}}
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-5">*Color de Etiqueta</label>
+				<div class="col-sm-7">
+					{{editform.render("color")}}
+					<table id="colorchart">
 						{% for color in colors %}
 							<tr>
 							{% for col in color %}
@@ -58,13 +54,24 @@
 							{% endfor %}
 							</tr>
 						{% endfor %}
-						</table>
-					</div>
-					<div class="form-actions">
-						<a href="{{ url('dbase') }}" class="btn btn-default">Cancelar</a>
-						{{submit_button("Guardar", 'class' : "btn btn-blue", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
-					</div>
-				</form>
+					</table>
+				</div>
+			</div>
+			<div class="form-actions">
+				<a href="{{ url('dbase') }}" class="btn btn-default btn-sm">Cancelar</a>
+				{{submit_button("Guardar", 'class' : "btn btn-guardar btn-sm ", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
+			</div>
+		</form>
+	</div>
+	<div class="col-md-6">
+		<div class="alert alert-success">
+			<div class="row">
+				<div class="col-sm-2">
+					<span class="glyphicon glyphicon-info-sign"></span>
+				</div>
+				<div class="col-md-9">
+					<p>Cree una nueva base de datos, seleccione un color para identificar los contactos que pertenecen a la misma.</p>
+				</div>
 			</div>
 		</div>
 	</div>

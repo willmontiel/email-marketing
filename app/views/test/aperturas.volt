@@ -72,7 +72,7 @@
 {% block sectiontitle %}<i class="icon-signal icon-2x"></i>Estadisticas{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="news span4">
 			<table class="table-condensed">
 				<thead>
@@ -115,7 +115,7 @@
 		</div>
 		<div id="chartContainer" class="time-graph span8"></div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="box">
 				<div class="box-header">

@@ -3,7 +3,7 @@
 {%block sectionsubtitle %}Cree, edite o proporcione permisos a los usuarios de su cuenta{% endblock %}
 
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8">
 			{{ flashSession.output() }}
 		</div>
@@ -37,7 +37,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<table class="table table-normal">
@@ -89,7 +89,7 @@
 				</table>
 			</div>
 			<div class="box-footer padded">
-				<div class="row-fluid">
+				<div class="row">
 					<div class="span5">
 						<div class="pagination">
 							<ul>
@@ -120,7 +120,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid text-right">
+	<div class="row text-right">
 		<a href="{{url('user/new')}}" class="btn btn-default"><i class="icon-plus"></i> Crear usuario</a>
 		<a href="{{ url('') }}" class="btn btn-default"><i class="icon-reply"></i> Página principal</a>
 	</div>

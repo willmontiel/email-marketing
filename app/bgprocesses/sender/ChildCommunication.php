@@ -21,6 +21,8 @@ class ChildCommunication extends BaseWrapper
 	public function startProcess($idMail)
 	{
 		$log = Phalcon\DI::getDefault()->get('logger');
+		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND deleted = 0',
 			'bind' => array(1 => $idMail)
@@ -30,282 +32,383 @@ class ChildCommunication extends BaseWrapper
 			'conditions' => 'idMail = ?1',
 			'bind' => array(1 => $idMail)
 		));
+
+		
+		/*
+		 * ================================================================
+		 * NOTA
+		 * Moví la validación del mail a este punto para cerrarlo antes
+		 * ================================================================
+		 */
+		if (!$mail || !$mailContent) {
+			$log->log('The Mail do not exist, or The html content is incomplete or invalid!');
+			
+			/*
+			 * ================================================================
+			 * ERROR
+			 * REVISAR: Debería hacerse algo con el estado del mail cuando tiene
+			 * problemas... el usuario no sabe que sucedió y sigue en estado
+			 * SCHEDULED!
+			 * ================================================================
+			 */
+			return;
+		}
+		
 		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
-		if ($mail && $mailContent) {
-			try {
-				$this->checkMailStatus($mail);
-				$oldstatus = $mail->status;
-				$mail->status = 'Sending';
-				$mail->startedon = time();
-				if(!$mail->save()) {
-					$log->log('No se pudo actualizar el estado del MAIL');
-					throw new MailStatusException('No se pudo actualizar el estado del MAIL a SENDING');
-				}		
+		try {
+			$this->checkMailStatus($mail);
+			$oldstatus = $mail->status;
+			$mail->status = 'Sending';
+			$mail->startedon = time();
+			if(!$mail->save()) {
+				$log->log('No se pudo actualizar el estado del MAIL');
+				throw new MailStatusException('No se pudo actualizar el estado del MAIL a SENDING');
+			}		
 
-				$mail = Mail::findFirst(array(
-					'conditions' => 'idMail = ?1 AND deleted = 0',
-					'bind' => array(1 => $idMail)
-				));
-				
-				$account = Account::findFirstByIdAccount($mail->idAccount);
-				$this->setAccount($account);
-				$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1 AND deleted = 0',
+				'bind' => array(1 => $idMail)
+			));
 
-				$dbases = Dbase::findByIdAccount($this->account->idAccount);
-				$id = array();
-				foreach ($dbases as $dbase) {
-					$id[] = $dbase->idDbase;
-				}
+			$account = Account::findFirstByIdAccount($mail->idAccount);
+			$this->setAccount($account);
+			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
 
-				$idDbases = implode(', ', $id);
-				
-				if ($oldstatus == 'Scheduled') {
-					$log->log("Identificando destinatarios");
-					$identifyTarget = new IdentifyTarget();
-					$identifyTarget->identifyTarget($mail);
-				}
-				
-				if (trim($mailContent->content) === '') {
-					throw new \InvalidArgumentException("Error mail's content is empty");
-				}
-				else if ($mail->type == 'Editor') {
-					$htmlObj = new HtmlObj();
-	//				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
-					$htmlObj->assignContent(json_decode($mailContent->content));
-					$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
-	//				$this->log->log('Json: ' . $content);
-				}
-				else {
-	//				$this->log->log("No Hay editor");
-					$html =  html_entity_decode($mailContent->content);
-				}
-				
+			$dbases = Dbase::findByIdAccount($this->account->idAccount);
+			$id = array();
+			foreach ($dbases as $dbase) {
+				$id[] = $dbase->idDbase;
+			}
+			// Lista de todas las bases de datos de la cuenta
+			// Se usa para identificar los campos personalizados
+			$idDbases = implode(', ', $id);
+
+			/*
+			 * =========================================================
+			 * NOTA
+			 * Cambié el siguiente IF de ubicacion...
+			 * Validar contenido (que no esta vacio) antes de realizar
+			 * la identificación de destinatarios (y la insercion
+			 * en mxc!!!
+			 * =========================================================
+			 */
+			if (trim($mailContent->content) === '') {
+				throw new \InvalidArgumentException("Error mail's content is empty");
+			}
+
+			if ($oldstatus == 'Scheduled') {
+				$log->log("Identificando destinatarios");
+				$identifyTarget = new IdentifyTarget();
+				$identifyTarget->identifyTarget($mail);
+			}
+
+			if ($mail->type == 'Editor') {
+				$htmlObj = new HtmlObj();
+//				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
+				$htmlObj->assignContent(json_decode($mailContent->content));
+				$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
+//				$this->log->log('Json: ' . $content);
+			}
+			else {
+//				$this->log->log("No Hay editor");
+				$html =  html_entity_decode($mailContent->content);
+			}
+
 //				$prepareMail = new PrepareMailContent($this->account);
 //				$content = $prepareMail->getContentMail($html);
-				$urlManager = $this->urlManager;
-				$imageService = new ImageService($account, $domain, $urlManager);
-				$linkService = new LinkService($account, $mail);
-				$prepareMail = new PrepareMailContent($linkService, $imageService);
-				list($content, $links) = $prepareMail->processContent($html);
-				
-				$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $idDbases);
-				$cf = $mailField->getCustomFields();
-				
-				switch ($cf) {
-					case 'No Fields':
-						$customFields = false;
-						$fields = false;
-						break;
-					case 'No Custom':
-						$fields = true;
-						$customFields = false;
-						break;
-					default:
-						$fields = true;
-						$customFields = $cf;
-						break;
+			$urlManager = $this->urlManager;
+			$imageService = new ImageService($account, $domain, $urlManager);
+			$linkService = new LinkService($account, $mail);
+			$prepareMail = new PrepareMailContent($linkService, $imageService);
+			list($content, $links) = $prepareMail->processContent($html);
+
+			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $idDbases);
+			$cf = $mailField->getCustomFields();
+
+			switch ($cf) {
+				case 'No Fields':
+					$customFields = false;
+					$fields = false;
+					break;
+				case 'No Custom':
+					$fields = true;
+					$customFields = false;
+					break;
+				default:
+					$fields = true;
+					$customFields = $cf;
+					break;
+			}
+
+			$contactIterator = new ContactIterator($mail, $customFields);
+			$disruptedProcess = FALSE;
+
+			/*
+			 * ================================================================
+			 * NOTA
+			 * TODO: Cual es el propósito de estas dos líneas???
+			 * Por qué son valores codificados???
+			 * ================================================================
+			 */
+			$_ENV['TMPDIR']='/memorydisk/tmp';
+			$_ENV['TMP']=$_ENV['TMPDIR'];
+
+			// Crear transport y mailer
+			$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
+			$swift = Swift_Mailer::newInstance($transport);
+
+			$i = 0;
+			$sentContacts = array();
+			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
+
+			$from = array($mail->fromEmail => $mail->fromName);
+			foreach ($contactIterator as $contact) {
+
+				/*
+				 * ================================================================
+				 * NOTA
+				 * Esta validacion de mensajes del proceso padre debería hacerse
+				 * después de enviar algunos correos (ej: 10 o 20) para 
+				 * evitar sobre-procesamiento
+				 * ================================================================
+				 */
+				// Recibir y procesar mensajes pendientes del proceso padre (YIELD)
+				$msg = $this->childprocess->Messages();
+
+				// Reemplazar valores de los campos personalizados en el contenido
+				// del correo
+	
+				if ($fields) {
+					$c = $mailField->processCustomFields($contact);
+					$subject = $c['subject'];
+					$html = $c['html'];
+					$text = $c['text'];
 				}
-				
-				$contactIterator = new ContactIterator($mail, $customFields);
-				$disruptedProcess = FALSE;
-				
-				$_ENV['TMPDIR']='/memorydisk/tmp';
-				$_ENV['TMP']=$_ENV['TMPDIR'];
-				
-				// Crear transport y mailer
-				$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
-				$swift = Swift_Mailer::newInstance($transport);
-				
-				$i = 0;
-				$sentContacts = array();
-				Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
-				
-				$from = array($mail->fromEmail => $mail->fromName);
-				foreach ($contactIterator as $contact) {
-					
-					$msg = $this->childprocess->Messages();
-					
-					if ($fields) {
-						$c = $mailField->processCustomFields($contact);
-						$subject = $c['subject'];
-						$html = $c['html'];
-						$text = $c['text'];
-					}
-					else {
-						$subject = $mail->subject;
-						$html = $content->html;
-						$text = $content->text;
-					}
-					
-					$trackingObj = new TrackingUrlObject();
-					$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact'], $links);
-					
-//					$log->log("HTML: " . $htmlWithTracking);
-					
-					$to = array($contact['email']['email'] => $contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
-					
-					$message = new Swift_Message($subject);
-					
-					/*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
-					$headers = $message->getHeaders();
-					
-					if ($this->account->virtualMta == null || trim($this->account->virtualMta) === '') {
-						$mta = 'CUST_SIGMA';
-					}
-					else {
-						$mta = $this->account->virtualMta;
-					}
-					
-//					$rp = Returnpath::findFirstByIdReturnPath($this->account->idReturnPath);
-					$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
-					$listID = 't0em' . $this->account->idAccount;
-					$sendID = '0em' . $mail->idMail;
-					$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'] . 'x' . $contact['email']['idEmail'];
-					
-//					$verpFormat = str_replace('@', '=', $contact['email']['email']);
-//					$mailClass = $this->mta->mailClass . $sendID;
-//					$returnPathData = $listID . '-' . $mailClass . '-' . $verpFormat;
-//					$returnPath = str_replace('(verp)', $returnPathData, $rp->path);
-					
-//					$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
-					$headers->addTextHeader('X-GreenArrow-MailClass', $mailclass->name);
-					$headers->addTextHeader('X-GreenArrow-MtaID', $mta);
-					$headers->addTextHeader('X-GreenArrow-InstanceID', $sendID);
-//					$headers->addTextHeader('X-GreenArrow-SendID', $sendID);
-					$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', $trackingID);
-					$headers->addTextHeader('X-GreenArrow-ListID', $listID);
-					$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
-					
-					$message->setFrom($from);
-					$message->setBody($htmlWithTracking, 'text/html');
-					$message->setTo($to);
-					if ($mail->replyTo != null) {
-						$message->setReplyTo($mail->replyTo);
-					}
-					$message->addPart($text, 'text/plain');
-					
+				else {
+					/*
+					 * ================================================================
+					 * ERROR (CORREGIDO)
+					 * REVISAR: En este punto se hace referencia a: $content->text
+					 * Pero $content es una variable que se crea arriba a partir
+					 * del código HTML SOLAMENTE!
+					 * Es decir que se está perdiendo el contenido de texto
+					 * que el usuario eligió!!!
+					 * ================================================================
+					 */
+					$subject = $mail->subject;
+					$html = $content;
+					$text = $mailContent->plainText;
+				}
+
+				/*
+				 * ================================================================
+				 * NOTA
+				 * REVISAR: Este objeto se está instanciando por cada contacto al
+				 * que se envía, pero el contenido original del correo no varía
+				 * entre contactos, por lo que la creación y eliminación de objetos
+				 * genera consumo adicional de memoria y de tiempo.
+				 * SUGERENCIA: cambiar el objeto para que se pueda instanciar
+				 * fuera del loop y que luego pueda ser utilizado dentro del loop
+				 * ================================================================
+				 */
+				$trackingObj = new TrackingUrlObject();
+				$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact'], $links);
+
+				$log->log("HTML: " . $htmlWithTracking);
+
+				/*
+				 * ================================================================
+				 * ERROR (CORREGIDO)
+				 * REVISAR: Qué sucede cuando el contacto NO tiene nombre ni apellido?
+				 * Cómo le llega el correo? (verificado, se ve mal en algunos programas
+				 * de correo)
+				 * ================================================================
+				 */
+				$toName = trim($contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
+				if (!$toName || $toName == '') {
+					$toName = $contact['email']['email'];
+				}
+				$to = array($contact['email']['email'] => $toName);
+
+				$message = new Swift_Message($subject);
+
+				/*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
+				$headers = $message->getHeaders();
+
+				if ($this->account->virtualMta == null || trim($this->account->virtualMta) === '') {
+					$mta = 'CUST_SIGMA';
+				}
+				else {
+					$mta = $this->account->virtualMta;
+				}
+
+				/*
+				 * ================================================================
+				 * ERROR
+				 * ADVERTENCIA: Esta consulta de MAILCLASS se esta realizando
+				 * por cada uno de los contactos a los que se envía.
+				 * Este valor es global al correo, por lo que sería mejor no hacerlo
+				 * por cada contacto!
+				 * TODO: Mover fuera del loop
+				 * ================================================================
+				 */
+				$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
+				$listID = 't0em' . $this->account->idAccount;
+				$sendID = '0em' . $mail->idMail;
+				$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'] . 'x' . $contact['email']['idEmail'];
+
+				$headers->addTextHeader('X-GreenArrow-MailClass', $mailclass->name);
+				$headers->addTextHeader('X-GreenArrow-MtaID', $mta);
+				$headers->addTextHeader('X-GreenArrow-InstanceID', $sendID);
+				$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', $trackingID);
+				$headers->addTextHeader('X-GreenArrow-ListID', $listID);
+				$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
+
+				$message->setFrom($from);
+				$message->setBody($htmlWithTracking, 'text/html');
+				$message->setTo($to);
+				if ($mail->replyTo != null) {
+					$message->setReplyTo($mail->replyTo);
+				}
+				$message->addPart($text, 'text/plain');
+
 //					$recipients = true;
-					$recipients = $swift->send($message, $failures);
-					$this->lastsendheaders = $message->getHeaders()->toString();
-					$log->log("Headers: " . print_r($this->lastsendheaders, true));
-					if ($recipients){
-						echo "Message " . $i . " successfully sent! \n";
+				$recipients = $swift->send($message, $failures);
+				$this->lastsendheaders = $message->getHeaders()->toString();
+				$log->log("Headers: " . print_r($this->lastsendheaders, true));
+				if ($recipients){
+					echo "Message " . $i . " successfully sent! \n";
 //						$log->log("HTML: " . $html);
 //						$log->log("Headers: " . $this->lastsendheaders);
-						$log->log("Message successfully sent! with idContact: " . $contact['contact']['idContact']);
-						$sentContacts[] = $contact['contact']['idContact'];
-						$lastContact = end(end($contactIterator));
-						if (count($sentContacts) == self::CONTACTS_PER_UPDATE || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact'] || $msg == "Stop") {
-							$idsContact = implode(', ', $sentContacts);
-							$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = {$mail->idMail} AND idContact IN ({$idsContact})";
-							
-							$mm = Phalcon\DI::getDefault()->get('modelsManager');
-							$mm->executeQuery($phql);
-					
-							if ($mm) {
-//								echo "state's the first 20 changed successfully! \n";
-								unset($sentContacts);
-								$sentContacts = array();
-							}
-							else {
-								$log->log("Error guardando");
-							}
+					$log->log("Message successfully sent! with idContact: " . $contact['contact']['idContact']);
+					$sentContacts[] = $contact['contact']['idContact'];
+					/*
+					 * ================================================================
+					 * NOTA
+					 * count($array) es una operacion O(1) o O(n) ???
+					 * Si es O(1) no hay problema
+					 * Si es O(n) entonces es preferible usar una variable separada
+					 * ADVERTENCIA: preferible utilizar 
+					 *	if (!($n % self::CONTACTS_PER_UPDATE) ... )
+					 * ================================================================
+					 */
+					if (count($sentContacts) == self::CONTACTS_PER_UPDATE || $msg == "Stop") {
+						$idsContact = implode(', ', $sentContacts);
+						$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = {$mail->idMail} AND idContact IN ({$idsContact})";
+
+						if ($modelsManager->executeQuery($phql)) {
+							unset($sentContacts);
+							$sentContacts = array();
 						}
-						$i++;
-					} 
-					else {
-						echo "There was an error in message {$i}: \n";
-						$log->log("Error while sending mail: " . print_r($failures, true));
-						print_r($failures);
+						else {
+							$log->log("Error actualizando el estado de envio de los mensajes!!!");
+						}
 					}
+					$i++;
+				} 
+				else {
+					echo "There was an error in message {$i}: \n";
+					$log->log("Error while sending mail: " . print_r($failures, true));
+					print_r($failures);
+				}
 //					$log->log("HTML: " . $html);
 //					echo 'Hrml: ' . $html;
-					switch ($msg) {
-						case 'Cancel':
-							$log->log('Estado: Me Cancelaron');
-							
-							$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $mail->idMail;
-							$mm = Phalcon\DI::getDefault()->get('modelsManager');
-							$mm->executeQuery($phql);
-							if (!$mm) {
-								$log->log("Error updating MxC");
-							}
-							
-							$mail->status = 'Cancelled';
-							$mail->finishedon = time();
-							$disruptedProcess = TRUE;
-							break 2;
-						case 'Stop':
-							$log->log("Estado: Me Pausaron");
-							$mail->status = 'Paused';
-							$disruptedProcess = TRUE;
-							break 2;
-						case 'Checking-Work':
-							$log->log('Estado: Verificando');
-							$this->childprocess->responseToParent('Work-Checked' , $i);
-							break;
-					}
-				}
-				Phalcon\DI::getDefault()->get('timerObject')->endTimer('all messages sent!');
-				
-				if(!$disruptedProcess) {
-					$log->log('Estado: Me enviaron');
-					$mail->totalContacts = $i;
-					$mail->status = 'Sent';
-					$mail->finishedon = time();
-				}
-				$log->log('Se actualizara el estado del MAIL como ' . $mail->status);
-				if(!$mail->save()) {
-					$log->log('No se pudo actualizar el estado del MAIL');
-					throw new MailStatusException('No se pudo actualizar el estado del MAIL a Terminado o finalizacion Abrupta');
-				}
-				// Grabar profiling de la base de datos
-				print_dbase_profile();
-				
-				if($mail->socialnetworks != null) {
-					$socials = new SocialNetworkConnection();
-					$socials->setAccount($this->account);
-					$socialdesc = Socialmail::findFirstByIdMail($mail->idMail);
-					if($socialdesc) {
-						$idsocials = json_decode($mail->socialnetworks);
-						if(isset($idsocials->facebook)) {
-							$socials->setFacebookConnection(Phalcon\DI::getDefault()->get('fbapp')->iduser, Phalcon\DI::getDefault()->get('fbapp')->token);
-							$socials->postOnFacebook($idsocials->facebook, $socialdesc, $mail);
+				switch ($msg) {
+					case 'Cancel':
+						$log->log('Estado: Me Cancelaron');
+
+						$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $mail->idMail;
+						if (!$modelsManager->executeQuery($phql)) {
+							$log->log("Error updating MxC");
 						}
-						if(isset($idsocials->twitter)) {
-							$socials->setTwitterConnection(Phalcon\DI::getDefault()->get('twapp')->iduser, Phalcon\DI::getDefault()->get('twapp')->token);
-							$appids = array(
-								'id' => Phalcon\DI::getDefault()->get('twapp')->iduser,
-								'secret' => Phalcon\DI::getDefault()->get('twapp')->token
-							);
-							$socials->postOnTwitter($idsocials->twitter, $socialdesc, $mail, $appids);
-						}
-					}
-					else {
-						$log->log('No se encontro descripcion de la publicacion en las redes sociales');
-					}
+
+						$mail->status = 'Cancelled';
+						$mail->finishedon = time();
+						$disruptedProcess = TRUE;
+						break 2;
+					case 'Stop':
+						$log->log("Estado: Me Pausaron");
+						$mail->status = 'Paused';
+						$disruptedProcess = TRUE;
+						break 2;
+					case 'Checking-Work':
+						$log->log('Estado: Verificando');
+						$this->childprocess->responseToParent('Work-Checked' , $i);
+						break;
 				}
 			}
-			catch (InvalidArgumentException $e) {
-				$log->log('Exception: [' . $e . ']');
-				$mail->status = 'Cancelled';
+
+		    // || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact']	
+			// Grabar ultimos contactos enviados
+			if (count($sentContacts) > 0) {
+				$idsContact = implode(', ', $sentContacts);
+				$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = {$mail->idMail} AND idContact IN ({$idsContact})";
+
+				if ($modelsManager->executeQuery($phql)) {
+					unset($sentContacts);
+					$sentContacts = array();
+				}
+				else {
+					$log->log("Error guardando");
+				}
+			}			
+
+			Phalcon\DI::getDefault()->get('timerObject')->endTimer('all messages sent!');
+
+			if(!$disruptedProcess) {
+				$log->log('Estado: Me enviaron');
+				$mail->totalContacts = $i;
+				$mail->status = 'Sent';
 				$mail->finishedon = time();
-				if(!$mail->save()) {
-					$log->log('No se pudo actualizar el estado del MAIL');
+			}
+			$log->log('Se actualizara el estado del MAIL como ' . $mail->status);
+			if(!$mail->save()) {
+				$log->log('No se pudo actualizar el estado del MAIL');
+				throw new MailStatusException('No se pudo actualizar el estado del MAIL a Terminado o finalizacion Abrupta');
+			}
+			// Grabar profiling de la base de datos
+			print_dbase_profile();
+
+			if($mail->socialnetworks != null) {
+				$socials = new SocialNetworkConnection();
+				$socials->setAccount($this->account);
+				$socialdesc = Socialmail::findFirstByIdMail($mail->idMail);
+				if($socialdesc) {
+					$idsocials = json_decode($mail->socialnetworks);
+					if(isset($idsocials->facebook)) {
+						$socials->setFacebookConnection(Phalcon\DI::getDefault()->get('fbapp')->iduser, Phalcon\DI::getDefault()->get('fbapp')->token);
+						$socials->postOnFacebook($idsocials->facebook, $socialdesc, $mail);
+					}
+					if(isset($idsocials->twitter)) {
+						$socials->setTwitterConnection(Phalcon\DI::getDefault()->get('twapp')->iduser, Phalcon\DI::getDefault()->get('twapp')->token);
+						$appids = array(
+							'id' => Phalcon\DI::getDefault()->get('twapp')->iduser,
+							'secret' => Phalcon\DI::getDefault()->get('twapp')->token
+						);
+						$socials->postOnTwitter($idsocials->twitter, $socialdesc, $mail, $appids);
+					}
+				}
+				else {
+					$log->log('No se encontro descripcion de la publicacion en las redes sociales');
 				}
 			}
-			catch (MailStatusException $e) {
-				$log->log('Exception de Estado de Correo: [' . $e . ']');
-			}
-			catch (Exception $e) {
-				$log->log('Exception General: [' . $e . ']');
+		}
+		catch (InvalidArgumentException $e) {
+			$log->log('Exception: [' . $e . ']');
+			$mail->status = 'Cancelled';
+			$mail->finishedon = time();
+			if(!$mail->save()) {
+				$log->log('No se pudo actualizar el estado del MAIL');
 			}
 		}
-		else {
-			$log->log('The Mail do not exist, or The html content is incomplete or invalid!');
+		catch (MailStatusException $e) {
+			$log->log('Exception de Estado de Correo: [' . $e . ']');
 		}
-		
+		catch (Exception $e) {
+			$log->log('Exception General: [' . $e . ']');
+		}
+
 	}
 	
 	protected function checkMailStatus($mail)

@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * NOTA
+ * TODO
+ * Cual es el proposito de esta clase???
+ * Que hacen los metodos???
+ */
 class MailField
 {
 	public $html;

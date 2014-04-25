@@ -1,333 +1,404 @@
+<!-- SEGMENT PARTIAL -->
+
 <script type="text/x-handlebars" data-template-name="segments/index">
 
-			{# Insertar botones de navegacion #}
-			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
+	{# Insertar botones de navegacion #}
+	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
 
-	<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
-		{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
+	<div class="row">
+		<h4 class="sectiontitle">Segmentos</h4>
+		<div class="row">
+			<div class="col-xs-6 col-sm-5 col-md-4">
+				<form role="form">
+					{{ '{{view Ember.Select
+							contentBinding="dbaseSelect"
+							optionValuePath="content.id"
+							optionLabelPath="content.name"
+							valueBinding="selectedDbase"
+							class="form-control"
+							prompt="Seleccione una base de datos"
+							placeholder="Todas las bases de datos"
+						}}'
+					}}
+				</form>
+			</div>
+			<div class="col-md-3 pull-right">
+				{{'{{#link-to "segments.new" class="btn btn-default btn-sm extra-padding"}}'}} Crear nuevo segmento{{'{{/link-to}}'}}
+			</div>
+		</div>
+		<div class="space"></div>
 	</div>
-	<div class="row-fluid">
-        <div class="span12">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Segmentos
+	<table class="table table-striped table-contacts">
+		<thead>
+		</thead>
+		<tbody>
+			{{'{{#each model}}'}}
+
+			<tr>
+				<td {{' {{bind-attr style="dbase.style"}} '}}>
+
+				</td>
+				<td>
+					<a href="{{url('segment/show/')}}{{ '{{unbound id}}' }}#/contacts">{{' {{name}} '}}</a>
+					<p>{{' {{description}}'}}</p>
+				</td>
+
+				<td>
+					{{ '{{#link-to "segments.delete" this class="btn btn-default btn-delete btn-sm extra-padding"}} <span class="glyphicon glyphicon-trash"></span> Eliminar{{/link-to}}' }}
+
+					{{ '{{#link-to "segments.edit" this class="btn btn-default btn-sm extra-padding"}} <span class="glyphicon glyphicon-pencil"></span> Editar{{/link-to}}' }}
+
+				</td>
+			</tr>
+			{{ '{{else}}' }}
+			<tr>
+				<td>
+					<div class="">
+						<h4>Aun no tienes segmentos para tus contactos</h4>
+						<p>Lorem Ipsum
+						</p>
 					</div>
-				</div>
-				<div class="box-content">
-				{{'{{#each model}}'}}
-					{{' {{# unless isNew }}' }}
-					<div class="box-section news with-icons">
-						<div class="avatar purple">
-							<i class="icon-resize-horizontal icon-2x"></i>
-						</div>
-						<div class="news-content">
-							<div class="pull-right" style="margin-right: 10px;">
-								<div class="btn-group">
-									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li>{{ '{{#link-to "segments.delete" this}}<i class="icon-trash"></i> Eliminar{{/link-to}}' }}</li>
-										<li>{{ '{{#link-to "segments.edit" this}}<i class="icon-pencil"></i> Editar{{/link-to}}' }}</li>
-									</ul>
-								</div>
-							</div>
-							<div class="news-title">
-							<a href="{{url('segment/show/')}}{{ '{{unbound id}}' }}#/contacts">{{' {{name}} '}}</a>
-							</div>
-							<div class="news-text">
-								{{' {{description}}'}}
-								<br />
-								<span class="label label-filling">{{ '{{dbase.name }}' }}</span>
-							</div>
-						</div>
+				</td>
+			</tr>
+			{{ '{{/each}}' }}				
+
+		</tbody>
+		<tfoot>
+		</tfoot>
+	</table>
+
+	{{' {{# unless isNew }}' }}
+	{{' {{/unless}}'}}
+	
+	{# ########## inserta paginacion ########## #}
+	<div class="row">
+	{{ partial("partials/pagination_partial") }}
+	</div>
+
+</script>
+
+<script type="text/x-handlebars" data-template-name="segments">
+	{{'{{outlet}}'}}
+
+</script>
+
+<script type="text/x-handlebars" data-template-name="segments/new">
+	<div class="row">
+		<h4 class="sectiontitle">Crear nuevo segmento</h4>
+		{{ '{{#if App.errormessage }}' }}
+			<div class="bs-callout bs-callout-danger">
+				{{ '{{ App.errormessage }}' }}
+			</div>
+		{{ '{{/if}} '}}
+		{{'{{#if errors.segmentname}}'}}
+			<div class="bs-callout bs-callout-danger">
+				{{'{{errors.segmentname}}'}}
+			</div>
+		{{'{{/if}}'}}
+		<div class="col-sm-12 hidden-md hidden-lg">
+			<div class="alert alert-success">
+				<div class="row">
+					<div class="col-sm-2">
+						<span class="glyphicon glyphicon-info-sign"></span>
 					</div>
-					{{' {{/unless}}'}}
-				{{ '{{else}}' }}
-					<div class="box-section news with-icons">
-						<div class="avatar green">
-							<i class="icon-lightbulb icon-2x"></i>
-						</div>
-						<div class="news-content">
-							<div class="news-title">
-								No hay segmentos
-							</div>
-							<div class="news-text">
-								No tiene segmentos de contactos creados, para crear uno haga click en el siguiente enlace
-								<br /><br />
-								{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
-							</div>
-						</div>
+					<div class="col-md-9">
+						<p>Cree un nuevo segmento en una base de datos.</p>
+						<p>Seleccione las condiciones que desee para el segmento.</p>
 					</div>
-				{{ '{{/each}}' }}
-				<div class="box-footer flat"> 
-					{{ partial("partials/pagination_partial") }}
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
-</script>
-<script type="text/x-handlebars" data-template-name="segments">
-	{{'{{outlet}}'}}
-</script>
-<script type="text/x-handlebars" data-template-name="segments/new">
-	<div class="box">
-		<div class="box-header">
-			<div class="title">Agregar un nuevo segmento</div>
-		</div>
-		<div class="box-content padded">
-			{{ '{{#if App.errormessage }}' }}
-				<div class="row-fluid">
-					<div class="alert alert-error">
-						{{ '{{ App.errormessage }}' }}
+		<form  class="form-horizontal" role="form">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<label for="name" class="col-sm-4 control-label">*Nombre: </label>
+						<div class="col-md-7">
+							{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" class="form-control"}}' }}
+						</div>
 					</div>
-				</div>
-			{{ '{{/if}} '}}
-			{{'{{#if errors.segmentname}}'}}
-				<div class="row-fluid">
-					<div class="alert alert-error">
-						{{'{{errors.segmentname}}'}}
+					<div class="form-group">
+						<label for="description" class="col-sm-4 control-label">Descripción: </label>
+						<div class="col-md-7">
+							{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" class="form-control sm-textarea-description"}}' }}
+						</div>
 					</div>
-				</div>
-			{{'{{/if}}'}}
-			<form>
-			<div class="row-fluid">
-				<div class="span4">
-					<label>*Nombre: </label>
-					{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre"}}' }}
-					
-					<label>Descripción: </label>
-					{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción"}}' }}
-					
 					{{ '{{#unless dbaseSelected}}' }}
-						<label>*Seleccione base de datos:</label>
-							{{ '{{view Ember.Select 
+					<div class="form-group">
+						<label  for="dbase" class="col-sm-4 control-label">*Base de datos:</label>
+						<div class="col-md-6">
+							{{ '{{view Ember.Select
 									selectionBinding="dbase" 
-									contentBinding="controllers.dbase.content" 
+									contentBinding="controllers.dbase.content"
+									placeholder="Seleccione una base de datos"
 									optionValuePath="content.id" 
 									optionLabelPath="content.name" 
 									prompt="Seleccione una base de datos"
-									class="span11"}}' 
+									class="form-control"
+								}}' 
 							}}
-						 <br /><br />
-						 	
-						<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
-						<button class="btn btn-default" disabled="disabled">Grabar</button>
+						</div>
+					</div>
 					{{ '{{else}}' }}
-						<br /><br />
-						<select class="span12" disabled="disabled">
-							<option>{{' {{dbase.name}} '}}</option>
-						</select>
-						<br /><br />
-						<button class="btn btn-default" {{ '{{action cancel this }}' }}>Cancelar</button>
-						<button class="btn btn-blue" {{ '{{action save this}}' }}>Grabar</button>
-						<br />
+					<div class="form-group">
+						<label  for="dbase" class="col-sm-4 control-label">*Base de datos:</label>
+						<div class="col-md-6">
+							<select class="form-control" disabled="disabled">
+								<option>{{' {{dbase.name}} '}}</option>
+							</select>
+						</div>
+						<button class="btn btn-default btn-sm extra-padding" {{ '{{action reset this }}' }}><i class="icon-bolt"></i> Reset</button>
+					</div>
 					{{ '{{/unless}}' }}
 				</div>
-				<div class="span8">
-					<div class="box">
-						<div class="box-section news with-icons">
-							<div class="avatar green">
-								<i class="icon-lightbulb icon-2x"></i>
+				<div class="hidden-xs hidden-sm col-md-5">
+					<div class="alert alert-success">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="glyphicon glyphicon-info-sign"></span>
 							</div>
-							<div class="news-content">
-								<div class="news-title">
-									Segmentos
-								</div>
-								<div class="news-text">
-									<p>
-										Aqui podrá crear segmentos con los contactos de una base de datos determinada.
-									</p>
-									<p>
-										Un segmento es un fragmento, o en este caso una lista, hecha con los contactos que siguen determinadas condiciones, como 
-										por ejemplo: "Todos los contactos en los que el nombre empiece con jaime", este ejemplo
-										creara una lista con todos los contactos que siguen esa condición
-									</p>
-									<p>
-										Para empezar a crear un segmento, deberá ingresar un nombre y una descripción,
-										y deberá seleccionar una base de datos de contactos en la cual se aplicarán las condiciones definidas.
-									</p>
-									<p>
-										El siguiente paso es seleccionar si se deben completar todas las condiciones que defina o cualquiera de ellas,
-										esto quiere decir que si selecciona todas las condiciones, un contacto solo pertenecerá
-										al segmento sí y solo sí cumple con todas las condiciones, o en caso de que seleccione cualquiera de ellas
-										el contacto pertenecerá al segmento sí cumple al menos una de ellas.
-									</p>
-								</div>
+							<div class="col-md-9">
+								<p>Cree un nuevo segmento en una base de datos.</p>
+								<p>Seleccione las condiciones que desee para el segmento.</p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<hr></hr>
+
 			{{ '{{#if dbaseSelected}}' }}
-			<div class="row-fluid">
-				Crear segmento con 
-					{{ '{{view Ember.Select
-						  contentBinding="App.criteria"
-						  optionValuePath="content.id"
-						  optionLabelPath="content.criterion"
-						  valueBinding="criterion"
-						  class="span2"}}'
-					}}
-					condiciones a continuación:
-			</div>
-			<div class="row-fluid">
-				{{'{{#if errors.segment}}'}}
-					<div class="alert alert-error">
-						{{'{{errors.segment}}'}}
-					</div>
-				{{'{{/if}}'}}
-			</div>
-			{{' {{#each cr in criteria}} '}}
-				<div class="row-fluid">
-					<div class="span3">
-						{{ '{{view Ember.Select
-							 contentBinding="cfields"
-							 optionValuePath="content.id"
-							 optionLabelPath="content.name"
-							 valueBinding="cr.cfields"
-							 prompt="Seleccione un campo"}}'
-						}}
-					</div>
-					<div class="span3">
-						{{ '{{view Ember.Select
-							contentBinding="App.relations"
-							optionValuePath="content.id"
-							optionLabelPath="content.relation"
-							valueBinding="cr.relations"}}'
-						}}
-					</div>
-					<div class="span3">
-						{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus"}}' }}
-					</div>
-					<div class="span3">
-						{{ '{{#unless defaultCriteria}}' }}
-							<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}><i class="icon-trash"></i></button>
-						{{ '{{/unless}}' }}
+
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-sm-12 col-md-7">
+					<div class="form-group">
+						<label  for="" class="col-sm-4 control-label">Crear segmento con </label>
+						<div class="col-sm-4">
+							{{ '{{view Ember.Select
+								  contentBinding="App.criteria"
+								  optionValuePath="content.id"
+								  optionLabelPath="content.criterion"
+								  valueBinding="criterion"
+								  class="form-control"}}'
+							}}
+						</div>
+						<p class="form-control-static">condiciones a continuación:</p>
 					</div>
 				</div>
-			{{' {{/each}} '}}
-			<div class="row-fluid">
-				{{ '{{#unless limitCriteria}}' }}
-					<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
-				{{ '{{/unless}}' }}
-				<button class="btn btn-default" {{ '{{action reset this }}' }}><i class="icon-bolt"></i> Reset</button>
+				<div class="clearfix"></div>
+				{{'{{#if errors.segment}}'}}
+				<div class="bs-callout bs-callout-danger">
+					{{'{{errors.segment}}'}}
+				</div>
+				{{'{{/if}}'}}
+
+				{{' {{#each cr in criteria}} '}}
+				<div class="col-lg-12">
+					<div class="form-group">
+						<label  for="" class="col-xs-1 control-label"></label>
+						<div class="col-sm-3">
+							{{ '{{view Ember.Select
+								 contentBinding="cfields"
+								 optionValuePath="content.id"
+								 optionLabelPath="content.name"
+								 valueBinding="cr.cfields"
+								 prompt="Seleccione un campo"
+								 class="form-control"
+								}}'
+							}}
+						</div>
+						<div class="col-xs-2">
+							{{ '{{view Ember.Select
+								contentBinding="App.relations"
+								optionValuePath="content.id"
+								optionLabelPath="content.relation"
+								valueBinding="cr.relations"
+								class="form-control"
+								}}'
+							}}
+						</div>
+						<div class="col-sm-3">
+							{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus" class="form-control"}}' }}
+						</div>
+						<div class="col-md-3">
+							<div class="row">
+								{{ '{{#unless defaultCriteria}}' }}
+									<button class="btn btn-default btn-sm extra-padding" {{ '{{action aConditionLess cr}}' }}><i class="glyphicon glyphicon-trash"></i></button>
+							
+								{{ '{{#unless limitCriteria}}' }}
+								<button class="btn btn-sm btn-default btn-add extra-padding" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
+								{{ '{{/unless}}' }}
+									{{ '{{/unless}}' }}
+							</div>
+						</div>
+					</div>
+				</div>
+				{{' {{/each}} '}}
+				<div class="clearfix"></div>
+				<div class="form-actions pull-right">
+					<div class="row">
+						<div class="col-xs-6">
+							<button class="btn btn-sm btn-default extra-padding" {{ '{{action cancel this }}' }}>Cancelar</button>
+						</div>
+						<div class="col-xs-6">
+							<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action save this }}' }}>Grabar</button>
+							{{ '{{/if}}' }}
+						</div>
+					</div>
+				</div>
 			</div>
-			</form>
-			{{ '{{/if}}' }}
-		</div>
+		</form>
 	</div>
 </script>
+
+
 <script type="text/x-handlebars" data-template-name="segments/delete">
-	<div class="box">
-		<div class="box-header">
-			<div class="title">
-				Borrar segmento
-			</div>
+	<div class"row">
+		<h4 class="sectiontitle">Eliminar un segmento</h4>
+		<div class="bs-callout bs-callout-danger">
+			<p>Está a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos, pero no los contactos .Si está seguro que desea continuar haga clic en el botón eliminar, de lo contrario haga en clic en cancelar.</p>
 		</div>
-		<div class="box-content">
-			<div class="padded">
-				<p>
-					Esta a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos,
-					pero no los contactos .Si esta seguro que desea continuar haga clic en botón eliminar de lo contrario
-					haga en clic en cancelar.
-				</p>
-				<button class="btn btn-red" {{ '{{action delete this}}' }}>Eliminar</button>
-				<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-			</div>
-		</div>
+		
+		<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+		<button class="btn btn-delete btn-sm extra-padding" {{ '{{action delete this}}' }}>Eliminar</button>
 	</div>
 </script>
+
+
 <script type="text/x-handlebars" data-template-name="segments/edit">
-	<div class="box">
-		<div class="box-header">
-			<div class="title">
-				Editar un segmento
+	<div class="row">
+		<h4 class="sectiontitle">Editar un segmento</h4>
+		{{ '{{#if App.errormessage }}' }}
+			<div class="bs-callout bs-callout-danger">
+				{{ '{{ App.errormessage }}' }}
+			</div>
+		{{ '{{/if}} '}}	
+		{{'{{#if errors.segmentname}}'}}
+			<div class="bs-callout bs-callout-danger">
+				{{'{{errors.segmentname}}'}}
+			</div>
+		{{'{{/if}}'}}
+
+		<div class="col-sm-12 hidden-md hidden-lg">
+			<div class="alert alert-success">
+				<div class="row">
+					<div class="col-sm-2">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</div>
+					<div class="col-md-9">
+						<p>Edite un segmento.</p>
+						<p>Cambie las condiciones que desee para el segmento.</p>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="box-content padded">
-			{{ '{{#if App.errormessage }}' }}
-				<div class="row-fluid">
-					<div class="alert alert-error">
-						{{ '{{ App.errormessage }}' }}
+		<form  class="form-horizontal" role="form">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<label for="name" class="col-sm-4 control-label">*Nombre: </label>
+						<div class="col-md-7">
+							{{'{{view Ember.TextField valueBinding="name" class="form-control"}}'}}
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="description" class="col-sm-4 control-label">Descripción: </label>
+						<div class="col-md-7">
+							{{'{{view Ember.TextArea valueBinding="description" class="form-control"}}'}}
+						</div>
 					</div>
 				</div>
-			{{ '{{/if}} '}}	
-			{{'{{#if errors.segmentname}}'}}
-				<div class="row-fluid">
-					<div class="alert alert-error">
-						{{'{{errors.segmentname}}'}}
+				<div class="hidden-xs hidden-sm col-md-5">
+					<div class="alert alert-success">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="glyphicon glyphicon-info-sign"></span>
+							</div>
+							<div class="col-md-9">
+								<p>Edite un segmento.</p>
+								<p>Cambie las condiciones que desee para el segmento.</p>
+							</div>
+						</div>
 					</div>
 				</div>
-			{{'{{/if}}'}}
-			<div class="row-fluid">
-				<div class="span4">
-					<label>*Nombre: </label>
-					{{'{{view Ember.TextField valueBinding="name"}}'}}
-				
-					<label>Descripción: </label>
-					{{'{{view Ember.TextArea valueBinding="description"}}'}}
-					<br /><br />
-					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-					<button class="btn btn-blue" {{ '{{action edit this}}' }}>Editar</button>
-				</div>
-				<div class="span8"></div>
 			</div>
-			<hr></hr>
-			<div class="row-fluid">
-				Editar Segmento con:
-				{{ '{{view Ember.Select
-					contentBinding="App.criteria"
-					optionValuePath="content.id"
-					optionLabelPath="content.criterion"
-					valueBinding="criterion"
-					class="span2"}}'
-				}}
-				<br /><br />
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-sm-12 col-md-7">
+					<div class="form-group">
+						<label  for="" class="col-md-4 control-label">Editar segmento con: </label>
+						<div class="col-md-4">
+							{{ '{{view Ember.Select
+								contentBinding="App.criteria"
+								optionValuePath="content.id"
+								optionLabelPath="content.criterion"
+								valueBinding="criterion"
+								class="form-control"}}'
+							}}
+						</div>
+						<p class="form-control-static">condiciones a continuacion:</p>
+					</div>
+				</div>
+				<div class="clearfix"></div>
 				{{'{{#if errors.segment}}'}}
-					<div class="alert alert-error">
+					<div class="bs-callout bs-callout-danger">
 						{{'{{errors.segment}}'}}
 					</div>
 				{{'{{/if}}'}}
-			</div>
-			{{' {{#each cr in criteria}} '}}
-				<div class="row-fluid">
-					<div class="span3">
-						{{ '{{view Ember.Select
-							  contentBinding="cfields"
-							  optionValuePath="content.id"
-							  optionLabelPath="content.name"
-							  valueBinding="cr.cfields"
-							  prompt="Seleccione un campo"
-							}}'
-						}}
-					</div>
-					<div class="span3">
-						{{ '{{view Ember.Select
-							  contentBinding="App.relations"
-							  optionValuePath="content.id"
-							  optionLabelPath="content.relation"
-							  valueBinding="cr.relations"
-							}}'
-						}}
-					</div>
-					<div class="span3">
-						{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required"}}' }}
-					</div>
-					<div class="span3">
-						{{ '{{#unless defaultCriteria}}' }}
-							<button class="btn btn-default" {{ '{{action aConditionLess cr}}' }}><i class="icon-trash"></i></button>
-						{{ '{{/unless}}' }}
+
+				{{' {{#each cr in criteria}} '}}
+				<div class="col-lg-12">
+					<div class="form-group">
+						<label  for="" class="col-xs-1 control-label"></label>
+						<div class="col-sm-3">
+							{{ '{{view Ember.Select
+								contentBinding="cfields"
+								optionValuePath="content.id"
+								optionLabelPath="content.name"
+								valueBinding="cr.cfields"
+								prompt="Seleccione un campo"
+								placeholder="Seleccione un campo"
+								class="form-control"}}'
+							}}
+						</div>
+						<div class="col-xs-2">
+							{{ '{{view Ember.Select
+								  contentBinding="App.relations"
+								  optionValuePath="content.id"
+								  optionLabelPath="content.relation"
+								  valueBinding="cr.relations"
+								  class="form-control"}}'
+							}}
+						</div>
+						<div class="col-sm-3">
+							{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" class="form-control"}}' }}
+						</div>
+						<div class="col-md-3">
+							<div class="row">
+								{{ '{{#unless defaultCriteria}}' }}
+									<button class="btn btn-default btn-sm extra-padding" {{ '{{action aConditionLess cr}}' }}><i class="glyphicon glyphicon-trash"></i></button>
+								{{ '{{/unless}}' }}
+
+								{{ '{{#unless limitCriteria}}' }}
+									<button class="btn btn-default btn-sm btn-add extra-padding" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
+								{{ '{{/unless}}' }}
+							</div>
+						</div>
 					</div>
 				</div>
-			{{' {{/each}} '}}
-			<br />
-			<div class="row-fluid">
-				{{ '{{#unless limitCriteria}}' }}
-					<button class="btn btn-default" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
-				{{ '{{/unless}}' }}
+				{{' {{/each}} '}}
+				<div class="clearfix"></div>
+				<div class="form-actions pull-right">
+					<div class="row">
+						<div class="col-xs-6">
+							<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+						</div>
+						<div class="col-xs-6">
+							<button class="btn btn-sm btn-guardar extra-padding" {{ '{{action edit this}}' }}>Guardar</button>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </script>

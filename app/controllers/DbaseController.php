@@ -20,6 +20,7 @@ class DbaseController extends ControllerBase
     {
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 		
+//		$this->logger->log("Page: {$currentPage}");
 		$idAccount = $this->user->account->idAccount;
 		
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
@@ -31,6 +32,7 @@ class DbaseController extends ControllerBase
 		);
 		
 		$page = $paginator->getPaginate();
+//		$this->logger->log("Page: {$page->current}, {$page->before}, {$page->next}");
 		
 		$this->view->setVar("page", $page);
     }

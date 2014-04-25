@@ -22,10 +22,10 @@ class CreateViewEmber
 				break;
 			case "Select":
 				// {{ view Ember.Select contentBinding="nombrecampo_options" valueBinding="nombrecampo" }}
-				$valor = "{{view Ember.Select valueBinding='{$fieldname}' contentBinding='App.{$fieldname}_options' class='select' id='{$fieldname}'";
+				$valor = "{{view Ember.Select valueBinding='{$fieldname}' contentBinding='App.{$fieldname}_options' id='{$fieldname}' {$optionstxt}";
 				break;
 			case "MultiSelect":
-				$valor = "{{view Ember.Select multiple='true' valueBinding='{$fieldname}' contentBinding='App.{$fieldname}_options' class='select' id='{$fieldname}'";
+				$valor = "{{view Ember.Select multiple='true' valueBinding='{$fieldname}' contentBinding='App.{$fieldname}_options' id='{$fieldname}'  {$optionstxt}";
 				break;
 			case "Date":
 				$valor = "{{view App.DatePickerField valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}'";

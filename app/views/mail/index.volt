@@ -7,7 +7,7 @@
 <div class="row">
 	<!-- menu de opciones -->
 	<h4 class="sectiontitle">Qué quieres hacer hoy?</h4>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('mail/setup') }}"  class="shortcuts"><span class="sm-button-large-email-new"></span></a>

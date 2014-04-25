@@ -3,7 +3,7 @@
 {%block sectionsubtitle %}Cree o elimine sus cuentas de redes sociales{% endblock %}
 
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -22,7 +22,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="box table-container-social-media-list">
 				<div class="box-header">

@@ -55,10 +55,10 @@
 		</div>
 		{%endfor%}
 	</div>
-	<div class="row-fluid space"></div>
+	<div class="row space"></div>
 	<div class="row">
 		<h4 class="sectiontitle">Interacciones de los últimos 3 envíos</h4>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="col-sm-12 col-lg-10">
 				<table class="table table-normal table-striped table-bordered">
 					<thead>
@@ -85,31 +85,31 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid space"></div>
+	<div class="row space"></div>
 	<div class="row">
 		<h4 class="sectiontitle">Qué quieres hacer hoy?</h4>
-		<div class="row-fluid">
+		<div class="row">
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">
-					<a href="{{url('mail/setup')}}"  class="shortcuts"><span class="sm-button-large-email"></span></a>
+					<a href="{{url('mail/setup')}}"  class="shortcuts"><span class="sm-button-large-email-new"></span></a>
 				</div>
 				<a href="{{url('mail/setup')}}" class="btn-actn">Crear un nuevo email</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">
-					<a href=""  class="shortcuts"><span class="sm-button-large-import-contacts"></span></a>
+					<a href="{{url('contactlist#/lists')}}"  class="shortcuts"><span class="sm-button-large-contact-list"></span></a>
 				</div>
-				<a href="" class="btn-actn">Crear contactos</a>
+				<a href="{{url('contactlist#/lists')}}" class="btn-actn">Listas de contactos</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">
-					<a href="{{url('dbase')}}"  class="shortcuts"><span class="sm-button-large-database"></span></a>
+					<a href="{{url('mail/list')}}"  class="shortcuts"><span class="sm-button-large-email-list"></span></a>
 				</div>
-				<a href="{{url('dbase')}}" class="btn-actn">Bases de datos</a>
+				<a href="{{url('mail/list')}}" class="btn-actn">Listas de correos</a>
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid space"></div>
+	<div class="row space"></div>
 </div>
 
 {% endblock %}

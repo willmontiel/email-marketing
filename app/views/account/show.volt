@@ -3,7 +3,7 @@
 {%block sectionsubtitle %}Administre la información de los usuarios de la cuenta{% endblock %}
 
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="box">
 			<div class="box-content">
 				<div class="box-section news with-icons">
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8">
 			{{ flashSession.output() }}
 		</div>
@@ -35,7 +35,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="box">
 				<div class="box-content">
@@ -87,7 +87,7 @@
 					</table>
 				</div>
 				<div class="box-footer padded">
-					<div class="row-fluid">
+					<div class="row">
 						<div class="span5">
 							<div class="pagination">
 								<ul>

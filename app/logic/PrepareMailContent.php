@@ -51,14 +51,8 @@ class PrepareMailContent
 		$search = array('</body>', '%%WEBVERSION%%', '%%UNSUBSCRIBE%%');
 		$replace = array('$$$_open_track_$$$</body>', '$$$_webversion_track_$$$', '$$$_unsubscribe_track_$$$');
 		$html2 = str_ireplace($search, $replace, $html1);
-		$result[] = $html2;
-		$result[] = $marks;
-//		
-/*		return  array('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">'
-				      . PHP_EOL . 
-				      '<html><head></head><body><img src="http://stage.sigmamovil.com/assets/2/images/123.jpg"></body></html>'
-					  . PHP_EOL);
-*/		
-		return $result;
+
+		// Arreglo con [ HTML, MARCAS ]
+		return array($html2, $marks);
 	}
 }

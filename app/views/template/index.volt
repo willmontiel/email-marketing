@@ -15,7 +15,7 @@
 {% block sectiontitle %}<i class="icon-magic"></i>Plantillas globales y locales{% endblock %}
 {% block sectionsubtitle %}Listado de plantillas creadas en la cuenta{% endblock %}
 {% block content %}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span6">{{ flashSession.output()}}</div>
 		<div class="span6 text-right">
 			<a href="{{ url('mail') }}" class="btn btn-default">
@@ -27,7 +27,7 @@
 		</div>
 	</div>
 	<hr class="divider">
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span10">
 			<div class="box">
 				<div class="box-header">
@@ -106,7 +106,7 @@
 		</div>
 	</div>
 	<br />
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12 padded">
 			{#<a href="{{url('mail/source')}}/{{mail.idMail}}" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</a>#}
 		</div>

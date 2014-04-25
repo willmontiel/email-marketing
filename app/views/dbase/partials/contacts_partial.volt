@@ -1,5 +1,5 @@
 <script type="text/x-handlebars" data-template-name="contacts/index">
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span8">
 			<div class="box">
 				<div class="box-content">
@@ -54,7 +54,7 @@
 	
 	{{ partial("partials/search_contacts_partial") }}
 	
-	<div class="row-fluid">
+	<div class="row">
         <div class="span12">
 			<div class="box">
 				<div class="box-content">
@@ -107,7 +107,7 @@
 			{{ '{{ App.errormessage }}' }}
 		</div>
 	{{ '{{/if}} '}}
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span4">
 			<div class="box">
 				<div class="box-header">
@@ -160,7 +160,7 @@
 </script>
 #}
 <script type="text/x-handlebars" data-template-name="contacts/delete">
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span12">
 			<div class="box">
 				<div class="box-header">
@@ -190,7 +190,7 @@
 </script>
 {#
 <script type="text/x-handlebars" data-template-name="contacts/show">
-<div class="row-fluid">
+<div class="row">
 		<div class="span12">
 			<div class="full-contact-information clearfix">
 				<div class="contact-information">
