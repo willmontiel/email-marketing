@@ -397,8 +397,10 @@ class TemplateController extends ControllerBase
 			$template->setAccount($this->user->account);
 			$template->setUser($this->user);
 			$template->createTemplate($name, $categoryF, $content);
+			$this->traceSuccess("Create template");
 		}
 		catch (Exception $e) {
+			$this->traceFail("Error create template");
 			$this->logger->log("Exception: " . $e);
 			$this->flashSession->error('Ha ocurrido un error, por favor conacte al administrador');
 		}
