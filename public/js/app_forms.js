@@ -91,7 +91,7 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 		var t = this;
 		this.store.find('list').then(function(list) {
 			var lists = list.get('content');
-			var values = [{id: 0, name:'Seleccione una lista'}];
+			var values = [];
 			for(var i = 0; i < lists.length; i++) {
 				var obj = {id: lists[i].get('id'), name: lists[i].get('name')};
 				values.push(obj);
@@ -109,6 +109,10 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 	checkValues: function(form) {
 		if( form.get('name') === undefined ) {
 			return {acceptance: false, msg: 'Recuerde dar un NOMBRE al formulario'};
+		}
+		
+		if( form.get('urlsuccess') === undefined || form.get('urlerror') === undefined ) {
+			return {acceptance: false, msg: 'Recuerde dar las URLs de EXITO y ERROR'};
 		}
 
 		if( form.get('optin') ) {
@@ -291,7 +295,11 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 		if( form.get('name') === undefined ) {
 			return {acceptance: false, msg: 'Recuerde dar un NOMBRE al formulario'};
 		}
-
+		
+		if( form.get('urlsuccess') === undefined || form.get('urlerror') === undefined ) {
+			return {acceptance: false, msg: 'Recuerde dar las URLs de EXITO y ERROR'};
+		}
+		
 		if( form.get('optin') ) {
 			if( form.get('optinsubject') === undefined && form.get('optinfromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para OPTIN'};
@@ -425,5 +433,10 @@ App.FormsCodeRoute = Ember.Route.extend({
 });
 
 App.FormsCodeController = Ember.ObjectController.extend({
-	
+	actions: {
+		cancel: function() {
+			this.get("model").rollback();
+			this.transitionToRoute('forms.index');
+		}
+	}
 });

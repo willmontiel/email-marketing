@@ -21,13 +21,17 @@ class FormWrapper extends BaseWrapper
 		$form->title = $content->title;
 		$form->content = $content->content;
 		$form->target = $content->listselected;
-		$form->urlSuccess = $content->urlsuccess;
-		$form->urlError = $content->urlerror;
+		
+		$form->urlSuccess = (strpos($content->urlsuccess, "http://") === FALSE && strpos($content->urlsuccess, "https://") === FALSE ) ? 'http://' . $content->urlsuccess : $content->urlsuccess;
+		$form->urlError = (strpos($content->urlerror, "http://") === FALSE && strpos($content->urlerror, "https://") === FALSE) ? 'http://' . $content->urlerror : $content->urlerror;
+		
 		$form->optin = ($content->optin)?'Si':'No';
 		$form->optinMail = $content->optinmail;
 		$form->welcome = ($content->welcome)?'Si':'No';
 		$form->welcomeMail = $content->welcomemail;
-		$form->welcomeUrl = $content->welcomeurl;
+
+		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
+		
 		$form->notify = $content->notify;
 		$form->notifyMail = $content->notifymail;
 		
@@ -49,13 +53,17 @@ class FormWrapper extends BaseWrapper
 		$form->title = $content->title;
 		$form->content = $content->content;
 		$form->target = $content->listselected;
-		$form->urlSuccess = $content->urlsuccess;
-		$form->urlError = $content->urlerror;
+
+		$form->urlSuccess = (strpos($content->urlsuccess, "http://") === FALSE && strpos($content->urlsuccess, "https://") === FALSE ) ? 'http://' . $content->urlsuccess : $content->urlsuccess;
+		$form->urlError = (strpos($content->urlerror, "http://") === FALSE && strpos($content->urlerror, "https://") === FALSE) ? 'http://' . $content->urlerror : $content->urlerror;
+		
 		$form->optin = ($content->optin)?'Si':'No';
 		$form->optinMail = $content->optinmail;
 		$form->welcome = ($content->welcome)?'Si':'No';
 		$form->welcomeMail = $content->welcomemail;
-		$form->welcomeUrl = $content->welcomeurl;
+		
+		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
+		
 		$form->notify = $content->notify;
 		$form->notifyMail = $content->notifymail;
 		

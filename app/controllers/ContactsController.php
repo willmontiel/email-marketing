@@ -345,7 +345,7 @@ class ContactsController extends ControllerBase
 			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
 			$idenfifiers = $linkEncoder->decodeLink('contacts/form', $parameters);
 			list($idLink, $idContactlist, $idForm) = $idenfifiers;
-			  
+
 			if ($this->request->isPost()) {
 				$fields = $this->request->getPost();
 				$contactlist = Contactlist::findFirst(array(
@@ -357,7 +357,7 @@ class ContactsController extends ControllerBase
 					'conditions' => 'idForm = ?1',
 					'bind' => array(1 => $idForm)
 				));
-				
+
 				if( !$contactlist || !$form ) {
 					return $this->response->redirect('error/link');
 				}
@@ -386,7 +386,7 @@ class ContactsController extends ControllerBase
 			}
 			return $this->response->redirect($form->urlError, true);
 		}
-		
+
 		return $this->response->redirect($form->urlSuccess, true);
 	}
 }

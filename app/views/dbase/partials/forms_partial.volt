@@ -1,6 +1,8 @@
 <script type="text/x-handlebars" data-template-name="forms/index">
 	<div class="row">
 		<h4 class="sectiontitle">Formularios</h4>
+		{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario{{ '{{/link-to}}' }}
+		<br \><br \>
 		<table class="table table-condensed table-striped table-contacts">
 			{{'{{#each model}}'}}
 			<tr>
@@ -19,11 +21,13 @@
 						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 					</div>
 				</td>
+				{{ '{{#if framecode}}' }}
 				<td>
 					<div>
 						{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Codigo{{ '{{/link-to}}' }}
 					</div>
 				</td>
+				{{ '{{/if}}' }}
 			</tr>
 			{{'{{/each}}'}}
 		</table>
@@ -105,6 +109,9 @@
 					<textarea rows="4" cols="70">{{ '{{unbound framecode}}' }}</textarea>
 				</div>
 			</div>
+		</div>
+		<div class="col-md-6 col-md-offset-4">
+			<button class="btn btn-default" {{ '{{action cancel this}}' }}>Regresar</button>
 		</div>
 	</div>
 </script>
