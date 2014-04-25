@@ -5,11 +5,12 @@ class TemplateObj
 	private $mail;
 	private $user;
 	private $templatesfolder;
+	private $template;
 	private $asset;
 	private $url;
 	private $cache;
 	private $logger;
-	private $finalAccount;
+	private $global;
 	
 	public function __construct() 
 	{
@@ -20,20 +21,20 @@ class TemplateObj
 		$this->cache = Phalcon\DI::getDefault()->get('cache');
 	}
 
-	public function setAccount(Account $account = null)
+	public function setAccount(Account $account)
 	{
-		if ($account == null) {
-			$this->account = new stdClass();
-			$this->account->idAccount = null;
-		}
-		else {
-			$this->account = $account;
-		}
+		$this->account = $account;
 	}
 	
-	public function setFinalAccount(Account $account)
+	public function setGlobal($global = false)
 	{
-		$this->finalAccount = $account;
+		if ($global == 'true') {
+			$this->global = true;
+		}
+		else {
+			$this->global = false;
+		}
+		
 	}
 
 
@@ -56,36 +57,42 @@ class TemplateObj
 	{
 		$this->logger->log('Empezando proceso de creacion de plantilla a partir de un correo');
 		
-		$template = $this->saveTemplateInDb($name, $category);
-		$content = $this->saveTemplateInFolder($template->idTemplate, $mailContent->content);
-		$this->updateContentHtmlFromMail($template, $content->content, $content->contentHtml);
+		$this->saveTemplateInDb($name, $category);
+		$content = $this->saveTemplateInFolder($mailContent->content);
+		$this->updateContentHtmlFromMail($content);
 	}
 	
 	public function createTemplate($name, $category, $editorContent)
 	{
 		$this->logger->log('Empezando proceso de creacion de plantillas');
+		$this->saveTemplateInDb($name, $category);
+		$content = $this->saveTemplateInFolder($editorContent);
+		$this->updateContentHtml($content);
 		
-		$template = $this->saveTemplateInDb($name, $category);
-		$content = $this->saveTemplateInFolder($template->idTemplate, $editorContent);
-		$this->updateContentHtml($template, $content->content, $content->contentHtml);
-		
-		return $template->idTemplate;
+		return $this->template->idTemplate;
 	}
 	
 	public function updateTemplate($name, $category, $editorContent)
 	{
 		$this->logger->log('Empezando proceso de edición de plantillas');
-		$content = $this->saveTemplateInFolder($this->template->idTemplate, $editorContent);
-		$this->updateTemplateInDb($name, $category, $content->content, $content->contentHtml);
+		$this->startTransaction();
+		$content = $this->updateTemplateImageUbication($editorContent);
+		$this->updateTemplateInDb($name, $category, $content);
 	}
 	
 	protected function saveTemplateInDb($name, $category)
 	{
-		$this->logger->log('Iniciando guardado de la plantilla');
-		
 		$this->startTransaction();
 		$template = new Template();
-		$template->idAccount = $this->account->idAccount;
+		
+		if ($this->global && $this->user->userrole == "ROLE_SUDO") {
+			$this->logger->log('Iniciando guardado de plantilla pública');
+			$template->idAccount = null;
+		}
+		else {
+			$this->logger->log('Iniciando guardado de plantilla privada');
+			$template->idAccount = $this->account->idAccount;
+		}
 		$template->name = $name;
 		$template->category = $category;
 		$template->content = null;
@@ -95,19 +102,27 @@ class TemplateObj
 			$this->rollbackTransaction();
 			throw new Exception('we have a error while saving new template...');
 		}
-		return $template;
+		
+		$this->template = $template;
 	}
 	
-	protected function updateTemplateInDb($name, $category, $content, $html)
+	protected function updateTemplateInDb($name, $category, $content)
 	{
-		$this->template->idAccount = $this->account->idAccount;
+		if ($this->global) {
+			$this->template->idAccount = null;
+		}
+		else {
+			$this->template->idAccount = $this->account->idAccount;
+		}
 		$this->template->name = $name;
 		$this->template->category = $category;
-		$this->template->content = $content;
-		$this->template->contentHtml = $html;
-
+		
+		if ($content != null) {
+			$this->template->content = $content->content;
+			$this->template->contentHtml = $content->contentHtml;
+		}
+		
 		$preview = $this->cache->get('preview-img64-cache-' . $this->user->idUser);
-//			$this->logger->log('Preview: ' . $preview);
 		if ($preview) {
 			$this->template->previewData = $preview;
 			$this->cache->delete('preview-img64-cache-' . $this->user->idUser);
@@ -119,19 +134,18 @@ class TemplateObj
 				throw new Exception('Error while updating template');
 			}
 		}
+		$this->commitTransaction();
 	}
 	
-	protected function saveTemplateInFolder($idTemplate, $editorContent)
+	protected function saveTemplateInFolder($editorContent)
 	{
 		$content = $this->convertToHtml($editorContent);
 		
-		if($this->account->idAccount != null) {
-			$dir = $this->asset->dir . $this->account->idAccount . '/templates/' . $idTemplate . '/images/';
-			$type = 'private';
+		if ($this->global && $this->user->userrole == "ROLE_SUDO") {
+			$dir = $this->templatesfolder->dir . $this->template->idTemplate . '/images/';
 		}
 		else {
-			$dir = $this->templatesfolder->dir . $idTemplate . '/images/';
-			$type = 'public';
+			$dir = $this->asset->dir . $this->account->idAccount . '/templates/' . $this->template->idTemplate . '/images/';
 		}
 		
 		if (!file_exists($dir)) {
@@ -150,28 +164,173 @@ class TemplateObj
 				$src = $image->getAttribute('src');
 				$this->logger->log("Src: {$src}");
 				if ($this->validateImageSrc($src)) {
-					$templateImage = $this->transportImageToPrivateTemplate($src, $idTemplate, $dir);
+					
+					$url = explode('/', $src);
+					$key = (count($url)-1);
+					
+					$idAsset = $url[$key];
+					
+					$asset = Asset::findFirst(array(
+						"conditions" => "idAsset = ?1",
+						"bind" => array(1 => $idAsset)
+					));
+					
+					if (!$asset) {
+						throw new Exception('Error, asset not found!');
+					}
+					
+					$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
+					$templateImage = $this->saveTemplateImage($asset);
+					$img = $this->asset->dir . $asset->idAccount . "/images/" . $asset->idAsset . "." .$ext;
+					
+					$this->logger->log("Img: {$img}");
+					$this->logger->log('Dir: ' . $dir . $templateImage->idTemplateImage . '.' .$ext);
+					if (!copy($img, $dir . $templateImage->idTemplateImage . '.' .$ext)) {
+						$this->rollbackTransaction();
+						throw new Exception("Error while copying image file with name {$templateImage->idTemplateImage}.{$ext}");
+					}
+					
 					$find[] = $src;
-					$replace[] = $this->url->get('template/image') . '/' . $idTemplate . '/' .$templateImage->idTemplateImage;
+					$replace[] = $this->url->get('template/image') . '/' . $this->template->idTemplate . '/' .$templateImage->idTemplateImage;
 				}
-				else if ($this->validateImageTemplateSrc($src) && $type == 'public') {
-					$this->transportImageToPublicTemplate($src, $idTemplate, $dir);
-				}
-				$find[] = $src;
-				$replace[] = $this->url->get('template/image') . '/' . $idTemplate . '/' .$templateImage->idTemplateImage;
 			}
-//			$this->logger->log('Find: ' . print_r($find, true));
-//			$this->logger->log('Replace: ' . print_r($replace, true));
-			$editorContent = str_replace($find, $replace, $editorContent);
 		}
-//		$this->logger->log('Urls transformados');
-		$contentHtml = $this->convertToHtml($editorContent);
 		
-		$templateContent = new stdClass();
-		$templateContent->content = $editorContent;
-		$templateContent->contentHtml = $contentHtml;
+		$newEditorContent = str_replace($find, $replace, $editorContent);
 		
-		return $templateContent;
+		$finalContent = new stdClass();
+		$finalContent->content = $newEditorContent;
+		$finalContent->contentHtml = $this->convertToHtml($newEditorContent);
+
+		return $finalContent;	
+	}
+	
+	
+	private function updateTemplateImageUbication($editorContent)
+	{
+		if ($this->global && $this->user->userrole == "ROLE_SUDO") {
+			if ($this->template->idAccount == null) {
+				$newContent =  $this->saveTemplateInFolder($editorContent);
+				return $newContent;
+			}
+			else {
+				$newContent = $this->saveTemplateInFolder($editorContent);
+				$this->transformImageTemplatePrivateInPublic($newContent->content);
+				return $newContent;
+			}
+		}
+		else {
+			if ($this->template->idAccount == null) {
+				$this->logger->log('is here now');
+				$newContent =  $this->saveTemplateInFolder($editorContent);
+				$this->transformImageTemplatePublicInPrivate($newContent);
+				return $newContent;
+			}
+			else {
+				$this->logger->log('is here');
+				return $this->saveTemplateInFolder($editorContent);
+			}
+		}
+	}
+	
+	private function transformImageTemplatePublicInPrivate($editorContent)
+	{
+		$destiny = "{$this->asset->dir}{$this->account->idAccount}/templates/{$this->template->idTemplate}/images/";
+		
+		if (!file_exists($destiny)) {
+			mkdir($destiny, 0777, true);
+		} 
+		
+		$content = $this->convertToHtml($editorContent);
+		
+		$html = new DOMDocument();
+		@$html->loadHTML($content);
+		$images = $html->getElementsByTagName('img');
+
+		if ($images->length !== 0) {
+			foreach ($images as $image) {
+				$src = $image->getAttribute('src');
+				$this->logger->log("Src: {$src}");
+				if ($this->validateImageTemplateSrc($src)) {
+					$url = explode('/', $src);
+					$key = (count($url)-1);
+					
+					$idTemplateImg = $url[$key];
+					
+					$templateImg = Templateimage::findFirst(array(
+						"conditions" => "idTemplateImage = ?1",
+						"bind" => array(1 => $idTemplateImg)
+					));
+					
+					if (!$templateImg) {
+						throw new Exception('Error, asset not found!');
+					}
+					
+					$ext = pathinfo($templateImg->name, PATHINFO_EXTENSION);
+						
+//					$destiny = "{$this->templatesfolder->dir}{$this->template->idTemplate}/images/{$idTemplateImg}.{$ext}";
+					$destiny = "{$this->asset->dir}{$this->account->idAccount}/templates/{$this->template->idTemplate}/images/{$idTemplateImg}.{$ext}";
+					if (!file_exists($destiny)) {
+						$source = "{$this->templatesfolder->dir}{$this->template->idTemplate}/images/{$idTemplateImg}.{$ext}";
+						$this->logger->log("Source: {$source}");
+						$this->logger->log("Destiny: {$destiny}");
+						if (!copy($source, $destiny)) {
+							throw new Exception("Error while copying image file with name {$idTemplateImg}.{$ext}");
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private function transformImageTemplatePrivateInPublic($editorContent)
+	{
+		$destiny = $this->templatesfolder->dir . $this->template->idTemplate . '/images/';
+		
+		if (!file_exists($destiny)) {
+			mkdir($destiny, 0777, true);
+		} 
+		
+		$content = $this->convertToHtml($editorContent);
+		
+		$html = new DOMDocument();
+		@$html->loadHTML($content);
+		$images = $html->getElementsByTagName('img');
+
+		if ($images->length !== 0) {
+			foreach ($images as $image) {
+				$src = $image->getAttribute('src');
+				$this->logger->log("Src: {$src}");
+				if ($this->validateImageTemplateSrc($src)) {
+					$url = explode('/', $src);
+					$key = (count($url)-1);
+					
+					$idTemplateImg = $url[$key];
+					
+					$templateImg = Templateimage::findFirst(array(
+						"conditions" => "idTemplateImage = ?1",
+						"bind" => array(1 => $idTemplateImg)
+					));
+					
+					if (!$templateImg) {
+						throw new Exception('Error, asset not found!');
+					}
+					
+					$ext = pathinfo($templateImg->name, PATHINFO_EXTENSION);
+						
+					$destiny = "{$this->templatesfolder->dir}{$this->template->idTemplate}/images/{$idTemplateImg}.{$ext}";
+					
+					if (!file_exists($destiny)) {
+						$source = "{$this->asset->dir}{$this->account->idAccount}/templates/{$this->template->idTemplate}/images/{$idTemplateImg}.{$ext}";
+						$this->logger->log("Source: {$source}");
+						$this->logger->log("Destiny: {$destiny}");
+						if (!copy($source, $destiny)) {
+							throw new Exception("Error while copying image file with name {$idTemplateImg}.{$ext}");
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private function convertToHtml($editorContent)
@@ -205,68 +364,13 @@ class TemplateObj
 		return true;
 	}
 	
-	private function transportImageToPublicTemplate($src, $idTemplate)
-	{
-		$ids = explode('/', $src);
-		$id = count($ids) - 1;
-		$idTemplateImg = $ids[$id];
-
-		$this->logger->log("idT: {$idTemplateImg}");
-
-		$templateImg = Templateimage::findFirst(array(
-			'conditions' => 'idTemplateImage = ?1',
-			'bind' => array(1 => $idTemplateImg)
-		));
-
-		if (!$templateImg) {	
-			throw new Exception('Error, template image not found!');
-		}
-
-		$ext = pathinfo($templateImg->name, PATHINFO_EXTENSION);
-		$this->logger->log("Account : {$this->finalAccount->idAccount}");
-		$source = "{$this->asset->dir}{$this->finalAccount->idAccount}/templates/{$idTemplate}/images/{$idTemplateImg}.{$ext}";
-		$destiny = "{$this->templatesfolder->dir}{$idTemplate}/images/{$idTemplateImg}.{$ext}";
-		
-		$this->logger->log("Source: {$source}");
-		$this->logger->log("Destiny: {$destiny}");
-		
-		if (!copy($source, $destiny)) {
-			throw new Exception('Error while copying image files');
-		}
-	}
-	
-	private function transportImageToPrivateTemplate($src, $idTemplate, $dir)
-	{
-		$idAsset = filter_var($src, FILTER_SANITIZE_NUMBER_INT);
-		
-		$asset = Asset::findFirst(array(
-			"conditions" => "idAsset = ?1",
-			"bind" => array(1 => $idAsset)
-		));
-
-		if (!$asset) {
-			throw new Exception('Error, asset not found!');
-		}
-
-		$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
-		$templateImage = $this->saveTemplateImage($idTemplate, $asset->fileName);
-		$img = $this->asset->dir . $asset->idAccount . "/images/" . $asset->idAsset . "." .$ext;
-
-		$this->logger->log("Img: {$img}");
-		$this->logger->log('Dir: ' . $dir . $templateImage->idTemplateImage . '.' .$ext);
-		if (!copy($img, $dir . $templateImage->idTemplateImage . '.' .$ext)) {
-			throw new Exception('Error while copying image files');
-		}
-		return $templateImage;
-	}
-	
-	private function saveTemplateImage($idTemplate, $name)
+	private function saveTemplateImage(Asset $asset)
 	{
 		$this->logger->log('Guardando imagen de plantilla');
 		$templateImage = new Templateimage();
 		
-		$templateImage->idTemplate = $idTemplate;
-		$templateImage->name = $name;
+		$templateImage->idTemplate = $this->template->idTemplate;
+		$templateImage->name = $asset->fileName;
 		
 		if (!$templateImage->save()) {
 			$this->rollbackTransaction();
@@ -275,31 +379,30 @@ class TemplateObj
 		return $templateImage;
 	}
 	
-	private function updateContentHtml($template, $newContent, $newContentHtml)
+	private function updateContentHtml($content)
 	{
-		$template->content = $newContent;
-		$template->contentHtml = htmlspecialchars($newContentHtml, ENT_QUOTES);
+		$this->template->content = $content->content;
+		$this->template->contentHtml = htmlspecialchars($content->contentHtml, ENT_QUOTES);
 		
 		$preview = $this->cache->get('preview-img64-cache-' . $this->user->idUser);
-		$this->logger->log('Preview: ' . $preview);
 		if (!$preview) {
 			$preview = null;
 		}
 		$this->cache->delete('preview-img64-cache-' . $this->user->idUser);
 		
-		$template->previewData = $preview;
+		$this->template->previewData = $preview;
 		
-		if (!$template->save()) {
+		if (!$this->template->save()) {
 			$this->rollbackTransaction();
 			throw new Exception('Error while updating template');
 		}
 		$this->commitTransaction();
 	}
 	
-	private function updateContentHtmlFromMail($template, $newContent, $newContentHtml)
+	private function updateContentHtmlFromMail($content)
 	{
-		$template->content = $newContent;
-		$template->contentHtml = htmlspecialchars($newContentHtml, ENT_QUOTES);
+		$this->template->content = $content->content;
+		$this->template->contentHtml = htmlspecialchars($content->contentHtml, ENT_QUOTES);
 		
 		if ($this->mail == null) {
 			$preview = null;
@@ -308,9 +411,9 @@ class TemplateObj
 			$preview = $this->mail->previewData;
 		}
 		
-		$template->previewData = $preview;
+		$this->template->previewData = $preview;
 		
-		if (!$template->save()) {
+		if (!$this->template->save()) {
 			$this->rollbackTransaction();
 			throw new Exception('Error while updating template');
 		}

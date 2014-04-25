@@ -97,16 +97,10 @@ class TemplateController extends ControllerBase
 				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos, por favor verifique la información'), 400 , 'failed');
 			}
 			
-			if (($this->user->userrole == "ROLE_SUDO") && ($global == 'true')) {
-				$account = null;
-			}
-			else {
-				$account = $this->user->account;
-			}
-			
 			try {
 				$template = new TemplateObj();
-				$template->setAccount($account);
+				$template->setGlobal($global);
+				$template->setAccount($this->user->account);
 				$template->setUser($this->user);
 				$idTemplate = $template->createTemplate($name, $category, $content);
 			}
@@ -231,17 +225,10 @@ class TemplateController extends ControllerBase
 				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos, por favor verifique la información'), 400 , 'failed');
 			}
 			
-			if (($this->user->userrole == "ROLE_SUDO") && ($global == 'true')) {
-				$account = null;
-			}
-			else {
-				$account = $this->user->account;
-			}
-			
 			try {
 				$templateObj = new TemplateObj();
 				$templateObj->setAccount($account);
-				$templateObj->setFinalAccount($this->user->account);
+				$templateObj->setGlobal($global);
 				$templateObj->setUser($this->user);
 				$templateObj->setTemplate($template);
 				$templateObj->updateTemplate($name, $category, $content);
@@ -336,7 +323,7 @@ class TemplateController extends ControllerBase
 			
 			$ext = pathinfo($image->name, PATHINFO_EXTENSION);
 			
-			if ($template->idAccount == null) {
+			if (empty($template->idAccount)) {
 				$img = $this->templatesfolder->dir . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
 			}
 			else if ($template->idAccount == $account->idAccount) {

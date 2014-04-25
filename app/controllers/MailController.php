@@ -1694,9 +1694,8 @@ class MailController extends ControllerBase
 		
 		if ($mail && $mailContent) {
 			$name = $this->request->getPost("nametemplate");
-		
 			$category = $this->request->getPost("category");
-
+			
 			try {
 				$template = new TemplateObj();
 				$template->setAccount($this->user->account);
