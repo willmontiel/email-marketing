@@ -166,7 +166,6 @@ class ApiController extends ControllerBase
 		$log = $this->logger;
 		
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -193,12 +192,14 @@ class ApiController extends ControllerBase
 			foreach ($customfield->getMessages() as $message) {
 				$log->log('Error grabando Customfield: [' . $message . ']');
 			}
+			$this->traceFail("Error creating custom field USER: {$this->user->idUser}/{$this->user->username}");
 			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Error grabando informacion');
 		}
 
 
 		$fielddata = $this->fromPObjectToJObject($customfield);
-
+		
+		$this->traceSuccess("Create custom field, idCustomField: {$fielddata['id']}");
 		return $this->setJsonResponse(array('field' => $fielddata), 201, 'Success');	
 	
 	}
@@ -220,8 +221,6 @@ class ApiController extends ControllerBase
 		$log = $this->logger;
 		
 		$contentsraw = $this->request->getRawBody();
-
-		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -244,6 +243,7 @@ class ApiController extends ControllerBase
 		
 		if (!$customfield->save()) {
 			foreach ($customfield->getMessages() as $message) {
+				$this->traceFail("Error editing customfield, idCustomfield: {$idDbase} / idDbase: {$idCustomfield}");
 				$log->log('Error grabando Customfield: [' . $message . ']');
 			}
 			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Error grabando informacion');
@@ -251,8 +251,8 @@ class ApiController extends ControllerBase
 
 		$fielddata = $this->fromPObjectToJObject($customfield);
 
-		return $this->setJsonResponse(array('field' => $fielddata), 201, 'Success');	
-	
+		$this->traceSuccess("Edit custom field, idCustomfield: {$idDbase} / idDbase: {$idCustomfield}");
+		return $this->setJsonResponse(array('field' => $fielddata), 201, 'Success');		
 	}
 
 	/**
@@ -271,14 +271,22 @@ class ApiController extends ControllerBase
 		// Eliminar el campo
 		$fieldinstances = Fieldinstance::findByIdCustomField($idCustomfield);
 		
-		foreach ($fieldinstances as $fieldinstance) {
-			$fieldinstance->delete();
+		try {
+			foreach ($fieldinstances as $fieldinstance) {
+				$fieldinstance->delete();
+				$this->traceSuccess("Custom field instance deleted, idDbase: {$idDbase} / idCustomfield: {$idCustomfield} / idContact: {$fieldinstance->idContact}");
+			}
+			$response = $customfield->delete();
+
+			$this->traceSuccess("Custom field deleted, idDbase: {$idDbase} / idCustomfield: {$idCustomfield}");
+			return $this->setJsonResponse($response);
+		}
+		catch (Exception $e) {
+			$this->traceFail("Error deleting customfield, idDbase: {$idDbase} / idCustomfield: {$idCustomfield}");
+			$this->logger->log("Exception: error while deleting customfield: {$e}");
+			return $this->setJsonResponse(array('status' => 'Ha ocurrido un error, contacte con el administrador'), 500);
 		}
 		
-		$response = $customfield->delete();
-		
-		return $this->setJsonResponse($response);	
-	
 	}
 	
 //	/**
@@ -641,12 +649,16 @@ class ApiController extends ControllerBase
 			$lists = $wrapper->createContactlist($contents);
 		}
 		catch (InvalidArgumentException $e) {
+			$this->traceFail("Error Create contact list, USER: {$this->user->idUser}/{$this->user->username}");
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (Exception $e) {
+			$this->traceFail("Error Create contact list, USER: {$this->user->idUser}/{$this->user->username}");
 			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al crear lista de contactos')), 422, 'Error: ' . $e->getMessage());
 		}
 		
+		$list = $lists['list'];
+		$this->traceSuccess("Create contact list, idContactlist: {$list['id']}, idDbase: {$list['dbase']}");
 		return $this->setJsonResponse($lists);
 	}
 	
@@ -671,12 +683,16 @@ class ApiController extends ControllerBase
 			$mensaje = $wrapper->updateContactList($contents, $idContactlist);
 		}
 		catch (InvalidArgumentException $e) {
+			$this->traceFail("Error editing contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (Exception $e) {
+			$this->traceFail("Error editing contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
 			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al actualizar lista de contactos')), 422, 'Error: ' . $e->getMessage());
 		}
 		
+		$list = $mensaje['list'];
+		$this->traceSuccess("Edit contact list, idContactlist:{$list['id']} / idDbase: {$list['dbase']}");
 		return $this->setJsonResponse($mensaje);
 	}
 	
@@ -760,13 +776,16 @@ class ApiController extends ControllerBase
 			$deletedList = $wrapper->deleteContactList($idContactlist);	
 		}
 		catch (\InvalidArgumentException $e) {
+			$this->traceFail("Error deleting contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 422, "Error: {$e}");	
 		}
 		catch (\Exception $e) {
+			$this->traceFail("Error deleting contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
 		}
+		$this->traceSuccess("contactlist deleted, idContactlist: {$idContactlist}");
 		return $this->setJsonResponse($deletedList);
 	}
 	/*Fin listas de contactos*/
@@ -817,8 +836,8 @@ class ApiController extends ControllerBase
 
 		$contentsraw = $this->request->getRawBody();
 		$contentsT = json_decode($contentsraw);
-		$log->log('Got this: [' . $contentsraw . ']');
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		
@@ -844,16 +863,19 @@ class ApiController extends ControllerBase
 			}
 		}
 		catch (\InvalidArgumentException $e) {
+			$this->traceFail("Error creating contact, USER: {$this->user->idUser}/{$this->user->username}");
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors()), 422, 'Invalid data');	
 		}
 		catch (\Exception $e) {
+			$this->traceFail("Error creating contact, USER: {$this->user->idUser}/{$this->user->username}");
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
 		}
 
 		$contactdata = $wrapper->convertContactToJson($contact);
-
+		
+		$this->traceSuccess("Create contact, idContact: {$contactdata['id']}/ email: {$contactdata['email']}");
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 		
 	}
@@ -900,18 +922,20 @@ class ApiController extends ControllerBase
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
+			$this->traceFail("Error editing contact, idContact: {$idContact} / email: {$contentsT->email} / idContactlist: {$idContactlist}");
 			$contact = Contact::findFirst($idContact);
 			return $this->setJsonResponse(array('contact' => $wrapper->convertContactToJson($contact), 'errors' => $wrapper->getFieldErrors()), 422, 'Error: Invalid data');	
 		}
 		catch (\Exception $e) {
+			$this->traceFail("Error editing contact, idContact: {$idContact} / email: {$contentsT->email} / idContactlist: {$idContactlist}");
 			$log->log('Exception: [' . $e . ']');
 			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
 		}
 
 		$contactdata = $wrapper->convertContactToJson($contact);
-
-		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 		
+		$this->traceSuccess("Edit contact, idContact: {$contactdata['id']} / email: {$contactdata['email']} / idContactlist: {$idContactlist}");
+		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 	}
         
         
@@ -940,11 +964,15 @@ class ApiController extends ControllerBase
 			$override = ($this->user->userrole == 'ROLE_SUDO') ? TRUE : FALSE;
 			$wrapper = new ContactWrapper();
 			$response = $wrapper->deleteContactFromList($contact, $list, $override);
-		} catch(\Exception $e) {
+		} 
+		catch(\Exception $e) {
+			$this->logger->log("Exception while deleting contact: {$e}");
+			$this->traceFail("Error deleting contact, idContact: {$idContact} / idEmail: {$contact->idEmail} / idContactlist: {$idContactlist}");
 			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
 		}
-		return $this->setJsonResponse(array ('contact' => $response), 202, 'contact deleted success');	
-	
+		
+		$this->traceSuccess("Contact deleted, idContact: {$idContact} / idEmail: {$contact->idEmail} / idContactlist: {$idContactlist}");
+		return $this->setJsonResponse(array ('contact' => $response), 202, 'contact deleted success');
 	}
 
 	/**
