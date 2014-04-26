@@ -47,6 +47,11 @@ class ContactFormWrapper extends ContactWrapper
 		if($contact == false) {
 			$contact = $this->createNewContactFromJsonData($contactObj, $this->contactlist);
 		}
+		
+		if($contact) {
+			$optin = new NotificationMail();
+			$optin->sendMailInForm($contact, $this->form->optinMail);
+		}
 	}
 	
 	protected function setAllValuesInContact($obj)
