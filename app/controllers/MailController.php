@@ -49,14 +49,35 @@ class MailController extends ControllerBase
 				$MailWrapper->saveMail();
 				$response = $MailWrapper->getResponse();
 				
+				if ($idMail == null) {
+					$this->traceSuccess("Create mail, idMail: {$response->data['id']}");
+				}
+				else {
+					$this->traceSuccess("Update mail, idMail: {$idMail}");
+				}
+				
 				return $this->setJsonResponse(array($response->key => $response->data), $response->code);
 			}
 			catch (InvalidArgumentException $e) {
+				if ($idMail == null) {
+					$this->traceFail("Error creating mail, USER: {$this->user->idUser}/{$this->user->username}");
+				}
+				else {
+					$this->traceFail("Error update mail, idMail: {$idMail}");
+				}
+				
 				$this->logger->log("InvalidArgumentException: {$e}");
 				$response = $MailWrapper->getResponseMessageForEmber();
 				return $this->setJsonResponse(array($response->key => $response->message), $response->code);
 			}
 			catch (Exception $e) {
+				if ($idMail == null) {
+					$this->traceFail("Error creating mail, USER: {$this->user->idUser}/{$this->user->username}");
+				}
+				else {
+					$this->traceFail("Error update mail, idMail: {$idMail}");
+				}
+				
 				$this->logger->log("Exception: {$e}");
 				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador'), 500);
 			}
@@ -171,10 +192,14 @@ class MailController extends ControllerBase
 			$process->setAccount($this->user->account);
 			$process->setUser($this->user);
 			$process->deleteMail($idMail);
-		} catch (\InvalidArgumentException $e) {
+		} 
+		catch (\InvalidArgumentException $e) {
 			$this->flashSession->error($e->getMessage());
+			$this->logger->log("Exception: Error while deleting mail, {$e}");
+			$this->traceFail("Error deleting mail, idMail: {$idMail}");
 			return $this->response->redirect("mail");
 		}
+		$this->traceSuccess("Mail deleted, idMail: {$idMail}");
 		$this->flashSession->warning("Se ha eliminado el correo exitosamente");
 		return $this->response->redirect("mail");
 	}
@@ -1886,22 +1911,6 @@ class MailController extends ControllerBase
 	
 	public function stopAction($direction, $idMail)
 	{
-		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		
-		$mail = Mail::findFirst(array(
-			"conditions" => "idMail = ?1 AND idAccount = ?2",
-			"bind" => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
-		));
-		
-		if ($mail && $mail->status == 'Scheduled') {
-			$this->stopScheduledTask($mail);
-			$commObj->sendSchedulingToParent($idMail);
-		}
-		else {
-			$commObj->sendPausedToParent($idMail);
-		}
-		
 		switch ($direction) {
 			case 'programming':
 				$route = 'programmingmail/index';
@@ -1910,18 +1919,56 @@ class MailController extends ControllerBase
 				$route = 'programmingmail/manage';
 				break;
 			case 'index':
-				$route = 'mail/index';
+				$route = 'mail/list';
 				break;
+		}
+		
+		try {
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+		
+			$mail = Mail::findFirst(array(
+				"conditions" => "idMail = ?1 AND idAccount = ?2",
+				"bind" => array(1 => $idMail,
+								2 => $this->user->account->idAccount)
+			));
+
+			if ($mail && $mail->status == 'Scheduled') {
+				$this->stopScheduledTask($mail);
+				$commObj->sendSchedulingToParent($idMail);
+			}
+			else {
+				$commObj->sendPausedToParent($idMail);
+			}
+			$this->traceSuccess("Stop mail, idMail: {$idMail}");
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: Error while stopping send, {$e}");
+			$this->traceFail("Error stopping mail, idMail: {$idMail}");
 		}
 		return $this->response->redirect($route);
 	}
 	
 	public function playAction($idMail)
 	{
-		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		$commObj->sendPlayToParent($idMail);
-		
-		return $this->response->redirect("mail/index");
+		try {
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$response = $commObj->sendPlayToParent($idMail);
+			
+			if ($response) {
+				$this->traceSuccess("Resume send, idMail: {$idMail}");
+				$this->flashSession->success("Se ha reanudado el correo exitosamente");
+			}
+			else {
+				$this->flashSession->error("Ha intentado reanudar un correo que nunca inició o no existe, por favor verifique la información");
+			}
+			return $this->response->redirect("mail/list");
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: Error resuming send, {$e}");
+			$this->flashSession->error("Ha ocurrido un error mientras se reanudaba el envío de correo, por favor contacte con el administrador");
+			$this->traceFail("Error resuming send, idMail: {$idMail}");
+			return $this->response->redirect("mail/list");
+		}
 	}
 	
 	
@@ -1999,10 +2046,12 @@ class MailController extends ControllerBase
 				$sendMail = $swift->send($message, $failures);
 				
 				if (!$sendMail){
+					$this->traceFail("Error while sending test, idMail: {$idMail}");
 					$this->logger->log("Error while sending test mail: " . print_r($failures));
 				}
 			}
 			if ($sendMail){
+				$this->traceSuccess("Send test, idMail: {$idMail}");
 				$this->flashSession->success("Se ha enviado el mensaje de prueba exitosamente");
 				return $this->response->redirect('mail/target/' . $idMail);
 			}
@@ -2016,16 +2065,28 @@ class MailController extends ControllerBase
 	{
 		try {
 			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-			$commObj->sendCancelToParent($idMail);
+			$response = $commObj->sendCancelToParent($idMail);
+			
+			if ($response) {
+				$this->flashSession->warning("Se ha cancelado el mensaje exitosamente");
+				$this->traceSuccess("Cancel mail, idMail: {$idMail}");
+			}
+			else {
+				$this->flashSession->error("Ha intentado cancelar un correo que no existe, por favor verifique la información");
+			}
+			
+			return $this->response->redirect("mail/list");
 		}
 		catch(\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e . ']');
+			$this->flashSession->error("Ha ocurrido un error mientras se cancelaba el correo, por favor contacte al administrador");
+			$this->traceFail("Error Cancelling mail, idMail: {$idMail}");
 		}
 		catch(\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
+			$this->flashSession->error("Ha ocurrido un error mientras se cancelaba el correo, por favor contacte al administrador");
+			$this->traceFail("Error Cancelling mail, idMail: {$idMail}");
 		}
-		
-		return $this->response->redirect("mail/index");
 	}
 
 	protected function stopScheduledTask(Mail $mail)

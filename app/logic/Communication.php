@@ -98,7 +98,11 @@ class Communication
 			
 			$this->requester->send(sprintf("%s $idMail $idMail", 'Stop-Process'));
 			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
 	public function sendCancelToParent($idMail)
@@ -138,7 +142,9 @@ class Communication
 					}
 				}
 			}
+			return true;
 		}
+		return false;
 	}
 
 	public function sendSchedulingToParent($idMail)
