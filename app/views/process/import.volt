@@ -45,98 +45,93 @@
 {{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'import']) }}
 {# /Menu de navegacion pequeño #}
 
-{%for res in result%}
 	<div class="row">
-		<div class="span8 offset2">
-			<div class="well relative">
-				<p>Importacion de Archivo: {{res['name']}}</p>
-				{%if res['status'] == "En Ejecucion"%}
-					<p id="status-progress-{{res['idProcess']}}"></p>
-					<div id="progress-bar-{{res['idProcess']}}" class="progress progress-striped progress-blue active"></div>
-				{% endif %}
-					
-				<p id="status-title-{{res['idProcess']}}">Estado: {{res['status']}}</p>
+		<h4 class="sectiontitle">Lista de importaciones</h4>
+	</div>
+	{%for res in result%}
+	<div class="row">
+		<div class="well relative">
+			<p>Importacion de Archivo: <strong>{{res['name']}}</strong></p>
+			{%if res['status'] == "En Ejecucion"%}
+				<p id="status-progress-{{res['idProcess']}}"></p>
+				<div id="progress-bar-{{res['idProcess']}}" class="progress progress-striped progress-blue active"></div>
+			{% endif %}
 				
-				{%if res['status'] == "Finalizado"%}
-				<div class="text-right">
-					<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo-{{res['idProcess']}}">
-					  Ver Detalles
-					</a>
-				</div>
-				{% endif %}
+			<p id="status-title-{{res['idProcess']}}">Estado: {{res['status']}}</p>
+			
+			{%if res['status'] == "Finalizado"%}
+			<div class="text-right">
+				<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo-{{res['idProcess']}}">
+				  Ver Detalles
+				</a>
 			</div>
+			{% endif %}
 		</div>
 	</div>
-	<div class="row">
-		<div id="collapseInfo-{{res['idProcess']}}" class="accordion-body collapse" style="height: 0px;">
-			<div class="span8 offset2">
-				<div class="box">
-					<div class="box-header">
-						<span class="title">Resultado importación de contactos</span>
-						<ul class="box-toolbar">
-							<li><span class="icon"><i class="icon-folder-open-alt" style="font-size: 20px;"></i></span></li>
-						</ul>
-					</div>
-					<div class="box-content">
-						<table class="table table-striped table-contacts">
-							<thead></thead>
-							<tbody>
-								<tr class="status-info">
-									<td class="icon"><i class="icon-cloud-upload"></i></td>
-									<td>Contactos totales en archivo</td>
-										
+	<div id="collapseInfo-{{res['idProcess']}}" class="accordion-body collapse" style="height: 0px;">
+		<div class="container-fluid">
+			<div class="box">
+				
+				<div class="box-content col-md-8 col col-md-offset-1">
+					<h5>Resultado importación de contactos</h5>
+					<table class="table table-striped table-contacts">
+						<thead></thead>
+						<tbody>
+							<tr class="status-info">
+								<td class="icon"><i class="icon-cloud-upload"></i></td>
+								<td>Contactos totales en archivo</td>
 									
-									<td><span class="big-number">{{res['linesprocess']}}</span></td>
-								</tr>
-								<tr class="status-success">
-									<td class="icon"><i class="icon-ok"></i></td>
-									<td>
-										<span class="news-title">Importados exitosamente </span>
-										<a href="{{ url('process/downoladsuccess/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
-									</td>
-									<td><span class="big-number">{{res['import']}}</span></td>
-								</tr>
+								
+								<td><span class="blue big-number pull-right">{{res['linesprocess']}}</span></td>
+							</tr>
+							<tr class="status-success">
+								<td class="icon"><i class="icon-ok"></i></td>
+								<td>
+									<span class="news-title">Importados exitosamente </span>
+									<a href="{{ url('process/downoladsuccess/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
+								</td>
+								<td><span class="blue big-number pull-right">{{res['import']}}</span></td>
+							</tr>
 
-								<tr class="status-warning">
-									<td class="icon"><i class="icon-refresh"></i></td>
-									<td>No importados porque ya existen</td>
-									<td><span class="big-number">{{res['exist']}}</span></td>
-								</tr>
+							<tr class="status-warning">
+								<td class="icon"><i class="icon-refresh"></i></td>
+								<td>No importados porque ya existen</td>
+								<td><span class="blue big-number pull-right">{{res['exist']}}</span></td>
+							</tr>
 
-								<tr class="status-error">
-									<td class="icon"><i class="icon-remove"></i></td>
-									<td>No importados por correo inválido </td>
-									<td><span class="big-number">{{res['invalid']}}</span></td>
-								</tr>
+							<tr class="status-error">
+								<td class="icon"><i class="icon-remove"></i></td>
+								<td>No importados por correo inválido </td>
+								<td><span class="blue big-number pull-right">{{res['invalid']}}</span></td>
+							</tr>
 
-								<tr class="status-error">
-									<td class="icon"><i class="icon-ban-circle"></i></td>
-									<td>No importados por correo bloqueado </td>
-									<td><span class="big-number">{{res['bloqued']}}</span></td>
-								</tr>
+							<tr class="status-error">
+								<td class="icon"><i class="icon-ban-circle"></i></td>
+								<td>No importados por correo bloqueado </td>
+								<td><span class="blue big-number pull-right">{{res['bloqued']}}</span></td>
+							</tr>
 
-								<tr class="status-warning">
-									<td class="icon"><i class="icon-random"></i></td>
-									<td>No importados porque estan duplicados en el archivo </td>
-									<td><span class="big-number">{{res['repeated']}}</span></td>
-								</tr>
+							<tr class="status-warning">
+								<td class="icon"><i class="icon-random"></i></td>
+								<td>No importados porque estan duplicados en el archivo </td>
+								<td><span class="blue big-number pull-right">{{res['repeated']}}</span></td>
+							</tr>
 
-								<tr class="status-pending">
-									<td class="icon"><i class="icon-exclamation-sign"></i></td>
-									<td>No importados por limite de contactos excedido </td>
-									<td><span class="big-number">{{res['limit']}}</span></td>
-								</tr>
-								<tr class="status-error">
-									<td class="icon"><i class="icon-warning-sign"></i></td>
-									<td>
-										<span class="news-title">Total contactos no importados</span>
-										<a href="{{ url('process/downoladerror/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
-									</td>
-									<td><span class="big-number">{{res['Nimport']}}</span></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
+							<tr class="status-pending">
+								<td class="icon"><i class="icon-exclamation-sign"></i></td>
+								<td>No importados por limite de contactos excedido </td>
+								<td><span class="blue big-number pull-right">{{res['limit']}}</span></td>
+							</tr>
+							<tr class="status-error">
+								<td class="icon"><i class="icon-warning-sign"></i></td>
+								<td>
+									<span class="news-title">Total contactos no importados</span>
+									<a href="{{ url('process/downoladerror/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
+								</td>
+								<td><span class="blue big-number pull-right">{{res['Nimport']}}</span></td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
