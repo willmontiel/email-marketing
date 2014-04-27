@@ -845,11 +845,25 @@ class ApiController extends ControllerBase
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors()), 422, 'Invalid data');	
+
+			/*
+			 * Inicialmente los errores se entregaban en un objeto así:
+			 * { errors: { fieldA: ['Mensaje 1', 'Mensaje 2'] , fieldB: [ ... ] , ...  } }
+			 * que es recibido por Ember y asignado al objeto del modelo...
+			 * pero con el nuevo funcionamiento de PROMESAS (ver el mixin Ember.SaveHandlerMixin)
+			 * lo convertimos en un gritter o en un App.errormessage
+			 * así que debemos aplanar estos mensajes de error (es decir, un solo texto!)
+			 */
+			$errors = $wrapper->getFieldErrors();
+			$errorstxt = '';
+			foreach ($errors as $f => $l) {
+				$errorstxt .= implode(',', $l);
+			}
+			return $this->setJsonResponse(array('errors' => $errorstxt), 422, 'Invalid data');	
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
+			return $this->setJsonResponse(array('status' => 'error', 'errors' => 'Error general. Contacte al administrador!'), 400, 'Error while creating new contact!');	
 		}
 
 		$contactdata = $wrapper->convertContactToJson($contact);

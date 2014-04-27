@@ -1,6 +1,44 @@
 Ember.SaveHandlerMixin = Ember.Mixin.create({
+	/*
+	 * Cuando hay un error muestra un gritter y luego redirige a "troute"
+	 */
 	handleSavePromise: function(p, troute, message, fn) {
+		console.log('Manejando promesa');
+		this.actuallyHandlePromise(p, troute, message, fn, this.showGritter, false);
+	},
+
+	/*
+	 * Cuando hay un error lo graba en App.errormessage y luego redirige a "troute"
+	 */
+	handleSavePromiseAppError: function(p, troute, message, fn) {
+		console.log('Manejando promesa');
+		this.actuallyHandlePromise(p, troute, message, fn, this.showAppError, false);
+	},
+
+
+	/*
+	 * Cuando hay un error muestra un gritter pero NO redirige a "troute"
+	 */
+	handleSavePromiseNoRollback: function(p, troute, message, fn) {
+		console.log('Manejando promesa');
+		this.actuallyHandlePromise(p, troute, message, fn, this.showGritter, true);
+	},
+
+	/*
+	 * Cuando hay un error lo graba en App.errormessage pero NO redirige a "troute"
+	 */
+	handleSavePromiseAppErrorNoRollback: function(p, troute, message, fn) {
+		console.log('Manejando promesa');
+		this.actuallyHandlePromise(p, troute, message, fn, this.showAppError, true);
+	},
+
+	/*
+	 * Este es el metodo que realmente hace el manejo de las promesas
+	 */
+	actuallyHandlePromise: function(p, troute, message, fn, callmeback, norollback) {
+		console.log('Manejando promesa DE VERDAD!');
 		var self = this;
+
 		p.then(function() {
 			self.transitionToRoute(troute);
 			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
@@ -11,9 +49,11 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 			if (error.status == 422) {
 				try {
 					var obj = $.parseJSON(error.responseText);
-					self.get("model").rollback();
-					self.transitionToRoute(troute);
-					$.gritter.add({title: 'Error', text: obj.errors, sticky: false, time: 3000});
+					if (!norollback) {
+						self.get("model").rollback();
+						self.transitionToRoute(troute);
+					}
+					callmeback(obj.errors);
 				}
 				catch (e) {
 				}
@@ -22,7 +62,22 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 				self.set('errors', {errormsg: error.statusText});
 			}
 		});
+	},
+
+	/*
+	 * Esta es la funcion que muestra el gritter de error
+	 */
+	showGritter: function(msg) {
+		$.gritter.add({title: 'Error', text: msg, sticky: false, time: 5000});
+	},
+
+	/*
+	 * Esta es la funcion que asigna el error
+	 */
+	showAppError: function(msg) {
+		App.set('errormessage', msg);
 	}
+
 });
 
 Ember.AclMixin = Ember.Mixin.create({		

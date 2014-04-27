@@ -82,7 +82,10 @@ App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 				this.content.set('isSubscribed', true);
 				App.set('errormessage', '');
 				App.set('segment', '');
-				this.handleSavePromise(this.content.save(), 'contacts', 'El contacto ha sido creado con exito!');
+
+				// Este metodo del MIXIN muestra errores en App.errormessage
+				// No hace rollback y tampoco hace transicion hacia otra ruta
+				this.handleSavePromiseAppErrorNoRollback(this.content.save(), 'contacts', 'El contacto ha sido creado con exito!', null, 'contacts.new');
 			}
 			else {
 				App.set('errormessage', 'La dirección de correo electrónico ingresada es invalida, por favor verifica la información');
@@ -93,41 +96,14 @@ App.ContactsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 		
 		cancel: function(){
 			App.set('errormessage', '');
-//			var record = this.get('model');
-//			if (record.get('isDirty')) {
-//				record.rollback();
-//			}
 			this.transitionToRoute("contacts");
 		}
 	}
 	,
 	emailChanged: function () {
 		var em = this.get('content.email');
-//		if (em.regexp()) {
-//			
-//		}
 	}.observes('content.email')
 });
-
-//App.ContactsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
-//	actions : {
-//		edit: function() {
-//			var filter = /^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
-//			if (filter.test(this.get('email'))) {
-//				App.set('errormessage', '');
-//				this.handleSavePromise(this.content.save(), 'contacts', 'El contacto fue actualizado exitosamente');
-//			}
-//			else {
-//				App.set('errormessage', 'La dirección de correo electrónico ingresada no es valida por favor verifique la información')
-//			}
-//		},
-//		cancel: function(){
-//			App.set('errormessage', '');
-//			this.get('model').rollback();
-//			this.transitionToRoute("contacts");
-//		}
-//	}
-//});
 
 App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
     actions : {
@@ -146,22 +122,7 @@ App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 });
 
 App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchReferencePagination, Ember.AclMixin, Ember.SaveHandlerMixin,{
-/*
-	historyMail: function(){
-		var content = null;
-		if(this.content.content === undefined) {
-			content = this.content;
-		}
-		else {
-			content = this.content.content;
-		}
-		for(var i = 0; i < content.length; i++) {
-			if(typeof content[i].get('mailHistory') === 'string') {
-				content[i].set('mailHistory', JSON.parse(content[i].get('mailHistory')));
-			}
-		}
-	}.observes('this.content'),
-*/	
+
 	init: function () {
 		this.set('acl', App.contactACL);
 	},
@@ -247,26 +208,7 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 	modelClass: App.Contact
 });
 
-//App.ContactsShowController = Ember.ObjectController.extend({
-//	historyMail: function(){
-//		var mailHistory = JSON.parse(this.content.get('mailHistory'));
-//		this.set('history', mailHistory);
-//	}.observes(this.content),
-//			
-//	actions :{
-//		subscribedcontact: function () {
-//			//this.set("isSubscribed", true);
-//			var self = this;
-//			self.content.set('isSubscribed', true);
-//			self.content.save();
-//		},
-//		unsubscribedcontact: function () {
-//			var self = this;
-//			self.content.set('isSubscribed', false);
-//			self.content.save();
-//		}
-//	}
-//});
+
 
 App.ContactsImportController = Ember.ObjectController.extend({
 	cancel: function() {
@@ -306,7 +248,7 @@ App.DatePickerField = Em.View.extend({
   }
 });
 
-App.DropDownSelect = Ember.View.Extend({
+App.DropDownSelect = Ember.View.extend({
 	templateName: 'dropdown',
 	didInsertElement: function() {
 		$('.dropdown-toggle').dropdown({
