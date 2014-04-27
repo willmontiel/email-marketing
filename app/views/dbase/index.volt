@@ -30,11 +30,7 @@
 		<thead></thead>
 		<tbody>
 		{%for item in page.items%}
-			<tr>
-				<td style="background-color: {{item.color}}">
-					
-				</td>
-
+			<tr style="border-left: solid 10px {{item.color}}">
 				<td>
 					
 					<a href="{{ url('dbase/show') }}/{{item.idDbase}}"><strong>{{item.name}}</strong></a><br>

@@ -665,7 +665,7 @@ table.middle > tbody > tr > th > td {
 }
 /*  Estilos cajas de numeros bases de datos   */
 .list-inline > li.card {
-	padding: 5px 30px;
+	padding: 5px 20px;
 	border-radius: 5px;
 	color: @brand-white;
 	text-align: center;
@@ -688,3 +688,23 @@ table.middle > tbody > tr > th > td {
 .bs-ember-href li a {
 	cursor:pointer;
 }
+
+
+
+.sm-striped-bg-base(@w) {
+	width: @w;
+	background-size: 30px 30px;
+	background-image: linear-gradient(
+		45deg, 
+		rgba(0, 0, 0, 0.1)  25%, 
+		transparent       25%, 
+		transparent       50%, 
+		rgba(0, 0, 0, 0.1)  50%, 
+		rgba(0, 0, 0, 0.1)  75%, 
+		transparent       75%, 
+		transparent
+	);  
+}
+
+.sm-striped-bg { .sm-striped-bg-base(12px); }
+.sm-striped-bg-sm { .sm-striped-bg-base(4px); }

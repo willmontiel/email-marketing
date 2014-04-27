@@ -144,7 +144,7 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 			t.set('content', d.content);
 		});
 	},
-	
+
 	actions: {
 		search: function() {
 			this.refreshRecords();

@@ -1,10 +1,5 @@
-<tr {{ ' {{bind-attr class="isExpanded:spreadout"}} ' }} >
-	<td>
-		<div class="estado-contact">
-			<div {{'{{ bind-attr class="isActive:active:inactive inactive"}}'}}>&nbsp
-			<div {{'{{ bind-attr class="isSubscribed:suscribed:unsubscribed unsubscribed"}}'}}>&nbsp
-		</div>
-	</td>
+<tr {{ ' {{bind-attr class="isExpanded:spreadout" style="visualCues"}}' }} >
+	{# Por ahora eliminar fila 
 	<td>
 		<form role="form">
 			<div class="checkbox">
@@ -14,20 +9,24 @@
 			</div>
 		</form>
 	</td>
+	#}
 	<td>
 		<label {{ '{{action "expand" this}}' }}>
 		{#<label>#}
 			{#{{ '{{#link-to "contacts.show" this}}' }}{{ '{{email}}' }}{{ '{{/link-to}}' }}#}
 			<a href="">{{ '{{email}}' }}</a>
 			{{' {{#if isEmailBlocked}} '}}
-				<span class="badge badge-dark-red">Correo bloqueado</span>
+				<span class="label label-default">Bloqueado</span>
 			{{' {{/if }} '}}
 			{{ '{{#if isBounced}}' }}
-				<span class="badge badge badge-red">Rebotado</span>
+				<span class="label label-warning">Rebotado</span>
 			{{ '{{/if}}' }}	
 			{{ '{{#if isSpam}}' }}
-				<span class="badge badge badge-red">Reportado Spam:&nbsp</span>
+				<span class="label label-danger">Spam</span>
 			{{ '{{/if}}' }}
+			{{ '{{#unless isActive}}' }}
+				<span class="label label-info">Inactivo</span>
+			{{ '{{/unless}}' }}
 			{{' {{#if errors.email}} '}}
 				<span class="text text-error">{{'{{errors.email}}'}}</span>
 			{{' {{/if }} '}}
