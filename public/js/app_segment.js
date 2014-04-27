@@ -90,7 +90,8 @@ App.SegmentsIndexController = Ember.ArrayController.extend(Ember.MixinPagination
 
 App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	
-	criteria: Ember.A(),		
+	criteria: Ember.A(),
+	disableRemoveCriteria: true,		
 	
 	needs: ['dbase'],
 	
@@ -143,10 +144,9 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 			} else {
 				this.set('limitCriteria', false);
 			}
-			if( this.criteria.length > 1) {
-				this.set('defaultCriteria', false);
-			} 
-			
+			if ( this.criteria.length > 1 ) {
+				this.set('disableRemoveCriteria', false);
+			}
 		},
 
 		aConditionLess: function(data) {
@@ -156,9 +156,10 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 			} else {
 				this.set('limitCriteria', true);
 			}
-			if( this.criteria.length < 2) {
-				this.set('defaultCriteria', true);
-			} 
+
+			if ( this.criteria.length < 2 ) {
+				this.set('disableRemoveCriteria', true);
+			}
 		},
 				
 		save : function() {
@@ -179,7 +180,11 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 		},
 		
 		reset : function() {
+			this.set('model.dbase', null);
 			this.set('dbaseSelected', false);
+			this.set('criteria', new Ember.A([{}]));
+			this.set('disableRemoveCriteria', true);
+			this.set('limitCriteria', false);
 		},
 		
 		cancel: function(){

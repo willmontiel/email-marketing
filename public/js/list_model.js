@@ -8,7 +8,7 @@ if (!App.Dbase) {
 		color: DS.attr('string'),
 		lists: DS.hasMany('list'),
 		style: function () {
-			return 'background-color: ' + this.get('color');
+			return 'background-color: ' + this.get('color') + ';';
 		}.property('color')
 	});
 }

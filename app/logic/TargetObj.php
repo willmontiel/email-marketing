@@ -23,8 +23,8 @@ class TargetObj
 	{
 		$this->account = $account;
 	}
-	
-	public function setIdsDbase($idsDbase)
+
+	public function setIdsDbase($idsDbase = null)
 	{
 		$this->idsDbase = $idsDbase;
 	}

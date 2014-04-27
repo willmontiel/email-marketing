@@ -30,18 +30,31 @@
 		<thead></thead>
 		<tbody>
 		{%for item in page.items%}
-			<tr>
+			<tr style="border-left: solid 10px {{item.color}}">
 				<td>
-					<a href="{{url('statistic/dbase')}}/{{item.idDbase}}"><i class="icon-bar-chart icon-2x"></i></a>
+					
 					<a href="{{ url('dbase/show') }}/{{item.idDbase}}"><strong>{{item.name}}</strong></a><br>
 						{{item.description}}
 				</td>
 				<td>
 					<ul class="list-inline pull-right">
-						<li>
-							<h4 class="green"><span>Activos:</span> {{item.Cactive|numberf}}</h4>
+						<li class="card cont">
+							<span class="number">{{item.Cactive|numberf}}</span>
+							<img src="{{url('')}}b3/images/icon-user.png" class="center-block" />
+							<p>Contactos</p>
+						</li>
+						<li class="card list">
+							<span class="number"> {{item.Cactive|numberf}} </span>
+							<img src="{{url('')}}b3/images/icon-list.png" class="center-block" />
+							<p>Listas </p> {#  Cambiar porque esta mostrando activos  #}
+						</li>
+						<li class="card seg">
+							<span class="number"> {{item.Cactive|numberf}} </span>
+							<img src="{{url('')}}b3/images/icon-pie.png" class="center-block" />
+							<p>Segmentos </p> {#  Cambiar porque esta mostrando activos  #}
 						</li>
 
+{#
 						<li>
 							<h4 class="gray"><span>Inactivos:</span> {{get_inactive(item)|numberf}}</h4>
 						</li>
@@ -57,17 +70,19 @@
 						<li>
 							<h4 class="red"><span>Spam:</span> {{item.Cspam|numberf}}</h4>
 						</li>
+#}
 					</ul>
 				</td>
 				<td>
 					<a href="{{ url('dbase/edit/') }}{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
 					<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
+					<a href="{{url('statistic/dbase')}}/{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span></a>
 				</td>
 			</tr>
 	{%endfor%}
 		</tbody>
 	</table>
-	
+	<div class="space"></div>
 	<div class="col-sm-12 text-center">
 		<ul class="pagination">
 			<li class="{{ (page.current == 1)?'disabled':'enabled' }}">
@@ -89,13 +104,6 @@
 	</div>
 
 	<!-- Fin de mi lista de bases de datos -->
-</div>
-<div class="row">
-	<div class="span5 text-right"> 
-		<a href="{{ url('dbase/new') }}" class="btn btn-default">
-			<i class="icon-plus"></i> Crear base de datos
-		</a>
-	</div>
 </div>
 
 {#  Este es el modal (lightbox) que se activa al hacer clic en el boton eliminar   #}

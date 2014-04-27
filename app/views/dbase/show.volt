@@ -92,320 +92,340 @@
 <div id="emberAppContainer">
 	<script type="text/x-handlebars"> 
 		<div class="row">
+			<h4 class="sectiontitle">Base de datos: {{sdbase.name}}</h4>
 			<div class="box-header">
-				<ul class="nav nav-tabs nav-tabs-left">
+				<ul class="nav nav-tabs nav-tabs-left bs-ember-href">
 					{{'{{#link-to "index" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>General</a>{{/link-to}}'}}
 					{{'{{#link-to "fields" tagName="li" href=false}}<a {{bind-attr href="view.href"}}>Campos</a>{{/link-to}}'}}
 					{{'{{#link-to "contacts" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Contactos</a>{{/link-to}}'}}
 					{{'{{#link-to "forms" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Formularios</a>{{/link-to}}'}}
 				</ul>
 			</div>
+			<div class="space"></div>
 			{{ "{{outlet}}" }}
 		</div>
 	</script>
 	<script type="text/x-handlebars" data-template-name="fields/index">       
-		<div class="box-section news with-icons">
-			<div class="news-time">
-			</div>
-			<div class="news-content">
-				<div class="news-title">
-					Campos de la Base de Datos
-				</div>
-				<div class="news-text">
-					Esta seccion esta dedicada a la Lectura
-					y Edicion de los Campos Personalizados
-				</div>
-			</div>
+		<div class="pull-right">
+			{{'{{#link-to "fields.add" class="btn btn-default btn-sm extra-padding" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/link-to}}'}}
 		</div>
-		<div class="row">
-			<div class="pull-right">
-				{{'{{#link-to "fields.add" class="btn btn-default" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/link-to}}'}}
-			</div>
-		</div>
-		<div class="row">
-			<table class="table table-normal">
-				<thead>
-					<tr>
-						<td>Etiqueta</td>
-						<td>Tipo</td>
-						<td>Requerido</td>
-						<td>Valor por Defecto</td>
-						<td>Accion</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Email</td>
-						<td>Text</td>
-						<td>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<td>Etiqueta</td>
+					<td>Tipo</td>
+					<td>Requerido</td>
+					<td>Valor por Defecto</td>
+					<td>Accion</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Email</td>
+					<td>Text</td>
+					<td>
+						<div class="icheckbox_flat-aero checked hover">
+						</div>
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Nombre</td>
+					<td>Text</td>
+					<td>
+						<div class="icheckbox_flat-aero hover">
+						</div>
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Apellido</td>
+					<td>Text</td>
+					<td>
+						<div class="icheckbox_flat-aero hover">
+						</div>
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+			{{'{{#each model}}'}}
+				<tr>
+					<td>{{'{{name}}'}}</td>
+					<td>{{'{{type}}'}}</td>
+					<td>
+						{{ '{{#if required}}' }}
 							<div class="icheckbox_flat-aero checked hover">
 							</div>
-						</td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>Nombre</td>
-						<td>Text</td>
-						<td>
+						{{ '{{else}}' }}
 							<div class="icheckbox_flat-aero hover">
 							</div>
-						</td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>Apellido</td>
-						<td>Text</td>
-						<td>
-							<div class="icheckbox_flat-aero hover">
-							</div>
-						</td>
-						<td></td>
-						<td></td>
-					</tr>
-				{{'{{#each model}}'}}
-					<tr>
-						<td>{{'{{name}}'}}</td>
-						<td>{{'{{type}}'}}</td>
-						<td>
-							{{ '{{#if required}}' }}
-								<div class="icheckbox_flat-aero checked hover">
-								</div>
-							{{ '{{else}}' }}
-								<div class="icheckbox_flat-aero hover">
-								</div>
-							{{ '{{/if}}' }}
-						</td>
-						<td>{{'{{defaultValue}}'}}</td>
-						<td>
-							<div class="pull-right">
-								<div class="btn-group">
-									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li>{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled"}}' }}<i class="icon-pencil"></i> Editar{{'{{/link-to}}'}}</li>
-										<li>{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled"}}'}}<i class="icon-trash"></i> Eliminar {{'{{/link-to}}'}}</li>
-									</ul>
-								</div>
-							</div>
-
-
-						</td>
-					</tr>
-				{{'{{else}}'}}
-					<tr><td colspan="5">No hay campos personalizados</td></tr>
-				{{'{{/each}}'}}
-				</tbody>
-			</table>
-		</div>
+						{{ '{{/if}}' }}
+					</td>
+					<td>{{'{{defaultValue}}'}}</td>
+					<td>
+						{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<i class="icon-pencil"></i> Editar{{'{{/link-to}}'}}
+						{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-delete btn-sm extra-padding"}}'}}<i class="icon-trash"></i> Eliminar {{'{{/link-to}}'}}
+					</td>
+				</tr>
+			{{'{{else}}'}}
+				<tr><td colspan="5">No hay campos personalizados</td></tr>
+			{{'{{/each}}'}}
+			</tbody>
+		</table>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields">
 		{{'{{outlet}}'}}
 	</script>
-	<div class="row">
-		<div class="pull-right">
-			<a href="{{url('dbase')}}" class="btn btn-default"><i class="icon-reply"></i> Bases de datos</a>
-		</div>
-	</div>
 		<!------------------ Ember! ---------------------------------->
+		{#   Copntenido del tab general   #}
 	<div id="emberAppContainer">
 	<script type="text/x-handlebars" data-template-name="index">
 		<h4>Información de la base de datos</h4>
-		<div class="news-title">
-			{{sdbase.name}}
-		</div>
-		<div class="news-text">
-			<p>{{sdbase.description}}</p>
-			<p>{{sdbase.Cdescription}}</p>
-			Creada en {{date('Y-m-d', sdbase.createdon)}}<br />
-			Actualizada en {{date('Y-m-d', sdbase.updatedon)}}
-		</div>
-		<div class="row">
-			<div class="col-md-3">
-				<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default">Editar</a>
-			</div>
-		</div>
-		<h4>Información de contactos</h4>
-		<table class="table table-normal">
+		<table class="table">
 			<thead></thead>
 			<tbody>
 				<tr>
-					<td><i class="icon-user"></i> Contactos totales</td>
-					<td class="status-success"><span class="label label-blue">{{ sdbase.Ctotal|numberf }}</span></td>
-				</tr>
+					<td style="background-color: {{sdbase.color}} ;">
 
-				<tr>
-					<td><i class="icon-ok"></i> Contactos Activos</td>
-					<td class="status-success"><span class="label label-green">{{ sdbase.Cactive|numberf }}</span></td>
-				</tr>
+					</td>
+					<td>
+						<strong>{{sdbase.name}}</strong>
+						<p>{{sdbase.description}}</p>
+						<p>{{sdbase.Cdescription}}</p>
+					</td>
+					<td>
+						<p>Creada en <strong>{{date('Y-m-d', sdbase.createdon)}}</strong></p>
+					</td>
+					<td>
+						<p>Actualizada en <strong>{{date('Y-m-d', sdbase.updatedon)}}</strong></p>
+					</td>
+					<td>
+					<td>
+						<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
+						<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span></a>
+					</td>
 
-				<tr>
-					<td><i class="icon-question-sign"></i> Contactos Inactivos</td>
-					<td class="status-error"><span class="label label-gray"> {{ get_inactive(sdbase)|numberf }}</span></td>
-				</tr>
-
-				<tr>
-					<td><i class="icon-check-empty"></i> Contactos Desuscritos</td>
-					<td class="status-success"><span class="label label-warning"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
-				</tr>
-
-				<tr>
-					<td><i class="icon-retweet"></i> Contactos Rebotados</td>
-					<td class="status-success"><span class="label label-red"> {{sdbase.Cbounced|numberf }}</span></td>
-				</tr>
-
-				<tr>
-					<td><i class="icon-exclamation-sign"></i> Contactos Spam</td>
-					<td class="status-success"><span class="label label-red"> {{sdbase.Cspam|numberf }}</span></td>
 				</tr>
 			</tbody>
-			<tfooter></tfooter>
+			<tfoot></tfoot>
+		</table>	
+		<h4>Información de contactos</h4>
+		<table class="table table-striped">
+			<thead></thead>
+			<tbody>
+				<tr>
+					<td>Contactos totales</td>
+					<td><span class="blue big-number pull-right">{{ sdbase.Ctotal|numberf }}</span></td>
+					<td><span class="glyphicon glyphicon-user"></span></td>
+				</tr>
+
+				<tr>
+					<td>Contactos Activos</td>
+					<td><span class="blue big-number pull-right">{{ sdbase.Cactive|numberf }}</span></td>
+					<td><span class="glyphicon glyphiconicon-ok"></span></td>
+				</tr>
+
+				<tr>
+					<td>Contactos Inactivos</td>
+					<td><span class="blue big-number pull-right"> {{ get_inactive(sdbase)|numberf }}</span></td>
+					<td><span class="glyphicon glyphiconicon-thumbs-up"></span></td>
+				</tr>
+
+				<tr>
+					<td>Contactos Desuscritos</td>
+					<td><span class="blue big-number pull-right"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
+					<td><span class="glyphicon glyphiconicon-thumbs-down"></span></td>
+				</tr>
+
+				<tr>
+					<td>Contactos Rebotados</td>
+					<td><span class="blue big-number pull-right"> {{sdbase.Cbounced|numberf }}</span></td>
+					<td><span class="glyphicon glyphiconicon-remove"></span></td>
+				</tr>
+
+				<tr>
+					<td>Contactos Spam</td>
+					<td><span class="blue big-number pull-right"> {{sdbase.Cspam|numberf }}</span></td>
+					<td><span class="glyphicon glyphiconicon-exclamation-sign"></span></td>
+				</tr>
+			</tbody>
+			<tfoot></tfoot>
 		</table>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/add">
-		<div class="row">
-			<div class="box span4">
-				<div class="box-header">
-					<div class="title">
-						Agregar un nuevo campo
-					</div>
+		<h4>Agregar un nuevo campo</h4>
+			{{ '{{#if errors.errormsg}}' }}
+				<div class="alert alert-error">
+					{{ '{{errors.errormsg}}' }}
 				</div>
-				<div class="box-content padded">
-					{{ '{{#if errors.errormsg}}' }}
-						<div class="alert alert-error">
-							{{ '{{errors.errormsg}}' }}
+			{{ '{{/if}}' }}
+			<div class="col-md-8">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label for="" class="col-sm-4 control-label">Nombre del Campo</label>
+						<div class="col-md-6">
+							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus" class="form-control"}} '}}
 						</div>
-					{{ '{{/if}}' }}
-					<form>
-						<label>Nombre del Campo</label>
-						{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus"}} '}}
-
-						<label>Tipo de Formato del Campo</label>
+					</div>
+					<div class="form-group">
+						<label for="" class="col-sm-4 control-label">Tipo de Formato del Campo</label>
+						<div class="col-md-6">
 							{{ '{{view Ember.Select
 									contentBinding="App.types"
 									optionValuePath="content.id"
 									optionLabelPath="content.type"
-									valueBinding="type" id="type"}}'
+									valueBinding="type" id="type"
+									class="form-control"}}'
 							 }}
-						<br />
-							{{ '{{#if isText}}' }}
-								{{ '{{partial "fields/text"}}' }}
-							{{ '{{/if}}' }}
-							{{ '{{#if isNumerical}}' }}
-								{{ '{{partial "fields/numerical"}}' }}
-							{{ '{{/if}}' }}
-
-						<label>Seleccione si desea que el campo sea requerido</label>
-						{{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
-
-						<br /><br />
-						{{ '{{#unless isDate}}' }}
-							<label>Valor por defecto </label>
-							{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="defaultValue"}}' }}
-						{{ '{{/unless}}' }}
-
-						{{ '{{#if isSelect}}' }}
-							{{ '{{partial "fields/select"}}' }}
-						{{ '{{/if}}' }}
-
-						<br />
-						<button class="btn btn-blue" {{' {{action save this}} '}}>Grabar</button>
-						<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</script>
-
-	<script type="text/x-handlebars" data-template-name="fields/edit">
-		<div class="row">
-			<div class="box span4">
-				<div class="box-header">
-					<div class="title">
-						Editar un campo personalizado
+						</div>
 					</div>
-				</div>
-				<div class="box-content padded">
-					<form>
-						{{ '{{#if errors.errormsg}}' }}
-							<div class="alert alert-error">
-								{{ '{{errors.errormsg}}' }}
-							</div>
-						{{ '{{/if}}' }}
-						<label>Nombre del Campo</label>
-						{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name"}} '}}
-
-						<br />
 						{{ '{{#if isText}}' }}
 							{{ '{{partial "fields/text"}}' }}
 						{{ '{{/if}}' }}
 						{{ '{{#if isNumerical}}' }}
 							{{ '{{partial "fields/numerical"}}' }}
 						{{ '{{/if}}' }}
+					<div class="form-group">
+						<label for="" class="col-sm-4 control-label">Seleccione si desea que el campo sea requerido</label>
+						<div class="col-md-6">
+							{{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
+						</div>
+					</div>
 
-						<label>Seleccione si desea que el Campo sea Obligatorio</label>
-						{{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
+					{{ '{{#unless isDate}}' }}
+					<div class="form-group">
+						<label for="" class="col-sm-4 control-label">Valor por defecto </label>
+						<div class="col-md-6">
+							{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="defaultValue" class="form-control"}}' }}
+						</div>
+					</div>
+					{{ '{{/unless}}' }}
 
-						<br /><br />
-						{{ '{{#unless isDate}}' }}
-							<label>Valor por defecto </label>
-							{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="value_default"}}' }}
-						{{ '{{/unless}}' }}
+					{{ '{{#if isSelect}}' }}
+						{{ '{{partial "fields/select"}}' }}
+					{{ '{{/if}}' }}
 
-						{{ '{{#if isSelect}}' }}
-							{{ '{{partial "fields/select"}}' }}
-						{{ '{{/if}}' }}
-						<br />	
-						<button class="btn btn-blue" {{' {{action edit this}} '}}>Editar</button>
-						<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-					</form>
-				</div>
+					<div class="form-actions">
+						<div class="row">
+							<div class="col-md-3 col-md-offset-5">
+								<button class="btn btn-guardar btn-sm extra-padding" {{' {{action save this}} '}}>Grabar</button>
+							</div>
+							<div class="col-md-3">
+								<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+							</div>
+						</div>
+					</div>
+				</form>
 			</div>
+	</script>
+
+	<script type="text/x-handlebars" data-template-name="fields/edit">
+		<h4>Editar un campo personalizado</h4>
+		<div class="col-md-6">
+			{{ '{{#if errors.errormsg}}' }}
+				<div class="alert alert-error">
+					{{ '{{errors.errormsg}}' }}
+				</div>
+			{{ '{{/if}}' }}
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-sm-4 control-label">Nombre del Campo</label>
+					<div class="col-md-6">
+						{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" class="form-control"}} '}}
+					</div>
+				</div>
+				{{ '{{#if isText}}' }}
+					{{ '{{partial "fields/text"}}' }}
+				{{ '{{/if}}' }}
+				{{ '{{#if isNumerical}}' }}
+					{{ '{{partial "fields/numerical"}}' }}
+				{{ '{{/if}}' }}
+				<div class="form-group">
+					<label class="col-sm-4 control-label">Seleccione si desea que el Campo sea Obligatorio</label>
+					<div class="col-md-5">
+						{{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
+					</div>
+				</div>
+
+				{{ '{{#unless isDate}}' }}
+				<div class="form-group">
+					<label class="col-sm-4 control-label">Valor por defecto </label>
+					<div class="col-md-6">
+						{{ '{{view Ember.TextField valueBinding="defaultValue" placeholder="Valor por defecto" id="value_default" class="form-control"}}' }}
+					</div>
+				{{ '{{/unless}}' }}
+
+				{{ '{{#if isSelect}}' }}
+					{{ '{{partial "fields/select"}}' }}
+				{{ '{{/if}}' }}
+				</div>
+				<div class="space"></div>
+				<div class="form-actions pull-right">
+					<div class="row">
+						<div class="col-md-6">
+							<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+						</div>
+						<div class="col-md-6">
+							<button class="btn btn-guardar btn-sm extra-padding" {{' {{action edit this}} '}}>Editar</button>
+						</div>
+					</div>
+				</div>
+			</form>
 		</div>
-	</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/remove">
-		<div class="row">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Eliminar un campo personalizado
-					</div>
+		<h4>Eliminar un campo personalizado</h4>
+		<div class="bs-callout bs-callout-danger">			
+			<p>Si elimina este campo personalizado se borrará toda la información de los contactos relacionada con este Campo</p>
+		</div>
+		<p>¿Esta seguro que desea eliminar el Campo <strong>{{'{{name}}'}}</strong>?</p>
+			{{ '{{#if errors.errormsg}}' }}
+				<div class="alert alert-error">
+					{{ '{{errors.errormsg}}' }}
 				</div>
-				<div class="box-content padded">			
-					<p>Si elimina este campo personalizado se borrará toda la información de los contactos relacionada con este Campo</p>
-					<p>¿Esta seguro que desea eliminar el Campo <strong>{{'{{name}}'}}</strong>?</p>
-					{{ '{{#if errors.errormsg}}' }}
-						<div class="alert alert-error">
-							{{ '{{errors.errormsg}}' }}
-						</div>
-					{{ '{{/if}}' }}
-					<button {{'{{action eliminate this}}'}} class="btn btn-danger">Eliminar</button>
-					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>	
-				</div>
-			</div>
+			{{ '{{/if}}' }}
+			<button {{'{{action eliminate this}}'}} class="btn btn-danger btn-sm extra-padding">Eliminar</button>
+			<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>	
 		</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/_select">
-		<label for="values">Opciones de la lista</label>
-		{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor" id="values"}}' }}
+		<div class="form-group">
+			<label for="values" class="col-sm-4 control-label">Opciones de la lista</label>
+			<div class="col-md-6">
+				{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor" id="values"}}' }}
+			</div>
+		</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/_text">
-		<label>Longitud Maxima del Campo</label>
-		{{ '{{view Ember.TextField valueBinding="maxLength" placeholder="Letras" id="maxlong"}}' }}
+		<div class="form-group">
+			<label for="" class="col-sm-4 control-label">Longitud Maxima del Campo</label>
+			<div class="col-md-6">
+				{{ '{{view Ember.TextField valueBinding="maxLength" placeholder="Letras" id="maxlong" class="form-control"}}' }}
+			</div>
+		</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/_numerical">
-		<label>Valor Minimo</label>
-		{{ '{{view Ember.TextField valueBinding="minValue" placeholder="Inferior" id="limit_Inf"}}' }}
-
-		<label for="limit_Sup">Valor Maximo</label>
-		{{ '{{view Ember.TextField valueBinding="maxValue" placeholder="Superior" id="limit_Sup"}}' }}
+		<div class="form-group">
+			<label for="" class="col-sm-4 control-label">Valor Minimo</label>
+			<div class="col-md-6">
+				{{ '{{view Ember.TextField valueBinding="minValue" placeholder="Inferior" id="limit_Inf" class="form-control"}}' }}
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="limit_Sup" class="col-sm-4 control-label">Valor Maximo</label>
+			<div class="col-md-6">
+				{{ '{{view Ember.TextField valueBinding="maxValue" placeholder="Superior" id="limit_Sup" class="form-control"}}' }}
+			</div>
+		</div>
 	</script>
 
 	</div>

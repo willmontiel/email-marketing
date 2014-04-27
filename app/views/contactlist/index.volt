@@ -136,7 +136,7 @@
 					<tbody>
 				{{'{{#each model}}'}}
 						<tr>
-							<td {{' {{bind-attr style="dbase.style"}} '}}>
+							<td class="sm-striped-bg" {{' {{bind-attr style="dbase.style"}} '}}>
 							</td>
 							<td>
 								<a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts"><strong>{{ '{{name}}' }}</strong></a>
@@ -359,13 +359,10 @@
 		</script>
 		{#  ######## /Handlebars de eliminar lista de contactos ######### #}
 
-
-
 	{{ partial("contactlist/blockedemail_partial") }}
 
 		<!-- SM -->
 	<div class="prueba"></div>
-
 	{{ partial("contactlist/segment_partial")}}
 </div>
 {% endblock %}

@@ -14,6 +14,8 @@ class ContactsController extends ControllerBase
 
 	public function newbatchAction($idContactlist)
 	{
+		$log = $this->logger;
+
 		$this->flashSession->error('');
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
@@ -32,71 +34,108 @@ class ContactsController extends ControllerBase
 		}
 		
 		$eachrow = explode("\n", $contents);
-		$sizearray = count($eachrow);
-		
-		for($i=0; $i<$sizearray; $i++){
-				$eachdata = explode(",", trim($eachrow[$i]));
 
-				if(!empty($eachdata[0]))
-				{
-					$status = true;
-					if(isset($eachdata[0]))	{
-						
-						$email = $eachdata[0];
-						
-					} else {						
-						$status = false;
+		$emailsToFind = array();
+		/*
+		 * =================================================================================
+		 * NOTA
+		 * Modifique este codigo, mejorando la lectura y rapidez en validacion de repetidos
+		 * de repetidos
+		 * =================================================================================
+		 */
+		foreach ($eachrow as $e) {
+			$eachdata = explode(",", trim($e));
 
-					}
-					if(isset($eachdata[1]))	{
-						
-						$name = trim($eachdata[1]);
-						
-					} else {						
-						$name = "";
-						
-					}
-					if(isset($eachdata[2]))	{
-						
-						$last_name = trim($eachdata[2]);
-						
-					} else {
-						$last_name = "";
-						
-					}
-					
-					if(isset($batch)){
-						foreach ($batch as $b){
-							if($b['email'] === $email) {
-								$status=false;
-							}
-						}
-					}
-					
-					$batch[] = array(
+			if(isset($eachdata[0]) && !empty($eachdata[0])) {
+				$email = $eachdata[0];
+				$name = (isset($eachdata[1]))?trim($eachdata[1]):'';
+				$last_name = (isset($eachdata[2]))?trim($eachdata[2]):'';
+				
+				// Evitar duplicados
+				if (!isset($emailsToFind[$email])) {
+					$batchreal[] = array(
 						'email' => $email,
 						'name' => $name,
 						'lastName' => $last_name,
-						'status' => $status,
 					);
-					
-					if($status) {
-						$batchreal[] = array(
-							'email' => $email,
-							'name' => $name,
-							'lastName' => $last_name,
-						);
-					}
+					$emailsToFind[$email] = true;
 				}
-				
+			}
 		}
 		
-		$this->session->set('batch_data', $batchreal);
+		/*
+		 * =================================================================================
+		 * NOTA
+		 * Actualice esta parte, unificando el proceso de creacion de los contactos
+		 * en una sola accion.
+		 * REVISAR!!!
+		 * =================================================================================
+		 */
+		$contactsAdded = array();
+		$contactsCreated = array();
+		$contactsErrors = array();
+		foreach ($batchreal as $batchC) {
+			// Crear el nuevo contacto:
+			$wrapper = new ContactWrapper();
+			$wrapper->setAccount($this->user->account);
+			$wrapper->setIdDbase($list->idDbase);
+			$wrapper->setIdContactlist($idContactlist);
+			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
+
+			$newcontact = new stdClass();
 			
-		$totalValidContacts = count($batchreal);
+			$newcontact->email = $batchC['email'];
+			$newcontact->name = $batchC['name'];
+			$newcontact->lastName = $batchC['lastName'];
+			$newcontact->status = "";
+			$newcontact->activatedOn = "";
+			$newcontact->bouncedOn = "";
+			$newcontact->subscribedOn = "";
+			$newcontact->unsubscribedOn = "";
+			$newcontact->spamOn = "";
+			$newcontact->ipActive = "";
+			$newcontact->ipSubscribed = "";
+			$newcontact->updatedOn = "";
+			$newcontact->createdOn = "";
+			$newcontact->isBounced = "";
+			$newcontact->isSubscribed = 1;
+			$newcontact->isSpam = "";
+			$newcontact->isActive = 1;
+
+
+			$info = $batchC;
+			$info['isValid'] = false;
+			try {
+				$contact = $wrapper->addExistingContactToListFromDbase($newcontact->email, $list);
+				if(!$contact) {
+					$contact = $wrapper->createNewContactFromJsonData($newcontact, $list);
+					$info['status'] = 'Nuevo contacto creado';
+					$info['isValid'] = true;
+					$contactsCreated[] = $info;
+				}
+				else {
+					$info['status'] = 'Contacto existente adicionado a la lista';
+					$info['isValid'] = true;
+					$contactsCreated[] = $info;
+				}
+			}
+			catch (\InvalidArgumentException $e) {
+				$log->log('Exception: [' . $e . ']');
+				$info['status'] = $e->getMessage();
+				$contactsErrors[] = $info;
+			}
+			catch (\Exception $e) {
+				$info['status'] = 'Error general -- contacte al administrador';
+				$contactsErrors[] = $info;
+				$log->log('Exception: [' . $e . ']');
+			}
+		}
+
+		$totalValidContacts = count($contactsCreated) + count($contactsAdded);
 		$this->view->setVar("account", $this->user->account);
 		$this->view->setVar("total", $totalValidContacts);
-		$this->view->setVar("batch", $batch);	
+		$this->view->setVar("errors", count($contactsErrors));
+		$this->view->setVar("batch", array_merge($contactsCreated, $contactsAdded, $contactsErrors));
 		$this->view->setVar("idContactlist", $idContactlist);
 		$this->view->currentActiveContacts = $this->user->account->countActiveContactsInAccount();
 		
@@ -272,6 +311,7 @@ class ContactsController extends ControllerBase
 			$fields[$field->idCustomField] = $this->request->getPost($namefield);
 		}
 		
+
 		$destiny =  "../../../tmp/ifiles/".$nameFile;
 		$idAccount = $this->user->account->idAccount;
 		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);

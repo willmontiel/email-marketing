@@ -11,59 +11,13 @@
 		{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js') }}
 		{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 		{#{{ javascript_include('javascripts/moment/moment.min.js')}}#}
-<script type="text/javascript">
+	<script type="text/javascript">
 		var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};
 
-		var myContactModel = {
-			email: DS.attr( 'string' ),
-			name: DS.attr( 'string' ),
-			lastName: DS.attr( 'string' ),
-			status: DS.attr( 'number' ),
-			activatedOn: DS.attr('string'),
-			bouncedOn: DS.attr('string'),
-			subscribedOn: DS.attr('string'),
-			unsubscribedOn: DS.attr('string'),
-			spamOn: DS.attr('string'),
-			ipActive: DS.attr('string'),
-			ipSubscribed: DS.attr('string'),
-			updatedOn: DS.attr('string'),
-			createdOn: DS.attr('string'),
-			isBounced: DS.attr('boolean'),
-			isSubscribed: DS.attr('boolean'),
-			isSpam: DS.attr('boolean'),
-			isActive: DS.attr('boolean'),
-			isEmailBlocked: DS.attr('boolean'),
-			mailHistory: DS.attr('string'),
-			list: DS.belongsTo('list'),
-			isReallyActive: function () {
-				if (this.get('isActive') && this.get('isSubscribed') && !(this.get('isSpam') || this.get('isBounced'))) {
-					return true;
-				}
-				return false;
-			}.property('isSubscribed,isActive'),
-			mailHistoryArray: function () {
-				return JSON.parse(this.get('mailHistory'))
-			}.property()
+		{{ partial('partials/contact_model_definition', ['include_list' : true]) }}
 
-		{%for field in fields%}
-			,
-				{% if field.type == "Text" %}
-					campo{{field.idCustomField }}: DS.attr('string')
-				{% elseif field.type == "Date" %}
-					campo{{field.idCustomField }}: DS.attr('string')
-				{% elseif field.type == "TextArea" %}
-					campo{{field.idCustomField }}: DS.attr('string')
-				{% elseif field.type == "Numerical" %}
-					campo{{field.idCustomField }}: DS.attr('number')
-				{% elseif field.type == "Select" %}
-					campo{{field.idCustomField }}: DS.attr('string')
-				{% elseif field.type == "MultiSelect" %}
-					campo{{field.idCustomField }}: DS.attr('string')
-				{% endif %}
-			
-			{%endfor%}
-		};
+
 	</script>
 	{{ javascript_include('js/app_contactlist_contacts.js') }}
 	{{ javascript_include('js/app_contact.js') }}
@@ -123,8 +77,8 @@
 		<script type="text/x-handlebars" data-template-name="contacts">
 			<div class="row wrap">
 				<div class="sparkline-row col-xs-3">
-					<h4 class="blue">Lista de Iván </h4>
-					<span>Lista de prueba para iván</span>
+					<h4 class="blue"> {{ datalist.name }}</h4>
+					<span>{{ datalist.description}}</span>
 				</div>
 				<ul class="list-inline numbers-contacts pull-right">
 					<li>Contactos totales <br/> <span class="blue big-number"> {{'{{lista.totalContactsF}}'}} </span></li>

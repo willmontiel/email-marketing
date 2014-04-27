@@ -32,7 +32,7 @@ class SelectedFieldsMapper
 	 */
 	public function assignMapping($map)
 	{
-		if (!isset($map['email'])) {
+		if (!isset($map['email']) || $map['email'] == -1) {
 			throw new \InvalidArgumentException('The "email" field is not present on the mapping, and it should!');
 		}
 		$this->rawMap = $map;
@@ -68,7 +68,7 @@ class SelectedFieldsMapper
 
 		// Recorrer la lista
 		foreach ($m as $idfield => $position) {
-			if ($position == null) {
+			if ($position == null || $position == -1) {
 				continue;
 			}
 			if (is_numeric($idfield)) {
