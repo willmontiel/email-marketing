@@ -13,7 +13,7 @@
 {% block content %}
 
 	{# Insertar botones de navegacion #}
-	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'lists']) }}
+	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
 
 
 	<div class="row">
