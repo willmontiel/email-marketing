@@ -134,6 +134,8 @@ class ContactCounter
 		 * 
 		 * Retorna los contadores de un nuevo contacto para ser sumado al contador general.
 		 */
+		
+		$oper = array('Ctotal' => 0, 'Cspam' => 0, 'Cbounced' => 0, 'Cunsubscribed' => 0, 'Cactive' => 0);
 		$oper["Ctotal"]=1;
 		$oper["Cspam"] = ($contact->email->spam != 0)?1:0;
 		if($oper["Cspam"] == 0) {

@@ -2031,7 +2031,7 @@ class MailController extends ControllerBase
 			$replyTo = $mail->replyTo;
 			
 			foreach ($emails as $email) {
-				$to = array($email => 'Nombre Apellido');
+				$to = array($email => $email);
 				
 				$message = new Swift_Message($subject);
 				$message->setFrom($from);

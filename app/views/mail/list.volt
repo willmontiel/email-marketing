@@ -152,38 +152,9 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="box-footer padded">
-			<div class="row">
-				<div class="span5">
-					<div class="pagination">
-						<ul>
-							{% if page.current == 1 %}
-								<li class="previous"><a href="#" class="inactive"><<</a></li>
-								<li class="previous"><a href="#" class="inactive"><</a></li>
-							{% else %}
-								<li class="previous active"><a href="{{ url('mail/index') }}"><<</a></li>
-								<li class="previous active"><a href="{{ url('mail/index') }}?page={{ page.before }}"><</a></li>
-							{% endif %}
-
-							{% if page.current >= page.total_pages %}
-								<li class="next"><a href="#" class="inactive">></a></li>
-								<li class="next"><a href="#" class="inactive">>></a></li>
-							{% else %}
-								<li class="next active"><a href="{{ url('mail/index') }}?page={{page.next}}">></a></li>
-								<li class="next active"><a href="{{ url('mail/index') }}?page={{page.last}}">>></a></li>		
-							{% endif %}
-						</ul>
-					 </div>
-				 </div>
-				 <div class="span5">
-					 <br />
-					 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
-					 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
-				 </div>
-			</div>
+		<div class="col-sm-12 text-center">
+			{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
 		</div>
-	</div>
-		<!-- Fin de mi lista de correos -->
 </div>
 
 <div id="modal-simple" class="modal hide fade" aria-hidden="false">

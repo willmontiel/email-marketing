@@ -84,23 +84,7 @@
 	</table>
 	<div class="space"></div>
 	<div class="col-sm-12 text-center">
-		<ul class="pagination">
-			<li class="{{ (page.current == 1)?'disabled':'enabled' }}">
-				<a href="{{ url('dbase/index') }}"><i class="glyphicon glyphicon-fast-backward"></i></a>
-			</li>
-			<li class="{{ (page.current == 1)?'disabled':'enabled' }}">
-				<a href="{{ url('dbase/index') }}?page={{ page.before }}"><i class="glyphicon glyphicon-step-backward"></i></a>
-			</li>
-			<li>
-				<span><b>{{page.total_items}}</b> registros.</span><span>Página <b>{{page.current}}</b> de <b>{{page.total_pages}}</b></span>
-			</li>
-			<li class="{{ (page.current >= page.total_pages)?'disabled':'enabled' }}">
-				<a href="{{ url('dbase/index') }}?page={{page.next}}"><i class="glyphicon glyphicon-step-forward"></i></a>
-			</li>
-			<li class="{{ (page.current >= page.total_pages)?'disabled':'enabled' }}">
-				<a href="{{ url('dbase/index') }}?page={{page.last}}"><i class="glyphicon glyphicon-fast-forward"></i></a>
-			</li>
-		</ul>
+		{{ partial('partials/pagination_static_partial', ['pagination_url': 'dbase/index']) }}
 	</div>
 
 	<!-- Fin de mi lista de bases de datos -->
