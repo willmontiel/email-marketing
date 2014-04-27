@@ -311,6 +311,7 @@ class ContactsController extends ControllerBase
 			$fields[$field->idCustomField] = $this->request->getPost($namefield);
 		}
 		
+
 		$destiny =  "../../../tmp/ifiles/".$nameFile;
 		$idAccount = $this->user->account->idAccount;
 		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);

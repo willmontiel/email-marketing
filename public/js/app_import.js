@@ -30,7 +30,7 @@ App.Contact = DS.Model.extend(
 
 //Rutas
 App.ContactsIndexRoute = Ember.Route.extend({
-	model: function(){
+	model: function() {
 		return myImportModel;
 	}
 });
@@ -50,10 +50,23 @@ App.ContactsIndexController = Ember.ObjectController.extend({
 	hasheader: function () {
 		if(this.get('content.header') == true) {
 			return true;
-		} else {
+		} 
+		else {
 			return false;
 		}
-	}.property('content.header')
+	}.property('content.header'),
+	/*
+	 * Funcion que asigna vacio a todos los campos cuando
+	 * cambia el delimitador (las opciones)
+	 */
+
+	chgFields: function () {
+		for (f in this.get('content')) {
+			if (f != 'header' && f != 'delimiter') {
+				this.set('content.' + f, -1);
+			}
+		}
+	}.observes('App.options')
 });
 
 
@@ -61,7 +74,7 @@ App.ContactsIndexController = Ember.ObjectController.extend({
 
 App.ContactsIndexView = Ember.View.extend({
 	didInsertElement: function() {
-		$('.easy-pie-step').easyPieChart({barColor: '#599cc7', trackColor: '#a1a1a1', scaleColor: false, lineWidth: 10, size: 50, lineCap: 'butt'});
+	//	$('.easy-pie-step').easyPieChart({barColor: '#599cc7', trackColor: '#a1a1a1', scaleColor: false, lineWidth: 10, size: 50, lineCap: 'butt'});
 	}
 }); 
 
@@ -77,7 +90,6 @@ App.DelimiterView = Ember.Select.extend({
 	change: function(evt) {
 		var delim = this.get('value');
 		var opt = mappingColumns(advancedSplit(App.lines[0], delim))
-		opt.unshift(" ");
 		App.set('options', opt);
 		App.set('firstline', advancedSplit(App.lines[0], delim));
 		App.set('secondline',  advancedSplit(App.lines[1], delim));
@@ -90,6 +102,7 @@ App.DelimiterView = Ember.Select.extend({
 function mappingColumns(arrayopt)
 {
 	var res = [];
+	res.push({name: 'No Importar', id: -1});
 	for (var i = 0; i < arrayopt.length; i++) {
 		objtemp = new Object();
 		objtemp.name = arrayopt[i];

@@ -185,7 +185,12 @@
 					<span class="glyphicon glyphicon-th-list"></span>
 				</div>
 			</div>
-			<table class="table table-condensed table-striped table-contacts">
+			<table class="table table-condensed table-striped table-bordered">
+				<thead>
+						{{' {{#each App.firstline}} '}}
+							<th>Campo</th>
+						{{' {{/each}} '}}
+				</thead>
 				<tbody>
 					{{' {{#unless hasheader}} '}}
 					<tr>
