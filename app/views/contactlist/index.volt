@@ -135,9 +135,7 @@
 					</thead>
 					<tbody>
 				{{'{{#each model}}'}}
-						<tr>
-							<td {{' {{bind-attr style="dbase.style"}} '}}>
-							</td>
+						<tr {{' {{bind-attr style="dbase.style"}} '}}>
 							<td>
 								<a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts"><strong>{{ '{{name}}' }}</strong></a>
 								<br/>

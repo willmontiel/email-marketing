@@ -34,10 +34,7 @@
 		<tbody>
 			{{'{{#each model}}'}}
 
-			<tr>
-				<td {{' {{bind-attr style="dbase.style"}} '}}>
-
-				</td>
+			<tr {{' {{bind-attr style="dbase.style"}} '}}>
 				<td>
 					<a href="{{url('segment/show/')}}{{ '{{unbound id}}' }}#/contacts">{{' {{name}} '}}</a>
 					<p>{{' {{description}}'}}</p>
