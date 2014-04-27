@@ -1,34 +1,12 @@
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
-	{{ stylesheet_link('b3/css/bootstrap.css') }}
-	{{ stylesheet_link('b3/css/font-awesome.css') }}
-	{{ stylesheet_link('css/prstyles.css') }}
-	{{ stylesheet_link('b3/css/sm-email-theme.css') }}
-	{{ stylesheet_link('b3/vendors/css/bootstrap-editable.css') }}
-	{{ stylesheet_link('b3/vendors/css/jquery.gritter.css') }}
-
-	<!--[if lt IE 9]>
-	{{ javascript_include('javascripts/vendor/html5shiv.js') }}
-	{{ javascript_include('javascripts/vendor/excanvas.js') }}
-	<![endif]-->
-	
-	{{ javascript_include('b3/js/jquery-1.9.1.js') }}
-	{{ javascript_include('b3/js/bootstrap.js') }}
-	{{ javascript_include('b3/vendors/js/jquery.sparkline.js') }}
-	{{ javascript_include('b3/vendors/js/spark_auto.js') }}
-	{{ javascript_include('b3/vendors/js/bootstrap-editable.js') }}
-	{{ javascript_include('b3/vendors/js/jquery.gritter.js') }}
-
-
-	{{ javascript_include('js/jquery-1.9.1.js') }}
-	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
-	{{ javascript_include('bootstrap/js/bootstrap.js') }}
+	{{ super() }}
 	<script type="text/javascript">
 		function preview(id) {
 			$.post("{{url('template/preview')}}/" + id, function(template){
 				var e = template.template;
-				$( "#preview-modal" ).empty();
-				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>');
-				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal').contents().find('body').append(e);
+				$("#modal-body-preview").empty();
+				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#modal-body-preview').contents().find('body').append(e)
 			});
 		}
 	</script>
@@ -56,7 +34,7 @@
 									<div class="row">
 									   {% for t in template %}
 											<div class="col-xs-6 col-md-3">
-												<a href="{{url('mail/editor_frame')}}/0/{{t['id']}}" class="thumbnail">
+												<a href="{{url('mail/contenteditor')}}/{{t['idMail']}}/{{t['id']}}" class="thumbnail">
 													{% if t['preview'] == null%}
 														<img data-src="holder.js/100%x180" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNzEiIGhlaWdodD0iMTgwIj48cmVjdCB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2VlZSI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9Ijg1LjUiIHk9IjkwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MTcxeDE4MDwvdGV4dD48L3N2Zz4=">
 													{% else %}
@@ -66,7 +44,7 @@
 												<div class="caption text-center">
 													<h4>{{t['name']}}</h4><br />
 													<h5>
-														<a href="#preview-modal" data-toggle="modal" onClick="preview({{t['id']}})" title="Previsualizar"><span class="label label-primary">Previsualizar</span></a>
+														<button onclick="preview({{t['id']}})" class="btn btn-info btn-xs" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
 													</h5>
 												</div>
 											</div>
@@ -80,8 +58,19 @@
 			</div>
 		</div>
 	</div>
-	
-	<div id="preview-modal" class="modal fade preview-modal">
+
+	<div id="preview-modal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Previsualización</h4>
+				</div>
+				<div class="modal-body" id="modal-body-preview">
+
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<div class="modal fade" id="modal-simple">

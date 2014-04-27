@@ -1,29 +1,14 @@
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
-	{{ stylesheet_link('b3/css/bootstrap.css') }}
-	{{ stylesheet_link('b3/css/font-awesome.css') }}
-	{{ stylesheet_link('css/prstyles.css') }}
-	{{ stylesheet_link('b3/css/sm-email-theme.css') }}
-	{{ stylesheet_link('b3/vendors/css/bootstrap-editable.css') }}
-	{{ stylesheet_link('b3/vendors/css/jquery.gritter.css') }}
-
-	<!--[if lt IE 9]>
-	{{ javascript_include('javascripts/vendor/html5shiv.js') }}
-	{{ javascript_include('javascripts/vendor/excanvas.js') }}
-	<![endif]-->
-	
-	{{ javascript_include('b3/js/jquery-1.9.1.js') }}
-	{{ javascript_include('b3/js/bootstrap.js') }}
-	{{ javascript_include('b3/vendors/js/jquery.sparkline.js') }}
-	{{ javascript_include('b3/vendors/js/spark_auto.js') }}
-	{{ javascript_include('b3/vendors/js/bootstrap-editable.js') }}
-	{{ javascript_include('b3/vendors/js/jquery.gritter.js') }}
+	{{ super() }}
 	<script type="text/javascript">
+		var idMail = {{mail.idMail}};
 		function sendData() {
 			var url = $('#url').val();
 			var image = $('#image').val();
 			
 			$.ajax({
-				url: "{{url('mail/importcontent')}}",
+				url: "{{url('mail/importcontent')}}/" + idMail,
 				type: "POST",			
 				data: { 
 					url: url,
@@ -34,7 +19,7 @@
 					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.errors, sticky: false, time: 10000});
 				},
 				success: function(){
-					$(location).attr('href', "{{url('mail/contenthtml')}}"); 
+					$(location).attr('href', "{{url('mail/contenthtml')}}/" + idMail); 
 				}
 			});
 		}

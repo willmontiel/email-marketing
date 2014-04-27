@@ -84,6 +84,7 @@ class FlashmessageController extends ControllerBase
 				$fm->createdon = time();
 				
 				if ($form->isValid() && $fm->save()) {
+					$this->traceSuccess("Create flash message sudo, idMessage: {$fm->idFlashMessage}");
 					$this->flashSession->success('Mensaje creado exitosamente');
 					return $this->response->redirect('flashmessage/index');
 				}
@@ -121,22 +122,16 @@ class FlashmessageController extends ControllerBase
 				$start = $this->request->getPost('start');
 				$end = $this->request->getPost('end');
 				
-				$this->logger->log("Accounts: " . print_r($accounts, true));
-				
 				if (trim($name) === '' || trim($msg) === '' || trim($allAccounts) === '' || trim($type) === '' || trim($start) === '' || trim($end) === '') {
 					$this->flashSession->error('Ha enviado campos vacios, por favor verifique la información');
 				}
 				else {
 					list($month1, $day1, $year1, $hour1, $minute1) = preg_split('/[\s\/|-|:]+/', $start);
 					$dateBegin = mktime($hour1, $minute1, 0, $month1, $day1, $year1);
-					
-//					$dateBegin	= strtotime($start);
-					
+				
 					list($month2, $day2, $year2, $hour2, $minute2) = preg_split('/[\s\/|-|:]+/', $end);
 					$dateEnd = mktime($hour2, $minute2, 0, $month2, $day2, $year2);
-					
-//					$dateEnd = strtotime($end);
-					
+				
 					if($dateEnd < $dateBegin || $dateEnd < time()) {
 						$this->flashSession->error('Ha selecionado una fecha que ya ha pasado, por favor verifique la información');
 					}
@@ -144,7 +139,7 @@ class FlashmessageController extends ControllerBase
 						if ($allAccounts == 'any') {
 							if (count($accounts) == 0) {
 								$this->flashSession->error('No ha seleccionado una cuenta, por favor verifique la información');
-								return $this->response->redirect('flashmessage/edit/' . $idMessage);
+								return $this->response->redirect("flashmessage/edit/{$idMessage}");
 							}
 							else {
 								$message->accounts = json_encode($accounts);
@@ -163,10 +158,12 @@ class FlashmessageController extends ControllerBase
 
 						if (!$message->save()) {
 							foreach ($message->getMessages() as $m) {
-								$this->logger->log("Error editing message: " . $m);
+								$this->flashSession->error($m);
+								$this->logger->log("Error editing message: {$m}");
 							}
 						}
 						else {
+							$this->traceSuccess("Edit flash message sudo, idMessage: {$idMessage}");
 							$this->flashSession->success('Mensaje editado exitosamente');
 							return $this->response->redirect('flashmessage/index');
 						}
@@ -186,21 +183,22 @@ class FlashmessageController extends ControllerBase
 			'conditions' => 'idFlashMessage = ?1',
 			'bind' => array(1 => $idMessage)
 		));
+		
 		if ($message) {
 			if (!$message->delete()) {
 				foreach ($message->getMessages() as $msg) {
-					$this->logger->log('Error deleting message: ' . $msg);
+					$this->logger->log("Error deleting message: {$msg}");
+					$this->flashSession->error($msg);
 				}
-				$this->flashSession->error('Ha ocurrido un error mientras se eliminaba el mensaje');
 				return $this->response->redirect('flashmessage');
 			}
+			$this->traceSuccess("Flash message deleted, sudo, idMessage: {$idMessage}");
 			$this->flashSession->warning('Se ha eliminado el mensaje exitosamente');
-			return $this->response->redirect('flashmessage');
 		}
 		else {
 			$this->flashSession->warning('El mensaje que desea eliminar no existe o ya ha sido elminado, por favor verifique la información');
-			return $this->response->redirect('flashmessage');
 		}
 		
+		return $this->response->redirect('flashmessage');
 	}
 }

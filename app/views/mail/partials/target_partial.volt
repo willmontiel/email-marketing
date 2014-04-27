@@ -16,64 +16,85 @@
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="target">
 									<br />
-									{% if mail.targetName is empty AND mail.target is empty %}
+									{{ '{{#if isTargetBydbases}}' }}
+										{{ ' {{view Ember.RadioButtonTarget name="radioTarget" value="dataBase" id="dbRadio" checked="checked"}}' }}
+									{{ '{{else}}' }}
 										{{ ' {{view Ember.RadioButtonTarget name="radioTarget" value="dataBase" id="dbRadio"}}' }}
-										<label for="dbRadio">Base de datos de contactos</label> <br />
-										<div id="db" style="display: none;">
-											{{ '{{view Ember.Select
-													multiple="true"
-													contentBinding="App.dbs"
-													optionValuePath="content.id"
-													optionLabelPath="content.name"
-													selectionBinding="dbaselist"
-													id="dbases"
-													class="form-control"}}'
-											 }}
-										</div>
-										<br />
-										{{ ' {{view Ember.RadioButtonTarget name="radioTarget" value="contactList" id="listRadio"}}' }}
-										<label for="listRadio">Lista de contactos </label>
-										<div id="list" style="display: none;">
-											{{ '{{view Ember.Select
-													multiple="true"
-													contentBinding="App.lists"
-													optionValuePath="content.id"
-													optionLabelPath="content.name"
-													selectionBinding="list"
-													id="contactlists"
-													class="form-control"}}'
-											 }}
-										</div>
-										<br /><br />
-										{{ ' {{view Ember.RadioButtonTarget name="radioTarget" value="segment" id="segmentRadio"}}' }}
-										<label for="segmentRadio">Segmentos</label>
-										<br />
-										<div id="seg" style="display: none;">
-											{{' {{view Ember.Select
+									{{ '{{/if}}' }}
+									
+									<label for="dbRadio">Bases de datos</label>
+									<div id="db" style="{{ '{{unbound dbaseChecked}}' }}">
+										{{ '{{view Ember.Select
 												multiple="true"
-												contentBinding="App.segments"
+												contentBinding="App.dbs"
 												optionValuePath="content.id"
 												optionLabelPath="content.name"
-												selectionBinding="segmentlist"
-												id="segments"
-												class="form-control"
-											}} '}}
-										</div>
-									{% else %}
-										{{partial('partials/targetselect_partial')}}
-									{% endif %}
+												selectionBinding="dbaselist"
+												id="dbases"
+												class="form-control"}}'
+										 }}
+									</div>
+									<br /><br />
+									
+									{{ '{{#if isTargetByLists}}' }}
+											{{ ' {{view Ember.RadioButtonTarget selectionBinding="radioTarget" name="radioTarget" value="contactList" id="listRadio" checked="checked"}}' }}
+									{{ '{{else}}' }}
+										{{ ' {{view Ember.RadioButtonTarget selectionBinding="radioTarget" name="radioTarget" value="contactList" id="listRadio"}}' }}
+									{{ '{{/if}}' }}
+									<label for="listRadio">Lista de contactos</label>
+									<div id="list" style="{{ '{{unbound listChecked}}' }}">
+										{{ '{{view Ember.Select
+												multiple="true"
+												contentBinding="App.lists"
+												optionValuePath="content.id"
+												optionLabelPath="content.name"
+												selectionBinding="list"
+												id="contactlists"
+												class="form-control"}}'
+										 }}
+									</div>
+									<br /><br />
+									
+									{{ '{{#if isTargetBySegments}}' }}
+										{{ ' {{view Ember.RadioButtonTarget selectionBinding="radioTarget" name="radioTarget" value="segment" id="segmentRadio" checked="checked"}}' }}
+									{{ '{{else}}' }}
+										{{ ' {{view Ember.RadioButtonTarget selectionBinding="radioTarget" name="radioTarget" value="segment" id="segmentRadio"}}' }}
+									{{ '{{/if}}' }}
+									<label for="segmentRadio">Segmentos</label>
+									<br />
+									<div id="seg" style="{{ '{{unbound segmentChecked}}' }}">
+										{{' {{view Ember.Select
+											multiple="true"
+											contentBinding="App.segments"
+											optionValuePath="content.id"
+											optionLabelPath="content.name"
+											selectionBinding="segmentlist"
+											id="segments"
+											class="form-control"
+										}} '}}
+									</div>
 								</div>
 								<div class="tab-pane fade" id="filter">
 									<br />
-										{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byMail" id="byMail"}}' }}
+										{{ '{{#if isFilterByEmail}}' }}
+											{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byMail" id="byMail" checked="checked"}}' }}
+										{{ '{{else}}' }}
+											{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byMail" id="byMail"}}' }}
+										{{ '{{/if}}' }}
 										<label for="byMail">Enviar a contactos que tenga el siguiente correo: </label><br />
-										<div id="mail" style="display: none;">
+										
+										<div id="mail" style="{{ '{{unbound filterEmailChecked}}' }}">
 											{{'{{view Ember.TextField valueBinding="filterByEmail" id="sendByMail" class="form-control"}}'}}
 										</div><br />
-
-										{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byOpen" id="byOpen"}}' }}
+										
+										{{ '{{#if isFilterByOpen}}' }}
+											{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byOpen" id="byOpen" checked="checked"}}' }}
+										{{ '{{else}}' }}
+											{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byOpen" id="byOpen"}}' }}
+										{{ '{{/if}}' }}
 										<label for="byOpen">Enviar a contactos que hayan abierto el siguiente correo electrónico: </label><br />
-										<div id="open" style="display: none;">
+										
+										<div id="open" style="{{ '{{unbound filterOpenChecked}}' }}">
 											{{ '{{view Ember.Select
 													multiple="true"
 													contentBinding="App.sendByOpen"
@@ -84,10 +105,14 @@
 													class="form-control"}}'
 											 }}
 										</div><br />
-
-										{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byClick" id="byClick"}}' }}
+										
+										{{ '{{#if isFilterByClick}}' }}
+											{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byClick" id="byClick" checked="checked"}}' }}
+										{{ '{{else}}' }}
+											{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byClick" id="byClick"}}' }}
+										{{ '{{/if}}' }}
 										<label for="byClick">Enviar a contactos que hayan hecho click en el siguiente enlace: </label><br />
-										<div id="click" style="display: none;">
+										<div id="click" style="{{ '{{unbound filterClickChecked}}' }}">
 											{{ '{{view Ember.Select
 													multiple="true"
 													contentBinding="App.sendByClick"
@@ -99,9 +124,14 @@
 											 }}
 										</div><br />
 										
-										{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byExclude" id="byExclude"}}' }}
+										{{ '{{#if isFilterByExclude}}' }}
+											{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byExclude" id="byExclude" checked="checked"}}' }}
+										{{ '{{else}}' }}
+											{{ ' {{view Ember.RadioFilter name="RadioFilter" value="byExclude" id="byExclude"}}' }}
+										{{ '{{/if}}' }}
+										
 										<label for="byExclude">No enviar a aquellos contactos que hayan abierto el siguiente correo electrónico: </label>
-										<div id="exclude" style="display: none;">
+										<div id="exclude" style="{{ '{{unbound filterExcludeChecked}}' }}">
 											{{ '{{view Ember.Select
 													multiple="true"
 													contentBinding="App.excludeContact"
@@ -121,9 +151,6 @@
 						<div class="col-sm-6 col-md-offset-6 text-right">
 							<button class="btn btn-default" {{'{{action "discardTarget" this}}'}}>Descartar cambios</button>
 							<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
-							{#
-							<input type="button" class="btn btn-primary" value="Aplicar cambios" onClick="createBlock(this.form, 'target')">
-							#}
 						</div>
 					</div>
 					<br />

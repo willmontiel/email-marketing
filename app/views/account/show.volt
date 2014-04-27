@@ -28,8 +28,8 @@
 			{{ flashSession.output() }}
 		</div>
 		<div class="span4">	
-			<div class="row text-right">
-				<a href="{{url('account/newuser/')}}{{idAccount}}" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
+			<div class="row-fluid text-right">
+				<a href="{{url('account/newuser')}}/{{idAccount}}" class="btn btn-default"><i class="icon-plus"></i> Crear nuevo usuario</a>
 				<a href="{{ url('account/index') }}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
 			</div>
 		</div>

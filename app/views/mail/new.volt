@@ -6,73 +6,39 @@
 	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
 	<script type="text/javascript">
+		var db;
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 	</script>
 	{{ javascript_include('js/mixin_save.js') }}
 	{{ javascript_include('js/app_mail.js') }}
 	<script type="text/javascript">
-		function iframeResize() {
-			var iFrame = document.getElementById('iframeEditor');
-			//iFrame.height = '';
-			iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
-		};
+		var idMail;
+		{% if mail is defined%}
+			idMail = {{mail.idMail}}
+		{% endif %}
 		
-		$(function(){
-			$("#editor").click(function() {
-				createIframe("iframeEditor", "{{url('mail/editor_frame')}}", "100%", "", "iframeResize()");
+		function sendMail() {
+			$(function() {
+				$.ajax({
+					url: "{{url('mail/confirmmail')}}/" + idMail,
+					type: "POST",			
+					data: {},
+					error: function(msg){
+						var obj = $.parseJSON(msg.responseText);
+						$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
+					},
+					success: function(msg){
+						$(location).attr('href', "{{url('mail/list')}}"); 
+					}
+				});
 			});
-			
-			$("#template").click(function() {
-				createIframe("iframeEditor", "{{url('template/select')}}", "100%", "", "iframeResize()");
-			});
-			
-			$("#html").click(function() {
-				createIframe("iframeHtml", "{{url('mail/contenthtml')}}", "100%", "600", "");
-			});
-			
-			$("#import").click(function() {
-				createIframe("iframeHtml", "{{url('mail/importcontent')}}", "100%", "600", "");
-			});
-			
-		});
-		
-		function createIframe(id, url, width, height, fn) {
-			$("#choose-content").hide();
-			$("#plaintext-content").show();
-			$("#buttons-content").show();
-		
-			$('<iframe />');  // Create an iframe element
-			$('<iframe />', {
-				id: id,
-				src: url,
-				width: width,
-				height: height,
-				onload: fn,
-				seamless: "seamless"
-			}).appendTo('#show-content');
 		}
 	</script>
 	<script type="text/javascript">
 		//Full Mail Content
 		{% if mail is defined %}
 			App.maildata = [{
-				id: {{mail.idMail}}, 
-				name: "{{mail.name}}",
-				type: "{{mail.type}}",
-				scheduleDate: "{{mail.scheduleDate}}",
-				fromName: "{{mail.fromName}}",
-				fromEmail: "{{mail.fromEmail}}",
-				replyTo: "{{mail.replyTo}}",
-				subject: "{{mail.subject}}",
-				dbases: "{{mail.dbases}}",
-				contactlists: "{{mail.contactlists}}",
-				segments: "{{mail.segments}}",
-				filterByEmail: "{{mail.filterByEmail}}",
-				filterByOpen: "{{mail.filterByOpen}}",
-				filterByClick: "{{mail.filterByClick}}",
-				filterByExclude: "{{mail.filterByExclude}}",
-				content: {{mail.content}},
-				{#plainText: "{{mail.plainText}}",#}
+				id: {{mail.idMail}}
 			}];
 		{% endif %}
 		
@@ -86,7 +52,7 @@
 			
 			App.lists = [
 				{% for contactlist in contactlists %}
-					Ember.Object.create({name: "{{contactlist.Dbase}}", id: {{contactlist.idContactlist}}}),
+					Ember.Object.create({name: "{{contactlist.name}}", id: {{contactlist.idContactlist}}}),
 				{% endfor %}
 			];
 			
@@ -119,8 +85,17 @@
 						Ember.Object.create({name: "{{m2.name}}", id: {{m2.idMail}}}),
 					{% endfor %}	
 				];
-			{% endif%}
-									
+			{% endif%}				
+		{% endif %}
+		
+		{% if linksForTrack is defined%}
+			{% if linksForTrack|length !== 0 %}
+				App.googleAnalyticsLinks = [
+					{% for link in linksForTrack%}
+						Ember.Object.create({name: "{{link}}"}),
+					{% endfor %}
+				];
+			{% endif %}
 		{% endif %}
 	</script>
 {% endblock %}
@@ -133,8 +108,13 @@
 	</div>
 	<br />
 	<div id="emberAppContainer">
-	</script>
 		<script type="text/x-handlebars" data-template-name="index">
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/mailstatus_partial") }}
+				</div>
+			</div>
+			
 			<div class="row">
 				<div class="col-md-12">
 					<div class="panel panel-default">
@@ -175,17 +155,11 @@
 					{{ partial("mail/partials/googleanalytics_partial") }}
 				</div>
 			</div>
-			
+		
+
 			<div class="row">
 				<div class="col-md-12">
 					{{ partial("mail/partials/schedule_partial") }}
-				</div>
-			</div>
-	
-			<div class="row">
-				<div class="col-md-12 text-right">
-					<a href="{{url('mail/list')}}" class="btn btn-default">Confirmar luego </a>
-					<a href="{{url('mail/confirmmail')}}/{{ '{{id}}' }}" class="btn btn-primary">Confirmar</a>
 				</div>
 			</div>
 		</script>

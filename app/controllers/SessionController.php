@@ -1,5 +1,5 @@
 <?php
-class SessionController extends \Phalcon\Mvc\Controller
+class SessionController extends ControllerBase
 {
     
     public function signinAction()
@@ -12,7 +12,7 @@ class SessionController extends \Phalcon\Mvc\Controller
     {
         $this->session->remove("user-name");
         $this->session->destroy();
-		
+		$this->traceSuccess("logout: {$this->user->idUser}/{$this->user->username}");
         $this->response->redirect('session/signin');
     }
 	
@@ -33,8 +33,14 @@ class SessionController extends \Phalcon\Mvc\Controller
 					$this->session->set('userid', $user->idUser);
 					$this->session->set('authenticated', true);
 					
+					$this->user = $user;
+					$this->traceSuccess("Access allowed username: {$this->user->idUser}/{$this->user->username}");
+					
 					return $this->response->redirect("");
 
+				}
+				else {
+					$this->traceFail("Access denied username: {$login}, password: [{$password}]");
 				}
 //			}
         }
@@ -72,6 +78,9 @@ class SessionController extends \Phalcon\Mvc\Controller
 					foreach ($recoverObj->getMessages() as $msg) {
 						$this->logger->log('Msg: ' . $msg);
 					}
+					$this->logger->log("user: {$user->idUser}/{$user->username}");
+					$this->traceFail("Recover pass failed user with email '{$email}' error 500");
+					$this->flashSession->error('Ha ocurrido un error contacte al administrador');
 				}
 				else {
 					$link = '<a href="' . $url . '" style="text-decoration: underline;">Click aqui</a>';
@@ -80,10 +89,17 @@ class SessionController extends \Phalcon\Mvc\Controller
 						$message->createRecoverpassMessage($link, $user->email);
 						$message->sendMessage();
 					}
-					catch (InvalidArgumentException $e) {
-						$this->logger->log('Error: ' . $e->getMessage());
+					catch (Exception $e) {
+						$this->logger->log('Exception: ' . $e->getMessage());
+						$this->logger->log("user: {$user->idUser}/{$user->username}");
+						$this->traceFail("Recover pass failed user with email '{$email}' error 500");
+						$this->flashSession->error('Ha ocurrido un error contacte al administrador');
 					}
+					$this->traceSuccess("Send email for recover pass user: {$user->idUser}/{$user->username}");
 				}
+			}
+			else {
+				$this->traceFail("User with email '{$email}'  do not exists");
 			}
 			$this->flashSession->success('Se ha enviado un correo electronico con instrucciones para recuperar la contraseña');
 			return $this->response->redirect('session/signin');
@@ -104,6 +120,7 @@ class SessionController extends \Phalcon\Mvc\Controller
 			$this->view->setVar('uniq', $unique);
 		}
 		else {
+			$this->traceFail("Reset pass failed because the link is invalid, do not exists or is expired id: {$unique}");
 			return $this->response->redirect('error/link');
 		}
 	}
@@ -164,21 +181,27 @@ class SessionController extends \Phalcon\Mvc\Controller
 							$this->flashSession->notice('Ha ocurrido un error, contacte con el administrador');
 							foreach ($user->getMessages() as $msg) {
 								$this->logger->log('Error while recovering user password' . $msg);
+								$this->logger->log("User {$user->idUser}/{$user->username}");
+								$this->traceFail("Reset pass failed error 500");
+								$this->flashSession->error('Ha ocurrido un error contacte al administrador');
 							}
 						}
 						else {
 							$idUser = $this->session->remove('idUser');
 							$url->delete();
 							$this->flashSession->notice('Se ha actualizado el usuario exitosamente');
+							$this->traceSuccess("Recover and reset pass user: {$user->idUser}/{$user->username}");
 							return $this->response->redirect('index');
 						}
 					}
 					else {
+						$this->traceFail("Reset pass failed because user do not exists");
 						return $this->response->redirect('error/link');
 					}
 				}
 			}
 			else {
+				$this->traceFail("Reset pass failed because the link is invalid, do not exists or is expired id: {$uniq}");
 				return $this->response->redirect('error/link');
 			}
 		}

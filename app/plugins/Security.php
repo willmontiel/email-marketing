@@ -89,7 +89,7 @@ class Security extends Plugin
 	protected function getControllerMap()
 	{
 		$map = $this->cache->get('controllermap-cache');
-		if (!$map) {
+		if (true) {
 			$map = array(
 		//* RELEASE 0.1.0 *//
 				//Tests
@@ -140,6 +140,10 @@ class Security extends Plugin
 				'contacts::importbatch' => array('contact' => array('read', 'importbatch')),
 				'contacts::import' => array('contact' => array('read','importbatch')),
 				'contacts::processfile' => array('contact' => array('read','importbatch')),
+				'process::import' => array('contact' => array('read', 'import')),
+				'process::refreshimport' => array('contact' => array('read', 'import')),
+				'process::downoladsuccess' => array('contact' => array('read', 'import')),
+				'process::downoladerror' => array('contact' => array('read', 'import')),
 				//Dbase controller
 				'dbase::index' => array('dbase' => array('read')),
 				'dbase::new' => array('dbase' => array('read','create')),
@@ -251,6 +255,7 @@ class Security extends Plugin
 				'mail::template' => array('mail' => array('read', 'create')),
 				'mail::converttotemplate' => array('mail' => array('read', 'create')),
 				'mail::confirm' => array('mail' => array('read', 'create')),
+				'mail::confirmmail' => array('mail' => array('send')),
 				'mail::play' => array('mail' => array('read', 'send')),
 				'mail::stop' => array('mail' => array('read', 'send')),
 				'mail::cancel' => array('mail' => array('read', 'send')),
@@ -282,14 +287,10 @@ class Security extends Plugin
 				'mail::previewhtml' => array('mail' => array('read', 'create')),
 				
 				//Processes
-				'process::index' => array('mail' => array('read', 'create', 'send')),
-				'process::getprocesses' => array('mail' => array('read', 'create', 'send')),
-				'process::stopsending' => array('mail' => array('read', 'create', 'send')),
-				'process::import' => array('process' => array('read')),
+				'process::index' => array('process' => array('read')),
+				'process::getprocesses' => array('process' => array('read')),
+				'process::stopsending' => array('process' => array('read')),
 				'process::stopimport' => array('process' => array('read')),
-				'process::refreshimport' => array('process' => array('read')),
-				'process::downoladsuccess' => array('process' => array('download')),
-				'process::downoladerror' => array('process' => array('download')),
 				
 				//Programming mail
 				'scheduledmail::index' => array('mail' => array('read', 'create', 'send')),
