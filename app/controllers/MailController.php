@@ -197,11 +197,11 @@ class MailController extends ControllerBase
 			$this->flashSession->error($e->getMessage());
 			$this->logger->log("Exception: Error while deleting mail, {$e}");
 			$this->traceFail("Error deleting mail, idMail: {$idMail}");
-			return $this->response->redirect("mail");
+			return $this->response->redirect("mail/list");
 		}
 		$this->traceSuccess("Mail deleted, idMail: {$idMail}");
 		$this->flashSession->warning("Se ha eliminado el correo exitosamente");
-		return $this->response->redirect("mail");
+		return $this->response->redirect("mail/list");
 	}
 	
 	private function validateTemplate($template, $account)

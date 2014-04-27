@@ -360,7 +360,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				mail.set('filterByExclude', exclude);
 				mail.set('googleAnalytics', analitycs);
 				
-				this.handleSavePromise(mail.save(), 'Se han aplicado los cambios existosamente');
+				this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
 				this.set('isHeaderExpanded', false);
 				this.set('isTargetExpanded', false);
 				this.set('isGoogleAnalitycsExpanded', false);

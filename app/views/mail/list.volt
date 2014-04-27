@@ -157,24 +157,29 @@
 		</div>
 </div>
 
-<div id="modal-simple" class="modal hide fade" aria-hidden="false">
-	<div class="modal-header">
-	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	  <h6 id="modal-tablesLabel">Eliminar correo y sus estadisticas</h6>
-	</div>
-	<div class="modal-body">
-		<p>
-			¿Esta seguro que desea eliminar este correo?
-		</p>
-		<p>
-			Recuerde que si elimina este correo se perderán todos los datos asociados, excepto las imágenes
-		</p>
-	</div>
-	<div class="modal-footer">
-	  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-	  <a href="" id="deleteMail" class="btn btn-danger" >Eliminar</a>
-	</div>
-</div>
+
+<div id="modal-simple" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Eliminar correo y sus estadisticas</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					¿Esta seguro que desea eliminar este correo?
+				</p>
+				<p>
+					Recuerde que si elimina este correo se perderán todos los datos asociados, excepto las imágenes
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				<a href="" id="deleteMail" class="btn btn-danger" >Eliminar</a>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div id="modal-simple-edit" class="modal hide fade" aria-hidden="false">
 	<div class="modal-header">
