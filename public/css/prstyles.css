@@ -672,3 +672,106 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border-left: none !important; 
 	border-right: none !important;
 }
+
+/*-----------------//-----------------// FORMULARIOS //-----------------//-----------------*/
+
+.form-options {
+	background-color: rgb(228, 228, 228);
+	height: 40px;
+	width: 150px;
+	text-align: center;
+	padding: 10px;
+	border: 1px dashed lightgray;
+	cursor: pointer;
+}
+.form-full-content {
+	text-align: center;
+	width: 400px;
+}
+.form-title-name {
+	padding: 10px;
+	font-weight: bold;
+	font-size: 17px;
+}
+.field-zone-name {
+	font-size: 15px;
+}
+.field-content-zone {
+	padding-bottom: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	cursor: move;
+}
+.field-option-disabled {
+	color: rgb(180, 180, 180) !important;
+	background-color: rgb(243, 243, 243) !important;
+	cursor: auto !important;
+}
+.field-edit-zone {
+	background-color: rgb(247, 236, 222);
+	padding: 15px;
+	font-size: 14px;
+}
+.edit-row-in-zone{
+	margin-bottom: 10px;
+}
+.field-edit-zone-row {
+	margin-top: 5px;
+	margin-bottom: 25px;
+}
+.form-field-editing {
+	background-color: #d5d5d5 !important;
+	color: #888 !important;
+}
+.field-content-zone input{
+	cursor: move;
+}
+.field-content-zone:hover {
+	background-color: antiquewhite;
+}
+.hide-form-field {
+	display: none;
+}
+span.required {
+ color:@brand-danger;
+ padding-right: 4px;
+}
+.form-field-hide-selected {
+	font-style: italic;
+	background-color: rgb(233, 233, 233);
+}
+.col-without-padding {
+	padding: 0px;
+	margin-right: 5px;
+}
+.select-day-number-form {
+	padding: 6px 9px;
+}
+.field-zone-name {
+	word-break: break-word;
+}
+.create-email-spot, button.btn-form-email-creator-save/*, div.optin-information-container*/ {
+	display: none;
+}
+#colorchart td {
+	width: 25px !important;
+	height: 25px !important;
+	cursor: pointer;
+	border: 2px lightgray solid;
+}
+#colorchart {
+	border-collapse: separate;
+	border: 4px gray solid;
+}
+#color.text-for-db-color {
+	display: none !important;
+}
+#colorchart td:hover {
+	opacity: 0.5;
+}
+.color-selected {
+	border: 2px blue solid !important;
+}
+.field-element-form-hide {
+	display: none;
+}

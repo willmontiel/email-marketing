@@ -115,6 +115,10 @@ class Security extends Plugin
 				'socialmedia::share' => array(),
 				'unsubscribe::contact' => array(),
 				'unsubscribe::success' => array(),
+				'form::frame' => array(),
+				'contacts::form' => array(),
+				
+				
 				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
@@ -200,6 +204,15 @@ class Security extends Plugin
 				
 				//Dbaseapi
 				'dbaseapi::searchcontacts' => array('contact' => array('read')),
+				
+				//Dbaseapi -- Formularios
+				'dbaseapi::getforms' => array('form' => array('read')),
+				'dbaseapi::getforminformation' => array('form' => array('read')),
+				'dbaseapi::createforminformation' => array('form' => array('create')),
+				'dbaseapi::createformcontent' => array('form' => array('update')),
+				'dbaseapi::deleteform' => array('form' => array('delete')),
+				'dbaseapi::getcontactlists' => array('form' => array('read')),
+				
                 //Contactlistapi
 				'contactlistapi::searchcontacts' => array('contact' => array('read')),
 				//Segmentapi
@@ -340,11 +353,6 @@ class Security extends Plugin
 				'socialmedia::create' => array('socialmedia' => array('create')),
 				'socialmedia::delete' => array('socialmedia' => array('delete')),
 				
-				//Formularios
-				'form::index' => array('form' => array('read')),
-				'form::new' => array('form' => array('create')),
-				'form::delete' => array('form' => array('delete')),
-				
 				//Sistema
 				'system::index' => array('system' => array('read')),
 				'system::configure' => array('system' => array('update')),
@@ -436,7 +444,9 @@ class Security extends Plugin
 			'webversion:share',
 			'socialmedia:share',
 			'unsubscribe:contact',
-			'unsubscribe:success'
+			'unsubscribe:success',
+			'form:frame',
+			'contacts:form'
 		);
 
 		if ("$controller::$action" == "error::notavailable") {

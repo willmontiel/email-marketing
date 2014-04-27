@@ -28,7 +28,12 @@ App.Router.map(function() {
 	  this.resource('contacts.delete', { path: '/delete/:contact_id'});
   });
   this.resource('forms', function(){
-	  
+	  this.route('setup');
+	  this.route('index');
+	  this.route('new', { path: '/editor/:form_id'});
+	  this.route('edit', { path: '/edit/:form_id'});
+	  this.route('remove', { path: '/remove/:form_id'});
+	  this.route('code', { path: '/code/:form_id'});
   });
 });
 

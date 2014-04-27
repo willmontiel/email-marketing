@@ -8,6 +8,8 @@
 	{{ partial("partials/xeditable_select_view_partial") }}
 	{{ javascript_include('js/search-reference-pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
+	{{ javascript_include('js/mixin_save_form.js') }}
+	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
 
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/dbase/' ~ sdbase.idDbase }}';
@@ -55,6 +57,12 @@
 	{{ javascript_include('js/app_dbase.js') }}
 	{{ javascript_include('js/app_contact.js') }}
 	{{ javascript_include('js/app_forms.js') }}
+	{{ javascript_include('js/forms/email_block.js') }}
+	{{ javascript_include('js/forms/text_block.js') }}
+	{{ javascript_include('js/forms/select_block.js') }}
+	{{ javascript_include('js/forms/multiple_select_block.js') }}
+	{{ javascript_include('js/forms/date_block.js') }}
+	{{ javascript_include('js/forms/form_zone.js') }}
 	<script type="text/javascript">
 		//ACL de los campos personalizados
 		App.customFieldACL = {
@@ -72,10 +80,23 @@
 		}
 	</script>
 	<script>
+		App.formfields = new Array();
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
 			{{ ember_customfield_options_xeditable(field) }}
+			App.formfields.push({id: {{field.idCustomField}}, 
+								name: '{{field.name}}', 
+								type: '{{field.type}}',
+								required: '{{field.required}}',
+								values: '{{field.values}}'});
 		{%endfor%}
+		
+		var config = {baseUrl: "{{url('')}}"};
+		
+		function iframeResize() {
+			var iFrame = document.getElementById('iframeEditor');
+			iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
+		};
 	</script>
 	{{ javascript_include('js/editable-ember-view.js')}}
 {% endblock %}
