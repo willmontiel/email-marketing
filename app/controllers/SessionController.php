@@ -206,4 +206,29 @@ class SessionController extends ControllerBase
 			}
 		}
 	}
+	
+	public function loginlikethisuserAction($idUser)
+	{
+		$user = User::findFirst(array(
+			'conditions' => 'idUser = ?1',
+			'bind' => array(1 => $idUser)
+		));
+
+		if (!$user) {
+			$this->flashSession->error("No se ha podido ingresar como el usuario, porque este no existe");
+			return $this->response->redirect('account/index');
+		}
+
+		$this->session->set('userid', $user->idUser);
+		$this->session->set('authenticated', true);
+
+		$this->user = $user;
+
+		return $this->response->redirect("");
+	}
+	
+	public function logoutfromthisaccountAction()
+	{
+		return $this->response->redirect("");
+	}
 }

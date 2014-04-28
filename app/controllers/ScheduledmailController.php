@@ -4,6 +4,7 @@ class ScheduledmailController extends ControllerBase
 	protected function router($action)
 	{
 		switch ($action) {
+			case 'list':
 			case 'index':
 				return $this->response->redirect('scheduledmail/index');
 				break;
@@ -42,47 +43,101 @@ class ScheduledmailController extends ControllerBase
 	
 	public function stopAction($action, $idMail)
 	{
-		$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
+		));
 		
-		$communication->sendPausedToParent($idMail);
-		
+		if ($mail) {
+			try {
+				$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+				$communication->sendPausedToParent($idMail);
+				$this->flashSession->warning("Se ha pausado el correo exitosamente");
+				$this->traceSuccess("Stopping send, idMail: {$idMail}");
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: Error while stopping send, idMail: {$idMail}, {$e}");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+				$this->traceFail("Stopping send, idMail: {$idMail}");
+				$this->router($action);
+			}
+		}
+		else {
+			$this->flashSession->error("Ha intentado pausar el envío de un correo que no existe, por favor verifique la información");
+		}
 		$this->router($action);
+		
 	}
 
 	public function playAction($action, $idMail)
 	{
-		$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
+		));
 		
-		$communication->sendPlayToParent($idMail);
-		
+		if ($mail) {
+			try {
+				$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+				$communication->sendPlayToParent($idMail);
+				$this->traceSuccess("Resuming send, idMail: {$idMail}");
+				$this->flashSession->warning("Se ha reanudado el correo exitosamente");
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: Error while resuming send, idMail: {$idMail}, {$e}");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+				$this->traceFail("Resuming send, idMail: {$idMail}");
+				$this->router($action);
+			}
+		}
+		else {
+			$this->flashSession->error("Ha intentado reanudar el envío de un correo que no existe, por favor verifique la información");
+		}
 		$this->router($action);
 	}
 
 	public function cancelAction($action, $idMail)
 	{
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
 		));
 		
-		if ($mail->status == 'Scheduled') {
-			$mail->status = 'Cancelled';
-			
-			if (!$mail->save()) {
-				foreach ($mail->getMessages() as $msg) {
-					$this->flashSession->error($msg);
+		if ($mail) {
+			try {
+				if ($mail->status == 'Scheduled') {
+					$mail->status = 'Cancelled';
+
+					if (!$mail->save()) {
+						foreach ($mail->getMessages() as $msg) {
+							$this->flashSession->error($msg);
+						}
+					}
+					else {
+						$this->flashSession->warning("Se ha cancelado el correo exitosamente, recuerde que esta acción no se puede revertir");
+						$this->traceSuccess("Cancel send, idMail: {$idMail}");
+					}
+				}
+				else {
+					$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+					$communication->sendCancelToParent($idMail);
+					$this->flashSession->warning("Se ha cancelado el correo exitosamente, recuerde que esta acción no se puede revertir");
+					$this->traceSuccess("Cancel send, idMail: {$idMail}");
 				}
 			}
-			else {
-				$this->flashSession->warning("Se ha cancelado el correo exitosamente, recuerde que esta acción no se puede revertir");
+			catch (Exception $e) {
+				$this->logger->log("Exception: Error while canceling send, idMail: {$idMail}, {$e}");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+				$this->traceFail("Canceling send, idMail: {$idMail}");
+				$this->router($action);
 			}
 		}
 		else {
-			$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		
-			$communication->sendCancelToParent($idMail);
+			$this->flashSession->error("Ha intentado cancelar el envío de un correo que no existe, por favor verifique la información");
 		}
-		
 		$this->router($action);
 	}
 	

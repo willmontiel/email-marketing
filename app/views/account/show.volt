@@ -75,8 +75,9 @@
 										<div class="btn-group">
 											<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
 											<ul class="dropdown-menu">
-												<li><a href="{{url('account/edituser/')}}{{item.idUser}}"><i class="icon-pencil"></i> Editar</a></li>
-												<li><a class="ShowDialog" data-toggle="modal" href="#modal-simple" data-id="{{url('account/deleteuser/')}}{{item.idUser}}"><i class="icon-trash"></i> Eliminar</a></li>
+												<li><a href="{{url('session/loginlikethisuser/')}}{{item.idUser}}">Ingresar como este usuario</a></li>
+												<li><a href="{{url('account/edituser/')}}{{item.idUser}}">Editar</a></li>
+												<li><a class="ShowDialog" data-toggle="modal" href="#modal-simple" data-id="{{url('account/deleteuser/')}}{{item.idUser}}">Eliminar</a></li>
 											</ul>
 										</div>
 									</div>

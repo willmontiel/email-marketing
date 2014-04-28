@@ -38,10 +38,10 @@ class AppObjects
 		
 		if (!$this->config->system->status && !in_array($this->ip, $this->allowed_ips)) {
 			$this->setAppPath();
+			$this->setDispatcher();
 			$this->setLogger();
 			$this->setUrlManagerObject();
 			$this->setUri();
-			$this->setDispatcher();
 			$this->setViewSystemNotAvailable();
 		}
 		else {

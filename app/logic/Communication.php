@@ -110,8 +110,7 @@ class Communication
 		$log = Phalcon\DI::getDefault()->get('logger');
 		$mail = Mail::findFirstByIdMail($idMail);
 		
-		if(!$this->verifySentStatus($mail)) {
-
+		if($mail && !$this->verifySentStatus($mail)) {
 			if($mail->status == 'Sending') {
 				$this->requester->send(sprintf("%s $idMail $idMail", 'Cancel-Process'));
 				$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
@@ -144,7 +143,9 @@ class Communication
 			}
 			return true;
 		}
-		return false;
+		else {
+			return false;
+		}
 	}
 
 	public function sendSchedulingToParent($idMail)
@@ -158,7 +159,6 @@ class Communication
 		if($mail->status == 'Sent') {
 			return TRUE;
 		}
-		
 		return FALSE;
 	}
 	

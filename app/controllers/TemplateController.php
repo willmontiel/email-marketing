@@ -93,6 +93,11 @@ class TemplateController extends ControllerBase
 			$category = $this->request->getPost("category");
 			$global = $this->request->getPost("global");
 			
+			$type = 'private';
+			if ($global == 'true') {
+				$type = 'public';
+			}
+			
 			if (empty($content) || empty($name) || empty($category)) {
 				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos, por favor verifique la información'), 400 , 'failed');
 			}
@@ -106,15 +111,15 @@ class TemplateController extends ControllerBase
 			}
 			catch (Exception $e) {
 				$this->logger->log("Exception: " . $e);
-				$this->traceFail("Error creating template");
+				$this->traceFail("Error creating {$type} template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
 			catch (InvalidArgumentException $e) {
 				$this->logger->log("Exception: " . $e);
-				$this->traceFail("Error creating template");
+				$this->traceFail("Error creating {$type} template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
-			$this->traceSuccess("Create template, idTemplate: {$idTemplate}");
+			$this->traceSuccess("Create {$type} template, idTemplate: {$idTemplate}");
 			return $this->setJsonResponse(array('msg' => 'Se ha creado la plantilla exitosamente'), 200, 'success');
 		}
 		else { 
@@ -221,6 +226,11 @@ class TemplateController extends ControllerBase
 			$global = $this->request->getPost("global");
 			$content = $this->request->getPost("editor");
 			
+			$type = 'private';
+			if ($global == 'true') {
+				$type = 'public';
+			}
+			
 			if (empty($content) || empty($name) || empty($category)) {
 				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos, por favor verifique la información'), 400 , 'failed');
 			}
@@ -234,11 +244,11 @@ class TemplateController extends ControllerBase
 				$templateObj->updateTemplate($name, $category, $content);
 			}
 			catch (Exception $e) {
-				$this->traceFail("Edit template, idTemplate: {$idTemplate}");
+				$this->traceFail("Edit {$type} template, idTemplate: {$idTemplate}");
 				$this->logger->log('Exception: ' . $e);
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
-			$this->traceSuccess("Edit template, idTemplate: {$idTemplate}");
+			$this->traceSuccess("Edit {$type} template, idTemplate: {$idTemplate}");
 			return $this->setJsonResponse(array('msg' => 'Se ha editado la plantilla exitosamente'), 200, 'success');
 		}
 		else {
