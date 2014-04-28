@@ -2254,7 +2254,7 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function newAction($idMail = null)
+	public function composeAction($idMail = null)
 	{
 		$account = $this->user->account;
 		$dbases = Dbase::findByIdAccount($account->idAccount);

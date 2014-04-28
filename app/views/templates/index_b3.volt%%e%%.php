@@ -57,10 +57,10 @@ a:7:{i:0;s:1160:"
 					<a class="navbar-brand" href="<?php echo $this->url->get(''); ?>">Email Sigma</a>
 				</div>
 
-				<!-- <p class="navbar-text">";s:12:"sectiontitle";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:16:"Titulo de pagina";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:60;}}i:2;s:3455:"</p> -->
+				<!-- <p class="navbar-text">";s:12:"sectiontitle";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:16:"Titulo de pagina";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:60;}}i:2;s:3395:"</p> -->
 				<div class="collapse navbar-collapse" id="nav-collapse-01">
 					<ul id="top-nav" class="nav navbar-nav navbar-right">
-<!--						<li><a href="">Mi Cuenta</a></li>
+<!--					<li><a href="">Mi Cuenta</a></li>
 						<li><a href="">Ayuda</a></li>
 -->
 						<?php if ($this->chat->enabled) { ?>
@@ -72,9 +72,7 @@ a:7:{i:0;s:1160:"
 						</li>
 						<!-- END OLARK CHAT LINK -->
 						<?php } ?>
-						<?php if (isset($usersudo)) { ?>
-							<li><a href="<?php echo $this->url->get('session/logoutfromthisaccount'); ?>">Volver a la sesión natural</a></li>
-						<?php } ?>
+						<li><a href="<?php echo $this->url->get('session/logoutfromthisaccount'); ?>">Volver a la sesión natural</a></li>
 						<li><?php echo $this->userObject->firstName; ?> <?php echo $this->userObject->lastName; ?></li>
 						<li><a href="<?php echo $this->url->get('session/logout'); ?>">Cerrar sesión</a></li>
 					</ul>					
@@ -148,7 +146,7 @@ a:7:{i:0;s:1160:"
 					<!-- Inicio de contenido -->
 					";s:7:"content";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:44:"
 						<!-- Aqui va el contenido -->
-					";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:151;}}i:3;s:2770:"
+					";s:4:"file";s:36:"../app/views/templates/index_b3.volt";s:4:"line";i:149;}}i:3;s:2770:"
 					<!-- Fin de contenido -->
 				</div>
 			</div>

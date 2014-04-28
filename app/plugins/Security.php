@@ -275,7 +275,7 @@ class Security extends Plugin
 				'mail::cancel' => array('mail' => array('read', 'send')),
 				'mail::sendtest' => array('mail' => array('read', 'send')),
 				
-				'mail::new' => array('mail' => array('read', 'send')),
+				'mail::compose' => array('mail' => array('read', 'create', 'send')),
 				
 				//Plantillas
 				'template::image' => array('template' => array('read')),
@@ -397,8 +397,9 @@ class Security extends Plugin
 	 */
 	public function beforeDispatch(Event $event, Dispatcher $dispatcher)
 	{
-		$controller = $dispatcher->getControllerName();
-		$action = $dispatcher->getActionName();
+		$controller = strtolower($dispatcher->getControllerName());
+		$action = strtolower($dispatcher->getActionName());
+		$resource = "$controller::$action";
 		
 		$this->logger->log("Server Status: {$this->serverStatus}");
 		$this->logger->log("Allowed Ip's: ". print_r($this->allowed_ips, true));
@@ -456,7 +457,7 @@ class Security extends Plugin
 			'contacts:form'
 		);
 
-		if ("$controller::$action" == "error::notavailable") {
+		if ($resource == "error::notavailable") {
 			$this->response->redirect('index');
 			return false;
 		}
@@ -471,10 +472,10 @@ class Security extends Plugin
 		}
 		else{
 			$acl = $this->getAcl();
-			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
-			$controller = strtolower($controller);
+			$this->logger->log("Validando el usuario con rol [$role] en [$resource]");
 			
-			if (!isset($map[$controller .'::'. $action])) {
+			
+			if (!isset($map[$resource])) {
 				if($this->validateResponse($controller) == true){
 					$this->logger->log("Accion no permitida accesando desde ember");
 					$this->logger->log("Controller: {$controller}, Action: {$action}");
@@ -490,7 +491,7 @@ class Security extends Plugin
 			}
 
 
-			$reg = $map[$controller .'::'. $action];
+			$reg = $map[$resource];
 			
 			foreach($reg as $resources => $actions){
 				foreach ($actions as $act) {
@@ -512,6 +513,16 @@ class Security extends Plugin
 					}
 				}
 			}
+			
+			if ($resource == 'session::loginlikethisuser') {
+				$this->session->set('userefective', $user);
+			}
+			else if ($resource == 'session::loginlikethisuser') {
+				$sudo = $this->_dependencyInjector->get('userefective');
+				$this->session->set('userid', $sudo->idUser);
+				$this->_dependencyInjector->remove('userefective');
+			}
+			
 			return true;
 		}
 	}	
