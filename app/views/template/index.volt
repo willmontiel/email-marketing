@@ -54,7 +54,7 @@
 													{% if t['idMail'] != null %}
 														<a href="{{url('mail/editor')}}/{{t['idMail']}}/{{t['id']}}">
 													{% else %}
-														<a href="{{url('mail/setup')}}/0/{{t['id']}}/new">
+														<a href="{{url('mail/contenteditor')}}/0/{{t['id']}}">
 													{% endif %}
 															<div class="img-info-x2"><p><i class="icon-ok"></i> Elegir</p></div>
 														</a>

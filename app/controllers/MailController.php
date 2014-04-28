@@ -601,7 +601,7 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function contenteditorAction($idMail, $idTemplate = null) 
+	public function contenteditorAction($idMail = null, $idTemplate = null) 
 	{
 		$account = $this->user->account;
 		
@@ -611,48 +611,57 @@ class MailController extends ControllerBase
 							2 => $account->idAccount)
 		));
 		
+		$objTemplate = Template::findFirst(array(
+			"conditions" => "idTemplate = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $idTemplate,
+							2 => $account->idAccount)
+		));
+		
+		$mailcontent = false;
+		
 		if ($mail) {
-			$objTemplate = Template::findFirst(array(
-				"conditions" => "idTemplate = ?1",
-				"bind" => array(1 => $idTemplate)
-			));
-			
 			$mailcontent = Mailcontent::findFirst(array(
 				'conditions' => 'idMail = ?1',
 				'bind' => array(1 => $mail->idMail)
 			));
 			
-			if ($objTemplate) {
-				if (empty($objTemplate->content)) {
-					$objContent = 'null';
-				}
-				else {
-					$objContent = $objTemplate->content;
-				}
-			}
-			else if($mailcontent) {
-				$text = $mailcontent->plainText;
-				if (empty($mailcontent->content)) {
-					$objContent = 'null';
-				}
-				else {
-					$objContent = $mailcontent->content;
-				}
+			$this->view->setVar('mail', $mail);
+		}
+		
+		if ($objTemplate) {
+			if (empty($objTemplate->content)) {
+				$objContent = 'null';
 			}
 			else {
-				$text = null;
+				$objContent = $objTemplate->content;
+			}
+		}
+		else if($mailcontent) {
+			$text = $mailcontent->plainText;
+			if (empty($mailcontent->content)) {
 				$objContent = 'null';
+			}
+			else {
+				$objContent = $mailcontent->content;
 			}
 		}
 		else {
-			return $this->response->redirect('error');
+			$text = null;
+			$objContent = 'null';
 		}
 		
-		$this->view->setVar('mail', $mail);
 		$this->view->setVar('objMail', $objContent);
 		
 		if ($this->request->isPost()) {
 			$this->db->begin();
+			
+			if (!$mail) {
+				$mail = new Mail();
+				$mail->idAccount = $this->user->idAccount;
+				$mail->status = 'Draft';
+				$mail->wizardOption = 'setup';
+				$mail->deleted = 0;
+			}
 			
 			$content = $this->request->getPost('editor');
 			$mail->type = 'Editor';
@@ -2309,10 +2318,6 @@ class MailController extends ControllerBase
 				'bind' => array(1 => $account->idAccount,
 								2 => $idMail)
 			));
-			
-			if (!$mail) {
-				return $this->response->redirect('error');	
-			}
 			
 			$mailcontent = Mailcontent::findFirst(array(
 				'conditions' => 'idMail = ?1',
