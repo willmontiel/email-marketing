@@ -128,43 +128,90 @@ class ProcessController extends ControllerBase
 	
 	public function getSendingProcesses()
 	{
-		$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		$status = $communication->getStatus('Mail');
-		if ($status !== null) {
-			return $status;
+		try {
+			$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$status = $communication->getStatus('Mail');
+			if ($status !== null) {
+				return $status;
+			}
+			return null; 
 		}
-		return null; 
+		catch (Exception $e) {
+			$this->logger->log("Exception: Error while getting import estatus, {$e}");
+		}
 	}
 	
 	public function getImportProcesses()
 	{
-		$communication = new Communication(SocketConstants::getImportRequestsEndPointPeer());
-		$status = $communication->getStatus('Import');
-		if ($status !== null) {
-			return $status;
+		try {
+			$communication = new Communication(SocketConstants::getImportRequestsEndPointPeer());
+			$status = $communication->getStatus('Import');
+			if ($status !== null) {
+				return $status;
+			}
+			return null; 
 		}
-		return null; 
+		catch (Exception $e) {
+			$this->logger->log("Exception: Error while getting import estatus, {$e}");
+		}
 	}
 	
 	public function stopsendingAction($idTask)
 	{
-		$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+		$mail = Mail::findFirst(array(
+			'conditions' => "idMail = ?1 AND idAccount = ?2 AND status = 'Sending'",
+			'bind' => array(1 => $idTask,
+							2 => $this->user->account->idAccount)
+		));
 		
-		$communication->sendPausedToParent($idTask);
-		
-		sleep(1);
-		
+		if ($mail) {
+			try {
+				$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+				$communication->sendPausedToParent($idTask);
+
+				sleep(1);
+				$this->flashSession->warning("Se ha pausado el envío del correo con id: {$idTask}");
+				$this->traceSuccess("Stopping send, idMail: {$idTask}");
+			}
+			catch (Exception $e) {
+				$this->traceFail("Stopping send, idMail: {$idTask}");
+				$this->logger->log("Exception: Error while stopping send, {$e}");
+				$this->flashSession->error("Ha ocurrido un error, contacte al administrador");
+				return $this->response->redirect('process');
+			}
+		}
+		else {
+			$this->flashSession->error("Ha intentado pausar un envío que no se esta ejecutando, por favor verifique la información");
+		}
 		return $this->response->redirect('process');
 	}
 	
 	public function stopimportAction($idTask)
 	{
-		$communication = new Communication(SocketConstants::getImportRequestsEndPointPeer());
+		$import = Importproccess::findFirst(array(
+			'conditions' => "idImportproccess = ?1 AND idAccount = ?2",
+			'bind' => array(1 => $idTask,
+							2 => $this->user->account->idAccount)
+		));
 		
-		$communication->sendPausedImportToParent($idTask);
-		
-		sleep(1);
-		
+		if ($import) {
+			try {
+				$communication = new Communication(SocketConstants::getImportRequestsEndPointPeer());
+				$communication->sendPausedImportToParent($idTask);
+				sleep(1);
+				$this->flashSession->warning("Se ha pausado el proceso de importación exitosamente");
+				$this->traceSuccess("Stopping import, idImport: {$idTask}");
+			}
+			catch (Exception $e) {
+				$this->traceFail("Stopping import, idImport: {$idTask}");
+				$this->logger->log("Exception: Error while stopping import, {$e}");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+				return $this->response->redirect('process');
+			}
+		}
+		else {
+			$this->flashSession->error("Ha intentado parar una importación que no se está ejecutando, por favor verifique la información");
+		}
 		return $this->response->redirect('process');
 	}	
 }
