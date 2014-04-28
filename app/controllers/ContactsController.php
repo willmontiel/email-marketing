@@ -455,11 +455,14 @@ class ContactsController extends ControllerBase
 				return $this->response->redirect($form->urlError, true);
 			}
 			
+			$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
+			
 			$wrapper = new ContactFormWrapper();
 			$wrapper->setForm($form);
+			$wrapper->setAccount($dbase->account);
 			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 			$wrapper->activateContactFromForm($contact);
-
+			
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');

@@ -108,11 +108,16 @@ class ContactFormWrapper extends ContactWrapper
 			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
 		}
 		
+		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
+		
 		if($this->form->notify === 'Si') {
 			$content = json_decode($this->form->notifyMail);
 			
 			$notify = new NotificationMail();
 			$notify->setForm($this->form);
+			$notify->setAccount($this->account);
+			$notify->setDomain($domain);
+			$notify->setMail(new Mail());
 			$notify->prepareContent($content->mail);
 			$notify->setNotifyReceiver($this->form->notifyEmail, '');
 			$notify->sendMail($content);
@@ -124,6 +129,9 @@ class ContactFormWrapper extends ContactWrapper
 			$welcome = new NotificationMail();
 			$welcome->setForm($this->form);
 			$welcome->setContact($contact);
+			$welcome->setAccount($this->account);
+			$welcome->setDomain($domain);
+			$welcome->setMail(new Mail());
 			$welcome->prepareContent($content->mail);
 			$welcome->setContactReceiver();
 			$welcome->sendMail($content);
