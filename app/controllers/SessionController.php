@@ -206,4 +206,45 @@ class SessionController extends ControllerBase
 			}
 		}
 	}
+	
+	public function loginlikethisuserAction($idUser)
+	{
+		$sudo = Phalcon\DI::getDefault()->get('userObject');
+		
+		if (isset($sudo) && $sudo->userrole == 'ROLE_SUDO') {
+			$this->session->set('userefective', $sudo);
+			
+			$user = User::findFirst(array(
+				'conditions' => 'idUser = ?1',
+				'bind' => array(1 => $idUser)
+			));
+			
+			if (!$user) {
+				$this->flashSession->error("No se ha podido ingresar como el usuario, porque este no existe");
+				return $this->response->redirect('account/index');
+			}
+			
+			$this->session->set('userid', $user->idUser);
+			$this->session->set('authenticated', true);
+
+			$this->user = $user;
+			
+			return $this->response->redirect("");
+		}
+	}
+	
+	public function logoutfromthisaccountAction()
+	{
+		$sudo = $this->session->get('userefective');
+		
+		if (isset($sudo)) {	
+			$this->session->set('userid', $sudo->idUser);
+			$this->session->set('authenticated', true);
+
+			$this->user = $sudo;
+			$this->session->remove('userefective');
+			return $this->response->redirect("");
+		}
+		return $this->response->redirect("error");
+	}
 }

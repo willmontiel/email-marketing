@@ -72,6 +72,10 @@
 						</li>
 						<!-- END OLARK CHAT LINK -->
 						{% endif %}
+						{% if usersudo is defined%}
+							<li><a href="{{url('session/logoutfromthisaccount')}}">Volver a la sesión natural</a></li>
+						{% endif %}
+						<li>{{ userObject.firstName }} {{ userObject.lastName }}</li>
 						<li><a href="{{url('session/logout')}}">Cerrar sesión</a></li>
 					</ul>					
 				</div>	

@@ -89,7 +89,7 @@ class Security extends Plugin
 	protected function getControllerMap()
 	{
 		$map = $this->cache->get('controllermap-cache');
-		if (true) {
+		if (!$map) {
 			$map = array(
 		//* RELEASE 0.1.0 *//
 				//Tests
@@ -105,6 +105,7 @@ class Security extends Plugin
 				'session::recoverpass' => array(),
 				'session::setnewpass' => array(),
 				'session::reset' => array(),
+				'session::logoutfromthisaccount' => array(),
 				'track::open' => array(),
 				'track::click' => array(),
 				'track::mtaevent' => array(),
@@ -359,8 +360,10 @@ class Security extends Plugin
 
 				// Herramientas de administracion
 				'tools::index' => array('tools' => array('read')),
-				
+				'session::loginlikethisuser' => array('account' => array('login how any user')),
+//				'session::logoutfromthisaccount' => array('account' => array('logout from any account')),
 				'mail::savemail' => array('mail' => array('create')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
@@ -403,13 +406,16 @@ class Security extends Plugin
 		
 		if ($this->serverStatus == 0 && !in_array($this->ip, $this->allowed_ips)) {
 			$this->publicurls = array(
-				'error:notavailable', 
+				'error:index',
+				'error:link',
+				'error:notavailable',
+				'error:unauthorized',
 			);
 			$accessdir = $controller . ':' . $action;
 			if (!in_array($accessdir, $this->publicurls)) {
-				$dispatcher->forward(array('controller' => 'error', 'action' => 'notavailable')); 
-				return false;
+				return $this->response->redirect('error/notavailable');
 			}
+			return false;
 		}
 		
 		$role = 'ROLE_GUEST';
@@ -430,6 +436,7 @@ class Security extends Plugin
 			'session:logout',
 			'session:recoverpass',
 			'session:setnewpass',
+			'session:logoutfromthisaccount',
 			'session:reset',
 			'error:index',
 			'error:link',

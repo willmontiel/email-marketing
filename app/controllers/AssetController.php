@@ -29,8 +29,12 @@ class AssetController extends ControllerBase
 			try {
 				$assetObj = new AssetObj($this->user->account);
 				$assetObj->createImage($name, $type, $tmp_dir, $size);
+				$idAsset = $assetObj->getIdAsset();
+				$this->traceSuccess("Upploading asset, idAsset: {$idAsset}");
 			} 
-			catch (InvalidArgumentException $e) {
+			catch (Exception $e) {
+				$this->logger->log("Exception: Error while uplodaing asset, {$e}");
+				$this->traceFail("Upploading asset:");
 				return $this->setJsonResponse(
 					array(
 						'error' => 'Ha ocurrido un error mientras se cargaba la imagen, por favor asegurese
@@ -44,7 +48,7 @@ class AssetController extends ControllerBase
 				'filelink' => $assetObj->getImagePrivateUrl(),
 				'thumb' => $assetObj->getThumbnailUrl(),
 				'title' => $assetObj->getFileName(),
-				'id' => $assetObj->getIdAsset()
+				'id' => $idAsset
 			);
 			return $this->setJsonResponse($array);
 		}
