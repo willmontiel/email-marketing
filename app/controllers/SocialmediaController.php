@@ -18,33 +18,52 @@ class SocialmediaController extends ControllerBase
 	public function newAction()
 	{
 		$this->view->disable();
-		$socialnet = new SocialNetworkConnection();
-		$socialnet->setAccount($this->user->account);
-		$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
-		$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
-		if(isset($_REQUEST['oauth_token']) && isset($_REQUEST['oauth_verifier'])) {
-			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token, $_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
-			$socialnet->saveTwitterUser($_REQUEST['oauth_verifier']);
+		try {
+			$socialnet = new SocialNetworkConnection();
+			$socialnet->setAccount($this->user->account);
+			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
+			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
+			if(isset($_REQUEST['oauth_token']) && isset($_REQUEST['oauth_verifier'])) {
+				$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token, $_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
+				$socialnet->saveTwitterUser($_REQUEST['oauth_verifier']);
+			}
+			else {
+				$socialnet->saveFacebookUser();
+			}
+			$this->traceSuccess('Social User Account created from socialmedia');
+		} catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->traceFail('Social User Account Fail from socialmedia');
+		} catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->traceFail('Social User Account Fail from socialmedia');
 		}
-		else {
-			$socialnet->saveFacebookUser();
-		}
+		
 		return $this->response->redirect("socialmedia");
 	}
 	
 	public function createAction($idMail = '')
 	{
 		$this->view->disable();
-		$socialnet = new SocialNetworkConnection();
-		$socialnet->setAccount($this->user->account);
-		$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
-		$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
-		if(isset($_REQUEST['oauth_token']) && isset($_REQUEST['oauth_verifier'])) {
-			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token, $_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
-			$socialnet->saveTwitterUser($_REQUEST['oauth_verifier']);
-		}
-		else {
-			$socialnet->saveFacebookUser();
+		try {
+			$socialnet = new SocialNetworkConnection();
+			$socialnet->setAccount($this->user->account);
+			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
+			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
+			if(isset($_REQUEST['oauth_token']) && isset($_REQUEST['oauth_verifier'])) {
+				$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token, $_REQUEST['oauth_token'], $_REQUEST['oauth_verifier']);
+				$socialnet->saveTwitterUser($_REQUEST['oauth_verifier']);
+			}
+			else {
+				$socialnet->saveFacebookUser();
+			}
+			$this->traceSuccess('Social User Account created from mail');
+		} catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->traceFail('Social User Account Fail from mail');
+		} catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->traceFail('Social User Account Fail from mail');
 		}
 		return $this->response->redirect("mail/setup/" . $idMail);
 	}

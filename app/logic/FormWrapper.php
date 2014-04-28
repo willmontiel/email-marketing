@@ -126,8 +126,8 @@ class FormWrapper extends BaseWrapper
 		foreach ($content as $cont){
 			if(!$cont->hide) {
 				switch ($cont->type) {
-					case 'MultiSelect':
-						$total+= 90;
+					case 'Date':
+						$total+= 200;
 						break;
 					default:
 						$total+= 90;

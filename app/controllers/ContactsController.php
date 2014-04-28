@@ -392,7 +392,7 @@ class ContactsController extends ControllerBase
 					'conditions' => 'idContactlist = ?1',
 					'bind' => array(1 => $idContactlist)
 				));
-
+				
 				$form = Form::findFirst(array(
 					'conditions' => 'idForm = ?1',
 					'bind' => array(1 => $idForm)

@@ -87,6 +87,12 @@ class ContactFormWrapper extends ContactWrapper
 		$cfs = Customfield::findByIdDbase($this->contactlist->idDbase);
 		foreach ($cfs as $cf) {
 			$name = 'campo'.$cf->idCustomField;
+			if($cf->type === 'Date') {
+				if(isset($obj->$name)) {
+					$obj->$name = strtotime($obj->$name);
+				}
+			}
+			
 			if(!isset($obj->$name)) {
 				$obj->$name = '';
 			}
