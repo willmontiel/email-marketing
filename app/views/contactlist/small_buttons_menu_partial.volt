@@ -17,11 +17,13 @@
 				<span class="sm-button-small-bloq-list"></span>
 				</a>
 			</li>
+{#
 			<li class="small-btn sm-btn-blue {{ activelnk=='search'?'active':'' }}">
 				<a href="{{ url('contacts/search') }}#/contacts">
 				<span class="sm-button-small-contact-search"></span>
 				</a>
 			</li>
+#}
 			<li class="small-btn sm-btn-blue {{ activelnk=='dbase'?'active':'' }}">
 				<a href="{{ url('dbase') }}">
 				<span class="sm-button-small-database"></span>

@@ -5,9 +5,9 @@
 		function verPreview(id) {
 			$.post("{{url('mail/previewindex')}}/" + id, function(preview){
 				var e = preview.preview;
-				$( "#preview-modal" ).empty();
-				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>');
-				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal').contents().find('body').append(e);
+				$( "#preview-modal-content" ).empty();
+				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal-content').contents().find('body').append(e);
+				$('#preview-modal').modal('show');
 			});
 		}
 	</script>
@@ -243,17 +243,22 @@
 </div>
 
 #}
-<div id="preview-modal" class="modal hide fade preview-modal">
-	<div class="modal-header">
-		Previsualización de correo
-	</div>
-	<div class="modal-body">
-		<div id="content-template">
-			un momento...
+<div id="preview-modal" class="modal fade preview-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Previsualización de correo</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div id="preview-modal-content" class="modal-body">
+				<div id="content-template">
+					un momento...
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-black" data-dismiss="modal">x</button>
+			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-black" data-dismiss="modal">x</button>
 	</div>
 </div>
 
