@@ -10,7 +10,7 @@ class NotificationMail extends TestMail
 	function __construct()
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
-		$this->urlObj = Phalcon\DI::getDefault()->get('urlManager');
+		$this->urlManager = Phalcon\DI::getDefault()->get('urlManager');
 	}
 	
 	public function setForm(Form $form)
@@ -39,6 +39,7 @@ class NotificationMail extends TestMail
 	{
 		$this->setBody($content);
 		$this->createPlaintext();
+		$this->replaceUrlImages();		
 	}
 
 	public function sendMail($sender)
@@ -83,7 +84,7 @@ class NotificationMail extends TestMail
 	public function setNotificationLink()
 	{
 		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
-		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
+		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
 		
 		$action = 'contacts/activate';
 		$parameters = array(1, $this->contact->idContact, $this->form->idForm);

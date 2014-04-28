@@ -50,10 +50,14 @@ class ContactFormWrapper extends ContactWrapper
 		
 		if($contact && $this->form->optin === 'Si') {
 			$content = json_decode($this->form->optinMail);
+			$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 			
 			$optin = new NotificationMail();
 			$optin->setForm($this->form);
+			$optin->setAccount($this->account);
+			$optin->setDomain($domain);
 			$optin->setContact($contact);
+			$optin->setMail(new Mail());
 			$optin->prepareContent($content->mail);
 			$optin->setNotificationLink();
 			$optin->setContactReceiver();
