@@ -103,6 +103,8 @@ class ContactFormWrapper extends ContactWrapper
 	{
 		$contact->status = time();
 		$contact->updatedon = time();
+		$contact->unsubscribed = 0;
+		$contact->subscribedon = time();
 		$contact->ipActivated = $this->ipaddress;
 		
 		if (!$contact->save()) {
