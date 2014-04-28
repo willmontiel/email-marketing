@@ -68,10 +68,7 @@ class NotificationMail extends TestMail
 
 		if (!$sendMail){
 			$this->logger->log("Error while sending mail: " . print_r($failures));
-		}
-			
-		if ($sendMail){
-			$this->flashSession->success("Se ha enviado el mensaje exitosamente");
+			throw new \Exception('Error while sending mail');
 		}
 	}
 	

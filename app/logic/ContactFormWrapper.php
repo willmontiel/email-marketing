@@ -92,6 +92,7 @@ class ContactFormWrapper extends ContactWrapper
 	public function activateContactFromForm(Contact $contact)
 	{
 		$contact->status = time();
+		$contact->updatedon = time();
 		$contact->ipActivated = $this->ipaddress;
 		
 		if (!$contact->save()) {
