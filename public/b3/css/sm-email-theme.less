@@ -552,7 +552,8 @@ table.table-contacts tbody tr td {
 /* Estilos para contenedor con bg y paddings */
 .frame-bg-pd {
 	background-color: @brand-gray-light;
-	padding: 9px 0;
+	padding-top: 9px;
+	padding-bottom: 0px;
 	margin-bottom: 15px;
 }
 /* Estilos para los select de acciones en la tabla de contactos */
@@ -645,7 +646,9 @@ table.middle > tbody > tr > th > td {
 .right {
 	text-align: right;
 }
-
+.padding-top {
+	padding-top: 15px;
+}
 #colorchart td {
  width: 25px !important;
  height: 25px !important;
@@ -690,8 +693,12 @@ table.middle > tbody > tr > th > td {
 .bs-ember-href li a {
 	cursor:pointer;
 }
-
-
+.pointer {
+	cursor:pointer;
+}
+.border {
+	border: 1px solid #c3c3c3;
+}
 
 .sm-striped-bg-base(@w) {
 	width: @w;
@@ -710,3 +717,10 @@ table.middle > tbody > tr > th > td {
 
 .sm-striped-bg { .sm-striped-bg-base(12px); }
 .sm-striped-bg-sm { .sm-striped-bg-base(4px); }
+
+/*   Estilos listas de correo   */
+
+
+.preview-mail {
+	margin: 0 15px 0 0;
+}

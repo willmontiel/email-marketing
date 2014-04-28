@@ -15,9 +15,7 @@
 		de cada base de datos, los contactos activos e inactivos, etc. Además podrá crear campos personalizados y configurar las bases de datos.
 		
 	</div>
-	<div class="row">
-		{{ flashSession.output() }}
-	</div>
+	{{ flashSession.output() }}
 	<div class="col-md-3 col-md-offset-8">
 		<a href="{{ url('dbase/new') }}" class="btn btn-default btn-sm extra-padding">
 			<i class="glyphicon glyphicon-plus"></i> Crear base de datos

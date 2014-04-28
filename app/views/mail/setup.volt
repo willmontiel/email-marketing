@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
@@ -19,70 +19,47 @@
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
 {% block content %}
+
+	{# Insertar botones de navegacion #}
+	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
+
 	<div class="row">
-		<div class="box">
-			<div class="box-content">
-				<div class="box-section news with-icons">
-					<div class="avatar green">
-						<i class="icon-lightbulb icon-2x"></i>
-					</div>
-					<div class="news-content">
-						<div class="news-title">
-							Información de correo
-						</div>
-						<div class="news-text">
-							<p>
-								Aqui podrá ingresar la información básica del correo, como un nombre para el correo,
-								el asunto, la direccion de correo desde donde se envía, etc.
-							
-								Una vez haya terminado de ingresar los datos, haga click en el botón siguiente para continuar 
-								con el proceso.
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="span8 offset2">
-			{% if mail is empty %}
-				<div id="breadcrumbs">
-					<div class="breadcrumb-button blue">
-						<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
-						<span class="breadcrumb-arrow"><span></span></span>
-					</div>
-					<div class="breadcrumb-button">
-						<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
-						<span class="breadcrumb-arrow"><span></span></span>
-					</div>
-					<div class="breadcrumb-button">
-						<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
-						<span class="breadcrumb-arrow"><span></span></span>
-					</div>
-					<div class="breadcrumb-button">
-						<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
-						<span class="breadcrumb-arrow"><span></span></span>
-					</div>
-				</div>
-			{% else %}
-				{{partial('partials/wizard_partial')}}
-			{% endif %}
+		<h4 class="sectiontitle">Información de correo</h4>
+		<div class="bs-callout bs-callout-info">
+			<p>
+				Aqui podrá ingresar la información básica del correo, como un nombre para el correo,
+				el asunto, la direccion de correo desde donde se envía, etc.
 			
+				Una vez haya terminado de ingresar los datos, haga click en el botón siguiente para continuar 
+				con el proceso.
+			</p>
 		</div>
-	</div>
-	<br />
-	<div class="row">
-		{{ flashSession.output()}}
-	</div>
-	<br />
-	<div class="row">
-		<div class="box offset3 span6">
-			<div class="box-header">
-				<div class="title">
-					Nuevo correo
+		{% if mail is empty %}
+			<div id="breadcrumbs">
+				<div class="breadcrumb-button blue">
+					<span class="breadcrumb-label"><i class="icon-check"></i> Información de correo</span>
+					<span class="breadcrumb-arrow"><span></span></span>
+				</div>
+				<div class="breadcrumb-button">
+					<span class="breadcrumb-label"><i class="icon-edit"></i> Editar/Crear contenido</span>
+					<span class="breadcrumb-arrow"><span></span></span>
+				</div>
+				<div class="breadcrumb-button">
+					<span class="breadcrumb-label"><i class="icon-group"></i> Seleccionar destinatarios</span>
+					<span class="breadcrumb-arrow"><span></span></span>
+				</div>
+				<div class="breadcrumb-button">
+					<span class="breadcrumb-label"><i class="icon-calendar"></i> Programar envío</span>
+					<span class="breadcrumb-arrow"><span></span></span>
 				</div>
 			</div>
+		{% else %}
+			{{partial('partials/wizard_partial')}}
+		{% endif %}
+	</div>
+		{{ flashSession.output()}}
+		<div class="row">
+			<h4 class="sectiontitle"> Nuevo correo</h4>
 			<div class="box-content">
 				<form action="{% if mail is empty %}{% if new == true %}{{url('mail/setup')}}/0/{{idTemplate}}/new{% else %}{{url('mail/setup')}}{% endif %}{% else %}{{url('mail/setup')}}/{{mail.idMail}}{% endif %}" method="post" class="fill-up" id="setupform">
 					<div class="padded">

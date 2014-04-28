@@ -95,76 +95,30 @@
 		<script type="text/x-handlebars" data-template-name="contacts/index">
 			{# formulario para busqueda #}
 			<div class="row">
-				<div class="col-md-5 col-sm-12 form-search">
-					<form role="form">
-						<div class="form-group">
-							<div class="input-group">
-								{{' {{view Ember.TextField valueBinding="searchCriteria" onEvent="enter" action="search" type="text" autofocus="autofocus" class="form-control" id="search" placeholder="Correo, @dominio, nombres, apellidos, combinaciones"}}'}}
-								<span class="input-group-addon"><i class="glyphicon glyphicon-search" {{ '{{action "search" this}}' }}></i></span>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="col-md-7 col-sm-12">
-					<ul class="list-inline pull-right">
-						<li>
-							{{'{{#link-to "contacts.new" class="btn btn-default extra-padding btn-sm" disabledWhen="createDisabled"}}'}} Crear un contacto{{'{{/link-to}}'}}
-						</li>
-						<li>
-							{{'{{#link-to "contacts.newbatch" class="btn btn-default extra-padding btn-sm" disabledWhen="importBatchDisabled"}}'}} Crear contactos rápidamente{{'{{/link-to}}'}}
-						</li>
-						<li>
-							{{ '{{#link-to "contacts.import" class="btn btn-default extra-padding btn-sm" disabledWhen="importDisabled"}}'}} Importar contactos{{'{{/link-to}}'}}	
-						</li>
 
-						{#	<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="btn btn-default extra-padding btn-sm" title="Configuracion avanzada"><i class="icon-cog"></i></a> #}
-					</ul>
-				</div>
-			</div>
-			
-			{# {{ partial("partials/search_contacts_partial") }} #}
-			<div class="row frame-bg-pd">
-				<div class="col-md-3">
-					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle no-bg" data-toggle="dropdown">Marcar
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="#">Todos</a></li>
-							<li><a href="#">Activos</a></li>
-							<li><a href="#">Suscritos</a></li>
-							<li><a href="#">Rebotados</a></li>
+			{#   Busqueda   #}
+			{{ partial("partials/search_contacts_partial") }}
+					<div class="col-sm-12 col-md-12 col-lg-7">
+						<ul class="list-inline pull-right">
+							<li>
+								{{'{{#link-to "contacts.new" class="btn btn-default extra-padding btn-sm" disabledWhen="createDisabled"}}'}} Crear contacto{{'{{/link-to}}'}}
+							</li>
+							<li>
+								{{'{{#link-to "contacts.newbatch" class="btn btn-default extra-padding btn-sm" disabledWhen="importBatchDisabled"}}'}} Crear contactos rápidamente{{'{{/link-to}}'}}
+							</li>
+							<li>
+								{{ '{{#link-to "contacts.import" class="btn btn-default extra-padding btn-sm" disabledWhen="importDisabled"}}'}} Importar contactos{{'{{/link-to}}'}}	
+							</li>
+
+							{#	<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="btn btn-default extra-padding btn-sm" title="Configuracion avanzada"><i class="icon-cog"></i></a> #}
 						</ul>
 					</div>
 				</div>
-
-				<div class="col-md-3">
-					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle no-bg" data-toggle="dropdown">Acciones
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="#">Borrar</a></li>
-							<li><a href="#">Duplicar</a></li>
-							<li><a href="#">Copiar</a></li>
-							<li><a href="#">Mover</a></li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="col-md-3">
-					{#{{' {{ view App.DropDownSelect }} '}}#}
-					<label>Mostrar</label>
-					{{'{{
-					view Ember.Select
-					content=filters
-					optionValuePath="content.value"
-					optionLabelPath="content.name"
-					value=filter.value
-					class="form-control"
-					}}'}}
-				</div>
 			</div>
+
+
+			{#   seleccion de contactos a mostrar   #}
+			{{ partial("partials/select_contacts_search_partial") }}
 
 			<div class="row">
 				<table class="table table-striped table-contacts">

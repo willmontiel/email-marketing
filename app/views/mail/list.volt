@@ -16,145 +16,116 @@
 {%block sectionsubtitle %}Administre sus correos{% endblock %}
 {% block content %}
 <!-- aqui inicia mi contenido -->
-<div class="row">
-	<div class="box">
-		<div class="box-section news with-icons">
-			<div class="avatar green">
-				<i class="icon-lightbulb icon-2x"></i>
-			</div>
-			<div class="news-content">
-				<div class="news-title">
-					Administre sus correos
-				</div>
-				<div class="news-text">
-					Esta es la página principal de los correos en la cuenta, aqui podrá encontrar información acerca de la configuración
-					de cada correo enviado, programado, en borrador, etc. Además podrá ver las estadisticas de cada correo enviado.
-					
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="span6">
-	{{ flashSession.output() }}
-	</div>
-	<div class="span6 text-right"> 
-		<a href="{{ url('scheduledmail') }}" class="btn btn-default">
-			<i class="icon-calendar"></i> Administrar Programación
-		</a>
-		<a href="{{ url('mail/setup') }}" class="btn btn-default">
-			<i class="icon-plus"></i> Nuevo Correo
-		</a>
-		<a href="{{ url('template/index') }}" class="btn btn-default">
-			<i class="icon-magic"></i> Administrar Plantillas
-		</a>
-	</div>
-</div>
-<br />
-<div class="row">
-		<!-- Lista de mis correos -->
-	<div class="box">
-		<div class="box-header">
-			<div class="title">
-				Lista de correos
-			</div>
-		</div>
-		<div class="box-content">
-			<table class="table table-bordered">
-				<thead></thead>
-				<tbody>
-			{%for item in page.items%}
-					<tr>
-						<td class="span6">
-							<div class="preview-mail img-wrap">
-								{% if item.previewData == null%}
-									<div class="not-available"></div>
-								{% else %}
-									<a href="#preview-modal" data-toggle="modal" onClick="verPreview({{item.idMail}})">
-										<img src="data: image/png;base64, {{item.previewData}}" />
-										<div class="img-info">
-											<p><i class="icon-search"></i> Previsualizar</p>
-										</div>
-									</a>
-								{% endif %}	
-							</div>
-							<div class="box-section news with-icons">
-								<div class="news-content">
-									<div class="news-title" style="padding-left: 40px;">
-										{%if item.status == 'Sent'%}
-											<a href="{{ url('statistic/mail') }}/{{item.idMail}}">{{item.name}}</a>
-										{%elseif item.status == 'Draft'%}
-											<a href="{{ url('mail/setup') }}/{{item.idMail}}">{{item.name}}</a>
-										{%else%}
-											<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
-										{%endif%}
-									</div>
-									<div class="news-text" style="padding-left: 40px;">
-										{{item.status}} <br /> 
-										Creado el {{date('Y-m-d', item.createdon)}} 
-										{%if item.status == 'Sent'%}
-										- Enviado el {{date('Y-m-d, g:i a', item.startedon)}}
-										{%elseif item.status == 'Scheduled'%}
-										- Programado {{date('Y-m-d, g:i a', item.scheduleDate)}}
-										{%endif%}
-									</div>
-								</div>
-							</div>
-						</td>
-						<td class="span4">
-						{%if item.status == 'Sent'%}
-							<ul class="inline sparkline-box">
-								<li class="sparkline-row">
-									<h4 class="blue"><span>Destinatarios</span> {{item.totalContacts}} </h4>
-								</li>
-								
-								<li class="sparkline-row">
-									<h4 class="green"><span>Aperturas</span> {{item.uniqueOpens}} </h4>
-								</li>
 
-								<li class="sparkline-row">
-									<h4 class="gray"><span>Clicks</span> {{item.clicks}} </h4>
-								</li>
-								
-								<li class="sparkline-row">
-									<h4 class="red"><span>Rebotes</span> {{item.bounced}} </h4>
-								</li>
-							</ul>
-						{%endif%}
-						</td>
-						<td class="span2">
-							<div class="offset3">
-								<div class="btn-group">
-									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-									<ul class="dropdown-menu">
-									{%if item.status == 'Scheduled'%}
-										<li><a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}"><i class="icon-pause"></i>Pausar </a></li>
-									{%endif%}
-									{% for value in mail_options(item) %}
-										<li><a href="{{ url(value.url) }}{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
-									{% endfor %}
-										<li><a href="{{ url('mail/clone/') }}{{item.idMail}}"><i class="icon-copy"></i>Duplicar</a></li>
-										<li><a class="ShowDialog" data-backdrop="static" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}"><i class="icon-trash"></i>Eliminar </a></li>
-									{% if item.type%}
-										<li><a class="ShowDialogTemplate" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}">Plantilla</a></li>
-										
-									{%endif%}
-									{%if item.status == 'Sent'%}
-										<li><a href="{{url('statistic/mail')}}/{{item.idMail}}"><i class="icon-bar-chart"></i> Estadisticas</a></li>
-									{%endif%}
-									</ul>
+{# Insertar botones de navegacion #}
+{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
+
+<div class="row">
+	<h4 class="sectiontitle">Listas de correos</h4>
+
+	<div class="bs-callout bs-callout-info">
+		Esta es la página principal de los correos en la cuenta, aqui podrá encontrar información acerca de la configuración
+		de cada correo enviado, programado, en borrador, etc. Además podrá ver las estadísticas de cada correo enviado.
+	</div>
+
+	{{ flashSession.output() }}
+
+	<div class="col-md-6 pull-right">
+		<a class="btn btn-default btn-sm extra-padding" href="{{ url('scheduledmail') }}">
+			<span class="glyphicon glyphicon-calendar"></span> Administrar Programación</a>
+		<a class="btn btn-default btn-sm extra-padding" href="{{ url('mail/new') }}">
+			<span class="glyphicon glyphicon-plus"></span> Nuevo Correo</a>
+		
+		<a class="btn btn-default btn-sm extra-padding" href="{{ url('template/index') }}" class="btn btn-default btn-sm extra-padding">
+			<span class="glyphicon glyphicon-magic"></span> Administrar Plantillas</a>
+		
+	</div>
+		<!-- Lista de mis correos -->
+	<table class="table table-bordered">
+		<thead></thead>
+		<tbody>
+			{%for item in page.items%}
+			<tr>
+				<td>
+					<div class="preview-mail img-wrap">
+						{% if item.previewData == null%}
+							<div class="not-available"></div>
+						{% else %}
+							<a href="#preview-modal" data-toggle="modal" onClick="verPreview({{item.idMail}})">
+								<img src="data: image/png;base64, {{item.previewData}}" />
+								<div class="img-info">
+									<p><i class="icon-search"></i> Previsualizar</p>
 								</div>
-							</div>
-						</td>
-					</tr>
+							</a>
+						{% endif %}	
+					</div>
+					<div class="news-title" style="padding-left: 40px;">
+						{%if item.status == 'Sent'%}
+							<a href="{{ url('statistic/mail') }}/{{item.idMail}}">{{item.name}}</a>
+						{%elseif item.status == 'Draft'%}
+							<a href="{{ url('mail/new') }}/{{item.idMail}}">{{item.name}}</a>
+						{%else%}
+							<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
+						{%endif%}
+					</div>
+					<div class="news-text" style="padding-left: 40px;">
+						{{item.status}} <br /> 
+						Creado el {{date('Y-m-d', item.createdon)}} 
+						{%if item.status == 'Sent'%} <br />
+						Enviado el {{date('Y-m-d, g:i a', item.startedon)}}
+						{%elseif item.status == 'Scheduled'%} <br />
+						Programado {{date('Y-m-d, g:i a', item.scheduleDate)}}
+						{%endif%}
+					</div>
+				</td>
+				<td class="">
+					{%if item.status == 'Sent'%}
+					<ul class="inline sparkline-box">
+						<li class="sparkline-row">
+							<h4 class="blue"><span>Destinatarios</span> {{item.totalContacts}} </h4>
+						</li>
+						
+						<li class="sparkline-row">
+							<h4 class="green"><span>Aperturas</span> {{item.uniqueOpens}} </h4>
+						</li>
+
+						<li class="sparkline-row">
+							<h4 class="gray"><span>Clicks</span> {{item.clicks}} </h4>
+						</li>
+						
+						<li class="sparkline-row">
+							<h4 class="red"><span>Rebotes</span> {{item.bounced}} </h4>
+						</li>
+					</ul>
+					{%endif%}
+				</td>
+				<td class="">
+					<div class="">
+						{%if item.status == 'Scheduled'%}
+							<a class="ShowDialogEditScheduled btn btn-sm extra-padding" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">Pausar </a>
+						{%endif%}
+						{% for value in mail_options(item) %}
+							<a class="btn btn-sm btn-default extra-padding" href="{{ url(value.url) }}{{item.idMail}}">{{value.text}}</a>
+						{% endfor %}
+							<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default">Duplicar</a>
+
+							<button class="ShowDialog btn btn-sm btn-default btn-delete extra-padding" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}">Eliminar </button>
+						{% if item.type%}
+							<a class="ShowDialogTemplate btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}">Plantilla</a>
+							
+						{%endif%}
+						{%if item.status == 'Sent'%}
+							<a class="btn btn-sm btn-default extra-padding" href="{{url('statistic/mail')}}/{{item.idMail}}">Estadísticas</a>
+						{%endif%}
+					</div>
+				</td>
+			</tr>
 			{%endfor%}
-				</tbody>
-			</table>
-		</div>
-		<div class="col-sm-12 text-center">
-			{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
-		</div>
+		</tbody>
+	</table>
+	<div class="col-sm-12 text-center">
+		{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
+	</div>
 </div>
 
 

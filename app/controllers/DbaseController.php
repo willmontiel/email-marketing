@@ -167,7 +167,7 @@ class DbaseController extends ControllerBase
 					$response = $e->getMessage();
 				}
 			}
-			$this->flashSession->warning($response);
+			$this->flashSession->error($response);
 		} 
 		else {
 			$this->flashSession->error('Base de Datos no existe');

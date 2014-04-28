@@ -163,8 +163,7 @@
 							<td>
 								<div class="box-section news with-icons">
 									<div class="news-time">
-										<span class="blue big-number right">{{ '{{infocontact.activeContacts}}' }}</span><br>
-										<span class="blue big-number">{{'{{activeContactsF}}'}}</span> activos<br>
+										<p class="right"><span class="blue big-number right">{{'{{activeContactsF}}'}}<br> </span> activos</p>
 									</div>
 								</div>
 							</td>

@@ -151,8 +151,8 @@
 		{{ '{{#if App.isEditable}}' }}
 		<div class="row">
 			<div class="span10 offset1 text-right">
-				<button class="btn btn-default extra-padding" {{ '{{action "discard" this}}' }}>descartar<br />cambios</button>
-				<button class="btn btn-green extra-padding" {{ '{{action "edit" this}}' }}>guardar<br />cambios</button>
+				<button class="btn btn-default extra-padding" {{ '{{action "discard" this}}' }}>Descartar<br >cambios</button>
+				<button class="btn btn-green extra-padding" {{ '{{action "edit" this}}' }}>Guardar<br >cambios</button>
 			</div>
 		</div>
 		{{ '{{/if}}' }}
@@ -253,10 +253,15 @@
 				</table>
 		</div>
 		<div class="row">
-			<div class="span12 text-center">
+			<div class="container-fluid">
 				<a data-toggle="collapse" data-parent="#accordion" href="#collapse-history-contact-{{'{{unbound id}}'}}">
-					<span {{ '{{action "collapse" this}}' }}>- Colapsar</span>
-					<span onclick="collapse_contact({{'{{unbound id}}'}});" class="collapse-link-{{'{{unbound id}}'}}">+ Ver Historial</span>
+					<div class="col-md-5 text-right">
+						<span class="tab-int border-top" {{ '{{action "collapse" this}}' }}>- Colapsar</span>
+					</div>
+					<div class="col-md-1"></div>
+					<div class="col-md-5 text-left">
+						<span onclick="collapse_contact({{'{{unbound id}}'}});" class="tab-int border-bot collapse-link-{{'{{unbound id}}'}}">+ Ver Historial</span>
+					</div>
 				</a>
 			</div>
 		</div>
