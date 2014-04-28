@@ -72,8 +72,10 @@
 						</li>
 						<!-- END OLARK CHAT LINK -->
 						{% endif %}
-						<li><a href="{{url('session/logoutfromthisaccount')}}">Volver a la sesión natural</a></li>
-						<li>{{ userObject.firstName }} {{ userObject.lastName }}</li>
+						{% if userefective.enable %}
+							<li><a href="{{url('session/logoutfromthisaccount')}}">Volver a la sesión original </a></li>
+						{% endif %}
+						<li><a href="#">{{ userObject.firstName }} {{ userObject.lastName }}</a></li>
 						<li><a href="{{url('session/logout')}}">Cerrar sesión</a></li>
 					</ul>					
 				</div>	

@@ -106,6 +106,7 @@ class Security extends Plugin
 				'session::setnewpass' => array(),
 				'session::reset' => array(),
 				'session::logoutfromthisaccount' => array(),
+				'session::loginlikethisuser' => array('account' => array('login how any user')),
 				'track::open' => array(),
 				'track::click' => array(),
 				'track::mtaevent' => array(),
@@ -360,8 +361,6 @@ class Security extends Plugin
 
 				// Herramientas de administracion
 				'tools::index' => array('tools' => array('read')),
-				'session::loginlikethisuser' => array('account' => array('login how any user')),
-//				'session::logoutfromthisaccount' => array('account' => array('logout from any account')),
 				'mail::savemail' => array('mail' => array('create')),
 				
 			);
@@ -426,6 +425,16 @@ class Security extends Plugin
 				$role = $user->userrole;
 				// Inyectar el usuario
 				$this->_dependencyInjector->set('userObject', $user);
+				
+				$userefective = new stdClass();
+				$userefective->enable = false;
+				
+				$efective = $this->session->get('userefective');
+				if (isset($efective)) {
+					$userefective->enable = true;
+				}
+				
+				$this->_dependencyInjector->set('userefective', $userefective);
 			}
 		}
 
@@ -456,7 +465,7 @@ class Security extends Plugin
 			'form:frame',
 			'contacts:form'
 		);
-
+		
 		if ($resource == "error::notavailable") {
 			$this->response->redirect('index');
 			return false;
@@ -514,13 +523,10 @@ class Security extends Plugin
 				}
 			}
 			
-			if ($resource == 'session::loginlikethisuser') {
+			$mapForLoginLikeAnyUser = array('session::loginlikethisuser');
+			
+			if (in_array($resource, $mapForLoginLikeAnyUser)) {
 				$this->session->set('userefective', $user);
-			}
-			else if ($resource == 'session::loginlikethisuser') {
-				$sudo = $this->_dependencyInjector->get('userefective');
-				$this->session->set('userid', $sudo->idUser);
-				$this->_dependencyInjector->remove('userefective');
 			}
 			
 			return true;

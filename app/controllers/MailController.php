@@ -1749,6 +1749,14 @@ class MailController extends ControllerBase
 			$name = $this->request->getPost("nametemplate");
 			$category = $this->request->getPost("category");
 			
+			if (empty($name)) {
+				$name = "Nueva plantilla";
+			}
+			
+			if (empty($category)) {
+				$category = "Mis Templates";
+			}
+			
 			try {
 				$template = new TemplateObj();
 				$template->setAccount($this->user->account);
@@ -1758,16 +1766,16 @@ class MailController extends ControllerBase
 				$this->traceSuccess("Mail converted in template, idMail: {$idMail}");
 				$this->response->redirect('template');
 			}
-			catch (InvalidArgumentException $e) {
+			catch (Exception $e) {
 				$this->traceFail("Error converting mail in template, idMail: {$idMail}");
 				$this->logger->log('Exception: ' . $e);
 				$this->flashSession->error("Ha ocurrido un error mientras se creaba una plantilla a partir de un correo, contacte al administrador");
-				$this->response->redirect('mail');
+				$this->response->redirect('mail/list');
 			}
 		}
 		else {
 			$this->flashSession->success("El correo base no existe por favor verifique la información");
-			$this->response->redirect('mail');
+			$this->response->redirect('mail/list');
 		}
 	}
 	

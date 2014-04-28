@@ -229,6 +229,20 @@ class SessionController extends ControllerBase
 	
 	public function logoutfromthisaccountAction()
 	{
-		return $this->response->redirect("");
+		$user = $this->session->get('userefective');
+		
+		if (isset($user)) {
+			$this->session->set('userid', $user->idUser);
+			$this->session->set('authenticated', true);
+
+			$this->user = $user;
+
+			$this->session->remove('userefective');
+			return $this->response->redirect("");
+		}
+		else {
+			return $this->response->redirect("error/unauthorized");
+		}
+		
 	}
 }
