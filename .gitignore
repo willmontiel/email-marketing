@@ -6,8 +6,9 @@ app/cache/metadata/*
 /app/logs/debug.log
 /app/views/templates/signin.volt%%e%%.php
 /app/views/templates/index_new.volt%%e%%.php
+/app/views/templates/index_new.volt%%e%%.php
 /public/css/style.css
-/app/views/templates/index.volt%%e%%.php
+/app/views/templates/index_b3.volt%%e%%.php
 /public/css/normalize.css
 /tmp/ifiles/6_1309102134_522f905b09196.csv
 /tmp/ifiles/6_1309102135_522f90b42f4f1.csv

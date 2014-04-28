@@ -17,7 +17,7 @@
 {% block content %}
 <!-- aqui inicia mi contenido -->
 
-{# Insertar botones de navegacion #}
+{# Botones de navegacion #}
 {{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
 
 <div class="row">
@@ -33,7 +33,7 @@
 	<div class="col-md-6 pull-right">
 		<a class="btn btn-default btn-sm extra-padding" href="{{ url('scheduledmail') }}">
 			<span class="glyphicon glyphicon-calendar"></span> Administrar Programación</a>
-		<a class="btn btn-default btn-sm extra-padding" href="{{ url('mail/new') }}">
+		<a class="btn btn-default btn-sm extra-padding" href="{{ url('mail/compose') }}">
 			<span class="glyphicon glyphicon-plus"></span> Nuevo Correo</a>
 		
 		<a class="btn btn-default btn-sm extra-padding" href="{{ url('template/index') }}" class="btn btn-default btn-sm extra-padding">
@@ -63,7 +63,7 @@
 						{%if item.status == 'Sent'%}
 							<a href="{{ url('statistic/mail') }}/{{item.idMail}}">{{item.name}}</a>
 						{%elseif item.status == 'Draft'%}
-							<a href="{{ url('mail/new') }}/{{item.idMail}}">{{item.name}}</a>
+							<a href="{{ url('mail/compose') }}/{{item.idMail}}">{{item.name}}</a>
 						{%else%}
 							<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
 						{%endif%}

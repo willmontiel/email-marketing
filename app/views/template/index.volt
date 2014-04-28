@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
@@ -15,97 +15,83 @@
 {% block sectiontitle %}<i class="icon-magic"></i>Plantillas globales y locales{% endblock %}
 {% block sectionsubtitle %}Listado de plantillas creadas en la cuenta{% endblock %}
 {% block content %}
+
+{# Botones de navegacion #}
+{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
+
 	<div class="row">
-		<div class="span6">{{ flashSession.output()}}</div>
-		<div class="span6 text-right">
-			<a href="{{ url('mail') }}" class="btn btn-default">
+		<h4 class="sectiontitle">Plantillas</h4>
+
+		{{ flashSession.output()}}
+
+		<div class="pull-right">
+			<a href="{{ url('mail') }}" class="btn btn-default btn-sm extra-padding">
 				<i class="icon-plus"></i> Regresar a correos
 			</a>
-			<a href="{{ url('template/new') }}" class="btn btn-default">
+			<a href="{{ url('template/new') }}" class="btn btn-default btn-sm extra-padding">
 				<i class="icon-plus"></i> Nueva Plantilla
 			</a>
 		</div>
+			
+		<h4>Categorías</h4>
+		<div class="col-md-4">
+			<ul class="nav nav-pills nav-stacked nav-template">
+				{% for category, template in arrayTemplate %}
+					<li class="{% if loop.first %}active{% endif %}"><a href="#{{category|change_spaces_in_between}}" data-toggle="tab">{{category}}</a></li> 
+				{% endfor %}
+			</ul>
+		</div>
 	</div>
-	<hr class="divider">
+
+	<div class="space"></div>
 	<div class="row">
-		<div class="span10">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Escoja una plantilla
-					</div>
-				</div>
-				<div class="box-content">
-					<div class="padded">
-						<div class="tab-content">
-							{% for category, template in arrayTemplate %}
-								<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category|change_spaces_in_between}}">
-									<ul class="thumbnails">
-										{% for t in template %}
-										<li>
-											<h5 style="text-align: center;">{{t['name']}}</h5>
-											{#<a href="{{url('mail/editor')}}/{{mail.idMail}}/{{t['id']}}" class="thumbnail">#}
-												<div class="preview-template img-wrap">
-													{% if t['preview'] == null%}
-														<div class="not-available-template"></div>
-													{% else %}
-														<img src="data: image/png;base64, {{t['preview']}}" />
-													{%endif%}
-													{% if t['idMail'] != null %}
-														<a href="{{url('mail/editor')}}/{{t['idMail']}}/{{t['id']}}">
-													{% else %}
-														<a href="{{url('mail/setup')}}/0/{{t['id']}}/new">
+		<div class="tab-content">
+			{% for category, template in arrayTemplate %}
+				<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category|change_spaces_in_between}}">
+						<div class="thumbnails">
+							<div class="row">
+								{% for t in template %}
+								<div class="item-thumb col-xs-6 col-md-3">
+									<h5 style="text-align: center;">{{t['name']}}</h5>
+										<div class="preview-template img-wrap">
+											{% if t['preview'] == null%}
+												<div class="not-available-template"></div>
+											{% else %}
+												<img src="data: image/png;base64, {{t['preview']}}" />
+											{%endif%}
+											{% if t['idMail'] != null %}
+												<a href="{{url('mail/editor')}}/{{t['idMail']}}/{{t['id']}}">
+											{% else %}
+												<a href="{{url('mail/setup')}}/0/{{t['id']}}/new">
+											{% endif %}
+													<div class="img-info-x2"><p><i class="icon-ok"></i> Elegir</p></div>
+												</a>
+										</div>
+									<div class="btn-toolbar" style="text-align: center !important;">
+										<div class="btn-group template-tools">
+											<a href="#preview-modal" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Previsualizar"><i class="icon-eye-open"></i></a>
+											{% if t['idMail'] == null %}
+												{% if t['idAccount'] == null%}
+													{% if userObject.userrole == 'ROLE_SUDO'%}
+														<a href="{{url('template/edit')}}/{{t['id']}}" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Editar"><i class="icon-edit"></i></a>
+														<a class="ShowDialog btn btn-default" data-backdrop="static" data-toggle="modal" href="#modal-simple" data-id="{{url('template/delete')}}/{{t['id']}}" title="Eliminar"><i class="icon-trash"></i></a>
 													{% endif %}
-															<div class="img-info-x2"><p><i class="icon-ok"></i> Elegir</p></div>
-														</a>
-												</div>
-											</a>
-											<div class="btn-toolbar" style="text-align: center !important;">
-												<div class="btn-group template-tools">
-													<a href="#preview-modal" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Previsualizar"><i class="icon-eye-open"></i></a>
-													{% if t['idMail'] == null %}
-														{% if t['idAccount'] == null%}
-															{% if userObject.userrole == 'ROLE_SUDO'%}
-																<a href="{{url('template/edit')}}/{{t['id']}}" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Editar"><i class="icon-edit"></i></a>
-																<a class="ShowDialog btn btn-default" data-backdrop="static" data-toggle="modal" href="#modal-simple" data-id="{{url('template/delete')}}/{{t['id']}}" title="Eliminar"><i class="icon-trash"></i></a>
-															{% endif %}
-														{% else%}
-															<a href="{{url('template/edit')}}/{{t['id']}}" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Editar"><i class="icon-edit"></i></a>
-															<a class="ShowDialog btn btn-default" data-backdrop="static" data-toggle="modal" href="#modal-simple" data-id="{{url('template/delete')}}/{{t['id']}}" title="Eliminar"><i class="icon-trash"></i></a>
-														{% endif %}
-													{% endif %}
-												</div>
-											</div>
-										</li>
-										{% endfor %}
-									</ul>
+												{% else%}
+													<a href="{{url('template/edit')}}/{{t['id']}}" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Editar"><i class="icon-edit"></i></a>
+													<a class="ShowDialog btn btn-default" data-backdrop="static" data-toggle="modal" href="#modal-simple" data-id="{{url('template/delete')}}/{{t['id']}}" title="Eliminar"><i class="icon-trash"></i></a>
+												{% endif %}
+											{% endif %}
+										</div>
+									</div>
 								</div>
-							{% endfor %}
+								{% endfor %}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="span2">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Categorías
-					</div>
-				</div>
-				<div class="box-content">
-					<div class="padded">
-						<ul class="nav nav-pills nav-stacked nav-template">
-							{% for category, template in arrayTemplate %}
-								<li class="{% if loop.first %}active{% endif %}"><a href="#{{category|change_spaces_in_between}}" data-toggle="tab">{{category}}</a></li> 
-							{% endfor %}
-						</ul>
-					</div>
-				</div>
-			</div>
+			{% endfor %}
 		</div>
 	</div>
-	<br />
 	<div class="row">
 		<div class="span12 padded">
 			{#<a href="{{url('mail/source')}}/{{mail.idMail}}" class="btn btn-default"><i class="icon-circle-arrow-left"></i> Anterior</a>#}

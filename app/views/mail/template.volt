@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
@@ -27,8 +27,12 @@
 	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
-{% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
+{% block sectionsubtitle %}Envíe un correo a mútiples contactos{% endblock %}
 {% block content %}
+
+{# botones de navegacion #}
+{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
+
 	<div class="row">
 		<div class="box">
 			<div class="box-content">

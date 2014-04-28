@@ -10,9 +10,9 @@
 	<div class="row">
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
-				<a href="{{ url('mail/setup') }}"  class="shortcuts"><span class="sm-button-large-email-new"></span></a>
+				<a href="{{ url('mail/compose') }}"  class="shortcuts"><span class="sm-button-large-email-new"></span></a>
 			</div>
-			<a href="{{ url('mail/setup') }}" class="btn-actn">Nuevo correo</a>
+			<a href="{{ url('mail/compose') }}" class="btn-actn">Nuevo correo</a>
 		</div>
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
