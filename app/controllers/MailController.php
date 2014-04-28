@@ -671,6 +671,7 @@ class MailController extends ControllerBase
 					$this->logger->log("Error while saving mail {$msg}");
 				}
 				$this->db->rollback();
+				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			}
 			
@@ -700,9 +701,14 @@ class MailController extends ControllerBase
 					$this->logger->log("Error while saving content mail {$msg}");
 				}
 				$this->db->rollback();
+				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			} 
 			$this->db->commit();
+			
+			if ($idMail == 'null') {
+				$this->traceSuccess("Mail created from template, idMail: {$mail->idMail}");
+			}
 			return $this->setJsonResponse(array('msg' => "{$mail->idMail}"), 200);
 		}
 	}

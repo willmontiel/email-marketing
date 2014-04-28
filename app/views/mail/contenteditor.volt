@@ -10,7 +10,7 @@
 		iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
 	};
 	var objMail = {{objMail}};
-	var idMail = '';
+	var idMail = 'null';
 	
 	{% if mail is defined %}
 		var idMail = {{mail.idMail}};
@@ -150,6 +150,8 @@
 					<div class="pull-right NextFromEditor">
 						{% if mail is defined%}
 							<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar</a>
+						{% else %}
+							<a href="{{url('template')}}" class="btn btn-default">Cancelar</a>
 						{% endif %}
 						<button onclick="sendData()" type="button" class="btn btn-primary">Guardar y regresar</button>
 					</div>
