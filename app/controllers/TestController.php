@@ -1126,7 +1126,16 @@ class TestController extends ControllerBase
 		$this->logger->log('Contacto con id: ' . $contact->idContact);
 		$this->logger->log('Formulario con id: ' . $form->idForm);
 		
-		$notification = new NotificationMail();
-		$notification->sendMailInForm($contact, $form->optinMail);
+		$content = json_decode($form->optinMail);
+			
+		$optin = new NotificationMail();
+		$optin->setForm($form);
+		$optin->setContact($contact);
+		$optin->prepareContent($content->mail);
+		$optin->setNotificationLink();
+		$optin->setContactReceiver();
+		$optin->sendMail($content);
+		
+		
 	}
 }

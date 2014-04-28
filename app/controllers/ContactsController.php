@@ -429,4 +429,53 @@ class ContactsController extends ControllerBase
 
 		return $this->response->redirect($form->urlSuccess, true);
 	}
+	
+	public function activateAction($parameters)
+	{
+		try {
+			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
+			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
+			$idenfifiers = $linkEncoder->decodeLink('contacts/activate', $parameters);
+			list($idLink, $idContact, $idForm) = $idenfifiers;
+			
+			$form = Form::findFirst(array(
+				'conditions' => 'idForm = ?1',
+				'bind' => array(1 => $idForm)
+			));
+			
+			$contact = Contact::findFirst(array(
+				'conditions' => 'idContact = ?1',
+				'bind' => array(1 => $idContact)
+			));
+			
+			if( !$contact ) {
+				if( !isset($form) && !$form) {
+					return $this->response->redirect('error/link');
+				}
+				return $this->response->redirect($form->urlError, true);
+			}
+			
+			$wrapper = new ContactFormWrapper();
+			$wrapper->setForm($form);
+			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
+			$wrapper->activateContactFromForm($contact);
+
+		}
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			if( !isset($form) && !$form) {
+				return $this->response->redirect('error/link');
+			}
+			return $this->response->redirect($form->urlError, true);
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			if( !isset($form) && !$form) {
+				return $this->response->redirect('error/link');
+			}
+			return $this->response->redirect($form->urlError, true);
+		}
+		
+		return $this->response->redirect($form->urlSuccess, true);
+	}
 }

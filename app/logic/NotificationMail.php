@@ -5,28 +5,55 @@ require_once "../app/library/swiftmailer/lib/swift_required.php";
 class NotificationMail extends TestMail
 {
 	public $content;
+	public $receiver = array('email' => '', 'name' => '');
 	
 	function __construct()
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
+		$this->urlObj = Phalcon\DI::getDefault()->get('urlManager');
 	}
 	
-	public function sendMailInForm(Contact $contact, $jsoncontent)
+	public function setForm(Form $form)
 	{
-		$fullcontent = json_decode($jsoncontent);
-		$this->setBody($fullcontent->mail);
+		$this->form = $form;
+	}
+	
+	public function setContact(Contact $contact)
+	{
+		$this->contact = $contact;
+	}
+
+	public function setContactReceiver()
+	{
+		$this->receiver['email'] = $this->contact->email->email;
+		$this->receiver['name'] = $this->contact->name;
+	}
+
+	public function setNotifyReceiver($email, $name)
+	{
+		$this->receiver['email'] = $email;
+		$this->receiver['name'] = $name;
+	}
+	
+	public function prepareContent($content)
+	{
+		$this->setBody($content);
 		$this->createPlaintext();
-		
+	}
+
+	public function sendMail($sender)
+	{
+//		$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 		$transport = Swift_SendmailTransport::newInstance();
 		$swift = Swift_Mailer::newInstance($transport);
 		
-		$subject = $fullcontent->subject;
-		$from = array($fullcontent->fromemail => $fullcontent->fromname);
-		$to = array($contact->email->email => $contact->name);
+		$subject = $sender->subject;
+		$from = array($sender->fromemail => $sender->fromname);
+		$to = array($this->receiver['email'] => $this->receiver['name']);
 		$content = $this->getBody();
 		$text = $this->getPlainText();
-		$replyTo = $fullcontent->reply;
-
+		$replyTo = $sender->reply;
+		
 		$message = new Swift_Message($subject);
 		$message->setFrom($from);
 		$message->setTo($to);
@@ -36,7 +63,7 @@ class NotificationMail extends TestMail
 		if ($replyTo != null) {
 			$message->setReplyTo($replyTo);
 		}
-
+		$this->logger->log($content);
 		$sendMail = $swift->send($message, $failures);
 
 		if (!$sendMail){
@@ -54,19 +81,17 @@ class NotificationMail extends TestMail
 		$editorObj->assignContent(json_decode($contentobj));
 		$content = utf8_decode($editorObj->replacespecialchars($editorObj->render()));
 		$this->body = $content;
-//		$replace = '<body>
-//						<center>
-//							<table border="0" cellpadding="0" cellspacing="0" width="600px" style="border-collapse:collapse;background-color:#444444;border-top:0;border-bottom:0">
-//								<tbody>
-//									<tr>
-//										<td align="center" valign="top" style="border-collapse:collapse">
-//											<span style="padding-bottom:9px;color:#eeeeee;font-family:Helvetica;font-size:12px;line-height:150%">"' . $this->message . '" — ' . $this->mail->fromName . '</span>
-//										</td>
-//									</tr>
-//								</tbody>
-//							</table>
-//						</center>';
-//		
-//		$this->body = str_replace('<body>', $replace, $content);
+	}
+	
+	public function setNotificationLink()
+	{
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
+		
+		$action = 'contacts/activate';
+		$parameters = array(1, $this->contact->idContact, $this->form->idForm);
+		$link = $linkdecoder->encodeLink($action, $parameters);
+		
+		$this->body = str_replace('%%CONFIRMLINK%%', $link, $this->body);
 	}
 }

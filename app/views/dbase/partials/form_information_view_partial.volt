@@ -54,16 +54,16 @@
 						<div class="form-group">
 							<label for="optin-mail-from-name" class="col-sm-3 control-label">De: </label>
 							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="optinfromname" id="optin-mail-from-name" class="form-control"}}'}}
+								{{'{{view Ember.TextField valueBinding="optinfromname" id="optin-mail-from-name" class="form-control" placeholder="Nombre"}}'}}
 							</div>
 							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="optinfromemail" id="optin-mail-from-email" class="form-control"}}'}}
+								{{'{{view Ember.TextField valueBinding="optinfromemail" id="optin-mail-from-email" class="form-control" placeholder="example@test.com"}}'}}
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="optin-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
 							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="optinreplyto" id="optin-mail-reply-to" class="form-control"}}'}}
+								{{'{{view Ember.TextField valueBinding="optinreplyto" id="optin-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
 							</div>
 						</div>
 						<div class="form-group" style="text-align: center;">
@@ -111,16 +111,16 @@
 						<div class="form-group">
 							<label for="welcome-mail-from-name" class="col-sm-3 control-label">De: </label>
 							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="welcomefromname" id="welcome-mail-from-name" class="form-control"}}'}}
+								{{'{{view Ember.TextField valueBinding="welcomefromname" id="welcome-mail-from-name" class="form-control" placeholder="Nombre"}}'}}
 							</div>
 							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="welcomefromemail" id="welcome-mail-from-email" class="form-control"}}'}}
+								{{'{{view Ember.TextField valueBinding="welcomefromemail" id="welcome-mail-from-email" class="form-control" placeholder="example@test.com"}}'}}
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="welcome-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
 							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="welcomereplyto" id="welcome-mail-reply-to" class="form-control"}}'}}
+								{{'{{view Ember.TextField valueBinding="welcomereplyto" id="welcome-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
 							</div>
 						</div>
 						<div class="form-group" style="text-align: center;">
@@ -162,16 +162,16 @@
 						<div class="form-group">
 							<label for="notify-mail-from-name" class="col-sm-3 control-label">De: </label>
 							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="notifyfromname" id="notify-mail-from-name" class="form-control"}}'}}
+								{{'{{view Ember.TextField valueBinding="notifyfromname" id="notify-mail-from-name" class="form-control" placeholder="Nombre"}}'}}
 							</div>
 							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="notifyfromemail" id="notify-mail-from-email" class="form-control"}}'}}
+								{{'{{view Ember.TextField valueBinding="notifyfromemail" id="notify-mail-from-email" class="form-control" placeholder="example@test.com"}}'}}
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="notify-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
 							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="notifyreplyto" id="notify-mail-reply-to" class="form-control"}}'}}
+								{{'{{view Ember.TextField valueBinding="notifyreplyto" id="notify-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
 							</div>
 						</div>
 						<div class="form-group" style="text-align: center;">

@@ -48,9 +48,16 @@ class ContactFormWrapper extends ContactWrapper
 			$contact = $this->createNewContactFromJsonData($contactObj, $this->contactlist);
 		}
 		
-		if($contact) {
+		if($contact && $this->form->optin === 'Si') {
+			$content = json_decode($this->form->optinMail);
+			
 			$optin = new NotificationMail();
-			$optin->sendMailInForm($contact, $this->form->optinMail);
+			$optin->setForm($this->form);
+			$optin->setContact($contact);
+			$optin->prepareContent($content->mail);
+			$optin->setNotificationLink();
+			$optin->setContactReceiver();
+			$optin->sendMail($content);
 		}
 	}
 	
@@ -79,6 +86,42 @@ class ContactFormWrapper extends ContactWrapper
 			if(!isset($obj->$name)) {
 				$obj->$name = '';
 			}
+		}
+	}
+	
+	public function activateContactFromForm(Contact $contact)
+	{
+		$contact->status = time();
+		$contact->ipActivated = $this->ipaddress;
+		
+		if (!$contact->save()) {
+			$errmsg = $contact->getMessages();
+			$msg = '';
+			foreach ($errmsg as $err) {
+				$msg .= $err . PHP_EOL;
+			}
+			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
+		}
+		
+		if($this->form->notify === 'Si') {
+			$content = json_decode($this->form->notifyMail);
+			
+			$notify = new NotificationMail();
+			$notify->setForm($this->form);
+			$notify->prepareContent($content->mail);
+			$notify->setNotifyReceiver($this->form->notifyEmail, '');
+			$notify->sendMail($content);
+		}
+		
+		if($this->form->welcome === 'Si') {
+			$content = json_decode($this->form->welcomeMail);
+			
+			$welcome = new NotificationMail();
+			$welcome->setForm($this->form);
+			$welcome->setContact($contact);
+			$welcome->prepareContent($content->mail);
+			$welcome->setContactReceiver();
+			$welcome->sendMail($content);
 		}
 	}
 	

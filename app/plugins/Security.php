@@ -117,6 +117,7 @@ class Security extends Plugin
 				'unsubscribe::success' => array(),
 				'form::frame' => array(),
 				'contacts::form' => array(),
+				'contacts::activate' => array(),
 				
 				
 				
@@ -447,7 +448,8 @@ class Security extends Plugin
 			'unsubscribe:contact',
 			'unsubscribe:success',
 			'form:frame',
-			'contacts:form'
+			'contacts:form',
+			'contacts:activate'
 		);
 
 		if ("$controller::$action" == "error::notavailable") {
