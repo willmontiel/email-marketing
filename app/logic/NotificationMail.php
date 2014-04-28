@@ -77,7 +77,7 @@ class NotificationMail extends TestMail
 	{
 		$editorObj = new HtmlObj();
 		$editorObj->assignContent(json_decode($contentobj));
-		$this->body = utf8_decode($htmlObj->replacespecialchars($editorObj->replacespecialchars($editorObj->render())));
+		$this->body = utf8_decode($editorObj->replacespecialchars($editorObj->render()));
 	}
 	
 	public function setNotificationLink()
