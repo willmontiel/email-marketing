@@ -326,6 +326,7 @@ class Security extends Plugin
 				'test::imagetest' => array('mail' => array('read')),
 				'test::unsubscribed' => array('mail' => array('read')),
 				'test::testsnimageresize' => array('mail' => array('read')),
+				'test::testoptinmail' => array('form' => array('create')),
 				
 				//statistics
 				'statistic::index' => array('statistic' => array('read')),

@@ -1,5 +1,7 @@
 <?php
 
+require_once "../app/library/swiftmailer/lib/swift_required.php";
+
 class NotificationMail extends TestMail
 {
 	public $content;
