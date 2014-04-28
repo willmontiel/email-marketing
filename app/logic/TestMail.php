@@ -107,8 +107,11 @@ class TestMail
 	{
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $this->mail);
-		$prepareMail = new PrepareMailContent($linkService, $imageService);
+		$prepareMail = new PrepareMailContent($linkService, $imageService, false);
 		list($this->body, $links) = $prepareMail->processContent($this->body);
+		
+		$htmlObj = new HtmlObj();
+		$this->body = utf8_decode($htmlObj->replacespecialchars($this->body));
 	}
 
 	public function getBody()
