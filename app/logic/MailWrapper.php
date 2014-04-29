@@ -80,6 +80,36 @@ class MailWrapper extends BaseWrapper
 		}
 	}
 	
+	protected function processSocialPosts()
+	{
+		if($this->fbaccounts || $this->twaccounts) {
+			$socialmail = Socialmail::findFirstByIdMail($this->mail->idMail);
+			if(!$socialmail) {
+				$socialmail = new Socialmail();
+				$socialmail->idMail = $this->mail->idMail;
+			}
+			
+			$socialnet = new SocialNetworkConnection();
+			if($this->fbaccounts) {
+				$socialmail->fbdescription = $socialnet->saveFacebookDescription($this->content->fbtitlecontent, $this->content->fbdescriptioncontent, $this->content->fbmessagecontent, $this->content->fbimagepublication);
+			}
+			if($this->twaccounts) {
+				$socialmail->twdescription = $socialnet->saveTwitterDescription($this->content->twpublicationcontent);
+			}
+			
+			if (!$socialmail->save()) {
+				$e = array();
+				foreach ($socialmail->getMessages() as $msg) {
+					$e[] = $msg;
+				}
+				$messages = implode(", ", $e);
+
+				$this->addMessageError('errors', $messages, 400);
+				throw new \InvalidArgumentException($messages);
+			}
+		}
+		
+	}
 	
 	public function saveMail()
 	{
@@ -105,8 +135,14 @@ class MailWrapper extends BaseWrapper
 		$this->mail->fromEmail = $this->content->fromEmail;
 		$this->mail->replyTo = $this->content->replyTo;
 		$this->mail->target = $this->target->target;
-		$this->mail->socialNetworks = $this->content->socialNetworks;
-
+		
+		$this->fbaccounts = (!empty($this->content->fbaccounts)) ? explode(',', $this->content->fbaccounts) : null;
+		$this->twaccounts = (!empty($this->content->twaccounts)) ? explode(',', $this->content->twaccounts) : null;
+		if($this->fbaccounts || $this->twaccounts) {
+			$socialnet = new SocialNetworkConnection();
+			$this->mail->socialnetworks = $socialnet->saveSocialsIds($this->fbaccounts, $this->twaccounts);
+		}
+		
 		if (!$this->mail->save()) {
 			$e = array();
 			foreach ($this->mail->getMessages() as $msg) {
@@ -117,6 +153,8 @@ class MailWrapper extends BaseWrapper
 			$this->addMessageError('errors', $messages, 400);
 			throw new \InvalidArgumentException($messages);
 		}
+		
+		$this->processSocialPosts();
 		
 		if ($this->scheduleDate != null) {
 			$mailSchedule = new MailScheduleObj($this->mail);
@@ -182,6 +220,30 @@ class MailWrapper extends BaseWrapper
 		$jsonObject['dbases'] = '';
 		$jsonObject['contactlists'] = '';
 		$jsonObject['segments'] = '';
+		$jsonObject['fbaccounts'] = '';
+		$jsonObject['twaccounts'] = '';
+		$jsonObject['fbmessagecontent'] = '';
+		$jsonObject['fbimagepublication'] = 'default';
+		$jsonObject['fbtitlecontent'] = '';
+		$jsonObject['fbdescriptioncontent'] = '';
+		$jsonObject['twpublicationcontent'] = '';
+		
+		if( !empty($this->mail->socialnetworks) ) {
+			$socials = json_decode($this->mail->socialnetworks);
+			$jsonObject['fbaccounts'] = (isset($socials->facebook)) ? implode(',', $socials->facebook) : '';
+			$jsonObject['twaccounts'] = (isset($socials->twitter)) ? implode(',', $socials->twitter) : '';
+			
+			$socialmail = Socialmail::findFirstByIdMail($this->mail->idMail);
+			$fbdesc = ($socialmail && !empty($socialmail->fbdescription)) ? json_decode($socialmail->fbdescription) : '';
+			$twdesc = ($socialmail && !empty($socialmail->twdescription)) ? json_decode($socialmail->twdescription) : '';
+			
+			$jsonObject['fbmessagecontent'] = ($fbdesc != '') ? $fbdesc->message : '';
+			$jsonObject['fbimagepublication'] = ($fbdesc != '') ? $fbdesc->image : '';
+			$jsonObject['fbtitlecontent'] = ($fbdesc != '') ? $fbdesc->title : '';
+			$jsonObject['fbdescriptioncontent'] = ($fbdesc != '') ? $fbdesc->description : '';
+					
+			$jsonObject['twpublicationcontent'] = ($twdesc != '') ? $twdesc->message : '';
+		}
 		
 		$filter = null;
 		if ($this->mail->target != null) {

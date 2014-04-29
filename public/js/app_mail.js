@@ -8,7 +8,7 @@ DS.RESTAdapter.reopen({
 
 App.Store = DS.Store.extend({});
 
-App.fbimage = 'post_default.png';
+App.fbimage = 'default';
 
 
 App.Mail = DS.Model.extend({
@@ -80,6 +80,14 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	fromSummary: '',
 	summaryMail: '',
 	summaryAnalytics: '',
+	imageUrl: function () {
+		var res = config.assetsUrl;
+		if( this.get('fbimagepublication') === undefined || this.get('fbimagepublication') === 'default' || this.get('fbimagepublication') === 'post_default.png' ) {
+			this.set('fbimagepublication', 'post_default.png');
+			res = config.imagesUrl;
+		}
+		return res;
+	}.property('fbimagepublication'),
 	//Retorna el id del correo para crear las url's
 	url: function () {
 		return '/' + this.get('id');
@@ -87,10 +95,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	
 	//Setear la imagen por defecto de facebook en caso de que no tenga ninguna
 	facebookImage: function() {
-		if( this.get('fbimagepublication') === undefined ) {
-			this.set('fbimagepublication', App.fbimage);
+		if( this.get('fbimagepublication') === undefined || this.get('fbimagepublication') === 'default' ) {
+			this.set('fbimagepublication', 'post_default.png');
 		}
-	}.observes('content.fbimagepublication'),
+	}.observes('this.content'),
 	
 	//Si hay un id se encargara se recrear el correo para su edición
 	setSelectsContent: function () {
@@ -98,10 +106,14 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
 			var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
 			var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
+			var fbaccounts = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
+			var twaccounts = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
 			
 			this.set('dbaselist', arrayDbase);
 			this.set('list', arrayList);
 			this.set('segmentlist', arraySegment);
+			this.set('fbaccountsel', fbaccounts);
+			this.set('twaccountsel', twaccounts);
 			
 			var arrayOpen = setTargetValues(this.get('this.filterByOpen'), App.sendByOpen);
 			var arrayClick = setTargetValues(this.get('this.filterByClick'), App.sendByClick);
@@ -114,7 +126,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			if (App.googleAnalyticsLinks !== undefined) {
 				var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
 				this.set('linksAnalytics', arrayAnalytics);
-			}	
+			}
 		}
 	}.observes('this.content'),
 			
@@ -355,6 +367,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				var open = getArrayValue(this.get('open'));
 				var click = getArrayValue(this.get('click'));
 				var exclude = getArrayValue(this.get('exclude'));
+				var fbaccounts = getArrayValue(this.get('fbaccountsel'));
+				var twaccounts = getArrayValue(this.get('twaccountsel'));
 				
 				var array = [];
 					var obj = this.get('linksAnalytics').toArray();
@@ -377,8 +391,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				mail.set('filterByClick', click);
 				mail.set('filterByExclude', exclude);
 				mail.set('googleAnalytics', analitycs);
+				mail.set('fbaccounts', fbaccounts);
+				mail.set('twaccounts', twaccounts);
 				mail.set('fbimagepublication', App.fbimage);
-				
+
 				this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
 				this.set('isHeaderExpanded', false);
 				this.set('isTargetExpanded', false);

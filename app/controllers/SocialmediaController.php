@@ -65,7 +65,7 @@ class SocialmediaController extends ControllerBase
 			$this->logger->log('Exception: [' . $e . ']');
 			$this->traceFail('Social User Account Fail from mail');
 		}
-		return $this->response->redirect("mail/setup/" . $idMail);
+		return $this->response->redirect("mail/compose/" . $idMail);
 	}
 	
 	public function deleteAction($idSocialnetwork)
