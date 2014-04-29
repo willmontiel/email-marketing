@@ -111,7 +111,7 @@ class FormCreator
 	
 	protected function getDateElement($element)
 	{
-		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control date_view_picker" data-name="' . $element->name . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required" data-name="' . $element->name . '" required>';
+		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control date_view_picker" data-name="' . $element->name . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required date_view_picker" data-name="' . $element->name . '" required>';
 		if($element->hide) {
 			$field = '<input type="text" class="form-control date_view_picker" value="' . $element->defaultvalue . '">';
 		}
