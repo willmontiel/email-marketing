@@ -107,16 +107,16 @@
 				</div>
 				<div class="space"></div>
 				<div class="bs-callout bs-callout-danger">
-					<p>Si está seguro dele click al botón <strong>Bloquear</strong> para continuar.</p>
+					<p>Si está seguro haga clic en el botón <strong>Bloquear</strong> para continuar.</p>
 				</div>
 				<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact" class="icheckbox_flat-aero hover"}}' }} Eliminar contactos asociados al email</p>
 				<div class="form-actions pull-right">
 					<div class="row">
 						<div class="col-xs-6">
-							<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this }}' }}>Cancelar</button>
+							<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this }}' }}>Cancelar</button>
 						</div>
 						<div class="col-xs-6">
-							<button class="btn btn-danger btn-sm extra-padding" {{ '{{action block this }}' }}>Bloquear</button>
+							<button class="btn btn-danger btn-sm extra-padding" {{ '{{action "block" this }}' }}>Bloquear</button>
 						</div>
 					</div>
 				</div>

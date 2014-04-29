@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
@@ -69,17 +69,12 @@
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
 			<div class="row">
-				<div class="span12">
-					<h3>{{mail.name}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span6">
+				<h3>{{mail.name}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
 					<table class="table" style="border: 0px !important;" >
 						<thead></thead>
 						<tbody>
 							<tr>
-								<td style="width: 50%;">
+								<td>
 									<div class="box">
 										<div class="box-section news with-icons">
 											<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
@@ -168,7 +163,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<div class="span4">
+					<div class="">
 						{{ '{{view Ember.Select
 							class="select"
 							contentBinding="App.mails"

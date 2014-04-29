@@ -206,4 +206,48 @@ class SessionController extends ControllerBase
 			}
 		}
 	}
+	
+	public function loginlikethisuserAction($idUser)
+	{
+		$user = User::findFirst(array(
+			'conditions' => 'idUser = ?1',
+			'bind' => array(1 => $idUser)
+		));
+
+		if (!$user) {
+			$this->flashSession->error("No se ha podido ingresar como el usuario, porque este no existe");
+			return $this->response->redirect('account/index');
+		}
+
+		$this->session->set('userid', $user->idUser);
+		$this->session->set('authenticated', true);
+
+		$this->user = $user;
+		
+		$uefective = $this->session->get('userefective');
+		$this->traceSuccess("Login by sudo: {$uefective->username} / {$uefective->idUser}, in account {$this->user->account->idAccount} with user {$this->user->username} / {$this->user->idUser}");
+		return $this->response->redirect("");
+	}
+	
+	public function logoutfromthisaccountAction()
+	{
+		$uefective = $this->session->get('userefective');
+		$olduser = $this->user;
+		$oldAccount = $this->user->account;
+		
+		if (isset($uefective)) {
+			$this->session->set('userid', $uefective->idUser);
+			$this->session->set('authenticated', true);
+
+			$this->user = $uefective;
+
+			$this->session->remove('userefective');
+			$this->traceSuccess("Logout by sudo: {$uefective->username} / {$uefective->idUser}, in account {$oldAccount->idAccount} with user {$olduser->username} / {$olduser->idUser}");
+			return $this->response->redirect("");
+		}
+		else {
+			return $this->response->redirect("error/unauthorized");
+		}
+		
+	}
 }

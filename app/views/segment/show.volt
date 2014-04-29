@@ -53,6 +53,8 @@
 			<h4 class="sectiontitle">Contactos del segmento {{datasegment.name}} <small>({{'{{totalrecords}}'}})</small></h4>
 				{{ partial("partials/search_contacts_partial") }}
 
+				<div class="clearfix"></div>
+
 				{{ partial("partials/select_contacts_search_partial") }}
 
 			<table class="table table-striped table-contacts">

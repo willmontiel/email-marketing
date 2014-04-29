@@ -49,14 +49,35 @@ class MailController extends ControllerBase
 				$MailWrapper->saveMail();
 				$response = $MailWrapper->getResponse();
 				
+				if ($idMail == null) {
+					$this->traceSuccess("Create mail, idMail: {$response->data['id']}");
+				}
+				else {
+					$this->traceSuccess("Update mail, idMail: {$idMail}");
+				}
+				
 				return $this->setJsonResponse(array($response->key => $response->data), $response->code);
 			}
 			catch (InvalidArgumentException $e) {
+				if ($idMail == null) {
+					$this->traceFail("Error creating mail, USER: {$this->user->idUser}/{$this->user->username}");
+				}
+				else {
+					$this->traceFail("Error update mail, idMail: {$idMail}");
+				}
+				
 				$this->logger->log("InvalidArgumentException: {$e}");
 				$response = $MailWrapper->getResponseMessageForEmber();
 				return $this->setJsonResponse(array($response->key => $response->message), $response->code);
 			}
 			catch (Exception $e) {
+				if ($idMail == null) {
+					$this->traceFail("Error creating mail, USER: {$this->user->idUser}/{$this->user->username}");
+				}
+				else {
+					$this->traceFail("Error update mail, idMail: {$idMail}");
+				}
+				
 				$this->logger->log("Exception: {$e}");
 				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador'), 500);
 			}
@@ -171,12 +192,16 @@ class MailController extends ControllerBase
 			$process->setAccount($this->user->account);
 			$process->setUser($this->user);
 			$process->deleteMail($idMail);
-		} catch (\InvalidArgumentException $e) {
+		} 
+		catch (\InvalidArgumentException $e) {
 			$this->flashSession->error($e->getMessage());
-			return $this->response->redirect("mail");
+			$this->logger->log("Exception: Error while deleting mail, {$e}");
+			$this->traceFail("Error deleting mail, idMail: {$idMail}");
+			return $this->response->redirect("mail/list");
 		}
+		$this->traceSuccess("Mail deleted, idMail: {$idMail}");
 		$this->flashSession->warning("Se ha eliminado el correo exitosamente");
-		return $this->response->redirect("mail");
+		return $this->response->redirect("mail/list");
 	}
 	
 	private function validateTemplate($template, $account)
@@ -348,6 +373,14 @@ class MailController extends ControllerBase
 					}
 					$socialmail->save();
 				}
+				
+				if ($idMail == null) {
+					$this->traceSuccess("Create mail, idMail: {$mail->idMail}");
+				}
+				else {
+					$this->traceSuccess("mail updated, idMail: {$idMail}");
+				}
+				
 				if(!$mail->type) {
 					return $this->response->redirect("mail/source/" .$mail->idMail);
 				}
@@ -368,6 +401,12 @@ class MailController extends ControllerBase
 				}
 			}
 			else {
+				if ($idMail == null) {
+					$this->traceSuccess("Error creating mail, idMail: {$mail->idMail}");
+				}
+				else {
+					$this->traceSuccess("Error updating mail, idMail: {$idMail}");
+				}
 				foreach ($mail->getMessages() as $msg) {
 					$this->flashSession->error($msg);
 				}
@@ -562,7 +601,7 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function contenteditorAction($idMail, $idTemplate = null) 
+	public function contenteditorAction($idMail = null, $idTemplate = null) 
 	{
 		$account = $this->user->account;
 		
@@ -572,48 +611,57 @@ class MailController extends ControllerBase
 							2 => $account->idAccount)
 		));
 		
+		$objTemplate = Template::findFirst(array(
+			"conditions" => "idTemplate = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $idTemplate,
+							2 => $account->idAccount)
+		));
+		
+		$mailcontent = false;
+		
 		if ($mail) {
-			$objTemplate = Template::findFirst(array(
-				"conditions" => "idTemplate = ?1",
-				"bind" => array(1 => $idTemplate)
-			));
-			
 			$mailcontent = Mailcontent::findFirst(array(
 				'conditions' => 'idMail = ?1',
 				'bind' => array(1 => $mail->idMail)
 			));
 			
-			if ($objTemplate) {
-				if (empty($objTemplate->content)) {
-					$objContent = 'null';
-				}
-				else {
-					$objContent = $objTemplate->content;
-				}
-			}
-			else if($mailcontent) {
-				$text = $mailcontent->plainText;
-				if (empty($mailcontent->content)) {
-					$objContent = 'null';
-				}
-				else {
-					$objContent = $mailcontent->content;
-				}
+			$this->view->setVar('mail', $mail);
+		}
+		
+		if ($objTemplate) {
+			if (empty($objTemplate->content)) {
+				$objContent = 'null';
 			}
 			else {
-				$text = null;
+				$objContent = $objTemplate->content;
+			}
+		}
+		else if($mailcontent) {
+			$text = $mailcontent->plainText;
+			if (empty($mailcontent->content)) {
 				$objContent = 'null';
+			}
+			else {
+				$objContent = $mailcontent->content;
 			}
 		}
 		else {
-			return $this->response->redirect('error');
+			$text = null;
+			$objContent = 'null';
 		}
 		
-		$this->view->setVar('mail', $mail);
 		$this->view->setVar('objMail', $objContent);
 		
 		if ($this->request->isPost()) {
 			$this->db->begin();
+			
+			if (!$mail) {
+				$mail = new Mail();
+				$mail->idAccount = $this->user->idAccount;
+				$mail->status = 'Draft';
+				$mail->wizardOption = 'setup';
+				$mail->deleted = 0;
+			}
 			
 			$content = $this->request->getPost('editor');
 			$mail->type = 'Editor';
@@ -623,6 +671,7 @@ class MailController extends ControllerBase
 					$this->logger->log("Error while saving mail {$msg}");
 				}
 				$this->db->rollback();
+				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			}
 			
@@ -652,9 +701,14 @@ class MailController extends ControllerBase
 					$this->logger->log("Error while saving content mail {$msg}");
 				}
 				$this->db->rollback();
+				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			} 
 			$this->db->commit();
+			
+			if ($idMail == 'null') {
+				$this->traceSuccess("Mail created from template, idMail: {$mail->idMail}");
+			}
 			return $this->setJsonResponse(array('msg' => "{$mail->idMail}"), 200);
 		}
 	}
@@ -1503,9 +1557,9 @@ class MailController extends ControllerBase
 	{
 		$log = $this->logger;
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND status = ?2',
+			'conditions' => "idMail = ?1 AND idAccount = ?2 AND status = 'Draft'",
 			'bind' => array(1 => $idMail,
-							2 => 'Draft')
+							2 => $this->user->account->idAccount)
 		));
 		if ($mail) {
 			$target = $this->findTargetsName($mail->target);
@@ -1657,8 +1711,9 @@ class MailController extends ControllerBase
 		$newImg = $imgObj->getImageBase64();
 		
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
 		));
 		
 		$mail->previewData = $newImg;
@@ -1697,12 +1752,25 @@ class MailController extends ControllerBase
 
 	public function converttotemplateAction($idMail)
 	{
-		$mail = Mail::findFirstByIdMail($idMail);
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
+		));
+		
 		$mailContent = Mailcontent::findFirstByIdMail($idMail);
 		
 		if ($mail && $mailContent) {
 			$name = $this->request->getPost("nametemplate");
 			$category = $this->request->getPost("category");
+			
+			if (empty($name)) {
+				$name = "Nueva plantilla";
+			}
+			
+			if (empty($category)) {
+				$category = "Mis Templates";
+			}
 			
 			try {
 				$template = new TemplateObj();
@@ -1710,68 +1778,82 @@ class MailController extends ControllerBase
 				$template->setMail($mail);
 				$template->convertMailToTemplate($name, $category, $mailContent);
 				$this->flashSession->success("Se ha creado la plantilla a partir del correo exitosamente");
+				$this->traceSuccess("Mail converted in template, idMail: {$idMail}");
 				$this->response->redirect('template');
 			}
-			catch (InvalidArgumentException $e) {
-				$this->flashSession->error("Ha ocurrido un error mientras se creaba una plantilla a partir de un correo, contacte al administrador");
-				$this->response->redirect('mail');
+			catch (Exception $e) {
+				$this->traceFail("Error converting mail in template, idMail: {$idMail}");
 				$this->logger->log('Exception: ' . $e);
+				$this->flashSession->error("Ha ocurrido un error mientras se creaba una plantilla a partir de un correo, contacte al administrador");
+				$this->response->redirect('mail/list');
 			}
 		}
 		else {
 			$this->flashSession->success("El correo base no existe por favor verifique la información");
-			$this->response->redirect('mail');
+			$this->response->redirect('mail/list');
 		}
 	}
 	
 	public function confirmAction($idMail)
 	{
-		$schedule = Mailschedule::findFirstByIdMail($idMail);
-		$mail = Mail::findFirstByIdMail($idMail);
-		
-		if($schedule) {
+		try {
+			$schedule = Mailschedule::findFirstByIdMail($idMail);
+			$mail = Mail::findFirstByIdMail($idMail);
+
+			if($schedule) {
+				$mail->status = 'Scheduled';
+				if(!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+					$this->traceFail("Error confirming mail, idMail: {$idMail}");
+					return $this->response->redirect('mail/preview/' . $idMail);
+				}
+				
+				$schedule->confirmationStatus = 'Yes';
+				if(!$schedule->save()){
+					foreach ($schedule->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+					$this->traceFail("Error confirming mail, idMail: {$idMail}");
+					return $this->response->redirect('mail/preview/' . $idMail);
+				}
+				$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+				$commObj->sendSchedulingToParent($idMail);	
+
+				return $this->response->redirect("mail/index");
+			}
+
 			$mail->status = 'Scheduled';
+			$mail->startedon = time();
+
 			if(!$mail->save()) {
 				foreach ($mail->getMessages() as $msg) {
 					$this->flashSession->error($msg);
 				}
+				$this->traceFail("Error confirming mail, idMail: {$idMail}");
 				return $this->response->redirect('mail/preview/' . $idMail);
 			}
-			$schedule->confirmationStatus = 'Yes';
-			if(!$schedule->save()){
-				foreach ($schedule->getMessages() as $msg) {
-					$this->flashSession->error($msg);
-				}
-				return $this->response->redirect('mail/preview/' . $idMail);
-			}
+
 			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-			$commObj->sendSchedulingToParent($idMail);	
+			$commObj->sendPlayToParent($idMail);
+			$this->traceSuccess("Confirm mail, idMail: {$idMail}");
 			
 			return $this->response->redirect("mail/index");
 		}
-		
-		$mail->status = 'Scheduled';
-		$mail->startedon = time();
-		
-		if(!$mail->save()) {
-			foreach ($mail->getMessages() as $msg) {
-				$this->flashSession->error($msg);
-			}
+		catch (Exception $e) {
+			$this->traceFail("Error confirming mail, idMail: {$idMail}");
+			$this->logger->log("Exception: Error confiming mail, {$e}");
 			return $this->response->redirect('mail/preview/' . $idMail);
 		}
-		
-		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		$commObj->sendPlayToParent($idMail);
-		
-		return $this->response->redirect("mail/index");
 	}
 	
 	public function confirmmailAction($idMail)
 	{
-		$this->logger->log("idMail {$idMail}");
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
 		));
 		
 		$mailcontent = Mailcontent::findFirst(array(
@@ -1831,6 +1913,7 @@ class MailController extends ControllerBase
 			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 			$commObj->sendSchedulingToParent($mail->idMail);	
 			
+			$this->traceSuccess("Confirm mail, idMail: {$idMail}");
 			$this->flashSession->success('Se ha programado existosamente el correo');
 			return $this->setJsonResponse(array('status' => 'success'), 200);
 		}
@@ -1838,6 +1921,7 @@ class MailController extends ControllerBase
 			$this->db->rollback();
 			$this->logger->log("Exception: {$e}");
 			$this->logger->log("idUser: {$this->user->idUser} / idAccount: {$this->user->account->idAccount}");
+			$this->traceFail("Error confirming mail, idMail: {$idMail}");
 			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error por favor contacte al administrador'), 500);
 		}
 	}
@@ -1886,22 +1970,6 @@ class MailController extends ControllerBase
 	
 	public function stopAction($direction, $idMail)
 	{
-		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		
-		$mail = Mail::findFirst(array(
-			"conditions" => "idMail = ?1 AND idAccount = ?2",
-			"bind" => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
-		));
-		
-		if ($mail && $mail->status == 'Scheduled') {
-			$this->stopScheduledTask($mail);
-			$commObj->sendSchedulingToParent($idMail);
-		}
-		else {
-			$commObj->sendPausedToParent($idMail);
-		}
-		
 		switch ($direction) {
 			case 'programming':
 				$route = 'programmingmail/index';
@@ -1909,27 +1977,88 @@ class MailController extends ControllerBase
 			case 'manage':
 				$route = 'programmingmail/manage';
 				break;
+			default:
+			case 'list':
 			case 'index':
-				$route = 'mail/index';
+				$route = 'mail/list';
 				break;
+		}
+		
+		$mail = Mail::findFirst(array(
+			"conditions" => "idMail = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
+		));
+		
+		if ($mail) {
+			$this->logger->log("Entra");
+			try {
+				$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+
+				if ($mail->status == 'Scheduled') {
+					$this->stopScheduledTask($mail);
+					$commObj->sendSchedulingToParent($idMail);
+				}
+				else {
+					$commObj->sendPausedToParent($idMail);
+				}
+				$this->traceSuccess("Stop mail, idMail: {$idMail}");
+				$this->flashSession->warning("Se ha pausado el correo exitosamente");
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: Error while stopping send, {$e}");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+				$this->traceFail("Error stopping mail, idMail: {$idMail}");
+				return $this->response->redirect($route);
+			}
+		}
+		else {
+			$this->flashSession->error("Ha intentado pausar un envío o correo que no existe, por favor verifique la información");
 		}
 		return $this->response->redirect($route);
 	}
 	
 	public function playAction($idMail)
 	{
-		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-		$commObj->sendPlayToParent($idMail);
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
+		));
 		
-		return $this->response->redirect("mail/index");
+		if ($mail) {
+			try {
+				$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+				$response = $commObj->sendPlayToParent($idMail);
+
+				if ($response) {
+					$this->traceSuccess("Resume send, idMail: {$idMail}");
+					$this->flashSession->success("Se ha reanudado el correo exitosamente");
+				}
+				else {
+					$this->flashSession->error("Ha intentado reanudar un correo que nunca inició o no existe, por favor verifique la información");
+				}
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: Error resuming send, {$e}");
+				$this->flashSession->error("Ha ocurrido un error mientras se reanudaba el envío de correo, por favor contacte con el administrador");
+				$this->traceFail("Error resuming send, idMail: {$idMail}");
+				return $this->response->redirect("mail/list");
+			}
+		}
+		else {
+			$this->flashSession->error("Ha intentado reanudar un correo que nunca inició o no existe, por favor verifique la información");
+		}
+		return $this->response->redirect("mail/list");
 	}
 	
 	
 	public function sendtestAction($idMail)
 	{
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1',
-			'bind' => array(1 => $idMail)
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
 		));
 		
 		if ($this->request->isPost() && $mail) {
@@ -1960,13 +2089,13 @@ class MailController extends ControllerBase
 				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
 				return $this->response->redirect('mail/target/' . $idMail);
 			}
-			
+
 			$transport = Swift_SendmailTransport::newInstance();
 			$swift = Swift_Mailer::newInstance($transport);
-			
+
 			$account = $this->user->account;
 			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
-			
+
 			$testMail = new TestMail();
 			$testMail->setAccount($account);
 			$testMail->setDomain($domain);
@@ -1974,58 +2103,84 @@ class MailController extends ControllerBase
 			$testMail->setMail($mail);
 			$testMail->setMailContent($mailContent);
 			$testMail->setPersonalMessage($msg);
-			
-			$testMail->load();
-			
-			$subject = $mail->subject;
-			$from = array($mail->fromEmail => $mail->fromName);
-			$content = $testMail->getBody();
-			$text = $testMail->getPlainText();
-			$replyTo = $mail->replyTo;
-			
-			foreach ($emails as $email) {
-				$to = array($email => $email);
-				
-				$message = new Swift_Message($subject);
-				$message->setFrom($from);
-				$message->setTo($to);
-				$message->setBody($content, 'text/html');
-				$message->addPart($text, 'text/plain');
-				
-				if ($replyTo != null) {
-					$message->setReplyTo($replyTo);
+
+			try {
+				$testMail->load();
+
+				$subject = $mail->subject;
+				$from = array($mail->fromEmail => $mail->fromName);
+				$content = $testMail->getBody();
+				$text = $testMail->getPlainText();
+				$replyTo = $mail->replyTo;
+
+				foreach ($emails as $email) {
+					$to = array($email => $email);
+
+					$message = new Swift_Message($subject);
+					$message->setFrom($from);
+					$message->setTo($to);
+					$message->setBody($content, 'text/html');
+					$message->addPart($text, 'text/plain');
+
+					if ($replyTo != null) {
+						$message->setReplyTo($replyTo);
+					}
+
+					$sendMail = $swift->send($message, $failures);
+
+					if (!$sendMail){
+						$this->traceFail("Error while sending test, idMail: {$idMail}");
+						$this->logger->log("Error while sending test mail: " . print_r($failures));
+					}
 				}
-				
-				$sendMail = $swift->send($message, $failures);
-				
-				if (!$sendMail){
-					$this->logger->log("Error while sending test mail: " . print_r($failures));
+				if ($sendMail){
+					$this->traceSuccess("Send test, idMail: {$idMail}");
+					$this->flashSession->success("Se ha enviado el mensaje de prueba exitosamente");
+					return $this->response->redirect('mail/target/' . $idMail);
 				}
-			}
-			if ($sendMail){
-				$this->flashSession->success("Se ha enviado el mensaje de prueba exitosamente");
+
+				$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
 				return $this->response->redirect('mail/target/' . $idMail);
 			}
-			
-			$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
-			return $this->response->redirect('mail/target/' . $idMail);
+			catch (Exception $e) {
+				$this->logger->log("Exception, Error while sending test, {$e}");
+				$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
+				$this->traceSuccess("Send test, idMail: {$idMail}");
+				return $this->response->redirect('mail/target/' . $idMail);
+			}
 		}
 	}
 
 	public function cancelAction($idMail)
 	{
-		try {
-			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-			$commObj->sendCancelToParent($idMail);
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $this->user->account->idAccount)
+		));
+		if ($mail) {
+			try {
+				$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+				$response = $commObj->sendCancelToParent($idMail);
+
+				if ($response) {
+					$this->flashSession->warning("Se ha cancelado el mensaje exitosamente");
+					$this->traceSuccess("Cancel mail, idMail: {$idMail}");
+				}
+				else {
+					$this->flashSession->error("Ha intentado cancelar un correo que no existe, por favor verifique la información");
+				}
+			}
+			catch(\Exception $e) {
+				$this->logger->log('Exception: [' . $e . ']');
+				$this->flashSession->error("Ha ocurrido un error mientras se cancelaba el correo, por favor contacte al administrador");
+				$this->traceFail("Error Cancelling mail, idMail: {$idMail}");
+			}
 		}
-		catch(\InvalidArgumentException $e) {
-			$this->logger->log('Exception: [' . $e . ']');
+		else {
+			$this->flashSession->error("Ha intentado cancelar un correo que no existe, por favor verifique la información");
 		}
-		catch(\Exception $e) {
-			$this->logger->log('Exception: [' . $e . ']');
-		}
-		
-		return $this->response->redirect("mail/index");
+		return $this->response->redirect("mail/list");
 	}
 
 	protected function stopScheduledTask(Mail $mail)
@@ -2122,7 +2277,7 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function newAction($idMail = null)
+	public function composeAction($idMail = null)
 	{
 		$account = $this->user->account;
 		$dbases = Dbase::findByIdAccount($account->idAccount);
@@ -2169,10 +2324,6 @@ class MailController extends ControllerBase
 				'bind' => array(1 => $account->idAccount,
 								2 => $idMail)
 			));
-			
-			if (!$mail) {
-				return $this->response->redirect('error');	
-			}
 			
 			$mailcontent = Mailcontent::findFirst(array(
 				'conditions' => 'idMail = ?1',

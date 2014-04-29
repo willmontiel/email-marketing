@@ -89,7 +89,7 @@ class Security extends Plugin
 	protected function getControllerMap()
 	{
 		$map = $this->cache->get('controllermap-cache');
-		if (true) {
+		if (!$map) {
 			$map = array(
 		//* RELEASE 0.1.0 *//
 				//Tests
@@ -105,6 +105,8 @@ class Security extends Plugin
 				'session::recoverpass' => array(),
 				'session::setnewpass' => array(),
 				'session::reset' => array(),
+				'session::logoutfromthisaccount' => array(),
+				'session::loginlikethisuser' => array('account' => array('login how any user')),
 				'track::open' => array(),
 				'track::click' => array(),
 				'track::mtaevent' => array(),
@@ -275,7 +277,7 @@ class Security extends Plugin
 				'mail::cancel' => array('mail' => array('read', 'send')),
 				'mail::sendtest' => array('mail' => array('read', 'send')),
 				
-				'mail::new' => array('mail' => array('read', 'send')),
+				'mail::compose' => array('mail' => array('read', 'create', 'send')),
 				
 				//Plantillas
 				'template::image' => array('template' => array('read')),
@@ -361,8 +363,8 @@ class Security extends Plugin
 
 				// Herramientas de administracion
 				'tools::index' => array('tools' => array('read')),
-				
 				'mail::savemail' => array('mail' => array('create')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
@@ -396,8 +398,9 @@ class Security extends Plugin
 	 */
 	public function beforeDispatch(Event $event, Dispatcher $dispatcher)
 	{
-		$controller = $dispatcher->getControllerName();
-		$action = $dispatcher->getActionName();
+		$controller = strtolower($dispatcher->getControllerName());
+		$action = strtolower($dispatcher->getActionName());
+		$resource = "$controller::$action";
 		
 		$this->logger->log("Server Status: {$this->serverStatus}");
 		$this->logger->log("Allowed Ip's: ". print_r($this->allowed_ips, true));
@@ -405,13 +408,16 @@ class Security extends Plugin
 		
 		if ($this->serverStatus == 0 && !in_array($this->ip, $this->allowed_ips)) {
 			$this->publicurls = array(
-				'error:notavailable', 
+				'error:index',
+				'error:link',
+				'error:notavailable',
+				'error:unauthorized',
 			);
 			$accessdir = $controller . ':' . $action;
 			if (!in_array($accessdir, $this->publicurls)) {
-				$dispatcher->forward(array('controller' => 'error', 'action' => 'notavailable')); 
-				return false;
+				return $this->response->redirect('error/notavailable');
 			}
+			return false;
 		}
 		
 		$role = 'ROLE_GUEST';
@@ -421,6 +427,16 @@ class Security extends Plugin
 				$role = $user->userrole;
 				// Inyectar el usuario
 				$this->_dependencyInjector->set('userObject', $user);
+				
+				$userefective = new stdClass();
+				$userefective->enable = false;
+				
+				$efective = $this->session->get('userefective');
+				if (isset($efective)) {
+					$userefective->enable = true;
+				}
+				
+				$this->_dependencyInjector->set('userefective', $userefective);
 			}
 		}
 
@@ -432,6 +448,7 @@ class Security extends Plugin
 			'session:logout',
 			'session:recoverpass',
 			'session:setnewpass',
+			'session:logoutfromthisaccount',
 			'session:reset',
 			'error:index',
 			'error:link',
@@ -451,8 +468,8 @@ class Security extends Plugin
 			'contacts:form',
 			'contacts:activate'
 		);
-
-		if ("$controller::$action" == "error::notavailable") {
+		
+		if ($resource == "error::notavailable") {
 			$this->response->redirect('index');
 			return false;
 		}
@@ -467,10 +484,10 @@ class Security extends Plugin
 		}
 		else{
 			$acl = $this->getAcl();
-			$this->logger->log("Validando el usuario con rol [$role] en [$controller::$action]");
-			$controller = strtolower($controller);
+			$this->logger->log("Validando el usuario con rol [$role] en [$resource]");
 			
-			if (!isset($map[$controller .'::'. $action])) {
+			
+			if (!isset($map[$resource])) {
 				if($this->validateResponse($controller) == true){
 					$this->logger->log("Accion no permitida accesando desde ember");
 					$this->logger->log("Controller: {$controller}, Action: {$action}");
@@ -486,7 +503,7 @@ class Security extends Plugin
 			}
 
 
-			$reg = $map[$controller .'::'. $action];
+			$reg = $map[$resource];
 			
 			foreach($reg as $resources => $actions){
 				foreach ($actions as $act) {
@@ -508,6 +525,13 @@ class Security extends Plugin
 					}
 				}
 			}
+			
+			$mapForLoginLikeAnyUser = array('session::loginlikethisuser');
+			
+			if (in_array($resource, $mapForLoginLikeAnyUser)) {
+				$this->session->set('userefective', $user);
+			}
+			
 			return true;
 		}
 	}	

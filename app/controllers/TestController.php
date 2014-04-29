@@ -1106,7 +1106,19 @@ class TestController extends ControllerBase
 	
 	public function unsubscribedAction()
 	{
+		$sudo = Phalcon\DI::getDefault()->get('userObject');
 		
+		$this->logger->log("Sudo {$sudo->username}");
+		
+		Phalcon\DI::getDefault()->set('usersudo', $sudo);
+		
+		$sudo2 = Phalcon\DI::getDefault()->get('usersudo');
+		$this->logger->log("Sudo2 {$sudo2->username}");
+		
+		Phalcon\DI::getDefault()->remove('usersudo');
+		
+		$sudo3 = Phalcon\DI::getDefault()->get('usersudo');
+		$this->logger->log("Sudo3 {$sudo3->username}");
 	}
 	
 	public function testsnimageresizeAction($idAsset)

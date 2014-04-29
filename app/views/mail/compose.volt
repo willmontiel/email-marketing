@@ -9,7 +9,7 @@
 		var db;
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 	</script>
-	{{ javascript_include('js/mixin_save.js') }}
+	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_mail.js') }}
 	<script type="text/javascript">
 		var idMail;

@@ -100,7 +100,9 @@ class TemplateObj
 		
 		if (!$template->save()) {
 			$this->rollbackTransaction();
-			throw new Exception('we have a error while saving new template...');
+			foreach ($template->getMessages() as $msg) {
+				throw new Exception("we have a error while saving new template... {$msg}");
+			}
 		}
 		
 		$this->template = $template;
@@ -130,8 +132,7 @@ class TemplateObj
 
 		if (!$this->template->save()) {
 			foreach ($this->template->getMessages() as $msg) {
-				$this->logger->log('Error: ' . $msg);
-				throw new Exception('Error while updating template');
+				throw new Exception("Error while updating template... {$msg}");
 			}
 		}
 		$this->commitTransaction();

@@ -60,7 +60,7 @@
 				<!-- <p class="navbar-text">{% block sectiontitle %}Titulo de pagina{% endblock %}</p> -->
 				<div class="collapse navbar-collapse" id="nav-collapse-01">
 					<ul id="top-nav" class="nav navbar-nav navbar-right">
-<!--						<li><a href="">Mi Cuenta</a></li>
+<!--					<li><a href="">Mi Cuenta</a></li>
 						<li><a href="">Ayuda</a></li>
 -->
 						{% if chat.enabled %}
@@ -72,6 +72,10 @@
 						</li>
 						<!-- END OLARK CHAT LINK -->
 						{% endif %}
+						{% if userefective.enable %}
+							<li><a href="{{url('session/logoutfromthisaccount')}}">Volver a la sesión original </a></li>
+						{% endif %}
+						<li><a href="#">{{ userObject.firstName }} {{ userObject.lastName }}</a></li>
 						<li><a href="{{url('session/logout')}}">Cerrar sesión</a></li>
 					</ul>					
 				</div>	

@@ -1,93 +1,65 @@
 <script type="text/x-handlebars" data-template-name="contacts/index">
-	<div class="row">
-		<div class="span8">
-			<div class="box">
-				<div class="box-content">
-					<div class="box-section news with-icons">
-						<div class="avatar green">
-							<i class="icon-user icon-2x"></i>
-						</div>
-						<div class="news-content">
-							<div class="news-title">
-								Contactos
-							</div>
-							<div class="news-text">
-								Aqui esta toda la información necesaria para gestionar los datos de tus contactos, recuerda que al editar, 
-								eliminar o desuscribir un contacto, estos cambios se aplicaran a nivel de todas las listas con las que este
-								relacionado
-								ese contacto, que a su vez estan relacionadas con esta base de datos. 
-							</div>
-						</div>
+	<div class="bs-callout bs-callout-info">
+		Aqui esta toda la información necesaria para gestionar los datos de sus contactos, recuerde que al editar, 
+		eliminar o desuscribir un contacto, estos cambios se aplicarán a nivel de todas las listas con las que esté
+		relacionado ese contacto, que a su vez están relacionadas con ésta base de datos. 
+	</div>
+
+	<div class="container-fluid wrap">
+		<ul class="list-inline numbers-contacts pull-right">
+			<li>Contactos totales: <br>
+				<span class="blue big-number">{{sdbase.Ctotal|numberf}}</span>
+			</li>
+
+			<li>Activos: <br>
+				<span class="green big-number">{{ sdbase.Cactive|numberf }}</span>
+			</li>
+
+			<li>Inactivos: <br>
+				<span class="sad-blue big-number">{{ get_inactive(sdbase)|numberf }}</span>
+			</li>
+
+			<li>Desuscritos: <br>
+				<span class="gray big-number">{{ sdbase.Cunsubscribed|numberf }}</span>
+			</li>
+
+			<li>Rebotados: <br>
+				<span class="orange big-number">{{sdbase.Cbounced|numberf }}</span>
+			</li>
+
+			<li>Spam: <br>
+				<span class="red big-number">{{sdbase.Cspam|numberf }}</span>
+			</li>
+		</ul>
+	</div>
+
+	{{ partial("partials/search_contacts_partial") }}
+
+	<table class="table table-striped">
+		<thead></thead>
+		<tbody>
+		{{'{{#each model}}'}}
+			{{ partial("partials/contact_view_partial") }}
+		{{ '{{else}}' }}
+			<div class="box-section news with-icons">
+				<div class="avatar green">
+					<i class="icon-lightbulb icon-2x"></i>
+				</div>
+				<div class="news-content">
+					<div class="news-title">
+						No hay contactos en esta base de datos
+					</div>
+					<div class="news-text">
+						<p>
+							Para empezar a administrar contactos, puede crear una lista de contactos en la base de datos,
+							y asociar contactos a la misma.
+						</p>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="span4">
-			<ul class="inline pull-right sparkline-box">
-				<li class="sparkline-row">
-					<h4 class="blue"><span>Contactos Totales</span>{{sdbase.Ctotal|numberf}}</h4>
-				</li>
-
-				<li class="sparkline-row">
-					<h4 class="green"><span>Activos</span>{{ sdbase.Cactive|numberf }}</h4>
-				</li>
-
-				<li class="sparkline-row">
-					<h4 class="gray"><span>Inactivos</span>{{ get_inactive(sdbase)|numberf }}</h4>
-				</li>
-			</ul>
-			<ul class="inline pull-right sparkline-box">
-				<li class="sparkline-row">
-					<h4 class="orange"><span>Desuscritos</span>{{ sdbase.Cunsubscribed|numberf }}</h4>
-				</li>
-
-				<li class="sparkline-row">
-					<h4 class="red"><span>Rebotados</span>{{sdbase.Cbounced|numberf }}</h4>
-				</li>
-
-				<li class="sparkline-row">
-					<h4 class="red"><span>Spam</span>{{sdbase.Cspam|numberf }}</h4>
-				</li>
-			</ul>
-		</div>
-	</div>
-	
-	{{ partial("partials/search_contacts_partial") }}
-	
-	<div class="row">
-        <div class="span12">
-			<div class="box">
-				<div class="box-content">
-						<table class="table table-normal">
-							<thead>
-								 <tr>
-									<td colspan="3">E-mail</td>
-									<td>Acciones</td>
-								</tr>
-							</thead>
-							<tbody>
-							{{'{{#each model}}'}}
-								{{ partial("partials/contact_view_partial") }}
-							{{ '{{else}}' }}
-								<div class="box-section news with-icons">
-									<div class="avatar green">
-										<i class="icon-lightbulb icon-2x"></i>
-									</div>
-									<div class="news-content">
-										<div class="news-title">
-											No hay contactos en esta base de datos
-										</div>
-										<div class="news-text">
-											<p>
-												Para empezar a administrar contactos, puede crear una lista de contactos en la base de datos,
-												y asociar contactos a la misma.
-											</p>
-										</div>
-									</div>
-								</div>
-							{{'{{/each}}'}}
-						</tbody>
-					 </table>
+		{{'{{/each}}'}}
+	</tbody>
+ </table>
 				</div>
 				<div class="box-footer">
 					{{ partial("partials/pagination_partial") }}
@@ -160,33 +132,22 @@
 </script>
 #}
 <script type="text/x-handlebars" data-template-name="contacts/delete">
-	<div class="row">
-		<div class="span12">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Eliminar un contacto
-					</div>
-				</div>
-				<div class="box-content padded">
-					<p>Si elimina un contacto, se eliminará de todas las listas y de Bases de datos a las que pertenece</p>
-					<p>¿Esta seguro que desea eliminar el Contacto <strong>{{'{{email}}'}}</strong>?</p>
-					{{ '{{#if errors.errormsg}}' }}
-						<div class="alert alert-error">
-							{{ '{{errors.errormsg}}' }}
-						</div>
-					{{ '{{/if}}' }}
-					{{ '{{#if App.errormessage }}' }}
-						<div class="alert alert-message alert-error">
-							{{ '{{ App.errormessage }}' }}
-						</div>
-					{{ '{{/if}} '}}	
-					<button {{'{{action delete this}}'}} class="btn btn-danger">Eliminar</button>
-					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-				</div>
+	<div class="bs-callout bs-callout-danger">
+		<p>Si elimina un contacto, se eliminará de todas las listas y de Bases de datos a las que pertenece</p>
+		<p>¿Esta seguro que desea eliminar el Contacto <strong>{{'{{email}}'}}</strong>?</p>
+		{{ '{{#if errors.errormsg}}' }}
+			<div class="alert alert-error">
+				{{ '{{errors.errormsg}}' }}
 			</div>
-		</div>
+		{{ '{{/if}}' }}
+		{{ '{{#if App.errormessage }}' }}
+			<div class="alert alert-message alert-error">
+				{{ '{{ App.errormessage }}' }}
+			</div>
+		{{ '{{/if}} '}}
 	</div>
+		<button {{'{{action delete this}}'}} class="btn btn-danger">Eliminar</button>
+		<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
 </script>
 {#
 <script type="text/x-handlebars" data-template-name="contacts/show">

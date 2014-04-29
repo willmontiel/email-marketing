@@ -120,11 +120,13 @@ class ContactsController extends ControllerBase
 				}
 			}
 			catch (\InvalidArgumentException $e) {
+				$this->traceFail("Error adding contacts by newbatch, idContactlist: {$idContactlist}");
 				$log->log('Exception: [' . $e . ']');
 				$info['status'] = $e->getMessage();
 				$contactsErrors[] = $info;
 			}
 			catch (\Exception $e) {
+				$this->traceFail("Error adding contacts by newbatch, idContactlist: {$idContactlist}");
 				$info['status'] = 'Error general -- contacte al administrador';
 				$contactsErrors[] = $info;
 				$log->log('Exception: [' . $e . ']');
@@ -132,6 +134,7 @@ class ContactsController extends ControllerBase
 		}
 
 		$totalValidContacts = count($contactsCreated) + count($contactsAdded);
+		$this->traceSuccess("{$totalValidContacts} contacts added by newbatch, idContactlist: {$idContactlist}");
 		$this->view->setVar("account", $this->user->account);
 		$this->view->setVar("total", $totalValidContacts);
 		$this->view->setVar("errors", count($contactsErrors));
@@ -263,31 +266,26 @@ class ContactsController extends ControllerBase
 						return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 				}
 				else {
-					
-						$destiny =  $this->tmppath->dir . $internalName;
-						copy($_FILES['importFile']['tmp_name'],$destiny);
+					$destiny =  $this->tmppath->dir . $internalName;
+					copy($_FILES['importFile']['tmp_name'],$destiny);
 
-						$open = fopen($destiny, "r");
-						$line = array('', '', '', '', '');
-						for($i=0; $i<5 && !feof($open); $i++) {
-							$l = trim(fgets($open));
-							$line[$i] = str_replace('"', '\"', $l);
-						}
-						fclose($open);
+					$open = fopen($destiny, "r");
+					$line = array('', '', '', '', '');
+					for($i=0; $i<5 && !feof($open); $i++) {
+						$l = trim(fgets($open));
+						$line[$i] = str_replace('"', '\"', $l);
+					}
+					fclose($open);
 
-						$customfields = Customfield::findByIdDbase($idDbase);
+					$customfields = Customfield::findByIdDbase($idDbase);
 
-						$this->view->setVar("customfields", $customfields);
-						$this->view->setVar("row", $line);		
-						$this->view->setVar("idContactlist", $idContactlist);
-						$this->view->setVar("idImportfile", $saveDataFile->idImportfile);
-						
+					$this->view->setVar("customfields", $customfields);
+					$this->view->setVar("row", $line);		
+					$this->view->setVar("idContactlist", $idContactlist);
+					$this->view->setVar("idImportfile", $saveDataFile->idImportfile);
 				}
 			}
-			
 		}
-		
-			
 	}
 	
 	public function processfileAction($idContactlist, $idImportfile)
@@ -363,16 +361,18 @@ class ContactsController extends ControllerBase
 		
 		$toSend = json_encode($arrayToSend);
 		
-		
 		try{
 			$objcomm = new Communication(SocketConstants::getImportRequestsEndPointPeer());
 			$objcomm->sendImportToParent($toSend, $newprocess->idImportproccess);
+			$this->traceSuccess("{$linecount} contacts imported, idContactlist: {$idContactlist} / idImportFile: {$idImportfile}");
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
+			$this->traceFail("Error importing {$linecount} contacts, , idContactlist: {$idContactlist} / idImportFile: {$idImportfile}");
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
+			$this->traceFail("Error importing {$linecount} contacts, , idContactlist: {$idContactlist} / idImportFile: {$idImportfile}");
 		}
 		
 		return $this->response->redirect("process/import");

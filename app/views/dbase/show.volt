@@ -233,52 +233,55 @@
 				</tr>
 			</tbody>
 			<tfoot></tfoot>
-		</table>	
-		<h4>Información de contactos</h4>
-		<table class="table table-striped">
-			<thead></thead>
-			<tbody>
-				<tr>
-					<td>Contactos totales</td>
-					<td><span class="blue big-number pull-right">{{ sdbase.Ctotal|numberf }}</span></td>
-					<td><span class="glyphicon glyphicon-user"></span></td>
-				</tr>
-
-				<tr>
-					<td>Contactos Activos</td>
-					<td><span class="blue big-number pull-right">{{ sdbase.Cactive|numberf }}</span></td>
-					<td><span class="glyphicon glyphiconicon-ok"></span></td>
-				</tr>
-
-				<tr>
-					<td>Contactos Inactivos</td>
-					<td><span class="blue big-number pull-right"> {{ get_inactive(sdbase)|numberf }}</span></td>
-					<td><span class="glyphicon glyphiconicon-thumbs-up"></span></td>
-				</tr>
-
-				<tr>
-					<td>Contactos Desuscritos</td>
-					<td><span class="blue big-number pull-right"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
-					<td><span class="glyphicon glyphiconicon-thumbs-down"></span></td>
-				</tr>
-
-				<tr>
-					<td>Contactos Rebotados</td>
-					<td><span class="blue big-number pull-right"> {{sdbase.Cbounced|numberf }}</span></td>
-					<td><span class="glyphicon glyphiconicon-remove"></span></td>
-				</tr>
-
-				<tr>
-					<td>Contactos Spam</td>
-					<td><span class="blue big-number pull-right"> {{sdbase.Cspam|numberf }}</span></td>
-					<td><span class="glyphicon glyphiconicon-exclamation-sign"></span></td>
-				</tr>
-			</tbody>
-			<tfoot></tfoot>
 		</table>
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-5">
+				<h4 class="">Información de contactos</h4>
+			</div>
+			<div class="col-md-1 pull-right">
+				<p class="blue big-number"><span class="glyphicon glyphicon-user"></span></p>
+			</div>
+
+			<table class="table table-striped">
+				<thead></thead>
+				<tbody>
+					<tr>
+						<td>Contactos totales</td>
+						<td><span class="blue big-number pull-right">{{ sdbase.Ctotal|numberf }}</span></td>
+					</tr>
+
+					<tr>
+						<td>Contactos Activos</td>
+						<td><span class="blue big-number pull-right">{{ sdbase.Cactive|numberf }}</span></td>
+					</tr>
+
+					<tr>
+						<td>Contactos Inactivos</td>
+						<td><span class="blue big-number pull-right"> {{ get_inactive(sdbase)|numberf }}</span></td>
+					</tr>
+
+					<tr>
+						<td>Contactos Desuscritos</td>
+						<td><span class="blue big-number pull-right"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
+					</tr>
+
+					<tr>
+						<td>Contactos Rebotados</td>
+						<td><span class="blue big-number pull-right"> {{sdbase.Cbounced|numberf }}</span></td>
+					</tr>
+
+					<tr>
+						<td>Contactos Spam</td>
+						<td><span class="blue big-number pull-right"> {{sdbase.Cspam|numberf }}</span></td>
+					</tr>
+				</tbody>
+				<tfoot></tfoot>
+			</table>
+		</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/add">
+	{#   Tab campos   #}
 		<h4>Agregar un nuevo campo</h4>
 			{{ '{{#if errors.errormsg}}' }}
 				<div class="alert alert-error">
@@ -288,7 +291,7 @@
 			<div class="col-md-8">
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
-						<label for="" class="col-sm-4 control-label">Nombre del Campo</label>
+						<label for="" class="col-sm-4 control-label">*Nombre del Campo</label>
 						<div class="col-md-6">
 							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus" class="form-control"}} '}}
 						</div>
@@ -313,7 +316,7 @@
 						{{ '{{/if}}' }}
 					<div class="form-group">
 						<label for="" class="col-sm-4 control-label">Seleccione si desea que el campo sea requerido</label>
-						<div class="col-md-6">
+						<div class="col-md-6 padding-top">
 							{{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
 						</div>
 					</div>
@@ -355,7 +358,7 @@
 			{{ '{{/if}}' }}
 			<form class="form-horizontal" role="form">
 				<div class="form-group">
-					<label class="col-sm-4 control-label">Nombre del Campo</label>
+					<label class="col-sm-4 control-label">Nombre del campo</label>
 					<div class="col-md-6">
 						{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" class="form-control"}} '}}
 					</div>
@@ -367,8 +370,8 @@
 					{{ '{{partial "fields/numerical"}}' }}
 				{{ '{{/if}}' }}
 				<div class="form-group">
-					<label class="col-sm-4 control-label">Seleccione si desea que el Campo sea Obligatorio</label>
-					<div class="col-md-5">
+					<label class="col-sm-4 control-label">Seleccione si desea que el campo sea obligatorio</label>
+					<div class="col-md-5 padding-top">
 						{{' {{view Ember.Checkbox  checkedBinding="required" id="required"}} '}}  Requerido
 					</div>
 				</div>
@@ -405,7 +408,7 @@
 		<div class="bs-callout bs-callout-danger">			
 			<p>Si elimina este campo personalizado se borrará toda la información de los contactos relacionada con este Campo</p>
 		</div>
-		<p>¿Esta seguro que desea eliminar el Campo <strong>{{'{{name}}'}}</strong>?</p>
+		<p>¿Esta seguro que desea eliminar el campo <strong>{{'{{name}}'}}</strong>?</p>
 			{{ '{{#if errors.errormsg}}' }}
 				<div class="alert alert-error">
 					{{ '{{errors.errormsg}}' }}
@@ -427,7 +430,7 @@
 
 	<script type="text/x-handlebars" data-template-name="fields/_text">
 		<div class="form-group">
-			<label for="" class="col-sm-4 control-label">Longitud Maxima del Campo</label>
+			<label for="" class="col-sm-4 control-label">Longitud máxima del campo</label>
 			<div class="col-md-6">
 				{{ '{{view Ember.TextField valueBinding="maxLength" placeholder="Letras" id="maxlong" class="form-control"}}' }}
 			</div>
@@ -436,13 +439,13 @@
 
 	<script type="text/x-handlebars" data-template-name="fields/_numerical">
 		<div class="form-group">
-			<label for="" class="col-sm-4 control-label">Valor Minimo</label>
+			<label for="" class="col-sm-4 control-label">Valor mínimo</label>
 			<div class="col-md-6">
 				{{ '{{view Ember.TextField valueBinding="minValue" placeholder="Inferior" id="limit_Inf" class="form-control"}}' }}
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="limit_Sup" class="col-sm-4 control-label">Valor Maximo</label>
+			<label for="limit_Sup" class="col-sm-4 control-label">Valor máximo</label>
 			<div class="col-md-6">
 				{{ '{{view Ember.TextField valueBinding="maxValue" placeholder="Superior" id="limit_Sup" class="form-control"}}' }}
 			</div>
@@ -456,5 +459,39 @@
 	
 	<!---------------------- Forms Template -------------------------->
 		{{ partial("dbase/partials/forms_partial") }}
+
+
+{#  Este es el modal (lightbox) que se activa al hacer clic en el boton eliminar   #}
+<div id="modal-simple" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Eliminar Base de Datos</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					¿Está seguro que desea eliminar esta base de datos?
+				</p>
+				<p>
+					Recuerde que si elimina la base de datos se perderán todos los contactos, listas de contactos y segmentos que pertenezcan a ella
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				<a href="" id="deleteDb" class="btn btn-danger" >Eliminar</a>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).on("click", ".ShowDialog", function () {
+		var myURL = $(this).data('id');
+		$("#deleteDb").attr('href', myURL );
+	});
+</script>
+
 </div>
 {% endblock %}

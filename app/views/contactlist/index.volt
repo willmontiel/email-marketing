@@ -73,12 +73,14 @@
 					</div>
 						{{'{{#link-to "blockedemails" class="btn-actn"}}Lista de bloqueo{{/link-to}}'}}
 				</div>
+{#
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						<a href="{{url('contacts/search')}}#/contacts" class="shortcuts"><span class="sm-button-large-contact-search"></span></a>
 					</div>
 					<a href="{{url('contacts/search')}}#/contacts" class="btn-actn">Búsqueda de contactos</a>
 				</div>	
+#}
 			</div>
 			<div class="row space"></div>
 			<div class="row">
@@ -161,8 +163,7 @@
 							<td>
 								<div class="box-section news with-icons">
 									<div class="news-time">
-										<span class="blue big-number">{{ '{{infocontact.activeContacts}}' }}</span>
-										<span class="blue big-number">{{'{{activeContactsF}}'}}</span> activos
+										<p class="right"><span class="blue big-number right">{{'{{activeContactsF}}'}}<br> </span> activos</p>
 									</div>
 								</div>
 							</td>

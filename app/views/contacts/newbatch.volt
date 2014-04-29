@@ -21,32 +21,32 @@
 
 		{# Aqui lightbox de operacion exitosa #}
 
-		<ul class="list-inline">
-			<li>Contactos válidos:<span class="blue big-number"> {{total}}</span></li>
-		</ul>
-
-		<table class="table table-striped table-contacts">
-			<thead>
-				<tr>
-					<td>Email</td>
-					<td>Nombre</td>
-					<td>Apellido</td>
-					<td>Estado</td>
-				</tr>
-			</thead>
-			<tbody>
-				{%for content in batch%}
-					<tr class="{{content['isValid']?'text-success':'text-danger'}}">
-						<td>{{content['email']}}</td>
-						<td>{{content['name']}}</td>
-						<td>{{content['lastName']}}</td>
-						<td>{{content['status']}}</td>
+		<div class="col-md-8 col-md-offset-1">
+			<h4>Contactos válidos: <span class="blue big-number"> {{total}}</span></h4>
+			<table class="table">
+				<thead>
+					<tr>
+						<td>Email</td>
+						<td>Nombre</td>
+						<td>Apellido</td>
+						<td>Estado</td>
 					</tr>
-				{%endfor%}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{%for content in batch%}
+						<tr class="{{content['isValid']?'text-success':'text-danger'}}">
+							<td>{{content['email']}}</td>
+							<td>{{content['name']}}</td>
+							<td>{{content['lastName']}}</td>
+							<td>{{content['status']}}</td>
+						</tr>
+					{%endfor%}
+				</tbody>
+			</table>
+			<div class="space"></div>
+			<a href="{{ url('contactlist/show/') }}{{idContactlist}}#/contacts">Regresar a la lista de contactos</a>
+		</div>
 	</div>
-	<a href="{{ url('contactlist/show/') }}{{idContactlist}}#/contacts">Regresar a la lista de contactos</a>
 {% endblock %}
 
 

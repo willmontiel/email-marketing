@@ -79,10 +79,12 @@ class SocialmediaController extends ControllerBase
 				foreach ($socialaccount->getMessages() as $msg) {
 					$this->logger->log('Error deleting social account: ' . $msg);
 				}
+				$this->traceFail("Error deleting social account. idSocial: {$idSocialnetwork}");
 				$this->logger-log('Ha ocurrido un error mientras se eliminaba la cuenta social');
 //				$this->flashSession->error('Ha ocurrido un error mientras se eliminaba la cuenta social');
 				return $this->response->redirect('socialmedia');
 			}
+			$this->traceSuccess("Social account deleted. idSocial: {$idSocialnetwork}");
 			$this->logger-log('Se ha eliminado la cuenta social exitosamente');
 //			$this->flashSession->warning('Se ha eliminado la cuenta social exitosamente');
 			return $this->response->redirect('socialmedia');
