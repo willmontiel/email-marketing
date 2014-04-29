@@ -2381,9 +2381,23 @@ class MailController extends ControllerBase
 			$this->view->setVar("fbloginUrl", $fbloginUrl);
 			$this->view->setVar('twsocials', $twsocials);
 			$this->view->setVar("twloginUrl", $twloginUrl);
+			
+			$assets = AssetObj::findAllAssetsInAccount($this->user->account);
+			if(empty($assets)) {
+					$arrayAssets = array();
+			}
+			else {
+				foreach ($assets as $a) {
+					$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
+										'image' => $a->getImagePrivateUrl(),
+										'title' => $a->getFileName(),
+										'id' => $a->getIdAsset());								
+				}
+			}
+			$this->view->setVar('assets', $arrayAssets);
 		} 
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e . ']');
-		}	
+		}
 	}
 }

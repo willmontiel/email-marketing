@@ -119,7 +119,7 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 			if( form.get('optinsubject') === undefined && form.get('optinfromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para OPTIN'};
 			}
-			var optin_mail = ( form.get('mailforoptin') === undefined ) ? App.defaultmailoptin : form.get('mailforoptin');
+			var optin_mail = ( form.get('mailforoptin') === undefined ) ?  JSON.stringify(App.defaultmailoptin) : form.get('mailforoptin');
 			
 			form.set('optinmail', JSON.stringify({	
 									subject: form.get('optinsubject'), 
@@ -133,7 +133,7 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 			if( form.get('welcomesubject') === undefined && form.get('welcomefromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para BIENVENIDA'};
 			}
-			var welcome_mail = ( form.get('mailforwelcome') === undefined ) ? App.defaultmailwelcome : form.get('mailforwelcome');
+			var welcome_mail = ( form.get('mailforwelcome') === undefined ) ?  JSON.stringify(App.defaultmailwelcome) : form.get('mailforwelcome');
 			
 			form.set('welcomemail', JSON.stringify({
 									subject: form.get('welcomesubject'), 
@@ -147,7 +147,7 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 			if( form.get('notifysubject') === undefined && form.get('notifyfromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para NOTIFICACIÓN'};
 			}
-			var notify_mail = ( form.get('mailfornotify') === undefined ) ? App.defaultmailnotify : form.get('mailfornotify');
+			var notify_mail = ( form.get('mailfornotify') === undefined ) ?  JSON.stringify(App.defaultmailnotify) : form.get('mailfornotify');
 			
 			form.set('notifymail', JSON.stringify({
 									subject: form.get('notifysubject'), 
@@ -311,7 +311,7 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 			if( form.get('optinsubject') === undefined && form.get('optinfromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para OPTIN'};
 			}
-			var optin_mail = ( form.get('mailforoptin') === undefined ) ? App.defaultmailoptin : form.get('mailforoptin');
+			var optin_mail = ( form.get('mailforoptin') === undefined ) ? JSON.stringify(App.defaultmailoptin) : form.get('mailforoptin');
 			
 			form.set('optinmail', JSON.stringify({	
 									subject: form.get('optinsubject'), 
@@ -325,7 +325,7 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 			if( form.get('welcomesubject') === undefined && form.get('welcomefromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para BIENVENIDA'};
 			}
-			var welcome_mail = ( form.get('mailforwelcome') === undefined ) ? App.defaultmailwelcome : form.get('mailforwelcome');
+			var welcome_mail = ( form.get('mailforwelcome') === undefined ) ? JSON.stringify(App.defaultmailwelcome) : form.get('mailforwelcome');
 			
 			form.set('welcomemail', JSON.stringify({
 									subject: form.get('welcomesubject'), 
@@ -339,7 +339,7 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 			if( form.get('notifysubject') === undefined && form.get('notifyfromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para NOTIFICACIÓN'};
 			}
-			var notify_mail = ( form.get('mailfornotify') === undefined ) ? App.defaultmailnotify : form.get('mailfornotify');
+			var notify_mail = ( form.get('mailfornotify') === undefined ) ? JSON.stringify(App.defaultmailnotify) : form.get('mailfornotify');
 			
 			form.set('notifymail', JSON.stringify({
 									subject: form.get('notifysubject'), 

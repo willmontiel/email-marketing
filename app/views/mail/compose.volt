@@ -3,6 +3,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
@@ -14,6 +15,13 @@
 	{{ javascript_include('js/app_mail.js') }}
 	<script type="text/javascript">
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}"};
+		$(function() {
+			{%for asset in assets%}
+				var media = new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}});
+				media.createMedia();
+				media.mediaSelected();
+			{%endfor%}
+		});
 		var idMail;
 		{% if mail is defined%}
 			idMail = {{mail.idMail}}
