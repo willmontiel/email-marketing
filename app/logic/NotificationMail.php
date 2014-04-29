@@ -74,13 +74,17 @@ class NotificationMail extends TestMail
 		if ($replyTo != null) {
 			$message->setReplyTo($replyTo);
 		}
+		
 		$this->logger->log($content);
+		
 		$sendMail = $swift->send($message, $failures);
-
+		
 		if (!$sendMail){
 			$this->logger->log("Error while sending mail: " . print_r($failures));
 			throw new \Exception('Error while sending mail');
 		}
+		
+		$this->logger->log('Correo Enviado');
 	}
 	
 	protected function setBody($contentobj)

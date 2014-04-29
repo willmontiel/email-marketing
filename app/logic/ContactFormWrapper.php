@@ -81,7 +81,7 @@ class ContactFormWrapper extends ContactWrapper
 						$notify->setDomain($domain);
 						$notify->setMail(new Mail());
 						$notify->prepareContent($content->mail);
-						$notify->setNotifyReceiver($this->form->notifyEmail, '');
+						$notify->setNotifyReceiver($this->form->notifyEmail, $this->form->notifyEmail);
 						$notify->sendMail($content);
 					} catch (\Exception $e) {
 						$this->logger->log('Exception: [' . $e->getMessage() . ']');
