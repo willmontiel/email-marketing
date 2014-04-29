@@ -366,8 +366,10 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 					var maildefault = App.defaultmailnotify;
 					break;
 			}
-
-			objMail = ( mail === undefined ) ? maildefault : JSON.parse(mail);
+			if( mail !== undefined ) {
+				mail = ( typeof(mail) === 'object' ) ? mail : JSON.parse(mail);
+			}
+			objMail = ( mail === undefined ) ? maildefault : mail;
 			
 			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
 			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');

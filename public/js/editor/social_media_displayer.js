@@ -24,7 +24,7 @@ SocialMediaDisplayer.prototype.imageSelected = function() {
 	});
 };
 
-Dropzone.autoDiscover = false;
+//Dropzone.autoDiscover = false;
 
 $(function() {
 	var src = config.imagesUrl + "/post_default.png";
@@ -35,23 +35,23 @@ $(function() {
 	
 	$('#fb-share-image').attr('src', src);
 	
-	var myDropzone = new Dropzone("#my-dropzone");
-	myDropzone.on("success", function(file, response) {
-		var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);
-		newMedia.createMedia();
-		newMedia.mediaSelected();
-		media.setGallery(newMedia);
-		media.imageSelected(response.filelink, response.title);
-	});	
-	
-	if($('#accounts_facebook')[0].selectedOptions.length > 0){
-		$('.fbdescription').show();
-		$('.setup_socials_container').show();
-	}	
-	if($('#accounts_twitter')[0].selectedOptions.length > 0){
-		$('.twdescription').show();
-		$('.setup_socials_container').show();
-	}
+//	var myDropzone = new Dropzone("#my-dropzone");
+//	myDropzone.on("success", function(file, response) {
+//		var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);
+//		newMedia.createMedia();
+//		newMedia.mediaSelected();
+//		media.setGallery(newMedia);
+//		media.imageSelected(response.filelink, response.title);
+//	});	
+//	
+//	if($('#accounts_facebook')[0].selectedOptions.length > 0){
+//		$('.fbdescription').show();
+//		$('.setup_socials_container').show();
+//	}	
+//	if($('#accounts_twitter')[0].selectedOptions.length > 0){
+//		$('.twdescription').show();
+//		$('.setup_socials_container').show();
+//	}
 	$('#accounts_facebook').on('change', function() {
 		if($(this)[0].selectedOptions.length > 0) {
 			$('.fbdescription').show();

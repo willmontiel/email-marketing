@@ -30,6 +30,11 @@ App.Mail = DS.Model.extend({
 	mailcontent: DS.attr('boolean'),
 	plainText: DS.attr('string'),
 	totalContacts: DS.attr('string'),
+	fbmessagecontent: DS.attr('string'),
+	fbimagepublication: DS.attr('string'),
+	fbtitlecontent: DS.attr('string'),
+	fbdescriptioncontent: DS.attr('string'),
+	twpublicationcontent: DS.attr('string')
 });
 
 App.IndexRoute = Ember.Route.extend({
@@ -64,6 +69,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	open: [],
 	click: [],
 	exclude: [],
+	fbaccountsel: [],
+	twaccountsel: [],
 	scheduleRadio: '',
 	linksAnalytics: [],
 	fromSummary: '',
@@ -99,7 +106,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			}	
 		}
 	}.observes('this.content'),
-		
+			
 	//Observa el contenido del header (fromName, fromEmail, etc)
 	headerEmpty: function () {
 		var n, e, s;
