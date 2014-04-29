@@ -13,84 +13,70 @@
 {% block sectiontitle %}<i class="icon-calendar icon-2x"></i>Programación de correos{% endblock %}
 {%block sectionsubtitle %}Administre cuando se deben enviar los correos{% endblock %}
 {% block content%}
+
+{# Botones de navegacion #}
+{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
+
 	<div class="row">
-		<div class="box">
-			<div class="box-section news with-icons">
-				<div class="avatar green">
-					<i class="icon-lightbulb icon-2x"></i>
-				</div>
-				<div class="news-content">
-					<div class="news-title">
-						Administre la programación de envío de los correos
-					</div>
-					<div class="news-text">
-						Aqui podrá administrar la programación de los correos, pausarlos, cancelarlos y tambien reprogramar fechas
-					</div>
-				</div>
-			</div>
+		<h4 class="sectiontitle">Programación de envío de correos</h4>
+		<div class="bs-callout bs-callout-info">
+			<p>Aqui podrá administrar la programación de los correos, pausarlos, cancelarlos y también reprogramar fechas.</p>
 		</div>
-	</div>
-	<div class="row">
-		<div class="span7">
 		{{ flashSession.output() }}
-		</div>
-		<div class="span5 text-right">
-			<a href="{{url('mail')}}" class="btn btn-blue"><i class="icon-envelope"></i> Todos los correos</a>
+
+		<div class="">
+			<a href="{{url('mail')}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-envelope"></span> Todos los correos</a>
 		</div>
 	</div>
-	<br />
+	<div class="space"></div>
 	<div class="row">
-		<div class="box">
-			<div class="box-header">
-				<div class="title">
-					Programación de correos
-				</div>
-			</div>
-			<div class="box-content" >
-				<table id="processes-table" class="tablesorter table table-normal">
-					<thead>
-						<tr>
-							<th>Nombre</th>
-							<th>Estado</th>
-							<th>Destinatarios aprox.</th>
-							<th>Programado para</th>
-							<td>Acciones</td>
-						</tr>
-					</thead>
-					<tbody id="resultado">
-						 {% for item in page.items %}
-							<tr>
-								<td>{{item.name}}</td>
-								<td>
-									{{item.status}}
-										{%if item.deleted != 0%}
-											( Eliminado {{date('d-M-Y, g:i A', item.deleted)}} )
-										{% endif %}
-								</td>
-								<td>{{item.totalContacts}}</td>
-								<td>{{date('d-M-Y, g:i A', item.scheduleDate)}}</td>
-								<td style="text-align: center;">
-									<div class="btn-group">
-										<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-										<ul class="dropdown-menu">
-										{% for value in programming_options(item) %}
-											{% if value.url == 'null'%}	
-												&nbsp;<i class="icon-minus-sign"></i> No hay acciones disponibles&nbsp;
-											{% elseif value.text == 'Pausar'%}
-												<li><a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{url('mail/stop')}}/scheduledmail/{{item.idMail}}"><i class="{{value.icon}}"></i> Pausar</a></li>
-											{% else %}
-												<li><a href="{{url(value.url)}}index/{{item.idMail}}"><i class="{{value.icon}}"></i> {{value.text}}</a></li>
-											{% endif %}
-										{% endfor %}
-										</ul>
-									</div>
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-			<div class="box-footer padded">
+		<table id="processes-table" class="table table-striped">
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Estado</th>
+					<th>Destinatarios aprox.</th>
+					<th>Programado para</th>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody id="resultado">
+				 {% for item in page.items %}
+					<tr>
+						<td>{{item.name}}</td>
+						<td>
+							{{item.status}}
+								{%if item.deleted != 0%}
+									( Eliminado {{date('d-M-Y, g:i A', item.deleted)}} )
+								{% endif %}
+						</td>
+						<td>{{item.totalContacts}}</td>
+						<td>{{date('d-M-Y, g:i A', item.scheduleDate)}}</td>
+						<td style="text-align: center;">
+							<div class="btn-group">
+								{% for value in programming_options(item) %}
+									{% if value.url == 'null'%}	
+										&nbsp;<span></span> No hay acciones disponibles&nbsp;
+									{% elseif value.text == 'Pausar'%}
+										<a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{url('mail/stop')}}/scheduledmail/{{item.idMail}}"><span class="{{value.icon}}"></span> Pausar</a>
+									{% else %}
+										<a href="{{url(value.url)}}index/{{item.idMail}}" class="btn btn-sm btn-default extra-padding" ><span class="{{value.icon}}"></span> {{value.text}}</a>
+									{% endif %}
+								{% endfor %}
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	{#   Partial paginacion sin ember   #}
+	<div class="col-sm-12 text-center">
+		{{ partial('partials/pagination_static_partial', ['pagination_url': 'scheduledmail/index']) }}
+	</div>
+
+{#			<div class="box-footer padded">
 				<div class="row">
 					<div class="span5">
 						<div class="pagination">
@@ -120,8 +106,7 @@
 					 </div>
 				</div>
 			</div>
-		 </div>
-	</div>
+#}
 	<div id="modal-simple-edit" class="modal hide fade" aria-hidden="false">
 		<div class="modal-header">
 		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

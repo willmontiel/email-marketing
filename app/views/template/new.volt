@@ -1,4 +1,4 @@
-{% extends "templates/editor_template.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	{{ javascript_include('redactor/redactor.js')}}
@@ -89,59 +89,50 @@
 </script>
 {% endblock %}
 {% block content %}
+
+{# Botones de navegacion #}
+{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
+
     <div class="row">
-		<div class="area-top clearfix">
-			<div class="pull-left header">
-				<h3 class="title">
-				  <i class="icon-magic"></i>
-				  Crear una plantilla
-				</h3>
-				<h5>
-				  Cree una plantilla global, que cualquier cuenta podrá usar como base
-				</h5>
+		<h4 class="sectiontitle">Crear una plantilla</h4>
+	
+		<div class="bs-callout bs-callout-info">	  
+			<p>Cree una plantilla global, que cualquier cuenta podrá usar como base</p>
+	    </div>
+	    <form class="form-inline" role="form">
+	    	<div class="form-group">
+				<label for="" class="" >Nombre de la plantilla:</label>
+				<input type="text" name="name" id="name" required="required" class="form-control">
 			</div>
-		</div>
-    </div>
-	<div class="row">
-		<div class="btnoptions">
-			<div class="box span12 btnoptions">
-				<div class="templateName pull-left">
-					<label>Nombre de la plantilla: 
-					<input type="text" name="name" id="name" required="required"></label>
-				</div>
-				<div class="templateCategory pull-left">
-					<label class="selectcategory" >Categoría: 
-					<select class="uniform" name="categoria" id="category">
-						{%if categories%}
-							{%for category in categories%}
-								<option value="{{category}}">{{category}}</option>
-							{%endfor%}
-						{%else%}
-							<option value="Mis Templates">Mis Templates</option>
-						{%endif%}
-					</select></label>
-					<label class="newcategory" style="margin-left: -40px;">Nueva Categoria: 
-					<input type="text" name="categoria" id="category" style="width: 124px;" required="required">
-					</label>
-				</div>
-				<div class="btnNewCategory pull-left">
-					<button class="btn btn-default" onclick="writenewcategory()"><i class="icon-pencil"></i></button>
-				</div>
-				<div class="btnSelectCategory pull-left">
-					<button class="btn btn-default" onclick="selectcategory()"><i class="icon-th-list"></i></button>
-				</div>
-				<div class="templateBtns pull-left">
-					<a href="{{url('template/index')}}" class="btn btn-default">Salir</a>
-					<a type="submit" class="btn btn-blue" value="Guardar" onclick="sendData()"><i class="icon-2x icon-save"></i></a>
-				</div>
-				<div class="globalTemplateOpt pull-left">
-					<label><input type="checkbox" name="isglobal" id="isglobal"> Plantilla Global</label>
-				</div>
-				<div class="templatePreview pull-right">
-					<a class="btn btn-default" onClick="verHTML()"><i class="icon-search"></i> Previsualizar</a>
-				</div>
+	    	<div class="form-group">
+				<label for="">Categoría: </label>
+				<select class="form-control" name="categoria" id="category">
+					{%if categories%}
+						{%for category in categories%}
+							<option value="{{category}}">{{category}}</option>
+						{%endfor%}
+					{%else%}
+						<option value="Mis Templates">Mis Templates</option>
+					{%endif%}
+				</select>
 			</div>
-		</div>
+			<div class="form-group">
+				<label for="" class="">Nueva Categoria: </label>
+				<input type="text" name="categoria" id="category" required="required" class="form-control">
+			</div>
+			<div class="form-group">
+				<button class="btn btn-default" onclick="writenewcategory()"><span class="glyphicon glyphicon-pencil"></span></button>
+				<button class="btn btn-default" onclick="selectcategory()"><span class="glyphicon glyphicon-check"></span></button>
+			</div>
+			<div class="form-group">
+				<a href="{{url('template/index')}}" class="btn btn-default">Salir</a>
+				<a class="btn btn-default" onclick="sendData()"><span class="glyphicon glyphicon-floppy-saved"></i></a>
+			</div>
+			<div class="form-group">
+				<label><input type="checkbox" name="isglobal" id="isglobal"> Plantilla Global</label>
+				<a class="btn btn-default" onClick="verHTML()"><span class="glyphicon glyphicon-search"></span> Previsualizar</a>
+			</div>
+		</form>
 	</div>
 	<div class="row">
 		{{ flashSession.output()}}
