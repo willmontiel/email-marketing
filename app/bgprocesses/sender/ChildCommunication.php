@@ -161,8 +161,18 @@ class ChildCommunication extends BaseWrapper
 			$i = 0;
 			$sentContacts = array();
 			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
-
+			
 			$from = array($mail->fromEmail => $mail->fromName);
+			
+			// Crear objeto que se encarga de insertar links para cada usuario
+			$trackingObj = new TrackingUrlObject();
+			
+			// Consultar el mail class para inyectarselo en las cabeceras del correo con switmailer
+			$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
+			
+			// Crear variables listID y sendID para inyectarlas a las cabeceras con swiftmailer
+			$listID = 't0em' . $this->account->idAccount;
+			$sendID = '0em' . $mail->idMail;
 			foreach ($contactIterator as $contact) {
 
 				/*
@@ -212,7 +222,6 @@ class ChildCommunication extends BaseWrapper
 				 * fuera del loop y que luego pueda ser utilizado dentro del loop
 				 * ================================================================
 				 */
-				$trackingObj = new TrackingUrlObject();
 				$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact'], $links);
 
 				$log->log("HTML: " . $htmlWithTracking);
@@ -253,9 +262,6 @@ class ChildCommunication extends BaseWrapper
 				 * TODO: Mover fuera del loop
 				 * ================================================================
 				 */
-				$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
-				$listID = 't0em' . $this->account->idAccount;
-				$sendID = '0em' . $mail->idMail;
 				$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'] . 'x' . $contact['email']['idEmail'];
 
 				$headers->addTextHeader('X-GreenArrow-MailClass', $mailclass->name);

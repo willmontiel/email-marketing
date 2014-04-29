@@ -48,20 +48,64 @@ class ContactFormWrapper extends ContactWrapper
 			$contact = $this->createNewContactFromJsonData($contactObj, $this->contactlist);
 		}
 		
-		if($contact && $this->form->optin === 'Si') {
-			$content = json_decode($this->form->optinMail);
+		if($contact) {
+			
 			$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 			
-			$optin = new NotificationMail();
-			$optin->setForm($this->form);
-			$optin->setAccount($this->account);
-			$optin->setDomain($domain);
-			$optin->setContact($contact);
-			$optin->setMail(new Mail());
-			$optin->prepareContent($content->mail);
-			$optin->setNotificationLink();
-			$optin->setContactReceiver();
-			$optin->sendMail($content);
+			if($this->form->optin === 'Si') {
+				try {
+					$content = json_decode($this->form->optinMail);
+
+					$optin = new NotificationMail();
+					$optin->setForm($this->form);
+					$optin->setAccount($this->account);
+					$optin->setDomain($domain);
+					$optin->setContact($contact);
+					$optin->setMail(new Mail());
+					$optin->prepareContent($content->mail);
+					$optin->setNotificationLink();
+					$optin->setContactReceiver();
+					$optin->sendMail($content);
+				} catch (\Exception $e) {
+					$this->logger->log('Exception: [' . $e->getMessage() . ']');
+				}
+			}
+			else {
+				if($this->form->notify === 'Si') {
+					try {
+						$content = json_decode($this->form->notifyMail);
+
+						$notify = new NotificationMail();
+						$notify->setForm($this->form);
+						$notify->setAccount($this->account);
+						$notify->setDomain($domain);
+						$notify->setMail(new Mail());
+						$notify->prepareContent($content->mail);
+						$notify->setNotifyReceiver($this->form->notifyEmail, $this->form->notifyEmail);
+						$notify->sendMail($content);
+					} catch (\Exception $e) {
+						$this->logger->log('Exception: [' . $e->getMessage() . ']');
+					}
+				}
+
+				if($this->form->welcome === 'Si') {
+					try {
+						$content = json_decode($this->form->welcomeMail);
+
+						$welcome = new NotificationMail();
+						$welcome->setForm($this->form);
+						$welcome->setContact($contact);
+						$welcome->setAccount($this->account);
+						$welcome->setDomain($domain);
+						$welcome->setMail(new Mail());
+						$welcome->prepareContent($content->mail);
+						$welcome->setContactReceiver();
+						$welcome->sendMail($content);
+					} catch (\Exception $e) {
+						$this->logger->log('Exception: [' . $e->getMessage() . ']');
+					}
+				}
+			}
 		}
 	}
 	
@@ -84,15 +128,14 @@ class ContactFormWrapper extends ContactWrapper
 		$obj->isEmailBlocked = '';
 		$obj->mailHistory = '';
 		
+		if($this->form->optin === 'No') {
+			$obj->isActive = true;
+			$obj->isSubscribed = true;
+		}
+		
 		$cfs = Customfield::findByIdDbase($this->contactlist->idDbase);
 		foreach ($cfs as $cf) {
-			$name = 'campo'.$cf->idCustomField;
-			if($cf->type === 'Date') {
-				if(isset($obj->$name)) {
-					$obj->$name = strtotime($obj->$name);
-				}
-			}
-			
+			$name = 'campo'.$cf->idCustomField;			
 			if(!isset($obj->$name)) {
 				$obj->$name = '';
 			}
@@ -119,30 +162,38 @@ class ContactFormWrapper extends ContactWrapper
 		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 		
 		if($this->form->notify === 'Si') {
-			$content = json_decode($this->form->notifyMail);
-			
-			$notify = new NotificationMail();
-			$notify->setForm($this->form);
-			$notify->setAccount($this->account);
-			$notify->setDomain($domain);
-			$notify->setMail(new Mail());
-			$notify->prepareContent($content->mail);
-			$notify->setNotifyReceiver($this->form->notifyEmail, '');
-			$notify->sendMail($content);
+			try {
+				$content = json_decode($this->form->notifyMail);
+				
+				$notify = new NotificationMail();
+				$notify->setForm($this->form);
+				$notify->setAccount($this->account);
+				$notify->setDomain($domain);
+				$notify->setMail(new Mail());
+				$notify->prepareContent($content->mail);
+				$notify->setNotifyReceiver($this->form->notifyEmail, '');
+				$notify->sendMail($content);
+			} catch (\Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}
 		}
 		
 		if($this->form->welcome === 'Si') {
-			$content = json_decode($this->form->welcomeMail);
-			
-			$welcome = new NotificationMail();
-			$welcome->setForm($this->form);
-			$welcome->setContact($contact);
-			$welcome->setAccount($this->account);
-			$welcome->setDomain($domain);
-			$welcome->setMail(new Mail());
-			$welcome->prepareContent($content->mail);
-			$welcome->setContactReceiver();
-			$welcome->sendMail($content);
+			try {
+				$content = json_decode($this->form->welcomeMail);
+
+				$welcome = new NotificationMail();
+				$welcome->setForm($this->form);
+				$welcome->setContact($contact);
+				$welcome->setAccount($this->account);
+				$welcome->setDomain($domain);
+				$welcome->setMail(new Mail());
+				$welcome->prepareContent($content->mail);
+				$welcome->setContactReceiver();
+				$welcome->sendMail($content);
+			} catch (\Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}
 		}
 	}
 	
