@@ -10,7 +10,11 @@
 		iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
 	};
 	var objMail = {{objMail}};
-	var idMail = {{mail.idMail}};
+	var idMail = 'null';
+	
+	{% if mail is defined %}
+		var idMail = {{mail.idMail}};
+	{% endif %}
 	
 	function sendData() {
 		//verHTML();
@@ -26,7 +30,7 @@
 				return false;
 			},
 			success: function(msg){
-				$(location).attr('href', "{{url('mail/new')}}/" + idMail);
+				$(location).attr('href', "{{url('mail/compose')}}/" + msg.msg);
 			}
 		});
 	}
@@ -144,17 +148,23 @@
 			<div class="btnoptions">
 				<div class="box span12 optionsEditor">
 					<div class="pull-right NextFromEditor">
-						<a href="{{url('mail/new')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar <i class="icon-circle-arrow-right"></i></a>
-						<button onclick="sendData()" type="button" class="btn btn-primary">Guardar y regresar <i class="icon-circle-arrow-right"></i></button>
+						{% if mail is defined%}
+							<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar</a>
+						{% else %}
+							<a href="{{url('template')}}" class="btn btn-default">Cancelar</a>
+						{% endif %}
+						<button onclick="sendData()" type="button" class="btn btn-primary">Guardar y regresar</button>
 					</div>
 					<div class="pull-left VisualizeEditor">
 						<button onclick="verHTML()" class="btn btn-default" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
 					</div>
 					<div class="pull-left SaveTemplate">
-						<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-default">Guardar como Plantilla <i class="icon-picture"></i></button>
+						<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-default">Guardar como Plantilla</button>
 					</div>
 					<div class="pull-left SaveContent">
-						<button onclick="saveContent()" type="button" value="Guardar" class="btn btn-primary">Guardar  <i class="icon-save"></i></button>
+						{% if mail is defined %}
+							<button onclick="saveContent()" type="button" value="Guardar" class="btn btn-primary">Guardar</button>
+						{% endif %}
 					</div>
 					{#
 					<div class="pull-left SaveTemplate">

@@ -601,7 +601,7 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function contenteditorAction($idMail, $idTemplate = null) 
+	public function contenteditorAction($idMail = null, $idTemplate = null) 
 	{
 		$account = $this->user->account;
 		
@@ -611,48 +611,57 @@ class MailController extends ControllerBase
 							2 => $account->idAccount)
 		));
 		
+		$objTemplate = Template::findFirst(array(
+			"conditions" => "idTemplate = ?1 AND idAccount = ?2",
+			"bind" => array(1 => $idTemplate,
+							2 => $account->idAccount)
+		));
+		
+		$mailcontent = false;
+		
 		if ($mail) {
-			$objTemplate = Template::findFirst(array(
-				"conditions" => "idTemplate = ?1",
-				"bind" => array(1 => $idTemplate)
-			));
-			
 			$mailcontent = Mailcontent::findFirst(array(
 				'conditions' => 'idMail = ?1',
 				'bind' => array(1 => $mail->idMail)
 			));
 			
-			if ($objTemplate) {
-				if (empty($objTemplate->content)) {
-					$objContent = 'null';
-				}
-				else {
-					$objContent = $objTemplate->content;
-				}
-			}
-			else if($mailcontent) {
-				$text = $mailcontent->plainText;
-				if (empty($mailcontent->content)) {
-					$objContent = 'null';
-				}
-				else {
-					$objContent = $mailcontent->content;
-				}
+			$this->view->setVar('mail', $mail);
+		}
+		
+		if ($objTemplate) {
+			if (empty($objTemplate->content)) {
+				$objContent = 'null';
 			}
 			else {
-				$text = null;
+				$objContent = $objTemplate->content;
+			}
+		}
+		else if($mailcontent) {
+			$text = $mailcontent->plainText;
+			if (empty($mailcontent->content)) {
 				$objContent = 'null';
+			}
+			else {
+				$objContent = $mailcontent->content;
 			}
 		}
 		else {
-			return $this->response->redirect('error');
+			$text = null;
+			$objContent = 'null';
 		}
 		
-		$this->view->setVar('mail', $mail);
 		$this->view->setVar('objMail', $objContent);
 		
 		if ($this->request->isPost()) {
 			$this->db->begin();
+			
+			if (!$mail) {
+				$mail = new Mail();
+				$mail->idAccount = $this->user->idAccount;
+				$mail->status = 'Draft';
+				$mail->wizardOption = 'setup';
+				$mail->deleted = 0;
+			}
 			
 			$content = $this->request->getPost('editor');
 			$mail->type = 'Editor';
@@ -662,6 +671,7 @@ class MailController extends ControllerBase
 					$this->logger->log("Error while saving mail {$msg}");
 				}
 				$this->db->rollback();
+				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			}
 			
@@ -691,9 +701,14 @@ class MailController extends ControllerBase
 					$this->logger->log("Error while saving content mail {$msg}");
 				}
 				$this->db->rollback();
+				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			} 
 			$this->db->commit();
+			
+			if ($idMail == 'null') {
+				$this->traceSuccess("Mail created from template, idMail: {$mail->idMail}");
+			}
 			return $this->setJsonResponse(array('msg' => "{$mail->idMail}"), 200);
 		}
 	}
@@ -1749,6 +1764,14 @@ class MailController extends ControllerBase
 			$name = $this->request->getPost("nametemplate");
 			$category = $this->request->getPost("category");
 			
+			if (empty($name)) {
+				$name = "Nueva plantilla";
+			}
+			
+			if (empty($category)) {
+				$category = "Mis Templates";
+			}
+			
 			try {
 				$template = new TemplateObj();
 				$template->setAccount($this->user->account);
@@ -1758,16 +1781,16 @@ class MailController extends ControllerBase
 				$this->traceSuccess("Mail converted in template, idMail: {$idMail}");
 				$this->response->redirect('template');
 			}
-			catch (InvalidArgumentException $e) {
+			catch (Exception $e) {
 				$this->traceFail("Error converting mail in template, idMail: {$idMail}");
 				$this->logger->log('Exception: ' . $e);
 				$this->flashSession->error("Ha ocurrido un error mientras se creaba una plantilla a partir de un correo, contacte al administrador");
-				$this->response->redirect('mail');
+				$this->response->redirect('mail/list');
 			}
 		}
 		else {
 			$this->flashSession->success("El correo base no existe por favor verifique la información");
-			$this->response->redirect('mail');
+			$this->response->redirect('mail/list');
 		}
 	}
 	
@@ -2301,10 +2324,6 @@ class MailController extends ControllerBase
 				'bind' => array(1 => $account->idAccount,
 								2 => $idMail)
 			));
-			
-			if (!$mail) {
-				return $this->response->redirect('error');	
-			}
 			
 			$mailcontent = Mailcontent::findFirst(array(
 				'conditions' => 'idMail = ?1',
