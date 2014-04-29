@@ -8,6 +8,8 @@ DS.RESTAdapter.reopen({
 
 App.Store = DS.Store.extend({});
 
+App.fbdefaultimage = 'post_default.png';
+
 
 App.Mail = DS.Model.extend({
 	type: DS.attr('string'),
@@ -80,6 +82,13 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	url: function () {
 		return '/' + this.get('id');
 	}.property('id'),
+	
+	//Setear la imagen por defecto de facebook en caso de que no tenga ninguna
+	facebookImage: function() {
+		if( this.get('fbimagepublication') === undefined ) {
+			this.set('fbimagepublication', App.fbdefaultimage);
+		}
+	}.observes('content.fbimagepublication'),
 	
 	//Si hay un id se encargara se recrear el correo para su edición
 	setSelectsContent: function () {

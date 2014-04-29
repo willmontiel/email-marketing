@@ -127,10 +127,10 @@
 									<div class="clearfix">
 										<div style="float: left;margin-right: 15px;width: 154px;height: 154px;background-color: #FAFAFA;">
 											<div>
-												<div data-toggle="modal" data-backdrop="static" href="#images" class="edit-fb-image-tool icon-pencil icon-2x" style="position: relative;left: 2px;top: 4px;padding: 2px;border-radius: 4px;cursor: pointer;border: 1px solid #E4E4E4;background-color: #F5F5F5;"></div>
+												<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil" style="position: relative;left: 2px;top: 4px;padding: 2px;border-radius: 4px;cursor: pointer;border: 1px solid #E4E4E4;background-color: #F5F5F5;"></div>
 											</div>
 											{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
-											<img id="fb-share-image" src="/emarketing/images/260.png" width="154" height="154">
+											<img id="fb-share-image" src="{{url('images')}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154">
 										</div>
 										<div style="float: left;width: 67%;">
 											<br>

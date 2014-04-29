@@ -185,4 +185,41 @@
 		</script>
 	</div>	
 	<br />
+	<div class="modal fade gallery-modal" id="images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Imagenes</h3>
+				</div>
+					
+				<ul class="nav nav-tabs nav-tabs-in-modal">
+					<li id="tabgallery" class="active">
+						<a href="#gallery" data-toggle="tab">Galeria</a>
+					</li>
+					<li id="tabuploadimage" class="">
+						<a href="#uploadimage" data-toggle="tab">Cargar</a>
+					</li>
+				</ul>
+					
+				<div class="modal-body">
+					<div class="tab-content imagesbody">
+						<div id="gallery" class="tab-pane active">
+						</div>
+						<div id="uploadimage" class="tab-pane well">
+							<h2 class="text-center">Cargar Imagen</h2>
+							<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
+								<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div id="accept_cancel_image">
+						<a href="#" class="btn btn-default" id="accept_change" data-dismiss="modal">Aplicar</a>
+						<a href="#" class="btn btn-default" id="cancel_change" data-dismiss="modal">Cancelar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

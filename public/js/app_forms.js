@@ -157,6 +157,10 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 									mail: notify_mail }) );
 		}
 		
+		if( form.get('listselected') === undefined ) {
+			return {acceptance: false, msg: 'Recuerde seleccionar una "LISTA"'};
+		}
+		
 		return {acceptance: true, msg: ''};
 	},
 	actions: {
@@ -181,8 +185,11 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 					var maildefault = App.defaultmailnotify;
 					break;
 			}
-
-			objMail = ( mail === undefined ) ? maildefault : JSON.parse(mail);
+			
+			if( mail !== undefined ) {
+				mail = ( typeof(mail) === 'object' ) ? mail : JSON.parse(mail);
+			}
+			objMail = ( mail === undefined ) ? maildefault : mail;
 			
 			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
 			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
@@ -340,6 +347,10 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+		}
+		
+		if( form.get('listselected') === undefined ) {
+			return {acceptance: false, msg: 'Recuerde seleccionar una "LISTA"'};
 		}
 		
 		return {acceptance: true, msg: ''};
