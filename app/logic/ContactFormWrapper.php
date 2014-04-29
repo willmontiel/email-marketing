@@ -114,8 +114,8 @@ class ContactFormWrapper extends ContactWrapper
 		$obj->status = '';
 		$obj->activatedOn = '';
 		$obj->bouncedOn = '';
-		$obj->subscribedOn = '';
-		$obj->unsubscribedOn = '';
+		$obj->unsubscribed = 0;
+		$obj->subscribedon = time();
 		$obj->spamOn = '';
 		$obj->ipActive = '';
 		$obj->ipSubscribed = '';
@@ -148,8 +148,6 @@ class ContactFormWrapper extends ContactWrapper
 		
 		$contact->status = time();
 		$contact->updatedon = time();
-		$contact->unsubscribed = 0;
-		$contact->subscribedon = time();
 		$contact->ipActivated = $this->ipaddress;
 		
 		if (!$contact->save()) {
