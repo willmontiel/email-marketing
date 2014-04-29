@@ -4,10 +4,11 @@ class PrepareMailContent
 	protected $linkService;
 	protected $imageService;
 
-	public function __construct(LinkService $linkService, ImageService $imageService) 
+	public function __construct(LinkService $linkService, ImageService $imageService, $mark = TRUE) 
 	{
 		$this->linkService = $linkService;
 		$this->imageService = $imageService;
+		$this->mark = $mark;
 	}
 	
 	public function processContent($html)
@@ -49,7 +50,10 @@ class PrepareMailContent
 		$html = $htmlObj->saveHTML();
 		$html1 = str_replace('%24%24%24', '$$$', $html);
 		$search = array('</body>', '%%WEBVERSION%%', '%%UNSUBSCRIBE%%');
-		$replace = array('$$$_open_track_$$$</body>', '$$$_webversion_track_$$$', '$$$_unsubscribe_track_$$$');
+		
+		$open_track = ($this->mark) ? '$$$_open_track_$$$</body>' : '</body>';
+		
+		$replace = array($open_track, '$$$_webversion_track_$$$', '$$$_unsubscribe_track_$$$');
 		$html2 = str_ireplace($search, $replace, $html1);
 
 		// Arreglo con [ HTML, MARCAS ]

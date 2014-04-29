@@ -54,7 +54,7 @@ class FormCreator
 	
 	protected function getTextElement($element)
 	{
-		$field = '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '">';
+		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" required>';
 		if($element->hide) {
 			$field = '<input type="text" class="form-control" value="' . $element->defaultvalue . '">';
 		}
@@ -64,7 +64,7 @@ class FormCreator
 	
 	protected function getTextAreaElement($element)
 	{
-		$field = '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '"></textarea>';
+		$field = ($element->required != 'Si') ? '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" ></textarea>' : '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" required></textarea>';
 		if($element->hide) {
 			$field = '<textarea class="form-control" value="' . $element->defaultvalue . '"></textarea>';
 		}
@@ -74,8 +74,8 @@ class FormCreator
 	
 	protected function getSelectElement($element)
 	{
-		$field = '<select id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control">';
-
+		$field = ($element->required != 'Si') ? '<select id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" data-name="' . $element->name . '" >' : '<select id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required" data-name="' . $element->name . '" required>';
+		
 		$values = explode(',', $element->values);
 		$options = '';
 		foreach ($values as $value) {
@@ -92,8 +92,8 @@ class FormCreator
 	
 	protected function getMultiSelectElement($element)
 	{
-		$field = '<select id="c_' . $element->id . '" name="c_' . $element->id . '[]" class="form-control" multiple="true">';
-
+		$field = ($element->required != 'Si') ? '<select id="c_' . $element->id . '[]" name="c_' . $element->id . '[]" class="form-control" multiple="true" data-name="' . $element->name . '" >' : '<select id="c_' . $element->id . '[]" name="c_' . $element->id . '[]" class="form-control field-element-form-required" multiple="true" data-name="' . $element->name . '" required>';
+		
 		$values = explode(',', $element->values);
 		$defaultvalues = explode(',', $element->defaultvalue);
 		$options = '';
@@ -111,7 +111,12 @@ class FormCreator
 	
 	protected function getDateElement($element)
 	{
+		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control date_view_picker" data-name="' . $element->name . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required" data-name="' . $element->name . '" required>';
+		if($element->hide) {
+			$field = '<input type="text" class="form-control date_view_picker" value="' . $element->defaultvalue . '">';
+		}
 		
+		return $field;
 	}
 	
 	public function getLinkAction(Form $form)

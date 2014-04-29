@@ -107,11 +107,11 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 		$('.form-setup-content').show();
 	},
 	checkValues: function(form) {
-		if( form.get('name') === undefined ) {
+		if( form.get('name') === undefined ||  form.get('name').length === 0 ) {
 			return {acceptance: false, msg: 'Recuerde dar un NOMBRE al formulario'};
 		}
 		
-		if( form.get('urlsuccess') === undefined || form.get('urlerror') === undefined ) {
+		if( ( form.get('urlsuccess') === undefined || form.get('urlsuccess').length === 0 ) || ( form.get('urlerror') === undefined ) || form.get('urlerror').length === 0 ) {
 			return {acceptance: false, msg: 'Recuerde dar las URLs de EXITO y ERROR'};
 		}
 
@@ -292,11 +292,11 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 		$('.form-setup-content').show();
 	},
 	checkValues: function(form) {
-		if( form.get('name') === undefined ) {
+		if( form.get('name') === undefined ||  form.get('name').length === 0 ) {
 			return {acceptance: false, msg: 'Recuerde dar un NOMBRE al formulario'};
 		}
 		
-		if( form.get('urlsuccess') === undefined || form.get('urlerror') === undefined ) {
+		if( ( form.get('urlsuccess') === undefined || form.get('urlsuccess').length === 0 ) || ( form.get('urlerror') === undefined ) || form.get('urlerror').length === 0 ) {
 			return {acceptance: false, msg: 'Recuerde dar las URLs de EXITO y ERROR'};
 		}
 		

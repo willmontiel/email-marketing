@@ -48,9 +48,20 @@ class ContactFormWrapper extends ContactWrapper
 			$contact = $this->createNewContactFromJsonData($contactObj, $this->contactlist);
 		}
 		
-		if($contact) {
+		if($contact && $this->form->optin === 'Si') {
+			$content = json_decode($this->form->optinMail);
+			$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
+			
 			$optin = new NotificationMail();
-			$optin->sendMailInForm($contact, $this->form->optinMail);
+			$optin->setForm($this->form);
+			$optin->setAccount($this->account);
+			$optin->setDomain($domain);
+			$optin->setContact($contact);
+			$optin->setMail(new Mail());
+			$optin->prepareContent($content->mail);
+			$optin->setNotificationLink();
+			$optin->setContactReceiver();
+			$optin->sendMail($content);
 		}
 	}
 	
@@ -76,9 +87,62 @@ class ContactFormWrapper extends ContactWrapper
 		$cfs = Customfield::findByIdDbase($this->contactlist->idDbase);
 		foreach ($cfs as $cf) {
 			$name = 'campo'.$cf->idCustomField;
+			if($cf->type === 'Date') {
+				if(isset($obj->$name)) {
+					$obj->$name = strtotime($obj->$name);
+				}
+			}
+			
 			if(!isset($obj->$name)) {
 				$obj->$name = '';
 			}
+		}
+	}
+	
+	public function activateContactFromForm(Contact $contact)
+	{
+		$contact->status = time();
+		$contact->updatedon = time();
+		$contact->unsubscribed = 0;
+		$contact->subscribedon = time();
+		$contact->ipActivated = $this->ipaddress;
+		
+		if (!$contact->save()) {
+			$errmsg = $contact->getMessages();
+			$msg = '';
+			foreach ($errmsg as $err) {
+				$msg .= $err . PHP_EOL;
+			}
+			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
+		}
+		
+		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
+		
+		if($this->form->notify === 'Si') {
+			$content = json_decode($this->form->notifyMail);
+			
+			$notify = new NotificationMail();
+			$notify->setForm($this->form);
+			$notify->setAccount($this->account);
+			$notify->setDomain($domain);
+			$notify->setMail(new Mail());
+			$notify->prepareContent($content->mail);
+			$notify->setNotifyReceiver($this->form->notifyEmail, '');
+			$notify->sendMail($content);
+		}
+		
+		if($this->form->welcome === 'Si') {
+			$content = json_decode($this->form->welcomeMail);
+			
+			$welcome = new NotificationMail();
+			$welcome->setForm($this->form);
+			$welcome->setContact($contact);
+			$welcome->setAccount($this->account);
+			$welcome->setDomain($domain);
+			$welcome->setMail(new Mail());
+			$welcome->prepareContent($content->mail);
+			$welcome->setContactReceiver();
+			$welcome->sendMail($content);
 		}
 	}
 	
