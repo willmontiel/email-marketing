@@ -223,7 +223,7 @@ class MailWrapper extends BaseWrapper
 		$jsonObject['fbaccounts'] = '';
 		$jsonObject['twaccounts'] = '';
 		$jsonObject['fbmessagecontent'] = '';
-		$jsonObject['fbimagepublication'] = '';
+		$jsonObject['fbimagepublication'] = 'default';
 		$jsonObject['fbtitlecontent'] = '';
 		$jsonObject['fbdescriptioncontent'] = '';
 		$jsonObject['twpublicationcontent'] = '';

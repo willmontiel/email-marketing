@@ -138,7 +138,9 @@ class ContactFormWrapper extends ContactWrapper
 			$name = 'campo'.$cf->idCustomField;
 			if($cf->type === 'Date') {
 				if(isset($obj->$name)) {
+					$this->logger->log('Antes ' . $obj->$name);
 					$obj->$name = strtotime($obj->$name);
+					$this->logger->log('Despues ' . $obj->$name);
 				}
 			}
 			
