@@ -105,7 +105,7 @@
 			{{flashSession.output()}}
 		</div>
 	</div>
-
+	
 	<div id="emberAppContainer">
 		<script type="text/x-handlebars" data-template-name="index">
 			<div class="row">
@@ -122,7 +122,7 @@
 								<div class="form-group">
 									<label for="fromName" class="col-sm-2 control-label">Nombre del correo: </label>
 									<div class="col-sm-10">
-										{{'{{view Ember.TextField valueBinding="name" id="name" required="required" class="form-control" placeholder="Nombre para identificar este correo "}}'}}
+										{{'{{view Ember.TextField valueBinding="name" id="name" required="required" class="form-control"}}'}}
 									</div>
 								</div>
 							</form>

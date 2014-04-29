@@ -17,7 +17,7 @@
 {% block content %}
 
 {# Botones de navegacion #}
-{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
+{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'template']) }}
 
 	<div class="row">
 		<h4 class="sectiontitle">Plantillas</h4>
@@ -25,9 +25,10 @@
 		{{ flashSession.output()}}
 
 		<div class="pull-right">
-			<a href="{{ url('mail') }}" class="btn btn-default btn-sm extra-padding">
+{#			<a href="{{ url('mail/list') }}" class="btn btn-default btn-sm extra-padding">
 				<i class="icon-plus"></i> Regresar a correos
 			</a>
+#}
 			<a href="{{ url('template/new') }}" class="btn btn-default btn-sm extra-padding">
 				<i class="icon-plus"></i> Nueva Plantilla
 			</a>
@@ -46,19 +47,20 @@
 							<div class="row">
 								{% for t in template %}
 								<div class="item-thumb col-xs-6 col-md-3">
-									<h5 style="text-align: center;">{{t['name']}}</h5>
-									<div class="preview-template img-wrap">
-										{% if t['preview'] == null%}
-											<div class="not-available-template"></div>
-										{% else %}
-											<img src="data: image/png;base64, {{t['preview']}}" />
-										{%endif%}
-										<a href="{{url('mail/compose')}}/{{ (t['idMail'] != null)?t['idMail']:''}}?template={{  t['id']  }}">
-											<div class="img-info-x2"><p><i class="icon-ok"></i> Elegir</p></div>
-										</a>
-									</div>
-									<div class="btn-toolbar" style="text-align: center !important;">
-										<div class="btn-group template-tools center-block">
+									<div class="container-fluid">
+										<h5>{{t['name']}}</h5>
+										<div class="preview-template img-wrap">
+											{% if t['preview'] == null%}
+												<div class="not-available-template"></div>
+											{% else %}
+												<img src="data: image/png;base64, {{t['preview']}}" />
+											{%endif%}
+											<a href="{{url('mail/contenteditor')}}/{{ (t['idMail'] != null)?t['idMail']:'template'}}/{{  t['id']  }}">
+												<div class="img-info-x2"><p><i class="icon-ok"></i> Elegir</p></div>
+											</a>
+										</div>
+										<div class="clearfix"></div>
+										<div class="btn-group template-tools">
 											<a href="#preview-modal" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Previsualizar"><span class="glyphicon glyphicon-eye-open"></span></a>
 											{% if t['idMail'] == null %}
 												{% if t['idAccount'] == null%}

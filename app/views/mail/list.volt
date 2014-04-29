@@ -30,15 +30,16 @@
 
 	{{ flashSession.output() }}
 
-	<div class="col-md-6 pull-right">
-		<a class="btn btn-default btn-sm extra-padding" href="{{ url('scheduledmail') }}">
-			<span class="glyphicon glyphicon-calendar"></span> Administrar Programación</a>
-		<a class="btn btn-default btn-sm extra-padding" href="{{ url('mail/compose') }}">
-			<span class="glyphicon glyphicon-plus"></span> Nuevo Correo</a>
-		
-		<a class="btn btn-default btn-sm extra-padding" href="{{ url('template/index') }}" class="btn btn-default btn-sm extra-padding">
-			<span class="glyphicon glyphicon-magic"></span> Administrar Plantillas</a>
-		
+	<div class="col-sm-12 col-md-12 col-lg-8 pull-right">
+		<ul class="list-inline pull-right">
+			<li><a class="btn btn-default btn-sm extra-padding" href="{{ url('scheduledmail') }}">
+				<span class="glyphicon glyphicon-calendar"></span> Administrar Programación</a></li>
+			<li><a class="btn btn-default btn-sm extra-padding" href="{{ url('mail/compose') }}">
+				<span class="glyphicon glyphicon-plus"></span> Nuevo Correo</a></li>
+			
+			<li><a class="btn btn-default btn-sm extra-padding" href="{{ url('template/index') }}" class="btn btn-default btn-sm extra-padding">
+				<span class="glyphicon glyphicon-magic"></span> Administrar Plantillas</a></li>
+		</ul>
 	</div>
 </div>
 

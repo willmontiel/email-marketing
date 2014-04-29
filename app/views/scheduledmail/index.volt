@@ -15,7 +15,7 @@
 {% block content%}
 
 {# Botones de navegacion #}
-{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
+{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'scheduledmail']) }}
 
 	<div class="row">
 		<h4 class="sectiontitle">Programación de envío de correos</h4>
@@ -25,22 +25,24 @@
 		{{ flashSession.output() }}
 
 		<div class="">
-			<a href="{{url('mail')}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-envelope"></span> Todos los correos</a>
+			<a href="{{url('mail/list')}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-envelope"></span> Todos los correos</a>
 		</div>
 	</div>
 	<div class="space"></div>
 	<div class="row">
-		<table id="processes-table" class="table table-striped">
+{#		<table id="processes-table" class="table table-striped"> #}
+		<table class="table table-striped">
 			<thead>
 				<tr>
 					<th>Nombre</th>
 					<th>Estado</th>
 					<th>Destinatarios aprox.</th>
 					<th>Programado para</th>
-					<td></td>
+					<th></th>
 				</tr>
 			</thead>
-			<tbody id="resultado">
+{#			<tbody id="resultado"> #}
+			<tbody>
 				 {% for item in page.items %}
 					<tr>
 						<td>{{item.name}}</td>
@@ -113,11 +115,11 @@
 		  <h6 id="modal-tablesLabel">Pausar Correo Programado</h6>
 		</div>
 		<div class="modal-body">
+			<p>¿Está seguro que desea pausar éste correo?</p>
+				
+			
 			<p>
-				¿Esta seguro que desea pausar este correo?
-			</p>
-			<p>
-				Recuerde que si pausa este correo debera programarlo de nuevo.
+				Recuerde que si pausa éste correo, deberá programarlo de nuevo.
 			</p>
 		</div>
 		<div class="modal-footer">

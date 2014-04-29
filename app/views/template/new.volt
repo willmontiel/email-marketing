@@ -21,9 +21,9 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
 			},
 			success: function() {
-				$("#preview-modal").empty();
-				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
-				$('<iframe frameborder="0" width="100%" height="100%" src="{{url('template/previewdata')}}"/>').appendTo('#preview-modal');
+				$("#modal-body-preview").empty();
+				$('#modal-body-preview').append($('<iframe frameborder="0" width="100%" height="100%" src="{{url('template/previewdata')}}"/>'));
+			
 			}
 		});
 		
@@ -38,23 +38,23 @@
 
 	
 	function writenewcategory() {
-		$('.selectcategory').hide();
-		$('.btnNewCategory').hide();
-		$('.selectcategory').find('#category').removeAttr('id');
+		$('#all-category').hide();
+		$('#btnNewCategory').hide();
+		$('#category').find('#category').removeAttr('id');
 		
-		$('.newcategory').show();
-		$('.btnSelectCategory').show();
-		$('.newcategory').find('input').attr('id', "category");
+		$('#new-category').show();
+		$('#btnSelectCategory').show();
+		$('#new-category').find('input').attr('id', "category");
 	};
 	
 	function selectcategory() {
-		$('.newcategory').hide();
-		$('.btnSelectCategory').hide();
-		$('.newcategory').find('input').removeAttr('id');
+		$('#new-category').hide();
+		$('#btnSelectCategory').hide();
+		$('#new-category').find('input').removeAttr('id');
 		
-		$('.selectcategory').show();
-		$('.btnNewCategory').show();
-		$('.selectcategory').find('select').attr('id', "category");
+		$('#all-category').show();
+		$('#btnNewCategory').show();
+		$('#category').find('select').attr('id', "category");
 	};
 	
 	function sendData() {
@@ -99,13 +99,14 @@
 		<div class="bs-callout bs-callout-info">	  
 			<p>Cree una plantilla global, que cualquier cuenta podrá usar como base</p>
 	    </div>
+
 	    <form class="form-inline" role="form">
 	    	<div class="form-group">
 				<label for="" class="" >Nombre de la plantilla:</label>
 				<input type="text" name="name" id="name" required="required" class="form-control">
 			</div>
-	    	<div class="form-group">
-				<label for="">Categoría: </label>
+	    	<div class="form-group" id="all-category" style="display: inline;">
+				<label for="categoria">Categoría: </label>
 				<select class="form-control" name="categoria" id="category">
 					{%if categories%}
 						{%for category in categories%}
@@ -116,31 +117,50 @@
 					{%endif%}
 				</select>
 			</div>
-			<div class="form-group">
-				<label for="" class="">Nueva Categoria: </label>
-				<input type="text" name="categoria" id="category" required="required" class="form-control">
+			<div class="form-group" id="new-category" style="display: none;">
+				<label for="category" class="">Nueva Categoria: </label>
+				<input type="text" name="categoria" id="category" 	 class="form-control">
 			</div>
 			<div class="form-group">
-				<button class="btn btn-default" onclick="writenewcategory()"><span class="glyphicon glyphicon-pencil"></span></button>
-				<button class="btn btn-default" onclick="selectcategory()"><span class="glyphicon glyphicon-check"></span></button>
-			</div>
-			<div class="form-group">
-				<a href="{{url('template/index')}}" class="btn btn-default">Salir</a>
-				<a class="btn btn-default" onclick="sendData()"><span class="glyphicon glyphicon-floppy-saved"></i></a>
+				<a id="btnNewCategory" class="btn btn-default extra-padding" onclick="writenewcategory()" ><span class="glyphicon glyphicon-pencil"></span></a>
+				<a id="btnSelectCategory" class="btn btn-default extra-padding" onclick="selectcategory()" style="display: none;"><span class="glyphicon glyphicon-check"></span></a>
 			</div>
 			<div class="form-group">
 				<label><input type="checkbox" name="isglobal" id="isglobal"> Plantilla Global</label>
-				<a class="btn btn-default" onClick="verHTML()"><span class="glyphicon glyphicon-search"></span> Previsualizar</a>
+			</div>
+			<div class="col-xs-12 col-sm-9 col-md-10 col-lg-4 pull-right">
+				<div class="form-group">
+					<a class="btn btn-default extra-padding" data-toggle="modal" data-target="#preview-modal" onClick="verHTML()"><span class="glyphicon glyphicon-search"></span> Previsualizar</a>
+				</div>
+				<div class="form-group">
+					<a href="{{url('template/index')}}" class="btn btn-default extra-padding">Salir</a>
+					<a class="btn btn-default extra-padding" onclick="sendData()"><span class="glyphicon glyphicon-floppy-saved"></i></a>
+				</div>
 			</div>
 		</form>
 	</div>
 	<div class="row">
 		{{ flashSession.output()}}
 	</div>
-	<br />
 	<div class="row">
 		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
-	<br />
-	<div id="preview-modal" class="modal hide fade preview-modal"></div>
+	
+
+	<div class="modal fade" id="preview-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+		      </div>
+	      <div class="modal-body" id="modal-body-preview">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 {% endblock %}
