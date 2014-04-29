@@ -144,6 +144,8 @@ class ContactFormWrapper extends ContactWrapper
 	
 	public function activateContactFromForm(Contact $contact)
 	{
+		$oldContact = $contact;
+		
 		$contact->status = time();
 		$contact->updatedon = time();
 		$contact->unsubscribed = 0;
@@ -158,6 +160,10 @@ class ContactFormWrapper extends ContactWrapper
 			}
 			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
 		}
+		
+		$counter = new ContactCounter();
+		$counter->updateContact($oldContact, $contact);
+		$counter->saveCounters();
 		
 		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 		
