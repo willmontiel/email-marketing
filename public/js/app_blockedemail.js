@@ -46,11 +46,11 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandl
 		block: function (){
 			var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
 			if(this.get('email') == null) {
-				App.set('errormessage', 'El campo email esta vacío, por favor verifica la información');
+				App.set('errormessage', 'El campo email esta vacío, por favor verifique la información');
 				this.transitionToRoute('blockedemails.block');
 			}
 			else if (this.get('blockedReason') == null) {
-				App.set('errormessage', 'Debes enviar al menos una razón de porqué estas bloqueando este email, por favor verifica la información');
+				App.set('errormessage', 'Debe enviar al menos una razón de porqué esta bloqueando este email, por favor verifique la información');
 				this.transitionToRoute('blockedemails.block');
 			}
 			else {
@@ -59,7 +59,7 @@ App.BlockedemailsBlockController = Ember.ObjectController.extend(Ember.SaveHandl
 					this.handleSavePromise(this.content.save(), 'blockedemails', 'Correo bloqueado exitosamente');
 				}
 				else {
-					App.set('errormessage', 'La dirección de correo electrónico ingresada es invalida, por favor verifica la información');
+					App.set('errormessage', 'La dirección de correo electrónico ingresada es invalida, por favor verifique la información');
 					this.transitionToRoute('blockedemails.block');
 				}
 			}

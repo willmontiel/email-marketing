@@ -107,7 +107,7 @@
 				</div>
 				<div class="space"></div>
 				<div class="bs-callout bs-callout-danger">
-					<p>Si está seguro dele click al botón <strong>Bloquear</strong> para continuar.</p>
+					<p>Si está seguro haga clic en el botón <strong>Bloquear</strong> para continuar.</p>
 				</div>
 				<p>{{ '{{view Ember.Checkbox checkedBinding="deleteContact" id="deleteContact" class="icheckbox_flat-aero hover"}}' }} Eliminar contactos asociados al email</p>
 				<div class="form-actions pull-right">
