@@ -158,9 +158,11 @@ class ContactFormWrapper extends ContactWrapper
 			}
 			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
 		}
-		
+		$db = Phalcon\DI::getDefault()->get('db');
+		$db->begin();
 		$counter = new ContactCounter();
 		$counter->updateContact($oldContact, $contact);
+		$db->commit();
 		$counter->saveCounters();
 		
 		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
