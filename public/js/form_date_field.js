@@ -1,6 +1,6 @@
 $(function() {
 	$('.date_view_picker').datetimepicker({
-			format:'d/m/Y',
+			format:'m/d/Y',
 			inline:true,
 			timepicker:false,
 			lang:'es',

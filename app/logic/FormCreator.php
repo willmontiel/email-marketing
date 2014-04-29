@@ -92,7 +92,7 @@ class FormCreator
 	
 	protected function getMultiSelectElement($element)
 	{
-		$field = ($element->required != 'Si') ? '<select id="c_' . $element->id . '" name="c_' . $element->id . '[]" class="form-control" multiple="true" data-name="' . $element->name . '" >' : '<select id="c_' . $element->id . '[]" name="c_' . $element->id . '" class="form-control field-element-form-required" multiple="true" data-name="' . $element->name . '" required>';
+		$field = ($element->required != 'Si') ? '<select id="c_' . $element->id . '[]" name="c_' . $element->id . '[]" class="form-control" multiple="true" data-name="' . $element->name . '" >' : '<select id="c_' . $element->id . '[]" name="c_' . $element->id . '[]" class="form-control field-element-form-required" multiple="true" data-name="' . $element->name . '" required>';
 		
 		$values = explode(',', $element->values);
 		$defaultvalues = explode(',', $element->defaultvalue);
