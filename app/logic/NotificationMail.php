@@ -31,6 +31,10 @@ class NotificationMail extends TestMail
 
 	public function setNotifyReceiver($email, $name)
 	{
+		$email = trim($email);
+		if( !\filter_var($email, FILTER_VALIDATE_EMAIL) ) {
+			throw new \Exception('Email Invalido Para Envio [To]');
+		}
 		$this->receiver['email'] = $email;
 		$this->receiver['name'] = $name;
 	}
@@ -49,7 +53,13 @@ class NotificationMail extends TestMail
 		$swift = Swift_Mailer::newInstance($transport);
 		
 		$subject = $sender->subject;
-		$from = array($sender->fromemail => $sender->fromname);
+		
+		$from_email = trim($sender->fromemail);
+		if( !\filter_var($from_email, FILTER_VALIDATE_EMAIL) ) {
+			throw new \Exception('Email Invalido Para Envio [From]');
+		}
+		
+		$from = array($from_email => $sender->fromname);
 		$to = array($this->receiver['email'] => $this->receiver['name']);
 		$content = $this->getBody();
 		$text = $this->getPlainText();

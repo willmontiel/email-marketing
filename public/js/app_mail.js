@@ -32,10 +32,12 @@ App.Mail = DS.Model.extend({
 	mailcontent: DS.attr('boolean'),
 	plainText: DS.attr('string'),
 	totalContacts: DS.attr('string'),
+	fbaccounts: DS.attr('string'),
 	fbmessagecontent: DS.attr('string'),
 	fbimagepublication: DS.attr('string'),
 	fbtitlecontent: DS.attr('string'),
 	fbdescriptioncontent: DS.attr('string'),
+	twaccounts: DS.attr('string'),
 	twpublicationcontent: DS.attr('string')
 });
 
