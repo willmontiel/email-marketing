@@ -8,13 +8,13 @@
 	<script type="text/javascript">
 		var db;
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
+		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}"};
 	</script>
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_mail.js') }}
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	<script type="text/javascript">
-		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}"};
 		$(function() {
 			{%for asset in assets%}
 				var media = new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}});

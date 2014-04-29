@@ -9,6 +9,15 @@
 				{{'{{else}}'}}
 					<dt>De:</dt> <dd>{{'{{fromSummary}}'}}</dd>
 					<dt>Asunto:</dt> <dd>{{'  {{subject}} '}}</dd>
+					<dt></dt>
+					<dd>
+						{{'{{#if fbaccountsel }}'}}
+						<img src="{{url('images')}}/share_facebook_image_24.png">
+						{{'{{/if}}'}}
+						{{'{{#if twaccountsel }}'}}
+						<img src="{{url('images')}}/share_twitter_image_24.png">
+						{{'{{/if}}'}}
+					</dd>
 				{{'{{/if}}'}}
 				</dl>
 				<dl class="dl-horizontal" {{ '{{action "expandTarget" this}}' }}>
@@ -104,7 +113,7 @@
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="facebook">
 								<br />
-								<label>Seleccione una cuenta de facebook, si aún no ha configurado alguna <a href="">haga click aqui </a></label>
+								<div class="add_facebook_account"><label>Seleccione una cuenta de facebook, si aún no ha configurado alguna <a onclick="new_sn_account('{{fbloginUrl}}')">haga click aqui</a></label></div>
 								<br />
 								{#<select name="facebookaccounts" id="accounts_facebook" class="form-control">
 									<option>Cuenta de facebook 1</option>
@@ -130,7 +139,7 @@
 												<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil" style="position: relative;left: 2px;top: 4px;padding: 2px;border-radius: 4px;cursor: pointer;border: 1px solid #E4E4E4;background-color: #F5F5F5;"></div>
 											</div>
 											{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
-											<img id="fb-share-image" src="{{url('images')}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154">
+											<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154">
 										</div>
 										<div style="float: left;width: 67%;">
 											<br>
@@ -144,7 +153,7 @@
 							</div>
 							<div class="tab-pane fade" id="twitter">
 								<br />
-								<label>Seleccione una cuenta de twitter, si aún no ha configurado alguna <a href="">haga click aqui </a></label>
+								<div class="add_twitter_account"><label>Seleccione una cuenta de twitter, si aún no ha configurado alguna <a onclick="new_sn_account('{{twloginUrl}}')">haga click aqui</a></div>
 								<br />
 								{{ '{{view Ember.Select
 										multiple="true"
