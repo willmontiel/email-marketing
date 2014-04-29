@@ -4,7 +4,7 @@ $(function() {
 			inline:true,
 			timepicker:false,
 			lang:'es',
-			minDate: 0,
+//			minDate: 0,
 			startDate: 0
 		});
 });
