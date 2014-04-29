@@ -20,7 +20,8 @@ SocialMediaDisplayer.prototype.imageSelected = function() {
 	var t = this;
 	$('#accept_change').on('click', function() {
 		$('#fb-share-image').attr('src', t.gallery.srcImage);
-		$('#fbimagepublication').val(t.gallery.id);
+		App.fbimage = t.gallery.id;
+//		$('#fbimagepublication').val(t.gallery.id);
 	});
 };
 

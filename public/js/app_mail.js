@@ -8,7 +8,7 @@ DS.RESTAdapter.reopen({
 
 App.Store = DS.Store.extend({});
 
-App.fbdefaultimage = 'post_default.png';
+App.fbimage = 'post_default.png';
 
 
 App.Mail = DS.Model.extend({
@@ -88,7 +88,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	//Setear la imagen por defecto de facebook en caso de que no tenga ninguna
 	facebookImage: function() {
 		if( this.get('fbimagepublication') === undefined ) {
-			this.set('fbimagepublication', App.fbdefaultimage);
+			this.set('fbimagepublication', App.fbimage);
 		}
 	}.observes('content.fbimagepublication'),
 	
@@ -377,6 +377,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				mail.set('filterByClick', click);
 				mail.set('filterByExclude', exclude);
 				mail.set('googleAnalytics', analitycs);
+				mail.set('fbimagepublication', App.fbimage);
 				
 				this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
 				this.set('isHeaderExpanded', false);

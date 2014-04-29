@@ -25,7 +25,7 @@
 		{{ javascript_include('b3/vendors/js/bootstrap-editable.js') }}
 		{{ javascript_include('b3/vendors/js/jquery.gritter.js') }}
 		{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
-		{{ javascript_include('js/form_required_fields.js') }}
+		{{ javascript_include('js/form_date_field.js') }}
 	</head>
 	<body>
 		<div class="container">
