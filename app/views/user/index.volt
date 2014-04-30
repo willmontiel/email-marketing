@@ -55,7 +55,7 @@
 				<td>
 					<div class="pull-right">
 						<a href="{{url('user/edit/')}}{{item.idUser}}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
-						<a class="ShowDialog btn btn-default btn-sm" data-toggle="modal" href="#modal-simple" data-id="{{url('user/delete/')}}{{item.idUser}}"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>
+						<a class="ShowDialog btn btn-default btn-delete btn-sm" data-toggle="modal" href="#modal-simple" data-id="{{url('user/delete/')}}{{item.idUser}}"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>
 					</div>
 				</td>
 			</tr>
