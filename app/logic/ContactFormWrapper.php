@@ -49,8 +49,63 @@ class ContactFormWrapper extends ContactWrapper
 		}
 		
 		if($contact) {
-			$optin = new NotificationMail();
-			$optin->sendMailInForm($contact, $this->form->optinMail);
+			
+			$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
+			
+			if($this->form->optin === 'Si') {
+				try {
+					$content = json_decode($this->form->optinMail);
+
+					$optin = new NotificationMail();
+					$optin->setForm($this->form);
+					$optin->setAccount($this->account);
+					$optin->setDomain($domain);
+					$optin->setContact($contact);
+					$optin->setMail(new Mail());
+					$optin->prepareContent($content->mail);
+					$optin->setNotificationLink();
+					$optin->setContactReceiver();
+					$optin->sendMail($content);
+				} catch (\Exception $e) {
+					$this->logger->log('Exception: [' . $e->getMessage() . ']');
+				}
+			}
+			else {
+				if($this->form->notify === 'Si') {
+					try {
+						$content = json_decode($this->form->notifyMail);
+
+						$notify = new NotificationMail();
+						$notify->setForm($this->form);
+						$notify->setAccount($this->account);
+						$notify->setDomain($domain);
+						$notify->setMail(new Mail());
+						$notify->prepareContent($content->mail);
+						$notify->setNotifyReceiver($this->form->notifyEmail, $this->form->notifyEmail);
+						$notify->sendMail($content);
+					} catch (\Exception $e) {
+						$this->logger->log('Exception: [' . $e->getMessage() . ']');
+					}
+				}
+
+				if($this->form->welcome === 'Si') {
+					try {
+						$content = json_decode($this->form->welcomeMail);
+
+						$welcome = new NotificationMail();
+						$welcome->setForm($this->form);
+						$welcome->setContact($contact);
+						$welcome->setAccount($this->account);
+						$welcome->setDomain($domain);
+						$welcome->setMail(new Mail());
+						$welcome->prepareContent($content->mail);
+						$welcome->setContactReceiver();
+						$welcome->sendMail($content);
+					} catch (\Exception $e) {
+						$this->logger->log('Exception: [' . $e->getMessage() . ']');
+					}
+				}
+			}
 		}
 	}
 	
@@ -73,11 +128,71 @@ class ContactFormWrapper extends ContactWrapper
 		$obj->isEmailBlocked = '';
 		$obj->mailHistory = '';
 		
+		if($this->form->optin === 'No') {
+			$obj->isActive = true;
+			$obj->isSubscribed = true;
+		}
+		
 		$cfs = Customfield::findByIdDbase($this->contactlist->idDbase);
 		foreach ($cfs as $cf) {
-			$name = 'campo'.$cf->idCustomField;
+			$name = 'campo'.$cf->idCustomField;			
 			if(!isset($obj->$name)) {
 				$obj->$name = '';
+			}
+		}
+	}
+	
+	public function activateContactFromForm(Contact $contact)
+	{
+		$contact->status = time();
+		$contact->updatedon = time();
+		$contact->unsubscribed = 0;
+		$contact->subscribedon = time();
+		$contact->ipActivated = $this->ipaddress;
+		
+		if (!$contact->save()) {
+			$errmsg = $contact->getMessages();
+			$msg = '';
+			foreach ($errmsg as $err) {
+				$msg .= $err . PHP_EOL;
+			}
+			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
+		}
+		
+		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
+		
+		if($this->form->notify === 'Si') {
+			try {
+				$content = json_decode($this->form->notifyMail);
+				
+				$notify = new NotificationMail();
+				$notify->setForm($this->form);
+				$notify->setAccount($this->account);
+				$notify->setDomain($domain);
+				$notify->setMail(new Mail());
+				$notify->prepareContent($content->mail);
+				$notify->setNotifyReceiver($this->form->notifyEmail, '');
+				$notify->sendMail($content);
+			} catch (\Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}
+		}
+		
+		if($this->form->welcome === 'Si') {
+			try {
+				$content = json_decode($this->form->welcomeMail);
+
+				$welcome = new NotificationMail();
+				$welcome->setForm($this->form);
+				$welcome->setContact($contact);
+				$welcome->setAccount($this->account);
+				$welcome->setDomain($domain);
+				$welcome->setMail(new Mail());
+				$welcome->prepareContent($content->mail);
+				$welcome->setContactReceiver();
+				$welcome->sendMail($content);
+			} catch (\Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
 			}
 		}
 	}

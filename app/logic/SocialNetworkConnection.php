@@ -103,7 +103,7 @@ class SocialNetworkConnection
 	{
 		$userid = $this->facebook->getUser();
 		if($userid) {
-			try{
+			
 			$existing = Socialnetwork::findFirst(array(
 							"conditions" => "userid = ?1 AND idAccount = ?2",
 							"bind" => array(1 => $userid, 2 => $this->account->idAccount)
@@ -128,13 +128,6 @@ class SocialNetworkConnection
 				else if($fanpage->status === 'Deactivated'){
 					$this->activateAccount($fanpage, $fanpage->userid, $account['access_token'], $account['name']);
 				}
-			}
-			} 
-			catch (InvalidArgumentException $e) {
-				$this->logger->log('Exception: [' . $e . ']');
-			}
-			catch (Exception $e) {
-				$this->logger->log('Exception: [' . $e . ']');
 			}
 		}
 	}
