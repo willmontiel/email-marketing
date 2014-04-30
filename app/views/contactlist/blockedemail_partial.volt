@@ -64,12 +64,12 @@
 		<h4 class="sectiontitle">Bloqueo de direcciones de correo</h4>
 
 		{{ '{{#if App.errormessage }}' }}
-			<div class="alert alert-message alert-error">
+			<div class="bs-callout bs-callout-danger">
 		{{ '{{ App.errormessage }}' }}
 			</div>
 		{{ '{{/if}} '}}	
 		{{'{{#if errors.errormsg}}'}}
-			<div class="alert alert-error">
+			<div class="bs-callout bs-callout-danger">
 				{{'{{errors.errormsg}}'}}
 			</div>
 		{{'{{/if}}'}}
@@ -158,7 +158,7 @@
 
 			{{'{{#if errors.errormsg}}'}}
 				<br />
-				<div class="alert alert-error">
+				<div class="bs-callout bs-callout-danger">
 					{{'{{errors.errormsg}}'}}
 				</div>
 			{{'{{/if}}'}}

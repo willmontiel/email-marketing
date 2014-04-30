@@ -780,3 +780,6 @@ span.required {
 .field-element-form-hide, .social-input-hide {
 	display: none;
 }
+.btn-for-modal-accordion {
+	width: 120px;
+}
