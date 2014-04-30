@@ -1,16 +1,23 @@
 {% extends "templates/index_b3.volt" %}
-{% block sectiontitle %}<i class="icon-edit"></i> Editar información de las cuentas{%endblock%}
-{%block sectionsubtitle %}Edite la configuración de la cuenta{% endblock %}
-
 {% block content %}
+	<div class="row">
+		<div class="col-sm-12">
+			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
+		</div>
+	</div>
+
 	<div class="row">
 		<h4 class="sectiontitle">Edición de la cuenta</h4>
 		<div class="bs-callout bs-callout-info">
 			<p>Edite datos de cuentas o reconfigure.</p>
 		</div>
 	</div>	
-
-	{{ flashSession.output() }}
+	
+	<div class="row">
+		<div class="col-sm-12">
+			{{ flashSession.output() }}
+		</div>
+	</div>
 
 	<div class="row">
 		<div clas="col-md-6">

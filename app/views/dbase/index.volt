@@ -16,7 +16,7 @@
 		
 	</div>
 	{{ flashSession.output() }}
-	<div class="col-md-3 col-md-offset-8">
+	<div class="col-md-12 text-right">
 		<a href="{{ url('dbase/new') }}" class="btn btn-default btn-sm extra-padding">
 			<i class="glyphicon glyphicon-plus"></i> Crear base de datos
 		</a>
@@ -74,7 +74,7 @@
 				<td>
 					<a href="{{ url('dbase/edit/') }}{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
 					<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
-					<a href="{{url('statistic/dbase')}}/{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span></a>
+					<a href="{{url('statistic/dbase')}}/{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"></span> Estadísticas</a>
 				</td>
 			</tr>
 	{%endfor%}
