@@ -131,52 +131,52 @@
 
 <div class="border-mail mail-wrapper">
 	{{flashSession.output()}}
-		<div id="emberAppContainer">
-			<script type="text/x-handlebars" data-template-name="index">
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/mailstatus_partial") }}
-					</div>
+	<div id="emberAppContainer">
+		<script type="text/x-handlebars" data-template-name="index">
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/mailstatus_partial") }}
 				</div>
-				
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/name_partial") }}
-					</div>
-				</div>
+			</div>
 
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/header_partial") }}
-					</div>
-				</div>	
-		
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/target_partial") }}
-					</div>
-				</div>	
-		
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/content_partial") }}
-					</div>
-				</div>	
-				
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/googleanalytics_partial") }}
-					</div>
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/name_partial") }}
 				</div>
-			
+			</div>
 
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/schedule_partial") }}
-					</div>
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/header_partial") }}
 				</div>
-			</script>
-		</div>
+			</div>	
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/target_partial") }}
+				</div>
+			</div>	
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/content_partial") }}
+				</div>
+			</div>	
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/googleanalytics_partial") }}
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/schedule_partial") }}
+				</div>
+			</div>
+		</script>
+	</div>
 </div>
 
 	<div class="modal fade gallery-modal" id="images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
