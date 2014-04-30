@@ -1,7 +1,6 @@
 {{'{{#unless isHeaderExpanded }}'}}
 	{{'{{#unless isTargetExpanded }}'}}
-		<div {{'{{bind-attr class=":bs-callout headerEmpty:bs-callout-warning:bs-callout-success"}}'}}>
-			<div class="panel-body">
+			<div {{'{{bind-attr class=": headerEmpty:bg-warning: "}}'}}>
 				<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }}>
 				{{'{{#if headerEmpty }}'}}
 					<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
@@ -55,14 +54,13 @@
 				{{'{{/if}}'}}
 				</dl>
 			</div>
-		</div>
 	{{ '{{/unless}}' }}
 {{ '{{/unless}}' }}
 
 {{ '{{#if isHeaderExpanded}}' }}
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">Nuevo correo</h3>
+			<h3 class="panel-title">Encabezado</h3>
 		</div>
 		<div class="panel-body">
 			<form class="form-horizontal" role="form" id="header">

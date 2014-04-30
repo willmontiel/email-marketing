@@ -362,9 +362,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			if (mail.get('name') === undefined) {
 				$.gritter.add({title: 'Error', text: 'No ha ingresado un nombre para el correo, por favor verifique la información', sticky: false, time: 3000});
 			}
-			else if (!filter.test(mail.get('email'))) {
-				$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
-			}
+			//else if (!filter.test(mail.get('email'))) {
+				//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
+			//}
 			else {
 				var dbases = getArrayValue(this.get('dbaselist'));
 				var contactlists = getArrayValue(this.get('list'));
