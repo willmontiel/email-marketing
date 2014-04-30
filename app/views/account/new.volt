@@ -15,7 +15,7 @@
 		{{ flashSession.output() }}
 	</div>
 	<div class="row">
-			{{ form('account/new', 'method': 'Post', 'class': 'form-horizontal', 'role':'form') }}
+		<form action = "{{url('account/new')}}" class="form-horizontal" id="registerAccount" method="post" 'role':'form'>
 				<div class="row">
 					<div class="col-md-6">
 						<h4 class="text-center">Datos de la cuenta</h4>
