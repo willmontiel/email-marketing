@@ -504,36 +504,55 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 
 .preview-message-info {
 	background-color: #ccdcea;
+	float: left;
+	width: 50px;
+	height: 50px;
+	border: 1px solid #A5CBEB;
 	border-radius: 8px;
-	border: 1px solid #a8c3dc;
-	width: 40px;
-	height: 40px;
+	margin-right: 10px;
+	margin-top: 10px;
 }
 
-.preview-message-block {
+.preview-message-warning {
 	background-color: #f6e1a4;
 	border-radius: 8px;
 	border: 1px solid #f1d276;
-	width: 40px;
-	height: 40px;
+	width: 50px;
+	height: 50px;
+	margin-right: 10px;
+	margin-top: 10px;
+	float: left;
 }
 
-.preview-message-error {
+.preview-message-danger {
 	background-color: #e8a397;
 	border-radius: 8px;
 	border: 1px solid #de7e6d;
-	width: 40px;
-	height: 40px;
+	width: 50px;
+	height: 50px;
+	margin-right: 10px;
+	margin-top: 10px;
+	float: left;
 }
 
 .preview-message-success {
 	background-color: #acd954;
 	border-radius: 8px;
 	border: 1px solid #97cc2e;
-	width: 40px;
-	height: 40px;
+	width: 50px;
+	height: 50px;
+	margin-right: 10px;
+	margin-top: 10px;
+	float: left;
 }
 
+.flashmessage-title {
+	
+}
+
+.flashmessage-text {
+	font-size: 13px;
+}
 
 .google-analytics-logo {
 	background-image: url(../images/logo-google-analytics.png);

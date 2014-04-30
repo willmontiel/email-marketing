@@ -467,10 +467,10 @@ class AppObjects
 	{
 		$this->di->set('flashSession', function(){
 			$flash = new \Phalcon\Flash\Session(array(
-				'error' => 'alert alert-danger',
-				'success' => 'alert alert-success',
-				'notice' => 'alert alert-info',
-				'warning' => 'alert alert-warning'
+				'error' => 'bs-callout bs-callout-danger',
+				'success' => 'bs-callout bs-callout-success',
+				'notice' => 'bs-callout bs-callout-info',
+				'warning' => 'bs-callout bs-callout-warning'
 			));
 			return $flash;
 		});
