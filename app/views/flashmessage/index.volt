@@ -1,6 +1,4 @@
 {% extends "templates/index_b3.volt" %}
-{% block sectiontitle %}<i class="icon-bullhorn"></i> Mensajes administrativos{%endblock%}
-{% block sectionsubtitle %}Lista de mensajes administrativos activos e inactivos{% endblock %}
 {% block content %}
 	<div class="row">
 		<div class="col-md-12">
@@ -18,10 +16,13 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			{{flashSession.output()}}
 		</div>
-		<div class="col-md-6">
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 pull-right">
 			<a href="{{url('flashmessage/new')}}" class="btn btn-sm btn-primary extra-padding pull-right">Crear nuevo mensaje</a>
 		</div>
 	</div>
@@ -33,37 +34,47 @@
 			<table class="table table-bordered">
 				<thead></thead>
 				<tbody>
-			{%for item in page.items%}
+			{% if page.items|length == 0%}
 					<tr>
 						<td>
-							<div class="preview-message-{{item.type}}"></div>
-							<div class="flashmessage-title">
-								{{item.name}}
-							</div>
-							<div class="flashmessage-text">
-								Fecha de creación: <strong>{{ date('d/M/Y',item.createdon)}}</strong><br />
-								Inicio: <strong>{{ date('M/d/Y H:i',item.start)}}</strong> ,
-								Fin: <strong>{{ date('M/d/Y H:i',item.end)}}</strong>
-							</div>
-						</td>
-						<td>
-							<button class="ShowPreview btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-preview" data-id="{{item.message}}">Ver</button>
-							<a href="{{url('flashmessage/edit')}}/{{item.idFlashMessage}}" class="btn btn-sm btn-default extra-padding">Editar</a>
-							<button class="ShowDialog btn btn-sm btn-danger extra-padding" data-toggle="modal" data-target="#modal-simple" data-id="{{url('flashmessage/delete')}}/{{item.idFlashMessage}}">Eliminar</button>
+							No hay mensajes adiministrativos, para crear uno haga clic en el botón <strong>Crear nuevo mensaje</strong>
 						</td>
 					</tr>
-			{% endfor %}
+			{% else %}
+				{%for item in page.items%}
+						<tr>
+							<td>
+								<div class="preview-message-{{item.type}}"></div>
+								<div class="flashmessage-title">
+									<h4>{{item.name}}</h4>
+								</div>
+								<div class="flashmessage-text">
+									Fecha de creación: <strong>{{ date('d/M/Y',item.createdon)}}</strong><br />
+									Inicio: <strong>{{ date('M/d/Y H:i',item.start)}}</strong> ,
+									Fin: <strong>{{ date('M/d/Y H:i',item.end)}}</strong>
+								</div>
+							</td>
+							<td>
+								<button class="ShowPreview btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-preview" data-id="{{item.message}}">Ver</button>
+								<a href="{{url('flashmessage/edit')}}/{{item.idFlashMessage}}" class="btn btn-sm btn-default extra-padding">Editar</a>
+								<button class="ShowDialog btn btn-sm btn-danger extra-padding" data-toggle="modal" data-target="#modal-simple" data-id="{{url('flashmessage/delete')}}/{{item.idFlashMessage}}">Eliminar</button>
+							</td>
+						</tr>
+				{% endfor %}
+			{% endif %}
 				</tbody>
 			</table>
 		</div>
 	</div>
-
+	
+{% if page.items|length != 0%}
 	<div class="row">
 		<div class="col-sm-12 text-center">
 			{{ partial('partials/pagination_static_partial', ['pagination_url': 'flashmessage/index']) }}
 		</div>
 	</div>
-	
+{% endif %}	
+
 	<div class="modal fade" id="modal-simple-preview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
