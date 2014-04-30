@@ -114,15 +114,15 @@ class ContactFormWrapper extends ContactWrapper
 		$obj->status = '';
 		$obj->activatedOn = '';
 		$obj->bouncedOn = '';
-		$obj->subscribedOn = '';
-		$obj->unsubscribedOn = '';
+		$obj->unsubscribed = '';
+		$obj->subscribedon = '';
 		$obj->spamOn = '';
 		$obj->ipActive = '';
 		$obj->ipSubscribed = '';
 		$obj->updatedOn = '';
 		$obj->createdOn = '';
 		$obj->isBounced = '';
-		$obj->isSubscribed = false;
+		$obj->isSubscribed = true;
 		$obj->isSpam = '';
 		$obj->isActive = false;
 		$obj->isEmailBlocked = '';
@@ -144,10 +144,10 @@ class ContactFormWrapper extends ContactWrapper
 	
 	public function activateContactFromForm(Contact $contact)
 	{
+		$oldContact = Contact::findFirstByIdContact($contact->idContact);
+		
 		$contact->status = time();
 		$contact->updatedon = time();
-		$contact->unsubscribed = 0;
-		$contact->subscribedon = time();
 		$contact->ipActivated = $this->ipaddress;
 		
 		if (!$contact->save()) {
@@ -158,6 +158,9 @@ class ContactFormWrapper extends ContactWrapper
 			}
 			throw new \Exception('Error al actualizar el contacto: >>' . $msg . '<<');
 		}
+		$counter = new ContactCounter();
+		$counter->updateContact($oldContact, $contact);
+		$counter->saveCounters();
 		
 		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 		
