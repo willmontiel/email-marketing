@@ -1149,5 +1149,13 @@ class TestController extends ControllerBase
 		$optin->sendMail($content);
 		
 		
+		//Prueba Contadores para la activacion de contacto por formulario
+//		$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
+//			
+//		$wrapper = new ContactFormWrapper();
+//		$wrapper->setForm($form);
+//		$wrapper->setAccount($dbase->account);
+//		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
+//		$wrapper->activateContactFromForm($contact);
 	}
 }

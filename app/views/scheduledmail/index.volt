@@ -10,12 +10,10 @@
 		}); 
 	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-calendar icon-2x"></i>Programación de correos{% endblock %}
-{%block sectionsubtitle %}Administre cuando se deben enviar los correos{% endblock %}
 {% block content%}
 
 {# Botones de navegacion #}
-{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'scheduledmail']) }}
+{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'scheduledmail']) }}
 
 	<div class="row">
 		<h4 class="sectiontitle">Programación de envío de correos</h4>
@@ -55,17 +53,15 @@
 						<td>{{item.totalContacts}}</td>
 						<td>{{date('d-M-Y, g:i A', item.scheduleDate)}}</td>
 						<td style="text-align: center;">
-							<div class="btn-group">
-								{% for value in programming_options(item) %}
-									{% if value.url == 'null'%}	
-										&nbsp;<span></span> No hay acciones disponibles&nbsp;
-									{% elseif value.text == 'Pausar'%}
-										<a class="ShowDialogEditScheduled" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{url('mail/stop')}}/scheduledmail/{{item.idMail}}"><span class="{{value.icon}}"></span> Pausar</a>
-									{% else %}
-										<a href="{{url(value.url)}}index/{{item.idMail}}" class="btn btn-sm btn-default extra-padding" ><span class="{{value.icon}}"></span> {{value.text}}</a>
-									{% endif %}
-								{% endfor %}
-							</div>
+							{% for value in programming_options(item) %}
+								{% if value.url == 'null'%}	
+									No hay acciones disponibles
+								{% elseif value.text == 'Pausar'%}
+									<a class="ShowDialogEditScheduled btn btn-sm btn-default extra-padding" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{url('mail/stop')}}/scheduledmail/{{item.idMail}}"> Pausar</a>
+								{% else %}
+									<a href="{{url(value.url)}}index/{{item.idMail}}" class="btn btn-sm btn-default extra-padding" >{{value.text}}</a>
+								{% endif %}
+							{% endfor %}
 						</td>
 					</tr>
 				{% endfor %}
@@ -109,24 +105,28 @@
 				</div>
 			</div>
 #}
-	<div id="modal-simple-edit" class="modal hide fade" aria-hidden="false">
-		<div class="modal-header">
-		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		  <h6 id="modal-tablesLabel">Pausar Correo Programado</h6>
-		</div>
-		<div class="modal-body">
-			<p>¿Está seguro que desea pausar éste correo?</p>
-				
-			
-			<p>
-				Recuerde que si pausa éste correo, deberá programarlo de nuevo.
-			</p>
-		</div>
-		<div class="modal-footer">
-		  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-		  <a href="" id="editScheduledMail" class="btn btn-blue" >Pausar</a>
+	
+	<div class="modal fade" id="modal-simple-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Pausar Correo Programado</h4>
+				</div>
+				<div class="modal-body">
+					<p>¿Está seguro que desea pausar éste correo?</p>
+					<p>
+						Recuerde que si pausa éste correo, deberá programarlo de nuevo.
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+					<a href="" id="editScheduledMail" class="btn btn-sm btn-primary extra-padding" >Pausar</a>
+				</div>
+			</div>
 		</div>
 	</div>
+	
 	<script type="text/javascript">
 		$(function() {
 			$('.ShowDialogEditScheduled').click(function() {

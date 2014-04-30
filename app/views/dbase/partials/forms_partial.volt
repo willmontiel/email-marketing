@@ -1,9 +1,20 @@
 <script type="text/x-handlebars" data-template-name="forms/index">
-	<div class="row">
-		<h4 class="sectiontitle">Formularios</h4>
-		{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario{{ '{{/link-to}}' }}
-		<br \><br \>
-		<table class="table table-condensed table-striped table-contacts">
+	<div class="bs-callout bs-callout-info">
+		Aqui esta toda la información necesaria para gestionar sus formularios
+	</div>
+
+	<div class="pull-right">
+	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario{{ '{{/link-to}}' }}
+	</div>
+	<div class="space"></div>
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<td> Nombre </td>
+			<td> Tipo </td>
+		<tr>
+		</thead>
+		<tbody>
 			{{'{{#each model}}'}}
 			<tr>
 				<td>
@@ -12,26 +23,23 @@
 					</div>
 				</td>
 				<td>
-					<div>
-						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
-					</div>
+					Inscripcion
 				</td>
 				<td>
-					<div>
+					<div class="text-right">
+						{{ '{{#if framecode}}' }}
+							{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
+						{{ '{{/if}}' }}
+
+						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+
 						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 					</div>
 				</td>
-				{{ '{{#if framecode}}' }}
-				<td>
-					<div>
-						{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Codigo{{ '{{/link-to}}' }}
-					</div>
-				</td>
-				{{ '{{/if}}' }}
 			</tr>
 			{{'{{/each}}'}}
-		</table>
-	</div>
+		</tbody>
+	</table>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/setup">
@@ -42,31 +50,33 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/new">
-	<br />
-	<br />
 	<div class="row">
 		<div class="col-md-5 col-md-offset-1">
 			<div class="form-full-content">
 			
 			</div>
-			<div class="form-full-button col-md-offset-8">
+			<div class="form-full-button col-md-offset-7">
 				
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div class="form-menu">
+			<h4 class="sectiontitle title-fields-options form-options">Campos</h4>
 			
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="btn btn-default btn-sm">
-			<span {{ '{{action "cancel" this}}' }}>Cancelar</span>
-		</div>
-		<div class="btn btn-default btn-sm">
-			<span {{ '{{action "sendData" this}}' }}>Crear Formulario</span>
+	<div class="form-action">
+		<div class="row">
+			<div class="col-xs-offset-6 col-xs-2">
+				<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
+			</div>
+			<div class="col-xs-2">
+				<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "sendData" this}}' }}>Crear Formulario</button>
+			</div>
 		</div>
 	</div>
+	<div class="space"></div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/edit">

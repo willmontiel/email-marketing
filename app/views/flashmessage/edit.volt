@@ -69,8 +69,8 @@
 		<h4 class="sectiontitle">Editar mensaje flash</h4>
 		
 		<div class="bs-callout bs-callout-info">
-			Aqui podrá configurar mensajes informativos, para que determinados clientes o todos puedan verlos en
-			el momento en el que inician sesión
+			Edite cualquier configuración de un mensaje administrativo flash, desde de el nombre, el mensaje y hasta las cuentas en donde
+			se debe mostrar.
 		</div>
 	</div>
 	

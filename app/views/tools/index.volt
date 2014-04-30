@@ -37,9 +37,9 @@
 	<div class="container-fluid">
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
-				<a href="{{ url('scheduledmail') }}"  class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
+				<a href="{{ url('scheduledmail/manage') }}"  class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
 			</div>
-			<a href="{{ url('scheduledmail') }}" class="btn-actn">Programación de Correos</a>
+			<a href="{{ url('scheduledmail/manage') }}" class="btn-actn">Programación de correos de todas las cuentas</a>
 		</div>
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
