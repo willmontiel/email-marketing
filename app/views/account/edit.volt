@@ -1,73 +1,89 @@
-{% extends "templates/index_new.volt" %}
-{% block sectiontitle %}<i class="icon-edit"></i> Editar información de las cuentas{%endblock%}
-{%block sectionsubtitle %}Edite la configuración de la cuenta{% endblock %}
-
-{% block content %} 
+{% extends "templates/index_b3.volt" %}
+{% block content %}
 	<div class="row">
-		<div class="box">
-			<div class="box-content">
-				<div class="box-section news with-icons">
-					<div class="avatar green">
-						<i class="icon-lightbulb icon-2x"></i>
+		<div class="col-sm-12">
+			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
+		</div>
+	</div>
+
+	<div class="row">
+		<h4 class="sectiontitle">Edición de la cuenta</h4>
+		<div class="bs-callout bs-callout-info">
+			<p>Edite datos de cuentas o reconfigure.</p>
+		</div>
+	</div>	
+	
+	<div class="row">
+		<div class="col-sm-12">
+			{{ flashSession.output() }}
+		</div>
+	</div>
+
+		<div clas="col-md-6">
+			<form action = "{{url('account/edit/')}}{{allAccount.idAccount}}" class="form-horizontal" id="registerAccount" method="post" role="form">
+				<div class="form-group">
+					<label class="col-md-4 control-label">*Nombre de la cuenta: </label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('companyName', {'class': 'form-control'}) }}
 					</div>
-					<div class="news-content">
-						<div class="news-title">
-							Edite información de las cuentas
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">*Espacio disponible en disco(Mb):</label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('fileSpace', {'class': 'form-control'}) }}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">*Limite de contactos:</label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('contactLimit', {'class': 'form-control'}) }}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">*Limite de mensajes:</label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('messageLimit', {'class': 'form-control'}) }}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">*Modo de uso:</label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('accountingMode', {'class': 'form-control'}) }}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">*Modo de Pago: </label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('subscriptionMode', {'class': 'form-control'}) }}
+					</div>
+				</div>
+				<div class="form-group">					
+					<label class="col-md-4 control-label">*MTA: </label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('virtualMta', {'class': 'form-control'}) }}
+					</div>
+				</div>
+				<div class="form-group">					
+					<label class="col-md-4 control-label">*Url de dominio: </label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('idUrlDomain', {'class': 'form-control'})}}
+					</div>
+				</div>
+				<div class="form-group">								
+					<label class="col-md-4 control-label">*Retornar correos rebotados a: </label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('idMailClass', {'class': 'form-control'})}}
+				</div>
+				<div class="form-actions pull-right">
+					<div class="row">
+						<div class="col-xs-6">
+							<a href="{{ url('account') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
 						</div>
-						<div class="news-text">
-							Edite datos de cuentas o reconfigure.
+						<div class="col-xs-6">
+							{{ submit_button("Grabar", 'class' : "btn btn-default btn-guardar extra-padding", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
 						</div>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
-	</div>
-	<div class="row">
-		{{ flashSession.output() }}
-	</div>
-	<div class="row padded">
-		<div class="box span4">
-			<div class="box-header">
-				<div class="title">
-					Editar datos de la cuenta
-				</div>
-			</div>
-			<div class="box-content">
-				<form action = "{{url('account/edit/')}}{{allAccount.idAccount}}" id="registerAccount" method="post">
-					<div class="padded">
-						<label>*Nombre de la cuenta: </label>
-						{{ editFormAccount.render('companyName') }}
-
-						<label>*Espacio disponible en disco(Mb):</label>
-						{{ editFormAccount.render('fileSpace') }}
-
-						<label>*Limite de contactos:</label>
-						{{ editFormAccount.render('contactLimit') }}
-
-						<label>*Limite de mensajes:</label>
-						{{ editFormAccount.render('messageLimit') }}
-
-						<label>*Modo de uso:</label>
-						{{ editFormAccount.render('accountingMode') }}
-
-						<label>*Modo de Pago: </label>
-						{{ editFormAccount.render('subscriptionMode') }}
-						
-						<label>*MTA: </label>
-						{{ editFormAccount.render('virtualMta') }}
-						
-						<label>*Url de dominio: <label/>
-						{{ editFormAccount.render('idUrlDomain')}}<br /> <br />
-									
-						<label>*Retornar correos rebotados a: <label/>
-						{{ editFormAccount.render('idMailClass')}}
-					</div>
-					<div class="form-actions">
-						<a href="{{ url('account') }}" class="btn btn-default">Cancelar</a>
-						{{ submit_button("Grabar", 'class' : "btn btn-blue", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
 {% endblock %}
