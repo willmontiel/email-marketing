@@ -183,12 +183,12 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3>Imagenes</h3>
+					<h3>Imágenes</h3>
 				</div>
 					
 				<ul class="nav nav-tabs nav-tabs-in-modal">
 					<li id="tabgallery" class="active">
-						<a href="#gallery" data-toggle="tab">Galeria</a>
+						<a href="#gallery" data-toggle="tab">Galería</a>
 					</li>
 					<li id="tabuploadimage" class="">
 						<a href="#uploadimage" data-toggle="tab">Cargar</a>
@@ -202,7 +202,7 @@
 						<div id="uploadimage" class="tab-pane well">
 							<h2 class="text-center">Cargar Imagen</h2>
 							<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
-								<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
+								<div class="dz-message"><span>Suelte su imagen aqui! <br/><br/>(o Click)</span></div>
 							</form>
 						</div>
 					</div>

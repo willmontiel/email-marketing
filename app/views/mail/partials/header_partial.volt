@@ -58,130 +58,122 @@
 {{ '{{/unless}}' }}
 
 {{ '{{#if isHeaderExpanded}}' }}
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title">Encabezado</h3>
-		</div>
-		<div class="panel-body">
+	<h4 class="paneltitle">Encabezado</h4>
 			<form class="form-horizontal" role="form" id="header">
 				<div class="form-group">
 					<label for="fromName" class="col-sm-2 control-label">De: </label>
-					<div class="col-sm-5">
-						{{'{{view Ember.TextField valueBinding="fromName" id="fromName" required="required" autofocus="autofocus" class="form-control"}}'}}
-						{#
-						<input type="text" class="form-control" name="fromName" id="fromName" placeholder="Enviar desde este nombre">
-						#}
+					<div class="col-sm-4">
+						{{'{{view Ember.TextField valueBinding="fromName" id="fromName" placeholder="Enviar desde este nombre" required="required" autofocus="autofocus" class="form-control"}}'}}
 					</div>
-					<div class="col-sm-5">
-						{{'{{view Ember.TextField valueBinding="fromEmail" id="fromEmail" class="form-control"}}'}}
-						{#
-						<input type="email" class="form-control" name="fromEmail" id="fromEmail" placeholder="Enviar desde esta dirección de correo">
-						#}
+					<label for="fromName" class="col-sm-2 control-label">Email: </label>
+					<div class="col-sm-4">
+						{{'{{view Ember.TextField valueBinding="fromEmail" id="fromEmail" placeholder="Enviar desde esta dirección de correo" class="form-control"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="replyTo" class="col-sm-2 control-label">Responder a: </label>
 					<div class="col-sm-10">
-						{{'{{view Ember.TextField valueBinding="replyTo" id="replyTo" class="form-control"}}'}}
-						{#
-						<input type="text" class="form-control" name="replyTo" id="replyTo" placeholder="Responder a este correo">
-						#}
+						{{'{{view Ember.TextField valueBinding="replyTo" id="replyTo" placeholder="Responder a este correo" class="form-control"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="subject" class="col-sm-2 control-label">Asunto: </label>
 					<div class="col-sm-10">
-						{{'{{view Ember.TextField valueBinding="subject" id="subject" class="form-control"}}'}}
-						{#
-						<input type="text" class="form-control" name="subject" id="subject" placeholder="Asunto">
-						#}
+						{{'{{view Ember.TextField valueBinding="subject" id="subject" placeholder="Asunto" class="form-control"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-6 col-md-offset-2">
-						<h4>Redes sociales <small>Configure cuentas de facebook y twitter</small></h4>
+						<h4>Redes sociales <small>Comparta en facebook y twitter</small></h4>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-10 col-md-offset-2">
 						<ul class="nav nav-tabs">
-							<li class="active"><a href="#facebook" data-toggle="tab">Facebook</a></li>
-							<li><a href="#twitter" data-toggle="tab">Twitter</a></li>
+							<li class="active"><a href="#facebook" data-toggle="tab"><img src="{{url('')}}b3/images/icon-face-color.png" class="center-block" alt="" /></a></li>
+							<li><a href="#twitter" data-toggle="tab"><img src="{{url('')}}b3/images/icon-teewt-color.png" class="center-block" alt="" /></a></li>
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="facebook">
 								<br />
-								<div class="add_facebook_account"><label>Seleccione una cuenta de facebook, si aún no ha configurado alguna <a onclick="new_sn_account('{{fbloginUrl}}')">haga click aqui</a></label></div>
-								<br />
-								{#<select name="facebookaccounts" id="accounts_facebook" class="form-control">
-									<option>Cuenta de facebook 1</option>
-									<option>Cuenta de facebook 2</option>
-								</select>#}
-								{{ '{{view Ember.Select
-										multiple="true"
-										contentBinding="App.fbaccounts"
-										optionValuePath="content.id"
-										optionLabelPath="content.name"
-										selectionBinding="fbaccountsel"
-										id="accounts_facebook"
-										class="form-control"}}'
-								 }}
-								<div class="fbdescription bs-callout bs-callout-info">
-									<div>
-										{{'{{view Ember.TextArea valueBinding="fbmessagecontent" id="fbmessagecontent" class="form-control" placeholder="Haz un comentario..."}}'}}
-									</div>
-									<br>
-									<div class="clearfix">
-										<div style="float: left;margin-right: 15px;width: 154px;height: 154px;background-color: #FAFAFA;">
+								{#
+								{% if fbsocials %}
+								#}
+									<div class="add_facebook_account"><label>Seleccione una cuenta de facebook, si aún no ha configurado alguna <a onclick="new_sn_account('{{fbloginUrl}}')">haga click aqui</a></label></div>
+									<br />
+									{{ '{{view Ember.Select
+											multiple="true"
+											contentBinding="App.fbaccounts"
+											optionValuePath="content.id"
+											optionLabelPath="content.name"
+											selectionBinding="fbaccountsel"
+											id="accounts_facebook"
+											class="form-control"}}'
+									 }}
+									<div class="fbdescription bg-info">
+										<div class="pad-marg">
 											<div>
-												<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil" style="position: relative;left: 2px;top: 4px;padding: 2px;border-radius: 4px;cursor: pointer;border: 1px solid #E4E4E4;background-color: #F5F5F5;"></div>
+												{{'{{view Ember.TextArea valueBinding="fbmessagecontent" id="fbmessagecontent" class="form-control" placeholder="Comentario..."}}'}}
 											</div>
-											{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
-											<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154">
-										</div>
-										<div style="float: left;width: 67%;">
 											<br>
-											{{'{{view Ember.TextArea valueBinding="fbtitlecontent" id="fbtitlecontent" class="form-control" placeholder="Da un titulo a tu publicacion..."}}'}}
-											<br>
-											{{'{{view Ember.TextArea valueBinding="fbdescriptioncontent" id="fbdescriptioncontent" class="form-control" placeholder="Describe tu publicacion..."}}'}}
+											<div class="clearfix">
+												<div style="float: left;margin-right: 15px;width: 154px;height: 154px;background-color: #FAFAFA;">
+													<div>
+														<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil" style="position: relative;left: 2px;top: 4px;padding: 2px;border-radius: 4px;cursor: pointer;border: 1px solid #E4E4E4;background-color: #F5F5F5;"></div>
+													</div>
+													{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
+													<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154">
+												</div>
+												<div style="float: left;width: 67%;">
+													<br>
+													{{'{{view Ember.TextArea valueBinding="fbtitlecontent" id="fbtitlecontent" class="form-control" placeholder="Título de la publicación..."}}'}}
+													<br>
+													{{'{{view Ember.TextArea valueBinding="fbdescriptioncontent" id="fbdescriptioncontent" class="form-control" placeholder="Descripción de la publicación..."}}'}}
+												</div>
+											</div>
 										</div>
 									</div>
-								</div>
-								<br />
+									<br />
+								{#
+								{% else %}
+									No tiene una cuenta de facebook configurada, si desea puede configurar una.
+								{% endif %}
+								#}
 							</div>
 							<div class="tab-pane fade" id="twitter">
-								<br />
-								<div class="add_twitter_account"><label>Seleccione una cuenta de twitter, si aún no ha configurado alguna <a onclick="new_sn_account('{{twloginUrl}}')">haga click aqui</a></div>
-								<br />
-								{{ '{{view Ember.Select
-										multiple="true"
-										contentBinding="App.twaccounts"
-										optionValuePath="content.id"
-										optionLabelPath="content.name"
-										selectionBinding="twaccountsel"
-										id="accounts_twitter"
-										class="form-control"}}'
-								 }}
-								<br />
-								<div class="twdescription bs-callout bs-callout-info">
-									<label>Mensaje del Tweet: </label>
-									{{'{{view Ember.TextArea valueBinding="twpublicationcontent" id="twpublicationcontent" class="form-control" placeholder="Escribe tu tweet..."}}'}}
-									<div class="number-of-tweet-characters">
-									<span id="tweet-char-number" class="label label-blue">1</span>
+								{% if twsocials %}
+									<br />
+									<div class="add_twitter_account"><label>Seleccione una cuenta de twitter, si aún no ha configurado alguna <a onclick="new_sn_account('{{twloginUrl}}')">haga click aquí</a></div>
+									<br />
+									{{ '{{view Ember.Select
+											multiple="true"
+											contentBinding="App.twaccounts"
+											optionValuePath="content.id"
+											optionLabelPath="content.name"
+											selectionBinding="twaccountsel"
+											id="accounts_twitter"
+											class="form-control"}}'
+									 }}
+									<br />
+									<div class="twdescription">
+										<label>Mensaje del Tweet: </label>
+										{{'{{view Ember.TextArea valueBinding="twpublicationcontent" id="twpublicationcontent" class="form-control" placeholder="Tweet..."}}'}}
+										<div class="number-of-tweet-characters">
+										<span id="tweet-char-number" class="label label-blue">1</span>
+										</div>
 									</div>
-								</div>
-								<br />
+									<br />
+								{% else %}
+									No tiene una cuenta de twitter configurada, si desea puede configurar una.
+								{% endif %}
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-6 col-md-offset-6 text-right">
-						<button class="btn btn-default" {{ '{{action "discardChanges" this}}' }}>Descartar cambios</button>
-						<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
-						{#
-						<input type="button" class="btn btn-primary" value="Aplicar cambios" onClick="createBlock(this.form, 'header')">
-						#}
+						<button class="btn btn-default btn-sm extra-padding" {{ '{{action "discardChanges" this}}' }}>Descartar cambios</button>
+						<button class="btn btn-default btn-sm extra-padding" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 					</div>
 				</div>
 			</form>
