@@ -1,4 +1,4 @@
-<div {{'{{bind-attr class=":bs-callout isMailReadyToSend:bs-callout-success:bs-callout-warning"}}'}}>
+<div {{'{{bind-attr class=": isMailReadyToSend:bg-success:bg-warning"}}'}}>
 	<div class="panel-body">
 		{{ '{{#if isMailReadyToSend}}' }}
 			<div class="row">

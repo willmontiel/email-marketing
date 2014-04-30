@@ -1,6 +1,6 @@
 {{'{{#unless isHeaderExpanded }}'}}
 	{{'{{#unless isTargetExpanded }}'}}
-		<div {{'{{bind-attr class=":bs-callout headerEmpty:bs-callout-warning:bs-callout-success"}}'}}>
+		<div {{'{{bind-attr class=": headerEmpty:bg-warning:"}}'}}>
 			<div class="panel-body">
 				<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }}>
 				{{'{{#if headerEmpty }}'}}
@@ -41,7 +41,7 @@
 						{{ '{{/unless}}' }}
 					</dd>
 					<dd>
-						Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podria variar)
+						Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podría variar)
 					</dd>
 				{{'{{/if}}'}}
 				</dl>
@@ -51,122 +51,117 @@
 {{ '{{/unless}}' }}
 
 {{ '{{#if isHeaderExpanded}}' }}
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title">Nuevo correo</h3>
+	<h4 class="paneltitle">Encabezado</h4>
+	<form class="form-horizontal" role="form" id="header">
+		<div class="form-group">
+			<label for="fromName" class="col-sm-2 control-label">De: </label>
+			<div class="col-sm-4">
+				{{'{{view Ember.TextField valueBinding="fromName" id="fromName" required="required" autofocus="autofocus" placeholder="Nombre del remitente" class="form-control"}}'}}
+				{#
+				<input type="text" class="form-control" name="fromName" id="fromName" placeholder="Enviar desde este nombre">
+				#}
+			</div>
+			<label for="fromEmail" class="col-sm-1 control-label">Email: </label>
+			<div class="col-sm-4">
+				{{'{{view Ember.TextField valueBinding="fromEmail" id="fromEmail" placeholder="Email del remitente" class="form-control"}}'}}
+				{#
+				<input type="email" class="form-control" name="fromEmail" id="fromEmail" placeholder="Enviar desde esta dirección de correo">
+				#}
+			</div>
 		</div>
-		<div class="panel-body">
-			<form class="form-horizontal" role="form" id="header">
-				<div class="form-group">
-					<label for="fromName" class="col-sm-2 control-label">De: </label>
-					<div class="col-sm-5">
-						{{'{{view Ember.TextField valueBinding="fromName" id="fromName" required="required" autofocus="autofocus" class="form-control"}}'}}
-						{#
-						<input type="text" class="form-control" name="fromName" id="fromName" placeholder="Enviar desde este nombre">
-						#}
-					</div>
-					<div class="col-sm-5">
-						{{'{{view Ember.TextField valueBinding="fromEmail" id="fromEmail" class="form-control"}}'}}
-						{#
-						<input type="email" class="form-control" name="fromEmail" id="fromEmail" placeholder="Enviar desde esta dirección de correo">
-						#}
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="replyTo" class="col-sm-2 control-label">Responder a: </label>
-					<div class="col-sm-10">
-						{{'{{view Ember.TextField valueBinding="replyTo" id="replyTo" class="form-control"}}'}}
-						{#
-						<input type="text" class="form-control" name="replyTo" id="replyTo" placeholder="Responder a este correo">
-						#}
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="subject" class="col-sm-2 control-label">Asunto: </label>
-					<div class="col-sm-10">
-						{{'{{view Ember.TextField valueBinding="subject" id="subject" class="form-control"}}'}}
-						{#
-						<input type="text" class="form-control" name="subject" id="subject" placeholder="Asunto">
-						#}
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-6 col-md-offset-2">
-						<h4>Redes sociales <small>Configure cuentas de facebook y twitter</small></h4>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-10 col-md-offset-2">
-						<ul class="nav nav-tabs">
-							<li class="active"><a href="#facebook" data-toggle="tab">Facebook</a></li>
-							<li><a href="#twitter" data-toggle="tab">Twitter</a></li>
-						</ul>
-						<div class="tab-content">
-							<div class="tab-pane fade in active" id="facebook">
-								<br />
-								<label>Seleccione una cuenta de facebook, si aún no ha configurado alguna <a href="">haga click aqui </a></label>
-								<br />
-								<select name="facebookaccounts" id="accounts_facebook" class="form-control">
-									<option>Cuenta de facebook 1</option>
-									<option>Cuenta de facebook 2</option>
-								</select>
-								<br />
-								<div class="fbdescription" style="display: none">
-									<div class="form-group">
-										<label for="postTitle" class="col-sm-4 control-label">Titulo de la Publicacion: </label>
-										<div class="col-sm-8">
-										  <input type="text" class="form-control" id="postTitle" placeholder="Titulo de la Publicacion">
-										</div>
-									</div>
-
-									<div class="form-group">
-										<label for="postDesc" class="col-sm-4 control-label">Descripcion de la Publicacion: </label>
-										<div class="col-sm-8">
-										  <input type="text" class="form-control" id="postDesc" placeholder="Descripcion de la Publicacion:">
-										</div>
-									</div>
-
-									<div class="form-group">
-										<label for="postMessage" class="col-sm-4 control-label">Mensaje de la Publicacion: </label>
-										<div class="col-sm-8">
-											<textarea class="form-control" id="postMessage" rows="5">Mensaje de la Publicacion</textarea>
-										</div>
-									</div>
+		<div class="form-group">
+			<label for="replyTo" class="col-sm-2 control-label">Responder a: </label>
+			<div class="col-sm-10">
+				{{'{{view Ember.TextField valueBinding="replyTo" id="replyTo" placeholder="Mailto" class="form-control"}}'}}
+				{#
+				<input type="text" class="form-control" name="replyTo" id="replyTo" placeholder="Responder a este correo">
+				#}
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="subject" class="col-sm-2 control-label">Asunto: </label>
+			<div class="col-sm-10">
+				{{'{{view Ember.TextField valueBinding="subject" id="subject" placeholder="Asunto del correo" class="form-control"}}'}}
+				{#
+				<input type="text" class="form-control" name="subject" id="subject" placeholder="Asunto">
+				#}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-6 col-md-offset-2">
+				<h4>Redes sociales <small>Configure cuentas de facebook y twitter</small></h4>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-10 col-md-offset-2">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#facebook" data-toggle="tab"><img src="/b3/images/icon-face-color.png" class="" alt=""></a></li>
+					<li><a href="#twitter" data-toggle="tab"><img src="/b3/images/icon-teewt-color.png" class="" alt=""></a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="facebook">
+						<br />
+						<label>Seleccione una cuenta de facebook, si aún no ha configurado alguna <a href="">haga click aqui </a></label>
+						<br />
+						<select name="facebookaccounts" id="accounts_facebook" class="form-control">
+							<option>Cuenta de facebook 1</option>
+							<option>Cuenta de facebook 2</option>
+						</select>
+						<br />
+						<div class="fbdescription" style="display: none">
+							<div class="form-group">
+								<label for="postTitle" class="col-sm-4 control-label">Titulo de la Publicacion: </label>
+								<div class="col-sm-8">
+								  <input type="text" class="form-control" id="postTitle" placeholder="Titulo de la Publicacion">
 								</div>
-								<br />
 							</div>
-							<div class="tab-pane fade" id="twitter">
-								<br />
-								<label>Seleccione una cuenta de twitter, si aún no ha configurado alguna <a href="">haga click aqui </a></label>
-								<br />
-								<select name="facebookaccounts" id="accounts_facebook" class="form-control">
-									<option>Cuenta de twitter 1</option>
-									<option>Cuenta de twitter 2</option>
-								</select>
-								<br />
-								<div class="fbdescription" style="display: none">
-									<div class="form-group">
-										<label for="postMessage" class="col-sm-4 control-label">Mensaje del tweet: </label>
-										<div class="col-sm-8">
-											<textarea class="form-control" id="postMessage" rows="5">Mensaje del tweet</textarea>
-										</div>
-									</div>
+
+							<div class="form-group">
+								<label for="postDesc" class="col-sm-4 control-label">Descripcion de la Publicacion: </label>
+								<div class="col-sm-8">
+								  <input type="text" class="form-control" id="postDesc" placeholder="Descripcion de la Publicacion:">
 								</div>
-								<br />
+							</div>
+
+							<div class="form-group">
+								<label for="postMessage" class="col-sm-4 control-label">Mensaje de la Publicacion: </label>
+								<div class="col-sm-8">
+									<textarea class="form-control" id="postMessage" rows="5">Mensaje de la Publicacion</textarea>
+								</div>
 							</div>
 						</div>
+						<br />
+					</div>
+					<div class="tab-pane fade" id="twitter">
+						<br />
+						<label>Seleccione una cuenta de twitter, si aún no ha configurado alguna <a href="">haga click aqui </a></label>
+						<br />
+						<select name="facebookaccounts" id="accounts_facebook" class="form-control">
+							<option>Cuenta de twitter 1</option>
+							<option>Cuenta de twitter 2</option>
+						</select>
+						<br />
+						<div class="fbdescription" style="display: none">
+							<div class="form-group">
+								<label for="postMessage" class="col-sm-4 control-label">Mensaje del tweet: </label>
+								<div class="col-sm-8">
+									<textarea class="form-control" id="postMessage" rows="5">Mensaje del tweet</textarea>
+								</div>
+							</div>
+						</div>
+						<br />
 					</div>
 				</div>
-				<div class="form-group">
-					<div class="col-sm-6 col-md-offset-6 text-right">
-						<button class="btn btn-default" {{ '{{action "discardChanges" this}}' }}>Descartar cambios</button>
-						<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
-						{#
-						<input type="button" class="btn btn-primary" value="Aplicar cambios" onClick="createBlock(this.form, 'header')">
-						#}
-					</div>
-				</div>
-			</form>
+			</div>
 		</div>
-	</div>
+		<div class="form-group">
+			<div class="col-sm-6 col-md-offset-6 text-right">
+				<button class="btn btn-default" {{ '{{action "discardChanges" this}}' }}>Descartar cambios</button>
+				<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
+				{#
+				<input type="button" class="btn btn-primary" value="Aplicar cambios" onClick="createBlock(this.form, 'header')">
+				#}
+			</div>
+		</div>
+	</form>
 {{ '{{/if}}' }}

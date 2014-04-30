@@ -60,7 +60,7 @@
 											</a>
 										</div>
 										<div class="clearfix"></div>
-										<div class="btn-group template-tools">
+										<div class="btn-group">
 											<a href="#preview-modal" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Previsualizar"><span class="glyphicon glyphicon-eye-open"></span></a>
 											{% if t['idMail'] == null %}
 												{% if t['idAccount'] == null%}

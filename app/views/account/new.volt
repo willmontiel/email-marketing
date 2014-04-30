@@ -1,86 +1,117 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-sitemap"></i> Crear una nueva cuenta{%endblock%}
 {%block sectionsubtitle %}Cree una cuenta asignandole al mismo tiempo un usuario administrador{% endblock %}
 
 {% block content %}
+
+	{# Botones de navegacion #}
+	{{ partial('account/partials/small_buttons_nav_partial', ['activelnk': 'account']) }}
+	
 	<div class="row">
-		<div class="box">
-			<div class="box-content">
-				<div class="box-section news with-icons">
-					<div class="avatar green">
-						<i class="icon-lightbulb icon-2x"></i>
-					</div>
-					<div class="news-content">
-						<div class="news-title">
-							Crear un nueva cuenta
-						</div>
-						<div class="news-text">
-							Aqui puede crear una nueva cuenta, configurar .
-						</div>
-					</div>
-				</div>
-			</div>
+		<h4 class="sectiontitle">Crear un nueva cuenta</h4>
+		<div class="bs-callout bs-callout-info">
+			Aqui puede crear una nueva cuenta, configurar .
 		</div>
-	</div>
-	<div class="row">
 		{{ flashSession.output() }}
 	</div>
 	<div class="row">
-		<div class="box">
-			<div class="box-header">
-				<div class="title">
-					Datos de la cuenta
-				</div>
-			</div>
+		<h4>Datos de la cuenta</h4>
 			<div class="box-content padded">
-				{{ form('account/new', 'method': 'Post', 'class': 'fill-up') }}
+				{{ form('account/new', 'method': 'Post', 'class': 'form-horizontal', 'role':'form') }}
 					<div class="row">
-						<div class="span6">
-							<label for="companyName">*Nombre de la cuenta:</label>
-							{{ newFormAccount.render('companyName') }}
-
-							<label for="fileSpace">*Espacio disponible en disco (Mb):</label>
-							{{ newFormAccount.render('fileSpace') }}
-
-							<label for="contactLimit">*Limite de contactos</label>
-							{{ newFormAccount.render('contactLimit') }}
-
-							<label for="messageLimit">*Limite de mensajes</label>
-							{{ newFormAccount.render('messageLimit') }}
-
-							<label for="modeUse">*Modo de uso:</label>
-							{{ newFormAccount.render('accountingMode', {'class': 'chzn-select'}) }}<br /> <br />
-
-							<label for="modeAccounting">*Modo de pago:</label>
-							{{ newFormAccount.render('subscriptionMode', {'class': 'chzn-select'}) }}<br /> <br />
-							
-							<label>*MTA: <label/>
-							{{ newFormAccount.render('virtualMta')}}<br />
-									
-							<label>*Url de dominio: <label/>
-							{{ newFormAccount.render('idUrlDomain')}}<br /> <br />
-									
-							<label>*Retornar correos rebotados a: <label/>
-							{{ newFormAccount.render('idMailClass')}}
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="companyName" class="col-sm-6 control-label">*Nombre de la cuenta:</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('companyName', {'class': 'form-control'})}}
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="fileSpace" class="col-sm-6 control-label">*Espacio disponible en disco (Mb):</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('fileSpace', {'class': 'form-control'}) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="contactLimit" class="col-sm-6 control-label">*Limite de contactos</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('contactLimit', {'class': 'form-control'}) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="messageLimit" class="col-sm-6 control-label">*Limite de mensajes</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('messageLimit', {'class': 'form-control'}) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="modeUse" class="col-sm-6 control-label">*Modo de uso:</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('accountingMode', {'class': 'chzn-select'}) }}<br /> <br />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="modeAccounting" class="col-sm-6 control-label">*Modo de pago:</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('subscriptionMode', {'class': 'chzn-select'}) }}<br /> <br />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-6 control-label">*MTA: <label/>
+								<div class="col-md-6">
+									{{ newFormAccount.render('virtualMta', {'class': 'form-control'}) }}<br />
+								</div>
+							</div>
+							<div class="form-group">	
+								<label class="col-sm-6 control-label">*Url de dominio: <label/>
+								<div class="col-md-6">
+									{{ newFormAccount.render('idUrlDomain', {'class': 'form-control'} )}}<br /> <br />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-6 control-label">*Retornar correos rebotados a: <label/>
+								<div class="col-md-6">
+									{{ newFormAccount.render('idMailClass', {'class': 'form-control'}) }}
+								</div>
+							</div>
 						</div>
-						<div class="span6">
-							<label for="firstName">*Nombre:</label>
-							{{ newFormAccount.render('firstName') }}
-						
-							<label for="lastName">*Apellido:</label>
-							{{ newFormAccount.render('lastName') }}
-
-							<label for="email">*Dirección de correo electronico:</label> 
-							 {{ newFormAccount.render('email') }}
-
-							<label>*Nombre de usuario:</label>
-							{{ newFormAccount.render('username') }}
-							
-							<label for="password">*Contraseña:</label>
-							{{ newFormAccount.render('password') }}
-
-							<label for="password2">*Repita la contraseña:</label>
-							{{ newFormAccount.render('password2') }}
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="firstName" class="col-sm-6 control-label">*Nombre:</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('firstName', {'class': 'form-control'}) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="lastName" class="col-sm-6 control-label">*Apellido:</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('lastName', {'class': 'form-control'}) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="email" class="col-sm-6 control-label">*Dirección de correo electronico:</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('email', {'class': 'form-control'}) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-6 control-label">*Nombre de usuario:</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('username', {'class': 'form-control'}) }}
+								</div>
+							</div>
+							<div class="form-group">	
+								<label for="password" class="col-sm-6 control-label">*Contraseña:</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('password', {'class': 'form-control'}) }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="password2" class="col-sm-6 control-label">*Repita la contraseña:</label>
+								<div class="col-md-6">
+									{{ newFormAccount.render('password2', {'class': 'form-control'}) }}
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="form-actions">

@@ -396,6 +396,7 @@ a.inactive {
 	overflow: hidden !important; 
 	border: 1px solid;
 	border-radius: 3px;
+	margin-bottom: 10px;
 }
 
 .template-tools {

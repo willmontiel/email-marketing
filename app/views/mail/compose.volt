@@ -100,37 +100,33 @@
 	</script>
 {% endblock %}
 {% block content %}
+{#
 	<div class="row">
 		<div class="col-md-12">
 			{{flashSession.output()}}
 		</div>
 	</div>
-
+#}
+<div id="border-mail" class="mail-wrapper">
 	<div id="emberAppContainer">
 		<script type="text/x-handlebars" data-template-name="index">
 			<div class="row">
 				<div class="col-md-12">
 					{{ partial("mail/partials/mailstatus_partial") }}
 				</div>
-			</div>
-			
+			</div>	
 			<div class="row">
 				<div class="col-md-12">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<form class="form-horizontal" role="form">
-								<div class="form-group">
-									<label for="fromName" class="col-sm-2 control-label">Nombre del correo: </label>
-									<div class="col-sm-10">
-										{{'{{view Ember.TextField valueBinding="name" id="name" required="required" class="form-control" placeholder="Nombre para identificar este correo "}}'}}
-									</div>
-								</div>
-							</form>
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="fromName" class="col-sm-2 control-label">Nombre del correo: </label>
+							<div class="col-sm-8">
+								{{'{{view Ember.TextField valueBinding="name" id="name" required="required" class="form-control" placeholder="Nombre para identificar este correo "}}'}}
+							</div>
 						</div>
-					</div>
+					</form>
 				</div>
 			</div>
-
 			<div class="row">
 				<div class="col-md-12">
 					{{ partial("mail/partials/header_partial") }}
@@ -162,6 +158,6 @@
 				</div>
 			</div>
 		</script>
-	</div>	
-	<br />
+	</div>
+</div>
 {% endblock %}
