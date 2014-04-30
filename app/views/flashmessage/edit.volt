@@ -124,7 +124,7 @@
 							<option value="info" {% if message.type == 'info' %} selected="selected" {% endif %}>Info</option>
 							<option value="warning" {% if message.type == 'warning' %} selected="selected" {% endif %}>warning</option>
 							<option value="success" {% if message.type == 'success' %} selected="selected" {% endif %}>success</option>
-							<option value="error" {% if message.type == 'error' %} selected="selected" {% endif %}>error</option>
+							<option value="danger" {% if message.type == 'error' %} selected="selected" {% endif %}>error</option>
 						</select>
 						{#
 						<div class="checkbox">
