@@ -18,22 +18,37 @@ class DbaseController extends ControllerBase
 	
 	public function indexAction()
     {
-		$currentPage = $this->request->getQuery('page', null, 1); // GET
-		
-//		$this->logger->log("Page: {$currentPage}");
+		$currentPage = $this->request->getQuery('page', null, 1); 
 		$idAccount = $this->user->account->idAccount;
+		
+//		$phql = "SELECT d . * , COUNT( DISTINCT cl.idContactlist ) , COUNT( DISTINCT s.idSegment ) 
+//					FROM Dbase AS d
+//						LEFT JOIN Contactlist AS cl ON cl.idDbase = d.idDbase
+//						LEFT JOIN Segment AS s ON s.idDbase = d.idDbase
+//				WHERE d.idAccount = :idAccount:";
+//		
+//		$dbases = $this->modelsManager->executeQuery($phql, array("idAccount" => $idAccount));
+		
+//		$sql = "SELECT d . * , COUNT( DISTINCT cl.idContactlist ) AS tlist , COUNT( DISTINCT s.idSegment ) AS tseg 
+//					FROM dbase AS d
+//						LEFT JOIN contactlist AS cl ON cl.idDbase = d.idDbase
+//						LEFT JOIN segment AS s ON s.idDbase = d.idDbase
+//				WHERE d.idAccount = {$idAccount} GROUP BY 1 LIMIT " . PaginationDecorator::DEFAULT_LIMIT;
+//		
+//		$result = $this->db->query($sql);
+//		$dbases = $result->fetchAll();
+		
+//		$this->logger->log("Bases de datos: " . print_r($dbases, true));
 		
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
-				"data"  => Dbase::find("idAccount = $idAccount"),
+				"data"  => Dbase::findByIdAccount($idAccount),
 				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page"  => $currentPage
 			)
 		);
 		
 		$page = $paginator->getPaginate();
-//		$this->logger->log("Page: {$page->current}, {$page->before}, {$page->next}");
-		
 		$this->view->setVar("page", $page);
     }
     

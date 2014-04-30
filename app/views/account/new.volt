@@ -5,7 +5,7 @@
 {% block content %}
 
 	{# Botones de navegacion #}
-	{{ partial('account/partials/small_buttons_nav_partial', ['activelnk': 'account']) }}
+	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 
 	<div class="row">
 		<h4 class="sectiontitle">Crear un nueva cuenta</h4>

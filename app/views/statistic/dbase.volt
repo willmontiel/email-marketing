@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
@@ -29,16 +29,26 @@
 		}
 	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-signal icon-2x"></i>Estadisticas{% endblock %}
+{% block sectiontitle %}<i class="icon-signal icon-2x"></i>{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
 	<div class="row">
-		<div class="span12">
-			<h3>{{dbase.name}} <small>{{statisticsData.sent}} correos enviados</small></h3>
+		<div class="col-sm-12">
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 		</div>
 	</div>
+	
 	<div class="row">
-		<div class="span6">
+		<div class="col-sm-12">
+			<h4 class="sectiontitle">Estadisticas de base de datos</h4>
+			<div class="bs-callout bs-callout-info">
+				<h3>{{dbase.name}} <small>{{statisticsData.sent}} correos enviados</small></h3>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-6">
 			<table class="table" style="border: 0px !important;" >
 				<thead></thead>
 				<tbody>
@@ -127,23 +137,25 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="pull-left">
-				<div class="span3">
-					<select id="dbasestocompare" style="width: 150px;">
-						{%for cdb in compareDbase %}
-							<option value="{{cdb.id}}">{{cdb.name}}</option>
-						{%endfor%}
-					</select>
-				</div>
-				<div class="span2">
-					<button class="btn btn-blue" onclick="compareDbases()"  style="margin-left: 80px;">Comparar</button>
-				</div>
-			</div>
 		</div>
-		<div class="span6">
-			<div class="box">
-				<div id="summaryChart" style="width: 640px; height: 400px;"></div>
-			</div>
+			
+		<div class="col-sm-6">
+			<div id="summaryChart" style="width: 640px; height: 400px;"></div>
+		</div>
+	</div>
+	
+	<br />
+	
+	<div class="row">
+		<div class="col-sm-2">
+			<select id="dbasestocompare" style="width: 150px;">
+				{%for cdb in compareDbase %}
+					<option value="{{cdb.id}}">{{cdb.name}}</option>
+				{%endfor%}
+			</select>
+		</div>
+		<div class="col-sm-3">
+			<button class="btn btn-blue" onclick="compareDbases()"  style="margin-left: 80px;">Comparar</button>
 		</div>
 	</div>	
 {% endblock %}
