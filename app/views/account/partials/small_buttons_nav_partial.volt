@@ -14,12 +14,12 @@
 			</li>
 			<li class="small-btn sm-btn-blue {{ activelnk=='flashmessage'?'active':'' }}">
 				<a href="{{ url('flashmessage') }}">
-				<span class="sm-button-small-flashmessage"></span>
+				<span class="sm-button-small-msj"></span>
 				</a>
 			</li>
 			<li class="small-btn sm-btn-blue {{ activelnk=='process'?'active':'' }}">
 				<a href="{{ url('process') }}">
-				<span class="sm-button-small-process"></span>
+				<span class="sm-button-small-send"></span>
 				</a>
 			</li>
 			<li class="small-btn sm-btn-blue {{ activelnk=='scheduledmail'?'active':'' }}">
@@ -29,7 +29,7 @@
 			</li>
 			<li class="small-btn sm-btn-blue {{ activelnk=='socialmedia'?'active':'' }}">
 				<a href="{{ url('socialmedia') }}">
-				<span class="sm-button-small-socialmedia"></span>
+				<span class="sm-button-small-social"></span>
 				</a>
 			</li>
 		</ul>
