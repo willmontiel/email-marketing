@@ -773,6 +773,6 @@ span.required {
 .color-selected {
 	border: 2px blue solid !important;
 }
-.field-element-form-hide {
+.field-element-form-hide, .social-input-hide {
 	display: none;
 }

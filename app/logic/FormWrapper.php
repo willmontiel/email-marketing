@@ -32,8 +32,9 @@ class FormWrapper extends BaseWrapper
 
 		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
 		
-		$form->notify = $content->notify;
+		$form->notify = $content->notify?'Si':'No';
 		$form->notifyMail = $content->notifymail;
+		$form->notifyEmail = $content->notifyemail;
 		
 		if (!$form->save()) {
 			foreach ($form->getMessages() as $message) {
@@ -64,8 +65,9 @@ class FormWrapper extends BaseWrapper
 		
 		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
 		
-		$form->notify = $content->notify;
+		$form->notify = $content->notify?'Si':'No';
 		$form->notifyMail = $content->notifymail;
+		$form->notifyEmail = $content->notifyemail;
 		
 		if (!$form->save()) {
 			foreach ($form->getMessages() as $message) {
@@ -92,8 +94,9 @@ class FormWrapper extends BaseWrapper
 		$jsonObject['optinmail'] = $phObject->optinMail;
 		$jsonObject['welcome'] = ($phObject->welcome=='Si');
 		$jsonObject['welcomemail'] = $phObject->welcomeMail;
-		$jsonObject['notify'] = $phObject->notify;
+		$jsonObject['notify'] = ($phObject->notify=='Si');
 		$jsonObject['notifymail'] = $phObject->notifyMail;
+		$jsonObject['notifyemail'] = $phObject->notifyEmail;
 		$jsonObject['framecode'] = $this->getFrameCode($phObject);
 		
 		return $jsonObject;
@@ -123,8 +126,8 @@ class FormWrapper extends BaseWrapper
 		foreach ($content as $cont){
 			if(!$cont->hide) {
 				switch ($cont->type) {
-					case 'MultiSelect':
-						$total+= 90;
+					case 'Date':
+						$total+= 200;
 						break;
 					default:
 						$total+= 90;

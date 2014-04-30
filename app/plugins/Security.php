@@ -119,6 +119,7 @@ class Security extends Plugin
 				'unsubscribe::success' => array(),
 				'form::frame' => array(),
 				'contacts::form' => array(),
+				'contacts::activate' => array(),
 				
 				
 				
@@ -328,6 +329,7 @@ class Security extends Plugin
 				'test::imagetest' => array('mail' => array('read')),
 				'test::unsubscribed' => array('mail' => array('read')),
 				'test::testsnimageresize' => array('mail' => array('read')),
+				'test::testoptinmail' => array('form' => array('create')),
 				
 				//statistics
 				'statistic::index' => array('statistic' => array('read')),
@@ -463,7 +465,8 @@ class Security extends Plugin
 			'unsubscribe:contact',
 			'unsubscribe:success',
 			'form:frame',
-			'contacts:form'
+			'contacts:form',
+			'contacts:activate'
 		);
 		
 		if ($resource == "error::notavailable") {

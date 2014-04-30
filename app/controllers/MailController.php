@@ -1952,6 +1952,10 @@ class MailController extends ControllerBase
 			$this->errorMsg = 'No se ha configurado el correo de origen, por favor verifique la información';
 			return false;
 		}
+		else if (!\filter_var($mail->fromEmail, FILTER_VALIDATE_EMAIL)) {
+			$this->errorMsg = 'El correo de origen es incorrecto, por favor verifique la información';
+			return false;
+		}
 		else if (empty($mail->target)) {
 			$this->errorMsg = 'No se ha configurado un destino, por favor verifique la información';
 			return false;
@@ -2362,6 +2366,42 @@ class MailController extends ControllerBase
 			}
 			
 			$this->view->setVar('mail', $mail);
+		}
+		
+		try {
+			$socialnet = new SocialNetworkConnection();
+			$socialnet->setAccount($account);
+			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
+			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
+
+			$fbsocials = $socialnet->getSocialIdNameArray($socialnet->findAllFacebookAccountsByUser());
+			$twsocials = $socialnet->getSocialIdNameArray($socialnet->findAllTwitterAccountsByUser());
+			
+			$redirect = ($idMail != null) ? '/socialmedia/create/' . $idMail : '/socialmedia/create/' ;
+			$fbloginUrl = $socialnet->getFbUrlLogIn($redirect);
+			$twloginUrl = $socialnet->getTwUrlLogIn($redirect);
+
+			$this->view->setVar('fbsocials', $fbsocials);
+			$this->view->setVar("fbloginUrl", $fbloginUrl);
+			$this->view->setVar('twsocials', $twsocials);
+			$this->view->setVar("twloginUrl", $twloginUrl);
+			
+			$assets = AssetObj::findAllAssetsInAccount($this->user->account);
+			if(empty($assets)) {
+					$arrayAssets = array();
+			}
+			else {
+				foreach ($assets as $a) {
+					$arrayAssets[] = array ('thumb' => $a->getThumbnailUrl(), 
+										'image' => $a->getImagePrivateUrl(),
+										'title' => $a->getFileName(),
+										'id' => $a->getIdAsset());								
+				}
+			}
+			$this->view->setVar('assets', $arrayAssets);
+		} 
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
 		}
 	}
 }

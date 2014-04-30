@@ -1130,4 +1130,24 @@ class TestController extends ControllerBase
 		$this->logger->log('La ruta absoluta de la imagen para share es: ' . $imageshare);
 		$this->logger->log('La ruta absoluta de la imagen para post es: ' . $imagepost);
 	}
+	
+	public function testoptinmailAction($idContact, $idForm)
+	{
+		$contact = Contact::findFirstByIdContact($idContact);
+		$form = Form::findFirstByIdForm($idForm);
+		$this->logger->log('Contacto con id: ' . $contact->idContact);
+		$this->logger->log('Formulario con id: ' . $form->idForm);
+		
+		$content = json_decode($form->optinMail);
+			
+		$optin = new NotificationMail();
+		$optin->setForm($form);
+		$optin->setContact($contact);
+		$optin->prepareContent($content->mail);
+		$optin->setNotificationLink();
+		$optin->setContactReceiver();
+		$optin->sendMail($content);
+		
+		
+	}
 }

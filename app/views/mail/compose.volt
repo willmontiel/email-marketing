@@ -8,10 +8,20 @@
 	<script type="text/javascript">
 		var db;
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
+		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}"};
 	</script>
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_mail.js') }}
+	{{ javascript_include('js/editor/gallery.js') }}
+	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	<script type="text/javascript">
+		$(function() {
+			{%for asset in assets%}
+				var media = new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}});
+				media.createMedia();
+				media.mediaSelected();
+			{%endfor%}
+		});
 		var idMail;
 		{% if mail is defined%}
 			idMail = {{mail.idMail}}
@@ -97,36 +107,58 @@
 				];
 			{% endif %}
 		{% endif %}
+			
+			
+		//Cuentas de Redes sociales
+		{% if fbsocials %}
+			App.fbaccounts = [
+				{% for fbsocial in fbsocials %}
+					Ember.Object.create({name: "{{fbsocial.name}}", id: {{fbsocial.idSocialnetwork}}}),	
+				{% endfor %}
+			];
+		{% endif %}
+		
+		{% if twsocials %}
+			App.twaccounts = [
+				{% for twsocial in twsocials %}
+					Ember.Object.create({name: "{{twsocial.name}}", id: {{twsocial.idSocialnetwork}}}),	
+				{% endfor %}
+			];
+		{% endif %}
 	</script>
 {% endblock %}
 {% block content %}
-{#
 	<div class="row">
 		<div class="col-md-12">
 			{{flashSession.output()}}
 		</div>
 	</div>
-#}
-<div id="border-mail" class="mail-wrapper">
+
 	<div id="emberAppContainer">
 		<script type="text/x-handlebars" data-template-name="index">
 			<div class="row">
 				<div class="col-md-12">
 					{{ partial("mail/partials/mailstatus_partial") }}
 				</div>
-			</div>	
+			</div>
+			
 			<div class="row">
 				<div class="col-md-12">
-					<form class="form-horizontal" role="form">
-						<div class="form-group">
-							<label for="fromName" class="col-sm-2 control-label">Nombre del correo: </label>
-							<div class="col-sm-8">
-								{{'{{view Ember.TextField valueBinding="name" id="name" required="required" class="form-control" placeholder="Nombre para identificar este correo "}}'}}
-							</div>
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<label for="fromName" class="col-sm-2 control-label">Nombre del correo: </label>
+									<div class="col-sm-10">
+										{{'{{view Ember.TextField valueBinding="name" id="name" required="required" class="form-control" placeholder="Nombre para identificar este correo "}}'}}
+									</div>
+								</div>
+							</form>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
+
 			<div class="row">
 				<div class="col-md-12">
 					{{ partial("mail/partials/header_partial") }}
@@ -158,6 +190,43 @@
 				</div>
 			</div>
 		</script>
+	</div>	
+	<br />
+	<div class="modal fade gallery-modal" id="images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Imagenes</h3>
+				</div>
+					
+				<ul class="nav nav-tabs nav-tabs-in-modal">
+					<li id="tabgallery" class="active">
+						<a href="#gallery" data-toggle="tab">Galeria</a>
+					</li>
+					<li id="tabuploadimage" class="">
+						<a href="#uploadimage" data-toggle="tab">Cargar</a>
+					</li>
+				</ul>
+					
+				<div class="modal-body">
+					<div class="tab-content imagesbody">
+						<div id="gallery" class="tab-pane active">
+						</div>
+						<div id="uploadimage" class="tab-pane well">
+							<h2 class="text-center">Cargar Imagen</h2>
+							<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
+								<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div id="accept_cancel_image">
+						<a href="#" class="btn btn-default" id="accept_change" data-dismiss="modal">Aplicar</a>
+						<a href="#" class="btn btn-default" id="cancel_change" data-dismiss="modal">Cancelar</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 {% endblock %}

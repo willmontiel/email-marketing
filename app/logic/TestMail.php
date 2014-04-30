@@ -53,7 +53,7 @@ class TestMail
 		if ($this->mail->type == 'Editor') {
 			$editorObj = new HtmlObj();
 			$editorObj->assignContent(json_decode($this->mailContent->content));
-			$content = $editorObj->render();
+			$content =  utf8_decode($editorObj->replacespecialchars($editorObj->render()));
 		}
 		else {
 			$content = $this->mailContent->content;
@@ -107,7 +107,7 @@ class TestMail
 	{
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $this->mail);
-		$prepareMail = new PrepareMailContent($linkService, $imageService);
+		$prepareMail = new PrepareMailContent($linkService, $imageService, false);
 		list($this->body, $links) = $prepareMail->processContent($this->body);
 	}
 
