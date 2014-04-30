@@ -67,8 +67,8 @@
 		<h4 class="sectiontitle">Crear nuevo mensaje flash</h4>
 		
 		<div class="bs-callout bs-callout-info">
-			Aqui podrá configurar mensajes informativos, para que determinados clientes o todos puedan verlos en
-			el momento en el que inician sesión
+			Cree un nuevo mensaje administrativo flash, configure las cuentas en donde se debe mostrar, el color con el que debe mostrarse, la fecha de inicio,
+			y la fecha final en que debe dejar de mostrarse.
 		</div>
 	</div>
 

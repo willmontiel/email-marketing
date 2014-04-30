@@ -1,12 +1,8 @@
 {% extends "templates/index_b3.volt" %}
-{% block sectiontitle %}<i class="icon-sitemap"></i> Cuentas{%endblock%}
-{%block sectionsubtitle %}Administre las cuentas en la aplicación{% endblock %}
-
 {% block content %}
 	<div class="row">
-
 		{# Botones de navegacion #}
-		{{ partial('account/partials/small_buttons_nav_partial', ['activelnk': 'account']) }}
+		{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 
 		<h4 class="sectiontitle">Cuentas</h4>
 		<div class="bs-callout bs-callout-info">

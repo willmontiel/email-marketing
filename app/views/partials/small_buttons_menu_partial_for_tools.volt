@@ -26,8 +26,8 @@
 				</a>
 			</li>
 			
-			<li class="small-btn sm-btn-blue {{ activelnk=='scheduledmail'?'active':'' }}">
-				<a href="{{ url('scheduledmail') }}">
+			<li class="small-btn sm-btn-blue {{ activelnk=='scheduledmail/manage'?'active':'' }}">
+				<a href="{{ url('scheduledmail/manage') }}">
 				<span class="sm-button-small-import-list"></span>
 				</a>
 			</li>

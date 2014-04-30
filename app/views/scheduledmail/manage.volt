@@ -1,120 +1,75 @@
-{% extends "templates/editor_template.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	{{ javascript_include('tablesorter/jquery-latest.js')}}
 	{{ javascript_include('tablesorter/jquery.tablesorter.js')}}
-	<script type="text/javascript">
-		{#var MyDbaseUrl = '{{urlManager.getApi_v1Url()}}';#}
-		$(function() { 
-			$("#processes-table").tablesorter(); 
-		}); 
-	</script>
 {% endblock %}
 {% block content%}
 	<div class="row">
-		<div class="box">
-			<div class="box-section news with-icons">
-				<div class="avatar green">
-					<i class="icon-lightbulb icon-2x"></i>
-				</div>
-				<div class="news-content">
-					<div class="news-title">
-						Administrar la programación de envío de correos
-					</div>
-					<div class="news-text">
-						Cancele, pause o reanude correos programados o que se esten enviando.
-					</div>
-				</div>
-			</div>
+		<div class="col-md-12">
+			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'scheduledmail/manage']) }}
 		</div>
 	</div>
+	
 	<div class="row">
-		<div class="span7">
-		{{ flashSession.output() }}
-		</div>
-		<div class="span5 text-right">
-			<a href="{{url('index')}}" class="btn btn-blue"><i class="icon-dashboard"></i> Volver a la página principal</a>
+		<h4 class="sectiontitle">Programación de envío de correos de todas las cuentas</h4>
+		<div class="bs-callout bs-callout-info">
+			<p>Aqui podrá administrar la programación de todos los correos de todas las cuentas, pausarlos, cancelarlos y también reprogramar fechas.</p>
 		</div>
 	</div>
-	<br />
+	
 	<div class="row">
-		<div class="box">
-			<div class="box-header">
-				<div class="title">
-					Programación de correos
-				</div>
-			</div>
-			<div class="box-content" >
-				<table id="processes-table" class="tablesorter table table-normal">
-					<thead>
+		<div class="col-md-12">
+			{{ flashSession.output() }}
+		</div>		
+	</div>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Programación de correos global</h4>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Cuenta</th>
+						<th>Nombre</th>
+						<th>Estado</th>
+						<th>Destinatarios aprox.</th>
+						<th>Programado para</th>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody id="resultado">
+					 {% for item in page.items %}
 						<tr>
-							<th>Nombre</th>
-							<th>Estado</th>
-							<th>Destinatarios aprox.</th>
-							<th>Programado para</th>
-							<td>Acciones</td>
-						</tr>
-					</thead>
-					<tbody id="resultado">
-						 {% for item in page.items %}
-							<tr>
-								<td>{{item.name}}</td>
-								<td>{{item.status}}</td>
-								<td>{{item.totalContacts}}</td>
-								<td>{{date('d-M-Y, g:i A', item.scheduleDate)}}</td>
-								<td>
-									<div class="btn-group">
-										<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Acciones <span class="caret"></span></button>
-										<ul class="dropdown-menu">
-										{% for value in programming_options(item) %}
-											{% if value.url == 'null'%}	
-												&nbsp;<i class="icon-minus-sign"></i> No hay acciones disponibles&nbsp;
-											{% elseif value.text == 'Editar'%}
-												
-											{% else %}
-												<li><a href="{{ url(value.url) }}manage/{{item.idMail}}"><i class="{{value.icon}}"></i>{{value.text}}</a></li>
-											{% endif %}
-										{% endfor %}
-										</ul>
-									</div>
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-			<div class="box-footer padded">
-				<div class="row">
-					<div class="span5">
-						<div class="pagination">
-							<ul>
-								{% if page.current == 1 %}
-									<li class="previous"><a href="#" class="inactive"><<</a></li>
-									<li class="previous"><a href="#" class="inactive"><</a></li>
-								{% else %}
-									<li class="previous active"><a href="{{ url('scheduledmail/manage') }}"><<</a></li>
-									<li class="previous active"><a href="{{ url('scheduledmail/manage') }}?page={{ page.before }}"><</a></li>
-								{% endif %}
+							<td>{{item.idAccount}}</td>
+							<td>{{item.name}}</td>
+							<td>{{item.status}}</td>
+							<td>{{item.totalContacts}}</td>
+							<td>{{date('d-M-Y, g:i A', item.scheduleDate)}}</td>
+							<td>	
+							{% for value in programming_options(item) %}
+								{% if value.url == 'null'%}	
+									No hay acciones disponibles
+								{% elseif value.text == 'Editar'%}
 
-								{% if page.current >= page.total_pages %}
-									<li class="next"><a href="#" class="inactive">></a></li>
-									<li class="next"><a href="#" class="inactive">>></a></li>
 								{% else %}
-									<li class="next active"><a href="{{ url('scheduledmail/manage') }}?page={{page.next}}">></a></li>
-									<li class="next active"><a href="{{ url('scheduledmail/manage') }}?page={{page.last}}">>></a></li>		
+									<a href="{{ url(value.url) }}manage/{{item.idMail}}" class="btn btn-sm btn-default extra-padding">{{value.text}}</a>
 								{% endif %}
-							</ul>
-						 </div>
-					 </div>
-					 <div class="span5">
-						 <br />
-						 Registros totales: <span class="label label-filling">{{page.total_items}}</span>&nbsp;
-						 Página <span class="label label-filling">{{page.current}}</span> de <span class="label label-filling">{{page.total_pages}}</span>
-					 </div>
-				</div>
-			</div>
-		 </div>
+							{% endfor %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>		
 	</div>
+	
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			{{ partial('partials/pagination_static_partial', ['pagination_url': 'scheduledmail/manage']) }}
+		</div>
+	</div>
+	
 	<div id="modal-simple-template" class="modal hide fade" aria-hidden="false">
 		<div class="modal-header">
 		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
