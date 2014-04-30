@@ -357,8 +357,13 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			
 	actions: {
 		save: function(mail) {
+			var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+			
 			if (mail.get('name') === undefined) {
 				$.gritter.add({title: 'Error', text: 'No ha ingresado un nombre para el correo, por favor verifique la información', sticky: false, time: 3000});
+			}
+			else if (!filter.test(mail.get('email'))) {
+				$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
 			}
 			else {
 				var dbases = getArrayValue(this.get('dbaselist'));

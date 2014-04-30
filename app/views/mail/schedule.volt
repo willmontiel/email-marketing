@@ -1,4 +1,4 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
@@ -32,36 +32,16 @@
 {% block sectiontitle %}<i class="icon-envelope"></i>Correos{% endblock %}
 {% block sectionsubtitle %}Envíe un correo a multiples contactos{% endblock %}
 {% block content %}
-	<div class="row">
-		<div class="box">
-			<div class="box-content">
-				<div class="box-section news with-icons">
-					<div class="avatar green">
-						<i class="icon-lightbulb icon-2x"></i>
-					</div>
-					<div class="news-content">
-						<div class="news-title">
-							Programar el envío
-						</div>
-						<div class="news-text">
-							Esta es la ultima parte del proceso, despues de haber seguido los pasos correctamente solo
-							tendrá que programar el envío, puede enviar el correo ya o programar una fecha
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+
+<div class="row">
+	<h4 class="sectiontitle">Programar el envío</div>
+	<div class="bs-callout bs-callout-info">
+		<p>Esta es la última parte del proceso, después de haber seguido los pasos correctamente solo tendrá que programar el envío, puede enviar el correo ya o programar una fecha.</p>
 	</div>
-	<div class="row">
-		<div class="span8 offset2">
-			{{partial('partials/wizard_partial')}}
-		</div>
+	<div class="span8 offset2">
+		{{partial('partials/wizard_partial')}}
 	</div>
-	<br />
-	<div class="row">
 		{{ flashSession.output()}}
-	</div>
-	
 	<div class="row">
 		<div class="span12">
 			<div class="box offset3 span6">

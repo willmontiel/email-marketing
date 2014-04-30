@@ -57,7 +57,7 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.msg, sticky: false, time: 10000});
 			},
 			success: function(msg) {
-				$(location).attr('href', "{{url('mail/new')}}/" + idMail);
+				$(location).attr('href', "{{url('mail/compose')}}/" + idMail);
 			}
 		});
 	}

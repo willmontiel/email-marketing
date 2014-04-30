@@ -1952,6 +1952,10 @@ class MailController extends ControllerBase
 			$this->errorMsg = 'No se ha configurado el correo de origen, por favor verifique la información';
 			return false;
 		}
+		else if (!\filter_var($mail->fromEmail, FILTER_VALIDATE_EMAIL)) {
+			$this->errorMsg = 'El correo de origen es incorrecto, por favor verifique la información';
+			return false;
+		}
 		else if (empty($mail->target)) {
 			$this->errorMsg = 'No se ha configurado un destino, por favor verifique la información';
 			return false;

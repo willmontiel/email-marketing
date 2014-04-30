@@ -1,8 +1,8 @@
 {{ '{{#if isTargetExpanded}}' }}
+	<div class="panel-heading">
+	  <h3 class="panel-title">Destinatarios</h3>
+	</div>
 	<div class="panel panel-default">
-		<div class="panel-heading">
-		  <h3 class="panel-title">Seleccione destinatarios</h3>
-		</div>
 		<div class="panel-body">
 			{% if db == true%}
 				<form class="form-horizontal" role="form">
@@ -10,8 +10,8 @@
 						<label for="target" class="col-sm-2 control-label">Para: </label>
 						<div class="col-sm-10">
 							<ul class="nav nav-tabs">
-								<li class="active"><a href="#target" data-toggle="tab">Destinatarios</a></li>
-								<li><a href="#filter" data-toggle="tab">Filtro</a></li>
+								<li class="active"><a href="#target" data-toggle="tab"><img src="/b3/images/email-color.png" class="" alt=""></a></li>
+								<li><a href="#filter" data-toggle="tab"><img src="/b3/images/filter.jpg" class="" alt=""></a></li>
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="target">
@@ -149,8 +149,8 @@
 					<br />
 					<div class="form-group">
 						<div class="col-sm-6 col-md-offset-6 text-right">
-							<button class="btn btn-default" {{'{{action "discardTarget" this}}'}}>Descartar cambios</button>
-							<button class="btn btn-blue" {{'{{action "save" this}}'}}>Aplicar cambios</button>
+							<button class="btn btn-default  btn-sm extra-padding" {{'{{action "discardTarget" this}}'}}>Descartar cambios</button>
+							<button class="btn btn-guardar btn-sm extra-padding" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 						</div>
 					</div>
 					<br />
