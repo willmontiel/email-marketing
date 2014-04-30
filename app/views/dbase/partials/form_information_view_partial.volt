@@ -206,17 +206,15 @@
 				
 				
 			{# Botones #}
-			<div class="form-actions">
-				<div class="row">
-					<div class="col-xs-2 col-md-offset-6">
-						<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
-					</div>
-					<div class="col-xs-4">
-						<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "next" this}}' }}>Siguiente</button>
-					</div>
+			<div class="form-actions col-xs-offset-5">
+				<div class="col-xs-4">
+					<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
+				</div>
+				<div class="col-xs-4">
+					<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "next" this}}' }}>Siguiente</button>
 				</div>
 			</div>
-
+			<div class="space"></div>
 		</form>
 	</div>
 </div>

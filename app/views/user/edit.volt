@@ -55,13 +55,25 @@
 
 				<div class="form-actions pull-right">
 					<div class="col-xs-6">
-						<a href="{{ url('user') }}" class="btn btn-sm btn-default">Cancelar</a>
+						<a href="{{ url('user') }}" class="btn btn-sm btn-default extra-padding">Cancelar</a>
 					</div>
 					<div class="col-xs-6">
-						{{ submit_button("Grabar", 'class' : "btn btn-sm btn-guardar", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+						{{ submit_button("Grabar", 'class' : "btn btn-sm btn-guardar extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
 					</div>
 				</div>
 			</form>
+		</div>
+		<div class="col-md-6">
+			<div class="alert alert-success">
+				<div class="row">
+					<div class="col-sm-2">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</div>
+					<div class="col-md-9">
+						<p>Edite el usuario</p>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 {% endblock %}

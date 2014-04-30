@@ -41,11 +41,13 @@ SlctBlock.prototype.designField = function() {
 									' + slctoptions + '\n\
 								</select>\n\
 							</div>\n\
-							<div class="col-md-1 btn btn-default btn-sm edit-field">\n\
-								<span class="glyphicon glyphicon-pencil"></span>\n\
-							</div>\n\
-							<div class="col-md-1 btn btn-default btn-sm delete-field">\n\
-								<span class="glyphicon glyphicon-trash"></span>\n\
+							<div class="btn-group">\n\
+								<button class="btn btn-default btn-sm edit-field">\n\
+									<span class="glyphicon glyphicon-pencil"></span>\n\
+								</button>\n\
+								<button class="btn btn-default btn-sm delete-field">\n\
+									<span class="glyphicon glyphicon-trash"></span>\n\
+								</button>\n\
 							</div>\n\
 						</div>\n\
 					</div>');

@@ -4,6 +4,9 @@
 
 {% block content %}
 <div class="row">
+	{# Botones de navegacion #}
+	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'user']) }}
+		
 	<h4 class="sectiontitle">Usuarios</h4>
 
 	<div class="bs-callout bs-callout-info">
