@@ -107,7 +107,9 @@
 					<td class="">
 						<div class="">
 							{%if item.status == 'Scheduled'%}
-								<a class="ShowDialogEditScheduled btn btn-sm extra-padding" data-backdrop="static" data-toggle="modal" href="#modal-simple-edit" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">Pausar </a>
+								<button class="ShowDialogEditScheduled btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">
+									Pausar
+								</button>
 							{%endif%}
 							{% for value in mail_options(item) %}
 								<a class="btn btn-sm btn-default extra-padding" href="{{ url(value.url) }}{{item.idMail}}">{{value.text}}</a>
@@ -157,46 +159,56 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div id="modal-simple-edit" class="modal hide fade" aria-hidden="false">
-	<div class="modal-header">
-	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	  <h6 id="modal-tablesLabel">Pausar Correo Programado</h6>
-	</div>
-	<div class="modal-body">
-		<p>
-			¿Esta seguro que desea pausar este correo?
-		</p>
-		<p>
-			Recuerde que si pausa este correo debera programarlo de nuevo.
-		</p>
-	</div>
-	<div class="modal-footer">
-	  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-	  <a href="" id="editScheduledMail" class="btn btn-blue" >Pausar</a>
+<div class="modal fade" id="modal-simple-stop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Pausar Correo Programado</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					¿Esta seguro que desea pausar este correo?
+				</p>
+				<p>
+					Recuerde que si pausa este correo debera programarlo de nuevo.
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+				<a href="" id="editScheduledMail" class="btn btn-sm btn-default btn-delete extra-padding" >Pausar</a>
+			</div>
+		</div>
 	</div>
 </div>
+
 
 <div class="modal fade" id="modal-simple-template" aria-hidden="false">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form id="temapletMail" method="post">
+			<form id="temapletMail" class="form-horizontal" role="form" method="post">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Crear Template</h4>
 				</div>
 				<div class="modal-body">
-					<table>
-						<tr>
-							<td style="padding-right: 10px;"><label for="nametemplate">Nombre del Template</label></td><td><input type="text" id="nametemplate" name="nametemplate"></td>
-						</tr>
-						<tr>
-							<td><label for="category">Categoria</label></td><td><input type="text" id="category" name="category" value="Mis Templates" readonly></td>
-						</tr>
-					</table>
+					<div class="form-group">
+						<label for="nametemplate" class="col-sm-4 control-label">Nombre del Template:</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="nametemplate" name="nametemplate">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="category" class="col-sm-4 control-label">Categoria:</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="category" name="category" value="Mis Templates" readonly>
+						</div>
+					</div>
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					<input class="btn btn-blue" type="submit" value="Crear">
+					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+					<input class="btn btn-sm btn-guardar extra-padding" type="submit" value="Crear">
 				</div>
 			</form>
 		</div>
