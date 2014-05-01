@@ -170,7 +170,7 @@ class StatisticController extends ControllerBase
 			$mailStat1 = $statWrapper->showMailStatistics($mail1);
 
 			$mailStat2 = $statWrapper->showMailStatistics($mail2);
-
+			$this->logger->log(print_r($mailStat1['statisticsData'], true));
 			if($mailStat1 && $mailStat2) {
 				$this->view->setVar("mail1", $mail1);
 				$this->view->setVar("summaryChartData1", $mailStat1['summaryChartData']);

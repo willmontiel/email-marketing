@@ -6,6 +6,8 @@
 	{{ javascript_include('javascripts/moment/moment.min.js')}}
 	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
+	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
+	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	<script type="text/javascript">
 		var db;
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
@@ -205,7 +207,7 @@
 						</div>
 						<div id="uploadimage" class="tab-pane well">
 							<h2 class="text-center">Cargar imágen</h2>
-							<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
+							<form action="{{url('asset/upload')}}" id="my-dropzone">
 								<div class="dz-message"><span>Suelte su imagen aquí! <br/><br/>(o Click)</span></div>
 							</form>
 						</div>

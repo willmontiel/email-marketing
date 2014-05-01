@@ -40,7 +40,7 @@
 	function writenewcategory() {
 		$('#all-category').hide();
 		$('#btnNewCategory').hide();
-		$('#category').find('#category').removeAttr('id');
+		$('#all-category').find('select').removeAttr('id');
 		
 		$('#new-category').show();
 		$('#btnSelectCategory').show();
@@ -54,7 +54,7 @@
 		
 		$('#all-category').show();
 		$('#btnNewCategory').show();
-		$('#category').find('select').attr('id', "category");
+		$('#all-category').find('select').attr('id', "category");
 	};
 	
 	function sendData() {
@@ -119,7 +119,7 @@
 			</div>
 			<div class="form-group" id="new-category" style="display: none;">
 				<label for="category" class="">Nueva Categoría: </label>
-				<input type="text" name="categoria" id="category" 	 class="form-control">
+				<input type="text" name="categoria" class="form-control">
 			</div>
 			<div class="form-group">
 				<a id="btnNewCategory" class="btn btn-default extra-padding" onclick="writenewcategory()" ><span class="glyphicon glyphicon-pencil"></span></a>

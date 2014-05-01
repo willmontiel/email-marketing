@@ -33,12 +33,13 @@
 			chart1.write('summaryChart1');
 			chart2 = createPieChart(chartData2);	
 			chart2.write('summaryChart2');
-			$("select").select2();
 		});
 		
-		function compareMails() {
+		function compareList() {
 			var id = $('#liststocompare').val();
-			window.location = "{{url('statistic/comparelists')}}/{{List1.idContactlist}}/" + id;
+			if(id !== null) {
+				window.location = "{{url('statistic/comparelists')}}/{{List1.idContactlist}}/" + id;
+			}
 		}
 			
 	</script>
@@ -46,13 +47,18 @@
 {% block sectiontitle %}<i class="icon-bar-chart icon-2x"></i>Estadisticas{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
-<div class="row">
-	<div class="span12">
-		<div class="span2 pull-right">
-			<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
+
+	<div class="row">
+		<div class="col-sm-12">
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
 		</div>
-		<div class="span3 pull-right">
-			<select id="liststocompare">
+	</div>
+
+	<div class="space"></div>
+
+	<div class="row">
+		<div class="col-md-3 col-md-offset-7">
+			<select id="liststocompare" class="form-control">
 				{%for clt in compareList %}
 					<option value="{{clt.id}}"
 						{%if clt.id == List2.idContactlist%}
@@ -62,32 +68,29 @@
 				{%endfor%}
 			</select>
 		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="span6">
-		<div class="leftComponent">
-			<div class="componentname">
-				<h3>{{List1.name}}</h3>
-			</div>
-			<div class="box">
-				<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
-			</div>
+		<div class="col-md-2">
+			<button class="btn btn-sm btn-guardar extra-padding" onclick="compareList()">Comparar</button>
 		</div>
 	</div>
-	<div class="span6">
-		<div class="rightComponent">
-			<div class="componentname">
-				<h3>{{List2.name}}</h3>
-			</div>
-			<div class="box">
-				<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
-			</div>
+	
+	<div class="space"></div>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<h4 class="sectiontitle">{{List1.name}}</h4>
+			<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
+		</div>
+		<div class="col-md-6">
+			<h4 class="sectiontitle">{{List2.name}}</h4>
+			<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
 		</div>
 	</div>
-	<div class="offset3 span6">
-		<div class="componentsummary">
-			<table class="table table-bordered">
+
+	<div class="space"></div>
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<table class="table table-striped">
 				<tr>
 					<td>
 						<div class="optiontotal pull-right">
@@ -199,5 +202,4 @@
 			</table>
 		</div>
 	</div>
-</div>
 {% endblock %}

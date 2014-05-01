@@ -92,20 +92,34 @@ td h3 {
 	list-style-type: none;
 }
 
-.label-click-percent {
- background: #81babd;
+.label-click-percent, .label-open-percent, .label-unsubscribed-percent, .label-spam-percent, .label-bounced-percent {
  font-size: 18px;
  padding: 3px;
  text-align: center;
  color: white;
  border-radius: 5px;
+ width: 280px;
 }
 
-
+.label-click-percent {
+	 background: #81babd;
+}
+.label-open-percent {
+	background: #8cc079;
+}
+.label-unsubscribed-percent {
+	background-color: #8c8689;
+}
+.label-spam-percent {
+	background-color: #d12929;
+}
+.label-bounced-percent {
+	background-color: #953B39;
+}
 
 .time-graph {
-	width: 500px;
-	height: 250px;
+	width: 900px;
+	height: 500px;
 }
 
 label > table {

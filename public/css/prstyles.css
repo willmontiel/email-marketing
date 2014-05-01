@@ -843,3 +843,9 @@ span.required {
 .modal-prevew-body {
 	height: 520px !important;
 }
+
+.dz-message {
+	text-align: center;
+	font-family: inherit;
+	font-size: 25px;
+}

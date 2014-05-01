@@ -148,7 +148,11 @@ App.DrilldownBouncedRoute = Ember.Route.extend({
 
 
 /*Controllers*/
-App.DrilldownController = Ember.ObjectController.extend({});
+App.DrilldownController = Ember.ObjectController.extend({
+	init: function() {
+		console.log($('#select-options-for-compare'))
+	}
+});
 App.DrilldownIndexController = Ember.ArrayController.extend({});	
 
 App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {
