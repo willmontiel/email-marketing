@@ -1,76 +1,90 @@
-{% extends "templates/index_new.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block sectiontitle %}<i class="icon-group icon-2x"></i>Administración de usuarios{% endblock %}
 {%block sectionsubtitle %}Cree, edite o proporcione permisos a los usuarios de cualquier cuenta{% endblock %}
 
 {% block content %}
 	<div class="row">
-		<div class="box">
-			<div class="box-content">
-				<div class="box-section news with-icons">
-					<div class="avatar blue">
-						<i class="icon-lightbulb icon-2x"></i>
-					</div>
-					<div class="news-content">
-						<div class="news-title">
-							Editar o actualizar información del usuario <span class="label label-gray">{{user.username}}</span>
-						</div>
-						<div class="news-text">
-							Aqui podrá editar o actualizar información de cualquier usuario de cualquiera de las cuentas.
-						</div>
-					</div>
-				</div>
+		<div class="col-md-12">
+			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<h4 class="sectiontitle">Editar o actualizar información del usuario</h4>
+			<div class="bs-callout bs-callout-info">
+				Aqui podrá editar o actualizar información de cualquier usuario de cualquiera de las cuentas.
 			</div>
 		</div>
 	</div>
+
 	<div class="row">
-		<div class="span8">
+		<div class="col-md-12">
 			{{ flashSession.output() }}
 		</div>
-		<div class="span4 text-right">
-			<a href="{{url('account/index')}}" class="btn btn-default"><i class="icon-reply"></i> Regresar</a>
-		</div>
 	</div>
-	<br />
+
+
 	<div class="row">
-		<div class="span4">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Editar un usuario
+		<div class="col-md-12">
+			<h4>Editar un usuario</h4>
+			<form action="{{url('account/edituser/')}}{{user.idUser}}" method="Post" class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="firstName" class="col-sm-3 control-label">*Nombre:</label>
+					<div class="col-sm-5">
+						{{ UserForm.render('firstName', {'class':'form-control'}) }}
 					</div>
 				</div>
-				<div class="box-content">
-					<form action="{{url('account/edituser/')}}{{user.idUser}}" method="Post">
-						<div class="padded">
-							<label>*Nombre </label>
-							{{ UserForm.render('firstName') }}
-
-							<label>*Apellido </label>
-							{{ UserForm.render('lastName') }}
-
-							<label>*Dirección de correo electrónico </label>
-							{{ UserForm.render('email') }}
-
-							<label>*Nombre de usuario </label>
-							{{ UserForm.render('username') }}
-
-							<label>*Contraseña </label>
-							{{ UserForm.render('passForEdit') }}
-
-							<label>*Repita la contraseña </label>
-							{{ UserForm.render('pass2ForEdit') }}	
-
-							<label>*Funciones </label>
-							{{ UserForm.render('userrole') }}	
-						</div>
-						<div class="form-actions">
-							<a href="{{ url('account/show/')}}{{user.idAccount}}" class="btn btn-default">Cancelar</a>
-							{{ submit_button("Grabar", 'class' : "btn btn-blue", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
-						</div>
-					</form>
 					
+				<div class="form-group">
+					<label for="lastName" class="col-sm-3 control-label">*Apellido:</label>
+					<div class="col-sm-5">
+						{{ UserForm.render('lastName', {'class':'form-control'}) }}
+					</div>
 				</div>
-			</div>
+					
+				<div class="form-group">
+					<label for="email" class="col-sm-3 control-label">*Dirección de correo electrónico:</label>
+					<div class="col-sm-5">
+						{{ UserForm.render('email', {'class':'form-control'}) }}
+					</div>
+				</div>
+					
+				<div class="form-group">
+					<label for="username" class="col-sm-3 control-label">*Nombre de usuario:</label>
+					<div class="col-sm-5">
+						{{ UserForm.render('username', {'class':'form-control'}) }}
+					</div>
+				</div>
+					
+				<div class="form-group">
+					<label for="passForEdit" class="col-sm-3 control-label">*Contraseña:</label>
+					<div class="col-sm-5">
+						{{ UserForm.render('passForEdit', {'class':'form-control'}) }}
+					</div>
+				</div>
+					
+				<div class="form-group">
+					<label for="pass2ForEdit" class="col-sm-3 control-label">*Repita la contraseña:</label>
+					<div class="col-sm-5">
+						{{ UserForm.render('pass2ForEdit', {'class':'form-control'}) }}
+					</div>
+				</div>
+					
+				<div class="form-group">
+					<label for="userrole" class="col-sm-3 control-label">*Funciones:</label>
+					<div class="col-sm-5">
+						{{ UserForm.render('userrole', {'class':'form-control'}) }}
+					</div>
+				</div>
+					
+				<div class="form-group">
+					<div class="col-sm-5 col-sm-offset-3">
+						<a href="{{ url('account/show/')}}{{user.idAccount}}" class="btn btn-sm btn-default extra-padding">Cancelar</a>
+						{{ submit_button("Grabar", 'class' : "btn btn-sm btn-guardar extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 {% endblock %}

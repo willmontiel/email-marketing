@@ -1,4 +1,4 @@
-{% extends "templates/editor_template.volt" %}
+{% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
 	{{ javascript_include('redactor/redactor.js')}}
@@ -14,7 +14,6 @@
 	
 	function verHTML() {
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
-		$('#preview-modal').modal('show');
 		$.ajax({
 			url: "{{url('template/previewtemplate')}}",
 			type: "POST",			
@@ -24,8 +23,7 @@
 			},
 			success: function() {
 				$("#preview-modal").empty();
-				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>')
-				$('<iframe frameborder="0" width="100%" height="100%" src="{{url('template/previewdata')}}"/>').appendTo('#preview-modal');
+				$('#preview-modal').append($('<iframe frameborder="0" width="100%" height="100%" src="{{url('template/previewdata')}}"/>'))
 			}
 		});
 		
@@ -92,67 +90,91 @@
 </script>
 {% endblock %}
 {% block content %}
-    <div class="row">
-		<div class="area-top clearfix">
-			<div class="pull-left header">
-				<h3 class="title">
-				  <i class="icon-magic"></i>
-				  Crear una plantilla
-				</h3>
-				<h5>
-				  Cree una plantilla global, que cualquier cuenta podrá usar como base
-				</h5>
-			</div>
-		</div>
-    </div>
 	<div class="row">
-		<div class="btnoptions">
-			<div class="box span12 btnoptions">
-				<div class="templateName pull-left">
-					<label>Nombre de la plantilla: 
-					<input type="text" name="name" id="name" value="{{template.name}}"></label>
-				</div>
-				<div class="templateCategory pull-left">
-					<label class="selectcategory" >Categoría: 
-					<select class="uniform" name="categoria" id="category">
-						{%if categories%}
-							{%for category in categories%}
-								<option value="{{category}}" {% if category == template.category %}selected{% endif %}>{{category}}</option>
-							{%endfor%}
-						{%else%}
-							<option value="Mis Templates">Mis Templates</option>
-						{%endif%}
-					</select></label>
-					<label class="newcategory" style="margin-left: -40px;">Nueva Categoria: 
-					<input type="text" name="categoria" id="category" style="width: 124px;">
-					</label>
-				</div>
-				<div class="btnNewCategory pull-left">
-					<button class="btn btn-default" onclick="writenewcategory()"><i class="icon-pencil"></i></button>
-				</div>
-				<div class="btnSelectCategory pull-left">
-					<button class="btn btn-default" onclick="selectcategory()"><i class="icon-th-list"></i></button>
-				</div>
-				<div class="templateBtns pull-left">
-					<a href="{{url('template/index')}}" class="btn btn-default">Salir</a>
-					<a type="submit" class="btn btn-blue" value="Guardar" onclick="sendData()"><i class="icon-2x icon-save"></i></a>
-				</div>
-				<div class="globalTemplateOpt pull-left">
-					<label><input type="checkbox" name="isglobal" id="isglobal" {% if template.idAccount == ''%}checked{% endif %}> Plantilla Global</label>
-				</div>
-				<div class="templatePreview pull-right">
-					<a class="btn btn-default" onClick="verHTML()"><i class="icon-search"></i> Previsualizar</a>
-				</div>
-			</div>
+		<div class="col-sm-12">
+			{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'template']) }}
 		</div>
 	</div>
+	
+	<div class="row">
+		<div class="col-sm-12">
+		<h4 class="sectiontitle">Editar Plantillas</h4>
+		<div class="bs-callout bs-callout-info">
+			Edite el contenido de plantillas predeterminadas
+		</div>
+		</div>
+	</div>
+	
 	<div class="row">
 		{{ flashSession.output()}}
 	</div>
-	<br />
+
 	<div class="row">
-		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
+		<div class="col-sm-2">
+			<label for="name">Nombre de la plantilla:</label>
+			<input type="text" value="{{template.name}}" name="name" id="name" required="required" class="form-control">
+		</div>
+		<div class="col-sm-3">
+			<div class="selectcategory form-group">
+				<label for="categoria">Categoría: </label>
+				<select class="form-control" name="categoria" id="category">
+					{%if categories%}
+						{%for category in categories%}
+							<option value="{{category}}" {% if category == template.category %}selected{% endif %}>{{category}}</option>
+						{%endfor%}
+					{%else%}
+						<option value="Mis Templates">Mis Templates</option>
+					{%endif%}
+				</select>
+			</div>
+				
+			<div class="newcategory form-group" id="new-category" style="display: none;">
+				<label for="category" class="">Nueva Categoria: </label>
+				<input type="text" name="categoria" id="category" class="newcategory form-control">
+			</div>
+		</div>
+			
+		<div class="col-sm-1">
+			<a class="btnNewCategory btn btn-sm btn-default extra-padding" onclick="writenewcategory()" ><span class="glyphicon glyphicon-pencil"></span></a>
+			<a class="btnSelectCategory btn btn-sm btn-default extra-padding" onclick="selectcategory()" style="display: none;"><span class="glyphicon glyphicon-check"></span></a>
+		</div>
+			
+		<div class="col-sm-2">
+			<input type="checkbox" name="isglobal" id="isglobal" {% if template.idAccount == ''%}checked{% endif %}> 
+			<label for="isglobal">Plantilla Global</label>
+		</div>
+			
+		
+		
+		<div class="col-sm-4 text-right">
+			<a href="{{url('template/index')}}" class="btn btn-default extra-padding">Salir</a>
+			<button class="btn btn-default extra-padding" data-toggle="modal" data-target="#myModal" onClick="verHTML()">
+				<span class="glyphicon glyphicon-search"></span> Previsualizar
+			</button>
+			<a class="btn btn-default extra-padding" onclick="sendData()"><span class="glyphicon glyphicon-floppy-saved"></i></a>
+		</div>
 	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
+		</div>
+	</div>
+	
 	<br />
-	<div id="preview-modal" class="modal hide fade preview-modal"></div>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Previsualización</h4>
+				</div>
+				<div class="modal-body" id="preview-modal">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
