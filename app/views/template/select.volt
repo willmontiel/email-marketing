@@ -13,51 +13,41 @@
 	{{ super() }}
 {% endblock %}
 {% block content %}
-	<div class="container-fluid">
-		<div class="row">
+	<h4 class="sectiontitle">Plantillas predeterminadas</h4>
+		<div class="col-md-2">
+			<ul class="nav nav-pills nav-stacked">
+			   {% for category, template in arrayTemplate %}
+				   <li class="{% if loop.first %}active{% endif %}"><a href="#{{category|change_spaces_in_between}}" data-toggle="tab">{{category}}</a></li> 
+			   {% endfor %}
+		   </ul>
 		</div>
-		<br />
-		<div class="row">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<div class="col-md-2">
-						<ul class="nav nav-pills nav-stacked">
-						   {% for category, template in arrayTemplate %}
-							   <li class="{% if loop.first %}active{% endif %}"><a href="#{{category|change_spaces_in_between}}" data-toggle="tab">{{category}}</a></li> 
-						   {% endfor %}
-					   </ul>
-					</div>
-					<div class="col-md-10">
-						<div class="tab-content">
-							{% for category, template in arrayTemplate %}
-								<div class="tab-pane {% if loop.first %}active {% else %} fade{% endif %}" id="{{category|change_spaces_in_between}}">
-									<div class="row">
-									   {% for t in template %}
-											<div class="col-xs-6 col-md-3">
-												<a href="{{url('mail/contenteditor')}}/{{t['idMail']}}/{{t['id']}}" class="thumbnail">
-													{% if t['preview'] == null%}
-														<img data-src="holder.js/100%x180" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNzEiIGhlaWdodD0iMTgwIj48cmVjdCB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2VlZSI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9Ijg1LjUiIHk9IjkwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MTcxeDE4MDwvdGV4dD48L3N2Zz4=">
-													{% else %}
-														<img src="data: image/png;base64, {{t['preview']}}">
-													{%endif%}
-												</a>
-												<div class="caption text-center">
-													<h4>{{t['name']}}</h4><br />
-													<h5>
-														<button onclick="preview({{t['id']}})" class="btn btn-info btn-xs" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
-													</h5>
-												</div>
-											</div>
-									   {% endfor %}
+		<div class="col-md-10">
+			<div class="tab-content">
+				{% for category, template in arrayTemplate %}
+					<div class="tab-pane {% if loop.first %}active {% else %} fade{% endif %}" id="{{category|change_spaces_in_between}}">
+						<div class="row">
+						   {% for t in template %}
+								<div class="col-xs-6 col-md-3">
+									<div class="thumbnail thumn-hight">
+										<a href="{{url('mail/contenteditor')}}/{{t['idMail']}}/{{t['id']}}" >
+											{% if t['preview'] == null%}
+												<img data-src="holder.js/100%x180" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNzEiIGhlaWdodD0iMTgwIj48cmVjdCB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2VlZSI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9Ijg1LjUiIHk9IjkwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MTcxeDE4MDwvdGV4dD48L3N2Zz4=">
+											{% else %}
+												<img src="data: image/png;base64, {{t['preview']}}">
+											{%endif%}
+										</a>
+										<div class="caption text-center">
+											<h3>{{t['name']}}</h3>
+											<button onclick="preview({{t['id']}})" class="btn btn-info btn-sm extra-padding" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
+										</div>
 									</div>
 								</div>
 						   {% endfor %}
-					   </div>
+						</div>
 					</div>
-				</div>
-			</div>
+			   {% endfor %}
+		   </div>
 		</div>
-	</div>
 
 	<div id="preview-modal" class="modal fade">
 		<div class="modal-dialog">
@@ -82,10 +72,10 @@
 				</div>
 				<div class="modal-body">
 					<p>
-						¿Esta seguro que desea eliminar esta plantilla?
+						¿Está seguro que desea eliminar ésta plantilla?
 					</p>
 					<p>
-						Recuerde que si elimina esta plantilla se perderán todos los datos asociados, excepto las imágenes
+						Recuerde que si elimina ésta plantilla se perderán todos los datos asociados, excepto las imágenes
 					</p>
 				</div>
 				<div class="modal-footer">

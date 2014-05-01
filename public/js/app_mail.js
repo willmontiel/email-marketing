@@ -269,7 +269,20 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		if (!schedule) {
 			return true;
 		}
-		this.set('scheduleSummary', schedule);
+
+		var date = moment(schedule, "DD-MM-YYYY HH:mm");
+		var day = date.date();
+		var m = date.month() + 1;
+		var month = moment('' + m).format('MMMM');
+		var year = date.year();
+		var hour = date.hour();
+		var minutes = date.minutes();
+		var time = hour + ':' + minutes;
+		
+		this.set('scheduleDay', day);
+		this.set('scheduleMonth', month);
+		this.set('scheduleYear', year);
+		this.set('scheduleTime', time);
 		return false;
 	}.property('content.scheduleDate'),
 	
@@ -409,6 +422,13 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 		
 		expandHeader: function () {
+			if (this.get('this.id') !== null) {
+				var arrayFb = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
+				var arrayTw = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
+				
+				this.set('facebook', arrayFb);
+				this.set('twitter', arrayTw);
+			}
 			this.set('isHeaderExpanded', true);
 		},
 				
@@ -417,7 +437,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
 				var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
 				var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
-
+				
 				this.set('databases', arrayDbase);
 				this.set('clists', arrayList);
 				this.set('csegments', arraySegment);
@@ -450,6 +470,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		discardChanges: function () {
 			if (this.get('this.id') !== null) {
 				this.get('model').rollback();
+				this.set('fbaccountsel', this.get('facebook'));
+				this.set('twaccountsel', this.get('twitter'));
 			}
 			this.set('isHeaderExpanded', false);
 			this.set('isScheduleExpanded', false);
@@ -471,7 +493,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.get('model').rollback();
 			if (App.googleAnalyticsLinks !== undefined) {
 				this.set('linksAnalytics', this.get('linksgoogleanalytics'));
-			}			
+			}	
+			this.set('isGoogleAnalitycsExpanded', false);
 		},
 				
 		cleanGoogleAnalytics: function () {

@@ -3,6 +3,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ javascript_include('javascripts/moment/moment.min.js')}}
 	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
 	<script type="text/javascript">
@@ -128,55 +129,58 @@
 	</script>
 {% endblock %}
 {% block content %}
-
-<div class="border-mail mail-wrapper">
-	{{flashSession.output()}}
-		<div id="emberAppContainer">
-			<script type="text/x-handlebars" data-template-name="index">
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/mailstatus_partial") }}
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/name_partial") }}
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/header_partial") }}
-					</div>
-				</div>	
-		
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/target_partial") }}
-					</div>
-				</div>	
-		
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/content_partial") }}
-					</div>
-				</div>	
-				
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/googleanalytics_partial") }}
-					</div>
-				</div>
-			
-
-				<div class="row">
-					<div class="col-md-12">
-						{{ partial("mail/partials/schedule_partial") }}
-					</div>
-				</div>
-			</script>
+	<div class="row">
+		<div class="col-sm-12">
+			{{flashSession.output()}}
 		</div>
+	</div>
+<div class="border-mail mail-wrapper">
+	<div id="emberAppContainer">
+		<script type="text/x-handlebars" data-template-name="index">
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/mailstatus_partial") }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/name_partial") }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/header_partial") }}
+				</div>
+			</div>	
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/target_partial") }}
+				</div>
+			</div>	
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/content_partial") }}
+				</div>
+			</div>	
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/googleanalytics_partial") }}
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ partial("mail/partials/schedule_partial") }}
+				</div>
+			</div>
+		</script>
+	</div>
 </div>
 
 	<div class="modal fade gallery-modal" id="images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -200,19 +204,46 @@
 						<div id="gallery" class="tab-pane active">
 						</div>
 						<div id="uploadimage" class="tab-pane well">
-							<h2 class="text-center">Cargar Imagen</h2>
+							<h2 class="text-center">Cargar imágen</h2>
 							<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
-								<div class="dz-message"><span>Suelte su imagen aqui! <br/><br/>(o Click)</span></div>
+								<div class="dz-message"><span>Suelte su imagen aquí! <br/><br/>(o Click)</span></div>
 							</form>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<div id="accept_cancel_image">
-						<a href="#" class="btn btn-default" id="accept_change" data-dismiss="modal">Aplicar</a>
-						<a href="#" class="btn btn-default" id="cancel_change" data-dismiss="modal">Cancelar</a>
+						<a href="#" class="btn btn-default btn-sm extra-padding" id="cancel_change" data-dismiss="modal">Cancelar</a>
+						<a href="#" class="btn btn-guardar btn-sm extra-padding" id="accept_change" data-dismiss="modal">Aplicar</a>
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Enviar una prueba</h4>
+				</div>
+			<form {% if mail is defined %} action="{{url('mail/sendtest')}}/{{mail.idMail}}" {% endif %} id="testmail" method="post" role="form">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="target">Enviar una prueba a:</label>
+						<input type="text" class="form-control" id="target" name="target" autofocus="autofocus" placeholder="Escriba las direcciones de correo separadas por coma"/>
+					</div>
+					<div class="form-group">
+						<label for="message">Incluir instrucciones o un mensaje personal (opcional)</label>
+						<textarea class="form-control" rows="3" cols="30" id="message" name="message"></textarea>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+					<input class="btn btn-sm btn-primary extra-padding" type="submit" value="Enviar">
+				</div>
+			</form>
 			</div>
 		</div>
 	</div>

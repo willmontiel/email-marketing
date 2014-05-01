@@ -49,7 +49,7 @@
 						{{ '{{/unless}}' }}
 					</dd>
 					<dd>
-						Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podria variar)
+						Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podría variar)
 					</dd>
 				{{'{{/if}}'}}
 				</dl>
@@ -110,30 +110,29 @@
 											id="accounts_facebook"
 											class="form-control"}}'
 									 }}
-									<div class="fbdescription bg-info">
-										<div class="pad-marg">
-											<div>
-												{{'{{view Ember.TextArea valueBinding="fbmessagecontent" id="fbmessagecontent" class="form-control" placeholder="Comentario..."}}'}}
-											</div>
-											<br>
-											<div class="clearfix">
-												<div style="float: left;margin-right: 15px;width: 154px;height: 154px;background-color: #FAFAFA;">
-													<div>
-														<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil" style="position: relative;left: 2px;top: 4px;padding: 2px;border-radius: 4px;cursor: pointer;border: 1px solid #E4E4E4;background-color: #F5F5F5;"></div>
-													</div>
-													{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
-													<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154">
+									<div class="fbdescription bs-callout bs-callout-info">
+										<div class="">
+											{{'{{view Ember.TextArea valueBinding="fbmessagecontent" id="fbmessagecontent" class="form-control" placeholder="Comentario..."}}'}}
+										</div>
+
+										<div class="clearfix">
+											<div class="container-fb-first">
+												<div class="edit-fb-image-container">
+													<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil"></div>
 												</div>
-												<div style="float: left;width: 67%;">
-													<br>
+												{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
+												<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154" />
+											</div>
+											<div class="container-fb-second">
+												<div class="">
 													{{'{{view Ember.TextArea valueBinding="fbtitlecontent" id="fbtitlecontent" class="form-control" placeholder="Título de la publicación..."}}'}}
-													<br>
+												</div>
+												<div class="">
 													{{'{{view Ember.TextArea valueBinding="fbdescriptioncontent" id="fbdescriptioncontent" class="form-control" placeholder="Descripción de la publicación..."}}'}}
 												</div>
 											</div>
 										</div>
 									</div>
-									<br />
 								{#
 								{% else %}
 									No tiene una cuenta de facebook configurada, si desea puede configurar una.
@@ -173,7 +172,7 @@
 				<div class="form-group">
 					<div class="col-sm-6 col-md-offset-6 text-right">
 						<button class="btn btn-default btn-sm extra-padding" {{ '{{action "discardChanges" this}}' }}>Descartar cambios</button>
-						<button class="btn btn-default btn-sm extra-padding" {{'{{action "save" this}}'}}>Aplicar cambios</button>
+						<button class="btn btn-guardar btn-sm extra-padding" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 					</div>
 				</div>
 			</form>

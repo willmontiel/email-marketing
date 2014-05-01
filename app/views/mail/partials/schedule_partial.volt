@@ -1,13 +1,33 @@
 {{ '{{#unless isScheduleExpanded'}}}}
 	<div {{'{{bind-attr class=": scheduleEmpty:bg-warning:"}}'}}>
-		<div class="panel-body">
-			<dl class="dl-horizontal" {{ '{{action "expandSchedule" this}}' }}>
-				{{'{{#if scheduleEmpty }}'}}
+		<div class="dl-horizontal" {{ '{{action "expandSchedule" this}}' }}>
+			{{'{{#if scheduleEmpty }}'}}
+				<dl>
 					<dt>Enviar el correo el:</dt><dd> _______________________________</dd>
-				{{'{{else}}'}}
-					<dt>Enviar el correo el:</dt><dd>{{'{{scheduleSummary}}'}}</dd>
-				{{'{{/if}}'}}
-			</dl>
+				</dl>
+			{{'{{else}}'}}
+				<div class="col-md-6">
+					<div class="">
+						<h4 class="text-center">Fecha del envío:</h4>
+						<div class="bg-wrap-calendar center-block">
+							<div class="date">
+								<h1 class="day-send">{{'{{scheduleDay}}'}}</h1>
+								<h6 class="month-send">{{'{{scheduleMonth}}'}}</h6>
+								<h6 class="year-send">{{'{{scheduleYear}}'}}</h6>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="">
+						<h4 class="text-center">Hora del envío:</h4>
+						<div class="bg-wrap-time center-block">
+							<span class="time-send">{{'{{scheduleTime}}'}}</span>
+						</div>
+					</div>
+				</div>
+			{{'{{/if}}'}}
+
 		</div>
 	</div>
 {{ '{{else}}' }}
