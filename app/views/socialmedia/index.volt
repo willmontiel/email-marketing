@@ -7,18 +7,18 @@
 	</div>
 	
 	<div class="row">
-		<h4 class="sectiontitle">Administración de redes sociales</h4>
+		<h4 class="sectiontitle">Cuentas de redes sociales</h4>
 
 		<div class="bs-callout bs-callout-info">
-			Administre las redes sociales, qui podrá configurar facebook y twitter, para que cuando envíe una campaña de
-			correo, se hagan post sobre estas redes automaticamente
+			Administre las redes sociales, configure facebook y twitter, para que cuando envíe una campaña de
+			correo, se hagan post sobre éstas redes automáticamente
 		</div>
 	</div>
 	
 	<div class="row">
 		<div class="col-sm-12 text-right">
-			<a href="{{fbloginUrl}}" class="btn btn-sm btn-default">Nuevo Facebook</a>
-			<a href="{{twloginUrl}}" class="btn btn-sm btn-default">Nuevo Twitter</a>
+			<a href="{{fbloginUrl}}" class="btn btn-sm btn-default extra-padding">Nuevo Facebook</a>
+			<a href="{{twloginUrl}}" class="btn btn-sm btn-default extra-padding">Nuevo Twitter</a>
 		</div>
 	</div>	
 	
@@ -54,7 +54,7 @@
 								{%endif%}
 							</td>
 							<td class="btns-social-column">
-								<a class="ShowDialog btn btn-sm btn-danger extra-padding" data-toggle="modal" href="#delete-modal-social" data-id="{{url('socialmedia/delete')}}/{{account.idSocialnetwork}}">Eliminar</a>
+								<a class="ShowDialog btn btn-sm btn-default btn-delete extra-padding" data-toggle="modal" href="#delete-modal-social" data-id="{{url('socialmedia/delete')}}/{{account.idSocialnetwork}}">Eliminar</a>
 								{%if account.status is 'Deactivated' and account.type is 'Facebook'%}
 									<a class="ShowDialog btn btn-sm btn-default extra-padding" href="{{fbloginUrl}}">Activar</a>
 								{%elseif account.status is 'Deactivated' and account.type is 'Twitter'%}
@@ -76,12 +76,12 @@
 					<h4 class="modal-title" id="myModalLabel">Eliminar Mensaje</h4>
 				</div>
 				<div class="modal-body">
-					<p>Esta seguro que desea eliminar esta cuenta.</p>
+					<p>Está seguro que desea eliminar ésta cuenta?</p>
 					<p>Recuerde que debe revocar los permisos desde su cuenta de red social.</p>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
-					<a href="" id="deleteMsg" class="btn btn-sm btn-danger extra-padding" >Eliminar</a>
+					<a href="" id="deleteMsg" class="btn btn-sm btn-default btn-danger extra-padding" >Eliminar</a>
 				</div>
 			</div>
 		</div>

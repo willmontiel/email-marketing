@@ -65,7 +65,7 @@
 
 		<div class="bs-callout bs-callout-info">
 			Aqui podrá encontrar toda la información relacionada con los envíos de correos eléctronicos,
-			como la programación, estados y que se estan enviando actualmente
+			como la programación, estados y envíos en curso.
 		</div>
 	</div>
 
@@ -80,7 +80,7 @@
 	
 	<div class="row">
 		<div class="col-md-12">
-			<h4>Procesos activos para envio de correos</h4>
+			<h4>Procesos activos para envío de correos</h4>
 			<table id="processes-table" class="table table-striped">
 				<thead>
 					<tr>
@@ -103,7 +103,7 @@
 	
 	<div class="row">
 		<div class="col-md-12">
-			<h4>Procesos activos para importacion de contactos</h4>
+			<h4>Procesos activos para importación de contactos</h4>
 			<table id="processes-table-import" class="table table-striped">
 				<thead>
 					<tr>

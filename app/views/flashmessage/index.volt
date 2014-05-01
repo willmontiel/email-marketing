@@ -10,8 +10,8 @@
 		<h4 class="sectiontitle">Mensajes informativos</h4>
 
 		<div class="bs-callout bs-callout-info">
-			Aqui podrá configurar mensajes informativos, para que determinados clientes o todos puedan verlos en
-			el momento en el que inician sesión
+			Configure mensajes informativos para que algunos o todos los clientes puedan verlos en
+			el momento en que inician sesión
 		</div>
 	</div>
 
@@ -37,7 +37,7 @@
 			{% if page.items|length == 0%}
 					<tr>
 						<td>
-							No hay mensajes adiministrativos, para crear uno haga clic en el botón <strong>Crear nuevo mensaje</strong>
+							No hay mensajes administrativos, para crear uno haga clic en el botón <strong>Crear nuevo mensaje</strong>
 						</td>
 					</tr>
 			{% else %}
@@ -97,16 +97,16 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Mensaje</h4>
+					<h4 class="modal-title" id="myModalLabel">Eliminar mensaje</h4>
 				</div>
 				<div class="modal-body">
 					<p>
-						¿Esta seguro que desea eliminar este mensaje.?
+						¿Está seguro que desea eliminar éste mensaje?
 					</p>
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-sm btn-default" data-dismiss="modal">Cancelar</button>
-					<a href="" id="deleteMsg" class="btn btn-sm btn-danger extra-padding">Eliminar</a>
+					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+					<a href="" id="deleteMsg" class="btn btn-sm btn-default btn-delete extra-padding">Eliminar</a>
 				</div>
 			</div>
 		</div>
