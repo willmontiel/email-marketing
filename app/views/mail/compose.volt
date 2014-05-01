@@ -3,6 +3,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ javascript_include('javascripts/moment/moment.min.js')}}
 	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
 	<script type="text/javascript">

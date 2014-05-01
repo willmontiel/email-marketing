@@ -118,7 +118,7 @@
 				</select>
 			</div>
 			<div class="form-group" id="new-category" style="display: none;">
-				<label for="category" class="">Nueva Categoria: </label>
+				<label for="category" class="">Nueva Categoría: </label>
 				<input type="text" name="categoria" id="category" 	 class="form-control">
 			</div>
 			<div class="form-group">
