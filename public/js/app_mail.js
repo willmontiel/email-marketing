@@ -484,12 +484,15 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 });
 
 function getArrayValue(value) {
-	var array = [];
-	var obj = value.toArray();
-	for (var i = 0; i < obj.length; i++) {
-		array.push(obj[i].id);
+	if( value !== null) {
+		var array = [];
+		var obj = value.toArray();
+		for (var i = 0; i < obj.length; i++) {
+			array.push(obj[i].id);
+		}
+		return array.toString();
 	}
-	return array.toString();
+	return '';
 }
 
 function setExpandAttr(self, expand) {
