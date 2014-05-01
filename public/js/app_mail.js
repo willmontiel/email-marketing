@@ -429,6 +429,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('fiteropens', arrayOpen);
 				this.set('filterclicks', arrayClick);
 				this.set('filterexcludes', arrayExclude);
+				
+				var arrayFb = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
+				var arrayTw = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
+				
+				this.set('facebook', arrayFb);
+				this.set('twitter', arrayTw);
 			}
 			this.set('isTargetExpanded', true);
 		},
@@ -463,6 +469,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('open', this.get('fiteropens'));
 				this.set('click', this.get('filterclicks'));
 				this.set('exclude', this.get('filterexcludes'));
+				this.set('fbaccountsel', this.get('facebook'));
+				this.set('twaccountsel', this.get('twitter'));
 			}
 			this.set('isTargetExpanded', false);
 		},
@@ -471,7 +479,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.get('model').rollback();
 			if (App.googleAnalyticsLinks !== undefined) {
 				this.set('linksAnalytics', this.get('linksgoogleanalytics'));
-			}			
+			}	
+			this.set('isGoogleAnalitycsExpanded', false);
 		},
 				
 		cleanGoogleAnalytics: function () {
