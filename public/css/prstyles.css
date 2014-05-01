@@ -799,6 +799,35 @@ span.required {
 .field-element-form-hide, .social-input-hide {
 	display: none;
 }
+.edit-fb-image-container {
+	float: right;
+	z-index: 150;
+	position: absolute;
+}
+#fb-share-image {
+	position: absolute;
+}
+.container-fb-first {
+	float: left;
+	margin-right: 15px;
+	width: 154px;
+	height: 154px;
+	background-color: #FAFAFA;
+}
+.container-fb-second {
+	float: left;
+	width: 67%;
+}
+.edit-fb-image-tool {
+	position: relative;
+	left: 2px;
+	top: 4px;
+	padding: 2px;
+	border-radius: 4px;
+	cursor: pointer;
+	border: 1px solid #E4E4E4;
+	background-color: #F5F5F5;
+}
 .btn-for-modal-accordion {
 	width: 120px;
 }
