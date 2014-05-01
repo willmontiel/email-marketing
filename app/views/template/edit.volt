@@ -39,23 +39,23 @@
 
 	
 	function writenewcategory() {
-		$('.selectcategory').hide();
-		$('.btnNewCategory').hide();
-		$('.selectcategory').find('#category').removeAttr('id');
+		$('#all-category').hide();
+		$('#btnNewCategory').hide();
+		$('#all-category').find('select').removeAttr('id');
 		
-		$('.newcategory').show();
-		$('.btnSelectCategory').show();
-		$('.newcategory').find('input').attr('id', "category");
+		$('#new-category').show();
+		$('#btnSelectCategory').show();
+		$('#new-category').find('input').attr('id', "category");
 	};
 	
 	function selectcategory() {
-		$('.newcategory').hide();
-		$('.btnSelectCategory').hide();
-		$('.newcategory').find('input').removeAttr('id');
+		$('#new-category').hide();
+		$('#btnSelectCategory').hide();
+		$('#new-category').find('input').removeAttr('id');
 		
-		$('.selectcategory').show();
-		$('.btnNewCategory').show();
-		$('.selectcategory').find('select').attr('id', "category");
+		$('#all-category').show();
+		$('#btnNewCategory').show();
+		$('#all-category').find('select').attr('id', "category");
 	};
 	
 	function sendData() {
@@ -90,32 +90,26 @@
 </script>
 {% endblock %}
 {% block content %}
+	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'template']) }}
+
 	<div class="row">
-		<div class="col-sm-12">
-			{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'template']) }}
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-sm-12">
+		
 		<h4 class="sectiontitle">Editar Plantillas</h4>
+		
 		<div class="bs-callout bs-callout-info">
 			Edite el contenido de plantillas predeterminadas
 		</div>
-		</div>
-	</div>
 	
-	<div class="row">
-		{{ flashSession.output()}}
-	</div>
-
-	<div class="row">
-		<div class="col-sm-2">
-			<label for="name">Nombre de la plantilla:</label>
-			<input type="text" value="{{template.name}}" name="name" id="name" required="required" class="form-control">
+		<div class="row">
+			{{ flashSession.output()}}
 		</div>
-		<div class="col-sm-3">
-			<div class="selectcategory form-group">
+
+		<form class="form-inline" role="form">
+			<div class="form-group">
+				<label for="name">Nombre de la plantilla:</label>
+				<input type="text" value="{{template.name}}" name="name" id="name" required="required" class="form-control">
+			</div>
+			<div class="form-group" id="all-category">
 				<label for="categoria">Categoría: </label>
 				<select class="form-control" name="categoria" id="category">
 					{%if categories%}
@@ -127,34 +121,32 @@
 					{%endif%}
 				</select>
 			</div>
-				
-			<div class="newcategory form-group" id="new-category" style="display: none;">
+			<div class="form-group" id="new-category" style="display: none;">
 				<label for="category" class="">Nueva Categoria: </label>
-				<input type="text" name="categoria" id="category" class="newcategory form-control">
+				<input type="text" name="categoria" class="form-control">
 			</div>
-		</div>
-			
-		<div class="col-sm-1">
-			<a class="btnNewCategory btn btn-sm btn-default extra-padding" onclick="writenewcategory()" ><span class="glyphicon glyphicon-pencil"></span></a>
-			<a class="btnSelectCategory btn btn-sm btn-default extra-padding" onclick="selectcategory()" style="display: none;"><span class="glyphicon glyphicon-check"></span></a>
-		</div>
-			
-		<div class="col-sm-2">
-			<input type="checkbox" name="isglobal" id="isglobal" {% if template.idAccount == ''%}checked{% endif %}> 
-			<label for="isglobal">Plantilla Global</label>
-		</div>
-			
-		
-		
-		<div class="col-sm-4 text-right">
-			<a href="{{url('template/index')}}" class="btn btn-default extra-padding">Salir</a>
-			<button class="btn btn-default extra-padding" data-toggle="modal" data-target="#myModal" onClick="verHTML()">
-				<span class="glyphicon glyphicon-search"></span> Previsualizar
-			</button>
-			<a class="btn btn-default extra-padding" onclick="sendData()"><span class="glyphicon glyphicon-floppy-saved"></i></a>
-		</div>
-	</div>
 
+			<div class="form-group">
+				<a id="btnNewCategory" class="btn btn-default extra-padding" onclick="writenewcategory()" ><span class="glyphicon glyphicon-pencil"></span></a>
+				<a id="btnSelectCategory" class="btn btn-default extra-padding" onclick="selectcategory()" style="display: none;"><span class="glyphicon glyphicon-check"></span></a>
+			</div>
+
+			<div class="form-group">
+				<label><input type="checkbox" name="isglobal" id="isglobal" {% if template.idAccount == ''%}checked{% endif %}> Plantilla Global</label>
+			</div>
+
+			<div class="col-xs-12 col-sm-9 col-md-10 col-lg-4 pull-right">
+				<div class="form-group">
+					<a class="btn btn-default extra-padding" data-toggle="modal" data-target="#myModal" onClick="verHTML()"><span class="glyphicon glyphicon-search"></span> Previsualizar</a>
+				</div>
+				<div class="form-group">
+					<a href="{{url('template/index')}}" class="btn btn-default extra-padding">Salir</a>
+					<a class="btn btn-default extra-padding" onclick="sendData()"><span class="glyphicon glyphicon-floppy-saved"></i></a>
+				</div>
+			</div>
+
+		</form>
+	</div>
 	<div class="row">
 		<div class="col-sm-12">
 			<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
