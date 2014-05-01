@@ -831,3 +831,8 @@ span.required {
 .btn-for-modal-accordion {
 	width: 120px;
 }
+.dz-message {
+	text-align: center;
+	font-family: inherit;
+	font-size: 25px;
+}

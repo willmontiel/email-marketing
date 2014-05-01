@@ -81,6 +81,17 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	summaryMail: '',
 	summaryAnalytics: '',
 	imageUrl: function () {
+		Dropzone.autoDiscover = false;
+		var myDropzone = new Dropzone("#my-dropzone");
+		$("#my-dropzone").addClass('dropzone');
+		myDropzone.on("success", function(file, response) {
+			var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);
+			newMedia.createMedia();
+			newMedia.mediaSelected();
+			media.setGallery(newMedia);
+			media.imageSelected(response.filelink, response.title);
+		});
+
 		var res = config.assetsUrl;
 		if( this.get('fbimagepublication') === undefined || this.get('fbimagepublication') === 'default' || this.get('fbimagepublication') === 'post_default.png' ) {
 			this.set('fbimagepublication', 'post_default.png');
