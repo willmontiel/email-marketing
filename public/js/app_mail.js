@@ -484,12 +484,15 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 });
 
 function getArrayValue(value) {
-	var array = [];
-	var obj = value.toArray();
-	for (var i = 0; i < obj.length; i++) {
-		array.push(obj[i].id);
+	if( value !== null) {
+		var array = [];
+		var obj = value.toArray();
+		for (var i = 0; i < obj.length; i++) {
+			array.push(obj[i].id);
+		}
+		return array.toString();
 	}
-	return array.toString();
+	return '';
 }
 
 function setExpandAttr(self, expand) {
@@ -502,16 +505,20 @@ function setExpandAttr(self, expand) {
 }
 
 function setTargetValues(values, select) {
-	var array = values.split(",");
-	var newArray = [];
-	for (var i = 0; i < select.length; i++) {
-		for (var j = 0; j < array.length; j++) {
-			if (select[i].id == array[j]) {
-				newArray.push(select[i]);
+	if(select !== undefined) {
+		var array = values.split(",");
+		var newArray = [];
+		for (var i = 0; i < select.length; i++) {
+			for (var j = 0; j < array.length; j++) {
+				if (select[i].id == array[j]) {
+					newArray.push(select[i]);
+				}
 			}
 		}
+		return newArray;
 	}
-	return newArray;
+	
+	return null;
 }
 
 function setGoogleAnalyticsValues(values, select) {

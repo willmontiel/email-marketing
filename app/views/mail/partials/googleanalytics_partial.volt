@@ -1,6 +1,6 @@
 {{ '{{#unless contentEmpty}}' }}
 	{{ '{{#unless isGoogleAnalitycsExpanded}}' }}
-		<div {{'{{bind-attr class=":bs-callout GoogleAnalitycsEmpty:bs-callout-warning:bs-callout-success"}}'}}>
+		<div {{'{{bind-attr class=": GoogleAnalitycsEmpty:bg-warning:"}}'}}>
 			<div class="panel-body">
 				<dl class="dl-horizontal" {{ '{{action "expandGA" this}}' }}>
 					<dt>Google Analitycs:</dt><dd>{{ '{{summaryAnalytics}}' }}</dd>

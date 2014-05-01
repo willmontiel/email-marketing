@@ -284,7 +284,7 @@
 	{#   Tab campos   #}
 		<h4>Agregar un nuevo campo</h4>
 			{{ '{{#if errors.errormsg}}' }}
-				<div class="alert alert-error">
+				<div class="bs-callout bs-callout-danger">
 					{{ '{{errors.errormsg}}' }}
 				</div>
 			{{ '{{/if}}' }}
@@ -337,7 +337,7 @@
 					<div class="form-actions">
 						<div class="row">
 							<div class="col-md-3 col-md-offset-5">
-								<button class="btn btn-guardar btn-sm extra-padding" {{' {{action save this}} '}}>Grabar</button>
+								<button class="btn btn-guardar btn-sm extra-padding" {{' {{action "save" this}} '}}>Grabar</button>
 							</div>
 							<div class="col-md-3">
 								<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
@@ -352,7 +352,7 @@
 		<h4>Editar un campo personalizado</h4>
 		<div class="col-md-6">
 			{{ '{{#if errors.errormsg}}' }}
-				<div class="alert alert-error">
+				<div class="bs-callout bs-callout-danger">
 					{{ '{{errors.errormsg}}' }}
 				</div>
 			{{ '{{/if}}' }}
@@ -410,7 +410,7 @@
 		</div>
 		<p>¿Esta seguro que desea eliminar el campo <strong>{{'{{name}}'}}</strong>?</p>
 			{{ '{{#if errors.errormsg}}' }}
-				<div class="alert alert-error">
+				<div class="bs-callout bs-callout-danger">
 					{{ '{{errors.errormsg}}' }}
 				</div>
 			{{ '{{/if}}' }}
