@@ -9,7 +9,7 @@
 		</div>
 	{{ '{{else}}' }}
 		{{ '{{#if isGaAvailable}}' }}
-			<div class="row">
+			<div class="row wrapper">
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
 						<label for="target" class="col-sm-4 control-label">Nombre de la campaña: </label>
