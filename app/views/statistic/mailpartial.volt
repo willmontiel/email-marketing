@@ -61,111 +61,121 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">
-	<hr />
 	<div class="row">
-		<div class="news span3">
-			<label class="label-gray-light-percent"><i class="icon-hand-up"></i> Resumen de clics</label>
-			<div>
-				<label class="label-click-percent">
-					<table>
-						<tr>
-							<td class="clicks_percent_information">{{statisticsData.totalclicks}}</td>
-							<td>Total de Clics Unicos</td>
-						</tr>
-					</table>
-				</label>
-				<label class="label-click-percent">
-					<table>
-						<tr>
-							<td class="clicks_percent_information">
-								{{statisticsData.clicks_CTR}} de {{statisticsData.total - statisticsData.bounced}}
-								<br />
-								({{statisticsData.percent_clicks_CTR}}%)
-							</td>
-							<td>Tasa de Clics</td>
-						</tr>
-					</table>
-				</label>
-				<label class="label-click-percent">
-					<table>
-						<tr>
-							<td class="clicks_percent_information">
-								{{statisticsData.clicks_CTR}} de {{statisticsData.opens}}
-								<br />
-								({{statisticsData.percent_clicks_CTO}}%)
-							</td>
-							<td>Click To Open Rate</td>
-						</tr>
-					</table>
-				</label>
-			</div>
-			
+		<div class="col-md-offset-1">
+			{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
 		</div>
-		{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
 	</div>
 	<div class="row">
-		<div class="clickstotalsandunique span10">
-			<div class="box">
-				<div class="box-content">
-					<table class="table table-normal">
-						<thead>
+		<div class="col-md-6">
+			<label class="label-gray-light-percent"><i class="icon-hand-up"></i> Resumen de clics</label>
+			<dl>
+				<dd>
+					<label class="label-click-percent">
+						<table>
 							<tr>
-								<td>Vinculos</td>
-								<td>Total Clics</td>
-								{#<td>Total Clics Unicos</td>#}
+								<td class="clicks_percent_information">{{statisticsData.totalclicks}}</td>
+								<td>Total de Clics Unicos</td>
 							</tr>
-						</thead>
-						<tbody>
-							{{'{{#each detailsLinks}}'}}
+						</table>
+					</label>
+				</dd>
+				<dd>
+					<label class="label-click-percent">
+						<table>
 							<tr>
-								<td>{{'{{link}}'}}</td>
-								<td>{{'{{total}}'}}</td>
-								{#<td>{{'{{uniques}}'}}</td>#}
+								<td class="clicks_percent_information">
+									{{statisticsData.clicks_CTR}} de {{statisticsData.total - statisticsData.bounced}}
+									<br />
+									({{statisticsData.percent_clicks_CTR}}%)
+								</td>
+								<td>Tasa de Clics</td>
 							</tr>
-							{{ '{{/each}}' }}
-						</tbody>
-					</table>
-				</div>
-			</div>
+						</table>
+					</label>
+				</dd>
+				<dd>
+					<label class="label-click-percent">
+						<table>
+							<tr>
+								<td class="clicks_percent_information">
+									{{statisticsData.clicks_CTR}} de {{statisticsData.opens}}
+									<br />
+									({{statisticsData.percent_clicks_CTO}}%)
+								</td>
+								<td>Click To Open Rate</td>
+							</tr>
+						</table>
+					</label>
+				</dd>
+			</dl>
 		</div>
-		<div class="span2">
+	
+
+		<div class="col-md-6">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td>Vinculos</td>
+						<td>Total Clics</td>
+						{#<td>Total Clics Unicos</td>#}
+					</tr>
+				</thead>
+				<tbody>
+					{{'{{#each detailsLinks}}'}}
+					<tr>
+						<td>{{'{{link}}'}}</td>
+						<td>{{'{{total}}'}}</td>
+						{#<td>{{'{{uniques}}'}}</td>#}
+					</tr>
+					{{ '{{/each}}' }}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-md-3">
 			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/clicks" class="btn btn-default"><i class="icon-download-alt"></i> Descargar reporte</a>
 		</div>
 	</div>
+	
+	<div class="space"></div>
+
 	<div class="row">
-		<div class="span12">
-			<div class="pull-left">
-				{{ '{{view Ember.Select
-						contentBinding="selectedLink"
-						valueBinding="linkSelected"}}'
-				}}
-			</div>
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Lista de clicks
+		<div class="col-md-10 col-md-offset-1">
+			<div class="row">
+				<div class="col-md-5">
+					<div class="pull-left">
+						{{ '{{view Ember.Select
+								contentBinding="selectedLink"
+								valueBinding="linkSelected"
+								class="form-control"}}'
+						}}
 					</div>
 				</div>
-				<div class="box-content">
-					<table class="table table-normal">
-						<thead>
-							<tr>
-								<td>Dirección de correo</td>
-								<td>Enlace</td>
-								<td>Fecha y hora</td>
-							</tr>
-						</thead>
-						<tbody>
-						{{'{{#each detailsData}}'}}
-							<tr>
-								<td>{{'{{email}}'}}</td>
-								<td>{{'{{link}}'}}</td>
-								<td>{{'{{date}}'}}</td>
-							</tr>
-						{{ '{{/each}}' }}
-						</tbody>
-					</table>
-				</div>
+			</div>
+
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td>Dirección de correo</td>
+						<td>Enlace</td>
+						<td>Fecha y hora</td>
+					</tr>
+				</thead>
+				<tbody>
+				{{'{{#each detailsData}}'}}
+					<tr>
+						<td>{{'{{email}}'}}</td>
+						<td>{{'{{link}}'}}</td>
+						<td>{{'{{date}}'}}</td>
+					</tr>
+				{{ '{{/each}}' }}
+				</tbody>
+			</table>
+				
 				<div class="box-footer flat"> 
 					{{ partial("partials/pagination_partial") }}
 				</div>

@@ -52,11 +52,12 @@
 			}catch(err){
 				console.log(err.message);
 			}
-			$("select").select2();
 		});
 		
 		function compareMails() {
-			window.location = "{{url('statistic/comparemails')}}/{{mail.idMail}}/" + App.mailCompare;
+			if(App.mailCompare !== undefined) {
+				window.location = "{{url('statistic/comparemails')}}/{{mail.idMail}}/" + App.mailCompare;
+			}
 		}
 		
 		
@@ -70,7 +71,8 @@
 		<script type="text/x-handlebars">
 			<div class="row">
 				<h3>{{mail.name}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
-					<table class="table" style="border: 0px !important;" >
+				<div class="col-md-6">
+					<table class="table table-striped" style="border: 0px !important;" >
 						<thead></thead>
 						<tbody>
 							<tr>
@@ -160,38 +162,37 @@
 										</div>	
 									</div>
 								</td>
+								<td>
+								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div class="">
-						{{ '{{view Ember.Select
-							class="select"
-							contentBinding="App.mails"
-							optionValuePath="content.id"
-							optionLabelPath="content.name"
-							valueBinding="App.mailCompare"}}'
-						}}
-					</div>
-					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-md-7">
+							{{ '{{view Ember.Select
+								class="form-control"
+								id="select-options-for-compare"
+								contentBinding="App.mails"
+								optionValuePath="content.id"
+								optionLabelPath="content.name"
+								valueBinding="App.mailCompare"}}'
+							}}
+						</div>
+						<div class="col-md-5">
+							<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
+						</div>
+					</div>	
 				</div>
-			{#</div>
-			<div class="row">#}
-				<div class="span6">
+				<div class="col-md-6">
 					<div class="box">
 						<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="span6">
-					{#<div id="summaryChart" style="width: 640px; height: 400px;"></div>#}
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					{{ "{{outlet}}" }}
-				</div>
-			</div>
+				
+			{{ "{{outlet}}" }}
+				
 		</script>
 		{{ partial("statistic/mailpartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
