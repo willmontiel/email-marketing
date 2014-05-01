@@ -252,14 +252,10 @@ class ContactWrapper extends BaseWrapper
 					$this->counter->deleteContactFromDbase($contact);
 					$this->counter->saveCounters();
 				}
-				Phalcon\DI::getDefault()->get('db')->commit();
-				Phalcon\DI::getDefault()->get('logger')->log('Se borró contacto exitosamente');
-				$response = new stdClass();
-				$response->status = $contact;
-				$response->type = 202;
-				$response->msg = 'contact deleted success';
 				
-				return $response;
+				Phalcon\DI::getDefault()->get('db')->commit();
+				
+				return true;
 			}
 			catch(Exception $e) {
 				Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e);

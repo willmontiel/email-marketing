@@ -34,6 +34,14 @@
 		
 		$(function() {
 			setInterval(checkUnfinishedImports, 5000);
+			$('.btn-for-modal-accordion').on('click', function(){
+				if(($(this).text()).trim() === 'Ver Detalles') {
+					$(this).text('Colapsar');
+				}
+				else {
+					$(this).text('Ver Detalles');
+				}
+			});
 		});
 		
 	</script>
@@ -61,7 +69,7 @@
 			
 			{%if res['status'] == "Finalizado"%}
 			<div class="text-right">
-				<a class="accordion-toggle collapsed btn btn-default" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo-{{res['idProcess']}}">
+				<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding btn-for-modal-accordion" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo-{{res['idProcess']}}">
 				  Ver Detalles
 				</a>
 			</div>

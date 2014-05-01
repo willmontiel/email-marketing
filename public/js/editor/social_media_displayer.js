@@ -26,16 +26,6 @@ SocialMediaDisplayer.prototype.imageSelected = function() {
 };
 
 //Dropzone.autoDiscover = false;
-
-$(function() {
-	var src = config.imagesUrl + "/post_default.png";
-	
-	if($('#fbimagepublication').val() !== 'default' && $('#fbimagepublication').val() !== '') {
-		src = config.assetsUrl + "/" + $('#fbimagepublication').val();
-	}
-	
-	$('#fb-share-image').attr('src', src);
-	
 //	var myDropzone = new Dropzone("#my-dropzone");
 //	myDropzone.on("success", function(file, response) {
 //		var newMedia = new Gallery(response.thumb, response.filelink, response.title, response.id);
@@ -43,50 +33,7 @@ $(function() {
 //		newMedia.mediaSelected();
 //		media.setGallery(newMedia);
 //		media.imageSelected(response.filelink, response.title);
-//	});	
-//	
-//	if($('#accounts_facebook')[0].selectedOptions.length > 0){
-//		$('.fbdescription').show();
-//		$('.setup_socials_container').show();
-//	}	
-//	if($('#accounts_twitter')[0].selectedOptions.length > 0){
-//		$('.twdescription').show();
-//		$('.setup_socials_container').show();
-//	}
-	$('#accounts_facebook').on('change', function() {
-		if($(this)[0].selectedOptions.length > 0) {
-			$('.fbdescription').show();
-		}
-		else {
-			$('.fbdescription').hide();
-		}
-	});
-
-	$('#accounts_twitter').on('change', function() {
-		if($(this)[0].selectedOptions.length > 0) {
-			$('.twdescription').show();
-		}
-		else {
-			$('.twdescription').hide();
-		}
-	});
-
-	$('#tweet-char-number').text($('#twpublicationcontent').attr('maxlength'));
-	$('#twpublicationcontent').keyup(function() {
-		var text = $(this).val();
-		$('#tweet-char-number').text($(this).attr('maxlength') - text.length);
-	});
-});
-
-function showsocials(){
-	var container = $('.setup_socials_container');
-	if (container.css('display') === 'none') {
-		container.show();
-	}
-	else {
-		container.hide();
-	}
-}
+//	});
 
 function new_sn_account(redirect){
 	$.ajax({

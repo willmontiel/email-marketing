@@ -41,25 +41,15 @@
 		{{'{{#each model}}'}}
 			{{ partial("partials/contact_view_partial") }}
 		{{ '{{else}}' }}
-			<div class="box-section news with-icons">
-				<div class="avatar green">
-					<i class="icon-lightbulb icon-2x"></i>
-				</div>
-				<div class="news-content">
-					<div class="news-title">
-						No hay contactos en esta base de datos
-					</div>
-					<div class="news-text">
-						<p>
-							Para empezar a administrar contactos, puede crear una lista de contactos en la base de datos,
-							y asociar contactos a la misma.
-						</p>
-					</div>
-				</div>
-			</div>
+		<div class="clearfix"></div>
+		<div class="bs-callout bs-callout-warning">
+			<p>No hay contactos en esta base de datos</p>
+			<p>Para empezar a administrar contactos, puede crear una lista de contactos en la base de datos, 
+			y asociar contactos a la misma.</p>
+		</div>
 		{{'{{/each}}'}}
-	</tbody>
- </table>
+		</tbody>
+	 </table>
 				</div>
 				<div class="box-footer">
 					{{ partial("partials/pagination_partial") }}
@@ -146,8 +136,8 @@
 			</div>
 		{{ '{{/if}} '}}
 	</div>
-		<button {{'{{action delete this}}'}} class="btn btn-danger">Eliminar</button>
-		<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+		<button class="btn btn-sm btn-default extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+		<button {{'{{action delete this}}'}} class="btn btn-sm btn-default btn-delete extra-padding">Eliminar</button>
 </script>
 {#
 <script type="text/x-handlebars" data-template-name="contacts/show">

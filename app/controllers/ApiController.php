@@ -569,9 +569,9 @@ class ApiController extends ControllerBase
 			$result = $wrapper->deleteContactFromDB($contact, $db, $override);
 		} catch(\Exception $e) {
 			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
-		} 
+		}
 			
-		return $this->setJsonResponse(array ('contact' => $result->status), $result->type, $result->msg);
+		return $this->setJsonResponse($result);
 	}
 
 

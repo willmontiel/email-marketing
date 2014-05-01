@@ -502,16 +502,20 @@ function setExpandAttr(self, expand) {
 }
 
 function setTargetValues(values, select) {
-	var array = values.split(",");
-	var newArray = [];
-	for (var i = 0; i < select.length; i++) {
-		for (var j = 0; j < array.length; j++) {
-			if (select[i].id == array[j]) {
-				newArray.push(select[i]);
+	if(select !== undefined) {
+		var array = values.split(",");
+		var newArray = [];
+		for (var i = 0; i < select.length; i++) {
+			for (var j = 0; j < array.length; j++) {
+				if (select[i].id == array[j]) {
+					newArray.push(select[i]);
+				}
 			}
 		}
+		return newArray;
 	}
-	return newArray;
+	
+	return null;
 }
 
 function setGoogleAnalyticsValues(values, select) {

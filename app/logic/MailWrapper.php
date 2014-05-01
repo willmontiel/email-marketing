@@ -70,13 +70,14 @@ class MailWrapper extends BaseWrapper
 	protected function processScheduleDate()
 	{
 		$schedule = $this->content->scheduleDate;
-		
-		if ($schedule == 'now') {
-			$this->scheduleDate = time();
-		}
-		else if ($schedule !== '' || !empty($schedule)) {
-			list($day, $month, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
-			$this->scheduleDate = mktime($hour, $minute, 0, $month, $day, $year);
+		if(!empty($schedule)) {
+			if ($schedule == 'now') {
+				$this->scheduleDate = time();
+			}
+			else if ($schedule !== '' || !empty($schedule)) {
+				list($day, $month, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
+				$this->scheduleDate = mktime($hour, $minute, 0, $month, $day, $year);
+			}
 		}
 	}
 	
