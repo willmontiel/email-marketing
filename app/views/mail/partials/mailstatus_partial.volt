@@ -11,6 +11,9 @@
 					<h2>{{ '{{scheduleDate}}' }}</h2>
 				</div>
 				<div class="col-md-6">
+					<button class="ShowDialogSendTest btn btn-primary" data-toggle="modal" data-target="#myModal">
+						Enviar prueba
+					</button>
 					<button onClick="sendMail()" class="btn btn-success" id="send-mail">Continuar</button>
 				</div>
 			</div>

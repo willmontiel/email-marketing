@@ -2140,17 +2140,17 @@ class MailController extends ControllerBase
 				if ($sendMail){
 					$this->traceSuccess("Send test, idMail: {$idMail}");
 					$this->flashSession->success("Se ha enviado el mensaje de prueba exitosamente");
-					return $this->response->redirect('mail/target/' . $idMail);
+					return $this->response->redirect("mail/compose/{$idMail}");
 				}
 
 				$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
-				return $this->response->redirect('mail/target/' . $idMail);
+				return $this->response->redirect("mail/compose/{$idMail}");
 			}
 			catch (Exception $e) {
 				$this->logger->log("Exception, Error while sending test, {$e}");
 				$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
 				$this->traceSuccess("Send test, idMail: {$idMail}");
-				return $this->response->redirect('mail/target/' . $idMail);
+				return $this->response->redirect("mail/compose/{$idMail}");
 			}
 		}
 	}

@@ -128,9 +128,12 @@
 	</script>
 {% endblock %}
 {% block content %}
-
+	<div class="row">
+		<div class="col-sm-12">
+			{{flashSession.output()}}
+		</div>
+	</div>
 <div class="border-mail mail-wrapper">
-	{{flashSession.output()}}
 	<div id="emberAppContainer">
 		<script type="text/x-handlebars" data-template-name="index">
 			<div class="row">
@@ -213,6 +216,33 @@
 						<a href="#" class="btn btn-guardar btn-sm extra-padding" id="accept_change" data-dismiss="modal">Aplicar</a>
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Enviar una prueba</h4>
+				</div>
+			<form {% if mail is defined %} action="{{url('mail/sendtest')}}/{{mail.idMail}}" {% endif %} id="testmail" method="post" role="form">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="target">Enviar una prueba a:</label>
+						<input type="text" class="form-control" id="target" name="target" autofocus="autofocus" placeholder="Escriba las direcciones de correo separadas por coma"/>
+					</div>
+					<div class="form-group">
+						<label for="message">Incluir instrucciones o un mensaje personal (opcional)</label>
+						<textarea class="form-control" rows="3" cols="30" id="message" name="message"></textarea>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+					<input class="btn btn-sm btn-primary extra-padding" type="submit" value="Enviar">
+				</div>
+			</form>
 			</div>
 		</div>
 	</div>
