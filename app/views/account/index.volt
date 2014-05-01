@@ -1,24 +1,32 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
 	<div class="row">
-		{# Botones de navegacion #}
-		{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
-
-		<h4 class="sectiontitle">Cuentas</h4>
-		<div class="bs-callout bs-callout-info">
-			Aqui puede ver, crear o editar las cuentas de la apliación, como también administrar los usuarios
-			de dichas cuentas.
+		<div class="col-md-12">
+			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 		</div>
-			{{ flashSession.output() }}
+	</div>
 
-
-		<div class="row">
-			<div class="col-md-3 col-md-offset-9">
-				<a href="{{ url('account/new') }}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-plus"></span> Crear nueva cuenta</a>
+	<div class="row">
+		<div class="col-md-12">
+			<h4 class="sectiontitle">Cuentas</h4>
+			<div class="bs-callout bs-callout-info">
+				Aqui puede ver, crear o editar las cuentas de la apliación, como también administrar los usuarios
+				de dichas cuentas.
 			</div>
 		</div>
-		<div class="space"></div>
 	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			{{ flashSession.output() }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-right">
+			<a href="{{ url('account/new') }}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-plus"></span> Crear nueva cuenta</a>
+		</div>
+	</div>
+	<br />
 	<div class="row">
 		<table class="table table-striped">
 			<thead>
@@ -37,7 +45,7 @@
 		 {%for item in page.items%}
 				<tr>
 					<td>
-						<a href="{{ url('account/show/') }}{{item.idAccount}}">{{item.companyName}}</a>
+						<h5><strong><a href="{{ url('account/show/') }}{{item.idAccount}}">{{item.companyName}}</a></strong></h5>
 						{{item.accountingMode}}<br/>
 						{{item.subscriptionMode}}
 					</td>

@@ -5,37 +5,40 @@
 		function preview(id) {
 			$.post("{{url('template/preview')}}/" + id, function(template){
 				var e = template.template;
-				$( "#preview-modal" ).empty();
-				$('#preview-modal').append('<span class="close-preview icon-remove icon-2x" data-dismiss="modal"></span>');
+				$('#preview-modal').empty();
 				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal').contents().find('body').append(e);
 			});
 		}
 	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-magic"></i>Plantillas globales y locales{% endblock %}
-{% block sectionsubtitle %}Listado de plantillas creadas en la cuenta{% endblock %}
 {% block content %}
 
 {# Botones de navegacion #}
 {{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'template']) }}
 
 	<div class="row">
+		<div class="col-sm-12">
 		<h4 class="sectiontitle">Plantillas</h4>
+		<div class="bs-callout bs-callout-info">
+			Administre plantillas que podrá usar como base en la creación de futuras campañas de correo.
+		</div>
+		</div>
+	</div>		
 
-		{{ flashSession.output()}}
-
-		<div class="pull-right">
-{#			<a href="{{ url('mail/list') }}" class="btn btn-default btn-sm extra-padding">
-				<i class="icon-plus"></i> Regresar a correos
-			</a>
-#}
+	<div class="row">
+		<div class="col-sm-12">
+			{{ flashSession.output()}}
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-12 text-right">
 			<a href="{{ url('template/new') }}" class="btn btn-default btn-sm extra-padding">
-				<i class="icon-plus"></i> Nueva Plantilla
+				Nueva Plantilla
 			</a>
 		</div>
-			
-
-	<div class="clearfix"></div>
+	</div>
+	
 	<hr></hr>
 	{#   tabs de plantillas   #}
 	<div class="row">
@@ -61,7 +64,10 @@
 										</div>
 										<div class="clearfix"></div>
 										<div class="btn-group">
-											<a href="#preview-modal" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Previsualizar"><span class="glyphicon glyphicon-eye-open"></span></a>
+											<button class="btn btn-default" onClick="preview({{t['id']}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+												<span class="glyphicon glyphicon-eye-open"></span>
+											</button>
+											
 											{% if t['idMail'] == null %}
 												{% if t['idAccount'] == null%}
 													{% if userObject.userrole == 'ROLE_SUDO'%}
@@ -106,8 +112,22 @@
 		</div>
 	</div>
 	
-	<div id="preview-modal" class="modal hide fade preview-modal"></div>
-
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-prevew-width">
+			<div class="modal-content modal-prevew-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Previsualización de plantilla</h4>
+				</div>
+				<div class="modal-body modal-prevew-body" id="preview-modal">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<div class="modal fade" id="modal-simple" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">

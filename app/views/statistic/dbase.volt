@@ -20,12 +20,13 @@
 		AmCharts.ready(function () {
 			chart = createPieChart(chartData);	
 			chart.write('summaryChart');
-			$("select").select2();
 		});
 		
 		function compareDbases() {
 			var id = $('#dbasestocompare').val();
-			window.location = "{{url('statistic/comparedbases')}}/{{dbase.idDbase}}/" + id;
+			if(id !== null) {
+				window.location = "{{url('statistic/comparedbases')}}/{{dbase.idDbase}}/" + id;
+			}
 		}
 	</script>
 {% endblock %}
@@ -49,11 +50,11 @@
 	
 	<div class="row">
 		<div class="col-sm-6">
-			<table class="table" style="border: 0px !important;" >
+			<table class="table table-striped">
 				<thead></thead>
 				<tbody>
 					<tr>
-						<td style="width: 50%;">
+						<td>
 							<div class="box">
 								<div class="box-section news with-icons">
 									<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
@@ -137,6 +138,19 @@
 					</tr>
 				</tbody>
 			</table>
+			
+			<div class="row">
+				<div class="col-sm-7">
+					<select id="dbasestocompare" class="form-control">
+						{%for cdb in compareDbase %}
+							<option value="{{cdb.id}}">{{cdb.name}}</option>
+						{%endfor%}
+					</select>
+				</div>
+				<div class="col-sm-5">
+					<button class="btn btn-sm btn-guardar extra-padding" onclick="compareDbases()">Comparar</button>
+				</div>
+			</div>	
 		</div>
 			
 		<div class="col-sm-6">
@@ -145,17 +159,4 @@
 	</div>
 	
 	<br />
-	
-	<div class="row">
-		<div class="col-sm-2">
-			<select id="dbasestocompare" style="width: 150px;">
-				{%for cdb in compareDbase %}
-					<option value="{{cdb.id}}">{{cdb.name}}</option>
-				{%endfor%}
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<button class="btn btn-blue" onclick="compareDbases()"  style="margin-left: 80px;">Comparar</button>
-		</div>
-	</div>	
 {% endblock %}

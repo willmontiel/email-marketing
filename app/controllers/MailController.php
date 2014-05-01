@@ -154,7 +154,7 @@ class MailController extends ControllerBase
 					$this->flashSession->error($msg);
 				}
 				$this->db->rollback();
-				return $this->response->redirect("mail/index");
+				return $this->response->redirect("mail/list");
 			}
 			
 			/* Mail Content Clone*/
@@ -174,15 +174,15 @@ class MailController extends ControllerBase
 						$this->flashSession->error($msg);
 					}
 					$this->db->rollback();
-					return $this->response->redirect("mail/index");
+					return $this->response->redirect("mail/list");
 				}
 			}
 			$this->db->commit();
-			return $this->response->redirect("mail/setup/" .$mailClone->idMail);
+			return $this->response->redirect("mail/compose/{$mailClone->idMail}");
 		}
 		
 		$this->flashSession->error('Un error no permitió duplicar el correo');
-		return $this->response->redirect("mail/index");
+		return $this->response->redirect("mail/list");
 	}
 	
 	public function deleteAction($idMail)

@@ -40,7 +40,7 @@
 	function writenewcategory() {
 		$('#all-category').hide();
 		$('#btnNewCategory').hide();
-		$('#category').find('#category').removeAttr('id');
+		$('#all-category').find('select').removeAttr('id');
 		
 		$('#new-category').show();
 		$('#btnSelectCategory').show();
@@ -54,7 +54,7 @@
 		
 		$('#all-category').show();
 		$('#btnNewCategory').show();
-		$('#category').find('select').attr('id', "category");
+		$('#all-category').find('select').attr('id', "category");
 	};
 	
 	function sendData() {
@@ -119,7 +119,7 @@
 			</div>
 			<div class="form-group" id="new-category" style="display: none;">
 				<label for="category" class="">Nueva Categoría: </label>
-				<input type="text" name="categoria" id="category" 	 class="form-control">
+				<input type="text" name="categoria" class="form-control">
 			</div>
 			<div class="form-group">
 				<a id="btnNewCategory" class="btn btn-default extra-padding" onclick="writenewcategory()" ><span class="glyphicon glyphicon-pencil"></span></a>
@@ -148,17 +148,16 @@
 	
 
 	<div class="modal fade" id="preview-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
+	  <div class="modal-dialog modal-prevew-width">
+	    <div class="modal-content modal-prevew-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
 		      </div>
-	      <div class="modal-body" id="modal-body-preview">
+	      <div class="modal-body modal-prevew-body" id="modal-body-preview">
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 	      </div>
 	    </div>
 	  </div>
