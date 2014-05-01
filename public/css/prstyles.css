@@ -831,3 +831,15 @@ span.required {
 .btn-for-modal-accordion {
 	width: 120px;
 }
+
+.modal-prevew-width {
+	width: 800px !important;
+}
+
+.modal-prevew-content {
+	height: 650px !important;
+}
+
+.modal-prevew-body {
+	height: 520px !important;
+}

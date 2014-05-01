@@ -7,7 +7,6 @@
 				var e = preview.preview;
 				$( "#preview-modal-content" ).empty();
 				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal-content').contents().find('body').append(e);
-				$('#preview-modal').modal('show');
 			});
 		}
 	</script>
@@ -231,24 +230,23 @@
 </div>
 
 #}
-<div id="preview-modal" class="modal fade preview-modal">
-	<div class="modal-dialog">
-		<div class="modal-content">
+
+
+<div id="preview-modal" class="modal fade">
+	<div class="modal-dialog modal-prevew-width">
+		<div class="modal-content modal-prevew-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Previsualización de correo</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Previsualización</h4>
 			</div>
-			<div id="preview-modal-content" class="modal-body">
-				<div id="content-template">
-					un momento...
-				</div>
-			</div>
+			<div class="modal-body modal-prevew-body" id="preview-modal-content"></div>
 			<div class="modal-footer">
-				<button class="btn btn-black" data-dismiss="modal">x</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
 	</div>
 </div>
+
 
 <script type="text/javascript">
 	$(document).on("click", ".ShowDialog", function () {
