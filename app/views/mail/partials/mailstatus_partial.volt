@@ -22,11 +22,11 @@
 						</div>
 					</div>
 				</div>
-					<div class="col-md-9">
+					<div class="col-md-8">
 						<h4>El correo está listo para enviarse en la fecha y hora programadas</h4>
 					</div>
 
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<button class="ShowDialogSendTest btn btn-primary btn-sm extra-padding" data-toggle="modal" data-target="#myModal">Enviar prueba</button>
 						<button onClick="sendMail()" class="btn btn-success btn-sm extra-padding" id="send-mail">Continuar</button>
 					</div>

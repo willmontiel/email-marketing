@@ -280,6 +280,25 @@
 	<script type="text/x-handlebars" data-template-name="contacts/import">
 		<div class="row">
 			<h4 class="sectiontitle">Importar contactos desde archivo .csv a <span>Lista de Iván</span></h4>
+			<div class="col-sm-12 hidden-md hidden-lg">
+				<div class="alert alert-success">
+					<div class="row">
+						<div class="col-sm-2">
+							<span class="glyphicon glyphicon-info-sign"></span>
+						</div>
+						<div class="col-md-9">
+							<p>Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc permiten crear y editar archivos CSV fácilmente.</p>
+						<p>El archivo debe ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
+						<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block" alt="" /></p>
+						<p>También puede ser una tabla sin encabezados.</p>
+						<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
+						<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
+						<p></p>
+						</div>
+					</div>
+				</div>
+
+			</div>
 			<div class="col-md-6">
 				<img src="{{url('')}}b3/images/step1-import.png" class="" alt="" />
 				<div class="space"></div>
@@ -317,7 +336,7 @@
 #}	
 			</div>
 
-			<div class="col-md-6">
+			<div class="hidden-xs hidden-sm col-md-5">
 				<div class="alert alert-success">
 					<div class="row">
 						<div class="col-sm-2">
