@@ -20,12 +20,13 @@
 		AmCharts.ready(function () {
 			chart = createPieChart(chartData);	
 			chart.write('summaryChart');
-			$("select").select2();
 		});
 		
 		function compareLists() {
 			var id = $('#liststocompare').val();
-			window.location = "{{url('statistic/comparelists')}}/{{contactList.idContactlist}}/" + id;
+			if(id !== null) {
+				window.location = "{{url('statistic/comparelists')}}/{{contactList.idContactlist}}/" + id;
+			}
 		}
 	</script>
 {% endblock %}
@@ -33,17 +34,26 @@
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
 	<div class="row">
-		<div class="span12 ">
-			<h3>{{contactList.name}} <small>{{statisticsData.sent}} correos enviados</small></h3>
+		<div class="col-sm-12">
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-12">
+			<h4 class="sectiontitle">Estadisticas de lista de contactos</h4>
+			<div class="bs-callout bs-callout-info">
+				<h3>{{contactList.name}} <small>{{statisticsData.sent}} correos enviados</small></h3>
+			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="span6">
-			<table class="table" style="border: 0px !important;" >
+		<div class="col-sm-6">
+			<table class="table table-striped">
 				<thead></thead>
 				<tbody>
 					<tr>
-						<td style="width: 50%;">
+						<td>
 							<div class="box">
 								<div class="box-section news with-icons">
 									<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
@@ -127,23 +137,21 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="pull-left">
-				<div class="span3">
-					<select id="liststocompare" style="width: 150px;">
+			<div class="row">
+				<div class="col-sm-7">
+					<select id="liststocompare" class="form-control">
 						{%for clt in compareList %}
 							<option value="{{clt.id}}">{{clt.name}}</option>
 						{%endfor%}
 					</select>
 				</div>
-				<div class="span2">
-					<button class="btn btn-blue" onclick="compareLists()"  style="margin-left: 80px;">Comparar</button>
+				<div class="col-sm-5">
+					<button class="btn btn-sm btn-guardar extra-padding" onclick="compareLists()">Comparar</button>
 				</div>
 			</div>
 		</div>
-		<div class="span6">
-			<div class="box">
-				<div id="summaryChart" style="width: 640px; height: 400px;"></div>
-			</div>
+		<div class="col-sm-6">
+			<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 		</div>
 	</div>
 {% endblock %}

@@ -33,12 +33,13 @@
 			chart1.write('summaryChart1');
 			chart2 = createPieChart(chartData2);	
 			chart2.write('summaryChart2');
-			$("select").select2();
 		});
 		
 		function compareDbases() {
 			var id = $('#dbasestocompare').val();
-			window.location = "{{url('statistic/comparedbases')}}/{{dbase1.idDbase}}/" + id;
+			if(id !== null) {
+				window.location = "{{url('statistic/comparedbases')}}/{{dbase1.idDbase}}/" + id;
+			}
 		}
 			
 	</script>
@@ -46,13 +47,18 @@
 {% block sectiontitle %}<i class="icon-bar-chart icon-2x"></i>Estadisticas{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
-<div class="row">
-	<div class="span12">
-		<div class="span2 pull-right">
-			<button class="btn btn-blue" onclick="compareDbases()">Comparar</button>
+
+	<div class="row">
+		<div class="col-sm-12">
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 		</div>
-		<div class="span3 pull-right">
-			<select id="dbasestocompare">
+	</div>
+
+	<div class="space"></div>
+	
+	<div class="row">
+		<div class="col-md-3 col-md-offset-7">
+			<select id="dbasestocompare" class="form-control">
 				{%for cdb in compareDbase %}
 					<option value="{{cdb.id}}"
 						{%if cdb.id == dbase2.idDbase%}
@@ -62,35 +68,29 @@
 				{%endfor%}
 			</select>
 		</div>
-	</div>
-</div>
-<br />
-<div class="row">
-	<div class="span6">
-		<div class="leftComponent">
-			<div class="componentname">
-				<h4>{{dbase1.name}}</h4>
-			</div>
-			<div class="box">
-				<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
-			</div>
+		<div class="col-md-2">
+			<button class="btn btn-sm btn-guardar extra-padding" onclick="compareDbases()">Comparar</button>
 		</div>
 	</div>
-	<div class="span6">
-		<div class="rightComponent">
-			<div class="componentname">
-				<h4>{{dbase2.name}}</h4>
-			</div>
-			<div class="box">
-				<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
-			</div>
+	
+	<div class="space"></div>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<h4 class="sectiontitle">{{dbase1.name}}</h4>
+			<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
+		</div>
+		<div class="col-md-6">
+			<h4 class="sectiontitle">{{dbase2.name}}</h4>
+			<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
 		</div>
 	</div>
-</div>
-<div class="row">
-	<div class="offset3 span6">
-		<div class="componentsummary">
-			<table class="table table-bordered">
+
+	<div class="space"></div>
+	
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<table class="table table-striped">
 				<tr>
 					<td>
 						<div class="optiontotal pull-right">
@@ -202,5 +202,4 @@
 			</table>
 		</div>
 	</div>
-</div>
 {% endblock %}
