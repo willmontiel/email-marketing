@@ -1,58 +1,60 @@
 {{'{{#unless isHeaderExpanded }}'}}
 	{{'{{#unless isTargetExpanded }}'}}
 			<div {{'{{bind-attr class=": headerEmpty:bg-warning: "}}'}}>
-				<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }}>
-				{{'{{#if headerEmpty }}'}}
-					<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
-					<dt>Asunto:</dt> <dd>_______________________________</dd>
-				{{'{{else}}'}}
-					<dt>De:</dt> <dd>{{'{{fromSummary}}'}}</dd>
-					<dt>Asunto:</dt> <dd>{{'  {{subject}} '}}</dd>
-					<dt></dt>
-					<dd>
-						{{'{{#if fbaccountsel }}'}}
-						<img src="{{url('images')}}/share_facebook_image_24.png">
-						{{'{{/if}}'}}
-						{{'{{#if twaccountsel }}'}}
-						<img src="{{url('images')}}/share_twitter_image_24.png">
-						{{'{{/if}}'}}
-					</dd>
-				{{'{{/if}}'}}
-				</dl>
-				<dl class="dl-horizontal" {{ '{{action "expandTarget" this}}' }}>
-				{{'{{#if targetEmpty }}'}}
-					<dt>Para:</dt>
-					<dd><i>Elija los destinatarios...</i></dd>
-				{{'{{else}}'}}
-					<dt>Para:</dt>
-					<dd>
-						{{ '{{#if dbaselist}}' }}
-							{{ '{{#each dbaselist}}' }}
-								Base de datos: {{' {{name}} '}}, 
-							{{ '{{/each}}' }}
-						{{ '{{/if}}' }}
+				<div class="wrapper">
+					<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }}>
+					{{'{{#if headerEmpty }}'}}
+						<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
+						<dt>Asunto:</dt> <dd>_______________________________</dd>
+					{{'{{else}}'}}
+						<dt>De:</dt> <dd>{{'{{fromSummary}}'}}</dd>
+						<dt>Asunto:</dt> <dd>{{'  {{subject}} '}}</dd>
+						<dt></dt>
+						<dd>
+							{{'{{#if fbaccountsel }}'}}
+							<img src="{{url('images')}}/share_facebook_image_24.png">
+							{{'{{/if}}'}}
+							{{'{{#if twaccountsel }}'}}
+							<img src="{{url('images')}}/share_twitter_image_24.png">
+							{{'{{/if}}'}}
+						</dd>
+					{{'{{/if}}'}}
+					</dl>
+					<dl class="dl-horizontal" {{ '{{action "expandTarget" this}}' }}>
+					{{'{{#if targetEmpty }}'}}
+						<dt>Para:</dt>
+						<dd><i>Elija los destinatarios...</i></dd>
+					{{'{{else}}'}}
+						<dt>Para:</dt>
+						<dd>
+							{{ '{{#if dbaselist}}' }}
+								{{ '{{#each dbaselist}}' }}
+									Base de datos: {{' {{name}} '}}, 
+								{{ '{{/each}}' }}
+							{{ '{{/if}}' }}
 
-						{{ '{{#if list}}' }}
-							{{ '{{#each list}}' }}
-								Lista de contactos: {{' {{name}} '}}, 
-							{{ '{{/each}}' }}
-						{{ '{{/if}}' }}
+							{{ '{{#if list}}' }}
+								{{ '{{#each list}}' }}
+									Lista de contactos: {{' {{name}} '}}, 
+								{{ '{{/each}}' }}
+							{{ '{{/if}}' }}
 
-						{{ '{{#if segmentlist}}' }}
-							{{ '{{#each segmentlist}}' }}
-								Segmento: {{' {{name}} '}}, 
-							{{ '{{/each}}' }}
-						{{ '{{/if}}' }}
-						
-						{{ '{{#unless filterEmpty}}' }}
-							(filtro)
-						{{ '{{/unless}}' }}
-					</dd>
-					<dd>
-						Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podría variar)
-					</dd>
-				{{'{{/if}}'}}
-				</dl>
+							{{ '{{#if segmentlist}}' }}
+								{{ '{{#each segmentlist}}' }}
+									Segmento: {{' {{name}} '}}, 
+								{{ '{{/each}}' }}
+							{{ '{{/if}}' }}
+							
+							{{ '{{#unless filterEmpty}}' }}
+								(filtro)
+							{{ '{{/unless}}' }}
+						</dd>
+						<dd>
+							Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podría variar)
+						</dd>
+					{{'{{/if}}'}}
+					</dl>
+				</div>	
 			</div>
 	{{ '{{/unless}}' }}
 {{ '{{/unless}}' }}
@@ -95,12 +97,11 @@
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="facebook">
-								<br />
+
 								{#
 								{% if fbsocials %}
 								#}
-									<div class="add_facebook_account"><label>Seleccione una cuenta de facebook, si aún no ha configurado alguna <a onclick="new_sn_account('{{fbloginUrl}}')">haga click aqui</a></label></div>
-									<br />
+								<div class="wrapper">
 									{{ '{{view Ember.Select
 											multiple="true"
 											contentBinding="App.fbaccounts"
@@ -110,28 +111,36 @@
 											id="accounts_facebook"
 											class="form-control"}}'
 									 }}
-									<div class="fbdescription bs-callout bs-callout-info">
-										<div class="">
-											{{'{{view Ember.TextArea valueBinding="fbmessagecontent" id="fbmessagecontent" class="form-control" placeholder="Comentario..."}}'}}
+								</div>
+									<div class="fbdescription wrap wrapper">
+										<div class="form-group">
+											<div class="col-md-11">
+												{{'{{view Ember.TextArea valueBinding="fbmessagecontent" id="fbmessagecontent" class="form-control" placeholder="Comentario..."}}'}}
+											</div>
 										</div>
 
-										<div class="clearfix">
-											<div class="container-fb-first">
+										<div class="img-prev">
+											<div class="container-fb-first col-md-3">
 												<div class="edit-fb-image-container">
 													<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil"></div>
 												</div>
 												{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
 												<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154" />
 											</div>
-											<div class="container-fb-second">
-												<div class="">
-													{{'{{view Ember.TextArea valueBinding="fbtitlecontent" id="fbtitlecontent" class="form-control" placeholder="Título de la publicación..."}}'}}
+											<div class="col-md-9">
+												<div class="form-group">
+													<div class="col-md-12">
+														{{'{{view Ember.TextArea valueBinding="fbtitlecontent" id="fbtitlecontent" class="form-control" placeholder="Título de la publicación..."}}'}}
+													</div>
 												</div>
-												<div class="">
-													{{'{{view Ember.TextArea valueBinding="fbdescriptioncontent" id="fbdescriptioncontent" class="form-control" placeholder="Descripción de la publicación..."}}'}}
+												<div class="form-group">
+													<div class="col-md-12">
+														{{'{{view Ember.TextArea valueBinding="fbdescriptioncontent" id="fbdescriptioncontent" class="form-control" placeholder="Descripción de la publicación..."}}'}}
+													</div>
 												</div>
 											</div>
 										</div>
+										<div class="clearfix"></div>
 									</div>
 								{#
 								{% else %}
@@ -141,9 +150,7 @@
 							</div>
 							<div class="tab-pane fade" id="twitter">
 								{% if twsocials %}
-									<br />
-									<div class="add_twitter_account"><label>Seleccione una cuenta de twitter, si aún no ha configurado alguna <a onclick="new_sn_account('{{twloginUrl}}')">haga click aquí</a></div>
-									<br />
+								<div class="wrapper">
 									{{ '{{view Ember.Select
 											multiple="true"
 											contentBinding="App.twaccounts"
@@ -153,15 +160,15 @@
 											id="accounts_twitter"
 											class="form-control"}}'
 									 }}
-									<br />
-									<div class="twdescription">
+								</div>
+									<div class="twdescription wrap wrapper">
 										<label>Mensaje del Tweet: </label>
 										{{'{{view Ember.TextArea valueBinding="twpublicationcontent" id="twpublicationcontent" class="form-control" placeholder="Tweet..."}}'}}
 										<div class="number-of-tweet-characters">
 										<span id="tweet-char-number" class="label label-blue">1</span>
 										</div>
 									</div>
-									<br />
+
 								{% else %}
 									No tiene una cuenta de twitter configurada, si desea puede configurar una.
 								{% endif %}

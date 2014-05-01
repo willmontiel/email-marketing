@@ -808,15 +808,13 @@ span.required {
 	position: absolute;
 }
 .container-fb-first {
-	float: left;
-	margin-right: 15px;
 	width: 154px;
 	height: 154px;
 	background-color: #FAFAFA;
+	padding-left: 0;
 }
 .container-fb-second {
 	float: left;
-	width: 67%;
 }
 .edit-fb-image-tool {
 	position: relative;
@@ -831,6 +829,19 @@ span.required {
 .btn-for-modal-accordion {
 	width: 120px;
 }
+
+.modal-prevew-width {
+	width: 800px !important;
+}
+
+.modal-prevew-content {
+	height: 650px !important;
+}
+
+.modal-prevew-body {
+	height: 520px !important;
+}
+
 .dz-message {
 	text-align: center;
 	font-family: inherit;

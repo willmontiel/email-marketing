@@ -25,13 +25,7 @@
 				</div>
 			</div>
 		</div>		
-		<div class="wrapper">
-			<div class="col-md-12">
-				<div id="show-content">
-					<h4>Preview</h4>
-				</div>
-			</div>
-		</div>
+		
 		<div class="row" id="plaintext-content" style="display: none;">
 			<div class="col-md-12">
 				<div >
