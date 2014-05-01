@@ -269,7 +269,20 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		if (!schedule) {
 			return true;
 		}
-		this.set('scheduleSummary', schedule);
+
+		var date = moment(schedule, "DD-MM-YYYY HH:mm");
+		var day = date.date();
+		var m = date.month() + 1;
+		var month = moment('' + m).format('MMMM');
+		var year = date.year();
+		var hour = date.hour();
+		var minutes = date.minutes();
+		var time = hour + ':' + minutes;
+		
+		this.set('scheduleDay', day);
+		this.set('scheduleMonth', month);
+		this.set('scheduleYear', year);
+		this.set('scheduleTime', time);
 		return false;
 	}.property('content.scheduleDate'),
 	
