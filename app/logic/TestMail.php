@@ -56,7 +56,7 @@ class TestMail
 			$content =  utf8_decode($editorObj->replacespecialchars($editorObj->render()));
 		}
 		else {
-			$content = $this->mailContent->content;
+			$content = html_entity_decode($this->mailContent->content);
 		}
 		
 		if ($this->message != null || !empty($this->message)) {
