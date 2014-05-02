@@ -59,7 +59,7 @@ class TestMail
 			$content = html_entity_decode($this->mailContent->content);
 		}
 		
-		if ($this->message != null || !empty($this->message)) {
+		if (!empty($this->message)) {
 			$replace = '<body>
 							<center>
 								<table border="0" cellpadding="0" cellspacing="0" width="600px" style="border-collapse:collapse;background-color:#444444;border-top:0;border-bottom:0">
