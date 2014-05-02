@@ -135,7 +135,7 @@
 										<p>Si desea crear nuevos contactos elija una de las opciones de arriba.
 											<ul>
 												<li><b>Crear un nuevo contacto:</b> para ingresar datos de un solo contacto</li>
-												<li><b>Crear varios contactos:</b> puede crear múltiples contactos rapidamente</li>
+												<li><b>Crear contactos rápidamente:</b> puede crear múltiples contactos rápidamente</li>
 												<li><b>Importar contactos:</b> copie contactos de otros sistemas fácilmente</li>
 											</ul>
 										</p>
@@ -160,6 +160,18 @@
 		</div>
 		{{ '{{/if}} '}}
 		<h4 class="sectiontitle">Crear nuevo contacto</h4>
+		<div class="col-sm-12 hidden-md hidden-lg">
+			<div class="alert alert-success">
+				<div class="row">
+					<div class="col-sm-2">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</div>
+					<div class="col-md-9">
+						<p>Cree un nuevo contacto, basta con una dirección de correo electrónico y si desea otros datos básicos como nombre y apellido.</p>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="col-md-5">
 			<form  class="form-horizontal" role="form">
 				{{ '{{#if errors.errormsg}}' }}
@@ -210,8 +222,9 @@
 					</div>
 				</div>
 			</form>
+			<div class="clearfix"></div>
 		</div>
-		<div class="col-md-6">
+		<div class="hidden-xs hidden-sm col-md-5">
 			<div class="alert alert-success">
 				<div class="row">
 					<div class="col-sm-2">
@@ -228,6 +241,14 @@
 	<script type="text/x-handlebars" data-template-name="contacts/newbatch">
 		<div class="row">
 			<h4 class="sectiontitle">Crear contactos rápidamente</h4>
+			<div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
+				<div class="alert alert-success">
+					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
+					<div class="space"></div>
+					<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
+					<p>Cree hasta 30 contactos por este medio</p>
+				</div>
+			</div>
 			<div class="col-md-5">
 				<form method="post" action="{{url('contacts/newbatch')}}/{{datalist.idContactlist}}" role="form">
 					<div class="form-group">
@@ -246,9 +267,9 @@
 					</div>
 				</form>
 			</div>
-			<div class="col-md-6">
+			<div class="hidden-xs hidden-sm col-md-6">
 				<div class="alert alert-success">
-					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block" alt="" />
+					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
 					<div class="space"></div>
 					<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
 					<p>Cree hasta 30 contactos por este medio</p>
@@ -272,15 +293,16 @@
 					{{ '{{errors.errormsg}}' }}
 				</div>
 			{{ '{{/if}}' }}
-			<button {{'{{action delete this}}'}} class="btn btn-danger btn-sm extra-padding">Eliminar</button>
+			<button {{'{{action delete this}}'}} class="btn btn-default btn-delete btn-sm extra-padding">Eliminar</button>
 			<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
 		</div>
+	
 	</script>
 		
 	<script type="text/x-handlebars" data-template-name="contacts/import">
 		<div class="row">
 			<h4 class="sectiontitle">Importar contactos desde archivo .csv a <span>Lista de Iván</span></h4>
-			<div class="col-sm-12 hidden-md hidden-lg">
+			<div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
 				<div class="alert alert-success">
 					<div class="row">
 						<div class="col-sm-2">
@@ -288,19 +310,18 @@
 						</div>
 						<div class="col-md-9">
 							<p>Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc permiten crear y editar archivos CSV fácilmente.</p>
-						<p>El archivo debe ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
-						<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block" alt="" /></p>
-						<p>También puede ser una tabla sin encabezados.</p>
-						<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
-						<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
-						<p></p>
+							<p>El archivo debe ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
+							<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block width-fix" alt="" /></p>
+							<p>También puede ser una tabla sin encabezados.</p>
+							<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
+							<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
+							<p></p>
 						</div>
 					</div>
 				</div>
-
 			</div>
 			<div class="col-md-6">
-				<img src="{{url('')}}b3/images/step1-import.png" class="" alt="" />
+				<img src="{{url('')}}b3/images/step1-import.png" class="width-fix" alt="" />
 				<div class="space"></div>
 				<form method="post" class="form-horizontal"  action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data" role="form">
 					<div class="form-group">
@@ -335,8 +356,7 @@
 				</div>
 #}	
 			</div>
-
-			<div class="hidden-xs hidden-sm col-md-5">
+			<div class="hidden-xs hidden-sm col-md-6">
 				<div class="alert alert-success">
 					<div class="row">
 						<div class="col-sm-2">
@@ -345,7 +365,7 @@
 						<div class="col-md-9">
 							<p>Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc permiten crear y editar archivos CSV fácilmente.</p>
 						<p>El archivo debe ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
-						<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block" alt="" /></p>
+						<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block width-fix" alt="" /></p>
 						<p>También puede ser una tabla sin encabezados.</p>
 						<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
 						<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
@@ -414,13 +434,13 @@
 				</table>
 				<ul>
 					<li>
-						Si desea ingresar mas campos, y no desea poner cabecera puede separar por comas (,), punto 
+						Si desea ingresar más campos, y no desea poner encabezado puede separar por comas (,), punto 
 						y coma (;), o barras (/),  cada uno de los campos, luego la aplicación se encargará de
 						separarlos, eso si asegurese de cumplir los criterios, por ejemplo:
 					</li>
 				</ul>
 				<div class="row">
-					<h4 class="sectiontitle">Archivo .csv con cabecera</h4>				
+					<h4 class="sectiontitle">Archivo .csv con encabezado</h4>				
 					<table class="table table-striped table-contacts">
 						<thead></thead>
 						<tbody>
