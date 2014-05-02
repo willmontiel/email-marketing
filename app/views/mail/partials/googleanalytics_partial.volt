@@ -41,11 +41,11 @@
 				</form>
 			</div>
 		{{ '{{else}}' }}
-			<div class="wrapper bg-danger">
-				<div class="col-md-7">
+			<div class="row wrapper bg-danger">
+				<div class="col-md-8">
 					<p>No se encontraron enlaces en el contenido html, para continuar agregue al menos uno.</p>
 				</div>
-				<div class="col-md-2">
+				<div class="col-md-4 text-right">
 					<button class="btn btn-default btn-sm extra-padding" {{ '{{action "expandGA" this}}' }}>Regresar</button>
 				</div>
 			</div>

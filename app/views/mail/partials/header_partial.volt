@@ -97,10 +97,7 @@
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="facebook">
-
-								{#
 								{% if fbsocials %}
-								#}
 								<div class="wrapper">
 									{{ '{{view Ember.Select
 											multiple="true"
@@ -142,25 +139,25 @@
 										</div>
 										<div class="clearfix"></div>
 									</div>
-								{#
 								{% else %}
-									No tiene una cuenta de facebook configurada, si desea puede configurar una.
+									<div class="wrapper bg bg-warning">
+										No tiene una cuenta de facebook configurada
+									</div>	
 								{% endif %}
-								#}
 							</div>
 							<div class="tab-pane fade" id="twitter">
 								{% if twsocials %}
-								<div class="wrapper">
-									{{ '{{view Ember.Select
-											multiple="true"
-											contentBinding="App.twaccounts"
-											optionValuePath="content.id"
-											optionLabelPath="content.name"
-											selectionBinding="twaccountsel"
-											id="accounts_twitter"
-											class="form-control"}}'
-									 }}
-								</div>
+									<div class="wrapper">
+										{{ '{{view Ember.Select
+												multiple="true"
+												contentBinding="App.twaccounts"
+												optionValuePath="content.id"
+												optionLabelPath="content.name"
+												selectionBinding="twaccountsel"
+												id="accounts_twitter"
+												class="form-control"}}'
+										 }}
+									</div>
 									<div class="twdescription wrap wrapper">
 										<label>Mensaje del Tweet: </label>
 										{{'{{view Ember.TextArea valueBinding="twpublicationcontent" id="twpublicationcontent" class="form-control" placeholder="Tweet..."}}'}}
@@ -168,9 +165,10 @@
 										<span id="tweet-char-number" class="label label-blue">1</span>
 										</div>
 									</div>
-
 								{% else %}
-									No tiene una cuenta de twitter configurada, si desea puede configurar una.
+									<div class="wrapper bg bg-warning">
+										No tiene una cuenta de twitter configurada
+									</div>	
 								{% endif %}
 							</div>
 						</div>

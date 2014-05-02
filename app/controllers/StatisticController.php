@@ -118,8 +118,10 @@ class StatisticController extends ControllerBase
 				$r = $createReport->createReport();
 			}
 			catch (Exception $e) {
-				$this->logger->log("E: " . $e->getMessage());
-				$this->response->redirect('error');
+				$this->logger->log("Exception: " . $e->getMessage());
+				$this->traceFail("Creating report, idMail: {$id}, type: {$type}");
+				$this->flashSession("Ha ocurrido un error, por favor contacte al administrador");
+				$this->response->redirect("statistic/mail/{$id}");
 			}
 			
 			$report = Mailreportfile::findFirst(array(
@@ -128,7 +130,13 @@ class StatisticController extends ControllerBase
 								2 => $id,
 								3 => $type)
 			));
-		
+			
+			if (!$report) {
+				$this->traceFail("Creating report, report do not exists, idMail: {$id}, type: {$type}");
+				$this->flashSession("Ha ocurrido un error, por favor contacte al administrador");
+				$this->response->redirect("statistic/mail/{$id}");
+			}
+			
 			$this->view->disable();
 
 			header('Content-type: application/csv');
@@ -147,12 +155,17 @@ class StatisticController extends ControllerBase
 			echo PHP_EOL;
 			echo 'FECHA,DIRECCIÓN DE CORREO ELÉCTRONICO' .PHP_EOL;
 			readfile($this->mailReportsDir->reports . $report->name);
+			
+			$this->traceSuccess("Creating report, idMail: {$id}, type: {$type}");
+		}
+		else {
+			$this->flashSession("No existe el correo, por favor verifique la información");
+			$this->response->redirect("error");
 		}
 	}
 	
-	public function comparemailsAction($idMail, $idMailCompare) {
-		$log = $this->logger;
-		
+	public function comparemailsAction($idMail, $idMailCompare) 
+	{
 		$mail1 = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idAccount = ?2 AND status = "Sent"',
 			'bind' => array(1 => $idMail, 2 => $this->user->account->idAccount)
@@ -164,12 +177,21 @@ class StatisticController extends ControllerBase
 		));
 		
 		if($mail1 && $mail2) {
-			$statWrapper = new StatisticsWrapper();
-			$statWrapper->setAccount($this->user->account);
+			try {
+				$statWrapper = new StatisticsWrapper();
+				$statWrapper->setAccount($this->user->account);
 
-			$mailStat1 = $statWrapper->showMailStatistics($mail1);
+				$mailStat1 = $statWrapper->showMailStatistics($mail1);
 
-			$mailStat2 = $statWrapper->showMailStatistics($mail2);
+				$mailStat2 = $statWrapper->showMailStatistics($mail2);
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: {$e}");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+				$this->traceFail("Comparing mails, idMail1: {$idMail} / idMail2: {$idMailCompare}");
+				$this->response->redirect("statistic/mail/{$idMail}");
+			}
+			
 			$this->logger->log(print_r($mailStat1['statisticsData'], true));
 			if($mailStat1 && $mailStat2) {
 				$this->view->setVar("mail1", $mail1);
@@ -179,6 +201,7 @@ class StatisticController extends ControllerBase
 				$this->view->setVar("summaryChartData2", $mailStat2['summaryChartData']);
 				$this->view->setVar("statisticsData2", $mailStat2['statisticsData']);
 				$this->view->setVar("compareMail", $mailStat1['compareMail']);
+				$this->traceSuccess("Comparing mails, idMail1: {$idMail} / idMail2: {$idMailCompare}");
 			}
 			else {
 				$this->response->redirect('error');
