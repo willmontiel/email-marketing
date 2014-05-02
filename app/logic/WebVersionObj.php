@@ -23,7 +23,6 @@ class WebVersionObj extends BaseWrapper
 			throw new \InvalidArgumentException("Error mail's content is empty");
 		}
 		else if ($mail->type == 'Editor') {
-			Phalcon\DI::getDefault()->get('logger')->log('Contenido del correo ' . $mailContent->content);
 			$htmlObj = new HtmlObj();
 			$htmlObj->assignContent(json_decode($mailContent->content));
 			$html = $htmlObj->render();
@@ -34,8 +33,9 @@ class WebVersionObj extends BaseWrapper
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $mail, $this->urlManager);
 		$prepareMail = new PrepareMailContent($linkService, $imageService);
+		Phalcon\DI::getDefault()->get('logger')->log('Sin procesar ' . $html);
 		list($content, $links) = $prepareMail->processContent($html);
-		
+		Phalcon\DI::getDefault()->get('logger')->log('Procesado ' . $content);
 		$contact = get_object_vars($contact);
 		
 		if($contact['idContact'] === 0) {
