@@ -55,10 +55,21 @@ class WebversionController extends ControllerBase
 			'conditions' => 'idContact = ?1',
 			'bind' => array(1 => $idContact)
 		));
-		if ($mail && $mailContent && $contact) {
+			
+		if ($mail && $mailContent) {
+			
+			if(!$contact) {
+				$contact = new Contact();
+				$contact->idContact = 0;
+				$dbase = new Dbase();
+			}
+			else {
+				$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
+			}
+			
 			$account = Account::findFirstByIdAccount($mail->idAccount);
 			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
-			$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
+			
 
 			try{
 				$webversionobj = new WebVersionObj();
@@ -67,10 +78,10 @@ class WebversionController extends ControllerBase
 				$webversionobj->setUrlDomain($domain);
 				$html = $webversionobj->createWebVersion($mail, $mailContent, $contact, $social);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$this->logger->log('Exception ' . $e);
 			}
-			catch (InvalidArgumentException $e) {
+			catch (\InvalidArgumentException $e) {
 				$this->logger->log('Exception ' . $e);
 			}
 			

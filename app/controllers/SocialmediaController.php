@@ -111,14 +111,16 @@ class SocialmediaController extends ControllerBase
 			$u = $linkdecoder->encodeLink('webversion/share', $p);
 			$url = urlencode($u);
 			
-			$trackingObj = new TrackingObject();
-			$trackingObj->setSendIdentification($idMail, $idContact);
-			$mxc = $trackingObj->getMxC();
+			if( $idContact != 0 ) {
+				$trackingObj = new TrackingObject();
+				$trackingObj->setSendIdentification($idMail, $idContact);
+				$mxc = $trackingObj->getMxC();
 
-			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($social);
-			$instance->setMxc($mxc);
-			$instance->trackShare();
-			$instance->save();
+				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($social);
+				$instance->setMxc($mxc);
+				$instance->trackShare();
+				$instance->save();
+			}
 			
 			switch ($social) {
 				case 'facebook':

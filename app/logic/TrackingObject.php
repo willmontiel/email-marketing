@@ -37,7 +37,7 @@ class TrackingObject
 		));
 
 		if (!$this->mxc) {
-			throw new Exception("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
+			throw new \Exception("Couldn't find a matching email-contact pair for idMail={$idMail} and idContact={$idContact}");
 		}
 		
 		if ($idEmail != null) {

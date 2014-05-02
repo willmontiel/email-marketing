@@ -25,7 +25,7 @@ class WebVersionObj extends BaseWrapper
 		else if ($mail->type == 'Editor') {
 			$htmlObj = new HtmlObj();
 			$htmlObj->assignContent(json_decode($mailContent->content));
-			$html = $htmlObj->render();
+			$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
 		}
 		else {
 			$html =  html_entity_decode($mailContent->content);
@@ -33,10 +33,19 @@ class WebVersionObj extends BaseWrapper
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $mail, $this->urlManager);
 		$prepareMail = new PrepareMailContent($linkService, $imageService);
+		
 		list($content, $links) = $prepareMail->processContent($html);
-		$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
-		$cf = $mailField->getCustomFields();
-
+		
+		$contact = get_object_vars($contact);
+		
+		if($contact['idContact'] === 0) {
+			$cf = 'No Fields';
+		}
+		else {
+			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
+			$cf = $mailField->getCustomFields();
+		}
+		
 		switch ($cf) {
 			case 'No Fields':
 				$customFields = false;
@@ -51,14 +60,15 @@ class WebVersionObj extends BaseWrapper
 				$customFields = $cf;
 				break;
 		}
-		$contact = get_object_vars($contact);
+		
 		if ($fields) {
 			$c = $mailField->processCustomFields($contact);
 			$html = $c['html'];
 		}
 		else {
-			$html = $content->html;
+			$html = $content;
 		}
+
 		$trackingObj = new TrackingUrlObject();
 		if($social) {
 			$htmlWithTracking = $trackingObj->getSocialTrackingUrl($html, $mail->idMail, $contact['idContact'], $links, $social);
@@ -66,7 +76,9 @@ class WebVersionObj extends BaseWrapper
 		else {
 			$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $contact['idContact'], $links);
 		}
+		
 		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $contact['idContact'], $social);
+		
 		return $htmlFinal;
 	}
 	

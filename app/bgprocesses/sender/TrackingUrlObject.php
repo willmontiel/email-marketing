@@ -115,6 +115,7 @@ class TrackingUrlObject
 		$this->links['replace'][] = $url;
 		
 		$this->unsubscribe_link = $url;
+		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de desuscripcion: ' . $url);
 	}
 	
 	public function getClicksTrackingUrl($social = false)
