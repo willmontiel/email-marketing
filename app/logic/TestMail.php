@@ -9,6 +9,13 @@ class TestMail
 	public $account;
 	public $domain;
 	public $urlManager;
+	public $logger;
+
+
+	public function __construct() 
+	{
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
+	}
 	
 	public function setMail(Mail $mail)
 	{
@@ -60,6 +67,7 @@ class TestMail
 		}
 		
 		if (!empty($this->message)) {
+			$this->logger->log("Entra");
 			$replace = '<body>
 							<center>
 								<table border="0" cellpadding="0" cellspacing="0" width="600px" style="border-collapse:collapse;background-color:#444444;border-top:0;border-bottom:0">
@@ -78,6 +86,7 @@ class TestMail
 		else {
 			$this->body = $content;
 		}
+		$this->logger->log("Contenido: {$this->body}");
 	}
 	
 	protected function createPlaintext()
