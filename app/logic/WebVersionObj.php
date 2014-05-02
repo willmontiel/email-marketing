@@ -23,6 +23,7 @@ class WebVersionObj extends BaseWrapper
 			throw new \InvalidArgumentException("Error mail's content is empty");
 		}
 		else if ($mail->type == 'Editor') {
+			Phalcon\DI::getDefault()->get('logger')->log('Contenido del correo ' . $mailContent->content);
 			$htmlObj = new HtmlObj();
 			$htmlObj->assignContent(json_decode($mailContent->content));
 			$html = $htmlObj->render();
@@ -75,9 +76,9 @@ class WebVersionObj extends BaseWrapper
 		else {
 			$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $contact['idContact'], $links);
 		}
-		Phalcon\DI::getDefault()->get('logger')->log('Insertando metadata social');
+		
 		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $contact['idContact'], $social);
-		Phalcon\DI::getDefault()->get('logger')->log('Metadata social insertada');
+		
 		return $htmlFinal;
 	}
 	

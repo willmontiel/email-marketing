@@ -77,7 +77,6 @@ class WebversionController extends ControllerBase
 				$webversionobj->setDbase($dbase);
 				$webversionobj->setUrlDomain($domain);
 				$html = $webversionobj->createWebVersion($mail, $mailContent, $contact, $social);
-				$this->logger->log('Html ' . $html);
 			}
 			catch (\Exception $e) {
 				$this->logger->log('Exception ' . $e);

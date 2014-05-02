@@ -31,9 +31,9 @@ class TrackingUrlObject
 		$this->getSocialMediaShare();
 		$this->getUnsubscribeTracking();
 		
-		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
+//		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
 		$htmlWithTracking = str_replace($this->links['search'], $this->links['replace'], $html);
-		Phalcon\DI::getDefault()->get('logger')->log('Cambio los links');
+		
 		return $htmlWithTracking;
 	}
 	
