@@ -89,7 +89,7 @@
 			</div>	
 			<div class="col-sm-6">
 				<div class="text-right">
-					<a href="{{url('mail/new')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar</a>
+					<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar</a>
 					<button onclick="saveData()" class="btn btn-info">Guardar</button>
 					<button onclick="sendData()" class="btn btn-primary">Guradar y volver</button>
 				</div>
