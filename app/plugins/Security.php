@@ -313,7 +313,7 @@ class Security extends Plugin
 				'scheduledmail::stop' => array('mail' => array('read', 'create', 'send')),
 				'scheduledmail::play' => array('mail' => array('read', 'create', 'send')),
 				'scheduledmail::cancel' => array('mail' => array('read', 'create', 'send')),
-				'scheduledmail::manage' => array('mail' => array('read', 'create', 'send')),
+				'scheduledmail::manage' => array('mail' => array('manage')),
 
 				//tests
 				'test::start' => array('mail' => array('read', 'create', 'send')),
