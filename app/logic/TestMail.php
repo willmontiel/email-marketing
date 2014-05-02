@@ -80,11 +80,10 @@ class TestMail
 								</table>
 							</center>';
 		
-			$this->body = str_replace('<body>', $replace, $content);
+			$content = utf8_decode(str_replace('<body>', $replace, $content));
 		}
-		else {
-			$this->body = $content;
-		}
+		
+		$this->body = utf8_decode($content);
 	}
 	
 	protected function createPlaintext()
