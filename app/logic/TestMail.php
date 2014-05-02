@@ -9,6 +9,13 @@ class TestMail
 	public $account;
 	public $domain;
 	public $urlManager;
+	public $logger;
+
+
+	public function __construct() 
+	{
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
+	}
 	
 	public function setMail(Mail $mail)
 	{
@@ -56,17 +63,17 @@ class TestMail
 			$content =  utf8_decode($editorObj->replacespecialchars($editorObj->render()));
 		}
 		else {
-			$content = $this->mailContent->content;
+			$content = html_entity_decode($this->mailContent->content);
 		}
 		
-		if ($this->message != null || !empty($this->message)) {
+		if (!empty($this->message)) {
 			$replace = '<body>
 							<center>
 								<table border="0" cellpadding="0" cellspacing="0" width="600px" style="border-collapse:collapse;background-color:#444444;border-top:0;border-bottom:0">
 									<tbody>
 										<tr>
 											<td align="center" valign="top" style="border-collapse:collapse">
-												<span style="padding-bottom:9px;color:#eeeeee;font-family:Helvetica;font-size:12px;line-height:150%">"' . $this->message . '" — ' . $this->mail->fromName . '</span>
+												<span style="padding-bottom:9px;color:#eeeeee;font-family:Helvetica;font-size:12px;line-height:150%">"' . utf8_decode($this->message) . '" - ' . $this->mail->fromName . '</span>
 											</td>
 										</tr>
 									</tbody>
