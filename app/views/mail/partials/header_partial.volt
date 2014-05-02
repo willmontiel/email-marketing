@@ -1,5 +1,4 @@
 {{'{{#unless isHeaderExpanded }}'}}
-	{{'{{#unless isTargetExpanded }}'}}
 			<div {{'{{bind-attr class=": headerEmpty:bg-warning: "}}'}}>
 				<div class="wrapper">
 					<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }}>
@@ -20,43 +19,8 @@
 						</dd>
 					{{'{{/if}}'}}
 					</dl>
-					<dl class="dl-horizontal" {{ '{{action "expandTarget" this}}' }}>
-					{{'{{#if targetEmpty }}'}}
-						<dt>Para:</dt>
-						<dd><i>Elija los destinatarios...</i></dd>
-					{{'{{else}}'}}
-						<dt>Para:</dt>
-						<dd>
-							{{ '{{#if dbaselist}}' }}
-								{{ '{{#each dbaselist}}' }}
-									Base de datos: {{' {{name}} '}}, 
-								{{ '{{/each}}' }}
-							{{ '{{/if}}' }}
-
-							{{ '{{#if list}}' }}
-								{{ '{{#each list}}' }}
-									Lista de contactos: {{' {{name}} '}}, 
-								{{ '{{/each}}' }}
-							{{ '{{/if}}' }}
-
-							{{ '{{#if segmentlist}}' }}
-								{{ '{{#each segmentlist}}' }}
-									Segmento: {{' {{name}} '}}, 
-								{{ '{{/each}}' }}
-							{{ '{{/if}}' }}
-							
-							{{ '{{#unless filterEmpty}}' }}
-								(filtro)
-							{{ '{{/unless}}' }}
-						</dd>
-						<dd>
-							Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podría variar)
-						</dd>
-					{{'{{/if}}'}}
-					</dl>
 				</div>	
 			</div>
-	{{ '{{/unless}}' }}
 {{ '{{/unless}}' }}
 
 {{ '{{#if isHeaderExpanded}}' }}

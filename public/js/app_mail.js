@@ -441,6 +441,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('twitter', arrayTw);
 			}
 			this.set('isHeaderExpanded', true);
+			this.set('isTargetExpanded', false);
+			this.set('isGoogleAnalitycsExpanded', false);
+			this.set('isScheduleExpanded', false);
 		},
 				
 		expandTarget: function () {
@@ -462,6 +465,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('filterexcludes', arrayExclude);
 			}
 			this.set('isTargetExpanded', true);
+			this.set('isHeaderExpanded', false);
+			this.set('isGoogleAnalitycsExpanded', false);
+			this.set('isScheduleExpanded', false);
 		},
 				
 		expandGA: function () {
@@ -472,10 +478,16 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				}
 			}	
 			setExpandAttr(this, 'isGoogleAnalitycsExpanded');
+			this.set('isHeaderExpanded', false);
+			this.set('isTargetExpanded', false);
+			this.set('isScheduleExpanded', false);
 		},
 				
 		expandSchedule: function () {
 			this.set('isScheduleExpanded', true);
+			this.set('isHeaderExpanded', false);
+			this.set('isTargetExpanded', false);
+			this.set('isGoogleAnalitycsExpanded', false);
 		},
 		
 		discardChanges: function () {
