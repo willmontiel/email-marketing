@@ -33,9 +33,9 @@ class WebVersionObj extends BaseWrapper
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $mail, $this->urlManager);
 		$prepareMail = new PrepareMailContent($linkService, $imageService);
-		Phalcon\DI::getDefault()->get('logger')->log('Sin procesar ' . $html);
+		
 		list($content, $links) = $prepareMail->processContent($html);
-		Phalcon\DI::getDefault()->get('logger')->log('Procesado ' . $content);
+		
 		$contact = get_object_vars($contact);
 		
 		if($contact['idContact'] === 0) {
@@ -66,7 +66,7 @@ class WebVersionObj extends BaseWrapper
 			$html = $c['html'];
 		}
 		else {
-			$html = $content->html;
+			$html = $content;
 		}
 
 		$trackingObj = new TrackingUrlObject();
