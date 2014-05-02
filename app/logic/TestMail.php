@@ -73,7 +73,7 @@ class TestMail
 									<tbody>
 										<tr>
 											<td align="center" valign="top" style="border-collapse:collapse">
-												<span style="padding-bottom:9px;color:#eeeeee;font-family:Helvetica;font-size:12px;line-height:150%">"' . utf8_encode($this->message) . '" - ' . $this->mail->fromName . '</span>
+												<span style="padding-bottom:9px;color:#eeeeee;font-family:Helvetica;font-size:12px;line-height:150%">"' . utf8_decode($this->message) . '" - ' . $this->mail->fromName . '</span>
 											</td>
 										</tr>
 									</tbody>
