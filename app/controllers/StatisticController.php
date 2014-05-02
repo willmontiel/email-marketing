@@ -182,29 +182,28 @@ class StatisticController extends ControllerBase
 				$statWrapper->setAccount($this->user->account);
 
 				$mailStat1 = $statWrapper->showMailStatistics($mail1);
-
 				$mailStat2 = $statWrapper->showMailStatistics($mail2);
+				
+				$this->logger->log(print_r($mailStat1['statisticsData'], true));
+				if($mailStat1 && $mailStat2) {
+					$this->view->setVar("mail1", $mail1);
+					$this->view->setVar("summaryChartData1", $mailStat1['summaryChartData']);
+					$this->view->setVar("statisticsData1", $mailStat1['statisticsData']);
+					$this->view->setVar("mail2", $mail2);
+					$this->view->setVar("summaryChartData2", $mailStat2['summaryChartData']);
+					$this->view->setVar("statisticsData2", $mailStat2['statisticsData']);
+					$this->view->setVar("compareMail", $mailStat1['compareMail']);
+					$this->traceSuccess("Comparing mails, idMail1: {$idMail} / idMail2: {$idMailCompare}");
+				}
+				else {
+					$this->response->redirect('error');
+				}
 			}
 			catch (Exception $e) {
 				$this->logger->log("Exception: {$e}");
 				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
 				$this->traceFail("Comparing mails, idMail1: {$idMail} / idMail2: {$idMailCompare}");
 				$this->response->redirect("statistic/mail/{$idMail}");
-			}
-			
-			$this->logger->log(print_r($mailStat1['statisticsData'], true));
-			if($mailStat1 && $mailStat2) {
-				$this->view->setVar("mail1", $mail1);
-				$this->view->setVar("summaryChartData1", $mailStat1['summaryChartData']);
-				$this->view->setVar("statisticsData1", $mailStat1['statisticsData']);
-				$this->view->setVar("mail2", $mail2);
-				$this->view->setVar("summaryChartData2", $mailStat2['summaryChartData']);
-				$this->view->setVar("statisticsData2", $mailStat2['statisticsData']);
-				$this->view->setVar("compareMail", $mailStat1['compareMail']);
-				$this->traceSuccess("Comparing mails, idMail1: {$idMail} / idMail2: {$idMailCompare}");
-			}
-			else {
-				$this->response->redirect('error');
 			}
 		}
 		else {
@@ -227,24 +226,32 @@ class StatisticController extends ControllerBase
 		$dbase = Dbase::findFirstByIdDbase($contactList1->idDbase);
 
 		if($dbase && $contactList1 && $contactList2 && ($contactList2->idDbase == $dbase->idDbase) && ($dbase->idAccount == $this->user->account->idAccount)) {
-			$statWrapper = new StatisticsWrapper();
-			$statWrapper->setAccount($this->user->account);
-			
-			$listStat1 = $statWrapper->showContactlistStatistics($contactList1, $dbase);
+			try {
+				$statWrapper = new StatisticsWrapper();
+				$statWrapper->setAccount($this->user->account);
 
-			$listStat2 = $statWrapper->showContactlistStatistics($contactList2, $dbase);
-
-			if($listStat1 && $listStat2) {
-				$this->view->setVar("List1", $contactList1);
-				$this->view->setVar("summaryChartData1", $listStat1['summaryChartData']);
-				$this->view->setVar("statisticsData1", $listStat1['statisticsData']);
-				$this->view->setVar("List2", $contactList2);
-				$this->view->setVar("summaryChartData2", $listStat2['summaryChartData']);
-				$this->view->setVar("statisticsData2", $listStat2['statisticsData']);
-				$this->view->setVar("compareList", $listStat1['compareList']);
+				$listStat1 = $statWrapper->showContactlistStatistics($contactList1, $dbase);
+				$listStat2 = $statWrapper->showContactlistStatistics($contactList2, $dbase);
+				
+				if($listStat1 && $listStat2) {
+					$this->view->setVar("List1", $contactList1);
+					$this->view->setVar("summaryChartData1", $listStat1['summaryChartData']);
+					$this->view->setVar("statisticsData1", $listStat1['statisticsData']);
+					$this->view->setVar("List2", $contactList2);
+					$this->view->setVar("summaryChartData2", $listStat2['summaryChartData']);
+					$this->view->setVar("statisticsData2", $listStat2['statisticsData']);
+					$this->view->setVar("compareList", $listStat1['compareList']);
+					$this->traceSuccess("Comparing contactlists, idContactlist1: {$idList} / idContactlist2: {$idListCompare}");
+				}
+				else {
+					$this->response->redirect('error');
+				}
 			}
-			else {
-				$this->response->redirect('error');
+			catch (Exception $e) {
+				$this->logger->log("Exception: {$e}");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+				$this->traceFail("Comparing contactlists, idContactlist1: {$idList} / idContactlist2: {$idListCompare}");
+				$this->response->redirect("statistic/contactlist/{$idList}");
 			}
 		}
 		else {
@@ -264,26 +271,33 @@ class StatisticController extends ControllerBase
 			'bind' => array(1 => $idDbaseCompare, 2 => $this->user->account->idAccount)
 		));
 		
-
 		if($dbase1 && $dbase2) {
-			$statWrapper = new StatisticsWrapper();
-			$statWrapper->setAccount($this->user->account);
-			
-			$dbaseStat1 = $statWrapper->showDbaseStatistics($dbase1);
+			try {
+				$statWrapper = new StatisticsWrapper();
+				$statWrapper->setAccount($this->user->account);
 
-			$dbaseStat2 = $statWrapper->showDbaseStatistics($dbase2);
+				$dbaseStat1 = $statWrapper->showDbaseStatistics($dbase1);
+				$dbaseStat2 = $statWrapper->showDbaseStatistics($dbase2);
 
-			if($dbaseStat1 && $dbaseStat2) {
-				$this->view->setVar("dbase1", $dbase1);
-				$this->view->setVar("summaryChartData1", $dbaseStat1['summaryChartData']);
-				$this->view->setVar("statisticsData1", $dbaseStat1['statisticsData']);
-				$this->view->setVar("dbase2", $dbase2);
-				$this->view->setVar("summaryChartData2", $dbaseStat2['summaryChartData']);
-				$this->view->setVar("statisticsData2", $dbaseStat2['statisticsData']);
-				$this->view->setVar("compareDbase", $dbaseStat1['compareDbase']);
+				if($dbaseStat1 && $dbaseStat2) {
+					$this->view->setVar("dbase1", $dbase1);
+					$this->view->setVar("summaryChartData1", $dbaseStat1['summaryChartData']);
+					$this->view->setVar("statisticsData1", $dbaseStat1['statisticsData']);
+					$this->view->setVar("dbase2", $dbase2);
+					$this->view->setVar("summaryChartData2", $dbaseStat2['summaryChartData']);
+					$this->view->setVar("statisticsData2", $dbaseStat2['statisticsData']);
+					$this->view->setVar("compareDbase", $dbaseStat1['compareDbase']);
+					$this->traceSuccess("Comparing dbases, idDbase1: {$idDbase} / idDbase2: {$idDbaseCompare}");
+				}
+				else {
+					$this->response->redirect('error');
+				}
 			}
-			else {
-				$this->response->redirect('error');
+			catch (Exception $e) {
+				$this->logger->log("Exception: {$e}");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+				$this->traceFail("Comparing dbases, idDbase1: {$idDbase} / idDbase2: {$idDbaseCompare}");
+				$this->response->redirect("statistic/dbase/{$idDbase}");
 			}
 		}
 		else {
