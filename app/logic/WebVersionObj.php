@@ -25,7 +25,7 @@ class WebVersionObj extends BaseWrapper
 		else if ($mail->type == 'Editor') {
 			$htmlObj = new HtmlObj();
 			$htmlObj->assignContent(json_decode($mailContent->content));
-			$html = $htmlObj->render();
+			$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
 		}
 		else {
 			$html =  html_entity_decode($mailContent->content);
