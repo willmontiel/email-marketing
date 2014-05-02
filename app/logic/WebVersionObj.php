@@ -75,7 +75,9 @@ class WebVersionObj extends BaseWrapper
 		else {
 			$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $contact['idContact'], $links);
 		}
+		Phalcon\DI::getDefault()->get('logger')->log('Insertando metadata social');
 		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $contact['idContact'], $social);
+		Phalcon\DI::getDefault()->get('logger')->log('Metadata social insertada');
 		return $htmlFinal;
 	}
 	

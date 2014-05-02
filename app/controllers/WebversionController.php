@@ -78,10 +78,10 @@ class WebversionController extends ControllerBase
 				$webversionobj->setUrlDomain($domain);
 				$html = $webversionobj->createWebVersion($mail, $mailContent, $contact, $social);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$this->logger->log('Exception ' . $e);
 			}
-			catch (InvalidArgumentException $e) {
+			catch (\InvalidArgumentException $e) {
 				$this->logger->log('Exception ' . $e);
 			}
 			
