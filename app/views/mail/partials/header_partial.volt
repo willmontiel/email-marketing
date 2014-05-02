@@ -105,7 +105,7 @@
 									</div>
 								{% else %}
 									<div class="wrapper bg bg-warning">
-										No tiene una cuenta de facebook configurada
+										No tiene una cuenta de facebook configurada, para configurarla haga <span style="text-decoration: underline;" onclick="saveDataAndGoToSocialMedia()">click aqui</span>
 									</div>	
 								{% endif %}
 							</div>
@@ -131,7 +131,7 @@
 									</div>
 								{% else %}
 									<div class="wrapper bg bg-warning">
-										No tiene una cuenta de twitter configurada
+										No tiene una cuenta de twitter configurada, para configurarla haga <span style="text-decoration: underline;" onclick="saveDataAndGoToSocialMedia()">click aqui</span>
 									</div>	
 								{% endif %}
 							</div>

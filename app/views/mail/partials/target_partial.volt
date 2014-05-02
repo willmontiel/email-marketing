@@ -49,8 +49,8 @@
 						<label for="target" class="col-sm-2 control-label">Para: </label>
 						<div class="col-sm-10">
 							<ul class="nav nav-tabs">
-								<li class="active"><a href="#target" data-toggle="tab"><img src="{{url('/b3/images/email-color.png')}}" class="" alt=""></a></li>
-								<li><a href="#filter" data-toggle="tab"><img src="{{url('/b3/images/filter.jpg')}}" class="" alt=""></a></li>
+								<li class="active"><a href="#target" data-toggle="tab"><img src="{{url('b3/images/email-color.png')}}" class="" alt=""></a></li>
+								<li><a href="#filter" data-toggle="tab"><img src="{{url('b3/images/filter.jpg')}}" class="" alt=""></a></li>
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="target">
