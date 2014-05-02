@@ -80,7 +80,7 @@ class TestMail
 								</table>
 							</center>';
 		
-			$content = utf8_decode(str_replace('<body>', $replace, $content));
+			$content = str_replace('<body>', $replace, $content);
 		}
 		
 		$this->body = utf8_decode($content);
