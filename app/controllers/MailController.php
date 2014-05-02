@@ -940,14 +940,14 @@ class MailController extends ControllerBase
 			$mc->content = htmlspecialchars($newContent, ENT_QUOTES);
 			$mc->plainText = $plainText;
 			
-			$this->db->begin();
+//			$this->db->begin();
 			
 			//5. Guardamos mail content
 			if(!$mc->save()) {
 				foreach ($mc->getMessages() as $msg) {
 					$this->logger->log("Error while saving mail html content {$msg}");
 				}
-				$this->db->rollback();
+//				$this->db->rollback();
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte con el administrador'), 500);
 			}
 			
@@ -958,15 +958,15 @@ class MailController extends ControllerBase
 				foreach ($mail->getMessages() as $msg) {
 					$this->logger->log("Error while saving mail {$msg}");
 				}
-				$this->db->rollback();
+//				$this->db->rollback();
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte con el administrador'), 500);
 			}
 			
-			$this->logger->log("Before commit: " . date('d/m/Y H:i:s - u', time()));
-			
-			$this->db->commit();
-			
-			$this->logger->log("After commit: " . date('d/m/Y H:i:s - u', time()));
+//			$this->logger->log("Before commit: " . date('d/m/Y H:i:s - u', time()));
+//			
+//			$this->db->commit();
+//			
+//			$this->logger->log("After commit: " . date('d/m/Y H:i:s - u', time()));
 			return $this->setJsonResponse(array('msg' => 'success'), 200);
 		}
 	}
