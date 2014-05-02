@@ -34,9 +34,17 @@ class WebVersionObj extends BaseWrapper
 		$linkService = new LinkService($this->account, $mail, $this->urlManager);
 		$prepareMail = new PrepareMailContent($linkService, $imageService);
 		list($content, $links) = $prepareMail->processContent($html);
-		$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
-		$cf = $mailField->getCustomFields();
-
+		
+		$contact = get_object_vars($contact);
+		
+		if($contact['idContact'] === 0) {
+			$cf = 'No Fields';
+		}
+		else {
+			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
+			$cf = $mailField->getCustomFields();
+		}
+		
 		switch ($cf) {
 			case 'No Fields':
 				$customFields = false;
@@ -51,7 +59,7 @@ class WebVersionObj extends BaseWrapper
 				$customFields = $cf;
 				break;
 		}
-		$contact = get_object_vars($contact);
+		
 		if ($fields) {
 			$c = $mailField->processCustomFields($contact);
 			$html = $c['html'];
@@ -59,6 +67,7 @@ class WebVersionObj extends BaseWrapper
 		else {
 			$html = $content->html;
 		}
+
 		$trackingObj = new TrackingUrlObject();
 		if($social) {
 			$htmlWithTracking = $trackingObj->getSocialTrackingUrl($html, $mail->idMail, $contact['idContact'], $links, $social);

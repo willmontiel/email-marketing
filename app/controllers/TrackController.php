@@ -20,7 +20,10 @@ class TrackController extends ControllerBase
 			$trackingObj->setSendIdentification($idMail, $idContact);
 			$trackingObj->trackOpenEvent($userAgent);	
 		}
-		catch (InvalidArgumentException $e) {
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+		}
+		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');
 		}
 		$this->logger->log('Preparando para retornar img');
@@ -43,12 +46,16 @@ class TrackController extends ControllerBase
 			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
 			$idenfifiers = $linkEncoder->decodeLink('track/click', $parameters);
 			list($v, $idLink, $idMail, $idContact) = $idenfifiers;
-				
+			
+			$trackingObj = new TrackingObject();
+			
 			$userAgent = new UserAgentDetectorObj();
 			$userAgent->setInfo($info);
+			
+			if($idContact != 0) {
+				$trackingObj->setSendIdentification($idMail, $idContact);
+			}
 				
-			$trackingObj = new TrackingObject();
-			$trackingObj->setSendIdentification($idMail, $idContact);
 			$url = $trackingObj->trackClickEvent($idLink, $userAgent);	
 				
 			if (!$url) {
@@ -56,7 +63,11 @@ class TrackController extends ControllerBase
 			}
 			return $this->response->redirect($url, true);
 		}
-		catch (InvalidArgumentException $e) {
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->response->redirect('error/link');
+		}
+		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
 			return $this->response->redirect('error/link');
 		}
@@ -94,11 +105,11 @@ class TrackController extends ControllerBase
 				$this->logger->log("Update funciono para : idMail: {$ids[0]}, idContact: {$ids[1]}, idEmail: {$ids[2]} ");
 				
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$this->logger->log('Exception: [' . $e . ']');
 				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Exception'));
 			}
-			catch (InvalidArgumentException $e) {
+			catch (\InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e . ']');
 				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Invalid Argument Exception'));
 			}
@@ -135,12 +146,11 @@ class TrackController extends ControllerBase
 			$instance->trackOpen();
 			$instance->save();
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');
 		}
-		catch (InvalidArgumentException $e) {
-			$this->logger->log('Link inválido');
-			$this->response->redirect('error/link');
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
 		}
 		
 		$this->logger->log('Preparando para retornar img');
@@ -164,21 +174,31 @@ class TrackController extends ControllerBase
 			$parts = $linkdecoder->decodeLink('track/clicksocial', $parameters);
 			list($v, $idLink, $idMail, $idContact, $socialType) = $parts;
 			$this->logger->log('El link es valido');
-				
+			
 			$trackingObj = new TrackingObject();
-			$trackingObj->setSendIdentification($idMail, $idContact);
-			$url = $trackingObj->getLinkToRedirect($idLink);	
-			$mxcxl = $trackingObj->getMxCxL($idLink);
-			if (!$mxcxl) {
-				$mxcxl = $trackingObj->createNewMxcxl($idLink, 0);
+			
+			if($idContact != 0) {
+				$trackingObj->setSendIdentification($idMail, $idContact);
+				$mxcxl = $trackingObj->getMxCxL($idLink);
+				if (!$mxcxl) {
+					$mxcxl = $trackingObj->createNewMxcxl($idLink, 0);
+				}
+
+				$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialType);
+				$instance->setMxcxl($mxcxl);
+				$instance->trackClick();
+				$instance->saveClick();
 			}
-			$instance = \EmailMarketing\SocialTracking\TrackingSocialAbstract::createInstanceTracking($socialType);
-			$instance->setMxcxl($mxcxl);
-			$instance->trackClick();
-			$instance->saveClick();
+			
+			$url = $trackingObj->getLinkToRedirect($idLink);
 		}
-		catch (Exception $e) {
+		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			return $this->response->redirect('error/link');
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			return $this->response->redirect('error/link');
 		}			
 		return $this->response->redirect($url, true);
 	}

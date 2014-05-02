@@ -226,7 +226,7 @@ class SocialNetworkConnection
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
 		$action = 'webversion/show';
-		$parameters = array(1, $mail->idMail, '1329278');
+		$parameters = array(1, $mail->idMail, 0);
 		$link = $linkdecoder->encodeLink($action, $parameters);
 		
 		// Ajustar Tamaño de Imagen para Publicar
@@ -286,7 +286,7 @@ class SocialNetworkConnection
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
 		$action = 'webversion/show';
-		$parameters = array(1, $mail->idMail, '1329278');
+		$parameters = array(1, $mail->idMail, 0);
 		$link = $linkdecoder->encodeLink($action, $parameters);
 		
 		if (count($ids_tokens) > 0) {

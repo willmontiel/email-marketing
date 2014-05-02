@@ -106,33 +106,34 @@ class PermissionsDataBase
 			'mail::delete' => 43,
 			'mail::send' => 44,
 			'mail::clone' => 45,
+			'mail::manage' => 46,
 			
-			'template::create' => 46,
-			'template::read' => 47,
-			'template::update' => 48,
-			'template::delete' => 49,
+			'template::create' => 47,
+			'template::read' => 48,
+			'template::update' => 49,
+			'template::delete' => 50,
 			
-			'statistic::read' => 50,
-			'statistic::download' => 51,
+			'statistic::read' => 51,
+			'statistic::download' => 52,
 			
-			'flashmessage::create' => 52,
-			'flashmessage::read' => 53,
-			'flashmessage::update' => 54,
-			'flashmessage::delete' => 55,
+			'flashmessage::create' => 53,
+			'flashmessage::read' => 54,
+			'flashmessage::update' => 55,
+			'flashmessage::delete' => 56,
 			
-			'form::create' => 56,
-			'form::read' => 57,
-			'form::update' => 58,
-			'form::delete' => 59,
+			'form::create' => 57,
+			'form::read' => 58,
+			'form::update' => 59,
+			'form::delete' => 60,
 			
-			'socialmedia::create' => 60,
-			'socialmedia::read' => 61,
-			'socialmedia::delete' => 62,
+			'socialmedia::create' => 61,
+			'socialmedia::read' => 62,
+			'socialmedia::delete' => 63,
 			
-			'system::read' => 63,
-			'system::update' => 64,
+			'system::read' => 64,
+			'system::update' => 65,
 			
-			'tools::read' => 65,
+			'tools::read' => 66,
 		);
 	}
 	
@@ -195,6 +196,7 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'mail::delete'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'mail::send'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'mail::clone'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'mail::manage'),
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'template::create'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'template::read'),
