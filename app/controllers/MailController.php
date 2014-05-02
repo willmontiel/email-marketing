@@ -2149,7 +2149,7 @@ class MailController extends ControllerBase
 			catch (Exception $e) {
 				$this->logger->log("Exception, Error while sending test, {$e}");
 				$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
-				$this->traceSuccess("Send test, idMail: {$idMail}");
+				$this->traceFail("Send test, idMail: {$idMail}");
 				return $this->response->redirect("mail/compose/{$idMail}");
 			}
 		}
