@@ -1,3 +1,42 @@
+{{'{{#unless isTargetExpanded }}'}}
+	<div {{'{{bind-attr class=":wrapper targetEmpty:bg-warning: "}}'}}>
+		<dl class="dl-horizontal" {{ '{{action "expandTarget" this}}' }}>
+			{{'{{#if targetEmpty }}'}}
+				<dt>Para:</dt>
+				<dd><i>Elija los destinatarios...</i></dd>
+			{{'{{else}}'}}
+				<dt>Para:</dt>
+				<dd>
+					{{ '{{#if dbaselist}}' }}
+						{{ '{{#each dbaselist}}' }}
+							Base de datos: {{' {{name}} '}}, 
+						{{ '{{/each}}' }}
+					{{ '{{/if}}' }}
+
+					{{ '{{#if list}}' }}
+						{{ '{{#each list}}' }}
+							Lista de contactos: {{' {{name}} '}}, 
+						{{ '{{/each}}' }}
+					{{ '{{/if}}' }}
+
+					{{ '{{#if segmentlist}}' }}
+						{{ '{{#each segmentlist}}' }}
+							Segmento: {{' {{name}} '}}, 
+						{{ '{{/each}}' }}
+					{{ '{{/if}}' }}
+
+					{{ '{{#unless filterEmpty}}' }}
+						(filtro)
+					{{ '{{/unless}}' }}
+				</dd>
+				<dd>
+					Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podría variar)
+				</dd>
+			{{'{{/if}}'}}
+		</dl>
+	</div>
+{{ '{{/unless}}' }}
+
 {{ '{{#if isTargetExpanded}}' }}
 	<div class="panel-heading">
 	  <h3 class="panel-title">Destinatarios</h3>
@@ -10,8 +49,8 @@
 						<label for="target" class="col-sm-2 control-label">Para: </label>
 						<div class="col-sm-10">
 							<ul class="nav nav-tabs">
-								<li class="active"><a href="#target" data-toggle="tab"><img src="{{url('/b3/images/email-color.png')}}" class="" alt=""></a></li>
-								<li><a href="#filter" data-toggle="tab"><img src="{{url('/b3/images/filter.jpg')}}" class="" alt=""></a></li>
+								<li class="active"><a href="#target" data-toggle="tab"><img src="{{url('b3/images/email-color.png')}}" class="" alt=""></a></li>
+								<li><a href="#filter" data-toggle="tab"><img src="{{url('b3/images/filter.jpg')}}" class="" alt=""></a></li>
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="target">

@@ -46,7 +46,14 @@
 					</tr>
 				{{ '{{else}}' }}
 					<tr>
-						<td celspadding="4">No hay direcciones de correo bloqueadas</td>
+						<td celspadding="4" colspan="4">
+							<div class="bs-callout bs-callout-warning">
+								<h4>No hay direcciones de correo bloqueadas</h4>
+								<p>
+									Para bloquear una dirección haga click en el botón <strong>Bloquear un correo eléctronico</strong> que se sitúa en la parte superior derecha.
+								</p>
+							</div>
+						</td>
 					</tr>
 				{{ '{{/each }}' }}
 			</tbody>
