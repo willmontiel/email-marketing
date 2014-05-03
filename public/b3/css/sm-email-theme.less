@@ -392,6 +392,12 @@ h4.sectiontitle {
 	font-size: 18px;
 	text-align: center;
 }
+.w-190 {
+	width: 190px;
+}
+.center {
+	text-align: center;
+}
 
 /* Estilos para botones de accion pequeños */
 
@@ -461,12 +467,20 @@ h4.sectiontitle {
 	.pos-icons(14, @shortcuts-small-icons-width);
 	background-position: @position @sm-icon-pos-y;
 }
-.sm-button-small-emal-new:extend(.sm-button-small-base) {
+.sm-button-small-email-new:extend(.sm-button-small-base) {
 	.pos-icons(15, @shortcuts-small-icons-width);
 	background-position: @position @sm-icon-pos-y;
 }
 .sm-button-small-email-list:extend(.sm-button-small-base) {
 	.pos-icons(16, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-template:extend(.sm-button-small-base) {
+	.pos-icons(17, @shortcuts-small-icons-width);
+	background-position: @position @sm-icon-pos-y;
+}
+.sm-button-small-schedule:extend(.sm-button-small-base) {
+	.pos-icons(18, @shortcuts-small-icons-width);
 	background-position: @position @sm-icon-pos-y;
 }
 /* Fin estilos para la navegación interna con iconos pequeños */

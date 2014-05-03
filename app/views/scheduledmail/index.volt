@@ -1,24 +1,30 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+
+{#}
 	{{ javascript_include('tablesorter/jquery-latest.js')}}
 	{{ javascript_include('tablesorter/jquery.tablesorter.js')}}
+#}
 	<script type="text/javascript">
 		{#var MyDbaseUrl = '{{urlManager.getApi_v1Url()}}';#}
+{#
 		$(function() { 
 			$("#processes-table").tablesorter(); 
 		}); 
+#}
+
 	</script>
 {% endblock %}
 {% block content%}
 
 {# Botones de navegacion #}
-{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'scheduledmail']) }}
+{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'scheduledmail']) }}
 
 	<div class="row">
 		<h4 class="sectiontitle">Programación de envío de correos</h4>
 		<div class="bs-callout bs-callout-info">
-			<p>Aqui podrá administrar la programación de los correos, pausarlos, cancelarlos y también reprogramar fechas.</p>
+			<p>Administre la programación de los correos, pausarlos, cancelarlos y también reprogramar fechas.</p>
 		</div>
 		{{ flashSession.output() }}
 
