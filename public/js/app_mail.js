@@ -134,6 +134,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('click', arrayClick);
 			this.set('exclude', arrayExclude);
 			
+			if( this.get('fbimagepublication') !== undefined || this.get('fbimagepublication') !== 'default' ) {
+				App.fbimage = this.get('fbimagepublication');
+			}
+			
 			if (App.googleAnalyticsLinks !== undefined) {
 				var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
 				this.set('linksAnalytics', arrayAnalytics);
