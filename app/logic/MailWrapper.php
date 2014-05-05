@@ -317,6 +317,9 @@ class MailWrapper extends BaseWrapper
 		}
 		
 		$jsonObject['previewData'] = $preview;
+		
+		$this->logger->log("PlainText: {$this->mailcontent->plainText}");
+		
 		$jsonObject['plainText'] = $this->mailcontent->plainText;
 		$jsonObject['totalContacts'] = $this->mail->totalContacts;
 		
