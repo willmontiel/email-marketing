@@ -43,7 +43,7 @@
 						</div>
 						<div class="news-content">
 							<div class="news-title">
-								{{item.username}}
+								<strong>{{item.username}}</strong>
 							</div>
 							<div class="news-text">
 								{{item.firstName}} {{item.lastName}}<br />
