@@ -42,74 +42,87 @@
 	<hr></hr>
 	{#   tabs de plantillas   #}
 	<div class="row">
-		<div class="col-md-9">
-			<div class="tab-content">
-				{% for category, template in arrayTemplate %}
-					<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category|change_spaces_in_between}}">
-						<div class="thumbnails">
-							<div class="row">
-								{% for t in template %}
-								<div class="item-thumb col-xs-6 col-md-3">
-									<div class="container-fluid">
-										<h5>{{t['name']}}</h5>
-										<div class="preview-template img-wrap">
-											{% if t['preview'] == null%}
-												<div class="not-available-template"></div>
-											{% else %}
-												<img src="data: image/png;base64, {{t['preview']}}" />
-											{%endif%}
-											<a href="{{url('mail/contenteditor')}}/{{ (t['idMail'] != null)?t['idMail']:'template'}}/{{  t['id']  }}">
-												<div class="img-info-x2"><p><i class="icon-ok"></i> Elegir</p></div>
-											</a>
-										</div>
-										<div class="clearfix"></div>
-										<div class="btn-group">
-											<button class="btn btn-default" onClick="preview({{t['id']}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
-												<span class="glyphicon glyphicon-eye-open"></span>
-											</button>
-											
-											{% if t['idMail'] == null %}
-												{% if t['idAccount'] == null%}
-													{% if userObject.userrole == 'ROLE_SUDO'%}
+		{% if arrayTemplate|length != 0%}
+			<div class="col-md-9">
+				<div class="tab-content">
+					{% for category, template in arrayTemplate %}
+						<div class="tab-pane {% if loop.first %}active{% else %}fade{% endif %}" id="{{category|change_spaces_in_between}}">
+							<div class="thumbnails">
+								<div class="row">
+									{% for t in template %}
+									<div class="item-thumb col-xs-6 col-md-3">
+										<div class="container-fluid">
+											<h5>{{t['name']}}</h5>
+											<div class="preview-template img-wrap">
+												{% if t['preview'] == null%}
+													<div class="not-available-template"></div>
+												{% else %}
+													<img src="data: image/png;base64, {{t['preview']}}" />
+												{%endif%}
+												<a href="{{url('mail/contenteditor')}}/{{ (t['idMail'] != null)?t['idMail']:'template'}}/{{  t['id']  }}">
+													<div class="img-info-x2"><p><i class="icon-ok"></i> Elegir</p></div>
+												</a>
+											</div>
+											<div class="clearfix"></div>
+											<div class="btn-group">
+												<button class="btn btn-default" onClick="preview({{t['id']}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+													<span class="glyphicon glyphicon-eye-open"></span>
+												</button>
+
+												{% if t['idMail'] == null %}
+													{% if t['idAccount'] == null%}
+														{% if userObject.userrole == 'ROLE_SUDO'%}
+															<a href="{{url('template/edit')}}/{{t['id']}}" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Editar">
+																<span class="glyphicon glyphicon-pencil"></span>
+															</a>
+
+
+															<a class="ShowDialog btn btn-default" data-backdrop="static" data-toggle="modal" href="#modal-simple" data-id="{{url('template/delete')}}/{{t['id']}}" title="Eliminar">
+																<span class="glyphicon glyphicon-trash"></span>
+															</a>
+
+														{% endif %}
+													{% else%}
 														<a href="{{url('template/edit')}}/{{t['id']}}" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Editar">
 															<span class="glyphicon glyphicon-pencil"></span>
 														</a>
 
-
-														<a class="ShowDialog btn btn-default" data-backdrop="static" data-toggle="modal" href="#modal-simple" data-id="{{url('template/delete')}}/{{t['id']}}" title="Eliminar">
+														<button class="ShowDialog btn btn-default" data-toggle="modal" data-target="#modal-simple" data-id="{{url('template/delete')}}/{{t['id']}}" title="Eliminar">
 															<span class="glyphicon glyphicon-trash"></span>
-														</a>
-
+														</button>
 													{% endif %}
-												{% else%}
-													<a href="{{url('template/edit')}}/{{t['id']}}" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Editar">
-														<span class="glyphicon glyphicon-pencil"></span>
-													</a>
-
-													<button class="ShowDialog btn btn-default" data-toggle="modal" data-target="#modal-simple" data-id="{{url('template/delete')}}/{{t['id']}}" title="Eliminar">
-														<span class="glyphicon glyphicon-trash"></span>
-													</button>
 												{% endif %}
-											{% endif %}
+											</div>
 										</div>
 									</div>
+									{% endfor %}
 								</div>
-								{% endfor %}
 							</div>
 						</div>
-					</div>
-				{% endfor %}
+					{% endfor %}
+				</div>
 			</div>
-		</div>
-		{#   Selector de plantillas a mostrar   #}
-		<div class="col-md-3 border-left">
-			<h4>Categorías</h4>
-			<ul class="nav nav-pills nav-stacked nav-template">
-				{% for category, template in arrayTemplate %}
-					<li class="{% if loop.first %}active{% endif %}"><a href="#{{category|change_spaces_in_between}}" data-toggle="tab">{{category}}</a></li> 
-				{% endfor %}
-			</ul>
-		</div>
+			{#   Selector de plantillas a mostrar   #}
+			<div class="col-md-3 border-left">
+				<h4>Categorías</h4>
+				<ul class="nav nav-pills nav-stacked nav-template">
+					{% for category, template in arrayTemplate %}
+						<li class="{% if loop.first %}active{% endif %}"><a href="#{{category|change_spaces_in_between}}" data-toggle="tab">{{category}}</a></li> 
+					{% endfor %}
+				</ul>
+			</div>
+		{% else %}
+			<div class="col-sm-12">
+				<div class="bs-callout bs-callout-warning">
+					<h4>No hay plantillas predefinidas</h4>
+					<p>
+						Para empezar a crear una nueva plantilla haga clic en el botón <strong>Nuevo plantilla</strong> que se
+						sitúa en la parte superior derecha.
+					</p>
+				</div>
+			</div>
+		{% endif %}
+		
 	</div>
 	
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
