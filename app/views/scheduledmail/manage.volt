@@ -14,7 +14,7 @@
 	<div class="row">
 		<h4 class="sectiontitle">Programación de envío de correos de todas las cuentas</h4>
 		<div class="bs-callout bs-callout-info">
-			<p>Aqui podrá administrar la programación de todos los correos de todas las cuentas, pausarlos, cancelarlos y también reprogramar fechas.</p>
+			<p>Administre la programación de todos los correos de todas las cuentas, pausarlos, cancelarlos y también reprogramar fechas.</p>
 		</div>
 	</div>
 	
@@ -26,7 +26,6 @@
 	
 	<div class="row">
 		<div class="col-md-12">
-			<h4>Programación de correos global</h4>
 			<table class="table table-striped">
 				<thead>
 					<tr>

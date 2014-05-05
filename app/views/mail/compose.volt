@@ -46,6 +46,35 @@
 				});
 			});
 		}
+		
+		function saveDataAndGoToSocialMedia() {
+			var name = $("#name").val();
+			var fromName = $("#fromName").val();
+			var fromEmail = $("#fromEmail").val();
+			var replyTo = $("#replyTo").val();
+			var subject = $("#subject").val();
+			
+			//$(function() {
+			//	$.ajax({
+			//		url: "{{url('mail/savemail')}}/" + idMail,
+			//		type: "POST",			
+			//		data: {
+			//			name: name,
+			//			fromName: fromName,
+			//			fromEmail: fromEmail,
+			//			replyTo: replyTo,
+			//			subject: subject
+			//		},
+			//		error: function(msg){
+			//			var obj = $.parseJSON(msg.responseText);
+			//			$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
+			//		},
+			//		success: function(msg){
+			//			$(location).attr('href', "{{url('mail/socialmedia')}}"); 
+			//}
+			//	});
+			//});
+		}
 	</script>
 	<script type="text/javascript">
 		//Full Mail Content

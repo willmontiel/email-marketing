@@ -5,22 +5,22 @@
 			<div class="row">
 				<div class="col-md-3 text-center">
 					{{' {{#external-link content=this pattern="' ~ url('mail/contenteditor') ~ '/%@" }}'}}
-						<img src="{{url('/b3/images/edit_page.png')}}" class="" alt=""><br>Editor avanzado
+						<img src="{{url('b3/images/edit_page.png')}}" class="" alt=""><br>Editor avanzado
 					{{'{{/external-link}}'}}
 				</div>
 				<div class="col-md-3 text-center">
 					{{' {{#external-link content=this pattern="' ~ url('template/select') ~ '/%@" }}'}}
-						<img src="{{url('/b3/images/icon-template.png')}}" class="" alt=""><br>Plantillas<br>predeterminadas
+						<img src="{{url('b3/images/icon-template.png')}}" class="" alt=""><br>Plantillas<br>predeterminadas
 					{{'{{/external-link}}'}}
 				</div>
 				<div class="col-md-3 text-center">
 					{{' {{#external-link content=this pattern="' ~ url('mail/contenthtml') ~ '/%@" }}'}}
-						<img src="{{url('/b3/images/icon-html.png')}}" class="" alt=""><br>HTML de ceros
+						<img src="{{url('b3/images/icon-html.png')}}" class="" alt=""><br>HTML de ceros
 					{{'{{/external-link}}'}}
 				</div>
 				<div class="col-md-3 text-center">
 					{{' {{#external-link content=this pattern="' ~ url('mail/importcontent') ~ '/%@" }}'}}
-						<img src="{{url('/b3/images/icon-url.png')}}" class="" alt=""><br>Importar desde
+						<img src="{{url('b3/images/icon-url.png')}}" class="" alt=""><br>Importar desde
 					{{'{{/external-link}}'}}
 				</div>
 			</div>

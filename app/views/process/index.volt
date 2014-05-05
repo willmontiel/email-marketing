@@ -61,11 +61,11 @@
 	</div>
 	
 	<div class="row">
-		<h4 class="sectiontitle">Monitor de procesos de envío</h4>
+		<h4 class="sectiontitle">Procesos de envío</h4>
 
 		<div class="bs-callout bs-callout-info">
-			Aqui podrá encontrar toda la información relacionada con los envíos de correos eléctronicos,
-			como la programación, estados y envíos en curso.
+			Monitoree los envíos de correos electrónicos,
+			la programación de los mismos, sus estados y envíos en curso.
 		</div>
 	</div>
 
