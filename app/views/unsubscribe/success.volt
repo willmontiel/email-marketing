@@ -1,7 +1,9 @@
 {% extends "templates/signin.volt" %}
-
 {% block content %}
 	{{ stylesheet_link('css/prstyles.css') }}
+	<div class="row">
+	</div>
+
 	<div class="navbar navbar-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="container-fluid">
