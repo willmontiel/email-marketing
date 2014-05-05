@@ -764,7 +764,13 @@ class TrackingObject
 			$source = '&utm_source=' . urlencode($googleAnalytics->utm_source);
 			$medium = '&utm_medium=' . urlencode($googleAnalytics->utm_medium);
 			$campaign = '&utm_campaign=' . urlencode($content->campaignName);
-			$newUrl = $link . '?' . $source . $medium . $campaign;
+			
+			if (parse_url($link, PHP_URL_QUERY) == null) {
+				$newUrl = $link . '?' . $source . $medium . $campaign;
+			}
+			else{
+				$newUrl = $link . $source . $medium . $campaign;
+			}
 
 			$this->log->log('Url Analytics: ' . $newUrl);
 			return $newUrl;
