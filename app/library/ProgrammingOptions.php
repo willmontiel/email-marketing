@@ -47,7 +47,7 @@ class ProgrammingOptions
 				break;
 			case 'Pausar':
 				$object->text = "Pausar";
-				$object->url = "mail/stop/";
+				$object->url = "scheduledmail/stop/";
 				$object->icon = "icon-pause";
 				break;
 			default:
