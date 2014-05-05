@@ -246,6 +246,11 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::update'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::delete'),
 			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'customfield::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'customfield::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'customfield::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'customfield::delete'),
+			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'user::create'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'user::read'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'user::update'),
