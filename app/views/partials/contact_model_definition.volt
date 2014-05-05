@@ -34,7 +34,10 @@ var myContactModel = {
 		return false;
 	}.property('isSubscribed,isActive'),
 	mailHistoryArray: function () {
-		return JSON.parse(this.get('mailHistory'))
+		if(this.get('mailHistory') !== undefined) {
+			return JSON.parse(this.get('mailHistory'))
+		}
+		return null;
 	}.property(),
 
 	visualCues: function () {

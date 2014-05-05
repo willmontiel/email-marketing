@@ -1112,10 +1112,24 @@ class ApiController extends ControllerBase
 			$pager->setCurrentPage($page);
 		}
 		
-		$wrapper = new SegmentWrapper();
-		$wrapper->setAccount($this->user->account);
-		$wrapper->setPager($pager);
-		$segment = $wrapper->findSegments();
+		$idDbase = $this->request->getQuery('dbase', null, null);
+		
+		try {
+			$wrapper = new SegmentWrapper();
+			$wrapper->setAccount($this->user->account);
+			$wrapper->setPager($pager);
+			$segment = $wrapper->findSegments($idDbase);
+		}
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->traceFail("Error creating segment, idDbase: {$contents->dbase}");
+			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors()), 422, 'Invalid data');
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			$this->traceFail("Error creating segment, idDbase: {$contents->dbase}");
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating segment!');	
+		}
 
 		return $this->setJsonResponse($segment, 201, 'success');
 	}

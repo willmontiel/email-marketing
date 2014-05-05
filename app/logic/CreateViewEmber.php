@@ -18,7 +18,7 @@ class CreateViewEmber
 				$valor = "{{view Ember.TextField valueBinding='{$fieldname}' id='{$fieldname}' {$optionstxt}";
 				break;
 			case "TextArea":
-				$valor = "{{view Ember.TextArea valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}'";
+				$valor = "{{view Ember.TextArea valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}' {$optionstxt}";
 				break;
 			case "Select":
 				// {{ view Ember.Select contentBinding="nombrecampo_options" valueBinding="nombrecampo" }}
@@ -28,7 +28,7 @@ class CreateViewEmber
 				$valor = "{{view Ember.Select multiple='true' valueBinding='{$fieldname}' contentBinding='App.{$fieldname}_options' id='{$fieldname}'  {$optionstxt}";
 				break;
 			case "Date":
-				$valor = "{{view App.DatePickerField valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}'";
+				$valor = "{{view Ember.TextField valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}' class='date_view_picker' ";
 				break;
 		}
 		
