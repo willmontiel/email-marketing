@@ -16,7 +16,6 @@
 							optionLabelPath="content.name"
 							valueBinding="selectedDbase"
 							class="form-control"
-							prompt="Seleccione una base de datos"
 							placeholder="Todas las bases de datos"
 						}}'
 					}}
