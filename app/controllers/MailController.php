@@ -611,9 +611,8 @@ class MailController extends ControllerBase
 		));
 		
 		$objTemplate = Template::findFirst(array(
-			"conditions" => "idTemplate = ?1 AND idAccount = ?2",
-			"bind" => array(1 => $idTemplate,
-							2 => $account->idAccount)
+			"conditions" => "idTemplate = ?1",
+			"bind" => array(1 => $idTemplate)
 		));
 		
 		$mailcontent = false;
@@ -627,7 +626,7 @@ class MailController extends ControllerBase
 			$this->view->setVar('mail', $mail);
 		}
 		
-		if ($objTemplate) {
+		if ($objTemplate && ($objTemplate->idAccount == $account->idAccount || $objTemplate->idAccount == null)) {
 			if (empty($objTemplate->content)) {
 				$objContent = 'null';
 			}
