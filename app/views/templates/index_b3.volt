@@ -29,7 +29,9 @@
 		{{ javascript_include('b3/js/jquery-1.9.1.js') }}
 		{{ javascript_include('b3/js/bootstrap.js') }}
 		{{ javascript_include('b3/vendors/js/jquery.sparkline.js') }}
+{#		
 		{{ javascript_include('b3/vendors/js/spark_auto.js') }}
+#}
 		{{ javascript_include('b3/vendors/js/bootstrap-editable.js') }}
 		{{ javascript_include('b3/vendors/js/jquery.gritter.js') }}
 		{% endblock %}
@@ -194,5 +196,11 @@
 			<!-- No chat available -->
 		{% endif %}
 		{# /OLARK #}
+		<!-- Tooltips -->
+		<script type="text/javascript">
+			$(function() {
+				$('a[data-toggle="tooltip"]').tooltip();
+			});
+		</script>
     </body>
 </html>

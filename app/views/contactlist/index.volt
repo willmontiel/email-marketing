@@ -59,26 +59,34 @@
 					<div class="to-do sm-btn-blue">
 						{{'{{#link-to "lists" class="shortcuts"}}<span class="sm-button-large-contact-list"></span>{{/link-to}}'}}
 					</div>
-					{{'{{#link-to "lists" class="btn-actn"}}Listas de contactos{{/link-to}}'}}
+					<div class="w-190 center">
+						{{'{{#link-to "lists" class="btn-actn"}}Listas de contactos{{/link-to}}'}}
+					</div>
 				</div>
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						{{'{{#link-to "segments" class="shortcuts"}}<span class="sm-button-large-segment"></span>{{/link-to}}'}}
 					</div>
+					<div class="w-190 center">
 						{{'{{#link-to "segments" class="btn-actn"}}Segmentos{{/link-to}}'}}
+					</div>
 				</div>
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						{{'{{#link-to "blockedemails" class="shortcuts"}} <span class="sm-button-large-bloq-list"></span>{{/link-to}}'}}
 					</div>
+					<div class="w-190 center">
 						{{'{{#link-to "blockedemails" class="btn-actn"}}Lista de bloqueo{{/link-to}}'}}
+					</div>
 				</div>
 {#
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						<a href="{{url('contacts/search')}}#/contacts" class="shortcuts"><span class="sm-button-large-contact-search"></span></a>
 					</div>
-					<a href="{{url('contacts/search')}}#/contacts" class="btn-actn">Búsqueda de contactos</a>
+					<div class="w-190 center">
+						<a href="{{url('contacts/search')}}#/contacts" class="btn-actn">Búsqueda de contactos</a>
+					</div>
 				</div>	
 #}
 			</div>
@@ -89,14 +97,18 @@
 					<div class="to-do sm-btn-blue">
 						<a href="{{url('dbase')}}" class="shortcuts" title="Configuracion avanzada"><span class="sm-button-large-settings"></span></a>
 					</div>
-					<a href="{{url('dbase')}}" class="btn-actn">Configuración avanzada</a>
+					<div class="w-190 center">
+						<a href="{{url('dbase')}}" class="btn-actn">Configuración avanzada</a>
+					</div>
 				</div>
 
 				<div class="col-xs-6 col-md-3">
 					<div class="to-do sm-btn-blue">
 						<a href="{{url('process/import')}}" class="shortcuts"><span class="sm-button-large-import-list"></span></a>
 					</div>
-					<a href="{{url('process/import')}}" class="btn-actn">Lista de importaciones</a>
+					<div class="w-190 center">
+						<a href="{{url('process/import')}}" class="btn-actn">Lista de importaciones</a>
+					</div>
 				</div>
 			</div>
 			<div class="space"></div>

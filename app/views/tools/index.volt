@@ -12,25 +12,33 @@
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('account') }}"  class="shortcuts"><span class="sm-button-large-accounts"></span></a>
 			</div>
-			<a href="{{ url('account') }}" class="btn-actn">Cuentas</a>
+			<div class="w-190 center">
+				<a href="{{ url('account') }}" class="btn-actn">Cuentas</a>
+			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('user') }}"  class="shortcuts"><span class="sm-button-large-users"></span></a>
 			</div>
-			<a href="{{ url('user') }}" class="btn-actn">Usuarios</a>
+			<div class="w-190 center">
+				<a href="{{ url('user') }}" class="btn-actn">Usuarios</a>
+			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('flashmessage') }}"  class="shortcuts"><span class="sm-button-large-msj"></span></a>
 			</div>
-			<a href="{{ url('flashmessage') }}" class="btn-actn">Mensajes Administrativos</a>
+			<div class="width-190">
+				<a href="{{ url('flashmessage') }}" class="btn-actn">Mensajes Administrativos</a>
+			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('process') }}"  class="shortcuts"><span class="sm-button-large-send-process"></span></a>
 			</div>
-			<a href="{{ url('process') }}" class="btn-actn">Procesos de Envio</a>
+			<div class="w-190 center">
+				<a href="{{ url('process') }}" class="btn-actn">Procesos de Envio</a>
+			</div>
 		</div>
 
 	</div>
@@ -39,13 +47,17 @@
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('scheduledmail/manage') }}"  class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
 			</div>
-			<a href="{{ url('scheduledmail/manage') }}" class="btn-actn">Programación de correos de todas las cuentas</a>
+			<div class="w-190 center">
+				<a href="{{ url('scheduledmail/manage') }}" class="btn-actn">Programación de correos de todas las cuentas</a>
+			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
 			<div class="to-do sm-btn-blue">
 				<a href="{{ url('socialmedia') }}"  class="shortcuts"><span class="sm-button-large-socialnet"></span></a>
 			</div>
-			<a href="{{ url('socialmedia') }}" class="btn-actn">Cuentas de redes sociales</a>
+			<div class="w-190 center">
+				<a href="{{ url('socialmedia') }}" class="btn-actn">Cuentas de redes sociales</a>
+			</div>
 		</div>
 	</div>
 	<div class="space"></div>
