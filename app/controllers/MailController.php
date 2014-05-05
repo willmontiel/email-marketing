@@ -2080,7 +2080,7 @@ class MailController extends ControllerBase
 			
 			if (trim($target) === '') {
 				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
-				return $this->response->redirect('mail/target/' . $idMail);
+				return $this->response->redirect('mail/compose/' . $idMail);
 			}
 			
 			$recipients = explode(', ', $target);
@@ -2095,7 +2095,7 @@ class MailController extends ControllerBase
 			
 			if (count($emails) == 0) {
 				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
-				return $this->response->redirect('mail/target/' . $idMail);
+				return $this->response->redirect('mail/compose/' . $idMail);
 			}
 
 			$transport = Swift_SendmailTransport::newInstance();
