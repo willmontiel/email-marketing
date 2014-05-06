@@ -703,7 +703,7 @@ class MailController extends ControllerBase
 				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			} 
-			$this->logger->log("Déspues de guardar Plain Text: {$plainText}");
+			$this->logger->log("Déspues de guardar Plain Text: {$mailcontent->plainText}");
 			
 			$this->db->commit();
 			
