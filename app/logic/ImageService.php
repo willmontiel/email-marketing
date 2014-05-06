@@ -29,6 +29,7 @@ class ImageService
 	
 	private function validateSrcImg($imageSrc)
 	{
+		$this->logger->log("Link: {$imageSrc}");
 		if (preg_match('/asset/i', $imageSrc)) {
 			$this->logger->log("Imágenes por asset");
 			$idAsset = filter_var($imageSrc, FILTER_SANITIZE_NUMBER_INT);
@@ -36,10 +37,8 @@ class ImageService
 		}
 		else if (preg_match('/template/i', $imageSrc)) {
 			$this->logger->log("Imágenes por template");
-			$this->logger->log("Link: {$imageSrc}");
 //			$idTemplateImage = filter_var($srcImg, FILTER_SANITIZE_NUMBER_INT);
 			$ids = explode("/", $imageSrc);
-			$this->logger->log("idTemplate: {$ids[3]}, idAsset: {$ids[4]}");
 			return $this->getCompletePublicImageSrc($ids[3], $ids[4]);
 		}
 	}

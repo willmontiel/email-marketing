@@ -291,7 +291,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var month = moment('' + m).format('MMMM');
 		var year = date.year();
 		var hour = date.hour();
-		var minutes = date.minutes();
+		var minutes = '' + date.minute();
+		minutes = (minutes.length === 1)? '0' + minutes:minutes;
+		
 		var time = hour + ':' + minutes;
 		
 		this.set('scheduleDay', day);
