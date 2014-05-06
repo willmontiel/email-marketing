@@ -15,12 +15,9 @@ function createBlock(data, type){
 		case 'target':
 			url = blockTargetUrl;
 			var j = data.segSelect;
-			console.log(j.value[i]);
 			for (var i=0; i<j.length; i++) {
-				console.log(j.value[i]);
 			}
 			
-//			console.log(data.sendByMail.value);
 			block = {
 				dbases: data.dbSelect.value,
 				contactlists: data.listSelect.value,
@@ -34,11 +31,9 @@ function createBlock(data, type){
 	}
 	
 //	saveBlock(block, url);
-	console.log(block);
 }
 
 function saveBlock(data, url) {
-	console.log('Preparandose para grabar bloque');
 	$.ajax({
 		type: "POST",
 		url: url,

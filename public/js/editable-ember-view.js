@@ -7,7 +7,6 @@ App.EmberXEditBaseView = Em.View.extend({
 		type: 'text', 
 		title: self.title, 
 		success: function (resp, newValue) { 
-			//console.log('Este es el nuevo valor que debe ir a Ember: ' + newValue);
 			self.set('value', newValue);
 			self.get('controller').set(self.field, self.value);
 			App.set('isEditable', true);
@@ -16,8 +15,6 @@ App.EmberXEditBaseView = Em.View.extend({
 	return this.selobj;
   },
   onValueChange: function () {
-//	  console.log('Valor cambio!');
-//	  console.log('Valor : [' + this.get('value') + ']');
 	  this.selobj.editable('setValue', this.get('value'));
   }.observes('value')
 });
@@ -40,7 +37,6 @@ App.EmberXEditableTextAreaView = App.EmberXEditBaseView.extend({
 		title: self.title, 
 		rows: 10,
 		success: function (resp, newValue) { 
-			//console.log('Este es el nuevo valor que debe ir a Ember: ' + newValue);
 			self.set('value', newValue);
 			self.get('controller').set(self.field, self.value);
 			App.set('isEditable', true);
@@ -62,7 +58,6 @@ App.EmberXEditableSelectView = App.EmberXEditBaseView.extend({
 		  source: self.source,
 		  title: self.title,
 		  success: function (resp, newValue) { 
-			  //console.log('Este es el nuevo valor que debe ir a Ember: ' + newValue);
 			  self.set('value', newValue);
 			  self.get('controller').set(self.field, self.value);
 			  App.set('isEditable', true);

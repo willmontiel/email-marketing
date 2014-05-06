@@ -168,7 +168,7 @@
 								<!-- Eliminar la lista -->
 								{{ '{{#link-to "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 
-								<!-- Estadisticas de la lista -->
+								<!-- Estadísticas de la lista -->
 								<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default btn-sm" title="Ver estadisticas"><i class="fa fa-bar-chart-o"></i></a>
 
 							</td>
@@ -187,7 +187,7 @@
 									<h4>No se encontraron listas</h4>
 									<p>Verifique el filtro de bases de datos.</p>
 									<p>Todos los contactos se organizan en listas. Si desea crear una lista de contactos,
-										haga {{'{{#link-to "lists.new" disabledWhen="createDisabled"}}'}} clic aquí {{'{{/link-to}}'}} o elija el botón de la parte superior
+										haga {{'{{#link-to "lists.new" disabledWhen="createDisabled"}}'}} clic aquí {{'{{/link-to}}'}} o elija el botón de la parte superior.
 									</p>
 								</div>
 							</td>

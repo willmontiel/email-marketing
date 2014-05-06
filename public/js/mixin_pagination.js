@@ -115,7 +115,6 @@ Ember.MixinPagination = Ember.Mixin.create({
 		},
 
 		setRxP: function(pages) {
-			console.log(pages);
 			return false;
 		}
 	

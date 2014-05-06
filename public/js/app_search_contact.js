@@ -46,7 +46,6 @@ App.ContactsIndexController = Ember.ArrayController.extend({
 						var total = (p.store.typeMaps[index].metadata.total);
 					}
 					if (total > 50) {
-						console.log('lalala')
 						t.set('totalrecords', true);	
 					}
 				});

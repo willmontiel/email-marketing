@@ -9,6 +9,7 @@
 
 @brand-white: #f5f5f5;
 @brand-blue: #6e97ac;
+@brand-light-blue:#a1dcfb;
 @brand-sad-blue: #b3e3e4;
 @brand-gray: #9d9d9d;
 @brand-green: #97c86b;
@@ -150,13 +151,16 @@ h4.sectiontitle {
 }
 
 .summary-unsubscribed {
-	background-color: #a1dcfb;
+	background-color: @brand-light-blue;
 }
 .summary-clicks {
-	background-color: #6e97ac;
+	background-color: @brand-blue;
 }
 .summary-bounced {
-	background-color: #ffa100;
+	background-color: @brand-orange;
+}
+.summary-spam {
+	background-color: @brand-danger;
 }
 .summary-box-social {
 	background-color: @social-network-bg;
@@ -239,17 +243,25 @@ h4.sectiontitle {
 	font-size: 15px;
 	padding: 15px;
 }
-#main-navigation li.active ,
-#main-navigation li:hover {
-	background-color: #f5f5f5;
-	border-left:6px solid #20526e;
+#main-navigation li.active {
+	background-color: @brand-white;
+	border-left:6px solid @menu-background;
 	border-radius: 0px;
 }
-#main-navigation li.active a,
-#main-navigation li:hover a {
-	background-color: #f5f5f5;
+#main-navigation li.active a {
+	background-color: @brand-white;
 	border-radius: 0px;
 	color:#20526e;
+}
+#main-navigation li:hover {
+	background-color: @bg-info-blue;
+	border-left:6px solid @bg-info-blue;
+	border-radius: 0px;
+}
+#main-navigation li:hover a {
+	background-color: @bg-info-blue;
+	border-radius: 0px;
+	color:@menu-background;
 }
 /* Estilos para la navegacion horizontal */
 .navbar-default {
@@ -338,7 +350,7 @@ h4.sectiontitle {
 	background-position: @position 0;
 }
 .sm-button-large-program-envios:extend(.sm-button-large-base) {
-	.pos-icons(7, @shortcuts-big-icons-width);
+	.pos-icons(16, @shortcuts-big-icons-width);
 	background-position: @position 0;
 }
 .sm-button-large-socialnet:extend(.sm-button-large-base) {
@@ -486,7 +498,7 @@ h4.sectiontitle {
 /* Fin estilos para la navegación interna con iconos pequeños */
 
 /* Estilos para la info sobre contactos */
-.numbers-contacts {
+h4.numbers-contacts {
 	margin-bottom: 0px;
 }
 .numbers-contacts li {
@@ -777,22 +789,23 @@ table.middle > tbody > tr > th > td {
 	-o-border-image:url('../images/bg-border-mail.png') 20 20 round; /* Opera */
 	border-image:url('../images/bg-border-mail.png') 20 20 round;
 }
-/*      */
+/*   email compose   */
 .thumn-hight {
 	height: 414px;
 }
 .bg-wrap-calendar {
-	background: transparent url("../images/bg-calendar.png")no-repeat 0px 0px;
+	background: transparent url("../images/bg-calendar-1.png")no-repeat 0px 0px;
+	box-shadow: 19px 19px 22px -12px #adadad;
 	margin-top: 0;
-	width: 160px;
-	height: 160px;
+	width: 175px;
+	height: 186px;
 }
 .date {
 	text-align: center;
-	padding-top: 36px;	
+	padding-top: 65px;	
 }
 .day-send {
-	color: @bg-delete-btn;
+	color: @menu-background;
 	font-size: 60px;
 	margin: 0px;
 }
@@ -810,10 +823,12 @@ table.middle > tbody > tr > th > td {
 	margin: 0px;
 }
 .bg-wrap-time {
-	border: 4px solid #585858;
-	border-radius: 3px;
-	background-color: #303030;
-	margin-top: 40px;
+	box-shadow: 10px 10px 22px #adadad;
+	background: -webkit-linear-gradient(left top, #3a7ba0, @menu-background); /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(bottom right, #3a7ba0, @menu-background); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(bottom right, #3a7ba0, @menu-background); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(to bottom right, #3a7ba0, @menu-background); /* Standard syntax */
+	margin-top: 60px;
 	text-align: center;
 	padding: 0 15px;
 	width: 200px;
@@ -823,4 +838,13 @@ table.middle > tbody > tr > th > td {
 }
 .width-fix {
 	width: 100%;
+}
+/*   statistics   */
+.anchor {
+	text-decoration: none;
+	cursor: pointer;
+}
+.anchor:hover {
+	text-decoration: none;
+	cursor: pointer;
 }
