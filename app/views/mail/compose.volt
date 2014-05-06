@@ -11,7 +11,7 @@
 	<script type="text/javascript">
 		var db;
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
-		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}"};
+		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_mail.js') }}

@@ -12,7 +12,6 @@ class MailController extends ControllerBase
 		$mailcontent = null;
 		
 		if ($idMail != null) {
-			
 			$mail = Mail::findFirst(array(
 				'conditions' => 'idMail = ?1 AND idAccount = ?2',
 				'bind' => array(1 => $idMail,

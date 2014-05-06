@@ -85,7 +85,32 @@ App.SegmentsShowRoute = Ember.Route.extend({});
 App.SegmentController = Ember.ObjectController.extend();
 
 App.SegmentsIndexController = Ember.ArrayController.extend(Ember.MixinPagination,{
-	modelClass : App.Segment,
+	selectedDbase: null,
+	init: function () 
+	{
+		this.set('acl', App.contactListACL);
+		var t = this;
+		this.store.find('dbase').then(function(db) {
+			var dbases = db.get('content');
+			var values = [{id: 0, name:'Todas las Bases de Datos'}];
+			for(var i = 0; i < dbases.length; i++) {
+				var obj = {id: dbases[i].get('id'), name: dbases[i].get('name')};
+				values.push(obj);
+			}
+			t.set('dbaseSelect', values);
+		});
+	},
+	
+	modelClass : App.Segment,		
+	needs: ['dbase'],
+	
+	dbaseSelect: [],
+	
+	dbaseSelectChange: function () {
+		var idDbase = this.get('selectedDbase');
+		var resultado = this.store.find('segment', { dbase: idDbase });
+		this.set('content', resultado);
+    }.observes('selectedDbase'),
 });
 
 App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {

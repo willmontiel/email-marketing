@@ -37,7 +37,7 @@
 				<a href="{{ url('process') }}"  class="shortcuts"><span class="sm-button-large-send-process"></span></a>
 			</div>
 			<div class="w-190 center">
-				<a href="{{ url('process') }}" class="btn-actn">Procesos de Envio</a>
+				<a href="{{ url('process') }}" class="btn-actn">Procesos de Envío y de Importación</a>
 			</div>
 		</div>
 

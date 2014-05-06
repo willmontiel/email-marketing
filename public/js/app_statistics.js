@@ -150,7 +150,7 @@ App.DrilldownBouncedRoute = Ember.Route.extend({
 /*Controllers*/
 App.DrilldownController = Ember.ObjectController.extend({
 	init: function() {
-		console.log($('#select-options-for-compare'))
+//		console.log($('#select-options-for-compare'))
 	}
 });
 App.DrilldownIndexController = Ember.ArrayController.extend({});	

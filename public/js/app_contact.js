@@ -220,16 +220,24 @@ App.ContactsImportController = Ember.ObjectController.extend({
 
 App.ContactsNewView = Ember.View.extend({
   didInsertElement: function() {
-        this.$("select").select2({
-			placeholder: "Seleccione las Opciones"
+		$('.date_view_picker').datetimepicker({
+			format:'Y-m-d',
+			inline:true,
+			timepicker:false,
+			lang:'es',
+			startDate: 0
 		});
     }
 });
 
 App.ContactsEditView = Ember.View.extend({
   didInsertElement: function() {
-        this.$("select").select2({
-			placeholder: "Seleccione las Opciones"
+        $('.date_view_picker').datetimepicker({
+			format:'Y-m-d',
+			inline:true,
+			timepicker:false,
+			lang:'es',
+			startDate: 0
 		});
     }
 });       
