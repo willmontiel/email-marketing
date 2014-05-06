@@ -87,7 +87,7 @@
 	</div>
 	<div class="row space"></div>
 	<div class="row">
-		<h4 class="sectiontitle">Qué quieres hacer hoy?</h4>
+		<h4 class="sectiontitle">Qué quiere hacer hoy?</h4>
 		<div class="row">
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">

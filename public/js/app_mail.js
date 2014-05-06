@@ -384,7 +384,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		
 		return true;
 	}.property('content.name', 'content.fromName', 'content.fromEmail', 'content.subject', 'content.mailcontent', 'content.plainText', 'content.totalContacts', 'content.scheduleDate'),
-			
+
 	actions: {
 		save: function(mail) {
 			var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
@@ -437,7 +437,11 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('isScheduleExpanded', false);
 			}
 		},
-		
+				
+		saveDataAndGoToSocialMedia: function (social) {
+//			console.log(this.get('this.id'))
+		},
+
 		expandHeader: function () {
 			if (this.get('this.id') !== null) {
 				var arrayFb = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
