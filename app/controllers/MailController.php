@@ -39,6 +39,7 @@ class MailController extends ControllerBase
 			$MailWrapper->setMail($mail);
 			$MailWrapper->setContent($content);
 			$MailWrapper->setAccount($account);
+			$MailWrapper->setSocialsKeys($this->fbapp->iduser, $this->fbapp->token, $this->twapp->iduser, $this->twapp->token);
 			if ($mailcontent) {
 				$MailWrapper->setMailContent($mailcontent);
 			}
@@ -85,6 +86,8 @@ class MailController extends ControllerBase
 		if ($mails != null) {
 			$MailWrapper = new MailWrapper();
 			$MailWrapper->setMail($mail);
+			$MailWrapper->setAccount($account);
+			$MailWrapper->setSocialsKeys($this->fbapp->iduser, $this->fbapp->token, $this->twapp->iduser, $this->twapp->token);
 			$MailWrapper->setMailContent($mailcontent);
 			$response = $MailWrapper->getResponse();
 			return $this->setJsonResponse(array($response->key => $response->data), $response->code);
@@ -279,20 +282,12 @@ class MailController extends ControllerBase
 		try {
 			$socialnet = new SocialNetworkConnection();
 			$socialnet->setAccount($account);
-			$socialnet->setFacebookConnection($this->fbapp->iduser, $this->fbapp->token);
-			$socialnet->setTwitterConnection($this->twapp->iduser, $this->twapp->token);
 
 			$fbsocials = $socialnet->getSocialIdNameArray($socialnet->findAllFacebookAccountsByUser());
 			$twsocials = $socialnet->getSocialIdNameArray($socialnet->findAllTwitterAccountsByUser());
 			
-			$redirect = ($idMail != null) ? '/socialmedia/create/' . $idMail : '/socialmedia/create/' ;
-			$fbloginUrl = $socialnet->getFbUrlLogIn($redirect);
-			$twloginUrl = $socialnet->getTwUrlLogIn($redirect);
-
 			$this->view->setVar('fbsocials', $fbsocials);
-			$this->view->setVar("fbloginUrl", $fbloginUrl);
 			$this->view->setVar('twsocials', $twsocials);
-			$this->view->setVar("twloginUrl", $twloginUrl);
 		} 
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');

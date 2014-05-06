@@ -35,6 +35,14 @@ class MailWrapper extends BaseWrapper
 		$this->mailcontent = $mailcontent;
 	}
 	
+	public function setSocialsKeys($fbiduser, $fbtoken, $twiduser, $twtoken)
+	{
+		$this->fbiduser = $fbiduser;
+		$this->fbtoken = $fbtoken;
+		$this->twiduser = $twiduser;
+		$this->twtoken = $twtoken;
+	}
+	
 	public function processDataForMail()
 	{
 		$this->processTarget();
@@ -331,6 +339,15 @@ class MailWrapper extends BaseWrapper
 		}
 		
 		$jsonObject['scheduleDate'] = $schedule;
+		$this->logger->log('ya casi llega ' . $this->account->idAccount);
+		$socialnet = new SocialNetworkConnection();
+		$socialnet->setAccount($this->account);
+		$socialnet->setFacebookConnection($this->fbiduser, $this->fbtoken);
+		$socialnet->setTwitterConnection($this->twiduser, $this->twtoken);
+		
+		$redirect = '/socialmedia/create/' . $this->mail->idMail;
+		$jsonObject['fbloginurl'] = $socialnet->getFbUrlLogIn($redirect);
+		$jsonObject['twloginurl'] = $socialnet->getTwUrlLogIn($redirect);
 		
 		$this->logger->log('Mail: ' . print_r($jsonObject, true));
 		return $jsonObject;
