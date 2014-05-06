@@ -536,7 +536,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 });
 
 function getArrayValue(value) {
-	if( value !== null) {
+	console.log(value)
+	if( value !== null && value !== undefined ) {
+		console.log(value)
 		var array = [];
 		var obj = value.toArray();
 		for (var i = 0; i < obj.length; i++) {
