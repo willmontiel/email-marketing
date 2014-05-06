@@ -30,113 +30,145 @@
 		}
 	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-signal icon-2x"></i>Estadisticas{% endblock %}
-{% block sectionsubtitle %}{% endblock %}
 {% block content %}
 	<div class="row">
-		<div class="col-sm-12">
-			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
+		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
+
+		<div class="wrap">
+			<div class="col-md-5">
+				<h4 class="sectiontitle numbers-contacts" >{{contactList.name}}</h4>
+			</div>
+			<div class="col-md-7">
+				<div class="col-md-6">
+					<p><span class="blue big-number">{{statisticsData.sent}}</span>correos enviados</p>
+				</div>
+				<div class="col-md-6">
+					<br><p class="text-right">Fecha del envío {{date('Y-m-d', mail.finishedon)}}</p>
+				</div>
+			</div>
+			<div class="clearfix"></div>
 		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-sm-12">
-			<h4 class="sectiontitle">Estadisticas de lista de contactos</h4>
-			<div class="bs-callout bs-callout-info">
-				<h3>{{contactList.name}} <small>{{statisticsData.sent}} correos enviados</small></h3>
+		{#  cajas de datos de interacciones de los contactos  #}
+		<div class="row">
+			<div class="space"></div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				<div class="box-dashboard-summary summary-opens">
+					<div class="title-stats-dashboard-summary">{{statisticsData.uniqueOpens|numberf}}</div>
+					<div class="number-stats-dashboard-summary">{{statisticsData.percentageUniqueOpens}}%</div>
+					<div class="title-stats-dashboard-summary">Aperturas</div>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				<div class="box-dashboard-summary summary-clicks">
+					<div class="title-stats-dashboard-summary">{{statisticsData.clicks|numberf}}</div>
+					<div class="number-stats-dashboard-summary">{{statisticsData.percent_clicks_CTR}}%</div>
+					<div class="title-stats-dashboard-summary">Clics</div>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				<div class="box-dashboard-summary summary-unsubscribed">
+					<div class="title-stats-dashboard-summary">{{statisticsData.unsubscribed|numberf}}</div>
+					<div class="number-stats-dashboard-summary">{{statisticsData.percentageUnsubscribed}}%</div>
+					<div class="title-stats-dashboard-summary">Desuscritos</div>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				<div class="box-dashboard-summary summary-bounced">
+					<div class="title-stats-dashboard-summary">{{statisticsData.bounced|numberf}}</div>
+					<div class="number-stats-dashboard-summary">{{statisticsData.percentageBounced}}%</div>
+					<div class="title-stats-dashboard-summary">Rebotes</div>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				<div class="box-dashboard-summary summary-spam">
+					<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
+					<div class="number-stats-dashboard-summary">{{statisticsData.percentageSpam}}%</div>
+					<div class="title-stats-dashboard-summary">Spam</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-6">
-			<table class="table table-striped">
-				<thead></thead>
-				<tbody>
-					<tr>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
-									<div class="news-time">
-									  <span>{{statisticsData.percentageUniqueOpens}}%</span>
-									</div>
-									<div class="news-content">
-										<label class="label-openings">{{statisticsData.uniqueOpens|numberf}}</label>
-										<div class="news-text">
-											Aperturas
-										</div>
-									</div>
-								</div>	
+		<div class="space"></div>
+
+		{#   cajas de datos de interacciones de contactos en redes sociales   #}
+		<div class="row">
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				<div class="box-dashboard-summary summary-box-social">
+					<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
+					<div>
+						<p>{{widget.getTitle()}}</p>
+					</div>
+					<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
+					<div class="number-stats-dashboard-summary">{{widget.getTotal()}}</div>
+					<div class="container-fluid">
+						<div class="row border-top">
+						{%for value in widget.getSecondaryValues()%}
+							<div class="col-xs-6 social-sec-box">
+								<div class="">
+									{{value.name}}
+								</div>
+								<div class="">
+									{{value.value}}
+								</div>
 							</div>
-						</td>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
-									<div class="news-content">
-										<label class="label-clicks">{{statisticsData.clicks|numberf}}</label>
-										<div class="news-text">
-											Clicks
-										</div>
-									</div>
-								</div>	
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				<div class="box-dashboard-summary summary-box-social">
+					<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
+					<div>
+						<p>{{widget.getTitle()}}</p>
+					</div>
+					<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
+					<div class="number-stats-dashboard-summary">{{widget.getTotal()}}</div>
+					<div class="container-fluid">
+						<div class="row border-top">
+						{%for value in widget.getSecondaryValues()%}
+							<div class="col-xs-6 social-sec-box">
+								<div class="">
+									{{value.name}}
+								</div>
+								<div class="">
+									{{value.value}}
+								</div>
 							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
-									<div class="news-time">
-									  <span>{{statisticsData.percentageUnsubscribed}}%</span>
-									</div>
-									<div class="news-content">
-										<label class="label-unsubscribed">{{statisticsData.unsubscribed|numberf}}</label>
-										<div class="news-text">
-											Des-suscritos
-										</div>
-									</div>
-								</div>	
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+
+
+
+
+
+			<div class="box-dashboard-summary summary-box-social">
+				<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
+				<div>
+					<p>{{widget.getTitle()}}</p>
+				</div>
+				<div class="number-stats-dashboard-summary">
+					{{widget.getTotal()}}
+				</div>
+				<div class="container-fluid">
+					<div class="row border-top">
+					{%for value in widget.getSecondaryValues()%}
+						<div class="col-xs-6 social-sec-box">
+							<div class="">
+								{{value.name}}
 							</div>
-						</td>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
-									<div class="news-time">
-									  <span>{{statisticsData.percentageBounced}}%</span>
-									</div>
-									<div class="news-content">
-										<label class="label-bounced">{{statisticsData.bounced|numberf}}</label>
-										<div class="news-text">
-											Rebotes
-										</div>
-									</div>
-								</div>	
+							<div class="">
+								{{value.value}}
 							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-spam"><i class="icon-warning-sign icon-3x"></i></label>
-									<div class="news-time">
-									  <span>{{statisticsData.percentageSpam}}%</span>
-									</div>
-									<div class="news-content">
-										<label class="label-spam">{{statisticsData.spam|numberf}}</label>
-										<div class="news-text">
-											Reportes de Spam
-										</div>
-									</div>
-								</div>	
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+						</div>
+					{% endfor %}
+
+
 			<div class="row">
 				<div class="col-sm-7">
 					<select id="liststocompare" class="form-control">

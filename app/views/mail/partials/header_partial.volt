@@ -33,7 +33,7 @@
 					</div>
 					<label for="fromName" class="col-sm-2 control-label">Email: </label>
 					<div class="col-sm-4">
-						{{'{{view Ember.TextField valueBinding="fromEmail" id="fromEmail" placeholder="Enviar desde esta dirección de correo" class="form-control"}}'}}
+						{{'{{view Ember.TextField valueBinding="fromEmail" id="fromEmail" placeholder="Enviar desde esta dirección de correo" required="required" class="form-control"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
@@ -45,7 +45,7 @@
 				<div class="form-group">
 					<label for="subject" class="col-sm-2 control-label">Asunto: </label>
 					<div class="col-sm-10">
-						{{'{{view Ember.TextField valueBinding="subject" id="subject" placeholder="Asunto" class="form-control"}}'}}
+						{{'{{view Ember.TextField valueBinding="subject" id="subject" placeholder="Asunto" class="form-control" required="required"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
@@ -105,7 +105,7 @@
 									</div>
 								{% else %}
 									<div class="wrapper bg bg-warning">
-										No tiene una cuenta de facebook configurada, para configurarla haga <span style="text-decoration: underline;" onclick="saveDataAndGoToSocialMedia()">click aqui</span>
+										No tiene una cuenta de facebook configurada, para configurarla haga <span style="text-decoration: underline;" {{' {{action "saveDataAndGoToSocialMedia" "fbloginUrl"}} '}}>click aqui</span>
 									</div>	
 								{% endif %}
 							</div>
@@ -131,7 +131,7 @@
 									</div>
 								{% else %}
 									<div class="wrapper bg bg-warning">
-										No tiene una cuenta de twitter configurada, para configurarla haga <span style="text-decoration: underline;" onclick="saveDataAndGoToSocialMedia()">click aqui</span>
+										No tiene una cuenta de twitter configurada, para configurarla haga <span style="text-decoration: underline;" {{' {{action "saveDataAndGoToSocialMedia" "twloginUrl"}} '}}>click aqui</span>
 									</div>	
 								{% endif %}
 							</div>

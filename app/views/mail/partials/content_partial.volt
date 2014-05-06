@@ -5,7 +5,7 @@
 			<div class="row">
 				<div class="col-md-3 text-center">
 					{{' {{#external-link content=this pattern="' ~ url('mail/contenteditor') ~ '/%@" }}'}}
-						<img src="{{url('b3/images/edit_page.png')}}" class="" alt=""><br>Editor avanzado
+						<img src="{{url('b3/images/icon-edit-avanz.png')}}" class="" alt=""><br>Editor avanzado
 					{{'{{/external-link}}'}}
 				</div>
 				<div class="col-md-3 text-center">
@@ -20,7 +20,7 @@
 				</div>
 				<div class="col-md-3 text-center">
 					{{' {{#external-link content=this pattern="' ~ url('mail/importcontent') ~ '/%@" }}'}}
-						<img src="{{url('b3/images/icon-url.png')}}" class="" alt=""><br>Importar desde
+						<img src="{{url('b3/images/icon-url.png')}}" class="" alt=""><br>Importar desde url
 					{{'{{/external-link}}'}}
 				</div>
 			</div>

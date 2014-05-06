@@ -451,7 +451,11 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},
-		
+				
+		saveDataAndGoToSocialMedia: function (social) {
+//			console.log(this.get('this.id'))
+		},
+
 		expandHeader: function () {
 			if (this.get('this.id') !== null) {
 				var arrayFb = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
@@ -622,7 +626,7 @@ App.DateTimePicker = Em.View.extend({
 			inline:true,
 			lang:'es',
 			minDate: 0,
-//			minTime: 0,
+			minTime: 0,
 			startDate: 0,
 //			allowTimes:[
 //				'7:00', '7:15', '7:30', '7:45',
