@@ -69,105 +69,70 @@
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
-			<div class="row">
-				<h3>{{mail.name}} <small>{{statisticsData.total|numberf}} correos enviados</small></h3>
-				<div class="col-md-6">
-					<table class="table table-striped" style="border: 0px !important;" >
-						<thead></thead>
-						<tbody>
-							<tr>
-								<td>
-									<div class="box">
-										<div class="box-section news with-icons">
-											<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
-											<div class="news-time">
-											  <span>{{statisticsData.statopens}}%</span>
-											</div>
-											<div class="news-content">
-												<label class="label-openings">
-													 {{statisticsData.opens|numberf}}
-												</label>
-												<div class="news-text">
-													{{'{{#link-to "drilldown.opens" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Aperturas</span>{{/link-to}}'}}
-												</div>
-											</div>
-										</div>	
-									</div>
-								</td>
-								<td>
-									<div class="box">
-										<div class="box-section news with-icons">
-											<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
-											<div class="news-time">
-											  <span>{{statisticsData.percent_clicks_CTR}}%</span>
-											</div>
-											<div class="news-content">
-												<label class="label-clicks">{{statisticsData.clicks_CTR|numberf}}</label>
-												<div class="news-text">
-													{{'{{#link-to "drilldown.clicks" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Clics</span>{{/link-to}}'}}
-												</div>
-											</div>
-										</div>	
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="box">
-										<div class="box-section news with-icons">
-											<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
-											<div class="news-time">
-											  <span>{{statisticsData.statunsubscribed}}%</span>
-											</div>
-											<div class="news-content">
-												<label class="label-unsubscribed">{{statisticsData.unsubscribed|numberf}}</label>
-												<div class="news-text">
-													{{'{{#link-to "drilldown.unsubscribed" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Des-suscritos</span>{{/link-to}}'}}
-												</div>
-											</div>
-										</div>	
-									</div>
-								</td>
-								<td>
-									<div class="box">
-										<div class="box-section news with-icons">
-											<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
-											<div class="news-time">
-											  <span>{{statisticsData.statbounced}}%</span>
-											</div>
-											<div class="news-content">
-												<label class="label-bounced">{{statisticsData.bounced|numberf}}</label>
-												<div class="news-text">
-													{{'{{#link-to "drilldown.bounced" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Rebotes</span>{{/link-to}}'}}
-												</div>
-											</div>
-										</div>	
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="box">
-										<div class="box-section news with-icons">
-											<label class="avatar-spam"><i class="icon-warning-sign icon-3x"></i></label>
-											<div class="news-time">
-											  <span>{{statisticsData.statspam}}%</span>
-											</div>
-											<div class="news-content">
-												<label class="label-spam">{{statisticsData.spam|numberf}}</label>
-												<div class="news-text">
-													{{'{{#link-to "drilldown.spam" href=false}}<span style="text-decoration: underline;" onClick="autoScroll()">Reportes de Spam</span>{{/link-to}}'}}
-												</div>
-											</div>
-										</div>	
-									</div>
-								</td>
-								<td>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="space"></div>
+			<div class="wrap">
+				<div class="col-md-5">
+					<h4 class="sectiontitle numbers-contacts">{{mail.name}}</h4>
+				</div>
+				<div class="col-md-7">
+					<div class="col-md-6">
+						<p><span class="blue big-number">{{statisticsData.total|numberf}} </span>correos enviados</p>
+					</div>
+					<div class="col-md-6">
+						<br><p class="text-right">Fecha del envío  {{date('Y-m-d', mail.finishedon)}}</p>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				{{'{{#link-to "drilldown.opens" class="anchor" href=false}}' }}
+					<div class="box-dashboard-summary summary-opens anchor">
+						<div class="title-stats-dashboard-summary">{{statisticsData.uniqueOpens|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{statisticsData.percentageUniqueOpens}}%</div>
+						<div class="title-stats-dashboard-summary">Aperturas</div>
+					</div>
+				{{ '{{/link-to}}'}}
+			</div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				{{'{{#link-to "drilldown.clicks" class="anchor" href=false}}' }}
+					<div class="box-dashboard-summary summary-clicks anchor">
+						<div class="title-stats-dashboard-summary">{{statisticsData.clicks|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{statisticsData.percent_clicks_CTR}}%</div>
+						<div class="title-stats-dashboard-summary">Clics</div>
+					</div>
+				{{'{{/link-to}}'}}
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				{{'{{#link-to "drilldown.unsubscribed" class="anchor" href=false}}' }}
+					<div class="box-dashboard-summary summary-unsubscribed">
+						<div class="title-stats-dashboard-summary">{{statisticsData.unsubscribed|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{statisticsData.percentageUnsubscribed}}%</div>
+						<div class="title-stats-dashboard-summary">Desuscritos</div>
+					</div>
+				{{ '{{/link-to}}'}}
+			</div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				{{'{{#link-to "drilldown.bounced" class="anchor" href=false}}' }}
+					<div class="box-dashboard-summary summary-bounced anchor">
+						<div class="title-stats-dashboard-summary">{{statisticsData.bounced|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{statisticsData.percentageBounced}}%</div>
+						<div class="title-stats-dashboard-summary">Rebotes</div>
+					</div>
+				{{ '{{/link-to}}'}}
+			</div>
+			<div class="col-md-2 col-sm-4 col-xs-6">
+				{{'{{#link-to "drilldown.spam" class="anchor" href=false}} '}}
+					<div class="box-dashboard-summary summary-spam anchor">
+						<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{statisticsData.percentageSpam}}%</div>
+						<div class="title-stats-dashboard-summary">Spam</div>
+					</div>
+				{{' {{/link-to}}'}}
+			</div>
+		</div>
+
+		<div class="space"></div>
+{#
 					<div class="row">
 						<div class="col-md-7">
 							{{ '{{view Ember.Select
@@ -189,34 +154,35 @@
 						<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 					</div>
 				</div>
-			</div>
-				
+#}				
 			{{ "{{outlet}}" }}
-				
+
 		</script>
 		{{ partial("statistic/mailpartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
-		<div class="pull-right scaleChart">
-			<div class="pull-left">
-				Agrupar por: &nbsp;
-			</div>
-			<div class="pull-right">
-				<label for="scaleHour">
-					{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
-					Hora &nbsp;
-				</label>
-			</div>
-			<div class="pull-right">
-				<label for="scaleDay">
-					{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
-					Dia &nbsp;
-				</label>
-			</div>
-			<div class="pull-right">
-				<label for="scaleMonth">
-					{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
-					Mes &nbsp;
-				</label>
+		<div class="row">
+			<div class="pull-right scaleChart">
+				<div class="pull-left">
+					Agrupar por: &nbsp;
+				</div>
+				<div class="pull-right">
+					<label for="scaleHour">
+						{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
+						Hora &nbsp;
+					</label>
+				</div>
+				<div class="pull-right">
+					<label for="scaleDay">
+						{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
+						Dia &nbsp;
+					</label>
+				</div>
+				<div class="pull-right">
+					<label for="scaleMonth">
+						{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
+						Mes &nbsp;
+					</label>
+				</div>
 			</div>
 		</div>
 		<div id="ChartContainer"></div>
