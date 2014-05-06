@@ -319,7 +319,7 @@ App.TimeGraphView = Ember.View.extend({
 		try{
 			chart.write(this.idChart);
 		}catch(err){
-			console.log(err.message);
+//			console.log(err.message);
 		}
 	},
 			
