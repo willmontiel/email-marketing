@@ -236,7 +236,7 @@ class SegmentWrapper extends BaseWrapper
 
 	}
 	
-	public function findSegments() 
+	public function findSegments($idDbase = 0) 
 	{
 		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 		
@@ -248,13 +248,21 @@ class SegmentWrapper extends BaseWrapper
 					FROM Segment s JOIN Dbase d ON s.idDbase = d.idDbase
 					WHERE d.idAccount = :idaccount:";
 		
+		if($idDbase != 0) {
+			$queryTxt.=" AND d.idDbase = :iddbase:";
+			$parameters = array('idaccount' => $this->account->idAccount, 'iddbase' => $idDbase);
+		}
+		else {
+			$parameters = array('idaccount' => $this->account->idAccount);
+		}
+		Phalcon\DI::getDefault()->get('logger')->log($idDbase);
+		Phalcon\DI::getDefault()->get('logger')->log($queryTxt);
 		if (isset($number) ) {
 			$offset = $this->pager->getStartIndex();
 			$start = isset($offset)?$offset:0;
 			$queryTxt .= ' LIMIT ' . $number . ' OFFSET ' . $start;
 		}
 		
-		$parameters = array('idaccount' => $this->account->idAccount);
 
 		$query = $modelManager->createQuery($queryTxt);
 		$segments = $query->execute($parameters);

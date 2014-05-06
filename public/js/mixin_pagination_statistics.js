@@ -49,7 +49,7 @@ Ember.MixinPaginationStatistics = Ember.Mixin.create({
 		if(this.type) {
 			obj.type = this.type;
 		}
-		if(this.filter) {
+		if(this.filter && typeof this.filter !== 'function') {
 			obj.filter = this.filter;
 		}
 		this.store.find(this.modelClass, obj).then(function(info) {
