@@ -120,6 +120,7 @@ class Security extends Plugin
 				'form::frame' => array(),
 				'contacts::form' => array(),
 				'contacts::activate' => array(),
+				'share::results' => array(),
 				
 				
 				
@@ -342,6 +343,8 @@ class Security extends Plugin
 				'statistic::comparelists' => array('statistic' => array('read')),
 				'statistic::comparedbases' => array('statistic' => array('read')),
 				
+				'share::statistics' => array('statistic' => array('share')),
+				
 				//flash messages
 				'flashmessage::index' => array('flashmessage' => array('read')),
 				'flashmessage::new' => array('flashmessage' => array('create')),
@@ -466,7 +469,8 @@ class Security extends Plugin
 			'unsubscribe:success',
 			'form:frame',
 			'contacts:form',
-			'contacts:activate'
+			'contacts:activate',
+			'share:results',
 		);
 		
 		if ($resource == "error::notavailable") {

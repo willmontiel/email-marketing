@@ -115,6 +115,7 @@ class PermissionsDataBase
 			
 			'statistic::read' => 51,
 			'statistic::download' => 52,
+			'statistic::share' => 67,
 			
 			'flashmessage::create' => 53,
 			'flashmessage::read' => 54,
@@ -205,6 +206,7 @@ class PermissionsDataBase
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'statistic::read'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'statistic::download'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'statistic::share'),
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'flashmessage::create'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'flashmessage::read'),
@@ -281,6 +283,7 @@ class PermissionsDataBase
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'statistic::read'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'statistic::download'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'statistic::share'),
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'form::create'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'form::read'),

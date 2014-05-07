@@ -686,11 +686,9 @@ class MailController extends ControllerBase
 				
 				$text = new PlainText();
 				$plainText = $text->getPlainText($contentmail);
-				$this->logger->log("Plain Text Nuevo: {$plainText}");
 				$mailcontent->plainText = $plainText;
 			}
 			else {
-				$this->logger->log("Plain Text Viejo: {$plainText}");
 				$mailcontent->content = $content;
 				$mailcontent->plainText = $text;
 			}
@@ -703,7 +701,6 @@ class MailController extends ControllerBase
 				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			} 
-			$this->logger->log("Déspues de guardar Plain Text: {$mailcontent->plainText}");
 			
 			$this->db->commit();
 			
