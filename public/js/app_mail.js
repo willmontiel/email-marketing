@@ -306,7 +306,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var month = moment('' + m).format('MMMM');
 		var year = date.year();
 		var hour = date.hour();
-		var minutes = date.minutes();
+		var minutes = '' + date.minute();
+		minutes = (minutes.length === 1)? '0' + minutes:minutes;
+		
 		var time = hour + ':' + minutes;
 		
 		this.set('scheduleDay', day);
@@ -558,7 +560,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 });
 
 function getArrayValue(value) {
-	if( value !== null) {
+	
+	if( value !== null && value !== undefined ) {
 		var array = [];
 		var obj = value.toArray();
 		for (var i = 0; i < obj.length; i++) {
@@ -629,7 +632,7 @@ App.DateTimePicker = Em.View.extend({
 			inline:true,
 			lang:'es',
 			minDate: 0,
-//			minTime: 0,
+			minTime: 0,
 			startDate: 0,
 //			allowTimes:[
 //				'7:00', '7:15', '7:30', '7:45',
@@ -673,8 +676,8 @@ Ember.RadioButton = Ember.View.extend({
 		if (this.get("selection") === 'now') {
 			this.set("selection", 'later');
 		}
-		console.log('esto' + this.get("selection"));
-        return this.get("value") === this.get("selection");   
+
+		return this.get("value") === this.get("selection");   
     }.property()
 });
 

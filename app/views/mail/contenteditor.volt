@@ -62,7 +62,7 @@
 	function saveContent() {
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$.ajax({
-			url: "{{url('mail/savecontent')}}/" + idMail,
+			url: "{{url('mail/contenteditor')}}/" + idMail,
 			type: "POST",			
 			data: { editor: editor},
 			error: function(msg){

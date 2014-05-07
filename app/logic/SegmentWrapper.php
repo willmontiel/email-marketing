@@ -248,7 +248,7 @@ class SegmentWrapper extends BaseWrapper
 					FROM Segment s JOIN Dbase d ON s.idDbase = d.idDbase
 					WHERE d.idAccount = :idaccount:";
 		
-		if($idDbase !== 0) {
+		if($idDbase != 0) {
 			$queryTxt.=" AND d.idDbase = :iddbase:";
 			$parameters = array('idaccount' => $this->account->idAccount, 'iddbase' => $idDbase);
 		}

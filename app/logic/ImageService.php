@@ -4,6 +4,7 @@ class ImageService
 	private $account;
 	private $domain;
 	private $urlManager;
+	private $logger;
 
 
 	public function __construct(Account $account, Urldomain $domain, UrlManagerObject $urlManager) 
@@ -11,6 +12,7 @@ class ImageService
 		$this->account = $account;
 		$this->domain = $domain;
 		$this->urlManager = $urlManager;
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}
 	
 	/**
@@ -27,11 +29,14 @@ class ImageService
 	
 	private function validateSrcImg($imageSrc)
 	{
+		$this->logger->log("Link: {$imageSrc}");
 		if (preg_match('/asset/i', $imageSrc)) {
+			$this->logger->log("Imágenes por asset");
 			$idAsset = filter_var($imageSrc, FILTER_SANITIZE_NUMBER_INT);
 			return $this->getCompletePrivateImageSrc($idAsset);
 		}
 		else if (preg_match('/template/i', $imageSrc)) {
+			$this->logger->log("Imágenes por template");
 //			$idTemplateImage = filter_var($srcImg, FILTER_SANITIZE_NUMBER_INT);
 			$ids = explode("/", $imageSrc);
 			return $this->getCompletePublicImageSrc($ids[3], $ids[4]);
@@ -48,21 +53,35 @@ class ImageService
 		if ($asset) {
 			$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
 			$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlAsset() . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
+			$this->logger->log("Link final: {$img}");
 			return $img;
 		}
 	}
 	
 	protected function getCompletePublicImageSrc($idTemplate, $idTemplateImage)
 	{
+		$template = Template::findFirst(array(
+			'conditions' => 'idTemplate = ?1',
+			'bind' => array(1 => $idTemplate)
+		));
+		
 		$tpImg = Templateimage::findFirst(array(
 			'conditions' => 'idTemplateImage = ?1',
 			'bind' => array(1 => $idTemplateImage)
 		));
 		
-		if ($tpImg) {
+		if ($template && $tpImg) {
 			$ext = pathinfo( $tpImg->name, PATHINFO_EXTENSION);
-			$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlTemplate() . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
+			
+			if ($template->idAccount == $this->account->idAccount) {
+				$img = "{$this->domain->imageUrl}/{$this->urlManager->getUrlAsset()}/{$this->account->idAccount}/templates/{$idTemplate}/images/{$idTemplateImage}.{$ext}";
+			}
+			else if ($template->idAccount == null) {
+				$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlTemplate() . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
+			}
+			$this->logger->log("Link final: {$img}");
 			return $img;
 		}
+		
 	}
 }

@@ -611,9 +611,8 @@ class MailController extends ControllerBase
 		));
 		
 		$objTemplate = Template::findFirst(array(
-			"conditions" => "idTemplate = ?1 AND idAccount = ?2",
-			"bind" => array(1 => $idTemplate,
-							2 => $account->idAccount)
+			"conditions" => "idTemplate = ?1",
+			"bind" => array(1 => $idTemplate)
 		));
 		
 		$mailcontent = false;
@@ -627,7 +626,7 @@ class MailController extends ControllerBase
 			$this->view->setVar('mail', $mail);
 		}
 		
-		if ($objTemplate) {
+		if ($objTemplate && ($objTemplate->idAccount == $account->idAccount || $objTemplate->idAccount == null)) {
 			if (empty($objTemplate->content)) {
 				$objContent = 'null';
 			}
@@ -663,6 +662,8 @@ class MailController extends ControllerBase
 			}
 			
 			$content = $this->request->getPost('editor');
+			
+//			$this->logger->log("Editor: {$content}");
 			$mail->type = 'Editor';
 				
 			if (!$mail->save()) {
@@ -675,7 +676,6 @@ class MailController extends ControllerBase
 			}
 			
 			if (!$mailcontent) {
-				$this->logger->log('Es nuevo');
 				$mailcontent = new Mailcontent();
 				$mailcontent->idMail = $mail->idMail;
 				$mailcontent->content = $content;
@@ -686,11 +686,9 @@ class MailController extends ControllerBase
 				
 				$text = new PlainText();
 				$plainText = $text->getPlainText($contentmail);
-				$this->logger->log("Plain Text {$plainText}");
 				$mailcontent->plainText = $plainText;
 			}
 			else {
-				$mailcontent->idMail = $mail->idMail;
 				$mailcontent->content = $content;
 				$mailcontent->plainText = $text;
 			}
@@ -703,6 +701,7 @@ class MailController extends ControllerBase
 				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			} 
+			
 			$this->db->commit();
 			
 			if ($idMail == 'null') {
@@ -2081,7 +2080,7 @@ class MailController extends ControllerBase
 			
 			if (trim($target) === '') {
 				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
-				return $this->response->redirect('mail/target/' . $idMail);
+				return $this->response->redirect('mail/compose/' . $idMail);
 			}
 			
 			$recipients = explode(', ', $target);
@@ -2096,7 +2095,7 @@ class MailController extends ControllerBase
 			
 			if (count($emails) == 0) {
 				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
-				return $this->response->redirect('mail/target/' . $idMail);
+				return $this->response->redirect('mail/compose/' . $idMail);
 			}
 
 			$transport = Swift_SendmailTransport::newInstance();

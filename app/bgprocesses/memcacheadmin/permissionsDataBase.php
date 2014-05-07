@@ -73,7 +73,7 @@ class PermissionsDataBase
 			'account::read' => 17,
 			'account::update' => 18,
 			'account::delete' => 19,
-			'account::login on any account' => 20,
+			'account::login how any user' => 20, 
 			
 			'customfield::create' => 21,
 			'customfield::read' => 22,
@@ -115,6 +115,7 @@ class PermissionsDataBase
 			
 			'statistic::read' => 51,
 			'statistic::download' => 52,
+			'statistic::share' => 67,
 			
 			'flashmessage::create' => 53,
 			'flashmessage::read' => 54,
@@ -163,7 +164,7 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::read'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::update'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::delete'),
-			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::login on any account'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::login how any user'),
 
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'customfield::create'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'customfield::read'),
@@ -205,6 +206,7 @@ class PermissionsDataBase
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'statistic::read'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'statistic::download'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'statistic::share'),
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'flashmessage::create'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'flashmessage::read'),
@@ -281,6 +283,7 @@ class PermissionsDataBase
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'statistic::read'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'statistic::download'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'statistic::share'),
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'form::create'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'form::read'),
