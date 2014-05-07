@@ -196,7 +196,22 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		}
 		return true;
 	}.property('content.id'),
-		
+	
+	socialEmpty: function () {
+		var f, t;
+		f = this.get('this.fbaccountsel');
+		t = this.get('this.twaccountsel');
+
+		f = (f.length === 0)?null:f;
+		t = (t.length === 0)?null:t;
+
+		if (!f && !t) {
+			return true;
+		}
+		return false;
+
+	}.property('fbaccountsel.[]','twaccountsel.[]'),
+
 	//Observa si hay filtro en selección de destinatarios
 	filterEmpty: function () {
 		var byEmail, byOpen, byClick, byEx;
@@ -493,7 +508,11 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},
-				
+		
+		expandSocial: function () {
+			this.set('isSocialExpanded', true);
+		},
+
 		expandGA: function () {
 			if (this.get('this.id') !== null) {
 				if (App.googleAnalyticsLinks !== undefined) {
@@ -520,6 +539,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('fbaccountsel', this.get('facebook'));
 				this.set('twaccountsel', this.get('twitter'));
 			}
+			this.set('isSocialExpanded', false);
 			this.set('isHeaderExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},

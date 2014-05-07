@@ -63,9 +63,12 @@
 		
 	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-bar-chart icon-2x"></i>Estadisticas{% endblock %}
-{% block sectionsubtitle %}{% endblock %}
 {% block content %}
+	<div class="row">
+		<div class="col-sm-12">
+			<a href="">Compartir</a>
+		</div>
+	</div>
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">

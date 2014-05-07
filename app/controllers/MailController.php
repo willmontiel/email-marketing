@@ -657,6 +657,8 @@ class MailController extends ControllerBase
 			}
 			
 			$content = $this->request->getPost('editor');
+			
+//			$this->logger->log("Editor: {$content}");
 			$mail->type = 'Editor';
 				
 			if (!$mail->save()) {
@@ -669,7 +671,6 @@ class MailController extends ControllerBase
 			}
 			
 			if (!$mailcontent) {
-				$this->logger->log('Es nuevo');
 				$mailcontent = new Mailcontent();
 				$mailcontent->idMail = $mail->idMail;
 				$mailcontent->content = $content;
@@ -680,11 +681,9 @@ class MailController extends ControllerBase
 				
 				$text = new PlainText();
 				$plainText = $text->getPlainText($contentmail);
-				$this->logger->log("Plain Text {$plainText}");
 				$mailcontent->plainText = $plainText;
 			}
 			else {
-				$mailcontent->idMail = $mail->idMail;
 				$mailcontent->content = $content;
 				$mailcontent->plainText = $text;
 			}
@@ -697,6 +696,7 @@ class MailController extends ControllerBase
 				$this->traceSuccess("Error creating mail from template");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte al administrador'), 500 , 'failed');
 			} 
+			
 			$this->db->commit();
 			
 			if ($idMail == 'null') {

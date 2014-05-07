@@ -200,6 +200,12 @@
 
 			<div class="row">
 				<div class="col-md-12">
+					{{ partial("mail/partials/social_partial") }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
 					{{ partial("mail/partials/googleanalytics_partial") }}
 				</div>
 			</div>

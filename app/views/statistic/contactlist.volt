@@ -40,7 +40,7 @@
 			</div>
 			<div class="col-md-7">
 				<div class="col-md-6">
-					<p><span class="blue big-number">{{statisticsData.sent}}</span>correos enviados</p>
+					<p><span class="blue big-number"> {{statisticsData.sent}} </span> correos enviados</p>
 				</div>
 				<div class="col-md-6">
 					<br><p class="text-right">Fecha del envío {{date('Y-m-d', mail.finishedon)}}</p>
@@ -91,97 +91,131 @@
 
 		{#   cajas de datos de interacciones de contactos en redes sociales   #}
 		<div class="row">
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				<div class="box-dashboard-summary summary-box-social">
-					<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
-					<div>
-						<p>{{widget.getTitle()}}</p>
-					</div>
-					<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
-					<div class="number-stats-dashboard-summary">{{widget.getTotal()}}</div>
-					<div class="container-fluid">
-						<div class="row border-top">
-						{%for value in widget.getSecondaryValues()%}
-							<div class="col-xs-6 social-sec-box">
-								<div class="">
-									{{value.name}}
-								</div>
-								<div class="">
-									{{value.value}}
-								</div>
-							</div>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				<div class="box-dashboard-summary summary-box-social">
-					<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
-					<div>
-						<p>{{widget.getTitle()}}</p>
-					</div>
-					<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
-					<div class="number-stats-dashboard-summary">{{widget.getTotal()}}</div>
-					<div class="container-fluid">
-						<div class="row border-top">
-						{%for value in widget.getSecondaryValues()%}
-							<div class="col-xs-6 social-sec-box">
-								<div class="">
-									{{value.name}}
-								</div>
-								<div class="">
-									{{value.value}}
-								</div>
-							</div>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-
-		</div>
-
-
-
-
-
-
-
-			<div class="box-dashboard-summary summary-box-social">
-				<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
-				<div>
-					<p>{{widget.getTitle()}}</p>
-				</div>
-				<div class="number-stats-dashboard-summary">
-					{{widget.getTotal()}}
-				</div>
-				<div class="container-fluid">
-					<div class="row border-top">
-					{%for value in widget.getSecondaryValues()%}
-						<div class="col-xs-6 social-sec-box">
-							<div class="">
-								{{value.name}}
-							</div>
-							<div class="">
-								{{value.value}}
-							</div>
+			{%for widget in stats.fullSocialStats()%}
+				<div class="col-md-2 col-sm-4 col-xs-6">
+					<div class="box-dashboard-summary summary-box-social">
+						<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
+						<div>
+							<p>{{widget.getTitle()}}</p>
 						</div>
-					{% endfor %}
+						<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{widget.getTotal()}}</div>
+						<div class="container-fluid">
+							<div class="row border-top">
+							{%for value in widget.getSecondaryValues()%}
+								<div class="col-xs-6 social-sec-box">
+									<div class="">
+										{{value.name}}
+									</div>
+									<div class="">
+										{{value.value}}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			{% endfor %}
 
 
-			<div class="row">
-				<div class="col-sm-7">
-					<select id="liststocompare" class="form-control">
-						{%for clt in compareList %}
-							<option value="{{clt.id}}">{{clt.name}}</option>
-						{%endfor%}
-					</select>
+			{%for widget in stats.fullSocialStats()%}
+				<div class="col-md-2 col-sm-4 col-xs-6">
+					<div class="box-dashboard-summary summary-box-social">
+						<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
+						<div>
+							<p>{{widget.getTitle()}}</p>
+						</div>
+						<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{widget.getTotal()}}</div>
+						<div class="container-fluid">
+							<div class="row border-top">
+							{%for value in widget.getSecondaryValues()%}
+								<div class="col-xs-6 social-sec-box">
+									<div class="">
+										{{value.name}}
+									</div>
+									<div class="">
+										{{value.value}}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
 				</div>
-				<div class="col-sm-5">
-					<button class="btn btn-sm btn-guardar extra-padding" onclick="compareLists()">Comparar</button>
+			{% endfor %}
+
+			{%for widget in stats.fullSocialStats()%}
+				<div class="col-md-2 col-sm-4 col-xs-6">
+					<div class="box-dashboard-summary summary-box-social">
+						<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
+						<div>
+							<p>{{widget.getTitle()}}</p>
+						</div>
+						<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{widget.getTotal()}}</div>
+						<div class="container-fluid">
+							<div class="row border-top">
+							{%for value in widget.getSecondaryValues()%}
+								<div class="col-xs-6 social-sec-box">
+									<div class="">
+										{{value.name}}
+									</div>
+									<div class="">
+										{{value.value}}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
 				</div>
+			{% endfor %}
+
+			{%for widget in stats.fullSocialStats()%}
+				<div class="col-md-2 col-sm-4 col-xs-6">
+					<div class="box-dashboard-summary summary-box-social">
+						<div class="sm-icons-summary-{{ widget.getClassName() }} center-block"></div>
+						<div>
+							<p>{{widget.getTitle()}}</p>
+						</div>
+						<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{widget.getTotal()}}</div>
+						<div class="container-fluid">
+							<div class="row border-top">
+							{%for value in widget.getSecondaryValues()%}
+								<div class="col-xs-6 social-sec-box">
+									<div class="">
+										{{value.name}}
+									</div>
+									<div class="">
+										{{value.value}}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+
+
+
+
+
+
+		<div class="row">
+			<div class="col-sm-7">
+				<select id="liststocompare" class="form-control">
+					{%for clt in compareList %}
+						<option value="{{clt.id}}">{{clt.name}}</option>
+					{%endfor%}
+				</select>
+			</div>
+			<div class="col-sm-5">
+				<button class="btn btn-sm btn-guardar extra-padding" onclick="compareLists()">Comparar</button>
 			</div>
 		</div>
+
 		<div class="col-sm-6">
 			<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 		</div>

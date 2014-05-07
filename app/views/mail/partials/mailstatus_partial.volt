@@ -22,19 +22,19 @@
 						</div>
 					</div>
 				</div>
-					<div class="col-md-8">
-						<h4>El correo está listo para enviarse en la fecha y hora programadas</h4>
-					</div>
+				<div class="col-md-8">
+					<h4>El correo está listo para enviarse en la fecha y hora programadas</h4>
+				</div>
 
-					<div class="col-md-4">
-						<button class="ShowDialogSendTest btn btn-primary btn-sm extra-padding" data-toggle="modal" data-target="#myModal">Enviar prueba</button>
-						<button onClick="sendMail()" class="btn btn-success btn-sm extra-padding" id="send-mail">Continuar</button>
-					</div>
+				<div class="col-md-4">
+					<button class="ShowDialogSendTest btn btn-primary btn-sm extra-padding" data-toggle="modal" data-target="#myModal">Enviar prueba</button>
+					<button onClick="sendMail()" class="btn btn-success btn-sm extra-padding" id="send-mail">Continuar</button>
+				</div>
 			</div>
 		{{ '{{else}}' }}
 			<div class="row">
 				<div class="col-md-12">
-					<h3>El correo aún no esta listo para enviarse</h3>
+					<h4>El correo aún no está listo para enviarse</h4>
 				</div>
 			</div>
 			<div class="row">

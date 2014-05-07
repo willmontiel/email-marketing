@@ -10,6 +10,7 @@
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/list_model.js') }}
+	{{ javascript_include('js/b3_tooltips.js') }}
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
 	<script type="text/javascript">
