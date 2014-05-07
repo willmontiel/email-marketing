@@ -325,8 +325,7 @@ class MailWrapper extends BaseWrapper
 		}
 		
 		$jsonObject['previewData'] = $preview;
-//		$jsonObject['plainText'] = htmlentities($this->mailcontent->plainText);
-		$jsonObject['plainText'] = $this->mailcontent->plainText;
+		$jsonObject['plainText'] = htmlentities($this->mailcontent->plainText);
 		$jsonObject['totalContacts'] = $this->mail->totalContacts;
 		
 		if ($this->mail->scheduleDate != null || $this->mail->scheduleDate != 0)  {
