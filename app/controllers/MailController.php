@@ -899,7 +899,6 @@ class MailController extends ControllerBase
 		
 		$this->view->setVar('mail', $mail);
 		
-		$this->logger->log('Before customfields!!!');
 		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
 		foreach ($cfs as $cf) {
 			$linkname = strtoupper(str_replace(array ("á", "é", "í", "ó", "ú", "ñ", " ", "&", ), 
@@ -907,8 +906,6 @@ class MailController extends ControllerBase
 			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
 		}
 		$this->view->setVar('cfs', $arrayCf);
-		$this->logger->log('After customfields!!!');
-		
 		
 		if ($this->request->isPost()) {
 			$content = $this->request->getPost("content");
@@ -935,7 +932,7 @@ class MailController extends ControllerBase
 			
 			//4. Escapamos el contenido html y asociamos los valores
 			$mc->content = htmlspecialchars($newContent, ENT_QUOTES);
-			$mc->plainText = $plainText;
+			$mc->plainText = htmlspecialchars($plainText);
 			
 //			$this->db->begin();
 			
