@@ -646,7 +646,7 @@ App.DateTimePicker = Em.View.extend({
 			inline:true,
 			lang:'es',
 			minDate: 0,
-			minTime: 0,
+//			minTime: 0,
 			startDate: 0,
 //			allowTimes:[
 //				'7:00', '7:15', '7:30', '7:45',
