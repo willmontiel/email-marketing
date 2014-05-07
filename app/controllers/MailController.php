@@ -926,6 +926,8 @@ class MailController extends ControllerBase
 			$text = new PlainText();
 			$plainText = $text->getPlainText($content);
 			
+			$this->logger->log("Textplain: {$plainText}");
+			
 			//3. Quitamos todos los scripts para evitar posibles errores en el contenido
 			$buscar = array("<script" , "</script>");
 			$reemplazar = array("<!-- ", " -->");
