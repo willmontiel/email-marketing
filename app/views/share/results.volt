@@ -27,7 +27,7 @@
 
 	<div class="col-md-2 col-sm-4 col-xs-6">
 		<div class="box-dashboard-summary summary-clicks">
-			<div class="title-stats-dashboard-summary">{{statisticsData.clicks|numberf}}</div>
+			<div class="title-stats-dashboard-summary">{{statisticsData.totalclicks|numberf}}</div>
 			<div class="number-stats-dashboard-summary">{{statisticsData.percent_clicks_CTR}}%</div>
 			<div class="title-stats-dashboard-summary">Clics</div>
 		</div>
