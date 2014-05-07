@@ -45,18 +45,17 @@ class ShareController extends ControllerBase
 
 			if ($mail) {
 				$statWrapper = new StatisticsWrapper();
+				$statWrapper->setAccount($this->user->account);
+				$mailStat = $statWrapper->showMailStatistics($mail, false);
+				$this->view->setVar("mail", $mail);
+				$this->view->setVar("summaryChartData", $mailStat['summaryChartData']);
+				$this->view->setVar("statisticsData", $mailStat['statisticsData']);
 				
 				if ($type == 'complete') {
-					$statWrapper->setAccount($this->user->account);
-					$mailStat = $statWrapper->showMailStatistics($mail);
+					$this->view->setVar('type', "complete");
 				}
 				else if ($type == 'summary') {
-					$statWrapper->setAccount($this->user->account);
-					$mailStat = $statWrapper->showMailStatistics($mail);
-					$this->view->setVar("mail", $mail);
-					$this->view->setVar("summaryChartData", $mailStat['summaryChartData']);
-					$this->view->setVar("statisticsData", $mailStat['statisticsData']);
-					$this->view->setVar("compareMail", $mailStat['compareMail']);
+					$this->view->setVar('type', "summary");
 				}
 			}
 		}

@@ -2,7 +2,7 @@
 //Phalcon\DI::getDefault()->get('logger')->log('Entra');
 class StatisticsWrapper extends BaseWrapper
 {
-	public function showMailStatistics(Mail $mail)
+	public function showMailStatistics(Mail $mail, $compare = true)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		$total = $mail->totalContacts;
@@ -68,19 +68,21 @@ class StatisticsWrapper extends BaseWrapper
 			'conditions' => 'idAccount = ?1 AND status = "Sent" AND idMail != ?2',
 			'bind' => array(1 => $this->account->idAccount, 2 => $mail->idMail)
 		));
-
-		$mailCompare = array();
-		foreach ($allMails as $m) {
-			$objfc = new stdClass();
-			$objfc->id = $m->idMail;
-			$objfc->name = $m->name;
-			$mailCompare[] = $objfc;				
+		
+		if ($compare) {
+			$mailCompare = array();
+			foreach ($allMails as $m) {
+				$objfc = new stdClass();
+				$objfc->id = $m->idMail;
+				$objfc->name = $m->name;
+				$mailCompare[] = $objfc;				
+			}
+				$response['compareMail'] = $mailCompare;
 		}
-
+		
 		$response['summaryChartData'] = $summaryChartData;
 		$response['statisticsData'] = $statisticsData;
-		$response['compareMail'] = $mailCompare;
-
+	
 		return $response;
 	}
 	

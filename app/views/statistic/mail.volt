@@ -89,8 +89,8 @@
 			<div class="col-md-2 col-sm-4 col-xs-6">
 				{{'{{#link-to "drilldown.opens" class="anchor" href=false}}' }}
 					<div class="box-dashboard-summary summary-opens anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.uniqueOpens|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.percentageUniqueOpens}}%</div>
+						<div class="title-stats-dashboard-summary">{{statisticsData.opens|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{statisticsData.statopens}}%</div>
 						<div class="title-stats-dashboard-summary">Aperturas</div>
 					</div>
 				{{ '{{/link-to}}'}}
@@ -98,7 +98,7 @@
 			<div class="col-md-2 col-sm-4 col-xs-6">
 				{{'{{#link-to "drilldown.clicks" class="anchor" href=false}}' }}
 					<div class="box-dashboard-summary summary-clicks anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.clicks|numberf}}</div>
+						<div class="title-stats-dashboard-summary">{{statisticsData.totalclicks|numberf}}</div>
 						<div class="number-stats-dashboard-summary">{{statisticsData.percent_clicks_CTR}}%</div>
 						<div class="title-stats-dashboard-summary">Clics</div>
 					</div>
@@ -109,7 +109,7 @@
 				{{'{{#link-to "drilldown.unsubscribed" class="anchor" href=false}}' }}
 					<div class="box-dashboard-summary summary-unsubscribed">
 						<div class="title-stats-dashboard-summary">{{statisticsData.unsubscribed|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.percentageUnsubscribed}}%</div>
+						<div class="number-stats-dashboard-summary">{{statisticsData.statunsubscribed}}%</div>
 						<div class="title-stats-dashboard-summary">Desuscritos</div>
 					</div>
 				{{ '{{/link-to}}'}}
@@ -117,8 +117,8 @@
 			<div class="col-md-2 col-sm-4 col-xs-6">
 				{{'{{#link-to "drilldown.bounced" class="anchor" href=false}}' }}
 					<div class="box-dashboard-summary summary-bounced anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.bounced|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.percentageBounced}}%</div>
+						<div class="title-stats-dashboard-summary">{{statisticsData.hardbounced|numberf}}</div>
+						<div class="number-stats-dashboard-summary">{{statisticsData.stathardbounced}}%</div>
 						<div class="title-stats-dashboard-summary">Rebotes</div>
 					</div>
 				{{ '{{/link-to}}'}}
@@ -127,7 +127,7 @@
 				{{'{{#link-to "drilldown.spam" class="anchor" href=false}} '}}
 					<div class="box-dashboard-summary summary-spam anchor">
 						<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.percentageSpam}}%</div>
+						<div class="number-stats-dashboard-summary">{{statisticsData.statspam}}%</div>
 						<div class="title-stats-dashboard-summary">Spam</div>
 					</div>
 				{{' {{/link-to}}'}}
@@ -158,6 +158,7 @@
 					</div>
 				</div>
 #}				
+	<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 			{{ "{{outlet}}" }}
 
 		</script>
