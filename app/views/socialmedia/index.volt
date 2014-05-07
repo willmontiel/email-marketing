@@ -11,7 +11,7 @@
 
 		<div class="bs-callout bs-callout-info">
 			Administre las redes sociales, configure facebook y twitter, para que cuando envíe una campaña de
-			correo, se hagan post sobre éstas redes automáticamente
+			correo, se hagan post sobre éstas redes automáticamente.
 		</div>
 	</div>
 	
@@ -22,7 +22,6 @@
 		</div>
 	</div>	
 	
-	<br />
 
 	{% if accounts|length != 0%}
 		<div class="row">

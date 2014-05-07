@@ -271,6 +271,7 @@
 				<div class="alert alert-success">
 					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
 					<div class="space"></div>
+					<p>Cada contacto en una línea de texto </p>
 					<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
 					<p>Cree hasta 30 contactos por este medio</p>
 				</div>
