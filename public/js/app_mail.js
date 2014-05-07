@@ -201,7 +201,15 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var f, t;
 		f = this.get('this.fbaccountsel');
 		t = this.get('this.twaccountsel');
-
+		
+		if (f === null) {
+			f = '0';
+		}
+		
+		if (t === null) {
+			t = '0';
+		}
+		
 		f = (f.length === 0)?null:f;
 		t = (t.length === 0)?null:t;
 
