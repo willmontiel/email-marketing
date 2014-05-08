@@ -24,31 +24,31 @@
 	</div>
 </div>
 
-{% if page.items|length != 0 %}
+{% if dbases|length != 0 %}
 	<div class="row">
 		<table class="table table-striped">
 			<thead></thead>
 			<tbody>
-		{%for item in page.items%}
-				<tr style="border-left: solid 10px {{item.color}}">
+		{%for item in dbases%}
+				<tr style="border-left: solid 10px {{item['color']}}">
 					<td>
-						<a href="{{ url('dbase/show') }}/{{item.idDbase}}"><strong>{{item.name}}</strong></a><br>
-							{{item.description}}
+						<a href="{{ url('dbase/show') }}/{{item['idDbase']}}"><strong>{{item['name']}}</strong></a><br>
+							{{item['description']}}
 					</td>
 					<td>
 						<ul class="list-inline pull-right">
 							<li class="card cont">
-								<span class="number">{{item.Cactive|numberf}}</span>
+								<span class="number">{{item['Cactive']|numberf}}</span>
 								<img src="{{url('')}}b3/images/icon-user.png" class="center-block" />
 								<p>Contactos</p>
 							</li>
 							<li class="card list">
-								<span class="number"> {{item.Cactive|numberf}} </span>
+								<span class="number"> {{item['CNT_LIST']|numberf}} </span>
 								<img src="{{url('')}}b3/images/icon-list.png" class="center-block" />
 								<p>Listas </p> {#  Cambiar porque esta mostrando activos  #}
 							</li>
 							<li class="card seg">
-								<span class="number"> {{item.Cactive|numberf}} </span>
+								<span class="number"> {{item['CNT_SEGM']|numberf}} </span>
 								<img src="{{url('')}}b3/images/icon-pie.png" class="center-block" />
 								<p>Segmentos </p> {#  Cambiar porque esta mostrando activos  #}
 							</li>
@@ -72,19 +72,21 @@
 						</ul>
 					</td>
 					<td>
-						<a href="{{ url('dbase/edit/') }}{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
-						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
-						<a href="{{url('statistic/dbase')}}/{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"></span> Estadísticas</a>
+						<a href="{{ url('dbase/edit/') }}{{item['idDbase']}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item['idDbase']}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
+						<a href="{{url('statistic/dbase')}}/{{item['idDbase']}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"></span> Estadísticas</a>
 					</td>
 				</tr>
 		{%endfor%}
 			</tbody>
 		</table>
 	</div>
+	{#
 	<div class="space"></div>
 	<div class="col-sm-12 text-center">
 		{{ partial('partials/pagination_static_partial', ['pagination_url': 'dbase/index']) }}
 	</div>
+	#}
 {% else %}
 	<div class="row">
 		<div class="bs-callout bs-callout-warning">
