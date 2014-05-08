@@ -170,7 +170,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	//Observa que se hayan seleccionado destinatarios
 	targetEmpty: function () {
 		var d, l, s;
-		
 		d = this.get('this.dbaselist');
 		l = this.get('this.list');
 		s = this.get('this.segmentlist');
@@ -622,6 +621,7 @@ function setTargetValues(values, select) {
 		var newArray = [];
 		for (var i = 0; i < select.length; i++) {
 			for (var j = 0; j < array.length; j++) {
+				array[j] = (typeof array[j] === 'string')?parseInt(array[j]):array[j];
 				if (select[i].id === array[j]) {
 					newArray.push(select[i]);
 				}
@@ -629,7 +629,6 @@ function setTargetValues(values, select) {
 		}
 		return newArray;
 	}
-	
 	return null;
 }
 
