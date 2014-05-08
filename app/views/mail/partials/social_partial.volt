@@ -3,8 +3,8 @@
 		{{'{{#if socialEmpty }}'}}
 			<div class="wrapper">
 				<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
-					<dt>Configurar redes sociales:</dt>
-					<dd><img src="{{url('images')}}/icon-face-color.png"> <img src="{{url('images')}}/icon-tweet-blue.png"></dd>
+					<dt>Redes sociales:</dt>
+					<dd><img src="{{url('b3/images')}}/icon-face-color.png"> <img src="{{url('b3/images')}}/icon-tweet-blue.png"></dd>
 				
 				</dl>
 			</div>
