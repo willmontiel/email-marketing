@@ -298,7 +298,7 @@ class ContactWrapper extends BaseWrapper
 		}
 	}
 
-	public function addExistingContactToListFromDbase($email, Contactlist $list, $saveCounters = true)
+	public function addExistingContactToListFromDbase($email, Contactlist $list, $saveCounters = true, $susbscribe = false)
 	{
 		$idAccount = $this->account->idAccount;
 		
@@ -325,6 +325,14 @@ class ContactWrapper extends BaseWrapper
 					}
 
 					return $existContact;
+				}
+				else if($susbscribe) {
+					
+					$existContact->subscribedon = time();
+					$existContact->ipSubscribed = $this->ipaddress;
+					if(!$existContact->save()) {
+						throw new \Exception('El contacto no pudo ser suscrito');
+					}
 				}
 			}
 		}

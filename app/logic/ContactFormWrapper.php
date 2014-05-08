@@ -43,7 +43,7 @@ class ContactFormWrapper extends ContactWrapper
 			throw new \Exception('El email es requerido');
 		}
 
-		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist);
+		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist, true, true);
 		if($contact == false) {
 			$contact = $this->createNewContactFromJsonData($contactObj, $this->contactlist);
 		}
