@@ -22,9 +22,9 @@ class DbaseWrapper extends BaseWrapper
 	public static function getColors()
 	{
 		$colors = array(
-			0 => array('EBF7FE', 'E3F4FC', 'FFF8E4', 'FFEAE4', 'E6E8FC', 'F1F3FE'),
-			1 => array('EEFEF0', 'E8FCEA', 'FFF5EB', 'FCF2FD', 'E7F6FA', 'FDFFF0'),
-			2 => array('00FFFF', '00BFFF', '0080FF', '0040FF', '0000FF', '4000FF'),
+			0 => array('9e0b0f', 'a0410d', 'a3620a', 'aba000', '598527', '197b30'),
+			1 => array('603913', '754c24', '8c6239', 'a67c52', 'c69c6d', '362f2d'),
+			2 => array('00FFFF', '00BFFF', '0080FF', '0072bc', '0054a6', '003471'),
 			3 => array('8000FF', 'BF00FF', 'FF00FF', 'FF00BF', 'FF0080', 'FF0040')
 		);
 		

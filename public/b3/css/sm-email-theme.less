@@ -48,6 +48,9 @@
 @summary-icons-height: 46px;
 @summary-icons-width: 46px;
 
+@stats-icons-height:70px;
+@stats-icons-width:70px;
+
 @shortcuts-big-icons-height:134px;
 @shortcuts-big-icons-width:134px;
 
@@ -62,7 +65,6 @@
 .pos-icons(@idx, @w: @summary-icons-width) {
 	@position: -(@idx * (@w + 1));
 }
-
 
 /* Estilos */
 body {
@@ -88,7 +90,7 @@ h4.sectiontitle {
 	color: @brand-sectiontitle;
 	margin-bottom: 30px;
 }
-
+/*   Estilos para los datos de interacciones del dashboard   */
 .box-dashboard-summary {
 	border-radius: 6px;
 	margin: 0 0 30px 0;
@@ -96,7 +98,7 @@ h4.sectiontitle {
 	text-align: center;
 	color: @brand-white;
 }
-[class^="sm-icons-summary-"] {
+[class*="sm-icons-summary-"] {
 	background: transparent url('../images/sm-icons.png') no-repeat 0 0;
 	height: @summary-icons-height;
 	width: @summary-icons-width;
@@ -124,7 +126,60 @@ h4.sectiontitle {
 	.pos-icons(5);
 	background-position: @position 0;
 }
+/*   Estilos para datos interacciones estadísticas  */
+[class*="sm-icons-stats-"] {
+	background: transparent url('../images/sm-icons.png') no-repeat 0 0;
+	height: @stats-icons-height;
+	width: @stats-icons-width;
+}
+.sm-icons-stats-sends {
+	background-position: 0 -58px;
+}
+.sm-icons-stats-opens {
+	.pos-icons(1, @stats-icons-width);
+	background-position: @position -58px;	
+}
+.sm-icons-stats-clics {
+	.pos-icons(2, @stats-icons-width);
+	background-position: @position -58px;	
+}
+.sm-icons-stats-unsubs {
+	.pos-icons(3, @stats-icons-width);
+	background-position: @position -58px;	
+}
+.sm-icons-stats-bounced {
+	.pos-icons(4, @stats-icons-width);
+	background-position: @position -58px;	
+}
+.sm-icons-stats-spam {
+	.pos-icons(5, @stats-icons-width);
+	background-position: @position -58px;	
+}
+.sends {
+	color:@brand-sectiontitle;
+	text-align: center;
 
+}
+.opens {
+	color:@brand-green;
+	text-align: center;
+}
+.clics {
+	color:@brand-blue;
+	text-align: center;
+}
+.bounced {
+	color:@brand-orange;
+	text-align: center;
+}
+.unsubs {
+	color:@brand-light-blue;
+	text-align: center;
+}
+.spam {
+	color:@brand-red;
+	text-align: center;
+}
 .summary-opens {
 	background: @brand-green;
 }
@@ -412,6 +467,9 @@ h4.sectiontitle {
 }
 
 /* Estilos para botones de accion pequeños */
+.mtop-5 {
+	margin-top:5px;
+}
 
 .sm-button-small-base {
 	background: transparent url('../images/icon-buttons.png') no-repeat center center;
@@ -531,6 +589,12 @@ h4.numbers-contacts {
 /* botones standar de toda la aplicacion */
 
 /*** Sobre escritura de estilos de botones ***/
+.btn {
+	margin-bottom: 10px;
+}
+.input-group-btn .btn {
+	margin-bottom: 0;
+}
 .btn-default {
 	background-color: @bg-default-btn;
 	color: @text-color-btn;
@@ -694,6 +758,9 @@ table.middle > tbody > tr > th > td {
 .padding-top {
 	padding-top: 15px;
 }
+.ptop-7 {
+	padding-top: 7px;
+}
 #colorchart td {
  width: 25px !important;
  height: 25px !important;
@@ -719,6 +786,7 @@ table.middle > tbody > tr > th > td {
 	border-radius: 5px;
 	color: @brand-white;
 	text-align: center;
+	margin-bottom: 5px;
 }
 .list-inline > li.card span {
 	font-size: 30px;
@@ -744,7 +812,7 @@ table.middle > tbody > tr > th > td {
 .border {
 	border: 1px solid #c3c3c3;
 }
-
+/*   Estilo para barra de color con franja diagonal para identificar las bases de datos   */
 .sm-striped-bg-base(@w) {
 	width: @w;
 	background-size: 30px 30px;
@@ -763,6 +831,14 @@ table.middle > tbody > tr > th > td {
 .sm-striped-bg { .sm-striped-bg-base(12px); }
 .sm-striped-bg-sm { .sm-striped-bg-base(4px); }
 
+/*   sobre escritura estilos bootstrap tabs bases de datos   */
+.nav-tabs > li.active > a {
+	background-color: #f5f5f5;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover {
+	background-color: #f5f5f5;	
+}
 /*   Estilos listas de correo   */
 
 .border-left {
@@ -790,11 +866,12 @@ table.middle > tbody > tr > th > td {
 	border-image:url('../images/bg-border-mail.png') 20 20 round;
 }
 /*   email compose   */
+/*   Estilos para fecha y hora de programacion de envios   */
 .thumn-hight {
 	height: 414px;
 }
 .bg-wrap-calendar {
-	background: transparent url("../images/bg-calendar-1.png")no-repeat 0px 0px;
+	background: transparent url("../images/bg-calendar-1.png") no-repeat 0px 0px;
 	box-shadow: 19px 19px 22px -12px #adadad;
 	margin-top: 0;
 	width: 175px;
@@ -847,4 +924,27 @@ table.middle > tbody > tr > th > td {
 .anchor:hover {
 	text-decoration: none;
 	cursor: pointer;
+}
+.mleft-15 {
+	margin-left:15px;
+}
+
+.ptop-50 {
+	padding-top: 50px;
+}
+.bg-thumb {
+	background: transparent url("../images/bg-thumbnail.png") no-repeat 0px 0px;
+}
+.item {
+	border: 2px solid @brand-orange;
+	border-radius: 135px;
+	height: 270px;
+	margin:0 10px;
+	width: 270px;
+}
+.percent {
+	font-size: 72px;
+}
+.number {
+	font-size: 25px;
 }

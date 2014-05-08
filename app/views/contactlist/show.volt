@@ -271,7 +271,6 @@
 				<div class="alert alert-success">
 					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
 					<div class="space"></div>
-					<p>Cada contacto en una línea de texto </p>
 					<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
 					<p>Cree hasta 30 contactos por este medio</p>
 				</div>
@@ -311,12 +310,12 @@
 						</div>
 						<div class="col-md-9">
 							<p>Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc permiten crear y editar archivos CSV fácilmente.</p>
-							<p>El archivo debe ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
+							<p>El archivo puede ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
 							<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block width-fix" alt="" /></p>
 							<p>También puede ser una tabla sin encabezados.</p>
 							<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
 							<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
-							<p></p>
+							<p>Importe máximo hasta 100.000 contactos</p>
 						</div>
 					</div>
 				</div>
@@ -370,7 +369,7 @@
 						<p>También puede ser una tabla sin encabezados.</p>
 						<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
 						<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
-						<p></p>
+						<p>Importe máximo hasta 100.000 contactos</p>
 						</div>
 					</div>
 				</div>

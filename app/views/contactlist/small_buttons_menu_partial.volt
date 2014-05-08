@@ -1,7 +1,7 @@
 {# Barra de menu de botones minimizados #}
 <div class="row">
 	<div class="col-xs-12 col-sm-10 col-sm-offset-2 col-md-6 col-md-offset-6 col-lg-4 col-lg-offset-8">
-		<ul class="list-inline pull-right">
+		<ul class="list-inline pull-right mtop-5">
 			<li class="small-btn sm-btn-blue {{ activelnk=='list'?'active':'' }}">
 				<a href="{{ url('contactlist') }}#/lists" data-toggle="tooltip" data-placement="bottom" title="Listas de contactos">
 				<span class="sm-button-small-contact-list"></span>

@@ -31,19 +31,19 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-5">*Descripcion</label>
+				<label class="col-sm-5">*Descripción</label>
 				<div class="col-sm-7">
 					{{editform.render("description")}}
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-5">*Descripcion de los Contactos</label>
+				<label class="col-sm-5">*Descripción de los contactos</label>
 				<div class="col-sm-7">
 					{{editform.render("Cdescription")}}
 				</div>
 			</div>
 			<div class="form-group">	
-				<label class="col-sm-5">*Color de Etiqueta</label>
+				<label class="col-sm-5">*Color de etiqueta</label>
 				<div class="col-sm-7">
 					{{editform.render("color")}}
 					<table id="colorchart">

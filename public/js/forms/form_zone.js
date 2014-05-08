@@ -21,7 +21,7 @@ FormEditor.prototype.startEvents = function(obj) {
 };
 
 FormEditor.prototype.createZones = function() {
-	this.titlezone = $('<div class="container-form-title-name"><h4 class="sectiontitle"><a href="#" class="editable editable-click" id="form-title-name" data-type="text" data-pk="1" data-original-title="Nombre del Formulario">' + this.title + '</a></h4></div>');
+	this.titlezone = $('<div class="container-form-title-name"><h4 class="sectiontitle"><a href="#" class="editable editable-click" id="form-title-name" data-type="text" data-pk="1" data-original-title="Título del formulario">' + this.title + '</a></h4></div>');
 	$('.form-full-content').append(this.titlezone);
 	
 	this.editorzone = $('<div class="form-content-zone"></div>');
@@ -30,7 +30,7 @@ FormEditor.prototype.createZones = function() {
 	this.optionzone = $('<div class="form-fields-menu"></div>');
 	$('.form-menu').append(this.optionzone);
 	
-	this.buttonzone = $('<div class="container-form-button-name btn btn-guardar extra-padding btn-sm"><a href="#" class="editable editable-click" id="form-button-name" data-type="text" data-pk="1" data-original-title="Nombre del Boton">' + this.button + '</a></div>');
+	this.buttonzone = $('<label>Botón</label><div class="container-form-button-name btn btn-guardar extra-padding btn-sm"><a href="#" class="editable editable-click" id="form-button-name" data-type="text" data-pk="1" data-original-title="Nombre del Boton">' + this.button + '</a></div>');
 	$('.form-full-button').append(this.buttonzone);
 };
 
