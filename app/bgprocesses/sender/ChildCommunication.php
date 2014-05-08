@@ -112,7 +112,7 @@ class ChildCommunication extends BaseWrapper
 			}
 			else {
 //				$this->log->log("No Hay editor");
-				$html =  html_entity_decode($mailContent->content);
+				$html =  utf8_decode(html_entity_decode($mailContent->content));
 			}
 
 //				$prepareMail = new PrepareMailContent($this->account);
