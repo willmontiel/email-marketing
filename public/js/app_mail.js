@@ -413,67 +413,74 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	SetAndSave: function (mail) {
 		var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
 			
-		if (mail.get('name') === undefined) {
-			$.gritter.add({title: 'Error', text: 'No ha ingresado un nombre para el correo, por favor verifique la información', sticky: false, time: 3000});
-		}
+		
 		//else if (!filter.test(mail.get('email'))) {
 			//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
 		//}
-		else {
-			var dbases = getArrayValue(this.get('dbaselist'));
-			var contactlists = getArrayValue(this.get('list'));
-			var segments = getArrayValue(this.get('segmentlist'));
-			var open = getArrayValue(this.get('open'));
-			var click = getArrayValue(this.get('click'));
-			var exclude = getArrayValue(this.get('exclude'));
-			var fbaccounts = getArrayValue(this.get('fbaccountsel'));
-			var twaccounts = getArrayValue(this.get('twaccountsel'));
+		
+		var dbases = getArrayValue(this.get('dbaselist'));
+		var contactlists = getArrayValue(this.get('list'));
+		var segments = getArrayValue(this.get('segmentlist'));
+		var open = getArrayValue(this.get('open'));
+		var click = getArrayValue(this.get('click'));
+		var exclude = getArrayValue(this.get('exclude'));
+		var fbaccounts = getArrayValue(this.get('fbaccountsel'));
+		var twaccounts = getArrayValue(this.get('twaccountsel'));
 
-			var array = [];
-				var obj = this.get('linksAnalytics').toArray();
-				for (var i = 0; i < obj.length; i++) {
-					array.push(obj[i].name);
-				}
-			var analitycs = array.toString();
-
-			var value = this.get('scheduleRadio');
-
-
-			if (value === 'now') {
-				mail.set('scheduleDate', value);
+		var array = [];
+			var obj = this.get('linksAnalytics').toArray();
+			for (var i = 0; i < obj.length; i++) {
+				array.push(obj[i].name);
 			}
+		var analitycs = array.toString();
 
-			mail.set('dbases', dbases);
-			mail.set('contactlists', contactlists);
-			mail.set('segments', segments);
-			mail.set('filterByOpen', open);
-			mail.set('filterByClick', click);
-			mail.set('filterByExclude', exclude);
-			mail.set('googleAnalytics', analitycs);
-			mail.set('fbaccounts', fbaccounts);
-			mail.set('twaccounts', twaccounts);
-			mail.set('fbimagepublication', App.fbimage);
+		var value = this.get('scheduleRadio');
 
-			return mail;
+
+		if (value === 'now') {
+			mail.set('scheduleDate', value);
 		}
+
+		mail.set('dbases', dbases);
+		mail.set('contactlists', contactlists);
+		mail.set('segments', segments);
+		mail.set('filterByOpen', open);
+		mail.set('filterByClick', click);
+		mail.set('filterByExclude', exclude);
+		mail.set('googleAnalytics', analitycs);
+		mail.set('fbaccounts', fbaccounts);
+		mail.set('twaccounts', twaccounts);
+		mail.set('fbimagepublication', App.fbimage);
+
+		return mail;
+		
 	},
 			
 	actions: {
 		gotosocial: function(mail, url) {
-			mail = this.SetAndSave(mail);
-			this.handleSavePromise(mail.save(), '', '');
-			window.location = mail.get('' + url);
+			if (mail.get('name') === undefined) {
+				$.gritter.add({title: 'Error', text: 'No ha ingresado un nombre para el correo, por favor verifique la información', sticky: false, time: 3000});
+			} 
+			else {
+				mail = this.SetAndSave(mail);
+				this.handleSavePromise(mail.save(), '', '');
+				window.location = mail.get('' + url);
+			}
 		},
 				
 		save: function(mail) {
-			mail = this.SetAndSave(mail);
-
-			this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
-			this.set('isHeaderExpanded', false);
-			this.set('isTargetExpanded', false);
-			this.set('isGoogleAnalitycsExpanded', false);
-			this.set('isScheduleExpanded', false);
-			this.set('isSocialExpanded', false);
+			if (mail.get('name') === undefined) {
+				$.gritter.add({title: 'Error', text: 'No ha ingresado un nombre para el correo, por favor verifique la información', sticky: false, time: 3000});
+			}
+			else {
+				mail = this.SetAndSave(mail);
+				this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
+				this.set('isHeaderExpanded', false);
+				this.set('isTargetExpanded', false);
+				this.set('isGoogleAnalitycsExpanded', false);
+				this.set('isScheduleExpanded', false);
+				this.set('isSocialExpanded', false);
+			}
 		},
 
 		expandHeader: function () {
