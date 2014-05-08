@@ -11,9 +11,13 @@
 	{{ javascript_include('javascripts/moment/moment-with-langs.min.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
+	{#
 	{{ javascript_include('amcharts/amcharts.js')}}
 	{{ javascript_include('amcharts/serial.js')}}
 	{{ javascript_include('amcharts/pie.js')}}
+	#}
+	{{ javascript_include('highcharts/highcharts.js')}}
+	{{ javascript_include('highcharts/modules/exporting.js')}}
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
@@ -23,27 +27,45 @@
 		}
 	</script>
 	<script>
-		var chartData = [];
-		
-		{%for data in summaryChartData %}
-			var data = new Object();
-			data.title = '{{ data['title'] }}';
-			data.value = {{ data['value'] }};
-			chartData.push(data);
-		{%endfor%}
-		
-		AmCharts.ready(function () {
-			var chart = createPieChart(chartData);
-			try{
-				if($('#summaryChart')[0] === undefined) {
-					setTimeout(function(){chart.write('summaryChart');},1000);
-				}
-				else {
-					chart.write('summaryChart');
-				}
-			}catch(err){
-				console.log(err.message);
-			}
+		$(function () {
+			$('#container').highcharts({
+				chart: {
+					plotBackgroundColor: null,
+					plotBorderWidth: null,
+					plotShadow: false,
+				},
+				
+				title: {
+					text: ''
+				},
+				tooltip: {
+					pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+				},
+				plotOptions: {
+					pie: {
+						allowPointSelect: true,
+						cursor: 'pointer',
+						dataLabels: {
+							enabled: false,
+							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+							style: {
+								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+							}
+						},
+						showInLegend: true,
+					}
+					
+				},
+				series: [{
+					type: 'pie',
+					name: 'Porcentaje',
+					data: [
+						{%for data in summaryChartData %}
+							['{{ data['title'] }}',   {{ data['value'] }}],
+						{%endfor%}
+					]
+				}]
+			});
 		});
 	</script>
 {% endblock %}
@@ -65,65 +87,67 @@
 				</div>
 				<div class="clearfix"></div>
 			</div>
-	
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.opens" class="anchor" href=false}}' }}
-					<div class="box-dashboard-summary summary-opens anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.opens|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.statopens}}%</div>
-						<div class="title-stats-dashboard-summary">Aperturas</div>
+			
+			<div class="row">
+				<div class="col-sm-2">
+					{{'{{#link-to "drilldown.opens" class="anchor" href=false}}' }}
+						<div class="box-dashboard-summary summary-opens anchor">
+							<div class="title-stats-dashboard-summary">{{statisticsData.opens|numberf}}</div>
+							<div class="number-stats-dashboard-summary">{{statisticsData.statopens}}%</div>
+							<div class="title-stats-dashboard-summary">Aperturas</div>
+						</div>
+					{{ '{{/link-to}}'}}
+				</div>
+
+				<div class="col-sm-2">
+					{{'{{#link-to "drilldown.clicks" class="anchor" href=false}}' }}
+						<div class="box-dashboard-summary summary-clicks anchor">
+							<div class="title-stats-dashboard-summary">{{statisticsData.totalclicks|numberf}}</div>
+							<div class="number-stats-dashboard-summary">{{statisticsData.percent_clicks_CTR}}%</div>
+							<div class="title-stats-dashboard-summary">Clics</div>
+						</div>
+					{{'{{/link-to}}'}}
 					</div>
-				{{ '{{/link-to}}'}}
-			</div>
-	
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.clicks" class="anchor" href=false}}' }}
-					<div class="box-dashboard-summary summary-clicks anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.totalclicks|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.percent_clicks_CTR}}%</div>
-						<div class="title-stats-dashboard-summary">Clics</div>
-					</div>
-				{{'{{/link-to}}'}}
+				</div>
+
+				<div class="col-sm-2">
+					{{'{{#link-to "drilldown.unsubscribed" class="anchor" href=false}}' }}
+						<div class="box-dashboard-summary summary-unsubscribed">
+							<div class="title-stats-dashboard-summary">{{statisticsData.unsubscribed|numberf}}</div>
+							<div class="number-stats-dashboard-summary">{{statisticsData.statunsubscribed}}%</div>
+							<div class="title-stats-dashboard-summary">Desuscritos</div>
+						</div>
+					{{ '{{/link-to}}'}}
+				</div>
+		
+				<div class="col-sm-4">
+					<div id="container" style="width: 300px; height: 250px;"></div>
 				</div>
 			</div>
-	
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.unsubscribed" class="anchor" href=false}}' }}
-					<div class="box-dashboard-summary summary-unsubscribed">
-						<div class="title-stats-dashboard-summary">{{statisticsData.unsubscribed|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.statunsubscribed}}%</div>
-						<div class="title-stats-dashboard-summary">Desuscritos</div>
-					</div>
-				{{ '{{/link-to}}'}}
-			</div>
-	
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.bounced" class="anchor" href=false}}' }}
-					<div class="box-dashboard-summary summary-bounced anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.hardbounced|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.stathardbounced}}%</div>
-						<div class="title-stats-dashboard-summary">Rebotes</div>
-					</div>
-				{{ '{{/link-to}}'}}
-			</div>
-	
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.spam" class="anchor" href=false}} '}}
-					<div class="box-dashboard-summary summary-spam anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.statspam}}%</div>
-						<div class="title-stats-dashboard-summary">Spam</div>
-					</div>
-				{{' {{/link-to}}'}}
+			
+			<div class="row">
+				<div class="col-md-2 col-sm-4 col-xs-6">
+					{{'{{#link-to "drilldown.bounced" class="anchor" href=false}}' }}
+						<div class="box-dashboard-summary summary-bounced anchor">
+							<div class="title-stats-dashboard-summary">{{statisticsData.hardbounced|numberf}}</div>
+							<div class="number-stats-dashboard-summary">{{statisticsData.stathardbounced}}%</div>
+							<div class="title-stats-dashboard-summary">Rebotes</div>
+						</div>
+					{{ '{{/link-to}}'}}
+				</div>
+
+				<div class="col-md-2 col-sm-4 col-xs-6">
+					{{'{{#link-to "drilldown.spam" class="anchor" href=false}} '}}
+						<div class="box-dashboard-summary summary-spam anchor">
+							<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
+							<div class="number-stats-dashboard-summary">{{statisticsData.statspam}}%</div>
+							<div class="title-stats-dashboard-summary">Spam</div>
+						</div>
+					{{' {{/link-to}}'}}
+				</div>
 			</div>
 	
 			<div class="space"></div>
-		
-			<div class="row">
-				<div class="col-sm-12">
-					<div id="summaryChart" style="width: 640px; height: 400px;"></div>
-				</div>
-			</div>
 	
 			{{ "{{outlet}}" }}
 
