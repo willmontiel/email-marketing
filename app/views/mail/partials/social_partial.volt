@@ -4,7 +4,7 @@
 			<div class="wrapper">
 				<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
 					<dt>Redes sociales:</dt>
-					<dd><img src="{{url('b3/images')}}/icon-face-color.png"> <img src="{{url('b3/images')}}/icon-tweet-blue.png"></dd>
+					<dd><img src="{{url('b3/images')}}/icon-face-color.png"> <img src="{{url('b3/images')}}/icon-tweet-color.png"></dd>
 				
 				</dl>
 			</div>
