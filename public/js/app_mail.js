@@ -465,22 +465,13 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isTargetExpanded', false);
 			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
-		},
-				
-		saveDataAndGoToSocialMedia: function (social) {
-//			console.log(this.get('this.id'))
+			this.set('isSocialExpanded', false);
 		},
 
 		expandHeader: function () {
-			if (this.get('this.id') !== null) {
-				var arrayFb = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
-				var arrayTw = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
-				
-				this.set('facebook', arrayFb);
-				this.set('twitter', arrayTw);
-			}
 			this.set('isHeaderExpanded', true);
 			this.set('isTargetExpanded', false);
+			this.set('isSocialExpanded', false);
 			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},
@@ -505,12 +496,25 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			}
 			this.set('isTargetExpanded', true);
 			this.set('isHeaderExpanded', false);
+			this.set('isSocialExpanded', false);
 			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},
 		
 		expandSocial: function () {
+			if (this.get('this.id') !== null) {
+				var arrayFb = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
+				var arrayTw = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
+
+				this.set('facebook', arrayFb);
+				this.set('twitter', arrayTw);
+			}
+			
 			this.set('isSocialExpanded', true);
+			this.set('isTargetExpanded', false);
+			this.set('isHeaderExpanded', false);
+			this.set('isGoogleAnalitycsExpanded', false);
+			this.set('isScheduleExpanded', false);
 		},
 
 		expandGA: function () {
@@ -523,6 +527,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			setExpandAttr(this, 'isGoogleAnalitycsExpanded');
 			this.set('isHeaderExpanded', false);
 			this.set('isTargetExpanded', false);
+			this.set('isSocialExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},
 				
@@ -530,6 +535,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isScheduleExpanded', true);
 			this.set('isHeaderExpanded', false);
 			this.set('isTargetExpanded', false);
+			this.set('isSocialExpanded', false);
 			this.set('isGoogleAnalitycsExpanded', false);
 		},
 		
@@ -601,7 +607,7 @@ function setTargetValues(values, select) {
 		var newArray = [];
 		for (var i = 0; i < select.length; i++) {
 			for (var j = 0; j < array.length; j++) {
-				if (select[i].id == array[j]) {
+				if (select[i].id === array[j]) {
 					newArray.push(select[i]);
 				}
 			}
@@ -617,7 +623,7 @@ function setGoogleAnalyticsValues(values, select) {
 	var newArray = [];
 	for (var i = 0; i < select.length; i++) {
 		for (var j = 0; j < array.length; j++) {
-			if (select[i].name == array[j]) {
+			if (select[i].name === array[j]) {
 				newArray.push(select[i]);
 			}
 		}
@@ -646,7 +652,7 @@ App.DateTimePicker = Em.View.extend({
 			inline:true,
 			lang:'es',
 			minDate: 0,
-			minTime: 0,
+//			minTime: 0,
 			startDate: 0,
 //			allowTimes:[
 //				'7:00', '7:15', '7:30', '7:45',
