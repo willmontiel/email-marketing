@@ -4,23 +4,22 @@
 		<div class="wrapper">
 			<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
 				<dt>Redes sociales:</dt>
-				<dd><img src="{{url('b3/images')}}/icon-face-color.png"> <img src="{{url('b3/images')}}/icon-tweet-color.png"></dd>
-
+				<dd>Inactivas</dd>
 			</dl>
 		</div>
 		{{'{{else}}'}}
 		<div class="wrapper">
 			<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
 					{{'{{#if fbaccountsel }}'}}
+					<dt>Cuenta de Facebook activa:</dt>
 					<dd>
-						Cuenta de Facebook activa:
 						<img src="{{url('images')}}/share_facebook_image_24.png">
 					</dd>
 					{{'{{/if}}'}}
 
 					{{'{{#if twaccountsel }}'}}
+					<dt>Cuenta de Twitter activa:</dt>
 					<dd>
-						Cuenta de Twitter activa:
 						<img src="{{url('images')}}/share_twitter_image_24.png">
 					</dd>
 					{{'{{/if}}'}}
@@ -118,6 +117,7 @@
 										</div>
 										<div class="form-group">
 											<div class="col-sm-6 col-md-offset-6 text-right">
+												<button class="btn btn-default" {{'{{action "cleanSocial" this}}'}}>Limpiar Cambios</button>
 												<button class="btn btn-default btn-sm extra-padding" {{ '{{action "discardChanges" this}}' }}>Descartar cambios</button>
 												<button class="btn btn-guardar btn-sm extra-padding" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 											</div>

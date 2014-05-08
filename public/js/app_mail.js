@@ -125,6 +125,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('dbaselist', arrayDbase);
 			this.set('list', arrayList);
 			this.set('segmentlist', arraySegment);
+			
 			this.set('fbaccountsel', fbaccounts);
 			this.set('twaccountsel', twaccounts);
 			
@@ -200,14 +201,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var f, t;
 		f = this.get('this.fbaccountsel');
 		t = this.get('this.twaccountsel');
-		
-		if (f === null) {
-			f = '0';
-		}
-		
-		if (t === null) {
-			t = '0';
-		}
 		
 		f = (f.length === 0)?null:f;
 		t = (t.length === 0)?null:t;
@@ -589,6 +582,21 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('linksAnalytics', []);
 				this.set('campaignName', '');
 			}
+		},
+				
+		cleanSocial: function () {
+			if (App.fbaccounts !== undefined) {
+				this.set('fbaccountsel', []);
+				this.set('fbmessagecontent', '');
+				this.set('fbtitlecontent', '');
+				this.set('fbdescriptioncontent', '');
+				this.set('fbimagepublication', 'post_default.png');
+			}
+			
+			if (App.twaccounts !== undefined) {
+				this.set('twaccountsel', []);
+				this.set('twpublicationcontent', '');
+			}
 		}
 	}
 });
@@ -616,9 +624,9 @@ function setExpandAttr(self, expand) {
 }
 
 function setTargetValues(values, select) {
+	var newArray = [];
 	if(select !== undefined) {
 		var array = values.split(",");
-		var newArray = [];
 		for (var i = 0; i < select.length; i++) {
 			for (var j = 0; j < array.length; j++) {
 				array[j] = (typeof array[j] === 'string')?parseInt(array[j]):array[j];
@@ -627,9 +635,8 @@ function setTargetValues(values, select) {
 				}
 			}
 		}
-		return newArray;
 	}
-	return null;
+	return newArray;
 }
 
 function setGoogleAnalyticsValues(values, select) {
