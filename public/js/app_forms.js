@@ -4,6 +4,7 @@ App.defaultmailnotify = JSON.parse('{\"layout\":{\"id\":1,\"name\":\"layout-simp
 
 App.Form = DS.Model.extend({
 	name: DS.attr('string', { required: true }),
+	type: DS.attr( 'string' ), 
 	title: DS.attr( 'string' ), 
 	urlsuccess: DS.attr( 'string' ),
 	urlerror: DS.attr( 'string' ),
@@ -15,6 +16,8 @@ App.Form = DS.Model.extend({
 	notify: DS.attr( 'boolean' ),
 	notifyemail: DS.attr( 'string' ),
 	notifymail: DS.attr( 'string' ),
+	updatenotify: DS.attr( 'string' ),
+	updatenotifymail: DS.attr( 'string' ),
 	listselected: DS.attr( 'string' ),
 	content: DS.attr( 'string' ),
 	framecode: DS.attr( 'string' )
@@ -213,6 +216,7 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 		next: function(form) {
 			var result = this.checkValues(form);
 			if(result.acceptance) {
+				this.content.set('type', 'Inscription');
 				this.handleSavePromise(this.content.save(), 'forms.new', 'Ok, listo');
 			}
 			else {
@@ -450,6 +454,124 @@ App.FormsCodeController = Ember.ObjectController.extend({
 		cancel: function() {
 			this.get("model").rollback();
 			this.transitionToRoute('forms.index');
+		}
+	}
+});
+
+App.FormsUpdatingRoute = Ember.Route.extend({
+	model: function(){
+		return this.store.createRecord('form');
+	},
+	deactivate: function () {
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && model.get('isSaving') == false) {
+			model.rollback();
+		}
+	}
+});
+
+App.FormsUpdatingController = Ember.ObjectController.extend({
+	cleanEditor: function() {
+		$('.title-advanced-editor').empty();
+		$('.here-comes-frame').empty();
+		$('.create-email-spot').hide();
+		$('.btn-form-email-creator-save').hide();
+		$('.form-setup-content').show();
+	},
+	checkValues: function(form) {
+		if( form.get('name') === undefined ||  form.get('name').length === 0 ) {
+			return {acceptance: false, msg: 'Recuerde dar un NOMBRE al formulario'};
+		}
+		
+		if( ( form.get('urlsuccess') === undefined || form.get('urlsuccess').length === 0 ) || ( form.get('urlerror') === undefined ) || form.get('urlerror').length === 0 ) {
+			return {acceptance: false, msg: 'Recuerde dar las URLs de EXITO y ERROR'};
+		}
+		
+		if( form.get('updatenotify') ) {
+			if( form.get('updatenotifysubject') === undefined && form.get('updatenotifyfromemail') === undefined ) {
+				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para AVISO DE ACTUALIZACIÓN'};
+			}
+			var notify_update_mail = ( form.get('mailforupdatenotify') === undefined ) ? JSON.stringify(App.defaultmailoptin) : form.get('mailforupdatenotify');
+			
+			form.set('updatenotifymail', JSON.stringify({	
+									subject: form.get('updatenotifysubject'), 
+									fromemail: form.get('updatenotifyfromemail'),
+									fromname: form.get('updatenotifyfromname'),
+									reply: form.get('updatenotifyreplyto'),
+									mail: notify_update_mail }) );
+		}
+		
+		if( form.get('notify') ) {
+			if( form.get('notifysubject') === undefined && form.get('notifyfromemail') === undefined ) {
+				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para NOTIFICACIÓN'};
+			}
+			var notify_mail = ( form.get('mailfornotify') === undefined ) ? JSON.stringify(App.defaultmailnotify) : form.get('mailfornotify');
+			
+			form.set('notifymail', JSON.stringify({
+									subject: form.get('notifysubject'), 
+									fromemail: form.get('notifyfromemail'),
+									fromname: form.get('notifyfromname'),
+									reply: form.get('notifyreplyto'),
+									mail: notify_mail }) );
+		}
+		
+		if( form.get('listselected') === undefined ) {
+			return {acceptance: false, msg: 'Recuerde seleccionar una "LISTA"'};
+		}
+		
+		return {acceptance: true, msg: ''};
+	},
+	actions: {
+		show_editor: function(option) {
+			$('.form-setup-content').hide();
+			$('.create-email-spot').show();
+			var msg = '';
+			switch (option) {
+				case 'updatenotify':
+					msg = 'Bienvenida';
+					var mail = this.get('mailforupdatenotify');
+					var maildefault = App.defaultmailwelcome; //CAMBIAR EL CORREO POR DEFECTO EN EL UPDATE NOTIFY
+					break;
+				case 'notify':
+					msg = 'Notificacion';
+					var mail = this.get('mailfornotify');
+					var maildefault = App.defaultmailnotify;
+					break;
+			}
+			if( mail !== undefined ) {
+				mail = ( typeof(mail) === 'object' ) ? mail : JSON.parse(mail);
+			}
+			objMail = ( mail === undefined ) ? maildefault : mail;
+			
+			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
+			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			$('#btn-for-' + option).show();
+		},
+		create_notify_contact_mail: function(form) {
+			var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+			form.set('mailforupdatenotify', editor);
+			this.cleanEditor();
+		},
+		create_notify_mail: function(form) {
+			var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+			form.set('mailfornotify', editor);
+			this.cleanEditor();
+		},
+		next: function(form) {
+			var result = this.checkValues(form);
+			if(result.acceptance) {
+//				this.handleSavePromise(this.content.save(), 'forms.new', 'Se han aplicado los cambios');
+			}
+			else {
+				$.gritter.add({title: 'Cuidado', text: result.msg, sticky: false, time: 5000});
+			}
 		}
 	}
 });

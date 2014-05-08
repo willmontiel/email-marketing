@@ -4,7 +4,8 @@
 	</div>
 
 	<div class="pull-right">
-	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Inscripción{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Actualización{{ '{{/link-to}}' }}
 	</div>
 	<div class="space"></div>
 	<table class="table table-striped">
@@ -23,7 +24,9 @@
 					</div>
 				</td>
 				<td>
-					Inscripcion
+					<div>
+						{{'{{type}}'}}
+					</div>
 				</td>
 				<td>
 					<div class="text-right">
@@ -47,6 +50,13 @@
 		<h4 class="sectiontitle">Crear nuevo formulario</h4>
 	</div>
 	{{ partial("dbase/partials/form_information_view_partial") }}
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/updating">
+	<div class="row">
+		<h4 class="sectiontitle">Crear nuevo formulario de actualizacion</h4>
+	</div>
+	{{ partial("dbase/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/new">

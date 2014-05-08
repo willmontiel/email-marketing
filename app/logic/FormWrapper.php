@@ -18,6 +18,7 @@ class FormWrapper extends BaseWrapper
 		$form = new Form();
 		$form->idDbase = $this->dbase->idDbase;
 		$form->name = $content->name;
+		$form->type = $content->type;
 		$form->title = $content->title;
 		$form->content = $content->content;
 		$form->target = $content->listselected;
@@ -35,6 +36,9 @@ class FormWrapper extends BaseWrapper
 		$form->notify = $content->notify?'Si':'No';
 		$form->notifyMail = $content->notifymail;
 		$form->notifyEmail = $content->notifyemail;
+		
+		$form->updatenotify = ($content->updatenotify)?'Si':'No';
+		$form->updatenotifyMail = $content->updatenotifymail;
 		
 		if (!$form->save()) {
 			foreach ($form->getMessages() as $message) {
@@ -51,6 +55,7 @@ class FormWrapper extends BaseWrapper
 	{
 		$form->idDbase = $this->dbase->idDbase;
 		$form->name = $content->name;
+		$form->type = $content->type;
 		$form->title = $content->title;
 		$form->content = $content->content;
 		$form->target = $content->listselected;
@@ -69,6 +74,9 @@ class FormWrapper extends BaseWrapper
 		$form->notifyMail = $content->notifymail;
 		$form->notifyEmail = $content->notifyemail;
 		
+		$form->updatenotify = ($content->updatenotify)?'Si':'No';
+		$form->updatenotifyMail = $content->updatenotifymail;
+		
 		if (!$form->save()) {
 			foreach ($form->getMessages() as $message) {
 				$this->logger->log('Error creando Formulario: [' . $message . ']');
@@ -84,6 +92,7 @@ class FormWrapper extends BaseWrapper
 		$jsonObject = array();
 		$jsonObject['id'] = $phObject->idForm;
 		$jsonObject['name'] = $phObject->name;
+		$jsonObject['type'] = $phObject->type;
 		$jsonObject['title'] = $phObject->title;
 		$jsonObject['content'] = $phObject->content;
 		$jsonObject['listselected'] = $phObject->target;
@@ -97,6 +106,8 @@ class FormWrapper extends BaseWrapper
 		$jsonObject['notify'] = ($phObject->notify=='Si');
 		$jsonObject['notifymail'] = $phObject->notifyMail;
 		$jsonObject['notifyemail'] = $phObject->notifyEmail;
+		$jsonObject['updatenotify'] = ($phObject->updatenotify=='Si');
+		$jsonObject['updatenotifymail'] = $phObject->updatenotifyMail;
 		$jsonObject['framecode'] = $this->getFrameCode($phObject);
 		
 		return $jsonObject;
