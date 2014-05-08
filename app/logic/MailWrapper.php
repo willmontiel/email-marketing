@@ -325,7 +325,15 @@ class MailWrapper extends BaseWrapper
 		}
 		
 		$jsonObject['previewData'] = $preview;
-		$jsonObject['plainText'] = htmlentities($this->mailcontent->plainText);
+		
+		if ($this->mail->type == 'Editor') {
+			$plainText = htmlentities($this->mailcontent->plainText);
+		}
+		else {
+			$plainText = $this->mailcontent->plainText;
+		}
+		
+		$jsonObject['plainText'] = $plainText;
 		$jsonObject['totalContacts'] = $this->mail->totalContacts;
 		
 		if ($this->mail->scheduleDate != null || $this->mail->scheduleDate != 0)  {
@@ -336,7 +344,7 @@ class MailWrapper extends BaseWrapper
 		}
 		
 		$jsonObject['scheduleDate'] = $schedule;
-		$this->logger->log('ya casi llega ' . $this->account->idAccount);
+		
 		$socialnet = new SocialNetworkConnection();
 		$socialnet->setAccount($this->account);
 		$socialnet->setFacebookConnection($this->fbiduser, $this->fbtoken);
