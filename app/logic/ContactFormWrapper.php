@@ -44,6 +44,7 @@ class ContactFormWrapper extends ContactWrapper
 		}
 
 		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist, true, true);
+		
 		if($contact == false) {
 			$contact = $this->createNewContactFromJsonData($contactObj, $this->contactlist);
 		}
