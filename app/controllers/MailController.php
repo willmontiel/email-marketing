@@ -911,6 +911,7 @@ class MailController extends ControllerBase
 			$content = $this->request->getPost("content");
 			
 			$this->db->begin();
+			
 			//1. Validamos si ya existe contenido html, de no ser asi se crea uno
 			if ($mailcontent) {
 				$mc = $mailcontent;
@@ -933,8 +934,8 @@ class MailController extends ControllerBase
 			
 			//4. Escapamos el contenido html y asociamos los valores
 			$mc->content = htmlspecialchars($newContent, ENT_QUOTES);
-			$mc->plainText = htmlspecialchars($plainText);
-	
+			$mc->plainText = $plainText;
+			
 			//5. Guardamos mail content
 			if(!$mc->save()) {
 				foreach ($mc->getMessages() as $msg) {
@@ -954,7 +955,6 @@ class MailController extends ControllerBase
 				$this->db->rollback();
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte con el administrador'), 500);
 			}
-
 			$this->db->commit();
 			return $this->setJsonResponse(array('msg' => 'success'), 200);
 		}
