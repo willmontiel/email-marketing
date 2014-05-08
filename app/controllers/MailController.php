@@ -899,7 +899,6 @@ class MailController extends ControllerBase
 		
 		$this->view->setVar('mail', $mail);
 		
-		$this->logger->log('Before customfields!!!');
 		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
 		foreach ($cfs as $cf) {
 			$linkname = strtoupper(str_replace(array ("á", "é", "í", "ó", "ú", "ñ", " ", "&", ), 
@@ -907,8 +906,6 @@ class MailController extends ControllerBase
 			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
 		}
 		$this->view->setVar('cfs', $arrayCf);
-		$this->logger->log('After customfields!!!');
-		
 		
 		if ($this->request->isPost()) {
 			$content = $this->request->getPost("content");
@@ -927,6 +924,8 @@ class MailController extends ControllerBase
 			//2. Capturamos el texto plano del contenido html
 			$text = new PlainText();
 			$plainText = $text->getPlainText($content);
+			
+			$this->logger->log("Textplain: {$plainText}");
 			
 			//3. Quitamos todos los scripts para evitar posibles errores en el contenido
 			$buscar = array("<script" , "</script>");

@@ -24,15 +24,7 @@
 	</script>
 	<script>
 		var chartData = [];
-		App.mails = [];
 		
-		{%for cmail in compareMail %}
-			var cmail = new Object();
-			cmail.id = {{ cmail.id }};
-			cmail.name = '{{ cmail.name }}';
-			App.mails.push(cmail);
-		{%endfor%}
-			
 		{%for data in summaryChartData %}
 			var data = new Object();
 			data.title = '{{ data['title'] }}';
@@ -53,22 +45,9 @@
 				console.log(err.message);
 			}
 		});
-		
-		function compareMails() {
-			if(App.mailCompare !== undefined) {
-				window.location = "{{url('statistic/comparemails')}}/{{mail.idMail}}/" + App.mailCompare;
-			}
-		}
-		
-		
 	</script>
 {% endblock %}
 {% block content %}
-	<div class="row">
-		<div class="col-sm-12">
-			<a href="">Compartir</a>
-		</div>
-	</div>
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
@@ -86,6 +65,7 @@
 				</div>
 				<div class="clearfix"></div>
 			</div>
+	
 			<div class="col-md-2 col-sm-4 col-xs-6">
 				{{'{{#link-to "drilldown.opens" class="anchor" href=false}}' }}
 					<div class="box-dashboard-summary summary-opens anchor">
@@ -95,6 +75,7 @@
 					</div>
 				{{ '{{/link-to}}'}}
 			</div>
+	
 			<div class="col-md-2 col-sm-4 col-xs-6">
 				{{'{{#link-to "drilldown.clicks" class="anchor" href=false}}' }}
 					<div class="box-dashboard-summary summary-clicks anchor">
@@ -105,6 +86,7 @@
 				{{'{{/link-to}}'}}
 				</div>
 			</div>
+	
 			<div class="col-md-2 col-sm-4 col-xs-6">
 				{{'{{#link-to "drilldown.unsubscribed" class="anchor" href=false}}' }}
 					<div class="box-dashboard-summary summary-unsubscribed">
@@ -114,6 +96,7 @@
 					</div>
 				{{ '{{/link-to}}'}}
 			</div>
+	
 			<div class="col-md-2 col-sm-4 col-xs-6">
 				{{'{{#link-to "drilldown.bounced" class="anchor" href=false}}' }}
 					<div class="box-dashboard-summary summary-bounced anchor">
@@ -123,6 +106,7 @@
 					</div>
 				{{ '{{/link-to}}'}}
 			</div>
+	
 			<div class="col-md-2 col-sm-4 col-xs-6">
 				{{'{{#link-to "drilldown.spam" class="anchor" href=false}} '}}
 					<div class="box-dashboard-summary summary-spam anchor">
@@ -132,37 +116,59 @@
 					</div>
 				{{' {{/link-to}}'}}
 			</div>
-		</div>
-
-		<div class="space"></div>
-{#
-					<div class="row">
-						<div class="col-md-7">
-							{{ '{{view Ember.Select
-								class="form-control"
-								id="select-options-for-compare"
-								contentBinding="App.mails"
-								optionValuePath="content.id"
-								optionLabelPath="content.name"
-								valueBinding="App.mailCompare"}}'
-							}}
-						</div>
-						<div class="col-md-5">
-							<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-						</div>
-					</div>	
+	
+			<div class="space"></div>
+		
+			<div class="row">
+				<div class="col-sm-12">
+					<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 				</div>
-				<div class="col-md-6">
-					<div class="box">
-						<div id="summaryChart" style="width: 640px; height: 400px;"></div>
-					</div>
-				</div>
-#}				
-	<div id="summaryChart" style="width: 640px; height: 400px;"></div>
+			</div>
+	
 			{{ "{{outlet}}" }}
 
 		</script>
-		{{ partial("statistic/mailpartial") }}
+		
+		<script type="text/x-handlebars" data-template-name="drilldown/opens">
+			<div class="row">
+				<div class="col-md-offset-1">
+					{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar" textChart="Aperturas de Correo"}}'}}
+				</div>
+			</div>
+		</script>
+		
+		<script type="text/x-handlebars" data-template-name="drilldown/clicks">
+			<div class="row">
+				<div class="col-md-offset-1">
+					{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
+				</div>
+			</div>
+		</script>
+		
+		<script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
+			<div class="row">
+				<div class="col-md-offset-1">
+					{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Des-suscritos de Correo"}}'}}
+				</div>
+			</div>
+		</script>
+		
+		<script type="text/x-handlebars" data-template-name="drilldown/spam">
+			<div class="row">
+				<div class="col-md-offset-1">
+					{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Reportes de Spam"}}'}}
+				</div>
+			</div>
+		</script>
+		
+		<script type="text/x-handlebars" data-template-name="drilldown/bounced">
+			<div class="row">
+				<div class="col-md-offset-1">
+					{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Rebotes"}}'}}
+				</div>
+			</div>
+		</script>
+
 		<script type="text/x-handlebars" data-template-name="timeGraph">
 		<div class="row">
 			<div class="pull-right scaleChart">
