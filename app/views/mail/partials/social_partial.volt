@@ -1,25 +1,32 @@
 {{'{{#unless isSocialExpanded }}'}}
 	<div {{'{{bind-attr class=": socialEmpty: :bg-warning"}}'}}>
-		<div class="wrapper">
-			<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
-			{{'{{#if socialEmpty }}'}}
-				<dt>Redes sociales:</dt>
-				<dd><img src="{{url('images')}}/icon-face-color.png"> <img src="{{url('images')}}/icon-tweet-blue.png"></dd>
-
-		</div>
+		{{'{{#if socialEmpty }}'}}
+			<div class="wrapper">
+				<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
+					<dt>Configurar redes sociales:</dt>
+					<dd><img src="{{url('images')}}/icon-face-color.png"> <img src="{{url('images')}}/icon-tweet-blue.png"></dd>
+				
+				</dl>
+			</div>
 		{{'{{else}}'}}
-			Esto se va mostrar cuando hay algo configurado
-			{{'{{#if fbaccountsel }}'}}
-				Entra aqui cuando se configura facebook
-				<img src="{{url('images')}}/share_facebook_image_24.png">
+			<div class="wrapper">
+				<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
+					{{'{{#if fbaccountsel }}'}}
+						<dd>
+							Cuenta de Facebook activa:
+							<img src="{{url('images')}}/share_facebook_image_24.png">
+						</dd>
+					{{'{{/if}}'}}
+						
+					{{'{{#if twaccountsel }}'}}
+						<dd>
+							Cuenta de Twitter activa:
+							<img src="{{url('images')}}/share_twitter_image_24.png">
+						</dd>
 			{{'{{/if}}'}}
-
-			{{'{{#if twaccountsel }}'}}
-				Entra aqui cuando se configura twitter
-				<img src="{{url('images')}}/share_twitter_image_24.png">
-			{{'{{/if}}'}}
+				</dl>
+			</div>
 		{{'{{/if}}'}}
-		</dl>
 	</div>
 {{'{{else}}'}}
 	<h4 class="paneltitle">Redes sociales</h4>
@@ -32,9 +39,7 @@
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="facebook">
-								{#
-									{% if fbsocials %}
-								#}			
+							{% if fbsocials %}
 								<div class="wrapper">
 									{{ '{{view Ember.Select
 											multiple="true"
@@ -76,18 +81,14 @@
 										</div>
 										<div class="clearfix"></div>
 									</div>
-								{#
 								{% else %}
 									<div class="wrapper bg bg-warning">
 										No tiene una cuenta de facebook configurada, para configurarla haga <span style="text-decoration: underline;" {{' {{action "saveDataAndGoToSocialMedia" "fbloginUrl"}} '}}>click aqui</span>
 									</div>	
 								{% endif %}
-								#}
 							</div>
 							<div class="tab-pane fade" id="twitter">
-								{#
 								{% if twsocials %}
-								#}
 									<div class="wrapper">
 										{{ '{{view Ember.Select
 												multiple="true"
@@ -106,13 +107,11 @@
 										<span id="tweet-char-number" class="label label-blue">1</span>
 										</div>
 									</div>
-								{#
 								{% else %}
 									<div class="wrapper bg bg-warning">
 										No tiene una cuenta de twitter configurada, para configurarla haga <span style="text-decoration: underline;" {{' {{action "saveDataAndGoToSocialMedia" "twloginUrl"}} '}}>click aqui</span>
 									</div>	
 								{% endif %}
-								#}
 							</div>
 						</div>
 					</div>
