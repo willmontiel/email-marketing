@@ -237,6 +237,9 @@ class ChildCommunication extends BaseWrapper
 				$timer->startTimer('prepare-msg', 'Preparing message (swift)...');
 				$message = new Swift_Message($subject);
 
+				// Set encoder ::: should speed things up a bit ;)
+				$message->setEncoder(Swift_Encoding::get8BitEncoding());
+
 				/* Asignacion de headers del mensaje */
 				$headers = $message->getHeaders();
 
