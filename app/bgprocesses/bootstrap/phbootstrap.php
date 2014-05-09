@@ -97,7 +97,11 @@ $di->setShared('db', function() use ($di, $config) {
 		});
 	}
 
-	$connection = new \Phalcon\Db\Adapter\Pdo\Mysql($config->database->toArray());
+	// Configuracion de la base de datos... adicionar modo persistente para
+	// evitar desconexion
+	$c = $config->database->toArray();
+	$c['persistent'] = true;
+	$connection = new \Phalcon\Db\Adapter\Pdo\Mysql($c);
 
 	$connection->setEventsManager($eventsManager);
 

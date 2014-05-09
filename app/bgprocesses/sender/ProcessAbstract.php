@@ -21,4 +21,3 @@ abstract class ProcessAbstract  {
 	abstract public function setPoolConditions();
 }
 
-?>
