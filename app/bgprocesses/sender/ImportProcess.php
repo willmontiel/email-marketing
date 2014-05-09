@@ -1,5 +1,6 @@
 <?php
-class ImportProcess extends ProcessAbstract{
+class ImportProcess extends ProcessAbstract
+{
 
 	public function getPublisherToChildrenSocket()
 	{
@@ -24,5 +25,3 @@ class ImportProcess extends ProcessAbstract{
 		$this->pool->createInitialChildren();
 	}
 }
-
-?>
