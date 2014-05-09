@@ -173,6 +173,13 @@ class ChildCommunication extends BaseWrapper
 			// Crear variables listID y sendID para inyectarlas a las cabeceras con swiftmailer
 			$listID = 't0em' . $this->account->idAccount;
 			$sendID = '0em' . $mail->idMail;
+			
+			// MTA a utilizar
+			$mta = ($this->account->virtualMta == null || trim($this->account->virtualMta) === '')?'CUST_SIGMA':$this->account->virtualMta;
+			
+			// Prefijo de tracking ID
+			$trIDprefix = 'em' . $mail->idMail . 'x';
+			
 			foreach ($contactIterator as $contact) {
 
 				/*
@@ -196,61 +203,24 @@ class ChildCommunication extends BaseWrapper
 					$text = $c['text'];
 				}
 				else {
-					/*
-					 * ================================================================
-					 * ERROR (CORREGIDO)
-					 * REVISAR: En este punto se hace referencia a: $content->text
-					 * Pero $content es una variable que se crea arriba a partir
-					 * del código HTML SOLAMENTE!
-					 * Es decir que se está perdiendo el contenido de texto
-					 * que el usuario eligió!!!
-					 * ================================================================
-					 */
 					$subject = $mail->subject;
 					$html = $content;
 					$text = $mailContent->plainText;
 				}
 
-				/*
-				 * ================================================================
-				 * NOTA
-				 * REVISAR: Este objeto se está instanciando por cada contacto al
-				 * que se envía, pero el contenido original del correo no varía
-				 * entre contactos, por lo que la creación y eliminación de objetos
-				 * genera consumo adicional de memoria y de tiempo.
-				 * SUGERENCIA: cambiar el objeto para que se pueda instanciar
-				 * fuera del loop y que luego pueda ser utilizado dentro del loop
-				 * ================================================================
-				 */
 				$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact'], $links);
 
 				$log->log("HTML: " . $htmlWithTracking);
 
-				/*
-				 * ================================================================
-				 * ERROR (CORREGIDO)
-				 * REVISAR: Qué sucede cuando el contacto NO tiene nombre ni apellido?
-				 * Cómo le llega el correo? (verificado, se ve mal en algunos programas
-				 * de correo)
-				 * ================================================================
-				 */
-				$toName = trim($contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
-				if (!$toName || $toName == '') {
-					$toName = $contact['email']['email'];
-				}
+				// El destinatario (cuando el nombre y apellido estan vacios, se asigna el correo)
+				$toNameT = trim($contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
+				$toName = (!$toNameT || $toNameT == '')?$contact['email']['email']:$toNameT;
 				$to = array($contact['email']['email'] => $toName);
 
 				$message = new Swift_Message($subject);
 
-				/*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
+				/* Asignacion de headers del mensaje */
 				$headers = $message->getHeaders();
-
-				if ($this->account->virtualMta == null || trim($this->account->virtualMta) === '') {
-					$mta = 'CUST_SIGMA';
-				}
-				else {
-					$mta = $this->account->virtualMta;
-				}
 
 				/*
 				 * ================================================================
@@ -262,7 +232,7 @@ class ChildCommunication extends BaseWrapper
 				 * TODO: Mover fuera del loop
 				 * ================================================================
 				 */
-				$trackingID = 'em' . $mail->idMail . 'x' . $contact['contact']['idContact'] . 'x' . $contact['email']['idEmail'];
+				$trackingID = $trIDprefix . $contact['contact']['idContact'] . 'x' . $contact['email']['idEmail'];
 
 				$headers->addTextHeader('X-GreenArrow-MailClass', $mailclass->name);
 				$headers->addTextHeader('X-GreenArrow-MtaID', $mta);
@@ -279,15 +249,14 @@ class ChildCommunication extends BaseWrapper
 				}
 				$message->addPart($text, 'text/plain');
 
-//					$recipients = true;
 				$recipients = $swift->send($message, $failures);
 				$this->lastsendheaders = $message->getHeaders()->toString();
 				$log->log("Headers: " . print_r($this->lastsendheaders, true));
-				if ($recipients){
-					echo "Message " . $i . " successfully sent! \n";
+				if ($recipients) {
+//					echo "Message " . $i . " successfully sent! \n";
 //						$log->log("HTML: " . $html);
 //						$log->log("Headers: " . $this->lastsendheaders);
-					$log->log("Message successfully sent! with idContact: " . $contact['contact']['idContact']);
+//					$log->log("Message successfully sent! with idContact: " . $contact['contact']['idContact']);
 					$sentContacts[] = $contact['contact']['idContact'];
 					/*
 					 * ================================================================
