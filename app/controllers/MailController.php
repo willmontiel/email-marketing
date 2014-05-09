@@ -899,7 +899,6 @@ class MailController extends ControllerBase
 		
 		$this->view->setVar('mail', $mail);
 		
-		$this->logger->log('Before customfields!!!');
 		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
 		foreach ($cfs as $cf) {
 			$linkname = strtoupper(str_replace(array ("á", "é", "í", "ó", "ú", "ñ", " ", "&", ), 
@@ -907,11 +906,11 @@ class MailController extends ControllerBase
 			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
 		}
 		$this->view->setVar('cfs', $arrayCf);
-		$this->logger->log('After customfields!!!');
-		
 		
 		if ($this->request->isPost()) {
 			$content = $this->request->getPost("content");
+			
+			$this->db->begin();
 			
 			//1. Validamos si ya existe contenido html, de no ser asi se crea uno
 			if ($mailcontent) {
@@ -926,6 +925,8 @@ class MailController extends ControllerBase
 			$text = new PlainText();
 			$plainText = $text->getPlainText($content);
 			
+			$this->logger->log("Textplain: {$plainText}");
+			
 			//3. Quitamos todos los scripts para evitar posibles errores en el contenido
 			$buscar = array("<script" , "</script>");
 			$reemplazar = array("<!-- ", " -->");
@@ -935,14 +936,12 @@ class MailController extends ControllerBase
 			$mc->content = htmlspecialchars($newContent, ENT_QUOTES);
 			$mc->plainText = $plainText;
 			
-//			$this->db->begin();
-			
 			//5. Guardamos mail content
 			if(!$mc->save()) {
 				foreach ($mc->getMessages() as $msg) {
 					$this->logger->log("Error while saving mail html content {$msg}");
 				}
-//				$this->db->rollback();
+				$this->db->rollback();
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte con el administrador'), 500);
 			}
 			
@@ -953,15 +952,10 @@ class MailController extends ControllerBase
 				foreach ($mail->getMessages() as $msg) {
 					$this->logger->log("Error while saving mail {$msg}");
 				}
-//				$this->db->rollback();
+				$this->db->rollback();
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error contacte con el administrador'), 500);
 			}
-			
-//			$this->logger->log("Before commit: " . date('d/m/Y H:i:s - u', time()));
-//			
-//			$this->db->commit();
-//			
-//			$this->logger->log("After commit: " . date('d/m/Y H:i:s - u', time()));
+			$this->db->commit();
 			return $this->setJsonResponse(array('msg' => 'success'), 200);
 		}
 	}

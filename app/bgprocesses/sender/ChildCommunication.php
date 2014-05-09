@@ -51,7 +51,6 @@ class ChildCommunication extends BaseWrapper
 	public function startProcess($idMail)
 	{
 		$this->pingDatabase();
-		
 		$log = Phalcon\DI::getDefault()->get('logger');
 		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 
@@ -144,7 +143,7 @@ class ChildCommunication extends BaseWrapper
 			}
 			else {
 //				$this->log->log("No Hay editor");
-				$html =  html_entity_decode($mailContent->content);
+				$html =  utf8_decode(html_entity_decode($mailContent->content));
 			}
 
 //				$prepareMail = new PrepareMailContent($this->account);
