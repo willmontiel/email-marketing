@@ -20,6 +20,10 @@ class ChildCommunication extends BaseWrapper
 
 	public function startProcess($idMail)
 	{
+		$timer = Phalcon\DI::getDefault()->get('timerObject');
+		$timer->reset();
+		$timer->startTimer('send-process', 'Sending message with MTA');
+		
 		$log = Phalcon\DI::getDefault()->get('logger');
 		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 
@@ -51,6 +55,7 @@ class ChildCommunication extends BaseWrapper
 			 * SCHEDULED!
 			 * ================================================================
 			 */
+			$timer->startTimer('send-process');
 			return;
 		}
 		
@@ -70,6 +75,8 @@ class ChildCommunication extends BaseWrapper
 				'conditions' => 'idMail = ?1 AND deleted = 0',
 				'bind' => array(1 => $idMail)
 			));
+
+			$timer->startTimer('send-preparation', 'Preparing everything to send email');
 
 			$account = Account::findFirstByIdAccount($mail->idAccount);
 			$this->setAccount($account);
@@ -179,7 +186,11 @@ class ChildCommunication extends BaseWrapper
 			
 			// Prefijo de tracking ID
 			$trIDprefix = 'em' . $mail->idMail . 'x';
-			
+	
+			$timer->endTimer('send-preparation');
+
+			$timer->startTimer('send-loop', 'In the loop');
+
 			foreach ($contactIterator as $contact) {
 
 				/*
@@ -190,12 +201,17 @@ class ChildCommunication extends BaseWrapper
 				 * evitar sobre-procesamiento
 				 * ================================================================
 				 */
+				$timer->startTimer('yield', 'Yielding...');
+
 				// Recibir y procesar mensajes pendientes del proceso padre (YIELD)
 				$msg = $this->childprocess->Messages();
+				$timer->endTimer('yield');
 
 				// Reemplazar valores de los campos personalizados en el contenido
 				// del correo
-	
+
+				$timer->startTimer('custom-fields', 'Processing Custom Fields...');
+				
 				if ($fields) {
 					$c = $mailField->processCustomFields($contact);
 					$subject = $c['subject'];
@@ -207,16 +223,18 @@ class ChildCommunication extends BaseWrapper
 					$html = $content;
 					$text = $mailContent->plainText;
 				}
-
+				$timer->endTimer('custom-fields');
+				
+				$timer->startTimer('tracking-code', 'Creating tracking code...');
 				$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact'], $links);
-
-				$log->log("HTML: " . $htmlWithTracking);
+				$timer->endTimer('tracking-code');
 
 				// El destinatario (cuando el nombre y apellido estan vacios, se asigna el correo)
 				$toNameT = trim($contact['contact']['name'] . ' ' . $contact['contact']['lastName']);
 				$toName = (!$toNameT || $toNameT == '')?$contact['email']['email']:$toNameT;
 				$to = array($contact['email']['email'] => $toName);
 
+				$timer->startTimer('prepare-msg', 'Preparing message (swift)...');
 				$message = new Swift_Message($subject);
 
 				/* Asignacion de headers del mensaje */
@@ -248,10 +266,12 @@ class ChildCommunication extends BaseWrapper
 					$message->setReplyTo($mail->replyTo);
 				}
 				$message->addPart($text, 'text/plain');
+				$timer->endTimer('prepare-msg');
 
+				$timer->startTimer('send-msg', 'Sending message (swift)...');
 				$recipients = $swift->send($message, $failures);
-				$this->lastsendheaders = $message->getHeaders()->toString();
-				$log->log("Headers: " . print_r($this->lastsendheaders, true));
+				$timer->endTimer('send-msg');
+				
 				if ($recipients) {
 //					echo "Message " . $i . " successfully sent! \n";
 //						$log->log("HTML: " . $html);
@@ -269,6 +289,7 @@ class ChildCommunication extends BaseWrapper
 					 * ================================================================
 					 */
 					if (count($sentContacts) == self::CONTACTS_PER_UPDATE || $msg == "Stop") {
+						$timer->startTimer('upd-msg-status', 'Updating message status...');
 						$idsContact = implode(', ', $sentContacts);
 						$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = {$mail->idMail} AND idContact IN ({$idsContact})";
 
@@ -279,6 +300,7 @@ class ChildCommunication extends BaseWrapper
 						else {
 							$log->log("Error actualizando el estado de envio de los mensajes!!!");
 						}
+						$timer->endTimer('upd-msg-status');
 					}
 					$i++;
 				} 
@@ -314,7 +336,8 @@ class ChildCommunication extends BaseWrapper
 				}
 			}
 
-		    // || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact']	
+			$timer->startTimer('send-postprocessing', 'Right after the loop');
+			// || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact']	
 			// Grabar ultimos contactos enviados
 			if (count($sentContacts) > 0) {
 				$idsContact = implode(', ', $sentContacts);
@@ -328,8 +351,7 @@ class ChildCommunication extends BaseWrapper
 					$log->log("Error guardando");
 				}
 			}			
-
-			Phalcon\DI::getDefault()->get('timerObject')->endTimer('all messages sent!');
+			$timer->endTimer('send-loop');
 
 			if(!$disruptedProcess) {
 				$log->log('Estado: Me enviaron');
@@ -342,8 +364,6 @@ class ChildCommunication extends BaseWrapper
 				$log->log('No se pudo actualizar el estado del MAIL');
 				throw new MailStatusException('No se pudo actualizar el estado del MAIL a Terminado o finalizacion Abrupta');
 			}
-			// Grabar profiling de la base de datos
-			print_dbase_profile();
 
 			if($mail->socialnetworks != null) {
 				$socials = new SocialNetworkConnection();
@@ -368,6 +388,7 @@ class ChildCommunication extends BaseWrapper
 					$log->log('No se encontro descripcion de la publicacion en las redes sociales');
 				}
 			}
+			$timer->endTimer('send-postprocessing');
 		}
 		catch (InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
@@ -383,7 +404,13 @@ class ChildCommunication extends BaseWrapper
 		catch (Exception $e) {
 			$log->log('Exception General: [' . $e . ']');
 		}
+		
+		$timer->endTimer('send-process');
+		// Grabar profiling de la base de datos
+		print_dbase_profile();
 
+		$log->log($timer);
+		
 	}
 	
 	protected function checkMailStatus($mail)
