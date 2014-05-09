@@ -112,10 +112,10 @@
 			</div>
 			<div class="modal-body">
 				<p>
-					¿Esta seguro que desea eliminar esta base de datos?
+					¿Está seguro que desea eliminar ésta base de datos?
 				</p>
 				<p>
-					Recuerde que si elimina la base de datos se perderan todos los contactos, listas de contactos y segmentos que pertenezcan a ella
+					Recuerde que si elimina la base de datos se perderán todos los contactos, listas de contactos y segmentos que pertenezcan a ella
 				</p>
 			</div>
 			<div class="modal-footer">

@@ -5,7 +5,7 @@
 			{{'{{#if socialEmpty }}'}}
 
 				<dt>Redes sociales:</dt>
-				<dd><img src="{{url('images')}}/icon-face-color.png"> <img src="{{url('images')}}/icon-tweet-blue.png"></dd>
+				<dd><img src="{{url('')}}b3/images/icon-face-color.png" /> <img src="{{url('')}}b3/images/icon-tweett-color.png" /></dd>
 
 		</div>
 		{{'{{else}}'}}
@@ -29,7 +29,7 @@
 					<div class="col-sm-10 col-md-offset-2">
 						<ul class="nav nav-tabs">
 							<li class="active"><a href="#facebook" data-toggle="tab"><img src="{{url('b3/images/icon-face-color.png')}}" class="center-block" alt="" /></a></li>
-							<li><a href="#twitter" data-toggle="tab"><img src="{{url('b3/images/icon-teewt-color.png')}}" class="center-block" alt="" /></a></li>
+							<li><a href="#twitter" data-toggle="tab"><img src="{{url('b3/images/icon-tweett-color.png')}}" class="center-block" alt="" /></a></li>
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="facebook">
