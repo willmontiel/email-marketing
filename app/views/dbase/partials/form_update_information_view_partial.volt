@@ -152,7 +152,7 @@
 	</div>
 	<div class="advanced-editor-buttons pull-right">
 		<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cleanEditor"}}' }} >Cancelar</button>
-		<button id="btn-for-updatenotify" class="btn btn-sm btn-default btn-guardar extra-padding btn-form-email-creator-save" {{ '{{action "create_notify_mail" this}}' }} >Guardar</button>
+		<button id="btn-for-updatenotify" class="btn btn-sm btn-default btn-guardar extra-padding btn-form-email-creator-save" {{ '{{action "create_notify_contact_mail" this}}' }} >Guardar</button>
 		<button id="btn-for-notify" class="btn btn-sm btn-default btn-guardar extra-padding btn-form-email-creator-save" {{ '{{action "create_notify_mail" this}}' }} >Guardar</button>
 	</div>
 </div>

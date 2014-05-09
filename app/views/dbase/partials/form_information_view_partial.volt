@@ -199,6 +199,7 @@
 							optionLabelPath="content.name"
 							valueBinding="listselected"
 							prompt="Seleccione una lista"
+							class="form-control"
 						}}'
 					}}
 				</div>

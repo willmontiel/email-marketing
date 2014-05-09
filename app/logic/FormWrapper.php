@@ -122,11 +122,15 @@ class FormWrapper extends BaseWrapper
 		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
-		$action = 'form/frame';
-		$parameters = array(1, $form->idForm, $form->idDbase);
-		$link = $linkdecoder->encodeLink($action, $parameters);
+		if($form->type === 'Inscription') {
+			$action = 'form/frame';
+			$parameters = array(1, $form->idForm, $form->idDbase);
+			$link = $linkdecoder->encodeLink($action, $parameters);
+
+			return '<iframe src="' . $link . '" style="height: ' . $this->getHeightForFrame(json_decode($form->content)) . 'px"></iframe>';
+		}
 		
-		return '<iframe src="' . $link . '" style="height: ' . $this->getHeightForFrame(json_decode($form->content)) . 'px"></iframe>';
+		return 'Finalizado';
 	}
 	
 	public function getHeightForFrame($fullcontent)

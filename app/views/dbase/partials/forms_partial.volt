@@ -31,10 +31,18 @@
 				<td>
 					<div class="text-right">
 						{{ '{{#if framecode}}' }}
-							{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
+							{{ '{{#if isInscription}}' }}
+								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
+							{{ '{{else}}' }}
+								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-link"></i> Enlace{{ '{{/link-to}}' }}
+							{{ '{{/if}}' }}
 						{{ '{{/if}}' }}
-
-						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+							
+						{{ '{{#if isInscription}}' }}
+							{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+						{{ '{{else}}' }}
+							{{ '{{#link-to "forms.editupdate" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+						{{ '{{/if}}' }}
 
 						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 					</div>
@@ -96,6 +104,13 @@
 	{{ partial("dbase/partials/form_information_view_partial") }}
 </script>
 
+<script type="text/x-handlebars" data-template-name="forms/editupdate">
+	<div class="row">
+		<h4 class="sectiontitle">Editar formulario</h4>
+	</div>
+	{{ partial("dbase/partials/form_update_information_view_partial") }}
+</script>
+
 <script type="text/x-handlebars" data-template-name="forms/remove">
 	<div class="row">
 			<div class="box">
@@ -128,6 +143,21 @@
 				<div>
 					<textarea rows="4" cols="70">{{ '{{unbound framecode}}' }}</textarea>
 				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-md-offset-4">
+			<button class="btn btn-default" {{ '{{action cancel this}}' }}>Regresar</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/link">
+	<div class="row">
+		<h4 class="sectiontitle">Enlace Formulario de Actualización</h4>
+		<div class="col-md-6">
+			<div class="bs-callout bs-callout-info">
+				<h4>Recuerde</h4>
+				<p>Seleccione el formulario cuando este creando un correo</p>
 			</div>
 		</div>
 		<div class="col-md-6 col-md-offset-4">
