@@ -18,8 +18,39 @@ class ChildCommunication extends BaseWrapper
 		$this->childprocess = $childprocess;
 	}
 	
+	/**
+	 * Metodo para chequear estado de base de datos
+	 */
+	protected function pingDatabase()
+	{
+		/*
+		 * ================================================================
+		 * NOTA
+		 * Cuando un proceso ha estado mucho tiempo ejecutandose sin
+		 * utilizar la sesion de la base de datos, la conexion puede perderse
+		 * 
+		 * Para evitar que esto acabe con el proceso hijo:
+		 * 1) Ejecutar un SELECT 1
+		 * 2) Atrapar excepciones
+		 * 3) Ejecutar $db->connect() (ver info http://docs.phalconphp.com/en/latest/api/Phalcon_Db_Adapter_Pdo.html)
+		 * ================================================================
+		 */
+		$log = \Phalcon\DI::getDefault()->get('logger');
+		$db =  \Phalcon\DI::getDefault()->get('db');
+		
+		try {
+			$db->fetchAll('SELECT 1');
+		} catch (Exception $ex) {
+			$log->log('Excepcion chequeando conexion a la base de datos... intentando la reconexion! [' . $ex->getMessage() . ']');
+			$db->connect();
+			$db->fetchAll('SELECT 1');
+		}
+	}
+
+
 	public function startProcess($idMail)
 	{
+		$this->pingDatabase();
 		$log = Phalcon\DI::getDefault()->get('logger');
 		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 
