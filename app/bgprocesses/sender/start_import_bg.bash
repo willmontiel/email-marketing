@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "Starting sender process in background"
+echo "Starting import process in background"
 
-(nohup php parentProcess.php -m -r 1>/dev/null 2>&1)&
+(nohup php parentProcess.php -i -r 1>/dev/null 2>&1)&
 
 echo "Done!"
