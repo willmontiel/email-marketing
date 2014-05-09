@@ -300,26 +300,27 @@ App.TimeGraphView = Ember.View.extend({
 	chart: null,
 	didInsertElement:function(){
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
-		var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM');
-		if(this.text === undefined || this.text === null) {
-			this.text = this.textChart;
-		}
-		if(this.typeChart === 'Pie') {
-			chart = createPieChart(chartData);
-		}
-		else if(this.typeChart === 'Bar') {
-			chart = createBarChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-		}
-		else if(this.typeChart === 'Line') {
-			chart = createLineChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-		}
-		else if(this.typeChart === 'LineStep') {
-			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-		}
+		var chartData = createChartData(App.get('chartData'));
+//		if(this.text === undefined || this.text === null) {
+//			this.text = this.textChart;
+//		}
+//		if(this.typeChart === 'Pie') {
+//			chart = createPieChart(chartData);
+//		}
+//		else if(this.typeChart === 'Bar') {
+			
+//		}
+//		else if(this.typeChart === 'Line') {
+//			chart = createLineChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
+//		}
+//		else if(this.typeChart === 'LineStep') {
+//			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
+//		}
 		try{
-			chart.write(this.idChart);
-		}catch(err){
-//			console.log(err.message);
+			createBarHighChart(this.idChart, chartData);
+		}
+		catch(err){
+			console.log(err.message);
 		}
 	},
 			
@@ -347,52 +348,192 @@ App.TimeGraphView = Ember.View.extend({
 			
 });
 
-function createChartData(totalData, multVal, format) {
-	var newData = [];
-	var result = [];
+function createChartData(totalData) {
+	var weeksArray = [],
+		daysArray = [],
+		hoursArray = [],
+		weeks = new Object(),
+		days = new Object(),
+		hours = new Object(),
+		colors = Highcharts.getOptions().colors,
+		object;
+	
+	weeks.name = 'Aperturas por semana';
+	weeks.categories = [];
+	weeks.data = [];
+	
+	days.name = 'Aperturas por día';
+	days.categories = [];
+	days.data = [];
+	
+	hours.name = 'Aperturas por hora';
+	hours.categories = [];
+	hours.data = [];
+	
 	for(var i = 0; i < totalData.length; i++) {
-		if(multVal === undefined || multVal === null) {
-			if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
-				newData[(moment.unix(totalData[i].title)).format(format)] = 0;
-			}
-			newData[(moment.unix(totalData[i].title)).format(format)]+= totalData[i].value;
-		}
-		else {
-			var values = JSON.parse(totalData[i].value);
-			if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
-				newData[(moment.unix(totalData[i].title)).format(format)] = [];
-				for (var index in values) {
-					newData[(moment.unix(totalData[i].title)).format(format)][index] = 0;
-				}
-			}
-			for (var index in values) {
-				newData[(moment.unix(totalData[i].title)).format(format)][index]+= parseInt(values[index]);
-			}
-		}
+		var val = totalData[i].title;
+		
+		var w = (moment.unix(val)).format('MMMM/YYYY');
+		var d = (moment.unix(val)).format('DD/MMMM');
+		var h = (moment.unix(val)).format('hh:mm a');
+		
+		weeks.categories = insertValueInArray(weeks.categories, w);
+		days.categories = insertValueInArray(days.categories, d);
+		hours.categories = insertValueInArray(hours.categories, h);
+		
+		weeksArray = createCategories(weeksArray, totalData[i], 'MMMM-YYYY');
+		daysArray = createCategories(daysArray, totalData[i], 'MMMM/DD');
+		hoursArray = createCategories(hoursArray, totalData[i], 'hh:mm a');
 	}
 
-	for (var key in newData) {
-		if(newData.hasOwnProperty(key)) {
-			var obj = new Object();
-			obj.title = '' + key;
-			if(multVal === undefined || multVal === null) {
-				obj.value = '' + newData[key];
-			}
-			else {
-				for (var index in values) {
-					obj[index] = '' + newData[key][index];
-				}
-			}
-			result.push(obj);
+//	console.log(weeksArray);
+//	console.log(daysArray);
+//	console.log(hoursArray);
+	
+	var arrayDays = [];
+//	for (var key in hoursArray) {
+//		if(hoursArray.hasOwnProperty(key)) {
+//			arrayDays = groupDataForDrilldownDays(arrayDays, hoursArray[key]);
+//		}
+//	}
+
+
+
+
+
+//	for (var key in hoursArray) {
+//		if(hoursArray.hasOwnProperty(key)) {
+//			days.data.push(object);
+//		}
+//	}
+//	
+//	for (var key in daysArray) {
+//		if(daysArray.hasOwnProperty(key)) {
+//			object = createDrilldownStructure(daysArray[key], colors[1], hours);
+//			days.data.push(object);	
+//		}
+//	}
+//	
+//	
+//	for (var key in weeksArray) {
+//		if(weeksArray.hasOwnProperty(key)) {
+//			object = createDrilldownStructure(weeksArray[key], colors[1], hours);
+//			weeks.data.push(object);	
+//		}
+//	}
+	
+	
+	
+	
+	
+	
+	
+//	var finalArray = []
+//	for (var key in weeksArray) {
+//		if(weeksArray.hasOwnProperty(key)) {
+//			finalArray = groupDataForDrilldownWeeks(arrayDays, weeksArray[key], finalArray);
+//		}
+//	}
+
+
+	for (var key in hoursArray) {
+		if(hoursArray.hasOwnProperty(key)) {
+			days.data.push(object);
 		}
 	}
-	if(result.length === 0) {
-		var obj = new Object();
-		obj.title = (moment()).format(format);
-		obj.value = "0";
-		result.push(obj);
+	
+	for (var key in daysArray) {
+		if(daysArray.hasOwnProperty(key)) {
+			object = createDrilldownStructure(daysArray[key], colors[1], hours);
+			days.data.push(object);	
+		}
 	}
-	return result;
+	
+	
+	for (var key in weeksArray) {
+		if(weeksArray.hasOwnProperty(key)) {
+			object = createDrilldownStructure(weeksArray[key], colors[1], hours);
+			weeks.data.push(object);	
+		}
+	}
+	
+	return weeks;
+}
+
+
+function createCategories(array, data, format) {
+	if(array[(moment.unix(data.title)).format(format)] === undefined) {
+		var obj = new Object;
+		obj.value = 0;
+		obj.key = data.title;
+		array[(moment.unix(data.title)).format(format)] = obj;
+	}
+
+	obj = array[(moment.unix(data.title)).format(format)];
+	obj.value++;
+	array[(moment.unix(data.title)).format(format)] = obj;
+	
+	return array;
+}
+
+function createDrilldownStructure(value, color, drill) {
+	object = new Object();
+	object.y = value;
+	object.color = color;
+	object.drilldown = drill;
+	
+	return object;
+}
+
+function groupDataForDrilldownDays(array, key) {
+	var newArray = [];
+	obj = new Object;
+	if(array[(moment.unix(key.key)).format('MMMM/DD')] === undefined) {
+		newArray[(moment.unix(key.key)).format('hh:mm a')] = key.value;
+		obj.value = newArray;
+		obj.key = key.key;
+		array[(moment.unix(key.key)).format('MMMM/DD')] = obj;
+	}
+	else {
+		newArray[(moment.unix(key.key)).format('hh:mm a')] = key.value;
+		obj.value = newArray;
+		obj.key = key.key;
+		array[(moment.unix(key.key)).format('MMMM/DD')].push(newArray);
+	}
+	 
+	return array;
+}
+
+
+function groupDataForDrilldownWeeks(arrayDays, key, finalArray) {
+	var newArray = [];
+	obj = new Object;
+	if(finalArray[(moment.unix(key.key)).format('MMMM-YYYY')] === undefined) {
+		newArray[(moment.unix(key.key)).format('MMMM/DD')] = key.value;
+		obj.value = newArray;
+		obj.drilldown = key.key;
+		array[(moment.unix(key.key)).format('MMMM/DD')] = obj;
+	}
+	else {
+		newArray[(moment.unix(key.key)).format('hh:mm a')] = key.value;
+		obj.value = newArray;
+		obj.key = key.key;
+		array[(moment.unix(key.key)).format('MMMM/DD')].push(newArray);
+	}
+	 
+	return array;
+}
+
+function insertValueInArray(array, needle) {
+	if (array.length === 0) {
+		array.push(needle);
+	}
+	else {
+		if ($.inArray(needle, array) === -1) {
+			array.push(needle);
+		}
+	}
+	return array;
 }
 
 function removeLastChart(chart) {

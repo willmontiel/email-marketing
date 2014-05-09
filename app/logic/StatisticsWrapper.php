@@ -1,7 +1,13 @@
 <?php
-//Phalcon\DI::getDefault()->get('logger')->log('Entra');
+//->log('Entra');
 class StatisticsWrapper extends BaseWrapper
 {
+	public function __construct() 
+	{
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
+	}
+
+
 	public function showMailStatistics(Mail $mail, $compare = true)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -290,6 +296,8 @@ class StatisticsWrapper extends BaseWrapper
 				}
 			}
 		}
+		
+//		$this->logger->log(print_r($opens, true));
 		
 		$this->pager->setTotalRecords($total['t']);
 		

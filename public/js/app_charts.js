@@ -1,3 +1,133 @@
+/* HighCharts*/
+
+function createHighPieChart(container, chartData) {
+	container.highcharts({
+		chart: {
+			plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false,
+		},	
+		title: {
+			text: ''
+		},
+		tooltip: {
+			pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: 'pointer',
+				dataLabels: {
+					enabled: false,
+					format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+					style: {
+						color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+					}
+				},
+				showInLegend: true,
+			}
+
+		},
+		series: [{
+			type: 'pie',
+			name: 'Porcentaje',
+			data: chartData
+		}]
+	});
+}
+
+
+function createBarHighChart(chartname, chartData) {
+		console.log(chartData);
+		console.log(chartData.categories);
+		var colors = Highcharts.getOptions().colors;
+		
+		var chart = $('#' + chartname).highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Estadisticas de apertura'
+            },
+            subtitle: {
+                text: 'Para ver mas detalle haga clic en la barra que desee.'
+            },
+            xAxis: {
+                categories: chartData.categories
+            },
+            yAxis: {
+                title: {
+                    text: 'Cantidad de aperturas'
+                }
+            },
+            plotOptions: {
+                column: {
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function() {
+                                var drilldown = this.drilldown;
+                                if (drilldown) { // drill down
+                                    setChart(drilldown.name, drilldown.categories, drilldown.data, drilldown.color);
+                                } 
+								else { // restore
+                                    setChart(chartData.name, chartData.categories, chartData.data);
+                                }
+                            }
+                        }
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        color: colors[0],
+                        style: {
+                            fontWeight: 'bold'
+                        },
+                        formatter: function() {
+                            return this.y;
+                        }
+                    }
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                    var point = this.point,
+                        s = this.x +': <b>' + this.y + ' apertura(s)</b><br/>';
+                    if (point.drilldown) {
+                        s += 'Clic para ver por días';
+                    } else {
+                        s += 'Clic para volver a semanas';
+                    }
+                    return s;
+                }
+            },
+            series: [{
+				name: chartData.name,
+				data: chartData.data
+			}],
+            exporting: {
+                enabled: false
+            }
+        })
+        $(this).highcharts(); // return chart
+		
+		
+		
+		function setChart(name, categories, data, color) {
+			var c = chart.highcharts();
+			c.xAxis[0].setCategories(categories, false);
+			c.series[0].remove(false);
+			c.addSeries({
+				name: name,
+				data: data,
+				color: color || 'orange'
+			}, false);
+			c.redraw();
+        }
+	
+}
+
+/* AmCharts*/
+
 function createPieChart(chartData) {
 	var chart = new AmCharts.AmPieChart();
 	chart.dataProvider = chartData;
@@ -30,6 +160,9 @@ function createPieChart(chartData) {
 	
 	return chart;
 }
+
+
+
 
 function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) {
 	if(chart === undefined || chart === null) {
@@ -78,6 +211,10 @@ function createBarChart(chart, chartData, dateFormat, minPeriod, text, multVal) 
 	
 	return chart;
 }
+
+
+
+
 
 function createLineChart(chart, chartData, dateFormat, minPeriod, text, multVal) {
 	if(chart === undefined || chart === null) {

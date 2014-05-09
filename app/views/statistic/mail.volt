@@ -11,9 +11,14 @@
 	{{ javascript_include('javascripts/moment/moment-with-langs.min.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
+	
 	{{ javascript_include('amcharts/amcharts.js')}}
 	{{ javascript_include('amcharts/serial.js')}}
 	{{ javascript_include('amcharts/pie.js')}}
+	
+	{{ javascript_include('highcharts/highcharts.js')}}
+	{{ javascript_include('highcharts/modules/exporting.js')}}
+	{{ javascript_include('highcharts/modules/drilldown.js')}}
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
@@ -52,6 +57,17 @@
 			}catch(err){
 				console.log(err.message);
 			}
+		});
+		
+		var cData = [
+			{%for data in summaryChartData %}
+				['{{ data['title'] }}',   {{ data['value'] }}],
+			{%endfor%}
+		];
+		
+		$(function () {
+			var container = $('#container');
+			var highchart = createHighPieChart(container, cData);
 		});
 		
 		function compareMails() {
@@ -158,38 +174,18 @@
 					</div>
 				</div>
 #}				
-	<div id="summaryChart" style="width: 640px; height: 400px;"></div>
+	
+				<div class="col-sm-4">
+					<div id="container" style="width: 300px; height: 250px;"></div>
+				</div>
 			{{ "{{outlet}}" }}
 
 		</script>
 		{{ partial("statistic/mailpartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
-		<div class="row">
-			<div class="pull-right scaleChart">
-				<div class="pull-left">
-					Agrupar por: &nbsp;
-				</div>
-				<div class="pull-right">
-					<label for="scaleHour">
-						{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
-						Hora &nbsp;
-					</label>
-				</div>
-				<div class="pull-right">
-					<label for="scaleDay">
-						{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
-						Dia &nbsp;
-					</label>
-				</div>
-				<div class="pull-right">
-					<label for="scaleMonth">
-						{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
-						Mes &nbsp;
-					</label>
-				</div>
+			<div class="row">
+				<div class="col-sm-12" id="ChartContainer"></div>
 			</div>
-		</div>
-		<div id="ChartContainer"></div>
 		</script>
 	</div>
 {% endblock %}
