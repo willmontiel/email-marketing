@@ -192,37 +192,39 @@
 				<div class="opens-social"><p>Aperturas <span class="number"> 674</span></p></div>
 				<div class="clics-social"><p>Clics <span class="number"> 937</span></p></div>
 			</div>
-			<hr>
 		</div>
+		<div class="clearfix"></div>
+		<hr>
 
+		<h4 class="sectiontitle">Aperturas</h4>
 {#
-					<div class="row">
-						<div class="col-md-7">
-							{{ '{{view Ember.Select
-								class="form-control"
-								id="select-options-for-compare"
-								contentBinding="App.mails"
-								optionValuePath="content.id"
-								optionLabelPath="content.name"
-								valueBinding="App.mailCompare"}}'
-							}}
-						</div>
-						<div class="col-md-5">
-							<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-						</div>
-					</div>	
-				</div>
-				<div class="col-md-6">
-					<div class="box">
-						<div id="summaryChart" style="width: 640px; height: 400px;"></div>
-					</div>
-				</div>
+		<div class="row">
+			<div class="col-md-7">
+				{{ '{{view Ember.Select
+					class="form-control"
+					id="select-options-for-compare"
+					contentBinding="App.mails"
+					optionValuePath="content.id"
+					optionLabelPath="content.name"
+					valueBinding="App.mailCompare"}}'
+				}}
+			</div>
+			<div class="col-md-5">
+				<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
+			</div>
+		</div>	
+		<div class="col-md-6">
+			<div class="box">
+				<div id="summaryChart" style="width: 640px; height: 400px;"></div>
+			</div>
+		</div>
 #}				
-			{{ "{{outlet}}" }}
+		{{ "{{outlet}}" }}
 
 		</script>
 		{{ partial("statistic/mailpartial") }}
 		<script type="text/x-handlebars" data-template-name="timeGraph">
+{#
 		<div class="row">
 			<div class="pull-right scaleChart">
 				<div class="pull-left">
@@ -248,7 +250,9 @@
 				</div>
 			</div>
 		</div>
+#}	
 		<div id="ChartContainer"></div>
 		</script>
+
 	</div>
 {% endblock %}

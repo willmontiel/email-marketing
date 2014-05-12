@@ -4,7 +4,7 @@
 		<div class="form-group">
 			<div class="input-group input-group-sm">
 				{{' {{view Ember.TextField valueBinding="searchCriteria" onEvent="enter" action="search" type="text" autofocus="autofocus" class="form-control" id="search" placeholder="Correo, @dominio, nombres, apellidos, combinaciones"}}'}}
-				<span class="input-group-addon pointer"><i class="glyphicon glyphicon-search" {{ '{{action "search" this}}' }}></i></span>
+				<span class="input-group-addon pointer"><span class="glyphicon glyphicon-search" {{ '{{action "search" this}}' }}></span></span>
 				<span class="input-group-btn">
 					<button class="btn btn-default extra-padding border" type="button" {{ '{{action "reset" this}}' }}>Limpiar</button>
 				</span>

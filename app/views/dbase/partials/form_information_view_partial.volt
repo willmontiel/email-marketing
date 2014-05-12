@@ -35,7 +35,7 @@
 			<div class="container-fluid col-sm-offset-1 col-sm-9" style="background-color: #fceedb;">
 				<div class="bs-callout bs-callout-info">
 					<h4>Información de doble optin</h4>
-					<p>El doble optin requiere que el usuario que se suscribe, confirme 
+					<p>El doble optin requiere que el usuario que se suscriba, confirme 
 					su suscripción haciendo clic en un enlace enviado por correo. Seleccione aquí
 					el contenido del correo, el asunto, origen y la página que se mostrará al contacto
 					cuando confirme.
@@ -64,10 +64,10 @@
 				</div>
 				<div class="form-group">
 					<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
-					<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "optin"}}' }}></span>
+					<a href="#" {{ '{{action "show_editor" "optin"}}' }} class="" ><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
 				</div>
 				<div class="form-group welcome-url-field">
-					<label for="url-welcome" class="col-sm-3 control-label">* URL de Bienvenida:</label>
+					<label for="url-welcome" class="col-sm-3 control-label">* URL de bienvenida:</label>
 					<div class="col-md-6">
 						{{'{{view Ember.TextField valueBinding="welcomeurl" id="url-welcome" class="form-control" placeholder="URL de Bienvenida"}}'}}
 					</div>
@@ -116,7 +116,7 @@
 				</div>
 				<div class="form-group">
 					<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
-					<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "welcome"}}' }}></span>
+					<a href="#" {{ '{{action "show_editor" "welcome"}}' }} class="" ><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
 				</div>
 			</div>
 			{{ '{{/if}} '}}	
@@ -137,7 +137,7 @@
 				<div class="bs-callout bs-callout-info">
 					<h4>Información de notificación</h4>
 					<p>Reciba un correo de notificación cada vez que un usuario se suscriba a su lista
-					por medio de éste formulario. Seleccione aquí el contenido del correo, el asunto 
+					por medio de este formulario. Seleccione aquí el contenido del correo, el asunto 
 					y el origen.
 					</p>
 				</div>
@@ -164,7 +164,7 @@
 				</div>
 				<div class="form-group">
 					<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
-					<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "notify"}}' }}></span>
+					<a href="#" {{ '{{action "show_editor" "notify"}}' }} class="" ><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
 				</div>
 				<div class="form-group welcome-url-field">
 					<label for="email-notify" class="col-sm-3 control-label">* Notificar a:</label>
@@ -175,22 +175,24 @@
 			</div>
 			{{ '{{/if}} '}}		
 
-				
-			{#Listas#}
-			<div class="form-group">
-				<label for="list-attachment" class="col-sm-3 control-label">Lista: </label>
-				<div class="col-md-6">
-					{{ '{{view Ember.Select
-							contentBinding="selectoflists"
-							optionValuePath="content.id"
-							optionLabelPath="content.name"
-							valueBinding="listselected"
-							prompt="Seleccione una lista"
-							class="form-control"
-						}}'
-					}}
+			<div class="clearfix"></div>
+			<div class="wrapper">
+				{#Listas#}
+				<div class="form-group">
+					<label for="list-attachment" class="col-sm-3 control-label">Lista: </label>
+					<div class="col-md-6">
+						{{ '{{view Ember.Select
+								contentBinding="selectoflists"
+								optionValuePath="content.id"
+								optionLabelPath="content.name"
+								valueBinding="listselected"
+								prompt="Seleccione una lista"
+								class="form-control"
+							}}'
+						}}
+					</div>
 				</div>
-			</div>	
+			</div>
 				
 				
 			{# Botones #}

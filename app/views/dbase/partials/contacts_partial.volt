@@ -1,8 +1,8 @@
 <script type="text/x-handlebars" data-template-name="contacts/index">
 	<div class="bs-callout bs-callout-info">
-		Aqui esta toda la información necesaria para gestionar los datos de sus contactos, recuerde que al editar, 
+		Aquí está toda la información necesaria para gestionar los datos de sus contactos, recuerde que al editar, 
 		eliminar o desuscribir un contacto, estos cambios se aplicarán a nivel de todas las listas con las que esté
-		relacionado ese contacto, que a su vez están relacionadas con ésta base de datos. 
+		relacionado ese contacto, que a su vez están relacionadas con esta base de datos. 
 	</div>
 
 	<div class="container-fluid wrap">
@@ -123,8 +123,8 @@
 #}
 <script type="text/x-handlebars" data-template-name="contacts/delete">
 	<div class="bs-callout bs-callout-danger">
-		<p>Si elimina un contacto, se eliminará de todas las listas y de Bases de datos a las que pertenece</p>
-		<p>¿Esta seguro que desea eliminar el Contacto <strong>{{'{{email}}'}}</strong>?</p>
+		<p>Si elimina un contacto, se eliminará de todas las listas y de bases de datos a las que pertenece</p>
+		<p>¿Esta seguro que desea eliminar el contacto <strong>{{'{{email}}'}}</strong>?</p>
 		{{ '{{#if errors.errormsg}}' }}
 			<div class="alert alert-error">
 				{{ '{{errors.errormsg}}' }}

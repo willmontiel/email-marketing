@@ -1,37 +1,18 @@
 <script type="text/x-handlebars" data-template-name="drilldown/opens">
-	<div class="row">
-		<div class="col-md-offset-1">
-			{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar" textChart="Aperturas de Correo"}}'}}
-		</div>
+	<div class="container-fluid">	
+		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar" textChart="Aperturas de Correo"}}'}}
 	</div>
-	
-	<div class="space"></div>
-	
-	<div class="row">
-		<div class="col-md-4">
-			<dl>
-				<dd><label class="label-gray-light-percent">Resumen de aperturas</label></dd>
-				<dd>
-					<label class="label-open-percent">
-						<table>
-							<tr>
-								<td><label>{{statisticsData.opens|numberf}}</label></td>
-								<td>|</td>
-								<td><label>{{statisticsData.statopens}}%</label></td>
-							</tr>
-						</table>
-					</label>
-				</dd>
-			</dl>
-		</div>
-		<div class="col-md-3">
+	<div class="">
+		<label class="label-open-percent">
+			<label>{{statisticsData.opens|numberf}}</label></td>
+			<label>{{statisticsData.statopens}}%</label></td>
+		</label>
 			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/opens" class="btn btn-default">Descargar reporte</a>
-		</div>
 	</div>
 
 	<div class="space"></div>
 	
-	<div class="row">
+	<h4 class="sectiontitle">Detalle de aperturas</h4>
 		<div class="col-md-10 col-md-offset-1">
 			<table class="table table-striped">
 				<thead>
@@ -53,7 +34,6 @@
 				{{ partial("partials/pagination_partial") }}
 			</div>
 		</div>
-	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">

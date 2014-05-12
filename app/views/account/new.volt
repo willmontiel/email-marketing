@@ -10,7 +10,7 @@
 	<div class="row">
 		<h4 class="sectiontitle">Crear un nueva cuenta</h4>
 		<div class="bs-callout bs-callout-info">
-			Aqui puede crear una nueva cuenta, configurar .
+			Aqui puede crear una nueva cuenta, configurar 
 		</div>
 		{{ flashSession.output() }}
 	</div>
@@ -32,13 +32,13 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="contactLimit" class="col-sm-5 control-label">*Limite de contactos</label>
+							<label for="contactLimit" class="col-sm-5 control-label">*Límite de contactos</label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('contactLimit', {'class': 'form-control'}) }}
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="messageLimit" class="col-sm-5 control-label">*Limite de mensajes</label>
+							<label for="messageLimit" class="col-sm-5 control-label">*Límite de mensajes</label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('messageLimit', {'class': 'form-control'}) }}
 							</div>
@@ -89,7 +89,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="email" class="col-sm-5 control-label">*Dirección de correo electronico:</label>
+							<label for="email" class="col-sm-5 control-label">*Dirección de correo electrónico:</label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('email', {'class': 'form-control'}) }}
 							</div>

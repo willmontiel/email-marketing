@@ -128,7 +128,7 @@
 	</script>
 	<script type="text/x-handlebars" data-template-name="fields/index">       
 		<div class="pull-right">
-			{{'{{#link-to "fields.add" class="btn btn-default btn-sm extra-padding" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/link-to}}'}}
+			{{'{{#link-to "fields.add" class="btn btn-default btn-sm extra-padding" disabledWhen="createDisabled"}}<span class="glyphicon glyphicon-plus"></span> Agregar campo{{/link-to}}'}}
 		</div>
 		<table class="table table-striped">
 			<thead>

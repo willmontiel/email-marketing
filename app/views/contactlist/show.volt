@@ -245,6 +245,7 @@
 				<div class="alert alert-success">
 					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
 					<div class="space"></div>
+					<p>Utilice una línea para cada contacto</p>
 					<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
 					<p>Cree hasta 30 contactos por este medio</p>
 				</div>
@@ -271,6 +272,7 @@
 				<div class="alert alert-success">
 					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
 					<div class="space"></div>
+					<p>Utilice una línea para cada contacto</p>
 					<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
 					<p>Cree hasta 30 contactos por este medio</p>
 				</div>
@@ -284,9 +286,9 @@
 								
 							
 			<div class="bs-callout bs-callout-danger">
-				<p>Recuerde que si el contacto solo esta asociado a esta lista se eliminará por completo de la 
-				Base de Datos</p>
-				<p>¿Esta seguro que desea Eliminar el Contacto <strong>{{'{{name}}'}} ?</strong></p>
+				<p>Recuerde que si el contacto solo esta asociado a ésta lista se eliminará por completo de la 
+				base de datos</p>
+				<p>¿Está seguro que desea eliminar el contacto <strong>{{'{{name}}'}} ?</strong></p>
 			</div>
 			{{ '{{#if errors.errormsg}}' }}
 				<div class="bs-callout bs-callout-danger">
