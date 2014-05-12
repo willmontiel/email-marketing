@@ -14,7 +14,7 @@
 			<p>
 				A través de las bases de datos, podrá administrar los contactos de la cuenta, cada base de datos tendrá
 				sus propios campos personalizados y segmentos ademas de sus propios contactos, esto quiere decir que un contacto
-				que este guardado en dos bases de datos distintas será contado como 2 contactos diferentes.
+				que esté guardado en dos bases de datos distintas será contado como 2 contactos diferentes.
 			</p>
 			<p>
 				Una vez editada la base de datos no afectará la configuración si ya la ha realizado.
@@ -33,19 +33,19 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="description" class="col-md-5 control-label">*Descripcion</label>
+						<label for="description" class="col-md-5 control-label">*Descripción</label>
 						<div class="col-md-7">       
 							{{editform.render("description")}}
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="Cdescription" class="col-md-5 control-label">*Descripcion de los Contactos</label>
+						<label for="Cdescription" class="col-md-5 control-label">*Descripción de los contactos</label>
 						<div class="col-md-7">
 							{{editform.render("Cdescription")}}
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-5 control-label">*Color de Etiqueta</label>
+						<label class="col-md-5 control-label">*Color de etiqueta</label>
 						<div class="col-md-7">
 							{{editform.render("color")}}
 						<table id="colorchart">

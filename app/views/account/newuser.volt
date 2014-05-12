@@ -10,8 +10,8 @@
 		<div class="col-md-12">
 			<h4 class="sectiontitle">Crear un nuevo usuario en la cuenta <strong>{{account.companyName}}</strong></h4>
 			<div class="bs-callout bs-callout-info">
-				Cree un nuevo usuario. Creelo a partir de los datos más básicos, agregue un nombre 
-				de usuario, una dirección de correo electrónico, una contraseña y asignele permisos de adminsitración
+				Cree un nuevo usuario. Créelo a partir de los datos más básicos, agregue un nombre 
+				de usuario, una dirección de correo electrónico, una contraseña y asígnele permisos de adminsitración
 				en la cuenta.
 			</div>
 		</div>

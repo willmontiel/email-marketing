@@ -170,7 +170,7 @@
 								{{ '{{#link-to "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 
 								<!-- Estadísticas de la lista -->
-								<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default btn-sm" title="Ver estadisticas"><i class="fa fa-bar-chart-o"></i></a>
+								<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default btn-sm" title="Ver estadisticas"><span class="glyphicon glyphicon-stats"></span></a>
 
 							</td>
 							<td>
@@ -353,8 +353,7 @@
 				<h4 class="sectiontitle">Eliminar una lista de contactos</h4>
 				<div class="bs-callout bs-callout-danger">
 					
-					<p>Al eliminar una lista de contactos <strong>no perderá los contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso
-						de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado por completo.</strong></p>
+					<p>Al eliminar una lista de contactos <strong>no perderá los contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado por completo.</strong></p>
 					
 					
 					<p>Si está <strong>completamente seguro</strong> y desea continuar haga clic en el botón eliminar para proceder</p>

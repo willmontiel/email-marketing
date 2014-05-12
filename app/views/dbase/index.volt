@@ -11,7 +11,7 @@
 <div class="row">
 	<h4 class="sectiontitle">Bases de datos de contactos</h4>
 	<div class="bs-callout bs-callout-info">
-		Esta son las bases de datos de la cuenta, aqui podrá encontrar información acerca de la configuración
+		Esta son las bases de datos de la cuenta, aquí podrá encontrar información acerca de la configuración
 		de cada base de datos, los contactos activos e inactivos, etc. Además podrá crear campos personalizados y configurar las bases de datos.
 		
 	</div>
@@ -92,7 +92,7 @@
 		<div class="bs-callout bs-callout-warning">
 			<h4>No hay bases de datos</h4>
 			<p>
-				Para empezar a crear contactos, necesita una base de datos. Para crear una, haga clic en el botón <strong>Crear Base de datos</strong>
+				Para empezar a crear contactos, necesita una base de datos. Para crear una, haga clic en el botón <strong>Crear base de datos</strong>
 				que se sitúa en la parte superior derecha.
 				
 			</p>
@@ -110,14 +110,14 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				<h4 class="modal-title">Eliminar Base de Datos</h4>
+				<h4 class="modal-title">Eliminar base de datos</h4>
 			</div>
 			<div class="modal-body">
 				<p>
-					¿Esta seguro que desea eliminar esta base de datos?
+					¿Está seguro que desea eliminar esta base de datos?
 				</p>
 				<p>
-					Recuerde que si elimina la base de datos se perderan todos los contactos, listas de contactos y segmentos que pertenezcan a ella
+					Recuerde que si elimina la base de datos se perderán todos los contactos, listas de contactos y segmentos que pertenezcan a ella
 				</p>
 			</div>
 			<div class="modal-footer">

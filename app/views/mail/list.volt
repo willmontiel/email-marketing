@@ -180,8 +180,7 @@
 				<div class="bs-callout bs-callout-warning">
 					<h4>No ha creado ningún correo aún</h4>
 					<p>
-						Para empezar la creación de un nuevo correo haga clic en el botón <strong>Nuevo correo</strong> de la parte de arriba,
-						encontrará muchas opciones para crear espléndidos correos.
+						Para empezar la creación de un nuevo correo haga clic en el botón <strong>Nuevo correo</strong> de la parte de arriba, encontrará muchas opciones para crear espléndidos correos.
 					</p>
 				</div>
 			</div>
@@ -192,11 +191,11 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Eliminar correo y sus estadisticas</h4>
+				<h4 class="modal-title">Eliminar correo y sus estadísticas</h4>
 			</div>
 			<div class="modal-body">
 				<p>
-					¿Esta seguro que desea eliminar este correo?
+					¿Está seguro que desea eliminar este correo?
 				</p>
 				<p>
 					Recuerde que si elimina este correo se perderán todos los datos asociados, excepto las imágenes
@@ -215,14 +214,14 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">Pausar Correo Programado</h4>
+				<h4 class="modal-title" id="myModalLabel">Pausar correo programado</h4>
 			</div>
 			<div class="modal-body">
 				<p>
-					¿Esta seguro que desea pausar este correo?
+					¿Está seguro que desea pausar este correo?
 				</p>
 				<p>
-					Recuerde que si pausa este correo debera programarlo de nuevo.
+					Recuerde que si pausa este correo deberá programarlo de nuevo.
 				</p>
 			</div>
 			<div class="modal-footer">
@@ -240,18 +239,18 @@
 			<form id="temapletMail" class="form-horizontal" role="form" method="post">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Crear Template</h4>
+					<h4 class="modal-title">Crear template</h4>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="nametemplate" class="col-sm-4 control-label">Nombre del Template:</label>
+						<label for="nametemplate" class="col-sm-4 control-label">Nombre del template:</label>
 						<div class="col-sm-8">
 							<input type="text" class="form-control" id="nametemplate" name="nametemplate">
 						</div>
 					</div>
 					
 					<div class="form-group">
-						<label for="category" class="col-sm-4 control-label">Categoria:</label>
+						<label for="category" class="col-sm-4 control-label">Categoría:</label>
 						<div class="col-sm-8">
 							<input type="text" class="form-control" id="category" name="category" value="Mis Templates" readonly>
 						</div>

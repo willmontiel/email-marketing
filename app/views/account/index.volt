@@ -10,7 +10,7 @@
 		<div class="col-md-12">
 			<h4 class="sectiontitle">Cuentas</h4>
 			<div class="bs-callout bs-callout-info">
-				Aqui puede ver, crear o editar las cuentas de la apliación, como también administrar los usuarios
+				Aquí puede ver, crear o editar las cuentas de la apliación, como también administrar los usuarios
 				de dichas cuentas.
 			</div>
 		</div>

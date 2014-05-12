@@ -1,10 +1,10 @@
 <script type="text/x-handlebars" data-template-name="forms/index">
 	<div class="bs-callout bs-callout-info">
-		Aqui esta toda la información necesaria para gestionar sus formularios
+		Aquí esta toda la información necesaria para gestionar sus formularios
 	</div>
 
 	<div class="pull-right">
-	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo formulario{{ '{{/link-to}}' }}
 	</div>
 	<div class="space"></div>
 	<table class="table table-striped">
@@ -23,12 +23,12 @@
 					</div>
 				</td>
 				<td>
-					Inscripcion
+					Inscripción
 				</td>
 				<td>
 					<div class="text-right">
 						{{ '{{#if framecode}}' }}
-							{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
+							{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Código{{ '{{/link-to}}' }}
 						{{ '{{/if}}' }}
 
 						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
@@ -43,39 +43,28 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/setup">
-	<div class="row">
-		<h4 class="sectiontitle">Crear nuevo formulario</h4>
-	</div>
+	<h4 class="sectiontitle">Crear nuevo formulario</h4>
 	{{ partial("dbase/partials/form_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/new">
-	<div class="row">
-		<div class="col-md-5 col-md-offset-1">
-			<div class="form-full-content">
-			
-			</div>
-			<div class="form-full-button col-md-offset-7">
-				
-			</div>
+		<div class="col-md-6 col-xs-12 col-md-offset-1 border">
+			<div class="form-full-content"></div>
+
+			<div class="form-full-button"></div>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-4 col-sm-8 col-xs-12">
 			<div class="form-menu">
-			<h4 class="sectiontitle title-fields-options form-options">Campos</h4>
-			
+				<h4 class="sectiontitle title-fields-options">Campos para agregar al formulario</h4>
 			</div>
 		</div>
-	</div>
-	<div class="form-action">
-		<div class="row">
-			<div class="col-xs-offset-6 col-xs-2">
-				<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
-			</div>
-			<div class="col-xs-2">
-				<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "sendData" this}}' }}>Crear Formulario</button>
-			</div>
+		<div class="clearfix"></div>
+		<div class="space"></div>
+		<hr>
+		<div class="form-action col-md-offset-1">
+			<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
+			<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "sendData" this}}' }}>Crear formulario</button>
 		</div>
-	</div>
 	<div class="space"></div>
 </script>
 
@@ -87,15 +76,9 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/remove">
-	<div class="row">
-			<div class="box">
-				<div class="box-header">
-					<div class="title">
-						Eliminar un formulario
-					</div>
-				</div>
+			<h3>Eliminar un formulario</h3>
 				<div class="box-content padded">			
-					<p>¿Esta seguro que desea eliminar el Formulario <strong>{{'{{name}}'}}</strong>?</p>
+					<p>¿Está seguro que desea eliminar el formulario <strong>{{'{{name}}'}}</strong>?</p>
 					{{ '{{#if errors.errormsg}}' }}
 						<div class="alert alert-error">
 							{{ '{{errors.errormsg}}' }}
@@ -110,11 +93,11 @@
 
 <script type="text/x-handlebars" data-template-name="forms/code">
 	<div class="row">
-		<h4 class="sectiontitle">Codigo formulario</h4>
+		<h4 class="sectiontitle">Código formulario</h4>
 		<div class="col-md-6">
 			<div class="bs-callout bs-callout-info">
-				<h4>Codigo IFrame</h4>
-				<p>Copie y pegue el siguiente codigo en su pagina web.</p>
+				<h4>Código IFrame</h4>
+				<p>Copie y pegue el siguiente código en su página web.</p>
 				<div>
 					<textarea rows="4" cols="70">{{ '{{unbound framecode}}' }}</textarea>
 				</div>

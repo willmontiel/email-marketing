@@ -8,10 +8,10 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<h4 class="sectiontitle">Informacion de usuarios de cuentas</h4>
+			<h4 class="sectiontitle">Información de usuarios de cuentas</h4>
 			<div class="bs-callout bs-callout-info">
-				Aqui puede editar información de los usuarios de la cuenta, puede dar permisos y quitarlos. Tambien puede
-				crear nuevos usuarios como tambien eliminarlos.
+				Aquí puede editar información de los usuarios de la cuenta, puede dar permisos y quitarlos. Puede
+				crear nuevos usuarios como también eliminarlos.
 			</div>
 		</div>
 	</div>
@@ -76,7 +76,7 @@
 					<h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>
 				</div>
 				<div class="modal-body">
-					¿Esta seguro que desea eliminar este Usuario?
+					¿Está seguro que desea eliminar este usuario?
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Cancelar</button>

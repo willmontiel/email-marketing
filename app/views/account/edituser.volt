@@ -13,7 +13,7 @@
 		<div class="col-md-12">
 			<h4 class="sectiontitle">Editar o actualizar información del usuario</h4>
 			<div class="bs-callout bs-callout-info">
-				Aqui podrá editar o actualizar información de cualquier usuario de cualquiera de las cuentas.
+				Aquí podrá editar o actualizar información de cualquier usuario de cualquiera de las cuentas.
 			</div>
 		</div>
 	</div>
