@@ -300,7 +300,7 @@ App.TimeGraphView = Ember.View.extend({
 	chart: null,
 	didInsertElement:function(){
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
-		var chartData = createChartData(App.get('chartData'));
+//		var chartData = createChartData(App.get('chartData'));
 //		if(this.text === undefined || this.text === null) {
 //			this.text = this.textChart;
 //		}
@@ -317,7 +317,7 @@ App.TimeGraphView = Ember.View.extend({
 //			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
 //		}
 		try{
-			createBarHighChart(this.idChart, chartData);
+			createBarHighChart(this.idChart, App.get('chartData'));
 		}
 		catch(err){
 			console.log(err.message);
@@ -349,113 +349,6 @@ App.TimeGraphView = Ember.View.extend({
 });
 
 function createChartData(totalData) {
-	var weeksArray = [],
-		daysArray = [],
-		hoursArray = [],
-		weeks = new Object(),
-		days = new Object(),
-		hours = new Object(),
-		colors = Highcharts.getOptions().colors,
-		object;
-	
-	weeks.name = 'Aperturas por semana';
-	weeks.categories = [];
-	weeks.data = [];
-	
-	days.name = 'Aperturas por día';
-	days.categories = [];
-	days.data = [];
-	
-	hours.name = 'Aperturas por hora';
-	hours.categories = [];
-	hours.data = [];
-	
-	for(var i = 0; i < totalData.length; i++) {
-		var val = totalData[i].title;
-		
-		var w = (moment.unix(val)).format('MMMM/YYYY');
-		var d = (moment.unix(val)).format('DD/MMMM');
-		var h = (moment.unix(val)).format('hh:mm a');
-		
-		weeks.categories = insertValueInArray(weeks.categories, w);
-		days.categories = insertValueInArray(days.categories, d);
-		hours.categories = insertValueInArray(hours.categories, h);
-		
-		weeksArray = createCategories(weeksArray, totalData[i], 'MMMM-YYYY');
-		daysArray = createCategories(daysArray, totalData[i], 'MMMM/DD');
-		hoursArray = createCategories(hoursArray, totalData[i], 'hh:mm a');
-	}
-
-//	console.log(weeksArray);
-//	console.log(daysArray);
-//	console.log(hoursArray);
-	
-	var arrayDays = [];
-//	for (var key in hoursArray) {
-//		if(hoursArray.hasOwnProperty(key)) {
-//			arrayDays = groupDataForDrilldownDays(arrayDays, hoursArray[key]);
-//		}
-//	}
-
-
-
-
-
-//	for (var key in hoursArray) {
-//		if(hoursArray.hasOwnProperty(key)) {
-//			days.data.push(object);
-//		}
-//	}
-//	
-//	for (var key in daysArray) {
-//		if(daysArray.hasOwnProperty(key)) {
-//			object = createDrilldownStructure(daysArray[key], colors[1], hours);
-//			days.data.push(object);	
-//		}
-//	}
-//	
-//	
-//	for (var key in weeksArray) {
-//		if(weeksArray.hasOwnProperty(key)) {
-//			object = createDrilldownStructure(weeksArray[key], colors[1], hours);
-//			weeks.data.push(object);	
-//		}
-//	}
-	
-	
-	
-	
-	
-	
-	
-//	var finalArray = []
-//	for (var key in weeksArray) {
-//		if(weeksArray.hasOwnProperty(key)) {
-//			finalArray = groupDataForDrilldownWeeks(arrayDays, weeksArray[key], finalArray);
-//		}
-//	}
-
-
-	for (var key in hoursArray) {
-		if(hoursArray.hasOwnProperty(key)) {
-			days.data.push(object);
-		}
-	}
-	
-	for (var key in daysArray) {
-		if(daysArray.hasOwnProperty(key)) {
-			object = createDrilldownStructure(daysArray[key], colors[1], hours);
-			days.data.push(object);	
-		}
-	}
-	
-	
-	for (var key in weeksArray) {
-		if(weeksArray.hasOwnProperty(key)) {
-			object = createDrilldownStructure(weeksArray[key], colors[1], hours);
-			weeks.data.push(object);	
-		}
-	}
 	
 	return weeks;
 }

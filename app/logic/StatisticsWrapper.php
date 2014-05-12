@@ -297,13 +297,23 @@ class StatisticsWrapper extends BaseWrapper
 			}
 		}
 		
-//		$this->logger->log(print_r($opens, true));
+		$o = array();
+		foreach ($opens as $open) {
+			$o[] = $open['title'];
+		}
+		
+		$this->logger->log(print_r($o, true));
+		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+		$timePeriod->setData($o);
+		$timePeriod->processTimePeriod();
+		$openData = $timePeriod->getTimePeriod();
+		$this->logger->log(print_r($openData, true));
 		
 		$this->pager->setTotalRecords($total['t']);
 		
 		$statistics[] = array(
 			'id' => $idMail,
-			'statistics' => json_encode($response['statistics'] = $opens),
+			'statistics' => json_encode($response['statistics'] = $openData),
 			'details' => json_encode($response['details'] = $opencontact)
 		);
 		

@@ -38,6 +38,7 @@ function createHighPieChart(container, chartData) {
 
 
 function createBarHighChart(chartname, chartData) {
+		var chartData = chartData[0];
 		console.log(chartData);
 		console.log(chartData.categories);
 		var colors = Highcharts.getOptions().colors;
