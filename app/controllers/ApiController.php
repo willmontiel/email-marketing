@@ -279,7 +279,7 @@ class ApiController extends ControllerBase
 			$response = $customfield->delete();
 
 			$this->traceSuccess("Custom field deleted, idDbase: {$idDbase} / idCustomfield: {$idCustomfield}");
-			return $this->setJsonResponse($response);
+			return $this->setJsonResponse(array('field' => null), 202, 'field deleted success');
 		}
 		catch (Exception $e) {
 			$this->traceFail("Error deleting customfield, idDbase: {$idDbase} / idCustomfield: {$idCustomfield}");
@@ -786,7 +786,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
 		}
 		$this->traceSuccess("contactlist deleted, idContactlist: {$idContactlist}");
-		return $this->setJsonResponse($deletedList);
+		return $this->setJsonResponse(array('list' => null), 202, 'list deleted success');
 	}
 	/*Fin listas de contactos*/
 	
@@ -1327,7 +1327,7 @@ class ApiController extends ControllerBase
 		}
 		
 		$this->traceSuccess("Segment deleted, idSegment: {$idSegment}");
-		return $this->setJsonResponse($response);	
+		return $this->setJsonResponse(array('segment' => null), 202, 'segment deleted success');
 	}
 	
 	/**

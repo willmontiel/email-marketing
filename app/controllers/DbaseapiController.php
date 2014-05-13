@@ -253,7 +253,7 @@ class DbaseapiController extends ControllerBase
 		
 		$response = $form->delete();
 		
-		return $this->setJsonResponse($response);	
+		return $this->setJsonResponse(array('form' => null), 202, 'form deleted success');
 	}
 	
 	/**
