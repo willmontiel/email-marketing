@@ -310,11 +310,11 @@ class ContactsController extends ControllerBase
 		}
 		
 
-		$destiny =  "../../../tmp/ifiles/".$nameFile;
+		$destiny =  $this->tmppath->dir . $nameFile;
 		$idAccount = $this->user->account->idAccount;
 		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);
 		
-		$open = fopen("../tmp/ifiles/".$nameFile, "r");
+		$open = fopen($this->tmppath->dir . $nameFile, "r");
 		
 		if(!$open) {
 			$log->log('Error al abrir el archivo original');
