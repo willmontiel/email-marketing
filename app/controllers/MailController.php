@@ -1126,6 +1126,11 @@ class MailController extends ControllerBase
 				$this->logger->log("Exception {$e}");
 				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error, contacte al administrador'), 500);
 			}
+			catch (\InvalidArgumentException $e) {
+				$this->db->rollback();
+				$this->logger->log("Exception {$e}");
+				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error, contacte al administrador'), 500);
+			}
 		}
 	}
 	
@@ -1780,6 +1785,12 @@ class MailController extends ControllerBase
 				$this->flashSession->error("Ha ocurrido un error mientras se creaba una plantilla a partir de un correo, contacte al administrador");
 				$this->response->redirect('mail/list');
 			}
+			catch (\InvalidArgumentException $e) {
+				$this->traceFail("Error converting mail in template, idMail: {$idMail}");
+				$this->logger->log('Exception: ' . $e);
+				$this->flashSession->error("Ha ocurrido un error mientras se creaba una plantilla a partir de un correo, contacte al administrador");
+				$this->response->redirect('mail/list');
+			}
 		}
 		else {
 			$this->flashSession->success("El correo base no existe por favor verifique la información");
@@ -1835,6 +1846,11 @@ class MailController extends ControllerBase
 			return $this->response->redirect("mail/index");
 		}
 		catch (Exception $e) {
+			$this->traceFail("Error confirming mail, idMail: {$idMail}");
+			$this->logger->log("Exception: Error confiming mail, {$e}");
+			return $this->response->redirect('mail/preview/' . $idMail);
+		}
+		catch (\InvalidArgumentException $e) {
 			$this->traceFail("Error confirming mail, idMail: {$idMail}");
 			$this->logger->log("Exception: Error confiming mail, {$e}");
 			return $this->response->redirect('mail/preview/' . $idMail);
@@ -1911,6 +1927,13 @@ class MailController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'success'), 200);
 		}
 		catch (Exception $e) {
+			$this->db->rollback();
+			$this->logger->log("Exception: {$e}");
+			$this->logger->log("idUser: {$this->user->idUser} / idAccount: {$this->user->account->idAccount}");
+			$this->traceFail("Error confirming mail, idMail: {$idMail}");
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error por favor contacte al administrador'), 500);
+		}
+		catch (\InvalidArgumentException $e) {
 			$this->db->rollback();
 			$this->logger->log("Exception: {$e}");
 			$this->logger->log("idUser: {$this->user->idUser} / idAccount: {$this->user->account->idAccount}");
@@ -2008,6 +2031,12 @@ class MailController extends ControllerBase
 				$this->traceFail("Error stopping mail, idMail: {$idMail}");
 				return $this->response->redirect($route);
 			}
+			catch (\InvalidArgumentException $e) {
+				$this->logger->log("Exception: Error while stopping send, {$e}");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+				$this->traceFail("Error stopping mail, idMail: {$idMail}");
+				return $this->response->redirect($route);
+			}
 		}
 		else {
 			$this->flashSession->error("Ha intentado pausar un envío o correo que no existe, por favor verifique la información");
@@ -2037,6 +2066,12 @@ class MailController extends ControllerBase
 				}
 			}
 			catch (Exception $e) {
+				$this->logger->log("Exception: Error resuming send, {$e}");
+				$this->flashSession->error("Ha ocurrido un error mientras se reanudaba el envío de correo, por favor contacte con el administrador");
+				$this->traceFail("Error resuming send, idMail: {$idMail}");
+				return $this->response->redirect("mail/list");
+			}
+			catch (\InvalidArgumentException $e) {
 				$this->logger->log("Exception: Error resuming send, {$e}");
 				$this->flashSession->error("Ha ocurrido un error mientras se reanudaba el envío de correo, por favor contacte con el administrador");
 				$this->traceFail("Error resuming send, idMail: {$idMail}");
@@ -2145,6 +2180,12 @@ class MailController extends ControllerBase
 				$this->traceFail("Send test, idMail: {$idMail}");
 				return $this->response->redirect("mail/compose/{$idMail}");
 			}
+			catch (\InvalidArgumentException $e) {
+				$this->logger->log("Exception, Error while sending test, {$e}");
+				$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
+				$this->traceFail("Send test, idMail: {$idMail}");
+				return $this->response->redirect("mail/compose/{$idMail}");
+			}
 		}
 	}
 
@@ -2169,6 +2210,11 @@ class MailController extends ControllerBase
 				}
 			}
 			catch(\Exception $e) {
+				$this->logger->log('Exception: [' . $e . ']');
+				$this->flashSession->error("Ha ocurrido un error mientras se cancelaba el correo, por favor contacte al administrador");
+				$this->traceFail("Error Cancelling mail, idMail: {$idMail}");
+			}
+			catch (\InvalidArgumentException $e) {
 				$this->logger->log('Exception: [' . $e . ']');
 				$this->flashSession->error("Ha ocurrido un error mientras se cancelaba el correo, por favor contacte al administrador");
 				$this->traceFail("Error Cancelling mail, idMail: {$idMail}");

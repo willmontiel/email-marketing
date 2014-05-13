@@ -120,10 +120,11 @@ class Communication
 			else {
 				if($mail->status == 'Scheduled') {
 					$scheduled = Mailschedule::findFirstByIdMail($idMail);
-					$scheduled->delete();
+					if($scheduled) {
+						$scheduled->delete();
+					}
 					$this->requester->send(sprintf("%s $idMail $idMail", 'Scheduled-Task'));
 					$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
-
 				}else {
 					$sql = "UPDATE mxc SET status = 'canceled' WHERE idMail = {$idMail}";
 					$db = Phalcon\DI::getDefault()->get('db');
