@@ -23,6 +23,7 @@
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	{{ stylesheet_link('javascripts/colorpicker/css/colorpicker.css') }}
 	{{ stylesheet_link('javascripts/gritter/css/jquery.gritter.css') }}
+	{{ javascript_include('js/editor/advanced.js') }}
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/media_displayer.js') }}
 
@@ -210,7 +211,6 @@
 </div>
 
 <div id="clipsmodal" style="display: none;">
-	
 	<section>
 		<ul class="redactor_clips_box">
 			<li>
@@ -268,4 +268,20 @@
 		<a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
 	</footer>
 </div>
+
+
+<div id="forms-update" style="display: none;">
+	<section>
+		{%if cfs is defined %}
+			{%for cf in cfs%}
+				<input type="checkbox" name="chk_group" value="%%{{cf['linkName']}}%%" />{{cf['originalName']}}<br />
+			{%endfor%}
+		{%endif%}
+	</section>
+	<footer>
+		<button class="redactor_modal_btn redactor_modal_action_btn" id="mymodal-insert">Insert</button>
+		<button class="redactor_modal_btn redactor_btn_modal_close">Close</button>
+	</footer>
+</div>
+
 {% endblock %}

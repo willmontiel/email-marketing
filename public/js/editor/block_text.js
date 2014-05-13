@@ -176,7 +176,7 @@ TxtBlock.prototype.textToolbar = function() {
 			'alignment' 
 		],
 
-		plugins: ['fontcolor', 'fontfamily', 'fontsize', 'clips'],
+		plugins: ['fontcolor', 'fontfamily', 'fontsize', 'clips', 'advanced'],
 
 		buttonsCustom: {
 			save: {
