@@ -4,11 +4,12 @@ class Communication
 	protected $requester;
 	
 	public function __construct($socket) {
+		Phalcon\DI::getDefault()->get('logger')->log("Connecting to: [" . $socket . "]");
+
 		$context = new ZMQContext();
 
 		$this->requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
 		$this->requester->connect($socket);
-		Phalcon\DI::getDefault()->get('logger')->log("Connecting to: [" . $socket . "]");
 	}
 	
 	public function getStatus($type)
