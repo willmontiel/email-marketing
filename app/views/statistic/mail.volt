@@ -182,7 +182,7 @@
 			<div class="text-right">
 				<span>Compartir </span> <a href=""> <img src="{{url('')}}b3/images/icon-face-color.png" /> </a> <a href=""> <img src="{{url('')}}b3/images/icon-tweett-color.png" /></a>
 			</div>
-			<hr>
+			<div class="space"></div>
 			<h4 class="sectiontitle">Interacciones en redes sociales</h4>
 			<div class="col-md-2 col-sm-4 col-xs-6 social facebook">
 				<div class="sm-icons-stats-facebook center-block"></div>
@@ -210,9 +210,8 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
-		<hr>
+		<div class="space"></div>
 
-		<h4 class="sectiontitle">Aperturas</h4>
 {#
 		<div class="row">
 			<div class="col-md-7">
