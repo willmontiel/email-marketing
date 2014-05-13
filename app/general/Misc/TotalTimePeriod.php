@@ -14,10 +14,12 @@ class TotalTimePeriod extends TimePeriod
 	
 	public function processTimePeriod()
 	{
-		$weekPeriod = new \EmailMarketing\General\Misc\WeekPeriod();
-		$weekPeriod->setData($this->data);
-		$weekPeriod->processTimePeriod();
-		$this->timePeriods = $weekPeriod->getTimePeriod();
+		if (count($this->data) != 0) {
+			$weekPeriod = new \EmailMarketing\General\Misc\WeekPeriod();
+			$weekPeriod->setData($this->data);
+			$weekPeriod->processTimePeriod();
+			$this->timePeriods = $weekPeriod->getTimePeriod();
+		}
 	}
 	
 	public function getTimePeriod()

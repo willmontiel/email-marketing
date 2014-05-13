@@ -300,22 +300,6 @@ App.TimeGraphView = Ember.View.extend({
 	chart: null,
 	didInsertElement:function(){
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
-//		var chartData = createChartData(App.get('chartData'));
-//		if(this.text === undefined || this.text === null) {
-//			this.text = this.textChart;
-//		}
-//		if(this.typeChart === 'Pie') {
-//			chart = createPieChart(chartData);
-//		}
-//		else if(this.typeChart === 'Bar') {
-			
-//		}
-//		else if(this.typeChart === 'Line') {
-//			chart = createLineChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-//		}
-//		else if(this.typeChart === 'LineStep') {
-//			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-//		}
 		try{
 			createBarHighChart(this.idChart, App.get('chartData'));
 		}
@@ -347,87 +331,6 @@ App.TimeGraphView = Ember.View.extend({
 	}.observes('App.scaleSelected')		
 			
 });
-
-function createChartData(totalData) {
-	
-	return weeks;
-}
-
-
-function createCategories(array, data, format) {
-	if(array[(moment.unix(data.title)).format(format)] === undefined) {
-		var obj = new Object;
-		obj.value = 0;
-		obj.key = data.title;
-		array[(moment.unix(data.title)).format(format)] = obj;
-	}
-
-	obj = array[(moment.unix(data.title)).format(format)];
-	obj.value++;
-	array[(moment.unix(data.title)).format(format)] = obj;
-	
-	return array;
-}
-
-function createDrilldownStructure(value, color, drill) {
-	object = new Object();
-	object.y = value;
-	object.color = color;
-	object.drilldown = drill;
-	
-	return object;
-}
-
-function groupDataForDrilldownDays(array, key) {
-	var newArray = [];
-	obj = new Object;
-	if(array[(moment.unix(key.key)).format('MMMM/DD')] === undefined) {
-		newArray[(moment.unix(key.key)).format('hh:mm a')] = key.value;
-		obj.value = newArray;
-		obj.key = key.key;
-		array[(moment.unix(key.key)).format('MMMM/DD')] = obj;
-	}
-	else {
-		newArray[(moment.unix(key.key)).format('hh:mm a')] = key.value;
-		obj.value = newArray;
-		obj.key = key.key;
-		array[(moment.unix(key.key)).format('MMMM/DD')].push(newArray);
-	}
-	 
-	return array;
-}
-
-
-function groupDataForDrilldownWeeks(arrayDays, key, finalArray) {
-	var newArray = [];
-	obj = new Object;
-	if(finalArray[(moment.unix(key.key)).format('MMMM-YYYY')] === undefined) {
-		newArray[(moment.unix(key.key)).format('MMMM/DD')] = key.value;
-		obj.value = newArray;
-		obj.drilldown = key.key;
-		array[(moment.unix(key.key)).format('MMMM/DD')] = obj;
-	}
-	else {
-		newArray[(moment.unix(key.key)).format('hh:mm a')] = key.value;
-		obj.value = newArray;
-		obj.key = key.key;
-		array[(moment.unix(key.key)).format('MMMM/DD')].push(newArray);
-	}
-	 
-	return array;
-}
-
-function insertValueInArray(array, needle) {
-	if (array.length === 0) {
-		array.push(needle);
-	}
-	else {
-		if ($.inArray(needle, array) === -1) {
-			array.push(needle);
-		}
-	}
-	return array;
-}
 
 function removeLastChart(chart) {
 	chart.removeGraph(chart.graphs[0]);

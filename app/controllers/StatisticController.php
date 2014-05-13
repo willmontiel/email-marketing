@@ -19,11 +19,13 @@ class StatisticController extends ControllerBase
 			$statWrapper = new StatisticsWrapper();
 			$statWrapper->setAccount($this->user->account);
 			$mailStat = $statWrapper->showMailStatistics($mail);
-
+			
 			if($mailStat) {
 				$this->view->setVar("mail", $mail);
 				$this->view->setVar("summaryChartData", $mailStat['summaryChartData']);
 				$this->view->setVar("statisticsData", $mailStat['statisticsData']);
+				$this->view->setVar("statisticsSocial", $mailStat['statisticsSocial']);
+				$this->view->setVar("statisticsClicksSocial", $mailStat['statisticsClicksSocial']);
 				$this->view->setVar("compareMail", $mailStat['compareMail']);
 			}
 			else {

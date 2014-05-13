@@ -38,6 +38,7 @@ function createHighPieChart(container, chartData) {
 
 
 function createBarHighChart(chartname, chartData) {
+	if (chartData.length !== 0) {
 		var chartData = chartData[0];
 		console.log(chartData);
 		console.log(chartData.categories);
@@ -124,8 +125,36 @@ function createBarHighChart(chartname, chartData) {
 			}, false);
 			c.redraw();
         }
-	
+	}
 }
+
+function createBarGroupHighChart(chartname, chartData) {
+	
+    $('#' + chartname).highcharts({
+        data: {
+            table: document.getElementById('datatable')
+        },
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Detalle de rebotes, spam y desuscritos'
+        },
+        yAxis: {
+            allowDecimals: false,
+            title: {
+                text: 'Total'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+
+                    this.point.y +' '+ this.point.name.toLowerCase();
+            }
+        }
+    });
+}
+
 
 /* AmCharts*/
 

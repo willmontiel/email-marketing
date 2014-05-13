@@ -86,9 +86,40 @@ class StatisticsWrapper extends BaseWrapper
 				$response['compareMail'] = $mailCompare;
 		}
 		
+		$snQuery = "SELECT SUM(m.share_fb) AS share_fb, 
+						  SUM(m.share_tw) AS share_tw, 
+						  SUM(m.share_gp) AS share_gp, 
+						  SUM(m.share_li) AS share_li, 
+						  SUM(m.open_fb) AS open_fb, 
+						  SUM(m.open_tw) AS open_tw, 
+						  SUM(m.open_gp) AS open_gp, 
+						  SUM( m.open_li) AS open_li
+					  FROM Mxc AS m
+				   WHERE m.idMail = :idMail:";
+		$social = $manager->createQuery($snQuery);
+		$socialStats = $social->execute(array(
+			'idMail' => $mail->idMail
+		));
+		
+		
+		$snCliksQuery = "SELECT SUM(l.click_fb) AS click_fb, 
+						  SUM(l.click_tw) AS click_tw, 
+						  SUM(l.click_gp) AS click_gp, 
+						  SUM(l.click_li) AS click_li
+					  FROM Mxcxl AS l
+				   WHERE l.idMail = :idMail:";
+		$socialClicks = $manager->createQuery($snCliksQuery);
+		$socialClickStats = $socialClicks->execute(array(
+			'idMail' => $mail->idMail
+		));
+		
+		
+		
 		$response['summaryChartData'] = $summaryChartData;
 		$response['statisticsData'] = $statisticsData;
-	
+		$response['statisticsSocial'] = $socialStats->getFirst();
+		$response['statisticsClicksSocial'] = $socialClickStats->getFirst();
+		
 		return $response;
 	}
 	
@@ -302,6 +333,8 @@ class StatisticsWrapper extends BaseWrapper
 			$o[] = $open['title'];
 		}
 		
+		asort($o);
+		
 		$this->logger->log(print_r($o, true));
 		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
 		$timePeriod->setData($o);
@@ -377,6 +410,7 @@ class StatisticsWrapper extends BaseWrapper
 		
 		$values = array();
 		$clicks = array();
+		$clickData = array();
 		if (count($linkValues) > 0 ) {
 			foreach ($linkValues as $l) {
 				if (!isset($values[$l['click']])) {
@@ -398,6 +432,18 @@ class StatisticsWrapper extends BaseWrapper
 					'value' => $value['value']
 				);
 			}
+			
+			$c = array();
+			foreach ($clicks as $click) {
+				$c[] = $click;
+			}
+			
+			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+			$timePeriod->setData($c);
+			$timePeriod->processTimePeriod();
+			$clickData = $timePeriod->getTimePeriod();
+			$this->logger->log("Stat: " . print_r($clickData, true));
+			
 		}
 		
 		$phql = "SELECT ml.click, e.email, l.link
@@ -448,7 +494,7 @@ class StatisticsWrapper extends BaseWrapper
 		
 		$statistics[] = array(
 			'id' => $idMail,
-			'statistics' => json_encode($clicks),
+			'statistics' => json_encode($clickData),
 			'details' => json_encode($clickcontact),
 			'links' => json_encode($links),
 			'multvalchart' => json_encode($info),

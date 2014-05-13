@@ -16,28 +16,29 @@ class HourPeriod extends TimePeriod
 	
 	public function processTimePeriod()
 	{
-		$max = strtotime("+24 hours", $this->day);
-		if ($this->data > $this->day && $this->data < $max) {
-			$hours = array();
-			$date = $this->day;
+		$max = strtotime("+23 hours", $this->day);
+		
+		$hours = array();
+		$date = $this->day;
+		$hours[] = $date;
+		do {
+			$date = strtotime("+1 hour", $date);
 			$hours[] = $date;
-			do {
-				$date = strtotime("+1 hour", $date);
-				$hours[] = $date;
-			} while ($date == $max);
-			
-			$this->timePeriods['name'] = "Aperturas por hora";
-			$this->timePeriods['categories'] = $hours;
-			$drilldown = array();
-			
-			for ($j = 0; $j < count($hours); $j++) {
-				$drilldown[] = $this->createArrayObject('#F5A9A9');
-			}
-			
-			$this->timePeriods['data'] = $drilldown;
-			
-			$this->addDrilldown($hours);
+		} while ($date < $max);
+
+		$this->timePeriods['name'] = "Aperturas por hora";
+		$this->timePeriods['categories'] = $hours;
+		$drilldown = array();
+
+		for ($j = 0; $j < count($hours); $j++) {
+			$drilldown[] = $this->createArrayObject('#F5A9A9');
 		}
+		
+		if (count($this->timePeriods['data']) == 0) {
+			$this->timePeriods['data'] = $drilldown;
+		}
+
+		$this->addDrilldown($hours);
 	}
 	
 	public function addDrilldown($hours)
@@ -46,12 +47,7 @@ class HourPeriod extends TimePeriod
 		
 		for ($i = 0; $i < $totalHours; $i++) {
 			$start = $hours[$i];
-			if ($i+1 == $totalHours) {
-				$end = $hours[$i-1];
-			}
-			else {
-				$end = $hours[$i+1];
-			}
+			$end = strtotime("+1 hour", $hours[$i]);
 
 			if ($this->data > $start && $this->data < $end) {
 				$object = $this->timePeriods['data'][$i];

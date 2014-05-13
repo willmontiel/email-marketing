@@ -6,6 +6,12 @@ class WeekPeriod extends TimePeriod
 {
 	public $data;
 	public $timePeriods = array();
+	public $logger;
+	
+	public function __construct() 
+	{
+		$this->logger = \Phalcon\DI::getDefault()->get('logger');
+	}
 
 	public function setData($data, $date = null)
 	{
@@ -42,8 +48,8 @@ class WeekPeriod extends TimePeriod
 		for ($j = 0; $j < count($weeks); $j++) {
 			$drilldown[] = $this->createArrayObject('#2E9AFE');
 		}
-		$this->timePeriods[0]['data'] = $drilldown;
 		
+		$this->timePeriods[0]['data'] = $drilldown;
 		$this->addDrilldown($weeks);
 	}
 	
