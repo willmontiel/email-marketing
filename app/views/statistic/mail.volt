@@ -110,7 +110,7 @@
 			<div class="space"></div>
 
 			<div class="text-right">
-				<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
+				<button class="btn btn-sm btn-add extra-padding">Compartir resumen de estadísticas</button>
 			</div>
 
 {#

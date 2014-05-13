@@ -12,6 +12,12 @@
 	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
+	<div class="text-right">
+		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
+	</div>
+	<div class="clearfix"></div>
+	<div class="space"></div>
+
 	<h4 class="sectiontitle">Detalle de aperturas</h4>
 	<div class="pull-right">
 		<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/opens" class="btn btn-sm btn-default extra-padding">Descargar reporte</a>
@@ -46,6 +52,11 @@
 	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
+	<div class="text-right">
+		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
+	</div>
+	<div class="clearfix"></div>
+	<div class="space"></div>
 	<h4 class="sectiontitle">Detalle de clics</h4>
 	<div class="pull-right">
 		<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/clicks" class="btn btn-sm btn-default extra-padding">Descargar reporte</a>
@@ -68,6 +79,11 @@
 			<span class="number">{{statisticsData.unsubscribed|numberf}}</span><br>
 			<span class="number">{{statisticsData.statunsubscribed}}%</span>
 		</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="space"></div>
+	<div class="text-right">
+		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
@@ -96,6 +112,11 @@
 		</div>
 	</div>
 
+	<div class="clearfix"></div>
+	<div class="space"></div>
+	<div class="text-right">
+		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
+	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
 	
@@ -127,6 +148,11 @@
 			<span class="number">{{statisticsData.stathardbounced}}%</span>
 			Duros
 		</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="space"></div>
+	<div class="text-right">
+		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>

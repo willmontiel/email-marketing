@@ -31,6 +31,7 @@
 	</script>
 {% endblock %}
 {% block content %}
+{#
 	<div class="row">
 		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
 
@@ -48,7 +49,6 @@
 			</div>
 			<div class="clearfix"></div>
 		</div>
-		{#  cajas de datos de interacciones de los contactos  #}
 		<div class="row">
 			<div class="space"></div>
 			<div class="col-md-2 col-sm-4 col-xs-6">
@@ -89,7 +89,6 @@
 		</div>
 		<div class="space"></div>
 
-		{#   cajas de datos de interacciones de contactos en redes sociales   #}
 		<div class="row">
 			{%for widget in stats.fullSocialStats()%}
 				<div class="col-md-2 col-sm-4 col-xs-6">
@@ -116,7 +115,6 @@
 					</div>
 				</div>
 			{% endfor %}
-
 
 			{%for widget in stats.fullSocialStats()%}
 				<div class="col-md-2 col-sm-4 col-xs-6">
@@ -196,13 +194,6 @@
 				</div>
 			{% endfor %}
 		</div>
-
-
-
-
-
-
-
 		<div class="row">
 			<div class="col-sm-7">
 				<select id="liststocompare" class="form-control">
@@ -220,4 +211,28 @@
 			<div id="summaryChart" style="width: 640px; height: 400px;"></div>
 		</div>
 	</div>
+#}
+	<div class="row">
+		<div class="col-sm-12">
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
+		</div>
+	</div>
+	<div class="wrap">
+		<div class="col-md-5">
+			<h4 class="sectiontitle numbers-contacts">{{contactList.name}}</h4>
+		</div>
+		<div class="col-md-7">
+			<div class="col-md-6">
+				<p><span class="blue big-number">{{contactList.Ctotal}} </span>Contactos totales</p>
+			</div>
+			<div class="col-md-6">
+				<br><p class="text-right">Creada el: {{date('Y-m-d', contactList.createdon)}}</p>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+
+	{#   parcial estadisticas generales   #}
+	{{ partial("statistic/partials/general_stats_contacts_partial") }}
+
 {% endblock %}
