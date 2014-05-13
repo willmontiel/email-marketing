@@ -38,8 +38,8 @@ function createHighPieChart(container, chartData) {
 
 
 function createBarHighChart(chartname, chartData) {
-	if (chartData.length !== 0) {
-		var chartData = chartData[0];
+	//if (chartData.length !== 0) {
+		//var chartData = chartData[0];
 		console.log(chartData);
 		console.log(chartData.categories);
 		var colors = Highcharts.getOptions().colors;
@@ -125,7 +125,7 @@ function createBarHighChart(chartname, chartData) {
 			}, false);
 			c.redraw();
         }
-	}
+	//}
 }
 
 function createBarGroupHighChart(chartname, chartData) {

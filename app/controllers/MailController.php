@@ -138,7 +138,7 @@ class MailController extends ControllerBase
 			$mailClone = new Mail();
 			
 			$mailClone->idAccount = $idAccount;
-			$mailClone->name = $mail->name . " (copia)";
+			$mailClone->name = substr($mail->name . " (copia)", 0, 79);
 			$mailClone->subject = $mail->subject;
 			$mailClone->fromName = $mail->fromName;
 			$mailClone->fromEmail = $mail->fromEmail;

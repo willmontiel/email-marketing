@@ -333,14 +333,28 @@ class StatisticsWrapper extends BaseWrapper
 			$o[] = $open['title'];
 		}
 		
-		asort($o);
+		sort($o);
+//		$sql = "SELECT FROM_UNIXTIME(CAST((opening/3600) AS UNSIGNED)*3600) AS date, COUNT(*) AS total
+//					FROM mxc
+//				WHERE idMail = ? AND opening != 0
+//				GROUP BY 1";
+//		
+//		$result = $db->query($sql, array($idMail));
+//		$openStats = $result->fetchAll();
 		
-		$this->logger->log(print_r($o, true));
+//		$this->logger->log(print_r($openStats, true));
 		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
 		$timePeriod->setData($o);
 		$timePeriod->processTimePeriod();
-		$openData = $timePeriod->getTimePeriod();
-		$this->logger->log(print_r($openData, true));
+		
+//		$this->printData($timePeriod);
+//		
+		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel();
+		$periodModel->setTimePeriod($timePeriod);
+		$periodModel->modelTimePeriod();
+		$openData = $periodModel->getModelTimePeriod();
+		
+//		$this->logger->log("Open: " . print_r($openData, true));
 		
 		$this->pager->setTotalRecords($total['t']);
 		
@@ -355,6 +369,22 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownopen' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
 	
+	public function printData($obj, $indent = 0)
+	{
+		$this->logger->log('ind: ' . $indent);
+		$ind = str_repeat("\t", $indent);
+		
+		$this->logger->log($ind . 'Nombre: ' . $obj->getPeriodName());
+		$this->logger->log($ind . 'Total: ' . $obj->getTotal());
+		
+		foreach ($obj->getTimePeriod() as $child) {
+			$this->printData($child, $indent+1);
+		}
+	}
+
+
+
+
 	public function findMailClickStats($idMail, $filter)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
