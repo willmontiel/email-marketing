@@ -14,14 +14,16 @@ class StatisticController extends ControllerBase
 			'conditions' => 'idMail = ?1 AND idAccount = ?2 AND status = "Sent"',
 			'bind' => array(1 => $idMail, 2 => $this->user->account->idAccount)
 		));
-
+		
 		if($mail) {
+			$target = $this->getTargetFromMail($mail);
 			$statWrapper = new StatisticsWrapper();
 			$statWrapper->setAccount($this->user->account);
 			$mailStat = $statWrapper->showMailStatistics($mail);
 			
 			if($mailStat) {
 				$this->view->setVar("mail", $mail);
+				$this->view->setVar("target", $target);
 				$this->view->setVar("summaryChartData", $mailStat['summaryChartData']);
 				$this->view->setVar("statisticsData", $mailStat['statisticsData']);
 				$this->view->setVar("statisticsSocial", $mailStat['statisticsSocial']);
@@ -36,6 +38,48 @@ class StatisticController extends ControllerBase
 			$this->response->redirect('error');
 		}
 	}
+	
+	private function getTargetFromMail($mail)
+	{
+		$t = json_decode($mail->target);
+		switch ($t->destination) {
+			case 'contactlists':
+				$model = Contactlist;
+				$name = 'Listas de contactos' ;
+				$key = 'idContactlist';
+				break;
+			
+			case 'dbases':
+				$model = Dbase;
+				$name = 'Bases de datos';
+				$key = 'idDbase';
+				break;
+			
+			case 'segments':
+				$model = Segment;
+				$name = 'Segmentos';
+				$key = 'idSegment';
+				break;
+			
+			default:
+				break;
+		}
+		
+		$target = "{$name}: ";
+		foreach ($t->ids as $id) {
+			$list = $model::findFirst(array(
+				'conditions' => "{$key} = ?1",
+				'bind' => array(1 => $id)
+			));
+
+			if ($list) {
+				$target .= "{$list->name}, ";
+			}
+		}
+		
+		return $target;
+	}
+	
 	
 	public function dbaseAction($idDbase)
 	{

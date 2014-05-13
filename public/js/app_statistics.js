@@ -161,6 +161,9 @@ App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginatio
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
+		App.set('title', 'Estadisticas de apertura');
+		App.set('text', 'Cantidad de aperturas');
+		App.set('ref', 'Apertura(s)');
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
@@ -291,45 +294,18 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 
 App.scaleSelected = null;
 
-App.chartScale = [
-	"Hora", "Dia", "Mes", "Año"
-];
-
 App.TimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
 	chart: null,
 	didInsertElement:function(){
-		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
+		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph col-sm-12'></div>");
 		try{
-			createBarHighChart(this.idChart, App.get('chartData'));
+			createBarHighChart(this.idChart, App.get('chartData'), App.get('title'), App.get('text'), App.get('ref'));
 		}
 		catch(err){
 			console.log(err.message);
 		}
-	},
-			
-	changeScale: function()	{
-		var scale = App.get('scaleSelected');
-		removeLastChart(chart);
-		switch(scale) {
-			case 'hh':
-				var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM-DD HH:mm');
-				chart = createLineStepChart(chart, chartData, 'YYYY-MM-DD JJ:NN', 'hh', this.text, App.get('multValChart'));
-				break;
-			case 'DD':
-				var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM-DD');
-				chart = createLineChart(chart, chartData, 'YYYY-MM-DD', 'DD', this.text, App.get('multValChart'));
-				break;
-			case 'MM':
-			default:
-				var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM');
-				chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-				break;
-		}
-		chart.validateData();
-		chart.animateAgain();
-	}.observes('App.scaleSelected')		
-			
+	}			
 });
 
 function removeLastChart(chart) {

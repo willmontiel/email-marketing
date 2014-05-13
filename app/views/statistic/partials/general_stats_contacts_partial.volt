@@ -25,13 +25,14 @@
 	</div>
 </div>
 <div class="col-md-2 col-sm-4 col-xs-6 bounced anchor item">
-		<div class="bounced anchor">
-			<div class="sm-icons-stats-bounced center-block"></div>
-			<span class="number">{{statisticsData.hardbounced|numberf}}</span><br>
-			<span class="percent">{{statisticsData.stathardbounced}}%</span>
-			<p>Rebotes</p>
-		</div>
+	<div class="bounced anchor">
+		<div class="sm-icons-stats-bounced center-block"></div>
+		<span class="number">{{statisticsData.hardbounced|numberf}}</span><br>
+		<span class="percent">{{statisticsData.stathardbounced}}%</span>
+		<p>Rebotes</p>
+	</div>
 </div>
+
 <div class="clearfix"></div>
 <div class="space"></div>
 <hr>

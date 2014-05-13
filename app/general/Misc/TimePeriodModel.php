@@ -5,13 +5,15 @@ namespace EmailMarketing\General\Misc;
 class TimePeriodModel
 {
 	protected $timePeriod;
+	protected $type;
 	protected $model = array();
 
 
-	public function __construct() 
+	public function __construct($type) 
 	{
 		$this->logger = \Phalcon\DI::getDefault()->get('logger');
-		$this->model = $this->createDrilldownObject("Aperturas por semana");
+		$this->type = $type;
+		$this->model = $this->createDrilldownObject("{$this->type} por semana");
 	}
 	
 	public function setTimePeriod(TimePeriod $timePeriod)
@@ -27,7 +29,7 @@ class TimePeriodModel
 		
 		if ($ind == 1) {
 			$this->model['categories'][] = $obj->getPeriodName();
-			$array = $this->createArrayObject('#81BEF7');
+			$array = $this->createArrayObject('#8dc63f');
 			$array['y'] = $obj->getTotal();
 
 			$dayModel = null;
@@ -52,7 +54,7 @@ class TimePeriodModel
 			$model = $this->createDrilldownObject($name);
 		}
 		$model['categories'][] = $obj->getPeriodName();
-		$array = $this->createArrayObject('#58FAAC');
+		$array = $this->createArrayObject('#197b30');
 		$array['y'] = $obj->getTotal();
 		
 		$hourModel = null;
@@ -70,6 +72,7 @@ class TimePeriodModel
 		if ($hourModel == null) {
 			$hourModel = $this->createDrilldownObject($name);
 		}
+		$hourModel['color'] = '#005826';
 		$hourModel['categories'][] = $data->getPeriodName();
 		$hourModel['data'][] = $data->getTotal();
 		

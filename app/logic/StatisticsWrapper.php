@@ -287,16 +287,23 @@ class StatisticsWrapper extends BaseWrapper
 		$result1 = $db->query($sql1, array($idMail));
 		$total = $result1->fetch();
 		
-		$sql = "SELECT m.idContact, m.opening AS date, e.email 
+		$sql2 = "SELECT m.idContact, m.opening AS date, e.email 
 					FROM mxc AS m
 						JOIN contact as c ON (c.idContact = m.idContact)
 						JOIN email as e ON (c.idEmail = e.idEmail)
 					WHERE m.idMail = ? AND m.opening != 0";
 		
-		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-		$result = $db->query($sql, array($idMail));
-		$info = $result->fetchAll();
-
+		$sql2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+		$result2 = $db->query($sql2, array($idMail));
+		$info = $result2->fetchAll();
+		
+		$sql3 = "SELECT m.opening AS date
+					FROM mxc AS m
+					WHERE m.idMail = ? AND m.opening != 0";
+		$result3 = $db->query($sql3, array($idMail));
+		$stats = $result3->fetchAll();
+		
+		
 		$opencontact = array();
 		$opens = array();
 		
@@ -307,33 +314,19 @@ class StatisticsWrapper extends BaseWrapper
 					'email' => $i['email'],
 					'date' => date('Y-m-d H:i', $i['date']),
 				);
-				
-				$openArray = array();
-				if (!isset($openArray[$i['date']])) {
-					$openArray[$i['date']] = array(
-						'title' => $i['date'],
-						'value' => 1
-					);
-				}
-				else {
-					$openArray[$i['date']]['value'] += 1;
-				}
-				
-				foreach ($openArray as $o) {
-					$opens[] = array (
-						'title' => $o['title'],
-						'value' => $o['value']
-					);
-				}
 			}
 		}
 		
-		$o = array();
-		foreach ($opens as $open) {
-			$o[] = $open['title'];
+		
+		if (count($stats) > 0) {
+			foreach ($stats as $i) {
+				$opens[] = $i['date'];
+			}
 		}
 		
-		sort($o);
+		sort($opens);
+		
+//		$this->logger->log("Opens: " . print_r($opens, true));
 //		$sql = "SELECT FROM_UNIXTIME(CAST((opening/3600) AS UNSIGNED)*3600) AS date, COUNT(*) AS total
 //					FROM mxc
 //				WHERE idMail = ? AND opening != 0
@@ -344,18 +337,13 @@ class StatisticsWrapper extends BaseWrapper
 		
 //		$this->logger->log(print_r($openStats, true));
 		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
-		$timePeriod->setData($o);
+		$timePeriod->setData($opens);
 		$timePeriod->processTimePeriod();
-		
-//		$this->printData($timePeriod);
-//		
-		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel();
+
+		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Aperturas');
 		$periodModel->setTimePeriod($timePeriod);
 		$periodModel->modelTimePeriod();
-		$openData = $periodModel->getModelTimePeriod();
-		
-//		$this->logger->log("Open: " . print_r($openData, true));
-		
+		$openData = $periodModel->getModelTimePeriod();		
 		$this->pager->setTotalRecords($total['t']);
 		
 		$statistics[] = array(

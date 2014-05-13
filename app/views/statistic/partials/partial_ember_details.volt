@@ -1,7 +1,7 @@
 <script type="text/x-handlebars" data-template-name="drilldown/opens">
 	<h4 class="sectiontitle">Aperturas</h4>
-	<div class="col-md-offset-1 wrapper">	
-		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar" textChart="Aperturas de Correo"}}'}}
+	<div class="wrapper">	
+		{{'{{view App.TimeGraphView idChart="openBarChartContainer"}}'}}
 	</div>
 	<hr>
 	<div class="stats">
@@ -30,8 +30,8 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">
 	<h4 class="sectiontitle">Clics</h4>
-	<div class="col-md-offset-1 wrapper">
-		{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
+	<div class="wrapper">
+		{{'{{view App.TimeGraphView idChart="clickBarChartContainer"}}'}}
 	</div>
 	<hr>
 	<div class="stats">	
@@ -69,8 +69,8 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
 	<h4 class="sectiontitle">Desuscritos</h4>
-	<div class="col-md-offset-1 wrapper">
-		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Des-suscritos de Correo"}}'}}
+	<div class="wrapper">
+		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 	</div>
 	<hr>
 	
@@ -100,8 +100,8 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/spam">
 	<h4 class="sectiontitle">Spam</h4>
-	<div class="col-md-offset-1 wrapper">
-		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Reportes de Spam"}}'}}
+	<div class="wrapper">
+		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 	</div>
 	<hr>
 	
@@ -132,8 +132,8 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/bounced">
 	<h4 class="sectiontitle">Rebotes</h4>
-	<div class="col-md-offset-1 wrapper">
-		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Rebotes"}}'}}
+	<div class="col wrapper">
+		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 	</div>
 	<hr>	
 
