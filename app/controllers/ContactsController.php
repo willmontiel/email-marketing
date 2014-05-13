@@ -318,6 +318,15 @@ class ContactsController extends ControllerBase
 		
 		if(!$open) {
 			$log->log('Error al abrir el archivo original');
+			/*
+			 * ===========================================================================
+			 * ERROR
+			 * No se esta controlando esta situacion!!!
+			 * Cambie para que genere un error y redireccione
+			 * ===========================================================================
+			 */
+			$this->flashSession->error('Error al procesar el archivo. Contacte a su administrador!');
+			return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 		}
 		
 		if($header) {
@@ -345,7 +354,17 @@ class ContactsController extends ControllerBase
 		
 		if(!$newprocess->save()) {
 			$log->log('No se creo ningun proceso de importaction');
-			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
+			/*
+			 * ===========================================================================
+			 * ERROR
+			 * Esto no debería generar una excepción porque esa excepcion se va
+			 * al cliente!!!
+			 * Cambie para que genere un error y redireccione
+			 * ===========================================================================
+			 */
+//			throw new \InvalidArgumentException('No se creo ningun proceso de importaction');
+			$this->flashSession->error('Error al procesar el archivo de importacion. Contacte a su administrador!');
+			return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
 		}		
 		
 		$arrayToSend = array(
