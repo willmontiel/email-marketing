@@ -2,32 +2,59 @@
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
-	{{ javascript_include('amcharts/amcharts.js')}}
-	{{ javascript_include('js/app_charts.js') }}
-	{{ javascript_include('amcharts/serial.js')}}
-	{{ javascript_include('amcharts/pie.js')}}
+	{{ javascript_include('highcharts/highcharts.js')}}
+	{{ javascript_include('highcharts/modules/exporting.js')}}
 
 	<script>
-		var chartData = [];
-		
-		{%for data in summaryChartData %}
-			var data = new Object();
-			data.title = '{{ data['title'] }}';
-			data.value = {{ data['value'] }};
-			chartData.push(data);
-		{%endfor%}
-			
-		AmCharts.ready(function () {
-			chart = createPieChart(chartData);	
-			chart.write('summaryChart');
-		});
-		
 		function compareDbases() {
 			var id = $('#dbasestocompare').val();
 			if(id !== null) {
 				window.location = "{{url('statistic/comparedbases')}}/{{dbase.idDbase}}/" + id;
 			}
 		}
+	</script>
+	
+	<script>
+		$(function () {
+			$('#container').highcharts({
+				chart: {
+					plotBackgroundColor: null,
+					plotBorderWidth: null,
+					plotShadow: false,
+				},
+				
+				title: {
+					text: ''
+				},
+				tooltip: {
+					pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+				},
+				plotOptions: {
+					pie: {
+						allowPointSelect: true,
+						cursor: 'pointer',
+						dataLabels: {
+							enabled: false,
+							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+							style: {
+								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+							}
+						},
+						showInLegend: true,
+					}
+					
+				},
+				series: [{
+					type: 'pie',
+					name: 'Porcentaje',
+					data: [
+						{%for data in summaryChartData %}
+							['{{ data['title'] }}',   {{ data['value'] }}],
+						{%endfor%}
+					]
+				}]
+			});
+		});
 	</script>
 {% endblock %}
 {% block sectiontitle %}<i class="icon-signal icon-2x"></i>{% endblock %}
@@ -160,6 +187,12 @@
 	
 	<br />
 #}
+	<div class="row">
+		<div class="col-sm-12">
+			<div id="container"></div>
+		</div>
+	</div>
+
 	<div class="wrap">
 		<div class="col-md-5">
 			<h4 class="sectiontitle numbers-contacts">{{dbase.name}}</h4>
