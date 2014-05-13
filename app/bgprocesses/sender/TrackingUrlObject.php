@@ -22,7 +22,7 @@ class TrackingUrlObject
 		$this->html = $html;
 		$this->urls = $urls;
 		
-		Phalcon\DI::getDefault()->get('logger')->log('Empezando proceso de tracking');
+//		Phalcon\DI::getDefault()->get('logger')->log('Empezando proceso de tracking');
 		
 //		Phalcon\DI::getDefault()->get('logger')->log('Antes: ' . print_r($this->links, true));
 		$this->getOpenTrackingUrl();
@@ -49,7 +49,7 @@ class TrackingUrlObject
 		$this->getClicksTrackingUrl($social);
 		$this->getSocialMediaShare();
 		
-		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
+//		Phalcon\DI::getDefault()->get('logger')->log('Despúes: ' . print_r($this->links, true));
 		$htmlWithTracking = str_replace($this->links['search'], $this->links['replace'], $html);
 		
 		return $htmlWithTracking;
@@ -74,7 +74,7 @@ class TrackingUrlObject
 	
 		$this->links['search'][] = '$$$_open_track_$$$';
 		$this->links['replace'][] = $img;
-		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track apertura: ' . $img);
+//		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de track apertura: ' . $img);
 	}
 	
 	public function getWebVersionTrack()
@@ -87,7 +87,7 @@ class TrackingUrlObject
 		
 		$this->links['search'][] = '$$$_webversion_track_$$$';
 		$this->links['replace'][] = $url;
-		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $url);
+//		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $url);
 	}
 	
 	public function getSocialMediaShare()
@@ -100,7 +100,7 @@ class TrackingUrlObject
 		
 		$this->links['search'][] = '$$$_social_media_share_$$$';
 		$this->links['replace'][] = $url . '-';
-		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $url);
+//		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de version web: ' . $url);
 	}
 	
 	public function getUnsubscribeTracking()
@@ -115,7 +115,7 @@ class TrackingUrlObject
 		$this->links['replace'][] = $url;
 		
 		$this->unsubscribe_link = $url;
-		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de desuscripcion: ' . $url);
+//		Phalcon\DI::getDefault()->get('logger')->log('Insertando link de desuscripcion: ' . $url);
 	}
 	
 	public function getClicksTrackingUrl($social = false)
@@ -140,7 +140,7 @@ class TrackingUrlObject
 				$url = $linkdecoder->encodeLink($action, $parameters);
 				
 				$this->links['replace'][] = $url;
-				Phalcon\DI::getDefault()->get('logger')->log('Insertando link de click: ' . $url);
+//				Phalcon\DI::getDefault()->get('logger')->log('Insertando link de click: ' . $url);
 				next($this->urls);
 			}
 		}

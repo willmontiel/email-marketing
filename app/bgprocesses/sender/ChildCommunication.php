@@ -304,6 +304,10 @@ class ChildCommunication extends BaseWrapper
 							$log->log("Error actualizando el estado de envio de los mensajes!!!");
 						}
 						$timer->endTimer('upd-msg-status');
+						$timer->startTimer('gc-collect', 'Reclaiming memory...');
+						$log->log('Memory usage before reclaiming: ' . memory_get_usage(true));
+						$log->log('Memory usage after reclaiming: ' . memory_get_usage(true));
+						$timer->endTimer('gc-collect');
 					}
 					$i++;
 				} 
