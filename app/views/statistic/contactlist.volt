@@ -213,9 +213,7 @@
 	</div>
 #}
 	<div class="row">
-		<div class="col-sm-12">
-			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
-		</div>
+		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 	</div>
 	<div class="wrap">
 		<div class="col-md-5">

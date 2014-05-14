@@ -83,6 +83,10 @@
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
+
+			{# Botones de navegacion #}
+			{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
+
 			<div class="wrap">
 				<div class="col-md-5">
 					<h4 class="sectiontitle numbers-contacts">{{mail.name}}</h4>

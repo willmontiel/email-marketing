@@ -34,7 +34,7 @@
 				<div class="col-sm-10 col-md-offset-2">
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="#facebook" data-toggle="tab"><img src="{{url('b3/images/icon-face-color.png')}}" class="center-block" alt="" /></a></li>
-						<li><a href="#twitter" data-toggle="tab"><img src="{{url('b3/images/icon-teewt-color.png')}}" class="center-block" alt="" /></a></li>
+						<li><a href="#twitter" data-toggle="tab"><img src="{{url('b3/images/icon-tweet-color.png')}}" class="center-block" alt="" /></a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade in active" id="facebook">
@@ -82,7 +82,7 @@
 												</div>
 								{% else %}
 												<div class="wrapper bg bg-warning">
-													No tiene una cuenta de facebook configurada, para configurarla haga <span style="text-decoration: underline;" {{' {{action "saveDataAndGoToSocialMedia" "fbloginUrl"}} '}}>click aqui</span>
+													No tiene una cuenta de facebook configurada, para configurarla haga <span style="text-decoration: underline;" {{'{{action gotosocial this "fbloginurl"}}'}}>click aqui</span>
 												</div>	
 								{% endif %}
 											</div>
@@ -108,7 +108,7 @@
 														</div>
 								{% else %}
 														<div class="wrapper bg bg-warning">
-															No tiene una cuenta de twitter configurada, para configurarla haga <span style="text-decoration: underline;" {{' {{action "saveDataAndGoToSocialMedia" "twloginUrl"}} '}}>click aqui</span>
+															No tiene una cuenta de twitter configurada, para configurarla haga <span style="text-decoration: underline;" {{'{{action gotosocial this "twloginurl"}}'}}>click aqui</span>
 														</div>	
 								{% endif %}
 													</div>

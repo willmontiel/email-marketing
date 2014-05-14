@@ -7,9 +7,9 @@
 		</div>
 	</div>
 	<div class="col-md-3 ptop-50">
-		<p>Información sobre esta campaña</p>
-		<p>Información sobre esta campaña</p>
-		<p>Información sobre esta campaña</p>
+		<p>Asunto:</p>
+		<p>Destinatarios:</p>
+		<p>Más información sobre este correo:</p>
 	</div>
 </div>
 <hr>

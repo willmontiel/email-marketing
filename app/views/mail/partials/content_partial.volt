@@ -15,7 +15,7 @@
 				</div>
 				<div class="col-md-3 text-center">
 					{{' {{#external-link content=this pattern="' ~ url('mail/contenthtml') ~ '/%@" }}'}}
-						<img src="{{url('b3/images/icon-html.png')}}" class="" alt=""><br>HTML de ceros
+						<img src="{{url('b3/images/icon-html.png')}}" class="" alt=""><br>HTML
 					{{'{{/external-link}}'}}
 				</div>
 				<div class="col-md-3 text-center">

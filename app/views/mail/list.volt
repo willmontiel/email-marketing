@@ -60,11 +60,11 @@
 {{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
 
 <div class="row">
-	<h4 class="sectiontitle">Listas de correos</h4>
+	<h4 class="sectiontitle">Lista de correos</h4>
 
 	<div class="bs-callout bs-callout-info">
-		Esta es la página principal de los correos en la cuenta, aqui podrá encontrar información acerca de la configuración
-		de cada correo enviado, programado, en borrador, etc. Además podrá ver las estadísticas de cada correo enviado.
+		Esta es la página principal de los correos en la cuenta, aquí podrá encontrar información acerca de la configuración
+		de cada correo enviado, programado, en borrador, etc. Además podrá ver las estadísticas de cada envío.
 	</div>
 
 	{{ flashSession.output() }}
@@ -86,7 +86,7 @@
 		<!-- Lista de mis correos -->
 		{% if page.items|length != 0%}
 			<div class="row">
-				<table class="table table-bordered">
+				<table class="table mail-list">
 					<thead></thead>
 					<tbody>
 						{%for item in page.items%}
@@ -99,12 +99,14 @@
 										<a href="#preview-modal" data-toggle="modal" onClick="verPreview({{item.idMail}})">
 											<img src="data: image/png;base64, {{item.previewData}}" />
 											<div class="img-info">
-												<p><i class="icon-search"></i> Previsualizar</p>
+												<p>Previsualizar</p>
 											</div>
 										</a>
 									{% endif %}	
 								</div>
-								<div class="news-title" style="padding-left: 40px;">
+							</td>
+							<td>
+								<div class="news-title">
 									{%if item.status == 'Sent'%}
 										<a href="{{ url('statistic/mail') }}/{{item.idMail}}">{{item.name}}</a>
 									{%elseif item.status == 'Draft'%}
@@ -113,7 +115,7 @@
 										<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
 									{%endif%}
 								</div>
-								<div class="news-text" style="padding-left: 40px;">
+								<div class="news-text">
 									{{item.status}} <br /> 
 									Creado el {{date('Y-m-d', item.createdon)}} 
 									{%if item.status == 'Sent'%} <br />
@@ -123,28 +125,24 @@
 									{%endif%}
 								</div>
 							</td>
-							<td class="">
+							<td>
 								{%if item.status == 'Sent'%}
-								<ul class="inline sparkline-box">
-									<li class="sparkline-row">
-										<h4 class="blue"><span>Destinatarios</span> {{item.totalContacts}} </h4>
-									</li>
+								<dl class="dl-horizontal">
+									<dt class="blue">Destinatarios</dt>
+									<dd class="blue">{{item.totalContacts}}</dd>
 
-									<li class="sparkline-row">
-										<h4 class="green"><span>Aperturas</span> {{item.uniqueOpens}} </h4>
-									</li>
+									<dt class="green">Aperturas</dt>
+									<dd class="green">{{item.uniqueOpens}} </dd>
 
-									<li class="sparkline-row">
-										<h4 class="gray"><span>Clicks</span> {{item.clicks}} </h4>
-									</li>
+									<dt class="gray">Clicks</dt> 
+									<dd class="gray">{{item.clicks}} </dd>
 
-									<li class="sparkline-row">
-										<h4 class="red"><span>Rebotes</span> {{item.bounced}} </h4>
-									</li>
-								</ul>
+									<dt class="red">Rebotes</dt>
+									<dd class="red">{{item.bounced}} </dd>
+								</dl>
 								{%endif%}
 							</td>
-							<td class="">
+							<td>
 								<div class="">
 									{%if item.status == 'Scheduled'%}
 										<button class="ShowDialogEditScheduled btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">
@@ -154,7 +152,7 @@
 									{% for value in mail_options(item) %}
 										<a class="btn btn-sm btn-default extra-padding" href="{{ url(value.url) }}{{item.idMail}}">{{value.text}}</a>
 									{% endfor %}
-										<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default">Duplicar</a>
+										<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default extra-padding">Duplicar</a>
 
 										<button class="ShowDialog btn btn-sm btn-default btn-delete extra-padding" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}">Eliminar </button>
 									{% if item.type%}
@@ -163,7 +161,7 @@
 									{%endif%}
 									{%if item.status == 'Sent'%}
 										<a class="btn btn-sm btn-default extra-padding" href="{{url('statistic/mail')}}/{{item.idMail}}">Estadísticas</a>
-										<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadisticas</button>
+										<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadísticas</button>
 									{%endif%}
 								</div>
 							</td>

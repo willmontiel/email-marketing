@@ -335,28 +335,6 @@
 				</form>
 				<div class="clearfix"></div>
 				<div class="space"></div>
-{#
-				<div class="well relative span8">
-					<p>
-						Aqui puede importar contactos desde un archivo 
-						<a rel="tooltip" data-placement="right" data-original-title="La extensión de archivo CSV significa Comma Separated Values (Valores separados por comas). El formato es utilizado en muchos programas de bases de datos, hojas de cálculo y gestores de contactos para almacenar listas de información. Como un archivo de texto, el formato es ampliamente compatible">
-							.csv
-						</a>
-						Haga clic en el botón más (+) elija el archivo .csv que desea cargar y a continuación haga clic en el botón cargar, o en cancelar si
-						no desea continuar.
-					</p>
-				</div>
-
-				<div class="">
-					<div class="well relative span12">
-						<div class="easy-pie-step span6"  data-percent="50"><span>1/2</span></div>
-						<span class="triangle-button blue"><i class="icon-lightbulb"></i></span>
-						<div class="span7"><strong>Primer paso: </strong><br />
-						Seleccionar el archivo .csv que contiene los contactos
-						</div>
-					</div>
-				</div>
-#}	
 			</div>
 			<div class="hidden-xs hidden-sm col-md-6">
 				<div class="alert alert-success">
@@ -366,194 +344,17 @@
 						</div>
 						<div class="col-md-9">
 							<p>Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc permiten crear y editar archivos CSV fácilmente.</p>
-						<p>El archivo debe ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
-						<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block width-fix" alt="" /></p>
-						<p>También puede ser una tabla sin encabezados.</p>
-						<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
-						<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
-						<p>Importe máximo hasta 100.000 contactos</p>
+							<p>El archivo debe ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
+							<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block width-fix" alt="" /></p>
+							<p>También puede ser una tabla sin encabezados.</p>
+							<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
+							<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
+							<p>Importe máximo hasta 100.000 contactos</p>
 						</div>
 					</div>
 				</div>
 			</div>
-
-				{{ flashSession.output() }}
-{#
-				<div class="accordion-heading">
-					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Haga clic aqui para más información</a>
-				</div>
-				<div class="clearfix"></div>
-				<div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
-					<div class="accordion-inner box">
-					<p>
-						Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc 
-						permiten crear y editar archivos CSV fácilmente.
-					</p>
-					<p>
-						El formato de este archivo debe ser una tabla con una cabecera o línea de título 
-						(No es obligatorio) que defina los campos que contiene, por ejemplo: nombre, dirección de correo electrónico, etc. 
-						Si desea cargar un archivo existente, asegurese de que siga los criterios que le mostraremos 
-						a continuación, de lo contrario, si desea crear un nuevo archivo y necesita alguna orientación,
-						a continuación le ofrecemos algunas pautas que le servirán como guía:
-					</p>
-					<ul>
-						<li>El archivo debe incluir al menos un campo para la dirección de correo electrónico, por ejemplo:</li>
-					</ul>
-					<div class="row">
-						<h4 class="sectiontitle">Archivo .csv con cabecera</h4>				
-						<table class="table table-striped table-contacts">
-							<thead></thead>
-							<tbody>
-								<tr class="status-pending">
-									<td>Cabecera</td>
-									<td><strong>Email</strong></td>
-								</tr>
-								<tr class="status-pending">
-									<td>Datos de contactos</td>
-									<td>micorreo@noreply.com</td>
-								</tr>
-								<tr class="status-pending">
-									<td></td>
-									<td>micorreo2@noreply.com</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<h4 class="sectiontitle">Archivo .csv sin cabecera</h4>				
-				<table class="table table-striped table-contacts">
-					<thead></thead>
-					<tbody>
-						<tr class="status-pending">
-						  <td>Datos de contactos</td>
-						  <td>micorreo@noreply.com</td>
-						</tr>
-						<tr class="status-pending">
-						  <td></td>
-						  <td>micorreo2@noreply.com</td>
-						</tr>
-					</tbody>
-				</table>
-				<ul>
-					<li>
-						Si desea ingresar más campos, y no desea poner encabezado puede separar por comas (,), punto 
-						y coma (;), o barras (/),  cada uno de los campos, luego la aplicación se encargará de
-						separarlos, eso si asegurese de cumplir los criterios, por ejemplo:
-					</li>
-				</ul>
-				<div class="row">
-					<h4 class="sectiontitle">Archivo .csv con encabezado</h4>				
-					<table class="table table-striped table-contacts">
-						<thead></thead>
-						<tbody>
-							<tr class="status-pending">
-								<td>Cabecera</td>
-								<td><strong>Email, Nombre, Apellido</strong></td>
-							</tr>
-							<tr class="status-pending">
-							  <td>Datos de contactos</td>
-							  <td>micorreo@noreply.com, Antonio, Lopez</td>
-							</tr>
-							<tr class="status-pending">
-							  <td></td>
-							  <td>micorreo2@noreply.com, Luz María, Rodriguez</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<h4 class="sectiontitle">Archivo .csv sin cabecera</h4>				
-				<table class="table table-striped table-contacts">
-					<thead></thead>
-					<tbody>
-						<tr class="status-pending">
-						  <td>Datos de contactos</td>
-						  <td>micorreo@noreply.com, Antonio, Caicedo</td>
-						</tr>
-						<tr class="status-pending">
-						  <td></td>
-						  <td>micorreo2@noreply.com, Luz María, Rodriguez</td>
-						</tr>
-					</tbody>
-				</table>
-				<p>
-					Una vez que haya introducido todos los contactos en una tabla, guarde el documento y seleccione CSV (delimitado por comas) 
-					(*.csv) como el tipo de archivo que desea guardar.
-					Una vez que haya guardado el archivo, y este seguro de haber seguido los criterios anteriores puede pasar a importar sus contactos a la aplicación.
-				</p>
-			</div>
+			{{ flashSession.output() }}
 		</div>
-#}
 	</script>
-
-{#		<script type="text/x-handlebars" data-template-name="contacts/newimport">
-			<div class="row">
-				{{' {{#with App.records}} '}}
-				{{' {{#each row1}} '}}
-										<tr>
-											<td>{{' {{this}} '}}</td>
-											<td>
-												<select>
-													<option value="email">Email</option>
-													<option value="name">Nombre</option>
-													<option value="lastname">Apellido</option>
-													{% for field in fields %}
-														<option value="{{field.idCustomField}}">{{field.name}}</option>
-													{%endfor%}
-												</select>
-											</td>
-										</tr>
-									{{' {{/each}} '}}
-						{{' {{/with}} '}}
-
-
-							Delimitador:
-							<select>
-								<option value="coma" selected>,</option>
-								<option value="puntocoma">;</option>
-								<option value="slash">/</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="span7">
-
-							<table>
-							{{' {{#with App.records}} '}}
-								<tr>
-									{{' {{#each row1}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-								<tr>
-									{{' {{#each row2}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-								<tr>
-									{{' {{#each row3}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-								<tr>
-									{{' {{#each row4}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-								<tr>
-									{{' {{#each row5}} '}}
-										<td>{{' {{this}} '}}</td>
-									{{' {{/each}} '}}
-								</tr>
-							{{' {{/with}} '}}
-							</table>
-						</div>
-					</div>
-				</div>
-
-				<div class="span4">
-					Como queda guardada la info
-				</div>
-			</div>
-		</script>
-#}
 {% endblock %}

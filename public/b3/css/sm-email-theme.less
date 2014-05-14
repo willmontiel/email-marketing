@@ -20,6 +20,7 @@
 @brand-gray-dark: #505050;
 @brand-sectiontitle: #20526e;
 @brand-pink: #ff90a8;
+@brand-lighter-blue: #e7f3f7;
 
 @bg-default-btn: #cccccc;
 @bg-delete-btn: #ac1905;
@@ -670,6 +671,9 @@ h4.numbers-contacts {
 table.table-contacts tbody tr td {
 	vertical-align: middle;
 }
+table.mail-list tbody tr td {
+	padding:25px;
+}
 .inactive {
 	background-color: gray;
 	width: 15px;
@@ -889,6 +893,7 @@ table.middle > tbody > tr > th > td {
 	-o-border-image:url('../images/bg-border-mail.png') 20 20 round; /* Opera */
 	border-image:url('../images/bg-border-mail.png') 20 20 round;
 }
+
 /*   email compose   */
 /*   Estilos para fecha y hora de programacion de envios   */
 .thumn-hight {
@@ -1043,7 +1048,14 @@ table.middle > tbody > tr > th > td {
 	color: #636363;
 	padding: 20px 0;
 }
-
-
+/*   Sobreescritura estilos bootstrap pagination   */
+.pagination > li > span,
+.pagination > li > a {
+	background-color: #e7f3f7;
+	border:none;
+}
+.pagination > li > a:hover {
+	background-color: @brand-white;
+}
 
 
