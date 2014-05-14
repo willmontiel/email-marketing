@@ -288,7 +288,7 @@ App.TimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
 	chart: null,
 	didInsertElement:function(){
-		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph col-sm-12'></div>");
+		$('#ChartContainer').append("<div id='" + this.idChart + "' class='col-sm-12'></div>");
 		try{
 			createBarHighChart(this.idChart, App.get('chartData'), App.get('title'), App.get('text'), App.get('ref'));
 		}
