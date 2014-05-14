@@ -117,6 +117,10 @@ class MailField
 			'subject' => $newSubject
 		);
 		
+		unset($newHtml);
+		unset($newText);
+		unset($newSubject);
+		
 		return $content;
 	}
 }

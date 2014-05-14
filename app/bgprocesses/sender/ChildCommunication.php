@@ -190,6 +190,7 @@ class ChildCommunication extends BaseWrapper
 			$timer->endTimer('send-preparation');
 
 			$timer->startTimer('send-loop', 'In the loop');
+			gc_enable(); // Enable Garbage Collector
 
 			foreach ($contactIterator as $contact) {
 
@@ -307,9 +308,7 @@ class ChildCommunication extends BaseWrapper
 						$timer->startTimer('gc-collect', 'Reclaiming memory...');
 						$log->log('Memory usage before reclaiming: ' . memory_get_usage(true));
 						// [13-May-2014 17:43:34] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 71 bytes) in /websites/emailmarketing/email-marketing/app/bgprocesses/sender/ChildCommunication.php on line 299
-						gc_enable(); // Enable Garbage Collector
 						$gc_number = gc_collect_cycles(); // # of elements cleaned up
-						gc_disable(); // Disable Garbage Collector						
 						$log->log('Memory usage after reclaiming: ' . memory_get_usage(true) . ', objects: ' . $gc_number);
 						$timer->endTimer('gc-collect');
 					}
@@ -419,6 +418,7 @@ class ChildCommunication extends BaseWrapper
 		$timer->endTimer('send-process');
 		// Grabar profiling de la base de datos
 		print_dbase_profile();
+		gc_disable(); // Disable Garbage Collector						
 
 		$log->log($timer);
 		

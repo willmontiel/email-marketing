@@ -56,9 +56,10 @@ class ContactIterator implements Iterator
 		else {
 			$this->prepareContactsWithCustomFields($contacts);
 		}
+		unset($contacts);
 		$end = end($this->contacts);
 		$this->start = $end['contact']['idContact'];
-		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Organizing Array');
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Organizing');
 		Phalcon\DI::getDefault()->get('logger')->log('Memory after Organize: ' . memory_get_peak_usage(true));
 		
 		return true;
@@ -105,7 +106,7 @@ class ContactIterator implements Iterator
 	
 	protected function prepareContactsWithoutCustomFields($contacts)
 	{
-		Phalcon\DI::getDefault()->get('logger')->log('Sin Custom');
+//		Phalcon\DI::getDefault()->get('logger')->log('Sin Custom');
 		$i = -1;
 		$k = 0;
 		$this->contacts = array();
@@ -157,7 +158,7 @@ class ContactIterator implements Iterator
 	
 	protected function prepareContactsWithCustomFields($contacts)
 	{
-		Phalcon\DI::getDefault()->get('logger')->log('Con Custom');
+//		Phalcon\DI::getDefault()->get('logger')->log('Con Custom');
 		$this->contacts = array();
 		$i = -1;
 		$k = 0;
