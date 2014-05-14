@@ -11,6 +11,21 @@ App.Store = DS.Store.extend({});
 App.set('errormessage', '');
 App.set('chartData', '');
 
+Ember.RadioButton = Ember.View.extend({
+	tagName : "input",
+	type : "radio",
+	attributeBindings : [ "name", "type", "value", "checked:checked:" ],
+	click : function() {
+		this.set("selection", this.$().val());
+	},
+	
+	checked : function() {
+		return this.get("value") === this.get("selection");   
+	}.property()
+});
+
+
+
 App.Drilldownopen = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string')
@@ -168,9 +183,9 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
 		info = info.length > 0 ? info : null;
 		App.set('chartData', statistics);
-		App.set('title', 'Estadisticas de clics');
+		App.set('title', 'Estadisticas de clics (únicos)');
 		App.set('text', 'Cantidad de clics');
-		App.set('ref', 'Clic(s)');
+		App.set('ref', 'Clic(s) únicos');
 		App.set('multValChart', info);
 	},
 	loadDataDetails: function() {
@@ -233,6 +248,8 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
 		App.set('chartData', statistics);
+		App.set('title', 'Estadisticas de rebotes');
+		App.set('text', 'Vea el detalle de los rebotes suaves y duros.');
 		App.set('multValChart', info);
 	},
 	loadDataDetails: function() {
@@ -290,7 +307,13 @@ App.TimeGraphView = Ember.View.extend({
 	didInsertElement:function(){
 		$('#ChartContainer').append("<div id='" + this.idChart + "' class='col-sm-12'></div>");
 		try{
-			createBarHighChart(this.idChart, App.get('chartData'), App.get('title'), App.get('text'), App.get('ref'));
+			console.log(this.typeChart);
+			if (this.typeChart === 'bar-drilldown') {
+				createBarHighChart(this.idChart, App.get('chartData'), App.get('title'), App.get('text'), App.get('ref'));
+			}
+			else if (this.typeChart === 'pie-basic') {
+				createHighPieChart(this.idChart, App.get('chartData'), App.get('title'), App.get('text'));
+			}
 		}
 		catch(err){
 			console.log(err.message);

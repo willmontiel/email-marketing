@@ -129,16 +129,16 @@
 								{%if item.status == 'Sent'%}
 								<dl class="dl-horizontal">
 									<dt class="blue">Destinatarios</dt>
-									<dd class="blue">{{item.totalContacts}}</dd>
+									<dd class="blue">{{item.totalContacts|numberf}}</dd>
 
 									<dt class="green">Aperturas</dt>
-									<dd class="green">{{item.uniqueOpens}} </dd>
+									<dd class="green">{{item.uniqueOpens|numberf}} </dd>
 
 									<dt class="gray">Clicks</dt> 
-									<dd class="gray">{{item.clicks}} </dd>
+									<dd class="gray">{{item.clicks|numberf}} </dd>
 
 									<dt class="red">Rebotes</dt>
-									<dd class="red">{{item.bounced}} </dd>
+									<dd class="red">{{item.bounced|numberf}} </dd>
 								</dl>
 								{%endif%}
 							</td>

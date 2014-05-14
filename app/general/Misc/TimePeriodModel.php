@@ -5,6 +5,7 @@ namespace EmailMarketing\General\Misc;
 class TimePeriodModel
 {
 	protected $timePeriod;
+	protected $color;
 	protected $type;
 	protected $model = array();
 
@@ -14,6 +15,7 @@ class TimePeriodModel
 		$this->logger = \Phalcon\DI::getDefault()->get('logger');
 		$this->type = $type;
 		$this->model = $this->createDrilldownObject("{$this->type} por semana");
+		$this->assignColors();
 	}
 	
 	public function setTimePeriod(TimePeriod $timePeriod)
@@ -29,7 +31,7 @@ class TimePeriodModel
 		
 		if ($ind == 1) {
 			$this->model['categories'][] = $obj->getPeriodName();
-			$array = $this->createArrayObject('#8dc63f');
+			$array = $this->createArrayObject($this->color->layer1);
 			$array['y'] = $obj->getTotal();
 
 			$dayModel = null;
@@ -54,7 +56,7 @@ class TimePeriodModel
 			$model = $this->createDrilldownObject($name);
 		}
 		$model['categories'][] = $obj->getPeriodName();
-		$array = $this->createArrayObject('#197b30');
+		$array = $this->createArrayObject($this->color->layer2);
 		$array['y'] = $obj->getTotal();
 		
 		$hourModel = null;
@@ -72,7 +74,7 @@ class TimePeriodModel
 		if ($hourModel == null) {
 			$hourModel = $this->createDrilldownObject($name);
 		}
-		$hourModel['color'] = '#005826';
+		$hourModel['color'] = $this->color->layer3;
 		$hourModel['categories'][] = $data->getPeriodName();
 		$hourModel['data'][] = $data->getTotal();
 		
@@ -89,7 +91,7 @@ class TimePeriodModel
 		return $object;
 	}
 	
-	public function createDrilldownObject($name)
+	protected function createDrilldownObject($name)
 	{
 		$object = array();
 		$object['name'] = $name;
@@ -103,4 +105,40 @@ class TimePeriodModel
 	{
 		return $this->model;
 	}
+	
+	protected function assignColors()
+	{
+		$this->color = new \stdClass();
+		
+		switch ($this->type) {
+			case 'Aperturas':
+				$color1 = "#8dc63f";
+				$color2 = "#197b30";
+				$color3 = "#005826";
+				break;
+
+			case 'Clics':
+				$color1 = "#0076a3";
+				$color2 = "#004a80";
+				$color3 = "#003663";
+				break;
+			
+			case 'Des-suscritos':
+				$color1 = "#605ca8";
+				$color2 = "#8560a8";
+				$color3 = "#a864a8";
+				break;
+			
+			default:
+				$color1 = "#8dc63f";
+				$color2 = "#197b30";
+				$color3 = "#005826";
+				break;
+		}
+		
+		$this->color->layer1 = $color1;
+		$this->color->layer2 = $color1;
+		$this->color->layer3 = $color1;
+	}
+	
 }

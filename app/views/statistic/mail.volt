@@ -44,10 +44,11 @@
 			{%endfor%}
 		];
 		
-		$(function () {
-			var container = $('#container');
-			createHighPieChart(container, cData);
-		});
+		console.log(cData)
+		//$(function () {
+		//	var container = $('#container');
+		//	createHighPieChart(container, cData);
+		//});
 		
 		function compareMails() {
 			if(App.mailCompare !== undefined) {
@@ -110,7 +111,6 @@
 		</script>
 		
 		{{ partial("statistic/partials/partial_ember_details") }}
-		
 		{#	 Partial para gráfica de estadisticas	#}
 		{{ partial("statistic/partials/partial_graph") }}
 {#
