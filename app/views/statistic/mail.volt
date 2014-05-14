@@ -38,6 +38,7 @@
 			App.mails.push(cmail);
 		{%endfor%}
 		
+		{#
 		var cData = [
 			{%for data in summaryChartData %}
 				['{{ data['title'] }}',   {{ data['value'] }}],
@@ -45,11 +46,11 @@
 		];
 		
 		console.log(cData)
-		//$(function () {
-		//	var container = $('#container');
-		//	createHighPieChart(container, cData);
-		//});
-		
+		$(function () {
+			var container = $('#container');
+			createHighPieChart(container, cData);
+		});
+		#}
 		function compareMails() {
 			if(App.mailCompare !== undefined) {
 				window.location = "{{url('statistic/comparemails')}}/{{mail.idMail}}/" + App.mailCompare;

@@ -317,14 +317,25 @@ class StatisticsWrapper extends BaseWrapper
 			}
 		}
 		
-		
+		$openData = array();
 		if (count($stats) > 0) {
+			$opens = array();
+			
 			foreach ($stats as $i) {
 				$opens[] = $i['date'];
 			}
+			
+			sort($opens);
+			
+			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+			$timePeriod->setData($opens);
+			$timePeriod->processTimePeriod();
+
+			$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Aperturas');
+			$periodModel->setTimePeriod($timePeriod);
+			$periodModel->modelTimePeriod();
+			$openData = $periodModel->getModelTimePeriod();	
 		}
-		
-		sort($opens);
 		
 //		$this->logger->log("Opens: " . print_r($opens, true));
 //		$sql = "SELECT FROM_UNIXTIME(CAST((opening/3600) AS UNSIGNED)*3600) AS date, COUNT(*) AS total
@@ -336,14 +347,7 @@ class StatisticsWrapper extends BaseWrapper
 //		$openStats = $result->fetchAll();
 		
 //		$this->logger->log(print_r($openStats, true));
-		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
-		$timePeriod->setData($opens);
-		$timePeriod->processTimePeriod();
-
-		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Aperturas');
-		$periodModel->setTimePeriod($timePeriod);
-		$periodModel->modelTimePeriod();
-		$openData = $periodModel->getModelTimePeriod();		
+			
 		$this->pager->setTotalRecords($total['t']);
 		
 		$statistics[] = array(
@@ -430,23 +434,26 @@ class StatisticsWrapper extends BaseWrapper
 		$result2 = $db->query($sql2, array($idMail));
 		$linkValues = $result2->fetchAll();
 		
-		$allLinks = array();
+		$statsLinks = array();
+		
 		if (count($linkValues) > 0) {
+			$AllLinks = array();
+			
 			foreach ($linkValues as $l) {
-				$allLinks[] = $l['date'];
+				$AllLinks[] = $l['date'];
 			}
-		}
-		
-		sort($allLinks);
-		
-		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
-		$timePeriod->setData($allLinks);
-		$timePeriod->processTimePeriod();
+			
+			sort($AllLinks);
+			
+			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+			$timePeriod->setData($AllLinks);
+			$timePeriod->processTimePeriod();
 
-		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Clics');
-		$periodModel->setTimePeriod($timePeriod);
-		$periodModel->modelTimePeriod();
-		$statsLinks = $periodModel->getModelTimePeriod();	
+			$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Clics');
+			$periodModel->setTimePeriod($timePeriod);
+			$periodModel->modelTimePeriod();
+			$statsLinks = $periodModel->getModelTimePeriod();
+		}
 		
 		$phql = "SELECT ml.click, e.email, l.link
 				 FROM Mxcxl AS ml
@@ -681,20 +688,14 @@ class StatisticsWrapper extends BaseWrapper
 		$query1 = $db->query($sql1, array($idMail));
 		$result1 = $query1->fetchAll();
 		
-		$bounced = array();
-		$soft = array(
-			0 => 'Rebotes suaves',
-			1 => 0
+		$b = array(
+			'hard' => 0,
+			'soft' => 0
 		);
 		
-		$hard = array(
-			0 => 'Rebotes duros',
-			1 => 0
-		);
 		$bouncedcontact = array();
 		$valueDomain = array();
 		if (count($result1) > 0) {
-			$values = array();
 			foreach ($result1 as $r) {
 				$bouncedcontact[] = array(
 					'email' => $r['email'],
@@ -709,17 +710,18 @@ class StatisticsWrapper extends BaseWrapper
 				}
 			
 				if ($r['type'] == 'hard') {
-					$hard[1] = $hard[1] + 1;
+					$b['hard'] = $b['hard'] + 1;
 				}
 				else if ($r['type'] == 'soft') {
-					$soft[1] = $soft[1] + 1;
+					$b['soft'] = $b['soft'] + 1;
 				}
 			}
 		}
 		
-		$bounced[] = $soft;
-		$bounced[] = $hard;
-	
+		$bounced = array($b);
+		
+		$this->logger->log(print_r($bounced, true));
+		
 		$bouncedTypes = Bouncedcode::find();
 		$valueType = array();
 		$valueCategory = array();

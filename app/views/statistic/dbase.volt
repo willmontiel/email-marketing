@@ -2,13 +2,23 @@
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
-	{{ javascript_include('highcharts/highcharts.js')}}
-	{{ javascript_include('highcharts/modules/exporting.js')}}
-	{{ javascript_include('highcharts/themes/dark-unica.js')}}
+	{{ partial("statistic/partials/partial_pie_highcharts") }}
 	<script>
+		var color = ['#97c86b', '#ef8807', '#BDBDBD'];
+		var data = [];
+		var i = 0;
+		{%for data in summaryChartData %}
+			var obj = new Object;
+				obj.name = '{{ data['title'] }}';
+				obj.y = {{ data['value'] }};
+				obj.color = color[i];
 
-
-
+				data.push(obj);
+				i++;
+		{%endfor%}
+			
+		createCharts('container', data);
+		
 		function compareDbases() {
 			var id = $('#dbasestocompare').val();
 			if(id !== null) {
@@ -16,52 +26,7 @@
 			}
 		}
 	</script>
-	
-	<script>
-		$(function () {
-			$('#container').highcharts({
-				chart: {
-					plotBackgroundColor: null,
-					plotBorderWidth: null,
-					plotShadow: false,
-				},
-				
-				title: {
-					text: ''
-				},
-				tooltip: {
-					pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-				},
-				plotOptions: {
-					pie: {
-						allowPointSelect: true,
-						cursor: 'pointer',
-						dataLabels: {
-							enabled: true,
-							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-							style: {
-								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-							}
-						},
-						showInLegend: true,
-					}
-					
-				},
-				series: [{
-					type: 'pie',
-					name: 'Porcentaje',
-					data: [
-						{%for data in summaryChartData %}
-							['{{ data['title'] }}',   {{ data['value'] }}],
-						{%endfor%}
-					]
-				}]
-			});
-		});
-	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-signal icon-2x"></i>{% endblock %}
-{% block sectionsubtitle %}{% endblock %}
 {% block content %}
 	{#   Navegacion botones pequeños   #}
 	<div class="row">

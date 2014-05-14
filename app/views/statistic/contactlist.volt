@@ -2,51 +2,22 @@
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
-	{{ javascript_include('highcharts/highcharts.js')}}
-	{{ javascript_include('highcharts/modules/exporting.js')}}
-	{{ javascript_include('highcharts/themes/dark-unica.js')}}
-
+	{{ partial("statistic/partials/partial_pie_highcharts") }}
 	<script>
-		$(function () {
-			$('#container').highcharts({
-				chart: {
-					plotBackgroundColor: null,
-					plotBorderWidth: null,
-					plotShadow: false,
-				},
-				
-				title: {
-					text: ''
-				},
-				tooltip: {
-					pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-				},
-				plotOptions: {
-					pie: {
-						allowPointSelect: true,
-						cursor: 'pointer',
-						dataLabels: {
-							enabled: false,
-							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-							style: {
-								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-							}
-						},
-						showInLegend: true,
-					}
-					
-				},
-				series: [{
-					type: 'pie',
-					name: 'Porcentaje',
-					data: [
-						{%for data in summaryChartData %}
-							['{{ data['title'] }}',   {{ data['value'] }}],
-						{%endfor%}
-					]
-				}]
-			});
-		});
+		var color = ['#97c86b', '#ef8807', '#BDBDBD'];
+		var data = [];
+		var i = 0;
+		{%for data in summaryChartData %}
+			var obj = new Object;
+				obj.name = '{{ data['title'] }}';
+				obj.y = {{ data['value'] }};
+				obj.color = color[i];
+
+				data.push(obj);
+				i++;
+		{%endfor%}
+		
+		createCharts('container', data);
 		
 		function compareLists() {
 			var id = $('#liststocompare').val();
@@ -92,16 +63,16 @@
 			<form class="form-horizontal" role="form">
 	  			<div class="form-group">
 	  				<label class="sr-only" for=""></label>
-					<select id="dbasestocompare" class="form-control">
-						{%for cdb in compareDbase %}
-							<option value="{{cdb.id}}">{{cdb.name}}</option>
+					<select id="liststocompare" class="form-control">
+						{%for clt in compareList %}
+							<option value="{{clt.id}}">{{clt.name}}</option>
 						{%endfor%}
 					</select>
 				</div>
 			</form>
 		</div>
 		<div class="col-md-2 col-xs-4 ptop-3">
-			<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases()">Comparar</button>
+			<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareLists();">Comparar</button>
 		</div>
 	</div>	
 {% endblock %}

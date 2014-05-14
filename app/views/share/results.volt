@@ -21,48 +21,6 @@
 			$('html, body').animate({scrollTop: '615px'}, 'slow');
 		}
 	</script>
-	<script>
-		$(function () {
-			$('#container').highcharts({
-				chart: {
-					plotBackgroundColor: null,
-					plotBorderWidth: null,
-					plotShadow: false,
-				},
-				
-				title: {
-					text: ''
-				},
-				tooltip: {
-					pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-				},
-				plotOptions: {
-					pie: {
-						allowPointSelect: true,
-						cursor: 'pointer',
-						dataLabels: {
-							enabled: false,
-							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-							style: {
-								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-							}
-						},
-						showInLegend: true,
-					}
-					
-				},
-				series: [{
-					type: 'pie',
-					name: 'Porcentaje',
-					data: [
-						{%for data in summaryChartData %}
-							['{{ data['title'] }}',   {{ data['value'] }}],
-						{%endfor%}
-					]
-				}]
-			});
-		});
-	</script>
 {% endblock %}
 {% block content %}
 	<!------------------ Ember! ---------------------------------->
