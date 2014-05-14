@@ -4,77 +4,31 @@ namespace EmailMarketing\General\Misc;
 
 class WeekPeriod extends TimePeriod
 {
-	public $data;
 	public $timePeriods = array();
-
-	public function setData($data, $date = null)
+	public $logger;
+	
+	public function __construct() 
 	{
-		$this->data = $data;
+//		$this->logger = \Phalcon\DI::getDefault()->get('logger');
+	}
+
+	protected function createPeriods() 
+	{
+		$d = $this->start;
+		$days = array();
+		for ($i=0; $i<8; $i++) {
+			$days[] = $d;
+			$d = strtotime("next day", $d);
+		}
+		
+		$this->name = 'Semana del ' . date('d/M/y', $this->start) . ' al ' .date('d/M/y', strtotime("next saturday", $this->start));
+
+		return $days;
 	}
 	
-	public function processTimePeriod()
+	protected function createChild()
 	{
-		$min = min($this->data);
-		$max = max($this->data);
-
-		$weeks = array();
-
-		if (date('N', $min != 7)) {
-			$sunday = strtotime("last sunday", $min);
-		}
-		else {
-			$sunday = strtotime("midnight", $min);
-		}
-
-		$weeks[] = $sunday;
-
-		$date = $sunday;
-		
-		do {
-			$date = strtotime("next sunday", $date);
-			$weeks[] = $date;
-		} while ($date < $max);
-
-		$this->timePeriods[0]['categories'] = $weeks;
-		$this->timePeriods[0]['name'] = 'Aperturas por semana';
-		$drilldown = array();
-		
-		for ($j = 0; $j < count($weeks); $j++) {
-			$drilldown[] = $this->createArrayObject('#2E9AFE');
-		}
-		$this->timePeriods[0]['data'] = $drilldown;
-		
-		$this->addDrilldown($weeks);
+		return new DayPeriod();
 	}
-	
-	private function addDrilldown($weeks)
-	{
-		$dayPeriod = new \EmailMarketing\General\Misc\DayPeriod();
-		foreach ($this->data as $data) {
-			$totalWeeks = count($weeks);
-			for ($i = 0; $i < $totalWeeks; $i++) {
-				$start = $weeks[$i];
-				if ($i+1 == $totalWeeks) {
-					$end = $weeks[$i-1];
-				}
-				else {
-					$end = $weeks[$i+1];
-				}
 
-				if ($data > $start && $data < $end) {
-					$object = $this->timePeriods[0]['data'][$i];
-					$object['y'] += 1;
-					$dayPeriod->setData($weeks[$i], $data);
-					$dayPeriod->processTimePeriod();
-					$object['drilldown'] = $dayPeriod->getTimePeriod();
-					$this->timePeriods[0]['data'][$i] = $object;
-				}
-			}
-		}
-	}
-	
-	public function getTimePeriod()
-	{
-		return $this->timePeriods;
-	}	
 }

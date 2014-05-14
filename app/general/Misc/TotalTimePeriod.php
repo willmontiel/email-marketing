@@ -4,24 +4,43 @@ namespace EmailMarketing\General\Misc;
 
 class TotalTimePeriod extends TimePeriod
 {
-	public $data;
-	public $timePeriods = array();
+	
+	public function __construct() 
+	{
+	//	$this->logger = \Phalcon\DI::getDefault()->get('logger');
+	}
+	
+	protected function createChild()
+	{
+		return new WeekPeriod();
+	}
+	
+	protected function createPeriods()
+	{
+		$min = min($this->data);
+		$max = max($this->data);
 
-	public function setData($data, $date = null)
-	{
-		$this->data = $data;
+		$weeks = array();
+
+		if (date('N', $min != 7)) {
+			$sunday = strtotime("last sunday", $min);
+		}
+		else {
+			$sunday = strtotime("midnight", $min);
+		}
+
+		$weeks[] = $sunday;
+
+		$date = $sunday;
+		
+		do {
+			$date = strtotime("next sunday", $date);
+			$weeks[] = $date;
+		} while ($date < $max);
+		$last = strtotime("next sunday", $date);
+		
+		$this->name = date('Y-m-d', $weeks[0]) . ' - ' . date('Y-m-d', $last);
+		
+		return $weeks;
 	}
-	
-	public function processTimePeriod()
-	{
-		$weekPeriod = new \EmailMarketing\General\Misc\WeekPeriod();
-		$weekPeriod->setData($this->data);
-		$weekPeriod->processTimePeriod();
-		$this->timePeriods = $weekPeriod->getTimePeriod();
-	}
-	
-	public function getTimePeriod()
-	{
-		return $this->timePeriods;
-	}	
 }

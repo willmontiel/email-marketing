@@ -1,6 +1,4 @@
 {#   Estadisticas generales de los envios   #}
-
-
 <div class="col-md-2 col-sm-4 col-xs-6 item">
 	<div class="sends">
 		<div class="sm-icons-stats-sends center-block"></div>

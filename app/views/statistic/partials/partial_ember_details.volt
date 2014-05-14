@@ -1,7 +1,7 @@
 <script type="text/x-handlebars" data-template-name="drilldown/opens">
 	<h4 class="sectiontitle">Aperturas</h4>
-	<div class="col-md-offset-1 wrapper">	
-		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="Bar" textChart="Aperturas de Correo"}}'}}
+	<div class="wrapper">	
+		{{'{{view App.TimeGraphView idChart="openBarChartContainer"}}'}}
 	</div>
 	<hr>
 	<div class="stats">
@@ -11,27 +11,30 @@
 		</div>
 	</div>
 	<div class="clearfix"></div>
-	<div class="space"></div>
-	<div class="text-right">
-		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
-	</div>
-	<div class="clearfix"></div>
-	<div class="space"></div>
+	
+	{% if type is defined %}
+	{% else %}
+		<div class="space"></div>
+		<div class="text-right">
+			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
+		</div>
+		<div class="clearfix"></div>
+		<div class="space"></div>
 
-	<h4 class="sectiontitle">Detalle de aperturas</h4>
-	<div class="pull-right">
-		<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/opens" class="btn btn-sm btn-default extra-padding">Descargar reporte</a>
-	</div>
-
-	{#   parcial tabla aperturas estadisticas   #}
-	{{ partial("statistic/partials/opens_table_stats_partial") }}
+		<h4 class="sectiontitle">Detalle de aperturas</h4>
+		<div class="pull-right">
+			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/opens" class="btn btn-sm btn-default extra-padding">Descargar reporte</a>
+		</div>
+		{{ partial("statistic/partials/opens_table_stats_partial") }}
+	{% endif %}
+	
 
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">
 	<h4 class="sectiontitle">Clics</h4>
-	<div class="col-md-offset-1 wrapper">
-		{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="Bar" textChart="Clics en"}}'}}
+	<div class="wrapper">
+		{{'{{view App.TimeGraphView idChart="clickBarChartContainer"}}'}}
 	</div>
 	<hr>
 	<div class="stats">	
@@ -51,26 +54,21 @@
 		</div>
 	</div>
 	<div class="clearfix"></div>
-	<div class="space"></div>
-	<div class="text-right">
-		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
-	</div>
-	<div class="clearfix"></div>
-	<div class="space"></div>
-	<h4 class="sectiontitle">Detalle de clics</h4>
-	<div class="pull-right">
-		<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/clicks" class="btn btn-sm btn-default extra-padding">Descargar reporte</a>
-	</div>
-
-	{#   parcial tabla clics estadisticas   #}
-	{{ partial("statistic/partials/clics_table_stats_partial") }}
-
+	
+	{% if type is defined %}
+	{% else %}
+		<div class="space"></div>
+		<div class="text-right">
+			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
+		</div>
+		{{ partial("statistic/partials/clics_table_stats_partial") }}
+	{% endif %}
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
 	<h4 class="sectiontitle">Desuscritos</h4>
-	<div class="col-md-offset-1 wrapper">
-		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Des-suscritos de Correo"}}'}}
+	<div class="wrapper">
+		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 	</div>
 	<hr>
 	
@@ -86,22 +84,22 @@
 		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 	</div>
 	<div class="clearfix"></div>
-	<div class="space"></div>
 	
-	<h4 class="sectiontitle">Detalle de desuscritos</h4>
-	<div class="pull-right">
-		<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/unsubscribed" class="btn btn-default btn-sm extra-padding">Descargar reporte</a>
-	</div>
-
-	{#   parcial tabla dessuscritos estadisticas   #}
-	{{ partial("statistic/partials/unsubscribed_table_stats_partial") }}
-
+	{% if type is defined %}
+	{% else %}
+		<div class="space"></div>
+		<h4 class="sectiontitle">Detalle de desuscritos</h4>
+		<div class="pull-right">
+			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/unsubscribed" class="btn btn-default btn-sm extra-padding">Descargar reporte</a>
+		</div>
+		{{ partial("statistic/partials/unsubscribed_table_stats_partial") }}
+	{% endif %}
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/spam">
 	<h4 class="sectiontitle">Spam</h4>
-	<div class="col-md-offset-1 wrapper">
-		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Reportes de Spam"}}'}}
+	<div class="wrapper">
+		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 	</div>
 	<hr>
 	
@@ -118,22 +116,22 @@
 		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 	</div>
 	<div class="clearfix"></div>
-	<div class="space"></div>
 	
-	<h4 class="sectiontitle">Detalle de Spam</h4>
-	<div class="pull-right">
-		<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/spam" class="btn btn-default btn-sm extra-padding">Descargar reporte</a>
-	</div>
-
-	{#   parcial tabla dessuscritos estadisticas   #}
-	{{ partial("statistic/partials/unsubscribed_table_stats_partial") }}
-
+	{% if type is defined %}
+	{% else %}
+		<div class="space"></div>
+		<h4 class="sectiontitle">Detalle de Spam</h4>
+		<div class="pull-right">
+			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/spam" class="btn btn-default btn-sm extra-padding">Descargar reporte</a>
+		</div>
+		{{ partial("statistic/partials/unsubscribed_table_stats_partial") }}
+	{% endif %}
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/bounced">
 	<h4 class="sectiontitle">Rebotes</h4>
-	<div class="col-md-offset-1 wrapper">
-		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="Bar" textChart="Rebotes"}}'}}
+	<div class="col wrapper">
+		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 	</div>
 	<hr>	
 
@@ -155,15 +153,15 @@
 		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 	</div>
 	<div class="clearfix"></div>
-	<div class="space"></div>
 	
-	<h4 class="sectiontitle">Detalle de rebotes</h4>
-	<div class="pull-right">
-		<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/bounced" class="btn btn-sm btn-default btn-sm extra-padding">Descargar reporte</a>
-	</div>
-
-	{#   parcial tabla rebotados estadisticas   #}
-	{{ partial("statistic/partials/bounced_table_stats_partial") }}
-
+	{% if type is defined %}
+	{% else %}
+		<div class="space"></div>
+		<h4 class="sectiontitle">Detalle de rebotes</h4>
+		<div class="pull-right">
+			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/bounced" class="btn btn-sm btn-default btn-sm extra-padding">Descargar reporte</a>
+		</div>
+		{{ partial("statistic/partials/bounced_table_stats_partial") }}
+	{% endif %}
 </script>
 

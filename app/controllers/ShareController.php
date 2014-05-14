@@ -50,13 +50,10 @@ class ShareController extends ControllerBase
 				$this->view->setVar("mail", $mail);
 				$this->view->setVar("summaryChartData", $mailStat['summaryChartData']);
 				$this->view->setVar("statisticsData", $mailStat['statisticsData']);
-				
-				if ($type == 'complete') {
-					$this->view->setVar('type', "complete");
-				}
-				else if ($type == 'summary') {
-					$this->view->setVar('type', "summary");
-				}
+				$this->view->setVar("statisticsSocial", $mailStat['statisticsSocial']);
+				$this->view->setVar("statisticsClicksSocial", $mailStat['statisticsClicksSocial']);
+				$this->view->setVar("target", $this->getTargetFromMail($mail));
+				$this->view->setVar('type', $type);
 			}
 		}
 		catch (Exception $e) {
@@ -64,5 +61,46 @@ class ShareController extends ControllerBase
 			$this->traceFail("Share statistics, idMail: {$idMail}");
 			$this->response->redirect('error/link');
 		}
+	}
+	
+	private function getTargetFromMail($mail)
+	{
+		$t = json_decode($mail->target);
+		switch ($t->destination) {
+			case 'contactlists':
+				$model = Contactlist;
+				$name = 'Listas de contactos' ;
+				$key = 'idContactlist';
+				break;
+			
+			case 'dbases':
+				$model = Dbase;
+				$name = 'Bases de datos';
+				$key = 'idDbase';
+				break;
+			
+			case 'segments':
+				$model = Segment;
+				$name = 'Segmentos';
+				$key = 'idSegment';
+				break;
+			
+			default:
+				break;
+		}
+		
+		$target = "{$name}: ";
+		foreach ($t->ids as $id) {
+			$list = $model::findFirst(array(
+				'conditions' => "{$key} = ?1",
+				'bind' => array(1 => $id)
+			));
+
+			if ($list) {
+				$target .= "{$list->name}, ";
+			}
+		}
+		
+		return $target;
 	}
 }
