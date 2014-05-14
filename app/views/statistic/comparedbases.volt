@@ -47,159 +47,117 @@
 {% block sectiontitle %}<i class="icon-bar-chart icon-2x"></i>Estadisticas{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
+		
+		{#   Botones pequeños navegacion   #}
+		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 
-	<div class="row">
-		<div class="col-sm-12">
-			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
+		<div class="container-fluid">
+			<div class="col-md-6 col-md-offset-6">
+				<div class="col-xs-6 col-sm-7 col-md-6">
+					<form class="form-horizontal" role="form">
+			  			<div class="form-group">
+			  				<label class="sr-only" for=""></label>
+							<select id="dbasestocompare" class="form-control">
+								{%for cdb in compareDbase %}
+									<option value="{{cdb.id}}">
+										{%if cdb.id == dbase2.idDbase%}
+											selected
+										{%endif%}
+									{{cdb.name}}</option>
+								{%endfor%}
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-2 col-xs-4 ptop-3">
+					<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases()">Comparar</button>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-6">
+					<h4 class="sectiontitle">{{dbase1.name}}</h4>
+					<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
+				</div>
+				<div class="col-md-6">
+					<h4 class="sectiontitle">{{dbase2.name}}</h4>
+					<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
+				</div>
+			</div>
+			<div class="space"></div>
 		</div>
-	</div>
-
-	<div class="space"></div>
-	
-	<div class="row">
-		<div class="col-md-3 col-md-offset-7">
-			<select id="dbasestocompare" class="form-control">
-				{%for cdb in compareDbase %}
-					<option value="{{cdb.id}}"
-						{%if cdb.id == dbase2.idDbase%}
-							selected
-						{%endif%}
-					>{{cdb.name}}</option>
-				{%endfor%}
-			</select>
-		</div>
-		<div class="col-md-2">
-			<button class="btn btn-sm btn-guardar extra-padding" onclick="compareDbases()">Comparar</button>
-		</div>
-	</div>
-	
-	<div class="space"></div>
-	
-	<div class="row">
-		<div class="col-md-6">
-			<h4 class="sectiontitle">{{dbase1.name}}</h4>
-			<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
-		</div>
-		<div class="col-md-6">
-			<h4 class="sectiontitle">{{dbase2.name}}</h4>
-			<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
-		</div>
-	</div>
-
-	<div class="space"></div>
-	
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
-			<table class="table table-striped">
-				<tr>
-					<td>
-						<div class="optiontotal pull-right">
+		<div class="container-fluid">
+			<div class="col-md-8 col-md-offset-2">
+				<table class="table table-normal">
+					<tr class="opens big-number">
+						<td>
 							{{statisticsData1.uniqueOpens}}
-						</div>
-					</td>
-					<td>
-						<div class="openscomponent optionpercent pull-right">
+						</td>
+						<td>
 							{{statisticsData1.percentageUniqueOpens}}%
-						</div>
-					</td>
-					<td>
-						<div class="optionname">
+						</td>
+						<td>
 							Aperturas
-						</div>
-					</td>
-					<td>
-						<div class="openscomponent optionpercent pull-left">
+						</td>
+						<td>
 							{{statisticsData2.percentageUniqueOpens}}%
-						</div>
-					</td>
-					<td>
-						<div class="optiontotal pull-left">
+						</td>
+						<td>
 							{{statisticsData2.uniqueOpens}}
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="clickscomponent optiontotal pull-right">
+						</td>
+					</tr>
+					<tr class="clics big-number">
+						<td>
 							{{statisticsData1.clicks}}
-						</div>
-					</td>
-					<td>
-						<div class="clickscomponent optionpercent pull-right">
-							{#{{statisticsData1.statclicks}}%#}0%
-						</div>
-					</td>
-					<td>
-						<div class="optionname">
+						</td>
+						<td>
+								{#{{statisticsData1.statclicks}}%#}0%
+						</td>
+						<td>
 							Clics
-						</div>
-					</td>
-					<td>
-						<div class="clickscomponent optionpercent pull-left">
-							{#{{statisticsData2.statclicks}}%#}0%
-						</div>
-					</td>
-					<td>
-						<div class="clickscomponent optiontotal pull-left">
+						</td>
+						<td>
+								{#{{statisticsData2.statclicks}}%#}0%
+						</td>
+						<td>
 							{{statisticsData2.clicks}}
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="unsubscribedcomponent optiontotal pull-right">
+						</td>
+					</tr>
+					<tr class="unsubs big-number">
+						<td>
 							{{statisticsData1.unsubscribed}}
-						</div>
-					</td>
-					<td>
-						<div class="unsubscribedcomponent optionpercent pull-right">
+						</td>
+						<td>
 							{{statisticsData1.percentageUnsubscribed}}%
-						</div>
-					</td>
-					<td>
-						<div class="optionname">
-							Des-suscritos
-						</div>
-					</td>
-					<td>
-						<div class="unsubscribedcomponent optionpercent pull-left">
+						</td>
+						<td>
+							Desuscritos
+						</td>
+						<td>
 							{{statisticsData2.percentageUnsubscribed}}%
-						</div>
-					</td>
-					<td>
-						<div class="unsubscribedcomponent optiontotal pull-left">
+						</td>
+						<td>
 							{{statisticsData2.unsubscribed}}
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="bouncedcomponent optiontotal pull-right">
+						</td>
+					</tr>
+					<tr class="bounced big-number">
+						<td>
 							{{statisticsData1.bounced}}
-						</div>
-					</td>
-					<td>
-						<div class="bouncedcomponent optionpercent pull-right">
+						</td>
+						<td>
 							{{statisticsData1.percentageSpam}}%
-						</div>
-					</td>
-					<td>
-						<div class="optionname">
+						</td>
+						<td>
 							Rebotes
-						</div>
-					</td>
-					<td>
-						<div class="bouncedcomponent optionpercent pull-left">
+						</td>
+						<td>
 							{{statisticsData2.percentageSpam}}%
-						</div>
-					</td>
-					<td>
-						<div class="bouncedcomponent optiontotal pull-left">
+						</td>
+						<td>
 							{{statisticsData2.bounced}}
-						</div>
-					</td>
-				</tr>
-			</table>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
-	</div>
 {% endblock %}

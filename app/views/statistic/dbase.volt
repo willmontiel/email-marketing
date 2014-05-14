@@ -4,8 +4,11 @@
 	{{ super() }}
 	{{ javascript_include('highcharts/highcharts.js')}}
 	{{ javascript_include('highcharts/modules/exporting.js')}}
-
+	{{ javascript_include('highcharts/themes/dark-unica.js')}}
 	<script>
+
+
+
 		function compareDbases() {
 			var id = $('#dbasestocompare').val();
 			if(id !== null) {
@@ -34,7 +37,7 @@
 						allowPointSelect: true,
 						cursor: 'pointer',
 						dataLabels: {
-							enabled: false,
+							enabled: true,
 							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
 							style: {
 								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
@@ -60,11 +63,57 @@
 {% block sectiontitle %}<i class="icon-signal icon-2x"></i>{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
+	{#   Navegacion botones pequeños   #}
 	<div class="row">
-		<div class="col-sm-12">
-			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
+		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 		</div>
 	</div>
+	
+	{#   encabezado página   #}
+	<div class="wrap">
+		<div class="col-md-5">
+			<h4 class="sectiontitle numbers-contacts">{{dbase.name}}</h4>
+		</div>
+		<div class="col-md-7">
+			<div class="col-md-6">
+				<p><span class="blue big-number">{{dbase.Ctotal}} </span>Contactos totales</p>
+			</div>
+			<div class="col-md-6">
+				<br><p class="text-right">Creada el: {{date('Y-m-d', dbase.createdon)}}</p>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	
+	{#   Contenedor chart   #}
+	<div id="container" class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 col-sm-12"></div>
+	<div class="clearfix"></div>
+	<div class="space"></div>
+
+	{#   parcial estadisticas generales   #}
+	{{ partial("statistic/partials/general_stats_contacts_partial") }}
+
+	{#   Select para comparacion de estadisticas   #}
+	<h4 class="sectiontitle">Comparación</h4>
+	<div class="container-fluid">
+		<div class="col-xs-6 col-sm-5 col-md-4">
+			<form class="form-horizontal" role="form">
+	  			<div class="form-group">
+	  				<label class="sr-only" for=""></label>
+					<select id="dbasestocompare" class="form-control">
+						{%for cdb in compareDbase %}
+							<option value="{{cdb.id}}">{{cdb.name}}</option>
+						{%endfor%}
+					</select>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-2 col-xs-4 ptop-3">
+			<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases()">Comparar</button>
+		</div>
+	</div>	
+{% endblock %}
+
 {#
 	<div class="row">
 		<div class="col-sm-12">
@@ -165,50 +214,4 @@
 					</tr>
 				</tbody>
 			</table>
-			
-			<div class="row">
-				<div class="col-sm-7">
-					<select id="dbasestocompare" class="form-control">
-						{%for cdb in compareDbase %}
-							<option value="{{cdb.id}}">{{cdb.name}}</option>
-						{%endfor%}
-					</select>
-				</div>
-				<div class="col-sm-5">
-					<button class="btn btn-sm btn-guardar extra-padding" onclick="compareDbases()">Comparar</button>
-				</div>
-			</div>	
-		</div>
-			
-		<div class="col-sm-6">
-			<div id="summaryChart" style="width: 640px; height: 400px;"></div>
-		</div>
-	</div>
-	
-	<br />
 #}
-	<div class="row">
-		<div class="col-sm-12">
-			<div id="container"></div>
-		</div>
-	</div>
-
-	<div class="wrap">
-		<div class="col-md-5">
-			<h4 class="sectiontitle numbers-contacts">{{dbase.name}}</h4>
-		</div>
-		<div class="col-md-7">
-			<div class="col-md-6">
-				<p><span class="blue big-number">{{dbase.Ctotal}} </span>Contactos totales</p>
-			</div>
-			<div class="col-md-6">
-				<br><p class="text-right">Creada el: {{date('Y-m-d', dbase.createdon)}}</p>
-			</div>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-
-	{#   parcial estadisticas generales   #}
-	{{ partial("statistic/partials/general_stats_contacts_partial") }}
-
-{% endblock %}
