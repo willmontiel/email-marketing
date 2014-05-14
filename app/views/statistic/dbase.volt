@@ -34,8 +34,7 @@
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
 	<div class="row">
-		<div class="col-sm-12">
-			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
+		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 		</div>
 	</div>
 {#
@@ -138,27 +137,6 @@
 					</tr>
 				</tbody>
 			</table>
-			
-			<div class="row">
-				<div class="col-sm-7">
-					<select id="dbasestocompare" class="form-control">
-						{%for cdb in compareDbase %}
-							<option value="{{cdb.id}}">{{cdb.name}}</option>
-						{%endfor%}
-					</select>
-				</div>
-				<div class="col-sm-5">
-					<button class="btn btn-sm btn-guardar extra-padding" onclick="compareDbases()">Comparar</button>
-				</div>
-			</div>	
-		</div>
-			
-		<div class="col-sm-6">
-			<div id="summaryChart" style="width: 640px; height: 400px;"></div>
-		</div>
-	</div>
-	
-	<br />
 #}
 	<div class="wrap">
 		<div class="col-md-5">
@@ -177,5 +155,26 @@
 
 	{#   parcial estadisticas generales   #}
 	{{ partial("statistic/partials/general_stats_contacts_partial") }}
+
+	{#   Select para comparacion de estadisticas   #}
+	<div class="">
+		<h4 class="sectiontitle">Comparación</h4>
+	</div>
+	<div class="row">
+		<div class="col-sm-7">
+			<select id="dbasestocompare" class="form-control">
+				{%for cdb in compareDbase %}
+					<option value="{{cdb.id}}">{{cdb.name}}</option>
+				{%endfor%}
+			</select>
+		</div>
+		<div class="col-sm-5">
+			<button class="btn btn-sm btn-guardar extra-padding" onclick="compareDbases()">Comparar</button>
+		</div>
+	</div>	
+	
+	<div class="col-sm-6">
+		<div id="summaryChart" style="width: 640px; height: 400px;"></div>
+	</div>
 
 {% endblock %}
