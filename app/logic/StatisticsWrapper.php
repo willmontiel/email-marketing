@@ -418,51 +418,76 @@ class StatisticsWrapper extends BaseWrapper
 		/**
 		 * SQL para extraer los links y el total de clicks por cada uno
 		 */
-		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
+//		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
+//					FROM mxcxl AS m
+//				 WHERE m.idMail = ? AND m.click != 0
+//				 GROUP BY m.idMailLink, m.click";
+		
+		$sql2 = "SELECT m.click AS date
 					FROM mxcxl AS m
-				 WHERE m.idMail = ? AND m.click != 0
-				 GROUP BY m.idMailLink, m.click";
+				 WHERE m.idMail = ? AND m.click != 0";
 		
 		$result2 = $db->query($sql2, array($idMail));
 		$linkValues = $result2->fetchAll();
 		
-		$values = array();
-		$clicks = array();
-		$clickData = array();
-		if (count($linkValues) > 0 ) {
+		$statsLinks = array();
+		if (count($linkValues) > 0) {
 			foreach ($linkValues as $l) {
-				if (!isset($values[$l['click']])) {
-					$al = $arrayLinks;
-					$values[$l['click']]['title'] = $l['click'];
-					$al[$l['idMailLink']] = $l['total'];
-					$values[$l['click']]['value'] = json_encode($al);
-				}
-				else {
-					$a = json_decode($values[$l['click']]['value']);
-					$a->$l['idMailLink'] += $l['total'];
-					$values[$l['click']]['value'] = json_encode($a);
-				}
+				$statsLinks[] = $l['date'];
 			}
-			
-			foreach ($values as $value) {
-				$clicks[] = array(
-					'title' => $value['title'],
-					'value' => $value['value']
-				);
-			}
-			
-			$c = array();
-			foreach ($clicks as $click) {
-				$c[] = $click;
-			}
-			
-			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
-			$timePeriod->setData($c);
-			$timePeriod->processTimePeriod();
-			$clickData = $timePeriod->getTimePeriod();
-			$this->logger->log("Stat: " . print_r($clickData, true));
-			
 		}
+		
+		sort($statsLinks);
+		
+		
+		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+		$timePeriod->setData($statsLinks);
+		$timePeriod->processTimePeriod();
+
+		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Clicks');
+		$periodModel->setTimePeriod($timePeriod);
+		$periodModel->modelTimePeriod();
+		$statsLinks = $periodModel->getModelTimePeriod();	
+		
+//		$values = array();
+//		$clicks = array();
+//		$clickData = array();
+		
+		
+//		if (count($linkValues) > 0 ) {
+//			foreach ($linkValues as $l) {
+//				if (!isset($values[$l['click']])) {
+//					$al = $arrayLinks;
+//					$values[$l['click']]['title'] = $l['click'];
+//					$al[$l['idMailLink']] = $l['total'];
+//					$values[$l['click']]['value'] = json_encode($al);
+//				}
+//				else {
+//					$a = json_decode($values[$l['click']]['value']);
+//					$a->$l['idMailLink'] += $l['total'];
+//					$values[$l['click']]['value'] = json_encode($a);
+//				}
+//			}
+//			
+//			foreach ($values as $value) {
+//				$clicks[] = array(
+//					'title' => $value['title'],
+//					'value' => $value['value']
+//				);
+//			}
+//			
+//			$c = array();
+//			foreach ($clicks as $click) {
+//				$c[] = $click;
+//			}
+//			
+//			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+//			$timePeriod->setData($c);
+//			$timePeriod->processTimePeriod();
+//			$clickData = $timePeriod->getTimePeriod();
+//			$this->logger->log("Stat: " . print_r($clickData, true));
+//			
+//		}
 		
 		$phql = "SELECT ml.click, e.email, l.link
 				 FROM Mxcxl AS ml
@@ -512,7 +537,7 @@ class StatisticsWrapper extends BaseWrapper
 		
 		$statistics[] = array(
 			'id' => $idMail,
-			'statistics' => json_encode($clickData),
+			'statistics' => json_encode($statsLinks),
 			'details' => json_encode($clickcontact),
 			'links' => json_encode($links),
 			'multvalchart' => json_encode($info),

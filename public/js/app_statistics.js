@@ -11,19 +11,6 @@ App.Store = DS.Store.extend({});
 App.set('errormessage', '');
 App.set('chartData', '');
 
-
-Ember.RadioButton = Ember.View.extend({
-    tagName : "input",
-    type : "radio",
-    attributeBindings : [ "name", "type", "value", "checked:checked:" ],
-    click : function() {
-        this.set("selection", this.$().val());
-    },
-    checked : function() {
-        return this.get("value") === this.get("selection");   
-    }.property()
-});
-
 App.Drilldownopen = DS.Model.extend({
 	details: DS.attr('string'),
 	statistics: DS.attr('string')
@@ -181,6 +168,9 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
 		info = info.length > 0 ? info : null;
 		App.set('chartData', statistics);
+		App.set('title', 'Estadisticas de clics');
+		App.set('text', 'Cantidad de clics');
+		App.set('ref', 'Clic(s)');
 		App.set('multValChart', info);
 	},
 	loadDataDetails: function() {

@@ -61,12 +61,6 @@
 		<div class="text-right">
 			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 		</div>
-		<div class="clearfix"></div>
-		<div class="space"></div>
-		<h4 class="sectiontitle">Detalle de clics</h4>
-		<div class="pull-right">
-			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/clicks" class="btn btn-sm btn-default extra-padding">Descargar reporte</a>
-		</div>
 		{{ partial("statistic/partials/clics_table_stats_partial") }}
 	{% endif %}
 </script>
