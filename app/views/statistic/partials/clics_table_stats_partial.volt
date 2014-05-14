@@ -1,10 +1,13 @@
+<div class="clearfix"></div>
+<div class="space"></div>
+
+<h4 class="sectiontitle">Clics por enlance</h4>
 <div class="col-md-10 col-md-offset-1">
 	<table class="table table-striped">
 		<thead>
 			<tr>
 				<td>Vínculos</td>
 				<td>Total Clics</td>
-				{#<td>Total Clics únicos</td>#}
 			</tr>
 		</thead>
 		<tbody>
@@ -12,14 +15,19 @@
 			<tr>
 				<td>{{'{{link}}'}}</td>
 				<td>{{'{{total}}'}}</td>
-				{#<td>{{'{{uniques}}'}}</td>#}
 			</tr>
 			{{ '{{/each}}' }}
 		</tbody>
 	</table>
 </div>
 
+<div class="clearfix"></div>
 <div class="space"></div>
+
+<h4 class="sectiontitle">Detalle de clics</h4>
+<div class="pull-right">
+	<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/clicks" class="btn btn-sm btn-default extra-padding">Descargar reporte</a>
+</div>
 
 <div class="col-md-10 col-md-offset-1">
 	<div class="row">

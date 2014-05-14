@@ -86,9 +86,40 @@ class StatisticsWrapper extends BaseWrapper
 				$response['compareMail'] = $mailCompare;
 		}
 		
+		$snQuery = "SELECT SUM(m.share_fb) AS share_fb, 
+						  SUM(m.share_tw) AS share_tw, 
+						  SUM(m.share_gp) AS share_gp, 
+						  SUM(m.share_li) AS share_li, 
+						  SUM(m.open_fb) AS open_fb, 
+						  SUM(m.open_tw) AS open_tw, 
+						  SUM(m.open_gp) AS open_gp, 
+						  SUM( m.open_li) AS open_li
+					  FROM Mxc AS m
+				   WHERE m.idMail = :idMail:";
+		$social = $manager->createQuery($snQuery);
+		$socialStats = $social->execute(array(
+			'idMail' => $mail->idMail
+		));
+		
+		
+		$snCliksQuery = "SELECT SUM(l.click_fb) AS click_fb, 
+						  SUM(l.click_tw) AS click_tw, 
+						  SUM(l.click_gp) AS click_gp, 
+						  SUM(l.click_li) AS click_li
+					  FROM Mxcxl AS l
+				   WHERE l.idMail = :idMail:";
+		$socialClicks = $manager->createQuery($snCliksQuery);
+		$socialClickStats = $socialClicks->execute(array(
+			'idMail' => $mail->idMail
+		));
+		
+		
+		
 		$response['summaryChartData'] = $summaryChartData;
 		$response['statisticsData'] = $statisticsData;
-	
+		$response['statisticsSocial'] = $socialStats->getFirst();
+		$response['statisticsClicksSocial'] = $socialClickStats->getFirst();
+		
 		return $response;
 	}
 	
@@ -256,16 +287,23 @@ class StatisticsWrapper extends BaseWrapper
 		$result1 = $db->query($sql1, array($idMail));
 		$total = $result1->fetch();
 		
-		$sql = "SELECT m.idContact, m.opening AS date, e.email 
+		$sql2 = "SELECT m.idContact, m.opening AS date, e.email 
 					FROM mxc AS m
 						JOIN contact as c ON (c.idContact = m.idContact)
 						JOIN email as e ON (c.idEmail = e.idEmail)
 					WHERE m.idMail = ? AND m.opening != 0";
 		
-		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-		$result = $db->query($sql, array($idMail));
-		$info = $result->fetchAll();
-
+		$sql2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+		$result2 = $db->query($sql2, array($idMail));
+		$info = $result2->fetchAll();
+		
+		$sql3 = "SELECT m.opening AS date
+					FROM mxc AS m
+					WHERE m.idMail = ? AND m.opening != 0";
+		$result3 = $db->query($sql3, array($idMail));
+		$stats = $result3->fetchAll();
+		
+		
 		$opencontact = array();
 		$opens = array();
 		
@@ -276,39 +314,36 @@ class StatisticsWrapper extends BaseWrapper
 					'email' => $i['email'],
 					'date' => date('Y-m-d H:i', $i['date']),
 				);
-				
-				$openArray = array();
-				if (!isset($openArray[$i['date']])) {
-					$openArray[$i['date']] = array(
-						'title' => $i['date'],
-						'value' => 1
-					);
-				}
-				else {
-					$openArray[$i['date']]['value'] += 1;
-				}
-				
-				foreach ($openArray as $o) {
-					$opens[] = array (
-						'title' => $o['title'],
-						'value' => $o['value']
-					);
-				}
 			}
 		}
 		
-		$o = array();
-		foreach ($opens as $open) {
-			$o[] = $open['title'];
+		
+		if (count($stats) > 0) {
+			foreach ($stats as $i) {
+				$opens[] = $i['date'];
+			}
 		}
 		
-		$this->logger->log(print_r($o, true));
-		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
-		$timePeriod->setData($o);
-		$timePeriod->processTimePeriod();
-		$openData = $timePeriod->getTimePeriod();
-		$this->logger->log(print_r($openData, true));
+		sort($opens);
 		
+//		$this->logger->log("Opens: " . print_r($opens, true));
+//		$sql = "SELECT FROM_UNIXTIME(CAST((opening/3600) AS UNSIGNED)*3600) AS date, COUNT(*) AS total
+//					FROM mxc
+//				WHERE idMail = ? AND opening != 0
+//				GROUP BY 1";
+//		
+//		$result = $db->query($sql, array($idMail));
+//		$openStats = $result->fetchAll();
+		
+//		$this->logger->log(print_r($openStats, true));
+		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+		$timePeriod->setData($opens);
+		$timePeriod->processTimePeriod();
+
+		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Aperturas');
+		$periodModel->setTimePeriod($timePeriod);
+		$periodModel->modelTimePeriod();
+		$openData = $periodModel->getModelTimePeriod();		
 		$this->pager->setTotalRecords($total['t']);
 		
 		$statistics[] = array(
@@ -322,6 +357,22 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownopen' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
 	
+	public function printData($obj, $indent = 0)
+	{
+		$this->logger->log('ind: ' . $indent);
+		$ind = str_repeat("\t", $indent);
+		
+		$this->logger->log($ind . 'Nombre: ' . $obj->getPeriodName());
+		$this->logger->log($ind . 'Total: ' . $obj->getTotal());
+		
+		foreach ($obj->getTimePeriod() as $child) {
+			$this->printData($child, $indent+1);
+		}
+	}
+
+
+
+
 	public function findMailClickStats($idMail, $filter)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
@@ -367,38 +418,76 @@ class StatisticsWrapper extends BaseWrapper
 		/**
 		 * SQL para extraer los links y el total de clicks por cada uno
 		 */
-		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
+//		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
+//					FROM mxcxl AS m
+//				 WHERE m.idMail = ? AND m.click != 0
+//				 GROUP BY m.idMailLink, m.click";
+		
+		$sql2 = "SELECT m.click AS date
 					FROM mxcxl AS m
-				 WHERE m.idMail = ? AND m.click != 0
-				 GROUP BY m.idMailLink, m.click";
+				 WHERE m.idMail = ? AND m.click != 0";
 		
 		$result2 = $db->query($sql2, array($idMail));
 		$linkValues = $result2->fetchAll();
 		
-		$values = array();
-		$clicks = array();
-		if (count($linkValues) > 0 ) {
+		$statsLinks = array();
+		if (count($linkValues) > 0) {
 			foreach ($linkValues as $l) {
-				if (!isset($values[$l['click']])) {
-					$al = $arrayLinks;
-					$values[$l['click']]['title'] = $l['click'];
-					$al[$l['idMailLink']] = $l['total'];
-					$values[$l['click']]['value'] = json_encode($al);
-				}
-				else {
-					$a = json_decode($values[$l['click']]['value']);
-					$a->$l['idMailLink'] += $l['total'];
-					$values[$l['click']]['value'] = json_encode($a);
-				}
-			}
-			
-			foreach ($values as $value) {
-				$clicks[] = array(
-					'title' => $value['title'],
-					'value' => $value['value']
-				);
+				$statsLinks[] = $l['date'];
 			}
 		}
+		
+		sort($statsLinks);
+		
+		
+		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+		$timePeriod->setData($statsLinks);
+		$timePeriod->processTimePeriod();
+
+		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Clicks');
+		$periodModel->setTimePeriod($timePeriod);
+		$periodModel->modelTimePeriod();
+		$statsLinks = $periodModel->getModelTimePeriod();	
+		
+//		$values = array();
+//		$clicks = array();
+//		$clickData = array();
+		
+		
+//		if (count($linkValues) > 0 ) {
+//			foreach ($linkValues as $l) {
+//				if (!isset($values[$l['click']])) {
+//					$al = $arrayLinks;
+//					$values[$l['click']]['title'] = $l['click'];
+//					$al[$l['idMailLink']] = $l['total'];
+//					$values[$l['click']]['value'] = json_encode($al);
+//				}
+//				else {
+//					$a = json_decode($values[$l['click']]['value']);
+//					$a->$l['idMailLink'] += $l['total'];
+//					$values[$l['click']]['value'] = json_encode($a);
+//				}
+//			}
+//			
+//			foreach ($values as $value) {
+//				$clicks[] = array(
+//					'title' => $value['title'],
+//					'value' => $value['value']
+//				);
+//			}
+//			
+//			$c = array();
+//			foreach ($clicks as $click) {
+//				$c[] = $click;
+//			}
+//			
+//			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+//			$timePeriod->setData($c);
+//			$timePeriod->processTimePeriod();
+//			$clickData = $timePeriod->getTimePeriod();
+//			$this->logger->log("Stat: " . print_r($clickData, true));
+//			
+//		}
 		
 		$phql = "SELECT ml.click, e.email, l.link
 				 FROM Mxcxl AS ml
@@ -448,7 +537,7 @@ class StatisticsWrapper extends BaseWrapper
 		
 		$statistics[] = array(
 			'id' => $idMail,
-			'statistics' => json_encode($clicks),
+			'statistics' => json_encode($statsLinks),
 			'details' => json_encode($clickcontact),
 			'links' => json_encode($links),
 			'multvalchart' => json_encode($info),

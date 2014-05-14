@@ -37,27 +37,6 @@
 			cmail.name = '{{ cmail.name }}';
 			App.mails.push(cmail);
 		{%endfor%}
-			
-		{%for data in summaryChartData %}
-			var data = new Object();
-			data.title = '{{ data['title'] }}';
-			data.value = {{ data['value'] }};
-			chartData.push(data);
-		{%endfor%}
-		
-		AmCharts.ready(function () {
-			var chart = createPieChart(chartData);
-			try{
-				if($('#summaryChart')[0] === undefined) {
-					setTimeout(function(){chart.write('summaryChart');},1000);
-				}
-				else {
-					chart.write('summaryChart');
-				}
-			}catch(err){
-				console.log(err.message);
-			}
-		});
 		
 		var cData = [
 			{%for data in summaryChartData %}
@@ -67,7 +46,7 @@
 		
 		$(function () {
 			var container = $('#container');
-			var highchart = createHighPieChart(container, cData);
+			createHighPieChart(container, cData);
 		});
 		
 		function compareMails() {
@@ -80,33 +59,22 @@
 	</script>
 {% endblock %}
 {% block content %}
+	{#
+		<div id="container"></div>
+	#}
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
-
-			{# Botones de navegacion #}
-			{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
-
-			<div class="wrap">
-				<div class="col-md-5">
-					<h4 class="sectiontitle numbers-contacts">{{mail.name}}</h4>
-				</div>
-				<div class="col-md-7">
-					<div class="col-md-6">
-						<p><span class="blue big-number">{{statisticsData.total|numberf}} </span>correos enviados</p>
-					</div>
-					<div class="col-md-6">
-						<br><p class="text-right">Enviado el: {{date('Y-m-d', mail.finishedon)}}</p>
-					</div>
-				</div>
-				<div class="clearfix"></div>
-			</div>
+			{#   parcial vista en miniatura del correo y datos del mismo   #}
+			{{ partial("statistic/partials/header_partial") }}
+			
 			{#   parcial vista en miniatura del correo y datos del mismo   #}
 			{{ partial("statistic/partials/preview_email_partial") }}
-
+				
+			
 			{#   parcial estadisticas generales   #}
 			{{ partial("statistic/partials/general_stats_partial") }}
-
+			
 			{#   parcial estadisticas redes sociales   #}
 			{{ partial("statistic/partials/social_media_stats_partial") }}
 
@@ -132,18 +100,15 @@
 				<div class="col-md-5">
 					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
 				</div>
-			</div>	
-			<div class="col-md-6">
-				<div class="box">
-					<div id="summaryChart" style="width: 640px; height: 400px;"></div>
-				</div>
 			</div>
 #}				
 			{{ "{{outlet}}" }}
-
 		</script>
-		{{ partial("statistic/mailpartial") }}
-		<script type="text/x-handlebars" data-template-name="timeGraph">
+		
+		{{ partial("statistic/partials/partial_ember_details") }}
+		
+		{#	 Partial para gráfica de estadisticas	#}
+		{{ partial("statistic/partials/partial_graph") }}
 {#
 		<div class="row">
 			<div class="pull-right scaleChart">
@@ -171,8 +136,5 @@
 			</div>
 		</div>
 #}	
-		<div id="ChartContainer"></div>
-		</script>
-
 	</div>
 {% endblock %}

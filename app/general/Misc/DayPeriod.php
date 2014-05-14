@@ -4,69 +4,32 @@ namespace EmailMarketing\General\Misc;
 
 class DayPeriod extends TimePeriod
 {
-	public $week;
-	public $data;
 	public $timePeriods = array();
+	public $logger;
 	
-	public function setData($week, $data)
+	public function __construct() 
 	{
-		$this->week = $week;
-		$this->data = $data;
+		//$this->logger = \Phalcon\DI::getDefault()->get('logger');
 	}
 	
-	public function processTimePeriod()
+	protected function createPeriods()
 	{
-		$sun = $this->week;
-		$sat = strtotime("next saturday", $sun);
-		$days = array();
-	
-		if ($this->data > $sun && $this->data < $sat) {
-			$days[] = $sun;
-			do {
-				$sun = strtotime("next day", $sun);
-				$days[] = $sun;
-			} while ($sun == $sat);
-			
-			$this->timePeriods['name'] = 'Aperturas por día';
-			$this->timePeriods['categories'] = $days;
-			$drilldown = array();
+		$hours = array();
+		$h = $this->start;
 		
-			for ($j = 0; $j < count($days); $j++) {
-				$drilldown[] = $this->createArrayObject('#F2F5A9');
-			}
-			$this->timePeriods['data'] = $drilldown;
-			$this->addDrilldown($days);
+		for ($i=0; $i<25; $i++) {
+			$hours[] = $h;
+			$h += 3600;
 		}
-	}
-	
-	public function addDrilldown($days)
-	{
-		$hourPeriod = new \EmailMarketing\General\Misc\HourPeriod();
 		
-		$totalDays = count($days);
-		
-		for ($i = 0; $i < $totalDays; $i++) {
-			$start = $days[$i];
-			if ($i+1 == $totalDays) {
-				$end = $days[$i-1];
-			}
-			else {
-				$end = $days[$i+1];
-			}
+		$this->name = date('D d/M', $this->start);
 
-			if ($this->data > $start && $this->data < $end) {
-				$object = $this->timePeriods['data'][$i];
-				$object['y'] += 1;
-				$hourPeriod->setData($days[$i], $this->data);
-				$hourPeriod->processTimePeriod();
-				$object['drilldown'] = $hourPeriod->getTimePeriod();
-				$this->timePeriods['data'][$i] = $object;
-			}
-		}
+		return $hours;
 	}
 	
-	public function getTimePeriod()
+	protected function createChild()
 	{
-		return $this->timePeriods;
+		return new HourPeriod();
 	}
+
 }

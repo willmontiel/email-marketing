@@ -37,18 +37,16 @@ function createHighPieChart(container, chartData) {
 }
 
 
-function createBarHighChart(chartname, chartData) {
-		var chartData = chartData[0];
-		console.log(chartData);
-		console.log(chartData.categories);
-		var colors = Highcharts.getOptions().colors;
+function createBarHighChart(chartname, chartData, title, text, ref) {
+	//if (chartData.length !== 0) {
+//		var colors = Highcharts.getOptions().colors;
 		
 		var chart = $('#' + chartname).highcharts({
             chart: {
                 type: 'column'
             },
             title: {
-                text: 'Estadisticas de apertura'
+                text: title
             },
             subtitle: {
                 text: 'Para ver mas detalle haga clic en la barra que desee.'
@@ -58,7 +56,7 @@ function createBarHighChart(chartname, chartData) {
             },
             yAxis: {
                 title: {
-                    text: 'Cantidad de aperturas'
+                    text: text
                 }
             },
             plotOptions: {
@@ -79,7 +77,7 @@ function createBarHighChart(chartname, chartData) {
                     },
                     dataLabels: {
                         enabled: true,
-                        color: colors[0],
+                        color: '#848484',
                         style: {
                             fontWeight: 'bold'
                         },
@@ -92,7 +90,7 @@ function createBarHighChart(chartname, chartData) {
             tooltip: {
                 formatter: function() {
                     var point = this.point,
-                        s = this.x +': <b>' + this.y + ' apertura(s)</b><br/>';
+                        s = this.x +': <b>' + this.y + ' ' + ref + ' </b><br/>';
                     if (point.drilldown) {
                         s += 'Clic para ver por días';
                     } else {
@@ -120,12 +118,40 @@ function createBarHighChart(chartname, chartData) {
 			c.addSeries({
 				name: name,
 				data: data,
-				color: color || 'orange'
+				color: color
 			}, false);
 			c.redraw();
         }
-	
+	//}
 }
+
+function createBarGroupHighChart(chartname, chartData) {
+	
+    $('#' + chartname).highcharts({
+        data: {
+            table: document.getElementById('datatable')
+        },
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Detalle de rebotes, spam y desuscritos'
+        },
+        yAxis: {
+            allowDecimals: false,
+            title: {
+                text: 'Total'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+
+                    this.point.y +' '+ this.point.name.toLowerCase();
+            }
+        }
+    });
+}
+
 
 /* AmCharts*/
 
