@@ -51,10 +51,12 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
-	<h4 class="sectiontitle">Desuscritos</h4>
+	{#
+	<h4 class="sectiontitle">Desuscritos</h4>	
 	<div class="wrapper">
 		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 	</div>
+	
 	<hr>
 	
 	<div class="stats">
@@ -69,7 +71,7 @@
 		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 	</div>
 	<div class="clearfix"></div>
-	
+	#}
 	{% if type is defined %}
 	{% else %}
 		{{ partial("statistic/partials/unsubscribed_table_stats_partial") }}
@@ -77,12 +79,13 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/spam">
+	{#
 	<h4 class="sectiontitle">Spam</h4>
 	<div class="wrapper">
 		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 	</div>
-	<hr>
 	
+	<hr>
 	<div class="stats">
 		<div class="col-md-4 wrapper">
 			<span class="number">{{statisticsData.spam|numberf}}</span><br>
@@ -96,7 +99,7 @@
 		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 	</div>
 	<div class="clearfix"></div>
-	
+	#}
 	{% if type is defined %}
 	{% else %}
 		{{ partial("statistic/partials/spam_table_stats_partial") }}
@@ -127,7 +130,7 @@
 	<div class="text-right">
 		<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 	</div>
-	<div class="clearfix"></div>
+	
 	
 	{% if type is defined %}
 	{% else %}

@@ -164,7 +164,7 @@ App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginatio
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
 		App.set('title', 'Estadisticas de apertura');
-		App.set('text', 'Cantidad de aperturas');
+		App.set('subtitle', 'Cantidad de aperturas');
 		App.set('ref', 'Apertura(s)');
 	},
 	loadDataDetails: function() {
@@ -184,7 +184,7 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 		info = info.length > 0 ? info : null;
 		App.set('chartData', statistics);
 		App.set('title', 'Estadisticas de clics (únicos)');
-		App.set('text', 'Cantidad de clics');
+		App.set('subtitle', 'Cantidad de clics');
 		App.set('ref', 'Clic(s) únicos');
 		App.set('multValChart', info);
 	},
@@ -249,7 +249,7 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
 		App.set('chartData', statistics);
 		App.set('title', 'Estadisticas de rebotes');
-		App.set('text', 'Vea el detalle de los rebotes suaves y duros.');
+		App.set('subtitle', 'Vea el detalle de los rebotes suaves y duros.');
 		App.set('multValChart', info);
 	},
 	loadDataDetails: function() {
@@ -305,14 +305,19 @@ App.TimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
 	chart: null,
 	didInsertElement:function(){
-		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph col-sm-12'></div>");
 		try{
-			console.log(this.typeChart);
-			if (this.typeChart === 'bar-drilldown') {
-				createBarHighChart(this.idChart, App.get('chartData'), App.get('title'), App.get('text'), App.get('ref'));
-			}
-			else if (this.typeChart === 'pie-basic') {
-				createHighPieChart(this.idChart, App.get('chartData'), App.get('title'), App.get('text'));
+			var data = App.get('chartData');
+			if (data.length !== 0 && data !== undefined && data !== null) {
+				var title = App.get('title');
+				var subtitle = App.get('subtitle');
+				$('#ChartContainer').append("<div id='" + this.idChart + "' class='col-sm-12'></div>");
+				if (this.typeChart === 'bar-drilldown') {
+					createBarHighChart(this.idChart, data, title, subtitle, App.get('ref'));
+				}
+				else if (this.typeChart === 'pie-basic') {
+					var newdata = modelDataForPie(data);
+					createHighPieChart(this.idChart, newdata, title, subtitle);
+				}
 			}
 		}
 		catch(err){
@@ -327,4 +332,24 @@ function removeLastChart(chart) {
 	chart.removeChartCursor();
 	chart.removeChartScrollbar();
 	chart.removeLegend();
+}
+
+function modelDataForPie(rawData) {
+	var data = [];
+	
+	if (rawData[0].hard !== 0 || rawData[0].soft !== 0) {
+		var soft = new Object;
+		soft.name = 'Rebotes suaves';
+		soft.y = rawData[0].hard;
+		soft.color = '#f7941d';
+
+		var hard = new Object;
+		hard.name = 'Rebotes duros';
+		hard.y = rawData[0].soft;
+		hard.color = '#f26522';
+
+		data = [hard, soft];
+	}
+	
+	return data;
 }
