@@ -1,7 +1,7 @@
 <script type="text/x-handlebars" data-template-name="drilldown/opens">
 	<h4 class="sectiontitle">Aperturas</h4>
 	<div class="wrapper">	
-		{{'{{view App.TimeGraphView idChart="openBarChartContainer"}}'}}
+		{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="bar-drilldown"}}'}}
 	</div>
 	<hr>
 	<div class="stats">
@@ -14,17 +14,6 @@
 	
 	{% if type is defined %}
 	{% else %}
-		<div class="space"></div>
-		<div class="text-right">
-			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
-		</div>
-		<div class="clearfix"></div>
-		<div class="space"></div>
-
-		<h4 class="sectiontitle">Detalle de aperturas</h4>
-		<div class="pull-right">
-			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/opens" class="btn btn-sm btn-default extra-padding">Descargar reporte</a>
-		</div>
 		{{ partial("statistic/partials/opens_table_stats_partial") }}
 	{% endif %}
 	
@@ -34,7 +23,7 @@
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">
 	<h4 class="sectiontitle">Clics</h4>
 	<div class="wrapper">
-		{{'{{view App.TimeGraphView idChart="clickBarChartContainer"}}'}}
+		{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="bar-drilldown"}}'}}
 	</div>
 	<hr>
 	<div class="stats">	
@@ -57,10 +46,6 @@
 	
 	{% if type is defined %}
 	{% else %}
-		<div class="space"></div>
-		<div class="text-right">
-			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
-		</div>
 		{{ partial("statistic/partials/clics_table_stats_partial") }}
 	{% endif %}
 </script>
@@ -87,11 +72,6 @@
 	
 	{% if type is defined %}
 	{% else %}
-		<div class="space"></div>
-		<h4 class="sectiontitle">Detalle de desuscritos</h4>
-		<div class="pull-right">
-			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/unsubscribed" class="btn btn-default btn-sm extra-padding">Descargar reporte</a>
-		</div>
 		{{ partial("statistic/partials/unsubscribed_table_stats_partial") }}
 	{% endif %}
 </script>
@@ -119,19 +99,14 @@
 	
 	{% if type is defined %}
 	{% else %}
-		<div class="space"></div>
-		<h4 class="sectiontitle">Detalle de Spam</h4>
-		<div class="pull-right">
-			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/spam" class="btn btn-default btn-sm extra-padding">Descargar reporte</a>
-		</div>
-		{{ partial("statistic/partials/unsubscribed_table_stats_partial") }}
+		{{ partial("statistic/partials/spam_table_stats_partial") }}
 	{% endif %}
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/bounced">
 	<h4 class="sectiontitle">Rebotes</h4>
 	<div class="col wrapper">
-		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
+		{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="pie-basic"}}'}}
 	</div>
 	<hr>	
 
@@ -156,11 +131,6 @@
 	
 	{% if type is defined %}
 	{% else %}
-		<div class="space"></div>
-		<h4 class="sectiontitle">Detalle de rebotes</h4>
-		<div class="pull-right">
-			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/bounced" class="btn btn-sm btn-default btn-sm extra-padding">Descargar reporte</a>
-		</div>
 		{{ partial("statistic/partials/bounced_table_stats_partial") }}
 	{% endif %}
 </script>

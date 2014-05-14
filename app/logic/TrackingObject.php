@@ -517,7 +517,7 @@ class TrackingObject
 		}
 	}
 
-	public function trackHardBounceEvent($date = null)
+	public function trackHardBounceEvent($cod, $date = null)
 	{
 		if ($date == null) {
 			$date = time();
@@ -527,7 +527,13 @@ class TrackingObject
 		$this->log->log("Contact: [idContact: {$contact->idContact}, idEmail: {$contact->idEmail}]");
 		$this->log->log("Email: [idEmail: {$this->idEmail}]");
 		if ($this->canTrackHardBounceEvent()) {
+			$this->startTransaction();
 			$this->log->log('Es válido');
+			$this->log->log('Es preparandose para cambiar el tipo de rebote de soft a hard');
+			$this->mxc->idBouncedCode = $cod;
+			$this->addDirtyObject($this->mxc);
+			$this->flushChanges();
+			$this->log->log('Se cambió el tipo de rebote de soft a hard');
 			
 			$email = Email::findFirst(array(
 				'conditions' => 'idEmail = ?1',
