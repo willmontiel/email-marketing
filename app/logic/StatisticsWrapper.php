@@ -114,7 +114,7 @@ class StatisticsWrapper extends BaseWrapper
 		));
 		
 		
-		
+		$this->logger->log("Stats: " . print_r($statisticsData, true));
 		$response['summaryChartData'] = $summaryChartData;
 		$response['statisticsData'] = $statisticsData;
 		$response['statisticsSocial'] = $socialStats->getFirst();
@@ -430,64 +430,23 @@ class StatisticsWrapper extends BaseWrapper
 		$result2 = $db->query($sql2, array($idMail));
 		$linkValues = $result2->fetchAll();
 		
-		$statsLinks = array();
+		$allLinks = array();
 		if (count($linkValues) > 0) {
 			foreach ($linkValues as $l) {
-				$statsLinks[] = $l['date'];
+				$allLinks[] = $l['date'];
 			}
 		}
 		
-		sort($statsLinks);
-		
+		sort($allLinks);
 		
 		$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
-		$timePeriod->setData($statsLinks);
+		$timePeriod->setData($allLinks);
 		$timePeriod->processTimePeriod();
 
-		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Clicks');
+		$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Clics');
 		$periodModel->setTimePeriod($timePeriod);
 		$periodModel->modelTimePeriod();
 		$statsLinks = $periodModel->getModelTimePeriod();	
-		
-//		$values = array();
-//		$clicks = array();
-//		$clickData = array();
-		
-		
-//		if (count($linkValues) > 0 ) {
-//			foreach ($linkValues as $l) {
-//				if (!isset($values[$l['click']])) {
-//					$al = $arrayLinks;
-//					$values[$l['click']]['title'] = $l['click'];
-//					$al[$l['idMailLink']] = $l['total'];
-//					$values[$l['click']]['value'] = json_encode($al);
-//				}
-//				else {
-//					$a = json_decode($values[$l['click']]['value']);
-//					$a->$l['idMailLink'] += $l['total'];
-//					$values[$l['click']]['value'] = json_encode($a);
-//				}
-//			}
-//			
-//			foreach ($values as $value) {
-//				$clicks[] = array(
-//					'title' => $value['title'],
-//					'value' => $value['value']
-//				);
-//			}
-//			
-//			$c = array();
-//			foreach ($clicks as $click) {
-//				$c[] = $click;
-//			}
-//			
-//			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
-//			$timePeriod->setData($c);
-//			$timePeriod->processTimePeriod();
-//			$clickData = $timePeriod->getTimePeriod();
-//			$this->logger->log("Stat: " . print_r($clickData, true));
-//			
-//		}
 		
 		$phql = "SELECT ml.click, e.email, l.link
 				 FROM Mxcxl AS ml
@@ -723,6 +682,15 @@ class StatisticsWrapper extends BaseWrapper
 		$result1 = $query1->fetchAll();
 		
 		$bounced = array();
+		$soft = array(
+			0 => 'Rebotes suaves',
+			1 => 0
+		);
+		
+		$hard = array(
+			0 => 'Rebotes duros',
+			1 => 0
+		);
 		$bouncedcontact = array();
 		$valueDomain = array();
 		if (count($result1) > 0) {
@@ -739,39 +707,18 @@ class StatisticsWrapper extends BaseWrapper
 				if (!in_array($r['name'], $valueDomain)) {
 					$valueDomain[] = $r['name'];
 				}
-				
+			
 				if ($r['type'] == 'hard') {
-					$values[$r['date']][0] += 1;
-					$values[$r['date']][1] += 0;
-					$values[$r['date']]['date'] = $r['date'];
+					$hard[1] = $hard[1] + 1;
 				}
 				else if ($r['type'] == 'soft') {
-					$values[$r['date']][0] += 0;
-					$values[$r['date']][1] += 1;
-					$values[$r['date']]['date'] = $r['date'];
-				}
-			}
-			
-			foreach ($values as $v) {
-				$x = array(
-					'hard' => $v[0],
-					'soft' => $v[1]
-				);
-				if (count($bounced) == 0) {
-					$bounced[0]['title'] = $v['date'];
-					$bounced[0]['value'] = json_encode($x);
-				}
-				else {
-					if (!in_array($v['date'], $bounced)) {
-						$bounced[] = array(
-							'title' => $v['date'],
-							'value' => json_encode($x)
-						);
-					}
+					$soft[1] = $soft[1] + 1;
 				}
 			}
 		}
 		
+		$bounced[] = $soft;
+		$bounced[] = $hard;
 	
 		$bouncedTypes = Bouncedcode::find();
 		$valueType = array();

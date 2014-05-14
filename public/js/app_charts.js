@@ -1,15 +1,22 @@
 /* HighCharts*/
 
-function createHighPieChart(container, chartData) {
-	container.highcharts({
+function createHighPieChart(container, chartData, text, subtitle) {
+	if (text === undefined || text === null) {
+		text = 'Estadisticas';
+	}
+	
+	$('#' + container).highcharts({
 		chart: {
 			plotBackgroundColor: null,
 			plotBorderWidth: null,
 			plotShadow: false,
 		},	
 		title: {
-			text: ''
+			text: text
 		},
+		subtitle: {
+            text: subtitle
+        },
 		tooltip: {
 			pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
 		},
@@ -18,7 +25,7 @@ function createHighPieChart(container, chartData) {
 				allowPointSelect: true,
 				cursor: 'pointer',
 				dataLabels: {
-					enabled: false,
+					enabled: true,
 					format: '<b>{point.name}</b>: {point.percentage:.1f} %',
 					style: {
 						color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'

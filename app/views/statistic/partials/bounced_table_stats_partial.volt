@@ -1,3 +1,10 @@
+<div class="space"></div>
+
+<h4 class="sectiontitle">Detalle de rebotes</h4>
+<div class="pull-right">
+	<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/bounced" class="btn btn-sm btn-default btn-sm extra-padding">Descargar reporte</a>
+</div>
+
 <div class="col-md-10 col-md-offset-1">
 	<div class="row">
 		<div class="pull-left scaleChart">

@@ -96,7 +96,7 @@ class TrackController extends ControllerBase
 						$trackingObj->trackSoftBounceEvent($c['bounce_code'], $date);
 						break;
 					case 'bounce_bad_address':
-						$trackingObj->trackHardBounceEvent($date);
+						$trackingObj->trackHardBounceEvent($c['bounce_code'], $date);
 						break;
 					case 'scomp':
 						$trackingObj->trackSpamEvent($c['bounce_code'], $date);
