@@ -3,37 +3,38 @@
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
 	{{ javascript_include('javascripts/moment/moment-with-langs.min.js') }}
-	{{ javascript_include('js/app_charts.js') }}
-	{{ javascript_include('amcharts/amcharts.js')}}
-	{{ javascript_include('amcharts/serial.js')}}
-	{{ javascript_include('amcharts/pie.js')}}
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
+	{{ partial("statistic/partials/partial_pie_highcharts") }}
 	<script>
-		var chartData1 = [];
-		var chartData2 = [];
-		
-		{%for data in summaryChartData1 %}
-			var data = new Object();
-			data.title = '{{ data['title'] }}';
-			data.value = {{ data['value'] }};
-			chartData1.push(data);
-		{%endfor%}
-			
-		{%for data in summaryChartData2 %}
-			var data = new Object();
-			data.title = '{{ data['title'] }}';
-			data.value = {{ data['value'] }};
-			chartData2.push(data);
+		var color = ['#97c86b', '#ef8807', '#BDBDBD'];
+		var data1 = [];
+		var i = 0;
+		{%for sum1 in summaryChartData1 %}
+			var obj = new Object;
+				obj.name = '{{ sum1['title'] }}';
+				obj.y = {{ sum1['value'] }};
+				obj.color = color[i];
+
+				data1.push(obj);
+				i++;
 		{%endfor%}
 		
-		AmCharts.ready(function () {
-			chart1 = createPieChart(chartData1);	
-			chart1.write('summaryChart1');
-			chart2 = createPieChart(chartData2);	
-			chart2.write('summaryChart2');
-		});
+		var data2 = [];
+		var j = 0;
+		{%for sum2 in summaryChartData2 %}
+			var obj = new Object;
+				obj.name = '{{ sum2['title'] }}';
+				obj.y = {{ sum2['value'] }};
+				obj.color = color[j];
+
+				data2.push(obj);
+				j++;
+		{%endfor%}
+		
+		createCharts('summaryChart1', data1);
+		createCharts('summaryChart2', data2);
 		
 		function compareDbases() {
 			var id = $('#dbasestocompare').val();
@@ -41,123 +42,47 @@
 				window.location = "{{url('statistic/comparedbases')}}/{{dbase1.idDbase}}/" + id;
 			}
 		}
-			
 	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-bar-chart icon-2x"></i>Estadisticas{% endblock %}
-{% block sectionsubtitle %}{% endblock %}
 {% block content %}
-		
-		{#   Botones pequeños navegacion   #}
-		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
-
-		<div class="container-fluid">
-			<div class="col-md-6 col-md-offset-6">
-				<div class="col-xs-6 col-sm-7 col-md-6">
-					<form class="form-horizontal" role="form">
-			  			<div class="form-group">
-			  				<label class="sr-only" for=""></label>
-							<select id="dbasestocompare" class="form-control">
-								{%for cdb in compareDbase %}
-									<option value="{{cdb.id}}">
-										{%if cdb.id == dbase2.idDbase%}
-											selected
-										{%endif%}
-									{{cdb.name}}</option>
-								{%endfor%}
-							</select>
-						</div>
-					</form>
-				</div>
-				<div class="col-md-2 col-xs-4 ptop-3">
-					<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases()">Comparar</button>
-				</div>
+	{#   Botones pequeños navegacion   #}
+	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
+	<div class="space"></div>
+	
+	<div class="row">
+		<div class="col-md-6 col-md-offset-6">
+			<div class="col-md-6 text-right">
+				<select id="dbasestocompare" class="form-control">
+					{%for cdb in compareDbase %}
+						<option value="{{cdb.id}}">
+							{%if cdb.id == dbase2.idDbase%}
+								selected
+							{%endif%}
+						{{cdb.name}}</option>
+					{%endfor%}
+				</select>
 			</div>
-			<div class="clearfix"></div>
-			<div class="row">
-				<div class="col-md-6">
-					<h4 class="sectiontitle">{{dbase1.name}}</h4>
-					<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
-				</div>
-				<div class="col-md-6">
-					<h4 class="sectiontitle">{{dbase2.name}}</h4>
-					<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
-				</div>
-			</div>
-			<div class="space"></div>
-		</div>
-		<div class="container-fluid">
-			<div class="col-md-8 col-md-offset-2">
-				<table class="table table-normal">
-					<tr class="opens big-number">
-						<td>
-							{{statisticsData1.uniqueOpens}}
-						</td>
-						<td>
-							{{statisticsData1.percentageUniqueOpens}}%
-						</td>
-						<td>
-							Aperturas
-						</td>
-						<td>
-							{{statisticsData2.percentageUniqueOpens}}%
-						</td>
-						<td>
-							{{statisticsData2.uniqueOpens}}
-						</td>
-					</tr>
-					<tr class="clics big-number">
-						<td>
-							{{statisticsData1.clicks}}
-						</td>
-						<td>
-								{#{{statisticsData1.statclicks}}%#}0%
-						</td>
-						<td>
-							Clics
-						</td>
-						<td>
-								{#{{statisticsData2.statclicks}}%#}0%
-						</td>
-						<td>
-							{{statisticsData2.clicks}}
-						</td>
-					</tr>
-					<tr class="unsubs big-number">
-						<td>
-							{{statisticsData1.unsubscribed}}
-						</td>
-						<td>
-							{{statisticsData1.percentageUnsubscribed}}%
-						</td>
-						<td>
-							Desuscritos
-						</td>
-						<td>
-							{{statisticsData2.percentageUnsubscribed}}%
-						</td>
-						<td>
-							{{statisticsData2.unsubscribed}}
-						</td>
-					</tr>
-					<tr class="bounced big-number">
-						<td>
-							{{statisticsData1.bounced}}
-						</td>
-						<td>
-							{{statisticsData1.percentageSpam}}%
-						</td>
-						<td>
-							Rebotes
-						</td>
-						<td>
-							{{statisticsData2.percentageSpam}}%
-						</td>
-						<td>
-							{{statisticsData2.bounced}}
-						</td>
-					</tr>
-				</table>
+			<div class="col-md-6 text-right">
+				<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases()">Comparar</button>
 			</div>
 		</div>
+	</div>
+	
+	<div class="clearfix"></div>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<h4 class="sectiontitle">{{dbase1.name}}</h4>
+			<div id="summaryChart1" class="col-md-12"></div>
+		</div>
+			
+		<div class="col-md-6">
+			<h4 class="sectiontitle">{{dbase2.name}}</h4>
+			<div id="summaryChart2" class="col-md-12"></div>
+		</div>
+	</div>
+	
+	<div class="space"></div>
+	
+	{{ partial('statistic/partials/partial_statistics_compare') }}
 {% endblock %}
