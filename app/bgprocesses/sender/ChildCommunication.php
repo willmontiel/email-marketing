@@ -261,6 +261,7 @@ class ChildCommunication extends BaseWrapper
 				$headers->addTextHeader('X-GreenArrow-InstanceID', $sendID);
 				$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', $trackingID);
 				$headers->addTextHeader('X-GreenArrow-ListID', $listID);
+				// TrackingObject ya fue analizado para no crear objetos dentro del loop
 				$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
 
 				$message->setFrom($from);
@@ -344,6 +345,8 @@ class ChildCommunication extends BaseWrapper
 						$this->childprocess->responseToParent('Work-Checked' , $i);
 						break;
 				}
+				unset($message);
+				unset($headers);
 			}
 
 			$timer->startTimer('send-postprocessing', 'Right after the loop');
