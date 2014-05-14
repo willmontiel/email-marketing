@@ -47,29 +47,31 @@
 {% block sectiontitle %}<i class="icon-bar-chart icon-2x"></i>Estadisticas{% endblock %}
 {% block sectionsubtitle %}{% endblock %}
 {% block content %}
+		
+		{#   Botones pequeños navegacion   #}
+		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 
-		<div class="row">
-			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
-		</div>
 		<div class="container-fluid">
-			<div class="col-xs-6 col-sm-5 col-md-4">
-				<form class="form-horizontal" role="form">
-		  			<div class="form-group">
-		  				<label class="sr-only" for=""></label>
-						<select id="dbasestocompare" class="form-control">
-							{%for cdb in compareDbase %}
-								<option value="{{cdb.id}}"
-									{%if cdb.id == dbase2.idDbase%}
-										selected
-									{%endif%}
-								>{{cdb.name}}</option>
-							{%endfor%}
-						</select>
-					</div>
-				</form>
-			</div>
-			<div class="col-md-2 col-xs-4 ptop-3">
-				<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases()">Comparar</button>
+			<div class="col-md-6 col-md-offset-6">
+				<div class="col-xs-6 col-sm-7 col-md-6">
+					<form class="form-horizontal" role="form">
+			  			<div class="form-group">
+			  				<label class="sr-only" for=""></label>
+							<select id="dbasestocompare" class="form-control">
+								{%for cdb in compareDbase %}
+									<option value="{{cdb.id}}">
+										{%if cdb.id == dbase2.idDbase%}
+											selected
+										{%endif%}
+									{{cdb.name}}</option>
+								{%endfor%}
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-2 col-xs-4 ptop-3">
+					<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases()">Comparar</button>
+				</div>
 			</div>
 			<div class="clearfix"></div>
 			<div class="row">
