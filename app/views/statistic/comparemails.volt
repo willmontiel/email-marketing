@@ -76,11 +76,11 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h4 class="sectiontitle">{{mail1.name}}</h4>
-			<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
+			<div id="summaryChart1" class="col-sm-12"></div>
 		</div>
 		<div class="col-md-6">
 			<h4 class="sectiontitle">{{mail2.name}}</h4>
-			<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
+			<div id="summaryChart2" class="col-sm-12"></div>
 		</div>
 	</div>
 
