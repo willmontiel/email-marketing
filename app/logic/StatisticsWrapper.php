@@ -2,6 +2,7 @@
 //->log('Entra');
 class StatisticsWrapper extends BaseWrapper
 {
+	protected $logger;
 	public function __construct() 
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
@@ -273,6 +274,8 @@ class StatisticsWrapper extends BaseWrapper
 		$response['statisticsData'] = $stat;
 		$response['compareDbase'] = $dbaseCompare;
 		
+		$this->logger->log("Response: " . print_r($response, true));
+		
 		return $response;
 	}
 	
@@ -280,6 +283,7 @@ class StatisticsWrapper extends BaseWrapper
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('First query', 'total de personas que abrieron el correo');
 		$sql1 = "SELECT COUNT(*) AS t
 					FROM mxc AS m
 						JOIN contact as c ON (c.idContact = m.idContact)
@@ -289,6 +293,9 @@ class StatisticsWrapper extends BaseWrapper
 		$result1 = $db->query($sql1, array($idMail));
 		$total = $result1->fetch();
 		
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('First Query');
+		
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Second query', 'Detalle de cada persona que abrió el correo, (paginado)');
 		$sql2 = "SELECT m.idContact, m.opening AS date, e.email 
 					FROM mxc AS m
 						JOIN contact as c ON (c.idContact = m.idContact)
@@ -299,16 +306,22 @@ class StatisticsWrapper extends BaseWrapper
 		$result2 = $db->query($sql2, array($idMail));
 		$info = $result2->fetchAll();
 		
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Second query Query');
+		
+		
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Third query', 'Fechas en que se hizo apertura');
 		$sql3 = "SELECT m.opening AS date
 					FROM mxc AS m
 					WHERE m.idMail = ? AND m.opening != 0";
 		$result3 = $db->query($sql3, array($idMail));
 		$stats = $result3->fetchAll();
 		
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Third query');
 		
 		$opencontact = array();
 		$opens = array();
 		
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('First organizing', 'Organizando fecha y contacto que hizo apertura');
 		if (count($info) > 0) {
 			foreach ($info as $i) {
 				$opencontact[] = array(
@@ -318,25 +331,32 @@ class StatisticsWrapper extends BaseWrapper
 				);
 			}
 		}
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('First organizing');
+		
 		
 		$openData = array();
 		if (count($stats) > 0) {
 			$opens = array();
 			
+			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Second organizing', 'Organizando arreglo que retornó la base de datos y haciendo un sort de php');
 			foreach ($stats as $i) {
 				$opens[] = $i['date'];
 			}
-			
 			sort($opens);
+			Phalcon\DI::getDefault()->get('timerObject')->endTimer('Second organizing');
 			
+			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Third organizing', 'Organizando datos con Obj TotalTimePeriod');
 			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
 			$timePeriod->setData($opens);
 			$timePeriod->processTimePeriod();
-
+			Phalcon\DI::getDefault()->get('timerObject')->endTimer('Third organizing');
+			
+			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Fourth organizing', 'Organizando el arreglo de datos que retorno totaltimeperiod para crear gráfica con high charts');
 			$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Aperturas');
 			$periodModel->setTimePeriod($timePeriod);
 			$periodModel->modelTimePeriod();
 			$openData = $periodModel->getModelTimePeriod();	
+			Phalcon\DI::getDefault()->get('timerObject')->endTimer('Fourth organizing');
 		}
 		
 //		$this->logger->log("Opens: " . print_r($opens, true));
