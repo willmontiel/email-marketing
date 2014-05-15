@@ -7,6 +7,18 @@ class Form  extends \Phalcon\Mvc\Model
 	{
 		$this->belongsTo("idDbase", "Dbase", "idDbase");
 	}
+	
+	public static function findAllFormsInAccount(Account $account) 
+	{
+		$db = Phalcon\DI::getDefault()->get('db');
+		
+		$phql = 'SELECT f.idForm, f.name FROM form f JOIN dbase db ON (f.idDbase = db.idDbase) WHERE db.idAccount = ' . $account->idAccount;
+
+		$query = $db->fetchAll($phql);
+
+		return $query;
+		
+	}
 }
 
 ?>

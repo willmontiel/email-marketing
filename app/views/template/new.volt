@@ -4,6 +4,7 @@
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
 <script type="text/javascript">
+	idTemplate = null;
 	function iframeResize() {
 		var iFrame = document.getElementById('iframeEditor');
 		//iFrame.height = '';
@@ -62,9 +63,14 @@
 		var category = $("#category").val();
 		var global = $("#isglobal")[0].checked;
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+		var url = "{{url('template/new')}}";
+		if(idTemplate != null) {
+			url = "{{url('template/edit')}}/" + idTemplate;
+		}
+		
 		$.ajax(
 			{
-			url: "{{url('template/new')}}",
+			url: url,
 			type: "POST",			
 			data: { 
 				name: name,
@@ -80,7 +86,8 @@
 					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: 'Ha ocurrido un error, contacta al administrador', sticky: false, time: 10000});
 				}
 			},
-			success: function(){
+			success: function(res){
+				idTemplate = res.idTemplate;
 				$.gritter.add({class_name: 'success', title: '<i class="icon-save"></i> Atención', text: 'Se ha guardado la plantilla exitosamente', sticky: false, time: 10000});
 			}
 		});
@@ -125,9 +132,11 @@
 				<a id="btnNewCategory" class="btn btn-default extra-padding" onclick="writenewcategory()" ><span class="glyphicon glyphicon-pencil"></span></a>
 				<a id="btnSelectCategory" class="btn btn-default extra-padding" onclick="selectcategory()" style="display: none;"><span class="glyphicon glyphicon-check"></span></a>
 			</div>
+			{% if userObject.userrole == 'ROLE_SUDO'%}
 			<div class="form-group">
 				<label><input type="checkbox" name="isglobal" id="isglobal"> Plantilla Global</label>
 			</div>
+			{% endif %}
 			<div class="col-xs-12 col-sm-9 col-md-10 col-lg-4 pull-right">
 				<div class="form-group">
 					<a class="btn btn-default extra-padding" data-toggle="modal" data-target="#preview-modal" onClick="verHTML()"><span class="glyphicon glyphicon-search"></span> Previsualizar</a>

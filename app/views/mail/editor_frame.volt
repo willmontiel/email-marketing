@@ -272,14 +272,17 @@
 
 <div id="forms-update" style="display: none;">
 	<section>
-		{%if cfs is defined %}
-			{%for cf in cfs%}
-				<input type="checkbox" name="chk_group" value="%%{{cf['linkName']}}%%" />{{cf['originalName']}}<br />
+		<ul>
+		{%if forms is defined %}
+			{%for form in forms%}
+				<li>
+					<a href="#" name="chk_group" class="selected-form-class" value="%%FORM_{{form['idForm']}}%%">{{form['name']}}</a><br />
+				</li>
 			{%endfor%}
 		{%endif%}
+		</ul>
 	</section>
 	<footer>
-		<button class="redactor_modal_btn redactor_modal_action_btn" id="mymodal-insert">Insert</button>
 		<button class="redactor_modal_btn redactor_btn_modal_close">Close</button>
 	</footer>
 </div>

@@ -122,7 +122,10 @@ class ChildCommunication extends BaseWrapper
 			$linkService = new LinkService($account, $mail);
 			$prepareMail = new PrepareMailContent($linkService, $imageService);
 			list($content, $links) = $prepareMail->processContent($html);
-
+			
+			$formField = new FormField($mail);
+			$content = $formField->prepareUpdatingForms($content);
+			
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $idDbases);
 			$cf = $mailField->getCustomFields();
 
@@ -214,6 +217,19 @@ class ChildCommunication extends BaseWrapper
 				/*
 				 * ================================================================
 				 * NOTA
+				 * Inicia el proceso de transformacion en los formularios de actualizacion
+				 * cambiando las referencias por links que redirigen al verdadero formulario
+				 * ================================================================
+				 */
+				
+				if($formField->formsAvailable()) {
+					$html = $formField->processUpdatingForms($html, $contact['contact']);
+				}
+				
+				
+				/*
+				 * ================================================================
+				 * NOTA
 				 * REVISAR: Este objeto se está instanciando por cada contacto al
 				 * que se envía, pero el contenido original del correo no varía
 				 * entre contactos, por lo que la creación y eliminación de objetos
@@ -279,8 +295,8 @@ class ChildCommunication extends BaseWrapper
 				}
 				$message->addPart($text, 'text/plain');
 
-//					$recipients = true;
-				$recipients = $swift->send($message, $failures);
+					$recipients = true;
+//				$recipients = $swift->send($message, $failures);
 				$this->lastsendheaders = $message->getHeaders()->toString();
 				$log->log("Headers: " . print_r($this->lastsendheaders, true));
 				if ($recipients){

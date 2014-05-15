@@ -11,17 +11,16 @@ RedactorPlugins.advanced = {
         var callback = $.proxy(function()
         {
             this.selectionSave();
-            $('#redactor_modal #mymodal-insert').click($.proxy(this.insertFromMyModal, this));
+			$('.selected-form-class').click($.proxy(this.insertFromMyModal, this));
 
         }, this);
 
-        // modal call
-        this.modalInit('Advanced', '#forms-update', 500, callback);
+        this.modalInit('Formularios', '#forms-update', 500, callback);
     },
     insertFromMyModal: function(html)
     {
         this.selectionRestore();
-        this.insertHtml('some');
+        this.insertHtml($(html.target).attr('value'));
         this.modalClose();
     }
-}
+};
