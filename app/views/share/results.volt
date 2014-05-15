@@ -20,6 +20,22 @@
 		function autoScroll() {
 			$('html, body').animate({scrollTop: '615px'}, 'slow');
 		}
+		
+		function expandMailPreview() {
+			if ($("#mail-preview").is(":visible")) {
+				$('#mail-preview').hide("slow");
+			}
+			else {
+				$('#mail-preview').show("slow");
+			}
+		}
+		
+		function autoScroll() {
+			event.preventDefault();
+			
+			var n = $(document).height();
+			$('html, body').animate({ scrollTop: 2000 }, 'slow');
+		}
 	</script>
 {% endblock %}
 {% block content %}
@@ -33,11 +49,7 @@
 			{#
 				<div id="container" style="width: 300px; height: 250px;"></div>
 			#}
-			{% if type == 'summary' %}
-				{{ partial("statistic/partials/partial_general_resume_stats") }}
-			{% else %}
-				{{ partial("statistic/partials/general_stats_partial") }}
-			{% endif %}
+			{{ partial("statistic/partials/general_stats_partial") }}
 				
 			{{ partial("statistic/partials/social_media_stats_partial") }}
 			{{ "{{outlet}}" }}
