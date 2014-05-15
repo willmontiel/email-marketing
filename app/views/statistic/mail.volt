@@ -81,7 +81,7 @@
 			{#   Botones de navegacion   #}
 			{{ partial("mail/partials/small_buttons_nav_partial") }}
 
-			{#   parcial vista en miniatura del correo y datos del mismo   #}
+			{#   parcial encabezado pag   #}
 			{{ partial("statistic/partials/header_partial") }}
 			
 			{#   parcial vista en miniatura del correo y datos del mismo   #}

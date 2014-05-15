@@ -201,11 +201,20 @@ h4.sectiontitle {
 }
 .unsubs {
 	color:@brand-light-blue;
+	float: left;
 	text-align: center;
+	padding-left: 70px;
+	position: relative;
+}
+.color-desusc {
+	color:@brand-light-blue;
 }
 .spam {
 	color:@brand-red;
+	float: left;
 	text-align: center;
+	padding-left: 70px;
+	position: relative;
 }
 .summary-opens {
 	background: @brand-green;
@@ -276,15 +285,15 @@ h4.sectiontitle {
 }
 .table-normal thead th.clics {
 	background: transparent url('../images/icon-clics-color.png') no-repeat center 12px;
-	color: #6e97ac;
+	color: @brand-blue;
 }
 .table-normal thead th.desusc {
 	background: transparent url('../images/icon-desusc-color.png') no-repeat center 12px;
-	color: #a1dcfb;
+	color: @brand-light-blue;
 }
 .table-normal thead th.bounced {
 	background: transparent url('../images/icon-bounced-color.png') no-repeat center 12px;
-	color: #ffa100;
+	color: @brand-orange;
 }
 .table-normal tbody td {
 	text-align: center;
@@ -984,14 +993,13 @@ table.middle > tbody > tr > th > td {
 .stretch {
 	width:100%;
 }
-.item {
+.totalstats {
 	border: 8px solid #636363;
 	border-radius: 135px;
-	margin: 15px;
 	background-color: #363636;
-}
-.pleft-60 {
-	padding-left:70px;
+	float: left;
+	margin: 15px;
+	position: relative;
 }
 .little-number {
 	font-size: 20px;
@@ -999,11 +1007,22 @@ table.middle > tbody > tr > th > td {
 .mbottom-0 {
 	margin-bottom: 0;
 }
+.wrap-other-stats {
+	border:2px dashed #636363;
+	border-radius: 85px;
+	float: left;
+	margin:12px;
+	padding: 20px 12px 12px 12px;
+	position: relative;
+}
 .social {
 	border-radius: 25px;
 	color: #f5f5f5;
+	float: left;
 	text-align: center;
 	margin: 15px;
+	padding-top: 40px;
+	position: relative;
 }
 .facebook {
 	background-color:#3c5b9a;
@@ -1018,7 +1037,7 @@ table.middle > tbody > tr > th > td {
 	background-color:#007bb6;
 }
 
-/*   Estilos estadisticas por interaccion   */
+/*   Estilos estadisticas interaccion   */
 .stats {
 	color: #636363;
 	padding: 20px 0;
@@ -1037,7 +1056,7 @@ table.middle > tbody > tr > th > td {
 
 /*   estadisticas interacciones   */
 @media screen and (min-width:1200px) {
-	.item {
+	.totalstats {
 		height: 270px;
 		width: 270px;
 	}
@@ -1047,9 +1066,16 @@ table.middle > tbody > tr > th > td {
 	.number {
 		font-size: 22px;
 	}
+	.number-send {
+		font-size:50px;
+	}
+	.wrap-other-stats {
+		width: 130px;
+		height: 130px;
+	}
 }
 @media screen and (max-width:1200px) {
-	.item {
+	.totalstats {
 		height: 200px;
 		width: 200px;
 	}
@@ -1060,11 +1086,15 @@ table.middle > tbody > tr > th > td {
 		font-size: 18px;
 	}
 	.number-send {
-	font-size: 30px;
-}
+		font-size: 30px;
+	}
+	.wrap-other-stats {
+		width: 130px;
+		height: 130px;
+	}
 }
 @media screen and (max-width:800px) {
-	.item {
+	.totalstats {
 		height: 165px;
 		width: 165px;
 	}
@@ -1073,7 +1103,6 @@ table.middle > tbody > tr > th > td {
 		height: @stats-icons-height-medscreen;
 		width: @stats-icons-width-medscreen;
 	}
-
 	.sm-icons-stats-sends {
 		background-position: 0 -128px;
 	}
@@ -1097,10 +1126,28 @@ table.middle > tbody > tr > th > td {
 		.pos-icons(5, @stats-icons-width-medscreen);
 		background-position: @position -128px;	
 	}
+	.wrap-other-stats {
+		width: 100px;
+		height: 100px;
+	}
+	.unsubs {
+		padding-left: 35px;
+	}
+	.little-number {
+		font-size: 15px;
+		padding-left: 8px;
+	}
+	.spam {
+		padding-left: 35px;
+	}
+	.wrap-other-stats {
+		width: 100px;
+		height: 100px;
+	}
 
 }
 @media screen and (max-width:640px) {
-	.item {
+	.totalstats {
 		height: 120px;
 		width: 120px;
 	}
@@ -1111,27 +1158,58 @@ table.middle > tbody > tr > th > td {
 	}
 
 	.sm-icons-stats-sends {
-		background-position: 0 -128px;
+		background-position: 0 -174px;
 	}
 	.sm-icons-stats-opens {
-		.pos-icons(1, @stats-icons-width-medscreen);
-		background-position: @position -128px;	
+		.pos-icons(1, @stats-icons-width-smallscreen);
+		background-position: @position -174px;	
 	}
 	.sm-icons-stats-clics {
-		.pos-icons(2, @stats-icons-width-medscreen);
-		background-position: @position -128px;	
+		.pos-icons(2, @stats-icons-width-smallscreen);
+		background-position: @position -174px;	
 	}
 	.sm-icons-stats-bounced {
-		.pos-icons(4, @stats-icons-width-medscreen);
-		background-position: @position -128px;	
+		.pos-icons(4, @stats-icons-width-smallscreen);
+		background-position: @position -174px;	
 	}
 	.sm-icons-stats-unsubs {
-		.pos-icons(3, @stats-icons-width-medscreen);
-		background-position: @position -128px;	
+		.pos-icons(3, @stats-icons-width-smallscreen);
+		background-position: @position -174px;	
 	}
 	.sm-icons-stats-spam {
-		.pos-icons(5, @stats-icons-width-medscreen);
-		background-position: @position -128px;	
+		.pos-icons(5, @stats-icons-width-smallscreen);
+		background-position: @position -174px;	
+	}
+	.sends,
+	.opens,
+	.clics,
+	.bounced {
+		margin-top: 10px;
+	}
+	.number {
+		font-size: 18px;
+	}
+	.percent {
+		font-size: 15px;
+	}
+	.unsubs {
+		padding-left: 18px;
+		margin-left: 15px;
+	}
+	.little-number {
+		font-size: 15px;
+		padding-left: 8px;
+	}
+	.ptop-40 {
+		padding-top: 40px;
+	}
+	.spam {
+		padding-left: 18px;
+		margin-left: 15px;
+	}
+	.wrap-other-stats {
+		width: 100px;
+		height: 100px;
 	}
 }
 
@@ -1153,10 +1231,54 @@ table.middle > tbody > tr > th > td {
 		height: 165px;
 		width: 165px;
 	}
+	[class*="sm-icons-stats-"] {
+		background: transparent url('../images/sm-icons.png') no-repeat 0 0;
+		height: @stats-icons-height-medscreen;
+		width: @stats-icons-width-medscreen;
+	}
+	.sm-icons-stats-facebook {
+		.pos-icons(6, @stats-icons-width-medscreen);
+		background-position: @position -128px;
+	}
+	.sm-icons-stats-tweet {
+		.pos-icons(7, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-gplus {
+		.pos-icons(8, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-linkedin {
+		.pos-icons(9, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
 }
 @media screen and (max-width:640px) {
 	.social {
 		height: 120px;
 		width: 120px;
 	}
+	[class*="sm-icons-stats-"] {
+		background: transparent url('../images/sm-icons.png') no-repeat 0 0;
+		height: @stats-icons-height-smallscreen;
+		width: @stats-icons-width-smallscreen;
+	}
+
+	.sm-icons-stats-facebook {
+		.pos-icons(6, @stats-icons-width-smallscreen);
+		background-position: @position -174px;
+	}
+	.sm-icons-stats-tweet {
+		.pos-icons(7, @stats-icons-width-smallscreen);
+		background-position: @position -174px;	
+	}
+	.sm-icons-stats-gplus {
+		.pos-icons(8, @stats-icons-width-smallscreen);
+		background-position: @position -174px;	
+	}
+	.sm-icons-stats-linkedin {
+		.pos-icons(9, @stats-icons-width-smallscreen);
+		background-position: @position -174px;	
+	}
+
 }
