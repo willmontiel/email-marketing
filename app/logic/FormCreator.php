@@ -5,7 +5,11 @@ class FormCreator
 	function __construct() {
 		$this->urlObj = Phalcon\DI::getDefault()->get('urlManager');
 	}
-
+	
+	public function setContact(Contact $contact)
+	{
+		$this->contact = $contact;
+	}
 	
 	public function getHtmlForm(Form $form)
 	{
@@ -13,7 +17,7 @@ class FormCreator
 		$content = $jsoncontent->content;
 		
 		$htmlelements = array();
-	
+		Phalcon\DI::getDefault()->get('logger')->log('1');
 		foreach ($content as $element) {
 			$block = array();
 			$block['label'] = $this->getLabelElement($element);
@@ -54,7 +58,7 @@ class FormCreator
 	
 	protected function getTextElement($element)
 	{
-		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" required>';
+		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" value="' . $this->getValue($element) . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" value="' . $this->getValue($element) . '" required>';
 		if($element->hide) {
 			$field = '<input type="text" class="form-control" value="' . $element->defaultvalue . '">';
 		}
@@ -64,7 +68,7 @@ class FormCreator
 	
 	protected function getTextAreaElement($element)
 	{
-		$field = ($element->required != 'Si') ? '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" ></textarea>' : '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" required></textarea>';
+		$field = ($element->required != 'Si') ? '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" >' . $this->getValue($element) . '</textarea>' : '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" required>' . $this->getValue($element) . '</textarea>';
 		if($element->hide) {
 			$field = '<textarea class="form-control" value="' . $element->defaultvalue . '"></textarea>';
 		}
@@ -79,7 +83,7 @@ class FormCreator
 		$values = explode(',', $element->values);
 		$options = '';
 		foreach ($values as $value) {
-			if($element->hide && $value === $element->defaultvalue) {
+			if(($element->hide && $value === $element->defaultvalue) || $value === $this->getValue($element)) {
 				$options.= '<option selected>' . $value . '</option>';
 			}
 			else {
@@ -129,5 +133,44 @@ class FormCreator
 		$link = $linkdecoder->encodeLink($action, $parameters);
 		
 		return $link;
+	}
+	
+	public function getLgetLinkUpdateActioninkAction(Form $form)
+	{
+		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
+		
+		$action = 'contacts/update';
+		$parameters = array(1, $this->contact->idContact, $form->idForm);
+		$link = $linkdecoder->encodeLink($action, $parameters);
+		
+		return $link;
+	}
+	
+	public function getValue($element)
+	{
+		if(isset($this->contact)) {
+			if($element->id === 'email' ) {
+				return $this->contact->email->email;
+			}
+			else if($element->id === 'name' || $element->id === 'lastName') {
+				$field = $element->id;
+				return $this->contact->$field;
+			}
+			else {
+				$value = Fieldinstance::findFirst(array(
+					'conditions' => 'idCustomField = ?1 AND idContact = ?2',
+					'bind' => array(1 => $element->id,
+									2 => $this->contact->idContact)
+				));
+				
+				if( $value->numberValue != null ) {
+					return $value->numberValue;
+				}
+				return $value->textValue;
+			}
+		}
+		
+		return '';
 	}
 }

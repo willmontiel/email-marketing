@@ -39,17 +39,23 @@ class FormController extends ControllerBase
 			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
 			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
 			$idenfifiers = $linkEncoder->decodeLink('form/update', $parameters);
-			list($idLink, $idForm, $idDbase) = $idenfifiers;
+			list($idLink, $idForm, $idContact, $idMail) = $idenfifiers;
+
+			$contact = Contact::findFirst(array(
+				'conditions' => 'idContact = ?1',
+				'bind' => array(1 => $idContact)
+			));
 
 			$form = Form::findFirst(array(
 				'conditions' => 'idForm = ?1 AND idDbase = ?2',
 				'bind' => array(1 => $idForm,
-								2 => $idDbase)
+								2 => $contact->idDbase)
 			));
 
 			$creator = new FormCreator();
+			$creator->setContact($contact);
 			$html = $creator->getHtmlForm($form);
-			$link = $creator->getLinkAction($form);
+			$link = $creator->getLinkUpdateAction($form);
 		}
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
@@ -59,7 +65,7 @@ class FormController extends ControllerBase
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');
 			return $this->response->redirect('error');
 		}
-//		$this->response->setHeader("X-Frame-Options", "GOFORIT");
+
 		$this->view->setVar('elements', $html);
 		$this->view->setVar('link', $link);
 	}

@@ -59,7 +59,7 @@ class FormField {
 		
 		foreach($this->ids as $id) {
 			$parameters = array(1, $id, $contact['idContact'], $this->mail->idMail);
-			$url = $linkdecoder->encodeLink('contact/update', $parameters);
+			$url = $linkdecoder->encodeLink('form/update', $parameters);
 			
 			$search[] = '$$$_updating_form_' . $id . '_$$$';
 			$replace[] = $url;
