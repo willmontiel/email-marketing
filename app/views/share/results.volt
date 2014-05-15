@@ -27,6 +27,7 @@
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
 			{{ partial("statistic/partials/header_partial") }}
+				
 			{{ partial("statistic/partials/preview_email_partial") }}
 			
 			{#

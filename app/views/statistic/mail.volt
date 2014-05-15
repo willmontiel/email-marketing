@@ -57,7 +57,14 @@
 			}
 		}
 		
-		
+		function expandMailPreview() {
+			if ($("#mail-preview").is(":visible")) {
+				$('#mail-preview').hide("slow");
+			}
+			else {
+				$('#mail-preview').show("slow");
+			}
+		}
 	</script>
 {% endblock %}
 {% block content %}

@@ -155,6 +155,7 @@ App.DrilldownController = Ember.ObjectController.extend({
 //		console.log($('#select-options-for-compare'))
 	}
 });
+
 App.DrilldownIndexController = Ember.ArrayController.extend({});	
 
 App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {
@@ -360,4 +361,13 @@ function modelDataForPie(rawData) {
 	}
 	
 	return data;
+}
+
+function setExpandAttr(self, expand) {
+	if(self.get(expand)) {
+		self.set(expand, false);
+	}
+	else {
+		self.set(expand, true);
+	}
 }
