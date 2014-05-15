@@ -156,6 +156,12 @@
 				Duros
 			</div>
 		</div>
+	{{ '{{else}}' }}
+		<div class="bg bg-success">
+			<div class="wrapper">
+				No hubo correos rebotados para esta campaña.
+			</div>
+		</div>
 	{{ '{{/if}}' }}
 	<div class="clearfix"></div>
 	{% if type is defined %}

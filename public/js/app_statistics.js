@@ -348,14 +348,14 @@ function modelDataForPie(rawData) {
 	
 	if (rawData[0].hard !== 0 || rawData[0].soft !== 0) {
 		var soft = new Object;
-		soft.name = 'Rebotes suaves';
+		soft.name = 'Rebotes duros';
 		soft.y = rawData[0].hard;
-		soft.color = '#f7941d';
+		soft.color = '#f26522';
 
 		var hard = new Object;
-		hard.name = 'Rebotes duros';
+		hard.name = 'Rebotes suaves';
 		hard.y = rawData[0].soft;
-		hard.color = '#f26522';
+		hard.color = '#f7941d';
 
 		data = [hard, soft];
 	}
