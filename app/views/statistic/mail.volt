@@ -84,6 +84,24 @@
 			{#   parcial encabezado pag   #}
 			{{ partial("statistic/partials/header_partial") }}
 			
+			<div class="space"></div>
+				<div class="row">
+					<div class="col-md-7">
+						{{ '{{view Ember.Select
+							class="form-control"
+							id="select-options-for-compare"
+							contentBinding="App.mails"
+							optionValuePath="content.id"
+							optionLabelPath="content.name"
+							valueBinding="App.mailCompare"}}'
+						}}
+					</div>
+					<div class="col-md-5">
+						<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
+					</div>
+				</div>
+			<div class="space"></div>
+			
 			{#   parcial vista en miniatura del correo y datos del mismo   #}
 			{{ partial("statistic/partials/preview_email_partial") }}
 				
