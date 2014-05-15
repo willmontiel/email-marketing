@@ -53,7 +53,7 @@
 				
 			{{ partial("statistic/partials/social_media_stats_partial") }}
 				
-			{% if summary == 'summary'%}
+			{% if summary == 'complete'%}
 				{{ partial("statistic/partials/partial_statistics_nav") }}
 			{% endif %}
 			{{ "{{outlet}}" }}
