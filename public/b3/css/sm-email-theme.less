@@ -52,6 +52,12 @@
 @stats-icons-height:70px;
 @stats-icons-width:70px;
 
+@stats-icons-height-medscreen:35px;
+@stats-icons-width-medscreen:35px;
+
+@stats-icons-height-smallscreen:18px;
+@stats-icons-width-smallscreen:18px;
+
 @shortcuts-big-icons-height:134px;
 @shortcuts-big-icons-width:134px;
 
@@ -984,15 +990,6 @@ table.middle > tbody > tr > th > td {
 	margin: 15px;
 	background-color: #363636;
 }
-.percent {
-	font-size: 70px;
-}
-.number-send {
-	font-size: 60px;
-}
-.number {
-	font-size: 25px;
-}
 .pleft-60 {
 	padding-left:70px;
 }
@@ -1005,7 +1002,6 @@ table.middle > tbody > tr > th > td {
 .social {
 	border-radius: 25px;
 	color: #f5f5f5;
-	padding: 8px;
 	text-align: center;
 	margin: 15px;
 }
@@ -1045,8 +1041,11 @@ table.middle > tbody > tr > th > td {
 		height: 270px;
 		width: 270px;
 	}
-	.text-style {
-
+	.percent {
+		font-size: 70px;
+	}
+	.number {
+		font-size: 22px;
 	}
 }
 @media screen and (max-width:1200px) {
@@ -1054,17 +1053,85 @@ table.middle > tbody > tr > th > td {
 		height: 200px;
 		width: 200px;
 	}
+	.percent {
+		font-size: 30px;
+	}
+	.number {
+		font-size: 18px;
+	}
+	.number-send {
+	font-size: 30px;
+}
 }
 @media screen and (max-width:800px) {
 	.item {
 		height: 165px;
 		width: 165px;
 	}
+	[class*="sm-icons-stats-"] {
+		background: transparent url('../images/sm-icons.png') no-repeat 0 0;
+		height: @stats-icons-height-medscreen;
+		width: @stats-icons-width-medscreen;
+	}
+
+	.sm-icons-stats-sends {
+		background-position: 0 -128px;
+	}
+	.sm-icons-stats-opens {
+		.pos-icons(1, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-clics {
+		.pos-icons(2, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-bounced {
+		.pos-icons(4, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-unsubs {
+		.pos-icons(3, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-spam {
+		.pos-icons(5, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+
 }
 @media screen and (max-width:640px) {
 	.item {
 		height: 120px;
 		width: 120px;
+	}
+	[class*="sm-icons-stats-"] {
+		background: transparent url('../images/sm-icons.png') no-repeat 0 0;
+		height: @stats-icons-height-smallscreen;
+		width: @stats-icons-width-smallscreen;
+	}
+
+	.sm-icons-stats-sends {
+		background-position: 0 -128px;
+	}
+	.sm-icons-stats-opens {
+		.pos-icons(1, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-clics {
+		.pos-icons(2, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-bounced {
+		.pos-icons(4, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-unsubs {
+		.pos-icons(3, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-spam {
+		.pos-icons(5, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
 	}
 }
 

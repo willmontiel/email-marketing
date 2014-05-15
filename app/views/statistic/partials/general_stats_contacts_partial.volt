@@ -1,6 +1,6 @@
 {#   Estadisticas generales de los envios para contactos y bases de datos   #}
 
-<div class="col-md-2 col-sm-4 col-xs-6 item">
+<div class="item">
 	<div class="sends">
 		<div class="sm-icons-stats-sends center-block"></div>
 		<span class="number-send">{{statisticsData.sent|numberf}}</span><br>
