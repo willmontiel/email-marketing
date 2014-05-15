@@ -83,14 +83,6 @@ body {
 	padding: 25px;
 	margin-bottom: 20px;
 }
-.wrapper-box {
-	background-color: #fff;
-	border: 2px solid #5a5a5a;
-	border-radius: 10px;
-	box-shadow: inset 2px 2px 9px #3a3a3a;
-	padding: 40px 40px 40px 70px;
-	
-}
 
 /* Estilos para los titulos de seccion */
 h4.sectiontitle {
@@ -218,7 +210,7 @@ h4.sectiontitle {
 	padding: 20px 8px;
 	text-align: center;
 }
-@media screen and (max-width:1280px) {
+@media screen and (min-width:1200px) {
 	.number-stats-dashboard-summary {
 		font-size: 36px;
 	}
@@ -989,9 +981,7 @@ table.middle > tbody > tr > th > td {
 .item {
 	border: 8px solid #636363;
 	border-radius: 135px;
-	height: 270px;
 	margin: 15px;
-	width: 270px;
 	background-color: #363636;
 }
 .percent {
@@ -1013,53 +1003,25 @@ table.middle > tbody > tr > th > td {
 	margin-bottom: 0;
 }
 .social {
+	border-radius: 25px;
 	color: #f5f5f5;
-	padding: 40px 8px;
+	padding: 8px;
 	text-align: center;
+	margin: 15px;
 }
 .facebook {
 	background-color:#3c5b9a;
-	border-radius: 25px;
-	height: 270px;
-	margin: 15px;
-	width: 270px;
 }
 .twitter {
 	background-color:#759EC7;
-	border-radius: 25px;
-	height: 270px;
-	margin: 15px;
-	width: 270px;
 }
 .google {
 	background-color:#dd4b39;
-	border-radius: 25px;
-	height: 270px;
-	margin: 15px;
-	width: 270px;
 }
 .linkedin {
 	background-color:#007bb6;
-	border-radius: 25px;
-	height: 270px;
-	margin: 15px;
-	width: 270px;
 }
-.shared {
-	height: 35px;
-}
-.facebook .shared {
-	background: transparent url("../images/shared-face.png") no-repeat 0px 0px;
-}
-.twitter .shared {
-	background: transparent url("../images/shared-twitter.png") no-repeat 0px 0px;
-}
-.google .shared {
-	background: transparent url("../images/shared-gplus.png") no-repeat 0px 0px;
-}
-.linkedin .shared {
-	background: transparent url("../images/shared-linkedin.png") no-repeat 0px 0px;
-}
+
 /*   Estilos estadisticas por interaccion   */
 .stats {
 	color: #636363;
@@ -1076,3 +1038,58 @@ table.middle > tbody > tr > th > td {
 }
 
 
+
+/*   estadisticas interacciones   */
+@media screen and (min-width:1200px) {
+	.item {
+		height: 270px;
+		width: 270px;
+	}
+	.text-style {
+
+	}
+}
+@media screen and (max-width:1200px) {
+	.item {
+		height: 200px;
+		width: 200px;
+	}
+}
+@media screen and (max-width:800px) {
+	.item {
+		height: 165px;
+		width: 165px;
+	}
+}
+@media screen and (max-width:640px) {
+	.item {
+		height: 120px;
+		width: 120px;
+	}
+}
+
+/*   estadisticas interacciones redes sociales   */
+@media screen and (min-width:1200px) {
+	.social {
+		height: 270px;
+		width: 270px;
+	}
+}
+@media screen and (max-width:1200px) {
+	.social {
+		height: 200px;
+		width: 200px;
+	}
+}
+@media screen and (max-width:800px) {
+	.social {
+		height: 165px;
+		width: 165px;
+	}
+}
+@media screen and (max-width:640px) {
+	.social {
+		height: 120px;
+		width: 120px;
+	}
+}
