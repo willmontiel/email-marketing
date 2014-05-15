@@ -24,7 +24,10 @@
 	{{ stylesheet_link ('css/select2.css') }}
 	<script>
 		function autoScroll() {
-			$('html, body').animate({scrollTop: '615px'}, 'slow');
+			event.preventDefault();
+			
+			var n = $(document).height();
+			$('html, body').animate({ scrollTop: 2000 }, 'slow');
 		}
 	</script>
 	<script>
@@ -90,14 +93,6 @@
 			
 			{#   parcial estadisticas redes sociales   #}
 			{{ partial("statistic/partials/social_media_stats_partial") }}
-
-			<div class="clearfix"></div>
-			<div class="space"></div>
-
-			<div class="text-right">
-				<button class="btn btn-sm btn-add extra-padding">Compartir resumen de estadísticas</button>
-			</div>
-
 {#
 			<div class="row">
 				<div class="col-md-7">
@@ -115,38 +110,13 @@
 				</div>
 			</div>
 #}				
+			
+			{{ partial("statistic/partials/partial_statistics_nav") }}
 			{{ "{{outlet}}" }}
 		</script>
 		
 		{{ partial("statistic/partials/partial_ember_details") }}
 		{#	 Partial para gráfica de estadisticas	#}
 		{{ partial("statistic/partials/partial_graph") }}
-{#
-		<div class="row">
-			<div class="pull-right scaleChart">
-				<div class="pull-left">
-					Agrupar por: &nbsp;
-				</div>
-				<div class="pull-right">
-					<label for="scaleHour">
-						{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
-						Hora &nbsp;
-					</label>
-				</div>
-				<div class="pull-right">
-					<label for="scaleDay">
-						{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
-						Dia &nbsp;
-					</label>
-				</div>
-				<div class="pull-right">
-					<label for="scaleMonth">
-						{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
-						Mes &nbsp;
-					</label>
-				</div>
-			</div>
-		</div>
-#}	
 	</div>
 {% endblock %}
