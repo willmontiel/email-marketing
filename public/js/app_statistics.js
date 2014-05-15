@@ -155,6 +155,7 @@ App.DrilldownController = Ember.ObjectController.extend({
 //		console.log($('#select-options-for-compare'))
 	}
 });
+
 App.DrilldownIndexController = Ember.ArrayController.extend({});	
 
 App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {
@@ -262,7 +263,7 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 	typeSelectChange: function () {	
 		var t = this;
 		var filter = (this.get('typeSelected') !== undefined) ? this.get('typeSelected') : 'Todos';
-		var type = this.get('bouncedFilter');
+		var type = (this.get('bouncedFilter') !== null) ? this.get('bouncedFilter') : 'type';
 		this.type = type;
 		this.filter = filter;
 		var obj = {type: type, filter: filter};
@@ -273,6 +274,7 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
     }.observes('typeSelected'),
 			
 	filterSelectChange: function () {
+		var t = this;
 		var bouncedFilter = this.get('bouncedFilter');
 		var filters = App.get('multValChart');
 		var objArray = [];
@@ -294,6 +296,13 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 				break;
 		}
 		this.set('selectedType', objArray);
+		
+		this.set('typeSelected', 'Todos');
+		var obj = {type: bouncedFilter, filter: 'Todos'};
+		this.store.find(this.modelClass, obj).then(function(info) {
+			var data = info.get('content');
+			t.set('detailsData', JSON.parse(data[0].get('details')));
+		});	
 		
 	}.observes('bouncedFilter')
 });
@@ -352,4 +361,13 @@ function modelDataForPie(rawData) {
 	}
 	
 	return data;
+}
+
+function setExpandAttr(self, expand) {
+	if(self.get(expand)) {
+		self.set(expand, false);
+	}
+	else {
+		self.set(expand, true);
+	}
 }
