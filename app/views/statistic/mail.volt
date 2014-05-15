@@ -12,10 +12,6 @@
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
 	
-	{{ javascript_include('amcharts/amcharts.js')}}
-	{{ javascript_include('amcharts/serial.js')}}
-	{{ javascript_include('amcharts/pie.js')}}
-	
 	{{ javascript_include('highcharts/highcharts.js')}}
 	{{ javascript_include('highcharts/modules/exporting.js')}}
 	{{ javascript_include('highcharts/modules/drilldown.js')}}
