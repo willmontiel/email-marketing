@@ -88,26 +88,26 @@
 		{% if db == true%}
 			App.dbs = [
 				{% for dbase in dbases %}
-					Ember.Object.create({name: "{{dbase.name}}", id: {{dbase.idDbase}}}),
+					Ember.Object.create({name: "{{dbase.name|escape_js}}", id: {{dbase.idDbase}}}),
 				{% endfor %}
 			];
 			
 			App.lists = [
 				{% for contactlist in contactlists %}
-					Ember.Object.create({name: "{{contactlist.name}}", id: {{contactlist.idContactlist}}}),
+					Ember.Object.create({name: "{{contactlist.name|escape_js}}", id: {{contactlist.idContactlist}}}),
 				{% endfor %}
 			];
 			
 			App.segments = [
 				{% for segment in segments %}
-					Ember.Object.create({name: "{{segment.name}}", id: {{segment.idSegment}}}),
+					Ember.Object.create({name: "{{segment.name|escape_js}}", id: {{segment.idSegment}}}),
 				{% endfor %}
 			];
 			
 			{% if mails %}
 				App.sendByOpen = [
 					{% for m in mails%}
-						Ember.Object.create({name: "{{m.name}}", id: {{m.idMail}}}),
+						Ember.Object.create({name: "{{m.name|escape_js}}", id: {{m.idMail}}}),
 					{% endfor %}
 				];
 			{% endif%}
@@ -116,7 +116,7 @@
 			{% if links %}
 				App.sendByClick = [
 					{% for link in links %}
-						Ember.Object.create({name: "{{link.link}}", id: {{link.idMailLink}}}),
+						Ember.Object.create({name: "{{link.link|escape_js}}", id: {{link.idMailLink}}}),
 					{% endfor%}
 				];
 			{% endif %}
@@ -124,7 +124,7 @@
 			{% if mails %}
 				App.excludeContact = [
 					{% for m2 in mails%}
-						Ember.Object.create({name: "{{m2.name}}", id: {{m2.idMail}}}),
+						Ember.Object.create({name: "{{m2.name|escape_js}}", id: {{m2.idMail}}}),
 					{% endfor %}	
 				];
 			{% endif%}				
@@ -134,7 +134,7 @@
 			{% if linksForTrack|length !== 0 %}
 				App.googleAnalyticsLinks = [
 					{% for link in linksForTrack%}
-						Ember.Object.create({name: "{{link}}"}),
+						Ember.Object.create({name: "{{link|escape_js}}"}),
 					{% endfor %}
 				];
 			{% endif %}
@@ -145,7 +145,7 @@
 		{% if fbsocials %}
 			App.fbaccounts = [
 				{% for fbsocial in fbsocials %}
-					Ember.Object.create({name: "{{fbsocial.name}}", id: {{fbsocial.idSocialnetwork}}}),	
+					Ember.Object.create({name: "{{fbsocial.name|escape_js}}", id: {{fbsocial.idSocialnetwork}}}),	
 				{% endfor %}
 			];
 		{% endif %}
@@ -153,7 +153,7 @@
 		{% if twsocials %}
 			App.twaccounts = [
 				{% for twsocial in twsocials %}
-					Ember.Object.create({name: "{{twsocial.name}}", id: {{twsocial.idSocialnetwork}}}),	
+					Ember.Object.create({name: "{{twsocial.name|escape_js}}", id: {{twsocial.idSocialnetwork}}}),	
 				{% endfor %}
 			];
 		{% endif %}
