@@ -87,5 +87,150 @@
 	<div class="space"></div>
 	
 	<div class="space"></div>
-	{{ partial('statistic/partials/partial_statistics_compare') }}
+	{#
+		{{ partial('statistic/partials/partial_statistics_compare') }}
+	#}
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<table class="table table-striped">
+				<tr>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData1.statopens}}%</span>
+								</div>
+
+								<div class="news-content">
+									<label class="label-openings">{{statisticsData1.opens|numberf}}</label>
+									<div class="news-text">
+										Aperturas
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData2.statopens}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-openings">{{statisticsData2.opens|numberf}}</label>
+									<div class="news-text">
+										Aperturas
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
+								<div class="news-time">
+									<span>{{statisticsData1.percent_clicks_CTO}}% <strong>(CTO)</strong></span>
+								</div>
+								<div class="news-content">
+									<label class="label-clicks">{{statisticsData1.totalclicks|numberf}}</label>
+									<div class="news-text">
+										Clics
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData2.percent_clicks_CTO}}% <strong>(CTO)</strong></span>
+								</div>
+								<div class="news-content">
+									<label class="label-clicks">{{statisticsData2.totalclicks|numberf}}</label>
+									<div class="news-text">
+										Clics
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData1.statunsubscribed}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-unsubscribed">{{statisticsData1.unsubscribed|numberf}}</label>
+									<div class="news-text">
+										Des-suscritos
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData2.statunsubscribed}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-unsubscribed">{{statisticsData2.unsubscribed|numberf}}</label>
+									<div class="news-text">
+										Des-suscritos
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData1.statbounced}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-bounced">{{statisticsData1.bounced|numberf}}</label>
+									<div class="news-text">
+										Rebotes
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+					<td>
+						<div class="box">
+							<div class="box-section news with-icons">
+								<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
+								<div class="news-time">
+								  <span>{{statisticsData2.statbounced}}%</span>
+								</div>
+								<div class="news-content">
+									<label class="label-bounced">{{statisticsData2.bounced|numberf}}</label>
+									<div class="news-text">
+										Rebotes
+									</div>
+								</div>
+							</div>	
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 {% endblock %}
