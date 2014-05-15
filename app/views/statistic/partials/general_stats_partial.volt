@@ -43,8 +43,8 @@
 	#}
 		<div class="bounced anchor">
 			<div class="sm-icons-stats-bounced center-block"></div>
-			<span class="number">{{statisticsData.hardbounced|numberf}}</span><br>
-			<span class="percent">{{statisticsData.stathardbounced}}%</span>
+			<span class="number">{{statisticsData.bounced|numberf}}</span><br>
+			<span class="percent">{{statisticsData.statbounced}}%</span>
 			<p>Rebotes</p>
 		</div>
 	{#

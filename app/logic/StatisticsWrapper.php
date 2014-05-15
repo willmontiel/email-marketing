@@ -14,7 +14,7 @@ class StatisticsWrapper extends BaseWrapper
 		$total = $mail->totalContacts;
 		$opens = ($mail->uniqueOpens != null) ? $mail->uniqueOpens : 0;
 		$bounced = ($mail->bounced != null) ? $mail->bounced : 0;
-		$clicks = ($mail->clicks != null) ? $mail->clicks : 0;
+//		$clicks = ($mail->clicks != null) ? $mail->clicks : 0;
 		$unopened = $total -($opens + $bounced);
 		$unsubscribed = ($mail->unsubscribed != null) ? $mail->unsubscribed : 0;
 		$spam = ($mail->spam != null) ? $mail->spam : 0;
@@ -57,7 +57,9 @@ class StatisticsWrapper extends BaseWrapper
 		$hardBounced = $sqlHardBounced->execute(array(
 			'idMail' => $mail->idMail
 		));
-		Phalcon\DI::getDefault()->get('logger')->log($hardBounced['total']->total);
+//		Phalcon\DI::getDefault()->get('logger')->log($hardBounced['total']->total);
+		
+		$this->logger->log("Rebotes: {$bounced}");
 		$statisticsData->bounced = $bounced;
 		$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
 		$statisticsData->hardbounced = $hardBounced['total']->total;
