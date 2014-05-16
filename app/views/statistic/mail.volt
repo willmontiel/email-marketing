@@ -18,15 +18,54 @@
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
-	<script>
+	<script type="text/javascript">
+		function getUrlForStatistics(id) {
+			$.post("{{url('share/statistics')}}/" + id, function(response){
+				$('#summary'+id).val("");
+				$('#complete'+id).val("");
+				
+				$('#summary' + id).val(response[0]);
+				$('#complete' + id).val(response[1]);
+			});
+		}
+		
+		$(function () {
+			$('button[data-toggle=popover]').click(function () {
+				var me = $(this);
+				var isVisible = me.data('bs.popover');
+				if (isVisible === undefined) {
+					var id = me.data('idmail');
+					$.post("{{url('share/statistics')}}/" + id, function(response){
+						var txt = '<b>Reporte resumido: </b><br />' + response[0] + '<br /><br /><b>Reporte completo: </b><br />' + response[1];
+						me.popover({
+							trigger: 'manual',
+							placement: 'left',
+						});
+						me.data('bs.popover').options.content = 'Un momento por favor...';
+						me.popover("show");
+
+						thepop = me;
+						me.data('bs.popover').$tip.find('.popover-content').html(txt);
+					});
+				}
+				else {
+					isVisible = isVisible.tip().hasClass('in');
+					if (isVisible) {
+						me.popover("hide");
+						me.popover('destroy')
+					}
+				}
+			});
+			//$('button[data-toggle="popover"]').tooltip();
+		}) ;
+		
 		function autoScroll() {
 			event.preventDefault();
 			
 			var n = $(document).height();
 			$('html, body').animate({ scrollTop: 2000 }, 'slow');
 		}
-	</script>
-	<script>
+		
 		var chartData = [];
 		App.mails = [];
 		
@@ -82,7 +121,7 @@
 			
 			<div class="space"></div>
 				<div class="row">
-					<div class="col-md-7">
+					<div class="col-md-5">
 						{{ '{{view Ember.Select
 							class="form-control"
 							id="select-options-for-compare"
@@ -92,8 +131,11 @@
 							valueBinding="App.mailCompare"}}'
 						}}
 					</div>
-					<div class="col-md-5">
+					<div class="col-md-2">
 						<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
+					</div>
+					<div class="col-md-5 text-right">
+						<button id="sharestats-{{mail.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{mail.idMail}}">Compartir estadísticas</button>
 					</div>
 				</div>
 			<div class="space"></div>
