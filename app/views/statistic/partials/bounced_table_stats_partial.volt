@@ -1,5 +1,9 @@
 <h4 class="sectiontitle">Detalle de rebotes</h4>
-
+{{ '{{#if bouncedData}}' }}
+	lala1
+{{ '{{else}}' }}
+	lala2
+{{ '{{/if}}' }}
 <div class="row">
 	<div class="col-sm-6">
 		<div class="pull-left scaleChart">
