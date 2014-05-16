@@ -92,7 +92,7 @@
 					<td>
 						<div class="box">
 							<div class="box-section news with-icons">
-								<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
+								<label class="avatar-openings"></label>
 								<div class="news-time">
 								  <span>{{statisticsData1.statopens}}%</span>
 								</div>
