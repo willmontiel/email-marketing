@@ -18,10 +18,8 @@
 			{{ partial("statistic/partials/opens_table_stats_partial") }}
 		{% endif %}
 	{{ '{{else}}' }}
-		<div class="bg bg-warning">
-			<div class="wrapper">
-				Aún no hay aperturas para esta campaña.
-			</div>
+		<div class="bg bg-warning wrapper">
+			Aún no hay aperturas para esta campaña.
 		</div>
 	{{ '{{/if}}' }}
 </script>
@@ -94,7 +92,7 @@
 	{{ '{{else}}' }}
 		<div class="bg bg-success">
 			<div class="wrapper">
-				No hubo des-suscritos durante la campaña.
+				No hubo desuscritos durante la campaña.
 			</div>
 		</div>
 	{{ '{{/if}}' }}
@@ -157,10 +155,8 @@
 			</div>
 		</div>
 	{{ '{{else}}' }}
-		<div class="bg bg-success">
-			<div class="wrapper">
-				No hubo correos rebotados para esta campaña.
-			</div>
+		<div class="bg bg-success wrapper">
+			No hubo correos rebotados para esta campaña.
 		</div>
 	{{ '{{/if}}' }}
 	<div class="clearfix"></div>
