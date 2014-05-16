@@ -31,16 +31,18 @@
 		</div>
 	</div>
 	<div class="wrap-other-stats">
-		<div class="sm-icons-stats-unsubs unsubs">
-			<span class="little-number">{{statisticsData.unsubscribed|numberf}}</span>
-			<span class="little-number">{{statisticsData.percentageUnsubscribed}}%</span>
+		<div class="unsubs">
+			<div class="sm-icons-stats-unsubs center-block"></div>
+			<span class="number">{{statisticsData.unsubscribed|numberf}}</span><br>
+			<span class="percent">{{statisticsData.percentageUnsubscribed}}%</span>
+			<p>Desuscritos</p>
 		</div>
-		<p class="text-center color-desusc ptop-40">Desuscritos</p>
 	</div>
 	<div class="wrap-other-stats">
-		<div class="sm-icons-stats-spam spam">
-			<span class="little-number">{{statisticsData.spam|numberf}}</span>
-			<span class="little-number">{{statisticsData.percentageSpam}}%</span>
+		<div class="spam">
+			<div class="sm-icons-stats-spam center-block"></div>
+			<span class="number">{{statisticsData.spam|numberf}}</span><br>
+			<span class="percent">{{statisticsData.percentageSpam}}%</span>
 			<p>Spam</p>
 		</div>
 	</div>

@@ -1,6 +1,5 @@
 <script type="text/x-handlebars" data-template-name="drilldown/opens">
 	{{ '{{#if App.chartData}}' }}
-		<h4 class="sectiontitle">Aperturas</h4>
 		<div class="wrapper">	
 			{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="bar-drilldown"}}'}}
 		</div>
@@ -27,7 +26,6 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">
 	{{ '{{#if App.chartData}}' }}
-		<h4 class="sectiontitle">Clics</h4>
 		<div class="wrapper">
 			{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="bar-drilldown"}}'}}
 		</div>
@@ -66,7 +64,6 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
 	{{ '{{#if App.chartData}}' }}
-		<h4 class="sectiontitle">Desuscritos</h4>	
 		<div class="wrapper">
 			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 		</div>
@@ -103,7 +100,7 @@
 <script type="text/x-handlebars" data-template-name="drilldown/spam">
 	{{ '{{#if App.chartData}}' }}
 		{#
-		<h4 class="sectiontitle">Spam</h4>
+
 		<div class="wrapper">
 			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 		</div>
@@ -140,7 +137,7 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/bounced">
 	{{ '{{#if bouncedData}}' }}
-		<h4 class="sectiontitle">Rebotes</h4>
+
 		<div class="col wrapper">
 			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="pie-basic"}}'}}
 		</div>

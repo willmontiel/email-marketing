@@ -201,20 +201,16 @@ h4.sectiontitle {
 }
 .unsubs {
 	color:@brand-light-blue;
-	float: left;
+	margin-top: 10px;
 	text-align: center;
-	padding-left: 70px;
-	position: relative;
 }
 .color-desusc {
 	color:@brand-light-blue;
 }
 .spam {
 	color:@brand-red;
-	float: left;
+	margin-top: 10px;
 	text-align: center;
-	padding-left: 70px;
-	position: relative;
 }
 .summary-opens {
 	background: @brand-green;
@@ -976,6 +972,10 @@ table.middle > tbody > tr > th > td {
 	text-decoration: none;
 	cursor: pointer;
 }
+.enlace {
+	text-decoration: underline;
+	color:blue;
+}
 .mleft-15 {
 	margin-left:15px;
 }
@@ -1013,10 +1013,10 @@ table.middle > tbody > tr > th > td {
 }
 .wrap-other-stats {
 	border:2px dashed #636363;
-	border-radius: 85px;
+	border-radius: 135px;
 	float: left;
 	margin:12px;
-	padding: 20px 12px 12px 12px;
+	padding-top: 10px;
 	position: relative;
 }
 .social {
@@ -1054,7 +1054,7 @@ table.middle > tbody > tr > th > td {
 .pagination > li > a:hover {
 	background-color: @brand-white;
 }
-
+/*   fin sobreescritura estilos bootstrap pagination   */
 
 
 /*   estadisticas interacciones   */
@@ -1073,15 +1073,15 @@ table.middle > tbody > tr > th > td {
 		font-size:50px;
 	}
 	.wrap-other-stats {
-		width: 130px;
-		height: 130px;
+		width: 270px;
+		height: 270px;
 	}
 	.social {
 		height: 270px;
 		width: 270px;
 	}
 	.ptop {
-		padding-top: 40px;
+		padding-top: 30px;
 	}
 }
 @media screen and (max-width:1200px) {
@@ -1099,15 +1099,15 @@ table.middle > tbody > tr > th > td {
 		font-size: 30px;
 	}
 	.wrap-other-stats {
-		width: 130px;
-		height: 130px;
+		width: 200px;
+		height: 200px;
 	}
 	.social {
 		height: 200px;
 		width: 200px;
 	}
 	.ptop {
-		padding-top: 20px;
+		padding-top: 10px;
 	}
 	.opens-social p,
 	.clics-social p {
@@ -1151,19 +1151,13 @@ table.middle > tbody > tr > th > td {
 		width: 100px;
 		height: 100px;
 	}
-	.unsubs {
-		padding-left: 35px;
-	}
 	.little-number {
 		font-size: 15px;
 		padding-left: 8px;
 	}
-	.spam {
-		padding-left: 35px;
-	}
 	.wrap-other-stats {
-		width: 100px;
-		height: 100px;
+		width: 165px;
+		height: 165px;
 	}
 	/*   Estilos estadisticas redes sociales    */
 	.social {
@@ -1224,7 +1218,9 @@ table.middle > tbody > tr > th > td {
 	.sends,
 	.opens,
 	.clics,
-	.bounced {
+	.bounced,
+	.unsubs,
+	.spam {
 		margin-top: 10px;
 	}
 	.number {
@@ -1233,24 +1229,16 @@ table.middle > tbody > tr > th > td {
 	.percent {
 		font-size: 15px;
 	}
-	.unsubs {
-		padding-left: 18px;
-		margin-left: 15px;
-	}
 	.little-number {
 		font-size: 15px;
 		padding-left: 8px;
 	}
 	.ptop-40 {
 		padding-top: 40px;
-	}
-	.spam {
-		padding-left: 18px;
-		margin-left: 15px;
-	}
+	}	
 	.wrap-other-stats {
-		width: 100px;
-		height: 100px;
+		width: 120px;
+		height: 120px;
 	}
 	/*   Estilos estadisticas redes sociales    */
 	.social {
@@ -1276,4 +1264,9 @@ table.middle > tbody > tr > th > td {
 	}
 }
 
-
+.mail-preview {
+	display: none;
+}
+.mtop-neg {
+	margin-top: -18px;
+}

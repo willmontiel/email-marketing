@@ -79,19 +79,19 @@
 
 			{#   parcial encabezado pag   #}
 			{{ partial("statistic/partials/header_partial") }}
-			
-			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
-			{{ partial("statistic/partials/shareandcompare_partial") }}
-			
+						
 			{#   parcial vista en miniatura del correo y datos del mismo   #}
 			{{ partial("statistic/partials/preview_email_partial") }}
-				
 			
 			{#   parcial estadisticas generales   #}
 			{{ partial("statistic/partials/general_stats_partial") }}
 			
 			{#   parcial estadisticas redes sociales   #}
 			{{ partial("statistic/partials/social_media_stats_partial") }}
+			<div class="space"></div>			
+			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
+			{{ partial("statistic/partials/shareandcompare_partial") }}
+
 {#
 			<div class="row">
 				<div class="col-md-7">
