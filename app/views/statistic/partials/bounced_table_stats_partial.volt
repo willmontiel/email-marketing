@@ -28,9 +28,7 @@
 	</div>
 	<div class="col-sm-4"></div>
 	<div class="col-sm-2 text-right">
-		{{ '{{#if detailsData}}' }}
-			<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/bounced" class="btn btn-sm btn-default btn-sm extra-padding">Descargar reporte</a>
-		{{ '{{/if}}' }}
+		<a href="{{url('statistic/downloadreport')}}/{{mail.idMail}}/bounced" class="btn btn-sm btn-default btn-sm extra-padding">Descargar reporte</a>
 	</div>
 </div>
 
@@ -47,39 +45,31 @@
 <div class="space"></div>
 
 <div class="row">
-	{{'{{#if detailsData}}'}}
-		<div class="col-md-12">
-			<table class="table table-striped table-bordered">
-				<thead>
-					<tr>
-						<td>Dirección de correo</td>
-						<td>Fecha y hora</td>
-						<td>Tipo</td>
-						<td>Categoria</td>
-					</tr>
-				</thead>
-				<tbody>
-				{{'{{#each detailsData}}'}}
-					<tr>
-						<td>{{'{{email}}'}}</td>
-						<td>{{'{{date}}'}}</td>
-						<td>{{'{{type}}'}}</td>
-						<td>{{'{{category}}'}}</td>
-					</tr>
-				{{ '{{/each}}' }}
-				</tbody>
-			</table>
-			<div class="space"></div>
-			<hr>
-			<div class="box-footer flat"> 
-				{{ partial("partials/pagination_partial") }}
-			</div>
-		</div>	
-	{{ '{{else}}' }}
-		<div class="bg bg-success">
-			<div class="wrapper">
-				No se encontrarón correos rebotados para esta campaña.
-			</div>
+	<div class="col-md-12">
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr>
+					<td>Dirección de correo</td>
+					<td>Fecha y hora</td>
+					<td>Tipo</td>
+					<td>Categoria</td>
+				</tr>
+			</thead>
+			<tbody>
+			{{'{{#each detailsData}}'}}
+				<tr>
+					<td>{{'{{email}}'}}</td>
+					<td>{{'{{date}}'}}</td>
+					<td>{{'{{type}}'}}</td>
+					<td>{{'{{category}}'}}</td>
+				</tr>
+			{{ '{{/each}}' }}
+			</tbody>
+		</table>
+		<div class="space"></div>
+		<hr>
+		<div class="box-footer flat"> 
+			{{ partial("partials/pagination_partial") }}
 		</div>
-	{{ '{{/if}}' }}
+	</div>
 </div>
