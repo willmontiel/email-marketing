@@ -18,47 +18,8 @@
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
+	{{ partial("partials/getstatistics_partial") }}
 	<script type="text/javascript">
-		function getUrlForStatistics(id) {
-			$.post("{{url('share/statistics')}}/" + id, function(response){
-				$('#summary'+id).val("");
-				$('#complete'+id).val("");
-				
-				$('#summary' + id).val(response[0]);
-				$('#complete' + id).val(response[1]);
-			});
-		}
-		
-		$(function () {
-			$('button[data-toggle=popover]').click(function () {
-				var me = $(this);
-				var isVisible = me.data('bs.popover');
-				if (isVisible === undefined) {
-					var id = me.data('idmail');
-					$.post("{{url('share/statistics')}}/" + id, function(response){
-						var txt = '<b>Reporte resumido: </b><br />' + response[0] + '<br /><br /><b>Reporte completo: </b><br />' + response[1];
-						me.popover({
-							trigger: 'manual',
-							placement: 'left',
-						});
-						me.data('bs.popover').options.content = 'Un momento por favor...';
-						me.popover("show");
-
-						thepop = me;
-						me.data('bs.popover').$tip.find('.popover-content').html(txt);
-					});
-				}
-				else {
-					isVisible = isVisible.tip().hasClass('in');
-					if (isVisible) {
-						me.popover("hide");
-						me.popover('destroy')
-					}
-				}
-			});
-			//$('button[data-toggle="popover"]').tooltip();
-		}) ;
-		
 		function autoScroll() {
 			event.preventDefault();
 			
@@ -119,26 +80,8 @@
 			{#   parcial encabezado pag   #}
 			{{ partial("statistic/partials/header_partial") }}
 			
-			<div class="space"></div>
-				<div class="row">
-					<div class="col-md-5">
-						{{ '{{view Ember.Select
-							class="form-control"
-							id="select-options-for-compare"
-							contentBinding="App.mails"
-							optionValuePath="content.id"
-							optionLabelPath="content.name"
-							valueBinding="App.mailCompare"}}'
-						}}
-					</div>
-					<div class="col-md-2">
-						<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-					</div>
-					<div class="col-md-5 text-right">
-						<button id="sharestats-{{mail.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{mail.idMail}}">Compartir estadísticas</button>
-					</div>
-				</div>
-			<div class="space"></div>
+			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
+			{{ partial("statistic/partials/shareandcompare_partial") }}
 			
 			{#   parcial vista en miniatura del correo y datos del mismo   #}
 			{{ partial("statistic/partials/preview_email_partial") }}
