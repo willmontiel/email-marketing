@@ -262,7 +262,7 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 	},
 			
 	bouncedData: function () {
-		var data = JSON.parse(this.get('model').content[0].get('statistics'));
+		var data = App.get('chartData');
 		
 		console.log(data);
 		
@@ -272,7 +272,7 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		}
 		console.log('false');
 		return false;
-	}.property('this.content'),
+	}.property('App.chartData'),
 			
 	typeSelectChange: function () {	
 		var t = this;
