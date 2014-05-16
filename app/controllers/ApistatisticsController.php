@@ -5,7 +5,7 @@
 class ApistatisticsController extends ControllerBase
 {
 	/**
-	 * @Get("/mail/{type: [a-z]}/{idMail:[0-9]+}/drilldownopens")
+	 * @Get("/mail/{type:[a-z]+}/{idMail:[0-9]+}/drilldownopens")
 	 */
 	public function mailopensAction($type, $idMail)
 	{
