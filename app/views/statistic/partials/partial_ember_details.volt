@@ -21,7 +21,7 @@
 	{{ '{{/if}}' }}
 		{% if type is defined %}
 		{% else %}
-			{{ '{{#if App.detailsData}}' }}
+			{{ '{{#if detailsData}}' }}
 				{{ partial("statistic/partials/opens_table_stats_partial") }}
 			{{ '{{/if}}' }}
 		{% endif %}
