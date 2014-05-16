@@ -34,6 +34,7 @@ class ApistatisticsController extends ControllerBase
 	 */
 	public function mailclicksAction($idMail, $type)
 	{
+		$this->logger->log("Type: {$type}");
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		$filter = $this->request->getQuery('filter');
