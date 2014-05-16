@@ -32,7 +32,7 @@ class ApistatisticsController extends ControllerBase
 	/**
 	 * @Get("/mail/{type:[a-z]+}/{idMail:[0-9]+}/drilldownclicks")
 	 */
-	public function mailclicksAction($idMail)
+	public function mailclicksAction($idMail, $type)
 	{
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
