@@ -8,8 +8,6 @@ class StatisticController extends ControllerBase
 	
 	public function mailAction($idMail)
 	{
-		$log = $this->logger;
-		
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idAccount = ?2 AND status = "Sent"',
 			'bind' => array(1 => $idMail, 2 => $this->user->account->idAccount)

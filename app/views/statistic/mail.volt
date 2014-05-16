@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/' ~ mail.idMail }}';
+		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/private/' ~ mail.idMail }}';
 	</script>
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
@@ -12,25 +12,21 @@
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
 	
-	{{ javascript_include('amcharts/amcharts.js')}}
-	{{ javascript_include('amcharts/serial.js')}}
-	{{ javascript_include('amcharts/pie.js')}}
-	
 	{{ javascript_include('highcharts/highcharts.js')}}
 	{{ javascript_include('highcharts/modules/exporting.js')}}
 	{{ javascript_include('highcharts/modules/drilldown.js')}}
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
-	<script>
+	{{ partial("partials/getstatistics_partial") }}
+	<script type="text/javascript">
 		function autoScroll() {
 			event.preventDefault();
 			
 			var n = $(document).height();
 			$('html, body').animate({ scrollTop: 2000 }, 'slow');
 		}
-	</script>
-	<script>
+		
 		var chartData = [];
 		App.mails = [];
 		
@@ -83,6 +79,9 @@
 
 			{#   parcial encabezado pag   #}
 			{{ partial("statistic/partials/header_partial") }}
+			
+			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
+			{{ partial("statistic/partials/shareandcompare_partial") }}
 			
 			{#   parcial vista en miniatura del correo y datos del mismo   #}
 			{{ partial("statistic/partials/preview_email_partial") }}
