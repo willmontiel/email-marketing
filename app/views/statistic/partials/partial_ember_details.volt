@@ -141,7 +141,7 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/bounced">
-	{{ '{{#if App.chartData}}' }}
+	{{ '{{#if bouncedData}}' }}
 		<h4 class="sectiontitle">Rebotes</h4>
 		<div class="col wrapper">
 			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="pie-basic"}}'}}
