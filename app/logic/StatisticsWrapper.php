@@ -400,7 +400,7 @@ class StatisticsWrapper extends BaseWrapper
 
 
 
-	public function findMailClickStats($idMail, $filter)
+	public function findMailClickStats($idMail, $filter, $type)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -478,24 +478,25 @@ class StatisticsWrapper extends BaseWrapper
 			$statsLinks = $periodModel->getModelTimePeriod();
 		}
 		
-		$phql = "SELECT ml.click, e.email, l.link
-				 FROM Mxcxl AS ml
-					JOIN Contact AS c ON (c.idContact = ml.idContact)
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = :idMail: AND ml.click != 0 ";
-		
-		if ($filter && $filter != 'Todos') {
-			$phql.= "AND l.link = '" . $filter . "' ";
+		if ($type == 'private') {
+			$phql = "SELECT ml.click, e.email, l.link
+					 FROM Mxcxl AS ml
+						JOIN Contact AS c ON (c.idContact = ml.idContact)
+						JOIN Email AS e ON (e.idEmail = c.idEmail)
+						JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
+					 WHERE ml.idMail = :idMail: AND ml.click != 0 ";
+
+			if ($filter && $filter != 'Todos') {
+				$phql.= "AND l.link = '" . $filter . "' ";
+			}
+
+			$phql.= "LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+
+			$query = $manager->createQuery($phql);
+			$result = $query->execute(array(
+				'idMail' => $idMail
+			));
 		}
-				
-		$phql.= "LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-		
-		$query = $manager->createQuery($phql);
-		$result = $query->execute(array(
-			'idMail' => $idMail
-		));
-		
 		$clickcontact = array();
 		if (count($result) > 0) {
 			foreach ($result as $i) {

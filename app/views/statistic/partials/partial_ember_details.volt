@@ -28,7 +28,7 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">
-	{{ '{{#if detailsData}}' }}
+	{{ '{{#if App.chartData}}' }}
 		<h4 class="sectiontitle">Clics</h4>
 		<div class="wrapper">
 			{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="bar-drilldown"}}'}}
@@ -51,11 +51,6 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
-
-		{% if type is defined %}
-		{% else %}
-			{{ partial("statistic/partials/clics_table_stats_partial") }}
-		{% endif %}
 	{{ '{{else}}' }}
 		<div class="bg bg-warning">
 			<div class="wrapper">
@@ -63,10 +58,16 @@
 			</div>
 		</div>
 	{{ '{{/if}}' }}
+	{% if type is defined %}
+	{% else %}
+		{{ '{{#if detailsData}}' }}
+			{{ partial("statistic/partials/clics_table_stats_partial") }}
+		{{ '{{/if}}' }}
+	{% endif %}
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
-	{{ '{{#if detailsData}}' }}
+	{{ '{{#if App.chartData}}' }}
 		{#
 		<h4 class="sectiontitle">Desuscritos</h4>	
 		<div class="wrapper">
@@ -88,10 +89,6 @@
 		</div>
 		<div class="clearfix"></div>
 		#}
-		{% if type is defined %}
-		{% else %}
-			{{ partial("statistic/partials/unsubscribed_table_stats_partial") }}
-		{% endif %}
 	{{ '{{else}}' }}
 		<div class="bg bg-success">
 			<div class="wrapper">
@@ -99,10 +96,16 @@
 			</div>
 		</div>
 	{{ '{{/if}}' }}
+	{% if type is defined %}
+	{% else %}
+		{{ '{{#if detailsData}}' }}
+			{{ partial("statistic/partials/unsubscribed_table_stats_partial") }}
+		{{ '{{/if}}' }}
+	{% endif %}
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/spam">
-	{{ '{{#if detailsData}}' }}
+	{{ '{{#if App.chartData}}' }}
 		{#
 		<h4 class="sectiontitle">Spam</h4>
 		<div class="wrapper">
@@ -124,10 +127,6 @@
 		</div>
 		<div class="clearfix"></div>
 		#}
-		{% if type is defined %}
-		{% else %}
-			{{ partial("statistic/partials/spam_table_stats_partial") }}
-		{% endif %}
 	{{ '{{else}}' }}
 		<div class="bg bg-success">
 			<div class="wrapper">
@@ -135,10 +134,16 @@
 			</div>
 		</div>
 	{{ '{{/if}}' }}
+	{% if type is defined %}
+	{% else %}
+		{{ '{{#if detailsData}}' }}
+			{{ partial("statistic/partials/spam_table_stats_partial") }}
+		{{ '{{/if}}' }}
+	{% endif %}
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/bounced">
-	{{ '{{#if detailsData}}' }}
+	{{ '{{#if App.chartData}}' }}
 		<h4 class="sectiontitle">Rebotes</h4>
 		<div class="col wrapper">
 			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="pie-basic"}}'}}
@@ -157,6 +162,11 @@
 				Duros
 			</div>
 		</div>
+		<div class="clearfix"></div>
+		{% if type is defined %}
+		{% else %}
+			{{ partial("statistic/partials/bounced_table_stats_partial") }}
+		{% endif %}
 	{{ '{{else}}' }}
 		<div class="bg bg-success">
 			<div class="wrapper">
@@ -164,11 +174,5 @@
 			</div>
 		</div>
 	{{ '{{/if}}' }}
-	<div class="clearfix"></div>
-	{% if type is defined %}
-	{% else %}
-		{{ partial("statistic/partials/bounced_table_stats_partial") }}
-	{% endif %}
-	
 </script>
 

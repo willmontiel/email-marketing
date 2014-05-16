@@ -30,7 +30,7 @@ class ApistatisticsController extends ControllerBase
 	}
 	
 	/**
-	 * @Get("/mail/{idMail:[0-9]+}/drilldownclicks")
+	 * @Get("/mail/{type:[a-z]+}/{idMail:[0-9]+}/drilldownclicks")
 	 */
 	public function mailclicksAction($idMail)
 	{
@@ -50,7 +50,7 @@ class ApistatisticsController extends ControllerBase
 		
 		$statWrapper->setPager($pager);
 		
-		$stat = $statWrapper->findMailClickStats($idMail, $filter);
+		$stat = $statWrapper->findMailClickStats($idMail, $filter, $type);
 		
 		return $this->setJsonResponse($stat);
 	}
