@@ -260,6 +260,16 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		this.set('bouncedFilter', null);
 		this.set('typeSelected', null);
 	},
+			
+	bouncedData: function () {
+		var data = App.get('chartData');
+		
+		if (data[0].hard !== 0 || data[0].soft !== 0) {
+			return true;
+		}
+		return false;
+	}.property('this.statistics'),
+			
 	typeSelectChange: function () {	
 		var t = this;
 		var filter = (this.get('typeSelected') !== undefined) ? this.get('typeSelected') : 'Todos';

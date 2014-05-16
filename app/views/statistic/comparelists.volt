@@ -35,6 +35,7 @@
 		
 		createCharts('summaryChart1', data1);
 		createCharts('summaryChart2', data2);
+		
 		function compareList() {
 			var id = $('#liststocompare').val();
 			if(id !== null) {
@@ -87,5 +88,6 @@
 	</div>
 
 	<div class="space"></div>
-	{{ partial('statistic/partials/partial_statistics_compare') }}
+	
+	{{ partial('statistic/partials/partial_statistics_compare') }}	
 {% endblock %}

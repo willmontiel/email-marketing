@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/' ~ mail.idMail }}';
+		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/public/' ~ mail.idMail }}';
 	</script>
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
