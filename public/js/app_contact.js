@@ -258,7 +258,15 @@ App.ContactsEditView = Ember.View.extend({
 //});
 
 App.DatePicker = Em.View.extend({
-	templateName: 'date_picker',
+	templateName: 'datepicker_b3',
+	didInsertElement: function() {
+		$('.datepicker').datetimepicker({
+//			format:'dd/mm/yyyy',
+			pickDate: true,                
+			pickTime: false,  
+			showToday: true,
+		});
+	}
 });
 
 

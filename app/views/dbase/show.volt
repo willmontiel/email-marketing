@@ -171,6 +171,16 @@
 					<td></td>
 					<td></td>
 				</tr>
+				<tr>
+					<td>Fecha de nacimiento</td>
+					<td>Date</td>
+					<td>
+						<div class="icheckbox_flat-aero hover">
+						</div>
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
 			{{'{{#each model}}'}}
 				<tr>
 					<td>{{'{{name}}'}}</td>

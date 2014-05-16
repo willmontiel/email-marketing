@@ -3,15 +3,20 @@
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
 		{#{{ partial("partials/date_view_partial") }}#}
-		{{ partial("partials/date_picker_partial") }}
+		{{ partial("partials/date_picker_b3_partial") }}
 		{{ partial("partials/xeditable_view_partial") }}
 		{{ partial("partials/xeditable_select_view_partial") }}
 		{{ javascript_include('js/load_activecontacts.js')}}
 		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
+		{{ javascript_include('javascripts/moment/moment.min.js')}}
+		{{ javascript_include('b3/js/bootstrap.min.js') }}
+		{{ javascript_include('date-time-picker-b3/bootstrap-datetimepicker.min.js')}}
+		{#
+		{{ javascript_include('javascripts/moment/moment.min.js')}}
 		{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js') }}
 		{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
-		{#{{ javascript_include('javascripts/moment/moment.min.js')}}#}
+		#}
 	<script type="text/javascript">
 		var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};
@@ -201,7 +206,10 @@
 				<div class="form-group">
 					<label for="birthDate" class="col-sm-4 control-label">Fecha de nacimiento:</label>
 					<div class="col-md-8">
+						{#
 						{{ '{{view App.DatePicker valueBinding="birthDate" id="birthDate"}}' }}
+						#}
+						{{'{{view Ember.TextField valueBinding="birthDate" id="birthDate" class="form-control"}}'}}
 					</div>
 				</div>
 				<!-- Campos Personalizados -->
