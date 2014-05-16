@@ -12,11 +12,6 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
-
-		{% if type is defined %}
-		{% else %}
-			{{ partial("statistic/partials/opens_table_stats_partial") }}
-		{% endif %}
 	{{ '{{else}}' }}
 		<div class="bg bg-warning">
 			<div class="wrapper">
@@ -24,6 +19,12 @@
 			</div>
 		</div>
 	{{ '{{/if}}' }}
+		{% if type is defined %}
+		{% else %}
+			{{ '{{#if App.detailsData}}' }}
+				{{ partial("statistic/partials/opens_table_stats_partial") }}
+			{{ '{{/if}}' }}
+		{% endif %}
 </script>
 
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">
