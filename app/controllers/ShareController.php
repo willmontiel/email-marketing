@@ -44,8 +44,13 @@ class ShareController extends ControllerBase
 			));
 
 			if ($mail) {
+				$account = Account::findFirst(array(
+					'conditions' => 'idAccount = ?1',
+					'bind' => array(1 => $mail->idAccount)
+				));
+				
 				$statWrapper = new StatisticsWrapper();
-				$statWrapper->setAccount($this->user->account);
+				$statWrapper->setAccount($account);
 				$mailStat = $statWrapper->showMailStatistics($mail, false);
 				$this->view->setVar("mail", $mail);
 				$this->view->setVar("summaryChartData", $mailStat['summaryChartData']);
@@ -58,7 +63,7 @@ class ShareController extends ControllerBase
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
-			$this->traceFail("Share statistics, idMail: {$idMail}");
+//			$this->traceFail("Share statistics, idMail: {$idMail}");
 			$this->response->redirect('error/link');
 		}
 	}
