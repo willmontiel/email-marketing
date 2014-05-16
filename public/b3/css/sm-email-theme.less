@@ -220,24 +220,28 @@ h4.sectiontitle {
 	background: @brand-green;
 }
 .number-stats-dashboard-summary {
-	font-size: 48px;
 	color: @brand-white;
 	padding: 20px 8px;
 	text-align: center;
 }
 @media screen and (min-width:1200px) {
 	.number-stats-dashboard-summary {
+		font-size: 48px;
+	}
+}
+@media screen and (max-width:1200px) {
+	.number-stats-dashboard-summary {
 		font-size: 36px;
 	}
 }
 @media screen and (max-width:1024px) {
 	.number-stats-dashboard-summary {
-		font-size: 32px;
+		font-size: 36px;
 	}
 }
 @media screen and (max-width:800px) {
 	.number-stats-dashboard-summary {
-		font-size: 26px;
+		font-size: 32px;
 	}
 }
 
@@ -1021,7 +1025,6 @@ table.middle > tbody > tr > th > td {
 	float: left;
 	text-align: center;
 	margin: 15px;
-	padding-top: 40px;
 	position: relative;
 }
 .facebook {
@@ -1073,6 +1076,13 @@ table.middle > tbody > tr > th > td {
 		width: 130px;
 		height: 130px;
 	}
+	.social {
+		height: 270px;
+		width: 270px;
+	}
+	.ptop {
+		padding-top: 40px;
+	}
 }
 @media screen and (max-width:1200px) {
 	.totalstats {
@@ -1091,6 +1101,17 @@ table.middle > tbody > tr > th > td {
 	.wrap-other-stats {
 		width: 130px;
 		height: 130px;
+	}
+	.social {
+		height: 200px;
+		width: 200px;
+	}
+	.ptop {
+		padding-top: 20px;
+	}
+	.opens-social p,
+	.clics-social p {
+		margin-bottom: 0;
 	}
 }
 @media screen and (max-width:800px) {
@@ -1144,7 +1165,27 @@ table.middle > tbody > tr > th > td {
 		width: 100px;
 		height: 100px;
 	}
-
+	/*   Estilos estadisticas redes sociales    */
+	.social {
+		height: 165px;
+		width: 165px;
+	}
+	.sm-icons-stats-facebook {
+		.pos-icons(6, @stats-icons-width-medscreen);
+		background-position: @position -128px;
+	}
+	.sm-icons-stats-tweet {
+		.pos-icons(7, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-gplus {
+		.pos-icons(8, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
+	.sm-icons-stats-linkedin {
+		.pos-icons(9, @stats-icons-width-medscreen);
+		background-position: @position -128px;	
+	}
 }
 @media screen and (max-width:640px) {
 	.totalstats {
@@ -1211,59 +1252,12 @@ table.middle > tbody > tr > th > td {
 		width: 100px;
 		height: 100px;
 	}
-}
-
-/*   estadisticas interacciones redes sociales   */
-@media screen and (min-width:1200px) {
+	/*   Estilos estadisticas redes sociales    */
 	.social {
-		height: 270px;
-		width: 270px;
-	}
-}
-@media screen and (max-width:1200px) {
-	.social {
-		height: 200px;
-		width: 200px;
-	}
-}
-@media screen and (max-width:800px) {
-	.social {
-		height: 165px;
-		width: 165px;
-	}
-	[class*="sm-icons-stats-"] {
-		background: transparent url('../images/sm-icons.png') no-repeat 0 0;
-		height: @stats-icons-height-medscreen;
-		width: @stats-icons-width-medscreen;
-	}
-	.sm-icons-stats-facebook {
-		.pos-icons(6, @stats-icons-width-medscreen);
-		background-position: @position -128px;
-	}
-	.sm-icons-stats-tweet {
-		.pos-icons(7, @stats-icons-width-medscreen);
-		background-position: @position -128px;	
-	}
-	.sm-icons-stats-gplus {
-		.pos-icons(8, @stats-icons-width-medscreen);
-		background-position: @position -128px;	
-	}
-	.sm-icons-stats-linkedin {
-		.pos-icons(9, @stats-icons-width-medscreen);
-		background-position: @position -128px;	
-	}
-}
-@media screen and (max-width:640px) {
-	.social {
-		height: 120px;
+		height: auto;
+		padding-bottom: 20px;
 		width: 120px;
 	}
-	[class*="sm-icons-stats-"] {
-		background: transparent url('../images/sm-icons.png') no-repeat 0 0;
-		height: @stats-icons-height-smallscreen;
-		width: @stats-icons-width-smallscreen;
-	}
-
 	.sm-icons-stats-facebook {
 		.pos-icons(6, @stats-icons-width-smallscreen);
 		background-position: @position -174px;
@@ -1280,5 +1274,6 @@ table.middle > tbody > tr > th > td {
 		.pos-icons(9, @stats-icons-width-smallscreen);
 		background-position: @position -174px;	
 	}
-
 }
+
+
