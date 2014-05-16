@@ -21,6 +21,9 @@
 	<script type="text/javascript">
 		function getUrlForStatistics(id) {
 			$.post("{{url('share/statistics')}}/" + id, function(response){
+				$('#summary').empty();
+				$('#complete').empty();
+				
 				$('#summary').append(response[0]);
 				$('#complete').append(response[1]);
 			});
@@ -137,7 +140,11 @@
 						Copie estos enlaces y compartalos con quien quiera, y así las personas que los abran
 						en el navegador podrán ver las estadisticas del correo.
 					</p>
+					
+					<h4>Compartir resumen de estadisticas del correo</h4>
 					<p id="summary"></p>
+					
+					<h4>Compartir estadísticas completas del correo</h4>
 					<p id="complete"></p>
 				</div>
 				<div class="modal-footer">
