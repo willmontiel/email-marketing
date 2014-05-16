@@ -479,6 +479,7 @@ class StatisticsWrapper extends BaseWrapper
 		}
 		
 		if ($type == 'private') {
+			$this->logger->log("Entra");
 			$phql = "SELECT ml.click, e.email, l.link
 					 FROM Mxcxl AS ml
 						JOIN Contact AS c ON (c.idContact = ml.idContact)
@@ -497,6 +498,7 @@ class StatisticsWrapper extends BaseWrapper
 				'idMail' => $idMail
 			));
 		}
+		
 		$clickcontact = array();
 		if (count($result) > 0) {
 			foreach ($result as $i) {
