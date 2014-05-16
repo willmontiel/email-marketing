@@ -1,5 +1,5 @@
 <script type="text/x-handlebars" data-template-name="drilldown/opens">
-	{{ '{{#if detailsData}}' }}
+	{{ '{{#if statistics}}' }}
 		<h4 class="sectiontitle">Aperturas</h4>
 		<div class="wrapper">	
 			{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="bar-drilldown"}}'}}
