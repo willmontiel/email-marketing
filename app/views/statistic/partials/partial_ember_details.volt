@@ -68,7 +68,6 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
 	{{ '{{#if App.chartData}}' }}
-		{#
 		<h4 class="sectiontitle">Desuscritos</h4>	
 		<div class="wrapper">
 			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
@@ -88,7 +87,6 @@
 			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 		</div>
 		<div class="clearfix"></div>
-		#}
 	{{ '{{else}}' }}
 		<div class="bg bg-success">
 			<div class="wrapper">
