@@ -18,8 +18,14 @@
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
-	{{ partial("partials/getstatistics_partial") }}
 	<script type="text/javascript">
+		function getUrlForStatistics(id) {
+			$.post("{{url('share/statistics')}}/" + id, function(response){
+				$('#summary').append(response[0]);
+				$('#complete').append(response[1]);
+			});
+		}
+		
 		function autoScroll() {
 			event.preventDefault();
 			
@@ -117,5 +123,27 @@
 		{{ partial("statistic/partials/partial_ember_details") }}
 		{#	 Partial para gráfica de estadisticas	#}
 		{{ partial("statistic/partials/partial_graph") }}
+	</div>
+	
+	<div id="modal-simple" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Compartir estadísticas</h4>
+				</div>
+				<div class="modal-body">
+					<p>
+						Copie estos enlaces y compartalos con quien quiera, y así las personas que los abran
+						en el navegador podrán ver las estadisticas del correo.
+					</p>
+					<p id="summary"></p>
+					<p id="complete"></p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
 	</div>
 {% endblock %}
