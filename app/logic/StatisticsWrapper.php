@@ -478,6 +478,8 @@ class StatisticsWrapper extends BaseWrapper
 			$statsLinks = $periodModel->getModelTimePeriod();
 		}
 		
+		$this->logger->log("{$type}");
+		
 		if ($type == 'private') {
 			$this->logger->log("Entra");
 			$phql = "SELECT ml.click, e.email, l.link
