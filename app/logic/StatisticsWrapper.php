@@ -279,7 +279,7 @@ class StatisticsWrapper extends BaseWrapper
 		return $response;
 	}
 	
-	public function findMailOpenStats($idMail)
+	public function findMailOpenStats($idMail, $type)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
@@ -295,18 +295,19 @@ class StatisticsWrapper extends BaseWrapper
 		
 		Phalcon\DI::getDefault()->get('timerObject')->endTimer('First Query');
 		
-		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Second query', 'Detalle de cada persona que abrió el correo, (paginado)');
-		$sql2 = "SELECT m.idContact, m.opening AS date, e.email 
-					FROM mxc AS m
-						JOIN contact as c ON (c.idContact = m.idContact)
-						JOIN email as e ON (c.idEmail = e.idEmail)
-					WHERE m.idMail = ? AND m.opening != 0";
-		
-		$sql2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-		$result2 = $db->query($sql2, array($idMail));
-		$info = $result2->fetchAll();
-		
-		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Second query Query');
+		if ($type == 'private') {
+			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Second query', 'Detalle de cada persona que abrió el correo, (paginado)');
+			$sql2 = "SELECT m.idContact, m.opening AS date, e.email 
+						FROM mxc AS m
+							JOIN contact as c ON (c.idContact = m.idContact)
+							JOIN email as e ON (c.idEmail = e.idEmail)
+						WHERE m.idMail = ? AND m.opening != 0";
+
+			$sql2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+			$result2 = $db->query($sql2, array($idMail));
+			$info = $result2->fetchAll();
+			Phalcon\DI::getDefault()->get('timerObject')->endTimer('Second query Query');
+		}
 		
 		
 		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Third query', 'Fechas en que se hizo apertura');

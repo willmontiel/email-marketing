@@ -5,9 +5,9 @@
 class ApistatisticsController extends ControllerBase
 {
 	/**
-	 * @Get("/mail/{idMail:[0-9]+}/drilldownopens")
+	 * @Get("/mail/{type: [a-z]}/{idMail:[0-9]+}/drilldownopens")
 	 */
-	public function mailopensAction($idMail)
+	public function mailopensAction($type, $idMail)
 	{
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
@@ -24,7 +24,7 @@ class ApistatisticsController extends ControllerBase
 		
 		$statWrapper->setPager($pager);
 		
-		$stat = $statWrapper->findMailOpenStats($idMail);
+		$stat = $statWrapper->findMailOpenStats($idMail, $type);
 		
 		return $this->setJsonResponse($stat);
 	}
