@@ -264,13 +264,9 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 	bouncedData: function () {
 		var data = App.get('chartData');
 		
-		console.log(data);
-		
 		if (data[0].hard !== 0 || data[0].soft !== 0) {
-			console.log('true');
 			return true;
 		}
-		console.log('false');
 		return false;
 	}.property('this.statistics'),
 			
