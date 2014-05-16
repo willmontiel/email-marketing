@@ -512,22 +512,28 @@ class StatisticsWrapper extends BaseWrapper
 			}
 		}
 		
-		$phqlcount = "SELECT COUNT(*) AS total
-						FROM Mxcxl AS ml
-						   JOIN Contact AS c ON (c.idContact = ml.idContact)
-						   JOIN Email AS e ON (e.idEmail = c.idEmail)
-						   JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
-						WHERE ml.idMail = :idMail: AND ml.click != 0 ";
-		if ($filter && $filter != 'Todos') {
-			$phqlcount.= "AND l.link = '" . $filter . "' ";
-		}
+		$totalRecords = 0;
 		
-		$querycount = $manager->createQuery($phqlcount);
-		$resultcount = $querycount->execute(array(
-			'idMail' => $idMail
-		));
+		if ($type == 'private') {
+			$phqlcount = "SELECT COUNT(*) AS total
+							FROM Mxcxl AS ml
+							   JOIN Contact AS c ON (c.idContact = ml.idContact)
+							   JOIN Email AS e ON (e.idEmail = c.idEmail)
+							   JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
+							WHERE ml.idMail = :idMail: AND ml.click != 0 ";
+			if ($filter && $filter != 'Todos') {
+				$phqlcount.= "AND l.link = '" . $filter . "' ";
+			}
 
-		$this->pager->setTotalRecords($resultcount['total']->total);
+			$querycount = $manager->createQuery($phqlcount);
+			$resultcount = $querycount->execute(array(
+				'idMail' => $idMail
+			));
+			
+			$totalRecords = $resultcount['total']->total;
+		}
+
+		$this->pager->setTotalRecords($totalRecords);
 		
 		$statistics[] = array(
 			'id' => $idMail,
