@@ -110,10 +110,12 @@
 			</div>
 #}				
 			
+			{#   partial para tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
 			{{ "{{outlet}}" }}
 		</script>
 		
+		{#   Partial para contenido de los tabs de opciones de inteeracciones en estadisticas   #}
 		{{ partial("statistic/partials/partial_ember_details") }}
 		{#	 Partial para gráfica de estadisticas	#}
 		{{ partial("statistic/partials/partial_graph") }}

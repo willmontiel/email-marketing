@@ -2,7 +2,7 @@
 	<span onClick="expandMailPreview();" class="anchor enlace">Ver detalle del correo</span>
 </div>
 {#   Vista en miniatura del correo enviado, con datos del mismo   #}
-<div id="mail-preview">
+<div id="mail-preview" class="oculto">
 	<div class="row wrapper">
 		<div class="col-sm-8 col-md-5 col-md-offset-1">
 			<div class="bg-thumb">

@@ -1,3 +1,15 @@
+/*   fuentes   */
+@font-face {
+    font-family: 'journalregular';
+    src: url('../fonts/journal-webfont-webfont.eot');
+    src: url('../fonts/journal-webfont-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/journal-webfont-webfont.woff') format('woff'),
+         url('../fonts/journal-webfont-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 /* Colores */
 // Colores de BOOTSTRAP ______
 @brand-primary: #428bca;
@@ -21,6 +33,7 @@
 @brand-sectiontitle: #20526e;
 @brand-pink: #ff90a8;
 @brand-lighter-blue: #e7f3f7;
+@brand-banner-blue: #557595;
 
 @bg-default-btn: #cccccc;
 @bg-delete-btn: #ac1905;
@@ -78,7 +91,7 @@ body {
 	background-color: @brand-white;
 }
 .space {
-	margin-bottom: 40px;
+	margin: 40px 0;
 }
 .wrap {
 	background-color: @bg-info-blue;
@@ -976,6 +989,9 @@ table.middle > tbody > tr > th > td {
 	text-decoration: underline;
 	color:blue;
 }
+.oculto {
+	display: none;
+}
 .mleft-15 {
 	margin-left:15px;
 }
@@ -1269,4 +1285,10 @@ table.middle > tbody > tr > th > td {
 }
 .mtop-neg {
 	margin-top: -18px;
+}
+.hand-writer-message {
+	font-family:journalregular;
+	font-size:45px;
+	color:@brand-red;
+	line-height: 1;
 }

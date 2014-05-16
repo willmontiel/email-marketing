@@ -13,7 +13,7 @@
 		<div class="clearfix"></div>
 	{{ '{{else}}' }}
 		<div class="bg bg-warning wrapper">
-			Aún no hay aperturas para esta campaña.
+			<p class="hand-writer-message">No hay aún reporte de aperturas en esta campaña... <img src="{{url('b3/images/sad.png')}}" /></p>
 		</div>
 	{{ '{{/if}}' }}
 		{% if type is defined %}
@@ -48,10 +48,8 @@
 		</div>
 		<div class="clearfix"></div>
 	{{ '{{else}}' }}
-		<div class="bg bg-warning">
-			<div class="wrapper">
-				Aún no hay clics para esta campaña.
-			</div>
+		<div class="wrapper">
+			<p class="hand-writer-message">No hay aún reporte de clics en esta campaña... <img src="{{url('b3/images/sad.png')}}" /></p>
 		</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}
@@ -83,11 +81,10 @@
 		</div>
 		<div class="clearfix"></div>
 	{{ '{{else}}' }}
-		<div class="bg bg-success">
 			<div class="wrapper">
-				No hubo desuscritos durante la campaña.
+				<p class="hand-writer-message">No hay reporte de desuscritos en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
+				
 			</div>
-		</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}
 	{% else %}
@@ -121,11 +118,10 @@
 		<div class="clearfix"></div>
 		#}
 	{{ '{{else}}' }}
-		<div class="bg bg-success">
 			<div class="wrapper">
-				No hay reportes de spam para esta campaña.
+				<p class="hand-writer-message">No hay reporte de spam en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
+				
 			</div>
-		</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}
 	{% else %}
@@ -161,8 +157,9 @@
 			{{ partial("statistic/partials/bounced_table_stats_partial") }}
 		{% endif %}
 	{{ '{{else}}' }}
-		<div class="bg bg-success wrapper">
-			No hubo correos rebotados para esta campaña.
+		<div class="wrapper">
+			<p class="hand-writer-message">No hay reporte de rebotes en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
+			
 		</div>
 	{{ '{{/if}}' }}
 </script>
