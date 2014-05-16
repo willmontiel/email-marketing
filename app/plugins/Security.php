@@ -121,6 +121,7 @@ class Security extends Plugin
 				'form::update' => array(),
 				'contacts::form' => array(),
 				'contacts::activate' => array(),
+				'contacts::update' => array(),
 				'share::results' => array(),
 				
 				
@@ -472,6 +473,7 @@ class Security extends Plugin
 			'form:update',
 			'contacts:form',
 			'contacts:activate',
+			'contacts:update',
 			'share:results',
 		);
 		

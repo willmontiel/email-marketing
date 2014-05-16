@@ -1,4 +1,11 @@
 {% extends "templates/signin.volt" %}
+{% block header_javascript %}
+	{{ javascript_include('b3/js/jquery-1.9.1.js') }}
+	{{ javascript_include('b3/js/bootstrap.js') }}
+	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
+	{{ javascript_include('js/form_date_field.js') }}
+{% endblock %}
 {% block content %}
 <div class="row">
 	<div class="col-md-5">

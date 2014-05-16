@@ -17,8 +17,8 @@ class ContactFormWrapper extends ContactWrapper
 	{
 		$this->form = $form;
 	}
-
-	public function createContactFromForm($fields)
+	
+	protected function setFieldsToWrapper($fields)
 	{
 		$contactObj = new stdClass();
 
@@ -42,6 +42,13 @@ class ContactFormWrapper extends ContactWrapper
 		if (!isset($contactObj->email) || trim($contactObj->email) == '') {
 			throw new \Exception('El email es requerido');
 		}
+		
+		return $contactObj;
+	}
+
+	public function createContactFromForm($fields)
+	{
+		$contactObj = $this->setFieldsToWrapper($fields);
 
 		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist, true, true);
 		
@@ -175,8 +182,52 @@ class ContactFormWrapper extends ContactWrapper
 				$notify->setDomain($domain);
 				$notify->setMail(new Mail());
 				$notify->prepareContent($content->mail);
-				$notify->setNotifyReceiver($this->form->notifyEmail, '');
+				$notify->setNotifyReceiver($this->form->notifyEmail, $this->form->notifyEmail);
 				$notify->sendMail($content);
+			} catch (\Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}
+		}
+		
+		if($this->form->welcome === 'Si') {
+			try {
+				$content = json_decode($this->form->welcomeMail);
+
+				$welcome = new NotificationMail();
+				$welcome->setForm($this->form);
+				$welcome->setContact($contact);
+				$welcome->setAccount($this->account);
+				$welcome->setDomain($domain);
+				$welcome->setMail(new Mail());
+				$welcome->prepareContent($content->mail);
+				$welcome->setContactReceiver();
+				$welcome->sendMail($content);
+			} catch (\Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}
+		}
+	}
+	
+	public function updateContactFromForm($idContact, $fields)
+	{
+		$contactObj = $this->setFieldsToWrapper($fields);
+		$contact = $this->updateContactFromJsonData($idContact, $contactObj);
+		
+		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
+		
+		if($this->form->updatenotify === 'Si') {
+			try {
+				$content = json_decode($this->form->updatenotifyMail);
+				
+				$updatenotify = new NotificationMail();
+				$updatenotify->setForm($this->form);
+				$updatenotify->setContact($contact);
+				$updatenotify->setAccount($this->account);
+				$updatenotify->setDomain($domain);
+				$updatenotify->setMail(new Mail());
+				$updatenotify->prepareContent($content->mail);
+				$updatenotify->setContactReceiver();
+				$updatenotify->sendMail($content);
 			} catch (\Exception $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');
 			}

@@ -487,33 +487,29 @@ class ContactsController extends ControllerBase
 		try {
 			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
 			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
-			$idenfifiers = $linkEncoder->decodeLink('contacts/activate', $parameters);
+			$idenfifiers = $linkEncoder->decodeLink('contacts/update', $parameters);
 			list($idLink, $idContact, $idForm) = $idenfifiers;
 			
-			$form = Form::findFirst(array(
-				'conditions' => 'idForm = ?1',
-				'bind' => array(1 => $idForm)
-			));
-			
-			$contact = Contact::findFirst(array(
-				'conditions' => 'idContact = ?1',
-				'bind' => array(1 => $idContact)
-			));
-			
-			if( !$contact ) {
-				if( !isset($form) && !$form) {
+			if ($this->request->isPost()) {
+				$fields = $this->request->getPost();
+				$form = Form::findFirst(array(
+					'conditions' => 'idForm = ?1',
+					'bind' => array(1 => $idForm)
+				));
+				
+				if(!$form) {
 					return $this->response->redirect('error/link');
 				}
-				return $this->response->redirect($form->urlError, true);
+
+				$dbase = Dbase::findFirstByIdDbase($form->idDbase);
+
+				$wrapper = new ContactFormWrapper();
+				$wrapper->setForm($form);
+				$wrapper->setAccount($dbase->account);
+				$wrapper->setIdDbase($dbase->idDbase);
+				$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
+				$wrapper->updateContactFromForm($idContact, $fields);
 			}
-			
-			$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
-			
-			$wrapper = new ContactFormWrapper();
-			$wrapper->setForm($form);
-			$wrapper->setAccount($dbase->account);
-			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
-//			$wrapper->activateContactFromForm($contact); EDITAR CONTACTO!!!
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');
@@ -529,5 +525,6 @@ class ContactsController extends ControllerBase
 			}
 			return $this->response->redirect($form->urlError, true);
 		}
+		return $this->response->redirect($form->urlSuccess, true);
 	}
 }

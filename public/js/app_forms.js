@@ -16,7 +16,7 @@ App.Form = DS.Model.extend({
 	notify: DS.attr( 'boolean' ),
 	notifyemail: DS.attr( 'string' ),
 	notifymail: DS.attr( 'string' ),
-	updatenotify: DS.attr( 'string' ),
+	updatenotify: DS.attr( 'boolean' ),
 	updatenotifymail: DS.attr( 'string' ),
 	listselected: DS.attr( 'string' ),
 	content: DS.attr( 'string' ),
