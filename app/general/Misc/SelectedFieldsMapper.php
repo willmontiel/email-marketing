@@ -60,30 +60,22 @@ class SelectedFieldsMapper
 		$m = $this->rawMap;
 		unset($m['email']);
 		
-		\Phalcon\DI::getDefault()->get('logger')->log('newmap: ' . print_r($newmap, true));
 		// Transformaciones
 		$this->transformations  = array('email', 'domain');
 
 		// Posicion donde debe moverse el nuevo campo
 		$stposition = 2;
-		\Phalcon\DI::getDefault()->get('logger')->log('m: ' . print_r($m, true));
+		
 		// Recorrer la lista
 		foreach ($m as $idfield => $position) {
-			\Phalcon\DI::getDefault()->get('logger')->log('Idfield: ' . $idfield);
-			\Phalcon\DI::getDefault()->get('logger')->log('Position: ' . $position);
 			if ($position == null || $position == -1) {
-				\Phalcon\DI::getDefault()->get('logger')->log('Continue');
 				continue;
 			}
 			if (is_numeric($idfield)) {
-				\Phalcon\DI::getDefault()->get('logger')->log('Numeric');
-				\Phalcon\DI::getDefault()->get('logger')->log("Idfield: {$idfield}");
 				$name = $this->getCustomFieldName($idfield);
 				if ($name) {
-					\Phalcon\DI::getDefault()->get('logger')->log("Name: {$name}");
 					$this->fieldnames[] = $name;
 					$this->transformations[] = $this->cfieldstransform[$name];
-					\Phalcon\DI::getDefault()->get('logger')->log("Name: {$this->cfieldstransform[$name]}");
 					$newmap[$stposition] = $position;
 					$stposition++;
 				}
@@ -93,8 +85,6 @@ class SelectedFieldsMapper
 				$this->transformations[] = 'Date';
 			}
 			else {
-				\Phalcon\DI::getDefault()->get('logger')->log('None');
-				\Phalcon\DI::getDefault()->get('logger')->log("Idfield: {$idfield}");
 				$this->fieldnames[] = $idfield;
 				$this->transformations[] = 'Text';
 				$newmap[$stposition] = $position;
@@ -102,7 +92,6 @@ class SelectedFieldsMapper
 			}
 		}		
 		$this->mapping = $newmap;
-		\Phalcon\DI::getDefault()->get('logger')->log('transformation: ' . print_r($this->transformations, true));
 	}
 	
 	/**
@@ -139,12 +128,8 @@ class SelectedFieldsMapper
 			throw new \InvalidArgumentException("Invalid Email Address: [{$email}]");
 		}
 		
-		\Phalcon\DI::getDefault()->get('logger')->log('mapping: ' . print_r($this->mapping, true));
 		foreach ($this->mapping as $to => $from) {
 			if (isset($values[$from])) {
-				\Phalcon\DI::getDefault()->get('logger')->log('to: ' . $to);
-				\Phalcon\DI::getDefault()->get('logger')->log('from: ' . $from);
-				\Phalcon\DI::getDefault()->get('logger')->log('value: ' . $values[$from]);
 				$result[$to] = $this->transformValue($to, $values[$from]);
 			}
 		}

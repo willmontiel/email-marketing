@@ -420,6 +420,7 @@ class ImportContactWrapper
 		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
 					. "({$fields})";
 		
+		$this->log->log("SQL: {$importfile}");
 		// Ejecutar sentencia SQL
 		$this->db->execute($importfile);
 		$this->timer->endTimer('load-rows');
