@@ -257,9 +257,8 @@
 		<div class="bs-callout bs-callout-danger">
 			<p>Está a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos, pero no los contactos. Si está seguro que desea continuar haga clic en el botón eliminar, de lo contrario haga en clic en cancelar.</p>
 		</div>
-		
+		<button class="btn btn-default btn-delete btn-sm extra-padding" {{ '{{action delete this}}' }}>Eliminar</button>		
 		<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
-		<button class="btn btn-delete btn-sm extra-padding" {{ '{{action delete this}}' }}>Eliminar</button>
 	</div>
 </script>
 

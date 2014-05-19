@@ -58,8 +58,8 @@
 				</div>
 			</div>
 			<div class="form-actions">
-				<a href="{{ url('dbase') }}" class="btn btn-default btn-sm">Cancelar</a>
-				{{submit_button("Guardar", 'class' : "btn btn-guardar btn-sm ", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
+				<a href="{{ url('dbase') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
+				{{submit_button("Guardar", 'class' : "btn btn-guardar btn-sm extra-padding", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
 			</div>
 		</form>
 	</div>

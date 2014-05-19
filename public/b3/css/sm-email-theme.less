@@ -639,9 +639,10 @@ h4.numbers-contacts {
 
 /*** Sobre escritura de estilos de botones ***/
 .btn {
-	margin-bottom: 10px;
+	margin-bottom: 10px
 }
-.input-group-btn .btn {
+.input-group-btn .btn,
+#modal-simple .btn {
 	margin-bottom: 0;
 }
 .btn-default {
@@ -1070,6 +1071,11 @@ table.middle > tbody > tr > th > td {
 .pagination > li > a:hover {
 	background-color: @brand-white;
 }
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > span {
+	background-color: #e7f3f7;
+}
 /*   fin sobreescritura estilos bootstrap pagination   */
 
 
@@ -1291,4 +1297,7 @@ table.middle > tbody > tr > th > td {
 	font-size:45px;
 	color:@brand-red;
 	line-height: 1;
+}
+.input-group-sm > .input-group-addon {
+	width:13px;
 }

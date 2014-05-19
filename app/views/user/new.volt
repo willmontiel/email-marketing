@@ -58,7 +58,7 @@
 						<a href="{{ url('user') }}" class="btn btn-sm btn-default extra-padding">Cancelar</a>
 					</div>
 					<div class="col-xs-6">
-						{{ submit_button("Grabar", 'class' : "btn btn-sm btn-guardar extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+						{{ submit_button("Grabar", 'class' : "btn btn-sm btn-default btn-guardar extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
 					</div>
 				</div>
 			</form>

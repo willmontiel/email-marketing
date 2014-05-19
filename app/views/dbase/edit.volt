@@ -61,10 +61,10 @@
 					<div class="form-actions pull-right">
 						<div class="row">
 							<div class="col-xs-6">
-								<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default btn-sm">Cancelar</a>
+								<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
 							</div>
 							<div class="col-xs-6">
-								{{submit_button("Guardar", 'class' : "btn btn-default btn-guardar btn-sm", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
+								{{submit_button("Guardar", 'class' : "btn btn-default btn-guardar btn-sm extra-padding", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
 							</div>
 						</div>
 					</div>	

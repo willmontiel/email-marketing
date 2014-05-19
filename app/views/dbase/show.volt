@@ -186,8 +186,8 @@
 					</td>
 					<td>{{'{{defaultValue}}'}}</td>
 					<td>
-						{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<i class="icon-pencil"></i> Editar{{'{{/link-to}}'}}
-						{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-delete btn-sm extra-padding"}}'}}<i class="icon-trash"></i> Eliminar {{'{{/link-to}}'}}
+						{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="ghyphicon ghyphicon-pencil"></span> Editar{{'{{/link-to}}'}}
+						{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-delete btn-sm extra-padding"}}'}}<span class="ghyphicon ghyphicon-trash"></span> Eliminar {{'{{/link-to}}'}}
 					</td>
 				</tr>
 			{{'{{else}}'}}
@@ -201,7 +201,7 @@
 		{{'{{outlet}}'}}
 	</script>
 		<!------------------ Ember! ---------------------------------->
-		{#   Copntenido del tab general   #}
+		{#   Contenido del tab general   #}
 	<div id="emberAppContainer">
 	<script type="text/x-handlebars" data-template-name="index">
 		<h4>Información de la base de datos</h4>
@@ -337,10 +337,10 @@
 					<div class="form-actions">
 						<div class="row">
 							<div class="col-md-3 col-md-offset-5">
-								<button class="btn btn-guardar btn-sm extra-padding" {{' {{action "save" this}} '}}>Grabar</button>
+								<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
 							</div>
 							<div class="col-md-3">
-								<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
+								<button class="btn btn-default btn-guardar btn-sm extra-padding" {{' {{action "save" this}} '}}>Guardar</button>
 							</div>
 						</div>
 					</div>
@@ -395,7 +395,7 @@
 							<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
 						</div>
 						<div class="col-md-6">
-							<button class="btn btn-guardar btn-sm extra-padding" {{' {{action edit this}} '}}>Editar</button>
+							<button class="btn btn-default btn-guardar btn-sm extra-padding" {{' {{action edit this}} '}}>Guardar</button>
 						</div>
 					</div>
 				</div>
@@ -414,7 +414,7 @@
 					{{ '{{errors.errormsg}}' }}
 				</div>
 			{{ '{{/if}}' }}
-			<button {{'{{action eliminate this}}'}} class="btn btn-danger btn-sm extra-padding">Eliminar</button>
+			<button {{'{{action eliminate this}}'}} class="btn btn-default btn-delete btn-sm extra-padding">Eliminar</button>
 			<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>	
 		</div>
 	</script>

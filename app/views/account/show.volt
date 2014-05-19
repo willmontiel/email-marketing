@@ -1,11 +1,7 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
-	<div class="row">
-		<div class="col-md-12">
-			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
-		</div>
-	</div>
-
+	{#   navegacion botones pequeños   #}
+	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 	<div class="row">
 		<div class="col-md-12">
 			<h4 class="sectiontitle">Información de usuarios de cuentas</h4>
@@ -79,8 +75,8 @@
 					¿Está seguro que desea eliminar este usuario?
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					<a href="" id="deleteUser" class="btn btn-danger" >Eliminar</a>
+					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+					<a href="" id="deleteUser" class="btn btn-sm btn-default btn-delete extra-padding" >Eliminar</a>
 				</div>
 			</div>
 		</div>

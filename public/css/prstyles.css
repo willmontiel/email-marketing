@@ -717,9 +717,6 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .field-zone-name {
 }
 .field-content-zone {
-	padding-bottom: 10px;
-	padding-top: 10px;
-	padding-right: 10px;
 	cursor: move;
 }
 .field-option-disabled {
@@ -731,13 +728,6 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	background-color: rgb(247, 236, 222);
 	padding: 15px;
 	font-size: 14px;
-}
-.edit-row-in-zone{
-	margin-bottom: 10px;
-}
-.field-edit-zone-row {
-	margin-top: 5px;
-	margin-bottom: 25px;
 }
 .form-field-editing {
 	background-color: #d5d5d5 !important;

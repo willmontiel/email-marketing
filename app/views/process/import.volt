@@ -60,8 +60,8 @@
 		{%for res in result%}
 			<div class="row">
 				<div class="well relative">
-					<p>Importacion de Archivo: <strong>{{res['name']}}</strong></p>
-					{%if res['status'] == "En Ejecucion"%}
+					<p>Importación de archivo: <strong>{{res['name']}}</strong></p>
+					{%if res['status'] == "En Ejecución"%}
 						<p id="status-progress-{{res['idProcess']}}"></p>
 						<div id="progress-bar-{{res['idProcess']}}" class="progress progress-striped progress-blue active"></div>
 					{% endif %}
@@ -71,7 +71,7 @@
 					{%if res['status'] == "Finalizado"%}
 					<div class="text-right">
 						<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding btn-for-modal-accordion" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo-{{res['idProcess']}}">
-						  Ver Detalles
+						  Ver detalles
 						</a>
 					</div>
 					{% endif %}
@@ -122,13 +122,13 @@
 
 									<tr class="status-warning">
 										<td class="icon"><i class="icon-random"></i></td>
-										<td>No importados porque estan duplicados en el archivo </td>
+										<td>No importados porque están duplicados en el archivo </td>
 										<td><span class="blue big-number pull-right">{{res['repeated']}}</span></td>
 									</tr>
 
 									<tr class="status-pending">
 										<td class="icon"><i class="icon-exclamation-sign"></i></td>
-										<td>No importados por limite de contactos excedido </td>
+										<td>No importados por límite de contactos excedido </td>
 										<td><span class="blue big-number pull-right">{{res['limit']}}</span></td>
 									</tr>
 									<tr class="status-error">
@@ -149,7 +149,7 @@
 	{% else %}
 		<div class="bs-callout bs-callout-warning">
 			No ha importado contactos por este medio aún, para importar contactos desde una archivo .csv
-			dirijase a una lista de contactos y haga clic en el botón <strong>Importar contactos</strong>
+			diríjase a una lista de contactos y haga clic en el botón <strong>Importar contactos</strong>
 		</div>
 	{% endif %}
 {% endblock %}

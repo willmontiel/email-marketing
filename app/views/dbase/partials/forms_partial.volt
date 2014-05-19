@@ -49,9 +49,9 @@
 
 <script type="text/x-handlebars" data-template-name="forms/new">
 		<div class="col-md-6 col-xs-12 col-md-offset-1 border">
-			<div class="form-full-content"></div>
+			<form class="form-horizontal form-full-content" role="form"></form>
 
-			<div class="form-full-button"></div>
+			<form class="form-full-button" role="form"></form>
 		</div>
 		<div class="col-md-4 col-sm-8 col-xs-12">
 			<div class="form-menu">
@@ -69,14 +69,12 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/edit">
-	<div class="row">
-		<h4 class="sectiontitle">Editar formulario</h4>
-	</div>
+	<h4 class="sectiontitle">Editar formulario</h4>
 	{{ partial("dbase/partials/form_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/remove">
-			<h3>Eliminar un formulario</h3>
+			<h4 class="sectiontitle">Eliminar un formulario</h4>
 				<div class="box-content padded">			
 					<p>¿Está seguro que desea eliminar el formulario <strong>{{'{{name}}'}}</strong>?</p>
 					{{ '{{#if errors.errormsg}}' }}
@@ -84,8 +82,8 @@
 							{{ '{{errors.errormsg}}' }}
 						</div>
 					{{ '{{/if}}' }}
-					<button {{'{{action eliminate this}}'}} class="btn btn-danger">Eliminar</button>
-					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>	
+					<button {{'{{action eliminate this}}'}} class="btn btn-delete btn-sm extra-padding">Eliminar</button>
+					<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>	
 				</div>
 			</div>
 		</div>	

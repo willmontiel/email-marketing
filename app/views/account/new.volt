@@ -8,9 +8,9 @@
 	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 
 	<div class="row">
-		<h4 class="sectiontitle">Crear un nueva cuenta</h4>
+		<h4 class="sectiontitle">Crear una nueva cuenta</h4>
 		<div class="bs-callout bs-callout-info">
-			Aqui puede crear una nueva cuenta, configurar 
+			Aquí puede crear una nueva cuenta, configurarla, etc
 		</div>
 		{{ flashSession.output() }}
 	</div>
@@ -120,7 +120,7 @@
 							<a href="{{ url('account') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
 						</div>
 						<div class="col-xs-6">
-							{{ submit_button("Registrar", 'class' : "btn btn-guardar btn-sm extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+							{{ submit_button("Registrar", 'class' : "btn btn-sm btn-default btn-guardar extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
 						</div>
 					</div>
 				</div>
