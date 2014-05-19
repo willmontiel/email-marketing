@@ -301,7 +301,7 @@ class ContactsController extends ControllerBase
 		$header = $this->request->getPost('header');
 		$fields['email'] = $this->request->getPost('email');
 		$fields['name'] = $this->request->getPost('name');
-		$fields['lastname'] = $this->request->getPost('lastname');
+		$fields['lastname'] = $this->request->getPost('lastname');		
 		$fields['birthdate'] = $this->request->getPost('birthdate');
 		$delimiter = $this->request->getPost('delimiter');
 		
