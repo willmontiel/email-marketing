@@ -153,22 +153,15 @@ class SelectedFieldsMapper
 					break;
 				case 'Date':
 					try {
-						// Intentar parse con Fecha y hora
-						$d = \DateTime::createFromFormat('Y-m-d H:i:s', $value);
-						if (!$d) {
-							// Intentar solo con fecha
-							$d = \DateTime::createFromFormat('Y-m-d', $value);
-							if (!$d) {
-								$d = new \DateTime('now');
-							}
-							$d->setTime(0,0,0);
-						}
+						$d = $this->getTimeStamp($value);
+					
 						if ($d->getTimestamp() < 0) {
 							$d = new \DateTime('now');
 							$d->setTime(0,0,0);
 						}
 						$result = ($d)?$d->getTimestamp():0;
-					} catch (Exception $ex) {
+					} 
+					catch (Exception $ex) {
 						$result = 0;
 					}
 					break;
@@ -190,6 +183,31 @@ class SelectedFieldsMapper
 		return $value;
 	}
 	
+	protected function getTimeStamp($date)
+	{
+		$formats = array(
+			'Y-m-d H:i:s', 
+			'Y-m-d', 
+			'Y/m/d H:i:s', 
+			'Y/m/d',
+			'd-m-Y H:i:s',
+			'd-m-Y',
+			'd/m/Y H:i:s',
+			'd/m/Y',
+			'm-d-Y H:i:s',
+			'm-d-Y',
+			'm/d/Y H:i:s',
+			'm/d/Y'
+		);
+		
+		foreach ($formats as $format) {
+			$d = \DateTime::createFromFormat($format, $date);
+			if ($d) {
+				return $d;
+			}
+		}
+	}
+
 	protected function getCustomFieldName($fieldid)
 	{
 		if (isset($this->dbfields[$fieldid])) {
