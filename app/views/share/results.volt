@@ -9,7 +9,7 @@
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('javascripts/moment/moment-with-langs.min.js') }}
-	{{ javascript_include('js/app_statistics.js') }}
+	{{ javascript_include('js/app_public_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
 	{{ javascript_include('highcharts/highcharts.js')}}
 	{{ javascript_include('highcharts/modules/exporting.js')}}

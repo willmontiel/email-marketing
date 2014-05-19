@@ -279,7 +279,7 @@ class StatisticsWrapper extends BaseWrapper
 		return $response;
 	}
 	
-	public function findMailOpenStats($idMail, $type)
+	public function findMailOpenStats($idMail, $type = 'private')
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
@@ -400,7 +400,7 @@ class StatisticsWrapper extends BaseWrapper
 
 
 
-	public function findMailClickStats($idMail, $filter, $type)
+	public function findMailClickStats($idMail, $filter, $type = 'private')
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -548,7 +548,7 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownclick' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
 	
-	public function findMailUnsubscribedStats($idMail, $type)
+	public function findMailUnsubscribedStats($idMail, $type = 'private')
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		
@@ -611,7 +611,7 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownunsubscribed' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}
 	
-	public function findMailSpamStats($idMail, $type)
+	public function findMailSpamStats($idMail, $type = 'private')
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		
@@ -669,7 +669,7 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownspam' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}
 	
-	public function findMailBouncedStats($idMail, $type, $filter, $request)
+	public function findMailBouncedStats($idMail, $type, $filter, $request = 'private')
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
