@@ -13,6 +13,7 @@
 		email: DS.attr( 'string' ),	
 		name: DS.attr( 'string' ),
 		lastname: DS.attr( 'string' ),
+		birthdate: DS.attr( 'string' ),
 		header :DS.attr( 'boolean' ),
 		delimiter: DS.attr( 'string' )
 		{%for field in customfields%}
@@ -109,6 +110,12 @@
 									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="lastname" id="lastname" name="lastname" class="form-control"}}'}}
 								</th>
 							</tr>
+							<tr>		
+								<th>Fecha de nacimiento</th>
+								<th>
+									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="birthdate" id="birthdate" name="birthdate" class="form-control"}}'}}
+								</th>
+							</tr>
 							{%for field in customfields %}
 							<tr>		
 								<th>{{field.name}}</th>
@@ -142,6 +149,10 @@
 							<tr>
 								<th>Apellido: </th>
 								<td>{{'{{lastnameF}}'}}</td>
+							</tr>
+							<tr>
+								<th>Fecha de nacimiento: </th>
+								<td>{{'{{birthdateF}}'}}</td>
 							</tr>
 						{%for field in customfields%}
 							<tr>

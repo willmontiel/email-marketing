@@ -16,10 +16,11 @@
 		
 		var myContactModel = {
 			list: DS.belongsTo('list'),
-			email: DS.attr( 'string' ),
-			name: DS.attr( 'string' ),
-			lastName: DS.attr( 'string' ),
-			status: DS.attr( 'number' ),
+			email: DS.attr('string'),
+			name: DS.attr('string'),
+			lastName: DS.attr('string'),
+			birthDate: DS.attr('string'),
+			status: DS.attr('number'),
 			activatedOn: DS.attr('string'),
 			bouncedOn: DS.attr('string'),
 			subscribedOn: DS.attr('string'),

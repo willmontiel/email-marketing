@@ -302,6 +302,7 @@ class ContactsController extends ControllerBase
 		$fields['email'] = $this->request->getPost('email');
 		$fields['name'] = $this->request->getPost('name');
 		$fields['lastname'] = $this->request->getPost('lastname');
+		$fields['birthdate'] = $this->request->getPost('birthdate');
 		$delimiter = $this->request->getPost('delimiter');
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
@@ -312,7 +313,6 @@ class ContactsController extends ControllerBase
 			$fields[$field->idCustomField] = $this->request->getPost($namefield);
 		}
 		
-
 		$destiny =  "../../../tmp/ifiles/".$nameFile;
 		$idAccount = $this->user->account->idAccount;
 		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);
