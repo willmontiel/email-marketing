@@ -501,7 +501,7 @@ class ContactWrapper extends BaseWrapper
 			$name = "campo".$field->idCustomField;
 			$value = null;
 			
-			$this->logger->log("date: " . print_r($data, true));
+//			$this->logger->log("date: " . print_r($data, true));
 			
 			if ($field->type == "Date") {
 				if($data->$name != null){
@@ -704,7 +704,7 @@ class ContactWrapper extends BaseWrapper
 				switch ($field->type) {
 					case 'Date':
 						if($fvalue['numberValue']) {
-							$value = date('Y-m-d',$fvalue['numberValue']);
+							$value = date('d/m/Y',$fvalue['numberValue']);
 						} else {
 							$value = "";
 						}

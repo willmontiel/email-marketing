@@ -481,7 +481,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 						switch ($field['type']) {
 							case 'Date':
 								if($fvalue['numberValue']) {
-									$value = date('Y-m-d',$fvalue['numberValue']);
+									$value = date('d/m/Y',$fvalue['numberValue']);
 								} else {
 									$value = "";
 								}
