@@ -59,13 +59,13 @@ class SelectedFieldsMapper
 		$newmap = array(0 => $this->rawMap['email'], 1 => $this->rawMap['email']);
 		$m = $this->rawMap;
 		unset($m['email']);
-
+		
 		// Transformaciones
 		$this->transformations  = array('email', 'domain');
 
 		// Posicion donde debe moverse el nuevo campo
 		$stposition = 2;
-
+		
 		// Recorrer la lista
 		foreach ($m as $idfield => $position) {
 			if ($position == null || $position == -1) {
@@ -80,6 +80,10 @@ class SelectedFieldsMapper
 					$stposition++;
 				}
 			}
+			else if ($idfield == 'birthdate') {
+				$this->fieldnames[] = $idfield;
+				$this->transformations[] = 'Date';
+			}
 			else {
 				$this->fieldnames[] = $idfield;
 				$this->transformations[] = 'Text';
@@ -88,7 +92,6 @@ class SelectedFieldsMapper
 			}
 		}		
 		$this->mapping = $newmap;
-		
 	}
 	
 	/**
