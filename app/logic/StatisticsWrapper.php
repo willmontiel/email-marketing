@@ -548,34 +548,40 @@ class StatisticsWrapper extends BaseWrapper
 		$unsubscribed = array();
 		$unsubscribedcontact = array();
 		
-		if ($type == 'private') {
-			$phql = "SELECT m.idContact, m.unsubscribe AS date, c.name, c.lastName, e.email 
-				FROM Mxc AS m
-					JOIN Contact AS c ON (c.idContact = m.idContact)
-					JOIN Email AS e ON (c.idEmail = e.idEmail)
-				WHERE m.idMail = :idMail: AND m.unsubscribe != 0";
-			
-			$phql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-			$query = $manager->createQuery($phql);
-			$unsubscribeds = $query->execute(array(
-				'idMail' => $idMail
-			));
-		}
+		$phql = "SELECT m.idContact, m.unsubscribe AS date, c.name, c.lastName, e.email 
+			FROM Mxc AS m
+				JOIN Contact AS c ON (c.idContact = m.idContact)
+				JOIN Email AS e ON (c.idEmail = e.idEmail)
+			WHERE m.idMail = :idMail: AND m.unsubscribe != 0";
+
+		$phql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+		$query = $manager->createQuery($phql);
+		$unsubscribeds = $query->execute(array(
+			'idMail' => $idMail
+		));
 		
 		$count = count($unsubscribeds);
 		
 		if ($count) {
-			foreach ($unsubscribeds as $u) {
-				$unsubscribedcontact[] = array(
-					'id' => $u->idContact,
-					'email' => $u->email,
-					'date' => date('Y-m-d h:i', $u->date),
-					'name' => $u->name,
-					'lastname' => $u->lastName
-				);
-			
-				$unsubscribed[] = $u->date;
+			if ($type == 'private') {
+				foreach ($unsubscribeds as $u) {
+					$unsubscribedcontact[] = array(
+						'id' => $u->idContact,
+						'email' => $u->email,
+						'date' => date('Y-m-d h:i', $u->date),
+						'name' => $u->name,
+						'lastname' => $u->lastName
+					);
+
+					$unsubscribed[] = $u->date;
+				}
 			}
+			else {
+				foreach ($unsubscribeds as $u) {
+					$unsubscribed[] = $u->date;
+				}
+			}
+			
 			
 			sort($unsubscribed);
 			
