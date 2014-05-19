@@ -20,7 +20,7 @@ RedactorPlugins.advanced = {
     insertFromMyModal: function(html)
     {
         this.selectionRestore();
-        this.insertHtml($(html.target).attr('value'));
+        this.insertHtml('<a href="' + $(html.target).attr('value') + '" >Actualice sus datos aquí</a>');
         this.modalClose();
 		$.gritter.add({title: 'Recuerde', text: 'El formulario que acabo de agregar debe pertenecer a la base de datos de los destinatarios', sticky: false, time: 4000});
     }

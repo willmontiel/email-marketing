@@ -29,7 +29,7 @@
 				<label for="welcome" class="col-sm-3 control-label">Aviso de Actualización:</label>
 				<div class="col-md-9">
 					{{' {{input type="checkbox" id="updatenotify" name="updatenotify" checked=updatenotify valueBinding="updatenotify"}}' }}
-					<label for="welcome"><span class="text-muted">Esta opción envía un correo al usuario una vez que se haya suscrito!</span></label>
+					<label for="welcome"><span class="text-muted">Esta opción envía un correo al contacto una vez que haya editado sus datos!</span></label>
 				</div>
 			</div>
 			{{ '{{#if this.updatenotify }}' }}
@@ -37,10 +37,10 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="bs-callout bs-callout-info">
-							<h4>Información de Bienvenida</h4>
-							<p>El mensaje de bienvenida es utilizado cuando el usuario se ha suscrito exitosamente
-							a la lista, en el cual se enviara un correo con un contenido de bienvenida. Selecciona aquí
-							el contenido del correo, el asunto y el origen.
+							<h4>Información de Actualización</h4>
+							<p>El mensaje de notificación es utilizado cuando el contacto ha editado su información 
+								correctamente, en el cual se enviara un correo con un contenido de aviso. Selecciona aquí
+								el contenido del correo, el asunto y el origen.
 							</p>
 						</div>
 					</div>
@@ -89,7 +89,7 @@
 					<div class="row">
 						<div class="bs-callout bs-callout-info">
 							<h4>Información de Notificación</h4>
-							<p>Reciba un correo de notificacion cada vez que un usuario se suscriba a su lista
+							<p>Reciba un correo de notificacion cada vez que un usuario se actualice
 							por medio de este formulario. Selecciona aquí el contenido del correo, el asunto 
 							y el origen.
 							</p>
