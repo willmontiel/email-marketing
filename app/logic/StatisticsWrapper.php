@@ -117,7 +117,7 @@ class StatisticsWrapper extends BaseWrapper
 		));
 		
 		
-		$this->logger->log("Stats: " . print_r($statisticsData, true));
+//		$this->logger->log("Stats: " . print_r($statisticsData, true));
 		$response['summaryChartData'] = $summaryChartData;
 		$response['statisticsData'] = $statisticsData;
 		$response['statisticsSocial'] = $socialStats->getFirst();
