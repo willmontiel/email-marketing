@@ -40,7 +40,7 @@ App.Drilldownunsubscribed = DS.Model.extend({
 });
 
 App.Drilldownbounced = DS.Model.extend({
-	statistics: DS.attr('string'),
+	statistics: DS.attr('string')
 });
 
 App.Drilldownspam = DS.Model.extend({
