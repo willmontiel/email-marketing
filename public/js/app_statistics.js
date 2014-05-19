@@ -153,7 +153,7 @@ App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginatio
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
-		App.set('title', 'Estadisticas de apertura');
+		App.set('title', 'Estadísticas de apertura');
 		App.set('subtitle', 'Cantidad de aperturas');
 		App.set('ref', 'Apertura(s)');
 	},
@@ -171,7 +171,7 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
-		App.set('title', 'Estadisticas de clics (únicos)');
+		App.set('title', 'Estadísticas de clics (únicos)');
 		App.set('subtitle', 'Cantidad de clics');
 		App.set('ref', 'Clic(s) únicos');
 	},
@@ -205,6 +205,9 @@ App.DrilldownUnsubscribedController = Ember.ArrayController.extend(Ember.MixinPa
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
+		App.set('title', 'Estadísticas de des-suscritos (únicos)');
+		App.set('subtitle', 'Cantidad de des-suscritos');
+		App.set('ref', 'Des-suscrito(s)');
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
@@ -235,7 +238,7 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
 		App.set('chartData', statistics);
-		App.set('title', 'Estadisticas de rebotes');
+		App.set('title', 'Estadísticas de rebotes');
 		App.set('subtitle', 'Vea el detalle de los rebotes suaves y duros.');
 		App.set('multValChart', info);
 	},

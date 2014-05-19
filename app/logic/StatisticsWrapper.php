@@ -577,6 +577,17 @@ class StatisticsWrapper extends BaseWrapper
 				$unsubscribed[] = $u->date;
 			}
 			
+			sort($unsubscribed);
+			
+			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+			$timePeriod->setData($unsubscribed);
+			$timePeriod->processTimePeriod();
+
+			$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Clics');
+			$periodModel->setTimePeriod($timePeriod);
+			$periodModel->modelTimePeriod();
+			$statsUnsubscribed = $periodModel->getModelTimePeriod();
+			
 			$phqlCount = "SELECT COUNT(*) AS total
 						FROM Mxc AS m
 							JOIN Contact AS c ON (c.idContact = m.idContact)
@@ -595,7 +606,7 @@ class StatisticsWrapper extends BaseWrapper
 		
 		$statistics[] = array(
 			'id' => $idMail,
-			'statistics' => json_encode($unsubscribed),
+			'statistics' => json_encode($statsUnsubscribed),
 			'details' => json_encode($unsubscribedcontact)
 		);
 		
