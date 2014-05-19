@@ -215,9 +215,9 @@ class ContactFormWrapper extends ContactWrapper
 		
 		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 		
-		if($this->form->updatenotify === 'Si') {
+		if($this->form->notify === 'Si') {
 			try {
-				$content = json_decode($this->form->updatenotifyMail);
+				$content = json_decode($this->form->notifyMail);
 				
 				$updatenotify = new NotificationMail();
 				$updatenotify->setForm($this->form);
