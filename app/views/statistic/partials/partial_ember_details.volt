@@ -91,7 +91,7 @@
 	{{ '{{#if App.chartData}}' }}
 		<h4 class="sectiontitle">Desuscritos</h4>	
 		<div class="wrapper">
-			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
+			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="bar-drilldown"}}'}}
 		</div>
 
 		<hr>
