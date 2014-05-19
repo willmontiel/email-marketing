@@ -99,25 +99,7 @@
 			{{ partial("statistic/partials/social_media_stats_partial") }}
 			<div class="space"></div>			
 			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
-			{{ partial("statistic/partials/shareandcompare_partial") }}
-
-{#
-			<div class="row">
-				<div class="col-md-7">
-					{{ '{{view Ember.Select
-						class="form-control"
-						id="select-options-for-compare"
-						contentBinding="App.mails"
-						optionValuePath="content.id"
-						optionLabelPath="content.name"
-						valueBinding="App.mailCompare"}}'
-					}}
-				</div>
-				<div class="col-md-5">
-					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-				</div>
-			</div>
-#}				
+			{{ partial("statistic/partials/shareandcompare_partial") }}	
 			
 			{#   partial para tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
