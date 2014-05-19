@@ -60,13 +60,13 @@ class SelectedFieldsMapper
 		$m = $this->rawMap;
 		unset($m['email']);
 		
-		Phalcon\DI::getDefault()->get('logger')->log('newmap: ' . print_r($newmap, true));
+		\Phalcon\DI::getDefault()->get('logger')->log('newmap: ' . print_r($newmap, true));
 		// Transformaciones
 		$this->transformations  = array('email', 'domain');
 
 		// Posicion donde debe moverse el nuevo campo
 		$stposition = 2;
-		Phalcon\DI::getDefault()->get('logger')->log('m: ' . print_r($m, true));
+		\Phalcon\DI::getDefault()->get('logger')->log('m: ' . print_r($m, true));
 		// Recorrer la lista
 		foreach ($m as $idfield => $position) {
 			if ($position == null || $position == -1) {
@@ -89,7 +89,7 @@ class SelectedFieldsMapper
 			}
 		}		
 		$this->mapping = $newmap;
-		Phalcon\DI::getDefault()->get('logger')->log('transformation: ' . print_r($this->transformations, true));
+		\Phalcon\DI::getDefault()->get('logger')->log('transformation: ' . print_r($this->transformations, true));
 	}
 	
 	/**
@@ -126,12 +126,12 @@ class SelectedFieldsMapper
 			throw new \InvalidArgumentException("Invalid Email Address: [{$email}]");
 		}
 		
-		Phalcon\DI::getDefault()->get('logger')->log('mapping: ' . print_r($this->mapping, true));
+		\Phalcon\DI::getDefault()->get('logger')->log('mapping: ' . print_r($this->mapping, true));
 		foreach ($this->mapping as $to => $from) {
 			if (isset($values[$from])) {
-				Phalcon\DI::getDefault()->get('logger')->log('to: ' . $to);
-				Phalcon\DI::getDefault()->get('logger')->log('from: ' . $from);
-				Phalcon\DI::getDefault()->get('logger')->log('value: ' . $values[$from]);
+				\Phalcon\DI::getDefault()->get('logger')->log('to: ' . $to);
+				\Phalcon\DI::getDefault()->get('logger')->log('from: ' . $from);
+				\Phalcon\DI::getDefault()->get('logger')->log('value: ' . $values[$from]);
 				$result[$to] = $this->transformValue($to, $values[$from]);
 			}
 		}
