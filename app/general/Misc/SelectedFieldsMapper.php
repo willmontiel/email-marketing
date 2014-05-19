@@ -83,6 +83,8 @@ class SelectedFieldsMapper
 			else if ($idfield == 'birthdate') {
 				$this->fieldnames[] = $idfield;
 				$this->transformations[] = 'Date';
+				$newmap[$stposition] = $position;
+				$stposition++;
 			}
 			else {
 				$this->fieldnames[] = $idfield;
