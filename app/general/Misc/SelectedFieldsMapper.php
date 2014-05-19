@@ -90,7 +90,9 @@ class SelectedFieldsMapper
 				$newmap[$stposition] = $position;
 				$stposition++;
 			}
-		}		
+		}	
+		
+		\Phalcon\DI::getDefault()->get('logger')->log('newmap: ' . print_r($newmap, true));
 		$this->mapping = $newmap;
 	}
 	
@@ -121,7 +123,9 @@ class SelectedFieldsMapper
 	public function mapValues($values)
 	{
 		$result = array();
-
+		
+		\Phalcon\DI::getDefault()->get('logger')->log('mapping: ' . print_r($this->mapping, true));
+		
 		// Validar correo
 		$email = $values[$this->mapping[0]];
 		if (! \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
