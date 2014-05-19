@@ -419,7 +419,6 @@ class StatisticsWrapper extends BaseWrapper
 		$links = array();
 		$valueLinks = array();
 		$arrayLinks = array();
-		$info = array();
 		
 		if (count($total) > 0 ) {
 			foreach ($total as $t) {
@@ -435,11 +434,6 @@ class StatisticsWrapper extends BaseWrapper
 				
 				$arrayLinks[$t['idMailLink']] = 0;
 			}
-			
-			$info[] = array(
-				'amount' => count($valueLinks),
-				'value' => $valueLinks
-			);
 		}
 		
 		/**
@@ -540,7 +534,6 @@ class StatisticsWrapper extends BaseWrapper
 			'statistics' => json_encode($statsLinks),
 			'details' => json_encode($clickcontact),
 			'links' => json_encode($links),
-			'multvalchart' => json_encode($info),
 		);
 		
 		$this->pager->setRowsInCurrentPage(count($clickcontact));
