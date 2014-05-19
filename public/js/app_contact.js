@@ -221,7 +221,7 @@ App.ContactsImportController = Ember.ObjectController.extend({
 App.ContactsNewView = Ember.View.extend({
   didInsertElement: function() {
 		$('.date_view_picker').datetimepicker({
-			format:'Y-m-d',
+			format:'d/m/Y',
 			inline:true,
 			timepicker:false,
 			lang:'es',
@@ -230,44 +230,62 @@ App.ContactsNewView = Ember.View.extend({
     }
 });
 
-App.ContactsEditView = Ember.View.extend({
-  didInsertElement: function() {
-        $('.date_view_picker').datetimepicker({
-			format:'Y-m-d',
-			inline:true,
-			timepicker:false,
-			lang:'es',
-			startDate: 0
-		});
-    }
-});       
-
-
-//App.DatePickerField = Em.View.extend({
-//  templateName: 'datepicker',
+//App.ContactsEditView = Ember.View.extend({
 //  didInsertElement: function() {
-//    var onChangeDate, self;
-//    self = this;
-//    onChangeDate = function(ev) {
-//      return self.set("value", moment.utc(ev.date).format("YYYY-MM-DD"));
-//    };
-//    return this.$('.datepicker').datepicker({
-//      separator: "-"
-//    }).on("changeDate", onChangeDate);
-//  }
+//        $('.date_view_picker').datetimepicker({
+//			format:'Y-m-d',
+//			inline:true,
+//			timepicker:false,
+//			lang:'es',
+//			startDate: 0
+//		});
+//    }
+//});       
+
+
+App.DatePickerField = Em.View.extend({
+  templateName: 'datepicker',
+  didInsertElement: function() {
+    var onChangeDate, self;
+    self = this;
+    onChangeDate = function(ev) {
+      return self.set("value", moment.utc(ev.date).format("DD-MM-YYYY"));
+    };
+    return this.$('.datepicker').datepicker({
+      separator: "/"
+    }).on("changeDate", onChangeDate);
+  }
+});
+
+
+//App.DateTimePickerField = Em.View.extend({
+//	templateName: 'datetimepicker',
+//	didInsertElement: function() {
+//		$('.datepicker').datepicker({
+//			format: 'dd/mm/yyyy',
+//			autoclose: true,
+//			todayBtn: true,
+//			todayHighlight: true
+//		});
+//	},
+//			
+//	onChangeValue: function () {
+//		var fecha = new Date(this.get('value'));
+//		console.log(fecha);
+//	}.observes('this.value')
 //});
 
-App.DatePicker = Em.View.extend({
-	templateName: 'datepicker_b3',
-	didInsertElement: function() {
-		$('.datepicker').datetimepicker({
-//			format:'dd/mm/yyyy',
-			pickDate: true,                
-			pickTime: false,  
-			showToday: true,
-		});
-	}
-});
+//App.DatePicker = Em.View.extend({
+//	templateName: 'datepicker_b3',
+//	didInsertElement: function() {
+//		$('.datepicker').datetimepicker({
+////			format:'dd/mm/yyyy',
+//			pickDate: true,                
+//			pickTime: false,  
+//			showToday: true,
+//		});
+//	}
+//});
 
 
 //App.DropDownSelect = Ember.View.Extend({

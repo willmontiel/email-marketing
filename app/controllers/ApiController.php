@@ -948,6 +948,7 @@ class ApiController extends ControllerBase
 
 		$contactdata = $wrapper->convertContactToJson($contact);
 		
+//		$this->logger->log("Contact: " . print_r($contactdata, true));
 		$this->traceSuccess("Edit contact, idContact: {$contactdata['id']} / email: {$contactdata['email']} / idContactlist: {$idContactlist}");
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 	}

@@ -105,14 +105,14 @@ App.EmberXEditableDateView = Em.View.extend({
 		this.selobj = this.$('.x-editable').editable({ 
 			type: 'date', 
 			title: self.title,
-			format: 'yyyy/mm/dd',    
-			viewformat: 'yyyy/mm/dd',
+			format: 'dd/mm/yyyy',    
+			viewformat: 'dd/mm/yyyy',
 			datepicker: {weekStart: 1},
 			success: function (resp, newValue) { 
 				var mes_tmp = "0" + (newValue.getUTCMonth()+1);
 				mes_tmp = mes_tmp.substring(mes_tmp.length-2);
 
-				var fecha_total = newValue.getUTCFullYear() + '-' + mes_tmp + '-' + newValue.getUTCDate();
+				var fecha_total = newValue.getUTCDate() + '/' + mes_tmp + '/' + newValue.getUTCFullYear();
 
 				self.set('value', fecha_total);
 
