@@ -51,6 +51,10 @@ class FormController extends ControllerBase
 				'bind' => array(1 => $idForm,
 								2 => $contact->idDbase)
 			));
+			
+			if(!$form) {
+				return $this->response->redirect('error');
+			}
 
 			$creator = new FormCreator();
 			$creator->setContact($contact);
