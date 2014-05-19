@@ -32,8 +32,7 @@ App.Drilldownopen = DS.Model.extend({
 
 App.Drilldownclick = DS.Model.extend({
 	statistics: DS.attr('string'),
-	links: DS.attr('string'),
-	multvalchart: DS.attr('string')
+	links: DS.attr('string')
 });
 
 App.Drilldownunsubscribed = DS.Model.extend({
@@ -42,7 +41,6 @@ App.Drilldownunsubscribed = DS.Model.extend({
 
 App.Drilldownbounced = DS.Model.extend({
 	statistics: DS.attr('string'),
-	multvalchart: DS.attr('string')
 });
 
 App.Drilldownspam = DS.Model.extend({
@@ -68,8 +66,6 @@ App.DrilldownOpensRoute = Ember.Route.extend({
 		return this.store.find('drilldownopen');	
 	},
 	deactivate: function () {
-		App.set('scaleSelected', null);
-		App.set('multValChart', null);
 		App.set('chartData', null);
 	},
 	setupController: function(controller, model) {
@@ -83,8 +79,6 @@ App.DrilldownClicksRoute = Ember.Route.extend({
 		return this.store.find('drilldownclick');		
 	},
 	deactivate: function () {
-		App.set('scaleSelected', null);
-		App.set('multValChart', null);
 		App.set('chartData', null);
 	},
 	setupController: function(controller, model) {
@@ -99,8 +93,6 @@ App.DrilldownUnsubscribedRoute = Ember.Route.extend({
 		return this.store.find('drilldownunsubscribed');	
 	},
 	deactivate: function () {
-		App.set('scaleSelected', null);
-		App.set('multValChart', null);
 		App.set('chartData', null);
 	},
 	setupController: function(controller, model) {
@@ -114,8 +106,6 @@ App.DrilldownSpamRoute = Ember.Route.extend({
 		return this.store.find('drilldownspam');	
 	},
 	deactivate: function () {
-		App.set('scaleSelected', null);
-		App.set('multValChart', null);
 		App.set('chartData', null);
 	},
 	setupController: function(controller, model) {
@@ -129,8 +119,6 @@ App.DrilldownBouncedRoute = Ember.Route.extend({
 		return this.store.find('drilldownbounced');	
 	},
 	deactivate: function () {
-		App.set('scaleSelected', null);
-		App.set('multValChart', null);
 		App.set('chartData', null);
 	},
 	setupController: function(controller, model) {
@@ -168,13 +156,10 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 	linkSelected: null,
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
-		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
-		info = info.length > 0 ? info : null;
 		App.set('chartData', statistics);
 		App.set('title', 'Estadisticas de clics (únicos)');
 		App.set('subtitle', 'Cantidad de clics');
 		App.set('ref', 'Clic(s) únicos');
-		App.set('multValChart', info);
 	},
 	loadDataDetails: function() {
 		var links = JSON.parse(this.get('model').content[0].get('links'));
@@ -208,11 +193,9 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 	bouncedFilter: null,
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
-		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
 		App.set('chartData', statistics);
 		App.set('title', 'Estadisticas de rebotes');
 		App.set('subtitle', 'Vea el detalle de los rebotes suaves y duros.');
-		App.set('multValChart', info);
 	},
 	bouncedData: function () {
 		var data = App.get('chartData');
