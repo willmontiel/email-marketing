@@ -1,14 +1,21 @@
 <?php
-//Phalcon\DI::getDefault()->get('logger')->log('Entra');
+//->log('Entra');
 class StatisticsWrapper extends BaseWrapper
 {
-	public function showMailStatistics(Mail $mail)
+	protected $logger;
+	public function __construct() 
+	{
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
+	}
+
+
+	public function showMailStatistics(Mail $mail, $compare = true)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		$total = $mail->totalContacts;
 		$opens = ($mail->uniqueOpens != null) ? $mail->uniqueOpens : 0;
 		$bounced = ($mail->bounced != null) ? $mail->bounced : 0;
-		$clicks = ($mail->clicks != null) ? $mail->clicks : 0;
+//		$clicks = ($mail->clicks != null) ? $mail->clicks : 0;
 		$unopened = $total -($opens + $bounced);
 		$unsubscribed = ($mail->unsubscribed != null) ? $mail->unsubscribed : 0;
 		$spam = ($mail->spam != null) ? $mail->spam : 0;
@@ -51,7 +58,9 @@ class StatisticsWrapper extends BaseWrapper
 		$hardBounced = $sqlHardBounced->execute(array(
 			'idMail' => $mail->idMail
 		));
-		Phalcon\DI::getDefault()->get('logger')->log($hardBounced['total']->total);
+//		Phalcon\DI::getDefault()->get('logger')->log($hardBounced['total']->total);
+		
+//		$this->logger->log("Rebotes: {$bounced}");
 		$statisticsData->bounced = $bounced;
 		$statisticsData->statbounced = round(( $bounced / $total ) * 100 );
 		$statisticsData->hardbounced = $hardBounced['total']->total;
@@ -68,19 +77,52 @@ class StatisticsWrapper extends BaseWrapper
 			'conditions' => 'idAccount = ?1 AND status = "Sent" AND idMail != ?2',
 			'bind' => array(1 => $this->account->idAccount, 2 => $mail->idMail)
 		));
-
-		$mailCompare = array();
-		foreach ($allMails as $m) {
-			$objfc = new stdClass();
-			$objfc->id = $m->idMail;
-			$objfc->name = $m->name;
-			$mailCompare[] = $objfc;				
+		
+		if ($compare) {
+			$mailCompare = array();
+			foreach ($allMails as $m) {
+				$objfc = new stdClass();
+				$objfc->id = $m->idMail;
+				$objfc->name = $m->name;
+				$mailCompare[] = $objfc;				
+			}
+				$response['compareMail'] = $mailCompare;
 		}
-
+		
+		$snQuery = "SELECT SUM(m.share_fb) AS share_fb, 
+						  SUM(m.share_tw) AS share_tw, 
+						  SUM(m.share_gp) AS share_gp, 
+						  SUM(m.share_li) AS share_li, 
+						  SUM(m.open_fb) AS open_fb, 
+						  SUM(m.open_tw) AS open_tw, 
+						  SUM(m.open_gp) AS open_gp, 
+						  SUM( m.open_li) AS open_li
+					  FROM Mxc AS m
+				   WHERE m.idMail = :idMail:";
+		$social = $manager->createQuery($snQuery);
+		$socialStats = $social->execute(array(
+			'idMail' => $mail->idMail
+		));
+		
+		
+		$snCliksQuery = "SELECT SUM(l.click_fb) AS click_fb, 
+						  SUM(l.click_tw) AS click_tw, 
+						  SUM(l.click_gp) AS click_gp, 
+						  SUM(l.click_li) AS click_li
+					  FROM Mxcxl AS l
+				   WHERE l.idMail = :idMail:";
+		$socialClicks = $manager->createQuery($snCliksQuery);
+		$socialClickStats = $socialClicks->execute(array(
+			'idMail' => $mail->idMail
+		));
+		
+		
+		$this->logger->log("Stats: " . print_r($statisticsData, true));
 		$response['summaryChartData'] = $summaryChartData;
 		$response['statisticsData'] = $statisticsData;
-		$response['compareMail'] = $mailCompare;
-
+		$response['statisticsSocial'] = $socialStats->getFirst();
+		$response['statisticsClicksSocial'] = $socialClickStats->getFirst();
+		
 		return $response;
 	}
 	
@@ -232,13 +274,16 @@ class StatisticsWrapper extends BaseWrapper
 		$response['statisticsData'] = $stat;
 		$response['compareDbase'] = $dbaseCompare;
 		
+		$this->logger->log("Response: " . print_r($response, true));
+		
 		return $response;
 	}
 	
-	public function findMailOpenStats($idMail)
+	public function findMailOpenStats($idMail, $type)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('First query', 'total de personas que abrieron el correo');
 		$sql1 = "SELECT COUNT(*) AS t
 					FROM mxc AS m
 						JOIN contact as c ON (c.idContact = m.idContact)
@@ -248,19 +293,36 @@ class StatisticsWrapper extends BaseWrapper
 		$result1 = $db->query($sql1, array($idMail));
 		$total = $result1->fetch();
 		
-		$sql = "SELECT m.idContact, m.opening AS date, e.email 
-					FROM mxc AS m
-						JOIN contact as c ON (c.idContact = m.idContact)
-						JOIN email as e ON (c.idEmail = e.idEmail)
-					WHERE m.idMail = ? AND m.opening != 0";
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('First Query');
 		
-		$sql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-		$result = $db->query($sql, array($idMail));
-		$info = $result->fetchAll();
+		if ($type == 'private') {
+			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Second query', 'Detalle de cada persona que abrió el correo, (paginado)');
+			$sql2 = "SELECT m.idContact, m.opening AS date, e.email 
+						FROM mxc AS m
+							JOIN contact as c ON (c.idContact = m.idContact)
+							JOIN email as e ON (c.idEmail = e.idEmail)
+						WHERE m.idMail = ? AND m.opening != 0";
 
+			$sql2 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+			$result2 = $db->query($sql2, array($idMail));
+			$info = $result2->fetchAll();
+			Phalcon\DI::getDefault()->get('timerObject')->endTimer('Second query Query');
+		}
+		
+		
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Third query', 'Fechas en que se hizo apertura');
+		$sql3 = "SELECT m.opening AS date
+					FROM mxc AS m
+					WHERE m.idMail = ? AND m.opening != 0";
+		$result3 = $db->query($sql3, array($idMail));
+		$stats = $result3->fetchAll();
+		
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Third query');
+		
 		$opencontact = array();
 		$opens = array();
 		
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('First organizing', 'Organizando fecha y contacto que hizo apertura');
 		if (count($info) > 0) {
 			foreach ($info as $i) {
 				$opencontact[] = array(
@@ -268,32 +330,52 @@ class StatisticsWrapper extends BaseWrapper
 					'email' => $i['email'],
 					'date' => date('Y-m-d H:i', $i['date']),
 				);
-				
-				$openArray = array();
-				if (!isset($openArray[$i['date']])) {
-					$openArray[$i['date']] = array(
-						'title' => $i['date'],
-						'value' => 1
-					);
-				}
-				else {
-					$openArray[$i['date']]['value'] += 1;
-				}
-				
-				foreach ($openArray as $o) {
-					$opens[] = array (
-						'title' => $o['title'],
-						'value' => $o['value']
-					);
-				}
 			}
 		}
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('First organizing');
 		
+		
+		$openData = array();
+		if (count($stats) > 0) {
+			$opens = array();
+			
+			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Second organizing', 'Organizando arreglo que retornó la base de datos y haciendo un sort de php');
+			foreach ($stats as $i) {
+				$opens[] = $i['date'];
+			}
+			sort($opens);
+			Phalcon\DI::getDefault()->get('timerObject')->endTimer('Second organizing');
+			
+			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Third organizing', 'Organizando datos con Obj TotalTimePeriod');
+			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+			$timePeriod->setData($opens);
+			$timePeriod->processTimePeriod();
+			Phalcon\DI::getDefault()->get('timerObject')->endTimer('Third organizing');
+			
+			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Fourth organizing', 'Organizando el arreglo de datos que retorno totaltimeperiod para crear gráfica con high charts');
+			$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Aperturas');
+			$periodModel->setTimePeriod($timePeriod);
+			$periodModel->modelTimePeriod();
+			$openData = $periodModel->getModelTimePeriod();	
+			Phalcon\DI::getDefault()->get('timerObject')->endTimer('Fourth organizing');
+		}
+		
+//		$this->logger->log("Opens: " . print_r($opens, true));
+//		$sql = "SELECT FROM_UNIXTIME(CAST((opening/3600) AS UNSIGNED)*3600) AS date, COUNT(*) AS total
+//					FROM mxc
+//				WHERE idMail = ? AND opening != 0
+//				GROUP BY 1";
+//		
+//		$result = $db->query($sql, array($idMail));
+//		$openStats = $result->fetchAll();
+		
+//		$this->logger->log(print_r($openStats, true));
+			
 		$this->pager->setTotalRecords($total['t']);
 		
 		$statistics[] = array(
 			'id' => $idMail,
-			'statistics' => json_encode($response['statistics'] = $opens),
+			'statistics' => json_encode($response['statistics'] = $openData),
 			'details' => json_encode($response['details'] = $opencontact)
 		);
 		
@@ -302,7 +384,23 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownopen' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
 	
-	public function findMailClickStats($idMail, $filter)
+	public function printData($obj, $indent = 0)
+	{
+		$this->logger->log('ind: ' . $indent);
+		$ind = str_repeat("\t", $indent);
+		
+		$this->logger->log($ind . 'Nombre: ' . $obj->getPeriodName());
+		$this->logger->log($ind . 'Total: ' . $obj->getTotal());
+		
+		foreach ($obj->getTimePeriod() as $child) {
+			$this->printData($child, $indent+1);
+		}
+	}
+
+
+
+
+	public function findMailClickStats($idMail, $filter, $type)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -347,56 +445,61 @@ class StatisticsWrapper extends BaseWrapper
 		/**
 		 * SQL para extraer los links y el total de clicks por cada uno
 		 */
-		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
+//		$sql2 = "SELECT m.click, m.idMailLink, COUNT( m.idMailLink ) AS total
+//					FROM mxcxl AS m
+//				 WHERE m.idMail = ? AND m.click != 0
+//				 GROUP BY m.idMailLink, m.click";
+		
+		$sql2 = "SELECT m.click AS date
 					FROM mxcxl AS m
-				 WHERE m.idMail = ? AND m.click != 0
-				 GROUP BY m.idMailLink, m.click";
+				 WHERE m.idMail = ? AND m.click != 0";
 		
 		$result2 = $db->query($sql2, array($idMail));
 		$linkValues = $result2->fetchAll();
 		
-		$values = array();
-		$clicks = array();
-		if (count($linkValues) > 0 ) {
+		$statsLinks = array();
+		
+		if (count($linkValues) > 0) {
+			$AllLinks = array();
+			
 			foreach ($linkValues as $l) {
-				if (!isset($values[$l['click']])) {
-					$al = $arrayLinks;
-					$values[$l['click']]['title'] = $l['click'];
-					$al[$l['idMailLink']] = $l['total'];
-					$values[$l['click']]['value'] = json_encode($al);
-				}
-				else {
-					$a = json_decode($values[$l['click']]['value']);
-					$a->$l['idMailLink'] += $l['total'];
-					$values[$l['click']]['value'] = json_encode($a);
-				}
+				$AllLinks[] = $l['date'];
 			}
 			
-			foreach ($values as $value) {
-				$clicks[] = array(
-					'title' => $value['title'],
-					'value' => $value['value']
-				);
+			sort($AllLinks);
+			
+			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+			$timePeriod->setData($AllLinks);
+			$timePeriod->processTimePeriod();
+
+			$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Clics');
+			$periodModel->setTimePeriod($timePeriod);
+			$periodModel->modelTimePeriod();
+			$statsLinks = $periodModel->getModelTimePeriod();
+		}
+		
+		$this->logger->log("{$type}");
+		
+		if ($type == 'private') {
+			$this->logger->log("Entra");
+			$phql = "SELECT ml.click, e.email, l.link
+					 FROM Mxcxl AS ml
+						JOIN Contact AS c ON (c.idContact = ml.idContact)
+						JOIN Email AS e ON (e.idEmail = c.idEmail)
+						JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
+					 WHERE ml.idMail = :idMail: AND ml.click != 0 ";
+
+			if ($filter && $filter != 'Todos') {
+				$phql.= "AND l.link = '" . $filter . "' ";
 			}
+
+			$phql.= "LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+
+			$query = $manager->createQuery($phql);
+			$result = $query->execute(array(
+				'idMail' => $idMail
+			));
 		}
-		
-		$phql = "SELECT ml.click, e.email, l.link
-				 FROM Mxcxl AS ml
-					JOIN Contact AS c ON (c.idContact = ml.idContact)
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = :idMail: AND ml.click != 0 ";
-		
-		if ($filter && $filter != 'Todos') {
-			$phql.= "AND l.link = '" . $filter . "' ";
-		}
-				
-		$phql.= "LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-		
-		$query = $manager->createQuery($phql);
-		$result = $query->execute(array(
-			'idMail' => $idMail
-		));
 		
 		$clickcontact = array();
 		if (count($result) > 0) {
@@ -409,26 +512,32 @@ class StatisticsWrapper extends BaseWrapper
 			}
 		}
 		
-		$phqlcount = "SELECT COUNT(*) AS total
-						FROM Mxcxl AS ml
-						   JOIN Contact AS c ON (c.idContact = ml.idContact)
-						   JOIN Email AS e ON (e.idEmail = c.idEmail)
-						   JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
-						WHERE ml.idMail = :idMail: AND ml.click != 0 ";
-		if ($filter && $filter != 'Todos') {
-			$phqlcount.= "AND l.link = '" . $filter . "' ";
-		}
+		$totalRecords = 0;
 		
-		$querycount = $manager->createQuery($phqlcount);
-		$resultcount = $querycount->execute(array(
-			'idMail' => $idMail
-		));
+		if ($type == 'private') {
+			$phqlcount = "SELECT COUNT(*) AS total
+							FROM Mxcxl AS ml
+							   JOIN Contact AS c ON (c.idContact = ml.idContact)
+							   JOIN Email AS e ON (e.idEmail = c.idEmail)
+							   JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
+							WHERE ml.idMail = :idMail: AND ml.click != 0 ";
+			if ($filter && $filter != 'Todos') {
+				$phqlcount.= "AND l.link = '" . $filter . "' ";
+			}
 
-		$this->pager->setTotalRecords($resultcount['total']->total);
+			$querycount = $manager->createQuery($phqlcount);
+			$resultcount = $querycount->execute(array(
+				'idMail' => $idMail
+			));
+			
+			$totalRecords = $resultcount['total']->total;
+		}
+
+		$this->pager->setTotalRecords($totalRecords);
 		
 		$statistics[] = array(
 			'id' => $idMail,
-			'statistics' => json_encode($clicks),
+			'statistics' => json_encode($statsLinks),
 			'details' => json_encode($clickcontact),
 			'links' => json_encode($links),
 			'multvalchart' => json_encode($info),
@@ -439,22 +548,27 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownclick' => $statistics, 'meta' => $this->pager->getPaginationObject());
 	}
 	
-	public function findMailUnsubscribedStats($idMail)
+	public function findMailUnsubscribedStats($idMail, $type)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
-		$phql = "SELECT m.idContact, m.unsubscribe AS date, c.name, c.lastName, e.email 
+		
+		$unsubscribed = array();
+		$unsubscribedcontact = array();
+		
+		if ($type == 'private') {
+			$phql = "SELECT m.idContact, m.unsubscribe AS date, c.name, c.lastName, e.email 
 				FROM Mxc AS m
 					JOIN Contact AS c ON (c.idContact = m.idContact)
 					JOIN Email AS e ON (c.idEmail = e.idEmail)
 				WHERE m.idMail = :idMail: AND m.unsubscribe != 0";
-		$phql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
-		$query = $manager->createQuery($phql);
-		$unsubscribeds = $query->execute(array(
-			'idMail' => $idMail
-		));
+			
+			$phql .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
+			$query = $manager->createQuery($phql);
+			$unsubscribeds = $query->execute(array(
+				'idMail' => $idMail
+			));
+		}
 		
-		$unsubscribed = array();
-		$unsubscribedcontact = array();
 		$count = count($unsubscribeds);
 		
 		if ($count) {
@@ -467,23 +581,7 @@ class StatisticsWrapper extends BaseWrapper
 					'lastname' => $u->lastName
 				);
 			
-				$unsubsArray = array();
-				if (!isset($unsubsArray[$u->date])) {
-					$unsubsArray[$u->date] = array(
-						'title' => $u->date,
-						'value' => 1
-					);
-				}
-				else {
-					$unsubsArray[$u->date]['value'] += 1;
-				}
-				
-				foreach ($unsubsArray as $o) {
-					$unsubscribed[] = array (
-						'title' => $o['title'],
-						'value' => $o['value']
-					);
-				}
+				$unsubscribed[] = $u->date;
 			}
 			
 			$phqlCount = "SELECT COUNT(*) AS total
@@ -513,63 +611,52 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownunsubscribed' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}
 	
-	public function findMailSpamStats($idMail)
+	public function findMailSpamStats($idMail, $type)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
 		
-		$phql = "SELECT e.email, m.spam, c.name, c.lastName
+		$spamcontact = array();
+		$spam = array();
+		$count = 0;
+		if ($type == 'private') {
+			$phql = "SELECT e.email, m.spam, c.name, c.lastName
 				FROM Mxc AS m 
 					JOIN Contact AS c ON (c.idContact = m.idContact)
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
 				WHERE m.idMail = :idMail: AND m.spam != 0 LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
-		$query = $manager->createQuery($phql);
-		$spams = $query->execute(array(
-			'idMail' => $idMail
-		));
-		
-		$spamcontact = array();
-		$spam = array();
-		if (count($spams) > 0) {
-			foreach ($spams as $s) {
-				$spamcontact[] = array(
-					'email' => $s->email,
-					'date' => date('Y-m-d h:i', $s->date),
-					'name' => $s->name,
-					'lastname' => $s->lastName
-				);
-				
-				$spamArray = array();
-				if (!isset($spamArray[$s->date])) {
-					$spamArray[$s->date] = array(
-						'title' => $s->date,
-						'value' => 1
+			$query = $manager->createQuery($phql);
+			$spams = $query->execute(array(
+				'idMail' => $idMail
+			));
+
+			if (count($spams) > 0) {
+				foreach ($spams as $s) {
+					$spamcontact[] = array(
+						'email' => $s->email,
+						'date' => date('Y-m-d h:i', $s->date),
+						'name' => $s->name,
+						'lastname' => $s->lastName
 					);
-				}
-				else {
-					$spamArray[$s->date]['value'] += 1;
+					
+					$spam[] = $s->date;
 				}
 				
-				foreach ($spamArray as $o) {
-					$spam[] = array (
-						'title' => $o['title'],
-						'value' => $o['value']
-					);
-				}
+				$phql2 = "SELECT COUNT(*) AS total
+						FROM Mxc AS m 
+							JOIN Contact AS c ON (c.idContact = m.idContact)
+							JOIN Email AS e ON (e.idEmail = c.idEmail)
+						WHERE m.idMail = :idMail: AND m.spam != 0";
+				$query2 = $manager->createQuery($phql2);
+				$total = $query2->execute(array(
+					'idMail' => $idMail
+				));
+				
+				$count = $total['total']->total;
 			}
 		}
 		
-		$phql2 = "SELECT COUNT(*) AS total
-				FROM Mxc AS m 
-					JOIN Contact AS c ON (c.idContact = m.idContact)
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-				WHERE m.idMail = :idMail: AND m.spam != 0";
-		$query2 = $manager->createQuery($phql2);
-		$total = $query2->execute(array(
-			'idMail' => $idMail
-		));
-		
-		$this->pager->setTotalRecords($total['total']->total);
+		$this->pager->setTotalRecords($count);
 		
 		$statistics[] = array(
 			'id' => $idMail,
@@ -582,7 +669,7 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownspam' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}
 	
-	public function findMailBouncedStats($idMail, $type, $filter)
+	public function findMailBouncedStats($idMail, $type, $filter, $request)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
@@ -613,66 +700,64 @@ class StatisticsWrapper extends BaseWrapper
 		$query1 = $db->query($sql1, array($idMail));
 		$result1 = $query1->fetchAll();
 		
-		$bounced = array();
+		$b = array(
+			'hard' => 0,
+			'soft' => 0
+		);
+		
 		$bouncedcontact = array();
 		$valueDomain = array();
+		
 		if (count($result1) > 0) {
-			$values = array();
-			foreach ($result1 as $r) {
-				$bouncedcontact[] = array(
-					'email' => $r['email'],
-					'date' => date('Y-m-d h:i', $r['date']),
-					'type' => $r['type'],
-					'category' => $r['description'],
-					'domain' => $r['name']
-				);
+			if ($request == 'private') {
+				foreach ($result1 as $r) {
+					$bouncedcontact[] = array(
+						'email' => $r['email'],
+						'date' => date('Y-m-d h:i', $r['date']),
+						'type' => $r['type'],
+						'category' => $r['description'],
+						'domain' => $r['name']
+					);
 
-				if (!in_array($r['name'], $valueDomain)) {
-					$valueDomain[] = $r['name'];
-				}
-				
-				if ($r['type'] == 'hard') {
-					$values[$r['date']][0] += 1;
-					$values[$r['date']][1] += 0;
-					$values[$r['date']]['date'] = $r['date'];
-				}
-				else if ($r['type'] == 'soft') {
-					$values[$r['date']][0] += 0;
-					$values[$r['date']][1] += 1;
-					$values[$r['date']]['date'] = $r['date'];
+					if (!in_array($r['name'], $valueDomain)) {
+						$valueDomain[] = $r['name'];
+					}
+
+					if ($r['type'] == 'hard') {
+						$b['hard'] = $b['hard'] + 1;
+					}
+					else if ($r['type'] == 'soft') {
+						$b['soft'] = $b['soft'] + 1;
+					}
 				}
 			}
-			
-			foreach ($values as $v) {
-				$x = array(
-					'hard' => $v[0],
-					'soft' => $v[1]
-				);
-				if (count($bounced) == 0) {
-					$bounced[0]['title'] = $v['date'];
-					$bounced[0]['value'] = json_encode($x);
-				}
-				else {
-					if (!in_array($v['date'], $bounced)) {
-						$bounced[] = array(
-							'title' => $v['date'],
-							'value' => json_encode($x)
-						);
+			else {
+				foreach ($result1 as $r) {
+					if ($r['type'] == 'hard') {
+						$b['hard'] = $b['hard'] + 1;
+					}
+					else if ($r['type'] == 'soft') {
+						$b['soft'] = $b['soft'] + 1;
 					}
 				}
 			}
 		}
 		
-	
-		$bouncedTypes = Bouncedcode::find();
+		$bounced = array($b);
+		
+//		$this->logger->log(print_r($bounced, true));
+		
 		$valueType = array();
 		$valueCategory = array();
-		if (count($bouncedTypes) > 0) {
-			foreach ($bouncedTypes as $b) {
-				if (!in_array($b->type, $valueType)) {
-					$valueType[$b->type] = ucfirst($b->type);
+		if ($request == 'private') {
+			$bouncedTypes = Bouncedcode::find();
+			if (count($bouncedTypes) > 0) {
+				foreach ($bouncedTypes as $b) {
+					if (!in_array($b->type, $valueType)) {
+						$valueType[$b->type] = ucfirst($b->type);
+					}
+					$valueCategory[] = $b->description;
 				}
-				$valueCategory[] = $b->description;
 			}
 		}
 		
@@ -683,30 +768,38 @@ class StatisticsWrapper extends BaseWrapper
 			'domain' => $valueDomain
 		);
 		
-		$phqlcount = "	SELECT COUNT(*) AS total 
-						FROM mxc AS m 
-							JOIN contact AS c ON (c.idContact = m.idContact)
-							JOIN email AS e ON (e.idEmail = c.idEmail)
-							JOIN domain AS d ON (d.idDomain = e.idDomain)
-							JOIN bouncedcode AS b ON (b.idBouncedCode = m.idBouncedCode)
-						WHERE m.idMail = ? AND m.bounced != 0 ";
+		$totalRecords = 0;
 		
-		if($filter && $filter != 'Todos') {
-			switch ($type) {
-				case 'category':
-					$phqlcount.= "AND b.description = '{$filter}'";
-					break;
-				case 'domain':
-					$phqlcount.= "AND d.name = '{$filter}'";
-					break;
-				case 'type':
-					$phqlcount.= "AND b.type = '{$filter}'";
-					break;
+		if ($request == 'private') {
+			$phqlcount = "	SELECT COUNT(*) AS total 
+							FROM mxc AS m 
+								JOIN contact AS c ON (c.idContact = m.idContact)
+								JOIN email AS e ON (e.idEmail = c.idEmail)
+								JOIN domain AS d ON (d.idDomain = e.idDomain)
+								JOIN bouncedcode AS b ON (b.idBouncedCode = m.idBouncedCode)
+							WHERE m.idMail = ? AND m.bounced != 0 ";
+
+			if($filter && $filter != 'Todos') {
+				switch ($type) {
+					case 'category':
+						$phqlcount.= "AND b.description = '{$filter}'";
+						break;
+					case 'domain':
+						$phqlcount.= "AND d.name = '{$filter}'";
+						break;
+					case 'type':
+						$phqlcount.= "AND b.type = '{$filter}'";
+						break;
+				}
 			}
+			
+			$querycount = $db->query($phqlcount, array($idMail));
+			$resultcount = $querycount->fetchAll();
+			
+			$totalRecords = $resultcount[0]['total'];
 		}
-		$querycount = $db->query($phqlcount, array($idMail));
-		$resultcount = $querycount->fetchAll();
-		$this->pager->setTotalRecords($resultcount[0]['total']);
+		
+		$this->pager->setTotalRecords($totalRecords);
 		
 		$statistics[] = array(
 			'id' => $idMail,

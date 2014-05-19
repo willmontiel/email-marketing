@@ -19,7 +19,7 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 			"icon" => "icon-user"
 		),
 		"Correos" => array(
-			"controller" => array("mail", "template"),
+			"controller" => array("mail", "template", "statistic"),
 			"class" => "",
 			"url" => "mail",
 			"title" => "Correos",
@@ -40,13 +40,13 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 			"icon" => "icon-share"
 		),
 */
-		"Estadisticas" => array(
-			"controller" => array("statistic"),
-			"class" => "",
-			"url" => "",
-			"title" => "Estadísticas",
-			"icon" => "icon-bar-chart"
-		),
+//		"Estadisticas" => array(
+//			"controller" => array("statistic"),
+//			"class" => "",
+//			"url" => "",
+//			"title" => "Estadísticas",
+//			"icon" => "icon-bar-chart"
+//		),
 		"Herramientas" => array(
 			"controller" => array('tools', 'process', "account", "user", "flashmessage", "socialmedia", 'scheduledmail'),
 			"class" => "",

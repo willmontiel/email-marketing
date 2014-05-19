@@ -15,7 +15,7 @@
 		<a href="{{ url(pagination_url) }}?page={{ page.before }}"><i class="glyphicon glyphicon-step-backward"></i></a>
 	</li>
 	<li>
-		<span><b>{{page.total_items}}</b> registros.</span><span>Página <b>{{page.current}}</b> de <b>{{page.total_pages}}</b></span>
+		<span><b>{{page.total_items}}</b> registros </span><span>Página <b>{{page.current}}</b> de <b>{{page.total_pages}}</b></span>
 	</li>
 	<li class="{{ (page.current >= page.total_pages)?'disabled':'enabled' }}">
 		<a href="{{ url(pagination_url) }}?page={{page.next}}"><i class="glyphicon glyphicon-step-forward"></i></a>

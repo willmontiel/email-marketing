@@ -20,10 +20,10 @@ EmailBlock.prototype.designField = function() {
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
 						<div class="row field-content-zone ' + hide + '">\n\
-							<div class="col-md-3 field-zone-name">\n\
+							<div class="col-md-3 col-sm-2 col-xs-3 field-zone-name">\n\
 								' + required + this.name + '\n\
 							</div>\n\
-							<div class="col-md-7">\n\
+							<div class="col-md-7 col-sm-8 col-xs-7">\n\
 								<input type="text" class="form-control field-label-placeholder" placeholder="' + this.placeholder + '">\n\
 							</div>\n\
 							<div class="col-md-1 btn btn-default btn-sm edit-field">\n\

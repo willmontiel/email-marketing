@@ -7,7 +7,7 @@
 			<a href="#" {{ '{{action "prevPage" this}}' }}><i class="glyphicon glyphicon-step-backward"></i></a>
 		</li>
 		<li>
-			<span><b>{{  '{{totalrecords}}' }}</b> registros.</span><span>Página <b>{{  '{{currentpage}}' }}</b> de <b>{{  '{{availablepages}}' }}</b></span>
+			<span><b>{{  '{{totalrecords}}' }}</b> registros </span><span>Página <b>{{  '{{currentpage}}' }}</b> de <b>{{  '{{availablepages}}' }}</b></span>
 		</li>
 		<li {{' {{ bind-attr class="cannext:enabled:disabled"}}'}}>
 			<a href="#" {{ '{{action "nextPage" this}}' }}><i class="glyphicon glyphicon-step-forward"></i></a>

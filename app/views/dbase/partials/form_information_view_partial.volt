@@ -1,6 +1,4 @@
-<div class="row">
-	<div class="col-md-8 form-setup-content">
-		<form class="form-horizontal" role="form">
+		<form class="form-horizontal form-setup-content" role="form">
 			<div class="form-group">
 				<label for="name" class="col-sm-3 control-label">* Nombre:</label>
 				<div class="col-md-6">
@@ -26,55 +24,52 @@
 			{#Doble Optin#}
 			<div class="form-group">
 				<label for="optin" class="col-sm-3 control-label">Doble Optin:</label>
-				<div class="col-md-9">
-					{{' {{input type="checkbox" id="optin" name="optin" checked=optin valueBinding="optin"}}' }}
-					<label for="optin"><span class="text-muted">Esta opción exige confirmación a través de un correo!</span></label>
+				<div class="checkbox-inline mleft-15">
+					<label for="optin">
+						{{' {{input type="checkbox" id="optin" name="optin" checked=optin valueBinding="optin"}}' }}
+						<span class="text-muted">Esta opción exige confirmación a través de un correo!</span>
+					</label>
 				</div>
 			</div>
 			{{ '{{#if this.optin }}' }}
-			<div class="optin-information-container col-sm-offset-1 col-sm-11" style="background-color: #fceedb;">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="bs-callout bs-callout-info">
-							<h4>Información de Doble Optin</h4>
-							<p>El doble optin requiere que el usuario que se suscribe, confirme 
-							su suscripción haciendo clic en un enlace enviado por correo. Selecciona aquí
-							el contenido del correo, el asunto, origen y la página que se mostrará al contacto
-							cuando confirme.
-							</p>
-						</div>
+			<div class="container-fluid col-sm-offset-1 col-sm-9" style="background-color: #fceedb;">
+				<div class="bs-callout bs-callout-info">
+					<h4>Información de doble optin</h4>
+					<p>El doble optin requiere que el usuario que se suscriba, confirme 
+					su suscripción haciendo clic en un enlace enviado por correo. Seleccione aquí
+					el contenido del correo, el asunto, origen y la página que se mostrará al contacto
+					cuando confirme.
+					</p>
+				</div>
+				<div class="form-group">
+					<label for="optin-mail-subject" class="col-sm-3 control-label">Asunto: </label>
+					<div class="col-md-6">
+						{{'{{view Ember.TextField valueBinding="optinsubject" id="optin-mail-subject" class="form-control"}}'}}
 					</div>
-					<div class="row">
-						<div class="form-group">
-							<label for="optin-mail-subject" class="col-sm-3 control-label">Asunto: </label>
-							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="optinsubject" id="optin-mail-subject" class="form-control"}}'}}
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="optin-mail-from-name" class="col-sm-3 control-label">De: </label>
-							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="optinfromname" id="optin-mail-from-name" class="form-control" placeholder="Nombre"}}'}}
-							</div>
-							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="optinfromemail" id="optin-mail-from-email" class="form-control" placeholder="example@test.com"}}'}}
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="optin-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
-							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="optinreplyto" id="optin-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
-							</div>
-						</div>
-						<div class="form-group" style="text-align: center;">
-							<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "optin"}}' }}></span>
-						</div>
-						<div class="form-group welcome-url-field">
-							<label for="url-welcome" class="col-sm-3 control-label">* URL de Bienvenida:</label>
-							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="welcomeurl" id="url-welcome" class="form-control" placeholder="URL de Bienvenida"}}'}}
-							</div>
-						</div>
+				</div>
+				<div class="form-group">
+					<label for="optin-mail-from-name" class="col-sm-3 control-label">De: </label>
+					<div class="col-md-3">
+						{{'{{view Ember.TextField valueBinding="optinfromname" id="optin-mail-from-name" class="form-control" placeholder="Nombre"}}'}}
+					</div>
+					<div class="col-md-3">
+						{{'{{view Ember.TextField valueBinding="optinfromemail" id="optin-mail-from-email" class="form-control" placeholder="example@test.com"}}'}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="optin-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
+					<div class="col-md-6">
+						{{'{{view Ember.TextField valueBinding="optinreplyto" id="optin-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
+					<a href="#" {{ '{{action "show_editor" "optin"}}' }} class="" ><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
+				</div>
+				<div class="form-group welcome-url-field">
+					<label for="url-welcome" class="col-sm-3 control-label">* URL de bienvenida:</label>
+					<div class="col-md-6">
+						{{'{{view Ember.TextField valueBinding="welcomeurl" id="url-welcome" class="form-control" placeholder="URL de Bienvenida"}}'}}
 					</div>
 				</div>
 			</div>
@@ -83,50 +78,45 @@
 
 			{#Mensaje de Bienvenida#}
 			<div class="form-group">
-				<label for="welcome" class="col-sm-3 control-label">Mensaje de Bienvenida:</label>
-				<div class="col-md-9">
-					{{' {{input type="checkbox" id="welcome" name="welcome" checked=welcome valueBinding="welcome"}}' }}
-					<label for="welcome"><span class="text-muted">Esta opción envía un correo al usuario una vez que se haya suscrito!</span></label>
+				<label for="welcome" class="col-sm-3 control-label">Mensaje de bienvenida:</label>
+				<div class="checkbox-inline mleft-15">
+					<label for="welcome">
+						{{' {{input type="checkbox" id="welcome" name="welcome" checked=welcome valueBinding="welcome"}}' }}
+						<span class="text-muted">Esta opción envía un correo al usuario una vez que se haya suscrito!</span>
+					</label>
 				</div>
 			</div>
 			{{ '{{#if this.welcome }}' }}
-			<div class="welcome-information-container col-sm-offset-1 col-sm-11" style="background-color: #fceedb;">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="bs-callout bs-callout-info">
-							<h4>Información de Bienvenida</h4>
-							<p>El mensaje de bienvenida es utilizado cuando el usuario se ha suscrito exitosamente
-							a la lista, en el cual se enviara un correo con un contenido de bienvenida. Selecciona aquí
-							el contenido del correo, el asunto y el origen.
-							</p>
-						</div>
+			<div class="container-fluid col-sm-offset-1 col-sm-9" style="background-color: #fceedb;">
+				<div class="bs-callout bs-callout-info">
+					<h4>Información de bienvenida</h4>
+					<p>El mensaje de bienvenida es utilizado cuando el usuario se ha suscrito exitosamente
+					a la lista. Seleccione aquí el contenido del correo, el asunto y el origen.</p>
+				</div>
+				<div class="form-group">
+					<label for="welcome-mail-subject" class="col-sm-3 control-label">Asunto: </label>
+					<div class="col-md-6">
+						{{'{{view Ember.TextField valueBinding="welcomesubject" id="welcome-mail-subject" class="form-control"}}'}}
 					</div>
-					<div class="row">
-						<div class="form-group">
-							<label for="welcome-mail-subject" class="col-sm-3 control-label">Asunto: </label>
-							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="welcomesubject" id="welcome-mail-subject" class="form-control"}}'}}
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="welcome-mail-from-name" class="col-sm-3 control-label">De: </label>
-							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="welcomefromname" id="welcome-mail-from-name" class="form-control" placeholder="Nombre"}}'}}
-							</div>
-							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="welcomefromemail" id="welcome-mail-from-email" class="form-control" placeholder="example@test.com"}}'}}
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="welcome-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
-							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="welcomereplyto" id="welcome-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
-							</div>
-						</div>
-						<div class="form-group" style="text-align: center;">
-							<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "welcome"}}' }}></span>
-						</div>
+				</div>
+				<div class="form-group">
+					<label for="welcome-mail-from-name" class="col-sm-3 control-label">De: </label>
+					<div class="col-md-3">
+						{{'{{view Ember.TextField valueBinding="welcomefromname" id="welcome-mail-from-name" class="form-control" placeholder="Nombre"}}'}}
 					</div>
+					<div class="col-md-3">
+						{{'{{view Ember.TextField valueBinding="welcomefromemail" id="welcome-mail-from-email" class="form-control" placeholder="example@test.com"}}'}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="welcome-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
+					<div class="col-md-6">
+						{{'{{view Ember.TextField valueBinding="welcomereplyto" id="welcome-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
+					<a href="#" {{ '{{action "show_editor" "welcome"}}' }} class="" ><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
 				</div>
 			</div>
 			{{ '{{/if}} '}}	
@@ -135,54 +125,51 @@
 			{#Notificar#}	
 			<div class="form-group">
 				<label for="notify" class="col-sm-3 control-label">Notificar a: </label>
-				<div class="col-md-9">
-					{{' {{input type="checkbox" id="notify" name="notify" checked=notify valueBinding="notify"}}' }}
-					<label for="notify"><span class="text-muted">Esta opción envía un correo notificando la suscripción de un nuevo contacto!</span></label>
+				<div class="checkbox-inline mleft-15">
+					<label for="notify">
+						{{' {{input type="checkbox" id="notify" name="notify" checked=notify valueBinding="notify"}}' }}
+						<span class="text-muted">Esta opción envía un correo notificando la suscripción de un nuevo contacto!</span>
+					</label>
 				</div>
 			</div>
 			{{ '{{#if this.notify }}' }}
-			<div class="notify-information-container col-sm-offset-1 col-sm-11" style="background-color: #fceedb;">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="bs-callout bs-callout-info">
-							<h4>Información de Notificación</h4>
-							<p>Reciba un correo de notificacion cada vez que un usuario se suscriba a su lista
-							por medio de este formulario. Selecciona aquí el contenido del correo, el asunto 
-							y el origen.
-							</p>
-						</div>
+			<div class="container-fluid col-sm-offset-1 col-sm-9" style="background-color: #fceedb;">
+				<div class="bs-callout bs-callout-info">
+					<h4>Información de notificación</h4>
+					<p>Reciba un correo de notificación cada vez que un usuario se suscriba a su lista
+					por medio de este formulario. Seleccione aquí el contenido del correo, el asunto 
+					y el origen.
+					</p>
+				</div>
+				<div class="form-group">
+					<label for="notify-mail-subject" class="col-sm-3 control-label">Asunto: </label>
+					<div class="col-md-6">
+						{{'{{view Ember.TextField valueBinding="notifysubject" id="notify-mail-subject" class="form-control"}}'}}
 					</div>
-					<div class="row">
-						<div class="form-group">
-							<label for="notify-mail-subject" class="col-sm-3 control-label">Asunto: </label>
-							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="notifysubject" id="notify-mail-subject" class="form-control"}}'}}
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="notify-mail-from-name" class="col-sm-3 control-label">De: </label>
-							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="notifyfromname" id="notify-mail-from-name" class="form-control" placeholder="Nombre"}}'}}
-							</div>
-							<div class="col-md-3">
-								{{'{{view Ember.TextField valueBinding="notifyfromemail" id="notify-mail-from-email" class="form-control" placeholder="example@test.com"}}'}}
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="notify-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
-							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="notifyreplyto" id="notify-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
-							</div>
-						</div>
-						<div class="form-group" style="text-align: center;">
-							<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "notify"}}' }}></span>
-						</div>
-						<div class="form-group welcome-url-field">
-							<label for="email-notify" class="col-sm-3 control-label">* Notificar a:</label>
-							<div class="col-md-6">
-								{{'{{view Ember.TextField valueBinding="notifyemail" id="email-notify" class="form-control" placeholder="Direccion de correo"}}'}}
-							</div>
-						</div>
+				</div>
+				<div class="form-group">
+					<label for="notify-mail-from-name" class="col-sm-3 control-label">De: </label>
+					<div class="col-md-3">
+						{{'{{view Ember.TextField valueBinding="notifyfromname" id="notify-mail-from-name" class="form-control" placeholder="Nombre"}}'}}
+					</div>
+					<div class="col-md-3">
+						{{'{{view Ember.TextField valueBinding="notifyfromemail" id="notify-mail-from-email" class="form-control" placeholder="example@test.com"}}'}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="notify-mail-reply-to" class="col-sm-3 control-label">Responder a: </label>
+					<div class="col-md-6">
+						{{'{{view Ember.TextField valueBinding="notifyreplyto" id="notify-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
+					<a href="#" {{ '{{action "show_editor" "notify"}}' }} class="" ><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
+				</div>
+				<div class="form-group welcome-url-field">
+					<label for="email-notify" class="col-sm-3 control-label">* Notificar a:</label>
+					<div class="col-md-6">
+						{{'{{view Ember.TextField valueBinding="notifyemail" id="email-notify" class="form-control" placeholder="Direccion de correo"}}'}}
 					</div>
 				</div>
 			</div>
@@ -217,8 +204,6 @@
 			</div>
 			<div class="space"></div>
 		</form>
-	</div>
-</div>
 <div class="create-email-spot">
 	<div class="title-advanced-editor">
 	</div>

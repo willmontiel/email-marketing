@@ -9,7 +9,7 @@
 		
 		<p class="bs-callout bs-callout-warning">
 			Esta es la lista global de direcciones de correo electrónico bloqueados, ninguna dirección de correo
-			que esté listada abajo, esta recibiendo campañas de envío.
+			que esté listada abajo, está recibiendo campañas de envío.
 		</p>
 		<div class="col-md-3 col-md-offset-8">
 			{{ '{{#link-to "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger btn-delete btn-sm extra-padding"}}Bloquear un correo electronico{{/link-to}}' }}
@@ -50,7 +50,7 @@
 							<div class="bs-callout bs-callout-warning">
 								<h4>No hay direcciones de correo bloqueadas</h4>
 								<p>
-									Para bloquear una dirección haga click en el botón <strong>Bloquear un correo eléctronico</strong> que se sitúa en la parte superior derecha.
+									Para bloquear una dirección haga click en el botón <strong>Bloquear un correo eléctronico</strong> arriba a la derecha.
 								</p>
 							</div>
 						</td>
@@ -101,7 +101,7 @@
 		<form  class="form-horizontal" role="form">
 			<div class="col-md-5">
 				<div class="form-group">
-					<label for="email" class="col-sm-4 control-label">* Dirección de correo electronico:</label>
+					<label for="email" class="col-sm-4 control-label">* Dirección de correo electrónico:</label>
 						<div class="col-md-8">
 							{{ '{{view Ember.TextField valueBinding="email" placeholder="Email" required="required" autofocus="autofocus" class="form-control"}}' }}
 						</div>
@@ -141,7 +141,7 @@
 						<p>Configure el sistema para eliminar los contactos asociados a esa dirección por medio de una casilla de verificación, si no se configura esa opción, por defecto se marcarán como des-suscritos y en el futuro podrá revertirlo.</p>
 
 						<p>Si la dirección de correo electrónico que ingrese no existe, se creará automáticamente como bloqueada
-						y luego podrá desbloquearla, e ingresarlos datos necesarios para crear un contacto para vincularlo
+						y luego podrá desbloquearla, e ingresar los datos necesarios para crear un contacto para vincularlo
 						a esta dirección de correo.</p>
 					</div>
 				</div>
@@ -164,10 +164,11 @@
 			<p>Click en <strong>desbloquear</strong> si desea continuar</p>
 
 			{{'{{#if errors.errormsg}}'}}
-				<br />
+
 				<div class="bs-callout bs-callout-danger">
 					{{'{{errors.errormsg}}'}}
 				</div>
+				
 			{{'{{/if}}'}}
 		</div>
 		<div class="col-xs-6">

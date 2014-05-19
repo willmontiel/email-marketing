@@ -1,6 +1,6 @@
 <!-- Menu vertical con el nuevo tema -->
 
-<ul id="main-navigation" class="nav nav-pills nav-stacked" role="navigation">
+<ul id="main-navigation" class="nav nav-pills nav-stacked nav-main-navigation" role="navigation">
 {% for item in elements.get() %} 
 	<li class="{{item.class}}">
 		<a href="{{ url(item.url) }}">

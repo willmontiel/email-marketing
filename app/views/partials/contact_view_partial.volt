@@ -82,6 +82,10 @@
 							<td>{{' {{view Ember.TextField valueBinding="lastName" required="required" class="edit-contact-online"}} '}}</td> 
 	#}
 						</tr>
+						<tr>
+							<td>Fecha de nacimiento</td>
+							<td>{{' {{ view App.EmberXEditableDateView value=birthDate field="birthDate" title="Editar fecha de nacimiento de contacto" }} '}}</td>
+						</tr>
 						{%for field in fields%}
 						<tr>
 							<td>{{field.name}}</td>
@@ -150,9 +154,9 @@
 			#}
 		{{ '{{#if App.isEditable}}' }}
 		<div class="row">
-			<div class="span10 offset1 text-right">
-				<button class="btn btn-default extra-padding" {{ '{{action "discard" this}}' }}>Descartar<br >cambios</button>
-				<button class="btn btn-green extra-padding" {{ '{{action "edit" this}}' }}>Guardar<br >cambios</button>
+			<div class="pull-right">
+				<button class="btn btn-sm btn-default extra-padding" {{ '{{action "discard" this}}' }}>Descartar cambios</button>
+				<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "edit" this}}' }}>Guardar cambios</button>
 			</div>
 		</div>
 		{{ '{{/if}}' }}
