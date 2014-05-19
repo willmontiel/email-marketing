@@ -141,7 +141,9 @@ class ContactFormWrapper extends ContactWrapper
 			$obj->isSubscribed = true;
 		}
 		
-		$cfs = Customfield::findByIdDbase($this->contactlist->idDbase);
+		$idDbase = (isset($this->contactlist)) ? $this->contactlist->idDbase : $this->idDbase;
+		
+		$cfs = Customfield::findByIdDbase($idDbase);
 		foreach ($cfs as $cf) {
 			$name = 'campo'.$cf->idCustomField;			
 			if(!isset($obj->$name)) {
