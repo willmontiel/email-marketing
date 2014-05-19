@@ -49,6 +49,29 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
+		
+		<h4 class="sectiontitle">Clics por enlance</h4>
+
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<td class="col-sm-11">Vínculos</td>
+							<td class="col-sm-1">Total Clics</td>
+						</tr>
+					</thead>
+					<tbody>
+						{{'{{#each detailsLinks}}'}}
+						<tr>
+							<td>{{'{{link}}'}}</td>
+							<td>{{'{{total}}'}}</td>
+						</tr>
+						{{ '{{/each}}' }}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	{{ '{{else}}' }}
 		<div class="bg bg-warning">
 			<div class="wrapper">
