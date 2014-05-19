@@ -15,30 +15,35 @@ class FormWrapper extends BaseWrapper
 	
 	public function saveInformation($content)
 	{
+		Phalcon\DI::getDefault()->get('logger')->log(print_r($content, true));
 		$form = new Form();
 		$form->idDbase = $this->dbase->idDbase;
 		$form->name = $content->name;
 		$form->type = $content->type;
 		$form->title = $content->title;
 		$form->content = $content->content;
-		$form->target = $content->listselected;
+		$form->target = ($content->listselected) ? $content->listselected : 'none';
 		
 		$form->urlSuccess = (strpos($content->urlsuccess, "http://") === FALSE && strpos($content->urlsuccess, "https://") === FALSE ) ? 'http://' . $content->urlsuccess : $content->urlsuccess;
 		$form->urlError = (strpos($content->urlerror, "http://") === FALSE && strpos($content->urlerror, "https://") === FALSE) ? 'http://' . $content->urlerror : $content->urlerror;
 		
 		$form->optin = ($content->optin)?'Si':'No';
 		$form->optinMail = $content->optinmail;
-		$form->welcome = ($content->welcome)?'Si':'No';
-		$form->welcomeMail = $content->welcomemail;
-
-		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
 		
 		$form->notify = $content->notify?'Si':'No';
 		$form->notifyMail = $content->notifymail;
 		$form->notifyEmail = $content->notifyemail;
 		
-		$form->updatenotify = ($content->updatenotify)?'Si':'No';
-		$form->updatenotifyMail = $content->updatenotifymail;
+		if($content->type == 'Inscription') {
+			$form->welcome = ($content->welcome)?'Si':'No';
+			$form->welcomeMail = $content->welcomemail;
+		}
+		else {
+			$form->welcome = ($content->updatenotify)?'Si':'No';
+			$form->welcomeMail = $content->updatenotifymail;
+		}
+		
+		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
 		
 		if (!$form->save()) {
 			foreach ($form->getMessages() as $message) {
@@ -58,25 +63,29 @@ class FormWrapper extends BaseWrapper
 		$form->type = $content->type;
 		$form->title = $content->title;
 		$form->content = $content->content;
-		$form->target = $content->listselected;
+		$form->target = ($content->listselected) ? $content->listselected : 'none';
 
 		$form->urlSuccess = (strpos($content->urlsuccess, "http://") === FALSE && strpos($content->urlsuccess, "https://") === FALSE ) ? 'http://' . $content->urlsuccess : $content->urlsuccess;
 		$form->urlError = (strpos($content->urlerror, "http://") === FALSE && strpos($content->urlerror, "https://") === FALSE) ? 'http://' . $content->urlerror : $content->urlerror;
 		
 		$form->optin = ($content->optin)?'Si':'No';
 		$form->optinMail = $content->optinmail;
-		$form->welcome = ($content->welcome)?'Si':'No';
-		$form->welcomeMail = $content->welcomemail;
-		
-		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
-		
+
 		$form->notify = $content->notify?'Si':'No';
 		$form->notifyMail = $content->notifymail;
 		$form->notifyEmail = $content->notifyemail;
 		
-		$form->updatenotify = ($content->updatenotify)?'Si':'No';
-		$form->updatenotifyMail = $content->updatenotifymail;
+		if($content->type == 'Inscription') {
+			$form->welcome = ($content->welcome)?'Si':'No';
+			$form->welcomeMail = $content->welcomemail;
+		}
+		else {
+			$form->welcome = ($content->updatenotify)?'Si':'No';
+			$form->welcomeMail = $content->updatenotifymail;
+		}
 		
+		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
+
 		if (!$form->save()) {
 			foreach ($form->getMessages() as $message) {
 				$this->logger->log('Error creando Formulario: [' . $message . ']');
@@ -101,13 +110,23 @@ class FormWrapper extends BaseWrapper
 		$jsonObject['welcomeurl'] = $phObject->welcomeUrl;
 		$jsonObject['optin'] = ($phObject->optin=='Si');
 		$jsonObject['optinmail'] = $phObject->optinMail;
-		$jsonObject['welcome'] = ($phObject->welcome=='Si');
-		$jsonObject['welcomemail'] = $phObject->welcomeMail;
 		$jsonObject['notify'] = ($phObject->notify=='Si');
 		$jsonObject['notifymail'] = $phObject->notifyMail;
 		$jsonObject['notifyemail'] = $phObject->notifyEmail;
-		$jsonObject['updatenotify'] = ($phObject->updatenotify=='Si');
-		$jsonObject['updatenotifymail'] = $phObject->updatenotifyMail;
+		
+		if($phObject->type == 'Inscription'){
+			$jsonObject['welcome'] = ($phObject->welcome=='Si');
+			$jsonObject['welcomemail'] = $phObject->welcomeMail;
+			$jsonObject['updatenotify'] = null;
+			$jsonObject['updatenotifymail'] = null;
+		}
+		else {
+			$jsonObject['welcome'] = null;
+			$jsonObject['welcomemail'] = null;
+			$jsonObject['updatenotify'] = ($phObject->welcome=='Si');
+			$jsonObject['updatenotifymail'] = $phObject->welcomeMail;
+		}
+		
 		$jsonObject['framecode'] = $this->getFrameCode($phObject);
 		
 		return $jsonObject;
