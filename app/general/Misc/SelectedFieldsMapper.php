@@ -88,9 +88,10 @@ class SelectedFieldsMapper
 					$stposition++;
 				}
 			}
-//			else if (true) {
-//				
-//			}
+			else if ($idfield == 'birthdate') {
+				$this->fieldnames[] = $idfield;
+				$this->transformations[] = 'Date';
+			}
 			else {
 				\Phalcon\DI::getDefault()->get('logger')->log('None');
 				\Phalcon\DI::getDefault()->get('logger')->log("Idfield: {$idfield}");
