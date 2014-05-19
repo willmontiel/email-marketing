@@ -51,22 +51,18 @@
 {% endblock %}
 {% block content %}
 	<div class="row">
-		<div class="col-sm-12">
-			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'mail']) }}
-		</div>
+		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'mail']) }}
 	</div>
-	
-	<div class="space"></div>
-	
+		
 	<div class="row">
-		<div class="col-md-3 col-md-offset-7">
+		<div class="col-md-3 col-md-offset-6">
 			<select id="mailstocompare" class="form-control">
 				{%for cmail in compareMail %}
 					<option value="{{cmail.id}}">{{cmail.name}}</option>
 				{%endfor%}
 			</select>
 		</div>
-		<div class="col-md-2 text-right">
+		<div class="col-md-1 text-right ptop-3">
 			<button class="btn btn-sm btn-default extra-padding" onclick="compareMails()">Comparar</button>
 		</div>
 	</div>
@@ -86,7 +82,6 @@
 
 	<div class="space"></div>
 	
-	<div class="space"></div>
 	{#
 		{{ partial('statistic/partials/partial_statistics_compare') }}
 	#}
@@ -97,7 +92,7 @@
 					<td>
 						<div class="box">
 							<div class="box-section news with-icons">
-								<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
+								<label class="avatar-openings"></label>
 								<div class="news-time">
 								  <span>{{statisticsData1.statopens}}%</span>
 								</div>

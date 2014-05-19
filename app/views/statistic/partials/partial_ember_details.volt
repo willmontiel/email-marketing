@@ -1,6 +1,5 @@
 <script type="text/x-handlebars" data-template-name="drilldown/opens">
 	{{ '{{#if App.chartData}}' }}
-		<h4 class="sectiontitle">Aperturas</h4>
 		<div class="wrapper">	
 			{{'{{view App.TimeGraphView idChart="openBarChartContainer" typeChart="bar-drilldown"}}'}}
 		</div>
@@ -14,7 +13,7 @@
 		<div class="clearfix"></div>
 	{{ '{{else}}' }}
 		<div class="bg bg-warning wrapper">
-			Aún no hay aperturas para esta campaña.
+			<p class="hand-writer-message">No hay aún reporte de aperturas en esta campaña... <img src="{{url('b3/images/sad.png')}}" /></p>
 		</div>
 	{{ '{{/if}}' }}
 		{% if type is defined %}
@@ -27,7 +26,6 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/clicks">
 	{{ '{{#if App.chartData}}' }}
-		<h4 class="sectiontitle">Clics</h4>
 		<div class="wrapper">
 			{{'{{view App.TimeGraphView idChart="clickBarChartContainer" typeChart="bar-drilldown"}}'}}
 		</div>
@@ -73,10 +71,8 @@
 			</div>
 		</div>
 	{{ '{{else}}' }}
-		<div class="bg bg-warning">
-			<div class="wrapper">
-				Aún no hay clics para esta campaña.
-			</div>
+		<div class="wrapper">
+			<p class="hand-writer-message">No hay aún reporte de clics en esta campaña... <img src="{{url('b3/images/sad.png')}}" /></p>
 		</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}
@@ -89,7 +85,6 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
 	{{ '{{#if App.chartData}}' }}
-		<h4 class="sectiontitle">Desuscritos</h4>	
 		<div class="wrapper">
 			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="bar-drilldown"}}'}}
 		</div>
@@ -104,11 +99,10 @@
 		</div>
 		<div class="clearfix"></div>
 	{{ '{{else}}' }}
-		<div class="bg bg-success">
 			<div class="wrapper">
-				No hubo desuscritos durante la campaña.
+				<p class="hand-writer-message">No hay reporte de desuscritos en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
+				
 			</div>
-		</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}
 	{% else %}
@@ -121,7 +115,7 @@
 <script type="text/x-handlebars" data-template-name="drilldown/spam">
 	{{ '{{#if App.chartData}}' }}
 		{#
-		<h4 class="sectiontitle">Spam</h4>
+
 		<div class="wrapper">
 			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
 		</div>
@@ -142,11 +136,10 @@
 		<div class="clearfix"></div>
 		#}
 	{{ '{{else}}' }}
-		<div class="bg bg-success">
 			<div class="wrapper">
-				No hay reportes de spam para esta campaña.
+				<p class="hand-writer-message">No hay reporte de spam en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
+				
 			</div>
-		</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}
 	{% else %}
@@ -158,7 +151,7 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/bounced">
 	{{ '{{#if bouncedData}}' }}
-		<h4 class="sectiontitle">Rebotes</h4>
+
 		<div class="col wrapper">
 			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="pie-basic"}}'}}
 		</div>
@@ -182,8 +175,9 @@
 			{{ partial("statistic/partials/bounced_table_stats_partial") }}
 		{% endif %}
 	{{ '{{else}}' }}
-		<div class="bg bg-success wrapper">
-			No hubo correos rebotados para esta campaña.
+		<div class="wrapper">
+			<p class="hand-writer-message">No hay reporte de rebotes en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
+			
 		</div>
 	{{ '{{/if}}' }}
 </script>

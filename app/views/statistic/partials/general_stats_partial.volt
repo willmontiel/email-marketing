@@ -1,5 +1,5 @@
 {#   Estadisticas generales de los envios   #}
-<div class="container-fluid">
+<div class="row">
 	<div class="totalstats">
 		<div class="sends">
 			<div class="sm-icons-stats-sends center-block"></div>
@@ -38,7 +38,7 @@
 		#}
 	</div>
 
-	<div class="bounced totalstats">
+	<div class="totalstats">
 		{#
 		{{'{{#link-to "drilldown.bounced" class="anchor" href=false}}' }}
 		#}
@@ -56,11 +56,12 @@
 		{{'{{#link-to "drilldown.unsubscribed" class="anchor" href=false}}' }}
 		#}
 		<div class="wrap-other-stats">
-			<div class="sm-icons-stats-unsubs unsubs">
-				<span class="little-number">{{statisticsData.unsubscribed|numberf}}</span>
-				<span class="little-number">{{statisticsData.statunsubscribed}}%</span>
+			<div class="unsubs">
+				<div class="sm-icons-stats-unsubs center-block"></div>
+				<span class="number">{{statisticsData.unsubscribed|numberf}}</span><br>
+				<span class="percent">{{statisticsData.statunsubscribed}}%</span>
+				<p>Desuscritos</p>
 			</div>
-			<p class="text-center color-desusc ptop-40">Desuscritos</p>
 		</div>
 		{#
 		{{ '{{/link-to}}'}}
@@ -69,9 +70,10 @@
 		{{'{{#link-to "drilldown.spam" class="anchor" href=false}} '}}
 		#}
 		<div class="wrap-other-stats">
-			<div class="sm-icons-stats-spam spam">
-				<span class="little-number">{{statisticsData.spam|numberf}}</span>
-				<span class="little-number">{{statisticsData.statspam}}%</span>
+			<div class="spam">
+				<div class="sm-icons-stats-spam center-block"></div>
+				<span class="number">{{statisticsData.spam|numberf}}</span><br>
+				<span class="percent">{{statisticsData.statspam}}%</span>
 				<p>Spam</p>
 			</div>
 		</div>
