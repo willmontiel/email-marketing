@@ -23,7 +23,7 @@
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	{{ stylesheet_link('javascripts/colorpicker/css/colorpicker.css') }}
 	{{ stylesheet_link('javascripts/gritter/css/jquery.gritter.css') }}
-	{{ javascript_include('js/editor/advanced.js') }}
+	{{ javascript_include('js/editor/forms_text_editor.js') }}
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/media_displayer.js') }}
 

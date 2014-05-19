@@ -1135,7 +1135,7 @@ table {
 	border-radius: 5px;
 	background-color: #fafafa;
 	margin-top: 5px;
-	width: 500px;
+	width: 525px;
 	z-index: 10;
 }
 .one-element hr {
@@ -1172,4 +1172,7 @@ table {
 }
 .image-sprite.image-vertical-align-bottom {
 	background-position: 31px 271px;
+}
+.redactor_toolbar li a.redactor_btn_form-updating {
+	background-position: -875px;
 }

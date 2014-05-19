@@ -12,7 +12,7 @@ class Form  extends \Phalcon\Mvc\Model
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$phql = 'SELECT f.idForm, f.name FROM form f JOIN dbase db ON (f.idDbase = db.idDbase) WHERE db.idAccount = ' . $account->idAccount;
+		$phql = 'SELECT f.idForm, f.name FROM form f JOIN dbase db ON (f.idDbase = db.idDbase) WHERE f.type = "Updating" AND db.idAccount = ' . $account->idAccount;
 
 		$query = $db->fetchAll($phql);
 
