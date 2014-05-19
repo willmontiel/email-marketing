@@ -553,7 +553,7 @@ class ImportContactWrapper
 							. "   AND c.idDbase = {$idDbase}";
 		// Insertar contactos nuevos (ID nulo y no bloqueados)
 		$createcontacts    =  "INSERT INTO contact (idDbase, idEmail, name, lastName, birthDate, status, unsubscribed, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) "
-							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, {$hora}, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
+							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, t.birthDate, {$hora}, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
 							. "    FROM {$this->tablename} t "
 							. "    WHERE t.idContact IS NULL "
 							. "        AND t.blocked IS NULL;";
