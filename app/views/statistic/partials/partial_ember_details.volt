@@ -103,7 +103,6 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
-		<div class="space"></div>
 	{{ '{{else}}' }}
 		<div class="bg bg-success">
 			<div class="wrapper">
