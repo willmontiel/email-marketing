@@ -495,6 +495,7 @@ class ImportContactWrapper
 			$rows++;
 			try {
 				$lineOut = $this->fieldmapper->mapValues($line);
+				$this->log->log("lineOut: " . print_r($lineOut, true));
 			}
 			catch (\InvalidArgumentException $e) {
 				$this->errors[] = \sprintf('%s en linea %d', $e->getMessage(), $rows);
