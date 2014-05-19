@@ -69,19 +69,31 @@ class SelectedFieldsMapper
 		\Phalcon\DI::getDefault()->get('logger')->log('m: ' . print_r($m, true));
 		// Recorrer la lista
 		foreach ($m as $idfield => $position) {
+			\Phalcon\DI::getDefault()->get('logger')->log('Idfield: ' . $idfield);
+			\Phalcon\DI::getDefault()->get('logger')->log('Position: ' . $position);
 			if ($position == null || $position == -1) {
+				\Phalcon\DI::getDefault()->get('logger')->log('Continue');
 				continue;
 			}
 			if (is_numeric($idfield)) {
+				\Phalcon\DI::getDefault()->get('logger')->log('Numeric');
+				\Phalcon\DI::getDefault()->get('logger')->log("Idfield: {$idfield}");
 				$name = $this->getCustomFieldName($idfield);
 				if ($name) {
+					\Phalcon\DI::getDefault()->get('logger')->log("Name: {$name}");
 					$this->fieldnames[] = $name;
 					$this->transformations[] = $this->cfieldstransform[$name];
+					\Phalcon\DI::getDefault()->get('logger')->log("Name: {$this->cfieldstransform[$name]}");
 					$newmap[$stposition] = $position;
 					$stposition++;
 				}
 			}
+//			else if (true) {
+//				
+//			}
 			else {
+				\Phalcon\DI::getDefault()->get('logger')->log('None');
+				\Phalcon\DI::getDefault()->get('logger')->log("Idfield: {$idfield}");
 				$this->fieldnames[] = $idfield;
 				$this->transformations[] = 'Text';
 				$newmap[$stposition] = $position;
