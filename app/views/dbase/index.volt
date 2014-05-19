@@ -11,7 +11,7 @@
 <div class="row">
 	<h4 class="sectiontitle">Bases de datos de contactos</h4>
 	<div class="bs-callout bs-callout-info">
-		Esta son las bases de datos de la cuenta, aqui podrá encontrar información acerca de la configuración
+		Esta son las bases de datos de la cuenta, aquí podrá encontrar información acerca de la configuración
 		de cada base de datos, los contactos activos e inactivos, etc. Además podrá crear campos personalizados y configurar las bases de datos.
 		
 	</div>
@@ -24,31 +24,31 @@
 	</div>
 </div>
 
-{% if page.items|length != 0 %}
+{% if dbases|length != 0 %}
 	<div class="row">
 		<table class="table table-striped">
 			<thead></thead>
 			<tbody>
-		{%for item in page.items%}
-				<tr style="border-left: solid 10px {{item.color}}">
+		{%for item in dbases%}
+				<tr style="border-left: solid 10px {{item['color']}}">
 					<td>
-						<a href="{{ url('dbase/show') }}/{{item.idDbase}}"><strong>{{item.name}}</strong></a><br>
-							{{item.description}}
+						<a href="{{ url('dbase/show') }}/{{item['idDbase']}}"><strong>{{item['name']}}</strong></a><br>
+							{{item['description']}}
 					</td>
 					<td>
 						<ul class="list-inline pull-right">
 							<li class="card cont">
-								<span class="number">{{item.Cactive|numberf}}</span>
+								<span class="number">{{item['Cactive']|numberf}}</span>
 								<img src="{{url('')}}b3/images/icon-user.png" class="center-block" />
 								<p>Contactos</p>
 							</li>
 							<li class="card list">
-								<span class="number"> {{item.Cactive|numberf}} </span>
+								<span class="number"> {{item['CNT_LIST']|numberf}} </span>
 								<img src="{{url('')}}b3/images/icon-list.png" class="center-block" />
 								<p>Listas </p> {#  Cambiar porque esta mostrando activos  #}
 							</li>
 							<li class="card seg">
-								<span class="number"> {{item.Cactive|numberf}} </span>
+								<span class="number"> {{item['CNT_SEGM']|numberf}} </span>
 								<img src="{{url('')}}b3/images/icon-pie.png" class="center-block" />
 								<p>Segmentos </p> {#  Cambiar porque esta mostrando activos  #}
 							</li>
@@ -72,25 +72,27 @@
 						</ul>
 					</td>
 					<td>
-						<a href="{{ url('dbase/edit/') }}{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
-						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
-						<a href="{{url('statistic/dbase')}}/{{item.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"></span> Estadísticas</a>
+						<a href="{{ url('dbase/edit/') }}{{item['idDbase']}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{item['idDbase']}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
+						<a href="{{url('statistic/dbase')}}/{{item['idDbase']}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"></span> Estadísticas</a>
 					</td>
 				</tr>
 		{%endfor%}
 			</tbody>
 		</table>
 	</div>
+	{#
 	<div class="space"></div>
 	<div class="col-sm-12 text-center">
 		{{ partial('partials/pagination_static_partial', ['pagination_url': 'dbase/index']) }}
 	</div>
+	#}
 {% else %}
 	<div class="row">
 		<div class="bs-callout bs-callout-warning">
 			<h4>No hay bases de datos</h4>
 			<p>
-				Para empezar a crear contactos, necesita una base de datos. Para crear una, haga clic en el botón <strong>Crear Base de datos</strong>
+				Para empezar a crear contactos, necesita una base de datos. Para crear una, haga clic en el botón <strong>Crear base de datos</strong>
 				que se sitúa en la parte superior derecha.
 				
 			</p>
@@ -108,14 +110,14 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				<h4 class="modal-title">Eliminar Base de Datos</h4>
+				<h4 class="modal-title">Eliminar base de datos</h4>
 			</div>
 			<div class="modal-body">
 				<p>
-					¿Esta seguro que desea eliminar esta base de datos?
+					¿Está seguro que desea eliminar esta base de datos?
 				</p>
 				<p>
-					Recuerde que si elimina la base de datos se perderan todos los contactos, listas de contactos y segmentos que pertenezcan a ella
+					Recuerde que si elimina la base de datos se perderán todos los contactos, listas de contactos y segmentos que pertenezcan a ella
 				</p>
 			</div>
 			<div class="modal-footer">

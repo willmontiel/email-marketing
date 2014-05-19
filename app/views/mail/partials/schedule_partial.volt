@@ -3,12 +3,8 @@
 			<div class="dl-horizontal" {{ '{{action "expandSchedule" this}}' }}>
 				{{'{{#if scheduleEmpty }}'}}
 					<div class="wrapper">
-						<h4 class="text-center">Fecha del envío:</h4>
-						<div class="bg-wrap-calendar center-block">
-							<div class="date">
-								<h1 class="day-send">?</h1>
-							</div>
-						</div>
+						<dt>Fecha del envío:</dt>
+						<dd><img src="<?php echo $this->url->get(''); ?>b3/images/bg-calendar.png" /></dd>
 					</div>
 				{{'{{else}}'}}
 					<hr>

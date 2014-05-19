@@ -30,7 +30,7 @@
 					{{ '{{/unless}}' }}
 				</dd>
 				<dd>
-					Contactos aproximados: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podría variar)
+					Contactos: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podría variar)
 				</dd>
 			{{'{{/if}}'}}
 		</dl>

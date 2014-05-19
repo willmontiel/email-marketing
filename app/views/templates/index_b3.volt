@@ -50,7 +50,7 @@
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<!-- Brand and toggle get grouped for better mobile display -->
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-main-navigation">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>

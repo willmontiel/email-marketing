@@ -10,30 +10,35 @@
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
+	{{ partial("statistic/partials/partial_pie_highcharts") }}
 	<script>
-		var chartData1 = [];
-		var chartData2 = [];
-		
-		{%for data in summaryChartData1 %}
-			var data = new Object();
-			data.title = '{{ data['title'] }}';
-			data.value = {{ data['value'] }};
-			chartData1.push(data);
-		{%endfor%}
-			
-		{%for data in summaryChartData2 %}
-			var data = new Object();
-			data.title = '{{ data['title'] }}';
-			data.value = {{ data['value'] }};
-			chartData2.push(data);
+		var color = ['#97c86b', '#ef8807', '#BDBDBD'];
+		var data1 = [];
+		var i = 0;
+		{%for sum1 in summaryChartData1 %}
+			var obj = new Object;
+				obj.name = '{{ sum1['title'] }}';
+				obj.y = {{ sum1['value'] }};
+				obj.color = color[i];
+
+				data1.push(obj);
+				i++;
 		{%endfor%}
 		
-		AmCharts.ready(function () {
-			chart1 = createPieChart(chartData1);	
-			chart1.write('summaryChart1');
-			chart2 = createPieChart(chartData2);	
-			chart2.write('summaryChart2');
-		});
+		var data2 = [];
+		var j = 0;
+		{%for sum2 in summaryChartData2 %}
+			var obj = new Object;
+				obj.name = '{{ sum2['title'] }}';
+				obj.y = {{ sum2['value'] }};
+				obj.color = color[j];
+
+				data2.push(obj);
+				j++;
+		{%endfor%}
+		
+		createCharts('summaryChart1', data1);
+		createCharts('summaryChart2', data2);
 		
 		function compareMails() {
 			var id = $('#mailstocompare').val();
@@ -44,9 +49,14 @@
 			
 	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-bar-chart icon-2x"></i>Estadisticas{% endblock %}
-{% block sectionsubtitle %}{% endblock %}
 {% block content %}
+	<div class="row">
+		<div class="col-sm-12">
+			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'mail']) }}
+		</div>
+	</div>
+	
+	<div class="space"></div>
 	
 	<div class="row">
 		<div class="col-md-3 col-md-offset-7">
@@ -56,8 +66,8 @@
 				{%endfor%}
 			</select>
 		</div>
-		<div class="col-md-2">
-			<button class="btn btn-sm btn-guardar extra-padding" onclick="compareMails()">Comparar</button>
+		<div class="col-md-2 text-right">
+			<button class="btn btn-sm btn-default extra-padding" onclick="compareMails()">Comparar</button>
 		</div>
 	</div>
 	
@@ -66,16 +76,20 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h4 class="sectiontitle">{{mail1.name}}</h4>
-			<div id="summaryChart1" style="width: 640px; height: 400px;"></div>
+			<div id="summaryChart1" class="col-sm-12"></div>
 		</div>
 		<div class="col-md-6">
 			<h4 class="sectiontitle">{{mail2.name}}</h4>
-			<div id="summaryChart2" style="width: 640px; height: 400px;"></div>
+			<div id="summaryChart2" class="col-sm-12"></div>
 		</div>
 	</div>
 
 	<div class="space"></div>
 	
+	<div class="space"></div>
+	{#
+		{{ partial('statistic/partials/partial_statistics_compare') }}
+	#}
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
 			<table class="table table-striped">
@@ -87,6 +101,7 @@
 								<div class="news-time">
 								  <span>{{statisticsData1.statopens}}%</span>
 								</div>
+
 								<div class="news-content">
 									<label class="label-openings">{{statisticsData1.opens|numberf}}</label>
 									<div class="news-text">

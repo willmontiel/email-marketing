@@ -112,7 +112,7 @@ class ChildCommunication extends BaseWrapper
 			}
 			else {
 //				$this->log->log("No Hay editor");
-				$html =  html_entity_decode($mailContent->content);
+				$html =  utf8_decode(html_entity_decode($mailContent->content));
 			}
 
 //				$prepareMail = new PrepareMailContent($this->account);
@@ -240,7 +240,7 @@ class ChildCommunication extends BaseWrapper
 				 */
 				$htmlWithTracking = $trackingObj->getTrackingUrl($html, $idMail, $contact['contact']['idContact'], $links);
 
-				$log->log("HTML: " . $htmlWithTracking);
+//				$log->log("HTML: " . $htmlWithTracking);
 
 				/*
 				 * ================================================================
@@ -298,7 +298,7 @@ class ChildCommunication extends BaseWrapper
 //					$recipients = true;
 				$recipients = $swift->send($message, $failures);
 				$this->lastsendheaders = $message->getHeaders()->toString();
-				$log->log("Headers: " . print_r($this->lastsendheaders, true));
+//				$log->log("Headers: " . print_r($this->lastsendheaders, true));
 				if ($recipients){
 					echo "Message " . $i . " successfully sent! \n";
 //						$log->log("HTML: " . $html);

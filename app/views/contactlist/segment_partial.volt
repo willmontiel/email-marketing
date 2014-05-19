@@ -255,7 +255,7 @@
 	<div class"row">
 		<h4 class="sectiontitle">Eliminar un segmento</h4>
 		<div class="bs-callout bs-callout-danger">
-			<p>Está a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos, pero no los contactos .Si está seguro que desea continuar haga clic en el botón eliminar, de lo contrario haga en clic en cancelar.</p>
+			<p>Está a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos, pero no los contactos. Si está seguro que desea continuar haga clic en el botón eliminar, de lo contrario haga en clic en cancelar.</p>
 		</div>
 		
 		<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
@@ -335,7 +335,7 @@
 								class="form-control"}}'
 							}}
 						</div>
-						<p class="form-control-static">condiciones a continuacion:</p>
+						<p class="form-control-static">condiciones a continuación:</p>
 					</div>
 				</div>
 				<div class="clearfix"></div>
@@ -375,11 +375,11 @@
 						<div class="col-md-3">
 							<div class="row">
 								{{ '{{#unless defaultCriteria}}' }}
-									<button class="btn btn-default btn-sm extra-padding" {{ '{{action aConditionLess cr}}' }}><i class="glyphicon glyphicon-trash"></i></button>
+									<button class="btn btn-default btn-sm extra-padding" {{ '{{action aConditionLess cr}}' }}><span class="glyphicon glyphicon-trash"></span></button>
 								{{ '{{/unless}}' }}
 
 								{{ '{{#unless limitCriteria}}' }}
-									<button class="btn btn-default btn-sm btn-add extra-padding" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
+									<button class="btn btn-default btn-sm btn-add extra-padding" {{ '{{action aConditionMore}}' }}><span class="glyphicon glyphicon-plus"></span> Agregar condición</button>
 								{{ '{{/unless}}' }}
 							</div>
 						</div>

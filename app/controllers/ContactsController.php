@@ -50,6 +50,7 @@ class ContactsController extends ControllerBase
 				$email = $eachdata[0];
 				$name = (isset($eachdata[1]))?trim($eachdata[1]):'';
 				$last_name = (isset($eachdata[2]))?trim($eachdata[2]):'';
+				$birth_date = (isset($eachdata[3]))?trim($eachdata[3]):'';
 				
 				// Evitar duplicados
 				if (!isset($emailsToFind[$email])) {
@@ -57,6 +58,7 @@ class ContactsController extends ControllerBase
 						'email' => $email,
 						'name' => $name,
 						'lastName' => $last_name,
+						'birthDate' => $birth_date
 					);
 					$emailsToFind[$email] = true;
 				}
@@ -87,6 +89,7 @@ class ContactsController extends ControllerBase
 			$newcontact->email = $batchC['email'];
 			$newcontact->name = $batchC['name'];
 			$newcontact->lastName = $batchC['lastName'];
+			$newcontact->birthDate = $batchC['birthDate'];
 			$newcontact->status = "";
 			$newcontact->activatedOn = "";
 			$newcontact->bouncedOn = "";
@@ -298,7 +301,8 @@ class ContactsController extends ControllerBase
 		$header = $this->request->getPost('header');
 		$fields['email'] = $this->request->getPost('email');
 		$fields['name'] = $this->request->getPost('name');
-		$fields['lastname'] = $this->request->getPost('lastname');
+		$fields['lastname'] = $this->request->getPost('lastname');		
+		$fields['birthdate'] = $this->request->getPost('birthdate');
 		$delimiter = $this->request->getPost('delimiter');
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
@@ -309,7 +313,6 @@ class ContactsController extends ControllerBase
 			$fields[$field->idCustomField] = $this->request->getPost($namefield);
 		}
 		
-
 		$destiny =  "../../../tmp/ifiles/".$nameFile;
 		$idAccount = $this->user->account->idAccount;
 		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);

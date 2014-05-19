@@ -11,18 +11,20 @@ App.Store = DS.Store.extend({});
 App.set('errormessage', '');
 App.set('chartData', '');
 
-
 Ember.RadioButton = Ember.View.extend({
-    tagName : "input",
-    type : "radio",
-    attributeBindings : [ "name", "type", "value", "checked:checked:" ],
-    click : function() {
-        this.set("selection", this.$().val());
-    },
-    checked : function() {
-        return this.get("value") === this.get("selection");   
-    }.property()
+	tagName : "input",
+	type : "radio",
+	attributeBindings : [ "name", "type", "value", "checked:checked:" ],
+	click : function() {
+		this.set("selection", this.$().val());
+	},
+	
+	checked : function() {
+		return this.get("value") === this.get("selection");   
+	}.property()
 });
+
+
 
 App.Drilldownopen = DS.Model.extend({
 	details: DS.attr('string'),
@@ -153,6 +155,7 @@ App.DrilldownController = Ember.ObjectController.extend({
 //		console.log($('#select-options-for-compare'))
 	}
 });
+
 App.DrilldownIndexController = Ember.ArrayController.extend({});	
 
 App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginationStatistics, {
@@ -161,6 +164,9 @@ App.DrilldownOpensController = Ember.ArrayController.extend(Ember.MixinPaginatio
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
+		App.set('title', 'Estadisticas de apertura');
+		App.set('subtitle', 'Cantidad de aperturas');
+		App.set('ref', 'Apertura(s)');
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));
@@ -178,6 +184,9 @@ App.DrilldownClicksController = Ember.ArrayController.extend(Ember.MixinPaginati
 		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
 		info = info.length > 0 ? info : null;
 		App.set('chartData', statistics);
+		App.set('title', 'Estadisticas de clics (únicos)');
+		App.set('subtitle', 'Cantidad de clics');
+		App.set('ref', 'Clic(s) únicos');
 		App.set('multValChart', info);
 	},
 	loadDataDetails: function() {
@@ -240,6 +249,8 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		var info = JSON.parse(this.get('model').content[0].get('multvalchart'));
 		App.set('chartData', statistics);
+		App.set('title', 'Estadisticas de rebotes');
+		App.set('subtitle', 'Vea el detalle de los rebotes suaves y duros.');
 		App.set('multValChart', info);
 	},
 	loadDataDetails: function() {
@@ -249,10 +260,20 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		this.set('bouncedFilter', null);
 		this.set('typeSelected', null);
 	},
+			
+	bouncedData: function () {
+		var data = App.get('chartData');
+		
+		if (data[0].hard !== 0 || data[0].soft !== 0) {
+			return true;
+		}
+		return false;
+	}.property('this.statistics'),
+			
 	typeSelectChange: function () {	
 		var t = this;
 		var filter = (this.get('typeSelected') !== undefined) ? this.get('typeSelected') : 'Todos';
-		var type = this.get('bouncedFilter');
+		var type = (this.get('bouncedFilter') !== null) ? this.get('bouncedFilter') : 'type';
 		this.type = type;
 		this.filter = filter;
 		var obj = {type: type, filter: filter};
@@ -263,6 +284,7 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
     }.observes('typeSelected'),
 			
 	filterSelectChange: function () {
+		var t = this;
 		var bouncedFilter = this.get('bouncedFilter');
 		var filters = App.get('multValChart');
 		var objArray = [];
@@ -285,115 +307,43 @@ App.DrilldownBouncedController = Ember.ArrayController.extend(Ember.MixinPaginat
 		}
 		this.set('selectedType', objArray);
 		
+		this.set('typeSelected', 'Todos');
+		var obj = {type: bouncedFilter, filter: 'Todos'};
+		this.store.find(this.modelClass, obj).then(function(info) {
+			var data = info.get('content');
+			t.set('detailsData', JSON.parse(data[0].get('details')));
+		});	
+		
 	}.observes('bouncedFilter')
 });
 
 
 App.scaleSelected = null;
 
-App.chartScale = [
-	"Hora", "Dia", "Mes", "Año"
-];
-
 App.TimeGraphView = Ember.View.extend({
 	templateName:"timeGraph",
 	chart: null,
 	didInsertElement:function(){
-		$('#ChartContainer').append("<div id='" + this.idChart + "' class='time-graph span8'></div>");
-		var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM');
-		if(this.text === undefined || this.text === null) {
-			this.text = this.textChart;
-		}
-		if(this.typeChart === 'Pie') {
-			chart = createPieChart(chartData);
-		}
-		else if(this.typeChart === 'Bar') {
-			chart = createBarChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-		}
-		else if(this.typeChart === 'Line') {
-			chart = createLineChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-		}
-		else if(this.typeChart === 'LineStep') {
-			chart = createLineStepChart(null, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-		}
 		try{
-			chart.write(this.idChart);
-		}catch(err){
-//			console.log(err.message);
+			var data = App.get('chartData');
+			if (data.length !== 0 && data !== undefined && data !== null) {
+				var title = App.get('title');
+				var subtitle = App.get('subtitle');
+				$('#ChartContainer').append("<div id='" + this.idChart + "' class='col-sm-12'></div>");
+				if (this.typeChart === 'bar-drilldown') {
+					createBarHighChart(this.idChart, data, title, subtitle, App.get('ref'));
+				}
+				else if (this.typeChart === 'pie-basic') {
+					var newdata = modelDataForPie(data);
+					createHighPieChart(this.idChart, newdata, title, subtitle);
+				}
+			}
 		}
-	},
-			
-	changeScale: function()	{
-		var scale = App.get('scaleSelected');
-		removeLastChart(chart);
-		switch(scale) {
-			case 'hh':
-				var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM-DD HH:mm');
-				chart = createLineStepChart(chart, chartData, 'YYYY-MM-DD JJ:NN', 'hh', this.text, App.get('multValChart'));
-				break;
-			case 'DD':
-				var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM-DD');
-				chart = createLineChart(chart, chartData, 'YYYY-MM-DD', 'DD', this.text, App.get('multValChart'));
-				break;
-			case 'MM':
-			default:
-				var chartData = createChartData(App.get('chartData'), App.get('multValChart'), 'YYYY-MM');
-				chart = createBarChart(chart, chartData, 'YYYY-MM', 'MM', this.text, App.get('multValChart'));
-				break;
+		catch(err){
+			console.log(err.message);
 		}
-		chart.validateData();
-		chart.animateAgain();
-	}.observes('App.scaleSelected')		
-			
+	}			
 });
-
-function createChartData(totalData, multVal, format) {
-	var newData = [];
-	var result = [];
-	for(var i = 0; i < totalData.length; i++) {
-		if(multVal === undefined || multVal === null) {
-			if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
-				newData[(moment.unix(totalData[i].title)).format(format)] = 0;
-			}
-			newData[(moment.unix(totalData[i].title)).format(format)]+= totalData[i].value;
-		}
-		else {
-			var values = JSON.parse(totalData[i].value);
-			if(newData[(moment.unix(totalData[i].title)).format(format)] === undefined) {
-				newData[(moment.unix(totalData[i].title)).format(format)] = [];
-				for (var index in values) {
-					newData[(moment.unix(totalData[i].title)).format(format)][index] = 0;
-				}
-			}
-			for (var index in values) {
-				newData[(moment.unix(totalData[i].title)).format(format)][index]+= parseInt(values[index]);
-			}
-		}
-	}
-
-	for (var key in newData) {
-		if(newData.hasOwnProperty(key)) {
-			var obj = new Object();
-			obj.title = '' + key;
-			if(multVal === undefined || multVal === null) {
-				obj.value = '' + newData[key];
-			}
-			else {
-				for (var index in values) {
-					obj[index] = '' + newData[key][index];
-				}
-			}
-			result.push(obj);
-		}
-	}
-	if(result.length === 0) {
-		var obj = new Object();
-		obj.title = (moment()).format(format);
-		obj.value = "0";
-		result.push(obj);
-	}
-	return result;
-}
 
 function removeLastChart(chart) {
 	chart.removeGraph(chart.graphs[0]);
@@ -401,4 +351,33 @@ function removeLastChart(chart) {
 	chart.removeChartCursor();
 	chart.removeChartScrollbar();
 	chart.removeLegend();
+}
+
+function modelDataForPie(rawData) {
+	var data = [];
+	
+	if (rawData[0].hard !== 0 || rawData[0].soft !== 0) {
+		var soft = new Object;
+		soft.name = 'Rebotes duros';
+		soft.y = rawData[0].hard;
+		soft.color = '#f26522';
+
+		var hard = new Object;
+		hard.name = 'Rebotes suaves';
+		hard.y = rawData[0].soft;
+		hard.color = '#f7941d';
+
+		data = [hard, soft];
+	}
+	
+	return data;
+}
+
+function setExpandAttr(self, expand) {
+	if(self.get(expand)) {
+		self.set(expand, false);
+	}
+	else {
+		self.set(expand, true);
+	}
 }
