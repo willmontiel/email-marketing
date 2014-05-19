@@ -370,6 +370,9 @@ class Security extends Plugin
 				'tools::index' => array('tools' => array('read')),
 				'mail::savemail' => array('mail' => array('create')),
 				
+				//Formularios
+				'form::preview' => array('form' => array('read')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

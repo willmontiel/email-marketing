@@ -31,6 +31,9 @@
 				<td>
 					<div class="text-right">
 						{{ '{{#if framecode}}' }}
+							<a class="btn btn-default btn-sm" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
+							</a>
 							{{ '{{#if isInscription}}' }}
 								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
 							{{ '{{else}}' }}
@@ -51,6 +54,22 @@
 			{{'{{/each}}'}}
 		</tbody>
 	</table>
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Previsualización de formulario</h4>
+				</div>
+				<div class="modal-body" id="preview-modal">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/setup">
@@ -164,4 +183,22 @@
 			<button class="btn btn-default" {{ '{{action cancel this}}' }}>Regresar</button>
 		</div>
 	</div>
+</script>
+
+<script type="text/javascript">
+	function preview(id) {
+		$.post("{{url('form/preview')}}/" + id, function(form){
+			var f = form.form;
+			
+			var button = '<div class="form-actions pull-right"><a class="btn btn-sm btn-default btn-guardar extra-padding">' + f.button + '</a></div><div class="clearfix"></div>';
+			var title = '<h4 class="sectiontitle">' + f.title + '</h4>';
+			var content = title + '<form class="form-horizontal">';
+			for(var i = 0; i < f.fields.length; i++) {
+				content+= '<div class="form-group ' + f.fields[i].hide + '"><div class="col-md-3">' + f.fields[i].label + '</div><div class="col-md-7">' + f.fields[i].field + '</div></div>'
+			}
+			content+= button + '</form>';
+			$('#preview-modal').empty();
+			$('#preview-modal').append(content);
+		});
+	}
 </script>

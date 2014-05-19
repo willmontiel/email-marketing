@@ -69,4 +69,22 @@ class FormController extends ControllerBase
 		$this->view->setVar('elements', $html);
 		$this->view->setVar('link', $link);
 	}
+	
+	public function previewAction($idForm)
+	{
+		try {
+			$form = Form::findFirstByIdForm($idForm);
+			$creator = new FormCreator();
+			$html = $creator->getHtmlForm($form);
+			return $this->setJsonResponse(array('form' => $html));
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->response->redirect('error');
+		}
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			return $this->response->redirect('error');
+		}
+	}
 }
