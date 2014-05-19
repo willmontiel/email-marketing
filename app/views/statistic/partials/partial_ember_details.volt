@@ -104,10 +104,6 @@
 		</div>
 		<div class="clearfix"></div>
 		<div class="space"></div>
-		<div class="text-right">
-			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
-		</div>
-		<div class="clearfix"></div>
 	{{ '{{else}}' }}
 		<div class="bg bg-success">
 			<div class="wrapper">
