@@ -94,7 +94,6 @@ class SelectedFieldsMapper
 			}
 		}	
 		
-		\Phalcon\DI::getDefault()->get('logger')->log('newmap: ' . print_r($newmap, true));
 		$this->mapping = $newmap;
 	}
 	
@@ -126,8 +125,6 @@ class SelectedFieldsMapper
 	{
 		$result = array();
 		
-		\Phalcon\DI::getDefault()->get('logger')->log('mapping: ' . print_r($this->mapping, true));
-		
 		// Validar correo
 		$email = $values[$this->mapping[0]];
 		if (! \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
@@ -149,8 +146,6 @@ class SelectedFieldsMapper
 	 */
 	protected function transformValue($i, $value)
 	{
-		\Phalcon\DI::getDefault()->get('logger')->log('i: ' . $i);
-		\Phalcon\DI::getDefault()->get('logger')->log('value: ' . $value);
 		if (isset($this->transformations[$i])) {
 			switch ($this->transformations[$i]) {
 				case 'Numerical':
@@ -188,11 +183,10 @@ class SelectedFieldsMapper
 				default:
 					$result = $value;
 			}
-			\Phalcon\DI::getDefault()->get('logger')->log('value2: ' . $value);
-			\Phalcon\DI::getDefault()->get('logger')->log('result: ' . $result);
+	
 			return $result;
 		}
-		\Phalcon\DI::getDefault()->get('logger')->log('value2: ' . $value);
+	
 		return $value;
 	}
 	

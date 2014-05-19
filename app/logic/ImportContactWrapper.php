@@ -495,7 +495,6 @@ class ImportContactWrapper
 			$rows++;
 			try {
 				$lineOut = $this->fieldmapper->mapValues($line);
-				$this->log->log("lineOut: " . print_r($lineOut, true));
 			}
 			catch (\InvalidArgumentException $e) {
 				$this->errors[] = \sprintf('%s en linea %d', $e->getMessage(), $rows);
@@ -553,7 +552,7 @@ class ImportContactWrapper
 							. "WHERE t.idEmail IS NOT NULL "
 							. "   AND c.idDbase = {$idDbase}";
 		// Insertar contactos nuevos (ID nulo y no bloqueados)
-		$createcontacts    =  "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) "
+		$createcontacts    =  "INSERT INTO contact (idDbase, idEmail, name, lastName, birthDate, status, unsubscribed, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) "
 							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, {$hora}, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
 							. "    FROM {$this->tablename} t "
 							. "    WHERE t.idContact IS NULL "
