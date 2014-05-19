@@ -121,7 +121,11 @@ class Security extends Plugin
 				'contacts::form' => array(),
 				'contacts::activate' => array(),
 				'share::results' => array(),
-				
+				'apistatistics::mailpublicopens' => array(),
+				'apistatistics::mailpublicclicks' => array(),
+				'apistatistics::mailpublicunsubscribed' => array(),
+				'apistatistics::mailpublicspam' => array(),
+				'apistatistics::mailpublicbounced' => array(),
 				
 				
 				//Dashboard
@@ -471,6 +475,11 @@ class Security extends Plugin
 			'contacts:form',
 			'contacts:activate',
 			'share:results',
+			'apistatistics:mailpublicopens',
+			'apistatistics:mailpublicclicks',
+			'apistatistics:mailpublicunsubscribed',
+			'apistatistics:mailpublicspam',
+			'apistatistics:mailpublicbounced'
 		);
 		
 		if ($resource == "error::notavailable") {

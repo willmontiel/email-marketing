@@ -134,7 +134,9 @@ class ApistatisticsController extends ControllerBase
 	}
 	
 	
-	
+	/**
+	 * Public actions for share statistics
+	 */
 	
 	
 	/**
