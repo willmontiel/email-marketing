@@ -155,7 +155,7 @@ class SelectedFieldsMapper
 					try {
 						$d = $this->getTimeStamp($value);
 					
-						if ($d->getTimestamp() < 0 || !$d) {
+						if (!$d || $d->getTimestamp() < 0) {
 							$d = new \DateTime('now');
 							$d->setTime(0,0,0);
 						}
