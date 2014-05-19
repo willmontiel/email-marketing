@@ -143,6 +143,8 @@ class SelectedFieldsMapper
 	 */
 	protected function transformValue($i, $value)
 	{
+		\Phalcon\DI::getDefault()->get('logger')->log('i: ' . $i);
+		\Phalcon\DI::getDefault()->get('logger')->log('value: ' . $value);
 		if (isset($this->transformations[$i])) {
 			switch ($this->transformations[$i]) {
 				case 'Numerical':
@@ -180,8 +182,11 @@ class SelectedFieldsMapper
 				default:
 					$result = $value;
 			}
+			\Phalcon\DI::getDefault()->get('logger')->log('value2: ' . $value);
+			\Phalcon\DI::getDefault()->get('logger')->log('result: ' . $result);
 			return $result;
 		}
+		\Phalcon\DI::getDefault()->get('logger')->log('value2: ' . $value);
 		return $value;
 	}
 	
