@@ -51,7 +51,7 @@ class ApistatisticsController extends ControllerBase
 		
 		$statWrapper->setPager($pager);
 		
-		$stat = $statWrapper->findMailClickStats($idMail, $filter, $type);
+		$stat = $statWrapper->findMailClickStats($idMail, $filter);
 		
 		return $this->setJsonResponse($stat);
 	}
@@ -59,7 +59,7 @@ class ApistatisticsController extends ControllerBase
 	/**
 	 * @Get("/mail/{idMail:[0-9]+}/drilldownunsubscribeds")
 	 */
-	public function mailunsubscribedAction($type)
+	public function mailunsubscribedAction($idMail)
 	{
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
