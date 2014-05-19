@@ -22,7 +22,7 @@ class FormWrapper extends BaseWrapper
 		$form->type = $content->type;
 		$form->title = $content->title;
 		$form->content = $content->content;
-		$form->target = ($content->listselected) ? $content->listselected : '';
+		$form->target = ($content->listselected) ? $content->listselected : 'none';
 		
 		$form->urlSuccess = (strpos($content->urlsuccess, "http://") === FALSE && strpos($content->urlsuccess, "https://") === FALSE ) ? 'http://' . $content->urlsuccess : $content->urlsuccess;
 		$form->urlError = (strpos($content->urlerror, "http://") === FALSE && strpos($content->urlerror, "https://") === FALSE) ? 'http://' . $content->urlerror : $content->urlerror;
@@ -63,7 +63,7 @@ class FormWrapper extends BaseWrapper
 		$form->type = $content->type;
 		$form->title = $content->title;
 		$form->content = $content->content;
-		$form->target = ($content->listselected) ? $content->listselected : '';
+		$form->target = ($content->listselected) ? $content->listselected : 'none';
 
 		$form->urlSuccess = (strpos($content->urlsuccess, "http://") === FALSE && strpos($content->urlsuccess, "https://") === FALSE ) ? 'http://' . $content->urlsuccess : $content->urlsuccess;
 		$form->urlError = (strpos($content->urlerror, "http://") === FALSE && strpos($content->urlerror, "https://") === FALSE) ? 'http://' . $content->urlerror : $content->urlerror;
