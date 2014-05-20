@@ -176,7 +176,10 @@ class SelectedFieldsMapper
 						$d = \DateTime::createFromFormat($this->dateformat, $value);
 						if (!$d || $d->getTimestamp() < 0) {
 							$result = null;
-						} 
+						}
+						else {
+							$result = "'$value', '{$this->dateformat}'";
+						}
 					} 
 					catch (Exception $ex) {
 						$result = 0;

@@ -152,6 +152,11 @@ class ImportContactWrapper
 	public function startImport($fields, $destiny, $dateformat, $delimiter, $header) {
 		$mode = $this->account->accountingMode;
 		
+		$dateformat = (empty($dateformat) ? 'd/m/Y' : $dateformat);
+		$s = array('d', 'm', 'Y');
+		$r = array('%d', '%m', '%Y');
+		$this->dateformat = str_ireplace($s, $r, $dateformat);
+		
 		$this->resetProcess();
 		$this->timer->startTimer('all-import', 'Import process');
 	
@@ -186,7 +191,7 @@ class ImportContactWrapper
 		try {
 			$this->fieldmapper->setDbase($dbase);
 			$this->fieldmapper->assignMapping($posCol);
-			$this->fieldmapper->setDateFormat($dateformat);
+			$this->fieldmapper->setDateFormat($this->dateformat);
 			$this->fieldmapper->processMapping();
 		} catch (Exception $ex) {
 			$this->updateProcessStatus('Importacion no realizada');
