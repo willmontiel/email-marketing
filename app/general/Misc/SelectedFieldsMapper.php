@@ -54,6 +54,9 @@ class SelectedFieldsMapper
 		$s = array('d', 'm', 'Y');
 		$r = array('%d', '%m', '%Y');
 		$this->dateformated = str_ireplace($s, $r, $dateformat);
+		
+		\Phalcon\DI::getDefault()->get('logger')->log("format: {$this->dateformat}");
+		\Phalcon\DI::getDefault()->get('logger')->log("formated: {$this->dateformated}");
 	}
 	
 	public function processMapping()
@@ -94,6 +97,7 @@ class SelectedFieldsMapper
 				}
 			}
 			else if ($idfield == 'birthdate') {
+				\Phalcon\DI::getDefault()->get('logger')->log("Es birthdate {$idfield}");
 				$this->fieldnames[] = $idfield;
 				$this->transformations[] = 'birthdate';
 				$newmap[$stposition] = $position;
@@ -164,6 +168,7 @@ class SelectedFieldsMapper
 				case 'Numerical':
 					$result =  intval($value);
 					break;
+				
 				case 'Date':
 					try {
 						$d = $this->getTimeStamp($value);
@@ -178,29 +183,37 @@ class SelectedFieldsMapper
 						$result = 0;
 					}
 					break;
+					
 				case 'birthdate':
 					try {
 						$d = \DateTime::createFromFormat($this->dateformat, $value);
 						if (!$d || $d->getTimestamp() < 0) {
+							\Phalcon\DI::getDefault()->get('logger')->log("Result es null");
 							$result = null;
 						}
 						else {
 							$result = "{$value}, {$this->dateformated}";
+							\Phalcon\DI::getDefault()->get('logger')->log("Result es {$result}");
 						}
 					} 
 					catch (Exception $ex) {
-						$result = 0;
+						$result = null;
 					}
+					break;
+					
 				case 'email':
 					$result = strtolower($value);
 					break;
+				
 				case 'domain':
 					$value = strtolower($value);
 					list($u, $d) = explode('@', $value);
 					$result = $d;
 					break;
+				
 				default:
 					$result = $value;
+					break;
 			}
 	
 			return $result;
