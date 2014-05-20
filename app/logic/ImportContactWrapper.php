@@ -508,7 +508,8 @@ class ImportContactWrapper
 			}
 			// Validar que el EMAIL no este repetido
 			if ( $this->verifyEmailAddress($lineOut[0], $rows) ) {
-				fputcsv($nfp, $lineOut, $delimiter);
+//				fputcsv($nfp, $lineOut, $delimiter);
+				$this->fputcsv2($nfp, $lineOut, $delimiter);
 			}
 			if (! $rows % $every) {
 				$this->incrementProgress($rows);
@@ -519,6 +520,26 @@ class ImportContactWrapper
 
 		$this->incrementProgress($rows);
 		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed!");
+	}
+	
+	
+	protected function fputcsv2 ($fh, array $fields, $delimiter = ',', $enclosure = '"', $mysql_null = false) { 
+		$delimiter_esc = preg_quote($delimiter, '/'); 
+		$enclosure_esc = preg_quote($enclosure, '/'); 
+
+		$output = array(); 
+		foreach ($fields as $field) { 
+			if ($field === null && $mysql_null) { 
+				$output[] = 'NULL'; 
+				continue; 
+			} 
+
+			$output[] = preg_match("/(?:${delimiter_esc}|${enclosure_esc}|\s)/", $field) ? ( 
+				$enclosure . str_replace($enclosure, $enclosure . $enclosure, $field) . $enclosure 
+			) : $field; 
+		} 
+
+		fwrite($fh, join($delimiter, $output) . "\n"); 
 	}
 	
 	protected function incrementProgress($adv)
@@ -651,7 +672,8 @@ class ImportContactWrapper
 
 				foreach ($this->errors as $error) {
 					$tmp = explode(",", $error);
-					fputcsv($fp, $tmp);
+//					fputcsv($fp, $tmp);
+					$this->fputcsv2($fp, $tmp);
 				}
 
 				fclose($fp);
