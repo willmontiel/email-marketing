@@ -76,20 +76,33 @@ class ContactsController extends ControllerBase
 		$contactsAdded = array();
 		$contactsCreated = array();
 		$contactsErrors = array();
+		
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
+		
 		foreach ($batchreal as $batchC) {
 			// Crear el nuevo contacto:
 			$wrapper = new ContactWrapper();
 			$wrapper->setAccount($this->user->account);
+			$wrapper->setDateFormat($dateFormat);
 			$wrapper->setIdDbase($list->idDbase);
 			$wrapper->setIdContactlist($idContactlist);
 			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
 
 			$newcontact = new stdClass();
-			
+		
 			$newcontact->email = $batchC['email'];
 			$newcontact->name = $batchC['name'];
 			$newcontact->lastName = $batchC['lastName'];
-			$newcontact->birthDate = $batchC['birthDate'];
+			
+			$date = explode('/', $batchC['birthDate']);
+			if (count($date) != 0) {
+				$newDate = (checkdate($date[1],$date[0],$date[2]) ? $batchC['birthDate'] : null);
+			}
+			else {
+				$newDate = null;
+			}
+			
+			$newcontact->birthDate = $newDate;
 			$newcontact->status = "";
 			$newcontact->activatedOn = "";
 			$newcontact->bouncedOn = "";

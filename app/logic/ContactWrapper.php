@@ -22,7 +22,9 @@ class ContactWrapper extends BaseWrapper
 	protected $counter;
 
 	protected $logger;
-	
+	protected $dateFormat;
+
+
 	const PAGE_DEFAULT = 5;
 	const DEFAULT_LIMIT_SEARCH = 200;
 
@@ -38,6 +40,11 @@ class ContactWrapper extends BaseWrapper
 	public function setContactMailHistory(\EmailMarketing\General\ModelAccess\ContactMailHistory $mailhistory)
 	{
 		$this->mailHistory = $mailhistory;
+	}
+	
+	public function setDateFormat($dateFormat)
+	{
+		$this->dateFormat = $dateFormat;
 	}
 	
 	public function startTransaction()
@@ -442,13 +449,7 @@ class ContactWrapper extends BaseWrapper
 		
 		$contact->name = $data->name;
 		$contact->lastName = $data->lastName;
-		
-		if (!empty($data->birthDate)) {
-			list($day, $month, $year) = preg_split('/[\s\/|-|:]+/', $data->birthDate);
-			$data->birthDate = mktime(0, 0, 0, $month, $day, $year);
-		}
-		
-		$contact->birthDate = $data->birthDate;
+		$contact->birthDate = (empty($data->birthDate) ? NULL : $this->dateFormat->transformDateFormat($data->birthDate, 'd/m/Y', 'Y-m-d'));
 
 		if ($isnew) {
 			$contact->ipSubscribed = $this->ipaddress;
@@ -843,7 +844,7 @@ class ContactWrapper extends BaseWrapper
 
 			$finstances = $this->createFieldInstanceMap($finstancesO);
 			
-			$this->dateFormat = \EmailMarketing\General\Misc\DateFormat();
+			$this->dateFormat = new \EmailMarketing\General\Misc\DateFormat();
 			foreach ($contacts as $contact) {
 				//$contactT = Contact::findFirstByIdContact($contact->idContact);
 				$result[] = $this->convertCompleteContactToJson($contact, $cfields, $finstances);

@@ -513,9 +513,12 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->contact;
 		
 		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
+		
 		$wrapper = new ContactWrapper();
 		
 		$wrapper->setAccount($this->user->account);
+		$wrapper->setDateFormat($dateFormat);
 		$wrapper->setContactMailHistory($mailhistory);
 		$wrapper->setIdDbase($idDbase);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
@@ -844,10 +847,12 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->contact;
 		
 		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
 		$wrapper = new ContactWrapper();
 		
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setContactMailHistory($mailhistory);
+		$wrapper->setDateFormat($dateFormat);
 		$wrapper->setIdDbase($list->idDbase);
 		$wrapper->setIdContactlist($idContactlist);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
@@ -918,11 +923,13 @@ class ApiController extends ControllerBase
 		$contents = $contentsT->contact;
 		
 		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
 		
 		$wrapper = new ContactWrapper();
 
 		$wrapper->setAccount($this->user->account);
 		$wrapper->setIdDbase($list->idDbase);
+		$wrapper->setDateFormat($dateFormat);
 		$wrapper->setContactMailHistory($mailhistory);
 		$wrapper->setIdContactlist($idContactlist);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
@@ -1355,9 +1362,14 @@ class ApiController extends ControllerBase
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		
 		$wrapper = new ContactWrapper();
 
 		$wrapper->setAccount($this->user->account);
+		$wrapper->setDateFormat($dateFormat);
+		$wrapper->setContactMailHistory($mailhistory);
 		$wrapper->setIdDbase($segment->idDbase);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 		

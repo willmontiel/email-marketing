@@ -29,6 +29,7 @@
 						<td>Email</td>
 						<td>Nombre</td>
 						<td>Apellido</td>
+						<td>Fecha de cumpleaños</td>
 						<td>Estado</td>
 					</tr>
 				</thead>

@@ -176,22 +176,16 @@ class SelectedFieldsMapper
 					break;
 					
 				case 'birthdate':
-					try {
-						$d = \DateTime::createFromFormat($this->dateformat, $value);
-						if (!$d || $d->getTimestamp() < 0) {
-							$result = null;
+					if ($this->validateDate($value)) {
+						$result = null;
+					}
+					else {
+						if ($this->dateformat == 'Y-m-d') {
+							$result = $value;
 						}
 						else {
-							if ($this->dateformat == 'Y-m-d') {
-								$result = $value;
-							}
-							else {
-								$result = $this->transformDateFormat($value, $this->dateformat);
-							}
+							$result = $this->transformDateFormat($value, $this->dateformat);
 						}
-					} 
-					catch (Exception $ex) {
-						$result = null;
 					}
 					break;
 					
@@ -242,22 +236,26 @@ class SelectedFieldsMapper
 	}
 	
 	
-	protected function transformDateFormat($date, $format) {
+	protected function transformDateFormat($date, $format) 
+	{
 		$separator = substr($format, 1, 1);
 	
 		$f = explode($separator, $format);
 		$d = explode($separator, $date);
 		
-		$year = $this->getPart($f, $d, 'Y');
-		$month = $this->getPart($f, $d, 'm');
-		$day = $this->getPart($f, $d, 'd');
-	
-		$newDate = "{$year}-{$month}-{$day}";
-		
-		return $newDate;
+		if (count($d) != 0) {
+			$year = $this->getPart($f, $d, 'Y');
+			$month = $this->getPart($f, $d, 'm');
+			$day = $this->getPart($f, $d, 'd');
+
+			$newDate = "{$year}-{$month}-{$day}";
+			return $newDate;
+		}
+		return null;
 	}
 
-	protected function getPart($format, $value, $criteria) {
+	protected function getPart($format, $value, $criteria) 
+	{
 		if ($format[0] == $criteria) {
 			$v = $value[0];
 		}
@@ -269,7 +267,23 @@ class SelectedFieldsMapper
 		}
 		return $v;
 	}
-
+	
+	
+	protected function validateDate($date) 
+	{
+		$date = $this->transformDateFormat($date, $this->dateformat);
+		
+		$d = explode('-', $date);
+		
+		if (count($d) != 0) {
+			if (checkdate($d[1],$d[2],$d[0])) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+	
 	protected function getCustomFieldName($fieldid)
 	{
 		if (isset($this->dbfields[$fieldid])) {

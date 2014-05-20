@@ -66,8 +66,10 @@ class DbaseapiController extends ControllerBase
 				return $this->setJsonResponse($rest->getRecords());
 			}	
 			else {
+				$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
 				$wrapper = new ContactWrapper();
 				$wrapper->setAccount($account);
+				$wrapper->setDateFormat($dateFormat);
 				$wrapper->setIdDbase($dbase->idDbase);
 				$wrapper->setPager($pager);
 				$wrapper->setContactMailHistory($mailhistory);

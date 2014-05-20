@@ -447,7 +447,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	private function createStructureForReturns($contacts)
 	{   
 		$object = array();
-		$dateFormat = \EmailMarketing\General\Misc\DateFormat();
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
 		
 		foreach ($contacts as $contact) {
 			$c = array();
