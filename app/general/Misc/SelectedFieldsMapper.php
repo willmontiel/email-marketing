@@ -176,7 +176,7 @@ class SelectedFieldsMapper
 					break;
 					
 				case 'birthdate':
-					if ($this->validateDate($value)) {
+					if (!$this->validateDate($value)) {
 						$result = null;
 					}
 					else {
