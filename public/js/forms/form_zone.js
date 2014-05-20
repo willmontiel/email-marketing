@@ -36,7 +36,7 @@ FormEditor.prototype.createZones = function() {
 
 FormEditor.prototype.designDefaultFields = function() {	
 	for(var i = 0; i < this.options.length; i++) {
-		if( this.options[i].id === 'email' ||  this.options[i].id === 'name' ||  this.options[i].id === 'lastName') {
+		if( this.options[i].id === 'email' ||  this.options[i].id === 'name' ||  this.options[i].id === 'lastName' ||  this.options[i].id === 'birthDate') {
 			this.options[i].designField();
 		}
 	}
@@ -51,6 +51,9 @@ FormEditor.prototype.designCustomFields = function() {
 	
 	var lastname = new TxtBlock(this, 'lastName', 'Apellido', 'Si', false);
 	lastname.designOptionField();
+	
+	var birthdate = new DateBlock(this, 'birthDate', 'Fecha de nacimiento', 'Si', false);
+	birthdate.designOptionField();
 	
 	for(var i = 0; i < App.formfields.length; i++) {
 		switch(App.formfields[i].type) {

@@ -116,7 +116,7 @@ class FormCreator
 	{
 		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control date_view_picker" data-name="' . $element->name . '" value="' . $this->getDateValue($element) . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control field-element-form-required date_view_picker" data-name="' . $element->name . '" value="' . $this->getDateValue($element) . '" required>';
 		if($element->hide) {
-			$field = '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control date_view_picker" value="' . $element->defaultmonth . '/' . $element->defaultday . '/' . $element->defaultyear . '" data-name="' . $element->name . '">';
+			$field = '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="form-control date_view_picker" value="' . $element->defaultyear . '-' . $element->defaultmonth . '-' . $element->defaultday . '" data-name="' . $element->name . '">';
 		}
 		
 		return $field;
@@ -192,6 +192,9 @@ class FormCreator
 	public function getDateValue($element)
 	{
 		if(isset($this->contact)) {
+			if($element->id === 'birthDate') {
+				return $this->contact->birthDate;
+			}
 			$fis = Fieldinstance::findFirst(array(
 				'conditions' => 'idCustomField = ?1 AND idContact = ?2',
 				'bind' => array(1 => $element->id,

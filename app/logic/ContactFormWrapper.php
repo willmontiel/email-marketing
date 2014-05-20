@@ -27,7 +27,7 @@ class ContactFormWrapper extends ContactWrapper
 			$param = explode("_", $key);
 			$fieldname = $param[1];
 			
-			if($fieldname === 'email' || $fieldname === 'name' || $fieldname === 'lastName') {
+			if($fieldname === 'email' || $fieldname === 'name' || $fieldname === 'lastName' || $fieldname === 'birthDate') {
 				$name = $fieldname;
 			}
 			else {
@@ -49,7 +49,7 @@ class ContactFormWrapper extends ContactWrapper
 	public function createContactFromForm($fields)
 	{
 		$contactObj = $this->setFieldsToWrapper($fields);
-
+		$this->logger->log(print_r($contactObj, true));
 		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist, true, true);
 		
 		if($contact == false) {
