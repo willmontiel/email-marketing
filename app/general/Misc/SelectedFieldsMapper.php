@@ -14,6 +14,7 @@ class SelectedFieldsMapper
 	protected $cfieldsforinsert;
 	protected $cfieldstransform;
 	protected $transformations;
+	protected $dateformat;
 
 	public function __construct() 
 	{
@@ -43,6 +44,11 @@ class SelectedFieldsMapper
 		$this->dbase = $dbase;
 	}
 	
+	public function setDateFormat($dateformat)
+	{
+		$this->dateformat = $dateformat;
+	}
+	
 	public function processMapping()
 	{
 		if ($this->dbase == null || $this->rawMap == null) {
@@ -59,13 +65,13 @@ class SelectedFieldsMapper
 		$newmap = array(0 => $this->rawMap['email'], 1 => $this->rawMap['email']);
 		$m = $this->rawMap;
 		unset($m['email']);
-
+		
 		// Transformaciones
 		$this->transformations  = array('email', 'domain');
 
 		// Posicion donde debe moverse el nuevo campo
 		$stposition = 2;
-
+		
 		// Recorrer la lista
 		foreach ($m as $idfield => $position) {
 			if ($position == null || $position == -1) {
@@ -80,15 +86,21 @@ class SelectedFieldsMapper
 					$stposition++;
 				}
 			}
+			else if ($idfield == 'birthdate') {
+				$this->fieldnames[] = $idfield;
+				$this->transformations[] = 'birthdate';
+				$newmap[$stposition] = $position;
+				$stposition++;
+			}
 			else {
 				$this->fieldnames[] = $idfield;
 				$this->transformations[] = 'Text';
 				$newmap[$stposition] = $position;
 				$stposition++;
 			}
-		}		
-		$this->mapping = $newmap;
+		}	
 		
+		$this->mapping = $newmap;
 	}
 	
 	/**
@@ -118,7 +130,7 @@ class SelectedFieldsMapper
 	public function mapValues($values)
 	{
 		$result = array();
-
+		
 		// Validar correo
 		$email = $values[$this->mapping[0]];
 		if (! \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
@@ -147,25 +159,28 @@ class SelectedFieldsMapper
 					break;
 				case 'Date':
 					try {
-						// Intentar parse con Fecha y hora
-						$d = \DateTime::createFromFormat('Y-m-d H:i:s', $value);
-						if (!$d) {
-							// Intentar solo con fecha
-							$d = \DateTime::createFromFormat('Y-m-d', $value);
-							if (!$d) {
-								$d = new \DateTime('now');
-							}
-							$d->setTime(0,0,0);
-						}
-						if ($d->getTimestamp() < 0) {
+						$d = $this->getTimeStamp($value);
+					
+						if (!$d || $d->getTimestamp() < 0) {
 							$d = new \DateTime('now');
 							$d->setTime(0,0,0);
 						}
 						$result = ($d)?$d->getTimestamp():0;
-					} catch (Exception $ex) {
+					} 
+					catch (Exception $ex) {
 						$result = 0;
 					}
 					break;
+				case 'birthdate':
+					try {
+						$d = \DateTime::createFromFormat($this->dateformat, $value);
+						if (!$d || $d->getTimestamp() < 0) {
+							$result = null;
+						} 
+					} 
+					catch (Exception $ex) {
+						$result = 0;
+					}
 				case 'email':
 					$result = strtolower($value);
 					break;
@@ -177,11 +192,38 @@ class SelectedFieldsMapper
 				default:
 					$result = $value;
 			}
+	
 			return $result;
 		}
+	
 		return $value;
 	}
 	
+	protected function getTimeStamp($date)
+	{
+		$formats = array(
+			'Y-m-d H:i:s', 
+			'Y-m-d', 
+			'Y/m/d H:i:s', 
+			'Y/m/d',
+			'd-m-Y H:i:s',
+			'd-m-Y',
+			'd/m/Y H:i:s',
+			'd/m/Y',
+			'm-d-Y H:i:s',
+			'm-d-Y',
+			'm/d/Y H:i:s',
+			'm/d/Y'
+		);
+		
+		foreach ($formats as $format) {
+			$d = \DateTime::createFromFormat($format, $date);
+			if ($d) {
+				return $d;
+			}
+		}
+	}
+
 	protected function getCustomFieldName($fieldid)
 	{
 		if (isset($this->dbfields[$fieldid])) {

@@ -85,6 +85,15 @@ App.delimiter_opt = [
 	",", ";", "/"
 ];    
 
+App.dateformats = [
+	Ember.Object.create({format: "Y-m-d (1969-12-31)", id: "Y-m-d"}),
+	Ember.Object.create({format: "Y/m/d (1969/12/31)", id: "Y/m/d"}),
+	Ember.Object.create({format: "d-m-Y (31-12-1969)", id: "d-m-Y"}),
+	Ember.Object.create({format: "d/m/Y (31/12/1969)", id: "d/m/Y"}),
+	Ember.Object.create({format: "m-d-Y (12-31-1969)", id: "m-d-Y"}),
+	Ember.Object.create({format: "m/d/Y (12/31/1969)", id: "m/d/Y"})
+];
+
 App.delimiterView =  Ember.View.extend({
   templateName: 'select'
 });
