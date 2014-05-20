@@ -20,7 +20,7 @@
 		<a class="btn btn-default btn-sm extra-padding" href="{{ url('user/new') }}"><span class="glyphicon glyphicon-plus"></span> Nuevo Usuario</a>
 	</div>
 	
-	<table class="table table-striped">
+	<table class="table table-contacts table-striped">
 		<thead>
 			<tr>
 				<td></td>

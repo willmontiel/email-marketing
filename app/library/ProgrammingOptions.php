@@ -33,22 +33,22 @@ class ProgrammingOptions
 			case 'Reanudar':
 				$object->text = "Reanudar";
 				$object->url = "scheduledmail/play/";
-				$object->icon = "icon-play";
+				$object->icon = "glyphicon glyphicon-play";
 				break;
 			case 'Detener':
 				$object->text = "Detener";
 				$object->url = "scheduledmail/stop/";
-				$object->icon = "icon-pause";
+				$object->icon = "glyphicon glyphicon-stop";
 				break;
 			case 'Cancelar':
 				$object->text = "Cancelar";
 				$object->url = "scheduledmail/cancel/";
-				$object->icon = "icon-remove";
+				$object->icon = "glyphicon glyphicon-remove";
 				break;
 			case 'Pausar':
 				$object->text = "Pausar";
 				$object->url = "scheduledmail/stop/";
-				$object->icon = "icon-pause";
+				$object->icon = "glyphicon glyphicon-pause";
 				break;
 			default:
 				$object->text = "No hay acciones disponibles";

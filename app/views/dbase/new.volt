@@ -19,32 +19,45 @@
 			</p>
 		</div>
 	</div>
-	<div class="row">
-		{{ flashSession.output() }}
+	
+	{{ flashSession.output() }}
+
+	<div class="col-sm-12 hidden-md hidden-lg">
+		<div class="alert alert-success">
+			<div class="row">
+				<div class="col-sm-2">
+					<span class="glyphicon glyphicon-info-sign"></span>
+				</div>
+				<div class="col-md-9">
+					<p>Cree una nueva base de datos, seleccione un color para identificar los contactos que pertenecen a la misma.</p>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="col-md-5">
+
+	<div class="col-md-7">
 		<form action = "{{url('dbase/new')}}" method="post" class="form-horizontal" role="form">
 			<div class="form-group">
-				<label class="col-sm-5">*Nombre</label>
-				<div class="col-sm-7">
+				<label class="col-sm-4 control-label">*Nombre</label>
+				<div class="col-sm-8">
 					{{editform.render("name")}}
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-5">*Descripción</label>
-				<div class="col-sm-7">
+				<label class="col-sm-4 control-label">*Descripción</label>
+				<div class="col-sm-8">
 					{{editform.render("description")}}
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-5">*Descripción de los contactos</label>
-				<div class="col-sm-7">
+				<label class="col-sm-4 control-label">*Descripción de los contactos</label>
+				<div class="col-sm-8">
 					{{editform.render("Cdescription")}}
 				</div>
 			</div>
 			<div class="form-group">	
-				<label class="col-sm-5">*Color de etiqueta</label>
-				<div class="col-sm-7">
+				<label class="col-sm-4 control-label">*Color de etiqueta</label>
+				<div class="col-sm-8">
 					{{editform.render("color")}}
 					<table id="colorchart">
 						{% for color in colors %}
@@ -63,7 +76,7 @@
 			</div>
 		</form>
 	</div>
-	<div class="col-md-6">
+	<div class="hidden-xs hidden-sm col-md-5">
 		<div class="alert alert-success">
 			<div class="row">
 				<div class="col-sm-2">

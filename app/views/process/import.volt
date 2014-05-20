@@ -35,11 +35,11 @@
 		$(function() {
 			setInterval(checkUnfinishedImports, 5000);
 			$('.btn-for-modal-accordion').on('click', function(){
-				if(($(this).text()).trim() === 'Ver Detalles') {
+				if(($(this).text()).trim() === 'Ver detalles') {
 					$(this).text('Colapsar');
 				}
 				else {
-					$(this).text('Ver Detalles');
+					$(this).text('Ver detalles');
 				}
 			});
 		});
@@ -48,6 +48,140 @@
 {% endblock %}
 {% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
+
+	{#   importaciones progreso y reporte   #}
+
+	{# Menu de navegacion pequeño #}
+	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'import']) }}
+	{# /Menu de navegacion pequeño #}
+
+	<div class="row">
+		<h4 class="sectiontitle">Importando archivo: nombre del archivo a la lista: nombre de la lista</h4>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="progress progress-striped active">
+				<div class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+					<span class="">45% Complete</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row wrapper">
+		<div class="">
+			<a href="">Regresar a la lista</a> ó 
+			<button class="btn btn-sm btn-default extra-padding">Ver detalle</button>
+		</div>
+	</div>
+
+		<h4>Resumen de importación del archivo: nombre del archivo a la lista: nombre de la lista</h4>
+		<table class="table table-contacts report-import table-condensed table-striped">
+			<thead>
+			</thead>
+			<tbody>
+				<tr class="blue">
+					<td>
+						<span class="glyphicon glyphicon-folder-open"></span>
+					</td>
+					<td>
+						Contactos totales en archivo
+					</td>
+					<td class="big-number text-right">
+						50.000
+					</td>
+				</tr>
+				<tr class="green">
+					<td>
+						<span class="glyphicon glyphicon-ok-circle"></span>
+					</td>
+					<td>
+						Importados exitosamente <a href="">(Descargar reporte)</a>
+					</td>
+					<td class="big-number text-right">
+						49.900
+					</td>
+				</tr>
+				<tr class="red">
+					<td>
+						<span class="glyphicon glyphicon-ban-circle"></span>
+					</td>
+					<td>
+						No importados porque ya existen
+					</td>
+					<td class="big-number text-right">
+						7
+					</td>
+				</tr>
+				<tr class="red">
+					<td>
+						<span class="glyphicon glyphicon-ban-circle"></span>
+					</td>
+					<td>
+						No importados por correo inválido
+					</td>
+					<td class="big-number text-right">
+						5
+					</td>
+				</tr>
+				<tr class="red">
+					<td>
+						<span class="glyphicon glyphicon-ban-circle"></span>
+					</td>
+					<td>
+						No importados por correo bloqueado
+					</td>
+					<td class="big-number text-right">
+						32
+					</td>
+				</tr>
+				<tr class="red">
+					<td>
+						<span class="glyphicon glyphicon-ban-circle"></span>
+					</td>
+					<td>
+						No importados porque están duplicados en el archivo
+					</td>
+					<td class="big-number text-right">
+						20
+					</td>
+				</tr>
+				<tr class="red">
+					<td>
+						<span class="glyphicon glyphicon-ban-circle"></span>
+					</td>
+					<td>
+						No importados por límite de contactos exedidos
+					</td>
+					<td class="big-number text-right">
+						25
+					</td>
+				</tr>
+				<tr class="red">
+					<td>
+						<span class="glyphicon glyphicon-ban-circle"></span>
+					</td>
+					<td>
+						Total contactos no importados <a href="">(Descargar reporte)</a>
+					</td>
+					<td class="big-number text-right">
+						27
+					</td>
+				</tr>
+
+			</tbody>
+			<tfoot>
+			</tfoot>
+		</table>
+
+	
+
+
+
+
+	
+	
+	
+	
 
 	{# Menu de navegacion pequeño #}
 	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'import']) }}

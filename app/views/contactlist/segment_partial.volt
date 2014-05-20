@@ -22,7 +22,7 @@
 				</form>
 			</div>
 			<div class="col-md-3 pull-right">
-				{{'{{#link-to "segments.new" class="btn btn-default btn-sm extra-padding"}}'}} Crear nuevo segmento{{'{{/link-to}}'}}
+				{{'{{#link-to "segments.new" class="btn btn-default btn-sm extra-padding"}}'}} <span class="glyphicon glyphicon-plus"></span> Crear nuevo segmento{{'{{/link-to}}'}}
 			</div>
 		</div>
 		<div class="space"></div>

@@ -20,12 +20,12 @@
 	</div>
 
 	<div class="text-right">
-		<a href="{{url('flashmessage/new')}}" class="btn btn-sm btn-primary extra-padding pull-right">Crear nuevo mensaje</a>
+		<a href="{{url('flashmessage/new')}}" class="btn btn-sm btn-primary extra-padding pull-right"><span class="glyphicon glyphicon-plus"></span> Crear nuevo mensaje</a>
 	</div>
 	
 
 	<div class="row">
-		<table class="table table-bordered">
+		<table class="table table-contacts table-bordered">
 			<thead></thead>
 			<tbody>
 		{% if page.items|length == 0%}
@@ -49,9 +49,9 @@
 							</div>
 						</td>
 						<td>
-							<button class="ShowPreview btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-preview" data-id="{{item.message}}">Ver</button>
-							<a href="{{url('flashmessage/edit')}}/{{item.idFlashMessage}}" class="btn btn-sm btn-default extra-padding">Editar</a>
-							<button class="ShowDialog btn btn-sm btn-default btn-delete extra-padding" data-toggle="modal" data-target="#modal-simple" data-id="{{url('flashmessage/delete')}}/{{item.idFlashMessage}}">Eliminar</button>
+							<button class="ShowPreview btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-preview" data-id="{{item.message}}"><span class="glyphicon glyphicon-eye-open"></span> Ver</button>
+							<a href="{{url('flashmessage/edit')}}/{{item.idFlashMessage}}" class="btn btn-sm btn-default extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+							<button class="ShowDialog btn btn-sm btn-default btn-delete extra-padding" data-toggle="modal" data-target="#modal-simple" data-id="{{url('flashmessage/delete')}}/{{item.idFlashMessage}}"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
 						</td>
 					</tr>
 			{% endfor %}

@@ -20,34 +20,45 @@
 				Una vez editada la base de datos no afectará la configuración si ya la ha realizado.
 			</p>
 		</div>
-		<div class="row">
-			{{ flashSession.output() }}
+
+		{{ flashSession.output() }}
+		
+		<div class="col-sm-12 hidden-md hidden-lg">
+			<div class="alert alert-success">
+				<div class="row">
+					<div class="col-sm-2">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</div>
+					<div class="col-md-9">
+						<p>Cambie los datos de identificación de la base de datos</p>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-5">
-				<form action = "{{url('dbase/edit')}}/{{edbase.idDbase}}" method="post" role="form" class="form-horizontal">
-					<div class="form-group">
-						<label for="name" class="col-md-5 control-label">*Nombre</label>
-						<div class="col-md-7">
-							{{editform.render("name")}}
-						</div>
+		<div class="col-md-6">
+			<form action = "{{url('dbase/edit')}}/{{edbase.idDbase}}" method="post" role="form" class="form-horizontal">
+				<div class="form-group">
+					<label for="name" class="col-md-4 control-label">*Nombre</label>
+					<div class="col-md-8">
+						{{editform.render("name")}}
 					</div>
-					<div class="form-group">
-						<label for="description" class="col-md-5 control-label">*Descripción</label>
-						<div class="col-md-7">       
-							{{editform.render("description")}}
-						</div>
+				</div>
+				<div class="form-group">
+					<label for="description" class="col-md-4 control-label">*Descripción</label>
+					<div class="col-md-8">       
+						{{editform.render("description")}}
 					</div>
-					<div class="form-group">
-						<label for="Cdescription" class="col-md-5 control-label">*Descripción de los contactos</label>
-						<div class="col-md-7">
-							{{editform.render("Cdescription")}}
-						</div>
+				</div>
+				<div class="form-group">
+					<label for="Cdescription" class="col-md-4 control-label">*Descripción de los contactos</label>
+					<div class="col-md-8">
+						{{editform.render("Cdescription")}}
 					</div>
-					<div class="form-group">
-						<label class="col-md-5 control-label">*Color de etiqueta</label>
-						<div class="col-md-7">
-							{{editform.render("color")}}
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">*Color de etiqueta</label>
+					<div class="col-md-8">
+						{{editform.render("color")}}
 						<table id="colorchart">
 						{% for color in colors %}
 							<tr>
@@ -57,29 +68,24 @@
 							</tr>
 						{% endfor %}
 						</table>
+						<div class="space"></div>
 					</div>
-					<div class="form-actions pull-right">
-						<div class="row">
-							<div class="col-xs-6">
-								<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
-							</div>
-							<div class="col-xs-6">
-								{{submit_button("Guardar", 'class' : "btn btn-default btn-guardar btn-sm extra-padding", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
-							</div>
-						</div>
-					</div>	
-				</form>
-			</div>
-			</div>
-			<div class="col-md-6">
-				<div class="alert alert-success">
-					<div class="row">
-						<div class="col-sm-2">
-							<span class="glyphicon glyphicon-info-sign"></span>
-						</div>
-						<div class="col-md-9">
-							<p>Cree una nueva lista</p>
-						</div>
+				</div>
+				
+				<div class="form-actions">
+					<a href="{{ url('dbase/show/') }}{{edbase.idDbase}}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
+					{{submit_button("Guardar", 'class' : "btn btn-default btn-guardar btn-sm extra-padding", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides")}}
+				</div>	
+			</form>
+		</div>
+		<div class="hidden-xs hidden-sm col-md-5">
+			<div class="alert alert-success">
+				<div class="row">
+					<div class="col-sm-2">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</div>
+					<div class="col-md-9">
+						<p>Cambie los datos de identificación de la base de datos</p>
 					</div>
 				</div>
 			</div>

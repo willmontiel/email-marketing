@@ -8,6 +8,18 @@
 					
 		{{ flashSession.output() }}	
 
+		<div class="col-sm-12 hidden-md hidden-lg">
+			<div class="alert alert-success">
+				<div class="row">
+					<div class="col-sm-2">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</div>
+					<div class="col-md-9">
+						<p>Cree un nuevo usuario</p>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="col-md-5">
 			<form action = "{{url('user/new/')}}" id="createUser" method="Post" class="form-horizontal" role="form">
 				<div class="form-group">
@@ -63,7 +75,7 @@
 				</div>
 			</form>
 		</div>
-		<div class="col-md-6">
+		<div class="hidden-xs hidden-sm col-md-5">
 			<div class="alert alert-success">
 				<div class="row">
 					<div class="col-sm-2">

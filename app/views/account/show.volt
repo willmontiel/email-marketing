@@ -20,7 +20,7 @@
 
 	<div class="row">
 		<div class="col-sm-12 text-right">
-			<a href="{{url('account/newuser')}}/{{idAccount}}" class="btn btn-sm btn-default extra-padding">Crear nuevo usuario</a>
+			<a href="{{url('account/newuser')}}/{{idAccount}}" class="btn btn-sm btn-default extra-padding"><span class="glyphicon glyphicon-plus"></span> Crear nuevo usuario</a>
 		</div>
 	</div>
 
@@ -48,8 +48,8 @@
 						<td>{{date('Y-m-d', item.updatedon)}}</td>
 						<td>
 							<a href="{{url('session/loginlikethisuser/')}}{{item.idUser}}" class="btn btn-sm btn-primary extra-padding">Ingresar como este usuario</a>
-							<a href="{{url('account/edituser/')}}{{item.idUser}}" class="btn btn-sm btn-default extra-padding">Editar</a>
-							<button data-toggle="modal"  data-target="#modal-simple" data-id="{{url('account/deleteuser/')}}{{item.idUser}}" class="ShowDialog btn btn-sm btn-default btn-delete extra-padding">Eliminar</button>
+							<a href="{{url('account/edituser/')}}{{item.idUser}}" class="btn btn-sm btn-default extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+							<button data-toggle="modal"  data-target="#modal-simple" data-id="{{url('account/deleteuser/')}}{{item.idUser}}" class="ShowDialog btn btn-sm btn-default btn-delete extra-padding"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
 						</td>
 					</tr>
 				</tbody>
