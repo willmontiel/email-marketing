@@ -762,7 +762,7 @@ class ContactWrapper extends BaseWrapper
 		$object['id'] = $contact->idContact;
 		$object['email'] = $email->email;
 		$object['name'] = $contact->name;
-		$object['birthDate'] = (!empty($contact->birthDate) ? $contact->birthDate : '');
+		$object['birthDate'] = (!empty($contact->birthDate) ? $this->dateFormat->transformDateFormat($contact->birthDate, 'Y-m-d', 'd/m/Y') : '');
 		$object['lastName'] = $contact->lastName;
 		$object['isActive'] = ($contact->status != 0);
 		$object['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
@@ -842,7 +842,8 @@ class ContactWrapper extends BaseWrapper
 			unset($cfieldsO);
 
 			$finstances = $this->createFieldInstanceMap($finstancesO);
-
+			
+			$this->dateFormat = \EmailMarketing\General\Misc\DateFormat();
 			foreach ($contacts as $contact) {
 				//$contactT = Contact::findFirstByIdContact($contact->idContact);
 				$result[] = $this->convertCompleteContactToJson($contact, $cfields, $finstances);

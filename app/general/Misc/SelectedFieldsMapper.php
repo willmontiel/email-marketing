@@ -179,12 +179,15 @@ class SelectedFieldsMapper
 					try {
 						$d = \DateTime::createFromFormat($this->dateformat, $value);
 						if (!$d || $d->getTimestamp() < 0) {
-							\Phalcon\DI::getDefault()->get('logger')->log("Result es null");
 							$result = null;
 						}
 						else {
-							$result = $this->transformDateFormat($value, $this->dateformat);
-							\Phalcon\DI::getDefault()->get('logger')->log("Result es {$result}");
+							if ($this->dateformat == 'Y-m-d') {
+								$result = $value;
+							}
+							else {
+								$result = $this->transformDateFormat($value, $this->dateformat);
+							}
 						}
 					} 
 					catch (Exception $ex) {
