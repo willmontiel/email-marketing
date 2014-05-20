@@ -183,7 +183,7 @@ class SelectedFieldsMapper
 							$result = null;
 						}
 						else {
-							$result = transformDateFormat($value, $this->dateformat);
+							$result = $this->transformDateFormat($value, $this->dateformat);
 							\Phalcon\DI::getDefault()->get('logger')->log("Result es {$result}");
 						}
 					} 
@@ -245,9 +245,9 @@ class SelectedFieldsMapper
 		$f = explode($separator, $format);
 		$d = explode($separator, $date);
 		
-		$year = getPart($f, $d, 'Y');
-		$month = getPart($f, $d, 'm');
-		$day = getPart($f, $d, 'd');
+		$year = $this->getPart($f, $d, 'Y');
+		$month = $this->getPart($f, $d, 'm');
+		$day = $this->getPart($f, $d, 'd');
 	
 		$newDate = "{$year}-{$month}-{$day}";
 		
