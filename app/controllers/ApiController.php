@@ -506,15 +506,17 @@ class ApiController extends ControllerBase
 		 */
 
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
+//		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		$log->log('Contact: [' . print_r($contentsT, true) . ']');
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
-
+		
+		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
 		$wrapper = new ContactWrapper();
 		
 		$wrapper->setAccount($this->user->account);
+		$wrapper->setContactMailHistory($mailhistory);
 		$wrapper->setIdDbase($idDbase);
 		$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
 
@@ -893,9 +895,7 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 		
 	}
-        
-        
-        
+       
     /**
 	 * 
 	 * @Put("/contactlist/{idContactlist:[0-9]+}/contacts/{idContact:[0-9]+}")
@@ -948,6 +948,7 @@ class ApiController extends ControllerBase
 
 		$contactdata = $wrapper->convertContactToJson($contact);
 		
+//		$this->logger->log("Contact: " . print_r($contactdata, true));
 		$this->traceSuccess("Edit contact, idContact: {$contactdata['id']} / email: {$contactdata['email']} / idContactlist: {$idContactlist}");
 		return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 	}

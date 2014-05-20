@@ -23,6 +23,7 @@
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	{{ stylesheet_link('javascripts/colorpicker/css/colorpicker.css') }}
 	{{ stylesheet_link('javascripts/gritter/css/jquery.gritter.css') }}
+	{{ javascript_include('js/editor/forms_text_editor.js') }}
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/media_displayer.js') }}
 
@@ -210,7 +211,6 @@
 </div>
 
 <div id="clipsmodal" style="display: none;">
-	
 	<section>
 		<ul class="redactor_clips_box">
 			<li>
@@ -268,4 +268,23 @@
 		<a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
 	</footer>
 </div>
+
+
+<div id="forms-update" style="display: none;">
+	<section>
+		<ul>
+		{%if forms is defined %}
+			{%for form in forms%}
+				<li>
+					<a href="#" name="chk_group" class="selected-form-class" value="%%FORM_{{form['idForm']}}%%">{{form['name']}}</a><br />
+				</li>
+			{%endfor%}
+		{%endif%}
+		</ul>
+	</section>
+	<footer>
+		<button class="redactor_modal_btn redactor_btn_modal_close">Close</button>
+	</footer>
+</div>
+
 {% endblock %}

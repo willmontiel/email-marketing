@@ -452,6 +452,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$c['id'] = $contact['idContact'];
 			$c['email'] = $contact['email'];
 			$c['name'] = $contact['name'];
+			$c['birthDate'] = (!empty($contact['birthDate']) ? date('d/m/Y', $contact['birthDate']) : '');
 			$c['lastName'] = $contact['lastName'];
 			$c['isActive'] = ($contact['status'] != 0);
 			$c['activatedOn'] = (($contact['status'] != 0)?date('d/m/Y H:i', $contact['status']):'');
@@ -480,7 +481,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 						switch ($field['type']) {
 							case 'Date':
 								if($fvalue['numberValue']) {
-									$value = date('Y-m-d',$fvalue['numberValue']);
+									$value = date('d/m/Y',$fvalue['numberValue']);
 								} else {
 									$value = "";
 								}

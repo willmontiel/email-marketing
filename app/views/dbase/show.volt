@@ -16,10 +16,11 @@
 		
 		var myContactModel = {
 			list: DS.belongsTo('list'),
-			email: DS.attr( 'string' ),
-			name: DS.attr( 'string' ),
-			lastName: DS.attr( 'string' ),
-			status: DS.attr( 'number' ),
+			email: DS.attr('string'),
+			name: DS.attr('string'),
+			lastName: DS.attr('string'),
+			birthDate: DS.attr('string'),
+			status: DS.attr('number'),
 			activatedOn: DS.attr('string'),
 			bouncedOn: DS.attr('string'),
 			subscribedOn: DS.attr('string'),
@@ -164,6 +165,16 @@
 				<tr>
 					<td>Apellido</td>
 					<td>Text</td>
+					<td>
+						<div class="icheckbox_flat-aero hover">
+						</div>
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Fecha de nacimiento</td>
+					<td>Date</td>
 					<td>
 						<div class="icheckbox_flat-aero hover">
 						</div>

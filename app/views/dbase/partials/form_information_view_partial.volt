@@ -175,24 +175,22 @@
 			</div>
 			{{ '{{/if}} '}}		
 
-			<div class="clearfix"></div>
-			<div class="wrapper">
-				{#Listas#}
-				<div class="form-group">
-					<label for="list-attachment" class="col-sm-3 control-label">Lista: </label>
-					<div class="col-md-6">
-						{{ '{{view Ember.Select
-								contentBinding="selectoflists"
-								optionValuePath="content.id"
-								optionLabelPath="content.name"
-								valueBinding="listselected"
-								prompt="Seleccione una lista"
-								class="form-control"
-							}}'
-						}}
-					</div>
+				
+			{#Listas#}
+			<div class="form-group">
+				<label for="list-attachment" class="col-sm-3 control-label">Lista: </label>
+				<div class="col-md-6">
+					{{ '{{view Ember.Select
+							contentBinding="selectoflists"
+							optionValuePath="content.id"
+							optionLabelPath="content.name"
+							valueBinding="listselected"
+							prompt="Seleccione una lista"
+							class="form-control"
+						}}'
+					}}
 				</div>
-			</div>
+			</div>	
 				
 				
 			{# Botones #}

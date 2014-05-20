@@ -118,8 +118,10 @@ class Security extends Plugin
 				'unsubscribe::contact' => array(),
 				'unsubscribe::success' => array(),
 				'form::frame' => array(),
+				'form::update' => array(),
 				'contacts::form' => array(),
 				'contacts::activate' => array(),
+				'contacts::update' => array(),
 				'share::results' => array(),
 				'apistatistics::mailpublicopens' => array(),
 				'apistatistics::mailpublicclicks' => array(),
@@ -372,6 +374,9 @@ class Security extends Plugin
 				'tools::index' => array('tools' => array('read')),
 				'mail::savemail' => array('mail' => array('create')),
 				
+				//Formularios
+				'form::preview' => array('form' => array('read')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
@@ -472,8 +477,10 @@ class Security extends Plugin
 			'unsubscribe:contact',
 			'unsubscribe:success',
 			'form:frame',
+			'form:update',
 			'contacts:form',
 			'contacts:activate',
+			'contacts:update',
 			'share:results',
 			'apistatistics:mailpublicopens',
 			'apistatistics:mailpublicclicks',

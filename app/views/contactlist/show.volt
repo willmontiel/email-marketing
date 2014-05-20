@@ -2,15 +2,23 @@
 {% block header_javascript %}
 		{{ super() }}
 		{{ partial("partials/ember_partial") }}
-		{{ partial("partials/date_view_partial") }}
+		{#
+			{{ partial("partials/date_view_partial") }}
+			{{ partial("partials/date_picker_partial") }}
+		#}
 		{{ partial("partials/xeditable_view_partial") }}
 		{{ partial("partials/xeditable_select_view_partial") }}
 		{{ javascript_include('js/load_activecontacts.js')}}
 		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
+		{{ javascript_include('javascripts/moment/moment.min.js')}}
+		{{ javascript_include('date-time-picker-b3/bootstrap-datepicker.js')}}
 		{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js') }}
 		{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
-		{#{{ javascript_include('javascripts/moment/moment.min.js')}}#}
+		{#
+		{{ javascript_include('javascripts/moment/moment.min.js')}}
+		
+		#}
 	<script type="text/javascript">
 		var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};
@@ -54,10 +62,6 @@
 	</script>
 
 {% endblock %}
-
-{% block sectiontitle %}Lista: <strong>{{datalist.name}}</strong>{% endblock %}
-
-{%block sectionsubtitle %}{{datalist.description}}{% endblock %}
 {% block sectionContactLimit %}
 	{{ partial("partials/contactlimitinfo_partial") }}
 {%endblock%}	
@@ -183,21 +187,28 @@
 						<span class="text text-error">{{'{{errors.email}}'}}</span>
 				{{' {{/if }} '}}
 				<div class="form-group">
-					<label for="Email" class="col-sm-4 control-label"><span class="required">*</span>Email:</label>
+					<label for="email" class="col-sm-4 control-label"><span class="required">*</span>Email:</label>
 					<div class="col-md-8">
 						{{'{{view Ember.TextField valueBinding="email" required="required" autofocus="autofocus" id="email" class="form-control" placeholder="Email"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="nombre" class="col-sm-4 control-label">Nombre:</label>
+					<label for="name" class="col-sm-4 control-label">Nombre:</label>
 					<div class="col-md-8">
 						{{'{{view Ember.TextField valueBinding="name" id="name" class="form-control" placeholder="Nombre"}}'}}
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="apellido" class="col-sm-4 control-label">Apellido:</label>
+					<label for="lastName" class="col-sm-4 control-label">Apellido:</label>
 					<div class="col-md-8">
-						{{'{{view Ember.TextField valueBinding="lastName" id="lastName" class="form-control" id="Apellido" placeholder="Apellido"}}'}}
+						{{'{{view Ember.TextField valueBinding="lastName" id="lastName" class="form-control" placeholder="Apellido"}}'}}
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="birthDate" class="col-sm-4 control-label">Fecha de nacimiento:</label>
+					<div class="col-md-8">
+						{{'{{view Ember.TextField valueBinding="birthDate" class="form-control date_view_picker"}}'}}
 					</div>
 				</div>
 				<!-- Campos Personalizados -->
@@ -239,6 +250,12 @@
 
 	</script>
 	<script type="text/x-handlebars" data-template-name="contacts/newbatch">
+		<div class="row">
+			<div class="col-sm-12">
+				{{flashSession.output()}}
+			</div>
+		</div>
+		
 		<div class="row">
 			<h4 class="sectiontitle">Crear contactos rápidamente</h4>
 			<div class="col-xs-12 col-sm-12 hidden-md hidden-lg">

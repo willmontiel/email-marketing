@@ -4,7 +4,8 @@
 	</div>
 
 	<div class="pull-right">
-	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo formulario{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Inscripción{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Actualización{{ '{{/link-to}}' }}
 	</div>
 	<div class="space"></div>
 	<table class="table table-striped">
@@ -23,15 +24,28 @@
 					</div>
 				</td>
 				<td>
-					Inscripción
+					<div>
+						{{'{{type}}'}}
+					</div>
 				</td>
 				<td>
 					<div class="text-right">
 						{{ '{{#if framecode}}' }}
-							{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Código{{ '{{/link-to}}' }}
+							<a class="btn btn-default btn-sm" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
+							</a>
+							{{ '{{#if isInscription}}' }}
+								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
+							{{ '{{else}}' }}
+								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-link"></i> Enlace{{ '{{/link-to}}' }}
+							{{ '{{/if}}' }}
 						{{ '{{/if}}' }}
-
-						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+							
+						{{ '{{#if isInscription}}' }}
+							{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+						{{ '{{else}}' }}
+							{{ '{{#link-to "forms.editupdate" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+						{{ '{{/if}}' }}
 
 						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 					</div>
@@ -40,11 +54,34 @@
 			{{'{{/each}}'}}
 		</tbody>
 	</table>
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Previsualización de formulario</h4>
+				</div>
+				<div class="modal-body" id="preview-modal">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/setup">
 	<h4 class="sectiontitle">Crear nuevo formulario</h4>
 	{{ partial("dbase/partials/form_information_view_partial") }}
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/updating">
+	<div class="row">
+		<h4 class="sectiontitle">Crear nuevo formulario de actualizacion</h4>
+	</div>
+	{{ partial("dbase/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/new">
@@ -73,6 +110,13 @@
 		<h4 class="sectiontitle">Editar formulario</h4>
 	</div>
 	{{ partial("dbase/partials/form_information_view_partial") }}
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/editupdate">
+	<div class="row">
+		<h4 class="sectiontitle">Editar formulario</h4>
+	</div>
+	{{ partial("dbase/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/remove">
@@ -107,4 +151,37 @@
 			<button class="btn btn-default" {{ '{{action cancel this}}' }}>Regresar</button>
 		</div>
 	</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/link">
+	<div class="row">
+		<h4 class="sectiontitle">Enlace Formulario de Actualización</h4>
+		<div class="col-md-6">
+			<div class="bs-callout bs-callout-info">
+				<h4>Recuerde</h4>
+				<p>Seleccione el formulario cuando este creando un correo</p>
+			</div>
+		</div>
+		<div class="col-md-6 col-md-offset-4">
+			<button class="btn btn-default" {{ '{{action cancel this}}' }}>Regresar</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/javascript">
+	function preview(id) {
+		$.post("{{url('form/preview')}}/" + id, function(form){
+			var f = form.form;
+			
+			var button = '<div class="form-actions pull-right"><a class="btn btn-sm btn-default btn-guardar extra-padding">' + f.button + '</a></div><div class="clearfix"></div>';
+			var title = '<h4 class="sectiontitle">' + f.title + '</h4>';
+			var content = title + '<form class="form-horizontal">';
+			for(var i = 0; i < f.fields.length; i++) {
+				content+= '<div class="form-group ' + f.fields[i].hide + '"><div class="col-md-3">' + f.fields[i].label + '</div><div class="col-md-7">' + f.fields[i].field + '</div></div>'
+			}
+			content+= button + '</form>';
+			$('#preview-modal').empty();
+			$('#preview-modal').append(content);
+		});
+	}
 </script>

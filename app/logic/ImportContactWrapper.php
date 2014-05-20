@@ -420,6 +420,7 @@ class ImportContactWrapper
 		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
 					. "({$fields})";
 		
+		$this->log->log("SQL: {$importfile}");
 		// Ejecutar sentencia SQL
 		$this->db->execute($importfile);
 		$this->timer->endTimer('load-rows');
@@ -551,8 +552,8 @@ class ImportContactWrapper
 							. "WHERE t.idEmail IS NOT NULL "
 							. "   AND c.idDbase = {$idDbase}";
 		// Insertar contactos nuevos (ID nulo y no bloqueados)
-		$createcontacts    =  "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) "
-							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, {$hora}, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
+		$createcontacts    =  "INSERT INTO contact (idDbase, idEmail, name, lastName, birthDate, status, unsubscribed, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) "
+							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, t.birthDate, {$hora}, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
 							. "    FROM {$this->tablename} t "
 							. "    WHERE t.idContact IS NULL "
 							. "        AND t.blocked IS NULL;";

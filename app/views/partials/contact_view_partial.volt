@@ -82,6 +82,10 @@
 							<td>{{' {{view Ember.TextField valueBinding="lastName" required="required" class="edit-contact-online"}} '}}</td> 
 	#}
 						</tr>
+						<tr>
+							<td>Fecha de nacimiento</td>
+							<td>{{' {{ view App.EmberXEditableDateView value=birthDate field="birthDate" title="Editar fecha de nacimiento de contacto" }} '}}</td>
+						</tr>
 						{%for field in fields%}
 						<tr>
 							<td>{{field.name}}</td>

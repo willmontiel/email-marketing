@@ -122,7 +122,10 @@ class ChildCommunication extends BaseWrapper
 			$linkService = new LinkService($account, $mail);
 			$prepareMail = new PrepareMailContent($linkService, $imageService);
 			list($content, $links) = $prepareMail->processContent($html);
-
+			
+			$formField = new FormField($mail);
+			$content = $formField->prepareUpdatingForms($content);
+			
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $idDbases);
 			$cf = $mailField->getCustomFields();
 
@@ -211,6 +214,19 @@ class ChildCommunication extends BaseWrapper
 					$text = $mailContent->plainText;
 				}
 
+				/*
+				 * ================================================================
+				 * NOTA
+				 * Inicia el proceso de transformacion en los formularios de actualizacion
+				 * cambiando las referencias por links que redirigen al verdadero formulario
+				 * ================================================================
+				 */
+				
+				if($formField->formsAvailable()) {
+					$html = $formField->processUpdatingForms($html, $contact['contact']);
+				}
+				
+				
 				/*
 				 * ================================================================
 				 * NOTA

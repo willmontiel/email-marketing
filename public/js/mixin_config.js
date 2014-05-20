@@ -40,7 +40,9 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 		var self = this;
 
 		p.then(function() {
-			self.set('errors.errormsg', '');
+			if (typeof self.get('errors.errormsg') !== 'undefined') {
+				self.set('errors.errormsg', '');
+			}
 			self.transitionToRoute(troute);
 			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
 			if (typeof fn == 'function') {

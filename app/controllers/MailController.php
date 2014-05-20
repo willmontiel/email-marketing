@@ -740,8 +740,15 @@ class MailController extends ControllerBase
 			
 			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
 		}
+		
+		$forms = Form::findAllFormsInAccount($this->user->account);
+		
+		foreach ($forms as $form) {
+			$arrayForm[] = array('idForm' => $form[0], 'name' => ucwords($form[1]));
+		}
 
 		$this->view->setVar('cfs', $arrayCf);
+		$this->view->setVar('forms', $arrayForm);
 		
 		if($idMail) {
 			$this->view->setVar('idMail', $idMail);

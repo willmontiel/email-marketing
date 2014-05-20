@@ -47,6 +47,9 @@ App.ContactsIndexController = Ember.ObjectController.extend({
 	lastnameF: function () {
 		return App.secondline[this.get('content.lastname')];
 	}.property('content.lastname'),
+	birthdateF: function () {
+		return App.secondline[this.get('content.birthdate')];
+	}.property('content.birthdate'),
 	hasheader: function () {
 		if(this.get('content.header') == true) {
 			return true;
