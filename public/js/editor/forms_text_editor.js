@@ -4,7 +4,6 @@ RedactorPlugins.advanced = {
 	init: function()
 	{
 		this.buttonAdd('form-updating', 'Formularios de actualización', this.showMyModal);
-//		this.buttonAwesome('advanced', 'fa-bullhorn');
 	},
 	showMyModal: function()
     {
@@ -22,6 +21,5 @@ RedactorPlugins.advanced = {
         this.selectionRestore();
         this.insertHtml('<a href="' + $(html.target).attr('value') + '" >Actualice sus datos aquí</a>');
         this.modalClose();
-		$.gritter.add({title: 'Recuerde', text: 'El formulario que acabo de agregar debe pertenecer a la base de datos de los destinatarios', sticky: false, time: 4000});
     }
 };

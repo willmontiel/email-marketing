@@ -10,6 +10,7 @@
 	{{ javascript_include('redactor/plugins/fontsize.js') }}
 	{{ javascript_include('redactor/plugins/fullscreen.js') }}
 	{{ javascript_include('redactor/plugins/textdirection.js') }}
+	{{ javascript_include('js/editor/forms_text_editor.js') }}
 
 	<script type="text/javascript">
 		var idMail = {{mail.idMail}};
@@ -23,7 +24,7 @@
 						$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: json.error, sticky: false, time: 10000});
 					},
 					lang: 'es',
-					plugins: ['fontcolor', 'fontfamily', 'fontsize', 'fullscreen', 'clips'],
+					plugins: ['fontcolor', 'fontfamily', 'fontsize', 'fullscreen', 'clips', 'advanced'],
 					fullpage: true
 				});
 			}
@@ -36,7 +37,6 @@
 			type: "POST",			
 			data: { html: content},
 			error: function(msg){
-				console.log(msg);
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg.statusText, sticky: false, time: 10000});
 			},
 			success: function() {
@@ -168,5 +168,22 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	
+	<div id="forms-update" style="display: none;">
+		<section>
+			<ul>
+			{%if forms is defined %}
+				{%for form in forms%}
+					<li>
+						<a href="#" name="chk_group" class="selected-form-class" value="%%FORM_{{form['idForm']}}%%">{{form['name']}}</a><br />
+					</li>
+				{%endfor%}
+			{%endif%}
+			</ul>
+		</section>
+		<footer>
+			<button class="redactor_modal_btn redactor_btn_modal_close">Close</button>
+		</footer>
 	</div>
 {% endblock %}

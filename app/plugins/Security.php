@@ -279,6 +279,7 @@ class Security extends Plugin
 				'mail::stop' => array('mail' => array('read', 'send')),
 				'mail::cancel' => array('mail' => array('read', 'send')),
 				'mail::sendtest' => array('mail' => array('read', 'send')),
+				'mail::checkforms' => array('mail' => array('read', 'send')),
 				
 				'mail::compose' => array('mail' => array('read', 'create', 'send')),
 				

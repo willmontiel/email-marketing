@@ -193,4 +193,64 @@ class FormWrapper extends BaseWrapper
 		$object['name'] = $contactlist->name;
 		return $object;
 	}
+	
+	public function checkFormsInTarget(Mail $mail, Mailcontent $mailcontent) {
+		
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$dbases = array();
+		$forms = array();
+		$target = json_decode($mail->target);
+		
+		if( $target->destination == 'contactlists' ) {
+			$lists = implode(', ', $target->ids);
+			$phql = "SELECT idDbase FROM Contactlist WHERE idContactlist IN ({$lists})";
+			$ids = $mm->executeQuery($phql);
+			foreach ($ids as $id) {
+				if(!in_array($id->idDbase, $dbases)) {
+					$dbases[]= $id->idDbase;
+				}
+			}
+		}
+		else if( $target->destination == 'segments' ) {
+			$segments = implode(', ', $target->ids);
+			$phql = "SELECT idDbase FROM Segment WHERE idSegment IN ({$segments})";
+			$ids = $mm->executeQuery($phql);
+			foreach ($ids as $id) {
+				if(!in_array($id->idDbase, $dbases)) {
+					$dbases[]= $id->idDbase;
+				}
+			}
+		}
+		else if( $target->destination == 'dbases' ) {
+			$dbases = $target->ids;
+		}
+//		Phalcon\DI::getDefault()->get('logger')->log('TODO ESTO-----------------------------');
+//		Phalcon\DI::getDefault()->get('logger')->log(print_r($dbases, true));
+		
+		preg_match_all('/%%FORM_([a-zA-Z0-9_\-]*)%%/', $mailcontent->content, $arrayForms);
+		
+		if (count($arrayForms[0]) == 0) {
+			return false;
+		}
+		
+		list($allforms, $allids) = $arrayForms;
+		$idsForms = array_unique($allids);
+		
+		$idsforms = implode(', ', $idsForms);
+		$phql2 = "SELECT idDbase FROM Form WHERE idForm IN ({$idsforms})";
+		$idsform = $mm->executeQuery($phql2);
+		foreach ($idsform as $idform) {
+			if(!in_array($idform->idDbase, $forms)) {
+				$forms[]= $idform->idDbase;
+			}
+		}
+		
+		if(count($forms) > 1 || count($dbases) > 1 || $forms[0] != $dbases[0]) {
+			return true;
+		}
+		
+		return false;
+		
+	}
 }
