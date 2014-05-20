@@ -23,6 +23,7 @@ class ImportContactWrapper
 	protected $invalid;
 	protected $emailbuffers;
 	
+	protected $dateformat;
 	/**
 	 *
 	 * @var SelectedFieldsMapper
@@ -152,10 +153,7 @@ class ImportContactWrapper
 	public function startImport($fields, $destiny, $dateformat, $delimiter, $header) {
 		$mode = $this->account->accountingMode;
 		
-		$dateformat = (empty($dateformat) ? 'd/m/Y' : $dateformat);
-		$s = array('d', 'm', 'Y');
-		$r = array('%d', '%m', '%Y');
-		$this->dateformat = str_ireplace($s, $r, $dateformat);
+		$this->dateformat = $dateformat;
 		
 		$this->resetProcess();
 		$this->timer->startTimer('all-import', 'Import process');

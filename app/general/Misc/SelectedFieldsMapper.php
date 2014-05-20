@@ -15,6 +15,7 @@ class SelectedFieldsMapper
 	protected $cfieldstransform;
 	protected $transformations;
 	protected $dateformat;
+	protected $dateformated;
 
 	public function __construct() 
 	{
@@ -46,7 +47,13 @@ class SelectedFieldsMapper
 	
 	public function setDateFormat($dateformat)
 	{
+		$dateformat = (empty($dateformat) ? 'd/m/Y' : $dateformat);
+		
 		$this->dateformat = $dateformat;
+		
+		$s = array('d', 'm', 'Y');
+		$r = array('%d', '%m', '%Y');
+		$this->dateformated = str_ireplace($s, $r, $dateformat);
 	}
 	
 	public function processMapping()
@@ -178,7 +185,7 @@ class SelectedFieldsMapper
 							$result = null;
 						}
 						else {
-							$result = "'$value', '{$this->dateformat}'";
+							$result = "{$value}, {$this->dateformated}";
 						}
 					} 
 					catch (Exception $ex) {
