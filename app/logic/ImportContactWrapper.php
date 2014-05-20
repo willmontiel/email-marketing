@@ -144,6 +144,7 @@ class ImportContactWrapper
 	 * 
 	 * @param array $fields
 	 * @param string $destiny
+	 * @param string $dateformat
 	 * @param string $delimiter
 	 * @param boolean $header
 	 * @throws \InvalidArgumentException
