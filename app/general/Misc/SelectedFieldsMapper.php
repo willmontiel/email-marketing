@@ -47,16 +47,7 @@ class SelectedFieldsMapper
 	
 	public function setDateFormat($dateformat)
 	{
-		$dateformat = (empty($dateformat) ? 'd/m/Y' : $dateformat);
-		
 		$this->dateformat = $dateformat;
-		
-		$s = array('d', 'm', 'Y');
-		$r = array('%d', '%m', '%Y');
-		$this->dateformated = str_ireplace($s, $r, $dateformat);
-		
-		\Phalcon\DI::getDefault()->get('logger')->log("format: {$this->dateformat}");
-		\Phalcon\DI::getDefault()->get('logger')->log("formated: {$this->dateformated}");
 	}
 	
 	public function processMapping()
@@ -192,7 +183,7 @@ class SelectedFieldsMapper
 							$result = null;
 						}
 						else {
-							$result = "{$value}, {$this->dateformated}";
+							$result = transformDateFormat($value, $this->dateformat);
 							\Phalcon\DI::getDefault()->get('logger')->log("Result es {$result}");
 						}
 					} 
@@ -245,6 +236,35 @@ class SelectedFieldsMapper
 				return $d;
 			}
 		}
+	}
+	
+	
+	protected function transformDateFormat($date, $format) {
+		$separator = substr($format, 1, 1);
+	
+		$f = explode($separator, $format);
+		$d = explode($separator, $date);
+		
+		$year = getPart($f, $d, 'Y');
+		$month = getPart($f, $d, 'm');
+		$day = getPart($f, $d, 'd');
+	
+		$newDate = "{$year}-{$month}-{$day}";
+		
+		return $newDate;
+	}
+
+	protected function getPart($format, $value, $criteria) {
+		if ($format[0] == $criteria) {
+			$v = $value[0];
+		}
+		else if ($format[1] == $criteria) {
+			$v = $value[1];
+		}
+		else if ($format[2] == $criteria) {
+			$v = $value[2];
+		}
+		return $v;
 	}
 
 	protected function getCustomFieldName($fieldid)
