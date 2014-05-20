@@ -5,10 +5,10 @@ namespace EmailMarketing\General\Misc;
 class DateFormat
 {
 	public function transformDateFormat($date, $oldFormat, $newFormat) {
-		$separator = substr($oldFormat, 1, 1);
+		$separator = \substr($oldFormat, 1, 1);
 	
-		$f = explode($separator, $oldFormat);
-		$d = explode($separator, $date);
+		$f = \explode($separator, $oldFormat);
+		$d = \explode($separator, $date);
 		
 		$year = $this->getPart($f, $d, 'Y');
 		$month = $this->getPart($f, $d, 'm');
