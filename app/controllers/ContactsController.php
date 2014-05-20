@@ -315,7 +315,8 @@ class ContactsController extends ControllerBase
 		$fields['email'] = $this->request->getPost('email');
 		$fields['name'] = $this->request->getPost('name');
 		$fields['lastname'] = $this->request->getPost('lastname');		
-		$fields['birthdate'] = $this->request->getPost('birthdate');
+		$birthdate = $this->request->getPost('birthdate');
+		$fields['birthdate'] = (empty($birthdate) ? 'd/m/Y' : $birthdate);
 		$dateformat = $this->request->getPost('dateformat');
 		$delimiter = $this->request->getPost('delimiter');
 		
