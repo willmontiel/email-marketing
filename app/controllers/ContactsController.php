@@ -306,8 +306,6 @@ class ContactsController extends ControllerBase
 		$dateformat = $this->request->getPost('dateformat');
 		$delimiter = $this->request->getPost('delimiter');
 		
-		$this->logger->log("date format: {$dateformat}");
-		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		$customfields = Customfield::findByIdDbase($list->idDbase);
 		
@@ -365,8 +363,6 @@ class ContactsController extends ControllerBase
 			'idAccount' => $idAccount,
 			'ipaddress' => $ipaddress
 			);
-		
-		$this->logger->log("Send: " . print_r($arrayToSend, true));
 		
 		$toSend = json_encode($arrayToSend);
 		
