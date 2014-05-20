@@ -509,7 +509,7 @@ class ImportContactWrapper
 			// Validar que el EMAIL no este repetido
 			if ( $this->verifyEmailAddress($lineOut[0], $rows) ) {
 //				fputcsv($nfp, $lineOut, $delimiter);
-				$this->fputcsv2($nfp, $lineOut, $delimiter);
+				$this->fputcsv2($nfp, $lineOut, $delimiter, '"', true);
 			}
 			if (! $rows % $every) {
 				$this->incrementProgress($rows);
