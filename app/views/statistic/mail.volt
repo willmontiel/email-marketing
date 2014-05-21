@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/private/' ~ mail.idMail }}';
+		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/' ~ mail.idMail }}';
 	</script>
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
@@ -86,45 +86,29 @@
 			{#   Botones de navegacion   #}
 			{{ partial("mail/partials/small_buttons_nav_partial") }}
 
-			{#   parcial encabezado pag   #}
+			{#   Encabezado pag   #}
 			{{ partial("statistic/partials/header_partial") }}
-			
-			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
-			{{ partial("statistic/partials/shareandcompare_partial") }}
-			
-			{#   parcial vista en miniatura del correo y datos del mismo   #}
+						
+			{#   Vista en miniatura del correo y datos del mismo   #}
 			{{ partial("statistic/partials/preview_email_partial") }}
-				
 			
-			{#   parcial estadisticas generales   #}
+			{#   Estadisticas generales   #}
 			{{ partial("statistic/partials/general_stats_partial") }}
 			
-			{#   parcial estadisticas redes sociales   #}
+			{#  Estadisticas redes sociales   #}
 			{{ partial("statistic/partials/social_media_stats_partial") }}
-{#
-			<div class="row">
-				<div class="col-md-7">
-					{{ '{{view Ember.Select
-						class="form-control"
-						id="select-options-for-compare"
-						contentBinding="App.mails"
-						optionValuePath="content.id"
-						optionLabelPath="content.name"
-						valueBinding="App.mailCompare"}}'
-					}}
-				</div>
-				<div class="col-md-5">
-					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-				</div>
-			</div>
-#}				
+			<div class="space"></div>			
+			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
+			{{ partial("statistic/partials/shareandcompare_partial") }}	
 			
+			{#   Tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
 			{{ "{{outlet}}" }}
 		</script>
 		
+		{#   Contenido de los tabs de opciones de inteeracciones en estadisticas   #}
 		{{ partial("statistic/partials/partial_ember_details") }}
-		{#	 Partial para gráfica de estadisticas	#}
+		{#	 Gráfica de estadisticas	#}
 		{{ partial("statistic/partials/partial_graph") }}
 	</div>
 	

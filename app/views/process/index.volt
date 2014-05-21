@@ -54,11 +54,8 @@
 	</script>
 {% endblock %}
 {% block content %}
-	<div class="row">
-		<div class="col-md-12">
-			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'process']) }}
-		</div>
-	</div>
+
+	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'process']) }}
 	
 	<div class="row">
 		<h4 class="sectiontitle">Procesos de envío</h4>
@@ -69,13 +66,9 @@
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-md-6">
-		{{ flashSession.output() }}
-		</div>
-		<div class="col-md-6 text-right">
-			<button class="btn btn-sm btn-primary extra-padding" onclick="loadNow()">Refrescar</button>
-		</div>
+	{{ flashSession.output() }}
+	<div class="text-right">
+		<button class="btn btn-sm btn-primary extra-padding" onclick="loadNow()"><span class="glyphicon glyphicon-refresh"></span> Refrescar</button>
 	</div>
 	
 	<div class="row">

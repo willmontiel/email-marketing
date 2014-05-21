@@ -10,6 +10,8 @@
 	}
 
 	$(function () {
+		console.log('POPOVER');
+		console.log($('button[data-toggle=popover]'));
 		$('button[data-toggle=popover]').click(function () {
 			var me = $(this);
 			var isVisible = me.data('bs.popover');

@@ -1,4 +1,4 @@
-<div class="wrap">
+<div class="row wrap">
 	<div class="col-md-5">
 		<h4 class="sectiontitle numbers-contacts">{{mail.name}}</h4>
 	</div>

@@ -162,10 +162,10 @@ class StatisticController extends ControllerBase
 				$r = $createReport->createReport();
 			}
 			catch (Exception $e) {
-				$this->logger->log("Exception: " . $e->getMessage());
+				$this->logger->log("Exception: {$e}");
 				$this->traceFail("Creating report, idMail: {$id}, type: {$type}");
 				$this->flashSession("Ha ocurrido un error, por favor contacte al administrador");
-				$this->response->redirect("statistic/mail/{$id}");
+				return $this->response->redirect("statistic/mail/{$id}");
 			}
 			
 			$report = Mailreportfile::findFirst(array(
@@ -178,7 +178,7 @@ class StatisticController extends ControllerBase
 			if (!$report) {
 				$this->traceFail("Creating report, report do not exists, idMail: {$id}, type: {$type}");
 				$this->flashSession("Ha ocurrido un error, por favor contacte al administrador");
-				$this->response->redirect("statistic/mail/{$id}");
+				return $this->response->redirect("statistic/mail/{$id}");
 			}
 			
 			$this->view->disable();
@@ -204,7 +204,7 @@ class StatisticController extends ControllerBase
 		}
 		else {
 			$this->flashSession("No existe el correo, por favor verifique la información");
-			$this->response->redirect("error");
+			return $this->response->redirect("error");
 		}
 	}
 	

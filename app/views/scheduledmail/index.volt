@@ -24,7 +24,7 @@
 	<div class="row">
 		<h4 class="sectiontitle">Programación de envío de correos</h4>
 		<div class="bs-callout bs-callout-info">
-			<p>Administre la programación de los correos, pausarlos, cancelarlos y también reprogramar fechas.</p>
+			<p>Administre la programación de los correos. Puede pausarlos, cancelarlos y también reprogramar fechas.</p>
 		</div>
 		{{ flashSession.output() }}
 
@@ -77,15 +77,13 @@
 			</div>
 
 			{#   Partial paginacion sin ember   #}
-			<div class="col-sm-12 text-center">
 				{{ partial('partials/pagination_static_partial', ['pagination_url': 'scheduledmail/index']) }}
-			</div>
 		{% else %}
 			<div class="row">
 				<div class="bs-callout bs-callout-warning">
 					<h4>No hay correos programados</h4>
 					<p>
-						Para programar un correo dirijase a la lista de correos y haga clic en el correo que desea programar
+						Para programar un correo diríjase a la lista de correos y haga clic en el correo que desea programar,
 						luego siga las instrucciones.
 					</p>
 				</div>
@@ -97,17 +95,17 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Pausar Correo Programado</h4>
+					<h4 class="modal-title" id="myModalLabel">Pausar correo programado</h4>
 				</div>
 				<div class="modal-body">
-					<p>¿Está seguro que desea pausar éste correo?</p>
+					<p>¿Está seguro que desea pausar este correo?</p>
 					<p>
-						Recuerde que si pausa éste correo, deberá programarlo de nuevo.
+						Recuerde que si pausa este correo, deberá programarlo de nuevo.
 					</p>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
-					<a href="" id="editScheduledMail" class="btn btn-sm btn-primary extra-padding" >Pausar</a>
+					<a href="" id="editScheduledMail" class="btn btn-sm btn-default btn-delete extra-padding" >Pausar</a>
 				</div>
 			</div>
 		</div>

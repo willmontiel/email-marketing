@@ -199,8 +199,8 @@
 					</td>
 					<td>{{'{{defaultValue}}'}}</td>
 					<td>
-						{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<i class="icon-pencil"></i> Editar{{'{{/link-to}}'}}
-						{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-delete btn-sm extra-padding"}}'}}<i class="icon-trash"></i> Eliminar {{'{{/link-to}}'}}
+						{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="ghyphicon ghyphicon-pencil"></span> Editar{{'{{/link-to}}'}}
+						{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-delete btn-sm extra-padding"}}'}}<span class="ghyphicon ghyphicon-trash"></span> Eliminar {{'{{/link-to}}'}}
 					</td>
 				</tr>
 			{{'{{else}}'}}
@@ -214,7 +214,7 @@
 		{{'{{outlet}}'}}
 	</script>
 		<!------------------ Ember! ---------------------------------->
-		{#   Copntenido del tab general   #}
+		{#   Contenido del tab general   #}
 	<div id="emberAppContainer">
 	<script type="text/x-handlebars" data-template-name="index">
 		<h4>Información de la base de datos</h4>
@@ -240,22 +240,16 @@
 					<td>
 						<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
 						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><span class="glyphicon glyphicon-trash"></span> Eliminar </a>
-						<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span></a>
+						<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span> Estadísticas</a>
 					</td>
 
 				</tr>
 			</tbody>
 			<tfoot></tfoot>
 		</table>
-		<div class="col-md-10 col-md-offset-1">
-			<div class="col-md-5">
-				<h4 class="">Información de contactos</h4>
-			</div>
-			<div class="col-md-1 pull-right">
-				<p class="blue big-number"><span class="glyphicon glyphicon-user"></span></p>
-			</div>
 
-			<table class="table table-striped">
+			<h4 class="">Información de contactos</h4>
+			<table class="table table-contacts table-striped">
 				<thead></thead>
 				<tbody>
 					<tr>
@@ -265,27 +259,27 @@
 
 					<tr>
 						<td>Contactos Activos</td>
-						<td><span class="blue big-number pull-right">{{ sdbase.Cactive|numberf }}</span></td>
+						<td><span class="green big-number pull-right">{{ sdbase.Cactive|numberf }}</span></td>
 					</tr>
 
 					<tr>
 						<td>Contactos Inactivos</td>
-						<td><span class="blue big-number pull-right"> {{ get_inactive(sdbase)|numberf }}</span></td>
+						<td><span class="sad-blue big-number pull-right"> {{ get_inactive(sdbase)|numberf }}</span></td>
 					</tr>
 
 					<tr>
 						<td>Contactos Desuscritos</td>
-						<td><span class="blue big-number pull-right"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
+						<td><span class="gray big-number pull-right"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
 					</tr>
 
 					<tr>
 						<td>Contactos Rebotados</td>
-						<td><span class="blue big-number pull-right"> {{sdbase.Cbounced|numberf }}</span></td>
+						<td><span class="orange big-number pull-right"> {{sdbase.Cbounced|numberf }}</span></td>
 					</tr>
 
 					<tr>
 						<td>Contactos Spam</td>
-						<td><span class="blue big-number pull-right"> {{sdbase.Cspam|numberf }}</span></td>
+						<td><span class="red big-number pull-right"> {{sdbase.Cspam|numberf }}</span></td>
 					</tr>
 				</tbody>
 				<tfoot></tfoot>
@@ -295,13 +289,14 @@
 
 	<script type="text/x-handlebars" data-template-name="fields/add">
 	{#   Tab campos   #}
-		<h4>Agregar un nuevo campo</h4>
 			{{ '{{#if errors.errormsg}}' }}
 				<div class="bs-callout bs-callout-danger">
 					{{ '{{errors.errormsg}}' }}
 				</div>
 			{{ '{{/if}}' }}
 			<div class="col-md-8">
+				<h4 class="text-center">Agregar un nuevo campo</h4>
+				<div class="space"></div>
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
 						<label for="" class="col-sm-4 control-label">*Nombre del campo</label>
@@ -348,14 +343,8 @@
 					{{ '{{/if}}' }}
 
 					<div class="form-actions">
-						<div class="row">
-							<div class="col-md-3 col-md-offset-5">
-								<button class="btn btn-guardar btn-sm extra-padding" {{' {{action "save" this}} '}}>Grabar</button>
-							</div>
-							<div class="col-md-3">
-								<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>
-							</div>
-						</div>
+						<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+						<button class="btn btn-default btn-guardar btn-sm extra-padding" {{' {{action "save" this}} '}}>Guardar</button>
 					</div>
 				</form>
 			</div>
@@ -402,15 +391,9 @@
 				{{ '{{/if}}' }}
 				</div>
 				<div class="space"></div>
-				<div class="form-actions pull-right">
-					<div class="row">
-						<div class="col-md-6">
-							<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
-						</div>
-						<div class="col-md-6">
-							<button class="btn btn-guardar btn-sm extra-padding" {{' {{action edit this}} '}}>Editar</button>
-						</div>
-					</div>
+				<div class="form-actions">
+					<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+					<button class="btn btn-default btn-guardar btn-sm extra-padding" {{' {{action edit this}} '}}>Guardar</button>
 				</div>
 			</form>
 		</div>
@@ -427,7 +410,7 @@
 					{{ '{{errors.errormsg}}' }}
 				</div>
 			{{ '{{/if}}' }}
-			<button {{'{{action eliminate this}}'}} class="btn btn-danger btn-sm extra-padding">Eliminar</button>
+			<button {{'{{action eliminate this}}'}} class="btn btn-default btn-delete btn-sm extra-padding">Eliminar</button>
 			<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>	
 		</div>
 	</script>
@@ -491,8 +474,8 @@
 				</p>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<a href="" id="deleteDb" class="btn btn-danger" >Eliminar</a>
+				<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+				<a href="" id="deleteDb" class="btn btn-sm btn-default btn-delete extra-padding" >Eliminar</a>
 			</div>
 
 		</div>

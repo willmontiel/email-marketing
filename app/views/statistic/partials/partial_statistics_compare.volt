@@ -1,6 +1,13 @@
 <div class="container-fluid">
 	<div class="col-md-8 col-md-offset-2">
 		<table class="table table-normal">
+			<tr class="big-number">
+				<td>{{statisticsData1.sent}}</td>
+				<td></td>
+				<td>Correos enviados</td>
+				<td></td>
+				<td>{{statisticsData2.sent}}</td>
+			</tr>
 			<tr class="opens big-number">
 				<td>
 					{{statisticsData1.uniqueOpens}}

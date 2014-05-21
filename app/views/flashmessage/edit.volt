@@ -59,17 +59,14 @@
 	</script>
 {% endblock %}
 {% block content %}
-	<div class="row">
-		<div class="col-md-12">
-			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'flashmessage']) }}
-		</div>
-	</div>
+	{#   navegacion botones pequeños   #}
+	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'flashmessage']) }}
 	
 	<div class="row">
 		<h4 class="sectiontitle">Editar mensaje flash</h4>
 		
 		<div class="bs-callout bs-callout-info">
-			Edite cualquier configuración de un mensaje administrativo flash, desde de el nombre, el mensaje y hasta las cuentas en donde
+			Edite cualquier configuración de un mensaje administrativo flash: el nombre, el mensaje y hasta las cuentas en donde
 			se debe mostrar.
 		</div>
 	</div>
@@ -106,7 +103,6 @@
 						<input type="radio" name="allAccounts" {% if message.accounts !== 'all'%}checked{% endif %} value="any" id="any">
 						<label for="any">Determinadas cuentas</label>
 						<div id="selectAccount" style="display: {% if message.accounts !== 'all'%}block{% else %}none{% endif %};">
-							<br />
 							<select multiple="multiple" name="accounts[]" id="accountSelect" class="form-control">
 								{% if message.accounts !== 'all'%}
 									{% for account in accounts %}
@@ -168,12 +164,11 @@
 					</div>
 				</div>
 					
-				<br />
 				
-				<div class="form-group">
-					<div class="col-sm-5">
+				<div class="form-group wrapper">
+					<div class="col-md-6 col-md-offset-3">
 						<a href="{{ url('flashmessage/index') }}" class="btn btn-sm btn-default extra-padding">Cancelar</a>
-						{{ submit_button("Guardar", 'class' : "btn btn-sm btn-guardar extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+						{{ submit_button("Guardar", 'class' : "btn btn-sm btn-default btn-guardar extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
 					</div>
 				</div>
 				

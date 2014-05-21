@@ -121,8 +121,8 @@
 				</p>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<a href="" id="deleteDb" class="btn btn-danger" >Eliminar</a>
+				<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+				<a href="" id="deleteDb" class="btn btn-sm btn-default btn-delete extra-padding" >Eliminar</a>
 			</div>
 
 		</div>

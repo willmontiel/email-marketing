@@ -11,7 +11,7 @@
 			<h4 class="sectiontitle">Crear un nuevo usuario en la cuenta <strong>{{account.companyName}}</strong></h4>
 			<div class="bs-callout bs-callout-info">
 				Cree un nuevo usuario. Créelo a partir de los datos más básicos, agregue un nombre 
-				de usuario, una dirección de correo electrónico, una contraseña y asígnele permisos de adminsitración
+				de usuario, una dirección de correo electrónico, una contraseña y asígnele permisos de administración
 				en la cuenta.
 			</div>
 		</div>
@@ -76,10 +76,10 @@
 					</div>
 				</div>
 					
-				<div class="form-group">
-					<div class="col-sm-5 col-sm-offset-3">
+				<div class="form-group wrapper">
+					<div class="col-md-4 col-md-offset-4">
 						<a href="{{ url('account/show/')}}{{account.idAccount}}" class="btn btn-sm btn-default extra-padding">Cancelar</a>
-						{{ submit_button("Grabar", 'class' : "btn btn-sm btn-guardar extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+						{{ submit_button("Grabar", 'class' : "btn btn-sm btn-default btn-guardar extra-padding", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
 					</div>
 				</div>
 			</form>
