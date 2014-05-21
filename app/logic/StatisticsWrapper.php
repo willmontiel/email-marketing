@@ -589,7 +589,7 @@ class StatisticsWrapper extends BaseWrapper
 			$timePeriod->setData($unsubscribed);
 			$timePeriod->processTimePeriod();
 
-			$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Clics');
+			$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Des-suscritos');
 			$periodModel->setTimePeriod($timePeriod);
 			$periodModel->modelTimePeriod();
 			$statsUnsubscribed = $periodModel->getModelTimePeriod();
@@ -641,6 +641,7 @@ class StatisticsWrapper extends BaseWrapper
 			));
 
 			if (count($spams) > 0) {
+				$spamData = array();
 				foreach ($spams as $s) {
 					$spamcontact[] = array(
 						'email' => $s->email,
@@ -649,8 +650,19 @@ class StatisticsWrapper extends BaseWrapper
 						'lastname' => $s->lastName
 					);
 					
-					$spam[] = $s->spam;
+					$spamData[] = $s->spam;
 				}
+				
+				sort($spamData);
+			
+				$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+				$timePeriod->setData($spamData);
+				$timePeriod->processTimePeriod();
+
+				$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Spam');
+				$periodModel->setTimePeriod($timePeriod);
+				$periodModel->modelTimePeriod();
+				$spam = $periodModel->getModelTimePeriod();
 				
 				$phql2 = "SELECT COUNT(*) AS total
 						FROM Mxc AS m 
