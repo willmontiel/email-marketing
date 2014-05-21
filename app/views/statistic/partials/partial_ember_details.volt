@@ -127,11 +127,6 @@
 		</div>
 
 		<div class="clearfix"></div>
-		<div class="space"></div>
-		<div class="text-right">
-			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
-		</div>
-		<div class="clearfix"></div>
 	{{ '{{else}}' }}
 			<div class="wrapper">
 				<p class="hand-writer-message">No hay reporte de spam en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
