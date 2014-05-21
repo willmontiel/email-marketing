@@ -15,21 +15,20 @@ class ChildImport extends ChildProcess
 		$idImportproccess = $arrayDecode->idImportproccess;
 		$fields = $arrayDecode->fields;
 		$destiny = $arrayDecode->destiny;
+		$dateformat = $arrayDecode->dateformat;
 		$delimiter = $arrayDecode->delimiter;
 		$header = $arrayDecode->header;
 		$idAccount = $arrayDecode->idAccount;
 		$ipaddress = $arrayDecode->ipaddress;
 
 		$account = Account::findFirstByIdAccount($idAccount);
-		if($account) {
-			$wrapper = new ImportContactWrapper();
+		$wrapper = new ImportContactWrapper();
 
-			$wrapper->setIdProccess($idImportproccess);
-			$wrapper->setIdContactlist($idContactlist);
-			$wrapper->setAccount($account);
-			$wrapper->setIpaddress($ipaddress);
-			$wrapper->startImport($fields, $destiny, $delimiter, $header);
-		}
+		$wrapper->setIdProccess($idImportproccess);
+		$wrapper->setIdContactlist($idContactlist);
+		$wrapper->setAccount($account);
+		$wrapper->setIpaddress($ipaddress);
+		$wrapper->startImport($fields, $destiny, $dateformat, $delimiter, $header);
 	}
 	
 	public function publishToChildren()

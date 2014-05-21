@@ -23,6 +23,7 @@ class ImportContactWrapper
 	protected $invalid;
 	protected $emailbuffers;
 	
+	protected $dateformat;
 	/**
 	 *
 	 * @var SelectedFieldsMapper
@@ -144,12 +145,15 @@ class ImportContactWrapper
 	 * 
 	 * @param array $fields
 	 * @param string $destiny
+	 * @param string $dateformat
 	 * @param string $delimiter
 	 * @param boolean $header
 	 * @throws \InvalidArgumentException
 	 */
-	public function startImport($fields, $destiny, $delimiter, $header) {
+	public function startImport($fields, $destiny, $dateformat, $delimiter, $header) {
 		$mode = $this->account->accountingMode;
+		
+		$this->dateformat = $dateformat;
 		
 		$this->resetProcess();
 		$this->timer->startTimer('all-import', 'Import process');
@@ -185,6 +189,7 @@ class ImportContactWrapper
 		try {
 			$this->fieldmapper->setDbase($dbase);
 			$this->fieldmapper->assignMapping($posCol);
+			$this->fieldmapper->setDateFormat($this->dateformat);
 			$this->fieldmapper->processMapping();
 		} catch (Exception $ex) {
 			$this->updateProcessStatus('Importacion no realizada');
@@ -420,6 +425,7 @@ class ImportContactWrapper
 		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
 					. "({$fields})";
 		
+		$this->log->log("SQL: {$importfile}");
 		// Ejecutar sentencia SQL
 		$this->db->execute($importfile);
 		$this->timer->endTimer('load-rows');
@@ -502,7 +508,8 @@ class ImportContactWrapper
 			}
 			// Validar que el EMAIL no este repetido
 			if ( $this->verifyEmailAddress($lineOut[0], $rows) ) {
-				fputcsv($nfp, $lineOut, $delimiter);
+//				fputcsv($nfp, $lineOut, $delimiter);
+				$this->fputcsv2($nfp, $lineOut, $delimiter, '"', true);
 			}
 			if (! $rows % $every) {
 				$this->incrementProgress($rows);
@@ -513,6 +520,26 @@ class ImportContactWrapper
 
 		$this->incrementProgress($rows);
 		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed!");
+	}
+	
+	
+	protected function fputcsv2 ($fh, array $fields, $delimiter = ',', $enclosure = '"', $mysql_null = false) { 
+		$delimiter_esc = preg_quote($delimiter, '/'); 
+		$enclosure_esc = preg_quote($enclosure, '/'); 
+
+		$output = array(); 
+		foreach ($fields as $field) { 
+			if ($field === null && $mysql_null) { 
+				$output[] = 'NULL'; 
+				continue; 
+			} 
+
+			$output[] = preg_match("/(?:${delimiter_esc}|${enclosure_esc}|\s)/", $field) ? ( 
+				$enclosure . str_replace($enclosure, $enclosure . $enclosure, $field) . $enclosure 
+			) : $field; 
+		} 
+
+		fwrite($fh, join($delimiter, $output) . "\n"); 
 	}
 	
 	protected function incrementProgress($adv)
@@ -551,8 +578,8 @@ class ImportContactWrapper
 							. "WHERE t.idEmail IS NOT NULL "
 							. "   AND c.idDbase = {$idDbase}";
 		// Insertar contactos nuevos (ID nulo y no bloqueados)
-		$createcontacts    =  "INSERT INTO contact (idDbase, idEmail, name, lastName, status, unsubscribed, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) "
-							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, {$hora}, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
+		$createcontacts    =  "INSERT INTO contact (idDbase, idEmail, name, lastName, birthDate, status, unsubscribed, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) "
+							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, t.birthDate, {$hora}, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
 							. "    FROM {$this->tablename} t "
 							. "    WHERE t.idContact IS NULL "
 							. "        AND t.blocked IS NULL;";
@@ -645,7 +672,8 @@ class ImportContactWrapper
 
 				foreach ($this->errors as $error) {
 					$tmp = explode(",", $error);
-					fputcsv($fp, $tmp);
+//					fputcsv($fp, $tmp);
+					$this->fputcsv2($fp, $tmp);
 				}
 
 				fclose($fp);

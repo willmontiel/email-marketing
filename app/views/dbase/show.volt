@@ -16,10 +16,11 @@
 		
 		var myContactModel = {
 			list: DS.belongsTo('list'),
-			email: DS.attr( 'string' ),
-			name: DS.attr( 'string' ),
-			lastName: DS.attr( 'string' ),
-			status: DS.attr( 'number' ),
+			email: DS.attr('string'),
+			name: DS.attr('string'),
+			lastName: DS.attr('string'),
+			birthDate: DS.attr('string'),
+			status: DS.attr('number'),
 			activatedOn: DS.attr('string'),
 			bouncedOn: DS.attr('string'),
 			subscribedOn: DS.attr('string'),
@@ -128,7 +129,7 @@
 	</script>
 	<script type="text/x-handlebars" data-template-name="fields/index">       
 		<div class="pull-right">
-			{{'{{#link-to "fields.add" class="btn btn-default btn-sm extra-padding" disabledWhen="createDisabled"}}<i class="icon-plus"></i> Agregar campo{{/link-to}}'}}
+			{{'{{#link-to "fields.add" class="btn btn-default btn-sm extra-padding" disabledWhen="createDisabled"}}<span class="glyphicon glyphicon-plus"></span> Agregar campo{{/link-to}}'}}
 		</div>
 		<table class="table table-striped">
 			<thead>
@@ -136,8 +137,8 @@
 					<td>Etiqueta</td>
 					<td>Tipo</td>
 					<td>Requerido</td>
-					<td>Valor por Defecto</td>
-					<td>Accion</td>
+					<td>Valor por defecto</td>
+					<td>Acción</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -164,6 +165,16 @@
 				<tr>
 					<td>Apellido</td>
 					<td>Text</td>
+					<td>
+						<div class="icheckbox_flat-aero hover">
+						</div>
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Fecha de nacimiento</td>
+					<td>Date</td>
 					<td>
 						<div class="icheckbox_flat-aero hover">
 						</div>
@@ -225,8 +236,8 @@
 					</td>
 					<td>
 					<td>
-						<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
-						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
+						<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><span class="glyphicon glyphicon-trash"></span> Eliminar </a>
 						<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span></a>
 					</td>
 
@@ -291,13 +302,13 @@
 			<div class="col-md-8">
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
-						<label for="" class="col-sm-4 control-label">*Nombre del Campo</label>
+						<label for="" class="col-sm-4 control-label">*Nombre del campo</label>
 						<div class="col-md-6">
 							{{' {{view Ember.TextField valueBinding="name" placeholder="Nombre" id="name" required="required" autofocus="autofocus" class="form-control"}} '}}
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="" class="col-sm-4 control-label">Tipo de Formato del Campo</label>
+						<label for="" class="col-sm-4 control-label">Tipo de formato del campo</label>
 						<div class="col-md-6">
 							{{ '{{view Ember.Select
 									contentBinding="App.types"
@@ -406,9 +417,9 @@
 	<script type="text/x-handlebars" data-template-name="fields/remove">
 		<h4>Eliminar un campo personalizado</h4>
 		<div class="bs-callout bs-callout-danger">			
-			<p>Si elimina este campo personalizado se borrará toda la información de los contactos relacionada con este Campo</p>
+			<p>Si elimina este campo personalizado, se borrará toda la información de los contactos relacionada con este campo</p>
 		</div>
-		<p>¿Esta seguro que desea eliminar el campo <strong>{{'{{name}}'}}</strong>?</p>
+		<p>¿Está seguro que desea eliminar el campo <strong>{{'{{name}}'}}</strong>?</p>
 			{{ '{{#if errors.errormsg}}' }}
 				<div class="bs-callout bs-callout-danger">
 					{{ '{{errors.errormsg}}' }}
@@ -467,7 +478,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				<h4 class="modal-title">Eliminar Base de Datos</h4>
+				<h4 class="modal-title">Eliminar base de datos</h4>
 			</div>
 			<div class="modal-body">
 				<p>

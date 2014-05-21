@@ -50,6 +50,7 @@ class ContactsController extends ControllerBase
 				$email = $eachdata[0];
 				$name = (isset($eachdata[1]))?trim($eachdata[1]):'';
 				$last_name = (isset($eachdata[2]))?trim($eachdata[2]):'';
+				$birth_date = (isset($eachdata[3]))?trim($eachdata[3]):'';
 				
 				// Evitar duplicados
 				if (!isset($emailsToFind[$email])) {
@@ -57,6 +58,7 @@ class ContactsController extends ControllerBase
 						'email' => $email,
 						'name' => $name,
 						'lastName' => $last_name,
+						'birthDate' => $birth_date
 					);
 					$emailsToFind[$email] = true;
 				}
@@ -74,19 +76,33 @@ class ContactsController extends ControllerBase
 		$contactsAdded = array();
 		$contactsCreated = array();
 		$contactsErrors = array();
+		
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
+		
 		foreach ($batchreal as $batchC) {
 			// Crear el nuevo contacto:
 			$wrapper = new ContactWrapper();
 			$wrapper->setAccount($this->user->account);
+			$wrapper->setDateFormat($dateFormat);
 			$wrapper->setIdDbase($list->idDbase);
 			$wrapper->setIdContactlist($idContactlist);
 			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
 
 			$newcontact = new stdClass();
-			
+		
 			$newcontact->email = $batchC['email'];
 			$newcontact->name = $batchC['name'];
 			$newcontact->lastName = $batchC['lastName'];
+			
+			$date = explode('/', $batchC['birthDate']);
+			if (count($date) != 0) {
+				$newDate = (checkdate($date[1],$date[0],$date[2]) ? $batchC['birthDate'] : null);
+			}
+			else {
+				$newDate = null;
+			}
+			
+			$newcontact->birthDate = $newDate;
 			$newcontact->status = "";
 			$newcontact->activatedOn = "";
 			$newcontact->bouncedOn = "";
@@ -298,7 +314,10 @@ class ContactsController extends ControllerBase
 		$header = $this->request->getPost('header');
 		$fields['email'] = $this->request->getPost('email');
 		$fields['name'] = $this->request->getPost('name');
-		$fields['lastname'] = $this->request->getPost('lastname');
+		$fields['lastname'] = $this->request->getPost('lastname');		
+		$birthdate = $this->request->getPost('birthdate');
+		$fields['birthdate'] = (empty($birthdate) ? 'd/m/Y' : $birthdate);
+		$dateformat = $this->request->getPost('dateformat');
 		$delimiter = $this->request->getPost('delimiter');
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
@@ -371,6 +390,7 @@ class ContactsController extends ControllerBase
 			'fields' => $fields,
 			'destiny' => $destiny,
 			'delimiter' => $delimiter,
+			'dateformat' => $dateformat,
 			'header' => $header,
 			'idContactlist' => $idContactlist,
 			'idImportproccess' => $newprocess->idImportproccess,
@@ -498,6 +518,52 @@ class ContactsController extends ControllerBase
 			return $this->response->redirect($form->urlError, true);
 		}
 		
+		return $this->response->redirect($form->urlSuccess, true);
+	}
+	
+	public function updateAction($parameters)
+	{
+		try {
+			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
+			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
+			$idenfifiers = $linkEncoder->decodeLink('contacts/update', $parameters);
+			list($idLink, $idContact, $idForm) = $idenfifiers;
+			
+			if ($this->request->isPost()) {
+				$fields = $this->request->getPost();
+				$form = Form::findFirst(array(
+					'conditions' => 'idForm = ?1',
+					'bind' => array(1 => $idForm)
+				));
+				
+				if(!$form) {
+					return $this->response->redirect('error/link');
+				}
+
+				$dbase = Dbase::findFirstByIdDbase($form->idDbase);
+
+				$wrapper = new ContactFormWrapper();
+				$wrapper->setForm($form);
+				$wrapper->setAccount($dbase->account);
+				$wrapper->setIdDbase($dbase->idDbase);
+				$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
+				$wrapper->updateContactFromForm($idContact, $fields);
+			}
+		}
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			if( !isset($form) && !$form) {
+				return $this->response->redirect('error/link');
+			}
+			return $this->response->redirect($form->urlError, true);
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			if( !isset($form) && !$form) {
+				return $this->response->redirect('error/link');
+			}
+			return $this->response->redirect($form->urlError, true);
+		}
 		return $this->response->redirect($form->urlSuccess, true);
 	}
 }

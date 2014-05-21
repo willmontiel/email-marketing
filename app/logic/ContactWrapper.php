@@ -21,6 +21,9 @@ class ContactWrapper extends BaseWrapper
     protected $_di;
 	protected $counter;
 
+	protected $logger;
+	protected $dateFormat;
+
 
 	const PAGE_DEFAULT = 5;
 	const DEFAULT_LIMIT_SEARCH = 200;
@@ -30,12 +33,18 @@ class ContactWrapper extends BaseWrapper
 		parent::__construct();
 		$this->counter = new ContactCounter();
 		$this->db = Phalcon\DI::getDefault()->get('db');
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
 		
 	}
 	
 	public function setContactMailHistory(\EmailMarketing\General\ModelAccess\ContactMailHistory $mailhistory)
 	{
 		$this->mailHistory = $mailhistory;
+	}
+	
+	public function setDateFormat($dateFormat)
+	{
+		$this->dateFormat = $dateFormat;
 	}
 	
 	public function startTransaction()
@@ -137,14 +146,14 @@ class ContactWrapper extends BaseWrapper
 			if (!$email) {
 				$email = $this->createEmail($data->email);
 			}
-			Phalcon\DI::getDefault()->get('logger')->log("Se crea email [id: {$email->idEmail}, email: {$email->email}]");
-			Phalcon\DI::getDefault()->get('logger')->log("Email anterior {$contact->idEmail}");
+//			Phalcon\DI::getDefault()->get('logger')->log("Se crea email [id: {$email->idEmail}, email: {$email->email}]");
+//			Phalcon\DI::getDefault()->get('logger')->log("Email anterior {$contact->idEmail}");
 			// Asignar el nuevo email
 			
 			
 			$contact->idEmail = $email->idEmail;
 			
-			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo antes grabar {$contact->idEmail}");
+//			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo antes grabar {$contact->idEmail}");
 			
 			if (!$contact->save()) {
 				foreach ($contact->getMessages() as $msg) {
@@ -152,7 +161,7 @@ class ContactWrapper extends BaseWrapper
 				}
 			}
 			
-			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo despúes de grabar {$contact->idEmail}");
+//			Phalcon\DI::getDefault()->get('logger')->log("Email nuevo despúes de grabar {$contact->idEmail}");
 		}
 
 		$this->contact = $contact;
@@ -440,6 +449,7 @@ class ContactWrapper extends BaseWrapper
 		
 		$contact->name = $data->name;
 		$contact->lastName = $data->lastName;
+		$contact->birthDate = (empty($data->birthDate) ? NULL : $this->dateFormat->transformDateFormat($data->birthDate, 'd/m/Y', 'Y-m-d'));
 
 		if ($isnew) {
 			$contact->ipSubscribed = $this->ipaddress;
@@ -491,15 +501,20 @@ class ContactWrapper extends BaseWrapper
 			$fieldinstance->idContact = $this->contact->idContact;
 			$name = "campo".$field->idCustomField;
 			$value = null;
+			
+//			$this->logger->log("date: " . print_r($data, true));
+			
 			if ($field->type == "Date") {
 				if($data->$name != null){
-					$value = strtotime($data->$name);
+					list($day, $month, $year) = preg_split('/[\s\/|-|:]+/', $data->$name);
+					$value = mktime(0, 0, 0, $month, $day, $year);
 				} 
 				else { 
 					$value = $field->defaultValue;
 				}
 				$fieldinstance->numberValue = $value;
-			} else {
+			} 
+			else {
 				if($data->$name != null){
 					$value = $data->$name;
 				} 
@@ -508,6 +523,7 @@ class ContactWrapper extends BaseWrapper
 				}
 				$fieldinstance->textValue = $value;
 			}
+			
 			if(!$fieldinstance->save()) {
 				throw new \Exception('Error al crear los Campos Personalizados del Contacto');
 			}
@@ -654,6 +670,7 @@ class ContactWrapper extends BaseWrapper
 		$object['id'] = $contact->idContact;
 		$object['email'] = $contact->email->email;
 		$object['name'] = $contact->name;
+		$object['birthDate'] = (!empty($contact->birthDate) ? $this->dateFormat->transformDateFormat($contact->birthDate, 'Y-m-d', 'd/m/Y') : '');
 		$object['lastName'] = $contact->lastName;
 		$object['isActive'] = ($contact->status != 0);
 		$object['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
@@ -688,7 +705,7 @@ class ContactWrapper extends BaseWrapper
 				switch ($field->type) {
 					case 'Date':
 						if($fvalue['numberValue']) {
-							$value = date('Y-m-d',$fvalue['numberValue']);
+							$value = date('d/m/Y',$fvalue['numberValue']);
 						} else {
 							$value = "";
 						}
@@ -746,6 +763,7 @@ class ContactWrapper extends BaseWrapper
 		$object['id'] = $contact->idContact;
 		$object['email'] = $email->email;
 		$object['name'] = $contact->name;
+		$object['birthDate'] = (!empty($contact->birthDate) ? $this->dateFormat->transformDateFormat($contact->birthDate, 'Y-m-d', 'd/m/Y') : '');
 		$object['lastName'] = $contact->lastName;
 		$object['isActive'] = ($contact->status != 0);
 		$object['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
@@ -775,7 +793,7 @@ class ContactWrapper extends BaseWrapper
 				switch ($field['type']) {
 					case 'Date':
 						if($fvalue['numberValue']) {
-							$value = date('Y-m-d',$fvalue['numberValue']);
+							$value = date('d/m/Y',$fvalue['numberValue']);
 						} else {
 							$value = "";
 						}
@@ -825,7 +843,8 @@ class ContactWrapper extends BaseWrapper
 			unset($cfieldsO);
 
 			$finstances = $this->createFieldInstanceMap($finstancesO);
-
+			
+			$this->dateFormat = new \EmailMarketing\General\Misc\DateFormat();
 			foreach ($contacts as $contact) {
 				//$contactT = Contact::findFirstByIdContact($contact->idContact);
 				$result[] = $this->convertCompleteContactToJson($contact, $cfields, $finstances);

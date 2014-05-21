@@ -14,8 +14,8 @@ class ContactlistapiController extends ControllerBase
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
-		$this->logger->log('Criterio de búsqueda: ' . $search);
-		$this->logger->log('Filtro: ' . $filter);
+//		$this->logger->log('Criterio de búsqueda: ' . $search);
+//		$this->logger->log('Filtro: ' . $filter);
 //		$this->logger->log('Limit: ' . $limit);
 //		$this->logger->log('Page: ' . $page);
                 
@@ -62,8 +62,10 @@ class ContactlistapiController extends ControllerBase
 				return $this->setJsonResponse($rest->getRecords());
 			}
 			else {
+				$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
 				$wrapper = new ContactWrapper();
 				$wrapper->setAccount($account);
+				$wrapper->setDateFormat($dateFormat);
 				$wrapper->setIdDbase($contactlist->idDbase);
 				$wrapper->setPager($pager);
 				$wrapper->setIdContactlist($contactlist->idContactlist);

@@ -14,6 +14,8 @@ class SelectedFieldsMapper
 	protected $cfieldsforinsert;
 	protected $cfieldstransform;
 	protected $transformations;
+	protected $dateformat;
+	protected $dateformated;
 
 	public function __construct() 
 	{
@@ -43,6 +45,11 @@ class SelectedFieldsMapper
 		$this->dbase = $dbase;
 	}
 	
+	public function setDateFormat($dateformat)
+	{
+		$this->dateformat = $dateformat;
+	}
+	
 	public function processMapping()
 	{
 		if ($this->dbase == null || $this->rawMap == null) {
@@ -59,13 +66,13 @@ class SelectedFieldsMapper
 		$newmap = array(0 => $this->rawMap['email'], 1 => $this->rawMap['email']);
 		$m = $this->rawMap;
 		unset($m['email']);
-
+		
 		// Transformaciones
 		$this->transformations  = array('email', 'domain');
 
 		// Posicion donde debe moverse el nuevo campo
 		$stposition = 2;
-
+		
 		// Recorrer la lista
 		foreach ($m as $idfield => $position) {
 			if ($position == null || $position == -1) {
@@ -80,15 +87,22 @@ class SelectedFieldsMapper
 					$stposition++;
 				}
 			}
+			else if ($idfield == 'birthdate') {
+				\Phalcon\DI::getDefault()->get('logger')->log("Es birthdate {$idfield}");
+				$this->fieldnames[] = $idfield;
+				$this->transformations[] = 'birthdate';
+				$newmap[$stposition] = $position;
+				$stposition++;
+			}
 			else {
 				$this->fieldnames[] = $idfield;
 				$this->transformations[] = 'Text';
 				$newmap[$stposition] = $position;
 				$stposition++;
 			}
-		}		
-		$this->mapping = $newmap;
+		}	
 		
+		$this->mapping = $newmap;
 	}
 	
 	/**
@@ -118,7 +132,7 @@ class SelectedFieldsMapper
 	public function mapValues($values)
 	{
 		$result = array();
-
+		
 		// Validar correo
 		$email = $values[$this->mapping[0]];
 		if (! \filter_var($email, FILTER_VALIDATE_EMAIL) ) {
@@ -145,41 +159,133 @@ class SelectedFieldsMapper
 				case 'Numerical':
 					$result =  intval($value);
 					break;
+				
 				case 'Date':
 					try {
-						// Intentar parse con Fecha y hora
-						$d = \DateTime::createFromFormat('Y-m-d H:i:s', $value);
-						if (!$d) {
-							// Intentar solo con fecha
-							$d = \DateTime::createFromFormat('Y-m-d', $value);
-							if (!$d) {
-								$d = new \DateTime('now');
-							}
-							$d->setTime(0,0,0);
-						}
-						if ($d->getTimestamp() < 0) {
+						$d = $this->getTimeStamp($value);
+					
+						if (!$d || $d->getTimestamp() < 0) {
 							$d = new \DateTime('now');
 							$d->setTime(0,0,0);
 						}
 						$result = ($d)?$d->getTimestamp():0;
-					} catch (Exception $ex) {
+					} 
+					catch (Exception $ex) {
 						$result = 0;
 					}
 					break;
+					
+				case 'birthdate':
+					if (!$this->validateDate($value)) {
+						$result = null;
+					}
+					else {
+						if ($this->dateformat == 'Y-m-d') {
+							$result = $value;
+						}
+						else {
+							$result = $this->transformDateFormat($value, $this->dateformat);
+						}
+					}
+					break;
+					
 				case 'email':
 					$result = strtolower($value);
 					break;
+				
 				case 'domain':
 					$value = strtolower($value);
 					list($u, $d) = explode('@', $value);
 					$result = $d;
 					break;
+				
 				default:
 					$result = $value;
+					break;
 			}
+	
 			return $result;
 		}
+	
 		return $value;
+	}
+	
+	protected function getTimeStamp($date)
+	{
+		$formats = array(
+			'Y-m-d H:i:s', 
+			'Y-m-d', 
+			'Y/m/d H:i:s', 
+			'Y/m/d',
+			'd-m-Y H:i:s',
+			'd-m-Y',
+			'd/m/Y H:i:s',
+			'd/m/Y',
+			'm-d-Y H:i:s',
+			'm-d-Y',
+			'm/d/Y H:i:s',
+			'm/d/Y'
+		);
+		
+		foreach ($formats as $format) {
+			$d = \DateTime::createFromFormat($format, $date);
+			if ($d) {
+				return $d;
+			}
+		}
+	}
+	
+	
+	protected function transformDateFormat($date, $format) 
+	{
+		$separator = substr($format, 1, 1);
+	
+		$f = explode($separator, $format);
+		$d = explode($separator, $date);
+		
+		if (count($d) != 0) {
+			$year = $this->getPart($f, $d, 'Y');
+			$month = $this->getPart($f, $d, 'm');
+			$day = $this->getPart($f, $d, 'd');
+
+			$newDate = "{$year}-{$month}-{$day}";
+			return $newDate;
+		}
+		return null;
+	}
+
+	protected function getPart($format, $value, $criteria) 
+	{
+		if ($format[0] == $criteria) {
+			$v = $value[0];
+		}
+		else if ($format[1] == $criteria) {
+			$v = $value[1];
+		}
+		else if ($format[2] == $criteria) {
+			$v = $value[2];
+		}
+		return $v;
+	}
+	
+	
+	protected function validateDate($date) 
+	{
+		$date = $this->transformDateFormat($date, $this->dateformat);
+		
+		$d = explode('-', $date);
+		
+		if (count($d) != 0) {
+			$month = (int)$d[1];
+			$day = (int)$d[2];
+			$year = (int)$d[0];
+			
+			if (checkdate($month,$day,$year)) {
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 	
 	protected function getCustomFieldName($fieldid)

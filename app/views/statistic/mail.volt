@@ -4,25 +4,38 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/' ~ mail.idMail }}';
+		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/private/' ~ mail.idMail }}';
 	</script>
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('javascripts/moment/moment-with-langs.min.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
-	{{ javascript_include('amcharts/amcharts.js')}}
-	{{ javascript_include('amcharts/serial.js')}}
-	{{ javascript_include('amcharts/pie.js')}}
+	
+	{{ javascript_include('highcharts/highcharts.js')}}
+	{{ javascript_include('highcharts/modules/exporting.js')}}
+	{{ javascript_include('highcharts/modules/drilldown.js')}}
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
-	<script>
-		function autoScroll() {
-			$('html, body').animate({scrollTop: '615px'}, 'slow');
+	<script type="text/javascript">
+		function getUrlForStatistics(id) {
+			$.post("{{url('share/statistics')}}/" + id, function(response){
+				$('#summary').empty();
+				$('#complete').empty();
+				
+				$('#summary').append(response[0]);
+				$('#complete').append(response[1]);
+			});
 		}
-	</script>
-	<script>
+		
+		function autoScroll() {
+			event.preventDefault();
+			
+			var n = $(document).height();
+			$('html, body').animate({ scrollTop: 2000 }, 'slow');
+		}
+		
 		var chartData = [];
 		App.mails = [];
 		
@@ -32,164 +45,112 @@
 			cmail.name = '{{ cmail.name }}';
 			App.mails.push(cmail);
 		{%endfor%}
-			
-		{%for data in summaryChartData %}
-			var data = new Object();
-			data.title = '{{ data['title'] }}';
-			data.value = {{ data['value'] }};
-			chartData.push(data);
-		{%endfor%}
 		
-		AmCharts.ready(function () {
-			var chart = createPieChart(chartData);
-			try{
-				if($('#summaryChart')[0] === undefined) {
-					setTimeout(function(){chart.write('summaryChart');},1000);
-				}
-				else {
-					chart.write('summaryChart');
-				}
-			}catch(err){
-				console.log(err.message);
-			}
+		{#
+		var cData = [
+			{%for data in summaryChartData %}
+				['{{ data['title'] }}',   {{ data['value'] }}],
+			{%endfor%}
+		];
+		
+		console.log(cData)
+		$(function () {
+			var container = $('#container');
+			createHighPieChart(container, cData);
 		});
-		
+		#}
 		function compareMails() {
 			if(App.mailCompare !== undefined) {
 				window.location = "{{url('statistic/comparemails')}}/{{mail.idMail}}/" + App.mailCompare;
 			}
 		}
 		
-		
+		function expandMailPreview() {
+			if ($("#mail-preview").is(":visible")) {
+				$('#mail-preview').hide("slow");
+			}
+			else {
+				$('#mail-preview').show("slow");
+			}
+		}
 	</script>
 {% endblock %}
 {% block content %}
-	<div class="row">
-		<div class="col-sm-12">
-			<a href="">Compartir</a>
-		</div>
-	</div>
+	{#
+		<div id="container"></div>
+	#}
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
-			<div class="wrap">
-				<div class="col-md-5">
-					<h4 class="sectiontitle numbers-contacts">{{mail.name}}</h4>
-				</div>
-				<div class="col-md-7">
-					<div class="col-md-6">
-						<p><span class="blue big-number">{{statisticsData.total|numberf}} </span>correos enviados</p>
-					</div>
-					<div class="col-md-6">
-						<br><p class="text-right">Fecha del envío  {{date('Y-m-d', mail.finishedon)}}</p>
-					</div>
-				</div>
-				<div class="clearfix"></div>
-			</div>
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.opens" class="anchor" href=false}}' }}
-					<div class="box-dashboard-summary summary-opens anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.opens|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.statopens}}%</div>
-						<div class="title-stats-dashboard-summary">Aperturas</div>
-					</div>
-				{{ '{{/link-to}}'}}
-			</div>
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.clicks" class="anchor" href=false}}' }}
-					<div class="box-dashboard-summary summary-clicks anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.totalclicks|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.percent_clicks_CTR}}%</div>
-						<div class="title-stats-dashboard-summary">Clics</div>
-					</div>
-				{{'{{/link-to}}'}}
-				</div>
-			</div>
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.unsubscribed" class="anchor" href=false}}' }}
-					<div class="box-dashboard-summary summary-unsubscribed">
-						<div class="title-stats-dashboard-summary">{{statisticsData.unsubscribed|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.statunsubscribed}}%</div>
-						<div class="title-stats-dashboard-summary">Desuscritos</div>
-					</div>
-				{{ '{{/link-to}}'}}
-			</div>
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.bounced" class="anchor" href=false}}' }}
-					<div class="box-dashboard-summary summary-bounced anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.hardbounced|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.stathardbounced}}%</div>
-						<div class="title-stats-dashboard-summary">Rebotes</div>
-					</div>
-				{{ '{{/link-to}}'}}
-			</div>
-			<div class="col-md-2 col-sm-4 col-xs-6">
-				{{'{{#link-to "drilldown.spam" class="anchor" href=false}} '}}
-					<div class="box-dashboard-summary summary-spam anchor">
-						<div class="title-stats-dashboard-summary">{{statisticsData.spam|numberf}}</div>
-						<div class="number-stats-dashboard-summary">{{statisticsData.statspam}}%</div>
-						<div class="title-stats-dashboard-summary">Spam</div>
-					</div>
-				{{' {{/link-to}}'}}
-			</div>
-		</div>
 
-		<div class="space"></div>
+			{#   Botones de navegacion   #}
+			{{ partial("mail/partials/small_buttons_nav_partial") }}
+
+			{#   parcial encabezado pag   #}
+			{{ partial("statistic/partials/header_partial") }}
+			
+			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
+			{{ partial("statistic/partials/shareandcompare_partial") }}
+			
+			{#   parcial vista en miniatura del correo y datos del mismo   #}
+			{{ partial("statistic/partials/preview_email_partial") }}
+				
+			
+			{#   parcial estadisticas generales   #}
+			{{ partial("statistic/partials/general_stats_partial") }}
+			
+			{#   parcial estadisticas redes sociales   #}
+			{{ partial("statistic/partials/social_media_stats_partial") }}
 {#
-					<div class="row">
-						<div class="col-md-7">
-							{{ '{{view Ember.Select
-								class="form-control"
-								id="select-options-for-compare"
-								contentBinding="App.mails"
-								optionValuePath="content.id"
-								optionLabelPath="content.name"
-								valueBinding="App.mailCompare"}}'
-							}}
-						</div>
-						<div class="col-md-5">
-							<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-						</div>
-					</div>	
+			<div class="row">
+				<div class="col-md-7">
+					{{ '{{view Ember.Select
+						class="form-control"
+						id="select-options-for-compare"
+						contentBinding="App.mails"
+						optionValuePath="content.id"
+						optionLabelPath="content.name"
+						valueBinding="App.mailCompare"}}'
+					}}
 				</div>
-				<div class="col-md-6">
-					<div class="box">
-						<div id="summaryChart" style="width: 640px; height: 400px;"></div>
-					</div>
+				<div class="col-md-5">
+					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
 				</div>
+			</div>
 #}				
-	<div id="summaryChart" style="width: 640px; height: 400px;"></div>
+			
+			{{ partial("statistic/partials/partial_statistics_nav") }}
 			{{ "{{outlet}}" }}
-
 		</script>
-		{{ partial("statistic/mailpartial") }}
-		<script type="text/x-handlebars" data-template-name="timeGraph">
-		<div class="row">
-			<div class="pull-right scaleChart">
-				<div class="pull-left">
-					Agrupar por: &nbsp;
+		
+		{{ partial("statistic/partials/partial_ember_details") }}
+		{#	 Partial para gráfica de estadisticas	#}
+		{{ partial("statistic/partials/partial_graph") }}
+	</div>
+	
+	<div id="modal-simple" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Compartir estadísticas</h4>
 				</div>
-				<div class="pull-right">
-					<label for="scaleHour">
-						{{'{{view Ember.RadioButton id="scaleHour" name="scale" selectionBinding="App.scaleSelected" value="hh"}}'}}
-						Hora &nbsp;
-					</label>
+				<div class="modal-body">
+					<p>
+						Copie estos enlaces y compartalos con quien quiera, y así las personas que los abran
+						en el navegador podrán ver las estadisticas del correo.
+					</p>
+					
+					<h4>Compartir resumen de estadisticas del correo</h4>
+					<p id="summary"></p>
+					
+					<h4>Compartir estadísticas completas del correo</h4>
+					<p id="complete"></p>
 				</div>
-				<div class="pull-right">
-					<label for="scaleDay">
-						{{'{{view Ember.RadioButton id="scaleDay" name="scale" selectionBinding="App.scaleSelected" value="DD"}}'}}
-						Dia &nbsp;
-					</label>
-				</div>
-				<div class="pull-right">
-					<label for="scaleMonth">
-						{{'{{view Ember.RadioButton id="scaleMonth" name="scale" selectionBinding="App.scaleSelected" value="MM" checked="checked"}}'}}
-						Mes &nbsp;
-					</label>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				</div>
 			</div>
 		</div>
-		<div id="ChartContainer"></div>
-		</script>
 	</div>
 {% endblock %}

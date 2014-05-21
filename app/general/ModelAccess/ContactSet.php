@@ -447,11 +447,14 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 	private function createStructureForReturns($contacts)
 	{   
 		$object = array();
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
+		
 		foreach ($contacts as $contact) {
 			$c = array();
 			$c['id'] = $contact['idContact'];
 			$c['email'] = $contact['email'];
 			$c['name'] = $contact['name'];
+			$c['birthDate'] = (!empty($contact['birthDate']) ? $dateFormat->transformDateFormat($contact['birthDate'], 'Y-m-d', 'd/m/Y') : '');
 			$c['lastName'] = $contact['lastName'];
 			$c['isActive'] = ($contact['status'] != 0);
 			$c['activatedOn'] = (($contact['status'] != 0)?date('d/m/Y H:i', $contact['status']):'');
@@ -480,7 +483,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 						switch ($field['type']) {
 							case 'Date':
 								if($fvalue['numberValue']) {
-									$value = date('Y-m-d',$fvalue['numberValue']);
+									$value = date('d/m/Y',$fvalue['numberValue']);
 								} else {
 									$value = "";
 								}

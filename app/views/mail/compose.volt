@@ -272,7 +272,7 @@
 						<input type="text" class="form-control" id="target" name="target" autofocus="autofocus" placeholder="Escriba las direcciones de correo separadas por coma"/>
 					</div>
 					<div class="form-group">
-						<label for="message">Incluir instrucciones o un mensaje personal (opcional)</label>
+						<label for="message">Incluír instrucciones o un mensaje personal (opcional)</label>
 						<textarea class="form-control" rows="3" cols="30" id="message" name="message"></textarea>
 					</div>
 				</div>

@@ -29,6 +29,7 @@ while (true) {
 	$fields = $arrayDecode->fields;
 	$destiny = $arrayDecode->destiny;
 	$delimiter = $arrayDecode->delimiter;
+	$dateformat = $arrayDecode->dateformat;
 	$header = $arrayDecode->header;
 	$idAccount = $arrayDecode->idAccount;
 	$ipaddress = $arrayDecode->ipaddress;
@@ -42,7 +43,7 @@ while (true) {
 	$importwrapper->setIpaddress($ipaddress);
 
 	try {
-		$importwrapper->startImport($fields, $destiny, $delimiter, $header);
+		$importwrapper->startImport($fields, $destiny, $dateformat, $delimiter, $header);
 	}
 	catch (\InvalidArgumentException $e) {
 		$log->log($e);

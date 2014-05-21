@@ -459,8 +459,11 @@ class SegmentWrapper extends BaseWrapper
 		
 		$result = array();
 		
-		$cwrapper = new ContactWrapper();
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
 		$mailhistory = new \EmailMarketing\General\ModelAccess\ContactMailHistory();
+		
+		$cwrapper = new ContactWrapper();
+		$cwrapper->setDateFormat($dateFormat);
 		$cwrapper->setContactMailHistory($mailhistory);
 		
 		$ids = array();

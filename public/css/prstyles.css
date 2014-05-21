@@ -697,8 +697,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 
 .form-options {
 	background-color: rgb(228, 228, 228);
-	height: 40px;
-	width: 150px;
+	line-height: 2.4;
 	text-align: center;
 	padding: 10px;
 	border: 1px dashed lightgray;
@@ -708,8 +707,6 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border: none;
 }
 .form-full-content {
-	text-align: center;
-	width: 400px;
 	padding-bottom: 20px;
 }
 .form-title-name {
@@ -718,7 +715,6 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	font-size: 17px;
 }
 .field-zone-name {
-	font-size: 15px;
 }
 .field-content-zone {
 	padding-bottom: 10px;

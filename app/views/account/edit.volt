@@ -34,13 +34,13 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label">*Limite de contactos:</label>
+					<label class="col-md-4 control-label">*Límite de contactos:</label>
 					<div class="col-md-6">
 						{{ editFormAccount.render('contactLimit', {'class': 'form-control'}) }}
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label">*Limite de mensajes:</label>
+					<label class="col-md-4 control-label">*Límite de mensajes:</label>
 					<div class="col-md-6">
 						{{ editFormAccount.render('messageLimit', {'class': 'form-control'}) }}
 					</div>
@@ -52,7 +52,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label">*Modo de Pago: </label>
+					<label class="col-md-4 control-label">*Modo de pago: </label>
 					<div class="col-md-6">
 						{{ editFormAccount.render('subscriptionMode', {'class': 'form-control'}) }}
 					</div>
