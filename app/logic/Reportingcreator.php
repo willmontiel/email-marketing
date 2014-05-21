@@ -228,11 +228,8 @@ class Reportingcreator
 	protected function saveReport($generate,$save) 
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
-		Phalcon\DI::getDefault()->get('logger')->log("1");
 		$s = $db->execute($generate);
-		Phalcon\DI::getDefault()->get('logger')->log("2");
 		$g = $db->execute($save);
-		Phalcon\DI::getDefault()->get('logger')->log("3");
 		
 		if (!$s || !$g) {
 			throw new \Exception('Error while generting info in tmp db');
