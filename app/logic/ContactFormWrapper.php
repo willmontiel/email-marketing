@@ -49,6 +49,7 @@ class ContactFormWrapper extends ContactWrapper
 	public function createContactFromForm($fields)
 	{
 		$contactObj = $this->setFieldsToWrapper($fields);
+		$this->logger->log('Nuevo contacto por formulario');
 		$this->logger->log(print_r($contactObj, true));
 		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist, true, true);
 		
@@ -213,6 +214,8 @@ class ContactFormWrapper extends ContactWrapper
 	public function updateContactFromForm($idContact, $fields)
 	{
 		$contactObj = $this->setFieldsToWrapper($fields);
+		$this->logger->log('Actualizacion de contacto por formulario');
+		$this->logger->log(print_r($contactObj, true));
 		$contact = $this->updateContactFromJsonData($idContact, $contactObj);
 		
 		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);

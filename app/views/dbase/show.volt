@@ -10,6 +10,8 @@
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/mixin_save_form.js') }}
 	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
+	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/dbase/' ~ sdbase.idDbase }}';

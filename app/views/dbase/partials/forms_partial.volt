@@ -182,6 +182,13 @@
 			content+= button + '</form>';
 			$('#preview-modal').empty();
 			$('#preview-modal').append(content);
+			$('.date_view_picker').datetimepicker({
+				format:'Y-m-d',
+				inline:true,
+				timepicker:false,
+				lang:'es',
+				startDate: 0
+			});
 		});
 	}
 </script>
