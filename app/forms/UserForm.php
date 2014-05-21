@@ -33,14 +33,14 @@ class UserForm extends Form
         $this->add(new Password ('password', array(
 			'maxlength' => 40,
 			'type' => 'text',
-//			'required' => 'required',
+			'required' => 'required',
 			'class' => 'form-control'
         )));
 		
         $this->add(new Password ('password2', array(
 			'maxlength' => 40,
 			'type' => 'text',
-//			'required' => 'required',
+			'required' => 'required',
 			'class' => 'form-control'
         )));
 		
@@ -70,14 +70,14 @@ class UserForm extends Form
 			'maxlength' => 40,
 			'type' => 'text',
 			'class' => 'form-control',
-			'required' => 'required'
+//			'required' => 'required'
         )));
 		
 		$this->add(new Password ('pass2ForEdit', array(
 			'maxlength' => 40,
 			'type' => 'text',
 			'class' => 'form-control',
-			'required' => 'required'
+//			'required' => 'required'
         )));
     }
 }
