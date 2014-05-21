@@ -19,6 +19,13 @@
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
 	<script type="text/javascript">
+		function focus(t) {
+			$('#' + t + ' > input').click(function () { 
+				this.focus();
+				this.select(); 
+			});
+		}
+		
 		function getUrlForStatistics(id) {
 			$.post("{{url('share/statistics')}}/" + id, function(response){
 				$('#summary').empty();
@@ -126,10 +133,10 @@
 					</p>
 					
 					<h4>Compartir resumen de estadisticas del correo</h4>
-					<p id="summary"></p>
+					<input type="text" readonly="readonly" id="summary" onClick="focus('summary');">
 					
 					<h4>Compartir estadísticas completas del correo</h4>
-					<p id="complete"></p>
+					<input type="text" readonly="readonly" id="complete" onClick="focus('complete');">
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Cerrar</button>
