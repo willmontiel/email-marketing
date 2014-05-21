@@ -137,6 +137,7 @@
 					<h4>Compartir resumen de estadisticas del correo</h4>
 					<p id="summary"></p>
 					
+					<div class="space"></div>
 					
 					<h4>Compartir estadísticas completas del correo</h4>
 					<p id="complete"></p>
