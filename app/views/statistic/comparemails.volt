@@ -90,11 +90,11 @@
 				</thead>
 				<tbody>
 					<tr class="big-number">
-						<td>{{statisticsData1.sent}}</td>
+						<td>{{mail1.totalContacts}}</td>
 						<td></td>
 						<td>Correos enviados</td>
 						<td></td>
-						<td>{{statisticsData1.sent}}</td>
+						<td>{{mail2.totalContacts}}</td>
 					</tr>
 					<tr class="opens big-number">
 						<td>{{statisticsData1.opens|numberf}}</td>

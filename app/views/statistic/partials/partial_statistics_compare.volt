@@ -2,11 +2,11 @@
 	<div class="col-md-8 col-md-offset-2">
 		<table class="table table-normal">
 			<tr class="big-number">
-				<td>{{mail1.totalContacts}}</td>
+				<td>{{statisticsData1.sent}}</td>
 				<td></td>
 				<td>Correos enviados</td>
 				<td></td>
-				<td>{{mail2.totalContacts}}</td>
+				<td>{{statisticsData2.sent}}</td>
 			</tr>
 			<tr class="opens big-number">
 				<td>
