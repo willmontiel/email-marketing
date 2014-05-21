@@ -129,6 +129,12 @@ class TimePeriodModel
 				$color3 = "#a864a8";
 				break;
 			
+			case 'Spam':
+				$color1 = "#f6381f";
+				$color2 = "#e0250c";
+				$color3 = "#bd1b06";
+				break;
+			
 			default:
 				$color1 = "#8dc63f";
 				$color2 = "#197b30";

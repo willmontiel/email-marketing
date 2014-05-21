@@ -1,12 +1,10 @@
-<<<<<<< HEAD
 <script type="text/x-handlebars" data-template-name="forms/index">
 	<div class="bs-callout bs-callout-info">
 		Aquí esta toda la información necesaria para gestionar sus formularios
 	</div>
 
 	<div class="pull-right">
-	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Inscripción{{ '{{/link-to}}' }}
-	{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Actualización{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo formulario{{ '{{/link-to}}' }}
 	</div>
 	<div class="space"></div>
 	<table class="table table-striped">
@@ -25,28 +23,15 @@
 					</div>
 				</td>
 				<td>
-					<div>
-						{{'{{type}}'}}
-					</div>
+					Inscripción
 				</td>
 				<td>
 					<div class="text-right">
 						{{ '{{#if framecode}}' }}
-							<a class="btn btn-default btn-sm" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
-								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
-							</a>
-							{{ '{{#if isInscription}}' }}
-								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
-							{{ '{{else}}' }}
-								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-link"></i> Enlace{{ '{{/link-to}}' }}
-							{{ '{{/if}}' }}
+							{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Código{{ '{{/link-to}}' }}
 						{{ '{{/if}}' }}
-							
-						{{ '{{#if isInscription}}' }}
-							{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
-						{{ '{{else}}' }}
-							{{ '{{#link-to "forms.editupdate" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
-						{{ '{{/if}}' }}
+
+						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
 
 						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 					</div>
@@ -55,22 +40,6 @@
 			{{'{{/each}}'}}
 		</tbody>
 	</table>
-	
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Previsualización de formulario</h4>
-				</div>
-				<div class="modal-body" id="preview-modal">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</div>
-	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/setup">
@@ -78,18 +47,11 @@
 	{{ partial("dbase/partials/form_information_view_partial") }}
 </script>
 
-<script type="text/x-handlebars" data-template-name="forms/updating">
-	<div class="row">
-		<h4 class="sectiontitle">Crear nuevo formulario de actualizacion</h4>
-	</div>
-	{{ partial("dbase/partials/form_update_information_view_partial") }}
-</script>
-
 <script type="text/x-handlebars" data-template-name="forms/new">
 		<div class="col-md-6 col-xs-12 col-md-offset-1 border">
-			<div class="form-full-content"></div>
+			<form class="form-horizontal form-full-content" role="form"></form>
 
-			<div class="form-full-button"></div>
+			<form class="form-full-button" role="form"></form>
 		</div>
 		<div class="col-md-4 col-sm-8 col-xs-12">
 			<div class="form-menu">
@@ -107,21 +69,12 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/edit">
-	<div class="row">
-		<h4 class="sectiontitle">Editar formulario</h4>
-	</div>
+	<h4 class="sectiontitle">Editar formulario</h4>
 	{{ partial("dbase/partials/form_information_view_partial") }}
 </script>
 
-<script type="text/x-handlebars" data-template-name="forms/editupdate">
-	<div class="row">
-		<h4 class="sectiontitle">Editar formulario</h4>
-	</div>
-	{{ partial("dbase/partials/form_update_information_view_partial") }}
-</script>
-
 <script type="text/x-handlebars" data-template-name="forms/remove">
-			<h3>Eliminar un formulario</h3>
+			<h4 class="sectiontitle">Eliminar un formulario</h4>
 				<div class="box-content padded">			
 					<p>¿Está seguro que desea eliminar el formulario <strong>{{'{{name}}'}}</strong>?</p>
 					{{ '{{#if errors.errormsg}}' }}
@@ -129,8 +82,8 @@
 							{{ '{{errors.errormsg}}' }}
 						</div>
 					{{ '{{/if}}' }}
-					<button {{'{{action eliminate this}}'}} class="btn btn-danger">Eliminar</button>
-					<button class="btn btn-default" {{ '{{action cancel this}}' }}>Cancelar</button>	
+					<button {{'{{action eliminate this}}'}} class="btn btn-delete btn-sm extra-padding">Eliminar</button>
+					<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>	
 				</div>
 			</div>
 		</div>	

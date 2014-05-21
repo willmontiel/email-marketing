@@ -4,7 +4,7 @@
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
-		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/private/' ~ mail.idMail }}';
+		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/' ~ mail.idMail }}';
 	</script>
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
@@ -98,26 +98,8 @@
 			{#  Estadisticas redes sociales   #}
 			{{ partial("statistic/partials/social_media_stats_partial") }}
 			<div class="space"></div>			
-			{#   Compartir estadisticas y comparar estadisticas de correo	#}
-			{{ partial("statistic/partials/shareandcompare_partial") }}
-
-{#
-			<div class="row">
-				<div class="col-md-7">
-					{{ '{{view Ember.Select
-						class="form-control"
-						id="select-options-for-compare"
-						contentBinding="App.mails"
-						optionValuePath="content.id"
-						optionLabelPath="content.name"
-						valueBinding="App.mailCompare"}}'
-					}}
-				</div>
-				<div class="col-md-5">
-					<button class="btn btn-blue" onclick="compareMails()">Comparar</button>
-				</div>
-			</div>
-#}				
+			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
+			{{ partial("statistic/partials/shareandcompare_partial") }}	
 			
 			{#   Tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}

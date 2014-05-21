@@ -47,6 +47,29 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
+		
+		<h4 class="sectiontitle">Clics por enlance</h4>
+
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<td class="col-sm-11">Vínculos</td>
+							<td class="col-sm-1">Total Clics</td>
+						</tr>
+					</thead>
+					<tbody>
+						{{'{{#each detailsLinks}}'}}
+						<tr>
+							<td>{{'{{link}}'}}</td>
+							<td>{{'{{total}}'}}</td>
+						</tr>
+						{{ '{{/each}}' }}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	{{ '{{else}}' }}
 		<div class="wrapper">
 			<p class="hand-writer-message">No hay aún reporte de clics en esta campaña... <img src="{{url('b3/images/sad.png')}}" /></p>
@@ -63,7 +86,7 @@
 <script type="text/x-handlebars" data-template-name="drilldown/unsubscribed">
 	{{ '{{#if App.chartData}}' }}
 		<div class="wrapper">
-			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
+			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="bar-drilldown"}}'}}
 		</div>
 
 		<hr>
@@ -73,11 +96,6 @@
 				<span class="number">{{statisticsData.unsubscribed|numberf}}</span><br>
 				<span class="number">{{statisticsData.statunsubscribed}}%</span>
 			</div>
-		</div>
-		<div class="clearfix"></div>
-		<div class="space"></div>
-		<div class="text-right">
-			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 		</div>
 		<div class="clearfix"></div>
 	{{ '{{else}}' }}
@@ -96,10 +114,8 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/spam">
 	{{ '{{#if App.chartData}}' }}
-		{#
-
 		<div class="wrapper">
-			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
+			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="bar-drilldown"}}'}}
 		</div>
 
 		<hr>
@@ -111,16 +127,9 @@
 		</div>
 
 		<div class="clearfix"></div>
-		<div class="space"></div>
-		<div class="text-right">
-			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
-		</div>
-		<div class="clearfix"></div>
-		#}
 	{{ '{{else}}' }}
 			<div class="wrapper">
 				<p class="hand-writer-message">No hay reporte de spam en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
-				
 			</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}
