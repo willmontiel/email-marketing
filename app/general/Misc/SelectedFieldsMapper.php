@@ -276,7 +276,11 @@ class SelectedFieldsMapper
 		$d = explode('-', $date);
 		
 		if (count($d) != 0) {
-			if (checkdate($d[1],$d[2],$d[0])) {
+			$month = (int)$d[1];
+			$day = (int)$d[2];
+			$year = (int)$d[0];
+			
+			if (checkdate($month,$day,$year)) {
 				return true;
 			}
 			return false;
