@@ -31,8 +31,10 @@
 				$('#summary').empty();
 				$('#complete').empty();
 				
-				$('#summary').append(response[0]);
-				$('#complete').append(response[1]);
+				var s = 'summary';
+				var c = 'complete';
+				$('#summary').append('<input type="text" class="col-sm-12" readonly="readonly" id="summary" value="' + response[0] + '" onClick="focus(' + s + ');">');
+				$('#complete').append('<input type="text" class="col-sm-12" readonly="readonly" id="complete" value="' + response[1] + '" onClick="focus(' + c + ');">');
 			});
 		}
 		
@@ -133,10 +135,11 @@
 					</p>
 					
 					<h4>Compartir resumen de estadisticas del correo</h4>
-					<input type="text" class="col-sm-12" readonly="readonly" id="summary" onClick="focus('summary');">
+					<p id="summary"></p>
+					
 					
 					<h4>Compartir estadísticas completas del correo</h4>
-					<input type="text" class="col-sm-12" readonly="readonly" id="complete" onClick="focus('complete');">
+					<p id="complete"></p>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Cerrar</button>
