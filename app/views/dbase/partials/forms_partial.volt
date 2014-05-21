@@ -146,7 +146,7 @@
 		});
 	}
 </script>
-=======
+
 <script type="text/x-handlebars" data-template-name="forms/index">
 	<div class="bs-callout bs-callout-info">
 		Aquí esta toda la información necesaria para gestionar sus formularios
