@@ -20,17 +20,13 @@
 	{{ stylesheet_link ('css/select2.css') }}
 	<script type="text/javascript">
 		function selectSummary() {
-			$('#inputsummary > input').click(function () { 
-				this.focus();
-				this.select(); 
-			});
+			$('#inputsummary').focus();
+			$('#inputsummary').select();
 		}
 		
 		function selectComplete() {
-			$('#inputcomplete > input').click(function () { 
-				this.focus();
-				this.select(); 
-			});
+			$('#inputcomplete').focus();
+			$('#inputcomplete').select();
 		}
 		function getUrlForStatistics(id) {
 			$.post("{{url('share/statistics')}}/" + id, function(response){
