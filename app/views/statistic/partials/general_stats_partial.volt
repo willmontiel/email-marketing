@@ -14,7 +14,7 @@
 		#}
 			<div class="opens">
 				<div class="sm-icons-stats-opens center-block"></div>
-				<span class="number">{{statisticsData.clicks_CTR}} de {{statisticsData.total - statisticsData.bounced}}</span><br>
+				<span class="number">{{statisticsData.opens|numberf}}</span><br>
 				<span class="percent">{{statisticsData.statopens}}%</span>
 				<p>Aperturas</p>
 			</div>
@@ -29,7 +29,7 @@
 		#}
 			<div class="clics">
 				<div class="sm-icons-stats-clics center-block"></div>
-				<span class="number">{{statisticsData.totalclicks|numberf}}</span><br>
+				<span class="number">{{statisticsData.clicks_CTR}} persona de {{statisticsData.total - statisticsData.bounced}}</span><br>
 				<span class="percent">{{statisticsData.percent_clicks_CTR}}%</span>
 				<p>Clics</p>
 			</div>
