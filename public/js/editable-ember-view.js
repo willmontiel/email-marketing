@@ -107,7 +107,10 @@ App.EmberXEditableDateView = Em.View.extend({
 			title: self.title,
 			format: 'dd/mm/yyyy',    
 			viewformat: 'dd/mm/yyyy',
-			datepicker: {weekStart: 1},
+			datepicker: {
+				weekStart: 1,
+				todayBtn: true
+			},
 			success: function (resp, newValue) { 
 				var mes_tmp = "0" + (newValue.getUTCMonth()+1);
 				mes_tmp = mes_tmp.substring(mes_tmp.length-2);
