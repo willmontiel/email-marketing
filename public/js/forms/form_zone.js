@@ -2,7 +2,7 @@
 function FormEditor() {
 	this.content = [];
 	this.options = [];
-	this.title = 'Formulario';
+	this.title = 'Nombre del formulario';
 	this.button = 'Aceptar';
 }
 
@@ -30,7 +30,7 @@ FormEditor.prototype.createZones = function() {
 	this.optionzone = $('<div class="form-fields-menu"></div>');
 	$('.form-menu').append(this.optionzone);
 	
-	this.buttonzone = $('<div class="col-md-3 col-sm-2 col-xs-3 field-zone-name"><span>Botón</span></div><div class="col-md-7 col-sm-8 col-xs-7"><div class="container-form-button-name btn btn-guardar extra-padding btn-sm"><a href="#" class="editable editable-click" id="form-button-name" data-type="text" data-pk="1" data-original-title="Nombre del Boton">' + this.button + '</a></div></div>');
+	this.buttonzone = $('<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name"><span>Botón</span></label><div class="col-md-7 col-sm-8 col-xs-7"><div class="container-form-button-name btn btn-guardar extra-padding btn-sm"><a href="#" class="editable editable-click" id="form-button-name" data-type="text" data-pk="1" data-original-title="Nombre del Boton">' + this.button + '</a></div></div>');
 	$('.form-full-button').append(this.buttonzone);
 };
 
@@ -85,7 +85,7 @@ FormEditor.prototype.createFieldInOptions = function(field) {
 };
 
 FormEditor.prototype.editField = function(field) {	
-	$('.row.field-edit-zone-row').remove();
+	$('.field-edit-zone-row').remove();
 	$('.accept-form-field-changes').off('click');
 	
 	if(field.content.find('.form-field-editing').length > 0) {
@@ -119,7 +119,7 @@ FormEditor.prototype.editField = function(field) {
 			}
 			else if( field.checkIfCanSave(editzone) ) {
 				field.changeValues(editzone);
-				$(this).parents('.row.field-edit-zone-row').remove();
+				$(this).parents('.field-edit-zone-row').remove();
 				$(this).off('click');
 				$('.form-field-editing').removeClass('form-field-editing');
 				t.editorzone.sortable({ disabled: false });

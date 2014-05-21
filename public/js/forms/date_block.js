@@ -37,17 +37,20 @@ DateBlock.prototype.designField = function() {
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
-						<form class="field-content-zone form-inline ' + hide + '" role="form">\n\
-							<div class="col-md-3 col-sm-2 col-xs-3 field-zone-name form-group">\n\
+						<form class="field-content-zone form-inline' + hide + '" role="form">\n\
+							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name form-group" style="width: 206px;">\n\
 								' + required + this.name + '\n\
-							</div>\n\
-							<div class="form-group">\n\
+							</label>\n\
+							<div class="form-group" style="width: 90px;">\n\
+								<label class="sr-only"></label>\n\
 								<select class="form-control select-day-number-form">' + days + '</select>\n\
 							</div>\n\
-							<div class="form-group">\n\
+							<div class="form-group" style="width: 150px;">\n\
+								<label class="sr-only"></label>\n\
 								<select class="form-control select-month-number-form">' + months + '</select>\n\
 							</div>\n\
-							<div class="form-group">\n\
+							<div class="form-group" style="width: 200px;">\n\
+								<label class="sr-only"></label>\n\
 								<input type="text" class="form-control select-year-number-form">\n\
 							</div>\n\
 							<div class="form-group">\n\
@@ -126,16 +129,16 @@ DateBlock.prototype.getEditZone = function() {
 	var defaultvalue = (!this.hide) ? 'hide-form-field' : '';
 	var edit = $('<div class="row field-edit-zone-row">\n\
 					<div class="col-md-10 col-md-offset-1 field-edit-zone">\n\
-						<div class="row edit-row-in-zone">\n\
+						<div class="form-group edit-row-in-zone">\n\
 							<div class="col-md-4">Label</div><div class="col-md-8"><input type="text" class="form-control field-label-name" value="' + this.name + '"></div>\n\
 						</div>\n\
-						<div class="row edit-row-in-zone">\n\
+						<div class="form-group edit-row-in-zone">\n\
 							<div class="col-md-4">Requerido</div><div class="col-md-8"><input type="checkbox" class="field-required-option" ' + required + '></div>\n\
 						</div>\n\
-						<div class="row edit-row-in-zone">\n\
+						<div class="form-group edit-row-in-zone">\n\
 							<div class="col-md-4">Oculto</div><div class="col-md-8"><input type="checkbox" class="field-hide-option" ' + hide + '></div>\n\
 						</div>\n\
-						<div class="row edit-row-in-zone ' + defaultvalue + '">\n\
+						<div class="form-group edit-row-in-zone ' + defaultvalue + '">\n\
 							<div class="col-md-4">Valor de campo</div><div class="col-md-8">\n\
 								<div class="row field-default-value">\n\
 									<div class="col-md-3 col-without-padding">\n\
@@ -150,11 +153,11 @@ DateBlock.prototype.getEditZone = function() {
 								</div>\n\
 							</div>\n\
 						</div>\n\
-						<div class="row edit-button-row-in-zone">\n\
-							<a class="accept-form-field-changes btn btn-default btn-sm">Aceptar</a>\n\
+						<div class="pull-right edit-button-row-in-zone">\n\
+							<a class="accept-form-field-changes btn btn-default btn-guardar extra-padding btn-sm">Aceptar</a>\n\
 						</div>\n\
 					</div>\n\
-				</div>');
+				</div><div class="clearfix"></div>');
 	return edit;
 };
 

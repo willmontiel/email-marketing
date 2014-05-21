@@ -139,7 +139,7 @@
 						</form>
 					</div>
 					<div class="col-md-3 pull-right">
-						<a class="btn btn-default extra-padding btn-sm" href="{{ url('contactlist') }}#/lists/new">Crear una nueva lista</a>
+						<a class="btn btn-default extra-padding btn-sm" href="{{ url('contactlist') }}#/lists/new"><span class="glyphicon glyphicon-plus"></span> Crear una nueva lista</a>
 					</div>
 				</div>
 				<div class="space"></div>
@@ -154,24 +154,8 @@
 							<td class="sm-striped-bg" {{' {{bind-attr style="dbase.style"}} '}}>
 							</td>
 							<td>
-								<a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts"><strong>{{ '{{name}}' }}</strong></a>
-								<br/>
+								<a href="contactlist/show/{{ '{{unbound id}}' }}#/contacts"><strong>{{ '{{name}}' }}</strong></a></br>
 								{{ '{{description}}' }}
-							</td>
-							<td>
-{#								<!-- Detalles de la lista -->
-								<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts" class="btn btn-default btn-sm">
-								<i class="glyphicon glyphicon-search"></i> Detalles</a>
-#}
-								<!-- Editar la lista -->
-								{{ '{{#link-to "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
-
-								<!-- Eliminar la lista -->
-								{{ '{{#link-to "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
-
-								<!-- Estadísticas de la lista -->
-								<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default btn-sm" title="Ver estadisticas"><span class="glyphicon glyphicon-stats"></span></a>
-
 							</td>
 							<td>
 								<div class="box-section news with-icons">
@@ -179,6 +163,21 @@
 										<p class="right"><span class="blue big-number right">{{'{{activeContactsF}}'}}<br> </span> activos</p>
 									</div>
 								</div>
+							</td>
+							<td class="text-right">
+{#								<!-- Detalles de la lista -->
+								<a href="{{url('contactlist/show')}}/{{ '{{unbound id}}' }}#/contacts" class="btn btn-default btn-sm extra-padding">
+								<span class="glyphicon glyphicon-search"></span> Detalles</a>
+#}
+								<!-- Editar la lista -->
+								{{ '{{#link-to "lists.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-pencil"></span> Editar{{ '{{/link-to}}' }}
+
+								<!-- Eliminar la lista -->
+								{{ '{{#link-to "lists.delete" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete extra-padding"}}' }}<span class="glyphicon glyphicon-trash"></span> Eliminar{{ '{{/link-to}}' }}
+
+								<!-- Estadísticas de la lista -->
+								<a href="{{url('statistic/contactlist')}}/{{ '{{unbound id}}' }}" class="btn btn-default btn-sm extra-padding" title="Ver estadisticas"><span class="glyphicon glyphicon-stats"></span> Estadísticas</a>
+
 							</td>
 						</tr>
 				{{ '{{else}}' }}
@@ -188,17 +187,16 @@
 									<h4>No se encontraron listas</h4>
 									<p>Verifique el filtro de bases de datos.</p>
 									<p>Todos los contactos se organizan en listas. Si desea crear una lista de contactos,
-										haga {{'{{#link-to "lists.new" disabledWhen="createDisabled"}}'}} clic aquí {{'{{/link-to}}'}} o elija el botón de la parte superior.
-									</p>
+										haga {{'{{#link-to "lists.new" disabledWhen="createDisabled"}}'}} clic aquí {{'{{/link-to}}'}} o elija el botón de la parte superior.</p>
+									
 								</div>
 							</td>
 						</tr>
 				{{ '{{/each}}' }}
 					</tbody>
 				</table>
-				<div class="row">
+				{#   parcial paginacion   #}
 				{{ partial("partials/pagination_partial") }}
-				</div>
 			</div>
 
 		</script>
@@ -215,12 +213,26 @@
 		<script type="text/x-handlebars" data-template-name="lists/new">
 			<div class="row">
 				<h4 class="sectiontitle">Crear una nueva lista</h4>
+				<div class="col-sm-12 hidden-md hidden-lg">
+					<div class="alert alert-success">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="glyphicon glyphicon-info-sign"></span>
+							</div>
+							<div class="col-md-9">
+								<p>Cree una nueva lista</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				{{'{{#if errors.errormsg}}'}}
 				<div class="bs-callout bs-callout-danger">
 					{{'{{errors.errormsg}}'}}
 				</div>
 				{{'{{/if}}'}}
-				<div class="col-md-5">
+
+				<div class="col-md-7">
 					<form  class="form-horizontal" role="form">
 						{{' {{#if errors.name }} '}}
 						<span class="text text-error">{{'{{errors.name}}'}}</span>
@@ -260,19 +272,12 @@
 							</div>
 						</div>
 						<div class="form-actions pull-right">
-							<div class="row">
-								<div class="col-xs-6">
-									<button class="btn btn-sm btn-default" {{ '{{action "cancel" this }}' }}>Cancelar</button>
-								</div>
-
-								<div class="col-xs-6">
-									<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "save" this }}' }}>Guardar</button>
-								</div>
-							</div>	
+							<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cancel" this }}' }}>Cancelar</button>
+							<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "save" this }}' }}>Guardar</button>
 						</div>
 					</form>
 				</div>
-				<div class="col-md-6">
+				<div class="hidden-xs hidden-sm col-md-5">
 					<div class="alert alert-success">
 						<div class="row">
 							<div class="col-sm-2">
@@ -284,7 +289,7 @@
 						</div>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</script>
 		{#  ######## /Handlebars de crear nueva lista de contactos ######### #}
 		
@@ -292,12 +297,24 @@
 		<script type="text/x-handlebars" data-template-name="lists/edit">
 			<div class="row">
 				<h4 class="sectiontitle">Editar la lista <strong>{{'{{name}}'}}</strong></h4>
+				<div class="col-sm-12 hidden-md hidden-lg">
+					<div class="alert alert-success">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="glyphicon glyphicon-info-sign"></span>
+							</div>
+							<div class="col-md-9">
+								<p>Cambie el nombre y/o la descripción de la lista</p>
+							</div>
+						</div>
+					</div>
+				</div>
 				{{'{{#if errors.errormsg}}'}}
 				<div class="bs-callout bs-callout-danger">
 					{{'{{errors.errormsg}}'}}
 				</div>
 				{{'{{/if}}'}}
-				<div class="col-md-5">
+				<div class="col-md-7">
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<label for="" class="col-sm-4 control-label">*Nombre
@@ -320,18 +337,12 @@
 							</div>
 						</div>
 						<div class="form-actions pull-right">
-							<div class="row">
-								<div class="col-xs-6">
-									<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
-								</div>
-								<div class="col-xs-6">
-									<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
-								</div>
-							</div>
+							<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+							<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action edit this}}' }} data-toggle="tooltip" title="Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides">Guardar</button>
 						</div>
 					</form>
 				</div>
-				<div class="col-md-6">
+				<div class="hidden-xs hidden-sm col-md-5">
 					<div class="alert alert-success">
 						<div class="row">
 							<div class="col-sm-2">
@@ -365,8 +376,8 @@
 					</div>
 				{{'{{/if}}'}}
 				<div class="form-actions">
+					<button class="btn btn-default btn-delete btn-sm extra-padding" {{ '{{action delete this}}' }}>Eliminar</button>
 					<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
-					<button class="btn btn-danger btn-sm extra-padding" {{ '{{action delete this}}' }}>Eliminar</button>
 				</div>
 			</div>
 		</script>
