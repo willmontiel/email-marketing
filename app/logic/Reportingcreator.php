@@ -214,6 +214,9 @@ class Reportingcreator
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
 		
+		Phalcon\DI::getDefault()->get('logger')->log("SQL: {$sql}");
+		Phalcon\DI::getDefault()->get('logger')->log("Report: {$report}");
+						
 		$data = array(
 			'generate' => $sql,
 			'save' => $report
