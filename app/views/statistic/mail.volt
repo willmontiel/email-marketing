@@ -19,13 +19,22 @@
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
 	<script type="text/javascript">
+		function selectSummary() {
+			$('#inputsummary').focus();
+			$('#inputsummary').select();
+		}
+		
+		function selectComplete() {
+			$('#inputcomplete').focus();
+			$('#inputcomplete').select();
+		}
 		function getUrlForStatistics(id) {
 			$.post("{{url('share/statistics')}}/" + id, function(response){
 				$('#summary').empty();
 				$('#complete').empty();
 				
-				$('#summary').append(response[0]);
-				$('#complete').append(response[1]);
+				$('#summary').append('<input type="text" class="col-sm-12" readonly="readonly" id="inputsummary" value="' + response[0] + '" onClick="selectSummary();">');
+				$('#complete').append('<input type="text" class="col-sm-12" readonly="readonly" id="inputcomplete" value="' + response[1] + '" onClick="selectComplete();">');
 			});
 		}
 		
@@ -127,6 +136,8 @@
 					
 					<h4>Compartir resumen de estadisticas del correo</h4>
 					<p id="summary"></p>
+					
+					<div class="space"></div>
 					
 					<h4>Compartir estadísticas completas del correo</h4>
 					<p id="complete"></p>

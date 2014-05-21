@@ -29,7 +29,7 @@
 		#}
 			<div class="clics">
 				<div class="sm-icons-stats-clics center-block"></div>
-				<span class="number">{{statisticsData.totalclicks|numberf}}</span><br>
+				<span class="number">{{statisticsData.clicks_CTR}} contacto(s) de {{statisticsData.total - statisticsData.bounced}}</span><br>
 				<span class="percent">{{statisticsData.percent_clicks_CTR}}%</span>
 				<p>Clics</p>
 			</div>

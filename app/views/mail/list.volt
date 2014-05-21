@@ -121,7 +121,9 @@
 									{%endif%}
 									{%if item.status == 'Sent'%}
 										<a class="btn btn-sm btn-default extra-padding" href="{{url('statistic/mail')}}/{{item.idMail}}">Estadísticas</a>
+										{#
 										<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadísticas</button>
+										#}
 									{%endif%}
 								</div>
 							</td>

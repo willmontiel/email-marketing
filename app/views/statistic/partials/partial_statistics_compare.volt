@@ -30,11 +30,38 @@
 				<td>{{statisticsData2.unsubscribed}}</td>
 			</tr>
 			<tr class="bounced big-number">
-				<td>{{statisticsData1.bounced}}</td>
-				<td>{{statisticsData1.percentageSpam}}%</td>
-				<td>Rebotes</td>
-				<td>{{statisticsData2.percentageSpam}}%</td>
-				<td>{{statisticsData2.bounced}}</td>
+				<td>
+					{{statisticsData1.bounced}}
+				</td>
+				<td>
+					{{statisticsData1.percentageBounced}}%
+				</td>
+				<td>
+					Rebotes
+				</td>
+				<td>
+					{{statisticsData2.percentageBounced}}%
+				</td>
+				<td>
+					{{statisticsData2.bounced}}
+				</td>
+			</tr>
+			<tr class="spam big-number">
+				<td>
+					{{statisticsData1.spam}}
+				</td>
+				<td>
+					{{statisticsData1.percentageSpam}}%
+				</td>
+				<td>
+					Spam
+				</td>
+				<td>
+					{{statisticsData2.percentageSpam}}%
+				</td>
+				<td>
+					{{statisticsData2.spam}}
+				</td>
 			</tr>
 		</table>
 	</div>
