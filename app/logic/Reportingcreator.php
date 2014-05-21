@@ -33,6 +33,7 @@ class Reportingcreator
 		}
 		catch (Exception $e) {
 			$db->execute("DROP TEMPORARY TABLE $this->tablename");
+			throw new \Exception("{$e}");
 			Phalcon\DI::getDefault()->get('logger')->log('Exception: ' . $e->getMessage());
 		}
 		
@@ -44,7 +45,7 @@ class Reportingcreator
 		$report->createdon = time();
 		
 		if (!$report->save()) {
-			throw new \InvalidArgumentException('Error while creating report');
+			throw new \Exception('Error while creating report');
 		}
 		else {
 			$report->title = $title;
@@ -81,7 +82,7 @@ class Reportingcreator
 				break;
 			
 			default :
-				throw new \InvalidArgumentException('There is not the type of report');
+				throw new \Exception('There is not the type of report');
 				break;
 		}
 		
@@ -228,7 +229,7 @@ class Reportingcreator
 		$g = $db->execute($save);
 		
 		if (!$s || !$g) {
-			throw new \InvalidArgumentException('Error while generting info in tmp db');
+			throw new \Exception('Error while generting info in tmp db');
 		}
 		$db->execute("DROP TEMPORARY TABLE $this->tablename");
 		return true;

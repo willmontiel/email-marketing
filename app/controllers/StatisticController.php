@@ -165,7 +165,7 @@ class StatisticController extends ControllerBase
 				$this->logger->log("Exception: " . $e->getMessage());
 				$this->traceFail("Creating report, idMail: {$id}, type: {$type}");
 				$this->flashSession("Ha ocurrido un error, por favor contacte al administrador");
-				$this->response->redirect("statistic/mail/{$id}");
+				return $this->response->redirect("statistic/mail/{$id}");
 			}
 			
 			$report = Mailreportfile::findFirst(array(
@@ -204,7 +204,7 @@ class StatisticController extends ControllerBase
 		}
 		else {
 			$this->flashSession("No existe el correo, por favor verifique la información");
-			$this->response->redirect("error");
+			return $this->response->redirect("error");
 		}
 	}
 	
