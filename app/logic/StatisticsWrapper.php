@@ -628,19 +628,20 @@ class StatisticsWrapper extends BaseWrapper
 		$spamcontact = array();
 		$spam = array();
 		$count = 0;
-		if ($type == 'private') {
-			$phql = "SELECT e.email, m.spam, c.name, c.lastName
-				FROM Mxc AS m 
-					JOIN Contact AS c ON (c.idContact = m.idContact)
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-				WHERE m.idMail = :idMail: AND m.spam != 0 LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 		
-			$query = $manager->createQuery($phql);
-			$spams = $query->execute(array(
-				'idMail' => $idMail
-			));
+		$phql = "SELECT e.email, m.spam, c.name, c.lastName
+			FROM Mxc AS m 
+				JOIN Contact AS c ON (c.idContact = m.idContact)
+				JOIN Email AS e ON (e.idEmail = c.idEmail)
+			WHERE m.idMail = :idMail: AND m.spam != 0 LIMIT " . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();
 
-			if (count($spams) > 0) {
+		$query = $manager->createQuery($phql);
+		$spams = $query->execute(array(
+			'idMail' => $idMail
+		));
+
+		if (count($spams) > 0) {	
+			if ($type == 'private') {
 				$spamData = array();
 				foreach ($spams as $s) {
 					$spamcontact[] = array(
@@ -652,32 +653,37 @@ class StatisticsWrapper extends BaseWrapper
 					
 					$spamData[] = $s->spam;
 				}
-				
-				sort($spamData);
-			
-				$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
-				$timePeriod->setData($spamData);
-				$timePeriod->processTimePeriod();
-
-				$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Spam');
-				$periodModel->setTimePeriod($timePeriod);
-				$periodModel->modelTimePeriod();
-				$spam = $periodModel->getModelTimePeriod();
-				
-				$phql2 = "SELECT COUNT(*) AS total
-						FROM Mxc AS m 
-							JOIN Contact AS c ON (c.idContact = m.idContact)
-							JOIN Email AS e ON (e.idEmail = c.idEmail)
-						WHERE m.idMail = :idMail: AND m.spam != 0";
-				$query2 = $manager->createQuery($phql2);
-				$total = $query2->execute(array(
-					'idMail' => $idMail
-				));
-				
-				$count = $total['total']->total;
 			}
+			else {
+				foreach ($spams as $s) {
+					$spamData[] = $s->spam;
+				}
+			}
+				
+			sort($spamData);
+
+			$timePeriod = new \EmailMarketing\General\Misc\TotalTimePeriod();
+			$timePeriod->setData($spamData);
+			$timePeriod->processTimePeriod();
+
+			$periodModel = new \EmailMarketing\General\Misc\TimePeriodModel('Spam');
+			$periodModel->setTimePeriod($timePeriod);
+			$periodModel->modelTimePeriod();
+			$spam = $periodModel->getModelTimePeriod();
+				
+			$phql2 = "SELECT COUNT(*) AS total
+					FROM Mxc AS m 
+						JOIN Contact AS c ON (c.idContact = m.idContact)
+						JOIN Email AS e ON (e.idEmail = c.idEmail)
+					WHERE m.idMail = :idMail: AND m.spam != 0";
+			$query2 = $manager->createQuery($phql2);
+			$total = $query2->execute(array(
+				'idMail' => $idMail
+			));
+
+			$count = $total['total']->total;
 		}
-		
+	
 		$this->pager->setTotalRecords($count);
 		
 		$statistics[] = array(
