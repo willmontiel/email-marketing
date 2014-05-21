@@ -198,7 +198,7 @@ class Reportingcreator
 	
 	protected function getQueryForSpamReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail . ", 'spam', e.email, null, null, null, null, b.type, b.description, v.bounced
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'spam', e.email, null, null, null, null, 'hard', b.description, v.bounced
 					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
