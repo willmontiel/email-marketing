@@ -118,8 +118,10 @@ class Security extends Plugin
 				'unsubscribe::contact' => array(),
 				'unsubscribe::success' => array(),
 				'form::frame' => array(),
+				'form::update' => array(),
 				'contacts::form' => array(),
 				'contacts::activate' => array(),
+				'contacts::update' => array(),
 				'share::results' => array(),
 				
 				
@@ -277,6 +279,7 @@ class Security extends Plugin
 				'mail::stop' => array('mail' => array('read', 'send')),
 				'mail::cancel' => array('mail' => array('read', 'send')),
 				'mail::sendtest' => array('mail' => array('read', 'send')),
+				'mail::checkforms' => array('mail' => array('read', 'send')),
 				
 				'mail::compose' => array('mail' => array('read', 'create', 'send')),
 				
@@ -367,6 +370,9 @@ class Security extends Plugin
 				// Herramientas de administracion
 				'tools::index' => array('tools' => array('read')),
 				'mail::savemail' => array('mail' => array('create')),
+				
+				//Formularios
+				'form::preview' => array('form' => array('read')),
 				
 			);
 		}
@@ -468,8 +474,10 @@ class Security extends Plugin
 			'unsubscribe:contact',
 			'unsubscribe:success',
 			'form:frame',
+			'form:update',
 			'contacts:form',
 			'contacts:activate',
+			'contacts:update',
 			'share:results',
 		);
 		

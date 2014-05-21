@@ -5,7 +5,7 @@ function DateBlock(zone, id, name, required) {
 	this.required = required;
 	this.defaultvalue = {day: '1', month: 'Enero', year: ''};
 	this.hide = false;
-	this.months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+	this.months = [{name:'Enero', value:'01'}, {name:'Febrero', value:'02'}, {name:'Marzo', value:'03'}, {name:'Abril', value:'04'}, {name:'Mayo', value:'05'}, {name:'Junio', value:'06'}, {name:'Julio', value:'07'}, {name:'Agosto', value:'08'}, {name:'Septiembre', value:'09'}, {name:'Octubre', value:'10'}, {name:'Noviembre', value:'11'}, {name:'Diciembre', value:'12'}];
 }
 
 DateBlock.prototype.designOptionField = function() {
@@ -24,10 +24,15 @@ DateBlock.prototype.designField = function() {
 	var days = '';
 	var months = '';
 	for (var i = 1; i <= 31; i++) {
-		days+= '<option>' + i + '</option>';
+		if(i < 10) {
+			days+= '<option>0' + i + '</option>';
+		}
+		else {
+			days+= '<option>' + i + '</option>';
+		}
 	}
 	for (var i = 0; i < this.months.length; i++) {
-		months+= '<option>' + this.months[i] + '</option>';
+		months+= '<option value="' + this.months[i].value + '">' + this.months[i].name + '</option>';
 	}
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
@@ -105,11 +110,16 @@ DateBlock.prototype.getEditZone = function() {
 	var months = '';
 	for (var i = 1; i <= 31; i++) {
 		var selected = (i == this.defaultvalue.day) ? 'selected' : '';
-		days+= '<option ' + selected + '>' + i + '</option>';
+		if(i < 10) {
+			days+= '<option ' + selected + '>0' + i + '</option>';
+		}
+		else {
+			days+= '<option ' + selected + '>' + i + '</option>';
+		}
 	}
 	for (var i = 0; i < this.months.length; i++) {
 		var selected = (this.months[i] === this.defaultvalue.month) ? 'selected' : '';
-		months+= '<option ' + selected + '>' + this.months[i] + '</option>';
+		months+= '<option value="' + this.months[i].value + '" ' + selected + '>' + this.months[i].name + '</option>';
 	}
 	var required = (this.required === 'Si') ? 'checked' : '';
 	var hide = (this.hide) ? 'checked' : '';

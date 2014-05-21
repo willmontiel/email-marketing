@@ -17,8 +17,8 @@ class ContactFormWrapper extends ContactWrapper
 	{
 		$this->form = $form;
 	}
-
-	public function createContactFromForm($fields)
+	
+	protected function setFieldsToWrapper($fields)
 	{
 		$contactObj = new stdClass();
 
@@ -27,7 +27,7 @@ class ContactFormWrapper extends ContactWrapper
 			$param = explode("_", $key);
 			$fieldname = $param[1];
 			
-			if($fieldname === 'email' || $fieldname === 'name' || $fieldname === 'lastName') {
+			if($fieldname === 'email' || $fieldname === 'name' || $fieldname === 'lastName' || $fieldname === 'birthDate') {
 				$name = $fieldname;
 			}
 			else {
@@ -42,8 +42,17 @@ class ContactFormWrapper extends ContactWrapper
 		if (!isset($contactObj->email) || trim($contactObj->email) == '') {
 			throw new \Exception('El email es requerido');
 		}
+		
+		return $contactObj;
+	}
 
-		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist);
+	public function createContactFromForm($fields)
+	{
+		$contactObj = $this->setFieldsToWrapper($fields);
+		$this->logger->log('Nuevo contacto por formulario');
+		$this->logger->log(print_r($contactObj, true));
+		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist, true, true);
+		
 		if($contact == false) {
 			$contact = $this->createNewContactFromJsonData($contactObj, $this->contactlist);
 		}
@@ -133,7 +142,9 @@ class ContactFormWrapper extends ContactWrapper
 			$obj->isSubscribed = true;
 		}
 		
-		$cfs = Customfield::findByIdDbase($this->contactlist->idDbase);
+		$idDbase = (isset($this->contactlist)) ? $this->contactlist->idDbase : $this->idDbase;
+		
+		$cfs = Customfield::findByIdDbase($idDbase);
 		foreach ($cfs as $cf) {
 			$name = 'campo'.$cf->idCustomField;			
 			if(!isset($obj->$name)) {
@@ -174,8 +185,54 @@ class ContactFormWrapper extends ContactWrapper
 				$notify->setDomain($domain);
 				$notify->setMail(new Mail());
 				$notify->prepareContent($content->mail);
-				$notify->setNotifyReceiver($this->form->notifyEmail, '');
+				$notify->setNotifyReceiver($this->form->notifyEmail, $this->form->notifyEmail);
 				$notify->sendMail($content);
+			} catch (\Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}
+		}
+		
+		if($this->form->welcome === 'Si') {
+			try {
+				$content = json_decode($this->form->welcomeMail);
+
+				$welcome = new NotificationMail();
+				$welcome->setForm($this->form);
+				$welcome->setContact($contact);
+				$welcome->setAccount($this->account);
+				$welcome->setDomain($domain);
+				$welcome->setMail(new Mail());
+				$welcome->prepareContent($content->mail);
+				$welcome->setContactReceiver();
+				$welcome->sendMail($content);
+			} catch (\Exception $e) {
+				$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			}
+		}
+	}
+	
+	public function updateContactFromForm($idContact, $fields)
+	{
+		$contactObj = $this->setFieldsToWrapper($fields);
+		$this->logger->log('Actualizacion de contacto por formulario');
+		$this->logger->log(print_r($contactObj, true));
+		$contact = $this->updateContactFromJsonData($idContact, $contactObj);
+		
+		$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
+		
+		if($this->form->notify === 'Si') {
+			try {
+				$content = json_decode($this->form->notifyMail);
+				
+				$updatenotify = new NotificationMail();
+				$updatenotify->setForm($this->form);
+				$updatenotify->setContact($contact);
+				$updatenotify->setAccount($this->account);
+				$updatenotify->setDomain($domain);
+				$updatenotify->setMail(new Mail());
+				$updatenotify->prepareContent($content->mail);
+				$updatenotify->setContactReceiver();
+				$updatenotify->sendMail($content);
 			} catch (\Exception $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');
 			}

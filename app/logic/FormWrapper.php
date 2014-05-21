@@ -15,26 +15,35 @@ class FormWrapper extends BaseWrapper
 	
 	public function saveInformation($content)
 	{
+		Phalcon\DI::getDefault()->get('logger')->log(print_r($content, true));
 		$form = new Form();
 		$form->idDbase = $this->dbase->idDbase;
 		$form->name = $content->name;
+		$form->type = $content->type;
 		$form->title = $content->title;
 		$form->content = $content->content;
-		$form->target = $content->listselected;
+		$form->target = ($content->listselected) ? $content->listselected : 'none';
 		
 		$form->urlSuccess = (strpos($content->urlsuccess, "http://") === FALSE && strpos($content->urlsuccess, "https://") === FALSE ) ? 'http://' . $content->urlsuccess : $content->urlsuccess;
 		$form->urlError = (strpos($content->urlerror, "http://") === FALSE && strpos($content->urlerror, "https://") === FALSE) ? 'http://' . $content->urlerror : $content->urlerror;
 		
 		$form->optin = ($content->optin)?'Si':'No';
 		$form->optinMail = $content->optinmail;
-		$form->welcome = ($content->welcome)?'Si':'No';
-		$form->welcomeMail = $content->welcomemail;
-
-		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
 		
 		$form->notify = $content->notify?'Si':'No';
 		$form->notifyMail = $content->notifymail;
 		$form->notifyEmail = $content->notifyemail;
+		
+		if($content->type == 'Inscription') {
+			$form->welcome = ($content->welcome)?'Si':'No';
+			$form->welcomeMail = $content->welcomemail;
+		}
+		else {
+			$form->welcome = ($content->updatenotify)?'Si':'No';
+			$form->welcomeMail = $content->updatenotifymail;
+		}
+		
+		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
 		
 		if (!$form->save()) {
 			foreach ($form->getMessages() as $message) {
@@ -51,24 +60,32 @@ class FormWrapper extends BaseWrapper
 	{
 		$form->idDbase = $this->dbase->idDbase;
 		$form->name = $content->name;
+		$form->type = $content->type;
 		$form->title = $content->title;
 		$form->content = $content->content;
-		$form->target = $content->listselected;
+		$form->target = ($content->listselected) ? $content->listselected : 'none';
 
 		$form->urlSuccess = (strpos($content->urlsuccess, "http://") === FALSE && strpos($content->urlsuccess, "https://") === FALSE ) ? 'http://' . $content->urlsuccess : $content->urlsuccess;
 		$form->urlError = (strpos($content->urlerror, "http://") === FALSE && strpos($content->urlerror, "https://") === FALSE) ? 'http://' . $content->urlerror : $content->urlerror;
 		
 		$form->optin = ($content->optin)?'Si':'No';
 		$form->optinMail = $content->optinmail;
-		$form->welcome = ($content->welcome)?'Si':'No';
-		$form->welcomeMail = $content->welcomemail;
-		
-		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
-		
+
 		$form->notify = $content->notify?'Si':'No';
 		$form->notifyMail = $content->notifymail;
 		$form->notifyEmail = $content->notifyemail;
 		
+		if($content->type == 'Inscription') {
+			$form->welcome = ($content->welcome)?'Si':'No';
+			$form->welcomeMail = $content->welcomemail;
+		}
+		else {
+			$form->welcome = ($content->updatenotify)?'Si':'No';
+			$form->welcomeMail = $content->updatenotifymail;
+		}
+		
+		$form->welcomeUrl = (!empty($content->welcomeurl) && strpos($content->welcomeurl, "http://") === FALSE && strpos($content->welcomeurl, "https://") === FALSE ) ? 'http://' . $content->welcomeurl : $content->welcomeurl;
+
 		if (!$form->save()) {
 			foreach ($form->getMessages() as $message) {
 				$this->logger->log('Error creando Formulario: [' . $message . ']');
@@ -84,6 +101,7 @@ class FormWrapper extends BaseWrapper
 		$jsonObject = array();
 		$jsonObject['id'] = $phObject->idForm;
 		$jsonObject['name'] = $phObject->name;
+		$jsonObject['type'] = $phObject->type;
 		$jsonObject['title'] = $phObject->title;
 		$jsonObject['content'] = $phObject->content;
 		$jsonObject['listselected'] = $phObject->target;
@@ -92,11 +110,23 @@ class FormWrapper extends BaseWrapper
 		$jsonObject['welcomeurl'] = $phObject->welcomeUrl;
 		$jsonObject['optin'] = ($phObject->optin=='Si');
 		$jsonObject['optinmail'] = $phObject->optinMail;
-		$jsonObject['welcome'] = ($phObject->welcome=='Si');
-		$jsonObject['welcomemail'] = $phObject->welcomeMail;
 		$jsonObject['notify'] = ($phObject->notify=='Si');
 		$jsonObject['notifymail'] = $phObject->notifyMail;
 		$jsonObject['notifyemail'] = $phObject->notifyEmail;
+		
+		if($phObject->type == 'Inscription'){
+			$jsonObject['welcome'] = ($phObject->welcome=='Si');
+			$jsonObject['welcomemail'] = $phObject->welcomeMail;
+			$jsonObject['updatenotify'] = null;
+			$jsonObject['updatenotifymail'] = null;
+		}
+		else {
+			$jsonObject['welcome'] = null;
+			$jsonObject['welcomemail'] = null;
+			$jsonObject['updatenotify'] = ($phObject->welcome=='Si');
+			$jsonObject['updatenotifymail'] = $phObject->welcomeMail;
+		}
+		
 		$jsonObject['framecode'] = $this->getFrameCode($phObject);
 		
 		return $jsonObject;
@@ -111,11 +141,15 @@ class FormWrapper extends BaseWrapper
 		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
-		$action = 'form/frame';
-		$parameters = array(1, $form->idForm, $form->idDbase);
-		$link = $linkdecoder->encodeLink($action, $parameters);
+		if($form->type === 'Inscription') {
+			$action = 'form/frame';
+			$parameters = array(1, $form->idForm, $form->idDbase);
+			$link = $linkdecoder->encodeLink($action, $parameters);
+
+			return '<iframe src="' . $link . '" style="height: ' . $this->getHeightForFrame(json_decode($form->content)) . 'px"></iframe>';
+		}
 		
-		return '<iframe src="' . $link . '" style="height: ' . $this->getHeightForFrame(json_decode($form->content)) . 'px"></iframe>';
+		return 'Finalizado';
 	}
 	
 	public function getHeightForFrame($fullcontent)
@@ -158,5 +192,65 @@ class FormWrapper extends BaseWrapper
 		$object['id'] = $contactlist->idContactlist;
 		$object['name'] = $contactlist->name;
 		return $object;
+	}
+	
+	public function checkFormsInTarget(Mail $mail, Mailcontent $mailcontent) {
+		
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$dbases = array();
+		$forms = array();
+		$target = json_decode($mail->target);
+		
+		if( $target->destination == 'contactlists' ) {
+			$lists = implode(', ', $target->ids);
+			$phql = "SELECT idDbase FROM Contactlist WHERE idContactlist IN ({$lists})";
+			$ids = $mm->executeQuery($phql);
+			foreach ($ids as $id) {
+				if(!in_array($id->idDbase, $dbases)) {
+					$dbases[]= $id->idDbase;
+				}
+			}
+		}
+		else if( $target->destination == 'segments' ) {
+			$segments = implode(', ', $target->ids);
+			$phql = "SELECT idDbase FROM Segment WHERE idSegment IN ({$segments})";
+			$ids = $mm->executeQuery($phql);
+			foreach ($ids as $id) {
+				if(!in_array($id->idDbase, $dbases)) {
+					$dbases[]= $id->idDbase;
+				}
+			}
+		}
+		else if( $target->destination == 'dbases' ) {
+			$dbases = $target->ids;
+		}
+//		Phalcon\DI::getDefault()->get('logger')->log('TODO ESTO-----------------------------');
+//		Phalcon\DI::getDefault()->get('logger')->log(print_r($dbases, true));
+		
+		preg_match_all('/%%FORM_([a-zA-Z0-9_\-]*)%%/', $mailcontent->content, $arrayForms);
+		
+		if (count($arrayForms[0]) == 0) {
+			return false;
+		}
+		
+		list($allforms, $allids) = $arrayForms;
+		$idsForms = array_unique($allids);
+		
+		$idsforms = implode(', ', $idsForms);
+		$phql2 = "SELECT idDbase FROM Form WHERE idForm IN ({$idsforms})";
+		$idsform = $mm->executeQuery($phql2);
+		foreach ($idsform as $idform) {
+			if(!in_array($idform->idDbase, $forms)) {
+				$forms[]= $idform->idDbase;
+			}
+		}
+		
+		if(count($forms) > 1 || count($dbases) > 1 || $forms[0] != $dbases[0]) {
+			return true;
+		}
+		
+		return false;
+		
 	}
 }

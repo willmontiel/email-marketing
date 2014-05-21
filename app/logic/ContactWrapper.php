@@ -307,7 +307,7 @@ class ContactWrapper extends BaseWrapper
 		}
 	}
 
-	public function addExistingContactToListFromDbase($email, Contactlist $list, $saveCounters = true)
+	public function addExistingContactToListFromDbase($email, Contactlist $list, $saveCounters = true, $susbscribe = false)
 	{
 		$idAccount = $this->account->idAccount;
 		
@@ -334,6 +334,20 @@ class ContactWrapper extends BaseWrapper
 					}
 
 					return $existContact;
+				}
+				else if($susbscribe && $existContact->unsubscribed != 0) {
+					$oldContact = Contact::findFirstByIdContact($existContact->idContact);
+					$existContact->unsubscribed = 0;
+					$existContact->subscribedon = time();
+					$existContact->ipSubscribed = $this->ipaddress;
+					if(!$existContact->save()) {
+						Phalcon\DI::getDefault()->get('logger')->log('El contacto no pudo ser suscrito por el formulario');
+						throw new \Exception('El contacto no pudo ser suscrito');
+					}
+					else {
+						$this->counter->updateContact($oldContact, $existContact);
+						$this->counter->saveCounters();
+					}
 				}
 			}
 		}

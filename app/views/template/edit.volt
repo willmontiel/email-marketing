@@ -130,11 +130,11 @@
 				<a id="btnNewCategory" class="btn btn-default extra-padding" onclick="writenewcategory()" ><span class="glyphicon glyphicon-pencil"></span></a>
 				<a id="btnSelectCategory" class="btn btn-default extra-padding" onclick="selectcategory()" style="display: none;"><span class="glyphicon glyphicon-check"></span></a>
 			</div>
-
+			{% if userObject.userrole == 'ROLE_SUDO'%}
 			<div class="form-group">
 				<label><input type="checkbox" name="isglobal" id="isglobal" {% if template.idAccount == ''%}checked{% endif %}> Plantilla Global</label>
 			</div>
-
+			{% endif %}
 			<div class="col-xs-12 col-sm-9 col-md-10 col-lg-4 pull-right">
 				<div class="form-group">
 					<a class="btn btn-default extra-padding" data-toggle="modal" data-target="#myModal" onClick="verHTML()"><span class="glyphicon glyphicon-search"></span> Previsualizar</a>

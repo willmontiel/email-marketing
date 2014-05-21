@@ -740,8 +740,15 @@ class MailController extends ControllerBase
 			
 			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
 		}
+		
+		$forms = Form::findAllFormsInAccount($this->user->account);
+		
+		foreach ($forms as $form) {
+			$arrayForm[] = array('idForm' => $form[0], 'name' => ucwords($form[1]));
+		}
 
 		$this->view->setVar('cfs', $arrayCf);
+		$this->view->setVar('forms', $arrayForm);
 		
 		if($idMail) {
 			$this->view->setVar('idMail', $idMail);
@@ -905,6 +912,14 @@ class MailController extends ControllerBase
 											   array ("a", "e", "i", "o", "u", "n", "_"), $cf[0]));
 			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
 		}
+		
+		$forms = Form::findAllFormsInAccount($this->user->account);
+		
+		foreach ($forms as $form) {
+			$arrayForm[] = array('idForm' => $form[0], 'name' => ucwords($form[1]));
+		}
+
+		$this->view->setVar('forms', $arrayForm);
 		$this->view->setVar('cfs', $arrayCf);
 		
 		if ($this->request->isPost()) {
@@ -2442,5 +2457,40 @@ class MailController extends ControllerBase
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e . ']');
 		}
+	}
+	
+	public function checkformsAction($idMail)
+	{
+		try {
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1 AND idAccount = ?2',
+				'bind' => array(1 => $idMail,
+								2 => $this->user->account->idAccount)
+			));
+			
+			if(!$mail) {
+				throw new Exception('No se encontro el correo');
+			}
+			
+			$content = Mailcontent::findFirstByIdMail($mail->idMail);
+			
+			if(!$content) {
+				throw new Exception('No se encontro el contenido del correo');
+			}
+			
+			$wrapper = new FormWrapper();
+			$wrapper->setAccount($this->user->account);
+			$value = $wrapper->checkFormsInTarget($mail, $content);
+			
+			return $this->setJsonResponse(array('status' => $value), 200);
+			
+		}
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log('InvalidArgumentException: [' . $e . ']');
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+		}
+		
 	}
 }

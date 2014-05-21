@@ -147,7 +147,27 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			}
 		}
 	}.observes('this.content'),
+	
 			
+	checkFormsStatus: function(content, dbases, contactlists, segments) {
+		if(content && (dbases || contactlists || segments)) {
+			var t = this;
+			var id = this.get('this.id');
+			$.ajax({
+				url: config.baseUrl + 'mail/checkforms/' + id,
+				type: "POST",			
+				error: function(){
+				},
+				success: function(msg) {
+					t.set('invalidDbaseForm', false);
+					if(msg.status) {
+						t.set('invalidDbaseForm', true);
+					}
+				}
+			});
+		}
+	},
+	
 	//Observa el contenido del header (fromName, fromEmail, etc)
 	headerEmpty: function () {
 		var n, e, s;
@@ -170,6 +190,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		
 	//Observa que se hayan seleccionado destinatarios
 	targetEmpty: function () {
+		
+		this.checkFormsStatus(this.get('this.mailcontent'), this.get('this.dbases'), this.get('this.contactlists'), this.get('this.segments'));
+
 		var d, l, s;
 		d = this.get('this.dbaselist');
 		l = this.get('this.list');
@@ -202,8 +225,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		f = this.get('this.fbaccountsel');
 		t = this.get('this.twaccountsel');
 		
-		f = (f.length === 0)?null:f;
-		t = (t.length === 0)?null:t;
+		f = (f == null || f.length === 0)?null:f;
+		t = (t == null || t.length === 0)?null:t;
 
 		if (!f && !t) {
 			return true;
