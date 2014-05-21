@@ -442,6 +442,7 @@ class ContactsController extends ControllerBase
 				}
 				
 				$wrapper = new ContactFormWrapper();
+				$wrapper->setDateFormat(new \EmailMarketing\General\Misc\DateFormat());
 				$wrapper->setContactlist($contactlist);
 				$wrapper->setForm($form);
 				$wrapper->setAccount($contactlist->dbase->account);
@@ -497,6 +498,7 @@ class ContactsController extends ControllerBase
 			$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
 			
 			$wrapper = new ContactFormWrapper();
+			$wrapper->setDateFormat(new \EmailMarketing\General\Misc\DateFormat());
 			$wrapper->setForm($form);
 			$wrapper->setAccount($dbase->account);
 			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);
@@ -543,6 +545,7 @@ class ContactsController extends ControllerBase
 				$dbase = Dbase::findFirstByIdDbase($form->idDbase);
 
 				$wrapper = new ContactFormWrapper();
+				$wrapper->setDateFormat(new \EmailMarketing\General\Misc\DateFormat());
 				$wrapper->setForm($form);
 				$wrapper->setAccount($dbase->account);
 				$wrapper->setIdDbase($dbase->idDbase);
