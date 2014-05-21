@@ -19,22 +19,26 @@
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
 	<script type="text/javascript">
-		function focus(t) {
-			$('#' + t + ' > input').click(function () { 
+		function selectSummary() {
+			$('#inputsummary > input').click(function () { 
 				this.focus();
 				this.select(); 
 			});
 		}
 		
+		function selectComplete() {
+			$('#inputcomplete > input').click(function () { 
+				this.focus();
+				this.select(); 
+			});
+		}
 		function getUrlForStatistics(id) {
 			$.post("{{url('share/statistics')}}/" + id, function(response){
 				$('#summary').empty();
 				$('#complete').empty();
 				
-				var s = 'summary';
-				var c = 'complete';
-				$('#summary').append('<input type="text" class="col-sm-12" readonly="readonly" id="summary" value="' + response[0] + '" onClick="focus(' + s + ');">');
-				$('#complete').append('<input type="text" class="col-sm-12" readonly="readonly" id="complete" value="' + response[1] + '" onClick="focus(' + c + ');">');
+				$('#summary').append('<input type="text" class="col-sm-12" readonly="readonly" id="inputsummary" value="' + response[0] + '" onClick="selectSummary();">');
+				$('#complete').append('<input type="text" class="col-sm-12" readonly="readonly" id="inputcomplete" value="' + response[1] + '" onClick="selectComplete();">');
 			});
 		}
 		
