@@ -61,7 +61,9 @@
 	function sendData() {
 		var name = $("#name").val();
 		var category = $("#category").val();
-		var global = $("#isglobal")[0].checked;
+		if($("#isglobal")[0] !== undefined) {
+			var global = $("#isglobal")[0].checked;
+		}
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 		$.ajax(
 			{
