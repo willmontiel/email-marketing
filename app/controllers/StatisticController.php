@@ -178,7 +178,7 @@ class StatisticController extends ControllerBase
 			if (!$report) {
 				$this->traceFail("Creating report, report do not exists, idMail: {$id}, type: {$type}");
 				$this->flashSession("Ha ocurrido un error, por favor contacte al administrador");
-				$this->response->redirect("statistic/mail/{$id}");
+				return $this->response->redirect("statistic/mail/{$id}");
 			}
 			
 			$this->view->disable();
