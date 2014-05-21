@@ -291,7 +291,7 @@
 		
 	<script type="text/x-handlebars" data-template-name="contacts/import">
 		<div class="row">
-			<h4 class="sectiontitle">Importar contactos desde archivo .csv a <span>Lista de Iván</span></h4>
+			<h4 class="sectiontitle">Importar contactos desde archivo .csv</h4>
 			<div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
 				<div class="alert alert-success">
 					<div class="row">
