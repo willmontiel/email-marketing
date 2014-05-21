@@ -215,7 +215,6 @@
 	</script>
 		<!------------------ Ember! ---------------------------------->
 		{#   Contenido del tab general   #}
-	<div id="emberAppContainer">
 	<script type="text/x-handlebars" data-template-name="index">
 		<h4>Información de la base de datos</h4>
 		<table class="table">
@@ -284,7 +283,6 @@
 				</tbody>
 				<tfoot></tfoot>
 			</table>
-		</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/add">
