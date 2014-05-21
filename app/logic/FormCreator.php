@@ -203,7 +203,7 @@ class FormCreator
 			));
 			
 			if($fis) { 
-				return date('m/d/Y', $fis->numberValue);
+				return date('d/m/Y', $fis->numberValue);
 			}
 		}
 		return '';
