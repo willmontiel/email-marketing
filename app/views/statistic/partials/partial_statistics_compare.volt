@@ -64,6 +64,23 @@
 					{{statisticsData1.bounced}}
 				</td>
 				<td>
+					{{statisticsData1.percentageBounced}}%
+				</td>
+				<td>
+					Rebotes
+				</td>
+				<td>
+					{{statisticsData2.percentageBounced}}%
+				</td>
+				<td>
+					{{statisticsData2.bounced}}
+				</td>
+			</tr>
+			<tr class="spam big-number">
+				<td>
+					{{statisticsData1.spam}}
+				</td>
+				<td>
 					{{statisticsData1.percentageSpam}}%
 				</td>
 				<td>
@@ -73,7 +90,7 @@
 					{{statisticsData2.percentageSpam}}%
 				</td>
 				<td>
-					{{statisticsData2.bounced}}
+					{{statisticsData2.spam}}
 				</td>
 			</tr>
 		</table>
