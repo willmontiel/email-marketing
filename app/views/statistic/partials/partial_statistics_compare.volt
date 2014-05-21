@@ -84,7 +84,7 @@
 					{{statisticsData1.percentageSpam}}%
 				</td>
 				<td>
-					Rebotes
+					Spam
 				</td>
 				<td>
 					{{statisticsData2.percentageSpam}}%
