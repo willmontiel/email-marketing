@@ -133,10 +133,10 @@
 					</p>
 					
 					<h4>Compartir resumen de estadisticas del correo</h4>
-					<input type="text" readonly="readonly" id="summary" onClick="focus('summary');">
+					<input type="text" class="col-sm-12" readonly="readonly" id="summary" onClick="focus('summary');">
 					
 					<h4>Compartir estadísticas completas del correo</h4>
-					<input type="text" readonly="readonly" id="complete" onClick="focus('complete');">
+					<input type="text" class="col-sm-12" readonly="readonly" id="complete" onClick="focus('complete');">
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Cerrar</button>
