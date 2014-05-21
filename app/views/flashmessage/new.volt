@@ -54,27 +54,21 @@
 		});	
 	</script>
 {% endblock %}
-{% block sectiontitle %}<i class="icon-bullhorn"></i> Crear un nuevo mensaje informativo{%endblock%}
+{% block sectiontitle %}<span class="icon-bullhorn"></span> Crear un nuevo mensaje informativo{%endblock%}
 {% block sectionsubtitle %}Cree un pequeño mensaje para informar sobre algo a una cuenta determinada o todas las cuentas{% endblock %}
 {% block content %}
-	<div class="row">
-		<div class="col-md-12">
-			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'flashmessage']) }}
-		</div>
-	</div>
+	{#   Navegacion botones pequeños   #}
+	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'flashmessage']) }}
 	
 	<div class="row">
 		<h4 class="sectiontitle">Crear nuevo mensaje flash</h4>
 		
 		<div class="bs-callout bs-callout-info">
-			Cree un nuevo mensaje administrativo flash, configure las cuentas en donde se debe mostrar, el color con el que debe mostrarse, la fecha de inicio,
-			y la fecha final en que debe dejar de mostrarse.
+			Cree un nuevo mensaje administrativo flash, configure las cuentas en donde se debe mostrar, el color con el que debe mostrarse, la fecha de inicio y la fecha final en que debe dejar de mostrarse.
 		</div>
 	</div>
 
-	<div class="row">
-		{{flashSession.output()}}
-	</div>
+	{{flashSession.output()}}
 
 	<div class="row">
 		<div class="col-md-8">
@@ -155,10 +149,10 @@
 					</div>
 				</div>
 				<br />
-				<div class="form-group">
-					<div class="col-sm-3">
-						<a href="{{ url('flashmessage/index') }}" class="btn btn-default">Cancelar</a>
-						{{ submit_button("Guardar", 'class' : "btn btn-sm btn-guardar", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
+				<div class="form-group wrapper">
+					<div class="col-sm-6 col-md-offset-3">
+						<a href="{{ url('flashmessage/index') }}" class="btn btn-sm btn-default extra-padding">Cancelar</a>
+						{{ submit_button("Guardar", 'class' : "btn btn-sm btn-default extra-padding btn-guardar", 'data-toggle': "tooltip", 'data-placement': "left", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides", 'data-original-title': "Tooltip on left") }}
 					</div>
 				</div>
 			</form>

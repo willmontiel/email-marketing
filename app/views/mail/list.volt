@@ -38,7 +38,7 @@
 				<span class="glyphicon glyphicon-plus"></span> Nuevo Correo</a></li>
 			
 			<li><a class="btn btn-default btn-sm extra-padding" href="{{ url('template/index') }}" class="btn btn-default btn-sm extra-padding">
-				<span class="glyphicon glyphicon-magic"></span> Administrar Plantillas</a></li>
+				<span class="glyphicon glyphicon-th"></span> Administrar Plantillas</a></li>
 		</ul>
 	</div>
 </div>
@@ -106,9 +106,8 @@
 							<td>
 								<div class="">
 									{%if item.status == 'Scheduled'%}
-										<button class="ShowDialogEditScheduled btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">
-											Pausar
-										</button>
+										<button class="ShowDialogEditScheduled btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">Pausar</button>
+										
 									{%endif%}
 									{% for value in mail_options(item) %}
 										<a class="btn btn-sm btn-default extra-padding" href="{{ url(value.url) }}{{item.idMail}}">{{value.text}}</a>
@@ -131,9 +130,9 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="col-sm-12 text-center">
-				{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
-			</div>
+			
+			{#   parcial paginacion   #}	
+			{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
 		{% else %}
 			<div class="row">
 				<div class="bs-callout bs-callout-warning">
@@ -161,8 +160,8 @@
 				</p>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<a href="" id="deleteMail" class="btn btn-danger" >Eliminar</a>
+				<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+				<a href="" id="deleteMail" class="btn btn-sm btn-default btn-delete extra-padding" >Eliminar</a>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

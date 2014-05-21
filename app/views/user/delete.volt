@@ -5,26 +5,11 @@
 {% block content %}
 	{{ content() }}
 	<div class="row">
-		<div class="box">
-			<div class="box-content">
-				<div class="box-section news with-icons">
-					<div class="avatar blue">
-						<i class="icon-lightbulb icon-2x"></i>
-					</div>
-					<div class="news-content">
-						<div class="news-title">
-							Eliminar un usuario
-						</div>
-						<div class="news-text">
-							En esta sección de la aplicacion podrá eliminar usuarios de la cuenta, pero recuerde que
-							al eliminar un usuario se perderá totalmente la información y no podrá recuperarla.
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<h4 class="sectiontitle">Eliminar un usuario</h4>
 	</div>
-	<br />
+	<div class="bs-callout bs-callout-info">
+		Aquí puede eliminar usuarios de la cuenta, pero recuerde que al al hacerlo se perderá totalmente la información y no podrá recuperarla.
+	</div>
 	<div class="row">
 		<div class="box">
 			<div class="box-header">

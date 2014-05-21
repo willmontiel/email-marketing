@@ -73,15 +73,12 @@
 					<label class="col-md-4 control-label">*Retornar correos rebotados a: </label>
 					<div class="col-md-6">
 						{{ editFormAccount.render('idMailClass', {'class': 'form-control'})}}
+					</div>
 				</div>
-				<div class="form-actions pull-right">
-					<div class="row">
-						<div class="col-xs-6">
-							<a href="{{ url('account') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
-						</div>
-						<div class="col-xs-6">
-							{{ submit_button("Grabar", 'class' : "btn btn-default btn-guardar extra-padding", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
-						</div>
+				<div class="form-group wrapper">
+					<div class="col-md-4 col-md-offset-4">
+						<a href="{{ url('account') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
+						{{ submit_button("Grabar", 'class' : "btn btn-sm btn-default btn-guardar extra-padding", 'data-toggle':"tooltip", 'data-placement': "bottom", 'title': "Recuerda que los campos con asterisco (*) son obligatorios, por favor no los olvides") }}
 					</div>
 				</div>
 			</form>

@@ -86,21 +86,21 @@
 			{#   Botones de navegacion   #}
 			{{ partial("mail/partials/small_buttons_nav_partial") }}
 
-			{#   parcial encabezado pag   #}
+			{#   Encabezado pag   #}
 			{{ partial("statistic/partials/header_partial") }}
-			
-			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
-			{{ partial("statistic/partials/shareandcompare_partial") }}
-			
-			{#   parcial vista en miniatura del correo y datos del mismo   #}
+						
+			{#   Vista en miniatura del correo y datos del mismo   #}
 			{{ partial("statistic/partials/preview_email_partial") }}
-				
 			
-			{#   parcial estadisticas generales   #}
+			{#   Estadisticas generales   #}
 			{{ partial("statistic/partials/general_stats_partial") }}
 			
-			{#   parcial estadisticas redes sociales   #}
+			{#  Estadisticas redes sociales   #}
 			{{ partial("statistic/partials/social_media_stats_partial") }}
+			<div class="space"></div>			
+			{#   Compartir estadisticas y comparar estadisticas de correo	#}
+			{{ partial("statistic/partials/shareandcompare_partial") }}
+
 {#
 			<div class="row">
 				<div class="col-md-7">
@@ -119,12 +119,14 @@
 			</div>
 #}				
 			
+			{#   Tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
 			{{ "{{outlet}}" }}
 		</script>
 		
+		{#   Contenido de los tabs de opciones de inteeracciones en estadisticas   #}
 		{{ partial("statistic/partials/partial_ember_details") }}
-		{#	 Partial para gráfica de estadisticas	#}
+		{#	 Gráfica de estadisticas	#}
 		{{ partial("statistic/partials/partial_graph") }}
 	</div>
 	

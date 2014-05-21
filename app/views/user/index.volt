@@ -10,20 +10,17 @@
 	<h4 class="sectiontitle">Usuarios</h4>
 
 	<div class="bs-callout bs-callout-info">
-		Aqui puede editar información de los usuarios de la cuenta, puede dar permisos y quitarlos. Tambien puede
-		crear nuevos usuarios como tambien eliminarlos.
+		Aquí puede editar información de los usuarios de la cuenta, puede dar permisos y quitarlos. Puede
+		crear nuevos usuarios como también eliminarlos.
 	</div>
 
 	{{ flashSession.output() }}
 	
-	<div class="row">
-		<div class="col-md-2 col-md-offset-10">
-			<a class="btn btn-default btn-sm extra-padding" href="{{ url('user/new') }}">
-				<span class="glyphicon glyphicon-plus"></span> Nuevo Usuario</a>
-		</div>
+	<div class="text-right">
+		<a class="btn btn-default btn-sm extra-padding" href="{{ url('user/new') }}"><span class="glyphicon glyphicon-plus"></span> Nuevo Usuario</a>
 	</div>
 	
-	<table class="table table-striped">
+	<table class="table table-contacts table-striped">
 		<thead>
 			<tr>
 				<td></td>
@@ -57,16 +54,16 @@
 				<td>{{ date('d/m/Y',item.updatedon)}}</td>
 				<td>
 					<div class="pull-right">
-						<a href="{{url('user/edit/')}}{{item.idUser}}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
-						<a class="ShowDialog btn btn-default btn-delete btn-sm" data-toggle="modal" href="#modal-simple" data-id="{{url('user/delete/')}}{{item.idUser}}"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>
+						<a href="{{url('user/edit/')}}{{item.idUser}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+						<a class="ShowDialog btn btn-default btn-delete btn-sm extra-padding" data-toggle="modal" href="#modal-simple" data-id="{{url('user/delete/')}}{{item.idUser}}"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
 					</div>
 				</td>
 			</tr>
 	{% endfor %}
 		</tbody>
 	</table>
-	<div class="col-sm-12 text-center">
-		{{ partial('partials/pagination_static_partial', ['pagination_url': 'user/index']) }}
+	{#   paginacion sin ember   #}	
+	{{ partial('partials/pagination_static_partial', ['pagination_url': 'user/index']) }}
 	</div>
 </div>
 
@@ -79,11 +76,11 @@
 			  <h6 id="modal-tablesLabel">Eliminar Usuario</h6>
 			</div>
 			<div class="modal-body">
-				Esta seguro que desea eliminar este Usuario.
+				Está seguro que desea eliminar este usuario?
 			</div>
 			<div class="modal-footer">
-			  <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-			  <a href="" id="deleteUser" class="btn btn-danger" >Eliminar</a>
+			  <a href="" class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</a>
+			  <a href="" id="deleteUser" class="btn btn-sm btn-default btn-delete extra-padding" >Eliminar</a>
 			</div>
 		</div>
 	</div>

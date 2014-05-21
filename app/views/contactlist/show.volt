@@ -176,7 +176,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-5">
+		<div class="col-md-7">
 			<form  class="form-horizontal" role="form">
 				{{ '{{#if errors.errormsg}}' }}
 					<div class="bs-callout bs-callout-danger">
@@ -223,14 +223,8 @@
 				<!--  Fin de campos personalizados -->
 
 				<div class="form-actions pull-right">
-					<div class="row">
-						<div class="col-xs-6">
-							<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
-						</div>
-						<div class="col-xs-6">
-							<button class="btn btn-sm btn-default btn-guardar extra-padding" {{'{{action "save" this}}'}}>Guardar</button>
-						</div>
-					</div>
+					<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
+					<button class="btn btn-sm btn-default btn-guardar extra-padding" {{'{{action "save" this}}'}}>Guardar</button>
 				</div>
 			</form>
 			<div class="clearfix"></div>
@@ -267,21 +261,15 @@
 					<p>Cree hasta 30 contactos por este medio</p>
 				</div>
 			</div>
-			<div class="col-md-5">
+			<div class="col-md-6">
 				<form method="post" action="{{url('contacts/newbatch')}}/{{datalist.idContactlist}}" role="form">
 					<div class="form-group">
 						<label for="info-cont" class="control-label">Información de los contactos:</label>
 						<textarea name="arraybatch" class="form-control sm-textarea" rows="3"></textarea>
 					</div>
-					<div class="form-actions pull-right">
-						<div class="row">
-							<div class="col-xs-6">
-								<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
-							</div>
-							<div class="col-xs-6">
-								<button class="btn btn-sm btn-default btn-guardar extra-padding">Guardar</button>
-							</div>
-						</div>
+					<div class="form-actions">
+						<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
+						<button class="btn btn-sm btn-default btn-guardar extra-padding">Guardar</button>
 					</div>
 				</form>
 			</div>
@@ -320,7 +308,7 @@
 		
 	<script type="text/x-handlebars" data-template-name="contacts/import">
 		<div class="row">
-			<h4 class="sectiontitle">Importar contactos desde archivo .csv a <span>Lista de Iván</span></h4>
+			<h4 class="sectiontitle">Importar contactos desde archivo .csv</h4>
 			<div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
 				<div class="alert alert-success">
 					<div class="row">

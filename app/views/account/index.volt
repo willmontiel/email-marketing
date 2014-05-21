@@ -1,34 +1,23 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
+		{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
+
 	<div class="row">
-		<div class="col-md-12">
-			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
+		<h4 class="sectiontitle">Cuentas</h4>
+		<div class="bs-callout bs-callout-info">
+			Aquí puede ver, crear o editar las cuentas de la apliación, como también administrar los usuarios
+			de dichas cuentas.
 		</div>
 	</div>
 
 	<div class="row">
-		<div class="col-md-12">
-			<h4 class="sectiontitle">Cuentas</h4>
-			<div class="bs-callout bs-callout-info">
-				Aquí puede ver, crear o editar las cuentas de la apliación, como también administrar los usuarios
-				de dichas cuentas.
-			</div>
-		</div>
+		{{ flashSession.output() }}
 	</div>
-
-	<div class="row">
-		<div class="col-md-12">
-			{{ flashSession.output() }}
-		</div>
+	<div class="row wrapper text-right">
+		<a href="{{ url('account/new') }}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-plus"></span> Crear nueva cuenta</a>
 	</div>
 	<div class="row">
-		<div class="col-md-12 text-right">
-			<a href="{{ url('account/new') }}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-plus"></span> Crear nueva cuenta</a>
-		</div>
-	</div>
-	<br />
-	<div class="row">
-		<table class="table table-striped">
+		<table class="table table-contacts table-striped">
 			<thead>
 				<tr>
 					<td>Listado de cuentas</td>
@@ -62,10 +51,7 @@
 		 {%endfor%}
 			</tbody>
 		</table>
-	</div>
 
-	<div class="col-sm-12 text-center">
 		{#   Paginacion sin ember   #}
 		{{ partial('partials/pagination_static_partial', ['pagination_url': 'account/index']) }}
-	</div>
 {% endblock %}

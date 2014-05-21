@@ -12,7 +12,7 @@
 			que esté listada abajo, está recibiendo campañas de envío.
 		</p>
 		<div class="col-md-3 col-md-offset-8">
-			{{ '{{#link-to "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger btn-delete btn-sm extra-padding"}}Bloquear un correo electronico{{/link-to}}' }}
+			{{ '{{#link-to "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger btn-delete btn-sm extra-padding"}}Bloquear un correo electrónico{{/link-to}}' }}
 		</div>
 	</div>
 	<div class="space"></div>
@@ -120,10 +120,10 @@
 				<div class="form-actions pull-right">
 					<div class="row">
 						<div class="col-xs-6">
-							<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this }}' }}>Cancelar</button>
+							<button class="btn btn-default btn-delete btn-sm extra-padding" {{ '{{action "block" this }}' }}>Bloquear</button>
 						</div>
 						<div class="col-xs-6">
-							<button class="btn btn-danger btn-sm extra-padding" {{ '{{action "block" this }}' }}>Bloquear</button>
+							<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this }}' }}>Cancelar</button>
 						</div>
 					</div>
 				</div>

@@ -1,11 +1,7 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
-	<div class="row">
-		<div class="col-md-12">
-			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
-		</div>
-	</div>
-
+	{#   navegacion botones pequeños   #}
+	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 	<div class="row">
 		<div class="col-md-12">
 			<h4 class="sectiontitle">Información de usuarios de cuentas</h4>
@@ -24,7 +20,7 @@
 
 	<div class="row">
 		<div class="col-sm-12 text-right">
-			<a href="{{url('account/newuser')}}/{{idAccount}}" class="btn btn-sm btn-default extra-padding">Crear nuevo usuario</a>
+			<a href="{{url('account/newuser')}}/{{idAccount}}" class="btn btn-sm btn-default extra-padding"><span class="glyphicon glyphicon-plus"></span> Crear nuevo usuario</a>
 		</div>
 	</div>
 
@@ -52,8 +48,8 @@
 						<td>{{date('Y-m-d', item.updatedon)}}</td>
 						<td>
 							<a href="{{url('session/loginlikethisuser/')}}{{item.idUser}}" class="btn btn-sm btn-primary extra-padding">Ingresar como este usuario</a>
-							<a href="{{url('account/edituser/')}}{{item.idUser}}" class="btn btn-sm btn-default extra-padding">Editar</a>
-							<button data-toggle="modal"  data-target="#modal-simple" data-id="{{url('account/deleteuser/')}}{{item.idUser}}" class="ShowDialog btn btn-sm btn-default btn-delete extra-padding">Eliminar</button>
+							<a href="{{url('account/edituser/')}}{{item.idUser}}" class="btn btn-sm btn-default extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+							<button data-toggle="modal"  data-target="#modal-simple" data-id="{{url('account/deleteuser/')}}{{item.idUser}}" class="ShowDialog btn btn-sm btn-default btn-delete extra-padding"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
 						</td>
 					</tr>
 				</tbody>
@@ -79,8 +75,8 @@
 					¿Está seguro que desea eliminar este usuario?
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					<a href="" id="deleteUser" class="btn btn-danger" >Eliminar</a>
+					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+					<a href="" id="deleteUser" class="btn btn-sm btn-default btn-delete extra-padding" >Eliminar</a>
 				</div>
 			</div>
 		</div>
