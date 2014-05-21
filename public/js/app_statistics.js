@@ -221,6 +221,9 @@ App.DrilldownSpamController = Ember.ArrayController.extend(Ember.MixinPagination
 	loadDataChart: function() {
 		var statistics = JSON.parse(this.get('model').content[0].get('statistics'));
 		App.set('chartData', statistics);
+		App.set('title', 'Estadísticas de spam');
+		App.set('subtitle', 'Cantidad de marcas como spam');
+		App.set('ref', 'Contacto(s )Marcarón como spam');
 	},
 	loadDataDetails: function() {
 		var details = JSON.parse(this.get('model').content[0].get('details'));

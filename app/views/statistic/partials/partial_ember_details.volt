@@ -114,10 +114,8 @@
 
 <script type="text/x-handlebars" data-template-name="drilldown/spam">
 	{{ '{{#if App.chartData}}' }}
-		{#
-
 		<div class="wrapper">
-			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer"}}'}}
+			{{'{{view App.TimeGraphView idChart="unsubscribedBarChartContainer" typeChart="bar-drilldown"}}'}}
 		</div>
 
 		<hr>
@@ -134,11 +132,9 @@
 			<button class="btn btn-sm btn-add extra-padding">Compartir estadísticas</button>
 		</div>
 		<div class="clearfix"></div>
-		#}
 	{{ '{{else}}' }}
 			<div class="wrapper">
 				<p class="hand-writer-message">No hay reporte de spam en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
-				
 			</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}

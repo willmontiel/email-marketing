@@ -644,12 +644,12 @@ class StatisticsWrapper extends BaseWrapper
 				foreach ($spams as $s) {
 					$spamcontact[] = array(
 						'email' => $s->email,
-						'date' => date('Y-m-d h:i', $s->date),
+						'date' => date('Y-m-d h:i', $s->spam),
 						'name' => $s->name,
 						'lastname' => $s->lastName
 					);
 					
-					$spam[] = $s->date;
+					$spam[] = $s->spam;
 				}
 				
 				$phql2 = "SELECT COUNT(*) AS total
