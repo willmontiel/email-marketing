@@ -248,7 +248,7 @@ class TemplateController extends ControllerBase
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error'), 500 , 'failed');
 			}
 			$this->traceSuccess("Edit {$type} template, idTemplate: {$idTemplate}");
-			return $this->setJsonResponse(array('msg' => 'Se ha editado la plantilla exitosamente'), 200, 'success');
+			return $this->setJsonResponse(array('idTemplate' => $idTemplate, 'msg' => 'Se ha editado la plantilla exitosamente'), 200, 'success');
 		}
 		else {
 			if ($template && $template->idAccount == '') {

@@ -26,11 +26,8 @@
 							<p>¿Esta seguro que desea desuscribirse? </p>
 							
 							<p>
-								El correo electrónico esta relacionado con la base de datos <strong>{{dbase.name}}</strong>
-								y esta suscrito a la lista <strong>{{dbase.Cdescription}}</strong>
+								Si se des-suscribe ya no recibirá boletines por parte de la compañía <strong>{{account.companyName}}</strong>
 							</p>
-
-							<p>compañia <strong>{{account.companyName}}</strong></p>
 
 							<table class="table table-bordered">
 								<tr>
@@ -53,7 +50,7 @@
 						</div>
 					{% else %}
 						<div class="bs-callout bs-callout-info">
-							El contacto con nombres {{contact.name}} {{contact.lastName}} ya se encuentra desuscrito, para suscribirlo de nuevo contacte con la compañia indicada en la parte superior izquierda		
+							El contacto con nombre {{contact.name}} {{contact.lastName}} ya se encuentra desuscrito, para suscribirlo de nuevo contacte con la compañia <strong>{{account.companyName}}</strong>
 						</div>
 					{% endif %}
 				{% else %}
