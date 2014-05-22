@@ -701,7 +701,8 @@ class StatisticsWrapper extends BaseWrapper
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		
-		$sql1 = "SELECT m.bounced AS date, e.email, b.type, b.description, d.name 
+		if ($request == 'private') {
+			$sql1 = "SELECT m.bounced AS date, e.email, b.type, b.description, d.name 
 				FROM mxc AS m 
 					JOIN contact AS c ON (c.idContact = m.idContact)
 					JOIN email AS e ON (e.idEmail = c.idEmail)
@@ -709,24 +710,34 @@ class StatisticsWrapper extends BaseWrapper
 					JOIN bouncedcode AS b ON (b.idBouncedCode = m.idBouncedCode)
 				WHERE m.idMail = ? AND m.bounced != 0 ";
 
-		if($filter && $filter != 'Todos') {
-			switch ($type) {
-				case 'category':
-					$sql1.= "AND b.description = '{$filter}'";
-					break;
-				case 'domain':
-					$sql1.= "AND d.name = '{$filter}'";
-					break;
-				case 'type':
-					$sql1.= "AND b.type = '{$filter}'";
-					break;
+			if($filter && $filter != 'Todos') {
+				switch ($type) {
+					case 'category':
+						$sql1.= "AND b.description = '{$filter}'";
+						break;
+					case 'domain':
+						$sql1.= "AND d.name = '{$filter}'";
+						break;
+					case 'type':
+						$sql1.= "AND b.type = '{$filter}'";
+						break;
+				}
 			}
+
+			$sql1 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();	
+
+			$query1 = $db->query($sql1, array($idMail));
+			$result1 = $query1->fetchAll();
 		}
 		
-		$sql1 .= ' LIMIT ' . $this->pager->getRowsPerPage() . ' OFFSET ' . $this->pager->getStartIndex();	
 		
-		$query1 = $db->query($sql1, array($idMail));
-		$result1 = $query1->fetchAll();
+		$sqlforbouncedstats = "SELECT m.bounced AS date, b.type
+							   FROM mxc AS m 
+								  JOIN bouncedcode AS b ON (b.idBouncedCode = m.idBouncedCode)
+							   WHERE m.idMail = ? AND m.bounced != 0 ";
+		
+		$query2 = $db->query($sqlforbouncedstats, array($idMail));
+		$result2 = $query2->fetchAll();
 		
 		$b = array(
 			'hard' => 0,
@@ -737,36 +748,26 @@ class StatisticsWrapper extends BaseWrapper
 		$valueDomain = array();
 		
 		if (count($result1) > 0) {
-			if ($request == 'private') {
-				foreach ($result1 as $r) {
-					$bouncedcontact[] = array(
-						'email' => $r['email'],
-						'date' => date('Y-m-d h:i', $r['date']),
-						'type' => $r['type'],
-						'category' => $r['description'],
-						'domain' => $r['name']
-					);
+			foreach ($result1 as $r) {
+				$bouncedcontact[] = array(
+					'email' => $r['email'],
+					'date' => date('Y-m-d h:i', $r['date']),
+					'type' => $r['type'],
+					'category' => $r['description'],
+					'domain' => $r['name']
+				);
 
-					if (!in_array($r['name'], $valueDomain)) {
-						$valueDomain[] = $r['name'];
-					}
-
-					if ($r['type'] == 'hard') {
-						$b['hard'] = $b['hard'] + 1;
-					}
-					else if ($r['type'] == 'soft') {
-						$b['soft'] = $b['soft'] + 1;
-					}
+				if (!in_array($r['name'], $valueDomain)) {
+					$valueDomain[] = $r['name'];
 				}
 			}
-			else {
-				foreach ($result1 as $r) {
-					if ($r['type'] == 'hard') {
-						$b['hard'] = $b['hard'] + 1;
-					}
-					else if ($r['type'] == 'soft') {
-						$b['soft'] = $b['soft'] + 1;
-					}
+			
+			foreach ($result2 as $stat) {
+				if ($stat['type'] == 'hard') {
+					$b['hard'] = $b['hard'] + 1;
+				}
+				else if ($stat['type'] == 'soft') {
+					$b['soft'] = $b['soft'] + 1;
 				}
 			}
 		}
