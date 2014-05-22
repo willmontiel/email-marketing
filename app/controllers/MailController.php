@@ -32,7 +32,7 @@ class MailController extends ControllerBase
 			$contentsraw = $this->request->getRawBody();
 			$contentsT = json_decode($contentsraw);
 			$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
-			$this->logger->log('idMail: ' . $idMail);
+//			$this->logger->log('idMail: ' . $idMail);
 			$content = $contentsT->mail;
 			
 			$MailWrapper = new MailWrapper();

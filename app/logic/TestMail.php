@@ -60,7 +60,7 @@ class TestMail
 		if ($this->mail->type == 'Editor') {
 			$editorObj = new HtmlObj();
 			$editorObj->assignContent(json_decode($this->mailContent->content));
-			$content =  utf8_decode($editorObj->replacespecialchars($editorObj->render()));
+			$content =  $editorObj->replacespecialchars($editorObj->render());
 		}
 		else {
 			$content = html_entity_decode($this->mailContent->content);
