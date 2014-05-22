@@ -14,6 +14,11 @@
 {% endblock %}
 {% block content %}
 	<h4 class="sectiontitle">Plantillas predeterminadas</h4>
+	<div class="row">
+		<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-default extra-padding pull-right">Cancelar</a>
+	</div>
+	
+	<div class="row">
 		<div class="col-md-2">
 			<ul class="nav nav-pills nav-stacked">
 			   {% for category, template in arrayTemplate %}
@@ -48,7 +53,8 @@
 			   {% endfor %}
 		   </div>
 		</div>
-
+	</div>
+	
 	<div id="preview-modal" class="modal fade">
 		<div class="modal-dialog modal-prevew-width">
 			<div class="modal-content modal-prevew-content">
