@@ -84,14 +84,14 @@
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="text-left">
-					<button onclick="verHTML()" class="btn btn-black" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
+					<button onclick="verHTML();" class="btn btn-black" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
 				</div>
 			</div>	
 			<div class="col-sm-6">
 				<div class="text-right">
 					<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar</a>
-					<button onclick="saveData()" class="btn btn-info">Guardar</button>
-					<button onclick="sendData()" class="btn btn-primary">Guardar y volver</button>
+					<button onclick="saveData();" class="btn btn-info">Guardar</button>
+					<button onclick="sendData();" class="btn btn-primary">Guardar y volver</button>
 				</div>
 			</div>
 		</div>

@@ -31,12 +31,12 @@ class ImageService
 	{
 		$this->logger->log("Link: {$imageSrc}");
 		if (preg_match('/asset/i', $imageSrc)) {
-			$this->logger->log("Imágenes por asset");
+//			$this->logger->log("Imágenes por asset");
 			$idAsset = filter_var($imageSrc, FILTER_SANITIZE_NUMBER_INT);
 			return $this->getCompletePrivateImageSrc($idAsset);
 		}
 		else if (preg_match('/template/i', $imageSrc)) {
-			$this->logger->log("Imágenes por template");
+//			$this->logger->log("Imágenes por template");
 //			$idTemplateImage = filter_var($srcImg, FILTER_SANITIZE_NUMBER_INT);
 			$ids = explode("/", $imageSrc);
 			return $this->getCompletePublicImageSrc($ids[3], $ids[4]);
@@ -53,7 +53,7 @@ class ImageService
 		if ($asset) {
 			$ext = pathinfo($asset->fileName, PATHINFO_EXTENSION);
 			$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlAsset() . "/" . $this->account->idAccount . "/images/" . $asset->idAsset . "." .$ext;
-			$this->logger->log("Link final: {$img}");
+//			$this->logger->log("Link final: {$img}");
 			return $img;
 		}
 	}
@@ -79,7 +79,7 @@ class ImageService
 			else if ($template->idAccount == null) {
 				$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlTemplate() . "/" . $idTemplate. "/images/" . $idTemplateImage . "." . $ext;
 			}
-			$this->logger->log("Link final: {$img}");
+//			$this->logger->log("Link final: {$img}");
 			return $img;
 		}
 		
