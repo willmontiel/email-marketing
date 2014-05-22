@@ -658,6 +658,7 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
 			$this->traceFail("Error Create contact list, USER: {$this->user->idUser}/{$this->user->username}");
 			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al crear lista de contactos')), 422, 'Error: ' . $e->getMessage());
 		}
