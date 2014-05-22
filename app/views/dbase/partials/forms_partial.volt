@@ -4,7 +4,8 @@
 	</div>
 
 	<div class="pull-right">
-	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo formulario{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Inscripción{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Actualización{{ '{{/link-to}}' }}
 	</div>
 	<div class="space"></div>
 	<table class="table table-striped">
@@ -23,15 +24,28 @@
 					</div>
 				</td>
 				<td>
-					Inscripción
+					<div>
+						{{'{{type}}'}}
+					</div>
 				</td>
 				<td>
 					<div class="text-right">
 						{{ '{{#if framecode}}' }}
-							{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Código{{ '{{/link-to}}' }}
+							<a class="btn btn-default btn-sm" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
+							</a>
+							{{ '{{#if isInscription}}' }}
+								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
+							{{ '{{else}}' }}
+								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-link"></i> Enlace{{ '{{/link-to}}' }}
+							{{ '{{/if}}' }}
 						{{ '{{/if}}' }}
-
-						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+							
+						{{ '{{#if isInscription}}' }}
+							{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+						{{ '{{else}}' }}
+							{{ '{{#link-to "forms.editupdate" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+						{{ '{{/if}}' }}
 
 						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 					</div>
@@ -40,11 +54,32 @@
 			{{'{{/each}}'}}
 		</tbody>
 	</table>
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Previsualización de formulario</h4>
+				</div>
+				<div class="modal-body" id="preview-modal">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/setup">
 	<h4 class="sectiontitle">Crear nuevo formulario</h4>
 	{{ partial("dbase/partials/form_information_view_partial") }}
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/updating">
+	<h4 class="sectiontitle">Crear nuevo formulario de actualizacion</h4>
+	{{ partial("dbase/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/new">
@@ -69,8 +104,13 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/edit">
-	<h4 class="sectiontitle">Editar formulario</h4>
+		<h4 class="sectiontitle">Editar formulario</h4>
 	{{ partial("dbase/partials/form_information_view_partial") }}
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/editupdate">
+	<h4 class="sectiontitle">Editar formulario</h4>
+	{{ partial("dbase/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/remove">

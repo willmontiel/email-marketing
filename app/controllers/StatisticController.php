@@ -278,10 +278,10 @@ class StatisticController extends ControllerBase
 				$listStat2 = $statWrapper->showContactlistStatistics($contactList2, $dbase);
 				
 				if($listStat1 && $listStat2) {
-					$this->view->setVar("List1", $contactList1);
+					$this->view->setVar("compare1", $contactList1);
 					$this->view->setVar("summaryChartData1", $listStat1['summaryChartData']);
 					$this->view->setVar("statisticsData1", $listStat1['statisticsData']);
-					$this->view->setVar("List2", $contactList2);
+					$this->view->setVar("compare2", $contactList2);
 					$this->view->setVar("summaryChartData2", $listStat2['summaryChartData']);
 					$this->view->setVar("statisticsData2", $listStat2['statisticsData']);
 					$this->view->setVar("compareList", $listStat1['compareList']);
@@ -324,10 +324,10 @@ class StatisticController extends ControllerBase
 				$dbaseStat2 = $statWrapper->showDbaseStatistics($dbase2);
 
 				if($dbaseStat1 && $dbaseStat2) {
-					$this->view->setVar("dbase1", $dbase1);
+					$this->view->setVar("compare1", $dbase1);
 					$this->view->setVar("summaryChartData1", $dbaseStat1['summaryChartData']);
 					$this->view->setVar("statisticsData1", $dbaseStat1['statisticsData']);
-					$this->view->setVar("dbase2", $dbase2);
+					$this->view->setVar("compare2", $dbase2);
 					$this->view->setVar("summaryChartData2", $dbaseStat2['summaryChartData']);
 					$this->view->setVar("statisticsData2", $dbaseStat2['statisticsData']);
 					$this->view->setVar("compareDbase", $dbaseStat1['compareDbase']);

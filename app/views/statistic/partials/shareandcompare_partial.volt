@@ -18,8 +18,6 @@
 		<button class="btn btn-sm btn-default extra-padding" onclick="compareMails();">Comparar</button>
 	</div>
 	<div class="col-md-2 text-right">
-		<button class="btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple" onClick="getUrlForStatistics({{mail.idMail}});">
-			Compartir estadísticas
-		</button>
+		<button class="btn btn-sm btn-default btn-add extra-padding" onclick="getUrlForStatistics({{mail.idMail}});" data-toggle="modal" data-target="#modal-simple">Compartir estadísticas</button>
 	</div>
 <div class="space"></div>

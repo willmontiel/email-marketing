@@ -172,11 +172,11 @@
 				</div>
 			</div>
 	
-			<div class="row">
-				<div class="col-md-12">
-					{{ partial("mail/partials/mailstatus_warning_partial") }}
+				<div class="row">
+					<div class="col-md-12">
+						{{ partial("mail/partials/mailstatus_warning_partial") }}
+					</div>
 				</div>
-			</div>
 
 				<div class="row">
 					<div class="col-md-12">
