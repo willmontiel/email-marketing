@@ -67,14 +67,10 @@
 			<div class="row">
 				<div class="well relative">
 					<p>Importación de archivo: <strong>{{res['name']}}</strong></p>
-					{#
 					{%if res['status'] != "Finalizado"%}
-					#}
 						<p id="status-progress-{{res['idProcess']}}"></p>
 						<div id="progress-bar-{{res['idProcess']}}" class="progress progress-striped active"></div>
-					{#	
 					{% endif %}
-					#}
 
 					<p id="status-title-{{res['idProcess']}}">Estado: {{res['status']}}</p>
 
