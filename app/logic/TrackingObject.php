@@ -95,7 +95,7 @@ class TrackingObject
 			$this->log->log('ya se contabilizó tracking');
 		}
 		catch (Exception $e) {
-			$this->logger->log('Exception: [' . $e . ']');
+			$this->log->log('Exception: [' . $e . ']');
 			$this->rollbackTransaction();
 		}
 	}
@@ -512,7 +512,7 @@ class TrackingObject
 			$this->log->log('ya se contabilizó bounced tracking');
 		}
 		catch (Exception $e) {
-			$this->logger->log('Exception: [' . $e . ']');
+			$this->log->log('Exception: [' . $e . ']');
 			$this->rollbackTransaction();
 		}
 	}
@@ -636,7 +636,7 @@ class TrackingObject
 			}
 		}
 		catch (Exception $e) {
-			$this->logger->log('Exception: [' . $e . ']');
+			$this->log->log('Exception: [' . $e . ']');
 			$this->rollbackTransaction();
 		}
 	}
@@ -746,7 +746,7 @@ class TrackingObject
 			}
 		}
 		catch (Exception $e) {
-			$this->logger->log('Exception: [' . $e . ']');
+			$this->log->log('Exception: [' . $e . ']');
 			$this->rollbackTransaction();
 		}
 	}
