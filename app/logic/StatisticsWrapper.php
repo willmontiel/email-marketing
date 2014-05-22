@@ -429,7 +429,7 @@ class StatisticsWrapper extends BaseWrapper
 				$links[] = array(
 					'link' => $t['link'],
 					'total' => $t['totalClicks'],
-					'uniques' => 15,
+					//'uniques' => 15,
 				);
 				
 				$arrayLinks[$t['idMailLink']] = 0;
