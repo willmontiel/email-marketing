@@ -193,6 +193,11 @@ class ChildCommunication extends BaseWrapper
 			$swift = Swift_Mailer::newInstance($transport);
 
 			$i = 0;
+			
+			if ($mail->totalContacts != 0 || !empty($mail->totalContacts)) {
+				$i = $mail->totalContacts;
+			}
+			
 			$sentContacts = array();
 			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
 			
