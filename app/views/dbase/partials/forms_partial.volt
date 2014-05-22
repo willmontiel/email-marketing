@@ -4,7 +4,8 @@
 	</div>
 
 	<div class="pull-right">
-	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo formulario{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Inscripción{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Actualización{{ '{{/link-to}}' }}
 	</div>
 	<div class="space"></div>
 	<table class="table table-striped">
@@ -23,15 +24,28 @@
 					</div>
 				</td>
 				<td>
-					Inscripción
+					<div>
+						{{'{{type}}'}}
+					</div>
 				</td>
 				<td>
 					<div class="text-right">
 						{{ '{{#if framecode}}' }}
-							{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Código{{ '{{/link-to}}' }}
+							<a class="btn btn-default btn-sm" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
+							</a>
+							{{ '{{#if isInscription}}' }}
+								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
+							{{ '{{else}}' }}
+								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-link"></i> Enlace{{ '{{/link-to}}' }}
+							{{ '{{/if}}' }}
 						{{ '{{/if}}' }}
-
-						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+							
+						{{ '{{#if isInscription}}' }}
+							{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+						{{ '{{else}}' }}
+							{{ '{{#link-to "forms.editupdate" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+						{{ '{{/if}}' }}
 
 						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
 					</div>
@@ -40,11 +54,32 @@
 			{{'{{/each}}'}}
 		</tbody>
 	</table>
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Previsualización de formulario</h4>
+				</div>
+				<div class="modal-body" id="preview-modal">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/setup">
 	<h4 class="sectiontitle">Crear nuevo formulario</h4>
 	{{ partial("dbase/partials/form_information_view_partial") }}
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/updating">
+	<h4 class="sectiontitle">Crear nuevo formulario de actualizacion</h4>
+	{{ partial("dbase/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/new">
@@ -69,8 +104,13 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/edit">
-	<h4 class="sectiontitle">Editar formulario</h4>
+		<h4 class="sectiontitle">Editar formulario</h4>
 	{{ partial("dbase/partials/form_information_view_partial") }}
+</script>
+
+<script type="text/x-handlebars" data-template-name="forms/editupdate">
+	<h4 class="sectiontitle">Editar formulario</h4>
+	{{ partial("dbase/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/remove">
@@ -145,113 +185,4 @@
 			});
 		});
 	}
-</script>
-
-<script type="text/x-handlebars" data-template-name="forms/index">
-	<div class="bs-callout bs-callout-info">
-		Aquí esta toda la información necesaria para gestionar sus formularios
-	</div>
-
-	<div class="pull-right">
-	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo formulario{{ '{{/link-to}}' }}
-	</div>
-	<div class="space"></div>
-	<table class="table table-striped">
-		<thead>
-		<tr>
-			<td> Nombre </td>
-			<td> Tipo </td>
-		<tr>
-		</thead>
-		<tbody>
-			{{'{{#each model}}'}}
-			<tr>
-				<td>
-					<div>
-						{{'{{name}}'}}
-					</div>
-				</td>
-				<td>
-					Inscripción
-				</td>
-				<td>
-					<div class="text-right">
-						{{ '{{#if framecode}}' }}
-							{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Código{{ '{{/link-to}}' }}
-						{{ '{{/if}}' }}
-
-						{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
-
-						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
-					</div>
-				</td>
-			</tr>
-			{{'{{/each}}'}}
-		</tbody>
-	</table>
-</script>
-
-<script type="text/x-handlebars" data-template-name="forms/setup">
-	<h4 class="sectiontitle">Crear nuevo formulario</h4>
-	{{ partial("dbase/partials/form_information_view_partial") }}
-</script>
-
-<script type="text/x-handlebars" data-template-name="forms/new">
-		<div class="col-md-6 col-xs-12 col-md-offset-1 border">
-			<form class="form-horizontal form-full-content" role="form"></form>
-
-			<form class="form-full-button" role="form"></form>
-		</div>
-		<div class="col-md-4 col-sm-8 col-xs-12">
-			<div class="form-menu">
-				<h4 class="sectiontitle title-fields-options">Campos para agregar al formulario</h4>
-			</div>
-		</div>
-		<div class="clearfix"></div>
-		<div class="space"></div>
-		<hr>
-		<div class="form-action col-md-offset-1">
-			<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
-			<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "sendData" this}}' }}>Crear formulario</button>
-		</div>
-	<div class="space"></div>
-</script>
-
-<script type="text/x-handlebars" data-template-name="forms/edit">
-	<h4 class="sectiontitle">Editar formulario</h4>
-	{{ partial("dbase/partials/form_information_view_partial") }}
-</script>
-
-<script type="text/x-handlebars" data-template-name="forms/remove">
-			<h4 class="sectiontitle">Eliminar un formulario</h4>
-				<div class="box-content padded">			
-					<p>¿Está seguro que desea eliminar el formulario <strong>{{'{{name}}'}}</strong>?</p>
-					{{ '{{#if errors.errormsg}}' }}
-						<div class="alert alert-error">
-							{{ '{{errors.errormsg}}' }}
-						</div>
-					{{ '{{/if}}' }}
-					<button {{'{{action eliminate this}}'}} class="btn btn-delete btn-sm extra-padding">Eliminar</button>
-					<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>	
-				</div>
-			</div>
-		</div>	
-</script>
-
-<script type="text/x-handlebars" data-template-name="forms/code">
-	<div class="row">
-		<h4 class="sectiontitle">Código formulario</h4>
-		<div class="col-md-6">
-			<div class="bs-callout bs-callout-info">
-				<h4>Código IFrame</h4>
-				<p>Copie y pegue el siguiente código en su página web.</p>
-				<div>
-					<textarea rows="4" cols="70">{{ '{{unbound framecode}}' }}</textarea>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6 col-md-offset-4">
-			<button class="btn btn-default" {{ '{{action cancel this}}' }}>Regresar</button>
-		</div>
-	</div>
 </script>
