@@ -21,7 +21,7 @@
 					
 					//$('#progress-bar-' + data.idProcess).append('<div class="bar tip" title="' + percent + '%" data-percent="' + percent + '" style="width: ' + percent + '%;" data-original-title="' + percent + '%"></div>');
 					
-					$('#progress-bar-' + data.idProcess).append('<div class="progress-bar"  role="progressbar" aria-valuenow="' + data.linesprocess + '" aria-valuemin="0" aria-valuemax="' + data.totalReg + '" style="width: 45%"><span class="">' + percent +  '% Completado</span></div>');
+					$('#progress-bar-' + data.idProcess).append('<div class="progress-bar"  role="progressbar" aria-valuenow="' + data.linesprocess + '" aria-valuemin="0" aria-valuemax="' + data.totalReg + '" style="width: 100%"><span class="">' + percent +  '% Completado</span></div>');
 					
 								
 							
@@ -67,10 +67,14 @@
 			<div class="row">
 				<div class="well relative">
 					<p>Importación de archivo: <strong>{{res['name']}}</strong></p>
+					{#
 					{%if res['status'] != "Finalizado"%}
+					#}
 						<p id="status-progress-{{res['idProcess']}}"></p>
 						<div id="progress-bar-{{res['idProcess']}}" class="progress progress-striped active"></div>
+					{#	
 					{% endif %}
+					#}
 
 					<p id="status-title-{{res['idProcess']}}">Estado: {{res['status']}}</p>
 
