@@ -326,12 +326,14 @@ class MailWrapper extends BaseWrapper
 		
 		$jsonObject['previewData'] = $preview;
 		
-		if ($this->mail->type == 'Editor') {
-			$plainText = htmlentities($this->mailcontent->plainText);
-		}
-		else {
-			$plainText = $this->mailcontent->plainText;
-		}
+//		if ($this->mail->type == 'Editor') {
+//			$plainText = htmlentities($this->mailcontent->plainText);
+//		}
+//		else {
+//			$plainText = $this->mailcontent->plainText;
+//		}
+		
+		$plainText = htmlspecialchars($this->mailcontent->plainText, ENT_QUOTES);
 		
 		$jsonObject['plainText'] = $plainText;
 		$jsonObject['totalContacts'] = $this->mail->totalContacts;

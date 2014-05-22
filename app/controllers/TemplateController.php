@@ -42,9 +42,7 @@ class TemplateController extends ControllerBase
 		}
 		
 		try {
-			$this->logger->log("Antes");
 			$templates = Template::findGlobalsAndPrivateTemplates($account);
-			$this->logger->log("Despúes");
 			$arrayTemplate = array();
 			foreach ($templates as $template) {
 				$templateInfo = array(
@@ -58,7 +56,8 @@ class TemplateController extends ControllerBase
 				);
 				$arrayTemplate[$template->category][] = $templateInfo;
 			}
-
+			
+			$this->view->setVar('mail', $mail);
 			$this->view->setVar('templates', $templates);
 			$this->view->setVar('arrayTemplate', $arrayTemplate);
 		}
