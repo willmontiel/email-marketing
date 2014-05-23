@@ -797,9 +797,9 @@ class StatisticsWrapper extends BaseWrapper
 			'domain' => $valueDomain
 		);
 		
-		$this->logger->log("Value type: " . print_r($valueType, true));
-		$this->logger->log("Value category: " . print_r($valueCategory, true));
-		$this->logger->log("Info: " . print_r($info, true));
+//		$this->logger->log("Value type: " . print_r($valueType, true));
+//		$this->logger->log("Value category: " . print_r($valueCategory, true));
+//		$this->logger->log("Info: " . print_r($info, true));
 		
 		$totalRecords = 0;
 		
