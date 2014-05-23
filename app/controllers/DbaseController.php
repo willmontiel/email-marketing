@@ -156,9 +156,16 @@ class DbaseController extends ControllerBase
         $db = $this->findAndValidateDbaseAccount($id);
 		if ($db) {
 			if($this->user->userrole === 'ROLE_SUDO') {
-				$db->delete();
-				$response = 'Base de Datos Eliminada!';
-				$this->traceSuccess("Dbase deleted like sudo, idDbase: {$id}");
+				try {
+					$db->delete();
+					$response = 'Base de Datos Eliminada!';
+					$this->traceSuccess("Dbase deleted like sudo, idDbase: {$id}");
+				}
+				catch(Exception $e) {
+					$response = 'Ha ocurrido un error, contacte al administrador';
+					$this->logger->log("Exception {$e}");
+					$this->traceFail("Dbase deleted like sudo, idDbase: {$id}");
+				}
 			}
 			else {
 				try {
