@@ -90,6 +90,12 @@ class ChildCommunication extends BaseWrapper
 		try {
 			$this->checkMailStatus($mail);
 			$oldstatus = $mail->status;
+			
+			$contactsSent = 0;
+			if ($oldstatus == 'Paused') {
+				$contactsSent = $mail->totalContacts;
+			}
+			
 			$mail->status = 'Sending';
 			$mail->startedon = time();
 			if(!$mail->save()) {
@@ -194,8 +200,8 @@ class ChildCommunication extends BaseWrapper
 
 			$i = 0;
 			
-			if ($mail->totalContacts != 0 || !empty($mail->totalContacts)) {
-				$i = $mail->totalContacts;
+			if ($contactsSent != 0) {
+				$i = $contactsSent;
 			}
 			
 			$sentContacts = array();
