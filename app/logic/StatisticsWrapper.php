@@ -790,7 +790,7 @@ class StatisticsWrapper extends BaseWrapper
 			}
 		}
 		
-		$info[] = array(
+		$info = array(
 			'amount' => count($valueType),
 			'value' => $valueType,
 			'category' => $valueCategory,
