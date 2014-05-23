@@ -23,7 +23,7 @@
 				</a>
 			</li>
 			<li class="small-btn sm-btn-blue disabled {{ activelnk=='statisticsmail'?'active':'' }}">
-				<a href="#" data-toggle="tooltip" data-placement="bottom" title="Estadísticas">
+				<a href="javascript: void(0)" class="disabled" data-toggle="tooltip" data-placement="bottom" title="Estadísticas">
 				<span class="sm-button-small-stats"></span>
 				</a>
 			</li>

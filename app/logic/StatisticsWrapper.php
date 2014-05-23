@@ -739,7 +739,7 @@ class StatisticsWrapper extends BaseWrapper
 		$query2 = $db->query($sqlforbouncedstats, array($idMail));
 		$result2 = $query2->fetchAll();
 		
-		$b = array(
+		$bouncedStats = array(
 			'hard' => 0,
 			'soft' => 0
 		);
@@ -764,15 +764,15 @@ class StatisticsWrapper extends BaseWrapper
 			
 			foreach ($result2 as $stat) {
 				if ($stat['type'] == 'hard') {
-					$b['hard'] = $b['hard'] + 1;
+					$bouncedStats['hard'] = $bouncedStats['hard'] + 1;
 				}
 				else if ($stat['type'] == 'soft') {
-					$b['soft'] = $b['soft'] + 1;
+					$bouncedStats['soft'] = $bouncedStats['soft'] + 1;
 				}
 			}
 		}
 		
-		$bounced = array($b);
+		$bounced = array($bouncedStats);
 		
 //		$this->logger->log(print_r($bounced, true));
 		
@@ -796,6 +796,10 @@ class StatisticsWrapper extends BaseWrapper
 			'category' => $valueCategory,
 			'domain' => $valueDomain
 		);
+		
+		$this->logger->log("Value type: " . print_r($valueType, true));
+		$this->logger->log("Value category: " . print_r($valueCategory, true));
+		$this->logger->log("Info: " . print_r($info, true));
 		
 		$totalRecords = 0;
 		
