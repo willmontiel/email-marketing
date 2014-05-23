@@ -256,14 +256,14 @@ class SelectedFieldsMapper
 
 	protected function getPart($format, $value, $criteria) 
 	{
-		if ($format[0] == $criteria) {
-			$v = $value[0];
+		if (isset($format[0]) && $format[0] == $criteria) {
+			$v = (isset($value[0]) ? $value[0] : ' ');
 		}
-		else if ($format[1] == $criteria) {
-			$v = $value[1];
+		else if (isset($format[1]) && $format[1] == $criteria) {
+			$v = (isset($value[1]) ? $value[1] : ' ');
 		}
-		else if ($format[2] == $criteria) {
-			$v = $value[2];
+		else if (isset($format[2]) && $format[2] == $criteria) {
+			$v = (isset($value[2]) ? $value[2] : ' ');
 		}
 		return $v;
 	}
