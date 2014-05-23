@@ -40,39 +40,54 @@ class StatisticController extends ControllerBase
 	private function getTargetFromMail($mail)
 	{
 		$t = json_decode($mail->target);
+		$target = "Indefinida";
+		
 		switch ($t->destination) {
 			case 'contactlists':
-				$model = Contactlist;
-				$name = 'Listas de contactos' ;
-				$key = 'idContactlist';
+				$target = "Listas de contactos: ";
+				foreach ($t->ids as $id) {
+					$list = Contactlist::findFirst(array(
+						'conditions' => "idContactlist = ?1",
+						'bind' => array(1 => $id)
+					));
+					
+					
+					if ($list) {
+						$target .= "{$list->name}, ";
+					}
+				}
 				break;
 			
 			case 'dbases':
-				$model = Dbase;
-				$name = 'Bases de datos';
-				$key = 'idDbase';
+				$target = "Bases de datos: ";
+				foreach ($t->ids as $id) {
+					$list = Dbase::findFirst(array(
+						'conditions' => "idDbase = ?1",
+						'bind' => array(1 => $id)
+					));
+
+					if ($list) {
+						$target .= "{$list->name}, ";
+					}
+				}
 				break;
 			
 			case 'segments':
-				$model = Segment;
-				$name = 'Segmentos';
-				$key = 'idSegment';
+				$target = "Segmentos: ";
+				foreach ($t->ids as $id) {
+					$list = Segment::findFirst(array(
+						'conditions' => "idSegment = ?1",
+						'bind' => array(1 => $id)
+					));
+
+					if ($list) {
+						$target .= "{$list->name}, ";
+					}
+				}
 				break;
 			
 			default:
 				break;
-		}
-		
-		$target = "{$name}: ";
-		foreach ($t->ids as $id) {
-			$list = $model::findFirst(array(
-				'conditions' => "{$key} = ?1",
-				'bind' => array(1 => $id)
-			));
-
-			if ($list) {
-				$target .= "{$list->name}, ";
-			}
 		}
 		
 		return $target;

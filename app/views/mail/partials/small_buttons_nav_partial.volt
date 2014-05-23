@@ -22,6 +22,11 @@
 				<span class="sm-button-small-schedule"></span>
 				</a>
 			</li>
+			<li class="small-btn sm-btn-blue disabled {{ activelnk=='statisticsmail'?'active':'' }}">
+				<a href="javascript: void(0)" class="disabled" data-toggle="tooltip" data-placement="bottom" title="Estadísticas">
+				<span class="sm-button-small-stats"></span>
+				</a>
+			</li>
 		</ul>
 	</div>
 </div>

@@ -93,7 +93,7 @@
 		<script type="text/x-handlebars">
 
 			{#   Botones de navegacion   #}
-			{{ partial("mail/partials/small_buttons_nav_partial") }}
+			{{ partial("mail/partials/small_buttons_nav_partial",['activelnk': 'statisticsmail']) }}
 
 			{#   Encabezado pag   #}
 			{{ partial("statistic/partials/header_partial") }}
