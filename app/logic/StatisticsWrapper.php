@@ -785,7 +785,7 @@ class StatisticsWrapper extends BaseWrapper
 					if (!in_array($b->type, $valueType)) {
 						$valueType[$b->type] = ucfirst($b->type);
 					}
-					$valueCategory[] = $b->description;
+					$valueCategory[] = utf8_decode($b->description);
 				}
 			}
 		}
