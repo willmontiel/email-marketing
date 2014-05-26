@@ -107,9 +107,9 @@ class SegmentWrapper extends BaseWrapper
 		
 		$sxc = Sxc::findByIdSegment($this->segment->idSegment);
 		$sxc->delete();
-		$this->saveSxC($this->segment, $contents);
 		
 		$response = $this->updateSegmentData($contents);
+		$this->saveSxC($this->segment, $contents);
 		
 		return $response;
 	}
@@ -147,12 +147,21 @@ class SegmentWrapper extends BaseWrapper
 		foreach ($objCriterias as $objcr) {
 			$done = FALSE;
 			foreach ($arrayFields as $key => $value) {
+				
+				$val = $value['value'];
+				if ($value['cfields'] == 'domain') {
+					$a = substr($value['value'], 0, 1);
+					$val = ($a == '@' ? substr($value['value'],1) : $value['value']);
+				}
+				
+				Phalcon\DI::getDefault()->get('logger')->log("Val: {$val}");
+				
 				if (!array_key_exists('idCriteria', $value)) {
 					
 					$newobj = new Criteria();
 
 					$newobj->relation = $value['relations'];
-					$newobj->value = $value['value'];
+					$newobj->value = $val;
 					$newobj->fieldName = $value['cfields'];
 					
 					$this->findType($value["cfields"], $newobj);
@@ -165,7 +174,7 @@ class SegmentWrapper extends BaseWrapper
 				}
 				else if (($value['idCriteria'] == $objcr->idCriteria)) {
 					$objcr->relation = $value['relations'];
-					$objcr->value = $value['value'];
+					$objcr->value = $val;
 					$objcr->fieldName = $value['cfields'];
 					
 					$this->findType($value["cfields"], $objcr);				
@@ -283,7 +292,7 @@ class SegmentWrapper extends BaseWrapper
 					$cleanCr->idCriteria = $cr->idCriteria;
 					$cleanCr->relations = $cr->relation;
 					$cleanCr->cfields = $cr->fieldName;
-					$cleanCr->value = $cr->value;
+					$cleanCr->value = ($cr->fieldName == 'domain' ? "@".$cr->value : $cr->value);
 					
 					array_push($criteria, $cleanCr);
 				}
@@ -312,7 +321,6 @@ class SegmentWrapper extends BaseWrapper
 		else {
 			$crit = $segment->criterion;
 		}
-		
 		
 		$allcriterias = Criteria::findByIdSegment($segment->idSegment);
 		$join = "";

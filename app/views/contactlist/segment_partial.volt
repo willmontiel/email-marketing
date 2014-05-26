@@ -1,5 +1,4 @@
 <!-- SEGMENT PARTIAL -->
-
 <script type="text/x-handlebars" data-template-name="segments/index">
 
 	{# Insertar botones de navegacion #}

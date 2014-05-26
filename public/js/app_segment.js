@@ -306,6 +306,7 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 				} 
 				else { 
 					var JsonCriteria = JSON.stringify(this.criteria);
+//					var JsonCriteria = this.criteria;
 					this.content.set('criteria', JsonCriteria);
 					this.handleSavePromise(this.content.save(), 'segments', 'Se ha editado el segmento existosamente');
 				}

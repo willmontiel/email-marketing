@@ -23,7 +23,7 @@ class ScheduledmailController extends ControllerBase
 
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
-				"data" => Mail::find("idAccount = {$this->user->account->idAccount} AND deleted = 0 AND status != 'Draft' ORDER BY scheduleDate"),
+				"data" => Mail::find("idAccount = {$this->user->account->idAccount} AND deleted = 0 AND status != 'Draft' ORDER BY scheduleDate DESC"),
 				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page" => $currentPage
 			)
@@ -36,11 +36,7 @@ class ScheduledmailController extends ControllerBase
 	
 	public function stopAction($action, $idMail)
 	{
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
-		));
+		$mail = $this->validateMail($idMail);
 		
 		if ($mail) {
 			try {
@@ -65,11 +61,7 @@ class ScheduledmailController extends ControllerBase
 
 	public function playAction($action, $idMail)
 	{
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
-		));
+		$mail = $this->validateMail($idMail);
 		
 		if ($mail) {
 			try {
@@ -93,11 +85,7 @@ class ScheduledmailController extends ControllerBase
 
 	public function cancelAction($action, $idMail)
 	{
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
-		));
+		$mail = $this->validateMail($idMail);
 		
 		if ($mail) {
 			try {
@@ -140,7 +128,7 @@ class ScheduledmailController extends ControllerBase
 
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
-				"data" => Mail::find("status != 'Draft' ORDER BY scheduleDate"),
+				"data" => Mail::find("status != 'Draft' ORDER BY scheduleDate DESC"),
 				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page" => $currentPage
 			)
@@ -150,4 +138,24 @@ class ScheduledmailController extends ControllerBase
 		
 		$this->view->setVar("page", $page);
 	}	
+	
+	
+	private function validateMail($idMail) 
+	{
+		if ($this->user->userrole == 'ROLE_SUDO') {
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $idMail)
+			));
+		}
+		else {
+			$mail = Mail::findFirst(array(
+				'conditions' => "idMail = ?1 AND idAccount = ?2 AND deleted = 0 AND status != 'Draft'",
+				'bind' => array(1 => $idMail,
+								2 => $this->user->account->idAccount)
+			));
+		}
+		
+		return $mail;
+	}
 }
