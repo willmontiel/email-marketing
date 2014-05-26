@@ -140,7 +140,7 @@ class ScheduledmailController extends ControllerBase
 
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
-				"data" => Mail::find("status != 'Draft'"),
+				"data" => Mail::find("status != 'Draft' ORDER BY scheduleDate DESC"),
 				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page" => $currentPage
 			)
