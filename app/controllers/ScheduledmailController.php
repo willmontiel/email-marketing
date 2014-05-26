@@ -36,11 +36,7 @@ class ScheduledmailController extends ControllerBase
 	
 	public function stopAction($action, $idMail)
 	{
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
-		));
+		$mail = $this->validateMail($idMail);
 		
 		if ($mail) {
 			try {
@@ -65,11 +61,7 @@ class ScheduledmailController extends ControllerBase
 
 	public function playAction($action, $idMail)
 	{
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
-		));
+		$mail = $this->validateMail($idMail);
 		
 		if ($mail) {
 			try {
@@ -93,11 +85,7 @@ class ScheduledmailController extends ControllerBase
 
 	public function cancelAction($action, $idMail)
 	{
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
-			'bind' => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
-		));
+		$mail = $this->validateMail($idMail);
 		
 		if ($mail) {
 			try {
@@ -150,4 +138,24 @@ class ScheduledmailController extends ControllerBase
 		
 		$this->view->setVar("page", $page);
 	}	
+	
+	
+	private function validateMail($idMail) 
+	{
+		if ($this->user->userrole == 'ROLE_SUDO') {
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $idMail)
+			));
+		}
+		else {
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1 AND idAccount = ?2',
+				'bind' => array(1 => $idMail,
+								2 => $this->user->account->idAccount)
+			));
+		}
+		
+		return $mail;
+	}
 }
