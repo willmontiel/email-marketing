@@ -170,6 +170,7 @@ class MailController extends ControllerBase
 			if ($mailContent) {
 				$mailContentClone->idMail = $mailClone->idMail;
 				$mailContentClone->content = $mailContent->content;
+				$mailContentClone->plainText = $mailContent->plainText;
 				
 				if (!$mailContentClone->save()) {
 					foreach ($mailContentClone->getMessages() as $msg) {
