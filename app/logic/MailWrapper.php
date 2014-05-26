@@ -199,7 +199,7 @@ class MailWrapper extends BaseWrapper
 				$this->mailcontent->googleAnalytics = null;
 			}
 			
-			$this->mailcontent->plainText = $this->content->plainText;
+			$this->mailcontent->plainText = utf8_encode($this->content->plainText);
 			
 			
 			if (!$this->mailcontent->save()) {
@@ -333,7 +333,7 @@ class MailWrapper extends BaseWrapper
 //			$plainText = $this->mailcontent->plainText;
 //		}
 		
-		$plainText = htmlspecialchars($this->mailcontent->plainText, ENT_QUOTES);
+		$plainText = (empty($this->mailcontent->plainText) ? '' : $this->mailcontent->plainText);
 		
 		$jsonObject['plainText'] = $plainText;
 		$jsonObject['totalContacts'] = $this->mail->totalContacts;

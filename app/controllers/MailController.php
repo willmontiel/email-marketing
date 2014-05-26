@@ -681,7 +681,7 @@ class MailController extends ControllerBase
 				
 				$text = new PlainText();
 				$plainText = $text->getPlainText($contentmail);
-				$mailcontent->plainText = $plainText;
+				$mailcontent->plainText = utf8_encode($plainText);
 			}
 			else {
 				$mailcontent->content = $content;
@@ -949,7 +949,7 @@ class MailController extends ControllerBase
 			
 			//4. Escapamos el contenido html y asociamos los valores
 			$mc->content = htmlspecialchars($newContent, ENT_QUOTES);
-			$mc->plainText = $plainText;
+			$mc->plainText = utf8_encode($plainText);
 			
 			//5. Guardamos mail content
 			if(!$mc->save()) {
