@@ -17,7 +17,7 @@
 		<a href="{{ url('account/new') }}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-plus"></span> Crear nueva cuenta</a>
 	</div>
 	<div class="row">
-		<table class="table table-contacts table-striped">
+		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
 					<td>Listado de cuentas</td>

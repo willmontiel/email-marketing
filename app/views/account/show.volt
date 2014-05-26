@@ -26,7 +26,7 @@
 
 	<div class="row">
 		<div class="col-sm-12">
-			<table class='table table-striped'>
+			<table class='table table-striped table-bordered'>
 				<thead>
 					<tr>
 						<th>Username</th>
@@ -46,7 +46,7 @@
 						<td>{{item.userrole}}</td>
 						<td>{{date('Y-m-d', item.createdon)}}</td>
 						<td>{{date('Y-m-d', item.updatedon)}}</td>
-						<td>
+						<td class="text-right">
 							<a href="{{url('session/loginlikethisuser/')}}{{item.idUser}}" class="btn btn-sm btn-primary extra-padding">Ingresar como este usuario</a>
 							<a href="{{url('account/edituser/')}}{{item.idUser}}" class="btn btn-sm btn-default extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
 							<button data-toggle="modal"  data-target="#modal-simple" data-id="{{url('account/deleteuser/')}}{{item.idUser}}" class="ShowDialog btn btn-sm btn-default btn-delete extra-padding"><span class="glyphicon glyphicon-trash"></span> Eliminar</button>
