@@ -417,7 +417,7 @@
 		<div class="form-group">
 			<label for="values" class="col-sm-4 control-label">Opciones de la lista</label>
 			<div class="col-md-6">
-				{{ '{{view Ember.TextArea valueBinding="values" placeholder="Valor" id="values"}}' }}
+				{{ '{{view Ember.TextArea valueBinding="values" placeholder="Cada línea es un valor" id="values" class="form-control"}}' }}
 			</div>
 		</div>
 	</script>
