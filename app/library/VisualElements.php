@@ -12,7 +12,7 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 			"icon" => "icon-dashboard"
 		),
 		"Contactos" => array(
-			"controller" => array("contactlist", "dbase", "contacts"),
+			"controller" => array("contactlist", "dbase", "contacts", "segment"),
 			"class" => "",
 			"url" => "contactlist",
 			"title" => "Contactos",
