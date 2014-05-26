@@ -23,7 +23,7 @@ class ScheduledmailController extends ControllerBase
 
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
-				"data" => Mail::find("idAccount = {$this->user->account->idAccount} AND deleted = 0 AND status != 'Draft' ORDER BY scheduleDate"),
+				"data" => Mail::find("idAccount = {$this->user->account->idAccount} AND deleted = 0 AND status != 'Draft' ORDER BY scheduleDate DESC"),
 				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page" => $currentPage
 			)
@@ -150,7 +150,7 @@ class ScheduledmailController extends ControllerBase
 		}
 		else {
 			$mail = Mail::findFirst(array(
-				'conditions' => 'idMail = ?1 AND idAccount = ?2',
+				'conditions' => "idMail = ?1 AND idAccount = ?2 AND deleted = 0 AND status != 'Draft'",
 				'bind' => array(1 => $idMail,
 								2 => $this->user->account->idAccount)
 			));
