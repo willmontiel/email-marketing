@@ -158,13 +158,7 @@ class ProcessController extends ControllerBase
 	
 	public function stopsendingAction($idTask)
 	{
-		$mail = Mail::findFirst(array(
-			'conditions' => "idMail = ?1 AND idAccount = ?2 AND status = 'Sending'",
-			'bind' => array(1 => $idTask,
-							2 => $this->user->account->idAccount)
-		));
-		
-		if ($mail) {
+		if ($this->validateMail($idTask)) {
 			try {
 				$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 				$communication->sendPausedToParent($idTask);
@@ -188,13 +182,7 @@ class ProcessController extends ControllerBase
 	
 	public function stopimportAction($idTask)
 	{
-		$import = Importproccess::findFirst(array(
-			'conditions' => "idImportproccess = ?1 AND idAccount = ?2",
-			'bind' => array(1 => $idTask,
-							2 => $this->user->account->idAccount)
-		));
-		
-		if ($import) {
+		if ($this->validateImport($idTask)) {
 			try {
 				$communication = new Communication(SocketConstants::getImportRequestsEndPointPeer());
 				$communication->sendPausedImportToParent($idTask);
@@ -214,4 +202,42 @@ class ProcessController extends ControllerBase
 		}
 		return $this->response->redirect('process');
 	}	
+	
+	private function validateMail($idMail) 
+	{
+		if ($this->user->userrole == 'ROLE_SUDO') {
+			$mail = Mail::findFirst(array(
+				'conditions' => "idMail = ?1 AND status != 'Sending'",
+				'bind' => array(1 => $idMail)
+			));
+		}
+		else {
+			$mail = Mail::findFirst(array(
+				'conditions' => "idMail = ?1 AND idAccount = ?2 AND deleted = 0 AND status != 'Sending'",
+				'bind' => array(1 => $idMail,
+								2 => $this->user->account->idAccount)
+			));
+		}
+		
+		return $mail;
+	}
+	
+	private function validateImport($idImport)
+	{
+		if ($this->user->userrole == 'ROLE_SUDO') {
+			$import = Importproccess::findFirst(array(
+				'conditions' => "idImportproccess = ?1",
+				'bind' => array(1 => $idImport)
+			));
+		}
+		else {
+			$import = Importproccess::findFirst(array(
+				'conditions' => "idImportproccess = ?1 AND idAccount = ?2",
+				'bind' => array(1 => $idImport,
+								2 => $this->user->account->idAccount)
+			));
+		}
+		
+		return $import;
+	}
 }
