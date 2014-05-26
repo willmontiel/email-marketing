@@ -34,10 +34,6 @@
 	</script>
 	{{ javascript_include('js/editable-ember-view.js')}}
 {% endblock %}
-{% block sectiontitle %}Segmento: <strong>{{datasegment.name}}</strong>{% endblock %}
-
-{%block sectionsubtitle %}{{datasegment.description}}{% endblock %}	
-	
 {% block content %}
 <div id="emberAppContactContainer">
 	<script type="text/x-handlebars" data-template-name="contacts">

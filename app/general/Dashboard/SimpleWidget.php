@@ -12,13 +12,14 @@ class SimpleWidget extends BaseWidget
 			$property = $this->property;
 			$time = new \DateTime('-' . BaseWidget::CHART_INTERVALS . ' day');
 			$time->setTime(0, 0, 0);
+			$timecondition = ($property != 'clicks') ? $time->getTimestamp() : 0;
 			$query = "	SELECT COUNT(c.{$property}) AS cnt
 						FROM Mxc AS c 
 							JOIN Mail AS m ON (c.idMail = m.idMail)
 						WHERE m.finishedon > {$time->getTimestamp()}
 						AND m.status = 'Sent'
 						AND m.idAccount = {$this->account->idAccount}
-						AND c.{$property} > {$time->getTimestamp()}";
+						AND c.{$property} > {$timecondition}";
 			$sql = $this->modelManager->createQuery($query);
 			$result = $sql->execute();
 
@@ -32,7 +33,7 @@ class SimpleWidget extends BaseWidget
 						WHERE m.finishedon > {$time->getTimestamp()}
 						AND m.status = 'Sent'
 						AND m.idAccount = {$this->account->idAccount}
-						AND c.{$property} > {$time->getTimestamp()}
+						AND c.{$property} > {$timecondition}
 						GROUP BY c.{$property}, FROM_UNIXTIME(c.{$property},'%Y %D %M')";
 			$sql1 = $this->modelManager->createQuery($query1);
 			$result1 = $sql1->execute();
