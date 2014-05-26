@@ -56,9 +56,16 @@ class SegmentWrapper extends BaseWrapper
 			}
 			
 			$criteria = new Criteria();
-
+			
 			$this->findType($typeField["cfields"], $criteria);
-			$criteria->value = $typeField["value"];
+			
+			$val = $typeField["value"];
+			if ($typeField['cfields'] == 'domain') {
+				$a = substr($typeField['value'], 0, 1);
+				$val = ($a == '@' ? substr($typeField['value'],1) : $typeField['value']);
+			}
+			
+			$criteria->value = $val;
 			$criteria->relation = $typeField["relations"];
 			$criteria->fieldName = $typeField["cfields"];
 			
