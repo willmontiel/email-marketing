@@ -9,6 +9,7 @@ class ChildImport extends ChildProcess
 {
 	public function executeProcess($data)
 	{
+		$this->pingDatabase();
 		$arrayDecode = json_decode($data);
 	
 		$idContactlist = $arrayDecode->idContactlist;

@@ -9,9 +9,15 @@ class TrackingUrlObject
 	protected $urlManager;
 	protected $unsubscribe_link;
 
+	protected $encoder;
+	
+	
 	public function __construct() 
 	{
 		$this->urlManager = Phalcon\DI::getDefault()->get('urlManager');
+
+		$this->encoder = new \EmailMarketing\General\Links\ParametersEncoder();
+		$this->encoder->setBaseUri($this->urlManager->getBaseUri(true));
 	}
 	
 	public function getTrackingUrl($html, $idMail, $idContact, $urls) 
@@ -57,8 +63,7 @@ class TrackingUrlObject
 	
 	public function getOpenTrackingUrl($social = false)
 	{
-		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
-		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		$linkdecoder = $this->encoder;
 		
 		if ($social !== false) {
 			$action = 'track/opensocial';
@@ -79,8 +84,7 @@ class TrackingUrlObject
 	
 	public function getWebVersionTrack()
 	{
-		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
-		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		$linkdecoder = $this->encoder;
 		
 		$parameters = array(1, $this->idMail, $this->idContact);
 		$url = $linkdecoder->encodeLink('webversion/show', $parameters);
@@ -92,8 +96,7 @@ class TrackingUrlObject
 	
 	public function getSocialMediaShare()
 	{
-		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
-		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		$linkdecoder = $this->encoder;
 		
 		$parameters = array(1, $this->idMail, $this->idContact);
 		$url = $linkdecoder->encodeLink('socialmedia/share', $parameters);
@@ -105,8 +108,7 @@ class TrackingUrlObject
 	
 	public function getUnsubscribeTracking()
 	{
-		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
-		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		$linkdecoder = $this->encoder;
 		
 		$parameters = array(1, $this->idMail, $this->idContact);
 		$url = $linkdecoder->encodeLink('unsubscribe/contact', $parameters);
@@ -120,8 +122,7 @@ class TrackingUrlObject
 	
 	public function getClicksTrackingUrl($social = false)
 	{
-		$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
-		$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
+		$linkdecoder = $this->encoder;
 		
 		if (count($this->urls) !== 0) {
 			while ($true = current($this->urls)) {

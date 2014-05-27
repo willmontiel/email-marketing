@@ -1,5 +1,6 @@
 <?php
-abstract class ProcessAbstract  {
+abstract class ProcessAbstract 
+{
 	
 	public function createHandlers($registry) {
 		$this->client = new ClientHandler($registry);
@@ -21,4 +22,3 @@ abstract class ProcessAbstract  {
 	abstract public function setPoolConditions();
 }
 
-?>

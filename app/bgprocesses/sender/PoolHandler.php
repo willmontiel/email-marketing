@@ -120,7 +120,7 @@ class PoolHandler extends Handler
 			$this->newChild(true);
 		}
 		
-		return NULL;
+		return null;
 	}
 	
 	public function processGotTask(ChildHandler $process, Event $event)
@@ -142,7 +142,7 @@ class PoolHandler extends Handler
 				}
 			}
 		}
-		return NULL;
+		return null;
 	}
 
 	public function childDie(ChildHandler $child)
