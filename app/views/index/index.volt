@@ -59,7 +59,7 @@
 	<div class="row">
 		<h4 class="sectiontitle">Interacciones de los últimos 3 envíos</h4>
 		<div class="row">
-			<div class="col-sm-12 col-lg-10">
+			<div class="col-sm-12">
 				<table class="table table-normal table-striped table-bordered">
 					<thead>
 						<tr>
@@ -74,10 +74,10 @@
 						{%for mail in stats.getLastMailsWithStats()%}
 							<tr>
 								<td>{{mail.name}}</td>
-								<td>{{mail.uniqueOpens}}</td>
-								<td>{{mail.clicks}}</td>
-								<td>{{mail.unsubscribed}}</td>
-								<td>{{mail.bounced}}</td>
+								<td>{{mail.uniqueOpens|numberf}}</td>
+								<td>{{mail.clicks|numberf}}</td>
+								<td>{{mail.unsubscribed|numberf}}</td>
+								<td>{{mail.bounced|numberf}}</td>
 							</tr>
 						{%endfor%}
 					</tbody>
@@ -91,9 +91,9 @@
 		<div class="row">
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">
-					<a href="{{url('mail/setup')}}"  class="shortcuts"><span class="sm-button-large-email-new"></span></a>
+					<a href="{{url('mail/compose')}}"  class="shortcuts"><span class="sm-button-large-email-new"></span></a>
 				</div>
-				<a href="{{url('mail/setup')}}" class="btn-actn">Crear un nuevo email</a>
+				<a href="{{url('mail/compose')}}" class="btn-actn">Crear un nuevo email</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">
