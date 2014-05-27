@@ -78,11 +78,11 @@
 	
 	<div class="row">
 		<div class="col-md-6">
-			<h4 class="sectiontitle">{{List1.name}}</h4>
+			<h4 class="sectiontitle">{{compare1.name}}</h4>
 			<div id="summaryChart1" class="col-sm-12"></div>
 		</div>
 		<div class="col-md-6">
-			<h4 class="sectiontitle">{{List2.name}}</h4>
+			<h4 class="sectiontitle">{{compare2.name}}</h4>
 			<div id="summaryChart2" class="col-sm-12"></div>
 		</div>
 	</div>
