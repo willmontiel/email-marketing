@@ -69,7 +69,24 @@ DropzoneArea.prototype.addElementToZone = function() {
 		t.createHtmlElement('footer', 'Footer', 'Compound', [new ImgBlock(row), new TxtBlock(row), new SShareBlock(row)], row);
 		
 		parent.iframeResize();
+		t.setAddElementPosition();
 	});
+};
+
+DropzoneArea.prototype.setAddElementPosition = function() {
+	var pos = this.content.offset();
+	if( this.content.height() > ( $('#add-element-block').height() - 50 ) ) {
+		$('#add-element-block').css('top', pos.top + this.content.height() - ( $('#add-element-block').height() - 50 ) );
+	}
+	else if( pos.top < 380 ) {
+		$('#add-element-block').css('top', '10%');
+	}
+	else if((pos.top - 350) + 710 > $(document).height()) {
+		$('#add-element-block').css('top', $(document).height() - 500);
+	}
+	else {
+		$('#add-element-block').css('top', pos.top - 350);
+	}
 };
 
 DropzoneArea.prototype.editZone = function() {
