@@ -484,6 +484,8 @@ class ImportContactWrapper
 	 */
 	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $hasHeader)
 	{
+		ini_set('auto_detect_line_endings', '1');
+		
 		$fp = fopen($sourcefile, 'r');
 		$nfp = fopen($tmpFilename, 'w');
 		
