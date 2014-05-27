@@ -39,7 +39,7 @@
 		function compareDbases() {
 			var id = $('#dbasestocompare').val();
 			if(id !== null) {
-				window.location = "{{url('statistic/comparedbases')}}/{{dbase1.idDbase}}/" + id;
+				window.location = "{{url('statistic/comparedbases')}}/{{compare1.idDbase}}/" + id;
 			}
 		}
 	</script>
@@ -63,7 +63,7 @@
 				</select>
 			</div>
 			<div class="col-md-6 text-right">
-				<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases()">Comparar</button>
+				<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases();">Comparar</button>
 			</div>
 		</div>
 	</div>
@@ -72,12 +72,12 @@
 	
 	<div class="row">
 		<div class="col-md-6">
-			<h4 class="sectiontitle">{{dbase1.name}}</h4>
+			<h4 class="sectiontitle">{{compare1.name}}</h4>
 			<div id="summaryChart1" class="col-md-12"></div>
 		</div>
 			
 		<div class="col-md-6">
-			<h4 class="sectiontitle">{{dbase2.name}}</h4>
+			<h4 class="sectiontitle">{{compare2.name}}</h4>
 			<div id="summaryChart2" class="col-md-12"></div>
 		</div>
 	</div>

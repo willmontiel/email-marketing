@@ -151,6 +151,7 @@ class ImportContactWrapper
 	 * @throws \InvalidArgumentException
 	 */
 	public function startImport($fields, $destiny, $dateformat, $delimiter, $header) {
+		ini_set('auto_detect_line_endings', '1');
 		$mode = $this->account->accountingMode;
 		
 		$this->dateformat = $dateformat;
@@ -483,7 +484,7 @@ class ImportContactWrapper
 	 * @param boolean $hasHeader
 	 */
 	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $hasHeader)
-	{
+	{		
 		$fp = fopen($sourcefile, 'r');
 		$nfp = fopen($tmpFilename, 'w');
 		
