@@ -289,8 +289,22 @@ class ContactsController extends ControllerBase
 					$line = array('', '', '', '', '');
 					for($i=0; $i<5 && !feof($open); $i++) {
 						$l = trim(fgets($open));
-						$line[$i] = str_replace('"', '\"', $l);
+//						$this->logger->log('Fila numero ' . $i);
+//						$this->logger->log($l);
+						if (!mb_check_encoding($l, 'UTF-8')) {
+							if (mb_check_encoding($l, 'ISO-8859-1')) {
+								$lineC = mb_convert_encoding($l, 'UTF-8', 'ISO-8859-1');
+								$line[$i] = str_replace('"', '\"', $lineC);
+							}
+							else {
+								return $this->response->redirect('error/link');
+							}
+						}
+						else {
+							$line[$i] = str_replace('"', '\"', $l);
+						}
 					}
+//					$this->logger->log(print_r($line, true));
 					fclose($open);
 
 					$customfields = Customfield::findByIdDbase($idDbase);
