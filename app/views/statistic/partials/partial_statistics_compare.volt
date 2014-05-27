@@ -2,11 +2,11 @@
 	<div class="col-md-8 col-md-offset-2">
 		<table class="table table-normal">
 			<tr class="big-number">
-				<td>{{compare1.Cactive}}</td>
+				<td>{{compare1.Cactive|numberf}}</td>
 				<td></td>
 				<td>Contactos</td>
 				<td></td>
-				<td>{{compare2.Cactive}}</td>
+				<td>{{compare2.Cactive|numberf}}</td>
 			</tr>
 			<tr class="big-number">
 				<td>{{statisticsData1.sent}}</td>
