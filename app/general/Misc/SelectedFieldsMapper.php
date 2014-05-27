@@ -203,7 +203,7 @@ class SelectedFieldsMapper
 					$result = $value;
 					break;
 			}
-	
+			
 			return $result;
 		}
 	

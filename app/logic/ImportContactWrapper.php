@@ -509,7 +509,13 @@ class ImportContactWrapper
 			// Validar que el EMAIL no este repetido
 			if ( $this->verifyEmailAddress($lineOut[0], $rows) ) {
 //				fputcsv($nfp, $lineOut, $delimiter);
-				$this->fputcsv2($nfp, $lineOut, $delimiter, '"', true);
+				try {
+					$this->fputcsv2($nfp, $lineOut, $delimiter, '"', true);
+				}
+				catch (\Exception $e) {
+					$this->errors[] = \sprintf('%s en linea %d', $e->getMessage(), $rows);
+					$this->invalid++;
+				}
 			}
 			if (! $rows % $every) {
 				$this->incrementProgress($rows);
@@ -538,8 +544,18 @@ class ImportContactWrapper
 				$enclosure . str_replace($enclosure, $enclosure . $enclosure, $field) . $enclosure 
 			) : $field; 
 		} 
-
-		fwrite($fh, join($delimiter, $output) . "\n"); 
+		$line = join($delimiter, $output);
+		
+		if (!mb_check_encoding($line, 'UTF-8')) {
+			if (mb_check_encoding($line, 'ISO-8859-1')) {
+				$line = mb_convert_encoding($line, 'UTF-8', 'ISO-8859-1');
+			}
+			else {
+				throw new \Exception('Codificacion invalida en texto');
+			}
+		}
+		
+		fwrite($fh, $line . "\n"); 
 	}
 	
 	protected function incrementProgress($adv)
