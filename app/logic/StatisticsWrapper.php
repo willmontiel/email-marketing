@@ -761,7 +761,9 @@ class StatisticsWrapper extends BaseWrapper
 					$valueDomain[] = $r['name'];
 				}
 			}
-			
+		}	
+		
+		if (count($result2) > 0) {
 			foreach ($result2 as $stat) {
 				if ($stat['type'] == 'hard') {
 					$bouncedStats['hard'] = $bouncedStats['hard'] + 1;
