@@ -74,10 +74,10 @@
 						{%for mail in stats.getLastMailsWithStats()%}
 							<tr>
 								<td>{{mail.name}}</td>
-								<td>{{mail.uniqueOpens}}</td>
-								<td>{{mail.clicks}}</td>
-								<td>{{mail.unsubscribed}}</td>
-								<td>{{mail.bounced}}</td>
+								<td>{{mail.uniqueOpens|numberf}}</td>
+								<td>{{mail.clicks|numberf}}</td>
+								<td>{{mail.unsubscribed|numberf}}</td>
+								<td>{{mail.bounced|numberf}}</td>
 							</tr>
 						{%endfor%}
 					</tbody>
