@@ -284,27 +284,26 @@ class ContactsController extends ControllerBase
 				else {
 					$destiny =  $this->tmppath->dir . $internalName;
 					copy($_FILES['importFile']['tmp_name'],$destiny);
-
+					
+					ini_set('auto_detect_line_endings', '1');
+					
 					$open = fopen($destiny, "r");
 					$line = array('', '', '', '', '');
 					for($i=0; $i<5 && !feof($open); $i++) {
 						$l = trim(fgets($open));
-//						$this->logger->log('Fila numero ' . $i);
-//						$this->logger->log($l);
 						if (!mb_check_encoding($l, 'UTF-8')) {
 							if (mb_check_encoding($l, 'ISO-8859-1')) {
-								$lineC = mb_convert_encoding($l, 'UTF-8', 'ISO-8859-1');
-								$line[$i] = str_replace('"', '\"', $lineC);
+								$line[$i] = str_replace('"', '\"', $l);
 							}
 							else {
-								return $this->response->redirect('error/link');
+								$this->flashSession->error('Codificacion invalida en texto');
+								return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");	
 							}
 						}
 						else {
 							$line[$i] = str_replace('"', '\"', $l);
 						}
 					}
-//					$this->logger->log(print_r($line, true));
 					fclose($open);
 
 					$customfields = Customfield::findByIdDbase($idDbase);
