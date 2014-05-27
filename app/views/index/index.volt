@@ -59,7 +59,7 @@
 	<div class="row">
 		<h4 class="sectiontitle">Interacciones de los últimos 3 envíos</h4>
 		<div class="row">
-			<div class="col-sm-12 col-lg-10">
+			<div class="col-sm-12">
 				<table class="table table-normal table-striped table-bordered">
 					<thead>
 						<tr>
