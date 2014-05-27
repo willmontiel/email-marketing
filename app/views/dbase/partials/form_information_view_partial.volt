@@ -22,6 +22,8 @@
 			</div>
 
 			{#Doble Optin#}
+			<div class="clearfix"></div>
+			<div class="space"></div>
 			<div class="form-group">
 				<label for="optin" class="col-sm-3 control-label">Doble Optin:</label>
 				<div class="checkbox-inline mleft-15">
@@ -77,6 +79,8 @@
 
 
 			{#Mensaje de Bienvenida#}
+			<div class="clearfix"></div>
+			<div class="space"></div>
 			<div class="form-group">
 				<label for="welcome" class="col-sm-3 control-label">Mensaje de bienvenida:</label>
 				<div class="checkbox-inline mleft-15">
@@ -122,7 +126,9 @@
 			{{ '{{/if}} '}}	
 
 
-			{#Notificar#}	
+			{#Notificar#}
+			<div class="clearfix"></div>
+			<div class="space"></div>
 			<div class="form-group">
 				<label for="notify" class="col-sm-3 control-label">Notificar a: </label>
 				<div class="checkbox-inline mleft-15">
@@ -177,6 +183,8 @@
 
 				
 			{#Listas#}
+			<div class="clearfix"></div>
+			<div class="space"></div>
 			<div class="form-group">
 				<label for="list-attachment" class="col-sm-3 control-label">Lista: </label>
 				<div class="col-md-6">
@@ -195,12 +203,8 @@
 				
 			{# Botones #}
 			<div class="form-actions col-xs-offset-5">
-				<div class="col-xs-4">
-					<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
-				</div>
-				<div class="col-xs-4">
-					<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "next" this}}' }}>Siguiente</button>
-				</div>
+				<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
+				<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "next" this}}' }}>Siguiente</button>
 			</div>
 			<div class="space"></div>
 		</form>

@@ -30,7 +30,7 @@ FormEditor.prototype.createZones = function() {
 	this.optionzone = $('<div class="form-fields-menu"></div>');
 	$('.form-menu').append(this.optionzone);
 	
-	this.buttonzone = $('<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name"><span>Botón</span></label><div class="col-md-7 col-sm-8 col-xs-7"><div class="container-form-button-name btn btn-guardar extra-padding btn-sm"><a href="#" class="editable editable-click" id="form-button-name" data-type="text" data-pk="1" data-original-title="Nombre del Boton">' + this.button + '</a></div></div>');
+	this.buttonzone = $('<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name control-label"><span>Botón</span></label><div class="col-md-7 col-sm-8 col-xs-7"><div class="container-form-button-name btn btn-guardar extra-padding btn-sm"><a href="#" class="editable editable-click" id="form-button-name" data-type="text" data-pk="1" data-original-title="Nombre del Boton">' + this.button + '</a></div></div>');
 	$('.form-full-button').append(this.buttonzone);
 };
 

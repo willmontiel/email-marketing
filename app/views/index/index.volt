@@ -63,7 +63,7 @@
 				<table class="table table-normal table-striped table-bordered">
 					<thead>
 						<tr>
-							<th class="title">Ultimos 3 Envios</th>
+							<th class="title">Ultimos 3 envíos</th>
 							<th class="opens">Aperturas</th>
 							<th class="clics">Clics</th>
 							<th class="desusc">Desuscripciones</th>

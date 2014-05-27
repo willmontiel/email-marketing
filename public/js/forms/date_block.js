@@ -37,24 +37,30 @@ DateBlock.prototype.designField = function() {
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
-						<form class="field-content-zone form-inline' + hide + '" role="form">\n\
-							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name form-group" style="width: 206px;">\n\
+						<form class="field-content-zone form-inline mbottom-15' + hide + '" role="form">\n\
+							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name width-la">\n\
 								' + required + this.name + '\n\
 							</label>\n\
-							<div class="form-group" style="width: 90px;">\n\
+							<div class="form-group">\n\
 								<label class="sr-only"></label>\n\
-								<select class="form-control select-day-number-form">' + days + '</select>\n\
-							</div>\n\
-							<div class="form-group" style="width: 150px;">\n\
-								<label class="sr-only"></label>\n\
-								<select class="form-control select-month-number-form">' + months + '</select>\n\
-							</div>\n\
-							<div class="form-group" style="width: 200px;">\n\
-								<label class="sr-only"></label>\n\
-								<input type="text" class="form-control select-year-number-form">\n\
+								<div class="col-md-12 col-sm-12 col-xs-2">\n\
+									<select class="form-control select-day-number-form">' + days + '</select>\n\
+								</div>\n\
 							</div>\n\
 							<div class="form-group">\n\
-								<div class="btn-group">\n\
+								<label class="sr-only"></label>\n\
+								<div class="col-md-12 col-sm-12 col-xs-4">\n\
+									<select class="form-control select-month-number-form">' + months + '</select>\n\
+								</div>\n\
+							</div>\n\
+							<div class="form-group">\n\
+								<label class="sr-only"></label>\n\
+								<div class="col-md-8 col-sm-9 col-xs-2">\n\
+									<input type="text" class="form-control select-year-number-form">\n\
+								</div>\n\
+							</div>\n\
+							<div class="form-group">\n\
+								<div class="btn-group margin-top-left">\n\
 									<a class="btn btn-default btn-sm edit-field">\n\
 										<span class="glyphicon glyphicon-pencil"></span>\n\
 									</a>\n\
