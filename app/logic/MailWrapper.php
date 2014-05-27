@@ -335,7 +335,7 @@ class MailWrapper extends BaseWrapper
 //			$plainText = $this->mailcontent->plainText;
 //		}
 		
-		$plainText = (empty($this->mailcontent->plainText) ? '' : htmlspecialchars($this->mailcontent->plainText));
+		$plainText = (empty($this->mailcontent->plainText) ? '' : utf8_encode($this->mailcontent->plainText));
 		
 		$jsonObject['plainText'] = $plainText;
 		$jsonObject['totalContacts'] = $this->mail->totalContacts;
