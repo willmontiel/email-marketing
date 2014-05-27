@@ -124,6 +124,13 @@
 						<td>{{statisticsData2.statbounced}}%</td>
 						<td>{{statisticsData2.bounced|numberf}}</td>
 					</tr>
+					<tr class="spam big-number">
+						<td>{{statisticsData1.spam|numberf}}</td>
+						<td>{{statisticsData1.statspam}}%</td>
+						<td>Rebotes</td>
+						<td>{{statisticsData2.spam}}%</td>
+						<td>{{statisticsData2.statspam|numberf}}</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
