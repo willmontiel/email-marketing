@@ -78,7 +78,7 @@ class User extends Modelbase
 		$this->validate(new Regex(
 				array(
 					 'field' => 'username',
-					 'pattern' => '/^[a-z\d_]{4,15}$/i',
+					 'pattern' => '/^[A-Za-z\d_]{1}[A-Za-z0-9\d_]{5,31}$/i',
 					 'message' => 'EL nombre de usuario no de tener espacios ni caracteres especiales'
 
 		 )));

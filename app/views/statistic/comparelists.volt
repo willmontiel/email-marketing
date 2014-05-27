@@ -39,7 +39,7 @@
 		function compareList() {
 			var id = $('#liststocompare').val();
 			if(id !== null) {
-				window.location = "{{url('statistic/comparelists')}}/{{List1.idContactlist}}/" + id;
+				window.location = "{{url('statistic/comparelists')}}/{{compare1.idContactlist}}/" + id;
 			}
 		}
 			
@@ -70,7 +70,7 @@
 			</select>
 		</div>
 		<div class="col-md-2 text-right">
-			<button class="btn btn-sm btn-default extra-padding" onclick="compareList()">Comparar</button>
+			<button class="btn btn-sm btn-default extra-padding" onclick="compareList();">Comparar</button>
 		</div>
 	</div>
 	
