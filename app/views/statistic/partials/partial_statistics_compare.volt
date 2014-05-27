@@ -8,6 +8,13 @@
 				<td></td>
 				<td>{{compare2.Cactive}}</td>
 			</tr>
+			<tr class="big-number">
+				<td>{{statisticsData1.sent}}</td>
+				<td></td>
+				<td>Correos enviados</td>
+				<td></td>
+				<td>{{statisticsData2.sent}}</td>
+			</tr>
 			<tr class="opens big-number">
 				<td>{{statisticsData1.uniqueOpens}}</td>
 				<td>{{statisticsData1.percentageUniqueOpens}}%</td>
