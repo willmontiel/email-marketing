@@ -127,7 +127,7 @@
 					<tr class="spam big-number">
 						<td>{{statisticsData1.spam|numberf}}</td>
 						<td>{{statisticsData1.statspam}}%</td>
-						<td>Rebotes</td>
+						<td>Spam</td>
 						<td>{{statisticsData2.spam}}%</td>
 						<td>{{statisticsData2.statspam|numberf}}</td>
 					</tr>
