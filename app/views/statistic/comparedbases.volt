@@ -72,12 +72,12 @@
 	
 	<div class="row">
 		<div class="col-md-6">
-			<h4 class="sectiontitle">{{dbase1.name}}</h4>
+			<h4 class="sectiontitle">{{compare1.name}}</h4>
 			<div id="summaryChart1" class="col-md-12"></div>
 		</div>
 			
 		<div class="col-md-6">
-			<h4 class="sectiontitle">{{dbase2.name}}</h4>
+			<h4 class="sectiontitle">{{compare2.name}}</h4>
 			<div id="summaryChart2" class="col-md-12"></div>
 		</div>
 	</div>
