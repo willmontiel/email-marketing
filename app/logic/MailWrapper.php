@@ -216,6 +216,8 @@ class MailWrapper extends BaseWrapper
 	
 	public function convertMailToJson()
 	{
+		ini_set('auto_detect_line_endings', '1');
+		
 		$this->mail; $this->content;
 		$jsonObject = array();
 		
