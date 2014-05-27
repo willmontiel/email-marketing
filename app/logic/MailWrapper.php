@@ -199,7 +199,7 @@ class MailWrapper extends BaseWrapper
 				$this->mailcontent->googleAnalytics = null;
 			}
 			
-			$this->mailcontent->plainText = utf8_encode($this->content->plainText);
+			$this->mailcontent->plainText = $this->content->plainText;
 			
 			
 			if (!$this->mailcontent->save()) {
