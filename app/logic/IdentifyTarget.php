@@ -244,8 +244,8 @@ class IdentifyTarget
 				break;
 			
 			case 'mailExclude':
-				$join = " JOIN mxc AS m ON (m.idContact = c.idContact) ";
-				$and = " AND m.idMail NOT IN (" . $ids . ") ";
+				$join = " LEFT OUTER JOIN mxc AS m ON (m.idContact = c.idContact AND m.idMail IN ({$ids})) ";
+				$and = " AND (m.idContact IS NULL OR m.opening = 0)";
 				break;
 		}
 		$filters = new stdClass();
