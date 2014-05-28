@@ -7,6 +7,8 @@
 			var url = $('#url').val();
 			var image = $('#image').val();
 			
+			$('#wait').show();
+			
 			$.ajax({
 				url: "{{url('mail/importcontent')}}/" + idMail,
 				type: "POST",			
@@ -17,6 +19,7 @@
 				error: function(msg){
 					var obj = $.parseJSON(msg.responseText);
 					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.errors, sticky: false, time: 10000});
+					$('#wait').hide();
 				},
 				success: function(){
 					$(location).attr('href', "{{url('mail/contenthtml')}}/" + idMail); 
@@ -42,8 +45,10 @@
 					</div>
 					<div class="form-group">
 						<div class="col-sm-4"></div>
-						<div class="col-sm-8">
-							<a class="btn btn-primary" onClick="sendData()">Importar</a>
+						<div class="col-sm-4">
+							<a class="btn btn-sm btn-primary extra-padding" onClick="sendData();">Importar</a>
+							<a class="btn btn-sm btn-default extra-padding" href="{{url('mail/compose')}}/{{mail.idMail}}">Cancelar</a>
+							<div id="wait" style="display: none">Espere... procesando solicitud <img src="{{url('')}}/images/processing.gif" width="20" height="20"> <br />(podría tardar unos minutos)</div>
 						</div>
 					</div>
 				</form>

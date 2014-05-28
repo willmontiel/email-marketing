@@ -81,6 +81,7 @@ ImgBlock.prototype.updateColumnStyle = function(style, value) {
 ImgBlock.prototype.createImage = function() {
 	var t = this;
 	this.content.find('img').on('click', function() {
+		t.setImageGalleryPosition();
 		removeTextEditor();
 		if($(this).attr('src') === undefined) {
 			t.widthZone =  t.content.width();
@@ -346,5 +347,19 @@ ImgBlock.prototype.updateSize = function() {
 		
 		this.changeAttrImgBlock('width', this.content.width());
 		this.changeAttrImgBlock('height', (this.height * this.content.width()) / this.width);
+	}
+};
+
+
+ImgBlock.prototype.setImageGalleryPosition = function() {
+	var pos = this.content.offset();
+	if( pos.top < 330 ) {
+		$('#images').css('top', '5%');
+	}
+	else if((pos.top - 300) + 610 > $(document).height()) {
+		$('#images').css('top', $(document).height() - 660);
+	}
+	else {
+		$('#images').css('top', pos.top - 300);
 	}
 };
