@@ -19,7 +19,7 @@
 					for(var f=0; f<data.length; f++){
 						var stop;
 						if (data[f].pause){
-							stop = '<a href="{{url('process/stopsending')}}/' + data[f].task +'"><span class="label label-dark-red">Stop</span></a>'; 
+							stop = '<a href="{{url('process/stopsending')}}/' + data[f].task +'">Stop</a>'; 
 						}
 						else{
 						stop = '---';
@@ -34,7 +34,7 @@
 					for(var f=0; f<importdata.length; f++){
 						var stopimport;
 						if (importdata[f].pause){
-							stopimport = '<a href="{{url('process/stopimport')}}/' + importdata[f].task +'"><span class="label label-dark-red">Stop</span></a>'; 
+							stopimport = '<a href="{{url('process/stopimport')}}/' + importdata[f].task +'">Stop</a>'; 
 						}
 						else{
 						stopimport = '---';

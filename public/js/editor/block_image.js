@@ -353,13 +353,14 @@ ImgBlock.prototype.updateSize = function() {
 
 ImgBlock.prototype.setImageGalleryPosition = function() {
 	var pos = this.content.offset();
-	if( pos.top < 330 ) {
+	var height = $('#images').height();
+	if( pos.top < ( height/2 + 100 ) ) {
 		$('#images').css('top', '5%');
 	}
-	else if((pos.top - 300) + 610 > $(document).height()) {
-		$('#images').css('top', $(document).height() - 660);
+	else if((pos.top - height/2 + 50) + (height + 100) > $(document).height()) {
+		$('#images').css('top', $(document).height() - ( height + 200 ) );
 	}
 	else {
-		$('#images').css('top', pos.top - 300);
+		$('#images').css('top', pos.top - height/2);
 	}
 };

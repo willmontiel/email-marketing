@@ -55,7 +55,7 @@ class TemplateObj
 	
 	public function convertMailToTemplate($name, $category, Mailcontent $mailContent)
 	{
-		$this->logger->log('Empezando proceso de creacion de plantilla a partir de un correo');
+//		$this->logger->log('Empezando proceso de creacion de plantilla a partir de un correo');
 		
 		$this->saveTemplateInDb($name, $category);
 		$content = $this->saveTemplateInFolder($mailContent->content);
@@ -64,7 +64,7 @@ class TemplateObj
 	
 	public function createTemplate($name, $category, $editorContent)
 	{
-		$this->logger->log('Empezando proceso de creacion de plantillas');
+//		$this->logger->log('Empezando proceso de creacion de plantillas');
 		$this->saveTemplateInDb($name, $category);
 		$content = $this->saveTemplateInFolder($editorContent);
 		$this->updateContentHtml($content);
@@ -74,7 +74,7 @@ class TemplateObj
 	
 	public function updateTemplate($name, $category, $editorContent)
 	{
-		$this->logger->log('Empezando proceso de edición de plantillas');
+//		$this->logger->log('Empezando proceso de edición de plantillas');
 		$this->startTransaction();
 		$content = $this->updateTemplateImageUbication($editorContent);
 		$this->updateTemplateInDb($name, $category, $content);
@@ -86,11 +86,11 @@ class TemplateObj
 		$template = new Template();
 		
 		if ($this->global && $this->user->userrole == "ROLE_SUDO") {
-			$this->logger->log('Iniciando guardado de plantilla pública');
+//			$this->logger->log('Iniciando guardado de plantilla pública');
 			$template->idAccount = null;
 		}
 		else {
-			$this->logger->log('Iniciando guardado de plantilla privada');
+//			$this->logger->log('Iniciando guardado de plantilla privada');
 			$template->idAccount = $this->account->idAccount;
 		}
 		$template->name = $name;
@@ -222,13 +222,13 @@ class TemplateObj
 		}
 		else {
 			if ($this->template->idAccount == null) {
-				$this->logger->log('is here now');
+//				$this->logger->log('is here now');
 				$newContent =  $this->saveTemplateInFolder($editorContent);
 				$this->transformImageTemplatePublicInPrivate($newContent);
 				return $newContent;
 			}
 			else {
-				$this->logger->log('is here');
+//				$this->logger->log('is here');
 				return $this->saveTemplateInFolder($editorContent);
 			}
 		}
@@ -273,8 +273,8 @@ class TemplateObj
 					$destiny = "{$this->asset->dir}{$this->account->idAccount}/templates/{$this->template->idTemplate}/images/{$idTemplateImg}.{$ext}";
 					if (!file_exists($destiny)) {
 						$source = "{$this->templatesfolder->dir}{$this->template->idTemplate}/images/{$idTemplateImg}.{$ext}";
-						$this->logger->log("Source: {$source}");
-						$this->logger->log("Destiny: {$destiny}");
+//						$this->logger->log("Source: {$source}");
+//						$this->logger->log("Destiny: {$destiny}");
 						if (!copy($source, $destiny)) {
 							throw new Exception("Error while copying image file with name {$idTemplateImg}.{$ext}");
 						}
@@ -323,8 +323,8 @@ class TemplateObj
 					
 					if (!file_exists($destiny)) {
 						$source = "{$this->asset->dir}{$this->account->idAccount}/templates/{$this->template->idTemplate}/images/{$idTemplateImg}.{$ext}";
-						$this->logger->log("Source: {$source}");
-						$this->logger->log("Destiny: {$destiny}");
+//						$this->logger->log("Source: {$source}");
+//						$this->logger->log("Destiny: {$destiny}");
 						if (!copy($source, $destiny)) {
 							throw new Exception("Error while copying image file with name {$idTemplateImg}.{$ext}");
 						}

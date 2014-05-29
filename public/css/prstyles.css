@@ -846,3 +846,7 @@ span.required {
 	font-family: inherit;
 	font-size: 25px;
 }
+
+.group-datepicker {
+	padding-top: 0px !important;
+}
