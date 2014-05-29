@@ -11,14 +11,29 @@
 		{{ javascript_include('js/load_activecontacts.js')}}
 		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
+		{#**** DATE TIME PICKER (https://github.com/eternicode/bootstrap-datepicker/) ****#}
+		{#
 		{{ javascript_include('javascripts/moment/moment.min.js')}}
 		{{ javascript_include('date-time-picker-b3/bootstrap-datepicker.js')}}
 		{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js') }}
 		{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
+		#}
+
+
+		{#**** DATE TIME PICKER (https://github.com/Eonasdan/bootstrap-datetimepicker) ****#}
 		{#
 		{{ javascript_include('javascripts/moment/moment.min.js')}}
-		
+		{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
+		{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
+		{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.es.js')}}
 		#}
+
+		{#****  ****#}
+		{{ stylesheet_link('datetimepickerb3/bootstrap-datetimepicker.min.css') }}
+		{{ stylesheet_link('datetimepickerb3/bootstrap.min.css') }}
+		{{ javascript_include('datetimepickerb3/bootstrap-datetimepicker.js')}}
+		{{ javascript_include('datetimepickerb3/bootstrap.min.js')}}
+		{{ javascript_include('datetimepickerb3/bootstrap-datetimepicker.es.js')}}
 	<script type="text/javascript">
 		var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};
@@ -208,9 +223,14 @@
 				<div class="form-group">
 					<label for="birthDate" class="col-sm-4 control-label">Fecha de nacimiento:</label>
 					<div class="col-md-8">
-						{{'{{view Ember.TextField valueBinding="birthDate" class="form-control date_view_picker"}}'}}
+						<div class="input-group date date_view_picker group-datepicker">
+							{{'{{view Ember.TextField valueBinding="birthDate" class="form-control" readonly="readonly"}}'}}
+							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+						</div>
 					</div>
 				</div>
+		
 				<!-- Campos Personalizados -->
 				{%for field in fields%}
 					<div class="form-group">
@@ -224,7 +244,7 @@
 
 				<div class="form-actions pull-right">
 					<button class="btn btn-sm btn-default extra-padding" {{'{{action "cancel" this}}'}}>Cancelar</button>
-					<button class="btn btn-sm btn-default btn-guardar extra-padding" {{'{{action "save" this}}'}}>Guardar</button>
+					<button class="btn btn-sm btn-guardar extra-padding" {{'{{action "save" this}}'}}>Guardar</button>
 				</div>
 			</form>
 			<div class="clearfix"></div>

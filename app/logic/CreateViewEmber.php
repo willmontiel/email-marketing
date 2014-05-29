@@ -7,10 +7,12 @@ class CreateViewEmber
 		$options = (!$options)?array():$options;
 
 		$fieldname = "campo".$field->idCustomField;
-
+		$div1 = "";
+		$div2 = "";
 		$optionstxt = '';
 		foreach ($options as $key => $value) {
 			$optionstxt .= " {$key}='{$value}' ";
+			$class = " {$value}";
 		}
 		switch ($field->type) {
 			case "Text":
@@ -28,7 +30,10 @@ class CreateViewEmber
 				$valor = "{{view Ember.Select multiple='true' valueBinding='{$fieldname}' contentBinding='App.{$fieldname}_options' id='{$fieldname}'  {$optionstxt}";
 				break;
 			case "Date":
-				$valor = "{{view Ember.TextField valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}' class='date_view_picker' ";
+				$div1 = "<div class='input-group date date_view_picker group-datepicker'>";
+				$div2 = "<span class='input-group-addon'><span class='glyphicon glyphicon-remove'></span></span><span class='input-group-addon'><span class='glyphicon glyphicon-th'></span></span></div>";
+//				$valor = "{{view Ember.TextField valueBinding='{$fieldname}' placeholder='{$field->name}' id='{$fieldname}' class='date_view_picker'";
+				$valor = "{{view Ember.TextField valueBinding='{$fieldname}' id='{$fieldname}' class='{$class}' readonly='readonly'";
 				break;
 		}
 		
@@ -44,7 +49,8 @@ class CreateViewEmber
 		else {
 			$valor.= "}}";
 		}
-		return $valor;
+		
+		return $div1 . $valor . $div2;
 	}
 	
 	public static function createCustomFieldXeditable(Customfield $field)

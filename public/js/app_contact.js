@@ -220,12 +220,26 @@ App.ContactsImportController = Ember.ObjectController.extend({
 
 App.ContactsNewView = Ember.View.extend({
   didInsertElement: function() {
+//		$('.date_view_picker').datetimepicker({
+//			format:'d/m/Y',
+//			inline:true,
+//			timepicker:false,
+//			lang:'es',
+//			startDate: 0
+//		});
+		
 		$('.date_view_picker').datetimepicker({
-			format:'d/m/Y',
+			language: 'es',
+			autoclose: true,
+			weekStart: false,
+			todayBtn: true,
 			inline:true,
-			timepicker:false,
-			lang:'es',
-			startDate: 0
+			format: "dd/mm/yyyy",
+			todayHighlight: true,
+			showMeridian: false,
+			startView: 2,
+			minView: 2,
+			forceParse: 0
 		});
     }
 });
