@@ -171,7 +171,8 @@ Toolbar.prototype.createBorder = function() {
 };
 
 Toolbar.prototype.createCorners = function() {
-	var title = $("<div class='option-title-toolbar'>Esquinas</div>");
+//	var title = $("<div class='option-title-toolbar'>Esquinas</div>");
+	var title = $("<div class='full-container-img-border'><div class='border-img-container'><span class='img-border img-top'></span></div><div class='border-img-container'><span class='img-border img-bottom'></span></div><div class='border-img-container'><span class='img-border img-left'></span></div><div class='border-img-container'><span class='img-border img-right'></span></div></div>");
 	var top_left = $('<input id="corner-top-left-spinner" name="top-left" class="toolbar-spinner" value=' + this.component.corner_top_left + '>');
 	var top_right = $('<input id="corner-top-right-spinner" name="top-right" class="toolbar-spinner" value=' + this.component.corner_top_right + '>');
 	var bottom_left = $('<input id="corner-bottom-left-spinner" name="bottom-left" class="toolbar-spinner" value=' + this.component.corner_bottom_left + '>');
@@ -193,7 +194,8 @@ Toolbar.prototype.createCorners = function() {
 };
 
 Toolbar.prototype.createMargins = function() {
-	var title = $("<div class='option-title-toolbar'>Margenes</div>");
+//	var title = $("<div class='option-title-toolbar'>Margenes</div>");
+	var title = $("<div class='full-container-img-margin'><div class='margin-img-container'><span class='img-margin img-top'></span></div><div class='margin-img-container'><span class='img-margin img-bottom'></span></div><div class='margin-img-container'><span class='img-margin img-left'></span></div><div class='margin-img-container'><span class='img-margin img-right'></span></div></div>");
 	var top_left = $('<input id="margin-top-spinner" name="top" class="toolbar-spinner" value=' + this.component.margin_top + '>');
 	var top_right = $('<input id="margin-bottom-spinner" name="bottom" class="toolbar-spinner" value=' + this.component.margin_bottom + '>');
 	var bottom_left = $('<input id="margin-left-spinner" name="left" class="toolbar-spinner" value=' + this.component.margin_left + '>');
