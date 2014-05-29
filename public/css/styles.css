@@ -1176,3 +1176,52 @@ table {
 .redactor_toolbar li a.redactor_btn_form-updating {
 	background-position: -875px;
 }
+.img-margin, .img-border {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	/*vertical-align: text-top;*/
+	background-repeat: no-repeat;
+	margin-bottom : 2px;
+	margin-left: 5px;
+}
+.img-margin {
+	background-image: url('../images/margin_editor.png');
+}
+.img-border {
+	background-image: url('../images/border_editor.png');
+}
+.img-margin.img-top {
+	background-position: -42px 0px;
+}
+.img-margin.img-bottom {
+	background-position: -63px 0px;
+}
+.img-margin.img-left {
+	background-position: 0px 0px;
+}
+.img-margin.img-right {
+	background-position: -20px 0px;
+}
+
+.img-border.img-top {
+	background-position: 0px 0px;
+}
+.img-border.img-bottom {
+	background-position: -23px 0px;
+}
+.img-border.img-left {
+	background-position: -47px 0px;
+}
+.img-border.img-right {
+	background-position: -71px 0px;
+}
+
+.margin-img-container, .border-img-container {
+	width: 50px;
+	text-align: center;
+	float: left;
+}
+.full-container-img-margin, .full-container-img-border {
+	float: none !important;
+}

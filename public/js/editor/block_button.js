@@ -234,7 +234,7 @@ BtnBlock.prototype.createToolbar = function() {
 	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr><tr><td class="second_row"><ul class="second_elements"></ul></td></tr><tr><td class="third_row"><ul class="third_elements"></ul></td></tr></table>');
 	
 	var checkedBGSty = (this.btnwithbgimage) ? 'checked' : '';
-	var backgroundColor = $("<div class='button-background-toolbar-container'><div class='btn-toolbar-title'>Fondo</div><input type='text' value='" + this.btnbgcolor + "' id='color-button-background-toolbar' name='color-button-background-toolbar' class='pick-a-color'></div>");
+	var backgroundColor = $("<div class='button-background-toolbar-container'><div class='btn-toolbar-title'>Fondo</div><input type='text' id='color-button-background-toolbar' name='color-button-background-toolbar' class='pick-a-color'></div>");
 	var backgroundStyle = $("<div class='button-background-toolbar-container'>\n\
 								<div class='btn-toolbar-title'>Degradado</div><div class='btn-toolbar-background-style'><input type='checkbox' id='style-button-with-background-toolbar' " + checkedBGSty + "></div>\n\
 								<div class='medium-select btn-toolbar-background-style-options'>\n\
@@ -267,15 +267,15 @@ BtnBlock.prototype.createToolbar = function() {
 									<option value='outset'>Outset</option>\n\
 								</select>\n\
 							</div>\n\
-							<div class='btn-color-border-container'><input type='text' value='" + this.btnbordercolor + "' id='color-button-border-toolbar' name='color-button-border-toolbar' class='pick-a-color'></div>\n\
+							<div class='btn-color-border-container'><input type='text' id='color-button-border-toolbar' name='color-button-border-toolbar' class='pick-a-color'></div>\n\
 							<div class='btn-size-border-container'><input id='button-border-width-spinner' name='width' class='toolbar-spinner' value=" + this.btnborderwidth + "></div>\n\
 						</div>");
 	elements.append(border_radius);
 	elements.append(border_color);
 	toolbar.find('.first_row ul').append(elements);
 	
-	this.colorPickerBlockChange('color-button-background-toolbar', 'background-color', 'btnbgcolor');
-	this.colorPickerBlockChange('color-button-border-toolbar', 'border-color', 'btnbordercolor');	
+	this.colorPickerBlockChange('color-button-background-toolbar', 'background-color', 'btnbgcolor', this.btnbgcolor);
+	this.colorPickerBlockChange('color-button-border-toolbar', 'border-color', 'btnbordercolor', this.btnbordercolor);	
 	this.spinnerBlockChange('button-border-radius-spinner', 'border-radius', 'btnradius', 0, 20);
 	this.spinnerBlockChange('button-border-width-spinner', 'border-width', 'btnborderwidth', 0, 20);
 	
@@ -291,7 +291,7 @@ BtnBlock.prototype.createToolbar = function() {
 									<option value='monospace'>Monospace</option>\n\
 								</select>\n\
 							</div>\n\
-						<div class='color-font-container'><input type='text' value='" + this.btntextcolor +"' id='color-button-font-toolbar' name='color-button-font-toolbar' class='pick-a-color'></div>\n\
+						<div class='color-font-container'><input type='text' id='color-button-font-toolbar' name='color-button-font-toolbar' class='pick-a-color'></div>\n\
 						<div class='size-font-container'><input id='button-font-size-spinner' name='font-size' class='toolbar-spinner spinner-button' value=" + this.btnfontsize + "></div>\n\
 						</div>");
 	var text = $('<div class="button-title-toolbar-container"><div class="btn-toolbar-title">Titulo</div><div class="btn-toolbar-field"><input type="text" id="button-text-toolbar" value="' + this.btntext + '"></div></div>');
@@ -301,7 +301,7 @@ BtnBlock.prototype.createToolbar = function() {
 	toolbar.find('.second_row ul').append(elements);
 	
 	this.spinnerBlockChange('button-font-size-spinner', 'font-size', 'btnfontsize', 0, 30);
-	this.colorPickerBlockChange('color-button-font-toolbar', 'color', 'btntextcolor');
+	this.colorPickerBlockChange('color-button-font-toolbar', 'color', 'btntextcolor', this.btntextcolor);
 	
 	
 	var link = $('<div class="button-title-toolbar-container"><div class="btn-toolbar-title">Hipervinculo</div><div class="btn-toolbar-field"><input type="text" id="button-link-toolbar" value="' + this.btnlink + '"></div></div>');
@@ -342,15 +342,45 @@ BtnBlock.prototype.spinnerBlockChange = function(id, style, property, min, max) 
 	});
 };
 
-BtnBlock.prototype.colorPickerBlockChange = function(id, style, property) {
+BtnBlock.prototype.colorPickerBlockChange = function(id, style, property, value) {
 	var t = this;
 	
-	$('#' + id).pickAColor({showHexInput: false});
-	
-	$('#' + id + ' input').on("change", function () {
-		t.content.find('.content-button').css(style, '#' + $(this).val());
-		t[property] = '#' + $(this).val();
+	$('#' + id).spectrum({
+		color: value,
+		flat: false,
+		showInput: true,
+		className: "full-spectrum",
+		showInitial: true,
+		showPalette: true,
+		showSelectionPalette: true,
+		maxPaletteSize: 10,
+		preferredFormat: "hex",
+		change: function(color) {
+			t.content.find('.content-button').css(style, color.toHexString());
+			t[property] = color.toHexString();
+		},
+		palette: [
+			["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+			"rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+			["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+			"rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
+			["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
+			"rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
+			"rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
+			"rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
+			"rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
+			"rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+			"rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+			"rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+			"rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
+			"rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+		]
 	});
+	
+//	$('#' + id + ' input').on("change", function () {
+//		t.content.find('.content-button').css(style, '#' + $(this).val());
+//		t[property] = '#' + $(this).val();
+//	});
 };
 
 BtnBlock.prototype.eventsChange = function() {
