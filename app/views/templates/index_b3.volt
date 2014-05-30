@@ -93,7 +93,6 @@
 										<img class="menu-avatar" src="{{ url('images/avatars/avatar1.jpg')}}" /> <span> {{ userObject.username }} <i class="icon-caret-down"></i></span>
 										{# Este es un indicador sobre numero de mensajes #}
 										<span class="badge badge-dark-red">
-											--><br /><!--
 											{% set messages = flashMessage.getMessages() %}
 											{% if messages !== false%}
 												{{messages|length}}

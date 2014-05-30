@@ -5,59 +5,55 @@
 
 	<div class="row">
 		<h4 class="sectiontitle">Lista de bloqueo</h4>
-			
-		
 		<p class="bs-callout bs-callout-warning">
 			Esta es la lista global de direcciones de correo electrónico bloqueados, ninguna dirección de correo
 			que esté listada abajo, está recibiendo campañas de envío.
 		</p>
-		<div class="col-md-3 col-md-offset-8">
+		<div class="text-right">
 			{{ '{{#link-to "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger btn-delete btn-sm extra-padding"}}Bloquear un correo electrónico{{/link-to}}' }}
 		</div>
 	</div>
 	<div class="space"></div>
 	<div class="row">
-		<table class="table table-striped table-contacts">
-			<thead>
-				<tr>
-					<td>
-						Email
-					</td>
-					<td class="span3">
-						Fecha
-					</td>
-					<td class="span5">
-						Razón de bloqueo
-					</td>
-					<td class="span1">
-						Acciones
-					</td>
-				</tr>
-			</thead>
-			</tbody>
-				{{ '{{#each model}}' }}
+		{{ '{{#if model}}' }}
+			<table class="table table-striped table-contacts">
+				<thead>
 					<tr>
-						<td>{{ '{{email}}' }}</td>
-						<td>{{'{{blockedDate}}' }}</td>
-						<td>{{ '{{blockedReason}}'}}</td>
 						<td>
-							{{'{{#link-to "blockedemails.unblock" this disabledWhen="controller.deleteDisabled" class="btn-default btn-sm"}}Desbloquear{{/link-to}}'}}
+							Email
+						</td>
+						<td class="span3">
+							Fecha
+						</td>
+						<td class="span5">
+							Razón de bloqueo
+						</td>
+						<td class="span1">
+							Acciones
 						</td>
 					</tr>
-				{{ '{{else}}' }}
-					<tr>
-						<td celspadding="4" colspan="4">
-							<div class="bs-callout bs-callout-warning">
-								<h4>No hay direcciones de correo bloqueadas</h4>
-								<p>
-									Para bloquear una dirección haga click en el botón <strong>Bloquear un correo eléctronico</strong> arriba a la derecha.
-								</p>
-							</div>
-						</td>
-					</tr>
-				{{ '{{/each }}' }}
-			</tbody>
-		</table>
+				</thead>
+				</tbody>
+					{{ '{{#each model}}' }}
+						<tr>
+							<td>{{ '{{email}}' }}</td>
+							<td>{{'{{blockedDate}}' }}</td>
+							<td>{{ '{{blockedReason}}'}}</td>
+							<td>
+								{{'{{#link-to "blockedemails.unblock" this disabledWhen="controller.deleteDisabled" class="btn-default btn-sm"}}Desbloquear{{/link-to}}'}}
+							</td>
+						</tr>
+					{{ '{{/each }}' }}
+				</tbody>
+			</table>
+		{{ '{{else}}' }}
+			<div class="bs-callout bs-callout-warning">
+				<h4>No hay direcciones de correo bloqueadas</h4>
+				<p>
+					Para bloquear una dirección haga click en el botón <strong>Bloquear un correo eléctronico</strong> arriba a la derecha.
+				</p>
+			</div>
+		{{ '{{/if}}' }}
 	</div>
 	<div class="row">
 		{{ partial("partials/pagination_partial") }}
