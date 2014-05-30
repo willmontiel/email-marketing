@@ -134,6 +134,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							{% for msg in messages%}
+								<div class="space"></div>
 								<div class="alert alert-{{msg.type}}">
 									<button type="button" class="close" data-dismiss="alert">×</button>
 									<h4>Atención!</h4>

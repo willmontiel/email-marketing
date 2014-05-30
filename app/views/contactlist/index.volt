@@ -138,7 +138,7 @@
 							}}
 						</form>
 					</div>
-					<div class="col-md-3 pull-right">
+					<div class="col-md-8 text-right">
 						<a class="btn btn-default extra-padding btn-sm" href="{{ url('contactlist') }}#/lists/new"><span class="glyphicon glyphicon-plus"></span> Crear una nueva lista</a>
 					</div>
 				</div>

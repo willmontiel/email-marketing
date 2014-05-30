@@ -13,7 +13,7 @@
 			{{ '{{#link-to "blockedemails.block" disabledWhen="createDisabled" class="btn btn-danger btn-delete btn-sm extra-padding"}}Bloquear un correo electrónico{{/link-to}}' }}
 		</div>
 	</div>
-	<div class="space"></div>
+	
 	<div class="row">
 		{{ '{{#if model}}' }}
 			<table class="table table-striped table-contacts">
@@ -55,9 +55,11 @@
 			</div>
 		{{ '{{/if}}' }}
 	</div>
-	<div class="row">
-		{{ partial("partials/pagination_partial") }}
-	</div>
+	{{ '{{#if model}}' }}
+		<div class="row">
+			{{ partial("partials/pagination_partial") }}
+		</div>
+	{{ '{{/if}}' }}
 </script>
 <script type="text/x-handlebars" data-template-name="blockedemails">
 	{{'{{outlet}}'}}
