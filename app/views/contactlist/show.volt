@@ -30,7 +30,7 @@
 
 		{#****  ****#}
 		{{ stylesheet_link('datetimepickerb3/bootstrap-datetimepicker.min.css') }}
-		{{ stylesheet_link('datetimepickerb3/bootstrap.min.css') }}
+		
 		{{ javascript_include('datetimepickerb3/bootstrap-datetimepicker.js')}}
 		{{ javascript_include('datetimepickerb3/bootstrap.min.js')}}
 		{{ javascript_include('datetimepickerb3/bootstrap-datetimepicker.es.js')}}
