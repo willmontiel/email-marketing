@@ -66,18 +66,11 @@ DateBlock.prototype.startFieldEvents = function() {
 	var t = this;
 	
 	this.content.find('.date_view_picker').datetimepicker({
-		language: 'es',
-		autoclose: true,
-		weekStart: false,
-		timepicker: false,
-		todayBtn: true,
+		format:'d/m/Y',
 		inline:true,
-		format: "dd/mm/yyyy",
-		todayHighlight: true,
-		showMeridian: false,
-		startView: 2,
-		minView: 2,
-		forceParse: 0
+		timepicker:false,
+		lang:'es',
+		startDate: 0
 	});
 	
 	this.content.find('.edit-field').on('click', function(){
