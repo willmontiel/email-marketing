@@ -29,11 +29,9 @@
 		#}
 
 		{#****  ****#}
-		{{ stylesheet_link('datetimepickerb3/bootstrap-datetimepicker.min.css') }}
-		
-		{{ javascript_include('datetimepickerb3/bootstrap-datetimepicker.js')}}
-		{{ javascript_include('datetimepickerb3/bootstrap.min.js')}}
-		{{ javascript_include('datetimepickerb3/bootstrap-datetimepicker.es.js')}}
+		{{ stylesheet_link('b3/datetimepickerb3/bootstrap-datetimepicker.min.css') }}
+		{{ javascript_include('b3/datetimepickerb3/bootstrap-datetimepicker.js')}}
+		{{ javascript_include('b3/datetimepickerb3/bootstrap-datetimepicker.es.js')}}
 	<script type="text/javascript">
 		var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};
