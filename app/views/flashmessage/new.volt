@@ -39,7 +39,8 @@
 				format: "MM/DD/YYYY H:mm",
 				//pick12HourFormat: true,
 				pickSeconds: false,
-				startDate: now
+				startDate: now,
+				autoclose: true
 			});
 			
 			$('#scheduleArea2').datetimepicker({
@@ -49,7 +50,8 @@
 				format: "MM/DD/YYYY H:mm",
 				//pick12HourFormat: true,
 				pickSeconds: false,
-				startDate: now
+				startDate: now,
+				autoclose: true
 			});
 		});	
 	</script>
@@ -134,7 +136,7 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label">*Fecha y hora de inicio:</label>
 					<div class="col-sm-8">
-						<div id="scheduleArea1" class="input-append date" class="col-sm-12">
+						<div id="scheduleArea1">
 							{{ MessageForm.render('start', {'id': 'begin', 'class' : 'form-control'}) }}
 						</div>
 					</div>
@@ -143,7 +145,7 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label">*Fecha y hora de fin:</label>
 					<div class="col-sm-8">
-						<div id="scheduleArea2" class="input-append date" class="col-sm-12">
+						<div id="scheduleArea2">
 							{{ MessageForm.render('end', {'id': 'end', 'class' : 'form-control'}) }}
 						</div>
 					</div>

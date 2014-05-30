@@ -18,23 +18,25 @@
 	<div class="row">
 		{{flashSession.output()}}
 	</div>
-
-	<div class="text-right">
-		<a href="{{url('flashmessage/new')}}" class="btn btn-sm btn-primary extra-padding pull-right"><span class="glyphicon glyphicon-plus"></span> Crear nuevo mensaje</a>
-	</div>
 	
+	<div class="row">
+		<div class="col-sm-12 text-right">
+			<a href="{{url('flashmessage/new')}}" class="btn btn-sm btn-primary extra-padding pull-right"><span class="glyphicon glyphicon-plus"></span> Crear nuevo mensaje</a>
+		</div>
+	</div>
 
 	<div class="row">
-		<table class="table table-contacts table-bordered">
-			<thead></thead>
-			<tbody>
 		{% if page.items|length == 0%}
-				<tr>
-					<td>
-						No hay mensajes administrativos, para crear uno haga clic en el botón <strong>Crear nuevo mensaje</strong>
-					</td>
-				</tr>
+			<div class="bs-callout bs-callout-warning">
+				<h4>No hay mensajes administrativos</h4>
+				<p>
+					Para crear uno haga clic en el botón <strong>Crear nuevo mensaje</strong>
+				</p>
+			</div>
 		{% else %}
+			<table class="table table-contacts table-bordered">
+				<thead></thead>
+				<tbody>
 			{%for item in page.items%}
 					<tr>
 						<td>
@@ -55,11 +57,10 @@
 						</td>
 					</tr>
 			{% endfor %}
+				</tbody>
+			</table>
+		</div>
 		{% endif %}
-			</tbody>
-		</table>
-	</div>
-	
 {% if page.items|length != 0%}
 	
 	{#   paginacion sin ember   #}

@@ -93,7 +93,6 @@
 										<img class="menu-avatar" src="{{ url('images/avatars/avatar1.jpg')}}" /> <span> {{ userObject.username }} <i class="icon-caret-down"></i></span>
 										{# Este es un indicador sobre numero de mensajes #}
 										<span class="badge badge-dark-red">
-											--><br /><!--
 											{% set messages = flashMessage.getMessages() %}
 											{% if messages !== false%}
 												{{messages|length}}
@@ -135,6 +134,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							{% for msg in messages%}
+								<div class="space"></div>
 								<div class="alert alert-{{msg.type}}">
 									<button type="button" class="close" data-dismiss="alert">×</button>
 									<h4>Atención!</h4>

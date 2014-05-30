@@ -16,6 +16,9 @@
 		
 	</div>
 	{{ flashSession.output() }}
+</div>
+
+<div class="row">
 	<div class="col-md-12 text-right">
 		<a href="{{ url('dbase/new') }}" class="btn btn-default btn-sm extra-padding">
 			<i class="glyphicon glyphicon-plus"></i> Crear base de datos
