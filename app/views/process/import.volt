@@ -70,7 +70,7 @@
 					{%if res['status'] != "Finalizado" and res['status'] != "Cancelado"%}
 						<p id="status-progress-{{res['idProcess']}}"></p>
 						<div id="progress-bar-{{res['idProcess']}}" class="progress progress-striped active"></div>
-					{% elseif res['status'] != "Cancelado" %}
+					{% elseif res['status'] == "Cancelado" %}
 						<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%">
 							<span class="sr-only">{{res['status']}}</span>
 						</div>
