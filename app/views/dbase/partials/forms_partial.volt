@@ -86,7 +86,7 @@
 		<div class="col-md-7 col-sm-12 col-xs-12 col-md-offset-1 border">
 			<form class="form-horizontal form-full-content" role="form"></form>
 
-			<form class="form-full-button" role="form"></form>
+			<form class="form-horizontal form-full-button" role="form"></form>
 		</div>
 		<div class="col-md-3 col-sm-12 col-xs-12">
 			<div class="form-menu">

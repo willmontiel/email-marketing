@@ -38,8 +38,8 @@ DateBlock.prototype.designField = function() {
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
 						<form class="field-content-zone form-inline mbottom-15' + hide + '" role="form">\n\
-							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name width-la">\n\
-								' + required + this.name + '\n\
+							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name control-label">\n\
+								' + required + this.name + ':\n\
 							</label>\n\
 							<div class="form-group">\n\
 								<label class="sr-only"></label>\n\
