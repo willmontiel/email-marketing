@@ -10,7 +10,6 @@
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/list_model.js') }}
-	{{ javascript_include('js/b3_tooltips.js') }}
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
 	<script type="text/javascript">
@@ -376,8 +375,8 @@
 					</div>
 				{{'{{/if}}'}}
 				<div class="form-actions">
-					<button class="btn btn-default btn-delete btn-sm extra-padding" {{ '{{action delete this}}' }}>Eliminar</button>
 					<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>
+					<button class="btn btn-default btn-delete btn-sm extra-padding" {{ '{{action delete this}}' }}>Eliminar</button>
 				</div>
 			</div>
 		</script>

@@ -112,20 +112,20 @@
 				<div class="col-md-6 col-sm-12">
 					<div class="form-group">
 						<label for="name" class="col-sm-4 control-label">*Nombre: </label>
-						<div class="col-md-7">
+						<div class="col-sm-7 col-xs-12 col-md-7">
 							{{ '{{view Ember.TextField valueBinding="name" placeholder="Nombre" class="form-control"}}' }}
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="description" class="col-sm-4 control-label">Descripción: </label>
-						<div class="col-md-7">
+						<div class="col-sm-7 col-xs-12 col-md-7">
 							{{ '{{view Ember.TextArea valueBinding="description" placeholder="Descripción" class="form-control sm-textarea-description"}}' }}
 						</div>
 					</div>
 					{{ '{{#unless dbaseSelected}}' }}
 					<div class="form-group">
 						<label  for="dbase" class="col-sm-4 control-label">*Base de datos:</label>
-						<div class="col-md-6">
+						<div class="col-sm-7 col-xs-12 col-md-7">
 							{{ '{{view Ember.Select
 									selectionBinding="dbase" 
 									contentBinding="controllers.dbase.content"
@@ -141,12 +141,12 @@
 					{{ '{{else}}' }}
 					<div class="form-group">
 						<label  for="dbase" class="col-sm-4 control-label">*Base de datos:</label>
-						<div class="col-md-6">
+						<div class="col-md-6 col-sm-6 col-xs-6">
 							<select class="form-control" disabled="disabled">
 								<option>{{' {{dbase.name}} '}}</option>
 							</select>
 						</div>
-						<button class="btn btn-default btn-sm extra-padding" {{ '{{action reset this }}' }}><i class="icon-bolt"></i> Reset</button>
+						<button class="btn btn-default btn-sm extra-padding" {{ '{{action reset this }}' }}>Reset</button>
 					</div>
 					{{ '{{/unless}}' }}
 				</div>
@@ -168,11 +168,9 @@
 			{{ '{{#if dbaseSelected}}' }}
 
 				<div class="clearfix"></div>
-				<div class="row">
-					<div class="col-sm-12 col-md-7">
 						<div class="form-group">
-							<label  for="" class="col-sm-4 control-label">Crear segmento con </label>
-							<div class="col-sm-4">
+							<label  for="" class="col-lg-2 col-md-3 col-sm-3 control-label">Crear segmento con </label>
+							<div class="col-sm-4 col-sm-6 col-xs-5">
 								{{ '{{view Ember.Select
 									  contentBinding="App.criteria"
 									  optionValuePath="content.id"
@@ -181,9 +179,10 @@
 									  class="form-control"}}'
 								}}
 							</div>
-							<p class="form-control-static">condiciones a continuación:</p>
+							<div class="col-sm-4 col-xs-5">
+								<p class="form-control-static">condiciones a continuación:</p>
+							</div>
 						</div>
-					</div>
 					<div class="clearfix"></div>
 					{{'{{#if errors.segment}}'}}
 					<div class="bs-callout bs-callout-danger">
@@ -192,10 +191,9 @@
 					{{'{{/if}}'}}
 
 					{{' {{#each cr in criteria}} '}}
-					<div class="col-lg-12">
 						<div class="form-group">
-							<label  for="" class="col-xs-1 control-label"></label>
-							<div class="col-sm-3">
+							<label  for="" class="sr-only"></label>
+							<div class="col-sm-3 col-sm-6 col-xs-5">
 								{{ '{{view Ember.Select
 									 contentBinding="cfields"
 									 optionValuePath="content.id"
@@ -206,7 +204,7 @@
 									}}'
 								}}
 							</div>
-							<div class="col-xs-2">
+							<div class="col-xs-3">
 								{{ '{{view Ember.Select
 									contentBinding="App.relations"
 									optionValuePath="content.id"
@@ -216,19 +214,17 @@
 									}}'
 								}}
 							</div>
-							<div class="col-sm-3">
+							<div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
 
 								{{ '{{view Ember.TextField valueBinding="cr.value" placeholder="valor" required="required" autofocus="autofocus" class="form-control"}}' }}	
 							</div>
-							<div class="col-md-3">
 									{{'{{#unless disableRemoveCriteria}}'}}
-									<button class="btn btn-delete btn-sm extra-padding" {{ '{{action aConditionLess cr}}' }}><i class="glyphicon glyphicon-trash"></i></button>
+									<button class="btn btn-delete btn-sm extra-padding" {{ '{{action aConditionLess cr}}' }}><span class="glyphicon glyphicon-trash"></span></button>
 									{{ '{{/unless}}' }}
 
 									{{ '{{#unless limitCriteria}}' }}
-										<button class="btn btn-sm btn-default btn-add extra-padding" {{ '{{action aConditionMore}}' }}><i class="icon-plus"></i> Agregar condición</button>
+										<button class="btn btn-sm btn-default btn-add extra-padding" {{ '{{action aConditionMore}}' }}><span class="icon-plus"></span> Agregar condición</button>
 									{{ '{{/unless}}' }}
-							</div>
 						</div>
 					</div>
 					{{' {{/each}} '}}
