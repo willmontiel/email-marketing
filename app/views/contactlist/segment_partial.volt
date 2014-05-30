@@ -7,7 +7,7 @@
 	<div class="row">
 		<h4 class="sectiontitle">Segmentos</h4>
 		<div class="row">
-			<div class="col-xs-6 col-sm-5 col-md-4">
+			<div class="col-md-6">
 				<form role="form">
 					{{ '{{view Ember.Select
 							contentBinding="dbaseSelect"
@@ -20,7 +20,7 @@
 					}}
 				</form>
 			</div>
-			<div class="col-md-3 pull-right">
+			<div class="col-md-6 text-right">
 				{{'{{#link-to "segments.new" class="btn btn-default btn-sm extra-padding"}}'}} <span class="glyphicon glyphicon-plus"></span> Crear nuevo segmento{{'{{/link-to}}'}}
 			</div>
 		</div>
@@ -70,10 +70,11 @@
 	{{' {{/unless}}'}}
 	
 	{# ########## inserta paginacion ########## #}
-	<div class="row">
-	{{ partial("partials/pagination_partial") }}
-	</div>
-
+	{{'{{#if model}}'}}
+		<div class="row">
+			{{ partial("partials/pagination_partial") }}
+		</div>
+	{{'{{/if}}'}}
 </script>
 
 <script type="text/x-handlebars" data-template-name="segments">
