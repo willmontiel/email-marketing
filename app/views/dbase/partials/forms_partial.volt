@@ -4,8 +4,8 @@
 	</div>
 
 	<div class="pull-right">
-	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Inscripción{{ '{{/link-to}}' }}
-	{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}Nuevo Formulario de Actualización{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-plus"></span> Crear nuevo formulario de inscripción{{ '{{/link-to}}' }}
+	{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-plus"></span> Crear nuevo formulario de actualización{{ '{{/link-to}}' }}
 	</div>
 	<div class="space"></div>
 	<table class="table table-striped">
@@ -31,23 +31,23 @@
 				<td>
 					<div class="text-right">
 						{{ '{{#if framecode}}' }}
-							<a class="btn btn-default btn-sm" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+							<a class="btn btn-default btn-sm extra-padding" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
 								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
 							</a>
 							{{ '{{#if isInscription}}' }}
-								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-th"></i> Codigo{{ '{{/link-to}}' }}
+								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> Codigo{{ '{{/link-to}}' }}
 							{{ '{{else}}' }}
-								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm"}}' }}<i class="glyphicon glyphicon-link"></i> Enlace{{ '{{/link-to}}' }}
+								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-link"></span> Enlace{{ '{{/link-to}}' }}
 							{{ '{{/if}}' }}
 						{{ '{{/if}}' }}
 							
 						{{ '{{#if isInscription}}' }}
-							{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+							{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-pencil"></span> Editar{{ '{{/link-to}}' }}
 						{{ '{{else}}' }}
-							{{ '{{#link-to "forms.editupdate" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm"}}' }}<i class="glyphicon glyphicon-pencil"></i> Editar{{ '{{/link-to}}' }}
+							{{ '{{#link-to "forms.editupdate" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-pencil"></span> Editar{{ '{{/link-to}}' }}
 						{{ '{{/if}}' }}
 
-						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete"}}' }}<i class="glyphicon glyphicon-trash"></i> Eliminar{{ '{{/link-to}}' }}
+						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete extra-padding"}}' }}<span class="glyphicon glyphicon-trash"></span> Eliminar{{ '{{/link-to}}' }}
 					</div>
 				</td>
 			</tr>
@@ -60,7 +60,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Previsualización de formulario</h4>
+					<h4 class="modal-title" id="myModalLabel">Previsualización del formulario</h4>
 				</div>
 				<div class="modal-body" id="preview-modal">
 				</div>
@@ -83,14 +83,14 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/new">
-		<div class="col-md-6 col-xs-12 col-md-offset-1 border">
+		<div class="col-md-7 col-sm-12 col-xs-12 col-md-offset-1 border">
 			<form class="form-horizontal form-full-content" role="form"></form>
 
-			<form class="form-full-button" role="form"></form>
+			<form class="form-horizontal form-full-button" role="form"></form>
 		</div>
-		<div class="col-md-4 col-sm-8 col-xs-12">
+		<div class="col-md-3 col-sm-12 col-xs-12">
 			<div class="form-menu">
-				<h4 class="sectiontitle title-fields-options">Campos para agregar al formulario</h4>
+				<h6 class="sectiontitle title-fields-options">Campos para agregar al formulario</h4>
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -131,18 +131,18 @@
 
 <script type="text/x-handlebars" data-template-name="forms/code">
 	<div class="row">
-		<h4 class="sectiontitle">Código formulario</h4>
+		<h4 class="sectiontitle">Código del formulario</h4>
 		<div class="col-md-6">
 			<div class="bs-callout bs-callout-info">
 				<h4>Código IFrame</h4>
-				<p>Copie y pegue el siguiente código en su página web.</p>
+				<p>Copie y pegue el siguiente código en su página web</p>
 				<div>
 					<textarea rows="4" cols="70">{{ '{{unbound framecode}}' }}</textarea>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6 col-md-offset-4">
-			<button class="btn btn-default" {{ '{{action cancel this}}' }}>Regresar</button>
+		<div class="button-actions">
+			<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Regresar</button>
 		</div>
 	</div>
 </script>

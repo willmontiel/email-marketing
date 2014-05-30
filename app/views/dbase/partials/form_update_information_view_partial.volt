@@ -24,12 +24,15 @@
 			</div>
 				
 			{#Mensaje de Aviso al Contacto#}
-				
+			<div class="clearfix"></div>
+			<div class="space"></div>
 			<div class="form-group">
 				<label for="welcome" class="col-sm-3 control-label">Aviso de Actualización:</label>
-				<div class="col-md-9">
-					{{' {{input type="checkbox" id="updatenotify" name="updatenotify" checked=updatenotify valueBinding="updatenotify"}}' }}
-					<label for="welcome"><span class="text-muted">Esta opción envía un correo al contacto una vez que haya editado sus datos!</span></label>
+				<div class="checkbox-inline mleft-15">
+					<label for="welcome">
+						{{' {{input type="checkbox" id="updatenotify" name="updatenotify" checked=updatenotify valueBinding="updatenotify"}}' }}
+						<span class="text-muted">Esta opción envía un correo al contacto una vez que haya editado sus datos!</span>
+					</label>
 				</div>
 			</div>
 			{{ '{{#if this.updatenotify }}' }}
@@ -39,8 +42,7 @@
 						<div class="bs-callout bs-callout-info">
 							<h4>Información de Actualización</h4>
 							<p>El mensaje de notificación es utilizado cuando el contacto ha editado su información 
-								correctamente, en el cual se enviara un correo con un contenido de aviso. Selecciona aquí
-								el contenido del correo, el asunto y el origen.
+								correctamente.  Seleccione aquí el contenido del correo, el asunto y el origen.								
 							</p>
 						</div>
 					</div>
@@ -66,21 +68,25 @@
 								{{'{{view Ember.TextField valueBinding="updatenotifyreplyto" id="updatenotify-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
 							</div>
 						</div>
-						<div class="form-group" style="text-align: center;">
-							<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "updatenotify"}}' }}></span>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
+							<a href="#" {{ '{{action "show_editor" "updatenotify"}}' }} class=""><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
 						</div>
 					</div>
 				</div>
 			</div>
 			{{ '{{/if}} '}}		
 				
-			{#Notificar#}	
-				
+			{#Notificar#}
+			<div class="clearfix"></div>
+			<div class="space"></div>
 			<div class="form-group">
 				<label for="notify" class="col-sm-3 control-label">Notificar a: </label>
-				<div class="col-md-9">
-					{{' {{input type="checkbox" id="notify" name="notify" checked=notify valueBinding="notify"}}' }}
-					<label for="notify"><span class="text-muted">Esta opción envía un correo notificando la suscripción de un nuevo contacto!</span></label>
+				<div class="checkbox-inline mleft-15">
+					<label for="notify">
+						{{' {{input type="checkbox" id="notify" name="notify" checked=notify valueBinding="notify"}}' }}
+						<span class="text-muted">Esta opción envía un correo notificando la suscripción de un nuevo contacto!</span>
+					</label>
 				</div>
 			</div>
 			{{ '{{#if this.notify }}' }}
@@ -89,8 +95,8 @@
 					<div class="row">
 						<div class="bs-callout bs-callout-info">
 							<h4>Información de Notificación</h4>
-							<p>Reciba un correo de notificacion cada vez que un usuario se actualice
-							por medio de este formulario. Selecciona aquí el contenido del correo, el asunto 
+							<p>Reciba un correo de notificación cada vez que un usuario se actualice
+							por medio de este formulario. Seleccione aquí el contenido del correo, el asunto 
 							y el origen.
 							</p>
 						</div>
@@ -117,8 +123,9 @@
 								{{'{{view Ember.TextField valueBinding="notifyreplyto" id="notify-mail-reply-to" class="form-control" placeholder="example@test.com"}}'}}
 							</div>
 						</div>
-						<div class="form-group" style="text-align: center;">
-							<span class="glyphicon glyphicon-envelope" {{ '{{action "show_editor" "notify"}}' }}></span>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
+							<a href="#" {{ '{{action "show_editor" "notify"}}' }} class=""><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
 						</div>
 						<div class="form-group welcome-url-field">
 							<label for="email-notify" class="col-sm-3 control-label">* Notificar a:</label>
@@ -132,15 +139,13 @@
 			{{ '{{/if}} '}}	
 			
 			{# Botones #}
-			<div class="form-actions col-xs-offset-5">
-				<div class="col-xs-4">
+			<div class="clearfix"></div>
+			<div class="space"></div>
+			<div class="form-actions">
 					<button class="btn btn-sm btn-default extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
-				</div>
-				<div class="col-xs-4">
 					<button class="btn btn-sm btn-default btn-guardar extra-padding" {{ '{{action "next" this}}' }}>Siguiente</button>
-				</div>
 			</div>
-			<div class="space"></div>	
+			<div class="space"></div>
 			
 		</form>
 	</div>

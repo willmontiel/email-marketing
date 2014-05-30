@@ -104,7 +104,8 @@ body {
 }
 
 /* Estilos para los titulos de seccion */
-h4.sectiontitle {
+h4.sectiontitle,
+h6.sectiontitle {
 	background-color: @bg-info-blue;
 	padding: 10px;
 	color: @brand-sectiontitle;
@@ -535,7 +536,7 @@ h4.sectiontitle {
 	background-position: @position @sm-icon-pos-y;
 }
 .sm-button-small-database:extend(.sm-button-small-base) {
-	.pos-icons(8, @shortcuts-small-icons-width);
+	.pos-icons(5, @shortcuts-small-icons-width);
 	background-position: @position @sm-icon-pos-y;
 }
 .sm-button-small-bloq-list:extend(.sm-button-small-base) {
@@ -985,6 +986,9 @@ table.middle > tbody > tr > th > td {
 .width-fix {
 	width: 100%;
 }
+.mtop-10 {
+	margin-top: 10px;
+}
 /*   statistics   */
 .anchor {
 	text-decoration: none;
@@ -1317,4 +1321,11 @@ table.middle > tbody > tr > th > td {
 }
 .blue {
 	color:@brand-banner-blue;
+}
+/*   Estilos formularios   */
+.mbottom-15 {
+	margin-bottom: 15px;
+}
+.margin-top-left {
+	margin:5px 0 0 15px;
 }

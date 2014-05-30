@@ -267,6 +267,9 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 			for(var i = 0; i < lists.length; i++) {
 				var obj = {id: lists[i].get('id'), name: lists[i].get('name')};
 				values.push(obj);
+				if(lists[i].get('id') == t.content.get('listselected')) {
+					t.set('listselectedfield', obj);
+				}
 			}
 			t.set('selectoflists', values);
 		});
