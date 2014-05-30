@@ -49,21 +49,21 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 				fn();
 			}
 		}, function(error) {
-			if (error.status == 422) {
-				try {
-					var obj = $.parseJSON(error.responseText);
-					if (!norollback) {
-						self.get("model").rollback();
-						self.transitionToRoute(troute);
+				if (error.status == 422) {
+					try {
+						var obj = $.parseJSON(error.responseText);
+						if (!norollback) {
+							self.get("model").rollback();
+							self.transitionToRoute(troute);
+						}
+						callmeback(obj.errors);
 					}
-					callmeback(obj.errors);
+					catch (e) {
+					}
 				}
-				catch (e) {
+				else {
+					self.set('errors.errormsg', error.statusText);
 				}
-			}
-			else {
-				self.set('errors.errormsg', error.statusText);
-			}
 		});
 	},
 

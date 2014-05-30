@@ -32,8 +32,10 @@
 			</li>
 		</ul>
 	</div>
-
-	{{ partial("partials/search_contacts_partial") }}
+	
+	{{'{{#if model}}'}}
+		{{ partial("partials/search_contacts_partial") }}
+	{{'{{/if}}'}}
 
 	<table class="table table-striped">
 		<thead></thead>
@@ -51,9 +53,11 @@
 		</tbody>
 	 </table>
 				</div>
-				<div class="box-footer">
-					{{ partial("partials/pagination_partial") }}
-				</div>
+				{{'{{#if model}}'}}
+					<div class="box-footer">
+						{{ partial("partials/pagination_partial") }}
+					</div>
+				{{'{{/if}}'}}
 			</div>
 			
         </div>
