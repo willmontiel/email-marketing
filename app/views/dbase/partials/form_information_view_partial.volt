@@ -193,6 +193,7 @@
 							optionValuePath="content.id"
 							optionLabelPath="content.name"
 							valueBinding="listselected"
+							selectionBinding="listselectedfield"
 							prompt="Seleccione una lista"
 							class="form-control"
 						}}'
