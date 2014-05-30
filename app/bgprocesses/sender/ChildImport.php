@@ -31,7 +31,7 @@ class ChildImport extends ChildProcess
 		$wrapper->setIpaddress($ipaddress);
 		$wrapper->startImport($fields, $destiny, $dateformat, $delimiter, $header);
 	}
-	
+
 	public function publishToChildren()
 	{
 		return SocketConstants::getImportPub2ChildrenEndPoint();

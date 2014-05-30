@@ -151,84 +151,96 @@ class ImportContactWrapper
 	 * @throws \InvalidArgumentException
 	 */
 	public function startImport($fields, $destiny, $dateformat, $delimiter, $header) {
-		ini_set('auto_detect_line_endings', '1');
-		$mode = $this->account->accountingMode;
-		
-		$this->dateformat = $dateformat;
-		
-		$this->resetProcess();
-		$this->timer->startTimer('all-import', 'Import process');
-	
-		// Cual es el proposito de esto?
-		// Controlar la importacion de contactos para que no exceda el limite
-		// ?
-		$this->timer->startTimer('phase1', 'Prepare to import!');
-		if ($mode == "Contacto") {
-			$contactLimit = $this->account->contactLimit;
-			$activeContacts = $this->account->countActiveContactsInAccount();
-		} else {
-			$contactLimit = 1;
-			$activeContacts = 0;
-		}
-		
-		// Buscar la lista de contactos
-		$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
-		// Buscar la base de datos
-		$dbase = Dbase::findFirstByIdDbase($list->idDbase);
-
-		// En que formato se presentan los campos (de que forma esta codificado
-		//esto?
-		$posCol = json_decode(json_encode($fields), true);
-		
-		// Cargar el proceso de importacion
-		$this->loadProcess();
-		
-		// Crear el mapper
-		$this->fieldmapper = new SelectedFieldsMapper;
-		$this->log->log('Position fields for mapping object: [' . print_r($posCol, true) . ']');
-
 		try {
-			$this->fieldmapper->setDbase($dbase);
-			$this->fieldmapper->assignMapping($posCol);
-			$this->fieldmapper->setDateFormat($this->dateformat);
-			$this->fieldmapper->processMapping();
-		} catch (Exception $ex) {
-			$this->updateProcessStatus('Importacion no realizada');
+			ini_set('auto_detect_line_endings', '1');
+			$mode = $this->account->accountingMode;
+
+			$this->dateformat = $dateformat;
+
+			$this->resetProcess();
+			$this->timer->startTimer('all-import', 'Import process');
+
+			// Cual es el proposito de esto?
+			// Controlar la importacion de contactos para que no exceda el limite
+			// ?
+			$this->timer->startTimer('phase1', 'Prepare to import!');
+			if ($mode == "Contacto") {
+				$contactLimit = $this->account->contactLimit;
+				$activeContacts = $this->account->countActiveContactsInAccount();
+			} else {
+				$contactLimit = 1;
+				$activeContacts = 0;
+			}
+
+			// Buscar la lista de contactos
+			$list = Contactlist::findFirstByIdContactlist($this->idContactlist);
+			// Buscar la base de datos
+			$dbase = Dbase::findFirstByIdDbase($list->idDbase);
+
+			// En que formato se presentan los campos (de que forma esta codificado
+			//esto?
+			$posCol = json_decode(json_encode($fields), true);
+
+			// Cargar el proceso de importacion
+			$this->loadProcess();
+
+			// Crear el mapper
+			$this->fieldmapper = new SelectedFieldsMapper;
+			$this->log->log('Position fields for mapping object: [' . print_r($posCol, true) . ']');
+
+			try {
+				$this->fieldmapper->setDbase($dbase);
+				$this->fieldmapper->assignMapping($posCol);
+				$this->fieldmapper->setDateFormat($this->dateformat);
+				$this->fieldmapper->processMapping();
+			} catch (Exception $ex) {
+				$this->updateProcessStatus('Importacion no realizada');
+				$this->saveProcess();
+
+				throw new \InvalidArgumentException("Error al crear objeto de mapeo de columnas: [{$ex->getMessage()}]");
+			}
+
+			$this->updateProcessStatus('En Ejecucion');
 			$this->saveProcess();
 
-			throw new \InvalidArgumentException("Error al crear objeto de mapeo de columnas: [{$ex->getMessage()}]");
+			$this->timer->endTimer('phase1');
+
+			$this->timer->startTimer('phase2', 'Create values to import!');
+
+			$this->createTemporaryTable();
+
+			// Creacion de contactos utilizando LOAD DATA INFILE
+			// Preprocesando el archivo CSV
+			$this->importDataFromCSV($destiny, $header, $delimiter, $activeContacts, $contactLimit, $mode, $dbase);
+
+			$this->timer->endTimer('phase2');
+
+			$this->timer->startTimer('phase3', 'Update counters!');
+			$dbase->updateCountersInDbase();
+			$list->updateCountersInContactlist();
+			$this->timer->endTimer('phase3');
+
+			$this->destroyTemporaryTable();
+
+			$swrapper = new SegmentWrapper;
+
+			// Recrear los segmentos de esta base de datos para tener en cuenta los nuevos contactos importados
+			$this->timer->startTimer('phase5', 'Recreate segments!');
+			$swrapper->recreateSegmentsInDbase($dbase->idDbase);		
+			$this->timer->endTimer('phase5');
+
+			$this->timer->endTimer('all-import');
 		}
-
-		$this->updateProcessStatus('En Ejecucion');
-		$this->saveProcess();
-		
-		$this->timer->endTimer('phase1');
-
-		$this->timer->startTimer('phase2', 'Create values to import!');
-		
-		$this->createTemporaryTable();
-		
-		// Creacion de contactos utilizando LOAD DATA INFILE
-		// Preprocesando el archivo CSV
-		$this->importDataFromCSV($destiny, $header, $delimiter, $activeContacts, $contactLimit, $mode, $dbase);
-				
-		$this->timer->endTimer('phase2');
-
-		$this->timer->startTimer('phase3', 'Update counters!');
-		$dbase->updateCountersInDbase();
-		$list->updateCountersInContactlist();
-		$this->timer->endTimer('phase3');
-		
-		$this->destroyTemporaryTable();
-		
-		$swrapper = new SegmentWrapper;
-		
-		// Recrear los segmentos de esta base de datos para tener en cuenta los nuevos contactos importados
-		$this->timer->startTimer('phase5', 'Recreate segments!');
-		$swrapper->recreateSegmentsInDbase($dbase->idDbase);		
-		$this->timer->endTimer('phase5');
-		
-		$this->timer->endTimer('all-import');
+		catch (\InvalidArgumentException $e) {
+			$this->destroyTemporaryTable();
+			$this->updateProcessStatus('Cancelado');
+			$this->saveProcess();
+		}
+		catch (\Exception $e) {
+			$this->destroyTemporaryTable();
+			$this->updateProcessStatus('Cancelado');
+			$this->saveProcess();
+		}
 	}
 	
 	
