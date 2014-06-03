@@ -37,39 +37,24 @@ DateBlock.prototype.designField = function() {
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
-						<form class="field-content-zone form-inline mbottom-15' + hide + '" role="form">\n\
+						<div class="form-group field-content-zone ' + hide + '">\n\
 							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name control-label">\n\
 								' + required + this.name + ':\n\
 							</label>\n\
-							<div class="form-group">\n\
-								<label class="sr-only"></label>\n\
-								<div class="col-md-12 col-sm-12 col-xs-2">\n\
-									<select class="form-control select-day-number-form">' + days + '</select>\n\
+							<div class="col-md-7 col-sm-8 col-xs-7">\n\
+								<div class="input-group date date_view_picker group-datepicker">\n\
+									<input class="form-control" readonly="readonly" type="text">\n\
 								</div>\n\
 							</div>\n\
-							<div class="form-group">\n\
-								<label class="sr-only"></label>\n\
-								<div class="col-md-12 col-sm-12 col-xs-4">\n\
-									<select class="form-control select-month-number-form">' + months + '</select>\n\
-								</div>\n\
+							<div class="btn-group">\n\
+								<a class="btn btn-default btn-sm edit-field">\n\
+									<span class="glyphicon glyphicon-pencil"></span>\n\
+								</a>\n\
+								<a class="btn btn-default btn-sm delete-field">\n\
+									<span class="glyphicon glyphicon-trash"></span>\n\
+								</a>\n\
 							</div>\n\
-							<div class="form-group">\n\
-								<label class="sr-only"></label>\n\
-								<div class="col-md-8 col-sm-9 col-xs-2">\n\
-									<input type="text" class="form-control select-year-number-form">\n\
-								</div>\n\
-							</div>\n\
-							<div class="form-group">\n\
-								<div class="btn-group margin-top-left">\n\
-									<a class="btn btn-default btn-sm edit-field">\n\
-										<span class="glyphicon glyphicon-pencil"></span>\n\
-									</a>\n\
-									<a class="btn btn-default btn-sm delete-field">\n\
-										<span class="glyphicon glyphicon-trash"></span>\n\
-									</a>\n\
-								</div>\n\
-							</div>\n\
-						</form>\n\
+						</div>\n\
 					</div>');
 	this.zone.createFieldInZone(this);
 	this.content.data('smobj', this);
@@ -79,6 +64,15 @@ DateBlock.prototype.designField = function() {
 
 DateBlock.prototype.startFieldEvents = function() {
 	var t = this;
+	
+	this.content.find('.date_view_picker').datetimepicker({
+		format:'d/m/Y',
+		inline:true,
+		timepicker:false,
+		lang:'es',
+		startDate: 0
+	});
+	
 	this.content.find('.edit-field').on('click', function(){
 		t.zone.editField(t);	
 	});

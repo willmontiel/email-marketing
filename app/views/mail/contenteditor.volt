@@ -37,7 +37,6 @@
 	
 	function verHTML() {
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
-		$('#preview-modal').modal('show');
 		$.ajax({
 			url: "{{url('mail/previeweditor')}}/" + idMail,
 			type: "POST",			

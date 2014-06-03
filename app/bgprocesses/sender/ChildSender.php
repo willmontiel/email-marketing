@@ -6,10 +6,11 @@ $child = ChildProcess::getSenderChild();
 
 $child->startProcess();
 
-class ChildSender extends childProcess
+class ChildSender extends ChildProcess
 {
 	public function executeProcess($data) 
 	{
+		$this->pingDatabase();
 		$communication = new ChildCommunication();
 		$communication->setSocket($this);
 		$communication->startProcess($data);

@@ -9,6 +9,7 @@ class ChildImport extends ChildProcess
 {
 	public function executeProcess($data)
 	{
+		$this->pingDatabase();
 		$arrayDecode = json_decode($data);
 	
 		$idContactlist = $arrayDecode->idContactlist;
@@ -30,7 +31,7 @@ class ChildImport extends ChildProcess
 		$wrapper->setIpaddress($ipaddress);
 		$wrapper->startImport($fields, $destiny, $dateformat, $delimiter, $header);
 	}
-	
+
 	public function publishToChildren()
 	{
 		return SocketConstants::getImportPub2ChildrenEndPoint();

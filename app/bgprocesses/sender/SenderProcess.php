@@ -1,5 +1,6 @@
 <?php
-class SenderProcess extends ProcessAbstract {
+class SenderProcess extends ProcessAbstract 
+{
 	
 	public function getPublisherToChildrenSocket()
 	{
@@ -24,5 +25,3 @@ class SenderProcess extends ProcessAbstract {
 		$this->pool->createInitialChildren();
 	}
 }
-
-?>

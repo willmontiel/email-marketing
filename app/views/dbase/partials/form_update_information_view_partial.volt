@@ -151,8 +151,13 @@
 	</div>
 </div>
 <div class="create-email-spot">
-	<div class="title-advanced-editor">
-	</div>
+	<form class="form-inline" role="form">
+		<div class="title-advanced-editor form-group">
+		</div>
+		<div class="form-group">
+			<a class="btn btn-default extra-padding" data-toggle="modal" href="#preview-modal" onClick="verHTML()"><span class="glyphicon glyphicon-search"></span> Previsualizar</a>
+		</div>
+	</form>
 	<div class="here-comes-frame">
 	</div>
 	<div class="advanced-editor-buttons pull-right">
@@ -160,4 +165,20 @@
 		<button id="btn-for-updatenotify" class="btn btn-sm btn-default btn-guardar extra-padding btn-form-email-creator-save" {{ '{{action "create_notify_contact_mail" this}}' }} >Guardar</button>
 		<button id="btn-for-notify" class="btn btn-sm btn-default btn-guardar extra-padding btn-form-email-creator-save" {{ '{{action "create_notify_mail" this}}' }} >Guardar</button>
 	</div>
+</div>
+
+<div class="modal fade" id="preview-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-prevew-width">
+	<div class="modal-content modal-prevew-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel">Previsualización de plantilla</h4>
+		  </div>
+	  <div class="modal-body modal-prevew-body" id="modal-body-preview">
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+	  </div>
+	</div>
+  </div>
 </div>

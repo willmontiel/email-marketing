@@ -6,7 +6,7 @@
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		function checkUnfinishedImports() {
 			{%for res in result%}
-				if('{{res['status']}}' !== 'Finalizado') {
+				if('{{res['status']}}' !== 'Finalizado' && '{{res['status']}}' !== 'Cancelado') {
 					loadNow('{{res['idProcess']}}');
 				}	
 			{%endfor%}
@@ -67,9 +67,15 @@
 			<div class="row">
 				<div class="well relative">
 					<p>Importación de archivo: <strong>{{res['name']}}</strong></p>
-					{%if res['status'] != "Finalizado"%}
+					{%if res['status'] != "Finalizado" and res['status'] != "Cancelado"%}
 						<p id="status-progress-{{res['idProcess']}}"></p>
 						<div id="progress-bar-{{res['idProcess']}}" class="progress progress-striped active"></div>
+					{% elseif res['status'] == "Cancelado" %}
+						<div class="progress">
+							<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+								<span class="sr-only">{{res['status']}}</span>
+							</div>
+						</div>
 					{% endif %}
 
 					<p id="status-title-{{res['idProcess']}}">Estado: {{res['status']}}</p>

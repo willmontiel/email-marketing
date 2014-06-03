@@ -62,7 +62,6 @@
 			{%endfor%}
 		];
 		
-		console.log(cData)
 		$(function () {
 			var container = $('#container');
 			createHighPieChart(container, cData);
