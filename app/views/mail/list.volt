@@ -54,16 +54,19 @@
 						<tr>
 							<td>
 								<div class="preview-mail img-wrap">
+									<a href="#preview-modal" data-toggle="modal" onClick="verPreview({{item.idMail}});">
+										<div class="not-available">
 									{% if item.previewData == null%}
-										<div class="not-available"></div>
+											<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+											<label>Previsualización no disponible</label>
 									{% else %}
-										<a href="#preview-modal" data-toggle="modal" onClick="verPreview({{item.idMail}})">
 											<img src="data: image/png;base64, {{item.previewData}}" />
-											<div class="img-info">
-												<p>Previsualizar</p>
-											</div>
-										</a>
 									{% endif %}	
+											<div class="img-info">
+												<p style="font-size: 18px;">Previsualizar</p>
+											</div>
+										</div>
+									</a>
 								</div>
 							</td>
 							<td>
@@ -103,7 +106,7 @@
 								</dl>
 								{%endif%}
 							</td>
-							<td>
+							<td class="text-right">
 								<div class="">
 									{%if item.status == 'Scheduled'%}
 										<button class="ShowDialogEditScheduled btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">Pausar</button>

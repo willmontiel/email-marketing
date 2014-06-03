@@ -54,10 +54,10 @@
 			<div class="col-md-6 text-right">
 				<select id="dbasestocompare" class="form-control">
 					{%for cdb in compareDbase %}
-						<option value="{{cdb.id}}">
-							{%if cdb.id == dbase2.idDbase%}
+						<option value="{{cdb.id}}"
+							{%if cdb.id == compare2.idDbase%}
 								selected
-							{%endif%}
+							>{%endif%}
 						{{cdb.name}}</option>
 					{%endfor%}
 				</select>

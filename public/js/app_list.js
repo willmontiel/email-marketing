@@ -112,7 +112,7 @@ App.ListsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 	
 	actions: {
 		save: function(){
-			if(this.get('name') == null || this.get('name') == ''){
+			if(this.get('name') === null || this.get('name') === ''){
 				this.set('errors.errormsg', 'El nombre de la lista es requerido');
 				this.transitionToRoute('lists.new');
 			}

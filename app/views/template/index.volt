@@ -50,21 +50,25 @@
 							<div class="thumbnails">
 								<div class="row">
 									{% for t in template %}
-									<div class="item-thumb col-xs-6 col-md-3">
+									<div class="item-thumb col-xs-6 col-md-5 col-lg-4">
 										<div class="container-fluid">
 											<h5>{{t['name']}}</h5>
-											<div class="preview-template img-wrap">
-												{% if t['preview'] == null%}
-													<div class="not-available-template"></div>
-												{% else %}
-													<img src="data: image/png;base64, {{t['preview']}}" />
-												{%endif%}
-												<a href="{{url('mail/contenteditor')}}/{{ (t['idMail'] != null)?t['idMail']:'template'}}/{{  t['id']  }}">
-													<div class="img-info-x2"><p><i class="icon-ok"></i> Elegir</p></div>
-												</a>
+											<div class="preview-mail img-wrap">
+												<div class="not-available">
+													{% if t['preview'] == null%}
+														<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+														<label>Previsualización no disponible</label>
+													{% else %}
+														<img src="data: image/png;base64, {{t['preview']}}" />
+													{%endif%}
+													<a href="{{url('mail/contenteditor')}}/{{ (t['idMail'] != null)?t['idMail']:'template'}}/{{  t['id']  }}">
+														<div class="img-info"><p style="font-size: 18px;"><i class="icon-ok"></i> Elegir</p></div>
+													</a>
+												</div>
 											</div>
 											<div class="clearfix"></div>
-											<div class="btn-group">
+											<div class="space"></div>
+											<div class="btn-group"  style="text-align: center;">
 												<button class="btn btn-default" onClick="preview({{t['id']}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
 													<span class="glyphicon glyphicon-eye-open"></span>
 												</button>
@@ -163,7 +167,12 @@
 			</div>
 		</div>
 	</div>
-
+	
+	<div class="space"></div>
+	<div class="clearfix"></div>
+	
+	<div class="space"></div>
+	<div class="space"></div>
 	
 	<script type="text/javascript">
 		$(document).on("click", ".ShowDialog", function () {

@@ -324,15 +324,16 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		if (!schedule) {
 			return true;
 		}
-
-		var date = moment(schedule, "DD-MM-YYYY HH:mm");
+		
+		var date = moment(schedule, "DD-MM-YYYY HH:mm").lang('es');
 		var day = date.date();
 		var m = date.month() + 1;
-		var month = moment('' + m).format('MMMM');
+		var month = moment('' + m).lang('es').format('MMMM');
 		var year = date.year();
-		var hour = date.hour();
+		var hour = '' + date.hour();
+		hour = (hour.length === 1)? '0' + hour: hour;
 		var minutes = '' + date.minute();
-		minutes = (minutes.length === 1)? '0' + minutes:minutes;
+		minutes = (minutes.length === 1)? '0' + minutes: minutes;
 		
 		var time = hour + ':' + minutes;
 		
@@ -699,9 +700,9 @@ App.DateTimePicker = Em.View.extend({
 //			minTime: 0,
 			startDate: 0,
 //			allowTimes:[
-//				'7:00', '7:15', '7:30', '7:45',
-//				'8:00', '8:15', '8:30', '8:45',
-//				'9:00', '9:15', '9:30', '9:45',
+//				'07:00', '07:15', '07:30', '07:45',
+//				'08:00', '08:15', '08:30', '08:45',
+//				'09:00', '09:15', '09:30', '09:45',
 //				'10:00', '10:15', '10:30', '10:45',
 //				'11:00', '11:15', '11:30', '11:45',
 //				'12:00', '12:15', '12:30', '12:45',

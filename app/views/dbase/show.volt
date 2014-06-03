@@ -133,56 +133,54 @@
 		<div class="pull-right">
 			{{'{{#link-to "fields.add" class="btn btn-default btn-sm extra-padding" disabledWhen="createDisabled"}}<span class="glyphicon glyphicon-plus"></span> Agregar campo{{/link-to}}'}}
 		</div>
+		<div class="clearfix"></div>
+		<div class="space"></div>
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<td>Etiqueta</td>
-					<td>Tipo</td>
-					<td>Requerido</td>
-					<td>Valor por defecto</td>
-					<td>Acción</td>
+					<th>Etiqueta</th>
+					<th>Tipo</th>
+					<th>Requerido</th>
+					<th>Valor por defecto</th>
+					<th>Acción</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
+				<tr class="primary-field">
 					<td>Email</td>
 					<td>Text</td>
 					<td>
-						<div class="icheckbox_flat-aero checked hover">
-						</div>
+						<input type="checkbox" checked="checked" disabled="disabled">
 					</td>
-					<td></td>
-					<td></td>
+					<td> ------ </td>
+					<td> ------ </td>
 				</tr>
-				<tr>
+				<tr class="primary-field">
 					<td>Nombre</td>
 					<td>Text</td>
 					<td>
-						<div class="icheckbox_flat-aero hover">
-						</div>
+						<input type="checkbox" disabled="disabled">
 					</td>
-					<td></td>
-					<td></td>
+					<td> ------ </td>
+					<td> ------ </td>
 				</tr>
-				<tr>
+				<tr class="primary-field">
 					<td>Apellido</td>
 					<td>Text</td>
 					<td>
-						<div class="icheckbox_flat-aero hover">
-						</div>
+						<input type="checkbox" disabled="disabled">
 					</td>
-					<td></td>
-					<td></td>
+					<td> ------ </td>
+					<td> ------ </td>
 				</tr>
-				<tr>
+				<tr class="primary-field">
 					<td>Fecha de nacimiento</td>
 					<td>Date</td>
 					<td>
-						<div class="icheckbox_flat-aero hover">
-						</div>
+						<input type="checkbox" disabled="disabled">
 					</td>
-					<td></td>
-					<td></td>
+					<td> ------ </td>
+					<td> ------ </td>
 				</tr>
 			{{'{{#each model}}'}}
 				<tr>
@@ -190,14 +188,18 @@
 					<td>{{'{{type}}'}}</td>
 					<td>
 						{{ '{{#if required}}' }}
-							<div class="icheckbox_flat-aero checked hover">
-							</div>
+							<input type="checkbox" checked="checked" disabled="disabled">
 						{{ '{{else}}' }}
-							<div class="icheckbox_flat-aero hover">
-							</div>
+							<input type="checkbox" disabled="disabled">
 						{{ '{{/if}}' }}
 					</td>
-					<td>{{'{{defaultValue}}'}}</td>
+					<td>
+						{{ '{{#if defaultValue}}' }}
+							{{'{{defaultValue}}'}}
+						{{ '{{else}}' }}
+							 ------ 
+						{{ '{{/if}}' }}
+					</td>
 					<td>
 						{{ '{{#link-to "fields.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="ghyphicon ghyphicon-pencil"></span> Editar{{'{{/link-to}}'}}
 						{{'{{#link-to "fields.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-delete btn-sm extra-padding"}}'}}<span class="ghyphicon ghyphicon-trash"></span> Eliminar {{'{{/link-to}}'}}
@@ -236,7 +238,7 @@
 						<p>Actualizada en <strong>{{date('Y-m-d', sdbase.updatedon)}}</strong></p>
 					</td>
 					<td>
-					<td>
+					<td class="text-right">
 						<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
 						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><span class="glyphicon glyphicon-trash"></span> Eliminar </a>
 						<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span> Estadísticas</a>

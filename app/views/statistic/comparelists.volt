@@ -62,7 +62,7 @@
 			<select id="liststocompare" class="form-control">
 				{%for clt in compareList %}
 					<option value="{{clt.id}}"
-						{%if clt.id == List2.idContactlist%}
+						{%if clt.id == compare2.idContactlist%}
 							selected
 						{%endif%}
 					>{{clt.name}}</option>
