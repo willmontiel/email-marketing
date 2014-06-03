@@ -20,7 +20,7 @@ class FlashMessageForm extends Form
         )));
 		
 		$this->add(new TextArea('message', array(
-			'maxlength' => 200,
+			'maxlength' => 1000,
 			'type' => 'text',
 			'rows' => 3,
 			'required' => 'required' ,

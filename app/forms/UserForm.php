@@ -54,7 +54,7 @@ class UserForm extends Form
 		
         $this->add(new Select("userrole", array(
             'ROLE_ADMIN' => 'Administrador de la cuenta',
-			'ROLE_USER' => 'Usuario estandár'
+			'ROLE_USER' => 'Usuario estándar'
 			), array(
 			'class' => 'form-control'
 		)));
