@@ -129,10 +129,14 @@
 			{{ "{{outlet}}" }}
 		</div>
 	</script>
-	<script type="text/x-handlebars" data-template-name="fields/index">       
-		<div class="pull-right">
-			{{'{{#link-to "fields.add" class="btn btn-default btn-sm extra-padding" disabledWhen="createDisabled"}}<span class="glyphicon glyphicon-plus"></span> Agregar campo{{/link-to}}'}}
+	<script type="text/x-handlebars" data-template-name="fields/index">      
+		<div class="bs-callout bs-callout-info">
+			Cree hasta 10 campos personalizados, para completar información de sus contactos
+			<div class="text-right">
+				{{'{{#link-to "fields.add" class="btn btn-default btn-sm extra-padding" disabledWhen="createDisabled"}}<span class="glyphicon glyphicon-plus"></span> Agregar campo{{/link-to}}'}}
+			</div>
 		</div>
+		
 		<div class="clearfix"></div>
 		<div class="space"></div>
 		<table class="table table-striped">
