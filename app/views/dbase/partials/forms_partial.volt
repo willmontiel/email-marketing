@@ -185,4 +185,23 @@
 			});
 		});
 	}
+	
+	function verHTML() {
+		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+		$.ajax({
+			url: "{{url('template/previewtemplate')}}",
+			type: "POST",			
+			data: { editor: editor},
+			error: function(msg){
+				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
+			},
+			success: function() {
+				$("#modal-body-preview").empty();
+				$('#modal-body-preview').append($('<iframe frameborder="0" width="100%" height="100%" src="{{url('template/previewdata')}}"/>'));
+			
+			}
+		});
+		
+		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
+	}
 </script>

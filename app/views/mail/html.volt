@@ -35,7 +35,6 @@
 			type: "POST",			
 			data: { html: inf},
 			error: function(msg){
-				console.log(msg);
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg.statusText, sticky: false, time: 10000});
 			},
 			success: function(response) {
@@ -44,7 +43,6 @@
 				$('<iframe frameborder="0" width="100%" height="100%" src="{{url('mail/previewdata')}}"/>').appendTo('#preview-modal');
 			
 				//var r = response.response;
-				//console.log(inf);
 				//$( "#content-template" ).empty();
 				//$('<iframe frameborder="0" width="100%" height="390px"/>').appendTo('#content-template').contents().find('body').append(r);
 			}

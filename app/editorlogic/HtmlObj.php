@@ -34,7 +34,6 @@ class HtmlObj extends HtmlAbstract
 						<script type="text/javascript" src="' . $this->path->get('js/html2canvas.js'). '"></script>
 						<script type="text/javascript" src="' . $this->path->get('js/jquery-1.8.3.min.js') .'"></script>';
 			$pr .= '<script>function createPreviewImage(img) {
-						console.log(img);
 						$.ajax({
 							url: "' . $this->url . '/' . $this->idMail .'",
 							type: "POST",			
