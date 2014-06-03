@@ -39,12 +39,12 @@ MultSlctBlock.prototype.designField = function() {
 								</select>\n\
 							</div>\n\
 							<div class="btn-group">\n\
-								<button class="btn btn-default btn-sm edit-field">\n\
+								<a class="btn btn-default btn-sm edit-field">\n\
 									<span class="glyphicon glyphicon-pencil"></span>\n\
-								</button>\n\
-								<button class="btn btn-default btn-sm delete-field">\n\
+								</a>\n\
+								<a class="btn btn-default btn-sm delete-field">\n\
 									<span class="glyphicon glyphicon-trash"></span>\n\
-								</button>\n\
+								</a>\n\
 							</div>\n\
 						</div>\n\
 					</div>');

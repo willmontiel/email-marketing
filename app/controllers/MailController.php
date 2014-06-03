@@ -1683,7 +1683,6 @@ class MailController extends ControllerBase
 						<script type="text/javascript" src="' . $this->url->get('js/jquery-1.8.3.min.js') .'"></script>
 						<script>
 							function createPreviewImage(img) {
-							console.log(img);
 							$.ajax({
 								url: "' . $url . '/' . $idMail .'",
 								type: "POST",			

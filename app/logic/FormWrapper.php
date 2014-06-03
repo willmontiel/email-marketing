@@ -161,7 +161,7 @@ class FormWrapper extends BaseWrapper
 			if(!$cont->hide) {
 				switch ($cont->type) {
 					case 'Date':
-						$total+= 200;
+						$total+= 240;
 						break;
 					default:
 						$total+= 90;

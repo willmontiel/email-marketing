@@ -141,7 +141,6 @@ App.DrilldownBouncedRoute = Ember.Route.extend({
 /*Controllers*/
 App.DrilldownController = Ember.ObjectController.extend({
 	init: function() {
-//		console.log($('#select-options-for-compare'))
 	}
 });
 
@@ -332,7 +331,6 @@ App.TimeGraphView = Ember.View.extend({
 			}
 		}
 		catch(err){
-			console.log(err.message);
 		}
 	}			
 });

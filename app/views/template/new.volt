@@ -13,7 +13,6 @@
 
 	function verHTML() {
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
-		$('#preview-modal').modal('show');
 		$.ajax({
 			url: "{{url('template/previewtemplate')}}",
 			type: "POST",			
