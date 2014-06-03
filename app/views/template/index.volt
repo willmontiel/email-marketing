@@ -50,7 +50,7 @@
 							<div class="thumbnails">
 								<div class="row">
 									{% for t in template %}
-									<div class="item-thumb col-xs-6 col-md-3">
+									<div class="item-thumb col-xs-6 col-md-5 col-lg-4">
 										<div class="container-fluid">
 											<h5>{{t['name']}}</h5>
 											<div class="preview-mail img-wrap">
