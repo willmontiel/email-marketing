@@ -654,8 +654,9 @@ class ApiController extends ControllerBase
 			$lists = $wrapper->createContactlist($contents);
 		}
 		catch (InvalidArgumentException $e) {
+			$error = $wrapper->getFieldErrors();
 			$this->traceFail("Error Create contact list, USER: {$this->user->idUser}/{$this->user->username}");
-			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('errors' =>  $error['name']), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
@@ -674,12 +675,10 @@ class ApiController extends ControllerBase
 	 */
 	public function listseditAction($idContactlist)
 	{
-		$log = $this->logger;
-		
 		$contentsraw = $this->request->getRawBody();
-		$log->log('Got this: [' . $contentsraw . ']');
+//		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
-		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+//		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->list;
@@ -689,12 +688,13 @@ class ApiController extends ControllerBase
 			$mensaje = $wrapper->updateContactList($contents, $idContactlist);
 		}
 		catch (InvalidArgumentException $e) {
-			$this->traceFail("Error editing contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
-			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
+			$error = $wrapper->getFieldErrors();
+			return $this->setJsonResponse(array('errors' =>  $error['error']), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
 			$this->traceFail("Error editing contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
-			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al actualizar lista de contactos')), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('errors' => array('Ha ocurrido un error, por favor contacte al administrador'), 500));
 		}
 		
 		$list = $mensaje['list'];

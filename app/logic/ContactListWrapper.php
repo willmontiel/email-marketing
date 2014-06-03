@@ -60,10 +60,16 @@ class ContactListWrapper extends BaseWrapper
 			$this->addFieldError('name', 'El nombre de la lista de contactos es requerido!');
 			throw new InvalidArgumentException('El nombre de la lista de contactos es requerido!');
 		}
-		$cnt = Contactlist::countContactListsInAccount($this->account, 'Contactlist.name = :name:', array('name' => $contents->name));
-
-		if($cnt != 0) {
-			$this->addFieldError('name', 'Este nombre de lista ya existe en la base de datos seleccionada');
+//		$cnt = Contactlist::countContactListsInAccount($this->account, 'Contactlist.name = :name:', array('name' => $contents->name));
+		
+		$contactlist = Contactlist::findFirst(array(
+			'conditions' => 'name = ?1 AND idDbase = ?2',
+			'bind' => array(1 => $contents->name,
+							2 => $contents->dbase)
+		));
+		
+		if($contactlist) {
+			$this->addFieldError('name', 'Ya existe una lista de contactos con este mismo nombre en la base de datos, por favor verifique la información');
 			throw new InvalidArgumentException('Nombre de lista de contacto duplicado');
 		}
 		
@@ -163,14 +169,25 @@ class ContactListWrapper extends BaseWrapper
 		
 		if (!$contactList) {
 			throw new \InvalidArgumentException('Lista no encontrada en la base de datos!');
-			$this->addFieldError('Lista', 'No se encuentra la lista en la base de datos');
+			$this->addFieldError('error', 'No se encuentra la lista en la base de datos');
 		}
-		
 		else {
-			$mensaje = $this->assignDataToContactList($contents, $contactList);
+			$othercl = Contactlist::findFirst(array(
+				'conditions' => 'name = ?1 AND idDbase = ?2',
+				'bind' => array(1 => $contents->name, 
+								2 => $contactList->idDbase)
+			));
+			
+			if ($othercl) {
+				$this->addFieldError('error', 'Ya existe una lista de contactos con este mismo nombre en la base de datos, por favor verifique la información');
+				throw new \InvalidArgumentException('Nombre de lista de contacto duplicado');
+			}
+			
+			$this->assignDataToContactList($contents, $contactList);
 		
 			if(!$contactList->save()){
-				return array('lists' => 'errror');
+				$this->addFieldError('error', 'Ha ocurrido un error, por favor contacte al administrador');
+				throw new InvalidArgumentException('Error, while updating contactlist');
 			}
 			else{
 				return array('list' => self::convertListToJson($contactList, $contactList->dbase->account));
