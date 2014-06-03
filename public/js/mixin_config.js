@@ -3,7 +3,6 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 	 * Cuando hay un error muestra un gritter y luego redirige a "troute"
 	 */
 	handleSavePromise: function(p, troute, message, fn) {
-//		console.log('Manejando promesa');
 		this.actuallyHandlePromise(p, troute, message, fn, this.showGritter, false);
 	},
 
@@ -11,7 +10,6 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 	 * Cuando hay un error lo graba en App.errormessage y luego redirige a "troute"
 	 */
 	handleSavePromiseAppError: function(p, troute, message, fn) {
-//		console.log('Manejando promesa');
 		this.actuallyHandlePromise(p, troute, message, fn, this.showAppError, false);
 	},
 
@@ -20,7 +18,6 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 	 * Cuando hay un error muestra un gritter pero NO redirige a "troute"
 	 */
 	handleSavePromiseNoRollback: function(p, troute, message, fn) {
-//		console.log('Manejando promesa');
 		this.actuallyHandlePromise(p, troute, message, fn, this.showGritter, true);
 	},
 
@@ -28,7 +25,6 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 	 * Cuando hay un error lo graba en App.errormessage pero NO redirige a "troute"
 	 */
 	handleSavePromiseAppErrorNoRollback: function(p, troute, message, fn) {
-//		console.log('Manejando promesa');
 		this.actuallyHandlePromise(p, troute, message, fn, this.showAppError, true);
 	},
 
@@ -36,7 +32,6 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 	 * Este es el metodo que realmente hace el manejo de las promesas
 	 */
 	actuallyHandlePromise: function(p, troute, message, fn, callmeback, norollback) {
-//		console.log('Manejando promesa DE VERDAD!');
 		var self = this;
 
 		p.then(function() {
