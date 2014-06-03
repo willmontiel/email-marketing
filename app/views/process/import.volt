@@ -6,7 +6,7 @@
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		function checkUnfinishedImports() {
 			{%for res in result%}
-				if('{{res['status']}}' !== 'Finalizado') {
+				if('{{res['status']}}' !== 'Finalizado' && '{{res['status']}}' !== 'Cancelado') {
 					loadNow('{{res['idProcess']}}');
 				}	
 			{%endfor%}
