@@ -16,18 +16,23 @@
 					switch (data.status) {
 						case 'Preprocesando registros':
 							$('#1').toggleClass("blue");
+							$('#1-loading').empty();
+							$('#1-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.png" height="30" width="30">');
 							break;
 							
 						case 'Mapeando contactos':
 							$('#1').toggleClass("green");
 							$('#2').toggleClass("blue");
+							$('#2-loading').empty();
+							$('#2-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.png" height="30" width="30">');
 							break;
 							
 						case 'Cargando registros en base de datos':
-							console.log("LALA");
 							$('#1').toggleClass("green");
 							$('#2').toggleClass("green");
 							$('#3').toggleClass("blue");
+							$('#3-loading').empty();
+							$('#3-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.png" height="30" width="30">');
 							break;
 							
 						case 'Actuaizando campos personalizados':
@@ -35,6 +40,8 @@
 							$('#2').toggleClass("green");
 							$('#3').toggleClass("green");
 							$('#4').toggleClass("blue");
+							$('#4-loading').empty();
+							$('#4-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.png" height="30" width="30">');
 							break;
 							
 						case 'Finalizado':
@@ -43,6 +50,8 @@
 							$('#3').toggleClass("green");
 							$('#4').toggleClass("green");
 							$('#5').toggleClass("green");
+							$('#5-loading').empty();
+							$('#4-loading').append('<span class="glyphicon glyphicon-ok-circle"></span>');
 							$('#details').show();
 							break;
 					}
@@ -69,32 +78,32 @@
 	<div class="row">
 		<div class="col-sm-8 col-sm-offset-2">
 			<table class="table table-contacts report-import table-condensed table-striped">
-				<tr id="1" class="blue">
-					<td><img src="{{url('')}}images/loading1.gif" height="30" width="30"></td>
+				<tr id="1" class="red">
+					<td><div id="1-loading"></div></td>
 					<td>Validando registros</td>
 					<td>En proceso</td>
 				</tr>
 				
 				<tr id="2" class="red">
-					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
+					<td><div id="2-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
 					<td>Mapeando contactos</td>
 					<td>Esperando</td>
 				</tr>
 				
 				<tr id="3" class="red">
-					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
+					<td><div id="3-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
 					<td>Cargando registros en la lista</td>
 					<td>Esperando</td>
 				</tr>
 				
 				<tr id="4" class="red">
-					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
+					<td><div id="4-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
 					<td>Actualizando campos personalizados</td>
 					<td>Esperando</td>
 				</tr>
 				
 				<tr id="5" class="red">
-					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
+					<td><div id="5-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
 					<td>Finalizado</td>
 					<td>Esperando</td>
 				</tr>
