@@ -51,22 +51,26 @@
 	<div class="row">
 		{% if result|length != 0 %}
 			<table class="table table-striped table-bordered">
-				<tr>
-					<td>Nombre del archivo</td>
-					<td>Estado</td>
-					<td></td>
-				</tr>
+				<thead>
+					<tr>
+						<th>Nombre del archivo</th>
+						<th>Estado</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
 			{%for res in result%}
-				<tr>
-					<td>{{res['name']}}</td>
-				{% if res['status'] == 'Finalizado' OR res['status'] == 'Cancelado'%}
-					<td>{{res['status']}}</td>
-				{% else %}
-					<td><div id="processing-{{res['idProcess']}}">{{res['status']}}</div></td>
-				{% endif %}
-					<td><a href="{{url('process/importdetail')}}/{{res['idProcess']}}">Ver detalles</a></td>
-				</tr>
+					<tr>
+						<td>{{res['name']}}</td>
+					{% if res['status'] == 'Finalizado' OR res['status'] == 'Cancelado'%}
+						<td>{{res['status']}}</td>
+					{% else %}
+						<td><div id="processing-{{res['idProcess']}}">{{res['status']}} <img src="{{url('')}}images/loading1.gif" height="30" width="30"></div></td>
+					{% endif %}
+						<td><a href="{{url('process/importdetail')}}/{{res['idProcess']}}">Ver detalles</a></td>
+					</tr>
 			{%endfor%}
+				</tbody>
 			</table>
 		{% else %}
 			<div class="bs-callout bs-callout-warning">
