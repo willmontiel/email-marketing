@@ -42,7 +42,7 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div id="processing">
-				<img src="{{url('')}}/images/loading1.gif" height="25" width="25">
+				<img src="{{url('')}}images/loading1.gif" height="25" width="25">
 			</div>
 		</div>
 	</div>
