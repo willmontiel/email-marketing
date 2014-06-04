@@ -28,6 +28,7 @@ class ProcessController extends ControllerBase
 			$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
 			$result[] = array(
 				"name" => $inputFile->originalName,
+				"status" => $process->status,
 				"idProcess" => $process->idImportproccess
 			);		
 		}
