@@ -2,9 +2,57 @@
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
-
+		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		
+		function checkUnfinishedImports() {
+			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
+				loadNow('{{process['idProcess']}}');
+			}	
+		}
 		
+		function loadNow (idProcess) {   
+			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
+				if(data.length !== 0) {
+					switch (data.status) {
+						case 'Preprocesando registros':
+							$('#1').toggleClass("blue");
+							break;
+							
+						case 'Mapeando contactos':
+							$('#1').toggleClass("green");
+							$('#2').toggleClass("blue");
+							break;
+							
+						case 'Cargando registros en la base de datos':
+							$('#1').toggleClass("green");
+							$('#2').toggleClass("green");
+							$('#3').toggleClass("blue");
+							break;
+							
+						case 'Actuaizando campos personalizados':
+							$('#1').toggleClass("green");
+							$('#2').toggleClass("green");
+							$('#3').toggleClass("green");
+							$('#4').toggleClass("blue");
+							break;
+							
+						case 'Finalizado':
+							$('#1').toggleClass("green");
+							$('#2').toggleClass("green");
+							$('#3').toggleClass("green");
+							$('#4').toggleClass("green");
+							$('#5').toggleClass("green");
+							$('#details').show();
+							break;
+					}
+				}
+			});
+		};
+		
+		$(function() {
+			loadNow('{{process['idProcess']}}');
+			setInterval(checkUnfinishedImports, 5000);
+		});
 	</script>
 {% endblock %}
 {% block content %}
@@ -17,43 +65,46 @@
 	<div class="row">
 		<div class="col-sm-8 col-sm-offset-2">
 			<table class="table table-contacts report-import table-condensed table-striped">
-				<tr class="green">
-					<td><span class="glyphicon glyphicon-ok-circle"></span></td>
-					<td>Validando registros</td>
-					<td>Hecho</td>
-				</tr>
-				
-				<tr class="blue">
+				<tr id="1" class="blue">
 					<td><img src="{{url('')}}images/loading1.gif" height="30" width="30"></td>
-					<td>Mapeando contactos</td>
+					<td>Validando registros</td>
 					<td>En proceso</td>
 				</tr>
 				
-				<tr class="red">
-					<td><span class="glyphicon glyphicon-remove-circle"></td>
+				<tr id="2" class="red">
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
+					<td>Mapeando contactos</td>
+					<td>Esperando</td>
+				</tr>
+				
+				<tr id="3" class="red">
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Cargando registros en la lista</td>
 					<td>Esperando</td>
 				</tr>
 				
-				<tr class="red">
-					<td><span class="glyphicon glyphicon-remove-circle"></td>
+				<tr id="4" class="red">
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Actualizando campos personalizados</td>
 					<td>Esperando</td>
 				</tr>
 				
-				<tr class="red">
-					<td><span class="glyphicon glyphicon-remove-circle"></td>
+				<tr id="5" class="red">
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Finalizado</td>
 					<td>Esperando</td>
 				</tr>
-				
+			
 				<tr>
 					<td colspan="3" class="text-center">
-						<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding btn-for-modal-accordion" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
-							Ver detalles
-						</a>
+						<div id="details" style="display: none;">
+							<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding btn-for-modal-accordion" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
+								Ver detalles
+							</a>
+						</div>
 					</td>
 				</tr>
+			
 			</table>
 		</div>
 	</div>

@@ -38,38 +38,10 @@ class ProcessController extends ControllerBase
 	
 	public function refreshimportAction($idImportprocess)
 	{
-		$process = Importproccess::findFirst(array(
-			"conditions" => "idImportproccess = ?1",
-			"bind" => array(1 => $idImportprocess),
-		));
+		$res = $this->getImportInfo($idImportprocess);
 		
-		$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
-		
-		$res = array();
-		if ($process && $inputFile) {
-			$count = array(
-				"linesprocess" => $process->processLines,
-				"exist" => $process->exist,
-				"invalid" => $process->invalid,
-				"bloqued" => $process->bloqued,
-				"limit" => $process->limitcontact,
-				"repeated" => $process->repeated
-			);
-
-			$res = array(
-				"name" => $inputFile->originalName,
-				"totalReg" => $process->totalReg,
-				"status" => $process->status,
-				"linesprocess" => $count['linesprocess'],
-				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
-				"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
-				"exist" => $count['exist'],
-				"invalid" => $count['invalid'],
-				"bloqued" => $count['bloqued'],
-				"limit" => $count['limit'],
-				"repeated" => $count['repeated'],
-				"idProcess" => $process->idImportproccess
-			);
+		if (!$res) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró información de importación');
 		}
 		
 		return $this->setJsonResponse($res);
@@ -222,19 +194,17 @@ class ProcessController extends ControllerBase
 		return $import;
 	}
 	
-	public function importdetailAction($idProcess)
+	protected function getImportInfo($idImportprocess)
 	{
 		$process = Importproccess::findFirst(array(
-			"conditions" => "idAccount = ?1 AND idImportproccess = ?2",
-			"bind" => array(1 => $this->user->account->idAccount,
-							2 => $idProcess),
+			"conditions" => "idImportproccess = ?1",
+			"bind" => array(1 => $idImportprocess),
 		));
 		
-		$result = array();
+		$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
 		
-		if ($process) {
-			$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
-
+		$res = array();
+		if ($process && $inputFile) {
 			$count = array(
 				"linesprocess" => $process->processLines,
 				"exist" => $process->exist,
@@ -244,7 +214,7 @@ class ProcessController extends ControllerBase
 				"repeated" => $process->repeated
 			);
 
-			$result[] = array(
+			$res = array(
 				"name" => $inputFile->originalName,
 				"totalReg" => $process->totalReg,
 				"status" => $process->status,
@@ -257,13 +227,21 @@ class ProcessController extends ControllerBase
 				"limit" => $count['limit'],
 				"repeated" => $count['repeated'],
 				"idProcess" => $process->idImportproccess
-			);		
+			);
 		}
 		
-		else {
+		return $res;
+	}
+
+
+	public function importdetailAction($idImportprocess)
+	{
+		$res = $this->getImportInfo($idImportprocess);
+		
+		if (!$res) {
 			return $this->response->redirect("error");
 		}
 		
-		$this->view->setVar("process", $result);
+		$this->view->setVar("process", $res);
 	}
 }
