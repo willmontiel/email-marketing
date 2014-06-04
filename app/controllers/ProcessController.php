@@ -25,33 +25,13 @@ class ProcessController extends ControllerBase
 		
 		$result = array();
 		foreach ($processes as $process) {
-			
 			$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
-
-			$count = array(
-				"linesprocess" => $process->processLines,
-				"exist" => $process->exist,
-				"invalid" => $process->invalid,
-				"bloqued" => $process->bloqued,
-				"limit" => $process->limitcontact,
-				"repeated" => $process->repeated
-			);
-
 			$result[] = array(
 				"name" => $inputFile->originalName,
-				"totalReg" => $process->totalReg,
-				"status" => $process->status,
-				"linesprocess" => $count['linesprocess'],
-				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
-				"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
-				"exist" => $count['exist'],
-				"invalid" => $count['invalid'],
-				"bloqued" => $count['bloqued'],
-				"limit" => $count['limit'],
-				"repeated" => $count['repeated'],
 				"idProcess" => $process->idImportproccess
 			);		
 		}
+		
 		$this->view->setVar("result", $result);
 	}
 	
