@@ -61,7 +61,7 @@
 		
 		
 		$(function() {
-			setInterval(checkUnfinishedImports(), 5000);
+			setInterval(checkUnfinishedImports, 5000);
 		});
 	</script>
 {% endblock %}
