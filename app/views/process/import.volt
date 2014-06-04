@@ -11,8 +11,18 @@
 				}	
 			{%endfor%}
 		}
+		
 		function loadNow (idProcess) {   
-			
+			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
+				if(data.length !== 0) {
+					$('#processing-' + data.idProcess).empty();
+					$('#processing-' + data.idProcess).append(data.status);
+					
+					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
+						location.reload(true);
+					}
+				}
+			});
 		};
 		
 		$(function() {
@@ -38,14 +48,6 @@
 	<div class="row">
 		<h4 class="sectiontitle">Lista de importaciones</h4>
 	</div>
-	
-	<div class="row">
-		<div class="col-sm-12">
-			<div id="processing">
-				<img src="{{url('')}}images/loading1.gif" height="25" width="25">
-			</div>
-		</div>
-	</div>
 
 	<div class="row">
 		{% if result|length != 0 %}
@@ -56,11 +58,19 @@
 					<td></td>
 				</tr>
 			{%for res in result%}
-				<tr>
-					<td>{{res['name']}}</td>
-					<td>{{res['status']}}</td>
-					<td><a href="{{url('')}}/{{res['idProcess']}}">Ver detalles</a></td>
-				</tr>
+				{% if res['status'] == 'Finalizado' OR res['status'] == 'Cancelado'%}
+					<tr>
+						<td>{{res['name']}}</td>
+						<td>{{res['status']}}</td>
+						<td><a href="{{url('')}}/{{res['idProcess']}}">Ver detalles</a></td>
+					</tr>
+				{% else %}
+					<tr>
+						<td>{{res['name']}}</td>
+						<td><div id="processing-{{res['idProcess']}}"></div> <img src="{{url('')}}images/loading1.gif" height="40" width="40"></td>
+						<td><a href="{{url('')}}/{{res['idProcess']}}">Ver detalles</a></td>
+					</tr>
+				{% endif %}
 			{%endfor%}
 			</table>
 		{% else %}
