@@ -10,33 +10,55 @@
 			}	
 		}
 		
-		function update(x) {
+		function inProcess(x, text) {
 			$('#' + x).addClass("blue");
 			$('#' + x).empty();
-			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30"></td><td>Validando registros</td><td>En proceso</td>');
+			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>');
 		}
 		
-		function loadNow (idProcess) {   
+		function done(x, text) {
+			$('#' + x).addClass("green");
+			$('#' + x).empty();
+			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-circle"></span></td><td>' + text + '</td><td>Hecho</td>');
+		}
+		
+		function waiting(x, text) {
+			$('#' + x).addClass("red");
+			$('#' + x).empty();
+			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-remove"></span></td><td>' + text + '</td><td>Esperando</td>');
+		}
+		
+		function loadNow(idProcess) {   
 			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
 				if(data.length !== 0) {
 					switch (data.status) {
 						case 'Preprocesando registros':
-							update('1');
+							inProcess('1', 'Validando registros');
 							break;
 						case 'Mapeando contactos':
-							update('2');
+							done('2', 'Validando registros');
+							inProcess('2', 'Mapeando contactos');
 							break;
 							
 						case 'Cargando registros en base de datos':
-							update('3');
+							done('1', 'Validando registros');
+							done('2', 'Mapeando contactos');
+							inProcess('3', 'Cargando registros en la lista');
 							break;
 							
 						case 'Actuaizando campos personalizados':
-							update('4');
+							done('1', 'Validando registros');
+							done('2', 'Mapeando contactos');
+							done('3', 'Cargando registros en la lista');
+							inProcess('4', 'Actualizando campos personalizados');
 							break;
 							
 						case 'Finalizado':
-							update('5');
+							done('1', 'Validando registros');
+							done('2', 'Mapeando contactos');
+							done('3', 'Cargando registros en la lista');
+							done('4', 'Actualizando campos personalizados');
+							done('4', 'Finalizado');
 							break;
 					}
 				}
@@ -45,6 +67,7 @@
 		
 		
 		$(function() {
+			loadNow({{process['idProcess']}});
 			setInterval(checkUnfinishedImports, 5000);
 		});
 	</script>
