@@ -52,6 +52,9 @@
 		
 		$(function() {
 			loadNow('{{process['idProcess']}}');
+		});
+		
+		$(function() {
 			setInterval(checkUnfinishedImports, 5000);
 		});
 	</script>
