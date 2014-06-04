@@ -244,7 +244,7 @@ class ProcessController extends ControllerBase
 	public function importdetailAction($idProcess)
 	{
 		$process = Importproccess::findFirst(array(
-			"conditions" => "idAccount = ?1 AND idImportproccess",
+			"conditions" => "idAccount = ?1 AND idImportproccess = ?2",
 			"bind" => array(1 => $this->user->account->idAccount,
 							2 => $idProcess),
 		));
