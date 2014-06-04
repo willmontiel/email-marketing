@@ -17,14 +17,14 @@
 						case 'Preprocesando registros':
 							$('#1').toggleClass("blue");
 							$('#1-loading').empty();
-							$('#1-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.png" height="30" width="30">');
+							$('#1-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
 							
 						case 'Mapeando contactos':
 							$('#1').toggleClass("green");
 							$('#2').toggleClass("blue");
 							$('#2-loading').empty();
-							$('#2-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.png" height="30" width="30">');
+							$('#2-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
 							
 						case 'Cargando registros en base de datos':
@@ -32,7 +32,7 @@
 							$('#2').toggleClass("green");
 							$('#3').toggleClass("blue");
 							$('#3-loading').empty();
-							$('#3-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.png" height="30" width="30">');
+							$('#3-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
 							
 						case 'Actuaizando campos personalizados':
@@ -41,7 +41,7 @@
 							$('#3').toggleClass("green");
 							$('#4').toggleClass("blue");
 							$('#4-loading').empty();
-							$('#4-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.png" height="30" width="30">');
+							$('#4-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
 							
 						case 'Finalizado':
@@ -51,7 +51,7 @@
 							$('#4').toggleClass("green");
 							$('#5').toggleClass("green");
 							$('#5-loading').empty();
-							$('#4-loading').append('<span class="glyphicon glyphicon-ok-circle"></span>');
+							$('#5-loading').append('<span class="glyphicon glyphicon-ok-circle"></span>');
 							$('#details').show();
 							break;
 					}
