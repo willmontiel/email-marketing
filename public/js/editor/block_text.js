@@ -1,6 +1,6 @@
-function TxtBlock(row) {
+function TxtBlock(row, text) {
 	this.row = row;
-	this.content_text = $('<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>');
+	this.content_text = (text === undefined) ? $('<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>') : $(text);
 	this.background_color = "transparent";
 	this.border_width = 0;
 	this.border_color = "#FFFFFF";

@@ -61,7 +61,7 @@ DropzoneArea.prototype.addElementToZone = function() {
 		t.createHtmlElement('image-only', 'Imagen', 'Basic', new ImgBlock(row), row);
 		t.createHtmlElement('separator', 'Separador', 'Basic', new HrBlock(row), row);
 		t.createHtmlElement('social-share', 'Compartir Redes', 'Basic', new SShareBlock(row), row);
-		t.createHtmlElement('social-follow', 'Seguir Redes', 'Basic', new SFollowBlock(row), row);
+		t.createHtmlElement('social-follow', 'Seguir Redes', 'Basic',[new TxtBlock(row, '<p style="text-align: right;"><strong>Síguenos en&nbsp;</strong></p>'), new SFollowBlock(row)], row);
 		t.createHtmlElement('button', 'Botón', 'Basic', new BtnBlock(row), row);
 		
 		t.createHtmlElement('text-image', 'Texto - Imagen', 'Compound', [new TxtBlock(row), new ImgBlock(row)], row);
@@ -125,7 +125,7 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 			t.listofrows.push(row);
 			row.createRow();
 		}
-		if(category === 'Compound') {
+		if(block.length > 1) {
 			for(var i = 0; i < block.length; i++) {
 				row.addBlock(block[i]);
 			}

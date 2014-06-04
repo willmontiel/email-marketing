@@ -626,6 +626,10 @@ table {
 	background-color: #F74D4D;
 }
 
+.content-social-share.media-object, .content-social-follow.media-object {
+	min-height: 15px;
+}
+
 .edit-block, .remove-block {
 	position: absolute;
 	height: 25px;
@@ -962,7 +966,7 @@ table {
 .list-no-right-line {
 	border-right: none;
 }
-.soc_net_share {
+.soc_net_share, .soc_net_follow {
 	margin-right: 8px;
 }
 .social-toolbar-title, .social-toolbar-title {
@@ -1141,9 +1145,6 @@ table {
 .one-element hr {
 	border-style: inset;
 	border-width: 1px;
-}
-.content-social-follow {
-	width: 0;
 }
 .content-text-block {
 	position: absolute;
