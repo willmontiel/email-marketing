@@ -58,7 +58,8 @@
 							done('2', 'Mapeando contactos');
 							done('3', 'Cargando registros en la lista');
 							done('4', 'Actualizando campos personalizados');
-							done('4', 'Finalizado');
+							done('5', 'Finalizado');
+							$('#6').show();
 							break;
 					}
 				}
@@ -112,7 +113,7 @@
 					<td>Esperando</td>
 				</tr>
 			
-				<tr>
+				<tr id="6">
 					<td colspan="3" class="text-center">
 						<div id="details" style="display: none;">
 							<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding btn-for-modal-accordion" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
