@@ -28,7 +28,7 @@
 							break;
 							
 						case 'Cargando registros en base de datos':
-							update('1');
+							update('3');
 							break;
 							
 						case 'Actuaizando campos personalizados':
@@ -72,19 +72,19 @@
 				</tr>
 				
 				<tr id="3" class="red">
-					<td><div id="3-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Cargando registros en la lista</td>
-					<td><div id="3-status">Esperando</div></td>
+					<td>Esperando</td>
 				</tr>
 				
 				<tr id="4" class="red">
-					<td><div id="4-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Actualizando campos personalizados</td>
 					<td>Esperando</td>
 				</tr>
 				
 				<tr id="5" class="red">
-					<td><div id="5-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Finalizado</td>
 					<td>Esperando</td>
 				</tr>
