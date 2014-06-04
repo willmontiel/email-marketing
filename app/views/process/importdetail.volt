@@ -23,7 +23,7 @@
 							$('#2').toggleClass("blue");
 							break;
 							
-						case 'Cargando registros en la base de datos':
+						case 'Cargando registros en base de datos':
 							$('#1').toggleClass("green");
 							$('#2').toggleClass("green");
 							$('#3').toggleClass("blue");
