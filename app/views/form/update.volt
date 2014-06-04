@@ -7,24 +7,33 @@
 	{{ javascript_include('js/form_date_field.js') }}
 {% endblock %}
 {% block content %}
-<div class="row">
-	<div class="col-md-5">
-		<h4 class="sectiontitle">{{elements['title']}}</h4>
-		<form method="post" action="{{link}}" class="form-horizontal">
-			{% for element in elements['fields'] %}
-				<div class="form-group {{ element['hide'] }}">
-					<div class="col-md-3">
-						{{ element['label'] }}
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="{{url('')}}">Email Sigma</a>
+		</div>
+	</div>
+</nav>
+<div class="container">
+	<div class="row">
+		<div class="col-md-offset-3 col-md-7 col-sm-offset-3 col-sm-7 col-xs-offset-3 col-xs-7">
+			<h4 class="sectiontitle">{{elements['title']}}</h4>
+			<form method="post" action="{{link}}" class="form-horizontal">
+				{% for element in elements['fields'] %}
+					<div class="form-group {{ element['hide'] }}">
+						<div class="col-md-3 col-sm-3">
+							{{ element['label'] }}
+						</div>
+						<div class="col-md-8 col-sm-8">
+							{{ element['field'] }}
+						</div>
 					</div>
-					<div class="col-md-7">
-						{{ element['field'] }}
-					</div>
+				{% endfor %}
+				<div class="form-actions col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
+					<input type="submit" class="btn btn-sm btn-default btn-guardar extra-padding" value="{{elements['button']}}">
 				</div>
-			{% endfor %}
-			<div class="form-actions pull-right">
-				<input type="submit" class="btn btn-sm btn-default btn-guardar extra-padding" value="{{elements['button']}}">
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 </div>
 {% endblock %}
