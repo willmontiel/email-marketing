@@ -3,39 +3,7 @@
 	{{ super() }}
 	<script type="text/javascript">
 
-		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
-		function checkUnfinishedImports() {
-			{%for res in result%}
-				if('{{res['status']}}' !== 'Finalizado' && '{{res['status']}}' !== 'Cancelado') {
-					loadNow('{{res['idProcess']}}');
-				}	
-			{%endfor%}
-		}
 		
-		function loadNow (idProcess) {   
-			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
-				if(data.length !== 0) {
-					$('#processing-' + data.idProcess).empty();
-					$('#processing-' + data.idProcess).append(data.status);
-					
-					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
-						location.reload(true);
-					}
-				}
-			});
-		};
-		
-		$(function() {
-			setInterval(checkUnfinishedImports, 5000);
-			$('.btn-for-modal-accordion').on('click', function(){
-				if(($(this).text()).trim() === 'Ver detalles') {
-					$(this).text('Colapsar');
-				}
-				else {
-					$(this).text('Ver detalles');
-				}
-			});
-		});
 		
 	</script>
 {% endblock %}
@@ -43,12 +11,60 @@
 	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'import']) }}
 	
 	<div class="row">
+		<h4 class="sectiontitle">Lista de importaciones</h4>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			<table class="table table-contacts report-import table-condensed table-striped">
+				<tr class="green">
+					<td><span class="glyphicon glyphicon-ok-circle"></span></td>
+					<td>Validando registros</td>
+					<td>Hecho</td>
+				</tr>
+				
+				<tr class="blue">
+					<td><img src="{{url('')}}images/loading1.gif" height="30" width="30"></td>
+					<td>Mapeando contactos</td>
+					<td>En proceso</td>
+				</tr>
+				
+				<tr class="red">
+					<td><span class="glyphicon glyphicon-remove-circle"></td>
+					<td>Cargando registros en la lista</td>
+					<td>Esperando</td>
+				</tr>
+				
+				<tr class="red">
+					<td><span class="glyphicon glyphicon-remove-circle"></td>
+					<td>Actualizando campos personalizados</td>
+					<td>Esperando</td>
+				</tr>
+				
+				<tr class="red">
+					<td><span class="glyphicon glyphicon-remove-circle"></td>
+					<td>Finalizado</td>
+					<td>Esperando</td>
+				</tr>
+				
+				<tr>
+					<td colspan="3" class="text-center">
+						<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding btn-for-modal-accordion" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
+							Ver detalles
+						</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+	<div class="row">
 		<div class="col-sm-12">
-			<div id="collapseInfo-{{res['idProcess']}}" class="accordion-body collapse" style="height: 0px;">
+			<div id="collapseInfo" class="accordion-body collapse" style="height: 0px;">
 				<div class="container-fluid">
 					<div class="box">
 						<div class="box-content col-md-12">
-							<h4>Resumen de importación del archivo: nombre del archivo a la lista: {{res['name']}}</h4>
+							<h4>Resumen de importación del archivo: nombre del archivo a la lista: {{process['name']}}</h4>
 							
 							<table class="table table-contacts report-import table-condensed table-striped">
 								<thead>
@@ -62,7 +78,7 @@
 											Contactos totales en archivo
 										</td>
 										<td class="big-number text-right">
-											{{res['linesprocess']}}
+											{{process['linesprocess']}}
 										</td>
 									</tr>
 									<tr class="green">
@@ -70,10 +86,10 @@
 											<span class="glyphicon glyphicon-ok-circle"></span>
 										</td>
 										<td>
-											Importados exitosamente <a href="{{ url('process/downoladsuccess/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
+											Importados exitosamente <a href="{{ url('process/downoladsuccess/') }}{{ process['idProcess'] }}" target="_blank">(Descargar reporte)</a>
 										</td>
 										<td class="big-number text-right">
-											{{res['import']}}
+											{{process['import']}}
 										</td>
 									</tr>
 									<tr class="red">
@@ -84,7 +100,7 @@
 											No importados porque ya existen
 										</td>
 										<td class="big-number text-right">
-											{{res['exist']}}
+											{{process['exist']}}
 										</td>
 									</tr>
 									<tr class="red">
@@ -95,7 +111,7 @@
 											No importados por correo inválido
 										</td>
 										<td class="big-number text-right">
-											{{res['invalid']}}
+											{{process['invalid']}}
 										</td>
 									</tr>
 									<tr class="red">
@@ -106,7 +122,7 @@
 											No importados por correo bloqueado
 										</td>
 										<td class="big-number text-right">
-											{{res['bloqued']}}
+											{{process['bloqued']}}
 										</td>
 									</tr>
 									<tr class="red">
@@ -117,7 +133,7 @@
 											No importados porque están duplicados en el archivo
 										</td>
 										<td class="big-number text-right">
-											{{res['repeated']}}
+											{{process['repeated']}}
 										</td>
 									</tr>
 									<tr class="red">
@@ -128,7 +144,7 @@
 											No importados por límite de contactos excedidos
 										</td>
 										<td class="big-number text-right">
-											{{res['limit']}}
+											{{process['limit']}}
 										</td>
 									</tr>
 									<tr class="red">
@@ -139,7 +155,7 @@
 											Total contactos no importados <a href="{{ url('process/downoladerror/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
 										</td>
 										<td class="big-number text-right">
-											{{res['Nimport']}}
+											{{process['Nimport']}}
 										</td>
 									</tr>
 								</tbody>

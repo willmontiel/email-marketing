@@ -312,6 +312,7 @@ class Security extends Plugin
 				
 				//Processes
 				'process::index' => array('process' => array('read')),
+				'process::importdetail' => array('process' => array('read')),
 				'process::getprocesses' => array('process' => array('read')),
 				'process::stopsending' => array('process' => array('read')),
 				'process::stopimport' => array('process' => array('read')),
