@@ -38,25 +38,36 @@
 	<div class="row">
 		<h4 class="sectiontitle">Lista de importaciones</h4>
 	</div>
-	{% if result|length != 0 %}
-		<table class="table table-striped table-bordered">
-			<tr>
-				<td>Nombre del archivo</td>
-				<td>Estado</td>
-				<td></td>
-			</tr>
-		{%for res in result%}
-			<tr>
-				<td>{{res['name']}}</td>
-				<td>{{res['status']}}</td>
-				<td><a href="{{url('')}}/{{res['idProcess']}}">Ver detalles</a></td>
-			</tr>
-		{%endfor%}
-		</table>
-	{% else %}
-		<div class="bs-callout bs-callout-warning">
-			No ha importado contactos por este medio aún, para importar contactos desde una archivo .csv
-			diríjase a una lista de contactos y haga clic en el botón <strong>Importar contactos</strong>
+	
+	<div class="row">
+		<div class="col-sm-12">
+			<div id="processing">
+				<img src="{{url('')}}/images/loading1.gif" height="25" width="25">
+			</div>
 		</div>
-	{% endif %}
+	</div>
+
+	<div class="row">
+		{% if result|length != 0 %}
+			<table class="table table-striped table-bordered">
+				<tr>
+					<td>Nombre del archivo</td>
+					<td>Estado</td>
+					<td></td>
+				</tr>
+			{%for res in result%}
+				<tr>
+					<td>{{res['name']}}</td>
+					<td>{{res['status']}}</td>
+					<td><a href="{{url('')}}/{{res['idProcess']}}">Ver detalles</a></td>
+				</tr>
+			{%endfor%}
+			</table>
+		{% else %}
+			<div class="bs-callout bs-callout-warning">
+				No ha importado contactos por este medio aún, para importar contactos desde una archivo .csv
+				diríjase a una lista de contactos y haga clic en el botón <strong>Importar contactos</strong>
+			</div>
+		{% endif %}
+	</div>
 {% endblock %}
