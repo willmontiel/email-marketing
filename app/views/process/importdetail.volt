@@ -10,73 +10,33 @@
 			}	
 		}
 		
-		function isValidate() {
-			$('#1').addClass("blue");
-			
-			$('#1-loading').empty();
-			$('#1-status').empty();
-			
-			$('#1-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
-			$('#1-status').append('En proceso');
+		function update(x) {
+			$('#' + x).addClass("blue");
+			$('#' + x).empty();
+			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30"></td><td>Validando registros</td><td>En proceso</td>');
 		}
-		
-		function isMapping() {
-			$('#1').addClass("green");
-			$('#1-status').append('Hecho');
-			
-			$('#2').addClass("blue");
-			
-			$('#1-status').empty();
-			$('#2-loading').empty();
-			$('#2-status').empty();
-			
-			$('#2-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
-			$('#2-status').append('En proceso');
-		}
-		
-		
-		function isLoadData() {
-			$('#1').addClass("green");
-			$('#2').addClass("green");
-			$('#3').addClass("blue");
-			$('#3-loading').empty();
-			$('#3-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
-		}
-		
 		
 		function loadNow (idProcess) {   
 			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
 				if(data.length !== 0) {
 					switch (data.status) {
 						case 'Preprocesando registros':
-							isValidate();
+							update('1');
 							break;
 						case 'Mapeando contactos':
-							isMapping();
+							update('2');
 							break;
 							
 						case 'Cargando registros en base de datos':
-							isLoadData();
+							update('1');
 							break;
 							
 						case 'Actuaizando campos personalizados':
-							$('#1').toggleClass("green");
-							$('#2').toggleClass("green");
-							$('#3').toggleClass("green");
-							$('#4').toggleClass("blue");
-							$('#4-loading').empty();
-							$('#4-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
+							update('4');
 							break;
 							
 						case 'Finalizado':
-							$('#1').toggleClass("green");
-							$('#2').toggleClass("green");
-							$('#3').toggleClass("green");
-							$('#4').toggleClass("green");
-							$('#5').toggleClass("green");
-							$('#5-loading').empty();
-							$('#5-loading').append('<span class="glyphicon glyphicon-ok-circle"></span>');
-							$('#details').show();
+							update('5');
 							break;
 					}
 				}
@@ -100,9 +60,9 @@
 		<div class="col-sm-8 col-sm-offset-2">
 			<table class="table table-contacts report-import table-condensed table-striped">
 				<tr id="1" class="red">
-					<td><div id="1-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Validando registros</td>
-					<td><div id="1-status">En proceso</div></td>
+					<td>En proceso</td>
 				</tr>
 				
 				<tr id="2" class="red">
