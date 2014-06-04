@@ -59,7 +59,7 @@
 							done('3', 'Cargando registros en la lista');
 							done('4', 'Actualizando campos personalizados');
 							done('5', 'Finalizado');
-							$('#6').show();
+							$('#details').show();
 							break;
 					}
 				}
@@ -113,7 +113,7 @@
 					<td>Esperando</td>
 				</tr>
 			
-				<tr id="6">
+				<tr>
 					<td colspan="3" class="text-center">
 						<div id="details" style="display: none;">
 							<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding btn-for-modal-accordion" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
