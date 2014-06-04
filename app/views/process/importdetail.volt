@@ -3,36 +3,28 @@
 	{{ super() }}
 	<script type="text/javascript">
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
-		
-		function checkUnfinishedImports() {
-			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
-				loadNow('{{process['idProcess']}}');
-			}	
-		}
-		
+	
 		function loadNow (idProcess) {   
 			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
 				if(data.length !== 0) {
 					switch (data.status) {
 						case 'Preprocesando registros':
-							$('#1').switchClass( "red", "blue", 1000, "easeInOutQuad" );
+							$('#1').toggleClass("blue");
 							$('#1-loading').empty();
 							$('#1-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
 							
 						case 'Mapeando contactos':
-							$('#1').switchClass( "blue", "green", 1000, "easeInOutQuad" );
-							$('#2').switchClass( "red", "blue", 1000, "easeInOutQuad" );
-							
+							$('#1').toggleClass("green");
+							$('#2').toggleClass("blue");
 							$('#2-loading').empty();
 							$('#2-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
 							
 						case 'Cargando registros en base de datos':
-							$('#1').switchClass( "red", "green", 1000, "easeInOutQuad" );
-							$('#2').switchClass( "red", "green", 1000, "easeInOutQuad" );
-							$('#3').switchClass( "red", "blue", 1000, "easeInOutQuad" );
-							
+							$('#1').toggleClass("green");
+							$('#2').toggleClass("green");
+							$('#3').toggleClass("blue");
 							$('#3-loading').empty();
 							$('#3-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
@@ -62,11 +54,7 @@
 		};
 		
 		$(function() {
-			loadNow('{{process['idProcess']}}');
-		});
-		
-		$(function() {
-			setInterval(checkUnfinishedImports, 5000);
+			setInterval(loadNow({{process['idProcess']}})), 5000);
 		});
 	</script>
 {% endblock %}
