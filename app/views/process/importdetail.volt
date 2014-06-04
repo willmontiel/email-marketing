@@ -35,7 +35,7 @@
 		}
 		
 		
-		function loadData() {
+		function isLoadData() {
 			$('#1').addClass("green");
 			$('#2').addClass("green");
 			$('#3').addClass("blue");
