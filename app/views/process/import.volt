@@ -39,7 +39,6 @@
 		
 	</script>
 {% endblock %}
-{% block sectiontitle %}Reporte de importación de contactos{% endblock %}
 {% block content %}
 	{# Menu de navegacion pequeño #}
 	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'import']) }}
@@ -58,19 +57,15 @@
 					<td></td>
 				</tr>
 			{%for res in result%}
+				<tr>
+					<td>{{res['name']}}</td>
 				{% if res['status'] == 'Finalizado' OR res['status'] == 'Cancelado'%}
-					<tr>
-						<td>{{res['name']}}</td>
-						<td>{{res['status']}}</td>
-						<td><a href="{{url('')}}/{{res['idProcess']}}">Ver detalles</a></td>
-					</tr>
+					<td>{{res['status']}}</td>
 				{% else %}
-					<tr>
-						<td>{{res['name']}}</td>
-						<td><div id="processing-{{res['idProcess']}}"></div> <img src="{{url('')}}images/loading1.gif" height="40" width="40"></td>
-						<td><a href="{{url('')}}/{{res['idProcess']}}">Ver detalles</a></td>
-					</tr>
+					<td><div id="processing-{{res['idProcess']}}">{{res['status']}}</div></td>
 				{% endif %}
+					<td><a href="{{url('process/importdetail')}}/{{res['idProcess']}}">Ver detalles</a></td>
+				</tr>
 			{%endfor%}
 			</table>
 		{% else %}

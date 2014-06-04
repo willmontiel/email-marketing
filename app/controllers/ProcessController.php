@@ -240,4 +240,9 @@ class ProcessController extends ControllerBase
 		
 		return $import;
 	}
+	
+	public function importdetailAction($idProcess)
+	{
+		
+	}
 }
