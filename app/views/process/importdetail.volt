@@ -24,6 +24,7 @@
 							break;
 							
 						case 'Cargando registros en base de datos':
+							console.log("LALA");
 							$('#1').toggleClass("green");
 							$('#2').toggleClass("green");
 							$('#3').toggleClass("blue");
