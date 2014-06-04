@@ -29,8 +29,8 @@
 							break;
 							
 						case 'Cargando registros en base de datos':
-							$('#1').switchClass( "blue", "green", 1000, "easeInOutQuad" );
-							$('#2').switchClass( "blue", "green", 1000, "easeInOutQuad" );
+							$('#1').switchClass( "red", "green", 1000, "easeInOutQuad" );
+							$('#2').switchClass( "red", "green", 1000, "easeInOutQuad" );
 							$('#3').switchClass( "red", "blue", 1000, "easeInOutQuad" );
 							
 							$('#3-loading').empty();
