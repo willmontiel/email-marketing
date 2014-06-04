@@ -10,29 +10,53 @@
 			}	
 		}
 		
+		function isValidate() {
+			$('#1').addClass("blue");
+			
+			$('#1-loading').empty();
+			$('#1-status').empty();
+			
+			$('#1-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
+			$('#1-status').append('En proceso');
+		}
+		
+		function isMapping() {
+			$('#1').addClass("green");
+			$('#1-status').append('Hecho');
+			
+			$('#2').addClass("blue");
+			
+			$('#1-status').empty();
+			$('#2-loading').empty();
+			$('#2-status').empty();
+			
+			$('#2-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
+			$('#2-status').append('En proceso');
+		}
+		
+		
+		function loadData() {
+			$('#1').addClass("green");
+			$('#2').addClass("green");
+			$('#3').addClass("blue");
+			$('#3-loading').empty();
+			$('#3-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
+		}
+		
+		
 		function loadNow (idProcess) {   
 			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
 				if(data.length !== 0) {
 					switch (data.status) {
 						case 'Preprocesando registros':
-							$('#1').toggleClass("blue");
-							$('#1-loading').empty();
-							$('#1-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
+							isValidate();
 							break;
-							
 						case 'Mapeando contactos':
-							$('#1').toggleClass("green");
-							$('#2').toggleClass("blue");
-							$('#2-loading').empty();
-							$('#2-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
+							isMapping();
 							break;
 							
 						case 'Cargando registros en base de datos':
-							$('#1').toggleClass("green");
-							$('#2').toggleClass("green");
-							$('#3').toggleClass("blue");
-							$('#3-loading').empty();
-							$('#3-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
+							isLoadData();
 							break;
 							
 						case 'Actuaizando campos personalizados':
@@ -78,19 +102,19 @@
 				<tr id="1" class="red">
 					<td><div id="1-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
 					<td>Validando registros</td>
-					<td>En proceso</td>
+					<td><div id="1-status">En proceso</div></td>
 				</tr>
 				
 				<tr id="2" class="red">
 					<td><div id="2-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
 					<td>Mapeando contactos</td>
-					<td>Esperando</td>
+					<td><div id="2-status">Esperando</div></td>
 				</tr>
 				
 				<tr id="3" class="red">
 					<td><div id="3-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
 					<td>Cargando registros en la lista</td>
-					<td>Esperando</td>
+					<td><div id="3-status">Esperando</div></td>
 				</tr>
 				
 				<tr id="4" class="red">
