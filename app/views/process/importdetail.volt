@@ -15,22 +15,24 @@
 				if(data.length !== 0) {
 					switch (data.status) {
 						case 'Preprocesando registros':
-							$('#1').toggleClass("blue");
+							$('#1').switchClass( "red", "blue", 1000, "easeInOutQuad" );
 							$('#1-loading').empty();
 							$('#1-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
 							
 						case 'Mapeando contactos':
-							$('#1').toggleClass("green");
-							$('#2').toggleClass("blue");
+							$('#1').switchClass( "blue", "green", 1000, "easeInOutQuad" );
+							$('#2').switchClass( "red", "blue", 1000, "easeInOutQuad" );
+							
 							$('#2-loading').empty();
 							$('#2-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
 							
 						case 'Cargando registros en base de datos':
-							$('#1').toggleClass("green");
-							$('#2').toggleClass("green");
-							$('#3').toggleClass("blue");
+							$('#1').switchClass( "blue", "green", 1000, "easeInOutQuad" );
+							$('#2').switchClass( "blue", "green", 1000, "easeInOutQuad" );
+							$('#3').switchClass( "red", "blue", 1000, "easeInOutQuad" );
+							
 							$('#3-loading').empty();
 							$('#3-loading').append('</div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30">');
 							break;
@@ -79,7 +81,7 @@
 		<div class="col-sm-8 col-sm-offset-2">
 			<table class="table table-contacts report-import table-condensed table-striped">
 				<tr id="1" class="red">
-					<td><div id="1-loading"></div></td>
+					<td><div id="1-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
 					<td>Validando registros</td>
 					<td>En proceso</td>
 				</tr>
