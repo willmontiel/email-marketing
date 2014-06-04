@@ -3,7 +3,13 @@
 	{{ super() }}
 	<script type="text/javascript">
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
-	
+		
+		function checkUnfinishedImports() {
+			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
+				loadNow({{process['idProcess']}});
+			}	
+		}
+		
 		function loadNow (idProcess) {   
 			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
 				if(data.length !== 0) {
@@ -53,8 +59,9 @@
 			});
 		};
 		
+		
 		$(function() {
-			setInterval(loadNow({{process['idProcess']}})), 5000);
+			setInterval(checkUnfinishedImports(), 5000);
 		});
 	</script>
 {% endblock %}
