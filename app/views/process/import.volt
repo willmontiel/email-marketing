@@ -2,7 +2,6 @@
 {% block header_javascript %}
 	{{ super() }}
 	<script type="text/javascript">
-
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		function checkUnfinishedImports() {
 			{%for res in result%}
@@ -27,14 +26,6 @@
 		
 		$(function() {
 			setInterval(checkUnfinishedImports, 3000);
-			$('.btn-for-modal-accordion').on('click', function(){
-				if(($(this).text()).trim() === 'Ver detalles') {
-					$(this).text('Colapsar');
-				}
-				else {
-					$(this).text('Ver detalles');
-				}
-			});
 		});
 		
 	</script>

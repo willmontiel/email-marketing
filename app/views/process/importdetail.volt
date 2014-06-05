@@ -13,54 +13,68 @@
 		function inProcess(x, text) {
 			$('#' + x).addClass("blue");
 			$('#' + x).empty();
-			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading2.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>').fadeIn("slow");
+			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading2.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>');
 		}
 		
 		function done(x, text) {
 			$('#' + x).addClass("green");
 			$('#' + x).empty();
-			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-circle"></span></td><td>' + text + '</td><td>Hecho</td>').fadeIn("slow");
+			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-circle"></span></td><td>' + text + '</td><td>Hecho</td>');
 		}
 		
 		function waiting(x, text) {
 			$('#' + x).addClass("red");
 			$('#' + x).empty();
-			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-remove"></span></td><td>' + text + '</td><td>Esperando</td>').fadeIn("slow");
+			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-remove"></span></td><td>' + text + '</td><td>Esperando</td>');
 		}
 		
 		function loadNow(idProcess) {   
 			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
 				if(data.length !== 0) {
 					switch (data.status) {
-						case 'Preprocesando registros':
-							inProcess('1', 'Validando registros');
+						case 'En ejecución':
+							inProcess('1', 'Cargando servicios');
 							break;
+							
+						case 'Preprocesando registros':
+							done('1', 'Cargando servicios');
+							inProcess('2', 'Validando registros');
+							break;
+							
 						case 'Mapeando contactos':
+							done('1', 'Cargando servicios');
 							done('2', 'Validando registros');
-							inProcess('2', 'Mapeando contactos');
+							inProcess('3', 'Mapeando contactos');
 							break;
 							
 						case 'Cargando registros en base de datos':
-							done('1', 'Validando registros');
-							done('2', 'Mapeando contactos');
-							inProcess('3', 'Cargando registros en la lista');
+							done('1', 'Cargando servicios');
+							done('2', 'Validando registros');
+							done('3', 'Mapeando contactos');
+							inProcess('4', 'Cargando registros en la lista');
 							break;
 							
 						case 'Actuaizando campos personalizados':
-							done('1', 'Validando registros');
-							done('2', 'Mapeando contactos');
-							done('3', 'Cargando registros en la lista');
-							inProcess('4', 'Actualizando campos personalizados');
+							done('1', 'Cargando servicios');
+							done('2', 'Validando registros');
+							done('3', 'Mapeando contactos');
+							done('4', 'Cargando registros en la lista');
+							inProcess('5', 'Actualizando campos personalizados');
 							break;
 							
 						case 'Finalizado':
-							done('1', 'Validando registros');
-							done('2', 'Mapeando contactos');
-							done('3', 'Cargando registros en la lista');
-							done('4', 'Actualizando campos personalizados');
-							done('5', 'Finalizado');
+							done('1', 'Cargando servicios');
+							done('2', 'Validando registros');
+							done('3', 'Mapeando contactos');
+							done('4', 'Cargando registros en la lista');
+							done('5', 'Actualizando campos personalizados');
+							done('6', 'Finalizado');
 							$('#details').show();
 							break;
+					}
+					
+					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
+						location.reload(true);
 					}
 				}
 			});
@@ -85,29 +99,35 @@
 			<table class="table table-contacts report-import table-condensed table-striped">
 				<tr id="1" class="red">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
-					<td>Validando registros</td>
+					<td>Cargando servicios</td>
 					<td>En proceso</td>
 				</tr>
 				
 				<tr id="2" class="red">
-					<td><div id="2-loading"><span class="glyphicon glyphicon-remove-circle"></span></div></td>
-					<td>Mapeando contactos</td>
-					<td><div id="2-status">Esperando</div></td>
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
+					<td>Validando registros</td>
+					<td>Esperando</td>
 				</tr>
 				
 				<tr id="3" class="red">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
-					<td>Cargando registros en la lista</td>
+					<td>Mapeando contactos</td>
 					<td>Esperando</td>
 				</tr>
 				
 				<tr id="4" class="red">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
-					<td>Actualizando campos personalizados</td>
+					<td>Cargando registros en la lista</td>
 					<td>Esperando</td>
 				</tr>
 				
 				<tr id="5" class="red">
+					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
+					<td>Actualizando campos personalizados</td>
+					<td>Esperando</td>
+				</tr>
+				
+				<tr id="6" class="red">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Finalizado</td>
 					<td>Esperando</td>
