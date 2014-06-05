@@ -1,7 +1,4 @@
-<?php
-/* 
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
-*/
+{% extends "templates/index_b3.volt" %}
+{% block content %}
 
-?>
+{% endblock %}

@@ -396,4 +396,9 @@ class AccountController extends ControllerBase
 		$this->flashSession->warning('Se ha eliminado el usuario <strong>' .$user->username. '</strong> exitosamente');
 		return $this->response->redirect("account/show/{$user->idAccount}");
 	}
+	
+	public function accountingAction($idAccount)
+	{
+		
+	}
  }  
