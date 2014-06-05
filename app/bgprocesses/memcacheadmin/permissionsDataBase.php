@@ -267,6 +267,9 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'blockemail::block email'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'blockemail::unblock email'),
 			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'process::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'process::download'),
+			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dashboard::read'),
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'mail::create'),
