@@ -16,7 +16,7 @@
 			$('#' + x).empty();
 			$('#' + x).removeClass("red");
 			$('#' + x).addClass("blue");
-			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading2.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>');
+			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading4.GIF" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>');
 		}
 		
 		function done(x, text) {

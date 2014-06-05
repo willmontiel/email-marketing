@@ -56,7 +56,7 @@
 					{% if res['status'] == 'Finalizado' OR res['status'] == 'Cancelado'%}
 						<td>{{res['status']}}</td>
 					{% else %}
-						<td><div id="processing-{{res['idProcess']}}">{{res['status']}} </div><img class="pull-right" src="{{url('')}}images/loading3.GIF" height="30" width="30"></td>
+						<td><div id="processing-{{res['idProcess']}}">{{res['status']}} </div><img class="pull-right" src="{{url('')}}images/loading2.gif" height="30" width="30"></td>
 					{% endif %}
 						<td><a href="{{url('process/importdetail')}}/{{res['idProcess']}}">Ver detalles</a></td>
 					</tr>
