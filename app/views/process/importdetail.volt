@@ -36,6 +36,7 @@
 			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
 				if(data.length !== 0) {
 					switch (data.status) {
+						case 'Pendiente':
 						case 'En ejecución':
 							inProcess('1', 'Cargando servicios');
 							
