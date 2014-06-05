@@ -1,7 +1,4 @@
 {% extends "templates/index_b3.volt" %}
-{% block sectiontitle %}<i class="icon-group icon-2x"></i>Administración de usuarios{% endblock %}
-{%block sectionsubtitle %}Cree, edite o proporcione permisos a los usuarios de su cuenta{% endblock %}
-
 {% block content %}
 	{#   partial navegacion botones pequeños   #}
 	<div class="row">
@@ -34,7 +31,8 @@
 				</div>
 				<div class="form-group">
 					<label for="username" class="col-sm-4 control-label"><span class="required">*</span>Nombre de usuario:</label>
-					<div class="col-md-8">
+					<div class="input-group col-md-8" style="padding-left: 15px !important; padding-right: 15px !important;">
+						<span class="input-group-addon">{{prefix}}</span>
 						{{ UserForm.render('username') }}
 					</div>
 				</div>
