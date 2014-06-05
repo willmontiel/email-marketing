@@ -11,20 +11,20 @@
 		}
 		
 		function inProcess(x, text) {
-			$('#' + x).addClass("blue");
 			$('#' + x).empty();
+			$('#' + x).addClass("blue");
 			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading2.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>');
 		}
 		
 		function done(x, text) {
-			$('#' + x).addClass("green");
 			$('#' + x).empty();
+			$('#' + x).addClass("green");
 			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-circle"></span></td><td>' + text + '</td><td>Hecho</td>');
 		}
 		
 		function waiting(x, text) {
-			$('#' + x).addClass("red");
 			$('#' + x).empty();
+			$('#' + x).addClass("red");
 			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-remove"></span></td><td>' + text + '</td><td>Esperando</td>');
 		}
 		
@@ -72,10 +72,6 @@
 							$('#details').show();
 							break;
 					}
-					
-					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
-						location.reload(true);
-					}
 				}
 			});
 		};
@@ -83,7 +79,7 @@
 		
 		$(function() {
 			loadNow({{process['idProcess']}});
-			setInterval(checkUnfinishedImports, 1000);
+			setInterval(checkUnfinishedImports, 3000);
 		});
 	</script>
 {% endblock %}
