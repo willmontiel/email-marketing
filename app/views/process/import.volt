@@ -26,7 +26,7 @@
 		};
 		
 		$(function() {
-			setInterval(checkUnfinishedImports, 5000);
+			setInterval(checkUnfinishedImports, 3000);
 			$('.btn-for-modal-accordion').on('click', function(){
 				if(($(this).text()).trim() === 'Ver detalles') {
 					$(this).text('Colapsar');

@@ -69,7 +69,7 @@
 		
 		$(function() {
 			loadNow({{process['idProcess']}});
-			setInterval(checkUnfinishedImports, 5000);
+			setInterval(checkUnfinishedImports, 1000);
 		});
 	</script>
 {% endblock %}
