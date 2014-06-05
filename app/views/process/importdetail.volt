@@ -52,6 +52,8 @@
 							break;
 							
 						case 'Mapeando contactos':
+						case 'Cargando registros en base de datos':
+						case 'Actualizando campos personalizados':
 							done('1', 'Cargando servicios');
 							done('2', 'Validando registros');
 							inProcess('3', 'Cargando registros en la lista');
