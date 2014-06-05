@@ -399,6 +399,8 @@ class AccountController extends ControllerBase
 	
 	public function accountingAction($idAccount)
 	{
+		$accounts = Account::find();
 		
+		$this->view->setVar('accounts', $accounts);
 	}
  }  
