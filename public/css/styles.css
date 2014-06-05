@@ -1225,3 +1225,8 @@ table {
 .full-container-img-margin, .full-container-img-border {
 	float: none !important;
 }
+
+.prefix {
+	padding-left: 15px !important; 
+	padding-right: 15px !important;
+}

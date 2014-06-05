@@ -25,6 +25,14 @@
 								{{ newFormAccount.render('companyName', {'class': 'form-control'})}}
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label for="prefix" class="col-sm-5 control-label">Prefijo:</label>
+							<div class="col-md-6">
+								{{ newFormAccount.render('prefix', {'class': 'form-control'})}}
+							</div>
+						</div>
+						
 						<div class="form-group">
 							<label for="fileSpace" class="col-sm-5 control-label">*Espacio disponible en disco (Mb):</label>
 							<div class="col-md-6">

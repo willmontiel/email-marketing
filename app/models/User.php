@@ -74,6 +74,14 @@ class User extends Modelbase
 					"field" => "username",
 					"message" => "Por favor ingrese el nombre de usuario, se necesitará para iniciar sesión"
 		)));
+		
+		$this->validate(new StringLength(
+			array(
+				"field" => "username",
+				"min" => 4,
+				"message" => "El nombre de usuario es muy corto, debe tener al menos 4 caracteres"
+			)
+		));
 
 		$this->validate(new Regex(
 				array(
