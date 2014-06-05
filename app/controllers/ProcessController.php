@@ -23,14 +23,23 @@ class ProcessController extends ControllerBase
 			"order" => "idImportproccess DESC"
 		));
 		
+		$ago = strtotime('-90 days');
 		$result = array();
+		
 		foreach ($processes as $process) {
-			$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
-			$result[] = array(
-				"name" => $inputFile->originalName,
-				"status" => $process->status,
-				"idProcess" => $process->idImportproccess
-			);		
+			$inputFile = Importfile::findFirst(array(
+				"conditions" => 'idImportfile = ?1 AND createdon > ?2',
+				"bind" => array(1 => $process->inputFile,
+								2 => $ago)
+			));
+			
+			if ($inputFile) {
+				$result[] = array(
+					"name" => $inputFile->originalName,
+					"status" => $process->status,
+					"idProcess" => $process->idImportproccess
+				);	
+			}
 		}
 		
 		$this->view->setVar("result", $result);
