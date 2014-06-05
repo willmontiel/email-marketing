@@ -13,7 +13,7 @@
 		function inProcess(x, text) {
 			$('#' + x).addClass("blue");
 			$('#' + x).empty();
-			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading1.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>');
+			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading2.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>');
 		}
 		
 		function done(x, text) {
@@ -116,6 +116,7 @@
 				<tr>
 					<td colspan="3" class="text-center">
 						<div id="details" style="display: none;">
+							<div class="space"></div>
 							<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding btn-for-modal-accordion" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
 								Ver detalles
 							</a>
@@ -237,4 +238,5 @@
 			</div>
 		</div>
 	</div>
+	<div class="space"></div>
 {% endblock %}
