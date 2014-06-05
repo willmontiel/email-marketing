@@ -23,72 +23,34 @@ class ProcessController extends ControllerBase
 			"order" => "idImportproccess DESC"
 		));
 		
+		$ago = strtotime('-90 days');
 		$result = array();
+		
 		foreach ($processes as $process) {
+			$inputFile = Importfile::findFirst(array(
+				"conditions" => 'idImportfile = ?1 AND createdon > ?2',
+				"bind" => array(1 => $process->inputFile,
+								2 => $ago)
+			));
 			
-			$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
-
-			$count = array(
-				"linesprocess" => $process->processLines,
-				"exist" => $process->exist,
-				"invalid" => $process->invalid,
-				"bloqued" => $process->bloqued,
-				"limit" => $process->limitcontact,
-				"repeated" => $process->repeated
-			);
-
-			$result[] = array(
-				"name" => $inputFile->originalName,
-				"totalReg" => $process->totalReg,
-				"status" => $process->status,
-				"linesprocess" => $count['linesprocess'],
-				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
-				"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
-				"exist" => $count['exist'],
-				"invalid" => $count['invalid'],
-				"bloqued" => $count['bloqued'],
-				"limit" => $count['limit'],
-				"repeated" => $count['repeated'],
-				"idProcess" => $process->idImportproccess
-			);		
+			if ($inputFile) {
+				$result[] = array(
+					"name" => $inputFile->originalName,
+					"status" => $process->status,
+					"idProcess" => $process->idImportproccess
+				);	
+			}
 		}
+		
 		$this->view->setVar("result", $result);
 	}
 	
 	public function refreshimportAction($idImportprocess)
 	{
-		$process = Importproccess::findFirst(array(
-			"conditions" => "idImportproccess = ?1",
-			"bind" => array(1 => $idImportprocess),
-		));
+		$res = $this->getImportInfo($idImportprocess);
 		
-		$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
-		
-		$res = array();
-		if ($process && $inputFile) {
-			$count = array(
-				"linesprocess" => $process->processLines,
-				"exist" => $process->exist,
-				"invalid" => $process->invalid,
-				"bloqued" => $process->bloqued,
-				"limit" => $process->limitcontact,
-				"repeated" => $process->repeated
-			);
-
-			$res = array(
-				"name" => $inputFile->originalName,
-				"totalReg" => $process->totalReg,
-				"status" => $process->status,
-				"linesprocess" => $count['linesprocess'],
-				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
-				"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
-				"exist" => $count['exist'],
-				"invalid" => $count['invalid'],
-				"bloqued" => $count['bloqued'],
-				"limit" => $count['limit'],
-				"repeated" => $count['repeated'],
-				"idProcess" => $process->idImportproccess
-			);
+		if (!$res) {
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró información de importación');
 		}
 		
 		return $this->setJsonResponse($res);
@@ -239,5 +201,56 @@ class ProcessController extends ControllerBase
 		}
 		
 		return $import;
+	}
+	
+	protected function getImportInfo($idImportprocess)
+	{
+		$process = Importproccess::findFirst(array(
+			"conditions" => "idImportproccess = ?1",
+			"bind" => array(1 => $idImportprocess),
+		));
+		
+		$inputFile = Importfile::findFirstByIdImportfile($process->inputFile);
+		
+		$res = array();
+		if ($process && $inputFile) {
+			$count = array(
+				"linesprocess" => $process->processLines,
+				"exist" => $process->exist,
+				"invalid" => $process->invalid,
+				"bloqued" => $process->bloqued,
+				"limit" => $process->limitcontact,
+				"repeated" => $process->repeated
+			);
+
+			$res = array(
+				"name" => $inputFile->originalName,
+				"totalReg" => $process->totalReg,
+				"status" => $process->status,
+				"linesprocess" => $count['linesprocess'],
+				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
+				"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
+				"exist" => $count['exist'],
+				"invalid" => $count['invalid'],
+				"bloqued" => $count['bloqued'],
+				"limit" => $count['limit'],
+				"repeated" => $count['repeated'],
+				"idProcess" => $process->idImportproccess
+			);
+		}
+		
+		return $res;
+	}
+
+
+	public function importdetailAction($idImportprocess)
+	{
+		$res = $this->getImportInfo($idImportprocess);
+		
+		if (!$res) {
+			return $this->response->redirect("error");
+		}
+		
+		$this->view->setVar("process", $res);
 	}
 }
