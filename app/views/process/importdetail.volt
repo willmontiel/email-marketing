@@ -226,7 +226,7 @@
 											<span class="glyphicon glyphicon-ban-circle"></span>
 										</td>
 										<td>
-											Total contactos no importados <a href="{{ url('process/downoladerror/') }}{{ res['idProcess'] }}" target="_blank">(Descargar reporte)</a>
+											Total contactos no importados <a href="{{ url('process/downoladerror/') }}{{ process['idProcess'] }}" target="_blank">(Descargar reporte)</a>
 										</td>
 										<td class="big-number text-right">
 											{{process['Nimport']}}
