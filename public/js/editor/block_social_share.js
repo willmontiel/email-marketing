@@ -1,11 +1,12 @@
 function SShareBlock(row) {
 	this.row = row;
-	this.content_fb = {html: $('<img class="soc_net_share button_facebook" src="' + config.imagesUrl + '/share_facebook_image_32.png" alt="64x64" />'), selected: true};
-	this.content_tw = {html: $('<img class="soc_net_share button_twitter" src="' + config.imagesUrl + '/share_twitter_image_32.png" alt="64x64" />'), selected: true};
-	this.content_li = {html: $('<img class="soc_net_share button_linkedin" src="' + config.imagesUrl + '/share_linkedin_image_32.png" alt="64x64" />'), selected: true};
-	this.content_gp = {html: $('<img class="soc_net_share button_google_plus" src="' + config.imagesUrl + '/share_google_plus_image_32.png" alt="64x64" />'), selected: true};
-	this.align = 'left';
-	this.size = '32';
+	this.content_fb = {html: $('<img class="soc_net_share button_facebook" src="' + config.imagesUrl + '/socials/share/theme_1/share_facebook_image_xs.png" alt="64x64" />'), selected: true};
+	this.content_tw = {html: $('<img class="soc_net_share button_twitter" src="' + config.imagesUrl + '/socials/share/theme_1/share_twitter_image_xs.png" alt="64x64" />'), selected: true};
+	this.content_li = {html: $('<img class="soc_net_share button_linkedin" src="' + config.imagesUrl + '/socials/share/theme_1/share_linkedin_image_xs.png" alt="64x64" />'), selected: true};
+	this.content_gp = {html: $('<img class="soc_net_share button_google_plus" src="' + config.imagesUrl + '/socials/share/theme_1/share_google_plus_image_xs.png" alt="64x64" />'), selected: true};
+	this.align = 'center';
+	this.size = 'xs';
+	this.theme = 1;
 	this.background_color = "transparent";
 	this.border_width = 0;
 	this.border_color = "#FFFFFF";
@@ -207,7 +208,7 @@ SShareBlock.prototype.createToolbar = function() {
 	$('.element-share-in-edition').removeClass('element-share-in-edition');
 	this.content.find('.one-element').addClass('element-share-in-edition');
 	
-	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr></table>');
+	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr><tr><td class="second_row"><ul class="second_elements"></ul></td></tr></table>');
 
 	var withfb = (this.content_fb.selected) ? 'checked' : '';
 	var withtw = (this.content_tw.selected) ? 'checked' : '';
@@ -225,13 +226,13 @@ SShareBlock.prototype.createToolbar = function() {
 	toolbar.find('.first_row ul').append(elements);
 	
 	
-	var size = $('<div class="social-size-toolbar-container"><div class="social-toolbar-title">Tamaño</div>\n\
+	var size = $('<div class="social-size-toolbar-container"><div class="social-toolbar-title"><span class="img-sprite-white"></span></div>\n\
 					<div class="medium-large-select social-size-container">\n\
 						<select id="size-social-options-toolbar">\n\
-							<option value="16" selected>Pequeño</option>\n\
-							<option value="24">Mediano</option>\n\
-							<option value="32" selected>Grande</option>\n\
-							<option value="128">Gigante</option>\n\
+							<option value="xs" selected>Pequeño</option>\n\
+							<option value="sm">Mediano</option>\n\
+							<option value="md" selected>Grande</option>\n\
+							<option value="xl">Gigante</option>\n\
 						</select>\n\
 					</div>\n\
 					</div></div>');
@@ -247,6 +248,18 @@ SShareBlock.prototype.createToolbar = function() {
 	elements.append(align);
 	toolbar.find('.first_row ul').append(elements);	
 	
+	var themes = $('<div class="social-share-themes-toolbar-container">\n\
+						<div class="social-share-themes-title">Temas</div>\n\
+						<div class="social-share-themes-buttons">\n\
+							<div class="img-themes-in-toolbar-container" data-theme="1"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-1.png"></div></div>\n\
+							<div class="img-themes-in-toolbar-container" data-theme="2"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-2.png"></div></div>\n\
+							<div class="img-themes-in-toolbar-container" data-theme="3"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-3.png"></div></div>\n\
+							<div class="img-themes-in-toolbar-container" data-theme="4"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-4.png"></div></div>\n\
+						</div>\n\
+					</div>');
+	var elements = $('<li class="toolbar-elements" />');
+	elements.append(themes);
+	toolbar.find('.second_row ul').append(elements);	
 	this.eventsChange();
 };
 
@@ -287,6 +300,19 @@ SShareBlock.prototype.eventsChange = function() {
 		}
 		t.size = $(this).val();
 	});
+	
+	var themes = $('.img-themes-in-toolbar-container');
+	for(var i = 0; i < themes.length; i++) {
+		if($(themes[i]).data('theme') === t.theme) {
+			$(themes[i]).addClass('img-themes-in-toolbar-selected');
+		}
+	}
+	
+	$('.img-themes-in-toolbar-container').on('click', function() {
+		$('.img-themes-in-toolbar-selected').removeClass('img-themes-in-toolbar-selected');
+		$(this).addClass('img-themes-in-toolbar-selected');
+		t.changeSocialTheme($(this).data('theme'));
+	});
 };
 
 SShareBlock.prototype.withSocialNetwork = function(id, container) {
@@ -309,4 +335,14 @@ SShareBlock.prototype.withSocialNetwork = function(id, container) {
 	else {
 		$('.' + container + '-container-in-toolbar').removeClass('social-network-selected');
 	}
+};
+
+SShareBlock.prototype.changeSocialTheme = function(theme) {
+	var images = this.content.find('img.soc_net_share');
+	for (var i = 0; i < images.length; i++ ) {
+		var src = $(images[i]).attr('src');
+		var newsrc = src.replace('theme_' + this.theme, 'theme_' + theme);
+		$(images[i]).attr('src', newsrc);
+	}
+	this.theme = theme;
 };

@@ -1,10 +1,11 @@
 function SFollowBlock(row) {
 	this.row = row;
-	this.content_fb = {html: $('<img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/follow_facebook_image.png" alt="64x64" />'), selected: true};
-	this.content_tw = {html: $('<img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/follow_twitter_image.png" alt="64x64" />'), selected: true};
-	this.content_li = {html: $('<img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/follow_linkedin_image.png" alt="64x64" />'), selected: true};
-	this.content_gp = {html: $('<img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/follow_google_plus_image.png" alt="64x64" />'), selected: true};
+	this.content_fb = {html: $('<img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_facebook_image_md.png" alt="64x64" />'), selected: true};
+	this.content_tw = {html: $('<img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_twitter_image_md.png" alt="64x64" />'), selected: true};
+	this.content_li = {html: $('<img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_linkedin_image_md.png" alt="64x64" />'), selected: true};
+	this.content_gp = {html: $('<img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_google_plus_image_md.png" alt="64x64" />'), selected: true};
 	this.align = 'left';
+	this.size = 'md';
 	this.background_color = "transparent";
 	this.border_width = 0;
 	this.border_color = "#FFFFFF";
@@ -184,7 +185,7 @@ SFollowBlock.prototype.createToolbar = function() {
 	var position = this.content.offset();
 	toolbar.css('position', 'absolute');
 	toolbar.css('top', position.top + this.content.height() - 20);
-	toolbar.css('left', 177);
+	toolbar.css('left', 160);
 	
 	$('.element-follow-in-edition').removeClass('element-follow-in-edition');
 	this.content.find('.one-element').addClass('element-follow-in-edition');
@@ -206,7 +207,16 @@ SFollowBlock.prototype.createToolbar = function() {
 	elements.append(gp);
 	toolbar.find('.first_row ul').append(elements);
 	
-
+	var size = $('<div class="social-size-toolbar-container"><div class="social-toolbar-title"><span class="img-sprite-white"></span></div>\n\
+					<div class="medium-large-select social-size-container">\n\
+						<select id="size-social-options-toolbar">\n\
+							<option value="xs" selected>Pequeño</option>\n\
+							<option value="sm">Mediano</option>\n\
+							<option value="md" selected>Grande</option>\n\
+							<option value="xl">Gigante</option>\n\
+						</select>\n\
+					</div>\n\
+					</div></div>');
 	var align = $('<div class="social-align-toolbar-container">\n\
 					<div class="social-align-container">\n\
 						<div class="align-btn-toolbar align-left"><span class="icon-align-left icon-white"></span></div>\n\
@@ -215,6 +225,7 @@ SFollowBlock.prototype.createToolbar = function() {
 					</div>\n\
 					</div>');
 	var elements = $('<li class="toolbar-elements" />');
+	elements.append(size);
 	elements.append(align);
 	toolbar.find('.first_row ul').append(elements);	
 	
@@ -246,6 +257,17 @@ SFollowBlock.prototype.eventsChange = function() {
 		t.align = 'right';
 		$('.align-selected-toolbar').removeClass('align-selected-toolbar');
 		$(this).addClass('align-selected-toolbar');
+	});
+	
+	$('#size-social-options-toolbar').val(this.size);
+	$('#size-social-options-toolbar').on('change', function() {
+		var imgs = t.content.find('.content-social-follow img');
+		for (var i=0; i < imgs.length; i++ ) {
+			var src = $(imgs[i]).attr('src');
+			var newsrc = src.replace(t.size, $(this).val());
+			t.content.find('.content-social-follow img[src="' + src + '"]').attr('src', newsrc);
+		}
+		t.size = $(this).val();
 	});
 };
 
