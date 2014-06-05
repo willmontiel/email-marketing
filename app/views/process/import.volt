@@ -16,7 +16,7 @@
 			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
 				if(data.length !== 0) {
 					$('#processing-' + data.idProcess).empty();
-					$('#processing-' + data.idProcess).append(data.status + ' <img src="{{url('')}}images/loading2.gif" height="30" width="30">');
+					$('#processing-' + data.idProcess).append(data.status + ' <img class="pull-right" src="{{url('')}}images/loading2.gif" height="30" width="30">');
 					
 					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
 						location.reload(true);
@@ -65,7 +65,7 @@
 					{% if res['status'] == 'Finalizado' OR res['status'] == 'Cancelado'%}
 						<td>{{res['status']}}</td>
 					{% else %}
-						<td><div id="processing-{{res['idProcess']}}">{{res['status']}} <img src="{{url('')}}images/loading1.gif" height="30" width="30"></div></td>
+						<td><div id="processing-{{res['idProcess']}}">{{res['status']}} <img class="pull-right" src="{{url('')}}images/loading2.gif" height="30" width="30"></div></td>
 					{% endif %}
 						<td><a href="{{url('process/importdetail')}}/{{res['idProcess']}}">Ver detalles</a></td>
 					</tr>
