@@ -3,10 +3,12 @@
 	{{ super() }}
 	<script type="text/javascript">
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
-		
+		var finished = false;
 		function checkUnfinishedImports() {
 			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
-				loadNow({{process['idProcess']}});
+				if (!finished) {
+					loadNow({{process['idProcess']}});
+				}
 			}	
 		}
 		
@@ -27,7 +29,7 @@
 		function waiting(x, text) {
 			$('#' + x).empty();
 			$('#' + x).addClass("red");
-			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-remove"></span></td><td>' + text + '</td><td>Esperando</td>');
+			$('#' + x).append('<td></div><span class="glyphicon glyphicon-remove-circle"></span></td><td>' + text + '</td><td>Esperando</td>');
 		}
 		
 		function loadNow(idProcess) {   
@@ -49,7 +51,7 @@
 							waiting('4', 'Finalizado');
 							break;
 							
-						case 'Cargando registros en base de datos':
+						case 'Mapeando contactos':
 							done('1', 'Cargando servicios');
 							done('2', 'Validando registros');
 							inProcess('3', 'Cargando registros en la lista');
@@ -63,6 +65,9 @@
 							done('4', 'Finalizado');
 							$('#details').show();
 							break;
+					}
+					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
+						finished = true;
 					}
 				}
 			});
