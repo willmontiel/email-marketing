@@ -12,12 +12,14 @@
 		
 		function inProcess(x, text) {
 			$('#' + x).empty();
+			$('#' + x).removeClass("red");
 			$('#' + x).addClass("blue");
 			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading2.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>');
 		}
 		
 		function done(x, text) {
 			$('#' + x).empty();
+			$('#' + x).removeClass("blue");
 			$('#' + x).addClass("green");
 			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-circle"></span></td><td>' + text + '</td><td>Hecho</td>');
 		}
@@ -34,41 +36,31 @@
 					switch (data.status) {
 						case 'En ejecución':
 							inProcess('1', 'Cargando servicios');
+							
+							waiting('2', 'Validando registros');
+							waiting('3', 'Cargando registros en la lista');
+							waiting('4', 'Finalizado');
 							break;
 							
 						case 'Preprocesando registros':
 							done('1', 'Cargando servicios');
 							inProcess('2', 'Validando registros');
-							break;
-							
-						case 'Mapeando contactos':
-							done('1', 'Cargando servicios');
-							done('2', 'Validando registros');
-							inProcess('3', 'Mapeando contactos');
+							waiting('3', 'Cargando registros en la lista');
+							waiting('4', 'Finalizado');
 							break;
 							
 						case 'Cargando registros en base de datos':
 							done('1', 'Cargando servicios');
 							done('2', 'Validando registros');
-							done('3', 'Mapeando contactos');
-							inProcess('4', 'Cargando registros en la lista');
+							inProcess('3', 'Cargando registros en la lista');
+							waiting('4', 'Finalizado');
 							break;
-							
-						case 'Actuaizando campos personalizados':
-							done('1', 'Cargando servicios');
-							done('2', 'Validando registros');
-							done('3', 'Mapeando contactos');
-							done('4', 'Cargando registros en la lista');
-							inProcess('5', 'Actualizando campos personalizados');
-							break;
-							
+								
 						case 'Finalizado':
 							done('1', 'Cargando servicios');
 							done('2', 'Validando registros');
-							done('3', 'Mapeando contactos');
-							done('4', 'Cargando registros en la lista');
-							done('5', 'Actualizando campos personalizados');
-							done('6', 'Finalizado');
+							done('3', 'Cargando registros en la lista');
+							done('4', 'Finalizado');
 							$('#details').show();
 							break;
 					}
@@ -93,37 +85,25 @@
 	<div class="row">
 		<div class="col-sm-8 col-sm-offset-2">
 			<table class="table table-contacts report-import table-condensed table-striped">
-				<tr id="1" class="red">
+				<tr id="1">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Cargando servicios</td>
 					<td>En proceso</td>
 				</tr>
 				
-				<tr id="2" class="red">
+				<tr id="2">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Validando registros</td>
 					<td>Esperando</td>
 				</tr>
 				
-				<tr id="3" class="red">
-					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
-					<td>Mapeando contactos</td>
-					<td>Esperando</td>
-				</tr>
-				
-				<tr id="4" class="red">
+				<tr id="3">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Cargando registros en la lista</td>
 					<td>Esperando</td>
 				</tr>
 				
-				<tr id="5" class="red">
-					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
-					<td>Actualizando campos personalizados</td>
-					<td>Esperando</td>
-				</tr>
-				
-				<tr id="6" class="red">
+				<tr id="4">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Finalizado</td>
 					<td>Esperando</td>
