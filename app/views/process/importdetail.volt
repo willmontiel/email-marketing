@@ -13,19 +13,19 @@
 		function inProcess(x, text) {
 			$('#' + x).addClass("blue");
 			$('#' + x).empty();
-			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading2.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>');
+			$('#' + x).append('<td></div><img src="' + MyBaseURL + 'images/loading2.gif" height="30" width="30"></td><td>' + text +'</td><td>En proceso</td>').fadeIn("slow");
 		}
 		
 		function done(x, text) {
 			$('#' + x).addClass("green");
 			$('#' + x).empty();
-			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-circle"></span></td><td>' + text + '</td><td>Hecho</td>');
+			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-circle"></span></td><td>' + text + '</td><td>Hecho</td>').fadeIn("slow");
 		}
 		
 		function waiting(x, text) {
 			$('#' + x).addClass("red");
 			$('#' + x).empty();
-			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-remove"></span></td><td>' + text + '</td><td>Esperando</td>');
+			$('#' + x).append('<td></div><span class="glyphicon glyphicon-ok-remove"></span></td><td>' + text + '</td><td>Esperando</td>').fadeIn("slow");
 		}
 		
 		function loadNow(idProcess) {   
