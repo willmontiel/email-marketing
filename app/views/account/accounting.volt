@@ -15,23 +15,27 @@
 			<thead>
 				<tr>
 					<th colspan="2"></th>
-					<th>Mes anterior (Mayo de 2014)</th>
-					<th>Mes actual (Junio de 2014)</th>
+					<th colspan="2">Mes anterior (xxx)</th>
+					<th colspan="2">Mes actual (xxx)</th>
 				</tr>
 				<tr>
 					<th class="col-sm-1">id</th>
-					<th class="col-sm-5">Cuenta</th>
-					<th class="col-sm-3">Contactos</th>
-					<th class="col-sm-3">Envíos</th>
+					<th class="col-sm-3">Cuenta</th>
+					<th class="col-sm-2">Contactos</th>
+					<th class="col-sm-2">Envíos</th>
+					<th class="col-sm-2">Contactos</th>
+					<th class="col-sm-2">Envíos</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for account in accounts%}
 					<tr>
-						<td>{{account.idAccount}}</td>
-						<td>{{account.companyName}}</td>
-						<td>15000</td>
-						<td>45000</td>
+						<td>{{account['idAccount']}}</td>
+						<td>{{account['account']}}</td>
+						<td>{{account['lastMonth']}}</td>
+						<td>0</td>
+						<td>{{account['currentMonth']}}</td>
+						<td>0</td>
 					</tr>
 				{% endfor %}	
 			</tbody>

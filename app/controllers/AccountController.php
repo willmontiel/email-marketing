@@ -397,10 +397,19 @@ class AccountController extends ControllerBase
 		return $this->response->redirect("account/show/{$user->idAccount}");
 	}
 	
-	public function accountingAction($idAccount)
+	public function accountingAction()
 	{
 		$accounts = Account::find();
 		
-		$this->view->setVar('accounts', $accounts);
+		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
+		$accounting->setAccounts($accounts);
+		$accounting->startAccounting();
+		$a = $accounting->getAccounting();
+		
+//		$this->view->setVar('currentMonth', $currentMonth);
+//		$this->view->setVar('lastMonth', $lastMonth);
+		$this->view->setVar('accounts', $a);
 	}
+	
+	
  }  
