@@ -82,8 +82,8 @@ class AccountingObject
 	
 	protected function processData($values)
 	{
-		foreach ($values as $value) {
-			foreach ($this->accounts as $account) {
+		foreach ($this->accounts as $account) {
+			foreach ($values as $value) {
 				if ($account->idAccount !== $value['idAccount']) {
 					$values[] = array(
 						'idAccount' => $account->idAccount,
