@@ -15,8 +15,8 @@
 			<thead>
 				<tr>
 					<th colspan="2"></th>
-					<th colspan="2">Mes anterior (xxx)</th>
-					<th colspan="2">Mes actual (xxx)</th>
+					<th colspan="2">Mes anterior ({{lastMonth}})</th>
+					<th colspan="2">Mes actual ({{currentMonth}})</th>
 				</tr>
 				<tr>
 					<th class="col-sm-1">id</th>

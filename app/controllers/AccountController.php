@@ -412,8 +412,15 @@ class AccountController extends ControllerBase
 			$this->logger->log("Exception: {$e}");
 		}
 		
-//		$this->view->setVar('currentMonth', $currentMonth);
-//		$this->view->setVar('lastMonth', $lastMonth);
+		
+		$month = date('M', time());
+		$year = date('Y', time());
+		
+		$currentMonth = strtotime("1 {$month} {$year}");
+		$lastMonth = strtotime("-1 month", $currentMonth);
+		
+		$this->view->setVar('currentMonth', date('M', $currentMonth));
+		$this->view->setVar('lastMonth', date('M', $lastMonth));
 		$this->view->setVar('accounts', $a);
 	}
 	

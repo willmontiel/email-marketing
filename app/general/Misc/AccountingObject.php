@@ -22,51 +22,61 @@ class AccountingObject
 	
 	public function startAccounting()
 	{
-		$this->createAccountIdentifiers();
 		$times = $this->createRelationshipDate();
 		$values = $this->createAccounting($times);
 		$this->accounting = $this->processData($values);
 	}
 	
-	protected function createAccountIdentifiers()
-	{
-		$ids = array();
-		foreach ($this->accounts as $account) {
-			$ids[] = $account->idAccount;
-		}
-		
-		$this->ids = implode(',', $ids);
-	}
-
-
 	protected function createAccounting($times)
 	{
 		$db = \Phalcon\DI::getDefault()->get('db');
 		
-		$lastMonthSQl = $this->getSql($times->lastTime, $times->currentTime);
+		$lastMonthSQl = $this->getSql($times->currentTime);
 		$result1 = $db->query($lastMonthSQl);
 		$lastMonth = $result1->fetchAll();
 		
-		
-		$currentMonthSQL = $this->getSql($times->currentTime, $times->nextTime);
+		$currentMonthSQL = $this->getSql($times->nextTime);
 		$result2 = $db->query($currentMonthSQL);
 		$currentMonth = $result2->fetchAll();
 		
 		$array = array();
 		
-		foreach ($lastMonth as $last) {
-			foreach ($currentMonth as $current) {
-				if ($last['idAccount'] == $current['idAccount']) {
-					$array[] = array(
-						'idAccount' => $last['idAccount'],
-						'account' => $last['companyName'],
-						'lastMonth' => $last['actives'],
-						'currentMonth' => $current['actives']
-					);
+		if (count($lastMonth) > 0 && count($lastMonth) > 0) {
+			foreach ($lastMonth as $last) {
+				foreach ($currentMonth as $current) {
+					if ($last['idAccount'] == $current['idAccount']) {
+						$array[] = array(
+							'idAccount' => $last['idAccount'],
+							'account' => $last['companyName'],
+							'lastMonth' => $last['actives'],
+							'currentMonth' => $current['actives']
+						);
+					}
 				}
 			}
 		}
+		else if (count($lastMonth) > 0) {
+			foreach ($lastMonth as $last) {
+				$array[] = array(
+					'idAccount' => $last['idAccount'],
+					'account' => $last['companyName'],
+					'lastMonth' => $last['actives'],
+					'currentMonth' => 0
+				);
+			}
+		}
+		else if (count($currentMonth) > 0) {
+			foreach ($currentMonth as $current) {
+				$array[] = array(
+					'idAccount' => $current['idAccount'],
+					'account' => $current['companyName'],
+					'lastMonth' => 0,
+					'currentMonth' => $current['actives']
+				);
+			}
+		}
 		
+		$this->logger->log(print_r($array, true));
 		return $array;
 	}
 	
@@ -88,21 +98,14 @@ class AccountingObject
 		return $values;
 	}
 	
-	protected function getSql($time1, $time2)
+	protected function getSql($time)
 	{
-		$sql = "SELECT a.idAccount, a.companyName, COUNT(c.idContact) AS actives
-						  FROM account AS a
-						  JOIN dbase AS d ON (d.idAccount = a.idAccount) 
-						  JOIN contact AS c ON (c.idDbase = d.idDbase) 
-						  JOIN email AS e ON (e.idEmail = c.idEmail)
-					  WHERE a.idAccount IN ({$this->ids})
-						  AND c.createdon > {$time1}
-						  AND c.createdon < {$time2}
-						  AND c.unsubscribed = 0
-						  AND e.bounced = 0
-						  AND e.spam = 0
-					 	  AND e.blocked = 0
-						  GROUP BY 1, 2";
+		$sql = "SELECT a.idAccount, a.companyName, SUM(i.actives) AS actives
+					FROM indicator AS i
+					JOIN dbase AS d ON (d.idDbase = i.idDbase)
+					LEFT JOIN account AS a ON (a.idAccount = d.idAccount)
+				WHERE i.date < {$time}
+				GROUP BY 1, 2";
 		
 		$this->logger->log("SQL: $sql");
 		return $sql;
