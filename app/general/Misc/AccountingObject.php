@@ -101,7 +101,8 @@ class AccountingObject
 						  AND c.unsubscribed = 0
 						  AND e.bounced = 0
 						  AND e.spam = 0
-					 	  AND e.blocked = 0";
+					 	  AND e.blocked = 0
+						  GROUP BY 1, 2";
 		
 		$this->logger->log("SQL: $sql");
 		return $sql;
