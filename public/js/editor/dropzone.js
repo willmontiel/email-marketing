@@ -169,14 +169,26 @@ DropzoneArea.prototype.updateFooter = function(block) {
 		}
 		else if(block[i] instanceof SShareBlock) {
 			block[i].content.find('.content-social-share').css('text-align', 'center');
-			block[i].align = 'center';
+			
 			var imgs = block[i].content.find('.content-social-share img');
 			for (var j=0; j < imgs.length; j++ ) {
 				var src = $(imgs[j]).attr('src');
-				var newsrc = src.replace(block[i].size, 24);
+				
+				var newsrc = src.replace(block[i].size, 'xs');
+				block[i].content.find('.content-social-share img[src="' + src + '"]').attr('src', newsrc);
+				
+				var newsrc = src.replace('theme_' + block[i].theme, 'theme_' + 2);
 				block[i].content.find('.content-social-share img[src="' + src + '"]').attr('src', newsrc);
 			}
-			block[i].size = 24;
+			
+			block[i].content_li.html.hide();
+			block[i].content_li.selected = false;
+			
+			block[i].content_gp.html.hide();
+			block[i].content_gp.selected = false;
+			
+			block[i].size = 'xs';
+			block[i].theme = 2;
 		}
 	}
 };

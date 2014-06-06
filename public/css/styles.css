@@ -908,6 +908,22 @@ table {
 	background-color: #c7c7c7;
 }
 
+#my-social-share-component-toolbar .first_row, #my-social-follow-component-toolbar .first_row{
+	padding: 5px 0;
+}
+
+#my-social-share-component-toolbar ul.second_elements, #my-social-follow-component-toolbar ul.second_elements {
+	border-top: 1px solid rgb(160, 160, 160);
+	margin-left: 0;
+	padding-left: 25px;
+	padding-top: 8px;
+}
+
+.social-themes-title {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
 .first_elements li:last-child, .second_elements li:last-child, .third_elements li:last-child {
 	border-right: none;
 	margin-left: 0px;
@@ -1049,6 +1065,7 @@ table {
 	border-top-left-radius: 0px !important;
 	border-bottom-left-radius: 0px !important;
 	border-left: 0px !important;
+	margin-right: 10px;
 }
 .align-btn-toolbar.align-left {
 	padding: 3px 4px 5px 5px;
@@ -1076,12 +1093,11 @@ table {
 }
 .social_follow_net_container {
 	border: 1px dashed #656466;
-	padding: 2px 1px 5px 4px;
+	padding: 5px 1px 9px 4px;
 	margin-bottom: 3px;
 	margin-top: 3px;
 	border-radius: 4px;
 	height: 28px;
-	width: 74px;
 }
 .social-follow-text input {
 	width: 100px;
@@ -1094,7 +1110,7 @@ table {
 	display: none;
 }
 #my-social-follow-component-toolbar.component-toolbar-social {
-	width: 630px;
+	width: 580px;
 }
 .soc_net_follow_container {
 	margin-right: 8px;
@@ -1246,7 +1262,7 @@ table {
 .full-container-img-margin, .full-container-img-border {
 	float: none !important;
 }
-.social-share-themes-title, .social-share-themes-buttons, .img-themes-in-toolbar-container {
+.social-themes-title, .social-themes-buttons, .img-themes-in-toolbar-container {
 	float: left;
 }
 .img-themes-in-toolbar {

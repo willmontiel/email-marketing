@@ -105,6 +105,7 @@ SShareBlock.prototype.persist = function() {
 		contentData : content,
 		align: this.align,
 		size: this.size,
+		theme: this.theme,
 	
 		background_color : this.background_color,
 		border_width : this.border_width,
@@ -126,33 +127,34 @@ SShareBlock.prototype.persist = function() {
 SShareBlock.prototype.unpersist = function(obj) {
 	this.align = obj.align;
 	this.size = obj.size;
+	this.theme = obj.theme;
 	
 	for(var i=0; i < obj.contentData.length; i++) {
 		switch (obj.contentData[i].socialname) {
 			case 'Facebook':
 				this.content_fb.selected = obj.contentData[i].selected;
-				this.content_fb.html.attr('src', config.imagesUrl + '/share_facebook_image_' + this.size + '.png');
+				this.content_fb.html.attr('src', config.imagesUrl + '/socials/share/theme_' + this.theme + '/share_facebook_image_' + this.size + '.png');
 				if(!this.content_fb.selected) {
 					this.content_fb.html.hide();
 				}
 				break;
 			case 'Twitter':
 				this.content_tw.selected = obj.contentData[i].selected;
-				this.content_tw.html.attr('src', config.imagesUrl + '/share_twitter_image_' + this.size + '.png');
+				this.content_tw.html.attr('src', config.imagesUrl + '/socials/share/theme_' + this.theme + '/share_twitter_image_' + this.size + '.png');
 				if(!this.content_tw.selected) {
 					this.content_tw.html.hide();
 				}
 				break;
 			case 'LinkedIn':
 				this.content_li.selected = obj.contentData[i].selected;
-				this.content_li.html.attr('src', config.imagesUrl + '/share_linkedin_image_' + this.size + '.png');
+				this.content_li.html.attr('src', config.imagesUrl + '/socials/share/theme_' + this.theme + '/share_linkedin_image_' + this.size + '.png');
 				if(!this.content_li.selected) {
 					this.content_li.html.hide();
 				}
 				break;
 			case 'Google Plus':
 				this.content_gp.selected = obj.contentData[i].selected;
-				this.content_gp.html.attr('src', config.imagesUrl + '/share_google_plus_image_' + this.size + '.png');
+				this.content_gp.html.attr('src', config.imagesUrl + '/socials/share/theme_' + this.theme + '/share_google_plus_image_' + this.size + '.png');
 				if(!this.content_gp.selected) {
 					this.content_gp.html.hide();
 				}
@@ -214,10 +216,10 @@ SShareBlock.prototype.createToolbar = function() {
 	var withtw = (this.content_tw.selected) ? 'checked' : '';
 	var withli = (this.content_li.selected) ? 'checked' : '';
 	var withgp = (this.content_gp.selected) ? 'checked' : '';
-	var fb = $('<div class="social_share_net_container fb-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-fb-toolbar" ' + withfb + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-fb-toolbar"><img class="soc_net_share button_facebook" src="' + config.imagesUrl + '/share_facebook_image_32.png" alt="64x64" /></label></div></div>');
-	var tw = $('<div class="social_share_net_container tw-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-tw-toolbar" ' + withtw + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-tw-toolbar"><img class="soc_net_share button_twitter" src="' + config.imagesUrl + '/share_twitter_image_32.png" alt="64x64" /></label></div></div>');
-	var li = $('<div class="social_share_net_container li-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-li-toolbar" ' + withli + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-li-toolbar"><img class="soc_net_share button_linkedin" src="' + config.imagesUrl + '/share_linkedin_image_32.png" alt="64x64" /></label></div></div>');
-	var gp = $('<div class="social_share_net_container gp-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-gp-toolbar" ' + withgp + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-gp-toolbar"><img class="soc_net_share button_google_plus" src="' + config.imagesUrl + '/share_google_plus_image_32.png" alt="64x64" /></label></div></div>');
+	var fb = $('<div class="social_share_net_container fb-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-fb-toolbar" ' + withfb + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-fb-toolbar"><img class="soc_net_share button_facebook" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-1.png" alt="64x64" /></label></div></div>');
+	var tw = $('<div class="social_share_net_container tw-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-tw-toolbar" ' + withtw + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-tw-toolbar"><img class="soc_net_share button_twitter" src="' + config.imagesUrl + '/socials/buttons/btn-tw-style-1.png" alt="64x64" /></label></div></div>');
+	var li = $('<div class="social_share_net_container li-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-li-toolbar" ' + withli + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-li-toolbar"><img class="soc_net_share button_linkedin" src="' + config.imagesUrl + '/socials/buttons/btn-li-style-1.png" alt="64x64" /></label></div></div>');
+	var gp = $('<div class="social_share_net_container gp-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-gp-toolbar" ' + withgp + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-gp-toolbar"><img class="soc_net_share button_google_plus" src="' + config.imagesUrl + '/socials/buttons/btn-gp-style-1.png" alt="64x64" /></label></div></div>');
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(fb);
 	elements.append(tw);
@@ -248,9 +250,9 @@ SShareBlock.prototype.createToolbar = function() {
 	elements.append(align);
 	toolbar.find('.first_row ul').append(elements);	
 	
-	var themes = $('<div class="social-share-themes-toolbar-container">\n\
-						<div class="social-share-themes-title">Temas</div>\n\
-						<div class="social-share-themes-buttons">\n\
+	var themes = $('<div class="social-themes-toolbar-container">\n\
+						<div class="social-themes-title">Temas</div>\n\
+						<div class="social-themes-buttons">\n\
 							<div class="img-themes-in-toolbar-container" data-theme="1"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-1.png"></div></div>\n\
 							<div class="img-themes-in-toolbar-container" data-theme="2"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-2.png"></div></div>\n\
 							<div class="img-themes-in-toolbar-container" data-theme="3"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-3.png"></div></div>\n\
@@ -260,6 +262,7 @@ SShareBlock.prototype.createToolbar = function() {
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(themes);
 	toolbar.find('.second_row ul').append(elements);	
+	
 	this.eventsChange();
 };
 
@@ -270,7 +273,7 @@ SShareBlock.prototype.eventsChange = function() {
 	this.withSocialNetwork('with-li-toolbar', 'li');
 	this.withSocialNetwork('with-gp-toolbar', 'gp');
 	
-	$('.align-btn-toolbar.align-' + this.align).addClass('align-selected-toolbar')
+	$('.align-btn-toolbar.align-' + this.align).addClass('align-selected-toolbar');
 	$('.align-btn-toolbar.align-left').on('click', function() {
 		t.content.find('.content-social-share').css('text-align', 'left');
 		t.align = 'left';
