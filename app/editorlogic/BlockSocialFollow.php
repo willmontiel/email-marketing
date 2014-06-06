@@ -24,16 +24,16 @@ class BlockSocialFollow extends HtmlAbstract
 				$domain = Urldomain::findFirstByIdUrlDomain(1);
 				switch ($content->socialname) {
 					case 'Facebook':
-						$this->children[] = '<a href="https://www.facebook.com"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_facebook_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_facebook_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
 						break;
 					case 'Twitter':
-						$this->children[] = '<a href="https://twitter.com"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_twitter_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_twitter_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
 						break;
 					case 'LinkedIn':
-						$this->children[] = '<a href="https://linkedin.com"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_linkedin_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_linkedin_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
 						break;
 					case 'Google Plus':
-						$this->children[] = '<a href="https://plus.google.com"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_google_plus_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_google_plus_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
 						break;
 				}	
 			}

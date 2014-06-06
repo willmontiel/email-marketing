@@ -1,9 +1,9 @@
 function SFollowBlock(row) {
 	this.row = row;
-	this.content_fb = {html: $('<img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_facebook_image_md.png" alt="64x64" />'), selected: true};
-	this.content_tw = {html: $('<img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_twitter_image_md.png" alt="64x64" />'), selected: true};
-	this.content_li = {html: $('<img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_linkedin_image_md.png" alt="64x64" />'), selected: true};
-	this.content_gp = {html: $('<img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_google_plus_image_md.png" alt="64x64" />'), selected: true};
+	this.content_fb = {html: $('<img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_facebook_image_md.png" alt="64x64" />'), selected: true, link: 'https://facebook.com/'};
+	this.content_tw = {html: $('<img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_twitter_image_md.png" alt="64x64" />'), selected: true, link: 'https://twitter.com/'};
+	this.content_li = {html: $('<img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_linkedin_image_md.png" alt="64x64" />'), selected: true, link: 'https://linkedin.com/'};
+	this.content_gp = {html: $('<img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_google_plus_image_md.png" alt="64x64" />'), selected: true, link: 'https://plus.google.com/'};
 	this.align = 'left';
 	this.size = 'md';
 	this.theme = 1;
@@ -96,10 +96,10 @@ SFollowBlock.prototype.updateColumnStyle = function(style, value) {
 
 SFollowBlock.prototype.persist = function() {
 	var content = [];
-	content.push({socialname: 'Facebook', selected: this.content_fb.selected});
-	content.push({socialname: 'Twitter', selected: this.content_tw.selected});
-	content.push({socialname: 'LinkedIn', selected: this.content_li.selected});
-	content.push({socialname: 'Google Plus', selected: this.content_gp.selected});
+	content.push({socialname: 'Facebook', selected: this.content_fb.selected, link: this.content_fb.link});
+	content.push({socialname: 'Twitter', selected: this.content_tw.selected, link: this.content_tw.link});
+	content.push({socialname: 'LinkedIn', selected: this.content_li.selected, link: this.content_li.link});
+	content.push({socialname: 'Google Plus', selected: this.content_gp.selected, link: this.content_gp.link});
 	
 	var obj = {
 		contentData : content,
@@ -132,6 +132,11 @@ SFollowBlock.prototype.unpersist = function(obj) {
 	this.content_tw.selected = obj.contentData[1].selected;
 	this.content_li.selected = obj.contentData[2].selected;
 	this.content_gp.selected = obj.contentData[3].selected;
+	
+	this.content_fb.link = obj.contentData[0].link;
+	this.content_tw.link = obj.contentData[1].link;
+	this.content_li.link = obj.contentData[2].link;
+	this.content_gp.link = obj.contentData[3].link;
 	
 	for(var i=0; i < obj.contentData.length; i++) {
 		switch (obj.contentData[i].socialname) {
@@ -218,10 +223,10 @@ SFollowBlock.prototype.createToolbar = function() {
 	var withtw = (this.content_tw.selected) ? 'checked' : '';
 	var withli = (this.content_li.selected) ? 'checked' : '';
 	var withgp = (this.content_gp.selected) ? 'checked' : '';
-	var fb = $('<div class="full-container-social-network-toolbar"><div class="social_follow_net_container fb-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-fb-toolbar" ' + withfb + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-fb-toolbar"><img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-1.png" alt="64x64" /></label></div></div></div>');
-	var tw = $('<div class="full-container-social-network-toolbar"><div class="social_follow_net_container tw-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-tw-toolbar" ' + withtw + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-tw-toolbar"><img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/socials/buttons/btn-tw-style-1.png" alt="64x64" /></label></div></div></div>');
-	var li = $('<div class="full-container-social-network-toolbar"><div class="social_follow_net_container li-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-li-toolbar" ' + withli + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-li-toolbar"><img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/socials/buttons/btn-li-style-1.png" alt="64x64" /></label></div></div></div>');
-	var gp = $('<div class="full-container-social-network-toolbar"><div class="social_follow_net_container gp-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-gp-toolbar" ' + withgp + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-gp-toolbar"><img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/socials/buttons/btn-gp-style-1.png" alt="64x64" /></label></div></div></div>');
+	var fb = $('<div class="full-container-social-network-toolbar"><div class="social_follow_net_container fb-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-fb-toolbar" ' + withfb + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-fb-toolbar"><img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-1.png" alt="64x64" /></label></div></div><div class="social-follow-url-container"><div id="fb_link_btn" class="social-follow-link"><span class="icons-16x16 icon-link-16x16"></span></div><div class="input-field-social-follow"><input class="social-follow-input" type="text"></div></div></div>');
+	var tw = $('<div class="full-container-social-network-toolbar"><div class="social_follow_net_container tw-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-tw-toolbar" ' + withtw + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-tw-toolbar"><img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/socials/buttons/btn-tw-style-1.png" alt="64x64" /></label></div></div><div class="social-follow-url-container"><div id="tw_link_btn" class="social-follow-link"><span class="icons-16x16 icon-link-16x16"></span></div><div class="input-field-social-follow"><input class="social-follow-input" type="text"></div></div></div>');
+	var li = $('<div class="full-container-social-network-toolbar"><div class="social_follow_net_container li-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-li-toolbar" ' + withli + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-li-toolbar"><img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/socials/buttons/btn-li-style-1.png" alt="64x64" /></label></div></div><div class="social-follow-url-container"><div id="li_link_btn" class="social-follow-link"><span class="icons-16x16 icon-link-16x16"></span></div><div class="input-field-social-follow"><input class="social-follow-input" type="text"></div></div></div>');
+	var gp = $('<div class="full-container-social-network-toolbar"><div class="social_follow_net_container gp-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-gp-toolbar" ' + withgp + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-gp-toolbar"><img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/socials/buttons/btn-gp-style-1.png" alt="64x64" /></label></div></div><div class="social-follow-url-container"><div id="gp_link_btn" class="social-follow-link"><span class="icons-16x16 icon-link-16x16"></span></div><div class="input-field-social-follow"><input class="social-follow-input" type="text"></div></div></div>');
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(fb);
 	elements.append(tw);
@@ -246,10 +251,6 @@ SFollowBlock.prototype.createToolbar = function() {
 						<div class="align-btn-toolbar align-right"><span class="icon-align-right icon-white"></span></div>\n\
 					</div>\n\
 					</div>');
-	var elements = $('<li class="toolbar-elements" />');
-	elements.append(size);
-	elements.append(align);
-	toolbar.find('.first_row ul').append(elements);	
 	
 	var themes = $('<div class="social-themes-toolbar-container">\n\
 						<div class="social-themes-title">Temas</div>\n\
@@ -263,6 +264,11 @@ SFollowBlock.prototype.createToolbar = function() {
 					</div>');
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(themes);
+	toolbar.find('.second_row ul').append(elements);	
+	
+	var elements = $('<li class="toolbar-elements" />');
+	elements.append(size);
+	elements.append(align);
 	toolbar.find('.second_row ul').append(elements);
 	
 	this.eventsChange();
@@ -318,6 +324,11 @@ SFollowBlock.prototype.eventsChange = function() {
 		$(this).addClass('img-themes-in-toolbar-selected');
 		t.changeSocialTheme($(this).data('theme'));
 	});
+	
+	this.assignUrlFollow('fb');
+	this.assignUrlFollow('tw');
+	this.assignUrlFollow('li');
+	this.assignUrlFollow('gp');
 };
 
 SFollowBlock.prototype.withSocialNetwork = function(id, container) {
@@ -350,4 +361,27 @@ SFollowBlock.prototype.changeSocialTheme = function(theme) {
 		$(images[i]).attr('src', newsrc);
 	}
 	this.theme = theme;
+};
+
+SFollowBlock.prototype.assignUrlFollow = function(social) {
+	var t = this;
+	$('#' + social + '_link_btn' ).on('click', function() {
+		$('.social-follow-input').off('change');
+		
+		var input = $(this).siblings('.input-field-social-follow');
+		input.find('.social-follow-input').val(t['content_'+social].link);
+		
+		if(input.hasClass('input-url-social-follow')) {
+			input.removeClass('input-url-social-follow');
+		}
+		else {
+			$('.input-url-social-follow').removeClass('input-url-social-follow');
+			input.addClass('input-url-social-follow');
+		}
+		
+		$('.social-follow-input').on('change', function(){
+			t['content_'+social].link = $(this).val();
+		});
+		
+	});
 };
