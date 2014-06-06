@@ -82,18 +82,21 @@ class AccountingObject
 	
 	protected function processData($values)
 	{
-//		foreach ($values as $value) {
-//			foreach ($this->accounts as $account) {
-//				if ($account->idAccount !== $value['idAccount']) {
-//					$values[] = array(
-//						'idAccount' => $account->idAccount,
-//						'account' => $account->companyName,
-//						'lastMonth' => 0,
-//						'currentMonth' => 0
-//					);
-//				}
-//			}
-//		}
+		foreach ($values as $value) {
+			foreach ($this->accounts as $account) {
+				if ($account->idAccount == $value['idAccount']) {
+					
+				}
+				else {
+					$values[] = array(
+						'idAccount' => $account->idAccount,
+						'account' => $account->companyName,
+						'lastMonth' => 0,
+						'currentMonth' => 0
+					);
+				}
+			}
+		}
 		
 		return $values;
 	}
