@@ -404,7 +404,13 @@ class AccountController extends ControllerBase
 		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
 		$accounting->setAccounts($accounts);
 		$accounting->startAccounting();
-		$a = $accounting->getAccounting();
+		
+		try {
+			$a = $accounting->getAccounting();
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
+		}
 		
 //		$this->view->setVar('currentMonth', $currentMonth);
 //		$this->view->setVar('lastMonth', $lastMonth);
