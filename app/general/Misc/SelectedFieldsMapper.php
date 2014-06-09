@@ -239,18 +239,20 @@ class SelectedFieldsMapper
 	protected function transformDateFormat($date, $format) 
 	{
 		$separator = substr($format, 1, 1);
-	
-		$f = explode($separator, $format);
-		$d = explode($separator, $date);
-		
-		if (count($d) != 0) {
-			$year = $this->getPart($f, $d, 'Y');
-			$month = $this->getPart($f, $d, 'm');
-			$day = $this->getPart($f, $d, 'd');
+		if (!empty($separator)) {
+			$f = explode($separator, $format);
+			$d = explode($separator, $date);
 
-			$newDate = "{$year}-{$month}-{$day}";
-			return $newDate;
+			if (count($d) != 0) {
+				$year = $this->getPart($f, $d, 'Y');
+				$month = $this->getPart($f, $d, 'm');
+				$day = $this->getPart($f, $d, 'd');
+
+				$newDate = "{$year}-{$month}-{$day}";
+				return $newDate;
+			}
 		}
+		
 		return null;
 	}
 
