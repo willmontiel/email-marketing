@@ -56,7 +56,7 @@ class AccountingObject
 		$lastContactsMonth = $result1->fetchAll();
 		
 		$currentMonthContactsSQL = $this->getSQLForTotalContacts($times->currentTime, $times->nextTime);
-		$this->logger->log("SQL: $currentMonthContactsSQL");
+//		$this->logger->log("SQL: $currentMonthContactsSQL");
 		$result2 = $db->query($currentMonthContactsSQL);
 		$currentContactsMonth = $result2->fetchAll();
 		
@@ -105,6 +105,7 @@ class AccountingObject
 					JOIN account AS a ON ( a.idAccount = m.idAccount ) 
 				WHERE m.updatedon >= {$time1}
 					AND m.updatedon < {$time2}
+					AND m.status = 'sent'
 				GROUP BY 1 ";
 					
 //		$this->logger->log("SQL: $sql");
