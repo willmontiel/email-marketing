@@ -104,7 +104,7 @@ class AccountingObject
 		
 		if (count($currentSentMonth) > 0) {
 			foreach ($currentSentMonth as $currentSent) {
-				$this->accounting[$currentSent['idAccount']]['sentCurrentMonth'] = $currentSent['total'] ;
+				$this->accounting[$currentSent['idAccount']]['sentCurrentMonth'] = $currentSent['total'];
 				
 				if ($currentSent['total'] > $this->accounting[$currentSent['idAccount']]['sentLastMonth']) {
 					$this->accounting[$currentSent['idAccount']]['classCurrentSent'] = 'text-green-color';
@@ -172,7 +172,7 @@ class AccountingObject
 	
 	public function getAccounting()
 	{
-//		$this->logger->log("Accounting: " . print_r($this->accounting, true));
+		$this->logger->log("Accounting: " . print_r($this->accounting, true));
 		return $this->accounting;
 	}
 }
