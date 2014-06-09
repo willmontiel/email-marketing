@@ -54,10 +54,17 @@ class AccountController extends ControllerBase
         $form = new AccountForm($account);
 		
         if ($this->request->isPost()) {
-            
+			
             $form->bind($this->request->getPost(), $account);
+			
+			$p = $form->getValue('prefix');
+			$c = $form->getValue('companyName');
+			
+			$prefix = $this->validatePrefix($c, $p);
+			$account->prefix = $prefix;
 			$account->idUrlDomain = 1;
 			$this->db->begin();
+			
             if ($form->isValid() && $account->save()) {
             
 				$user = new User();
@@ -69,7 +76,7 @@ class AccountController extends ControllerBase
 				$user->lastName = $form->getValue('lastName');				
 		$pass =	$user->password = $form->getValue('password');
 		$pass2=	$user->password2 = $form->getValue('password2');
-				$user->username = $form->getValue('username');  
+				$user->username = $prefix . '_' . $form->getValue('username');  
 				$user->userrole='ROLE_ADMIN';
 			    $user->account = $account;
 				
@@ -132,6 +139,15 @@ class AccountController extends ControllerBase
   
    } 
    
+   private function validatePrefix($name, $prefix)
+   {
+		$p = (empty($prefix) ? $name : $prefix);
+
+		$prefix = (strlen($p) <= 4 ? strtolower($p) : $this->getPrefix($p));
+		
+		return $prefix;
+   }
+   
    /*
     * Esta función se encarga de mostrar todos los usuarios de todas la cuentas. Es utilizada por el super-administrador
     * Recibe el id de la cuenta
@@ -174,16 +190,18 @@ class AccountController extends ControllerBase
 
  			if ($this->request->isPost()) {   
 					$editform->bind($this->request->getPost(), $account);
-					$this->db->begin();
+					
+					$n = $editform->getValue('companyName');
+					$p = $editform->getValue('prefix');
+					
+					$account->prefix = $this->validatePrefix($n, $p);
 								
 					if (!$editform->isValid() || !$account->save()) {
-						$this->db->rollback();
 						foreach ($account->getMessages() as $msg) {
 							$this->flashSession->error($msg);
 						} 
 					}
 					else {
-						$this->db->commit();
 						$this->traceSuccess("Edit account: {$id}");
 						$this->flashSession->notice('Se ha editado la cuenta exitosamente');
 						return $this->response->redirect("account");
@@ -257,47 +275,65 @@ class AccountController extends ControllerBase
 			return $this->response->redirect("account/show/{$this->user->account->idAccount}");
 		}
 		
+		$prefix = $account->prefix . '_';
+		$this->view->setVar("prefix", $prefix);
+		
 		if ($this->request->isPost()) {
 			$form->bind($this->request->getPost(), $user);
-
-			$pass = $form->getValue('password');
-			$pass2 = $form->getValue('password2');
-
-			if(strlen($pass) < 8) {
-				$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 caracteres y máximo 40");
+			
+			$username = $form->getValue('username');
+			
+			if (strlen($username) < 4) {
+				$this->flashSession->error("El nombre de usuario es muy corto, debe tener al menos 4 caracteres");
 			}
 			else {
-				if($pass !== $pass2) {
-					$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
+				$user->username = $prefix . $username;
+				$pass = $form->getValue('password');
+				$pass2 = $form->getValue('password2');
+
+				if(strlen($pass) < 8) {
+					$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 caracteres y máximo 40");
 				}
 				else {
-					$email = strtolower($form->getValue('email'));
-
-					$user->idAccount = $account->idAccount;
-					$user->email = $email;
-					$user->password = $this->security2->hash($pass);
-
-					if ($form->isValid() && $user->save()) {
-						$this->traceSuccess("Create user like sudo, account {$account->idAccount}");
-						$this->flashSession->notice("Se ha creado el usuario exitosamente en la cuenta {$account->companyName}");
-						return $this->response->redirect("account/show/{$account->idAccount}");
+					if($pass !== $pass2) {
+						$this->flashSession->error("Las contraseñas no coinciden por favor verifique la información");
 					}
-
 					else {
-						foreach ($user->getMessages() as $msg) {
-							$this->flashSession->error($msg);
-							$this->logger->log("Error while creating user account {$account->idAccount}");
+						$email = strtolower($form->getValue('email'));
+
+						$user->idAccount = $account->idAccount;
+						$user->email = $email;
+						$user->password = $this->security2->hash($pass);
+
+						if ($form->isValid() && $user->save()) {
+							$this->traceSuccess("Create user like sudo, account {$account->idAccount}");
+							$this->flashSession->notice("Se ha creado el usuario exitosamente en la cuenta {$account->companyName}");
+							return $this->response->redirect("account/show/{$account->idAccount}");
 						}
-						$this->traceFail("Create user like sudo, account {$account->idAccount}");
+
+						else {
+							foreach ($user->getMessages() as $msg) {
+									$this->flashSession->error($msg);
+									$this->logger->log("Error while creating user account {$account->idAccount}");
+							}
+							$this->traceFail("Create user like sudo, account {$account->idAccount}");
+						}
 					}
 				}
 			}
-		 }
+		}
 
-		 $this->view->UserForm = $form;
-		 $this->view->setVar('account', $account);
+		$this->view->UserForm = $form;
+		$this->view->setVar('account', $account);
 	}
 	
+	
+	protected function removePrefix($username)
+	{
+		$un = explode('_', $username);
+		
+		return $un[1];
+	}
 	
 	/*
 	 * Esta función le permite al super-administrador editar cualquier usuario de cualquier cuenta
@@ -315,12 +351,26 @@ class AccountController extends ControllerBase
 			return $this->response->redirect("account/index");
 		}
 		
+		$account = $userExist->account;
+		$prefix = $account->prefix . '_';
+		
+		$userExist->username = $this->removePrefix($userExist->username);
+		
 		$this->view->setVar("user", $userExist);
+		$this->view->setVar("prefix", $prefix);
 		$form = new UserForm($userExist);
 
 		if ($this->request->isPost()) {   
 			$form->bind($this->request->getPost(), $userExist);
-
+			
+			$username = $form->getValue('username');
+			
+			if (strlen($username) < 4) {
+				$this->flashSession->error("El nombre de usuario es muy corto, debe tener al menos 4 caracteres");
+				return $this->response->redirect("account/edituser/{$id}");
+			}
+			
+			$userExist->username = $prefix . $username; 
 			$pass = $form->getValue('passForEdit');
 			$pass2 = $form->getValue('pass2ForEdit');
 			$email = strtolower($form->getValue('email'));

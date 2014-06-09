@@ -27,6 +27,14 @@
 						{{ editFormAccount.render('companyName', {'class': 'form-control'}) }}
 					</div>
 				</div>
+					
+				<div class="form-group">
+					<label class="col-md-4 control-label">Prefijo: </label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('prefix', {'class': 'form-control'}) }}
+					</div>
+				</div>
+					
 				<div class="form-group">
 					<label class="col-md-4 control-label">*Espacio disponible en disco(Mb):</label>
 					<div class="col-md-6">

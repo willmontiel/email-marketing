@@ -16,6 +16,12 @@ class AccountForm extends Form
 			'autofocus' => "autofocus" 
         )));
 		
+		$this->add(new Text('prefix', array(
+			'maxlength' => 4,
+			'type' => 'text',
+			'autofocus' => "autofocus" 
+        )));
+		
 		$this->add(new Text('virtualMta', array(
 			'maxlength' => 50,
 			'type' => 'text',

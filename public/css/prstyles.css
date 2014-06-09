@@ -863,3 +863,8 @@ span.required {
 .primary-field {
 	color: #5bc0de;
 }
+
+.prefix {
+	padding-left: 15px !important; 
+	padding-right: 15px !important;
+}

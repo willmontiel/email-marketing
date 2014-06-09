@@ -1,6 +1,7 @@
 <?php
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
+use Phalcon\Mvc\Model\Validator\StringLength;
 /**
  * La clase Modelbase hereda las funciones:
  * beforeUpdate -> Se ejecuta antes de actualizar un objeto y asigna un valor, en este caso un timestamp para el campo updateon
@@ -41,6 +42,14 @@ class Account extends Modelbase
 				"message" => "Debe ingresar un nombre para la cuenta"
             )
         ));
+		
+		$this->validate(new StringLength(
+			array(
+				"field" => "companyName",
+				"min" => 4,
+				"message" => "El nombre de la cuenta es muy corto, debe tener al menos 4 caracteres"
+			)
+		));
 		
 		$this->validate(new PresenceOf(
             array(

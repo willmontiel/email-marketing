@@ -77,12 +77,19 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		return $this->response;
 	}
 	
+	public function getPrefix($name)
+	{
+		$name = str_replace(' ', '', $name);
+		$prefix = strtolower(substr($name, 0, 4));
+		
+		return $prefix;
+	}
 	
 	public function beforeExecuteRoute($dispatcher)
 	{
 		$this->timerObject->startTimer('controller', 'Controller/action [' . $dispatcher->getControllerName() . ':' . $dispatcher->getActionName() . ']');
 	}
-
+	
 	public function afterExecuteRoute($dispatcher)
 	{
 		$this->timerObject->endTimer('controller');
