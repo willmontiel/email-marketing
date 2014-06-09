@@ -36,16 +36,16 @@ class AccountingObject
 					'account' => $account->companyName,
 					
 					'contactsLastMonth' => 0,
-					'classLastContact' => 'text-gray-color',
+					'classLastContact' => '',
 					
 					'sentLastMonth' => 0,
-					'classLastSent' => 'text-gray-color',
+					'classLastSent' => '',
 					
 					'contactsCurrentMonth' => 0,
-					'classCurrentContact' => 'text-gray-color',
+					'classCurrentContact' => '',
 					
 					'sentCurrentMonth' => 0,
-					'classCurrentSent' => 'text-gray-color',
+					'classCurrentSent' => '',
 				);
 			}
 		}
