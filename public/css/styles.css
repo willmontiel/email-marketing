@@ -749,7 +749,7 @@ table {
 
 .component-toolbar-image {
 	height: 42px;
-	width: 690px;
+	width: 755px;
 	background: lightgray;
 	padding: 4px;
 	border-radius: 5px;
@@ -761,10 +761,18 @@ table {
 	margin-top: 10px;
 	margin-right: 15px;
 }
-.link-img-container {
-	margin-top: 10px;
+.link-img-container, .alt-img-container {
+	margin-top: 5px;
 }
-.link-img-container input {
+.link-for-image-input, .alt-for-image-input {
+	margin-top: 5px;
+	float: left;
+	display: none;
+}
+.link-for-image-input.show-img-toolabar-input, .alt-for-image-input.show-img-toolabar-input {
+	display: block;
+}
+.link-img-container input, .alt-img-container input {
 	width: 160px;
 }
 /*.maximum-width-for-image {
@@ -1050,7 +1058,7 @@ table {
 .social_share_net_container input[type=checkbox] {
 	display: none;
 }
-.align-btn-toolbar, .vert-align-btn-toolbar, .media-btn-image-displayer {
+.align-btn-toolbar, .vert-align-btn-toolbar, .media-btn-image-displayer, .link-btn-toolbar, .alt-btn-toolbar {
 	float: left;
 	background-color: #7A7A7A;
 	border-radius: 30px;
@@ -1058,7 +1066,7 @@ table {
 	margin-right: 5px;
 	margin-top: 5px;
 }
-.align-btn-toolbar:hover, .vert-align-btn-toolbar:hover, .media-btn-image-displayer:hover {
+.align-btn-toolbar:hover, .vert-align-btn-toolbar:hover, .media-btn-image-displayer:hover, .link-btn-toolbar:hover, .alt-btn-toolbar:hover {
 	background-color: #C4C4C4;
 }
 #size-social-options-toolbar {
@@ -1087,6 +1095,12 @@ table {
 }
 .media-btn-image-displayer {
 	padding: 3px 4px 5px 4px;
+}
+.link-btn-toolbar {
+	padding: 3px 4px 4px 4px;
+}
+.alt-btn-toolbar {
+	padding: 3px 5px 4px 4px;
 }
 .align-selected-toolbar, .vert-align-selected-toolbar {
 	background-color: #107fc8;
@@ -1192,8 +1206,22 @@ table {
 	line-height: 14px;
 	vertical-align: text-top;
 }
+.image-insert-alt {
+	background-image: url('../images/alt-icon.png');
+	display: inline-block;
+	width: 15px;
+	height: 14px;
+	margin-top: 1px;
+	line-height: 14px;
+	vertical-align: text-top;
+	background-position: 0 -1px;
+}
 .image-sprite.image-vertical-align-middle {
 	background-position: 31px 288px;
+}
+.image-sprite.image-insert-link {
+	background-position: 51px 288px;
+	width: 16px;
 }
 .image-sprite.image-vertical-align-top {
 	background-position: 31px 304px;

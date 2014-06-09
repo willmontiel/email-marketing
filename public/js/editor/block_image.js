@@ -104,7 +104,7 @@ ImgBlock.prototype.createImgToolbar = function() {
 	toolbar.css('position', 'absolute');
 //	toolbar.css('top', position.top + this.content.height() - 80);
 	toolbar.css('top', position.top - 150);
-	toolbar.css('left', 140);
+	toolbar.css('left', 102);
 	
 	$('.element-img-in-edition').removeClass('element-img-in-edition');
 	this.content.find('.one-element').addClass('element-img-in-edition');
@@ -136,10 +136,12 @@ ImgBlock.prototype.createImgToolbar = function() {
 	elementvertalign.append(verticalalign);
 	
 	var imgmedia = $('<div class="media-image-displayer"><div class="media-image-container"><div data-toggle="modal" data-backdrop="static" href="#images" class="media-btn-image-displayer"><span class="icon-picture icon-white"></span></div></div></div>');
-	var imglink = $('<div class="link-img-container"><input id="link_to_image" type="text" placeholder="Escriba Link"></div>');
+	var imglink = $('<div class="link-img-container"><div id="bnt-insert-link-img" class="link-btn-toolbar"><span class="image-sprite image-insert-link"></span></div><div class="link-for-image-input show-img-toolabar-input"><input id="link_to_image" type="text" placeholder="Escriba Link"></div></div>');
+	var imgalt = $('<div class="alt-img-container"><div id="bnt-insert-alt-img" class="alt-btn-toolbar"><span class="image-insert-alt"></span></div><div class="alt-for-image-input"><input id="alt_to_image" type="text" placeholder="Escriba Alt"></div></div>');
 	var elementmedia = $('<li class="toolbar-elements" />');
 	elementmedia.append(imgmedia);
 	elementmedia.append(imglink);
+	elementmedia.append(imgalt);
 	
 	toolbar.find('.img-components-list').append(elementslider);
 	toolbar.find('.img-components-list').append(elementalign);
@@ -181,6 +183,23 @@ ImgBlock.prototype.activateEvents = function() {
 	$('#link_to_image').val(this.imglink);
 	$('#link_to_image').on('change', function() {
 		t.setLinkToImage($(this).val());
+	});
+	
+	$('#alt_to_image').val(this.imgalt);
+	$('#alt_to_image').on('change', function() {
+		t.setAltToImage($(this).val());
+	});
+	
+	this.showFieldInput('bnt-insert-link-img', 'show-img-toolabar-input', 'link-for-image-input');
+	this.showFieldInput('bnt-insert-alt-img', 'show-img-toolabar-input', 'alt-for-image-input');
+	
+};
+
+ImgBlock.prototype.showFieldInput = function(id, classname, sibling) {
+	$('#' + id).on('click', function() {
+		$('.' + classname).removeClass(classname);
+		var input = $(this).siblings('.' + sibling);
+		input.addClass(classname);
 	});
 };
 
@@ -229,6 +248,10 @@ ImgBlock.prototype.setLinkToImage = function(link) {
 	this.imglink = link;
 };
 
+ImgBlock.prototype.setAltToImage = function(alt) {
+	this.imgalt = alt;
+};
+
 ImgBlock.prototype.setVerticalAlignImgBlock = function(vertalign) {
 	this.vertalign = vertalign;
 };
@@ -260,8 +283,8 @@ ImgBlock.prototype.persist = function() {
 		align: this.align,
 		vertalign: this.vertalign,
 		imgsrc: this.imgsrc,
-		imgalt: this.imgalt,
-		imglink: this.imglink,
+		imgalt: (this.imgalt !== undefined) ? this.imgalt.replace(/"/g, '&quot;') : this.imgalt,
+		imglink: (this.imglink !== undefined) ? this.imglink.replace(/"/g, '&quot;') : this.imglink,
 		type : 'Image'
 	};
 	return obj;
@@ -292,9 +315,9 @@ ImgBlock.prototype.unpersist = function(object) {
 		this.width = obj.width;
 		this.align = obj.align;
 		this.vertalign = obj.vertalign;
-		this.imglink = obj.imglink;
+		this.imglink = (obj.imglink !== undefined) ? obj.imglink.replace(/&quot;/g, '"') : obj.imglink;
 		this.imgsrc = obj.imgsrc;
-		this.imgalt = obj.imgalt;
+		this.imgalt = (obj.imgalt !== undefined) ? obj.imgalt.replace(/&quot;/g, '"') : obj.imgalt;
 		this.content_img = $('<img alt="' + this.imgalt + '" class="media-object-img" src="' + this.imgsrc + '" height="' + this.height + '" width="' + this.width + '" />');
 	}
 	else {
