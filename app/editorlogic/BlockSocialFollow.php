@@ -24,16 +24,16 @@ class BlockSocialFollow extends HtmlAbstract
 				$domain = Urldomain::findFirstByIdUrlDomain(1);
 				switch ($content->socialname) {
 					case 'Facebook':
-						$this->children[] = '<a href="https://www.facebook.com"><img src="' . $domain->imageUrl . '/images/follow_facebook_image.png"><br><label>' . $content->text . '</label></a>';
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_facebook_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
 						break;
 					case 'Twitter':
-						$this->children[] = '<a href="https://twitter.com"><img src="' . $domain->imageUrl . '/images/follow_twitter_image.png"><br><label>' . $content->text . '</label></a>';
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_twitter_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
 						break;
 					case 'LinkedIn':
-						$this->children[] = '<a href="https://linkedin.com"><img src="' . $domain->imageUrl . '/images/follow_linkedin_image.png"><br><label>' . $content->text . '</label></a>';
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_linkedin_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
 						break;
 					case 'Google Plus':
-						$this->children[] = '<a href="https://plus.google.com"><img src="' . $domain->imageUrl . '/images/follow_google_plus_image.png"><br><label>' . $content->text . '</label></a>';
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_google_plus_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
 						break;
 				}	
 			}
@@ -41,18 +41,18 @@ class BlockSocialFollow extends HtmlAbstract
 	}
 	public function renderObjPrefix()
 	{
-		return '<td style="width: ' . $this->column_width . '%; padding-left: ' . $this->margin_left . 'px; padding-right: ' . $this->margin_right . 'px;" width="' . $this->column_width . '%" align="' . $this->align . '"><table style="border-color: ' . $this->border_color . '; border-style: ' . $this->border_style . '; border-width: ' . $this->border_width . 'px; background-color: ' . $this->background_color . '; border-top-left-radius: ' . $this->corner_top_left . 'px; border-top-right-radius: ' . $this->corner_top_right . 'px; border-bottom-right-radius: ' . $this->corner_bottom_right . 'px; border-bottom-left-radius: ' . $this->corner_bottom_left . 'px; margin-top: ' . $this->margin_top . 'px; margin-bottom: ' . $this->margin_bottom . 'px; font-family: Helvetica, Arial, sans-serif;" cellpadding="0"><tbody><tr>';
+		return '<td style="width: ' . $this->column_width . '%; padding-left: ' . $this->margin_left . 'px; padding-right: ' . $this->margin_right . 'px;" width="' . $this->column_width . '%"><table style="border-color: ' . $this->border_color . '; border-style: ' . $this->border_style . '; border-width: ' . $this->border_width . 'px; background-color: ' . $this->background_color . '; border-top-left-radius: ' . $this->corner_top_left . 'px; border-top-right-radius: ' . $this->corner_top_right . 'px; border-bottom-right-radius: ' . $this->corner_bottom_right . 'px; border-bottom-left-radius: ' . $this->corner_bottom_left . 'px; margin-top: ' . $this->margin_top . 'px; margin-bottom: ' . $this->margin_bottom . 'px width: 100%; border-spacing: 0px;" cellpadding="0" width="100%"><tbody><tr><td style="text-align: ' . $this->align . '; width: 100%;">';
 	}
 	public function renderChildPrefix($i)
 	{
-		return '<td style="text-align: center;">';
+		return '';
 	}
 	public function renderChildPostfix($i)
 	{
-		return '</td>';
+		return '';
 	}
 	public function renderObjPostfix()
 	{
-		return '</tr></tbody></table></td>';
+		return '</td></tr></tbody></table></td>';
 	}
 }

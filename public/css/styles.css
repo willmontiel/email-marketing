@@ -626,6 +626,10 @@ table {
 	background-color: #F74D4D;
 }
 
+.content-social-share.media-object, .content-social-follow.media-object {
+	min-height: 15px;
+}
+
 .edit-block, .remove-block {
 	position: absolute;
 	height: 25px;
@@ -904,6 +908,22 @@ table {
 	background-color: #c7c7c7;
 }
 
+#my-social-share-component-toolbar .first_row, #my-social-follow-component-toolbar .first_row{
+	padding: 5px 0;
+}
+
+#my-social-share-component-toolbar ul.second_elements, #my-social-follow-component-toolbar ul.second_elements {
+	border-top: 1px solid rgb(160, 160, 160);
+	margin-left: 0;
+	padding-left: 25px;
+	padding-top: 8px;
+}
+
+.social-themes-title {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
 .first_elements li:last-child, .second_elements li:last-child, .third_elements li:last-child {
 	border-right: none;
 	margin-left: 0px;
@@ -962,13 +982,19 @@ table {
 .list-no-right-line {
 	border-right: none;
 }
-.soc_net_share {
+.soc_net_share, .soc_net_follow {
 	margin-right: 8px;
 }
-.social-toolbar-title, .social-toolbar-title {
+.social-toolbar-title {
 	float: left;
-	margin-top: 10px;
-	margin-right: 5px;
+	margin-top: 6px;
+	/*margin-right: 5px;*/
+}
+.social-toolbar-title {
+	padding: 1px 2px 2px 2px;
+	background-color: white;
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
 }
 .social-toolbar-field {
 	float: left;
@@ -1035,6 +1061,12 @@ table {
 .align-btn-toolbar:hover, .vert-align-btn-toolbar:hover, .media-btn-image-displayer:hover {
 	background-color: #C4C4C4;
 }
+#size-social-options-toolbar {
+	border-top-left-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+	border-left: 0px !important;
+	margin-right: 10px;
+}
 .align-btn-toolbar.align-left {
 	padding: 3px 4px 5px 5px;
 }
@@ -1061,12 +1093,11 @@ table {
 }
 .social_follow_net_container {
 	border: 1px dashed #656466;
-	padding: 2px 1px 5px 4px;
+	padding: 5px 1px 9px 4px;
 	margin-bottom: 3px;
 	margin-top: 3px;
 	border-radius: 4px;
 	height: 28px;
-	width: 74px;
 }
 .social-follow-text input {
 	width: 100px;
@@ -1079,7 +1110,7 @@ table {
 	display: none;
 }
 #my-social-follow-component-toolbar.component-toolbar-social {
-	width: 600px;
+	width: 580px;
 }
 .soc_net_follow_container {
 	margin-right: 8px;
@@ -1142,9 +1173,6 @@ table {
 	border-style: inset;
 	border-width: 1px;
 }
-.content-social-follow {
-	width: 0;
-}
 .content-text-block {
 	position: absolute;
 	height: 100%;
@@ -1175,6 +1203,15 @@ table {
 }
 .redactor_toolbar li a.redactor_btn_form-updating {
 	background-position: -875px;
+}
+.img-sprite-white {
+	background-image: url('../images/tool-resize-icon.png');
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	margin-top: 1px;
+	line-height: 14px;
+	vertical-align: text-top;
 }
 .img-margin, .img-border {
 	display: inline-block;
@@ -1225,3 +1262,79 @@ table {
 .full-container-img-margin, .full-container-img-border {
 	float: none !important;
 }
+.social-themes-title, .social-themes-buttons, .img-themes-in-toolbar-container {
+	float: left;
+}
+.img-themes-in-toolbar {
+	padding: 6px;
+}
+.social-theme-selected {
+	background-position: -48px -33px;
+}
+.social-theme-selected-container {
+	position: absolute;
+	padding: 1px;
+	background-color: rgb(79, 202, 79);
+	border-radius: 22px;
+	display: none;
+}
+.img-themes-in-toolbar-selected .social-theme-selected-container {
+	display: block;
+}
+.img-themes-in-toolbar-container {
+	cursor: pointer;
+}
+.icons-16x16 {
+	background-image: url('../images/icons_16x16_white.png');
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	margin-top: 1px;
+	line-height: 14px;
+	vertical-align: text-top;
+}
+.icon-link-16x16 {
+	background-position: -308px -238px;
+}
+.icon-ok-16x16 {
+	background-position: -526px -157px;
+}
+.social-follow-link {
+	padding: 4px;
+	background-color: darkgray;
+	float: left;
+	border-radius: 20px;
+	margin: 10px 2px 10px 5px;
+	cursor: pointer;
+}
+.social-follow-link:hover {
+	background-color: #C4C4C4;
+}
+.full-container-social-network-toolbar .social_follow_net_container, .full-container-social-network-toolbar .social-follow-link, .social-follow-url-container {
+	float: left;
+}
+.input-field-social-follow {
+	float: left;
+	margin-top: 10px;
+	width: 177px;
+	display: none;
+}
+.input-field-social-follow.input-url-social-follow {
+	display: block;
+}
+.input-field-social-follow > input {
+	width: 177px;
+	height: 26px;
+}
+/*.save-link-social-follow {
+	float: left;
+	padding: 2px;
+	background-color: rgb(90, 194, 49);;
+	border-radius: 20px;
+	margin: 12px 2px 10px 2px;
+	cursor: pointer;
+	display: none;
+}
+.input-field-social-follow.input-url-social-follow + .save-link-social-follow {
+	display: block;
+}*/

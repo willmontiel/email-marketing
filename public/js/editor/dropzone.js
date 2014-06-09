@@ -61,7 +61,7 @@ DropzoneArea.prototype.addElementToZone = function() {
 		t.createHtmlElement('image-only', 'Imagen', 'Basic', new ImgBlock(row), row);
 		t.createHtmlElement('separator', 'Separador', 'Basic', new HrBlock(row), row);
 		t.createHtmlElement('social-share', 'Compartir Redes', 'Basic', new SShareBlock(row), row);
-		t.createHtmlElement('social-follow', 'Seguir Redes', 'Basic', new SFollowBlock(row), row);
+		t.createHtmlElement('social-follow', 'Seguir Redes', 'Basic',[new TxtBlock(row, '<p style="text-align: right;"><strong>Síguenos en&nbsp;</strong></p>'), new SFollowBlock(row)], row);
 		t.createHtmlElement('button', 'Botón', 'Basic', new BtnBlock(row), row);
 		
 		t.createHtmlElement('text-image', 'Texto - Imagen', 'Compound', [new TxtBlock(row), new ImgBlock(row)], row);
@@ -125,7 +125,7 @@ DropzoneArea.prototype.createHtmlElement = function(module, description, categor
 			t.listofrows.push(row);
 			row.createRow();
 		}
-		if(category === 'Compound') {
+		if(block.length > 1) {
 			for(var i = 0; i < block.length; i++) {
 				row.addBlock(block[i]);
 			}
@@ -169,14 +169,26 @@ DropzoneArea.prototype.updateFooter = function(block) {
 		}
 		else if(block[i] instanceof SShareBlock) {
 			block[i].content.find('.content-social-share').css('text-align', 'center');
-			block[i].align = 'center';
+			
 			var imgs = block[i].content.find('.content-social-share img');
 			for (var j=0; j < imgs.length; j++ ) {
 				var src = $(imgs[j]).attr('src');
-				var newsrc = src.replace(block[i].size, 24);
+				
+				var newsrc = src.replace(block[i].size, 'xs');
+				block[i].content.find('.content-social-share img[src="' + src + '"]').attr('src', newsrc);
+				
+				var newsrc = src.replace('theme_' + block[i].theme, 'theme_' + 2);
 				block[i].content.find('.content-social-share img[src="' + src + '"]').attr('src', newsrc);
 			}
-			block[i].size = 24;
+			
+			block[i].content_li.html.hide();
+			block[i].content_li.selected = false;
+			
+			block[i].content_gp.html.hide();
+			block[i].content_gp.selected = false;
+			
+			block[i].size = 'xs';
+			block[i].theme = 2;
 		}
 	}
 };
