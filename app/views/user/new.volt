@@ -4,6 +4,10 @@
 
 {% block content %}
 	<div class="row">
+		{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'user']) }}
+	</div>
+
+	<div class="row">
 		<h4 class="sectiontitle">Crear un nuevo usuario</h4>
 					
 		{{ flashSession.output() }}	
@@ -42,7 +46,8 @@
 				</div>
 				<div class="form-group">
 					<label for="username" class="col-sm-4 control-label"><span class="required">*</span>Nombre de usuario:</label>
-					<div class="col-md-8">
+					<div class="input-group col-md-8" style="padding-left: 15px !important; padding-right: 15px !important;">
+						<span class="input-group-addon">{{prefix}}</span>
 						{{ UserForm.render('username') }}
 					</div>
 				</div>
