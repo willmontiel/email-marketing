@@ -25,7 +25,7 @@ class BlockSocialShare extends HtmlAbstract
 				try {
 					$domain = Urldomain::findFirstByIdUrlDomain(1);
 					$lowersocialname = strtolower($content->socialname);
-					$this->children[] = '<a href="$$$_social_media_share_$$$' . str_replace(" ", "", $lowersocialname) . '"><img src="' . $domain->imageUrl . '/images/share_' . str_replace(" ", "_", $lowersocialname) . '_image_' . $data->size .'.png" style="margin-right: 8px;"></a>';
+					$this->children[] = '<a href="$$$_social_media_share_$$$' . str_replace(" ", "", $lowersocialname) . '"><img src="' . $domain->imageUrl . '/images/socials/share/theme_' . $data->theme . '/share_' . str_replace(" ", "_", $lowersocialname) . '_image_' . $data->size .'.png" style="margin-right: 8px;"></a>';
 				} catch(InvalidArgumentException $e){
 					Phalcon\DI::getDefault()->get('logger')->log('Invalid Argument Exception: [' . $e . ']');
 				}

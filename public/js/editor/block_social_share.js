@@ -1,11 +1,12 @@
 function SShareBlock(row) {
 	this.row = row;
-	this.content_fb = {html: $('<img class="soc_net_share button_facebook" src="' + config.imagesUrl + '/share_facebook_image_32.png" alt="64x64" />'), selected: true};
-	this.content_tw = {html: $('<img class="soc_net_share button_twitter" src="' + config.imagesUrl + '/share_twitter_image_32.png" alt="64x64" />'), selected: true};
-	this.content_li = {html: $('<img class="soc_net_share button_linkedin" src="' + config.imagesUrl + '/share_linkedin_image_32.png" alt="64x64" />'), selected: true};
-	this.content_gp = {html: $('<img class="soc_net_share button_google_plus" src="' + config.imagesUrl + '/share_google_plus_image_32.png" alt="64x64" />'), selected: true};
-	this.align = 'left';
-	this.size = '32';
+	this.content_fb = {html: $('<img class="soc_net_share button_facebook" src="' + config.imagesUrl + '/socials/share/theme_1/share_facebook_image_xs.png" alt="64x64" />'), selected: true};
+	this.content_tw = {html: $('<img class="soc_net_share button_twitter" src="' + config.imagesUrl + '/socials/share/theme_1/share_twitter_image_xs.png" alt="64x64" />'), selected: true};
+	this.content_li = {html: $('<img class="soc_net_share button_linkedin" src="' + config.imagesUrl + '/socials/share/theme_1/share_linkedin_image_xs.png" alt="64x64" />'), selected: true};
+	this.content_gp = {html: $('<img class="soc_net_share button_google_plus" src="' + config.imagesUrl + '/socials/share/theme_1/share_google_plus_image_xs.png" alt="64x64" />'), selected: true};
+	this.align = 'center';
+	this.size = 'xs';
+	this.theme = 1;
 	this.background_color = "transparent";
 	this.border_width = 0;
 	this.border_color = "#FFFFFF";
@@ -104,6 +105,7 @@ SShareBlock.prototype.persist = function() {
 		contentData : content,
 		align: this.align,
 		size: this.size,
+		theme: this.theme,
 	
 		background_color : this.background_color,
 		border_width : this.border_width,
@@ -125,33 +127,34 @@ SShareBlock.prototype.persist = function() {
 SShareBlock.prototype.unpersist = function(obj) {
 	this.align = obj.align;
 	this.size = obj.size;
+	this.theme = obj.theme;
 	
 	for(var i=0; i < obj.contentData.length; i++) {
 		switch (obj.contentData[i].socialname) {
 			case 'Facebook':
 				this.content_fb.selected = obj.contentData[i].selected;
-				this.content_fb.html.attr('src', config.imagesUrl + '/share_facebook_image_' + this.size + '.png');
+				this.content_fb.html.attr('src', config.imagesUrl + '/socials/share/theme_' + this.theme + '/share_facebook_image_' + this.size + '.png');
 				if(!this.content_fb.selected) {
 					this.content_fb.html.hide();
 				}
 				break;
 			case 'Twitter':
 				this.content_tw.selected = obj.contentData[i].selected;
-				this.content_tw.html.attr('src', config.imagesUrl + '/share_twitter_image_' + this.size + '.png');
+				this.content_tw.html.attr('src', config.imagesUrl + '/socials/share/theme_' + this.theme + '/share_twitter_image_' + this.size + '.png');
 				if(!this.content_tw.selected) {
 					this.content_tw.html.hide();
 				}
 				break;
 			case 'LinkedIn':
 				this.content_li.selected = obj.contentData[i].selected;
-				this.content_li.html.attr('src', config.imagesUrl + '/share_linkedin_image_' + this.size + '.png');
+				this.content_li.html.attr('src', config.imagesUrl + '/socials/share/theme_' + this.theme + '/share_linkedin_image_' + this.size + '.png');
 				if(!this.content_li.selected) {
 					this.content_li.html.hide();
 				}
 				break;
 			case 'Google Plus':
 				this.content_gp.selected = obj.contentData[i].selected;
-				this.content_gp.html.attr('src', config.imagesUrl + '/share_google_plus_image_' + this.size + '.png');
+				this.content_gp.html.attr('src', config.imagesUrl + '/socials/share/theme_' + this.theme + '/share_google_plus_image_' + this.size + '.png');
 				if(!this.content_gp.selected) {
 					this.content_gp.html.hide();
 				}
@@ -207,16 +210,16 @@ SShareBlock.prototype.createToolbar = function() {
 	$('.element-share-in-edition').removeClass('element-share-in-edition');
 	this.content.find('.one-element').addClass('element-share-in-edition');
 	
-	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr></table>');
+	toolbar.append('<table><tr><td class="first_row"><ul class="first_elements"></ul></td></tr><tr><td class="second_row"><ul class="second_elements"></ul></td></tr></table>');
 
 	var withfb = (this.content_fb.selected) ? 'checked' : '';
 	var withtw = (this.content_tw.selected) ? 'checked' : '';
 	var withli = (this.content_li.selected) ? 'checked' : '';
 	var withgp = (this.content_gp.selected) ? 'checked' : '';
-	var fb = $('<div class="social_share_net_container fb-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-fb-toolbar" ' + withfb + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-fb-toolbar"><img class="soc_net_share button_facebook" src="' + config.imagesUrl + '/share_facebook_image_32.png" alt="64x64" /></label></div></div>');
-	var tw = $('<div class="social_share_net_container tw-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-tw-toolbar" ' + withtw + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-tw-toolbar"><img class="soc_net_share button_twitter" src="' + config.imagesUrl + '/share_twitter_image_32.png" alt="64x64" /></label></div></div>');
-	var li = $('<div class="social_share_net_container li-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-li-toolbar" ' + withli + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-li-toolbar"><img class="soc_net_share button_linkedin" src="' + config.imagesUrl + '/share_linkedin_image_32.png" alt="64x64" /></label></div></div>');
-	var gp = $('<div class="social_share_net_container gp-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-gp-toolbar" ' + withgp + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-gp-toolbar"><img class="soc_net_share button_google_plus" src="' + config.imagesUrl + '/share_google_plus_image_32.png" alt="64x64" /></label></div></div>');
+	var fb = $('<div class="social_share_net_container fb-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-fb-toolbar" ' + withfb + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-fb-toolbar"><img class="soc_net_share button_facebook" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-1.png" alt="64x64" /></label></div></div>');
+	var tw = $('<div class="social_share_net_container tw-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-tw-toolbar" ' + withtw + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-tw-toolbar"><img class="soc_net_share button_twitter" src="' + config.imagesUrl + '/socials/buttons/btn-tw-style-1.png" alt="64x64" /></label></div></div>');
+	var li = $('<div class="social_share_net_container li-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-li-toolbar" ' + withli + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-li-toolbar"><img class="soc_net_share button_linkedin" src="' + config.imagesUrl + '/socials/buttons/btn-li-style-1.png" alt="64x64" /></label></div></div>');
+	var gp = $('<div class="social_share_net_container gp-container-in-toolbar social-network-selected"><div class="with-social-net"><input type="checkbox" id="with-gp-toolbar" ' + withgp + '></div><div class="social_img_container"><label class="not-label-bottom" for="with-gp-toolbar"><img class="soc_net_share button_google_plus" src="' + config.imagesUrl + '/socials/buttons/btn-gp-style-1.png" alt="64x64" /></label></div></div>');
 	var elements = $('<li class="toolbar-elements" />');
 	elements.append(fb);
 	elements.append(tw);
@@ -225,13 +228,13 @@ SShareBlock.prototype.createToolbar = function() {
 	toolbar.find('.first_row ul').append(elements);
 	
 	
-	var size = $('<div class="social-size-toolbar-container"><div class="social-toolbar-title">Tamaño</div>\n\
+	var size = $('<div class="social-size-toolbar-container"><div class="social-toolbar-title"><span class="img-sprite-white"></span></div>\n\
 					<div class="medium-large-select social-size-container">\n\
 						<select id="size-social-options-toolbar">\n\
-							<option value="16" selected>Pequeño</option>\n\
-							<option value="24">Mediano</option>\n\
-							<option value="32" selected>Grande</option>\n\
-							<option value="128">Gigante</option>\n\
+							<option value="xs" selected>Pequeño</option>\n\
+							<option value="sm">Mediano</option>\n\
+							<option value="md" selected>Grande</option>\n\
+							<option value="xl">Gigante</option>\n\
 						</select>\n\
 					</div>\n\
 					</div></div>');
@@ -247,6 +250,19 @@ SShareBlock.prototype.createToolbar = function() {
 	elements.append(align);
 	toolbar.find('.first_row ul').append(elements);	
 	
+	var themes = $('<div class="social-themes-toolbar-container">\n\
+						<div class="social-themes-title">Temas</div>\n\
+						<div class="social-themes-buttons">\n\
+							<div class="img-themes-in-toolbar-container" data-theme="1"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-1.png"></div></div>\n\
+							<div class="img-themes-in-toolbar-container" data-theme="2"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-2.png"></div></div>\n\
+							<div class="img-themes-in-toolbar-container" data-theme="3"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-3.png"></div></div>\n\
+							<div class="img-themes-in-toolbar-container" data-theme="4"><div class="social-theme-selected-container"><span class="image-sprite social-theme-selected"></span></div><div class="img-theme-container"><img class="img-themes-in-toolbar" src="' + config.imagesUrl + '/socials/buttons/btn-fb-style-4.png"></div></div>\n\
+						</div>\n\
+					</div>');
+	var elements = $('<li class="toolbar-elements" />');
+	elements.append(themes);
+	toolbar.find('.second_row ul').append(elements);	
+	
 	this.eventsChange();
 };
 
@@ -257,7 +273,7 @@ SShareBlock.prototype.eventsChange = function() {
 	this.withSocialNetwork('with-li-toolbar', 'li');
 	this.withSocialNetwork('with-gp-toolbar', 'gp');
 	
-	$('.align-btn-toolbar.align-' + this.align).addClass('align-selected-toolbar')
+	$('.align-btn-toolbar.align-' + this.align).addClass('align-selected-toolbar');
 	$('.align-btn-toolbar.align-left').on('click', function() {
 		t.content.find('.content-social-share').css('text-align', 'left');
 		t.align = 'left';
@@ -287,6 +303,19 @@ SShareBlock.prototype.eventsChange = function() {
 		}
 		t.size = $(this).val();
 	});
+	
+	var themes = $('.img-themes-in-toolbar-container');
+	for(var i = 0; i < themes.length; i++) {
+		if($(themes[i]).data('theme') === t.theme) {
+			$(themes[i]).addClass('img-themes-in-toolbar-selected');
+		}
+	}
+	
+	$('.img-themes-in-toolbar-container').on('click', function() {
+		$('.img-themes-in-toolbar-selected').removeClass('img-themes-in-toolbar-selected');
+		$(this).addClass('img-themes-in-toolbar-selected');
+		t.changeSocialTheme($(this).data('theme'));
+	});
 };
 
 SShareBlock.prototype.withSocialNetwork = function(id, container) {
@@ -309,4 +338,14 @@ SShareBlock.prototype.withSocialNetwork = function(id, container) {
 	else {
 		$('.' + container + '-container-in-toolbar').removeClass('social-network-selected');
 	}
+};
+
+SShareBlock.prototype.changeSocialTheme = function(theme) {
+	var images = this.content.find('img.soc_net_share');
+	for (var i = 0; i < images.length; i++ ) {
+		var src = $(images[i]).attr('src');
+		var newsrc = src.replace('theme_' + this.theme, 'theme_' + theme);
+		$(images[i]).attr('src', newsrc);
+	}
+	this.theme = theme;
 };
