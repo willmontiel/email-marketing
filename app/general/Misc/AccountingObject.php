@@ -45,7 +45,7 @@ class AccountingObject
 			foreach ($lastMonth as $last) {
 				foreach ($currentMonth as $current) {
 					if ($last['idAccount'] == $current['idAccount']) {
-						$array[] = array(
+						$array[$current['idAccount']] = array(
 							'idAccount' => $last['idAccount'],
 							'account' => $last['companyName'],
 							'lastMonth' => $last['actives'],
@@ -57,7 +57,7 @@ class AccountingObject
 		}
 		else if (count($lastMonth) > 0) {
 			foreach ($lastMonth as $last) {
-				$array[] = array(
+				$array[$current['idAccount']] = array(
 					'idAccount' => $last['idAccount'],
 					'account' => $last['companyName'],
 					'lastMonth' => $last['actives'],
@@ -67,7 +67,7 @@ class AccountingObject
 		}
 		else if (count($currentMonth) > 0) {
 			foreach ($currentMonth as $current) {
-				$array[] = array(
+				$array[$current['idAccount']] = array(
 					'idAccount' => $current['idAccount'],
 					'account' => $current['companyName'],
 					'lastMonth' => 0,
@@ -83,8 +83,8 @@ class AccountingObject
 	protected function processData($values)
 	{
 		foreach ($this->accounts as $account) {
-			if (!in_array($account->idAccount, $values)) {
-				$values[] = array(
+			if (!isset($values[$account->idAccount])) {
+				$values[$account->idAccount] = array(
 					'idAccount' => $account->idAccount,
 					'account' => $account->companyName,
 					'lastMonth' => 0,
@@ -93,6 +93,7 @@ class AccountingObject
 			}
 		}
 		
+		$this->logger->log(print_r($values, true));
 		return $values;
 	}
 	
