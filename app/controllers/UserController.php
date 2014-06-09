@@ -82,7 +82,10 @@ class UserController extends ControllerBase
 	{
 		$un = explode('_', $username);
 		
-		return $un[1];
+		if (isset($un[1])) {
+			return $un[1];
+		}
+		return $username;
 	}
 	
 	public function editAction($id)
