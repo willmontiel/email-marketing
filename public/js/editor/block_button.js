@@ -257,6 +257,7 @@ BtnBlock.prototype.createToolbar = function() {
 	var border_color = $("<div class='button-border-toolbar-container'><div class='btn-toolbar-title'>Borde</div>\n\
 							<div class='btn-border-style-toolbar medium-select'>\n\
 								<select id='style-button-border-toolbar'>\n\
+									<option value='none'>None</option>\n\
 									<option value='dotted'>Dotted</option>\n\
 									<option value='dashed'>Dashed</option>\n\
 									<option value='solid'>Solid</option>\n\
