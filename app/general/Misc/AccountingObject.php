@@ -111,8 +111,8 @@ class AccountingObject
 					$this->accounting[$currentContact['idAccount']]['classLastSent'] = 'text-red-color';
 				}
 				else if ($currentSent['total'] < $this->accounting[$currentContact['idAccount']]['sentLastMonth']) {
-					$this->accounting[$currentContact['idAccount']]['classCurrentSent'] = 'text-green-color';
-					$this->accounting[$currentContact['idAccount']]['classLastSent'] = 'text-red-color';
+					$this->accounting[$currentContact['idAccount']]['classCurrentSent'] = 'text-red-color';
+					$this->accounting[$currentContact['idAccount']]['classLastSent'] = 'text-green-color';
 				}
 			}
 		}
