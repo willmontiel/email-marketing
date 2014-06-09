@@ -24,16 +24,18 @@ class IndicatorObject
 	
 	public function update()
 	{
-		$this->updateTotalContacts();
+		$times = $this->createRelationshipDate();
+		$this->updateTotalContacts($times->lastTime, $times->currentTime);
+		$this->updateTotalContacts($times->currentTime, $times->nextTime);
 	}
 	
-	protected function updateTotalContacts()
+	protected function updateTotalContacts($time1, $time2)
 	{
-		$times = $this->createRelationshipDate();
+//		$time = strtotime("-1 day", $time1);
 		
 		$sql = "INSERT IGNORE INTO indicator (idDbase, date, actives, bounced, spam, blocked)
 					(SELECT d.idDbase,
-							{$times->currentTime},
+							{$time1},
 							SUM(IF(e.bounced = 0 AND e.spam = 0 AND e.blocked = 0, 1, 0)),
 							SUM(IF(e.bounced > 0, 1, 0)),
 							SUM(IF(e.spam > 0, 1, 0)),
@@ -41,9 +43,9 @@ class IndicatorObject
 						FROM dbase AS d
 						JOIN contact AS c ON (c.idDbase = d.idDbase)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
-					WHERE c.createdon < {$times->nextTime}
+					WHERE c.createdon < {$time2}
 					GROUP BY d.idDbase)";
-		$this->logger->log("SQL {$sql}");
+//		$this->logger->log("SQL {$sql}");
 		$this->db->execute($sql);
 	}
 	
@@ -53,14 +55,15 @@ class IndicatorObject
 		$year = date('Y', time());
 		$t = strtotime("1 {$currentMonth} {$year}");
 		
-		$nextTime = strtotime("+1 month", $t);
-		$currentTime = strtotime("-1 day", $nextTime);
-		
+		$firstTime = strtotime("-1 month", $t);
+		$secondTime = time();
+		$thirdTime = strtotime("+1 month", $secondTime);
 		
 		$times = new \stdClass();
 		
-		$times->currentTime = $currentTime;
-		$times->nextTime = $nextTime;
+		$times->lastTime = $firstTime;
+		$times->currentTime = $secondTime;
+		$times->nextTime = $thirdTime;
 		
 		return $times;
 	}

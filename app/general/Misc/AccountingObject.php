@@ -44,7 +44,7 @@ class AccountingObject
 			}
 		}
 		
-		$this->logger->log("Accounting: " . print_r($this->accounting, true));
+//		$this->logger->log("Accounting: " . print_r($this->accounting, true));
 	}	
 
 	protected function createAccounting($times)
@@ -106,7 +106,7 @@ class AccountingObject
 					AND m.updatedon < {$time2}
 				GROUP BY 1 ";
 					
-		$this->logger->log("SQL: $sql");
+//		$this->logger->log("SQL: $sql");
 		return $sql;
 	}
 
@@ -117,95 +117,36 @@ class AccountingObject
 					FROM indicator AS i
 					JOIN dbase AS d ON (d.idDbase = i.idDbase)
 					JOIN account AS a ON (a.idAccount = d.idAccount)
-				WHERE i.date < {$time}
+				WHERE i.date <= {$time}
 				GROUP BY 1";
 		
-		$this->logger->log("SQL: $sql");
+//		$this->logger->log("SQL: $sql");
 		return $sql;
 	}
 
+	
 	protected function createRelationshipDate()
 	{
 		$currentMonth = date('M', time());
-		
-		switch ($currentMonth) {
-			case 'Jan':
-				$time = $this->createTimes('Dec', 'Jan', 'Feb');
-				break;
-
-			case 'Feb':
-				$time = $this->createTimes('Jan', 'Feb', 'Mar');
-				break;
-
-			case 'Mar':
-				$time = $this->createTimes('Feb', 'Mar', 'Apr');
-				break;
-
-			case 'Apr':
-				$time = $this->createTimes('Mar', 'Apr', 'May');
-				break;
-
-			case 'May':
-				$time = $this->createTimes('Apr', 'May', 'Jun');
-				break;
-
-			case 'Jun':
-				$time = $this->createTimes('May', 'Jun', 'Jul');
-				break;
-
-			case 'Jul':
-				$time = $this->createTimes('Jun', 'Jul', 'Aug');
-				break;
-
-			case 'Aug':
-				$time = $this->createTimes('Jul', 'Aug', 'Sep');
-				break;
-
-			case 'Sep':
-				$time = $this->createTimes('Aug', 'Sep', 'Oct');
-				break;
-
-			case 'Oct':
-				$time = $this->createTimes('Sep', 'Oct', 'Nov');
-				break;
-
-			case 'Nov':
-				$time = $this->createTimes('Oct', 'Nov', 'Dec');
-				break;
-
-			case 'Dec':
-				$time = $this->createTimes('Nov', 'Dec', 'Jan');
-				break;
-		}
-		
-		return $time;
-	}
-
-
-	protected function createTimes($last, $current, $next)
-	{
 		$year = date('Y', time());
-
-		$currentTime = strtotime("1 {$current} {$year}");
-
-		$year1 = ($next == 'Jan' ? $year+1 : $year);
-		$nextTime = strtotime("1 {$next} {$year1}");
-
-		$year2 = ($last == 'Dec' ? $year-1 : $year);
-		$lastTime = strtotime("1 {$last} {$year2}");
-
+		$t = strtotime("1 {$currentMonth} {$year}");
+		
+		$firstTime = strtotime("-1 month", $t);
+		$secondTime = $t;
+		$thirdTime = strtotime("+1 month", $secondTime);
+		
 		$times = new \stdClass();
 		
-		$times->lastTime = $lastTime;
-		$times->currentTime = $currentTime;
-		$times->nextTime = $nextTime;
+		$times->lastTime = $firstTime;
+		$times->currentTime = $secondTime;
+		$times->nextTime = $thirdTime;
 		
 		return $times;
 	}
 	
 	public function getAccounting()
 	{
-		$this->logger->log("Accounting: " . print_r($this->accounting, true));
+//		$this->logger->log("Accounting: " . print_r($this->accounting, true));
 		return $this->accounting;
 	}
 }
