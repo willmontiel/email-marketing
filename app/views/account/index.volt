@@ -13,8 +13,11 @@
 	<div class="row">
 		{{ flashSession.output() }}
 	</div>
-	<div class="row wrapper text-right">
-		<a href="{{ url('account/new') }}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-plus"></span> Crear nueva cuenta</a>
+	<div class="row">
+		<div class="text-right">
+			<a href="{{ url('account/new') }}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-plus"></span> Crear nueva cuenta</a>
+			<a href="{{ url('account/accounting') }}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-usd"></span> Contabilidad</a>
+		</div>
 	</div>
 	<div class="row">
 		<table class="table table-bordered table-striped">

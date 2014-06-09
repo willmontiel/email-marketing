@@ -75,6 +75,7 @@ class PermissionsDataBase
 			'account::update' => 18,
 			'account::delete' => 19,
 			'account::login how any user' => 20, 
+			'account::billing' => 67, 
 			
 			'customfield::create' => 21,
 			'customfield::read' => 22,
@@ -165,6 +166,7 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::read'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::update'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::delete'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::billing'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'account::login how any user'),
 
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'customfield::create'),
