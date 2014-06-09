@@ -36,10 +36,16 @@ class AccountingObject
 					'account' => $account->companyName,
 					
 					'contactsLastMonth' => 0,
+					'classLastContact' => 'text-gray-color',
+					
 					'sentLastMonth' => 0,
+					'classLastSent' => 'text-gray-color',
 					
 					'contactsCurrentMonth' => 0,
+					'classCurrentContact' => 'text-gray-color',
+					
 					'sentCurrentMonth' => 0,
+					'classCurrentSent' => 'text-gray-color',
 				);
 			}
 		}
@@ -78,7 +84,15 @@ class AccountingObject
 				
 		if (count($currentContactsMonth) > 0) {
 			foreach ($currentContactsMonth as $currentContact) {
-				$this->accounting[$currentContact['idAccount']]['contactsCurrentMonth'] = $currentContact['total'] ;
+				$this->accounting[$currentContact['idAccount']]['contactsCurrentMonth'] = $currentContact['total'];
+				if ($currentContact['total'] > $this->accounting[$currentContact['idAccount']]['contactsLastMonth']) {
+					$this->accounting[$currentContact['idAccount']]['classCurrentContact'] = 'text-green-color';
+					$this->accounting[$currentContact['idAccount']]['classLastContact'] = 'text-red-color';
+				}
+				else if ($currentContact['total'] < $this->accounting[$currentContact['idAccount']]['contactsLastMonth']) {
+					$this->accounting[$currentContact['idAccount']]['classCurrentContact'] = 'text-red-color';
+					$this->accounting[$currentContact['idAccount']]['classLastContact'] = 'text-green-color';
+				}
 			}
 		}
 		
@@ -91,6 +105,15 @@ class AccountingObject
 		if (count($currentSentMonth) > 0) {
 			foreach ($currentSentMonth as $currentSent) {
 				$this->accounting[$currentSent['idAccount']]['sentCurrentMonth'] = $currentSent['total'] ;
+				
+				if ($currentSent['total'] > $this->accounting[$currentContact['idAccount']]['sentLastMonth']) {
+					$this->accounting[$currentContact['idAccount']]['classCurrentSent'] = 'text-green-color';
+					$this->accounting[$currentContact['idAccount']]['classLastSent'] = 'text-red-color';
+				}
+				else if ($currentSent['total'] < $this->accounting[$currentContact['idAccount']]['sentLastMonth']) {
+					$this->accounting[$currentContact['idAccount']]['classCurrentSent'] = 'text-green-color';
+					$this->accounting[$currentContact['idAccount']]['classLastSent'] = 'text-red-color';
+				}
 			}
 		}
 	}

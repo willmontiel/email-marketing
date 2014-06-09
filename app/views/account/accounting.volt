@@ -32,10 +32,11 @@
 					<tr>
 						<td>{{account['idAccount']}}</td>
 						<td>{{account['account']}}</td>
-						<td>{{account['contactsLastMonth']}}</td>
-						<td>{{account['sentLastMonth']}}</td>
-						<td>{{account['contactsCurrentMonth']}}</td>
-						<td>{{account['sentCurrentMonth']}}</td>
+						<td class="{{account['classLastContact']}}">{{account['contactsLastMonth']}}</td>
+						<td class="{{account['classLastSent']}}">{{account['sentLastMonth']}}</td>
+						<td class="{{account['classCurrentContact']}}">{{account['contactsCurrentMonth']}}</td>
+						<td class="{{account['classCurrentSent']}}">{{account['sentCurrentMonth']}}</td>
+						
 					</tr>
 				{% endfor %}	
 			</tbody>

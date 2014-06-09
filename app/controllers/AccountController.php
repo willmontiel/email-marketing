@@ -399,6 +399,7 @@ class AccountController extends ControllerBase
 	
 	public function accountingAction()
 	{
+		$user = $this->user;
 		$accounts = Account::find();
 		
 		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
@@ -407,8 +408,10 @@ class AccountController extends ControllerBase
 		
 		try {
 			$a = $accounting->getAccounting();
+			$this->traceSuccess("Read accounting, idUser: {$user->idUser}");
 		}
 		catch (Exception $e) {
+			$this->traceFail("Read accounting, idUser: {$user->idUser}");
 			$this->logger->log("Exception: {$e}");
 		}
 		
