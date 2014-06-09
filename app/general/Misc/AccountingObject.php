@@ -106,13 +106,13 @@ class AccountingObject
 			foreach ($currentSentMonth as $currentSent) {
 				$this->accounting[$currentSent['idAccount']]['sentCurrentMonth'] = $currentSent['total'] ;
 				
-				if ($currentSent['total'] > $this->accounting[$currentContact['idAccount']]['sentLastMonth']) {
-					$this->accounting[$currentContact['idAccount']]['classCurrentSent'] = 'text-green-color';
-					$this->accounting[$currentContact['idAccount']]['classLastSent'] = 'text-red-color';
+				if ($currentSent['total'] > $this->accounting[$currentSent['idAccount']]['sentLastMonth']) {
+					$this->accounting[$currentSent['idAccount']]['classCurrentSent'] = 'text-green-color';
+					$this->accounting[$currentSent['idAccount']]['classLastSent'] = 'text-red-color';
 				}
-				else if ($currentSent['total'] < $this->accounting[$currentContact['idAccount']]['sentLastMonth']) {
-					$this->accounting[$currentContact['idAccount']]['classCurrentSent'] = 'text-red-color';
-					$this->accounting[$currentContact['idAccount']]['classLastSent'] = 'text-green-color';
+				else if ($currentSent['total'] < $this->accounting[$currentSent['idAccount']]['sentLastMonth']) {
+					$this->accounting[$currentSent['idAccount']]['classCurrentSent'] = 'text-red-color';
+					$this->accounting[$currentSent['idAccount']]['classLastSent'] = 'text-green-color';
 				}
 			}
 		}
