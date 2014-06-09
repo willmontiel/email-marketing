@@ -107,10 +107,12 @@ class AccountingObject
 				$this->accounting[$currentSent['idAccount']]['sentCurrentMonth'] = $currentSent['total'];
 				
 				if ($currentSent['total'] > $this->accounting[$currentSent['idAccount']]['sentLastMonth']) {
+					$this->logger->log("Entra {$currentSent['idAccount']}");
 					$this->accounting[$currentSent['idAccount']]['classCurrentSent'] = 'text-green-color';
 					$this->accounting[$currentSent['idAccount']]['classLastSent'] = 'text-red-color';
 				}
 				else if ($currentSent['total'] < $this->accounting[$currentSent['idAccount']]['sentLastMonth']) {
+					$this->logger->log("Entra {$currentSent['idAccount']}");
 					$this->accounting[$currentSent['idAccount']]['classCurrentSent'] = 'text-red-color';
 					$this->accounting[$currentSent['idAccount']]['classLastSent'] = 'text-green-color';
 				}
