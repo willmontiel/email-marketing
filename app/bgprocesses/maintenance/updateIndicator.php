@@ -24,9 +24,14 @@ class IndicatorObject
 	
 	public function update()
 	{
+		$this->updateTotalContacts();
+	}
+	
+	protected function updateTotalContacts()
+	{
 		$times = $this->createRelationshipDate();
 		
-		$sql = "INSERT INTO indicator (idDbase, date, actives, bounced, spam, blocked)
+		$sql = "INSERT IGNORE INTO indicator (idDbase, date, actives, bounced, spam, blocked)
 					(SELECT d.idDbase,
 							{$times->currentTime},
 							SUM(IF(e.bounced = 0 AND e.spam = 0 AND e.blocked = 0, 1, 0)),
