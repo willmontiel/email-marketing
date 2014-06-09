@@ -51,11 +51,12 @@ class AccountingObject
 	{
 		$db = \Phalcon\DI::getDefault()->get('db');
 		
-		$lastMonthContactsSQl = $this->getSQLForTotalContacts($times->currentTime);
+		$lastMonthContactsSQl = $this->getSQLForTotalContacts($times->lastTime, $times->currentTime);
 		$result1 = $db->query($lastMonthContactsSQl);
 		$lastContactsMonth = $result1->fetchAll();
 		
-		$currentMonthContactsSQL = $this->getSQLForTotalContacts($times->nextTime);
+		$currentMonthContactsSQL = $this->getSQLForTotalContacts($times->currentTime, $times->nextTime);
+		$this->logger->log("SQL: $currentMonthContactsSQL");
 		$result2 = $db->query($currentMonthContactsSQL);
 		$currentContactsMonth = $result2->fetchAll();
 		
@@ -111,13 +112,14 @@ class AccountingObject
 	}
 
 
-	protected function getSQLForTotalContacts($time)
+	protected function getSQLForTotalContacts($time1, $time2)
 	{
 		$sql = "SELECT a.idAccount, SUM(i.actives) AS total
 					FROM indicator AS i
 					JOIN dbase AS d ON (d.idDbase = i.idDbase)
 					JOIN account AS a ON (a.idAccount = d.idAccount)
-				WHERE i.date <= {$time}
+				WHERE i.date >= {$time1}
+					AND i.date < {$time2}
 				GROUP BY 1";
 		
 //		$this->logger->log("SQL: $sql");

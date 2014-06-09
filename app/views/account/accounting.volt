@@ -39,6 +39,12 @@
 					</tr>
 				{% endfor %}	
 			</tbody>
-		  </table>
+		</table>
+			
+		{#
+		{{date('d/M/Y', 1401512400)}} - {{date('d/M/Y', 1401598800)}}
+		<br />
+		{{date('d/M/Y', 1404104400)}} - {{date('d/M/Y', 1404190800)}}
+		#}
 	</div>
 {% endblock %}

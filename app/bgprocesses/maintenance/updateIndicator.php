@@ -25,38 +25,46 @@ class IndicatorObject
 	public function update()
 	{
 		$times = $this->createRelationshipDate();
-		$this->updateTotalContacts($times->lastTime, $times->currentTime);
-		$this->updateTotalContacts($times->currentTime, $times->nextTime);
+		
+		$time = strtotime("-1 day", $times->currentTime);
+		$this->updateTotalContacts($time, $times->currentTime);
+		
+		$time = strtotime("-1 day", $times->nextTime);
+		$this->updateTotalContacts($time, $times->nextTime);
 	}
 	
-	protected function updateTotalContacts($time1, $time2)
+	protected function updateTotalContacts($current, $time)
 	{
-//		$time = strtotime("-1 day", $time1);
-		
-		$sql = "INSERT IGNORE INTO indicator (idDbase, date, actives, bounced, spam, blocked)
+		$sql = "INSERT INTO indicator (idDbase, date, actives, bounced, spam, blocked)
 					(SELECT d.idDbase,
-							{$time1},
-							SUM(IF(e.bounced = 0 AND e.spam = 0 AND e.blocked = 0, 1, 0)),
-							SUM(IF(e.bounced > 0, 1, 0)),
-							SUM(IF(e.spam > 0, 1, 0)),
-							SUM(IF(e.blocked > 0, 1, 0))
+							{$current},
+							SUM(IF(e.bounced = 0 AND e.spam = 0 AND e.blocked = 0, 1, 0)) AS actives,
+							SUM(IF(e.bounced > 0, 1, 0)) AS bounced,
+							SUM(IF(e.spam > 0, 1, 0)) AS spam,
+							SUM(IF(e.blocked > 0, 1, 0)) AS blocked
 						FROM dbase AS d
 						JOIN contact AS c ON (c.idDbase = d.idDbase)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
-					WHERE c.createdon < {$time2}
-					GROUP BY d.idDbase)";
+					WHERE c.createdon < {$time}
+					GROUP BY d.idDbase)
+				ON DUPLICATE KEY UPDATE
+					actives = VALUES(actives),
+					bounced = VALUES(bounced),
+					spam = VALUES(spam),
+					blocked = VALUES(blocked)";
 //		$this->logger->log("SQL {$sql}");
 		$this->db->execute($sql);
 	}
 	
 	protected function createRelationshipDate()
 	{
-		$currentMonth = date('M', time());
+		$month = date('M', time());
 		$year = date('Y', time());
-		$t = strtotime("1 {$currentMonth} {$year}");
+		
+		$t = strtotime("1 {$month} {$year}");
 		
 		$firstTime = strtotime("-1 month", $t);
-		$secondTime = time();
+		$secondTime = $t;
 		$thirdTime = strtotime("+1 month", $secondTime);
 		
 		$times = new \stdClass();
