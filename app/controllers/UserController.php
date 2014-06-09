@@ -102,7 +102,7 @@ class UserController extends ControllerBase
 		$prefix = $account->prefix . '_';
 		$this->view->setVar('prefix', $prefix);
 		
-		$user->username = $this->removePrefix($user->username);
+//		$user->username = $this->removePrefix($user->username);
 		$form = new UserForm($user);
 
 		if ($this->request->isPost()) {   
