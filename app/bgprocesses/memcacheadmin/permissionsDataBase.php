@@ -20,7 +20,8 @@ class PermissionsDataBase
 		$this->role = array(
 			'ROLE_SUDO' => 1,
 			'ROLE_ADMIN' => 2,
-			'ROLE_USER' => 3
+			'ROLE_USER' => 3,
+			'ROLE_STATISTICS' => 4
 		);
 	}
 	
@@ -352,7 +353,15 @@ class PermissionsDataBase
 			
 			array( 'Role' => 'ROLE_USER', 'Action' => 'tools::read'),
 			
+//			----------//----------**ROLE_STATISTICS**----------//----------
+			
+			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'contact::read'),
+			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'contactlist::read'),
+			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'dashboard::read'),
+			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'statistic::read'),
+			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'mail::read'),
 		);
+		
 	}
 	
 	public function executeSqls()
