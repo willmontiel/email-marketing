@@ -396,4 +396,36 @@ class AccountController extends ControllerBase
 		$this->flashSession->warning('Se ha eliminado el usuario <strong>' .$user->username. '</strong> exitosamente');
 		return $this->response->redirect("account/show/{$user->idAccount}");
 	}
+	
+	public function accountingAction()
+	{
+		$user = $this->user;
+		$accounts = Account::find();
+		
+		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
+		$accounting->setAccounts($accounts);
+		$accounting->startAccounting();
+		
+		try {
+			$a = $accounting->getAccounting();
+			$this->traceSuccess("Read accounting, idUser: {$user->idUser}");
+		}
+		catch (Exception $e) {
+			$this->traceFail("Read accounting, idUser: {$user->idUser}");
+			$this->logger->log("Exception: {$e}");
+		}
+		
+		
+		$month = date('M', time());
+		$year = date('Y', time());
+		
+		$currentMonth = strtotime("1 {$month} {$year}");
+		$lastMonth = strtotime("-1 month", $currentMonth);
+		
+		$this->view->setVar('currentMonth', date('M', $currentMonth));
+		$this->view->setVar('lastMonth', date('M', $lastMonth));
+		$this->view->setVar('accounts', $a);
+	}
+	
+	
  }  
