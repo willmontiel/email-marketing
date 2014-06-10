@@ -3,14 +3,6 @@
 	{{ super() }}
 	<script type="text/javascript">
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
-		var finished = false;
-		function checkUnfinishedImports() {
-			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
-				if (!finished) {
-					loadNow({{process['idProcess']}});
-				}
-			}	
-		}
 		
 		function inProcess(x, text) {
 			$('#' + x).empty();
@@ -29,57 +21,75 @@
 		function waiting(x, text) {
 			$('#' + x).empty();
 			$('#' + x).addClass("red");
-			$('#' + x).append('<td></div><span class="glyphicon glyphicon-remove-circle"></span></td><td>' + text + '</td><td>Esperando</td>');
+			$('#' + x).append('<td></div><span class="glyphicon glyphicon-remove-circle"></span></td><td>' + text + '</td><td><div class="status">Esperando</div></td>');
 		}
 		
-		function loadNow(idProcess) {   
-			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
+		function loadNow() {   
+			$.getJSON(MyBaseURL + 'process/refreshimport/' + {{process['idProcess']}}, function(data){
 				if(data.length !== 0) {
-					switch (data.status) {
-						case 'Pendiente':
-						case 'En ejecución':
-							inProcess('1', 'Cargando servicios');
-							
-							waiting('2', 'Validando registros');
-							waiting('3', 'Cargando registros en la lista');
-							waiting('4', 'Finalizado');
-							break;
-							
-						case 'Preprocesando registros':
-							done('1', 'Cargando servicios');
-							inProcess('2', 'Validando registros');
-							waiting('3', 'Cargando registros en la lista');
-							waiting('4', 'Finalizado');
-							break;
-							
-						case 'Mapeando contactos':
-						case 'Cargando registros en base de datos':
-						case 'Actualizando campos personalizados':
-							done('1', 'Cargando servicios');
-							done('2', 'Validando registros');
-							inProcess('3', 'Cargando registros en la lista');
-							waiting('4', 'Finalizado');
-							break;
-								
-						case 'Finalizado':
-							done('1', 'Cargando servicios');
-							done('2', 'Validando registros');
-							done('3', 'Cargando registros en la lista');
-							done('4', 'Finalizado');
-							$('#details').show();
-							break;
-					}
+					updateView(data.status);
 					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
 						finished = true;
+						location.reload(MyBaseURL + 'process/refreshimport/' + {{process['idProcess']}});
 					}
 				}
 			});
 		};
 		
+		function updateView(status) {
+			switch (status) {
+				case 'Pendiente':
+				case 'En ejecución':
+					inProcess('1', 'Cargando servicios');
+
+					waiting('2', 'Validando registros');
+					waiting('3', 'Cargando registros en la lista');
+					waiting('4', 'Finalizado');
+					break;
+
+				case 'Preprocesando registros':
+					done('1', 'Cargando servicios');
+					inProcess('2', 'Validando registros');
+					waiting('3', 'Cargando registros en la lista');
+					waiting('4', 'Finalizado');
+					break;
+
+				case 'Mapeando contactos':
+				case 'Cargando registros en base de datos':
+				case 'Actualizando campos personalizados':
+					done('1', 'Cargando servicios');
+					done('2', 'Validando registros');
+					inProcess('3', 'Cargando registros en la lista');
+					waiting('4', 'Finalizado');
+					break;
+
+				case 'Finalizado':
+					done('1', 'Cargando servicios');
+					done('2', 'Validando registros');
+					done('3', 'Cargando registros en la lista');
+					done('4', 'Finalizado');
+					$('#details').show();
+					break;
+				
+				case 'Cancelado':
+					waiting('1', 'Cargando servicios');
+					waiting('2', 'Validando registros');
+					waiting('3', 'Cargando registros en la lista');
+					waiting('4', 'Finalizado');
+					$('.status').empty();
+					$('.status').append('Cancelado');
+					break;
+			}
+		}
 		
 		$(function() {
-			loadNow({{process['idProcess']}});
-			setInterval(checkUnfinishedImports, 3000);
+			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
+				loadNow();
+				setInterval(loadNow, 3000);
+			}
+			else {
+				updateView('{{process['status']}}');
+			}
 		});
 	</script>
 {% endblock %}
