@@ -77,14 +77,6 @@ class UserController extends ControllerBase
 		$this->view->UserForm = $form;
 	}
 	
-	
-	protected function removePrefix($username)
-	{
-		$un = explode('_', $username);
-		
-		return $un[1];
-	}
-	
 	public function editAction($id)
 	{
 		$account = $this->user->account;
