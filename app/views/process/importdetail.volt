@@ -30,7 +30,7 @@
 					updateView(data.status);
 					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
 						finished = true;
-						location.reload(MyBaseURL + 'process/refreshimport/' + idProcess);
+						location.reload(MyBaseURL + 'process/refreshimport/' + {{process['idProcess']}});
 					}
 				}
 			});
