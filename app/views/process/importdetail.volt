@@ -79,7 +79,7 @@
 				setInterval(loadNow, 3000);
 			}
 			else {
-				updateView({{process['status']}});
+				updateView('{{process['status']}}');
 			}
 		});
 	</script>
