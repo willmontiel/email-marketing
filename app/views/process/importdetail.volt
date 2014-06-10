@@ -76,8 +76,8 @@
 					waiting('2', 'Validando registros');
 					waiting('3', 'Cargando registros en la lista');
 					waiting('4', 'Finalizado');
-					$('#status').empty();
-					$('#status').append('Cancelado');
+					$('.status').empty();
+					$('.status').append('Cancelado');
 					break;
 			}
 		}
@@ -106,25 +106,25 @@
 				<tr id="1">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Cargando servicios</td>
-					<td>En proceso</td>
+					<td><div class="status">En proceso</div></td>
 				</tr>
 				
 				<tr id="2">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Validando registros</td>
-					<td>Esperando</td>
+					<td><div class="status">Esperando</div></td>
 				</tr>
 				
 				<tr id="3">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Cargando registros en la lista</td>
-					<td>Esperando</td>
+					<td><div class="status">Esperando</div></td>
 				</tr>
 				
 				<tr id="4">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Finalizado</td>
-					<td id="status">Esperando</td>
+					<td><div class="status">Esperando</div></td>
 				</tr>
 			
 				<tr>
