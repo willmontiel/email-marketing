@@ -192,8 +192,12 @@ class ChildCommunication extends BaseWrapper
 			$mailclass = Mailclass::findFirstByIdMailClass($this->account->idMailClass);
 			
 			// Crear variables listID y sendID para inyectarlas a las cabeceras con swiftmailer
-			$listID = 't0em' . $this->account->idAccount;
-			$sendID = '0em' . $mail->idMail;
+                        $prefixID = Phalcon\DI::getDefault()->get('instanceIDprefix')->prefix;
+                        if (!$prefixID || $prefixID == '') {
+                            $prefixID = '0em';
+                        }
+			$listID = 't' . $prefixID . $this->account->idAccount;
+			$sendID = $prefixID . $mail->idMail;
 			
 			// MTA a utilizar
 			$mta = ($this->account->virtualMta == null || trim($this->account->virtualMta) === '')?'CUST_SIGMA':$this->account->virtualMta;
