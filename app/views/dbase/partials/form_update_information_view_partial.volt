@@ -41,7 +41,7 @@
 					<div class="row">
 						<div class="bs-callout bs-callout-info">
 							<h4>Información de Actualización</h4>
-							<p>El mensaje de notificación es utilizado cuando el contacto ha editado su información 
+							<p>El mensaje de actualización es utilizado cuando el contacto ha editado su información 
 								correctamente.  Seleccione aquí el contenido del correo, el asunto y el origen.								
 							</p>
 						</div>
@@ -85,7 +85,7 @@
 				<div class="checkbox-inline mleft-15">
 					<label for="notify">
 						{{' {{input type="checkbox" id="notify" name="notify" checked=notify valueBinding="notify"}}' }}
-						<span class="text-muted">Esta opción envía un correo notificando la suscripción de un nuevo contacto!</span>
+						<span class="text-muted">Esta opción envía un correo notificando la actualización de un contacto!</span>
 					</label>
 				</div>
 			</div>

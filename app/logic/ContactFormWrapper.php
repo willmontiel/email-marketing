@@ -226,12 +226,11 @@ class ContactFormWrapper extends ContactWrapper
 				
 				$updatenotify = new NotificationMail();
 				$updatenotify->setForm($this->form);
-				$updatenotify->setContact($contact);
 				$updatenotify->setAccount($this->account);
 				$updatenotify->setDomain($domain);
 				$updatenotify->setMail(new Mail());
 				$updatenotify->prepareContent($content->mail);
-				$updatenotify->setContactReceiver();
+				$updatenotify->setNotifyReceiver($this->form->notifyEmail, $this->form->notifyEmail);
 				$updatenotify->sendMail($content);
 			} catch (\Exception $e) {
 				$this->logger->log('Exception: [' . $e->getMessage() . ']');
