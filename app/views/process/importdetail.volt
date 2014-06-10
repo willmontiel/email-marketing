@@ -5,6 +5,7 @@
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		var finished = false;
 		function checkUnfinishedImports() {
+			
 			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
 				if (!finished) {
 					loadNow({{process['idProcess']}});
@@ -79,8 +80,10 @@
 		
 		
 		$(function() {
-			loadNow({{process['idProcess']}});
-			setInterval(checkUnfinishedImports, 3000);
+			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
+				loadNow({{process['idProcess']}});
+				setInterval(checkUnfinishedImports, 3000);
+			}
 		});
 	</script>
 {% endblock %}
