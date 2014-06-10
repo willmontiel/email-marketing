@@ -21,7 +21,7 @@
 		function waiting(x, text) {
 			$('#' + x).empty();
 			$('#' + x).addClass("red");
-			$('#' + x).append('<td></div><span class="glyphicon glyphicon-remove-circle"></span></td><td>' + text + '</td><td>Esperando</td>');
+			$('#' + x).append('<td></div><span class="glyphicon glyphicon-remove-circle"></span></td><td>' + text + '</td><td><div class="status">Esperando</div></td>');
 		}
 		
 		function loadNow(idProcess) {   
@@ -106,25 +106,25 @@
 				<tr id="1">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Cargando servicios</td>
-					<td><div class="status">En proceso</div></td>
+					<td>En proceso</td>
 				</tr>
 				
 				<tr id="2">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Validando registros</td>
-					<td><div class="status">Esperando</div></td>
+					<td>Esperando</td>
 				</tr>
 				
 				<tr id="3">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Cargando registros en la lista</td>
-					<td><div class="status">Esperando</div></td>
+					<td>Esperando</td>
 				</tr>
 				
 				<tr id="4">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Finalizado</td>
-					<td><div class="status">Esperando</div></td>
+					<td>Esperando</td>
 				</tr>
 			
 				<tr>
