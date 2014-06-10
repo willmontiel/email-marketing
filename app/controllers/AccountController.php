@@ -327,14 +327,6 @@ class AccountController extends ControllerBase
 		$this->view->setVar('account', $account);
 	}
 	
-	
-	protected function removePrefix($username)
-	{
-		$un = explode('_', $username);
-		
-		return $un[1];
-	}
-	
 	/*
 	 * Esta función le permite al super-administrador editar cualquier usuario de cualquier cuenta
 	 * Recibe el id del usuario

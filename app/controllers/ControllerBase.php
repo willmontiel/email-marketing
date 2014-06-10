@@ -77,6 +77,16 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		return $this->response;
 	}
 	
+	protected function removePrefix($username)
+	{
+		$un = explode('_', $username);
+		
+		if (isset($un[1])) {
+			return $un[1];
+		}
+		return $username;
+	}
+	
 	public function getPrefix($name)
 	{
 		$name = str_replace(' ', '', $name);
