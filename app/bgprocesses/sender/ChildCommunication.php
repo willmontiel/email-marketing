@@ -5,12 +5,19 @@ class ChildCommunication extends BaseWrapper
 	protected $childprocess;
 	const CONTACTS_PER_UPDATE = 25;
 	
-	public function __construct() 
+        protected $db;
+        protected $mta;
+        protected $urlManager;
+
+
+        public function __construct() 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 	
 		$this->mta = $di['mtadata'];
 		$this->urlManager = $di['urlManager'];
+                
+                $this->db = $di->get('db');
 	}
 	
 	public function setSocket($childprocess)
@@ -338,22 +345,14 @@ class ChildCommunication extends BaseWrapper
 					 */
 					if (count($sentContacts) == self::CONTACTS_PER_UPDATE || $msg == "Stop") {
 						$timer->startTimer('upd-msg-status', 'Updating message status...');
-						$idsContact = implode(', ', $sentContacts);
-						$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = {$mail->idMail} AND idContact IN ({$idsContact})";
-
-						if ($modelsManager->executeQuery($phql)) {
-							unset($sentContacts);
-							$sentContacts = array();
-						}
-						else {
-							$log->log("Error actualizando el estado de envio de los mensajes!!!");
-						}
+                                                $this->commitSentMessages($mail, $sentContacts);
+                                                $sentContacts = array();
 						$timer->endTimer('upd-msg-status');
 						$timer->startTimer('gc-collect', 'Reclaiming memory...');
 						$log->log('Memory usage before reclaiming: ' . memory_get_usage(true));
 						// [13-May-2014 17:43:34] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 71 bytes) in /websites/emailmarketing/email-marketing/app/bgprocesses/sender/ChildCommunication.php on line 299
 						$gc_number = gc_collect_cycles(); // # of elements cleaned up
-						$log->log('Memory usage after reclaiming: ' . memory_get_usage(true) . ', objects: ' . $gc_number);
+						$log->log('Memory usage after reclaiming: ' . memory_get_usage(true));
 						$timer->endTimer('gc-collect');
 					}
 					$i++;
@@ -369,7 +368,7 @@ class ChildCommunication extends BaseWrapper
 					case 'Cancel':
 						$log->log('Estado: Me Cancelaron');
 
-						$phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = " . $mail->idMail;
+                                                $phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = {$mail->idMail} AND status != 'sent'";
 						if (!$modelsManager->executeQuery($phql)) {
 							$log->log("Error updating MxC");
 						}
@@ -396,16 +395,8 @@ class ChildCommunication extends BaseWrapper
 			// || $contact['contact']['idContact'] ==  $lastContact['contact']['idContact']	
 			// Grabar ultimos contactos enviados
 			if (count($sentContacts) > 0) {
-				$idsContact = implode(', ', $sentContacts);
-				$phql = "UPDATE Mxc SET status = 'sent' WHERE idMail = {$mail->idMail} AND idContact IN ({$idsContact})";
-
-				if ($modelsManager->executeQuery($phql)) {
-					unset($sentContacts);
-					$sentContacts = array();
-				}
-				else {
-					$log->log("Error guardando");
-				}
+                                $this->commitSentMessages($mail, $sentContacts);
+                                $sentContacts = array();
 			}			
 			$timer->endTimer('send-loop');
 
@@ -476,4 +467,14 @@ class ChildCommunication extends BaseWrapper
 			throw new MailStatusException('El correo no tiene estados Pausado o Programado. Estados no permitidos, en el Mail con ID '. $mail->idMail . ' Con estado ' . $mail->status);
 		}
 	}
+    protected function commitSentMessages($mail, $sentContacts)
+    {
+        $idsContact = implode(', ', $sentContacts);
+        $sql = "UPDATE mxc SET status = 'sent' WHERE idMail = {$mail->idMail} AND idContact IN ({$idsContact})";
+        
+        if (!$this->db->exec($sql)) {
+            \Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el estado de envio de los mensajes!!!");
+        }
+
+    }
 }
