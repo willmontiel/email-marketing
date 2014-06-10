@@ -472,7 +472,7 @@ class ChildCommunication extends BaseWrapper
         $idsContact = implode(', ', $sentContacts);
         $sql = "UPDATE mxc SET status = 'sent' WHERE idMail = {$mail->idMail} AND idContact IN ({$idsContact})";
         
-        if (!$this->db->exec($sql)) {
+        if (!$this->db->execute($sql)) {
             \Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el estado de envio de los mensajes!!!");
         }
 
