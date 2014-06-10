@@ -24,8 +24,8 @@
 			$('#' + x).append('<td></div><span class="glyphicon glyphicon-remove-circle"></span></td><td>' + text + '</td><td><div class="status">Esperando</div></td>');
 		}
 		
-		function loadNow(idProcess) {   
-			$.getJSON(MyBaseURL + 'process/refreshimport/' + idProcess, function(data){
+		function loadNow() {   
+			$.getJSON(MyBaseURL + 'process/refreshimport/' + {{process['idProcess']}}, function(data){
 				if(data.length !== 0) {
 					updateView(data.status);
 					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
@@ -84,8 +84,8 @@
 		
 		$(function() {
 			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
-				var load = loadNow({{process['idProcess']}});
-				setInterval(load, 3000);
+				loadNow();
+				setInterval(loadNow, 3000);
 			}
 			else {
 				updateView('{{process['status']}}');
