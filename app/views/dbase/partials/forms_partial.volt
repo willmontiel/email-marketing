@@ -78,7 +78,7 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/updating">
-	<h4 class="sectiontitle">Crear nuevo formulario de actualizacion</h4>
+	<h4 class="sectiontitle">Crear nuevo formulario de actualización</h4>
 	{{ partial("dbase/partials/form_update_information_view_partial") }}
 </script>
 
