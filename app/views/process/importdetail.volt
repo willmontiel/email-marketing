@@ -84,8 +84,8 @@
 		
 		$(function() {
 			if('{{process['status']}}' !== 'Finalizado' && '{{process['status']}}' !== 'Cancelado') {
-				loadNow({{process['idProcess']}});
-				setInterval(loadNow({{process['idProcess']}}), 3000);
+				var load = loadNow({{process['idProcess']}});
+				setInterval(load, 3000);
 			}
 			else {
 				updateView('{{process['status']}}');
