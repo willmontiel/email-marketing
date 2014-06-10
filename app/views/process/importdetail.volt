@@ -71,6 +71,7 @@
 					}
 					if (data.status === 'Finalizado' || data.status === 'Cancelado') {
 						finished = true;
+						location.reload(MyBaseURL + 'process/refreshimport/' + idProcess);
 					}
 				}
 			});
