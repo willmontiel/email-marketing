@@ -21,7 +21,7 @@ class WeekPeriod extends TimePeriod
 			$d = strtotime("next day", $d);
 		}
 		
-		$this->name = 'Semana del ' . date('d/M/y', $this->start) . ' al ' .date('d/M/y', strtotime("next saturday", $this->start));
+		$this->name = date('d/M/y', $this->start) . ' al ' .date('d/M/y', strtotime("next saturday", $this->start));
 
 		return $days;
 	}
