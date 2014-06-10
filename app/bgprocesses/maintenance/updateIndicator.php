@@ -54,6 +54,7 @@ class IndicatorObject
 					blocked = VALUES(blocked)";
 //		$this->logger->log("SQL {$sql}");
 		$this->db->execute($sql);
+		$this->logger->log("CRON JOB: indicator of amount contacts update, " . date('d/M/Y H:is', time()));
 	}
 	
 	protected function createRelationshipDate()

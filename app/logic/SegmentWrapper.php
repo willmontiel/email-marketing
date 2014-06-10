@@ -24,7 +24,7 @@ class SegmentWrapper extends BaseWrapper
 	public function createSegment($contents)
 	{
 		if(!isset($contents->name) || trim($contents->name) == '' || $contents->name == null) {
-			$this->addFieldError('segmentname', 'El segmento debe tener nombre');
+			$this->addFieldError('error', 'El segmento debe tener nombre');
 			throw new \InvalidArgumentException('El segmento debe tener nombre');
 		}
 		
@@ -51,7 +51,7 @@ class SegmentWrapper extends BaseWrapper
 		foreach ($typeFields as $typeField) {
 			
 			if(!isset($typeField["value"]) || trim($typeField["value"]) == '' || $typeField["value"] == null) {
-				$this->addFieldError('segment', 'La condicion debe tener un valor de comparacion');
+				$this->addFieldError('error', 'La condicion debe tener un valor de comparacion');
 				throw new \InvalidArgumentException('La condicion debe tener un valor de comparacion');
 			}
 			
@@ -108,7 +108,7 @@ class SegmentWrapper extends BaseWrapper
 	public function updateSegment($contents)
 	{
 		if(!isset($contents->name) || trim($contents->name) == '' || $contents->name == null) {
-			$this->addFieldError('segmentname', 'El segmento debe tener nombre');
+			$this->addFieldError('error', 'El segmento debe tener nombre');
 			throw new \InvalidArgumentException('El segmento debe tener nombre');
 		}
 		
@@ -220,7 +220,7 @@ class SegmentWrapper extends BaseWrapper
 					$objcr->idCustomField = substr($value, 3);
 				}
 				else {
-					$this->addFieldError('segment', 'Debe seleccionar una campo por cada condición');
+					$this->addFieldError('error', 'Debe seleccionar una campo por cada condición');
 					throw new \InvalidArgumentException('Debe seleccionar una campo por cada condición');
 				}
 				break;
@@ -242,7 +242,7 @@ class SegmentWrapper extends BaseWrapper
 		
 		if (!$deletedSegment) {
 			$db->rollback();
-			$this->addFieldError('segment', 'Falló la eliminacion del segmento');
+			$this->addFieldError('error', 'Falló la eliminacion del segmento');
 			throw new \InvalidArgumentException('Falló la eliminacion del segmento');
 		}
 		
