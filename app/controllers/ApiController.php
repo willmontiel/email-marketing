@@ -1243,9 +1243,10 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('segment' => $response), 201, 'Success');
 		}
 		catch (\InvalidArgumentException $e) {
+			$error = $wrapper->getFieldErrors();
 			$this->logger->log('Exception: [' . $e . ']');
-			$this->traceFail("Error creating segment, idDbase: {$contents->dbase}");
-			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors()), 422, 'Invalid data');
+//			$this->traceFail("Error creating segment, idDbase: {$contents->dbase}");
+			return $this->setJsonResponse(array('errors' => $error['error']), 422, 'Invalid data');
 		}
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
