@@ -70,6 +70,15 @@
 					done('4', 'Finalizado');
 					$('#details').show();
 					break;
+				
+				case 'Cancelado':
+					waiting('1', 'Cargando servicios');
+					waiting('2', 'Validando registros');
+					waiting('3', 'Cargando registros en la lista');
+					waiting('4', 'Finalizado');
+					$('#status').empty();
+					$('#status').append('Cancelado');
+					break;
 			}
 		}
 		
@@ -115,7 +124,7 @@
 				<tr id="4">
 					<td><span class="glyphicon glyphicon-remove-circle"></span></td>
 					<td>Finalizado</td>
-					<td>Esperando</td>
+					<td id="status">Esperando</td>
 				</tr>
 			
 				<tr>
