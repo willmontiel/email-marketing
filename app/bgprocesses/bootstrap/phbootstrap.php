@@ -41,6 +41,10 @@ $di->set('appPath', function () use ($apppath) {
 /* Configuracion */
 $config = new \Phalcon\Config\Adapter\Ini("../../config/configuration.ini");
 
+$obj = new \stdClass();
+$obj->prefix = isset($config->system->instance_id)?$config->system->instance_id:'';
+$di->set('instanceIDprefix', $obj);
+
 /*
  * Configuración de las URL's
  */
