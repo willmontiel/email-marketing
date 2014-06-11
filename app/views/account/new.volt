@@ -1,6 +1,9 @@
 {% extends "templates/index_b3.volt" %}
-{% block sectiontitle %}<i class="icon-sitemap"></i> Crear una nueva cuenta{%endblock%}
-{%block sectionsubtitle %}Cree una cuenta asignandole al mismo tiempo un usuario administrador{% endblock %}
+{% block header_javascript %}
+	{{ super() }}
+	{{ stylesheet_link('bootstrap-tagsinput/bootstrap-tagsinput.css') }}
+	{{ javascript_include('bootstrap-tagsinput/bootstrap-tagsinput.js')}}
+{% endblock %}
 
 {% block content %}
 
@@ -15,7 +18,7 @@
 		{{ flashSession.output() }}
 	</div>
 	<div class="row">
-		<form action = "{{url('account/new')}}" class="form-horizontal" id="registerAccount" method="post" 'role':'form'>
+		<form action = "{{url('account/new')}}" class="form-horizontal" id="registerAccount" method="post" role="form">
 				<div class="row">
 					<div class="col-md-6">
 						<h4 class="text-center">Datos de la cuenta</h4>
@@ -45,10 +48,18 @@
 								{{ newFormAccount.render('contactLimit', {'class': 'form-control'}) }}
 							</div>
 						</div>
+						
 						<div class="form-group">
 							<label for="messageLimit" class="col-sm-5 control-label">*Límite de mensajes</label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('messageLimit', {'class': 'form-control'}) }}
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="remittent" class="col-sm-5 control-label">*Remitente(s)</label>
+							<div class="col-md-6" style="font-size: 14px !important;">
+								{{ newFormAccount.render('remittent', {'class': 'form-control', 'data-role' : 'tagsinput', 'placeholder' : 'Escribe y luego presiona enter...'}) }}
 							</div>
 						</div>
 						<div class="form-group">
