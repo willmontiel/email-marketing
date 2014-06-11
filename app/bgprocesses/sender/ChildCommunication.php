@@ -217,6 +217,7 @@ class ChildCommunication extends BaseWrapper
 			$timer->startTimer('send-loop', 'In the loop');
 			gc_enable(); // Enable Garbage Collector
 
+                        $rmemory = 0;
 			foreach ($contactIterator as $contact) {
 
 				/*
@@ -348,13 +349,16 @@ class ChildCommunication extends BaseWrapper
                                                 $this->commitSentMessages($mail, $sentContacts);
                                                 $sentContacts = array();
 						$timer->endTimer('upd-msg-status');
-
-                                                $timer->startTimer('gc-collect', 'Reclaiming memory...');
-						$log->log('Memory usage before reclaiming: ' . memory_get_usage(true));
-						// [13-May-2014 17:43:34] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 71 bytes) in /websites/emailmarketing/email-marketing/app/bgprocesses/sender/ChildCommunication.php on line 299
-						$gc_number = gc_collect_cycles(); // # of elements cleaned up
-						$log->log('Memory usage after reclaiming: ' . memory_get_usage(true));
-						$timer->endTimer('gc-collect');
+                                                
+                                                $rmemory++;
+                                                if (($rmemory % 10)) {
+                                                    $timer->startTimer('gc-collect', 'Reclaiming memory...');
+                                                    $log->log('Memory usage before reclaiming: ' . memory_get_usage(true));
+                                                    // [13-May-2014 17:43:34] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 71 bytes) in /websites/emailmarketing/email-marketing/app/bgprocesses/sender/ChildCommunication.php on line 299
+                                                    $gc_number = gc_collect_cycles(); // # of elements cleaned up
+                                                    $log->log('Memory usage after reclaiming: ' . memory_get_usage(true));
+                                                    $timer->endTimer('gc-collect');
+                                                } 
 					}
 					$i++;
 				} 
