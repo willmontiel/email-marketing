@@ -137,7 +137,7 @@ class Security extends Plugin
 				'account::accounting' => array('account' => array('billing')),
 				'account::new' => array('account' => array('create', 'read')),
 				'account::edit' => array('account' => array ('read', 'update')),
-				'account::show' => array('user' => array ('read')),
+				'account::show' => array('account' => array ('read')),
 				'account::delete' => array('account' => array ('read', 'delete')),
 				'account::newuser' => array('user' => array ('read', 'create'),
 									        'account' => array('read')),
