@@ -7,7 +7,7 @@ class ContactIterator implements Iterator
 	public $start;
 	public $offset;
 	
-	const ROWS_PER_FETCH = 100;
+	const ROWS_PER_FETCH = 500;
 	
 	public function __construct(Mail $mail, $idFields) 
 	{
