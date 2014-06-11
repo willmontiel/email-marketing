@@ -3,7 +3,7 @@ require_once "../../library/swiftmailer/lib/swift_required.php";
 class ChildCommunication extends BaseWrapper
 {
 	protected $childprocess;
-	const CONTACTS_PER_UPDATE = 50;
+	const CONTACTS_PER_UPDATE = 25;
 	
         protected $db;
         protected $mta;
