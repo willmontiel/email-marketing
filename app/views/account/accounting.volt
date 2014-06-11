@@ -1,6 +1,12 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
 	<div class="row">
+		<div class="col-sm-12">
+			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
+		</div>
+	</div>
+
+	<div class="row">
 		<h4 class="sectiontitle">Contabilidad y facturación</h4>
 		<div class="bs-callout bs-callout-info">
 			Desde aqui podrá ver el consumo de todos los clientes, para realizar labores de contabilidad y facturación
