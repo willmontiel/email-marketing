@@ -38,9 +38,11 @@
 					</div>
 				</div>
 				#}
-				<div class="form-group">
+				
+			
+				<div class="form-group" id="not-allowed-remittents">
 					<label for="fromName" class="col-sm-2 control-label">De: </label>
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						{{ '{{view Ember.Select
 								contentBinding="App.remittentsName"
 								optionValuePath="content.id"
@@ -50,8 +52,9 @@
 								class="form-control"}}'
 						 }}
 					</div>
+					
 					<label for="fromName" class="col-sm-2 control-label">Email: </label>
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						{{ '{{view Ember.Select
 								contentBinding="App.remittentsEmail"
 								optionValuePath="content.id"
@@ -61,8 +64,27 @@
 								class="form-control"}}'
 						 }}
 					</div>
+				{{ '{{#if App.remittentAllowed}}' }}
+					<div class="col-sm-2">
+						<span class="label label-primary" style="cursor:pointer" onClick="showNewRemittent();">Otro remitente</span>
+					</div>
+				{{ '{{/if}}' }}
 				</div>	
+				
+				<div class="form-group" id="allowed-remittents" style="display: none;">
+					<label for="fromName" class="col-sm-2 control-label">De: </label>
+					<div class="col-sm-3">
+						{{'{{view Ember.TextField valueBinding="fromName1" id="fromName" placeholder="Nombre de remitente" class="form-control"}}'}}
+					</div>
 					
+					<label for="fromName" class="col-sm-2 control-label">Email: </label>
+					<div class="col-sm-3">
+						{{'{{view Ember.TextField valueBinding="fromEmail2" id="fromEmail" placeholder="Direccion de remitente" class="form-control"}}'}}
+					</div>
+					<div class="col-sm-2">
+						<span class="label label-primary" style="cursor:pointer" onClick="hideNewRemittent();" {{ '{{action "cancelNewRemittent" this}}' }}>Cancelar</span>
+					</div>
+				</div>
 					
 				<div class="form-group">
 					<label for="replyTo" class="col-sm-2 control-label">Responder a: </label>

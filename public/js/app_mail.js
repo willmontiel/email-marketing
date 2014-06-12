@@ -17,6 +17,8 @@ App.Mail = DS.Model.extend({
 	name: DS.attr('string'),
 	fromName: DS.attr( 'string' ),
 	fromEmail: DS.attr('string'),
+	fromName1: DS.attr( 'string' ),
+	fromEmail2: DS.attr('string'),
 	replyTo: DS.attr('string'),
 	subject: DS.attr('string'),
 	dbases: DS.attr('string'),
@@ -127,12 +129,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			var fbaccounts = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
 			var twaccounts = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
 			
-			var r = this.get('this.fromEmail');
-			
-			this.set('remittentNames', this.get('this.fromName'));
-			this.set('remittentEmails', r);
-			
-			console.log(this.get('remittentEmails'));
+			this.set('remittentNames', remittentName);
+			this.set('remittentEmails', remittentEmail);
+			this.set('isChangeRemittentAllowed', App.remittentAllowed)
 			
 			this.set('dbaselist', arrayDbase);
 			this.set('list', arrayList);
@@ -446,6 +445,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
 		//}
 		
+		var fromName = this.get('fromName1');
+		var fromEmail = this.get('fromEmail2');
+		
 		var remittentNames = this.get('remittentNames').value;
 		var remittentEmails = this.get('remittentEmails').value;
 		
@@ -516,7 +518,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('isSocialExpanded', false);
 			}
 		},
-
+				
+		cancelNewRemittent: function () {
+			this.set('fromName1', '');
+			this.set('fromEmail1', '');
+		},
+				
 		expandHeader: function () {
 			this.set('isHeaderExpanded', true);
 			this.set('isTargetExpanded', false);

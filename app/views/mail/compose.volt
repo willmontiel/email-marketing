@@ -19,6 +19,17 @@
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	<script type="text/javascript">
+		function showNewRemittent() {
+			$('#not-allowed-remittents').hide();
+			$('#allowed-remittents').show();
+		}
+		
+		function hideNewRemittent() {
+			$('#not-allowed-remittents').show();
+			$('#allowed-remittents').hide();
+		}
+	</script>
+	<script type="text/javascript">
 		$(function() {
 			{%for asset in assets%}
 				var media = new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}});
@@ -84,6 +95,9 @@
 				id: {{mail.idMail}}
 			}];
 		{% endif %}
+		
+		
+		App.remittentAllowed = {{account.remittentAllowed}};
 		
 		//Relacion de direcciones de remitente y nombres de remitentes configurados previamente en la creación de la cuenta
 		{% if remittents is defined %}
