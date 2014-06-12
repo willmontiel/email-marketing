@@ -40,9 +40,11 @@ class ContactIterator implements Iterator
 		
 		unset($this->contacts);
 		
+		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Querying', 'Querying data');
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$contacts = $result->fetchAll();
+		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Querying');
 		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Organizing', 'Organizing data');
 		if (count($contacts) <= 0) {
 			return false;
