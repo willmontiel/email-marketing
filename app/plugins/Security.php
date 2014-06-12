@@ -380,6 +380,9 @@ class Security extends Plugin
 				//Formularios
 				'form::preview' => array('form' => array('read')),
 				
+				//Footer
+				'footer::preview' => array('footer' => array('read')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

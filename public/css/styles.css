@@ -1366,3 +1366,6 @@ table {
 .input-field-social-follow.input-url-social-follow + .save-link-social-follow {
 	display: block;
 }*/
+.footer-by-default-not-editable {
+	background-color: white;
+}

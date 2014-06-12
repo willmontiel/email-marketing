@@ -731,6 +731,13 @@ class MailController extends ControllerBase
 			$this->view->setVar('assets', $arrayAssets);
 		}
 		
+		$footer = Footer::findFirstByIdFooter($this->user->account->idFooter);
+		$objfooter = new stdClass();
+		$objfooter->editor = $footer->editor;
+		$objfooter->html = $footer->html;
+		$objfooter->editable = $this->user->account->footerEditable;
+		$this->view->setVar('footer', $objfooter);
+		
 		$arrayCf = array();
 		
 		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
@@ -922,6 +929,10 @@ class MailController extends ControllerBase
 
 		$this->view->setVar('forms', $arrayForm);
 		$this->view->setVar('cfs', $arrayCf);
+		
+		$footer = Footer::findFirstByIdFooter($this->user->account->idFooter);
+		$footer->editable = $this->user->account->footerEditable;
+		$this->view->setVar('footer', $footer);
 		
 		if ($this->request->isPost()) {
 			$content = $this->request->getPost("content");
@@ -1616,6 +1627,7 @@ class MailController extends ControllerBase
 		$this->session->remove('htmlObj');
 		$url = $this->url->get('mail/previewmail');		
 		$editorObj = new HtmlObj(true, $url, $idMail);
+		$editorObj->setAccount($this->user->account);
 		$editorObj->assignContent(json_decode($content));
 		$this->session->set('htmlObj', $editorObj->render());
 		
@@ -1672,7 +1684,10 @@ class MailController extends ControllerBase
 	{
 		$html = $this->request->getPost("html");
 		$this->session->remove('htmlObj');
-		
+		$footer = Footer::findFirstByIdFooter($this->user->account->idFooter);
+		if($this->user->account->footerEditable == 0) {
+			$html = str_replace("</body></html>", $footer->html . "</body></html>", $html);
+		}
 		if (trim($html) === '' || $html == null || empty($html)) {
 			return $this->setJsonResponse(array('status' => 'Error'), 401, 'No hay html que previsualizar por favor verfique la informacion');
 		}

@@ -21,6 +21,7 @@ class HtmlObj extends HtmlAbstract
 		
 		foreach ($content->dz as $key => $values) {
 			$HtmlZone = new HtmlZone();
+			$HtmlZone->setAccount($this->account);
 			$HtmlZone->assignContent($content->dz->$key);
 			$this->children[] = $HtmlZone->render();
 		}

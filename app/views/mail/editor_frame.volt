@@ -31,7 +31,9 @@
 
 <script type="text/javascript">
 		var objMail = {{objMail}};
-		
+		var footer = {{footer.editor}};
+		var footerhtml = '{{footer.html}}';
+		var footereditable = "{{footer.editable}}";
 	
 		var config = {imagesUrl: "{{url('images')}}", templateUrl : "{{url('template/create')}}"};
 		

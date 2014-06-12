@@ -868,3 +868,10 @@ span.required {
 	padding-left: 15px !important; 
 	padding-right: 15px !important;
 }
+.footer-html {
+	background-color: white;
+	border: 1px solid #ddd
+}
+.footer-html > table {
+	margin: auto;
+}

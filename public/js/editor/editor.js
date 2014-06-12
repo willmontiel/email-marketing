@@ -41,6 +41,7 @@ Editor.prototype.objectExists = function(objMail) {
 		this.dz = objMail.dz;
 		this.editorColor = objMail.editorColor;
 		this.changeLayout();
+		this.createDefaultFooter(false);
 		NoMediaDisplayer();
 		
 		$('.dropzone-container').sortable({ 
@@ -56,7 +57,7 @@ Editor.prototype.objectExists = function(objMail) {
 		this.editorColor = '#E6E6E6';
 		this.createEditStyle();
 		this.newDropZones();
-		this.createDefaultFooter();
+		this.createDefaultFooter(true);
 		parent.$('.btnoptions').show();
 	}
 };
@@ -88,6 +89,8 @@ Editor.prototype.serializeDZ = function() {
 			this.dz[key] = this.dz[key].persist();
 		}
 	}
+	
+	$('#edit-area').find('.footer-by-default-not-editable').remove();
 };
 
 Editor.prototype.createDZ = function(objdz) {
@@ -155,8 +158,8 @@ Editor.prototype.newDropZones = function() {
 	}
 };
 
-Editor.prototype.createDefaultFooter = function() {
-	this.dz['footer'].createFooter();
+Editor.prototype.createDefaultFooter = function(first) {
+	this.dz['footer'].createFooter(first);
 };
 
 Dropzone.autoDiscover = false;
