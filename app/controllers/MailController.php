@@ -2365,6 +2365,16 @@ class MailController extends ControllerBase
 				'bind' => array(1 => $account->idAccount)
 			));
 			
+			
+			$remittents = Remittent::find(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $account->idAccount)
+			));
+			
+			if (count($remittents) > 0) {
+				$this->view->setVar('remittents', $remittents);
+			}
+			
 			$this->view->setVar('account', $account);
 			$this->view->setVar('mails', $mails);
 			$this->view->setVar('links', $links);

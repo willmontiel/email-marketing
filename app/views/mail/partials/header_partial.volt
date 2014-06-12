@@ -26,6 +26,7 @@
 {{ '{{#if isHeaderExpanded}}' }}
 	<h4 class="paneltitle">Encabezado</h4>
 			<form class="form-horizontal" role="form" id="header">
+				{#
 				<div class="form-group">
 					<label for="fromName" class="col-sm-2 control-label">De: </label>
 					<div class="col-sm-4">
@@ -36,6 +37,33 @@
 						{{'{{view Ember.TextField valueBinding="fromEmail" id="fromEmail" placeholder="Enviar desde esta dirección de correo" required="required" class="form-control"}}'}}
 					</div>
 				</div>
+				#}
+				<div class="form-group">
+					<label for="fromName" class="col-sm-2 control-label">De: </label>
+					<div class="col-sm-4">
+						{{ '{{view Ember.Select
+								contentBinding="App.remittentsName"
+								optionValuePath="content.id"
+								optionLabelPath="content.value"
+								selectionBinding="remittentNames"
+								id="remittentNames"
+								class="form-control"}}'
+						 }}
+					</div>
+					<label for="fromName" class="col-sm-2 control-label">Email: </label>
+					<div class="col-sm-4">
+						{{ '{{view Ember.Select
+								contentBinding="App.remittentsEmail"
+								optionValuePath="content.id"
+								optionLabelPath="content.value"
+								selectionBinding="remittentEmails"
+								id="remittentEmails"
+								class="form-control"}}'
+						 }}
+					</div>
+				</div>	
+					
+					
 				<div class="form-group">
 					<label for="replyTo" class="col-sm-2 control-label">Responder a: </label>
 					<div class="col-sm-10">

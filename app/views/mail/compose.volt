@@ -86,7 +86,19 @@
 		{% endif %}
 		
 		//Relacion de direcciones de remitente y nombres de remitentes configurados previamente en la creación de la cuenta
-		
+		{% if remittents is defined %}
+			App.remittentsName = [
+				{% for remittent in remittents %}
+					Ember.Object.create({value: "{{remittent.name|escape_js}}", id: "{{remittent.name|escape_js}}"}),
+				{% endfor %}
+			];
+			
+			App.remittentsEmail = [
+				{% for remittent in remittents %}
+					Ember.Object.create({value: "{{remittent.email|escape_js}}", id: "{{remittent.email|escape_js}}"}),
+				{% endfor %}
+			];
+		{% endif %}
 		
 		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios
 		{% if db == true%}

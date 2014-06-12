@@ -69,6 +69,8 @@ Ember.Handlebars.helper("external-link", App.ExternalLinkComponent);
 
 
 App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
+	remittentNames: [],
+	remittentEmails: [],
 	dbaselist: [],
 	list: [],
 	segmentlist: [],
@@ -116,11 +118,21 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	//Si hay un id se encargara se recrear el correo para su edición
 	setSelectsContent: function () {
 		if (this.get('id') !== null) {
+			var remittentName = setTargetValue(this.get('this.fromName'), App.remittentsName);
+			var remittentEmail = setTargetValue(this.get('this.fromEmail'), App.remittentsEmail);
+			
 			var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
 			var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
 			var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
 			var fbaccounts = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
 			var twaccounts = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
+			
+			var r = this.get('this.fromEmail');
+			
+			this.set('remittentNames', this.get('this.fromName'));
+			this.set('remittentEmails', r);
+			
+			console.log(this.get('remittentEmails'));
 			
 			this.set('dbaselist', arrayDbase);
 			this.set('list', arrayList);
@@ -434,6 +446,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
 		//}
 		
+		var remittentNames = this.get('remittentNames').value;
+		var remittentEmails = this.get('remittentEmails').value;
+		
 		var dbases = getArrayValue(this.get('dbaselist'));
 		var contactlists = getArrayValue(this.get('list'));
 		var segments = getArrayValue(this.get('segmentlist'));
@@ -442,7 +457,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var exclude = getArrayValue(this.get('exclude'));
 		var fbaccounts = getArrayValue(this.get('fbaccountsel'));
 		var twaccounts = getArrayValue(this.get('twaccountsel'));
-
+		
 		var array = [];
 			var obj = this.get('linksAnalytics').toArray();
 			for (var i = 0; i < obj.length; i++) {
@@ -456,7 +471,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		if (value === 'now') {
 			mail.set('scheduleDate', value);
 		}
-
+		
+		mail.set('fromName', remittentNames);
+		mail.set('fromEmail', remittentEmails);
+		
 		mail.set('dbases', dbases);
 		mail.set('contactlists', contactlists);
 		mail.set('segments', segments);
@@ -626,7 +644,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 });
 
 function getArrayValue(value) {
-	
 	if( value !== null && value !== undefined ) {
 		var array = [];
 		var obj = value.toArray();
@@ -658,6 +675,16 @@ function setTargetValues(values, select) {
 					newArray.push(select[i]);
 				}
 			}
+		}
+	}
+	return newArray;
+}
+
+function setTargetValue(value, select) {
+	var newArray = [];
+	for (var j = 0; j < select.length; j++) {
+		if (select[j].value === value) {
+			newArray.push(select[j]);
 		}
 	}
 	return newArray;
