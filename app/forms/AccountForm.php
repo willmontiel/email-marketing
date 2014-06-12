@@ -74,7 +74,11 @@ class AccountForm extends Form
 		$this->add(new Text ('remittent', array(
 			'maxlength' => 100,
 			'type' => 'text',
-			'required' => 'required' 
+        )));
+		
+		$this->add(new Select ('remittentAllowed', array(
+            '0' => 'No',
+			'1' => 'Si',
         )));
 		
         $this->add(new Text ('messageLimit', array(

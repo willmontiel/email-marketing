@@ -85,6 +85,9 @@
 			}];
 		{% endif %}
 		
+		//Relacion de direcciones de remitente y nombres de remitentes configurados previamente en la creación de la cuenta
+		
+		
 		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios
 		{% if db == true%}
 			App.dbs = [

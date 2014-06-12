@@ -60,6 +60,7 @@ class AccountController extends ControllerBase
 			$p = $form->getValue('prefix');
 			$c = $form->getValue('companyName');
 			$r = $form->getValue('remittent');
+			$r = strtolower($r);
 			
 			if (empty($r)) {
 				$this->flashSession->error('No ha enviado un remitente válido, por favor verfique la información');
@@ -107,14 +108,28 @@ class AccountController extends ControllerBase
    
 	protected function saveRemittent(Account $account, $remittent)
 	{
-		if (!$this->isAValidDomain($remittent)) {
+		$parts = explode('/', $remittent);
+		$domain = explode('@', $parts[0]);
+		
+		if (!\filter_var($parts[0], FILTER_VALIDATE_EMAIL)) {
+			$this->flashSession->error("Hay direcciones de correo para remitente que no son válidas, por favor verifique la información");
+			throw new InvalidArgumentException("Invalid email");
+		}
+		
+		if (!$this->isAValidDomain($domain[1])) {
 			$this->flashSession->error("Hay direcciones de correo para remitente que contienen dominios invalidos, recuerde que no debe usar dominios de correo públicas como hotmail o gmail");
 			throw new InvalidArgumentException("Invalid domain");
 		}
-			
+		
+		if (empty($parts[1])) {
+			$this->flashSession->error("No ha enviado un nombre de remitente válido, por favor verifique la información");
+			throw new InvalidArgumentException("Invalid remittent name");
+		}
+		
 		$remittentmodel = new Remittent();
 		$remittentmodel->idAccount = $account->idAccount;
-		$remittentmodel->email = $remittent;
+		$remittentmodel->email = $parts[0];
+		$remittentmodel->name = $parts[1];
 		$remittentmodel->createdon = time();
 
 		if (!$remittentmodel->save()) {
@@ -234,33 +249,70 @@ class AccountController extends ControllerBase
 		));
 		
 		if ($account) {
-            $this->view->setVar("allAccount", $account);
+			$allRemittents = Remittent::find(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $account->idAccount)
+			));
+			
+			
+			$completeRemittents = '';
+			if (count($allRemittents) > 0) {
+				foreach ($allRemittents as $r) {
+					$completeRemittents .= "{$r->email}/{$r->name},";
+				}
+			}
+			
+			$account->remittent = $completeRemittents;
+            $this->view->setVar("account", $account);
 			$editform = new AccountForm($account);
 
  			if ($this->request->isPost()) {   
-					$editform->bind($this->request->getPost(), $account);
-					
-					$n = $editform->getValue('companyName');
-					$p = $editform->getValue('prefix');
-					
+				$editform->bind($this->request->getPost(), $account);
+
+				$n = $editform->getValue('companyName');
+				$p = $editform->getValue('prefix');
+				$r = $editform->getValue('remittent');
+				$r = strtolower($r);
+				
+				if (empty($r)) {
+					$this->flashSession->error('No ha enviado un remitente válido o el campo esta vacío, por favor verfique la información');
+				}
+				else {
+					$remittents = explode(',', $r);
+				
 					$account->prefix = $this->validatePrefix($n, $p);
-								
+					
+					$this->db->begin();
 					if (!$editform->isValid() || !$account->save()) {
 						foreach ($account->getMessages() as $msg) {
 							$this->flashSession->error($msg);
 						} 
 					}
 					else {
-						$this->traceSuccess("Edit account: {$id}");
-						$this->flashSession->notice('Se ha editado la cuenta exitosamente');
-						return $this->response->redirect("account");
+						try {
+							foreach ($remittents as $remittent) {
+								$this->saveRemittent($account, $remittent);
+							}
+							
+							foreach ($allRemittents as $r) {
+								$r->delete();
+							}
+							
+							$this->db->commit();
+							$this->traceSuccess("Edit account: {$id}");
+							$this->flashSession->success('Se ha editado la cuenta exitosamente');
+							return $this->response->redirect("account");
+						}
+						catch (Exception $e) {
+							$this->db->rollback();
+						}
 					}
-
+				}
  			}
 			$this->view->editFormAccount = $editform;
         } 
 		else {
-			$this->traceFail("Edit account do not exists: {$id}");
+			$this->traceFail("Edit, account do not exists: {$id}");
 			$this->flashSession->error('La cuenta no existe, por favor verifique la información');
 			return $this->response->redirect("account");
 		}

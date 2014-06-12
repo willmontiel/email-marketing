@@ -3,6 +3,11 @@
 	{{ super() }}
 	{{ stylesheet_link('bootstrap-tagsinput/bootstrap-tagsinput.css') }}
 	{{ javascript_include('bootstrap-tagsinput/bootstrap-tagsinput.js')}}
+	<script type="text/javascript">
+		$(function() {
+			
+		});
+	</script>
 {% endblock %}
 
 {% block content %}
@@ -23,7 +28,7 @@
 					<div class="col-md-6">
 						<h4 class="text-center">Datos de la cuenta</h4>
 						<div class="form-group">
-							<label for="companyName" class="col-sm-5 control-label">*Nombre de la cuenta:</label>
+							<label for="companyName" class="col-sm-5 control-label">*Nombre de la cuenta: </label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('companyName', {'class': 'form-control'})}}
 							</div>
@@ -37,31 +42,52 @@
 						</div>
 						
 						<div class="form-group">
-							<label for="fileSpace" class="col-sm-5 control-label">*Espacio disponible en disco (Mb):</label>
+							<label for="fileSpace" class="col-sm-5 control-label">*Espacio disponible en disco (Mb): </label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('fileSpace', {'class': 'form-control'}) }}
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="contactLimit" class="col-sm-5 control-label">*Límite de contactos</label>
+							<label for="contactLimit" class="col-sm-5 control-label">*Límite de contactos: </label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('contactLimit', {'class': 'form-control'}) }}
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label for="messageLimit" class="col-sm-5 control-label">*Límite de mensajes</label>
+							<label for="messageLimit" class="col-sm-5 control-label">*Límite de mensajes: </label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('messageLimit', {'class': 'form-control'}) }}
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label for="remittent" class="col-sm-5 control-label">*Remitente(s)</label>
-							<div class="col-md-6" style="font-size: 14px !important;">
-								{{ newFormAccount.render('remittent', {'class': 'form-control', 'data-role' : 'tagsinput', 'placeholder' : 'Escribe y luego presiona enter...'}) }}
+							<label for="remittent" class="col-sm-5 control-label">*Remitente(s):</label>
+							<div class="col-md-6">
+								{{ newFormAccount.render('remittent', {'class': 'form-control', 'data-role' : 'tagsinput', 'placeholder' : 'Escriba y luego presione enter...'}) }}
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label for="remittentAllowed" class="col-sm-5 control-label">¿Permitir al usuario agregar más remitentes?:</label>
+							<div class="col-md-6">
+								{{ newFormAccount.render('remittentAllowed', {'class': 'form-control'}) }}
+							</div>
+						</div>
+						
+						{#
+						<div class="form-group">
+							<label for="remittent" class="col-sm-5 control-label">*Remitente(s)</label>
+							<div class="col-md-3">
+								{{ newFormAccount.render('remittent', {'class': 'form-control', 'placeholder' : 'Email', 'id' : 'remittent'}) }}
+							</div>
+							<div class="col-md-3">
+								{{ newFormAccount.render('remittentName', {'class': 'form-control', 'placeholder' : 'Nombre', 'id' : 'remittentName'}) }}
+							</div>
+						</div>
+						#}
+						
+						
 						<div class="form-group">
 							<label for="modeUse" class="col-sm-5 control-label">*Modo de uso:</label>
 							<div class="col-md-6">

@@ -2365,6 +2365,7 @@ class MailController extends ControllerBase
 				'bind' => array(1 => $account->idAccount)
 			));
 			
+			$this->view->setVar('account', $account);
 			$this->view->setVar('mails', $mails);
 			$this->view->setVar('links', $links);
 			$this->view->setVar('dbases', $dbases);
