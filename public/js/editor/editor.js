@@ -36,12 +36,22 @@ Editor.prototype.otherLayout = function() {
 };
 
 Editor.prototype.objectExists = function(objMail) {
-	if(objMail != null) {
+	
+	if(objMail === 'Footer') {
+		this.layout = footerLay;
+		$('#edit-area').css('min-height', 0);
+		this.editorColor = '#E6E6E6';
+		this.createEditStyle();
+		this.newDropZones();
+	}
+	else if(objMail != null) {
 		this.layout = objMail.layout;
 		this.dz = objMail.dz;
 		this.editorColor = objMail.editorColor;
 		this.changeLayout();
-		this.createDefaultFooter(false);
+		if (objMail.layout.id !== 6 ) {
+			this.createDefaultFooter(false);
+		}
 		NoMediaDisplayer();
 		
 		$('.dropzone-container').sortable({ 

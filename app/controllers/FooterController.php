@@ -12,6 +12,15 @@ class FooterController extends ControllerBase {
 		
 		return $this->setJsonResponse(array('preview' =>  $footer->html));
 	}
+	
+	public function newAction()
+	{
+		 if ($this->request->isPost()) {
+			$name = $this->request->getPost("name");
+			$content = $this->request->getPost("content");
+			$this->logger->log($content);
+		 }
+	}
 }
 
 ?>
