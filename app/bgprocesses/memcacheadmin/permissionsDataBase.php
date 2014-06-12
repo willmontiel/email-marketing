@@ -75,6 +75,7 @@ class PermissionsDataBase
 			'account::update' => 18,
 			'account::delete' => 19,
 			'account::login how any user' => 20, 
+			'account::billing' => 68, 
 			
 			'customfield::create' => 21,
 			'customfield::read' => 22,
