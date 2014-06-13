@@ -850,6 +850,10 @@ span.required {
 	height: 520px !important;
 }
 
+.modal-preview-body-footer {
+	height: 300px !important;
+}
+
 .dz-message {
 	text-align: center;
 	font-family: inherit;

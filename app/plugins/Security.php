@@ -383,6 +383,9 @@ class Security extends Plugin
 				//Footer
 				'footer::preview' => array('footer' => array('read')),
 				'footer::new' => array('footer' => array('create')),
+				'footer::previeweditor' => array('footer' => array('read')),
+				'footer::previewdata' => array('footer' => array('read')),
+				'footer::index' => array('footer' => array('read')),
 				
 			);
 		}

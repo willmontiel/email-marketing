@@ -20,7 +20,7 @@ Editor.prototype.otherLayout = function() {
 		}
 		else {
 			t.serializeDZ();
-			t.changeLayout();
+			t.changeLayout(true);
 			NoMediaDisplayer();
 		}
 		parent.iframeResize();
@@ -40,15 +40,14 @@ Editor.prototype.objectExists = function(objMail) {
 	if(objMail === 'Footer') {
 		this.layout = footerLay;
 		$('#edit-area').css('min-height', 0);
-		this.editorColor = '#E6E6E6';
-		this.createEditStyle();
+		$('#edit-area').css('background-color', '#E6E6E6');
 		this.newDropZones();
 	}
 	else if(objMail != null) {
 		this.layout = objMail.layout;
 		this.dz = objMail.dz;
 		this.editorColor = objMail.editorColor;
-		this.changeLayout();
+		this.changeLayout((objMail.layout.id !== 6 ) ? true: false);
 		if (objMail.layout.id !== 6 ) {
 			this.createDefaultFooter(false);
 		}
@@ -72,7 +71,7 @@ Editor.prototype.objectExists = function(objMail) {
 	}
 };
 
-Editor.prototype.changeLayout = function() {
+Editor.prototype.changeLayout = function(Style) {
 	var objdz = {};
 	for(var z = 0; z < this.layout.zones.length; z++) {
 		var dzname = this.layout.zones[z].name;
@@ -87,7 +86,7 @@ Editor.prototype.changeLayout = function() {
 		}
 		objdz[newdz.name] = newdz;
 	}
-	this.createEditStyle();
+	if(Style) {	this.createEditStyle();}
 	this.createDZ(objdz);
 };
 
