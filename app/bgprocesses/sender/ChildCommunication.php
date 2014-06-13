@@ -66,9 +66,29 @@ class ChildCommunication extends BaseWrapper
 			return;
 		}
 		
-		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
 		try {
+			$account = Account::findFirstByIdAccount($mail->idAccount);
+			
+			$t = time();
+			$month = date('M', $t);
+			$year = date('Y', $t);
+
+			$time1 = strtotime("1 {$month} {$year}");
+			$time2 = strtotime("+1 month", $time1);
+			$time2 = strtotime("-1 day", $time2);
+
+			$messagesSent = $account->countTotalMessagesSent($time1, $time2);
+			$messagesLimit = $account->messageLimit;
+			
+			$log->log("Message sent: {$messagesSent}");
+			$log->log("Message limit: {$messagesLimit}");
+			
+			if ($messagesLimit <= $messagesSent) {
+				$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
+				throw new MailMessagesLimitException("Messages limit has been exceeded");
+			}
+			
 			$this->checkMailStatus($mail);
 			$oldstatus = $mail->status;
 			
@@ -91,7 +111,6 @@ class ChildCommunication extends BaseWrapper
 
 			$timer->startTimer('send-preparation', 'Preparing everything to send email');
 
-			$account = Account::findFirstByIdAccount($mail->idAccount);
 			$this->setAccount($account);
 			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
 
@@ -361,6 +380,7 @@ class ChildCommunication extends BaseWrapper
                                                 } 
 					}
 					$i++;
+					$messagesSent++;
 				} 
 				else {
 					echo "There was an error in message {$i}: \n";
@@ -452,6 +472,9 @@ class ChildCommunication extends BaseWrapper
 		}
 		catch (MailStatusException $e) {
 			$log->log('Exception de Estado de Correo: [' . $e . ']');
+		}
+		catch (MailMessagesLimitException $e) {
+			$log->log('Exception limite de mensajes: [' . $e . ']');
 		}
 		catch (Exception $e) {
 			$log->log('Exception General: [' . $e . ']');
