@@ -16,8 +16,8 @@ class ChildCommunication extends BaseWrapper
 	
 		$this->mta = $di['mtadata'];
 		$this->urlManager = $di['urlManager'];
-                
-                $this->db = $di->get('db');
+        $this->db = $di->get('db');
+		$this->flashSession = $di->get('flashSession');
 	}
 	
 	public function setSocket($childprocess)
@@ -475,6 +475,7 @@ class ChildCommunication extends BaseWrapper
 		}
 		catch (MailMessagesLimitException $e) {
 			$log->log('Exception limite de mensajes: [' . $e . ']');
+			$this->flashSession->error("Se ha excedido el limite de mensajes configurado previamente, por favor contacte al administrador");
 			$mail->status = 'Cancelled';
 			$mail->finishedon = time();
 			if(!$mail->save()) {
