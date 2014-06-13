@@ -133,6 +133,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('remittentEmails', remittentEmail);
 			this.set('isChangeRemittentAllowed', App.remittentAllowed);
 			
+			console.log('1');
+			console.log(this.get('remittentNames'));
+			console.log(this.get('remittentEmails'));
+			
 			this.set('dbaselist', arrayDbase);
 			this.set('list', arrayList);
 			this.set('segmentlist', arraySegment);
@@ -444,6 +448,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		//else if (!filter.test(mail.get('email'))) {
 			//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
 		//}
+		var remittentName;
+		var remittentEmail;
 		
 		var fromName1 = this.get('fromName1');
 		var fromEmail1 = this.get('fromEmail1');
@@ -451,13 +457,18 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var fromName2 = (this.get('remittentNames') !== undefined ? this.get('remittentNames').value : '');
 		var fromEmail2 = (this.get('remittentEmails') !== undefined ? this.get('remittentEmails').value : '');
 	
-		if (fromName1 !== undefined && fromName1 !== '' && fromEmail1 !== undefined && fromEmail1 !== '') {
-			var remittentNames = fromName1;
-			var remittentEmails = fromEmail1;
+		if (fromName1 !== undefined && 
+				fromName1 !== '' && 
+				fromName1 !== null && 
+				fromEmail1 !== undefined && 
+				fromEmail1 !== '' &&
+				fromEmail1 !== null) {
+			remittentName = fromName1;
+			remittentEmail = fromEmail1;
 		}
 		else {
-			var remittentNames = fromName2;
-			var remittentEmails = fromEmail2;
+			remittentName = fromName2;
+			remittentEmail = fromEmail2;
 		}
 		
 		var dbases = getArrayValue(this.get('dbaselist'));
@@ -483,8 +494,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			mail.set('scheduleDate', value);
 		}
 		
-		mail.set('fromName', remittentNames);
-		mail.set('fromEmail', remittentEmails);
+		mail.set('fromName', remittentName);
+		mail.set('fromEmail', remittentEmail);
 		
 		mail.set('dbases', dbases);
 		mail.set('contactlists', contactlists);
@@ -698,14 +709,14 @@ function setTargetValues(values, select) {
 }
 
 function setTargetValue(value, select) {
-	var newArray = [];
+	var object;
 	for (var j = 0; j < select.length; j++) {
 		if (select[j].value === value) {
-			newArray.push(select[j]);
+			object = Ember.Object.create({value: select[j].value, id: select[j].id});
 		}
 	}
-	console.log(newArray);
-	return newArray;
+	console.log(object);
+	return object;
 }
 
 function setGoogleAnalyticsValues(values, select) {

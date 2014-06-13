@@ -32,10 +32,8 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 	 * Este es el metodo que realmente hace el manejo de las promesas
 	 */
 	actuallyHandlePromise: function(p, troute, message, fn, callmeback, norollback) {
-		console.log('1');
 		var self = this;
 		p.then(function() {
-			console.log('2');
 			
 			if (typeof self.get('errors.errormsg') !== 'undefined') {
 				self.set('errors.errormsg', '');
@@ -43,16 +41,16 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 			self.transitionToRoute(troute);
 			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
 			
-			App.remittentsName.push(Ember.Object.create({value: self.get('fromName'), id: self.get('fromName')}));
-			App.remittentsEmail.push(Ember.Object.create({value: self.get('fromEmail'), id: self.get('fromEmail')}));
+			if (App.remittentsName !== undefined && App.remittentsEmail !== undefined) {
+				App.remittentsName.push(Ember.Object.create({value: self.get('fromName'), id: self.get('fromName')}));
+				App.remittentsEmail.push(Ember.Object.create({value: self.get('fromEmail'), id: self.get('fromEmail')}));
+			}
 			
 			if (typeof fn == 'function') {
 				fn();
 			}
 		}, 
 		function(error) {
-			console.log('3');
-			
 			if (error.status == 422) {
 				try {
 					var obj = $.parseJSON(error.responseText);

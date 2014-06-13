@@ -47,6 +47,7 @@
 								contentBinding="App.remittentsName"
 								optionValuePath="content.id"
 								optionLabelPath="content.value"
+								valueBinding="remittentNames.value"
 								selectionBinding="remittentNames"
 								id="remittentNames"
 								class="form-control"}}'
@@ -59,6 +60,7 @@
 								contentBinding="App.remittentsEmail"
 								optionValuePath="content.id"
 								optionLabelPath="content.value"
+								valueBinding="fromEmail"
 								selectionBinding="remittentEmails"
 								id="remittentEmails"
 								class="form-control"}}'
@@ -66,7 +68,7 @@
 					</div>
 				{{ '{{#if App.remittentAllowed}}' }}
 					<div class="col-sm-2">
-						<span class="label label-primary" style="cursor:pointer; font-size: 12px;" onClick="showNewRemittent();">Otro remitente</span>
+						<span class="label label-primary" style="cursor:pointer; font-size: 12px;" onClick="showNewRemittent();">Agregar otro remitente</span>
 					</div>
 				{{ '{{/if}}' }}
 				</div>	
