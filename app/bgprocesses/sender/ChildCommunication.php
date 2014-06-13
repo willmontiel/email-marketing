@@ -238,7 +238,10 @@ class ChildCommunication extends BaseWrapper
 
                         $rmemory = 0;
 			foreach ($contactIterator as $contact) {
-
+				if ($messagesLimit <= $messagesSent) {
+					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
+					throw new MailMessagesLimitException("Messages limit has been exceeded");
+				}
 				/*
 				 * ================================================================
 				 * NOTA
@@ -475,7 +478,6 @@ class ChildCommunication extends BaseWrapper
 		}
 		catch (MailMessagesLimitException $e) {
 			$log->log('Exception limite de mensajes: [' . $e . ']');
-			$this->flashSession->error("Se ha excedido el limite de mensajes configurado previamente, por favor contacte al administrador");
 			$mail->status = 'Cancelled';
 			$mail->finishedon = time();
 			if(!$mail->save()) {
