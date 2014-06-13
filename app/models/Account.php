@@ -103,9 +103,9 @@ class Account extends Modelbase
 	public function countTotalMessagesSent($time1, $time2)
 	{
 		$sql = "SELECT a.idAccount, COUNT( mc.idContact ) AS total
-					FROM mail AS m
-					LEFT JOIN mxc AS mc ON ( mc.idMail = m.idMail ) 
-					JOIN account AS a ON ( a.idAccount = m.idAccount ) 
+					FROM Mail AS m
+					LEFT JOIN Mxc AS mc ON ( mc.idMail = m.idMail ) 
+					JOIN Account AS a ON ( a.idAccount = m.idAccount ) 
 				WHERE m.updatedon >= {$time1}
 					AND m.updatedon <= {$time2}
 					AND m.status = 'sent'
