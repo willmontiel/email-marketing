@@ -2061,7 +2061,7 @@ class MailController extends ControllerBase
 	
 	public function playAction($idMail)
 	{
-		$account = $this->user->account->idAccount;
+		$account = $this->user->account;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idAccount = ?2',
 			'bind' => array(1 => $idMail,
