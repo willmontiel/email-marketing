@@ -131,7 +131,7 @@ class MailWrapper extends BaseWrapper
 		$this->mail->type = $this->content->type;
 		$this->mail->status = 'draft';
 		$this->mail->wizardOption = 'setup';
-		$this->mail->totalContacts = $this->target->totalContacts;
+		$this->mail->totalContacts = (isset($this->target->totalContacts) ? $this->target->totalContacts : '');
 		if ($this->scheduleDate != null) {
 			$this->mail->scheduleDate = $this->scheduleDate;
 		}
@@ -142,6 +142,9 @@ class MailWrapper extends BaseWrapper
 		$this->mail->subject = $this->content->subject;
 		$this->mail->fromName = $this->content->fromName;
 		$this->mail->fromEmail = $this->content->fromEmail;
+		
+		$this->saveRemittent();
+		
 		$this->mail->replyTo = $this->content->replyTo;
 		$this->mail->target = $this->target->target;
 		
@@ -173,6 +176,56 @@ class MailWrapper extends BaseWrapper
 				$this->addMessageError('errors', 'Ha ocurrido un error por favor contacte al administrador', 500);
 				$this->logger->log("Error while saving mail {$this->mail->idMail} scheduleDate in Mailschedule table account {$this->mail->idAccount}");
 				throw new \Exception('Error while saving mail scheduleDate in Mailschedule table');
+			}
+		}
+	}
+	
+	protected function isAValidDomain($domain)
+	{
+		$invalidDomains = array(
+			'yahoo',
+			'hotmail',
+			'live',
+			'gmail',
+			'aol'
+		);
+		
+		$d = explode('.', $domain);
+		
+		foreach ($invalidDomains as $invalidDomain) {
+			if ($invalidDomain == $d[0]) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private function saveRemittent()
+	{
+		if (!empty($this->content->fromName1) && !empty($this->content->fromEmail1)) {
+			if (!\filter_var($this->content->fromEmail1, FILTER_VALIDATE_EMAIL)) {
+				$this->addMessageError('errors', 'La dirección de correo de remitente que ha enviado es inválida, por favor verifique la información', 422);
+				throw new \InvalidArgumentException("Invalid email");
+			}
+			
+			$domain = explode('@', $this->content->fromEmail1);
+			
+			if (!$this->isAValidDomain($domain[1])) {
+				$this->addMessageError('errors', 'La dirección de correo de remitente que ha enviado es inválida, recuerde que no debe usar dominios de correo públicas como hotmail o gmail', 422);
+				throw new \InvalidArgumentException("Invalid domain");
+			}
+
+			$remittentmodel = new Remittent();
+			$remittentmodel->idAccount = $this->account->idAccount;
+			$remittentmodel->email = $this->content->fromEmail1;
+			$remittentmodel->name = $this->content->fromName1;
+			$remittentmodel->createdon = time();
+
+			if (!$remittentmodel->save()) {
+				foreach ($remittentmodel->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
+				throw new Exception("Error while saving account remittent");
 			}
 		}
 	}

@@ -66,7 +66,7 @@
 					</div>
 				{{ '{{#if App.remittentAllowed}}' }}
 					<div class="col-sm-2">
-						<span class="label label-primary" style="cursor:pointer" onClick="showNewRemittent();">Otro remitente</span>
+						<span class="label label-primary" style="cursor:pointer; font-size: 12px;" onClick="showNewRemittent();">Otro remitente</span>
 					</div>
 				{{ '{{/if}}' }}
 				</div>	
@@ -74,15 +74,15 @@
 				<div class="form-group" id="allowed-remittents" style="display: none;">
 					<label for="fromName" class="col-sm-2 control-label">De: </label>
 					<div class="col-sm-3">
-						{{'{{view Ember.TextField valueBinding="fromName1" id="fromName" placeholder="Nombre de remitente" class="form-control"}}'}}
+						{{'{{view Ember.TextField valueBinding="fromName1" id="fromName1" placeholder="Nombre de remitente" class="form-control"}}'}}
 					</div>
 					
 					<label for="fromName" class="col-sm-2 control-label">Email: </label>
 					<div class="col-sm-3">
-						{{'{{view Ember.TextField valueBinding="fromEmail2" id="fromEmail" placeholder="Direccion de remitente" class="form-control"}}'}}
+						{{'{{view Ember.TextField valueBinding="fromEmail1" id="fromEmail1" placeholder="Direccion de remitente" class="form-control"}}'}}
 					</div>
 					<div class="col-sm-2">
-						<span class="label label-primary" style="cursor:pointer" onClick="hideNewRemittent();" {{ '{{action "cancelNewRemittent" this}}' }}>Cancelar</span>
+						<span class="label label-primary" style="cursor:pointer; font-size: 12px;" onClick="hideNewRemittent();" {{ '{{action "cancelNewRemittent" this}}' }}>Cancelar</span>
 					</div>
 				</div>
 					

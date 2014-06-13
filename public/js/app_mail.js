@@ -18,7 +18,7 @@ App.Mail = DS.Model.extend({
 	fromName: DS.attr( 'string' ),
 	fromEmail: DS.attr('string'),
 	fromName1: DS.attr( 'string' ),
-	fromEmail2: DS.attr('string'),
+	fromEmail1: DS.attr('string'),
 	replyTo: DS.attr('string'),
 	subject: DS.attr('string'),
 	dbases: DS.attr('string'),
@@ -131,7 +131,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			
 			this.set('remittentNames', remittentName);
 			this.set('remittentEmails', remittentEmail);
-			this.set('isChangeRemittentAllowed', App.remittentAllowed)
+			this.set('isChangeRemittentAllowed', App.remittentAllowed);
 			
 			this.set('dbaselist', arrayDbase);
 			this.set('list', arrayList);
@@ -438,18 +438,27 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}.property('content.name', 'content.fromName', 'content.fromEmail', 'content.subject', 'content.mailcontent', 'content.plainText', 'content.totalContacts', 'content.scheduleDate'),
 
 	SetAndSave: function (mail) {
-		var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+//		var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
 			
 		
 		//else if (!filter.test(mail.get('email'))) {
 			//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
 		//}
 		
-		var fromName = this.get('fromName1');
-		var fromEmail = this.get('fromEmail2');
-		
-		var remittentNames = this.get('remittentNames').value;
-		var remittentEmails = this.get('remittentEmails').value;
+		var fromName1 = this.get('fromName1');
+		var fromEmail1 = this.get('fromEmail1');
+	
+		var fromName2 = (this.get('remittentNames') !== undefined ? this.get('remittentNames').value : '');
+		var fromEmail2 = (this.get('remittentEmails') !== undefined ? this.get('remittentEmails').value : '');
+	
+		if (fromName1 !== undefined && fromName1 !== '' && fromEmail1 !== undefined && fromEmail1 !== '') {
+			var remittentNames = fromName1;
+			var remittentEmails = fromEmail1;
+		}
+		else {
+			var remittentNames = fromName2;
+			var remittentEmails = fromEmail2;
+		}
 		
 		var dbases = getArrayValue(this.get('dbaselist'));
 		var contactlists = getArrayValue(this.get('list'));
@@ -511,6 +520,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			else {
 				mail = this.SetAndSave(mail);
 				this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
+			
 				this.set('isHeaderExpanded', false);
 				this.set('isTargetExpanded', false);
 				this.set('isGoogleAnalitycsExpanded', false);
@@ -694,6 +704,7 @@ function setTargetValue(value, select) {
 			newArray.push(select[j]);
 		}
 	}
+	console.log(newArray);
 	return newArray;
 }
 
