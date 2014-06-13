@@ -2073,18 +2073,6 @@ class MailController extends ControllerBase
 		if ($mail) {
 			if ($account->messageLimit > $messagesSent) {
 				try {
-					
-					if ($mail->status == 'Pending') {
-						$mail->status = 'Paused';
-						if (!$mail->save()) {
-							$m = "";
-							foreach ($mail->getMessages() as $msg) {
-								$m .= ", {$msg}";
-							}
-							throw new Exception("Error while updating mail status {$m}");
-						}
-					}
-					
 					$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 					$response = $commObj->sendPlayToParent($idMail);
 

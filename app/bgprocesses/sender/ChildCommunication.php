@@ -124,6 +124,7 @@ class ChildCommunication extends BaseWrapper
 				$log->log("Identificando destinatarios");
 				$identifyTarget = new IdentifyTarget();
 				$identifyTarget->identifyTarget($mail);
+				$this->updateTotalContacts();
 			}
 			
 			if ($messagesLimit <= $messagesSent) {
@@ -227,11 +228,11 @@ class ChildCommunication extends BaseWrapper
 
                         $rmemory = 0;
 			foreach ($contactIterator as $contact) {
-				if ($messagesLimit <= $messagesSent) {
-					$this->commitSentMessages($mail, $sentContacts);
-					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
-					throw new MailMessagesLimitException("Messages limit has been exceeded");
-				}
+//				if ($messagesLimit <= $messagesSent) {
+//					$this->commitSentMessages($mail, $sentContacts);
+//					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
+//					throw new MailMessagesLimitException("Messages limit has been exceeded");
+//				}
 				/*
 				 * ================================================================
 				 * NOTA
@@ -373,7 +374,7 @@ class ChildCommunication extends BaseWrapper
                                                 } 
 					}
 					$i++;
-					$messagesSent++;
+//					$messagesSent++;
 				} 
 				else {
 					echo "There was an error in message {$i}: \n";
@@ -468,7 +469,7 @@ class ChildCommunication extends BaseWrapper
 		}
 		catch (MailMessagesLimitException $e) {
 			$log->log('Exception de limite de mensajes: [' . $e . ']');
-			$mail->status = 'Pending';
+			$mail->status = 'Paused';
 			$mail->finishedon = time();
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
@@ -512,10 +513,29 @@ class ChildCommunication extends BaseWrapper
 	
 	protected function updateMxcStatus($mail)
 	{
-		$sql = "UPDATE mxc SET status = 'Pending' WHERE idMail = {$mail->idMail} AND status = 'Scheduled'";
+		$sql = "UPDATE mxc SET status = 'Paused' WHERE idMail = {$mail->idMail} AND status = 'Scheduled'";
         
         if (!$this->db->execute($sql)) {
             \Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el estado de envio de los mensajes!!!");
         }
+	}
+	
+	protected function updateTotalContacts($mail)
+	{
+		$sql = "SELECT COUNT (mc.idContact) AS totalContacts FROM mxc WHERE idMail = {$mail->idMail}";
+        
+		$result = $this->db->query($sql);
+		
+		if (!$result) {
+            \Phalcon\DI::getDefault()->get('logger')->log("Error consultando los contactos totales del envío!!!");
+        }
+		
+		$totalContacts = $result->fetchAll();
+		
+		$mail->totalContacts = $totalContacts;
+		
+		if (!$mail->save()) {
+			\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando la cantidad de correos a enviar!!!");
+		}
 	}
 }
