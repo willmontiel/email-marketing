@@ -239,6 +239,7 @@ class ChildCommunication extends BaseWrapper
                         $rmemory = 0;
 			foreach ($contactIterator as $contact) {
 				if ($messagesLimit <= $messagesSent) {
+					$this->commitSentMessages($mail, $sentContacts);
 					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
 					throw new MailMessagesLimitException("Messages limit has been exceeded");
 				}
@@ -478,7 +479,7 @@ class ChildCommunication extends BaseWrapper
 		}
 		catch (MailMessagesLimitException $e) {
 			$log->log('Exception limite de mensajes: [' . $e . ']');
-			$mail->status = 'Cancelled';
+			$mail->status = 'Pending';
 			$mail->finishedon = time();
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
