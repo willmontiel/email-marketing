@@ -73,14 +73,6 @@ class ChildCommunication extends BaseWrapper
 			$messagesSent = $account->countTotalMessagesSent();
 			$messagesLimit = $account->messageLimit;
 			
-			$log->log("Message sent: {$messagesSent}");
-			$log->log("Message limit: {$messagesLimit}");
-			
-			if ($messagesLimit <= $messagesSent) {
-				$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
-				throw new MailMessagesLimitException("Messages limit has been exceeded");
-			}
-			
 			$this->checkMailStatus($mail);
 			$oldstatus = $mail->status;
 			
@@ -133,7 +125,12 @@ class ChildCommunication extends BaseWrapper
 				$identifyTarget = new IdentifyTarget();
 				$identifyTarget->identifyTarget($mail);
 			}
-
+			
+			if ($messagesLimit <= $messagesSent) {
+				$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
+				throw new MailMessagesLimitException("Messages limit has been exceeded");
+			}
+			
 			if ($mail->type == 'Editor') {
 				$htmlObj = new HtmlObj();
 //				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
@@ -470,12 +467,13 @@ class ChildCommunication extends BaseWrapper
 			$log->log('Exception de Estado de Correo: [' . $e . ']');
 		}
 		catch (MailMessagesLimitException $e) {
-			$log->log('Exception limite de mensajes: [' . $e . ']');
+			$log->log('Exception de limite de mensajes: [' . $e . ']');
 			$mail->status = 'Pending';
 			$mail->finishedon = time();
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
 			}
+			$this->updateMxcStatus($mail);
 		}
 		catch (Exception $e) {
 			$log->log('Exception General: [' . $e . ']');
@@ -510,6 +508,14 @@ class ChildCommunication extends BaseWrapper
         if (!$this->db->execute($sql)) {
             \Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el estado de envio de los mensajes!!!");
         }
-
     }
+	
+	protected function updateMxcStatus($mail)
+	{
+		$sql = "UPDATE mxc SET status = 'Pending' WHERE idMail = {$mail->idMail} AND status = 'Scheduled'";
+        
+        if (!$this->db->execute($sql)) {
+            \Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el estado de envio de los mensajes!!!");
+        }
+	}
 }
