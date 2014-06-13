@@ -2068,9 +2068,9 @@ class MailController extends ControllerBase
 							2 => $account->idAccount)
 		));
 		
-		$this->logger->log("1");
 		$messagesSent = $account->countTotalMessagesSent();
-		$this->logger->log("2");
+		$this->logger->log("Sent: {$messagesSent}");
+		$this->logger->log("Limit: {$account->messageLimit}");
 		
 		if ($mail) {
 			if ($account->messageLimit < $messagesSent) {
