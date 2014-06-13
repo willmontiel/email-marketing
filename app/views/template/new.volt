@@ -152,8 +152,9 @@
 	<div class="row">
 		{{ flashSession.output()}}
 	</div>
+	<div class="space"></div>
 	<div class="row">
-		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
+		<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" frameborder="0" width="100%" onload="iframeResize()" seamless></iframe>
 	</div>
 	
 

@@ -2,6 +2,10 @@ table {
 	width: 100%;
 }
 
+.editor-bg-color {
+	background-color: transparent;
+}
+
 .module-cont {
 	border: solid 1px black;
 	min-height: 490px;

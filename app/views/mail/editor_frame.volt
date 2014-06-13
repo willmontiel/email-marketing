@@ -72,223 +72,224 @@
 
 {% endblock %}
 {% block content %}
-	<br /><br />
-<div class="row">
-	<div class="span12">
-		<div class="edit-area-container">
-			<div id="edit-area" class="module-cont clearfix">
+<body class="editor-bg-color">
+	<div class="row">
+		<div class="span12">
+			<div class="edit-area-container">
+				<div id="edit-area" class="module-cont clearfix">
+				</div>
 			</div>
 		</div>
-	</div>
-<div id="newtemplatename" class="modal hide fade">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Nuevo Template</h3>
-	</div>
-	<div class="modal-body">
-		<label>Escriba un nombre para el nuevo template</label>
-		<input id="templatename" type="text">
-		<br />
-		<label>Categoria</label>
-		<input id="templatecategory" type="text" value="Mis Templates" readonly>
-	</div>
-	<div class="modal-footer">
-		<a id="saveTemplate" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
-		<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
-	</div>
-</div>
-	
-<div id="boxedtext" class="modal hide fade">
-	<div class="modal-header">
-		<h3>Editar Caja</h3>
-	</div>
-	<div class="modal-body">
-		<div class="span6">
-			<label>Color de Fondo</label>
-			<div class='input-append color' data-color='' data-color-format='hex' id='boxbgcolor'>
-				<input id="field-boxbgcolor" type='text' value='#556270' style="width: 90px; height: 30px;">
-				<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+		<div id="newtemplatename" class="modal hide fade">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>Nuevo Template</h3>
+			</div>
+			<div class="modal-body">
+				<label>Escriba un nombre para el nuevo template</label>
+				<input id="templatename" type="text">
+				<br />
+				<label>Categoria</label>
+				<input id="templatecategory" type="text" value="Mis Templates" readonly>
+			</div>
+			<div class="modal-footer">
+				<a id="saveTemplate" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
+				<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
 			</div>
 		</div>
-		<div class="span6">
-			<label for="boxborder">Borde</label>
-			<label>
-				<input type="text" id="boxborderwidth" value="0"> px
-				<select id="boxborderstyle" class="span2">
-					<option value="solid" selected>Solid</option>
-					<option value="dotted">Dotted</option>
-					<option value="dashed">Dashed</option>
-					<option value="double">Double</option>
-					<option value="groove">Groove</option>
-					<option value="ridge">Ridge</option>
-					<option value="inset">Inset</option>
-					<option value="outset">Outset</option>
-				</select>
-				<div class='input-append color' data-color='' data-color-format='hex' id='boxbordercolor'>
-					<input id="field-boxbordercolor" type='text' value='#556270' style="width: 90px; height: 30px;">
-					<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
-				</div>
-			</label>
-		</div>
-		<div class="span3">
-			<label for="boxradius">Borde Redondeado</label>
-			<input type="text" id="boxborderradius" value="0"> px
-		</div>
-	</div>
-	<div class="modal-footer">
-		<a id="acceptboxtext" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
-		<a id="cancelboxtext" href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
-	</div>
-</div>
-	
-	
-<div id="add-element-block" class="modal hide fade">
-	<div class="modal-header">
-		Seleccione Elemento
-	</div>
-	<div class="modal-body">
-		<div class="basic-elements clearfix">
-			
-		</div>
-		<hr />
-		<div class="compounds-elements clearfix">
-	
-		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
-	</div>
-</div>
 
-<div id="select-layout" class="modal hide fade">
-	<div class="modal-header">
-		Seleccione Layout
-	</div>
-	<div class="modal-body">
-		<div class="layout-list clearfix">
-			
-		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
-	</div>
-</div>
-	
-	
-<div class="component-toolbar" style="display:none"></div>
-<div class="component-toolbar-text" style="display:none"></div>
-
-<div id="images" class="modal hide fade gallery-modal">
-	<div class="modal-header gallery-header">
-		<h3>Imagenes</h3>
-	</div>
-
-	<ul class="nav nav-tabs nav-tabs-in-modal">
-		<li id="tabgallery" class="active">
-			<a href="#gallery" data-toggle="tab">Galeria</a>
-		</li>
-		<li id="tabuploadimage" class="">
-			<a href="#uploadimage" data-toggle="tab">Cargar</a>
-		</li>
-	</ul>
-
-	<div class="modal-body">
-		<div class="tab-content imagesbody">
-			<div id="gallery" class="tab-pane active">
-
+		<div id="boxedtext" class="modal hide fade">
+			<div class="modal-header">
+				<h3>Editar Caja</h3>
 			</div>
-
-			<div id="uploadimage" class="tab-pane well">
-				<h2 class="text-center">Cargar Imagen</h2>
-				<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
-					<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
-				</form>
+			<div class="modal-body">
+				<div class="span6">
+					<label>Color de Fondo</label>
+					<div class='input-append color' data-color='' data-color-format='hex' id='boxbgcolor'>
+						<input id="field-boxbgcolor" type='text' value='#556270' style="width: 90px; height: 30px;">
+						<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+					</div>
+				</div>
+				<div class="span6">
+					<label for="boxborder">Borde</label>
+					<label>
+						<input type="text" id="boxborderwidth" value="0"> px
+						<select id="boxborderstyle" class="span2">
+							<option value="solid" selected>Solid</option>
+							<option value="dotted">Dotted</option>
+							<option value="dashed">Dashed</option>
+							<option value="double">Double</option>
+							<option value="groove">Groove</option>
+							<option value="ridge">Ridge</option>
+							<option value="inset">Inset</option>
+							<option value="outset">Outset</option>
+						</select>
+						<div class='input-append color' data-color='' data-color-format='hex' id='boxbordercolor'>
+							<input id="field-boxbordercolor" type='text' value='#556270' style="width: 90px; height: 30px;">
+							<span class='add-on'><i style='background-color: rgb(255, 146, 180)'></i></span>
+						</div>
+					</label>
+				</div>
+				<div class="span3">
+					<label for="boxradius">Borde Redondeado</label>
+					<input type="text" id="boxborderradius" value="0"> px
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a id="acceptboxtext" href="#" class="btn btn-default" data-dismiss="modal">Aceptar</a>
+				<a id="cancelboxtext" href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
 			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<div id="accept_cancel_image">
-			<a href="#" class="btn btn-default" id="accept_change" data-dismiss="modal">Aplicar</a>
-			<a href="#" class="btn btn-default" id="cancel_change" data-dismiss="modal">Cancelar</a>
+
+
+		<div id="add-element-block" class="modal hide fade">
+			<div class="modal-header">
+				Seleccione Elemento
+			</div>
+			<div class="modal-body">
+				<div class="basic-elements clearfix">
+
+				</div>
+				<hr />
+				<div class="compounds-elements clearfix">
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+			</div>
 		</div>
-	</div>
-</div>
 
-<div id="clipsmodal" style="display: none;">
-	<section>
-		<ul class="redactor_clips_box">
-			<li>
-				<a href="#" class="redactor_clip_link">Email</a>
+		<div id="select-layout" class="modal hide fade">
+			<div class="modal-header">
+				Seleccione Layout
+			</div>
+			<div class="modal-body">
+				<div class="layout-list clearfix">
 
-				<div class="redactor_clip" style="display: none;">
-					%%EMAIL%%
 				</div>
-			</li>
-			<li>
-				<a href="#" class="redactor_clip_link">Nombre</a>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+			</div>
+		</div>
 
-				<div class="redactor_clip" style="display: none;">
-					%%NOMBRE%%
-				</div>
-			</li>
-			<li>
-				<a href="#" class="redactor_clip_link">Apellido</a>
 
-				<div class="redactor_clip" style="display: none;">
-					%%APELLIDO%%
+		<div class="component-toolbar" style="display:none"></div>
+		<div class="component-toolbar-text" style="display:none"></div>
+
+		<div id="images" class="modal hide fade gallery-modal">
+			<div class="modal-header gallery-header">
+				<h3>Imagenes</h3>
+			</div>
+
+			<ul class="nav nav-tabs nav-tabs-in-modal">
+				<li id="tabgallery" class="active">
+					<a href="#gallery" data-toggle="tab">Galeria</a>
+				</li>
+				<li id="tabuploadimage" class="">
+					<a href="#uploadimage" data-toggle="tab">Cargar</a>
+				</li>
+			</ul>
+
+			<div class="modal-body">
+				<div class="tab-content imagesbody">
+					<div id="gallery" class="tab-pane active">
+
+					</div>
+
+					<div id="uploadimage" class="tab-pane well">
+						<h2 class="text-center">Cargar Imagen</h2>
+						<form action="{{url('asset/upload')}}" class="dropzone" id="my-dropzone">
+							<div class="dz-message"><span>Suelte su Imagen Aqui! <br/><br/>(o Click)</span></div>
+						</form>
+					</div>
 				</div>
-			</li>
-			{%if cfs is defined %}
-				{%for cf in cfs%}
+			</div>
+			<div class="modal-footer">
+				<div id="accept_cancel_image">
+					<a href="#" class="btn btn-default" id="accept_change" data-dismiss="modal">Aplicar</a>
+					<a href="#" class="btn btn-default" id="cancel_change" data-dismiss="modal">Cancelar</a>
+				</div>
+			</div>
+		</div>
+
+		<div id="clipsmodal" style="display: none;">
+			<section>
+				<ul class="redactor_clips_box">
 					<li>
-						<a href="#" class="redactor_clip_link">{{cf['originalName']}}</a>
+						<a href="#" class="redactor_clip_link">Email</a>
 
 						<div class="redactor_clip" style="display: none;">
-							%%{{cf['linkName']}}%%
+							%%EMAIL%%
 						</div>
 					</li>
-				{%endfor%}
-			{%endif%}
-			
-			<li>
-				<a href="#" class="redactor_clip_link">Enlace de des-suscripcion</a>
+					<li>
+						<a href="#" class="redactor_clip_link">Nombre</a>
 
-				<div class="redactor_clip" style="display: none;">
-					<a href="#%%UNSUBSCRIBE%%">Para des-suscribirse haga clic aqui</a>
-					
-				</div>
-			</li>
-			<li>
-				<a href="#" class="redactor_clip_link">Enlace de version web</a>
+						<div class="redactor_clip" style="display: none;">
+							%%NOMBRE%%
+						</div>
+					</li>
+					<li>
+						<a href="#" class="redactor_clip_link">Apellido</a>
 
-				<div class="redactor_clip" style="display: none;">
-					<a href="#%%WEBVERSION%%">Version web</a>
-					
-				</div>
-			</li>
-		</ul>
-	</section>
-	<footer>
-		<a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
-	</footer>
-</div>
+						<div class="redactor_clip" style="display: none;">
+							%%APELLIDO%%
+						</div>
+					</li>
+					{%if cfs is defined %}
+						{%for cf in cfs%}
+							<li>
+								<a href="#" class="redactor_clip_link">{{cf['originalName']}}</a>
+
+								<div class="redactor_clip" style="display: none;">
+									%%{{cf['linkName']}}%%
+								</div>
+							</li>
+						{%endfor%}
+					{%endif%}
+
+					<li>
+						<a href="#" class="redactor_clip_link">Enlace de des-suscripcion</a>
+
+						<div class="redactor_clip" style="display: none;">
+							<a href="#%%UNSUBSCRIBE%%">Para des-suscribirse haga clic aqui</a>
+
+						</div>
+					</li>
+					<li>
+						<a href="#" class="redactor_clip_link">Enlace de version web</a>
+
+						<div class="redactor_clip" style="display: none;">
+							<a href="#%%WEBVERSION%%">Version web</a>
+
+						</div>
+					</li>
+				</ul>
+			</section>
+			<footer>
+				<a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
+			</footer>
+		</div>
 
 
-<div id="forms-update" style="display: none;">
-	<section>
-		<ul>
-		{%if forms is defined %}
-			{%for form in forms%}
-				<li>
-					<a href="#" name="chk_group" class="selected-form-class" value="%%FORM_{{form['idForm']}}%%">{{form['name']}}</a><br />
-				</li>
-			{%endfor%}
-		{%endif%}
-		</ul>
-	</section>
-	<footer>
-		<button class="redactor_modal_btn redactor_btn_modal_close">Close</button>
-	</footer>
-</div>
-
+		<div id="forms-update" style="display: none;">
+			<section>
+				<ul>
+				{%if forms is defined %}
+					{%for form in forms%}
+						<li>
+							<a href="#" name="chk_group" class="selected-form-class" value="%%FORM_{{form['idForm']}}%%">{{form['name']}}</a><br />
+						</li>
+					{%endfor%}
+				{%endif%}
+				</ul>
+			</section>
+			<footer>
+				<button class="redactor_modal_btn redactor_btn_modal_close">Close</button>
+			</footer>
+		</div>
+	</div>
+</body>
 {% endblock %}
