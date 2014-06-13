@@ -2069,12 +2069,9 @@ class MailController extends ControllerBase
 		));
 		
 		$messagesSent = $account->countTotalMessagesSent();
-		$this->logger->log("Sent: {$messagesSent}");
-		$this->logger->log("Limit: {$account->messageLimit}");
 		
 		if ($mail) {
-			if ($account->messageLimit < $messagesSent) {
-				$this->logger->log("3");
+			if ($account->messageLimit > $messagesSent) {
 				try {
 					$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 					$response = $commObj->sendPlayToParent($idMail);
@@ -2101,15 +2098,13 @@ class MailController extends ControllerBase
 				}
 			}
 			else {
-				$this->logger->log("4");
 				$this->flashSession->error("No se ha podido reanudar porque se ha sobrepasado el limite de envíos, por favor contacte al administrador");
 			}
 		}
 		else {
-			$this->logger->log("5");
 			$this->flashSession->error("Ha intentado reanudar un correo que nunca inició o no existe, por favor verifique la información");
 		}
-		$this->logger->log("6");
+		
 		return $this->response->redirect("mail/list");
 	}
 	
