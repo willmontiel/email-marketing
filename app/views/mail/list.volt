@@ -115,7 +115,7 @@
 										
 									{%endif%}
 									{% for value in mail_options(item) %}
-										<a class="btn btn-sm btn-default extra-padding" href="{{ url(value.url) }}{{item.idMail}}">{{value.text}}<span class="{{value.icon}}"></span></a>
+										<a class="btn btn-sm btn-default extra-padding" href="{{ url(value.url) }}{{item.idMail}}">{{value.text}} <span class="{{value.icon}}"></span></a>
 									{% endfor %}
 										<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default extra-padding">Duplicar</a>
 
