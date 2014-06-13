@@ -74,7 +74,7 @@
 									{%if item.status == 'Sent'%}
 										<a href="{{ url('statistic/mail') }}/{{item.idMail}}">{{item.name}}</a>
 									{%elseif item.status == 'Pending'%}
-										<a href="{{ url('scheduledmail/play') }}/{{item.idMail}}">{{item.name}}</a>
+										<a href="{{ url('mail/play') }}/{{item.idMail}}">{{item.name}}</a>
 									{%elseif item.status == 'Draft'%}
 										<a href="{{ url('mail/compose') }}/{{item.idMail}}">{{item.name}}</a>
 									{%else%}
