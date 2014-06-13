@@ -475,6 +475,11 @@ class ChildCommunication extends BaseWrapper
 		}
 		catch (MailMessagesLimitException $e) {
 			$log->log('Exception limite de mensajes: [' . $e . ']');
+			$mail->status = 'Cancelled';
+			$mail->finishedon = time();
+			if(!$mail->save()) {
+				$log->log('No se pudo actualizar el estado del MAIL');
+			}
 		}
 		catch (Exception $e) {
 			$log->log('Exception General: [' . $e . ']');
