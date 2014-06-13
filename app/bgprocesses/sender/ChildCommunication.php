@@ -70,15 +70,7 @@ class ChildCommunication extends BaseWrapper
 		try {
 			$account = Account::findFirstByIdAccount($mail->idAccount);
 			
-			$t = time();
-			$month = date('M', $t);
-			$year = date('Y', $t);
-
-			$time1 = strtotime("1 {$month} {$year}");
-			$time2 = strtotime("+1 month", $time1);
-			$time2 = strtotime("-1 day", $time2);
-
-			$messagesSent = $account->countTotalMessagesSent($time1, $time2);
+			$messagesSent = $account->countTotalMessagesSent();
 			$messagesLimit = $account->messageLimit;
 			
 			$log->log("Message sent: {$messagesSent}");

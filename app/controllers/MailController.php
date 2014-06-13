@@ -2061,36 +2061,44 @@ class MailController extends ControllerBase
 	
 	public function playAction($idMail)
 	{
+		$account = $this->user->account->idAccount;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idAccount = ?2',
 			'bind' => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
+							2 => $account->idAccount)
 		));
 		
+		$messagesSent = $account->countTotalMessagesSent();
+		
 		if ($mail) {
-			try {
-				$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-				$response = $commObj->sendPlayToParent($idMail);
+			if ($account->messageLimit < $messagesSent) {
+				try {
+					$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+					$response = $commObj->sendPlayToParent($idMail);
 
-				if ($response) {
-					$this->traceSuccess("Resume send, idMail: {$idMail}");
-					$this->flashSession->success("Se ha reanudado el correo exitosamente");
+					if ($response) {
+						$this->traceSuccess("Resume send, idMail: {$idMail}");
+						$this->flashSession->success("Se ha reanudado el correo exitosamente");
+					}
+					else {
+						$this->flashSession->error("Ha intentado reanudar un correo que nunca inició o no existe, por favor verifique la información");
+					}
 				}
-				else {
-					$this->flashSession->error("Ha intentado reanudar un correo que nunca inició o no existe, por favor verifique la información");
+				catch (Exception $e) {
+					$this->logger->log("Exception: Error resuming send, {$e}");
+					$this->flashSession->error("Ha ocurrido un error mientras se reanudaba el envío de correo, por favor contacte con el administrador");
+					$this->traceFail("Error resuming send, idMail: {$idMail}");
+					return $this->response->redirect("mail/list");
+				}
+				catch (\InvalidArgumentException $e) {
+					$this->logger->log("Exception: Error resuming send, {$e}");
+					$this->flashSession->error("Ha ocurrido un error mientras se reanudaba el envío de correo, por favor contacte con el administrador");
+					$this->traceFail("Error resuming send, idMail: {$idMail}");
+					return $this->response->redirect("mail/list");
 				}
 			}
-			catch (Exception $e) {
-				$this->logger->log("Exception: Error resuming send, {$e}");
-				$this->flashSession->error("Ha ocurrido un error mientras se reanudaba el envío de correo, por favor contacte con el administrador");
-				$this->traceFail("Error resuming send, idMail: {$idMail}");
-				return $this->response->redirect("mail/list");
-			}
-			catch (\InvalidArgumentException $e) {
-				$this->logger->log("Exception: Error resuming send, {$e}");
-				$this->flashSession->error("Ha ocurrido un error mientras se reanudaba el envío de correo, por favor contacte con el administrador");
-				$this->traceFail("Error resuming send, idMail: {$idMail}");
-				return $this->response->redirect("mail/list");
+			else {
+				$this->flashSession->error("No se ha podido reanudar el envío porque se ha sobrepasado el limite de envíos, por favor contacte al administrador");
 			}
 		}
 		else {
