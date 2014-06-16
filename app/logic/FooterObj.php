@@ -1,6 +1,10 @@
 <?php
 //Phalcon\DI::getDefault()->get('logger')
 class FooterObj {
+	
+	public function setAccount($account) {
+		$this->account = $account;
+	}
 
 	public function createFooter($content, $name)
 	{
@@ -54,7 +58,6 @@ class FooterObj {
 		$obj = new stdClass();
 		$obj->html = $html;
 		$obj->plaintext = (!empty($plainText)) ? $plainText : '==Plain Text==' ;
-		Phalcon\DI::getDefault()->get('logger')->log(print_r($obj, true));
 		return $obj;
 	}
 
@@ -90,5 +93,15 @@ class FooterObj {
 		$editor->dz->footer->widthval = 600;
 		
 		return json_encode($editor);
+	}
+	
+	public function addFooterInHtml($html)
+	{
+		if(isset($this->account) && $this->account->footerEditable == 0) {
+			$footer = Footer::findFirstByIdFooter($this->account->idFooter);
+			$html.= $footer->html;
+		}
+		
+		return $html;
 	}
 }
