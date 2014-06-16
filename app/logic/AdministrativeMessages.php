@@ -75,7 +75,7 @@ class AdministrativeMessages
 		$recipients = $swift->send($message, $failures);
 		
 		if ($recipients){
-			Phalcon\DI::getDefault()->get('logger')->log('Recovery pass message successfully sent!');
+			Phalcon\DI::getDefault()->get('logger')->log('Limit exceeded message successfully sent!');
 		}
 		else {
 			throw new Exception('Error while sending message: ' . $failures);
