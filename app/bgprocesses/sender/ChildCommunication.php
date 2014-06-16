@@ -137,9 +137,9 @@ class ChildCommunication extends BaseWrapper
 				$log->log("Envíos totales: {$totalSent}");
 				$log->log("Account limit: {$messagesLimit}");
 				
-				$account->contactLimit = $messagesLimit - $totalSent;
+				$account->messageLimit = $messagesLimit - $totalSent;
 				
-				$log->log("New account limit: {$account->contactLimit}");
+				$log->log("New account limit: {$account->messageLimit}");
 				
 				if (!$account->save()) {
 					\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el limite de envíos en la cuenta");
