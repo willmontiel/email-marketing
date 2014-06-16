@@ -126,6 +126,9 @@ class ChildCommunication extends BaseWrapper
 			$identifyTarget->processData();
 			$totalSent = $identifyTarget->getTotalContacts();
 			
+			$this->log("Envíos totales: {$totalSent}");
+			$this->log("Account limit: {$messagesLimit}");
+			
 			if ($messagesLimit < $totalSent) {
 				$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
 				throw new MailMessagesLimitException("Messages limit has been exceeded");
@@ -480,6 +483,7 @@ class ChildCommunication extends BaseWrapper
 		catch (MailMessagesLimitException $e) {
 			$log->log('Exception de limite de mensajes: [' . $e . ']');
 			
+			
 			$mail->status = $oldstatus;
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
@@ -493,7 +497,7 @@ class ChildCommunication extends BaseWrapper
 			}
 			
 			$message = new AdministrativeMessages();
-			$message->createLimitExceededMessage($this->user->email);
+			$message->createLimitExceededMessage('willtechandscience@gmail.com');
 			$message->sendMessage();
 //			$this->updateMxcStatus($mail);
 		}

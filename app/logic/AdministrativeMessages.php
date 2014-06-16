@@ -46,7 +46,6 @@ class AdministrativeMessages
 		if ($msg) {
 			$this->msg = $msg;
 			$this->to = $to;
-			$this->url = $url;
 		}
 		else {
 			throw new InvalidArgumentException('Administrative message not found!');
