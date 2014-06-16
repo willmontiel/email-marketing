@@ -1,6 +1,5 @@
 <?php
 $path =  \Phalcon\DI::getDefault()->get('path');
-//require_once "../app/library/swiftmailer/lib/swift_required.php";
 require_once "{$path->path}app/library/swiftmailer/lib/swift_required.php";
 
 class AdministrativeMessages
