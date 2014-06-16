@@ -1,5 +1,6 @@
 <?php
-require_once "../app/library/swiftmailer/lib/swift_required.php";
+//require_once "../app/library/swiftmailer/lib/swift_required.php";
+require_once "../../library/swiftmailer/lib/swift_required.php";
 class AdministrativeMessages
 {
 	protected $msg;
