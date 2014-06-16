@@ -36,8 +36,8 @@ class IdentifyTarget
 		$total = $query->fetchAll();
 		
 		$this->log->log("Total: " . print_r($total, true));
-		$this->log->log("Total: " . print_r($total['total'], true));
-		return $total['total'];
+		$this->log->log("Total: " . print_r($total[0]['total'], true));
+		return $total[0]['total'];
 	}
 	
 	public function saveTarget()
