@@ -31,7 +31,7 @@
 
 <script type="text/javascript">
 		var objMail = {{objMail}};
-		var footer = {{footer.editor}};
+		var footer = {%if footer.editor is defined %} {{footer.editor}} {% else %} '' {% endif %};
 		var footerhtml = '{{footer.html}}';
 		var footereditable = "{{footer.editable}}";
 	

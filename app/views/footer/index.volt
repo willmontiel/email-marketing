@@ -1,6 +1,6 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
-		{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
+		{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'footer']) }}
 
 	<div class="row">
 		<h4 class="sectiontitle">Footer</h4>

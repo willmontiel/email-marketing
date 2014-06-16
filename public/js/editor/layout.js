@@ -26,4 +26,4 @@ var layouts = [
 	new Layout(5, 'layout-right-sidebar', 'Layout with Right Sidebar', config.imagesUrl + "/19m.png", [{name: 'preheader', width: 'full-width', widthval: 600}, {name: 'header', width: 'full-width', widthval: 600}, {name: 'body', width: 'twothird-width', widthval: 400}, {name: 'sidebar', width: 'third-width', widthval: 200}, {name: 'footer', width: 'full-width', widthval: 600}])
 ];
 
-var footerLay = new Layout(6, 'layout-footer', 'Layout for Footer', config.imagesUrl + "/19m.png", [{name: 'footer', width: 'full-width', widthval: 600}]);
+var footerLay = new Layout(6, 'layout-footer', 'Layout for Footer', "", [{name: 'footer', width: 'full-width', widthval: 600}]);

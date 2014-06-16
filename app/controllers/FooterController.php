@@ -60,6 +60,57 @@ class FooterController extends ControllerBase {
 		
 		return $this->response->setContent($htmlObj);
 	}
+	
+	public function editAction($idFooter)
+	{
+		$footer = Footer::findFirst(array(
+			"conditions" => "idFooter = ?1",
+			"bind" => array(1 => $idFooter)
+		));
+		
+		$obj = new FooterObj();
+		
+		if ($this->request->isPost()) {
+			$name = trim($this->request->getPost("name"));
+			
+			if(empty($name)) {
+				return $this->setJsonResponse(array('msg' => 'El nombre que ha enviado es inválido o esta vacío, por favor verifique la información'), 400 , 'failed');
+			}
+			$content = $this->request->getPost("content");
+			try {
+				$obj->updateFooter($footer, $content, $name);
+			} 
+			catch(Exception $e) {
+				$this->logger->log("Exception: {$e}");
+				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error, contacta al administrador'), 500 , 'failed');
+			}
+			catch(InvalidArgumentException $e) {
+				$this->logger->log("Exception: {$e}");
+				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error, contacta al administrador'), 500 , 'failed');
+			}
+		}
+		
+		$objMail = $obj->setFooterEditorObj(json_decode($footer->editor));
+		
+		$this->view->setVar('objMail', $objMail);
+		$this->view->setVar('footer', $footer);
+	}
+	
+	public function deleteAction($idFooter)
+	{
+		$footer = Footer::findFirst(array(
+			"conditions" => "idFooter = ?1",
+			"bind" => array(1 => $idFooter)
+		));
+		
+		if( !$footer->delete() ) {
+			$this->flashSession->warning("Error al eliminar el Footer");
+		}
+		else {
+			$this->flashSession->warning("Se ha eliminado el Footer con éxito");
+		}
+		return $this->response->redirect("footer");
+	}
 }
 
 ?>

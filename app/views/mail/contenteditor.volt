@@ -142,7 +142,6 @@
 	<div class="row">
 		{{ flashSession.output()}}
 	</div>
-	<div class="space"></div>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="btnoptions">

@@ -4,28 +4,11 @@
 	{{ javascript_include('redactor/redactor.js')}}
 	{{ stylesheet_link('redactor/redactor.css') }}
 	<script type="text/javascript">
-		objMail = "Footer";
+		objMail = {{objMail}};
 		
 		function iframeResize() {
 			var iFrame = document.getElementById('iframeEditor');
 			iFrame.height = (iFrame.contentWindow.document.body.scrollHeight < 600) ? "600px" : ( iFrame.contentWindow.document.body.scrollHeight + 80 ) + "px";
-		};
-		
-		function verHTML() {
-			var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
-			$.ajax({
-				url: "{{url('footer/previeweditor')}}",
-				type: "POST",			
-				data: { editor: editor},
-				error: function(msg){
-					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
-				},
-				success: function() {
-					$( "#preview-modal-content" ).empty();
-					$('#preview-modal-content').append($('<iframe frameborder="0" id="footer-preview" width="100%" height="100%" src="{{url('footer/previewdata')}}"/>'));
-				}
-			});
-			document.getElementById('iframeEditor').contentWindow.RecreateEditor();
 		};
 		
 		function sendData() {
@@ -38,7 +21,7 @@
 				var objeditor = JSON.parse(editor);
 				var footer = JSON.stringify(objeditor.dz.footer.content);
 				$.ajax({
-					url: "{{url('footer/new')}}",
+					url: "{{url('footer/edit')}}/{{footer.idFooter}}",
 					type: "POST",			
 					data: { 
 						name: name,
@@ -61,24 +44,23 @@
 				document.getElementById('iframeEditor').contentWindow.RecreateEditor();
 			}
 		};
-
+		
 	</script>
 {% endblock %}
 {% block content %}
-	
 	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'footer']) }}
 	
 	<div class="row">
-		<h4 class="sectiontitle">Crear un footer</h4>
+		<h4 class="sectiontitle">Editar un footer</h4>
 	
 		<div class="bs-callout bs-callout-info">	  
-			<p>Cree un footer para asignar a cualquier cuenta como base</p>
+			<p>Edite un footer para asignar a cualquier cuenta como base</p>
 	    </div>
 
 	    <form class="form-inline" role="form">
 	    	<div class="form-group">
 				<label for="" class="" >Nombre del footer:</label>
-				<input type="text" name="name" id="name" required="required" class="form-control">
+				<input type="text" name="name" id="name" required="required" class="form-control" value="{{footer.name}}">
 			</div>
 			<div class="col-xs-12 col-sm-9 col-md-10 col-lg-4 pull-right">
 				<div class="form-group">
@@ -111,4 +93,5 @@
 			</div>
 		</div>
 	</div>
+
 {% endblock %}

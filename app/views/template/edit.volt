@@ -149,7 +149,6 @@
 
 		</form>
 	</div>
-	<div class="space"></div>
 	<div class="row">
 		<div class="col-sm-12">
 			<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" frameborder="0" width="100%" onload="iframeResize()" seamless></iframe>

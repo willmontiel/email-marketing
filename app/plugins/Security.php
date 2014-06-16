@@ -386,6 +386,8 @@ class Security extends Plugin
 				'footer::previeweditor' => array('footer' => array('read')),
 				'footer::previewdata' => array('footer' => array('read')),
 				'footer::index' => array('footer' => array('read')),
+				'footer::edit' => array('footer' => array('update')),
+				'footer::delete' => array('footer' => array('delete')),
 				
 			);
 		}
