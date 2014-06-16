@@ -480,6 +480,7 @@ class ChildCommunication extends BaseWrapper
 			$log->log('Exception de Estado de Correo: [' . $e . ']');
 		}
 		catch (MailMessagesLimitException $e) {
+			$this->log->log("DIR: " . dirname(__FILE__));
 			$log->log('Exception de limite de mensajes: [' . $e . ']');
 			
 			
@@ -492,8 +493,6 @@ class ChildCommunication extends BaseWrapper
 				'conditions' => "idAccount = ?1 AND userrole = 'ROLE_ADMIN'",
 				'bind' => array(1 => $account->idAccount)
 			));
-			
-			$this->log->log("DIR: " . dirname(__FILE__));
 			
 			$message = new AdministrativeMessages();
 			foreach ($users as $user) {
