@@ -47,6 +47,7 @@ class AppObjects
 		}
 		else {
 			$this->setAppPath();
+			$this->setFullPath();
 			$this->setUrlManagerObject();
 			$this->setUri();
 			$this->setRouter();
