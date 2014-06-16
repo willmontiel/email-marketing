@@ -2,11 +2,12 @@
 require_once "../app/library/swiftmailer/lib/swift_required.php";
 class AdministrativeMessages
 {
-	public $subject;
-	public $from;
-	public $html;
-	public $to;
-	public $text;
+	protected $msg;
+	protected $subject;
+	protected $from;
+	protected $html;
+	protected $to;
+	protected $text;
 	
 	public function __construct() 
 	{
@@ -14,24 +15,38 @@ class AdministrativeMessages
 		$this->mta = $di['mtadata'];
 	}
 	
-	public function createRecoverpassMessage($url, $to)
+	public function createRecoverpassMessage($to, $url = null)
 	{
 		$msg = Adminmsg::findFirst(array(
 			'conditions' => 'type = ?1',
 			'bind' => array(1 => 'Recoverpass')
 		));
-		
-		Phalcon\DI::getDefault()->get('logger')->log("Url: " . $url);
-		
+
 		if ($msg) {
-			$message = str_replace('tmpurl', $url, $msg->msg);
-			$plainText = str_replace('tmpurl', $url, $msg->text);
+			$msg->msg = str_replace('tmpurl', $this->url, $msg->msg);
+			$msg->text = str_replace('tmpurl', $this->url, $msg->text);
 			
-			$this->subject = $msg->subject;
-			$this->from = $msg->from;
-			$this->html = $message;
+			$this->msg = $msg;
 			$this->to = $to;
-			$this->text = $plainText;
+			$this->url = $url;
+		}
+		else {
+			throw new InvalidArgumentException('Administrative message not found!');
+		}
+		
+	}
+	
+	public function createLimitExceededMessage($to)
+	{
+		$msg = Adminmsg::findFirst(array(
+			'conditions' => 'type = ?1',
+			'bind' => array(1 => 'LimiteExceeded')
+		));
+
+		if ($msg) {
+			$this->msg = $msg;
+			$this->to = $to;
+			$this->url = $url;
 		}
 		else {
 			throw new InvalidArgumentException('Administrative message not found!');
@@ -43,16 +58,16 @@ class AdministrativeMessages
 		$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 		$swift = Swift_Mailer::newInstance($transport);
 		
-		$message = new Swift_Message($this->subject);
+		$message = new Swift_Message($this->msg->subject);
 		
 		/*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
 		$headers = $message->getHeaders();
 		$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
 		
-		$message->setFrom($this->from);
-		$message->setBody($this->html, 'text/html');
+		$message->setFrom($this->msg->from);
+		$message->setBody($this->msg->msg, 'text/html');
 		$message->setTo($this->to);
-		$message->addPart($this->text, 'text/plain');
+		$message->addPart($this->msg->text, 'text/plain');
 
 		$recipients = $swift->send($message, $failures);
 		

@@ -67,14 +67,15 @@ class ChildCommunication extends BaseWrapper
 		}
 		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
+		$oldstatus = $mail->status;
+		
 		try {
 			$account = Account::findFirstByIdAccount($mail->idAccount);
 			
-			$messagesSent = $account->countTotalMessagesSent();
-			$messagesLimit = $account->messageLimit;
-			
 			$this->checkMailStatus($mail);
-			$oldstatus = $mail->status;
+		
+//			$messagesSent = $account->countTotalMessagesSent();
+			$messagesLimit = $account->messageLimit;
 			
 			$contactsSent = 0;
 			if ($oldstatus == 'Paused') {
@@ -119,17 +120,26 @@ class ChildCommunication extends BaseWrapper
 			if (trim($mailContent->content) === '') {
 				throw new \InvalidArgumentException("Error mail's content is empty");
 			}
-
-			if ($oldstatus == 'Scheduled') {
-				$log->log("Identificando destinatarios");
-				$identifyTarget = new IdentifyTarget();
-				$identifyTarget->identifyTarget($mail);
-				$this->updateTotalContacts();
-			}
 			
-			if ($messagesLimit <= $messagesSent) {
+			$identifyTarget = new IdentifyTarget();
+			$identifyTarget->setMail($mail);
+			$identifyTarget->processData();
+			$totalSent = $identifyTarget->getTotalContacts();
+			
+			if ($messagesLimit < $totalSent) {
 				$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
 				throw new MailMessagesLimitException("Messages limit has been exceeded");
+			}
+			
+			if ($oldstatus == 'Scheduled') {
+				$log->log("Identificando destinatarios");
+				$identifyTarget->saveTarget();
+//				$totalContacts = $this->updateTotalContacts();
+				$account->contactLimit = $account->contactLimit - $totalSent;
+				
+				if (!$account->save()) {
+					\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el limite de envíos en la cuenta");
+				}
 			}
 			
 			if ($mail->type == 'Editor') {
@@ -469,12 +479,23 @@ class ChildCommunication extends BaseWrapper
 		}
 		catch (MailMessagesLimitException $e) {
 			$log->log('Exception de limite de mensajes: [' . $e . ']');
-			$mail->status = 'Paused';
-			$mail->finishedon = time();
+			
+			$mail->status = $oldstatus;
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
 			}
-			$this->updateMxcStatus($mail);
+			
+			$schedule = Mailschedule::findFirstByIdMail($mail->idMail);
+			$schedule->confirmationStatus = 'No';
+			
+			if(!$schedule->save()) {
+				$log->log('No se pudo actualizar el estado de schedule');
+			}
+			
+			$message = new AdministrativeMessages();
+			$message->createLimitExceededMessage($this->user->email);
+			$message->sendMessage();
+//			$this->updateMxcStatus($mail);
 		}
 		catch (Exception $e) {
 			$log->log('Exception General: [' . $e . ']');
@@ -537,5 +558,7 @@ class ChildCommunication extends BaseWrapper
 		if (!$mail->save()) {
 			\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando la cantidad de correos a enviar!!!");
 		}
+		
+		return $totalContacts;
 	}
 }
