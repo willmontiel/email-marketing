@@ -488,8 +488,6 @@ class ChildCommunication extends BaseWrapper
 				$log->log('No se pudo actualizar el estado del MAIL');
 			}
 			
-			$log->log("DIR: " . dirname(__FILE__));
-			
 			$users = User::find(array(
 				'conditions' => "idAccount = ?1 AND userrole = 'ROLE_ADMIN'",
 				'bind' => array(1 => $account->idAccount)
