@@ -489,12 +489,12 @@ class ChildCommunication extends BaseWrapper
 				$log->log('No se pudo actualizar el estado del MAIL');
 			}
 			
-			$schedule = Mailschedule::findFirstByIdMail($mail->idMail);
-			$schedule->confirmationStatus = 'No';
-			
-			if(!$schedule->save()) {
-				$log->log('No se pudo actualizar el estado de schedule');
-			}
+//			$schedule = Mailschedule::findFirstByIdMail($mail->idMail);
+//			$schedule->confirmationStatus = 'No';
+//			
+//			if(!$schedule->save()) {
+//				$log->log('No se pudo actualizar el estado de schedule');
+//			}
 			
 			$log->log('1');
 			$message = new AdministrativeMessages();
