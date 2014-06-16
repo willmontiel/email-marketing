@@ -45,6 +45,11 @@ $obj = new \stdClass();
 $obj->prefix = isset($config->system->instance_id)?$config->system->instance_id:'';
 $di->set('instanceIDprefix', $obj);
 
+/* Full path*/
+$path = new \stdClass();
+$path->path = $this->config->general->path;
+$di->set('path', $path);
+
 /*
  * Configuración de las URL's
  */
