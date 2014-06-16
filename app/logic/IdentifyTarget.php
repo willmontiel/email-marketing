@@ -35,6 +35,8 @@ class IdentifyTarget
 		$query = $this->db->query($this->sql->count);
 		$total = $query->fetchAll();
 		
+		$this->log->log("Total: " . print_r($total, true));
+		$this->log->log("Total: " . print_r($tota['total'], true));
 		return $total['total'];
 	}
 	
