@@ -141,7 +141,7 @@ class MailWrapper extends BaseWrapper
 		$this->mail->name = $this->content->name;
 		$this->mail->subject = $this->content->subject;
 		$this->mail->fromName = $this->content->fromName;
-		$this->mail->fromEmail = $this->content->fromEmail;
+		$this->mail->fromEmail = trim(strtolower($this->content->fromEmail));
 		$this->mail->replyTo = $this->content->replyTo;
 		$this->mail->target = $this->target->target;
 		

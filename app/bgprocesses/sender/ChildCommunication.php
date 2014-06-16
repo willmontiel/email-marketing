@@ -67,13 +67,13 @@ class ChildCommunication extends BaseWrapper
 		}
 		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
-		$oldstatus = $mail->status;
+		
 		$account = Account::findFirstByIdAccount($mail->idAccount);
 		
 		try {
 			$this->checkMailStatus($mail);
-		
-//			$messagesSent = $account->countTotalMessagesSent();
+			
+			$oldstatus = $mail->status;
 			$messagesLimit = $account->messageLimit;
 			
 			$contactsSent = 0;
