@@ -480,7 +480,6 @@ class ChildCommunication extends BaseWrapper
 			$log->log('Exception de Estado de Correo: [' . $e . ']');
 		}
 		catch (MailMessagesLimitException $e) {
-			$this->log->log("DIR: " . dirname(__FILE__));
 			$log->log('Exception de limite de mensajes: [' . $e . ']');
 			
 			
@@ -488,6 +487,8 @@ class ChildCommunication extends BaseWrapper
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
 			}
+			
+			$log->log("DIR: " . dirname(__FILE__));
 			
 			$users = User::find(array(
 				'conditions' => "idAccount = ?1 AND userrole = 'ROLE_ADMIN'",
