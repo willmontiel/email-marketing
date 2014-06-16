@@ -35,7 +35,7 @@ class IdentifyTarget
 		$query = $this->db->query($this->sql->count);
 		$total = $query->fetchAll();
 		
-		return $total['Total'];
+		return $total['total'];
 	}
 	
 	public function saveTarget()
@@ -133,8 +133,7 @@ class IdentifyTarget
 				  FROM contact AS c 
 					 JOIN email AS e ON (c.idEmail = e.idEmail) 
 					 JOIN coxcl AS l ON (c.idContact = l.idContact) {$filters->join}
-					 WHERE c.idDbase IN {$this->identifiers} {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0 
-				   GROUP BY 1, 2)";
+					 WHERE c.idDbase IN {$this->identifiers} {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0)";
 		
 		$this->sql = new stdClass();
 		
@@ -185,12 +184,11 @@ class IdentifyTarget
 						JOIN mxc AS m ON (m.idContact = c.idContact)
 					WHERE m.idMail = {$this->mail->idMail})";
 		
-		$sql4 = "(SELECT COUNT(c.idContact) AS TOTAL
+		$sql4 = "(SELECT COUNT(c.idContact) AS total
 				  FROM coxcl AS cl
 					 JOIN contact AS c ON (cl.idContact = c.idContact)
 				     JOIN email AS e ON (c.idEmail = e.idEmail) {$filters->join} 
-				     WHERE cl.idContactlist IN ({$this->identifiers}) {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0
-				  GROUP BY 1, 2)";
+				     WHERE cl.idContactlist IN ({$this->identifiers}) {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0)";
 		
 		$this->sql = new stdClass();
 		
@@ -236,8 +234,7 @@ class IdentifyTarget
 						JOIN contact AS c ON (sc.idContact = c.idContact)
 						JOIN email AS e ON (c.idEmail = e.idEmail)
 						JOIN coxcl AS l ON (c.idContact = l.idContact) {$filters->join} 
-					WHERE sc.idSegment IN ({$this->identifiers}) {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0
-					GROUP BY 1, 2)";
+					WHERE sc.idSegment IN ({$this->identifiers}) {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0)";
 		
 		$this->sql = new stdClass();
 		
