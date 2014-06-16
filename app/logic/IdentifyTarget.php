@@ -105,7 +105,7 @@ class IdentifyTarget
 				  FROM contact AS c 
 					 JOIN email AS e ON (c.idEmail = e.idEmail) 
 					 JOIN coxcl AS l ON (c.idContact = l.idContact) {$filters->join}
-					 WHERE c.idDbase IN {$this->identifiers} {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0 
+					 WHERE c.idDbase IN ({$this->identifiers}) {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0 
 				   GROUP BY 1, 2)";
 		/**
 		 * Inserting data into statdbase for statistics.
@@ -135,7 +135,7 @@ class IdentifyTarget
 				  FROM contact AS c 
 					 JOIN email AS e ON (c.idEmail = e.idEmail) 
 					 JOIN coxcl AS l ON (c.idContact = l.idContact) {$filters->join}
-					 WHERE c.idDbase IN {$this->identifiers} {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0)";
+					 WHERE c.idDbase IN ({$this->identifiers}) {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0)";
 		
 		$this->sql = new stdClass();
 		
