@@ -47,7 +47,7 @@ $di->set('instanceIDprefix', $obj);
 
 /* Full path*/
 $path = new \stdClass();
-$path->path = $this->config->general->path;
+$path->path = $config->general->path;
 $di->set('path', $path);
 
 /*
