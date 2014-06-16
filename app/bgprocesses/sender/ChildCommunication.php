@@ -496,9 +496,13 @@ class ChildCommunication extends BaseWrapper
 				$log->log('No se pudo actualizar el estado de schedule');
 			}
 			
+			$log->log('1');
 			$message = new AdministrativeMessages();
+			$log->log('2');
 			$message->createLimitExceededMessage('william.montiel@sigmamovil.com');
+			$log->log('3');
 			$message->sendMessage();
+			$log->log('4');
 //			$this->updateMxcStatus($mail);
 		}
 		catch (Exception $e) {

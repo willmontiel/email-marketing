@@ -32,7 +32,7 @@ class AdministrativeMessages
 			$this->url = $url;
 		}
 		else {
-			throw new InvalidArgumentException('Administrative message not found!');
+			throw new Exception('Administrative message not found!');
 		}
 		
 	}
@@ -49,7 +49,7 @@ class AdministrativeMessages
 			$this->to = $to;
 		}
 		else {
-			throw new InvalidArgumentException('Administrative message not found!');
+			throw new Exception('Administrative message not found!');
 		}
 	}
 	
@@ -77,7 +77,7 @@ class AdministrativeMessages
 			Phalcon\DI::getDefault()->get('logger')->log('Recovery pass message successfully sent!');
 		}
 		else {
-			throw new InvalidArgumentException('Error while sending message: ' . $failures);
+			throw new Exception('Error while sending message: ' . $failures);
 		}
 	}
 }
