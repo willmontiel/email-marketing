@@ -470,7 +470,7 @@ class ChildCommunication extends BaseWrapper
 			}
 			$timer->endTimer('send-postprocessing');
 		}
-		catch (InvalidArgumentException $e) {
+		catch (Exception $e) {
 			$log->log('Exception: [' . $e . ']');
 			$mail->status = 'Cancelled';
 			$mail->finishedon = time();
@@ -502,9 +502,6 @@ class ChildCommunication extends BaseWrapper
 				$message->sendMessage();	
 			}
 //			$this->updateMxcStatus($mail);
-		}
-		catch (Exception $e) {
-			$log->log('Exception General: [' . $e . ']');
 		}
 
                 $timer->startTimer('gc-collect', 'Reclaiming memory...');
