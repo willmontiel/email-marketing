@@ -13,6 +13,7 @@ class AdministrativeMessages
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 		$this->mta = $di['mtadata'];
+		$this->logger = $di['logger'];
 	}
 	
 	public function createRecoverpassMessage($to, $url = null)
@@ -67,7 +68,9 @@ class AdministrativeMessages
 		$message->setBody($this->msg->msg, 'text/html');
 		$message->setTo($this->to);
 		$message->addPart($this->msg->text, 'text/plain');
-
+		
+		$this->logger->log("Preparandose para enviar mensaje a: {$this->to}");
+		
 		$recipients = $swift->send($message, $failures);
 		
 		if ($recipients){

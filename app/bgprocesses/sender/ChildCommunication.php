@@ -497,7 +497,7 @@ class ChildCommunication extends BaseWrapper
 			}
 			
 			$message = new AdministrativeMessages();
-			$message->createLimitExceededMessage('willtechandscience@gmail.com');
+			$message->createLimitExceededMessage('william.montiel@sigmamovil.com');
 			$message->sendMessage();
 //			$this->updateMxcStatus($mail);
 		}
