@@ -108,6 +108,11 @@ class TrackingObject
 	 */
 	protected function canTrackOpenEvents()
 	{
+		$this->log->log("Open: {$this->mxc->opening}");
+		$this->log->log("Bounced: {$this->mxc->bounced}");
+		$this->log->log("Spam: {$this->mxc->spam}");
+		$this->log->log("Status: {$this->mxc->status}");
+		
 		if ($this->mxc->opening == 0 &&
 				  $this->mxc->bounced == 0 &&
 				  $this->mxc->spam == 0 &&
