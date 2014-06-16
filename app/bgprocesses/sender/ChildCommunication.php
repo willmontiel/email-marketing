@@ -68,10 +68,9 @@ class ChildCommunication extends BaseWrapper
 		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
 		$oldstatus = $mail->status;
+		$account = Account::findFirstByIdAccount($mail->idAccount);
 		
 		try {
-			$account = Account::findFirstByIdAccount($mail->idAccount);
-			
 			$this->checkMailStatus($mail);
 		
 //			$messagesSent = $account->countTotalMessagesSent();
@@ -489,9 +488,18 @@ class ChildCommunication extends BaseWrapper
 				$log->log('No se pudo actualizar el estado del MAIL');
 			}
 			
+			$users = User::find(array(
+				'conditions' => "idAccount = ?1 AND userrole = 'ROLE_ADMIN'",
+				'bind' => array(1 => $account->idAccount)
+			));
+			
+			$this->log->log("DIR: " . dirname(__FILE__));
+			
 			$message = new AdministrativeMessages();
-			$message->createLimitExceededMessage('william.montiel@sigmamovil.com');
-			$message->sendMessage();
+			foreach ($users as $user) {
+				$message->createLimitExceededMessage($user->email);
+				$message->sendMessage();	
+			}
 //			$this->updateMxcStatus($mail);
 		}
 		catch (Exception $e) {
