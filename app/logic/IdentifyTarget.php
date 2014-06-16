@@ -134,7 +134,7 @@ class IdentifyTarget
 		$sql4 = "(SELECT COUNT(c.idContact) AS total
 				  FROM contact AS c 
 					 JOIN email AS e ON (c.idEmail = e.idEmail) 
-					 JOIN coxcl AS l ON (c.idContact = l.idContact) {$filters->join}
+					 {$filters->join}
 					 WHERE c.idDbase IN ({$this->identifiers}) {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0)";
 		
 		$this->sql = new stdClass();
@@ -235,7 +235,7 @@ class IdentifyTarget
 					FROM sxc AS sc
 						JOIN contact AS c ON (sc.idContact = c.idContact)
 						JOIN email AS e ON (c.idEmail = e.idEmail)
-						JOIN coxcl AS l ON (c.idContact = l.idContact) {$filters->join} 
+						{$filters->join} 
 					WHERE sc.idSegment IN ({$this->identifiers}) {$filters->and} AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0 AND c.unsubscribed = 0)";
 		
 		$this->sql = new stdClass();
