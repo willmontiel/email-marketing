@@ -470,14 +470,6 @@ class ChildCommunication extends BaseWrapper
 			}
 			$timer->endTimer('send-postprocessing');
 		}
-		catch (Exception $e) {
-			$log->log('Exception: [' . $e . ']');
-			$mail->status = 'Cancelled';
-			$mail->finishedon = time();
-			if(!$mail->save()) {
-				$log->log('No se pudo actualizar el estado del MAIL');
-			}
-		}
 		catch (MailStatusException $e) {
 			$log->log('Exception de Estado de Correo: [' . $e . ']');
 		}
@@ -502,6 +494,14 @@ class ChildCommunication extends BaseWrapper
 				$message->sendMessage();	
 			}
 //			$this->updateMxcStatus($mail);
+		}
+		catch (Exception $e) {
+			$log->log('Exception: [' . $e . ']');
+			$mail->status = 'Cancelled';
+			$mail->finishedon = time();
+			if(!$mail->save()) {
+				$log->log('No se pudo actualizar el estado del MAIL');
+			}
 		}
 
                 $timer->startTimer('gc-collect', 'Reclaiming memory...');
