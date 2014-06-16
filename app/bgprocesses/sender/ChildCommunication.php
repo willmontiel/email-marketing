@@ -126,8 +126,8 @@ class ChildCommunication extends BaseWrapper
 			$identifyTarget->processData();
 			$totalSent = $identifyTarget->getTotalContacts();
 			
-			$this->log("Envíos totales: {$totalSent}");
-			$this->log("Account limit: {$messagesLimit}");
+			$log->log("Envíos totales: {$totalSent}");
+			$log->log("Account limit: {$messagesLimit}");
 			
 			if ($messagesLimit < $totalSent) {
 				$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
