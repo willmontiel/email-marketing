@@ -480,6 +480,7 @@ class ChildCommunication extends BaseWrapper
 			$log->log('Exception de Estado de Correo: [' . $e . ']');
 		}
 		catch (MailMessagesLimitException $e) {
+			$log->log("PATH: " . \Phalcon\DI::getDefault()->get('path')->path);
 			$log->log('Exception de limite de mensajes: [' . $e . ']');
 			
 			
