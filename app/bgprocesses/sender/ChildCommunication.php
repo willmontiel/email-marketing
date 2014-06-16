@@ -484,25 +484,14 @@ class ChildCommunication extends BaseWrapper
 			$log->log('Exception de limite de mensajes: [' . $e . ']');
 			
 			
-			$mail->status = $oldstatus;
+			$mail->status = 'Draft';
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
 			}
 			
-//			$schedule = Mailschedule::findFirstByIdMail($mail->idMail);
-//			$schedule->confirmationStatus = 'No';
-//			
-//			if(!$schedule->save()) {
-//				$log->log('No se pudo actualizar el estado de schedule');
-//			}
-			
-			$log->log('1');
 			$message = new AdministrativeMessages();
-			$log->log('2');
 			$message->createLimitExceededMessage('william.montiel@sigmamovil.com');
-			$log->log('3');
 			$message->sendMessage();
-			$log->log('4');
 //			$this->updateMxcStatus($mail);
 		}
 		catch (Exception $e) {
