@@ -430,6 +430,7 @@ class ChildCommunication extends BaseWrapper
 						$this->childprocess->responseToParent('Work-Checked' , $this->massagesSent);
 						break;
 				}
+				
 				unset($message);
 				unset($headers);
 			}
@@ -442,13 +443,24 @@ class ChildCommunication extends BaseWrapper
                                 $sentContacts = array();
 			}			
 			$timer->endTimer('send-loop');
-
+			
 			if(!$disruptedProcess) {
 				$log->log('Estado: Me enviaron');
 				$mail->totalContacts = $this->massagesSent;
 				$mail->status = 'Sent';
 				$mail->finishedon = time();
 			}
+			else {
+				if ($account->accountingMode == 'Envio') {
+					$t = $messagesLimit - $this->massagesSent;
+					$account->messageLimit = $t; 
+
+					if(!$account->save()) {
+						$log->log("No se pudo actualizar el limite de envios en la cuenta {$t}");
+					}
+				}
+			}
+			
 			$log->log('Se actualizara el estado del MAIL como ' . $mail->status);
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
