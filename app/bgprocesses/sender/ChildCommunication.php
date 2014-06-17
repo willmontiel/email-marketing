@@ -421,6 +421,7 @@ class ChildCommunication extends BaseWrapper
 					case 'Stop':
 						$log->log("Estado: Me Pausaron");
 						$mail->status = 'Paused';
+						$mail->totalContacts = $i;
 						$disruptedProcess = TRUE;
 						break 2;
 					case 'Checking-Work':
