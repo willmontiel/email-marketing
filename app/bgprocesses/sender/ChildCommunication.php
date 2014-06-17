@@ -80,7 +80,7 @@ class ChildCommunication extends BaseWrapper
 			
 			$contactsSent = 0;
 			if ($oldstatus == 'Paused') {
-				$contactsSent = $mail->totalContacts;
+				$contactsSent = $mail->messagesSent;
 			}
 			
 			$mail->status = 'Sending';
@@ -126,10 +126,10 @@ class ChildCommunication extends BaseWrapper
 			$identifyTarget->setMail($mail);
 			$identifyTarget->processData();
 			
+			$totalSent = $identifyTarget->getTotalContacts();
+			$totalSent = ($oldstatus == 'Paused' ? $totalSent - $mail->messagesSent : $totalSent);
+			
 			if ($account->accountingMode == 'Envio') {
-				$totalSent = $identifyTarget->getTotalContacts();
-				$totalSent = ($oldstatus == 'Paused' ? $totalSent - $mail->totalContacts : $totalSent);
-				
 				if ($messagesLimit < $totalSent) {
 					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
 					throw new MailMessagesLimitException("Messages limit has been exceeded");
@@ -398,7 +398,7 @@ class ChildCommunication extends BaseWrapper
 						}
 
 						$mail->status = 'Cancelled';
-						$mail->totalContacts = $this->massagesSent;
+						$mail->messagesSent = $this->massagesSent;
 						$mail->finishedon = time();
 						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
@@ -406,7 +406,7 @@ class ChildCommunication extends BaseWrapper
 					case 'Stop':
 						$log->log("Estado: Me Pausaron");
 						$mail->status = 'Paused';
-						$mail->totalContacts = $this->massagesSent;
+						$mail->messagesSent = $this->massagesSent;
 						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
 						break 2;
@@ -434,7 +434,7 @@ class ChildCommunication extends BaseWrapper
 				if ($contactsSent != 0) {
 					$this->massagesSent = $contactsSent + $this->massagesSent;
 				}
-				$mail->totalContacts = $this->massagesSent;
+				$mail->messagesSent = $this->massagesSent;
 				$mail->status = 'Sent';
 				$mail->finishedon = time();
 			}
@@ -496,7 +496,7 @@ class ChildCommunication extends BaseWrapper
 		catch (Exception $e) {
 			$log->log('Exception: [' . $e . ']');
 			$mail->status = 'Cancelled';
-			$mail->totalContacts = $this->massagesSent;
+			$mail->messagesSent = $this->massagesSent;
 			$mail->finishedon = time();
 			if(!$mail->save()) {
 				$log->log("No se pudo actualizar el estado del MAIL: Cancelled");
@@ -557,7 +557,7 @@ class ChildCommunication extends BaseWrapper
 		
 		$totalContacts = $result->fetchAll();
 		
-		$mail->totalContacts = $totalContacts;
+		$mail->messagesSent = $totalContacts;
 		
 		if (!$mail->save()) {
 			\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando la cantidad de correos a enviar!!!");
