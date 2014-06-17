@@ -10,9 +10,10 @@ class ChildCommunication extends BaseWrapper
         protected $urlManager;
 		protected $logger;
 		protected $messagesSent = 0;
+		protected $sent = 0;
 
 
-    public function __construct() 
+		public function __construct() 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 	
@@ -79,9 +80,7 @@ class ChildCommunication extends BaseWrapper
 			$this->checkMailStatus($mail);
 			
 			if ($oldstatus == 'Paused') {
-				$this->logger->log("Estaba pausado {$mail->messagesSent}");
-				$this->messagesSent = $mail->messagesSent;
-				$this->logger->log("Total: {$this->messagesSent}");
+				$this->sent = $mail->messagesSent;
 			}
 			
 			$mail->status = 'Sending';
@@ -398,7 +397,7 @@ class ChildCommunication extends BaseWrapper
 						}
 
 						$mail->status = 'Cancelled';
-						$mail->messagesSent = $this->messagesSent;
+						$mail->messagesSent = $this->sent + $this->messagesSent;
 						$mail->finishedon = time();
 						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
@@ -406,14 +405,15 @@ class ChildCommunication extends BaseWrapper
 					case 'Stop':
 						$log->log("Estado: Me Pausaron");
 						$mail->status = 'Paused';
-						$mail->messagesSent = $this->messagesSent;
+						$mail->messagesSent = $this->sent + $this->messagesSent;
 						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
 						break 2;
 					case 'Checking-Work':
 						$log->log('Estado: Verificando');
-						$this->logger->log("Verificando: {$this->messagesSent}");
-						$this->childprocess->responseToParent('Work-Checked' , $this->messagesSent);
+						$sent = $this->sent + $this->messagesSent;
+						$this->logger->log("Verificando: {$sent}");
+						$this->childprocess->responseToParent('Work-Checked' , $sent);
 						break;
 				}
 				
@@ -433,7 +433,7 @@ class ChildCommunication extends BaseWrapper
 			if(!$disruptedProcess) {
 				$log->log('Estado: Me enviaron');
 				
-				$mail->messagesSent = $this->messagesSent;
+				$mail->messagesSent = $this->sent + $this->messagesSent;
 				$mail->status = 'Sent';
 				$mail->finishedon = time();
 			}
@@ -495,10 +495,11 @@ class ChildCommunication extends BaseWrapper
 		catch (Exception $e) {
 			$log->log('Exception: [' . $e . ']');
 			$mail->status = 'Cancelled';
-			$mail->messagesSent = $this->massagesSent;
+			$sent = $this->sent + $this->massagesSent;
+			$mail->messagesSent = $sent;
 			$mail->finishedon = time();
 			if(!$mail->save()) {
-				$log->log("No se pudo actualizar el estado del MAIL: Cancelled");
+				$log->log("No se pudo actualizar el estado del MAIL: Cancelled, mensajes enviados: {$sent}");
 			}
 			
 			$this->updateMessageLimit($account, $messagesLimit);
