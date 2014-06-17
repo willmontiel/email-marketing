@@ -123,11 +123,14 @@ class ChildCommunication extends BaseWrapper
 			$identifyTarget = new IdentifyTarget();
 			$identifyTarget->setMail($mail);
 			$identifyTarget->processData();
-			$totalSent = $identifyTarget->getTotalContacts();
 			
-			if ($messagesLimit < $totalSent) {
-				$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
-				throw new MailMessagesLimitException("Messages limit has been exceeded");
+			if ($account->accountingMode == 'Envio') {
+				$totalSent = $identifyTarget->getTotalContacts();
+				
+				if ($messagesLimit < $totalSent) {
+					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
+					throw new MailMessagesLimitException("Messages limit has been exceeded");
+				}
 			}
 			
 			if ($oldstatus == 'Scheduled') {
