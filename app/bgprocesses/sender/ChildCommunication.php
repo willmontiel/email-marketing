@@ -127,6 +127,8 @@ class ChildCommunication extends BaseWrapper
 			if ($account->accountingMode == 'Envio') {
 				$totalSent = $identifyTarget->getTotalContacts();
 				$log->log("Total Sent: {$totalSent}");
+				$log->log("Total Contacts: {$mail->totalContacts}");
+				
 				$totalSent = ($oldstatus == 'Paused' ? $totalSent - $mail->totalContacts : $totalSent);
 				$log->log("Total Sent: {$totalSent}");
 				
