@@ -69,12 +69,11 @@ class ChildCommunication extends BaseWrapper
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
 		
 		$account = Account::findFirstByIdAccount($mail->idAccount);
+		$oldstatus = $mail->status;
+		$messagesLimit = $account->messageLimit;
 		
 		try {
 			$this->checkMailStatus($mail);
-			
-			$oldstatus = $mail->status;
-			$messagesLimit = $account->messageLimit;
 			
 			$contactsSent = 0;
 			if ($oldstatus == 'Paused') {
@@ -415,6 +414,7 @@ class ChildCommunication extends BaseWrapper
 						}
 
 						$mail->status = 'Cancelled';
+						$mail->totalContacts = $i;
 						$mail->finishedon = time();
 						$disruptedProcess = TRUE;
 						break 2;
@@ -483,11 +483,9 @@ class ChildCommunication extends BaseWrapper
 			$log->log('Exception de Estado de Correo: [' . $e . ']');
 		}
 		catch (MailMessagesLimitException $e) {
-//			$log->log("PATH: " . \Phalcon\DI::getDefault()->get('path')->path);
 			$log->log('Exception de limite de mensajes: [' . $e . ']');
 			
-			
-			$mail->status = 'Draft';
+			$mail->status = ($oldstatus == 'Paused' ? 'Paused' : 'Draft');
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
 			}
@@ -502,7 +500,7 @@ class ChildCommunication extends BaseWrapper
 				$message->createLimitExceededMessage($user->email);
 				$message->sendMessage();	
 			}
-//			$this->updateMxcStatus($mail);
+			
 		}
 		catch (Exception $e) {
 			$log->log('Exception: [' . $e . ']');
