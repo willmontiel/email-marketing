@@ -126,8 +126,11 @@ class ChildCommunication extends BaseWrapper
 			
 			if ($account->accountingMode == 'Envio') {
 				$totalSent = $identifyTarget->getTotalContacts();
-				
+				$log->log("Total Sent: {$totalSent}");
 				$totalSent = ($oldstatus == 'Paused' ? $totalSent - $mail->totalContacts : $totalSent);
+				$log->log("Total Sent: {$totalSent}");
+				
+				$log->log("Message Limit: {$messagesLimit}");
 				
 				if ($messagesLimit < $totalSent) {
 					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
