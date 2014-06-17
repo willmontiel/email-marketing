@@ -78,9 +78,8 @@ class ChildCommunication extends BaseWrapper
 		try {
 			$this->checkMailStatus($mail);
 			
-			$contactsSent = 0;
 			if ($oldstatus == 'Paused') {
-				$contactsSent = $mail->messagesSent;
+				$this->massagesSent = $mail->messagesSent;
 			}
 			
 			$mail->status = 'Sending';
@@ -385,8 +384,7 @@ class ChildCommunication extends BaseWrapper
 					$log->log("Error while sending mail: " . print_r($failures, true));
 					print_r($failures);
 				}
-//					$log->log("HTML: " . $html);
-//					echo 'Hrml: ' . $html;
+				
 				switch ($msg) {
 					case 'Cancel':
 						$log->log('Estado: Me Cancelaron');
@@ -431,9 +429,7 @@ class ChildCommunication extends BaseWrapper
 			
 			if(!$disruptedProcess) {
 				$log->log('Estado: Me enviaron');
-				if ($contactsSent != 0) {
-					$this->massagesSent = $contactsSent + $this->massagesSent;
-				}
+				
 				$mail->messagesSent = $this->massagesSent;
 				$mail->status = 'Sent';
 				$mail->finishedon = time();
