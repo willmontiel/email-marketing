@@ -569,7 +569,7 @@ class ChildCommunication extends BaseWrapper
 	protected function updateMessageLimit(Account $account, $messagesLimit)
 	{
 		if ($account->accountingMode == 'Envio') {
-			$t = $messagesLimit - $this->massagesSent;
+			$t = $messagesLimit - $this->messagesSent;
 			$account->messageLimit = $t; 
 
 			if(!$account->save()) {
