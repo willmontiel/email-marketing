@@ -79,7 +79,9 @@ class ChildCommunication extends BaseWrapper
 			$this->checkMailStatus($mail);
 			
 			if ($oldstatus == 'Paused') {
+				$this->logger->log("Estaba pausado {$mail->messagesSent}");
 				$this->massagesSent = $mail->messagesSent;
+				$this->logger->log("Total: {$this->messagesSent}");
 			}
 			
 			$mail->status = 'Sending';
@@ -410,6 +412,7 @@ class ChildCommunication extends BaseWrapper
 						break 2;
 					case 'Checking-Work':
 						$log->log('Estado: Verificando');
+						$this->logger->log("Verificando: {$this->massagesSent}");
 						$this->childprocess->responseToParent('Work-Checked' , $this->massagesSent);
 						break;
 				}
