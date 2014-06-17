@@ -127,6 +127,8 @@ class ChildCommunication extends BaseWrapper
 			if ($account->accountingMode == 'Envio') {
 				$totalSent = $identifyTarget->getTotalContacts();
 				
+				$totalSent = ($oldstatus == 'Paused' ? $totalSent - $mail->totalContacts : $totalSent);
+				
 				if ($messagesLimit < $totalSent) {
 					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
 					throw new MailMessagesLimitException("Messages limit has been exceeded");
@@ -137,12 +139,10 @@ class ChildCommunication extends BaseWrapper
 				$log->log("Identificando destinatarios");
 				$identifyTarget->saveTarget();
 //				$totalContacts = $this->updateTotalContacts();
-				$log->log("Envíos totales: {$totalSent}");
-				$log->log("Account limit: {$messagesLimit}");
+//				$log->log("Envíos totales: {$totalSent}");
+//				$log->log("Account limit: {$messagesLimit}");
 				
 				$account->messageLimit = $messagesLimit - $totalSent;
-				
-				$log->log("New account limit: {$account->messageLimit}");
 				
 				if (!$account->save()) {
 					\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el limite de envíos en la cuenta");

@@ -2068,10 +2068,10 @@ class MailController extends ControllerBase
 							2 => $account->idAccount)
 		));
 		
-		$messagesSent = $account->countTotalMessagesSent();
+//		$messagesSent = $account->countTotalMessagesSent();
 		
 		if ($mail) {
-			if ($account->messageLimit > $messagesSent) {
+			if ($account->messageLimit > $mail->totalContacts) {
 				try {
 					$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 					$response = $commObj->sendPlayToParent($idMail);
