@@ -126,17 +126,25 @@ class ChildCommunication extends BaseWrapper
 			
 			if ($account->accountingMode == 'Envio') {
 				$totalSent = $identifyTarget->getTotalContacts();
-				$log->log("Total Sent: {$totalSent}");
-				$log->log("Total Contacts: {$mail->totalContacts}");
+//				$log->log("Total Sent: {$totalSent}");
+//				$log->log("Total Contacts: {$mail->totalContacts}");
 				
 				$totalSent = ($oldstatus == 'Paused' ? $totalSent - $mail->totalContacts : $totalSent);
-				$log->log("Total Sent: {$totalSent}");
 				
-				$log->log("Message Limit: {$messagesLimit}");
+//				$log->log("Total Sent: {$totalSent}");
+				
+//				$log->log("Message Limit: {$messagesLimit}");
 				
 				if ($messagesLimit < $totalSent) {
 					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
 					throw new MailMessagesLimitException("Messages limit has been exceeded");
+				}
+				
+				$account->messageLimit = $messagesLimit - $totalSent;	
+				
+				if (!$account->save()) {
+					\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el limite de envíos en la cuenta");
+					throw new \Exception("Error while updating message limit in account, cancelling sent");
 				}
 			}
 			
@@ -146,12 +154,6 @@ class ChildCommunication extends BaseWrapper
 //				$totalContacts = $this->updateTotalContacts();
 //				$log->log("Envíos totales: {$totalSent}");
 //				$log->log("Account limit: {$messagesLimit}");
-				
-				$account->messageLimit = $messagesLimit - $totalSent;
-				
-				if (!$account->save()) {
-					\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el limite de envíos en la cuenta");
-				}
 			}
 			
 			if ($mail->type == 'Editor') {
@@ -507,8 +509,17 @@ class ChildCommunication extends BaseWrapper
 			$mail->totalContacts = $this->massagesSent;
 			$mail->finishedon = time();
 			if(!$mail->save()) {
-				$log->log('No se pudo actualizar el estado del MAIL');
+				$log->log("No se pudo actualizar el estado del MAIL: Cancelled");
 			}
+			
+			if ($account->accountingMode == 'Envio') {
+				$t = $messagesLimit - $this->massagesSent;
+				$account->messageLimit = $t; 
+
+				if(!$account->save()) {
+					$log->log("No se pudo actualizar el limite de envios en la cuenta {$t}");
+				}
+			}	
 		}
 
                 $timer->startTimer('gc-collect', 'Reclaiming memory...');
