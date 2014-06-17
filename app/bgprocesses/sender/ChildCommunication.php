@@ -200,10 +200,6 @@ class ChildCommunication extends BaseWrapper
 			$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 			$swift = Swift_Mailer::newInstance($transport);
 
-			if ($contactsSent != 0) {
-				$this->massagesSent = $contactsSent;
-			}
-			
 			$sentContacts = array();
 			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
 			
@@ -435,6 +431,9 @@ class ChildCommunication extends BaseWrapper
 			
 			if(!$disruptedProcess) {
 				$log->log('Estado: Me enviaron');
+				if ($contactsSent != 0) {
+					$this->massagesSent = $contactsSent + $this->massagesSent;
+				}
 				$mail->totalContacts = $this->massagesSent;
 				$mail->status = 'Sent';
 				$mail->finishedon = time();
