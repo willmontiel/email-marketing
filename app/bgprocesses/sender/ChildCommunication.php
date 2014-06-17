@@ -412,7 +412,7 @@ class ChildCommunication extends BaseWrapper
 					case 'Checking-Work':
 						$log->log('Estado: Verificando');
 						$sent = $this->sent + $this->messagesSent;
-						$this->logger->log("Verificando: {$sent}");
+//						$this->logger->log("Verificando: {$sent}");
 						$this->childprocess->responseToParent('Work-Checked' , $sent);
 						break;
 				}
