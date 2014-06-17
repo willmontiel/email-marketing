@@ -8,6 +8,7 @@ class ChildCommunication extends BaseWrapper
         protected $db;
         protected $mta;
         protected $urlManager;
+		protected $logger;
 		protected $massagesSent = 0;
 
 
@@ -15,6 +16,7 @@ class ChildCommunication extends BaseWrapper
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 	
+		$this->logger = $di['logger'];
 		$this->mta = $di['mtadata'];
 		$this->urlManager = $di['urlManager'];
         $this->db = $di->get('db');
@@ -126,14 +128,7 @@ class ChildCommunication extends BaseWrapper
 			
 			if ($account->accountingMode == 'Envio') {
 				$totalSent = $identifyTarget->getTotalContacts();
-//				$log->log("Total Sent: {$totalSent}");
-//				$log->log("Total Contacts: {$mail->totalContacts}");
-				
 				$totalSent = ($oldstatus == 'Paused' ? $totalSent - $mail->totalContacts : $totalSent);
-				
-//				$log->log("Total Sent: {$totalSent}");
-				
-//				$log->log("Message Limit: {$messagesLimit}");
 				
 				if ($messagesLimit < $totalSent) {
 					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
@@ -149,27 +144,18 @@ class ChildCommunication extends BaseWrapper
 			}
 			
 			if ($oldstatus == 'Scheduled') {
-				$log->log("Identificando destinatarios");
 				$identifyTarget->saveTarget();
-//				$totalContacts = $this->updateTotalContacts();
-//				$log->log("Envíos totales: {$totalSent}");
-//				$log->log("Account limit: {$messagesLimit}");
 			}
 			
 			if ($mail->type == 'Editor') {
 				$htmlObj = new HtmlObj();
-//				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
 				$htmlObj->assignContent(json_decode($mailContent->content));
 				$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
-//				$this->log->log('Json: ' . $content);
 			}
 			else {
-//				$this->log->log("No Hay editor");
 				$html =  utf8_decode(html_entity_decode($mailContent->content));
 			}
 
-//				$prepareMail = new PrepareMailContent($this->account);
-//				$content = $prepareMail->getContentMail($html);
 			$urlManager = $this->urlManager;
 			$imageService = new ImageService($account, $domain, $urlManager);
 			$linkService = new LinkService($account, $mail);
@@ -409,20 +395,23 @@ class ChildCommunication extends BaseWrapper
 					case 'Cancel':
 						$log->log('Estado: Me Cancelaron');
 
-                                                $phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = {$mail->idMail} AND status != 'sent'";
+                        $phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = {$mail->idMail} AND status != 'sent'";
 						if (!$modelsManager->executeQuery($phql)) {
+							throw new \Exception("Error while updating mxc status");
 							$log->log("Error updating MxC");
 						}
 
 						$mail->status = 'Cancelled';
 						$mail->totalContacts = $this->massagesSent;
 						$mail->finishedon = time();
+						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
 						break 2;
 					case 'Stop':
 						$log->log("Estado: Me Pausaron");
 						$mail->status = 'Paused';
 						$mail->totalContacts = $this->massagesSent;
+						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
 						break 2;
 					case 'Checking-Work':
@@ -449,16 +438,6 @@ class ChildCommunication extends BaseWrapper
 				$mail->totalContacts = $this->massagesSent;
 				$mail->status = 'Sent';
 				$mail->finishedon = time();
-			}
-			else {
-				if ($account->accountingMode == 'Envio') {
-					$t = $messagesLimit - $this->massagesSent;
-					$account->messageLimit = $t; 
-
-					if(!$account->save()) {
-						$log->log("No se pudo actualizar el limite de envios en la cuenta {$t}");
-					}
-				}
 			}
 			
 			$log->log('Se actualizara el estado del MAIL como ' . $mail->status);
@@ -524,14 +503,7 @@ class ChildCommunication extends BaseWrapper
 				$log->log("No se pudo actualizar el estado del MAIL: Cancelled");
 			}
 			
-			if ($account->accountingMode == 'Envio') {
-				$t = $messagesLimit - $this->massagesSent;
-				$account->messageLimit = $t; 
-
-				if(!$account->save()) {
-					$log->log("No se pudo actualizar el limite de envios en la cuenta {$t}");
-				}
-			}	
+			$this->updateMessageLimit($account, $messagesLimit);
 		}
 
                 $timer->startTimer('gc-collect', 'Reclaiming memory...');
@@ -593,5 +565,18 @@ class ChildCommunication extends BaseWrapper
 		}
 		
 		return $totalContacts;
+	}
+	
+	protected function updateMessageLimit(Account $account, $messagesLimit)
+	{
+		if ($account->accountingMode == 'Envio') {
+			$t = $messagesLimit - $this->massagesSent;
+			$account->messageLimit = $t; 
+
+			if(!$account->save()) {
+				$this->logger->log("No se pudo actualizar el limite de envios en la cuenta {$t}");
+				throw new Exception("Error while updating message limit in account: {$t}");
+			}
+		}
 	}
 }
