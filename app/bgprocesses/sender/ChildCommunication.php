@@ -362,7 +362,7 @@ class ChildCommunication extends BaseWrapper
 				$timer->endTimer('send-msg');
 				
 				if ($recipients) {
-//					echo "Message " . $i . " successfully sent! \n";
+//					echo "Message {$this->massagesSent} successfully sent! \n";
 //						$log->log("HTML: " . $html);
 //						$log->log("Headers: " . $this->lastsendheaders);
 //					$log->log("Message successfully sent! with idContact: " . $contact['contact']['idContact']);
