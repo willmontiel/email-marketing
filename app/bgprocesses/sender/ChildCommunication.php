@@ -8,9 +8,10 @@ class ChildCommunication extends BaseWrapper
         protected $db;
         protected $mta;
         protected $urlManager;
+		protected $massagesSent = 0;
 
 
-        public function __construct() 
+    public function __construct() 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 	
@@ -211,10 +212,8 @@ class ChildCommunication extends BaseWrapper
 			$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 			$swift = Swift_Mailer::newInstance($transport);
 
-			$i = 0;
-			
 			if ($contactsSent != 0) {
-				$i = $contactsSent;
+				$this->massagesSent = $contactsSent;
 			}
 			
 			$sentContacts = array();
@@ -394,11 +393,11 @@ class ChildCommunication extends BaseWrapper
                                                     $timer->endTimer('gc-collect');
                                                 } 
 					}
-					$i++;
+					$this->massagesSent++;
 //					$messagesSent++;
 				} 
 				else {
-					echo "There was an error in message {$i}: \n";
+					echo "There was an error in message {$this->massagesSent}: \n";
 					$log->log("Error while sending mail: " . print_r($failures, true));
 					print_r($failures);
 				}
@@ -414,19 +413,19 @@ class ChildCommunication extends BaseWrapper
 						}
 
 						$mail->status = 'Cancelled';
-						$mail->totalContacts = $i;
+						$mail->totalContacts = $this->massagesSent;
 						$mail->finishedon = time();
 						$disruptedProcess = TRUE;
 						break 2;
 					case 'Stop':
 						$log->log("Estado: Me Pausaron");
 						$mail->status = 'Paused';
-						$mail->totalContacts = $i;
+						$mail->totalContacts = $this->massagesSent;
 						$disruptedProcess = TRUE;
 						break 2;
 					case 'Checking-Work':
 						$log->log('Estado: Verificando');
-						$this->childprocess->responseToParent('Work-Checked' , $i);
+						$this->childprocess->responseToParent('Work-Checked' , $this->massagesSent);
 						break;
 				}
 				unset($message);
@@ -444,7 +443,7 @@ class ChildCommunication extends BaseWrapper
 
 			if(!$disruptedProcess) {
 				$log->log('Estado: Me enviaron');
-				$mail->totalContacts = $i;
+				$mail->totalContacts = $this->massagesSent;
 				$mail->status = 'Sent';
 				$mail->finishedon = time();
 			}
@@ -505,6 +504,7 @@ class ChildCommunication extends BaseWrapper
 		catch (Exception $e) {
 			$log->log('Exception: [' . $e . ']');
 			$mail->status = 'Cancelled';
+			$mail->totalContacts = $this->massagesSent;
 			$mail->finishedon = time();
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
