@@ -9,7 +9,7 @@ class ChildCommunication extends BaseWrapper
         protected $mta;
         protected $urlManager;
 		protected $logger;
-		protected $massagesSent = 0;
+		protected $messagesSent = 0;
 
 
     public function __construct() 
@@ -80,7 +80,7 @@ class ChildCommunication extends BaseWrapper
 			
 			if ($oldstatus == 'Paused') {
 				$this->logger->log("Estaba pausado {$mail->messagesSent}");
-				$this->massagesSent = $mail->messagesSent;
+				$this->messagesSent = $mail->messagesSent;
 				$this->logger->log("Total: {$this->messagesSent}");
 			}
 			
@@ -378,11 +378,11 @@ class ChildCommunication extends BaseWrapper
                                                     $timer->endTimer('gc-collect');
                                                 } 
 					}
-					$this->massagesSent++;
+					$this->messagesSent++;
 //					$messagesSent++;
 				} 
 				else {
-					echo "There was an error in message {$this->massagesSent}: \n";
+					echo "There was an error in message {$this->messagesSent}: \n";
 					$log->log("Error while sending mail: " . print_r($failures, true));
 					print_r($failures);
 				}
@@ -398,7 +398,7 @@ class ChildCommunication extends BaseWrapper
 						}
 
 						$mail->status = 'Cancelled';
-						$mail->messagesSent = $this->massagesSent;
+						$mail->messagesSent = $this->messagesSent;
 						$mail->finishedon = time();
 						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
@@ -406,14 +406,14 @@ class ChildCommunication extends BaseWrapper
 					case 'Stop':
 						$log->log("Estado: Me Pausaron");
 						$mail->status = 'Paused';
-						$mail->messagesSent = $this->massagesSent;
+						$mail->messagesSent = $this->messagesSent;
 						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
 						break 2;
 					case 'Checking-Work':
 						$log->log('Estado: Verificando');
-						$this->logger->log("Verificando: {$this->massagesSent}");
-						$this->childprocess->responseToParent('Work-Checked' , $this->massagesSent);
+						$this->logger->log("Verificando: {$this->messagesSent}");
+						$this->childprocess->responseToParent('Work-Checked' , $this->messagesSent);
 						break;
 				}
 				
@@ -433,7 +433,7 @@ class ChildCommunication extends BaseWrapper
 			if(!$disruptedProcess) {
 				$log->log('Estado: Me enviaron');
 				
-				$mail->messagesSent = $this->massagesSent;
+				$mail->messagesSent = $this->messagesSent;
 				$mail->status = 'Sent';
 				$mail->finishedon = time();
 			}
