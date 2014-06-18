@@ -11,6 +11,23 @@
 			iFrame.height = (iFrame.contentWindow.document.body.scrollHeight < 600) ? "600px" : ( iFrame.contentWindow.document.body.scrollHeight + 80 ) + "px";
 		};
 		
+		function verHTML() {
+			var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
+			$.ajax({
+				url: "{{url('footer/previeweditor')}}",
+				type: "POST",			
+				data: { editor: editor},
+				error: function(msg){
+					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
+				},
+				success: function() {
+					$( "#preview-modal-content" ).empty();
+					$('#preview-modal-content').append($('<iframe frameborder="0" id="footer-preview" width="100%" height="100%" src="{{url('footer/previewdata')}}"/>'));
+				}
+			});
+			document.getElementById('iframeEditor').contentWindow.RecreateEditor();
+		};		
+		
 		function sendData() {
 			var name = $("#name").val();
 			if (name.length === 0) {

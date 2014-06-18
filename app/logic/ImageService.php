@@ -41,6 +41,10 @@ class ImageService
 			$ids = explode("/", $imageSrc);
 			return $this->getCompletePublicImageSrc($ids[3], $ids[4]);
 		}
+		else if(preg_match('/footer/i', $imageSrc)) {
+			$ids = explode("/", $imageSrc);
+			return $this->getFooterImageSrc($ids[4], $ids[5]);
+		}
 	}
 	
 	private function getCompletePrivateImageSrc($idAsset)
@@ -83,5 +87,26 @@ class ImageService
 			return $img;
 		}
 		
+	}
+	
+	protected function getFooterImageSrc($idFooter, $idFooterImage)
+	{
+		$footer = Footer::findFirst(array(
+			'conditions' => 'idFooter = ?1',
+			'bind' => array(1 => $idFooter)
+		));
+		
+		$image = Footerimage::findFirst(array(
+			'conditions' => 'idFooterImage = ?1',
+			'bind' => array(1 => $idFooterImage)
+		));
+		
+		if ($footer && $image) {
+			$ext = pathinfo( $image->name, PATHINFO_EXTENSION);
+			
+			$img = $this->domain->imageUrl . '/' . $this->urlManager->getUrlFooter() . "/global/" . $image->idFooterImage . "." . $ext;
+			
+			return $img;
+		}
 	}
 }

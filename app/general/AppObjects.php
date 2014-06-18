@@ -68,6 +68,7 @@ class AppObjects
 			$this->setPrivateAssetsFolder();
 			$this->setPublicAssetsFolder();
 			$this->setTmpFolder();
+			$this->setPublicFootersFolder();
 			
 			$this->setFacebookAppConfig();
 			$this->setTwitterAppConfig();
@@ -371,6 +372,16 @@ class AppObjects
 		$tmpdir = new \stdClass;
 		$tmpdir->dir = $this->config->general->tmpdir;
 		$this->di->set('tmppath', $tmpdir);
+	}
+	
+	/**
+	 * Directorio de footers publicos
+	 */
+	private function setPublicFootersFolder()
+	{
+		$footersfolder = new \stdClass();
+		$footersfolder->dir = $this->config->general->footersfolder;
+		$this->di->set('footersfolder', $footersfolder);
 	}
 	
 	/**

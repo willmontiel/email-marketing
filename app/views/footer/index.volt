@@ -25,6 +25,7 @@
 				<tr>
 					<td>{{item.name}}</td>
 					<td class="text-right">
+						<a href="{{ url('footer/duplicate/') }}{{item.idFooter}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-tags"></i> Duplicar</a>
 						<a href="{{ url('footer/edit/') }}{{item.idFooter}}" class="btn btn-default btn-sm extra-padding"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
 						<a href="{{ url('footer/delete/') }}{{item.idFooter}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><i class="glyphicon glyphicon-trash"></i> Eliminar </a>
 					</td>

@@ -2,7 +2,7 @@
 
 class FooterController extends ControllerBase {
 	
-	public function indexAction($id)
+	public function indexAction()
 	{
 		$footers = Footer::find();
 		$this->view->setVar('footers', $footers);
@@ -78,7 +78,8 @@ class FooterController extends ControllerBase {
 			}
 			$content = $this->request->getPost("content");
 			try {
-				$obj->updateFooter($footer, $content, $name);
+				$obj->setFooter($footer);
+				$obj->updateFooter($content, $name);
 			} 
 			catch(Exception $e) {
 				$this->logger->log("Exception: {$e}");
@@ -98,18 +99,77 @@ class FooterController extends ControllerBase {
 	
 	public function deleteAction($idFooter)
 	{
+		$account = Account::findFirst(array(
+			"conditions" => "idFooter = ?1",
+			"bind" => array(1 => $idFooter)
+		));
+		
+		if(!$account) {
+			$footer = Footer::findFirst(array(
+				"conditions" => "idFooter = ?1",
+				"bind" => array(1 => $idFooter)
+			));
+
+			if( !$footer->delete() ) {
+				$this->flashSession->warning("Error al eliminar el Footer");
+			}
+			else {
+				$this->flashSession->warning("Se ha eliminado el Footer con éxito");
+			}
+		}
+		else {
+			$this->flashSession->error("No se pudo eliminar el Footer, ya que está asociado a una cuenta");
+		}
+		
+		return $this->response->redirect("footer");
+	}
+	
+	public function duplicateAction($idFooter)
+	{
 		$footer = Footer::findFirst(array(
 			"conditions" => "idFooter = ?1",
 			"bind" => array(1 => $idFooter)
 		));
 		
-		if( !$footer->delete() ) {
-			$this->flashSession->warning("Error al eliminar el Footer");
+		if($footer) {
+			try {
+				$obj = new FooterObj();
+				$newfooter = $obj->cloneContent($footer);
+				return $this->response->redirect("footer/edit/{$newfooter->idFooter}");
+			} 
+			catch(Exception $e) {
+				$this->logger->log("Exception: {$e}");
+				$this->flashSession->error("No se pudo duplicar el Footer");
+			}
+			catch(InvalidArgumentException $e) {
+				$this->logger->log("Exception: {$e}");
+				$this->flashSession->error("No se pudo duplicar el Footer");
+			}
+			return $this->response->redirect("footer");
 		}
-		else {
-			$this->flashSession->warning("Se ha eliminado el Footer con éxito");
+	}
+	
+	public function imageAction($idFooter, $idFooterImage)
+	{
+		$image = Footerimage::findFirst(array(
+			"conditions" => "idFooterImage = ?1 AND idFooter = ?2",
+			"bind" => array(1 => $idFooterImage,
+							2 => $idFooter)
+		));
+		
+		if (!$image) {
+			return $this->setJsonResponse(array('Error' => 'not found'), 404, 'No se encontro la imágen!!');
 		}
-		return $this->response->redirect("footer");
+		
+		$ext = pathinfo($image->name, PATHINFO_EXTENSION);
+		
+		$img = $this->footersfolder->dir . "global/" . $image->idFooterImage . "." .$ext;
+		
+		$info = getimagesize($img);
+		$this->response->setHeader("Content-Type:", $info['mime']);
+		$this->logger->log('Imagen ' . $img);
+		$this->view->disable();
+		return $this->response->setContent(file_get_contents($img));
 	}
 }
 
