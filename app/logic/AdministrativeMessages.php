@@ -22,7 +22,7 @@ class AdministrativeMessages
 	{
 		$msg = Adminmsg::findFirst(array(
 			'conditions' => 'type = ?1',
-			'bind' => array(1 => 'Recoverpass')
+			'bind' => array(1 => 'RecoverPass')
 		));
 
 		if ($msg) {
@@ -43,7 +43,7 @@ class AdministrativeMessages
 	{
 		$msg = Adminmsg::findFirst(array(
 			'conditions' => 'type = ?1',
-			'bind' => array(1 => 'LimiteExceeded')
+			'bind' => array(1 => 'LimitExceeded')
 		));
 
 		if ($msg) {
