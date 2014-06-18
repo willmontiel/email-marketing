@@ -13,7 +13,7 @@ class ChildCommunication extends BaseWrapper
 		protected $sent = 0;
 
 
-		public function __construct() 
+	public function __construct() 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 	
