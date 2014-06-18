@@ -47,8 +47,8 @@
 								contentBinding="App.remittentsName"
 								optionValuePath="content.id"
 								optionLabelPath="content.value"
-								valueBinding="remittentNames.value"
 								selectionBinding="remittentNames"
+								prompt="Seleccione nombre de remitente"
 								id="remittentNames"
 								class="form-control"}}'
 						 }}
@@ -60,8 +60,8 @@
 								contentBinding="App.remittentsEmail"
 								optionValuePath="content.id"
 								optionLabelPath="content.value"
-								valueBinding="fromEmail"
 								selectionBinding="remittentEmails"
+								prompt="Seleccione correo de remitente"	
 								id="remittentEmails"
 								class="form-control"}}'
 						 }}

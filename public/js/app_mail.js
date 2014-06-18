@@ -120,22 +120,13 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	//Si hay un id se encargara se recrear el correo para su edición
 	setSelectsContent: function () {
 		if (this.get('id') !== null) {
-			var remittentName = setTargetValue(this.get('this.fromName'), App.remittentsName);
-			var remittentEmail = setTargetValue(this.get('this.fromEmail'), App.remittentsEmail);
-			
 			var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
 			var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
 			var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
 			var fbaccounts = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
 			var twaccounts = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
 			
-			this.set('remittentNames', remittentName);
-			this.set('remittentEmails', remittentEmail);
 			this.set('isChangeRemittentAllowed', App.remittentAllowed);
-			
-			console.log('1');
-			console.log(this.get('remittentNames'));
-			console.log(this.get('remittentEmails'));
 			
 			this.set('dbaselist', arrayDbase);
 			this.set('list', arrayList);
@@ -160,6 +151,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
 				this.set('linksAnalytics', arrayAnalytics);
 			}
+			
+			var remittentName = setTargetValue(this.get('this.fromName'), App.remittentsName);
+			var remittentEmail = setTargetValue(this.get('this.fromEmail'), App.remittentsEmail);
+			
+			this.set('remittentNames', remittentName);
+			this.set('remittentEmails', remittentEmail);
 		}
 	}.observes('this.content'),
 	
@@ -454,9 +451,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var fromName1 = this.get('fromName1');
 		var fromEmail1 = this.get('fromEmail1');
 	
-		var fromName2 = (this.get('remittentNames') !== undefined ? this.get('remittentNames').value : '');
-		var fromEmail2 = (this.get('remittentEmails') !== undefined ? this.get('remittentEmails').value : '');
-	
+		var fromName2 = (this.get('remittentNames') !== undefined && this.get('remittentNames') !== null ? this.get('remittentNames').value : '');
+		var fromEmail2 = (this.get('remittentEmails') !== undefined && this.get('remittentEmails') !== null ? this.get('remittentEmails').value : '');
+		
 		if (fromName1 !== undefined && 
 				fromName1 !== '' && 
 				fromName1 !== null && 
@@ -507,7 +504,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		mail.set('fbaccounts', fbaccounts);
 		mail.set('twaccounts', twaccounts);
 		mail.set('fbimagepublication', App.fbimage);
-
+		
 		return mail;
 		
 	},
@@ -671,6 +668,20 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}
 });
 
+function addRemittent(object, value) {
+	var val = false;
+	for (var i = 0; i < object.length; i++) {
+		if (object[i].value === value) {
+			val = true;
+			break;
+		}
+	}
+
+	if (!val) {
+		object.push(Ember.Object.create({value: value, id: value}));
+	}
+}
+
 function getArrayValue(value) {
 	if( value !== null && value !== undefined ) {
 		var array = [];
@@ -712,10 +723,9 @@ function setTargetValue(value, select) {
 	var object;
 	for (var j = 0; j < select.length; j++) {
 		if (select[j].value === value) {
-			object = Ember.Object.create({value: select[j].value, id: select[j].id});
+			object = select[j];
 		}
 	}
-	console.log(object);
 	return object;
 }
 

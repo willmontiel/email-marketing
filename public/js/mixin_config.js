@@ -42,8 +42,8 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
 			
 			if (App.remittentsName !== undefined && App.remittentsEmail !== undefined) {
-				App.remittentsName.push(Ember.Object.create({value: self.get('fromName'), id: self.get('fromName')}));
-				App.remittentsEmail.push(Ember.Object.create({value: self.get('fromEmail'), id: self.get('fromEmail')}));
+				self.addRemittent(App.remittentsName, self.get('fromName'));
+				self.addRemittent(App.remittentsEmail, self.get('fromEmail'));
 			}
 			
 			if (typeof fn == 'function') {
@@ -67,6 +67,20 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 				self.set('errors.errormsg', error.statusText);
 			}
 		});
+	},
+	
+	addRemittent: function(object, value) {
+		var val = false;
+		for (var i = 0; i < object.length; i++) {
+			if (object[i].value === value) {
+				val = true;
+				break;
+			}
+		}
+
+		if (!val) {
+			object.push(Ember.Object.create({value: value, id: value}));
+		}
 	},
 
 	/*
