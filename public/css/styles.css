@@ -1373,4 +1373,9 @@ table {
 }*/
 .footer-by-default-not-editable {
 	background-color: white;
+	cursor: not-allowed;
+}
+
+.footer-by-default-not-editable a {
+	cursor: not-allowed;
 }

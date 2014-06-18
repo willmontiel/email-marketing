@@ -106,7 +106,7 @@ class FooterObj
 			$editor->assignContent($row);
 			$htmleditor.= '<tr>' . $editor->render() . '</tr>';
 		}
-		$html = '<table>' . $htmleditor . '</table>';
+		$html = '<center><table style="width: 600px;" width="600px" cellspacing="0" cellpadding="0" >' . $htmleditor . '</table></center>';
 		return $html;
 	}
 

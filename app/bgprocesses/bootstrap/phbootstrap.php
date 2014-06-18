@@ -123,6 +123,14 @@ $asset->url = '/' . $di->get('urlManager')->getAppUrlAsset() . '/';
 $di->set('asset', $asset);
 
 /*
+ * Directorio de footers
+ */
+
+$footersfolder = new \stdClass;
+$footersfolder->dir = '../../' .$config->general->footersfolder;
+$di->set('footersfolder', $footersfolder);
+
+/*
  * Configuración MTA
  */
 $mtaConfig = new stdClass();

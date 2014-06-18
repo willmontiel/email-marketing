@@ -162,6 +162,7 @@ DropzoneArea.prototype.createFooter = function(first) {
 	}
 	else if(footereditable == 0) {
 		$(this.parent).append('<div class="full-width footer-by-default-not-editable">' + footerhtml + '</div>');
+		$('.footer-by-default-not-editable').click(function (e) { e.preventDefault();});
 	}
 //	else {
 //		var row = new rowZone(this);
