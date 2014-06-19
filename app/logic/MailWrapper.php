@@ -140,10 +140,11 @@ class MailWrapper extends BaseWrapper
 		$this->mail->deleted = 0;
 		$this->mail->name = $this->content->name;
 		$this->mail->subject = $this->content->subject;
-		$this->mail->fromName = $this->content->fromName;
-		$this->mail->fromEmail = $this->content->fromEmail;
 		
-		$this->saveRemittent();
+		$sender = $this->getSender();
+		$this->saveSender($sender);
+		$this->mail->fromName = $sender->name;
+		$this->mail->fromEmail = $sender->email;
 		
 		$this->mail->replyTo = $this->content->replyTo;
 		$this->mail->target = $this->target->target;
@@ -200,29 +201,53 @@ class MailWrapper extends BaseWrapper
 		return true;
 	}
 	
-	private function saveRemittent()
+	private function getSender()
 	{
-		if (!empty($this->content->fromName1) && !empty($this->content->fromEmail1)) {
-			if (!\filter_var($this->content->fromEmail1, FILTER_VALIDATE_EMAIL)) {
-				$this->addMessageError('errors', 'La dirección de correo de remitente que ha enviado es inválida, por favor verifique la información', 422);
-				throw new \InvalidArgumentException("Invalid email");
-			}
-			
-			$domain = explode('@', $this->content->fromEmail1);
-			
-			if (!$this->isAValidDomain($domain[1])) {
-				$this->addMessageError('errors', 'La dirección de correo de remitente que ha enviado es inválida, recuerde que no debe usar dominios de correo públicas como hotmail o gmail', 422);
-				throw new \InvalidArgumentException("Invalid domain");
-			}
+		$parts = explode('/', $this->content->sender);
+		$email = trim(strtolower($parts[0]));
+		$domain = explode('@', $email);
+		$name = $parts[1];
+		
+		if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente inválida, por favor verifique la información', 422);
+			throw new InvalidArgumentException("Invalid sender email");
+		}
+		
+		if (!$this->isAValidDomain($domain[1])) {
+			$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente invalidos, recuerde que no debe usar dominios de correo públicas como hotmail o gmail', 422);
+			throw new InvalidArgumentException("Invalid sender domain");
+		}
+		
+		if (empty($name)) {
+			$this->addMessageError('errors', 'No ha enviado un nombre de remitente válido, por favor verifique la información', 422);
+			throw new InvalidArgumentException("Invalid sender name");
+		}
+		
+		$sender = new stdClass();
+		$sender->name = $name;
+		$sender->email = $email;
+		
+		return $sender;
+	}
+	
+	private function saveSender($sender)
+	{
+		$findSender = Sender::findFirst(array(
+			'conditions' => 'idAccount = ?1 AND email = ?2',
+			'bind' => array(1 => $this->account->idAccount,
+							2 => $sender->email)
+		));
+		
+		
+		if (!$findSender) {
+			$newsender = new Sender();
+			$newsender->idAccount = $this->account->idAccount;
+			$newsender->email = $sender->email;
+			$newsender->name = $sender->name;
+			$newsender->createdon = time();
 
-			$remittentmodel = new Remittent();
-			$remittentmodel->idAccount = $this->account->idAccount;
-			$remittentmodel->email = $this->content->fromEmail1;
-			$remittentmodel->name = $this->content->fromName1;
-			$remittentmodel->createdon = time();
-
-			if (!$remittentmodel->save()) {
-				foreach ($remittentmodel->getMessages() as $msg) {
+			if (!$newsender->save()) {
+				foreach ($newsender->getMessages() as $msg) {
 					$this->flashSession->error($msg);
 				}
 				throw new Exception("Error while saving account remittent");
@@ -277,8 +302,7 @@ class MailWrapper extends BaseWrapper
 		$jsonObject['id'] = $this->mail->idMail;      
 		$jsonObject['name'] = $this->mail->name;
 		$jsonObject['subject'] = $this->mail->subject;
-		$jsonObject['fromName'] = $this->mail->fromName;
-		$jsonObject['fromEmail'] = $this->mail->fromEmail;
+		$jsonObject['sender'] = "{$this->mail->fromEmail}/{$this->mail->fromName}";
 		$jsonObject['replyTo'] = $this->mail->replyTo;
 		$jsonObject['type'] = $this->mail->type;
 		$jsonObject['dbases'] = '';

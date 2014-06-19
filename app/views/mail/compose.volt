@@ -96,20 +96,11 @@
 			}];
 		{% endif %}
 		
-		
-		App.remittentAllowed = {{account.remittentAllowed}};
-		
 		//Relacion de direcciones de remitente y nombres de remitentes configurados previamente en la creación de la cuenta
-		{% if remittents is defined %}
-			App.remittentsName = [
-				{% for remittent in remittents %}
-					Ember.Object.create({value: "{{remittent.name|escape_js}}", id: "{{remittent.name|escape_js}}"}),
-				{% endfor %}
-			];
-			
-			App.remittentsEmail = [
-				{% for remittent in remittents %}
-					Ember.Object.create({value: "{{remittent.email|escape_js}}", id: "{{remittent.email|escape_js}}"}),
+		{% if senders is defined %}
+			App.senders = [
+				{% for sender in senders %}
+					Ember.Object.create({id: "{{sender.email|escape_js}}/{{sender.name|escape_js}}", value: "{{sender.name|escape_js}}  <{{sender.email|escape_js}}>"}),
 				{% endfor %}
 			];
 		{% endif %}

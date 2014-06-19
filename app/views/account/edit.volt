@@ -67,14 +67,14 @@
 				<div class="form-group">
 					<label for="remittent" class="col-sm-4 control-label">*Remitente(s):</label>
 					<div class="col-md-6">
-						{{ editFormAccount.render('remittent', {'class': 'form-control', 'data-role' : 'tagsinput'}) }}
+						{{ editFormAccount.render('sender', {'class': 'form-control', 'data-role' : 'tagsinput'}) }}
 					</div>
 				</div>
 					
 				<div class="form-group">
 					<label for="remittentAllowed" class="col-sm-4 control-label">¿Permitir al usuario agregar más remitentes?:</label>
 					<div class="col-md-6">
-						{{ editFormAccount.render('remittentAllowed', {'class': 'form-control'}) }}
+						{{ editFormAccount.render('senderAllowed', {'class': 'form-control'}) }}
 					</div>
 				</div>
 					

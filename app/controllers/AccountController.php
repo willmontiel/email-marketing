@@ -59,8 +59,7 @@ class AccountController extends ControllerBase
 			
 			$p = $form->getValue('prefix');
 			$c = $form->getValue('companyName');
-			$r = $form->getValue('remittent');
-			$r = strtolower($r);
+			$r = $form->getValue('sender');
 			
 			if (empty($r)) {
 				$this->flashSession->error('No ha enviado un remitente válido, por favor verfique la información');
@@ -78,7 +77,7 @@ class AccountController extends ControllerBase
 
 					try {
 						foreach ($remittents as $remittent) {
-							$this->saveRemittent($account, $remittent);
+							$this->saveSender($account, $remittent);
 						}
 						$this->saveUser($account, $form, $prefix);
 						$this->saveDbase($account);
@@ -106,12 +105,15 @@ class AccountController extends ControllerBase
 		$this->view->newFormAccount = $form;
 	} 
    
-	protected function saveRemittent(Account $account, $remittent)
+	protected function saveSender(Account $account, $remittent)
 	{
 		$parts = explode('/', $remittent);
-		$domain = explode('@', $parts[0]);
+		$email = trim(strtolower($parts[0]));
+		$domain = explode('@', $email);
+		$name = $parts[1];
 		
-		if (!\filter_var($parts[0], FILTER_VALIDATE_EMAIL)) {
+		
+		if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$this->flashSession->error("Hay direcciones de correo para remitente que no son válidas, por favor verifique la información");
 			throw new InvalidArgumentException("Invalid email");
 		}
@@ -121,19 +123,19 @@ class AccountController extends ControllerBase
 			throw new InvalidArgumentException("Invalid domain");
 		}
 		
-		if (empty($parts[1])) {
+		if (empty($name)) {
 			$this->flashSession->error("No ha enviado un nombre de remitente válido, por favor verifique la información");
 			throw new InvalidArgumentException("Invalid remittent name");
 		}
 		
-		$remittentmodel = new Remittent();
-		$remittentmodel->idAccount = $account->idAccount;
-		$remittentmodel->email = $parts[0];
-		$remittentmodel->name = $parts[1];
-		$remittentmodel->createdon = time();
+		$sender = new Sender();
+		$sender->idAccount = $account->idAccount;
+		$sender->email = $email;
+		$sender->name = $name;
+		$sender->createdon = time();
 
-		if (!$remittentmodel->save()) {
-			foreach ($remittentmodel->getMessages() as $msg) {
+		if (!$sender->save()) {
+			foreach ($sender->getMessages() as $msg) {
 				$this->flashSession->error($msg);
 			}
 			throw new Exception("Error while saving account remittent");
@@ -249,7 +251,7 @@ class AccountController extends ControllerBase
 		));
 		
 		if ($account) {
-			$allRemittents = Remittent::find(array(
+			$allRemittents = Sender::find(array(
 				'conditions' => 'idAccount = ?1',
 				'bind' => array(1 => $account->idAccount)
 			));
@@ -262,7 +264,7 @@ class AccountController extends ControllerBase
 				}
 			}
 			
-			$account->remittent = $completeRemittents;
+			$account->sender = $completeRemittents;
             $this->view->setVar("account", $account);
 			$editform = new AccountForm($account);
 
@@ -271,8 +273,7 @@ class AccountController extends ControllerBase
 
 				$n = $editform->getValue('companyName');
 				$p = $editform->getValue('prefix');
-				$r = $editform->getValue('remittent');
-				$r = strtolower($r);
+				$r = $editform->getValue('sender');
 				
 				if (empty($r)) {
 					$this->flashSession->error('No ha enviado un remitente válido o el campo esta vacío, por favor verfique la información');
@@ -291,7 +292,7 @@ class AccountController extends ControllerBase
 					else {
 						try {
 							foreach ($remittents as $remittent) {
-								$this->saveRemittent($account, $remittent);
+								$this->saveSender($account, $remittent);
 							}
 							
 							foreach ($allRemittents as $r) {

@@ -64,14 +64,14 @@
 						<div class="form-group">
 							<label for="remittent" class="col-sm-5 control-label">*Remitente(s):</label>
 							<div class="col-md-6">
-								{{ newFormAccount.render('remittent', {'class': 'form-control', 'data-role' : 'tagsinput', 'placeholder' : 'Escriba y luego presione enter...'}) }}
+								{{ newFormAccount.render('sender', {'class': 'form-control', 'data-role' : 'tagsinput', 'placeholder' : 'Escriba y luego presione enter...'}) }}
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label for="remittentAllowed" class="col-sm-5 control-label">¿Permitir al usuario agregar más remitentes?:</label>
 							<div class="col-md-6">
-								{{ newFormAccount.render('remittentAllowed', {'class': 'form-control'}) }}
+								{{ newFormAccount.render('senderAllowed', {'class': 'form-control'}) }}
 							</div>
 						</div>
 						

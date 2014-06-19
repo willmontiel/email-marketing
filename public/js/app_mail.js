@@ -15,10 +15,7 @@ App.Mail = DS.Model.extend({
 	type: DS.attr('string'),
 	scheduleDate: DS.attr('string'),
 	name: DS.attr('string'),
-	fromName: DS.attr( 'string' ),
-	fromEmail: DS.attr('string'),
-	fromName1: DS.attr( 'string' ),
-	fromEmail1: DS.attr('string'),
+	sender: DS.attr('string'),
 	replyTo: DS.attr('string'),
 	subject: DS.attr('string'),
 	dbases: DS.attr('string'),
@@ -71,8 +68,9 @@ Ember.Handlebars.helper("external-link", App.ExternalLinkComponent);
 
 
 App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
-	remittentNames: [],
-	remittentEmails: [],
+	senderName: '',
+	senderEmail: '',
+	senderAttr: [],
 	dbaselist: [],
 	list: [],
 	segmentlist: [],
@@ -126,8 +124,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			var fbaccounts = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
 			var twaccounts = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
 			
-			this.set('isChangeRemittentAllowed', App.remittentAllowed);
-			
 			this.set('dbaselist', arrayDbase);
 			this.set('list', arrayList);
 			this.set('segmentlist', arraySegment);
@@ -152,11 +148,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				this.set('linksAnalytics', arrayAnalytics);
 			}
 			
-			var remittentName = setTargetValue(this.get('this.fromName'), App.remittentsName);
-			var remittentEmail = setTargetValue(this.get('this.fromEmail'), App.remittentsEmail);
+			var sender = setTargetValue(this.get('this.sender'), App.senders);
 			
-			this.set('remittentNames', remittentName);
-			this.set('remittentEmails', remittentEmail);
+			this.set('senderAttr', sender);
 		}
 	}.observes('this.content'),
 	
@@ -182,23 +176,23 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	
 	//Observa el contenido del header (fromName, fromEmail, etc)
 	headerEmpty: function () {
-		var n, e, s;
-		n = this.get('content.fromName');
-		e = this.get('content.fromEmail');
+		var sn, s;
+		sn = this.get('content.sender');
 		s = this.get('content.subject');
 		
-		n = (n === '')?null:n;
-		e = (e === '')?null:e;
+		sn = (sn === '')?null:sn;
 		s = (s === '')?null:s;
 		
-		if (!e ||  !n || !s) {
+		if (!sn || !s) {
 			this.set('fromSummary', 'Sin definir <email@domain.com>');
 			return true;
 		}
-		this.set('fromSummary', n + '<' + e + '>');
+		
+		var sender = sn.split("/");
+		this.set('fromSummary', sender[1] + '<' + sender[0] + '>');
 		
 		return false;
-	}.property('content.fromName', 'content.fromEmail', 'content.subject'),
+	}.property('content.sender', 'content.subject'),
 		
 	//Observa que se hayan seleccionado destinatarios
 	targetEmpty: function () {
@@ -445,27 +439,19 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		//else if (!filter.test(mail.get('email'))) {
 			//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
 		//}
-		var remittentName;
-		var remittentEmail;
 		
-		var fromName1 = this.get('fromName1');
-		var fromEmail1 = this.get('fromEmail1');
+		var senderName = this.get('senderName');
+		var senderEmail = this.get('senderEmail');
 	
-		var fromName2 = (this.get('remittentNames') !== undefined && this.get('remittentNames') !== null ? this.get('remittentNames').value : '');
-		var fromEmail2 = (this.get('remittentEmails') !== undefined && this.get('remittentEmails') !== null ? this.get('remittentEmails').value : '');
+		var sender = (this.get('senderAttr') !== undefined && this.get('senderAttr') !== null && this.get('senderAttr') !== '' ? this.get('senderAttr').id : '');
 		
-		if (fromName1 !== undefined && 
-				fromName1 !== '' && 
-				fromName1 !== null && 
-				fromEmail1 !== undefined && 
-				fromEmail1 !== '' &&
-				fromEmail1 !== null) {
-			remittentName = fromName1;
-			remittentEmail = fromEmail1;
-		}
-		else {
-			remittentName = fromName2;
-			remittentEmail = fromEmail2;
+		if (senderName !== undefined && 
+				senderName !== '' && 
+				senderName !== null && 
+				senderEmail !== undefined && 
+				senderEmail !== '' &&
+				senderEmail !== null) {
+			sender = senderEmail + '/' + senderName;
 		}
 		
 		var dbases = getArrayValue(this.get('dbaselist'));
@@ -491,9 +477,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			mail.set('scheduleDate', value);
 		}
 		
-		mail.set('fromName', remittentName);
-		mail.set('fromEmail', remittentEmail);
-		
+		mail.set('sender', sender);
 		mail.set('dbases', dbases);
 		mail.set('contactlists', contactlists);
 		mail.set('segments', segments);
@@ -537,9 +521,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			}
 		},
 				
-		cancelNewRemittent: function () {
-			this.set('fromName1', '');
-			this.set('fromEmail1', '');
+		cancelNewSender: function () {
+			this.set('senderName', '');
+			this.set('senderEmail', '');
 		},
 				
 		expandHeader: function () {
@@ -668,20 +652,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}
 });
 
-function addRemittent(object, value) {
-	var val = false;
-	for (var i = 0; i < object.length; i++) {
-		if (object[i].value === value) {
-			val = true;
-			break;
-		}
-	}
-
-	if (!val) {
-		object.push(Ember.Object.create({value: value, id: value}));
-	}
-}
-
 function getArrayValue(value) {
 	if( value !== null && value !== undefined ) {
 		var array = [];
@@ -722,10 +692,11 @@ function setTargetValues(values, select) {
 function setTargetValue(value, select) {
 	var object;
 	for (var j = 0; j < select.length; j++) {
-		if (select[j].value === value) {
+		if (select[j].id === value) {
 			object = select[j];
 		}
 	}
+	
 	return object;
 }
 

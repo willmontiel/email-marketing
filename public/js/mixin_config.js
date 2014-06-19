@@ -41,10 +41,17 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 			self.transitionToRoute(troute);
 			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
 			
-			if (App.remittentsName !== undefined && App.remittentsEmail !== undefined) {
-				self.addRemittent(App.remittentsName, self.get('fromName'));
-				self.addRemittent(App.remittentsEmail, self.get('fromEmail'));
+			if (App.senders !== undefined) {
+				var sender = self.get('sender');
+				
+				self.addSender(App.senders, sender);
+				var s = self.setTargetValue(App.senders, sender);
+				
+				self.set('senderAttr', s);
 			}
+			
+			self.set('senderName', '');
+			self.set('senderEmail', '');
 			
 			if (typeof fn == 'function') {
 				fn();
@@ -69,17 +76,29 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 		});
 	},
 	
-	addRemittent: function(object, value) {
+	setTargetValue: function(select, value) {
+		var object;
+		for (var j = 0; j < select.length; j++) {
+			if (select[j].id === value) {
+				object = select[j];
+			}
+		}
+		return object;
+	},
+	
+	
+	addSender: function(object, value) {
 		var val = false;
 		for (var i = 0; i < object.length; i++) {
-			if (object[i].value === value) {
+			if (object[i].id === value) {
 				val = true;
 				break;
 			}
 		}
 
 		if (!val) {
-			object.push(Ember.Object.create({value: value, id: value}));
+			var sender =  value.split("/");
+			object.push(Ember.Object.create({id: value, value: sender[1] + ' <' + sender[0] + '>'}));
 		}
 	},
 

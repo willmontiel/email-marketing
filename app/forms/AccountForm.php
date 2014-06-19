@@ -71,12 +71,12 @@ class AccountForm extends Form
 			'required' => 'required' 
         )));
 		
-		$this->add(new Text ('remittent', array(
+		$this->add(new Text ('sender', array(
 			'maxlength' => 100,
 			'type' => 'text',
         )));
 		
-		$this->add(new Select ('remittentAllowed', array(
+		$this->add(new Select ('senderAllowed', array(
             '0' => 'No',
 			'1' => 'Si',
         )));

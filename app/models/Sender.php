@@ -1,7 +1,7 @@
 <?php
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 
-class Remittent extends \Phalcon\Mvc\Model
+class Sender extends \Phalcon\Mvc\Model
 {
 	public $idAccount;
 	
@@ -12,8 +12,16 @@ class Remittent extends \Phalcon\Mvc\Model
 		);
 	}
 	
-	 public function validation()
+	
+	public function validation()
     {
+		$this->validate(new PresenceOf(
+            array(
+                "field"   => "name",
+				"message" => "Deber ingresar el nombre del remitente"
+            )
+        ));
+		
 		$this->validate(new PresenceOf(
             array(
                 "field"   => "email",
