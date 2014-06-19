@@ -1,6 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ stylesheet_link('bootstrap-tagsinput/bootstrap-tagsinput.css')}}
+	{{ javascript_include('bootstrap-tagsinput/bootstrap-tagsinput.js')}}
 	<script type="text/javascript">
 		function footerpreview() {
 			$.post("{{url('footer/preview')}}/" + $('#idFooter').val(), function(preview){

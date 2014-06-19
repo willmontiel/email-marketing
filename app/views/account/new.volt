@@ -1,6 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ stylesheet_link('bootstrap-tagsinput/bootstrap-tagsinput.css')}}
+	{{ javascript_include('bootstrap-tagsinput/bootstrap-tagsinput.js')}}
 	<script type="text/javascript">
 		function footerpreview() {
 			$.post("{{url('footer/preview')}}/" + $('#idFooter').val(), function(preview){
@@ -67,14 +69,14 @@
 						</div>
 						
 						<div class="form-group">
-							<label for="remittent" class="col-sm-5 control-label">*Remitente(s):</label>
+							<label for="sender" class="col-sm-5 control-label">*Remitente(s):</label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('sender', {'class': 'form-control', 'data-role' : 'tagsinput', 'placeholder' : 'Escriba y luego presione enter...'}) }}
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label for="remittentAllowed" class="col-sm-5 control-label">¿Permitir al usuario agregar más remitentes?:</label>
+							<label for="senderAllowed" class="col-sm-5 control-label">¿Permitir al usuario agregar más remitentes?:</label>
 							<div class="col-md-6">
 								{{ newFormAccount.render('senderAllowed', {'class': 'form-control'}) }}
 							</div>
