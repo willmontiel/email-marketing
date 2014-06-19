@@ -90,6 +90,7 @@ class NotificationMail extends TestMail
 	protected function setBody($contentobj)
 	{
 		$editorObj = new HtmlObj();
+		$editorObj->setAccount($this->account);
 		$editorObj->assignContent(json_decode($contentobj));
 		$this->body = utf8_decode($editorObj->replacespecialchars($editorObj->render()));
 	}

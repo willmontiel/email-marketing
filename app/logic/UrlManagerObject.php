@@ -10,6 +10,7 @@ class UrlManagerObject
 	protected $api_v1_2;
 	protected $assets;
 	protected $templates;
+	protected $footers;
 	protected $protocol_mail;
 	protected $host_mail;
 	protected $host_assets;
@@ -31,6 +32,7 @@ class UrlManagerObject
 			$this->api_v1_2 = $config->urlmanager->api_v1_2;
 			$this->assets = $config->urlmanager->assets;
 			$this->templates = $config->urlmanager->templates;
+			$this->footers = $config->urlmanager->footers;
 			$this->protocol_mail = $config->urlmanager->protocol_mail;
 			$this->host_mail = $config->urlmanager->host_mail;
 			$this->host_assets = $config->urlmanager->host_assets;;
@@ -44,6 +46,7 @@ class UrlManagerObject
 			$this->api_v1_2 = "apistatistics";
 			$this->assets = "asset";
 			$this->templates = "template";
+			$this->footers = "footer";
 			$this->protocol_mail = "http";
 			$this->host_mail = "nmailer.sigmamovil.com";
 			$this->host_assets = "files.sigmamovil.com";
@@ -94,6 +97,11 @@ class UrlManagerObject
 	public function getUrlTemplate()
 	{
 		return $this->templates;
+	}
+	
+	public function getUrlFooter()
+	{
+		return $this->footers;
 	}
 	
 	/**

@@ -59,6 +59,14 @@
 				<a href="{{ url('socialmedia') }}" class="btn-actn">Cuentas de redes sociales</a>
 			</div>
 		</div>
+		<div class="col-xs-6 col-md-3">
+			<div class="to-do sm-btn-blue">
+				<a href="{{ url('footer') }}"  class="shortcuts"><span class="sm-button-large-socialnet"></span></a>
+			</div>
+			<div class="w-190 center">
+				<a href="{{ url('footer') }}" class="btn-actn">Footers</a>
+			</div>
+		</div>
 	</div>
 	<div class="space"></div>
 </div>

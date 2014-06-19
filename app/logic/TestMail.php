@@ -59,11 +59,14 @@ class TestMail
 	{
 		if ($this->mail->type == 'Editor') {
 			$editorObj = new HtmlObj();
+			$editorObj->setAccount($this->account);
 			$editorObj->assignContent(json_decode($this->mailContent->content));
 			$content =  $editorObj->replacespecialchars($editorObj->render());
 		}
 		else {
-			$content = html_entity_decode($this->mailContent->content);
+			$footerObj = new FooterObj();
+			$footerObj->setAccount($this->account);
+			$content = $footerObj->addFooterInHtml(html_entity_decode($this->mailContent->content));
 		}
 		
 		if (!empty($this->message)) {

@@ -2,6 +2,11 @@ table {
 	width: 100%;
 }
 
+.editor-bg-color {
+	background-color: transparent;
+	padding-top: 45px;
+}
+
 .module-cont {
 	border: solid 1px black;
 	min-height: 490px;
@@ -1366,3 +1371,11 @@ table {
 .input-field-social-follow.input-url-social-follow + .save-link-social-follow {
 	display: block;
 }*/
+.footer-by-default-not-editable {
+	background-color: white;
+	cursor: not-allowed;
+}
+
+.footer-by-default-not-editable a {
+	cursor: not-allowed;
+}

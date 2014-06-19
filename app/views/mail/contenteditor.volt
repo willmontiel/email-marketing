@@ -177,7 +177,7 @@
 	<br />
 	<div class="row">
 		<div class="col-md-12">
-			<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" onload="iframeResize()" seamless></iframe>
+			<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" frameborder="0" onload="iframeResize()" seamless></iframe>
 		</div>
 	</div>
 	<div id="preview-modal" class="modal fade">

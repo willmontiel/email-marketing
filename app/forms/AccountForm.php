@@ -112,5 +112,17 @@ class AccountForm extends Form
 			'using' => array('idMailClass', 'name'),
 			'class' => 'chzn-select'
 		)));
+		
+		$this->add(new Select('idFooter', Footer::find(), array(
+			'using' => array('idFooter', 'name'),
+			'class' => 'chzn-select'
+		)));
+		
+		$this->add(new Select("footerEditable", array(
+			1 => 'Si',
+			0 => 'No'
+			), array(
+			'class' => 'form-control'
+        )));
     }
 }

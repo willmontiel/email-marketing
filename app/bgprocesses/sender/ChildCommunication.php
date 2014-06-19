@@ -118,6 +118,7 @@ class ChildCommunication extends BaseWrapper
 
 			if ($mail->type == 'Editor') {
 				$htmlObj = new HtmlObj();
+				$htmlObj->setAccount($account);
 //				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
 				$htmlObj->assignContent(json_decode($mailContent->content));
 				$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
@@ -125,7 +126,9 @@ class ChildCommunication extends BaseWrapper
 			}
 			else {
 //				$this->log->log("No Hay editor");
-				$html =  utf8_decode(html_entity_decode($mailContent->content));
+				$footerObj = new FooterObj();
+				$footerObj->setAccount($account);
+				$html = utf8_decode($footerObj->addFooterInHtml(html_entity_decode($mailContent->content)));
 			}
 
 //				$prepareMail = new PrepareMailContent($this->account);
