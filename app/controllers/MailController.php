@@ -1256,11 +1256,14 @@ class MailController extends ControllerBase
 		if ($mail && $content) {
 			switch ($mail->type) {
 				case 'Html':
-					$html = html_entity_decode($content->content); 
+					$footerObj = new FooterObj();
+					$footerObj->setAccount($this->user->account);
+					$html = $footerObj->addFooterInHtml(html_entity_decode($content->content)); 
 					break;
 
 				case 'Editor':
 					$editor = new HtmlObj();
+					$editor->setAccount($this->user->account);
 					$editor->assignContent(json_decode($content->content));
 					$html = $editor->render();
 					break;
@@ -1653,11 +1656,14 @@ class MailController extends ControllerBase
 				switch ($mail->type) {
 					case 'Editor':
 						$editorObj = new HtmlObj();
+						$editorObj->setAccount($this->user->account);
 						$editorObj->assignContent(json_decode($content->content));
 						$response = $editorObj->render();
 						break;
 					case 'Html':
-						$response = html_entity_decode($content->content);
+						$footerObj = new FooterObj();
+						$footerObj->setAccount($this->account);
+						$response = $footerObj->addFooterInHtml(html_entity_decode($content->content));
 						break;			
 				}
 				return $this->setJsonResponse(array('preview' => $response));
@@ -2406,11 +2412,14 @@ class MailController extends ControllerBase
 			if ($mailcontent) {
 				switch ($mail->type) {
 					case 'Html':
-						$html = html_entity_decode($mailcontent->content); 
+						$footerObj = new FooterObj();
+						$footerObj->setAccount($this->user->account);
+						$html = $footerObj->addFooterInHtml(html_entity_decode($mailcontent->content)); 
 						break;
 
 					case 'Editor':
 						$editor = new HtmlObj();
+						$editor->setAccount($this->user->account);
 						$editor->assignContent(json_decode($mailcontent->content));
 						$html = $editor->render();
 						break;

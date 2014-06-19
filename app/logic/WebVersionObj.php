@@ -24,11 +24,14 @@ class WebVersionObj extends BaseWrapper
 		}
 		else if ($mail->type == 'Editor') {
 			$htmlObj = new HtmlObj();
+			$htmlObj->setAccount($this->account);
 			$htmlObj->assignContent(json_decode($mailContent->content));
 			$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
 		}
 		else {
-			$html =  html_entity_decode($mailContent->content);
+			$footerObj = new FooterObj();
+			$footerObj->setAccount($this->account);
+			$html =  $footerObj->addFooterInHtml(html_entity_decode($mailContent->content));
 		}
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $mail, $this->urlManager);
