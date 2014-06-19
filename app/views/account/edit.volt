@@ -1,4 +1,16 @@
 {% extends "templates/index_b3.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	<script type="text/javascript">
+		function footerpreview() {
+			$.post("{{url('footer/preview')}}/" + $('#idFooter').val(), function(preview){
+				var e = preview.preview;
+				$( "#preview-modal-content" ).empty();
+				$('#preview-modal-content').append(e);
+			});
+		}
+	</script>
+{% endblock %}
 {% block content %}
 	<div class="row">
 		<div class="col-sm-12">
@@ -83,6 +95,21 @@
 						{{ editFormAccount.render('idMailClass', {'class': 'form-control'})}}
 					</div>
 				</div>
+				<div class="form-group">
+					<label class="col-sm-4 control-label">*Seleccionar footer: </label>
+					<div class="col-md-5">
+						{{ editFormAccount.render('idFooter', {'class': 'form-control'}) }}
+					</div>
+					<div class="col-md-1">
+						<a href="#preview-footer-modal" data-toggle="modal" class="btn btn-default pull-right" onclick="footerpreview();"><span class="glyphicon glyphicon-search"></span></a>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-4 control-label">*Footer Editable: </label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('footerEditable') }}
+					</div>
+				</div>
 				<div class="form-group wrapper">
 					<div class="col-md-4 col-md-offset-4">
 						<a href="{{ url('account') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
@@ -90,5 +117,19 @@
 					</div>
 				</div>
 			</form>
+		</div>
+		<div id="preview-footer-modal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Footer</h4>
+					</div>
+					<div class="modal-body" id="preview-modal-content"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
 		</div>
 {% endblock %}

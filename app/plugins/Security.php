@@ -380,6 +380,17 @@ class Security extends Plugin
 				//Formularios
 				'form::preview' => array('form' => array('read')),
 				
+				//Footer
+				'footer::preview' => array('footer' => array('read')),
+				'footer::new' => array('footer' => array('create')),
+				'footer::previeweditor' => array('footer' => array('read')),
+				'footer::previewdata' => array('footer' => array('read')),
+				'footer::index' => array('footer' => array('read')),
+				'footer::edit' => array('footer' => array('update')),
+				'footer::delete' => array('footer' => array('delete')),
+				'footer::duplicate' => array('footer' => array('create')),
+				'footer::image' => array('footer' => array('read')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

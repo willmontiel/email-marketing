@@ -20,7 +20,7 @@ Editor.prototype.otherLayout = function() {
 		}
 		else {
 			t.serializeDZ();
-			t.changeLayout();
+			t.changeLayout(true);
 			NoMediaDisplayer();
 		}
 		parent.iframeResize();
@@ -36,11 +36,21 @@ Editor.prototype.otherLayout = function() {
 };
 
 Editor.prototype.objectExists = function(objMail) {
-	if(objMail != null) {
+	
+	if(objMail === 'Footer') {
+		this.layout = footerLay;
+		$('#edit-area').css('min-height', 0);
+		$('#edit-area').css('background-color', '#E6E6E6');
+		this.newDropZones();
+	}
+	else if(objMail != null) {
 		this.layout = objMail.layout;
 		this.dz = objMail.dz;
 		this.editorColor = objMail.editorColor;
-		this.changeLayout();
+		this.changeLayout((objMail.layout.id !== 6 ) ? true: false);
+		if (objMail.layout.id !== 6 ) {
+			this.createDefaultFooter(false);
+		}
 		NoMediaDisplayer();
 		
 		$('.dropzone-container').sortable({ 
@@ -56,12 +66,12 @@ Editor.prototype.objectExists = function(objMail) {
 		this.editorColor = '#E6E6E6';
 		this.createEditStyle();
 		this.newDropZones();
-		this.createDefaultFooter();
+		this.createDefaultFooter(true);
 		parent.$('.btnoptions').show();
 	}
 };
 
-Editor.prototype.changeLayout = function() {
+Editor.prototype.changeLayout = function(Style) {
 	var objdz = {};
 	for(var z = 0; z < this.layout.zones.length; z++) {
 		var dzname = this.layout.zones[z].name;
@@ -76,7 +86,7 @@ Editor.prototype.changeLayout = function() {
 		}
 		objdz[newdz.name] = newdz;
 	}
-	this.createEditStyle();
+	if(Style) {	this.createEditStyle();}
 	this.createDZ(objdz);
 };
 
@@ -88,6 +98,8 @@ Editor.prototype.serializeDZ = function() {
 			this.dz[key] = this.dz[key].persist();
 		}
 	}
+	
+	$('#edit-area').find('.footer-by-default-not-editable').remove();
 };
 
 Editor.prototype.createDZ = function(objdz) {
@@ -155,8 +167,8 @@ Editor.prototype.newDropZones = function() {
 	}
 };
 
-Editor.prototype.createDefaultFooter = function() {
-	this.dz['footer'].createFooter();
+Editor.prototype.createDefaultFooter = function(first) {
+	this.dz['footer'].createFooter(first);
 };
 
 Dropzone.autoDiscover = false;

@@ -37,6 +37,12 @@
 				<span class="sm-button-small-social"></span>
 				</a>
 			</li>
+			
+			<li class="small-btn sm-btn-blue {{ activelnk=='footer'?'active':'' }}">
+				<a href="{{ url('footer') }}" data-toggle="tooltip" data-placement="bottom" title="Footers">
+				<span class="sm-button-small-social"></span>
+				</a>
+			</li>
 		</ul>
 	</div>
 </div>

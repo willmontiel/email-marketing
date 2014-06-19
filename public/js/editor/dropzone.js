@@ -150,16 +150,31 @@ DropzoneArea.prototype.removeRow = function(row) {
 	}
 };
 
-DropzoneArea.prototype.createFooter = function() {
-	var row = new rowZone(this);
-	this.listofrows.push(row);
-	row.createRow();
-	var blocks = [new ImgBlock(row), new TxtBlock(row), new SShareBlock(row)];
-	for(var i = 0; i < blocks.length; i++) {
-		row.addBlock(blocks[i]);
+DropzoneArea.prototype.createFooter = function(first) {
+	if(footereditable == 1 && first) {
+		for (var i = 0; i < footer.length; i++) {
+			var row = new rowZone(this);
+			this.content.append(row.unpersist(footer[i]));
+			this.listofrows.push(row);
+			row.createRow();
+			row.updateChanges();
+		}
 	}
-	row.updateImagesSize();
-	this.updateFooter(blocks);
+	else if(footereditable == 0) {
+		$(this.parent).append('<div class="full-width footer-by-default-not-editable">' + footerhtml + '</div>');
+		$('.footer-by-default-not-editable').click(function (e) { e.preventDefault();});
+	}
+//	else {
+//		var row = new rowZone(this);
+//		this.listofrows.push(row);
+//		row.createRow();
+//		var blocks = [new ImgBlock(row), new TxtBlock(row), new SShareBlock(row)];
+//		for(var i = 0; i < blocks.length; i++) {
+//			row.addBlock(blocks[i]);
+//		}
+//		row.updateImagesSize();
+//		this.updateFooter(blocks);
+//	}
 };
 
 DropzoneArea.prototype.updateFooter = function(block) {

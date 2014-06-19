@@ -1,4 +1,17 @@
 {% extends "templates/index_b3.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	<script type="text/javascript">
+		function footerpreview() {
+			$.post("{{url('footer/preview')}}/" + $('#idFooter').val(), function(preview){
+				var e = preview.preview;
+				$( "#preview-modal-content" ).empty();
+				$('#preview-modal-content').append(e);
+			});
+		}
+	</script>
+{% endblock %}
+	
 {% block sectiontitle %}<i class="icon-sitemap"></i> Crear una nueva cuenta{%endblock%}
 {%block sectionsubtitle %}Cree una cuenta asignandole al mismo tiempo un usuario administrador{% endblock %}
 
@@ -81,6 +94,21 @@
 								{{ newFormAccount.render('idMailClass', {'class': 'form-control'}) }}
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">*Seleccionar footer: </label>
+							<div class="col-md-5">
+								{{ newFormAccount.render('idFooter', {'class': 'form-control'}) }}
+							</div>
+							<div class="col-md-1">
+								<a href="#preview-footer-modal" data-toggle="modal" class="btn btn-default pull-right" onclick="footerpreview();"><span class="glyphicon glyphicon-search"></span></a>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">*Footer Editable: </label>
+							<div class="col-md-6">
+								{{ newFormAccount.render('footerEditable') }}
+							</div>
+						</div>
 					</div>
 					<div class="col-md-6">
 						<h4 class="text-center">Datos del administrador de la cuenta</h4>
@@ -133,5 +161,19 @@
 					</div>
 				</div>
 			</form>
+	</div>
+	<div id="preview-footer-modal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Footer</h4>
+				</div>
+				<div class="modal-body" id="preview-modal-content"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
 	</div>
 {% endblock %}

@@ -286,6 +286,7 @@ class TemplateController extends ControllerBase
 		$this->session->remove('preview-template');
 		$url = $this->url->get('template/createpreview');		
 		$editorObj = new HtmlObj(true, $url);
+		$editorObj->setAccount($this->user->account);
 		$editorObj->assignContent(json_decode($content));
 		$this->session->set('preview-template', $editorObj->render());
 		
