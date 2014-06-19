@@ -43,7 +43,6 @@ class ImageService
 		}
 		else if(preg_match('/footer/i', $imageSrc)) {
 			$ids = explode("/", $imageSrc);
-			$this->logger->log('Arreglo ' . print_r($ids, true));
 			return $this->getFooterImageSrc($ids[3], $ids[4]);
 		}
 	}
