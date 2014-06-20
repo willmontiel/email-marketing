@@ -60,15 +60,14 @@ class AccountController extends ControllerBase
 			$p = $form->getValue('prefix');
 			$c = $form->getValue('companyName');
 			$r = $form->getValue('sender');
-//			$r = array_unique($r);
-			
-			$this->logger->log("Sender: " . print_r($r, true));
-			
+
 			if (empty($r)) {
 				$this->flashSession->error('No ha enviado un remitente válido, por favor verfique la información');
 			}
 			else {
 				$remittents = explode(',', $r);
+				$remittents = array_unique($remittents);
+				$this->logger->log("Sender: " . print_r($remittents, true));
 				
 				$prefix = $this->validatePrefix($c, $p);
 				$account->prefix = $prefix;
@@ -277,14 +276,15 @@ class AccountController extends ControllerBase
 				$n = $editform->getValue('companyName');
 				$p = $editform->getValue('prefix');
 				$r = $editform->getValue('sender');
-				$r = array_unique($r);
 				
 				if (empty($r)) {
 					$this->flashSession->error('No ha enviado un remitente válido o el campo esta vacío, por favor verfique la información');
 				}
 				else {
 					$remittents = explode(',', $r);
-				
+					$remittents = array_unique($remittents);
+					$this->logger->log("Sender: " . print_r($remittents, true));
+					
 					$account->prefix = $this->validatePrefix($n, $p);
 					
 					$this->db->begin();
