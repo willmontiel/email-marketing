@@ -60,7 +60,7 @@ class AccountController extends ControllerBase
 			$p = $form->getValue('prefix');
 			$c = $form->getValue('companyName');
 			$r = $form->getValue('sender');
-			$r = array_unique($r);
+//			$r = array_unique($r);
 			
 			$this->logger->log("Sender: " . print_r($r, true));
 			
