@@ -97,6 +97,7 @@
 		{% endif %}
 		
 		//Relacion de direcciones de remitente y nombres de remitentes configurados previamente en la creación de la cuenta
+		App.senders = [];
 		{% if senders is defined %}
 			App.senders = [
 				{% for sender in senders %}
