@@ -67,7 +67,6 @@ class AccountController extends ControllerBase
 			else {
 				$remittents = explode(',', $r);
 				$remittents = array_unique($remittents);
-				$this->logger->log("Sender: " . print_r($remittents, true));
 				
 				$prefix = $this->validatePrefix($c, $p);
 				$account->prefix = $prefix;
