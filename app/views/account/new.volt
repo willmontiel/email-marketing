@@ -163,7 +163,7 @@
 			</form>
 	</div>
 	<div id="preview-footer-modal" class="modal fade">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-prevew-width">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
