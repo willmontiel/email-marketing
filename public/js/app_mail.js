@@ -380,11 +380,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	
 	//Observa el contenido del correo y una vez este completo habilita el botón para enviarlo
 	isMailReadyToSend: function () {
-		var name, fromName, fromEmail, subject, mailcontent, plainText, totalContacts, scheduleDate;
+		var name, sender, subject, mailcontent, plainText, totalContacts, scheduleDate;
 		
 		name = this.get('this.name');
-		fromName = this.get('this.fromName');
-		fromEmail = this.get('this.fromEmail');
+		sender = this.get('this.sender');
 		subject = this.get('this.subject');
 		mailcontent = this.get('this.mailcontent');
 		plainText = this.get('this.plainText');
@@ -392,8 +391,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		scheduleDate = this.get('this.scheduleDate');
 
 		name = (name === '')?0:name;
-		fromName = (fromName === '')?0:fromName;
-		fromEmail = (fromEmail === '')?0:fromEmail;
+		sender = (sender === '')?0:sender;
 		subject = (subject === '')?0:subject;
 		mailcontent = (mailcontent === 0)?0:mailcontent;
 		plainText = (plainText === '')?0:plainText;
@@ -404,8 +402,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('summaryMail', 'El campo "Nombre" se encuentra vacío');
 			return false;
 		}
-		else if (!fromName || !fromEmail) {
-			this.set('summaryMail', 'El campo "De" se encuentra vacío');
+		else if (!sender) {
+			this.set('summaryMail', 'El campo "Remitente" se encuentra vacío');
 			return false;
 		}
 		else if (!subject) {
