@@ -60,6 +60,7 @@ class AccountController extends ControllerBase
 			$p = $form->getValue('prefix');
 			$c = $form->getValue('companyName');
 			$r = $form->getValue('sender');
+			$r = array_unique($r);
 			
 			if (empty($r)) {
 				$this->flashSession->error('No ha enviado un remitente válido, por favor verfique la información');
@@ -274,6 +275,7 @@ class AccountController extends ControllerBase
 				$n = $editform->getValue('companyName');
 				$p = $editform->getValue('prefix');
 				$r = $editform->getValue('sender');
+				$r = array_unique($r);
 				
 				if (empty($r)) {
 					$this->flashSession->error('No ha enviado un remitente válido o el campo esta vacío, por favor verfique la información');
