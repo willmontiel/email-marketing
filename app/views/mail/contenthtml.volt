@@ -99,8 +99,12 @@
 			<div class="col-sm-12">
 				<br />
 				<label>Cree contenido para el correo con HTML base: </label>
-				<textarea rows="25" required id="redactor_content">{% if content is defined%} {{content}} {% endif %}</textarea>
-				<br />
+				<textarea rows="25" required id="redactor_content">{% if content is defined%} {{content}} {% elseif footer.editable == 1 %} {{footer.html}} {% endif %}</textarea>
+				{% if footer.editable == 0 %}
+					<div class="footer-html">
+						{{footer.html}}
+					</div>
+				{% endif %}
 			</div>
 		</div>
 	</div>

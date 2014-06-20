@@ -31,6 +31,10 @@ abstract class HtmlAbstract
 		return $htmlRendered;
 	}
 	
+	public function setAccount($account) {
+		$this->account = $account;
+	}
+	
 	abstract public function renderObjPrefix();
 	abstract public function renderChildPrefix($i);
 	abstract public function renderChildPostfix($i);

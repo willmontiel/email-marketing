@@ -22,6 +22,17 @@ class HtmlZone extends HtmlAbstract
 			$row->assignContent($content);
 			$this->children[] = $row->render();
 		}
+		
+		if(isset($this->account) && $this->account->footerEditable == 0 && $zone->name === 'footer') {
+			$footerObj = Footer::findFirstByIdFooter($this->account->idFooter);
+			$footer = json_decode($footerObj->editor);
+			foreach ($footer as $frow) {
+				$frow->widthval = 600;
+				$row = new HtmlRow();
+				$row->assignContent($frow);
+				$this->children[] = $row->render();
+			}
+		}
 	}
 	
 	public function renderObjPrefix()
