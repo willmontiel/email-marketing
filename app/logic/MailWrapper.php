@@ -131,7 +131,7 @@ class MailWrapper extends BaseWrapper
 		$this->mail->type = $this->content->type;
 		$this->mail->status = 'draft';
 		$this->mail->wizardOption = 'setup';
-		$this->mail->totalContacts = (isset($this->target->totalContacts) ? $this->target->totalContacts : '');
+		$this->mail->totalContacts = (isset($this->target->totalContacts) ? $this->target->totalContacts : 0);
 		if ($this->scheduleDate != null) {
 			$this->mail->scheduleDate = $this->scheduleDate;
 		}
