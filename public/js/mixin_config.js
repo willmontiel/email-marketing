@@ -62,7 +62,10 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 				try {
 					var obj = $.parseJSON(error.responseText);
 					if (!norollback) {
-						self.get("model").rollback();
+						var model = self.get("model");
+						if (!model.get('isDirty')) {
+							model.rollback();
+						}
 						self.transitionToRoute(troute);
 					}
 					callmeback(obj.errors);
@@ -85,7 +88,6 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 		}
 		return object;
 	},
-	
 	
 	addSender: function(object, value) {
 		var val = false;

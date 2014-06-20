@@ -214,7 +214,7 @@ class MailWrapper extends BaseWrapper
 		}
 		
 		if (!$this->isAValidDomain($domain[1])) {
-			$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente invalidos, recuerde que no debe usar dominios de correo públicas como hotmail o gmail', 422);
+			$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente invalida, recuerde que no debe usar dominios de correo públicas como hotmail o gmail', 422);
 			throw new InvalidArgumentException("Invalid sender domain");
 		}
 		

@@ -511,13 +511,18 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			}
 			else {
 				mail = this.SetAndSave(mail);
-				this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
-			
-				this.set('isHeaderExpanded', false);
-				this.set('isTargetExpanded', false);
-				this.set('isGoogleAnalitycsExpanded', false);
-				this.set('isScheduleExpanded', false);
-				this.set('isSocialExpanded', false);
+				
+				if (!validateSender(mail)) {
+					$.gritter.add({title: 'Error', text: 'El remitente ingresado es inválido, por favor verifique la información', sticky: false, time: 3000});
+				}
+				else {
+					this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
+					this.set('isHeaderExpanded', false);
+					this.set('isTargetExpanded', false);
+					this.set('isGoogleAnalitycsExpanded', false);
+					this.set('isScheduleExpanded', false);
+					this.set('isSocialExpanded', false);
+				}
 			}
 		},
 				
@@ -651,6 +656,16 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		}
 	}
 });
+
+function validateSender(mail){
+	var sender = mail.get('sender');
+	
+	if (sender === undefined || sender === null || sender === '') {
+		return false;
+	}
+	
+	return true;
+}
 
 function getArrayValue(value) {
 	if( value !== null && value !== undefined ) {
