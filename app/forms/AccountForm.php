@@ -71,6 +71,16 @@ class AccountForm extends Form
 			'required' => 'required' 
         )));
 		
+		$this->add(new Text ('sender', array(
+			'maxlength' => 100,
+			'type' => 'text',
+        )));
+		
+		$this->add(new Select ('senderAllowed', array(
+            '0' => 'No',
+			'1' => 'Si',
+        )));
+		
         $this->add(new Text ('messageLimit', array(
 			'maxlength' => 30,
 			'type' => 'text',

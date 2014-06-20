@@ -2386,6 +2386,17 @@ class MailController extends ControllerBase
 				'bind' => array(1 => $account->idAccount)
 			));
 			
+			
+			$senders = Sender::find(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $account->idAccount)
+			));
+			
+			if (count($senders) > 0) {
+				$this->view->setVar('senders', $senders);
+			}
+			
+			$this->view->setVar('account', $account);
 			$this->view->setVar('mails', $mails);
 			$this->view->setVar('links', $links);
 			$this->view->setVar('dbases', $dbases);

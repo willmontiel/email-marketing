@@ -15,8 +15,7 @@ App.Mail = DS.Model.extend({
 	type: DS.attr('string'),
 	scheduleDate: DS.attr('string'),
 	name: DS.attr('string'),
-	fromName: DS.attr( 'string' ),
-	fromEmail: DS.attr('string'),
+	sender: DS.attr('string'),
 	replyTo: DS.attr('string'),
 	subject: DS.attr('string'),
 	dbases: DS.attr('string'),
@@ -69,6 +68,9 @@ Ember.Handlebars.helper("external-link", App.ExternalLinkComponent);
 
 
 App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
+	senderName: '',
+	senderEmail: '',
+	senderAttr: [],
 	dbaselist: [],
 	list: [],
 	segmentlist: [],
@@ -145,6 +147,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				var arrayAnalytics = setGoogleAnalyticsValues(this.get('this.googleAnalytics'), App.googleAnalyticsLinks);
 				this.set('linksAnalytics', arrayAnalytics);
 			}
+			
+			var sender = setTargetValue(this.get('this.sender'), App.senders);
+			
+			this.set('senderAttr', sender);
 		}
 	}.observes('this.content'),
 	
@@ -170,23 +176,23 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	
 	//Observa el contenido del header (fromName, fromEmail, etc)
 	headerEmpty: function () {
-		var n, e, s;
-		n = this.get('content.fromName');
-		e = this.get('content.fromEmail');
+		var sn, s;
+		sn = this.get('content.sender');
 		s = this.get('content.subject');
 		
-		n = (n === '')?null:n;
-		e = (e === '')?null:e;
+		sn = (sn === '')?null:sn;
 		s = (s === '')?null:s;
 		
-		if (!e ||  !n || !s) {
+		if (!sn || !s) {
 			this.set('fromSummary', 'Sin definir <email@domain.com>');
 			return true;
 		}
-		this.set('fromSummary', n + '<' + e + '>');
+		
+		var sender = sn.split("/");
+		this.set('fromSummary', sender[1] + '<' + sender[0] + '>');
 		
 		return false;
-	}.property('content.fromName', 'content.fromEmail', 'content.subject'),
+	}.property('content.sender', 'content.subject'),
 		
 	//Observa que se hayan seleccionado destinatarios
 	targetEmpty: function () {
@@ -427,12 +433,26 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}.property('content.name', 'content.fromName', 'content.fromEmail', 'content.subject', 'content.mailcontent', 'content.plainText', 'content.totalContacts', 'content.scheduleDate'),
 
 	SetAndSave: function (mail) {
-		var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
+//		var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
 			
 		
 		//else if (!filter.test(mail.get('email'))) {
 			//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
 		//}
+		
+		var senderName = this.get('senderName');
+		var senderEmail = this.get('senderEmail');
+	
+		var sender = (this.get('senderAttr') !== undefined && this.get('senderAttr') !== null && this.get('senderAttr') !== '' ? this.get('senderAttr').id : '');
+		
+		if (senderName !== undefined && 
+				senderName !== '' && 
+				senderName !== null && 
+				senderEmail !== undefined && 
+				senderEmail !== '' &&
+				senderEmail !== null) {
+			sender = senderEmail + '/' + senderName;
+		}
 		
 		var dbases = getArrayValue(this.get('dbaselist'));
 		var contactlists = getArrayValue(this.get('list'));
@@ -442,7 +462,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var exclude = getArrayValue(this.get('exclude'));
 		var fbaccounts = getArrayValue(this.get('fbaccountsel'));
 		var twaccounts = getArrayValue(this.get('twaccountsel'));
-
+		
 		var array = [];
 			var obj = this.get('linksAnalytics').toArray();
 			for (var i = 0; i < obj.length; i++) {
@@ -456,7 +476,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		if (value === 'now') {
 			mail.set('scheduleDate', value);
 		}
-
+		
+		mail.set('sender', sender);
 		mail.set('dbases', dbases);
 		mail.set('contactlists', contactlists);
 		mail.set('segments', segments);
@@ -467,7 +488,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		mail.set('fbaccounts', fbaccounts);
 		mail.set('twaccounts', twaccounts);
 		mail.set('fbimagepublication', App.fbimage);
-
+		
 		return mail;
 		
 	},
@@ -490,16 +511,33 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			}
 			else {
 				mail = this.SetAndSave(mail);
-				this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
-				this.set('isHeaderExpanded', false);
-				this.set('isTargetExpanded', false);
-				this.set('isGoogleAnalitycsExpanded', false);
-				this.set('isScheduleExpanded', false);
-				this.set('isSocialExpanded', false);
+				
+				if (!validateSender(mail)) {
+					$.gritter.add({title: 'Error', text: 'El remitente ingresado es inválido, por favor verifique la información', sticky: false, time: 3000});
+				}
+				else {
+					this.handleSavePromise(mail.save(), '', 'Se han aplicado los cambios existosamente');
+					this.set('isHeaderExpanded', false);
+					this.set('isTargetExpanded', false);
+					this.set('isGoogleAnalitycsExpanded', false);
+					this.set('isScheduleExpanded', false);
+					this.set('isSocialExpanded', false);
+				}
 			}
 		},
-
+				
+		cancelNewSender: function () {
+			this.set('senderName', '');
+			this.set('senderEmail', '');
+		},
+				
 		expandHeader: function () {
+			if (this.get('this.id') !== null) {
+				var sender = setTargetValue(this.get('this.sender'), App.senders);
+				this.set('valueSender', sender);
+			}
+			this.set('senderName', '');
+			this.set('senderEmail', '');
 			this.set('isHeaderExpanded', true);
 			this.set('isTargetExpanded', false);
 			this.set('isSocialExpanded', false);
@@ -573,9 +611,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		discardChanges: function () {
 			if (this.get('this.id') !== null) {
 				this.get('model').rollback();
+				this.set('senderAttr', this.get('valueSender'));
 				this.set('fbaccountsel', this.get('facebook'));
 				this.set('twaccountsel', this.get('twitter'));
 			}
+			this.set('senderName', '');
+			this.set('senderEmail', '');
 			this.set('isSocialExpanded', false);
 			this.set('isHeaderExpanded', false);
 			this.set('isScheduleExpanded', false);
@@ -625,8 +666,17 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}
 });
 
-function getArrayValue(value) {
+function validateSender(mail){
+	var sender = mail.get('sender');
 	
+	if (sender === undefined || sender === null || sender === '') {
+		return false;
+	}
+	
+	return true;
+}
+
+function getArrayValue(value) {
 	if( value !== null && value !== undefined ) {
 		var array = [];
 		var obj = value.toArray();
@@ -661,6 +711,17 @@ function setTargetValues(values, select) {
 		}
 	}
 	return newArray;
+}
+
+function setTargetValue(value, select) {
+	var object;
+	for (var j = 0; j < select.length; j++) {
+		if (select[j].id === value) {
+			object = select[j];
+		}
+	}
+	
+	return object;
 }
 
 function setGoogleAnalyticsValues(values, select) {
