@@ -59,94 +59,161 @@ class AccountController extends ControllerBase
 			
 			$p = $form->getValue('prefix');
 			$c = $form->getValue('companyName');
-			
-			$prefix = $this->validatePrefix($c, $p);
-			$account->prefix = $prefix;
-			$account->idUrlDomain = 1;
-			$this->db->begin();
-			
-            if ($form->isValid() && $account->save()) {
-            
-				$user = new User();
+			$r = $form->getValue('sender');
+
+			if (empty($r)) {
+				$this->flashSession->error('No ha enviado un remitente válido, por favor verfique la información');
+			}
+			else {
+				$remittents = explode(',', $r);
+				$remittents = array_unique($remittents);
 				
-				$email = strtolower($form->getValue('email'));
-				
-				$user->email = $email;
-				$user->firstName = $form->getValue('firstName');
-				$user->lastName = $form->getValue('lastName');				
-		$pass =	$user->password = $form->getValue('password');
-		$pass2=	$user->password2 = $form->getValue('password2');
-				$user->username = $prefix . '_' . $form->getValue('username');  
-				$user->userrole='ROLE_ADMIN';
-			    $user->account = $account;
-				
-				if($pass == $pass2){
-					if(strlen($pass) >= 8){
-						$user->password = $this->security2->hash($pass);
-						if (!$user->save()) {
-							$this->db->rollback();
-							foreach ($user->getMessages() as $msg) {
-								$this->flashSession->error($msg);
-							}
+				$prefix = $this->validatePrefix($c, $p);
+				$account->prefix = $prefix;
+				$account->idUrlDomain = 1;
+
+				$this->db->begin();
+
+				if ($form->isValid() && $account->save()) {
+
+					try {
+						foreach ($remittents as $remittent) {
+							$this->saveSender($account, $remittent);
 						}
-						else {
-							$dbase = new Dbase();
-							$dbase->account = $account;
-							$dbase->name = "Base de datos";
-							$dbase->description = "Sin descripción";
-							$dbase->Cdescription = "Sin descripción de contactos";
-							$dbase->Ctotal = 0;
-							$dbase->Cactive = 0;
-							$dbase->Cunsubscribed = 0;
-							$dbase->Cbounced = 0;
-							$dbase->Cspam = 0;
-							$dbase->color = '#0080FF';
-							$dbase->createdon = time();
-							$dbase->update = time();
-							
-							if (!$dbase->save()) {
-								$this->db->rollback();
-								foreach ($dbase->getMessages() as $msg) {
-									$this->flashSession->error($msg);
-								}
-							}
-							else {
-								$this->db->commit();
-								$this->traceSuccess('Create account: ' . $account->idAccount);
-								
-								$this->flashSession->notice('Se ha creado la cuenta exitosamente');
-								return $this->response->redirect("account/index");
-							}
-						}
+						$this->saveUser($account, $form, $prefix);
+						$this->saveDbase($account);
+
+						$this->db->commit();
+						$this->traceSuccess('Create account: ' . $account->idAccount);
+
+						$this->flashSession->success('Se ha creado la cuenta exitosamente');
+						return $this->response->redirect("account/index");
+
 					}
-							
-					else{
-						$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 y máximo 40 caracteres");
+					catch (Exception $e) {
+						$this->logger->log("Exception: {$e}");
+						$this->db->rollback();
+					}	
+				}
+				else {
+					foreach ($account->getMessages() as $msg) {
+						$this->flashSession->error($msg);
 					}
 				}
-				else{
-					$this->flashSession->error('Las contraseñas no coinciden por favor verifique la información');
-				}		
 			}
-            else {
-				foreach ($account->getMessages() as $msg) {
-					$this->flashSession->error($msg);
-                }
-            }
         }
        
 		$this->view->newFormAccount = $form;
-  
-   } 
+	} 
    
-   private function validatePrefix($name, $prefix)
-   {
-		$p = (empty($prefix) ? $name : $prefix);
-
-		$prefix = (strlen($p) <= 4 ? strtolower($p) : $this->getPrefix($p));
+	protected function saveSender(Account $account, $remittent)
+	{
+		$parts = explode('/', $remittent);
+		$email = trim(strtolower($parts[0]));
+		$domain = explode('@', $email);
+		$name = $parts[1];
 		
-		return $prefix;
+		
+		if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$this->flashSession->error("Hay direcciones de correo para remitente que no son válidas, por favor verifique la información");
+			throw new InvalidArgumentException("Invalid email");
+		}
+		
+		if (!$this->isAValidDomain($domain[1])) {
+			$this->flashSession->error("Hay direcciones de correo para remitente que contienen dominios invalidos, recuerde que no debe usar dominios de correo públicas como hotmail o gmail");
+			throw new InvalidArgumentException("Invalid domain");
+		}
+		
+		if (empty($name)) {
+			$this->flashSession->error("No ha enviado un nombre de remitente válido, por favor verifique la información");
+			throw new InvalidArgumentException("Invalid remittent name");
+		}
+		
+		$sender = new Sender();
+		$sender->idAccount = $account->idAccount;
+		$sender->email = $email;
+		$sender->name = $name;
+		$sender->createdon = time();
+
+		if (!$sender->save()) {
+			foreach ($sender->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+			}
+			throw new Exception("Error while saving account remittent");
+		}
+		
    }
+
+	protected function saveUser(Account $account, $form, $prefix) 
+	{
+		$user = new User();
+		
+		$email = strtolower($form->getValue('email'));
+				
+		$user->email = $email;
+		$user->firstName = $form->getValue('firstName');
+		$user->lastName = $form->getValue('lastName');				
+		$pass =	$user->password = $form->getValue('password');
+		$pass2=	$user->password2 = $form->getValue('password2');
+		$user->username = $prefix . '_' . $form->getValue('username');  
+		$user->userrole='ROLE_ADMIN';
+		$user->account = $account;
+				
+		if($pass == $pass2){
+			if(strlen($pass) >= 8){
+				$user->password = $this->security2->hash($pass);
+				if (!$user->save()) {
+					foreach ($user->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+					throw new Exception("Error while saving principal account user");
+				}
+			}
+			else{
+				$this->flashSession->error("La contraseña es muy corta, debe tener mínimo 8 y máximo 40 caracteres");
+				throw new InvalidArgumentException("Password too short");
+			}
+		}
+		else{
+			$this->flashSession->error('Las contraseñas no coinciden por favor verifique la información');
+			throw new InvalidArgumentException("Error in passwords");
+		}
+	}
+
+
+	protected function saveDbase(Account $account)
+	{
+		$dbase = new Dbase();
+		
+		$dbase->account = $account;
+		$dbase->name = "Base de datos";
+		$dbase->description = "Sin descripción";
+		$dbase->Cdescription = "Sin descripción de contactos";
+		$dbase->Ctotal = 0;
+		$dbase->Cactive = 0;
+		$dbase->Cunsubscribed = 0;
+		$dbase->Cbounced = 0;
+		$dbase->Cspam = 0;
+		$dbase->color = '#0080FF';
+		$dbase->createdon = time();
+		$dbase->update = time();
+
+		if (!$dbase->save()) {
+			foreach ($dbase->getMessages() as $msg) {
+				$this->flashSession->error($msg);
+			}
+			throw new Exception("Error while saving principal account data base");
+		}
+	}
+
+	private function validatePrefix($name, $prefix)
+	{
+		 $p = (empty($prefix) ? $name : $prefix);
+
+		 $prefix = (strlen($p) <= 4 ? strtolower($p) : $this->getPrefix($p));
+
+		 return $prefix;
+	}
    
    /*
     * Esta función se encarga de mostrar todos los usuarios de todas la cuentas. Es utilizada por el super-administrador
@@ -185,33 +252,71 @@ class AccountController extends ControllerBase
 		));
 		
 		if ($account) {
-            $this->view->setVar("allAccount", $account);
+			$allRemittents = Sender::find(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $account->idAccount)
+			));
+			
+			
+			$completeRemittents = '';
+			if (count($allRemittents) > 0) {
+				foreach ($allRemittents as $r) {
+					$completeRemittents .= "{$r->email}/{$r->name},";
+				}
+			}
+			
+			$account->sender = $completeRemittents;
+            $this->view->setVar("account", $account);
 			$editform = new AccountForm($account);
 
  			if ($this->request->isPost()) {   
-					$editform->bind($this->request->getPost(), $account);
-					
-					$n = $editform->getValue('companyName');
-					$p = $editform->getValue('prefix');
+				$editform->bind($this->request->getPost(), $account);
+
+				$n = $editform->getValue('companyName');
+				$p = $editform->getValue('prefix');
+				$r = $editform->getValue('sender');
+				
+				if (empty($r)) {
+					$this->flashSession->error('No ha enviado un remitente válido o el campo esta vacío, por favor verfique la información');
+				}
+				else {
+					$remittents = explode(',', $r);
+					$remittents = array_unique($remittents);
+					$this->logger->log("Sender: " . print_r($remittents, true));
 					
 					$account->prefix = $this->validatePrefix($n, $p);
-								
+					
+					$this->db->begin();
 					if (!$editform->isValid() || !$account->save()) {
 						foreach ($account->getMessages() as $msg) {
 							$this->flashSession->error($msg);
 						} 
 					}
 					else {
-						$this->traceSuccess("Edit account: {$id}");
-						$this->flashSession->notice('Se ha editado la cuenta exitosamente');
-						return $this->response->redirect("account");
+						try {
+							foreach ($remittents as $remittent) {
+								$this->saveSender($account, $remittent);
+							}
+							
+							foreach ($allRemittents as $r) {
+								$r->delete();
+							}
+							
+							$this->db->commit();
+							$this->traceSuccess("Edit account: {$id}");
+							$this->flashSession->success('Se ha editado la cuenta exitosamente');
+							return $this->response->redirect("account");
+						}
+						catch (Exception $e) {
+							$this->db->rollback();
+						}
 					}
-
+				}
  			}
 			$this->view->editFormAccount = $editform;
         } 
 		else {
-			$this->traceFail("Edit account do not exists: {$id}");
+			$this->traceFail("Edit, account do not exists: {$id}");
 			$this->flashSession->error('La cuenta no existe, por favor verifique la información');
 			return $this->response->redirect("account");
 		}
@@ -469,5 +574,24 @@ class AccountController extends ControllerBase
 		$this->view->setVar('accounts', $a);
 	}
 	
+	protected function isAValidDomain($domain)
+	{
+		$invalidDomains = array(
+			'yahoo',
+			'hotmail',
+			'live',
+			'gmail',
+			'aol'
+		);
+		
+		$d = explode('.', $domain);
+		
+		foreach ($invalidDomains as $invalidDomain) {
+			if ($invalidDomain == $d[0]) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
  }  

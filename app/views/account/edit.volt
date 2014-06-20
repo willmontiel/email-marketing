@@ -1,6 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
+	{{ stylesheet_link('bootstrap-tagsinput/bootstrap-tagsinput.css')}}
+	{{ javascript_include('bootstrap-tagsinput/bootstrap-tagsinput.js')}}
 	<script type="text/javascript">
 		function footerpreview() {
 			$.post("{{url('footer/preview')}}/" + $('#idFooter').val(), function(preview){
@@ -32,7 +34,7 @@
 	</div>
 
 		<div clas="col-md-6">
-			<form action = "{{url('account/edit/')}}{{allAccount.idAccount}}" class="form-horizontal" id="registerAccount" method="post" role="form">
+			<form action = "{{url('account/edit/')}}{{account.idAccount}}" class="form-horizontal" id="registerAccount" method="post" role="form">
 				<div class="form-group">
 					<label class="col-md-4 control-label">*Nombre de la cuenta: </label>
 					<div class="col-md-6">
@@ -65,6 +67,21 @@
 						{{ editFormAccount.render('messageLimit', {'class': 'form-control'}) }}
 					</div>
 				</div>
+				
+				<div class="form-group">
+					<label for="remittent" class="col-sm-4 control-label">*Remitente(s):</label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('sender', {'class': 'form-control', 'data-role' : 'tagsinput'}) }}
+					</div>
+				</div>
+					
+				<div class="form-group">
+					<label for="remittentAllowed" class="col-sm-4 control-label">¿Permitir al usuario agregar más remitentes?:</label>
+					<div class="col-md-6">
+						{{ editFormAccount.render('senderAllowed', {'class': 'form-control'}) }}
+					</div>
+				</div>
+					
 				<div class="form-group">
 					<label class="col-md-4 control-label">*Modo de uso:</label>
 					<div class="col-md-6">
@@ -119,7 +136,7 @@
 			</form>
 		</div>
 		<div id="preview-footer-modal" class="modal fade">
-			<div class="modal-dialog modal-prevew-width">
+			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
