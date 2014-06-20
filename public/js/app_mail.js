@@ -532,6 +532,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 				
 		expandHeader: function () {
+			if (this.get('this.id') !== null) {
+				var sender = setTargetValue(this.get('this.sender'), App.senders);
+				this.set('valueSender', sender);
+			}
+			this.set('senderName', '');
+			this.set('senderEmail', '');
 			this.set('isHeaderExpanded', true);
 			this.set('isTargetExpanded', false);
 			this.set('isSocialExpanded', false);
@@ -605,9 +611,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		discardChanges: function () {
 			if (this.get('this.id') !== null) {
 				this.get('model').rollback();
+				this.set('sender', this.get('valueSender'))
 				this.set('fbaccountsel', this.get('facebook'));
 				this.set('twaccountsel', this.get('twitter'));
 			}
+			this.set('senderName', '');
+			this.set('senderEmail', '');
 			this.set('isSocialExpanded', false);
 			this.set('isHeaderExpanded', false);
 			this.set('isScheduleExpanded', false);
