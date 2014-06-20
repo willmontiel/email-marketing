@@ -389,7 +389,7 @@ class Security extends Plugin
 				'footer::edit' => array('footer' => array('update')),
 				'footer::delete' => array('footer' => array('delete')),
 				'footer::duplicate' => array('footer' => array('create')),
-				'footer::image' => array('footer' => array('read')),
+				'footer::image' => array('footer' => array('view')),
 				
 			);
 		}
