@@ -54,8 +54,8 @@ Ember.MixinSearchReferencePagination = Ember.Mixin.create({
 
 	crobject: function (p) {
 		return  {
-			searchCriteria: this.criteria,
-			filter: this.finalFilter,
+			searchCriteria: App.criteria,
+			filter: App.finalFilter,
 			page: p,
 			limit: this.get("recordsperpage")
 		};
