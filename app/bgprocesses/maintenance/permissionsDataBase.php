@@ -143,6 +143,7 @@ class PermissionsDataBase
 			'footer::read' => 70,
 			'footer::update' => 71,
 			'footer::delete' => 72,
+			'footer::view' => 73,
 		);
 	}
 	
@@ -231,6 +232,7 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'footer::read'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'footer::update'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'footer::delete'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'footer::view'),
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'socialmedia::create'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'socialmedia::read'),
@@ -313,6 +315,8 @@ class PermissionsDataBase
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'tools::read'),
 			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'footer::view'),
+			
 			
 //			----------//----------**ROLE_USER**----------//----------
 			
@@ -365,6 +369,8 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_USER', 'Action' => 'socialmedia::delete'),
 			
 			array( 'Role' => 'ROLE_USER', 'Action' => 'tools::read'),
+			
+			array( 'Role' => 'ROLE_USER', 'Action' => 'footer::view'),
 			
 //			----------//----------**ROLE_STATISTICS**----------//----------
 			
