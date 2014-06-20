@@ -19,6 +19,17 @@
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	<script type="text/javascript">
+		function showNewRemittent() {
+			$('#not-allowed-remittents').hide();
+			$('#allowed-remittents').show();
+		}
+		
+		function hideNewRemittent() {
+			$('#not-allowed-remittents').show();
+			$('#allowed-remittents').hide();
+		}
+	</script>
+	<script type="text/javascript">
 		$(function() {
 			{%for asset in assets%}
 				var media = new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}});
@@ -83,6 +94,15 @@
 			App.maildata = [{
 				id: {{mail.idMail}}
 			}];
+		{% endif %}
+		
+		//Relacion de direcciones de remitente y nombres de remitentes configurados previamente en la creación de la cuenta
+		{% if senders is defined %}
+			App.senders = [
+				{% for sender in senders %}
+					Ember.Object.create({id: "{{sender.email|escape_js}}/{{sender.name|escape_js}}", value: "{{sender.name|escape_js}}  <{{sender.email|escape_js}}>"}),
+				{% endfor %}
+			];
 		{% endif %}
 		
 		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios

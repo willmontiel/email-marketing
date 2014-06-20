@@ -26,6 +26,7 @@
 {{ '{{#if isHeaderExpanded}}' }}
 	<h4 class="paneltitle">Encabezado</h4>
 			<form class="form-horizontal" role="form" id="header">
+				{#
 				<div class="form-group">
 					<label for="fromName" class="col-sm-2 control-label">De: </label>
 					<div class="col-sm-4">
@@ -36,6 +37,47 @@
 						{{'{{view Ember.TextField valueBinding="fromEmail" id="fromEmail" placeholder="Enviar desde esta dirección de correo" required="required" class="form-control"}}'}}
 					</div>
 				</div>
+				#}
+				
+			
+				<div class="form-group" id="not-allowed-remittents">
+					<label for="sender" class="col-sm-2 control-label">De: </label>
+					<div class="col-sm-7">
+						{{ '{{view Ember.Select
+								contentBinding="App.senders"
+								optionValuePath="content.id"
+								optionLabelPath="content.value"
+								selectionBinding="senderAttr"
+								prompt="Seleccione nombre de remitente"
+								id="senderAttr"
+								class="form-control"}}'
+						 }}
+					</div>
+					
+					{% if account.senderAllowed %}
+						<div class="col-sm-3 text-right">
+							<a href="javascript:void(0);" class="btn btn-sm btn-primary extra-padding" style="cursor:pointer;" onClick="showNewRemittent();">Agregar otro remitente</a>
+						</div>
+					{% endif %}
+					
+					
+				</div>	
+				
+				<div class="form-group" id="allowed-remittents" style="display: none;">
+					<label for="senderName" class="col-sm-2 control-label">Nombre: </label>
+					<div class="col-sm-3">
+						{{'{{view Ember.TextField valueBinding="senderName" id="senderName" placeholder="Nombre de remitente" class="form-control"}}'}}
+					</div>
+					
+					<label for="senderEmail" class="col-sm-2 control-label">Correo: </label>
+					<div class="col-sm-3">
+						{{'{{view Ember.TextField valueBinding="senderEmail" id="senderEmail" placeholder="Direccion de remitente" class="form-control"}}'}}
+					</div>
+					<div class="col-sm-2 text-right">
+						<a href="javascript:void(0);" class="btn btn-sm btn-primary extra-padding" style="cursor:pointer;" onClick="hideNewRemittent();" {{ '{{action "cancelNewSender" this}}' }}>Cancelar</a>
+					</div>
+				</div>
+					
 				<div class="form-group">
 					<label for="replyTo" class="col-sm-2 control-label">Responder a: </label>
 					<div class="col-sm-10">

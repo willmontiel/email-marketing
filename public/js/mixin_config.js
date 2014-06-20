@@ -33,33 +33,75 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 	 */
 	actuallyHandlePromise: function(p, troute, message, fn, callmeback, norollback) {
 		var self = this;
-
 		p.then(function() {
+			
 			if (typeof self.get('errors.errormsg') !== 'undefined') {
 				self.set('errors.errormsg', '');
 			}
 			self.transitionToRoute(troute);
 			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
+			
+			if (App.senders !== undefined) {
+				var sender = self.get('sender');
+				
+				self.addSender(App.senders, sender);
+				var s = self.setTargetValue(App.senders, sender);
+				
+				self.set('senderAttr', s);
+			}
+			
+			self.set('senderName', '');
+			self.set('senderEmail', '');
+			
 			if (typeof fn == 'function') {
 				fn();
 			}
-		}, function(error) {
-				if (error.status == 422) {
-					try {
-						var obj = $.parseJSON(error.responseText);
-						if (!norollback) {
-							self.get("model").rollback();
-							self.transitionToRoute(troute);
+		}, 
+		function(error) {
+			if (error.status == 422) {
+				try {
+					var obj = $.parseJSON(error.responseText);
+					if (!norollback) {
+						var model = self.get("model");
+						if (!model.get('isDirty')) {
+							model.rollback();
 						}
-						callmeback(obj.errors);
+						self.transitionToRoute(troute);
 					}
-					catch (e) {
-					}
+					callmeback(obj.errors);
 				}
-				else {
-					self.set('errors.errormsg', error.statusText);
+				catch (e) {
 				}
+			}
+			else {
+				self.set('errors.errormsg', error.statusText);
+			}
 		});
+	},
+	
+	setTargetValue: function(select, value) {
+		var object;
+		for (var j = 0; j < select.length; j++) {
+			if (select[j].id === value) {
+				object = select[j];
+			}
+		}
+		return object;
+	},
+	
+	addSender: function(object, value) {
+		var val = false;
+		for (var i = 0; i < object.length; i++) {
+			if (object[i].id === value) {
+				val = true;
+				break;
+			}
+		}
+
+		if (!val) {
+			var sender =  value.split("/");
+			object.push(Ember.Object.create({id: value, value: sender[1] + ' <' + sender[0] + '>'}));
+		}
 	},
 
 	/*
