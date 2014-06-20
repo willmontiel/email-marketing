@@ -169,7 +169,7 @@ class ProcessController extends ControllerBase
 	{
 		if ($this->user->userrole == 'ROLE_SUDO') {
 			$mail = Mail::findFirst(array(
-				'conditions' => "idMail = ?1 AND status != 'Sending'",
+				'conditions' => "idMail = ?1 AND status == 'Sending'",
 				'bind' => array(1 => $idMail)
 			));
 		}
