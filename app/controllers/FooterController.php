@@ -99,26 +99,37 @@ class FooterController extends ControllerBase {
 	
 	public function deleteAction($idFooter)
 	{
-		$account = Account::findFirst(array(
-			"conditions" => "idFooter = ?1",
-			"bind" => array(1 => $idFooter)
-		));
+		try {
 		
-		if(!$account) {
-			$footer = Footer::findFirst(array(
+			$account = Account::findFirst(array(
 				"conditions" => "idFooter = ?1",
 				"bind" => array(1 => $idFooter)
 			));
 
-			if( !$footer->delete() ) {
-				$this->flashSession->warning("Error al eliminar el Footer");
+			if(!$account) {
+				$footer = Footer::findFirst(array(
+					"conditions" => "idFooter = ?1",
+					"bind" => array(1 => $idFooter)
+				));
+
+				if( !$footer->delete() ) {
+					$this->flashSession->warning("Error al eliminar el Footer");
+				}
+				else {
+					$this->flashSession->warning("Se ha eliminado el Footer con éxito");
+				}
 			}
 			else {
-				$this->flashSession->warning("Se ha eliminado el Footer con éxito");
+				$this->flashSession->error("No se pudo eliminar el Footer, ya que está asociado a una cuenta");
 			}
 		}
-		else {
-			$this->flashSession->error("No se pudo eliminar el Footer, ya que está asociado a una cuenta");
+		catch(Exception $e) {
+			$this->logger->log("Exception: {$e}");
+			$this->flashSession->error("No se pudo eliminar el Footer");
+		}
+		catch(InvalidArgumentException $e) {
+			$this->logger->log("Exception: {$e}");
+			$this->flashSession->error("No se pudo eliminar el Footer");
 		}
 		
 		return $this->response->redirect("footer");
