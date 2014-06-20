@@ -611,7 +611,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		discardChanges: function () {
 			if (this.get('this.id') !== null) {
 				this.get('model').rollback();
-				this.set('sender', this.get('valueSender'))
+				this.set('senderAttr', this.get('valueSender'));
 				this.set('fbaccountsel', this.get('facebook'));
 				this.set('twaccountsel', this.get('twitter'));
 			}
