@@ -62,6 +62,8 @@ class AccountController extends ControllerBase
 			$r = $form->getValue('sender');
 			$r = array_unique($r);
 			
+			$this->logger->log("Sender: " . print_r($r, true));
+			
 			if (empty($r)) {
 				$this->flashSession->error('No ha enviado un remitente válido, por favor verfique la información');
 			}
