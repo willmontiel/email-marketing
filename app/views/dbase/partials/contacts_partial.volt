@@ -55,15 +55,12 @@
 		{{'{{/each}}'}}
 		</tbody>
 	 </table>
-				</div>
-				{{'{{#if model}}'}}
-					<div class="box-footer">
-						{{ partial("partials/pagination_partial") }}
-					</div>
-				{{'{{/if}}'}}
+	<div>
+		{{'{{#if model}}'}}
+			<div class="box-footer">
+				{{ partial("partials/pagination_partial") }}
 			</div>
-			
-        </div>
+		{{'{{/if}}'}}
 	</div>
 </script>
 <script type="text/x-handlebars" data-template-name="contacts">
