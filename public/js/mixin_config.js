@@ -42,19 +42,9 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 			$.gritter.add({title: 'Operacion exitosa', text: message, sticky: false, time: 3000});
 			
 			var sender = self.get('sender');
-			if (App.senders !== 0) {
-				self.addSender(App.senders, sender);
-				var s = self.setTargetValue(App.senders, sender);
-				
-				self.set('senderAttr', s);
+			if (sender !== undefined) {
+				self.processSender(self, sender);
 			}
-			else {
-				var sender =  value.split("/");
-				App.senders.push(Ember.Object.create({id: value, value: sender[1] + ' <' + sender[0] + '>'}));
-			}
-			
-			self.set('senderName', '');
-			self.set('senderEmail', '');
 			
 			if (typeof fn == 'function') {
 				fn();
@@ -80,6 +70,23 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 				self.set('errors.errormsg', error.statusText);
 			}
 		});
+	},
+	
+	processSender: function(self, sender) {
+		if (App.senders !== 0 || App.sender !== undefined) {
+			self.addSender(App.senders, sender);
+			var s = self.setTargetValue(App.senders, sender);
+
+			self.set('senderAttr', s);
+		}
+		else {
+			console.log(sender);
+			var sender =  sender.split("/");
+			App.senders.push(Ember.Object.create({id: sender, value: sender[1] + ' <' + sender[0] + '>'}));
+		}
+		
+		self.set('senderName', '');
+		self.set('senderEmail', '');
 	},
 	
 	setTargetValue: function(select, value) {

@@ -148,8 +148,8 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					WHERE e.idAccount = {$this->account->idAccount} {$queryCriteria->andFilter} $filter $limit";
 		}
 		
-		\Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
-		\Phalcon\DI::getDefault()->get('logger')->log("Total query: " . $sqlTotalRecords);
+//		\Phalcon\DI::getDefault()->get('logger')->log("Core query: " . $sql);
+//		\Phalcon\DI::getDefault()->get('logger')->log("Total query: " . $sqlTotalRecords);
 		
 		$this->setTotalMatches($sqlTotalRecords);
 		
@@ -196,7 +196,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 					WHERE c.idContact IN ({$ids})";
 			
 		}      
-        \Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
+//        \Phalcon\DI::getDefault()->get('logger')->log("Final query: " . $sql);
 		return $sql;
 	}
 	
@@ -259,7 +259,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			
 			$query = $db->query($sql);
 			$result = $query->fetch();
-			\Phalcon\DI::getDefault()->get('logger')->log("Total: " . $result['total']);
+//			\Phalcon\DI::getDefault()->get('logger')->log("Total: " . $result['total']);
 			$this->paginator->setTotalRecords($result['total']);
 		}
 	}
