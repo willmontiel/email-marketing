@@ -1,9 +1,9 @@
 App.set('errormessage', '');
 
 //Rutas
-App.ContactsIndexRoute = Ember.Route.extend({
+App.ContactsIndexRoute = Ember.Route.extend(Ember.MixinSearchReferencePagination, {
 	model: function(){
-		return this.store.find('contact');
+		return this.store.find('contact', {searchCriteria: App.criteria, filter: App.finalFilter});
 	},
 	deactivate: function () {
 		this.doRollBack();
@@ -114,7 +114,7 @@ App.ContactsDeleteController = Ember.ObjectController.extend(Ember.SaveHandlerMi
 				
 		cancel: function(){
 			 this.get("model").rollback();
-			 this.transitionTo("contacts");
+			 this.transitionToRoute("contacts");
 		}
 	}
 	
@@ -137,10 +137,12 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		value: "all"
 	},
 	refreshRecords: function() {
-		this.criteria = this.get('searchCriteria');
-		this.finalFilter = this.get('filter.value');
+		App.criteria = this.get('searchCriteria');
+		App.finalFilter = this.get('filter.value');
+//		this.criteria = this.get('searchCriteria');
+//		this.finalFilter = this.get('filter.value');
 		var t = this;
-		this.store.find('contact', {searchCriteria: this.criteria, filter: this.finalFilter}).then(function(d) {
+		this.store.find('contact', {searchCriteria: App.criteria, filter: App.finalFilter}).then(function(d) {
 			t.set('content', d.content);
 		});
 	},
@@ -153,8 +155,8 @@ App.ContactsIndexController = Ember.ArrayController.extend(Ember.MixinSearchRefe
 		reset: function() {
 			this.set('searchCriteria', '');
 			this.set('filter.value', "all");
-			this.criteria = '';
-			this.finalFilter = '';
+			App.criteria = '';
+			App.finalFilter = '';
 			this.refreshRecords();	
 		},
 		expand: function (contact) {

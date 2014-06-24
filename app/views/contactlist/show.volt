@@ -45,6 +45,8 @@
 	{{ javascript_include('js/list_model.js') }}
 	{{ javascript_include('js/app_contact_list.js') }}
 	<script type="text/javascript">
+		App.currentFilter = '';
+		
 		App.contactACL = {
 			canCreate: {{acl_Ember('api::createcontactbylist')}},
 			canImportBatch: {{acl_Ember('contacts::importbatch')}},

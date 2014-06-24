@@ -35,6 +35,9 @@
 	
 	{{'{{#if model}}'}}
 		{{ partial("partials/search_contacts_partial") }}
+		{#
+			{{ partial("partials/select_contacts_search_partial") }}
+		#}
 	{{'{{/if}}'}}
 
 	<table class="table table-striped">
