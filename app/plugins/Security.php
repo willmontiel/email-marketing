@@ -391,6 +391,13 @@ class Security extends Plugin
 				'footer::duplicate' => array('footer' => array('create')),
 				'footer::image' => array('footer' => array('view')),
 				
+				//Campañas
+				'campaign::index' => array('campaign' => array('read')),
+				'campaign::list' => array('campaign' => array('read')),
+				'campaign::new' => array('campaign' => array('create')),
+				'campaign::edit' => array('campaign' => array('update')),
+				'campaign::delete' => array('campaign' => array('delete')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

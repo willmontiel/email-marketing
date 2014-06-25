@@ -47,6 +47,7 @@ class PermissionsDataBase
 			'system' => 17,
 			'tools' => 18,
 			'footer' => 19,
+			'campaign' => 20,
 		);
 	}
 	
@@ -144,6 +145,11 @@ class PermissionsDataBase
 			'footer::update' => 71,
 			'footer::delete' => 72,
 			'footer::view' => 73,
+			
+			'campaign::create' => 74,
+			'campaign::read' => 75,
+			'campaign::update' => 76,
+			'campaign::delete' => 77,
 		);
 	}
 	
@@ -242,6 +248,11 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'system::update'),
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'tools::read'),
+			
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::create'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::read'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::update'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::delete'),
 			
 			
 //			----------//----------**ROLE_ADMIN**----------//----------
