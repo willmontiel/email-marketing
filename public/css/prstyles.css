@@ -879,3 +879,25 @@ span.required {
 .footer-html > table {
 	margin: auto;
 }
+
+.select-target-title {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	font-size: 12px;
+	padding:  0px 9px;
+	border: 1px solid #ddd;
+	width: 100%;
+}
+
+.select-target {
+	/*background-color: #f5f5f5;*/
+	font-size: 16px;
+	padding: 8px;
+	border: 1px solid #ddd;
+	width: 100%;
+}
+
+.target-button {
+	margin-right: 2px;
+	cursor: pointer;
+}

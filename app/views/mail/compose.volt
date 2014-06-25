@@ -2,11 +2,16 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
+
+	{# Select2 master#}
+	{{ stylesheet_link('select2-master/select2.css') }}
+	{{ javascript_include('select2-master/select2.js')}}
+
 	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
-	
 	{{ javascript_include('javascripts/moment/moment-with-langs.min.js')}}
 	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
+	{{ partial("partials/select2_view_partial") }}
 	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	<script type="text/javascript">
@@ -110,7 +115,7 @@
 		{% if db == true%}
 			App.dbs = [
 				{% for dbase in dbases %}
-					Ember.Object.create({name: "{{dbase.name|escape_js}}", id: {{dbase.idDbase}}}),
+					Ember.Object.create({id: {{dbase.idDbase}}, name: "{{dbase.name|escape_js}}", color: "{{dbase.color}}"}),
 				{% endfor %}
 			];
 			
