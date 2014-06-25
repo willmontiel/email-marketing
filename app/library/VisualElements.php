@@ -25,21 +25,21 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 			"title" => "Correos",
 			"icon" => "icon-envelope"
 		),
-/*		"Formularios" => array(
-			"controller" => array("form"),
-			"class" => "",
-			"url" => "form",
-			"title" => "Formularios",
-			"icon" => "icon-edit"
-		),
+//		"Formularios" => array(
+//			"controller" => array("form"),
+//			"class" => "",
+//			"url" => "form",
+//			"title" => "Formularios",
+//			"icon" => "icon-edit"
+//		),
 		"Autorespuestas" => array(
-			"controller" => array(""),
+			"controller" => array("campaign"),
 			"class" => "",
-			"url" => "",
+			"url" => "campaign",
 			"title" => "Autorespuestas",
 			"icon" => "icon-share"
 		),
-*/
+
 //		"Estadisticas" => array(
 //			"controller" => array("statistic"),
 //			"class" => "",
