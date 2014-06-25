@@ -879,3 +879,9 @@ span.required {
 .footer-html > table {
 	margin: auto;
 }
+
+.input-autoresponse {
+    width: 100%;
+    text-align: center;
+    font-size: 115%;
+}
