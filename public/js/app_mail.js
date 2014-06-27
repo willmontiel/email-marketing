@@ -114,6 +114,14 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('fbimagepublication', 'post_default.png');
 		}
 	}.observes('this.content'),
+			
+	whatevers: function () {
+		console.log('some');
+		principalPanel = new PrincipalPanel('none', 'li-active', 'none');
+		principalPanel.createHtmlPanel();
+		principalPanel.appendPanel();
+	}.observes('isTargetExpanded'),
+		
 	
 	//Si hay un id se encargara se recrear el correo para su edición
 	setSelectsContent: function () {
@@ -567,7 +575,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},
-		
+
 		expandSocial: function () {
 			if (this.get('this.id') !== null) {
 				var arrayFb = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);

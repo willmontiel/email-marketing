@@ -6,7 +6,7 @@
 	{# Select2 master#}
 	{{ stylesheet_link('select2-master/select2.css') }}
 	{{ javascript_include('select2-master/select2.js')}}
-
+	
 	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
 	{{ javascript_include('javascripts/moment/moment-with-langs.min.js')}}
 	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
@@ -185,8 +185,18 @@
 			];
 		{% endif %}
 	</script>
+	
+	{# funcionalidad seleccionar destinatarios #}
+	{{ stylesheet_link('target-selection/css/target-selection-function.css') }}
+	{{ javascript_include('target-selection/principal.js')}}
 {% endblock %}
 {% block content %}
+	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}
+	
+	<div class="row">
+	<div class="principal"></div>
+</div>
+	
 	{{flashSession.output()}}
 	
 	<div class="border-mail mail-wrapper">
@@ -250,7 +260,9 @@
 			</script>
 		</div>
 	</div>
-
+	
+	<div class="space"></div>
+	
 	<div class="modal fade gallery-modal" id="images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">

@@ -251,6 +251,7 @@ class Security extends Plugin
 		//* RELEASE 0.2.0 *//
 				//Envío de correos
 				'mail::index' => array('mail' => array('read')),
+				'dbase::listandsegments' => array('mail' => array('create')),
 				'mail::list' => array('mail' => array('read')),
 				'mail::setup' => array('mail' => array('read', 'create')),
 				'mail::savetmpdata' => array('mail' => array('read', 'create')),

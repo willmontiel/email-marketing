@@ -43,35 +43,9 @@
 	</div>
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<div class="row">
-				<div class="col-sm-4">
-						<div class="select-target-title" style="background-color: #ddd;">
-							<h4>Bases de datos</h4>
-						</div>
-					{{ '{{#each App.dbs}}' }}
-						<div class="select-target" style="color: {{ '{{unbound color}}' }}">
-							<span class="glyphicon glyphicon-hdd"></span>
-							{{ '{{name}}' }}
-
-							<span class="label label-default pull-right target-button"><span class="glyphicon glyphicon-plus"></span></span>
-							<span class="label label-default pull-right target-button"><span class="glyphicon glyphicon-ok"></span></span>
-						</div>	
-					{{ '{{/each}}' }}
-				</div>
-				<div class="col-sm-4">
-					{{ '{{#each App.dbs}}' }}
-						<div class="select-target" style="color: {{ '{{unbound color}}' }}">
-							<span class="glyphicon glyphicon-hdd"></span>
-							{{ '{{name}}' }}
-
-							<span class="label label-default pull-right target-button"><span class="glyphicon glyphicon-plus"></span></span>
-							<span class="label label-default pull-right target-button"><span class="glyphicon glyphicon-ok"></span></span>
-						</div>	
-					{{ '{{/each}}' }}
-						
-				</div>
-				<div class="col-sm-4"></div>
-			</div>	
+			{{ partial("partials/select_target_partial") }}
+			
+			
 			
 			{% if db == true%}
 				<form class="form-horizontal" role="form">
