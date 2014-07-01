@@ -1,6 +1,6 @@
 {# Barra de menu de botones minimizados #}
 <div class="row">
-	<div class="col-xs-12 col-sm-10 col-sm-offset-2 col-md-6 col-md-offset-6 col-lg-4 col-lg-offset-8">
+	<div class="col-xs-12 col-sm-10 col-sm-offset-2 col-md-6 col-md-offset-6 col-lg-5 col-lg-offset-7">
 		<ul class="list-inline pull-right mtop-5">
 			<li class="small-btn sm-btn-blue {{ activelnk=='account'?'active':'' }}">
 				<a href="{{ url('account') }}" data-toggle="tooltip" data-placement="bottom" title="Cuentas">
@@ -34,6 +34,12 @@
 			
 			<li class="small-btn sm-btn-blue {{ activelnk=='socialmedia'?'active':'' }}">
 				<a href="{{ url('socialmedia') }}" data-toggle="tooltip" data-placement="bottom" title="Cuentas de redes sociales">
+				<span class="sm-button-small-social"></span>
+				</a>
+			</li>
+			
+			<li class="small-btn sm-btn-blue {{ activelnk=='apikey'?'active':'' }}">
+				<a href="{{ url('apikey') }}" data-toggle="tooltip" data-placement="bottom" title="API Key">
 				<span class="sm-button-small-social"></span>
 				</a>
 			</li>

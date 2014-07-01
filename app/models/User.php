@@ -18,6 +18,7 @@ class User extends Modelbase
     public function initialize()
     {
 		$this->hasMany("idUser", "Tmprecoverpass", "idUser");
+		$this->hasOne("idUser", "Apikey", "idUser");
         $this->belongsTo("idAccount", "Account", "idAccount", array(
             "foreignKey" => true,
         ));

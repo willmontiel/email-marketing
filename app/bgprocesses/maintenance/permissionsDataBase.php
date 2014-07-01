@@ -47,6 +47,7 @@ class PermissionsDataBase
 			'system' => 17,
 			'tools' => 18,
 			'footer' => 19,
+			'apikey' => 20,
 		);
 	}
 	
@@ -144,6 +145,11 @@ class PermissionsDataBase
 			'footer::update' => 71,
 			'footer::delete' => 72,
 			'footer::view' => 73,
+			
+			'apikey::create' => 74,
+			'apikey::read' => 75,
+			'apikey::update' => 76,
+			'apikey::delete' => 77,
 		);
 	}
 	
@@ -234,6 +240,11 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'footer::delete'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'footer::view'),
 			
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'apikey::create'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'apikey::read'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'apikey::update'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'apikey::delete'),
+			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'socialmedia::create'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'socialmedia::read'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'socialmedia::delete'),
@@ -316,6 +327,11 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'tools::read'),
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'footer::view'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'apikey::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'apikey::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'apikey::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'apikey::delete'),
 			
 			
 //			----------//----------**ROLE_USER**----------//----------

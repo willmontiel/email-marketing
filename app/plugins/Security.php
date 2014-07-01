@@ -391,6 +391,14 @@ class Security extends Plugin
 				'footer::duplicate' => array('footer' => array('create')),
 				'footer::image' => array('footer' => array('view')),
 				
+				//API Keys
+				'apikey::index' => array('apikey' => array('read')),
+				'apikey::create' => array('apikey' => array('create')),
+				
+				//ExternalApi
+				'apiexternal::listaccounts' => array('account' => array('read')),
+				'apiexternal::timebilling' => array('account' => array('read')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
@@ -465,7 +473,33 @@ class Security extends Plugin
 				$this->_dependencyInjector->set('userefective', $userefective);
 			}
 		}
+		else {
+			try {
+				$method = $this->request->getMethod();
+				$data = $this->request->getRawBody();
+				$uri = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://" . $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+				
+				$auth = new \EmailMarketing\General\Authorization\AuthHmacHeader($method, $uri, $data);
+				
+				if( $auth->verifyHeader() && $auth->processHeader() && $auth->checkUserPWD() ) {
+					$user = User::findFirst(array(
+						'conditions' => 'idUser = ?1',
+						'bind' => array(1 => $auth->getAuthUser())));
 
+					if ($user) {
+						$role = $user->userrole;
+						$this->_dependencyInjector->set('userObject', $user);
+					}
+				}
+			}
+			catch(\Exception $e) {
+				$this->logger->log('Error al Autenticar HTTP. Error [ ' . $e . ' ]');
+			}
+			catch(\InvalidArgumentException $e) {
+				$this->logger->log('Error al Autenticar HTTP. Error [ ' . $e . ' ]');
+			}
+		}
+		
 		$map = $this->getControllerMap();
 		
 		$this->publicurls = array(

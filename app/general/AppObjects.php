@@ -173,6 +173,7 @@ class AppObjects
 			$router->addResource('Contactlistapi', '/api/contactlist');
 			$router->addResource('Segmentapi', '/api/segment');
 			$router->addResource('Apistatistics', '/apistatistics');
+			$router->addResource('Apiexternal', '/v1/api');
 
 			return $router;
 		});
