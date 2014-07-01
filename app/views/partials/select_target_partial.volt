@@ -16,4 +16,6 @@
 
 <div class="row">
 	<div class="principal"></div>
+	<div class="target"></div>
+	<div class="filter"></div>
 </div>

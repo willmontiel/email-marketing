@@ -119,11 +119,24 @@
 				{% endfor %}
 			];
 			
+			var dbases = [];
+			{% for dbase in dbases %}
+				var object = {id: {{dbase.idDbase}}, value: "{{dbase.name|escape_js}}", color: "{{dbase.color}}"};
+				dbases.push(object);
+			{% endfor %}
+			
 			App.lists = [
 				{% for contactlist in contactlists %}
 					Ember.Object.create({name: "{{contactlist.name|escape_js}}", id: {{contactlist.idContactlist}}}),
 				{% endfor %}
 			];
+			
+			
+			var lists = [];
+			{% for list in contactlists %}
+				var object = {id: {{list.idContactlist}}, value: "{{list.name|escape_js}}"};
+				lists.push(object);
+			{% endfor %}
 			
 			App.segments = [
 				{% for segment in segments %}
@@ -188,14 +201,13 @@
 	
 	{# funcionalidad seleccionar destinatarios #}
 	{{ stylesheet_link('target-selection/css/target-selection-function.css') }}
-	{{ javascript_include('target-selection/principal.js')}}
+	{{ javascript_include('target-selection/panel-container.js')}}
+	{{ javascript_include('target-selection/panel.js')}}
 {% endblock %}
 {% block content %}
 	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}
 	
-	<div class="row">
-	<div class="principal"></div>
-</div>
+	<div class="row panel-container"></div>
 	
 	{{flashSession.output()}}
 	

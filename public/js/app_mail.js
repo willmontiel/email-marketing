@@ -117,9 +117,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			
 	whatevers: function () {
 		console.log('some');
-		principalPanel = new PrincipalPanel('none', 'li-active', 'none');
-		principalPanel.createHtmlPanel();
-		principalPanel.appendPanel();
+		var panelContainer = new PanelContainer();
 	}.observes('isTargetExpanded'),
 		
 	
