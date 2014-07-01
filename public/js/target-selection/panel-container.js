@@ -19,4 +19,15 @@ PanelContainer.prototype.removePanel = function(panel) {
 				tor[j].remove();
 		}
 	}
-}
+};
+
+PanelContainer.prototype.resetContainer = function () {
+	var l = this.panellist.length;
+	
+	for (var i = 1; i < this.panellist.length; i++) {
+		this.panellist[i].remove();
+	}
+	
+	this.panellist.splice(1, l - 1);
+	console.log(this.panellist);
+};

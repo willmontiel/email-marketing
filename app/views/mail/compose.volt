@@ -200,9 +200,10 @@
 	</script>
 	
 	{# funcionalidad seleccionar destinatarios #}
-	{{ stylesheet_link('target-selection/css/target-selection-function.css') }}
-	{{ javascript_include('target-selection/panel-container.js')}}
-	{{ javascript_include('target-selection/panel.js')}}
+	{{ stylesheet_link('js/target-selection/css/target-selection-function.css') }}
+	{{ javascript_include('js/target-selection/panel-container.js')}}
+	{{ javascript_include('js/target-selection/panel.js')}}
+	{{ javascript_include('js/target-selection/panel-content.js')}}
 {% endblock %}
 {% block content %}
 	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}

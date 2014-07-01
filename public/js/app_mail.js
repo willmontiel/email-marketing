@@ -117,21 +117,35 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			
 	whatevers: function () {
 		var panelContainer = new PanelContainer('#panel-container');
+		var topPanelContent = new TopPanelContent();
+		topPanelContent.createContent();
+		
 		var config = {
 			sticky: true, 
 			leftArrow: false, 
-			title: 'Seleccione una opción'
+			title: 'Seleccione una opción',
+			content: topPanelContent
 		};
+		
 		panelContainer.addPanel(config);
 		
-		$('#panel-container').before($('<button class="addPanel btn btn-sm btn-primary extra-padding">+</button>'));
+//		$('#panel-container').before($('<button class="addPanel btn btn-sm btn-primary extra-padding">+</button>'));
 
-		$('#panel-container').siblings('.addPanel').on('click', function() {
+		$('.addPanel').on('click', function() {
+			panelContainer.resetContainer();
+			
+			var listPanelContent = new ListPanelContent();
+			listPanelContent.createContent();
+			
+			console.log($(this).attr('data-type'));
+			$('.sgm-content-selector li').removeClass('li-active');
+			$(this).addClass('li-active');
+			
 			config.sticky = false;
 			config.leftArrow = true;
+			config.content = listPanelContent;
 			config.title = 'Secondary option';
 			panelContainer.addPanel(config);
-			console.log('Se agregó panel');
 		});
 
 	}.observes('isTargetExpanded'),
