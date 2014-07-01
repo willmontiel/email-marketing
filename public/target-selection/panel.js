@@ -1,45 +1,34 @@
-function Panel(title, attrAdd, attrRemove) {
-	this.title = title;
-	this.attrAdd = attrAdd;
-	this.attrRemove = attrRemove;
-	
-	var self = this;
-	
-	$('.addFilter').on('click', function() {
-		self.addPanel('Seleccione una opción', true, true);
-		console.log('Se agregó panel');
-	});
+function Panel(parent, config) {
+	this.config = config;
+	this.parent = parent;
 }
 
-Panel.prototype.createHtmlPanel = function() {
-	var add = (this.attrAdd ? '<button class="addFilter btn btn-sm btn-primary extra-padding">+</button>' : '');
-	var remove = (this.attrRemove ? '<button class="removeFilter btn btn-sm btn-danger extra-padding">-</button>' : '');
-	
-	console.log(add);
-	this.html = $('<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">\n\
-					<div class="panel">\n\
-						<div class="panel-title">' + this.title + '</div>\n\
+Panel.prototype.panelClass = 'col-xs-12 col-sm-6 col-md-4 col-lg-3';
+
+Panel.prototype.createPanel = function(container) {
+	this.html = $('<div class="' + Panel.prototype.panelClass + '">\n\
+					<div class="sgm-panel">\n\
+						' + ((!this.config.sticky)?'<div class="sgm-close-panel"><span class="glyphicon glyphicon-minus-sign"></span></div>':'') +
+						'<div class="sgm-panel-title">' + this.config.title + '</div>\n\
+						<div class="sgm-panel-content">\n\
 						</div>\n\
-						<div class="panel-content">\n\
-							' + remove + '\n\
-							' + add + '\n\
-						</div>\n\
+					    ' + ((this.config.leftArrow) ? '<div class="sgm-left-arrow-border"></div><div class="sgm-left-arrow"></div>' : '') + '\n\
 					</div>\n\
 				 </div>');
-};
-
-Panel.prototype.addPanel = function(title, add, remove) {
-	var panel = new Panel(title, add, remove);
-	panel.createHtmlPanel();
-	var cpanel = panel.getPanel();
+	this.container = container;
+	var self = this;
+	this.html.find('.sgm-close-panel').on('click', function (e) {
+		self.close(e);
+	});
 	
-	$('.panel-container').append(cpanel);
+//	this.html.show('slow');
+	container.append(this.html);
 };
 
-Panel.prototype.destroyPanel = function() {
-	
+Panel.prototype.close = function (e) {
+	e.preventDefault();
+	this.parent.removePanel(this);
 };
-
-Panel.prototype.getPanel = function() {
-	return this.html;
-};
+Panel.prototype.remove = function (e) {
+	this.html.remove();
+}
