@@ -84,48 +84,49 @@
 		<form method="POST" class="" action="{{url('contacts/processfile/')}}{{idContactlist~'/'~idImportfile}}" role="form">
 			<div class="row">
 				<div class="col-sm-6">
-					<div class="col-md-10 report">
-						<h4>Asignación de campos</h4>
-					</div>
-					<div class="col-md-1 mini-icon pull-right">
-						<span class="glyphicon glyphicon-hand-left"></span>
-					</div>
-					<table class="table table-condensed table-striped table-contacts">
-						<tbody>
-							<tr>
-								<th>Email</th>
-								<th>
-									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="email" id="email" name="email" class="form-control"}}'}}
-								</th>
-							</tr>
-							<tr>		
-								<th>Nombre</th>
-								<th>
-									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="name" id="name" name="name" class="form-control"}}'}}
-								</th>
-							</tr>
-							<tr>		
-								<th>Apellido</th>
-								<th>
-									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="lastname" id="lastname" name="lastname" class="form-control"}}'}}
-								</th>
-							</tr>
-							<tr>		
-								<th>Fecha de nacimiento</th>
-								<th>
-									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="birthdate" id="birthdate" name="birthdate" class="form-control"}}'}}
-								</th>
-							</tr>
-							{%for field in customfields %}
-							<tr>		
-								<th>{{field.name}}</th>
-								<th>
-									{{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" class="uniform form-control" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'" }}'}}
-								</th>
-							</tr>
-							{%endfor%}
-						</tbody>
-					</table>
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+						<h4 class="panel-title">Asignación de campos</h4>
+                                            </div>
+                                            <div class="panel-body">
+                                                <table class="table table-condensed table-striped table-contacts">
+                                                        <tbody>
+                                                                <tr>
+                                                                        <th>Email</th>
+                                                                        <th>
+                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="email" id="email" name="email" class="form-control"}}'}}
+                                                                        </th>
+                                                                </tr>
+                                                                <tr>		
+                                                                        <th>Nombre</th>
+                                                                        <th>
+                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="name" id="name" name="name" class="form-control"}}'}}
+                                                                        </th>
+                                                                </tr>
+                                                                <tr>		
+                                                                        <th>Apellido</th>
+                                                                        <th>
+                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="lastname" id="lastname" name="lastname" class="form-control"}}'}}
+                                                                        </th>
+                                                                </tr>
+                                                                <tr>		
+                                                                        <th>Fecha de nacimiento</th>
+                                                                        <th>
+                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="birthdate" id="birthdate" name="birthdate" class="form-control"}}'}}
+                                                                        </th>
+                                                                </tr>
+                                                                {%for field in customfields %}
+                                                                <tr>		
+                                                                        <th>{{field.name}}</th>
+                                                                        <th>
+                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" class="uniform form-control" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'" }}'}}
+                                                                        </th>
+                                                                </tr>
+                                                                {%endfor%}
+                                                        </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
 				</div>
 		
 				<div class="col-sm-6">
