@@ -130,118 +130,117 @@
 				</div>
 		
 				<div class="col-sm-6">
-					<div class="col-md-10 report">
-						<h4>Previsualización</h4>
-					</div>
-					<div class="col-md-1 mini-icon pull-right">
-						<span class="glyphicon glyphicon-eye-open"></span>
-					</div>
-					<table class="table table-normal hight-line">
-						<tbody>
-							<tr>
-								<th>Email: </th>
-								<td>{{'{{emailF}}'}}</td>
-							</tr>
-							<tr>
-								<th>Nombre:</th>
-								<td> {{'{{nameF}}'}}</td>
-							</tr>
-							<tr>
-								<th>Apellido: </th>
-								<td>{{'{{lastnameF}}'}}</td>
-							</tr>
-							<tr>
-								<th>Fecha de nacimiento: </th>
-								<td>{{'{{birthdateF}}'}}</td>
-							</tr>
-						{%for field in customfields%}
-							<tr>
-								<th>{{field.name}}: </th>
-								<td>{{'{{campo'~field.idCustomField~'F}}'}}</td>
-							
-							</tr>
-						{%endfor%}
-						</tbody>
-					</table>
-				</div>
-			</div>
-			
-			<div class="row">
-				<div class="clearfix"></div>
-				<div class="space"></div>
-				<div class="col-md-2"></div>
-				<div class="col-sm-6 col-sm-offset-1">
-                                    <div class="panel panel-default">
+                                    <div class="panel panel-info">
                                         <div class="panel-heading">
-                                        <h4 class="panel-title">Opciones de importación</h4>
+                                            <h4 class="panel-title">Previsualización</h4>
                                         </div>
                                         <div class="panel-body">
-                                            <table class="table table-striped">
-                                                <tbody>
-                                                    <tr>
-                                                        <th><strong>Delimitador: </strong></th>
-                                                        <td>{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th><strong>Formato de fecha: </strong></th>
-                                                        <td>{{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat"}}'}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th><strong>Encabezado: </strong></th>
-                                                        <td>{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}</td>
-                                                    </tr>
-                                                </tbody>
+                                            <table class="table table-normal hight-line">
+                                                    <tbody>
+                                                            <tr>
+                                                                    <th>Email: </th>
+                                                                    <td>{{'{{emailF}}'}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <th>Nombre:</th>
+                                                                    <td> {{'{{nameF}}'}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <th>Apellido: </th>
+                                                                    <td>{{'{{lastnameF}}'}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <th>Fecha de nacimiento: </th>
+                                                                    <td>{{'{{birthdateF}}'}}</td>
+                                                            </tr>
+                                                    {%for field in customfields%}
+                                                            <tr>
+                                                                    <th>{{field.name}}: </th>
+                                                                    <td>{{'{{campo'~field.idCustomField~'F}}'}}</td>
+
+                                                            </tr>
+                                                    {%endfor%}
+                                                    </tbody>
                                             </table>
                                         </div>
                                     </div>
 				</div>
-			<div class="clearfix"></div>
-			<div class="space"></div>
+			</div>
+			
+			<div class="row">
+                            <div class="col-sm-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                    <h4 class="panel-title">Opciones de importación</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <th><strong>Delimitador: </strong></th>
+                                                    <td>{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><strong>Formato de fecha: </strong></th>
+                                                    <td>{{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat"}}'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><strong>Encabezado: </strong></th>
+                                                    <td>{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="space"></div>
 			</div>
 			<div class="col-md-12">
-				<div class="col-md-11 report">
+				<div class="panel panel-success">
+                                    <div class="panel-heading">
 					<h4>Información de archivo, 5 primeras filas</h4>
-				</div>
-				<div class="col-md-1 mini-icon pull-right">
-					<span class="glyphicon glyphicon-th-list"></span>
-				</div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <table class="table table-condensed table-striped table-bordered">
+                                                <thead>
+                                                                {{' {{#each App.firstline}} '}}
+                                                                        <th>Campo</th>
+                                                                {{' {{/each}} '}}
+                                                </thead>
+                                                <tbody>
+                                                        {{' {{#unless hasheader}} '}}
+                                                        <tr>
+                                                                {{' {{#each App.firstline}} '}}
+                                                                        <td>{{' {{this}} '}}</td>
+                                                                {{' {{/each}} '}}
+                                                        </tr>
+                                                        {{ '{{/unless}}' }}
+                                                        <tr>
+                                                                {{' {{#each App.secondline}} '}}
+                                                                        <td>{{' {{this}} '}}</td>
+                                                                {{' {{/each}} '}}
+                                                        </tr>
+                                                        <tr>
+                                                                {{' {{#each App.thirdline}} '}}
+                                                                        <td>{{' {{this}} '}}</td>
+                                                                {{' {{/each}} '}}
+                                                        </tr>
+                                                        <tr>
+                                                                {{' {{#each App.fourthline}} '}}
+                                                                        <td>{{' {{this}} '}}</td>
+                                                                {{' {{/each}} '}}
+                                                        </tr>
+                                                        <tr>
+                                                                {{' {{#each App.fifthline}} '}}
+                                                                        <td>{{' {{this}} '}}</td>
+                                                                {{' {{/each}} '}}
+                                                        </tr>
+                                                </tbody>
+                                        </table>
+                                    </div>
+                                </div>
 			</div>
-			<table class="table table-condensed table-striped table-bordered">
-				<thead>
-						{{' {{#each App.firstline}} '}}
-							<th>Campo</th>
-						{{' {{/each}} '}}
-				</thead>
-				<tbody>
-					{{' {{#unless hasheader}} '}}
-					<tr>
-						{{' {{#each App.firstline}} '}}
-							<td>{{' {{this}} '}}</td>
-						{{' {{/each}} '}}
-					</tr>
-					{{ '{{/unless}}' }}
-					<tr>
-						{{' {{#each App.secondline}} '}}
-							<td>{{' {{this}} '}}</td>
-						{{' {{/each}} '}}
-					</tr>
-					<tr>
-						{{' {{#each App.thirdline}} '}}
-							<td>{{' {{this}} '}}</td>
-						{{' {{/each}} '}}
-					</tr>
-					<tr>
-						{{' {{#each App.fourthline}} '}}
-							<td>{{' {{this}} '}}</td>
-						{{' {{/each}} '}}
-					</tr>
-					<tr>
-						{{' {{#each App.fifthline}} '}}
-							<td>{{' {{this}} '}}</td>
-						{{' {{/each}} '}}
-					</tr>
-				</tbody>
-			</table>
 			<a href="{{ url('contactlist/show/'~ idContactlist ~'#/contacts/import') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
 			{{submit_button('class': "btn btn-default btn-sm btn-guardar extra-padding", "Guardar")}}
 		</form>
