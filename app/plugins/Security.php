@@ -394,10 +394,13 @@ class Security extends Plugin
 				//API Keys
 				'apikey::index' => array('apikey' => array('read')),
 				'apikey::create' => array('apikey' => array('create')),
+				'apikey::remake' => array('apikey' => array('update')),
+				'apikey::delete' => array('apikey' => array('delete')),
+				'apikey::changestatus' => array('apikey' => array('update')),
 				
 				//ExternalApi
-				'apiexternal::listaccounts' => array('account' => array('read')),
-				'apiexternal::timebilling' => array('account' => array('read')),
+				'apiversionone::listaccounts' => array('account' => array('read')),
+				'apiversionone::timebilling' => array('account' => array('read')),
 				
 			);
 		}
@@ -481,12 +484,13 @@ class Security extends Plugin
 				
 				$auth = new \EmailMarketing\General\Authorization\AuthHmacHeader($method, $uri, $data);
 				
-				if( $auth->verifyHeader() && $auth->processHeader() && $auth->checkUserPWD() ) {
-					$user = User::findFirst(array(
-						'conditions' => 'idUser = ?1',
+				if( $auth->verifyHeader() && $auth->processHeader() ) {
+					$apikey = Apikey::findFirst(array(
+						'conditions' => 'apikey = ?1',
 						'bind' => array(1 => $auth->getAuthUser())));
-
-					if ($user) {
+					
+					if ( $apikey && $auth->checkUserPWD($apikey) && $apikey->user) {
+						$user = $apikey->user;
 						$role = $user->userrole;
 						$this->_dependencyInjector->set('userObject', $user);
 					}

@@ -6,6 +6,6 @@ interface AuthHeader
 {
 	public function verifyHeader();
 	public function processHeader();
-	public function checkUserPWD();
+	public function checkUserPWD(\Apikey $apikey);
 	public function getAuthUser();
 }

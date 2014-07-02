@@ -1,8 +1,8 @@
 <?php
 /**
- * @RoutePrefix("/v1/api")
+ * @RoutePrefix("/api/v1")
  */
-class ApiexternalController extends ControllerBase
+class ApiversiononeController extends ControllerBase
 {
 	/**
 	 * @Get("/account")

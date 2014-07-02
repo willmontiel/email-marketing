@@ -48,12 +48,11 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 		return false;
 	}
 	
-	public function checkUserPWD()
+	public function checkUserPWD(\Apikey $apikey)
 	{
 		$msg = $this->method . '|' . $this->uri . '|' . $this->data;
-		$key = '123456789';
-		$hash = hash_hmac('sha1', $msg, $key);
-		if($hash == $this->pwd) {
+		$hash = hash_hmac('sha1', $msg, $apikey->secret);
+		if($hash == $this->pwd && $apikey->status == 'Enable' ) {
 			return true;
 		} 
 		
