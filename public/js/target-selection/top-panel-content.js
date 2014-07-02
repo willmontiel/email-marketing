@@ -3,6 +3,7 @@ function TopPanelContent() {}
 TopPanelContent.prototype = new PanelContent;
 
 TopPanelContent.prototype.initialize = function() {
+	console.log('Initializing from TopPanelContent');
 	var self = this;
 	
 	this.content.find('.sgm-add-selector-content').on('click', function (e) {

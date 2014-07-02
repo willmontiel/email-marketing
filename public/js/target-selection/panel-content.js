@@ -5,6 +5,7 @@ PanelContent.prototype.setPanelContainer = function(container) {
 };
 
 PanelContent.prototype.initialize = function(panel) {
+	console.log('Initializing from PanelContent');
 	panel.find('.sgm-panel-content').append(this.content);
 };
 
