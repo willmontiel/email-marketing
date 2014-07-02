@@ -209,7 +209,7 @@
                                                 <tr>
                                                     <th><strong>Modo de importación: </strong></th>
                                                     <td>
-                                                        {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="dateformat" name="importmode" class="form-control"}}'}}
+                                                        {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="importmode" name="importmode" class="form-control"}}'}}
                                                         <br/>  
                                                         Estado en que se importan los contactos
                                                         <p class="text-warning">
