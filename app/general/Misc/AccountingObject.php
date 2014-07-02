@@ -130,8 +130,8 @@ class AccountingObject
 					FROM mail AS m
 					LEFT JOIN mxc AS mc ON ( mc.idMail = m.idMail ) 
 					JOIN account AS a ON ( a.idAccount = m.idAccount ) 
-				WHERE m.updatedon >= {$time1}
-					AND m.updatedon < {$time2}
+				WHERE m.finishedon >= {$time1}
+					AND m.finishedon < {$time2}
 					AND m.status = 'sent'
 				GROUP BY 1 ";
 					
