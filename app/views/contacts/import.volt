@@ -171,56 +171,68 @@
 			
 			<div class="row">
                             <div class="col-xs-12 col-sm-10">
-                                <div class="panel panel-info">
-                                    <div class="panel-heading">
-                                    <h4 class="panel-title">Opciones de importación</h4>
+                                <div class="panel-group" id="import-configuration">
+
+                                    <!-- Panel -->
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#import-configuration" href="#config-collapse">
+                                                <i class="glyphicon glyphicon-cog"></i> Opciones de importación
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="config-collapse" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <table class="table table-striped">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th><strong>Encabezado: </strong></th>
+                                                            <td>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        {{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
+                                                                        Tratar primera fila de archivo como encabezado<br/>
+                                                                        <i>No se importa la primera línea</i>
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><strong>Delimitador: </strong></th>
+                                                            <td>
+                                                                {{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" }} '}}
+                                                                <br/>
+                                                                <i>Para identificar los campos de cada línea</i>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><strong>Formato de fecha: </strong></th>
+                                                            <td>
+                                                                {{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat" class="form-control"}}'}}
+                                                                <br/>
+                                                                <i>Afecta como se procesan los campos de tipo fecha</i>    
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><strong>Modo de importación: </strong></th>
+                                                            <td>
+                                                                {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="importmode" name="importmode" class="form-control"}}'}}
+                                                                <br/>  
+                                                                Estado en que se importan los contactos
+                                                                <p class="text-warning">
+                                                                    <strong>Nota:</strong>
+                                                                    Esta opción es avanzada, si no sabe cual debe elegir deje el valor por defecto!
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="panel-body">
-                                        <table class="table table-striped">
-                                            <tbody>
-                                                <tr>
-                                                    <th><strong>Encabezado: </strong></th>
-                                                    <td>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                {{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
-                                                                Tratar primera fila de archivo como encabezado<br/>
-                                                                <i>No se importa la primera línea</i>
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th><strong>Delimitador: </strong></th>
-                                                    <td>
-                                                        {{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" }} '}}
-                                                        <br/>
-                                                        <i>Para identificar los campos de cada línea</i>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th><strong>Formato de fecha: </strong></th>
-                                                    <td>
-                                                        {{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat" class="form-control"}}'}}
-                                                        <br/>
-                                                        <i>Afecta como se procesan los campos de tipo fecha</i>    
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th><strong>Modo de importación: </strong></th>
-                                                    <td>
-                                                        {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="importmode" name="importmode" class="form-control"}}'}}
-                                                        <br/>  
-                                                        Estado en que se importan los contactos
-                                                        <p class="text-warning">
-                                                            <strong>Nota:</strong>
-                                                            Esta opción es avanzada, si no sabe cual debe elegir deje el valor por defecto!
-                                                        </p>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <!-- /Panel -->
+            
                                 </div>
                             </div>
                             <div class="clearfix"></div>
