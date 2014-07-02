@@ -109,21 +109,21 @@ App.importmodes = [
 ];
 
 App.delimiterView =  Ember.View.extend({
-  templateName: 'select'
+    class: 'form-control',
+    templateName: 'select',
 });
 
 App.DelimiterView = Ember.Select.extend({
-        class: 'form-control',
-	change: function(evt) {
-		var delim = this.get('value');
-		var opt = mappingColumns(advancedSplit(App.lines[0], delim))
-		App.set('options', opt);
-		App.set('firstline', advancedSplit(App.lines[0], delim));
-		App.set('secondline',  advancedSplit(App.lines[1], delim));
-		App.set('thirdline',  advancedSplit(App.lines[2], delim));
-		App.set('fourthline',  advancedSplit(App.lines[3], delim));
-		App.set('fifthline', advancedSplit(App.lines[4], delim));
-	}
+    change: function(evt) {
+            var delim = this.get('value');
+            var opt = mappingColumns(advancedSplit(App.lines[0], delim))
+            App.set('options', opt);
+            App.set('firstline', advancedSplit(App.lines[0], delim));
+            App.set('secondline',  advancedSplit(App.lines[1], delim));
+            App.set('thirdline',  advancedSplit(App.lines[2], delim));
+            App.set('fourthline',  advancedSplit(App.lines[3], delim));
+            App.set('fifthline', advancedSplit(App.lines[4], delim));
+    }
 });
 
 function mappingColumns(arrayopt)
