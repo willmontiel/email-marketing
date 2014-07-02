@@ -16,6 +16,7 @@
 	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	<script type="text/javascript">
 		var db;
+		var urlBase = "{{url('')}}";
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
@@ -210,6 +211,8 @@
 	{{ javascript_include('js/target-selection/panel-container.js')}}
 	{{ javascript_include('js/target-selection/panel.js')}}
 	{{ javascript_include('js/target-selection/panel-content.js')}}
+	{{ javascript_include('js/target-selection/top-panel-content.js')}}
+	{{ javascript_include('js/target-selection/data-source.js')}}
 {% endblock %}
 {% block content %}
 	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}

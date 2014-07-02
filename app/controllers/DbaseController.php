@@ -201,8 +201,6 @@ class DbaseController extends ControllerBase
 			$d[$dbase->idDbase]['color'] = $dbase->color;
 		}
 		
-		$d = json_decode($d);
-		
 		return $this->setJsonResponse($d);
 	}
 }

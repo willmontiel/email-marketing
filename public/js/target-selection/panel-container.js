@@ -4,7 +4,6 @@ function PanelContainer(selector) {
 }
 
 PanelContainer.prototype.addPanel = function(config) {
-	config.title = config.title + ' - ' + (this.panellist.length + 1);
 	var panel = new Panel(this, config);
 	panel.createPanel(this.element);
 	this.panellist.push(panel);
