@@ -118,6 +118,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	whatevers: function () {
 		var panelContainer = new PanelContainer('#panel-container');
 		var topPanelContent = new TopPanelContent();
+		topPanelContent.setPanelContainer(panelContainer);
 		topPanelContent.createContent();
 		
 		var config = {
@@ -130,23 +131,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		panelContainer.addPanel(config);
 		
 //		$('#panel-container').before($('<button class="addPanel btn btn-sm btn-primary extra-padding">+</button>'));
-
-		$('.addPanel').on('click', function() {
-			panelContainer.resetContainer();
-			
-			var listPanelContent = new ListPanelContent();
-			listPanelContent.createContent();
-			
-			console.log($(this).attr('data-type'));
-			$('.sgm-content-selector li').removeClass('li-active');
-			$(this).addClass('li-active');
-			
-			config.sticky = false;
-			config.leftArrow = true;
-			config.content = listPanelContent;
-			config.title = 'Secondary option';
-			panelContainer.addPanel(config);
-		});
 
 	}.observes('isTargetExpanded'),
 		

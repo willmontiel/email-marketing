@@ -187,4 +187,22 @@ class DbaseController extends ControllerBase
 		}
 		return $this->response->redirect('dbase');
     }
+	
+	public function getallAction()
+	{
+		$account = $this->user->account;
+		
+		$dbases = Dbase::findByIdAccount($account->idAccount);
+		
+		$d = array();
+		foreach ($dbases as $dbase) {
+			$d[$dbase->idDbase]['idDbase'] = $dbase->idDbase;
+			$d[$dbase->idDbase]['name'] = $dbase->name;
+			$d[$dbase->idDbase]['color'] = $dbase->color;
+		}
+		
+		$d = json_decode($d);
+		
+		return $this->setJsonResponse($d);
+	}
 }

@@ -13,7 +13,6 @@ Panel.prototype.createPanel = function(container) {
 						<div class="sgm-panel-content">\n\
 						</div>\n\
 					    ' + ((this.config.leftArrow) ? '<div class="sgm-left-arrow-border"></div><div class="sgm-left-arrow"></div>' : '') + '\n\
-						' + ((!this.config.sticky) ?'<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span></div>' : '') + '\n\
 					</div>\n\
 				 </div>');
 	this.container = container;

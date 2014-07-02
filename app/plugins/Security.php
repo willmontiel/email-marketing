@@ -289,6 +289,8 @@ class Security extends Plugin
 				
 				'mail::compose' => array('mail' => array('read', 'create', 'send')),
 				
+				'dbase::getall' => array('mail' => array('read', 'create')),
+				
 				//Plantillas
 				'template::image' => array('template' => array('read')),
 				'template::thumbnail' => array('template' => array('read')),
