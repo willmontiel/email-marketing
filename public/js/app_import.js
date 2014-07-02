@@ -102,10 +102,10 @@ App.dateformats = [
 ];
 
 App.importmodes = [
-	Ember.Object.create({value: "Contactos Suscritos", id: "normal"}),
-	Ember.Object.create({value: "Contactos Des-suscritos", id: "unsubscribed"}),
-	Ember.Object.create({value: "Contactos Rebotados", id: "bounced"}),
-	Ember.Object.create({value: "Contactos Inactivos", id: "inactive"})
+	Ember.Object.create({value: "Contactos Suscritos - Opcion recomendada", id: "normal"}),
+	Ember.Object.create({value: "Des-suscritos - Los contactos se marcaran como des-suscritos", id: "unsubscribed"}),
+	Ember.Object.create({value: "Rebotados - Las direcciones de correo se marcaran como rebotadas", id: "bounced"}),
+	Ember.Object.create({value: "Inactivos - Los contactos se marcaran como inactivos", id: "inactive"})
 ];
 
 App.delimiterView =  Ember.View.extend({

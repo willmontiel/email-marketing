@@ -353,67 +353,60 @@ class ContactsController extends ControllerBase
 		$idAccount = $this->user->account->idAccount;
 		$ipaddress = ip2long($_SERVER["REMOTE_ADDR"]);
 		
-		$open = fopen($this->tmppath->dir . $nameFile, "r");
-		
-		if(!$open) {
-			$log->log('Error al abrir el archivo original');
-			/*
-			 * ===========================================================================
-			 * ERROR
-			 * No se esta controlando esta situacion!!!
-			 * Cambie para que genere un error y redireccione
-			 * ===========================================================================
-			 */
-			$this->flashSession->error('Error al procesar el archivo. Contacte a su administrador!');
-			return $this->response->redirect("contactlist/show/$idContactlist#/contacts/import");
-		}
-		
-                /*
-                 * ===========================================================================
-                 * NOTA
-                 * Cambie en esta linea (y mas abajo) el fgetcsv() por fgets()
-                 * ===========================================================================
-                 */
-		if($header) {
-                    $linew = fgets($open);
-		}
-		
-		$linecount = 0;
-		
-		while(!feof($open)){
-                    $linew = fgets($open);
-                    $linecount++;
-		}
-		
-		$newprocess = new Importproccess();
-						
-		$newprocess->idAccount = $idAccount;
-		$newprocess->inputFile = $idImportfile;
-		$newprocess->status = "Pendiente";
-		$newprocess->totalReg = $linecount;
-		$newprocess->processLines = 0;
-		
-		if(!$newprocess->save()) {
-                    $log->log('Error al crear proceso de importaction');
-                    throw new \InvalidArgumentException('Error al procesar el archivo de importacion');
-		}		
-		
-		$arrayToSend = array(
-			'fields' => $fields,
-			'destiny' => $destiny,
-			'delimiter' => $delimiter,
-                        'importmode' => $importmode,
-			'dateformat' => $dateformat,
-			'header' => $header,
-			'idContactlist' => $idContactlist,
-			'idImportproccess' => $newprocess->idImportproccess,
-			'idAccount' => $idAccount,
-			'ipaddress' => $ipaddress
-			);
-		
-		$toSend = json_encode($arrayToSend);
-		
 		try{
+                    $open = fopen($this->tmppath->dir . $nameFile, "r");
+
+                    if(!$open) {
+                        $log->log('Error al abrir el archivo original');
+                        throw new \Exception('Error al procesar el archivo. Contacte a su administrador!');
+                    }
+
+                    /*
+                     * ===========================================================================
+                     * NOTA
+                     * Cambie en esta linea (y mas abajo) el fgetcsv() por fgets()
+                     * ===========================================================================
+                     */
+                    if($header) {
+                        $linew = fgets($open);
+                    }
+
+                    $linecount = 0;
+
+                    while(!feof($open)){
+                        $linew = fgets($open);
+                        $linecount++;
+                    }
+                    fclose($open);
+
+                    $newprocess = new Importproccess();
+
+                    $newprocess->idAccount = $idAccount;
+                    $newprocess->inputFile = $idImportfile;
+                    $newprocess->status = "Pendiente";
+                    $newprocess->totalReg = $linecount;
+                    $newprocess->processLines = 0;
+		
+                    if(!$newprocess->save()) {
+                        $log->log('Error al crear proceso de importaction');
+                        throw new \InvalidArgumentException('Error al procesar el archivo de importacion');
+                    }		
+
+                    $arrayToSend = array(
+                            'fields' => $fields,
+                            'destiny' => $destiny,
+                            'delimiter' => $delimiter,
+                            'importmode' => $importmode,
+                            'dateformat' => $dateformat,
+                            'header' => $header,
+                            'idContactlist' => $idContactlist,
+                            'idImportproccess' => $newprocess->idImportproccess,
+                            'idAccount' => $idAccount,
+                            'ipaddress' => $ipaddress
+                            );
+
+                    $toSend = json_encode($arrayToSend);
+		
                     $objcomm = new Communication(SocketConstants::getImportRequestsEndPointPeer());
                     $objcomm->sendImportToParent($toSend, $newprocess->idImportproccess);
                     $this->traceSuccess("{$linecount} contacts imported, idContactlist: {$idContactlist} / idImportFile: {$idImportfile}");

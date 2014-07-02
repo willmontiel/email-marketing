@@ -134,7 +134,7 @@
 				<div class="col-sm-6">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title">Previsualización</h4>
+                                            <h4 class="panel-title">Ejemplo de información a importar</h4>
                                         </div>
                                         <div class="panel-body">
                                             <table class="table table-normal hight-line">
