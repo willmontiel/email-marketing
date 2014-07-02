@@ -84,207 +84,209 @@
 #}
 
 		<form method="POST" class="" action="{{url('contacts/processfile/')}}{{idContactlist~'/'~idImportfile}}" role="form">
-			<div class="row">
-				<div class="col-sm-6">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">
-						<h4 class="panel-title">Asignación de campos</h4>
-                                            </div>
-                                            <div class="panel-body">
-                                                <table class="table table-condensed table-striped table-contacts">
-                                                        <tbody>
-                                                                <tr>
-                                                                        <th>Email</th>
-                                                                        <th>
-                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="email" id="email" name="email" class="form-control"}}'}}
-                                                                        </th>
-                                                                </tr>
-                                                                <tr>		
-                                                                        <th>Nombre</th>
-                                                                        <th>
-                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="name" id="name" name="name" class="form-control"}}'}}
-                                                                        </th>
-                                                                </tr>
-                                                                <tr>		
-                                                                        <th>Apellido</th>
-                                                                        <th>
-                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="lastname" id="lastname" name="lastname" class="form-control"}}'}}
-                                                                        </th>
-                                                                </tr>
-                                                                <tr>		
-                                                                        <th>Fecha de nacimiento</th>
-                                                                        <th>
-                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="birthdate" id="birthdate" name="birthdate" class="form-control"}}'}}
-                                                                        </th>
-                                                                </tr>
-                                                                {%for field in customfields %}
-                                                                <tr>		
-                                                                        <th>{{field.name}}</th>
-                                                                        <th>
-                                                                                {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" class="uniform form-control" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'" }}'}}
-                                                                        </th>
-                                                                </tr>
-                                                                {%endfor%}
-                                                        </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-				</div>
-		
-				<div class="col-sm-6">
-                                    <div class="panel panel-default">
+                    <div class="row">
+                            <div class="col-sm-6">
+                                    <div class="panel panel-primary">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title">Ejemplo de información a importar</h4>
+                                            <h4 class="panel-title">Asignación de campos</h4>
                                         </div>
                                         <div class="panel-body">
-                                            <table class="table table-normal hight-line">
+                                            <table class="table table-condensed table-striped table-contacts">
                                                     <tbody>
                                                             <tr>
-                                                                    <th>Email: </th>
-                                                                    <td>{{'{{emailF}}'}}</td>
+                                                                    <th>Email</th>
+                                                                    <th>
+                                                                            {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="email" id="email" name="email" class="form-control"}}'}}
+                                                                    </th>
                                                             </tr>
-                                                            <tr>
-                                                                    <th>Nombre:</th>
-                                                                    <td> {{'{{nameF}}'}}</td>
+                                                            <tr>		
+                                                                    <th>Nombre</th>
+                                                                    <th>
+                                                                            {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="name" id="name" name="name" class="form-control"}}'}}
+                                                                    </th>
                                                             </tr>
-                                                            <tr>
-                                                                    <th>Apellido: </th>
-                                                                    <td>{{'{{lastnameF}}'}}</td>
+                                                            <tr>		
+                                                                    <th>Apellido</th>
+                                                                    <th>
+                                                                            {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="lastname" id="lastname" name="lastname" class="form-control"}}'}}
+                                                                    </th>
                                                             </tr>
-                                                            <tr>
-                                                                    <th>Fecha de nacimiento: </th>
-                                                                    <td>{{'{{birthdateF}}'}}</td>
+                                                            <tr>		
+                                                                    <th>Fecha de nacimiento</th>
+                                                                    <th>
+                                                                            {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="birthdate" id="birthdate" name="birthdate" class="form-control"}}'}}
+                                                                    </th>
                                                             </tr>
-                                                    {%for field in customfields%}
-                                                            <tr>
-                                                                    <th>{{field.name}}: </th>
-                                                                    <td>{{'{{campo'~field.idCustomField~'F}}'}}</td>
-
+                                                            {%for field in customfields %}
+                                                            <tr>		
+                                                                    <th>{{field.name}}</th>
+                                                                    <th>
+                                                                            {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" class="uniform form-control" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'" }}'}}
+                                                                    </th>
                                                             </tr>
-                                                    {%endfor%}
+                                                            {%endfor%}
                                                     </tbody>
                                             </table>
                                         </div>
                                     </div>
-				</div>
-			</div>
-			
-			<div class="row">
-                            <div class="col-xs-12 col-sm-10">
-                                <div class="panel-group" id="import-configuration">
-
-                                    <!-- Panel -->
-                                    <div class="panel panel-info">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#import-configuration" href="#config-collapse">
-                                                <i class="glyphicon glyphicon-cog"></i> Opciones de importación
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="config-collapse" class="panel-collapse collapse">
-                                            <div class="panel-body">
-                                                <table class="table table-striped">
-                                                    <tbody>
-                                                        <tr>
-                                                            <th><strong>Encabezado: </strong></th>
-                                                            <td>
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        {{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
-                                                                        Tratar primera fila de archivo como encabezado<br/>
-                                                                        <i>No se importa la primera línea</i>
-                                                                    </label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th><strong>Delimitador: </strong></th>
-                                                            <td>
-                                                                {{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" }} '}}
-                                                                <br/>
-                                                                <i>Para identificar los campos de cada línea</i>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th><strong>Formato de fecha: </strong></th>
-                                                            <td>
-                                                                {{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat" class="form-control"}}'}}
-                                                                <br/>
-                                                                <i>Afecta como se procesan los campos de tipo fecha</i>    
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th><strong>Modo de importación: </strong></th>
-                                                            <td>
-                                                                {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="importmode" name="importmode" class="form-control"}}'}}
-                                                                <br/>  
-                                                                Estado en que se importan los contactos
-                                                                <p class="text-warning">
-                                                                    <strong>Nota:</strong>
-                                                                    Esta opción es avanzada, si no sabe cual debe elegir deje el valor por defecto!
-                                                                </p>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Panel -->
-            
-                                </div>
                             </div>
-                            <div class="clearfix"></div>
-                            <div class="space"></div>
-			</div>
-			<div class="col-md-12">
-				<div class="panel panel-warning">
+
+                            <div class="col-sm-6">
+                                <div class="panel panel-default">
                                     <div class="panel-heading">
-					<h4 class="panel-title">Esta es la información del archivo. Se muestran las primeras 5 filas</h4>
+                                        <h4 class="panel-title">Ejemplo de información a importar</h4>
                                     </div>
                                     <div class="panel-body">
-                                        <table class="table table-condensed table-striped">
-                                                <thead>
-                                                    {{' {{#each App.firstline}} '}}
-                                                            <th>Campo</th>
-                                                    {{' {{/each}} '}}
-                                                </thead>
+                                        <table class="table table-normal hight-line">
                                                 <tbody>
-                                                    {{' {{#unless hasheader}} '}}
-                                                    <tr>
-                                                            {{' {{#each App.firstline}} '}}
-                                                                    <td>{{' {{this}} '}}</td>
-                                                            {{' {{/each}} '}}
-                                                    </tr>
-                                                    {{ '{{/unless}}' }}
-                                                    <tr>
-                                                            {{' {{#each App.secondline}} '}}
-                                                                    <td>{{' {{this}} '}}</td>
-                                                            {{' {{/each}} '}}
-                                                    </tr>
-                                                    <tr>
-                                                            {{' {{#each App.thirdline}} '}}
-                                                                    <td>{{' {{this}} '}}</td>
-                                                            {{' {{/each}} '}}
-                                                    </tr>
-                                                    <tr>
-                                                            {{' {{#each App.fourthline}} '}}
-                                                                    <td>{{' {{this}} '}}</td>
-                                                            {{' {{/each}} '}}
-                                                    </tr>
-                                                    <tr>
-                                                        {{' {{#each App.fifthline}} '}}
-                                                            <td>{{' {{this}} '}}</td>
-                                                        {{' {{/each}} '}}
-                                                    </tr>
+                                                        <tr>
+                                                                <th>Email: </th>
+                                                                <td>{{'{{emailF}}'}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                                <th>Nombre:</th>
+                                                                <td> {{'{{nameF}}'}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                                <th>Apellido: </th>
+                                                                <td>{{'{{lastnameF}}'}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                                <th>Fecha de nacimiento: </th>
+                                                                <td>{{'{{birthdateF}}'}}</td>
+                                                        </tr>
+                                                {%for field in customfields%}
+                                                        <tr>
+                                                                <th>{{field.name}}: </th>
+                                                                <td>{{'{{campo'~field.idCustomField~'F}}'}}</td>
+
+                                                        </tr>
+                                                {%endfor%}
                                                 </tbody>
                                         </table>
                                     </div>
                                 </div>
-			</div>
-			<a href="{{ url('contactlist/show/'~ idContactlist ~'#/contacts/import') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
-			{{submit_button('class': "btn btn-default btn-sm btn-guardar extra-padding", "Guardar")}}
+                            </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-10">
+                            <div class="panel-group" id="import-configuration">
+
+                                <!-- Panel -->
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#import-configuration" href="#config-collapse">
+                                            <i class="glyphicon glyphicon-cog"></i> Opciones de importación
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="config-collapse" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <table class="table table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th><strong>Encabezado: </strong></th>
+                                                        <td>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    {{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
+                                                                    Tratar primera fila de archivo como encabezado<br/>
+                                                                    <i>No se importa la primera línea</i>
+                                                                </label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><strong>Delimitador: </strong></th>
+                                                        <td>
+                                                            {{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" }} '}}
+                                                            <br/>
+                                                            <i>Para identificar los campos de cada línea</i>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><strong>Formato de fecha: </strong></th>
+                                                        <td>
+                                                            {{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat" class="form-control"}}'}}
+                                                            <br/>
+                                                            <i>Afecta como se procesan los campos de tipo fecha</i>    
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><strong>Modo de importación: </strong></th>
+                                                        <td>
+                                                            {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="importmode" name="importmode" class="form-control"}}'}}
+                                                            <br/>  
+                                                            Estado en que se importan los contactos
+                                                            <p class="text-warning">
+                                                                <strong>Nota:</strong>
+                                                                Esta opción es avanzada, si no sabe cual debe elegir deje el valor por defecto!
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Panel -->
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="space"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-warning">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Esta es la información del archivo. Se muestran las primeras 5 filas</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-condensed table-striped">
+                                            <thead>
+                                                {{' {{#each App.firstline}} '}}
+                                                        <th>Campo</th>
+                                                {{' {{/each}} '}}
+                                            </thead>
+                                            <tbody>
+                                                {{' {{#unless hasheader}} '}}
+                                                <tr>
+                                                        {{' {{#each App.firstline}} '}}
+                                                                <td>{{' {{this}} '}}</td>
+                                                        {{' {{/each}} '}}
+                                                </tr>
+                                                {{ '{{/unless}}' }}
+                                                <tr>
+                                                        {{' {{#each App.secondline}} '}}
+                                                                <td>{{' {{this}} '}}</td>
+                                                        {{' {{/each}} '}}
+                                                </tr>
+                                                <tr>
+                                                        {{' {{#each App.thirdline}} '}}
+                                                                <td>{{' {{this}} '}}</td>
+                                                        {{' {{/each}} '}}
+                                                </tr>
+                                                <tr>
+                                                        {{' {{#each App.fourthline}} '}}
+                                                                <td>{{' {{this}} '}}</td>
+                                                        {{' {{/each}} '}}
+                                                </tr>
+                                                <tr>
+                                                    {{' {{#each App.fifthline}} '}}
+                                                        <td>{{' {{this}} '}}</td>
+                                                    {{' {{/each}} '}}
+                                                </tr>
+                                            </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ url('contactlist/show/'~ idContactlist ~'#/contacts/import') }}" class="btn btn-default btn-sm extra-padding">Cancelar</a>
+                    {{submit_button('class': "btn btn-default btn-sm btn-guardar extra-padding", "Guardar")}}
 		</form>
 		<div class="space"></div>
 	</script>
