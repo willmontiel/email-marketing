@@ -170,25 +170,29 @@
 				<div class="space"></div>
 				<div class="col-md-2"></div>
 				<div class="col-sm-6 col-sm-offset-1">
-					<table class="table table-normal">
-						<thead></thead>
-						<tbody>
-							<tr>
-							<th><strong>Delimitador: </strong></th>
-							<td>{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}</td>
-							</tr>
-							<tr>
-							<th><strong>Formato de la fecha de nacimiento: </strong></th>
-							<td>{{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat"}}'}}</td>
-							</tr>
-							<tr>
-							<th><strong>Encabezado: </strong></th>
-							<td>{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}</td>
-							</tr>
-						</tbody>
-						<tfoot>
-						</tfoot>
-					</table>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                        <h4 class="panel-title">Opciones de importación</h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th><strong>Delimitador: </strong></th>
+                                                        <td>{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><strong>Formato de fecha: </strong></th>
+                                                        <td>{{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat"}}'}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><strong>Encabezado: </strong></th>
+                                                        <td>{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
 				</div>
 			<div class="clearfix"></div>
 			<div class="space"></div>
