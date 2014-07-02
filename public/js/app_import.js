@@ -38,6 +38,8 @@ App.ContactsIndexRoute = Ember.Route.extend({
 
 //Controladores
 App.ContactsIndexController = Ember.ObjectController.extend({
+        showAdvancedOptions: false,
+        
 	emailF: function () {
 		return App.secondline[this.get('content.email')];
 	}.property('content.email'),
@@ -58,6 +60,11 @@ App.ContactsIndexController = Ember.ObjectController.extend({
 			return false;
 		}
 	}.property('content.header'),
+        
+//        showAdvancedOptions: function () {
+//            return this.get('showAdv');
+//        }.property(),
+        
 	/*
 	 * Funcion que asigna vacio a todos los campos cuando
 	 * cambia el delimitador (las opciones)
@@ -92,6 +99,13 @@ App.dateformats = [
 	Ember.Object.create({format: "d/m/Y (31/12/1969)", id: "d/m/Y"}),
 	Ember.Object.create({format: "m-d-Y (12-31-1969)", id: "m-d-Y"}),
 	Ember.Object.create({format: "m/d/Y (12/31/1969)", id: "m/d/Y"})
+];
+
+App.importmodes = [
+	Ember.Object.create({value: "Contactos Suscritos", id: "normal"}),
+	Ember.Object.create({value: "Contactos Des-suscritos", id: "unsubscribed"}),
+	Ember.Object.create({value: "Contactos Rebotados", id: "bounced"}),
+	Ember.Object.create({value: "Contactos Inactivos", id: "inactive"})
 ];
 
 App.delimiterView =  Ember.View.extend({

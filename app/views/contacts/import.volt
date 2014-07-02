@@ -16,7 +16,9 @@
 		birthdate: DS.attr( 'string' ),
 		header :DS.attr( 'boolean' ),
 		delimiter: DS.attr( 'string' ),
-		dateformat: DS.attr( 'string' )
+		dateformat: DS.attr( 'string' ),
+                importformat: DS.attr('string'),
+                
 		{%for field in customfields%}
 			,
 			campo{{ field.idCustomField }}: DS.attr('string')
@@ -130,7 +132,7 @@
 				</div>
 		
 				<div class="col-sm-6">
-                                    <div class="panel panel-info">
+                                    <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">Previsualización</h4>
                                         </div>
@@ -169,7 +171,7 @@
 			
 			<div class="row">
                             <div class="col-sm-6">
-                                <div class="panel panel-default">
+                                <div class="panel panel-info">
                                     <div class="panel-heading">
                                     <h4 class="panel-title">Opciones de importación</h4>
                                     </div>
@@ -177,16 +179,44 @@
                                         <table class="table table-striped">
                                             <tbody>
                                                 <tr>
+                                                    <th><strong>Encabezado: </strong></th>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                {{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
+                                                                Tratar primera fila de archivo como encabezado<br/>
+                                                                <i>No se importa la primera línea</i>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <th><strong>Delimitador: </strong></th>
-                                                    <td>{{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content"}} '}}</td>
+                                                    <td>
+                                                        {{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" class="form-control"}} '}}
+                                                        <br/>
+                                                        <i>Para identificar los campos de cada línea</i>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <th><strong>Formato de fecha: </strong></th>
-                                                    <td>{{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat"}}'}}</td>
+                                                    <td>
+                                                        {{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat" class="form-control"}}'}}
+                                                        <br/>
+                                                        <i>Afecta como se procesan los campos de tipo fecha</i>    
+                                                    </td>
                                                 </tr>
                                                 <tr>
-                                                    <th><strong>Encabezado: </strong></th>
-                                                    <td>{{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}</td>
+                                                    <th><strong>Modo de importación: </strong></th>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="dateformat" name="importmode" class="form-control"}}'}}
+                                                                Tratar primera fila de archivo como encabezado<br/>
+                                                                <i>No se importa la primera línea</i>
+                                                            </label>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -197,45 +227,45 @@
                             <div class="space"></div>
 			</div>
 			<div class="col-md-12">
-				<div class="panel panel-success">
+				<div class="panel panel-warning">
                                     <div class="panel-heading">
-					<h4>Información de archivo, 5 primeras filas</h4>
+					<h4 class="panel-title">Esta es la información del archivo. Se muestran las primeras 5 filas</h4>
                                     </div>
                                     <div class="panel-body">
-                                        <table class="table table-condensed table-striped table-bordered">
+                                        <table class="table table-condensed table-striped">
                                                 <thead>
-                                                                {{' {{#each App.firstline}} '}}
-                                                                        <th>Campo</th>
-                                                                {{' {{/each}} '}}
+                                                    {{' {{#each App.firstline}} '}}
+                                                            <th>Campo</th>
+                                                    {{' {{/each}} '}}
                                                 </thead>
                                                 <tbody>
-                                                        {{' {{#unless hasheader}} '}}
-                                                        <tr>
-                                                                {{' {{#each App.firstline}} '}}
-                                                                        <td>{{' {{this}} '}}</td>
-                                                                {{' {{/each}} '}}
-                                                        </tr>
-                                                        {{ '{{/unless}}' }}
-                                                        <tr>
-                                                                {{' {{#each App.secondline}} '}}
-                                                                        <td>{{' {{this}} '}}</td>
-                                                                {{' {{/each}} '}}
-                                                        </tr>
-                                                        <tr>
-                                                                {{' {{#each App.thirdline}} '}}
-                                                                        <td>{{' {{this}} '}}</td>
-                                                                {{' {{/each}} '}}
-                                                        </tr>
-                                                        <tr>
-                                                                {{' {{#each App.fourthline}} '}}
-                                                                        <td>{{' {{this}} '}}</td>
-                                                                {{' {{/each}} '}}
-                                                        </tr>
-                                                        <tr>
-                                                                {{' {{#each App.fifthline}} '}}
-                                                                        <td>{{' {{this}} '}}</td>
-                                                                {{' {{/each}} '}}
-                                                        </tr>
+                                                    {{' {{#unless hasheader}} '}}
+                                                    <tr>
+                                                            {{' {{#each App.firstline}} '}}
+                                                                    <td>{{' {{this}} '}}</td>
+                                                            {{' {{/each}} '}}
+                                                    </tr>
+                                                    {{ '{{/unless}}' }}
+                                                    <tr>
+                                                            {{' {{#each App.secondline}} '}}
+                                                                    <td>{{' {{this}} '}}</td>
+                                                            {{' {{/each}} '}}
+                                                    </tr>
+                                                    <tr>
+                                                            {{' {{#each App.thirdline}} '}}
+                                                                    <td>{{' {{this}} '}}</td>
+                                                            {{' {{/each}} '}}
+                                                    </tr>
+                                                    <tr>
+                                                            {{' {{#each App.fourthline}} '}}
+                                                                    <td>{{' {{this}} '}}</td>
+                                                            {{' {{/each}} '}}
+                                                    </tr>
+                                                    <tr>
+                                                        {{' {{#each App.fifthline}} '}}
+                                                            <td>{{' {{this}} '}}</td>
+                                                        {{' {{/each}} '}}
+                                                    </tr>
                                                 </tbody>
                                         </table>
                                     </div>
