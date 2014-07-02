@@ -300,4 +300,16 @@
 	</script>
 
 </div>
+                
+                
+<script type="text/x-handlebars" id="mytesthandlebars">
+    <div class="{{'{{className}}'}}">
+        <ul>
+            <li>Prueba 1</li>
+            <li>{{'{{texto}}'}}</li>
+            <li>Prueba 2</li>
+        </ul>
+    </div>
+</script>
+                
 {% endblock %}
