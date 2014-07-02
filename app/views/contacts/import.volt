@@ -170,7 +170,7 @@
 			</div>
 			
 			<div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-xs-12 col-sm-10">
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
                                     <h4 class="panel-title">Opciones de importación</h4>
@@ -278,7 +278,7 @@
 	</script>
 		
 	<script type="text/x-handlebars" data-template-name="select">
-		{{' {{view App.DelimiterView name="delimiter" contentBinding="App.delimiter_opt"}} '}}
+		{{' {{view App.DelimiterView name="delimiter" contentBinding="App.delimiter_opt" class="form-control"}} '}}
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="contacts">

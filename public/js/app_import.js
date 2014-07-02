@@ -109,7 +109,6 @@ App.importmodes = [
 ];
 
 App.delimiterView =  Ember.View.extend({
-    class: 'form-control',
     templateName: 'select',
 });
 
