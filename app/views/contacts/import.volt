@@ -193,7 +193,7 @@
                                                 <tr>
                                                     <th><strong>Delimitador: </strong></th>
                                                     <td>
-                                                        {{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" class="form-control"}} '}}
+                                                        {{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" }} '}}
                                                         <br/>
                                                         <i>Para identificar los campos de cada línea</i>
                                                     </td>
@@ -209,13 +209,13 @@
                                                 <tr>
                                                     <th><strong>Modo de importación: </strong></th>
                                                     <td>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="dateformat" name="importmode" class="form-control"}}'}}
-                                                                Tratar primera fila de archivo como encabezado<br/>
-                                                                <i>No se importa la primera línea</i>
-                                                            </label>
-                                                        </div>
+                                                        {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="dateformat" name="importmode" class="form-control"}}'}}
+                                                        <br/>  
+                                                        Estado en que se importan los contactos
+                                                        <p class="text-warning">
+                                                            <strong>Nota:</strong>
+                                                            Esta opción es avanzada, si no sabe cual debe elegir deje el valor por defecto!
+                                                        </p>
                                                     </td>
                                                 </tr>
                                             </tbody>

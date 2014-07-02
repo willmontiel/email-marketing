@@ -113,6 +113,7 @@ App.delimiterView =  Ember.View.extend({
 });
 
 App.DelimiterView = Ember.Select.extend({
+        class: 'form-control',
 	change: function(evt) {
 		var delim = this.get('value');
 		var opt = mappingColumns(advancedSplit(App.lines[0], delim))
