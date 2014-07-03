@@ -21,6 +21,7 @@ class ChildImport extends ChildProcess
 		$header = $arrayDecode->header;
 		$idAccount = $arrayDecode->idAccount;
 		$ipaddress = $arrayDecode->ipaddress;
+                $importmode = (isset($arrayDecode->importmode))?$arrayDecode->importmode:'normal';
 
 		$account = Account::findFirstByIdAccount($idAccount);
 		$wrapper = new ImportContactWrapper();
@@ -29,7 +30,7 @@ class ChildImport extends ChildProcess
 		$wrapper->setIdContactlist($idContactlist);
 		$wrapper->setAccount($account);
 		$wrapper->setIpaddress($ipaddress);
-		$wrapper->startImport($fields, $destiny, $dateformat, $delimiter, $header);
+		$wrapper->startImport($fields, $destiny, $dateformat, $delimiter, $header, $importmode);
 	}
 
 	public function publishToChildren()
