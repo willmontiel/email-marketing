@@ -217,8 +217,18 @@ class ImportContactWrapper
 			$this->timer->endTimer('phase2');
 
 			$this->timer->startTimer('phase3', 'Update counters!');
+                        /**
+                         * =====================================================
+                         * NOTA:
+                         * Modifiqué el STORED PROCEDURE de actualizacion de 
+                         * contadores de base de datos.
+                         * Ahora actualiza los contadores de todas las listas
+                         * de esa base de datos. Por lo tanto no es necesario
+                         * realizar la actualización de la lista que antes
+                         * se hacia
+                         * =====================================================
+                         */
 			$dbase->updateCountersInDbase();
-			$list->updateCountersInContactlist();
 			$this->timer->endTimer('phase3');
 
 			$this->destroyTemporaryTable();
