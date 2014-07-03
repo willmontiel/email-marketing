@@ -28,4 +28,5 @@ PanelContainer.prototype.resetContainer = function () {
 	}
 	
 	this.panellist.splice(1, l - 1);
+	$('.sgm-add-selector-content').removeClass('li-active');
 };

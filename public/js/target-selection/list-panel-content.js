@@ -18,8 +18,8 @@ ListPanelContent.prototype.initialize = function(panel) {
 
 	dataSource.findDataSource().then(function() { 
 		source = dataSource.getDataSource();
-		self.insertSource(source);
-		self.initializeSelect2();
+//		self.insertSource(source);
+		self.initializeSelect2(source);
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
@@ -44,7 +44,9 @@ ListPanelContent.prototype.initialize = function(panel) {
 
 ListPanelContent.prototype.createContent = function () {
 	this.content = $('<div class="sgm-target-selector">\n\
-						<div class="sgm-selector-content"></div>\n\
+						<div class="sgm-selector-content">\n\
+							<input type="hidden" class="select2"/>\n\
+						</div>\n\
 						<div class="sgm-add-filter-content sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>\n\
 						</div> \n\
 					 </div>');
@@ -69,24 +71,23 @@ ListPanelContent.prototype.getUrlForDataSource = function() {
 	return url;
 };
 
-ListPanelContent.prototype.initializeSelect2 = function() {
-	$(function () {
-		$(".select2").select2({
-			
-		});
+ListPanelContent.prototype.initializeSelect2 = function(data) {
+	$(".select2").select2({
+		 data: data,
+		 placeholder: "Selecciona una opción",
 	});
 };
 
-ListPanelContent.prototype.insertSource = function(source) {
-	var options = '';
-	for(var i = 0; i < source.length; i++) {
-		var dbase = source[i];
-		options += '<option value="' + dbase.idDbase + '">' + dbase.name + '</option>';
-	}
-	
-	var select = $('<select class="select2">\n\
-						' + options + '\n\
-					</select');
-	
-	this.content.find('.sgm-selector-content').append(select);
-};
+//ListPanelContent.prototype.insertSource = function(source) {
+//	var options = '';
+//	for(var i = 0; i < source.length; i++) {
+//		var dbase = source[i];
+//		options += '<option value="' + dbase.idDbase + '">' + dbase.name + '</option>';
+//	}
+//	
+//	var select = $('<select class="select2">\n\
+//						' + options + '\n\
+//					</select');
+//	
+//	this.content.find('.sgm-selector-content').append(select);
+//};

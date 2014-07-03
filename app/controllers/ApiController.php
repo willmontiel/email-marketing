@@ -1433,9 +1433,9 @@ class ApiController extends ControllerBase
 		$d = array();
 		foreach ($dbases as $dbase) {
 			$object = new stdClass();
-			$object->idDbase = $dbase->idDbase;
-			$object->name = $dbase->name;
-			$object->color = $dbase->color;
+			$object->id = $dbase->idDbase;
+			$object->text = $dbase->name;
+//			$object->color = $dbase->color;
 			
 			$d[] = $object;
 		}
