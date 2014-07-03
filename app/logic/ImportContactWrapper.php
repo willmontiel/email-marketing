@@ -148,9 +148,10 @@ class ImportContactWrapper
 	 * @param string $dateformat
 	 * @param string $delimiter
 	 * @param boolean $header
+         * @param string $importmode
 	 * @throws \InvalidArgumentException
 	 */
-	public function startImport($fields, $destiny, $dateformat, $delimiter, $header) {
+	public function startImport($fields, $destiny, $dateformat, $delimiter, $header, $importmode = 'normal') {
 		try {
 			ini_set('auto_detect_line_endings', '1');
 			$mode = $this->account->accountingMode;
@@ -211,13 +212,23 @@ class ImportContactWrapper
 
 			// Creacion de contactos utilizando LOAD DATA INFILE
 			// Preprocesando el archivo CSV
-			$this->importDataFromCSV($destiny, $header, $delimiter, $activeContacts, $contactLimit, $mode, $dbase);
+			$this->importDataFromCSV($destiny, $header, $delimiter, $activeContacts, $contactLimit, $mode, $dbase, $importmode);
 
 			$this->timer->endTimer('phase2');
 
 			$this->timer->startTimer('phase3', 'Update counters!');
+                        /**
+                         * =====================================================
+                         * NOTA:
+                         * Modifiqué el STORED PROCEDURE de actualizacion de 
+                         * contadores de base de datos.
+                         * Ahora actualiza los contadores de todas las listas
+                         * de esa base de datos. Por lo tanto no es necesario
+                         * realizar la actualización de la lista que antes
+                         * se hacia
+                         * =====================================================
+                         */
 			$dbase->updateCountersInDbase();
-			$list->updateCountersInContactlist();
 			$this->timer->endTimer('phase3');
 
 			$this->destroyTemporaryTable();
@@ -375,9 +386,10 @@ class ImportContactWrapper
 	 * @param int $contactLimit
 	 * @param string $mode
 	 * @param Dbase $dbase
+	 * @param string $importmode
 	 * @throws \InvalidArgumentException
 	 */
-	protected function importDataFromCSV($sourcefile, $hasHeader, $delimiter, $activeContacts, $contactLimit, $mode, Dbase $dbase)
+	protected function importDataFromCSV($sourcefile, $hasHeader, $delimiter, $activeContacts, $contactLimit, $mode, Dbase $dbase, $importmode)
 	{
 		// Cuantas lineas tiene el archivo?
 		$linecount = $this->countFileRecords($sourcefile);
@@ -466,7 +478,42 @@ class ImportContactWrapper
 		// Actualizar/insertar campos personalizados
 		$this->updateProcessStatus('Actualizando campos personalizados');
 		$this->saveProcess();
-		
+
+                /*
+                 * =============================================================
+                 * Marcar contactos o emails dependiendo del modo de importacion
+                 * seleccionado por el usuario:
+                 * 'normal'         ==> no se hace nada adicional
+                 * 'unsubscribed'   ==> se marcan como des-suscritos
+                 * 'bounced'        ==> se marcan emails como rebotados
+                 * 'inactive'       ==> se marcan como inactivos
+                 * =============================================================
+                 */
+                
+                switch ($importmode) {
+                    case 'unsubscribed':
+                        $this->timer->startTimer('unsubscribing', 'Unsubscribing contacts!');
+                        $this->unsubscribeContacts();
+        		$this->timer->endTimer('unsubscribing');
+                        break;
+                    case 'bounced':
+                        $this->timer->startTimer('bouncing', 'Bouncing contacts\' emails!');
+                        $this->bounceContacts();
+        		$this->timer->endTimer('bouncing');
+                        break;
+                    case 'inactive':
+                        $this->timer->startTimer('deactivating', 'Deactivating contacts!');
+                        $this->deactivateContacts();
+        		$this->timer->endTimer('deactivating');
+                        break;
+                    case 'normal':
+                        // Nothing to be done
+                        break;
+                    default:
+                        $this->log->log("ERROR: the importmode value is not valid: [{$importmode}]");
+                        break;
+                }
+                
 		$this->timer->startTimer('custom-fields', 'Insert Custom Fields!');
 		$this->updateCustomFields();
 		$this->timer->endTimer('custom-fields');
@@ -667,7 +714,53 @@ class ImportContactWrapper
 		
 	}
 
-	protected function runReports($limit) {
+        /**
+         * Este metodo des-suscribe los contactos que han sido importados
+         * y aquellos que ya existían en la base de datos y que fueron incluidos
+         * dentro de la importación
+         */
+        protected function unsubscribeContacts()
+        {
+            $hora = time();
+            
+            $sql = "UPDATE contact c "
+                    . "JOIN {$this->tablename} t ON (t.idContact = c.idContact) "
+                . " SET c.unsubscribed = {$hora} "
+                . " WHERE c.unsubscribed = 0";
+            $this->db->execute($sql);
+        }
+        
+        /**
+         * Este metodo desactiva los contactos que han sido importados
+         * y aquellos que ya existían en la base de datos y que fueron incluidos
+         * dentro de la importación
+         */
+        protected function deactivateContacts()
+        {
+            $sql = "UPDATE contact c "
+                    . "JOIN {$this->tablename} t ON (t.idContact = c.idContact) "
+                . " SET c.status = 0 "
+                . " WHERE c.status != 0";
+            $this->db->execute($sql);
+        }
+
+        /**
+         * Este metodo rebota las direcciones de correo de los contactos que han
+         * sido importados y de aquellos que ya existían en la base de datos y 
+         * que fueron incluidos dentro de la importación
+         */
+        protected function bounceContacts()
+        {
+            $hora = time();
+            
+            $sql = "UPDATE email e "
+                    . "JOIN {$this->tablename} t ON (t.idEmail = e.idEmail) "
+                . " SET e.bounced = {$hora} "
+                . " WHERE e.bounced = 0";
+            $this->db->execute($sql);
+        }
+
+        protected function runReports($limit) {
 		$exist = 0;
 		$bloqued = 0;
 		$uniquecode = uniqid();

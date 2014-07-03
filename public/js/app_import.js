@@ -38,6 +38,8 @@ App.ContactsIndexRoute = Ember.Route.extend({
 
 //Controladores
 App.ContactsIndexController = Ember.ObjectController.extend({
+        showAdvancedOptions: false,
+        
 	emailF: function () {
 		return App.secondline[this.get('content.email')];
 	}.property('content.email'),
@@ -58,6 +60,11 @@ App.ContactsIndexController = Ember.ObjectController.extend({
 			return false;
 		}
 	}.property('content.header'),
+        
+//        showAdvancedOptions: function () {
+//            return this.get('showAdv');
+//        }.property(),
+        
 	/*
 	 * Funcion que asigna vacio a todos los campos cuando
 	 * cambia el delimitador (las opciones)
@@ -69,7 +76,28 @@ App.ContactsIndexController = Ember.ObjectController.extend({
 				this.set('content.' + f, -1);
 			}
 		}
-	}.observes('App.options')
+	}.observes('App.options'),
+        
+        modeDescription: function () {
+            var c = this.get('content.importmode');
+            var x;
+            switch (c) {
+                case 'unsubscribed':
+                    x = 'Los contactos se marcarán como "des-suscritos" después de importados';
+                    break;
+                case 'bounced':
+                    x = 'Los correos de los contactos se marcarán como "rebotados" después de importados';
+                    break;
+                case 'inactive':
+                    x = 'Los contactos se marcarán como "inactivos" después de importados';
+                    break;
+                case 'normal':
+                default:
+                    x = 'Los contactos se importarán activos y suscritos';
+                    break;
+            }
+            return x;
+        }.property('content.importmode')
 });
 
 
@@ -94,21 +122,28 @@ App.dateformats = [
 	Ember.Object.create({format: "m/d/Y (12/31/1969)", id: "m/d/Y"})
 ];
 
+App.importmodes = [
+	Ember.Object.create({value: "Contactos Suscritos - Opcion recomendada", id: "normal"}),
+	Ember.Object.create({value: "Des-suscritos - Los contactos se marcaran como des-suscritos", id: "unsubscribed"}),
+	Ember.Object.create({value: "Rebotados - Las direcciones de correo se marcaran como rebotadas", id: "bounced"}),
+	Ember.Object.create({value: "Inactivos - Los contactos se marcaran como inactivos", id: "inactive"})
+];
+
 App.delimiterView =  Ember.View.extend({
-  templateName: 'select'
+    templateName: 'select',
 });
 
 App.DelimiterView = Ember.Select.extend({
-	change: function(evt) {
-		var delim = this.get('value');
-		var opt = mappingColumns(advancedSplit(App.lines[0], delim))
-		App.set('options', opt);
-		App.set('firstline', advancedSplit(App.lines[0], delim));
-		App.set('secondline',  advancedSplit(App.lines[1], delim));
-		App.set('thirdline',  advancedSplit(App.lines[2], delim));
-		App.set('fourthline',  advancedSplit(App.lines[3], delim));
-		App.set('fifthline', advancedSplit(App.lines[4], delim));
-	}
+    change: function(evt) {
+            var delim = this.get('value');
+            var opt = mappingColumns(advancedSplit(App.lines[0], delim))
+            App.set('options', opt);
+            App.set('firstline', advancedSplit(App.lines[0], delim));
+            App.set('secondline',  advancedSplit(App.lines[1], delim));
+            App.set('thirdline',  advancedSplit(App.lines[2], delim));
+            App.set('fourthline',  advancedSplit(App.lines[3], delim));
+            App.set('fifthline', advancedSplit(App.lines[4], delim));
+    }
 });
 
 function mappingColumns(arrayopt)
