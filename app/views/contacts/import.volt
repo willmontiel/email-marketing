@@ -218,8 +218,12 @@
                                                         <th><strong>Modo de importación: </strong></th>
                                                         <td>
                                                             {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="importmode" name="importmode" class="form-control"}}'}}
-                                                            <br/>  
-                                                            En que <strong>estado</strong> deben quedar los contactos despues de importados
+                                                            <br/>
+                                                            En que <strong>estado</strong> deben quedar los contactos despues de importados:
+                                                            <p class="text-success">
+                                                                {{'{{modeDescription}}'}}
+                                                            </p>
+                                                            <br/>
                                                             <p class="text-warning">
                                                                 <strong>Nota:</strong>
                                                                 Esta opción es avanzada, si no sabe cual debe elegir utilice el valor recomendado!
