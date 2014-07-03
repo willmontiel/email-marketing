@@ -76,7 +76,28 @@ App.ContactsIndexController = Ember.ObjectController.extend({
 				this.set('content.' + f, -1);
 			}
 		}
-	}.observes('App.options')
+	}.observes('App.options'),
+        
+        modeDescription: function () {
+            var c = this.get('content.importmode');
+            var x;
+            switch (c) {
+                case 'unsubscribed':
+                    x = 'Los contactos se marcarán como "des-suscritos" después de importados';
+                    break;
+                case 'bounced':
+                    x = 'Los correos de los contactos se marcarán como "rebotados" después de importados';
+                    break;
+                case 'inactive':
+                    x = 'Los contactos se marcarán como "inactivos" después de importados';
+                    break;
+                case 'normal':
+                default:
+                    x = 'Los contactos se importarán activos y suscritos';
+                    break;
+            }
+            return x;
+        }.property('content.importmode')
 });
 
 

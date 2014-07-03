@@ -17,7 +17,7 @@
 		header :DS.attr( 'boolean' ),
 		delimiter: DS.attr( 'string' ),
 		dateformat: DS.attr( 'string' ),
-                importformat: DS.attr('string'),
+                importmode: DS.attr('string'),
                 
 		{%for field in customfields%}
 			,
@@ -95,34 +95,34 @@
                                                     <tbody>
                                                             <tr>
                                                                     <th>Email</th>
-                                                                    <th>
+                                                                    <td>
                                                                             {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="email" id="email" name="email" class="form-control"}}'}}
-                                                                    </th>
+                                                                    </td>
                                                             </tr>
                                                             <tr>		
                                                                     <th>Nombre</th>
-                                                                    <th>
+                                                                    <td>
                                                                             {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="name" id="name" name="name" class="form-control"}}'}}
-                                                                    </th>
+                                                                    </td>
                                                             </tr>
                                                             <tr>		
                                                                     <th>Apellido</th>
-                                                                    <th>
+                                                                    <td>
                                                                             {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="lastname" id="lastname" name="lastname" class="form-control"}}'}}
-                                                                    </th>
+                                                                    </td>
                                                             </tr>
                                                             <tr>		
                                                                     <th>Fecha de nacimiento</th>
-                                                                    <th>
+                                                                    <td>
                                                                             {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" valueBinding="birthdate" id="birthdate" name="birthdate" class="form-control"}}'}}
-                                                                    </th>
+                                                                    </td>
                                                             </tr>
                                                             {%for field in customfields %}
                                                             <tr>		
                                                                     <th>{{field.name}}</th>
-                                                                    <th>
+                                                                    <td>
                                                                             {{'{{ view Ember.Select contentBinding="App.options" optionValuePath="content.id" optionLabelPath="content.name" class="uniform form-control" valueBinding="campo'~field.idCustomField~'" id="campo'~field.idCustomField~'" name="campo'~field.idCustomField~'" }}'}}
-                                                                    </th>
+                                                                    </td>
                                                             </tr>
                                                             {%endfor%}
                                                     </tbody>
@@ -170,7 +170,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-12 col-sm-10">
+                        <div class="col-xs-12 col-sm-12">
                             <div class="panel-group" id="import-configuration">
 
                                 <!-- Panel -->
@@ -192,8 +192,8 @@
                                                             <div class="checkbox">
                                                                 <label>
                                                                     {{' {{view Ember.Checkbox  checkedBinding="header" name="header"}} '}}
-                                                                    Tratar primera fila de archivo como encabezado<br/>
-                                                                    <i>No se importa la primera línea</i>
+                                                                    Tratar primera fila de archivo como el encabezado de las columnas<br/>
+                                                                    <i>Si habilita esta opción no se importará la primera línea del archivo</i>
                                                                 </label>
                                                             </div>
                                                         </td>
@@ -203,7 +203,7 @@
                                                         <td>
                                                             {{' {{view App.delimiterView valueBinding="delimiter" contentBinding="content" }} '}}
                                                             <br/>
-                                                            <i>Para identificar los campos de cada línea</i>
+                                                            <i>Caracter que separa los campos en cada fila.</i>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -211,7 +211,7 @@
                                                         <td>
                                                             {{'{{ view Ember.Select contentBinding="App.dateformats" optionValuePath="content.id" optionLabelPath="content.format" valueBinding="dateformat" id="dateformat" name="dateformat" class="form-control"}}'}}
                                                             <br/>
-                                                            <i>Afecta como se procesan los campos de tipo fecha</i>    
+                                                            <i>Indica como se deben procesar los campos de tipo fecha</i>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -219,10 +219,10 @@
                                                         <td>
                                                             {{'{{ view Ember.Select contentBinding="App.importmodes" optionValuePath="content.id" optionLabelPath="content.value" valueBinding="importmode" id="importmode" name="importmode" class="form-control"}}'}}
                                                             <br/>  
-                                                            Estado en que se importan los contactos
+                                                            En que <strong>estado</strong> deben quedar los contactos despues de importados
                                                             <p class="text-warning">
                                                                 <strong>Nota:</strong>
-                                                                Esta opción es avanzada, si no sabe cual debe elegir deje el valor por defecto!
+                                                                Esta opción es avanzada, si no sabe cual debe elegir utilice el valor recomendado!
                                                             </p>
                                                         </td>
                                                     </tr>
