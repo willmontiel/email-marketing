@@ -4,7 +4,6 @@ TopPanelContent.prototype = new PanelContent;
 
 TopPanelContent.prototype.initialize = function(panel) {
 	var self = this;
-	
 	this.content.find('.sgm-add-selector-content').on('click', function (e) {
 		var criteria = $(this).attr('data-type');
 		self.addContent(e, criteria);
