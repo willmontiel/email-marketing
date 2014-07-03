@@ -289,7 +289,9 @@ class Security extends Plugin
 				
 				'mail::compose' => array('mail' => array('read', 'create', 'send')),
 				
-				'dbase::getall' => array('mail' => array('read', 'create')),
+				'api::getdbases' => array('mail' => array('read', 'create')),
+				'api::getcontactlists' => array('mail' => array('read', 'create')),
+				'api::getsegments' => array('mail' => array('read', 'create')),
 				
 				//Plantillas
 				'template::image' => array('template' => array('read')),

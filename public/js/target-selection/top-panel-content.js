@@ -1,66 +1,25 @@
-function TopPanelContent() {}
+TopPanelContent = function() {};
 
 TopPanelContent.prototype = new PanelContent;
 
-TopPanelContent.prototype.initialize = function() {
-	console.log('Initializing from TopPanelContent');
+TopPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	
 	this.content.find('.sgm-add-selector-content').on('click', function (e) {
-		self.addSelector(e);
-		
 		var criteria = $(this).attr('data-type');
-		
+		self.addContent(e, criteria);
 		$('.sgm-add-selector-content').removeClass('li-active');
 		$(this).addClass('li-active');
-		
-		var url = self.getUrlForDataSource(criteria);
-		
-		var dataSource = new DataSourceForSelect(url);
-		var source = dataSource.getDataSource();
-	
-		self.processTarget(source);
-		
-		self.initializeSelect2();
 	});
-};
-
-TopPanelContent.prototype.getUrlForDataSource = function(criteria) {
-	var url = urlBase;
-	switch (criteria) {
-		case 'dbases':
-			url += "dbase/getall";
-			break;
-			
-		case 'lists':
-			url += "dbase/getall";
-			break;
-			
-		case 'segments':
-			url += "dbase/getall";
-			break;
-	}
 	
-	return url;
+	panel.find('.sgm-panel-content').append(this.content);
 };
 
-TopPanelContent.prototype.processTarget = function(target) {
-	var select = $('<select class="select2">');
-	for (var i = 0; i < target.length; i++) {
-		var option = $('<option value="' + target[i].idDbase + '">' + target[i].name + '</option>');
-		select += option;
-	}
-	select += $('</select>');
-	
-	console.log(select);
-	this.content.find('sgm-selector-content').append(select);
-};
-
-TopPanelContent.prototype.addSelector = function (e) {
+TopPanelContent.prototype.addContent = function (e, criteria) {
 	e.preventDefault();
-	
 	var listPanelContent = new ListPanelContent();
 	listPanelContent.setPanelContainer(this.container);
+	listPanelContent.setContentCriteria(criteria);
 	listPanelContent.createContent();
 	
 	var config = {
@@ -87,12 +46,4 @@ TopPanelContent.prototype.createContent = function () {
 							</li>\n\
 						 </ul>\n\
 					  </div>');
-};
-
-TopPanelContent.prototype.initializeSelect2 = function() {
-	$(function () {
-		$(".select2").select2({
-			
-		});
-	});
 };

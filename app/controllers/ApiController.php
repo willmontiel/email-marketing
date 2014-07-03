@@ -1423,4 +1423,33 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('contact' => $contacts));
 		}
 	}
+	
+	public function getdbasesAction()
+	{
+		$account = $this->user->account;
+		
+		$dbases = Dbase::findByIdAccount($account->idAccount);
+		
+		$d = array();
+		foreach ($dbases as $dbase) {
+			$object = new stdClass();
+			$object->idDbase = $dbase->idDbase;
+			$object->name = $dbase->name;
+			$object->color = $dbase->color;
+			
+			$d[] = $object;
+		}
+		
+		return $this->setJsonResponse($d);
+	}
+	
+	public function getcontactlistsAction()
+	{
+		
+	}
+	
+	public function getsegmentsAction()
+	{
+		
+	}
 }

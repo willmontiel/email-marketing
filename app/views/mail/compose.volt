@@ -212,6 +212,8 @@
 	{{ javascript_include('js/target-selection/panel.js')}}
 	{{ javascript_include('js/target-selection/panel-content.js')}}
 	{{ javascript_include('js/target-selection/top-panel-content.js')}}
+	{{ javascript_include('js/target-selection/list-panel-content.js')}}
+	{{ javascript_include('js/target-selection/filter-panel-content.js')}}
 	{{ javascript_include('js/target-selection/data-source.js')}}
 {% endblock %}
 {% block content %}
