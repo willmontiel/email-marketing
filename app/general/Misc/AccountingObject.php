@@ -16,11 +16,35 @@ class AccountingObject
 		$this->logger = \Phalcon\DI::getDefault()->get('logger');
 	}
 	
+	public function getContactsMonth()
+	{
+		return $this->contactsMonth;
+	}
+
+	public function getSentMonth()
+	{
+		return $this->sentMonth;
+	}
+	
 	public function setAccounts($accounts)
 	{
 		$this->accounts = $accounts;
 	}
 	
+	public function setAccountingModel($timeContacts, $timeSent)
+	{
+		foreach ($this->accounts as $account) {
+			if (!isset($this->accounting[$account->idAccount])) {
+				$this->accounting[$account->idAccount] = array(
+					'idAccount' => $account->idAccount,
+					'account' => $account->companyName,
+					$timeContacts => 0,
+					$timeSent => 0
+				);
+			}
+		}
+	}
+		
 	public function createCurrentAndLastAccounting()
 	{
 		foreach ($this->accounts as $account) {
@@ -44,36 +68,29 @@ class AccountingObject
 			}
 		}
 		
-		
 		$current = strtotime("1 " . date('M', time()) . " " . date('Y', time()));
 		$lastperiod = strtotime("-1 month", $current);
 		$nextperiod = strtotime("+1 month", $current);
 		
 		$this->createAccounting($lastperiod, $current);
-		
-		if (count($this->contactsMonth) > 0) {
-			foreach ($this->contactsMonth as $lastContact) {
-				$this->accounting[$lastContact['idAccount']]['contactsLastMonth'] = $lastContact['total'] ;
-			}
-		}
-		
-		if (count($this->sentMonth) > 0) {
-			foreach ($this->sentMonth as $lastSent) {
-				$this->accounting[$lastSent['idAccount']]['sentLastMonth'] = $lastSent['total'] ;
-			}
-		}
+		$this->processAccountingArray('contactsLastMonth', 'sentLastMonth');
 		
 		$this->createAccounting($current, $nextperiod);
+		$this->processAccountingArray('contactsCurrentMonth', 'sentCurrentMonth');
 		
+	}
+	
+	public function processAccountingArray($timeContacts, $timeSent)
+	{
 		if (count($this->contactsMonth) > 0) {
-			foreach ($this->contactsMonth as $currentContact) {
-				$this->accounting[$currentContact['idAccount']]['contactsCurrentMonth'] = $currentContact['total'];
+			foreach ($this->contactsMonth as $totalcontact) {
+				$this->accounting[$totalcontact['idAccount']][$timeContacts] = $totalcontact['total'] ;
 			}
 		}
 		
 		if (count($this->sentMonth) > 0) {
-			foreach ($this->sentMonth as $currentSent) {
-				$this->accounting[$currentSent['idAccount']]['sentCurrentMonth'] = $currentSent['total'];
+			foreach ($this->sentMonth as $totalsent) {
+				$this->accounting[$totalsent['idAccount']][$timeSent] = $totalsent['total'] ;
 			}
 		}
 	}
@@ -102,7 +119,7 @@ class AccountingObject
 		}
 	}
 
-	protected function createAccounting($firstperiod, $secondperiod)
+	public function createAccounting($firstperiod, $secondperiod)
 	{
 		$this->contactsMonth = array();
 		$this->sentMonth = array();
@@ -119,8 +136,6 @@ class AccountingObject
 		$this->sentMonth = $resultS->fetchAll();
 	}
 	
-	
-	
 	protected function getSQLForTotalMailsSent($time1, $time2)
 	{
 		$sql = "SELECT a.idAccount, COUNT( mc.idContact ) AS total
@@ -135,7 +150,6 @@ class AccountingObject
 		return $sql;
 	}
 
-
 	protected function getSQLForTotalContacts($time1, $time2)
 	{
 		$sql = "SELECT a.idAccount, SUM(i.actives) AS total
@@ -149,7 +163,6 @@ class AccountingObject
 		return $sql;
 	}
 
-	
 	protected function createRelationshipDate()
 	{
 		$currentMonth = date('M', time());

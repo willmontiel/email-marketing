@@ -43,13 +43,20 @@ class ApiversiononeController extends ControllerBase
 	 */	
 	public function timebillingAction()
 	{
-		$accounts = Account::find();
-		
-		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
-		$accounting->setAccounts($accounts);
-		$accounting->startAccounting();
-		
 		try {
+			$accounts = Account::find();
+		
+			$accounting = new \EmailMarketing\General\Misc\AccountingObject();
+			$accounting->setAccounts($accounts);
+			$accounting->setAccountingModel('contactsPeriod', 'sentPeriod');
+			
+			$current = strtotime("1 " . date('M', time()) . " " . date('Y', time()));
+			$lastperiod = strtotime("-1 month", $current);
+		
+			$accounting->createAccounting($lastperiod, $current);
+			
+			$accounting->processAccountingArray('contactsPeriod', 'sentPeriod');
+			
 			$data = $accounting->getAccounting();
 
 			$response = array();
@@ -64,11 +71,11 @@ class ApiversiononeController extends ControllerBase
 
 				if($account->accountingMode == 'Contacto') {
 					$res['limit'] = $account->contactLimit;
-					$res['consumed'] = $data[$account->idAccount]['contactsCurrentMonth'];
+					$res['consumed'] = $data[$account->idAccount]['contactsPeriod'];
 				}
 				else if($account->accountingMode == 'Envio') {
 					$res['limit'] = $account->messageLimit;
-					$res['consumed'] = $data[$account->idAccount]['sentCurrentMonth'];
+					$res['consumed'] = $data[$account->idAccount]['sentPeriod'];
 				}
 				$response[] = $res;
 			}
