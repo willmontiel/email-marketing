@@ -5,23 +5,24 @@
 class ApiversiononeController extends ControllerBase
 {
 	/**
-	 * @Get("/account")
+	 * @Route("/echo", methods={"GET", "POST", "PUT"})
+	 */
+	public function echoAction()
+	{
+		return $this->setJsonResponse(array('success' => 'true','method' => $this->request->getMethod(), 'response' => $this->request->getRawBody()));
+	}
+	
+	
+	/**
+	 * @Get("/billing/accounts")
 	 */
 	public function listaccountsAction()
 	{
-		if($this->user->userrole == 'ROLE_SUDO') {
-			$accounts = Account::find();
-		}
-		else {
-			$accounts = $this->user->account;
-		}
+		$accounts = Account::find();
 		
 		$data = array(	'id' => 'idAccount',
-						'messageLimit' =>	'messageLimit',
-						'contactLimit' => 'contactLimit', 
-						'accountingMode' => 'accountingMode',
-						'companyName' => 'companyName',
-						'subscriptionMode' => 'subscriptionMode');
+						'name' => 'companyName',
+						'mode' => 'accountingMode');
 		
 		$response = array();
 		
@@ -38,16 +39,11 @@ class ApiversiononeController extends ControllerBase
 	
 	
 	/**
-	 * @Get("/billing")
+	 * @Get("/billing/accounting")
 	 */	
 	public function timebillingAction()
 	{
-		if($this->user->userrole == 'ROLE_SUDO') {
-			$accounts = Account::find();
-		}
-		else {
-			$accounts = $this->user->account;
-		}
+		$accounts = Account::find();
 		
 		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
 		$accounting->setAccounts($accounts);
@@ -61,18 +57,18 @@ class ApiversiononeController extends ControllerBase
 			foreach ($accounts as $account) {
 				$res = array(
 					'id' => $account->idAccount,
-					'companyName' => $account->companyName,
-					'subscriptionMode' => $account->subscriptionMode,
-					'accountingMode' => $account->accountingMode
+					'name' => $account->companyName,
+					'subscription' => $account->subscriptionMode,
+					'mode' => $account->accountingMode
 				);
 
 				if($account->accountingMode == 'Contacto') {
 					$res['limit'] = $account->contactLimit;
-					$res['consumed'] = $data['contactsCurrentMonth'];
+					$res['consumed'] = $data[$account->idAccount]['contactsCurrentMonth'];
 				}
 				else if($account->accountingMode == 'Envio') {
 					$res['limit'] = $account->messageLimit;
-					$res['consumed'] = $data['sentCurrentMonth'];
+					$res['consumed'] = $data[$account->idAccount]['sentCurrentMonth'];
 				}
 				$response[] = $res;
 			}

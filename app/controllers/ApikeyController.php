@@ -6,12 +6,10 @@ class ApikeyController extends ControllerBase
 		$idAccount = $this->user->account->idAccount;
 		
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
-
-		$roles = array('ROLE_SUDO', 'ROLE_ADMIN');	
 		
 		$paginator = new \Phalcon\Paginator\Adapter\Model(
 			array(
-				"data" => User::find("idAccount = $idAccount AND userrole IN ('" . implode("','", $roles) . "')"),
+				"data" => User::find("idAccount = $idAccount"),
 				"limit"=> PaginationDecorator::DEFAULT_LIMIT,
 				"page" => $currentPage
 			)

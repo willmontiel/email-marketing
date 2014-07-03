@@ -10,12 +10,14 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	protected $method;
 	protected $uri;
 	protected $data;
+	protected $permissions;
 			
 	function __construct($method, $uri, $data)
 	{
 		$this->method = $method;
 		$this->uri = $uri;
 		$this->data = $data;
+		$this->permissions = array('apiversionone', 'api');
 	}
 
 	
@@ -28,7 +30,7 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 			return true;
 		}
 		
-		return false;
+		throw new \Exception("Autenticación Invalida");
 	}
 	
 	public function processHeader()
@@ -45,9 +47,18 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 			}
 		}
 		
-		return false;
+		throw new \Exception("Autenticación Invalida");
 	}
 	
+	public function checkPermissions($controller, $action)
+	{
+		if(in_array($controller, $this->permissions)) {
+			return true;
+		}
+		
+		throw new \Exception("No tiene permisos para acceder a este recurso");
+	}
+
 	public function checkUserPWD(\Apikey $apikey)
 	{
 		$msg = $this->method . '|' . $this->uri . '|' . $this->data;
@@ -56,14 +67,14 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 			return true;
 		} 
 		
-		return false;
+		throw new \Exception("HMAC Invalido");
 	}
 	
 	public function getAuthUser()
 	{
 		return $this->user;
 	}
-	
+		
 }
 
 ?>

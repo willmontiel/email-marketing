@@ -128,6 +128,7 @@ class Security extends Plugin
 				'apistatistics::mailpublicunsubscribed' => array(),
 				'apistatistics::mailpublicspam' => array(),
 				'apistatistics::mailpublicbounced' => array(),
+				'apiversionone::echo' => array(),
 				
 				
 				//Dashboard
@@ -484,7 +485,7 @@ class Security extends Plugin
 				
 				$auth = new \EmailMarketing\General\Authorization\AuthHmacHeader($method, $uri, $data);
 				
-				if( $auth->verifyHeader() && $auth->processHeader() ) {
+				if( $auth->verifyHeader() && $auth->checkPermissions($controller, $action) && $auth->processHeader() ) {
 					$apikey = Apikey::findFirst(array(
 						'conditions' => 'apikey = ?1',
 						'bind' => array(1 => $auth->getAuthUser())));
@@ -494,13 +495,20 @@ class Security extends Plugin
 						$role = $user->userrole;
 						$this->_dependencyInjector->set('userObject', $user);
 					}
+					else {
+						throw new \Exception("API Key Invalido");
+					}
 				}
 			}
 			catch(\Exception $e) {
-				$this->logger->log('Error al Autenticar HTTP. Error [ ' . $e . ' ]');
+				$this->response->setContentType('application/json', 'UTF-8');
+				$this->response->setStatusCode(400, $e->getMessage());
+				return false;
 			}
 			catch(\InvalidArgumentException $e) {
-				$this->logger->log('Error al Autenticar HTTP. Error [ ' . $e . ' ]');
+				$this->response->setContentType('application/json', 'UTF-8');
+				$this->response->setStatusCode(400, $e->getMessage());
+				return false;
 			}
 		}
 		
@@ -538,7 +546,8 @@ class Security extends Plugin
 			'apistatistics:mailpublicclicks',
 			'apistatistics:mailpublicunsubscribed',
 			'apistatistics:mailpublicspam',
-			'apistatistics:mailpublicbounced'
+			'apistatistics:mailpublicbounced',
+			'apiversionone:echo'
 		);
 		
 		if ($resource == "error::notavailable") {

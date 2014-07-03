@@ -551,7 +551,8 @@ class AccountController extends ControllerBase
 		
 		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
 		$accounting->setAccounts($accounts);
-		$accounting->startAccounting();
+		$accounting->createCurrentAndLastAccounting();
+		$accounting->classColor();
 		
 		try {
 			$a = $accounting->getAccounting();

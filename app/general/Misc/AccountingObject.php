@@ -7,6 +7,8 @@ class AccountingObject
 	protected $accounts;
 	protected $ids;
 	protected $accounting = array();
+	protected $contactsMonth;
+	protected $sentMonth;
 
 
 	public function __construct() 
@@ -19,15 +21,7 @@ class AccountingObject
 		$this->accounts = $accounts;
 	}
 	
-	
-	public function startAccounting()
-	{
-		$this->modelAccounts();
-		$times = $this->createRelationshipDate();
-		$this->createAccounting($times);
-	}
-	
-	protected function modelAccounts()
+	public function createCurrentAndLastAccounting()
 	{
 		foreach ($this->accounts as $account) {
 			if (!isset($this->accounting[$account->idAccount])) {
@@ -50,57 +44,43 @@ class AccountingObject
 			}
 		}
 		
-//		$this->logger->log("Accounting: " . print_r($this->accounting, true));
-	}	
-
-	protected function createAccounting($times)
-	{
-		$db = \Phalcon\DI::getDefault()->get('db');
 		
-		$lastMonthContactsSQl = $this->getSQLForTotalContacts($times->lastTime, $times->currentTime);
-		$result1 = $db->query($lastMonthContactsSQl);
-		$lastContactsMonth = $result1->fetchAll();
+		$current = strtotime("1 " . date('M', time()) . " " . date('Y', time()));
+		$lastperiod = strtotime("-1 month", $current);
+		$nextperiod = strtotime("+1 month", $current);
 		
-		$currentMonthContactsSQL = $this->getSQLForTotalContacts($times->currentTime, $times->nextTime);
-//		$this->logger->log("SQL: $currentMonthContactsSQL");
-		$result2 = $db->query($currentMonthContactsSQL);
-		$currentContactsMonth = $result2->fetchAll();
+		$this->createAccounting($lastperiod, $current);
 		
-		
-		
-		$lastMonthSentSQL = $this->getSQLForTotalMailsSent($times->lastTime, $times->currentTime);
-		$result4= $db->query($lastMonthSentSQL);
-		$lastSentMonth = $result4->fetchAll();
-		
-		$currentMonthSentSQL = $this->getSQLForTotalMailsSent($times->currentTime, $times->nextTime);
-		$result3 = $db->query($currentMonthSentSQL);
-		$currentSentMonth = $result3->fetchAll();
-		
-		if (count($lastContactsMonth) > 0) {
-			foreach ($lastContactsMonth as $lastContact) {
+		if (count($this->contactsMonth) > 0) {
+			foreach ($this->contactsMonth as $lastContact) {
 				$this->accounting[$lastContact['idAccount']]['contactsLastMonth'] = $lastContact['total'] ;
 			}
 		}
-				
-		if (count($currentContactsMonth) > 0) {
-			foreach ($currentContactsMonth as $currentContact) {
-				$this->accounting[$currentContact['idAccount']]['contactsCurrentMonth'] = $currentContact['total'];
-			}
-		}
 		
-		if (count($lastSentMonth) > 0) {
-			foreach ($lastSentMonth as $lastSent) {
+		if (count($this->sentMonth) > 0) {
+			foreach ($this->sentMonth as $lastSent) {
 				$this->accounting[$lastSent['idAccount']]['sentLastMonth'] = $lastSent['total'] ;
 			}
 		}
 		
-		if (count($currentSentMonth) > 0) {
-			foreach ($currentSentMonth as $currentSent) {
-				$this->accounting[$currentSent['idAccount']]['sentCurrentMonth'] = $currentSent['total'];
+		$this->createAccounting($current, $nextperiod);
+		
+		if (count($this->contactsMonth) > 0) {
+			foreach ($this->contactsMonth as $currentContact) {
+				$this->accounting[$currentContact['idAccount']]['contactsCurrentMonth'] = $currentContact['total'];
 			}
 		}
 		
-		
+		if (count($this->sentMonth) > 0) {
+			foreach ($this->sentMonth as $currentSent) {
+				$this->accounting[$currentSent['idAccount']]['sentCurrentMonth'] = $currentSent['total'];
+			}
+		}
+	}
+	
+	
+	public function classColor()
+	{
 		foreach ($this->accounting as $accounting) {
 			if ($accounting['contactsLastMonth'] > $accounting['contactsCurrentMonth']) {
 				$this->accounting[$accounting['idAccount']]['classLastContact'] = 'text-green-color';
@@ -121,6 +101,23 @@ class AccountingObject
 			}
 		}
 	}
+
+	protected function createAccounting($firstperiod, $secondperiod)
+	{
+		$this->contactsMonth = array();
+		$this->sentMonth = array();
+		
+		$db = \Phalcon\DI::getDefault()->get('db');
+		
+		$monthContactsSQl = $this->getSQLForTotalContacts($firstperiod, $secondperiod);
+		$resultC = $db->query($monthContactsSQl);
+		$this->contactsMonth = $resultC->fetchAll();		
+		
+		
+		$monthSentSQL = $this->getSQLForTotalMailsSent($firstperiod, $secondperiod);
+		$resultS= $db->query($monthSentSQL);
+		$this->sentMonth = $resultS->fetchAll();
+	}
 	
 	
 	
@@ -135,7 +132,6 @@ class AccountingObject
 					AND m.status = 'sent'
 				GROUP BY 1 ";
 					
-//		$this->logger->log("SQL: $sql");
 		return $sql;
 	}
 
@@ -150,7 +146,6 @@ class AccountingObject
 					AND i.date < {$time2}
 				GROUP BY 1";
 		
-//		$this->logger->log("SQL: $sql");
 		return $sql;
 	}
 
