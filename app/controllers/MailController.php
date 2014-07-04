@@ -1987,6 +1987,14 @@ class MailController extends ControllerBase
 			$this->errorMsg = 'El correo de origen es incorrecto, por favor verifique la información';
 			return false;
 		}
+		else if (empty($mail->replyTo)) {
+			$this->errorMsg = 'No se ha congigurado una dirección de correo de respuesta por favor verifique la información';
+			return false;
+		}
+		else if (!\filter_var($mail->replyTo, FILTER_VALIDATE_EMAIL)) {
+			$this->errorMsg = 'La dirección de correo de respuesta es inválida, por favor verifique la información';
+			return false;
+		}
 		else if (empty($mail->target)) {
 			$this->errorMsg = 'No se ha configurado un destino, por favor verifique la información';
 			return false;
