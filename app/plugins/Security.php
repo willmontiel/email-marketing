@@ -400,8 +400,9 @@ class Security extends Plugin
 				'apikey::changestatus' => array('apikey' => array('update')),
 				
 				//ExternalApi
-				'apiversionone::listaccounts' => array('account' => array('read')),
-				'apiversionone::timebilling' => array('account' => array('read')),
+				'apiversionone::listaccounts' => array('api' => array('billing')),
+				'apiversionone::timebilling' => array('api' => array('billing')),
+				'apiversionone::updateaccount' => array('api' => array('e-comm')),
 				
 			);
 		}
@@ -500,12 +501,10 @@ class Security extends Plugin
 					}
 				}
 			}
-			catch(\Exception $e) {
-				$this->response->setContentType('application/json', 'UTF-8');
-				$this->response->setStatusCode(400, $e->getMessage());
-				return false;
-			}
 			catch(\InvalidArgumentException $e) {
+				/*Atrapa la excepción y continua el proceso*/
+			}
+			catch(\Exception $e) {
 				$this->response->setContentType('application/json', 'UTF-8');
 				$this->response->setStatusCode(400, $e->getMessage());
 				return false;

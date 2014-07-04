@@ -163,28 +163,9 @@ class AccountingObject
 		return $sql;
 	}
 
-	protected function createRelationshipDate()
-	{
-		$currentMonth = date('M', time());
-		$year = date('Y', time());
-		$t = strtotime("1 {$currentMonth} {$year}");
-		
-		$firstTime = strtotime("-1 month", $t);
-		$secondTime = $t;
-		$thirdTime = strtotime("+1 month", $secondTime);
-		
-		$times = new \stdClass();
-		
-		$times->lastTime = $firstTime;
-		$times->currentTime = $secondTime;
-		$times->nextTime = $thirdTime;
-		
-		return $times;
-	}
-	
+
 	public function getAccounting()
 	{
-		$this->logger->log("Accounting: " . print_r($this->accounting, true));
 		return $this->accounting;
 	}
 }

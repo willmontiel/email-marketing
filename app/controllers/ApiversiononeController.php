@@ -22,7 +22,8 @@ class ApiversiononeController extends ControllerBase
 		
 		$data = array(	'id' => 'idAccount',
 						'name' => 'companyName',
-						'mode' => 'accountingMode');
+						'mode' => 'accountingMode',
+						'subscription' => 'subscriptionMode');
 		
 		$response = array();
 		
@@ -44,22 +45,26 @@ class ApiversiononeController extends ControllerBase
 	public function timebillingAction()
 	{
 		try {
+			$response = array();
+
 			$accounts = Account::find();
 		
 			$accounting = new \EmailMarketing\General\Misc\AccountingObject();
 			$accounting->setAccounts($accounts);
 			$accounting->setAccountingModel('contactsPeriod', 'sentPeriod');
 			
-			$current = strtotime("1 " . date('M', time()) . " " . date('Y', time()));
-			$lastperiod = strtotime("-1 month", $current);
-		
-			$accounting->createAccounting($lastperiod, $current);
+			$firstperiod = strtotime( $this->request->get('first_date') );
+			$secondperiod = strtotime( $this->request->get('second_date') );
+			
+			if(!$firstperiod || !$secondperiod) {
+				throw new Exception("Fechas Invalidas");
+			}
+			
+			$accounting->createAccounting($firstperiod, $secondperiod);
 			
 			$accounting->processAccountingArray('contactsPeriod', 'sentPeriod');
 			
 			$data = $accounting->getAccounting();
-
-			$response = array();
 
 			foreach ($accounts as $account) {
 				$res = array(
@@ -81,10 +86,23 @@ class ApiversiononeController extends ControllerBase
 			}
 		}
 		catch (Exception $e) {
-			$this->logger->log("Exception: {$e}");
+			$response['status'] = $e->getMessage();
 		}
 		
 		return $this->setJsonResponse(array('accounts' => $response));
+	}
+	
+	
+	/**
+	 *
+	 * @Put("/account/update/{idAccount:[0-9]+}")
+	 */	
+	public function updateaccountAction($idAccount)
+	{
+		$contentsraw = $this->request->getRawBody();
+		$this->logger->log('Got this: [' . $contentsraw . ']');
+		$contentsT = json_decode($contentsraw);
+		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 	}
 }
 

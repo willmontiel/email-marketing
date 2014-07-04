@@ -23,6 +23,7 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	
 	public function verifyHeader()
 	{
+//		Metodo getallheaders() no funciona con la version del servidor, encontrar solucion PERO YA!!
 		$header = getallheaders();
 		
 		if ( isset($header['Authorization']) ) {
@@ -30,7 +31,7 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 			return true;
 		}
 		
-		throw new \Exception("Autenticación Invalida");
+		throw new \InvalidArgumentException("Autenticación Invalida");
 	}
 	
 	public function processHeader()

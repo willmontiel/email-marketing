@@ -48,6 +48,7 @@ class PermissionsDataBase
 			'tools' => 18,
 			'footer' => 19,
 			'apikey' => 20,
+			'api' => 21,
 		);
 	}
 	
@@ -150,6 +151,9 @@ class PermissionsDataBase
 			'apikey::read' => 75,
 			'apikey::update' => 76,
 			'apikey::delete' => 77,
+			
+			'api::billing' => 78,
+			'api::e-comm' => 78,
 		);
 	}
 	
@@ -253,6 +257,9 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'system::update'),
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'tools::read'),
+			
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'api::billing'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'api::e-comm'),
 			
 			
 //			----------//----------**ROLE_ADMIN**----------//----------
