@@ -18,6 +18,10 @@ class ProgrammingOptions
 				$array[] = self::getObject("Reanudar");
 				$array[] = self::getObject("Cancelar");
 				break;
+			case 'Sending':
+				$array[] = self::getObject("Reanudar");
+				$array[] = self::getObject("Cancelar");
+				break;
 			default :
 				$array[] = self::getObject("Sin acciones");
 				break;

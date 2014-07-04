@@ -79,10 +79,12 @@ class Communication
 		$mail = Mail::findFirstByIdMail($idMail);
 		
 		if(!$this->verifySentStatus($mail)) {
-
 			$this->requester->send(sprintf("%s $idMail $idMail", 'Play-Task'));
 			$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+			return true;
 		}
+		
+		return false;
 	}
 	
 	public function sendImportToParent($data, $code)

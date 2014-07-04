@@ -8,16 +8,20 @@ class ChildCommunication extends BaseWrapper
         protected $db;
         protected $mta;
         protected $urlManager;
+		protected $logger;
+		protected $messagesSent = 0;
+		protected $sent = 0;
 
 
-        public function __construct() 
+	public function __construct() 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 	
+		$this->logger = $di['logger'];
 		$this->mta = $di['mtadata'];
 		$this->urlManager = $di['urlManager'];
-                
-                $this->db = $di->get('db');
+        $this->db = $di->get('db');
+		$this->flashSession = $di->get('flashSession');
 	}
 	
 	public function setSocket($childprocess)
@@ -66,15 +70,17 @@ class ChildCommunication extends BaseWrapper
 			return;
 		}
 		
-		
 		echo 'Empecé el proceso con MTA!' .PHP_EOL;
+		
+		$account = Account::findFirstByIdAccount($mail->idAccount);
+		$oldstatus = $mail->status;
+		$messagesLimit = $account->messageLimit;
+		
 		try {
 			$this->checkMailStatus($mail);
-			$oldstatus = $mail->status;
 			
-			$contactsSent = 0;
 			if ($oldstatus == 'Paused') {
-				$contactsSent = $mail->totalContacts;
+				$this->sent = $mail->messagesSent;
 			}
 			
 			$mail->status = 'Sending';
@@ -91,7 +97,6 @@ class ChildCommunication extends BaseWrapper
 
 			$timer->startTimer('send-preparation', 'Preparing everything to send email');
 
-			$account = Account::findFirstByIdAccount($mail->idAccount);
 			$this->setAccount($account);
 			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
 
@@ -116,20 +121,38 @@ class ChildCommunication extends BaseWrapper
 			if (trim($mailContent->content) === '') {
 				throw new \InvalidArgumentException("Error mail's content is empty");
 			}
-
-			if ($oldstatus == 'Scheduled') {
-				$log->log("Identificando destinatarios");
-				$identifyTarget = new IdentifyTarget();
-				$identifyTarget->identifyTarget($mail);
+			
+			$identifyTarget = new IdentifyTarget();
+			$identifyTarget->setMail($mail);
+			$identifyTarget->processData();
+			
+			$totalSent = $identifyTarget->getTotalContacts();
+			$totalSent = ($oldstatus == 'Paused' ? $totalSent - $mail->messagesSent : $totalSent);
+			
+			if ($account->accountingMode == 'Envio') {
+				if ($messagesLimit < $totalSent) {
+					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
+					throw new MailMessagesLimitException("Messages limit has been exceeded");
+				}
+				
+				$account->messageLimit = $messagesLimit - $totalSent;	
+				
+				if (!$account->save()) {
+					\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el limite de envíos en la cuenta");
+					throw new \Exception("Error while updating message limit in account, cancelling sent");
+				}
 			}
-
+			
+			if ($oldstatus == 'Scheduled') {
+				$identifyTarget->saveTarget();
+			}
+			
 			if ($mail->type == 'Editor') {
 				$htmlObj = new HtmlObj();
 				$htmlObj->setAccount($account);
 //				$this->log->log("Content editor: " . print_r(json_decode($mailContent->content), true));
 				$htmlObj->assignContent(json_decode($mailContent->content));
 				$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
-//				$this->log->log('Json: ' . $content);
 			}
 			else {
 //				$this->log->log("No Hay editor");
@@ -138,8 +161,6 @@ class ChildCommunication extends BaseWrapper
 				$html = utf8_decode($footerObj->addFooterInHtml(html_entity_decode($mailContent->content)));
 			}
 
-//				$prepareMail = new PrepareMailContent($this->account);
-//				$content = $prepareMail->getContentMail($html);
 			$urlManager = $this->urlManager;
 			$imageService = new ImageService($account, $domain, $urlManager);
 			$linkService = new LinkService($account, $mail);
@@ -184,12 +205,6 @@ class ChildCommunication extends BaseWrapper
 			$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 			$swift = Swift_Mailer::newInstance($transport);
 
-			$i = 0;
-			
-			if ($contactsSent != 0) {
-				$i = $contactsSent;
-			}
-			
 			$sentContacts = array();
 			Phalcon\DI::getDefault()->get('timerObject')->startTimer('Sending', 'Sending message with MTA');
 			
@@ -222,7 +237,11 @@ class ChildCommunication extends BaseWrapper
 
                         $rmemory = 0;
 			foreach ($contactIterator as $contact) {
-
+//				if ($messagesLimit <= $messagesSent) {
+//					$this->commitSentMessages($mail, $sentContacts);
+//					$log->log("El cliente ha excedido o llegado al limite de mensajes configurado en la cuenta");
+//					throw new MailMessagesLimitException("Messages limit has been exceeded");
+//				}
 				/*
 				 * ================================================================
 				 * NOTA
@@ -332,7 +351,7 @@ class ChildCommunication extends BaseWrapper
 				$timer->endTimer('send-msg');
 				
 				if ($recipients) {
-//					echo "Message " . $i . " successfully sent! \n";
+//					echo "Message {$this->massagesSent} successfully sent! \n";
 //						$log->log("HTML: " . $html);
 //						$log->log("Headers: " . $this->lastsendheaders);
 //					$log->log("Message successfully sent! with idContact: " . $contact['contact']['idContact']);
@@ -363,38 +382,46 @@ class ChildCommunication extends BaseWrapper
                                                     $timer->endTimer('gc-collect');
                                                 } 
 					}
-					$i++;
+					$this->messagesSent++;
+//					$messagesSent++;
 				} 
 				else {
-					echo "There was an error in message {$i}: \n";
+					echo "There was an error in message {$this->messagesSent}: \n";
 					$log->log("Error while sending mail: " . print_r($failures, true));
 					print_r($failures);
 				}
-//					$log->log("HTML: " . $html);
-//					echo 'Hrml: ' . $html;
+				
 				switch ($msg) {
 					case 'Cancel':
 						$log->log('Estado: Me Cancelaron');
 
-                                                $phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = {$mail->idMail} AND status != 'sent'";
+                        $phql = "UPDATE Mxc SET status = 'canceled' WHERE idMail = {$mail->idMail} AND status != 'sent'";
 						if (!$modelsManager->executeQuery($phql)) {
+							throw new \Exception("Error while updating mxc status");
 							$log->log("Error updating MxC");
 						}
 
 						$mail->status = 'Cancelled';
+						$mail->messagesSent = $this->sent + $this->messagesSent;
 						$mail->finishedon = time();
+						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
 						break 2;
 					case 'Stop':
 						$log->log("Estado: Me Pausaron");
 						$mail->status = 'Paused';
+						$mail->messagesSent = $this->sent + $this->messagesSent;
+						$this->updateMessageLimit($account, $messagesLimit);
 						$disruptedProcess = TRUE;
 						break 2;
 					case 'Checking-Work':
 						$log->log('Estado: Verificando');
-						$this->childprocess->responseToParent('Work-Checked' , $i);
+						$sent = $this->sent + $this->messagesSent;
+//						$this->logger->log("Verificando: {$sent}");
+						$this->childprocess->responseToParent('Work-Checked' , $sent);
 						break;
 				}
+				
 				unset($message);
 				unset($headers);
 			}
@@ -407,13 +434,15 @@ class ChildCommunication extends BaseWrapper
                                 $sentContacts = array();
 			}			
 			$timer->endTimer('send-loop');
-
+			
 			if(!$disruptedProcess) {
 				$log->log('Estado: Me enviaron');
-				$mail->totalContacts = $i;
+				
+				$mail->messagesSent = $this->sent + $this->messagesSent;
 				$mail->status = 'Sent';
 				$mail->finishedon = time();
 			}
+			
 			$log->log('Se actualizara el estado del MAIL como ' . $mail->status);
 			if(!$mail->save()) {
 				$log->log('No se pudo actualizar el estado del MAIL');
@@ -445,19 +474,40 @@ class ChildCommunication extends BaseWrapper
 			}
 			$timer->endTimer('send-postprocessing');
 		}
-		catch (InvalidArgumentException $e) {
-			$log->log('Exception: [' . $e . ']');
-			$mail->status = 'Cancelled';
-			$mail->finishedon = time();
-			if(!$mail->save()) {
-				$log->log('No se pudo actualizar el estado del MAIL');
-			}
-		}
 		catch (MailStatusException $e) {
 			$log->log('Exception de Estado de Correo: [' . $e . ']');
 		}
+		catch (MailMessagesLimitException $e) {
+			$log->log('Exception de limite de mensajes: [' . $e . ']');
+			
+			$mail->status = ($oldstatus == 'Paused' ? 'Paused' : 'Draft');
+			if(!$mail->save()) {
+				$log->log('No se pudo actualizar el estado del MAIL');
+			}
+			
+			$users = User::find(array(
+				'conditions' => "idAccount = ?1 AND userrole = 'ROLE_ADMIN'",
+				'bind' => array(1 => $account->idAccount)
+			));
+			
+			$message = new AdministrativeMessages();
+			foreach ($users as $user) {
+				$message->createLimitExceededMessage($user->email);
+				$message->sendMessage();	
+			}
+			
+		}
 		catch (Exception $e) {
-			$log->log('Exception General: [' . $e . ']');
+			$log->log('Exception: [' . $e . ']');
+			$mail->status = 'Cancelled';
+			$sent = $this->sent + $this->massagesSent;
+			$mail->messagesSent = $sent;
+			$mail->finishedon = time();
+			if(!$mail->save()) {
+				$log->log("No se pudo actualizar el estado del MAIL: Cancelled, mensajes enviados: {$sent}");
+			}
+			
+			$this->updateMessageLimit($account, $messagesLimit);
 		}
 
                 $timer->startTimer('gc-collect', 'Reclaiming memory...');
@@ -489,6 +539,48 @@ class ChildCommunication extends BaseWrapper
         if (!$this->db->execute($sql)) {
             \Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el estado de envio de los mensajes!!!");
         }
-
     }
+	
+	protected function updateMxcStatus($mail)
+	{
+		$sql = "UPDATE mxc SET status = 'Paused' WHERE idMail = {$mail->idMail} AND status = 'Scheduled'";
+        
+        if (!$this->db->execute($sql)) {
+            \Phalcon\DI::getDefault()->get('logger')->log("Error actualizando el estado de envio de los mensajes!!!");
+        }
+	}
+	
+	protected function updateTotalContacts($mail)
+	{
+		$sql = "SELECT COUNT (mc.idContact) AS totalContacts FROM mxc WHERE idMail = {$mail->idMail}";
+        
+		$result = $this->db->query($sql);
+		
+		if (!$result) {
+            \Phalcon\DI::getDefault()->get('logger')->log("Error consultando los contactos totales del envío!!!");
+        }
+		
+		$totalContacts = $result->fetchAll();
+		
+		$mail->messagesSent = $totalContacts;
+		
+		if (!$mail->save()) {
+			\Phalcon\DI::getDefault()->get('logger')->log("Error actualizando la cantidad de correos a enviar!!!");
+		}
+		
+		return $totalContacts;
+	}
+	
+	protected function updateMessageLimit(Account $account, $messagesLimit)
+	{
+		if ($account->accountingMode == 'Envio') {
+			$t = $messagesLimit - $this->messagesSent;
+			$account->messageLimit = $t; 
+
+			if(!$account->save()) {
+				$this->logger->log("No se pudo actualizar el limite de envios en la cuenta {$t}");
+				throw new Exception("Error while updating message limit in account: {$t}");
+			}
+		}
+	}
 }

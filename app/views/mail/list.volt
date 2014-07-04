@@ -73,10 +73,12 @@
 								<div class="news-title">
 									{%if item.status == 'Sent'%}
 										<a href="{{ url('statistic/mail') }}/{{item.idMail}}">{{item.name}}</a>
+									{%elseif item.status == 'Pending'%}
+										<a href="{{ url('mail/play') }}/{{item.idMail}}">{{item.name}}</a>
 									{%elseif item.status == 'Draft'%}
 										<a href="{{ url('mail/compose') }}/{{item.idMail}}">{{item.name}}</a>
 									{%else%}
-										<a href="{{ url('mail/#') }}{{item.idMail}}">{{item.name}}</a>
+										<a href="javascript.void(0);">{{item.name}}</a>
 									{%endif%}
 								</div>
 								<div class="news-text">
@@ -113,7 +115,7 @@
 										
 									{%endif%}
 									{% for value in mail_options(item) %}
-										<a class="btn btn-sm btn-default extra-padding" href="{{ url(value.url) }}{{item.idMail}}">{{value.text}}</a>
+										<a class="btn btn-sm btn-default extra-padding" href="{{ url(value.url) }}{{item.idMail}}">{{value.text}} <span class="{{value.icon}}"></span></a>
 									{% endfor %}
 										<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default extra-padding">Duplicar</a>
 
