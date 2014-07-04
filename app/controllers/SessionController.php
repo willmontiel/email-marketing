@@ -86,7 +86,7 @@ class SessionController extends ControllerBase
 					$link = '<a href="' . $url . '" style="text-decoration: underline;">Click aqui</a>';
 					try {
 						$message = new AdministrativeMessages();
-						$message->createRecoverpassMessage($link, $user->email);
+						$message->createRecoverpassMessage($user->email, $link);
 						$message->sendMessage();
 					}
 					catch (Exception $e) {

@@ -120,7 +120,7 @@ class ProcessController extends ControllerBase
 	
 	public function stopsendingAction($idTask)
 	{
-		if ($this->validateMail($idTask)) {
+		if ($this->validateSendingMail($idTask)) {
 			try {
 				$communication = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 				$communication->sendPausedToParent($idTask);
@@ -176,6 +176,25 @@ class ProcessController extends ControllerBase
 		else {
 			$mail = Mail::findFirst(array(
 				'conditions' => "idMail = ?1 AND idAccount = ?2 AND deleted = 0 AND status != 'Sending'",
+				'bind' => array(1 => $idMail,
+								2 => $this->user->account->idAccount)
+			));
+		}
+		
+		return $mail;
+	}
+	
+	private function validateSendingMail($idMail) 
+	{
+		if ($this->user->userrole == 'ROLE_SUDO') {
+			$mail = Mail::findFirst(array(
+				'conditions' => "idMail = ?1 AND status = 'Sending'",
+				'bind' => array(1 => $idMail)
+			));
+		}
+		else {
+			$mail = Mail::findFirst(array(
+				'conditions' => "idMail = ?1 AND idAccount = ?2 AND deleted = 0 AND status = 'Sending'",
 				'bind' => array(1 => $idMail,
 								2 => $this->user->account->idAccount)
 			));

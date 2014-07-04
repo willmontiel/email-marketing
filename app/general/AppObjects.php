@@ -38,6 +38,7 @@ class AppObjects
 		
 		if (!$this->config->system->status && !in_array($this->ip, $this->allowed_ips)) {
 			$this->setAppPath();
+			$this->setFullPath();
 			$this->setDispatcher();
 			$this->setLogger();
 			$this->setUrlManagerObject();
@@ -46,6 +47,7 @@ class AppObjects
 		}
 		else {
 			$this->setAppPath();
+			$this->setFullPath();
 			$this->setUrlManagerObject();
 			$this->setUri();
 			$this->setRouter();
@@ -629,6 +631,13 @@ class AppObjects
 			));
 			return $view;
 		});
+	}
+	
+	private function setFullPath()
+	{
+		$path = new \stdClass();
+		$path->path = $this->config->general->path;
+		$this->di->set('path', $path);
 	}
 
 	public function getDi()

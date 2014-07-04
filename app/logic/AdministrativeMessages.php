@@ -1,40 +1,57 @@
 <?php
-require_once "../app/library/swiftmailer/lib/swift_required.php";
+$path =  \Phalcon\DI::getDefault()->get('path');
+require_once "{$path->path}app/library/swiftmailer/lib/swift_required.php";
+
 class AdministrativeMessages
 {
-	public $subject;
-	public $from;
-	public $html;
-	public $to;
-	public $text;
+	protected $msg;
+	protected $subject;
+	protected $from;
+	protected $html;
+	protected $to;
+	protected $text;
 	
 	public function __construct() 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 		$this->mta = $di['mtadata'];
+		$this->logger = $di['logger'];
 	}
 	
-	public function createRecoverpassMessage($url, $to)
+	public function createRecoverpassMessage($to, $url = null)
 	{
 		$msg = Adminmsg::findFirst(array(
 			'conditions' => 'type = ?1',
-			'bind' => array(1 => 'Recoverpass')
+			'bind' => array(1 => 'RecoverPass')
 		));
-		
-		Phalcon\DI::getDefault()->get('logger')->log("Url: " . $url);
-		
+
 		if ($msg) {
-			$message = str_replace('tmpurl', $url, $msg->msg);
-			$plainText = str_replace('tmpurl', $url, $msg->text);
+			$msg->msg = str_replace('tmpurl', $this->url, $msg->msg);
+			$msg->text = str_replace('tmpurl', $this->url, $msg->text);
 			
-			$this->subject = $msg->subject;
-			$this->from = $msg->from;
-			$this->html = $message;
+			$this->msg = $msg;
 			$this->to = $to;
-			$this->text = $plainText;
+			$this->url = $url;
 		}
 		else {
-			throw new InvalidArgumentException('Administrative message not found!');
+			throw new Exception('Administrative message not found!');
+		}
+		
+	}
+	
+	public function createLimitExceededMessage($to)
+	{
+		$msg = Adminmsg::findFirst(array(
+			'conditions' => 'type = ?1',
+			'bind' => array(1 => 'LimitExceeded')
+		));
+
+		if ($msg) {
+			$this->msg = $msg;
+			$this->to = $to;
+		}
+		else {
+			throw new Exception('Administrative message not found!');
 		}
 	}
 	
@@ -43,24 +60,26 @@ class AdministrativeMessages
 		$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 		$swift = Swift_Mailer::newInstance($transport);
 		
-		$message = new Swift_Message($this->subject);
+		$message = new Swift_Message($this->msg->subject);
 		
 		/*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
 		$headers = $message->getHeaders();
 		$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
 		
-		$message->setFrom($this->from);
-		$message->setBody($this->html, 'text/html');
+		$message->setFrom($this->msg->from);
+		$message->setBody($this->msg->msg, 'text/html');
 		$message->setTo($this->to);
-		$message->addPart($this->text, 'text/plain');
-
+		$message->addPart($this->msg->text, 'text/plain');
+		
+		$this->logger->log("Preparandose para enviar mensaje a: {$this->to}");
+		
 		$recipients = $swift->send($message, $failures);
 		
 		if ($recipients){
-			Phalcon\DI::getDefault()->get('logger')->log('Recovery pass message successfully sent!');
+			Phalcon\DI::getDefault()->get('logger')->log('Limit exceeded message successfully sent!');
 		}
 		else {
-			throw new InvalidArgumentException('Error while sending message: ' . $failures);
+			throw new Exception('Error while sending message: ' . $failures);
 		}
 	}
 }

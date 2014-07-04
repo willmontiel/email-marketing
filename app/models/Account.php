@@ -101,5 +101,32 @@ class Account extends Modelbase
 		return $r->getFirst()->cnt;
 	}
 			
+	public function countTotalMessagesSent()
+	{
+		$t = time();
+		$month = date('M', $t);
+		$year = date('Y', $t);
+
+		$time1 = strtotime("1 {$month} {$year}");
+		$time2 = strtotime("+1 month", $time1);
+		$time2 = strtotime("-1 day", $time2);
+			
+		$sql = "SELECT a.idAccount, COUNT( mc.idContact ) AS total
+					FROM Mail AS m
+					LEFT JOIN Mxc AS mc ON ( mc.idMail = m.idMail ) 
+					JOIN Account AS a ON ( a.idAccount = m.idAccount ) 
+				WHERE m.updatedon >= {$time1}
+					AND m.updatedon <= {$time2}
+					AND m.status = 'sent'
+					AND a.idAccount = :idAccount:
+				GROUP BY 1 ";
+		
+		$r =  Phalcon\DI::getDefault()->get('modelsManager')->executeQuery($sql, array('idAccount' => $this->idAccount));
+		
+		if (!$r) {
+			return 0;
+		}
+		return $r->getFirst()->total;
+	}
            
 }   

@@ -2008,6 +2008,14 @@ class MailController extends ControllerBase
 			$this->errorMsg = 'El correo de origen es incorrecto, por favor verifique la información';
 			return false;
 		}
+		else if (empty($mail->replyTo)) {
+			$this->errorMsg = 'No se ha congigurado una dirección de correo de respuesta por favor verifique la información';
+			return false;
+		}
+		else if (!\filter_var($mail->replyTo, FILTER_VALIDATE_EMAIL)) {
+			$this->errorMsg = 'La dirección de correo de respuesta es inválida, por favor verifique la información';
+			return false;
+		}
 		else if (empty($mail->target)) {
 			$this->errorMsg = 'No se ha configurado un destino, por favor verifique la información';
 			return false;
@@ -2082,10 +2090,11 @@ class MailController extends ControllerBase
 	
 	public function playAction($idMail)
 	{
+		$account = $this->user->account;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idAccount = ?2',
 			'bind' => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
+							2 => $account->idAccount)
 		));
 		
 		if ($mail) {
@@ -2117,6 +2126,7 @@ class MailController extends ControllerBase
 		else {
 			$this->flashSession->error("Ha intentado reanudar un correo que nunca inició o no existe, por favor verifique la información");
 		}
+		
 		return $this->response->redirect("mail/list");
 	}
 	
