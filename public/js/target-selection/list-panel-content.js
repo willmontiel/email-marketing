@@ -72,6 +72,7 @@ ListPanelContent.prototype.getUrlForDataSource = function() {
 };
 
 ListPanelContent.prototype.initializeSelect2 = function(data) {
+//	var d = eval("([{text: 'uno', children: [{id: 0, text: 'Cero'}, {id: 1, text: 'Uno'}]}, {text: 'segundo', children: [{id: 2, text: 'Dos'}, {id: 3, text: 'Tres'}]} ])");
 	$(".select2").select2({
 		 data: data,
 		 placeholder: "Selecciona una opción",

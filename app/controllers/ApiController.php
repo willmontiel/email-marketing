@@ -1445,11 +1445,63 @@ class ApiController extends ControllerBase
 	
 	public function getcontactlistsAction()
 	{
+		$account = $this->user->account;
+		$dbases = Dbase::findByIdAccount($account->idAccount);
 		
+		$lists = array();
+		foreach ($dbases as $dbase) {
+			$parent = new stdClass();
+			$parent->id = $dbase->idDbase;
+			$parent->text = $dbase->name;
+			$parent->children = array();
+			
+			$contactlists = Contactlist::find(array(
+				'conditions' => 'idDbase = ?1',
+				'bind' => array(1 => $dbase->idDbase)
+			));
+			
+			foreach ($contactlists as $contactlist) {
+				$children = new stdClass();
+				$children->id = $contactlist->idContactlist;
+				$children->text = $contactlist->name;
+				
+				$parent->children[] = $children;
+			}
+			
+			$lists[] = $parent;
+		}
+		
+		return $this->setJsonResponse($lists);
 	}
 	
 	public function getsegmentsAction()
 	{
+		$account = $this->user->account;
+		$dbases = Dbase::findByIdAccount($account->idAccount);
 		
+		$s = array();
+		foreach ($dbases as $dbase) {
+			$parent = new stdClass();
+			$parent->id = $dbase->idDbase;
+			$parent->text = $dbase->name;
+			$parent->children = array();
+			
+			$segments = Segment::find(array(
+				'conditions' => 'idDbase = ?1',
+				'bind' => array(1 => $dbase->idDbase)
+			));
+			
+			foreach ($segments as $segment) {
+				$children = new stdClass();
+				$children->id = $segment->idSegment;
+				$children->text = $segment->name;
+				
+				$parent->children[] = $children;
+			}
+			
+			$s[] = $parent;
+		}
+		
+		return $this->setJsonResponse($s);
 	}
 }

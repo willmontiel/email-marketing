@@ -3,7 +3,6 @@ function DataSourceForSelect(url) {
 }
 
 DataSourceForSelect.prototype.findDataSource = function() {
-	console.log('Processing...');
 	var self = this;
 	this.dataSource = '';
 	
@@ -13,8 +12,7 @@ DataSourceForSelect.prototype.findDataSource = function() {
 			type: "POST",			
 			data: {},
 			error: function(error){
-				console.log('Error');
-				console.log(error);
+				console.log('Error: ' + error);
 			},
 			success: function(data){
 				self.dataSource = data;

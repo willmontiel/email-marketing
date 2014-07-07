@@ -121,18 +121,14 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		topPanelContent.setPanelContainer(panelContainer);
 		topPanelContent.createContent();
 		
-		console.log('Se creó todo lo necesario');
 		var config = {
 			sticky: true, 
 			leftArrow: false, 
 			title: 'Seleccione una opción',
 			content: topPanelContent
 		};
-		console.log('Agregar panel...');
-		panelContainer.addPanel(config);
 		
-//		$('#panel-container').before($('<button class="addPanel btn btn-sm btn-primary extra-padding">+</button>'));
-
+		panelContainer.addPanel(config);
 	}.observes('isTargetExpanded'),
 		
 	
