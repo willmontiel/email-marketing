@@ -402,7 +402,8 @@ class Security extends Plugin
 				//ExternalApi
 				'apiversionone::listaccounts' => array('api' => array('billing')),
 				'apiversionone::timebilling' => array('api' => array('billing')),
-				'apiversionone::updateaccount' => array('api' => array('e-comm')),
+				'apiversionone::updateaccount' => array('api' => array('account')),
+				'apiversionone::accountinformation' => array('api' => array('account')),
 				
 			);
 		}
@@ -495,6 +496,12 @@ class Security extends Plugin
 						$user = $apikey->user;
 						$role = $user->userrole;
 						$this->_dependencyInjector->set('userObject', $user);
+						if(!empty($data)) {
+							$content = new stdClass();
+							$content->content = $data;
+//							Se crea el objeto RequestContent para ser inyectado y usado en los controladores
+							$this->_dependencyInjector->set('requestContent', $content);
+						}
 					}
 					else {
 						throw new \Exception("API Key Invalido");

@@ -153,7 +153,7 @@ class PermissionsDataBase
 			'apikey::delete' => 77,
 			
 			'api::billing' => 78,
-			'api::e-comm' => 78,
+			'api::account' => 79,
 		);
 	}
 	
@@ -259,7 +259,7 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'tools::read'),
 			
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'api::billing'),
-			array( 'Role' => 'ROLE_SUDO', 'Action' => 'api::e-comm'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'api::account'),
 			
 			
 //			----------//----------**ROLE_ADMIN**----------//----------

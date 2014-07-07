@@ -35,7 +35,7 @@ class ApiversiononeController extends ControllerBase
 			$response[] = $res;
 		}
 		
-		return $this->setJsonResponse(array('accounts' => $response));
+		return $this->setJsonResponse(array('response' => $response));
 	}
 	
 	
@@ -46,50 +46,18 @@ class ApiversiononeController extends ControllerBase
 	{
 		try {
 			$response = array();
-
-			$accounts = Account::find();
-		
-			$accounting = new \EmailMarketing\General\Misc\AccountingObject();
-			$accounting->setAccounts($accounts);
-			$accounting->setAccountingModel('contactsPeriod', 'sentPeriod');
-			
-			$firstperiod = strtotime( $this->request->get('first_date') );
-			$secondperiod = strtotime( $this->request->get('second_date') );
-			
-			if(!$firstperiod || !$secondperiod) {
-				throw new Exception("Fechas Invalidas");
-			}
-			
-			$accounting->createAccounting($firstperiod, $secondperiod);
-			
-			$accounting->processAccountingArray('contactsPeriod', 'sentPeriod');
-			
-			$data = $accounting->getAccounting();
-
-			foreach ($accounts as $account) {
-				$res = array(
-					'id' => $account->idAccount,
-					'name' => $account->companyName,
-					'subscription' => $account->subscriptionMode,
-					'mode' => $account->accountingMode
-				);
-
-				if($account->accountingMode == 'Contacto') {
-					$res['limit'] = $account->contactLimit;
-					$res['consumed'] = $data[$account->idAccount]['contactsPeriod'];
-				}
-				else if($account->accountingMode == 'Envio') {
-					$res['limit'] = $account->messageLimit;
-					$res['consumed'] = $data[$account->idAccount]['sentPeriod'];
-				}
-				$response[] = $res;
-			}
+			$wrapper = new AccountWrapper();
+			$response[] = $wrapper->getAccountsBilling($this->request->get('first_date'), $this->request->get('second_date'));
 		}
-		catch (Exception $e) {
+		catch (ApiException $e) {
 			$response['status'] = $e->getMessage();
 		}
+		catch (Exception $e) {
+			$this->logger->log('Error API: [ ' . $e->getMessage() . ' ]');
+			$response['status'] = "Error. Por favor, comuníquese con el administrador";
+		}
 		
-		return $this->setJsonResponse(array('accounts' => $response));
+		return $this->setJsonResponse(array('response' => $response));
 	}
 	
 	
@@ -99,11 +67,60 @@ class ApiversiononeController extends ControllerBase
 	 */	
 	public function updateaccountAction($idAccount)
 	{
-		$contentsraw = $this->request->getRawBody();
-		$this->logger->log('Got this: [' . $contentsraw . ']');
-		$contentsT = json_decode($contentsraw);
-		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		try {
+			$response = array();
+			$contentsraw = $this->getRequestContent();
+			$content = json_decode($contentsraw);
+
+			$account = Account::findFirst(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $idAccount)
+			));
+			
+			if($account->idAccount != $this->user->account->idAccount) {
+				throw new ApiException("Usted no tiene permisos para realizar esta acción");
+			}
+			
+			$wrapper = new AccountWrapper();
+			$wrapper->setAccount($account);
+			$response[] = $wrapper->updateAccountSettings($content->account);
+		}
+		catch (ApiException $e) {
+			$response['status'] = $e->getMessage();
+		}
+		catch (Exception $e) {
+			$this->logger->log('Error API: [ ' . $e->getMessage() . ' ]');
+			$response['status'] = "Error. Por favor, comuníquese con el administrador";
+		}
+		
+		return $this->setJsonResponse(array('response' => $response));
+	}
+	
+	
+	/**
+	 * @Get("/account/consult/{idAccount:[0-9]+}")
+	 */	
+	public function accountinformationAction($idAccount)
+	{
+		try {
+			$response = array('status'  => 'OK');
+			$account = Account::findFirst(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $idAccount)
+			));
+
+			$wrapper = new AccountWrapper();
+			$wrapper->setAccount($account);
+			$response[] = $wrapper->getAccountInfo($this->request->get('first_date'), $this->request->get('second_date'));
+		}
+		catch (ApiException $e) {
+			$response['status'] = $e->getMessage();
+		}
+		catch (Exception $e) {
+			$this->logger->log('Error API: [ ' . $e->getMessage() . ' ]');
+			$response['status'] = "Error. Por favor, comuníquese con el administrador";
+		}
+		
+		return $this->setJsonResponse(array('response' => $response));
 	}
 }
-
-?>
