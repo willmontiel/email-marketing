@@ -5,13 +5,14 @@ TopPanelContent.prototype = new PanelContent;
 TopPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	this.content.find('.sgm-add-selector-content').on('click', function (e) {
-//		console.log(self.contaniner);
 		var criteria = $(this).attr('data-type');
+		self.container.resetContainer();
+		
 		self.addContent(e, criteria);
 		$('.sgm-add-selector-content').removeClass('li-active');
 		$(this).addClass('li-active');
 	});
-	console.log(this.contaniner);
+	
 	panel.find('.sgm-panel-content').append(this.content);
 };
 

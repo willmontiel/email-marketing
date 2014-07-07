@@ -7,15 +7,15 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.addContent(e);
 	});
 	
-	var url = self.getUrlForDataSource();
-	var dataSource = new DataSourceForSelect(url);
-	var source;
-	
-	dataSource.findDataSource().then(function() { 
-		source = dataSource.getDataSource();
-//		self.insertSource(source);
-		self.initializeSelect2(source);
-	});
+//	var url = self.getUrlForDataSource();
+//	var dataSource = new DataSourceForSelect(url);
+//	var source;
+//	
+//	dataSource.findDataSource().then(function() { 
+//		source = dataSource.getDataSource();
+////		self.insertSource(source);
+//		self.initializeSelect2(source);
+//	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
 };

@@ -6,6 +6,7 @@ function Panel(parent, config) {
 Panel.prototype.panelClass = 'col-xs-12 col-sm-6 col-md-4 col-lg-3';
 
 Panel.prototype.createPanel = function(container) {
+	
 	this.html = $('<div class="' + Panel.prototype.panelClass + '">\n\
 					<div class="sgm-panel" style="display: none;">\n\
 						' + ((!this.config.sticky)?'<div class="sgm-close-panel"><span class="glyphicon glyphicon-minus-sign"></span></div>':'') +
@@ -15,13 +16,14 @@ Panel.prototype.createPanel = function(container) {
 					    ' + ((this.config.leftArrow) ? '<div class="sgm-left-arrow-border"></div><div class="sgm-left-arrow"></div>' : '') + '\n\
 					</div>\n\
 				 </div>');
+	
 	this.container = container;
 	var self = this;
+	
 	this.html.find('.sgm-close-panel').on('click', function (e) {
 		self.close(e);
 	});
-	
-//	this.html.show('slow');
+
 	this.html.find('.sgm-panel').css({width: '0px'}).show();
 	container.append(this.html);
 	this.html.find('.sgm-panel').animate({width: '100%'});
