@@ -1,15 +1,14 @@
-function ListPanelContent() {}
+function ListPanelContent() {
+	this.selectedValue = '';
+}
 
 ListPanelContent.prototype = new PanelContent;
-
-ListPanelContent.prototype.setContentCriteria = function(criteria) {
-	this.criteria = criteria;
-};
 
 ListPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	this.content.find('.sgm-add-filter-content').on('click', function (e) {
 		self.addContent(e);
+		$(this).remove();
 	});
 	
 	var url = self.getUrlForDataSource();
@@ -18,36 +17,18 @@ ListPanelContent.prototype.initialize = function(panel) {
 
 	dataSource.findDataSource().then(function() { 
 		source = dataSource.getDataSource();
-//		self.insertSource(source);
 		self.initializeSelect2(source);
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
 };
 
-//ListPanelContent.prototype.addContent = function (e) {
-//	e.preventDefault();
-//	
-//	var filterPanelContent = new FilterPanelContent();
-//	filterPanelContent.setPanelContainer(this.container);
-//	filterPanelContent.createContent();
-//	
-//	var config = {
-//		sticky: false, 
-//		leftArrow: true, 
-//		title: 'Seleccione una opción',
-//		content: filterPanelContent
-//	};
-//		
-//	this.container.addPanel(config);
-//};
-
 ListPanelContent.prototype.createContent = function () {
 	this.content = $('<div class="sgm-target-selector">\n\
 						<div class="sgm-selector-content">\n\
 							<input type="hidden" class="select2"/>\n\
 						</div>\n\
-						<div class="sgm-add-filter-content sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>\n\
+						<div class="sgm-add-filter-content"></div>\n\
 						</div> \n\
 					 </div>');
 };
@@ -59,7 +40,7 @@ ListPanelContent.prototype.getUrlForDataSource = function() {
 			url += "api/getdbases";
 			break;
 			
-		case 'lists':
+		case 'contactlists':
 			url += "api/getcontactlists";
 			break;
 			
@@ -73,29 +54,42 @@ ListPanelContent.prototype.getUrlForDataSource = function() {
 
 ListPanelContent.prototype.initializeSelect2 = function(data) {
 	var self = this;
-	
-	$(".select2").select2({
+	var results = {
 		more: false,
-		data: data,
+		results: data
+	};
+	
+	var select = this.content.find('.select2');
+	select.select2({
+//		multiple: true,
+		data: results,
 		placeholder: "Selecciona una opción"
 	});
 	
-	$(".select2").click(function () { 
-		
-		alert("Selected value is: "+$(".select2").select2("val"));
+	select.on("change", function(e) { 
+		e.preventDefault();
+		self.content.find('.sgm-add-filter-content').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
+		self.selectedValue = e.val;
 	});
 };
 
-//ListPanelContent.prototype.insertSource = function(source) {
-//	var options = '';
-//	for(var i = 0; i < source.length; i++) {
-//		var dbase = source[i];
-//		options += '<option value="' + dbase.idDbase + '">' + dbase.name + '</option>';
-//	}
-//	
-//	var select = $('<select class="select2">\n\
-//						' + options + '\n\
-//					</select');
-//	
-//	this.content.find('.sgm-selector-content').append(select);
-//};
+ListPanelContent.prototype.addContent = function(e) {
+	e.preventDefault();
+	
+	var filterPanelContent = new FilterPanelContent();
+	filterPanelContent.setPanelContainer(this.container);
+	filterPanelContent.setContentCriteria(this.criteria);
+	filterPanelContent.setSelectedValue(this.selectedValue);
+	filterPanelContent.createContent();
+	
+	this.content.find();
+	
+	var config = {
+		sticky: false, 
+		leftArrow: true, 
+		title: 'Seleccione una opción',
+		content: filterPanelContent
+	};
+		
+	this.container.addPanel(config);
+};

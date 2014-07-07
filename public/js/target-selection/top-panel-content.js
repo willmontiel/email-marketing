@@ -39,7 +39,7 @@ TopPanelContent.prototype.createContent = function () {
 							<li class="sgm-add-selector-content" data-type="dbases">\n\
 								<span class="glyphicon glyphicon-tasks"></span> Bases de datos\n\
 							</li>\n\
-							<li class="sgm-add-selector-content" data-type="lists">\n\
+							<li class="sgm-add-selector-content" data-type="contactlists">\n\
 								<span class="glyphicon glyphicon-list-alt"></span> Listas de contactos\n\
 							</li>\n\
 							<li class="sgm-add-selector-content" data-type="segments">\n\

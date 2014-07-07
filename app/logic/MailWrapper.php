@@ -9,12 +9,21 @@ class MailWrapper extends BaseWrapper
 	protected $target = null;
 	protected $scheduleDate = null;
 
+	protected $criteria;
+	protected $dbase;
+	protected $filter = array();
+	protected $model;
 
 	public function __construct() 
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}
-
+	
+	public function setDbase(Dbase $dbase)
+	{
+		$this->dbase = $dbase;
+	}
+	
 	public function setAccount(Account $account)
 	{
 		$this->account = $account;
@@ -43,6 +52,46 @@ class MailWrapper extends BaseWrapper
 		$this->twtoken = $twtoken;
 	}
 	
+	public function searchOpenFilter()
+	{
+		$sql = "SELECT m.idMail, m.name
+				FROM Mail AS m
+					JOIN Mxc AS mc ON (mc.idMail = m.idMail)
+					JOIN Contact AS c ON (c.idContact = mc.idContact)
+				WHERE c.idDbase = {$this->dbase->idDbase} GROUP BY 1,2";
+				
+		$this->setFilterResult($sql);
+	}
+	
+	public function searchClicksFilter()
+	{
+		$sql = "SELECT ml.idMailLink, ml.link
+				FROM mail AS m
+					JOIN mxcxl AS mc ON (mc.idMail = m.idMail)
+					JOIN maillink AS ml ON (ml.idMailLink = mc.idMailLink)
+					JOIN contact AS c ON (c.idContact = mc.idContact)
+				WHERE c.idDbase = {$this->dbase->idDbase} GROUP BY 1,2;";
+				
+		$this->setFilterResult($sql);
+	}
+	
+	protected function setFilterResult($sql)
+	{
+		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+		$result = $modelsManager->executeQuery($sql);
+		
+		if (count($result) > 0) {
+			foreach ($result as $r) {
+				$object = new stdClass();
+				$object->id = $r->idMail;
+				$object->text = $r->name;
+				
+				$this->filter[] = $object;
+			}
+		}
+	}
+
+
 	public function processDataForMail()
 	{
 		$this->processTarget();
@@ -447,5 +496,10 @@ class MailWrapper extends BaseWrapper
 		$response->code = 200;
 
 		return $response;
+	}
+	
+	public function getFilter()
+	{
+		return $this->filter;
 	}
 }
