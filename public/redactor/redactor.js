@@ -5244,8 +5244,9 @@
 		forEditorFrame: function(thref)		
 		{
 			thref = thref.replace('editor_frame', '');
+			thref = thref.replace(/[0-9]/g, '');
 			thref = thref.replace('#', '');
-			
+
 			return thref;
 		},
 				

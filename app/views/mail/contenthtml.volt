@@ -148,7 +148,15 @@
 					<a href="#" class="redactor_clip_link">Enlace de des-suscripcion</a>
 
 					<div class="redactor_clip" style="display: none;">
-						<a href="#%%UNSUBSCRIBE%%">Para des-suscribirse haga clic aqui</a>
+						<a href="%%UNSUBSCRIBE%%">Para des-suscribirse haga clic aqui</a>
+
+					</div>
+				</li>
+				<li>
+					<a href="#" class="redactor_clip_link">Enlace de version web</a>
+
+					<div class="redactor_clip" style="display: none;">
+						<a href="%%WEBVERSION%%">Version web</a>
 
 					</div>
 				</li>
