@@ -52,7 +52,7 @@
 	padding-bottom: 3px;
 	color: white;
 	right: 28px;
-	bottom: 27px;
+	bottom: 18px;
 	cursor: pointer;
 	border-radius: 4px;
 	background-color: green;
@@ -116,7 +116,7 @@
 }
 
 .sgm-selector-content > .select2 {
-	width: 100%;
+	width: 80%;
 }
 
 .sgm-filter-content-header {
@@ -131,5 +131,34 @@
 	color: white;
 	padding: 4px;
 	border-radius: 4px;
+	cursor: pointer;
+}
+
+.sgm-button-add {
+	background-color: green;
+	color: white;
+	padding: 6px;
+	border-radius: 4px;
+	right: 0px;
+	cursor: pointer;
+}
+
+.sgm-box-content {
+	width: 90%;
+	border: 1px solid;
+	height: 90px;
+	margin: 12px;
+	border-radius: 4px;
+}
+
+.sgm-item-added {
+	background-color: #428bca;
+	color: white;
+	padding: 2px;
+	margin: 2px;
+	border-radius: 4px;
+}
+
+.sgm-remove-item {
 	cursor: pointer;
 }
