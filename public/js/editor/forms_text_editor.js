@@ -19,7 +19,7 @@ RedactorPlugins.advanced = {
     insertFromMyModal: function(html)
     {
         this.selectionRestore();
-        this.insertHtml('<a href="#' + $(html.target).attr('value') + '" >Actualice sus datos aquí</a>');
+        this.insertHtml('<a href="' + $(html.target).attr('value') + '" >Actualice sus datos aquí</a>');
         this.modalClose();
     }
 };

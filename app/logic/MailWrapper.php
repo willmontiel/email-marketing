@@ -140,12 +140,12 @@ class MailWrapper extends BaseWrapper
 		$this->mail->deleted = 0;
 		$this->mail->name = $this->content->name;
 		$this->mail->subject = $this->content->subject;
-
+		
 		$sender = $this->getSender();
 		$this->saveSender($sender);
 		$this->mail->fromName = $sender->name;
 		$this->mail->fromEmail = $sender->email;
-
+		
 		$this->mail->replyTo = $this->content->replyTo;
 		$this->mail->target = $this->target->target;
 		

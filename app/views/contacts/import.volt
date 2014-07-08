@@ -17,7 +17,7 @@
 		header :DS.attr( 'boolean' ),
 		delimiter: DS.attr( 'string' ),
 		dateformat: DS.attr( 'string' ),
-                importmode: DS.attr('string'),
+                importmode: DS.attr('string')
                 
 		{%for field in customfields%}
 			,
