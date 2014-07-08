@@ -27,7 +27,8 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 		foreach ($_SERVER as $name => $value) {
 			\Phalcon\DI::getDefault()->get('logger')->log('Nombre ' . $name . ' - Valor ' . $value);
 		}
-		$header = getallheaders();
+//		$header = getallheaders();
+		$header = array();
 		
 		if ( isset($header['Authorization']) ) {
 			$this->header = $header['Authorization'];
