@@ -54,6 +54,8 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	
 	public function checkPermissions($controller, $action)
 	{
+		\Phalcon\DI::getDefault()->get('logger')->log('Controlador ' . $controller . ' y Accion ' . $action);
+		\Phalcon\DI::getDefault()->get('logger')->log('Permisos ' . print_r($this->permissions, true));
 		if(in_array($controller, $this->permissions)) {
 			return true;
 		}
