@@ -24,6 +24,9 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	public function verifyHeader()
 	{
 //		Metodo getallheaders() no funciona con la version del servidor, encontrar solucion PERO YA!!
+		foreach ($_SERVER as $name => $value) {
+			\Phalcon\DI::getDefault()->get('logger')->log('Nombre ' . $name . ' - Valor ' . $value);
+		}
 		$header = getallheaders();
 		
 		if ( isset($header['Authorization']) ) {
