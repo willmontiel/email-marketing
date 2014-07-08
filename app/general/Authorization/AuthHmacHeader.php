@@ -23,8 +23,7 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	
 	public function verifyHeader()
 	{
-//		Metodo getallheaders() no funciona con la version del servidor, encontrar solucion PERO YA!!
-//		$header = getallheaders();
+//		Metodo getallheaders() no funciona con la version del servidor, por lo que se aplica una funcion manual
 		$header = $this->_getallheaders();
 		
 		if ( isset($header['Authorization']) ) {
@@ -54,8 +53,6 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	
 	public function checkPermissions($controller, $action)
 	{
-		\Phalcon\DI::getDefault()->get('logger')->log('Controlador ' . $controller . ' y Accion ' . $action);
-		\Phalcon\DI::getDefault()->get('logger')->log('Permisos ' . print_r($this->permissions, true));
 		if(in_array($controller, $this->permissions)) {
 			return true;
 		}
@@ -79,6 +76,7 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 		return $this->user;
 	}
 	
+	//Funcion para recuperar los Headers del Request, teniendo en cuenta la funcion de PHP getallheaders()
 	function _getallheaders()
 	{
 		if(function_exists('getallheaders')) {
