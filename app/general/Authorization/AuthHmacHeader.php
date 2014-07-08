@@ -24,11 +24,8 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	public function verifyHeader()
 	{
 //		Metodo getallheaders() no funciona con la version del servidor, encontrar solucion PERO YA!!
-		foreach ($_SERVER as $name => $value) {
-			\Phalcon\DI::getDefault()->get('logger')->log('Nombre ' . $name . ' - Valor ' . $value);
-		}
 //		$header = getallheaders();
-		$header = array();
+		$header = $this->_getallheaders();
 		
 		if ( isset($header['Authorization']) ) {
 			$this->header = $header['Authorization'];
@@ -78,6 +75,22 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	public function getAuthUser()
 	{
 		return $this->user;
+	}
+	
+	function _getallheaders()
+	{
+		if(function_exists('getallheaders')) {
+			return getallheaders();
+		}
+		$headers = array();
+		foreach ($_SERVER as $name => $value)
+		{
+			if (substr($name, 0, 5) == 'HTTP_')
+			{
+				$headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+			}
+		}
+		return $headers;
 	}
 		
 }
