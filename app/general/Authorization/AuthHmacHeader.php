@@ -94,5 +94,3 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	}
 		
 }
-
-?>
