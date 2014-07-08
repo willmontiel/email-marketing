@@ -2,7 +2,12 @@
 
 class AccountWrapper extends BaseWrapper
 {
-	
+	function __construct()
+	{
+		$this->db = Phalcon\DI::getDefault()->get('db');
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
+	}
+
 	public function getAccountsBilling($f_date, $s_date)
 	{
 		$response = array();
@@ -34,29 +39,52 @@ class AccountWrapper extends BaseWrapper
 		return $response;
 	}
 
-	public function updateAccountSettings($content)
+	public function refillAccount($content)
 	{
-		$this->account->accountingMode = $content->mode;
+		$this->db->begin();
+		
+		if ( $this->account->accountingMode != $content->mode ) {
+			throw new ApiException('No se pudo actualizar la Cuenta ' . $this->account->companyName . '. Por favor comuniquese con el administrador');
+		}
 		
 		if($content->mode == 'Contacto') {
-			$this->account->contactLimit = $content->limit;
+			$this->account->contactLimit = $content->amount;
 		}
 		else if($content->mode == 'Envio') {
-			$this->account->messageLimit = $content->limit;
+			$this->account->messageLimit = $content->amount;
 		}
 		
-		$unixdate = strtotime($content->expiry_date);
+		$startdate = strtotime($content->start_date);
+		$enddate = strtotime($content->expiry_date);
 
-		if($unixdate) {
-			$this->account->expiryDate = $unixdate;
+		if($startdate && $enddate) {
+			$this->account->expiryDate = $enddate;
+			
+			$new_history = new Accountinghistory();
+			$new_history->idAccount = $this->account->idAccount;
+			$new_history->amount = $content->amount;
+			$new_history->startDate = $startdate;
+			$new_history->endDate = $enddate;
+			
+			if(!$new_history->save()){
+				foreach ($new_history->getMessages() as $msg) {
+					$this->logger->log($msg);
+				}
+				$this->db->rollback();
+				throw new ApiException('No se pudo actualizar la Cuenta ' . $this->account->companyName . '. Por favor comuniquese con el administrador');
+			}
 		}
 		else {
+			$this->db->rollback();
 			throw new ApiException('No se pudo actualizar la Cuenta ' . $this->account->companyName . '. Por favor comuniquese con el administrador');
 		}
 		
 		if(!$this->account->save()){
+			$this->db->rollback();
 			throw new ApiException('No se pudo actualizar la Cuenta ' . $this->account->companyName . '. Por favor comuniquese con el administrador');
 		}
+		
+		$this->db->commit();
 		
 		return $content;
 	}

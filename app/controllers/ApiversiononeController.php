@@ -63,9 +63,9 @@ class ApiversiononeController extends ControllerBase
 	
 	/**
 	 *
-	 * @Put("/account/update/{idAccount:[0-9]+}")
+	 * @Put("/account/refill/prepay/{idAccount:[0-9]+}")
 	 */	
-	public function updateaccountAction($idAccount)
+	public function refillprepayAction($idAccount)
 	{
 		try {
 			$response = array();
@@ -77,13 +77,49 @@ class ApiversiononeController extends ControllerBase
 				'bind' => array(1 => $idAccount)
 			));
 			
-			if($account->idAccount != $this->user->account->idAccount) {
+			if($account->idAccount != $this->user->account->idAccount && $account->subscriptionMode == 'Prepago') {
 				throw new ApiException("Usted no tiene permisos para realizar esta acción");
 			}
 			
 			$wrapper = new AccountWrapper();
 			$wrapper->setAccount($account);
-			$response[] = $wrapper->updateAccountSettings($content->account);
+			$response[] = $wrapper->refillAccount($content->account);
+		}
+		catch (ApiException $e) {
+			$response['status'] = $e->getMessage();
+		}
+		catch (Exception $e) {
+			$this->logger->log('Error API: [ ' . $e->getMessage() . ' ]');
+			$response['status'] = "Error. Por favor, comuníquese con el administrador";
+		}
+		
+		return $this->setJsonResponse(array('response' => $response));
+	}
+	
+	
+	/**
+	 *
+	 * @Put("/account/refill/postpay/{idAccount:[0-9]+}")
+	 */	
+	public function refillpostpayAction($idAccount)
+	{
+		try {
+			$response = array();
+			$contentsraw = $this->getRequestContent();
+			$content = json_decode($contentsraw);
+
+			$account = Account::findFirst(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $idAccount)
+			));
+			
+			if($account->idAccount != $this->user->account->idAccount && $account->subscriptionMode == 'Pospago') {
+				throw new ApiException("Usted no tiene permisos para realizar esta acción");
+			}
+			
+			$wrapper = new AccountWrapper();
+			$wrapper->setAccount($account);
+			$response[] = $wrapper->refillAccount($content->account);
 		}
 		catch (ApiException $e) {
 			$response['status'] = $e->getMessage();

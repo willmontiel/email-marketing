@@ -402,7 +402,7 @@ class Security extends Plugin
 				//ExternalApi
 				'apiversionone::listaccounts' => array('api' => array('billing')),
 				'apiversionone::timebilling' => array('api' => array('billing')),
-				'apiversionone::updateaccount' => array('api' => array('account')),
+				'apiversionone::refillprepay' => array('api' => array('account')),
 				'apiversionone::accountinformation' => array('api' => array('account')),
 				
 			);
