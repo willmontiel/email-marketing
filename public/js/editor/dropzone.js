@@ -180,7 +180,7 @@ DropzoneArea.prototype.createFooter = function(first) {
 DropzoneArea.prototype.updateFooter = function(block) {
 	for(var i = 0; i < block.length; i++) {
 		if(block[i] instanceof TxtBlock) {
-			block[i].updateText('<p><span data-redactor="verified" data-redactor-inlinemethods="" style="font-size: 11px;"><span style="font-size: 11px;">Este correo electronico ha sido enviado a %%EMAIL%%</span></span></p><p style="text-align: right;"><span data-redactor="verified" data-redactor-inlinemethods="" style="font-size: 11px;"><a href="%%WEBVERSION%%">Version web</a><span>  | </span></span><a href="%%UNSUBSCRIBE%%"><span data-redactor="verified" data-redactor-inlinemethods="" style="font-size: 11px;">Eliminar suscripcion</span></a></p>');
+			block[i].updateText('<p><span data-redactor="verified" data-redactor-inlinemethods="" style="font-size: 11px;"><span style="font-size: 11px;">Este correo electronico ha sido enviado a %%EMAIL%%</span></span></p><p style="text-align: right;"><span data-redactor="verified" data-redactor-inlinemethods="" style="font-size: 11px;"><a href="%%WEBVERSION%%">Version web</a><span>  | </span></span><span data-redactor="verified" data-redactor-inlinemethods="" style="font-size: 11px;"><a href="%%UNSUBSCRIBE%%">Eliminar suscripcion</a></span></p>');
 		}
 		else if(block[i] instanceof SShareBlock) {
 			block[i].content.find('.content-social-share').css('text-align', 'center');
