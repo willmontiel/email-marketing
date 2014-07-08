@@ -5124,6 +5124,8 @@
 				$('.redactor_link_text').val(text);
 
 				var thref = self.location.href.replace(/\/$/i, '');
+				thref = this.forEditorFrame(thref);
+				
 				var turl = url.replace(thref, '');
 
 				// remove host from href
@@ -5238,6 +5240,15 @@
 			this.modalClose();
 		},
 
+		// Cambios para el editor frame
+		forEditorFrame: function(thref)		
+		{
+			thref = thref.replace('editor_frame', '');
+			thref = thref.replace('#', '');
+			
+			return thref;
+		},
+				
 		// FILE
 		fileShow: function ()
 		{
