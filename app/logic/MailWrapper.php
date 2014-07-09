@@ -9,7 +9,7 @@ class MailWrapper extends BaseWrapper
 	protected $target = null;
 	protected $scheduleDate = null;
 
-	protected $criteria;
+	protected $data;
 	protected $dbase;
 	protected $filter = array();
 	protected $model;
@@ -27,6 +27,11 @@ class MailWrapper extends BaseWrapper
 	public function setAccount(Account $account)
 	{
 		$this->account = $account;
+	}
+	
+	public function setData($data)
+	{
+		$this->data = $data;
 	}
 	
 	public function setContent($content)
@@ -52,15 +57,26 @@ class MailWrapper extends BaseWrapper
 		$this->twtoken = $twtoken;
 	}
 	
-	public function searchOpenFilter()
+	private function createSqlForSearch()
 	{
-		$sql = "SELECT m.idMail, m.name
+		$ids = implode(',' , $this->data['ids']);
+		switch ($this->data['criteria']) {
+			case 'dbases':
+				
+				break;
+		}
+		
+		$this->sql = "SELECT m.idMail, m.name
 				FROM Mail AS m
 					JOIN Mxc AS mc ON (mc.idMail = m.idMail)
 					JOIN Contact AS c ON (c.idContact = mc.idContact)
-				WHERE c.idDbase = {$this->dbase->idDbase} GROUP BY 1,2";
-				
-		$this->setFilterResult($sql);
+				WHERE c.idDbase = {$ids} GROUP BY 1,2";
+	}
+	
+	public function searchOpenFilter()
+	{
+		$this->createSqlForSearch();
+		$this->setFilterResult();
 	}
 	
 	public function searchClicksFilter()
@@ -75,10 +91,10 @@ class MailWrapper extends BaseWrapper
 		$this->setFilterResult($sql);
 	}
 	
-	protected function setFilterResult($sql)
+	protected function setFilterResult()
 	{
 		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
-		$result = $modelsManager->executeQuery($sql);
+		$result = $modelsManager->executeQuery($this->sql);
 		
 		if (count($result) > 0) {
 			foreach ($result as $r) {
@@ -500,6 +516,7 @@ class MailWrapper extends BaseWrapper
 	
 	public function getFilter()
 	{
+		$this->logger->log("Filter: " . print_r($this->filter, true));
 		return $this->filter;
 	}
 }

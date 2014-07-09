@@ -1,13 +1,23 @@
 function FilterPanelContent() {
-	this.selectedValue = '';
+	this.criteria = '';
+	this.selectedItems = [];
+	this.ids = [];
 }
 FilterPanelContent.prototype = new PanelContent;
 
-FilterPanelContent.prototype.setSelectedValue = function(val) {
-	this.criteriaVal = val;
+FilterPanelContent.prototype.setSelectedItems = function(val) {
+	this.selectedItems = val;
+	for (var i = 0; i < val.length; i++) {
+		console.log($(val[i]).attr('data-value'));
+		this.ids.push($(val[i]).attr('data-value'));
+	}
+	var d = val[0];
+	this.criteria = $(d).attr('data-criteria');
 };
 
 FilterPanelContent.prototype.initialize = function(panel) {
+	console.log(this.selectedItems);
+	
 	var self = this;
 	this.content.find('.sgm-add-filter-content').on('click', function (e) {
 		self.addContent(e);
@@ -15,29 +25,23 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	});
 	
 	this.content.find('.smg-add-click-filter').on('click', function (e) {
-		self.addSelectContent(e);
+		var url = urlBase + 'api/getopenfilter';
 		
-//		var url = self.getUrlForDataSource();
-//		url += '/' + e.val;
+		var data = {
+			criteria: self.criteria,
+			ids: self.ids
+		};
 		
-//		var dataSource = new DataSourceForSelect(url);
-		var source = [
-			{id: 1, text: 'Algo 1'},
-			{id: 2, text: 'Algo 2'},
-			{id: 3, text: 'Algo 3'}
-		];
+		console.log(data);
 		
-//		dataSource.findDataSource().then(function() { 
-//			source = dataSource.getDataSource();
+		var dataSource = new DataSourceForSelect(url, data);
+		dataSource.findDataSource().then(function() { 
+			var source = dataSource.getDataSource();
 			self.initializeSelect2(source);
-//		});
+		});
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
-};
-
-FilterPanelContent.prototype.addSelectContent = function (e) {
-	e.preventDefault();
 };
 
 FilterPanelContent.prototype.createContent = function () {
@@ -45,7 +49,7 @@ FilterPanelContent.prototype.createContent = function () {
 						<div class="sgm-filter-content">\n\
 							<div class="sgm-filter-content-header">\n\
 								<span class="smg-add-click-filter filter-icon glyphicon glyphicon-hand-up"></span>\n\
-								<span class="filter-icon glyphicon glyphicon-eye-open"></span>\n\
+								<span class="smg-add-click-filter filter-icon glyphicon glyphicon-eye-open"></span>\n\
 								<span class="filter-icon glyphicon glyphicon-envelope"></span>\n\
 								<span class="filter-icon glyphicon glyphicon-comment"></span>\n\
 								<span class="filter-icon glyphicon glyphicon-globe"></span>\n\
@@ -60,27 +64,26 @@ FilterPanelContent.prototype.createContent = function () {
 					 </div>');
 };
 
-FilterPanelContent.prototype.getUrlForDataSource = function() {
-	var url = urlBase;
-	switch (this.criteria) {
-		case 'dbases':
-			url += "api/getdbases";
-			break;
-			
-		case 'contactlists':
-			url += "api/getcontactlists";
-			break;
-			
-		case 'segments':
-			url += "api/getsegments";
-			break;
-	}
-	
-	return url;
-};
+//FilterPanelContent.prototype.getUrlForDataSource = function() {
+//	var url = urlBase;
+//	switch (this.criteria) {
+//		case 'dbases':
+//			url += "api/getdbases";
+//			break;
+//			
+//		case 'contactlists':
+//			url += "api/getcontactlists";
+//			break;
+//			
+//		case 'segments':
+//			url += "api/getsegments";
+//			break;
+//	}
+//	
+//	return url;
+//};
 
 FilterPanelContent.prototype.initializeSelect2 = function(data) {
-	console.log('Initializing');
 	var self = this;
 	
 	var select = this.content.find('.select2');

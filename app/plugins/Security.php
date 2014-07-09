@@ -292,6 +292,7 @@ class Security extends Plugin
 				'api::getdbases' => array('mail' => array('read', 'create')),
 				'api::getcontactlists' => array('mail' => array('read', 'create')),
 				'api::getsegments' => array('mail' => array('read', 'create')),
+				'api::getopenfilter' => array('mail' => array('read', 'create')),
 				
 				//Plantillas
 				'template::image' => array('template' => array('read')),

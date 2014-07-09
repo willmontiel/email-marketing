@@ -1,5 +1,6 @@
-function DataSourceForSelect(url) {
+function DataSourceForSelect(url, data) {
 	this.url = url;
+	this.data = data;
 }
 
 DataSourceForSelect.prototype.findDataSource = function() {
@@ -10,9 +11,10 @@ DataSourceForSelect.prototype.findDataSource = function() {
         $.ajax({
 			url: self.url,
 			type: "POST",			
-			data: {},
+			data: {data: self.data},
 			error: function(error){
-				console.log('Error: ' + error);
+				console.log('Error: ');
+				console.log(error);
 			},
 			success: function(data){
 				self.dataSource = data;

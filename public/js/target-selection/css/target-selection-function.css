@@ -116,7 +116,7 @@
 }
 
 .sgm-selector-content > .select2 {
-	width: 80%;
+	width: 77%;
 }
 
 .sgm-filter-content-header {
@@ -137,7 +137,16 @@
 .sgm-button-add {
 	background-color: green;
 	color: white;
-	padding: 6px;
+	padding: 3px;
+	border-radius: 4px;
+	right: 0px;
+	cursor: pointer;
+}
+
+.sgm-button-reset {
+	background-color: #428bca;
+	color: white;
+	padding: 3px;
 	border-radius: 4px;
 	right: 0px;
 	cursor: pointer;

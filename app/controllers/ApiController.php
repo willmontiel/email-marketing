@@ -1505,25 +1505,14 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse($s);
 	}
 	
-	public function getopenfilterAction($idDbase)
+	public function getopenfilterAction()
 	{
+		$data = $this->request->getPost("data");
+		
 		$wrapper = new MailWrapper();
 		
 		try {
-			$account = $this->user->account;
-			
-			$dbase = Dbase::findFirst(array(
-				'conditions' => 'idDbase = ?1 AND idAccount = ?2',
-				'bind' => array(1 => $idDbase,
-								2 => $account->idAccount)
-			));
-			
-			if (!$dbase) {
-				throw new Exception('Dbase not found!!');
-			}
-			
-			$wrapper->setAccount($account);
-			$wrapper->setDbase($dbase);
+			$wrapper->setData($data);
 			$wrapper->searchOpenFilter();
 		
 			return $this->setJsonResponse($wrapper->getFilter());
