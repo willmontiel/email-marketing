@@ -1468,9 +1468,9 @@ class ApiController extends ControllerBase
 
 					$parent->children[] = $children;
 				}
+				
+				$lists[] = $parent;
 			}
-			
-			$lists[] = $parent;
 		}
 		
 		return $this->setJsonResponse($lists);
@@ -1501,9 +1501,9 @@ class ApiController extends ControllerBase
 
 					$parent->children[] = $children;
 				}
+				
+				$s[] = $parent;
 			}
-			
-			$s[] = $parent;
 		}
 		
 		return $this->setJsonResponse($s);
