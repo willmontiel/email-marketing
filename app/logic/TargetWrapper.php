@@ -115,7 +115,7 @@ class TargetWrapper extends BaseWrapper
 		
 		$this->sql = "SELECT COUNT(c.idContact) AS totalContacts 
 						 FROM Contact AS c 
-						 JOIN email AS e ON (e.idEmail = c.idEmail) {$this->SQLfilter->totalContacts} 
+						 JOIN Email AS e ON (e.idEmail = c.idEmail) {$this->SQLfilter->totalContacts} 
 							 AND c.unsubscribed != 0 AND e.bounced != 0 AND e.spam != 0 AND e.blocked != 0";
 		
 		$this->setTotalContacts();
