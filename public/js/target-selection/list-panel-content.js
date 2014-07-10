@@ -12,7 +12,6 @@ ListPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	this.content.find('.sgm-add-filter-content').on('click', function (e) {
 		self.addContent(e);
-		$(this).remove();
 	});
 	
 	this.content.find('.sgm-add-item').on('click', function (e) {
@@ -67,6 +66,13 @@ ListPanelContent.prototype.initialize = function(panel) {
 					self.content.find('.sgm-add-panel').remove();
 				}
 			});
+			
+			var select = self.content.find('.select2');
+			var type = $(select[1]).attr('data-type');
+			
+			if (type === 'unique') {
+				self.selectData = [];
+			}
 			
 			self.initializeSelect2(self.selectData);
 			self.content.find('.sgm-add-filter-content').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
@@ -160,7 +166,7 @@ ListPanelContent.prototype.removeItem = function (e, item) {
 ListPanelContent.prototype.createContent = function () {
 	this.content = $('<div class="sgm-target-selector">\n\
 						<div class="sgm-selector-content">\n\
-							<input type="hidden" class="select2"/>\n\
+							<input type="hidden" class="select2" data-type="unique"/>\n\
 							<span class="sgm-reset-items sgm-button-reset glyphicon glyphicon-flash"></span>\n\
 							<span class="sgm-add-item sgm-button-add glyphicon glyphicon-plus"></span>\n\
 						</div>\n\

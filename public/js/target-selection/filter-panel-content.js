@@ -54,7 +54,6 @@ FilterPanelContent.prototype.createContent = function () {
 						<div class="sgm-filter-content-body sgm-selector-content">\n\
 							<input type="hidden" class="select2"/>\n\
 						</div>\n\
-						<div class="sgm-add-filter-content"></div>\n\
 						</div> \n\
 					 </div>');
 };

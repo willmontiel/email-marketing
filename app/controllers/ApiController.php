@@ -1450,22 +1450,24 @@ class ApiController extends ControllerBase
 		
 		$lists = array();
 		foreach ($dbases as $dbase) {
-			$parent = new stdClass();
-			$parent->id = $dbase->idDbase;
-			$parent->text = $dbase->name;
-			$parent->children = array();
-			
 			$contactlists = Contactlist::find(array(
 				'conditions' => 'idDbase = ?1',
 				'bind' => array(1 => $dbase->idDbase)
 			));
 			
-			foreach ($contactlists as $contactlist) {
-				$children = new stdClass();
-				$children->id = $contactlist->idContactlist;
-				$children->text = $contactlist->name;
+			if (count($contactlists) > 0) {
+				$parent = new stdClass();
+				$parent->id = $dbase->idDbase;
+				$parent->text = $dbase->name;
+				$parent->children = array();
 				
-				$parent->children[] = $children;
+				foreach ($contactlists as $contactlist) {
+					$children = new stdClass();
+					$children->id = $contactlist->idContactlist;
+					$children->text = $contactlist->name;
+
+					$parent->children[] = $children;
+				}
 			}
 			
 			$lists[] = $parent;
@@ -1481,22 +1483,24 @@ class ApiController extends ControllerBase
 		
 		$s = array();
 		foreach ($dbases as $dbase) {
-			$parent = new stdClass();
-			$parent->id = $dbase->idDbase;
-			$parent->text = $dbase->name;
-			$parent->children = array();
-			
 			$segments = Segment::find(array(
 				'conditions' => 'idDbase = ?1',
 				'bind' => array(1 => $dbase->idDbase)
 			));
 			
-			foreach ($segments as $segment) {
-				$children = new stdClass();
-				$children->id = $segment->idSegment;
-				$children->text = $segment->name;
+			if (count($segments) > 0) {
+				$parent = new stdClass();
+				$parent->id = $dbase->idDbase;
+				$parent->text = $dbase->name;
+				$parent->children = array();
 				
-				$parent->children[] = $children;
+				foreach ($segments as $segment) {
+					$children = new stdClass();
+					$children->id = $segment->idSegment;
+					$children->text = $segment->name;
+
+					$parent->children[] = $children;
+				}
 			}
 			
 			$s[] = $parent;
