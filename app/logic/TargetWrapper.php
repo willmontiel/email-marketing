@@ -46,13 +46,13 @@ class TargetWrapper extends BaseWrapper
 			case 'contactlists':
 				$this->SQLfilter->open = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) GROUP BY 1,2";
 				$this->SQLfilter->click = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE cl.idContactlist IN ({$ids}) GROUP BY 1,2";
-				$this->SQLfilter->totalContacts = " JOIN coxcl AS cl ON (cl.idContact = c.idContact) WHERE idContactlist IN ({$ids})";
+				$this->SQLfilter->totalContacts = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE idContactlist IN ({$ids})";
 				break;
 			
 			case 'segments':
 				$this->SQLfilter->open = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) GROUP BY 1,2";
 				$this->SQLfilter->click = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE s.idSegment IN ({$ids}) GROUP BY 1,2 ";
-				$this->SQLfilter->totalContacts = " JOIN sxc AS s ON (s.idContact = c.idContact) WHERE idSegment IN ({$ids})";
+				$this->SQLfilter->totalContacts = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE idSegment IN ({$ids})";
 				break;
 		}	
 	}
