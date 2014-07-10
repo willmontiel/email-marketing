@@ -35,6 +35,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 };
 
 FilterPanelContent.prototype.setContentFilter = function (url) {
+	var self = this;
 	var data = {
 		criteria: this.criteria,
 		ids: this.ids
@@ -43,7 +44,7 @@ FilterPanelContent.prototype.setContentFilter = function (url) {
 	var dataSource = new DataSourceForSelect(url, data);
 	dataSource.findDataSource().then(function() { 
 		var source = dataSource.getDataSource();
-		this.initializeSelect2(source);
+		self.initializeSelect2(source);
 	});
 };
 
