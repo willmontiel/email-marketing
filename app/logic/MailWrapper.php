@@ -87,7 +87,7 @@ class MailWrapper extends BaseWrapper
 	{
 		$this->createSQLFilter();
 		
-		$this->sql = "SELECT m.idMail, m.name
+		$this->sql = "SELECT m.idMail AS id, m.name AS name
 							  FROM Mail AS m
 								 JOIN Mxc AS mc ON (mc.idMail = m.idMail) {$this->SQLfilter->open}";
 		
@@ -98,7 +98,7 @@ class MailWrapper extends BaseWrapper
 	{
 		$this->createSQLFilter();
 		
-		$this->sql = "SELECT ml.idMailLink, ml.link
+		$this->sql = "SELECT ml.idMailLink AS id, ml.link AS name
 						  FROM Maillink AS ml
 						  JOIN Mxcxl AS mc ON (mc.idMailLink = ml.idMaillink)
 						  JOIN Contact AS c ON (c.idContact = mc.idContact) {$this->SQLfilter->click}";
@@ -116,7 +116,7 @@ class MailWrapper extends BaseWrapper
 		if (count($result) > 0) {
 			foreach ($result as $r) {
 				$object = new stdClass();
-				$object->id = $r->idMail;
+				$object->id = $r->id;
 				$object->text = $r->name;
 				
 				$this->filter[] = $object;
