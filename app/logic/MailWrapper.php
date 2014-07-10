@@ -90,8 +90,6 @@ class MailWrapper extends BaseWrapper
 		$this->sql = "SELECT m.idMail, m.name
 							  FROM Mail AS m
 								 JOIN Mxc AS mc ON (mc.idMail = m.idMail) {$this->SQLfilter->open}";
-								 
-		$this->logger->log("SQL: " . print_r($this->sql, true));
 		
 		$this->setFilterResult();
 	}
@@ -110,6 +108,8 @@ class MailWrapper extends BaseWrapper
 	
 	protected function setFilterResult()
 	{
+		$this->logger->log("SQL: " . print_r($this->sql, true));
+		
 		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$result = $modelsManager->executeQuery($this->sql);
 		
