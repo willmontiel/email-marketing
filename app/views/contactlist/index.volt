@@ -37,6 +37,7 @@
 {% block sectionContactLimit %}
 	{{ partial("partials/contactlimitinfo_partial") }}
 {%endblock%}
+{% block content %}
 {{flashSession.output()}}
 	<div id="emberApplistContainer">
 
