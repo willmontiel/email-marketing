@@ -67,15 +67,15 @@ class MailWrapper extends BaseWrapper
 		
 		switch ($this->data['criteria']) {
 			case 'dbases':
-				$piece = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase = {$ids} GROUP BY 1,2 ";
+				$piece = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) GROUP BY 1,2 ";
 				break;
 			
 			case 'contactlists':
-				$piece = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist = {$ids} GROUP BY 1,2";
+				$piece = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) GROUP BY 1,2";
 				break;
 			
 			case 'segments':
-				$piece = " JOIN Sxc AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist = {$ids} GROUP BY 1,2";
+				$piece = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) GROUP BY 1,2";
 				break;
 		}	
 		
