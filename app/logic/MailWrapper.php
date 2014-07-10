@@ -68,17 +68,17 @@ class MailWrapper extends BaseWrapper
 		switch ($this->data['criteria']) {
 			case 'dbases':
 				$this->SQLfilter->open = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) GROUP BY 1,2 ";
-				$this->SQLfilter->click = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE cl.idContactlist IN ({$ids}) GROUP BY 1,2  ";
+				$this->SQLfilter->click = " JOIN Dbase AS d ON (d.idDbase = c.idDbase) WHERE d.idDbase IN ({$ids}) GROUP BY 1,2";
 				break;
 			
 			case 'contactlists':
 				$this->SQLfilter->open = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) GROUP BY 1,2";
-				$this->SQLfilter->click = " JOIN Dbase AS d ON (d.idDbase = c.idDbase) WHERE d.idDbase IN (46, 72, 78, 79) GROUP BY 1,2 ";
+				$this->SQLfilter->click = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE cl.idContactlist IN ({$ids}) GROUP BY 1,2";
 				break;
 			
 			case 'segments':
 				$this->SQLfilter->open = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) GROUP BY 1,2";
-				$this->SQLfilter->click = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE s.idSegment IN (46, 72, 78, 79) GROUP BY 1,2 ";
+				$this->SQLfilter->click = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE s.idSegment IN ({$ids}) GROUP BY 1,2 ";
 				break;
 		}	
 	}
