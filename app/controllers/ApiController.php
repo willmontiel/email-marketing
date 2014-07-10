@@ -1513,7 +1513,7 @@ class ApiController extends ControllerBase
 	{
 		$data = $this->request->getPost("data");
 		
-		$this->logger->log("DATA: " . print_r($data, true));
+//		$this->logger->log("DATA: " . print_r($data, true));
 		
 		$wrapper = new MailWrapper();
 		
@@ -1529,25 +1529,16 @@ class ApiController extends ControllerBase
 		}
 	}
 	
-	public function getclicksfilterAction($idDbase)
+	public function getclicksfilterAction()
 	{
+		$data = $this->request->getPost("data");
+		
+		$this->logger->log("DATA: " . print_r($data, true));
+		
 		$wrapper = new MailWrapper();
 		
 		try {
-			$account = $this->user->account;
-			
-			$dbase = Dbase::findFirst(array(
-				'conditions' => 'idDbase = ?1 AND idAccount = ?2',
-				'bind' => array(1 => $idDbase,
-								2 => $account->idAccount)
-			));
-			
-			if (!$dbase) {
-				throw new Exception('Dbase not found!!');
-			}
-			
-			$wrapper->setAccount($account);
-			$wrapper->setDbase($dbase);
+			$wrapper->setData($data);
 			$wrapper->searchClicksFilter();
 		
 			return $this->setJsonResponse($wrapper->getFilter());

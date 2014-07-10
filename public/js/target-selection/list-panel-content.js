@@ -1,5 +1,6 @@
 function ListPanelContent() {
 	this.selectedValue = '';
+	this.selectType = '';
 	this.dataSource = [];
 	this.selectData = [];
 	this.selectedItems = [];
@@ -67,10 +68,7 @@ ListPanelContent.prototype.initialize = function(panel) {
 				}
 			});
 			
-			var select = self.content.find('.select2');
-			var type = $(select[1]).attr('data-type');
-			
-			if (type === 'unique') {
+			if (self.selectType === 'unique') {
 				self.selectData = [];
 			}
 			
@@ -166,7 +164,7 @@ ListPanelContent.prototype.removeItem = function (e, item) {
 ListPanelContent.prototype.createContent = function () {
 	this.content = $('<div class="sgm-target-selector">\n\
 						<div class="sgm-selector-content">\n\
-							<input type="hidden" class="select2" data-type="unique"/>\n\
+							<input type="hidden" class="select2" />\n\
 							<span class="sgm-reset-items sgm-button-reset glyphicon glyphicon-flash"></span>\n\
 							<span class="sgm-add-item sgm-button-add glyphicon glyphicon-plus"></span>\n\
 						</div>\n\
@@ -180,14 +178,17 @@ ListPanelContent.prototype.getUrlForDataSource = function() {
 	switch (this.criteria) {
 		case 'dbases':
 			url += "api/getdbases";
+			this.selectType = 'unique';
 			break;
 			
 		case 'contactlists':
 			url += "api/getcontactlists";
+			this.selectType = 'multiple';
 			break;
 			
 		case 'segments':
 			url += "api/getsegments";
+			this.selectType = 'multiple';
 			break;
 	}
 	

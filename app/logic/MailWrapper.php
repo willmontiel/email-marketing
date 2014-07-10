@@ -13,6 +13,8 @@ class MailWrapper extends BaseWrapper
 	protected $dbase;
 	protected $filter = array();
 	protected $model;
+	protected $sql;
+	protected $SQLfilter;
 
 	public function __construct() 
 	{
@@ -57,49 +59,53 @@ class MailWrapper extends BaseWrapper
 		$this->twtoken = $twtoken;
 	}
 	
-	private function createSqlForSearch()
+	private function createSQLFilter()
 	{
 		$ids = implode(',' , $this->data['ids']);
 		
-		$this->sql = "SELECT m.idMail, m.name
-							  FROM Mail AS m
-								 JOIN Mxc AS mc ON (mc.idMail = m.idMail)";
+		$this->SQLfilter = new stdClass();
 		
 		switch ($this->data['criteria']) {
 			case 'dbases':
-				$piece = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) GROUP BY 1,2 ";
+				$this->SQLfilter->open = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) GROUP BY 1,2 ";
+				$this->SQLfilter->click = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE cl.idContactlist IN ({$ids}) GROUP BY 1,2  ";
 				break;
 			
 			case 'contactlists':
-				$piece = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) GROUP BY 1,2";
+				$this->SQLfilter->open = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) GROUP BY 1,2";
+				$this->SQLfilter->click = " JOIN Dbase AS d ON (d.idDbase = c.idDbase) WHERE d.idDbase IN (46, 72, 78, 79) GROUP BY 1,2 ";
 				break;
 			
 			case 'segments':
-				$piece = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) GROUP BY 1,2";
+				$this->SQLfilter->open = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) GROUP BY 1,2";
+				$this->SQLfilter->click = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE s.idSegment IN (46, 72, 78, 79) GROUP BY 1,2 ";
 				break;
 		}	
-		
-		$this->sql .= $piece;
-		
-		$this->logger->log("SQL: " . print_r($this->sql, true));
 	}
 	
 	public function searchOpenFilter()
 	{
-		$this->createSqlForSearch();
+		$this->createSQLFilter();
+		
+		$this->sql = "SELECT m.idMail, m.name
+							  FROM Mail AS m
+								 JOIN Mxc AS mc ON (mc.idMail = m.idMail) {$this->SQLfilter->open}";
+								 
+		$this->logger->log("SQL: " . print_r($this->sql, true));
+		
 		$this->setFilterResult();
 	}
 	
 	public function searchClicksFilter()
 	{
-		$sql = "SELECT ml.idMailLink, ml.link
-				FROM mail AS m
-					JOIN mxcxl AS mc ON (mc.idMail = m.idMail)
-					JOIN maillink AS ml ON (ml.idMailLink = mc.idMailLink)
-					JOIN contact AS c ON (c.idContact = mc.idContact)
-				WHERE c.idDbase = {$this->dbase->idDbase} GROUP BY 1,2;";
+		$this->createSQLFilter();
+		
+		$this->sql = "SELECT ml.idMailLink, ml.link
+						  FROM Maillink AS ml
+						  JOIN Mxcxl AS mc ON (mc.idMailLink = ml.idMaillink)
+						  JOIN Contact AS c ON (c.idContact = mc.idContact) {$this->SQLfilter->click}";
 				
-		$this->setFilterResult($sql);
+		$this->setFilterResult();
 	}
 	
 	protected function setFilterResult()
