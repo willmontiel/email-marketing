@@ -294,6 +294,7 @@ class Security extends Plugin
 				'api::getsegments' => array('mail' => array('read', 'create')),
 				'api::getopenfilter' => array('mail' => array('read', 'create')),
 				'api::getclicksfilter' => array('mail' => array('read', 'create')),
+				'api::gettotalcontacts' => array('mail' => array('read', 'create')),
 				
 				//Plantillas
 				'template::image' => array('template' => array('read')),

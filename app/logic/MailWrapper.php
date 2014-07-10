@@ -9,13 +9,6 @@ class MailWrapper extends BaseWrapper
 	protected $target = null;
 	protected $scheduleDate = null;
 
-	protected $data;
-	protected $dbase;
-	protected $filter = array();
-	protected $model;
-	protected $sql;
-	protected $SQLfilter;
-
 	public function __construct() 
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
@@ -29,11 +22,6 @@ class MailWrapper extends BaseWrapper
 	public function setAccount(Account $account)
 	{
 		$this->account = $account;
-	}
-	
-	public function setData($data)
-	{
-		$this->data = $data;
 	}
 	
 	public function setContent($content)
@@ -59,72 +47,6 @@ class MailWrapper extends BaseWrapper
 		$this->twtoken = $twtoken;
 	}
 	
-	private function createSQLFilter()
-	{
-		$ids = implode(',' , $this->data['ids']);
-		
-		$this->SQLfilter = new stdClass();
-		
-		switch ($this->data['criteria']) {
-			case 'dbases':
-				$this->SQLfilter->open = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) GROUP BY 1,2 ";
-				$this->SQLfilter->click = " JOIN Dbase AS d ON (d.idDbase = c.idDbase) WHERE d.idDbase IN ({$ids}) GROUP BY 1,2";
-				break;
-			
-			case 'contactlists':
-				$this->SQLfilter->open = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) GROUP BY 1,2";
-				$this->SQLfilter->click = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE cl.idContactlist IN ({$ids}) GROUP BY 1,2";
-				break;
-			
-			case 'segments':
-				$this->SQLfilter->open = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) GROUP BY 1,2";
-				$this->SQLfilter->click = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE s.idSegment IN ({$ids}) GROUP BY 1,2 ";
-				break;
-		}	
-	}
-	
-	public function searchOpenFilter()
-	{
-		$this->createSQLFilter();
-		
-		$this->sql = "SELECT m.idMail AS id, m.name AS name
-							  FROM Mail AS m
-								 JOIN Mxc AS mc ON (mc.idMail = m.idMail) {$this->SQLfilter->open}";
-		
-		$this->setFilterResult();
-	}
-	
-	public function searchClicksFilter()
-	{
-		$this->createSQLFilter();
-		
-		$this->sql = "SELECT ml.idMailLink AS id, ml.link AS name
-						  FROM Maillink AS ml
-						  JOIN Mxcxl AS mc ON (mc.idMailLink = ml.idMaillink)
-						  JOIN Contact AS c ON (c.idContact = mc.idContact) {$this->SQLfilter->click}";
-				
-		$this->setFilterResult();
-	}
-	
-	protected function setFilterResult()
-	{
-		$this->logger->log("SQL: " . print_r($this->sql, true));
-		
-		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
-		$result = $modelsManager->executeQuery($this->sql);
-		
-		if (count($result) > 0) {
-			foreach ($result as $r) {
-				$object = new stdClass();
-				$object->id = $r->id;
-				$object->text = $r->name;
-				
-				$this->filter[] = $object;
-			}
-		}
-	}
-
-
 	public function processDataForMail()
 	{
 		$this->processTarget();
@@ -529,11 +451,5 @@ class MailWrapper extends BaseWrapper
 		$response->code = 200;
 
 		return $response;
-	}
-	
-	public function getFilter()
-	{
-		$this->logger->log("Filter: " . print_r($this->filter, true));
-		return $this->filter;
 	}
 }

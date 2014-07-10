@@ -85,6 +85,7 @@
 	padding-left: 0px;
 	list-style: none;
 	font-size: 15px;
+	font-weight: bold;
 }
 
 .sgm-content-selector ul li {
@@ -170,4 +171,15 @@
 
 .sgm-remove-item {
 	cursor: pointer;
+}
+
+.sgm-panel-contacts-space {
+	background-color: white;
+	color: #20526e;
+	padding: 16px;
+	margin: 1%;
+	border: 1px solid #20526e;
+	border-radius: 4px;
+	font-size: 16px;
+	font-weight: bold;
 }

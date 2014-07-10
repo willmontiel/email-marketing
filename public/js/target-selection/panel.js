@@ -26,7 +26,7 @@ Panel.prototype.createPanel = function(container) {
 	});
 
 	this.html.find('.sgm-panel').css({width: '0px'}).show();
-	container.append(this.html);
+	container.find('.sgm-panel-space').append(this.html);
 	this.html.find('.sgm-panel').animate({width: '100%'});
 	
 	this.config.content.initialize(this.html);

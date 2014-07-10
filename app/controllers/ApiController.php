@@ -1515,7 +1515,7 @@ class ApiController extends ControllerBase
 		
 //		$this->logger->log("DATA: " . print_r($data, true));
 		
-		$wrapper = new MailWrapper();
+		$wrapper = new TargetWrapper();
 		
 		try {
 			$wrapper->setData($data);
@@ -1535,13 +1535,33 @@ class ApiController extends ControllerBase
 		
 		$this->logger->log("DATA: " . print_r($data, true));
 		
-		$wrapper = new MailWrapper();
+		$wrapper = new TargetWrapper();
 		
 		try {
 			$wrapper->setData($data);
 			$wrapper->searchClicksFilter();
 		
 			return $this->setJsonResponse($wrapper->getFilter());
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
+			return $this->setJsonResponse('error', 500);
+		}
+	}
+	
+	public function gettotalcontactsAction()
+	{
+		$data = $this->request->getPost("data");
+		
+		$this->logger->log("DATA: " . print_r($data, true));
+		
+		$wrapper = new TargetWrapper();
+		
+		try {
+			$wrapper->setData($data);
+			$wrapper->searchTotalContacts();
+		
+			return $this->setJsonResponse($wrapper->getTotalContacts());
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
