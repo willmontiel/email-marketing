@@ -60,17 +60,26 @@ class MailWrapper extends BaseWrapper
 	private function createSqlForSearch()
 	{
 		$ids = implode(',' , $this->data['ids']);
-		switch ($this->data['criteria']) {
-			case 'dbases':
-				
-				break;
-		}
 		
 		$this->sql = "SELECT m.idMail, m.name
-				FROM Mail AS m
-					JOIN Mxc AS mc ON (mc.idMail = m.idMail)
-					JOIN Contact AS c ON (c.idContact = mc.idContact)
-				WHERE c.idDbase = {$ids} GROUP BY 1,2";
+							  FROM Mail AS m
+								 JOIN Mxc AS mc ON (mc.idMail = m.idMail)";
+		
+		switch ($this->data['criteria']) {
+			case 'dbases':
+				$piece = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase = {$ids} GROUP BY 1,2 ";
+				break;
+			
+			case 'contactlists':
+				$piece = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist = {$ids} GROUP BY 1,2";
+				break;
+			
+			case 'segments':
+				$piece = " JOIN Sxc AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist = {$ids} GROUP BY 1,2";
+				break;
+		}	
+		
+		$this->sql .= $piece;
 	}
 	
 	public function searchOpenFilter()

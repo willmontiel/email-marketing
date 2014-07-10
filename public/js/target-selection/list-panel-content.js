@@ -215,7 +215,6 @@ ListPanelContent.prototype.addContent = function(e) {
 	
 	var filterPanelContent = new FilterPanelContent();
 	filterPanelContent.setPanelContainer(this.container);
-	filterPanelContent.setContentCriteria(this.criteria);
 	filterPanelContent.setSelectedItems(this.selectedItems);
 	filterPanelContent.createContent();
 	

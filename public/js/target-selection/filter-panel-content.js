@@ -8,7 +8,6 @@ FilterPanelContent.prototype = new PanelContent;
 FilterPanelContent.prototype.setSelectedItems = function(val) {
 	this.selectedItems = val;
 	for (var i = 0; i < val.length; i++) {
-		console.log($(val[i]).attr('data-value'));
 		this.ids.push($(val[i]).attr('data-value'));
 	}
 	var d = val[0];
@@ -16,23 +15,19 @@ FilterPanelContent.prototype.setSelectedItems = function(val) {
 };
 
 FilterPanelContent.prototype.initialize = function(panel) {
-	console.log(this.selectedItems);
-	
 	var self = this;
 	this.content.find('.sgm-add-filter-content').on('click', function (e) {
 		self.addContent(e);
 		$(this).remove();
 	});
 	
-	this.content.find('.smg-add-click-filter').on('click', function (e) {
+	this.content.find('.smg-add-open-filter').on('click', function (e) {
 		var url = urlBase + 'api/getopenfilter';
 		
 		var data = {
 			criteria: self.criteria,
 			ids: self.ids
 		};
-		
-		console.log(data);
 		
 		var dataSource = new DataSourceForSelect(url, data);
 		dataSource.findDataSource().then(function() { 
@@ -49,7 +44,7 @@ FilterPanelContent.prototype.createContent = function () {
 						<div class="sgm-filter-content">\n\
 							<div class="sgm-filter-content-header">\n\
 								<span class="smg-add-click-filter filter-icon glyphicon glyphicon-hand-up"></span>\n\
-								<span class="smg-add-click-filter filter-icon glyphicon glyphicon-eye-open"></span>\n\
+								<span class="smg-add-open-filter filter-icon glyphicon glyphicon-eye-open"></span>\n\
 								<span class="filter-icon glyphicon glyphicon-envelope"></span>\n\
 								<span class="filter-icon glyphicon glyphicon-comment"></span>\n\
 								<span class="filter-icon glyphicon glyphicon-globe"></span>\n\
@@ -63,25 +58,6 @@ FilterPanelContent.prototype.createContent = function () {
 						</div> \n\
 					 </div>');
 };
-
-//FilterPanelContent.prototype.getUrlForDataSource = function() {
-//	var url = urlBase;
-//	switch (this.criteria) {
-//		case 'dbases':
-//			url += "api/getdbases";
-//			break;
-//			
-//		case 'contactlists':
-//			url += "api/getcontactlists";
-//			break;
-//			
-//		case 'segments':
-//			url += "api/getsegments";
-//			break;
-//	}
-//	
-//	return url;
-//};
 
 FilterPanelContent.prototype.initializeSelect2 = function(data) {
 	var self = this;
@@ -105,8 +81,7 @@ FilterPanelContent.prototype.addContent = function(e) {
 	
 	var filterPanelContent = new FilterPanelContent();
 	filterPanelContent.setPanelContainer(this.container);
-	filterPanelContent.setContentCriteria(this.criteria);
-	filterPanelContent.setSelectedValue(this.selectedValue);
+	filterPanelContent.setSelectedItems(this.selectedItems);
 	filterPanelContent.createContent();
 	
 	this.content.find();
