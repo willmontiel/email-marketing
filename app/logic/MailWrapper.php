@@ -80,6 +80,8 @@ class MailWrapper extends BaseWrapper
 		}	
 		
 		$this->sql .= $piece;
+		
+		$this->logger->log("SQL: " . print_r($this->sql, true));
 	}
 	
 	public function searchOpenFilter()
@@ -145,7 +147,7 @@ class MailWrapper extends BaseWrapper
 			$target->createTargetObj();
 			$this->target = $target->getTargetObject();
 
-			$this->logger->log("Target: " . print_r($this->target, true));
+//			$this->logger->log("Target: " . print_r($this->target, true));
 		}
 	}
 
