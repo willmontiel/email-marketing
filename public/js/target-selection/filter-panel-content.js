@@ -23,20 +23,28 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
 		var url = urlBase + 'api/getopenfilter';
-		
-		var data = {
-			criteria: self.criteria,
-			ids: self.ids
-		};
-		
-		var dataSource = new DataSourceForSelect(url, data);
-		dataSource.findDataSource().then(function() { 
-			var source = dataSource.getDataSource();
-			self.initializeSelect2(source);
-		});
+		self.setContentFilter(url);
+	});
+	
+	this.content.find('.smg-add-click-filter').on('click', function (e) {
+		var url = urlBase + 'api/getclicksfilter';
+		self.setContentFilter(url);
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
+};
+
+FilterPanelContent.prototype.setContentFilter = function (url) {
+	var data = {
+		criteria: this.criteria,
+		ids: this.ids
+	};
+
+	var dataSource = new DataSourceForSelect(url, data);
+	dataSource.findDataSource().then(function() { 
+		var source = dataSource.getDataSource();
+		this.initializeSelect2(source);
+	});
 };
 
 FilterPanelContent.prototype.createContent = function () {
