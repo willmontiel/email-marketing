@@ -84,6 +84,30 @@ FilterPanelContent.prototype.initializeSelect2 = function(data) {
 	});
 };
 
+FilterPanelContent.prototype.refreshTotalContacts = function() {
+	var ids = new Array();
+	for (var i = 0; i < this.selectedItems.length; i++) {
+		ids.push($(this.selectedItems[i]).attr('data-value'));
+	}
+	
+	var self = this;
+	var data = {
+		criteria: this.criteria,
+		ids: ids
+	};
+	
+	console.log(data);
+	
+	var url = urlBase + 'api/gettotalcontacts';
+	
+	var dataSource = new DataSourceForSelect(url, data);
+	dataSource.findDataSource().then(function() { 
+		var total = dataSource.getDataSource();
+		$('.sgm-panel-contacts-space').empty();
+		$('.sgm-panel-contacts-space').append('Contactos aproximados: ' + total.totalContacts);
+	});
+}
+
 FilterPanelContent.prototype.addContent = function(e) {
 	e.preventDefault();
 	

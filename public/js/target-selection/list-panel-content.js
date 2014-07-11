@@ -33,8 +33,9 @@ ListPanelContent.prototype.initialize = function(panel) {
 		self.initializeSelect2(self.selectData);
 	});
 	
-	var url = self.getUrlForDataSource();
-	var dataSource = new DataSourceForSelect(url);
+	
+	var DataSource = this.model.getDataSource();
+	DataSource.setUrl();
 
 	dataSource.findDataSource().then(function() { 
 		var source = dataSource.getDataSource();
@@ -46,6 +47,33 @@ ListPanelContent.prototype.initialize = function(panel) {
 	
 	panel.find('.sgm-panel-content').append(this.content);
 };
+
+ListPanelContent.prototype.updateView = function (obj) {
+	
+};
+
+ListPanelContent.prototype.createNextPanel = function (obj) {
+	
+};
+
+ListPanelContent.prototype.serialize = function(obj) {
+	if (obj.serialization !== null) {
+		
+	}
+};
+
+ListPanelContent.prototype.createContent = function () {
+	this.content = $('<div class="sgm-target-selector">\n\
+						<div class="sgm-selector-content">\n\
+							<input type="hidden" class="select2" />\n\
+							<span class="sgm-reset-items sgm-button-reset glyphicon glyphicon-flash"></span>\n\
+							<span class="sgm-add-item sgm-button-add glyphicon glyphicon-plus"></span>\n\
+						</div>\n\
+						<div class="sgm-box-content"></div>\n\
+						<div class="sgm-add-filter-content"></div>\n\
+					 </div>');
+};
+
 
 ListPanelContent.prototype.refreshTotalContacts = function () {
 	var ids = new Array();
@@ -188,18 +216,6 @@ ListPanelContent.prototype.removeItem = function (e, item) {
 	}
 	
 	this.initializeSelect2(this.selectData);
-};
-
-ListPanelContent.prototype.createContent = function () {
-	this.content = $('<div class="sgm-target-selector">\n\
-						<div class="sgm-selector-content">\n\
-							<input type="hidden" class="select2" />\n\
-							<span class="sgm-reset-items sgm-button-reset glyphicon glyphicon-flash"></span>\n\
-							<span class="sgm-add-item sgm-button-add glyphicon glyphicon-plus"></span>\n\
-						</div>\n\
-						<div class="sgm-box-content"></div>\n\
-						<div class="sgm-add-filter-content"></div>\n\
-					 </div>');
 };
 
 ListPanelContent.prototype.getUrlForDataSource = function() {

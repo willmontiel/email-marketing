@@ -5,32 +5,28 @@ TopPanelContent.prototype = new PanelContent;
 TopPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	this.content.find('.sgm-add-selector-content').on('click', function (e) {
-		var criteria = $(this).attr('data-type');
-		self.container.resetContainer();
-		
-		self.addContent(e, criteria);
-		$('.sgm-add-selector-content').removeClass('li-active');
-		$(this).addClass('li-active');
+		self.updateView($(this));
+		self.createNextPanel($(this));
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
 };
 
-TopPanelContent.prototype.addContent = function (e, criteria) {
-	e.preventDefault();
-	var listPanelContent = new ListPanelContent();
-	listPanelContent.setPanelContainer(this.container);
-	listPanelContent.setContentCriteria(criteria);
-	listPanelContent.createContent();
+TopPanelContent.prototype.updateView = function (obj) {
+	$('.sgm-add-selector-content').removeClass('li-active');
+	$(obj).addClass('li-active');
+};
+
+TopPanelContent.prototype.createNextPanel = function (obj) {
+	var criteria = $(obj).attr('data-type');
+	this.model.updateObject(this);
 	
-	var config = {
-		sticky: false, 
-		leftArrow: true, 
-		title: 'Seleccione un criterio',
-		content: listPanelContent
+	var ser = {
+		type: 'list-panel',
+		serialization: {criteria: criteria}
 	};
-		
-	this.container.addPanel(config);
+	
+	this.model.createListPanel(ser);
 };
 
 TopPanelContent.prototype.createContent = function () {
@@ -47,4 +43,10 @@ TopPanelContent.prototype.createContent = function () {
 							</li>\n\
 						 </ul>\n\
 					  </div>');
+};
+
+TopPanelContent.prototype.serialize = function(obj) {
+	if (obj.criteria !== null) {
+		this.content.find('.sgm-add-selector-content[data-type="' + obj.criteria + '"]').addClass('li-active');
+	}
 };

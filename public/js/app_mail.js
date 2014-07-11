@@ -116,19 +116,23 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}.observes('this.content'),
 			
 	whatevers: function () {
+		var ser = null;
+		
+		if (ser === null) {
+			ser = new Array();
+			ser.push({
+				type: 'top-panel',
+				serialization: {criteria: null}
+			});
+		}
+		
 		var panelContainer = new PanelContainer('#panel-container');
-		var topPanelContent = new TopPanelContent();
-		topPanelContent.setPanelContainer(panelContainer);
-		topPanelContent.createContent();
 		
-		var config = {
-			sticky: true, 
-			leftArrow: false, 
-			title: 'Seleccione una opción',
-			content: topPanelContent
-		};
+		var model = new Model();
+		model.setPanelContainer(panelContainer);
+		model.setSerializerObject(ser);
+		model.serializer();
 		
-		panelContainer.addPanel(config);
 	}.observes('isTargetExpanded'),
 		
 	
