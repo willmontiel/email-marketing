@@ -481,6 +481,9 @@ class Security extends Plugin
 		}
 		else {
 			try {
+				$timer = Phalcon\DI::getDefault()->get('timerObject');
+				$timer->reset();
+				$timer->startTimer('Authentication', 'Start Authentication');
 				$method = $this->request->getMethod();
 				$data = $this->request->getRawBody();
 				$uri = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://" . $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
@@ -516,6 +519,8 @@ class Security extends Plugin
 				$this->response->setStatusCode(400, $e->getMessage());
 				return false;
 			}
+			
+			$timer->endTimer('Authentication');
 		}
 		
 		$map = $this->getControllerMap();

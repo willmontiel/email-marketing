@@ -165,7 +165,7 @@ class ApiController extends ControllerBase
 		
 		$log = $this->logger;
 		
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -220,7 +220,7 @@ class ApiController extends ControllerBase
 
 		$log = $this->logger;
 		
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -407,7 +407,7 @@ class ApiController extends ControllerBase
 
 		 */
 
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
@@ -505,7 +505,7 @@ class ApiController extends ControllerBase
 
 		 */
 
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 //		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
 		$log->log('Contact: [' . print_r($contentsT, true) . ']');
@@ -642,7 +642,7 @@ class ApiController extends ControllerBase
 	 */
 	public function createcontactListAction()
 	{
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		
 		$contents = $contentsT->list;
@@ -675,7 +675,7 @@ class ApiController extends ControllerBase
 	 */
 	public function listseditAction($idContactlist)
 	{
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 //		$log->log('Got this: [' . $contentsraw . ']');
 		$contentsT = json_decode($contentsraw);
 //		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
@@ -840,7 +840,7 @@ class ApiController extends ControllerBase
 		
 		$log = $this->logger;
 
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -916,7 +916,7 @@ class ApiController extends ControllerBase
                 
 		$log = $this->logger;
 
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		
 		$log->log('Content: ' . print_r($contentsT, true));
@@ -1047,7 +1047,7 @@ class ApiController extends ControllerBase
 	{
 		$log = $this->logger;
 
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		$log->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -1207,7 +1207,7 @@ class ApiController extends ControllerBase
 	 */
 	public function createsegmentAction()
     {
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -1261,7 +1261,7 @@ class ApiController extends ControllerBase
 	 */
 	public function updatesegmentAction($idSegment)
 	{
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -1358,7 +1358,7 @@ class ApiController extends ControllerBase
                 
 		$log = $this->logger;
 
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		
 		$this->logger->log('Contact: ' . print_r($contentsT, true));

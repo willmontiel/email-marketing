@@ -180,7 +180,7 @@ class DbaseapiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la base de datos');
 		}
 		
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 //		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
@@ -219,7 +219,7 @@ class DbaseapiController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró el formulario');
 		}
 		
-		$contentsraw = $this->request->getRawBody();
+		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 //		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		

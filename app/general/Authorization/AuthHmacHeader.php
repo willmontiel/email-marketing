@@ -17,7 +17,7 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 		$this->method = $method;
 		$this->uri = $uri;
 		$this->data = $data;
-		$this->permissions = array('apiversionone', 'api');
+		$this->permissions = array('apiversionone', 'api', 'contactlistapi');
 	}
 
 	

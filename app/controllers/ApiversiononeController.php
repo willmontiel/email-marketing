@@ -18,24 +18,32 @@ class ApiversiononeController extends ControllerBase
 	 */
 	public function listaccountsAction()
 	{
-		$accounts = Account::find();
-		
-		$data = array(	'id' => 'idAccount',
-						'name' => 'companyName',
-						'mode' => 'accountingMode',
-						'subscription' => 'subscriptionMode');
-		
-		$response = array();
-		
-		foreach ($accounts as $account) {
-			$res = array();
-			foreach ($data as $k => $d) {
-				$res[$k] = $account->$d;
+		try {
+			$response = array();
+			
+			$accounts = Account::find();
+
+			$data = array(	'id' => 'idAccount',
+							'name' => 'companyName',
+							'mode' => 'accountingMode',
+							'subscription' => 'subscriptionMode');
+
+			foreach ($accounts as $account) {
+				$res = array();
+				foreach ($data as $k => $d) {
+					$res[$k] = $account->$d;
+				}
+				$response['response'][] = $res;
 			}
-			$response[] = $res;
+			$response['status'] = 200;
+		}
+		catch (Exception $e) {
+			$this->logger->log('Error API: [ ' . $e->getMessage() . ' ]');
+			$response['status'] = 400;
+			$response['message'] = "Error. Por favor, comuníquese con el administrador";
 		}
 		
-		return $this->setJsonResponse(array('response' => $response));
+		return $this->setJsonResponse($response);
 	}
 	
 	
@@ -47,17 +55,20 @@ class ApiversiononeController extends ControllerBase
 		try {
 			$response = array();
 			$wrapper = new AccountWrapper();
-			$response[] = $wrapper->getAccountsBilling($this->request->get('first_date'), $this->request->get('second_date'));
+			$response['message'] = $wrapper->getAccountsBilling($this->request->get('first_date'), $this->request->get('second_date'));
+			$response['status'] = 200;
 		}
 		catch (ApiException $e) {
-			$response['status'] = $e->getMessage();
+			$response['status'] = 400;
+			$response['message'] = $e->getMessage();
 		}
 		catch (Exception $e) {
 			$this->logger->log('Error API: [ ' . $e->getMessage() . ' ]');
-			$response['status'] = "Error. Por favor, comuníquese con el administrador";
+			$response['status'] = 400;
+			$response['message'] = "Error. Por favor, comuníquese con el administrador";
 		}
 		
-		return $this->setJsonResponse(array('response' => $response));
+		return $this->setJsonResponse($response);
 	}
 	
 	
@@ -83,17 +94,20 @@ class ApiversiononeController extends ControllerBase
 			
 			$wrapper = new AccountWrapper();
 			$wrapper->setAccount($account);
-			$response[] = $wrapper->refillAccount($content->account);
+			$response['message'] = $wrapper->refillAccount($content->account);
+			$response['status'] = 200;
 		}
 		catch (ApiException $e) {
-			$response['status'] = $e->getMessage();
+			$response['status'] = 400;
+			$response['message'] = $e->getMessage();
 		}
 		catch (Exception $e) {
 			$this->logger->log('Error API: [ ' . $e->getMessage() . ' ]');
+			$response['status'] = 400;
 			$response['status'] = "Error. Por favor, comuníquese con el administrador";
 		}
 		
-		return $this->setJsonResponse(array('response' => $response));
+		return $this->setJsonResponse($response);
 	}
 	
 	
@@ -119,17 +133,20 @@ class ApiversiononeController extends ControllerBase
 			
 			$wrapper = new AccountWrapper();
 			$wrapper->setAccount($account);
-			$response[] = $wrapper->refillAccount($content->account);
+			$response['message'] = $wrapper->refillAccount($content->account);
+			$response['status'] = 200;
 		}
 		catch (ApiException $e) {
-			$response['status'] = $e->getMessage();
+			$response['status'] = 400;
+			$response['message'] = $e->getMessage();
 		}
 		catch (Exception $e) {
 			$this->logger->log('Error API: [ ' . $e->getMessage() . ' ]');
-			$response['status'] = "Error. Por favor, comuníquese con el administrador";
+			$response['status'] = 400;
+			$response['message'] = "Error. Por favor, comuníquese con el administrador";
 		}
 		
-		return $this->setJsonResponse(array('response' => $response));
+		return $this->setJsonResponse($response);
 	}
 	
 	
@@ -147,16 +164,19 @@ class ApiversiononeController extends ControllerBase
 
 			$wrapper = new AccountWrapper();
 			$wrapper->setAccount($account);
-			$response[] = $wrapper->getAccountInfo($this->request->get('first_date'), $this->request->get('second_date'));
+			$response['message'] = $wrapper->getAccountInfo($this->request->get('first_date'), $this->request->get('second_date'));
+			$response['status'] = 200;
 		}
 		catch (ApiException $e) {
-			$response['status'] = $e->getMessage();
+			$response['status'] = 400;
+			$response['message'] = $e->getMessage();
 		}
 		catch (Exception $e) {
 			$this->logger->log('Error API: [ ' . $e->getMessage() . ' ]');
-			$response['status'] = "Error. Por favor, comuníquese con el administrador";
+			$response['status'] = 400;
+			$response['message'] = "Error. Por favor, comuníquese con el administrador";
 		}
 		
-		return $this->setJsonResponse(array('response' => $response));
+		return $this->setJsonResponse($response);
 	}
 }
