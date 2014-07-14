@@ -9,6 +9,6 @@ PanelContent.prototype.setModel = function(model) {
 };
 
 PanelContent.prototype.initialize = function() {};
-PanelContent.prototype.updateView = function() {};
-PanelContent.prototype.createNextPanel = function() {};
+PanelContent.prototype.createContent = function() {};
 PanelContent.prototype.serialize = function() {};
+PanelContent.prototype.createNextPanel = function() {};

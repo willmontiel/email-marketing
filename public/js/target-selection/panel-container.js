@@ -12,6 +12,7 @@ PanelContainer.prototype.addPanel = function(config) {
 };
 
 PanelContainer.prototype.removePanel = function(panel) {
+	console.log(panel);
 	var i = this.panellist.indexOf(panel);
 	var l = this.panellist.length;
 	if (i >= 0) {

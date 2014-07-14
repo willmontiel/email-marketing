@@ -1,65 +1,43 @@
 function ListPanelContent() {
+	this.oldCriteria = {
+		type: 'list-panel',
+		serialization: {items: []}
+	};
+	
 	this.selectedValue = '';
-	this.selectType = '';
-	this.dataSource = [];
-	this.selectData = [];
+	this.ds = [];
+	this.sd = [];
 	this.selectedItems = [];
-	this.filterlist = [];
 }
 
 ListPanelContent.prototype = new PanelContent;
 
 ListPanelContent.prototype.initialize = function(panel) {
 	var self = this;
-	this.content.find('.sgm-add-filter-content').on('click', function (e) {
-		self.addContent(e);
-	});
 	
 	this.content.find('.sgm-add-item').on('click', function (e) {
-		self.removeElementsAndResfreshSelect();
-		self.refreshTotalContacts();
+		self.resfreshData();
+		self.updateObject();
 	});
 	
 	this.content.find('.sgm-reset-items').on('click', function (e) {
-		for (var i = 0; i < self.selectedItems.length; i++) {
-			self.selectedItems[i].remove();
-		}
-		
-		self.selectedItems = [];
-		
-		self.content.find('.sgm-add-panel').remove();
-		
-		self.selectData = self.dataSource.slice(0);
-		self.initializeSelect2(self.selectData);
+		self.resetItems();
+		self.updateObject();
 	});
 	
+	this.content.find('.sgm-add-filter-content').on('click', function (e) {
+		self.createNextPanel();
+	});
 	
 	var DataSource = this.model.getDataSource();
-	DataSource.setUrl();
 
-	dataSource.findDataSource().then(function() { 
-		var source = dataSource.getDataSource();
-		
-		self.dataSource = self.cloneArrayObject(source);
-		self.selectData = self.cloneArrayObject(source);
-		self.initializeSelect2(self.selectData);
+	DataSource.find('list').then(function() { 
+		self.ds = DataSource.getData();
+		self.sd = self.ds.slice(0);
+		self.initializeSelect2(self.sd);
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
-};
-
-ListPanelContent.prototype.updateView = function (obj) {
-	
-};
-
-ListPanelContent.prototype.createNextPanel = function (obj) {
-	
-};
-
-ListPanelContent.prototype.serialize = function(obj) {
-	if (obj.serialization !== null) {
-		
-	}
 };
 
 ListPanelContent.prototype.createContent = function () {
@@ -74,59 +52,73 @@ ListPanelContent.prototype.createContent = function () {
 					 </div>');
 };
 
-
-ListPanelContent.prototype.refreshTotalContacts = function () {
-	var ids = new Array();
-	for (var i = 0; i < this.selectedItems.length; i++) {
-		ids.push($(this.selectedItems[i]).attr('data-value'));
+ListPanelContent.prototype.serialize = function(obj) {
+	this.oldCriteria = obj;
+	if (obj.serialization.items !== null) {
+		
 	}
-	
-	var self = this;
-	var data = {
-		criteria: this.criteria,
-		ids: ids
-	};
-	
-	console.log(data);
-	
-	var url = urlBase + 'api/gettotalcontacts';
-	
-	var dataSource = new DataSourceForSelect(url, data);
-	dataSource.findDataSource().then(function() { 
-		var total = dataSource.getDataSource();
-		$('.sgm-panel-contacts-space').empty();
-		$('.sgm-panel-contacts-space').append('Contactos aproximados: ' + total.totalContacts);
-	});
 };
 
-ListPanelContent.prototype.removeElementsAndResfreshSelect = function () {
+ListPanelContent.prototype.createNextPanel = function () {
+	this.model.createFilterPanel();
+};
+
+ListPanelContent.prototype.updateObject = function () {
+	var items = [];
+	for (var i = 0; i < this.selectedItems.length; i++) {
+		items.push(this.selectedItems[i].attr('data-value'));
+	}
+	
+	this.newCriteria = {
+		type: 'list-panel',
+		serialization: {items: items}
+	};
+	
+	this.model.updateObject(this.oldCriteria, this.newCriteria);
+	this.oldCriteria = this.newCriteria;
+};
+
+ListPanelContent.prototype.resetItems = function () {
+	for (var i = 0; i < this.selectedItems.length; i++) {
+		this.selectedItems[i].remove();
+	}
+
+	this.selectedItems = [];
+
+	this.content.find('.sgm-add-panel').remove();
+
+	this.sd = this.ds.slice(0);
+	this.initializeSelect2(this.sd);
+};
+
+
+ListPanelContent.prototype.resfreshData = function () {
 	var self = this;
 	var value = null;
 	var text = null;
 
-	for (var i = 0; i < self.selectData.length; i++) {
-		if (self.selectData[i].id === self.selectedValue) {
-			value = self.selectData[i].id;
-			text = self.selectData[i].text;
-
-			self.selectData.splice(i, 1);
+	for (var i = 0; i < this.sd.length; i++) {
+		if (this.sd[i].id === this.selectedValue) {
+			value = this.sd[i].id;
+			text = this.sd[i].text;
+			this.sd.splice(i, 1);
+			
 			break;
 		}
-		else if (self.selectData[i] !== undefined && self.selectData[i].children !== undefined && self.selectData[i].children !== null) {
-			for (var j = 0; j < self.selectData[i].children.length; j++) {
-				if (self.selectData[i].children[j].id === self.selectedValue) {
-					value = self.selectData[i].children[j].id;
-					text = self.selectData[ i].children[j].text;
+		else if (this.sd[i] !== undefined && this.sd[i].children !== undefined) {
+			for (var j = 0; j < this.sd[i].children.length; j++) {
+				if (this.sd[i].children[j].id === this.selectedValue) {
+					value = this.sd[i].children[j].id;
+					text = this.sd[ i].children[j].text;
 
-					self.selectData[i].children.splice(j, 1);
+					this.sd[i].children.splice(j, 1);
+					var n = this.sd.splice(i, 1);
+					this.sd = n.slice(0);
 
-					var n = self.selectData.splice(i, 1);
-
-					self.selectData = n.slice(0);
-
-					if (self.selectData[0].children.length === 0) {
-						self.selectData.splice(0, 1);
+					if (this.sd[0].children.length === 0) {
+						this.sd.splice(0, 1);
 					}
+					
 					break;
 				}
 			}
@@ -134,70 +126,55 @@ ListPanelContent.prototype.removeElementsAndResfreshSelect = function () {
 	}
 	
 	if (value !== null && text !== null) {
-		var item = $('<div class="sgm-item-added sgm-remove-item" data-criteria="' + self.criteria + '" data-value="' + value + '">\n\
+		var item = $('<div class="sgm-item-added sgm-remove-item" data-value="' + value + '">\n\
 						  <span class="glyphicon glyphicon-remove"></span> \n\
 						  ' + text + '\
 					  </div>'); 
 
-		self.content.find('.sgm-box-content').append(item);
-
-		self.selectedItems.push(item);
-
-		self.content.find('.sgm-remove-item').on('click', function (e) {
-			self.removeItem(e, this);
-
+		this.content.find('.sgm-box-content').append(item);
+		this.selectedItems.push(item);
+		
+		this.content.find('.sgm-remove-item').on('click', function (e) {
+			e.preventDefault();
+			
+			self.removeItem(this);
+			self.updateObject();
 			if (self.selectedItems.length === 0) {
 				self.content.find('.sgm-add-panel').remove();
 			}
 		});
 
-		if (self.selectType === 'unique') {
-			self.selectData = [];
-		}
-
-		self.initializeSelect2(self.selectData);
+		self.initializeSelect2(self.sd);
 		self.content.find('.sgm-add-filter-content').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
 	}
 };
 
-ListPanelContent.prototype.cloneArrayObject = function (baseArray) {
-	var newArray = new Array();
-	
-	for (var i = 0; i < baseArray.length; i++) {
-		newArray.push(baseArray[i]);
-	}
-	return newArray;
-};
-
-ListPanelContent.prototype.removeItem = function (e, item) {
-	e.preventDefault();
+ListPanelContent.prototype.removeItem = function (item) {
 	var value = $(item).attr('data-value');
 	
-//	console.log(value);
-//	console.log(this.dataSource);
-	
-	for (var i = 0; i < this.dataSource.length; i++) {
-		if (this.dataSource[i].id === value) {
-			var a = this.selectData.indexOf(this.dataSource[i]);
+	for (var i = 0; i < this.ds.length; i++) {
+		if (this.ds[i].id === value) {
+			var a = this.sd.indexOf(this.ds[i]);
 			if (a === -1) {
-				this.selectData.push(this.dataSource[i]);
+				this.sd.push(this.ds[i]);
 			}
+			
 			break;
 		}
-		else if (this.dataSource[i] !== undefined && this.dataSource[i].children !== undefined && this.dataSource[i].children !== null) {
-			for (var j = 0; j < this.dataSource[i].children.length; j++) {
-				if (this.dataSource[i].children[j].id === value) {
-					if (this.selectData[i] === undefined) {
+		else if (this.ds[i] !== undefined && this.ds[i].children !== undefined) {
+			for (var j = 0; j < this.ds[i].children.length; j++) {
+				if (this.ds[i].children[j].id === value) {
+					if (this.sd[i] === undefined) {
 						var x = {
-							id: this.dataSource[i].id, 
-							text: this.dataSource[i].text,
-							children: this.dataSource[i].children[j]
+							id: this.ds[i].id, 
+							text: this.ds[i].text,
+							children: this.ds[i].children[j]
 						};
 						
-						this.selectData.push(x);
+						this.ds.push(x);
 					}
 					else {
-						this.selectData[i].children.push(this.dataSource[i].children[j]);
+						this.sd[i].children.push(this.ds[i].children[j]);
 					}
 					
 					break;
@@ -207,77 +184,33 @@ ListPanelContent.prototype.removeItem = function (e, item) {
 	}
 	
 	item.remove();
-	
-	var it = this.selectedItems.indexOf(item);
-	
-	if (it >= 0) {
-		var tor = this.selectedItems.splice(it, 1);
-		tor.remove();
-	}
-	
-	this.initializeSelect2(this.selectData);
-};
 
-ListPanelContent.prototype.getUrlForDataSource = function() {
-	var url = urlBase;
-	switch (this.criteria) {
-		case 'dbases':
-			url += "api/getdbases";
-			this.selectType = 'unique';
-			break;
+	for (var m = 0; m < this.selectedItems.length; m++) {
+		if (value === this.selectedItems[m].attr('data-value')) {
+			this.selectedItems.splice(m, 1);
 			
-		case 'contactlists':
-			url += "api/getcontactlists";
-			this.selectType = 'multiple';
 			break;
-			
-		case 'segments':
-			url += "api/getsegments";
-			this.selectType = 'multiple';
-			break;
+		}
 	}
-	
-	return url;
+			
+	this.initializeSelect2(this.sd);
 };
 
 ListPanelContent.prototype.initializeSelect2 = function(data) {
-	var d = data.slice(0);
 	var self = this;
 	var results = {
 		more: false,
-		results: d
+		results: data
 	};
 	
 	var select = this.content.find('.select2');
 	select.select2({
-//		multiple: true,
 		data: results,
 		placeholder: "Selecciona una opción"
 	});
 	
 	select.on("change", function(e) { 
 		e.preventDefault();
-//		self.content.find('.sgm-add-filter-content').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
 		self.selectedValue = e.val;
 	});
-};
-
-ListPanelContent.prototype.addContent = function(e) {
-	e.preventDefault();
-	
-	var filterPanelContent = new FilterPanelContent();
-	filterPanelContent.setPanelContainer(this.container);
-	filterPanelContent.setSelectedItems(this.selectedItems);
-	filterPanelContent.createContent();
-	
-	this.filterlist.push(filterPanelContent);
-	
-	var config = {
-		sticky: false, 
-		leftArrow: true, 
-		title: 'Seleccione una opción',
-		content: filterPanelContent
-	};
-		
-	this.container.addPanel(config);
 };

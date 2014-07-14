@@ -1,32 +1,35 @@
-TopPanelContent = function() {};
+TopPanelContent = function() {
+	this.oldCriteria = {
+		type: 'top-panel',
+		serialization: {criteria: null}
+	};
+};
 
 TopPanelContent.prototype = new PanelContent;
 
 TopPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	this.content.find('.sgm-add-selector-content').on('click', function (e) {
-		self.updateView($(this));
-		self.createNextPanel($(this));
+		$('.sgm-add-selector-content').removeClass('li-active');
+		$(this).addClass('li-active');
+		self.initializeNextContentPanel($(this));
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
 };
 
-TopPanelContent.prototype.updateView = function (obj) {
-	$('.sgm-add-selector-content').removeClass('li-active');
-	$(obj).addClass('li-active');
-};
-
-TopPanelContent.prototype.createNextPanel = function (obj) {
+TopPanelContent.prototype.initializeNextContentPanel = function (obj) {
 	var criteria = $(obj).attr('data-type');
-	this.model.updateObject(this);
 	
-	var ser = {
-		type: 'list-panel',
+	this.newCriteria = {
+		type: 'top-panel',
 		serialization: {criteria: criteria}
 	};
 	
-	this.model.createListPanel(ser);
+	this.model.updateObject(this.oldCriteria, this.newCriteria);
+	this.model.createListPanel();
+	
+	this.oldCriteria = this.newCriteria;
 };
 
 TopPanelContent.prototype.createContent = function () {
@@ -46,7 +49,8 @@ TopPanelContent.prototype.createContent = function () {
 };
 
 TopPanelContent.prototype.serialize = function(obj) {
-	if (obj.criteria !== null) {
-		this.content.find('.sgm-add-selector-content[data-type="' + obj.criteria + '"]').addClass('li-active');
+	this.oldCriteria = obj;
+	if (obj.serialization.criteria !== null) {
+		this.content.find('.sgm-add-selector-content[data-type="' + obj.serialization.criteria + '"]').addClass('li-active');
 	}
 };
