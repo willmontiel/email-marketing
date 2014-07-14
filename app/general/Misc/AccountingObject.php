@@ -156,8 +156,7 @@ class AccountingObject
 					JOIN account AS a ON ( a.idAccount = m.idAccount ) 
 				WHERE m.finishedon >= {$time1}
 					AND m.finishedon < {$time2}
-					AND m.status = 'sent'
-				GROUP BY 1 ";
+					AND m.status = 'sent'";
 					
 		if($idAccount != null) {
 			$sql.= " AND a.idAccount = {$idAccount}";
