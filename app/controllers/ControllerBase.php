@@ -140,5 +140,20 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		
 		AuditTrace::createAuditTrace($this->user, 'Fail', $operation, $msg, $date, $ip);
 	}
+	
+	/**
+	 * Retorna el contenido POST de un Request desde 
+	 * un objeto inyectado o directamente desde el request
+	 */
+	
+	public function getRequestContent()
+	{
+		if($this->requestContent && isset($this->requestContent->content)) {
+			return $this->requestContent->content;
+		}
+		else {
+			return $this->request->getRawBody();
+		}
+	}
 }
 

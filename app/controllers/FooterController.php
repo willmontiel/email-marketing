@@ -30,9 +30,11 @@ class FooterController extends ControllerBase {
 			try {
 				$obj = new FooterObj();
 				$obj->createFooter($content, $name);
+				$this->traceSuccess("Create footer, account {$this->user->account->idAccount}");
 			} 
 			catch(Exception $e) {
 				$this->logger->log("Exception: {$e}");
+				$this->traceFail("Can't create footer - account: {$this->user->account->idAccount}");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error, contacta al administrador'), 500 , 'failed');
 			}
 		 }
@@ -80,13 +82,16 @@ class FooterController extends ControllerBase {
 			try {
 				$obj->setFooter($footer);
 				$obj->updateFooter($content, $name);
+				$this->traceSuccess("Edit footer: {$footer->idFooter}, account {$this->user->account->idAccount}");
 			} 
 			catch(Exception $e) {
 				$this->logger->log("Exception: {$e}");
+				$this->traceFail("Can't edit footer: {$footer->idFooter} - account: {$this->user->account->idAccount}");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error, contacta al administrador'), 500 , 'failed');
 			}
 			catch(InvalidArgumentException $e) {
 				$this->logger->log("Exception: {$e}");
+				$this->traceFail("Can't edit footer: {$footer->idFooter} - account: {$this->user->account->idAccount}");
 				return $this->setJsonResponse(array('msg' => 'Ha ocurrido un error, contacta al administrador'), 500 , 'failed');
 			}
 		}
@@ -114,21 +119,26 @@ class FooterController extends ControllerBase {
 
 				if( !$footer->delete() ) {
 					$this->flashSession->warning("Error al eliminar el Footer");
+					$this->traceFail("Can't delete footer: {$footer->idFooter} - account: {$this->user->account->idAccount}");
 				}
 				else {
 					$this->flashSession->warning("Se ha eliminado el Footer con éxito");
+					$this->traceSuccess("Delete footer, account {$this->user->account->idAccount}");
 				}
 			}
 			else {
 				$this->flashSession->error("No se pudo eliminar el Footer, ya que está asociado a una cuenta");
+				$this->traceFail("Can't delete footer - account: {$this->user->account->idAccount}");
 			}
 		}
 		catch(Exception $e) {
 			$this->logger->log("Exception: {$e}");
+			$this->traceFail("Can't delete footer - account: {$this->user->account->idAccount}");
 			$this->flashSession->error("No se pudo eliminar el Footer");
 		}
 		catch(InvalidArgumentException $e) {
 			$this->logger->log("Exception: {$e}");
+			$this->traceFail("Can't delete footer - account: {$this->user->account->idAccount}");
 			$this->flashSession->error("No se pudo eliminar el Footer");
 		}
 		
@@ -146,14 +156,17 @@ class FooterController extends ControllerBase {
 			try {
 				$obj = new FooterObj();
 				$newfooter = $obj->cloneContent($footer);
+				$this->traceSuccess("Duplicate footer, account {$this->user->account->idAccount}");
 				return $this->response->redirect("footer/edit/{$newfooter->idFooter}");
 			} 
 			catch(Exception $e) {
 				$this->logger->log("Exception: {$e}");
+				$this->traceFail("Can't duplicate footer: {$footer->idFooter} - account: {$this->user->account->idAccount}");
 				$this->flashSession->error("No se pudo duplicar el Footer");
 			}
 			catch(InvalidArgumentException $e) {
 				$this->logger->log("Exception: {$e}");
+				$this->traceFail("Can't duplicate footer: {$footer->idFooter} - account: {$this->user->account->idAccount}");
 				$this->flashSession->error("No se pudo duplicar el Footer");
 			}
 			return $this->response->redirect("footer");

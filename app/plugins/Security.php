@@ -128,6 +128,7 @@ class Security extends Plugin
 				'apistatistics::mailpublicunsubscribed' => array(),
 				'apistatistics::mailpublicspam' => array(),
 				'apistatistics::mailpublicbounced' => array(),
+				'apiversionone::echo' => array(),
 				
 				
 				//Dashboard
@@ -391,6 +392,19 @@ class Security extends Plugin
 				'footer::duplicate' => array('footer' => array('create')),
 				'footer::image' => array('footer' => array('view')),
 				
+				//API Keys
+				'apikey::index' => array('apikey' => array('read')),
+				'apikey::create' => array('apikey' => array('create')),
+				'apikey::remake' => array('apikey' => array('update')),
+				'apikey::delete' => array('apikey' => array('delete')),
+				'apikey::changestatus' => array('apikey' => array('update')),
+				
+				//ExternalApi
+				'apiversionone::listaccounts' => array('api' => array('billing')),
+				'apiversionone::timebilling' => array('api' => array('billing')),
+				'apiversionone::refillprepay' => array('api' => array('account')),
+				'apiversionone::accountinformation' => array('api' => array('account')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
@@ -465,7 +479,50 @@ class Security extends Plugin
 				$this->_dependencyInjector->set('userefective', $userefective);
 			}
 		}
-
+		else {
+			try {
+				$timer = Phalcon\DI::getDefault()->get('timerObject');
+				$timer->reset();
+				$timer->startTimer('Authentication', 'Start Authentication');
+				$method = $this->request->getMethod();
+				$data = $this->request->getRawBody();
+				$uri = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://" . $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+				
+				$auth = new \EmailMarketing\General\Authorization\AuthHmacHeader($method, $uri, $data);
+				
+				if( $auth->verifyHeader() && $auth->checkPermissions($controller, $action) && $auth->processHeader() ) {
+					$apikey = Apikey::findFirst(array(
+						'conditions' => 'apikey = ?1',
+						'bind' => array(1 => $auth->getAuthUser())));
+					
+					if ( $apikey && $auth->checkUserPWD($apikey) && $apikey->user) {
+						$user = $apikey->user;
+						$role = $user->userrole;
+						$this->_dependencyInjector->set('userObject', $user);
+						if(!empty($data)) {
+							$content = new stdClass();
+							$content->content = $data;
+//							Se crea el objeto RequestContent para ser inyectado y usado en los controladores
+							$this->_dependencyInjector->set('requestContent', $content);
+						}
+					}
+					else {
+						throw new \Exception("API Key Invalido");
+					}
+				}
+			}
+			catch(\InvalidArgumentException $e) {
+				/*Atrapa la excepción y continua el proceso*/
+			}
+			catch(\Exception $e) {
+				$this->response->setContentType('application/json', 'UTF-8');
+				$this->response->setStatusCode(400, $e->getMessage());
+				return false;
+			}
+			
+			$timer->endTimer('Authentication');
+		}
+		
 		$map = $this->getControllerMap();
 		
 		$this->publicurls = array(
@@ -500,7 +557,8 @@ class Security extends Plugin
 			'apistatistics:mailpublicclicks',
 			'apistatistics:mailpublicunsubscribed',
 			'apistatistics:mailpublicspam',
-			'apistatistics:mailpublicbounced'
+			'apistatistics:mailpublicbounced',
+			'apiversionone:echo'
 		);
 		
 		if ($resource == "error::notavailable") {

@@ -879,3 +879,6 @@ span.required {
 .footer-html > table {
 	margin: auto;
 }
+#modal-simple-remake .btn, #myModal .btn {
+	margin-bottom: 0;	
+}
