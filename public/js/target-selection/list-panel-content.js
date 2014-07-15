@@ -56,7 +56,7 @@ ListPanelContent.prototype.serialize = function(obj) {
 	console.log(obj);
 	this.oldCriteria = obj;
 	if (obj.serialization.items !== null) {
-		for (var i = 0; i < obj.serialization.items.length; ) {
+		for (var i = 0; i < obj.serialization.items.length; i++) {
 			this.selectedValue = obj.serialization.items[i];
 			this.resfreshData();
 		}
