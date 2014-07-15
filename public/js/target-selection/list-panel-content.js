@@ -43,7 +43,7 @@ ListPanelContent.prototype.initialize = function(panel) {
 ListPanelContent.prototype.createContent = function () {
 	this.content = $('<div class="sgm-target-selector">\n\
 						<div class="sgm-selector-content">\n\
-							<input type="hidden" class="select2 select2-style1" />\n\
+							<input type="hidden" class="select2" />\n\
 							<span class="sgm-reset-items sgm-button-reset glyphicon glyphicon-flash"></span>\n\
 							<span class="sgm-add-item sgm-button-add glyphicon glyphicon-plus"></span>\n\
 						</div>\n\

@@ -6,7 +6,7 @@ FilterOpenContent.prototype = new FilterContent;
 
 FilterOpenContent.prototype.createContent = function() {
 	var content = $('<div class="sgm-filter-select">\n\
-						  <input type="hidden" class="select2 select2-style2"/>\n\
+						  <input type="hidden" class="select2"/>\n\
 					  </div>');
 	
 	this.parent.find('.sgm-filter-content-body').append(content);

@@ -116,12 +116,8 @@
 	padding-top: 12px;
 }
 
-.sgm-selector-content > .select2-style1 {
+.sgm-selector-content > .select2 {
 	width: 77%;
-}
-
-.sgm-selector-content > .select2-style2 {
-	width: 100%;
 }
 
 .sgm-filter-content-header {
