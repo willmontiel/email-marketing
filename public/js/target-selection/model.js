@@ -49,7 +49,6 @@ Model.prototype.createTopPanel = function(obj) {
 		title: 'Seleccione una opción',
 		content: topPanelContent
 	};
-
 	this.container.addPanel(config, this);
 };
 
@@ -71,7 +70,7 @@ Model.prototype.createListPanel = function(obj) {
 		content: listPanelContent
 	};
 		
-	this.container.addPanel(config);
+	this.container.addPanel(config, this);
 };
 
 Model.prototype.createFilterPanel = function(obj) {
@@ -91,7 +90,7 @@ Model.prototype.createFilterPanel = function(obj) {
 		content: filterPanelContent
 	};
 		
-	this.container.addPanel(config);
+	this.container.addPanel(config, this);
 };
 
 Model.prototype.getDataSource = function() {
