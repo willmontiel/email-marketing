@@ -1,5 +1,5 @@
 function FilterOpenContent() {
-	this.ds = [];
+	this.select = '';
 }
 
 FilterOpenContent.prototype = new FilterContent;
@@ -10,17 +10,17 @@ FilterOpenContent.prototype.createContent = function() {
 					  </div>');
 };
 
-FilterOpenContent.prototype.getContent = function() {
+FilterOpenContent.prototype.createSelect = function() {
 	var self = this;
 	var DataSource = this.model.getDataSource();
 	
-	var select;
-	DataSource.find('/getopenfilter').then(function() { 
-		self.ds = DataSource.getData();
-		select = self.initializeSelect2(self.ds);
+	return $.Deferred(function(dfd){
+		DataSource.find('/getopenfilter').then(function() { 
+			var ds = DataSource.getData();
+			self.select = self.initializeSelect2(ds);
+			dfd.resolve();
+		});
 	});
-	
-	return select;
 };
 
 FilterOpenContent.prototype.initializeSelect2 = function(data) {
@@ -30,8 +30,10 @@ FilterOpenContent.prototype.initializeSelect2 = function(data) {
 		data: data,
 		placeholder: "Selecciona una opción"
 	});
+	
 	return select;
 };
 
-
-
+FilterOpenContent.prototype.getSelect = function() {
+	return this.select;
+};

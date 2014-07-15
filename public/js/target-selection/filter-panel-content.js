@@ -22,17 +22,20 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		filterContent.setModel(self.model);
 		filterContent.createContent();
 		
-		var select = filterContent.getContent();
-		
-		select.on("change", function(e) { 
-			e.preventDefault();
-			self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
-			self.selectedValue = e.val;
+		filterContent.createSelect().then(function() { 
+			var select = filterContent.getSelect();
 			
-			self.updateObject();
+			select.on("change", function(e) { 
+				e.preventDefault();
+				self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
+				self.selectedValue = e.val;
+
+				self.updateObject();
+			});
+			
+			console.log(select);
+			self.content.find('.sgm-filter-content-body').append(select);
 		});
-		
-		this.content.find('.sgm-filter-content-body').append(select);
 	});
 	
 	this.content.find('.sgm-add-filter-content').on('click', function (e) {

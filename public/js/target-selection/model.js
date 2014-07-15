@@ -103,9 +103,9 @@ Model.prototype.updateObject = function(oldObj, newObj) {
 	console.log(oldObj);
 	console.log(newObj);
 	
+	var key = this.serializerObj.indexOf(oldObj);
 	
-	if (oldObj !== undefined) {
-		var key = this.serializerObj.indexOf(oldObj);
+	if (key >= 0) {
 		this.serializerObj[key] = newObj;
 	}
 	else {

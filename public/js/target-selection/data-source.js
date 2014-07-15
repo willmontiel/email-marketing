@@ -35,7 +35,7 @@ DataSource.prototype.find = function(urlPart) {
         $.ajax({
 			url: self.url,
 			type: "POST",			
-			data: {data: self.data},
+			data: {data: self.obj},
 			error: function(error){
 				console.log('Error: ');
 				console.log(error);

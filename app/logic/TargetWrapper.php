@@ -32,11 +32,11 @@ class TargetWrapper extends BaseWrapper
 	
 	private function createSQLFilter()
 	{
-		$ids = implode(',' , $this->data['ids']);
+		$ids = implode(',' , $this->data[1]['serialization']['items']);
 		
 		$this->SQLfilter = new stdClass();
 		
-		switch ($this->data['criteria']) {
+		switch ($this->data[0]['serialization']['criteria']) {
 			case 'dbases':
 				$this->SQLfilter->open = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) GROUP BY 1,2 ";
 				$this->SQLfilter->click = " JOIN Dbase AS d ON (d.idDbase = c.idDbase) WHERE d.idDbase IN ({$ids}) GROUP BY 1,2";
