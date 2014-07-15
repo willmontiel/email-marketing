@@ -53,9 +53,13 @@ ListPanelContent.prototype.createContent = function () {
 };
 
 ListPanelContent.prototype.serialize = function(obj) {
+	console.log(obj);
 	this.oldCriteria = obj;
 	if (obj.serialization.items !== null) {
-		
+		for (var i = 0; i < obj.serialization.items.length; ) {
+			this.selectedValue = obj.serialization.items[i];
+			this.resfreshData();
+		}
 	}
 };
 
@@ -126,27 +130,33 @@ ListPanelContent.prototype.resfreshData = function () {
 	}
 	
 	if (value !== null && text !== null) {
-		var item = $('<div class="sgm-item-added sgm-remove-item" data-value="' + value + '">\n\
-						  <span class="glyphicon glyphicon-remove"></span> \n\
-						  ' + text + '\
-					  </div>'); 
-
-		this.content.find('.sgm-box-content').append(item);
-		this.selectedItems.push(item);
-		
-		this.content.find('.sgm-remove-item').on('click', function (e) {
-			e.preventDefault();
-			
-			self.removeItem(this);
-			self.updateObject();
-			if (self.selectedItems.length === 0) {
-				self.content.find('.sgm-add-panel').remove();
-			}
-		});
-
-		self.initializeSelect2(self.sd);
-		self.content.find('.sgm-add-filter-content').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
+		self.createItemObject(value, text);
 	}
+};
+
+ListPanelContent.prototype.createItemObject = function (value, text) {
+	var self = this;
+	
+	var item = $('<div class="sgm-item-added sgm-remove-item" data-value="' + value + '">\n\
+					  <span class="glyphicon glyphicon-remove"></span> \n\
+					  ' + text + '\
+				  </div>'); 
+
+	this.content.find('.sgm-box-content').append(item);
+	this.selectedItems.push(item);
+
+	this.content.find('.sgm-remove-item').on('click', function (e) {
+		e.preventDefault();
+
+		self.removeItem(this);
+		self.updateObject();
+		if (self.selectedItems.length === 0) {
+			self.content.find('.sgm-add-panel').remove();
+		}
+	});
+
+	self.initializeSelect2(self.sd);
+	self.content.find('.sgm-add-filter-content').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
 };
 
 ListPanelContent.prototype.removeItem = function (item) {
