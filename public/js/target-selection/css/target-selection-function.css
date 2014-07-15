@@ -116,8 +116,12 @@
 	padding-top: 12px;
 }
 
-.sgm-selector-content > .select2 {
+.sgm-selector-content > .select2-style1 {
 	width: 77%;
+}
+
+.sgm-selector-content > .select2-style2 {
+	width: 100%;
 }
 
 .sgm-filter-content-header {
@@ -182,4 +186,8 @@
 	border-radius: 4px;
 	font-size: 16px;
 	font-weight: bold;
+}
+
+.sgm-filter-content-body {
+	padding: 24px;
 }
