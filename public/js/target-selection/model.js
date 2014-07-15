@@ -50,7 +50,7 @@ Model.prototype.createTopPanel = function(obj) {
 		content: topPanelContent
 	};
 
-	this.container.addPanel(config);
+	this.container.addPanel(config, this);
 };
 
 Model.prototype.createListPanel = function(obj) {

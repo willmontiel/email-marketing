@@ -5,8 +5,9 @@ function PanelContainer(selector) {
 	this.panellist = [];
 }
 
-PanelContainer.prototype.addPanel = function(config) {
+PanelContainer.prototype.addPanel = function(config, model) {
 	var panel = new Panel(this, config);
+	panel.setModel(model);
 	panel.createPanel(this.element);
 	this.panellist.push(panel);
 };
