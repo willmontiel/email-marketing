@@ -2,10 +2,10 @@ function FilterContent() {
 
 }
 
-FilterContent.prototype.setModel = function(model) {
-	this.model = model;
+FilterContent.prototype.setParent = function(parent) {
+	this.parent = parent;
 };
 
-FilterContent.prototype.getContent = function() {
-	return this.content;
+FilterContent.prototype.setModel = function(model) {
+	this.model = model;
 };

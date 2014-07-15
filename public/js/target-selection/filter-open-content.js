@@ -5,33 +5,39 @@ function FilterOpenContent() {
 FilterOpenContent.prototype = new FilterContent;
 
 FilterOpenContent.prototype.createContent = function() {
-	this.content = $('<div class="sgm-filter-select">\n\
+	var content = $('<div class="sgm-filter-select">\n\
 						  <input type="hidden" class="select2"/>\n\
 					  </div>');
+	
+	this.parent.find('.sgm-filter-content-body').append(content);
 };
 
 FilterOpenContent.prototype.createSelect = function() {
 	var self = this;
-	var DataSource = this.model.getDataSource();
-	
 	return $.Deferred(function(dfd){
+		var DataSource = self.model.getDataSource();
 		DataSource.find('/getopenfilter').then(function() { 
 			var ds = DataSource.getData();
-			self.select = self.initializeSelect2(ds);
+			self.initializeSelect2(ds);
 			dfd.resolve();
 		});
 	});
 };
 
 FilterOpenContent.prototype.initializeSelect2 = function(data) {
-	var select = this.content.find('.select2');
+	var results = {
+		more: false,
+		results: data
+	};
 	
-	select.select2({
-		data: data,
+	this.select = this.parent.find('.select2');
+	
+	this.select.select2({
+		data: results,
 		placeholder: "Selecciona una opción"
 	});
 	
-	return select;
+	return this.select;
 };
 
 FilterOpenContent.prototype.getSelect = function() {

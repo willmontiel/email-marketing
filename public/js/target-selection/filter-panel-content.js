@@ -17,24 +17,21 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
 		self.type = 'open';
-		
+		self.content.find('.sgm-filter-content-body').empty();
+
 		var filterContent = new FilterOpenContent();
 		filterContent.setModel(self.model);
+		filterContent.setParent(self.content);
 		filterContent.createContent();
 		
 		filterContent.createSelect().then(function() { 
 			var select = filterContent.getSelect();
-			
 			select.on("change", function(e) { 
 				e.preventDefault();
 				self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
 				self.selectedValue = e.val;
-
 				self.updateObject();
 			});
-			
-			console.log(select);
-			self.content.find('.sgm-filter-content-body').append(select);
 		});
 	});
 	
