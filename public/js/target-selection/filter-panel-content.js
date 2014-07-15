@@ -28,14 +28,14 @@ FilterPanelContent.prototype.initialize = function(panel) {
 			var select = filterContent.getSelect();
 			select.on("change", function(e) { 
 				e.preventDefault();
-				self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-filter"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
+				self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
 				self.selectedValue = e.val;
 				self.updateObject();
 			});
 		});
 	});
 	
-	this.content.find('.sgm-add-filter').on('click', function (e) {
+	this.content.find('.sgm-filter-select-button-add').on('click', function (e) {
 		self.createNextPanel(e);
 		$(this).remove();
 	});
