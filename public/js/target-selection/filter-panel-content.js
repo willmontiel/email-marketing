@@ -36,7 +36,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	});
 	
 	this.content.find('.sgm-add-filter-content').on('click', function (e) {
-		self.addContent(e);
+		self.createNextPanel(e);
 		$(this).remove();
 	});
 	
