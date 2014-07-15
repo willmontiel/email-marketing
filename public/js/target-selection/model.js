@@ -100,9 +100,6 @@ Model.prototype.getDataSource = function() {
 };
 
 Model.prototype.updateObject = function(oldObj, newObj) {
-	console.log(oldObj);
-	console.log(newObj);
-	
 	var key = this.serializerObj.indexOf(oldObj);
 	
 	if (key >= 0) {
@@ -113,6 +110,15 @@ Model.prototype.updateObject = function(oldObj, newObj) {
 	}
 	
 //	this.refreshTotalContacts();
+};
+
+Model.prototype.removePanel = function(panel) {
+	var key = this.container.removePanel(panel);
+	
+	if (key >= 0) {
+		var l = this.serializerObj.length;
+		this.serializerObj.splice(key, l - key);
+	}
 };
 
 Model.prototype.refreshTotalContacts = function() {

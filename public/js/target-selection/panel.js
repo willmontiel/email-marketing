@@ -6,6 +6,10 @@ function Panel(parent, config) {
 
 Panel.prototype.panelClass = 'col-xs-12 col-sm-6 col-md-4 col-lg-3';
 
+Panel.prototype.setModel = function(model) {
+	this.model = model;
+};
+
 Panel.prototype.createPanel = function(container) {
 	
 	this.html = $('<div class="' + Panel.prototype.panelClass + '">\n\
@@ -34,7 +38,7 @@ Panel.prototype.createPanel = function(container) {
 
 Panel.prototype.close = function (e) {
 	e.preventDefault();
-	this.parent.removePanel(this);
+	this.model.removePanel(this);
 };
 
 Panel.prototype.remove = function (e) {
