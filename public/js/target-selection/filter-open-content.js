@@ -10,31 +10,27 @@ FilterOpenContent.prototype.createContent = function() {
 					  </div>');
 };
 
-FilterOpenContent.prototype.initialize = function() {
+FilterOpenContent.prototype.getContent = function() {
 	var self = this;
 	var DataSource = this.model.getDataSource();
-
+	
+	var select;
 	DataSource.find('/getopenfilter').then(function() { 
 		self.ds = DataSource.getData();
-		self.initializeSelect2(self.ds);
+		select = self.initializeSelect2(self.ds);
 	});
+	
+	return select;
 };
 
 FilterOpenContent.prototype.initializeSelect2 = function(data) {
-	var self = this;
-	
 	var select = this.content.find('.select2');
 	
 	select.select2({
 		data: data,
 		placeholder: "Selecciona una opción"
 	});
-	
-	select.on("change", function(e) { 
-		e.preventDefault();
-		self.content.find('.sgm-add-filter-content').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
-		self.selectedValue = e.val;
-	});
+	return select;
 };
 
 
