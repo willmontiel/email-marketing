@@ -13,7 +13,7 @@
         {{ stylesheet_link('b3/css/bootstrap.css') }}
         {{ stylesheet_link('b3/css/font-awesome.css') }}
         {{ stylesheet_link('css/prstyles.css') }}
-        {{ stylesheet_link('b3/css/sm-email-theme.css') }}
+        {{ stylesheet_link('themes/new-gray/css/sm-email-theme.css') }}
         {{ stylesheet_link('b3/vendors/css/bootstrap-editable.css') }}
         {{ stylesheet_link('b3/vendors/css/jquery.gritter.css') }}
 
