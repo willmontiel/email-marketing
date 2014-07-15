@@ -35,6 +35,7 @@ ListPanelContent.prototype.initialize = function(panel) {
 		self.ds = DataSource.getData();
 		self.sd = self.ds.slice(0);
 		self.initializeSelect2(self.sd);
+		self.serialize();
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
@@ -52,12 +53,11 @@ ListPanelContent.prototype.createContent = function () {
 					 </div>');
 };
 
-ListPanelContent.prototype.serialize = function(obj) {
-	console.log(obj);
-	this.oldCriteria = obj;
-	if (obj.serialization.items !== null) {
-		for (var i = 0; i < obj.serialization.items.length; i++) {
-			this.selectedValue = obj.serialization.items[i];
+ListPanelContent.prototype.serialize = function() {
+	this.oldCriteria = this.serializerObject;
+	if (this.serializerObject.items !== null) {
+		for (var i = 0; i < this.serializerObject.serialization.items.length; i++) {
+			this.selectedValue = this.serializerObject.serialization.items[i];
 			this.resfreshData();
 		}
 	}
@@ -100,9 +100,11 @@ ListPanelContent.prototype.resfreshData = function () {
 	var self = this;
 	var value = null;
 	var text = null;
-
+	
 	for (var i = 0; i < this.sd.length; i++) {
-		if (this.sd[i].id === this.selectedValue) {
+		if (this.sd[i].id == this.selectedValue) {
+			console.log(this.sd[i].id);
+			console.log(this.selectedValue);
 			value = this.sd[i].id;
 			text = this.sd[i].text;
 			this.sd.splice(i, 1);

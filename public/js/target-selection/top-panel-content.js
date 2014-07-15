@@ -48,9 +48,9 @@ TopPanelContent.prototype.createContent = function () {
 					  </div>');
 };
 
-TopPanelContent.prototype.serialize = function(obj) {
-	this.oldCriteria = obj;
-	if (obj.serialization.criteria !== null) {
-		this.content.find('.sgm-add-selector-content[data-type="' + obj.serialization.criteria + '"]').addClass('li-active');
+TopPanelContent.prototype.serialize = function() {
+	this.oldCriteria = this.serializerObject;
+	if (this.serializerObject.criteria !== null) {
+		this.content.find('.sgm-add-selector-content[data-type="' + this.serializerObject.serialization.criteria + '"]').addClass('li-active');
 	}
 };

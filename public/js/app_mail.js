@@ -134,7 +134,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				}
 			});
 
-			var x = [19];
+			var x = [23,44,46,45];
 
 			ser.push({
 				type: 'list-panel',

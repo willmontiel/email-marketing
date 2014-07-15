@@ -40,7 +40,8 @@ Model.prototype.createTopPanel = function(obj) {
 	topPanelContent.createContent();
 	
 	if (obj !== undefined) {
-		topPanelContent.serialize(obj);
+		console.log('Serial...');
+		topPanelContent.setSerializerObj(obj);
 	}
 	
 	var config = {
@@ -49,6 +50,7 @@ Model.prototype.createTopPanel = function(obj) {
 		title: 'Seleccione una opción',
 		content: topPanelContent
 	};
+	
 	this.container.addPanel(config, this);
 };
 
@@ -60,7 +62,7 @@ Model.prototype.createListPanel = function(obj) {
 	listPanelContent.createContent();
 	
 	if (obj !== undefined) {
-		listPanelContent.serialize(obj);
+		listPanelContent.setSerializerObj(obj);
 	}
 	
 	var config = {
@@ -69,7 +71,7 @@ Model.prototype.createListPanel = function(obj) {
 		title: 'Seleccione un criterio',
 		content: listPanelContent
 	};
-		
+	
 	this.container.addPanel(config, this);
 };
 

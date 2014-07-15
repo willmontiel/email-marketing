@@ -34,6 +34,7 @@ Panel.prototype.createPanel = function(container) {
 	this.html.find('.sgm-panel').animate({width: '100%'});
 	
 	this.config.content.initialize(this.html);
+//	this.config.content.serialize();
 };
 
 Panel.prototype.close = function (e) {
