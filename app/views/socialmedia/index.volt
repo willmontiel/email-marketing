@@ -47,9 +47,9 @@
 								</td>
 								<td class="social-account-name-column">
 									{%if account.status is 'Deactivated'%}
-										<div class="social-account-name socil-account-deactivated">{{account.name}} <span>(Desactivado)</span></div>
+										<div class="social-account-deactivated"><p>{{account.name}} <span>(Desactivado)</span></p> </div>
 									{%else%}
-										<div class="social-account-name">{{account.name}}</div>
+										<h4>{{account.name}}</h4>
 									{%endif%}
 								</td>
 								<td class="btns-social-column">

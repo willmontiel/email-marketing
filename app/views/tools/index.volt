@@ -9,7 +9,7 @@
 	<h4 class="sectiontitle">Herramientas de administración</h4>
 	<div class="container-fluid space">
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('account') }}"  class="shortcuts"><span class="sm-button-large-accounts"></span></a>
 			</div>
 			<div class="w-190 center">
@@ -17,7 +17,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('user') }}"  class="shortcuts"><span class="sm-button-large-users"></span></a>
 			</div>
 			<div class="w-190 center">
@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('flashmessage') }}"  class="shortcuts"><span class="sm-button-large-msj"></span></a>
 			</div>
 			<div class="width-190">
@@ -33,7 +33,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('process') }}"  class="shortcuts"><span class="sm-button-large-send-process"></span></a>
 			</div>
 			<div class="w-190 center">
@@ -44,7 +44,7 @@
 	</div>
 	<div class="container-fluid">
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('scheduledmail/manage') }}"  class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
 			</div>
 			<div class="w-190 center">
@@ -52,7 +52,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('socialmedia') }}"  class="shortcuts"><span class="sm-button-large-socialnet"></span></a>
 			</div>
 			<div class="w-190 center">
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('apikey') }}"  class="shortcuts"><span class="sm-button-large-socialnet"></span></a>
 			</div>
 			<div class="w-190 center">
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('footer') }}"  class="shortcuts"><span class="sm-button-large-socialnet"></span></a>
 			</div>
 			<div class="w-190 center">

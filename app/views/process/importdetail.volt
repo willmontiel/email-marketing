@@ -131,7 +131,7 @@
 					<td colspan="3" class="text-center">
 						<div id="details" style="display: none;">
 							<div class="space"></div>
-							<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding btn-for-modal-accordion" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
+							<a class="accordion-toggle collapsed btn btn-sm btn-default extra-padding" data-toggle="collapse" data-parent="#accordion2" href="#collapseInfo">
 								Ver detalles
 							</a>
 						</div>

@@ -139,39 +139,31 @@
 </script>
 {% endblock %}
 {% block content %}
-	<div class="row">
-		{{ flashSession.output()}}
-	</div>
+	{{ flashSession.output()}}
 	<div class="row">
 		<div class="col-md-12">
-			<div class="btnoptions">
-				<div class="box span12 optionsEditor">
-					<div class="pull-right NextFromEditor">
+			{#<div class="btnoptions">#}
+				<div class="box span12 padding-top">
+					<div class="pull-right">
 						{% if mail is defined%}
-							<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar</a>
+							<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-sm btn-default extra-padding">Regresar sin guardar</a>
 						{% else %}
-							<a href="{{url('template')}}" class="btn btn-default">Cancelar</a>
+							<a href="{{url('template')}}" class="btn btn-sm btn-default extra-padding">Cancelar</a>
 						{% endif %}
-						<button onclick="sendData()" type="button" class="btn btn-primary">Guardar y regresar</button>
+						<button onclick="sendData()" type="button" class="btn btn-sm btn-primary extra-padding">Guardar y regresar</button>
 					</div>
-					<div class="pull-left VisualizeEditor">
-						<button onclick="verHTML()" class="btn btn-default" data-toggle="modal" data-target="#preview-modal">Visualizar</button>
-					</div>
-					<div class="pull-left SaveTemplate">
-						<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-default">Guardar como Plantilla</button>
-					</div>
-					<div class="pull-left SaveContent">
-						{% if mail is defined %}
-							<button onclick="saveContent()" type="button" value="Guardar" class="btn btn-primary">Guardar</button>
-						{% endif %}
-					</div>
+					<button onclick="verHTML()" class="btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#preview-modal">Visualizar</button>	
+					<button onclick="createTemplate()" type="button" value="Guardar como Plantilla" class="btn btn-sm btn-default extra-padding">Guardar como Plantilla</button>					
+					{% if mail is defined %}
+						<button onclick="saveContent()" type="button" value="Guardar" class="btn btn-sm btn-primary extra-padding">Guardar</button>
+					{% endif %}
 					{#
 					<div class="pull-left SaveTemplate">
 						<a href="#modal-simple" onclick="addGoogleAnalytics()" type="button" class="btn btn-default">Seguimiento con Google Analytics <i class="icon-google-plus-sign"></i> <span id="analytics-active" style="color: #acd954; display: none;">Activo</span> <span id="analytics-inactive" style="color: #e8a397;">Inactivo</span></a>
 					</div>
 					#}
 				</div>
-			</div>
+			{#</div>#}
 		</div>
 	</div>
 	<br />

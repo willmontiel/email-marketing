@@ -17,7 +17,7 @@
 	
 	<div class="row">
 		<div class="col-md-12">
-			<div class="col-xs-6 col-md-3 col-lg-2 to-do">
+			<div class="col-xs-6 col-md-3 col-lg-2 big-btn-nav">
 				<a href="{{url('system/configure')}}" class="shortcuts" title="Editar archivo de configuración"><span class="sm-button-large-email"></span><br/>Editar archivo de configuración</a>
 			</div>
 		</div>	

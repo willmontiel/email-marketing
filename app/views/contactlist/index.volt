@@ -56,7 +56,7 @@
 			<div class="row">
 				<h4 class="sectiontitle">Básicas</h4>
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						{{'{{#link-to "lists" class="shortcuts"}}<span class="sm-button-large-contact-list"></span>{{/link-to}}'}}
 					</div>
 					<div class="w-190 center">
@@ -64,7 +64,7 @@
 					</div>
 				</div>
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						{{'{{#link-to "segments" class="shortcuts"}}<span class="sm-button-large-segment"></span>{{/link-to}}'}}
 					</div>
 					<div class="w-190 center">
@@ -72,7 +72,7 @@
 					</div>
 				</div>
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						{{'{{#link-to "blockedemails" class="shortcuts"}} <span class="sm-button-large-bloq-list"></span>{{/link-to}}'}}
 					</div>
 					<div class="w-190 center">
@@ -81,7 +81,7 @@
 				</div>
 {#
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						<a href="{{url('contacts/search')}}#/contacts" class="shortcuts"><span class="sm-button-large-contact-search"></span></a>
 					</div>
 					<div class="w-190 center">
@@ -94,7 +94,7 @@
 			<div class="row">
 				<h4 class="sectiontitle">Avanzadas</h4>
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						<a href="{{url('dbase')}}" class="shortcuts" title="Configuracion avanzada"><span class="sm-button-large-settings"></span></a>
 					</div>
 					<div class="w-190 center">
@@ -103,7 +103,7 @@
 				</div>
 
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						<a href="{{url('process/import')}}" class="shortcuts"><span class="sm-button-large-import-list"></span></a>
 					</div>
 					<div class="w-190 center">

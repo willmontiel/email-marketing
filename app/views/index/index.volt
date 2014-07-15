@@ -90,19 +90,19 @@
 		<h4 class="sectiontitle">Qué quiere hacer hoy?</h4>
 		<div class="row">
 			<div class="col-xs-6 col-md-3">
-				<div class="to-do sm-btn-blue">
+				<div class="big-btn-nav sm-btn-blue">
 					<a href="{{url('mail/compose')}}"  class="shortcuts"><span class="sm-button-large-email-new"></span></a>
 				</div>
 				<a href="{{url('mail/compose')}}" class="btn-actn">Crear un nuevo email</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<div class="to-do sm-btn-blue">
+				<div class="big-btn-nav sm-btn-blue">
 					<a href="{{url('contactlist#/lists')}}"  class="shortcuts"><span class="sm-button-large-contact-list"></span></a>
 				</div>
 				<a href="{{url('contactlist#/lists')}}" class="btn-actn">Listas de contactos</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<div class="to-do sm-btn-blue">
+				<div class="big-btn-nav sm-btn-blue">
 					<a href="{{url('mail/list')}}"  class="shortcuts"><span class="sm-button-large-email-list"></span></a>
 				</div>
 				<a href="{{url('mail/list')}}" class="btn-actn">Listas de correos</a>

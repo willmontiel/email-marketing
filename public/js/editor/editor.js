@@ -9,7 +9,7 @@ Editor.prototype.otherLayout = function() {
 	var t = this;
 	
 	$('.layout').on('click', function() {
-		parent.$('.btnoptions').show();
+		//parent.$('.btnoptions').show();
 		var oldLayout = t.layout;
 		var newLayout = $(this).data('layoutObj');
 		t.layout = newLayout;
