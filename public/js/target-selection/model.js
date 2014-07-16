@@ -120,9 +120,9 @@ Model.prototype.removePanel = function(panel) {
 };
 
 Model.prototype.refreshTotalContacts = function() {
-	var dataSource = new DataSource(this.serializerObj);
-	dataSource.find('/gettotalcontacts').then(function() { 
-		var total = dataSource.getDataSource();
+	var DataSource = this.getDataSource();
+	DataSource.find('/gettotalcontacts').then(function() { 
+		var total = DataSource.getData();
 		$('.sgm-panel-contacts-space').empty();
 		$('.sgm-panel-contacts-space').append('Contactos aproximados: ' + total.totalContacts);
 	});
