@@ -35,7 +35,7 @@ ListPanelContent.prototype.initialize = function(panel) {
 
 	DataSource.find('list').then(function() { 
 		self.ds = DataSource.getData();
-		self.sd = self.ds.slice(0);
+		self.sd = $.extend(true, [], self.ds);
 		self.initializeSelect2(self.sd);
 		self.serialize();
 	});
