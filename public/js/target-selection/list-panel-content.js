@@ -80,11 +80,10 @@ ListPanelContent.prototype.updateObject = function () {
 		serialization: {items: items}
 	};
 	
-	if (items.length == 0) {
+	if (items.length <= 0) {
 		this.newCriteria.serialization = null;
 	}
 	
-		
 	this.model.updateObject(this.oldCriteria, this.newCriteria);
 	this.oldCriteria = this.newCriteria;
 };
@@ -121,8 +120,12 @@ ListPanelContent.prototype.resfreshData = function () {
 				if (this.sd[i].children[j].id == this.selectedValue) {
 					value = this.sd[i].children[j].id;
 					text = this.sd[ i].children[j].text;
-
+					
+					console.log(this.sd[i]);
+					
 					this.sd[i].children.splice(j, 1);
+					
+					console.log(this.sd[i]);
 					var n = this.sd.splice(i, 1);
 					this.sd = n.slice(0);
 
@@ -171,25 +174,25 @@ ListPanelContent.prototype.removeItem = function (item) {
 	var value = $(item).attr('data-value');
 	
 	for (var i = 0; i < this.ds.length; i++) {
-		if (this.ds[i].id === value) {
+		if (this.ds[i].id == value) {
 			var a = this.sd.indexOf(this.ds[i]);
-			if (a === -1) {
+			if (a == -1) {
 				this.sd.push(this.ds[i]);
 			}
 			
 			break;
 		}
-		else if (this.ds[i] !== undefined && this.ds[i].children !== undefined) {
+		else if (this.ds[i] != undefined && this.ds[i].children != undefined) {
 			for (var j = 0; j < this.ds[i].children.length; j++) {
-				if (this.ds[i].children[j].id === value) {
-					if (this.sd[i] === undefined) {
+				if (this.ds[i].children[j].id == value) {
+					if (this.sd[i] == undefined) {
 						var x = {
 							id: this.ds[i].id, 
 							text: this.ds[i].text,
 							children: this.ds[i].children[j]
 						};
 						
-						this.ds.push(x);
+						this.sd.push(x);
 					}
 					else {
 						this.sd[i].children.push(this.ds[i].children[j]);
@@ -204,13 +207,14 @@ ListPanelContent.prototype.removeItem = function (item) {
 	item.remove();
 
 	for (var m = 0; m < this.selectedItems.length; m++) {
-		if (value === this.selectedItems[m].attr('data-value')) {
+		if (value == this.selectedItems[m].attr('data-value')) {
 			this.selectedItems.splice(m, 1);
 			
 			break;
 		}
 	}
-			
+	
+	this.selectedValue = null;
 	this.initializeSelect2(this.sd);
 };
 

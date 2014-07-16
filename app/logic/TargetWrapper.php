@@ -32,29 +32,31 @@ class TargetWrapper extends BaseWrapper
 	
 	private function createSQLFilter()
 	{
-		$ids = implode(',' , $this->data[1]['serialization']['items']);
+		if (isset($this->data[1])) {
+			$ids = implode(',' , $this->data[1]['serialization']['items']);
 		
-		$this->SQLfilter = new stdClass();
-		
-		switch ($this->data[0]['serialization']['criteria']) {
-			case 'dbases':
-				$this->SQLfilter->open = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) GROUP BY 1,2 ";
-				$this->SQLfilter->click = " JOIN Dbase AS d ON (d.idDbase = c.idDbase) WHERE d.idDbase IN ({$ids}) GROUP BY 1,2";
-				$this->SQLfilter->totalContacts = " WHERE idDbase IN ({$ids})";
-				break;
-			
-			case 'contactlists':
-				$this->SQLfilter->open = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) GROUP BY 1,2";
-				$this->SQLfilter->click = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE cl.idContactlist IN ({$ids}) GROUP BY 1,2";
-				$this->SQLfilter->totalContacts = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE idContactlist IN ({$ids})";
-				break;
-			
-			case 'segments':
-				$this->SQLfilter->open = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) GROUP BY 1,2";
-				$this->SQLfilter->click = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE s.idSegment IN ({$ids}) GROUP BY 1,2 ";
-				$this->SQLfilter->totalContacts = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE idSegment IN ({$ids})";
-				break;
-		}	
+			$this->SQLfilter = new stdClass();
+
+			switch ($this->data[0]['serialization']['criteria']) {
+				case 'dbases':
+					$this->SQLfilter->open = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) GROUP BY 1,2 ";
+					$this->SQLfilter->click = " JOIN Dbase AS d ON (d.idDbase = c.idDbase) WHERE d.idDbase IN ({$ids}) GROUP BY 1,2";
+					$this->SQLfilter->totalContacts = " WHERE idDbase IN ({$ids})";
+					break;
+
+				case 'contactlists':
+					$this->SQLfilter->open = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) GROUP BY 1,2";
+					$this->SQLfilter->click = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE cl.idContactlist IN ({$ids}) GROUP BY 1,2";
+					$this->SQLfilter->totalContacts = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE idContactlist IN ({$ids})";
+					break;
+
+				case 'segments':
+					$this->SQLfilter->open = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) GROUP BY 1,2";
+					$this->SQLfilter->click = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE s.idSegment IN ({$ids}) GROUP BY 1,2 ";
+					$this->SQLfilter->totalContacts = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE idSegment IN ({$ids})";
+					break;
+			}	
+		}
 	}
 	
 	public function searchOpenFilter()
@@ -102,11 +104,15 @@ class TargetWrapper extends BaseWrapper
 	{
 		$this->logger->log("SQL: " . print_r($this->sql, true));
 		
-		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+		$total = 0;
 		
-		$result = $modelsManager->executeQuery($this->sql);
+		if (isset($this->data[1])) {
+			$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+			$result = $modelsManager->executeQuery($this->sql);
+			$total = $result->getFirst()->totalContacts;
+		}
 		
-		$this->totalContacts = array('totalContacts' => $result->getFirst()->totalContacts);
+		$this->totalContacts = array('totalContacts' => $total);
 	}
 	
 	public function searchTotalContacts()

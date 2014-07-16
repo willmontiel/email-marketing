@@ -12,6 +12,7 @@ TopPanelContent.prototype.initialize = function(panel) {
 	this.content.find('.sgm-add-selector-content').on('click', function (e) {
 		$('.sgm-add-selector-content').removeClass('li-active');
 		$(this).addClass('li-active');
+		self.model.reset();
 		self.initializeNextContentPanel($(this));
 	});
 	

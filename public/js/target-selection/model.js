@@ -126,6 +126,11 @@ Model.prototype.removePanel = function(panel) {
 	}
 };
 
+Model.prototype.reset = function() {
+	this.container.resetContainer();
+	this.serializerObj = [];
+};
+
 Model.prototype.refreshTotalContacts = function() {
 	var DataSource = this.getDataSource();
 	DataSource.find('/gettotalcontacts').then(function() { 
@@ -133,4 +138,8 @@ Model.prototype.refreshTotalContacts = function() {
 		$('.sgm-panel-contacts-space').empty();
 		$('.sgm-panel-contacts-space').append('Contactos aproximados: ' + total.totalContacts);
 	});
+};
+
+Model.prototype.getModel = function() {
+	return this.serializerObj;
 };
