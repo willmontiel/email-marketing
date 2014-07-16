@@ -102,11 +102,18 @@ Model.prototype.getDataSource = function() {
 Model.prototype.updateObject = function(oldObj, newObj) {
 	var key = this.serializerObj.indexOf(oldObj);
 	
-	if (key >= 0) {
-		this.serializerObj[key] = newObj;
+	if (newObj.serialization !== null) {
+		if (key >= 0) {
+			this.serializerObj[key] = newObj;
+		}
+		else {
+			this.serializerObj.push(newObj);
+		}
 	}
 	else {
-		this.serializerObj.push(newObj);
+		if (key >= 0) {
+			this.serializerObj.splice(key, 1);
+		}
 	}
 };
 

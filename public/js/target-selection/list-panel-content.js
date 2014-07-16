@@ -79,7 +79,7 @@ ListPanelContent.prototype.updateObject = function () {
 		type: 'list-panel',
 		serialization: {items: items}
 	};
-	
+		
 	this.model.updateObject(this.oldCriteria, this.newCriteria);
 	this.oldCriteria = this.newCriteria;
 };
