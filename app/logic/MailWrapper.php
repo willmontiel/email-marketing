@@ -9,12 +9,16 @@ class MailWrapper extends BaseWrapper
 	protected $target = null;
 	protected $scheduleDate = null;
 
-
 	public function __construct() 
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}
-
+	
+	public function setDbase(Dbase $dbase)
+	{
+		$this->dbase = $dbase;
+	}
+	
 	public function setAccount(Account $account)
 	{
 		$this->account = $account;
@@ -71,7 +75,7 @@ class MailWrapper extends BaseWrapper
 			$target->createTargetObj();
 			$this->target = $target->getTargetObject();
 
-			$this->logger->log("Target: " . print_r($this->target, true));
+//			$this->logger->log("Target: " . print_r($this->target, true));
 		}
 	}
 
@@ -142,7 +146,6 @@ class MailWrapper extends BaseWrapper
 		$this->mail->subject = $this->content->subject;
 		
 		$sender = $this->getSender();
-		$this->saveSender($sender);
 		$this->mail->fromName = $sender->name;
 		$this->mail->fromEmail = $sender->email;
 		
@@ -208,29 +211,35 @@ class MailWrapper extends BaseWrapper
 		$domain = explode('@', $email);
 		$name = $parts[1];
 		
-		if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente inválida, por favor verifique la información', 422);
-			throw new InvalidArgumentException("Invalid sender email");
-		}
-		
-		if (!$this->isAValidDomain($domain[1])) {
-			$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente invalida, recuerde que no debe usar dominios de correo públicas como hotmail o gmail', 422);
-			throw new InvalidArgumentException("Invalid sender domain");
-		}
-		
-		if (empty($name)) {
-			$this->addMessageError('errors', 'No ha enviado un nombre de remitente válido, por favor verifique la información', 422);
-			throw new InvalidArgumentException("Invalid sender name");
-		}
-		
 		$sender = new stdClass();
 		$sender->name = $name;
 		$sender->email = $email;
 		
+		$s = $this->searchSender($sender);
+		
+		if (!$s) {
+			if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente inválida, por favor verifique la información', 422);
+				throw new InvalidArgumentException("Invalid sender email");
+			}
+
+			if (!$this->isAValidDomain($domain[1])) {
+				$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente invalida, recuerde que no debe usar dominios de correo públicas como hotmail o gmail', 422);
+				throw new InvalidArgumentException("Invalid sender domain");
+			}
+
+			if (empty($name)) {
+				$this->addMessageError('errors', 'No ha enviado un nombre de remitente válido, por favor verifique la información', 422);
+				throw new InvalidArgumentException("Invalid sender name");
+			}
+			
+			$this->saveSender($sender);
+		}
+		
 		return $sender;
 	}
 	
-	private function saveSender($sender)
+	private function searchSender($sender) 
 	{
 		$findSender = Sender::findFirst(array(
 			'conditions' => 'idAccount = ?1 AND email = ?2',
@@ -238,20 +247,22 @@ class MailWrapper extends BaseWrapper
 							2 => $sender->email)
 		));
 		
-		
-		if (!$findSender) {
-			$newsender = new Sender();
-			$newsender->idAccount = $this->account->idAccount;
-			$newsender->email = $sender->email;
-			$newsender->name = $sender->name;
-			$newsender->createdon = time();
+		return $findSender;
+	}
+	
+	private function saveSender($sender)
+	{
+		$newsender = new Sender();
+		$newsender->idAccount = $this->account->idAccount;
+		$newsender->email = $sender->email;
+		$newsender->name = $sender->name;
+		$newsender->createdon = time();
 
-			if (!$newsender->save()) {
-				foreach ($newsender->getMessages() as $msg) {
-					$this->flashSession->error($msg);
-				}
-				throw new Exception("Error while saving account remittent");
+		if (!$newsender->save()) {
+			foreach ($newsender->getMessages() as $msg) {
+				$this->flashSession->error($msg);
 			}
+			throw new Exception("Error while saving account remittent");
 		}
 	}
 	
