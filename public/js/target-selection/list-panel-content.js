@@ -24,6 +24,7 @@ ListPanelContent.prototype.initialize = function(panel) {
 	this.content.find('.sgm-reset-items').on('click', function (e) {
 		self.resetItems();
 		self.updateObject();
+		self.model.refreshTotalContacts();
 	});
 	
 	this.content.find('.sgm-add-filter-content').on('click', function (e) {
@@ -151,6 +152,7 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 
 		self.removeItem(this);
 		self.updateObject();
+		self.model.refreshTotalContacts();
 		if (self.selectedItems.length === 0) {
 			self.content.find('.sgm-add-panel').remove();
 		}
