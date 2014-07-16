@@ -41,8 +41,6 @@ FilterPanelContent.prototype.createFilter = function(obj) {
 	obj.createSelect().then(function() { 
 		var select = obj.getSelect();
 		
-		select.val('61');
-		
 		select.on("change", function(e) { 
 			e.preventDefault();
 			self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');

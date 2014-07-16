@@ -35,7 +35,7 @@ FilterOpenContent.prototype.initializeSelect2 = function(data) {
 	this.select.select2({
 		data: results,
 		placeholder: "Selecciona una opción"
-	});
+	}).select2('val', '61');
 	
 	return this.select;
 };
