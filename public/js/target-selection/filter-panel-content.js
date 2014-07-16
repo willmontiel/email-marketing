@@ -41,7 +41,7 @@ FilterPanelContent.prototype.createFilter = function(obj) {
 	obj.createSelect().then(function() { 
 		var select = obj.getSelect();
 		
-		select.select2.val('61');
+		select.val('61');
 		
 		select.on("change", function(e) { 
 			e.preventDefault();
