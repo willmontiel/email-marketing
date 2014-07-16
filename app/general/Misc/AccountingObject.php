@@ -191,11 +191,9 @@ class AccountingObject
 	
 	public function getAccountingHistory($firstperiod, $secondperiod, $idAccount = null)
 	{
-//		$history = array();
-		
 		if($idAccount != null) {
 			$accountsH = \Accountinghistory::find(array(
-				'conditions' => 'idAccount = ?1 AND ( ( startDate >= ?2 AND startDate < ?3) OR ( endDate < ?3 ) )',
+				'conditions' => 'idAccount = ?1 AND ( startDate >= ?2 AND startDate < ?3 )',
 				'bind' => array(1 => $idAccount,
 								2 => $firstperiod,
 								3 => $secondperiod)
@@ -203,19 +201,12 @@ class AccountingObject
 		}
 		else {
 			$accountsH = \Accountinghistory::find(array(
-				'conditions' => '( startDate >= ?1 AND startDate < ?2) OR ( endDate < ?2 )',
+				'conditions' => 'startDate >= ?1 AND startDate < ?2',
 				'bind' => array(1 => $firstperiod,
 								2 => $secondperiod)
 			));
 		}
 		
-//		foreach ($accountsH as $accountH) {
-//			$history[$accountH->idAccount][] = array('amount' => $accountH->amount,
-//													 'start_date' => date('d-m-Y', $accountH->startDate),
-//													 'end_date' => ($accountH->endDate) ? date('d-m-Y', $accountH->endDate) : '' );
-//		}
-//		
-//		return $history;
 		return $accountsH;
 	}
 }

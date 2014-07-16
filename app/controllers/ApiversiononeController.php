@@ -161,10 +161,14 @@ class ApiversiononeController extends ControllerBase
 				'conditions' => 'idAccount = ?1',
 				'bind' => array(1 => $idAccount)
 			));
-
+			
+			if($account->idAccount != $this->user->account->idAccount && $this->user->userrole != 'ROLE_SUDO') {
+				throw new ApiException("Usted no tiene permisos para realizar esta acción");
+			}
+			
 			$wrapper = new AccountWrapper();
 			$wrapper->setAccount($account);
-			$response['message'] = $wrapper->getAccountInfo($this->request->get('first_date'), $this->request->get('second_date'));
+			$response['message'] = $wrapper->getAccountingForAccount($this->request->get('first_date'), $this->request->get('second_date'));
 			$response['status'] = 200;
 		}
 		catch (ApiException $e) {

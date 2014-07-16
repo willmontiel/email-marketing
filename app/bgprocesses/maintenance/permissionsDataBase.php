@@ -340,6 +340,7 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'apikey::update'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'apikey::delete'),
 			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'api::account'),
 			
 //			----------//----------**ROLE_USER**----------//----------
 			

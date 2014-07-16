@@ -403,6 +403,7 @@ class Security extends Plugin
 				'apiversionone::listaccounts' => array('api' => array('billing')),
 				'apiversionone::timebilling' => array('api' => array('billing')),
 				'apiversionone::refillprepay' => array('api' => array('account')),
+				'apiversionone::refillpostpay' => array('api' => array('account')),
 				'apiversionone::accountinformation' => array('api' => array('account')),
 				
 			);

@@ -8,85 +8,38 @@ class AccountWrapper extends BaseWrapper
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}
 
-	public function getAccountsBilling($f_date, $s_date)
-	{
-		$response = array();
-
-		$accounts = Account::find();
-		
-		$firstperiod = strtotime($f_date);
-		$secondperiod = strtotime($s_date);
-
-		if(!$firstperiod || !$secondperiod) {
-			throw new ApiException("Fechas Invalidas");
-		}
-
-		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
-		$accounting->setAccounts($accounts);
-		$accounting->setAccountingModel('contactsPeriod', 'sentPeriod');
-		
-		$history = $accounting->getAccountingHistory($firstperiod, $secondperiod);
-		
-		foreach ($history as $haccount) {
-			if( !isset($response[$haccount->account->idAccount]) ) {
-				$response[$haccount->account->idAccount] =	array('id' => $haccount->account->idAccount,
-																'name' => $haccount->account->companyName,
-																'subscription' => $haccount->account->subscriptionMode,
-																'mode' => $haccount->account->accountingMode,
-																'history' => array());
-			}
-			
-			$accounting->createAccounting(date('d-m-Y', $haccount->startDate), date('d-m-Y', $haccount->endDate), $haccount->idAccount);
-			
-			$accounting->processAccountingArray('contactsPeriod', 'sentPeriod');
-
-			$data = $accounting->getAccounting();
-			
-			$response[$haccount->account->idAccount]['history'][] = $this->accountValues($haccount->account, $data, $haccount);
-		}
-
-//		$accounting->createAccounting($firstperiod, $secondperiod);
-//
-//		$accounting->processAccountingArray('contactsPeriod', 'sentPeriod');
-//
-//		$data = $accounting->getAccounting();
-//
-//		foreach ($accounts as $account) {
-//			
-//			$response[] = $this->accountValues($account, $data, $history[$account->idAccount]);
-//		}
-		
-		return $response;
-	}
-
 	public function refillAccount($content)
 	{
 		$this->db->begin();
-		$available = 0;
 		
 		if ( $this->account->accountingMode != $content->mode ) {
 			throw new ApiException('No se pudo actualizar la cuenta ' . $this->account->companyName . '. Por favor comuniquese con el administrador');
 		}
 		
-		if($content->mode == 'Contacto') {
-			$available = $this->account->contactLimit;
-			$this->account->contactLimit = $content->amount;
-		}
-		else if($content->mode == 'Envio') {
-			$available = $this->account->messageLimit;
-			$this->account->messageLimit+= $content->amount;
-		}
-		
 		$startdate = strtotime($content->start_date);
 		$expirydate = strtotime($content->expiry_date);
 
-		if($startdate && $expirydate && $startdate > time() && $startdate < $expirydate) {
-			$this->account->expiryDate = $expirydate;
+		if($startdate && $expirydate && $startdate >= strtotime('today midnight') && $startdate < $expirydate) {
+			
+			if($content->mode == 'Contacto') {
+				$this->account->contactLimit = $content->amount;
+			}
+			else if($content->mode == 'Envio') {
+				if($startdate < $this->account->expiryDate) {
+					$this->account->messageLimit+= $content->amount;
+				}
+				else {
+					$this->account->messageLimit = $content->amount;
+				}
+			}
 			
 			$old_history = Accountinghistory::findFirst(array(
-						'conditions' => 'idAccount = ?1 AND endDate IS NULL',
-						'bind' => array(1 => $this->account->idAccount)
+						'conditions' => 'idAccount = ?1 AND endDate =?2',
+						'bind' => array(1 => $this->account->idAccount,
+										2 => $this->account->expiryDate)
 			));
+			
+			$this->account->expiryDate = $expirydate;
 			
 			if($old_history){
 				
@@ -100,15 +53,12 @@ class AccountWrapper extends BaseWrapper
 					throw new ApiException('No se pudo actualizar la cuenta ' . $this->account->companyName . '. Por favor comuniquese con el administrador');
 				}
 			}
-			else {
-				throw new ApiException('No se pudo actualizar la cuenta ' . $this->account->companyName . '. Por favor comuniquese con el administrador');
-			}
 			
 			$new_history = new Accountinghistory();
 			$new_history->idAccount = $this->account->idAccount;
 			$new_history->amount = $content->amount;
-			$new_history->available = $available;
 			$new_history->startDate = $startdate;
+			$new_history->endDate = $expirydate;
 			
 			if(!$new_history->save()){
 				foreach ($new_history->getMessages() as $msg) {
@@ -136,43 +86,37 @@ class AccountWrapper extends BaseWrapper
 		return $content;
 	}
 	
-	protected function accountValues($account, $data, $history)
+	public function getAccountsBilling($f_date, $s_date)
 	{
-//		$res = array(
-//			'id' => $account->idAccount,
-//			'name' => $account->companyName,
-//			'subscription' => $account->subscriptionMode,
-//			'mode' => $account->accountingMode,
-//			'expiry_date' => ($account->expiryDate) ? date('d-m-Y', $account->expiryDate) : 0 
-//		);
-		
-		$res = array();
+		$response = array();
 
-		if($account->accountingMode == 'Contacto') {
-			$res['total'] = $history->available;
-			$res['consumed'] = $data[$account->idAccount]['contactsPeriod'];
-			$res['available'] = $history->available - $data[$account->idAccount]['contactsPeriod'];
-		}
-		else if($account->accountingMode == 'Envio') {
-			$res['available'] = $history->available;
-			$res['consumed'] = $data[$account->idAccount]['sentPeriod'];
-			$res['total'] = $history->available + $data[$account->idAccount]['sentPeriod'];
+		$accounts = Account::find();
+		
+		$firstperiod = strtotime($f_date);
+		$secondperiod = strtotime($s_date);
+
+		if(!$firstperiod || !$secondperiod) {
+			throw new ApiException("Fechas Invalidas");
 		}
 		
-//		$res['history'] = array();
-//		
-//		if($history != null) {
-//			$res['history'] = $history;
-//		}
+		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
+		$accounting->setAccounts($accounts);
+		$accounting->setAccountingModel('contactsPeriod', 'sentPeriod');
 		
-		$res['amount'] = $history->amount;
-		$res['start_date'] = date('d-m-Y', $history->startDate);
-		$res['end_date'] = ($history->endDate) ? date('d-m-Y', $history->endDate) : '';
-		
-		return $res;
+		foreach ($accounts as $account) {
+			if($account->accountingMode == 'Contacto'){
+				$response[] = $this->getPostpayContactBilling($account, $accounting, $firstperiod, $secondperiod);
+			}
+			else {
+				$response[] = $this->getPostpaySendBilling($account, $accounting, $firstperiod, $secondperiod);
+			}
+			
+		}
+
+		return $response;
 	}
 	
-	public function getAccountInfo($f_date, $s_date)
+	public function getAccountingForAccount($f_date, $s_date)
 	{
 		$response = array();
 		
@@ -186,26 +130,92 @@ class AccountWrapper extends BaseWrapper
 			throw new ApiException("Fechas Invalidas");
 		}
 		
-		$accounting->createAccounting($firstperiod, $secondperiod, $this->account->idAccount);
+		if($this->account->accountingMode == 'Contacto'){
+			$response[] = $this->getPrepayContactBilling($this->account, $accounting, $firstperiod, $secondperiod);
+		}
+		else {
+			$response[] = $this->getPrepaySendBilling($this->account, $accounting, $firstperiod, $secondperiod);
+		}
 		
+		return $response;
+	}
+	
+	protected function getPrepayContactBilling(Account $account, \EmailMarketing\General\Misc\AccountingObject $accounting, $firstperiod, $secondperiod)
+	{
+		$response[$this->account->idAccount] =	array(	'id' => $account->idAccount,
+														'name' => $account->companyName,
+														'subscription' => $account->subscriptionMode,
+														'mode' => $account->accountingMode,
+														'history' => array());
+		
+		$history = $accounting->getAccountingHistory($firstperiod, $secondperiod, $account->idAccount);
+		
+		foreach ($history as $haccount) {
+			if(!isset($response[$this->account->idAccount]['history']['end_date']) || $haccount->endDate > strtotime($response[$this->account->idAccount]['history']['end_date'])) {
+				
+				$response[$this->account->idAccount]['history'] = array('amount' => $haccount->amount,
+																	'start_date' => date('d-m-Y', $haccount->startDate),
+																	'end_date' => date('d-m-Y', $haccount->endDate));
+			}
+		}
+		
+		return $response;
+	}
+	
+	protected function getPrepaySendBilling(Account $account, \EmailMarketing\General\Misc\AccountingObject $accounting, $firstperiod, $secondperiod)
+	{
+		$response[$account->idAccount] = array(	'id' => $account->idAccount,
+												'name' => $account->companyName,
+												'subscription' => $account->subscriptionMode,
+												'mode' => $account->accountingMode,
+												'history' => array());
+		
+		$accounting->createAccounting(date('d-m-Y', $firstperiod), date('d-m-Y', $secondperiod), $account->idAccount);
+		$accounting->processAccountingArray('contactsPeriod', 'sentPeriod');
 		$data = $accounting->getAccounting();
 		
-		$history = $accounting->getAccountingHistory($firstperiod, $secondperiod, $this->account->idAccount);
+		$response[$account->idAccount]['history'][] = array('consumed' => $data[$account->idAccount]['sentPeriod'],
+															'start_date' => date('d-m-Y', $firstperiod),
+															'end_date' => date('d-m-Y', $secondperiod));
 		
-		foreach ($history as $h) {
-			if( !isset($response[$this->account->idAccount]) ) {
-				$response[$this->account->idAccount] =	array('id' => $this->account->idAccount,
-																'name' => $this->account->companyName,
-																'subscription' => $this->account->subscriptionMode,
-																'mode' => $this->account->accountingMode,
-																'history' => array());
-			}
-			
-			$response[$this->account->idAccount]['history'][] = $this->accountValues($this->account, $data, $h);
+		return $response;
+	}
+	
+	protected function getPostpayContactBilling(Account $account, \EmailMarketing\General\Misc\AccountingObject $accounting, $firstperiod, $secondperiod)
+	{
+		$response[$account->idAccount] = array(	'id' => $account->idAccount,
+												'name' => $account->companyName,
+												'subscription' => $account->subscriptionMode,
+												'mode' => $account->accountingMode,
+												'history' => array());
+		
+		$history = $accounting->getAccountingHistory($firstperiod, $secondperiod, $account->idAccount);
+		
+		foreach ($history as $haccount) {
+			$response[$account->idAccount]['history'][] = array('amount' => $haccount->amount,
+																'start_date' => date('d-m-Y', $haccount->startDate),
+																'end_date' => date('d-m-Y', $haccount->endDate));
 			
 		}
 		
-		//$response[] = $this->accountValues($this->account, $data, $history[$this->account->idAccount]);
+		return $response;
+	}
+	
+	protected function getPostpaySendBilling(Account $account, \EmailMarketing\General\Misc\AccountingObject $accounting, $firstperiod, $secondperiod)
+	{
+		$response[$account->idAccount] = array(	'id' => $account->idAccount,
+												'name' => $account->companyName,
+												'subscription' => $account->subscriptionMode,
+												'mode' => $account->accountingMode,
+												'history' => array());
+		
+		$accounting->createAccounting(date('d-m-Y', $firstperiod), date('d-m-Y', $secondperiod), $account->idAccount);
+		$accounting->processAccountingArray('contactsPeriod', 'sentPeriod');
+		$data = $accounting->getAccounting();
+		
+		$response[$account->idAccount]['history'][] = array('consumed' => $data[$account->idAccount]['sentPeriod'],
+															'start_date' => date('d-m-Y', $firstperiod),
+															'end_date' => date('d-m-Y', $secondperiod));
 		
 		return $response;
 	}
