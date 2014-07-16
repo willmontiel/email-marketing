@@ -75,6 +75,7 @@ FilterPanelContent.prototype.serialize = function() {
 	if (this.serializerObject !== undefined && this.serializerObject.serialization.items !== null) {
 		this.oldCriteria = this.serializerObject;
 		this.type = this.serializerObject.serialization.type;
+		this.selectedValue = this.serializerObject.serialization.items;
 		
 		switch (this.type) {
 			case 'open':
