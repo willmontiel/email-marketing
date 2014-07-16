@@ -16,6 +16,7 @@ TopPanelContent.prototype.initialize = function(panel) {
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
+	this.serialize();
 };
 
 TopPanelContent.prototype.initializeNextContentPanel = function (obj) {
@@ -49,8 +50,8 @@ TopPanelContent.prototype.createContent = function () {
 };
 
 TopPanelContent.prototype.serialize = function() {
-	this.oldCriteria = this.serializerObject;
-	if (this.serializerObject.criteria !== null) {
+	if (this.serializerObject !== undefined && this.serializerObject.criteria !== null) {
+		this.oldCriteria = this.serializerObject;
 		this.content.find('.sgm-add-selector-content[data-type="' + this.serializerObject.serialization.criteria + '"]').addClass('li-active');
 	}
 };

@@ -54,8 +54,8 @@ ListPanelContent.prototype.createContent = function () {
 };
 
 ListPanelContent.prototype.serialize = function() {
-	this.oldCriteria = this.serializerObject;
-	if (this.serializerObject.items !== null) {
+	if (this.serializerObject !== undefined && this.serializerObject.serialization.items.length > 0) {
+		this.oldCriteria = this.serializerObject;
 		for (var i = 0; i < this.serializerObject.serialization.items.length; i++) {
 			this.selectedValue = this.serializerObject.serialization.items[i];
 			this.resfreshData();
@@ -103,8 +103,6 @@ ListPanelContent.prototype.resfreshData = function () {
 	
 	for (var i = 0; i < this.sd.length; i++) {
 		if (this.sd[i].id == this.selectedValue) {
-			console.log(this.sd[i].id);
-			console.log(this.selectedValue);
 			value = this.sd[i].id;
 			text = this.sd[i].text;
 			this.sd.splice(i, 1);
@@ -113,7 +111,7 @@ ListPanelContent.prototype.resfreshData = function () {
 		}
 		else if (this.sd[i] !== undefined && this.sd[i].children !== undefined) {
 			for (var j = 0; j < this.sd[i].children.length; j++) {
-				if (this.sd[i].children[j].id === this.selectedValue) {
+				if (this.sd[i].children[j].id == this.selectedValue) {
 					value = this.sd[i].children[j].id;
 					text = this.sd[ i].children[j].text;
 
@@ -121,7 +119,7 @@ ListPanelContent.prototype.resfreshData = function () {
 					var n = this.sd.splice(i, 1);
 					this.sd = n.slice(0);
 
-					if (this.sd[0].children.length === 0) {
+					if (this.sd[0].children.length == 0) {
 						this.sd.splice(0, 1);
 					}
 					

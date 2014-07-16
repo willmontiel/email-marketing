@@ -40,7 +40,6 @@ Model.prototype.createTopPanel = function(obj) {
 	topPanelContent.createContent();
 	
 	if (obj !== undefined) {
-		console.log('Serial...');
 		topPanelContent.setSerializerObj(obj);
 	}
 	
@@ -82,7 +81,7 @@ Model.prototype.createFilterPanel = function(obj) {
 	filterPanelContent.createContent();
 	
 	if (obj !== undefined) {
-		filterPanelContent.serialize(obj);
+		filterPanelContent.setSerializerObj(obj);
 	}
 	
 	var config = {

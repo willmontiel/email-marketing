@@ -119,13 +119,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var ser = null;
 		
 		if (ser === null) {
-//			ser = new Array();
+			ser = new Array();
+			
 //			ser.push({
 //				type: 'top-panel',
 //				serialization: {criteria: null}
 //			});
-			
-			var ser = Array();
 
 			ser.push({
 				type: 'top-panel',
@@ -134,7 +133,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				}
 			});
 
-			var x = [23,44,46,45];
+			var x = [19];
 
 			ser.push({
 				type: 'list-panel',
@@ -166,7 +165,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 					items: 135
 				}
 			});
-
 		}
 		
 		var panelContainer = new PanelContainer('#panel-container');

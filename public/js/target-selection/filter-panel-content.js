@@ -18,21 +18,8 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
 		self.type = 'open';
 		self.content.find('.sgm-filter-content-body').empty();
-
-		var filterContent = new FilterOpenContent();
-		filterContent.setModel(self.model);
-		filterContent.setParent(self.content);
-		filterContent.createContent();
-		
-		filterContent.createSelect().then(function() { 
-			var select = filterContent.getSelect();
-			select.on("change", function(e) { 
-				e.preventDefault();
-				self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
-				self.selectedValue = e.val;
-				self.updateObject();
-			});
-		});
+		var openFilter = new FilterOpenContent();
+		self.createFilter(openFilter);
 	});
 	
 	this.content.find('.sgm-filter-select-button-add').on('click', function (e) {
@@ -41,9 +28,28 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
+	this.serialize();
 };
 
-FilterPanelContent.prototype.createContent = function () {
+FilterPanelContent.prototype.createFilter = function(obj) {
+	var self = this; 
+	
+	obj.setModel(this.model);
+	obj.setParent(this.content);
+	obj.createContent();
+
+	obj.createSelect().then(function() { 
+		var select = obj.getSelect();
+		select.on("change", function(e) { 
+			e.preventDefault();
+			self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
+			self.selectedValue = e.val;
+			self.updateObject();
+		});
+	});
+};
+
+FilterPanelContent.prototype.createContent = function() {
 	this.content = $('<div class="sgm-filter-selector">\n\
 						  <div class="sgm-filter-content">\n\
 							  <div class="sgm-filter-content-header">\n\
@@ -60,9 +66,18 @@ FilterPanelContent.prototype.createContent = function () {
 					  </div>');
 };
 
-FilterPanelContent.prototype.serialize = function(obj) {
-	this.oldCriteria = obj;
-	if (obj.serialization.items !== null) {
+FilterPanelContent.prototype.serialize = function() {
+	if (this.serializerObject !== undefined && this.serializerObject.serialization.items !== null) {
+		this.oldCriteria = this.serializerObject;
+		this.type = this.serializerObject.serialization.type;
+		
+		switch (this.type) {
+			case 'open':
+				this.content.find('.sgm-filter-content-body').empty();
+				var openFilter = new FilterOpenContent();
+				this.createFilter(openFilter);
+				break;
+		}
 		
 	}
 };
