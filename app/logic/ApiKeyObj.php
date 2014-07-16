@@ -26,7 +26,7 @@ class ApiKeyObj
 		$key->idUser = $this->user->idUser;
 		$key->apikey = $this->APIKeyGenerator();
 		$key->secret = $this->SecretGenerator();
-		$key->status = 'Enable';
+		$key->status = 'enabled';
 		$key->createdon = time();
 		
 		if (!$key->save()) {
@@ -40,7 +40,7 @@ class ApiKeyObj
 	{
 		$this->user->apikey->apikey = $this->APIKeyGenerator();
 		$this->user->apikey->secret = $this->SecretGenerator();
-		$this->user->apikey->status = 'Enable';
+		$this->user->apikey->status = 'enabled';
 		
 		if (!$this->user->apikey->save()) {
 			throw new InvalidArgumentException('No se pudo crear la API Key, por favor contacte al administrador');
@@ -51,7 +51,7 @@ class ApiKeyObj
 	
 	public function updateAPIKeyStatus($status)
 	{
-		$this->user->apikey->status = ($status === 'true') ? 'Enable' : 'Disable' ;
+		$this->user->apikey->status = ($status === 'true') ? 'enabled' : 'disabled' ;
 		
 		if (!$this->user->apikey->save()) {
 			throw new InvalidArgumentException('No se pudo crear la API Key, por favor contacte al administrador');

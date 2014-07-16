@@ -64,7 +64,7 @@ class AuthHmacHeader implements \EmailMarketing\General\Authorization\AuthHeader
 	{
 		$msg = $this->method . '|' . $this->uri . '|' . $this->data;
 		$hash = hash_hmac('sha1', $msg, $apikey->secret);
-		if($hash == $this->pwd && $apikey->status == 'Enable' ) {
+		if($hash == $this->pwd && $apikey->status == 'enabled' ) {
 			return true;
 		} 
 		
