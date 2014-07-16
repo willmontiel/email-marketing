@@ -21,7 +21,7 @@
 					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: 'Se ha creado la API Key exitosamente', sticky: false, time: 30000});
 					var row = $('#row-apikey-' + obj.APIKey.idUser);
 					row.find('td:last').remove();
-					var status = (obj.APIKey.status === 'Enable') ? 'checked' : '';
+					var status = (obj.APIKey.status === 'enabled') ? 'checked' : '';
 					var columns =	'<td id="col-apikey-for-' + obj.APIKey.idUser + '">\n\
 										<input type="text" onClick="this.select();" class="form-control" value="' + obj.APIKey.apikey + '" />\n\
 									</td>\n\
@@ -56,7 +56,7 @@
 				success: function(obj){
 					$('#col-apikey-for-' + obj.APIKey.idUser).find('input').val(obj.APIKey.apikey);
 					$('#col-secret-for-' + obj.APIKey.idUser).find('input').val(obj.APIKey.secret);
-					var status = (obj.APIKey.status === 'Enable') ? true : false;
+					var status = (obj.APIKey.status === 'enabled') ? true : false;
 					$('#col-status-for-' + obj.APIKey.idUser + ' input.apikey-status').bootstrapSwitch('state', status);
 				}
 			});
@@ -81,7 +81,7 @@
 					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg.statusText, sticky: false, time: 30000});
 				},
 				success: function(obj){
-					var msg = (obj.APIKey.status === 'Enable') ? 'La API Key del usuario ' + obj.APIKey.firstname + ' ' + obj.APIKey.lastname + ' ha sido habilitada' : 'La API Key del usuario ' + obj.APIKey.firstname + ' ' + obj.APIKey.lastname + ' ha sido deshabilitada' ;
+					var msg = (obj.APIKey.status === 'enabled') ? 'La API Key del usuario ' + obj.APIKey.firstname + ' ' + obj.APIKey.lastname + ' ha sido habilitada' : 'La API Key del usuario ' + obj.APIKey.firstname + ' ' + obj.APIKey.lastname + ' ha sido deshabilitada' ;
 					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 30000});
 				}
 			});
@@ -152,7 +152,7 @@
 							<input type="text" onClick="this.select();" class="form-control" value="{{item.apikey.secret}}" />
 						</td>
 						<td id="col-status-for-{{item.idUser}}">
-							<input type="checkbox" class="apikey-status" data-id="{{item.idUser}}" {% if item.apikey.status == 'Enable'%} checked {%endif%}>
+							<input type="checkbox" class="apikey-status" data-id="{{item.idUser}}" {% if item.apikey.status == 'enabled'%} checked {%endif%}>
 						</td>
 						<td id="col-actions-for-{{item.idUser}}">
 							<a data-toggle="modal" href="#modal-simple-remake" title="Regenerar API Key" onclick="preventRemakeAPIKey({{item.idUser}});" class="btn btn-sm btn-default btn-guardar extra-padding"><span class="glyphicon glyphicon-repeat"></span></a>
