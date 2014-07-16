@@ -18,6 +18,7 @@ ListPanelContent.prototype.initialize = function(panel) {
 	this.content.find('.sgm-add-item').on('click', function (e) {
 		self.resfreshData();
 		self.updateObject();
+		self.model.refreshTotalContacts();
 	});
 	
 	this.content.find('.sgm-reset-items').on('click', function (e) {
