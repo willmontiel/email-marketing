@@ -109,7 +109,7 @@ Model.prototype.updateObject = function(oldObj, newObj) {
 		this.serializerObj.push(newObj);
 	}
 	
-//	this.refreshTotalContacts();
+	this.refreshTotalContacts();
 };
 
 Model.prototype.removePanel = function(panel) {
