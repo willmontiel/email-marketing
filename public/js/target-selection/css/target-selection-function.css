@@ -169,8 +169,21 @@
 	border-radius: 4px;
 }
 
-.sgm-remove-item {
+.sgm-remove-item-style {
+	display: block;
 	cursor: pointer;
+	top: -8px;
+	left: 91%;
+	font-size: 16px;
+}
+
+.sgm-remove-item-style:hover {
+	color: red;
+	border: 1px solid white;
+	border-radius: 50%;
+	width: 15px;
+	height: 15px;
+	background-color: white;
 }
 
 .sgm-panel-contacts-space {

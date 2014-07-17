@@ -4,6 +4,7 @@ function ListPanelContent() {
 		serialization: {items: []}
 	};
 	
+	this.selectType = 'Multiple';
 	this.selectedValue = '';
 	this.ds = [];
 	this.sd = [];
@@ -34,7 +35,9 @@ ListPanelContent.prototype.initialize = function(panel) {
 	var DataSource = this.model.getDataSource();
 
 	DataSource.find('list').then(function() { 
-		self.ds = DataSource.getData();
+		var data = DataSource.getData();
+		self.checkArrayData(data);
+		self.ds = data;
 		self.sd = $.extend(true, [], self.ds);
 		self.initializeSelect2(self.sd);
 		self.serialize();
@@ -97,7 +100,7 @@ ListPanelContent.prototype.resetItems = function () {
 
 	this.content.find('.sgm-add-panel').remove();
 
-	this.sd = this.ds.slice(0);
+	this.sd = $.extend(true, [], this.ds);
 	this.initializeSelect2(this.sd);
 };
 
@@ -116,21 +119,24 @@ ListPanelContent.prototype.resfreshData = function () {
 			break;
 		}
 		else if (this.sd[i] !== undefined && this.sd[i].children !== undefined) {
-			for (var j = 0; j < this.sd[i].children.length; j++) {
-				if (this.sd[i].children[j].id == this.selectedValue) {
-					value = this.sd[i].children[j].id;
-					text = this.sd[ i].children[j].text;
+			var children = $.extend(true, [], this.sd[i].children);
+			for (var j = 0; j < children.length; j++) {
+				if (children[j].id == this.selectedValue) {
+					value = children[j].id;
+					text = children[j].text;
 					
-					console.log(this.sd[i]);
+					children.splice(j, 1);
 					
-					this.sd[i].children.splice(j, 1);
+					if (children.length <= 0) {
+						children = [];
+					}
 					
-					console.log(this.sd[i]);
 					var n = this.sd.splice(i, 1);
-					this.sd = n.slice(0);
-
-					if (this.sd[0].children.length == 0) {
-						this.sd.splice(0, 1);
+					this.sd = n; 
+					this.sd[i].children = children;
+					
+					if (this.sd[i].children.length <= 0) {
+						this.sd.splice(i, 1);
 					}
 					
 					break;
@@ -148,14 +154,14 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 	var self = this;
 	
 	var item = $('<div class="sgm-item-added sgm-remove-item" data-value="' + value + '">\n\
-					  <span class="glyphicon glyphicon-remove"></span> \n\
-					  ' + text + '\
+					  ' + text + '\n\
+					  <span class="glyphicon glyphicon-minus-sign sgm-remove-item-style"></span>\n\
 				  </div>'); 
 
 	this.content.find('.sgm-box-content').append(item);
 	this.selectedItems.push(item);
 
-	this.content.find('.sgm-remove-item').on('click', function (e) {
+	item.on('click', function (e) {
 		e.preventDefault();
 
 		self.removeItem(this);
@@ -165,7 +171,11 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 			self.content.find('.sgm-add-panel').remove();
 		}
 	});
-
+	
+	if (self.selectType === 'Unique') {
+		self.sd = [];
+	}
+	
 	self.initializeSelect2(self.sd);
 	self.content.find('.sgm-add-filter-content').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
 };
@@ -183,19 +193,21 @@ ListPanelContent.prototype.removeItem = function (item) {
 			break;
 		}
 		else if (this.ds[i] != undefined && this.ds[i].children != undefined) {
-			for (var j = 0; j < this.ds[i].children.length; j++) {
-				if (this.ds[i].children[j].id == value) {
+			var children = this.ds[i].children;
+			for (var j = 0; j < children.length; j++) {
+				if (children[j].id == value) {
 					if (this.sd[i] == undefined) {
+						var c = [children[j]]; 
 						var x = {
 							id: this.ds[i].id, 
 							text: this.ds[i].text,
-							children: this.ds[i].children[j]
+							children: c
 						};
 						
 						this.sd.push(x);
 					}
 					else {
-						this.sd[i].children.push(this.ds[i].children[j]);
+						this.sd[i].children.push(children[j]);
 					}
 					
 					break;
@@ -229,10 +241,16 @@ ListPanelContent.prototype.initializeSelect2 = function(data) {
 	select.select2({
 		data: results,
 		placeholder: "Selecciona una opción"
-	});
+	}).select2('data', null);
 	
 	select.on("change", function(e) { 
 		e.preventDefault();
 		self.selectedValue = e.val;
 	});
+};
+
+ListPanelContent.prototype.checkArrayData = function(array) {
+	if (array[0].children == undefined) {
+		this.selectType = 'Unique';
+	}
 };
