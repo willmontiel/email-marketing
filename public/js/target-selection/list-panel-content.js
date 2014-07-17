@@ -132,11 +132,14 @@ ListPanelContent.prototype.resfreshData = function () {
 					}
 					
 					var n = this.sd.splice(i, 1);
-					this.sd = n; 
-					this.sd[i].children = children;
 					
-					if (this.sd[i].children.length <= 0) {
-						this.sd.splice(i, 1);
+					console.log(n);
+					
+					this.sd = n; 
+					this.sd[0].children = children;
+					
+					if (this.sd[0].children.length <= 0) {
+						this.sd.splice(0, 1);
 					}
 					
 					break;
