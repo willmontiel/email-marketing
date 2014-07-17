@@ -50,6 +50,7 @@ FilterPanelContent.prototype.createFilter = function(obj) {
 			self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
 			self.selectedValue = e.val;
 			self.updateObject();
+			self.model.refreshTotalContacts();
 		});
 	});
 };

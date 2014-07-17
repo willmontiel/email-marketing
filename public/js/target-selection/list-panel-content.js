@@ -133,8 +133,6 @@ ListPanelContent.prototype.resfreshData = function () {
 					
 					var n = this.sd.splice(i, 1);
 					
-					console.log(n);
-					
 					this.sd = n; 
 					this.sd[0].children = children;
 					
