@@ -10,9 +10,9 @@ TopPanelContent.prototype = new PanelContent;
 TopPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	this.content.find('.sgm-add-selector-content').on('click', function (e) {
+		self.model.reset();
 		$('.sgm-add-selector-content').removeClass('li-active');
 		$(this).addClass('li-active');
-		self.model.reset();
 		self.initializeNextContentPanel($(this));
 	});
 	
