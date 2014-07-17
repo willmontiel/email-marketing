@@ -200,3 +200,14 @@
 .sgm-filter-content-body {
 	padding: 24px;
 }
+
+.sgm-loading-image {
+	display: inline-block;
+	background: url('../images/loading4.GIF');
+	width: 25px;
+	height: 25px;
+	background-repeat: no-repeat;
+	background-size: 25px 25px;
+	margin-left: 10px;
+	margin-bottom: -5px;
+}

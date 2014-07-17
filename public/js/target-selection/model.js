@@ -132,7 +132,9 @@ Model.prototype.reset = function() {
 };
 
 Model.prototype.refreshTotalContacts = function() {
+	$('.sgm-panel-contacts-space').empty();
 	var DataSource = this.getDataSource();
+	$('.sgm-panel-contacts-space').append('Contactos aproximados: <div class="sgm-loading-image"></div>');
 	DataSource.find('/gettotalcontacts').then(function() { 
 		var total = DataSource.getData();
 		$('.sgm-panel-contacts-space').empty();
