@@ -183,15 +183,9 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 	
 	self.initializeSelect2(self.sd);
 	
-	var all = (this.conditions === 'all' ? 'sgm-condition-active': '');
-	var any = (this.conditions === 'any' ? 'sgm-condition-active': '');
-	console.log(this.conditions);
-	
-	console.log(all);
-	console.log(any);
-	var buttons = $('<div class="sgm-all-conditions" ' + all + ' data-conditions="all">All\n\
+	var buttons = $('<div class="sgm-all-conditions ' + (this.conditions === 'all' ? 'sgm-condition-active': '') + '" data-conditions="all">All\n\
 					 </div>\n\
-					 <div class="sgm-any-conditions" ' + any + ' data-conditions="any">Any\n\
+					 <div class="sgm-any-conditions ' + (this.conditions === 'any' ? 'sgm-condition-active': '') + '" data-conditions="any">Any\n\
 					 </div>\
 					 <div class="sgm-add-panel">\n\
 						 <span class="glyphicon glyphicon-filter"></span>\n\
