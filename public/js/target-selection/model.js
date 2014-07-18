@@ -124,6 +124,8 @@ Model.prototype.removePanel = function(panel) {
 		var l = this.serializerObj.length;
 		this.serializerObj.splice(key, l - key);
 	}
+	
+	this.refreshTotalContacts();
 };
 
 Model.prototype.reset = function() {
