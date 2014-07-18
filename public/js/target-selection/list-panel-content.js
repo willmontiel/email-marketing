@@ -63,6 +63,7 @@ ListPanelContent.prototype.serialize = function() {
 		this.oldCriteria = this.serializerObject;
 		for (var i = 0; i < this.serializerObject.serialization.items.length; i++) {
 			this.selectedValue = this.serializerObject.serialization.items[i];
+			this.conditions = this.serializerObject.serialization.conditions;
 			this.resfreshData();
 		}
 	}
@@ -181,9 +182,10 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 	}
 	
 	self.initializeSelect2(self.sd);
-	var buttons = $('<div class="sgm-all-conditions sgm-condition-active" data-conditions="all">All\n\
+	
+	var buttons = $('<div class="sgm-all-conditions ' + (self.conditions === 'all' ? 'sgm-condition-active': '') + '" data-conditions="all">All\n\
 					 </div>\n\
-					 <div class="sgm-any-conditions" data-conditions="any">Any\n\
+					 <div class="sgm-any-conditions" ' + (self.conditions === 'any' ? 'sgm-condition-active': '') + ' data-conditions="any">Any\n\
 					 </div>\
 					 <div class="sgm-add-panel">\n\
 						 <span class="glyphicon glyphicon-filter"></span>\n\

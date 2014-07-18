@@ -139,7 +139,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				type: 'list-panel',
 				serialization: {
 					items: x,
-					conditions: 'all'
+					conditions: 'any'
 				}
 			});
 
