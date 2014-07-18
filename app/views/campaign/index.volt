@@ -1,43 +1,52 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
-	<div class="space"></div>
-
 	<div class="row">
 		<h4 class="sectiontitle">Autorespuestas</h4>
-	</div>
-	
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="#time" data-toggle="tab"><span class="glyphicon glyphicon-calendar"></span> Basadas en tiempo</a></li>
-		<li><a href="#profile" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span></a></li>
-		<li><a href="#messages" data-toggle="tab"><span class="glyphicon glyphicon-gift"></span></a></li>
-		<li><a href="#messages" data-toggle="tab"><span class="glyphicon glyphicon-gift"></span></a></li>
-	</ul>
-	
-	<div class="tab-content">
-		<div class="tab-pane active" id="time">
-			<div class="space"></div>
-			<div class="text-right">
-				<a href="{{url('campaign/new/time')}}" class="btn btn-sm btn-default extra-padding"><span class="glyphicon glyphicon-plus"></span> Nueva autorespuesta</a>
+		<div class="container-fluid space">
+			<div class="col-xs-6 col-md-3">
+				<div class="to-do sm-btn-blue">
+					<a href="{{url('campaign/list')}}" class="shortcuts"><span class="sm-button-large-email-list"></span></a>
+				</div>
+				<div class="w-190 center">
+					<a href="{{url('campaign/list')}}" class="btn-actn">Listas de autorespuestas</a>
+				</div>
 			</div>
-			<div class="">
-				<table class="table table-condensed">
-					<thead>
-						<tr>
-							<td colspan="3">Autorespuestas</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="6">Uno</td>
-							<td class="3">Dos</td>
-							<td class="3">Tres</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="col-xs-6 col-md-3">
+				<div class="to-do sm-btn-blue">
+					<a href="" class="shortcuts"><span class="sm-button-large-send-process"></span></a>
+				</div>
+				<div class="w-190 center">
+					<a href="" class="btn-actn">Cumpleaños</a>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-3">
+				<div class="to-do sm-btn-blue">
+					<a href="" class="shortcuts"><span class="sm-button-large-email-new"></span></a>
+				</div>
+				<div class="w-190 center">
+					<a href="" class="btn-actn">Eventos</a>
+				</div>
 			</div>
 		</div>
-		<div class="tab-pane" id="profile">...</div>
-		<div class="tab-pane" id="messages">...</div>
-		<div class="tab-pane" id="messages">...</div>
+		<div class="container-fluid">
+			<div class="col-xs-6 col-md-3">
+				<div class="to-do sm-btn-blue">
+					<a href="" class="shortcuts"><span class="sm-button-large-contact-list"></span></a>
+				</div>
+				<div class="w-190 center">
+					<a href="" class="btn-actn">Suscrito</a>
+				</div>
+			</div>
+
+			<div class="col-xs-6 col-md-3">
+				<div class="to-do sm-btn-blue">
+					<a href="" class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
+				</div>
+				<div class="w-190 center">
+					<a href="" class="btn-actn">Basada en tiempo</a>
+				</div>
+			</div>
+		</div>
 	</div>
+	<div class="space"></div>
 {% endblock %}
