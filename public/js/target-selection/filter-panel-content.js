@@ -24,11 +24,6 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.createFilter(openFilter);
 	});
 	
-	this.content.find('.sgm-filter-select-button-add').on('click', function (e) {
-		self.createNextPanel(e);
-		$(this).remove();
-	});
-	
 	panel.find('.sgm-panel-content').append(this.content);
 	this.serialize();
 };
@@ -49,7 +44,7 @@ FilterPanelContent.prototype.createFilter = function(obj) {
 		
 		select.on("change", function(e) { 
 			e.preventDefault();
-			self.content.find('.sgm-filter-select-button-add').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
+			self.content.find('.sgm-filter-content-footer').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
 			self.selectedValue = e.val;
 			self.updateObject();
 			self.model.refreshTotalContacts();
@@ -66,7 +61,7 @@ FilterPanelContent.prototype.createContent = function() {
 							  </div>\n\
 						  </div>\n\
 						  <div class="sgm-filter-content-body"></div>\n\
-						  <div class="sgm-filter-select-button-add"></div>\n\
+						  <div class="sgm-filter-content-footer"></div>\n\
 					  </div>');
 };
 
