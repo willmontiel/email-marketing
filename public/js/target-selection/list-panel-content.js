@@ -28,10 +28,6 @@ ListPanelContent.prototype.initialize = function(panel) {
 		self.model.refreshTotalContacts();
 	});
 	
-	this.content.find('.sgm-add-filter-content').on('click', function (e) {
-		self.createNextPanel();
-	});
-	
 	var DataSource = this.model.getDataSource();
 
 	DataSource.find('list').then(function() { 
@@ -50,11 +46,11 @@ ListPanelContent.prototype.createContent = function () {
 	this.content = $('<div class="sgm-target-selector">\n\
 						<div class="sgm-selector-content">\n\
 							<input type="hidden" class="select2" />\n\
-							<span class="sgm-reset-items sgm-button-reset glyphicon glyphicon-flash"></span>\n\
+							<span class="sgm-reset-items sgm-button-reset glyphicon glyphicon-repeat"></span>\n\
 							<span class="sgm-add-item sgm-button-add glyphicon glyphicon-plus"></span>\n\
 						</div>\n\
 						<div class="sgm-box-content"></div>\n\
-						<div class="sgm-add-filter-content"></div>\n\
+						<div class="sgm-box-footer-content"></div>\n\
 					 </div>');
 };
 
@@ -98,7 +94,7 @@ ListPanelContent.prototype.resetItems = function () {
 
 	this.selectedItems = [];
 
-	this.content.find('.sgm-add-panel').remove();
+	this.content.find('.sgm-box-footer-content').empty();
 
 	this.sd = $.extend(true, [], this.ds);
 	this.initializeSelect2(this.sd);
@@ -155,8 +151,8 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 	var self = this;
 	
 	var item = $('<div class="sgm-item-added sgm-remove-item" data-value="' + value + '">\n\
-					  ' + text + '\n\
-					  <span class="glyphicon glyphicon-minus-sign sgm-remove-item-style"></span>\n\
+					  <div class="sgm-item-text">' + text + '</div>\n\
+					  <div class="sgm-item-icon"><span class="glyphicon glyphicon-minus-sign"></span></div>\n\
 				  </div>'); 
 
 	this.content.find('.sgm-box-content').append(item);
@@ -169,7 +165,7 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 		self.updateObject();
 		self.model.refreshTotalContacts();
 		if (self.selectedItems.length === 0) {
-			self.content.find('.sgm-add-panel').remove();
+			self.content.find('.sgm-box-footer-content').empty();
 		}
 	});
 	
@@ -178,7 +174,31 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 	}
 	
 	self.initializeSelect2(self.sd);
-	self.content.find('.sgm-add-filter-content').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-plus-sign"></span> Agregar filtro</div>');
+	var buttons = $('<div class="sgm-all-conditions sgm-condition-active" data-conditions="all">All\n\
+					 </div>\n\
+					 <div class="sgm-any-conditions" data-conditions="any">Any\n\
+					 </div>\
+					 <div class="sgm-add-panel">\n\
+						 <span class="glyphicon glyphicon-filter"></span>\n\
+					 </div>');
+	self.content.find('.sgm-box-footer-content').append(buttons);
+	
+	this.content.find('.sgm-add-panel').on('click', function (e) {
+		e.preventDefault();
+		self.createNextPanel();
+	});
+	
+	this.content.find('.sgm-all-conditions').on('click', function (e) {
+		e.preventDefault();
+		$('.sgm-any-conditions').removeClass('sgm-condition-active');
+		$(this).addClass('sgm-condition-active');
+	});
+	
+	this.content.find('.sgm-any-conditions').on('click', function (e) {
+		e.preventDefault();
+		$('.sgm-all-conditions').removeClass('sgm-condition-active');
+		$(this).addClass('sgm-condition-active');
+	});
 };
 
 ListPanelContent.prototype.removeItem = function (item) {

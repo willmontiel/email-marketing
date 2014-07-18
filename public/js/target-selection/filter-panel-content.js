@@ -17,6 +17,8 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
 		self.type = 'open';
+		$('.smg-filter').removeClass('sgm-filter-active');
+		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
 		var openFilter = new FilterOpenContent();
 		self.createFilter(openFilter);
@@ -59,12 +61,8 @@ FilterPanelContent.prototype.createContent = function() {
 	this.content = $('<div class="sgm-filter-selector">\n\
 						  <div class="sgm-filter-content">\n\
 							  <div class="sgm-filter-content-header">\n\
-								  <span class="smg-add-click-filter filter-icon glyphicon glyphicon-hand-up"></span>\n\
-								  <span class="smg-add-open-filter filter-icon glyphicon glyphicon-eye-open"></span>\n\
-								  <span class="filter-icon glyphicon glyphicon-envelope"></span>\n\
-								  <span class="filter-icon glyphicon glyphicon-comment"></span>\n\
-								  <span class="filter-icon glyphicon glyphicon-globe"></span>\n\
-								  <span class="filter-icon glyphicon glyphicon-star"></span>\n\
+								  <span class="smg-filter smg-add-click-filter filter-icon glyphicon glyphicon-hand-up"></span>\n\
+								  <span class="smg-filter smg-add-open-filter filter-icon glyphicon glyphicon-eye-open"></span>\n\
 							  </div>\n\
 						  </div>\n\
 						  <div class="sgm-filter-content-body"></div>\n\

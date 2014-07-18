@@ -127,7 +127,6 @@ Model.prototype.removePanel = function(panel) {
 };
 
 Model.prototype.reset = function() {
-	this.refreshTotalContactsView('Contactos aproximados: <div class="sgm-loading-image"></div>');
 	this.refreshTotalContactsView('Contactos aproximados: 0');
 	this.container.resetContainer();
 	this.serializerObj = [];

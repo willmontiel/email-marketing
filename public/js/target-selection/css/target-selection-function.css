@@ -11,19 +11,16 @@
 }
 
 .sgm-panel {
+	border-radius: 4px;
 	margin-bottom: 12px;
-	border: 1px solid #20526e;
-	height: 200px;
+	border: 1px solid #ddd;
+	height: 280px;
 	background-color: white;
 }
 
-.sgm-panel > .panel-title {
+.sgm-panel > .sgm-panel-title {
 	padding: 10px;
-	color: white;
-	background-color: #20526e;
-	border-color: #20526e;
-	border-top-left-radius: 9px;
-	border-top-right-radius: 9px;
+	color: #20526e;
 }
 
 .sgm-panel .sgm-close-panel {
@@ -33,7 +30,7 @@
 	line-height: 20px;
 	font-size: 20px;
 	position: absolute;
-	color: red;
+	color: #F5A9A9;
 	right: 6px;
 	top: -10px;
 	cursor: pointer;
@@ -41,21 +38,35 @@
 	background-color: white;
 }
 
+.sgm-close-panel:hover {
+	color: red;
+}
+
 .sgm-add-panel {
-	display: block;
-	line-height: 20px;
-	font-size: 13px;
+	right: 0%;
+	top: 0%;
 	position: absolute;
-	padding-left: 6px;
-	padding-right: 6px;
-	padding-top: 3px;
-	padding-bottom: 3px;
+	padding: 0px;
+	height: 25px;
+	width: 25px;
+	border-radius: 50%;
 	color: white;
-	right: 28px;
-	bottom: 18px;
 	cursor: pointer;
-	border-radius: 4px;
+	background-color: #CEF6CE;
+	padding: 5px;
+}
+
+.sgm-add-panel:hover {
 	background-color: green;
+}
+
+.sgm-box-footer-content {
+	position: relative;
+	width: 90%;
+	height: 30px;
+	margin-top: 8px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .sgm-left-arrow-border {
@@ -65,7 +76,7 @@
     width: 0;    height: 0;    
     border-top: 11px solid transparent;   
     border-bottom: 11px solid transparent;       
-    border-right: 21px solid black;
+    border-right: 21px solid #BDBDBD;
 }
 
 .sgm-left-arrow {
@@ -79,13 +90,13 @@
 }
 
 .sgm-content-selector ul {
-	background-color: #FAF7F7;
+	background-color: white;
 	margin-bottom: 0px;
-	padding-top: 0px;
-	padding-left: 0px;
+	padding-top: 6px;
+	padding-left: 8px;
 	list-style: none;
 	font-size: 15px;
-	font-weight: bold;
+	/*font-weight: bold;*/
 }
 
 .sgm-content-selector ul li {
@@ -94,19 +105,48 @@
 	padding-top: 12px;
 	padding-bottom: 12px;
 	cursor: pointer;
-	border: 1px solid #20526e;
+	/*border: 1px solid #20526e;*/
 }
 
 .sgm-content-selector ul li:hover {
 	color: white;
-	/* border: 1px solid #428bca; */
 	background-color: #428bca;
+	border-top-left-radius: 21px;
+	border-bottom-left-radius: 21px;
 }
+
+/*.sgm-add-selector-avatar:hover {
+	color: #20526e;
+	background-color: white;
+}*/
 
 .li-active {
 	color: white !important;
 	border: 1px solid #428bca;
 	background-color: #428bca;
+	border-top-left-radius: 21px;
+	border-bottom-left-radius: 21px;
+}
+
+.li-active>.sgm-add-selector-avatar{
+	color: #20526e;
+	background-color: white;
+}
+
+.sgm-add-selector-avatar {
+	color: white;
+	display: inline;
+	background-color: #20526e;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	padding: 6px;
+	margin-right: 8px;
+}
+
+.sgm-add-selector-avatar>.glyphicon {
+	top: 2px !important;
+	left: 2px !important;
 }
 
 .sgm-selector-content {
@@ -114,6 +154,7 @@
 	padding-left: 20px;
 	padding-right: 20px;
 	padding-top: 12px;
+	position: relative;
 }
 
 .sgm-selector-content > .select2 {
@@ -128,73 +169,92 @@
 }
 
 .sgm-filter-content-header > .filter-icon {
-	background-color: #428bca;
+	background-color: #adadad;
 	color: white;
-	padding: 4px;
-	border-radius: 4px;
+	padding: 5px;
+	border-radius: 50%;
 	cursor: pointer;
 }
 
 .sgm-button-add {
-	background-color: green;
+	position: absolute;
+	right: 5%;
+	top: 38%;
+	background-color: #CEF6CE;
 	color: white;
-	padding: 3px;
-	border-radius: 4px;
-	right: 0px;
+	padding: 4px;
+	border-radius: 50%;
 	cursor: pointer;
 }
 
+.sgm-button-add:hover {
+	background-color: green;
+}
+
 .sgm-button-reset {
-	background-color: #428bca;
+	background-color: #A1C4E2;
 	color: white;
-	padding: 3px;
+	padding: 4px;
 	border-radius: 4px;
-	right: 0px;
+	right: 15%;
+	top: 38%;
 	cursor: pointer;
+	position: absolute;
+	border-radius: 50px;
+}
+
+.sgm-button-reset:hover {
+	background-color: #428bca;
 }
 
 .sgm-box-content {
 	width: 90%;
-	border: 1px solid;
-	height: 90px;
-	margin: 12px;
+	background-color: #f5f5f5;
+	border: 1px solid #BDBDBD;
+	height: 120px;
+	margin-top: 5%;
+	margin-left: auto;
+	margin-right: auto;
 	border-radius: 4px;
 }
 
 .sgm-item-added {
+	position: relative;
 	background-color: #428bca;
 	color: white;
-	padding: 2px;
+	height: 26px;
 	margin: 2px;
-	border-radius: 4px;
+	border-radius: 5px;
 }
 
-.sgm-remove-item-style {
-	display: block;
+.sgm-item-text {
+	position: absolute;
+	left: 5%;
+	top: 12%;
+}
+
+.sgm-item-icon {
+	position: absolute;
 	cursor: pointer;
-	top: -8px;
-	left: 91%;
+	height: 20px;
+	width: 20px;
+	top: 10%;
+	right: 3%;
 	font-size: 16px;
 }
 
-.sgm-remove-item-style:hover {
+.sgm-item-icon:hover {
 	color: red;
-	border: 1px solid white;
-	border-radius: 50%;
-	width: 15px;
-	height: 15px;
-	background-color: white;
 }
 
 .sgm-panel-contacts-space {
 	background-color: white;
 	color: #20526e;
-	padding: 16px;
-	margin: 1%;
-	border: 1px solid #20526e;
+	padding: 20px;
+	margin-bottom: 1%;
+	border: 1px solid #ddd;
 	border-radius: 4px;
 	font-size: 16px;
-	font-weight: bold;
 }
 
 .sgm-filter-content-body {
@@ -204,10 +264,57 @@
 .sgm-loading-image {
 	display: inline-block;
 	background: url('../images/loading4.GIF');
-	width: 25px;
-	height: 25px;
+	width: 22px;
+	height: 22px;
 	background-repeat: no-repeat;
-	background-size: 25px 25px;
+	background-size: 22px 22px;
 	margin-left: 10px;
 	margin-bottom: -5px;
+}
+
+.sgm-filter-active {
+	background-color: #428bca !important;
+	color: white !important;
+	border: 1px solid #428bca !important;
+}
+
+.smg-filter:hover {
+	background-color: #428bca;
+}
+
+.sgm-all-conditions{
+	position: absolute;
+	left: 0%;
+	height: 25px;
+	width: 25px;
+	border-radius: 50%;
+	background-color: #BDBDBD;
+	color: white;
+	padding: 4px;
+	cursor: pointer;
+}
+
+.sgm-any-conditions {
+	position: absolute;
+	left: 14%;
+	height: 25px;
+	width: 25px;
+	border-radius: 50%;
+	background-color: #BDBDBD;
+	color: white;
+	padding-top: 3px;
+	cursor: pointer;
+	padding-left: 1px;
+}
+
+.sgm-all-conditions:hover {
+	background-color: #428bca;
+}
+
+.sgm-any-conditions:hover {
+	background-color: #428bca;
+}
+
+.sgm-condition-active {
+	background-color: #428bca;
 }

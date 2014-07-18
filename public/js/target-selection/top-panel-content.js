@@ -38,13 +38,22 @@ TopPanelContent.prototype.createContent = function () {
 	this.content = $('<div class="sgm-content-selector">\n\
 						 <ul>\n\
 							<li class="sgm-add-selector-content" data-type="dbases">\n\
-								<span class="glyphicon glyphicon-tasks"></span> Bases de datos\n\
+								<div class="sgm-add-selector-avatar">\n\
+									<span class="glyphicon glyphicon-tasks"></span>\n\
+								</div>\n\
+								 Bases de datos\n\
 							</li>\n\
 							<li class="sgm-add-selector-content" data-type="contactlists">\n\
-								<span class="glyphicon glyphicon-list-alt"></span> Listas de contactos\n\
+								<div class="sgm-add-selector-avatar">\n\
+									<span class="glyphicon glyphicon-list-alt"></span>\n\
+								</div>\n\
+								 Listas de contactos\n\
 							</li>\n\
 							<li class="sgm-add-selector-content" data-type="segments">\n\
-								<span class="glyphicon glyphicon-user"></span> Segmentos\n\
+								<div class="sgm-add-selector-avatar">\n\
+									<span class="glyphicon glyphicon-user"></span>\n\
+								</div>\n\
+								 Segmentos\n\
 							</li>\n\
 						 </ul>\n\
 					  </div>');
