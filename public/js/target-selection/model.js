@@ -127,19 +127,27 @@ Model.prototype.removePanel = function(panel) {
 };
 
 Model.prototype.reset = function() {
+	this.refreshTotalContactsView('Contactos aproximados: <div class="sgm-loading-image"></div>');
+	this.refreshTotalContactsView('Contactos aproximados: 0');
 	this.container.resetContainer();
 	this.serializerObj = [];
 };
 
 Model.prototype.refreshTotalContacts = function() {
-	$('.sgm-panel-contacts-space').empty();
+	var self = this;
+	
+	this.refreshTotalContactsView('Contactos aproximados: <div class="sgm-loading-image"></div>');
 	var DataSource = this.getDataSource();
-	$('.sgm-panel-contacts-space').append('Contactos aproximados: <div class="sgm-loading-image"></div>');
 	DataSource.find('/gettotalcontacts').then(function() { 
 		var total = DataSource.getData();
-		$('.sgm-panel-contacts-space').empty();
-		$('.sgm-panel-contacts-space').append('Contactos aproximados: ' + total.totalContacts);
+		self.refreshTotalContactsView('Contactos aproximados: ' + total.totalContacts);
 	});
+};
+
+
+Model.prototype.refreshTotalContactsView = function(data) {
+	$('.sgm-panel-contacts-space').empty();
+	$('.sgm-panel-contacts-space').append(data);
 };
 
 Model.prototype.getModel = function() {
