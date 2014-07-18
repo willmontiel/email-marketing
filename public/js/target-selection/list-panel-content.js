@@ -1,7 +1,10 @@
 function ListPanelContent() {
 	this.oldCriteria = {
 		type: 'list-panel',
-		serialization: {items: []}
+		serialization: {
+			items: [],
+			conditions: 'all'
+		}
 	};
 	
 	this.selectType = 'Multiple';
@@ -9,6 +12,7 @@ function ListPanelContent() {
 	this.ds = [];
 	this.sd = [];
 	this.selectedItems = [];
+	this.conditions = 'all';
 }
 
 ListPanelContent.prototype = new PanelContent;
@@ -76,7 +80,10 @@ ListPanelContent.prototype.updateObject = function () {
 	
 	this.newCriteria = {
 		type: 'list-panel',
-		serialization: {items: items}
+		serialization: {
+			items: items,
+			conditions: this.conditions
+		}	
 	};
 	
 	if (items.length <= 0) {
@@ -192,12 +199,18 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 		e.preventDefault();
 		$('.sgm-any-conditions').removeClass('sgm-condition-active');
 		$(this).addClass('sgm-condition-active');
+		self.conditions = 'all';
+		self.updateObject();
+		self.model.refreshTotalContacts();
 	});
 	
 	this.content.find('.sgm-any-conditions').on('click', function (e) {
 		e.preventDefault();
 		$('.sgm-all-conditions').removeClass('sgm-condition-active');
 		$(this).addClass('sgm-condition-active');
+		self.conditions = 'any';
+		self.updateObject();
+		self.model.refreshTotalContacts();
 	});
 };
 
