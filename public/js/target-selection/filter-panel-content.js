@@ -44,9 +44,17 @@ FilterPanelContent.prototype.createFilter = function(obj) {
 		
 		select.on("change", function(e) { 
 			e.preventDefault();
-			self.content.find('.sgm-filter-content-footer').append('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
 			self.selectedValue = e.val;
 			self.updateObject();
+			
+			var content = $('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
+			self.content.find('.sgm-filter-content-footer').append(content);
+			
+			self.content.find('.sgm-add-panel').on('click', function (e) {
+				self.createNextPanel(e);
+				$(this).remove();
+			});
+			
 			self.model.refreshTotalContacts();
 		});
 	});
