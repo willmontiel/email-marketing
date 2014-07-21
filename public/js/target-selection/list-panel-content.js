@@ -23,12 +23,14 @@ ListPanelContent.prototype.initialize = function(panel) {
 	this.content.find('.sgm-add-item').on('click', function (e) {
 		self.resfreshData();
 		self.updateObject();
+		self.model.updatePanelList();
 		self.model.refreshTotalContacts();
 	});
 	
 	this.content.find('.sgm-reset-items').on('click', function (e) {
 		self.resetItems();
 		self.updateObject();
+		self.model.updatePanelList();
 		self.model.refreshTotalContacts();
 	});
 	
@@ -171,6 +173,7 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 
 		self.removeItem(this);
 		self.updateObject();
+		self.model.updatePanelList();
 		self.model.refreshTotalContacts();
 		if (self.selectedItems.length === 0) {
 			self.content.find('.sgm-box-footer-content').empty();
@@ -204,6 +207,7 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 		$(this).addClass('sgm-condition-active');
 		self.conditions = 'all';
 		self.updateObject();
+		self.model.updatePanelList();
 		self.model.refreshTotalContacts();
 	});
 	
@@ -213,6 +217,7 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 		$(this).addClass('sgm-condition-active');
 		self.conditions = 'any';
 		self.updateObject();
+		self.model.updatePanelList();
 		self.model.refreshTotalContacts();
 	});
 };

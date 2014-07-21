@@ -35,3 +35,19 @@ PanelContainer.prototype.resetContainer = function () {
 	this.panellist.splice(1, l - 1);
 	$('.sgm-add-selector-content').removeClass('li-active');
 };
+
+PanelContainer.prototype.updateContainer = function() {
+	for (var i = 2; i < this.panellist.length; i++) {
+		this.panellist[i].remove();
+	}
+	
+	var e = [];
+	e.push(this.panellist[0]);
+	e.push(this.panellist[1]);
+	
+	this.panellist = [];
+	this.panellist = e.slice(0);
+	
+	console.log(this.panellist[0]);
+	console.log(this.panellist[1]);
+};

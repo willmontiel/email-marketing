@@ -134,6 +134,17 @@ Model.prototype.reset = function() {
 	this.serializerObj = [];
 };
 
+Model.prototype.updatePanelList = function() {
+	this.container.updateContainer();
+	
+	var k = [];
+	k.push(this.serializerObj[0]);
+	k.push(this.serializerObj[1]);
+	
+	this.serializerObj = [];
+	this.serializerObj = k.slice(0);
+};
+
 Model.prototype.refreshTotalContacts = function() {
 	var self = this;
 	
