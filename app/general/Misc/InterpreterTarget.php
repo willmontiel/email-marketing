@@ -53,7 +53,7 @@ class InterpreterTarget
 
 			switch ($this->data[0]['serialization']['criteria']) {
 				case 'dbases':
-					$this->SQLForIdContacts = "SELECT idContact FROM contact WHERE idDbase IN ({$ids})";
+					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM contact WHERE idDbase IN ({$ids})";
 					break;
 
 				case 'contactlists':
@@ -103,20 +103,21 @@ class InterpreterTarget
 	private function createSQLBaseForTotalContacts()
 	{
 		$this->sql = "SELECT COUNT(c.idContact) AS total
-							 FROM ({$this->SQLForIdContacts}) AS c
+						  FROM ({$this->SQLForIdContacts}) AS c
+						  JOIN contact AS co ON (co.idContact = c.idContact)	 
 							 {$this->joinForFilters}
 							 WHERE 
-							 {$this->Conditions}";
+							 {$this->Conditions} AND co.unsubscribe = 0";
 	}
 	
 	private function executeSQL()
 	{
 		$this->logger->log("SQL: " . print_r($this->sql, true));
 		
-//		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
-//		$result = $modelsManager->executeQuery($this->sql);
+		$db = Phalcon\DI::getDefault()->get('db');
+		$result = $db->query($this->sql);
 		
-		$this->result = $result;
+		$this->result = $result->fetchAll();
 	}
 	
 	public function getTotalContacts()
