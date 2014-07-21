@@ -124,12 +124,11 @@ class InterpreterTarget
 		$result = $db->query($this->sql);
 		
 		$this->result = $result->fetchAll();
-		$this->logger->log("T: " . print_r($this->result, true));
 	}
 	
 	public function getTotalContacts()
 	{
-		return $this->result;
+		return $this->result[0]['total'];
 	}
 }
 
