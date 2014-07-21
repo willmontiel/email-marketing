@@ -128,7 +128,7 @@ class InterpreterTarget
 	
 	public function getTotalContacts()
 	{
-		return $this->result[0]['total'];
+		return array('totalContacts' => $this->result[0]['total']);
 	}
 }
 
