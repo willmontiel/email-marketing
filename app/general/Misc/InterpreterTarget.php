@@ -89,13 +89,13 @@ class InterpreterTarget
 					break;
 				
 				case 'open-view':
-					$this->joinForFilters .= " JOIN Mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
+					$this->joinForFilters .= "JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
 					
 					if ($first) {
-						$piece .= " mc{$i} != 0";
+						$piece .= " mc{$i}.opening != 0";
 					}
 					else {
-						$piece .= " {$condition} mc{$i} != 0";
+						$piece .= " {$condition} mc{$i}.opening != 0";
 					}
 					break;
 			}
@@ -111,13 +111,13 @@ class InterpreterTarget
 
 	private function createSQLBaseForTotalContacts()
 	{
-		$this->sql = "SELECT COUNT(c.idContact) AS total
-						  FROM ({$this->SQLForIdContacts}) AS c
-						  JOIN contact AS co ON (co.idContact = c.idContact)
+		$this->sql = "SELECT COUNT(c.idContact) AS total 
+						  FROM ({$this->SQLForIdContacts}) AS c 
+						  JOIN contact AS co ON (co.idContact = c.idContact) 
 						  JOIN email AS e ON (e.idEmail = co.idEmail) 
-							 {$this->joinForFilters}
-							 WHERE co.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 
-							 {$this->conditions} ";
+						  {$this->joinForFilters} 
+					  WHERE co.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 
+						  {$this->conditions} ";
 	}
 	
 	private function executeSQL()
