@@ -99,7 +99,17 @@ Model.prototype.getDataSource = function() {
 	return dataSource;
 };
 
+Model.prototype.cleanObject = function() {
+	for (var i = 0; i < this.serializerObj.length; i++) {
+		if ( this.serializerObj[i] === undefined ) {
+			this.serializerObj.splice(i,1);
+			i--;
+		}
+	}
+}
+
 Model.prototype.updateObject = function(oldObj, newObj) {
+	this.cleanObject();
 	var key = this.serializerObj.indexOf(oldObj);
 	
 	if (newObj.serialization !== null) {
@@ -112,7 +122,7 @@ Model.prototype.updateObject = function(oldObj, newObj) {
 	}
 	else {
 		if (key >= 0) {
-			this.serializerObj.splice(key, 1);
+			var j = this.serializerObj.splice(key, 1);
 		}
 	}
 };
@@ -137,6 +147,7 @@ Model.prototype.reset = function() {
 Model.prototype.updatePanelList = function() {
 	this.container.updateContainer();
 	
+//	console.log(this.serializerObj);
 	var k = [];
 	k.push(this.serializerObj[0]);
 	k.push(this.serializerObj[1]);

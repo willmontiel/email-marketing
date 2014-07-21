@@ -47,7 +47,4 @@ PanelContainer.prototype.updateContainer = function() {
 	
 	this.panellist = [];
 	this.panellist = e.slice(0);
-	
-	console.log(this.panellist[0]);
-	console.log(this.panellist[1]);
 };
