@@ -16,7 +16,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
-		self.type = 'open';
+		self.type = 'open-view';
 		$('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
