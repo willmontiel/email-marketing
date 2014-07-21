@@ -103,7 +103,7 @@ class InterpreterTarget
 			$first = false;
 		}
 		
-		$this->conditions = " AND ({$piece}) ";
+		$this->conditions = ($piece == "" ? "" : " AND ({$piece}) ");
 		
 		$this->logger->log("Joins: {$this->joinForFilters}");
 		$this->logger->log("Conditions: {$this->conditions}");
