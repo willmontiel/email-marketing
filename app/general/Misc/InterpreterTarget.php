@@ -112,7 +112,7 @@ class InterpreterTarget
 						  JOIN contact AS co ON (co.idContact = c.idContact)
 						  JOIN email AS e ON (e.idEmail = co.idEmail) 
 							 {$this->joinForFilters}
-							 WHERE co.unsubscribe = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 
+							 WHERE co.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 
 							 {$this->conditions} ";
 	}
 	
