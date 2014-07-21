@@ -41,8 +41,8 @@ class InterpreterTarget
 	public function searchTotalContacts()
 	{
 		$this->createSQLForIdContacts();
-		$this->createSQLBaseForTotalContacts();
 		$this->createSQLForFilters();
+		$this->createSQLBaseForTotalContacts();
 		$this->executeSQL();
 	}
 	
@@ -89,7 +89,6 @@ class InterpreterTarget
 					break;
 				
 				case 'open-view':
-					$this->logger->log("Open-view");
 					$this->joinForFilters .= " JOIN Mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
 					
 					if ($first) {
@@ -106,6 +105,7 @@ class InterpreterTarget
 		
 		$this->conditions = " AND ({$piece}) ";
 		
+		$this->logger->log("Joins: {$this->joinForFilters}");
 		$this->logger->log("Conditions: {$this->conditions}");
 	}
 
