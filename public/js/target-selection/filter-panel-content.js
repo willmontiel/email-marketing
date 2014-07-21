@@ -80,7 +80,7 @@ FilterPanelContent.prototype.serialize = function() {
 		this.selectedValue = this.serializerObject.serialization.items;
 		
 		switch (this.type) {
-			case 'open':
+			case 'open-view':
 				this.content.find('.sgm-filter-content-body').empty();
 				var openFilter = new FilterOpenContent();
 				this.createFilter(openFilter);

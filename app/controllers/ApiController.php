@@ -1515,13 +1515,13 @@ class ApiController extends ControllerBase
 		
 		$this->logger->log("DATA: " . print_r($data, true));
 		
-		$wrapper = new TargetWrapper();
+		$wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
 		
 		try {
 			$wrapper->setData($data);
-			$wrapper->searchOpenFilter();
+			$wrapper->searchTotalContacts();
 		
-			return $this->setJsonResponse($wrapper->getFilter());
+			return $this->setJsonResponse($wrapper->getTotalContacts());
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
