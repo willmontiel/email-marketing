@@ -74,6 +74,9 @@ class InterpreterTarget
 		
 		$first = true;
 		$i = 1;
+	
+		$piece = "";
+		
 		foreach ($this->data as $data) {
 			switch ($data['serialization']['type']) {
 				case 'click':
@@ -88,26 +91,29 @@ class InterpreterTarget
 					$this->joinForFilters .= " JOIN Mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
 					
 					if ($first) {
-						$this->conditions .= " mc{$i} != 0";
+						$piece .= " mc{$i} != 0";
 					}
 					else {
-						$this->conditions .= " {$condition} mc{$i} != 0";
+						$piece .= " {$condition} mc{$i} != 0";
 					}
 					break;
 			}
 			
 			$first = false;
 		}
+		
+		$this->conditions = " AND ({$piece}) ";
 	}
 
 	private function createSQLBaseForTotalContacts()
 	{
 		$this->sql = "SELECT COUNT(c.idContact) AS total
 						  FROM ({$this->SQLForIdContacts}) AS c
-						  JOIN contact AS co ON (co.idContact = c.idContact)	 
+						  JOIN contact AS co ON (co.idContact = c.idContact)
+						  JOIN email AS e ON (e.idEmail = co.idEmail) 
 							 {$this->joinForFilters}
-							 WHERE 
-							 {$this->Conditions} AND co.unsubscribe = 0";
+							 WHERE co.unsubscribe = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 
+							 {$this->conditions} ";
 	}
 	
 	private function executeSQL()
