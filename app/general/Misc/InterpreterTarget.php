@@ -89,7 +89,7 @@ class InterpreterTarget
 					break;
 				
 				case 'open-view':
-					$this->joinForFilters .= "JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
+					$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
 					
 					if ($first) {
 						$piece .= " mc{$i}.opening != 0";
@@ -101,6 +101,7 @@ class InterpreterTarget
 			}
 			
 			$first = false;
+			$i++;
 		}
 		
 		$this->conditions = ($piece == "" ? "" : " AND ({$piece}) ");
