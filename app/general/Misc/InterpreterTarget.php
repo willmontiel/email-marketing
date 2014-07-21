@@ -120,7 +120,7 @@ class InterpreterTarget
 	{
 		$this->logger->log("SQL: " . print_r($this->sql, true));
 		
-		$db = Phalcon\DI::getDefault()->get('db');
+		$db = \Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($this->sql);
 		
 		$this->result = $result->fetchAll();
