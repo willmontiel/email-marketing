@@ -72,6 +72,7 @@ class InterpreterTarget
 		$condition = ($this->data[1]['serialization']['conditions'] == 'all' ? 'AND' : 'OR');
 		array_splice($this->data, 0, 2);
 		
+		$this->logger->log("Data: " . print_r($this->data, true));
 		$first = true;
 		$i = 1;
 	
@@ -88,6 +89,7 @@ class InterpreterTarget
 					break;
 				
 				case 'open-view':
+					$this->logger->log("Open-view");
 					$this->joinForFilters .= " JOIN Mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
 					
 					if ($first) {
@@ -103,6 +105,8 @@ class InterpreterTarget
 		}
 		
 		$this->conditions = " AND ({$piece}) ";
+		
+		$this->logger->log("Conditions: {$this->conditions}");
 	}
 
 	private function createSQLBaseForTotalContacts()
