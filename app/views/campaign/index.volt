@@ -40,10 +40,10 @@
 
 			<div class="col-xs-6 col-md-3">
 				<div class="to-do sm-btn-blue">
-					<a href="" class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
+					<a href="{{url('campaign/automatic')}}" class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
 				</div>
 				<div class="w-190 center">
-					<a href="" class="btn-actn">Basada en tiempo</a>
+					<a href="{{url('campaign/automatic')}}" class="btn-actn">Basada en tiempo</a>
 				</div>
 			</div>
 		</div>

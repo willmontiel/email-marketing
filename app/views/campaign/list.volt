@@ -8,6 +8,10 @@
 	<script> 
 		$(function (){
 			$(".switch-campaign").bootstrapSwitch();
+			$('.auto_send_delete_btn').on("click", function () {
+				var myURL = $(this).data('id');
+				$("#delete_auto_send").attr('href', myURL );
+			});
 		});
 	</script>
 {% endblock %}
@@ -18,10 +22,91 @@
 	<div class="row">
 		<h4  class="sectiontitle">Lista de autorespuestas</h4>
 		
-		<div class="container-fluid">
+		{{ flashSession.output() }}
 		
-			{# Primer autorespuesta #}
+		<div class="container-fluid">
+			
+			{% if autoresponse|length != 0%}
+				
+				{%for item in autoresponse%}
 
+					<div class="col-md-12 col-sm-12 list-one-autoresponse">
+						<div class="col-sm-2">
+							<div class="image-64-autorespons img-64-n1"></div>
+						</div>
+						<div class="col-sm-1 autoresponse-list-icon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</div>
+						<div class="col-sm-4 autoresponse-list-information">
+							<h4>{{item.name}}</h4>
+							<dl>
+								<dd><strong>Destinatarios:</strong> {{item.target}}</dd>
+								<dd><strong>Asunto:</strong> {{item.subject}}</dd>
+							</dl>
+							<div class="autoresponse-list-options">
+								<a class="btn btn-default btn-sm" href="{{url("campaign/automatic")}}/{{item.id}}">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+								<a class="btn btn-default btn-sm" href="">
+									<span class="glyphicon glyphicon-eye-open"></span>
+								</a>
+								<a class="auto_send_delete_btn btn btn-default btn-sm" data-toggle="modal" href="#modal-simple" data-id="{{ url('campaign/delete/') }}{{item.id}}">
+									<span class="glyphicon glyphicon-trash"></span>
+								</a>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+						<div class="col-sm-3 autoresponse-list-details" style="">
+							Enviar autorespuesta a las
+							<span>{{item.time.hour}}:{{item.time.minute}} {{item.time.meridian}}</span>
+							<p>los dias {%for day in item.days%} {{day}}, {%endfor%} recurrente.</p>
+						</div>
+						<div class="col-sm-2 autoresponse-list-activated">
+							<input type="checkbox" class="switch-campaign" {%if item.activated == 1%}checked{%endif%}>
+						</div>
+					</div>
+
+				{%endfor%}
+				
+				<div id="modal-simple" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title">Eliminar envío automático</h4>
+							</div>
+							<div class="modal-body">
+								<p>
+									¿Está seguro que desea eliminar este envío automático?
+								</p>
+								<p>
+									Recuerde que si elimina este envío automático no se enviaran más correos
+								</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+								<a href="" id="delete_auto_send" class="btn btn-sm btn-default btn-delete extra-padding" >Eliminar</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			
+			{%else%}
+			
+				<div class="bs-callout bs-callout-warning">
+					<h4>No ha creado ninguna autorespuesta aún</h4>
+					<p>Gestione sus autorespuestas desde aquí.</p>
+				</div>
+			
+			{%endif%}
+			
+			
+			
+			
+{# Ejemplos de autorespuesta			
+			
+	
 			<div class="col-md-12 col-sm-12" style="width: 90%; margin: auto; border-top: 1px solid rgb(216, 213, 213);">
 				<div class="col-sm-2">
 					<div class="image-64-autorespons img-64-n1"></div>
@@ -58,7 +143,7 @@
 			</div>
 
 
-			{# Segunda autorespuesta #}
+
 
 			<div class="col-md-12 col-sm-12" style="width: 90%; margin: auto; border-top: 1px solid rgb(216, 213, 213);">
 				<div class="col-sm-2">
@@ -93,7 +178,7 @@
 			</div>
 
 
-			{# Tercera autorespuesta #}
+
 
 			<div class="col-md-12 col-sm-12" style="width: 90%; margin: auto; border-top: 1px solid rgb(216, 213, 213);">
 				<div class="col-sm-2">
@@ -126,6 +211,7 @@
 					<div><input type="checkbox" class="switch-campaign" checked></div>
 				</div>
 			</div>
+#}
 
 		</div>	
 	</div>
