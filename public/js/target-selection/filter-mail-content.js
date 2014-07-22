@@ -33,6 +33,14 @@ FilterMailContent.prototype.format = function(mail) {
     //return '<img class="flag" src="data:image/png;base64",' + mail.preview + '"/>' + mail.text;
 };
 
+
+function format(mail) {
+//    if (!state.id) return state.text; // optgroup
+//    return "<img class='flag' src='images/flags/" + state.id.toLowerCase() + ".png'/>" + state.text;
+	console.log(mail);
+	return mail;
+}
+
 FilterMailContent.prototype.initializeSelect2 = function(data) {
 	var self = this;
 	this.select = this.parent.find('.select2');
@@ -40,8 +48,8 @@ FilterMailContent.prototype.initializeSelect2 = function(data) {
 	this.select.select2({
 		placeholder: "Selecciona una opción",
 		data: data,
-		formatResult: self.format(),
-		formatSelection: self.format(),
+		formatResult: format,
+		formatSelection: format,
 		escapeMarkup: function(m) { return m; }
 	});
 	
