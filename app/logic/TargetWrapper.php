@@ -63,7 +63,7 @@ class TargetWrapper extends BaseWrapper
 	{
 		$this->createSQLFilter();
 		
-		$this->sql = "SELECT m.idMail AS id, m.name AS name
+		$this->sql = "SELECT m.idMail AS id, m.name AS name, m.previewData AS preview
 					  FROM Mail AS m
 						  JOIN Mxc AS mc ON (mc.idMail = m.idMail) {$this->SQLfilter->mail}";
 		

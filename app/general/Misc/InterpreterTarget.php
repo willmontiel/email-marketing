@@ -17,7 +17,7 @@ class InterpreterTarget
 	protected $account;
 	protected $data;
 	protected $result;
-	protected $SQLForIdContacts;
+	protected $SQLForIdContacts = "";
 	protected $joinForFilters = "";
 	protected $conditions = "";
 	protected $sql;
@@ -125,10 +125,16 @@ class InterpreterTarget
 	{
 		$this->logger->log("SQL: " . print_r($this->sql, true));
 		
-		$db = \Phalcon\DI::getDefault()->get('db');
-		$result = $db->query($this->sql);
-		
-		$this->result = $result->fetchAll();
+		if ($this->SQLForIdContacts != "") {
+			$db = \Phalcon\DI::getDefault()->get('db');
+			$result = $db->query($this->sql);
+			$this->result = $result->fetchAll();
+		}
+		else {
+			$this->result = array(
+				0 => array('total' => 0)
+			);
+		}
 	}
 	
 	public function getTotalContacts()

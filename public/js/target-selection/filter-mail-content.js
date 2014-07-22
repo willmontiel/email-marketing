@@ -1,12 +1,13 @@
 function FilterMailContent() {
 	this.select = '';
+	this.data = [];
 }
 
 FilterMailContent.prototype = new FilterContent;
 
 FilterMailContent.prototype.createContent = function() {
 	var content = $('<div class="sgm-filter-select">\n\
-						  <input type="hidden" class="select2"/>\n\
+						  <input style="width: 100%;" type="hidden" class="select2"/>\n\
 					  </div>');
 	
 	this.parent.find('.sgm-filter-content-body').append(content);
@@ -24,17 +25,24 @@ FilterMailContent.prototype.createSelect = function() {
 	});
 };
 
+
+FilterMailContent.prototype.format = function(mail) {
+//    if (!state.id) return state.text; // optgroup
+	console.log(mail);
+	return mail;
+    //return '<img class="flag" src="data:image/png;base64",' + mail.preview + '"/>' + mail.text;
+};
+
 FilterMailContent.prototype.initializeSelect2 = function(data) {
-	var results = {
-		more: false,
-		results: data
-	};
-	
+	var self = this;
 	this.select = this.parent.find('.select2');
 	
 	this.select.select2({
-		data: results,
-		placeholder: "Selecciona una opción"
+		placeholder: "Selecciona una opción",
+		data: data,
+		formatResult: self.format(),
+		formatSelection: self.format(),
+		escapeMarkup: function(m) { return m; }
 	});
 	
 	return this.select;

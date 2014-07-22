@@ -1457,7 +1457,7 @@ class ApiController extends ControllerBase
 			
 			if (count($contactlists) > 0) {
 				$parent = new stdClass();
-				$parent->id = $dbase->idDbase;
+//				$parent->id = $dbase->idDbase;
 				$parent->text = $dbase->name;
 				$parent->children = array();
 				
@@ -1490,7 +1490,7 @@ class ApiController extends ControllerBase
 			
 			if (count($segments) > 0) {
 				$parent = new stdClass();
-				$parent->id = $dbase->idDbase;
+//				$parent->id = $dbase->idDbase;
 				$parent->text = $dbase->name;
 				$parent->children = array();
 				
