@@ -91,6 +91,9 @@ FilterPanelContent.prototype.createContent = function() {
 								  <div class="smg-filter smg-add-click-filter filter-icon">\n\
 									  <span class="glyphicon glyphicon-hand-up"></span>\n\
 								  </div>\n\
+								   <div class="smg-filter smg-add-field-filter filter-icon">\n\
+									  <span class="glyphicon glyphicon-text-width"></span>\n\
+								  </div>\n\
 							  </div>\n\
 						  </div>\n\
 						  <div class="sgm-filter-content-body"></div>\n\
