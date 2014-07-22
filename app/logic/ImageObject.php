@@ -199,6 +199,12 @@ class ImageObject
 		return $this->path;
 	}
 	
+	
+	public function getImagePNG()
+	{
+		return $this->newImg;
+	}
+	
 	/**
 	 * Moves a image from site to another site. Recieves:
 	 * the path where the image is, and the path where image will be moved

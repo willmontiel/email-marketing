@@ -2538,8 +2538,6 @@ class MailController extends ControllerBase
 							2 => $account->idAccount)
 		));
 		
-		$image = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNzEiIGhlaWdodD0iMTgwIj48cmVjdCB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9Ijg1LjUiIHk9IjkwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MTcxeDE4MDwvdGV4dD48L3N2Zz4=";
-		
 		try {
 			if ($mail && !empty($mail->previewData)) {
 				$size = explode('x', $size);
@@ -2549,14 +2547,13 @@ class MailController extends ControllerBase
 				$imgObj = new ImageObject();
 				$imgObj->createFromBase64($img64);
 				$imgObj->resizeImage($size[0], $size[1]);
-				$image = "data:image/png;base64,{$imgObj->getImageBase64()}";
+				$this->response->setContentType('image/png');
+				$this->view->disable();
+				return $this->response->setContent($imgObj->getImagePNG());
 			}
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
 		}
-		
-		$this->logger->log("Image: {$image}");
-		return $this->setJsonResponse($image);
 	}
 }
