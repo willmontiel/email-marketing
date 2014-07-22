@@ -38,7 +38,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		$('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
-		var filter = new FilterMailContent();
+		var filter = new FilterClickContent();
 		self.createFilter(filter);
 	});
 	
