@@ -5,9 +5,9 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Ss]$ ]]
 then
 	echo "Estos son los archivos que se eliminan!!!"
-	find -regex ".*\.volt.*\.php"
+	find . -regex ".*\.volt.*\.php"
 	echo "ELIMINANDO!!!"
-	find -regex ".*\.volt.*\.php" -delete
+	find . -regex ".*\.volt.*\.php" -delete
 	echo "Listo"
 else
 	echo "No se elimino nada!"
