@@ -180,9 +180,12 @@
 .sgm-filter-content-header > .filter-icon {
 	background-color: #adadad;
 	color: white;
+	width: 35px;
+	height: 35px;
 	padding: 5px;
 	border-radius: 50%;
 	cursor: pointer;
+	display: inline-block;
 }
 
 .sgm-button-add {
@@ -327,4 +330,20 @@
 
 .sgm-condition-active {
 	background-color: #428bca;
+}
+
+.sgm-mail-sent-icon {
+	background: url('../images/mail-sent-icon.PNG');
+	width: 22px;
+	height: 22px;
+	background-repeat: no-repeat;
+	background-size: 22px 22px;
+}
+
+.sgm-mail-open-icon {
+	background: url('../images/mail-open-icon.PNG');
+	width: 22px;
+	height: 22px;
+	background-repeat: no-repeat;
+	background-size: 22px 22px;
 }

@@ -1509,7 +1509,7 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse($s);
 	}
 	
-	public function getopenfilterAction()
+	public function getmailfilterAction()
 	{
 		$data = $this->request->getPost("data");
 		
@@ -1519,7 +1519,7 @@ class ApiController extends ControllerBase
 		
 		try {
 			$wrapper->setData($data);
-			$wrapper->searchOpenFilter();
+			$wrapper->searchMailFilter();
 		
 			return $this->setJsonResponse($wrapper->getFilter());
 		}

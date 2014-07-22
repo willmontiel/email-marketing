@@ -15,13 +15,31 @@ FilterPanelContent.prototype = new PanelContent;
 FilterPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	
-	this.content.find('.smg-add-open-filter').on('click', function (e) {
-		self.type = 'open-view';
+	this.content.find('.smg-add-sent-filter').on('click', function (e) {
+		self.type = 'mail-sent';
 		$('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
-		var openFilter = new FilterOpenContent();
-		self.createFilter(openFilter);
+		var filter = new FilterMailContent();
+		self.createFilter(filter);
+	});
+	
+	this.content.find('.smg-add-open-filter').on('click', function (e) {
+		self.type = 'mail-open';
+		$('.smg-filter').removeClass('sgm-filter-active');
+		$(this).addClass('sgm-filter-active');
+		self.content.find('.sgm-filter-content-body').empty();
+		var filter = new FilterMailContent();
+		self.createFilter(filter);
+	});
+	
+	this.content.find('.smg-add-click-filter').on('click', function (e) {
+		self.type = 'click';
+		$('.smg-filter').removeClass('sgm-filter-active');
+		$(this).addClass('sgm-filter-active');
+		self.content.find('.sgm-filter-content-body').empty();
+		var filter = new FilterMailContent();
+		self.createFilter(filter);
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
@@ -64,8 +82,15 @@ FilterPanelContent.prototype.createContent = function() {
 	this.content = $('<div class="sgm-filter-selector">\n\
 						  <div class="sgm-filter-content">\n\
 							  <div class="sgm-filter-content-header">\n\
-								  <span class="smg-filter smg-add-click-filter filter-icon glyphicon glyphicon-hand-up"></span>\n\
-								  <span class="smg-filter smg-add-open-filter filter-icon glyphicon glyphicon-eye-open"></span>\n\
+								  <div class="smg-filter smg-add-sent-filter filter-icon">\n\
+									  <span class="glyphicon glyphicon-envelope"></span>\n\
+								  </div>\n\
+								  <div class="smg-filter smg-add-open-filter filter-icon">\n\
+									  <span class="glyphicon glyphicon-eye-open"></span>\n\
+								  </div>\n\
+								  <div class="smg-filter smg-add-click-filter filter-icon">\n\
+									  <span class="glyphicon glyphicon-hand-up"></span>\n\
+								  </div>\n\
 							  </div>\n\
 						  </div>\n\
 						  <div class="sgm-filter-content-body"></div>\n\
@@ -80,7 +105,7 @@ FilterPanelContent.prototype.serialize = function() {
 		this.selectedValue = this.serializerObject.serialization.items;
 		
 		switch (this.type) {
-			case 'open-view':
+			case 'mail-open':
 				this.content.find('.sgm-filter-content-body').empty();
 				var openFilter = new FilterOpenContent();
 				this.createFilter(openFilter);

@@ -1,10 +1,10 @@
-function FilterClickContent() {
+function FilterSentContent() {
 	this.select = '';
 }
 
-FilterClickContent.prototype = new FilterContent;
+FilterSentContent.prototype = new FilterContent;
 
-FilterClickContent.prototype.createContent = function() {
+FilterSentContent.prototype.createContent = function() {
 	var content = $('<div class="sgm-filter-select">\n\
 						  <input type="hidden" class="select2"/>\n\
 					  </div>');
@@ -12,11 +12,11 @@ FilterClickContent.prototype.createContent = function() {
 	this.parent.find('.sgm-filter-content-body').append(content);
 };
 
-FilterClickContent.prototype.createSelect = function() {
+FilterSentContent.prototype.createSelect = function() {
 	var self = this;
 	return $.Deferred(function(dfd){
 		var DataSource = self.model.getDataSource();
-		DataSource.find('/getclicksfilter').then(function() { 
+		DataSource.find('/getmailfilter').then(function() { 
 			var ds = DataSource.getData();
 			self.initializeSelect2(ds);
 			dfd.resolve();
@@ -24,7 +24,7 @@ FilterClickContent.prototype.createSelect = function() {
 	});
 };
 
-FilterClickContent.prototype.initializeSelect2 = function(data) {
+FilterSentContent.prototype.initializeSelect2 = function(data) {
 	var results = {
 		more: false,
 		results: data
@@ -40,6 +40,6 @@ FilterClickContent.prototype.initializeSelect2 = function(data) {
 	return this.select;
 };
 
-FilterClickContent.prototype.getSelect = function() {
+FilterSentContent.prototype.getSelect = function() {
 	return this.select;
 };

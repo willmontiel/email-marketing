@@ -39,19 +39,19 @@ class TargetWrapper extends BaseWrapper
 
 			switch ($this->data[0]['serialization']['criteria']) {
 				case 'dbases':
-					$this->SQLfilter->open = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) GROUP BY 1,2 ";
+					$this->SQLfilter->mail = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) AND m.status = 'Sent' GROUP BY 1,2 ";
 					$this->SQLfilter->click = " JOIN Dbase AS d ON (d.idDbase = c.idDbase) WHERE d.idDbase IN ({$ids}) GROUP BY 1,2";
 					$this->SQLfilter->totalContacts = " WHERE idDbase IN ({$ids})";
 					break;
 
 				case 'contactlists':
-					$this->SQLfilter->open = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) GROUP BY 1,2";
+					$this->SQLfilter->mail = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) AND m.status = 'Sent' GROUP BY 1,2";
 					$this->SQLfilter->click = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE cl.idContactlist IN ({$ids}) GROUP BY 1,2";
 					$this->SQLfilter->totalContacts = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE idContactlist IN ({$ids})";
 					break;
 
 				case 'segments':
-					$this->SQLfilter->open = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) GROUP BY 1,2";
+					$this->SQLfilter->mail = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) AND m.status = 'Sent' GROUP BY 1,2";
 					$this->SQLfilter->click = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE s.idSegment IN ({$ids}) GROUP BY 1,2 ";
 					$this->SQLfilter->totalContacts = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE idSegment IN ({$ids})";
 					break;
@@ -59,13 +59,13 @@ class TargetWrapper extends BaseWrapper
 		}
 	}
 	
-	public function searchOpenFilter()
+	public function searchMailFilter()
 	{
 		$this->createSQLFilter();
 		
 		$this->sql = "SELECT m.idMail AS id, m.name AS name
-							  FROM Mail AS m
-								 JOIN Mxc AS mc ON (mc.idMail = m.idMail) {$this->SQLfilter->open}";
+					  FROM Mail AS m
+						  JOIN Mxc AS mc ON (mc.idMail = m.idMail) {$this->SQLfilter->mail}";
 		
 		$this->setFilterResult();
 	}

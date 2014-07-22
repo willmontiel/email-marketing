@@ -70,9 +70,9 @@ class InterpreterTarget
 	private function createSQLForFilters()
 	{
 		$condition = ($this->data[1]['serialization']['conditions'] == 'all' ? 'AND' : 'OR');
+//		$condition = $this->data[1]['serialization']['conditions'];
 		array_splice($this->data, 0, 2);
-		
-		$this->logger->log("Data: " . print_r($this->data, true));
+
 		$first = true;
 		$i = 1;
 	
@@ -80,23 +80,23 @@ class InterpreterTarget
 		
 		foreach ($this->data as $data) {
 			switch ($data['serialization']['type']) {
-				case 'click':
-					$this->SQLForIdContacts = "SELECT idContact FROM contact WHERE idDbase IN ({$ids})";
-					break;
-
-				case 'open-sent':
-				
+				case 'mail-sent':
+					$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
 					break;
 				
-				case 'open-view':
+				case 'mail-open':
 					$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
 					
 					if ($first) {
-						$piece .= " mc{$i}.opening != 0";
+						$piece .= " COALESCE(mc{$i}.opening, 0) != 0";
 					}
 					else {
-						$piece .= " {$condition} mc{$i}.opening != 0";
+						$piece .= " {$condition} COALESCE(mc{$i}.opening, 0) != 0";
 					}
+					break;
+					
+				case 'click':
+					$this->joinForFilters = " JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact = c.idContact AND ml{$i}.idMailLink = {$data['serialization']['items']})";
 					break;
 			}
 			
