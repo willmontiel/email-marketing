@@ -1,8 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ javascript_include('bootstrap/switch/js/bootstrap-switch.js')}}
-	{{ stylesheet_link('bootstrap/switch/css/bootstrap3/bootstrap-switch.css') }}
+	{{ javascript_include('vendors/bootstrap_v2/switch/js/bootstrap-switch.js')}}
+	{{ stylesheet_link('vendors/bootstrap_v2/switch/css/bootstrap3/bootstrap-switch.css') }}
 	<script type="text/javascript">
 		
 		$(function() {

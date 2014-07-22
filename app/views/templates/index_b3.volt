@@ -10,12 +10,16 @@
 
         {{ get_title() }}
 
-        {{ stylesheet_link('b3/css/bootstrap.css') }}
-        {{ stylesheet_link('b3/css/font-awesome.css') }}
+        {{ stylesheet_link('vendors/bootstrap_v3/css/bootstrap.css') }}
+        {{ stylesheet_link('vendors/bootstrap_v3/css/font-awesome.css') }}
         {{ stylesheet_link('css/prstyles.css') }}
-        {{ stylesheet_link('themes/new-gray/css/sm-email-theme.css') }}
-        {{ stylesheet_link('b3/vendors/css/bootstrap-editable.css') }}
-        {{ stylesheet_link('b3/vendors/css/jquery.gritter.css') }}
+
+        {# Para cambiar el tema modificar la ruta en el siguiente enlace#}
+        {{ stylesheet_link('themes/gray-orange/css/styles.css') }}
+        {##}
+
+        {{ stylesheet_link('vendors/bootstrap_v3/vendors/css/bootstrap-editable.css') }}
+        {{ stylesheet_link('vendors/bootstrap_v3/vendors/css/jquery.gritter.css') }}
 
 		<!--[if lt IE 9]>
 		{{ javascript_include('javascripts/vendor/html5shiv.js') }}
@@ -26,14 +30,14 @@
 		<script type="text/javascript">
 			var MyBaseURL = '{{url('')}}';
 		</script>
-		{{ javascript_include('b3/js/jquery-1.9.1.js') }}
-		{{ javascript_include('b3/js/bootstrap.js') }}
-		{{ javascript_include('b3/vendors/js/jquery.sparkline.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/js/jquery-1.9.1.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/js/bootstrap.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.sparkline.js') }}
 {#		
 		{{ javascript_include('b3/vendors/js/spark_auto.js') }}
 #}
-		{{ javascript_include('b3/vendors/js/bootstrap-editable.js') }}
-		{{ javascript_include('b3/vendors/js/jquery.gritter.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/vendors/js/bootstrap-editable.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
 		{% endblock %}
 
         <style>
@@ -56,7 +60,6 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="{{url('')}}">Email Sigma</a>
 				</div>
 
 				<!-- <p class="navbar-text">{% block sectiontitle %}Titulo de pagina{% endblock %}</p> -->
@@ -69,7 +72,7 @@
 						<!-- BEGIN OLARK CHAT LINK -->
 						<li>
 							<a href="javascript:void(0);" onclick="olark('api.box.expand')">
-								Necesitas ayuda? <i class="fa fa-comments"></i>
+								Necesita ayuda? <i class="fa fa-comments"></i>
 							</a>
 						</li>
 						<!-- END OLARK CHAT LINK -->
@@ -123,6 +126,9 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xs-12 col-sm-3 col-md-2 sidebar" style="height: 100%;">
+				<a class="navbar-brand" href="{{url('')}}"><img src="{{url('themes/base/images/logo-blanco.png')}}"></a>
+				<div class="clearfix"></div>
+
 				<div>
 					<!-- Main nav -->
 					{{ partial("partials/menu_partial_b3") }}

@@ -6,7 +6,7 @@
 			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
 
 	<div class="row">
-		<h4 class="sectiontitle">Segmentos</h4>
+		<h1 class="sectiontitle">Segmentos</h1>
 			<div class="action-nav-normal pull-right" style="margin-bottom: 5px;">
 				{{'{{#link-to "segments.new" class="btn btn-default"}}'}}<i class="icon-plus"></i> Crear nuevo segmento{{'{{/link-to}}'}}
 			</div>
@@ -67,7 +67,7 @@
 
 <script type="text/x-handlebars" data-template-name="segments/new">
 	<div class="row">
-		<h4 class="sectiontitle">Agregar un nuevo segmento</h4>
+		<h1 class="sectiontitle">Agregar un nuevo segmento</h1>
 		{{ '{{#if App.errormessage }}' }}
 		<div class="row">
 			<div class="alert alert-error">
@@ -262,7 +262,7 @@
 
 
 <script type="text/x-handlebars" data-template-name="segments/edit">
-	<h4 class="sectiontitle">Editar un segmento</h4>
+	<h1 class="sectiontitle">Editar un segmento</h1>
 	<div class="row">
 		<div class="col-md-6">
 			<form  class="form-horizontal" role="form">

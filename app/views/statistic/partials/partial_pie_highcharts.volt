@@ -1,6 +1,6 @@
-{{ javascript_include('highcharts/highcharts.js')}}
-{{ javascript_include('highcharts/modules/exporting.js')}}
-{{ javascript_include('highcharts/themes/dark-unica.js')}}
+{{ javascript_include('vendors/highcharts/highcharts.js')}}
+{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
+{{ javascript_include('vendors/highcharts/themes/dark-unica.js')}}
 <script>
 	function createCharts(container, data) {
 		$(function () {

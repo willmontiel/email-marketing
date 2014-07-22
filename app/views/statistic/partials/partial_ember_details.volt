@@ -13,7 +13,7 @@
 		<div class="clearfix"></div>
 	{{ '{{else}}' }}
 		<div class="bg bg-warning wrapper">
-			<p class="hand-writer-message">No hay aún reporte de aperturas en esta campaña... <img src="{{url('b3/images/sad.png')}}" /></p>
+			<p class="hand-writer-message">No hay aún reporte de aperturas en esta campaña... <img src="{{url('vendors/bootstrap_v3/images/sad.png')}}" /></p>
 		</div>
 	{{ '{{/if}}' }}
 		{% if type is defined %}
@@ -72,7 +72,7 @@
 		</div>
 	{{ '{{else}}' }}
 		<div class="wrapper">
-			<p class="hand-writer-message">No hay aún reporte de clics en esta campaña... <img src="{{url('b3/images/sad.png')}}" /></p>
+			<p class="hand-writer-message">No hay aún reporte de clics en esta campaña... <img src="{{url('vendors/bootstrap_v3/images/sad.png')}}" /></p>
 		</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}
@@ -100,7 +100,7 @@
 		<div class="clearfix"></div>
 	{{ '{{else}}' }}
 			<div class="wrapper">
-				<p class="hand-writer-message">No hay reporte de desuscritos en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
+				<p class="hand-writer-message">No hay reporte de desuscritos en esta campaña... <img src="{{url('vendors/bootstrap_v3/images/smile.png')}}" /></p>
 				
 			</div>
 	{{ '{{/if}}' }}
@@ -129,7 +129,7 @@
 		<div class="clearfix"></div>
 	{{ '{{else}}' }}
 			<div class="wrapper">
-				<p class="hand-writer-message">No hay reporte de spam en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
+				<p class="hand-writer-message">No hay reporte de spam en esta campaña... <img src="{{url('vendors/bootstrap_v3/images/smile.png')}}" /></p>
 			</div>
 	{{ '{{/if}}' }}
 	{% if type is defined %}
@@ -167,7 +167,7 @@
 		{% endif %}
 	{{ '{{else}}' }}
 		<div class="wrapper">
-			<p class="hand-writer-message">No hay reporte de rebotes en esta campaña... <img src="{{url('b3/images/smile.png')}}" /></p>
+			<p class="hand-writer-message">No hay reporte de rebotes en esta campaña... <img src="{{url('vendors/bootstrap_v3/images/smile.png')}}" /></p>
 			
 		</div>
 	{{ '{{/if}}' }}

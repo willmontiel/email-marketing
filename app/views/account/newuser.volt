@@ -8,7 +8,7 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<h4 class="sectiontitle">Crear un nuevo usuario en la cuenta <strong>{{account.companyName}}</strong></h4>
+			<h1 class="sectiontitle">Crear un nuevo usuario en la cuenta <strong>{{account.companyName}}</strong></h1>
 			<div class="bs-callout bs-callout-info">
 				Cree un nuevo usuario. Créelo a partir de los datos más básicos, agregue un nombre 
 				de usuario, una dirección de correo electrónico, una contraseña y asígnele permisos de administración
@@ -25,7 +25,7 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<h4>Crear un nuevo usuario</h4>
+			<h1>Crear un nuevo usuario</h1>
 			<form action="{{url('account/newuser/')}}{{account.idAccount}}" method="Post" class="form-horizontal" role="form">
 				<div class="form-group">
 					<label for="firstName" class="col-sm-3 control-label">*Nombre:</label>

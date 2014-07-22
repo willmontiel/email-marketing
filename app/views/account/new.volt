@@ -1,8 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ stylesheet_link('bootstrap-tagsinput/bootstrap-tagsinput.css')}}
-	{{ javascript_include('bootstrap-tagsinput/bootstrap-tagsinput.js')}}
+	{{ stylesheet_link('vendors/bootstrap-tagsinput/bootstrap-tagsinput.css')}}
+	{{ javascript_include('vendors/bootstrap-tagsinput/bootstrap-tagsinput.js')}}
 	<script type="text/javascript">
 		function footerpreview() {
 			$.post("{{url('footer/preview')}}/" + $('#idFooter').val(), function(preview){
@@ -23,7 +23,7 @@
 	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 
 	<div class="row">
-		<h4 class="sectiontitle">Crear una nueva cuenta</h4>
+		<h1 class="sectiontitle">Crear una nueva cuenta</h1>
 		<div class="bs-callout bs-callout-info">
 			Aquí puede crear una nueva cuenta, configurarla, etc
 		</div>
@@ -33,7 +33,7 @@
 		<form action = "{{url('account/new')}}" class="form-horizontal" id="registerAccount" method="post" role="form">
 				<div class="row">
 					<div class="col-md-6">
-						<h4 class="text-center">Datos de la cuenta</h4>
+						<h1 class="text-center">Datos de la cuenta</h1>
 						<div class="form-group">
 							<label for="companyName" class="col-sm-5 control-label">*Nombre de la cuenta: </label>
 							<div class="col-md-6">
@@ -142,7 +142,7 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<h4 class="text-center">Datos del administrador de la cuenta</h4>
+						<h1 class="text-center">Datos del administrador de la cuenta</h1>
 						<div class="form-group">
 							<label for="firstName" class="col-sm-5 control-label">*Nombre:</label>
 							<div class="col-md-6">
@@ -198,7 +198,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Footer</h4>
+					<h1 class="modal-title">Footer</h1>
 				</div>
 				<div class="modal-body" id="preview-modal-content"></div>
 				<div class="modal-footer">

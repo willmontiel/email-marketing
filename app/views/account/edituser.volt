@@ -3,7 +3,7 @@
 {% block content %}
 	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 	<div class="row">
-		<h4 class="sectiontitle">Editar o actualizar información del usuario</h4>
+		<h1 class="sectiontitle">Editar o actualizar información del usuario</h1>
 		<div class="bs-callout bs-callout-info">
 			Aquí podrá editar o actualizar información de cualquier usuario de cualquiera de las cuentas.
 		</div>

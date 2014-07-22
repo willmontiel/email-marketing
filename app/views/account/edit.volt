@@ -1,8 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ stylesheet_link('bootstrap-tagsinput/bootstrap-tagsinput.css')}}
-	{{ javascript_include('bootstrap-tagsinput/bootstrap-tagsinput.js')}}
+	{{ stylesheet_link('vendors/bootstrap-tagsinput/bootstrap-tagsinput.css')}}
+	{{ javascript_include('vendors/bootstrap-tagsinput/bootstrap-tagsinput.js')}}
 	<script type="text/javascript">
 		function footerpreview() {
 			$.post("{{url('footer/preview')}}/" + $('#idFooter').val(), function(preview){
@@ -21,7 +21,7 @@
 	</div>
 
 	<div class="row">
-		<h4 class="sectiontitle">Edición de la cuenta</h4>
+		<h1 class="sectiontitle">Edición de la cuenta</h1>
 		<div class="bs-callout bs-callout-info">
 			<p>Edite datos de cuentas o reconfigure.</p>
 		</div>
@@ -140,7 +140,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">Footer</h4>
+						<h1 class="modal-title">Footer</h1>
 					</div>
 					<div class="modal-body" id="preview-modal-content"></div>
 					<div class="modal-footer">

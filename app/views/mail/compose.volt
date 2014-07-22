@@ -2,13 +2,13 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
-	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 	
-	{{ javascript_include('javascripts/moment/moment-with-langs.min.js')}}
-	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
+	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js')}}
+	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
-	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
-	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
+	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
+	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
 	<script type="text/javascript">
 		var db;
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
@@ -289,7 +289,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Enviar una prueba</h4>
+					<h1 class="modal-title" id="myModalLabel">Enviar una prueba</h1>
 				</div>
 			<form {% if mail is defined %} action="{{url('mail/sendtest')}}/{{mail.idMail}}" {% endif %} id="testmail" method="post" role="form">
 				<div class="modal-body">

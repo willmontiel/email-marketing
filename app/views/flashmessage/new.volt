@@ -1,10 +1,10 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ javascript_include('javascripts/moment/moment.min.js')}}
-	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
-	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
-	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.es.js')}}
+	{{ javascript_include('js/pluggins-editor/moment/moment.min.js')}}
+	{{ javascript_include('vendors/bootstrap_v2/datepicker/js/bootstrap-datetimepicker.min.js')}}
+	{{ stylesheet_link('vendors/bootstrap_v2/datepicker/css/bootstrap-datetimepicker.min.css') }}
+	{{ javascript_include('vendors/bootstrap_v2/datepicker/js/bootstrap-datetimepicker.es.js')}}
 	<script type="text/javascript">
 		$(function(){
 			if ($('#all').prop('checked')) {
@@ -56,8 +56,6 @@
 		});	
 	</script>
 {% endblock %}
-{% block sectiontitle %}<span class="icon-bullhorn"></span> Crear un nuevo mensaje informativo{%endblock%}
-{% block sectionsubtitle %}Cree un pequeño mensaje para informar sobre algo a una cuenta determinada o todas las cuentas{% endblock %}
 {% block content %}
 	{#   Navegacion botones pequeños   #}
 	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'flashmessage']) }}

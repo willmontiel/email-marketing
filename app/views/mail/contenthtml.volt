@@ -1,15 +1,15 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ javascript_include('redactor/redactor.js')}}
-	{{ javascript_include('redactor/langs/es.js')}}
-	{{ stylesheet_link('redactor/redactor.css') }}
-	{{ javascript_include('redactor/plugins/clips.js') }}
-	{{ javascript_include('redactor/plugins/fontcolor.js') }}
-	{{ javascript_include('redactor/plugins/fontfamily.js') }}
-	{{ javascript_include('redactor/plugins/fontsize.js') }}
-	{{ javascript_include('redactor/plugins/fullscreen.js') }}
-	{{ javascript_include('redactor/plugins/textdirection.js') }}
+	{{ javascript_include('vendors/redactor/redactor.js')}}
+	{{ javascript_include('vendors/redactor/langs/es.js')}}
+	{{ stylesheet_link('vendors/redactor/redactor.css') }}
+	{{ javascript_include('vendors/redactor/plugins/clips.js') }}
+	{{ javascript_include('vendors/redactor/plugins/fontcolor.js') }}
+	{{ javascript_include('vendors/redactor/plugins/fontfamily.js') }}
+	{{ javascript_include('vendors/redactor/plugins/fontsize.js') }}
+	{{ javascript_include('vendors/redactor/plugins/fullscreen.js') }}
+	{{ javascript_include('vendors/redactor/plugins/textdirection.js') }}
 	{{ javascript_include('js/editor/forms_text_editor.js') }}
 
 	<script type="text/javascript">
@@ -172,7 +172,7 @@
 			<div class="modal-content modal-prevew-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Previsualización</h4>
+					<h1 class="modal-title">Previsualización</h1>
 				</div>
 				<div class="modal-body modal-prevew-body" id="modal-body-preview"></div>
 				<div class="modal-footer">

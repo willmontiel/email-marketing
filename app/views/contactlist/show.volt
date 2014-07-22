@@ -29,9 +29,9 @@
 		#}
 
 		{#****  ****#}
-		{{ stylesheet_link('b3/datetimepickerb3/bootstrap-datetimepicker.min.css') }}
-		{{ javascript_include('b3/datetimepickerb3/bootstrap-datetimepicker.js')}}
-		{{ javascript_include('b3/datetimepickerb3/bootstrap-datetimepicker.es.js')}}
+		{{ stylesheet_link('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.min.css') }}
+		{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.js')}}
+		{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.es.js')}}
 	<script type="text/javascript">
 		var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
 		var currentList = {{datalist.idContactlist}};
@@ -96,7 +96,7 @@
 		<script type="text/x-handlebars" data-template-name="contacts">
 			<div class="row wrap">
 				<div class="sparkline-row col-xs-3">
-					<h4 class="blue"> {{ datalist.name }}</h4>
+					<h1 class="blue"> {{ datalist.name }}</h1>
 					<span>{{ datalist.description}}</span>
 				</div>
 				<ul class="list-inline numbers-contacts pull-right">
@@ -149,7 +149,7 @@
 							<tr>
 								<td>
 									<div class="bs-callout bs-callout-warning">
-										<h4>No se encontraron contactos</h4>
+										<h1>No se encontraron contactos</h1>
 										<p>Puede ser que su búsqueda no arrojó resultados, que no existen contactos que cumplan todas las condiciones de filtro o que no hay contactos en esta lista.</p>
 										<p>Si desea crear nuevos contactos elija una de las opciones de arriba.
 											<ul>
@@ -178,7 +178,7 @@
 				</div>
 		</div>
 		{{ '{{/if}} '}}
-		<h4 class="sectiontitle">Crear nuevo contacto</h4>
+		<h1 class="sectiontitle">Crear nuevo contacto</h1>
 		<div class="col-sm-12 hidden-md hidden-lg">
 			<div class="alert alert-success">
 				<div class="row">
@@ -271,10 +271,10 @@
 		</div>
 		
 		<div class="row">
-			<h4 class="sectiontitle">Crear contactos rápidamente</h4>
+			<h1 class="sectiontitle">Crear contactos rápidamente</h1>
 			<div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
 				<div class="alert alert-success">
-					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
+					<img src="{{url('')}}vendors/bootstrap_v3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
 					<div class="space"></div>
 					<p>Utilice una línea para cada contacto</p>
 					<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
@@ -295,7 +295,7 @@
 			</div>
 			<div class="hidden-xs hidden-sm col-md-6">
 				<div class="alert alert-success">
-					<img src="{{url('')}}b3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
+					<img src="{{url('')}}vendors/bootstrap_v3/images/how-add-many-contacts.png" class="center-block width-fix" alt="" />
 					<div class="space"></div>
 					<p>Utilice una línea para cada contacto</p>
 					<p>No es necesario incluir todos los campos, el único campo requerido es "email" </p>
@@ -307,7 +307,7 @@
 
 	<script type="text/x-handlebars" data-template-name="contacts/delete">
 		<div class="row">
-			<h4 class="sectiontitle">Eliminar un contacto</h4>
+			<h1 class="sectiontitle">Eliminar un contacto</h1>
 								
 							
 			<div class="bs-callout bs-callout-danger">
@@ -328,7 +328,7 @@
 		
 	<script type="text/x-handlebars" data-template-name="contacts/import">
 		<div class="row">
-			<h4 class="sectiontitle">Importar contactos desde archivo .csv</h4>
+			<h1 class="sectiontitle">Importar contactos desde archivo .csv</h1>
 			<div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
 				<div class="alert alert-success">
 					<div class="row">
@@ -338,7 +338,7 @@
 						<div class="col-md-9">
 							<p>Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc permiten crear y editar archivos CSV fácilmente.</p>
 							<p>El archivo puede ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
-							<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block width-fix" alt="" /></p>
+							<p><img src="{{url('')}}vendors/bootstrap_v3/images/tabla1.jpg" class="center-block width-fix" alt="" /></p>
 							<p>También puede ser una tabla sin encabezados.</p>
 							<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
 							<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>
@@ -348,7 +348,7 @@
 				</div>
 			</div>
 			<div class="col-md-6">
-				<img src="{{url('')}}b3/images/step1-import.png" class="width-fix" alt="" />
+				<img src="{{url('')}}vendors/bootstrap_v3/images/step1-import.png" class="width-fix" alt="" />
 				<div class="space"></div>
 				<form method="post" class="form-horizontal"  action="{{url('contacts/import#/contacts')}}" enctype="multipart/form-data" role="form">
 					<div class="form-group">
@@ -370,7 +370,7 @@
 						<div class="col-md-9">
 							<p>Los programas de hojas de cálculo como Microsoft Excel u OpenOffice.org Calc permiten crear y editar archivos CSV fácilmente.</p>
 							<p>El archivo debe ser una tabla con un encabezado que defina los campos que contiene, por ejemplo: email, nombre, apellido, etc</p>
-							<p><img src="{{url('')}}b3/images/tabla1.jpg" class="center-block width-fix" alt="" /></p>
+							<p><img src="{{url('')}}vendors/bootstrap_v3/images/tabla1.jpg" class="center-block width-fix" alt="" /></p>
 							<p>También puede ser una tabla sin encabezados.</p>
 							<p>Al guardar el documento, seleccione tipo de archivo: (*.csv) que significa: delimitado por comas.</p>
 							<p>El archivo debe incluir al menos un campo para la dirección de correo electrónico.</p>

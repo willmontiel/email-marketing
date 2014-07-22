@@ -8,13 +8,13 @@
 	</script>
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
-	{{ javascript_include('javascripts/moment/moment-with-langs.min.js') }}
+	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
 	
-	{{ javascript_include('highcharts/highcharts.js')}}
-	{{ javascript_include('highcharts/modules/exporting.js')}}
-	{{ javascript_include('highcharts/modules/drilldown.js')}}
+	{{ javascript_include('vendors/highcharts/highcharts.js')}}
+	{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
+	{{ javascript_include('vendors/highcharts/modules/drilldown.js')}}
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}

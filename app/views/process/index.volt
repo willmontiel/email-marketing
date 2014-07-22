@@ -1,8 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ javascript_include('tablesorter/jquery-latest.js')}}
-	{{ javascript_include('tablesorter/jquery.tablesorter.js')}}
+	{{ javascript_include('vendors/tablesorter/jquery-latest.js')}}
+	{{ javascript_include('vendors/tablesorter/jquery.tablesorter.js')}}
 	<script type="text/javascript">
 		var MyBaseURL = '{{urlManager.getBaseUri(true)}}';
 		$(function() { 

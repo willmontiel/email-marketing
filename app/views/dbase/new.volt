@@ -1,6 +1,4 @@
 {% extends "templates/index_b3.volt" %}
-{% block sectiontitle %}<i class="icon-book icon-2x"> </i> Nueva base de datos{% endblock %}
-{%block sectionsubtitle %}Cree una base de datos, y administre listas de contactos{% endblock %}
 {% block content %}
 
 {# Botones de navegacion interna #}

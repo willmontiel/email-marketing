@@ -4,7 +4,7 @@
 
 
 	<div class="row">
-		<h4 class="sectiontitle">Lista de bloqueo</h4>
+		<h1 class="sectiontitle">Lista de bloqueo</h1>
 		<p class="bs-callout bs-callout-warning">
 			Esta es la lista global de direcciones de correo electrónico bloqueados, ninguna dirección de correo
 			que esté listada abajo, está recibiendo campañas de envío.
@@ -48,7 +48,7 @@
 			</table>
 		{{ '{{else}}' }}
 			<div class="bs-callout bs-callout-warning">
-				<h4>No hay direcciones de correo bloqueadas</h4>
+				<h1>No hay direcciones de correo bloqueadas</h1>
 				<p>
 					Para bloquear una dirección haga click en el botón <strong>Bloquear un correo eléctronico</strong> arriba a la derecha.
 				</p>
@@ -66,7 +66,7 @@
 </script>
 <script type="text/x-handlebars" data-template-name="blockedemails/block">
 	<div class="row">
-		<h4 class="sectiontitle">Bloqueo de direcciones de correo</h4>
+		<h1 class="sectiontitle">Bloqueo de direcciones de correo</h1>
 
 		{{ '{{#if App.errormessage }}' }}
 			<div class="bs-callout bs-callout-danger">
@@ -150,7 +150,7 @@
 
 <script type="text/x-handlebars" data-template-name="blockedemails/unblock">
 	<div class="row">
-		<h4 class="sectiontitle">Desbloquear Contactos</h4>
+		<h1 class="sectiontitle">Desbloquear Contactos</h1>
 		<div class="bs-callout bs-callout-danger">
 			<p>Usted va a desbloquear la dirección de correo electrónico <strong>{{'{{this.email}}'}}</strong></p>
 				Recuerde que al desbloquearla si hay información de contacto, se marcará como des-suscrito y por ende 

@@ -70,7 +70,7 @@
 						</div>
 						<div class="form-group">
 							<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
-							<a href="#" {{ '{{action "show_editor" "updatenotify"}}' }} class=""><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
+							<a href="#" {{ '{{action "show_editor" "updatenotify"}}' }} class=""><img src="{{url('vendors/bootstrap_v3/images/icon-edit-avanz.png')}}"  /></a>
 						</div>
 					</div>
 				</div>
@@ -125,7 +125,7 @@
 						</div>
 						<div class="form-group">
 							<label for="" class="col-sm-3 control-label">Contenido del correo: </label>
-							<a href="#" {{ '{{action "show_editor" "notify"}}' }} class=""><img src="{{url('b3/images/icon-edit-avanz.png')}}"  /></a>
+							<a href="#" {{ '{{action "show_editor" "notify"}}' }} class=""><img src="{{url('vendors/bootstrap_v3/images/icon-edit-avanz.png')}}"  /></a>
 						</div>
 						<div class="form-group welcome-url-field">
 							<label for="email-notify" class="col-sm-3 control-label">* Notificar a:</label>

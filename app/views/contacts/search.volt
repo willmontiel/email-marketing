@@ -10,8 +10,6 @@
 	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/app_search_contact.js') }}
 {% endblock %}
-{% block sectiontitle %}<i class="icon-search"></i>Buscar contactos{% endblock %}
-{% block sectionsubtitle %}Busque contactos facilmente con solo ingresar un indicio{% endblock %}
 {% block content %}
 	<div id="emberApplistContainer">
 		<script type="text/x-handlebars">

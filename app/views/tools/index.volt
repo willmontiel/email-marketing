@@ -28,7 +28,7 @@
 			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('flashmessage') }}"  class="shortcuts"><span class="sm-button-large-msj"></span></a>
 			</div>
-			<div class="width-190">
+			<div class="w-190 center">
 				<a href="{{ url('flashmessage') }}" class="btn-actn">Mensajes Administrativos</a>
 			</div>
 		</div>
