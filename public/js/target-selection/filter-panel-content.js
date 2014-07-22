@@ -42,6 +42,15 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.createFilter(filter);
 	});
 	
+	this.content.find('.smg-add-field-filter').on('click', function (e) {
+		self.type = 'field';
+		$('.smg-filter').removeClass('sgm-filter-active');
+		$(this).addClass('sgm-filter-active');
+		self.content.find('.sgm-filter-content-body').empty();
+//		var filter = new FilterMailContent();
+//		self.createFilter(filter);
+	});
+	
 	panel.find('.sgm-panel-content').append(this.content);
 	this.serialize();
 };
