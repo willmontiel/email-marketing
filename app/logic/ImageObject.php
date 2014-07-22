@@ -70,7 +70,7 @@ class ImageObject
 	 */
 	public function resizeImage($w, $h, $color = null)
 	{
-		$width = imagesx ($this->img);
+		$width = imagesx($this->img);
 		$height =imagesy($this->img);
 		
 		$proportion = $this->getImageProportion($width, $height, $w, $h);

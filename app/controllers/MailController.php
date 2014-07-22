@@ -2541,12 +2541,10 @@ class MailController extends ControllerBase
 		try {
 			if ($mail && !empty($mail->previewData)) {
 				$size = explode('x', $size);
-				
-				$img64 = "data:image/png;base64,{$mail->previewData}";
-				
 				$imgObj = new ImageObject();
-				$imgObj->createFromBase64($img64);
+				$imgObj->createFromBase64($mail->previewData);
 				$imgObj->resizeImage($size[0], $size[1]);
+//				$this->logger->log($imgObj->getImagePNG());
 				
 				$this->response->setHeader("Content-Type", 'image/png');
 				$this->view->disable();
