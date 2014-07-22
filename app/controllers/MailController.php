@@ -2547,7 +2547,8 @@ class MailController extends ControllerBase
 				$imgObj = new ImageObject();
 				$imgObj->createFromBase64($img64);
 				$imgObj->resizeImage($size[0], $size[1]);
-				$this->response->setContentType('image/png');
+				
+				$this->response->setHeader("Content-Type", 'image/png');
 				$this->view->disable();
 				return $this->response->setContent($imgObj->getImagePNG());
 			}
