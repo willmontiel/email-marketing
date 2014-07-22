@@ -2543,10 +2543,13 @@ class MailController extends ControllerBase
 		try {
 			if ($mail) {
 				$size = explode('x', $size);
+				
+				$img64 = "data:image/png;base64,{$mail->previewData}";
+				
 				$imgObj = new ImageObject();
-				$imgObj->createFromBase64('data:image/png;base64,' . $mail->previewData);
+				$imgObj->createFromBase64($img64);
 				$imgObj->resizeImage($size[0], $size[1]);
-				$image = 'data:image/png;base64,' . $imgObj->getImageBase64();
+				$image = "data:image/png;base64,{$imgObj->getImageBase64()}";
 			}
 		}
 		catch (Exception $e) {
