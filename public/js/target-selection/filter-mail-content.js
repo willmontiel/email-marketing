@@ -29,11 +29,10 @@ FilterMailContent.prototype.createSelect = function() {
 function format(mail) {
 //    if (!state.id) return state.text; // optgroup
 	console.log(mail);
-    return "<img class='flag' src='images/flags/" + mail.id.toLowerCase() + ".png'/>" + mail.text;
+    return '<img class="flag" src="data:image/png;base64,' + mail.preview + '"/>' + mail.text;
 }
 
 FilterMailContent.prototype.initializeSelect2 = function(data) {
-	var self = this;
 	this.select = this.parent.find('.select2');
 	
 	this.select.select2({
