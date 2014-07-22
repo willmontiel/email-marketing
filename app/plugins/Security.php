@@ -289,6 +289,8 @@ class Security extends Plugin
 				
 				'mail::compose' => array('mail' => array('read', 'create', 'send')),
 				
+				'mail::thumbnail' => array('mail' => array('read')),
+				
 				'api::getdbases' => array('mail' => array('read', 'create')),
 				'api::getcontactlists' => array('mail' => array('read', 'create')),
 				'api::getsegments' => array('mail' => array('read', 'create')),

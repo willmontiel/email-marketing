@@ -2528,4 +2528,28 @@ class MailController extends ControllerBase
 		}
 		
 	}
+	
+	public function thumbnailAction($id, $size)
+	{
+		$account = $this->user->account;
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $id,
+							2 => $account->idAccount)
+		));
+		
+		if ($mail) {
+			$size = explode('x', $size);
+			
+			$imgObj = new ImageObject();
+			$imgObj->createFromBase64('data:image/png;base64,' . $mail->previewData);
+			$imgObj->resizeImage($size[0], $size[1]);
+			$image = 'data:image/png;base64,' . $imgObj->getImageBase64();
+		}
+		else {
+			$image = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNzEiIGhlaWdodD0iMTgwIj48cmVjdCB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9Ijg1LjUiIHk9IjkwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MTcxeDE4MDwvdGV4dD48L3N2Zz4=";
+		}
+		
+		return $this->setJsonResponse($image);
+	}
 }
