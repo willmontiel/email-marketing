@@ -94,6 +94,7 @@ class TargetWrapper extends BaseWrapper
 				$object = new stdClass();
 				$object->id = $r->id;
 				$object->text = $r->name;
+				$object->preview = $r->preview;
 				
 				$this->filter[] = $object;
 			}

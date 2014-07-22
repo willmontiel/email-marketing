@@ -26,19 +26,10 @@ FilterMailContent.prototype.createSelect = function() {
 };
 
 
-FilterMailContent.prototype.format = function(mail) {
-//    if (!state.id) return state.text; // optgroup
-	console.log(mail);
-	return mail;
-    //return '<img class="flag" src="data:image/png;base64",' + mail.preview + '"/>' + mail.text;
-};
-
-
 function format(mail) {
 //    if (!state.id) return state.text; // optgroup
-//    return "<img class='flag' src='images/flags/" + state.id.toLowerCase() + ".png'/>" + state.text;
 	console.log(mail);
-	return mail;
+    return "<img class='flag' src='images/flags/" + mail.id.toLowerCase() + ".png'/>" + mail.text;
 }
 
 FilterMailContent.prototype.initializeSelect2 = function(data) {
