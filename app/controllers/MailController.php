@@ -2531,25 +2531,29 @@ class MailController extends ControllerBase
 	
 	public function thumbnailAction($id, $size)
 	{
-		$account = $this->user->account;
-		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2',
-			'bind' => array(1 => $id,
-							2 => $account->idAccount)
-		));
-		
 		try {
-			if ($mail && !empty($mail->previewData)) {
-				$size = explode('x', $size);
-				$imgObj = new ImageObject();
-				$imgObj->createFromBase64($mail->previewData);
-				$imgObj->resizeImage($size[0], $size[1]);
-//				$this->logger->log($imgObj->getImagePNG());
-				
-				$this->response->setHeader("Content-Type", 'image/png');
-				$this->view->disable();
-				return $this->response->setContent($imgObj->getImagePNG());
+			$key = "thumbnail-{$id}-{$size}";
+			$img = $this->cache->get($key);
+			if (!$img) {
+				$account = $this->user->account;
+				$mail = Mail::findFirst(array(
+					'conditions' => 'idMail = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $id,
+									2 => $account->idAccount)
+				));
+		
+				if ($mail && !empty($mail->previewData)) {
+					$size = explode('x', $size);
+					$imgObj = new ImageObject();
+					$imgObj->createFromBase64($mail->previewData);
+					$imgObj->resizeImage($size[0], $size[1]);
+					$img = $imgObj->getImageInMemory();
+					$this->cache->save($key, $img);
+				}
 			}
+			$this->response->setHeader("Content-Type", 'image/png');
+			$this->view->disable();
+			return $this->response->setContent($img);
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");

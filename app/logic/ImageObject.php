@@ -87,6 +87,7 @@ class ImageObject
 		}
 		
 		ImageCopyResized($this->newImg, $this->img, $proportion['x'], $proportion['y'], 0, 0, $proportion['newWidth'], $proportion['newHeight'], $width, $height);	
+		$this->img = $this->newImg;
 	}
 	
 	/**
@@ -141,17 +142,17 @@ class ImageObject
 		ob_start();
 		switch ($this->ext) {
 			case 'png':
-				$img = imagepng($this->newImg);
+				$img = imagepng($this->img);
 				break;
 			case 'jpg':
 			case 'jpeg':
-				$img = imagejpeg($this->newImg);
+				$img = imagejpeg($this->img);
 				break;
 			case 'gif':
-				$img = imagegif($this->newImg);
+				$img = imagegif($this->img);
 				break;
 			default:
-				$img = imagepng($this->newImg);
+				$img = imagepng($this->img);
 				break;
 		}
 		
@@ -179,17 +180,17 @@ class ImageObject
 	{
 		switch ($type) {
 			case 'png':
-				$img = imagepng($this->newImg, $path);
+				$img = imagepng($this->img, $path);
 				break;
 			case 'jpg':
 			case 'jpeg':
-				$img = imagejpeg($this->newImg, $path);
+				$img = imagejpeg($this->img, $path);
 				break;
 			case 'gif':
-				$img = imagegif($this->newImg, $path);
+				$img = imagegif($this->img, $path);
 				break;
 			default:
-				$img = imagepng($this->newImg, $path);
+				$img = imagepng($this->img, $path);
 				break;
 		}
 		if (!$img) {
@@ -200,9 +201,13 @@ class ImageObject
 	}
 	
 	
-	public function getImagePNG()
+	public function getImageInMemory()
 	{
-		return $this->newImg;
+		\ob_start();
+		\imagepng($this->img);
+		$data = \ob_get_contents();
+		\ob_clean();
+		return $data;
 	}
 	
 	/**
