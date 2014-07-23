@@ -26,18 +26,8 @@ FilterMailContent.prototype.createSelect = function() {
 };
 
 
-function format(mail) {
+function formatDataForSelet2(mail) {
 //    if (!state.id) return state.text; // optgroup
-//	var img = '<div class="select2-content">\
-//				  <div class="select2-content-image">\n\
-//					  <img src="' + urlBase + 'mail/thumbnail/' + mail.id + '/50x50"/>\n\
-//				  </div>\n\
-//				  <div class="select2-content-text">\n\
-//					  <strong>' + mail.text + '</strong><br/>\n\
-//			          <span class="">' + mail.subject + '</span><br/>\n\
-//			          <span class="">' + mail.date + '</span>\
-//				  </div>\n\
-//               </div>';
 	var img = '<div class="select2-content">\
 					<p><img style="display:block; float:left;" src="' + urlBase + 'mail/thumbnail/' + mail.id + '/50x50"/>\n\
 					  <strong>' + mail.text + '</strong><br/>\n\
@@ -47,7 +37,7 @@ function format(mail) {
                </div>';
     return img;
 }
-function formatR(mail) {
+function formatValueSelected(mail) {
 	return '<strong>' + mail.text + '</strong> (' + mail.date + ')';
 }
 
@@ -57,8 +47,8 @@ FilterMailContent.prototype.initializeSelect2 = function(data) {
 	this.select.select2({
 		placeholder: "Selecciona una opción",
 		data: data,
-		formatResult: format,
-		formatSelection: formatR,
+		formatResult: formatDataForSelet2,
+		formatSelection: formatValueSelected,
 		escapeMarkup: function(m) { return m; }
 	});
 	

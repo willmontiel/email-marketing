@@ -2,6 +2,10 @@ function DataSource(obj) {
 	this.obj = obj;
 }
 
+DataSource.prototype.setObject = function(obj) {
+	this.obj = obj;
+};
+
 DataSource.prototype.getUrl = function() {
 	var url; 
 	switch (this.obj[0].serialization.criteria) {

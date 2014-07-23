@@ -3,11 +3,13 @@ function FilterPanelContent() {
 		type: 'filter-panel',
 		serialization: {
 			type: null,
+			idMail: null,
 			items: null
 		}
 	};
 	
 	this.selectedValue = null;
+	this.mailSelected = null;
 	this.type = null;
 }
 FilterPanelContent.prototype = new PanelContent;
@@ -38,8 +40,8 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
-		var filter = new FilterClickContent();
-		self.createFilter(filter);
+		var filter = new FilterMailContent();
+		self.createClickFilter(filter);
 	});
 	
 	this.content.find('.smg-add-field-filter').on('click', function (e) {
@@ -47,7 +49,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
-//		var filter = new FilterMailContent();
+		var filter = new FilterFieldContent();
 //		self.createFilter(filter);
 	});
 	
@@ -59,6 +61,7 @@ FilterPanelContent.prototype.createFilter = function(obj) {
 	var self = this; 
 	
 	obj.setModel(this.model);
+	obj.setMailSelected(this.mailSelected);
 	obj.setParent(this.content);
 	obj.createContent();
 
@@ -83,6 +86,31 @@ FilterPanelContent.prototype.createFilter = function(obj) {
 			});
 			
 			self.model.refreshTotalContacts();
+		});
+	});
+};
+
+FilterPanelContent.prototype.createClickFilter = function(obj) {
+	var self = this; 
+	
+	obj.setModel(this.model);
+	obj.setParent(this.content);
+	obj.createContent();
+
+	obj.createSelect().then(function() { 
+		var select = obj.getSelect();
+		
+		if (self.selectedValue !== null) {
+			select.select2('val', self.selectedValue);
+		}
+		
+		select.on("change", function(e) { 
+			e.preventDefault();
+			self.mailSelected = e.val;
+			self.updateObject();
+			self.content.find('.sgm-filter-content-body').empty();
+			var filter = new FilterMailContent();
+			self.createFilter(filter);
 		});
 	});
 };
@@ -119,7 +147,7 @@ FilterPanelContent.prototype.serialize = function() {
 		switch (this.type) {
 			case 'mail-open':
 				this.content.find('.sgm-filter-content-body').empty();
-				var openFilter = new FilterOpenContent();
+				var openFilter = new FilterMailContent();
 				this.createFilter(openFilter);
 				break;
 		}
@@ -137,6 +165,7 @@ FilterPanelContent.prototype.updateObject = function () {
 		type: 'filter-panel',
 		serialization: {
 			type: this.type,
+			idMail: this.mailSelected,
 			items: this.selectedValue
 		}
 	};

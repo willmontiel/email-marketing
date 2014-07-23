@@ -6,7 +6,7 @@ FilterClickContent.prototype = new FilterContent;
 
 FilterClickContent.prototype.createContent = function() {
 	var content = $('<div class="sgm-filter-select">\n\
-						  <input type="hidden" class="select2"/>\n\
+						  <input style="width: 100%;" type="hidden" class="select2"/>\n\
 					  </div>');
 	
 	this.parent.find('.sgm-filter-content-body').append(content);
@@ -15,7 +15,10 @@ FilterClickContent.prototype.createContent = function() {
 FilterClickContent.prototype.createSelect = function() {
 	var self = this;
 	return $.Deferred(function(dfd){
+		var obj = {idMail: self.idMail};
+		
 		var DataSource = self.model.getDataSource();
+		DataSource.setObject(obj);
 		DataSource.find('/getclicksfilter').then(function() { 
 			var ds = DataSource.getData();
 			self.initializeSelect2(ds);

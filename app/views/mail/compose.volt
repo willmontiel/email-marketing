@@ -220,6 +220,7 @@
 	{{ javascript_include('js/target-selection/filter-content.js')}}
 	{{ javascript_include('js/target-selection/filter-click-content.js')}}
 	{{ javascript_include('js/target-selection/filter-mail-content.js')}}
+	{{ javascript_include('js/target-selection/filter-field-content.js')}}
 	
 {% endblock %}
 {% block content %}
