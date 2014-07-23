@@ -39,13 +39,16 @@ function format(mail) {
 //				  </div>\n\
 //               </div>';
 	var img = '<div class="select2-content">\
-					<p><img src="' + urlBase + 'mail/thumbnail/' + mail.id + '/50x50"/>\n\
+					<p><img style="display:block; float:left;" src="' + urlBase + 'mail/thumbnail/' + mail.id + '/50x50"/>\n\
 					  <strong>' + mail.text + '</strong><br/>\n\
 			          <small><strong>Asunto: </strong>' + mail.subject + '</small><br/>\n\
 			          <small><strong>Fecha: </strong>' + mail.date + '</small>\
 					</p>\n\
                </div>';
     return img;
+}
+function formatR(mail) {
+	return '<strong>' + mail.text + '</strong> (' + mail.date + ')';
 }
 
 FilterMailContent.prototype.initializeSelect2 = function(data) {
@@ -54,7 +57,7 @@ FilterMailContent.prototype.initializeSelect2 = function(data) {
 	this.select.select2({
 		placeholder: "Selecciona una opción",
 		data: data,
-		formatResult: format,
+		formatResult: formatR,
 		formatSelection: format,
 		escapeMarkup: function(m) { return m; }
 	});
