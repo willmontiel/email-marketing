@@ -69,7 +69,7 @@ class TargetWrapper extends BaseWrapper
 	
 	public function searchClicksFilter()
 	{
-		$this->sql = "SELECT ml.idMailLink AS id, ml.link AS name
+		$this->sql = "SELECT l.idMailLink AS id, l.link AS name
 						  FROM Mxl AS ml
 						  JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
 					  WHERE ml.idMail = {$this->data['idMail']}";
