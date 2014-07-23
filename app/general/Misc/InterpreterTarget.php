@@ -93,6 +93,8 @@ class InterpreterTarget
 					else {
 						$piece .= " {$condition} COALESCE(mc{$i}.opening, 0) != 0";
 					}
+					
+					$first = false;
 					break;
 					
 				case 'click':
@@ -100,7 +102,6 @@ class InterpreterTarget
 					break;
 			}
 			
-			$first = false;
 			$i++;
 		}
 		
