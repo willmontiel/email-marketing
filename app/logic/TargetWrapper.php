@@ -67,20 +67,12 @@ class TargetWrapper extends BaseWrapper
 		$this->setFilterResult();
 	}
 	
-	
-	private function createSQLForClickFilter()
-	{
-		
-	}
-	
 	public function searchClicksFilter()
 	{
-		$this->createSQLForClickFilter();
-		
 		$this->sql = "SELECT ml.idMailLink AS id, ml.link AS name
-						  FROM Maillink AS ml
-						  JOIN Mxcxl AS mc ON (mc.idMailLink = ml.idMaillink)
-						  JOIN Contact AS c ON (c.idContact = mc.idContact) {$this->SQLfilter->click}";
+						  FROM Mxl AS ml
+						  JOIN Maillink AS l ON (l.idMailLink = ml.idMailLink)
+					  WHERE ml.idMail = {$this->data['idMail']}";
 				
 		$this->setFilterResult();
 	}

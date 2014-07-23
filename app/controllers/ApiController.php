@@ -1536,16 +1536,16 @@ class ApiController extends ControllerBase
 		
 		$wrapper = new TargetWrapper();
 		
-//		try {
-//			$wrapper->setData($data);
-//			$wrapper->searchClicksFilter();
-//		
-//			return $this->setJsonResponse($wrapper->getFilter());
-//		}
-//		catch (Exception $e) {
-//			$this->logger->log("Exception: {$e}");
-//			return $this->setJsonResponse('error', 500);
-//		}
+		try {
+			$wrapper->setData($data);
+			$wrapper->searchClicksFilter();
+		
+			return $this->setJsonResponse($wrapper->getFilter());
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
+			return $this->setJsonResponse('error', 500);
+		}
 	}
 	
 	public function gettotalcontactsAction()
