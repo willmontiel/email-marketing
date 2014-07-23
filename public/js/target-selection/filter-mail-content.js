@@ -33,9 +33,9 @@ function format(mail) {
 					  <img src="' + urlBase + 'mail/thumbnail/' + mail.id + '/50x50"/>\n\
 				  </div>\n\
 				  <div class="select2-content-text">\n\
-					  <p>' + mail.text + '</p>\n\
-			          <p>' + mail.subject + '</p>\n\
-			          <p>' + mail.date + '</p>\
+					  <strong>' + mail.text + '</strong><br/>\n\
+			          <span class="">' + mail.subject + '</span><br/>\n\
+			          <span class="">' + mail.date + '</span>\
 				  </div>\n\
                </div>';
     return img;
