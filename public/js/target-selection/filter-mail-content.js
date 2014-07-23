@@ -28,7 +28,17 @@ FilterMailContent.prototype.createSelect = function() {
 
 function format(mail) {
 //    if (!state.id) return state.text; // optgroup
-    return '<img class="flag" src="' + urlBase + 'mail/thumbnail/' + mail.id + '/40x40"/>' + mail.text + '<br />' + mail.subject + '<br />' + mail.date;
+	var img = '<div class="select2-content>"\
+				  <div class="select2-content-image">\n\
+					  <img src="' + urlBase + 'mail/thumbnail/' + mail.id + '/40x40"/>\n\
+				  </div>\n\
+				  <div class="select2-content-text">\n\
+					  <p>' + mail.text + '</p>\n\
+			          <p>' + mail.subject + '</p>\n\
+			          <p>' + mail.date + '</p>\
+				  </div>\n\
+               </div>';
+    return img;
 }
 
 FilterMailContent.prototype.initializeSelect2 = function(data) {
