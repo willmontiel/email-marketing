@@ -57,8 +57,8 @@ FilterMailContent.prototype.initializeSelect2 = function(data) {
 	this.select.select2({
 		placeholder: "Selecciona una opción",
 		data: data,
-		formatResult: formatR,
-		formatSelection: format,
+		formatResult: format,
+		formatSelection: formatR,
 		escapeMarkup: function(m) { return m; }
 	});
 	
