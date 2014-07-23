@@ -347,3 +347,7 @@
 	background-repeat: no-repeat;
 	background-size: 22px 22px;
 }
+
+.select2-content {
+	display: flex;
+}

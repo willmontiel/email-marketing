@@ -28,7 +28,7 @@ FilterMailContent.prototype.createSelect = function() {
 
 function format(mail) {
 //    if (!state.id) return state.text; // optgroup
-	var img = '<div class="select2-content>"\
+	var img = '<div class="select2-content">\
 				  <div class="select2-content-image">\n\
 					  <img src="' + urlBase + 'mail/thumbnail/' + mail.id + '/40x40"/>\n\
 				  </div>\n\
