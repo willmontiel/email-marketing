@@ -17,7 +17,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	
 	this.content.find('.smg-add-sent-filter').on('click', function (e) {
 		self.type = 'mail-sent';
-		$('.smg-filter').removeClass('sgm-filter-active');
+		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
 		var filter = new FilterMailContent();
@@ -26,7 +26,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
 		self.type = 'mail-open';
-		$('.smg-filter').removeClass('sgm-filter-active');
+		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
 		var filter = new FilterMailContent();
@@ -35,7 +35,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	
 	this.content.find('.smg-add-click-filter').on('click', function (e) {
 		self.type = 'click';
-		$('.smg-filter').removeClass('sgm-filter-active');
+		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
 		var filter = new FilterClickContent();
@@ -44,7 +44,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	
 	this.content.find('.smg-add-field-filter').on('click', function (e) {
 		self.type = 'field';
-		$('.smg-filter').removeClass('sgm-filter-active');
+		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
 //		var filter = new FilterMailContent();
