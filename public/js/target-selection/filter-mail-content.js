@@ -30,7 +30,7 @@ function format(mail) {
 //    if (!state.id) return state.text; // optgroup
 	var img = '<div class="select2-content">\
 				  <div class="select2-content-image">\n\
-					  <img src="' + urlBase + 'mail/thumbnail/' + mail.id + '/40x40"/>\n\
+					  <img src="' + urlBase + 'mail/thumbnail/' + mail.id + '/90x90"/>\n\
 				  </div>\n\
 				  <div class="select2-content-text">\n\
 					  <p>' + mail.text + '</p>\n\
