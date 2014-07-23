@@ -37,7 +37,7 @@
 				},
 				error: function(msg){
 					var txt = JSON.parse(msg.responseText);
-					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: txt.status, sticky: false, time: 10000});
+					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: txt.status, sticky: false, time: 2000});
 				},
 				success: function() {
 					$('#preview-modal-content').empty();

@@ -26,6 +26,7 @@ class CampaignController extends ControllerBase
 			$obj->target = $autosend->target;
 			$obj->subject = $autosend->subject;
 			$obj->content = $autosend->content;
+			$obj->previewData = $autosend->previewData;
 			$obj->time = json_decode($autosend->time);
 			$obj->days = $this->renameDays( json_decode($autosend->days) );
 			$autoresponse[] = $obj;
@@ -123,9 +124,11 @@ class CampaignController extends ControllerBase
 			 
 			try{ 
 				$content = $this->request->getPost();
+				$image = $this->cache->get($this->user->idUser . '-previewcampaign');
 				$wrapper = new CampaignWrapper();
 				$wrapper->setAccount($this->user->account);
-
+				$wrapper->setPreviewImage($image);
+				
 				if($idAutosend) {
 					$autosend = Autosend::findFirst(array(
 							"conditions" => "idAutosend = ?1",
@@ -156,7 +159,28 @@ class CampaignController extends ControllerBase
 		 }
 	}
 	
-	public function previewAction()
+	public function changestatusAction($id)
+	{
+		if ($this->request->isPost() && $id) {
+			$status = $this->request->getPost("state");
+
+			$wrapper = new CampaignWrapper();
+			$wrapper->setAccount($this->user->account);
+
+			$autosend = Autosend::findFirst(array(
+					"conditions" => "idAutosend = ?1",
+					"bind" => array(1 => $id)
+				));
+			$wrapper->setAutosend($autosend);
+			$wrapper->updateAutomaticSendStatus($status);
+			
+			return $this->setJsonResponse(array('status' => 'El estado de la autorespuesta se ha actualizado'), 201, 'Success');
+		}
+		
+		return $this->setJsonResponse(array('status' => 'Error, el estado de la autorespuesta no se ha podido actualizar'),400, 'Error');
+	}
+
+	public function previewAction($id)
 	{
 		if ($this->request->isPost()) {
 			try {
@@ -166,7 +190,13 @@ class CampaignController extends ControllerBase
 				}
 				$getHtml = new LoadHtml();
 				$html = $getHtml->gethtml($url, false, false, $this->user->account);
-				$this->session->set('preview-template', $html);
+				
+				$wrapper = new CampaignWrapper();
+				$wrapper->setAccount($this->user->account);
+				
+				$htmlFinal = $wrapper->insertCanvasHeader($id, $html, $this->url);
+				
+				$this->session->set('preview-template', $htmlFinal);
 				return $this->setJsonResponse(array('status' => 'Success'), 201, 'Success');
 			}
 			catch (\InvalidArgumentException $e) {
@@ -187,5 +217,34 @@ class CampaignController extends ControllerBase
 		$this->view->disable();
 		
 		return $this->response->setContent($html);
+	}
+	
+	public function previewimageAction($id)
+	{
+		try {
+			$content = $this->request->getPost("img");
+			
+			if($id) {
+				$wrapper = new CampaignWrapper();
+				$wrapper->setAccount($this->user->account);
+
+				$autosend = Autosend::findFirst(array(
+						"conditions" => "idAutosend = ?1",
+						"bind" => array(1 => $id)
+					));
+				$wrapper->setAutosend($autosend);
+				$wrapper->updateCampaignPreviewImage($content);
+			}
+			else {
+				$this->cache->save($this->user->idUser . '-previewcampaign', $content);
+			}
+		}
+		catch (\InvalidArgumentException $e) {
+			$this->logger->log("InvalidArgumentException {$e}");
+		}
+		catch (Exception $e){
+			$this->logger->log("Exception {$e}");
+		}
+		
 	}
 }

@@ -8,15 +8,33 @@
 	<script> 
 		$(function (){
 			$(".switch-campaign").bootstrapSwitch();
+			$('.switch-campaign').on('switchChange.bootstrapSwitch', function(event, state) {
+				changeStatus($(this).data('id'), state);
+			});
 			$('.auto_send_delete_btn').on("click", function () {
 				var myURL = $(this).data('id');
 				$("#delete_auto_send").attr('href', myURL );
 			});
 		});
 		
-		function previewAutoSend(url, type) {
+		function changeStatus(id, state)
+		{
 			$.ajax({
-				url: "{{url('campaign/preview')}}",
+				url: "{{url('campaign/changestatus')}}/" + id,
+				type: "POST",
+				data: { state: state},
+				error: function(msg){
+					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg.statusText, sticky: false, time: 2000});
+				},
+				success: function(obj){
+					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.status, sticky: false, time: 2000});
+				}
+			});
+		}
+		
+		function previewAutoSend(url, id) {
+			$.ajax({
+				url: "{{url('campaign/preview')}}/" + id,
 				type: "POST",			
 				data: { 
 					url: url
@@ -51,7 +69,16 @@
 
 					<div class="col-md-12 col-sm-12 list-one-autoresponse">
 						<div class="col-sm-2">
-							<div class="image-64-autorespons img-64-n1"></div>
+							{% if item.previewData == null%}
+									<div class="image-64-autorespons">
+										<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+										<label>Previsualización no disponible</label>
+									</div>
+							{% else %}
+									<div class="image-64-autorespons">
+										<img src="data: image/png;base64, {{item.previewData}}" />
+									</div>
+							{% endif %}	
 						</div>
 						<div class="col-sm-1 autoresponse-list-icon">
 							<span class="glyphicon glyphicon-calendar"></span>
@@ -66,7 +93,7 @@
 								<a class="btn btn-default btn-sm" href="{{url("campaign/automatic")}}/{{item.id}}">
 									<span class="glyphicon glyphicon-pencil"></span>
 								</a>
-								<a onclick="previewAutoSend('{{item.content}}', '{{item.type}}');" class="btn btn-default btn-sm">
+								<a onclick="previewAutoSend('{{item.content}}', '{{item.id}}');" class="btn btn-default btn-sm">
 									<span class="glyphicon glyphicon-eye-open"></span>
 								</a>
 								<a class="auto_send_delete_btn btn btn-default btn-sm" data-toggle="modal" href="#modal-simple" data-id="{{ url('campaign/delete/') }}{{item.id}}">
@@ -81,7 +108,7 @@
 							<p>los dias {%for day in item.days%} {{day}}, {%endfor%} recurrente.</p>
 						</div>
 						<div class="col-sm-2 autoresponse-list-activated">
-							<input type="checkbox" class="switch-campaign" {%if item.activated == 1%}checked{%endif%}>
+							<input type="checkbox" class="switch-campaign"  data-id="{{item.id}}" {%if item.activated == 1%}checked{%endif%}>
 						</div>
 					</div>
 

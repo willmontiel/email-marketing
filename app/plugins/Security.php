@@ -400,6 +400,8 @@ class Security extends Plugin
 				'campaign::automatic' => array('campaign' => array('create')),
 				'campaign::preview' => array('campaign' => array('read')),
 				'campaign::previewframe' => array('campaign' => array('read')),
+				'campaign::changestatus' => array('campaign' => array('update')),
+				'campaign::previewimage' => array('campaign' => array('create')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
