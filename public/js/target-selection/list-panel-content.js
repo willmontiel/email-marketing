@@ -211,7 +211,7 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 		$(this).addClass('sgm-condition-active');
 		self.conditions = 'all';
 		self.updateObject();
-		self.model.updatePanelList();
+//		self.model.updatePanelList();
 		self.model.refreshTotalContacts();
 	});
 	
@@ -221,7 +221,7 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 		$(this).addClass('sgm-condition-active');
 		self.conditions = 'any';
 		self.updateObject();
-		self.model.updatePanelList();
+//		self.model.updatePanelList();
 		self.model.refreshTotalContacts();
 	});
 };
