@@ -36,11 +36,13 @@
 					url: url
 				},
 				error: function(msg){
-					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: msg, sticky: false, time: 10000});
+					var txt = JSON.parse(msg.responseText);
+					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: txt.status, sticky: false, time: 10000});
 				},
 				success: function() {
-					$( "#preview-modal-content" ).empty();
-					$('#preview-modal-content').append($('<iframe frameborder="0" id="footer-preview" width="100%" height="100%" src="{{url('campaign/preview')}}"/>'));
+					$('#preview-modal-content').empty();
+					$('#preview-auto-send-modal').modal('show');
+					$('#preview-modal-content').append($('<iframe frameborder="0" width="100%" height="100%" src="{{url('campaign/previewframe')}}"/>'));
 				}
 			});
 		}
@@ -99,7 +101,7 @@
 						<input class="form-control" type="text" name="content" required="required" {%if autoresponse is defined%} value="{{autoresponse.content}}" {%endif%}>
 					</div>
 					<div class="col-md-1">
-						<a data-toggle="modal" data-target="#preview-auto-send-modal" onclick="previewAutoSend();" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
+						<a onclick="previewAutoSend();" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
 					</div>
 				</div>
 				
@@ -149,7 +151,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Footer</h4>
 				</div>
-				<div class="modal-body modal-preview-body-footer" id="preview-modal-content"></div>
+				<div class="modal-body modal-prevew-body" id="preview-modal-content"></div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 				</div>

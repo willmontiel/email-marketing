@@ -399,6 +399,7 @@ class Security extends Plugin
 				'campaign::delete' => array('campaign' => array('delete')),
 				'campaign::automatic' => array('campaign' => array('create')),
 				'campaign::preview' => array('campaign' => array('read')),
+				'campaign::previewframe' => array('campaign' => array('read')),
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

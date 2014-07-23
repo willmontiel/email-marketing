@@ -13,6 +13,25 @@
 				$("#delete_auto_send").attr('href', myURL );
 			});
 		});
+		
+		function previewAutoSend(url, type) {
+			$.ajax({
+				url: "{{url('campaign/preview')}}",
+				type: "POST",			
+				data: { 
+					url: url
+				},
+				error: function(msg){
+					var txt = JSON.parse(msg.responseText);
+					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: txt.status, sticky: false, time: 10000});
+				},
+				success: function() {
+					$('#preview-modal-content').empty();
+					$('#preview-auto-send-modal').modal('show');
+					$('#preview-modal-content').append($('<iframe frameborder="0" width="100%" height="100%" src="{{url('campaign/previewframe')}}"/>'));
+				}
+			});
+		}
 	</script>
 {% endblock %}
 {% block content %}
@@ -47,7 +66,7 @@
 								<a class="btn btn-default btn-sm" href="{{url("campaign/automatic")}}/{{item.id}}">
 									<span class="glyphicon glyphicon-pencil"></span>
 								</a>
-								<a class="btn btn-default btn-sm" href="">
+								<a onclick="previewAutoSend('{{item.content}}', '{{item.type}}');" class="btn btn-default btn-sm">
 									<span class="glyphicon glyphicon-eye-open"></span>
 								</a>
 								<a class="auto_send_delete_btn btn btn-default btn-sm" data-toggle="modal" href="#modal-simple" data-id="{{ url('campaign/delete/') }}{{item.id}}">
@@ -214,6 +233,21 @@
 #}
 
 		</div>	
+	</div>
+	
+	<div id="preview-auto-send-modal" class="modal fade">
+		<div class="modal-dialog modal-prevew-width">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Footer</h4>
+				</div>
+				<div class="modal-body modal-prevew-body" id="preview-modal-content"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 {% endblock %}

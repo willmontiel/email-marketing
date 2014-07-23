@@ -21,9 +21,11 @@ class CampaignController extends ControllerBase
 			$obj->id = $autosend->idAutosend;
 			$obj->name = $autosend->name;
 			$obj->category = $autosend->category;
+			$obj->type = $autosend->type;
 			$obj->activated = $autosend->activated;
 			$obj->target = $autosend->target;
 			$obj->subject = $autosend->subject;
+			$obj->content = $autosend->content;
 			$obj->time = json_decode($autosend->time);
 			$obj->days = $this->renameDays( json_decode($autosend->days) );
 			$autoresponse[] = $obj;
@@ -156,17 +158,34 @@ class CampaignController extends ControllerBase
 	
 	public function previewAction()
 	{
-		try {
-			$url = $this->request->getPost("url");
-			$getHtml = new LoadHtml();
-			$html = $getHtml->gethtml($url, false, false, $this->user->account);
-			return $html;
-		}
-		catch (Exception $e){
-			$this->logger->log("Exception {$e}");
-		}
-		catch (\InvalidArgumentException $e) {
-			$this->logger->log("Exception {$e}");
-		}
+		if ($this->request->isPost()) {
+			try {
+				$url = $this->request->getPost("url");
+				if(!filter_var($url, FILTER_VALIDATE_URL)) {
+					return $this->setJsonResponse(array('status' => 'Error, la url ingresada no es válida, por favor verifique la información'),400, 'Error');
+				}
+				$getHtml = new LoadHtml();
+				$html = $getHtml->gethtml($url, false, false, $this->user->account);
+				$this->session->set('preview-template', $html);
+				return $this->setJsonResponse(array('status' => 'Success'), 201, 'Success');
+			}
+			catch (\InvalidArgumentException $e) {
+				$this->logger->log("InvalidArgumentException {$e}");
+			}
+			catch (Exception $e){
+				$this->logger->log("Exception {$e}");
+			}
+
+			return $this->setJsonResponse(array('status' => 'Error'), 400, 'Error');
+		 }
+	}
+	
+	public function previewframeAction()
+	{
+		$html = $this->session->get('preview-template');
+		$this->session->remove('preview-template');
+		$this->view->disable();
+		
+		return $this->response->setContent($html);
 	}
 }
