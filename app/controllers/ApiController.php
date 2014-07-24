@@ -1533,7 +1533,7 @@ class ApiController extends ControllerBase
 	{
 		$data = $this->request->getPost("data");
 		
-//		$this->logger->log("DATA: " . print_r($data, true));
+		$this->logger->log("DATA: " . print_r($data, true));
 		
 		$wrapper = new TargetWrapper();
 		
