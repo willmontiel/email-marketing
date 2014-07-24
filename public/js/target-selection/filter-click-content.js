@@ -5,11 +5,11 @@ function FilterClickContent() {
 FilterClickContent.prototype = new FilterContent;
 
 FilterClickContent.prototype.createContent = function() {
-	var content = $('<div class="sgm-filter-select">\n\
+	this.content = $('<div class="sgm-filter-select">\n\
 						  <input style="width: 100%;" type="hidden" class="select2"/>\n\
 					  </div>');
 	
-	this.parent.find('.sgm-filter-content-body').append(content);
+	this.parent.find('.sgm-filter-content-body').append(this.content);
 };
 
 FilterClickContent.prototype.createSelectForMails = function() {
@@ -18,7 +18,12 @@ FilterClickContent.prototype.createSelectForMails = function() {
 		var DataSource = self.model.getDataSource();
 		DataSource.find('/getclicksmailfilter').then(function() { 
 			var ds = DataSource.getData();
-			self.initializeSelect2(ds);
+			var select2 = new Select2Object();
+			select2.setData(ds);
+			select2.setPlaceHolder("Seleccione un correo");
+			select2.setSelectObject(self.content);
+			select2.createSelectWithPreview();
+			self.select = select2.getSelect2Object();
 			dfd.resolve();
 		});
 	});
@@ -33,26 +38,15 @@ FilterClickContent.prototype.createSelect = function() {
 		DataSource.setObject(obj);
 		DataSource.find('/getclicksfilter').then(function() { 
 			var ds = DataSource.getData();
-			self.initializeSelect2(ds);
+			var select2 = new Select2Object();
+			select2.setData(ds);
+			select2.setPlaceHolder("Seleccione un correo");
+			select2.setSelectObject(self.content);
+			select2.createBasicSelect();
+			self.select = select2.getSelect2Object();
 			dfd.resolve();
 		});
 	});
-};
-
-FilterClickContent.prototype.initializeSelect2 = function(data) {
-	var results = {
-		more: false,
-		results: data
-	};
-	
-	this.select = this.parent.find('.select2');
-	
-	this.select.select2({
-		data: results,
-		placeholder: "Selecciona una opción"
-	});
-	
-	return this.select;
 };
 
 FilterClickContent.prototype.getSelect = function() {

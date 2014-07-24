@@ -37,6 +37,7 @@ function formatDataForSelet2(mail) {
                </div>';
     return img;
 }
+
 function formatValueSelected(mail) {
 	return '<strong>' + mail.text + '</strong> (' + mail.date + ')';
 }

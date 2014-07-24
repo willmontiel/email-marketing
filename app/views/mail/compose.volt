@@ -221,6 +221,7 @@
 	{{ javascript_include('js/target-selection/filter-click-content.js')}}
 	{{ javascript_include('js/target-selection/filter-mail-content.js')}}
 	{{ javascript_include('js/target-selection/filter-field-content.js')}}
+	{{ javascript_include('js/target-selection/select2-object.js')}}
 	
 {% endblock %}
 {% block content %}
