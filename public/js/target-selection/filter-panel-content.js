@@ -108,7 +108,7 @@ FilterPanelContent.prototype.createClickFilter = function(obj) {
 			e.preventDefault();
 			self.mailSelected = e.val;
 			self.updateObject();
-			self.content.find('.sgm-filter-content-body').empty();
+//			self.content.find('.sgm-filter-content-body').empty();
 			var filter = new FilterClickContent();
 			self.createFilter(filter);
 		});
