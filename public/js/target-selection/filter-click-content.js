@@ -15,10 +15,7 @@ FilterClickContent.prototype.createContent = function() {
 FilterClickContent.prototype.createSelectForMails = function() {
 	var self = this;
 	return $.Deferred(function(dfd){
-		var obj = {idMail: self.idMail};
-		
 		var DataSource = self.model.getDataSource();
-		DataSource.setObject(obj);
 		DataSource.find('/getclicksmailfilter').then(function() { 
 			var ds = DataSource.getData();
 			self.initializeSelect2(ds);
