@@ -12,6 +12,21 @@ FilterClickContent.prototype.createContent = function() {
 	this.parent.find('.sgm-filter-content-body').append(content);
 };
 
+FilterClickContent.prototype.createSelectForMails = function() {
+	var self = this;
+	return $.Deferred(function(dfd){
+		var obj = {idMail: self.idMail};
+		
+		var DataSource = self.model.getDataSource();
+		DataSource.setObject(obj);
+		DataSource.find('/getclicksmailfilter').then(function() { 
+			var ds = DataSource.getData();
+			self.initializeSelect2(ds);
+			dfd.resolve();
+		});
+	});
+}; 
+
 FilterClickContent.prototype.createSelect = function() {
 	var self = this;
 	return $.Deferred(function(dfd){

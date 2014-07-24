@@ -1529,6 +1529,26 @@ class ApiController extends ControllerBase
 		}
 	}
 	
+	public function getclicksmailfilterAction()
+	{
+		$data = $this->request->getPost("data");
+		
+//		$this->logger->log("DATA: " . print_r($data, true));
+		
+		$wrapper = new TargetWrapper();
+		
+		try {
+			$wrapper->setData($data);
+			$wrapper->searchMailsWithClicksFilter();
+		
+			return $this->setJsonResponse($wrapper->getFilter());
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
+			return $this->setJsonResponse('error', 500);
+		}
+	}
+	
 	public function getclicksfilterAction()
 	{
 		$data = $this->request->getPost("data");

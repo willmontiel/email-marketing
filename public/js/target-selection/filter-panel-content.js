@@ -40,7 +40,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
-		var filter = new FilterMailContent();
+		var filter = new FilterClickContent();
 		self.createClickFilter(filter);
 	});
 	
@@ -97,7 +97,7 @@ FilterPanelContent.prototype.createClickFilter = function(obj) {
 	obj.setParent(this.content);
 	obj.createContent();
 
-	obj.createSelect().then(function() { 
+	obj.createSelectForMails().then(function() { 
 		var select = obj.getSelect();
 		
 		if (self.selectedValue !== null) {
