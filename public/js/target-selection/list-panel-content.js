@@ -286,7 +286,7 @@ ListPanelContent.prototype.initializeSelect2 = function(data) {
 	var select = this.content.find('.select2');
 	select.select2({
 		data: results,
-		placeholder: "Selecciona una opción"
+		placeholder: "Seleccione una opción"
 	}).select2('data', null);
 	
 	select.on("change", function(e) { 

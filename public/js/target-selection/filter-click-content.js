@@ -40,7 +40,7 @@ FilterClickContent.prototype.createSelect = function() {
 			var ds = DataSource.getData();
 			var select2 = new Select2Object();
 			select2.setData(ds);
-			select2.setPlaceHolder("Seleccione un correo");
+			select2.setPlaceHolder("Seleccione un link");
 			select2.setSelectObject(self.content);
 			select2.createBasicSelect();
 			self.select = select2.getSelect2Object();
