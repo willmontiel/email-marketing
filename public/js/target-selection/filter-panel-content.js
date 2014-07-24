@@ -111,6 +111,7 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 		select.on("change", function(e) { 
 			e.preventDefault();
 			self.mailSelected = e.val;
+			self.selectedValue = null;
 			self.updateObject();
 			var container = self.content.find('.sgm-filter-content-select-click');
 			container.empty();
