@@ -2,8 +2,8 @@ function FilterContent() {
 
 }
 
-FilterContent.prototype.setParent = function(parent) {
-	this.parent = parent;
+FilterContent.prototype.setContainer = function(container) {
+	this.container = container;
 };
 
 FilterContent.prototype.setMailSelected = function(idMail) {

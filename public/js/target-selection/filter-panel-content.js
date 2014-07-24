@@ -22,8 +22,9 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
+		var container = self.content.find('.sgm-filter-content-select-mail');
 		var filter = new FilterMailContent();
-		self.createFilter(filter);
+		self.createFilter(filter, container);
 	});
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
@@ -31,8 +32,9 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
+		var container = self.content.find('.sgm-filter-content-select-mail');
 		var filter = new FilterMailContent();
-		self.createFilter(filter);
+		self.createFilter(filter, container);
 	});
 	
 	this.content.find('.smg-add-click-filter').on('click', function (e) {
@@ -40,8 +42,9 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.content.find('.smg-filter').removeClass('sgm-filter-active');
 		$(this).addClass('sgm-filter-active');
 		self.content.find('.sgm-filter-content-body').empty();
+		var container = self.content.find('.sgm-filter-content-select-mail');
 		var filter = new FilterClickContent();
-		self.createClickFilter(filter);
+		self.createClickFilter(filter, container);
 	});
 	
 	this.content.find('.smg-add-field-filter').on('click', function (e) {
@@ -57,12 +60,12 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	this.serialize();
 };
 
-FilterPanelContent.prototype.createFilter = function(obj) {
+FilterPanelContent.prototype.createFilter = function(obj, container) {
 	var self = this; 
 	
 	obj.setModel(this.model);
 	obj.setMailSelected(this.mailSelected);
-	obj.setParent(this.content);
+	obj.setContainer(container);
 	obj.createContent();
 
 	obj.createSelect().then(function() { 
@@ -90,11 +93,11 @@ FilterPanelContent.prototype.createFilter = function(obj) {
 	});
 };
 
-FilterPanelContent.prototype.createClickFilter = function(obj) {
+FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 	var self = this; 
 	
 	obj.setModel(this.model);
-	obj.setParent(this.content);
+	obj.setContainer(container);
 	obj.createContent();
 
 	obj.createSelectForMails().then(function() { 
@@ -108,9 +111,10 @@ FilterPanelContent.prototype.createClickFilter = function(obj) {
 			e.preventDefault();
 			self.mailSelected = e.val;
 			self.updateObject();
-//			self.content.find('.sgm-filter-content-body').empty();
+			var container = self.content.find('.sgm-filter-content-select-click');
+			container.empty();
 			var filter = new FilterClickContent();
-			self.createFilter(filter);
+			self.createFilter(filter, container);
 		});
 	});
 };
@@ -133,7 +137,10 @@ FilterPanelContent.prototype.createContent = function() {
 								  </div>\n\
 							  </div>\n\
 						  </div>\n\
-						  <div class="sgm-filter-content-body"></div>\n\
+						  <div class="sgm-filter-content-body">\n\
+							   <div class="sgm-filter-content-select-mail"></div>\n\
+							   <div class="sgm-filter-content-select-click"></div>\n\
+						  </div>\n\
 						  <div class="sgm-filter-content-footer"></div>\n\
 					  </div>');
 };

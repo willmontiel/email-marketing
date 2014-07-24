@@ -10,7 +10,7 @@ FilterMailContent.prototype.createContent = function() {
 						  <input style="width: 100%;" type="hidden" class="select2"/>\n\
 					  </div>');
 	
-	this.parent.find('.sgm-filter-content-body').append(this.content);
+	this.container.append(this.content);
 };
 
 FilterMailContent.prototype.createSelect = function() {
