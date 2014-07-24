@@ -14,44 +14,45 @@ function FilterPanelContent() {
 }
 FilterPanelContent.prototype = new PanelContent;
 
+
+
+FilterPanelContent.prototype.setValues = function(type, himself) {
+	this.type = type;
+	this.content.find('.smg-filter').removeClass('sgm-filter-active');
+	$(himself).addClass('sgm-filter-active');
+	
+	var mailContainer = this.content.find('.sgm-filter-content-select-mail');
+	mailContainer.empty();
+	
+	var clickContainer = this.content.find('.sgm-filter-content-select-click');
+	clickContainer.empty();
+	
+	return mailContainer;
+};
+
 FilterPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	
 	this.content.find('.smg-add-sent-filter').on('click', function (e) {
-		self.type = 'mail-sent';
-		self.content.find('.smg-filter').removeClass('sgm-filter-active');
-		$(this).addClass('sgm-filter-active');
-		self.content.find('.sgm-filter-content-body').empty();
-		var container = self.content.find('.sgm-filter-content-select-mail');
+		var container = self.setValues('mail-sent', this);
 		var filter = new FilterMailContent();
 		self.createFilter(filter, container);
 	});
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
-		self.type = 'mail-open';
-		self.content.find('.smg-filter').removeClass('sgm-filter-active');
-		$(this).addClass('sgm-filter-active');
-		self.content.find('.sgm-filter-content-body').empty();
-		var container = self.content.find('.sgm-filter-content-select-mail');
+		var container = self.setValues('mail-open', this);
 		var filter = new FilterMailContent();
 		self.createFilter(filter, container);
 	});
 	
 	this.content.find('.smg-add-click-filter').on('click', function (e) {
-		self.type = 'click';
-		self.content.find('.smg-filter').removeClass('sgm-filter-active');
-		$(this).addClass('sgm-filter-active');
-		self.content.find('.sgm-filter-content-body').empty();
-		var container = self.content.find('.sgm-filter-content-select-mail');
+		var container = self.setValues('click', this);
 		var filter = new FilterClickContent();
 		self.createClickFilter(filter, container);
 	});
 	
 	this.content.find('.smg-add-field-filter').on('click', function (e) {
-		self.type = 'field';
-		self.content.find('.smg-filter').removeClass('sgm-filter-active');
-		$(this).addClass('sgm-filter-active');
-		self.content.find('.sgm-filter-content-body').empty();
+		var container = self.setValues('field', this);
 		var filter = new FilterFieldContent();
 //		self.createFilter(filter);
 	});
