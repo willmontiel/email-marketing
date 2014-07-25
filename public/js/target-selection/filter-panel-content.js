@@ -160,7 +160,7 @@ FilterPanelContent.prototype.serialize = function() {
 			case 'click':
 				this.mailSelected = this.serializerObject.serialization.idMail;
 				var container = this.setValues(type);
-				var filter = new FilterMailContent();
+				var filter = new FilterClickContent();
 				this.createClickFilter(filter, container);
 				break;
 		}
