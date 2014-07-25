@@ -97,10 +97,10 @@ ListPanelContent.prototype.updateObject = function () {
 		this.newCriteria.serialization = null;
 	}
 	
-	console.log('Old');
-	console.log(this.oldCriteria);
-	console.log('New');
-	console.log(this.newCriteria);
+//	console.log('Old');
+//	console.log(this.oldCriteria);
+//	console.log('New');
+//	console.log(this.newCriteria);
 	
 	this.model.updateObject(this.oldCriteria, this.newCriteria);
 	this.oldCriteria = this.newCriteria;

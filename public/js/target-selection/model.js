@@ -159,7 +159,7 @@ Model.prototype.reset = function() {
 Model.prototype.updatePanelList = function() {
 	this.container.updateContainer();
 	
-	console.log(this.serializerObj);
+//	console.log(this.serializerObj);
 	var k = [];
 	k.push(this.serializerObj[0]);
 	k.push(this.serializerObj[1]);

@@ -1,27 +1,21 @@
 <?php
 
 namespace EmailMarketing\General\Misc;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of InterpreterTarget
- *
+ * Interprets a json object and convert it in a sql consult
  * @author Will
  */
 class InterpreterTarget 
 {
 	protected $account;
+	protected $logger;
+	protected $mail;
 	protected $data;
 	protected $result;
 	protected $SQLForIdContacts = "";
 	protected $joinForFilters = "";
 	protected $conditions = "";
 	protected $sql;
-
 
 	public function __construct()
 	{
@@ -38,12 +32,25 @@ class InterpreterTarget
 		$this->data = $data;
 	}
 	
+	public function setMail(\Mail $mail)
+	{
+		$this->mail = $mail;
+	}
+	
 	public function searchTotalContacts()
 	{
 		$this->createSQLForIdContacts();
 		$this->createSQLForFilters();
 		$this->createSQLBaseForTotalContacts();
 		$this->executeSQL();
+	}
+	
+	public function searchContacts()
+	{
+		$this->createSQLForIdContacts();
+		$this->createSQLForFilters();
+		$this->createSQLBaseForTarget();
+//		$this->executeSQL();
 	}
 	
 	private function createSQLForIdContacts()
@@ -70,7 +77,6 @@ class InterpreterTarget
 	private function createSQLForFilters()
 	{
 		$condition = ($this->data[1]['serialization']['conditions'] == 'all' ? 'AND' : 'OR');
-//		$condition = $this->data[1]['serialization']['conditions'];
 		array_splice($this->data, 0, 2);
 
 		$first = true;
@@ -106,9 +112,6 @@ class InterpreterTarget
 		}
 		
 		$this->conditions = ($piece == "" ? "" : " AND ({$piece}) ");
-		
-		$this->logger->log("Joins: {$this->joinForFilters}");
-		$this->logger->log("Conditions: {$this->conditions}");
 	}
 
 	private function createSQLBaseForTotalContacts()
@@ -120,6 +123,24 @@ class InterpreterTarget
 						  {$this->joinForFilters} 
 					  WHERE co.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 
 						  {$this->conditions} ";
+	}
+	
+	private function createSQLBaseForTarget()
+	{
+		$sql = "SELECT {$this->mail->idMail}, co.idContact, null, 'scheduled', 0, 0, 0, 0, 0, GROUP_CONCAT(l.idContactlist), 0, 0, 0, 0, 0, 0, 0, 0
+						  FROM ({$this->SQLForIdContacts}) AS c 
+						  JOIN contact AS co ON (co.idContact = c.idContact) 
+						  JOIN coxcl AS l ON (co.idContact = l.idContact)
+						  JOIN email AS e ON (e.idEmail = co.idEmail) 
+						  {$this->joinForFilters} 
+					  WHERE co.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 
+						  {$this->conditions} ";
+						  
+		$this->sql = "INSERT IGNORE INTO mxc (idMail, idContact, idBouncedCode, status, opening, clicks, bounced, 
+											  spam, unsubscribe, contactlists, share_fb, share_tw, share_gp, share_li,
+											  open_fb, open_tw, open_gp, open_li) VALUES ({$sql})";
+											  
+		$this->logger->log("SQL: {$sql}");									  
 	}
 	
 	private function executeSQL()
