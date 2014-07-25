@@ -94,8 +94,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 
 FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 	var self = this; 
-	
-	this.mailSelected = null;
+//	this.mailSelected = null;
 	
 	obj.setModel(this.model);
 	obj.setContainer(container);
@@ -160,7 +159,6 @@ FilterPanelContent.prototype.serialize = function() {
 				
 			case 'click':
 				this.mailSelected = this.serializerObject.serialization.idMail;
-				console.log(this.mailSelected);
 				var container = this.setValues(type);
 				var filter = new FilterClickContent();
 				this.createClickFilter(filter, container);
