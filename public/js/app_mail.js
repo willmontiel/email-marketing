@@ -139,14 +139,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			ser.push({
 				type: 'filter-panel',
 				serialization: {
-					type: 'open',
-					items: 61
-				}
-			});
-
-			ser.push({
-				type: 'filter-panel',
-				serialization: {
 					type: 'mail-sent',
 					idMail: null,
 					items: 61

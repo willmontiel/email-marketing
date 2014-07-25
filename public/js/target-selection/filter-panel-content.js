@@ -150,6 +150,7 @@ FilterPanelContent.prototype.serialize = function() {
 		this.selectedValue = this.serializerObject.serialization.items;
 		
 		switch (type) {
+			case 'mail-sent':
 			case 'mail-open':
 				var container = this.setValues(type);
 				var openFilter = new FilterMailContent();
