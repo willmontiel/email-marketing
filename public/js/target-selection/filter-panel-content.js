@@ -150,8 +150,14 @@ FilterPanelContent.prototype.serialize = function() {
 		
 		switch (type) {
 			case 'mail-sent':
-			case 'mail-open':
 				var active = this.content.find('.smg-add-sent-filter');
+				var container = this.setValues(type, active);
+				var filter = new FilterMailContent();
+				this.createFilter(filter, container);
+				break;
+				
+			case 'mail-open':
+				var active = this.content.find('.smg-add-open-filter');
 				var container = this.setValues(type, active);
 				var filter = new FilterMailContent();
 				this.createFilter(filter, container);
