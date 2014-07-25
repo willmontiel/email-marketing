@@ -153,8 +153,15 @@ FilterPanelContent.prototype.serialize = function() {
 			case 'mail-sent':
 			case 'mail-open':
 				var container = this.setValues(type);
-				var openFilter = new FilterMailContent();
-				this.createFilter(openFilter, container);
+				var filter = new FilterMailContent();
+				this.createFilter(filter, container);
+				break;
+				
+			case 'click':
+				this.mailSelected = this.serializerObject.serialization.idMail;
+				var container = this.setValues(type);
+				var filter = new FilterMailContent();
+				this.createClickFilter(filter, container);
 				break;
 		}
 		
