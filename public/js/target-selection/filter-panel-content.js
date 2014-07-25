@@ -70,7 +70,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 	obj.createSelect().then(function() { 
 		var select = obj.getSelect();
 		
-		if (self.selectedValue !== null) {
+		if (self.selectedValue != null) {
 			select.select2('val', self.selectedValue);
 		}
 		
@@ -104,7 +104,7 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 	obj.createSelectForMails().then(function() { 
 		var select = obj.getSelect();
 		
-		if (self.mailSelected !== null) {
+		if (self.mailSelected != null) {
 			console.log('Entra: ' + self.mailSelected);
 			select.select2('val', self.mailSelected);
 		}
