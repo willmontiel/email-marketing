@@ -14,9 +14,9 @@ class CampaignWrapper extends BaseWrapper
 		$this->dbase = $dbase;
 	}
 	
-	public function setAutosend(Autosend $autosend)
+	public function setAutoresponder(Autoresponder $autoresponder)
 	{
-		$this->autosend = $autosend;
+		$this->autoresponder = $autoresponder;
 	}
 	
 	public function setPreviewImage($image)
@@ -24,21 +24,21 @@ class CampaignWrapper extends BaseWrapper
 		$this->image = $image;
 	}
 	
-	public function createAutosend($content, $category, $type)
+	public function createAutoresponder($content, $type, $contentsource)
 	{
-		$autosend = new Autosend();
+		$autoresponder = new Autoresponder();
 		
-		$autosend->idAccount = $this->account->idAccount;
-		$autosend->category = $category;
-		$autosend->type = $type;
-		$autosend->createdon = time();
+		$autoresponder->idAccount = $this->account->idAccount;
+		$autoresponder->type = $type;
+		$autoresponder->contentsource = $contentsource;
+		$autoresponder->createdon = time();
 		
 		$nextmailing = new NextMailingObj();
 		$nextmailing->setSendTime($content['hour'] . ':' . $content['minute'] . ' ' . $content['meridian']);
 		$nextmailing->setFrequency('Daily');
 		$nextmailing->setLastSentDate(null);
 		
-		$this->populateAutoSendObj($autosend, $nextmailing, $content);
+		$this->populateAutoSendObj($autoresponder, $nextmailing, $content);
 		
 	}
 	
@@ -49,22 +49,22 @@ class CampaignWrapper extends BaseWrapper
 		$nextmailing->setFrequency('Daily');
 		$nextmailing->setLastSentDate(null);
 		
-		$this->populateAutoSendObj($this->autosend, $nextmailing, $content);
+		$this->populateAutoSendObj($this->autoresponder, $nextmailing, $content);
 	}
 	
 	public function updateAutomaticSendStatus($status)
 	{
 		$new_status = ($status == 'true') ? 1 : 0 ;
-		$this->autosend->activated = $new_status;
+		$this->autoresponder->active = $new_status;
 		
-		if (!$this->autosend->save()) {
+		if (!$this->autoresponder->save()) {
 			foreach ($this->utosend->getMessages() as $msg) {
 				throw new Exception("Error while updating status of automatic campaign, {$msg}!");
 			}
 		}
 	}
 	
-	protected function populateAutoSendObj(Autosend $autosend, NextMailingObj $nextmailing, $content)
+	protected function populateAutoSendObj(Autoresponder $autoresponder, NextMailingObj $nextmailing, $content)
 	{
 		$time = array(
 			'hour' => $content['hour'],
@@ -83,23 +83,23 @@ class CampaignWrapper extends BaseWrapper
 		
 		$nextmailing->setDaysAllowed($days);
 		
-		$autosend->activated = ( isset($content['activated']) ) ? 1 : 0 ;
-		$autosend->name = $content['name'];
-		$autosend->target = 'Nothing yet';
-		$autosend->subject = $content['subject'];
-		$autosend->from = $content['from'];
-		$autosend->reply = $content['reply'];
-		$autosend->time = json_encode($time);
-		$autosend->days = json_encode($days);
-		$autosend->content = $content['content'];
-		$autosend->nextMailing = $nextmailing->getNextSendTime();
+		$autoresponder->active = ( isset($content['active']) ) ? 1 : 0 ;
+		$autoresponder->name = $content['name'];
+		$autoresponder->target = json_encode(array('contactlists' => '5,7'));
+		$autoresponder->subject = $content['subject'];
+		$autoresponder->from = $content['from'];
+		$autoresponder->reply = $content['reply'];
+		$autoresponder->time = json_encode($time);
+		$autoresponder->days = json_encode($days);
+		$autoresponder->content = json_encode( array( 'url' => $content['content'] ) );
+		$autoresponder->nextExecution = $nextmailing->getNextSendTime();
 		
 		if($this->image) {
-			$autosend->previewData = $this->createCampaignPreviewImage($this->image);
+			$autoresponder->previewData = $this->createCampaignPreviewImage($this->image);
 		}
 		
-		if (!$autosend->save()) {
-			foreach ($autosend->getMessages() as $msg) {
+		if (!$autoresponder->save()) {
+			foreach ($autoresponder->getMessages() as $msg) {
 				throw new Exception("Error while saving automatic campaign, {$msg}!");
 			}
 		}
@@ -115,10 +115,10 @@ class CampaignWrapper extends BaseWrapper
 	
 	public function updateCampaignPreviewImage($image)
 	{
-		$this->autosend->previewData = $this->createCampaignPreviewImage($image);
+		$this->autoresponder->previewData = $this->createCampaignPreviewImage($image);
 
-		if (!$this->autosend->save()) {
-			foreach ($this->autosend->getMessages() as $msg) {
+		if (!$this->autoresponder->save()) {
+			foreach ($this->autoresponder->getMessages() as $msg) {
 				$this->logger->log("Error: " . $msg);
 			}
 		}

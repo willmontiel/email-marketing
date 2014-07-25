@@ -86,17 +86,17 @@
 						<div class="col-sm-4 autoresponse-list-information">
 							<h4>{{item.name}}</h4>
 							<dl>
-								<dd><strong>Destinatarios:</strong> {{item.target}}</dd>
+								<dd><strong>Destinatarios:</strong> {{item.target.contactlists}}</dd>
 								<dd><strong>Asunto:</strong> {{item.subject}}</dd>
 							</dl>
 							<div class="autoresponse-list-options">
-								<a class="btn btn-default btn-sm" href="{{url("campaign/automatic")}}/{{item.id}}">
+								<a class="btn btn-default btn-sm" href="{{url("campaign/automatic")}}/{{item.idAutoresponder}}">
 									<span class="glyphicon glyphicon-pencil"></span>
 								</a>
-								<a onclick="previewAutoSend('{{item.content}}', '{{item.id}}');" class="btn btn-default btn-sm">
+								<a onclick="previewAutoSend('{{item.content.url}}', '{{item.idAutoresponder}}');" class="btn btn-default btn-sm">
 									<span class="glyphicon glyphicon-eye-open"></span>
 								</a>
-								<a class="auto_send_delete_btn btn btn-default btn-sm" data-toggle="modal" href="#modal-simple" data-id="{{ url('campaign/delete/') }}{{item.id}}">
+								<a class="auto_send_delete_btn btn btn-default btn-sm" data-toggle="modal" href="#modal-simple" data-id="{{ url('campaign/delete/') }}{{item.idAutoresponder}}">
 									<span class="glyphicon glyphicon-trash"></span>
 								</a>
 								<div class="clearfix"></div>
@@ -108,7 +108,7 @@
 							<p>los dias {%for day in item.days%} {{day}}, {%endfor%} recurrente.</p>
 						</div>
 						<div class="col-sm-2 autoresponse-list-activated">
-							<input type="checkbox" class="switch-campaign"  data-id="{{item.id}}" {%if item.activated == 1%}checked{%endif%}>
+							<input type="checkbox" class="switch-campaign"  data-id="{{item.idAutoresponder}}" {%if item.active == 1%}checked{%endif%}>
 						</div>
 					</div>
 

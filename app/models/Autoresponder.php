@@ -1,6 +1,6 @@
 <?php
 
-class Autosend extends \Phalcon\Mvc\Model
+class Autoresponder extends \Phalcon\Mvc\Model
 {
 	public function initialize()
     {

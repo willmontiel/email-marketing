@@ -9,7 +9,7 @@ class CampaignController extends ControllerBase
 	
 	public function listAction()
 	{
-		$autosends = Autosend::find(array(
+		$autosends = Autoresponder::find(array(
 				"conditions" => "idAccount = ?1",
 				"bind" => array(1 => $this->user->idAccount),
 				"order" => "createdon DESC"
@@ -18,14 +18,14 @@ class CampaignController extends ControllerBase
 		$autoresponse = array();
 		foreach ($autosends as $autosend) {
 			$obj = new stdClass();
-			$obj->id = $autosend->idAutosend;
+			$obj->idAutoresponder = $autosend->idAutoresponder;
 			$obj->name = $autosend->name;
 			$obj->category = $autosend->category;
-			$obj->type = $autosend->type;
-			$obj->activated = $autosend->activated;
-			$obj->target = $autosend->target;
+			$obj->contentsource = $autosend->contentsource;
+			$obj->active = $autosend->active;
+			$obj->target = json_decode($autosend->target);
 			$obj->subject = $autosend->subject;
-			$obj->content = $autosend->content;
+			$obj->content = json_decode($autosend->content);
 			$obj->previewData = $autosend->previewData;
 			$obj->time = json_decode($autosend->time);
 			$obj->days = $this->renameDays( json_decode($autosend->days) );
@@ -67,37 +67,37 @@ class CampaignController extends ControllerBase
 		return $new_days;
 	}
 
-	public function newAction($type)
+//	public function newAction($type)
+//	{
+//		$account = $this->user->account;
+//		
+//		$dbases = Dbase::findByIdAccount($account->idAccount);
+//		$this->view->setVar('dbases', $dbases);
+//		
+//		if ($this->request->isPost()) {
+//			$campaignWrapper = new CampaignWrapper();
+//			try {
+//				$idDbase;
+//			
+//				$campaignWrapper->setDbase($dbase);
+//			}
+//			catch (Exception $e) {
+//				$this->flashSession->error("Error: {$campaignWrapper->getFieldErrors[0]}");
+//				$this->logger->log("Exception: {$e}");
+//			}
+//		}	
+//	}
+//	
+//	public function editAction()
+//	{
+//		
+//	}
+//	
+	public function deleteAction($idAutoresponder)
 	{
-		$account = $this->user->account;
-		
-		$dbases = Dbase::findByIdAccount($account->idAccount);
-		$this->view->setVar('dbases', $dbases);
-		
-		if ($this->request->isPost()) {
-			$campaignWrapper = new CampaignWrapper();
-			try {
-				$idDbase;
-			
-				$campaignWrapper->setDbase($dbase);
-			}
-			catch (Exception $e) {
-				$this->flashSession->error("Error: {$campaignWrapper->getFieldErrors[0]}");
-				$this->logger->log("Exception: {$e}");
-			}
-		}	
-	}
-	
-	public function editAction()
-	{
-		
-	}
-	
-	public function deleteAction($idAutosend)
-	{
-		$autosend = Autosend::findFirst(array(
-				"conditions" => "idAutosend = ?1",
-				"bind" => array(1 => $idAutosend)
+		$autosend = Autoresponder::findFirst(array(
+				"conditions" => "idAutoresponder = ?1",
+				"bind" => array(1 => $idAutoresponder)
 			));
 		
 		if($autosend->idAccount === $this->user->idAccount) {
@@ -118,7 +118,7 @@ class CampaignController extends ControllerBase
 		return $this->response->redirect("campaign/list");
 	}
 	
-	public function automaticAction($idAutosend)
+	public function automaticAction($idAutoresponder)
 	{
 		 if ($this->request->isPost()) {
 			 
@@ -129,16 +129,16 @@ class CampaignController extends ControllerBase
 				$wrapper->setAccount($this->user->account);
 				$wrapper->setPreviewImage($image);
 				
-				if($idAutosend) {
-					$autosend = Autosend::findFirst(array(
-							"conditions" => "idAutosend = ?1",
-							"bind" => array(1 => $idAutosend)
+				if($idAutoresponder) {
+					$autoresponder = Autoresponder::findFirst(array(
+							"conditions" => "idAutoresponder = ?1",
+							"bind" => array(1 => $idAutoresponder)
 						));
-					$wrapper->setAutosend($autosend);
+					$wrapper->setAutoresponder($autoresponder);
 					$wrapper->updateAutomaticSend($content);
 				}
 				else {
-					$wrapper->createAutosend($content, 'automatic', 'url');
+					$wrapper->createAutoresponder($content, 'automatic', 'url');
 				}
 			}
 			catch (Exception $e) {
@@ -147,15 +147,16 @@ class CampaignController extends ControllerBase
 			
 			return $this->response->redirect("campaign/list");
 		 }
-		 else if($idAutosend){
-			$autosend = Autosend::findFirst(array(
-					"conditions" => "idAutosend = ?1",
-					"bind" => array(1 => $idAutosend)
+		 else if($idAutoresponder){
+			$autoresponder = Autoresponder::findFirst(array(
+					"conditions" => "idAutoresponder = ?1",
+					"bind" => array(1 => $idAutoresponder)
 				));
-			$autosend->time = json_decode($autosend->time);
-			$autosend->days = json_decode($autosend->days);
+			$autoresponder->time = json_decode($autoresponder->time);
+			$autoresponder->days = json_decode($autoresponder->days);
+			$autoresponder->content = json_decode($autoresponder->content);
 			
-			$this->view->setVar("autoresponse", $autosend);
+			$this->view->setVar("autoresponse", $autoresponder);
 		 }
 	}
 	
@@ -167,11 +168,11 @@ class CampaignController extends ControllerBase
 			$wrapper = new CampaignWrapper();
 			$wrapper->setAccount($this->user->account);
 
-			$autosend = Autosend::findFirst(array(
-					"conditions" => "idAutosend = ?1",
+			$autosend = Autoresponder::findFirst(array(
+					"conditions" => "idAutoresponder = ?1",
 					"bind" => array(1 => $id)
 				));
-			$wrapper->setAutosend($autosend);
+			$wrapper->setAutoresponder($autosend);
 			$wrapper->updateAutomaticSendStatus($status);
 			
 			return $this->setJsonResponse(array('status' => 'El estado de la autorespuesta se ha actualizado'), 201, 'Success');
@@ -228,11 +229,11 @@ class CampaignController extends ControllerBase
 				$wrapper = new CampaignWrapper();
 				$wrapper->setAccount($this->user->account);
 
-				$autosend = Autosend::findFirst(array(
-						"conditions" => "idAutosend = ?1",
+				$autosend = Autoresponder::findFirst(array(
+						"conditions" => "idAutoresponder = ?1",
 						"bind" => array(1 => $id)
 					));
-				$wrapper->setAutosend($autosend);
+				$wrapper->setAutoresponder($autosend);
 				$wrapper->updateCampaignPreviewImage($content);
 			}
 			else {

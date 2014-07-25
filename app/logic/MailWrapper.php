@@ -179,6 +179,8 @@ class MailWrapper extends BaseWrapper
 				throw new \Exception('Error while saving mail scheduleDate in Mailschedule table');
 			}
 		}
+		
+		return $this->mail;
 	}
 	
 	protected function isAValidDomain($domain)

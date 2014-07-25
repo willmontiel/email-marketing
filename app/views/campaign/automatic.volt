@@ -18,7 +18,7 @@
 					$('#auto-day-{{day}}').prop('checked', true);
 				{%endfor%}
 					
-				{%if autoresponse.activated == 0%}
+				{%if autoresponse.active == 0%}
 					$(".switch-campaign").bootstrapSwitch('state', false);
 				{%endif%}
 				
@@ -53,7 +53,7 @@
 	<div class="row">
 		<h4 class="sectiontitle">Nueva autorespuesta en el tiempo</h4>
 		<div class="col-md-10">
-			<form class="form-horizontal"  action="{%if autoresponse is defined%} {{url('campaign/automatic')}}/{{autoresponse.idAutosend}} {%else%} {{url('campaign/automatic')}} {%endif%}" method="post"  role="form">
+			<form class="form-horizontal"  action="{%if autoresponse is defined%} {{url('campaign/automatic')}}/{{autoresponse.idAutoresponder}} {%else%} {{url('campaign/automatic')}} {%endif%}" method="post"  role="form">
 				<div class="form-group">
 					<label class="col-sm-4 control-label">Nombre de envío automático</label>
 					<div class="col-md-5">
@@ -98,7 +98,7 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">Contenido capturado de una URL</label>
 					<div class="col-md-5">
-						<input class="form-control" type="text" name="content" required="required" {%if autoresponse is defined%} value="{{autoresponse.content}}" {%endif%}>
+						<input class="form-control" type="text" name="content" required="required" {%if autoresponse is defined%} value="{{autoresponse.content.url}}" {%endif%}>
 					</div>
 					<div class="col-md-1">
 						<a onclick="previewAutoSend();" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
@@ -131,7 +131,7 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">Habilitado</label>
 					<div class="col-md-5">
-						<input type="checkbox" class="switch-campaign"  name="activated" checked>
+						<input type="checkbox" class="switch-campaign"  name="active" checked>
 					</div>
 				</div>
 				

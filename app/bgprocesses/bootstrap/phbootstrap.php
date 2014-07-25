@@ -9,6 +9,7 @@
 $loader = new \Phalcon\Loader();
 $loader->registerDirs(array(
 	'../sender',
+	'../autoresponder',
 	'../../models/',
 	'../../library/',
 	'../../library/facebook/',
@@ -23,6 +24,10 @@ $loader->registerNamespaces(
 	),
 	true
 );
+
+$loader->registerClasses(array(
+	"simple_html_dom" => "../../library/simple_html_dom.php",
+));
 
 // Ruta de APP
 $apppath = realpath('../../../');
