@@ -109,7 +109,7 @@ Model.prototype.cleanObject = function() {
 };
 
 Model.prototype.updateObject = function(oldObj, newObj) {
-	this.cleanObject();
+//	this.cleanObject();
 	var key = this.serializerObj.indexOf(oldObj);
 	
 	if (newObj.serialization !== null) {
