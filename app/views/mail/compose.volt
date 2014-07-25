@@ -226,12 +226,6 @@
 {% endblock %}
 {% block content %}
 	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}
-	
-	<div class="row">
-		<div id="panel-container">
-		</div>
-	</div>
-	
 	{{flashSession.output()}}
 	
 	<div class="border-mail mail-wrapper">

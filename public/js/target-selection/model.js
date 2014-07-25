@@ -1,5 +1,6 @@
 function Model() {
 	this.serializerObj = [];
+	this.totalContacts = 0;
 }
 
 Model.prototype.setPanelContainer = function(container){
@@ -135,8 +136,6 @@ Model.prototype.updateObject = function(oldObj, newObj) {
 			var j = this.serializerObj.splice(key, 1);
 		}
 	}
-	
-	console.log('Updating...');
 };
 
 Model.prototype.removePanel = function(panel) {
@@ -175,7 +174,8 @@ Model.prototype.refreshTotalContacts = function() {
 	var DataSource = this.getDataSource();
 	DataSource.find('/gettotalcontacts').then(function() { 
 		var total = DataSource.getData();
-		self.refreshTotalContactsView('Contactos aproximados: ' + total.totalContacts);
+		self.totalContacts = total.totalContacts;
+		self.refreshTotalContactsView('Contactos aproximados: ' + self.totalContacts);
 	});
 };
 
@@ -187,4 +187,8 @@ Model.prototype.refreshTotalContactsView = function(data) {
 
 Model.prototype.getModel = function() {
 	return this.serializerObj;
+};
+
+Model.prototype.getTotalContacts = function() {
+	return this.totalContacts;
 };

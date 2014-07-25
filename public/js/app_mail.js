@@ -18,13 +18,7 @@ App.Mail = DS.Model.extend({
 	sender: DS.attr('string'),
 	replyTo: DS.attr('string'),
 	subject: DS.attr('string'),
-	dbases: DS.attr('string'),
-	contactlists: DS.attr('string'),
-	segments: DS.attr('string'),
-	filterByEmail: DS.attr('string'),
-	filterByOpen: DS.attr('string'),
-	filterByClick: DS.attr('string'),
-	filterByExclude: DS.attr('string'),
+	target: DS.attr('string'),
 	googleAnalytics: DS.attr('string'),
 	campaignName: DS.attr('string'),
 	previewData: DS.attr('string'),
@@ -114,88 +108,18 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('fbimagepublication', 'post_default.png');
 		}
 	}.observes('this.content'),
-			
-	whatevers: function () {
-		
-			var ser = new Array();
-
-			ser.push({
-				type: 'top-panel',
-				serialization: {
-					criteria: 'dbases'
-				}
-			});
-
-			var x = [19];
-
-			ser.push({
-				type: 'list-panel',
-				serialization: {
-					items: x,
-					conditions: 'all'
-				}
-			});
-
-			ser.push({
-				type: 'filter-panel',
-				serialization: {
-					type: 'mail-sent',
-					idMail: null,
-					items: 61
-				}
-			});
-
-			ser.push({
-				type: 'filter-panel',
-				serialization: {
-					type: 'mail-open',
-					idMail: null,
-					items: 75
-				}
-			});
-			
-			ser.push({
-				type: 'filter-panel',
-				serialization: {
-					type: 'click',
-					idMail: 179,
-					items: 8
-				}
-			});
-		
-		var panelContainer = new PanelContainer('#panel-container');
-		
-		var model = new Model();
-		model.setPanelContainer(panelContainer);
-		model.setSerializerObject(ser);
-		model.serializer();
-		
-	}.observes('isTargetExpanded'),
-		
 	
 	//Si hay un id se encargara se recrear el correo para su edición
 	setSelectsContent: function () {
 		if (this.get('id') !== null) {
-			var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
-			var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
-			var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
 			var fbaccounts = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
 			var twaccounts = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
-			
-			this.set('dbaselist', arrayDbase);
-			this.set('list', arrayList);
-			this.set('segmentlist', arraySegment);
 			
 			this.set('fbaccountsel', fbaccounts);
 			this.set('twaccountsel', twaccounts);
 			
-			var arrayOpen = setTargetValues(this.get('this.filterByOpen'), App.sendByOpen);
-			var arrayClick = setTargetValues(this.get('this.filterByClick'), App.sendByClick);
-			var arrayExclude = setTargetValues(this.get('this.filterByExclude'), App.excludeContact);
-			
-			this.set('open', arrayOpen);
-			this.set('click', arrayClick);
-			this.set('exclude', arrayExclude);
+			var target = this.get('this.target');
+			App.serializerObject = JSON.parse(target);
 			
 			if( this.get('fbimagepublication') !== undefined || this.get('fbimagepublication') !== 'default' ) {
 				App.fbimage = this.get('fbimagepublication');
@@ -255,23 +179,19 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	//Observa que se hayan seleccionado destinatarios
 	targetEmpty: function () {
 		
-		this.checkFormsStatus(this.get('this.mailcontent'), this.get('this.dbases'), this.get('this.contactlists'), this.get('this.segments'));
+//		this.checkFormsStatus(this.get('this.mailcontent'), this.get('this.dbases'), this.get('this.contactlists'), this.get('this.segments'));
 
-		var d, l, s;
-		d = this.get('this.dbaselist');
-		l = this.get('this.list');
-		s = this.get('this.segmentlist');
+		var t;
+		t = this.get('this.target');
 		
-		d = (d.length === 0)?null:d;
-		l = (l.length === 0)?null:l;
-		s = (s.length === 0)?null:s;
+		t = (t === '') ? null : t;
 		
-		if (!d && !l && !s) {
+		if (!t) {
 			return true;
 		}
 		return false;
-	}.property('dbaselist.[]', 'list.[]', 'segmentlist.[]'), 
-		
+	}.property('content.target'), 
+	
 	//Si hay un id de correo la seleccion de contenido (editor, plantillas, html, importar contenido) se habilita de lo contrario no
 	isContentAvailable: function () {
 		var id;
@@ -510,12 +430,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			sender = senderEmail + '/' + senderName;
 		}
 		
-		var dbases = getArrayValue(this.get('dbaselist'));
-		var contactlists = getArrayValue(this.get('list'));
-		var segments = getArrayValue(this.get('segmentlist'));
-		var open = getArrayValue(this.get('open'));
-		var click = getArrayValue(this.get('click'));
-		var exclude = getArrayValue(this.get('exclude'));
 		var fbaccounts = getArrayValue(this.get('fbaccountsel'));
 		var twaccounts = getArrayValue(this.get('twaccountsel'));
 		
@@ -533,13 +447,11 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			mail.set('scheduleDate', value);
 		}
 		
+		var model = App.model.getModel();
+		var target = JSON.stringify(model);
+		
 		mail.set('sender', sender);
-		mail.set('dbases', dbases);
-		mail.set('contactlists', contactlists);
-		mail.set('segments', segments);
-		mail.set('filterByOpen', open);
-		mail.set('filterByClick', click);
-		mail.set('filterByExclude', exclude);
+		mail.set('target', target);
 		mail.set('googleAnalytics', analitycs);
 		mail.set('fbaccounts', fbaccounts);
 		mail.set('twaccounts', twaccounts);
@@ -624,6 +536,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isSocialExpanded', false);
 			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
+			
+			
 		},
 
 		expandSocial: function () {
@@ -815,6 +729,14 @@ function setFilterValues(values, checked, self) {
 	return false;
 }
 
+function createSelectorTarget() {
+	var panelContainer = new PanelContainer('#panel-container');		
+	App.model = new Model();
+	App.model.setPanelContainer(panelContainer);
+	App.model.setSerializerObject(App.serializerObject);
+	App.model.serializer();
+}
+
 App.Select2 = Em.View.extend({
 	templateName: 'select2',
 	didInsertElement: function() {
@@ -950,4 +872,10 @@ Ember.RadioFilter = Ember.View.extend({
 				break;
 		}
     }	
+});
+
+App.target = Ember.View.extend({
+	didInsertElement: function() {
+		createSelectorTarget();
+	}
 });
