@@ -146,14 +146,14 @@ FilterPanelContent.prototype.createContent = function() {
 FilterPanelContent.prototype.serialize = function() {
 	if (this.serializerObject !== undefined && this.serializerObject.serialization.items !== null) {
 		this.oldCriteria = this.serializerObject;
-		this.type = this.serializerObject.serialization.type;
+		var type = this.serializerObject.serialization.type;
 		this.selectedValue = this.serializerObject.serialization.items;
 		
-		switch (this.type) {
+		switch (type) {
 			case 'mail-open':
-				this.content.find('.sgm-filter-content-body').empty();
+				var container = this.setValues(type);
 				var openFilter = new FilterMailContent();
-				this.createFilter(openFilter);
+				this.createFilter(openFilter, container);
 				break;
 		}
 		
