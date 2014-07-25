@@ -151,14 +151,16 @@ FilterPanelContent.prototype.serialize = function() {
 		switch (type) {
 			case 'mail-sent':
 			case 'mail-open':
-				var container = this.setValues(type);
+				var active = this.content.find('.smg-add-sent-filter');
+				var container = this.setValues(type, active);
 				var filter = new FilterMailContent();
 				this.createFilter(filter, container);
 				break;
 				
 			case 'click':
+				var active = this.content.find('.smg-add-click-filter');
 				this.mailSelected = this.serializerObject.serialization.idMail;
-				var container = this.setValues(type);
+				var container = this.setValues(type, active);
 				var filter = new FilterClickContent();
 				this.createClickFilter(filter, container);
 				
