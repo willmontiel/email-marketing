@@ -70,7 +70,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 	obj.createSelect().then(function() { 
 		var select = obj.getSelect();
 		
-		if (self.selectedValue != null) {
+		if (self.selectedValue !== null) {
 			select.select2('val', self.selectedValue);
 		}
 		
@@ -103,8 +103,7 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 	obj.createSelectForMails().then(function() { 
 		var select = obj.getSelect();
 		
-		if (self.mailSelected != null) {
-			console.log('Entra: ' + self.mailSelected);
+		if (self.mailSelected !== null) {
 			select.select2('val', self.mailSelected);
 		}
 		
@@ -162,6 +161,11 @@ FilterPanelContent.prototype.serialize = function() {
 				var container = this.setValues(type);
 				var filter = new FilterClickContent();
 				this.createClickFilter(filter, container);
+				
+				var container = this.content.find('.sgm-filter-content-select-click');
+				container.empty();
+				var filter = new FilterClickContent();
+				this.createFilter(filter, container);
 				break;
 		}
 		
