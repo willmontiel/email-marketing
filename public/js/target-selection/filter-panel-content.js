@@ -105,6 +105,7 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 		var select = obj.getSelect();
 		
 		if (self.selectedValue !== null) {
+			console.log('ENtra');
 			select.select2('val', self.selectedValue);
 		}
 		
