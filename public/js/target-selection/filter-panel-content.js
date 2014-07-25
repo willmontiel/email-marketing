@@ -104,9 +104,8 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 	obj.createSelectForMails().then(function() { 
 		var select = obj.getSelect();
 		
-		if (self.selectedValue !== null) {
-			console.log('ENtra');
-			select.select2('val', self.selectedValue);
+		if (self.mailSelected !== null) {
+			select.select2('val', self.mailSelected);
 		}
 		
 		select.on("change", function(e) { 
