@@ -11,8 +11,18 @@ Model.prototype.setSerializerObject = function(serializerObj) {
 };
 
 Model.prototype.serializer = function() {
-	for (var i = 0; i < this.serializerObj.length; i++) {
-		this.selectTypeObject(this.serializerObj[i]);
+	if (this.serializerObj === null || this.serializerObj === undefined) {
+		var obj = {
+			type: 'top-panel',
+			serialization: {criteria: null}
+		};
+		
+		this.createTopPanel(obj);
+	}
+	else {
+		for (var i = 0; i < this.serializerObj.length; i++) {
+			this.selectTypeObject(this.serializerObj[i]);
+		}
 	}
 };
 

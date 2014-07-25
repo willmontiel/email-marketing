@@ -116,57 +116,60 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}.observes('this.content'),
 			
 	whatevers: function () {
-		var ser = null;
 		
-		if (ser === null) {
-			ser = new Array();
-			
+			var ser = new Array();
+
 			ser.push({
 				type: 'top-panel',
-				serialization: {criteria: null}
+				serialization: {
+					criteria: 'dbases'
+				}
 			});
 
-//			ser.push({
-//				type: 'top-panel',
-//				serialization: {
-//					criteria: 'dbases'
-//				}
-//			});
-//
-//			var x = [19];
-//
-//			ser.push({
-//				type: 'list-panel',
-//				serialization: {
-//					items: x,
-//					conditions: 'any'
-//				}
-//			});
-//
-//			ser.push({
-//				type: 'filter-panel',
-//				serialization: {
-//					type: 'open',
-//					items: 61
-//				}
-//			});
-//
-//			ser.push({
-//				type: 'filter-panel',
-//				serialization: {
-//					type: 'open',
-//					items: 136
-//				}
-//			});
-//
-//			ser.push({
-//				type: 'filter-panel',
-//				serialization: {
-//					type: 'open',
-//					items: 135
-//				}
-//			});
-		}
+			var x = [19];
+
+			ser.push({
+				type: 'list-panel',
+				serialization: {
+					items: x,
+					conditions: 'all'
+				}
+			});
+
+			ser.push({
+				type: 'filter-panel',
+				serialization: {
+					type: 'open',
+					items: 61
+				}
+			});
+
+			ser.push({
+				type: 'filter-panel',
+				serialization: {
+					type: 'mail-sent',
+					idMail: null,
+					items: 61
+				}
+			});
+
+			ser.push({
+				type: 'filter-panel',
+				serialization: {
+					type: 'mail-open',
+					idMail: null,
+					items: 75
+				}
+			});
+			
+			ser.push({
+				type: 'filter-panel',
+				serialization: {
+					type: 'click',
+					idMail: 179,
+					items: 8
+				}
+			});
 		
 		var panelContainer = new PanelContainer('#panel-container');
 		
