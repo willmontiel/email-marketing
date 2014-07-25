@@ -106,7 +106,7 @@ Model.prototype.cleanObject = function() {
 			i--;
 		}
 	}
-}
+};
 
 Model.prototype.updateObject = function(oldObj, newObj) {
 	this.cleanObject();
@@ -125,6 +125,8 @@ Model.prototype.updateObject = function(oldObj, newObj) {
 			var j = this.serializerObj.splice(key, 1);
 		}
 	}
+	
+	console.log(this.serializerObj);
 };
 
 Model.prototype.removePanel = function(panel) {

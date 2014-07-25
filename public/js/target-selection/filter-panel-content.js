@@ -14,8 +14,6 @@ function FilterPanelContent() {
 }
 FilterPanelContent.prototype = new PanelContent;
 
-
-
 FilterPanelContent.prototype.setValues = function(type, himself) {
 	this.type = type;
 	this.content.find('.smg-filter').removeClass('sgm-filter-active');
@@ -51,11 +49,11 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		self.createClickFilter(filter, container);
 	});
 	
-	this.content.find('.smg-add-field-filter').on('click', function (e) {
-		var container = self.setValues('field', this);
-		var filter = new FilterFieldContent();
+//	this.content.find('.smg-add-field-filter').on('click', function (e) {
+//		var container = self.setValues('field', this);
+//		var filter = new FilterFieldContent();
 //		self.createFilter(filter);
-	});
+//	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
 	this.serialize();
@@ -134,9 +132,6 @@ FilterPanelContent.prototype.createContent = function() {
 								  </div>\n\
 								  <div class="smg-filter smg-add-click-filter filter-icon">\n\
 									  <span class="glyphicon glyphicon-hand-up"></span>\n\
-								  </div>\n\
-								   <div class="smg-filter smg-add-field-filter filter-icon">\n\
-									  <span class="glyphicon glyphicon-text-width"></span>\n\
 								  </div>\n\
 							  </div>\n\
 						  </div>\n\
