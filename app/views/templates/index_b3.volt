@@ -15,7 +15,7 @@
         {{ stylesheet_link('css/prstyles.css') }}
 
         {# Para cambiar el tema modificar la ruta en el siguiente enlace#}
-        {{ stylesheet_link('themes/gray-orange/css/styles.css') }}
+        {{ stylesheet_link('themes/' ~ theme.name ~ '/css/styles.css') }}
         {##}
 
         {{ stylesheet_link('vendors/bootstrap_v3/vendors/css/bootstrap-editable.css') }}
@@ -126,7 +126,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xs-12 col-sm-3 col-md-2 sidebar" style="height: 100%;">
-				<a class="navbar-brand" href="{{url('')}}"><img src="{{url('themes/base/images/logo-blanco.png')}}"></a>
+				<a class="navbar-brand" href="{{url('')}}">{{theme.logo}}</a>
 				<div class="clearfix"></div>
 
 				<div>

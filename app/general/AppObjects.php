@@ -36,6 +36,8 @@ class AppObjects
 
 		$this->setChatConfig();
 		
+		$this->setThemeData();
+
 		if (!$this->config->system->status && !in_array($this->ip, $this->allowed_ips)) {
 			$this->setAppPath();
 			$this->setFullPath();
@@ -499,6 +501,32 @@ class AppObjects
 		$this->di->set('flashMessage', function(){
 			$flashMessage = new \FlashMessages();
 			return $flashMessage;
+		});
+	}
+
+
+	public function setThemeData()
+	{
+		$config = $this->config;
+
+		$this->di->set('theme', function() use ($config) {
+			$theme = new \stdClass;
+
+			if (isset($config->theme->name)) {
+				$theme->name = $config->theme->name;
+				$theme->logo = $config->theme->logo;
+				$theme->title = $config->theme->title;
+				$theme->subtitle = $config->theme->subtitle;
+				$theme->footer = $config->theme->footer;
+			}
+			else {
+				$theme->name = 'base';
+				$theme->logo = '';
+				$theme->title = 'Sigma Engine';
+				$theme->subtitle = 'Presencia Digital';
+				$theme->footer = 'Sigma Engine - (c) 2.014 Sigma Movil S.A.S';
+			}
+			return $theme;
 		});
 	}
 	
