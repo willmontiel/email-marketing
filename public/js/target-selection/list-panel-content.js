@@ -181,8 +181,8 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 		e.preventDefault();
 
 		self.removeItem(this);
-		self.updateObject();
 		self.model.updatePanelList();
+		self.updateObject();
 		self.model.refreshTotalContacts();
 		if (self.selectedItems.length === 0) {
 			self.content.find('.sgm-box-footer-content').empty();
