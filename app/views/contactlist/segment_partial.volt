@@ -5,7 +5,7 @@
 	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'segments']) }}
 
 	<div class="row">
-		<h4 class="sectiontitle">Segmentos</h4>
+		<h1 class="sectiontitle">Segmentos</h1>
 		<div class="row">
 			<div class="col-md-6">
 				<form role="form">
@@ -52,7 +52,7 @@
 				<tr>
 					<td>
 						<div class="bs-callout bs-callout-warning">
-							<h4>No se encontraron segmentos</h4>
+							<h1>No se encontraron segmentos</h1>
 							<p>Verifique el filtro de bases de datos.</p>
 							<p>Segmente sus contactos por los valores de sus campos, o por la actividad que han tenido.
 							</p>
@@ -84,7 +84,7 @@
 
 <script type="text/x-handlebars" data-template-name="segments/new">
 	<div class="row">
-		<h4 class="sectiontitle">Crear nuevo segmento</h4>
+		<h1 class="sectiontitle">Crear nuevo segmento</h1>
 		{{ '{{#if App.errormessage }}' }}
 			<div class="bs-callout bs-callout-danger">
 				{{ '{{ App.errormessage }}' }}
@@ -249,7 +249,7 @@
 
 <script type="text/x-handlebars" data-template-name="segments/delete">
 	<div class"row">
-		<h4 class="sectiontitle">Eliminar un segmento</h4>
+		<h1 class="sectiontitle">Eliminar un segmento</h1>
 		<div class="bs-callout bs-callout-danger">
 			<p>Está a punto de borrar un segmento, si lo hace borrará el filtro rápido para separar los contactos, pero no los contactos. Si está seguro que desea continuar haga clic en el botón eliminar, de lo contrario haga en clic en cancelar.</p>
 		</div>
@@ -261,7 +261,7 @@
 
 <script type="text/x-handlebars" data-template-name="segments/edit">
 	<div class="row">
-		<h4 class="sectiontitle">Editar un segmento</h4>
+		<h1 class="sectiontitle">Editar un segmento</h1>
 		{{ '{{#if App.errormessage }}' }}
 			<div class="bs-callout bs-callout-danger">
 				{{ '{{ App.errormessage }}' }}

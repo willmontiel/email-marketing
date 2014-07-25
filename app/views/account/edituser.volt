@@ -1,14 +1,9 @@
 {% extends "templates/index_b3.volt" %}
 
 {% block content %}
+	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 	<div class="row">
-		<div class="col-md-12">
-			{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
-		</div>
-	</div>
-
-	<div class="row">
-		<h4 class="sectiontitle">Editar o actualizar información del usuario</h4>
+		<h1 class="sectiontitle">Editar o actualizar información del usuario</h1>
 		<div class="bs-callout bs-callout-info">
 			Aquí podrá editar o actualizar información de cualquier usuario de cualquiera de las cuentas.
 		</div>
@@ -44,7 +39,7 @@
 				
 			<div class="form-group">
 				<label for="username" class="col-sm-3 control-label">*Nombre de usuario:</label>
-				<div class="input-group col-sm-5" style="padding-left: 15px !important; padding-right: 15px !important;">
+				<div class="input-group col-sm-5 prefix">
 					<span class="input-group-addon">{{prefix}}</span>
 					{{ UserForm.render('username', {'class':'form-control'}) }}
 				</div>

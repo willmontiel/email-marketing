@@ -7,9 +7,9 @@
 	</div>
 
 	<div class="row">
-		<h4 class="sectiontitle">Contabilidad y facturación</h4>
+		<h1 class="sectiontitle">Contabilidad y facturación</h1>
 		<div class="bs-callout bs-callout-info">
-			Desde aqui podrá ver el consumo de todos los clientes, para realizar labores de contabilidad y facturación
+			Desde aquí podrá ver el consumo de todos los clientes, para realizar labores de contabilidad y facturación
 			organizado por mes anterior y mes actual.
 		</div>
 	</div>

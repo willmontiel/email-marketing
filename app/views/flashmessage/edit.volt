@@ -1,10 +1,10 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ javascript_include('javascripts/moment/moment.min.js')}}
-	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.min.js')}}
-	{{ stylesheet_link('bootstrap/datepicker/css/bootstrap-datetimepicker.min.css') }}
-	{{ javascript_include('bootstrap/datepicker/js/bootstrap-datetimepicker.es.js')}}
+	{{ javascript_include('js/pluggins-editor/moment/moment.min.js')}}
+	{{ javascript_include('vendors/bootstrap_v2/datepicker/js/bootstrap-datetimepicker.min.js')}}
+	{{ stylesheet_link('vendors/bootstrap_v2/datepicker/css/bootstrap-datetimepicker.min.css') }}
+	{{ javascript_include('vendors/bootstrap_v2/datepicker/js/bootstrap-datetimepicker.es.js')}}
 	<script type="text/javascript">
 		$(function(){
 			var val = $('input[name=allAccounts]:checked').val();

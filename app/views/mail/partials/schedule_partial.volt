@@ -4,7 +4,7 @@
 				{{'{{#if scheduleEmpty }}'}}
 					<div class="wrapper">
 						<dt>Fecha del envío:</dt>
-						<dd><img src="<?php echo $this->url->get(''); ?>b3/images/bg-calendar.png" /></dd>
+						<dd><img src="{{url('vendors/bootstrap_v3/images/bg-calendar.png')}}" /></dd>
 					</div>
 				{{'{{else}}'}}
 					<hr>

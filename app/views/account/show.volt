@@ -4,7 +4,7 @@
 	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 	<div class="row">
 		<div class="col-md-12">
-			<h4 class="sectiontitle">Información de usuarios de cuentas</h4>
+			<h1 class="sectiontitle">Información de usuarios de cuentas</h1>
 			<div class="bs-callout bs-callout-info">
 				Aquí puede editar información de los usuarios de la cuenta, puede dar permisos y quitarlos. Puede
 				crear nuevos usuarios como también eliminarlos.
@@ -69,7 +69,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>
+					<h1 class="modal-title" id="myModalLabel">Eliminar Usuario</h1>
 				</div>
 				<div class="modal-body">
 					¿Está seguro que desea eliminar este usuario?

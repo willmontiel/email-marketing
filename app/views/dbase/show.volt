@@ -10,8 +10,8 @@
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/mixin_save_form.js') }}
 	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
-	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
-	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
+	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
 
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/dbase/' ~ sdbase.idDbase }}';
@@ -103,11 +103,6 @@
 	</script>
 	{{ javascript_include('js/editable-ember-view.js')}}
 {% endblock %}
-{% block sectiontitle %}
-	<i class="icon-book"></i> {{sdbase.name}}
-{% endblock %}
-{% block sectionsubtitle %} {{sdbase.description}} {% endblock %}
-
 {% block content %}
 
 {# Botones de navegacion interna #}

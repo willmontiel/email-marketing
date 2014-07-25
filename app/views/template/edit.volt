@@ -1,8 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ javascript_include('redactor/redactor.js')}}
-	{{ stylesheet_link('redactor/redactor.css') }}
+	{{ javascript_include('vendors/redactor/redactor.js')}}
+	{{ stylesheet_link('vendors/redactor/redactor.css') }}
 <script type="text/javascript">
 	function iframeResize() {
 		var iFrame = document.getElementById('iframeEditor');

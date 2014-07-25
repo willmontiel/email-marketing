@@ -2,11 +2,11 @@
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
-	{{ javascript_include('javascripts/moment/moment-with-langs.min.js') }}
+	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js') }}
 	{{ javascript_include('js/app_charts.js') }}
-	{{ javascript_include('amcharts/amcharts.js')}}
-	{{ javascript_include('amcharts/serial.js')}}
-	{{ javascript_include('amcharts/pie.js')}}
+	{{ javascript_include('vendors/amcharts/amcharts.js')}}
+	{{ javascript_include('vendors/amcharts/serial.js')}}
+	{{ javascript_include('vendors/amcharts/pie.js')}}
 	{{ javascript_include('js/select2.js') }}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}

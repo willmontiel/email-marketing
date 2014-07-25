@@ -10,19 +10,19 @@
 
         {{ get_title() }}
 
-        {{ stylesheet_link('stylesheets/application.css') }}
+        {{ stylesheet_link('vendors/stylesheets/application.css') }}
         {{ stylesheet_link('css/prstyles.css') }}
 		
 		<!--[if lt IE 9]>
-		{{ javascript_include('javascripts/vendor/html5shiv.js') }}
-		{{ javascript_include('javascripts/vendor/excanvas.js') }}
+		{{ javascript_include('js/pluggins-editor/vendor/html5shiv.js') }}
+		{{ javascript_include('js/pluggins-editor/vendor/excanvas.js') }}
 		<![endif]-->
 		
 		{% block header_javascript %}
 		<script type="text/javascript">
 			var MyBaseURL = '{{url('')}}';
 		</script>
-		{{ javascript_include('javascripts/application.js') }}
+		{{ javascript_include('js/pluggins-editor/application.js') }}
 		{% endblock %}
 
         <style>

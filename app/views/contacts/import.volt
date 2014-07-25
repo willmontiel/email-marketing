@@ -62,7 +62,7 @@
 		<div class="row">
 			<h4 class="sectiontitle">Importar contactos desde archivo .csv</h4>
 			<div class="">
-				<img src="{{url('')}}b3/images/step2-import.png" class="center-block" alt="" />
+				<img src="{{url('')}}themes/base/images/step2-import.png" class="center-block" alt="" />
 			</div>
 			<div class="space"></div>
 {#

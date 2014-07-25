@@ -1,30 +1,30 @@
 {% block header_javascript %}
 	{{ javascript_include('js/jquery-1.9.1.js') }}
 	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
-	{{ javascript_include('bootstrap/js/bootstrap.js') }}
-	{{ javascript_include('bootstrap/slider/js/bootstrap-slider.js') }}
-	{{ javascript_include('bootstrap/pick-a-color/1.1.5/js/tinycolor-0.9.14.min.js') }}
-	{{ javascript_include('bootstrap/pick-a-color/1.1.5/js/pick-a-color-1.1.5.min.js') }}
-	{{ javascript_include('bootstrap/spectrum/js/spectrum.js') }}
+	{{ javascript_include('vendors/bootstrap_v2/js/bootstrap.js') }}
+	{{ javascript_include('vendors/bootstrap_v2/slider/js/bootstrap-slider.js') }}
+	{{ javascript_include('vendors/bootstrap_v2/pick-a-color/1.1.5/js/tinycolor-0.9.14.min.js') }}
+	{{ javascript_include('vendors/bootstrap_v2/pick-a-color/1.1.5/js/pick-a-color-1.1.5.min.js') }}
+	{{ javascript_include('vendors/bootstrap_v2/spectrum/js/spectrum.js') }}
 	{{ stylesheet_link('css/jquery-ui.css') }}
-	{{ stylesheet_link('bootstrap/css/bootstrap.css') }}
-	{{ stylesheet_link('bootstrap/pick-a-color/1.1.5/css/pick-a-color-1.1.5.css') }}
-	{{ stylesheet_link('bootstrap/spectrum/css/spectrum.css') }}
-	{{ stylesheet_link('bootstrap/css/bootstrap-min.css') }}
-	{{ stylesheet_link('bootstrap/slider/css/slider.css') }}
-	{{ javascript_include('redactor/redactor.js')}}
-	{{ stylesheet_link('redactor/redactor.css') }}
-	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
-	{{ javascript_include('javascripts/colorpicker/js/bootstrap-colorpicker.js')}}
-	{{ javascript_include('javascripts/gritter/js/jquery.gritter.js') }}
-	{{ javascript_include('redactor/plugins/clips.js') }}
-	{{ javascript_include('redactor/plugins/fontcolor.js') }}
-	{{ javascript_include('redactor/plugins/fontfamily.js') }}
-	{{ javascript_include('redactor/plugins/fontsize.js') }}
+	{{ stylesheet_link('vendors/bootstrap_v2/css/bootstrap.css') }}
+	{{ stylesheet_link('vendors/bootstrap_v2/pick-a-color/1.1.5/css/pick-a-color-1.1.5.css') }}
+	{{ stylesheet_link('vendors/bootstrap_v2/spectrum/css/spectrum.css') }}
+	{{ stylesheet_link('vendors/bootstrap_v2/css/bootstrap-min.css') }}
+	{{ stylesheet_link('vendors/bootstrap_v2/slider/css/slider.css') }}
+	{{ javascript_include('vendors/redactor/redactor.js')}}
+	{{ stylesheet_link('vendors/redactor/redactor.css') }}
+	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
+	{{ javascript_include('js/pluggins-editor/colorpicker/js/bootstrap-colorpicker.js')}}
+	{{ javascript_include('js/pluggins-editor/gritter/js/jquery.gritter.js') }}
+	{{ javascript_include('vendors/redactor/plugins/clips.js') }}
+	{{ javascript_include('vendors/redactor/plugins/fontcolor.js') }}
+	{{ javascript_include('vendors/redactor/plugins/fontfamily.js') }}
+	{{ javascript_include('vendors/redactor/plugins/fontsize.js') }}
 	{{ stylesheet_link('css/styles.css') }}
-	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
-	{{ stylesheet_link('javascripts/colorpicker/css/colorpicker.css') }}
-	{{ stylesheet_link('javascripts/gritter/css/jquery.gritter.css') }}
+	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
+	{{ stylesheet_link('js/pluggins-editor/colorpicker/css/colorpicker.css') }}
+	{{ stylesheet_link('js/pluggins-editor/gritter/css/jquery.gritter.css') }}
 	{{ javascript_include('js/editor/forms_text_editor.js') }}
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/media_displayer.js') }}

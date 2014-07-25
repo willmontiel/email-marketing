@@ -2,7 +2,7 @@
     <head>
         <meta charset="utf-8">
         {{ get_title() }}
-        {{ stylesheet_link('bootstrap/css/bootstrap.css') }}
+        {{ stylesheet_link('vendors/bootstrap_v2/css/bootstrap.css') }}
         {{ stylesheet_link('css/style.css') }}
         {{ stylesheet_link ('css/flat-ui.css') }}
         {{ stylesheet_link ('css/bootstrap-modal.css') }}

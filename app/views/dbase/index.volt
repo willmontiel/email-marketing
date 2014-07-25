@@ -1,6 +1,4 @@
 {% extends "templates/index_b3.volt" %}
-{% block sectiontitle %}<i class="icon-book icon-2x"></i>Bases de Datos{% endblock %}
-{%block sectionsubtitle %}Configuración avanzada{% endblock %}
 {% block content %}
 
 {# Menu de navegacion pequeño #}
@@ -42,17 +40,17 @@
 						<ul class="list-inline pull-right">
 							<li class="card cont">
 								<span class="number">{{item['Cactive']|numberf}}</span>
-								<img src="{{url('')}}b3/images/icon-user.png" class="center-block" />
+								<img src="{{url('')}}vendors/bootstrap_v3/images/icon-user.png" class="center-block" />
 								<p>Contactos</p>
 							</li>
 							<li class="card list">
 								<span class="number"> {{item['CNT_LIST']|numberf}} </span>
-								<img src="{{url('')}}b3/images/icon-list.png" class="center-block" />
+								<img src="{{url('')}}vendors/bootstrap_v3/images/icon-list.png" class="center-block" />
 								<p>Listas </p> {#  Cambiar porque esta mostrando activos  #}
 							</li>
 							<li class="card seg">
 								<span class="number"> {{item['CNT_SEGM']|numberf}} </span>
-								<img src="{{url('')}}b3/images/icon-pie.png" class="center-block" />
+								<img src="{{url('')}}vendors/bootstrap_v3/images/icon-pie.png" class="center-block" />
 								<p>Segmentos </p> {#  Cambiar porque esta mostrando activos  #}
 							</li>
 		{#

@@ -2,8 +2,8 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
-	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
-	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
+	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
 	<script type="text/javascript">
 		var db;

@@ -16,9 +16,9 @@
 .row-fluid .uneditable-input {
 	height: 16px;
 }*/
+/*
 .badge-number-dark,
 .badge-number-light {
-/*	height: 78px; */
 	border-radius: 5px;
 	margin: 5px;
 	padding: 12px;
@@ -30,6 +30,7 @@
 .badge-number-light {
 	background: #ddd;
 }
+
 .number-huge {
 	font-size: 48px;
 	font-weight: bold;
@@ -46,6 +47,7 @@
 .number-small {
 	font-size: 11px;
 }
+
 .regular-text {
 	font-size: 12px;
 	color: #222;
@@ -65,6 +67,7 @@
 .text-blue-color {
 	color: #003366;
 }
+
 .return-upper-right-corner {
 	line-height: 150px;
 	text-align: center;
@@ -92,6 +95,7 @@
      -moz-border-radius: 9px;
           border-radius: 9px;
 }
+
 span.red-label {
 	color: #8f3831;
 	font-size: 14px;
@@ -118,9 +122,11 @@ span.orange-label {
 	font-size: 14px;
 	font-weight: bold;
 }
+*/
 body {
 	font-size: 13px;
 }
+/*
 #arraybatch {
 	height: 200px;
 }
@@ -145,10 +151,11 @@ body {
 .badge-show-dark {
 	background: #A8A8A8;
 }
+*/
 .text-right {
 	text-align: right;
 }
-
+/*
 .message-delete {
 	font-size: 17px;
 }
@@ -165,6 +172,7 @@ a.inactive {
 .sidebar-editor ul{
 	list-style-type: none;
 }
+
 
 .optionsEditor {
 	height: 45px;
@@ -191,6 +199,7 @@ a.inactive {
 	margin-left: 15px;
 }
 
+
 .relief {
 	min-height: 20px;
 	color: black;
@@ -213,9 +222,10 @@ a.inactive {
 	background-color: white !important;
 }
 
-/*#breadcrumbs {
+
+#breadcrumbs {
 	width: 0% !important;
-}*/
+}
 
 .main-content-editor {
 	margin-left: 5% !important;
@@ -233,11 +243,14 @@ a.inactive {
 	width: 0% !important;
 }
 
-/*
+
 .nav-template > .active > a, .nav-pills > .active > a:hover {
 	background-color: #60a1ca !important;
 }
 */
+
+
+/* Preview de lista de correos */
 
 .img-wrap{
 	overflow:hidden;
@@ -295,6 +308,9 @@ a.inactive {
 	-webkit-transition:opacity 0.25s;
 }
 
+/* FIN PREVIEW LISTA DE CORREOS */
+
+/*
 .preview-modal {
 	width: 70% !important;
 	margin-left: auto !important;
@@ -373,7 +389,9 @@ a.inactive {
 	-webkit-transform: scale(0.20);
 	-webkit-transform-origin: 0 0;
 }
+*/
 
+/*Preview Plantillas*/
 .preview-mail {
 	float: left;
 	width: 200px; 
@@ -407,25 +425,21 @@ a.inactive {
 	border-radius: 3px;
 	margin-bottom: 10px;
 }
-
+/*Fin plantillas */
+/*
 .template-tools {
 	margin-top: 10%;
 	margin-left: auto; 
 	margin-right: auto;
 }
-
 .not-available-template {
 	background-image: url(../images/notavailabletemplate.png);
 	width: 180px; 
 	height: 230px; 
 }
-
 #modal-simple-template h5 {
 	text-align: center;
 }
-
-
-/* tables */
 table {
 	border-collapse: collapse;
 	border-color: gray;
@@ -453,7 +467,6 @@ table.tablesorter thead tr .headerSortUp {
 table.tablesorter thead tr .headerSortDown {
 	background-image: url(../tablesorter/desc.gif);
 }
-
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
 	background-color: #f2f3f7;
 }
@@ -595,6 +608,8 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border-radius: 50%;
 	border: 1px solid #6c6c6c;
 }
+*/
+/* Cuentas de redes sociales */
 .social-account-icon {
 	width: 60px;
 	text-align: center !important;
@@ -605,11 +620,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 }
 .social-account-name-column {
 	vertical-align: middle !important;
-}
-.social-account-name {
-	font-size: 17px;
 	text-align: center;
-	font-weight: 600;
 }
 .table-container-social-media-list {
 	width: 550px;
@@ -623,12 +634,19 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .social-media-new-account a {
 	margin-right: 10px;
 }
-.social-account-name.socil-account-deactivated {
-	color: red;
+.social-account-deactivated {
+	color: @brand-spam;
 }
-.social-account-name.socil-account-deactivated > span{
-	font-size: 14px;
+.social-account-deactivated p {
+	font-size: 17px;
 }
+.social-account-deactivated  span {
+	font-size: 12px;
+}
+/* Fin cuentas de RRSS */
+
+
+/*
 .unsubscribe-button {
 	height: 42px;
 	width: 170px;
@@ -653,6 +671,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	text-shadow: 0 1px #aaa;
 	padding-bottom: 20px;
 }
+
 .full-contact-information {
 	margin-left: 18%
 }
@@ -689,6 +708,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .contact-history-event-text {
 	text-align: center !important;
 }
+
 .list-import-process {
 	margin-right: 15px;
 }
@@ -701,7 +721,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border-left: none !important; 
 	border-right: none !important;
 }
-
+*/
 /*-----------------//-----------------// FORMULARIOS //-----------------//-----------------*/
 
 .form-options {
@@ -712,20 +732,8 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 	border: 1px dashed lightgray;
 	cursor: pointer;
 }
-.title-fields-options {
-	border: none;
-}
-.form-full-content {
-	padding-bottom: 20px;
-}
-.form-title-name {
-	padding: 10px;
-	font-weight: bold;
-	font-size: 17px;
-}
-.field-zone-name {
-}
-.field-content-zone {
+.field-content-zone, 
+.field-content-zone input {
 	cursor: move;
 }
 .field-option-disabled {
@@ -736,19 +744,18 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .field-edit-zone {
 	background-color: rgb(247, 236, 222);
 	padding: 15px;
-	font-size: 14px;
+	margin-bottom: 15px;
 }
 .form-field-editing {
 	background-color: #d5d5d5 !important;
 	color: #888 !important;
 }
-.field-content-zone input{
-	cursor: move;
-}
 .field-content-zone:hover {
 	background-color: antiquewhite;
 }
-.hide-form-field {
+.hide-form-field
+.create-email-spot,
+.btn-form-email-creator-save {
 	display: none;
 }
 span.required {
@@ -763,37 +770,23 @@ span.required {
 	padding: 0px;
 	margin-right: 5px;
 }
-.select-day-number-form {
-	padding: 6px 9px;
-}
 .field-zone-name {
 	word-break: break-word;
 }
-.create-email-spot, button.btn-form-email-creator-save/*, div.optin-information-container*/ {
+/* Fin formularios */
+
+
+
+
+
+.field-element-form-hide, /* Formularios */
+.social-input-hide /* Correos RRSS */ {
 	display: none;
 }
-#colorchart td {
-	width: 25px !important;
-	height: 25px !important;
-	cursor: pointer;
-	border: 2px lightgray solid;
-}
-#colorchart {
-	border-collapse: separate;
-	border: 4px gray solid;
-}
-#color.text-for-db-color {
-	display: none !important;
-}
-#colorchart td:hover {
-	opacity: 0.5;
-}
-.color-selected {
-	border: 2px blue solid !important;
-}
-.field-element-form-hide, .social-input-hide {
-	display: none;
-}
+
+
+/* Inicia correo RRSS*/
+
 .edit-fb-image-container {
 	float: right;
 	z-index: 150;
@@ -834,17 +827,17 @@ span.required {
  background-color: #CDDCF0;
 }
 
-.btn-for-modal-accordion {
-	width: 120px;
-}
+/* Fin correo RRSS*/
+
+/* Modal previews */
 
 .modal-prevew-width {
 	width: 800px !important;
 }
 
-.modal-prevew-content {
+/*.modal-prevew-content {
 	height: 650px !important;
-}
+}*/
 
 .modal-prevew-body {
 	height: 520px !important;
@@ -854,31 +847,37 @@ span.required {
 	height: 300px !important;
 }
 
+/* Fin modal previews */
+
+/* Galeria de imagenes*/
 .dz-message {
 	text-align: center;
 	font-family: inherit;
 	font-size: 25px;
 }
 
+/* Date picker */
 .group-datepicker {
 	padding-top: 0px !important;
 }
 
+/* Base de datos campos por defecto */
 .primary-field {
 	color: #5bc0de;
 }
 
+/* Prefijo de usuarios */
 .prefix {
 	padding-left: 15px !important; 
 	padding-right: 15px !important;
 }
+
+/* Footer en html */
 .footer-html {
 	background-color: white;
 	border: 1px solid #ddd
 }
-.footer-html > table {
-	margin: auto;
-}
+
 #modal-simple-remake .btn, #myModal .btn {
 	margin-bottom: 0;	
 }

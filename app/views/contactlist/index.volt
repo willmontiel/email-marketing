@@ -52,11 +52,10 @@
 		{# ######### handlebars de index ########## #}
 		<script type="text/x-handlebars" data-template-name="index">
 			{# Botones de navegacion primarios #}
-
-			<div class="row">
-				<h4 class="sectiontitle">Básicas</h4>
+			<div class="container-fluid">
+				<h1 class="sectiontitle">Básicas</h1>
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						{{'{{#link-to "lists" class="shortcuts"}}<span class="sm-button-large-contact-list"></span>{{/link-to}}'}}
 					</div>
 					<div class="w-190 center">
@@ -64,7 +63,7 @@
 					</div>
 				</div>
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						{{'{{#link-to "segments" class="shortcuts"}}<span class="sm-button-large-segment"></span>{{/link-to}}'}}
 					</div>
 					<div class="w-190 center">
@@ -72,7 +71,7 @@
 					</div>
 				</div>
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						{{'{{#link-to "blockedemails" class="shortcuts"}} <span class="sm-button-large-bloq-list"></span>{{/link-to}}'}}
 					</div>
 					<div class="w-190 center">
@@ -81,7 +80,7 @@
 				</div>
 {#
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						<a href="{{url('contacts/search')}}#/contacts" class="shortcuts"><span class="sm-button-large-contact-search"></span></a>
 					</div>
 					<div class="w-190 center">
@@ -89,12 +88,10 @@
 					</div>
 				</div>	
 #}
-			</div>
 			<div class="row space"></div>
-			<div class="row">
-				<h4 class="sectiontitle">Avanzadas</h4>
+				<h1 class="sectiontitle">Avanzadas</h1>
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						<a href="{{url('dbase')}}" class="shortcuts" title="Configuracion avanzada"><span class="sm-button-large-settings"></span></a>
 					</div>
 					<div class="w-190 center">
@@ -103,15 +100,15 @@
 				</div>
 
 				<div class="col-xs-6 col-md-3">
-					<div class="to-do sm-btn-blue">
+					<div class="big-btn-nav sm-btn-blue">
 						<a href="{{url('process/import')}}" class="shortcuts"><span class="sm-button-large-import-list"></span></a>
 					</div>
 					<div class="w-190 center">
 						<a href="{{url('process/import')}}" class="btn-actn">Lista de importaciones</a>
 					</div>
 				</div>
-			</div>
 			<div class="space"></div>
+			</div>
 		</script>
 		{# /handlebars de index #}
 
@@ -122,7 +119,7 @@
 			{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
 
 			<div class="row">
-				<h4  class="sectiontitle">Listas de contactos</h4>
+				<h1  class="sectiontitle">Listas de contactos</h1>
 				<div class="row">
 					<div class="col-xs-6 col-sm-5 col-md-4">
 						<form role="form">
@@ -183,7 +180,7 @@
 						<tr>
 							<td>
 								<div class="bs-callout bs-callout-warning">
-									<h4>No se encontraron listas</h4>
+									<h1>No se encontraron listas</h1>
 									<p>Verifique el filtro de bases de datos.</p>
 									<p>Todos los contactos se organizan en listas. Si desea crear una lista de contactos,
 										haga {{'{{#link-to "lists.new" disabledWhen="createDisabled"}}'}} clic aquí {{'{{/link-to}}'}} o elija el botón de la parte superior.</p>
@@ -211,7 +208,7 @@
 		{#  ######## Handlebars de crear nueva lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/new">
 			<div class="row">
-				<h4 class="sectiontitle">Crear una nueva lista</h4>
+				<h1 class="sectiontitle">Crear una nueva lista</h1>
 				<div class="col-sm-12 hidden-md hidden-lg">
 					<div class="alert alert-success">
 						<div class="row">
@@ -295,7 +292,7 @@
 		{#  ######## Handlebars de editar lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/edit">
 			<div class="row">
-				<h4 class="sectiontitle">Editar la lista <strong>{{'{{name}}'}}</strong></h4>
+				<h1 class="sectiontitle">Editar la lista <strong>{{'{{name}}'}}</strong></h1>
 				<div class="col-sm-12 hidden-md hidden-lg">
 					<div class="alert alert-success">
 						<div class="row">
@@ -360,7 +357,7 @@
 		{#  ######## Handlebars de eliminar lista de contactos ######### #}
 		<script type="text/x-handlebars" data-template-name="lists/delete">
 			<div class="row">
-				<h4 class="sectiontitle">Eliminar una lista de contactos</h4>
+				<h1 class="sectiontitle">Eliminar una lista de contactos</h1>
 				<div class="bs-callout bs-callout-danger">
 					
 					<p>Al eliminar una lista de contactos <strong>no perderá los contactos</strong>, simplemente seran des-asociados de dicha lista, pero en caso de que algún contacto solo pertenezca a dicha lista y a ninguna otra, este si <strong>será eliminado por completo.</strong></p>

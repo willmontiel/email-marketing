@@ -1,8 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
-	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
+	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
+	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	<script type="text/javascript">

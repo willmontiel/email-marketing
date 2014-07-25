@@ -9,7 +9,7 @@
 	<h4 class="sectiontitle">Qué quiere hacer hoy?</h4>
 	<div class="row">
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('mail/compose') }}"  class="shortcuts"><span class="sm-button-large-email-new"></span></a>
 			</div>
 			<div class="w-190 center">
@@ -17,7 +17,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('mail/list') }}"  class="shortcuts"><span class="sm-button-large-email-list"></span></a>
 			</div>
 			<div class="w-190 center">
@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('template/index') }}"  class="shortcuts"><span class="sm-button-large-plantillas"></span></a>
 			</div>
 			<div class="w-190 center">
@@ -33,7 +33,7 @@
 			</div>
 		</div>
 		<div class="col-xs-6 col-md-3">
-			<div class="to-do sm-btn-blue">
+			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('scheduledmail') }}"  class="shortcuts"><span class="sm-button-large-admin-prog"></span></a>
 			</div>
 			<div class="w-190 center">

@@ -2,8 +2,8 @@
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
-	{{ javascript_include('amcharts/amcharts.js')}}
-	{{ javascript_include('amcharts/serial.js')}}
+	{{ javascript_include('vendors/amcharts/amcharts.js')}}
+	{{ javascript_include('vendors/amcharts/serial.js')}}
 	<script type = "text/javascript">
 		var chartData = [{
 			month: "Ene",
