@@ -29,6 +29,7 @@ class CheckASProcess
 			$mails = array();
 
 			foreach ($autoresponders as $autoresponder) {
+				$this->logger->log('El idAutoresponder es ' . $autoresponder->idAutoresponder);
 				$account = Account::findFirstByIdAccount($autoresponder->idAccount);
 				if($account) {
 					$mailconverter = new AutoSendingConverter();
