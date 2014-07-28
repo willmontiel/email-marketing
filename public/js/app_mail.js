@@ -450,8 +450,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			App.serializerObject = model;
 			target = JSON.stringify(model);
 			totalContacts = App.model.getTotalContacts();
+			console.log(totalContacts);
 		}
 		
+		console.log(totalContacts);
 		mail.set('sender', sender);
 		mail.set('target', target);
 		mail.set('totalContacts', totalContacts);

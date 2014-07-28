@@ -110,6 +110,7 @@ Model.prototype.createFilterPanel = function(obj) {
 };
 
 Model.prototype.updateTotalContactsView = function(obj) {
+	this.totalContacts = obj.total;
 	this.refreshTotalContactsView('Contactos aproximados: ' + obj.total);
 };
 
@@ -218,12 +219,8 @@ Model.prototype.getModel = function() {
 	return this.serializerObj;
 };
 
-Model.prototype.getCriteria = function() {
-	
-};
-
-Model.prototype.getCriteria = function() {
-	
+Model.prototype.getCriteriaType = function() {
+	return this.serializerObj[0].serialization.criteria;
 };
 
 Model.prototype.getTotalContacts = function() {
