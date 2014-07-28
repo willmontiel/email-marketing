@@ -53,12 +53,36 @@ class CheckASProcess
 	
 	public function send_autoresponders($idMail)
 	{
-		$context = new ZMQContext();
+		$schedule = Mailschedule::findFirstByIdMail($idMail);
+		$mail = Mail::findFirstByIdMail($idMail);
+		try {
+			if($schedule) {
+				$mail->status = 'Scheduled';
+				if(!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+					$this->traceFail("Error confirming mail, idMail: {$idMail}");
+					return $this->response->redirect('mail/preview/' . $idMail);
+				}
 
-		$requester = new ZMQSocket($context, ZMQ::SOCKET_REQ);
-		$requester->connect(SocketConstants::getMailRequestsEndPointPeer());
-		
-		$requester->send(sprintf("%s $idMail $idMail", 'Play-Task'));
-		$response = $this->requester->recv(ZMQ::MODE_NOBLOCK);
+				$schedule->confirmationStatus = 'Yes';
+				if(!$schedule->save()){
+					foreach ($schedule->getMessages() as $msg) {
+						$this->flashSession->error($msg);
+					}
+					$this->traceFail("Error confirming mail, idMail: {$idMail}");
+					return $this->response->redirect('mail/preview/' . $idMail);
+				}
+				$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+				$commObj->sendSchedulingToParent($idMail);	
+
+				return $this->response->redirect("mail/index");
+			}
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: Error confiming mail, {$e}");
+			return $this->response->redirect('mail/preview/' . $idMail);
+		}
 	}
 }
