@@ -7,6 +7,8 @@ namespace EmailMarketing\General\Misc;
  */
 class InterpreterTarget 
 {
+	protected $topObject;
+	protected $listObject;
 	protected $account;
 	protected $logger;
 	protected $mail;
@@ -57,59 +59,83 @@ class InterpreterTarget
 	private function createSQLForIdContacts()
 	{
 		$this->logger->log("Data: " . print_r($this->data, true));
-		if (isset($this->data[1])) {
-			$ids = implode(',' , $this->data[1]['serialization']['items']);
-
-			switch ($this->data[0]['serialization']['criteria']) {
+		$this->modelData();
+		
+		if ($this->top && $this->list) {
+			switch ($this->criteria) {
 				case 'dbases':
-					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM contact WHERE idDbase IN ({$ids})";
+					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM contact WHERE idDbase IN ({$this->ids})";
 					break;
 
 				case 'contactlists':
-					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM coxcl WHERE idContactlist IN ({$ids})";
+					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM coxcl WHERE idContactlist IN ({$this->ids})";
 					break;
 
 				case 'segments':
-					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM sxc WHERE idSegment IN ({$ids})";
+					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM sxc WHERE idSegment IN ({$this->ids})";
 					break;
 			}	
 		}
 	}
 	
+	private function modelData()
+	{
+		$this->top = false;
+		$this->list = false;
+		
+		foreach ($this->data as $data) {
+			if ($data['type'] == 'top-panel') {
+				$this->topObject = $data;
+				$this->criteria = $data['serialization']['criteria'];
+				$this->top  = true;
+			}
+			else if ($data['type'] == 'list-panel'){
+				$this->listObject = $data;
+				if (isset($data['serialization']['items'])) {
+					if (count($data['serialization']['items']) > 0) {
+						$this->ids = implode(',' , $this->data['serialization']['items']);
+						$this->list = true;
+					}
+				}
+			}
+		}
+		
+		
+	}
+	
 	private function createSQLForFilters()
 	{
-		$condition = ($this->data[1]['serialization']['conditions'] == 'all' ? 'AND' : 'OR');
-		array_splice($this->data, 0, 2);
-
+		$condition = ($this->topObject['serialization']['conditions'] == 'all' ? 'AND' : 'OR');
 		$first = true;
 		$i = 1;
 	
 		$piece = "";
 		
 		foreach ($this->data as $data) {
-			switch ($data['serialization']['type']) {
-				case 'mail-sent':
-					$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
-					break;
-				
-				case 'mail-open':
-					$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
-					
-					if ($first) {
-						$piece .= " COALESCE(mc{$i}.opening, 0) != 0";
-					}
-					else {
-						$piece .= " {$condition} COALESCE(mc{$i}.opening, 0) != 0";
-					}
-					
-					$first = false;
-					break;
-					
-				case 'click':
-					$this->joinForFilters .= " JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact = c.idContact AND ml{$i}.idMailLink = {$data['serialization']['items']})";
-					break;
+			if ($data['type'] == 'filter-panel') {
+				switch ($data['serialization']['type']) {
+					case 'mail-sent':
+						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
+						break;
+
+					case 'mail-open':
+						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
+
+						if ($first) {
+							$piece .= " COALESCE(mc{$i}.opening, 0) != 0";
+						}
+						else {
+							$piece .= " {$condition} COALESCE(mc{$i}.opening, 0) != 0";
+						}
+
+						$first = false;
+						break;
+
+					case 'click':
+						$this->joinForFilters .= " JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact = c.idContact AND ml{$i}.idMailLink = {$data['serialization']['items']})";
+						break;
+				}
 			}
-			
 			$i++;
 		}
 		
