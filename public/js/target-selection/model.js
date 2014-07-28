@@ -42,7 +42,7 @@ Model.prototype.selectTypeObject = function(obj) {
 			break
 			
 		case 'total-contacts':
-//			this.updateTotalContactsView(obj);
+			this.updateTotalContactsView(obj);
 			break
 	}
 	
@@ -166,11 +166,14 @@ Model.prototype.reset = function() {
 
 Model.prototype.updatePanelList = function() {
 	this.container.updateContainer();
-	
-//	console.log(this.serializerObj);
 	var k = [];
-	k.push(this.serializerObj[0]);
-	k.push(this.serializerObj[1]);
+	
+	for (var i = 0; i < this.serializerObj.length; i++) {
+		if (this.serializerObj[i].type === 'top-panel' ||
+			this.serializerObj[i].type === 'list-panel') {
+			k.push(this.serializerObj[i]);
+		}
+	}
 	
 	this.serializerObj = [];
 	this.serializerObj = k.slice(0);
@@ -185,7 +188,7 @@ Model.prototype.refreshTotalContacts = function() {
 		var total = DataSource.getData();
 		self.totalContacts = total.totalContacts;
 		self.refreshTotalContactsView('Contactos aproximados: ' + self.totalContacts);
-//		self.refreshTotalContactsObject();
+		self.refreshTotalContactsObject();
 	});
 };
 
