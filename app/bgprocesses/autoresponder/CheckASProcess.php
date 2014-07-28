@@ -41,6 +41,7 @@ class CheckASProcess
 			
 			foreach ($mails as $mail) {
 				try {
+					$this->logger->log('Enviando idMail ' . $mail->idMail);
 					$this->send_autoresponders($mail->idMail);
 				}
 				catch (Exception $e) {
@@ -60,8 +61,11 @@ class CheckASProcess
 	{
 		$schedule = Mailschedule::findFirstByIdMail($idMail);
 		$mail = Mail::findFirstByIdMail($idMail);
+		$this->logger->log('Mail ' . $mail->idMail);
+		$this->logger->log('Schedule ' . $schedule->idMailSchedule);		
 		if($schedule) {
 			$mail->status = 'Scheduled';
+			$this->logger->log('1');
 			if(!$mail->save()) {
 				foreach ($mail->getMessages() as $msg) {
 					$this->logger->log($msg);
@@ -70,14 +74,18 @@ class CheckASProcess
 			}
 
 			$schedule->confirmationStatus = 'Yes';
+			$this->logger->log('2');
 			if(!$schedule->save()){
 				foreach ($schedule->getMessages() as $msg) {
 					$this->logger->log($msg);
 				}
 				throw new Exception('Error saving scheduling in auto responder');
 			}
+			$this->logger->log('3');
 			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$this->logger->log('4');
 			$commObj->sendSchedulingToParent($idMail);	
+			$this->logger->log('5');
 		}
 	}
 }
