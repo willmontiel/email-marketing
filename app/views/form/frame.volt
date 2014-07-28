@@ -6,25 +6,25 @@
 		<!-- Always force latest IE rendering engine or request Chrome Frame -->
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
-		{{ stylesheet_link('b3/css/bootstrap.css') }}
-		{{ stylesheet_link('b3/css/font-awesome.css') }}
-		{{ stylesheet_link('b3/css/sm-email-theme.css') }}
-		{{ stylesheet_link('b3/vendors/css/bootstrap-editable.css') }}
-		{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
+		{{ stylesheet_link('vendors/bootstrap_v3/css/bootstrap.css') }}
+		{{ stylesheet_link('vendors/bootstrap_v3/css/font-awesome.css') }}
+		{{ stylesheet_link('vendors/bootstrap_v3/css/sm-email-theme.css') }}
+		{{ stylesheet_link('vendors/bootstrap_v3/vendors/css/bootstrap-editable.css') }}
+		{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
 		{{ stylesheet_link('css/prstyles.css') }}
 
 		<!--[if lt IE 9]>
-		{{ javascript_include('javascripts/vendor/html5shiv.js') }}
-		{{ javascript_include('javascripts/vendor/excanvas.js') }}
+		{{ javascript_include('js/pluggins-editor/vendor/html5shiv.js') }}
+		{{ javascript_include('js/pluggins-editor/vendor/excanvas.js') }}
 		<![endif]-->
 
-		{{ javascript_include('b3/js/jquery-1.9.1.js') }}
-		{{ javascript_include('b3/js/bootstrap.js') }}
-		{{ javascript_include('b3/vendors/js/jquery.sparkline.js') }}
-		{{ javascript_include('b3/vendors/js/spark_auto.js') }}
-		{{ javascript_include('b3/vendors/js/bootstrap-editable.js') }}
-		{{ javascript_include('b3/vendors/js/jquery.gritter.js') }}
-		{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
+		{{ javascript_include('vendors/bootstrap_v3/js/jquery-1.9.1.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/js/bootstrap.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.sparkline.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/vendors/js/spark_auto.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/vendors/js/bootstrap-editable.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
+		{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 		{{ javascript_include('js/form_date_field.js') }}
 	</head>
 	<body>
