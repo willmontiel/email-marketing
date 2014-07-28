@@ -74,6 +74,7 @@ class CheckASProcess
 			}
 
 			$schedule->confirmationStatus = 'Yes';
+			$this->logger->log('Mail status ' . $mail->status);
 			$this->logger->log('2');
 			if(!$schedule->save()){
 				foreach ($schedule->getMessages() as $msg) {
@@ -81,6 +82,7 @@ class CheckASProcess
 				}
 				throw new Exception('Error saving scheduling in auto responder');
 			}
+			$this->logger->log('Schedule status ' . $schedule->confirmationStatus );
 			$this->logger->log('3');
 			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 			$this->logger->log('4');
