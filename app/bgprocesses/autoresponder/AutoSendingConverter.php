@@ -92,7 +92,7 @@ class AutoSendingConverter
 		
 		$obj->scheduleDate = 'now';
 		$obj->type = 'Html';
-		$obj->name = $this->autoresponder->name;
+		$obj->name = $this->autoresponder->name . ' ' . date('d/m/Y', time());
 		
 		$from = json_decode($this->autoresponder->from);
 		$obj->sender = $from->email . '/' . $from->name;

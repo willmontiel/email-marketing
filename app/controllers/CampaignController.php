@@ -23,7 +23,8 @@ class CampaignController extends ControllerBase
 			$obj->category = $autosend->category;
 			$obj->contentsource = $autosend->contentsource;
 			$obj->active = $autosend->active;
-			$obj->target = json_decode($autosend->target);
+			$obj->target = $this->getTargetFromMail($autosend);
+			$this->logger->log($obj->target);
 			$obj->subject = $autosend->subject;
 			$obj->content = json_decode($autosend->content);
 			$obj->previewData = $autosend->previewData;
@@ -67,32 +68,6 @@ class CampaignController extends ControllerBase
 		return $new_days;
 	}
 
-//	public function newAction($type)
-//	{
-//		$account = $this->user->account;
-//		
-//		$dbases = Dbase::findByIdAccount($account->idAccount);
-//		$this->view->setVar('dbases', $dbases);
-//		
-//		if ($this->request->isPost()) {
-//			$campaignWrapper = new CampaignWrapper();
-//			try {
-//				$idDbase;
-//			
-//				$campaignWrapper->setDbase($dbase);
-//			}
-//			catch (Exception $e) {
-//				$this->flashSession->error("Error: {$campaignWrapper->getFieldErrors[0]}");
-//				$this->logger->log("Exception: {$e}");
-//			}
-//		}	
-//	}
-//	
-//	public function editAction()
-//	{
-//		
-//	}
-//	
 	public function deleteAction($idAutoresponder)
 	{
 		$autosend = Autoresponder::findFirst(array(
@@ -255,5 +230,56 @@ class CampaignController extends ControllerBase
 			$this->logger->log("Exception {$e}");
 		}
 		
+	}
+	
+	private function getTargetFromMail($mail)
+	{
+		$t = json_decode($mail->target);
+		$target = "Indefinida";
+		$ids = explode(',', $t->ids);
+		
+		switch ($t->destination) {
+			case 'contactlists':
+				$target = "Listas de contactos: ";
+				foreach ($ids as $id) {
+					$list = Contactlist::findFirst(array(
+						'conditions' => "idContactlist = ?1",
+						'bind' => array(1 => $id)
+					));
+					if ($list) {
+						$this->logger->log('Nombre ' . $list->name);
+						$target .= "{$list->name}, ";
+					}
+				}
+				break;
+			case 'dbases':
+				$target = "Bases de datos: ";
+				foreach ($t->ids as $id) {
+					$list = Dbase::findFirst(array(
+						'conditions' => "idDbase = ?1",
+						'bind' => array(1 => $id)
+					));
+					if ($list) {
+						$target .= "{$list->name}, ";
+					}
+				}
+				break;
+			case 'segments':
+				$target = "Segmentos: ";
+				foreach ($t->ids as $id) {
+					$list = Segment::findFirst(array(
+						'conditions' => "idSegment = ?1",
+						'bind' => array(1 => $id)
+					));
+
+					if ($list) {
+						$target .= "{$list->name}, ";
+					}
+				}
+				break;
+			default:
+				break;
+		}
+		return $target;
 	}
 }

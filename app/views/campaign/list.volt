@@ -86,7 +86,7 @@
 						<div class="col-sm-4 autoresponse-list-information">
 							<h4>{{item.name}}</h4>
 							<dl>
-								<dd><strong>Destinatarios:</strong> {{item.target.destination}}</dd>
+								<dd><strong>Destinatarios:</strong> {{item.target}}</dd>
 								<dd><strong>Asunto:</strong> {{item.subject}}</dd>
 							</dl>
 							<div class="autoresponse-list-options">
