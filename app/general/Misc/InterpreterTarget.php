@@ -169,9 +169,7 @@ class InterpreterTarget
 						  
 		$this->sql = "INSERT IGNORE INTO mxc (idMail, idContact, idBouncedCode, status, opening, clicks, bounced, 
 											  spam, unsubscribe, contactlists, share_fb, share_tw, share_gp, share_li,
-											  open_fb, open_tw, open_gp, open_li) VALUES ({$sql})";
-											  
-		$this->logger->log("SQL: {$sql}");									  
+											  open_fb, open_tw, open_gp, open_li) VALUES ({$sql})";			  
 	}
 	
 	private function executeSQL()
@@ -193,6 +191,12 @@ class InterpreterTarget
 	public function getTotalContacts()
 	{
 		return array('totalContacts' => $this->result[0]['total']);
+	}
+	
+	public function getSQL()
+	{
+		$this->logger->log("SQL: {$this->sql}");	
+		return $this->sql;
 	}
 }
 

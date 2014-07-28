@@ -119,9 +119,10 @@ class ChildCommunication extends BaseWrapper
 
 			if ($oldstatus == 'Scheduled') {
 				$log->log("Identificando destinatarios");
-				$wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
-				$wrapper->setMail($mail);
-				$wrapper->searchContacts();
+				$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+				$interpreter->setMail($mail);
+				$interpreter->searchContacts();
+				$sql = $interpreter->getSQL();
 				
 				//*** this is the old way for to get the target
 //				$identifyTarget = new IdentifyTarget();

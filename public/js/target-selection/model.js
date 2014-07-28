@@ -68,9 +68,7 @@ Model.prototype.createTopPanel = function(obj) {
 	this.container.addPanel(config, this);
 };
 
-Model.prototype.createListPanel = function(obj) {
-//	this.container.resetContainer();
-	
+Model.prototype.createListPanel = function(obj, criteria) {
 	var listPanelContent = new ListPanelContent();
 	listPanelContent.setModel(this);
 	listPanelContent.createContent();
@@ -79,14 +77,39 @@ Model.prototype.createListPanel = function(obj) {
 		listPanelContent.setSerializerObj(obj);
 	}
 	
+	var title = this.validateTitle(criteria);
+	
 	var config = {
 		sticky: false, 
 		leftArrow: true, 
-		title: 'Seleccione un criterio',
+		title: title,
 		content: listPanelContent
 	};
 	
 	this.container.addPanel(config, this);
+};
+
+Model.prototype.validateTitle = function(criteria) {
+	var title;
+	
+	switch (criteria) {
+		case 'dbases':
+			title = 'Seleccione una base de datos';
+			break;
+			
+		case 'contactlists':
+			title = 'Seleccione listas de contactos';
+			break;
+			
+		case 'segments':
+			title = 'Seleccione segmentos';
+			break;
+		
+		default:
+			title = 'Seleccione un criterio';
+			break;
+	}
+	return title;
 };
 
 Model.prototype.createFilterPanel = function(obj) {

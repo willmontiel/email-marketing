@@ -29,7 +29,7 @@ TopPanelContent.prototype.initializeNextContentPanel = function (obj) {
 	};
 	
 	this.model.updateObject(this.oldCriteria, this.newCriteria);
-	this.model.createListPanel();
+	this.model.createListPanel(undefined, criteria);
 	
 	this.oldCriteria = this.newCriteria;
 };

@@ -30,7 +30,7 @@
 	line-height: 20px;
 	font-size: 20px;
 	position: absolute;
-	color: #F5A9A9;
+	color: red;
 	right: 6px;
 	top: -10px;
 	cursor: pointer;
@@ -39,7 +39,7 @@
 }
 
 .sgm-close-panel:hover {
-	color: red;
+	color: #20526e;
 }
 
 .sgm-add-panel {
@@ -52,12 +52,12 @@
 	border-radius: 50%;
 	color: white;
 	cursor: pointer;
-	background-color: #CEF6CE;
+	background-color: green;
 	padding: 5px;
 }
 
 .sgm-add-panel:hover {
-	background-color: green;
+	background-color: #20526e;
 }
 
 .sgm-box-footer-content {
@@ -192,7 +192,7 @@
 	position: absolute;
 	right: 5%;
 	top: 38%;
-	background-color: #CEF6CE;
+	background-color: green;
 	color: white;
 	padding: 4px;
 	border-radius: 50%;
@@ -200,11 +200,11 @@
 }
 
 .sgm-button-add:hover {
-	background-color: green;
+	background-color: #20526e;
 }
 
 .sgm-button-reset {
-	background-color: #A1C4E2;
+	background-color: #428bca;
 	color: white;
 	padding: 4px;
 	border-radius: 4px;
@@ -216,7 +216,7 @@
 }
 
 .sgm-button-reset:hover {
-	background-color: #428bca;
+	background-color: #20526e;
 }
 
 .sgm-box-content {
