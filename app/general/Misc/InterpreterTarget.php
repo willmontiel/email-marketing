@@ -47,6 +47,7 @@ class InterpreterTarget
 	
 	public function searchContacts()
 	{
+		$this->data = $this->mail->target;
 		$this->createSQLForIdContacts();
 		$this->createSQLForFilters();
 		$this->createSQLBaseForTarget();

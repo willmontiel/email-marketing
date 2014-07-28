@@ -10,7 +10,7 @@ class ChildCommunication extends BaseWrapper
         protected $urlManager;
 
 
-        public function __construct() 
+	public function __construct() 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 	
@@ -119,8 +119,13 @@ class ChildCommunication extends BaseWrapper
 
 			if ($oldstatus == 'Scheduled') {
 				$log->log("Identificando destinatarios");
-				$identifyTarget = new IdentifyTarget();
-				$identifyTarget->identifyTarget($mail);
+				$wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
+				$wrapper->setMail($mail);
+				$wrapper->searchTotalContacts();
+				
+				//*** this is the old way for to get the target
+//				$identifyTarget = new IdentifyTarget();
+//				$identifyTarget->identifyTarget($mail);
 			}
 
 			if ($mail->type == 'Editor') {
