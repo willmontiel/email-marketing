@@ -42,7 +42,7 @@ Model.prototype.selectTypeObject = function(obj) {
 			break
 			
 		case 'total-contacts':
-			this.updateTotalContactsView(obj);
+//			this.updateTotalContactsView(obj);
 			break
 	}
 	
@@ -185,7 +185,7 @@ Model.prototype.refreshTotalContacts = function() {
 		var total = DataSource.getData();
 		self.totalContacts = total.totalContacts;
 		self.refreshTotalContactsView('Contactos aproximados: ' + self.totalContacts);
-		self.refreshTotalContactsObject();
+//		self.refreshTotalContactsObject();
 	});
 };
 
