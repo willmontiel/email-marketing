@@ -7,29 +7,6 @@
 			{{'{{else}}'}}
 				<dt>Para:</dt>
 				<dd>
-					{{ '{{#if dbaselist}}' }}
-						{{ '{{#each dbaselist}}' }}
-							Base de datos: {{' {{name}} '}}, 
-						{{ '{{/each}}' }}
-					{{ '{{/if}}' }}
-
-					{{ '{{#if list}}' }}
-						{{ '{{#each list}}' }}
-							Lista de contactos: {{' {{name}} '}}, 
-						{{ '{{/each}}' }}
-					{{ '{{/if}}' }}
-
-					{{ '{{#if segmentlist}}' }}
-						{{ '{{#each segmentlist}}' }}
-							Segmento: {{' {{name}} '}}, 
-						{{ '{{/each}}' }}
-					{{ '{{/if}}' }}
-
-					{{ '{{#unless filterEmpty}}' }}
-						(filtro)
-					{{ '{{/unless}}' }}
-				</dd>
-				<dd>
 					Contactos: <strong>{{ '{{totalContacts}}' }}</strong> (En el momento del envío podría variar)
 				</dd>
 			{{'{{/if}}'}}
@@ -57,6 +34,6 @@
 			<br />
 		</div>
 	</div>
-	{{ '{{#view App.target}}' }}
+	{{ '{{#view App.Target}}' }}
 	{{ '{{/view}}' }}
 {{ '{{/if}}' }}

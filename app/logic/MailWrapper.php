@@ -49,9 +49,19 @@ class MailWrapper extends BaseWrapper
 	
 	public function processDataForMail()
 	{
-		$this->processTarget();
+		$this->validateTarget();
 		$this->processScheduleDate();
 		$this->saveContent();
+	}
+	
+	public function validateTarget()
+	{
+		$target = $this->content->target;
+		if (!empty($target)) {
+			$this->target = new stdClass();
+			$this->target->target = $target;
+		}
+		
 	}
 	
 	public function processTarget()
@@ -135,7 +145,7 @@ class MailWrapper extends BaseWrapper
 		$this->mail->type = $this->content->type;
 		$this->mail->status = 'draft';
 		$this->mail->wizardOption = 'setup';
-		$this->mail->totalContacts = (isset($this->target->totalContacts) ? $this->target->totalContacts : 0);
+		$this->mail->totalContacts = (isset($this->content->totalContacts) ? $this->content->totalContacts : 0);
 		if ($this->scheduleDate != null) {
 			$this->mail->scheduleDate = $this->scheduleDate;
 		}
@@ -306,12 +316,15 @@ class MailWrapper extends BaseWrapper
 		$jsonObject['id'] = $this->mail->idMail;      
 		$jsonObject['name'] = $this->mail->name;
 		$jsonObject['subject'] = $this->mail->subject;
+		
+		$jsonObject['target'] = '';
+		if (!empty($this->mail->target)) {
+			$jsonObject['target'] = $this->mail->target;
+		}
+		
 		$jsonObject['sender'] = "{$this->mail->fromEmail}/{$this->mail->fromName}";
 		$jsonObject['replyTo'] = $this->mail->replyTo;
 		$jsonObject['type'] = $this->mail->type;
-		$jsonObject['dbases'] = '';
-		$jsonObject['contactlists'] = '';
-		$jsonObject['segments'] = '';
 		$jsonObject['fbaccounts'] = '';
 		$jsonObject['twaccounts'] = '';
 		$jsonObject['fbmessagecontent'] = '';
@@ -337,49 +350,49 @@ class MailWrapper extends BaseWrapper
 			$jsonObject['twpublicationcontent'] = ($twdesc != '') ? $twdesc->message : '';
 		}
 		
-		$filter = null;
-		if ($this->mail->target != null) {
-			$target = json_decode($this->mail->target);
-			$filter = $target->filter;
-			
-			if(!empty($filter)) {
-				$type = $filter->type;
-				$criteria = $filter->criteria;
-			}
-			
-			$ids = implode(',', $target->ids);
-			
-			
-			if ($target->destination == 'dbases') {
-				$jsonObject['dbases'] = $ids;
-			}
-			else if ($target->destination == 'contactlists') {
-				$jsonObject['contactlists'] = $ids;
-			}
-			else if ($target->destination == 'segments') {
-				$jsonObject['segments'] = $ids;
-			}
-		}
+//		$filter = null;
+//		if ($this->mail->target != null) {
+//			$target = json_decode($this->mail->target);
+//			$filter = $target->filter;
+//			
+//			if(!empty($filter)) {
+//				$type = $filter->type;
+//				$criteria = $filter->criteria;
+//			}
+//			
+//			$ids = implode(',', $target->ids);
+//			
+//			
+//			if ($target->destination == 'dbases') {
+//				$jsonObject['dbases'] = $ids;
+//			}
+//			else if ($target->destination == 'contactlists') {
+//				$jsonObject['contactlists'] = $ids;
+//			}
+//			else if ($target->destination == 'segments') {
+//				$jsonObject['segments'] = $ids;
+//			}
+//		}
 		
-		$jsonObject['filterByEmail'] = '';
-		$jsonObject['filterByOpen'] = '';
-		$jsonObject['filterByClick'] = '';
-		$jsonObject['filterByExclude'] = '';
-		
-		if ($filter != null) {
-			if ($type == 'email') {
-				$jsonObject['filterByEmail'] = $filter->criteria;
-			}
-			else if ($type == 'open') {
-				$jsonObject['filterByOpen'] = $criteria;
-			}
-			else if ($type == 'click') {
-				$jsonObject['filterByClick'] = $criteria;
-			}
-			else if ($type == 'mailExclude') {
-				$jsonObject['filterByExclude'] = $criteria;
-			}
-		}
+//		$jsonObject['filterByEmail'] = '';
+//		$jsonObject['filterByOpen'] = '';
+//		$jsonObject['filterByClick'] = '';
+//		$jsonObject['filterByExclude'] = '';
+//		
+//		if ($filter != null) {
+//			if ($type == 'email') {
+//				$jsonObject['filterByEmail'] = $filter->criteria;
+//			}
+//			else if ($type == 'open') {
+//				$jsonObject['filterByOpen'] = $criteria;
+//			}
+//			else if ($type == 'click') {
+//				$jsonObject['filterByClick'] = $criteria;
+//			}
+//			else if ($type == 'mailExclude') {
+//				$jsonObject['filterByExclude'] = $criteria;
+//			}
+//		}
 		
 		
 		$jsonObject['mailcontent'] = 0;
