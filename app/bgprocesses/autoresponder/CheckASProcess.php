@@ -29,7 +29,6 @@ class CheckASProcess
 			$mails = array();
 
 			foreach ($autoresponders as $autoresponder) {
-				$this->logger->log('El idAutoresponder es ' . $autoresponder->idAutoresponder);
 				$account = Account::findFirstByIdAccount($autoresponder->idAccount);
 				if($account) {
 					$mailconverter = new AutoSendingConverter();
@@ -41,7 +40,6 @@ class CheckASProcess
 			}
 			
 			foreach ($mails as $mail) {
-				$this->logger->log('El idMail es ' . $mail->idMail);
 				$this->send_autoresponders($mail->idMail);
 			}
 		}
@@ -78,13 +76,10 @@ class CheckASProcess
 				}
 				$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
 				$commObj->sendSchedulingToParent($idMail);	
-
-				return $this->response->redirect("mail/index");
 			}
 		}
 		catch (Exception $e) {
-			$this->logger->log("Exception: Error confiming mail, {$e}");
-			return $this->response->redirect('mail/preview/' . $idMail);
+			$this->logger->log("Exception: Error sending auto responder, {$e}");
 		}
 	}
 }
