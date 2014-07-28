@@ -121,7 +121,7 @@ class ChildCommunication extends BaseWrapper
 				$log->log("Identificando destinatarios");
 				$wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
 				$wrapper->setMail($mail);
-				$wrapper->searchTotalContacts();
+				$wrapper->searchContacts();
 				
 				//*** this is the old way for to get the target
 //				$identifyTarget = new IdentifyTarget();

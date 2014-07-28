@@ -56,6 +56,7 @@ class InterpreterTarget
 	
 	private function createSQLForIdContacts()
 	{
+		$this->logger->log("Data: " . print_r($this->data, true));
 		if (isset($this->data[1])) {
 			$ids = implode(',' , $this->data[1]['serialization']['items']);
 
