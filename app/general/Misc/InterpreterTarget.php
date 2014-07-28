@@ -65,6 +65,7 @@ class InterpreterTarget
 			switch ($this->criteria) {
 				case 'dbases':
 					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM contact WHERE idDbase IN ({$this->ids})";
+					$this->logger->log("idContacts: {$this->SQLForIdContacts}");
 					break;
 
 				case 'contactlists':
@@ -85,11 +86,13 @@ class InterpreterTarget
 		
 		foreach ($this->data as $data) {
 			if ($data['type'] == 'top-panel') {
+				$this->logger->log('Top-panel');
 				$this->topObject = $data;
 				$this->criteria = $data['serialization']['criteria'];
 				$this->top  = true;
 			}
 			else if ($data['type'] == 'list-panel'){
+				$this->logger->log('List-panel');
 				$this->listObject = $data;
 				if (isset($data['serialization']['items'])) {
 					if (count($data['serialization']['items']) > 0) {
