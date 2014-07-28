@@ -42,7 +42,7 @@ class CheckASProcess
 			foreach ($mails as $mail) {
 				try {
 					$this->logger->log('Enviando idMail ' . $mail->idMail);
-					$this->send_autoresponders($mail->idMail);
+					$this->send_autoresponders($mail);
 				}
 				catch (Exception $e) {
 					$this->logger->log("Exception: Error sending auto responder, {$e}");
@@ -57,10 +57,9 @@ class CheckASProcess
 		}
 	}
 	
-	public function send_autoresponders($idMail)
+	public function send_autoresponders($mail)
 	{
-		$schedule = Mailschedule::findFirstByIdMail($idMail);
-		$mail = Mail::findFirstByIdMail($idMail);
+		$schedule = Mailschedule::findFirstByIdMail($mail->idMail);
 		$this->logger->log('Mail ' . $mail->idMail);
 		$this->logger->log('Schedule ' . $schedule->idMailSchedule);		
 		if($schedule) {
