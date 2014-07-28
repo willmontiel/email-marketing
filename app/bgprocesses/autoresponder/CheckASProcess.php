@@ -40,7 +40,12 @@ class CheckASProcess
 			}
 			
 			foreach ($mails as $mail) {
-				$this->send_autoresponders($mail->idMail);
+				try {
+					$this->send_autoresponders($mail->idMail);
+				}
+				catch (Exception $e) {
+					$this->logger->log("Exception: Error sending auto responder, {$e}");
+				}
 			}
 		}
 		catch(Exception $e) {
@@ -55,31 +60,24 @@ class CheckASProcess
 	{
 		$schedule = Mailschedule::findFirstByIdMail($idMail);
 		$mail = Mail::findFirstByIdMail($idMail);
-		try {
-			if($schedule) {
-				$mail->status = 'Scheduled';
-				if(!$mail->save()) {
-					foreach ($mail->getMessages() as $msg) {
-						$this->flashSession->error($msg);
-					}
-					$this->traceFail("Error confirming mail, idMail: {$idMail}");
-					return $this->response->redirect('mail/preview/' . $idMail);
+		if($schedule) {
+			$mail->status = 'Scheduled';
+			if(!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->logger->log($msg);
 				}
-
-				$schedule->confirmationStatus = 'Yes';
-				if(!$schedule->save()){
-					foreach ($schedule->getMessages() as $msg) {
-						$this->flashSession->error($msg);
-					}
-					$this->traceFail("Error confirming mail, idMail: {$idMail}");
-					return $this->response->redirect('mail/preview/' . $idMail);
-				}
-				$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-				$commObj->sendSchedulingToParent($idMail);	
+				throw new Exception('Error saving mail in auto responder');
 			}
-		}
-		catch (Exception $e) {
-			$this->logger->log("Exception: Error sending auto responder, {$e}");
+
+			$schedule->confirmationStatus = 'Yes';
+			if(!$schedule->save()){
+				foreach ($schedule->getMessages() as $msg) {
+					$this->logger->log($msg);
+				}
+				throw new Exception('Error saving scheduling in auto responder');
+			}
+			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+			$commObj->sendSchedulingToParent($idMail);	
 		}
 	}
 }
