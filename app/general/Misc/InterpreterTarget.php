@@ -93,7 +93,7 @@ class InterpreterTarget
 				$this->listObject = $data;
 				if (isset($data['serialization']['items'])) {
 					if (count($data['serialization']['items']) > 0) {
-						$this->ids = implode(',' , $this->data['serialization']['items']);
+						$this->ids = implode(',' , $data['serialization']['items']);
 						$this->list = true;
 					}
 				}
