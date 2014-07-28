@@ -958,6 +958,9 @@ span.required {
 .target-section > div {
 	padding-bottom: 15px;
 }
+.target-section input {
+	margin-top: 10px !important;
+}
 
 /* Finaliza lista de auto envios */
 
