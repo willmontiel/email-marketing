@@ -38,8 +38,9 @@ class CheckASProcess
 					$mails[] = $mailconverter->getMail();
 				}
 			}
-
+			
 			foreach ($mails as $mail) {
+				$this->logger->log('El idMail es ' . $mail->idMail);
 				$this->send_autoresponders($mail->idMail);
 			}
 		}
