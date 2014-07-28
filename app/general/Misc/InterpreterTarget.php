@@ -85,18 +85,18 @@ class InterpreterTarget
 		$this->list = false;
 		
 		foreach ($this->data as $data) {
-			if ($data['type'] == 'top-panel') {
+			if ($data->type == 'top-panel') {
 				$this->logger->log('Top-panel');
 				$this->topObject = $data;
-				$this->criteria = $data['serialization']['criteria'];
+				$this->criteria = $data->serialization->criteria;
 				$this->top  = true;
 			}
-			else if ($data['type'] == 'list-panel'){
+			else if ($data->type == 'list-panel'){
 				$this->logger->log('List-panel');
 				$this->listObject = $data;
-				if (isset($data['serialization']['items'])) {
-					if (count($data['serialization']['items']) > 0) {
-						$this->ids = implode(',' , $data['serialization']['items']);
+				if (isset($data->serialization->items)) {
+					if (count($data->serialization->items) > 0) {
+						$this->ids = implode(',' , $data->serialization->items);
 						$this->list = true;
 					}
 				}
@@ -108,21 +108,21 @@ class InterpreterTarget
 	
 	private function createSQLForFilters()
 	{
-		$condition = ($this->topObject['serialization']['conditions'] == 'all' ? 'AND' : 'OR');
+		$condition = ($this->topObject->serialization->conditions == 'all' ? 'AND' : 'OR');
 		$first = true;
 		$i = 1;
 	
 		$piece = "";
 		
 		foreach ($this->data as $data) {
-			if ($data['type'] == 'filter-panel') {
-				switch ($data['serialization']['type']) {
+			if ($data->type == 'filter-panel') {
+				switch ($data->serialization->type) {
 					case 'mail-sent':
-						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
+						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
 						break;
 
 					case 'mail-open':
-						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data['serialization']['items']})";
+						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
 
 						if ($first) {
 							$piece .= " COALESCE(mc{$i}.opening, 0) != 0";
@@ -135,7 +135,7 @@ class InterpreterTarget
 						break;
 
 					case 'click':
-						$this->joinForFilters .= " JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact = c.idContact AND ml{$i}.idMailLink = {$data['serialization']['items']})";
+						$this->joinForFilters .= " JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact = c.idContact AND ml{$i}.idMailLink = {$data->serialization->items})";
 						break;
 				}
 			}

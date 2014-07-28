@@ -115,6 +115,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 //			
 			var target = this.get('content.target');
 			App.serializerObject = JSON.parse(target);
+			createSelectorTarget();
 			
 			if( this.get('fbimagepublication') !== undefined || this.get('fbimagepublication') !== 'default' ) {
 				App.fbimage = this.get('fbimagepublication');

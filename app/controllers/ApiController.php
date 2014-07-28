@@ -1571,8 +1571,8 @@ class ApiController extends ControllerBase
 	public function gettotalcontactsAction()
 	{
 		$data = $this->request->getPost("data");
-		
-		$this->logger->log("DATA: " . print_r($data, true));
+		$data = json_encode($data);
+		$data = json_decode($data);
 		
 		$wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
 		
