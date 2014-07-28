@@ -140,24 +140,32 @@ class CampaignController extends ControllerBase
 				else {
 					$wrapper->createAutoresponder($content, 'automatic', 'url');
 				}
+				return $this->response->redirect("campaign/list");
 			}
 			catch (Exception $e) {
 				$this->logger->log("Exception: {$e}");
+				$this->flashSession->error($e->getMessage());
 			}
-			
-			return $this->response->redirect("campaign/list");
 		 }
-		 else if($idAutoresponder){
+		 
+		 if($idAutoresponder){
 			$autoresponder = Autoresponder::findFirst(array(
 					"conditions" => "idAutoresponder = ?1",
 					"bind" => array(1 => $idAutoresponder)
 				));
 			$autoresponder->time = json_decode($autoresponder->time);
 			$autoresponder->days = json_decode($autoresponder->days);
+			$autoresponder->from = json_decode($autoresponder->from);
+			$autoresponder->target = json_decode($autoresponder->target);
 			$autoresponder->content = json_decode($autoresponder->content);
 			
 			$this->view->setVar("autoresponse", $autoresponder);
 		 }
+		 
+		$this->view->setVar('senders', Sender::findByIdAccount($this->user->idAccount));
+		$this->view->setVar("contactlist", Contactlist::findContactListsInAccount($this->user->account));
+		$this->view->setVar("dbases", Dbase::findByIdAccount($this->user->idAccount));
+		$this->view->setVar("segments", Segment::findSegmentsInAccount($this->user->account));
 	}
 	
 	public function changestatusAction($id)

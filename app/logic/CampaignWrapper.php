@@ -26,6 +26,18 @@ class CampaignWrapper extends BaseWrapper
 	
 	public function createAutoresponder($content, $type, $contentsource)
 	{
+		$wrapper = new MailWrapper();
+		
+		try {
+			$wrapper->setAccount($this->account);
+			$sender = $wrapper->getSender($content['from_email'] . '/' . $content['from_name']);
+			$wrapper->saveSender($sender);
+		}
+		catch (Exception $e) {
+			$this->logger->log($e);
+			throw new Exception($wrapper->getResponseMessageForEmber()->message);
+		}
+		
 		$autoresponder = new Autoresponder();
 		
 		$autoresponder->idAccount = $this->account->idAccount;
@@ -44,6 +56,18 @@ class CampaignWrapper extends BaseWrapper
 	
 	public function updateAutomaticSend($content)
 	{
+		$wrapper = new MailWrapper();
+		
+		try {
+			$wrapper->setAccount($this->account);
+			$sender = $wrapper->getSender($content['from_email'] . '/' . $content['from_name']);
+			$wrapper->saveSender($sender);
+		}
+		catch (Exception $e) {
+			$this->logger->log($e);
+			throw new Exception($wrapper->getResponseMessageForEmber()->message);
+		}
+		
 		$nextmailing = new NextMailingObj();
 		$nextmailing->setSendTime($content['hour'] . ':' . $content['minute'] . ' ' . $content['meridian']);
 		$nextmailing->setFrequency('Daily');
@@ -82,12 +106,17 @@ class CampaignWrapper extends BaseWrapper
 		}
 		
 		$nextmailing->setDaysAllowed($days);
-		
+				
 		$autoresponder->active = ( isset($content['active']) ) ? 1 : 0 ;
 		$autoresponder->name = $content['name'];
-		$autoresponder->target = json_encode(array('contactlists' => '5,7'));
+		
+		if(empty($content['target']) || empty($content['target_selected'])){
+			throw new Exception('Recuerde seleccionar destinatarios');
+		}
+		
+		$autoresponder->target = json_encode(array('destination' => $content['target'], 'ids' => implode(",", $content['target_selected']), 'filter' => ''));
 		$autoresponder->subject = $content['subject'];
-		$autoresponder->from = $content['from'];
+		$autoresponder->from = json_encode(array('email' => $content['from_email'], 'name' => $content['from_name']));
 		$autoresponder->reply = $content['reply'];
 		$autoresponder->time = json_encode($time);
 		$autoresponder->days = json_encode($days);
@@ -154,6 +183,26 @@ class CampaignWrapper extends BaseWrapper
 		$replace = array($script1, $script2);
 
 		return str_ireplace($search, $replace, $html);
+	}
+	
+	protected function isAValidDomain($domain)
+	{
+		$invalidDomains = array(
+			'yahoo',
+			'hotmail',
+			'live',
+			'gmail',
+			'aol'
+		);
+		
+		$d = explode('.', $domain);
+		
+		foreach ($invalidDomains as $invalidDomain) {
+			if ($invalidDomain == $d[0]) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 }

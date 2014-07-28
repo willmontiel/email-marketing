@@ -141,7 +141,7 @@ class MailWrapper extends BaseWrapper
 		$this->mail->name = $this->content->name;
 		$this->mail->subject = $this->content->subject;
 		
-		$sender = $this->getSender();
+		$sender = $this->getSender($this->content->sender);
 		$this->saveSender($sender);
 		$this->mail->fromName = $sender->name;
 		$this->mail->fromEmail = $sender->email;
@@ -203,9 +203,9 @@ class MailWrapper extends BaseWrapper
 		return true;
 	}
 	
-	private function getSender()
+	public function getSender($sender_raw)
 	{
-		$parts = explode('/', $this->content->sender);
+		$parts = explode('/', $sender_raw);
 		$email = trim(strtolower($parts[0]));
 		$domain = explode('@', $email);
 		$name = $parts[1];
@@ -232,7 +232,7 @@ class MailWrapper extends BaseWrapper
 		return $sender;
 	}
 	
-	private function saveSender($sender)
+	public function saveSender($sender)
 	{
 		$findSender = Sender::findFirst(array(
 			'conditions' => 'idAccount = ?1 AND email = ?2',

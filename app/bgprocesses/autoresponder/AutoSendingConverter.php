@@ -93,12 +93,12 @@ class AutoSendingConverter
 		$obj->scheduleDate = 'now';
 		$obj->type = 'Html';
 		$obj->name = $this->autoresponder->name;
-		$obj->sender = $this->autoresponder->from;
+		
+		$from = json_decode($this->autoresponder->from);
+		$obj->sender = $from->email . '/' . $from->name;
+		
 		$obj->replyTo = $this->autoresponder->reply;
 		$obj->subject = $this->autoresponder->subject;
-	
-		
-		/* Pendiente */
 		
 		$obj->dbases = '';
 		$obj->contactlists = '';
@@ -110,11 +110,8 @@ class AutoSendingConverter
 		$obj->filterByExclude = '';
 		
 		$target = json_decode($this->autoresponder->target);
-		foreach ($target as $k => $v) {
-			$obj->$k = $v;
-		}
-		
-		/* Fin Pendiente */
+		$destination = $target->destination;
+		$obj->$destination = $target->ids;
 		
 		$obj->previewData = $this->autoresponder->previewData;
 		

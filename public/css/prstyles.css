@@ -398,6 +398,8 @@ a.inactive {
 	font-size: 70px;
 }
 
+.icon-not-available.
+
 .preview-template {
 	float: left;
 	width: 180px; 
@@ -890,6 +892,11 @@ span.required {
 	margin: 0 !important;
 }
 
+.without-padding {
+	padding: 0 !important;
+}
+
+
 /* Inicia creacion auto envio */
 
 .time-clock-bigger {
@@ -941,6 +948,15 @@ span.required {
 }
 .autoresponse-list-activated {
 	margin-top: 3%;
+}
+.hide-temporary {
+	display: none;
+}
+.target_active {
+	display: block;
+}
+.target-section > div {
+	padding-bottom: 15px;
 }
 
 /* Finaliza lista de auto envios */
