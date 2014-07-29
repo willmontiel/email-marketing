@@ -43,7 +43,7 @@ class CheckASProcess
 				$nextmailing = new NextMailingObj();
 				$nextmailing->setSendTime($time->hour . ':' . $time->minute . ' ' . $time->meridian);
 				$nextmailing->setFrequency('Daily');
-				$nextmailing->setLastSentDate(null);
+				$nextmailing->setLastSentDate($autoresponder->nextExecution);
 				$nextmailing->setDaysAllowed(json_decode($autoresponder->days));
 				
 				$autoresponder->nextExecution = $nextmailing->getNextSendTime();

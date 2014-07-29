@@ -49,7 +49,12 @@ class NextMailingObj {
 		if($this->days) {
 			foreach ($this->days as $day) {
 				$day_at_time = strtotime('next ' . $day . ' ' . $this->time );
-				$next_send = ( $next_send > $day_at_time || $next_send == 0 ) ? $day_at_time : $next_send;
+				if($this->lastsend) {
+					$next_send = ( ( $next_send > $day_at_time || $next_send == 0 ) && ( $day_at_time > $this->lastsend ) ) ? $day_at_time : $next_send;
+				}
+				else {
+					$next_send = ( $next_send > $day_at_time || $next_send == 0 ) ? $day_at_time : $next_send;
+				}
 			}
 		}
 		
