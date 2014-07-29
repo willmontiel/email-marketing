@@ -17,6 +17,7 @@ class InterpreterTarget
 	protected $SQLForIdContacts = "";
 	protected $joinForFilters = "";
 	protected $conditions = "";
+	protected $conditionsWhenIsDbase = "";
 	protected $sql;
 
 	public function __construct()
@@ -64,16 +65,16 @@ class InterpreterTarget
 		if ($this->top && $this->list) {
 			switch ($this->criteria) {
 				case 'dbases':
-					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM contact WHERE idDbase IN ({$this->ids})";
-					$this->logger->log("idContacts: {$this->SQLForIdContacts}");
+					$this->SQLForIdContacts = "contact";
+					$this->conditionsWhenIsDbase .= "c.idDbase = {$this->ids} AND ";
 					break;
 
 				case 'contactlists':
-					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM coxcl WHERE idContactlist IN ({$this->ids})";
+					$this->SQLForIdContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN coxcl cl ON (c.idContact = cl.idContact) WHERE cl.idContactlist IN ({$this->ids}) GROUP BY 1, 2, 3)";
 					break;
 
 				case 'segments':
-					$this->SQLForIdContacts = "SELECT DISTINCT idContact FROM sxc WHERE idSegment IN ({$this->ids})";
+					$this->SQLForIdContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN sxc s ON (c.idContact = s.idContact) WHERE s.idSegment IN ({$this->ids}) GROUP BY 1, 2, 3)";
 					break;
 			}	
 		}
@@ -149,27 +150,22 @@ class InterpreterTarget
 	{
 		$this->sql = "SELECT COUNT(c.idContact) AS total 
 						  FROM ({$this->SQLForIdContacts}) AS c 
-						  JOIN contact AS co ON (co.idContact = c.idContact) 
 						  JOIN email AS e ON (e.idEmail = co.idEmail) 
 						  {$this->joinForFilters} 
-					  WHERE co.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 
-						  {$this->conditions} ";
+					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditions}";
 	}
 	
 	private function createSQLBaseForTarget()
 	{
-		$sql = "SELECT {$this->mail->idMail}, co.idContact, null, 'scheduled', 0, 0, 0, 0, 0, GROUP_CONCAT(l.idContactlist), 0, 0, 0, 0, 0, 0, 0, 0
-						  FROM ({$this->SQLForIdContacts}) AS c 
-						  JOIN contact AS co ON (co.idContact = c.idContact) 
-						  JOIN coxcl AS l ON (co.idContact = l.idContact)
-						  JOIN email AS e ON (e.idEmail = co.idEmail) 
+		$sql = "SELECT {$this->mail->idMail}, co.idContact, null, 'scheduled', 0, 0, 0, 0, 0, (SELECT GROUP_CONCAT(idContactlist) FROM coxcl x WHERE x.idContact = c.idContact) AS listas, 0, 0, 0, 0, 0, 0, 0, 0
+						  FROM {$this->SQLForIdContacts} AS c 
+						  JOIN email AS e ON (e.idEmail = c.idEmail) 
 						  {$this->joinForFilters} 
-					  WHERE co.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 
-						  {$this->conditions} ";
+					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditions}";
 						  
 		$this->sql = "INSERT IGNORE INTO mxc (idMail, idContact, idBouncedCode, status, opening, clicks, bounced, 
 											  spam, unsubscribe, contactlists, share_fb, share_tw, share_gp, share_li,
-											  open_fb, open_tw, open_gp, open_li) VALUES ({$sql})";			  
+											  open_fb, open_tw, open_gp, open_li) {$sql}";			  
 	}
 	
 	private function executeSQL()
