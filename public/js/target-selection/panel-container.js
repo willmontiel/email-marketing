@@ -21,7 +21,7 @@ PanelContainer.prototype.removePanel = function(panel) {
 				tor[j].remove();
 		}
 	}
-	
+	console.log(i);
 	return i;
 };
 
