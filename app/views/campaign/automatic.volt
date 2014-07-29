@@ -96,7 +96,7 @@
 {% block content %}
 	<div class="row">
 		<h1 class="sectiontitle">Nueva autorespuesta en el tiempo</h1>
-		
+		<div class="space"></div>
 		{{ flashSession.output() }}	
 		
 		<div class="col-md-10">

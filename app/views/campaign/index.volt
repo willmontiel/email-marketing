@@ -1,7 +1,7 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
 	<div class="row">
-		<h4 class="sectiontitle">Autorespuestas</h4>
+		<h1 class="sectiontitle">Autorespuestas</h1>
 		<div class="container-fluid space">
 			<div class="col-xs-6 col-md-3">
 				<div class="big-btn-nav sm-btn-blue">

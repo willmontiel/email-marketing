@@ -55,7 +55,7 @@
 {% block content %}
 	<div class="row">
 		<h1  class="sectiontitle">Lista de autorespuestas</h1>
-		
+		<div class="space"></div>
 		{{ flashSession.output() }}
 		
 		<div class="container-fluid">
