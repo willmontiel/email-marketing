@@ -37,6 +37,21 @@ class CheckASProcess
 					$mailconverter->convertToMail();
 					$mails[] = $mailconverter->getMail();
 				}
+				
+				$time = json_decode($autoresponder->time);
+				$nextmailing = new NextMailingObj();
+				$nextmailing->setSendTime($time->hour . ':' . $time->minute . ' ' . $time->meridian);
+				$nextmailing->setFrequency('Daily');
+				$nextmailing->setLastSentDate(null);
+				$nextmailing->setDaysAllowed(json_decode($autoresponder->days));
+				
+				$autoresponder->nextExecution = $nextmailing->getNextSendTime();
+				
+				if (!$autoresponder->save()) {
+					foreach ($autoresponder->getMessages() as $msg) {
+						throw new Exception("Error while saving automatic campaign, {$msg}!");
+					}
+				}
 			}
 			
 			foreach ($mails as $mail) {
