@@ -42,8 +42,16 @@ class NextMailingObj {
 		$this->logger->log('Despues de transformar ' . $today);
 		$today_txt = strtolower( date('l', time()) );
 		
-		if(in_array($today_txt, $this->days) && time() < $today) {
-			return $today;
+		if(in_array($today_txt, $this->days) && time() < $today ) {
+			if( $this->lastsend ) {
+				if( $today > $this->lastsend ) {
+					return $today;
+				}
+			}
+			else {
+				return $today;
+			}
+			
 		}
 		
 		$next_send = 0;
