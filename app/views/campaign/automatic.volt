@@ -4,6 +4,8 @@
 	{# bootstrap switch master B3 #}
 	{{ stylesheet_link('bootstrap-switch-master/bootstrap-switch.css')}}
 	{{ javascript_include('bootstrap-switch-master/bootstrap-switch.js')}}
+	{{ stylesheet_link('select2-master/select2.css')}}
+	{{ javascript_include('select2-master/select2.js')}}
 
 	<script> 
 		$(function (){
@@ -47,6 +49,10 @@
 				var values = $(this).val().split('/');
 				$('#from_email').val(values[1]);
 				$('#from_name').val(values[0]);
+			});
+			
+			$('.target-section select').select2({
+				placeholder: "Seleccione los destinatarios"
 			});
 		});
 		
@@ -112,9 +118,9 @@
 					
 					<div class="col-sm-12">
 						<label for="dbopt" class="col-sm-4 control-label">Bases de datos</label>
-						<input id="dbopt" class="col-sm-1 control-label" name="target" type="radio" value="dbases">
+						<input id="dbopt" class="col-sm-1 control-label radio-btn-automatic" name="target" type="radio" value="dbases">
 						<div id="dbases" class="col-md-5 hide-temporary">
-							<select id="dbases" multiple="true">
+							<select id="dbases" multiple="true" style="width:100%">
 								{%for item in dbases%}
 								<option value="{{item.idDbase}}">{{item.name}}</option>
 								{%endfor%}
@@ -124,9 +130,9 @@
 					
 					<div class="col-sm-12">
 						<label for="listopt" class="col-sm-4 control-label">Lista de contactos</label>
-						<input id="listopt" class="col-sm-1 control-label" name="target" type="radio" value="contactlists">
+						<input id="listopt" class="col-sm-1 control-label radio-btn-automatic" name="target" type="radio" value="contactlists">
 						<div id="contactlists" class="col-md-5 hide-temporary">
-							<select id="contactlists" multiple="true">
+							<select id="contactlists" multiple="true" style="width:100%">
 								{%for list in contactlist%}
 								<option value="{{list.idContactlist}}">{{list.name}}</option>
 								{%endfor%}
@@ -136,9 +142,9 @@
 					
 					<div class="col-sm-12">
 						<label for="segmentopt" class="col-sm-4 control-label">Segmentos</label>
-						<input id="segmentopt" class="col-sm-1 control-label" name="target" type="radio" value="segments">
+						<input id="segmentopt" class="col-sm-1 control-label radio-btn-automatic" name="target" type="radio" value="segments">
 						<div id="segments" class="col-md-5 hide-temporary">
-							<select id="segments" multiple="true">
+							<select id="segments" multiple="true" style="width:100%">
 								{%for segment in segments%}
 								<option value="{{segment.idSegment}}">{{segment.name}}</option>
 								{%endfor%}

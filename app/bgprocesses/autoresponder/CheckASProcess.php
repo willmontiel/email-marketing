@@ -31,7 +31,7 @@ class CheckASProcess
 
 			foreach ($autoresponders as $autoresponder) {
 				$account = Account::findFirstByIdAccount($autoresponder->idAccount);
-				if($account) {
+				if($account && $autoresponder->active == 1) {
 					$mailconverter = new AutoSendingConverter();
 					$mailconverter->setAutoresponder($autoresponder);
 					$mailconverter->setAccount($account);
