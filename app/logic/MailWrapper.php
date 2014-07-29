@@ -206,9 +206,9 @@ class MailWrapper extends BaseWrapper
 		return true;
 	}
 	
-	public function getSender($sender_raw)
+	public function getSender()
 	{
-		$parts = explode('/', $sender_raw);
+		$parts = explode('/', $this->content->sender);
 		$email = trim(strtolower($parts[0]));
 		$domain = explode('@', $email);
 		$name = $parts[1];
