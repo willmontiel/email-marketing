@@ -123,11 +123,10 @@ class ChildCommunication extends BaseWrapper
 				$interpreter->setMail($mail);
 				$interpreter->searchContacts();
 				$sql = $interpreter->getSQL();
-				
+				$this->log->log("SQL: {$sql}");
 				if ($sql != false) {
 					$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 					$executer->setSQL($sql);
-					$executer->executeSelectQuery();
 					$executer->executeQuery();
 				}
 				//*** this is the old way for to get the target
