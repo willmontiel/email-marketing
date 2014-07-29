@@ -149,7 +149,7 @@ class InterpreterTarget
 	private function createSQLBaseForTotalContacts()
 	{
 		$this->sql = "SELECT COUNT(c.idContact) AS total 
-						  FROM ({$this->SQLForIdContacts}) AS c 
+						  FROM {$this->SQLForIdContacts} AS c 
 						  JOIN email AS e ON (e.idEmail = co.idEmail) 
 						  {$this->joinForFilters} 
 					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditions}";
