@@ -1524,6 +1524,8 @@ class ApiController extends ControllerBase
 			$interpreter->searchMailFilter();
 			$sql = $interpreter->getSQL();
 			
+			$this->logger->log("SQL: {$sql}");
+			
 			if ($sql != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 				$executer->setSQL($sql);
