@@ -1515,13 +1515,35 @@ class ApiController extends ControllerBase
 		
 //		$this->logger->log("DATA: " . print_r($data, true));
 		
-		$wrapper = new TargetWrapper();
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+		
+		$filter = array();
 		
 		try {
-			$wrapper->setData($data);
-			$wrapper->searchMailFilter();
-		
-			return $this->setJsonResponse($wrapper->getFilter());
+			$interpreter->setData($data);
+			$interpreter->searchMailFilter();
+			$sql = $interpreter->getSQL();
+			
+			if ($sql != false) {
+				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+				$executer->setSQL($sql);
+				$executer->executeSelectQuery();
+				$result = $executer->getResult();
+				
+				if (count($result) > 0) {
+					foreach ($result as $r) {
+						$object = new stdClass();
+						$object->id = $r['id'];
+						$object->text = $r['name'];
+						$object->subject = $r['subject'];
+						$object->date = date('d/m/Y', $r['date']);
+
+						$filter[] = $object;
+					}
+				}
+			}
+			
+			return $this->setJsonResponse($filter);
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
@@ -1533,15 +1555,37 @@ class ApiController extends ControllerBase
 	{
 		$data = $this->request->getPost("data");
 		
-		$this->logger->log("DATA: " . print_r($data, true));
+//		$this->logger->log("DATA: " . print_r($data, true));
 		
-		$wrapper = new TargetWrapper();
+		$filter = array();
+		
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
 		
 		try {
-			$wrapper->setData($data);
-			$wrapper->searchMailsWithClicksFilter();
-		
-			return $this->setJsonResponse($wrapper->getFilter());
+			$interpreter->setData($data);
+			$interpreter->searchMailsWithClicksFilter();
+			$sql = $interpreter->getSQL();
+			
+			if ($sql != false) {
+				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+				$executer->setSQL($sql);
+				$executer->executeSelectQuery();
+				$result = $executer->getResult();
+				
+				if (count($result) > 0) {
+					foreach ($result as $r) {
+						$object = new stdClass();
+						$object->id = $r['id'];
+						$object->text = $r['name'];
+						$object->subject = $r['subject'];
+						$object->date = date('d/m/Y', $r['date']);
+
+						$filter[] = $object;
+					}
+				}
+			}
+			
+			return $this->setJsonResponse($filter);
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
@@ -1552,15 +1596,35 @@ class ApiController extends ControllerBase
 	public function getclicksfilterAction()
 	{
 		$data = $this->request->getPost("data");
-		$this->logger->log("DATA: " . print_r($data, true));
+//		$this->logger->log("DATA: " . print_r($data, true));
 		
-		$wrapper = new TargetWrapper();
+		$filter = array();
+		
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
 		
 		try {
-			$wrapper->setData($data);
-			$wrapper->searchClicksFilter();
-		
-			return $this->setJsonResponse($wrapper->getFilter());
+			$interpreter->setData($data);
+			$interpreter->searchClicksFilter();
+			$sql = $interpreter->getSQL();
+			
+			if ($sql != false) {
+				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+				$executer->setSQL($sql);
+				$executer->executeSelectQuery();
+				$result = $executer->getResult();
+				
+				if (count($result) > 0) {
+					foreach ($result as $r) {
+						$object = new stdClass();
+						$object->id = $r['id'];
+						$object->text = $r['name'];
+
+						$filter[] = $object;
+					}
+				}
+			}
+			
+			return $this->setJsonResponse($filter);
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
@@ -1574,13 +1638,28 @@ class ApiController extends ControllerBase
 		$data = json_encode($data);
 		$data = json_decode($data);
 		
+		$this->logger->log("DATA: " . print_r($data, true));
+		
 		$wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
 		
 		try {
+			$total = 0;
+			
 			$wrapper->setData($data);
 			$wrapper->searchTotalContacts();
-		
-			return $this->setJsonResponse($wrapper->getTotalContacts());
+			$sql = $wrapper->getSQL();
+			
+			if ($sql != false) {
+				$this->logger->log("SQL: {$sql}");
+				
+				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+				$executer->setSQL($sql);
+				$executer->executeSelectQuery();
+				$r = $executer->getResult();
+				$total = $r[0]['total'];
+			}
+			
+			return $this->setJsonResponse(array('totalContacts' => $total));
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");

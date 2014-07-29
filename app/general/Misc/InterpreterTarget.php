@@ -7,6 +7,7 @@ namespace EmailMarketing\General\Misc;
  */
 class InterpreterTarget 
 {
+	protected $SQLFilterMail = "";
 	protected $topObject;
 	protected $listObject;
 	protected $account;
@@ -14,7 +15,7 @@ class InterpreterTarget
 	protected $mail;
 	protected $data;
 	protected $result;
-	protected $SQLForIdContacts = "";
+	protected $SQLForContacts = "";
 	protected $joinForFilters = "";
 	protected $conditions = "";
 	protected $conditionsWhenIsDbase = "";
@@ -42,39 +43,39 @@ class InterpreterTarget
 	
 	public function searchTotalContacts()
 	{
-		$this->createSQLForIdContacts();
+		$this->createSQLByCriteria();
 		$this->createSQLForFilters();
 		$this->createSQLBaseForTotalContacts();
-		$this->executeSQL();
 	}
 	
 	public function searchContacts()
 	{
 		$this->data = json_decode($this->mail->target);
-		$this->createSQLForIdContacts();
+		$this->createSQLByCriteria();
 		$this->createSQLForFilters();
 		$this->createSQLBaseForTarget();
-//		$this->executeSQL();
 	}
 	
-	private function createSQLForIdContacts()
+	private function createSQLByCriteria()
 	{
-		$this->logger->log("Data: " . print_r($this->data, true));
 		$this->modelData();
 		
 		if ($this->top && $this->list) {
 			switch ($this->criteria) {
 				case 'dbases':
-					$this->SQLForIdContacts = "contact";
+					$this->SQLFilterMail = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
+					$this->SQLForContacts = "contact";
 					$this->conditionsWhenIsDbase .= "c.idDbase = {$this->ids} AND ";
 					break;
 
 				case 'contactlists':
-					$this->SQLForIdContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN coxcl cl ON (co.idContact = cl.idContact) WHERE cl.idContactlist IN ({$this->ids}) GROUP BY 1, 2, 3)";
+					$this->SQLFilterMail = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
+					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN coxcl cl ON (co.idContact = cl.idContact) WHERE cl.idContactlist IN ({$this->ids}) GROUP BY 1, 2, 3)";
 					break;
 
 				case 'segments':
-					$this->SQLForIdContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN sxc s ON (co.idContact = s.idContact) WHERE s.idSegment IN ({$this->ids}) GROUP BY 1, 2, 3)";
+					$this->SQLFilterMail = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
+					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN sxc s ON (co.idContact = s.idContact) WHERE s.idSegment IN ({$this->ids}) GROUP BY 1, 2, 3)";
 					break;
 			}	
 		}
@@ -101,15 +102,43 @@ class InterpreterTarget
 				}
 			}
 		}
+	}
+	
+	public function searchMailFilter()
+	{
+		$this->createSQLByCriteria();
 		
+		$this->sql = "SELECT m.idMail AS id, m.name AS name, m.subject AS subject, m.startedon AS date
+					  FROM mail AS m
+						  JOIN mxc AS mc ON (mc.idMail = m.idMail) {$this->SQLFilterMail}";
+	}
+	
+	public function searchMailsWithClicksFilter() 
+	{
+		$this->createSQLByCriteria();
 		
+		$this->sql = "SELECT m.idMail AS id, m.name AS name, m.subject AS subject, m.startedon AS date
+						 FROM mail AS m
+						 JOIN mxl AS l ON (l.idMail = m.idMail)
+						 JOIN mxc AS mc ON (mc.idMail = m.idMail) {$this->SQLFilterMail}";
+	}
+	
+	public function searchClicksFilter()
+	{
+		if (!empty($this->data['idMail'])) {
+			$this->sql = "SELECT l.idMailLink AS id, l.link AS name
+						  FROM mxl AS ml
+						  JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
+					  WHERE ml.idMail = {$this->data['idMail']}";
+					  
+			$this->top = true;
+			$this->list = true;
+		}
 	}
 	
 	private function createSQLForFilters()
 	{
 		$condition = ($this->listObject->serialization->conditions == 'all' ? 'AND' : 'OR');
-		$this->logger->log("Condition: {$condition}");
-		$this->logger->log("Condition Object: " . print_r($this->listObject, true));
 		$first = true;
 		$i = 1;
 	
@@ -149,7 +178,7 @@ class InterpreterTarget
 	private function createSQLBaseForTotalContacts()
 	{
 		$this->sql = "SELECT COUNT(c.idContact) AS total 
-						  FROM {$this->SQLForIdContacts} AS c 
+						  FROM {$this->SQLForContacts} AS c 
 						  JOIN email AS e ON (e.idEmail = c.idEmail) 
 						  {$this->joinForFilters} 
 					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditions}";
@@ -158,7 +187,7 @@ class InterpreterTarget
 	private function createSQLBaseForTarget()
 	{
 		$sql = "SELECT {$this->mail->idMail}, c.idContact, null, 'scheduled', 0, 0, 0, 0, 0, (SELECT GROUP_CONCAT(idContactlist) FROM coxcl x WHERE x.idContact = c.idContact) AS listas, 0, 0, 0, 0, 0, 0, 0, 0
-						  FROM {$this->SQLForIdContacts} AS c 
+						  FROM {$this->SQLForContacts} AS c 
 						  JOIN email AS e ON (e.idEmail = c.idEmail) 
 						  {$this->joinForFilters} 
 					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditions}";
@@ -168,30 +197,12 @@ class InterpreterTarget
 											  open_fb, open_tw, open_gp, open_li) {$sql}";			  
 	}
 	
-	private function executeSQL()
-	{
-		$this->logger->log("SQL: " . print_r($this->sql, true));
-		
-		if ($this->SQLForIdContacts != "") {
-			$db = \Phalcon\DI::getDefault()->get('db');
-			$result = $db->query($this->sql);
-			$this->result = $result->fetchAll();
-		}
-		else {
-			$this->result = array(
-				0 => array('total' => 0)
-			);
-		}
-	}
-	
-	public function getTotalContacts()
-	{
-		return array('totalContacts' => $this->result[0]['total']);
-	}
 	
 	public function getSQL()
 	{
-		$this->logger->log("SQL: {$this->sql}");	
+		if (!$this->top or !$this->list) {
+			return false;
+		}
 		return $this->sql;
 	}
 }

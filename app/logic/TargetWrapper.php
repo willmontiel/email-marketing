@@ -40,17 +40,14 @@ class TargetWrapper extends BaseWrapper
 			switch ($this->data[0]['serialization']['criteria']) {
 				case 'dbases':
 					$this->SQLfilter->mail = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
-					$this->SQLfilter->totalContacts = " WHERE idDbase IN ({$ids})";
 					break;
 
 				case 'contactlists':
 					$this->SQLfilter->mail = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
-					$this->SQLfilter->totalContacts = " JOIN Coxcl AS cl ON (cl.idContact = c.idContact) WHERE idContactlist IN ({$ids})";
 					break;
 
 				case 'segments':
 					$this->SQLfilter->mail = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
-					$this->SQLfilter->totalContacts = " JOIN Sxc AS s ON (s.idContact = c.idContact) WHERE idSegment IN ({$ids})";
 					break;
 			}	
 		}
@@ -103,49 +100,14 @@ class TargetWrapper extends BaseWrapper
 				$object->text = $r->name;
 				$object->subject = $r->subject;
 				$object->date = date('d/m/Y', $r->date);
-//				$object->preview = $r->preview;
 				
 				$this->filter[] = $object;
 			}
 		}
 	}
 	
-	private function setTotalContacts()
-	{
-		$this->logger->log("SQL: " . print_r($this->sql, true));
-		
-		$total = 0;
-		
-		if (isset($this->data[1])) {
-			$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
-			$result = $modelsManager->executeQuery($this->sql);
-			$total = $result->getFirst()->totalContacts;
-		}
-		
-		$this->totalContacts = array('totalContacts' => $total);
-	}
-	
-	public function searchTotalContacts()
-	{
-		$this->createSQLFilter();
-		
-		$this->sql = "SELECT COUNT(DISTINCT c.idContact) AS totalContacts 
-						 FROM Contact AS c 
-						 JOIN Email AS e ON (e.idEmail = c.idEmail) {$this->SQLfilter->totalContacts} 
-							 AND c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0";
-		
-		$this->setTotalContacts();
-	}
-	
-	public function getTotalContacts()
-	{
-		$this->logger->log("Total: " . print_r($this->totalContacts, true));		
-		return $this->totalContacts;
-	}
-	
 	public function getFilter()
 	{
-//		$this->logger->log("Filter: " . print_r($this->filter, true));
 		return $this->filter;
 	}
 }
