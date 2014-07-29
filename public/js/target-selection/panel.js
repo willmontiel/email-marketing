@@ -29,9 +29,11 @@ Panel.prototype.createPanel = function(container) {
 		self.close(e);
 	});
 
-	this.html.find('.sgm-panel').css({width: '0px'}).show();
+	this.html.find('.sgm-panel')
+//		.css({width: '0px'})
+		.show();
 	container.find('.sgm-panel-space').append(this.html);
-	this.html.find('.sgm-panel').animate({width: '100%'});
+//	this.html.find('.sgm-panel').animate({width: '100%'});
 	
 	this.config.content.initialize(this.html);
 //	this.config.content.serialize();

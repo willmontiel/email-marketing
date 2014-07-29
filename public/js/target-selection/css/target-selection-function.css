@@ -16,6 +16,7 @@
 	border: 1px solid #ddd;
 	height: 280px;
 	background-color: white;
+	box-shadow: 2px 2px 5px 0px #afafaf;
 }
 
 .sgm-panel > .sgm-panel-title {
@@ -228,6 +229,7 @@
 	margin-left: auto;
 	margin-right: auto;
 	border-radius: 4px;
+	overflow-y: scroll;
 }
 
 .sgm-item-added {
@@ -267,6 +269,7 @@
 	border: 1px solid #ddd;
 	border-radius: 4px;
 	font-size: 16px;
+	box-shadow: 2px 2px 5px 0px #afafaf;
 }
 
 .sgm-filter-content-body {
@@ -361,4 +364,13 @@
 .sgm-filter-select {
 	width: 100%;
 	margin-bottom: 20px;
+}
+
+.sgm-title-box {
+	color: #20526e;
+	border: 1px solid #ddd;
+	padding: 7px;
+	border-radius: 3px;
+	background-color: #f5f5f5;
+	margin-bottom: 6px;
 }

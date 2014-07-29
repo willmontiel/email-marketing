@@ -16,6 +16,21 @@ FilterPanelContent.prototype = new PanelContent;
 
 FilterPanelContent.prototype.setValues = function(type, himself) {
 	this.type = type;
+	
+	var mtitle = this.content.find('.sgm-mail-title');
+	var ctitle = this.content.find('.sgm-click-title');
+	
+	mtitle.empty();
+	ctitle.empty();
+	
+	if (this.mtitle !== '') {
+		mtitle.append('<div class="sgm-title-box">' + this.mtitle + '</div>');
+	}
+	
+	if (this.ctitle !== '') {
+		ctitle.append('<div class="sgm-title-box">' + this.ctitle + '</div>');
+	}
+	
 	this.content.find('.smg-filter').removeClass('sgm-filter-active');
 	$(himself).addClass('sgm-filter-active');
 	
@@ -32,18 +47,24 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	
 	this.content.find('.smg-add-sent-filter').on('click', function (e) {
+		self.ctitle = '';
+		self.mtitle = 'Enviar a contactos que hayan recibido el siguiente correo';
 		var container = self.setValues('mail-sent', this);
 		var filter = new FilterMailContent();
 		self.createFilter(filter, container);
 	});
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
+		self.ctitle = '';
+		self.mtitle = 'Enviar a contactos que hayan abierto el siguiente correo';
 		var container = self.setValues('mail-open', this);
 		var filter = new FilterMailContent();
 		self.createFilter(filter, container);
 	});
 	
 	this.content.find('.smg-add-click-filter').on('click', function (e) {
+		self.mtitle = '';
+		self.ctitle = 'Enviar a contactos que hayan hecho click en el siguiente enlace';
 		var container = self.setValues('click', this);
 		var filter = new FilterClickContent();
 		self.createClickFilter(filter, container);
@@ -135,7 +156,9 @@ FilterPanelContent.prototype.createContent = function() {
 							  </div>\n\
 						  </div>\n\
 						  <div class="sgm-filter-content-body">\n\
+							   <div class="sgm-mail-title"></div>\n\
 							   <div class="sgm-filter-content-select-mail"></div>\n\
+							   <div class="sgm-click-title"></div>\n\
 							   <div class="sgm-filter-content-select-click"></div>\n\
 						  </div>\n\
 						  <div class="sgm-filter-content-footer"></div>\n\

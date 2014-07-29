@@ -1,5 +1,5 @@
 function PanelContainer(selector) {
-	var structure = $('<div class="row"><div class="sgm-panel-space"></div></div><div class="row"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="sgm-panel-contacts-space">Contactos aproximados: 0</div></div></div>');
+	var structure = $('<div class="row-fluid"><div class="sgm-panel-space"></div></div><div class="row-fluid"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="sgm-panel-contacts-space">Contactos aproximados: 0</div></div></div>');
 	this.element = $(selector);
 	this.element.append(structure);
 	this.panellist = [];

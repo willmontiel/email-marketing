@@ -125,7 +125,7 @@ Model.prototype.createFilterPanel = function(obj) {
 	var config = {
 		sticky: false, 
 		leftArrow: true, 
-		title: 'Seleccione una opción',
+		title: 'Seleccione un filtro',
 		content: filterPanelContent
 	};
 		
