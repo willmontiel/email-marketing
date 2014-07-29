@@ -95,7 +95,7 @@
 {% endblock %}
 {% block content %}
 	<div class="row">
-		<h4 class="sectiontitle">Nueva autorespuesta en el tiempo</h4>
+		<h1 class="sectiontitle">Nueva autorespuesta en el tiempo</h1>
 		
 		{{ flashSession.output() }}	
 		

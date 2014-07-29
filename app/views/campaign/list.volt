@@ -53,11 +53,8 @@
 	</script>
 {% endblock %}
 {% block content %}
-
-{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'list']) }}
-
 	<div class="row">
-		<h4  class="sectiontitle">Lista de autorespuestas</h4>
+		<h1  class="sectiontitle">Lista de autorespuestas</h1>
 		
 		{{ flashSession.output() }}
 		
