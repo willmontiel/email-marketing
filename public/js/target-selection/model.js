@@ -17,7 +17,8 @@ Model.prototype.serializer = function() {
 	if (this.serializerObj === null || this.serializerObj === undefined) {
 		var obj = {
 			type: 'top-panel',
-			serialization: {criteria: null}
+			serialization: {criteria: null},
+			totalContacts: 0
 		};
 		
 		this.createTopPanel(obj);
@@ -33,6 +34,7 @@ Model.prototype.selectTypeObject = function(obj) {
 	switch (obj.type) {
 		case 'top-panel':
 			this.createTopPanel(obj);
+			this.updateTotalContactsView(obj);
 			break
 			
 		case 'list-panel':
@@ -41,10 +43,6 @@ Model.prototype.selectTypeObject = function(obj) {
 			
 		case 'filter-panel':
 			this.createFilterPanel(obj);
-			break
-			
-		case 'total-contacts':
-			this.updateTotalContactsView(obj);
 			break
 	}
 	
@@ -139,8 +137,8 @@ Model.prototype.createFilterPanel = function(obj) {
 };
 
 Model.prototype.updateTotalContactsView = function(obj) {
-	this.totalContacts = obj.total;
-	this.refreshTotalContactsView('Contactos aproximados: ' + obj.total);
+	this.totalContacts = obj.totalContacts;
+	this.refreshTotalContactsView('Contactos aproximados: ' + obj.totalContacts);
 };
 
 Model.prototype.getDataSource = function() {
@@ -180,7 +178,7 @@ Model.prototype.removePanel = function(panel) {
 	var key = this.container.removePanel(panel);
 	
 	if (key >= 0) {
-		var l = this.serializerObj.length - 1;
+		var l = this.serializerObj.length;
 		this.serializerObj.splice(key, l - key);
 	}
 	
@@ -222,23 +220,11 @@ Model.prototype.refreshTotalContacts = function() {
 };
 
 Model.prototype.refreshTotalContactsObject = function() {
-	var total = false;
-	
 	for (var i = 0; i < this.serializerObj.length; i++) {
-		if (this.serializerObj[i].type === 'total-contacts') {
-			this.serializerObj[i].total = this.totalContacts;
-			total = true;
+		if (this.serializerObj[i].type === 'top-panel') {
+			this.serializerObj[i].totalContacts = this.totalContacts;
 			break;
 		}
-	}
-	
-	if (!total) {
-		var tc = {
-			type: 'total-contacts',
-			total: this.totalContacts
-		};
-		
-		this.serializerObj.push(tc);
 	}
 };
 

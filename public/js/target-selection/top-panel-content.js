@@ -1,7 +1,8 @@
 TopPanelContent = function() {
 	this.oldCriteria = {
 		type: 'top-panel',
-		serialization: {criteria: null}
+		serialization: {criteria: null},
+		totalContacts: 0
 	};
 };
 
@@ -25,7 +26,8 @@ TopPanelContent.prototype.initializeNextContentPanel = function (obj) {
 	
 	this.newCriteria = {
 		type: 'top-panel',
-		serialization: {criteria: criteria}
+		serialization: {criteria: criteria},
+		totalContacts: 0
 	};
 	
 	this.model.updateObject(this.oldCriteria, this.newCriteria);
