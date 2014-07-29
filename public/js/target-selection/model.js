@@ -183,7 +183,7 @@ Model.prototype.removePanel = function(panel) {
 		var l = this.serializerObj.length;
 		console.log(key);
 		console.log(l);
-		this.serializerObj.splice(key, l - key);
+		this.serializerObj.splice(key, l);
 	}
 	
 	this.refreshTotalContacts();
