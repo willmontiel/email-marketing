@@ -148,7 +148,7 @@ class InterpreterTarget
 			if ($data->type == 'filter-panel') {
 				switch ($data->serialization->type) {
 					case 'mail-sent':
-						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
+						$this->joinForFilters .= " LEFT JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
 						
 						if ($first) {
 							$piece .= " mc{$i}.idContact IS NOT NULL ";
@@ -161,7 +161,7 @@ class InterpreterTarget
 						break;
 
 					case 'mail-open':
-						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items} AND mc{$i}.opening != 0)";
+						$this->joinForFilters .= " LEFT JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items} AND mc{$i}.opening != 0)";
 
 						if ($first) {
 							$piece .= " mc{$i}.idContact IS NOT NULL ";
