@@ -107,14 +107,17 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	//Si hay un id se encargara se recrear el correo para su edición
 	setSelectsContent: function () {
 		if (this.get('id') !== null) {
+			console.log('Setting...');
 			var fbaccounts = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
 			var twaccounts = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
 			
 			this.set('fbaccountsel', fbaccounts);
 			this.set('twaccountsel', twaccounts);
-//			
+			
 			var target = this.get('content.target');
-			App.serializerObject = JSON.parse(target);
+			if (target !== '') {
+				App.serializerObject = JSON.parse(target);
+			}
 			createSelectorTarget();
 			
 			if( this.get('fbimagepublication') !== undefined || this.get('fbimagepublication') !== 'default' ) {
@@ -129,6 +132,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			var sender = setTargetValue(this.get('this.sender'), App.senders);
 			
 			this.set('senderAttr', sender);
+			console.log('Setted!');
 		}
 	}.observes('this.content'),
 	
@@ -625,7 +629,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				
 		discardTarget: function() {
 			if (this.get('this.id') !== null) {
-				App.serializerObject = JSON.parse(this.get('oldTarget'));
+				if (this.get('oldTarget') !== '') {
+					App.serializerObject = JSON.parse(this.get('oldTarget'));
+				}
 //				this.set('dbaselist', this.get('databases'));
 //				this.set('list', this.get('clists'));
 //				this.set('segmentlist', this.get('csegments'));

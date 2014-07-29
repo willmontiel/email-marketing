@@ -149,16 +149,25 @@ class InterpreterTarget
 				switch ($data->serialization->type) {
 					case 'mail-sent':
 						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
+						
+						if ($first) {
+							$piece .= " mc{$i}.idContact IS NOT NULL ";
+						}
+						else {
+							$piece .= " {$condition} mc{$i}.idContact IS NOT NULL ";
+						}
+
+						$first = false;
 						break;
 
 					case 'mail-open':
-						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
+						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items} AND mc{$i}.opening != 0)";
 
 						if ($first) {
-							$piece .= " COALESCE(mc{$i}.opening, 0) != 0 ";
+							$piece .= " mc{$i}.idContact IS NOT NULL ";
 						}
 						else {
-							$piece .= " {$condition} COALESCE(mc{$i}.opening, 0) != 0 ";
+							$piece .= " {$condition} mc{$i}.idContact IS NOT NULL ";
 						}
 
 						$first = false;
