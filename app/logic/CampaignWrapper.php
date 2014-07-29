@@ -30,7 +30,10 @@ class CampaignWrapper extends BaseWrapper
 		
 		try {
 			$wrapper->setAccount($this->account);
-			$sender = $wrapper->getSender($content['from_email'] . '/' . $content['from_name']);
+			$obj = new stdClass();
+			$obj->sender = $content['from_email'] . '/' . $content['from_name'];
+			$wrapper->setContent($obj);
+			$sender = $wrapper->getSender();
 		}
 		catch (Exception $e) {
 			$this->logger->log($e);
@@ -59,8 +62,10 @@ class CampaignWrapper extends BaseWrapper
 		
 		try {
 			$wrapper->setAccount($this->account);
-			$sender = $wrapper->getSender($content['from_email'] . '/' . $content['from_name']);
-			$wrapper->saveSender($sender);
+			$obj = new stdClass();
+			$obj->sender = $content['from_email'] . '/' . $content['from_name'];
+			$wrapper->setContent($obj);
+			$sender = $wrapper->getSender();
 		}
 		catch (Exception $e) {
 			$this->logger->log($e);
