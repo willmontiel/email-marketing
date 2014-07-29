@@ -1512,7 +1512,8 @@ class ApiController extends ControllerBase
 	public function getmailfilterAction()
 	{
 		$data = $this->request->getPost("data");
-		
+		$data = json_encode($data);
+		$data = json_decode($data);
 //		$this->logger->log("DATA: " . print_r($data, true));
 		
 		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
@@ -1556,7 +1557,8 @@ class ApiController extends ControllerBase
 	public function getclicksmailfilterAction()
 	{
 		$data = $this->request->getPost("data");
-		
+		$data = json_encode($data);
+		$data = json_decode($data);
 //		$this->logger->log("DATA: " . print_r($data, true));
 		
 		$filter = array();
@@ -1568,6 +1570,7 @@ class ApiController extends ControllerBase
 			$interpreter->searchMailsWithClicksFilter();
 			$sql = $interpreter->getSQL();
 			
+			$this->logger->log("SQL: {$sql}");
 			if ($sql != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 				$executer->setSQL($sql);
@@ -1608,7 +1611,7 @@ class ApiController extends ControllerBase
 			$interpreter->setData($data);
 			$interpreter->searchClicksFilter();
 			$sql = $interpreter->getSQL();
-			
+			$this->logger->log("SQL: {$sql}");
 			if ($sql != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 				$executer->setSQL($sql);

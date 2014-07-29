@@ -124,6 +124,12 @@ class ChildCommunication extends BaseWrapper
 				$interpreter->searchContacts();
 				$sql = $interpreter->getSQL();
 				
+				if ($sql != false) {
+					$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+					$executer->setSQL($sql);
+					$executer->executeSelectQuery();
+					$executer->executeQuery();
+				}
 				//*** this is the old way for to get the target
 //				$identifyTarget = new IdentifyTarget();
 //				$identifyTarget->identifyTarget($mail);
