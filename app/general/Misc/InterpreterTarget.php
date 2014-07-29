@@ -87,13 +87,11 @@ class InterpreterTarget
 		
 		foreach ($this->data as $data) {
 			if ($data->type == 'top-panel') {
-				$this->logger->log('Top-panel');
 				$this->topObject = $data;
 				$this->criteria = $data->serialization->criteria;
 				$this->top  = true;
 			}
 			else if ($data->type == 'list-panel'){
-				$this->logger->log('List-panel');
 				$this->listObject = $data;
 				if (isset($data->serialization->items)) {
 					if (count($data->serialization->items) > 0) {
@@ -110,6 +108,8 @@ class InterpreterTarget
 	private function createSQLForFilters()
 	{
 		$condition = ($this->topObject->serialization->conditions == 'all' ? 'AND' : 'OR');
+		$this->logger->log("Condition: {$condition}");
+		$this->logger->log("Condition Object: {$this->topObject->serialization->conditions}");
 		$first = true;
 		$i = 1;
 	
@@ -126,10 +126,10 @@ class InterpreterTarget
 						$this->joinForFilters .= " JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
 
 						if ($first) {
-							$piece .= " COALESCE(mc{$i}.opening, 0) != 0";
+							$piece .= " COALESCE(mc{$i}.opening, 0) != 0 ";
 						}
 						else {
-							$piece .= " {$condition} COALESCE(mc{$i}.opening, 0) != 0";
+							$piece .= " {$condition} COALESCE(mc{$i}.opening, 0) != 0 ";
 						}
 
 						$first = false;
