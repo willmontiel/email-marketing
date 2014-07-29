@@ -63,18 +63,18 @@ class InterpreterTarget
 		if ($this->top && $this->list) {
 			switch ($this->criteria) {
 				case 'dbases':
-					$this->SQLFilterMail = " JOIN Contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
+					$this->SQLFilterMail = " JOIN contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
 					$this->SQLForContacts = "contact";
 					$this->conditionsWhenIsDbase .= "c.idDbase = {$this->ids} AND ";
 					break;
 
 				case 'contactlists':
-					$this->SQLFilterMail = " JOIN Coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
+					$this->SQLFilterMail = " JOIN coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
 					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN coxcl cl ON (co.idContact = cl.idContact) WHERE cl.idContactlist IN ({$this->ids}) GROUP BY 1, 2, 3)";
 					break;
 
 				case 'segments':
-					$this->SQLFilterMail = " JOIN Sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
+					$this->SQLFilterMail = " JOIN sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
 					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN sxc s ON (co.idContact = s.idContact) WHERE s.idSegment IN ({$this->ids}) GROUP BY 1, 2, 3)";
 					break;
 			}	
