@@ -180,10 +180,8 @@ Model.prototype.removePanel = function(panel) {
 	var key = this.container.removePanel(panel);
 	
 	if (key >= 0) {
-		var l = this.serializerObj.length;
-		console.log(key);
-		console.log(l);
-		this.serializerObj.splice(key, l);
+		var l = this.serializerObj.length - 1;
+		this.serializerObj.splice(key, l - key);
 	}
 	
 	this.refreshTotalContacts();
