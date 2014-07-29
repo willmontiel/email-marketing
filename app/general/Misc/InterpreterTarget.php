@@ -107,9 +107,9 @@ class InterpreterTarget
 	
 	private function createSQLForFilters()
 	{
-		$condition = ($this->topObject->serialization->conditions == 'all' ? 'AND' : 'OR');
+		$condition = ($this->listObject->serialization->conditions == 'all' ? 'AND' : 'OR');
 		$this->logger->log("Condition: {$condition}");
-		$this->logger->log("Condition Object: " . print_r($this->topObject, true));
+		$this->logger->log("Condition Object: " . print_r($this->listObject, true));
 		$first = true;
 		$i = 1;
 	
