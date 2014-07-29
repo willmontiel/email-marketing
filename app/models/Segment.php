@@ -53,4 +53,25 @@ class Segment extends \Phalcon\Mvc\Model
 		return 0;
 		
 	}
+	
+	public static function findSegmentsInAccount(Account $account, $conditions = null, $bind = null, $limits = null) 
+	{
+		$mm = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$phql = 'SELECT s.* FROM Segment s JOIN Dbase d ON s.idDbase = d.idDbase WHERE d.idAccount = :idaccount:';
+		if ($conditions != null) {
+			$phql .= ' AND ' . $conditions;
+			$options = $bind;
+		}
+		if ($limits != null && is_array($limits) && isset($limits['number']) ) {
+			$number = $limits['number'];
+			$start = isset($limits['offset'])?$limits['offset']:0;
+			$phql .= ' LIMIT ' . $number . ' OFFSET ' . $start;
+		}
+		$options['idaccount'] = $account->idAccount;
+		$query = $mm->executeQuery($phql, $options);
+		
+		return $query;
+		
+	}
 }

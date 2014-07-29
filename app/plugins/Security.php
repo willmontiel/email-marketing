@@ -406,6 +406,18 @@ class Security extends Plugin
 				'apiversionone::refillpostpay' => array('api' => array('account')),
 				'apiversionone::accountinformation' => array('api' => array('account')),
 				
+				//Campañas
+				'campaign::index' => array('campaign' => array('read')),
+				'campaign::list' => array('campaign' => array('read')),
+				'campaign::new' => array('campaign' => array('create')),
+				'campaign::edit' => array('campaign' => array('update')),
+				'campaign::delete' => array('campaign' => array('delete')),
+				'campaign::automatic' => array('campaign' => array('create')),
+				'campaign::preview' => array('campaign' => array('read')),
+				'campaign::previewframe' => array('campaign' => array('read')),
+				'campaign::changestatus' => array('campaign' => array('update')),
+				'campaign::previewimage' => array('campaign' => array('create')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

@@ -49,6 +49,7 @@ class PermissionsDataBase
 			'footer' => 19,
 			'apikey' => 20,
 			'api' => 21,
+			'campaign' => 22,
 		);
 	}
 	
@@ -154,6 +155,11 @@ class PermissionsDataBase
 			
 			'api::billing' => 78,
 			'api::account' => 79,
+			
+			'campaign::create' => 80,
+			'campaign::read' => 81,
+			'campaign::update' => 82,
+			'campaign::delete' => 83,
 		);
 	}
 	
@@ -261,6 +267,11 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'api::billing'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'api::account'),
 			
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::create'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::read'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::update'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::delete'),
+			
 			
 //			----------//----------**ROLE_ADMIN**----------//----------
 			
@@ -341,6 +352,11 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'apikey::delete'),
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'api::account'),
+			
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'campaign::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'campaign::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'campaign::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'campaign::delete'),
 			
 //			----------//----------**ROLE_USER**----------//----------
 			

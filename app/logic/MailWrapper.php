@@ -182,6 +182,8 @@ class MailWrapper extends BaseWrapper
 				throw new \Exception('Error while saving mail scheduleDate in Mailschedule table');
 			}
 		}
+		
+		return $this->mail;
 	}
 	
 	protected function isAValidDomain($domain)
@@ -204,9 +206,9 @@ class MailWrapper extends BaseWrapper
 		return true;
 	}
 	
-	private function getSender()
+	public function getSender($sender_raw)
 	{
-		$parts = explode('/', $this->content->sender);
+		$parts = explode('/', $sender_raw);
 		$email = trim(strtolower($parts[0]));
 		$domain = explode('@', $email);
 		$name = $parts[1];

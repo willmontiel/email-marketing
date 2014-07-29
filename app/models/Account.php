@@ -34,6 +34,7 @@ class Account extends Modelbase
 		$this->hasMany("idAccount", "Socialnetwork", "idAccount");
 		$this->hasMany("idAccount", "Remittent", "idAccount");
 		$this->hasMany("idAccount", "Accountinghistory", "idAccount");
+		$this->hasMany("idAccount", "Autoresponder", "idAccount");
     }
     
     public function validation()

@@ -8,6 +8,7 @@ class Mail extends Modelbase
 	public function initialize()
 	{
 		$this->hasMany("idMail", "Mxc", "idMail");
+		$this->hasMany("idMail", "Mxa", "idMail");
 		$this->hasMany("idMail", "Mail", "idMail");
 		$this->hasOne("idMail", "Mailcontent", "idMail");
 		$this->hasOne("idMail", "Mailschedule", "idMail");
