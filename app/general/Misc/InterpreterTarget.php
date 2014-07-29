@@ -109,7 +109,7 @@ class InterpreterTarget
 	{
 		$condition = ($this->topObject->serialization->conditions == 'all' ? 'AND' : 'OR');
 		$this->logger->log("Condition: {$condition}");
-		$this->logger->log("Condition Object: {$this->topObject->serialization->conditions}");
+		$this->logger->log("Condition Object: {$this->topObject}");
 		$first = true;
 		$i = 1;
 	
