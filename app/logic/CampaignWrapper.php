@@ -93,7 +93,7 @@ class CampaignWrapper extends BaseWrapper
 		$time = array(
 			'hour' => $content['hour'],
 			'minute' => $content['minute'],
-			'meridian' => $content['am_pm'],
+			'meridian' => $content['meridian'],
 		);
 
 		$days = array();

@@ -162,7 +162,7 @@
 						<div class="bg-wrap-time center-block without-margin time-clock-bigger">
 							<select class="input-autoresponse-time-hour" name="hour"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
 							<select class="input-autoresponse-time-minutes" name="minute"><option>00</option><option>10</option><option>20</option><option>30</option><option>40</option><option>50</option></select>
-							<select class="input-autoresponse-time-text" name="am_pm"><option>am</option><option>pm</option></select>
+							<select class="input-autoresponse-time-text" name="meridian"><option>am</option><option>pm</option></select>
 						</div>
 					</div>
 				</div>

@@ -24,7 +24,9 @@ class AutoSendingConverter
 		$MailWrapper->setContent($this->createContentForMail());
 		$MailWrapper->setAccount($this->account);
 		$MailWrapper->processDataForMail();
-		return $MailWrapper->saveMail();
+		$mail = $MailWrapper->saveMail();
+		$this->createMxA($mail);
+		return $mail;
 	}
 	
 	public function convertToMail()
@@ -116,6 +118,21 @@ class AutoSendingConverter
 		$obj->previewData = $this->autoresponder->previewData;
 		
 		return $obj;
+	}
+	
+	protected function createMxA(Mail $mail)
+	{
+		$mxa = new Mxa();
+		$mxa->idAutoresponder = $this->autoresponder->idAutoresponder;
+		$mxa->idMail = $mail->idMail;
+		
+		if(!$mxa->save()) {
+			foreach ($mxa->getMessages() as $msg) {
+				$this->logger->log("Error while saving MxA {$msg}");
+			}
+			$this->db->rollback();
+			throw new Exception('Error while saving MxA');
+		}
 	}
 }
 
