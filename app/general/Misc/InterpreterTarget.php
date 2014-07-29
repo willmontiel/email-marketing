@@ -150,14 +150,14 @@ class InterpreterTarget
 	{
 		$this->sql = "SELECT COUNT(c.idContact) AS total 
 						  FROM {$this->SQLForIdContacts} AS c 
-						  JOIN email AS e ON (e.idEmail = co.idEmail) 
+						  JOIN email AS e ON (e.idEmail = c.idEmail) 
 						  {$this->joinForFilters} 
 					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditions}";
 	}
 	
 	private function createSQLBaseForTarget()
 	{
-		$sql = "SELECT {$this->mail->idMail}, co.idContact, null, 'scheduled', 0, 0, 0, 0, 0, (SELECT GROUP_CONCAT(idContactlist) FROM coxcl x WHERE x.idContact = c.idContact) AS listas, 0, 0, 0, 0, 0, 0, 0, 0
+		$sql = "SELECT {$this->mail->idMail}, c.idContact, null, 'scheduled', 0, 0, 0, 0, 0, (SELECT GROUP_CONCAT(idContactlist) FROM coxcl x WHERE x.idContact = c.idContact) AS listas, 0, 0, 0, 0, 0, 0, 0, 0
 						  FROM {$this->SQLForIdContacts} AS c 
 						  JOIN email AS e ON (e.idEmail = c.idEmail) 
 						  {$this->joinForFilters} 
