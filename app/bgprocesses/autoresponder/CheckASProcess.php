@@ -16,6 +16,7 @@ class CheckASProcess
 	public function start_process()
 	{
 		try {
+			$this->logger->log('Checking auto responders');
 			$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 
 			$before = time() - self::SCHEDULING_INTERVAL_IN_SECONDS;
