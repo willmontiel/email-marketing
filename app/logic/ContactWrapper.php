@@ -294,15 +294,17 @@ class ContactWrapper extends BaseWrapper
 		$time = new \DateTime('-30 day');
 		$time->setTime(0, 0, 0);
 		$modelManager = \Phalcon\DI::getDefault()->get('modelsManager');
-		$sql = "SELECT *
+		$sql = "SELECT l.idContactlist
 				FROM Mxc AS x 
 					JOIN Mail AS m ON (x.idMail = m.idMail)
+					JOIN Coxcl AS l ON (x.idContact = l.idContact)
 				WHERE x.idContact = {$contact->idContact}
 				AND m.startedon > {$time->getTimestamp()}
-				AND ( m.finishedon = 0 OR m.finishedon > {$time->getTimestamp()} )";
+				AND ( m.finishedon = 0 OR m.finishedon > {$time->getTimestamp()} )
+				GROUP BY l.idContactlist";
 		$query = $modelManager->createQuery($sql);
 		$result = $query->execute();
-		if( count($result) > 0) {
+		if( count($result) <= 1 ) {
 			throw new \Exception('El contacto no puede ser eliminado debido a envíos realizados en los últimos 30 días');
 		}
 	}

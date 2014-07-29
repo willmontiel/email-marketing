@@ -897,7 +897,9 @@ span.required {
 .without-margin {
 	margin: 0 !important;
 }
-
+.automatic-day-opt {
+	float: left;
+}
 .without-padding {
 	padding: 0 !important;
 }

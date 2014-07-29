@@ -171,14 +171,14 @@
 				
 				<div class="form-group">
 					<label class="col-sm-4 control-label">¿Qué día de la semana?</label>
-					<div class="col-md-8">
-						<input type="checkbox" id="auto-day-monday" name="monday"><label class="autoresponse-day" for="auto-day-monday">Lunes</label>
-						<input type="checkbox" id="auto-day-tuesday" name="tuesday"><label class="autoresponse-day" for="auto-day-tuesday">Martes</label>
-						<input type="checkbox" id="auto-day-wednesday" name="wednesday"><label class="autoresponse-day" for="auto-day-wednesday">Miércoles</label>
-						<input type="checkbox" id="auto-day-thursday" name="thursday"><label class="autoresponse-day" for="auto-day-thursday">Jueves</label>
-						<input type="checkbox" id="auto-day-friday" name="friday"><label class="autoresponse-day" for="auto-day-friday">Viernes</label>
-						<input type="checkbox" id="auto-day-saturday" name="saturday"><label class="autoresponse-day" for="auto-day-saturday">Sábado</label>
-						<input type="checkbox" id="auto-day-sunday" name="sunday"><label class="autoresponse-day" for="auto-day-sunday">Domingo</label>
+					<div class="col-md-8 col-sm-12">
+						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-monday" name="monday"><label class="autoresponse-day" for="auto-day-monday">Lunes</label></div>
+						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-tuesday" name="tuesday"><label class="autoresponse-day" for="auto-day-tuesday">Martes</label></div>
+						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-wednesday" name="wednesday"><label class="autoresponse-day" for="auto-day-wednesday">Miércoles</label></div>
+						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-thursday" name="thursday"><label class="autoresponse-day" for="auto-day-thursday">Jueves</label></div>
+						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-friday" name="friday"><label class="autoresponse-day" for="auto-day-friday">Viernes</label></div>
+						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-saturday" name="saturday"><label class="autoresponse-day" for="auto-day-saturday">Sábado</label></div>
+						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-sunday" name="sunday"><label class="autoresponse-day" for="auto-day-sunday">Domingo</label></div>
 					</div>
 				</div>
 				

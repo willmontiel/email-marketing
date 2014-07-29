@@ -778,8 +778,9 @@ class ApiController extends ControllerBase
 			if(!$wrapper->validateListBelongsToAccount($this->user->account, $idContactlist)) {
 				return $this->setJsonResponse(null, 422, 'Lista invalida');
 			}
+			$override = ($this->user->userrole == 'ROLE_SUDO') ? TRUE : FALSE;
 			$wrapper->setUser($this->user);
-			$deletedList = $wrapper->deleteContactList($idContactlist);	
+			$deletedList = $wrapper->deleteContactList($idContactlist, $override);	
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->traceFail("Error deleting contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
@@ -968,7 +969,6 @@ class ApiController extends ControllerBase
 	 */
 	public function deletecontactbylistAction($idContactlist, $idContact)
 	{
-		
 		$contact = Contact::findFirst(array(
 			"conditions" => "idContact = ?1",
 			"bind" => array(1 => $idContact)
@@ -997,7 +997,7 @@ class ApiController extends ControllerBase
 		$this->traceSuccess("Contact deleted, idContact: {$idContact} / idEmail: {$contact->idEmail} / idContactlist: {$idContactlist}");
 		return $this->setJsonResponse(array ('contact' => $response), 202, 'contact deleted success');
 	}
-
+	
 	/**
 	 * 
 	 * @Get("/dbases")

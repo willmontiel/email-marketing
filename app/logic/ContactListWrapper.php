@@ -196,7 +196,7 @@ class ContactListWrapper extends BaseWrapper
 		
 	}
 	
-	public function deleteContactList($idContactlist)
+	public function deleteContactList($idContactlist, $override = FALSE)
 	{
 		$db = Phalcon\DI::getDefault()->get('db');
 		$list = Contactlist::findFirst(array(
@@ -219,7 +219,7 @@ class ContactListWrapper extends BaseWrapper
 		$query3  = "DELETE FROM contactlist WHERE idContactlist = ?";
 		$query3Array = array($idContactlist);
 		
-		if($this->user->userrole != 'ROLE_SUDO') {
+		if(!$override) {
 			$time = new \DateTime('-30 day');
 			$time->setTime(0, 0, 0);
 			$query.=" AND NOT EXISTS
