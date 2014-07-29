@@ -7,7 +7,7 @@ $obj->start_process();
 class CheckASProcess
 {
 	
-	const SCHEDULING_INTERVAL_IN_SECONDS = 120;
+	const SCHEDULING_INTERVAL_IN_SECONDS = 12000000000;
 	
 	function __construct() {
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
