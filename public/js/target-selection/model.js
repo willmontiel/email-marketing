@@ -1,6 +1,8 @@
 function Model() {
 	this.serializerObj = [];
 	this.totalContacts = 0;
+	this.totalSelectedValues = 0;
+	this.criteriaType = 'Indefinido';
 }
 
 Model.prototype.setPanelContainer = function(container){
@@ -94,18 +96,22 @@ Model.prototype.validateTitle = function(criteria) {
 	
 	switch (criteria) {
 		case 'dbases':
+			this.criteriaType = 'Base de datos';
 			title = 'Seleccione una base de datos';
 			break;
 			
 		case 'contactlists':
+			this.criteriaType = 'Lista(s) de contacto';
 			title = 'Seleccione listas de contactos';
 			break;
 			
 		case 'segments':
+			this.criteriaType = 'Segmento(s)';
 			title = 'Seleccione segmentos';
 			break;
 		
 		default:
+			this.criteriaType = 'Indefinido';
 			title = 'Seleccione un criterio';
 			break;
 	}
@@ -246,7 +252,43 @@ Model.prototype.getModel = function() {
 };
 
 Model.prototype.getCriteriaType = function() {
-	return this.serializerObj[0].serialization.criteria;
+	return this.criteriaType;
+};
+
+Model.prototype.getSelectedValues = function() {
+	var array = [];
+	for (var i = 0; i < this.serializerObj.length; i++) {
+		if (this.serializerObj[i].type === 'list-panel') {
+			array = this.serializerObj[i].serialization.items;
+		}
+	}
+	
+	this.totalSelectedValues = array.length;
+	return array[0];
+//	var self = this;
+//	var DataSource = this.getDataSource();
+//	DataSource.find('/gettotalcontacts').then(function() { 
+//		var total = DataSource.getData();
+//		self.totalContacts = total.totalContacts;
+//		self.refreshTotalContactsView('Contactos aproximados: ' + self.totalContacts);
+//		self.refreshTotalContactsObject();
+//	});
+//	return this.criteriaType;
+};
+
+Model.prototype.getTotalSelectedValues = function() {
+	return this.totalSelectedValues;
+};
+
+Model.prototype.getTotalFilters = function() {
+	var f = 0;
+	for (var i = 0; i < this.serializerObj.length; i++) {
+		if (this.serializerObj[i].type === 'filter-panel') {
+			f++;
+		}
+	}
+	
+	return f;
 };
 
 Model.prototype.getTotalContacts = function() {

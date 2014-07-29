@@ -185,6 +185,17 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		if (!t) {
 			return true;
 		}
+		
+		this.set('criteriaType', App.model.getCriteriaType());
+		this.set('selectedValue', App.model.getSelectedValues());
+		
+		var v = App.model.getTotalSelectedValues();
+		var total = (v == 0 || v == 1 ? '' : 'y ' + v + ' más');
+		this.set('totalSelectedValues', total);
+		
+		var f = App.model.getTotalFilters();
+		var filter = (f > 0 ? 'Filtrado' : 'Sin filtrar');
+		this.set('totalFilters', filter);
 		return false;
 	}.property('content.target'), 
 	
