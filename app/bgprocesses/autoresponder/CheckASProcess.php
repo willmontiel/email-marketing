@@ -15,21 +15,21 @@ class CheckASProcess
 	
 	public function start_process()
 	{
-		try {
-			$this->logger->log('Checking auto responders');
-			$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
+		$this->logger->log('Checking auto responders');
+		$modelManager = Phalcon\DI::getDefault()->get('modelsManager');
 
-			$before = time() - self::SCHEDULING_INTERVAL_IN_SECONDS;
-			$after = time() + self::SCHEDULING_INTERVAL_IN_SECONDS;
+		$before = time() - self::SCHEDULING_INTERVAL_IN_SECONDS;
+		$after = time() + self::SCHEDULING_INTERVAL_IN_SECONDS;
 
-			$parameters = array('before' => $before, 'after' => $after);
-			$querytxt = "SELECT * FROM Autoresponder WHERE nextExecution BETWEEN :before: AND :after:";
+		$parameters = array('before' => $before, 'after' => $after);
+		$querytxt = "SELECT * FROM Autoresponder WHERE nextExecution BETWEEN :before: AND :after:";
 
-			$autoresponders = $modelManager->executeQuery($querytxt, $parameters);
+		$autoresponders = $modelManager->executeQuery($querytxt, $parameters);
 
-			$mails = array();
+		$mails = array();
 
-			foreach ($autoresponders as $autoresponder) {
+		foreach ($autoresponders as $autoresponder) {
+			try {
 				$account = Account::findFirstByIdAccount($autoresponder->idAccount);
 				if($account && $autoresponder->active == 1) {
 					$mailconverter = new AutoSendingConverter();
@@ -38,37 +38,39 @@ class CheckASProcess
 					$mailconverter->convertToMail();
 					$mails[] = $mailconverter->getMail();
 				}
-				
+			}
+			catch(Exception $e) {
+				$this->logger->log('Error ' . $e->getMessage());
+			}
+
+			try {	
 				$time = json_decode($autoresponder->time);
 				$nextmailing = new NextMailingObj();
 				$nextmailing->setSendTime($time->hour . ':' . $time->minute . ' ' . $time->meridian);
 				$nextmailing->setFrequency('Daily');
 				$nextmailing->setLastSentDate($autoresponder->nextExecution);
 				$nextmailing->setDaysAllowed(json_decode($autoresponder->days));
-				
+
 				$autoresponder->nextExecution = $nextmailing->getNextSendTime();
-				
+
 				if (!$autoresponder->save()) {
 					foreach ($autoresponder->getMessages() as $msg) {
 						throw new Exception("Error while saving automatic campaign, {$msg}!");
 					}
 				}
 			}
-			
-			foreach ($mails as $mail) {
-				try {
-					$this->send_autoresponders($mail);
-				}
-				catch (Exception $e) {
-					$this->logger->log("Exception: Error sending auto responder, {$e}");
-				}
+			catch(Exception $e) {
+				$this->logger->log('Error ' . $e->getMessage());
 			}
 		}
-		catch(Exception $e) {
-			$this->logger->log('Error ' . $e->getMessage());
-		}
-		catch(InvalidArgumentException $e) {
-			$this->logger->log('Error ' . $e->getMessage());
+
+		foreach ($mails as $mail) {
+			try {
+				$this->send_autoresponders($mail);
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: Error sending auto responder, {$e}");
+			}
 		}
 	}
 	
