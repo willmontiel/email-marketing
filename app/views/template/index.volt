@@ -55,12 +55,7 @@
 											<h5>{{t['name']}}</h5>
 											<div class="preview-mail img-wrap">
 												<div class="not-available">
-													{% if t['preview'] == null%}
-														<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
-														<label>Previsualización no disponible</label>
-													{% else %}
-														<img src="data: image/png;base64, {{t['preview']}}" />
-													{%endif%}
+													<img src="{{url('template/thumbnailpreview')}}/{{t['id']}}/210x235" />
 													<a href="{{url('mail/contenteditor')}}/{{ (t['idMail'] != null)?t['idMail']:'template'}}/{{  t['id']  }}">
 														<div class="img-info"><p style="font-size: 18px;"><i class="icon-ok"></i> Elegir</p></div>
 													</a>
@@ -69,7 +64,7 @@
 											<div class="clearfix"></div>
 											<div class="space"></div>
 											<div class="btn-group"  style="text-align: center;">
-												<button class="btn btn-default" onClick="preview({{t['id']}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+												<button class="btn btn-default" onClick="preview({{t['id']}});" title="Previsualizar" data-toggle="modal" data-target="#myModal">
 													<span class="glyphicon glyphicon-eye-open"></span>
 												</button>
 

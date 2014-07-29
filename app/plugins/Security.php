@@ -301,6 +301,7 @@ class Security extends Plugin
 				
 				//Plantillas
 				'template::image' => array('template' => array('read')),
+				'template::thumbnailpreview' => array('template' => array('read')),
 				'template::thumbnail' => array('template' => array('read')),
 				'template::create' => array('template' => array('create')),
 				'template::preview' => array('template' => array('read')),

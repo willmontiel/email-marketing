@@ -21,7 +21,12 @@
 
 .sgm-panel > .sgm-panel-title {
 	padding: 10px;
-	color: #20526e;
+	/*color: #20526e;*/
+	color: black;
+	padding: 10px;
+	font-size: 12px;
+	font-weight: bold;
+	border-bottom: 1px solid black;
 }
 
 .sgm-panel .sgm-close-panel {
@@ -40,7 +45,7 @@
 }
 
 .sgm-close-panel:hover {
-	color: #20526e;
+	color: #F5A9A9;
 }
 
 .sgm-add-panel {
@@ -58,7 +63,7 @@
 }
 
 .sgm-add-panel:hover {
-	background-color: #20526e;
+	background-color: #CEF6CE;
 }
 
 .sgm-box-footer-content {
@@ -201,7 +206,7 @@
 }
 
 .sgm-button-add:hover {
-	background-color: #20526e;
+	background-color: #CEF6D8;
 }
 
 .sgm-button-reset {
@@ -217,7 +222,7 @@
 }
 
 .sgm-button-reset:hover {
-	background-color: #20526e;
+	background-color: #95B7D5;
 }
 
 .sgm-box-content {

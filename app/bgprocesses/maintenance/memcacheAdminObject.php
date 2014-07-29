@@ -15,8 +15,10 @@ class MemcacheAdminObject
 	public function clenMemcache()
 	{
 		echo 'Cleaning memcache metadata' . PHP_EOL;
-		$this->cache->delete('controllermap-cache');
-		$this->cache->delete('acl-cache');
+		$keys = $this->cache->queryKeys();
+		foreach ($keys as $key) {
+			$this->cache->delete($key);
+		}
 		$this->log->log('Memcache metadata cleaned');
 		echo 'Memcache metadata cleaned' . PHP_EOL;
 	}
