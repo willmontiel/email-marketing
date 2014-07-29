@@ -24,7 +24,6 @@ class CampaignController extends ControllerBase
 			$obj->contentsource = $autosend->contentsource;
 			$obj->active = $autosend->active;
 			$obj->target = $this->getTargetFromMail($autosend);
-			$this->logger->log($obj->target);
 			$obj->subject = $autosend->subject;
 			$obj->content = json_decode($autosend->content);
 			$obj->previewData = $autosend->previewData;
@@ -247,7 +246,6 @@ class CampaignController extends ControllerBase
 						'bind' => array(1 => $id)
 					));
 					if ($list) {
-						$this->logger->log('Nombre ' . $list->name);
 						$target .= "{$list->name}, ";
 					}
 				}
