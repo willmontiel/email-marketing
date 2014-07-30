@@ -216,7 +216,8 @@ class InterpreterTarget
 		
 		foreach ($this->data as $data) {
 			if ($data->type == 'filter-panel') {
-				$neg = ($data->serialization->negation ? 'NOT' : '');
+				$n = ($data->serialization->negation == 'true' ? true : false);
+				$neg = ($n ? '' : 'NOT');
 				switch ($data->serialization->type) {
 					case 'mail-sent':
 						$this->joinForFilters .= " LEFT JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
