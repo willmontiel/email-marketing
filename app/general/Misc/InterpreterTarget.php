@@ -247,7 +247,14 @@ class InterpreterTarget
 
 					case 'click':
 						$equal = ($neg == 'NOT' ? '=' : '!=');
-						$this->joinForFilters .= " JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact {$equal} c.idContact AND ml{$i}.idMailLink {$equal} {$data->serialization->items})";
+						$this->joinForFilters .= " JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact = c.idContact AND ml{$i}.idMailLink {$equal} {$data->serialization->items})";
+						
+						if ($first) {
+							$piece .= " ml{$i}.idContact IS {$neg} NULL ";
+						}
+						else {
+							$piece .= " {$condition} ml{$i}.idContact IS {$neg} NULL ";
+						}
 						break;
 				}
 			}
