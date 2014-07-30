@@ -139,8 +139,8 @@ class TemplateController extends ControllerBase
 				}
 			}
 			$this->view->setVar('categories', $arrayTemplate);
+			$this->view->setVar('global_permissions', $this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 		}		
-		$this->view->setVar('global_permissions', $this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 	}
 	
 	public function previewAction($idTemplate)
@@ -281,8 +281,8 @@ class TemplateController extends ControllerBase
 			
 			$this->view->setVar('template', $template);
 			$this->view->setVar('categories', $arrayTemplate);
+			$this->view->setVar('global_permissions', $this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 		}
-		$this->view->setVar('global_permissions', $this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 	}
 	
 	public function previewtemplateAction()
