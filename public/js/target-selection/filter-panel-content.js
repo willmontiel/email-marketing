@@ -100,8 +100,13 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			self.selectedValue = e.val;
 			self.updateObject();
 			
-			var content = $('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
-			self.content.find('.sgm-content-add-filter').append(content);
+			var addFilter = $('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
+			self.content.find('.sgm-content-add-filter').append(addFilter);
+			
+			var addNeg = $('<div class="sgm-add-neg">Not!</div>');
+			self.content.find('.sgm-content-negation-filter').append(addNeg);
+			
+			
 			
 			self.content.find('.sgm-add-panel').on('click', function (e) {
 				self.createNextPanel(e);
