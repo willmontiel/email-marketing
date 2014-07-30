@@ -23,7 +23,7 @@ class ProcessMail
 			throw new InvalidArgumentException("No se ha encontrado el correo, por favor verifique la información");
 		}
 		
-		if($this->user->userrole === 'ROLE_SUDO'){
+		if($this->acl->isAllowed($this->user->userrole, 'mail', 'on any mail')){
 			$this->deleteMailNow($mail);
 		}
 		else {

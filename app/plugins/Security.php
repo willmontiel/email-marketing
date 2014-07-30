@@ -82,6 +82,7 @@ class Security extends Plugin
 		}
 
 		// Retornar ACL
+		$this->_dependencyInjector->set('acl', $acl);
 		return $acl;
 		
 	}

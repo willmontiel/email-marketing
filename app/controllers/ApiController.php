@@ -569,7 +569,7 @@ class ApiController extends ControllerBase
 
 		// Eliminar el Contacto de la Base de Datos
 		try {
-			$override = ($this->user->userrole == 'ROLE_SUDO') ? TRUE : FALSE;
+			$override = ($this->acl->isAllowed($this->user->userrole, 'contact', 'full delete')) ? TRUE : FALSE;
 			$wrapper = new ContactWrapper();
 			$result = $wrapper->deleteContactFromDB($contact, $db, $override);
 		} catch(\Exception $e) {
@@ -778,7 +778,7 @@ class ApiController extends ControllerBase
 			if(!$wrapper->validateListBelongsToAccount($this->user->account, $idContactlist)) {
 				return $this->setJsonResponse(null, 422, 'Lista invalida');
 			}
-			$override = ($this->user->userrole == 'ROLE_SUDO') ? TRUE : FALSE;
+			$override = ($this->acl->isAllowed($this->user->userrole, 'contact', 'full delete')) ? TRUE : FALSE;
 			$wrapper->setUser($this->user);
 			$deletedList = $wrapper->deleteContactList($idContactlist, $override);	
 		}
@@ -984,7 +984,7 @@ class ApiController extends ControllerBase
 		
 		// Eliminar el Contacto de la Lista
 		try {
-			$override = ($this->user->userrole == 'ROLE_SUDO') ? TRUE : FALSE;
+			$override = ($this->acl->isAllowed($this->user->userrole, 'contact', 'full delete')) ? TRUE : FALSE;
 			$wrapper = new ContactWrapper();
 			$response = $wrapper->deleteContactFromList($contact, $list, $override);
 		} 

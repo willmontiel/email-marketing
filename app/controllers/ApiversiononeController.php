@@ -162,7 +162,7 @@ class ApiversiononeController extends ControllerBase
 				'bind' => array(1 => $idAccount)
 			));
 			
-			if($account->idAccount != $this->user->account->idAccount && $this->user->userrole != 'ROLE_SUDO') {
+			if($account->idAccount != $this->user->account->idAccount) {
 				throw new ApiException("Usted no tiene permisos para realizar esta acción");
 			}
 			

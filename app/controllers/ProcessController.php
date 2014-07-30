@@ -167,7 +167,7 @@ class ProcessController extends ControllerBase
 	
 	private function validateMail($idMail) 
 	{
-		if ($this->user->userrole == 'ROLE_SUDO') {
+		if ($this->acl->isAllowed($this->user->userrole, 'mail', 'on any mail')) {
 			$mail = Mail::findFirst(array(
 				'conditions' => "idMail = ?1 AND status = 'Sending'",
 				'bind' => array(1 => $idMail)
@@ -186,7 +186,7 @@ class ProcessController extends ControllerBase
 	
 	private function validateSendingMail($idMail) 
 	{
-		if ($this->user->userrole == 'ROLE_SUDO') {
+		if ($this->acl->isAllowed($this->user->userrole, 'mail', 'on any mail')) {
 			$mail = Mail::findFirst(array(
 				'conditions' => "idMail = ?1 AND status = 'Sending'",
 				'bind' => array(1 => $idMail)
@@ -205,7 +205,7 @@ class ProcessController extends ControllerBase
 	
 	private function validateImport($idImport)
 	{
-		if ($this->user->userrole == 'ROLE_SUDO') {
+		if ($this->acl->isAllowed($this->user->userrole, 'contact', 'on any import')) {
 			$import = Importproccess::findFirst(array(
 				'conditions' => "idImportproccess = ?1",
 				'bind' => array(1 => $idImport)

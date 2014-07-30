@@ -304,7 +304,7 @@ class ContactWrapper extends BaseWrapper
 				GROUP BY l.idContactlist";
 		$query = $modelManager->createQuery($sql);
 		$result = $query->execute();
-		if( count($result) <= 1 ) {
+		if( count($result) == 1 ) {
 			throw new \Exception('El contacto no puede ser eliminado debido a envíos realizados en los últimos 30 días');
 		}
 	}

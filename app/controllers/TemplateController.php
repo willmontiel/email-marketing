@@ -26,6 +26,7 @@ class TemplateController extends ControllerBase
 
 		$this->view->setVar('templates', $templates);
 		$this->view->setVar('arrayTemplate', $arrayTemplate);
+		$this->view->setVar('global_permissions', $this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 	}
 	
 	public function selectAction($idMail)
@@ -106,6 +107,7 @@ class TemplateController extends ControllerBase
 				$template->setGlobal($global);
 				$template->setAccount($this->user->account);
 				$template->setUser($this->user);
+				$template->setSuperPermissions($this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 				$idTemplate = $template->createTemplate($name, $category, $content);
 			}
 			catch (Exception $e) {
@@ -123,7 +125,7 @@ class TemplateController extends ControllerBase
 		}
 		else { 
 			
-			if ($this->user->userrole == "ROLE_SUDO") {
+			if ($this->validateRoleUser()) {
 				$templates = Template::findGlobalsAndPrivateTemplates($this->user->account);
 			}
 			else {
@@ -138,6 +140,7 @@ class TemplateController extends ControllerBase
 			}
 			$this->view->setVar('categories', $arrayTemplate);
 		}		
+		$this->view->setVar('global_permissions', $this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 	}
 	
 	public function previewAction($idTemplate)
@@ -204,7 +207,7 @@ class TemplateController extends ControllerBase
 
 	private function validateRoleUser()
 	{
-		if ($this->user->userrole == 'ROLE_SUDO') {
+		if ($this->acl->isAllowed($this->user->userrole, 'template', 'on any template')) {
 			return true;
 		}
 		return false;
@@ -240,6 +243,7 @@ class TemplateController extends ControllerBase
 				$templateObj->setGlobal($global);
 				$templateObj->setUser($this->user);
 				$templateObj->setTemplate($template);
+				$templateObj->setSuperPermissions($this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 				$templateObj->updateTemplate($name, $category, $content);
 			}
 			catch (Exception $e) {
@@ -278,6 +282,7 @@ class TemplateController extends ControllerBase
 			$this->view->setVar('template', $template);
 			$this->view->setVar('categories', $arrayTemplate);
 		}
+		$this->view->setVar('global_permissions', $this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 	}
 	
 	public function previewtemplateAction()
@@ -406,6 +411,7 @@ class TemplateController extends ControllerBase
 			$template = new TemplateObj();
 			$template->setAccount($this->user->account);
 			$template->setUser($this->user);
+			$template->setSuperPermissions($this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 			$template->createTemplate($name, $categoryF, $content);
 			$this->traceSuccess("Create template");
 		}

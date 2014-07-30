@@ -155,7 +155,7 @@ class DbaseController extends ControllerBase
         //Recuperar la informacion de la BD que se desea SI existe
         $db = $this->findAndValidateDbaseAccount($id);
 		if ($db) {
-			if($this->user->userrole === 'ROLE_SUDO') {
+			if($this->acl->isAllowed($this->user->userrole, 'contact', 'full delete')) {
 				try {
 					$db->delete();
 					$response = 'Base de Datos Eliminada!';
