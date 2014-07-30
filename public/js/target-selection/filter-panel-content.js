@@ -124,7 +124,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 				$(this).remove();
 			});
 			
-			if (!self.content.hasClass('.sgm-add-neg')) {
+			if (!self.content.find('.sgm-add-neg')) {
 				var addNeg = $('<div class="sgm-add-neg">Not!</div>');
 				self.content.find('.sgm-content-negation-filter').append(addNeg);
 
