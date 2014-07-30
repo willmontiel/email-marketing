@@ -372,7 +372,8 @@
 }
 
 .sgm-title-box {
-	color: #20526e;
+	/*color: #20526e;*/
+	color: black;
 	border: 1px solid #ddd;
 	padding: 7px;
 	border-radius: 3px;
