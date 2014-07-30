@@ -32,7 +32,7 @@
 	}
 	
 	$(function() {
-		if( {{global_permissions}} === 1 ) {
+		if( {{global_permissions}} == 1 ) {
 			$('.globalTemplateOpt').show();
 		}
 	});	
@@ -132,7 +132,7 @@
 				<a id="btnNewCategory" class="btn btn-default extra-padding" onclick="writenewcategory()" ><span class="glyphicon glyphicon-pencil"></span></a>
 				<a id="btnSelectCategory" class="btn btn-default extra-padding" onclick="selectcategory()" style="display: none;"><span class="glyphicon glyphicon-check"></span></a>
 			</div>
-			{% if global_permissions === 1 %}
+			{% if global_permissions == 1 %}
 			<div class="form-group">
 				<label><input type="checkbox" name="isglobal" id="isglobal" {% if template.idAccount == ''%}checked{% endif %}> Plantilla Global</label>
 			</div>

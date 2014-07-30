@@ -75,7 +75,7 @@
 
 												{% if t['idMail'] == null %}
 													{% if t['idAccount'] == null%}
-														{% if global_permissions === 1 %}
+														{% if global_permissions == 1 %}
 															<a href="{{url('template/edit')}}/{{t['id']}}" data-toggle="modal" onClick="preview({{t['id']}})" class="btn btn-default" title="Editar">
 																<span class="glyphicon glyphicon-pencil"></span>
 															</a>
