@@ -104,13 +104,15 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 		
 		if (self.selectedValue !== null) {
 			select.select2('val', self.selectedValue);
-			var active = (self.negation ? 'sgm-neg-active' :'');
-			var addNeg = $('<div class="sgm-add-neg ' + active + '">Not!</div>');
-			self.content.find('.sgm-content-negation-filter').append(addNeg);
-			console.log('1');
-			console.log(self.content.find('.sgm-add-neg'));
-			console.log('2');
-			self.updateNegationValue();
+			if (!self.content.find('.sgm-add-neg')) {
+				var active = (self.negation ? 'sgm-neg-active' :'');
+				var addNeg = $('<div class="sgm-add-neg ' + active + '">Not!</div>');
+				self.content.find('.sgm-content-negation-filter').append(addNeg);
+				console.log('1');
+				console.log(self.content.find('.sgm-add-neg'));
+				console.log('2');
+				self.updateNegationValue();
+			}
 		}
 		
 		select.on("change", function(e) { 
