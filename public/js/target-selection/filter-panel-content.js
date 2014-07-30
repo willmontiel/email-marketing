@@ -173,6 +173,8 @@ FilterPanelContent.prototype.serialize = function() {
 		
 		switch (type) {
 			case 'mail-sent':
+				this.mtitle = 'Enviar a contactos que hayan recibido el siguiente correo';
+				this.ctitle = '';
 				var active = this.content.find('.smg-add-sent-filter');
 				var container = this.setValues(type, active);
 				var filter = new FilterMailContent();
@@ -180,6 +182,8 @@ FilterPanelContent.prototype.serialize = function() {
 				break;
 				
 			case 'mail-open':
+				this.mtitle = 'Enviar a contactos que hayan abierto el siguiente correo';
+				this.ctitle = '';
 				var active = this.content.find('.smg-add-open-filter');
 				var container = this.setValues(type, active);
 				var filter = new FilterMailContent();
@@ -187,6 +191,8 @@ FilterPanelContent.prototype.serialize = function() {
 				break;
 				
 			case 'click':
+				this.mtitle = '';
+				this.ctitle = 'Enviar a contactos que hayan hecho click en el siguiente enlace';
 				var active = this.content.find('.smg-add-click-filter');
 				this.mailSelected = this.serializerObject.serialization.idMail;
 				var container = this.setValues(type, active);
