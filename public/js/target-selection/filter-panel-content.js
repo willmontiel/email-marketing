@@ -4,13 +4,15 @@ function FilterPanelContent() {
 		serialization: {
 			type: null,
 			idMail: null,
-			items: null
+			items: null,
+			negation: false
 		}
 	};
 	
 	this.selectedValue = null;
 	this.mailSelected = null;
 	this.type = null;
+	this.negation = false;
 }
 FilterPanelContent.prototype = new PanelContent;
 
@@ -93,6 +95,9 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 		
 		if (self.selectedValue !== null) {
 			select.select2('val', self.selectedValue);
+			var active = (self.negation ? 'sgm-neg-active' :'');
+			var addNeg = $('<div class="sgm-add-neg ' + active + '">Not!</div>');
+			self.content.find('.sgm-content-negation-filter').append(addNeg);
 		}
 		
 		select.on("change", function(e) { 
@@ -103,25 +108,21 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			var addFilter = $('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
 			self.content.find('.sgm-content-add-filter').append(addFilter);
 			
-			var addNeg = $('<div class="sgm-add-neg">Not!</div>');
-			self.content.find('.sgm-content-negation-filter').append(addNeg);
-			
-			
-			
 			self.content.find('.sgm-add-panel').on('click', function (e) {
 				self.createNextPanel(e);
 				$(this).remove();
 			});
 			
 			self.content.find('.sgm-add-neg').on('click', function (e) {
-//				var element = self.content.find('.sgm-add-neg');
 				if ($(this).hasClass("sgm-neg-active")) {
-					console.log('Tiene');
 					$(this).removeClass('sgm-neg-active');
+					self.negation = false;
+					self.updateObject();
 				}
 				else {
-					console.log('No tiene');
 					$(this).addClass('sgm-neg-active');
+					self.negation = true;
+					self.updateObject();
 				}
 			});
 			
@@ -188,6 +189,7 @@ FilterPanelContent.prototype.serialize = function() {
 		this.oldCriteria = this.serializerObject;
 		var type = this.serializerObject.serialization.type;
 		this.selectedValue = this.serializerObject.serialization.items;
+		this.negation = this.serializerObject.serialization.negation;
 		
 		switch (type) {
 			case 'mail-sent':
@@ -238,7 +240,8 @@ FilterPanelContent.prototype.updateObject = function () {
 		serialization: {
 			type: this.type,
 			idMail: this.mailSelected,
-			items: this.selectedValue
+			items: this.selectedValue,
+			negation: this.negation
 		}
 	};
 	
