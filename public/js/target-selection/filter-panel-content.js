@@ -104,7 +104,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 		
 		if (self.selectedValue !== null) {
 			select.select2('val', self.selectedValue);
-			if (!self.content.find('.sgm-add-neg')) {
+			if (self.content.find('.sgm-add-neg').length < 0) {
 				var active = (self.negation ? 'sgm-neg-active' :'');
 				var addNeg = $('<div class="sgm-add-neg ' + active + '">Not!</div>');
 				self.content.find('.sgm-content-negation-filter').append(addNeg);
@@ -128,7 +128,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 				$(this).remove();
 			});
 			
-			if (!self.content.find('.sgm-add-neg')) {
+			if (self.content.find('.sgm-add-neg') < 0) {
 				console.log('1');
 			console.log(self.content.find('.sgm-add-neg'));
 			console.log('2');
