@@ -180,7 +180,7 @@ Model.prototype.updateObject = function(oldObj, newObj) {
 		}
 	}
 	
-	console.log(this.serializerObj);
+//	console.log(this.serializerObj);
 };
 
 Model.prototype.removePanel = function(panel) {
