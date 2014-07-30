@@ -6,7 +6,7 @@
 				<dd><i>Elija los destinatarios...</i></dd>
 			{{'{{else}}'}}
 				<dt>Para:</dt>
-				<dd>{{ '{{criteriaType}}' }}: {{ '{{selectedValue}}' }} {{ '{{totalSelectedValues}}' }}, {{ '{{totalFilters}}' }}, <strong>{{ '{{totalContacts}}' }}</strong> contactos (En el momento del envío podría variar)</dd>
+				<dd>{{ '{{criteriaType}}' }}: {{ '{{selectedValue}}' }} {{ '{{totalSelectedValues}}' }}, {{ '{{totalFilters}}' }}, <strong>{{ '{{totalContacts}}' }}</strong> contacto(s) (En el momento del envío podría variar)</dd>
 			{{'{{/if}}'}}
 		</dl>
 	</div>
