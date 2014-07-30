@@ -26,6 +26,7 @@
 		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
 		{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 		{{ javascript_include('js/form_date_field.js') }}
+		{{ javascript_include('js/required_fields_forms.js') }}
 	</head>
 	<body>
 		<div class="container">
