@@ -99,18 +99,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			var addNeg = $('<div class="sgm-add-neg ' + active + '">Not!</div>');
 			self.content.find('.sgm-content-negation-filter').append(addNeg);
 			
-			self.content.find('.sgm-add-neg').on('click', function (e) {
-				if ($(this).hasClass("sgm-neg-active")) {
-					$(this).removeClass('sgm-neg-active');
-					self.negation = false;
-					self.updateObject();
-				}
-				else {
-					$(this).addClass('sgm-neg-active');
-					self.negation = true;
-					self.updateObject();
-				}
-			});
+			self.updateNegationValue();
 		}
 		
 		select.on("change", function(e) { 
@@ -130,22 +119,29 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 				var addNeg = $('<div class="sgm-add-neg">Not!</div>');
 				self.content.find('.sgm-content-negation-filter').append(addNeg);
 
-				self.content.find('.sgm-add-neg').on('click', function (e) {
-					if ($(this).hasClass("sgm-neg-active")) {
-						$(this).removeClass('sgm-neg-active');
-						self.negation = false;
-						self.updateObject();
-					}
-					else {
-						$(this).addClass('sgm-neg-active');
-						self.negation = true;
-						self.updateObject();
-					}
-				});
+				self.updateNegationValue();
 			}
 			
 			self.model.refreshTotalContacts();
 		});
+	});
+};
+
+FilterPanelContent.prototype.updateNegationValue = function() {
+	var self = this;
+	this.content.find('.sgm-add-neg').on('click', function (e) {
+		if ($(this).hasClass("sgm-neg-active")) {
+			$(this).removeClass('sgm-neg-active');
+			self.negation = false;
+			self.updateObject();
+		}
+		else {
+			$(this).addClass('sgm-neg-active');
+			self.negation = true;
+			self.updateObject();
+		}
+		
+		self.model.refreshTotalContacts();
 	});
 };
 
