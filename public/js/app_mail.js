@@ -107,7 +107,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	//Si hay un id se encargara se recrear el correo para su edición
 	setSelectsContent: function () {
 		if (this.get('id') !== null) {
-			console.log('Setting...');
 			var fbaccounts = setTargetValues(this.get('this.fbaccounts'), App.fbaccounts);
 			var twaccounts = setTargetValues(this.get('this.twaccounts'), App.twaccounts);
 			
@@ -132,7 +131,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			var sender = setTargetValue(this.get('this.sender'), App.senders);
 			
 			this.set('senderAttr', sender);
-			console.log('Setted!');
 		}
 	}.observes('this.content'),
 	
@@ -466,10 +464,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			App.serializerObject = model;
 			target = JSON.stringify(model);
 			totalContacts = App.model.getTotalContacts();
-			console.log(totalContacts);
 		}
 		
-		console.log(totalContacts);
 		mail.set('sender', sender);
 		mail.set('target', target);
 		mail.set('totalContacts', totalContacts);

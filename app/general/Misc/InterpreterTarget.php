@@ -216,15 +216,16 @@ class InterpreterTarget
 		
 		foreach ($this->data as $data) {
 			if ($data->type == 'filter-panel') {
+				$neg = ($data->serialization->negation ? '' : 'NOT');
 				switch ($data->serialization->type) {
 					case 'mail-sent':
 						$this->joinForFilters .= " LEFT JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
 						
 						if ($first) {
-							$piece .= " mc{$i}.idContact IS NOT NULL ";
+							$piece .= " mc{$i}.idContact IS {$neg} NULL ";
 						}
 						else {
-							$piece .= " {$condition} mc{$i}.idContact IS NOT NULL ";
+							$piece .= " {$condition} mc{$i}.idContact IS {$neg} NULL ";
 						}
 
 						$first = false;
@@ -234,17 +235,18 @@ class InterpreterTarget
 						$this->joinForFilters .= " LEFT JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items} AND mc{$i}.opening != 0)";
 
 						if ($first) {
-							$piece .= " mc{$i}.idContact IS NOT NULL ";
+							$piece .= " mc{$i}.idContact IS {$neg} NULL ";
 						}
 						else {
-							$piece .= " {$condition} mc{$i}.idContact IS NOT NULL ";
+							$piece .= " {$condition} mc{$i}.idContact IS {$neg} NULL ";
 						}
 
 						$first = false;
 						break;
 
 					case 'click':
-						$this->joinForFilters .= " JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact = c.idContact AND ml{$i}.idMailLink = {$data->serialization->items})";
+						$equal = ($neg == 'NOT' ? '=' : '!=');
+						$this->joinForFilters .= " JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact = c.idContact AND ml{$i}.idMailLink {$equal} {$data->serialization->items})";
 						break;
 				}
 			}
