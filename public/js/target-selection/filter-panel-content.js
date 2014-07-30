@@ -104,6 +104,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 		
 		if (self.selectedValue !== null) {
 			select.select2('val', self.selectedValue);
+			console.log(self.content.find('.sgm-add-neg'));
 			if (self.content.find('.sgm-add-neg').length < 0) {
 				var active = (self.negation ? 'sgm-neg-active' :'');
 				var addNeg = $('<div class="sgm-add-neg ' + active + '">Not!</div>');
