@@ -54,6 +54,11 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		var container = self.setValues('mail-sent', this);
 		var filter = new FilterMailContent();
 		self.createFilter(filter, container);
+		
+		var x = self.content.find('.smg-add-open-filter');
+		console.log(x);
+		x.remove();
+		self.content.find('.smg-add-click-filter').remove();
 	});
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
@@ -62,6 +67,9 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		var container = self.setValues('mail-open', this);
 		var filter = new FilterMailContent();
 		self.createFilter(filter, container);
+		
+		self.content.find('.smg-add-sent-filter').remove();
+		self.content.find('.smg-add-click-filter').remove();
 	});
 	
 	this.content.find('.smg-add-click-filter').on('click', function (e) {
@@ -70,6 +78,9 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		var container = self.setValues('click', this);
 		var filter = new FilterClickContent();
 		self.createClickFilter(filter, container);
+		
+		self.content.find('.smg-add-sent-filter').remove();
+		self.content.find('.smg-add-open-filter').remove();
 	});
 	
 //	this.content.find('.smg-add-field-filter').on('click', function (e) {
@@ -116,7 +127,6 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			});
 			
 			if (!self.content.hasClass('.sgm-add-neg')) {
-				console.log('No existe');
 				var addNeg = $('<div class="sgm-add-neg">Not!</div>');
 				self.content.find('.sgm-content-negation-filter').append(addNeg);
 
