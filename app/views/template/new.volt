@@ -31,7 +31,7 @@
 	}
 	
 	$(function() {
-		if( {{global_permissions}} == 1 ) {
+		if( '{{global_permissions}}' == '1' ) {
 			$('.globalTemplateOpt').show();
 		}
 	});	
