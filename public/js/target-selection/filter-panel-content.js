@@ -98,6 +98,19 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			var active = (self.negation ? 'sgm-neg-active' :'');
 			var addNeg = $('<div class="sgm-add-neg ' + active + '">Not!</div>');
 			self.content.find('.sgm-content-negation-filter').append(addNeg);
+			
+			self.content.find('.sgm-add-neg').on('click', function (e) {
+				if ($(this).hasClass("sgm-neg-active")) {
+					$(this).removeClass('sgm-neg-active');
+					self.negation = false;
+					self.updateObject();
+				}
+				else {
+					$(this).addClass('sgm-neg-active');
+					self.negation = true;
+					self.updateObject();
+				}
+			});
 		}
 		
 		select.on("change", function(e) { 
@@ -111,19 +124,6 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			self.content.find('.sgm-add-panel').on('click', function (e) {
 				self.createNextPanel(e);
 				$(this).remove();
-			});
-			
-			self.content.find('.sgm-add-neg').on('click', function (e) {
-				if ($(this).hasClass("sgm-neg-active")) {
-					$(this).removeClass('sgm-neg-active');
-					self.negation = false;
-					self.updateObject();
-				}
-				else {
-					$(this).addClass('sgm-neg-active');
-					self.negation = true;
-					self.updateObject();
-				}
 			});
 			
 			self.model.refreshTotalContacts();
