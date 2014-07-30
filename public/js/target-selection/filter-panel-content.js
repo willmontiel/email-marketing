@@ -113,6 +113,11 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 				$(this).remove();
 			});
 			
+			self.content.find('.sgm-add-neg').on('click', function (e) {
+				this.content.find('.sgm-add-neg').removeClass('sgm-neg-active');
+				$(this).addClass('sgm-neg-active');
+			});
+			
 			self.model.refreshTotalContacts();
 		});
 	});

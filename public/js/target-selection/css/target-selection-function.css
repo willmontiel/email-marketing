@@ -111,6 +111,10 @@
 	background-color: red;
 }
 
+.sgm-neg-active {
+	background-color: red;
+}
+
 .sgm-left-arrow-border {
     position: absolute;
     top: 20%;
