@@ -122,7 +122,7 @@ class ChildCommunication extends BaseWrapper
 				$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
 				$interpreter->setMail($mail);
 				$interpreter->searchContacts();
-				$mxcSQL = $interpreter->getMxcSQL();
+				$mxcSQL = $interpreter->getSQL();
 				$statDbaseSQL = $interpreter->getStatDbaseSQL();
 				$statContactlistSQL = $interpreter->getStatContactlistSQL();
 				

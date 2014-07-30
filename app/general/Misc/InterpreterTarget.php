@@ -277,7 +277,7 @@ class InterpreterTarget
 	}
 	
 	
-	public function getMxcSQL()
+	public function getSQL()
 	{
 		if (!$this->top or !$this->list) {
 			return false;
