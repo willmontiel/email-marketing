@@ -55,9 +55,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 		var filter = new FilterMailContent();
 		self.createFilter(filter, container);
 		
-		var x = self.content.find('.smg-add-open-filter');
-		console.log(x);
-		x.remove();
+		self.content.find('.smg-add-open-filter').remove();
 		self.content.find('.smg-add-click-filter').remove();
 	});
 	
@@ -224,6 +222,8 @@ FilterPanelContent.prototype.serialize = function() {
 				var container = this.setValues(type, active);
 				var filter = new FilterMailContent();
 				this.createFilter(filter, container);
+				this.content.find('.smg-add-open-filter').remove();
+				this.content.find('.smg-add-click-filter').remove();
 				break;
 				
 			case 'mail-open':
@@ -233,6 +233,8 @@ FilterPanelContent.prototype.serialize = function() {
 				var container = this.setValues(type, active);
 				var filter = new FilterMailContent();
 				this.createFilter(filter, container);
+				this.content.find('.smg-add-sent-filter').remove();
+				this.content.find('.smg-add-click-filter').remove();
 				break;
 				
 			case 'click':
@@ -248,6 +250,9 @@ FilterPanelContent.prototype.serialize = function() {
 				container.empty();
 				var filter = new FilterClickContent();
 				this.createFilter(filter, container);
+				
+				this.content.find('.smg-add-sent-filter').remove();
+				this.content.find('.smg-add-open-filter').remove();
 				break;
 		}
 		
