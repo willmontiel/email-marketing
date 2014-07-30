@@ -14,12 +14,16 @@ class InterpreterTarget
 	protected $logger;
 	protected $mail;
 	protected $data;
+	protected $ids;
+	protected $idsArray;
 	protected $result;
 	protected $SQLForContacts = "";
 	protected $joinForFilters = "";
 	protected $conditions = "";
 	protected $conditionsWhenIsDbase = "";
 	protected $sql;
+	protected $statDbaseSQL = "";
+	protected $statContactlistSQL = "";
 
 	public function __construct()
 	{
@@ -66,16 +70,81 @@ class InterpreterTarget
 					$this->SQLFilterMail = " JOIN contact AS c ON (c.idContact = mc.idContact) WHERE c.idDbase IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
 					$this->SQLForContacts = "contact";
 					$this->conditionsWhenIsDbase .= "c.idDbase = {$this->ids} AND ";
+					
+					
+					/**
+					* SQL for insert data into statdbase for statistics.
+					*/
+					$values = ' ';
+					$comma = true;
+					foreach ($this->idsArray as $id) {
+						if ($comma) {
+							$values .= "({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " .time() .")";
+							$comma = false;
+						}
+						else{
+							$values .= ", ({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " .time() .")";
+						}
+					}
+					
+					$this->statDbaseSQL = "INSERT INTO statdbase (idDbase, idMail, uniqueOpens, clicks, bounced, spam, unsubscribed, sent, sentDate) 
+											   VALUES {$values}";
+					/**
+					* SQL for insert data into statcontactlist for statistics
+					*/
+				    $this->statContactlistSQL = "INSERT IGNORE INTO statcontactlist (idContactlist, idMail, uniqueOpens,clicks, bounced, spam, unsubscribed, sent, sentDate) 
+													(SELECT c.idContactlist, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() . "
+													 FROM coxcl AS c
+														JOIN mxc AS m ON (m.idContact = c.idContact )
+													 WHERE m.idMail = {$this->mail->idMail})";
+					
+					
 					break;
 
 				case 'contactlists':
 					$this->SQLFilterMail = " JOIN coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
 					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN coxcl cl ON (co.idContact = cl.idContact) WHERE cl.idContactlist IN ({$this->ids}) GROUP BY 1, 2, 3)";
+					
+					/**
+					* Inserting data into statcontactlist for statistics
+					*/
+				   $values = ' ';
+				   $comma = true;
+				   foreach ($this->idsArray as $id) {
+					   if ($comma) {
+						   $values .= "({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() . ")";
+						   $comma = false;
+					   }
+					   else{
+						   $values .= ", ({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() . ")";
+					   }
+				   }
+
+				   $this->statContactlistSQL = "INSERT IGNORE INTO statcontactlist (idContactlist, idMail, uniqueOpens,clicks, bounced, spam, unsubscribed, sent, sentDate) 
+													VALUES {$values}";
+
+				   $this->statDbaseSQL = "INSERT IGNORE INTO statdbase (idDbase, idMail, uniqueOpens, clicks, bounced, spam, unsubscribed, sent, sentDate) 
+										  (SELECT c.idDbase, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() . "
+											 FROM contact AS c
+												JOIN mxc AS m ON (m.idContact = c.idContact)
+											 WHERE m.idMail = {$this->mail->idMail})";
 					break;
 
 				case 'segments':
 					$this->SQLFilterMail = " JOIN sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
 					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN sxc s ON (co.idContact = s.idContact) WHERE s.idSegment IN ({$this->ids}) GROUP BY 1, 2, 3)";
+					
+					$this->statContactlistSQL = "INSERT IGNORE INTO statcontactlist (idContactlist, idMail, uniqueOpens,clicks, bounced, spam, unsubscribed, sent, sentDate) 
+													(SELECT c.idContactlist, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() ."
+													 FROM coxcl AS c
+														   JOIN mxc AS m ON (m.idContact = c.idContact )
+													 WHERE m.idMail = {$this->mail->idMail})";
+
+					$this->statDbaseSQL = "INSERT IGNORE INTO statdbase (idDbase, idMail, uniqueOpens, clicks, bounced, spam, unsubscribed, sent, sentDate) 
+										   (SELECT c.idDbase, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() . "
+												FROM contact AS c
+												JOIN mxc AS m ON (m.idContact = c.idContact)
+											WHERE m.idMail = {$this->mail->idMail} LIMIT 0, 1)";
 					break;
 			}	
 		}
@@ -96,6 +165,7 @@ class InterpreterTarget
 				$this->listObject = $data;
 				if (isset($data->serialization->items)) {
 					if (count($data->serialization->items) > 0) {
+						$this->idsArray = $data->serialization->items;
 						$this->ids = implode(',' , $data->serialization->items);
 						$this->list = true;
 					}
@@ -207,12 +277,22 @@ class InterpreterTarget
 	}
 	
 	
-	public function getSQL()
+	public function getMxcSQL()
 	{
 		if (!$this->top or !$this->list) {
 			return false;
 		}
 		return $this->sql;
+	}
+	
+	public function getStatDbaseSQL()
+	{
+		return $this->statDbaseSQL;
+	}
+	
+	public function getStatContactlistSQL()
+	{
+		return $this->statContactlistSQL;
 	}
 }
 

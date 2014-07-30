@@ -122,11 +122,23 @@ class ChildCommunication extends BaseWrapper
 				$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
 				$interpreter->setMail($mail);
 				$interpreter->searchContacts();
-				$sql = $interpreter->getSQL();
-				$log->log("SQL: {$sql}");
-				if ($sql != false) {
+				$mxcSQL = $interpreter->getMxcSQL();
+				$statDbaseSQL = $interpreter->getStatDbaseSQL();
+				$statContactlistSQL = $interpreter->getStatContactlistSQL();
+				
+				$log->log("MXC: {$mxcSQL}");
+				$log->log("STATDB: {$statDbaseSQL}");
+				$log->log("STATLIST: {$statContactlistSQL}");
+				
+				if ($mxcSQL != false) {
 					$executer = new \EmailMarketing\General\Misc\SQLExecuter();
-					$executer->setSQL($sql);
+					$executer->setSQL($mxcSQL);
+					$executer->executeQuery();
+					
+					$executer->setSQL($statDbaseSQL);
+					$executer->executeQuery();
+					
+					$executer->setSQL($statContactlistSQL);
 					$executer->executeQuery();
 				}
 				//*** this is the old way for to get the target
