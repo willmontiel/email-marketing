@@ -126,6 +126,24 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 				$(this).remove();
 			});
 			
+			if (!self.content.hasClass('.sgm-add-neg')) {
+				var addNeg = $('<div class="sgm-add-neg">Not!</div>');
+				self.content.find('.sgm-content-negation-filter').append(addNeg);
+
+				self.content.find('.sgm-add-neg').on('click', function (e) {
+					if ($(this).hasClass("sgm-neg-active")) {
+						$(this).removeClass('sgm-neg-active');
+						self.negation = false;
+						self.updateObject();
+					}
+					else {
+						$(this).addClass('sgm-neg-active');
+						self.negation = true;
+						self.updateObject();
+					}
+				});
+			}
+			
 			self.model.refreshTotalContacts();
 		});
 	});
