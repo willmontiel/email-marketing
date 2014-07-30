@@ -97,13 +97,16 @@
 
 .sgm-add-neg {
 	position: absolute;
+	font-size: 11px;
 	left: 0%;
 	height: 25px;
 	width: 25px;
 	border-radius: 50%;
 	background-color: #BDBDBD;
 	color: white;
-	padding: 4px;
+	/* padding: 5px; */
+	padding-top: 5px;
+	padding-left: 3px;
 	cursor: pointer;
 }
 

@@ -114,8 +114,15 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			});
 			
 			self.content.find('.sgm-add-neg').on('click', function (e) {
-				self.content.find('.sgm-add-neg').removeClass('sgm-neg-active');
-				$(this).addClass('sgm-neg-active');
+//				var element = self.content.find('.sgm-add-neg');
+				if ($(this).hasClass("sgm-neg-active")) {
+					console.log('Tiene');
+					$(this).removeClass('sgm-neg-active');
+				}
+				else {
+					console.log('No tiene');
+					$(this).addClass('sgm-neg-active');
+				}
 			});
 			
 			self.model.refreshTotalContacts();
