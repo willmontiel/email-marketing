@@ -101,7 +101,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			self.updateObject();
 			
 			var content = $('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
-			self.content.find('.sgm-filter-content-footer').append(content);
+			self.content.find('.sgm-content-add-filter').append(content);
 			
 			self.content.find('.sgm-add-panel').on('click', function (e) {
 				self.createNextPanel(e);
@@ -160,8 +160,9 @@ FilterPanelContent.prototype.createContent = function() {
 							   <div class="sgm-filter-content-select-mail"></div>\n\
 							   <div class="sgm-click-title"></div>\n\
 							   <div class="sgm-filter-content-select-click"></div>\n\
+							   <div class="sgm-content-add-filter"></div>\n\
+							   <div class="sgm-content-negation-filter"></div>\n\
 						  </div>\n\
-						  <div class="sgm-filter-content-footer"></div>\n\
 					  </div>');
 };
 
