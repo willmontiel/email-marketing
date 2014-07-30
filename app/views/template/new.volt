@@ -31,6 +31,7 @@
 	}
 	
 	$(function() {
+	console.log('{{global_permissions}}')
 		if( {{global_permissions}} === 1 ) {
 			$('.globalTemplateOpt').show();
 		}
