@@ -126,9 +126,9 @@ class ChildCommunication extends BaseWrapper
 				$statDbaseSQL = $interpreter->getStatDbaseSQL();
 				$statContactlistSQL = $interpreter->getStatContactlistSQL();
 				
-				$log->log("MXC: {$mxcSQL}");
-				$log->log("STATDB: {$statDbaseSQL}");
-				$log->log("STATLIST: {$statContactlistSQL}");
+//				$log->log("MXC: {$mxcSQL}");
+//				$log->log("STATDB: {$statDbaseSQL}");
+//				$log->log("STATLIST: {$statContactlistSQL}");
 				
 				if ($mxcSQL != false) {
 					$executer = new \EmailMarketing\General\Misc\SQLExecuter();

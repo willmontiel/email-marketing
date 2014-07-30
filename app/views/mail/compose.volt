@@ -112,76 +112,6 @@
 			];
 		{% endif %}
 		
-		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios
-		{% if db == true%}
-			App.dbs = [
-				{% for dbase in dbases %}
-					Ember.Object.create({id: {{dbase.idDbase}}, name: "{{dbase.name|escape_js}}", color: "{{dbase.color}}"}),
-				{% endfor %}
-			];
-			
-			var dbases = [];
-			{% for dbase in dbases %}
-				var object = {id: {{dbase.idDbase}}, value: "{{dbase.name|escape_js}}", color: "{{dbase.color}}"};
-				dbases.push(object);
-			{% endfor %}
-			
-			App.lists = [
-				{% for contactlist in contactlists %}
-					Ember.Object.create({name: "{{contactlist.name|escape_js}}", id: {{contactlist.idContactlist}}}),
-				{% endfor %}
-			];
-			
-			
-			var lists = [];
-			{% for list in contactlists %}
-				var object = {id: {{list.idContactlist}}, value: "{{list.name|escape_js}}"};
-				lists.push(object);
-			{% endfor %}
-			
-			App.segments = [
-				{% for segment in segments %}
-					Ember.Object.create({name: "{{segment.name|escape_js}}", id: {{segment.idSegment}}}),
-				{% endfor %}
-			];
-			
-			{% if mails %}
-				App.sendByOpen = [
-					{% for m in mails%}
-						Ember.Object.create({name: "{{m.name|escape_js}}", id: {{m.idMail}}}),
-					{% endfor %}
-				];
-			{% endif%}
-			
-			
-			{% if links %}
-				App.sendByClick = [
-					{% for link in links %}
-						Ember.Object.create({name: "{{link.link|escape_js}}", id: {{link.idMailLink}}}),
-					{% endfor%}
-				];
-			{% endif %}
-			
-			{% if mails %}
-				App.excludeContact = [
-					{% for m2 in mails%}
-						Ember.Object.create({name: "{{m2.name|escape_js}}", id: {{m2.idMail}}}),
-					{% endfor %}	
-				];
-			{% endif%}				
-		{% endif %}
-		
-		{% if linksForTrack is defined%}
-			{% if linksForTrack|length !== 0 %}
-				App.googleAnalyticsLinks = [
-					{% for link in linksForTrack%}
-						Ember.Object.create({name: "{{link|escape_js}}"}),
-					{% endfor %}
-				];
-			{% endif %}
-		{% endif %}
-			
-			
 		//Cuentas de Redes sociales
 		{% if fbsocials %}
 			App.fbaccounts = [
@@ -236,7 +166,6 @@
 						{{ partial("mail/partials/mailstatus_partial") }}
 					</div>
 				</div>
-			</div>
 	
 				<div class="row">
 					<div class="col-md-12">

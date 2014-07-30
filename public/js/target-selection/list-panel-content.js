@@ -3,6 +3,7 @@ function ListPanelContent() {
 		type: 'list-panel',
 		serialization: {
 			items: [],
+			names: [],
 			conditions: 'all'
 		}
 	};
@@ -81,14 +82,17 @@ ListPanelContent.prototype.createNextPanel = function () {
 
 ListPanelContent.prototype.updateObject = function () {
 	var items = [];
+	var names = [];
 	for (var i = 0; i < this.selectedItems.length; i++) {
 		items.push(this.selectedItems[i].attr('data-value'));
+		names.push(this.selectedItems[i].attr('data-name'));
 	}
 	
 	this.newCriteria = {
 		type: 'list-panel',
 		serialization: {
 			items: items,
+			names: names,
 			conditions: this.conditions
 		}	
 	};
@@ -169,7 +173,7 @@ ListPanelContent.prototype.resfreshData = function () {
 ListPanelContent.prototype.createItemObject = function (value, text) {
 	var self = this;
 	
-	var item = $('<div class="sgm-item-added sgm-remove-item" data-value="' + value + '">\n\
+	var item = $('<div class="sgm-item-added sgm-remove-item" data-name="' + text + '" data-value="' + value + '">\n\
 					  <div class="sgm-item-text">' + text + '</div>\n\
 					  <div class="sgm-item-icon"><span class="glyphicon glyphicon-minus-sign"></span></div>\n\
 				  </div>'); 

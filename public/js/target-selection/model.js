@@ -3,6 +3,7 @@ function Model() {
 	this.totalContacts = 0;
 	this.totalSelectedValues = 0;
 	this.criteriaType = 'Indefinido';
+	this.selectedCriteria = 'Indefinido';
 }
 
 Model.prototype.setPanelContainer = function(container){
@@ -56,6 +57,8 @@ Model.prototype.createTopPanel = function(obj) {
 	
 	if (obj !== undefined) {
 		topPanelContent.setSerializerObj(obj);
+		this.selectedCriteria = obj.serialization.criteria;
+		this.validateTitle();
 	}
 	
 	var config = {
@@ -91,6 +94,10 @@ Model.prototype.createListPanel = function(obj, criteria) {
 
 Model.prototype.validateTitle = function(criteria) {
 	var title;
+	
+	if (criteria === undefined) {
+		criteria = this.selectedCriteria;
+	}
 	
 	switch (criteria) {
 		case 'dbases':
@@ -172,6 +179,8 @@ Model.prototype.updateObject = function(oldObj, newObj) {
 			var j = this.serializerObj.splice(key, 1);
 		}
 	}
+	
+//	console.log(this.serializerObj);
 };
 
 Model.prototype.removePanel = function(panel) {
@@ -245,7 +254,7 @@ Model.prototype.getSelectedValues = function() {
 	var array = [];
 	for (var i = 0; i < this.serializerObj.length; i++) {
 		if (this.serializerObj[i].type === 'list-panel') {
-			array = this.serializerObj[i].serialization.items;
+			array = this.serializerObj[i].serialization.names;
 		}
 	}
 	
