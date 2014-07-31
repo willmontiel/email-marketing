@@ -126,7 +126,6 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			});
 			
 			if (self.content.find('.sgm-add-neg').length == 0) {
-				console.log('Entra');
 				var addNeg = $('<div class="sgm-add-neg">Not!</div>');
 				self.content.find('.sgm-content-negation-filter').append(addNeg);
 
