@@ -43,7 +43,7 @@ class NotificationMail extends TestMail
 	{
 		$this->setBody($content);
 		$this->createPlaintext();
-		$this->replaceUrlImages();		
+		$this->replaceUrlImages(false);		
 	}
 
 	public function sendMail($sender)

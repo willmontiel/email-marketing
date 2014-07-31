@@ -11,7 +11,7 @@ class PrepareMailContent
 		$this->mark = $mark;
 	}
 	
-	public function processContent($html)
+	public function processContent($html, $link_service = true)
 	{
 		if (trim($html) === '') {
 			throw new \InvalidArgumentException("Error mail's content is empty");
@@ -21,7 +21,13 @@ class PrepareMailContent
 		@$htmlObj->loadHTML($html);
 		
 		$images = $htmlObj->getElementsByTagName('img');
-		$links = $htmlObj->getElementsByTagName('a');
+		if($link_service) {
+			$links = $htmlObj->getElementsByTagName('a');
+		}
+		else {
+			$links = new stdClass();
+			$links->length = 0;
+		}
 		
 		if ($images->length !== 0) {
 			foreach ($images as $image) {

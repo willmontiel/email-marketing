@@ -112,12 +112,12 @@ class TestMail
 		$this->plainText = str_replace($search, $replace, $this->plainText);
 	}
 	
-	protected function replaceUrlImages()
+	protected function replaceUrlImages($link_service = true)
 	{
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $this->mail);
 		$prepareMail = new PrepareMailContent($linkService, $imageService, false);
-		list($this->body, $links) = $prepareMail->processContent($this->body);
+		list($this->body, $links) = $prepareMail->processContent($this->body, $link_service);
 	}
 
 	public function getBody()
