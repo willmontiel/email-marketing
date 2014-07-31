@@ -39,6 +39,7 @@ class AutoSendingConverter
 			$this->mail->status = 'Draft';
 			$this->mail->wizardOption = 'setup';
 			$this->mail->deleted = 0;
+			$this->mail->previewData = $this->autoresponder->previewData;
 			
 			if(!$this->mail->save()) {
 				foreach ($this->mail->getMessages() as $msg) {
@@ -114,8 +115,6 @@ class AutoSendingConverter
 		$target = json_decode($this->autoresponder->target);
 		$destination = $target->destination;
 		$obj->$destination = $target->ids;
-		
-		$obj->previewData = $this->autoresponder->previewData;
 		
 		return $obj;
 	}
