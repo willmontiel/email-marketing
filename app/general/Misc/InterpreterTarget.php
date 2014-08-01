@@ -214,9 +214,13 @@ class InterpreterTarget
 			}
 		}
 		
+		$this->logger->log("Condition: {$this->listObject->conditions}");
+		
 		$object = new \stdClass();
 		$object->required = ($this->listObject->conditions == 'all' ? true : false);
 		$object->more = ($i > 1 ? true : false);
+		
+		$this->logger->log("Required: {$object->required}");
 		
 		foreach ($this->data as $data) {
 			if ($data->type == 'filter-panel') {
