@@ -7,6 +7,9 @@ namespace EmailMarketing\General\Misc;
  */
 class InterpreterTarget 
 {
+	protected $joinsForFilters = "";
+	protected $conditionsForFilters = "";
+
 	protected $SQLFilterMail = "";
 	protected $topObject;
 	protected $listObject;
@@ -18,7 +21,6 @@ class InterpreterTarget
 	protected $idsArray;
 	protected $result;
 	protected $SQLForContacts = "";
-	protected $joinForFilters = "";
 	protected $conditions = "";
 	protected $conditionsWhenIsDbase = "";
 	protected $sql;
@@ -77,6 +79,7 @@ class InterpreterTarget
 					*/
 					$values = ' ';
 					$comma = true;
+					
 					foreach ($this->idsArray as $id) {
 						if ($comma) {
 							$values .= "({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " .time() .")";
@@ -208,8 +211,8 @@ class InterpreterTarget
 	
 	private function createSQLForFilters()
 	{
-		$this->fromFilters = array();
-		$this->whereFilters = array();
+		$from = array();
+		$where = array();
 		
 		$i = 0;
 		foreach ($this->data as $data) {
@@ -234,8 +237,8 @@ class InterpreterTarget
 						$filterSent = new \EmailMarketing\General\Filter\FilterSent();
 						$filterSent->setObject($object);
 						$filterSent->createSQL();
-						$this->fromFilters[] = $filterSent->getFrom();
-						$this->whereFilters[] = $filterSent->getWhere();
+						$from[] = $filterSent->getFrom();
+						$where[] = $filterSent->getWhere();
 						
 						break;
 
@@ -250,16 +253,18 @@ class InterpreterTarget
 			}
 		}
 		
-		$this->fromFilters = implode(" ", $this->fromFilters);
-		
-		if (count($this->whereFilters) > 0) {
-			$glue = ($object->required ? ' AND ' : ' OR ');
-			$conditions = implode($glue, $this->whereFilters);
-			$this->whereFilters = "AND ({$conditions})";
+		if (count($from) > 0) {
+			$this->joinsForFilters = implode(" ", $from);
 		}
 		
-		$this->logger->log("From: {$this->fromFilters}");
-		$this->logger->log("Where: {$this->whereFilters}");
+		if (count($where) > 0) {
+			$glue = ($object->required ? ' AND ' : ' OR ');
+			$conditions = implode($glue, $where);
+			$this->conditionsForFilters = "AND ({$conditions})";
+		}
+		
+		$this->logger->log("From: {$this->joinsForFilters}");
+		$this->logger->log("Where: {$this->conditionsForFilters}");
 	}
 
 	private function createSQLBaseForTotalContacts()
@@ -267,12 +272,12 @@ class InterpreterTarget
 		$this->sql = "SELECT COUNT(c.idContact) AS total 
 						  FROM {$this->SQLForContacts} AS c 
 						  JOIN email AS e ON (e.idEmail = c.idEmail) 
-						  {$this->fromFilters} 
+						  {$this->joinsForFilters} 
 					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 
 						  AND e.bounced = 0 
 						  AND e.blocked = 0 
 						  AND e.spam = 0 
-					  {$this->whereFilters}";
+					  {$this->conditionsForFilters}";
 	}
 	
 	private function createSQLBaseForTarget()
