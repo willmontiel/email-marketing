@@ -238,8 +238,10 @@ class InterpreterTarget
 						$filterSent->setObject($object);
 						$filterSent->createSQL();
 						$from[] = $filterSent->getFrom();
-						$this->logger->log("WHERE1: " . $filterSent->getWhere());
-						$where[] = $filterSent->getWhere();
+						$w = $filterSent->getWhere();
+						if (!empty($w)) {
+							$where[] = $w;
+						}
 						
 						break;
 
