@@ -9,7 +9,6 @@ class InterpreterTarget
 {
 	protected $joinsForFilters = "";
 	protected $conditionsForFilters = "";
-
 	protected $SQLFilterMail = "";
 	protected $topObject;
 	protected $listObject;
@@ -19,9 +18,7 @@ class InterpreterTarget
 	protected $data;
 	protected $ids;
 	protected $idsArray;
-	protected $result;
 	protected $SQLForContacts = "";
-	protected $conditions = "";
 	protected $conditionsWhenIsDbase = "";
 	protected $sql;
 	protected $statDbaseSQL = "";
@@ -77,18 +74,7 @@ class InterpreterTarget
 					/**
 					* SQL for insert data into statdbase for statistics.
 					*/
-					$values = ' ';
-					$comma = true;
-					
-					foreach ($this->idsArray as $id) {
-						if ($comma) {
-							$values .= "({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " .time() .")";
-							$comma = false;
-						}
-						else{
-							$values .= ", ({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " .time() .")";
-						}
-					}
+					$values = $this->implode();
 					
 					$this->statDbaseSQL = "INSERT INTO statdbase (idDbase, idMail, uniqueOpens, clicks, bounced, spam, unsubscribed, sent, sentDate) 
 											   VALUES {$values}";
@@ -111,17 +97,7 @@ class InterpreterTarget
 					/**
 					* Inserting data into statcontactlist for statistics
 					*/
-				   $values = ' ';
-				   $comma = true;
-				   foreach ($this->idsArray as $id) {
-					   if ($comma) {
-						   $values .= "({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() . ")";
-						   $comma = false;
-					   }
-					   else{
-						   $values .= ", ({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() . ")";
-					   }
-				   }
+				   $values = $this->implode();
 
 				   $this->statContactlistSQL = "INSERT IGNORE INTO statcontactlist (idContactlist, idMail, uniqueOpens,clicks, bounced, spam, unsubscribed, sent, sentDate) 
 													VALUES {$values}";
@@ -153,6 +129,23 @@ class InterpreterTarget
 		}
 	}
 	
+	private function implode()
+	{
+		$values = ' ';
+		$comma = true;
+		foreach ($this->idsArray as $id) {
+			if ($comma) {
+				$values .= "({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() . ")";
+				$comma = false;
+			}
+			else{
+				$values .= ", ({$id}, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() . ")";
+			}
+		}
+		
+		return $values;
+	}
+
 	private function modelData()
 	{
 		$this->top = false;
@@ -232,13 +225,13 @@ class InterpreterTarget
 						$object->idMail = $data->serialization->items;
 						$object->negative = ($data->serialization->negation == 'true' ? true : false);
 						
-						$this->logger->log("Obj: " . print_r($object, true));
-						
 						$filterSent = new \EmailMarketing\General\Filter\FilterSent();
 						$filterSent->setObject($object);
 						$filterSent->createSQL();
+						
 						$from[] = $filterSent->getFrom();
 						$w = $filterSent->getWhere();
+						
 						if (!empty($w)) {
 							$where[] = $w;
 						}
@@ -255,8 +248,6 @@ class InterpreterTarget
 				}
 			}
 		}
-		
-		$this->logger->log("WHERE: " . print_r($where, true));
 		
 		if (count($from) > 0) {
 			$this->joinsForFilters = implode(" ", $from);
