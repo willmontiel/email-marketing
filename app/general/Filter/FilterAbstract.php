@@ -15,6 +15,7 @@ abstract class FilterAbstract
 	protected $equals = "";
 	protected $required = "";
 	protected $mxc = "mxc";
+	protected $condition = "";
 
 	public function setObject($obj)
 	{
@@ -28,23 +29,12 @@ abstract class FilterAbstract
 	
 	public function getFrom()
 	{
+		$this->from = "{$this->required} JOIN mxc AS {$this->mc} ON ({$this->mc}.idContact = c.idContact AND {$this->mc}.idMail = {$this->object->idMail}{$this->condition}) ";
 		return $this->from;
 	}
 	
 	public function getWhere()
 	{
 		return $this->where;
-	}
-	
-	public function processConditions()
-	{
-		if ($this->object->required) {
-			$this->required = "";
-			$this->where = "";
-		}
-		else {
-			$this->required = ($this->object->more ? " LEFT" : "");
-			$this->where = "{$this->mc} mc{$i}.idContact IS {$neg} NULL";
-		}
 	}
 }

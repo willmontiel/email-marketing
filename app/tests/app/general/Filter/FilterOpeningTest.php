@@ -29,14 +29,106 @@ class FilterOpeningTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
-	 * Generación de SQL cuando no ha abierto el correo y es ALL multiple
+	 * Que hayan abierto el correo 45 (Sin más filtros) condición AND
 	 */
-	public function testGetFromForNegativeAndRequiredMore() {
+	public function testOpenOneFilterConditionAll() {
 		$object = new \stdClass();
 		$object->idMail = 45;
-		$object->negative = true;
+		$object->required = true;
+		$object->more = false;
+		$object->negative = false;
+		
+		$this->object->setObject($object);
+		$this->object->createSQL();
+		
+		$from = $this->object->getFrom();
+		$expectedF = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening != 0) ";
+		
+		$where = $this->object->getWhere();
+		$expectedW = "";
+		
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+	}
+	
+	/**
+	 * Que hayan abierto el correo 45 (Con más filtros) condición AND
+	 */
+	public function testOpenMuchFilterConditionAll() {
+		$object = new \stdClass();
+		$object->idMail = 45;
 		$object->required = true;
 		$object->more = true;
+		$object->negative = false;
+		
+		$this->object->setObject($object);
+		$this->object->createSQL();
+		
+		$from = $this->object->getFrom();
+		$expectedF = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening != 0) ";
+		
+		$where = $this->object->getWhere();
+		$expectedW = "";
+		
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+	}
+	
+	/**
+	 * Que hayan abierto el correo 45 (Sin más filtros) condición OR
+	 */
+	public function testOpenOneFilterConditionAny() {
+		$object = new \stdClass();
+		$object->idMail = 45;
+		$object->required = false;
+		$object->more = false;
+		$object->negative = false;
+		
+		$this->object->setObject($object);
+		$this->object->createSQL();
+		
+		$from = $this->object->getFrom();
+		$expectedF = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening != 0) ";
+		
+		$where = $this->object->getWhere();
+		$expectedW = "";
+		
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+	}
+	
+	/**
+	 * Que hayan abierto el correo 45 (Con más filtros) condición OR
+	 */
+	public function testOpenMuchFilterConditionAny() {
+		$object = new \stdClass();
+		$object->idMail = 45;
+		$object->required = false;
+		$object->more = true;
+		$object->negative = false;
+		
+		$this->object->setObject($object);
+		$this->object->createSQL();
+		
+		$from = $this->object->getFrom();
+		$expectedF = " LEFT JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening != 0) ";
+		
+		$where = $this->object->getWhere();
+		$expectedW = " mc45.idContact IS NOT NULL ";
+		
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+	}
+	
+	/**
+	 * Que no hayan abierto el correo 45 (Sin más filtros) condición AND
+	 */
+	public function testOpenOneFilterConditionAllNegative() {
+		$object = new \stdClass();
+		$object->idMail = 45;
+		$object->required = true;
+		$object->more = false;
+		$object->negative = true;
 		
 		$this->object->setObject($object);
 		$this->object->createSQL();
@@ -47,97 +139,77 @@ class FilterOpeningTest extends \PHPUnit_Framework_TestCase {
 		$where = $this->object->getWhere();
 		$expectedW = "";
 		
-		$this->assertEquals($expectedF, $from, 'Generación de FROM_SQL cuando no ha abierto el correo y es ALL multiple');
-		$this->assertEquals($expectedW, $where, 'Generación de WHERE_SQL cuando no ha abierto el correo y es ALL multiple');
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
 	}
 	
 	/**
-	 * Generación de SQL cuando ha abierto el correo y es ALL único
+	 * Que no hayan abierto el correo 45 (Con más filtros) condición AND
 	 */
-	public function testGetFromForPositiveAndRequiredNoMore() {
+	public function testOpenMuchFilterConditionAllNegative() {
 		$object = new \stdClass();
 		$object->idMail = 45;
-		$object->negative = false;
 		$object->required = true;
-		$object->more = false;
+		$object->more = true;
+		$object->negative = true;
 		
 		$this->object->setObject($object);
 		$this->object->createSQL();
-		$from = $this->object->getFrom();
 		
-		$expected = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening != 0) ";
-		$this->assertEquals($expected, $from, 'Generación de SQL cuando ha abierto el correo y es ALL único');
+		$from = $this->object->getFrom();
+		$expectedF = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening = 0) ";
+		
+		$where = $this->object->getWhere();
+		$expectedW = "";
+		
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
 	}
 	
+	
 	/**
-	 * Generación de SQL cuando no ha abierto el correo y es ANY único
+	 * Que no hayan abierto el correo 45 (Sin más filtros) condición OR
 	 */
-	public function testGetFromForNegativeAndNoRequiredNoMore() {
+	public function testOpenOneFilterConditionAnyNegative() {
 		$object = new \stdClass();
 		$object->idMail = 45;
-		$object->negative = true;
 		$object->required = false;
 		$object->more = false;
+		$object->negative = true;
 		
 		$this->object->setObject($object);
 		$this->object->createSQL();
-		$from = $this->object->getFrom();
 		
-		$expected = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening = 0) ";
-		$this->assertEquals($expected, $from, 'Generación de SQL cuando no ha abierto el correo y es ANY único');
+		$from = $this->object->getFrom();
+		$expectedF = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening = 0) ";
+		
+		$where = $this->object->getWhere();
+		$expectedW = "";
+		
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
 	}
 	
 	/**
-	 * Generación de SQL cuando no ha abierto el correo y es ANY multiple
+	 * Que no hayan abierto el correo 45 (Con más filtros) condición OR
 	 */
-	public function testGetFromForNegativeAndNoRequiredMore() {
+	public function testOpenMuchFilterConditionAnyNegative() {
 		$object = new \stdClass();
 		$object->idMail = 45;
-		$object->negative = true;
 		$object->required = false;
 		$object->more = true;
+		$object->negative = true;
 		
 		$this->object->setObject($object);
 		$this->object->createSQL();
-		$from = $this->object->getFrom();
 		
-		$expected = " LEFT JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening = 0) ";
-		$this->assertEquals($expected, $from, 'Generación de SQL cuando no ha abierto el correo y es ANY multiple');
+		$from = $this->object->getFrom();
+		$expectedF = " LEFT JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening = 0) ";
+		
+		$where = $this->object->getWhere();
+		$expectedW = " mc45.idContact IS NOT NULL ";
+		
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que hayan abierto el correo 45 (Sin más filtros) condición AND');
 	}
-	
-	/**
-	 * 
-	 */
-//	public function testGetWhereForNegativeAndNoRequiredMore() {
-//		$object = new \stdClass();
-//		$object->idMail = 45;
-//		$object->negative = true;
-//		$object->required = true;
-//		$object->more = true;
-//		
-//		$this->object->setObject($object);
-//		$this->object->createSQL();
-//		$from = $this->object->getFrom();
-//		$where = $this->object->getWhere();
-//		
-//		$expectedF = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening = 0) ";
-//		$expectedW = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening = 0) ";
-//		
-//		$this->assertEquals($expectedF, $from, 'Generación de SQL FROM cuando no ha abierto el correo y es ALL');
-//		$this->assertEquals($expectedW, $where, 'Generación de SQL WHERE cuando no ha abierto el correo y es ALL');
-//	}
-	
-//	public function testGetWhereForNegative() {
-//		$object = new \stdClass();
-//		$object->idMail = 45;
-//		$object->negative = true;
-//		$object->required = true;
-//		
-//		$this->object->setObject($object);
-//		$this->object->createSQL();
-//		$from = $this->object->getFrom();
-//		
-//		$expected = " JOIN mxc AS mc45 ON (mc45.idContact = c.idContact AND mc45.idMail = 45 AND mc45.opening = 0) ";
-//		$this->assertEquals($expected, $from, 'Generación de SQL cuando no ha abierto el correo y es ALL');
-//	}
 }
