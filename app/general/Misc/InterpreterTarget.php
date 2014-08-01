@@ -233,6 +233,7 @@ class InterpreterTarget
 						
 						$filterSent = new \EmailMarketing\General\Filter\FilterSent();
 						$filterSent->setObject($object);
+						$filterSent->createSQL();
 						$this->fromFilters[] = $filterSent->getFrom();
 						$this->whereFilters[] = $filterSent->getWhere();
 						
