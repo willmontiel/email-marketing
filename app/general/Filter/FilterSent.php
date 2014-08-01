@@ -10,7 +10,7 @@ class FilterSent extends FilterAbstract
 {
 	public function createSQL() 
 	{
-		$this->mc = "mc{$this->object->idMail}";
+		$this->mc = "mc{$this->object->idMail}{$this->key}";
 		
 		if ($this->object->required) {
 			if ($this->object->negative) {

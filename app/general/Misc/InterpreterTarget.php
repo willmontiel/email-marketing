@@ -218,6 +218,7 @@ class InterpreterTarget
 		$object->required = ($this->listObject->serialization->conditions == 'all' ? true : false);
 		$object->more = ($i > 1 ? true : false);
 		
+		$key = 1;
 		foreach ($this->data as $data) {
 			if ($data->type == 'filter-panel') {
 				switch ($data->serialization->type) {
@@ -239,6 +240,7 @@ class InterpreterTarget
 				}
 				
 				$filter->setObject($object);
+				$filter->setKey($key);
 				$filter->createSQL();
 
 				$from[] = $filter->getFrom();
@@ -248,6 +250,7 @@ class InterpreterTarget
 					$where[] = $w;
 				}
 			}
+			$key++;
 		}
 		
 		if (count($from) > 0) {

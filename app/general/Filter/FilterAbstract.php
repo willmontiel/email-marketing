@@ -9,6 +9,7 @@ namespace EmailMarketing\General\Filter;
  */
 abstract class FilterAbstract 
 {
+	protected $key = "";
 	protected $from = "";
 	protected $where = "";
 	protected $object;
@@ -25,6 +26,11 @@ abstract class FilterAbstract
 		$this->object = $obj;
 	}
 
+	public function setKey($key)
+	{
+		$this->key = $key;
+	}
+	
 	abstract function createSQL();
 	
 	public function getFrom()
