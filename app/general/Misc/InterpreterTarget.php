@@ -253,6 +253,8 @@ class InterpreterTarget
 			}
 		}
 		
+		$this->logger->log("WHERE: " . print_r($where, true));
+		
 		if (count($from) > 0) {
 			$this->joinsForFilters = implode(" ", $from);
 		}
