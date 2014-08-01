@@ -208,59 +208,52 @@ class InterpreterTarget
 	
 	private function createSQLForFilters()
 	{
-		$condition = ($this->listObject->serialization->conditions == 'all' ? 'AND' : 'OR');
-		$first = true;
-		$i = 1;
-	
-		$piece = "";
+		$this->fromFilters = array();
+		$this->whereFilters = array();
+		
+		$i = 0;
+		foreach ($this->data as $data) {
+			if ($data->type == 'filter-panel') {
+				$i++;
+			}
+		}
+		
+		$object = new \stdClass();
+		$object->required = ($this->listObject->conditions == 'all' ? true : false);
+		$object->more = ($i > 1 ? true : false);
 		
 		foreach ($this->data as $data) {
 			if ($data->type == 'filter-panel') {
-				$n = ($data->serialization->negation == 'true' ? true : false);
-				$neg = ($n ? '' : 'NOT');
 				switch ($data->serialization->type) {
 					case 'mail-sent':
-						$this->joinForFilters .= " LEFT JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items})";
+						$object->idMail = $data->serialization->items;
+						$object->negative = ($data->serialization->negation == 'true' ? true : false);
 						
-						if ($first) {
-							$piece .= " mc{$i}.idContact IS {$neg} NULL ";
-						}
-						else {
-							$piece .= " {$condition} mc{$i}.idContact IS {$neg} NULL ";
-						}
-
-						$first = false;
+						$filterSent = new \EmailMarketing\General\Filter\FilterSent();
+						$filterSent->setObject($object);
+						$this->fromFilters[] = $filterSent->getFrom();
+						$this->whereFilters[] = $filterSent->getWhere();
+						
 						break;
 
 					case 'mail-open':
-						$this->joinForFilters .= " LEFT JOIN mxc AS mc{$i} ON (mc{$i}.idContact = c.idContact AND mc{$i}.idMail = {$data->serialization->items} AND mc{$i}.opening != 0)";
-
-						if ($first) {
-							$piece .= " mc{$i}.idContact IS {$neg} NULL ";
-						}
-						else {
-							$piece .= " {$condition} mc{$i}.idContact IS {$neg} NULL ";
-						}
-
-						$first = false;
+						
 						break;
 
 					case 'click':
-						$this->joinForFilters .= "LEFT JOIN mxcxl AS ml{$i} ON (ml{$i}.idContact = c.idContact AND ml{$i}.idMailLink = {$data->serialization->items})";
 						
-						if ($first) {
-							$piece .= " ml{$i}.idContact IS {$neg} NULL ";
-						}
-						else {
-							$piece .= " {$condition} ml{$i}.idContact IS {$neg} NULL ";
-						}
 						break;
 				}
 			}
-			$i++;
 		}
 		
-		$this->conditions = ($piece == "" ? "" : " AND ({$piece}) ");
+		$this->fromFilters = implode(" ", $this->fromFilters);
+		$glue = ($object->required ? ' AND ' : ' OR ');
+		$this->whereFilters = implode($glue, $this->whereFilters);
+		
+		
+		$this->logger->log("From: {$this->fromFilters}");
+		$this->logger->log("Where: {$this->whereFilters}");
 	}
 
 	private function createSQLBaseForTotalContacts()
@@ -268,8 +261,12 @@ class InterpreterTarget
 		$this->sql = "SELECT COUNT(c.idContact) AS total 
 						  FROM {$this->SQLForContacts} AS c 
 						  JOIN email AS e ON (e.idEmail = c.idEmail) 
-						  {$this->joinForFilters} 
-					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditions}";
+						  {$this->fromFilters} 
+					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 
+						  AND e.bounced = 0 
+						  AND e.blocked = 0 
+						  AND e.spam = 0 
+					  {$this->whereFilters}";
 	}
 	
 	private function createSQLBaseForTarget()
