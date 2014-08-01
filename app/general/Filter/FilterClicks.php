@@ -2,27 +2,38 @@
 
 namespace EmailMarketing\General\Filter;
 /**
- * Description of FilterSent
+ * Description of FilterClicks
  *
  * @author Will
  */
-class FilterSent extends FilterAbstract
+class FilterClicks extends FilterAbstract
 {
 	public function createSQL() 
 	{
-		$this->alias = "mc{$this->object->id}{$this->key}";
+		$this->alias = "ml{$this->object->id}{$this->key}";
 		
 		if ($this->object->required) {
-			if ($this->object->negative) {
-				$this->required = " LEFT";
-				$this->where = " {$this->alias}.idContact IS NULL ";
+			if ($this->object->more) {
+				if ($this->object->negative) {
+					
+				}
+				else {
+					//Do nothing
+				}
+			}
+			else {
+				if ($this->object->negative) {
+					
+				}
+				else {
+					//Do nothing
+				}
 			}
 		}
 		else {
 			if ($this->object->more) {
 				if ($this->object->negative) {
-					$this->required = " LEFT";
-					$this->where = " {$this->alias}.idContact IS NULL ";
+					
 				}
 				else {
 					$this->required = " LEFT";
@@ -31,14 +42,15 @@ class FilterSent extends FilterAbstract
 			}
 			else {
 				if ($this->object->negative) {
-					$this->required = " LEFT";
-					$this->where = " {$this->alias}.idContact IS NULL ";
+					
 				}
 				else {
 					//Do nothing
 				}
 			}
 		}
+		
+		
 		
 		$this->createFrom();
 	}

@@ -11,16 +11,18 @@ class FilterOpening extends FilterAbstract
 {
 	public function createSQL() 
 	{
-		$this->mc = "mc{$this->object->idMail}{$this->key}";
+		$this->alias = "mc{$this->object->id}{$this->key}";
 		$this->equals = ($this->object->negative ? "=" : "!=");
 		
 		if (!$this->object->required) {
 			if ($this->object->more) {
 				$this->required = " LEFT";
-				$this->where = " {$this->mc}.idContact IS NOT NULL ";
+				$this->where = " {$this->alias}.idContact IS NOT NULL ";
 			}
 		}
 		
-		$this->condition = " AND {$this->mc}.opening {$this->equals} 0";
+		$this->condition = " AND {$this->alias}.opening {$this->equals} 0";
+		
+		$this->createFrom();
 	}
 }

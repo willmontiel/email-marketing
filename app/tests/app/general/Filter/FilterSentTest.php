@@ -18,6 +18,10 @@ class FilterSentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	protected function setUp() {
 		$this->object = new FilterSent;
+		
+		$this->data = new \stdClass();
+		$this->data->id = 45;
+		$this->data->type = "mail";
 	}
 	
 	/**
@@ -32,13 +36,11 @@ class FilterSentTest extends \PHPUnit_Framework_TestCase {
 	 * Que hayan recibido el correo 45 (Sin más filtros) condición AND
 	 */
 	public function testSentOneFilterConditionAll() {
-		$object = new \stdClass();
-		$object->idMail = 45;
-		$object->required = true;
-		$object->more = false;
-		$object->negative = false;
+		$this->data->required = true;
+		$this->data->more = false;
+		$this->data->negative = false;
 		
-		$this->object->setObject($object);
+		$this->object->setObject($this->data);
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
@@ -55,13 +57,11 @@ class FilterSentTest extends \PHPUnit_Framework_TestCase {
 	 * Que hayan recibido el correo 45 (Con más filtros) condición AND
 	 */
 	public function testSentMuchFilterConditionAll() {
-		$object = new \stdClass();
-		$object->idMail = 45;
-		$object->required = true;
-		$object->more = true;
-		$object->negative = false;
+		$this->data->required = true;
+		$this->data->more = true;
+		$this->data->negative = false;
 		
-		$this->object->setObject($object);
+		$this->object->setObject($this->data);
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
@@ -78,13 +78,11 @@ class FilterSentTest extends \PHPUnit_Framework_TestCase {
 	 * Que hayan recibido el correo 45 (Sin más filtros) condición OR
 	 */
 	public function testSentOneFilterConditionAny() {
-		$object = new \stdClass();
-		$object->idMail = 45;
-		$object->required = false;
-		$object->more = false;
-		$object->negative = false;
+		$this->data->required = false;
+		$this->data->more = false;
+		$this->data->negative = false;
 		
-		$this->object->setObject($object);
+		$this->object->setObject($this->data);
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
@@ -101,13 +99,11 @@ class FilterSentTest extends \PHPUnit_Framework_TestCase {
 	 * Que hayan recibido el correo 45 (Con más filtros) condición OR
 	 */
 	public function testSentMuchFilterConditionAny() {
-		$object = new \stdClass();
-		$object->idMail = 45;
-		$object->required = false;
-		$object->more = true;
-		$object->negative = false;
+		$this->data->required = false;
+		$this->data->more = true;
+		$this->data->negative = false;
 		
-		$this->object->setObject($object);
+		$this->object->setObject($this->data);
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
@@ -125,13 +121,11 @@ class FilterSentTest extends \PHPUnit_Framework_TestCase {
 	 * Que no hayan recibido el correo 45 (sin más filtros) condición AND
 	 */
 	public function testSentOneFilterConditionAllNegative() {
-		$object = new \stdClass();
-		$object->idMail = 45;
-		$object->required = true;
-		$object->more = false;
-		$object->negative = true;
+		$this->data->required = true;
+		$this->data->more = false;
+		$this->data->negative = true;
 		
-		$this->object->setObject($object);
+		$this->object->setObject($this->data);
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
@@ -148,13 +142,11 @@ class FilterSentTest extends \PHPUnit_Framework_TestCase {
 	 * Que no hayan recibido el correo 45 (con más filtros) condición AND
 	 */
 	public function testSentMuchFilterConditionAllNegative() {
-		$object = new \stdClass();
-		$object->idMail = 45;
-		$object->required = true;
-		$object->more = true;
-		$object->negative = true;
+		$this->data->required = true;
+		$this->data->more = true;
+		$this->data->negative = true;
 		
-		$this->object->setObject($object);
+		$this->object->setObject($this->data);
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
@@ -171,13 +163,11 @@ class FilterSentTest extends \PHPUnit_Framework_TestCase {
 	 * Que no hayan recibido el correo 45 (sin más filtros) condición OR
 	 */
 	public function testSentOneFilterConditionAnyNegative() {
-		$object = new \stdClass();
-		$object->idMail = 45;
-		$object->required = false;
-		$object->more = false;
-		$object->negative = true;
+		$this->data->required = false;
+		$this->data->more = false;
+		$this->data->negative = true;
 		
-		$this->object->setObject($object);
+		$this->object->setObject($this->data);
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
@@ -194,13 +184,11 @@ class FilterSentTest extends \PHPUnit_Framework_TestCase {
 	 * Que no hayan recibido el correo 45 (con más filtros) condición OR
 	 */
 	public function testSentMuchFilterConditionAnyNegative() {
-		$object = new \stdClass();
-		$object->idMail = 45;
-		$object->required = false;
-		$object->more = true;
-		$object->negative = true;
+		$this->data->required = false;
+		$this->data->more = true;
+		$this->data->negative = true;
 		
-		$this->object->setObject($object);
+		$this->object->setObject($this->data);
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();

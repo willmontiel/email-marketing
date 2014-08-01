@@ -15,7 +15,7 @@ abstract class FilterAbstract
 	protected $object;
 	protected $equals = "";
 	protected $required = "";
-	protected $mxc = "mxc";
+	protected $alias = "";
 	protected $condition = "";
 
 	public function setObject($obj)
@@ -35,12 +35,24 @@ abstract class FilterAbstract
 	
 	public function getFrom()
 	{
-		$this->from = "{$this->required} JOIN mxc AS {$this->mc} ON ({$this->mc}.idContact = c.idContact AND {$this->mc}.idMail = {$this->object->idMail}{$this->condition}) ";
 		return $this->from;
 	}
 	
 	public function getWhere()
 	{
 		return $this->where;
+	}
+	
+	public function createFrom()
+	{
+		switch ($this->object->type) {
+			case 'mail':
+				$this->from = "{$this->required} JOIN mxc AS {$this->alias} ON ({$this->alias}.idContact = c.idContact AND {$this->alias}.idMail = {$this->object->id}{$this->condition}) ";
+				break;
+			
+			case 'click':
+				$this->from = "{$this->required} JOIN mxcxl AS {$this->alias} ON ({$this->alias}.idContact = c.idContact AND {$this->alias}.idMailLink = {$this->object->id}) ";
+				break;
+		}
 	}
 }

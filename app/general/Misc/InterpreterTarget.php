@@ -221,21 +221,23 @@ class InterpreterTarget
 		$key = 1;
 		foreach ($this->data as $data) {
 			if ($data->type == 'filter-panel') {
+				$object->id = $data->serialization->items;
+				$object->negative = ($data->serialization->negation == 'true' ? true : false);
+				
 				switch ($data->serialization->type) {
 					case 'mail-sent':
-						$object->idMail = $data->serialization->items;
-						$object->negative = ($data->serialization->negation == 'true' ? true : false);
+						$object->type = "mail";
 						$filter = new \EmailMarketing\General\Filter\FilterSent();
 						break;
 
 					case 'mail-open':
-						$object->idMail = $data->serialization->items;
-						$object->negative = ($data->serialization->negation == 'true' ? true : false);
+						$object->type = "mail";
 						$filter = new \EmailMarketing\General\Filter\FilterOpening();
 						break;
 
 					case 'click':
-						
+						$object->type = "click";
+						$filter = new \EmailMarketing\General\Filter\FilterClicks();
 						break;
 				}
 				
@@ -285,8 +287,8 @@ class InterpreterTarget
 		$sql = "SELECT {$this->mail->idMail}, c.idContact, null, 'scheduled', 0, 0, 0, 0, 0, (SELECT GROUP_CONCAT(idContactlist) FROM coxcl x WHERE x.idContact = c.idContact) AS listas, 0, 0, 0, 0, 0, 0, 0, 0
 						  FROM {$this->SQLForContacts} AS c 
 						  JOIN email AS e ON (e.idEmail = c.idEmail) 
-						  {$this->joinForFilters} 
-					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditions}";
+						  {$this->joinsForFilters} 
+					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditionsForFilters}";
 						  
 		$this->sql = "INSERT IGNORE INTO mxc (idMail, idContact, idBouncedCode, status, opening, clicks, bounced, 
 											  spam, unsubscribe, contactlists, share_fb, share_tw, share_gp, share_li,
