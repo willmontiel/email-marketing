@@ -194,7 +194,7 @@ class MailController extends ControllerBase
 			$process = new ProcessMail();
 			$process->setAccount($this->user->account);
 			$process->setUser($this->user);
-			$process->deleteMail($idMail);
+			$process->deleteMail($idMail, $this->acl->isAllowed($this->user->userrole, 'mail', 'on any mail'));
 		} 
 		catch (\InvalidArgumentException $e) {
 			$this->flashSession->error($e->getMessage());

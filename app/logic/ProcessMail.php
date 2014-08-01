@@ -11,7 +11,7 @@ class ProcessMail
 		$this->user = $user;
 	}
 
-	public function deleteMail($idMail)
+	public function deleteMail($idMail, $override = false)
 	{
 		$mail = Mail::findFirst(array(
 			"conditions" => "(idMail = ?1 AND idAccount = ?2)",
@@ -23,7 +23,7 @@ class ProcessMail
 			throw new InvalidArgumentException("No se ha encontrado el correo, por favor verifique la información");
 		}
 		
-		if($this->acl->isAllowed($this->user->userrole, 'mail', 'on any mail')){
+		if($override){
 			$this->deleteMailNow($mail);
 		}
 		else {
