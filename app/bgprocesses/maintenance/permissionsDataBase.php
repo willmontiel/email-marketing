@@ -427,6 +427,94 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'dashboard::read'),
 			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'statistic::read'),
 			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'mail::read'),
+			
+			
+//			----------//----------**ROLE_WEB_SERVICES**----------//----------
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contact::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contact::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contact::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contact::delete'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contact::full delete'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contact::(un)subscribe'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contact::importbatch'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contact::import'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contactlist::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contactlist::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contactlist::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'contactlist::delete'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'dbase::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'dbase::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'dbase::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'dbase::delete'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'customfield::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'customfield::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'customfield::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'customfield::delete'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'user::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'user::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'user::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'user::delete'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'segment::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'segment::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'segment::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'segment::delete'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'blockemail::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'blockemail::block email'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'blockemail::unblock email'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'process::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'process::download'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'dashboard::read'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'mail::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'mail::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'mail::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'mail::delete'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'mail::send'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'mail::clone'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'template::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'template::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'template::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'template::delete'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'statistic::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'statistic::download'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'statistic::share'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'form::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'form::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'form::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'form::delete'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'socialmedia::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'socialmedia::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'socialmedia::delete'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'tools::read'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'footer::view'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'apikey::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'apikey::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'apikey::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'apikey::delete'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'api::account'),
+			
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'campaign::create'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'campaign::read'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'campaign::update'),
+			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'campaign::delete'),
+			
 		);
 		
 	}
