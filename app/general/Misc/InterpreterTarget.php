@@ -229,6 +229,8 @@ class InterpreterTarget
 						$object->idMail = $data->serialization->items;
 						$object->negative = ($data->serialization->negation == 'true' ? true : false);
 						
+						$this->logger->log("Obj: " . print_r($object, true));
+						
 						$filterSent = new \EmailMarketing\General\Filter\FilterSent();
 						$filterSent->setObject($object);
 						$this->fromFilters[] = $filterSent->getFrom();
