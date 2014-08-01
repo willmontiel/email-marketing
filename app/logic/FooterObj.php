@@ -223,10 +223,7 @@ class FooterObj
 			$html.= $footer->html;
 		}
 		
-		$search = array("\xe2\x80\x8b", "\xe2\x80\x9c", "\xe2\x80\x9d");
-		$replace = array('', '"', '"');
-		$response= str_replace($search, $replace, $html);
-		return $response;
+		return $html;
 	}
 	
 	public function cloneContent(Footer $footer)
