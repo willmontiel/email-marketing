@@ -251,9 +251,12 @@ class InterpreterTarget
 		}
 		
 		$this->fromFilters = implode(" ", $this->fromFilters);
-		$glue = ($object->required ? ' AND ' : ' OR ');
-		$this->whereFilters = implode($glue, $this->whereFilters);
 		
+		if (count($this->whereFilters) > 0) {
+			$glue = ($object->required ? ' AND ' : ' OR ');
+			$conditions = implode($glue, $this->whereFilters);
+			$this->whereFilters = "AND ({$conditions})";
+		}
 		
 		$this->logger->log("From: {$this->fromFilters}");
 		$this->logger->log("Where: {$this->whereFilters}");
