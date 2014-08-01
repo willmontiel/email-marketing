@@ -224,27 +224,28 @@ class InterpreterTarget
 					case 'mail-sent':
 						$object->idMail = $data->serialization->items;
 						$object->negative = ($data->serialization->negation == 'true' ? true : false);
-						
-						$filterSent = new \EmailMarketing\General\Filter\FilterSent();
-						$filterSent->setObject($object);
-						$filterSent->createSQL();
-						
-						$from[] = $filterSent->getFrom();
-						$w = $filterSent->getWhere();
-						
-						if (!empty($w)) {
-							$where[] = $w;
-						}
-						
+						$filter = new \EmailMarketing\General\Filter\FilterSent();
 						break;
 
 					case 'mail-open':
-						
+						$object->idMail = $data->serialization->items;
+						$object->negative = ($data->serialization->negation == 'true' ? true : false);
+						$filter = new \EmailMarketing\General\Filter\FilterOpening();
 						break;
 
 					case 'click':
 						
 						break;
+				}
+				
+				$filter->setObject($object);
+				$filter->createSQL();
+
+				$from[] = $filter->getFrom();
+				$w = $filter->getWhere();
+
+				if (!empty($w)) {
+					$where[] = $w;
 				}
 			}
 		}
