@@ -135,6 +135,7 @@ class CampaignController extends ControllerBase
 			$autoresponder->from = json_decode($autoresponder->from);
 			$autoresponder->target = json_decode($autoresponder->target);
 			$autoresponder->content = json_decode($autoresponder->content);
+			$autoresponder->subject = json_decode($autoresponder->subject);
 			
 			$this->view->setVar("autoresponse", $autoresponder);
 		 }

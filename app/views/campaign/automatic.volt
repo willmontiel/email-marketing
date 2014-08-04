@@ -34,6 +34,11 @@
 					$("#{{autoresponse.target.destination}}").find('select').attr('name', 'target_selected[]');
 				{%endif%}
 					
+				{%if autoresponse.subject.text == 'Meta Tag'%}
+					$('#meta-tag').prop('checked', true);
+					$("input[name='subject']").prop('disabled', true);
+				{%endif%}
+					
 			{%endif%}
 		});
 		
@@ -168,7 +173,7 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">Asunto:</label>
 					<div class="col-md-5">
-						<input class="form-control" type="text" name="subject" required="required" {%if autoresponse is defined%} value="{{autoresponse.subject}}" {%endif%}>
+						<input class="form-control" type="text" name="subject" required="required" {%if autoresponse is defined and autoresponse.subject.text != 'Meta Tag'%} value="{{autoresponse.subject.text}}" {%endif%}>
 					</div>
 					<div class="col-md-2">
 						<input type="checkbox" id="meta-tag" name="meta-tag">

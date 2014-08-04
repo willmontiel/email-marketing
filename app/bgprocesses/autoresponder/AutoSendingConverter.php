@@ -149,7 +149,7 @@ class AutoSendingConverter
 		switch (strtolower($option->text)) {
 			case 'meta tag':
 				$tags = get_meta_tags($url->url);
-				$subject = $tags[$option->tag];
+				$subject = ( isset($tags[$option->tag]) ) ? $tags[$option->tag] : '';
 				break;
 		}
 		return $subject;
