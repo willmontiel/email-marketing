@@ -237,6 +237,7 @@ class InterpreterTarget
 
 					case 'click':
 						$object->type = "click";
+						$object->idMail = $data->serialization->idMail;
 						$filter = new \EmailMarketing\General\Filter\FilterClicks();
 						break;
 				}
