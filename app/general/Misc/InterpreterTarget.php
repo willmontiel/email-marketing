@@ -265,9 +265,9 @@ class InterpreterTarget
 			$conditions = implode($glue, $where);
 			$this->conditionsForFilters = "AND ({$conditions})";
 		}
-		
-		$this->logger->log("From: {$this->joinsForFilters}");
-		$this->logger->log("Where: {$this->conditionsForFilters}");
+//		
+//		$this->logger->log("From: {$this->joinsForFilters}");
+//		$this->logger->log("Where: {$this->conditionsForFilters}");
 	}
 
 	private function createSQLBaseForTotalContacts()
