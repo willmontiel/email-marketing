@@ -21,6 +21,7 @@ class FilterClicksTest extends \PHPUnit_Framework_TestCase {
 		
 		$this->data = new \stdClass();
 		$this->data->id = 1;
+		$this->data->idMail = 4;
 		$this->data->type = "click";
 		
 	}
@@ -45,7 +46,7 @@ class FilterClicksTest extends \PHPUnit_Framework_TestCase {
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
-		$expectedF = " JOIN mxcxl AS ml1 ON (ml1.idContact = c.idContact AND ml1.idMailLink = 1) ";
+		$expectedF = " JOIN mxcxl AS ml1 ON (ml1.idContact = c.idContact AND ml1.idMailLink = 1 AND ml1.idMail = 4) ";
 		
 		$where = $this->object->getWhere();
 		$expectedW = "";
@@ -66,7 +67,7 @@ class FilterClicksTest extends \PHPUnit_Framework_TestCase {
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
-		$expectedF = " JOIN mxcxl AS ml1 ON (ml1.idContact = c.idContact AND ml1.idMailLink = 1) ";
+		$expectedF = " JOIN mxcxl AS ml1 ON (ml1.idContact = c.idContact AND ml1.idMailLink = 1 AND ml1.idMail = 4) ";
 		
 		$where = $this->object->getWhere();
 		$expectedW = "";
@@ -87,7 +88,7 @@ class FilterClicksTest extends \PHPUnit_Framework_TestCase {
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
-		$expectedF = " JOIN mxcxl AS ml1 ON (ml1.idContact = c.idContact AND ml1.idMailLink = 1) ";
+		$expectedF = " JOIN mxcxl AS ml1 ON (ml1.idContact = c.idContact AND ml1.idMailLink = 1 AND ml1.idMail = 4) ";
 		
 		$where = $this->object->getWhere();
 		$expectedW = "";
@@ -108,7 +109,7 @@ class FilterClicksTest extends \PHPUnit_Framework_TestCase {
 		$this->object->createSQL();
 		
 		$from = $this->object->getFrom();
-		$expectedF = " LEFT JOIN mxcxl AS ml1 ON (ml1.idContact = c.idContact AND ml1.idMailLink = 1) ";
+		$expectedF = " LEFT JOIN mxcxl AS ml1 ON (ml1.idContact = c.idContact AND ml1.idMailLink = 1 AND ml1.idMail = 4) ";
 		
 		$where = $this->object->getWhere();
 		$expectedW = " ml1.idContact IS NOT NULL ";
@@ -116,4 +117,47 @@ class FilterClicksTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($expectedF, $from, 'FROM_SQL Que hayan hecho click en el enlace 1 (Con más filtros) condición OR');
 		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que hayan hecho click en el enlace 1 (Con más filtros) condición OR');
 	}
-}
+	
+	/**
+	 * Que NO hayan hecho click en el enlace 1, mail 4 (Sin más filtros) condición AND
+	 */
+	public function testClickOneFilterConditionAllNegative() {
+		$this->data->required = true;
+		$this->data->more = false;
+		$this->data->negative = true;
+		
+		$this->object->setObject($this->data);
+		$this->object->createSQL();
+		
+		$from = $this->object->getFrom();
+		$expectedF = " JOIN mxc AS mc4 ON (mc4.idContact = c.idContact AND mc4.idMail = 4) LEFT JOIN mxcxl AS ml1 ON (ml1.idContact = mc4.idContact AND ml1.idMailLink = 1 AND ml1.idMail = 4) ";
+		
+		$where = $this->object->getWhere();
+		$expectedW = " ml1.idContact IS NULL ";
+		
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que NO hayan hecho click en el enlace 1, mail 4 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que NO hayan hecho click en el enlace 1, mail 4 (Sin más filtros) condición AND');
+	}
+	
+	/**
+	 * Que NO hayan hecho click en el enlace 1, mail 4 (Con más filtros) condición AND
+	 */
+	public function testClickMuchFilterConditionAllNegative() {
+		$this->data->required = true;
+		$this->data->more = true;
+		$this->data->negative = true;
+		
+		$this->object->setObject($this->data);
+		$this->object->createSQL();
+		
+		$from = $this->object->getFrom();
+		$expectedF = " JOIN mxc AS mc4 ON (mc4.idContact = c.idContact AND mc4.idMail = 4) LEFT JOIN mxcxl AS ml1 ON (ml1.idContact = mc4.idContact AND ml1.idMailLink = 1 AND ml1.idMail = 4) ";
+		
+		$where = $this->object->getWhere();
+		$expectedW = " ml1.idContact IS NULL ";
+		
+		$this->assertEquals($expectedF, $from, 'FROM_SQL Que NO hayan hecho click en el enlace 1, mail 4 (Sin más filtros) condición AND');
+		$this->assertEquals($expectedW, $where, 'WHERE_SQL Que NO hayan hecho click en el enlace 1, mail 4 (Sin más filtros) condición AND');
+	}
+}	
+

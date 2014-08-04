@@ -17,6 +17,8 @@ abstract class FilterAbstract
 	protected $required = "";
 	protected $alias = "";
 	protected $condition = "";
+	protected $mxcJoin = "";
+	protected $contactAlias = "";
 
 	public function setObject($obj)
 	{
@@ -51,7 +53,7 @@ abstract class FilterAbstract
 				break;
 			
 			case 'click':
-				$this->from = "{$this->required} JOIN mxcxl AS {$this->alias} ON ({$this->alias}.idContact = c.idContact AND {$this->alias}.idMailLink = {$this->object->id}) ";
+				$this->from = "{$this->mxcJoin}{$this->required} JOIN mxcxl AS {$this->alias} ON ({$this->alias}.idContact = {$this->contactAlias}.idContact AND {$this->alias}.idMailLink = {$this->object->id} AND {$this->alias}.idMail = {$this->object->idMail}) ";
 				break;
 		}
 	}
