@@ -339,7 +339,7 @@ class TrackingObject
 				
 				$this->flushChanges();
 				
-				return $this->insertGoogleAnalyticsUrl($ml->link);
+				return $this->insertGoogleAnalyticsUrl($this->replaceLinkCustomFields($ml->link));
 			}
 			else {
 				$this->log->log('Ya se contabilizó');
@@ -415,7 +415,7 @@ class TrackingObject
 			throw new Exception('Ml object not found!');
 		}
 		
-		return $this->insertGoogleAnalyticsUrl($ml->link);
+		return $this->insertGoogleAnalyticsUrl($this->replaceLinkCustomFields($ml->link));
 	}
 	
 	
@@ -785,6 +785,15 @@ class TrackingObject
 			$this->log->log('Redirigiendo a: ' . $link);
 			return $link;
 		}
+	}
+	
+	public function replaceLinkCustomFields($link)
+	{
+		$find = array('%%EMAIL%%', '%%NOMBRE%%', '%%APELLIDO%%');
+		
+		$replace = array($this->mxc->contact->email->email, $this->mxc->contact->name, $this->mxc->contact->lastName);
+		
+		return str_replace($find, $replace, $link);
 	}
 	
 	protected function startTransaction()

@@ -101,7 +101,15 @@ class AutoSendingConverter
 		$obj->sender = $from->email . '/' . $from->name;
 		
 		$obj->replyTo = $this->autoresponder->reply;
-		$obj->subject = $this->autoresponder->subject;
+		
+		$subject = json_decode($this->autoresponder->subject);
+		
+		if($subject->mode == 'dynamic') {
+			$obj->subject = $this->getSubject($subject);
+		}
+		else {
+			$obj->subject = $subject->text;
+		}
 		
 		$obj->dbases = '';
 		$obj->contactlists = '';
@@ -132,6 +140,19 @@ class AutoSendingConverter
 			$this->db->rollback();
 			throw new Exception('Error while saving MxA');
 		}
+	}
+	
+	protected function getSubject($option)
+	{
+		$url = json_decode($this->autoresponder->content);
+		$subject = '';
+		switch (strtolower($option->text)) {
+			case 'meta tag':
+				$tags = get_meta_tags($url->url);
+				$subject = $tags[$option->tag];
+				break;
+		}
+		return $subject;
 	}
 }
 
