@@ -305,7 +305,7 @@ ListPanelContent.prototype.initializeSelect2 = function(data) {
 };
 
 ListPanelContent.prototype.checkArrayData = function(array) {
-	if (array[0].children == undefined) {
+	if (array[0] != undefined && array[0].children == undefined) {
 		this.selectType = 'Unique';
 	}
 };
