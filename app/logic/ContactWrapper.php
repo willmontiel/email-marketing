@@ -778,9 +778,9 @@ class ContactWrapper extends BaseWrapper
 		$object = array();
 		$object['id'] = $contact->idContact;
 		$object['email'] = $email->email;
-		$object['name'] =  $contact->name;
+		$object['name'] =  utf8_encode($contact->name);
 		$object['birthDate'] = (!empty($contact->birthDate) ? $this->dateFormat->transformDateFormat($contact->birthDate, 'Y-m-d', 'd/m/Y') : '');
-		$object['lastName'] = $contact->lastName;
+		$object['lastName'] = utf8_encode($contact->lastName);
 		$object['isActive'] = ($contact->status != 0);
 		$object['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
 		$object['isSubscribed'] = ($contact->unsubscribed == 0);
@@ -818,7 +818,7 @@ class ContactWrapper extends BaseWrapper
 						$value = $fvalue['numberValue'];
 						break;
 					default:
-						$value = $fvalue['textValue'];
+						$value = utf8_encode($fvalue['textValue']);
 				}
 			}
 			$object[$field['name']] = $value;
