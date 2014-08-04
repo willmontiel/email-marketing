@@ -187,13 +187,13 @@ FilterPanelContent.prototype.createContent = function() {
 						  <div class="sgm-filter-content">\n\
 							  <div class="sgm-filter-content-header">\n\
 								  <div class="smg-filter smg-add-sent-filter filter-icon">\n\
-									  <span class="glyphicon glyphicon-envelope"></span>\n\
+									  <div class="sgm-mail-sent-icon"></div>\n\
 								  </div>\n\
 								  <div class="smg-filter smg-add-open-filter filter-icon">\n\
-									  <span class="glyphicon glyphicon-eye-open"></span>\n\
+									  <div class="sgm-mail-open-icon"></div>\n\
 								  </div>\n\
 								  <div class="smg-filter smg-add-click-filter filter-icon">\n\
-									  <span class="glyphicon glyphicon-hand-up"></span>\n\
+									  <div class="sgm-mail-click-icon"></div>\n\
 								  </div>\n\
 							  </div>\n\
 						  </div>\n\

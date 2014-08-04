@@ -199,11 +199,7 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 	
 	self.initializeSelect2(self.sd);
 	
-	var buttons = $('<div class="sgm-all-conditions ' + (this.conditions === 'all' ? 'sgm-condition-active': '') + '" data-conditions="all">All\n\
-					 </div>\n\
-					 <div class="sgm-any-conditions ' + (this.conditions === 'any' ? 'sgm-condition-active': '') + '" data-conditions="any">Any\n\
-					 </div>\
-					 <div class="sgm-add-panel">\n\
+	var buttons = $('<div class="sgm-add-panel">\n\
 						 <span class="glyphicon glyphicon-filter"></span>\n\
 					 </div>');
 	
@@ -211,27 +207,38 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 	
 	this.content.find('.sgm-add-panel').on('click', function (e) {
 		e.preventDefault();
+		
+		if (self.content.find('.sgm-all-conditions').length == 0) {
+			var all = $('<div class="sgm-all-conditions ' + (self.conditions === 'all' ? 'sgm-condition-active': '') + '" data-conditions="all">All</div>');
+			self.content.find('.sgm-box-footer-content').append(all);
+		}
+		
+		if (self.content.find('.sgm-any-conditions').length == 0) {
+			var any = $('<div class="sgm-any-conditions ' + (self.conditions === 'any' ? 'sgm-condition-active': '') + '" data-conditions="any">Any</div>');
+			self.content.find('.sgm-box-footer-content').append(any);
+		}
+		
+		self.content.find('.sgm-all-conditions').on('click', function (e) {
+			e.preventDefault();
+			$('.sgm-any-conditions').removeClass('sgm-condition-active');
+			$(this).addClass('sgm-condition-active');
+			self.conditions = 'all';
+			self.updateObject();
+	//		self.model.updatePanelList();
+			self.model.refreshTotalContacts();
+		});
+	
+		self.content.find('.sgm-any-conditions').on('click', function (e) {
+			e.preventDefault();
+			$('.sgm-all-conditions').removeClass('sgm-condition-active');
+			$(this).addClass('sgm-condition-active');
+			self.conditions = 'any';
+			self.updateObject();
+	//		self.model.updatePanelList();
+			self.model.refreshTotalContacts();
+		});
+		
 		self.createNextPanel();
-	});
-	
-	this.content.find('.sgm-all-conditions').on('click', function (e) {
-		e.preventDefault();
-		$('.sgm-any-conditions').removeClass('sgm-condition-active');
-		$(this).addClass('sgm-condition-active');
-		self.conditions = 'all';
-		self.updateObject();
-//		self.model.updatePanelList();
-		self.model.refreshTotalContacts();
-	});
-	
-	this.content.find('.sgm-any-conditions').on('click', function (e) {
-		e.preventDefault();
-		$('.sgm-all-conditions').removeClass('sgm-condition-active');
-		$(this).addClass('sgm-condition-active');
-		self.conditions = 'any';
-		self.updateObject();
-//		self.model.updatePanelList();
-		self.model.refreshTotalContacts();
 	});
 };
 
