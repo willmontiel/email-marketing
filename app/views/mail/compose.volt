@@ -129,11 +129,15 @@
 			];
 		{% endif %}
 		
-		$(function () {
-		$(".select2").select2({
-			
-		});
-	});
+		{% if linksForTrack is defined%}
+			{% if linksForTrack|length !== 0 %}
+				App.googleAnalyticsLinks = [
+					{% for link in linksForTrack%}
+						Ember.Object.create({name: "{{link|escape_js}}"}),
+					{% endfor %}
+				];
+			{% endif %}
+		{% endif %}
 	</script>
 	
 	{# funcionalidad seleccionar destinatarios #}

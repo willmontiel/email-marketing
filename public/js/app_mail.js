@@ -650,6 +650,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			if (App.googleAnalyticsLinks !== undefined) {
 				this.set('linksAnalytics', []);
 				this.set('campaignName', '');
+				$('.select2').select2('val', '');
 			}
 		},
 				

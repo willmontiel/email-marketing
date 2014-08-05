@@ -2438,7 +2438,7 @@ class MailController extends ControllerBase
 				
 				$urlObj = new TrackingUrlObject();
 				$linksForTrack = $urlObj->searchDomainsAndProtocols($html, $mailcontent->plainText);
-//				$this->logger->log(print_r($linksForTrack, true));
+				$this->logger->log(print_r($linksForTrack, true));
 
 				$campaignNameExample = substr($mail->name, 0, 24);
 				
