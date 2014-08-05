@@ -40,14 +40,14 @@
 						<div class="tab-pane fade in active" id="facebook">
 							{% if fbsocials %}
 								<div class="wrapper">
-									{{ '{{view Ember.Select
+									{{ '{{view App.Select2
 											multiple="true"
 											contentBinding="App.fbaccounts"
 											optionValuePath="content.id"
 											optionLabelPath="content.name"
 											selectionBinding="fbaccountsel"
 											id="accounts_facebook"
-											class="form-control"}}'
+											class="form-control select2"}}'
 									 }}
 									</div>
 									<div class="fbdescription wrap wrapper">
@@ -89,14 +89,14 @@
 											<div class="tab-pane fade" id="twitter">
 								{% if twsocials %}
 													<div class="wrapper">
-										{{ '{{view Ember.Select
+										{{ '{{view App.Select2
 												multiple="true"
 												contentBinding="App.twaccounts"
 												optionValuePath="content.id"
 												optionLabelPath="content.name"
 												selectionBinding="twaccountsel"
 												id="accounts_twitter"
-												class="form-control"}}'
+												class="form-control select2"}}'
 										 }}
 														</div>
 														<div class="twdescription wrap wrapper">
