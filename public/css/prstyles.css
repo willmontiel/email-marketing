@@ -799,9 +799,10 @@ span.required {
 	z-index: 150;
 	position: absolute;
 }
-/*#fb-share-image {
-	position: absolute;
-}*/
+
+#fb-share-image {
+	margin: auto;
+}
 .container-fb-first {
 	width: 154px;
 	height: 154px;
@@ -812,9 +813,12 @@ span.required {
 	float: left;
 }
 .edit-fb-image-tool {
-	position: relative;
-	left: 2px;
-	top: 4px;
+	position: absolute;
+	/* left: 2px; */
+	/* top: 4px; */
+	right: 5%;
+	top: 80%;
+	/* bottom: 0px; */
 	padding: 2px;
 	border-radius: 4px;
 	cursor: pointer;
@@ -902,4 +906,5 @@ span.required {
 
 .img-post-face {
 	position: relative;
+	background-color: white;
 }
