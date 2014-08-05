@@ -176,8 +176,6 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 
 			mtitle.empty();
 			ctitle.empty();
-			
-			mtitle.append('<div class="sgm-title-box"></div>');
 			ctitle.append('<div class="sgm-title-box">Enviar a contactos que hayan hecho click en el siguiente enlace</div>');
 			
 			e.preventDefault();
