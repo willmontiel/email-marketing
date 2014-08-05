@@ -51,7 +51,7 @@ class MailField
 			throw new InvalidArgumentException('Error returned by Preg_match_all, invalid values');
 		}
 		
-//		$this->log->log("Fields: " . print_r($arrayFields, true));
+		$this->log->log("Fields: " . print_r($arrayFields, true));
 		list($cf, $fields) = $arrayFields;
 		$f = array_unique($cf);
 		$this->fields = array();
@@ -59,11 +59,12 @@ class MailField
 			if ($x == '%%EMAIL%%' || $x == '%%NOMBRE%%' || $x == '%%APELLIDO%%') {
 			}
 			else {
+				$this->log->log("Field name: " . $x);
 				$this->fields[] = $x;
 			}
 		}
 		$customfieldsFound = array_unique($fields);
-//		$this->log->log("Fields2: " . print_r($customfieldsFound, true));
+		$this->log->log("Fields2: " . print_r($customfieldsFound, true));
 	
 		$ids = array();
 		if ($result) {
@@ -75,7 +76,7 @@ class MailField
 				}
 			}
 		}
-//		$this->log->log("Fields4: " . print_r($ids, true));
+		$this->log->log("Fields4: " . print_r($ids, true));
 		if (count($ids) <= 0) {
 			return 'No Custom';
 		}
@@ -93,7 +94,7 @@ class MailField
 		$f = array('%%EMAIL%%', '%%NOMBRE%%', '%%APELLIDO%%');
 		$find = array_merge($f, $this->fields);
 		
-//		$this->log->log("Custom: " . print_r($find, true));
+		$this->log->log("Custom: " . print_r($find, true));
 		
 		$replace = array($contact['email']['email'], $contact['contact']['name'], $contact['contact']['lastName']);
 		
@@ -105,8 +106,8 @@ class MailField
 				$replace[] = $value;
 			}
 		}
-//		$this->log->log("Replace: " . print_r($replace, true));
-//		$this->log->log("Html antes del susodicho: " . $this->html);
+		$this->log->log("Replace: " . print_r($replace, true));
+		$this->log->log("Html antes del susodicho: " . $this->html);
 		$newHtml = str_replace($find, $replace, $this->html);
 		$newText = str_replace($find, $replace, $this->text);
 		$newSubject = str_replace($find, $replace, $this->subject);
