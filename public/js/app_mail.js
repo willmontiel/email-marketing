@@ -590,6 +590,9 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 				
 		expandSchedule: function () {
+			var sch = this.get('scheduleRadio');
+			this.set('schTmp', sch);
+			
 			this.set('isScheduleExpanded', true);
 			this.set('isHeaderExpanded', false);
 			this.set('isTargetExpanded', false);
@@ -646,7 +649,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isGoogleAnalitycsExpanded', false);
 		},
 				
-		cleanGoogleAnalytics: function () {
+		cleanGoogleAnalytics: function () {	
 			if (App.googleAnalyticsLinks !== undefined) {
 				this.set('linksAnalytics', []);
 				this.set('campaignName', '');
@@ -666,6 +669,16 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			if (App.twaccounts !== undefined) {
 				this.set('twaccountsel', []);
 				this.set('twpublicationcontent', '');
+			}
+		},
+		
+		discardSchedule: function () {
+			if (this.get('this.id') !== null) {
+				this.get('model').rollback();
+				
+				var sche = this.get('schTmp');
+				this.set('scheduleRadio', sche);
+				this.set('isScheduleExpanded', false);
 			}
 		}
 	}
