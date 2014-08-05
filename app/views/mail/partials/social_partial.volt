@@ -47,7 +47,7 @@
 											optionLabelPath="content.name"
 											selectionBinding="fbaccountsel"
 											id="accounts_facebook"
-											class="form-control select2"}}'
+											class="select2view select2"}}'
 									 }}
 									</div>
 									<div class="fbdescription wrap wrapper">
@@ -96,7 +96,7 @@
 												optionLabelPath="content.name"
 												selectionBinding="twaccountsel"
 												id="accounts_twitter"
-												class="form-control select2"}}'
+												class="select2view select2"}}'
 										 }}
 														</div>
 														<div class="twdescription wrap wrapper">
