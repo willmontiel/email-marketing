@@ -52,7 +52,6 @@
 											<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil"></div>
 											{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
 											<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="170" height="150" />
-											<div class="space"></div>
 										</div>
 									</div>
 									<div class="col-sm-8">
