@@ -899,3 +899,7 @@ span.required {
 	border: 1px solid #f7f7f7;
 	box-shadow: 2px 2px 5px 0px #f7f7f7;
 }
+
+.img-post-face {
+	position: relative;
+}
