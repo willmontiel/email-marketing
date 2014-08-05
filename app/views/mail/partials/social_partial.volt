@@ -13,14 +13,14 @@
 					{{'{{#if fbaccountsel }}'}}
 					<dt>Cuenta de Facebook activa:</dt>
 					<dd>
-						<img src="{{url('images')}}/share_facebook_image_24.png">
+						<img src="{{url('images')}}/facebook_icon_active.png">
 					</dd>
 					{{'{{/if}}'}}
 
 					{{'{{#if twaccountsel }}'}}
 					<dt>Cuenta de Twitter activa:</dt>
 					<dd>
-						<img src="{{url('images')}}/share_twitter_image_24.png">
+						<img src="{{url('images')}}/twitter_icon_active.png">
 					</dd>
 					{{'{{/if}}'}}
 				</dl>
@@ -33,8 +33,8 @@
 			<div class="form-group">
 				<div class="col-sm-10 col-md-offset-2">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#facebook" data-toggle="tab"><img src="{{url('b3/images/icon-face-color.png')}}" class="center-block" alt="" /></a></li>
-						<li><a href="#twitter" data-toggle="tab"><img src="{{url('b3/images/icon-tweet-color.png')}}" class="center-block" alt="" /></a></li>
+						<li class="active"><a href="#facebook" data-toggle="tab"><img src="{{url('b3/images/facebook_icon_active.png')}}" class="center-block" alt="" /></a></li>
+						<li><a href="#twitter" data-toggle="tab"><img src="{{url('b3/images/twitter_icon_active.png')}}" class="center-block" alt="" /></a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade in active" id="facebook">
@@ -88,24 +88,30 @@
 											</div>
 											<div class="tab-pane fade" id="twitter">
 								{% if twsocials %}
-													<div class="wrapper">
-										{{ '{{view Ember.Select
-												multiple="true"
-												contentBinding="App.twaccounts"
-												optionValuePath="content.id"
-												optionLabelPath="content.name"
-												selectionBinding="twaccountsel"
-												id="accounts_twitter"
-												class="form-control"}}'
-										 }}
-														</div>
-														<div class="twdescription wrap wrapper">
-															<label>Mensaje del Tweet: </label>
-										{{'{{view Ember.TextArea valueBinding="twpublicationcontent" id="twpublicationcontent" class="form-control" placeholder="Tweet..."}}'}}
-															<div class="number-of-tweet-characters">
-																<span id="tweet-char-number" class="label label-blue">1</span>
-															</div>
-														</div>
+												<div class="twdescription wrapper">
+													{{ '{{view Ember.Select
+															multiple="true"
+															contentBinding="App.twaccounts"
+															optionValuePath="content.id"
+															optionLabelPath="content.name"
+															selectionBinding="twaccountsel"
+															id="accounts_twitter"
+															class="form-control"}}'
+													 }}
+														
+													<div class="space"></div>
+													
+													<label>Mensaje del Tweet: </label>
+													{{'{{view Ember.TextArea 
+															valueBinding="twpublicationcontent" 
+															id="twpublicationcontent" 
+															class="form-control" 
+															placeholder="Tweet..."}}'
+													}}
+													<div class="number-of-tweet-characters">
+														<span id="tweet-char-number" class="label label-blue">1</span>
+													</div>
+												</div>
 								{% else %}
 														<div class="wrapper bg bg-warning">
 															No tiene una cuenta de twitter configurada, para configurarla haga <span style="text-decoration: underline;" {{'{{action gotosocial this "twloginurl"}}'}}>click aqui</span>
