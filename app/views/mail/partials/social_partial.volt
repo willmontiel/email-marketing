@@ -42,6 +42,20 @@
 							<div class="fbdescription wrapper">
 								<div class="form-group">
 									<div class="col-sm-12">
+										{{ '{{view Ember.Select
+											multiple="true"
+											contentBinding="App.fbaccounts"
+											optionValuePath="content.id"
+											optionLabelPath="content.name"
+											selectionBinding="fbaccountsel"
+											id="accounts_facebook"
+											class="form-control"}}'
+									    }}
+									</div>
+								</div>
+									
+								<div class="form-group">
+									<div class="col-sm-12">
 										{{'{{view Ember.TextArea valueBinding="fbmessagecontent" id="fbmessagecontent" class="form-control" placeholder="Comentario..."}}'}}
 									</div>
 								</div>
