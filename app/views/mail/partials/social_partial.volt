@@ -38,48 +38,40 @@
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade in active" id="facebook">
-							{% if fbsocials %}
-								<div class="wrapper">
-									{{ '{{view Ember.Select
-											multiple="true"
-											contentBinding="App.fbaccounts"
-											optionValuePath="content.id"
-											optionLabelPath="content.name"
-											selectionBinding="fbaccountsel"
-											id="accounts_facebook"
-											class="form-control"}}'
-									 }}
+						{% if fbsocials %}
+							<div class="fbdescription wrapper">
+								<div class="form-group">
+									<div class="col-md-11">
+										{{'{{view Ember.TextArea valueBinding="fbmessagecontent" id="fbmessagecontent" class="form-control" placeholder="Comentario..."}}'}}
 									</div>
-									<div class="fbdescription wrap wrapper">
+								</div>
+								<div class="img-prev">
+									<div class="container-fb-first col-md-3">
+										<div class="edit-fb-image-container">
+											<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil"></div>
+										</div>
+											
+										{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
+										
+										<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154" />
+									</div>
+										
+									<div class="col-md-9">
 										<div class="form-group">
-											<div class="col-md-11">
-												{{'{{view Ember.TextArea valueBinding="fbmessagecontent" id="fbmessagecontent" class="form-control" placeholder="Comentario..."}}'}}
-												</div>
+											<div class="col-md-12">
+												{{'{{view Ember.TextArea valueBinding="fbtitlecontent" id="fbtitlecontent" class="form-control" placeholder="Título de la publicación..."}}'}}
 											</div>
-
-											<div class="img-prev">
-												<div class="container-fb-first col-md-3">
-													<div class="edit-fb-image-container">
-														<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil"></div>
-													</div>
-												{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
-													<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154" />
-												</div>
-												<div class="col-md-9">
-													<div class="form-group">
-														<div class="col-md-12">
-														{{'{{view Ember.TextArea valueBinding="fbtitlecontent" id="fbtitlecontent" class="form-control" placeholder="Título de la publicación..."}}'}}
-															</div>
-														</div>
-														<div class="form-group">
-															<div class="col-md-12">
-														{{'{{view Ember.TextArea valueBinding="fbdescriptioncontent" id="fbdescriptioncontent" class="form-control" placeholder="Descripción de la publicación..."}}'}}
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="clearfix"></div>
-												</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12">
+												{{'{{view Ember.TextArea valueBinding="fbdescriptioncontent" id="fbdescriptioncontent" class="form-control" placeholder="Descripción de la publicación..."}}'}}
+											</div>
+										</div>
+									</div>
+								</div>
+									
+								<div class="clearfix"></div>
+							</div>
 								{% else %}
 												<div class="wrapper bg bg-warning">
 													No tiene una cuenta de facebook configurada, para configurarla haga <span style="text-decoration: underline;" {{'{{action gotosocial this "fbloginurl"}}'}}>click aqui</span>
