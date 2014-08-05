@@ -51,7 +51,8 @@
 										<div class="img-post-face">
 											<div data-toggle="modal" data-target="#images" class="edit-fb-image-tool glyphicon glyphicon-pencil"></div>
 											{{'{{view Ember.TextField valueBinding="fbimagepublication" id="fbimagepublication" class="form-control social-input-hide"}}'}}
-											<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="154" height="154" />
+											<img id="fb-share-image" src="{{'{{unbound imageUrl}}'}}/{{'{{unbound fbimagepublication}}'}}" width="170" height="150" />
+											<br />
 										</div>
 									</div>
 									<div class="col-sm-8">
@@ -61,7 +62,7 @@
 												class="form-control" 
 												placeholder="Título de la publicación..."}}'
 										}}
-										<div class="space"></div>
+										<br />
 										{{'{{view Ember.TextArea 
 												valueBinding="fbdescriptioncontent" 
 												id="fbdescriptioncontent" 
