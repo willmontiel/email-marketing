@@ -35,7 +35,7 @@
 								<div class="col-xs-6 col-md-3">
 									<div class="thumbnail thumn-hight">
 										<a href="{{url('mail/contenteditor')}}/{{t['idMail']}}/{{t['id']}}" >
-										<img src="{{url('template/thumbnailpreview')}}/{{t['id']}}/210x235" />
+											<img src="{{url('template/thumbnailpreview')}}/{{t['id']}}/210x240" />
 										</a>
 										<div class="caption text-center">
 											<h3>{{t['name']}}</h3>
