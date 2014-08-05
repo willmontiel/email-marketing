@@ -59,7 +59,7 @@
 												class="form-control" 
 												placeholder="Título de la publicación..."}}'
 										}}
-										
+										<div class="space"></div>
 										{{'{{view Ember.TextArea 
 												valueBinding="fbdescriptioncontent" 
 												id="fbdescriptioncontent" 
