@@ -801,7 +801,8 @@ span.required {
 }
 
 #fb-share-image {
-	margin: auto;
+	margin-left: 12%;
+	
 }
 .container-fb-first {
 	width: 154px;
