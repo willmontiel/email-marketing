@@ -71,8 +71,8 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	});
 	
 	this.content.find('.smg-add-click-filter').on('click', function (e) {
+		self.ctitle = '';
 		self.mtitle = '';
-		self.ctitle = 'Enviar a contactos que hayan hecho click en el siguiente enlace';
 		var container = self.setValues('click', this);
 		var filter = new FilterClickContent();
 		self.createClickFilter(filter, container);
@@ -171,6 +171,15 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 		}
 		
 		select.on("change", function(e) { 
+			var mtitle = self.content.find('.sgm-mail-title');
+			var ctitle = self.content.find('.sgm-click-title');
+
+			mtitle.empty();
+			ctitle.empty();
+			
+			mtitle.append('<div class="sgm-title-box"></div>');
+			ctitle.append('<div class="sgm-title-box">Enviar a contactos que hayan hecho click en el siguiente enlace</div>');
+			
 			e.preventDefault();
 			self.mailSelected = e.val;
 			self.updateObject();

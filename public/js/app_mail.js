@@ -759,8 +759,7 @@ function createSelectorTarget() {
 	App.model.serializer();
 }
 
-App.Select2 = Em.View.extend({
-	templateName: 'select2',
+App.Select2 = Ember.Select.extend({
 	didInsertElement: function() {
 		$(".select2").select2({
 			

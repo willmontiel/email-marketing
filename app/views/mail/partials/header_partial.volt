@@ -43,14 +43,14 @@
 				<div class="form-group" id="not-allowed-remittents">
 					<label for="sender" class="col-sm-2 control-label">De: </label>
 					<div class="col-sm-7">
-						{{ '{{view Ember.Select
+						{{ '{{view App.Select2
 								contentBinding="App.senders"
 								optionValuePath="content.id"
 								optionLabelPath="content.value"
 								selectionBinding="senderAttr"
 								prompt="Seleccione nombre de remitente"
 								id="senderAttr"
-								class="form-control"}}'
+								class="select2view select2"}}'
 						 }}
 					</div>
 					
