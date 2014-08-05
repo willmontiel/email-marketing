@@ -12,8 +12,6 @@
 	</script>
 	{{ partial("partials/getstatistics_partial") }}
 {% endblock %}
-{% block sectiontitle %}<i class="icon-envelope icon-2x"></i>Correos{% endblock %}
-{%block sectionsubtitle %}Administre sus correos{% endblock %}
 {% block content %}
 <!-- aqui inicia mi contenido -->
 
@@ -56,12 +54,7 @@
 								<div class="preview-mail img-wrap">
 									<a href="#preview-modal" data-toggle="modal" onClick="verPreview({{item.idMail}});">
 										<div class="not-available">
-									{% if item.previewData == null%}
-											<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
-											<label>Previsualización no disponible</label>
-									{% else %}
-											<img src="data: image/png;base64, {{item.previewData}}" />
-									{% endif %}	
+											<img src="{{url('mail/thumbnail')}}/{{item.idMail}}/210x235" />
 											<div class="img-info">
 												<p style="font-size: 18px;">Previsualizar</p>
 											</div>

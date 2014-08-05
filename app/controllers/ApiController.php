@@ -1423,4 +1423,252 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('contact' => $contacts));
 		}
 	}
+	
+	public function getdbasesAction()
+	{
+		$account = $this->user->account;
+		
+		$dbases = Dbase::findByIdAccount($account->idAccount);
+		
+		$d = array();
+		foreach ($dbases as $dbase) {
+			$object = new stdClass();
+			$object->id = $dbase->idDbase;
+			$object->text = $dbase->name;
+//			$object->color = $dbase->color;
+			
+			$d[] = $object;
+		}
+		
+		return $this->setJsonResponse($d);
+	}
+	
+	public function getcontactlistsAction()
+	{
+		$account = $this->user->account;
+		$dbases = Dbase::findByIdAccount($account->idAccount);
+		
+		$lists = array();
+		foreach ($dbases as $dbase) {
+			$contactlists = Contactlist::find(array(
+				'conditions' => 'idDbase = ?1',
+				'bind' => array(1 => $dbase->idDbase)
+			));
+			
+			if (count($contactlists) > 0) {
+				$parent = new stdClass();
+//				$parent->id = $dbase->idDbase;
+				$parent->text = $dbase->name;
+				$parent->children = array();
+				
+				foreach ($contactlists as $contactlist) {
+					$children = new stdClass();
+					$children->id = $contactlist->idContactlist;
+					$children->text = $contactlist->name;
+
+					$parent->children[] = $children;
+				}
+				
+				$lists[] = $parent;
+			}
+		}
+		
+		return $this->setJsonResponse($lists);
+	}
+	
+	public function getsegmentsAction()
+	{
+		$account = $this->user->account;
+		$dbases = Dbase::findByIdAccount($account->idAccount);
+		
+		$s = array();
+		foreach ($dbases as $dbase) {
+			$segments = Segment::find(array(
+				'conditions' => 'idDbase = ?1',
+				'bind' => array(1 => $dbase->idDbase)
+			));
+			
+			if (count($segments) > 0) {
+				$parent = new stdClass();
+//				$parent->id = $dbase->idDbase;
+				$parent->text = $dbase->name;
+				$parent->children = array();
+				
+				foreach ($segments as $segment) {
+					$children = new stdClass();
+					$children->id = $segment->idSegment;
+					$children->text = $segment->name;
+
+					$parent->children[] = $children;
+				}
+				
+				$s[] = $parent;
+			}
+		}
+		
+		return $this->setJsonResponse($s);
+	}
+	
+	public function getmailfilterAction()
+	{
+		$data = $this->request->getPost("data");
+		$data = json_encode($data);
+		$data = json_decode($data);
+//		$this->logger->log("DATA: " . print_r($data, true));
+		
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+		
+		$filter = array();
+		
+		try {
+			$interpreter->setData($data);
+			$interpreter->searchMailFilter();
+			$sql = $interpreter->getSQL();
+			
+			$this->logger->log("SQL: {$sql}");
+			
+			if ($sql != false) {
+				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+				$executer->setSQL($sql);
+				$executer->executeSelectQuery();
+				$result = $executer->getResult();
+				
+				if (count($result) > 0) {
+					foreach ($result as $r) {
+						$object = new stdClass();
+						$object->id = $r['id'];
+						$object->text = $r['name'];
+						$object->subject = $r['subject'];
+						$object->date = date('d/m/Y', $r['date']);
+
+						$filter[] = $object;
+					}
+				}
+			}
+			
+			return $this->setJsonResponse($filter);
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
+			return $this->setJsonResponse('error', 500);
+		}
+	}
+	
+	public function getclicksmailfilterAction()
+	{
+		$data = $this->request->getPost("data");
+		$data = json_encode($data);
+		$data = json_decode($data);
+//		$this->logger->log("DATA: " . print_r($data, true));
+		
+		$filter = array();
+		
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+		
+		try {
+			$interpreter->setData($data);
+			$interpreter->searchMailsWithClicksFilter();
+			$sql = $interpreter->getSQL();
+			
+			$this->logger->log("SQL: {$sql}");
+			if ($sql != false) {
+				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+				$executer->setSQL($sql);
+				$executer->executeSelectQuery();
+				$result = $executer->getResult();
+				
+				if (count($result) > 0) {
+					foreach ($result as $r) {
+						$object = new stdClass();
+						$object->id = $r['id'];
+						$object->text = $r['name'];
+						$object->subject = $r['subject'];
+						$object->date = date('d/m/Y', $r['date']);
+
+						$filter[] = $object;
+					}
+				}
+			}
+			
+			return $this->setJsonResponse($filter);
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
+			return $this->setJsonResponse('error', 500);
+		}
+	}
+	
+	public function getclicksfilterAction()
+	{
+		$data = $this->request->getPost("data");
+//		$this->logger->log("DATA: " . print_r($data, true));
+		
+		$filter = array();
+		
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+		
+		try {
+			$interpreter->setData($data);
+			$interpreter->searchClicksFilter();
+			$sql = $interpreter->getSQL();
+			$this->logger->log("SQL: {$sql}");
+			if ($sql != false) {
+				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+				$executer->setSQL($sql);
+				$executer->executeSelectQuery();
+				$result = $executer->getResult();
+				
+				if (count($result) > 0) {
+					foreach ($result as $r) {
+						$object = new stdClass();
+						$object->id = $r['id'];
+						$object->text = $r['name'];
+
+						$filter[] = $object;
+					}
+				}
+			}
+			
+			return $this->setJsonResponse($filter);
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
+			return $this->setJsonResponse('error', 500);
+		}
+	}
+	
+	public function gettotalcontactsAction()
+	{
+		$data = $this->request->getPost("data");
+		$data = json_encode($data);
+		$data = json_decode($data);
+		
+		$this->logger->log("DATA: " . print_r($data, true));
+		
+		$wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
+		
+		try {
+			$total = 0;
+			
+			$wrapper->setData($data);
+			$wrapper->searchTotalContacts();
+			$sql = $wrapper->getSQL();
+			
+			if ($sql != false) {
+				$this->logger->log("SQL: {$sql}");
+				
+				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+				$executer->setSQL($sql);
+				$executer->executeSelectQuery();
+				$r = $executer->getResult();
+				$total = $r[0]['total'];
+			}
+			
+			return $this->setJsonResponse(array('totalContacts' => $total));
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
+			return $this->setJsonResponse('error', 500);
+		}
+	}
 }

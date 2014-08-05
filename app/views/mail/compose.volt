@@ -2,15 +2,21 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
-	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
+
+	{# Select2 master#}
+	{{ stylesheet_link('select2-master/select2.css') }}
+	{{ javascript_include('select2-master/select2.js')}}
 	
-	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js')}}
-	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
+	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ javascript_include('javascripts/moment/moment-with-langs.min.js')}}
+	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
-	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
-	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
+	{{ partial("partials/select2_view_partial") }}
+	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
+	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
 	<script type="text/javascript">
 		var db;
+		var urlBase = "{{url('')}}";
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
@@ -106,63 +112,6 @@
 			];
 		{% endif %}
 		
-		//Creación de select's de base de datos, listas de contactos, segmentos y filtros en eleccion de destinatarios
-		{% if db == true%}
-			App.dbs = [
-				{% for dbase in dbases %}
-					Ember.Object.create({name: "{{dbase.name|escape_js}}", id: {{dbase.idDbase}}}),
-				{% endfor %}
-			];
-			
-			App.lists = [
-				{% for contactlist in contactlists %}
-					Ember.Object.create({name: "{{contactlist.name|escape_js}}", id: {{contactlist.idContactlist}}}),
-				{% endfor %}
-			];
-			
-			App.segments = [
-				{% for segment in segments %}
-					Ember.Object.create({name: "{{segment.name|escape_js}}", id: {{segment.idSegment}}}),
-				{% endfor %}
-			];
-			
-			{% if mails %}
-				App.sendByOpen = [
-					{% for m in mails%}
-						Ember.Object.create({name: "{{m.name|escape_js}}", id: {{m.idMail}}}),
-					{% endfor %}
-				];
-			{% endif%}
-			
-			
-			{% if links %}
-				App.sendByClick = [
-					{% for link in links %}
-						Ember.Object.create({name: "{{link.link|escape_js}}", id: {{link.idMailLink}}}),
-					{% endfor%}
-				];
-			{% endif %}
-			
-			{% if mails %}
-				App.excludeContact = [
-					{% for m2 in mails%}
-						Ember.Object.create({name: "{{m2.name|escape_js}}", id: {{m2.idMail}}}),
-					{% endfor %}	
-				];
-			{% endif%}				
-		{% endif %}
-		
-		{% if linksForTrack is defined%}
-			{% if linksForTrack|length !== 0 %}
-				App.googleAnalyticsLinks = [
-					{% for link in linksForTrack%}
-						Ember.Object.create({name: "{{link|escape_js}}"}),
-					{% endfor %}
-				];
-			{% endif %}
-		{% endif %}
-			
-			
 		//Cuentas de Redes sociales
 		{% if fbsocials %}
 			App.fbaccounts = [
@@ -179,9 +128,38 @@
 				{% endfor %}
 			];
 		{% endif %}
+		
+		{% if linksForTrack is defined%}
+			{% if linksForTrack|length !== 0 %}
+				App.googleAnalyticsLinks = [
+					{% for link in linksForTrack%}
+						Ember.Object.create({name: "{{link|escape_js}}"}),
+					{% endfor %}
+				];
+			{% endif %}
+		{% endif %}
 	</script>
+	
+	{# funcionalidad seleccionar destinatarios #}
+	{{ stylesheet_link('js/target-selection/css/target-selection-function.css') }}
+	{{ javascript_include('js/target-selection/model.js')}}
+	{{ javascript_include('js/target-selection/data-source.js')}}
+	{{ javascript_include('js/target-selection/panel-container.js')}}
+	{{ javascript_include('js/target-selection/panel.js')}}
+	{{ javascript_include('js/target-selection/panel-content.js')}}
+	{{ javascript_include('js/target-selection/top-panel-content.js')}}
+	{{ javascript_include('js/target-selection/list-panel-content.js')}}
+	{{ javascript_include('js/target-selection/filter-panel-content.js')}}
+	
+	{{ javascript_include('js/target-selection/filter-content.js')}}
+	{{ javascript_include('js/target-selection/filter-click-content.js')}}
+	{{ javascript_include('js/target-selection/filter-mail-content.js')}}
+	{{ javascript_include('js/target-selection/filter-field-content.js')}}
+	{{ javascript_include('js/target-selection/select2-object.js')}}
+	
 {% endblock %}
 {% block content %}
+	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}
 	{{flashSession.output()}}
 	
 	<div class="border-mail mail-wrapper">
@@ -192,7 +170,6 @@
 						{{ partial("mail/partials/mailstatus_partial") }}
 					</div>
 				</div>
-			</div>
 	
 				<div class="row">
 					<div class="col-md-12">
@@ -245,7 +222,9 @@
 			</script>
 		</div>
 	</div>
-
+	
+	<div class="space"></div>
+	
 	<div class="modal fade gallery-modal" id="images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">

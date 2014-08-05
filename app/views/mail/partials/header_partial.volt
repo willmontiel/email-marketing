@@ -11,10 +11,10 @@
 						<dt></dt>
 						<dd>
 							{{'{{#if fbaccountsel }}'}}
-							<img src="{{url('images')}}/share_facebook_image_24.png">
+							<img src="{{url('images')}}/facebook_icon_active.png">
 							{{'{{/if}}'}}
 							{{'{{#if twaccountsel }}'}}
-							<img src="{{url('images')}}/share_twitter_image_24.png">
+							<img src="{{url('images')}}/twitter_icon_active.png">
 							{{'{{/if}}'}}
 						</dd>
 					{{'{{/if}}'}}
@@ -43,14 +43,14 @@
 				<div class="form-group" id="not-allowed-remittents">
 					<label for="sender" class="col-sm-2 control-label">De: </label>
 					<div class="col-sm-7">
-						{{ '{{view Ember.Select
+						{{ '{{view App.Select2
 								contentBinding="App.senders"
 								optionValuePath="content.id"
 								optionLabelPath="content.value"
 								selectionBinding="senderAttr"
 								prompt="Seleccione nombre de remitente"
 								id="senderAttr"
-								class="form-control"}}'
+								class="select2view select2"}}'
 						 }}
 					</div>
 					

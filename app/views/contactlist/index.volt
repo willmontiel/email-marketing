@@ -37,7 +37,6 @@
 {% block sectionContactLimit %}
 	{{ partial("partials/contactlimitinfo_partial") }}
 {%endblock%}
-{%block sectionsubtitle %}Administre sus bases de datos de contactos{% endblock %}
 {% block content %}
 {{flashSession.output()}}
 	<div id="emberApplistContainer">

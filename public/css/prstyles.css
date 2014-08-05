@@ -993,3 +993,41 @@ span.required {
 .vert-align-middle {
 	vertical-align: middle !important;
 }
+
+.select2view {
+	width: 100%;
+}
+
+.twdescription {
+	margin-top: 11px;
+	background-color: #c0deed;
+	border-radius: 5px;
+	border: 1px solid #F2F2F2;
+	box-shadow: 2px 2px 5px 0px #F5F5F5;
+}
+
+.fbdescription {
+	margin-top: 11px;
+	background-color: #dfe3ee;
+	border-radius: 5px;
+	border: 1px solid #f7f7f7;
+	box-shadow: 2px 2px 5px 0px #f7f7f7;
+}
+
+.img-post-face {
+	position: relative;
+	background-color: white;
+	border-radius: 4px;
+	border: 1px solid #f7f7f7;
+}
+
+.bg-blue {
+	color: #428bca; 
+	background-color: #d9edf7;
+}
+
+.social-network-not-available {
+	margin-top: 10px;
+	border-radius: 6px;
+	border: 1px solid #f9f0c2;
+}

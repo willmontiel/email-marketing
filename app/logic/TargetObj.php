@@ -54,7 +54,7 @@ class TargetObj
 		$contacts = $this->modelsManager->executeQuery($targetInfo['phql']);
 		$total = $contacts->getFirst()->total;
 		
-		$this->logger->log('Target: ' . $total);
+//		$this->logger->log('Target: ' . $total);
 		$this->target = new stdClass();
 		$this->target->target = json_encode($targetInfo['destinationJson']);
 		$this->target->totalContacts = $total;

@@ -1,4 +1,4 @@
-<div {{'{{bind-attr class=": isMailReadyToSend:bg-success:bg-warning"}}'}}>
+<div {{'{{bind-attr class=": isMailReadyToSend:bg-success:bg-blue"}}'}} >
 	<div class="wrapper">
 		{{ '{{#if isMailReadyToSend}}' }}
 			<div class="row">

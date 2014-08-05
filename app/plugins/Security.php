@@ -252,6 +252,15 @@ class Security extends Plugin
 			
 		//* RELEASE 0.2.0 *//
 				//Envío de correos
+				'dbase::listandsegments' => array('mail' => array('create')),
+				'dbase::listandsegments' => array('mail' => array('create')),
+				'api::getdbases' => array('mail' => array('read', 'create')),
+				'api::getcontactlists' => array('mail' => array('read', 'create')),
+				'api::getsegments' => array('mail' => array('read', 'create')),
+				'api::getmailfilter' => array('mail' => array('read', 'create')),
+				'api::getclicksfilter' => array('mail' => array('read', 'create')),
+				'api::getclicksmailfilter' => array('mail' => array('read', 'create')),
+				'api::gettotalcontacts' => array('mail' => array('read', 'create')),
 				'mail::index' => array('mail' => array('read')),
 				'mail::list' => array('mail' => array('read')),
 				'mail::setup' => array('mail' => array('read', 'create')),

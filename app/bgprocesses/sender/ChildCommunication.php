@@ -144,7 +144,32 @@ class ChildCommunication extends BaseWrapper
 			}
 			
 			if ($oldstatus == 'Scheduled') {
-				$identifyTarget->saveTarget();
+				$log->log("Identificando destinatarios");
+				$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+				$interpreter->setMail($mail);
+				$interpreter->searchContacts();
+				$mxcSQL = $interpreter->getSQL();
+				$statDbaseSQL = $interpreter->getStatDbaseSQL();
+				$statContactlistSQL = $interpreter->getStatContactlistSQL();
+				
+//				$log->log("MXC: {$mxcSQL}");
+//				$log->log("STATDB: {$statDbaseSQL}");
+//				$log->log("STATLIST: {$statContactlistSQL}");
+				
+				if ($mxcSQL != false) {
+					$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+					$executer->setSQL($mxcSQL);
+					$executer->executeQuery();
+					
+					$executer->setSQL($statDbaseSQL);
+					$executer->executeQuery();
+					
+					$executer->setSQL($statContactlistSQL);
+					$executer->executeQuery();
+				}
+				//*** this is the old way for to get the target
+//				$identifyTarget = new IdentifyTarget();
+//				$identifyTarget->identifyTarget($mail);
 			}
 			
 			if ($mail->type == 'Editor') {
