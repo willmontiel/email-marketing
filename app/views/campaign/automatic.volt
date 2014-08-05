@@ -6,11 +6,10 @@
 	{{ javascript_include('bootstrap-switch-master/bootstrap-switch.js')}}
 	{{ stylesheet_link('select2-master/select2.css')}}
 	{{ javascript_include('select2-master/select2.js')}}
+	{{ javascript_include('js/campaign/automatic.js')}}
 
 	<script> 
 		$(function (){
-			$(".switch-campaign").bootstrapSwitch();
-			
 			{%if autoresponse is defined%}
 				$('.input-autoresponse-time-hour').val('{{autoresponse.time.hour}}');
 				$('.input-autoresponse-time-minutes').val('{{autoresponse.time.minute}}');
@@ -35,25 +34,12 @@
 					$("#{{autoresponse.target.destination}}").find('select').attr('name', 'target_selected[]');
 				{%endif%}
 					
+				{%if autoresponse.subject.text == 'Meta Tag'%}
+					$('#meta-tag').prop('checked', true);
+					$("input[name='subject']").prop('disabled', true);
+				{%endif%}
+					
 			{%endif%}
-				
-			$("input[name='target']").on('click', function(){
-				$('.target_active').removeClass('target_active');
-				var target = $('#' + $(this)[0].value);
-				target.addClass('target_active');
-				$("select[name='target_selected[]']").attr('name', '');
-				target.find('select').attr('name', 'target_selected[]');
-			});
-			
-			$('#select-field').on('change', function(){
-				var values = $(this).val().split('/');
-				$('#from_email').val(values[1]);
-				$('#from_name').val(values[0]);
-			});
-			
-			$('.target-section select').select2({
-				placeholder: "Seleccione los destinatarios"
-			});
 		});
 		
 		function previewAutoSend() {
@@ -77,20 +63,6 @@
 				}
 			});
 		}
-		
-		function newSender() {
-			$('#select-from').hide();
-			$('#new-from').show();
-			$('#from_email').val('');
-			$('#from_name').val('');
-			$('#select-field').val('');
-		}
-		
-		function senderList() {
-			$('#new-from').hide();
-			$('#select-from').show();
-		}
-		
 	</script>
 {% endblock %}
 {% block content %}
@@ -201,7 +173,11 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label">Asunto:</label>
 					<div class="col-md-5">
-						<input class="form-control" type="text" name="subject" required="required" {%if autoresponse is defined%} value="{{autoresponse.subject}}" {%endif%}>
+						<input class="form-control" type="text" name="subject" required="required" {%if autoresponse is defined and autoresponse.subject.text != 'Meta Tag'%} value="{{autoresponse.subject.text}}" {%endif%}>
+					</div>
+					<div class="col-md-2">
+						<input type="checkbox" id="meta-tag" name="meta-tag">
+						<label for="meta-tag">Meta Tag</label>
 					</div>
 				</div>
 				

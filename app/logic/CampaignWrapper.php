@@ -119,7 +119,14 @@ class CampaignWrapper extends BaseWrapper
 		}
 		
 		$autoresponder->target = json_encode(array('destination' => $content['target'], 'ids' => implode(",", $content['target_selected']), 'filter' => ''));
-		$autoresponder->subject = $content['subject'];
+		
+		if( empty($content['meta-tag']) ) {
+			$autoresponder->subject = json_encode( array('mode' => 'static', 'text' => $content['subject']));
+		}
+		else {
+			$autoresponder->subject = json_encode( array('mode' => 'dynamic', 'text' => 'Meta Tag', 'tag' => 'description' ) );
+		}
+		
 		$autoresponder->from = json_encode(array('email' => $content['from_email'], 'name' => $content['from_name']));
 		$autoresponder->reply = $content['reply'];
 		$autoresponder->time = json_encode($time);

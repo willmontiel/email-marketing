@@ -24,7 +24,10 @@ class CampaignController extends ControllerBase
 			$obj->contentsource = $autosend->contentsource;
 			$obj->active = $autosend->active;
 			$obj->target = $this->getTargetFromMail($autosend);
-			$obj->subject = $autosend->subject;
+			
+			$subject = json_decode($autosend->subject);
+			$obj->subject = $subject->text;
+			
 			$obj->content = json_decode($autosend->content);
 			$obj->previewData = $autosend->previewData;
 			$obj->time = json_decode($autosend->time);
@@ -132,6 +135,7 @@ class CampaignController extends ControllerBase
 			$autoresponder->from = json_decode($autoresponder->from);
 			$autoresponder->target = json_decode($autoresponder->target);
 			$autoresponder->content = json_decode($autoresponder->content);
+			$autoresponder->subject = json_decode($autoresponder->subject);
 			
 			$this->view->setVar("autoresponse", $autoresponder);
 		 }
