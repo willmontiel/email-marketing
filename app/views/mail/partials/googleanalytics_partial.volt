@@ -41,7 +41,7 @@
 				</form>
 			</div>
 		{{ '{{else}}' }}
-			<div class="row wrapper bg-danger">
+			<div class="row wrapper bg-danger" style="margin-right: 0px !important; margin-left: 0px !important;">
 				<div class="col-md-8">
 					<p>No se encontraron enlaces en el contenido html, para continuar agregue al menos uno.</p>
 				</div>

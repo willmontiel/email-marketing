@@ -126,7 +126,7 @@
 					{#
 					<button class="btn btn-default" {{'{{action "cleanSocial" this}}'}}>Limpiar Cambios</button>
 					#}
-					<button class="btn btn-default btn-sm extra-padding" {{ '{{action "discardChanges" this}}' }}>Descartar cambios</button>
+					<button class="btn btn-default btn-sm extra-padding" {{ '{{action "discardSocial" this}}' }}>Descartar cambios</button>
 					<button class="btn btn-guardar btn-sm extra-padding" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 				</div>
 			</div>
