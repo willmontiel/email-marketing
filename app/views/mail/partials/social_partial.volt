@@ -16,7 +16,7 @@
 					<img src="{{url('images')}}/facebook_icon_active.png">
 				</dd>
 			{{'{{/if}}'}}
-				<dt></dt><dd></dd>
+				<dt><br /></dt><dd><br /></dd>
 			{{'{{#if twaccountsel }}'}}
 				<dt>Cuenta de Twitter activa:</dt>
 				<dd>
