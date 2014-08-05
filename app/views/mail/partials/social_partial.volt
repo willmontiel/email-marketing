@@ -80,7 +80,7 @@
 								<div class="clearfix"></div>
 							</div>
 						{% else %}
-							<div class="wrapper bg bg-warning">
+							<div class="wrapper bg bg-warning social-network-not-available">
 								No tiene una cuenta de facebook configurada, para configurarla haga <span style="text-decoration: underline;" {{'{{action gotosocial this "fbloginurl"}}'}}>click aqui</span>
 							</div>	
 						{% endif %}
@@ -113,7 +113,7 @@
 								</div>
 							</div>
 						{% else %}
-							<div class="wrapper bg bg-warning">
+							<div class="wrapper bg bg-warning social-network-not-available">
 								No tiene una cuenta de twitter configurada, para configurarla haga <span style="text-decoration: underline;" {{'{{action gotosocial this "twloginurl"}}'}}>click aqui</span>
 							</div>	
 						{% endif %}

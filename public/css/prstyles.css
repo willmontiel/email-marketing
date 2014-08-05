@@ -911,3 +911,14 @@ span.required {
 	border-radius: 4px;
 	border: 1px solid #f7f7f7;
 }
+
+.bg-blue {
+	color: #428bca; 
+	background-color: #d9edf7;
+}
+
+.social-network-not-available {
+	margin-top: 10px;
+	border-radius: 6px;
+	border: 1px solid #f9f0c2;
+}
