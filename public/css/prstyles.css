@@ -893,5 +893,9 @@ span.required {
 }
 
 .fbdescription {
-	
+	margin-top: 11px;
+	background-color: #c0deed;
+	border-radius: 5px;
+	border: 1px solid #F2F2F2;
+	box-shadow: 2px 2px 5px 0px #F5F5F5;
 }
