@@ -120,7 +120,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			var addFilter = $('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
 			self.content.find('.sgm-content-add-filter').append(addFilter);
 			
-			self.content.find('.sgm-add-panel').on('click', function (e) {
+			addFilter.on('click', function (e) {
 				self.createNextPanel(e);
 				$(this).remove();
 			});
