@@ -10,19 +10,11 @@
 		{{'{{else}}'}}
 		<div class="wrapper">
 			<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
-			{{'{{#if fbaccountsel }}'}}
-				<dt>Cuenta de Facebook activa:</dt>
+				<dt>Redes sociales activas:</dt>
 				<dd>
-					<img src="{{url('images')}}/facebook_icon_active.png">
+					{{'{{#if fbaccountsel }}'}}<img src="{{url('images')}}/facebook_icon_active.png">{{'{{/if}}'}}
+					{{'{{#if twaccountsel }}'}}<img src="{{url('images')}}/twitter_icon_active.png">{{'{{/if}}'}}
 				</dd>
-			{{'{{/if}}'}}
-				<dt><br /></dt><dd><br /></dd>
-			{{'{{#if twaccountsel }}'}}
-				<dt>Cuenta de Twitter activa:</dt>
-				<dd>
-					<img src="{{url('images')}}/twitter_icon_active.png">
-				</dd>
-			{{'{{/if}}'}}
 			</dl>
 		</div>
 		{{'{{/if}}'}}
