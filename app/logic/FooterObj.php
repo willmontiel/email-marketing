@@ -223,8 +223,8 @@ class FooterObj
 			$html.= $footer->html;
 		}
 		
-		$search = array("\xe2\x80\x8b", "\xe2\x80\x9c", "\xe2\x80\x9d", "\xe2\x80\x9f", "\xe2\x80\x98", "\xe2\x80\x99", "\xe2\x80\x9b", "\xc3\xb1");
-		$replace = array('', '"', '"', '"', "'", "'", "'", "ñ");
+		$search = array("\xe2\x80\x8b", "\xe2\x80\x9c", "\xe2\x80\x9d", "\xe2\x80\x9f", "\xe2\x80\x98", "\xe2\x80\x99", "\xe2\x80\x9b", "aÌ", "eÌ", "iÌ", "oÌ", "uÌ", "nÌƒ", "AÌ", "EÌ", "IÌ", "OÌ", "UÌ", "NÌƒ");
+		$replace = array('', '"', '"', '"', "'", "'", "'", "á", "é", "í", "ó", "ú", "ñ", "Á", "É", "Í", "Ó", "Ú", "Ñ");
 		$response= str_replace($search, $replace, $html);
 		
 		return $response;
