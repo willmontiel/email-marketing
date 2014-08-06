@@ -56,7 +56,6 @@ class UserForm extends Form
             'ROLE_ADMIN' => 'Administrador de la cuenta',
 			'ROLE_USER' => 'Usuario estándar',
 			'ROLE_STATISTICS' => 'Usuario de estadisticas',
-			'ROLE_WEB_SERVICES' => 'Servicios web',
 			'ROLE_MAIL_SERVICES' => 'Servicios de correo',
 			), array(
 			'class' => 'form-control'

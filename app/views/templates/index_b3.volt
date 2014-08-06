@@ -143,7 +143,6 @@
 								<div class="space"></div>
 								<div class="alert alert-{{msg.type}}">
 									<button type="button" class="close" data-dismiss="alert">×</button>
-									<h4>Atención!</h4>
 									{{msg.message}}
 								</div>
 							{% endfor %}
