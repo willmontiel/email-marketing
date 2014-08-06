@@ -47,16 +47,18 @@ ListPanelContent.prototype.initialize = function(panel) {
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
+	
+	this.initializeTooltip();
 };
 
 ListPanelContent.prototype.createContent = function () {
 	this.content = $('<div class="sgm-target-selector">\n\
 						<div class="sgm-selector-content">\n\
 							<div class="sgm-list-select">\n\
-								<input style="width: 90%;" type="hidden" class="select2" />\n\
+								<input style="width: 77%;" type="hidden" class="select2" />\n\
 							</div>\n\
 							<div class="sgm-list-button">\n\
-								<span class="sgm-reset-items sgm-button-reset glyphicon glyphicon-repeat"></span>\n\
+								<span data-toggle="tooltip" data-placement="right" title="Borrar todo" class="sgm-tooltip sgm-reset-items sgm-button-reset">Reset</span>\n\
 							</div>\n\
 						</div>\n\
 						<div class="sgm-box-content"></div>\n\
@@ -198,24 +200,28 @@ ListPanelContent.prototype.createItemObject = function (value, text) {
 	
 	self.initializeSelect2(self.sd);
 	
-	var buttons = $('<div class="sgm-add-panel">\n\
+	var buttons = $('<div class="sgm-tooltip sgm-add-panel" data-toggle="tooltip" data-placement="right" title="Agregar filtro">\n\
 						 <span class="glyphicon glyphicon-filter"></span>\n\
 					 </div>');
 	
 	self.content.find('.sgm-box-footer-content').append(buttons);
 	
+	self.initializeTooltip('sgm-add-panel');
+	
 	this.content.find('.sgm-add-panel').on('click', function (e) {
 		e.preventDefault();
 		
 		if (self.content.find('.sgm-all-conditions').length == 0) {
-			var all = $('<div class="sgm-all-conditions ' + (self.conditions === 'all' ? 'sgm-condition-active': '') + '" data-conditions="all">All</div>');
+			var all = $('<div data-toggle="tooltip" data-placement="right" title="Los contactos deben cumplir con todas la condiciones" class="sgm-tooltip sgm-all-conditions ' + (self.conditions === 'all' ? 'sgm-condition-active': '') + '" data-conditions="all">All</div>');
 			self.content.find('.sgm-box-footer-content').append(all);
 		}
 		
 		if (self.content.find('.sgm-any-conditions').length == 0) {
-			var any = $('<div class="sgm-any-conditions ' + (self.conditions === 'any' ? 'sgm-condition-active': '') + '" data-conditions="any">Any</div>');
+			var any = $('<div data-toggle="tooltip" data-placement="right" title="Los contactos deben cumplir cualquiera de las condiciones" class="sgm-tooltip sgm-any-conditions ' + (self.conditions === 'any' ? 'sgm-condition-active': '') + '" data-conditions="any">Any</div>');
 			self.content.find('.sgm-box-footer-content').append(any);
 		}
+		
+		self.initializeTooltip();
 		
 		self.content.find('.sgm-all-conditions').on('click', function (e) {
 			e.preventDefault();
@@ -319,4 +325,8 @@ ListPanelContent.prototype.checkArrayData = function(array) {
 	if (array[0] != undefined && array[0].children == undefined) {
 		this.selectType = 'Unique';
 	}
+};
+
+ListPanelContent.prototype.initializeTooltip = function() {	
+	$('.sgm-tooltip').tooltip();
 };

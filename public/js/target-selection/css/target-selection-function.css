@@ -295,7 +295,8 @@
 	top: 38%;
 	cursor: pointer;
 	position: absolute;
-	border-radius: 50px;
+	border-radius: 4px;
+	font-size: 11px;
 }
 
 .sgm-button-reset:hover {
