@@ -223,9 +223,14 @@ Model.prototype.refreshTotalContacts = function() {
 	DataSource.find('/gettotalcontacts').then(function() { 
 		var total = DataSource.getData();
 		self.totalContacts = total.totalContacts;
-		self.refreshTotalContactsView('Contactos aproximados: ' + self.totalContacts);
+		self.refreshTotalContactsView('Contactos aproximados: ' + self.numberWithCommas(self.totalContacts));
 		self.refreshTotalContactsObject();
 	});
+};
+
+
+Model.prototype.numberWithCommas = function(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 Model.prototype.refreshTotalContactsObject = function() {
