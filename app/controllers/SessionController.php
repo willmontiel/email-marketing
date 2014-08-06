@@ -85,6 +85,7 @@ class SessionController extends ControllerBase
 				else {
 					$link = '<a href="' . $url . '" style="text-decoration: underline;">Click aqui</a>';
 					try {
+						$this->logger->log($link);
 						$message = new AdministrativeMessages();
 						$message->createRecoverpassMessage($user->email, $link);
 						$message->sendMessage();
