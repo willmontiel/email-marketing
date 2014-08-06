@@ -2,8 +2,8 @@
 {% block content %}
 <div class="container-fluid">
 	<div class="row">
-		<div class="text-center">
-			<h2>Sigma Email<br/><small>Bienvenido a Email Marketing de Sigma Movil</small></h2>
+		<div class="signin-background-logo text-center">
+			<a href="http://www.sigmamovil.com/" target="_blank">{{theme.logo}}</a>
 		</div>
 	</div>
 	<div class="row">
