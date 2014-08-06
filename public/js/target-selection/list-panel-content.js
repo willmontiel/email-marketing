@@ -21,12 +21,12 @@ ListPanelContent.prototype = new PanelContent;
 ListPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	
-	this.content.find('.sgm-add-item').on('click', function (e) {
-		self.resfreshData();
-		self.model.updatePanelList();
-		self.updateObject();
-		self.model.refreshTotalContacts();
-	});
+//	this.content.find('.sgm-add-item').on('click', function (e) {
+//		self.resfreshData();
+//		self.model.updatePanelList();
+//		self.updateObject();
+//		self.model.refreshTotalContacts();
+//	});
 	
 	this.content.find('.sgm-reset-items').on('click', function (e) {
 		self.resetItems();
@@ -53,11 +53,10 @@ ListPanelContent.prototype.createContent = function () {
 	this.content = $('<div class="sgm-target-selector">\n\
 						<div class="sgm-selector-content">\n\
 							<div class="sgm-list-select">\n\
-								<input style="width: 77%;" type="hidden" class="select2" />\n\
+								<input style="width: 90%;" type="hidden" class="select2" />\n\
 							</div>\n\
 							<div class="sgm-list-button">\n\
 								<span class="sgm-reset-items sgm-button-reset glyphicon glyphicon-repeat"></span>\n\
-								<span class="sgm-add-item sgm-button-add glyphicon glyphicon-plus"></span>\n\
 							</div>\n\
 						</div>\n\
 						<div class="sgm-box-content"></div>\n\
@@ -308,6 +307,11 @@ ListPanelContent.prototype.initializeSelect2 = function(data) {
 	select.on("change", function(e) { 
 		e.preventDefault();
 		self.selectedValue = e.val;
+		
+		self.resfreshData();
+		self.model.updatePanelList();
+		self.updateObject();
+		self.model.refreshTotalContacts();
 	});
 };
 
