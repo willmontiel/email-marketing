@@ -26,7 +26,7 @@
 <div class="container-fluid">
 	<div class="row scroll-not-available"> 
 		<div class="signin-background-logo text-center" style="display: none">
-			<img class="sigma-rocket" src="{{url('')}}/images/sigma-rocket.png" width="185" height="84">
+			<img class="sigma-rocket" src="/images/sigma-rocket.png" width="185" height="84">
 			<div class="signin-logo"><a href="http://www.sigmamovil.com/" target="_blank">{{theme.logo}}</a></div>
 		</div>
 	</div>
