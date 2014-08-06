@@ -108,10 +108,11 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			});
 			
 			if (self.content.find('.sgm-add-neg').length == 0) {
-				var addNeg = $('<div class="sgm-add-neg">Not!</div>');
+				var addNeg = $('<div class="sgm-tooltip sgm-add-neg" data-toggle="tooltip" data-placement="right" title="La condición cambiará a ser lo contrario">Not!</div>');
 				self.content.find('.sgm-content-negation-filter').append(addNeg);
 
 				self.updateNegationValue();
+				self.initializeTooltip();
 			}
 			
 			self.model.refreshTotalContacts();
