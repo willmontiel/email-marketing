@@ -191,7 +191,7 @@ FilterPanelContent.prototype.createContent = function() {
 								  </ul>\n\
 							  </div>\n\
 						  </div>\n\
-						  <div class="sgm-filter-content-footer">\n\
+						  <div class="sgm-filter-content-body">\n\
 							   <div class="sgm-filter-content-select-mail"></div>\n\
 							   <div class="sgm-filter-content-select-click"></div>\n\
 							   <div class="sgm-content-add-filter"></div>\n\
