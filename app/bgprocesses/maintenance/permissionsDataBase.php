@@ -23,6 +23,7 @@ class PermissionsDataBase
 			'ROLE_USER' => 3,
 			'ROLE_STATISTICS' => 4,
 			'ROLE_WEB_SERVICES' => 5,
+			'ROLE_MAIL_SERVICES' => 6,
 		);
 	}
 	
@@ -516,6 +517,32 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'campaign::update'),
 			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'campaign::delete'),
 			
+			
+			
+			//----------//----------**ROLE_MAIL_SERVICES**----------//----------
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'segment::create'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'segment::read'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'segment::update'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'segment::delete'),
+			
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'blockemail::read'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'blockemail::block email'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'blockemail::unblock email'),
+			
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'dashboard::read'),
+			
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'mail::create'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'mail::read'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'mail::update'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'mail::delete'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'mail::send'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'mail::clone'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'mail::manage'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'mail::on any mail'),
+			
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'statistic::read'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'statistic::download'),
+			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'statistic::share'),
 		);
 		
 	}
