@@ -51,11 +51,13 @@ class UserForm extends Form
 			'id' => 'user',
 			'class' => 'form-control'
         )));
-		
+				
         $this->add(new Select("userrole", array(
             'ROLE_ADMIN' => 'Administrador de la cuenta',
 			'ROLE_USER' => 'Usuario estándar',
-			'ROLE_STATISTICS' => 'Usuario de estadisticas'
+			'ROLE_STATISTICS' => 'Usuario de estadisticas',
+			'ROLE_WEB_SERVICES' => 'Servicios web',
+			'ROLE_MAIL_SERVICES' => 'Servicios de correo',
 			), array(
 			'class' => 'form-control'
 		)));
@@ -63,7 +65,10 @@ class UserForm extends Form
 		$this->add(new Select("userrole2", array(
 			'ROLE_SUDO' => 'Super administrador',
             'ROLE_ADMIN' => 'Administrador local',
-			'ROLE_STATISTICS' => 'Administrador local'
+			'ROLE_STATISTICS' => 'Administrador local',
+			'ROLE_USER' => 'Usuario estándar',
+			'ROLE_WEB_SERVICES' => 'Servicios web',
+			'ROLE_MAIL_SERVICES' => 'Servicios de correo',
 			), array(
 			'class' => 'form-control'
         )));
