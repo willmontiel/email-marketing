@@ -1,5 +1,5 @@
 <?php
-$path =  \Phalcon\DI::getDefault()->get('path');
+$path =  \Phalcon\DI\FactoryDefault::getDefault()->get('path');
 require_once "{$path->path}app/library/swiftmailer/lib/swift_required.php";
 
 class AdministrativeMessages
@@ -26,8 +26,8 @@ class AdministrativeMessages
 		));
 
 		if ($msg) {
-			$msg->msg = str_replace('tmpurl', $this->url, $msg->msg);
-			$msg->text = str_replace('tmpurl', $this->url, $msg->text);
+			$msg->msg = str_replace('tmpurl', $url, $msg->msg);
+			$msg->text = str_replace('tmpurl', $url, $msg->text);
 			
 			$this->msg = $msg;
 			$this->to = $to;
