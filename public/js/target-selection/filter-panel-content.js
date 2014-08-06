@@ -86,9 +86,10 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			select.select2('val', self.selectedValue);
 			if (self.content.find('.sgm-add-neg').length == 0) {
 				var active = (self.negation ? 'sgm-neg-active' :'');
-				var addNeg = $('<div class="sgm-add-neg ' + active + '">Not!</div>');
+				var addNeg = $('<div class="sgm-tooltip sgm-add-neg ' + active + '" data-toggle="tooltip" data-placement="right" title="La condición cambiará a ser lo contrario">Not!</div>');
 				self.content.find('.sgm-content-negation-filter').append(addNeg);
 				self.updateNegationValue();
+				self.initializeTooltip();
 			}
 		}
 		
@@ -97,9 +98,10 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			self.selectedValue = e.val;
 			self.updateObject();
 			
-			var addFilter = $('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
+			var addFilter = $('<div class="sgm-tooltip sgm-add-panel" data-toggle="tooltip" data-placement="right" title="Agregar otro filtro"><span class="glyphicon glyphicon-filter"></span></div>');
 			self.content.find('.sgm-content-add-filter').append(addFilter);
 			
+			self.initializeTooltip();
 			addFilter.on('click', function (e) {
 				self.createNextPanel(e);
 				$(this).remove();
@@ -189,7 +191,7 @@ FilterPanelContent.prototype.createContent = function() {
 								  </ul>\n\
 							  </div>\n\
 						  </div>\n\
-						  <div class="sgm-filter-content-body">\n\
+						  <div class="sgm-filter-content-footer">\n\
 							   <div class="sgm-filter-content-select-mail"></div>\n\
 							   <div class="sgm-filter-content-select-click"></div>\n\
 							   <div class="sgm-content-add-filter"></div>\n\
@@ -262,4 +264,8 @@ FilterPanelContent.prototype.updateObject = function () {
 	
 	this.model.updateObject(this.oldCriteria, this.newCriteria);
 	this.oldCriteria = this.newCriteria;
+};
+
+FilterPanelContent.prototype.initializeTooltip = function() {	
+	$('.sgm-tooltip').tooltip();
 };
