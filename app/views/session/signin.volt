@@ -6,28 +6,31 @@
 			$( ".signin-background-logo" ).animate({
 				opacity: 1,
 				width: "toggle"
-			}, 1500);
+			}, 1500, function(){
+				$(".sigma-rocket").animate({
+					position:"absolute",
+					top:"0px",
+					right:"-200px"
+				}, function(){$(".sigma-rocket").remove();});
+			});
 			
 			$( ".signin-logo" ).animate({
 				opacity: 1
 			}, 3000);
 	
-			$( ".sigma-rocket" ).fadeOut(2500, function(){ $(this).remove();});
+			
 		});
 	</script>
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
-	<br />
-	<br />
-	<div class="row" style="overflow-x: hidden; overflow-y: hidden;"> 
-		<div class="signin-background-logo text-center" style="background-color: #474646; display: none; position: relative;">
-			<img class="sigma-rocket" src="{{url('')}}/images/sigma-rocket.png" width="250" height="140" style="position: absolute; right: -150px; z-index: 999999; top: -30px;">
-			<div class="signin-logo" style="opacity:0">{{theme.logo}}</div>
+	<div class="row scroll-not-available"> 
+		<div class="signin-background-logo text-center" style="display: none">
+			<img class="sigma-rocket" src="{{url('')}}/images/sigma-rocket.png" width="185" height="84">
+			<div class="signin-logo"><a href="http://www.sigmamovil.com/" target="_blank">{{theme.logo}}</a></div>
 		</div>
 	</div>
-	<br />
-	<br />
+		
 	<div class="row">
 		<div class="col-lg-4 col-md-6 col-sm-8 col-xs-12 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
 			<div class="panel panel-warning">

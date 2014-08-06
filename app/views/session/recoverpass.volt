@@ -1,16 +1,12 @@
 {% extends "templates/signin.volt" %}
 {% block content %}
 <div class="container-fluid">
-	<br />
-	<br />
-	<br />
 	<div class="row">
-		<div class="text-center">
-			{{theme.logo}}
+		<div class="signin-background-logo text-center">
+			<a href="http://www.sigmamovil.com/" target="_blank">{{theme.logo}}</a>
 		</div>
 	</div>
-	<br />
-	<br />
+		
 	<div class="row">
 		<div class="col-lg-4 col-md-6 col-sm-8 col-xs-12 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
 			<div class="panel panel-warning">
