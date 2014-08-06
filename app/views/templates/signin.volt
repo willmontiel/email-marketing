@@ -9,11 +9,11 @@
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
         {{ get_title() }}
-
+		{{ javascript_include('vendors/bootstrap_v3/js/jquery-1.9.1.js') }}
         {{ stylesheet_link('vendors/bootstrap_v3/css/bootstrap.css') }}
         {{ stylesheet_link('vendors/bootstrap_v3/css/font-awesome.css') }}
         {{ stylesheet_link('css/prstyles.css') }}
-        {{ stylesheet_link('themes/new-gray/css/sm-email-theme.css') }}
+        {{ stylesheet_link('themes/' ~ theme.name ~ '/css/styles.css') }}
 
 		<!--[if lt IE 9]>
 		{{ javascript_include('javascripts/vendor/html5shiv.js') }}
