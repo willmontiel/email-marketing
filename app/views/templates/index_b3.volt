@@ -137,10 +137,10 @@
 			<div class="col-sx-12 col-sm-9 col-md-10">
 				{# Zona de mensajes #}
 				{% if messages !== false%}
+					<div class="space"></div>
 					<div class="row">
 						<div class="col-sm-12">
 							{% for msg in messages%}
-								<div class="space"></div>
 								<div class="alert alert-{{msg.type}}">
 									<button type="button" class="close" data-dismiss="alert">×</button>
 									{{msg.message}}
