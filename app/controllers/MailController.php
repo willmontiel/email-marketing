@@ -2367,54 +2367,54 @@ class MailController extends ControllerBase
 	public function composeAction($idMail = null)
 	{
 		$account = $this->user->account;
-		$dbases = Dbase::findByIdAccount($account->idAccount);
 		
-		if (count($dbases) > 0) {
-			$array = array();
-			foreach ($dbases as $dbase) {
-				$array[] = $dbase->idDbase;
-			}
-
-			$idsDbase = implode(",", $array);
-
-			$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
-			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
-
-			$contactlists = $this->modelsManager->executeQuery($phql1);
-			$segments = $this->modelsManager->executeQuery($phql2);
-
-			$mails = Mail::find(array(
-				'conditions' => 'idAccount = ?1 AND status = ?2',
-				'bind' => array(1 => $account->idAccount,
-								2 => 'Sent')
-			));
-
-			$links = Maillink::find(array(
-				'conditions' => 'idAccount = ?1',
-				'bind' => array(1 => $account->idAccount)
-			));
-			
-			
-			$senders = Sender::find(array(
-				'conditions' => 'idAccount = ?1',
-				'bind' => array(1 => $account->idAccount)
-			));
-			
-			if (count($senders) > 0) {
-				$this->view->setVar('senders', $senders);
-			}
-			
-			$this->view->setVar('account', $account);
-			$this->view->setVar('mails', $mails);
-			$this->view->setVar('links', $links);
-			$this->view->setVar('dbases', $dbases);
-			$this->view->setVar('contactlists', $contactlists);
-			$this->view->setVar('segments', $segments);
-			$this->view->setVar('db', true);
+		$senders = Sender::find(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $account->idAccount)
+		));
+		
+		if (count($senders) > 0) {
+			$this->view->setVar('senders', $senders);
 		}
-		else {
-			$this->view->setVar('db', false);
-		}
+		
+		$this->view->setVar('account', $account);
+//		$dbases = Dbase::findByIdAccount($account->idAccount);
+		
+//		if (count($dbases) > 0) {
+//			$array = array();
+//			foreach ($dbases as $dbase) {
+//				$array[] = $dbase->idDbase;
+//			}
+//
+//			$idsDbase = implode(",", $array);
+//
+//			$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
+//			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
+//
+//			$contactlists = $this->modelsManager->executeQuery($phql1);
+//			$segments = $this->modelsManager->executeQuery($phql2);
+//
+//			$mails = Mail::find(array(
+//				'conditions' => 'idAccount = ?1 AND status = ?2',
+//				'bind' => array(1 => $account->idAccount,
+//								2 => 'Sent')
+//			));
+//
+//			$links = Maillink::find(array(
+//				'conditions' => 'idAccount = ?1',
+//				'bind' => array(1 => $account->idAccount)
+//			));
+//			
+//			$this->view->setVar('mails', $mails);
+//			$this->view->setVar('links', $links);
+//			$this->view->setVar('dbases', $dbases);
+//			$this->view->setVar('contactlists', $contactlists);
+//			$this->view->setVar('segments', $segments);
+//			$this->view->setVar('db', true);
+//		}
+//		else {
+//			$this->view->setVar('db', false);
+//		}
 		
 		if($idMail != null) {
 			$mail = Mail::findFirst(array(
@@ -2446,7 +2446,7 @@ class MailController extends ControllerBase
 				
 				$urlObj = new TrackingUrlObject();
 				$linksForTrack = $urlObj->searchDomainsAndProtocols($html, $mailcontent->plainText);
-//				$this->logger->log(print_r($linksForTrack, true));
+				$this->logger->log(print_r($linksForTrack, true));
 
 				$campaignNameExample = substr($mail->name, 0, 24);
 				
@@ -2535,5 +2535,42 @@ class MailController extends ControllerBase
 			$this->logger->log('Exception: [' . $e . ']');
 		}
 		
+	}
+	
+	public function thumbnailAction($id, $size)
+	{
+		try {
+			$key = "thumbnail-{$id}-{$size}";
+			$img = $this->cache->get($key);
+			if (!$img) {
+				$account = $this->user->account;
+				$mail = Mail::findFirst(array(
+					'conditions' => 'idMail = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $id,
+									2 => $account->idAccount)
+				));
+		
+				if ($mail && !empty($mail->previewData)) {
+					$base64 = $mail->previewData;
+				}
+				else {
+					$base64 = "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TSE3/9GrRhDc9nZblSCkfjG4DZsMgr3qDkUzLlw/CGaZ0ZXa+9yuzxSIvZuYddiA9cMys6zfz0rw+qKdD0K7X34QhuPXhcbb/23ZYBAqVznVHBrZIjIF66oVh7f9ep/6ous/rxfd9OeL3nrP7Zf5zLSfhmNbNhiEmauXueXXhkaTMbwxDsawnfG43SvYTHFn1jsfhHPb+wjCnagXXSQIk3WU+nVmCq7ep5sOQnn8NoyhUW1ZazR5bBW3t876duaGRusWcrRf5jOCcN+GgrHFZApEuEFwJ69HsxPIyqTUrsP2qR9iucuuGIRmv7z2dl+79tsPxyaDUBa9x78jmP+v8ArW1xVrZ2bdpgjXDYLH9strL3h8uiVF4emJDs4R7NV7UBbBuGDHbcoQDCaT8ckVdr0gaPvx9mbCaYPwTxmo7YZAbTgIl1YvWNwfgrAYQdgSgrAYQdgSgrAYQdgSggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggAIggCI/15fX90/AHvx+vp6+B/P0IoVkReWAQAAAABJRU5ErkJggg==";
+				}
+				
+				$size = explode('x', $size);
+				$imgObj = new ImageObject();
+				$imgObj->createFromBase64($base64);
+				$imgObj->resizeImage($size[0], $size[1]);
+				$img = $imgObj->getImageInMemory();
+				$this->cache->save($key, $img);
+				
+			}
+			$this->response->setHeader("Content-Type", 'image/png');
+			$this->view->disable();
+			return $this->response->setContent($img);
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception: {$e}");
+		}
 	}
 }
