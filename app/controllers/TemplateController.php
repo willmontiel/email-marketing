@@ -449,7 +449,7 @@ class TemplateController extends ControllerBase
 				$imgObj = new ImageObject();
 				$imgObj->createFromBase64($base64);
 				$imgObj->resizeImage($size[0], $size[1]);
-				$this->logger->log("Here!");
+				$this->logger->log("{$base64}");
 				$img = $imgObj->getImageInMemory();
 				$this->logger->log("{$key}");
 				$this->cache->save($key, $img);
