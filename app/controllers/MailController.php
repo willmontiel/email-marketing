@@ -1651,18 +1651,17 @@ class MailController extends ControllerBase
 				'conditions' => 'idMail = ?1',
 				'bind' => array(1 => $mail->idMail)
 			));
-			
 			if ($content) {
 				switch ($mail->type) {
 					case 'Editor':
 						$editorObj = new HtmlObj();
-						$editorObj->setAccount($this->user->account);
+						$editorObj->setAccount($account);
 						$editorObj->assignContent(json_decode($content->content));
 						$response = $editorObj->render();
 						break;
 					case 'Html':
 						$footerObj = new FooterObj();
-						$footerObj->setAccount($this->account);
+						$footerObj->setAccount($account);
 						$response = $footerObj->addFooterInHtml(html_entity_decode($content->content));
 						break;			
 				}
