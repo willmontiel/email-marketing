@@ -1658,7 +1658,7 @@ class MailController extends ControllerBase
 					case 'Editor':
 						$this->logger->log("Es editor");
 						$editorObj = new HtmlObj();
-						$editorObj->setAccount($this->user->account);
+						$editorObj->setAccount($account);
 						$editorObj->assignContent(json_decode($content->content));
 						$response = $editorObj->render();
 						$this->logger->log("terminó el editor");
@@ -1667,7 +1667,7 @@ class MailController extends ControllerBase
 						$this->logger->log("Es html");
 						$footerObj = new FooterObj();
 						$this->logger->log("1");
-						$footerObj->setAccount($this->account);
+						$footerObj->setAccount($account);
 						$this->logger->log("2");
 						$response = $footerObj->addFooterInHtml(html_entity_decode($content->content));
 						$this->logger->log("3");
