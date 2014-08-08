@@ -2377,43 +2377,43 @@ class MailController extends ControllerBase
 		}
 		
 		$this->view->setVar('account', $account);
-//		$dbases = Dbase::findByIdAccount($account->idAccount);
+		$dbases = Dbase::findByIdAccount($account->idAccount);
 		
-//		if (count($dbases) > 0) {
-//			$array = array();
-//			foreach ($dbases as $dbase) {
-//				$array[] = $dbase->idDbase;
-//			}
-//
-//			$idsDbase = implode(",", $array);
-//
-//			$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
-//			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
-//
-//			$contactlists = $this->modelsManager->executeQuery($phql1);
-//			$segments = $this->modelsManager->executeQuery($phql2);
-//
-//			$mails = Mail::find(array(
-//				'conditions' => 'idAccount = ?1 AND status = ?2',
-//				'bind' => array(1 => $account->idAccount,
-//								2 => 'Sent')
-//			));
-//
-//			$links = Maillink::find(array(
-//				'conditions' => 'idAccount = ?1',
-//				'bind' => array(1 => $account->idAccount)
-//			));
-//			
-//			$this->view->setVar('mails', $mails);
-//			$this->view->setVar('links', $links);
-//			$this->view->setVar('dbases', $dbases);
-//			$this->view->setVar('contactlists', $contactlists);
-//			$this->view->setVar('segments', $segments);
-//			$this->view->setVar('db', true);
-//		}
-//		else {
-//			$this->view->setVar('db', false);
-//		}
+		if (count($dbases) > 0) {
+			$array = array();
+			foreach ($dbases as $dbase) {
+				$array[] = $dbase->idDbase;
+			}
+
+			$idsDbase = implode(",", $array);
+
+			$phql1 = "SELECT Dbase.name AS Dbase, Contactlist.idContactlist, Contactlist.name FROM Dbase JOIN Contactlist ON (Contactlist.idDbase = Dbase.idDbase) WHERE Dbase.idDbase IN (". $idsDbase .")";
+			$phql2 = "SELECT * FROM Segment WHERE idDbase IN (". $idsDbase .")";
+
+			$contactlists = $this->modelsManager->executeQuery($phql1);
+			$segments = $this->modelsManager->executeQuery($phql2);
+
+			$mails = Mail::find(array(
+				'conditions' => 'idAccount = ?1 AND status = ?2',
+				'bind' => array(1 => $account->idAccount,
+								2 => 'Sent')
+			));
+
+			$links = Maillink::find(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $account->idAccount)
+			));
+			
+			$this->view->setVar('mails', $mails);
+			$this->view->setVar('links', $links);
+			$this->view->setVar('dbases', $dbases);
+			$this->view->setVar('contactlists', $contactlists);
+			$this->view->setVar('segments', $segments);
+			$this->view->setVar('db', true);
+		}
+		else {
+			$this->view->setVar('db', false);
+		}
 		
 		if($idMail != null) {
 			$mail = Mail::findFirst(array(
