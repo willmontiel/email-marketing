@@ -45,6 +45,9 @@ class MailField
 		
 		$phql = "SELECT * FROM Customfield WHERE idDbase IN (" . $this->idDbases . ")";
 		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+		
+		$this->log->log("SQL: {$phql}");
+		
 		$result = $modelsManager->executeQuery($phql);
 		
 		if ($arrayFields === false) {
