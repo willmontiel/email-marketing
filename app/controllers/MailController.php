@@ -1666,8 +1666,11 @@ class MailController extends ControllerBase
 					case 'Html':
 						$this->logger->log("Es html");
 						$footerObj = new FooterObj();
+						$this->logger->log("1");
 						$footerObj->setAccount($this->account);
+						$this->logger->log("2");
 						$response = $footerObj->addFooterInHtml(html_entity_decode($content->content));
+						$this->logger->log("3");
 						$this->logger->log("terminó el html");
 						break;			
 				}
