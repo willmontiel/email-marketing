@@ -1651,21 +1651,27 @@ class MailController extends ControllerBase
 				'conditions' => 'idMail = ?1',
 				'bind' => array(1 => $mail->idMail)
 			));
-			
+			$this->logger->log("Hay mail");
 			if ($content) {
+				$this->logger->log("Hay content");
 				switch ($mail->type) {
 					case 'Editor':
+						$this->logger->log("Es editor");
 						$editorObj = new HtmlObj();
 						$editorObj->setAccount($this->user->account);
 						$editorObj->assignContent(json_decode($content->content));
 						$response = $editorObj->render();
+						$this->logger->log("terminó el editor");
 						break;
 					case 'Html':
+						$this->logger->log("Es html");
 						$footerObj = new FooterObj();
 						$footerObj->setAccount($this->account);
 						$response = $footerObj->addFooterInHtml(html_entity_decode($content->content));
+						$this->logger->log("terminó el html");
 						break;			
 				}
+				$this->logger->log("Returning...");
 				return $this->setJsonResponse(array('preview' => $response));
 			}
 			else {
