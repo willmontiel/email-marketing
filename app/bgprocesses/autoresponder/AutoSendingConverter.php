@@ -65,17 +65,13 @@ class AutoSendingConverter
 		}
 
 		$getHtml = new LoadHtml();
-		$content = $getHtml->gethtml($url, false, false, $this->account);
+		$html = $getHtml->gethtml($url, false, false, $this->account);
 
 		$mc = new Mailcontent();
 		$mc->idMail = $this->mail->idMail;
 
 		$text = new PlainText();
-		$plainText = $text->getPlainText($content);
-
-		$buscar = array("<script" , "</script>");
-		$reemplazar = array("<!-- ", " -->");
-		$html = str_replace($buscar,$reemplazar, $content);
+		$plainText = $text->getPlainText($html);
 
 		$mc->content = htmlspecialchars($html, ENT_QUOTES);
 		$mc->plainText = $plainText;
