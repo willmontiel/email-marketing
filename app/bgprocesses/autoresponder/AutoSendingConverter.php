@@ -65,17 +65,15 @@ class AutoSendingConverter
 		}
 
 		$getHtml = new LoadHtml();
-		$content = $getHtml->gethtml($url, false, false, $this->account);
+		$content = $getHtml->gethtml($url, false, false, $this->account, true);
 
+		$html = $this->changeTDStyles($content);
+		
 		$mc = new Mailcontent();
 		$mc->idMail = $this->mail->idMail;
 
 		$text = new PlainText();
-		$plainText = $text->getPlainText($content);
-
-		$buscar = array("<script" , "</script>");
-		$reemplazar = array("<!-- ", " -->");
-		$html = str_replace($buscar,$reemplazar, $content);
+		$plainText = $text->getPlainText($html);
 
 		$mc->content = htmlspecialchars($html, ENT_QUOTES);
 		$mc->plainText = $plainText;
@@ -153,6 +151,36 @@ class AutoSendingConverter
 				break;
 		}
 		return $subject;
+	}
+	
+	protected function changeTDStyles($html)
+	{
+		$htmlObj = new DOMDocument();
+		@$htmlObj->loadHTML($html);
+
+		$tds = $htmlObj->getElementsByTagName('td');
+
+		if ($tds->length !== 0) {
+			foreach ($tds as $td) {
+				$td_style = $td->getAttribute('style');
+				if ($td_style) {
+					$styles = explode(";", $td_style);
+					foreach($styles as $key => $style) {
+						if(strpos($style,'font-family') !== false) {
+							unset($styles[$key]);
+							array_push($styles, $style);
+						}
+						else if(trim($style) === '') {
+							unset($styles[$key]);
+						}
+					}
+					$full_style = implode(';', $styles);
+					$td->setAttribute('style', $full_style);
+				}
+			}
+		}
+		
+		return $htmlObj->saveHTML();
 	}
 }
 
