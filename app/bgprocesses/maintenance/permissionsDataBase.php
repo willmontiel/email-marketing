@@ -300,7 +300,6 @@ class PermissionsDataBase
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::read'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::update'),
-			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::delete'),
 			
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'customfield::create'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'customfield::read'),
