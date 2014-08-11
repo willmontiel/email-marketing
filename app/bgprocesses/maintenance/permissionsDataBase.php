@@ -298,7 +298,6 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contactlist::update'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'contactlist::delete'),
 			
-			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::create'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::read'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::update'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'dbase::delete'),
