@@ -65,7 +65,7 @@ class AutoSendingConverter
 		}
 
 		$getHtml = new LoadHtml();
-		$html = $getHtml->gethtml($url, false, false, $this->account);
+		$html = $getHtml->gethtml($url, false, false, $this->account, true);
 
 		$mc = new Mailcontent();
 		$mc->idMail = $this->mail->idMail;

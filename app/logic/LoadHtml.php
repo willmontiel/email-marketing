@@ -35,7 +35,7 @@ class LoadHtml
 	 * @param string $dir
 	 * @return string
 	 */
-	public function gethtml($url, $image, $dir, Account $account)
+	public function gethtml($url, $image, $dir, Account $account, $script = false)
 	{
 		$some = new simple_html_dom();
 		
@@ -80,8 +80,14 @@ class LoadHtml
 			}
 		}
 		
-		$busqueda = array("<script" , "</script>");
-		$reemplazar = array("<!-- ", " -->");
+		if(!$script) {
+			$busqueda = array("<script" , "</script>");
+			$reemplazar = array("<!-- ", " -->");
+		}
+		else {
+			$busqueda = array();
+			$reemplazar = array();
+		}
 		
 		$newhtml = str_replace($busqueda,$reemplazar, $html->__toString());
 		
