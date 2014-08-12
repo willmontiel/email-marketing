@@ -613,7 +613,11 @@ class ImportContactWrapper
 		} 
 		$line = join($delimiter, $output);
 		
+		$this->log->log("Line before: {$line}");
+		
 		$line = utf8_encode($line);
+		
+		$this->log->log("Line after: {$line}");
 		
 //		if (!mb_check_encoding($line, 'UTF-8')) {
 //			if (mb_check_encoding($line, 'ISO-8859-1')) {
