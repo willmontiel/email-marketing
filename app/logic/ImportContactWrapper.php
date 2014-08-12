@@ -629,6 +629,7 @@ class ImportContactWrapper
 //			}
 //		}
 		
+		fwrite($fh, pack("CCC",0xef,0xbb,0xbf)); 
 		fwrite($fh, $line . "\n"); 
 	}
 	
