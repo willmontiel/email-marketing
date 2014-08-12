@@ -613,14 +613,14 @@ class ImportContactWrapper
 		} 
 		$line = join($delimiter, $output);
 		
-		if (!mb_check_encoding($line, 'UTF-8')) {
-			if (mb_check_encoding($line, 'ISO-8859-1')) {
-				$line = mb_convert_encoding($line, 'UTF-8', 'ISO-8859-1');
-			}
-			else {
-				throw new \Exception('Codificacion invalida en texto');
-			}
-		}
+//		if (!mb_check_encoding($line, 'UTF-8')) {
+//			if (mb_check_encoding($line, 'ISO-8859-1')) {
+//				$line = mb_convert_encoding($line, 'UTF-8', 'ISO-8859-1');
+//			}
+//			else {
+//				throw new \Exception('Codificacion invalida en texto');
+//			}
+//		}
 		
 		fwrite($fh, $line . "\n"); 
 	}
