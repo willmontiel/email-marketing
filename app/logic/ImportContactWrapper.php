@@ -448,7 +448,7 @@ class ImportContactWrapper
 		$rpath = realpath($tmpFilename);
 		$fields = implode(',', $this->fieldmapper->getFieldnames() );
 		$sql_db_mode = "SET session sql_mode=''";
-		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
+		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} CHARACTER SET UTF8 FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
 					. "({$fields})";
 		$sql_db_mode_strict = "SET session sql_mode='strict_all_tables'";
 		
