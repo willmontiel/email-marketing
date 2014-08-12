@@ -1,6 +1,40 @@
 {% extends "templates/index_b3.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	{# Swicth master#}
+	{{ javascript_include('vendors/bootstrap-switch-master/bootstrap-switch.js')}}
+	{{ stylesheet_link('vendors/bootstrap-switch-master/bootstrap-switch.css') }}
+
+	<script type="text/javascript">
+		$(function () {
+			$(".switch").bootstrapSwitch({
+				size: 'mini',
+				onColor: 'success',
+				offColor: 'danger',
+			});
+			
+			$('.switch').on('switchChange.bootstrapSwitch', function(event, state) {
+				var idAccount = $(this).data("id");
+				//var status = ( state ? 1 : 0); // true | false
+				
+				$.ajax({
+					url: "{{url('account/changestatus')}}/" + idAccount,
+					type: "POST",			
+					data: {},
+					error: function(msg){
+						$.gritter.add({class_name: 'error', title: '<span class="glyphicon glyphicon-warning-sign"></span> Error', text: msg.error, time: 30000});
+					},
+					success: function(msg){
+						$.gritter.add({class_name: 'success', title: '<span class="glyphicon glyphicon-ok-sign"></span> Exitoso', text: msg.success, time: 30000});
+					}
+				});
+			});
+		});
+	</script>	
+{% endblock%}
+
 {% block content %}
-		{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
+	{{ partial('partials/small_buttons_menu_partial_for_tools', ['activelnk': 'account']) }}
 
 	<div class="row">
 		<h4 class="sectiontitle">Cuentas</h4>
@@ -30,6 +64,7 @@
 					<td>MTA</td>
 					<td>Fecha de registro</td>
 					<td>Última actualización</td>
+					<td>Estado</td>
 					<td></td>
 				</tr>
 			</thead>
@@ -45,8 +80,11 @@
 					<td>{{item.contactLimit}}</td>
 					<td>{{item.messageLimit}}</td>
 					<td>{{item.virtualMta}}</td>
-					<td>{{date('d/m/Y', item.createdon)}}</td>
-					<td>{{date('d/m/Y', item.updatedon)}}</td>
+					<td>{{date('d/M/Y', item.createdon)}}</td>
+					<td>{{date('d/M/Y', item.updatedon)}}</td>
+					<td>
+						<input type="checkbox" data-id="{{item.idAccount}}" class="switch" {% if item.status == 1%} checked {% endif %}>
+					</td>
 					<td>
 						<a href="{{ url('account/edit') }}/{{item.idAccount}}" class="btn btn-sm btn-default extra-padding" ><span class="glyphicon glyphicon-pencil"></span> Editar</a>
 					</td>

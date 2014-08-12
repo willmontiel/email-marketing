@@ -3,7 +3,7 @@ use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Text,
     Phalcon\Forms\Element\Select,
     Phalcon\Forms\Element\Password,
-	Phalcon\Forms\Element;
+	Phalcon\Forms\Element\Check;
 
 class AccountForm extends Form
 {
@@ -14,6 +14,10 @@ class AccountForm extends Form
 			'type' => 'text',
 			'required' => 'required',
 			'autofocus' => "autofocus" 
+        )));
+		
+		$this->add(new Check('status', array(
+			'value' => '1'
         )));
 		
 		$this->add(new Text('prefix', array(
