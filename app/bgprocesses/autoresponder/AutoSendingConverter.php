@@ -168,7 +168,7 @@ class AutoSendingConverter
 					foreach($styles as $key => $style) {
 						if(strpos($style,'font-family') !== false) {
 							unset($styles[$key]);
-							array_push($styles, $style);
+							//array_push($styles, $style);
 						}
 						else if(trim($style) === '') {
 							unset($styles[$key]);
