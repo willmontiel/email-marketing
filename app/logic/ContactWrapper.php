@@ -687,6 +687,7 @@ class ContactWrapper extends BaseWrapper
 		$object['email'] = $contact->email->email;
 		$object['name'] = $contact->name;
 		$object['birthDate'] = (!empty($contact->birthDate) ? $this->dateFormat->transformDateFormat($contact->birthDate, 'Y-m-d', 'd/m/Y') : '');
+//		$object['lastName'] = utf8_decode($contact->lastName);
 		$object['lastName'] = utf8_decode($contact->lastName);
 		$object['isActive'] = ($contact->status != 0);
 		$object['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
