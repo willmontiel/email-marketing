@@ -615,7 +615,8 @@ class ImportContactWrapper
 		
 		if (!mb_check_encoding($line, 'UTF-8')) {
 			if (mb_check_encoding($line, 'ISO-8859-1')) {
-				$line = mb_convert_encoding($line, 'UTF-8', 'ISO-8859-1');
+//				$line = mb_convert_encoding($line, 'UTF-8', 'ISO-8859-1');
+				$line = utf8_encode($line);
 			}
 			else {
 				throw new \Exception('Codificacion invalida en texto');
