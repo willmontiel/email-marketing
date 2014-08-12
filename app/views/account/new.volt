@@ -3,6 +3,10 @@
 	{{ super() }}
 	{{ stylesheet_link('vendors/bootstrap-tagsinput/bootstrap-tagsinput.css')}}
 	{{ javascript_include('vendors/bootstrap-tagsinput/bootstrap-tagsinput.js')}}
+
+	{# Swicth master#}
+	{{ javascript_include('vendors/bootstrap-switch-master/bootstrap-switch.js')}}
+	{{ stylesheet_link('vendors/bootstrap-switch-master/bootstrap-switch.css') }}
 	<script type="text/javascript">
 		function footerpreview() {
 			$.post("{{url('footer/preview')}}/" + $('#idFooter').val(), function(preview){
@@ -11,6 +15,14 @@
 				$('#preview-modal-content').append(e);
 			});
 		}
+		
+		$(function () {
+			$(".switch").bootstrapSwitch({
+				size: 'mini',
+				onColor: 'success',
+				offColor: 'danger'
+			});
+		});
 	</script>
 {% endblock %}
 	
@@ -33,7 +45,7 @@
 		<form action = "{{url('account/new')}}" class="form-horizontal" id="registerAccount" method="post" role="form">
 				<div class="row">
 					<div class="col-md-6">
-						<h1 class="text-center">Datos de la cuenta</h1>
+						<h3 class="text-center">Datos de la cuenta</h3>
 						<div class="form-group">
 							<label for="companyName" class="col-sm-5 control-label">*Nombre de la cuenta: </label>
 							<div class="col-md-6">
@@ -140,9 +152,17 @@
 								{{ newFormAccount.render('footerEditable') }}
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-5 control-label">*Estado: </label>
+							<div class="col-md-6">
+								{{ newFormAccount.render('status', {'class': 'switch', 'checked' : 'checked'}) }}
+							</div>
+						</div>
 					</div>
+						
 					<div class="col-md-6">
-						<h1 class="text-center">Datos del administrador de la cuenta</h1>
+						<h3 class="text-center">Datos del administrador de la cuenta</h3>
 						<div class="form-group">
 							<label for="firstName" class="col-sm-5 control-label">*Nombre:</label>
 							<div class="col-md-6">

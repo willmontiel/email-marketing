@@ -155,5 +155,44 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			return $this->request->getRawBody();
 		}
 	}
+	
+	public function getMessageResponse($status)
+	{
+		$obj = new stdClass();
+		
+		switch ($status) {
+			case 200:
+				$obj->type = "success";
+				$obj->msg = "Solicitud resuelta exitosamente";
+				$obj->status = "200";
+				break;
+			
+			case 500:
+				$obj->type = "error";
+				$obj->msg = "Ha ocurrido un error mientras se resolvía la solicitud, contacte al administrador";
+				$obj->status = "500";
+				break;
+			
+			case 400:
+				$obj->type = "error";
+				$obj->msg = "Solicitud incorrecta";
+				$obj->status = "400";
+				break;
+			
+			case 404:
+				$obj->type = "error";
+				$obj->msg = "Recurso no encontrado";
+				$obj->status = "404";
+				break;
+			
+			default:
+				$obj->type = "success";
+				$obj->msg = "error";
+				$obj->status = 500;
+				break;
+		}
+		
+		return $obj;
+	}
 }
 

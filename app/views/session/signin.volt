@@ -32,13 +32,18 @@
 	</div>
 		
 	<div class="row">
+		<div class="col-md-12 text-center">
+			{{ flashSession.output() }}
+		</div>
+	</div>
+		
+	<div class="row">
 		<div class="col-lg-4 col-md-6 col-sm-8 col-xs-12 col-sm-offset-2 col-md-offset-3 col-lg-offset-4">
 			<div class="panel panel-warning">
 				<div class="panel-heading">
 					<div class="panel-title">Inicio de sesión</div>
 				</div>
 				<div class="panel-body">
-					{{ flashSession.output() }}
 					<form class="form-horizontal" role="form" id="sessionlogin" action="{{ url('session/login') }}" method="post">
 						<input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
 						<div class="form-group">
