@@ -87,7 +87,7 @@
 					</td>
 					<td>
 						<a href="{{ url('account/edit') }}/{{item.idAccount}}" class="btn btn-sm btn-default" ><span class="glyphicon glyphicon-pencil"></span></a>
-						<a href="{{ url('account/edit') }}/{{item.idAccount}}" class="btn btn-sm btn-default" ><span class="glyphicon glyphicon-zoom-in"></span></a>
+						<a href="{{ url('account/show') }}/{{item.idAccount}}" class="btn btn-sm btn-default" ><span class="glyphicon glyphicon-zoom-in"></span></a>
 					</td>
 				</tr>
 		 {%endfor%}
