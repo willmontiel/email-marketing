@@ -60,7 +60,8 @@ class AccountController extends ControllerBase
 			$p = $form->getValue('prefix');
 			$c = $form->getValue('companyName');
 			$r = $form->getValue('sender');
-
+			$status = $form->getValue('status');
+			
 			if (empty($r)) {
 				$this->flashSession->error('No ha enviado un remitente válido, por favor verfique la información');
 			}
@@ -71,7 +72,8 @@ class AccountController extends ControllerBase
 				$prefix = $this->validatePrefix($c, $p);
 				$account->prefix = $prefix;
 				$account->idUrlDomain = 1;
-
+				$account->status = (empty($status) ? 0 : 1);
+				
 				$this->db->begin();
 
 				if ($form->isValid() && $account->save()) {
@@ -593,6 +595,35 @@ class AccountController extends ControllerBase
 			}
 		}
 		return true;
+	}
+	
+	public function changestatusAction($idAccount) 
+	{
+		$response = $this->getMessageResponse(400);
+		
+		if ($this->request->isPost()) {
+			$account = Account::findFirst(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $idAccount)
+			));
+			
+			$response = $this->getMessageResponse(404);
+			
+			if ($account) {
+				$status = $account->status;
+				$account->status = ($status == 1 ? 0 : 1);
+				
+				if (!$account->save()) {
+					foreach ($account->getMessages() as $msg) {
+						$this->logger->log("Error: {$msg}");
+					}
+					$response = $this->getMessageResponse(500);
+				}
+				$response = $this->getMessageResponse(200);
+			}
+		}
+		
+		return $this->setJsonResponse(array($response->type => $response->msg), $response->status);
 	}
 	
  }  

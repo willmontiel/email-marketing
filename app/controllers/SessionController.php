@@ -18,6 +18,8 @@ class SessionController extends ControllerBase
 	
     public function loginAction()
     {
+		$msg = "Usuario o contraseña incorrecta!";
+		
 		if ($this->request->isPost()) {
 //			if ($this->security->checkToken()) {
 				$login = $this->request->getPost("username");
@@ -28,27 +30,32 @@ class SessionController extends ControllerBase
 					"bind" => array($login)
 				));
 
-
+				
 				if ($user && $this->security2->checkHash($password, $user->password)) {
-					$this->session->set('userid', $user->idUser);
-					$this->session->set('authenticated', true);
-					
-					$this->user = $user;
-					$this->traceSuccess("Access allowed username: {$this->user->idUser}/{$this->user->username}");
-					
-					return $this->response->redirect("");
+					$account = Account::findFirstByIdAccount($user->idAccount);
 
+					if ($account && $account->status == 1) {
+						$this->session->set('userid', $user->idUser);
+						$this->session->set('authenticated', true);
+
+						$this->user = $user;
+						$this->traceSuccess("Access allowed username: {$this->user->idUser}/{$this->user->username}");
+
+						return $this->response->redirect("");
+					}
+					else {
+						$msg = "La cuenta ha sido bloqueada, por favor contacte al administrador";
+						$this->traceFail("Access denied because the account is disable, username: {$login}, password: [{$password}]");
+					}
 				}
 				else {
 					$this->traceFail("Access denied username: {$login}, password: [{$password}]");
 				}
 //			}
         }
-        
-		$this->flashSession->error('Usuario o contraseña incorrecta!');
-		$this->view->disable();
+		
+		$this->flashSession->error($msg);
 		$this->response->redirect('session/signin');
-
 	}
 	
     public function recoverpassAction()
