@@ -590,7 +590,7 @@ class ImportContactWrapper
 		}
 		fclose($fp);
 		fclose($nfp);
-
+		
 		$this->incrementProgress($rows);
 		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed!");
 	}
@@ -628,9 +628,9 @@ class ImportContactWrapper
 //				throw new \Exception('Codificacion invalida en texto');
 //			}
 //		}
-		
-		fwrite($fh, pack("CCC",0xef,0xbb,0xbf)); 
-		fwrite($fh, $line . "\n"); 
+
+		file_put_contents($fh, "\xEF\xBB\xBF".  $line . "\n"); 
+//		fwrite($fh, $line . "\n"); 
 	}
 	
 	protected function incrementProgress($adv)
