@@ -630,9 +630,9 @@ class ImportContactWrapper
 //				throw new \Exception('Codificacion invalida en texto');
 //			}
 //		}
-		fputs($fh, $line . "\n");
+//		fputs($fh, $line . "\n");
 //		
-//		fwrite($fh, $line . "\n"); 
+		fwrite($fh, $line . "\n"); 
 //		file_put_contents($fh, "\xEF\xBB\xBF".  $line . "\n"); 
 	}
 	
