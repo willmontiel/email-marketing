@@ -632,6 +632,8 @@ class ImportContactWrapper
 //		}
 //		fputs($fh, $line . "\n");
 //		
+		$fh = chr(239) . chr(187) . chr(191) . $line;
+		
 		fwrite($fh, $line . "\n"); 
 //		file_put_contents($fh, "\xEF\xBB\xBF".  $line . "\n"); 
 	}
