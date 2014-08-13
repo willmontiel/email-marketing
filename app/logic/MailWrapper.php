@@ -425,7 +425,17 @@ class MailWrapper extends BaseWrapper
 //			$plainText = $this->mailcontent->plainText;
 //		}
 		
-		$plainText = (empty($this->mailcontent->plainText) ? '' : utf8_encode($this->mailcontent->plainText));
+//		$plainText = (empty($this->mailcontent->plainText) ? '' : utf8_encode($this->mailcontent->plainText));
+		$plainText = $this->mailcontent->plainText;
+		
+		if (!mb_check_encoding($plainText, 'UTF-8')) {
+			if (mb_check_encoding($plainText, 'ISO-8859-1')) {
+				$plainText = mb_convert_encoding($plainText, 'UTF-8', 'ISO-8859-1');
+			}
+			else {
+				throw new \Exception('Codificacion invalida en texto');
+			}
+		}
 		
 		$jsonObject['plainText'] = $plainText;
 		$jsonObject['totalContacts'] = $this->mail->totalContacts;

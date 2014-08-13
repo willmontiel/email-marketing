@@ -448,7 +448,7 @@ class ImportContactWrapper
 		$rpath = realpath($tmpFilename);
 		$fields = implode(',', $this->fieldmapper->getFieldnames() );
 		$sql_db_mode = "SET session sql_mode=''";
-		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
+		$importfile = "LOAD DATA INFILE '{$rpath}' INTO TABLE {$this->tablename} CHARACTER SET UTF8 FIELDS TERMINATED BY '{$delimiter}' OPTIONALLY ENCLOSED BY '\"'"
 					. "({$fields})";
 		$sql_db_mode_strict = "SET session sql_mode='strict_all_tables'";
 		
@@ -553,6 +553,8 @@ class ImportContactWrapper
 	{		
 		$fp = fopen($sourcefile, 'r');
 		$nfp = fopen($tmpFilename, 'w');
+//		$nfp = "\xEF\xBB\xBF" . $nfp;
+//		$nfp = file_get_contents($tmpFilename);
 		
 		$rows = 0;
 
@@ -590,7 +592,7 @@ class ImportContactWrapper
 		}
 		fclose($fp);
 		fclose($nfp);
-
+		
 		$this->incrementProgress($rows);
 		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed!");
 	}
@@ -613,16 +615,29 @@ class ImportContactWrapper
 		} 
 		$line = join($delimiter, $output);
 		
+//		$this->log->log("Line: {$line}");
+		
+//		$line = utf8_encode($line);
+//		
+//		$this->log->log("Line encoded: {$line}");
+		
 		if (!mb_check_encoding($line, 'UTF-8')) {
 			if (mb_check_encoding($line, 'ISO-8859-1')) {
 				$line = mb_convert_encoding($line, 'UTF-8', 'ISO-8859-1');
+//				$line = utf8_encode($line);
 			}
 			else {
 				throw new \Exception('Codificacion invalida en texto');
 			}
 		}
+//		fputs($fh, $line . "\n");
+//		
+//		$line = chr(239) . chr(187) . chr(191) . $line;
 		
-		fwrite($fh, $line . "\n"); 
+//		$this->log->log("Line with BOM: {$line}");
+		
+		fwrite($fh, utf8_encode($line) . "\n"); 
+//		file_put_contents($fh, "\xEF\xBB\xBF".  $line . "\n"); 
 	}
 	
 	protected function incrementProgress($adv)
