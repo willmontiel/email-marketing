@@ -336,7 +336,6 @@ class ChildCommunication extends BaseWrapper
 				$headers->addTextHeader('X-GreenArrow-ListID', $listID);
 				// TrackingObject ya fue analizado para no crear objetos dentro del loop
 				$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
-				$this->logger->log("HTML FINAL: {$htmlWithTracking}");
 				$message->setFrom($from);
 				$message->setBody($htmlWithTracking, 'text/html');
 				$message->setTo($to);
