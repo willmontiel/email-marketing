@@ -553,7 +553,7 @@ class ImportContactWrapper
 	{		
 		$fp = fopen($sourcefile, 'r');
 		$nfp = fopen($tmpFilename, 'w');
-		$nfp = "\xEF\xBB\xBF" . $nfp;
+//		$nfp = "\xEF\xBB\xBF" . $nfp;
 //		$nfp = file_get_contents($tmpFilename);
 		
 		$rows = 0;
