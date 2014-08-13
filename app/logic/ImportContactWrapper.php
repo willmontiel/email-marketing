@@ -617,26 +617,26 @@ class ImportContactWrapper
 		
 		$this->log->log("Line: {$line}");
 		
-		$line = utf8_encode($line);
+//		$line = utf8_encode($line);
 //		
 //		$this->log->log("Line encoded: {$line}");
 		
-//		if (!mb_check_encoding($line, 'UTF-8')) {
-//			if (mb_check_encoding($line, 'ISO-8859-1')) {
-//				$line = mb_convert_encoding($line, 'UTF-8', 'ISO-8859-1');
-////				$line = utf8_encode($line);
-//			}
-//			else {
-//				throw new \Exception('Codificacion invalida en texto');
-//			}
-//		}
+		if (!mb_check_encoding($line, 'UTF-8')) {
+			if (mb_check_encoding($line, 'ISO-8859-1')) {
+				$line = mb_convert_encoding($line, 'UTF-8', 'ISO-8859-1');
+//				$line = utf8_encode($line);
+			}
+			else {
+				throw new \Exception('Codificacion invalida en texto');
+			}
+		}
 //		fputs($fh, $line . "\n");
 //		
 //		$line = chr(239) . chr(187) . chr(191) . $line;
 		
 //		$this->log->log("Line with BOM: {$line}");
 		
-		fwrite($fh, $line . "\n"); 
+		fwrite($fh, utf8_encode($line) . "\n"); 
 //		file_put_contents($fh, "\xEF\xBB\xBF".  $line . "\n"); 
 	}
 	
