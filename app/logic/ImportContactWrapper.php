@@ -552,7 +552,8 @@ class ImportContactWrapper
 	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $hasHeader)
 	{		
 		$fp = fopen($sourcefile, 'r');
-		$nfp = fopen($tmpFilename, 'w');
+		$nfp = fopen($tmpFilename, 'wb');
+		$nfp = "\xEF\xBB\xBF" . $nfp;
 //		$nfp = file_get_contents($tmpFilename);
 		
 		$rows = 0;
@@ -629,7 +630,9 @@ class ImportContactWrapper
 //				throw new \Exception('Codificacion invalida en texto');
 //			}
 //		}
-		fwrite($fh, "\xEF\xBB\xBF". $line . "\n"); 
+		fputs($fh, $line . "\n");
+//		
+//		fwrite($fh, $line . "\n"); 
 //		file_put_contents($fh, "\xEF\xBB\xBF".  $line . "\n"); 
 	}
 	
