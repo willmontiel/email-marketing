@@ -552,7 +552,7 @@ class ImportContactWrapper
 	protected function copyCSVRecordsToPR($sourcefile, $tmpFilename, $delimiter, $maxrows, $hasHeader)
 	{		
 		$fp = fopen($sourcefile, 'r');
-		$nfp = fopen($tmpFilename, 'wb');
+		$nfp = fopen($tmpFilename, 'w');
 		$nfp = "\xEF\xBB\xBF" . $nfp;
 //		$nfp = file_get_contents($tmpFilename);
 		
