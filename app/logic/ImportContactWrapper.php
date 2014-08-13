@@ -634,6 +634,8 @@ class ImportContactWrapper
 //		
 		$line = chr(239) . chr(187) . chr(191) . $line;
 		
+		$this->log->log("Line with BOM: {$line}");
+		
 		fwrite($fh, $line . "\n"); 
 //		file_put_contents($fh, "\xEF\xBB\xBF".  $line . "\n"); 
 	}
