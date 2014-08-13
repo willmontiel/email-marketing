@@ -617,7 +617,7 @@ class ImportContactWrapper
 		
 		$this->log->log("Line: {$line}");
 		
-//		$line = utf8_encode($line);
+		$line = utf8_encode($line);
 //		
 //		$this->log->log("Line encoded: {$line}");
 		
