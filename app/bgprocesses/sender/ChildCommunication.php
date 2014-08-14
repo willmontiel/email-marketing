@@ -179,11 +179,13 @@ class ChildCommunication extends BaseWrapper
 					$this->logger->log("No Fields");
 					$fields = false;
 					break;
+				
 				case 'No Custom':
 					$this->logger->log("No custom");
 					$fields = true;
 					break;
-				case true:
+				
+				case 'Fields':
 					$this->logger->log("It's OKEY");
 					$fields = true;
 					$customFields = $mailField->getCustomFields();

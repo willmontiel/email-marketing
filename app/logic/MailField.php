@@ -115,7 +115,8 @@ class MailField
 		}
 		
 		$this->idFields = implode(", ", $this->idFields);
-		return true;
+		
+		return 'Fields';
 	}
 	
 	private function setFields($fields)
