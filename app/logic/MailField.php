@@ -110,10 +110,7 @@ class MailField
 			return 'No Custom';
 		}
 		
-		$this->log->log("Ids: " . print_r($this->idFields, true));
 		$this->idFields = implode(", ", $this->idFields);
-		$this->log->log("Ids: {$this->idFields}");
-		
 		return true;
 	}
 	
