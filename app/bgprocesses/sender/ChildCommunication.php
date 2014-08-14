@@ -196,23 +196,24 @@ class ChildCommunication extends BaseWrapper
 			$content = $formField->prepareUpdatingForms($content);
 			
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $idDbases);
-			$cf = $mailField->getCustomFields();
-
-			switch ($cf) {
+			$fields = $mailField->searchCustomFields();
+			
+			$customFields = false;
+			switch ($fields) {
 				case 'No Fields':
-					$customFields = false;
 					$fields = false;
 					break;
+				
 				case 'No Custom':
 					$fields = true;
-					$customFields = false;
 					break;
-				default:
+				
+				case 'Fields':
 					$fields = true;
-					$customFields = $cf;
+					$customFields = $mailField->getCustomFields();
 					break;
 			}
-
+			
 			$contactIterator = new ContactIterator($mail, $customFields);
 			$disruptedProcess = FALSE;
 
