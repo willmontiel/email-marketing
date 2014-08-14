@@ -188,12 +188,12 @@ class ContactIterator implements Iterator
 				);
 
 				$f = array();
-				if ($m['field'] !== null) {
+				if ($m['idCustomField'] !== null) {
 					if ($m['textValue'] !== null) {
-						$f[$m['field']] = $m['textValue'];
+						$f[$m['idCustomField']] = $m['textValue'];
 					}
 					else if ($m['numberValue'] !== null) {
-						$f[$m['field']] = $m['numberValue'];
+						$f[$m['idCustomField']] = $m['numberValue'];
 					}
 				}
 				$this->contacts[0]['contact'] = $c;
@@ -202,10 +202,10 @@ class ContactIterator implements Iterator
 			}
 			else if ($this->contacts[$i]['email']['idEmail'] == $m['idEmail']) {
 				if ($m['textValue'] !== null) {
-					$this->contacts[$i]['fields']['field'] = $m['textValue'];
+					$this->contacts[$i]['fields'][$m['idCustomField']] = $m['textValue'];
 				}
 				else if ($m['numberValue'] !== null) {
-					$this->contacts[$i]['fields']['field'] = $m['numberValue'];
+					$this->contacts[$i]['fields'][$m['idCustomField']] = $m['numberValue'];
 				}
 				$i--;
 				$k--;
@@ -224,12 +224,12 @@ class ContactIterator implements Iterator
 				);
 
 				$f = array();
-				if ($m['field'] !== null) {
+				if ($m['idCustomField'] !== null) {
 					if ($m['textValue'] !== null) {
-						$f[$m['field']] = $m['textValue'];
+						$f[$m['idCustomField']] = $m['textValue'];
 					}
 					else if ($m['numberValue'] !== null) {
-						$f[$m['field']] = $m['numberValue'];
+						$f[$m['idCustomField']] = $m['numberValue'];
 					}
 				}
 				$this->contacts[$k]['contact'] = $c;

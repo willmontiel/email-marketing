@@ -88,12 +88,10 @@ class MailField
 			throw new InvalidArgumentException('Error returned by Preg_match_all, invalid values');
 		}
 		
-		$this->log->log("ArrayFields: " . print_r($arrayFields, true));
 		//3.Si no se encuentran campos personalizados simplemente se retornará 
 		//una cadena de texto igual a 'No Fields'
 		$array = $arrayFields[0];
 		if (count($array) == 0) {
-			$this->log->log("Retornando No Fields");
 			return 'No Fields';
 		}
 		
@@ -106,11 +104,10 @@ class MailField
 		$this->setFields($cf);
 		
 		//6.Organizamos los identificadores los campos personalizados
-		$this->setIdFields($fields);
+		$this->setIdFields();
 		
 		//7. Si no hay coincidencias retornamos el mensaje 'No Custom'
 		if (count($this->idFields) <= 0) {
-			$this->log->log("Retornando No Custom");
 			return 'No Custom';
 		}
 		
@@ -139,30 +136,33 @@ class MailField
 	
 	private function setIdFields($fields)
 	{
-		//1.Tomamos la segunda parte(Los que no están entre %%) del arreglo de posibles campos personalizados
-		//y quitamos los repetidos
-		$customfieldsFound = array_unique($fields);
-		
-		//2.Buscamos los campos personalizados de la base de datos
+		//1.Buscamos los campos personalizados de la base de datos
 		$this->searchCustomFieldsInDbase();
 		
-		//3.Recorremos el arreglo y comparamos los campos personalizados encontrados de la base de datos para
+		//2.Recorremos el arreglo y comparamos los campos personalizados encontrados de la base de datos para
 		//obtener los identificadores
 		$search =  array('Ñ', 'ñ', 'Á', 'á', 'É', 'é', 'Í', 'í', 'Ó', 'ó', 'Ú', 'ú');
 		$replace = array('N', 'n', 'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u');
 		
 		$this->idFields = array();
+		$this->fieldsDB = array();
+		
 		if ($this->fieldsInDbase) {
+			
+			$ff = array();
 			foreach ($this->fieldsInDbase as $r) {
-				foreach ($customfieldsFound as $c) {
+				foreach ($this->customFields as $c) {
 					$fieldDB = str_replace($search, $replace, $r->name);
 					$fieldDB = strtoupper($fieldDB);
-					$fieldHtml = str_replace('_', ' ', $c);
+					$fieldHtml = str_replace(array('_', '%%'), array(' ', ''), $c);
 					if ($fieldDB == $fieldHtml) {
 						$this->idFields[] = $r->idCustomField;
+						$ff[$r->idCustomField] = $c;
 					}
 				}
 			}
+			
+			$this->customFields = $ff;
 		}
 	}
 
@@ -196,11 +196,11 @@ class MailField
 		$replaceCustomFields = array();
 		
 		//3.Emparejamos los campos personalizados
-		foreach ($this->customFields as $cf) {
-			foreach ($contact['fields'] as $key => $value) {
-				$this->log->log("CF: {$cf}");
-				$this->log->log("KEY: {$key}");
-				if ($cf == $key) {
+		foreach ($this->customFields as $idh => $cf) {
+			foreach ($contact['fields'] as $idc => $value) {
+				$this->log->log("CF: {$idh}");
+				$this->log->log("KEY: {$idc}");
+				if ($idh == $idc) {
 					$searchCustomFields[] = $cf;
 					$replaceCustomFields[] = (empty($value) ? " " : $value);
 				}
