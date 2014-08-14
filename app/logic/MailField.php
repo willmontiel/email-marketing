@@ -111,6 +111,10 @@ class MailField
 			$this->idFields = 'No Custom';
 			return false;
 		}
+		
+		$this->log->log("Ids: " . print_r($this->idFields, true));
+		$this->idFields = implode(", ", $this->idFields);
+		$this->log->log("Ids: {$this->idFields}");
 	}
 	
 	private function setFields($fields)
@@ -172,11 +176,6 @@ class MailField
 	
 	public function getCustomFields()
 	{
-		if (is_array($this->idFields)) {
-			$this->log->log("Es array");
-			$this->idFields = implode(", ", $this->idFields);
-		}
-		
 		return $this->idFields;
 	}
 	
