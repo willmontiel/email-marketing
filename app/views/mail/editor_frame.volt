@@ -238,6 +238,13 @@
 							%%APELLIDO%%
 						</div>
 					</li>
+					<li>
+						<a href="#" class="redactor_clip_link">Fecha de nacimiento</a>
+
+						<div class="redactor_clip" style="display: none;">
+							%%FECHA_DE_NACIMIENTO%%​
+						</div>
+					</li>
 					{%if cfs is defined %}
 						{%for cf in cfs%}
 							<li>

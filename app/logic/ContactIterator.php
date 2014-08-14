@@ -18,36 +18,36 @@ class ContactIterator implements Iterator
 	public function extractContactsFromDB($start = 0)
 	{
 		if(!$this->mail) {
-			Phalcon\DI::getDefault()->get('logger')->log('Contact Iterator Error: ' . $start);
+			Phalcon\DI::getDefault()->get('logger')->log("Contact Iterator Error: {$start}");
 			throw new \InvalidArgumentException('Error while processing contacts');
 		}
-		$sql1 = 'SELECT idContact FROM mxc WHERE idMail = ' . $this->mail . ' AND idContact > ' . $start . ' AND status = "scheduled" ORDER BY idContact LIMIT ' . self::ROWS_PER_FETCH;
+		
+		$sql1 = "SELECT idContact FROM mxc WHERE idMail = {$this->mail} AND idContact > {$start} AND status = 'scheduled' ORDER BY idContact LIMIT " . self::ROWS_PER_FETCH;
+		
 		if (!$this->fields) {
-			$sql = 'SELECT c.idContact, c.name, c.lastName, e.idEmail, e.email
-						FROM (' . $sql1 . ') AS l 
+			$sql = "SELECT c.idContact, c.name, c.lastName, c.birthDate, e.idEmail, e.email
+						FROM ({$sql1}) AS l 
 							JOIN contact AS c ON(l.idContact = c.idContact)
 							JOIN email AS e ON(c.idEmail = e.idEmail)
-						WHERE  c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0';
+						WHERE  c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0";
 		}
 		else {
-			Phalcon\DI::getDefault()->get('logger')->log('Fields: ' . $this->fields);
-			$sql = 'SELECT c.idContact, c.name, c.lastName, e.idEmail, e.email, f.name AS field, f.textValue, f.numberValue 
-						FROM (' . $sql1 . ') AS l 
+			$sql = "SELECT c.idContact, c.name, c.lastName, c.birthDate, e.idEmail, e.email, f.idCustomField, f.name AS field, f.textValue, f.numberValue 
+						FROM ({$sql1}) AS l 
 							JOIN contact AS c ON(l.idContact = c.idContact)
 							JOIN email AS e ON(c.idEmail = e.idEmail)
-							LEFT JOIN (SELECT cf.name, fi.idContact, fi.textValue, fi.numberValue FROM customfield AS cf JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) WHERE cf.idCustomField IN (' . $this->fields . ')) AS f ON(c.idContact = f.idContact)
-						WHERE  c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0';
-			Phalcon\DI::getDefault()->get('logger')->log('Fields: ' . $sql);
+							LEFT JOIN (SELECT cf.name, fi.idContact, fi.textValue, fi.numberValue FROM customfield AS cf JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) WHERE cf.idCustomField IN ({$this->fields})) AS f ON(c.idContact = f.idContact)
+						WHERE  c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0";
 		}
 		
 		unset($this->contacts);
 		
-		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Querying', 'Querying data');
+//		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Querying', 'Querying data');
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$contacts = $result->fetchAll();
-		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Querying');
-		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Organizing', 'Organizing data');
+//		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Querying');
+//		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Organizing', 'Organizing data');
 		if (count($contacts) <= 0) {
 			return false;
 		}
@@ -63,8 +63,8 @@ class ContactIterator implements Iterator
 		unset($contacts);
 		$end = end($this->contacts);
 		$this->start = $end['contact']['idContact'];
-		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Organizing');
-		Phalcon\DI::getDefault()->get('logger')->log('Memory after Organize: ' . memory_get_peak_usage(true));
+//		Phalcon\DI::getDefault()->get('timerObject')->endTimer('Organizing');
+//		Phalcon\DI::getDefault()->get('logger')->log('Memory after Organize: ' . memory_get_peak_usage(true));
 		
 		return true;
 	}
@@ -119,7 +119,8 @@ class ContactIterator implements Iterator
 				$c = array(
 					'idContact' => $m['idContact'],
 					'name' => $m['name'],
-					'lastName' => $m['lastName']
+					'lastName' => $m['lastName'],
+					'birthDate' => $m['birthDate'],
 				);
 
 				$e = array(
@@ -141,7 +142,8 @@ class ContactIterator implements Iterator
 				$c = array(
 					'idContact' => $m['idContact'],
 					'name' => $m['name'],
-					'lastName' => $m['lastName']
+					'lastName' => $m['lastName'],
+					'birthDate' => $m['birthDate']
 				);
 
 				$e = array(
@@ -172,7 +174,8 @@ class ContactIterator implements Iterator
 				$c = array(
 					'idContact' => $m['idContact'],
 					'name' => $m['name'],
-					'lastName' => $m['lastName']
+					'lastName' => $m['lastName'],
+					'birthDate' => $m['birthDate'],
 				);
 
 				$e = array(
@@ -183,10 +186,6 @@ class ContactIterator implements Iterator
 				$f = array();
 				if ($m['field'] !== null) {
 					if ($m['textValue'] !== null) {
-						Phalcon\DI::getDefault()->get('logger')->log('Email: ' . $m['email']);
-						Phalcon\DI::getDefault()->get('logger')->log('Field: ' . $m['field']);
-						Phalcon\DI::getDefault()->get('logger')->log('Value: ' . $m['textValue']);
-						Phalcon\DI::getDefault()->get('logger')->log('--------****--------');
 						$f[$m['field']] = $m['textValue'];
 					}
 					else if ($m['numberValue'] !== null) {
@@ -199,10 +198,6 @@ class ContactIterator implements Iterator
 			}
 			else if ($this->contacts[$i]['email']['idEmail'] == $m['idEmail']) {
 				if ($m['textValue'] !== null) {
-					Phalcon\DI::getDefault()->get('logger')->log('Email: ' . $m['email']);
-					Phalcon\DI::getDefault()->get('logger')->log('Field: ' . $m['field']);
-					Phalcon\DI::getDefault()->get('logger')->log('Value: ' . $m['textValue']);
-					Phalcon\DI::getDefault()->get('logger')->log('--------****--------');
 					$this->contacts[$i]['fields']['field'] = $m['textValue'];
 				}
 				else if ($m['numberValue'] !== null) {
@@ -215,7 +210,8 @@ class ContactIterator implements Iterator
 				$c = array(
 					'idContact' => $m['idContact'],
 					'name' => $m['name'],
-					'lastName' => $m['lastName']
+					'lastName' => $m['lastName'],
+					'birthDate' => $m['birthDate'],
 				);
 
 				$e = array(
@@ -226,10 +222,6 @@ class ContactIterator implements Iterator
 				$f = array();
 				if ($m['field'] !== null) {
 					if ($m['textValue'] !== null) {
-						Phalcon\DI::getDefault()->get('logger')->log('Email: ' . $m['email']);
-						Phalcon\DI::getDefault()->get('logger')->log('Field: ' . $m['field']);
-						Phalcon\DI::getDefault()->get('logger')->log('Value: ' . $m['textValue']);
-						Phalcon\DI::getDefault()->get('logger')->log('--------****--------');
 						$f[$m['field']] = $m['textValue'];
 					}
 					else if ($m['numberValue'] !== null) {
