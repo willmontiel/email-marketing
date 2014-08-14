@@ -34,9 +34,6 @@ class IdentifyTarget
 	{
 		$query = $this->db->query($this->sql->count);
 		$total = $query->fetchAll();
-		
-		$this->log->log("Total: " . print_r($total, true));
-		$this->log->log("Total: " . print_r($total[0]['total'], true));
 		return $total[0]['total'];
 	}
 	
@@ -55,9 +52,7 @@ class IdentifyTarget
 	{
 		if($this->mail->target){
 			$this->target = json_decode($this->mail->target);
-//			$this->log->log('Target: ' . print_r($target, true));
 			$this->identifiers = implode(',', $this->target->ids);
-//			$this->log->log('Ids: ' . $ids);
 		}
 		else {
 			throw new Exception('Error while checking target');
@@ -83,11 +78,6 @@ class IdentifyTarget
 		
 		$generalSql .= $this->sql->general;
 		$this->sql->general = $generalSql;
-		
-		$this->log->log("SQL General: {$this->sql->general}");
-		$this->log->log("SQL Contactlist: {$this->sql->contactlist}");
-		$this->log->log("SQL Dbase: {$this->sql->dbase}");
-		$this->log->log("SQL Count: {$this->sql->count}");
 	}
 	
 	private function getSqlByDbase($filter = false)
