@@ -144,14 +144,18 @@ class MailField
 		
 		//3.Recorremos el arreglo y comparamos los campos personalizados encontrados de la base de datos para
 		//obtener los identificadores
-		$search = array('Ñ', 'Á', 'É', 'Í', 'Ó', 'Ú');
-		$replace = array('N', 'A', 'E', 'I', 'O', 'U');
+		$search =  array('Ñ', 'ñ', 'Á', 'á', 'É', 'é', 'Í', 'í', 'Ó', 'ó', 'Ú', 'ú');
+		$replace = array('N', 'n', 'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u');
 		if ($this->fieldsInDbase) {
 			foreach ($this->fieldsInDbase as $r) {
 				foreach ($customfieldsFound as $c) {
-					$this->log->log("field DB: " . str_replace($search, $replace, strtoupper($r->name)));
-					$this->log->log("field HTML: " . str_replace('_', ' ', $c));
-					if (str_replace($search, $replace, strtoupper($r->name)) == str_replace('_', ' ', $c)) {
+					$fieldDB = str_replace($search, $replace, $r->name);
+					$fieldDB = strtoupper($fieldDB);
+					$this->log->log("field DB: {$fieldDB}");
+					
+					$fieldHtml = str_replace('_', ' ', $c);
+					$this->log->log("field HTML: {$fieldHtml}");
+					if ($fieldDB == $fieldHtml) {
 						$this->idFields[] = $r->idCustomField;
 					}
 				}
