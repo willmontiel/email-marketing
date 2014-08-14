@@ -189,7 +189,7 @@ class MailField
 		}
 		
 		//2.Emparejamos los campos primarios 
-		$searchPrimaryFields = array('%%EMAIL%%', '%%NOMBRE%%', '%%APELLIDO%%', '%%FECHA_DE_NACIMIENTO%%​');
+		$searchPrimaryFields = array('%%EMAIL%%', '%%NOMBRE%%', '%%APELLIDO%%', '%%FECHA_DE_NACIMIENTO%%');
 		$replacePrimaryFields = array($contact['email']['email'], $contact['contact']['name'], $contact['contact']['lastName'], $contact['contact']['birthDate']);
 		
 		$searchCustomFields = array();
