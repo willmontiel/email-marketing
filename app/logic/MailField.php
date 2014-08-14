@@ -129,8 +129,6 @@ class MailField
 				$this->customFields[] = $x;
 			}
 		}
-		
-		$this->log->log("Customfields: " . print_r($this->customFields, true));
 	}
 	
 	private function setIdFields($fields)
@@ -146,23 +144,20 @@ class MailField
 		//obtener los identificadores
 		$search =  array('Ñ', 'ñ', 'Á', 'á', 'É', 'é', 'Í', 'í', 'Ó', 'ó', 'Ú', 'ú');
 		$replace = array('N', 'n', 'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u');
+		
+		$this->idFields = array();
 		if ($this->fieldsInDbase) {
 			foreach ($this->fieldsInDbase as $r) {
 				foreach ($customfieldsFound as $c) {
 					$fieldDB = str_replace($search, $replace, $r->name);
 					$fieldDB = strtoupper($fieldDB);
-					$this->log->log("field DB: {$fieldDB}");
-					
 					$fieldHtml = str_replace('_', ' ', $c);
-					$this->log->log("field HTML: {$fieldHtml}");
 					if ($fieldDB == $fieldHtml) {
 						$this->idFields[] = $r->idCustomField;
 					}
 				}
 			}
 		}
-		
-		$this->log->log("idFields: " . print_r($this->idFields, true));
 	}
 
 	
@@ -178,6 +173,7 @@ class MailField
 	public function getCustomFields()
 	{
 		if (is_array($this->idFields)) {
+			$this->log->log("Es array");
 			$this->idFields = strtolower(implode(", ", $this->idFields));
 		}
 		
