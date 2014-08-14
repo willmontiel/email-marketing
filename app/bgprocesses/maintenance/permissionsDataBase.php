@@ -635,11 +635,14 @@ class PermissionsDataBase
 			//----------//----------**ROLE_TEMPLATE**----------//----------
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'dashboard::read'),
 			
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'mail::read'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::create'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::read'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::update'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::delete'),
 			
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'contactlist::read'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'dbase::read'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'form::create'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'form::read'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'form::update'),
