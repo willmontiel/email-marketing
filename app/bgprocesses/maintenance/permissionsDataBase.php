@@ -633,17 +633,17 @@ class PermissionsDataBase
 			
 			
 			//----------//----------**ROLE_TEMPLATE**----------//----------
-			array( 'Role' => 'ROLE_MAIL_SERVICES', 'Action' => 'dashboard::read'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'dashboard::read'),
 			
-			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'template::create'),
-			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'template::read'),
-			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'template::update'),
-			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'template::delete'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::create'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::read'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::update'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::delete'),
 			
-			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'form::create'),
-			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'form::read'),
-			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'form::update'),
-			array( 'Role' => 'ROLE_WEB_SERVICES', 'Action' => 'form::delete'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'form::create'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'form::read'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'form::update'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'form::delete'),
 		);
 		
 	}
