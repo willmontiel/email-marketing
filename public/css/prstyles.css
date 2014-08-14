@@ -794,9 +794,9 @@ span.required {
 	z-index: 150;
 	position: absolute;
 }
-#fb-share-image {
+/*#fb-share-image {
 	position: absolute;
-}
+}*/
 .container-fb-first {
 	width: 154px;
 	height: 154px;
@@ -806,9 +806,12 @@ span.required {
 .container-fb-second {
 	float: left;
 }
+
 .edit-fb-image-tool {
-	position: relative;
-	left: 2px;
+	position: absolute;
+	/* left: 2px; */
+	right: 4px;
+	/* bottom: 0px; */
 	top: 4px;
 	padding: 2px;
 	border-radius: 4px;
@@ -1022,4 +1025,11 @@ span.required {
 	border-radius: 5px;
 	border: 1px solid #F2F2F2;
 	box-shadow: 2px 2px 5px 0px #F5F5F5;
+}
+
+.img-post-face {
+	position: relative;
+	background-color: white;
+	border-radius: 4px;
+	border: 1px solid #f7f7f7;
 }
