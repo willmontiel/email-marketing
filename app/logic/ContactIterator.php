@@ -36,12 +36,16 @@ class ContactIterator implements Iterator
 						FROM ({$sql1}) AS l 
 							JOIN contact AS c ON(l.idContact = c.idContact)
 							JOIN email AS e ON(c.idEmail = e.idEmail)
-							LEFT JOIN (SELECT cf.name, fi.idContact, fi.textValue, fi.numberValue FROM customfield AS cf JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) WHERE cf.idCustomField IN ({$this->fields})) AS f ON(c.idContact = f.idContact)
+							LEFT JOIN (SELECT cf.idCustomField, cf.name, fi.idContact, fi.textValue, fi.numberValue 
+									   FROM customfield AS cf 
+										   JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) 
+									   WHERE cf.idCustomField IN ({$this->fields})) AS f ON(c.idContact = f.idContact)
 						WHERE  c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND e.blocked = 0";
 		}
 		
 		unset($this->contacts);
 		
+		Phalcon\DI::getDefault()->get('logger')->log("SQL: {$sql}");
 //		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Querying', 'Querying data');
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
