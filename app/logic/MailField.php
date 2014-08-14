@@ -129,6 +129,8 @@ class MailField
 				$this->customFields[] = $x;
 			}
 		}
+		
+		$this->log->log("Customfields: " . print_r($this->customFields, true));
 	}
 	
 	private function setIdFields($fields)
@@ -193,6 +195,8 @@ class MailField
 		//3.Emparejamos los campos personalizados
 		foreach ($this->customFields as $cf) {
 			foreach ($contact['fields'] as $key => $value) {
+				$this->log->log("CF: {$cf}");
+				$this->log->log("KEY: {$key}");
 				if ($cf == $key) {
 					$searchCustomFields[] = $cf;
 					$replaceCustomFields[] = (empty($value) ? " " : $value);
