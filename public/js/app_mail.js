@@ -745,6 +745,14 @@ function setFilterValues(values, checked, self) {
 	return false;
 }
 
+App.Select2 = Ember.Select.extend({
+	didInsertElement: function() {
+		$(".select2").select2({
+			
+		});
+	}
+});
+
 App.DateTimePicker = Em.View.extend({
 	templateName: 'datetimepicker',
 	didInsertElement: function() {

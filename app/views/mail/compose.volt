@@ -4,6 +4,10 @@
 	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 	
+	{# Select2 master#}
+	{{ stylesheet_link('vendors/select2-master/select2.css') }}
+	{{ javascript_include('vendors/select2-master/select2.js')}}
+
 	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js')}}
 	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("partials/datetimepicker_view_partial") }}
@@ -193,7 +197,6 @@
 						{{ partial("mail/partials/mailstatus_partial") }}
 					</div>
 				</div>
-			</div>
 	
 				<div class="row">
 					<div class="col-md-12">

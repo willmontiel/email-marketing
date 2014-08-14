@@ -993,3 +993,8 @@ span.required {
 .vert-align-middle {
 	vertical-align: middle !important;
 }
+
+.bg-blue {
+color: #428bca;
+background-color: #d9edf7;
+}
