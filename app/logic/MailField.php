@@ -123,7 +123,7 @@ class MailField
 		// para insertarlos en la variable global fields
 		$this->customFields = array();
 		foreach ($f as $x) {
-			if ($x == '%%EMAIL%%' || $x == '%%NOMBRE%%' || $x == '%%APELLIDO%%' || $x == '%%FECHA_DE_NACIMIENTO%%​') {
+			if ($x == '%%EMAIL%%' || $x == '%%NOMBRE%%' || $x == '%%APELLIDO%%' || $x == '%%FECHA_DE_NACIMIENTO%%') {
 			}
 			else {
 				$this->customFields[] = $x;
@@ -149,6 +149,8 @@ class MailField
 		if ($this->fieldsInDbase) {
 			foreach ($this->fieldsInDbase as $r) {
 				foreach ($customfieldsFound as $c) {
+					$this->log->log("field DB: " . str_replace($search, $replace, strtoupper($r->name)));
+					$this->log->log("field HTML: " . str_replace('_', ' ', $c));
 					if (str_replace($search, $replace, strtoupper($r->name)) == str_replace('_', ' ', $c)) {
 						$this->idFields[] = $r->idCustomField;
 					}
@@ -156,7 +158,7 @@ class MailField
 			}
 		}
 		
-//		$this->log->log("Fields4: " . print_r($this->idFields, true));
+		$this->log->log("idFields: " . print_r($this->idFields, true));
 	}
 
 	
