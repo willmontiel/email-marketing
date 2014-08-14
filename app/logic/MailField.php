@@ -174,7 +174,7 @@ class MailField
 	{
 		if (is_array($this->idFields)) {
 			$this->log->log("Es array");
-			$this->idFields = strtolower(implode(", ", $this->idFields));
+			$this->idFields = implode(", ", $this->idFields);
 		}
 		
 		return $this->idFields;
