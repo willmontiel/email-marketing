@@ -20,14 +20,14 @@
 					<div class="form-group">
 						<label for="target" class="col-sm-4 control-label">Agregar seguimiento de Google Analitycs a los siguientes enlaces: </label>
 						<div class="col-sm-8">
-							{{ '{{view Ember.Select
+							{{ '{{view App.Select2
 									multiple="true"
 									contentBinding="App.googleAnalyticsLinks"
 									optionValuePath="content.name"
 									optionLabelPath="content.name"
 									selectionBinding="linksAnalytics"
 									id="linksAnalitycs"
-									class="form-control"}}'
+									class="select2view select2"}}'
 							 }}
 						</div>
 					</div>
@@ -41,7 +41,7 @@
 				</form>
 			</div>
 		{{ '{{else}}' }}
-			<div class="row wrapper bg-danger">
+			<div class="row wrapper bg-danger" style="margin-right: 0px !important; margin-left: 0px !important;">
 				<div class="col-md-8">
 					<p>No se encontraron enlaces en el contenido html, para continuar agregue al menos uno.</p>
 				</div>
