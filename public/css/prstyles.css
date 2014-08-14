@@ -995,6 +995,10 @@ span.required {
 }
 
 .bg-blue {
-color: #428bca;
-background-color: #d9edf7;
+	color: #428bca;
+	background-color: #d9edf7;
+}
+
+.select2view {
+	width: 100%;
 }

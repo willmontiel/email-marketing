@@ -619,7 +619,19 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isHeaderExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},
+		
+		discardSocial: function () {
+			if (this.get('this.id') !== null) {
+				this.get('model').rollback();
+				this.set('fbaccountsel', this.get('facebook'));
+				this.set('twaccountsel', this.get('twitter'));
+			}
 			
+			this.set('isSocialExpanded', false);
+			this.set('isHeaderExpanded', false);
+			this.set('isScheduleExpanded', false);
+		},	
+				
 		discardTarget: function() {
 			if (this.get('this.id') !== null) {
 				this.set('dbaselist', this.get('databases'));
