@@ -176,23 +176,19 @@ class ChildCommunication extends BaseWrapper
 			$customFields = false;
 			switch ($fields) {
 				case 'No Fields':
-					$this->logger->log("No Fields");
 					$fields = false;
 					break;
 				
 				case 'No Custom':
-					$this->logger->log("No custom");
 					$fields = true;
 					break;
 				
 				case 'Fields':
-					$this->logger->log("It's OKEY");
 					$fields = true;
 					$customFields = $mailField->getCustomFields();
 					break;
 			}
 			
-			$this->logger->log("IDS: {$customFields}");
 			$contactIterator = new ContactIterator($mail, $customFields);
 			$disruptedProcess = FALSE;
 

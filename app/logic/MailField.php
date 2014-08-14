@@ -140,7 +140,7 @@ class MailField
 		$this->searchCustomFieldsInDbase();
 		
 		//2.Recorremos el arreglo y comparamos los campos personalizados encontrados de la base de datos para
-		//obtener los identificadores
+		//obtener los identificadores.
 		$search =  array('Ñ', 'ñ', 'Á', 'á', 'É', 'é', 'Í', 'í', 'Ó', 'ó', 'Ú', 'ú');
 		$replace = array('N', 'n', 'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u');
 		
@@ -198,8 +198,6 @@ class MailField
 		//3.Emparejamos los campos personalizados
 		foreach ($this->customFields as $idh => $cf) {
 			foreach ($contact['fields'] as $idc => $value) {
-				$this->log->log("CF: {$idh}");
-				$this->log->log("KEY: {$idc}");
 				if ($idh == $idc) {
 					$searchCustomFields[] = $cf;
 					$replaceCustomFields[] = (empty($value) ? " " : $value);
@@ -210,9 +208,6 @@ class MailField
 		//4.Fusionamos los arreglos con campos personalizados y primarios
 		$search = array_merge($searchPrimaryFields, $searchCustomFields);
 		$replace = array_merge($replacePrimaryFields, $replaceCustomFields);
-		
-		$this->log->log("Search: " . print_r($search, true));
-		$this->log->log("Replace: " . print_r($replace, true));
 		
 		//5.Utilizamos str_replace para reemplazar los valores del contacto por la marca de campo personalizado
 		$newHtml = str_replace($search, $replace, $this->html);
