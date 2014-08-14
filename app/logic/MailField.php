@@ -145,7 +145,7 @@ class MailField
 		if ($this->fieldsInDbase) {
 			foreach ($this->fieldsInDbase as $r) {
 				foreach ($customfieldsFound as $c) {
-					if (strtoupper($r->name) == str_replace('_', ' ', $c)) {
+					if (strtoupper(str_replace('Ñ', 'N', $r->name)) == str_replace('_', ' ', $c)) {
 						$this->idFields[] = $r->idCustomField;
 					}
 				}
