@@ -173,16 +173,15 @@ class ChildCommunication extends BaseWrapper
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $idDbases);
 			$fields = $mailField->searchCustomFields();
 			
+			$customFields = false;
 			switch ($fields) {
 				case 'No Fields':
 					$this->logger->log("No Fields");
-					$customFields = false;
 					$fields = false;
 					break;
 				case 'No Custom':
 					$this->logger->log("No custom");
 					$fields = true;
-					$customFields = false;
 					break;
 				case true:
 					$this->logger->log("It's OKEY");

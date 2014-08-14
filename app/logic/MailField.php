@@ -88,6 +88,7 @@ class MailField
 			throw new InvalidArgumentException('Error returned by Preg_match_all, invalid values');
 		}
 		
+		$this->log->log("ArrayFields: " . print_r($arrayFields, true));
 		//3.Si no se encuentran campos personalizados simplemente se retornará 
 		//una cadena de texto igual a 'No Fields'
 		if (count($arrayFields[0]) == 0) {
