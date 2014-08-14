@@ -57,6 +57,7 @@ class UserForm extends Form
 			'ROLE_USER' => 'Usuario estándar',
 			'ROLE_STATISTICS' => 'Usuario de estadisticas',
 			'ROLE_MAIL_SERVICES' => 'Servicios de correo',
+			'ROLE_TEMPLATE' => 'Servicios de plantillas',
 			), array(
 			'class' => 'form-control'
 		)));
@@ -68,6 +69,7 @@ class UserForm extends Form
 			'ROLE_USER' => 'Usuario estándar',
 			'ROLE_WEB_SERVICES' => 'Servicios web',
 			'ROLE_MAIL_SERVICES' => 'Servicios de correo',
+			'ROLE_TEMPLATE' => 'Servicios de plantillas',
 			), array(
 			'class' => 'form-control'
         )));
