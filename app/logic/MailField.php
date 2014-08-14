@@ -91,8 +91,7 @@ class MailField
 		//3.Si no se encuentran campos personalizados simplemente se retornará 
 		//una cadena de texto igual a 'No Fields'
 		if (count($arrayFields[0]) == 0) {
-			$this->idFields = 'No Fields';
-			return false;
+			return 'No Fields';
 		}
 		
 //		$this->log->log("Fields: " . print_r($arrayFields, true));
@@ -108,13 +107,14 @@ class MailField
 		
 		//7. Si no hay coincidencias retornamos el mensaje 'No Custom'
 		if (count($this->idFields) <= 0) {
-			$this->idFields = 'No Custom';
-			return false;
+			return 'No Custom';
 		}
 		
 		$this->log->log("Ids: " . print_r($this->idFields, true));
 		$this->idFields = implode(", ", $this->idFields);
 		$this->log->log("Ids: {$this->idFields}");
+		
+		return true;
 	}
 	
 	private function setFields($fields)

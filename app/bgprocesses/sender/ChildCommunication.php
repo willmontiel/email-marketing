@@ -171,9 +171,9 @@ class ChildCommunication extends BaseWrapper
 			$content = $formField->prepareUpdatingForms($content);
 			
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $idDbases);
-			$mailField->searchCustomFields();
-			$fields = $mailField->getCustomFields();
-
+			$fields = $mailField->searchCustomFields();
+			
+			$customFields = array();
 			switch ($fields) {
 				case 'No Fields':
 					$customFields = false;
@@ -183,9 +183,9 @@ class ChildCommunication extends BaseWrapper
 					$fields = true;
 					$customFields = false;
 					break;
-				default:
+				case true:
 					$fields = true;
-					$customFields = $fields;
+					$customFields = $mailField->getCustomFields();
 					break;
 			}
 

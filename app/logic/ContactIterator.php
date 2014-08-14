@@ -24,7 +24,7 @@ class ContactIterator implements Iterator
 		
 		$sql1 = "SELECT idContact FROM mxc WHERE idMail = {$this->mail} AND idContact > {$start} AND status = 'scheduled' ORDER BY idContact LIMIT " . self::ROWS_PER_FETCH;
 		
-		if (!$this->fields) {
+		if (count($this->fields) <= 0) {
 			$sql = "SELECT c.idContact, c.name, c.lastName, c.birthDate, e.idEmail, e.email
 						FROM ({$sql1}) AS l 
 							JOIN contact AS c ON(l.idContact = c.idContact)
