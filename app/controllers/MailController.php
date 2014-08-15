@@ -2150,7 +2150,7 @@ class MailController extends ControllerBase
 				return $this->response->redirect('mail/compose/' . $idMail);
 			}
 			
-			$recipients = explode(', ', $target);
+			$recipients = explode(',', $target);
 			
 			$emails = array();
 			foreach ($recipients as $recipient) {
