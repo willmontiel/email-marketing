@@ -105,7 +105,7 @@ class AutoSendingConverter
 		$subject = json_decode($this->autoresponder->subject);
 		
 		if($subject->mode == 'dynamic') {
-			$obj->subject = $this->getSubject($subject);
+			$obj->subject = html_entity_decode($this->getSubject($subject), ENT_QUOTES);
 		}
 		else {
 			$obj->subject = $subject->text;
