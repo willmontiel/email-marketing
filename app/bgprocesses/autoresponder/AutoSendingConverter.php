@@ -63,21 +63,26 @@ class AutoSendingConverter
 			$this->db->rollback();
 			throw new Exception('Wrong URL');
 		}
+		try {
+			$getHtml = new LoadHtml();
+			$content = $getHtml->gethtml($url, false, false, $this->account, true);
 
-		$getHtml = new LoadHtml();
-		$content = $getHtml->gethtml($url, false, false, $this->account, true);
+			$html = $this->changeTDStyles($content);
 
-		$html = $this->changeTDStyles($content);
+			$mc = new Mailcontent();
+			$mc->idMail = $this->mail->idMail;
+
+			$text = new PlainText();
+			$plainText = $text->getPlainText($html);
+
+			$mc->content = htmlspecialchars($html, ENT_QUOTES);
+			$mc->plainText = $plainText;
+		}
+		catch(Exception $e) {
+			$this->db->rollback();
+			throw new Exception($e->getMessage());
+		}
 		
-		$mc = new Mailcontent();
-		$mc->idMail = $this->mail->idMail;
-
-		$text = new PlainText();
-		$plainText = $text->getPlainText($html);
-
-		$mc->content = htmlspecialchars($html, ENT_QUOTES);
-		$mc->plainText = $plainText;
-
 		if(!$mc->save()) {
 			foreach ($mc->getMessages() as $msg) {
 				$this->logger->log("Error while saving mail html content {$msg}");
