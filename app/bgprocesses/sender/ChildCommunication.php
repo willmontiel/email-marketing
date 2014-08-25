@@ -158,7 +158,7 @@ class ChildCommunication extends BaseWrapper
 //				$this->log->log("No Hay editor");
 				$footerObj = new FooterObj();
 				$footerObj->setAccount($account);
-				$html = utf8_decode($footerObj->addFooterInHtml(html_entity_decode($mailContent->content)));
+				$html = utf8_decode($footerObj->addFooterInHtml(html_entity_decode($mailContent->content, ENT_QUOTES)));
 			}
 
 			$urlManager = $this->urlManager;
