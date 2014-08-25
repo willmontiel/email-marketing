@@ -64,12 +64,14 @@ class CheckASProcess
 			}
 		}
 
-		foreach ($mails as $mail) {
-			try {
-				$this->send_autoresponders($mail);
-			}
-			catch (Exception $e) {
-				$this->logger->log("Exception: Error sending auto responder, {$e}");
+		if(!empty($mails)) {
+			foreach ($mails as $mail) {
+				try {
+					$this->send_autoresponders($mail);
+				}
+				catch (Exception $e) {
+					$this->logger->log("Exception: Error sending auto responder, {$e}");
+				}
 			}
 		}
 	}
