@@ -778,7 +778,7 @@ class ApiController extends ControllerBase
 			if(!$wrapper->validateListBelongsToAccount($this->user->account, $idContactlist)) {
 				return $this->setJsonResponse(null, 422, 'Lista invalida');
 			}
-			$override = ($this->acl->isAllowed($this->user->userrole, 'contact', 'full delete')) ? TRUE : FALSE;
+			$override = ($this->acl->isAllowed($this->user->userrole, 'contactlist', 'full delete')) ? TRUE : FALSE;
 			$wrapper->setUser($this->user);
 			$deletedList = $wrapper->deleteContactList($idContactlist, $override);	
 		}

@@ -247,7 +247,7 @@ class ProcessController extends ControllerBase
 				"totalReg" => $process->totalReg,
 				"status" => $process->status,
 				"linesprocess" => $count['linesprocess'],
-				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated']),
+				"import" => $count['linesprocess'] - ($count['exist'] + $count['invalid'] + $count['bloqued'] + $count['repeated']),
 				"Nimport" => $count['exist'] + $count['invalid'] + $count['bloqued'] + $count['limit'] + $count['repeated'],
 				"exist" => $count['exist'],
 				"invalid" => $count['invalid'],
