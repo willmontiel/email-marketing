@@ -374,8 +374,7 @@ class ChildCommunication extends BaseWrapper
 				$timer->endTimer('prepare-msg');
 
 				$timer->startTimer('send-msg', 'Sending message (swift)...');
-				//$recipients = $swift->send($message, $failures);
-				$recipients = true;
+				$recipients = $swift->send($message, $failures);
 				$timer->endTimer('send-msg');
 				
 				if ($recipients) {
