@@ -162,7 +162,7 @@
 											Contactos totales en archivo
 										</td>
 										<td class="big-number text-right">
-											{{process['linesprocess']}}
+											{{process['totalReg']}}
 										</td>
 									</tr>
 									<tr class="green">
