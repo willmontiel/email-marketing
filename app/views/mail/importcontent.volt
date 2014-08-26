@@ -30,6 +30,7 @@
 {% endblock %}
 {% block content %}
 	<div class="container-fluid">
+		<h4 class="sectiontitle">Importar contenido HTML desde una URL</h4>
 		<div class="row">
 			<div class="col-sm-12">
 				<br />
@@ -48,7 +49,7 @@
 						<div class="col-sm-4">
 							<a class="btn btn-sm btn-primary extra-padding" onClick="sendData();">Importar</a>
 							<a class="btn btn-sm btn-default extra-padding" href="{{url('mail/compose')}}/{{mail.idMail}}">Cancelar</a>
-							<div id="wait" style="display: none">Espere... procesando solicitud <img src="{{url('')}}/images/processing.gif" width="20" height="20"> <br />(podría tardar unos minutos)</div>
+							<div id="wait" style="display: block">Espere... procesando solicitud <img src="{{url('')}}/images/loading4.gif" width="20" height="20"><br />(podría tardar unos minutos)</div>
 						</div>
 					</div>
 				</form>
