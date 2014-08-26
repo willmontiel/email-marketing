@@ -197,11 +197,12 @@ class ContactWrapper extends BaseWrapper
 	
 	public function deleteContactFromList($contact, $list, $override = FALSE) 
 	{
-		if(!$override) {
-			$this->checkSendingStatusContact($contact);
+		$hasMails = $this->checkSendingStatusContact($contact);
+		if(!$override && $hasMails) {
+			throw new \Exception('El contacto no puede ser eliminado debido a envíos realizados en los últimos 30 días');
 		}
 		$association = Coxcl::findFirst("idContactlist = '$list->idContactlist' AND idContact = '$contact->idContact'");
-		
+
 		if($association->delete()) {
 			$this->counter->deleteContactFromList($contact, $list);
 		}		
@@ -210,7 +211,11 @@ class ContactWrapper extends BaseWrapper
 				foreach ($customfields as $field) {
 					$field->delete();
 				}
-
+			if($override && $hasMails) {
+				$str = "La cuenta " . $contact->dbase->account->companyName . ", elimino el contacto " . $contact->name . " " . $contact->lastName . " - idContact: " . $contact->idContact . " con correo " . $contact->email->email . " el día " . date('d/m/Y', time()) . " a las " . date('H:i a', time()) . " de la base de datos " . $contact->dbase->name . " - idDbase: " . $contact->dbase->idDbase;
+				Phalcon\DI::getDefault()->get('deletelogger')->log($str);
+			}
+				
 			if($contact->delete()) {
 				$this->counter->deleteContactFromDbase($contact);
 			}
@@ -220,8 +225,9 @@ class ContactWrapper extends BaseWrapper
 	
 	public function deleteContactFromDB($contact, $db, $override = FALSE)
 	{
-		if(!$override) {
-			$this->checkSendingStatusContact($contact);
+		$hasMails = $this->checkSendingStatusContact($contact);
+		if(!$override && $hasMails) {
+			throw new \Exception('El contacto no puede ser eliminado debido a envíos realizados en los últimos 30 días');
 		}
 		$allLists = Contactlist::findByIdDbase($db->idDbase);
 		if (count($allLists) > 0) {
@@ -251,6 +257,12 @@ class ContactWrapper extends BaseWrapper
 						}
 					}
 				}
+				
+				if($override && $hasMails) {
+					$str = "La cuenta " . $contact->dbase->account->companyName . ", elimino el contacto " . $contact->name . " " . $contact->lastName . " - idContact: " . $contact->idContact . " con correo " . $contact->email->email . " el día " . date('d/m/Y', time()) . " a las " . date('H:i a', time()) . " de la base de datos " . $contact->dbase->name . " - idDbase: " . $contact->dbase->idDbase;
+					Phalcon\DI::getDefault()->get('deletelogger')->log($str);
+				}
+
 				if (!$contact->delete()) {
 					foreach ($contact->getMessages() as $msg) {
 						Phalcon\DI::getDefault()->get('logger')->log('Error while deleting contact: ' . $msg);
@@ -305,8 +317,9 @@ class ContactWrapper extends BaseWrapper
 		$query = $modelManager->createQuery($sql);
 		$result = $query->execute();
 		if( count($result) == 1 ) {
-			throw new \Exception('El contacto no puede ser eliminado debido a envíos realizados en los últimos 30 días');
+			return true;
 		}
+		return false;
 	}
 
 	public function addExistingContactToListFromDbase($email, Contactlist $list, $saveCounters = true, $susbscribe = false)

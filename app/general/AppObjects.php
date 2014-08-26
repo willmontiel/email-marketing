@@ -43,6 +43,7 @@ class AppObjects
 			$this->setFullPath();
 			$this->setDispatcher();
 			$this->setLogger();
+			$this->setDeleteLogger();
 			$this->setUrlManagerObject();
 			$this->setUri();
 			$this->setViewSystemNotAvailable();
@@ -81,6 +82,7 @@ class AppObjects
 			$this->setMailReportsFolder();
 			
 			$this->setLogger();
+			$this->setDeleteLogger();
 			$this->setProfiler();
 			
 			$this->setElements();
@@ -539,6 +541,18 @@ class AppObjects
 		$this->di->set('logger', function () {
 			// Archivo de log
 			return new \Phalcon\Logger\Adapter\File("../app/logs/debug.log");
+		});
+	}
+	
+	/**
+	 * Log Delete Contact Object, utilizado para logging de eliminación de contactos a archivo
+	 * @return DI object
+	 */
+	private function setDeleteLogger()
+	{
+		$this->di->set('deletelogger', function () {
+			// Archivo de log
+			return new \Phalcon\Logger\Adapter\File("../app/logs/deletecontacts.log");
 		});
 	}
 

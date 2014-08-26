@@ -361,7 +361,9 @@ class ChildCommunication extends BaseWrapper
 				$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', $trackingID);
 				$headers->addTextHeader('X-GreenArrow-ListID', $listID);
 				// TrackingObject ya fue analizado para no crear objetos dentro del loop
-				$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
+				if($account->idAccount != 55 ) {
+					$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
+				}
 				$message->setFrom($from);
 				$message->setBody($htmlWithTracking, 'text/html');
 				$message->setTo($to);
@@ -372,7 +374,8 @@ class ChildCommunication extends BaseWrapper
 				$timer->endTimer('prepare-msg');
 
 				$timer->startTimer('send-msg', 'Sending message (swift)...');
-				$recipients = $swift->send($message, $failures);
+				//$recipients = $swift->send($message, $failures);
+				$recipients = true;
 				$timer->endTimer('send-msg');
 				
 				if ($recipients) {
