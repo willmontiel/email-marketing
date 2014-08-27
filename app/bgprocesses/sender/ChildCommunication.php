@@ -336,8 +336,7 @@ class ChildCommunication extends BaseWrapper
 				$headers->addTextHeader('X-GreenArrow-Click-Tracking-ID', $trackingID);
 				$headers->addTextHeader('X-GreenArrow-ListID', $listID);
 				// TrackingObject ya fue analizado para no crear objetos dentro del loop
-				//if($account->idAccount != 55 ) {
-				if($account->idAccount != 3 ) {
+				if($account->idAccount != 55 ) {
 					$headers->addTextHeader('List-Unsubscribe', $trackingObj->getUnsubscribeLink());
 				}
 				$message->setFrom($from);

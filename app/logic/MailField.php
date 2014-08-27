@@ -134,7 +134,7 @@ class MailField
 		}
 	}
 	
-	private function setIdFields($fields)
+	private function setIdFields()
 	{
 		//1.Buscamos los campos personalizados de la base de datos
 		$this->searchCustomFieldsInDbase();
