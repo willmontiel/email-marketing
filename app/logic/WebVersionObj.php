@@ -43,16 +43,18 @@ class WebVersionObj extends BaseWrapper
 		
 		list($content, $links) = $prepareMail->processContent($html);
 		
-		
-		
+		$this->logger->log("1.1.1");
 		if($this->contact['idContact'] === 0) {
+			$this->logger->log("1.1.2");
 			$fields = 'No Fields';
 		}
 		else {
+			$this->logger->log("1.1.3");
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
 			$fields = $mailField->searchCustomFields();
 		}
 		
+		$this->logger->log("1.1.4");
 		$customFields = false;
 		switch ($fields) {
 			case 'No Fields':
@@ -69,8 +71,11 @@ class WebVersionObj extends BaseWrapper
 				break;
 		}
 		
+		$this->logger->log("1.1.5");
+		$this->logger->log("Contact: " . print_r($this->contact, true));
 		$this->searchCustomfields($customFields);
-		
+		$this->logger->log("Contact: " . print_r($this->contact, true));
+		$this->logger->log("Contact: " . print_r($this->contact[0], true));
 		if ($fields) {
 			$c = $mailField->processCustomFields($this->contact[0]);
 			$html = $c['html'];
@@ -78,7 +83,8 @@ class WebVersionObj extends BaseWrapper
 		else {
 			$html = $content;
 		}
-
+		
+		$this->logger->log("1.1.6");
 		$trackingObj = new TrackingUrlObject();
 		if($social) {
 			$htmlWithTracking = $trackingObj->getSocialTrackingUrl($html, $mail->idMail, $contact['idContact'], $links, $social);
@@ -222,7 +228,6 @@ class WebVersionObj extends BaseWrapper
 				}
 				
 				$this->contact = $array;
-				$this->logger->log("New contact: " . print_r($array, true));
 			}
 		}
 
