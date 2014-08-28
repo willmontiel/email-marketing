@@ -2,7 +2,6 @@
 class WebVersionObj extends BaseWrapper
 {
 	private $contact;
-	private $completeContact;
 	const IMG_SN_WIDTH = 450;
 	const IMG_SN_HEIGHT = 340;
 	const IMG_TYPE_DEFAULT = 'default';
@@ -75,7 +74,7 @@ class WebVersionObj extends BaseWrapper
 		$this->searchCustomfields($customFields);
 		
 		if ($fields) {
-			$c = $mailField->processCustomFields($this->completeContact);
+			$c = $mailField->processCustomFields($this->contact);
 			$html = $c['html'];
 		}
 		else {
@@ -176,14 +175,11 @@ class WebVersionObj extends BaseWrapper
 									   JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) 
 								   WHERE cf.idCustomField IN ({$fields})) AS f ON(c.idContact = f.idContact)
 					WHERE c.idContact = {$this->contact['idContact']}";
-					
-			$this->logger->log("SQL: {$sql}");
+			
 			$db = Phalcon\DI::getDefault()->get('db');
 			$result = $db->query($sql);
 			$contact = $result->fetchAll();
 
-			$this->logger->log("Contact: " . print_r($contact, true));
-			
 			if (count($contact) > 0) {
 				$array = array();
 				$k = 0;
@@ -226,6 +222,8 @@ class WebVersionObj extends BaseWrapper
 					}
 					$k++;
 				}
+				
+				$this->contact = $array;
 				$this->logger->log("New contact: " . print_r($array, true));
 			}
 		}
