@@ -26,7 +26,7 @@ class WebVersionObj extends BaseWrapper
 			$htmlObj = new HtmlObj();
 			$htmlObj->setAccount($this->account);
 			$htmlObj->assignContent(json_decode($mailContent->content));
-			$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
+			$html = utf8_encode($htmlObj->replacespecialchars($htmlObj->render()));
 		}
 		else {
 			$footerObj = new FooterObj();
