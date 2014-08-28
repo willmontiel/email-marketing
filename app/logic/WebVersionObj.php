@@ -22,6 +22,8 @@ class WebVersionObj extends BaseWrapper
 
 	public function createWebVersion(Mail $mail, Mailcontent $mailContent, Contact $contact, $social = false)
 	{
+		$this->contact = get_object_vars($contact);
+		
 		if (trim($mailContent->content) === '') {
 			throw new \InvalidArgumentException("Error mail's content is empty");
 		}
@@ -42,13 +44,12 @@ class WebVersionObj extends BaseWrapper
 		
 		list($content, $links) = $prepareMail->processContent($html);
 		
-		$contact = get_object_vars($contact);
 		
-		if($contact['idContact'] === 0) {
+		
+		if($this->contact['idContact'] === 0) {
 			$fields = 'No Fields';
 		}
 		else {
-			$this->contact = $contact;
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
 			$fields = $mailField->searchCustomFields();
 		}
