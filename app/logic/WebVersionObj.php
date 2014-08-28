@@ -77,7 +77,6 @@ class WebVersionObj extends BaseWrapper
 			$html = $content;
 		}
 		
-		$this->logger->log("1.1.6");
 		$trackingObj = new TrackingUrlObject();
 		if($social) {
 			$htmlWithTracking = $trackingObj->getSocialTrackingUrl($html, $mail->idMail, $this->contact[0]['contact']['idContact'], $links, $social);
