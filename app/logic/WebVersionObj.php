@@ -175,7 +175,7 @@ class WebVersionObj extends BaseWrapper
 								   FROM customfield AS cf 
 									   JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) 
 								   WHERE cf.idCustomField IN ({$fields})) AS f ON(c.idContact = f.idContact)
-					WHERE c.idContact = {$this->contact->idContact}";
+					WHERE c.idContact = {$this->contact['idContact']}";
 					
 			$this->logger->log("SQL: {$sql}");
 			$db = Phalcon\DI::getDefault()->get('db');
