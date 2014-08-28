@@ -1,7 +1,7 @@
 <?php
 class WebVersionObj extends BaseWrapper
 {
-	private $contact;
+	private $contact = array();
 	const IMG_SN_WIDTH = 450;
 	const IMG_SN_HEIGHT = 340;
 	const IMG_TYPE_DEFAULT = 'default';
@@ -20,8 +20,8 @@ class WebVersionObj extends BaseWrapper
 	}
 
 	public function createWebVersion(Mail $mail, Mailcontent $mailContent, Contact $contact, $social = false)
-	{
-		$this->contact = get_object_vars($contact);
+	{		
+		$this->contact[0]['contact'] = get_object_vars($contact);
 		
 		if (trim($mailContent->content) === '') {
 			throw new \InvalidArgumentException("Error mail's content is empty");
@@ -43,18 +43,14 @@ class WebVersionObj extends BaseWrapper
 		
 		list($content, $links) = $prepareMail->processContent($html);
 		
-		$this->logger->log("1.1.1");
-		if($this->contact['idContact'] === 0) {
-			$this->logger->log("1.1.2");
+		if($this->contact[0]['contact']['idContact'] === 0) {
 			$fields = 'No Fields';
 		}
 		else {
-			$this->logger->log("1.1.3");
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
 			$fields = $mailField->searchCustomFields();
 		}
 		
-		$this->logger->log("1.1.4");
 		$customFields = false;
 		switch ($fields) {
 			case 'No Fields':
@@ -71,11 +67,8 @@ class WebVersionObj extends BaseWrapper
 				break;
 		}
 		
-		$this->logger->log("1.1.5");
-		$this->logger->log("Contact: " . print_r($this->contact, true));
 		$this->searchCustomfields($customFields);
-		$this->logger->log("Contact: " . print_r($this->contact, true));
-		$this->logger->log("Contact: " . print_r($this->contact[0], true));
+		
 		if ($fields) {
 			$c = $mailField->processCustomFields($this->contact[0]);
 			$html = $c['html'];
@@ -87,13 +80,13 @@ class WebVersionObj extends BaseWrapper
 		$this->logger->log("1.1.6");
 		$trackingObj = new TrackingUrlObject();
 		if($social) {
-			$htmlWithTracking = $trackingObj->getSocialTrackingUrl($html, $mail->idMail, $contact['idContact'], $links, $social);
+			$htmlWithTracking = $trackingObj->getSocialTrackingUrl($html, $mail->idMail, $this->contact[0]['contact']['idContact'], $links, $social);
 		}
 		else {
-			$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $contact['idContact'], $links);
+			$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $this->contact[0]['contact']['idContact'], $links);
 		}
 		
-		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $contact['idContact'], $social);
+		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $this->contact[0]['contact']['idContact'], $social);
 		
 		return $htmlFinal;
 	}
@@ -178,25 +171,17 @@ class WebVersionObj extends BaseWrapper
 								   FROM customfield AS cf 
 									   JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) 
 								   WHERE cf.idCustomField IN ({$fields})) AS f ON(c.idContact = f.idContact)
-					WHERE c.idContact = {$this->contact['idContact']}";
+					WHERE c.idContact = {$this->contact[0]['contact']['idContact']}";
 			
 			$db = Phalcon\DI::getDefault()->get('db');
 			$result = $db->query($sql);
 			$contact = $result->fetchAll();
 
 			if (count($contact) > 0) {
-				$array = array();
 				$k = 0;
 
 				foreach ($contact as $m) {
 					if ($k == 0) {
-						$c = array(
-							'idContact' => $this->contact['idContact'],
-							'name' => $this->contact['name'],
-							'lastName' => $this->contact['lastName'],
-							'birthDate' => $this->contact['birthDate'],
-						);
-
 						$e = array(
 							'email' => $m['email'],
 							'idEmail' => $m['idEmail']
@@ -212,22 +197,19 @@ class WebVersionObj extends BaseWrapper
 							}
 						}
 						
-						$array[0]['contact'] = $c;
-						$array[0]['email'] = $e;
-						$array[0]['fields'] = $f;
+						$this->contact[0]['email'] = $e;
+						$this->contact[0]['fields'] = $f;
 					}
-					else if ($array[0]['email']['idEmail'] == $m['idEmail']) {
+					else if ($this->contact[0]['email']['idEmail'] == $m['idEmail']) {
 						if ($m['textValue'] !== null) {
-							$array[0]['fields'][$m['idCustomField']] = $m['textValue'];
+							$this->contact[0]['fields'][$m['idCustomField']] = $m['textValue'];
 						}
 						else if ($m['numberValue'] !== null) {
-							$array[0]['fields'][$m['idCustomField']] = $m['numberValue'];
+							$this->contact[0]['fields'][$m['idCustomField']] = $m['numberValue'];
 						}
 					}
 					$k++;
 				}
-				
-				$this->contact = $array;
 			}
 		}
 
