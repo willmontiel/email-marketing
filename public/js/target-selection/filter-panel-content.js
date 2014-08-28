@@ -104,6 +104,7 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			self.initializeTooltip();
 			addFilter.on('click', function (e) {
 				self.createNextPanel(e);
+				$(this).tooltip('hide');
 				$(this).remove();
 			});
 			
