@@ -53,8 +53,6 @@ class WebVersionObj extends BaseWrapper
 			$fields = $mailField->searchCustomFields();
 		}
 		
-		$this->logger->log("Fields: {$fields}");
-		
 		$customFields = false;
 		switch ($fields) {
 			case 'No Fields':
@@ -76,6 +74,7 @@ class WebVersionObj extends BaseWrapper
 		if ($fields) {
 			$c = $mailField->processCustomFields($this->contact);
 			$html = $c['html'];
+			$this->logger->log("Html: {$html}");
 		}
 		else {
 			$html = $content;
