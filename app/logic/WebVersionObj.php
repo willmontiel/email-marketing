@@ -183,34 +183,52 @@ class WebVersionObj extends BaseWrapper
 			$contact = $result->fetchAll();
 
 			$this->logger->log("Contact: " . print_r($contact, true));
-	}
-//		if (count($contact) > 0) {
-//			$c = array(
-//				'idContact' => $this->contact->idContact,
-//				'name' => $this->contact->name,
-//				'lastName' => $this->contact->lastName,
-//				'birthDate' => $this->contact->birthDate,
-//			);
-//
-//			$e = array(
-//				'email' => $contact[0]['email'],
-//				'idEmail' => $contact[0]['idEmail']
-//			);
-//
-//			$f = array();
-//			
-//			if ($contact[0]['idCustomField'] !== null) {
-//				if ($contact[0]['textValue'] !== null) {
-//					$f[$contact[0]['idCustomField']] = $contact[0]['textValue'];
-//				}
-//				else if ($contact[0]['numberValue'] !== null) {
-//					$f[$contact[0]['idCustomField']] = $contact[0]['numberValue'];
-//				}
-//			}
-//			
-//			$this->contacts[0]['contact'] = $c;
-//			$this->contacts[0]['email'] = $e;
-//			$this->contacts[0]['fields'] = $f;
-//		}
+			
+			if (count($contact) > 0) {
+				$array = array();
+				$k = 0;
+
+				foreach ($contact as $m) {
+					if ($k == 0) {
+						$c = array(
+							'idContact' => $this->contact['idContact'],
+							'name' => $this->contact['name'],
+							'lastName' => $this->contact['lastName'],
+							'birthDate' => $this->contact['birthDate'],
+						);
+
+						$e = array(
+							'email' => $m['email'],
+							'idEmail' => $m['idEmail']
+						);
+
+						$f = array();
+						if ($m['idCustomField'] !== null) {
+							if ($m['textValue'] !== null) {
+								$f[$m['idCustomField']] = $m['textValue'];
+							}
+							else if ($m['numberValue'] !== null) {
+								$f[$m['idCustomField']] = $m['numberValue'];
+							}
+						}
+						
+						$array[0]['contact'] = $c;
+						$array[0]['email'] = $e;
+						$array[0]['fields'] = $f;
+					}
+					else if ($array[0]['email']['idEmail'] == $m['idEmail']) {
+						if ($m['textValue'] !== null) {
+							$array[0]['fields'][$m['idCustomField']] = $m['textValue'];
+						}
+						else if ($m['numberValue'] !== null) {
+							$array[0]['fields'][$m['idCustomField']] = $m['numberValue'];
+						}
+					}
+					$k++;
+				}
+				$this->logger->log("New contact: " . print_r($array, true));
+			}
+		}
+
 	}
 }
