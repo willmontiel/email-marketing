@@ -9,13 +9,17 @@ class WebversionController extends ControllerBase
 		$src = $this->urlManager->getBaseUri(true) . 'webversion/show/1-' . $idMail . '-' . $idContact;
 		$md5_2 = md5($src . '-Sigmamovil_Rules');
 		if ($md5 == $md5_2) {
+			$this->logger->log('1');
 			$html = $this->startWebVersionProcess($idLink, $idMail, $idContact, FALSE);
+			$this->logger->log('2');
 			if(!$html) {
 				return $this->response->redirect('error/link');
 			}
+			$this->logger->log('3');
 //			$this->logger->log("HTML: {$html}");
 //			$this->logger->log("Lala");
-			$this->view->setVar('html', "lala");
+			$l = "LALA";
+			$this->view->setVar('html', $l);
 		}
 		else {
 			return $this->response->redirect('error/link');
