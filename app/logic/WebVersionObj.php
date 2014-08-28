@@ -1,6 +1,8 @@
 <?php
 class WebVersionObj extends BaseWrapper
 {
+	private $contact;
+	private $completeContact;
 	const IMG_SN_WIDTH = 450;
 	const IMG_SN_HEIGHT = 340;
 	const IMG_TYPE_DEFAULT = 'default';
@@ -46,6 +48,7 @@ class WebVersionObj extends BaseWrapper
 			$fields = 'No Fields';
 		}
 		else {
+			$this->contact = $contact;
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
 			$fields = $mailField->searchCustomFields();
 		}
@@ -68,8 +71,10 @@ class WebVersionObj extends BaseWrapper
 				break;
 		}
 		
+		$this->searchCustomfields($customFields);
+		
 		if ($fields) {
-			$c = $mailField->processCustomFields($contact);
+			$c = $mailField->processCustomFields($this->completeContact);
 			$html = $c['html'];
 		}
 		else {
@@ -157,5 +162,53 @@ class WebVersionObj extends BaseWrapper
 		$image = $socialImg->createImageToIdealSize($img, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, $header);
 		
 		return $image;
+	}
+	
+	private function searchCustomfields($fields) 
+	{
+		if ($fields) {
+			$sql = "SELECT e.idEmail, e.email, f.idCustomField, f.name AS field, f.textValue, f.numberValue 
+					FROM contact AS c 
+						JOIN email AS e ON(c.idEmail = e.idEmail)
+						LEFT JOIN (SELECT cf.idCustomField, cf.name, fi.idContact, fi.textValue, fi.numberValue 
+								   FROM customfield AS cf 
+									   JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) 
+								   WHERE cf.idCustomField IN ({$fields})) AS f ON(c.idContact = f.idContact)
+					WHERE c.idContact = {$this->contact->idContact}";
+
+			$db = Phalcon\DI::getDefault()->get('db');
+			$result = $db->query($sql);
+			$contact = $result->fetchAll();
+
+			$this->logger->log("Contact: " . print_r($contact, true));
+	}
+//		if (count($contact) > 0) {
+//			$c = array(
+//				'idContact' => $this->contact->idContact,
+//				'name' => $this->contact->name,
+//				'lastName' => $this->contact->lastName,
+//				'birthDate' => $this->contact->birthDate,
+//			);
+//
+//			$e = array(
+//				'email' => $contact[0]['email'],
+//				'idEmail' => $contact[0]['idEmail']
+//			);
+//
+//			$f = array();
+//			
+//			if ($contact[0]['idCustomField'] !== null) {
+//				if ($contact[0]['textValue'] !== null) {
+//					$f[$contact[0]['idCustomField']] = $contact[0]['textValue'];
+//				}
+//				else if ($contact[0]['numberValue'] !== null) {
+//					$f[$contact[0]['idCustomField']] = $contact[0]['numberValue'];
+//				}
+//			}
+//			
+//			$this->contacts[0]['contact'] = $c;
+//			$this->contacts[0]['email'] = $e;
+//			$this->contacts[0]['fields'] = $f;
+//		}
 	}
 }
