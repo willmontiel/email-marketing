@@ -50,13 +50,16 @@ class WebversionController extends ControllerBase
 			'conditions' => 'idMail = ?1',
 			'bind' => array(1 => $idMail)
 		)); 
-
+		
 		$contact = Contact::findFirst(array(
 			'conditions' => 'idContact = ?1',
 			'bind' => array(1 => $idContact)
 		));
 			
 		if ($mail && $mailContent) {
+			
+			$account = Account::findFirstByIdAccount($mail->idAccount);
+			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
 			
 			if(!$contact) {
 				$contact = new Contact();
@@ -66,10 +69,6 @@ class WebversionController extends ControllerBase
 			else {
 				$dbase = Dbase::findFirstByIdDbase($contact->idDbase);
 			}
-			
-			$account = Account::findFirstByIdAccount($mail->idAccount);
-			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
-			
 
 			try{
 				$webversionobj = new WebVersionObj();

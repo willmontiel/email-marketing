@@ -1,12 +1,14 @@
 <?php
 class WebVersionObj extends BaseWrapper
 {
+	private $contact = array();
 	const IMG_SN_WIDTH = 450;
 	const IMG_SN_HEIGHT = 340;
 	const IMG_TYPE_DEFAULT = 'default';
 	
 	function __construct() {
 		$this->urlManager = Phalcon\DI::getDefault()->get('urlManager');
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}
 	
 	public function setDbase(Dbase $dbase) {
@@ -18,7 +20,9 @@ class WebVersionObj extends BaseWrapper
 	}
 
 	public function createWebVersion(Mail $mail, Mailcontent $mailContent, Contact $contact, $social = false)
-	{
+	{		
+		$this->contact[0]['contact'] = get_object_vars($contact);
+		
 		if (trim($mailContent->content) === '') {
 			throw new \InvalidArgumentException("Error mail's content is empty");
 		}
@@ -26,7 +30,7 @@ class WebVersionObj extends BaseWrapper
 			$htmlObj = new HtmlObj();
 			$htmlObj->setAccount($this->account);
 			$htmlObj->assignContent(json_decode($mailContent->content));
-			$html = utf8_decode($htmlObj->replacespecialchars($htmlObj->render()));
+			$html = $htmlObj->replacespecialchars($htmlObj->render());
 		}
 		else {
 			$footerObj = new FooterObj();
@@ -39,50 +43,51 @@ class WebVersionObj extends BaseWrapper
 		
 		list($content, $links) = $prepareMail->processContent($html);
 		
-		$contact = get_object_vars($contact);
-		
-		if($contact['idContact'] === 0) {
-			$cf = 'No Fields';
+		if($this->contact[0]['contact']['idContact'] === 0) {
+			$fields = 'No Fields';
 		}
 		else {
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
-			$cf = $mailField->getCustomFields();
+			$fields = $mailField->searchCustomFields();
 		}
 		
-		switch ($cf) {
+		$customFields = false;
+		switch ($fields) {
 			case 'No Fields':
-				$customFields = false;
 				$fields = false;
 				break;
+
 			case 'No Custom':
 				$fields = true;
-				$customFields = false;
 				break;
-			default:
+
+			case 'Fields':
 				$fields = true;
-				$customFields = $cf;
+				$customFields = $mailField->getCustomFields();
 				break;
 		}
 		
+		$this->searchCustomfields($customFields);
+		
 		if ($fields) {
-			$c = $mailField->processCustomFields($contact);
+			$c = $mailField->processCustomFields($this->contact[0]);
 			$html = $c['html'];
 		}
 		else {
 			$html = $content;
 		}
-
+		
 		$trackingObj = new TrackingUrlObject();
 		if($social) {
-			$htmlWithTracking = $trackingObj->getSocialTrackingUrl($html, $mail->idMail, $contact['idContact'], $links, $social);
+			$htmlWithTracking = $trackingObj->getSocialTrackingUrl($html, $mail->idMail, $this->contact[0]['contact']['idContact'], $links, $social);
 		}
 		else {
-			$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $contact['idContact'], $links);
+			$htmlWithTracking = $trackingObj->getTrackingUrl($html, $mail->idMail, $this->contact[0]['contact']['idContact'], $links);
 		}
 		
-		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $contact['idContact'], $social);
+		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $this->contact[0]['contact']['idContact'], $social);
 		
-		return $htmlFinal;
+		return utf8_decode($htmlFinal);
 	}
 	
 	public function insertSocialMediaMetadata(Mail $mail, $html, $idContact, $social = FALSE)
@@ -153,5 +158,59 @@ class WebVersionObj extends BaseWrapper
 		$image = $socialImg->createImageToIdealSize($img, self::IMG_SN_WIDTH, self::IMG_SN_HEIGHT, $header);
 		
 		return $image;
+	}
+	
+	private function searchCustomfields($fields) 
+	{
+		if ($fields) {
+			$sql = "SELECT e.idEmail, e.email, f.idCustomField, f.name AS field, f.textValue, f.numberValue 
+					FROM contact AS c 
+						JOIN email AS e ON(c.idEmail = e.idEmail)
+						LEFT JOIN (SELECT cf.idCustomField, cf.name, fi.idContact, fi.textValue, fi.numberValue 
+								   FROM customfield AS cf 
+									   JOIN fieldinstance AS fi ON (cf.idCustomField = fi.idCustomField) 
+								   WHERE cf.idCustomField IN ({$fields})) AS f ON(c.idContact = f.idContact)
+					WHERE c.idContact = {$this->contact[0]['contact']['idContact']}";
+			
+			$db = Phalcon\DI::getDefault()->get('db');
+			$result = $db->query($sql);
+			$contact = $result->fetchAll();
+
+			if (count($contact) > 0) {
+				$k = 0;
+
+				foreach ($contact as $m) {
+					if ($k == 0) {
+						$e = array(
+							'email' => $m['email'],
+							'idEmail' => $m['idEmail']
+						);
+
+						$f = array();
+						if ($m['idCustomField'] !== null) {
+							if ($m['textValue'] !== null) {
+								$f[$m['idCustomField']] = $m['textValue'];
+							}
+							else if ($m['numberValue'] !== null) {
+								$f[$m['idCustomField']] = $m['numberValue'];
+							}
+						}
+						
+						$this->contact[0]['email'] = $e;
+						$this->contact[0]['fields'] = $f;
+					}
+					else if ($this->contact[0]['email']['idEmail'] == $m['idEmail']) {
+						if ($m['textValue'] !== null) {
+							$this->contact[0]['fields'][$m['idCustomField']] = $m['textValue'];
+						}
+						else if ($m['numberValue'] !== null) {
+							$this->contact[0]['fields'][$m['idCustomField']] = $m['numberValue'];
+						}
+					}
+					$k++;
+				}
+			}
+		}
+
 	}
 }
