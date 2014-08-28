@@ -7,6 +7,7 @@ class WebVersionObj extends BaseWrapper
 	
 	function __construct() {
 		$this->urlManager = Phalcon\DI::getDefault()->get('urlManager');
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}
 	
 	public function setDbase(Dbase $dbase) {
@@ -26,7 +27,7 @@ class WebVersionObj extends BaseWrapper
 			$htmlObj = new HtmlObj();
 			$htmlObj->setAccount($this->account);
 			$htmlObj->assignContent(json_decode($mailContent->content));
-			$html = utf8_encode($htmlObj->replacespecialchars($htmlObj->render()));
+			$html = $htmlObj->replacespecialchars($htmlObj->render());
 		}
 		else {
 			$footerObj = new FooterObj();
@@ -48,6 +49,8 @@ class WebVersionObj extends BaseWrapper
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
 			$fields = $mailField->searchCustomFields();
 		}
+		
+		$this->logger->log("Fields: {$fields}");
 		
 		$customFields = false;
 		switch ($fields) {
