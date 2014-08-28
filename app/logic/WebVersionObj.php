@@ -42,25 +42,26 @@ class WebVersionObj extends BaseWrapper
 		$contact = get_object_vars($contact);
 		
 		if($contact['idContact'] === 0) {
-			$cf = 'No Fields';
+			$fields = 'No Fields';
 		}
 		else {
 			$mailField = new MailField($content, $mailContent->plainText, $mail->subject, $this->dbase->idDbase);
-			$cf = $mailField->getCustomFields();
+			$fields = $mailField->searchCustomFields();
 		}
 		
-		switch ($cf) {
+		$customFields = false;
+		switch ($fields) {
 			case 'No Fields':
-				$customFields = false;
 				$fields = false;
 				break;
+
 			case 'No Custom':
 				$fields = true;
-				$customFields = false;
 				break;
-			default:
+
+			case 'Fields':
 				$fields = true;
-				$customFields = $cf;
+				$customFields = $mailField->getCustomFields();
 				break;
 		}
 		
