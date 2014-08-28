@@ -81,7 +81,9 @@ class WebversionController extends ControllerBase
 				$webversionobj->setAccount($account);
 				$webversionobj->setDbase($dbase);
 				$webversionobj->setUrlDomain($domain);
+				$this->logger->log("1.1");
 				$html = $webversionobj->createWebVersion($mail, $mailContent, $contact, $social);
+				$this->logger->log("1.2");
 			}
 			catch (\Exception $e) {
 				$this->logger->log('Exception ' . $e);
@@ -89,7 +91,7 @@ class WebversionController extends ControllerBase
 			catch (\InvalidArgumentException $e) {
 				$this->logger->log('Exception ' . $e);
 			}
-			
+			$this->logger->log("1.3");
 			return $html;
 		}
 		else {
