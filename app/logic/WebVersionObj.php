@@ -72,7 +72,7 @@ class WebVersionObj extends BaseWrapper
 		$this->searchCustomfields($customFields);
 		
 		if ($fields) {
-			$c = $mailField->processCustomFields($this->contact);
+			$c = $mailField->processCustomFields($this->contact[0]);
 			$html = $c['html'];
 			$this->logger->log("Html: {$html}");
 		}
