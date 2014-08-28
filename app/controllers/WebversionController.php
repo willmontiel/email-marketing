@@ -14,7 +14,7 @@ class WebversionController extends ControllerBase
 				return $this->response->redirect('error/link');
 			}
 			$this->logger->log("HTML: {$html}");
-			$this->view->setVar('html', $html);
+			$this->view->setVar('html', "lala");
 		}
 		else {
 			return $this->response->redirect('error/link');
