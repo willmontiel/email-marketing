@@ -74,7 +74,6 @@ class WebVersionObj extends BaseWrapper
 		if ($fields) {
 			$c = $mailField->processCustomFields($this->contact[0]);
 			$html = $c['html'];
-			$this->logger->log("Html: {$html}");
 		}
 		else {
 			$html = $content;
