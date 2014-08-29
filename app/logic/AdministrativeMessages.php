@@ -55,6 +55,53 @@ class AdministrativeMessages
 		}
 	}
 	
+	public function createServerConnectionMessage($to, $connection, $campaign_name, $campaign_url , Account $account)
+	{
+		$msg = Adminmsg::findFirst(array(
+			'conditions' => 'type = ?1',
+			'bind' => array(1 => 'ServerConnection')
+		));
+
+		if ($msg) {
+			
+			$msg->msg = str_replace('%%ACCOUNT_NAME%%', $account->companyName, $msg->msg);
+			$msg->text = str_replace('%%ACCOUNT_NAME%%', $account->companyName, $msg->text);
+			
+			$msg->msg = str_replace('%%ACCOUNT_URL%%', $campaign_url, $msg->msg);
+			$msg->text = str_replace('%%ACCOUNT_URL%%', $campaign_url, $msg->text);
+			
+			$msg->msg = str_replace('%%CAMPAIGN_NAME%%', $campaign_name, $msg->msg);
+			$msg->text = str_replace('%%CAMPAIGN_NAME%%', $campaign_name, $msg->text);
+			
+			if($connection){
+				$msg->msg = str_replace('%%PING_SIGMA%%', $connection, $msg->msg);
+				$msg->text = str_replace('%%PING_SIGMA%%', $connection, $msg->text);
+			}
+			else {
+				$msg->msg = str_replace('%%PING_SIGMA%%', 0, $msg->msg);
+				$msg->text = str_replace('%%PING_SIGMA%%', 0, $msg->text);
+			}
+			
+			$this->msg = $msg;
+			$this->to = $to;
+		}
+		else {
+			throw new Exception('Administrative message not found!');
+		}
+	}
+	
+	public function createTemporarySuccessMessage($to)
+	{
+		$msg = new stdClass();
+		$msg->subject = "Se envio el Newsletter de El Pais";
+		$msg->from = "noreply@sigmamovil.com";
+		$msg->msg = '<html><head><title></title></head><body><h2><span style="font-family: Helvetica;"><strong>Senores de Sigma Movil:<br /></strong></span></h2><table><tbody><tr><td></td></tr><tr><td><span style="font-family: Helvetica;">Se fue el envio de EL PAIS el dia ' . date('d/m/Y', time()) . ' a las ' . date('H:i a', time()) . '.<br /><br /></span></td></tr></tbody></table></body></html>';
+		$msg->text = 'Senores de Sigma Movil:=========================================================================Se fue el envio de EL PAIS el dia ' . date('d/m/Y', time()) . ' a las ' . date('H:i a', time());
+		
+		$this->msg = $msg;
+		$this->to = $to;
+	}
+	
 	public function sendMessage()
 	{
 		$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
@@ -76,7 +123,7 @@ class AdministrativeMessages
 		$recipients = $swift->send($message, $failures);
 		
 		if ($recipients){
-			Phalcon\DI::getDefault()->get('logger')->log('Limit exceeded message successfully sent!');
+			Phalcon\DI::getDefault()->get('logger')->log('Message successfully sent!');
 		}
 		else {
 			throw new Exception('Error while sending message: ' . $failures);

@@ -66,7 +66,14 @@ class AutoSendingConverter
 		try {
 			$getHtml = new LoadHtml();
 			$content = $getHtml->gethtml($url, false, false, $this->account, true);
-
+		}
+		catch(Exception $e) {
+			$this->db->rollback();
+			$this->logger->log($e->getMessage());
+			throw new Exception(500);
+		}
+		
+		try {
 			$html = $this->changeTDStyles($content);
 
 			$mc = new Mailcontent();
@@ -80,7 +87,8 @@ class AutoSendingConverter
 		}
 		catch(Exception $e) {
 			$this->db->rollback();
-			throw new Exception($e->getMessage());
+			$this->logger->log($e->getMessage());
+			throw new Exception(400);
 		}
 		
 		if(!$mc->save()) {
