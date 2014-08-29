@@ -8,7 +8,7 @@ class CheckASProcess
 {
 	
 	const SCHEDULING_INTERVAL_IN_SECONDS = 120;
-	const NUMBER_OF_TRIES = 1;
+	const NUMBER_OF_TRIES = 3;
 	const TIME_TO_SLEEP = 300;
 	
 	function __construct() {
