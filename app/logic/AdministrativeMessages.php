@@ -95,8 +95,8 @@ class AdministrativeMessages
 		$msg = new stdClass();
 		$msg->subject = "Se envio el Newsletter de El Pais";
 		$msg->from = "noreply@sigmamovil.com";
-		$msg->msg = '<html><head><title></title></head><body><h2><span style="font-family: Helvetica;"><strong>Senores de Sigma Movil:<br /></strong></span></h2><table><tbody><tr><td></td></tr><tr><td><span style="font-family: Helvetica;">Se fue el envio de EL PAIS el dia ' . date('d/m/Y', time()) . ' a las ' . date('H:i a', time()) . '.<br /><br /></span></td></tr></tbody></table></body></html>';
-		$msg->text = 'Senores de Sigma Movil:=========================================================================Se fue el envio de EL PAIS el dia ' . date('d/m/Y', time()) . ' a las ' . date('H:i a', time());
+		$msg->msg = '<html><head><title></title></head><body><h2><span style="font-family: Helvetica;"><strong>Sigma Movil:<br /></strong></span></h2><table><tbody><tr><td></td></tr><tr><td><span style="font-family: Helvetica;">Se fue el envio de EL PAIS el dia ' . date('d/m/Y', time()) . ' a las ' . date('H:i a', time()) . '.<br /><br /></span></td></tr></tbody></table></body></html>';
+		$msg->text = 'Sigma Movil:=========================================================================Se fue el envio de EL PAIS el dia ' . date('d/m/Y', time()) . ' a las ' . date('H:i a', time());
 		
 		$this->msg = $msg;
 		$this->to = $to;
