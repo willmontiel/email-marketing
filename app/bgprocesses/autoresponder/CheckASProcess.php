@@ -165,7 +165,7 @@ class CheckASProcess
 	public function send_server_error_mail($autoresponder, Account $account)
 	{
 		$users = User::find(array(
-			'conditions' => "idAccount = ?1 AND userrole = 'ROLE_ADMIN'",
+			'conditions' => "idAccount = ?1 AND userrole = 'ROLE_WEB_SERVICES'",
 			'bind' => array(1 => $account->idAccount)
 		));
 		
