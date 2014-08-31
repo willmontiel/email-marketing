@@ -194,6 +194,18 @@ class AutoSendingConverter
 			}
 		}
 		
+		$metas = $htmlObj->getElementsByTagName('meta');
+		
+		if ($metas->length !== 0) {
+			foreach ($metas as $meta) {
+				$content = $meta->getAttribute('content');
+				$search = array("\xe2\x80\x9c", "\xe2\x80\x9d", "\xe2\x80\x9f", '"', "“", "”");
+				$replace = array("&quot;", "&quot;", "&quot;", "&quot;", "&quot;", "&quot;");
+				$final_tag= str_replace($search, $replace, $content);
+				$meta->setAttribute('content', $final_tag);
+			}
+		}
+		
 		return $htmlObj->saveHTML();
 	}
 }
