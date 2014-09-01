@@ -1115,8 +1115,12 @@ class MailController extends ControllerBase
 			
 			try {
 				$getHtml = new LoadHtml();
-				$html = $getHtml->gethtml($url, $image, $dir, $account);
+				$content = $getHtml->gethtml($url, $image, $dir, $account);
 				
+				$search = array("\xe2\x80\x8b", "\xe2\x80\x9c", "\xe2\x80\x9d", "\xe2\x80\x9f", "\xe2\x80\x98", "\xe2\x80\x99", "\xe2\x80\x9b", "á", "é", "í", "ó", "ú", "ñ", "Á", "É", "Í", "Ó", "Ú", "Ñ", "&nbsp;");
+				$replace = array('', '"', '"', '"', "'", "'", "'", "á", "é", "í", "ó", "ú", "ñ", "Á", "É", "Í", "Ó", "Ú", "Ñ", "");
+				$html= htmlentities(str_replace($search, $replace, $content));
+								
 				$contentmail = Mailcontent::findFirst(array(
 					'conditions' => 'idMail = ?1',
 					'bind' => array(1 => $mail->idMail)
