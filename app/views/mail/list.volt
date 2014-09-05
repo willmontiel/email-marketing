@@ -88,7 +88,7 @@
 								{%if item.status == 'Sent'%}
 								<dl class="dl-horizontal">
 									<dt class="blue">Destinatarios</dt>
-									<dd class="blue">{{item.messagesSent|numberf}}</dd>
+									<dd class="blue">{{item.totalContacts|numberf}}</dd>
 
 									<dt class="green">Aperturas</dt>
 									<dd class="green">{{item.uniqueOpens|numberf}} </dd>
