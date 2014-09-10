@@ -29,6 +29,9 @@ class WebVersionObj extends BaseWrapper
 		}
 		
 		$content = $mailContent->content;
+		
+//		$this->logger->log();
+		
 		$content = str_replace($this->_search_accents, $this->_replace_accents, $content);
 		
 		if ($mail->type == 'Editor') {
@@ -95,10 +98,10 @@ class WebVersionObj extends BaseWrapper
 		
 		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $this->contact[0]['contact']['idContact'], $social);
 		
-//		$htmlFinal = str_replace('<head>', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">', $htmlFinal);
+//		$htmlFinal = str_replace('<head>', '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">', $htmlFinal);
 		
-		return utf8_decode($htmlFinal);
-//		return $htmlFinal;
+//		return utf8_decode($htmlFinal);
+		return $htmlFinal;
 	}
 	
 	public function insertSocialMediaMetadata(Mail $mail, $html, $idContact, $social = FALSE)

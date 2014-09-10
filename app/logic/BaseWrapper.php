@@ -8,7 +8,7 @@ class BaseWrapper
 	protected $fieldErrors;
 	protected $messageError;
 	
-	protected $_search_accents = array(
+	protected $_replace_accents = array(
 								'&aacute;', 
 								'&eacute;', 
 								'&iacute;', 
@@ -23,7 +23,7 @@ class BaseWrapper
 								'&Uacute;'
 							  );
 	
-	protected $_replace_accents = array(
+	protected $_search_accents = array(
 									'á', 
 									'é', 
 									'í', 
