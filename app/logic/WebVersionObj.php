@@ -27,19 +27,23 @@ class WebVersionObj extends BaseWrapper
 		if (trim($mailContent->content) === '') {
 			throw new \InvalidArgumentException("Error mail's content is empty");
 		}
-		else if ($mail->type == 'Editor') {
+		
+		$content = $mailContent->content;
+		$content = str_replace($this->_search_accents, $this->_replace_accents, $content);
+		
+		if ($mail->type == 'Editor') {
 			$htmlObj = new HtmlObj();
 			$htmlObj->setAccount($this->account);
-			$htmlObj->assignContent(json_decode($mailContent->content));
+			$htmlObj->assignContent(json_decode($content));
 			$html = $htmlObj->replacespecialchars($htmlObj->render());
 		}
 		else {
 			$footerObj = new FooterObj();
 			$footerObj->setAccount($this->account);
-			$html =  $footerObj->addFooterInHtml(html_entity_decode($mailContent->content));
+			$html =  $footerObj->addFooterInHtml(html_entity_decode($content));
 		}
 		
-		$html = str_replace($this->_search_accents, $this->_replace_accents, $html);
+		
 		
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $mail, $this->urlManager);
