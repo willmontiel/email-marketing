@@ -89,7 +89,7 @@ class WebVersionObj extends BaseWrapper
 		
 		$htmlFinal = str_replace('<head>', '<head><meta charset="utf-8">', $htmlFinal);
 		
-		return utf8_encode($htmlFinal);
+		return utf8_decode($htmlFinal);
 //		return $htmlFinal;
 	}
 	
