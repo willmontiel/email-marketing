@@ -6,6 +6,7 @@ class WebVersionObj extends BaseWrapper
 	const IMG_SN_HEIGHT = 340;
 	const IMG_TYPE_DEFAULT = 'default';
 	
+	
 	function __construct() {
 		$this->urlManager = Phalcon\DI::getDefault()->get('urlManager');
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
@@ -37,6 +38,9 @@ class WebVersionObj extends BaseWrapper
 			$footerObj->setAccount($this->account);
 			$html =  $footerObj->addFooterInHtml(html_entity_decode($mailContent->content));
 		}
+		
+		$html = str_replace($this->_search_accents, $this->_replace_accents, $html);
+		
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $mail, $this->urlManager);
 		$prepareMail = new PrepareMailContent($linkService, $imageService);
@@ -89,7 +93,6 @@ class WebVersionObj extends BaseWrapper
 		
 		$htmlFinal = str_replace('<head>', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">', $htmlFinal);
 		
-		$this->logger->log("Html: {$htmlFinal}");
 //		return utf8_decode($htmlFinal);
 		return $htmlFinal;
 	}

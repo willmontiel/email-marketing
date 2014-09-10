@@ -7,7 +7,37 @@ class BaseWrapper
 	protected $account;
 	protected $fieldErrors;
 	protected $messageError;
-
+	
+	protected $_search_accents = array(
+								'&aacute;', 
+								'&eacute;', 
+								'&iacute;', 
+								'&oacute;', 
+								'&uacute;', 
+								'&agrave;', 
+								'&egrave;', 
+								'&Aacute;', 
+								'&Eacute;', 
+								'&Iacute;', 
+								'&Oacute;', 
+								'&Uacute;'
+							  );
+	
+	protected $_replace_accents = array(
+									'á', 
+									'é', 
+									'í', 
+									'ó', 
+									'ú', 
+									'à', 
+									'è', 
+									'Á', 
+									'É', 
+									'Í', 
+									'Ó', 
+									'Ú'
+								);
+	
 	public function __construct()
 	{
 		$this->pager = new PaginationDecorator();
