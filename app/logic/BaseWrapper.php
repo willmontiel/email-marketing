@@ -20,7 +20,9 @@ class BaseWrapper
 								'&Eacute;', 
 								'&Iacute;', 
 								'&Oacute;', 
-								'&Uacute;'
+								'&Uacute;',
+								'&ntilde;',
+								'&Ntilde;'
 							  );
 	
 	protected $_search_accents = array(
@@ -35,7 +37,9 @@ class BaseWrapper
 									'É', 
 									'Í', 
 									'Ó', 
-									'Ú'
+									'Ú',
+									'ñ',
+									'Ñ'	
 								);
 	
 	public function __construct()
