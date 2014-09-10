@@ -87,7 +87,7 @@ class WebVersionObj extends BaseWrapper
 		
 		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $this->contact[0]['contact']['idContact'], $social);
 		
-		$htmlFinal = str_replace('<head>', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">>', $htmlFinal);
+		$htmlFinal = str_replace('<head>', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">', $htmlFinal);
 		
 		$this->logger->log("Html: {$htmlFinal}");
 //		return utf8_decode($htmlFinal);
