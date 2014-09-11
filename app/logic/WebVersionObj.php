@@ -6,6 +6,7 @@ class WebVersionObj extends BaseWrapper
 	const IMG_SN_HEIGHT = 340;
 	const IMG_TYPE_DEFAULT = 'default';
 	
+	
 	function __construct() {
 		$this->urlManager = Phalcon\DI::getDefault()->get('urlManager');
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
@@ -26,17 +27,27 @@ class WebVersionObj extends BaseWrapper
 		if (trim($mailContent->content) === '') {
 			throw new \InvalidArgumentException("Error mail's content is empty");
 		}
-		else if ($mail->type == 'Editor') {
+		
+		$content = $mailContent->content;
+		
+//		$this->logger->log();
+		
+		$content = str_replace($this->_search_accents, $this->_replace_accents, $content);
+		
+		if ($mail->type == 'Editor') {
 			$htmlObj = new HtmlObj();
 			$htmlObj->setAccount($this->account);
-			$htmlObj->assignContent(json_decode($mailContent->content));
+			$htmlObj->assignContent(json_decode($content));
 			$html = $htmlObj->replacespecialchars($htmlObj->render());
 		}
 		else {
 			$footerObj = new FooterObj();
 			$footerObj->setAccount($this->account);
-			$html =  $footerObj->addFooterInHtml(html_entity_decode($mailContent->content));
+			$html =  $footerObj->addFooterInHtml(html_entity_decode($content));
 		}
+		
+		
+		
 		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
 		$linkService = new LinkService($this->account, $mail, $this->urlManager);
 		$prepareMail = new PrepareMailContent($linkService, $imageService);
@@ -87,7 +98,10 @@ class WebVersionObj extends BaseWrapper
 		
 		$htmlFinal = $this->insertSocialMediaMetadata($mail, $htmlWithTracking, $this->contact[0]['contact']['idContact'], $social);
 		
-		return utf8_decode($htmlFinal);
+		$htmlFinal = str_replace('<head>', '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">', $htmlFinal);
+		
+//		return utf8_decode($htmlFinal);
+		return $htmlFinal;
 	}
 	
 	public function insertSocialMediaMetadata(Mail $mail, $html, $idContact, $social = FALSE)
