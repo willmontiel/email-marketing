@@ -1,7 +1,7 @@
 <?php
 class AssetObj
 {
-	const MAX_FILE_SIZE = 10000000;
+	const MAX_FILE_SIZE = 1000000;
 	protected $log = null;
 	
 	function __construct(Account $account) 
