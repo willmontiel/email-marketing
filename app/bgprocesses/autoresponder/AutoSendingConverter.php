@@ -74,7 +74,8 @@ class AutoSendingConverter
 		}
 		
 		try {
-			$html = $this->changeTDStyles($content);
+			$content_processed = $this->addMetaAccent($content);
+			$html = $this->changeTDStyles($content_processed);
 
 			$mc = new Mailcontent();
 			$mc->idMail = $this->mail->idMail;
@@ -166,6 +167,15 @@ class AutoSendingConverter
 		return $subject;
 	}
 	
+	protected function addMetaAccent($html)
+	{
+		$search = array("</head>");
+		$replace = array('<meta name="accent" content="Aquí va una tilde"></head>');
+		$final_html= str_replace($search, $replace, $html);
+		
+		return $final_html;
+	}
+
 	protected function changeTDStyles($html)
 	{
 		$htmlObj = new DOMDocument();
