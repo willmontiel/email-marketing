@@ -164,30 +164,45 @@ class CheckASProcess
 	
 	public function send_server_error_mail($autoresponder, Account $account)
 	{
-		$users = User::find(array(
-			'conditions' => "idAccount = ?1 AND userrole = 'ROLE_WEB_SERVICES'",
-			'bind' => array(1 => $account->idAccount)
-		));
-		
-		$connection = $this->google_connection("www.google.com");
-		
-		$objJson = json_decode($autoresponder->content);
-		
-		$message = new AdministrativeMessages();
-		foreach ($users as $user) {
-			$message->createServerConnectionMessage($user->email, $connection, $autoresponder->name, $objJson->url, $account);
-			$this->logger->log('Enviando correo de conexion al servidor al usuario administrador con email ' . $user->email);
-			$message->sendMessage();
+		try {
+
+			$users = User::find(array(
+				'conditions' => "idAccount = ?1 AND userrole = 'ROLE_WEB_SERVICES'",
+				'bind' => array(1 => $account->idAccount)
+			));
+
+			$connection = $this->google_connection("www.google.com");
+
+			$objJson = json_decode($autoresponder->content);
+
+			$message = new AdministrativeMessages();
+			foreach ($users as $user) {
+				try {
+					$message->createServerConnectionMessage($user->email, $connection, $autoresponder->name, $objJson->url, $account);
+					$this->logger->log('Enviando correo de conexion al servidor al usuario administrador con email ' . $user->email);
+					$message->sendMessage();
+				}
+				catch(Exception $e) {
+					$this->logger->log('Error: [' . $e->getMessage() . ']');
+				}
+			}
+
+			$msg = Adminmsg::findFirst(array(
+				'conditions' => 'type = ?1',
+				'bind' => array(1 => 'ServerConnection')
+			));
+			try {
+				$message->createServerConnectionMessage($msg->forward, $connection, $autoresponder->name, $objJson->url, $account);
+				$this->logger->log('Enviando correo de conexion al servidor al email de soporte de Sigma Movil ' . $msg->forward);
+				$message->sendMessage();
+			}
+			catch(Exception $e) {
+				$this->logger->log('Error: [' . $e->getMessage() . ']');
+			}
 		}
-		
-		$msg = Adminmsg::findFirst(array(
-			'conditions' => 'type = ?1',
-			'bind' => array(1 => 'ServerConnection')
-		));
-		
-		$message->createServerConnectionMessage($msg->forward, $connection, $autoresponder->name, $objJson->url, $account);
-		$this->logger->log('Enviando correo de conexion al servidor al email de soporte de Sigma Movil ' . $msg->forward);
-		$message->sendMessage();
+		catch(Exception $e) {
+			$this->logger->log('Error: [' . $e->getMessage() . ']');
+		}
 	}
 	
 	public function send_success_mail_to_support()
