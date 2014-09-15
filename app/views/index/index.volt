@@ -2,7 +2,8 @@
 {% block content %}
 {{flashSession.output()}}
 	<div class="container-fluid">
-		<h1 class="sectiontitle">Interacciones de los últimos quince días</h1>
+		{#<h1 class="sectiontitle">Interacciones de los últimos quince días</h1>#}
+		<h1 class="sectiontitle">Interacción de la última campaña enviada</h1>	
 		{%for widget in stats.fullPeriodStats()%}
 		<div class="col-xs-6 col-md-3 col-lg-3">
 			<div class="box-dashboard-summary summary-{{ widget.getClassName() }}">
@@ -13,13 +14,13 @@
 				<div class="number-stats-dashboard-summary">
 					{{widget.getTotal()}}
 				</div>
-				<div class="sparkline big" data-color="white">
+				{#<div class="sparkline big" data-color="white">
 					<!--
 					{%for statvalue in widget.getSecondaryValues()%}
 						{{statvalue.value}},
 					{%endfor%}
 					-->
-				</div>
+				</div>#}
 			</div>
 		</div>
 
