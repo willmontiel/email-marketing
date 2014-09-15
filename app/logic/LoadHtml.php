@@ -40,7 +40,7 @@ class LoadHtml
 		$some = new simple_html_dom();
 		
 		$ctx = stream_context_create(array(
-			'http' => array('timeout' => 20)
+			'http' => array('timeout' => 30)
 		));
 		
 		$html = file_get_html($url, false, $ctx);
