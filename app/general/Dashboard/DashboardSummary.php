@@ -24,9 +24,9 @@ class DashboardSummary
 	{
 		$widgets = array();
 		
-		$widgets[] = new SimpleWidget($this->account, 'opening', 'Aperturas', 'opens');
+		$widgets[] = new SimpleWidget($this->account, 'uniqueOpens', 'Aperturas', 'opens');
 		$widgets[] = new SimpleWidget($this->account, 'clicks', 'Clics', 'clicks');
-		$widgets[] = new SimpleWidget($this->account, 'unsubscribe', 'Desuscripciones', 'unsubscribed');
+		$widgets[] = new SimpleWidget($this->account, 'unsubscribed', 'Desuscripciones', 'unsubscribed');
 		$widgets[] = new SimpleWidget($this->account, 'bounced', 'Rebotes', 'bounced');
 		
 		return $widgets;

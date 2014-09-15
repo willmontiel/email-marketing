@@ -8,7 +8,7 @@ class SocialWidget extends BaseWidget
 	{
 		try {
 			// Calcular totales
-			$time = new \DateTime('-' . BaseWidget::CHART_INTERVALS . ' day');
+			/*$time = new \DateTime('-' . BaseWidget::CHART_INTERVALS . ' day');
 			$time->setTime(0, 0, 0);
 			$share = 'share_' . $this->property;
 			$open = 'open_' . $this->property;
@@ -32,19 +32,44 @@ class SocialWidget extends BaseWidget
 			$query2 = $this->modelManager->createQuery($sql2);
 			$result2 = $query2->execute();
 
-			$this->totalValue = (isset($result1[0]->share)) ? $result1[0]->share : 0;
+			$this->totalValue = (isset($result1[0]->share)) ? $result1[0]->share : 0;*/
 			
+			$mail = \Mail::findFirst(array(
+				"conditions" => "idAccount = ?1 AND status = 'Sent'",
+				"bind" => array(
+							1 => $this->account->idAccount,
+						),
+				"order" => "finishedon DESC",
+			));
+			
+			$snQuery = "SELECT SUM(m.share_{$this->property}) AS share, 
+							SUM(m.open_{$this->property}) AS open 
+						FROM Mxc AS m
+						WHERE m.idMail = :idMail:";
+			$social = $this->modelManager->createQuery($snQuery);
+			$socialStats = $social->execute(array(
+				'idMail' => $mail->idMail
+			));
+			
+			$snCliksQuery = "SELECT SUM(l.click_{$this->property}) AS click 
+							FROM Mxcxl AS l
+							WHERE l.idMail = :idMail:";
+			$socialClicks = $this->modelManager->createQuery($snCliksQuery);
+			$socialClickStats = $socialClicks->execute(array(
+				'idMail' => $mail->idMail
+			));
+			
+			$this->totalValue = (isset($socialStats[0]->share)) ? $socialStats[0]->share : 0;
 			
 			// Calcular valores para aperturas y clics
 			// Secondary queda asi
 			// [ { name: 'Aperturas', value: 123456.4 }, { name: 'Clics': value: 121212 } ]
 			$o = new \stdClass();
 			$o->name = 'Aperturas';
-			$o->value = (isset($result1[0]->open)) ? $result1[0]->open : 0;
+			$o->value = (isset($socialStats[0]->open)) ? $socialStats[0]->open : 0;
 			$c = new \stdClass();
 			$c->name = 'Clics';
-			$c->value = (isset($result2[0]->click)) ? $result2[0]->click : 0;
-
+			$c->value = (isset($socialClickStats[0]->click)) ? $socialClickStats[0]->click : 0;
 			array_push($this->secondaryValues, $o, $c);
 		}
 		catch (\InvalidArgumentException $e) {

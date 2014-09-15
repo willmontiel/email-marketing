@@ -10,7 +10,7 @@ class SimpleWidget extends BaseWidget
 		try {
 			// Calcular totales
 			$property = $this->property;
-			$time = new \DateTime('-' . BaseWidget::CHART_INTERVALS . ' day');
+			/*$time = new \DateTime('-' . BaseWidget::CHART_INTERVALS . ' day');
 			$time->setTime(0, 0, 0);
 			$timecondition = ($property != 'clicks') ? $time->getTimestamp() : 0;
 			$query = "	SELECT COUNT(c.{$property}) AS cnt
@@ -23,11 +23,19 @@ class SimpleWidget extends BaseWidget
 			$sql = $this->modelManager->createQuery($query);
 			$result = $sql->execute();
 
-			$this->totalValue = $result[0]->cnt;
+			$this->totalValue = $result[0]->cnt;*/
 			
-			
+			$mail = \Mail::findFirst(array(
+				"conditions" => "idAccount = ?1 AND status = 'Sent'",
+				"bind" => array(
+							1 => $this->account->idAccount,
+						),
+				"order" => "finishedon DESC",
+			));
+
+			$this->totalValue = (isset($mail->$property)) ? $mail->$property : 0;;
 			// Calcular valores para chart
-			$query1 = "	SELECT c.{$property} AS date, COUNT(c.{$property}) AS cnt
+			/*$query1 = "	SELECT c.{$property} AS date, COUNT(c.{$property}) AS cnt
 						FROM Mxc AS c 
 							JOIN Mail AS m ON (c.idMail = m.idMail)
 						WHERE m.finishedon > {$time->getTimestamp()}
@@ -60,7 +68,7 @@ class SimpleWidget extends BaseWidget
 				}
 				$a[] = $o;
 			}
-			$this->secondaryValues = array_reverse($a);
+			$this->secondaryValues = array_reverse($a);*/
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log($e);

@@ -8,8 +8,8 @@ class CheckASProcess
 {
 	
 	const SCHEDULING_INTERVAL_IN_SECONDS = 120;
-	const NUMBER_OF_TRIES = 3;
-	const TIME_TO_SLEEP = 300;
+	const NUMBER_OF_TRIES = 35;
+	const TIME_TO_SLEEP = 600;
 	
 	function __construct() {
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
