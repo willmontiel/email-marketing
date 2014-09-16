@@ -134,6 +134,7 @@ class Security extends Plugin
 				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
+				'account::loadindicator' => array('dashboard' => array('read')),
 				//Account controller
 				'account::index' => array('account' => array('read')),
 				'account::accounting' => array('account' => array('billing')),
