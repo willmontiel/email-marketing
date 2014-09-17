@@ -8,7 +8,6 @@
 		#}
 		{{ partial("partials/xeditable_view_partial") }}
 		{{ partial("partials/xeditable_select_view_partial") }}
-		{{ javascript_include('js/load_activecontacts.js')}}
 		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
 		{#**** DATE TIME PICKER (https://github.com/eternicode/bootstrap-datepicker/) ****#}
@@ -76,10 +75,7 @@
 		</div>
 	</script>
 
-{% endblock %}
-{% block sectionContactLimit %}
-	{{ partial("partials/contactlimitinfo_partial") }}
-{%endblock%}	
+{% endblock %}	
 {% block content %}
 
 	{# Botones de navegacion pequeños #}

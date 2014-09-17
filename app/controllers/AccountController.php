@@ -21,6 +21,33 @@ class AccountController extends ControllerBase
 		return $this->setJsonResponse($object);
 	
 	}
+	
+	public function loadindicatorAction()
+	{
+		$account = $this->user->account;
+		$value = 0;
+		
+		switch ($account->accountingMode) {
+			case 'Envio':
+				$value = $account->countTotalMessagesSent();
+				break;
+			
+			case 'Contacto':
+				$value = $account->countActiveContactsInAccount();
+				break;
+		}
+		
+		$object = array();
+		$object['indicator'] = $value;
+		$object['contactLimit'] = $account->contactLimit;
+		$object['messageLimit'] = $account->messageLimit;
+		$object['accountingMode'] = $account->accountingMode;
+		$object['subscriptionMode'] = $account->subscriptionMode;
+		
+		return $this->setJsonResponse($object);
+	}
+	
+	
 	/**
 	 * 
 	 * Esta función se encarga de mostrar toda la información de las cuentas al super-administrador

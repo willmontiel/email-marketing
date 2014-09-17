@@ -40,7 +40,10 @@
 		{{ javascript_include('vendors/bootstrap_v3/vendors/js/bootstrap-editable.js') }}
 		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
 		{% endblock %}
-
+		{{ javascript_include('js/indicator_account_loader.js') }}
+		<script type="text/javascript">
+			loadIndicator("indicator");
+		</script>
         <style>
 			select {
 				width: 88%;
@@ -68,7 +71,11 @@
 					<ul id="top-nav" class="nav navbar-nav navbar-right">
 <!--					<li><a href="">Mi Cuenta</a></li>
 						<li><a href="">Ayuda</a></li>
--->
+-->						<li>
+							<a href="javascript: void(0);" style="cursor: default;">
+								<div id="indicator"></div>
+							</a>
+						</li>
 						{% if chat.enabled %}
 						<!-- BEGIN OLARK CHAT LINK -->
 						<li>
@@ -81,8 +88,8 @@
 						{% if userefective.enable %}
 							<li><a href="{{url('session/logoutfromthisaccount')}}">Volver a la sesión original </a></li>
 						{% endif %}
-						<li><a href="#">{{ userObject.firstName }} {{ userObject.lastName }}</a></li>
-						<li><a href="{{url('session/logout')}}">Cerrar sesión</a></li>
+						<li><a href="javascript: void(0);" style="cursor: default;">{{ userObject.firstName }} {{ userObject.lastName }}</a></li>
+						<li><a href="{{url('session/logout')}}" title="Cerrar sesión"><span class="glyphicon glyphicon-log-out"></span></a></li>
 					</ul>					
 				</div>	
 			</div>

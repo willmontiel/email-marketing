@@ -28,15 +28,8 @@
 			allowContactlist: {{acl_Ember('api::getlists')}}
 		};
 	</script>
-	{{ javascript_include('js/load_activecontacts.js')}}
 	{{ javascript_include('js/app_segment.js') }}
 {% endblock %}
-{% block sectiontitle %}
-	<i class="icon-user"></i> Contactos
-{% endblock %}
-{% block sectionContactLimit %}
-	{{ partial("partials/contactlimitinfo_partial") }}
-{%endblock%}
 {% block content %}
 {{flashSession.output()}}
 	<div id="emberApplistContainer">

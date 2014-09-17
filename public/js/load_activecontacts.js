@@ -13,5 +13,5 @@ function loadNow() {
 		
 $(function() {
 	loadNow();
-	var autoRefresh = setInterval(loadNow, 6000000);
+	var autoRefresh = setInterval(loadNow, 100);
 });
