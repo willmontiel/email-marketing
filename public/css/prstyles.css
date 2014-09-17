@@ -1033,3 +1033,38 @@ span.required {
 	border-radius: 4px;
 	border: 1px solid #f7f7f7;
 }
+
+.header {
+	border-bottom: 1px solid #eee;
+	padding-bottom: 9px;
+}
+
+.title {
+	display: inline;
+	/*text-shadow: 2px 2px 3px rgba(0,0,0,0.6);*/
+	font-weight: 700;
+	font-size: 30px;
+	color: #4c4c4e;
+}
+
+.title-info {
+	display: inline;
+	color: #777;
+	padding-left: 4px;
+	font-size: 11px;
+}
+
+.sub-title {
+	
+}
+
+.active-contacts {
+	color: #97c86b;
+	font-size: 40px;
+}
+
+.text-contacts {
+	color: #777;
+	/* padding-top: 0px; */
+	font-size: 11px;
+}

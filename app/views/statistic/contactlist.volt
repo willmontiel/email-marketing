@@ -3,7 +3,7 @@
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
 	{{ partial("statistic/partials/partial_pie_highcharts") }}
-	<script>
+	<script type="text/javascript">
 		var color = ['#97c86b', '#ef8807', '#BDBDBD'];
 		var data = [];
 		var i = 0;
@@ -25,6 +25,18 @@
 				window.location = "{{url('statistic/comparelists')}}/{{contactList.idContactlist}}/" + id;
 			}
 		}
+		
+		
+		var domains = [];
+		{% for domain in domains%}
+			var obj2 = new Object;
+				obj2.name = '{{domain.domain}}';
+				obj2.y = {{domain.total}};
+				
+				domains.push(obj2);
+		{% endfor %}
+		
+		createCharts('container2', domains);
 	</script>
 {% endblock %}
 {% block content %}
@@ -33,26 +45,32 @@
 	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 
 	{#   encabezado página   #}
-	<div class="wrap">
-		<div class="col-md-5">
-			<h4 class="sectiontitle numbers-contacts">{{contactList.name}}</h4>
-		</div>
-		<div class="col-md-7">
-			<div class="col-md-6">
-				<p><span class="blue big-number">{{contactList.Ctotal}} </span>Contactos totales</p>
-			</div>
-			<div class="col-md-6">
-				<br><p class="text-right">Creada el: {{date('Y-m-d', contactList.createdon)}}</p>
-			</div>
-		</div>
-		<div class="clearfix"></div>
-	</div>
 	
-	{#   Contenedor chart   #}
-	<div id="container" class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 col-sm-12"></div>
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12">
+			<div class="header">
+				<div class="title">{{contactList.name}}</div>
+				<div class="title-info">Creada el {{date('d/M/Y', contactList.createdon)}}</div>
+				<div class="sub-title">
+					<span class="active-contacts">{{contactList.Ctotal}}</span><br /> 
+					<span class="text-contacts">Contactos</span>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
 	
+	{#   Contenedor chart   #}
+	
+	<div class="row-fluid">
+		<div id="container" class="col-sm-12 col-md-8 col-lg-6"></div>
+		<div id="container2" class="col-sm-12 col-md-4 col-lg-6"></div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="space"></div>
+	
+	<hr>
 	{#   parcial estadisticas generales   #}
 	{{ partial("statistic/partials/general_stats_contacts_partial") }}
 

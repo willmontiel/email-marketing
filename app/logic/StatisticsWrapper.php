@@ -3,11 +3,58 @@
 class StatisticsWrapper extends BaseWrapper
 {
 	protected $logger;
+	protected $contactlist;
+	protected $result;
+	protected $manager;
+	protected $db;
+
+
 	public function __construct() 
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}
 
+	
+	public function setContactlist(Contactlist $contactlist)
+	{
+		$this->contactlist = $contactlist;
+	}
+	
+	public function groupDomainsByContactlist()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM contactlist AS cl
+					JOIN coxcl AS cc ON (cc.idContactlist = cl.idContactlist)
+					JOIN contact AS c ON (c.idContact = cc.idContact)
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN domain AS d ON (d.idDomain = e.idDomain)
+				WHERE cl.idContactlist = :idContactlist: GROUP BY 1";
+			
+		$this->getModelsManager();
+		
+		$exe = $this->manager->createQuery($sql);
+		$this->result = $exe->execute(array(
+			'idContactlist' => $this->contactlist->idContactlist
+		));
+		
+	}
+	
+	public function getDomains()
+	{
+		return $this->result;
+	}
+	
+	protected function getDbAbstractLayer()
+	{
+		$this->db = Phalcon\DI::getDefault()->get('db');
+	}
+	
+	protected function getModelsManager()
+	{
+		$this->manager = Phalcon\DI::getDefault()->get('modelsManager');
+	}
+
+	
 
 	public function showMailStatistics(Mail $mail, $compare = true)
 	{

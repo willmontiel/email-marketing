@@ -38,7 +38,7 @@ class AccountController extends ControllerBase
 		}
 		
 		$object = array();
-		$object['indicator'] = $value;
+		$object['indicator'] = (empty($value) ? 0 : $value);
 		$object['contactLimit'] = $account->contactLimit;
 		$object['messageLimit'] = $account->messageLimit;
 		$object['accountingMode'] = $account->accountingMode;

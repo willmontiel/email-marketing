@@ -1,14 +1,16 @@
 {{ javascript_include('vendors/highcharts/highcharts.js')}}
 {{ javascript_include('vendors/highcharts/modules/exporting.js')}}
-{{ javascript_include('vendors/highcharts/themes/dark-unica.js')}}
+{{ javascript_include('vendors/highcharts/themes/sand-signika.js')}}
+
 <script>
 	function createCharts(container, data) {
+		x = "m";
 		$(function () {
 			$('#' + container).highcharts({
 				chart: {
 					plotBackgroundColor: null,
 					plotBorderWidth: null,
-					plotShadow: false,
+					plotShadow: false
 				},
 
 				title: {
