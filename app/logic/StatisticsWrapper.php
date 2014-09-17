@@ -23,11 +23,11 @@ class StatisticsWrapper extends BaseWrapper
 	public function groupDomainsByContactlist()
 	{
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM contactlist AS cl
-					JOIN coxcl AS cc ON (cc.idContactlist = cl.idContactlist)
-					JOIN contact AS c ON (c.idContact = cc.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
-					JOIN domain AS d ON (d.idDomain = e.idDomain)
+				FROM Contactlist AS cl
+					JOIN Coxcl AS cc ON (cc.idContactlist = cl.idContactlist)
+					JOIN Contact AS c ON (c.idContact = cc.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
 				WHERE cl.idContactlist = :idContactlist: GROUP BY 1";
 			
 		$this->getModelsManager();
