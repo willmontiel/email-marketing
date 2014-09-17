@@ -32,7 +32,7 @@
 				obj2.name = '{{domain['domain']}}';
 				obj2.y = {{domain['total']}};
 				
-				domains.push(obj2);
+				domain_opening.push(obj2);
 		{% endfor %}
 		createCharts('domain-opening', domain_opening);
 		
