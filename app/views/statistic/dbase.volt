@@ -4,7 +4,13 @@
 	{{ super() }}
 	{{ partial("statistic/partials/partial_pie_highcharts") }}
 	<script>
-		{#
+		function compareDbases() {
+			var id = $('#dbasestocompare').val();
+			if(id !== null) {
+				window.location = "{{url('statistic/comparedbases')}}/{{dbase.idDbase}}/" + id;
+			}
+		}
+		
 		var color = ['#97c86b', '#ef8807', '#BDBDBD'];
 		var data = [];
 		var i = 0;
@@ -19,16 +25,8 @@
 		{%endfor%}
 			
 		createCharts('container', data);
-		#}
-		function compareDbases() {
-			var id = $('#dbasestocompare').val();
-			if(id !== null) {
-				window.location = "{{url('statistic/comparedbases')}}/{{dbase.idDbase}}/" + id;
-			}
-		}
 		
-		
-		var domains = [];
+		var domain_opening = [];
 		{% for domain in domains%}
 			var obj2 = new Object;
 				obj2.name = '{{domain['domain']}}';
@@ -36,8 +34,7 @@
 				
 				domains.push(obj2);
 		{% endfor %}
-		
-		createCharts('container', domains);
+		createCharts('domain-opening', domain_opening);
 		
 	</script>
 {% endblock %}
@@ -76,7 +73,7 @@
 	{#   Contenedor chart   #}
 	<div class="row">
 		<div class="col-sm-12 col-md-12 col-lg-12">
-			Estadísticas por envíos
+			Estadísticas de envíos
 			<div id="container"></div>
 		</div>
 		{#
@@ -100,7 +97,8 @@
 			
 		</div>
 		<div class="col-sm-12 col-md-6 col-lg-6">
-			
+			Aperturas agrupadas por dominio
+			<div id="domain-opening"></div>
 		</div>
 	</div>
 	{#   Select para comparacion de estadisticas   #}
