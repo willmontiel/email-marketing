@@ -30,9 +30,6 @@
 		
 		var domains = [];
 		{% for domain in domains%}
-		{{domain['0']}}
-	{{domain.domain}}
-	
 			var obj2 = new Object;
 				obj2.name = '{{domain['domain']}}';
 				obj2.y = {{domain['total']}};
