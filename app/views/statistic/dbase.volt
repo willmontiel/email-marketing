@@ -31,8 +31,8 @@
 		var domains = [];
 		{% for domain in domains%}
 			var obj2 = new Object;
-				obj2.name = '{{domain.domain}}';
-				obj2.y = {{domain.total}};
+				obj2.name = '{{domain['domain']}}';
+				obj2.y = {{domain['total']}};
 				
 				domains.push(obj2);
 		{% endfor %}
