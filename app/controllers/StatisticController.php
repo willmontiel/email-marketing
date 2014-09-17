@@ -114,7 +114,7 @@ class StatisticController extends ControllerBase
 			$statWrapper->groupDomaninsByDbaseAndOpens();
 			$domains = $statWrapper->getDomains();
 			
-			$this->logger->log("Domains: " . print_r($domains, true));
+//			$this->logger->log("Domains: " . print_r($domains, true));
 			if($statistics) {
 				$this->view->setVar('statisticsData', $statistics['statisticsData']);
 				$this->view->setVar('summaryChartData', $statistics['summaryChartData']);
