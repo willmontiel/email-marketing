@@ -29,11 +29,11 @@ class AccountController extends ControllerBase
 		
 		switch ($account->accountingMode) {
 			case 'Envio':
-				$value = $account->countActiveContactsInAccount();
+				$value = $account->countTotalMessagesSent();
 				break;
 			
 			case 'Contacto':
-				$value = $account->countTotalMessagesSent();
+				$value = $account->countActiveContactsInAccount();
 				break;
 		}
 		
