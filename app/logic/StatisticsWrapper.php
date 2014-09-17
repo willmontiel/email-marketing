@@ -4,6 +4,7 @@ class StatisticsWrapper extends BaseWrapper
 {
 	protected $logger;
 	protected $contactlist;
+	protected $dbase;
 	protected $result;
 	protected $manager;
 	protected $db;
@@ -20,6 +21,12 @@ class StatisticsWrapper extends BaseWrapper
 		$this->contactlist = $contactlist;
 	}
 	
+	public function setDbase(Dbase $dbase)
+	{
+		$this->dbase = $dbase;
+	}
+
+
 	public function groupDomainsByContactlist()
 	{
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
@@ -37,6 +44,38 @@ class StatisticsWrapper extends BaseWrapper
 			'idContactlist' => $this->contactlist->idContactlist
 		));
 		
+	}
+	
+	public function groupDomainsByDbase()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Dbase AS db
+					JOIN Contact AS c ON (c.idDbase = db.idDbase)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE db.idDbase = :idDbase: GROUP BY 1";
+		
+		$this->getModelsManager();
+		
+		$exe = $this->manager->createQuery($sql);
+		$this->result = $exe->execute(array(
+			'idDbase' => $this->dbase->idDbase
+		));
+	}
+	
+	public function groupDomaninsByDbaseAndOpens()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM mxc AS mc
+					JOIN (SELECT * FROM contact WHERE idDbase = {$this->dbase->idDbase}) AS c ON (c.idContact = mc.idContact)
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN domain AS d ON (d.idDomain = e.idDomain)
+				WHERE mc.status = 'sent' AND mc.opening != 0 GROUP BY 1";
+		
+		$this->getDbAbstractLayer();
+		
+		$exe = $this->db->query($sql);
+		$this->result = $exe->fetchAll();
 	}
 	
 	public function getDomains()

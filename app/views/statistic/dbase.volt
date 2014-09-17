@@ -4,6 +4,7 @@
 	{{ super() }}
 	{{ partial("statistic/partials/partial_pie_highcharts") }}
 	<script>
+		{#
 		var color = ['#97c86b', '#ef8807', '#BDBDBD'];
 		var data = [];
 		var i = 0;
@@ -18,46 +19,90 @@
 		{%endfor%}
 			
 		createCharts('container', data);
-		
+		#}
 		function compareDbases() {
 			var id = $('#dbasestocompare').val();
 			if(id !== null) {
 				window.location = "{{url('statistic/comparedbases')}}/{{dbase.idDbase}}/" + id;
 			}
 		}
+		
+		
+		var domains = [];
+		{% for domain in domains%}
+			var obj2 = new Object;
+				obj2.name = '{{domain.domain}}';
+				obj2.y = {{domain.total}};
+				
+				domains.push(obj2);
+		{% endfor %}
+		
+		createCharts('container', domains);
+		
 	</script>
 {% endblock %}
 {% block content %}
 	{#   Navegacion botones pequeños   #}
 	<div class="row">
 		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
-		</div>
 	</div>
-	
 	{#   encabezado página   #}
-	<div class="wrap">
-		<div class="col-md-5">
-			<h4 class="sectiontitle numbers-contacts">{{dbase.name}}</h4>
-		</div>
-		<div class="col-md-7">
-			<div class="col-md-6">
-				<p><span class="blue big-number">{{dbase.Ctotal}} </span>Contactos totales</p>
-			</div>
-			<div class="col-md-6">
-				<br><p class="text-right">Creada el: {{date('Y-m-d', dbase.createdon)}}</p>
+	<div class="row header-background">
+		<div class="col-sm-12 col-md-6 col-lg-6">
+			<div class="header">
+				<div class="title">{{dbase.name}}</div>
+				<div class="title-info">Creada el {{date('d/M/Y', dbase.createdon)}}</div>
 			</div>
 		</div>
-		<div class="clearfix"></div>
+		<div class="col-sm-12 col-md-3 col-lg-3">
+			<div class="contact-indicator">
+				<span class="active-contacts">{{dbase.Ctotal}}</span><br /> 
+				<span class="text-contacts">Contactos</span>
+			</div>
+		</div>
+		<div class="col-sm-12 col-md-3 col-lg-3">
+			<div class="contact-indicator">
+				<span class="sent-mails">{{statisticsData.sent|numberf}}</span><br /> 
+				<span class="text-contacts">Correos enviados</span>
+			</div>
+		</div>
 	</div>
-	
-	{#   Contenedor chart   #}
-	<div id="container" class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 col-sm-12"></div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
-
+	
+	
+	<hr>
+	
+	{#   Contenedor chart   #}
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12">
+			Estadísticas por envíos
+			<div id="container"></div>
+		</div>
+		{#
+		<div class="col-sm-12 col-md-8 col-lg-6" style="padding-top: 5px;">
+			Dominios
+			<div id="container2"></div>
+		</div>
+		#}
+	</div>
+	<div class="clearfix"></div>
+	<div class="space"></div>
+	
+	<hr>
 	{#   parcial estadisticas generales   #}
+	{#
 	{{ partial("statistic/partials/general_stats_contacts_partial") }}
-
+	#}
+	
+	<div class="row header-background">
+		<div class="col-sm-12 col-md-6 col-lg-6">
+			
+		</div>
+		<div class="col-sm-12 col-md-6 col-lg-6">
+			
+		</div>
+	</div>
 	{#   Select para comparacion de estadisticas   #}
 	<h4 class="sectiontitle">Comparación</h4>
 	<div class="container-fluid">
@@ -78,105 +123,3 @@
 		</div>
 	</div>	
 {% endblock %}
-
-{#
-	<div class="row">
-		<div class="col-sm-12">
-			<h4 class="sectiontitle">Estadisticas de base de datos</h4>
-			<div class="bs-callout bs-callout-info">
-				<h3>{{dbase.name}} <small>{{statisticsData.sent}} correos enviados</small></h3>
-			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-sm-6">
-			<table class="table table-striped">
-				<thead></thead>
-				<tbody>
-					<tr>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-openings"><i class="icon-folder-open icon-3x"></i></label>
-									<div class="news-time">
-									  <span>{{statisticsData.percentageUniqueOpens}}%</span>
-									</div>
-									<div class="news-content">
-										<label class="label-openings">{{statisticsData.uniqueOpens|numberf}}</label>
-										<div class="news-text">
-											Aperturas
-										</div>
-									</div>
-								</div>	
-							</div>
-						</td>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-clicks"><i class="icon-hand-up icon-3x"></i></label>
-									<div class="news-content">
-										<label class="label-clicks">{{statisticsData.clicks|numberf}}</label>
-										<div class="news-text">
-											Clicks
-										</div>
-									</div>
-								</div>	
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-unsubscribed"><i class="icon-minus-sign icon-3x"></i></label>
-									<div class="news-time">
-									  <span>{{statisticsData.percentageUnsubscribed}}%</span>
-									</div>
-									<div class="news-content">
-										<label class="label-unsubscribed">{{statisticsData.unsubscribed|numberf}}</label>
-										<div class="news-text">
-											Des-suscritos
-										</div>
-									</div>
-								</div>	
-							</div>
-						</td>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-bounced"><i class="icon-ban-circle icon-3x"></i></label>
-									<div class="news-time">
-									  <span>{{statisticsData.percentageBounced}}%</span>
-									</div>
-									<div class="news-content">
-										<label class="label-bounced">{{statisticsData.bounced|numberf}}</label>
-										<div class="news-text">
-											Rebotes
-										</div>
-									</div>
-								</div>	
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="box">
-								<div class="box-section news with-icons">
-									<label class="avatar-spam"><i class="icon-warning-sign icon-3x"></i></label>
-									<div class="news-time">
-									  <span>{{statisticsData.percentageSpam}}%</span>
-									</div>
-									<div class="news-content">
-										<label class="label-spam">{{statisticsData.spam|numberf}}</label>
-										<div class="news-text">
-											Reportes de Spam
-										</div>
-									</div>
-								</div>	
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-#}

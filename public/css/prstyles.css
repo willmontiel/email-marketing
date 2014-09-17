@@ -1035,7 +1035,6 @@ span.required {
 }
 
 .header {
-	border-bottom: 1px solid #eee;
 	padding-bottom: 9px;
 }
 
@@ -1048,14 +1047,16 @@ span.required {
 }
 
 .title-info {
-	display: inline;
+	/*display: inline;*/
 	color: #777;
 	padding-left: 4px;
 	font-size: 11px;
+	padding-top: 10px;
 }
 
-.sub-title {
-	
+.contact-indicator {
+	text-align: right;
+	margin-bottom: 10px;
 }
 
 .active-contacts {
@@ -1063,8 +1064,23 @@ span.required {
 	font-size: 40px;
 }
 
+.sent-mails {
+	color: black;
+	font-size: 40px;
+}
+
 .text-contacts {
 	color: #777;
 	/* padding-top: 0px; */
 	font-size: 11px;
+}
+
+.header-background {
+	background-color: #ffffff;
+	/* padding: 0px; */
+	padding-left: 15px;
+	padding-right: 15px;
+	border-bottom-color: #ddd;
+	box-shadow: 2px 2px 5px 0px #afafaf;
+	padding-top: 7px;
 }

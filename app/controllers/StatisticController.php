@@ -106,11 +106,19 @@ class StatisticController extends ControllerBase
 			
 			$statWrapper = new StatisticsWrapper();
 			$statWrapper->setAccount($this->user->account);
+			$statWrapper->setDbase($dbase);
+			
 			$statistics = $statWrapper->showDbaseStatistics($dbase);
-
+//			$statistics = true;
+			
+			$statWrapper->groupDomaninsByDbaseAndOpens();
+			$domains = $statWrapper->getDomains();
+			
+			$this->logger->log("Domains: " . print_r($domains, true));
 			if($statistics) {
 				$this->view->setVar('statisticsData', $statistics['statisticsData']);
 				$this->view->setVar('summaryChartData', $statistics['summaryChartData']);
+				$this->view->setVar('domains', $domains);
 				$this->view->setVar('compareDbase', $statistics['compareDbase']);
 				$this->view->setVar('dbase', $dbase);
 			}

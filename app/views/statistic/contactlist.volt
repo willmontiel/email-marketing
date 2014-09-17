@@ -45,7 +45,6 @@
 	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 
 	{#   encabezado página   #}
-	
 	<div class="row">
 		<div class="col-sm-12 col-md-12 col-lg-12">
 			<div class="header">
@@ -62,10 +61,9 @@
 	<div class="space"></div>
 	
 	{#   Contenedor chart   #}
-	
 	<div class="row-fluid">
-		<div id="container" class="col-sm-12 col-md-8 col-lg-6"></div>
-		<div id="container2" class="col-sm-12 col-md-4 col-lg-6"></div>
+		<div id="container" class="col-sm-12 col-md-8 col-lg-6" style="padding-top: 5px;"></div>
+		<div id="container2" class="col-sm-12 col-md-4 col-lg-6" style="padding-top: 5px;"></div>
 	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
