@@ -3,7 +3,7 @@
 {{ javascript_include('vendors/highcharts/themes/sand-signika.js')}}
 
 <script>
-	function createCharts(container, data, labels) {
+	function createCharts(container, data, labels, indicators) {
 		x = "m";
 		$(function () {
 			$('#' + container).highcharts({
@@ -30,7 +30,7 @@
 								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
 							}
 						},
-						showInLegend: false
+						showInLegend: indicators
 					}
 
 				},
