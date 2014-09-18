@@ -25,76 +25,7 @@ class StatisticsWrapper extends BaseWrapper
 	{
 		$this->dbase = $dbase;
 	}
-
-
-	public function groupDomainsByContactlist()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Contactlist AS cl
-					JOIN Coxcl AS cc ON (cc.idContactlist = cl.idContactlist)
-					JOIN Contact AS c ON (c.idContact = cc.idContact)
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE cl.idContactlist = :idContactlist: GROUP BY 1";
-			
-		$this->getModelsManager();
-		
-		$exe = $this->manager->createQuery($sql);
-		$this->result = $exe->execute(array(
-			'idContactlist' => $this->contactlist->idContactlist
-		));
-		
-	}
 	
-	public function groupDomainsByDbase()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Dbase AS db
-					JOIN Contact AS c ON (c.idDbase = db.idDbase)
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE db.idDbase = :idDbase: GROUP BY 1";
-		
-		$this->getModelsManager();
-		
-		$exe = $this->manager->createQuery($sql);
-		$this->result = $exe->execute(array(
-			'idDbase' => $this->dbase->idDbase
-		));
-	}
-	
-	public function groupDomaninsByDbaseAndOpens()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM mxc AS mc
-					JOIN (SELECT * FROM contact WHERE idDbase = {$this->dbase->idDbase}) AS c ON (c.idContact = mc.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
-					JOIN domain AS d ON (d.idDomain = e.idDomain)
-				WHERE mc.status = 'sent' AND mc.opening != 0 GROUP BY 1";
-		
-		$this->getDbAbstractLayer();
-		
-		$exe = $this->db->query($sql);
-		$this->result = $exe->fetchAll();
-	}
-	
-	public function getDomains()
-	{
-		return $this->result;
-	}
-	
-	protected function getDbAbstractLayer()
-	{
-		$this->db = Phalcon\DI::getDefault()->get('db');
-	}
-	
-	protected function getModelsManager()
-	{
-		$this->manager = Phalcon\DI::getDefault()->get('modelsManager');
-	}
-
-	
-
 	public function showMailStatistics(Mail $mail, $compare = true)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -933,4 +864,70 @@ class StatisticsWrapper extends BaseWrapper
 		
 		return array('drilldownbounced' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}	
+	
+	public function groupDomainsByContactlist()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Contactlist AS cl
+					JOIN Coxcl AS cc ON (cc.idContactlist = cl.idContactlist)
+					JOIN Contact AS c ON (c.idContact = cc.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE cl.idContactlist = :idContactlist: GROUP BY 1";
+			
+		$this->getModelsManager();
+		
+		$exe = $this->manager->createQuery($sql);
+		$this->result = $exe->execute(array(
+			'idContactlist' => $this->contactlist->idContactlist
+		));
+		
+	}
+	
+	public function groupDomainsByDbase()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Dbase AS db
+					JOIN Contact AS c ON (c.idDbase = db.idDbase)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE db.idDbase = :idDbase: GROUP BY 1";
+		
+		$this->getModelsManager();
+		
+		$exe = $this->manager->createQuery($sql);
+		$this->result = $exe->execute(array(
+			'idDbase' => $this->dbase->idDbase
+		));
+	}
+	
+	public function groupDomaninsByDbaseAndOpens()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM mxc AS mc
+					JOIN (SELECT * FROM contact WHERE idDbase = {$this->dbase->idDbase}) AS c ON (c.idContact = mc.idContact)
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN domain AS d ON (d.idDomain = e.idDomain)
+				WHERE mc.status = 'sent' AND mc.opening != 0 GROUP BY 1";
+		
+		$db = \EmailMarketing\General\Misc\SQLExecuter();
+		$db->setSQL($sql);
+		$this->result = $db->queryAbstractLayer();
+	}
+	
+	public function groupDomainsByDbaseAndBounced()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM contact AS c
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN domain AS d ON (d.idDomain = e.idDomain)
+				WHERE c.idDbase = :idDbase: AND e.bounced != 0 GROUP BY 1"
+				
+		$exe = \EmailMarketing\General\Misc\SQLExecuter::se
+	}
+	
+	public function getDomains()
+	{
+		return $this->result;
+	}
 }
