@@ -291,8 +291,6 @@ class StatisticsWrapper extends BaseWrapper
 		$response['statisticsData'] = $stat;
 		$response['compareDbase'] = $dbaseCompare;
 		
-		$this->logger->log("Response: " . print_r($response, true));
-		
 		return $response;
 	}
 	
@@ -913,7 +911,8 @@ class StatisticsWrapper extends BaseWrapper
 		$db = new \EmailMarketing\General\Misc\SQLExecuter();
 		$db->setSQL($sql);
 		$db->instanceDbAbstractLayer();
-		$this->result = $db->queryAbstractLayer();
+		$db->queryAbstractLayer();
+		$this->result = $db->getResult();
 	}
 	
 	public function groupDomainsByDbaseAndBounced()
@@ -928,6 +927,7 @@ class StatisticsWrapper extends BaseWrapper
 		$exe->setSQL($sql);
 		$exe->instanceModelsManager();
 		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
+		$this->result = $exe->getResult();
 	}
 	
 	public function getDomains()
