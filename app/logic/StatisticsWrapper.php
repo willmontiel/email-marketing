@@ -936,7 +936,7 @@ class StatisticsWrapper extends BaseWrapper
 				FROM Contact AS c
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
 					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE c.idDbase = :idDbase: AND e.unsubscribed != 0 GROUP BY 1";
+				WHERE c.idDbase = :idDbase: AND c.unsubscribed != 0 GROUP BY 1";
 		
 		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
 		$exe->setSQL($sql);
