@@ -30,7 +30,7 @@
 								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
 							}
 						},
-						showInLegend: true,
+						showInLegend: false
 					}
 
 				},

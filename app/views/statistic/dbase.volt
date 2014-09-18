@@ -125,12 +125,14 @@
 	#}
 	
 	<div class="row header-background">
-		<div class="col-sm-4 col-md-4 col-lg-4">
-			
+		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
+			<span class="number">{{statisticsData.uniqueOpens|numberf}}</span><br>
+			<span class="percent">{{statisticsData.percentageUniqueOpens}}%</span>
+			<p>Aperturas</p>
 		</div>
-		<div class="col-sm-4 col-md-4 col-lg-4">
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			Aperturas agrupadas por dominio
-			<div id="domain-opening" style="min-width: 100px; height: 200px; max-width: 300px; margin: 0 auto"></div>
+			<div id="domain-opening" style="min-width: 80px; height: 200px; max-width: 300px; margin: 0 auto;"></div>
 		</div>
 	</div>
 	
