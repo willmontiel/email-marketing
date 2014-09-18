@@ -910,8 +910,9 @@ class StatisticsWrapper extends BaseWrapper
 					JOIN domain AS d ON (d.idDomain = e.idDomain)
 				WHERE mc.status = 'sent' AND mc.opening != 0 GROUP BY 1";
 		
-		$db = \EmailMarketing\General\Misc\SQLExecuter();
+		$db = new \EmailMarketing\General\Misc\SQLExecuter();
 		$db->setSQL($sql);
+		$db->instanceDbAbstractLayer();
 		$this->result = $db->queryAbstractLayer();
 	}
 	
@@ -921,9 +922,12 @@ class StatisticsWrapper extends BaseWrapper
 				FROM contact AS c
 					JOIN email AS e ON (e.idEmail = c.idEmail)
 					JOIN domain AS d ON (d.idDomain = e.idDomain)
-				WHERE c.idDbase = :idDbase: AND e.bounced != 0 GROUP BY 1"
+				WHERE c.idDbase = :idDbase: AND e.bounced != 0 GROUP BY 1";
 				
-		$exe = \EmailMarketing\General\Misc\SQLExecuter::se
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
 	}
 	
 	public function getDomains()
