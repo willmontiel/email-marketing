@@ -1,6 +1,6 @@
 {{ javascript_include('vendors/highcharts/highcharts.js')}}
 {{ javascript_include('vendors/highcharts/modules/exporting.js')}}
-{{ javascript_include('vendors/highcharts/themes/sand-signika.js')}}
+{#{{ javascript_include('vendors/highcharts/themes/sand-signika.js')}}#}
 
 <script>
 	function createCharts(container, data, labels, indicators) {
