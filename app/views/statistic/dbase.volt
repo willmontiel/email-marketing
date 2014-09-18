@@ -77,19 +77,19 @@
 	</div>
 	{#   encabezado página   #}
 	<div class="row header-background">
-		<div class="col-sm-12 col-md-6 col-lg-6">
+		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			<div class="header">
 				<div class="title">{{dbase.name}}</div>
 				<div class="title-info">Creada el {{date('d/M/Y', dbase.createdon)}}</div>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-3 col-lg-3">
+		<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 			<div class="contact-indicator">
 				<span class="active-contacts">{{dbase.Ctotal}}</span><br /> 
 				<span class="text-contacts">Contactos</span>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-3 col-lg-3">
+		<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 			<div class="contact-indicator">
 				<span class="sent-mails">{{statisticsData.sent|numberf}}</span><br /> 
 				<span class="text-contacts">Correos enviados</span>
@@ -104,8 +104,8 @@
 	
 	{#   Contenedor chart   #}
 	<div class="row">
-		<div class="col-sm-12 col-md-12 col-lg-12">
-			Estadísticas de envíos
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<span class="big-title">Estadísticas de envíos</div>
 			<div id="container"></div>
 		</div>
 		{#
@@ -131,7 +131,7 @@
 			<p>Aperturas</p>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			Aperturas agrupadas por dominio
+			<span class="medium-title">Aperturas agrupadas por dominio</span>
 			<div id="domain-opening" class="small-pie-chart"></div>
 		</div>
 	</div>
@@ -140,10 +140,11 @@
 	
 	<div class="row header-background">
 		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			
+			<span class="number">{{statisticsData.bounced|numberf}}</span><br>
+			<span class="percent">{{statisticsData.percentageBounced}}%</span>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			Rebotes agrupados por dominio
+			<span class="medium-title">Rebotes agrupados por dominio</span>
 			<div id="domain-bounced" class="small-pie-chart"></div>
 		</div>
 	</div>
@@ -152,10 +153,11 @@
 	
 	<div class="row header-background">
 		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			
+			<span class="number">{{statisticsData.unsubscribed|numberf}}</span><br>
+			<span class="percent">{{statisticsData.percentageUnsubscribed}}%</span>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			Rebotes agrupados por dominio
+			<span class="medium-title">Contactos des-suscritos agrupados por dominio</span>
 			<div id="domain-dunsubscribed" class="small-pie-chart"></div>
 		</div>
 	</div>
@@ -164,10 +166,11 @@
 	
 	<div class="row header-background">
 		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			
+			<span class="number">{{statisticsData.spam|numberf}}</span><br>
+			<span class="percent">{{statisticsData.percentageSpam}}%</span>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			Rebotes agrupados por dominio
+			<span class="medium-title">Reportes de Spam agrupados por dominio</span>
 			<div id="domain-spam" class="small-pie-chart"></div>
 		</div>
 	</div>
