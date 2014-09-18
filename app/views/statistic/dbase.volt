@@ -156,8 +156,10 @@
 	
 	<div class="row header-background">
 		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			<span class="number">{{statisticsData.unsubscribed|numberf}}</span><br>
-			<span class="percent">{{statisticsData.percentageUnsubscribed}}%</span>
+			<div class="stat-unsubscribed-indicator">
+				<div class="percent-stats">{{statisticsData.percentageUnsubscribed}}%</div>
+			</div>
+			<div class="medium-title">{{statisticsData.unsubscribed|numberf}} Contactos des-suscritos</div>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			<div class="medium-title">Contactos des-suscritos agrupados por dominio</div>
@@ -169,10 +171,10 @@
 	
 	<div class="row header-background">
 		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			<div class="">
-				<span class="number">{{statisticsData.spam|numberf}}</span><br>
-				<span class="percent">{{statisticsData.percentageSpam}}%</span>
+			<div class="stat-spam-indicator">
+				<div class="percent-stats">{{statisticsData.percentageSpam}}%</div>
 			</div>
+			<div class="medium-title">{{statisticsData.spam|numberf}} reportes de Spam</div>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			<div class="medium-title">Reportes de Spam agrupados por dominio</div>
