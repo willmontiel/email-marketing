@@ -39,8 +39,8 @@
 		var domain_bounced = [];
 		{% for dbounced in domainsByBounced%}
 			var obj3 = new Object;
-				obj3.name = '{{dbounced['domain']}}';
-				obj3.y = {{dbounced['total']}};
+				obj3.name = '{{dbounced.domain}}';
+				obj3.y = {{dbounced.total}};
 				
 				domain_bounced.push(obj3);
 		{% endfor %}
