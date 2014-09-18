@@ -132,7 +132,7 @@
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			Aperturas agrupadas por dominio
-			<div id="domain-opening small-pie-chart"></div>
+			<div id="domain-opening" class="small-pie-chart"></div>
 		</div>
 	</div>
 	
@@ -144,7 +144,7 @@
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			Rebotes agrupados por dominio
-			<div id="domain-bounced small-pie-chart"></div>
+			<div id="domain-bounced" class="small-pie-chart"></div>
 		</div>
 	</div>
 	
@@ -156,7 +156,7 @@
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			Rebotes agrupados por dominio
-			<div id="domain-dunsubscribed small-pie-chart"></div>
+			<div id="domain-dunsubscribed" class="small-pie-chart"></div>
 		</div>
 	</div>
 	
@@ -168,7 +168,7 @@
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			Rebotes agrupados por dominio
-			<div id="domain-spam small-pie-chart"></div>
+			<div id="domain-spam" class="small-pie-chart"></div>
 		</div>
 	</div>
 	
