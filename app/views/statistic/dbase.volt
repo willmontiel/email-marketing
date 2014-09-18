@@ -23,18 +23,28 @@
 				data.push(obj);
 				i++;
 		{%endfor%}
-			
 		createCharts('container', data);
 		
 		var domain_opening = [];
-		{% for domain in domains%}
+		{% for dopen in domainsByOpens%}
 			var obj2 = new Object;
-				obj2.name = '{{domain['domain']}}';
-				obj2.y = {{domain['total']}};
+				obj2.name = '{{dopen['domain']}}';
+				obj2.y = {{dopen['total']}};
 				
 				domain_opening.push(obj2);
 		{% endfor %}
 		createCharts('domain-opening', domain_opening);
+		
+		
+		var domain_bounced = [];
+		{% for dbounced in domainsByBounced%}
+			var obj3 = new Object;
+				obj3.name = '{{dbounced['domain']}}';
+				obj3.y = {{dbounced['total']}};
+				
+				domain_bounced.push(obj3);
+		{% endfor %}
+		createCharts('domain-bounced', domain_bounced);
 		
 	</script>
 {% endblock %}
@@ -101,6 +111,18 @@
 			<div id="domain-opening"></div>
 		</div>
 	</div>
+	
+	<div class="row header-background">
+		<div class="col-sm-12 col-md-6 col-lg-6">
+			
+		</div>
+		<div class="col-sm-12 col-md-6 col-lg-6">
+			Rebotes agrupados por dominio
+			<div id="domain-bounced"></div>
+		</div>
+	</div>
+	
+	
 	{#   Select para comparacion de estadisticas   #}
 	<h4 class="sectiontitle">Comparación</h4>
 	<div class="container-fluid">

@@ -112,14 +112,18 @@ class StatisticController extends ControllerBase
 //			$statistics = true;
 			
 			$statWrapper->groupDomaninsByDbaseAndOpens();
-			$domains = $statWrapper->getDomains();
+			$domainsByOpens = $statWrapper->getDomains();
 			
+			$statWrapper->groupDomainsByDbaseAndBounced();
+			$domainsByBounced = $statWrapper->getDomains();
 //			$this->logger->log("Domains: " . print_r($domains, true));
 			if($statistics) {
 				$this->view->setVar('statisticsData', $statistics['statisticsData']);
 				$this->view->setVar('summaryChartData', $statistics['summaryChartData']);
-				$this->view->setVar('domains', $domains);
 				$this->view->setVar('compareDbase', $statistics['compareDbase']);
+				
+				$this->view->setVar('domainsByOpens', $domainsByOpens);
+				$this->view->setVar('domainsByBounced', $domainsByBounced);
 				$this->view->setVar('dbase', $dbase);
 			}
 			else {
