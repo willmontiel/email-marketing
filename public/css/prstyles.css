@@ -1121,8 +1121,13 @@ span.required {
 	/* background-color: #ddd; */
 	width: 150px;
 	height: 150px;
-	border: solid 8px red;
+	border: solid 8px #97c86b;
 	padding-top: 10px;
 	/* position: relative; */
-	padding: 12% 0 0 15%;
+	padding: 10% 0 0 6%;
+}
+
+.percent-stats {
+	font-size: 50px;
+	font-weight: 700;
 }
