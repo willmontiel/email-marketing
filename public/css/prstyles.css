@@ -1082,7 +1082,8 @@ span.required {
 	padding-right: 15px;
 	border-bottom-color: #ddd;
 	box-shadow: 2px 2px 5px 0px #afafaf;
-	padding-top: 7px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .small-pie-chart {
