@@ -1094,13 +1094,23 @@ span.required {
 }
 
 .big-title {
-	
+	text-align: center;
+	font-size: 25px;
+	/*font-weight: 700;*/
+	padding-bottom: 10px;
+	color: #777;
 }
 
 .medium-title {
-	
+	text-align: center;
+	font-size: 15px;
+	padding-bottom: 10px;
+	color: #777;
 }
 
 .small-title {
-	
+	text-align: center;
+	font-size: 10px;
+	padding-bottom: 10px;
+	color: #777;
 }
