@@ -130,45 +130,45 @@
 			<span class="percent">{{statisticsData.percentageUniqueOpens}}%</span>
 			<p>Aperturas</p>
 		</div>
-		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+		<div class="col-xs-12 col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			Aperturas agrupadas por dominio
-			<div id="domain-opening" style="min-width: 80px; height: 200px; max-width: 300px; margin: 0 auto;"></div>
+			<div id="domain-opening small-pie-chart"></div>
 		</div>
 	</div>
 	
 	<hr> 
 	
 	<div class="row header-background">
-		<div class="col-sm-4 col-md-4 col-lg-4">
+		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
 			
 		</div>
-		<div class="col-sm-4 col-md-4 col-lg-4">
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			Rebotes agrupados por dominio
-			<div id="domain-bounced"></div>
+			<div id="domain-bounced small-pie-chart"></div>
 		</div>
 	</div>
 	
 	<hr> 
 	
 	<div class="row header-background">
-		<div class="col-sm-12 col-md-6 col-lg-6">
+		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
 			
 		</div>
-		<div class="col-sm-12 col-md-6 col-lg-6">
+		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			Rebotes agrupados por dominio
-			<div id="domain-dunsubscribed"></div>
+			<div id="domain-dunsubscribed small-pie-chart"></div>
 		</div>
 	</div>
 	
 	<hr> 
 	
 	<div class="row header-background">
-		<div class="col-sm-12 col-md-6 col-lg-6">
+		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
 			
 		</div>
-		<div class="col-sm-12 col-md-6 col-lg-6">
+		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			Rebotes agrupados por dominio
-			<div id="domain-spam"></div>
+			<div id="domain-spam small-pie-chart"></div>
 		</div>
 	</div>
 	

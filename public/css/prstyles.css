@@ -1084,3 +1084,10 @@ span.required {
 	box-shadow: 2px 2px 5px 0px #afafaf;
 	padding-top: 7px;
 }
+
+.small-pie-chart {
+	min-width: 80px; 
+	height: 200px; 
+	max-width: 300px; 
+	margin: 0 auto;
+}
