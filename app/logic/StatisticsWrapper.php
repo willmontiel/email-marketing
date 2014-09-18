@@ -960,8 +960,35 @@ class StatisticsWrapper extends BaseWrapper
 		$this->result = $exe->getResult();
 	}
 	
+	public function regroupDomains()
+	{
+		$domains = $this->result;
+		$newDomains = array();
+		
+		$new = new stdClass();
+		$new->domain = 'Otros';
+		$new->total = 0;
+		foreach ($domains as $domain) {
+			if (is_array($domain)) {
+				$domain = (object)$domain;
+			}
+			
+			if (!in_array($domain->domain, $this->_popularDomains)) {
+				$new->total = $new->total + $domain->total;
+			}
+			else {
+				$newDomains[] = $domain;
+			}
+		}
+		
+		$newDomains[] = $new;
+		$this->result = $newDomains;
+	}
+	
 	public function getDomains()
 	{
 		return $this->result;
 	}
+	
+	
 }

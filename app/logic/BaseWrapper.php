@@ -46,6 +46,17 @@ class BaseWrapper
 									'¡'
 								);
 	
+	protected $_popularDomains = array(
+		'hotmail.es',
+		'hotmail.com',
+		'live.com',
+		'aol.com',
+		'yahoo.com',
+		'yahoo.es',
+		'gmail.com'
+	);
+
+
 	public function __construct()
 	{
 		$this->pager = new PaginationDecorator();

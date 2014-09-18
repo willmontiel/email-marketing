@@ -1180,3 +1180,18 @@ span.required {
 	font-weight: 700;
 	text-shadow: 2px 2px #afafaf;
 }
+
+.total-mails {
+	color: #759EC7;
+	font-size: 40px;
+}
+
+.total-contacts {
+	color: black;
+	font-size: 40px;
+}
+
+.total-clicks {
+	color: #97c86b;
+	font-size: 40px;
+}

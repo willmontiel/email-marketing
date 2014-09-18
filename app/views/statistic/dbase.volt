@@ -85,13 +85,13 @@
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 			<div class="contact-indicator">
-				<span class="active-contacts">{{dbase.Ctotal}}</span><br /> 
+				<span class="total-contacts">{{dbase.Ctotal}}</span><br /> 
 				<span class="text-contacts">Contactos</span>
 			</div>
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 			<div class="contact-indicator">
-				<span class="sent-mails">{{statisticsData.sent|numberf}}</span><br /> 
+				<span class="total-mails">{{statisticsData.sent|numberf}}</span><br /> 
 				<span class="text-contacts">Correos enviados</span>
 			</div>
 		</div>

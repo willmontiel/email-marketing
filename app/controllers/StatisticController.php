@@ -111,15 +111,19 @@ class StatisticController extends ControllerBase
 			$statistics = $statWrapper->showDbaseStatistics($dbase);
 			
 			$statWrapper->groupDomaninsByDbaseAndOpens();
+			$statWrapper->regroupDomains();
 			$domainsByOpens = $statWrapper->getDomains();
 			
 			$statWrapper->groupDomainsByDbaseAndBounced();
+			$statWrapper->regroupDomains();
 			$domainsByBounced = $statWrapper->getDomains();
 			
 			$statWrapper->groupDomainsByDbaseAndUnsubscribed();
+			$statWrapper->regroupDomains();
 			$domainsByUnsubscribed = $statWrapper->getDomains();
 			
 			$statWrapper->groupDomainsByDbaseAndSpam();
+			$statWrapper->regroupDomains();
 			$domainsBySpam = $statWrapper->getDomains();
 			
 //			$this->logger->log("Domains: " . print_r($domainsByOpens, true));
