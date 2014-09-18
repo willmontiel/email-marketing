@@ -930,6 +930,36 @@ class StatisticsWrapper extends BaseWrapper
 		$this->result = $exe->getResult();
 	}
 	
+	public function groupDomainsByDbaseAndUnsubscribed()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Contact AS c
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE c.idDbase = :idDbase: AND e.unsubscribed != 0 GROUP BY 1";
+		
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
+		$this->result = $exe->getResult();
+	}
+	
+	public function groupDomainsByDbaseAndSpam()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Contact AS c
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE c.idDbase = :idDbase: AND e.spam != 0 GROUP BY 1";
+		
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
+		$this->result = $exe->getResult();
+	}
+	
 	public function getDomains()
 	{
 		return $this->result;

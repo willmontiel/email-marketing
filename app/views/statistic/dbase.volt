@@ -48,6 +48,26 @@
 		{% endfor %}
 		createCharts('domain-bounced', domain_bounced);
 		
+		var domain_unsubscribed = [];
+		{% for dunsubscribed in domainsByUnsubscribed%}
+			var obj = new Object;
+				obj.name = '{{dunsubscribed.domain}}';
+				obj.y = {{dunsubscribed.total}};
+				
+				domain_unsubscribed.push(obj);
+		{% endfor %}
+		createCharts('domain-dunsubscribed', domain_unsubscribed);
+		
+		var domain_spam = [];
+		{% for dspam in domainsBySpam%}
+			var obj = new Object;
+				obj.name = '{{dspam.domain}}';
+				obj.y = {{dspam.total}};
+				
+				domain_spam.push(obj);
+		{% endfor %}
+		createCharts('domain-spam', domain_spam);
+		
 	</script>
 {% endblock %}
 {% block content %}
@@ -121,6 +141,26 @@
 		<div class="col-sm-12 col-md-6 col-lg-6">
 			Rebotes agrupados por dominio
 			<div id="domain-bounced"></div>
+		</div>
+	</div>
+	
+	<div class="row header-background">
+		<div class="col-sm-12 col-md-6 col-lg-6">
+			
+		</div>
+		<div class="col-sm-12 col-md-6 col-lg-6">
+			Rebotes agrupados por dominio
+			<div id="domain-dunsubscribed"></div>
+		</div>
+	</div>
+	
+	<div class="row header-background">
+		<div class="col-sm-12 col-md-6 col-lg-6">
+			
+		</div>
+		<div class="col-sm-12 col-md-6 col-lg-6">
+			Rebotes agrupados por dominio
+			<div id="domain-spam"></div>
 		</div>
 	</div>
 	
