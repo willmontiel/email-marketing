@@ -1,6 +1,8 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
+	{#
 	{{ stylesheet_link('css/statisticStyles.css') }}
+	#}
 	{{ super() }}
 	{{ partial("statistic/partials/partial_pie_highcharts") }}
 	<script>
