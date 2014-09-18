@@ -1130,6 +1130,21 @@ span.required {
 	margin-bottom: 5%;
 }
 
+.stat-bounced-indicator {
+	border-radius: 50%;
+	margin-top: 10%;
+	/* background-color: #ddd; */
+	width: 150px;
+	height: 150px;
+	border: solid 8px #d9534f;
+	/* padding-top: 10px; */
+	/* position: relative; */
+	padding-top: 10%;
+	text-align: center;
+	margin-left: 26%;
+	margin-bottom: 5%;
+}
+
 .percent-stats {
 	font-size: 50px;
 	font-weight: 700;

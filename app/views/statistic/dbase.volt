@@ -141,8 +141,10 @@
 	
 	<div class="row header-background">
 		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			<span class="number">{{statisticsData.bounced|numberf}}</span><br>
-			<span class="percent">{{statisticsData.percentageBounced}}%</span>
+			<div class="stat-bounced-indicator">
+				<div class="percent-stats">{{statisticsData.percentageBounced}}%</div>
+			</div>
+			<div class="medium-title">{{statisticsData.bounced|numberf}} rebotes</div>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			<div class="medium-title">Rebotes agrupados por dominio</div>
