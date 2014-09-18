@@ -105,7 +105,7 @@
 	{#   Contenedor chart   #}
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<span class="big-title">Estadísticas de envíos</div>
+			<div class="big-title">Estadísticas de envíos</div>
 			<div id="container"></div>
 		</div>
 		{#
@@ -131,7 +131,7 @@
 			<p>Aperturas</p>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<span class="medium-title">Aperturas agrupadas por dominio</span>
+			<div class="medium-title">Aperturas agrupadas por dominio</div>
 			<div id="domain-opening" class="small-pie-chart"></div>
 		</div>
 	</div>
@@ -144,7 +144,7 @@
 			<span class="percent">{{statisticsData.percentageBounced}}%</span>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<span class="medium-title">Rebotes agrupados por dominio</span>
+			<div class="medium-title">Rebotes agrupados por dominio</div>
 			<div id="domain-bounced" class="small-pie-chart"></div>
 		</div>
 	</div>
@@ -157,7 +157,7 @@
 			<span class="percent">{{statisticsData.percentageUnsubscribed}}%</span>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<span class="medium-title">Contactos des-suscritos agrupados por dominio</span>
+			<div class="medium-title">Contactos des-suscritos agrupados por dominio</div>
 			<div id="domain-dunsubscribed" class="small-pie-chart"></div>
 		</div>
 	</div>
@@ -170,7 +170,7 @@
 			<span class="percent">{{statisticsData.percentageSpam}}%</span>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<span class="medium-title">Reportes de Spam agrupados por dominio</span>
+			<div class="medium-title">Reportes de Spam agrupados por dominio</div>
 			<div id="domain-spam" class="small-pie-chart"></div>
 		</div>
 	</div>
