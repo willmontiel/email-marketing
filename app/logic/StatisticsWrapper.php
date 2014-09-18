@@ -919,9 +919,9 @@ class StatisticsWrapper extends BaseWrapper
 	public function groupDomainsByDbaseAndBounced()
 	{
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM contact AS c
-					JOIN email AS e ON (e.idEmail = c.idEmail)
-					JOIN domain AS d ON (d.idDomain = e.idDomain)
+				FROM Contact AS c
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
 				WHERE c.idDbase = :idDbase: AND e.bounced != 0 GROUP BY 1";
 				
 		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
