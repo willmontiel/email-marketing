@@ -29,22 +29,22 @@
 		
 		var domain_opening = [];
 		{% for dopen in domainsByOpens%}
-			var obj2 = new Object;
-				obj2.name = '{{dopen['domain']}}';
-				obj2.y = {{dopen['total']}};
+			var obj = new Object;
+				obj.name = '{{dopen['domain']}}';
+				obj.y = {{dopen['total']}};
 				
-				domain_opening.push(obj2);
+				domain_opening.push(obj);
 		{% endfor %}
 		createCharts('domain-opening', domain_opening);
 		
 		
 		var domain_bounced = [];
 		{% for dbounced in domainsByBounced%}
-			var obj3 = new Object;
-				obj3.name = '{{dbounced.domain}}';
-				obj3.y = {{dbounced.total}};
+			var obj = new Object;
+				obj.name = '{{dbounced.domain}}';
+				obj.y = {{dbounced.total}};
 				
-				domain_bounced.push(obj3);
+				domain_bounced.push(obj);
 		{% endfor %}
 		createCharts('domain-bounced', domain_bounced);
 		
