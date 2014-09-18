@@ -114,6 +114,8 @@ class StatisticController extends ControllerBase
 			$statWrapper->regroupDomains();
 			$domainsByOpens = $statWrapper->getDomains();
 			
+			$this->logger->log("Domains: " . print_r($domainsByOpens, true));
+			
 			$statWrapper->groupDomainsByDbaseAndBounced();
 			$statWrapper->regroupDomains();
 			$domainsByBounced = $statWrapper->getDomains();
@@ -126,7 +128,7 @@ class StatisticController extends ControllerBase
 			$statWrapper->regroupDomains();
 			$domainsBySpam = $statWrapper->getDomains();
 			
-//			$this->logger->log("Domains: " . print_r($domainsByOpens, true));
+			
 			
 			if($statistics) {
 				$this->view->setVar('statisticsData', $statistics['statisticsData']);

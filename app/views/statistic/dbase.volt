@@ -30,8 +30,8 @@
 		var domain_opening = [];
 		{% for dopen in domainsByOpens%}
 			var obj = new Object;
-				obj.name = '{{dopen['domain']}}';
-				obj.y = {{dopen['total']}};
+				obj.name = '{{dopen.domain}}';
+				obj.y = {{dopen.total}};
 				
 				domain_opening.push(obj);
 		{% endfor %}
