@@ -130,7 +130,7 @@
 		</div>
 		<div class="col-sm-4 col-md-4 col-lg-4">
 			Aperturas agrupadas por dominio
-			<div id="domain-opening"></div>
+			<div id="domain-opening" style="min-width: 100px; height: 200px; max-width: 300px; margin: 0 auto"></div>
 		</div>
 	</div>
 	
