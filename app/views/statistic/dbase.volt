@@ -185,10 +185,10 @@
 	<hr> 
 	
 	{#   Select para comparacion de estadisticas   #}
-	<h4 class="sectiontitle">Comparación</h4>
-	<div class="container-fluid">
-		<div class="col-xs-6 col-sm-5 col-md-4">
-			<form class="form-horizontal" role="form">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+			<div class="title">Comparar</div><br /> <br />
+			<form class="form-horizontal" role="form" style="padding-left: 15px;">
 	  			<div class="form-group">
 	  				<label class="sr-only" for=""></label>
 					<select id="dbasestocompare" class="form-control">
@@ -198,9 +198,7 @@
 					</select>
 				</div>
 			</form>
-		</div>
-		<div class="col-md-2 col-xs-4 ptop-3">
-			<button class="btn btn-sm btn-default btn-add extra-padding" onclick="compareDbases()">Comparar</button>
+			<button class="btn btn-sm btn-default" onclick="compareDbases();">Comparar</button>
 		</div>
 	</div>	
 {% endblock %}
