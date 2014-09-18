@@ -903,7 +903,7 @@ class StatisticsWrapper extends BaseWrapper
 	{
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
 				FROM mxc AS mc
-					JOIN (SELECT * FROM contact WHERE idDbase = {$this->dbase->idDbase}) AS c ON (c.idContact = mc.idContact)
+					JOIN (SELECT idContact, idEmail FROM contact WHERE idDbase = {$this->dbase->idDbase}) AS c ON (c.idContact = mc.idContact)
 					JOIN email AS e ON (e.idEmail = c.idEmail)
 					JOIN domain AS d ON (d.idDomain = e.idDomain)
 				WHERE mc.status = 'sent' AND mc.opening != 0 GROUP BY 1";
@@ -959,6 +959,74 @@ class StatisticsWrapper extends BaseWrapper
 		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
 		$this->result = $exe->getResult();
 	}
+	
+	public function groupDomaninsByContactlistAndOpens()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM mxc AS mc
+					JOIN (SELECT c.idContact, c.idEmail 
+						  FROM coxcl AS cl
+							  JOIN contact AS c ON (c.idContact = cl.idContact)
+						  WHERE cl.idContactlist = {$this->contactlist->idContactlist}) AS c ON (c.idContact = mc.idContact)
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN domain AS d ON (d.idDomain = e.idDomain)
+				WHERE mc.status = 'sent' AND mc.opening != 0 GROUP BY 1";
+		
+		$db = new \EmailMarketing\General\Misc\SQLExecuter();
+		$db->setSQL($sql);
+		$db->instanceDbAbstractLayer();
+		$db->queryAbstractLayer();
+		$this->result = $db->getResult();
+	}
+	
+	public function groupDomainsByContactlistAndBounced()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Contactlist AS cl
+					JOIN Contact AS c ON (c.idContact = cl.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE cl.idContactlist = :idContactlist: AND e.bounced != 0 GROUP BY 1";
+				
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idContactlist' => $this->contactlist->idContactlist));
+		$this->result = $exe->getResult();
+	}
+	
+	public function groupDomainsByContactlistAndUnsubscribed()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Contactlist AS cl
+					JOIN Contact AS c ON (c.idContact = cl.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE cl.idContactlist = :idContactlist: AND c.unsubscribed != 0 GROUP BY 1";
+		
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idContactlist' => $this->contactlist->idContactlist));
+		$this->result = $exe->getResult();
+	}
+	
+	public function groupDomainsByContactlistAndSpam()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Contactlist AS cl
+					JOIN Contact AS c ON (c.idContact = cl.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE cl.idContactlist = :idContactlist: AND e.spam != 0 GROUP BY 1";
+		
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idContactlist' => $this->contactlist->idContactlist));
+		$this->result = $exe->getResult();
+	}
+	
 	
 	public function regroupDomains()
 	{

@@ -114,8 +114,6 @@ class StatisticController extends ControllerBase
 			$statWrapper->regroupDomains();
 			$domainsByOpens = $statWrapper->getDomains();
 			
-			$this->logger->log("Domains: " . print_r($domainsByOpens, true));
-			
 			$statWrapper->groupDomainsByDbaseAndBounced();
 			$statWrapper->regroupDomains();
 			$domainsByBounced = $statWrapper->getDomains();
@@ -170,16 +168,32 @@ class StatisticController extends ControllerBase
 				
 				$statistics = $statWrapper->showContactlistStatistics($contactList, $dbase);
 				
-				$statWrapper->groupDomainsByContactlist();
-				$domains = $statWrapper->getDomains();
-				
-//				$this->logger->log("Domains: " . print_r($domains, true));
+				$statWrapper->groupDomaninsByContactlistAndOpens();
+				$statWrapper->regroupDomains();
+				$domainsByOpens = $statWrapper->getDomains();
+
+				$statWrapper->groupDomainsByContactlistAndBounced();
+				$statWrapper->regroupDomains();
+				$domainsByBounced = $statWrapper->getDomains();
+
+				$statWrapper->groupDomainsByContactlistAndUnsubscribed();
+				$statWrapper->regroupDomains();
+				$domainsByUnsubscribed = $statWrapper->getDomains();
+
+				$statWrapper->groupDomainsByContactlistAndSpam();
+				$statWrapper->regroupDomains();
+				$domainsBySpam = $statWrapper->getDomains();
 				
 				if($statistics) {
 					$this->view->setVar('statisticsData', $statistics['statisticsData']);
 					$this->view->setVar('summaryChartData', $statistics['summaryChartData']);
-					$this->view->setVar('domains', $domains);
 					$this->view->setVar('compareList', $statistics['compareList']);
+					
+					$this->view->setVar('domainsByOpens', $domainsByOpens);
+					$this->view->setVar('domainsByBounced', $domainsByBounced);
+					$this->view->setVar('domainsByUnsubscribed', $domainsByUnsubscribed);
+					$this->view->setVar('domainsBySpam', $domainsBySpam);
+					
 					$this->view->setVar('contactList', $contactList);
 				}
 				else {

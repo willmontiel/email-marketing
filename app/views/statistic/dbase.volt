@@ -108,12 +108,6 @@
 			<div class="big-title"><span class="glyphicon glyphicon-stats"></span> Estadísticas de envíos</div>
 			<div id="container"></div>
 		</div>
-		{#
-		<div class="col-sm-12 col-md-8 col-lg-6" style="padding-top: 5px;">
-			Dominios
-			<div id="container2"></div>
-		</div>
-		#}
 	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
