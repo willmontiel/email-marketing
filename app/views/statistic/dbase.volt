@@ -147,8 +147,8 @@
 			<div class="medium-title">{{statisticsData.bounced|numberf}} rebotes</div>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<div class="medium-title">Rebotes agrupados por dominio</div>
 			<div id="domain-bounced" class="small-pie-chart"></div>
+			<div class="medium-title">Rebotes agrupados por dominio</div>
 		</div>
 	</div>
 	
@@ -162,8 +162,8 @@
 			<div class="medium-title">{{statisticsData.unsubscribed|numberf}} Contactos des-suscritos</div>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<div class="medium-title">Contactos des-suscritos agrupados por dominio</div>
 			<div id="domain-dunsubscribed" class="small-pie-chart"></div>
+			<div class="medium-title">Contactos des-suscritos agrupados por dominio</div>
 		</div>
 	</div>
 	
@@ -177,8 +177,8 @@
 			<div class="medium-title">{{statisticsData.spam|numberf}} reportes de Spam</div>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<div class="medium-title">Reportes de Spam agrupados por dominio</div>
 			<div id="domain-spam" class="small-pie-chart"></div>
+			<div class="medium-title">Reportes de Spam agrupados por dominio</div>
 		</div>
 	</div>
 	

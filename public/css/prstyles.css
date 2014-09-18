@@ -1178,4 +1178,5 @@ span.required {
 .percent-stats {
 	font-size: 50px;
 	font-weight: 700;
+	text-shadow: 2px 2px #afafaf;
 }
