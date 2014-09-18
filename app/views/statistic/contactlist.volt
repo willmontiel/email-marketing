@@ -24,7 +24,7 @@
 				i++;
 		{%endfor%}
 		
-		createCharts('container', data);
+		createCharts('container', data, true, true);
 	</script>
 	{{ partial("statistic/partials/partial_statistics_domain") }}
 {% endblock %}
