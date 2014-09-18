@@ -1114,3 +1114,15 @@ span.required {
 	padding-bottom: 10px;
 	color: #777;
 }
+
+.stat-open-indicator {
+	border-radius: 50%;
+	margin-top: 15%;
+	/* background-color: #ddd; */
+	width: 150px;
+	height: 150px;
+	border: solid 8px red;
+	padding-top: 10px;
+	/* position: relative; */
+	padding: 12% 0 0 15%;
+}
