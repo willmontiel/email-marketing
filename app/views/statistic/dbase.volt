@@ -5,7 +5,7 @@
 	#}
 	{{ super() }}
 	{{ partial("statistic/partials/partial_pie_highcharts") }}
-	<script>
+	<script type="text/javascript">
 		function compareDbases() {
 			var id = $('#dbasestocompare').val();
 			if(id !== null) {
@@ -26,49 +26,8 @@
 				i++;
 		{%endfor%}
 		createCharts('container', data, true, true);
-		
-		var domain_opening = [];
-		{% for dopen in domainsByOpens%}
-			var obj = new Object;
-				obj.name = '{{dopen.domain}}';
-				obj.y = {{dopen.total}};
-				
-				domain_opening.push(obj);
-		{% endfor %}
-		createCharts('domain-opening', domain_opening, false, false);
-		
-		
-		var domain_bounced = [];
-		{% for dbounced in domainsByBounced%}
-			var obj = new Object;
-				obj.name = '{{dbounced.domain}}';
-				obj.y = {{dbounced.total}};
-				
-				domain_bounced.push(obj);
-		{% endfor %}
-		createCharts('domain-bounced', domain_bounced, false, false);
-		
-		var domain_unsubscribed = [];
-		{% for dunsubscribed in domainsByUnsubscribed%}
-			var obj = new Object;
-				obj.name = '{{dunsubscribed.domain}}';
-				obj.y = {{dunsubscribed.total}};
-				
-				domain_unsubscribed.push(obj);
-		{% endfor %}
-		createCharts('domain-dunsubscribed', domain_unsubscribed, false, false);
-		
-		var domain_spam = [];
-		{% for dspam in domainsBySpam%}
-			var obj = new Object;
-				obj.name = '{{dspam.domain}}';
-				obj.y = {{dspam.total}};
-				
-				domain_spam.push(obj);
-		{% endfor %}
-		createCharts('domain-spam', domain_spam, false, false);
-		
 	</script>
+	{{ partial("statistic/partials/partial_statistics_domain") }}
 {% endblock %}
 {% block content %}
 	{#   Navegacion botones pequeños   #}
@@ -118,63 +77,7 @@
 	{{ partial("statistic/partials/general_stats_contacts_partial") }}
 	#}
 	
-	<div class="row header-background">
-		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			<div class="stat-open-indicator">
-				<div class="percent-stats">{{statisticsData.percentageUniqueOpens}}%</div>
-			</div>
-			<div class="medium-title">{{statisticsData.uniqueOpens|numberf}} Aperturas</div>
-		</div>
-		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<div id="domain-opening" class="small-pie-chart"></div>
-			<div class="medium-title">Aperturas agrupadas por dominio</div>
-		</div>
-	</div>
-	
-	<hr> 
-	
-	<div class="row header-background">
-		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			<div class="stat-bounced-indicator">
-				<div class="percent-stats">{{statisticsData.percentageBounced}}%</div>
-			</div>
-			<div class="medium-title">{{statisticsData.bounced|numberf}} rebotes</div>
-		</div>
-		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<div id="domain-bounced" class="small-pie-chart"></div>
-			<div class="medium-title">Rebotes agrupados por dominio</div>
-		</div>
-	</div>
-	
-	<hr> 
-	
-	<div class="row header-background">
-		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			<div class="stat-unsubscribed-indicator">
-				<div class="percent-stats">{{statisticsData.percentageUnsubscribed}}%</div>
-			</div>
-			<div class="medium-title">{{statisticsData.unsubscribed|numberf}} Contactos des-suscritos</div>
-		</div>
-		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<div id="domain-dunsubscribed" class="small-pie-chart"></div>
-			<div class="medium-title">Contactos des-suscritos agrupados por dominio</div>
-		</div>
-	</div>
-	
-	<hr> 
-	
-	<div class="row header-background">
-		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			<div class="stat-spam-indicator">
-				<div class="percent-stats">{{statisticsData.percentageSpam}}%</div>
-			</div>
-			<div class="medium-title">{{statisticsData.spam|numberf}} reportes de Spam</div>
-		</div>
-		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<div id="domain-spam" class="small-pie-chart"></div>
-			<div class="medium-title">Reportes de Spam agrupados por dominio</div>
-		</div>
-	</div>
+	{{ partial("statistic/partials/general_stats_with_domain") }}
 	
 	<hr> 
 	
