@@ -109,7 +109,6 @@ class StatisticController extends ControllerBase
 			$statWrapper->setDbase($dbase);
 			
 			$statistics = $statWrapper->showDbaseStatistics($dbase);
-//			$statistics = true;
 			
 			$statWrapper->groupDomaninsByDbaseAndOpens();
 			$domainsByOpens = $statWrapper->getDomains();
@@ -123,7 +122,7 @@ class StatisticController extends ControllerBase
 			$statWrapper->groupDomainsByDbaseAndSpam();
 			$domainsBySpam = $statWrapper->getDomains();
 			
-			$this->logger->log("Domains: " . print_r($domainsByOpens, true));
+//			$this->logger->log("Domains: " . print_r($domainsByOpens, true));
 			
 			if($statistics) {
 				$this->view->setVar('statisticsData', $statistics['statisticsData']);
@@ -134,6 +133,7 @@ class StatisticController extends ControllerBase
 				$this->view->setVar('domainsByBounced', $domainsByBounced);
 				$this->view->setVar('domainsByUnsubscribed', $domainsByUnsubscribed);
 				$this->view->setVar('domainsBySpam', $domainsBySpam);
+				
 				$this->view->setVar('dbase', $dbase);
 			}
 			else {
