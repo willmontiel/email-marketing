@@ -982,7 +982,7 @@ class StatisticsWrapper extends BaseWrapper
 	public function groupDomainsByContactlistAndBounced()
 	{
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Contactlist AS cl
+				FROM Coxcl AS cl
 					JOIN Contact AS c ON (c.idContact = cl.idContact)
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
 					JOIN Domain AS d ON (d.idDomain = e.idDomain)
@@ -998,7 +998,7 @@ class StatisticsWrapper extends BaseWrapper
 	public function groupDomainsByContactlistAndUnsubscribed()
 	{
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Contactlist AS cl
+				FROM Coxcl AS cl
 					JOIN Contact AS c ON (c.idContact = cl.idContact)
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
 					JOIN Domain AS d ON (d.idDomain = e.idDomain)
@@ -1014,7 +1014,7 @@ class StatisticsWrapper extends BaseWrapper
 	public function groupDomainsByContactlistAndSpam()
 	{
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Contactlist AS cl
+				FROM Coxcl AS cl
 					JOIN Contact AS c ON (c.idContact = cl.idContact)
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
 					JOIN Domain AS d ON (d.idDomain = e.idDomain)
