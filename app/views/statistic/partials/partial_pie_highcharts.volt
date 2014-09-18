@@ -3,7 +3,7 @@
 {{ javascript_include('vendors/highcharts/themes/sand-signika.js')}}
 
 <script>
-	function createCharts(container, data) {
+	function createCharts(container, data, labels) {
 		x = "m";
 		$(function () {
 			$('#' + container).highcharts({
@@ -24,7 +24,7 @@
 						allowPointSelect: true,
 						cursor: 'pointer',
 						dataLabels: {
-							enabled: true,
+							enabled: labels,
 							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
 							style: {
 								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
