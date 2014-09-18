@@ -35,7 +35,7 @@
 				
 				domain_opening.push(obj);
 		{% endfor %}
-		createCharts('domain-opening', domain_opening, false, false);
+		createCharts('domain-opening', domain_opening, false, true);
 		
 		
 		var domain_bounced = [];
@@ -46,7 +46,7 @@
 				
 				domain_bounced.push(obj);
 		{% endfor %}
-		createCharts('domain-bounced', domain_bounced, false, false);
+		createCharts('domain-bounced', domain_bounced, false, true);
 		
 		var domain_unsubscribed = [];
 		{% for dunsubscribed in domainsByUnsubscribed%}
@@ -56,7 +56,7 @@
 				
 				domain_unsubscribed.push(obj);
 		{% endfor %}
-		createCharts('domain-dunsubscribed', domain_unsubscribed, false, false);
+		createCharts('domain-dunsubscribed', domain_unsubscribed, false, true);
 		
 		var domain_spam = [];
 		{% for dspam in domainsBySpam%}
@@ -66,7 +66,7 @@
 				
 				domain_spam.push(obj);
 		{% endfor %}
-		createCharts('domain-spam', domain_spam, false, false);
+		createCharts('domain-spam', domain_spam, false, true);
 		
 	</script>
 {% endblock %}
