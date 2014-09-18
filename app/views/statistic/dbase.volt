@@ -34,6 +34,7 @@
 	<div class="row">
 		{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 	</div>
+	
 	{#   encabezado página   #}
 	<div class="row header-background">
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -57,7 +58,6 @@
 	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
-	
 	
 	<hr>
 	

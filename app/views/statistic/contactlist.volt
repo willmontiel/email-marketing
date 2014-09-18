@@ -34,25 +34,37 @@
 	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'dbase']) }}
 
 	{#   encabezado página   #}
-	<div class="row">
-		<div class="col-sm-12 col-md-12 col-lg-12">
+	<div class="row header-background">
+		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			<div class="header">
 				<div class="title">{{contactList.name}}</div>
 				<div class="title-info">Creada el {{date('d/M/Y', contactList.createdon)}}</div>
-				<div class="sub-title">
-					<span class="active-contacts">{{contactList.Ctotal}}</span><br /> 
-					<span class="text-contacts">Contactos</span>
-				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+			<div class="contact-indicator">
+				<span class="total-contacts">{{contactList.Ctotal}}</span><br /> 
+				<span class="text-contacts">Contactos</span>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+			<div class="contact-indicator">
+				<span class="total-mails">{{statisticsData.sent|numberf}}</span><br /> 
+				<span class="text-contacts">Correos enviados</span>
 			</div>
 		</div>
 	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
 	
+	<hr>
+	
 	{#   Contenedor chart   #}
-	<div class="row-fluid">
-		<div id="container" class="col-sm-12 col-md-8 col-lg-6" style="padding-top: 5px;"></div>
-		<div id="container2" class="col-sm-12 col-md-4 col-lg-6" style="padding-top: 5px;"></div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="big-title"><span class="glyphicon glyphicon-stats"></span> Estadísticas de envíos</div>
+			<div id="container"></div>
+		</div>
 	</div>
 	<div class="clearfix"></div>
 	<div class="space"></div>
