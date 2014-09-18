@@ -129,11 +129,11 @@
 			<div class="stat-open-indicator">
 				<div class="percent-stats">{{statisticsData.percentageUniqueOpens}}%</div>
 			</div>
-			<div class="small-title">{{statisticsData.uniqueOpens|numberf}} Aperturas</div>
+			<div class="medium-title">{{statisticsData.uniqueOpens|numberf}} Aperturas</div>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<div class="medium-title">Aperturas agrupadas por dominio</div>
 			<div id="domain-opening" class="small-pie-chart"></div>
+			<div class="medium-title">Aperturas agrupadas por dominio</div>
 		</div>
 	</div>
 	
