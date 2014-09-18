@@ -126,12 +126,10 @@
 	
 	<div class="row header-background">
 		<div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">
-			<div>
-				<div class="stat-open-indicator">
-					<div class="percent-stats">{{statisticsData.percentageUniqueOpens}}%</div>
-				</div>
-				<div class="medium-title">{{statisticsData.uniqueOpens|numberf}} Aperturas</div>
+			<div class="stat-open-indicator">
+				<div class="percent-stats">{{statisticsData.percentageUniqueOpens}}%</div>
 			</div>
+			<div class="medium-title">{{statisticsData.uniqueOpens|numberf}} Aperturas</div>
 		</div>
 		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			<div id="domain-opening" class="small-pie-chart"></div>
