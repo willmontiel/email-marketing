@@ -110,19 +110,19 @@ class StatisticController extends ControllerBase
 			
 			$statistics = $statWrapper->showDbaseStatistics($dbase);
 			
-			$statWrapper->groupDomaninsByDbaseAndOpens();
+			$statWrapper->groupDomainsByDbase("opens");
 			$statWrapper->regroupDomains();
 			$domainsByOpens = $statWrapper->getDomains();
 			
-			$statWrapper->groupDomainsByDbaseAndBounced();
+			$statWrapper->groupDomainsByDbase("bounced");
 			$statWrapper->regroupDomains();
 			$domainsByBounced = $statWrapper->getDomains();
 			
-			$statWrapper->groupDomainsByDbaseAndUnsubscribed();
+			$statWrapper->groupDomainsByDbase("unsubscribed");
 			$statWrapper->regroupDomains();
 			$domainsByUnsubscribed = $statWrapper->getDomains();
 			
-			$statWrapper->groupDomainsByDbaseAndSpam();
+			$statWrapper->groupDomainsByDbase("spam");
 			$statWrapper->regroupDomains();
 			$domainsBySpam = $statWrapper->getDomains();
 			
@@ -168,19 +168,19 @@ class StatisticController extends ControllerBase
 				
 				$statistics = $statWrapper->showContactlistStatistics($contactList, $dbase);
 				
-				$statWrapper->groupDomaninsByContactlistAndOpens();
+				$statWrapper->groupDomaninsByContactlist('opens');
 				$statWrapper->regroupDomains();
 				$domainsByOpens = $statWrapper->getDomains();
 
-				$statWrapper->groupDomainsByContactlistAndBounced();
+				$statWrapper->groupDomaninsByContactlist('bounced');
 				$statWrapper->regroupDomains();
 				$domainsByBounced = $statWrapper->getDomains();
 
-				$statWrapper->groupDomainsByContactlistAndUnsubscribed();
+				$statWrapper->groupDomaninsByContactlist('unsubscribed');
 				$statWrapper->regroupDomains();
 				$domainsByUnsubscribed = $statWrapper->getDomains();
 
-				$statWrapper->groupDomainsByContactlistAndSpam();
+				$statWrapper->groupDomaninsByContactlist('spam');
 				$statWrapper->regroupDomains();
 				$domainsBySpam = $statWrapper->getDomains();
 				

@@ -6,9 +6,8 @@ class StatisticsWrapper extends BaseWrapper
 	protected $contactlist;
 	protected $dbase;
 	protected $result;
-	protected $manager;
-	protected $db;
-
+	protected $needle;
+	protected $conditions;
 
 	public function __construct() 
 	{
@@ -882,76 +881,64 @@ class StatisticsWrapper extends BaseWrapper
 		
 	}
 	
-	public function groupDomainsByDbase()
+//	public function groupDomainsByDbase()
+//	{
+//		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+//				FROM Dbase AS db
+//					JOIN Contact AS c ON (c.idDbase = db.idDbase)
+//					JOIN Email AS e ON (e.idEmail = c.idEmail)
+//					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+//				WHERE db.idDbase = :idDbase: GROUP BY 1";
+//		
+//		$this->getModelsManager();
+//		
+//		$exe = $this->manager->createQuery($sql);
+//		$this->result = $exe->execute(array(
+//			'idDbase' => $this->dbase->idDbase
+//		));
+//	}
+	
+	protected function createConditions()
 	{
+		$this->conditions = "";
+		switch ($this->needle) {
+			case 'opens':
+				$this->conditions = " AND mc.opening != 0 ";
+				break;
+			
+			case 'bounced':
+//				$conditions = " AND mc.bounced != 0 AND e.bounced != 0 ";
+				$this->conditions = " AND mc.bounced != 0";
+				break;
+			
+			case 'unsubscribed':
+				$this->conditions = " AND mc.unsubscribe != 0 ";
+				break;
+			
+			case 'spam':
+				$this->conditions = " AND mc.spam != 0 AND e.spam != 0 ";
+				break;
+		}
+	}
+
+	
+
+	/**
+	 * Agrupa por dominio las aperturas, rebotes, contactos des-suscritos o quejas de spam por base de datos
+	 * recibe los parámetros: opens, bounced, unsubscribed, spam
+	 * @param String $needle
+	 */
+	public function groupDomainsByDbase($needle)
+	{
+		$this->needle = $needle;
+		$this->createConditions();
+		
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Dbase AS db
-					JOIN Contact AS c ON (c.idDbase = db.idDbase)
+				FROM Mxc AS mc
+					JOIN Contact AS c ON (c.idContact = mc.idContact AND c.idDbase = :idDbase:)
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
 					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE db.idDbase = :idDbase: GROUP BY 1";
-		
-		$this->getModelsManager();
-		
-		$exe = $this->manager->createQuery($sql);
-		$this->result = $exe->execute(array(
-			'idDbase' => $this->dbase->idDbase
-		));
-	}
-	
-	public function groupDomaninsByDbaseAndOpens()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM mxc AS mc
-					JOIN (SELECT idContact, idEmail FROM contact WHERE idDbase = {$this->dbase->idDbase}) AS c ON (c.idContact = mc.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
-					JOIN domain AS d ON (d.idDomain = e.idDomain)
-				WHERE mc.status = 'sent' AND mc.opening != 0 GROUP BY 1";
-		
-		$db = new \EmailMarketing\General\Misc\SQLExecuter();
-		$db->setSQL($sql);
-		$db->instanceDbAbstractLayer();
-		$db->queryAbstractLayer();
-		$this->result = $db->getResult();
-	}
-	
-	public function groupDomainsByDbaseAndBounced()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Contact AS c
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE c.idDbase = :idDbase: AND e.bounced != 0 GROUP BY 1";
-				
-		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
-		$exe->setSQL($sql);
-		$exe->instanceModelsManager();
-		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
-		$this->result = $exe->getResult();
-	}
-	
-	public function groupDomainsByDbaseAndUnsubscribed()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Contact AS c
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE c.idDbase = :idDbase: AND c.unsubscribed != 0 GROUP BY 1";
-		
-		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
-		$exe->setSQL($sql);
-		$exe->instanceModelsManager();
-		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
-		$this->result = $exe->getResult();
-	}
-	
-	public function groupDomainsByDbaseAndSpam()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Contact AS c
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE c.idDbase = :idDbase: AND e.spam != 0 GROUP BY 1";
+				WHERE mc.status = 'sent' {$this->conditions} GROUP BY 1";
 		
 		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
 		$exe->setSQL($sql);
@@ -960,8 +947,11 @@ class StatisticsWrapper extends BaseWrapper
 		$this->result = $exe->getResult();
 	}
 	
-	public function groupDomaninsByContactlistAndOpens()
+	public function groupDomaninsByContactlist($needle)
 	{
+		$this->needle = $needle;
+		$this->createConditions();
+		
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
 				FROM mxc AS mc
 					JOIN (SELECT c.idContact, c.idEmail 
@@ -970,7 +960,7 @@ class StatisticsWrapper extends BaseWrapper
 						  WHERE cl.idContactlist = {$this->contactlist->idContactlist}) AS c ON (c.idContact = mc.idContact)
 					JOIN email AS e ON (e.idEmail = c.idEmail)
 					JOIN domain AS d ON (d.idDomain = e.idDomain)
-				WHERE mc.status = 'sent' AND mc.opening != 0 GROUP BY 1";
+				WHERE mc.status = 'sent' {$this->conditions} GROUP BY 1";
 		
 		$db = new \EmailMarketing\General\Misc\SQLExecuter();
 		$db->setSQL($sql);
@@ -979,78 +969,32 @@ class StatisticsWrapper extends BaseWrapper
 		$this->result = $db->getResult();
 	}
 	
-	public function groupDomainsByContactlistAndBounced()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Coxcl AS cl
-					JOIN Contact AS c ON (c.idContact = cl.idContact)
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE cl.idContactlist = :idContactlist: AND e.bounced != 0 GROUP BY 1";
-				
-		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
-		$exe->setSQL($sql);
-		$exe->instanceModelsManager();
-		$exe->queryPHQL(array('idContactlist' => $this->contactlist->idContactlist));
-		$this->result = $exe->getResult();
-	}
-	
-	public function groupDomainsByContactlistAndUnsubscribed()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Coxcl AS cl
-					JOIN Contact AS c ON (c.idContact = cl.idContact)
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE cl.idContactlist = :idContactlist: AND c.unsubscribed != 0 GROUP BY 1";
-		
-		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
-		$exe->setSQL($sql);
-		$exe->instanceModelsManager();
-		$exe->queryPHQL(array('idContactlist' => $this->contactlist->idContactlist));
-		$this->result = $exe->getResult();
-	}
-	
-	public function groupDomainsByContactlistAndSpam()
-	{
-		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-				FROM Coxcl AS cl
-					JOIN Contact AS c ON (c.idContact = cl.idContact)
-					JOIN Email AS e ON (e.idEmail = c.idEmail)
-					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-				WHERE cl.idContactlist = :idContactlist: AND e.spam != 0 GROUP BY 1";
-		
-		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
-		$exe->setSQL($sql);
-		$exe->instanceModelsManager();
-		$exe->queryPHQL(array('idContactlist' => $this->contactlist->idContactlist));
-		$this->result = $exe->getResult();
-	}
-	
 	
 	public function regroupDomains()
 	{
-		$domains = $this->result;
-		$newDomains = array();
-		
-		$new = new stdClass();
-		$new->domain = 'Otros';
-		$new->total = 0;
-		foreach ($domains as $domain) {
-			if (is_array($domain)) {
-				$domain = (object)$domain;
-			}
+		if (count($this->result) > 0) {
+			$domains = $this->result;
+			$newDomains = array();
+
+			$new = new stdClass();
+			$new->domain = 'Otros';
+			$new->total = 0;
+			foreach ($domains as $domain) {
+				if (is_array($domain)) {
+					$domain = (object)$domain;
+				}
 			
-			if (!in_array($domain->domain, $this->_popularDomains)) {
-				$new->total = $new->total + $domain->total;
+				if (!in_array($domain->domain, $this->_popularDomains)) {
+					$new->total = $new->total + $domain->total;
+				}
+				else {
+					$newDomains[] = $domain;
+				}
 			}
-			else {
-				$newDomains[] = $domain;
-			}
+
+			$newDomains[] = $new;
+			$this->result = $newDomains;
 		}
-		
-		$newDomains[] = $new;
-		$this->result = $newDomains;
 	}
 	
 	public function getDomains()
