@@ -6,12 +6,14 @@
 	{{ partial("partials/date_view_partial") }}
 	{{ partial("partials/xeditable_view_partial") }}
 	{{ partial("partials/xeditable_select_view_partial") }}
+	{{ partial("statistic/partials/partial_graph") }}
 	{{ javascript_include('js/search-reference-pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/mixin_save_form.js') }}
 	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
 	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
+	{{ partial("statistic/partials/partial_pie_highcharts") }}
 
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1Url() ~ '/dbase/' ~ sdbase.idDbase }}';
@@ -57,6 +59,7 @@
 			{%endfor%}
 		};
 	</script>
+	
 	{{ javascript_include('js/app_dbase.js') }}
 	{{ javascript_include('js/app_contact.js') }}
 	{{ javascript_include('js/app_forms.js') }}
@@ -66,7 +69,18 @@
 	{{ javascript_include('js/forms/multiple_select_block.js') }}
 	{{ javascript_include('js/forms/date_block.js') }}
 	{{ javascript_include('js/forms/form_zone.js') }}
+	
 	<script type="text/javascript">
+		//Contactos por dominios
+		App.data = [];
+		{%for domain in domains %}
+			var obj = new Object;
+				obj.name = '{{ domain.domain }}';
+				obj.y = {{ domain.total }};
+
+				App.data.push(obj);
+		{%endfor%}
+		
 		//ACL de los campos personalizados
 		App.customFieldACL = {
 			canCreate: {{acl_Ember('api::createcustomfield')}},
@@ -82,7 +96,8 @@
 			canDelete: {{acl_Ember('api::deletecontact')}}
 		}
 	</script>
-	<script>
+	
+	<script type="text/javascript">
 		App.formfields = new Array();
 		{%for field in fields %}
 			{{ ember_customfield_options(field) }}
@@ -110,8 +125,41 @@
 
 <div id="emberAppContainer">
 	<script type="text/x-handlebars"> 
+		<div class="row header-background">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="header">
+					<div class="title">{{sdbase.name}}</div>
+					<div class="title-info">Creada el {{date('d/M/Y', sdbase.createdon)}}</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<div class="contact-indicator">
+					<span class="total-contacts">{{ sdbase.Ctotal|numberf }}</span><br /> 
+					<span class="text-contacts">Contactos</span>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 text-right">
+				<ul>
+					<li>
+						<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+					</li>
+			
+					<li>
+						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}"><span class="glyphicon glyphicon-trash"></span> Eliminar </a>
+					</li>
+			
+					<li>
+						<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}"> <span class="glyphicon glyphicon-stats"> </span> Estadísticas</a>
+					</li>	
+				</ul>			
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="space"></div>
+		
+		<hr>
+		
 		<div class="row">
-			<h4 class="sectiontitle">Base de datos: {{sdbase.name}}</h4>
 			<div class="box-header">
 				<ul class="nav nav-tabs nav-tabs-left bs-ember-href">
 					{{'{{#link-to "index" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>General</a>{{/link-to}}'}}
@@ -217,39 +265,44 @@
 		<!------------------ Ember! ---------------------------------->
 		{#   Contenido del tab general   #}
 	<script type="text/x-handlebars" data-template-name="index">
-		<h4>Información de la base de datos</h4>
-		<table class="table">
-			<thead></thead>
-			<tbody>
-				<tr>
-					<td style="background-color: {{sdbase.color}} ;">
+		<div class="header-background">
+			<table class="table">
+				<thead></thead>
+				<tbody>
+					<tr>
+						<td style="background-color: {{sdbase.color}} ;">
 
-					</td>
-					<td>
-						<strong>{{sdbase.name}}</strong>
-						<p>{{sdbase.description}}</p>
-						<p>{{sdbase.Cdescription}}</p>
-					</td>
-					<td>
-						<p>Creada en <strong>{{date('Y-m-d', sdbase.createdon)}}</strong></p>
-					</td>
-					<td>
-						<p>Actualizada en <strong>{{date('Y-m-d', sdbase.updatedon)}}</strong></p>
-					</td>
-					<td>
-					<td class="text-right">
-						<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
-						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><span class="glyphicon glyphicon-trash"></span> Eliminar </a>
-						<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span> Estadísticas</a>
-					</td>
+						</td>
+						<td>
+							<strong>{{sdbase.name}}</strong>
+							<p>{{sdbase.description}}</p>
+							<p>{{sdbase.Cdescription}}</p>
+						</td>
+						<td>
+							<p>Creada en <strong>{{date('Y-m-d', sdbase.createdon)}}</strong></p>
+						</td>
+						<td>
+							<p>Actualizada en <strong>{{date('Y-m-d', sdbase.updatedon)}}</strong></p>
+						</td>
+						<td>
+						<td class="text-right">
+							<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
+							<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><span class="glyphicon glyphicon-trash"></span> Eliminar </a>
+							<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span> Estadísticas</a>
+						</td>
 
-				</tr>
-			</tbody>
-			<tfoot></tfoot>
-		</table>
-
-			<h4 class="">Información de contactos</h4>
-			<table class="table table-contacts table-striped">
+					</tr>
+				</tbody>
+				<tfoot></tfoot>
+			</table>
+		</div>
+		
+		<div class="clearfix"></div>
+		<div class="space"></div>
+		
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+			<div class="">Información de contactos</div>
+			<table class="table table-contacts table-striped" width="50%">
 				<thead></thead>
 				<tbody>
 					<tr>
@@ -284,6 +337,10 @@
 				</tbody>
 				<tfoot></tfoot>
 			</table>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+			{{'{{view App.TimeGraphView}}'}}
+		</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/add">

@@ -40,7 +40,6 @@ class DbaseController extends ControllerBase
 //		);
 		
 //		$page = $paginator->getPaginate();
-		$this->view->setVar("dbases", $dbaseQ);
     }
     
     public function newAction()
@@ -101,7 +100,14 @@ class DbaseController extends ControllerBase
 			$this->view->setVar("sdbase", $db);
 			$fields = Customfield::findByIdDbase($db->idDbase);
 			$this->view->setVar("fields", $fields);
+			
+			$statWrapper = new StatisticsWrapper();
+			$statWrapper->setDbase($db);
+			$statWrapper->groupContactsByDomainsAndDbase();
+			$statWrapper->regroupDomains();
+			$domains = $statWrapper->getDomains();
 
+			$this->view->setVar("domains", $domains);
         }
     }
    

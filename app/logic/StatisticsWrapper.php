@@ -881,22 +881,21 @@ class StatisticsWrapper extends BaseWrapper
 		
 	}
 	
-//	public function groupDomainsByDbase()
-//	{
-//		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
-//				FROM Dbase AS db
-//					JOIN Contact AS c ON (c.idDbase = db.idDbase)
-//					JOIN Email AS e ON (e.idEmail = c.idEmail)
-//					JOIN Domain AS d ON (d.idDomain = e.idDomain)
-//				WHERE db.idDbase = :idDbase: GROUP BY 1";
-//		
-//		$this->getModelsManager();
-//		
-//		$exe = $this->manager->createQuery($sql);
-//		$this->result = $exe->execute(array(
-//			'idDbase' => $this->dbase->idDbase
-//		));
-//	}
+	public function groupContactsByDomainsAndDbase()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Dbase AS db
+					JOIN Contact AS c ON (c.idDbase = db.idDbase)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE db.idDbase = :idDbase: GROUP BY 1";
+		
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
+		$this->result = $exe->getResult();
+	}
 	
 	protected function createConditions()
 	{
