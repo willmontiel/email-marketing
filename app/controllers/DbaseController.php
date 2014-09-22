@@ -40,6 +40,8 @@ class DbaseController extends ControllerBase
 //		);
 		
 //		$page = $paginator->getPaginate();
+		
+		$this->view->setVar('dbases', $dbaseQ);
     }
     
     public function newAction()
@@ -106,7 +108,6 @@ class DbaseController extends ControllerBase
 			$statWrapper->groupContactsByDomainsAndDbase();
 			$statWrapper->regroupDomains();
 			$domains = $statWrapper->getDomains();
-
 			$this->view->setVar("domains", $domains);
         }
     }

@@ -30,3 +30,15 @@ App.Router.map(function() {
 			this.resource('contacts.delete', { path: '/delete/:contact_id'});
 	});
 });
+
+App.TimeGraphView = Ember.View.extend({
+	templateName:"timeGraph",
+	didInsertElement:function(){
+		try{
+			createCharts('ChartContainer', App.data, true, false);
+		}
+		catch(err){
+			
+		}
+	}			
+});

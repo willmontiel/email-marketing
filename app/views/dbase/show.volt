@@ -139,19 +139,29 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 text-right">
-				<ul>
-					<li>
-						<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
-					</li>
-			
-					<li>
-						<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}"><span class="glyphicon glyphicon-trash"></span> Eliminar </a>
-					</li>
-			
-					<li>
-						<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}"> <span class="glyphicon glyphicon-stats"> </span> Estadísticas</a>
-					</li>	
-				</ul>			
+				<div class="btn-group">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						Action <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}">
+								<span class="glyphicon glyphicon-pencil"></span> Editar
+							</a>
+						</li>
+						<li>
+							<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}">
+								<span class="glyphicon glyphicon-trash"></span> Eliminar
+							</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}"> 
+								<span class="glyphicon glyphicon-stats"> </span> Estadísticas
+							</a>
+						</li>
+					</ul>
+				</div>		
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -302,7 +312,7 @@
 		
 		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 			<div class="">Información de contactos</div>
-			<table class="table table-contacts table-striped" width="50%">
+			<table class="table table-contacts table-striped">
 				<thead></thead>
 				<tbody>
 					<tr>

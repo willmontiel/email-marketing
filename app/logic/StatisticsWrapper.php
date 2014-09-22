@@ -862,7 +862,7 @@ class StatisticsWrapper extends BaseWrapper
 		return array('drilldownbounced' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}	
 	
-	public function groupDomainsByContactlist()
+	public function groupContactsByDomainsAndContactlist()
 	{
 		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
 				FROM Contactlist AS cl
@@ -871,13 +871,12 @@ class StatisticsWrapper extends BaseWrapper
 					JOIN Email AS e ON (e.idEmail = c.idEmail)
 					JOIN Domain AS d ON (d.idDomain = e.idDomain)
 				WHERE cl.idContactlist = :idContactlist: GROUP BY 1";
-			
-		$this->getModelsManager();
 		
-		$exe = $this->manager->createQuery($sql);
-		$this->result = $exe->execute(array(
-			'idContactlist' => $this->contactlist->idContactlist
-		));
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idContactlist' => $this->contactlist->idContactlist));
+		$this->result = $exe->getResult();
 		
 	}
 	

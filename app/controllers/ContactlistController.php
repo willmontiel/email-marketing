@@ -38,15 +38,26 @@ class ContactlistController extends ControllerBase
 	
 	public function showAction($id)
 	{
-	
-		$list = Contactlist::findFirstByIdContactlist($id);
+		$contactlist = Contactlist::findFirst(array(
+			'conditions' => 'idContactlist = ?1',
+			'bind' => array(1 => $id)
+		));
 		
-		$this->view->setVar('datalist', $list);
-		
-		$fields = Customfield::findByIdDbase($list->idDbase);
-		
-		$this->view->setVar("fields", $fields);
-		
+		if ($contactlist) {
+			$fields = Customfield::findByIdDbase($contactlist->idDbase);
+			$statWrapper = new StatisticsWrapper();
+			$statWrapper->setContactlist($contactlist);
+			$statWrapper->groupContactsByDomainsAndContactlist();
+			$statWrapper->regroupDomains();
+			$domains = $statWrapper->getDomains();
+
+			$this->view->setVar('datalist', $contactlist);
+			$this->view->setVar("fields", $fields);
+			$this->view->setVar("domains", $domains);
+		}
+		else {
+			return $this->response->redirect('error');
+		}
 	}
 	
 }

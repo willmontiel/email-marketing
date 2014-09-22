@@ -8,8 +8,10 @@
 		#}
 		{{ partial("partials/xeditable_view_partial") }}
 		{{ partial("partials/xeditable_select_view_partial") }}
+		{{ partial("statistic/partials/partial_graph") }}
 		{{ javascript_include('js/search-reference-pagination.js') }}
 		{{ javascript_include('js/mixin_config.js') }}
+		{{ partial("statistic/partials/partial_pie_highcharts") }}
 		{#**** DATE TIME PICKER (https://github.com/eternicode/bootstrap-datepicker/) ****#}
 		{#
 		{{ javascript_include('javascripts/moment/moment.min.js')}}
@@ -31,49 +33,64 @@
 		{{ stylesheet_link('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.min.css') }}
 		{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.js')}}
 		{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.es.js')}}
-	<script type="text/javascript">
-		var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
-		var currentList = {{datalist.idContactlist}};
 
-		{{ partial('partials/contact_model_definition', ['include_list' : true]) }}
+		<script type="text/javascript">
+			var MyContactlistUrl = '{{urlManager.getApi_v1Url() ~ '/contactlist/' ~ datalist.idContactlist}}';
+			var currentList = {{datalist.idContactlist}};
+
+			{{ partial('partials/contact_model_definition', ['include_list' : true]) }}
 
 
-	</script>
-	{{ javascript_include('js/app_contactlist_contacts.js') }}
-	{{ javascript_include('js/app_contact.js') }}
-	{{ javascript_include('js/list_model.js') }}
-	{{ javascript_include('js/app_contact_list.js') }}
-	<script type="text/javascript">
-		App.currentFilter = '';
+		</script>
 		
-		App.contactACL = {
-			canCreate: {{acl_Ember('api::createcontactbylist')}},
-			canImportBatch: {{acl_Ember('contacts::importbatch')}},
-			canImport: {{acl_Ember('contacts::import')}},
-			canUpdate: {{acl_Ember('api::updatecontactbylist')}},
-			canDelete: {{acl_Ember('api::deletecontactbylist')}}
-		};
-	</script>
-	<script>
-		{%for field in fields %}
-			{{ ember_customfield_options(field) }}
-			{{ ember_customfield_options_xeditable(field) }}
-		{%endfor%}
-	</script>
-	{{ javascript_include('js/editable-ember-view.js')}}
-	<script type="text/x-handlebars" data-template-name="dropdown" >
-		<div class="dropdown">
-			<button class="btn dropdown-toggle sr-only" type="button" id="dropdownMenu1" data-toggle="dropdown">
-				  <span class="caret">Mostrar</span>
-			</button>
-			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Todos</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Activos</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Suscritos</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Rebotados</a></li>
-			</ul>
-		</div>
-	</script>
+		{{ javascript_include('js/app_contactlist_contacts.js') }}
+		{{ javascript_include('js/app_contact.js') }}
+		{{ javascript_include('js/list_model.js') }}
+		{{ javascript_include('js/app_contact_list.js') }}
+	
+		<script type="text/javascript">
+			App.data = [];
+			{%for domain in domains %}
+				var obj = new Object;
+					obj.name = '{{ domain.domain }}';
+					obj.y = {{ domain.total }};
+
+					App.data.push(obj);
+			{%endfor%}
+
+			App.currentFilter = '';
+
+			App.contactACL = {
+				canCreate: {{acl_Ember('api::createcontactbylist')}},
+				canImportBatch: {{acl_Ember('contacts::importbatch')}},
+				canImport: {{acl_Ember('contacts::import')}},
+				canUpdate: {{acl_Ember('api::updatecontactbylist')}},
+				canDelete: {{acl_Ember('api::deletecontactbylist')}}
+			};
+		</script>
+		
+		<script type="text/javascript">
+			{%for field in fields %}
+				{{ ember_customfield_options(field) }}
+				{{ ember_customfield_options_xeditable(field) }}
+			{%endfor%}
+		</script>
+		
+		{{ javascript_include('js/editable-ember-view.js')}}
+		
+		<script type="text/x-handlebars" data-template-name="dropdown" >
+			<div class="dropdown">
+				<button class="btn dropdown-toggle sr-only" type="button" id="dropdownMenu1" data-toggle="dropdown">
+					  <span class="caret">Mostrar</span>
+				</button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Todos</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Activos</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Suscritos</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Rebotados</a></li>
+				</ul>
+			</div>
+		</script>
 
 {% endblock %}	
 {% block content %}
@@ -90,20 +107,29 @@
 	</script>
 	<div id="emberAppContactContainer">
 		<script type="text/x-handlebars" data-template-name="contacts">
-			<div class="row wrap">
-				<div class="sparkline-row col-xs-3">
-					<h1 class="blue"> {{ datalist.name }}</h1>
-					<span>{{ datalist.description}}</span>
+			<div class="row header-background">
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					<div class="title">{{ datalist.name }}</div>
+					<div class="title-info">{{ datalist.description}}</div>
+					
+					<div class="clearfix"></div>
+					<div class="space"></div>
+			
+					<ul class="list-inline numbers-contacts pull-right">
+						<li>Contactos totales <br/> <span class="blue big-number"> {{'{{lista.totalContactsF}}'}} </span></li>
+						<li>Activos <br/> <span class="green big-number"> {{'{{lista.activeContactsF}}'}} </span></li>
+						<li>Inactivos <br/><span class="sad-blue big-number"> {{'{{lista.inactiveContactsF}}'}} </span></li>
+						<li>Desuscritos <br/><span class="gray big-number"> {{'{{lista.unsubscribedContactsF}}'}} </span></li>
+						<li>Rebotados <br/><span class="orange big-number"> {{'{{lista.bouncedContactsF}}'}} </span></li>
+						<li>Spam <br/><span class="red big-number"> {{'{{lista.spamContactsF}}'}} </span></li>
+					</ul>
 				</div>
-				<ul class="list-inline numbers-contacts pull-right">
-					<li>Contactos totales <br/> <span class="blue big-number"> {{'{{lista.totalContactsF}}'}} </span></li>
-					<li>Activos <br/> <span class="green big-number"> {{'{{lista.activeContactsF}}'}} </span></li>
-					<li>Inactivos <br/><span class="sad-blue big-number"> {{'{{lista.inactiveContactsF}}'}} </span></li>
-					<li>Desuscritos <br/><span class="gray big-number"> {{'{{lista.unsubscribedContactsF}}'}} </span></li>
-					<li>Rebotados <br/><span class="orange big-number"> {{'{{lista.bouncedContactsF}}'}} </span></li>
-					<li>Spam <br/><span class="red big-number"> {{'{{lista.spamContactsF}}'}} </span></li>
-				</ul>
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					{{'{{view App.TimeGraphView}}'}}
+				</div>
 			</div>
+			<div class="clearfix"></div>
+			<div class="space"></div>
 		{{'{{outlet}}'}}
 		</script>
 
