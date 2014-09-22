@@ -371,6 +371,92 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'campaign::delete'),
 			
 			
+//			----------//----------**ROLE_ADMIN_DB**----------//----------
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contact::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contact::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contact::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contact::delete'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contact::(un)subscribe'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contact::importbatch'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contact::import'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contactlist::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contactlist::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contactlist::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'contactlist::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'dbase::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'dbase::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'dbase::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'dbase::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'customfield::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'customfield::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'customfield::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'customfield::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'user::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'user::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'user::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'user::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'segment::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'segment::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'segment::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'segment::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'blockemail::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'blockemail::block email'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'blockemail::unblock email'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'process::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'process::download'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'dashboard::read'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'mail::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'mail::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'mail::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'mail::delete'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'mail::send'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'mail::clone'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'template::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'template::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'template::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'template::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'statistic::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'statistic::download'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'statistic::share'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'form::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'form::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'form::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'form::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'socialmedia::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'socialmedia::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'socialmedia::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'tools::read'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'footer::view'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'apikey::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'apikey::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'apikey::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'apikey::delete'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'api::account'),
+			
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'campaign::create'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'campaign::read'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'campaign::update'),
+			array( 'Role' => 'ROLE_ADMIN_DB', 'Action' => 'campaign::delete'),			
+			
+			
 //			----------//----------**ROLE_TRAINING**----------//----------
 			
 			array( 'Role' => 'ROLE_TRAINING', 'Action' => 'contact::create'),
