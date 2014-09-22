@@ -109,28 +109,61 @@
 		<script type="text/x-handlebars" data-template-name="contacts">
 			<div class="row header-background">
 				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-					<div class="title">{{ datalist.name }}</div>
-					<div class="title-info">{{ datalist.description}}</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="title">{{ datalist.name }}</div>
+							<div class="title-info">{{ datalist.description}}</div>
+						</div>
+					</div>
 					
 					<div class="clearfix"></div>
 					<div class="space"></div>
 					
-					<table>
-						<thead>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Contactos totales <br/> <span class="blue big-number"> {{'{{lista.totalContactsF}}'}} </span></td>
-								<td>Activos <br/> <span class="green big-number"> {{'{{lista.activeContactsF}}'}} </span></td>
-								<td>Inactivos <br/><span class="sad-blue big-number"> {{'{{lista.inactiveContactsF}}'}} </span></td>
-							</tr>
-							<tr>
-								<td>Desuscritos <br/><span class="gray big-number"> {{'{{lista.unsubscribedContactsF}}'}} </span></td>
-								<td>Rebotados <br/><span class="orange big-number"> {{'{{lista.bouncedContactsF}}'}} </span></td>
-								<td>Spam <br/><span class="red big-number"> {{'{{lista.spamContactsF}}'}} </span></td>
-							</tr>
-						</tbody>
-					</table>
+					<div class="row">
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+							<div class="small-stat-total-contact-indicator">
+								<div class="small-percent-stats">{{'{{lista.totalContactsF}}'}}</div>
+							</div>
+							<div class="medium-title">Contactos totales</div>
+						</div>
+						
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+							<div class="small-stat-open-indicator">
+								<div class="small-percent-stats">{{'{{lista.activeContactsF}}'}}</div>
+							</div>
+							<div class="medium-title">Activos</div>
+						</div>
+				
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+							<div class="small-stat-inactive-contact-indicator">
+								<div class="small-percent-stats">{{'{{lista.inactiveContactsF}}'}}</div>
+							</div>
+							<div class="medium-title">Inactivos</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+							<div class="small-stat-unsubscribed-indicator">
+								<div class="small-percent-stats"> {{'{{lista.unsubscribedContactsF}}'}} </div>
+							</div>
+							<div class="medium-title">Desuscritos</div>
+						</div>
+						
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+							<div class="small-stat-bounced-indicator">
+								<div class="small-percent-stats"> {{'{{lista.bouncedContactsF}}'}} </div>
+							</div>
+							<div class="medium-title">Rebotados</div>
+						</div>
+				
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 pull-center">
+							<div class="small-stat-spam-indicator">
+								<div class="small-percent-stats"> {{'{{lista.spamContactsF}}'}} </div>
+							</div>
+							<div class="medium-title">Spam</div>
+						</div>
+					</div>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 					{{'{{view App.TimeGraphView}}'}}

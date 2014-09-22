@@ -1195,3 +1195,105 @@ span.required {
 	color: #97c86b;
 	font-size: 40px;
 }
+
+.small-percent-stats {
+	font-size: 30px;
+	font-weight: 600;
+	text-shadow: 1px 1px #afafaf;
+}
+
+.small-stat-spam-indicator {
+	border-radius: 50%;
+	margin-top: 10%;
+	/* background-color: #ddd; */
+	width: 75px;
+	height: 75px;
+	border: solid 8px #bd1b06;
+	/* padding-top: 10px; */
+	/* position: relative; */
+	padding-top: 6%;
+	text-align: center;
+	margin-left: 26%;
+	margin-bottom: 5%;
+	color: #bd1b06;
+}
+
+.small-stat-unsubscribed-indicator {
+	border-radius: 50%;
+	margin-top: 10%;
+	/* background-color: #ddd; */
+	width: 75px;
+	height: 75px;
+	border: solid 8px #636363;
+	/* padding-top: 10px; */
+	/* position: relative; */
+	padding-top: 6%;
+	text-align: center;
+	margin-left: 26%;
+	margin-bottom: 5%;
+	color: #636363;
+}
+
+.small-stat-bounced-indicator {
+	border-radius: 50%;
+	margin-top: 10%;
+	/* background-color: #ddd; */
+	width: 75px;
+	height: 75px;
+	border: solid 8px #ef8807;
+	/* padding-top: 10px; */
+	/* position: relative; */
+	padding-top: 6%;
+	text-align: center;
+	margin-left: 26%;
+	margin-bottom: 5%;
+	color: #ef8807;
+}
+
+.small-stat-open-indicator {
+	border-radius: 50%;
+	margin-top: 10%;
+	/* background-color: #ddd; */
+	width: 75px;
+	height: 75px;
+	border: solid 8px #97c86b;
+	/* padding-top: 10px; */
+	/* position: relative; */
+	padding-top: 6%;
+	text-align: center;
+	margin-left: 26%;
+	margin-bottom: 5%;
+	color: #97c86b;
+}
+
+.small-stat-total-contact-indicator {
+	border-radius: 50%;
+	margin-top: 10%;
+	/* background-color: #ddd; */
+	width: 75px;
+	height: 75px;
+	border: solid 8px #557595;
+	/* padding-top: 10px; */
+	/* position: relative; */
+	padding-top: 6%;
+	text-align: center;
+	margin-left: 26%;
+	margin-bottom: 5%;
+	color: #557595;
+}
+
+.small-stat-inactive-contact-indicator {
+	border-radius: 50%;
+	margin-top: 10%;
+	/* background-color: #ddd; */
+	width: 75px;
+	height: 75px;
+	border: solid 8px #6e97ac;
+	/* padding-top: 10px; */
+	/* position: relative; */
+	padding-top: 6%;
+	text-align: center;
+	margin-left: 26%;
+	margin-bottom: 5%;
+	color: #6e97ac;
+}
