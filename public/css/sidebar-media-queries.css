@@ -53,7 +53,7 @@
 	}
 }*/
 
-@media all and (max-width: 1380px){
+@media (min-width: 1381px){
 	.principal-menu {
 		margin-top: 5%;
 		display: block;
