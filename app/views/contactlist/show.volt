@@ -114,15 +114,23 @@
 					
 					<div class="clearfix"></div>
 					<div class="space"></div>
-			
-					<ul class="list-inline numbers-contacts pull-right">
-						<li>Contactos totales <br/> <span class="blue big-number"> {{'{{lista.totalContactsF}}'}} </span></li>
-						<li>Activos <br/> <span class="green big-number"> {{'{{lista.activeContactsF}}'}} </span></li>
-						<li>Inactivos <br/><span class="sad-blue big-number"> {{'{{lista.inactiveContactsF}}'}} </span></li>
-						<li>Desuscritos <br/><span class="gray big-number"> {{'{{lista.unsubscribedContactsF}}'}} </span></li>
-						<li>Rebotados <br/><span class="orange big-number"> {{'{{lista.bouncedContactsF}}'}} </span></li>
-						<li>Spam <br/><span class="red big-number"> {{'{{lista.spamContactsF}}'}} </span></li>
-					</ul>
+					
+					<table>
+						<thead>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Contactos totales <br/> <span class="blue big-number"> {{'{{lista.totalContactsF}}'}} </span></td>
+								<td>Activos <br/> <span class="green big-number"> {{'{{lista.activeContactsF}}'}} </span></td>
+								<td>Inactivos <br/><span class="sad-blue big-number"> {{'{{lista.inactiveContactsF}}'}} </span></td>
+							</tr>
+							<tr>
+								<td>Desuscritos <br/><span class="gray big-number"> {{'{{lista.unsubscribedContactsF}}'}} </span></td>
+								<td>Rebotados <br/><span class="orange big-number"> {{'{{lista.bouncedContactsF}}'}} </span></td>
+								<td>Spam <br/><span class="red big-number"> {{'{{lista.spamContactsF}}'}} </span></td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 					{{'{{view App.TimeGraphView}}'}}
