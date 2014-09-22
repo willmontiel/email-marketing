@@ -13,7 +13,7 @@
 
         {{ stylesheet_link('vendors/bootstrap_v3/css/bootstrap.css') }}
         {{ stylesheet_link('vendors/bootstrap_v3/css/font-awesome.css') }}
-        {{ stylesheet_link('css/prstyles.css') }}
+        
 
         {# Para cambiar el tema modificar la ruta en el siguiente enlace#}
         {{ stylesheet_link('themes/' ~ theme.name ~ '/css/styles.css') }}
@@ -41,6 +41,8 @@
 		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
 		{% endblock %}
 		{{ javascript_include('js/indicator_account_loader.js') }}
+		{{ stylesheet_link('css/prstyles.css') }}
+		{{ stylesheet_link('css/sidebar-media-queries.css') }}
 		<script type="text/javascript">
 			loadIndicator("indicator");
 		</script>
@@ -84,7 +86,7 @@
 		<!-- Contenedor principal -->
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-xs-12 col-sm-2 col-md-1 sidebar">
+				<div class="col-xs-12 col-sm-2 col-md-1 col-lg-1 sidebar">
 					<div class="principal-menu">
 						<!-- Main nav -->
 						{{ partial("partials/menu_partial_b3_2") }}
