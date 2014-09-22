@@ -125,43 +125,18 @@
 
 <div id="emberAppContainer">
 	<script type="text/x-handlebars"> 
-		<div class="row header-background">
-			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+		<div class="row header-background" style="border-top: 1px solid {{sdbase.color}};">
+			<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 				<div class="header">
 					<div class="title">{{sdbase.name}}</div>
 					<div class="title-info">Creada el {{date('d/M/Y', sdbase.createdon)}}</div>
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 text-right">
 				<div class="contact-indicator">
 					<span class="total-contacts">{{ sdbase.Ctotal|numberf }}</span><br /> 
 					<span class="text-contacts">Contactos</span>
 				</div>
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 text-right">
-				<div class="btn-group">
-					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-						Action <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" role="menu">
-						<li>
-							<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}">
-								<span class="glyphicon glyphicon-pencil"></span> Editar
-							</a>
-						</li>
-						<li>
-							<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}">
-								<span class="glyphicon glyphicon-trash"></span> Eliminar
-							</a>
-						</li>
-						<li class="divider"></li>
-						<li>
-							<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}"> 
-								<span class="glyphicon glyphicon-stats"> </span> Estadísticas
-							</a>
-						</li>
-					</ul>
-				</div>		
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -275,43 +250,25 @@
 		<!------------------ Ember! ---------------------------------->
 		{#   Contenido del tab general   #}
 	<script type="text/x-handlebars" data-template-name="index">
-		<div class="header-background">
-			<table class="table">
-				<thead></thead>
-				<tbody>
-					<tr>
-						<td style="background-color: {{sdbase.color}} ;">
+		<div class="space"></div>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
+			<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm">
+				<span class="glyphicon glyphicon-pencil"></span> Editar
+			</a>
 
-						</td>
-						<td>
-							<strong>{{sdbase.name}}</strong>
-							<p>{{sdbase.description}}</p>
-							<p>{{sdbase.Cdescription}}</p>
-						</td>
-						<td>
-							<p>Creada en <strong>{{date('Y-m-d', sdbase.createdon)}}</strong></p>
-						</td>
-						<td>
-							<p>Actualizada en <strong>{{date('Y-m-d', sdbase.updatedon)}}</strong></p>
-						</td>
-						<td>
-						<td class="text-right">
-							<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
-							<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-delete btn-sm extra-padding ShowDialog"><span class="glyphicon glyphicon-trash"></span> Eliminar </a>
-							<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm extra-padding"> <span class="glyphicon glyphicon-stats"> </span> Estadísticas</a>
-						</td>
+			<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-sm">
+				<span class="glyphicon glyphicon-trash"></span> Eliminar
+			</a>
 
-					</tr>
-				</tbody>
-				<tfoot></tfoot>
-			</table>
+			<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm"> 
+				<span class="glyphicon glyphicon-stats"> </span> Estadísticas
+			</a>
 		</div>
-		
 		<div class="clearfix"></div>
 		<div class="space"></div>
-		
+
 		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-			<div class="">Información de contactos</div>
+			<div class="big-title">Información de contactos</div>
 			<table class="table table-contacts table-striped">
 				<thead></thead>
 				<tbody>
@@ -351,6 +308,8 @@
 		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 			{{'{{view App.TimeGraphView}}'}}
 		</div>
+		<div class="clearfix"></div>
+		<div class="space"></div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="fields/add">
