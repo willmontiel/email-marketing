@@ -51,9 +51,6 @@
         </style>
     </head>
     <body>
-		<!-- side bar -->
-		<div id="sidebar-background-object" class="col-sm-3 col-md-2 hidden-xs"></div>
-		
 		<!-- nav bar -->
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
@@ -84,43 +81,43 @@
 			</div>
 		</nav>
 		
-<!-- Contenedor principal -->
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-xs-12 col-sm-2 col-md-1 sidebar">
-				<div class="principal-menu">
-					<!-- Main nav -->
-					{{ partial("partials/menu_partial_b3_2") }}
-				</div>
-			</div>
-			<div class="col-sx-12 col-sm-9 col-md-10">
-				{# Zona de mensajes #}
-				{% if messages !== false%}
-					<div class="space"></div>
-					<div class="row">
-						<div class="col-sm-12">
-							{% for msg in messages%}
-								<div class="alert alert-{{msg.type}}">
-									<button type="button" class="close" data-dismiss="alert">×</button>
-									{{msg.message}}
-								</div>
-							{% endfor %}
-						</div>
+		<!-- Contenedor principal -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12 col-sm-2 col-md-1 sidebar">
+					<div class="principal-menu">
+						<!-- Main nav -->
+						{{ partial("partials/menu_partial_b3_2") }}
 					</div>
-				{% endif %}
-				{# Fin de zona de mensajes #}
-
-				<div class="container-fluid">
-					<!-- Inicio de contenido -->
-					{% block content %}
-						<!-- Aqui va el contenido -->
-					{% endblock %}
-					<!-- Fin de contenido -->
 				</div>
-			</div>
+				<div class="col-sx-12 col-sm-10 col-md-11">
+					{# Zona de mensajes #}
+					{% if messages !== false%}
+						<div class="space"></div>
+						<div class="row">
+							<div class="col-sm-12">
+								{% for msg in messages%}
+									<div class="alert alert-{{msg.type}}">
+										<button type="button" class="close" data-dismiss="alert">×</button>
+										{{msg.message}}
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					{% endif %}
+					{# Fin de zona de mensajes #}
 
+					<div class="container-fluid">
+						<!-- Inicio de contenido -->
+						{% block content %}
+							<!-- Aqui va el contenido -->
+						{% endblock %}
+						<!-- Fin de contenido -->
+					</div>
+				</div>
+
+			</div>
 		</div>
-	</div>
 
 		{# OLARK #}
 		{% if chat.enabled %}
