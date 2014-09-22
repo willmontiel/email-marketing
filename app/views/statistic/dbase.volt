@@ -36,7 +36,7 @@
 	</div>
 	
 	{#   encabezado página   #}
-	<div class="row header-background">
+	<div class="row header-background" style="border-top: 1px solid {{dbase.color}};">
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			<div class="header">
 				<div class="title">{{dbase.name}}</div>

@@ -251,63 +251,78 @@
 		{#   Contenido del tab general   #}
 	<script type="text/x-handlebars" data-template-name="index">
 		<div class="space"></div>
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
-			<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm">
-				<span class="glyphicon glyphicon-pencil"></span> Editar
-			</a>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+				<div class="text-block">
+					<div class="medium-title" style="text-align: left !important;">Descripción:</div>
+					<p style="font-size: 12px; color: #777;">
+						{{sdbase.description}} <br />
+						{{sdbase.Cdescription}} 
+					</p>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-right">
+				<a href="{{url('dbase/edit')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm">
+					<span class="glyphicon glyphicon-pencil"></span> Editar
+				</a>
 
-			<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-sm">
-				<span class="glyphicon glyphicon-trash"></span> Eliminar
-			</a>
+				<a data-toggle="modal" href="#modal-simple" data-id="{{ url('dbase/delete/') }}{{sdbase.idDbase}}" class="btn btn-default btn-delete btn-sm">
+					<span class="glyphicon glyphicon-trash"></span> Eliminar
+				</a>
 
-			<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm"> 
-				<span class="glyphicon glyphicon-stats"> </span> Estadísticas
-			</a>
+				<a href="{{url('statistic/dbase')}}/{{sdbase.idDbase}}" class="btn btn-default btn-sm"> 
+					<span class="glyphicon glyphicon-stats"> </span> Estadísticas
+				</a>
+			</div>
 		</div>
+		
 		<div class="clearfix"></div>
 		<div class="space"></div>
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				<div class="big-title">Información de contactos</div>
+				<table class="table table-contacts table-striped">
+					<thead></thead>
+					<tbody>
+						<tr>
+							<td class="">Contactos totales</td>
+							<td><span class="blue big-number pull-right">{{ sdbase.Ctotal|numberf }}</span></td>
+						</tr>
 
-		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-			<div class="big-title">Información de contactos</div>
-			<table class="table table-contacts table-striped">
-				<thead></thead>
-				<tbody>
-					<tr>
-						<td>Contactos totales</td>
-						<td><span class="blue big-number pull-right">{{ sdbase.Ctotal|numberf }}</span></td>
-					</tr>
+						<tr>
+							<td>Contactos Activos</td>
+							<td><span class="green big-number pull-right">{{ sdbase.Cactive|numberf }}</span></td>
+						</tr>
 
-					<tr>
-						<td>Contactos Activos</td>
-						<td><span class="green big-number pull-right">{{ sdbase.Cactive|numberf }}</span></td>
-					</tr>
+						<tr>
+							<td>Contactos Inactivos</td>
+							<td><span class="sad-blue big-number pull-right"> {{ get_inactive(sdbase)|numberf }}</span></td>
+						</tr>
 
-					<tr>
-						<td>Contactos Inactivos</td>
-						<td><span class="sad-blue big-number pull-right"> {{ get_inactive(sdbase)|numberf }}</span></td>
-					</tr>
+						<tr>
+							<td>Contactos Desuscritos</td>
+							<td><span class="gray big-number pull-right"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
+						</tr>
 
-					<tr>
-						<td>Contactos Desuscritos</td>
-						<td><span class="gray big-number pull-right"> {{ sdbase.Cunsubscribed|numberf }}</span></td>
-					</tr>
+						<tr>
+							<td>Contactos Rebotados</td>
+							<td><span class="orange big-number pull-right"> {{sdbase.Cbounced|numberf }}</span></td>
+						</tr>
 
-					<tr>
-						<td>Contactos Rebotados</td>
-						<td><span class="orange big-number pull-right"> {{sdbase.Cbounced|numberf }}</span></td>
-					</tr>
-
-					<tr>
-						<td>Contactos Spam</td>
-						<td><span class="red big-number pull-right"> {{sdbase.Cspam|numberf }}</span></td>
-					</tr>
-				</tbody>
-				<tfoot></tfoot>
-			</table>
+						<tr>
+							<td>Contactos Spam</td>
+							<td><span class="red big-number pull-right"> {{sdbase.Cspam|numberf }}</span></td>
+						</tr>
+					</tbody>
+					<tfoot></tfoot>
+				</table>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pull-right">
+				{{'{{view App.TimeGraphView}}'}}
+			</div>
 		</div>
-		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-			{{'{{view App.TimeGraphView}}'}}
-		</div>
+
 		<div class="clearfix"></div>
 		<div class="space"></div>
 	</script>
