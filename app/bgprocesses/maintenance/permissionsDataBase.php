@@ -26,6 +26,7 @@ class PermissionsDataBase
 			'ROLE_MAIL_SERVICES' => 6,
 			'ROLE_TRAINING' => 7,
 			'ROLE_TEMPLATE' => 8,
+			'ROLE_ADMIN_DB' => 9,
 		);
 	}
 	
