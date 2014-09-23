@@ -94,7 +94,7 @@
 				</div>
 				<div class="col-sx-12 col-sm-10 col-md-11">
 					{# Zona de mensajes #}
-					{% if messages !== false%}
+					{% if messages == true %}
 						<div class="space"></div>
 						<div class="row">
 							<div class="col-sm-12">
