@@ -135,7 +135,8 @@ class ChildCommunication extends BaseWrapper
 			if ($totalContactsSQL != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 				$executer->setSQL($totalContactsSQL);
-				$executer->executeSelectQuery();
+				$executer->instanceDbAbstractLayer();
+				$executer->queryAbstractLayer();
 				$r = $executer->getResult();
 				$totalSent = $r[0]['total'];
 			}
@@ -169,14 +170,16 @@ class ChildCommunication extends BaseWrapper
 				
 				if ($mxcSQL != false) {
 					$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+					$executer->instanceDbAbstractLayer();
+					
 					$executer->setSQL($mxcSQL);
-					$executer->executeQuery();
+					$executer->executeAbstractLayer();
 					
 					$executer->setSQL($statDbaseSQL);
-					$executer->executeQuery();
+					$executer->executeAbstractLayer();
 					
 					$executer->setSQL($statContactlistSQL);
-					$executer->executeQuery();
+					$executer->executeAbstractLayer();
 				}
 				//*** this is the old way for to get the target
 //				$identifyTarget = new IdentifyTarget();
