@@ -9,7 +9,7 @@ class FlashMessages
 							2 => time())
 		));
 		
-		if (count($messages) !== 0) {
+		if (count($messages) != 0) {
 			$message = array();
 			foreach ($messages as $msg) {
 				if ($msg->accounts == 'all' || $msg->accounts == null) {
@@ -39,6 +39,7 @@ class FlashMessages
 			Phalcon\DI::getDefault()->get('logger')->log("No hay flash messages para esta cuenta");
 			$message = false;
 		}
+		
 		return $message;
 	}
 }
