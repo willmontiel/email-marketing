@@ -630,7 +630,6 @@ class TrackingObject
 				}
 
 //				$this->log->log("Se marcarón como spam a todos los contactos con idEmail: {$this->idEmail}");
-//				$this->log->log('Preparandose para actualizar contadores');
 				$this->updateCounters();
 				$this->log->log('Se actualizó spam');
 			}
