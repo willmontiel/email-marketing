@@ -106,12 +106,38 @@ class StatisticController extends ControllerBase
 			
 			$statWrapper = new StatisticsWrapper();
 			$statWrapper->setAccount($this->user->account);
+			$statWrapper->setDbase($dbase);
+			
 			$statistics = $statWrapper->showDbaseStatistics($dbase);
-
+			
+			$statWrapper->groupDomainsByDbase("opens");
+			$statWrapper->regroupDomains();
+			$domainsByOpens = $statWrapper->getDomains();
+			
+			$statWrapper->groupDomainsByDbase("bounced");
+			$statWrapper->regroupDomains();
+			$domainsByBounced = $statWrapper->getDomains();
+			
+			$statWrapper->groupDomainsByDbase("unsubscribed");
+			$statWrapper->regroupDomains();
+			$domainsByUnsubscribed = $statWrapper->getDomains();
+			
+			$statWrapper->groupDomainsByDbase("spam");
+			$statWrapper->regroupDomains();
+			$domainsBySpam = $statWrapper->getDomains();
+			
+			
+			
 			if($statistics) {
 				$this->view->setVar('statisticsData', $statistics['statisticsData']);
 				$this->view->setVar('summaryChartData', $statistics['summaryChartData']);
 				$this->view->setVar('compareDbase', $statistics['compareDbase']);
+				
+				$this->view->setVar('domainsByOpens', $domainsByOpens);
+				$this->view->setVar('domainsByBounced', $domainsByBounced);
+				$this->view->setVar('domainsByUnsubscribed', $domainsByUnsubscribed);
+				$this->view->setVar('domainsBySpam', $domainsBySpam);
+				
 				$this->view->setVar('dbase', $dbase);
 			}
 			else {
@@ -138,12 +164,36 @@ class StatisticController extends ControllerBase
 				
 				$statWrapper = new StatisticsWrapper();
 				$statWrapper->setAccount($this->user->account);
+				$statWrapper->setContactlist($contactList);
+				
 				$statistics = $statWrapper->showContactlistStatistics($contactList, $dbase);
+				
+				$statWrapper->groupDomaninsByContactlist('opens');
+				$statWrapper->regroupDomains();
+				$domainsByOpens = $statWrapper->getDomains();
+
+				$statWrapper->groupDomaninsByContactlist('bounced');
+				$statWrapper->regroupDomains();
+				$domainsByBounced = $statWrapper->getDomains();
+
+				$statWrapper->groupDomaninsByContactlist('unsubscribed');
+				$statWrapper->regroupDomains();
+				$domainsByUnsubscribed = $statWrapper->getDomains();
+
+				$statWrapper->groupDomaninsByContactlist('spam');
+				$statWrapper->regroupDomains();
+				$domainsBySpam = $statWrapper->getDomains();
 				
 				if($statistics) {
 					$this->view->setVar('statisticsData', $statistics['statisticsData']);
 					$this->view->setVar('summaryChartData', $statistics['summaryChartData']);
 					$this->view->setVar('compareList', $statistics['compareList']);
+					
+					$this->view->setVar('domainsByOpens', $domainsByOpens);
+					$this->view->setVar('domainsByBounced', $domainsByBounced);
+					$this->view->setVar('domainsByUnsubscribed', $domainsByUnsubscribed);
+					$this->view->setVar('domainsBySpam', $domainsBySpam);
+					
 					$this->view->setVar('contactList', $contactList);
 				}
 				else {

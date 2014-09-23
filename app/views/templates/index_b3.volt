@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0">
+		<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=1">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800">
 		<link rel="shortcut icon" type="image/x-icon" href="{{url('')}}images/favicon48x48.ico">
 		<!-- Always force latest IE rendering engine or request Chrome Frame -->
@@ -13,7 +13,7 @@
 
         {{ stylesheet_link('vendors/bootstrap_v3/css/bootstrap.css') }}
         {{ stylesheet_link('vendors/bootstrap_v3/css/font-awesome.css') }}
-        {{ stylesheet_link('css/prstyles.css') }}
+        
 
         {# Para cambiar el tema modificar la ruta en el siguiente enlace#}
         {{ stylesheet_link('themes/' ~ theme.name ~ '/css/styles.css') }}
@@ -41,6 +41,8 @@
 		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
 		{% endblock %}
 		{{ javascript_include('js/indicator_account_loader.js') }}
+		{{ stylesheet_link('css/prstyles.css') }}
+		{{ stylesheet_link('css/sidebar-media-queries.css') }}
 		<script type="text/javascript">
 			loadIndicator("indicator");
 		</script>
@@ -51,125 +53,73 @@
         </style>
     </head>
     <body>
-		<div id="sidebar-background-object" class="col-sm-3 col-md-2 hidden-xs"></div>
-
 		<!-- nav bar -->
-		<nav class="navbar navbar-default">
+		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
-				<div class="navbar-header">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-main-navigation">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					</button>
-				</div>
-
-				<!-- <p class="navbar-text">{% block sectiontitle %}Titulo de pagina{% endblock %}</p> -->
-				<div class="collapse navbar-collapse" id="nav-collapse-01">
-					<ul id="top-nav" class="nav navbar-nav navbar-right">
-<!--					<li><a href="">Mi Cuenta</a></li>
-						<li><a href="">Ayuda</a></li>
--->						<li>
-							<a href="javascript: void(0);" style="cursor: default;">
-								<div id="indicator"></div>
-							</a>
-						</li>
-						{% if chat.enabled %}
-						<!-- BEGIN OLARK CHAT LINK -->
-						<li>
-							<a href="javascript:void(0);" onclick="olark('api.box.expand')">
-								Necesita ayuda? <i class="fa fa-comments"></i>
-							</a>
-						</li>
-						<!-- END OLARK CHAT LINK -->
-						{% endif %}
-						{% if userefective.enable %}
-							<li><a href="{{url('session/logoutfromthisaccount')}}">Volver a la sesión original </a></li>
-						{% endif %}
-						<li><a href="javascript: void(0);" style="cursor: default;">{{ userObject.firstName }} {{ userObject.lastName }}</a></li>
-						<li><a href="{{url('session/logout')}}" title="Cerrar sesión"><span class="glyphicon glyphicon-log-out"></span></a></li>
-					</ul>					
-				</div>	
+			  <div class="navbar-header">
+				  <a class="navbar-brand" href="{{url('')}}">{{theme.logo}}</a>
+			  </div>
+			  <ul id="top-nav" class="nav navbar-nav navbar-right" style="padding-top: 10px;">
+					<li>
+						<a href="javascript: void(0);" style="cursor: default;">
+							<div id="indicator"></div>
+						</a>
+					</li>
+					{% if chat.enabled %}
+					<!-- BEGIN OLARK CHAT LINK -->
+					<li>
+						<a href="javascript:void(0);" onclick="olark('api.box.expand');">
+							Necesita ayuda? <i class="fa fa-comments"></i>
+						</a>
+					</li>
+					<!-- END OLARK CHAT LINK -->
+					{% endif %}
+					{% if userefective.enable %}
+						<li><a href="{{url('session/logoutfromthisaccount')}}">Volver a la sesión original </a></li>
+					{% endif %}
+					<li><a href="javascript: void(0);" style="cursor: default;">{{ userObject.firstName }} {{ userObject.lastName }}</a></li>
+					<li><a href="{{url('session/logout')}}" title="Cerrar sesión"><span class="glyphicon glyphicon-log-out"></span></a></li>
+				</ul>	
 			</div>
 		</nav>
-		<!-- /nav bar -->
-<!-- ****** ELEMENTOS POR UBICAR ********* ->
-
-<!--												{# Nombre del usuario #}
-										<span>{{ userObject.firstName }} {{ userObject.lastName }}</span>
-
-			
-										<img class="menu-avatar" src="{{ url('images/avatars/avatar1.jpg')}}" /> <span> {{ userObject.username }} <i class="icon-caret-down"></i></span>
-										{# Este es un indicador sobre numero de mensajes #}
-										<span class="badge badge-dark-red">
-											{% set messages = flashMessage.getMessages() %}
-											{% if messages !== false%}
-												{{messages|length}}
-											{% else %}
-												0
-											{% endif %}
-										</span>
-										{# fin del indicador #}
-
-
-						<ul class="nav pull-right">
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrar <b class="caret"></b></a>
-								<ul class="dropdown-menu">
-									<li><a href="{{ url('account') }}">Cuentas</a></li>
-									<li><a href="{{ url('user') }}">Usuarios</a></li>
-									<li><a href="{{ url('process') }}">Procesos</a></li>
-									<li><a href="{{ url('scheduledmail/manage') }}">Programación de correos</a></li>
-									<li><a href="{{ url('flashmessage/index') }}">Mensajes administrativos</a></li>
-									<li><a href="{{ url('socialmedia/index') }}">Cuentas de Redes Sociales</a></li>
-								</ul>
-							</li>
-						</ul>
--->
-<!-- ****** FIN ELEMENTOS POR UBICAR ********* -->
 		
-<!-- Contenedor principal -->
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-xs-12 col-sm-3 col-md-2 sidebar" style="height: 100%;">
-				<a class="navbar-brand" href="{{url('')}}">{{theme.logo}}</a>
-				<div class="clearfix"></div>
-
-				<div>
-					<!-- Main nav -->
-					{{ partial("partials/menu_partial_b3") }}
-				</div>
-			</div>
-			<div class="col-sx-12 col-sm-9 col-md-10">
-				{# Zona de mensajes #}
-				{% if messages !== false%}
-					<div class="space"></div>
-					<div class="row">
-						<div class="col-sm-12">
-							{% for msg in messages%}
-								<div class="alert alert-{{msg.type}}">
-									<button type="button" class="close" data-dismiss="alert">×</button>
-									{{msg.message}}
-								</div>
-							{% endfor %}
-						</div>
+		<!-- Contenedor principal -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12 col-sm-2 col-md-1 col-lg-1 sidebar">
+					<div class="principal-menu pull-center">
+						<!-- Main nav -->
+						{{ partial("partials/menu_partial_b3_2") }}
 					</div>
-				{% endif %}
-				{# Fin de zona de mensajes #}
-
-				<div class="container-fluid">
-					<!-- Inicio de contenido -->
-					{% block content %}
-						<!-- Aqui va el contenido -->
-					{% endblock %}
-					<!-- Fin de contenido -->
 				</div>
-			</div>
+				<div class="col-sx-12 col-sm-10 col-md-11">
+					{# Zona de mensajes #}
+					{% if messages == true %}
+						<div class="space"></div>
+						<div class="row">
+							<div class="col-sm-12">
+								{% for msg in messages%}
+									<div class="alert alert-{{msg.type}}">
+										<button type="button" class="close" data-dismiss="alert">×</button>
+										{{msg.message}}
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					{% endif %}
+					{# Fin de zona de mensajes #}
 
+					<div class="container-fluid">
+						<!-- Inicio de contenido -->
+						{% block content %}
+							<!-- Aqui va el contenido -->
+						{% endblock %}
+						<!-- Fin de contenido -->
+					</div>
+				</div>
+
+			</div>
 		</div>
-	</div>
 
 		{# OLARK #}
 		{% if chat.enabled %}

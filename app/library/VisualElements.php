@@ -9,50 +9,35 @@ class VisualElements extends Phalcon\Mvc\User\Component implements Iterator
 			"class" => "",
 			"url" => "",
 			"title" => "Dashboard",
-			"icon" => "icon-dashboard"
+			"icon" => "glyphicon glyphicon-dashboard"
 		),
 		"Contactos" => array(
 			"controller" => array("contactlist", "dbase", "contacts", "segment"),
 			"class" => "",
 			"url" => "contactlist",
 			"title" => "Contactos",
-			"icon" => "icon-user"
+			"icon" => "glyphicon glyphicon-user"
 		),
 		"Correos" => array(
 			"controller" => array("mail", "template", "statistic"),
 			"class" => "",
 			"url" => "mail",
 			"title" => "Correos",
-			"icon" => "icon-envelope"
+			"icon" => "glyphicon glyphicon-envelope"
 		),
-//		"Formularios" => array(
-//			"controller" => array("form"),
-//			"class" => "",
-//			"url" => "form",
-//			"title" => "Formularios",
-//			"icon" => "icon-edit"
-//		),
 		"Autorespuestas" => array(
 			"controller" => array("campaign"),
 			"class" => "",
 			"url" => "campaign",
 			"title" => "Autorespuestas",
-			"icon" => "icon-share"
+			"icon" => "glyphicon glyphicon-check"
 		),
-
-//		"Estadisticas" => array(
-//			"controller" => array("statistic"),
-//			"class" => "",
-//			"url" => "",
-//			"title" => "Estadísticas",
-//			"icon" => "icon-bar-chart"
-//		),
 		"Herramientas" => array(
 			"controller" => array('tools', 'process', "account", "user", "flashmessage", "socialmedia", 'scheduledmail', 'footer', 'apikey'),
 			"class" => "",
 			"url" => "tools",
 			"title" => "Herramientas",
-			"icon" => "icon-cog"
+			"icon" => "glyphicon glyphicon-wrench"
 		)
 	);
 	
