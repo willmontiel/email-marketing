@@ -59,40 +59,40 @@ class TrackingObject
 		$time = time();// Tomar timestamp de ejecucion
 		try {
 			if ($this->canTrackOpenEvents()) { // Verificar que se puede hacer tracking de eventos open
-				$this->log->log('Se puede realizar el tracking');
+//				$this->log->log('Se puede realizar el tracking');
 				$this->startTransaction();// Empezar transacción
-				$this->log->log('Se ha iniciado una transacción');
+//				$this->log->log('Se ha iniciado una transacción');
 				
 				$this->mxc->opening = $time;// Actualizar marcador de apertura (timestamp)
 				$this->addDirtyObject($this->mxc);//Se agregar el objeto mxc actualizado para su posterior grabación(esto se hace con todos los objetos)
-				$this->log->log('Se ha ensuaciado Mxc');
+//				$this->log->log('Se ha ensuaciado Mxc');
 				
 				$mailObj = $this->findRelatedMailObject();//Se incrementa el atributo correspondiente llamando al siguiente método que está en Mail.php (Modelo)
 				$mailObj->incrementUniqueOpens();//Se agregar el objeto Mail actualizado para su posterior grabación
 //				$mailObj->uniqueOpens += 1;
-				$this->log->log('Se ha incrementado el obj Mail');
+//				$this->log->log('Se ha incrementado el obj Mail');
 				$this->addDirtyObject($mailObj);
-				$this->log->log('Se ha ensuaciado Mxc');
+//				$this->log->log('Se ha ensuaciado Mxc');
 				
 				$statDbaseObj = $this->findRelatedDbaseStatObject();
 				$statDbaseObj->incrementUniqueOpens();
 //				$statDbaseObj->uniqueOpens += 1;
-				$this->log->log('Se ha incrementado el obj Statdbase');
+//				$this->log->log('Se ha incrementado el obj Statdbase');
 				$this->addDirtyObject($statDbaseObj);
-				$this->log->log('Se ha ensuaciado el obj Statdbase');
+//				$this->log->log('Se ha ensuaciado el obj Statdbase');
 				
 				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
 					$statListObj->incrementUniqueOpens();
 //					$statListObj->uniqueOpens += 1;
-					$this->log->log('Se ha incrementado statlist');
+//					$this->log->log('Se ha incrementado statlist');
 					$this->addDirtyObject($statListObj);
-					$this->log->log('Se ha ensuciado');
+//					$this->log->log('Se ha ensuciado');
 				}
 
 				$this->log->log('Preparandose para iniciar guardo simultaneo');
 				$this->flushChanges();//Se inicia proceso de grabado simultaneo de todos los objetos
 			}
-			$this->log->log('ya se contabilizó tracking');
+			$this->log->log('ya se contabilizó tracking de apertura');
 		}
 		catch (Exception $e) {
 			$this->log->log('Exception: [' . $e . ']');
@@ -163,7 +163,7 @@ class TrackingObject
 			throw new Exception('Statdbase object not found!');
 		}
 
-		$this->log->log('Se encontró el obj Statdbase');
+//		$this->log->log('Se encontró el obj Statdbase');
 		return $statdbase;
 			
 	}
@@ -242,7 +242,7 @@ class TrackingObject
 				}
 				$stats[] = $statcontactlist;
 			}
-			$this->log->log('Se encontrarón Statlist');
+//			$this->log->log('Se encontrarón Statlist');
 		}
 		
 
@@ -253,7 +253,7 @@ class TrackingObject
 	{
 		if (!in_array($object, $this->dirtyObjects)) {
 			$this->dirtyObjects[] = $object;
-			$this->log->log('Se agregó obj sucio');
+//			$this->log->log('Se agregó obj sucio');
 		}
 	}
 
@@ -271,10 +271,10 @@ class TrackingObject
 			$this->log->log('Se guardó el objeto: ' . $i);
 			$i++;
 		}
-		$this->log->log('Inicio de commit');
+//		$this->log->log('Inicio de commit');
 		$this->commitTransaction();
 		$this->dirtyObjects = array();
-		$this->log->log('Obj Dirty destruido');
+//		$this->log->log('Obj Dirty destruido');
 	}
 	
 	/**
@@ -294,7 +294,7 @@ class TrackingObject
 		try {
 			$mxcxl = $this->getMxCxL($idLink);
 			if (!$mxcxl || $mxcxl->click == 0) {
-				$this->log->log('No se ha contabilizado');
+//				$this->log->log('No se ha contabilizado');
 				$this->startTransaction();
 				
 				$this->mxc->clicks += 1;
@@ -310,7 +310,7 @@ class TrackingObject
 				
 				//Esta función valida si el usuario no hecho apertura, y si no es asi se marca apertura por click 
 				if ($this->validateOpenForClick()) {
-					$this->log->log('Apertura por click');
+//					
 					$this->mxc->opening = $time;
 					
 					$mailObj->incrementUniqueOpens();
@@ -323,7 +323,7 @@ class TrackingObject
 					}
 				}
 				else {
-					$this->log->log('Contablización de click sin apertura');
+//					$this->log->log('Contablización de click sin apertura');
 					foreach ($this->findRelatedContactlistObjects() as $statListObj) {
 						$statListObj->incrementClicks();
 						$this->addDirtyObject($statListObj);
@@ -338,11 +338,11 @@ class TrackingObject
 				$this->addDirtyObject($mxcxl);
 				
 				$this->flushChanges();
-				
+				$this->log->log('Contabilización de click');
 				return $this->insertGoogleAnalyticsUrl($this->replaceLinkCustomFields($ml->link));
 			}
 			else {
-				$this->log->log('Ya se contabilizó');
+//				$this->log->log('Ya se contabilizó');
 				return $this->getLinkToRedirect($idLink);
 			}
 		}
@@ -444,9 +444,9 @@ class TrackingObject
 				$this->mxc->spam == 0 && 
 				$this->mxc->status == 'sent') {
 			return true;
-			$this->log->log('Validación aceptada');
+//			$this->log->log('Validación aceptada');
 		}
-		$this->log->log('Validacion declinada');
+//		$this->log->log('Validacion declinada');
 		return false;
 	}
 	
@@ -456,10 +456,10 @@ class TrackingObject
 				$this->mxc->bounced > 0 && 
 				$this->mxc->spam == 0 && 
 				$this->mxc->status == 'sent') {
-				$this->log->log('Validación aceptada');
+//				$this->log->log('Validación aceptada');
 			return true;
 		}
-		$this->log->log('Validación declinada');
+//		$this->log->log('Validación declinada');
 		return false;
 	}
 	
@@ -468,10 +468,10 @@ class TrackingObject
 		if ($this->mxc->bounced == 0 && 
 				$this->mxc->spam == 0 && 
 				$this->mxc->status == 'sent') {
-			$this->log->log('Validación aceptada');
+//			$this->log->log('Validación aceptada');
 			return true;
 		}
-		$this->log->log('Validación declinada');
+//		$this->log->log('Validación declinada');
 		return false;
 	}
 	
@@ -487,29 +487,29 @@ class TrackingObject
 				$this->mxc->idBouncedCode = $cod;
 				$this->mxc->bounced = $date;
 				$this->addDirtyObject($this->mxc);
-				$this->log->log("Se agregó mxc: [idContact: {$this->mxc->idContact}, idMail: {$this->mxc->idMail}]");
+//				$this->log->log("Se agregó mxc: [idContact: {$this->mxc->idContact}, idMail: {$this->mxc->idMail}]");
 				
 				$mailObj = $this->findRelatedMailObject();
 				$mailObj->incrementBounced();
 				$this->addDirtyObject($mailObj);
-				$this->log->log("Se agregó mail: [idMail: {$this->mxc->idMail}]");
+//				$this->log->log("Se agregó mail: [idMail: {$this->mxc->idMail}]");
 				
 				$statDbaseObj = $this->findRelatedDbaseStatObject();
 				$statDbaseObj->incrementBounced();
 				$this->addDirtyObject($statDbaseObj);
-				$this->log->log("Se agregó statDbase : [idDbase: {$statDbaseObj->idDbase}, idMail: {$statDbaseObj->idMail}]");
+//				$this->log->log("Se agregó statDbase : [idDbase: {$statDbaseObj->idDbase}, idMail: {$statDbaseObj->idMail}]");
 				
 				foreach ($this->findRelatedContactlistObjects() as $statListObj) {
 					$statListObj->incrementBounced();
 					$this->addDirtyObject($statListObj);
-					$this->log->log("Se agregó un statContactlist: [idContactlist: {$statListObj->idContactlist}, idMail: {$statListObj->idMail}]");
+//					$this->log->log("Se agregó un statContactlist: [idContactlist: {$statListObj->idContactlist}, idMail: {$statListObj->idMail}]");
 				}
 				
-				$this->log->log('Preparandose para guardar');
+//				$this->log->log('Preparandose para guardar');
 				$this->flushChanges();
-				$this->log->log('Se guardó con exito');
+//				$this->log->log('Se guardó con exito');
 			}
-			$this->log->log('ya se contabilizó bounced tracking');
+			$this->log->log('ya se contabilizó rebote suave');
 		}
 		catch (Exception $e) {
 			$this->log->log('Exception: [' . $e . ']');
@@ -522,18 +522,18 @@ class TrackingObject
 		if ($date == null) {
 			$date = time();
 		}
-		$this->log->log('Inicio de tracking de rebote duro');
+//		$this->log->log('Inicio de tracking de rebote duro');
 		$contact = $this->mxc->contact;
-		$this->log->log("Contact: [idContact: {$contact->idContact}, idEmail: {$contact->idEmail}]");
-		$this->log->log("Email: [idEmail: {$this->idEmail}]");
+//		$this->log->log("Contact: [idContact: {$contact->idContact}, idEmail: {$contact->idEmail}]");
+//		$this->log->log("Email: [idEmail: {$this->idEmail}]");
 		if ($this->canTrackHardBounceEvent()) {
 			$this->startTransaction();
-			$this->log->log('Es válido');
-			$this->log->log('Es preparandose para cambiar el tipo de rebote de soft a hard');
+//			$this->log->log('Es válido');
+//			$this->log->log('Es preparandose para cambiar el tipo de rebote de soft a hard');
 			$this->mxc->idBouncedCode = $cod;
 			$this->addDirtyObject($this->mxc);
 			$this->flushChanges();
-			$this->log->log('Se cambió el tipo de rebote de soft a hard');
+//			$this->log->log('Se cambió el tipo de rebote de soft a hard');
 			
 			$email = Email::findFirst(array(
 				'conditions' => 'idEmail = ?1',
@@ -549,9 +549,9 @@ class TrackingObject
 				throw new Exception('Error while updating bounced on email');
 			}
 			
-			$this->log->log("Se marcó como rebotado el email con identificación: {$this->idEmail}");
+//			$this->log->log("Se marcó como rebotado el email con identificación: {$this->idEmail}");
 			
-			$this->log->log('Preparandose para actualizar contadores de bases de datos y listas de contactos');
+//			$this->log->log('Preparandose para actualizar contadores de bases de datos y listas de contactos');
 			$this->updateCounters();
 		
 			$this->log->log('Se actualizó rebote duro');
@@ -582,7 +582,7 @@ class TrackingObject
 				}
 				
 				if ($this->canTrackOpenEventsForSpam()) {
-					$this->log->log("Se contabilizará apertura");
+//					$this->log->log("Se contabilizará apertura");
 					$this->mxc->opening = $date;// Actualizar marcador de apertura (timestamp)
 					$mailObj->incrementUniqueOpens();//Se agregar el objeto Mail actualizado para su posterior grabación
 					$statDbaseObj->incrementUniqueOpens();
@@ -593,28 +593,28 @@ class TrackingObject
 				}
 				
 				$this->addDirtyObject($this->mxc);
-				$this->log->log("Se agregó mxc: [idContact: {$this->mxc->idContact}, idMail: {$this->mxc->idMail}]");
+//				$this->log->log("Se agregó mxc: [idContact: {$this->mxc->idContact}, idMail: {$this->mxc->idMail}]");
 				
 				$this->addDirtyObject($mailObj);
-				$this->log->log("Se agregó mail: [idMail: {$this->mxc->idMail}]");
+//				$this->log->log("Se agregó mail: [idMail: {$this->mxc->idMail}]");
 				
 				$this->addDirtyObject($statDbaseObj);
-				$this->log->log("Se agregó statDbase : [idDbase: {$statDbaseObj->idDbase}, idMail: {$statDbaseObj->idMail}]");
+//				$this->log->log("Se agregó statDbase : [idDbase: {$statDbaseObj->idDbase}, idMail: {$statDbaseObj->idMail}]");
 				
 				foreach ($statListObjs as $statListObj) {
 					$this->addDirtyObject($statListObj);
-					$this->log->log("Se agregó un statContactlist: [idContactlist: {$statListObj->idContactlist}, idMail: {$statListObj->idMail}]");
+//					$this->log->log("Se agregó un statContactlist: [idContactlist: {$statListObj->idContactlist}, idMail: {$statListObj->idMail}]");
 				}
 				
-				$this->log->log('Preparandose para guardar');
+//				$this->log->log('Preparandose para guardar');
 				$this->flushChanges();
-				$this->log->log('Se guardó con exito');
+//				$this->log->log('Se guardó con exito');
 				
 				
-				$this->log->log("Inicio de proceso para marcar email como spam");
+//				$this->log->log("Inicio de proceso para marcar email como spam");
 				$contact = $this->mxc->contact;
-				$this->log->log("Contact: [idContact: {$contact->idContact}, idEmail: {$contact->idEmail}]");
-				$this->log->log("Email: [idEmail: {$this->idEmail}]");
+//				$this->log->log("Contact: [idContact: {$contact->idContact}, idEmail: {$contact->idEmail}]");
+//				$this->log->log("Email: [idEmail: {$this->idEmail}]");
 				
 				$db = Phalcon\DI::getDefault()->get('db');
 				
@@ -629,8 +629,7 @@ class TrackingObject
 					throw new Exception('Error while updating spam in contact and email');
 				}
 
-				$this->log->log("Se marcarón como spam a todos los contactos con idEmail: {$this->idEmail}");
-				$this->log->log('Preparandose para actualizar contadores');
+//				$this->log->log("Se marcarón como spam a todos los contactos con idEmail: {$this->idEmail}");
 				$this->updateCounters();
 				$this->log->log('Se actualizó spam');
 			}
@@ -678,7 +677,7 @@ class TrackingObject
 					));
 					if ($dbase) {
 						$dbase->updateCountersInDbase();
-						$this->log->log("Se actualizarón contadores de Dbase: {$dbase->idDbase}");
+//						$this->log->log("Se actualizarón contadores de Dbase: {$dbase->idDbase}");
 					}
 				}
 			}
@@ -692,7 +691,7 @@ class TrackingObject
 
 					if ($contactlist) {
 						$contactlist->updateCountersInContactlist();
-						$this->log->log("Se actualizarón contadores de Contactlist: {$contactlist->idContactlist}");
+//						$this->log->log("Se actualizarón contadores de Contactlist: {$contactlist->idContactlist}");
 					}
 				}
 			}
@@ -720,7 +719,7 @@ class TrackingObject
 				$this->addDirtyObject($this->contact);
 
 				if ($this->canTrackUnsubscribedEvents()) {
-					$this->log->log('Se puede realizar el tracking de des-suscripción');				
+//					$this->log->log('Se puede realizar el tracking de des-suscripción');				
 					$this->mxc->unsubscribe = $date;
 					$this->addDirtyObject($this->mxc);
 
@@ -738,10 +737,10 @@ class TrackingObject
 					$this->addDirtyObject($statListObj);
 				}
 
-				$this->log->log('Preparandose para iniciar guardado simultaneo');
+//				$this->log->log('Preparandose para iniciar guardado simultaneo');
 				$this->flushChanges();
 
-				$this->log->log('Preparandose para actualizar contadores');
+//				$this->log->log('Preparandose para actualizar contadores');
 				$this->updateCounters();
 			}
 		}
@@ -765,7 +764,7 @@ class TrackingObject
 
 		if (in_array($path['scheme'] . '://' . $path['host'], json_decode($content->googleAnalytics))) {
 			$googleAnalytics = Phalcon\DI::getDefault()->get('googleAnalytics');
-			$this->log->log('Preparandose para insertar google analytics');
+//			$this->log->log('Preparandose para insertar google analytics');
 
 			$source = 'utm_source=' . urlencode($googleAnalytics->utm_source);
 			$medium = '&utm_medium=' . urlencode($googleAnalytics->utm_medium);
@@ -778,11 +777,11 @@ class TrackingObject
 				$newUrl = $link . '&' . $source . $medium . $campaign;
 			}
 
-			$this->log->log('Url Analytics: ' . $newUrl);
+//			$this->log->log('Url Analytics: ' . $newUrl);
 			return $newUrl;
 		}
 		else {
-			$this->log->log('Redirigiendo a: ' . $link);
+//			$this->log->log('Redirigiendo a: ' . $link);
 			return $link;
 		}
 	}

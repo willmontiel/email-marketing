@@ -53,10 +53,12 @@
 		</div>
 		{%endfor%}
 	</div>
+
 	<div class="clearfix space"></div>
-	<div class="container-fluid">
-		<h1 class="sectiontitle">Interacciones de los últimos 3 envíos</h1>
-		<div class="container-fluid">
+	
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<h1 class="sectiontitle">Interacciones de los últimos 3 envíos</h1>
 			<table class="table table-normal table-striped table-bordered">
 				<thead>
 					<tr>
@@ -81,6 +83,7 @@
 			</table>
 		</div>
 	</div>
+	
 	<div class="clearfix space"></div>
 	<div class="container-fluid">
 		<h1 class="sectiontitle">Qué quiere hacer hoy?</h1>
