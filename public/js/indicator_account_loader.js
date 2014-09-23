@@ -5,7 +5,7 @@ function loadIndicator(space) {
 			text = 'Correos enviados: ' + data.indicator + '' + (data.subscriptionMode === 'Prepago' ? '/' + data.messageLimit : '');
 		}
 		else {
-			text = 'Contactos disponibles: ' + data.indicator + (data.subscriptionMode === 'Prepago' ? '/' + data.contactLimit : '');
+			text = 'Contactos usados: ' + data.indicator + (data.subscriptionMode === 'Prepago' ? '/' + data.contactLimit : '');
 		}
 
 		$("#" + space).empty();
