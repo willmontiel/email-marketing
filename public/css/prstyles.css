@@ -1197,7 +1197,8 @@ span.required {
 }
 
 .small-percent-stats {
-	font-size: 30px;
+	/*margin-top: 30%;*/ 
+	font-size: 3em;
 	font-weight: 600;
 	text-shadow: 1px 1px #afafaf;
 }
@@ -1256,30 +1257,29 @@ span.required {
 	/* background-color: #ddd; */
 	width: 75px;
 	height: 75px;
-	border: solid 8px #97c86b;
+	/*border: solid 8px #97c86b;*/
 	/* padding-top: 10px; */
 	/* position: relative; */
 	padding-top: 6%;
 	text-align: center;
 	margin-left: 26%;
-	margin-bottom: 5%;
-	color: #97c86b;
+	color: white;
 }
 
 .small-stat-total-contact-indicator {
 	border-radius: 50%;
 	margin-top: 10%;
-	/* background-color: #ddd; */
-	width: 75px;
-	height: 75px;
-	border: solid 8px #557595;
+	background-color: #557595;
+	width: 90px;
+	height: 90px;
+	/* border: solid 8px #557595; */
 	/* padding-top: 10px; */
 	/* position: relative; */
-	padding-top: 6%;
+	padding-top: 12%;
 	text-align: center;
 	margin-left: 26%;
-	margin-bottom: 5%;
-	color: #557595;
+	/* margin-bottom: 5%; */
+	color: white;
 }
 
 .small-stat-inactive-contact-indicator {

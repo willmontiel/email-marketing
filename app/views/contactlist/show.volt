@@ -116,7 +116,6 @@
 						</div>
 					</div>
 					
-					<div class="clearfix"></div>
 					<div class="space"></div>
 					
 					<div class="row">
