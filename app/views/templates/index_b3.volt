@@ -87,7 +87,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-12 col-sm-2 col-md-1 col-lg-1 sidebar">
-					<div class="principal-menu">
+					<div class="principal-menu pull-center">
 						<!-- Main nav -->
 						{{ partial("partials/menu_partial_b3_2") }}
 					</div>

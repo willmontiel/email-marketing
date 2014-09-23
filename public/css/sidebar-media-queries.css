@@ -198,7 +198,7 @@
 	}
 
 	.principal-menu > ul{
-		padding-left: 5%;
+		padding-left: 10%;
 		/*margin: 0 auto;*/
 		list-style: none;
 		display: inline-table;
@@ -228,7 +228,7 @@
 	}
 
 	.principal-menu > ul{
-		padding-left: 5%;
+		margin-left: 10%;
 		/*margin: 0 auto;*/
 		list-style: none;
 		display: inline-table;
@@ -254,7 +254,6 @@
 
 @media (min-width: 200px) and (max-width: 374px) { 
 	.principal-menu > ul{
-		padding-left: 5%;
 		list-style: none;
 		display: inline-table;
 	}
