@@ -9,7 +9,7 @@ class FlashMessages
 							2 => time())
 		));
 		
-		if (!$messages) {
+		if ($messages) {
 			$message = array();
 			foreach ($messages as $msg) {
 				if ($msg->accounts == 'all' || $msg->accounts == null) {
