@@ -42,35 +42,37 @@ class SocialWidget extends BaseWidget
 				"order" => "finishedon DESC",
 			));
 			
-			$snQuery = "SELECT SUM(m.share_{$this->property}) AS share, 
+			if ($mail) {
+				$snQuery = "SELECT SUM(m.share_{$this->property}) AS share, 
 							SUM(m.open_{$this->property}) AS open 
-						FROM Mxc AS m
-						WHERE m.idMail = :idMail:";
-			$social = $this->modelManager->createQuery($snQuery);
-			$socialStats = $social->execute(array(
-				'idMail' => $mail->idMail
-			));
-			
-			$snCliksQuery = "SELECT SUM(l.click_{$this->property}) AS click 
-							FROM Mxcxl AS l
-							WHERE l.idMail = :idMail:";
-			$socialClicks = $this->modelManager->createQuery($snCliksQuery);
-			$socialClickStats = $socialClicks->execute(array(
-				'idMail' => $mail->idMail
-			));
-			
-			$this->totalValue = (isset($socialStats[0]->share)) ? $socialStats[0]->share : 0;
-			
-			// Calcular valores para aperturas y clics
-			// Secondary queda asi
-			// [ { name: 'Aperturas', value: 123456.4 }, { name: 'Clics': value: 121212 } ]
-			$o = new \stdClass();
-			$o->name = 'Aperturas';
-			$o->value = (isset($socialStats[0]->open)) ? $socialStats[0]->open : 0;
-			$c = new \stdClass();
-			$c->name = 'Clics';
-			$c->value = (isset($socialClickStats[0]->click)) ? $socialClickStats[0]->click : 0;
-			array_push($this->secondaryValues, $o, $c);
+							FROM Mxc AS m
+							WHERE m.idMail = :idMail:";
+				$social = $this->modelManager->createQuery($snQuery);
+				$socialStats = $social->execute(array(
+					'idMail' => $mail->idMail
+				));
+
+				$snCliksQuery = "SELECT SUM(l.click_{$this->property}) AS click 
+								FROM Mxcxl AS l
+								WHERE l.idMail = :idMail:";
+				$socialClicks = $this->modelManager->createQuery($snCliksQuery);
+				$socialClickStats = $socialClicks->execute(array(
+					'idMail' => $mail->idMail
+				));
+
+				$this->totalValue = (isset($socialStats[0]->share)) ? $socialStats[0]->share : 0;
+
+				// Calcular valores para aperturas y clics
+				// Secondary queda asi
+				// [ { name: 'Aperturas', value: 123456.4 }, { name: 'Clics': value: 121212 } ]
+				$o = new \stdClass();
+				$o->name = 'Aperturas';
+				$o->value = (isset($socialStats[0]->open)) ? $socialStats[0]->open : 0;
+				$c = new \stdClass();
+				$c->name = 'Clics';
+				$c->value = (isset($socialClickStats[0]->click)) ? $socialClickStats[0]->click : 0;
+				array_push($this->secondaryValues, $o, $c);
+			}
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log($e);
