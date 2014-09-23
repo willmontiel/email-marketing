@@ -1,0 +1,277 @@
+/* 
+    Document   : sidebar-media-queries
+    Created on : 22/09/2014, 05:07:05 PM
+    Author     : Will
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+@media (min-width: 1381px){
+	.principal-menu {
+		margin-top: 6%;
+		display: block;
+		position: fixed;
+		box-shadow: 2px 2px 3px #ccc;
+		border-radius: 0 8px 8px 0;
+		width: 7%;
+	}
+
+	.principal-menu > ul{
+		padding: 10%;
+		list-style: none;
+		position: relative;
+		padding-top: 22%;
+	}
+
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 3em;
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 0.8em;
+		padding-bottom: 15px;
+	}
+}
+
+@media (min-width: 1200px) and (max-width: 1380px) {  
+	.principal-menu {
+		margin-top: 1%;
+		display: block;
+		position: fixed;
+		box-shadow: 2px 2px 3px #ccc;
+		border-radius: 0 8px 8px 0;
+		width: 7%;
+	}
+
+	.principal-menu > ul{
+		padding: 10%;
+		list-style: none;
+		position: relative;
+		padding-top: 22%;
+	}
+
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 3em;
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 0.8em;
+		padding-bottom: 15px;
+	}
+}
+
+@media (min-width: 980px) and (max-width: 1199px) { 
+	.principal-menu {
+		margin-top: 3%;
+		display: block;
+		position: fixed;
+		box-shadow: 2px 2px 3px #ccc;
+		border-radius: 0 8px 8px 0;
+		width: 9%;
+	}
+
+	.principal-menu > ul{
+		padding: 10%;
+		list-style: none;
+		position: relative;
+		padding-top: 22%;
+	}
+
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 2.5em;
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 0.7em;
+		padding-bottom: 15px;
+	}
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { 
+	.principal-menu {
+		margin-top: 3%;
+		display: block;
+		position: fixed;
+		box-shadow: 2px 2px 3px #ccc;
+		border-radius: 0 8px 8px 0;
+		width: 9%;
+	}
+
+	.principal-menu > ul{
+		padding: 10%;
+		list-style: none;
+		position: relative;
+		padding-top: 22%;
+	}
+
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 2em;
+
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 0.6em;
+		padding-bottom: 15px;
+	}
+}
+
+@media (min-width: 690px) and (max-width: 767px) { 
+	.principal-menu > ul{
+		padding-left: 11%;
+		list-style: none;
+		display: inline-table;
+	}
+	
+	.principal-menu > ul > li{
+		display: inline-table;
+		margin: 18px;
+	}
+	
+	.principal-menu > ul > li > a{
+		margin-bottom: 0;
+	}
+
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 3.3em;
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 1.1em;
+	}
+}
+
+@media (min-width: 640px) and (max-width: 689px) { 
+	.principal-menu > ul{
+		padding-left: 11%;
+		list-style: none;
+		display: inline-table;
+	}
+	
+	.principal-menu > ul > li{
+		display: inline-table;
+		margin: 15px;
+	}
+	
+	.principal-menu > ul > li > a{
+		margin-bottom: 0;
+	}
+
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 3em;
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 1em;
+	}
+}
+
+@media (min-width: 550px) and (max-width: 639px) { 
+	.principal-menu > ul{
+		padding-left: 11%;
+		list-style: none;
+		display: inline-table;
+	}
+	
+	.principal-menu > ul > li{
+		display: inline-table;
+		margin: 15px;
+	}
+	
+	.principal-menu > ul > li > a{
+		margin-bottom: 0;
+	}
+
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 2.5em;
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 0.9em;
+	}
+
+}
+
+@media (min-width: 430px) and (max-width: 549px) { 
+	.principal-menu {
+		/*box-shadow: 2px 2px 3px #ccc;*/
+	}
+
+	.principal-menu > ul{
+		padding-left: 10%;
+		/*margin: 0 auto;*/
+		list-style: none;
+		display: inline-table;
+	}
+	
+	.principal-menu > ul > li{
+		display: inline-table;
+		margin: 10px;
+	}
+	
+	.principal-menu > ul > li > a{
+		margin-bottom: 0;
+	}
+
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 2em;
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 0.8em;
+	}
+}
+
+@media (min-width: 375px) and (max-width: 429px) { 
+	.principal-menu {
+		/*box-shadow: 2px 2px 3px #ccc;*/
+	}
+
+	.principal-menu > ul{
+		margin-left: 10%;
+		/*margin: 0 auto;*/
+		list-style: none;
+		display: inline-table;
+	}
+	
+	.principal-menu > ul > li{
+		display: inline-table;
+		margin: 10px;
+	}
+	
+	.principal-menu > ul > li > a{
+		margin-bottom: 0;
+	}
+	
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 2.5em;
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 1.2em;
+	}
+}
+
+@media (min-width: 200px) and (max-width: 374px) { 
+	.principal-menu > ul{
+		list-style: none;
+		display: inline-table;
+	}
+	
+	.principal-menu > ul > li{
+		display: inline-table;
+		margin: 10px;
+	}
+	
+	.principal-menu > ul > li > a{
+		margin-bottom: 0;
+	}
+	
+	.principal-menu > ul > li .item-icon_menu {
+		font-size: 2em;
+	}
+
+	.principal-menu > ul > li .item-title-menu {
+		font-size: 1em;
+	}
+}

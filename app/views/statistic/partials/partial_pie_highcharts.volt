@@ -1,14 +1,16 @@
 {{ javascript_include('vendors/highcharts/highcharts.js')}}
 {{ javascript_include('vendors/highcharts/modules/exporting.js')}}
-{{ javascript_include('vendors/highcharts/themes/dark-unica.js')}}
+{#{{ javascript_include('vendors/highcharts/themes/sand-signika.js')}}#}
+
 <script>
-	function createCharts(container, data) {
+	function createCharts(container, data, labels, indicators) {
+		x = "m";
 		$(function () {
 			$('#' + container).highcharts({
 				chart: {
 					plotBackgroundColor: null,
 					plotBorderWidth: null,
-					plotShadow: false,
+					plotShadow: false
 				},
 
 				title: {
@@ -22,13 +24,13 @@
 						allowPointSelect: true,
 						cursor: 'pointer',
 						dataLabels: {
-							enabled: true,
+							enabled: labels,
 							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
 							style: {
 								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
 							}
 						},
-						showInLegend: true,
+						showInLegend: indicators
 					}
 
 				},

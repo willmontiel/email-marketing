@@ -3,12 +3,28 @@
 class StatisticsWrapper extends BaseWrapper
 {
 	protected $logger;
+	protected $contactlist;
+	protected $dbase;
+	protected $result;
+	protected $needle;
+	protected $conditions;
+
 	public function __construct() 
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}
 
-
+	
+	public function setContactlist(Contactlist $contactlist)
+	{
+		$this->contactlist = $contactlist;
+	}
+	
+	public function setDbase(Dbase $dbase)
+	{
+		$this->dbase = $dbase;
+	}
+	
 	public function showMailStatistics(Mail $mail, $compare = true)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
@@ -273,8 +289,6 @@ class StatisticsWrapper extends BaseWrapper
 		$response['summaryChartData'] = $summaryChartData;
 		$response['statisticsData'] = $stat;
 		$response['compareDbase'] = $dbaseCompare;
-		
-		$this->logger->log("Response: " . print_r($response, true));
 		
 		return $response;
 	}
@@ -847,4 +861,144 @@ class StatisticsWrapper extends BaseWrapper
 		
 		return array('drilldownbounced' => $statistics, 'meta' =>  $this->pager->getPaginationObject());
 	}	
+	
+	public function groupContactsByDomainsAndContactlist()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Contactlist AS cl
+					JOIN Coxcl AS cc ON (cc.idContactlist = cl.idContactlist)
+					JOIN Contact AS c ON (c.idContact = cc.idContact)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE cl.idContactlist = :idContactlist: GROUP BY 1";
+		
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idContactlist' => $this->contactlist->idContactlist));
+		$this->result = $exe->getResult();
+		
+	}
+	
+	public function groupContactsByDomainsAndDbase()
+	{
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Dbase AS db
+					JOIN Contact AS c ON (c.idDbase = db.idDbase)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE db.idDbase = :idDbase: GROUP BY 1";
+		
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
+		$this->result = $exe->getResult();
+	}
+	
+	protected function createConditions()
+	{
+		$this->conditions = "";
+		switch ($this->needle) {
+			case 'opens':
+				$this->conditions = " AND mc.opening != 0 ";
+				break;
+			
+			case 'bounced':
+//				$conditions = " AND mc.bounced != 0 AND e.bounced != 0 ";
+				$this->conditions = " AND mc.bounced != 0";
+				break;
+			
+			case 'unsubscribed':
+				$this->conditions = " AND mc.unsubscribe != 0 ";
+				break;
+			
+			case 'spam':
+				$this->conditions = " AND mc.spam != 0 AND e.spam != 0 ";
+				break;
+		}
+	}
+
+	
+
+	/**
+	 * Agrupa por dominio las aperturas, rebotes, contactos des-suscritos o quejas de spam por base de datos
+	 * recibe los parámetros: opens, bounced, unsubscribed, spam
+	 * @param String $needle
+	 */
+	public function groupDomainsByDbase($needle)
+	{
+		$this->needle = $needle;
+		$this->createConditions();
+		
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM Mxc AS mc
+					JOIN Contact AS c ON (c.idContact = mc.idContact AND c.idDbase = :idDbase:)
+					JOIN Email AS e ON (e.idEmail = c.idEmail)
+					JOIN Domain AS d ON (d.idDomain = e.idDomain)
+				WHERE mc.status = 'sent' {$this->conditions} GROUP BY 1";
+		
+		$exe = new \EmailMarketing\General\Misc\SQLExecuter();
+		$exe->setSQL($sql);
+		$exe->instanceModelsManager();
+		$exe->queryPHQL(array('idDbase' => $this->dbase->idDbase));
+		$this->result = $exe->getResult();
+	}
+	
+	public function groupDomaninsByContactlist($needle)
+	{
+		$this->needle = $needle;
+		$this->createConditions();
+		
+		$sql = "SELECT d.name AS domain, COUNT(c.idContact) AS total
+				FROM mxc AS mc
+					JOIN (SELECT c.idContact, c.idEmail 
+						  FROM coxcl AS cl
+							  JOIN contact AS c ON (c.idContact = cl.idContact)
+						  WHERE cl.idContactlist = {$this->contactlist->idContactlist}) AS c ON (c.idContact = mc.idContact)
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN domain AS d ON (d.idDomain = e.idDomain)
+				WHERE mc.status = 'sent' {$this->conditions} GROUP BY 1";
+		
+		$db = new \EmailMarketing\General\Misc\SQLExecuter();
+		$db->setSQL($sql);
+		$db->instanceDbAbstractLayer();
+		$db->queryAbstractLayer();
+		$this->result = $db->getResult();
+	}
+	
+	
+	public function regroupDomains()
+	{
+		if (count($this->result) > 0) {
+			$domains = $this->result;
+			$newDomains = array();
+
+			$new = new stdClass();
+			$new->domain = 'Otros';
+			$new->total = 0;
+			foreach ($domains as $domain) {
+				if (is_array($domain)) {
+					$domain = (object)$domain;
+				}
+			
+				if (!in_array($domain->domain, $this->_popularDomains)) {
+					$new->total = $new->total + $domain->total;
+				}
+				else {
+					$newDomains[] = $domain;
+				}
+			}
+
+			$newDomains[] = $new;
+			$this->result = $newDomains;
+		}
+	}
+	
+	public function getDomains()
+	{
+		return $this->result;
+	}
+	
+	
 }
