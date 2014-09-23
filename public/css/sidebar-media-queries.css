@@ -35,7 +35,7 @@
 
 @media (min-width: 1200px) and (max-width: 1380px) {  
 	.principal-menu {
-		margin-top: 0%;
+		margin-top: 4%;
 		display: block;
 		position: fixed;
 		box-shadow: 2px 2px 3px #ccc;
@@ -62,7 +62,7 @@
 
 @media (min-width: 980px) and (max-width: 1199px) { 
 	.principal-menu {
-		margin-top: 1%;
+		margin-top: 2%;
 		display: block;
 		position: fixed;
 		box-shadow: 2px 2px 3px #ccc;
