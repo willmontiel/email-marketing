@@ -60,12 +60,7 @@
 				  <a class="navbar-brand" href="{{url('')}}">{{theme.logo}}</a>
 			  </div>
 			  <ul id="top-nav" class="nav navbar-nav navbar-right" style="padding-top: 10px;">
-					<li>
-						<a href="javascript: void(0);" style="cursor: default;">
-							<div id="indicator"></div>
-						</a>
-					</li>
-					{% if chat.enabled %}
+				{% if chat.enabled %}
 					<!-- BEGIN OLARK CHAT LINK -->
 					<li>
 						<a href="javascript:void(0);" onclick="olark('api.box.expand');">
@@ -73,10 +68,15 @@
 						</a>
 					</li>
 					<!-- END OLARK CHAT LINK -->
-					{% endif %}
-					{% if userefective.enable %}
-						<li><a href="{{url('session/logoutfromthisaccount')}}">Volver a la sesión original </a></li>
-					{% endif %}
+				{% endif %}
+					<li>
+						<a href="javascript: void(0);" style="cursor: default;">
+							<div id="indicator"></div>
+						</a>
+					</li>
+				{% if userefective.enable %}
+					<li><a href="{{url('session/logoutfromthisaccount')}}">Volver a la sesión original </a></li>
+				{% endif %}
 					<li><a href="javascript: void(0);" style="cursor: default;">{{ userObject.firstName }} {{ userObject.lastName }}</a></li>
 					<li><a href="{{url('session/logout')}}" title="Cerrar sesión"><span class="glyphicon glyphicon-log-out"></span></a></li>
 				</ul>	
@@ -94,11 +94,11 @@
 				</div>
 				<div class="col-sx-12 col-sm-10 col-md-11">
 					{# Zona de mensajes #}
-					{% if messages == true %}
+					{% if flashMessage.getLength() > 0 %}
 						<div class="space"></div>
 						<div class="row">
 							<div class="col-sm-12">
-								{% for msg in messages%}
+								{% for msg in flashMessage.getMessages()%}
 									<div class="alert alert-{{msg.type}}">
 										<button type="button" class="close" data-dismiss="alert">×</button>
 										{{msg.message}}
