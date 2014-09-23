@@ -1148,16 +1148,15 @@ span.required {
 }
 
 .small-percent-stats {
-	font-size: 3em;
+	font-size: 1.8em;
 	font-weight: lighter;
-	text-shadow: 1px 1px #afafaf;
 }
 
 .stats-indicator {
 	border-radius: 50%;
 	width: 90px;
 	height: 90px;
-	padding-top: 18px;
+	padding-top: 30px;
 	text-align: center;
 	margin-left: 26%;
 	color: white;
