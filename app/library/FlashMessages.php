@@ -1,7 +1,9 @@
 <?php
 class FlashMessages 
 {	
-	public function getMessages() 
+	protected $messages = array();
+	
+	private function searchMessages()
 	{
 		$messages = Flashmessage::find(array(
 			'conditions' => 'start <= ?1 AND end >= ?2',
@@ -9,11 +11,11 @@ class FlashMessages
 							2 => time())
 		));
 		
-		if ($messages) {
-			$message = array();
+		if (count($messages) > 0) {
+			$this->messages = array();
 			foreach ($messages as $msg) {
 				if ($msg->accounts == 'all' || $msg->accounts == null) {
-					$message[] = $msg;
+					$this->messages[] = $msg;
 				}
 				else {
 					$idUser = Phalcon\DI::getDefault()->get('session')->get('userid');
@@ -22,23 +24,24 @@ class FlashMessages
 						'bind' => array(1 => $idUser)
 					));
 					$accounts = json_decode($msg->accounts);
-//					Phalcon\DI::getDefault()->get('logger')->log("Account: " . print_r($accounts, true));
 					foreach ($accounts as $account) {
-//						Phalcon\DI::getDefault()->get('logger')->log("Account: " . $account);
 						if ($account == $user->idAccount) {
-							$message[] = $msg;
-						}
-						else {
-							Phalcon\DI::getDefault()->get('logger')->log("No hay flash messages para esta cuenta");
+							$this->messages[] = $msg;
 						}
 					}
 				}
 			}
 		}
-		else {
-			$message = false;
-		}
-		
-		return $message;
+	}
+	
+	public function getLength()
+	{
+		$this->searchMessages();
+		return count($this->messages);
+	}
+	
+	public function getMessages() 
+	{
+		return $this->messages;
 	}
 }
