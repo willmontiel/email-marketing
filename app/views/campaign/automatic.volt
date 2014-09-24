@@ -8,7 +8,7 @@
 	{{ javascript_include('select2-master/select2.js')}}
 	{{ javascript_include('js/campaign/automatic.js')}}
 
-	<script> 
+	<script type="text/javascript"> 
 		$(function (){
 			{%if autoresponse is defined%}
 				$('.input-autoresponse-time-hour').val('{{autoresponse.time.hour}}');
@@ -64,13 +64,30 @@
 			});
 		}
 	</script>
+	
+	{# Selección de destinatarios #}
+	{{ partial('partials/target_selection_partial') }}
+	<script type="text/javascript">
+		var serializerObject = null;
+		
+		var panelContainer = new PanelContainer('#panel-container');		
+		var model = new Model();
+		model.setPanelContainer(panelContainer);
+		model.setSerializerObject(serializerObject);
+		model.serializer();
+	</script>
 {% endblock %}
 {% block content %}
+	
+	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}
+	
 	<div class="row">
 		<h1 class="sectiontitle">Nueva autorespuesta en el tiempo</h1>
 		<div class="space"></div>
 		{{ flashSession.output() }}	
-		
+	</div>
+	
+	<div class="row">
 		<div class="col-md-10">
 			<form class="form-horizontal"  action="{%if autoresponse is defined%} {{url('campaign/automatic')}}/{{autoresponse.idAutoresponder}} {%else%} {{url('campaign/automatic')}} {%endif%}" method="post"  role="form">
 				<div class="form-group">
@@ -84,6 +101,14 @@
 				
 				<div class="form-group">
 					<label class="col-sm-4 control-label">¿A quién envías?</label>
+				</div>
+				
+				<div class="form-group">
+					<div class="panel panel-default">
+						<div class="panel-body" style="background-color: #f5f5f5;">
+							<div id="panel-container"></div>
+						</div>
+					</div>
 				</div>
 				
 				<div class="form-group target-section">
