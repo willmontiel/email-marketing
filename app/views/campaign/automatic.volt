@@ -68,13 +68,14 @@
 	{# Selección de destinatarios #}
 	{{ partial('partials/target_selection_partial') }}
 	<script type="text/javascript">
-		var serializerObject = null;
-		
-		var panelContainer = new PanelContainer('#panel-container');		
-		var model = new Model();
-		model.setPanelContainer(panelContainer);
-		model.setSerializerObject(serializerObject);
-		model.serializer();
+		$(function (){
+			var serializerObject = null;
+			var panelContainer = new PanelContainer('#panel-container');		
+			var model = new Model();
+			model.setPanelContainer(panelContainer);
+			model.setSerializerObject(serializerObject);
+			model.serializer();
+		});
 	</script>
 {% endblock %}
 {% block content %}
