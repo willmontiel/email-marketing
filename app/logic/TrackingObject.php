@@ -89,10 +89,10 @@ class TrackingObject
 //					$this->log->log('Se ha ensuciado');
 				}
 
-				$this->log->log('Preparandose para iniciar guardo simultaneo');
+//				$this->log->log('Preparandose para iniciar guardo simultaneo');
 				$this->flushChanges();//Se inicia proceso de grabado simultaneo de todos los objetos
 			}
-			$this->log->log('ya se contabilizó tracking de apertura');
+			$this->log->log('Tracking de apertura contabilizado');
 		}
 		catch (Exception $e) {
 			$this->log->log('Exception: [' . $e . ']');
@@ -137,7 +137,7 @@ class TrackingObject
 		if (!$mailobject) {
 			throw new Exception('Mail object not found!');
 		}
-		$this->log->log('Se encontró Mail');
+//		$this->log->log('Se encontró Mail');
 		return $mailobject;
 	}
 	
@@ -209,7 +209,7 @@ class TrackingObject
 			}
 			$stats[] = $statcontactlist;
 		}
-		$this->log->log('Se encontrarón Statlist');
+//		$this->log->log('Se encontrarón Statlist');
 		
 		return $stats;
 	}
@@ -244,8 +244,6 @@ class TrackingObject
 			}
 //			$this->log->log('Se encontrarón Statlist');
 		}
-		
-
 		return $stats;
 	}
 	
@@ -260,7 +258,7 @@ class TrackingObject
 	protected function flushChanges()
 	{
 		$i = 0;
-		$this->log->log('Total dirty Obj: ' . count($this->dirtyObjects));
+//		$this->log->log('Total dirty Obj: ' . count($this->dirtyObjects));
 		foreach ($this->dirtyObjects as $object) {
 			if (!$object->save()) {
 				foreach ($object->getMessages() as $msg) {
@@ -268,7 +266,7 @@ class TrackingObject
 				}
 				throw new Exception('Error while saving changes to objects!');
 			}
-			$this->log->log('Se guardó el objeto: ' . $i);
+//			$this->log->log('Se guardó el objeto: ' . $i);
 			$i++;
 		}
 //		$this->log->log('Inicio de commit');
@@ -338,7 +336,7 @@ class TrackingObject
 				$this->addDirtyObject($mxcxl);
 				
 				$this->flushChanges();
-				$this->log->log('Contabilización de click');
+				$this->log->log('Tracking de click contabilizado');
 				return $this->insertGoogleAnalyticsUrl($this->replaceLinkCustomFields($ml->link));
 			}
 			else {
@@ -509,7 +507,7 @@ class TrackingObject
 				$this->flushChanges();
 //				$this->log->log('Se guardó con exito');
 			}
-			$this->log->log('ya se contabilizó rebote suave');
+			$this->log->log('Tracking de rebote suave contabilizado');
 		}
 		catch (Exception $e) {
 			$this->log->log('Exception: [' . $e . ']');
@@ -554,7 +552,7 @@ class TrackingObject
 //			$this->log->log('Preparandose para actualizar contadores de bases de datos y listas de contactos');
 			$this->updateCounters();
 		
-			$this->log->log('Se actualizó rebote duro');
+			$this->log->log('Tracking rebote duro contabilizado');
 		}
 	}
 	
@@ -631,7 +629,7 @@ class TrackingObject
 
 //				$this->log->log("Se marcarón como spam a todos los contactos con idEmail: {$this->idEmail}");
 				$this->updateCounters();
-				$this->log->log('Se actualizó spam');
+				$this->log->log('Tracking de queja de spam contabilizado');
 			}
 		}
 		catch (Exception $e) {

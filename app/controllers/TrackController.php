@@ -3,7 +3,7 @@ class TrackController extends ControllerBase
 {
 	public function openAction($parameters)
 	{
-		$this->logger->log('Inicio tracking de apertura');
+//		$this->logger->log('Inicio tracking de apertura');
 		$info = $_SERVER['HTTP_USER_AGENT'];
 		
 		try {
@@ -26,7 +26,7 @@ class TrackController extends ControllerBase
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');
 		}
-		$this->logger->log('Preparando para retornar img');
+//		$this->logger->log('Preparando para retornar img');
 		// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
 		$img = '../public/images/tracking.gif';
 
@@ -38,7 +38,7 @@ class TrackController extends ControllerBase
 	
 	public function clickAction($parameters)
 	{
-		$this->logger->log('Inicio tracking de click');
+//		$this->logger->log('Inicio tracking de click');
 		$info = $_SERVER['HTTP_USER_AGENT'];
 		
 		try {
@@ -81,13 +81,13 @@ class TrackController extends ControllerBase
 			return false;
 		}
 		$cobject = json_decode($content, true);
-		$this->logger->log('[' .print_r($cobject, true) .  ']');
+//		$this->logger->log('[' .print_r($cobject, true) .  ']');
 		$i = 1;
 		foreach ($cobject as $c) {
 			$mxc = substr($c['click_tracking_id'], 2);
 			$ids = explode('x', $mxc);
 			$date = $c['event_time'];
-			$this->logger->log('Empezó track de evento: ' . $i);
+//			$this->logger->log('Empezó track de evento: ' . $i);
 			try {
 				$trackingObj = new TrackingObject();
 				$trackingObj->setSendIdentification($ids[0], $ids[1], $ids[2]);
@@ -102,7 +102,7 @@ class TrackController extends ControllerBase
 						$trackingObj->trackSpamEvent($c['bounce_code'], $date);
 						break;
 				}
-				$this->logger->log("Update funciono para : idMail: {$ids[0]}, idContact: {$ids[1]}, idEmail: {$ids[2]} ");
+				$this->logger->log("Update funcionó para : idMail: {$ids[0]}, idContact: {$ids[1]}, idEmail: {$ids[2]} ");
 				
 			}
 			catch (\Exception $e) {
@@ -113,16 +113,16 @@ class TrackController extends ControllerBase
 				$this->logger->log('Exception: [' . $e . ']');
 				return $this->setJsonResponse(array('status' => 'ERROR', 'description' => 'Invalid Argument Exception'));
 			}
-			$this->logger->log('Pasó la prueba: ' . $i);
+//			$this->logger->log('Pasó la prueba: ' . $i);
 			$i ++;
 		}
-		$this->logger->log('Preparando para dar respuesta');
+//		$this->logger->log('Preparando para dar respuesta');
 		return $this->setJsonResponse(array('status' => 'OK', 'description' => 'Everything seems to be fine!'));
 	}
 	
 	public function opensocialAction($parameters)
 	{
-		$this->logger->log('Inicio tracking de apertura por red social');
+//		$this->logger->log('Inicio tracking de apertura por red social');
 		$info = $_SERVER['HTTP_USER_AGENT'];
 		try {
 			// Decodificar enlace
@@ -130,7 +130,7 @@ class TrackController extends ControllerBase
 			$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
 			$parts = $linkdecoder->decodeLink('track/opensocial', $parameters);
 			list($v, $idMail, $idContact, $socialType) = $parts;
-			$this->logger->log('El link es valido');
+//			$this->logger->log('El link es valido');
 			
 			//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
 			//petición
@@ -153,7 +153,7 @@ class TrackController extends ControllerBase
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');
 		}
 		
-		$this->logger->log('Preparando para retornar img');
+//		$this->logger->log('Preparando para retornar img');
 			// TODO: la imagen debe tener la ubicacion fisica en disco y no la URL
 		$img = '../public/images/tracking.gif';	
 		$this->response->setHeader("Content-Type", "image/gif");
@@ -164,7 +164,7 @@ class TrackController extends ControllerBase
 	
 	public function clicksocialAction($parameters)
 	{
-		$this->logger->log('Inicio tracking de apertura por red social');
+//		$this->logger->log('Inicio tracking de apertura por red social');
 		$info = $_SERVER['HTTP_USER_AGENT'];
 		
 		try {		
@@ -173,7 +173,7 @@ class TrackController extends ControllerBase
 			$linkdecoder->setBaseUri($this->urlManager->getBaseUri(true));
 			$parts = $linkdecoder->decodeLink('track/clicksocial', $parameters);
 			list($v, $idLink, $idMail, $idContact, $socialType) = $parts;
-			$this->logger->log('El link es valido');
+//			$this->logger->log('El link es valido');
 			
 			$trackingObj = new TrackingObject();
 			
