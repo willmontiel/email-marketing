@@ -25,8 +25,8 @@
 			<div class="form-group">
 				<div class="col-sm-10 col-md-offset-2">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#facebook" data-toggle="tab"><img src="{{url('images/facebook_icon_active.png')}}" class="center-block" alt="" /></a></li>
-						<li><a href="#twitter" data-toggle="tab"><img src="{{url('images/twitter_icon_active.png')}}" class="center-block" alt="" /></a></li>
+						<li class="active"><a href="#facebook" data-toggle="tab"><img src="{{url('b3/images/facebook_icon_active.png')}}" class="center-block" alt="" /></a></li>
+						<li><a href="#twitter" data-toggle="tab"><img src="{{url('b3/images/twitter_icon_active.png')}}" class="center-block" alt="" /></a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade in active" id="facebook">

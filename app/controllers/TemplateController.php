@@ -451,6 +451,7 @@ class TemplateController extends ControllerBase
 				$imgObj->resizeImage($size[0], $size[1]);
 				$img = $imgObj->getImageInMemory();
 				$this->cache->save($key, $img);
+				
 			}
 			$this->response->setHeader("Content-Type", 'image/png');
 			$this->view->disable();

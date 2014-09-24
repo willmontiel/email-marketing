@@ -11,10 +11,10 @@
 						<dt></dt>
 						<dd>
 							{{'{{#if fbaccountsel }}'}}
-							<img src="{{url('images')}}/share_facebook_image_24.png">
+							<img src="{{url('images')}}/facebook_icon_active.png">
 							{{'{{/if}}'}}
 							{{'{{#if twaccountsel }}'}}
-							<img src="{{url('images')}}/share_twitter_image_24.png">
+							<img src="{{url('images')}}/twitter_icon_active.png">
 							{{'{{/if}}'}}
 						</dd>
 					{{'{{/if}}'}}
