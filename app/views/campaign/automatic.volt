@@ -4,10 +4,26 @@
 	{# bootstrap switch master B3 #}
 	{{ stylesheet_link('bootstrap-switch-master/bootstrap-switch.css')}}
 	{{ javascript_include('bootstrap-switch-master/bootstrap-switch.js')}}
-	{{ stylesheet_link('select2-master/select2.css')}}
-	{{ javascript_include('select2-master/select2.js')}}
 	{{ javascript_include('js/campaign/automatic.js')}}
+	
+	{# Select2 master#}
+	{{ stylesheet_link('vendors/select2-master/select2.css') }}
+	{{ javascript_include('vendors/select2-master/select2.js')}}
 
+	{# Selección de destinatarios #}
+	{{ partial('partials/target_selection_partial') }}
+	<script type="text/javascript">
+		var urlBase = "{{url('')}}";
+		var serializerObject = null;
+		$(function (){
+			var panelContainer = new PanelContainer('#panel-container');		
+			var model = new Model();
+			model.setPanelContainer(panelContainer);
+			model.setSerializerObject(serializerObject);
+			model.serializer();
+		});
+	</script>
+	
 	<script type="text/javascript"> 
 		$(function (){
 			{%if autoresponse is defined%}
@@ -64,199 +80,174 @@
 			});
 		}
 	</script>
-	
-	{# Selección de destinatarios #}
-	{{ partial('partials/target_selection_partial') }}
-	<script type="text/javascript">
-		$(function (){
-			var serializerObject = null;
-			var panelContainer = new PanelContainer('#panel-container');		
-			var model = new Model();
-			model.setPanelContainer(panelContainer);
-			model.setSerializerObject(serializerObject);
-			model.serializer();
-		});
-	</script>
 {% endblock %}
 {% block content %}
-	
 	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}
-	
 	<div class="row">
-		<h1 class="sectiontitle">Nueva autorespuesta en el tiempo</h1>
-		<div class="space"></div>
-		{{ flashSession.output() }}	
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="header-background">
+				<div class="title">Autorespuestas en el tiempo</div>
+			</div>
+		</div>
 	</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			{{ flashSession.output() }}	
+		</div>
+	</div>	
+	
+	<div class="space"></div>
 	
 	<div class="row">
-		<div class="col-md-10">
-			<form class="form-horizontal"  action="{%if autoresponse is defined%} {{url('campaign/automatic')}}/{{autoresponse.idAutoresponder}} {%else%} {{url('campaign/automatic')}} {%endif%}" method="post"  role="form">
-				<div class="form-group">
-					<label class="col-sm-4 control-label">Nombre de envío automático</label>
-					<div class="col-md-5">
-						<input class="form-control" type="text" name="name" required="required" {%if autoresponse is defined%} value="{{autoresponse.name}}" {%endif%}>
-					</div>
-				</div>
-					
-				<div class="space"></div>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="panel" style="box-shadow: 2px 2px 5px 0px #afafaf;">
+				<form class="form-horizontal"  action="{%if autoresponse is defined%} {{url('campaign/automatic')}}/{{autoresponse.idAutoresponder}} {%else%} {{url('campaign/automatic')}} {%endif%}" method="post"  role="form">
 				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">¿A quién envías?</label>
-				</div>
-				
-				<div class="form-group">
-					<div class="panel panel-default">
-						<div class="panel-body" style="background-color: #f5f5f5;">
-							<div id="panel-container"></div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="form-group target-section">
-					
-					<div class="col-sm-12">
-						<label for="dbopt" class="col-sm-4 control-label">Bases de datos</label>
-						<input id="dbopt" class="col-sm-1 control-label radio-btn-automatic" name="target" type="radio" value="dbases">
-						<div id="dbases" class="col-md-5 hide-temporary">
-							<select id="dbases" multiple="true" style="width:100%">
-								{%for item in dbases%}
-								<option value="{{item.idDbase}}">{{item.name}}</option>
-								{%endfor%}
-							</select>
-						</div>
+					<div class="panel-header panel-heading box-header">
+						<div class="box-title">Nueva autorespuesta en el tiempo</div>
 					</div>
 					
-					<div class="col-sm-12">
-						<label for="listopt" class="col-sm-4 control-label">Lista de contactos</label>
-						<input id="listopt" class="col-sm-1 control-label radio-btn-automatic" name="target" type="radio" value="contactlists">
-						<div id="contactlists" class="col-md-5 hide-temporary">
-							<select id="contactlists" multiple="true" style="width:100%">
-								{%for list in contactlist%}
-								<option value="{{list.idContactlist}}">{{list.name}}</option>
-								{%endfor%}
-							</select>
+					<div class="panel-body" style="margin-top: 20px;">
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+								Nombre de envío automático
+							</label>
+							<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+								<input class="form-control" autofocus placeholder="Nombre de envío automático" type="text" name="name" required="required" {%if autoresponse is defined%} value="{{autoresponse.name}}" {%endif%}>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+								¿A quién envías?
+							</label>
+							<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+								<div class="panel panel-default">
+									<div class="panel-body" style="background-color: #f5f5f5;">
+										<div id="panel-container"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+								Hora del envío
+							</label>
+							<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+								<div class="bg-wrap-time center-block without-margin time-clock-bigger">
+									<select class="input-autoresponse-time-hour" name="hour"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+									<select class="input-autoresponse-time-minutes" name="minute"><option>00</option><option>10</option><option>20</option><option>30</option><option>40</option><option>50</option></select>
+									<select class="input-autoresponse-time-text" name="meridian"><option>am</option><option>pm</option></select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="space"></div>
+						
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+								Día(s) de la semana
+							</label>
+							<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+								<div class="automatic-day-opt"><input type="checkbox" id="auto-day-monday" name="monday"><label class="autoresponse-day" for="auto-day-monday">Lunes</label></div>
+								<div class="automatic-day-opt"><input type="checkbox" id="auto-day-tuesday" name="tuesday"><label class="autoresponse-day" for="auto-day-tuesday">Martes</label></div>
+								<div class="automatic-day-opt"><input type="checkbox" id="auto-day-wednesday" name="wednesday"><label class="autoresponse-day" for="auto-day-wednesday">Miércoles</label></div>
+								<div class="automatic-day-opt"><input type="checkbox" id="auto-day-thursday" name="thursday"><label class="autoresponse-day" for="auto-day-thursday">Jueves</label></div>
+								<div class="automatic-day-opt"><input type="checkbox" id="auto-day-friday" name="friday"><label class="autoresponse-day" for="auto-day-friday">Viernes</label></div>
+								<div class="automatic-day-opt"><input type="checkbox" id="auto-day-saturday" name="saturday"><label class="autoresponse-day" for="auto-day-saturday">Sábado</label></div>
+								<div class="automatic-day-opt"><input type="checkbox" id="auto-day-sunday" name="sunday"><label class="autoresponse-day" for="auto-day-sunday">Domingo</label></div>
+							</div>
+						</div>
+						
+						<div class="space"></div>
+						
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+								Contenido capturado de una URL
+							</label>
+							<div class="col-xs-10 col-sm-10 col-md-8 col-lg-8">
+								<input class="form-control" placeholder="Pegar dirección de enlace aqui" type="text" name="content" required="required" {%if autoresponse is defined%} value="{{autoresponse.content.url}}" {%endif%}>
+							</div>
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<a onclick="previewAutoSend();" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+								Asunto
+							</label>
+							<div class="col-xs-10 col-sm-10 col-md-8 col-lg-8">
+								<input class="form-control" placeholder="Asunto" type="text" name="subject" required="required" {%if autoresponse is defined and autoresponse.subject.text != 'Meta Tag'%} value="{{autoresponse.subject.text}}" {%endif%}>
+							</div>
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<input type="checkbox" id="meta-tag" name="meta-tag">
+								<label for="meta-tag">Meta Tag</label>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+								Remitente
+							</label>
+
+						<div id="select-from">
+							<div class="col-xs-10 col-sm-10 col-md-8 col-lg-8">
+								<select id="select-field" class="form-control">
+									<option>Seleccione nombre de remitente</option>
+									{%for sender in senders%}
+									<option value="{{sender.name}}/{{sender.email}}" {%if autoresponse is defined %} {%if autoresponse.from and autoresponse.from.email == sender.email%} selected {%endif%} {%endif%}>{{sender.name}} / {{sender.email}}</option>
+									{%endfor%}
+								</select>
+							</div>
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<a onclick="newSender();" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></a>
+							</div>
+						</div>	
+
+						<div id="new-from" class="hide-temporary">
+							<div class="col-xs-5 col-sm-5 col-md-4 col-lg-4">
+								<input id="from_email" class="form-control" name="from_email" type="text" placeholder="Correo">
+							</div>
+							<div class="col-xs-5 col-sm-5 col-md-4 col-lg-4">
+								<input id="from_name" class="form-control" name="from_name" type="text" placeholder="Nombre">
+							</div>
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<a onclick="senderList();" class="btn btn-default"><span class="glyphicon glyphicon-list"></span></a>
+							</div>
+						</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+								Responder a
+							</label>
+							<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+								<input class="form-control" placeholder="Responder a" type="text" name="reply" {%if autoresponse is defined%} value="{{autoresponse.reply}}" {%endif%}>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+								Habilitado
+							</label>
+							<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+								<input type="checkbox" class="switch-campaign"  name="active" checked>
+							</div>
 						</div>
 					</div>
-					
-					<div class="col-sm-12">
-						<label for="segmentopt" class="col-sm-4 control-label">Segmentos</label>
-						<input id="segmentopt" class="col-sm-1 control-label radio-btn-automatic" name="target" type="radio" value="segments">
-						<div id="segments" class="col-md-5 hide-temporary">
-							<select id="segments" multiple="true" style="width:100%">
-								{%for segment in segments%}
-								<option value="{{segment.idSegment}}">{{segment.name}}</option>
-								{%endfor%}
-							</select>
+					<div class="panel-footer">
+						<div class="form-group">
+							<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"></div>
+							<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+								<a href="{{url('campaign')}}" class="btn btn-sm btn-default">Cancelar</a>
+								{{ submit_button("Guardar", 'class' : "btn btn-sm btn-guardar extra-padding") }}	
+							</div>
 						</div>
 					</div>
-					
-				</div>
-				
-				<div class="space"></div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">¿A qué hora?</label>
-					<div class="col-md-8">
-						<div class="bg-wrap-time center-block without-margin time-clock-bigger">
-							<select class="input-autoresponse-time-hour" name="hour"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
-							<select class="input-autoresponse-time-minutes" name="minute"><option>00</option><option>10</option><option>20</option><option>30</option><option>40</option><option>50</option></select>
-							<select class="input-autoresponse-time-text" name="meridian"><option>am</option><option>pm</option></select>
-						</div>
-					</div>
-				</div>
-				
-				<div class="space"></div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">¿Qué día de la semana?</label>
-					<div class="col-md-8 col-sm-12">
-						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-monday" name="monday"><label class="autoresponse-day" for="auto-day-monday">Lunes</label></div>
-						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-tuesday" name="tuesday"><label class="autoresponse-day" for="auto-day-tuesday">Martes</label></div>
-						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-wednesday" name="wednesday"><label class="autoresponse-day" for="auto-day-wednesday">Miércoles</label></div>
-						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-thursday" name="thursday"><label class="autoresponse-day" for="auto-day-thursday">Jueves</label></div>
-						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-friday" name="friday"><label class="autoresponse-day" for="auto-day-friday">Viernes</label></div>
-						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-saturday" name="saturday"><label class="autoresponse-day" for="auto-day-saturday">Sábado</label></div>
-						<div class="automatic-day-opt"><input type="checkbox" id="auto-day-sunday" name="sunday"><label class="autoresponse-day" for="auto-day-sunday">Domingo</label></div>
-					</div>
-				</div>
-				
-				<div class="space"></div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">¿Qué envías?</label>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">Contenido capturado de una URL</label>
-					<div class="col-md-5">
-						<input class="form-control" type="text" name="content" required="required" {%if autoresponse is defined%} value="{{autoresponse.content.url}}" {%endif%}>
-					</div>
-					<div class="col-md-1">
-						<a onclick="previewAutoSend();" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">Asunto:</label>
-					<div class="col-md-5">
-						<input class="form-control" type="text" name="subject" required="required" {%if autoresponse is defined and autoresponse.subject.text != 'Meta Tag'%} value="{{autoresponse.subject.text}}" {%endif%}>
-					</div>
-					<div class="col-md-2">
-						<input type="checkbox" id="meta-tag" name="meta-tag">
-						<label for="meta-tag">Meta Tag</label>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">Remitente:</label>
-					<div id="select-from">
-						<div class="col-md-5">
-							<select id="select-field" class="form-control">
-								<option>Seleccione nombre de remitente</option>
-								{%for sender in senders%}
-								<option value="{{sender.name}}/{{sender.email}}" {%if autoresponse is defined %} {%if autoresponse.from and autoresponse.from.email == sender.email%} selected {%endif%} {%endif%}>{{sender.name}} / {{sender.email}}</option>
-								{%endfor%}
-							</select>
-						</div>
-						<div class="col-md-1">
-							<a onclick="newSender();" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></a>
-						</div>
-					</div>
-					<div id="new-from" class="hide-temporary">
-						<div class="col-md-3">
-							<input id="from_email" class="form-control" name="from_email" type="text" placeholder="Correo">
-						</div>
-						<div class="col-md-2">
-							<input id="from_name" class="form-control" name="from_name" type="text" placeholder="Nombre">
-						</div>
-						<div class="col-md-1">
-							<a onclick="senderList();" class="btn btn-default"><span class="glyphicon glyphicon-list"></span></a>
-						</div>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">Responder a:</label>
-					<div class="col-md-5">
-						<input class="form-control" type="text" name="reply" {%if autoresponse is defined%} value="{{autoresponse.reply}}" {%endif%}>
-					</div>
-				</div>
-				
-				<div class="space"></div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">Habilitado</label>
-					<div class="col-md-5">
-						<input type="checkbox" class="switch-campaign"  name="active" checked>
-					</div>
-				</div>
-				
-				<div class="form-actions pull-right">
-					<a href="{{url('campaign')}}" class="btn btn-sm btn-default extra-padding">Cancelar</a>
-					{{ submit_button("Guardar", 'class' : "btn btn-sm btn-guardar extra-padding") }}
-				</div>
-				
-			</form>
+				</form>
+			</div>
 		</div>
 	</div>
 	

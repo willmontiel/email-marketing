@@ -1,5 +1,9 @@
 $(function (){
-	$(".switch-campaign").bootstrapSwitch();
+	$(".switch-campaign").bootstrapSwitch({
+		onColor: 'success',
+		offColor: 'danger'
+	});
+	
 	$("input[name='target']").on('click', function(){
 		$('.target_active').removeClass('target_active');
 		var target = $('#' + $(this)[0].value);
@@ -14,10 +18,6 @@ $(function (){
 		$('#from_name').val(values[0]);
 	});
 
-	$('.target-section select').select2({
-		placeholder: "Seleccione los destinatarios"
-	});
-	
 	$('#meta-tag').on('click', function() {
 		if($(this).is(':checked')) {
 			$("input[name='subject']").prop('disabled', true);

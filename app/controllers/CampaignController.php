@@ -141,9 +141,6 @@ class CampaignController extends ControllerBase
 		 }
 		 
 		$this->view->setVar('senders', Sender::findByIdAccount($this->user->idAccount));
-		$this->view->setVar("contactlist", Contactlist::findContactListsInAccount($this->user->account));
-		$this->view->setVar("dbases", Dbase::findByIdAccount($this->user->idAccount));
-		$this->view->setVar("segments", Segment::findSegmentsInAccount($this->user->account));
 	}
 	
 	public function changestatusAction($id)
