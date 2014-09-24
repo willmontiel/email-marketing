@@ -37,29 +37,49 @@
 		<h4 class="paneltitle">Programación del envío</h4>
 		<form class="form-horizontal" role="form">
 			<div class="form-group">
-				<label class="col-sm-2 control-label">Envíar correo: </label>
-				<div class="col-sm-10">
-					{{ ' {{view Ember.RadioButton name="schedule" id="now" selectionBinding="scheduleRadio" value="now"}}' }}
-					<label for="now">Ahora mismo:</label>
-
-					{{'{{#if scheduleEmpty }}'}}
-						{{ ' {{view Ember.RadioButton name="schedule" id="later" selectionBinding="scheduleRadio" value="later"}}' }}
-					{{ '{{else}}' }}
-						{{ ' {{view Ember.RadioButton name="schedule" id="later" selectionBinding="scheduleRadio" value="later" checked="checked"}}' }}
-					{{ '{{/if}}' }}
+				<label class="col-xs-12 col-sm-12 col-md-2 col-lg-2 control-label">
+					Envíar correo: 
+				</label>
 					
-					<label for="later">Seleccione la fecha:</label>
-					{{'{{#if scheduleEmpty }}'}}
+				<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 8px;">
+						{{ ' {{view Ember.RadioButton name="schedule" id="now" selectionBinding="scheduleRadio" value="now"}}' }}
+						<label for="now">Ahora mismo:</label>
+					</div>
+						
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 8px;">
+						{{'{{#if scheduleEmpty }}'}}
+							{{ ' {{view Ember.RadioButton name="schedule" id="later" selectionBinding="scheduleRadio" value="later"}}' }}
+						{{ '{{else}}' }}
+							{{ ' {{view Ember.RadioButton name="schedule" id="later" selectionBinding="scheduleRadio" value="later" checked="checked"}}' }}
+						{{ '{{/if}}' }}
+						<label for="later">Seleccione la fecha:</label>
+				{{'{{#if scheduleEmpty }}'}}
 						<div id="programmer" style="display: none">
-					{{ '{{else}}' }}
+				{{ '{{else}}' }}
 						<div id="programmer" style="display: block">			
-					{{ '{{/if}}' }}
-						{{ '{{scheduleDate}}' }}
-						{{' {{view App.DateTimePicker valueBinding="scheduleDate" }}' }}
+				{{ '{{/if}}' }}
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+								<div class="input-group date date-picker group-datepicker">
+									{{'{{view App.DatePicker valueBinding="scheduleDate" class="form-control" readonly="readonly"}}'}}
+									<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+									<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+								</div>	
+							</div>
+							
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+								<div class="input-append bootstrap-timepicker">
+									{{ '{{view App.TimePicker class="time-picker input-small"}}' }}
+									<span class="add-on">
+										<i class="glyphicon glyphicon-time" style="top: 4px !important;"></i>
+									</span>
+								</div>	
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
+				
 			<div class="form-group text-right">
 				<div class="col-sm-12">
 					<button class="btn btn-default btn-sm extra-padding" {{'{{action "discardChanges" this}}'}}>Descartar cambios</button>

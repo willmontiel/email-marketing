@@ -4,13 +4,22 @@
 	{{ partial("partials/ember_partial") }}
 	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 	
+	{# Time picker #}
+	{{ javascript_include('vendors/time-picker/js/bootstrap-timepicker.min.js')}}
+	{{ stylesheet_link('vendors/time-picker/css/bootstrap-timepicker.min.css') }}
+	
+	{# Date picker #}
+	{{ stylesheet_link('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.min.css') }}
+	{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.js')}}
+	{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.es.js')}}
+	
 	{# Select2 master#}
 	{{ stylesheet_link('vendors/select2-master/select2.css') }}
 	{{ javascript_include('vendors/select2-master/select2.js')}}
-
+	
+	{# Moment.js#}
 	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js')}}
-	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
-	{{ partial("partials/datetimepicker_view_partial") }}
+
 	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
 	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
 	<script type="text/javascript">
@@ -249,7 +258,10 @@
 			</script>
 		</div>
 	</div>
-
+	
+	<div class="clearfix"></div>
+	<div class="space"></div>
+	
 	<div class="modal fade gallery-modal" id="images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
