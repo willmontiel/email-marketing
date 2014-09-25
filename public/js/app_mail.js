@@ -152,15 +152,18 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('senderAttr', sender);
 			
 			var scheduleDate = this.get('scheduleDate');
-			var date = moment(scheduleDate, "DD-MM-YYYY HH:mm").lang('es');
-			var day = getDay(date);
-			var month = getNumberMonth(date);
-			var year = getYear(date);
-			var d = day + '/' + month + '/' + year;
-			this.set('date', d);
 			
-			var time = getTime(date);
-			this.set('time', time);
+			if (scheduleDate !== undefined || scheduleDate !== null || scheduleDate !== '') {
+				var date = moment(scheduleDate, "DD-MM-YYYY HH:mm").lang('es');
+				var day = getDay(date);
+				var month = getNumberMonth(date);
+				var year = getYear(date);
+				var d = day + '/' + month + '/' + year;
+				this.set('date', d);
+
+				var time = getTime(date);
+				this.set('time', time);
+			}
 		}
 	}.observes('this.content'),
 	
