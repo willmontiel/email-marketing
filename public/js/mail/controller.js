@@ -1,45 +1,6 @@
-App = Ember.Application.create({
-	rootElement: '#emberAppContainer'
-});
-
-DS.RESTAdapter.reopen({
-	namespace: MyUrl
-});
-
-App.Store = DS.Store.extend({});
-
-App.fbimage = 'default';
-
-App.Mail = DS.Model.extend({
-	type: DS.attr('string'),
-	scheduleDate: DS.attr('string'),
-	name: DS.attr('string'),
-	sender: DS.attr('string'),
-	replyTo: DS.attr('string'),
-	subject: DS.attr('string'),
-	dbases: DS.attr('string'),
-	contactlists: DS.attr('string'),
-	segments: DS.attr('string'),
-	filterByEmail: DS.attr('string'),
-	filterByOpen: DS.attr('string'),
-	filterByClick: DS.attr('string'),
-	filterByExclude: DS.attr('string'),
-	googleAnalytics: DS.attr('string'),
-	campaignName: DS.attr('string'),
-	previewData: DS.attr('string'),
-	mailcontent: DS.attr('boolean'),
-	plainText: DS.attr('string'),
-	totalContacts: DS.attr('string'),
-	fbaccounts: DS.attr('string'),
-	fbmessagecontent: DS.attr('string'),
-	fbimagepublication: DS.attr('string'),
-	fbtitlecontent: DS.attr('string'),
-	fbdescriptioncontent: DS.attr('string'),
-	twaccounts: DS.attr('string'),
-	twpublicationcontent: DS.attr('string'),
-	fbloginurl: DS.attr('string'),
-	twloginurl: DS.attr('string')
-});
+/* 
+ * Index: Ruta y Controlador
+ */
 
 App.IndexRoute = Ember.Route.extend({
 	model: function() {
@@ -52,17 +13,6 @@ App.IndexRoute = Ember.Route.extend({
 	   }
 	}
 });
-
-App.ExternalLinkComponent = Ember.Component.extend({
-  tagName: "a",
-  classNames: [],
-  attributeBindings: ["href"],
-  href: (function() {
-    return this.get('pattern').fmt(this.get('content.id'));
-  }).property("content.id")
-});
-
-Ember.Handlebars.helper("external-link", App.ExternalLinkComponent);
 
 App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	senderName: '',
@@ -103,6 +53,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		}
 		return res;
 	}.property('fbimagepublication'),
+			
 	//Retorna el id del correo para crear las url's
 	url: function () {
 		return '/' + this.get('id');
@@ -206,7 +157,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		
 	//Observa que se hayan seleccionado destinatarios
 	targetEmpty: function () {
-		
 		this.checkFormsStatus(this.get('this.mailcontent'), this.get('this.dbases'), this.get('this.contactlists'), this.get('this.segments'));
 
 		var d, l, s;
@@ -224,7 +174,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return false;
 	}.property('dbaselist.[]', 'list.[]', 'segmentlist.[]'), 
 		
-	//Si hay un id de correo la seleccion de contenido (editor, plantillas, html, importar contenido) se habilita de lo contrario no
+	//Si hay un id de correo la seleccion de contenido (editor, plantillas, html, importar contenido) se habilita 
+	//de lo contrario no
 	isContentAvailable: function () {
 		var id;
 		id = this.get('content.id');
@@ -236,6 +187,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return true;
 	}.property('content.id'),
 	
+	//Observa si se ha configurado alguna cuenta
 	socialEmpty: function () {
 		var f, t;
 		f = this.get('this.fbaccountsel');
@@ -356,27 +308,27 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	isTargetBydbases: function () {
 		return setFilterValues(this.get('this.dbases'), 'dbaseChecked', this);
 	}.property('content.dbases'),
-//	
+
 	isTargetByLists: function () {
 		return setFilterValues(this.get('this.contactlists'), 'listChecked', this);
 	}.property('content.contactlists'),
-//	
+
 	isTargetBySegments: function () {
 		return setFilterValues(this.get('this.segments'), 'segmentChecked', this);
 	}.property('content.segments'),
-//		
+
 	isFilterByEmail: function () {
 		return setFilterValues(this.get('this.filterByEmail'), 'filterEmailChecked', this);
 	}.property('content.filterByEmail'),
-//			
+
 	isFilterByOpen: function () {
 		return setFilterValues(this.get('this.filterByOpen'), 'filterOpenChecked', this);
 	}.property('content.filterByOpen'),
-//	
+
 	isFilterByClick: function () {
 		return setFilterValues(this.get('this.filterByClick'), 'filterClickChecked', this);
 	}.property('content.filterByClick'),
-//	
+
 	isFilterByExclude: function () {
 		return setFilterValues(this.get('this.filterByExclude'), 'filterExcludeChecked', this);
 	}.property('content.filterByExclude'),
@@ -434,13 +386,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}.property('content.name', 'content.fromName', 'content.fromEmail', 'content.subject', 'content.mailcontent', 'content.plainText', 'content.totalContacts', 'content.scheduleDate'),
 
 	SetAndSave: function (mail) {
-//		var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
-			
-		
-		//else if (!filter.test(mail.get('email'))) {
-			//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
-		//}
-		
 		var senderName = this.get('senderName');
 		var senderEmail = this.get('senderEmail');
 	
@@ -498,7 +443,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		mail.set('fbimagepublication', App.fbimage);
 		
 		return mail;
-		
 	},
 			
 	actions: {
@@ -710,249 +654,4 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			}
 		}
 	}
-});
-
-function validateSender(mail){
-	var sender = mail.get('sender');
-	
-	if (sender === undefined || sender === null || sender === '') {
-		return false;
-	}
-	
-	return true;
-}
-
-function getArrayValue(value) {
-	if( value !== null && value !== undefined ) {
-		var array = [];
-		var obj = value.toArray();
-		for (var i = 0; i < obj.length; i++) {
-			array.push(obj[i].id);
-		}
-		return array.toString();
-	}
-	return '';
-}
-
-function setExpandAttr(self, expand) {
-	if(self.get(expand)) {
-		self.set(expand, false);
-	}
-	else {
-		self.set(expand, true);
-	}
-}
-
-function setTargetValues(values, select) {
-	var newArray = [];
-	if(select !== undefined) {
-		var array = values.split(",");
-		for (var i = 0; i < select.length; i++) {
-			for (var j = 0; j < array.length; j++) {
-				array[j] = (typeof array[j] === 'string')?parseInt(array[j]):array[j];
-				if (select[i].id === array[j]) {
-					newArray.push(select[i]);
-				}
-			}
-		}
-	}
-	return newArray;
-}
-
-function setTargetValue(value, select) {
-	var object;
-	for (var j = 0; j < select.length; j++) {
-		if (select[j].id === value) {
-			object = select[j];
-		}
-	}
-	
-	return object;
-}
-
-function setGoogleAnalyticsValues(values, select) {
-	var array = values.split(",");
-	var newArray = [];
-	for (var i = 0; i < select.length; i++) {
-		for (var j = 0; j < array.length; j++) {
-			if (select[i].name === array[j]) {
-				newArray.push(select[i]);
-			}
-		}
-	}
-	return newArray;
-}
-
-function setFilterValues(values, checked, self) {
-	values = (values === '')?null:values;
-	if (values) {
-		self.set(checked, 'display: block;');
-		return true;
-	}	
-	self.set(checked, 'display: none;');
-	return false;
-}
-
-function getTime(date) {
-	var hour = '' + date.hour();
-	hour = (hour.length === 1)? '0' + hour: hour;
-	var minutes = '' + date.minute();
-	minutes = (minutes.length === 1)? '0' + minutes: minutes;
-		
-	var time = hour + ':' + minutes;
-	return time;
-}
-
-function getMonth(date) {
-	var m = date.month() + 1;
-	var month = moment('' + m).lang('es').format('MMMM');	
-	return month;	
-}
-
-function getNumberMonth(date) {
-	var m = date.month() + 1;	
-	return m;
-}
-
-function getDay(date) {
-	var day = date.date();
-	return day;
-}
-
-function getYear(date) {
-	var year = date.year();
-	return year;
-}
-
-App.Select2 = Ember.Select.extend({
-	didInsertElement: function() {
-		$(".select2").select2({
-			
-		});
-	}
-});
-
-App.TimePicker = Ember.TextField.extend({
-	didInsertElement: function() {
-		$('.time-picker').timepicker({
-			showMeridian: false,
-			defaultTime: false,
-			showInputs: false
-		});
-	}
-});
-
-App.DatePicker = Ember.TextField.extend({
-	didInsertElement: function() {
-		var now = moment().format('D/M/YYYY');
-		$('.date-picker').datetimepicker({
-			language: 'es',
-			autoclose: true,
-			weekStart: false,
-			todayBtn: true,
-			startDate: now,
-			format: "dd/mm/yyyy",
-			todayHighlight: true,
-			showMeridian: false,
-			startView: 2,
-			minView: 2,
-			forceParse: 0
-		});
-	}
-});
-
-Ember.RadioButton = Ember.View.extend({
-    tagName : "input",
-    type : "radio",
-    attributeBindings : [ "name", "type", "value", "id", "checked"],
-    click : function() {
-        this.set("selection", this.$().val());
-		var selection = this.get("selection");
-		$("#programmer").hide();
-		$("#schedule").val('');
-		
-		switch (selection) {
-			case "now":
-				break;
-
-			case "later":
-				$("#programmer").show();
-				break;
-		}
-    },
-    checked : function() {
-		if (this.get("selection") === 'now') {
-			this.set("selection", 'later');
-		}
-
-		return this.get("value") === this.get("selection");   
-    }.property()
-});
-
-Ember.RadioButtonTarget = Ember.View.extend({
-    tagName : "input",
-    type : "radio",
-    attributeBindings : [ "name", "type", "value", "id", "checked"],
-    click : function() {
-        $("#db").hide();
-		$("#list").hide();
-		$("#seg").hide();
-		
-		this.set('controller.dbaselist', []);
-		this.set('controller.list', []);
-		this.set('controller.segmentlist', []);
-		
-		var value = this.$().val();
-		
-		switch (value) {
-			case "dataBase":
-				$("#db").show();
-				break;
-			case "contactList":
-				$("#list").show();
-				break;
-			case "segment":
-				$("#seg").show();
-				break;
-		}
-    }
-});
-
-Ember.RadioFilter = Ember.View.extend({
-    tagName : "input",
-    type : "radio",
-    attributeBindings : [ "name", "type", "value", "id", "checked"],
-    click : function() {
-		$("#mail").hide();
-		$("#open").hide();
-		$("#click").hide();
-		$("#exclude").hide();
-		
-		this.set('controller.filterByEmail', '');
-		this.set('controller.open', []);
-		this.set('controller.click', []);
-		this.set('controller.exclude', []);
-	
-		$("#sendByMail").val('');
-		$('#sendOpen').val('');
-		$('#sendClick').val('');
-		$('#sendExclude').val('');
-		
-		var value = this.$().val();
-		
-		switch (value) {
-			case "byMail":
-				$("#mail").show();
-				break;
-			case "byOpen":
-				$("#open").show();
-				break;
-			case "byClick":
-				$("#click").show();
-				break;
-			case "byExclude":
-				$("#exclude").show();
-				break;
-		}
-    }	
 });

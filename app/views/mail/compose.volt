@@ -22,15 +22,18 @@
 
 	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
 	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
+
 	<script type="text/javascript">
 		var db;
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
+	
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_mail.js') }}
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
+	
 	<script type="text/javascript">
 		function showNewRemittent() {
 			$('#not-allowed-remittents').hide();
@@ -42,6 +45,7 @@
 			$('#allowed-remittents').hide();
 		}
 	</script>
+	
 	<script type="text/javascript">
 		$(function() {
 			{%for asset in assets%}
@@ -79,28 +83,31 @@
 			var replyTo = $("#replyTo").val();
 			var subject = $("#subject").val();
 			
-			//$(function() {
-			//	$.ajax({
-			//		url: "{{url('mail/savemail')}}/" + idMail,
-			//		type: "POST",			
-			//		data: {
-			//			name: name,
-			//			fromName: fromName,
-			//			fromEmail: fromEmail,
-			//			replyTo: replyTo,
-			//			subject: subject
-			//		},
-			//		error: function(msg){
-			//			var obj = $.parseJSON(msg.responseText);
-			//			$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
-			//		},
-			//		success: function(msg){
-			//			$(location).attr('href', "{{url('mail/socialmedia')}}"); 
-			//}
-			//	});
-			//});
+			{#
+			$(function() {
+				$.ajax({
+					url: "{{url('mail/savemail')}}/" + idMail,
+					type: "POST",			
+					data: {
+						name: name,
+						fromName: fromName,
+						fromEmail: fromEmail,
+						replyTo: replyTo,
+						subject: subject
+					},
+					error: function(msg){
+						var obj = $.parseJSON(msg.responseText);
+						$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
+					},
+					success: function(msg){
+						$(location).attr('href', "{{url('mail/socialmedia')}}"); 
+					}
+				});
+			});
+			#}
 		}
 	</script>
+	
 	<script type="text/javascript">
 		//Full Mail Content
 		{% if mail is defined %}

@@ -55,13 +55,13 @@
 						{{ '{{/if}}' }}
 						<label for="later">Seleccione la fecha:</label>
 				{{'{{#if scheduleEmpty }}'}}
-						<div id="programmer" style="display: none">
+						<div id="programmer" style="display: none; margin-top: 20px; margin-bottom: 20px;">
 				{{ '{{else}}' }}
-						<div id="programmer" style="display: block">			
+						<div id="programmer" style="display: block; margin-top: 20px; margin-bottom: 20px;">			
 				{{ '{{/if}}' }}
 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 								<div class="input-group date date-picker group-datepicker">
-									{{'{{view App.DatePicker valueBinding="scheduleDate" class="form-control" readonly="readonly"}}'}}
+									{{'{{view App.DatePicker valueBinding="date" class="form-control" readonly="readonly"}}'}}
 									<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 									<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 								</div>	
@@ -69,7 +69,7 @@
 							
 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 								<div class="input-append bootstrap-timepicker">
-									{{ '{{view App.TimePicker class="time-picker input-small"}}' }}
+									{{ '{{view App.TimePicker valueBinding="time" class="time-picker input-small"}}' }}
 									<span class="add-on">
 										<i class="glyphicon glyphicon-time" style="top: 4px !important;"></i>
 									</span>
