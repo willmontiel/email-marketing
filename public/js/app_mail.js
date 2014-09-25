@@ -153,7 +153,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			
 			var scheduleDate = this.get('scheduleDate');
 			
-			if (scheduleDate !== undefined || scheduleDate !== null || scheduleDate !== '') {
+			if (scheduleDate) {
 				var date = moment(scheduleDate, "DD-MM-YYYY HH:mm").lang('es');
 				var day = getDay(date);
 				var month = getNumberMonth(date);
