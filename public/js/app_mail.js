@@ -353,6 +353,14 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		this.set('scheduleMonth', month);
 		this.set('scheduleYear', year);
 		this.set('scheduleTime', time);
+		
+		var m = getNumberMonth(date);
+		var d = day + '/' + m + '/' + year;
+		this.set('date', d);
+
+		this.set('time', time);
+		
+		
 		return false;
 	}.property('content.scheduleDate'),
 	
