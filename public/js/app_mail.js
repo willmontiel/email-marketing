@@ -695,7 +695,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				
 		discardSchedule: function () {
 			if (this.get('this.id') !== null) {
-				this.get('model').rollback();
 				
 				var sche = this.get('schTmp');
 				this.set('scheduleRadio', sche);

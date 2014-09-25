@@ -458,7 +458,7 @@ class MailWrapper extends BaseWrapper
 		$jsonObject['fbloginurl'] = $socialnet->getFbUrlLogIn($redirect);
 		$jsonObject['twloginurl'] = $socialnet->getTwUrlLogIn($redirect);
 		
-		$this->logger->log('Mail: ' . print_r($jsonObject, true));
+//		$this->logger->log('Mail: ' . print_r($jsonObject, true));
 		return $jsonObject;
 	}
 	
