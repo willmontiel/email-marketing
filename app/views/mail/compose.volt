@@ -2,28 +2,39 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
-
-	{# Select2 master#}
-	{{ stylesheet_link('select2-master/select2.css') }}
-	{{ javascript_include('select2-master/select2.js')}}
+	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 	
-	{{ javascript_include('datetime_picker_jquery/jquery.datetimepicker.js')}}
-	{{ javascript_include('javascripts/moment/moment-with-langs.min.js')}}
-	{{ stylesheet_link('datetime_picker_jquery/jquery.datetimepicker.css') }}
-	{{ partial("partials/datetimepicker_view_partial") }}
-	{{ partial("partials/select2_view_partial") }}
-	{{ javascript_include('javascripts/dropzone/dropzone.js')}}
-	{{ stylesheet_link('javascripts/dropzone/css/dropzone.css') }}
+	{# Time picker #}
+	{{ javascript_include('vendors/time-picker/js/bootstrap-timepicker.min.js')}}
+	{{ stylesheet_link('vendors/time-picker/css/bootstrap-timepicker.min.css') }}
+	
+	{# Date picker #}
+	{{ stylesheet_link('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.min.css') }}
+	{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.js')}}
+	{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.es.js')}}
+	
+	{# Select2 master#}
+	{{ stylesheet_link('vendors/select2-master/select2.css') }}
+	{{ javascript_include('vendors/select2-master/select2.js')}}
+	
+	{# Moment.js#}
+	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js')}}
+
+	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
+	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
+	
 	<script type="text/javascript">
 		var db;
 		var urlBase = "{{url('')}}";
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
+	
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_mail.js') }}
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
+	
 	<script type="text/javascript">
 		function showNewRemittent() {
 			$('#not-allowed-remittents').hide();
@@ -35,6 +46,7 @@
 			$('#allowed-remittents').hide();
 		}
 	</script>
+	
 	<script type="text/javascript">
 		$(function() {
 			{%for asset in assets%}
@@ -72,28 +84,31 @@
 			var replyTo = $("#replyTo").val();
 			var subject = $("#subject").val();
 			
-			//$(function() {
-			//	$.ajax({
-			//		url: "{{url('mail/savemail')}}/" + idMail,
-			//		type: "POST",			
-			//		data: {
-			//			name: name,
-			//			fromName: fromName,
-			//			fromEmail: fromEmail,
-			//			replyTo: replyTo,
-			//			subject: subject
-			//		},
-			//		error: function(msg){
-			//			var obj = $.parseJSON(msg.responseText);
-			//			$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
-			//		},
-			//		success: function(msg){
-			//			$(location).attr('href', "{{url('mail/socialmedia')}}"); 
-			//}
-			//	});
-			//});
+			{#
+			$(function() {
+				$.ajax({
+					url: "{{url('mail/savemail')}}/" + idMail,
+					type: "POST",			
+					data: {
+						name: name,
+						fromName: fromName,
+						fromEmail: fromEmail,
+						replyTo: replyTo,
+						subject: subject
+					},
+					error: function(msg){
+						var obj = $.parseJSON(msg.responseText);
+						$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
+					},
+					success: function(msg){
+						$(location).attr('href', "{{url('mail/socialmedia')}}"); 
+					}
+				});
+			});
+			#}
 		}
 	</script>
+	
 	<script type="text/javascript">
 		//Full Mail Content
 		{% if mail is defined %}
@@ -223,6 +238,7 @@
 		</div>
 	</div>
 	
+	<div class="clearfix"></div>
 	<div class="space"></div>
 	
 	<div class="modal fade gallery-modal" id="images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
