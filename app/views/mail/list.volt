@@ -12,11 +12,8 @@
 	</script>
 	{{ partial("partials/getstatistics_partial") }}
 {% endblock %}
-{% block sectiontitle %}<i class="icon-envelope icon-2x"></i>Correos{% endblock %}
-{%block sectionsubtitle %}Administre sus correos{% endblock %}
 {% block content %}
-<!-- aqui inicia mi contenido -->
-
+	
 {# Botones de navegacion #}
 {{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
 
@@ -44,6 +41,69 @@
 </div>
 
 <div class="space"></div>
+
+<div class="row">
+	<ul class="block-list">
+		{% for item in page.items %}
+			{# Variables para la vista inteligente#}	
+			{% if item.status == 'Sent' %}
+				{% set hexagon = 'hexagon-success' %}
+				{% set icon = 'glyphicon glyphicon-ok'%}
+			{% elseif item.status == 'Pending' OR item.status == 'Paused'%}
+				{% set hexagon = 'hexagon-warning' %}
+				{% set icon = 'glyphicon glyphicon-pause'%}
+			{% elseif item.status == 'Cancelled' %}
+				{% set hexagon = 'hexagon-danger' %}
+				{% set icon = 'glyphicon glyphicon-warning-sign'%}
+			{% elseif item.status == 'Scheduled' %}
+				{% set hexagon = 'hexagon-primary' %}
+				{% set icon = 'glyphicon glyphicon-list-alt'%}
+			{% else %}
+				{% set hexagon = 'hexagon-disable' %}
+				{% set icon = 'glyphicon glyphicon-edit'%}
+			{% endif %}
+			<li>
+				<div class="mail-block">
+					<table class="table-list">
+						<tr>
+							<td>
+								<div class="hexagon hexagon-sm {{hexagon}}">
+									<div class="hexagon-wrap">
+										{% if item.status == 'Sent' %}
+											<a href="{{url('statistic/mail')}}/{{item.idMail}}" class="hexagon-inner toolTip">
+										{% elseif item.status == 'Draft' %}
+											<a href="{{url('mail/compose')}}/{{item.idMail}}" class="hexagon-inner toolTip">
+										{% else %}
+											<a href="javascript.void(0);" class="hexagon-inner toolTip">
+										{% endif %}
+												<i class="{{icon}}"></i>
+											</a>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="mail-info">
+									{% if item.status == 'Sent' %}
+										<a href="{{url('statistic/mail')}}/{{item.idMail}}">
+									{% elseif item.status == 'Draft' %}
+										<a href="{{url('mail/compose')}}/{{item.idMail}}">
+									{% else %}
+										<a href="javascript.void(0);">
+									{% endif %}
+											{{item.name}}
+										</a>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</li>
+		{% endfor %}
+	</ul>
+</div>
+
+<div class="space"></div>
+
 		<!-- Lista de mis correos -->
 		{% if page.items|length != 0%}
 			<div class="row">
