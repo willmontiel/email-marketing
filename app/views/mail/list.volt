@@ -40,7 +40,8 @@
 	</div>
 </div>
 
-<div class="space"></div>
+{#   parcial paginacion   #}	
+{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
 
 <div class="row">
 	<ul class="block-list">
@@ -66,7 +67,7 @@
 				<div class="mail-block">
 					<table class="table-list">
 						<tr>
-							<td>
+							<td class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
 								<div class="hexagon hexagon-sm {{hexagon}}">
 									<div class="hexagon-wrap">
 										{% if item.status == 'Sent' %}
@@ -81,18 +82,54 @@
 									</div>
 								</div>
 							</td>
-							<td>
+							<td class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
 								<div class="mail-info">
-									{% if item.status == 'Sent' %}
-										<a href="{{url('statistic/mail')}}/{{item.idMail}}">
-									{% elseif item.status == 'Draft' %}
-										<a href="{{url('mail/compose')}}/{{item.idMail}}">
-									{% else %}
-										<a href="javascript.void(0);">
-									{% endif %}
-											{{item.name}}
-										</a>
+									<div class="mail-name">
+										{% if item.status == 'Sent' %}
+											<a href="{{url('statistic/mail')}}/{{item.idMail}}">
+										{% elseif item.status == 'Draft' %}
+											<a href="{{url('mail/compose')}}/{{item.idMail}}">
+										{% else %}
+											<a href="javascript.void(0);">
+										{% endif %}
+												{{item.name}}
+											</a>
+									</div>
+									
+									<div class="mail-detail">
+										Creado el {{date('d/M/Y', item.createdon)}} 
+									</div>
+									
+									<div class="mail-detail">
+										Programado para el {{date('d/M/Y, g:i a', item.scheduleDate)}}
+									</div>
+										
+									<div class="mail-detail">
+										Enviado el {{date('d/M/Y, g:i a', item.startedon)}}
+									</div>
 								</div>
+							</td>
+							
+							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+								{%if item.status == 'Sent'%}
+									<dl class="dl-horizontal">
+										<dt class="blue">Destinatarios</dt>
+										<dd class="blue">{{item.totalContacts|numberf}}</dd>
+
+										<dt class="green">Aperturas</dt>
+										<dd class="green">{{item.uniqueOpens|numberf}} </dd>
+
+										<dt class="gray">Clicks</dt> 
+										<dd class="gray">{{item.clicks|numberf}} </dd>
+
+										<dt class="red">Rebotes</dt>
+										<dd class="red">{{item.bounced|numberf}} </dd>
+									</dl>
+								{%endif%}
+							</td>
+							
+							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+							
 							</td>
 						</tr>
 					</table>

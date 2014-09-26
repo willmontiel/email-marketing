@@ -605,18 +605,33 @@
 }
 
 .mail-block {
-	background-color: rgba(51,51,51,0.2);
+	background-color: transparent;
 	padding-left: 15px;
 	padding-right: 15px;
 	border-bottom-color: #ddd;
 	box-shadow: 2px 2px 5px 0px #afafaf;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	color: white;
+}
+
+.mail-block:hover {
+	background-color: rgba(51,51,51,0.1);
+	cursor: pointer;
 }
 
 .mail-info {
 	display: inline;
+}
+
+.mail-name {
+	font-size: 1.7em;
+	font-weight: 600;
+}
+
+.mail-detail {
+	color: #777;
+	font-size: 0.8em;
+	font-weight: lighter;
 }
 
 .mail-indicator {
