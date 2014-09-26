@@ -99,11 +99,11 @@
 										Creado el {{date('d/M/Y', item.createdon)}} 
 									</div>
 									
-									{%if item.status == 'Sent'%} <br />
+									{%if item.status == 'Sent'%}
 										<div class="mail-detail">
 											Enviado el {{date('d/M/Y, g:i a', item.startedon)}}
 										</div>
-									{%elseif item.status == 'Scheduled'%} <br />
+									{%elseif item.status == 'Scheduled'%}
 										<div class="mail-detail">
 											Programado para el {{date('d/M/Y, g:i a', item.scheduleDate)}}
 										</div>
