@@ -94,23 +94,26 @@
 										{% endif %}
 									</div>
 									
+									<div class="mail-detail">{{item.status}}</div>
 									<div class="mail-detail">
 										Creado el {{date('d/M/Y', item.createdon)}} 
 									</div>
 									
-									<div class="mail-detail">
-										Programado para el {{date('d/M/Y, g:i a', item.scheduleDate)}}
-									</div>
-										
-									<div class="mail-detail">
-										Enviado el {{date('d/M/Y, g:i a', item.startedon)}}
-									</div>
+									{%if item.status == 'Sent'%} <br />
+										<div class="mail-detail">
+											Enviado el {{date('d/M/Y, g:i a', item.startedon)}}
+										</div>
+									{%elseif item.status == 'Scheduled'%} <br />
+										<div class="mail-detail">
+											Programado para el {{date('d/M/Y, g:i a', item.scheduleDate)}}
+										</div>
+									{%endif%}
 								</div>
 							</td>
 							
 							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 								{%if item.status == 'Sent'%}
-									<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 20px !important;">
+									<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
 										<dt class="blue medium-indicator">Destinatarios</dt>
 										<dd class="blue medium-indicator">{{item.totalContacts|numberf}}</dd>
 
