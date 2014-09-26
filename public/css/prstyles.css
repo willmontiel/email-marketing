@@ -735,7 +735,7 @@
 	color: #fdfdfd;
 }
 .hexagon.hexagon-danger .hexagon-inner:hover {
-	background-color: rgba(271,83,79,0.9);
+	background-color: rgb(271,83,79);
 	color: #fdfdfd;
 }
 
@@ -745,7 +745,7 @@
 	color: #fdfdfd;
 }
 .hexagon.hexagon-primary .hexagon-inner:hover {
-	background-color: rgba(48,113,169,0.9);
+	background-color: rgb(48,113,169);
 	color: #fdfdfd;
 }
 
@@ -755,7 +755,7 @@
 	color: #fdfdfd;
 }
 .hexagon.hexagon-success .hexagon-inner:hover {
-	background-color: rgba(68,157,68,0.9);
+	background-color: rgb(68,157,68);
 	color: #fdfdfd;
 }
 
@@ -765,7 +765,7 @@
 	color: #fdfdfd;
 }
 .hexagon.hexagon-warning .hexagon-inner:hover {
-	background-color: rgba(236,151,31,0.9);
+	background-color: rgb(236,151,31);
 	color: #fdfdfd;
 }
 
@@ -775,6 +775,6 @@
 	color: #fdfdfd;
 }
 .hexagon.hexagon-disable .hexagon-inner:hover {
-	background-color: rgba(173,173,173,0.9);
+	background-color: rgb(173,173,173);
 	color: #fdfdfd;
 }
