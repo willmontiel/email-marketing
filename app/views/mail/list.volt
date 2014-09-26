@@ -43,9 +43,9 @@
 {#   parcial paginacion   #}	
 {{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
 
-<div class="row">
-	<ul class="block-list">
-		{% for item in page.items %}
+{% for item in page.items %}
+	<div class="mail-block">
+		<div class="row">
 			{# Variables para la vista inteligente#}	
 			{% if item.status == 'Sent' %}
 				{% set hexagon = 'hexagon-success' %}
@@ -73,203 +73,195 @@
 				{% set status = 'Borrador'%}
 				{% set color = "black" %}
 			{% endif %}
-			<li>
-				<div class="mail-block">
-					<table class="table-list">
-						<tr>
-							<td class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-								<div class="hexagon hexagon-sm {{hexagon}}">
-									<div class="hexagon-wrap">
-										{% if item.status == 'Sent' %}
-											<a href="{{url('statistic/mail')}}/{{item.idMail}}" class="hexagon-inner toolTip">
-										{% elseif item.status == 'Draft' %}
-											<a href="{{url('mail/compose')}}/{{item.idMail}}" class="hexagon-inner toolTip">
-										{% else %}
-											<a href="javascript.void(0);" class="hexagon-inner toolTip">
-										{% endif %}
-												<i class="{{icon}}"></i>
-											</a>
-									</div>
-								</div>
-							</td>
-							<td class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-								<div class="mail-info">
-									<div class="mail-name">
-										{% if item.status == 'Sent' %}
-											<a href="{{url('statistic/mail')}}/{{item.idMail}}">{{item.name}}</a>
-										{% elseif item.status == 'Draft' %}
-											<a href="{{url('mail/compose')}}/{{item.idMail}}">{{item.name}}</a>
-										{% else %}
-											{{item.name}}
-										{% endif %}
-									</div>
-									
-									<div class="mail-detail {{color}}">{{status}}</div>
-									<div class="mail-detail" style="color: #777;">
-										Creado el {{date('d/M/Y g:i a', item.createdon)}} 
-									</div>
-								</div>
-							</td>
-							
-							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-								{%if item.status == 'Sent'%}
-									<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
-										<dt class="blue medium-indicator">Destinatarios</dt>
-										<dd class="blue medium-indicator">{{item.totalContacts|numberf}}</dd>
-
-										<dt class="green medium-indicator">Aperturas</dt>
-										<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
-
-										<dt class="red medium-indicator">Rebotes</dt>
-										<dd class="red medium-indicator">{{item.bounced|numberf}} </dd>
-									</dl>
-								{%endif%}
-							</td>
-							
-							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right">
-								{%if item.status == 'Scheduled'%}
-									<button class="ShowDialogEditScheduled btn btn-sm btn-default tooltip-b3" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}" data-placement="top" title="Pausar este correo">
-										<span class="glyphicon glyphicon-pause"></span>
-									</button>
-								{%endif%}
-									
-								{% for value in mail_options(item) %}
-									<a class="btn btn-sm btn-default" href="{{ url(value.url) }}{{item.idMail}}">
-										<span class="{{value.icon}}"></span>
-									</a>
-								{% endfor %}
-									
-									<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default tooltip-b3" data-placement="top" title="Duplicar correo">
-										<span class="glyphicon glyphicon-flash"></span>
-									</a>
-									
-								{% if item.type == 'Editor'%}
-									<a class="ShowDialogTemplate btn btn-sm btn-default tooltip-b3" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}" data-placement="top" title="Crear una plantilla a partir de este correo">
-										<span class="glyphicon glyphicon-text-width"></span>
-									</a>
-								{%endif%}
-									
-								{%if item.status == 'Sent'%}
-									<a class="btn btn-sm btn-default tooltip-b3" href="{{url('statistic/mail')}}/{{item.idMail}}" data-placement="top" title="Ver estadísticas">
-										<span class="glyphicon glyphicon-stats"></span>
-									</a>
-									{#
-									<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadísticas</button>
-									#}
-								{%endif%}
-								<a href="#preview-modal" class="btn btn-sm btn-default tooltip-b3" data-toggle="modal" onClick="verPreview({{item.idMail}});" data-placement="top" title="Ver previsualización">
-									<span class="glyphicon glyphicon-eye-open"></span>
-								</a>
-								
-								<button class="btn btn-sm btn-default tooltip-b3" data-toggle="collapse" data-target="#preview{{item.idMail}}" data-placement="top" title="Ver detalles">
-									<span class="glyphicon glyphicon-collapse-down"></span>
-								</button>	
-									
-								<button class="ShowDialog btn btn-sm btn-default btn-delete tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}" data-placement="top" title="Eliminar correo">
-									<span class="glyphicon glyphicon-trash"></span>
-								</button>
-							</td>
-						</tr>
-					</table>
-					<div id="preview{{item.idMail}}" class="collapse">
-						<hr>
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
-							
-							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-								<div style="font-size: 1.3em; font-weight: 600;">Detalles</div><br />
-								<div class="preview-mail img-wrap">
-									<div class="not-available">
-								{% if item.previewData == null%}
-										<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
-										<label>Previsualización no disponible</label>
-								{% else %}
-										<img src="data: image/png;base64, {{item.previewData}}" />
-								{% endif %}	
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5" style="margin-top: 45px;">
-								<div class="panel panel-default">
-									<div class="panel-heading">
-										<h3 class="panel-title">Datos del correo</h3>
-									</div>
-									<div class="panel-body">
-										<table class="table-list">
-											<thead></thead>
-											<tbody>
-												{%if item.status == 'Sent'%}
-													<tr>
-														<td>Fecha de envío</td>
-														<td>{{date('d/M/Y g:i a', item.startedon)}}</td>
-													</tr>
-												{%elseif item.status == 'Scheduled'%}
-													<tr>
-														<td>Fecha de programación</td>
-														<td>Programado para el {{date('d/M/Y g:i a', item.scheduleDate)}}</td>
-													</tr>
-												{%endif%}
-												
-												<tr>
-													<td>Estado</td>
-													<td>{{status}}</td>
-												</tr>
-												<tr>
-													<td>Asunto</td>
-													<td>{{item.subject}}</td>
-												</tr>
-												<tr>
-													<td>Remitente</td>
-													<td>{{item.fromName}}&lt;{{item.fromEmail}}&gt;</td>
-												</tr>
-												<tr>
-													<td>Responder a</td>
-													<td>{{item.replyTo}}</td>
-												</tr>
-												<tr>
-													<td>Tipo</td>
-													<td>{{item.type}}</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" style="margin-top: 45px;">
-								{%if item.status == 'Sent'%}
-									<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
-										<dt class="blue medium-indicator">Destinatarios</dt>
-										<dd class="blue medium-indicator">{{item.messagesSent|numberf}}</dd>
-
-										<dt class="green medium-indicator">Aperturas</dt>
-										<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
-
-										<dt class="gray medium-indicator">Clicks</dt> 
-										<dd class="gray medium-indicator">{{item.clicks|numberf}} </dd>
-
-										<dt class="orange medium-indicator">Rebotes</dt>
-										<dd class="orange medium-indicator">{{item.bounced|numberf}} </dd>
-										
-										<dt class="red medium-indicator">Quejas de spam</dt>
-										<dd class="red medium-indicator">{{item.spam|numberf}} </dd>
-										
-										<dt class="gray medium-indicator">Des-suscritos</dt>
-										<dd class="gray medium-indicator">{{item.unsubscribed|numberf}} </dd>
-									</dl>
-								{%endif%}
-							</div>
-						</div>
-					</div>	
+			
+			<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+				<div class="hexagon hexagon-sm {{hexagon}}">
+					<div class="hexagon-wrap">
+						{% if item.status == 'Sent' %}
+							<a href="{{url('statistic/mail')}}/{{item.idMail}}" class="hexagon-inner toolTip">
+						{% elseif item.status == 'Draft' %}
+							<a href="{{url('mail/compose')}}/{{item.idMail}}" class="hexagon-inner toolTip">
+						{% else %}
+							<a href="javascript.void(0);" class="hexagon-inner toolTip">
+						{% endif %}
+								<i class="{{icon}}"></i>
+							</a>
+					</div>
 				</div>
-			</li>
-		{% endfor %}
-	</ul>
-</div>
+			</div>
+		
+			<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+				<div class="mail-info">
+					<div class="mail-name">
+						{% if item.status == 'Sent' %}
+							<a href="{{url('statistic/mail')}}/{{item.idMail}}">{{item.name}}</a>
+						{% elseif item.status == 'Draft' %}
+							<a href="{{url('mail/compose')}}/{{item.idMail}}">{{item.name}}</a>
+						{% else %}
+							{{item.name}}
+						{% endif %}
+					</div>
 
-<div class="space"></div>
+					<div class="mail-detail {{color}}">{{status}}</div>
+					<div class="mail-detail" style="color: #777;">
+						Creado el {{date('d/M/Y g:i a', item.createdon)}} 
+					</div>
+				</div>
+			</div>
+		
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+				{%if item.status == 'Sent'%}
+					<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
+						<dt class="blue medium-indicator">Destinatarios</dt>
+						<dd class="blue medium-indicator">{{item.totalContacts|numberf}}</dd>
 
+						<dt class="green medium-indicator">Aperturas</dt>
+						<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
+
+						<dt class="red medium-indicator">Rebotes</dt>
+						<dd class="red medium-indicator">{{item.bounced|numberf}} </dd>
+					</dl>
+				{%endif%}
+			</div>
+		
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right">
+				{%if item.status == 'Scheduled'%}
+					<button class="ShowDialogEditScheduled btn btn-sm btn-default tooltip-b3" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}" data-placement="top" title="Pausar este correo">
+						<span class="glyphicon glyphicon-pause"></span>
+					</button>
+				{%endif%}
+
+				{% for value in mail_options(item) %}
+					<a class="btn btn-sm btn-default" href="{{ url(value.url) }}{{item.idMail}}">
+						<span class="{{value.icon}}"></span>
+					</a>
+				{% endfor %}
+
+					<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default tooltip-b3" data-placement="top" title="Duplicar correo">
+						<span class="glyphicon glyphicon-flash"></span>
+					</a>
+
+				{% if item.type == 'Editor'%}
+					<a class="ShowDialogTemplate btn btn-sm btn-default tooltip-b3" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}" data-placement="top" title="Crear una plantilla a partir de este correo">
+						<span class="glyphicon glyphicon-text-width"></span>
+					</a>
+				{%endif%}
+
+				{%if item.status == 'Sent'%}
+					<a class="btn btn-sm btn-default tooltip-b3" href="{{url('statistic/mail')}}/{{item.idMail}}" data-placement="top" title="Ver estadísticas">
+						<span class="glyphicon glyphicon-stats"></span>
+					</a>
+					{#
+					<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadísticas</button>
+					#}
+				{%endif%}
+				<a href="#preview-modal" class="btn btn-sm btn-default tooltip-b3" data-toggle="modal" onClick="verPreview({{item.idMail}});" data-placement="top" title="Ver previsualización">
+					<span class="glyphicon glyphicon-eye-open"></span>
+				</a>
+
+				<button class="btn btn-sm btn-default tooltip-b3" data-toggle="collapse" data-target="#preview{{item.idMail}}" data-placement="top" title="Ver detalles">
+					<span class="glyphicon glyphicon-collapse-down"></span>
+				</button>	
+
+				<button class="ShowDialog btn btn-sm btn-default btn-delete tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}" data-placement="top" title="Eliminar correo">
+					<span class="glyphicon glyphicon-trash"></span>
+				</button>
+			</div>
+		</div>
+						
+		<div id="preview{{item.idMail}}" class="collapse row">
+			<hr>				
+			<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<div style="font-size: 1.3em; font-weight: 600;">Detalles</div><br />
+				<div class="preview-mail img-wrap">
+					<div class="not-available">
+				{% if item.previewData == null%}
+						<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+						<label>Previsualización no disponible</label>
+				{% else %}
+						<img src="data: image/png;base64, {{item.previewData}}" />
+				{% endif %}	
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5" style="margin-top: 45px;">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Datos del correo</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table-list">
+							<thead></thead>
+							<tbody>
+								{%if item.status == 'Sent'%}
+									<tr>
+										<td>Fecha de envío</td>
+										<td>{{date('d/M/Y g:i a', item.startedon)}}</td>
+									</tr>
+								{%elseif item.status == 'Scheduled'%}
+									<tr>
+										<td>Fecha de programación</td>
+										<td>Programado para el {{date('d/M/Y g:i a', item.scheduleDate)}}</td>
+									</tr>
+								{%endif%}
+
+								<tr>
+									<td>Estado</td>
+									<td>{{status}}</td>
+								</tr>
+								<tr>
+									<td>Asunto</td>
+									<td>{{item.subject}}</td>
+								</tr>
+								<tr>
+									<td>Remitente</td>
+									<td>{{item.fromName}}&lt;{{item.fromEmail}}&gt;</td>
+								</tr>
+								<tr>
+									<td>Responder a</td>
+									<td>{{item.replyTo}}</td>
+								</tr>
+								<tr>
+									<td>Tipo</td>
+									<td>{{item.type}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" style="margin-top: 45px;">
+				{%if item.status == 'Sent'%}
+					<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
+						<dt class="blue medium-indicator">Destinatarios</dt>
+						<dd class="blue medium-indicator">{{item.messagesSent|numberf}}</dd>
+
+						<dt class="green medium-indicator">Aperturas</dt>
+						<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
+
+						<dt class="gray medium-indicator">Clicks</dt> 
+						<dd class="gray medium-indicator">{{item.clicks|numberf}} </dd>
+
+						<dt class="orange medium-indicator">Rebotes</dt>
+						<dd class="orange medium-indicator">{{item.bounced|numberf}} </dd>
+
+						<dt class="red medium-indicator">Quejas de spam</dt>
+						<dd class="red medium-indicator">{{item.spam|numberf}} </dd>
+
+						<dt class="gray medium-indicator">Des-suscritos</dt>
+						<dd class="gray medium-indicator">{{item.unsubscribed|numberf}} </dd>
+					</dl>
+				{%endif%}
+			</div>
+		</div>					
+	</div>
+	<div class="small-space"></div>
+{% endfor %}
+	<div class="space"></div>
 		<!-- Lista de mis correos -->
 		{% if page.items|length != 0%}
 			<div class="row">

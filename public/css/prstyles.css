@@ -596,14 +596,17 @@
 }
 
 .block-list {
-	margin-left: -55px;
-	list-style: none;
+	/*margin-left: -55px;*/
+	/*list-style: none;*/
 }
 
 .block-list > li{
 	margin-bottom: 10px;
 }
 
+.small-space {
+	margin: 14px 0;
+}
 .mail-block {
 	background-color: transparent;
 	padding-left: 15px;
