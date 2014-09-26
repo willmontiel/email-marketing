@@ -171,33 +171,91 @@
 					</table>
 					<div id="preview{{item.idMail}}" class="collapse">
 						<hr>
-						<table class="table-list">
-							<tr>
-								<td>
-									<div class="preview-mail img-wrap">
-										<div class="not-available">
-									{% if item.previewData == null%}
-											<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
-											<label>Previsualización no disponible</label>
-									{% else %}
-											<img src="data: image/png;base64, {{item.previewData}}" />
-									{% endif %}	
-										</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+							
+							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+								<div style="font-size: 1.3em; font-weight: 600;">Detalles</div><br />
+								<div class="preview-mail img-wrap">
+									<div class="not-available">
+								{% if item.previewData == null%}
+										<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+										<label>Previsualización no disponible</label>
+								{% else %}
+										<img src="data: image/png;base64, {{item.previewData}}" />
+								{% endif %}	
 									</div>
-								</td>
-								<td>
-									{%if item.status == 'Sent'%}
-										<div class="mail-detail">
-											Enviado el {{date('d/M/Y g:i a', item.startedon)}}
-										</div>
-									{%elseif item.status == 'Scheduled'%}
-										<div class="mail-detail">
-											Programado para el {{date('d/M/Y g:i a', item.scheduleDate)}}
-										</div>
-									{%endif%}
-								</td>
-							</tr>
-						</table>
+								</div>
+							</div>
+							
+							<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5" style="margin-top: 45px;">
+								{%if item.status == 'Sent'%}
+									<div class="mail-detail">
+										Enviado el {{date('d/M/Y g:i a', item.startedon)}}
+									</div>
+								{%elseif item.status == 'Scheduled'%}
+									<div class="mail-detail">
+										Programado para el {{date('d/M/Y g:i a', item.scheduleDate)}}
+									</div>
+								{%endif%}
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h3 class="panel-title">Datos del correo</h3>
+									</div>
+									<div class="panel-body">
+										<table class="table-list">
+											<thead></thead>
+											<tbody>
+												<tr>
+													<td>Estado</td>
+													<td>{{status}}</td>
+												</tr>
+												<tr>
+													<td>Asunto</td>
+													<td>{{item.subject}}</td>
+												</tr>
+												<tr>
+													<td>Remitente</td>
+													<td>{{item.fromName}}&lt;{{item.fromEmail}}&gt;</td>
+												</tr>
+												<tr>
+													<td>Responder a</td>
+													<td>{{item.replyTo}}</td>
+												</tr>
+												<tr>
+													<td>Tipo</td>
+													<td>{{item.type}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" style="margin-top: 45px;">
+								{%if item.status == 'Sent'%}
+									<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
+										<dt class="blue medium-indicator">Destinatarios</dt>
+										<dd class="blue medium-indicator">{{item.messagesSent|numberf}}</dd>
+
+										<dt class="green medium-indicator">Aperturas</dt>
+										<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
+
+										<dt class="gray medium-indicator">Clicks</dt> 
+										<dd class="gray medium-indicator">{{item.clicks|numberf}} </dd>
+
+										<dt class="orange medium-indicator">Rebotes</dt>
+										<dd class="orange medium-indicator">{{item.bounced|numberf}} </dd>
+										
+										<dt class="red medium-indicator">Quejas de spam</dt>
+										<dd class="red medium-indicator">{{item.spam|numberf}} </dd>
+										
+										<dt class="gray medium-indicator">Des-suscritos</dt>
+										<dd class="gray medium-indicator">{{item.unsubscribed|numberf}} </dd>
+									</dl>
+								{%endif%}
+							</div>
+						</div>
 					</div>	
 				</div>
 			</li>
