@@ -189,15 +189,6 @@
 							</div>
 							
 							<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5" style="margin-top: 45px;">
-								{%if item.status == 'Sent'%}
-									<div class="mail-detail">
-										Enviado el {{date('d/M/Y g:i a', item.startedon)}}
-									</div>
-								{%elseif item.status == 'Scheduled'%}
-									<div class="mail-detail">
-										Programado para el {{date('d/M/Y g:i a', item.scheduleDate)}}
-									</div>
-								{%endif%}
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h3 class="panel-title">Datos del correo</h3>
@@ -206,6 +197,18 @@
 										<table class="table-list">
 											<thead></thead>
 											<tbody>
+												{%if item.status == 'Sent'%}
+													<tr>
+														<td>Fecha de envío</td>
+														<td>{{date('d/M/Y g:i a', item.startedon)}}</td>
+													</tr>
+												{%elseif item.status == 'Scheduled'%}
+													<tr>
+														<td>Fecha de programación</td>
+														<td>Programado para el {{date('d/M/Y g:i a', item.scheduleDate)}}</td>
+													</tr>
+												{%endif%}
+												
 												<tr>
 													<td>Estado</td>
 													<td>{{status}}</td>
