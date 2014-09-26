@@ -86,14 +86,12 @@
 								<div class="mail-info">
 									<div class="mail-name">
 										{% if item.status == 'Sent' %}
-											<a href="{{url('statistic/mail')}}/{{item.idMail}}">
+											<a href="{{url('statistic/mail')}}/{{item.idMail}}">{{item.name}}</a>
 										{% elseif item.status == 'Draft' %}
-											<a href="{{url('mail/compose')}}/{{item.idMail}}">
+											<a href="{{url('mail/compose')}}/{{item.idMail}}">{{item.name}}</a>
 										{% else %}
-											<a href="javascript.void(0);">
+											{{item.name}}
 										{% endif %}
-												{{item.name}}
-											</a>
 									</div>
 									
 									<div class="mail-detail">
@@ -112,7 +110,7 @@
 							
 							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 								{%if item.status == 'Sent'%}
-									<dl class="dl-horizontal">
+									<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 20px !important;">
 										<dt class="blue medium-indicator">Destinatarios</dt>
 										<dd class="blue medium-indicator">{{item.totalContacts|numberf}}</dd>
 
