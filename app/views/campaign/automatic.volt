@@ -4,6 +4,16 @@
 	{# bootstrap switch master B3 #}
 	{{ stylesheet_link('bootstrap-switch-master/bootstrap-switch.css')}}
 	{{ javascript_include('bootstrap-switch-master/bootstrap-switch.js')}}
+
+	<script type="text/javascript">
+		var urlBase = "{{url('')}}";
+		{%if autoresponse.target is defined%}
+			var serializerObject = {{autoresponse.target}};
+		{%else%}
+			var serializerObject = null;
+		{%endif%}
+	</script>
+	
 	{{ javascript_include('js/campaign/automatic.js')}}
 	
 	{# Select2 master#}
@@ -12,17 +22,6 @@
 
 	{# Selección de destinatarios #}
 	{{ partial('partials/target_selection_partial') }}
-	<script type="text/javascript">
-		var urlBase = "{{url('')}}";
-		var serializerObject = null;
-		$(function (){
-			var panelContainer = new PanelContainer('#panel-container');		
-			var model = new Model();
-			model.setPanelContainer(panelContainer);
-			model.setSerializerObject(serializerObject);
-			model.serializer();
-		});
-	</script>
 	
 	<script type="text/javascript"> 
 		$(function (){
@@ -42,12 +41,6 @@
 				{%if autoresponse.from is defined%}
 					$('#from_email').val('{{autoresponse.from.email}}');
 					$('#from_name').val('{{autoresponse.from.name}}');
-				{%endif%}
-					
-				{%if autoresponse.target is defined%}
-					$("input[value='{{autoresponse.target.destination}}']").attr('checked', true);
-					$("#{{autoresponse.target.destination}}").addClass('target_active');
-					$("#{{autoresponse.target.destination}}").find('select').attr('name', 'target_selected[]');
 				{%endif%}
 					
 				{%if autoresponse.subject.text == 'Meta Tag'%}
@@ -101,7 +94,7 @@
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			<div class="panel" style="box-shadow: 2px 2px 5px 0px #afafaf;">
-				<form class="form-horizontal"  action="{%if autoresponse is defined%} {{url('campaign/automatic')}}/{{autoresponse.idAutoresponder}} {%else%} {{url('campaign/automatic')}} {%endif%}" method="post"  role="form">
+				<form id="autosend_form" class="form-horizontal"  action="{%if autoresponse is defined%} {{url('campaign/automatic')}}/{{autoresponse.idAutoresponder}} {%else%} {{url('campaign/automatic')}} {%endif%}" method="post"  role="form">
 				
 					<div class="panel-header panel-heading box-header">
 						<div class="box-title">Nueva autorespuesta en el tiempo</div>
@@ -128,6 +121,7 @@
 									</div>
 								</div>
 							</div>
+							<input class="form-control" type="hidden" name="target">
 						</div>
 
 						<div class="form-group">
@@ -170,7 +164,7 @@
 								<input class="form-control" placeholder="Pegar dirección de enlace aqui" type="text" name="content" required="required" {%if autoresponse is defined%} value="{{autoresponse.content.url}}" {%endif%}>
 							</div>
 							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-								<a onclick="previewAutoSend();" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
+								<a onclick="previewAutoSend();" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>
 							</div>
 						</div>
 

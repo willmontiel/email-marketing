@@ -123,18 +123,7 @@ class AutoSendingConverter
 			$obj->subject = $subject->text;
 		}
 		
-		$obj->dbases = '';
-		$obj->contactlists = '';
-		$obj->segments = '';
-		
-		$obj->filterByEmail = '';
-		$obj->filterByOpen = '';
-		$obj->filterByClick = '';
-		$obj->filterByExclude = '';
-		
-		$target = json_decode($this->autoresponder->target);
-		$destination = $target->destination;
-		$obj->$destination = $target->ids;
+		$obj->target = $this->autoresponder->target;
 		
 		return $obj;
 	}
