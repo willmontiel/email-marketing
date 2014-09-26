@@ -616,7 +616,7 @@
 
 .mail-block:hover {
 	background-color: rgba(51,51,51,0.1);
-	cursor: pointer;
+	/*cursor: pointer;*/
 }
 
 .mail-info {
@@ -736,50 +736,50 @@
 
 /*Red*/
 .hexagon.hexagon-danger .hexagon-inner {
-	background-color: rgba(271,83,79,0.45);
+	background-color: rgb(271,83,79);
 	color: #fdfdfd;
 }
 .hexagon.hexagon-danger .hexagon-inner:hover {
-	background-color: rgb(271,83,79);
+	background-color: rgba(271,83,79,0.45);
 	color: #fdfdfd;
 }
 
 /*Blue*/
 .hexagon.hexagon-primary .hexagon-inner {
-	background-color: rgba(48,113,169,0.45);
+	background-color: rgb(48,113,169);
 	color: #fdfdfd;
 }
 .hexagon.hexagon-primary .hexagon-inner:hover {
-	background-color: rgb(48,113,169);
+	background-color: rgba(48,113,169,0.45);
 	color: #fdfdfd;
 }
 
 /*Green*/
 .hexagon.hexagon-success .hexagon-inner {
-	background-color: rgba(68,157,68,0.45);
+	background-color: rgb(68,157,68);
 	color: #fdfdfd;
 }
 .hexagon.hexagon-success .hexagon-inner:hover {
-	background-color: rgb(68,157,68);
+	background-color: rgba(68,157,68,0.45);
 	color: #fdfdfd;
 }
 
 /*Orange*/
 .hexagon.hexagon-warning .hexagon-inner {
-	background-color: rgba(236,151,31,0.45);
+	background-color: rgb(236,151,31);
 	color: #fdfdfd;
 }
 .hexagon.hexagon-warning .hexagon-inner:hover {
-	background-color: rgb(236,151,31);
+	background-color: rgba(236,151,31,0.45);
 	color: #fdfdfd;
 }
 
 /*Gris*/
 .hexagon.hexagon-disable .hexagon-inner {
-	background-color: rgba(173,173,173,0.45);
+	background-color: rgb(173,173,173);
 	color: #fdfdfd;
 }
 .hexagon.hexagon-disable .hexagon-inner:hover {
-	background-color: rgb(173,173,173);
+	background-color: rgba(173,173,173,0.45);
 	color: #fdfdfd;
 }

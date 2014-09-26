@@ -50,18 +50,23 @@
 			{% if item.status == 'Sent' %}
 				{% set hexagon = 'hexagon-success' %}
 				{% set icon = 'glyphicon glyphicon-ok'%}
+				{% set status = 'Enviado'%}
 			{% elseif item.status == 'Pending' OR item.status == 'Paused'%}
 				{% set hexagon = 'hexagon-warning' %}
 				{% set icon = 'glyphicon glyphicon-pause'%}
+				{% set status = 'Pendiente'%}
 			{% elseif item.status == 'Cancelled' %}
 				{% set hexagon = 'hexagon-danger' %}
 				{% set icon = 'glyphicon glyphicon-warning-sign'%}
+				{% set status = 'Cancelado'%}
 			{% elseif item.status == 'Scheduled' %}
 				{% set hexagon = 'hexagon-primary' %}
 				{% set icon = 'glyphicon glyphicon-list-alt'%}
+				{% set status = 'Programado'%}
 			{% else %}
 				{% set hexagon = 'hexagon-disable' %}
 				{% set icon = 'glyphicon glyphicon-edit'%}
+				{% set status = 'Borrador'%}
 			{% endif %}
 			<li>
 				<div class="mail-block">
@@ -94,20 +99,10 @@
 										{% endif %}
 									</div>
 									
-									<div class="mail-detail">{{item.status}}</div>
+									<div class="mail-detail">{{status}}</div>
 									<div class="mail-detail">
-										Creado el {{date('d/M/Y', item.createdon)}} 
+										Creado el {{date('d/M/Y g:i a', item.createdon)}} 
 									</div>
-									
-									{%if item.status == 'Sent'%}
-										<div class="mail-detail">
-											Enviado el {{date('d/M/Y, g:i a', item.startedon)}}
-										</div>
-									{%elseif item.status == 'Scheduled'%}
-										<div class="mail-detail">
-											Programado para el {{date('d/M/Y, g:i a', item.scheduleDate)}}
-										</div>
-									{%endif%}
 								</div>
 							</td>
 							
@@ -160,6 +155,13 @@
 									<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadísticas</button>
 									#}
 								{%endif%}
+								<a href="#preview-modal" class="btn btn-sm btn-default tooltip-b3" data-toggle="modal" onClick="verPreview({{item.idMail}});" data-placement="top" title="Ver previsualización">
+									<span class="glyphicon glyphicon-eye-open"></span>
+								</a>
+								
+								<button class="btn btn-sm btn-default tooltip-b3" data-toggle="collapse" data-target="#preview{{item.idMail}}" data-placement="top" title="Ver detalles">
+									<span class="glyphicon glyphicon-collapse-down"></span>
+								</button>	
 									
 								<button class="ShowDialog btn btn-sm btn-default btn-delete tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}" data-placement="top" title="Eliminar correo">
 									<span class="glyphicon glyphicon-trash"></span>
@@ -167,6 +169,36 @@
 							</td>
 						</tr>
 					</table>
+					<div id="preview{{item.idMail}}" class="collapse">
+						<hr>
+						<table class="table-list">
+							<tr>
+								<td>
+									<div class="preview-mail img-wrap">
+										<div class="not-available">
+									{% if item.previewData == null%}
+											<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+											<label>Previsualización no disponible</label>
+									{% else %}
+											<img src="data: image/png;base64, {{item.previewData}}" />
+									{% endif %}	
+										</div>
+									</div>
+								</td>
+								<td>
+									{%if item.status == 'Sent'%}
+										<div class="mail-detail">
+											Enviado el {{date('d/M/Y g:i a', item.startedon)}}
+										</div>
+									{%elseif item.status == 'Scheduled'%}
+										<div class="mail-detail">
+											Programado para el {{date('d/M/Y g:i a', item.scheduleDate)}}
+										</div>
+									{%endif%}
+								</td>
+							</tr>
+						</table>
+					</div>	
 				</div>
 			</li>
 		{% endfor %}
