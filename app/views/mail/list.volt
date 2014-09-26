@@ -51,22 +51,27 @@
 				{% set hexagon = 'hexagon-success' %}
 				{% set icon = 'glyphicon glyphicon-ok'%}
 				{% set status = 'Enviado'%}
+				{% set color = "green" %}
 			{% elseif item.status == 'Pending' OR item.status == 'Paused'%}
 				{% set hexagon = 'hexagon-warning' %}
 				{% set icon = 'glyphicon glyphicon-pause'%}
 				{% set status = 'Pendiente'%}
+				{% set color = "orange" %}
 			{% elseif item.status == 'Cancelled' %}
 				{% set hexagon = 'hexagon-danger' %}
 				{% set icon = 'glyphicon glyphicon-warning-sign'%}
 				{% set status = 'Cancelado'%}
+				{% set color = "red" %}
 			{% elseif item.status == 'Scheduled' %}
 				{% set hexagon = 'hexagon-primary' %}
 				{% set icon = 'glyphicon glyphicon-list-alt'%}
 				{% set status = 'Programado'%}
+				{% set color = "blue" %}
 			{% else %}
 				{% set hexagon = 'hexagon-disable' %}
 				{% set icon = 'glyphicon glyphicon-edit'%}
 				{% set status = 'Borrador'%}
+				{% set color = "black" %}
 			{% endif %}
 			<li>
 				<div class="mail-block">
@@ -99,8 +104,8 @@
 										{% endif %}
 									</div>
 									
-									<div class="mail-detail">{{status}}</div>
-									<div class="mail-detail">
+									<div class="mail-detail {{color}}">{{status}}</div>
+									<div class="mail-detail" style="color: #777;">
 										Creado el {{date('d/M/Y g:i a', item.createdon)}} 
 									</div>
 								</div>
@@ -114,9 +119,6 @@
 
 										<dt class="green medium-indicator">Aperturas</dt>
 										<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
-
-										<dt class="gray medium-indicator">Clicks</dt> 
-										<dd class="gray medium-indicator">{{item.clicks|numberf}} </dd>
 
 										<dt class="red medium-indicator">Rebotes</dt>
 										<dd class="red medium-indicator">{{item.bounced|numberf}} </dd>
