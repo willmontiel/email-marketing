@@ -128,8 +128,41 @@
 								{%endif%}
 							</td>
 							
-							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-							
+							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right">
+								{%if item.status == 'Scheduled'%}
+									<button class="ShowDialogEditScheduled btn btn-sm btn-default" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">
+										<span class="glyphicon glyphicon-pause"></span>
+									</button>
+								{%endif%}
+									
+								{% for value in mail_options(item) %}
+									<a class="btn btn-sm btn-default" href="{{ url(value.url) }}{{item.idMail}}">
+										<span class="{{value.icon}}"></span>
+									</a>
+								{% endfor %}
+									
+									<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default">
+										<span class="glyphicon glyphicon-flash"></span>
+									</a>
+									
+								{% if item.type == 'Editor'%}
+									<a class="ShowDialogTemplate btn btn-sm btn-default" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}">
+										<span class="glyphicon glyphicon-text-width"></span>
+									</a>
+								{%endif%}
+									
+								{%if item.status == 'Sent'%}
+									<a class="btn btn-sm btn-default" href="{{url('statistic/mail')}}/{{item.idMail}}">
+										<span class="glyphicon glyphicon-stats"></span>
+									</a>
+									{#
+									<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadísticas</button>
+									#}
+								{%endif%}
+									
+								<button class="ShowDialog btn btn-sm btn-default btn-delete" data-toggle="modal tooltip" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}" data-placement="top" title="Eliminar correo">
+									<span class="glyphicon glyphicon-trash"></span>
+								</button>
 							</td>
 						</tr>
 					</table>
