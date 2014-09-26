@@ -128,7 +128,7 @@
 
 				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right">
 					{%if item.status == 'Scheduled'%}
-						<button class="ShowDialogEditScheduled btn btn-sm btn-default tooltip-b3" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}" data-placement="top" title="Pausar este correo">
+						<button class="ShowDialogEditScheduled btn btn-sm btn-warning tooltip-b3" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}" data-placement="top" title="Pausar este correo">
 							<span class="glyphicon glyphicon-pause"></span>
 						</button>
 					{%endif%}
