@@ -642,6 +642,11 @@
 	width: 100%;
 }
 
+.medium-indicator {
+	font-size: 0.9em;
+	font-weight: 600;
+}
+
 .avatar-hexagon-header {
 	width: 0;
 	border-bottom: 15px solid #6C6;

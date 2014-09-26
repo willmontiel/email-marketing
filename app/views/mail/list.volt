@@ -113,24 +113,24 @@
 							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 								{%if item.status == 'Sent'%}
 									<dl class="dl-horizontal">
-										<dt class="blue">Destinatarios</dt>
-										<dd class="blue">{{item.totalContacts|numberf}}</dd>
+										<dt class="blue medium-indicator">Destinatarios</dt>
+										<dd class="blue medium-indicator">{{item.totalContacts|numberf}}</dd>
 
-										<dt class="green">Aperturas</dt>
-										<dd class="green">{{item.uniqueOpens|numberf}} </dd>
+										<dt class="green medium-indicator">Aperturas</dt>
+										<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
 
-										<dt class="gray">Clicks</dt> 
-										<dd class="gray">{{item.clicks|numberf}} </dd>
+										<dt class="gray medium-indicator">Clicks</dt> 
+										<dd class="gray medium-indicator">{{item.clicks|numberf}} </dd>
 
-										<dt class="red">Rebotes</dt>
-										<dd class="red">{{item.bounced|numberf}} </dd>
+										<dt class="red medium-indicator">Rebotes</dt>
+										<dd class="red medium-indicator">{{item.bounced|numberf}} </dd>
 									</dl>
 								{%endif%}
 							</td>
 							
 							<td class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right">
 								{%if item.status == 'Scheduled'%}
-									<button class="ShowDialogEditScheduled btn btn-sm btn-default" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">
+									<button class="ShowDialogEditScheduled btn btn-sm btn-default tooltip-b3" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}" data-placement="top" title="Pausar este correo">
 										<span class="glyphicon glyphicon-pause"></span>
 									</button>
 								{%endif%}
@@ -141,18 +141,18 @@
 									</a>
 								{% endfor %}
 									
-									<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default">
+									<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default tooltip-b3" data-placement="top" title="Duplicar correo">
 										<span class="glyphicon glyphicon-flash"></span>
 									</a>
 									
 								{% if item.type == 'Editor'%}
-									<a class="ShowDialogTemplate btn btn-sm btn-default" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}">
+									<a class="ShowDialogTemplate btn btn-sm btn-default tooltip-b3" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}" data-placement="top" title="Crear una plantilla a partir de este correo">
 										<span class="glyphicon glyphicon-text-width"></span>
 									</a>
 								{%endif%}
 									
 								{%if item.status == 'Sent'%}
-									<a class="btn btn-sm btn-default" href="{{url('statistic/mail')}}/{{item.idMail}}">
+									<a class="btn btn-sm btn-default tooltip-b3" href="{{url('statistic/mail')}}/{{item.idMail}}" data-placement="top" title="Ver estadísticas">
 										<span class="glyphicon glyphicon-stats"></span>
 									</a>
 									{#
@@ -160,7 +160,7 @@
 									#}
 								{%endif%}
 									
-								<button class="ShowDialog btn btn-sm btn-default btn-delete" data-toggle="modal tooltip" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}" data-placement="top" title="Eliminar correo">
+								<button class="ShowDialog btn btn-sm btn-default btn-delete tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}" data-placement="top" title="Eliminar correo">
 									<span class="glyphicon glyphicon-trash"></span>
 								</button>
 							</td>

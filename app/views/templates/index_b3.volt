@@ -162,7 +162,7 @@
 		<!-- Tooltips -->
 		<script type="text/javascript">
 			$(function() {
-				$('a[data-toggle="tooltip"]').tooltip();
+				$('.tooltip-b3').tooltip();
 			});
 		</script>
     </body>
