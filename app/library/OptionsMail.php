@@ -36,22 +36,22 @@ class OptionsMail
 		
 		switch ($option) {
 			case 'Reanudar':
-				$object->text = "Reanudar";
+				$object->text = "Reanudar el envío de este correo";
 				$object->url = "mail/play/";
 				$object->icon = "glyphicon glyphicon-play";
 				break;
 			case 'Editar':
-				$object->text = "Editar";
+				$object->text = "Editar este correo";
 				$object->url = "mail/compose/";
 				$object->icon = "glyphicon glyphicon-edit";
 				break;
 			case 'Detener':
-				$object->text = "Detener";
+				$object->text = "Detener el envío de este correo";
 				$object->url = "mail/stop/index/";
 				$object->icon = "glyphicon glyphicon-stop";
 				break;
 			case 'Cancelar':
-				$object->text = "Cancelar";
+				$object->text = "Cancelar el envío de este correo";
 				$object->url = "mail/cancel/";
 				$object->icon = "glyphicon glyphicon-exclamation-sign";
 				break;
