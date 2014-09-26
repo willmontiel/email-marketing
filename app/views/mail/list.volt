@@ -134,7 +134,7 @@
 					{%endif%}
 
 					{% for value in mail_options(item) %}
-						<a class="btn btn-sm btn-default" href="{{ url(value.url) }}{{item.idMail}}" data-placement="top" title="{{value.text}}">
+						<a class="btn btn-sm btn-default tooltip-b3" href="{{ url(value.url) }}{{item.idMail}}" data-placement="top" title="{{value.text}}">
 							<span class="{{value.icon}}"></span>
 						</a>
 					{% endfor %}
@@ -157,15 +157,15 @@
 						<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadísticas</button>
 						#}
 					{%endif%}
-					<a href="#preview-modal" class="btn btn-sm btn-default tooltip-b3" data-toggle="modal" onClick="verPreview({{item.idMail}});" data-placement="top" title="Ver previsualización">
+					<a href="#preview-modal" class="btn btn-sm btn-primary tooltip-b3" data-toggle="modal" onClick="verPreview({{item.idMail}});" data-placement="top" title="Ver previsualización">
 						<span class="glyphicon glyphicon-eye-open"></span>
 					</a>
 
-					<button class="btn btn-sm btn-default tooltip-b3" data-toggle="collapse" data-target="#preview{{item.idMail}}" data-placement="top" title="Ver detalles">
+					<button class="btn btn-sm btn btn-info tooltip-b3" data-toggle="collapse" data-target="#preview{{item.idMail}}" data-placement="top" title="Ver detalles">
 						<span class="glyphicon glyphicon-collapse-down"></span>
 					</button>	
 
-					<button class="ShowDialog btn btn-sm btn-default btn-delete tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}" data-placement="top" title="Eliminar correo">
+					<button class="ShowDialog btn btn-sm btn btn-danger tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}" data-placement="top" title="Eliminar correo">
 						<span class="glyphicon glyphicon-trash"></span>
 					</button>
 				</div>
@@ -197,7 +197,25 @@
 							<div class="widget-body {{color}}">{{status}}</div>	
 						</div>
 					</div>
-
+						
+					{%if item.status == 'Sent'%}
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-send"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Fecha de envío</div>	
+								<div class="widget-body">{{date('d/M/Y g:i a', item.startedon)}}</div>	
+							</div>
+						</div>
+					{%elseif item.status == 'Scheduled'%}
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-calendar"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Fecha de programación</div>	
+								<div class="widget-body">{{date('d/M/Y g:i a', item.scheduleDate)}}</div>	
+							</div>
+						</div>
+					{%endif%}
+						
 					<div class="small-widget">
 						<div class="widget-icon"><span class="glyphicon glyphicon-tag"></span></div>
 						<div class="widget-content">
@@ -240,8 +258,8 @@
 				</div>
 
 				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" style="margin-top: 45px;">
-					<div class="small-widget">
-						{%if item.status == 'Sent'%}
+					{%if item.status == 'Sent'%}
+						<div class="small-widget">
 							<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
 								<dt class="blue">Destinatarios</dt>
 								<dd class="blue">{{item.messagesSent|numberf}}</dd>
@@ -261,8 +279,8 @@
 								<dt class="gray">Des-suscritos</dt>
 								<dd class="gray">{{item.unsubscribed|numberf}} </dd>
 							</dl>
-						{%endif%}
-					</div>
+						</div>
+					{%endif%}
 				</div>
 			</div>	
 			<div class="small-space"></div>
