@@ -174,7 +174,7 @@
 			<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
 
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-				<div style="font-size: 1.3em; font-weight: 600;">Detalles</div><br />
+				<div style="font-size: 1.3em; font-weight: 600; color: #777;">Detalles</div><br />
 				<div class="preview-mail img-wrap">
 					<div class="not-available">
 				{% if item.previewData == null%}
@@ -188,76 +188,82 @@
 			</div>
 
 			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5" style="margin-top: 45px;">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">Datos del correo</h3>
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-cog"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Estado</div>	
+						<div class="widget-body {{color}}">{{status}}</div>	
 					</div>
-					<div class="panel-body">
-						<table class="table-list">
-							<thead></thead>
-							<tbody>
-								{%if item.status == 'Sent'%}
-									<tr>
-										<td>Fecha de envío</td>
-										<td>{{date('d/M/Y g:i a', item.startedon)}}</td>
-									</tr>
-								{%elseif item.status == 'Scheduled'%}
-									<tr>
-										<td>Fecha de programación</td>
-										<td>Programado para el {{date('d/M/Y g:i a', item.scheduleDate)}}</td>
-									</tr>
-								{%endif%}
-
-								<tr>
-									<td>Estado</td>
-									<td>{{status}}</td>
-								</tr>
-								<tr>
-									<td>Asunto</td>
-									<td>{{item.subject}}</td>
-								</tr>
-								<tr>
-									<td>Remitente</td>
-									<td>{{item.fromName}}&lt;{{item.fromEmail}}&gt;</td>
-								</tr>
-								<tr>
-									<td>Responder a</td>
-									<td>{{item.replyTo}}</td>
-								</tr>
-								<tr>
-									<td>Tipo</td>
-									<td>{{item.type}}</td>
-								</tr>
-							</tbody>
-						</table>
+				</div>
+					
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-tag"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Asunto</div>	
+						<div class="widget-body">
+							{% if item.subject is empty%}<span style="color: #bd1b06">Este correo no contiene un asunto</span>{% else %}{{item.subject}}{% endif %}
+						</div>	
+					</div>
+				</div>
+				
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-share-alt"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Remitente</div>	
+						<div class="widget-body">
+							{% if item.fromName is empty OR item.fromEmail is empty%}<span style="color: #bd1b06">Este correo no contiene un remitente</span>{% else %} {{item.fromName}}&lt;{{item.fromEmail}}&gt;{% endif %}
+						</div>	
+					</div>
+				</div>
+					
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-retweet"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Responder a</div>	
+						<div class="widget-body">
+							{% if item.replyTo is empty%}<span style="color: #777">Este correo no tiene configurado un "Responder a"</span>{% else %}{{item.replyTo}}{% endif %}
+						</div>	
+					</div>
+				</div>
+					
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-asterisk"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Tipo de correo</div>	
+						<div class="widget-body">
+							{% if item.type is empty%}<span style="color: #777">Indefinido</span>{% else %}{{item.type}}{% endif %}
+						</div>	
 					</div>
 				</div>
 			</div>
 
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" style="margin-top: 45px;">
-				{%if item.status == 'Sent'%}
-					<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
-						<dt class="blue medium-indicator">Destinatarios</dt>
-						<dd class="blue medium-indicator">{{item.messagesSent|numberf}}</dd>
+				<div class="small-widget">
+					{%if item.status == 'Sent'%}
+						<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
+							<dt class="blue">Destinatarios</dt>
+							<dd class="blue">{{item.messagesSent|numberf}}</dd>
 
-						<dt class="green medium-indicator">Aperturas</dt>
-						<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
+							<dt class="green">Aperturas</dt>
+							<dd class="green">{{item.uniqueOpens|numberf}} </dd>
 
-						<dt class="gray medium-indicator">Clicks</dt> 
-						<dd class="gray medium-indicator">{{item.clicks|numberf}} </dd>
+							<dt class="gray">Clicks</dt> 
+							<dd class="gray">{{item.clicks|numberf}} </dd>
 
-						<dt class="orange medium-indicator">Rebotes</dt>
-						<dd class="orange medium-indicator">{{item.bounced|numberf}} </dd>
+							<dt class="orange">Rebotes</dt>
+							<dd class="orange">{{item.bounced|numberf}} </dd>
 
-						<dt class="red medium-indicator">Quejas de spam</dt>
-						<dd class="red medium-indicator">{{item.spam|numberf}} </dd>
+							<dt class="red">Quejas de spam</dt>
+							<dd class="red">{{item.spam|numberf}} </dd>
 
-						<dt class="gray medium-indicator">Des-suscritos</dt>
-						<dd class="gray medium-indicator">{{item.unsubscribed|numberf}} </dd>
-					</dl>
-				{%endif%}
+							<dt class="gray">Des-suscritos</dt>
+							<dd class="gray">{{item.unsubscribed|numberf}} </dd>
+						</dl>
+					{%endif%}
+				</div>
 			</div>
-		</div>					
+		</div>	
+		<div class="small-space"></div>
 	</div>
 	<div class="small-space"></div>
 {% endfor %}
