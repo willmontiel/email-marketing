@@ -13,10 +13,6 @@
 		idMail = 0;
 		
 		function sendingMail() {
-			console.log('Hola');
-			
-			console.log(idMail);
-			
 			$("#" + idMail).removeClass("hexagon-success");
 			$("#" + idMail).removeClass("hexagon-warning");
 			$("#" + idMail).removeClass("hexagon-danger");
@@ -28,18 +24,12 @@
 			var aleatorio = Math.floor(Math.random()*(clases.length)); 
 			var c = clases[aleatorio];
 			
-			console.log(c);
-			
 			$("#" + idMail).addClass(c);
 		}
 		
 		function activateMagicHexagon(id) {
-			console.log(id);
-			console.log(idMail);
 			idMail = id;
-			console.log(idMail);
-			console.log('Magic!');
-			setInterval(sendingMail, 3000);
+			setInterval(sendingMail, 450);
 		}
 	</script>
 	{{ partial("partials/getstatistics_partial") }}
@@ -106,7 +96,7 @@
 					{% set hexagon = 'hexagon-primary' %}
 					{% set icon = 'glyphicon glyphicon-send'%}
 					{% set status = 'Enviando'%}
-					{% set color = "blue" %}
+					{% set color = "yellow" %}
 				{% else %}
 					{% set hexagon = 'hexagon-disable' %}
 					{% set icon = 'glyphicon glyphicon-edit'%}
@@ -115,7 +105,7 @@
 				{% endif %}
 
 				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-					<div class="hexagon hexagon-sm {{hexagon}}" id="{{idItem}}" {% if item.status == 'Sending' %} onload="activateMagicHexagon({{idItem}});"{% endif %}>
+					<div class="hexagon hexagon-sm {{hexagon}}" id="{{idItem}}" {% if item.status == 'Sending' %} onClick="activateMagicHexagon({{idItem}});"{% endif %}>
 						<div class="hexagon-wrap">
 							{% if item.status == 'Sent' %}
 								<a href="{{url('statistic/mail')}}/{{item.idMail}}" class="hexagon-inner toolTip">
