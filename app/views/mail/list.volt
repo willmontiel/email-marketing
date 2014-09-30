@@ -115,7 +115,7 @@
 					{%if item.status == 'Sent'%}
 						<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
 							<dt class="blue medium-indicator">Destinatarios</dt>
-							<dd class="blue medium-indicator">{{item.totalContacts|numberf}}</dd>
+							<dd class="blue medium-indicator">{{item.messagesSent|numberf}}</dd>
 
 							<dt class="green medium-indicator">Aperturas</dt>
 							<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
@@ -259,22 +259,22 @@
 					{%if item.status == 'Sent'%}
 						<div class="small-widget">
 							<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
-								<dt class="blue">Destinatarios</dt>
+								<dt class="blue" style="font-weight: lighter !important;">Destinatarios</dt>
 								<dd class="blue">{{item.messagesSent|numberf}}</dd>
 
-								<dt class="green">Aperturas</dt>
+								<dt class="green" style="font-weight: lighter !important;">Aperturas</dt>
 								<dd class="green">{{item.uniqueOpens|numberf}} </dd>
 
-								<dt class="gray">Clicks</dt> 
+								<dt class="gray" style="font-weight: lighter !important;">Clicks</dt> 
 								<dd class="gray">{{item.clicks|numberf}} </dd>
 
-								<dt class="orange">Rebotes</dt>
+								<dt class="orange" style="font-weight: lighter !important;">Rebotes</dt>
 								<dd class="orange">{{item.bounced|numberf}} </dd>
 
-								<dt class="red">Quejas de spam</dt>
+								<dt class="red" style="font-weight: lighter !important;">Quejas de spam</dt>
 								<dd class="red">{{item.spam|numberf}} </dd>
 
-								<dt class="gray">Des-suscritos</dt>
+								<dt class="gray" style="font-weight: lighter !important;">Des-suscritos</dt>
 								<dd class="gray">{{item.unsubscribed|numberf}} </dd>
 							</dl>
 						</div>
