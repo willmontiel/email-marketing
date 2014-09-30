@@ -28,7 +28,7 @@ class StatisticsWrapper extends BaseWrapper
 	public function showMailStatistics(Mail $mail, $compare = true)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
-		$total = $mail->totalContacts;
+		$total = $mail->messagesSent;
 		$opens = ($mail->uniqueOpens != null) ? $mail->uniqueOpens : 0;
 		$bounced = ($mail->bounced != null) ? $mail->bounced : 0;
 //		$clicks = ($mail->clicks != null) ? $mail->clicks : 0;

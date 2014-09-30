@@ -9,11 +9,36 @@
 				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal-content').contents().find('body').append(e);
 			});
 		}
+		
+		idMail = 0;
+		
+		function sendingMail() {
+			$("#" + idMail).removeClass("hexagon-success");
+			$("#" + idMail).removeClass("hexagon-warning");
+			$("#" + idMail).removeClass("hexagon-danger");
+			$("#" + idMail).removeClass("hexagon-primary");
+			$("#" + idMail).removeClass("hexagon-disable");
+			$("#" + idMail).removeClass("hexagon-blue-light");
+			$("#" + idMail).removeClass("hexagon-brown");
+			$("#" + idMail).removeClass("hexagon-yellow");
+			$("#" + idMail).removeClass("hexagon-purple");
+			
+			var clases = ["hexagon-success", "hexagon-warning", "hexagon-danger", "hexagon-primary", "hexagon-blue-light", "hexagon-brown", "hexagon-yellow", "hexagon-purple"];
+			
+			var aleatorio = Math.floor(Math.random()*(clases.length)); 
+			var c = clases[aleatorio];
+			
+			$("#" + idMail).addClass(c);
+		}
+		
+		function activateMagicHexagon(id) {
+			idMail = id;
+			setInterval(sendingMail, 100);
+		}
 	</script>
 	{{ partial("partials/getstatistics_partial") }}
 {% endblock %}
 {% block content %}
-	
 {# Botones de navegacion #}
 {{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
 
@@ -49,6 +74,7 @@
 		<div class="mail-block">
 			<div class="row">
 				{# Variables para la vista inteligente#}	
+				{% set idItem = item.idMail %}
 				{% if item.status == 'Sent' %}
 					{% set hexagon = 'hexagon-success' %}
 					{% set icon = 'glyphicon glyphicon-ok'%}
@@ -69,6 +95,14 @@
 					{% set icon = 'glyphicon glyphicon-list-alt'%}
 					{% set status = 'Programado'%}
 					{% set color = "blue" %}
+				{% elseif item.status == 'Sending' %}
+					<script type="text/javascript">
+						activateMagicHexagon({{item.idMail}});
+					</script>
+					{% set hexagon = 'hexagon-primary' %}
+					{% set icon = 'glyphicon glyphicon-send'%}
+					{% set status = 'Enviando'%}
+					{% set color = "purple" %}
 				{% else %}
 					{% set hexagon = 'hexagon-disable' %}
 					{% set icon = 'glyphicon glyphicon-edit'%}
@@ -77,7 +111,7 @@
 				{% endif %}
 
 				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-					<div class="hexagon hexagon-sm {{hexagon}}">
+					<div class="hexagon hexagon-sm {{hexagon}}" id="{{idItem}}">
 						<div class="hexagon-wrap">
 							{% if item.status == 'Sent' %}
 								<a href="{{url('statistic/mail')}}/{{item.idMail}}" class="hexagon-inner toolTip">
@@ -173,7 +207,7 @@
 
 			<div id="preview{{item.idMail}}" class="collapse row">
 				<hr>	
-				<div style="font-size: 1.8em; text-align: center; font-weight: 600; color: #777;">Detalles</div><br />
+				<div style="font-size: 1.8em; text-align: center; color: #777;">Detalles</div><br />
 				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 					<div class="preview-mail img-wrap">
 						<div class="not-available">
