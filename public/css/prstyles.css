@@ -632,7 +632,7 @@
 
 .mail-name {
 	font-size: 1.7em;
-	font-weight: 600;
+	/*font-weight: 600;*/
 }
 
 .mail-detail {
@@ -806,6 +806,46 @@
 }
 .hexagon.hexagon-warning .hexagon-inner:hover {
 	background-color: rgba(236,151,31,0.45);
+	color: #fdfdfd;
+}
+
+/*Purple*/
+.hexagon.hexagon-purple .hexagon-inner {
+	background-color: rgb(193,93,240);
+	color: #fdfdfd;
+}
+.hexagon.hexagon-purple .hexagon-inner:hover {
+	background-color: rgba(193,93,240,0.45);
+	color: #fdfdfd;
+}
+
+/*Yellow*/
+.hexagon.hexagon-yellow .hexagon-inner {
+	background-color: rgb(255,255,0);
+	color: #fdfdfd;
+}
+.hexagon.hexagon-yellow .hexagon-inner:hover {
+	background-color: rgba(255,255,0,0.45);
+	color: #fdfdfd;
+}
+
+/*Brown*/
+.hexagon.hexagon-brown .hexagon-inner {
+	background-color: rgb(97,33,11);
+	color: #fdfdfd;
+}
+.hexagon.hexagon-brown .hexagon-inner:hover {
+	background-color: rgba(97,33,11,0.45);
+	color: #fdfdfd;
+}
+
+/*Blue-light*/
+.hexagon.hexagon-blue-light .hexagon-inner {
+	background-color: rgb(91,192,22);
+	color: #fdfdfd;
+}
+.hexagon.hexagon-blue-light .hexagon-inner:hover {
+	background-color: rgba(91,192,22,0.45);
 	color: #fdfdfd;
 }
 
