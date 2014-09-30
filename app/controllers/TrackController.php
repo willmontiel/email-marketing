@@ -4,7 +4,8 @@ class TrackController extends ControllerBase
 	public function openAction($parameters)
 	{
 //		$this->logger->log('Inicio tracking de apertura');
-		$info = $_SERVER['HTTP_USER_AGENT'];
+//		$info = $_SERVER['HTTP_USER_AGENT'];
+		$this->getIp();
 		
 		try {
 			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
@@ -13,8 +14,8 @@ class TrackController extends ControllerBase
 			list($idLink, $idMail, $idContact) = $idenfifiers;
 			//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
 			//petición
-			$userAgent = new UserAgentDetectorObj();
-			$userAgent->setInfo($info);
+//			$userAgent = new UserAgentDetectorObj();
+//			$userAgent->setInfo($info);
 
 			$trackingObj = new TrackingObject();
 			$trackingObj->setSendIdentification($idMail, $idContact);
@@ -39,7 +40,7 @@ class TrackController extends ControllerBase
 	public function clickAction($parameters)
 	{
 //		$this->logger->log('Inicio tracking de click');
-		$info = $_SERVER['HTTP_USER_AGENT'];
+//		$info = $_SERVER['HTTP_USER_AGENT'];
 		
 		try {
 			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
@@ -49,8 +50,8 @@ class TrackController extends ControllerBase
 			
 			$trackingObj = new TrackingObject();
 			
-			$userAgent = new UserAgentDetectorObj();
-			$userAgent->setInfo($info);
+//			$userAgent = new UserAgentDetectorObj();
+//			$userAgent->setInfo($info);
 			
 			if($idContact != 0) {
 				$trackingObj->setSendIdentification($idMail, $idContact);
@@ -123,7 +124,7 @@ class TrackController extends ControllerBase
 	public function opensocialAction($parameters)
 	{
 //		$this->logger->log('Inicio tracking de apertura por red social');
-		$info = $_SERVER['HTTP_USER_AGENT'];
+//		$info = $_SERVER['HTTP_USER_AGENT'];
 		try {
 			// Decodificar enlace
 			$linkdecoder = new \EmailMarketing\General\Links\ParametersEncoder();
@@ -134,8 +135,8 @@ class TrackController extends ControllerBase
 			
 			//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
 			//petición
-			$userAgent = new UserAgentDetectorObj();
-			$userAgent->setInfo($info);
+//			$userAgent = new UserAgentDetectorObj();
+//			$userAgent->setInfo($info);
 				
 			$trackingObj = new TrackingObject();
 			$trackingObj->setSendIdentification($idMail, $idContact);
@@ -165,7 +166,7 @@ class TrackController extends ControllerBase
 	public function clicksocialAction($parameters)
 	{
 //		$this->logger->log('Inicio tracking de apertura por red social');
-		$info = $_SERVER['HTTP_USER_AGENT'];
+//		$info = $_SERVER['HTTP_USER_AGENT'];
 		
 		try {		
 			// Decodificar enlace
@@ -201,5 +202,19 @@ class TrackController extends ControllerBase
 			return $this->response->redirect('error/link');
 		}			
 		return $this->response->redirect($url, true);
+	}
+	
+	private function getIp () {
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])){//Verificar la ip compartida de internet
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		}
+		elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){//verificar si la ip fue provista por un proxy
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		}
+		else { 
+			$ip = $_SERVER['REMOTE_ADDR']; 
+		}
+		
+		$this->logger->log($ip);
 	}
 }
