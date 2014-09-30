@@ -9,7 +9,7 @@ class TrackController extends ControllerBase
 //		$info = $_SERVER['HTTP_USER_AGENT'];
 		$this->getIp();
 		
-		$gi = geoip_open("/usr/local/share/GeoIP/GeoIP.dat",GEOIP_STANDARD);
+		$gi = geoip_open("/usr/share/GeoIP/GeoIP.dat",GEOIP_STANDARD);
 
 		$this->logger->log(geoip_country_code_by_addr($gi, "24.24.24.24"));
 		$this->logger->log(geoip_country_name_by_addr($gi, "24.24.24.24"));
