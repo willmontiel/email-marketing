@@ -255,7 +255,7 @@
 					</div>
 				</div>
 
-				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" style="margin-top: 45px;">
+				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 					{%if item.status == 'Sent'%}
 						<div class="small-widget">
 							<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
