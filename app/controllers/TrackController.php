@@ -1,5 +1,5 @@
 <?php
-require '../../../public/vendor/autoload.php';
+require '../../../vendor/autoload.php';
 
 class TrackController extends ControllerBase
 {
