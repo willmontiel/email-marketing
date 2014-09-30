@@ -483,12 +483,11 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		var analitycs = array.toString();
 
 		var value = this.get('scheduleRadio');
-
-
+		
 		if (value === 'now') {
 			mail.set('scheduleDate', value);
 		}
-		else {
+		else if (value) {
 			var date = this.get('date');
 			var time = this.get('time');
 			var schedule = date + ' ' + time;

@@ -69,6 +69,11 @@
 					{% set icon = 'glyphicon glyphicon-list-alt'%}
 					{% set status = 'Programado'%}
 					{% set color = "blue" %}
+				{% elseif item.status == 'Scheduled' %}
+					{% set hexagon = 'hexagon-primary' %}
+					{% set icon = 'glyphicon glyphicon-send'%}
+					{% set status = 'Enviando'%}
+					{% set color = "blue" %}
 				{% else %}
 					{% set hexagon = 'hexagon-disable' %}
 					{% set icon = 'glyphicon glyphicon-edit'%}
