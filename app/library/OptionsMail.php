@@ -53,7 +53,7 @@ class OptionsMail
 			case 'Cancelar':
 				$object->text = "Cancelar el envío de este correo";
 				$object->url = "mail/cancel/";
-				$object->icon = "glyphicon glyphicon-exclamation-sign";
+				$object->icon = "glyphicon glyphicon-warning-sign";
 				break;
 		}
 		return $object;

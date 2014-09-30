@@ -134,18 +134,18 @@
 					{%endif%}
 
 					{% for value in mail_options(item) %}
-						<a class="btn btn-sm btn-default tooltip-b3" href="{{ url(value.url) }}{{item.idMail}}" data-placement="top" title="{{value.text}}">
+						<a class="btn btn-sm {% if value.url == 'mail/cancel/'%}btn-danger{% else %}btn-primary{% endif %} tooltip-b3" href="{{ url(value.url) }}{{item.idMail}}" data-placement="top" title="{{value.text}}">
 							<span class="{{value.icon}}"></span>
 						</a>
 					{% endfor %}
 
-						<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default tooltip-b3" data-placement="top" title="Duplicar correo">
-							<span class="glyphicon glyphicon-flash"></span>
+						<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-primary tooltip-b3" data-placement="top" title="Duplicar correo">
+							<span class="glyphicon glyphicon-export"></span>
 						</a>
 
 					{% if item.type == 'Editor'%}
-						<a class="ShowDialogTemplate btn btn-sm btn-default tooltip-b3" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}" data-placement="top" title="Crear una plantilla a partir de este correo">
-							<span class="glyphicon glyphicon-text-width"></span>
+						<a class="ShowDialogTemplate btn btn-sm btn-primary tooltip-b3" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}" data-placement="top" title="Crear una plantilla a partir de este correo">
+							<span class="glyphicon glyphicon-star"></span>
 						</a>
 					{%endif%}
 
