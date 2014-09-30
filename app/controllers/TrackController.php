@@ -9,6 +9,15 @@ class TrackController extends ControllerBase
 //		$info = $_SERVER['HTTP_USER_AGENT'];
 		$this->getIp();
 		
+		$gi = geoip_open("/usr/local/share/GeoIP/GeoIP.dat",GEOIP_STANDARD);
+
+		$this->logger->log(geoip_country_code_by_addr($gi, "24.24.24.24"));
+		$this->logger->log(geoip_country_name_by_addr($gi, "24.24.24.24"));
+		$this->logger->log(geoip_country_code_by_addr($gi, "80.24.24.24"));
+		$this->logger->log(geoip_country_name_by_addr($gi, "80.24.24.24"));
+
+		geoip_close($gi);
+		
 		try {
 			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
 			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
