@@ -150,7 +150,7 @@
 					{%endif%}
 
 					{%if item.status == 'Sent'%}
-						<a class="btn btn-sm btn-default tooltip-b3" href="{{url('statistic/mail')}}/{{item.idMail}}" data-placement="top" title="Ver estadísticas">
+						<a class="btn btn-sm btn-primary tooltip-b3" href="{{url('statistic/mail')}}/{{item.idMail}}" data-placement="top" title="Ver estadísticas">
 							<span class="glyphicon glyphicon-stats"></span>
 						</a>
 						{#
