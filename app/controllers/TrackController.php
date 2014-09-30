@@ -1,4 +1,6 @@
 <?php
+require '../../public/vendor/autoload.php';
+
 class TrackController extends ControllerBase
 {
 	public function openAction($parameters)
