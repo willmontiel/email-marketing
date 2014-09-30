@@ -172,11 +172,9 @@
 			</div>
 
 			<div id="preview{{item.idMail}}" class="collapse row">
-				<hr>				
-				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
-
+				<hr>	
+				<div style="font-size: 1.8em; text-align: center; font-weight: 600; color: #777;">Detalles</div><br />
 				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-					<div style="font-size: 1.3em; font-weight: 600; color: #777;">Detalles</div><br />
 					<div class="preview-mail img-wrap">
 						<div class="not-available">
 					{% if item.previewData == null%}
@@ -189,7 +187,7 @@
 					</div>
 				</div>
 
-				<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5" style="margin-top: 45px;">
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 					<div class="small-widget">
 						<div class="widget-icon"><span class="glyphicon glyphicon-cog"></span></div>
 						<div class="widget-content">
