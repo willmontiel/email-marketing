@@ -13,8 +13,7 @@
 	{{ partial("partials/getstatistics_partial") }}
 {% endblock %}
 {% block content %}
-<!-- aqui inicia mi contenido -->
-
+	
 {# Botones de navegacion #}
 {{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'list']) }}
 
@@ -41,108 +40,264 @@
 	</div>
 </div>
 
-<div class="space"></div>
-		<!-- Lista de mis correos -->
-		{% if page.items|length != 0%}
+<!-- Lista de mis correos -->
+{% if page.items|length != 0%}
+	{#   parcial paginacion   #}	
+	{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
+
+	{% for item in page.items %}
+		<div class="mail-block">
 			<div class="row">
-				<table class="table mail-list">
-					<thead></thead>
-					<tbody>
-						{%for item in page.items%}
-						<tr>
-							<td>
-								<div class="preview-mail img-wrap">
-									<a href="#preview-modal" data-toggle="modal" onClick="verPreview({{item.idMail}});">
-										<div class="not-available">
-											<img src="{{url('mail/thumbnail')}}/{{item.idMail}}/210x235" />
-											<div class="img-info">
-												<p style="font-size: 18px;">Previsualizar</p>
-											</div>
-										</div>
-									</a>
-								</div>
-							</td>
-							<td>
-								<div class="news-title">
-									{%if item.status == 'Sent'%}
-										<a href="{{ url('statistic/mail') }}/{{item.idMail}}">{{item.name}}</a>
-									{%elseif item.status == 'Pending'%}
-										<a href="{{ url('mail/play') }}/{{item.idMail}}">{{item.name}}</a>
-									{%elseif item.status == 'Draft'%}
-										<a href="{{ url('mail/compose') }}/{{item.idMail}}">{{item.name}}</a>
-									{%else%}
-										<a href="javascript.void(0);">{{item.name}}</a>
-									{%endif%}
-								</div>
-								<div class="news-text">
-									{{item.status}} <br /> 
-									Creado el {{date('Y-m-d', item.createdon)}} 
-									{%if item.status == 'Sent'%} <br />
-									Enviado el {{date('Y-m-d, g:i a', item.startedon)}}
-									{%elseif item.status == 'Scheduled'%} <br />
-									Programado {{date('Y-m-d, g:i a', item.scheduleDate)}}
-									{%endif%}
-								</div>
-							</td>
-							<td>
-								{%if item.status == 'Sent'%}
-								<dl class="dl-horizontal">
-									<dt class="blue">Destinatarios</dt>
-									<dd class="blue">{{item.totalContacts|numberf}}</dd>
+				{# Variables para la vista inteligente#}	
+				{% if item.status == 'Sent' %}
+					{% set hexagon = 'hexagon-success' %}
+					{% set icon = 'glyphicon glyphicon-ok'%}
+					{% set status = 'Enviado'%}
+					{% set color = "green" %}
+				{% elseif item.status == 'Pending' OR item.status == 'Paused'%}
+					{% set hexagon = 'hexagon-warning' %}
+					{% set icon = 'glyphicon glyphicon-pause'%}
+					{% set status = 'Pendiente'%}
+					{% set color = "orange" %}
+				{% elseif item.status == 'Cancelled' %}
+					{% set hexagon = 'hexagon-danger' %}
+					{% set icon = 'glyphicon glyphicon-warning-sign'%}
+					{% set status = 'Cancelado'%}
+					{% set color = "red" %}
+				{% elseif item.status == 'Scheduled' %}
+					{% set hexagon = 'hexagon-primary' %}
+					{% set icon = 'glyphicon glyphicon-list-alt'%}
+					{% set status = 'Programado'%}
+					{% set color = "blue" %}
+				{% else %}
+					{% set hexagon = 'hexagon-disable' %}
+					{% set icon = 'glyphicon glyphicon-edit'%}
+					{% set status = 'Borrador'%}
+					{% set color = "black" %}
+				{% endif %}
 
-									<dt class="green">Aperturas</dt>
-									<dd class="green">{{item.uniqueOpens|numberf}} </dd>
+				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+					<div class="hexagon hexagon-sm {{hexagon}}">
+						<div class="hexagon-wrap">
+							{% if item.status == 'Sent' %}
+								<a href="{{url('statistic/mail')}}/{{item.idMail}}" class="hexagon-inner toolTip">
+							{% elseif item.status == 'Draft' %}
+								<a href="{{url('mail/compose')}}/{{item.idMail}}" class="hexagon-inner toolTip">
+							{% else %}
+								<a href="#" class="hexagon-inner toolTip">
+							{% endif %}
+									<i class="{{icon}}"></i>
+								</a>
+						</div>
+					</div>
+				</div>
 
-									<dt class="gray">Clicks</dt> 
-									<dd class="gray">{{item.clicks|numberf}} </dd>
+				<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+					<div class="mail-info">
+						<div class="mail-name">
+							{% if item.status == 'Sent' %}
+								<a href="{{url('statistic/mail')}}/{{item.idMail}}">{{item.name}}</a>
+							{% elseif item.status == 'Draft' %}
+								<a href="{{url('mail/compose')}}/{{item.idMail}}">{{item.name}}</a>
+							{% else %}
+								{{item.name}}
+							{% endif %}
+						</div>
 
-									<dt class="red">Rebotes</dt>
-									<dd class="red">{{item.bounced|numberf}} </dd>
-								</dl>
-								{%endif%}
-							</td>
-							<td class="text-right">
-								<div class="">
-									{%if item.status == 'Scheduled'%}
-										<button class="ShowDialogEditScheduled btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}">Pausar</button>
-										
-									{%endif%}
-									{% for value in mail_options(item) %}
-										<a class="btn btn-sm btn-default extra-padding" href="{{ url(value.url) }}{{item.idMail}}">{{value.text}} <span class="{{value.icon}}"></span></a>
-									{% endfor %}
-										<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-default extra-padding">Duplicar</a>
+						<div class="mail-detail {{color}}">{{status}}</div>
+						<div class="mail-detail" style="color: #777;">
+							Creado el {{date('d/M/Y g:i a', item.createdon)}} 
+						</div>
+					</div>
+				</div>
 
-										<button class="ShowDialog btn btn-sm btn-default btn-delete extra-padding" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}">Eliminar </button>
-									{% if item.type == 'Editor'%}
-										<a class="ShowDialogTemplate btn btn-sm btn-default extra-padding" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}">Plantilla</a>
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					{%if item.status == 'Sent'%}
+						<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
+							<dt class="blue medium-indicator">Destinatarios</dt>
+							<dd class="blue medium-indicator">{{item.messagesSent|numberf}}</dd>
 
-									{%endif%}
-									{%if item.status == 'Sent'%}
-										<a class="btn btn-sm btn-default extra-padding" href="{{url('statistic/mail')}}/{{item.idMail}}">Estadísticas</a>
-										{#
-										<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadísticas</button>
-										#}
-									{%endif%}
-								</div>
-							</td>
-						</tr>
-						{%endfor%}
-					</tbody>
-				</table>
-			</div>
-			
-			{#   parcial paginacion   #}	
-			{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
-		{% else %}
-			<div class="row">
-				<div class="bs-callout bs-callout-warning">
-					<h4>No ha creado ningún correo aún</h4>
-					<p>
-						Para empezar la creación de un nuevo correo haga clic en el botón <strong>Nuevo correo</strong> de la parte de arriba, encontrará muchas opciones para crear espléndidos correos.
-					</p>
+							<dt class="green medium-indicator">Aperturas</dt>
+							<dd class="green medium-indicator">{{item.uniqueOpens|numberf}} </dd>
+
+							<dt class="red medium-indicator">Rebotes</dt>
+							<dd class="red medium-indicator">{{item.bounced|numberf}} </dd>
+						</dl>
+					{%endif%}
+				</div>
+
+				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right">
+					{%if item.status == 'Scheduled'%}
+						<button class="ShowDialogEditScheduled btn btn-sm btn-warning tooltip-b3" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}" data-placement="top" title="Pausar este correo">
+							<span class="glyphicon glyphicon-pause"></span>
+						</button>
+					{%endif%}
+
+					{% for value in mail_options(item) %}
+						<a class="btn btn-sm {% if value.url == 'mail/cancel/'%}btn-danger{% else %}btn-primary{% endif %} tooltip-b3" href="{{ url(value.url) }}{{item.idMail}}" data-placement="top" title="{{value.text}}">
+							<span class="{{value.icon}}"></span>
+						</a>
+					{% endfor %}
+
+						<a href="{{ url('mail/clone/') }}{{item.idMail}}" class="btn btn-sm btn-primary tooltip-b3" data-placement="top" title="Duplicar correo">
+							<span class="glyphicon glyphicon-export"></span>
+						</a>
+
+					{% if item.type == 'Editor'%}
+						<a class="ShowDialogTemplate btn btn-sm btn-primary tooltip-b3" data-toggle="modal" data-target="#modal-simple-template" data-id="{{ url('mail/converttotemplate/') }}{{item.idMail}}" data-placement="top" title="Crear una plantilla a partir de este correo">
+							<span class="glyphicon glyphicon-star"></span>
+						</a>
+					{%endif%}
+
+					{%if item.status == 'Sent'%}
+						<a class="btn btn-sm btn-primary tooltip-b3" href="{{url('statistic/mail')}}/{{item.idMail}}" data-placement="top" title="Ver estadísticas">
+							<span class="glyphicon glyphicon-stats"></span>
+						</a>
+						{#
+						<button id="sharestats-{{item.idMail}}" type="button" class="btn btn-sm btn-default btn-add extra-padding" data-container="body" data-toggle="popover" data-placement="left" data-idmail="{{item.idMail}}">Compartir estadísticas</button>
+						#}
+					{%endif%}
+					<a href="#preview-modal" class="btn btn-sm btn-primary tooltip-b3" data-toggle="modal" onClick="verPreview({{item.idMail}});" data-placement="top" title="Ver previsualización">
+						<span class="glyphicon glyphicon-eye-open"></span>
+					</a>
+
+					<button class="btn btn-sm btn btn-info tooltip-b3" data-toggle="collapse" data-target="#preview{{item.idMail}}" data-placement="top" title="Ver detalles">
+						<span class="glyphicon glyphicon-collapse-down"></span>
+					</button>	
+
+					<button class="ShowDialog btn btn-sm btn btn-danger tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{item.idMail}}" data-placement="top" title="Eliminar correo">
+						<span class="glyphicon glyphicon-trash"></span>
+					</button>
 				</div>
 			</div>
-		{% endif %}
+
+			<div id="preview{{item.idMail}}" class="collapse row">
+				<hr>	
+				<div style="font-size: 1.8em; text-align: center; font-weight: 600; color: #777;">Detalles</div><br />
+				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+					<div class="preview-mail img-wrap">
+						<div class="not-available">
+					{% if item.previewData == null%}
+							<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+							<label>Previsualización no disponible</label>
+					{% else %}
+							<img src="data: image/png;base64, {{item.previewData}}" />
+					{% endif %}	
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					<div class="small-widget">
+						<div class="widget-icon"><span class="glyphicon glyphicon-cog"></span></div>
+						<div class="widget-content">
+							<div class="widget-header">Estado</div>	
+							<div class="widget-body {{color}}">{{status}}</div>	
+						</div>
+					</div>
+						
+					{%if item.status == 'Sent'%}
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-send"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Fecha de envío</div>	
+								<div class="widget-body">{{date('d/M/Y g:i a', item.startedon)}}</div>	
+							</div>
+						</div>
+					{%elseif item.status == 'Scheduled'%}
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-calendar"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Fecha de programación</div>	
+								<div class="widget-body">{{date('d/M/Y g:i a', item.scheduleDate)}}</div>	
+							</div>
+						</div>
+					{%endif%}
+						
+					<div class="small-widget">
+						<div class="widget-icon"><span class="glyphicon glyphicon-tag"></span></div>
+						<div class="widget-content">
+							<div class="widget-header">Asunto</div>	
+							<div class="widget-body">
+								{% if item.subject is empty%}<span style="color: #bd1b06">Este correo no contiene un asunto</span>{% else %}{{item.subject}}{% endif %}
+							</div>	
+						</div>
+					</div>
+
+					<div class="small-widget">
+						<div class="widget-icon"><span class="glyphicon glyphicon-share-alt"></span></div>
+						<div class="widget-content">
+							<div class="widget-header">Remitente</div>	
+							<div class="widget-body">
+								{% if item.fromName is empty OR item.fromEmail is empty%}<span style="color: #bd1b06">Este correo no contiene un remitente</span>{% else %} {{item.fromName}}&lt;{{item.fromEmail}}&gt;{% endif %}
+							</div>	
+						</div>
+					</div>
+
+					<div class="small-widget">
+						<div class="widget-icon"><span class="glyphicon glyphicon-retweet"></span></div>
+						<div class="widget-content">
+							<div class="widget-header">Responder a</div>	
+							<div class="widget-body">
+								{% if item.replyTo is empty%}<span style="color: #777">Este correo no tiene configurado un "Responder a"</span>{% else %}{{item.replyTo}}{% endif %}
+							</div>	
+						</div>
+					</div>
+
+					<div class="small-widget">
+						<div class="widget-icon"><span class="glyphicon glyphicon-asterisk"></span></div>
+						<div class="widget-content">
+							<div class="widget-header">Tipo de correo</div>	
+							<div class="widget-body">
+								{% if item.type is empty%}<span style="color: #777">Indefinido</span>{% else %}{{item.type}}{% endif %}
+							</div>	
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+					{%if item.status == 'Sent'%}
+						<div class="small-widget">
+							<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
+								<dt class="blue" style="font-weight: lighter !important;">Destinatarios</dt>
+								<dd class="blue">{{item.messagesSent|numberf}}</dd>
+
+								<dt class="green" style="font-weight: lighter !important;">Aperturas</dt>
+								<dd class="green">{{item.uniqueOpens|numberf}} </dd>
+
+								<dt class="gray" style="font-weight: lighter !important;">Clicks</dt> 
+								<dd class="gray">{{item.clicks|numberf}} </dd>
+
+								<dt class="orange" style="font-weight: lighter !important;">Rebotes</dt>
+								<dd class="orange">{{item.bounced|numberf}} </dd>
+
+								<dt class="red" style="font-weight: lighter !important;">Quejas de spam</dt>
+								<dd class="red">{{item.spam|numberf}} </dd>
+
+								<dt class="gray" style="font-weight: lighter !important;">Des-suscritos</dt>
+								<dd class="gray">{{item.unsubscribed|numberf}} </dd>
+							</dl>
+						</div>
+					{%endif%}
+				</div>
+			</div>	
+			<div class="small-space"></div>
+		</div>
+		<div class="small-space"></div>
+	{% endfor %}
+	<div class="space"></div>
+	
+	{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
+{% else %}
+	<div class="row">
+		<div class="bs-callout bs-callout-warning">
+			<h4>No ha creado ningún correo aún</h4>
+			<p>
+				Para empezar la creación de un nuevo correo haga clic en el botón <strong>Nuevo correo</strong> de la parte de arriba, encontrará muchas opciones para crear espléndidos correos.
+			</p>
+		</div>
+	</div>
+{% endif %}
 		
 <div id="modal-simple" class="modal fade">
 	<div class="modal-dialog">
