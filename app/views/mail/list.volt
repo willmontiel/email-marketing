@@ -9,6 +9,38 @@
 				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal-content').contents().find('body').append(e);
 			});
 		}
+		
+		idMail = 0;
+		
+		function sendingMail() {
+			console.log('Hola');
+			
+			console.log(idMail);
+			
+			$("#" + idMail).removeClass("hexagon-success");
+			$("#" + idMail).removeClass("hexagon-warning");
+			$("#" + idMail).removeClass("hexagon-danger");
+			$("#" + idMail).removeClass("hexagon-primary");
+			$("#" + idMail).removeClass("hexagon-disable");
+			
+			var clases = ["hexagon-success", "hexagon-warning", "hexagon-danger", "hexagon-primary"];
+			
+			var aleatorio = Math.floor(Math.random()*(clases.length)); 
+			var c = clases[aleatorio];
+			
+			console.log(c);
+			
+			$("#" + idMail).addClass(c);
+		}
+		
+		function activateMagicHexagon(id) {
+			console.log(id);
+			console.log(idMail);
+			idMail = id;
+			console.log(idMail);
+			console.log('Magic!');
+			setInterval(sendingMail, 3000);
+		}
 	</script>
 	{{ partial("partials/getstatistics_partial") }}
 {% endblock %}
@@ -49,6 +81,7 @@
 		<div class="mail-block">
 			<div class="row">
 				{# Variables para la vista inteligente#}	
+				{% set idItem = item.idMail %}
 				{% if item.status == 'Sent' %}
 					{% set hexagon = 'hexagon-success' %}
 					{% set icon = 'glyphicon glyphicon-ok'%}
@@ -69,7 +102,7 @@
 					{% set icon = 'glyphicon glyphicon-list-alt'%}
 					{% set status = 'Programado'%}
 					{% set color = "blue" %}
-				{% elseif item.status == 'Scheduled' %}
+				{% elseif item.status == 'Sending' %}
 					{% set hexagon = 'hexagon-primary' %}
 					{% set icon = 'glyphicon glyphicon-send'%}
 					{% set status = 'Enviando'%}
@@ -82,7 +115,7 @@
 				{% endif %}
 
 				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-					<div class="hexagon hexagon-sm {{hexagon}}">
+					<div class="hexagon hexagon-sm {{hexagon}}" id="{{idItem}}" {% if item.status == 'Sending' %} onload="activateMagicHexagon({{idItem}});"{% endif %}>
 						<div class="hexagon-wrap">
 							{% if item.status == 'Sent' %}
 								<a href="{{url('statistic/mail')}}/{{item.idMail}}" class="hexagon-inner toolTip">
