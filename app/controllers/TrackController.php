@@ -1,11 +1,12 @@
 <?php
 //require 'vendor/autoload.php';
-require_once "../library/geoip.inc";
+//require_once "../library/geoip.inc";
 
 class TrackController extends ControllerBase
 {
 	public function openAction($parameters)
 	{
+		$this->logger->log("Dir: " . __DIR__ );
 //		$this->logger->log('Inicio tracking de apertura');
 //		$info = $_SERVER['HTTP_USER_AGENT'];
 		$ip = $this->getIp();
