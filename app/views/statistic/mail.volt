@@ -18,6 +18,11 @@
 	{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
 	{{ javascript_include('vendors/highcharts/modules/drilldown.js')}}
 	
+	{# HighMaps#}
+	{{ javascript_include('vendors/highmaps/highmaps.js')}}
+	{{ javascript_include('vendors/highmaps/modules/data.js')}}
+	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
+	
 	{{ javascript_include('js/select2.js') }}
 	
 	<script type="text/javascript">
@@ -86,53 +91,50 @@
 	</script>
 	
 	<script type="text/javascript">
-		$(function () {
-			$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=world-population-density.json&callback=?', function (data) {
+$(function () {
 
-				// Initiate the chart
-				$('#container').highcharts('Map', {
+    $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=world-population-density.json&callback=?', function (data) {
 
-					title : {
-						text : 'Population density by country (/km²)'
-					},
+        // Initiate the chart
+        $('#container').highcharts('Map', {
 
-					mapNavigation: {
-						enabled: true,
-						buttonOptions: {
-							verticalAlign: 'bottom'
-						}
-					},
+            title : {
+                text : 'Population density by country (/km²)'
+            },
 
-					colorAxis: {
-						min: 1,
-						max: 1000,
-						type: 'logarithmic'
-					},
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'bottom'
+                }
+            },
 
-					series : [{
-						data : data,
-						mapData: Highcharts.maps['custom/world'],
-						joinBy: ['iso-a2', 'code'],
-						name: 'Population density',
-						states: {
-							hover: {
-								color: '#BADA55'
-							}
-						},
-						tooltip: {
-							valueSuffix: '/km²'
-						}
-					}]
-				});
-			});
-		});
-	</script>
+            colorAxis: {
+                min: 1,
+                max: 1000,
+                type: 'logarithmic'
+            },
+
+            series : [{
+                data : data,
+                mapData: Highcharts.maps['custom/world'],
+                joinBy: ['iso-a2', 'code'],
+                name: 'Population density',
+                states: {
+                    hover: {
+                        color: '#BADA55'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: '/km²'
+                }
+            }]
+        });
+    });
+});
+		</script>
 {% endblock %}
 {% block content %}
-	{# HighMaps#}
-	{{ javascript_include('vendors/highmaps/highmaps.js')}}
-	{{ javascript_include('vendors/highmaps/modules/data.js')}}
-	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
 	<div id="container" style="max-width: 1000px"></div>
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
