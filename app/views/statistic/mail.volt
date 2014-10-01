@@ -8,16 +8,25 @@
 	</script>
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
-	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
 	
+	{# Moment.js#}
+	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js') }}
+	
+	{# HighCharts#}
 	{{ javascript_include('vendors/highcharts/highcharts.js')}}
 	{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
 	{{ javascript_include('vendors/highcharts/modules/drilldown.js')}}
+	
+	{# HighMaps#}
+	{{ javascript_include('vendors/highmaps/highmaps.js')}}
+	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
+	
 	{{ javascript_include('js/select2.js') }}
-	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ stylesheet_link ('css/select2.css') }}
+	{{ stylesheet_link('css/statisticStyles.css') }}
+	
 	<script type="text/javascript">
 		function selectSummary() {
 			$('#inputsummary').focus();
@@ -82,8 +91,52 @@
 			}
 		}
 	</script>
+	
+	<script type="text/javascript">
+		$(function () {
+			$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=world-population-density.json&callback=?', function (data) {
+
+				// Initiate the chart
+				$('#container').highcharts('Map', {
+
+					title : {
+						text : 'Population density by country (/km²)'
+					},
+
+					mapNavigation: {
+						enabled: true,
+						buttonOptions: {
+							verticalAlign: 'bottom'
+						}
+					},
+
+					colorAxis: {
+						min: 1,
+						max: 1000,
+						type: 'logarithmic'
+					},
+
+					series : [{
+						data : data,
+						mapData: Highcharts.maps['custom/world'],
+						joinBy: ['iso-a2', 'code'],
+						name: 'Population density',
+						states: {
+							hover: {
+								color: '#BADA55'
+							}
+						},
+						tooltip: {
+							valueSuffix: '/km²'
+						}
+					}]
+				});
+			});
+		});
+	</script>
 {% endblock %}
 {% block content %}
+	<div id="container" style="max-width: 1000px"></div>
 	{#
 		<div id="container"></div>
 	#}
