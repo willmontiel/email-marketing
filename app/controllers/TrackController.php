@@ -1,6 +1,7 @@
 <?php
 //require 'vendor/autoload.php';
 //require_once "../library/geoip.inc";
+require_once "../library/VisualElements.php";
 
 class TrackController extends ControllerBase
 {
