@@ -461,8 +461,8 @@ class Security extends Plugin
 		$resource = "$controller::$action";
 		
 		$this->logger->log("Server Status: {$this->serverStatus}");
-		$this->logger->log("Allowed Ip's: ". print_r($this->allowed_ips, true));
-		$this->logger->log("Ip: {$this->ip}");
+//		$this->logger->log("Allowed Ip's: ". print_r($this->allowed_ips, true));
+//		$this->logger->log("Ip: {$this->ip}");
 		
 		if ($this->serverStatus == 0 && !in_array($this->ip, $this->allowed_ips)) {
 			$this->publicurls = array(
