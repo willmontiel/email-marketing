@@ -1,7 +1,7 @@
 <?php
 //require 'vendor/autoload.php';
-//require_once "../library/geoip.inc";
 require_once "../library/VisualElements.php";
+require_once "../library/geoip.inc";
 
 class TrackController extends ControllerBase
 {
@@ -30,7 +30,7 @@ class TrackController extends ControllerBase
 			list($idLink, $idMail, $idContact) = $idenfifiers;
 			//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
 			//petición
-//			$userAgent = new UserAgentDetectorObj();
+			$userAgent = new UserAgentDetectorObj();
 //			$userAgent->setInfo($info);
 
 			$trackingObj = new TrackingObject();
