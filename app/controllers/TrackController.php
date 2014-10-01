@@ -7,14 +7,14 @@ class TrackController extends ControllerBase
 	{
 //		$this->logger->log('Inicio tracking de apertura');
 //		$info = $_SERVER['HTTP_USER_AGENT'];
-		$this->getIp();
+		$ip = $this->getIp();
 		
 		$gi = geoip_open("/usr/share/GeoIP/GeoIP.dat",GEOIP_STANDARD);
 
-		$this->logger->log(geoip_country_code_by_addr($gi, "24.24.24.24"));
-		$this->logger->log(geoip_country_name_by_addr($gi, "24.24.24.24"));
-		$this->logger->log(geoip_country_code_by_addr($gi, "80.24.24.24"));
-		$this->logger->log(geoip_country_name_by_addr($gi, "80.24.24.24"));
+		$this->logger->log(geoip_country_code_by_addr($gi, $ip));
+		$this->logger->log(geoip_country_name_by_addr($gi, $ip));
+		$this->logger->log(geoip_country_code_by_addr($gi, $ip));
+		$this->logger->log(geoip_country_name_by_addr($gi, $ip));
 
 		geoip_close($gi);
 		
@@ -226,6 +226,6 @@ class TrackController extends ControllerBase
 			$ip = $_SERVER['REMOTE_ADDR']; 
 		}
 		
-		$this->logger->log($ip);
+		return $ip;
 	}
 }
