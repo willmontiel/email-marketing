@@ -1,6 +1,5 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
-	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
