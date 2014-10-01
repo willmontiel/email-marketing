@@ -15,8 +15,14 @@
 	
 	{# HighCharts#}
 	{{ javascript_include('vendors/highcharts/highcharts.js')}}
-	{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
+	{#{{ javascript_include('vendors/highcharts/modules/exporting.js')}}#}
 	{{ javascript_include('vendors/highcharts/modules/drilldown.js')}}
+	
+	{# HighMaps#}
+	{{ javascript_include('vendors/highmaps/highmaps.js')}}
+	{{ javascript_include('vendors/highmaps/modules/data.js')}}
+	{{ javascript_include('vendors/highmaps/modules/exporting.js')}}
+	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
 	
 	{{ javascript_include('js/select2.js') }}
 	
@@ -127,12 +133,6 @@
 			});
 		});
 	</script>
-	
-	{# HighMaps#}
-	{{ javascript_include('vendors/highmaps/highmaps.js')}}
-	{{ javascript_include('vendors/highmaps/modules/data.js')}}
-	{{ javascript_include('vendors/highmaps/modules/exporting.js')}}
-	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
 {% endblock %}
 {% block content %}
 	<div id="container" style="max-width: 1000px"></div>
