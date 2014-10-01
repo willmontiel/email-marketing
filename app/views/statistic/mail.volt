@@ -20,6 +20,8 @@
 	
 	{# HighMaps#}
 	{{ javascript_include('vendors/highmaps/highmaps.js')}}
+	{{ javascript_include('vendors/highmaps/modules/data.js')}}
+	{{ javascript_include('vendors/highmaps/modules/exporting.js')}}
 	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
 	
 	{{ javascript_include('js/select2.js') }}
