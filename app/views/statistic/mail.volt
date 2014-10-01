@@ -19,6 +19,7 @@
 	{{ javascript_include('vendors/highcharts/modules/drilldown.js')}}
 	
 	{# HighMaps#}
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	{{ javascript_include('vendors/highmaps/highmaps.js')}}
 	{{ javascript_include('vendors/highmaps/modules/data.js')}}
 	{{ javascript_include('vendors/highmaps/modules/exporting.js')}}
