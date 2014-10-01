@@ -16,7 +16,7 @@ class TrackController extends ControllerBase
 		$this->logger->log(geoip_country_name_by_addr($gi, $ip));
 		$this->logger->log(geoip_country_code_by_addr($gi, $ip));
 		$this->logger->log(geoip_country_name_by_addr($gi, $ip));
-//		$this->logger->log(geoip_record_by_name($gi, $ip));
+		$this->logger->log(geoip_record_by_name($gi, $ip));
 
 		geoip_close($gi);
 		
