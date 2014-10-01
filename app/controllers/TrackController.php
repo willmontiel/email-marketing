@@ -5,21 +5,8 @@ class TrackController extends ControllerBase
 {
 	public function openAction($parameters)
 	{
-//		$this->logger->log('Inicio tracking de apertura');
 //		$info = $_SERVER['HTTP_USER_AGENT'];
-		$ip = $this->getIp();
-		
-//		$gi = geoip_open("/usr/share/GeoIP/GeoIP.dat",GEOIP_STANDARD);
-		$gi = geoip_open("/usr/share/GeoIP/GeoLiteCity.dat",GEOIP_STANDARD);
-
-		$this->logger->log(geoip_country_code_by_addr($gi, $ip));
-		$this->logger->log(geoip_country_name_by_addr($gi, $ip));
-		$this->logger->log(geoip_country_code_by_addr($gi, $ip));
-		$this->logger->log(geoip_country_name_by_addr($gi, $ip));
-//		$this->logger->log(geoip_record_by_name($gi, $ip));
-
-		geoip_close($gi);
-		
+		$geolocalization = $this->getGeolocalization();
 		try {
 			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
 			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
@@ -27,12 +14,12 @@ class TrackController extends ControllerBase
 			list($idLink, $idMail, $idContact) = $idenfifiers;
 			//Se instancia el detector de agente de usuario para capturar el OS y el Browser con que se efectuó la 
 			//petición
-			$userAgent = new UserAgentDetectorObj();
+//			$userAgent = new UserAgentDetectorObj();
 //			$userAgent->setInfo($info);
 
 			$trackingObj = new TrackingObject();
 			$trackingObj->setSendIdentification($idMail, $idContact);
-			$trackingObj->trackOpenEvent($userAgent);	
+			$trackingObj->trackOpenEvent($geolocalization);	
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');
@@ -52,9 +39,8 @@ class TrackController extends ControllerBase
 	
 	public function clickAction($parameters)
 	{
-//		$this->logger->log('Inicio tracking de click');
 //		$info = $_SERVER['HTTP_USER_AGENT'];
-		
+		$geolocalization = $this->getGeolocalization();
 		try {
 			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
 			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
@@ -70,7 +56,7 @@ class TrackController extends ControllerBase
 				$trackingObj->setSendIdentification($idMail, $idContact);
 			}
 				
-			$url = $trackingObj->trackClickEvent($idLink, $userAgent);	
+			$url = $trackingObj->trackClickEvent($idLink, $geolocalization);	
 				
 			if (!$url) {
 				return $this->response->redirect('error/link');
@@ -229,5 +215,23 @@ class TrackController extends ControllerBase
 		}
 		
 		return $ip;
+	}
+	
+	private function getGeolocalization ($ip) {
+		$ip = $this->getIp();
+		
+		$gi = geoip_open("/usr/share/GeoIP/GeoIP.dat",GEOIP_STANDARD);
+		
+//		$gi = geoip_open("/usr/share/GeoIP/GeoLiteCity.dat",GEOIP_STANDARD);
+//		$this->logger->log(geoip_country_code_by_addr($gi, $ip));
+		$country = geoip_country_name_by_addr($gi, $ip);
+		
+		geoip_close($gi);
+		
+		$geolocalization = new stdClass();
+		$geolocalization->ip = $ip;
+		$geolocalization->country = $country;
+		
+		return $geolocalization;
 	}
 }

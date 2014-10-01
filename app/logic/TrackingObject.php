@@ -54,7 +54,8 @@ class TrackingObject
 	 *
 	 * @param UserAgentDetectorObj $userinfo
 	 */
-	public function trackOpenEvent(UserAgentDetectorObj $userinfo)
+//	public function trackOpenEvent(UserAgentDetectorObj $userinfo)
+	public function trackOpenEvent($geo)
 	{
 		$time = time();// Tomar timestamp de ejecucion
 		try {
@@ -64,6 +65,8 @@ class TrackingObject
 //				$this->log->log('Se ha iniciado una transacción');
 				
 				$this->mxc->opening = $time;// Actualizar marcador de apertura (timestamp)
+				$this->mxc->ip = $geo->ip;// Actualizar marcador de apertura (timestamp)
+				$this->mxc->geolocalization = $geo->country;// Actualizar marcador de apertura (timestamp)
 				$this->addDirtyObject($this->mxc);//Se agregar el objeto mxc actualizado para su posterior grabación(esto se hace con todos los objetos)
 //				$this->log->log('Se ha ensuaciado Mxc');
 				
@@ -286,7 +289,8 @@ class TrackingObject
 	 * @param int $idLink
 	 * @param UserAgentDetectorObj $userinfo
 	 */
-	public function trackClickEvent($idLink, UserAgentDetectorObj $userinfo)
+//	public function trackClickEvent($idLink, UserAgentDetectorObj $userinfo)
+	public function trackClickEvent($idLink, $geo)
 	{
 		$time = time();// Tomar timestamp de ejecucion
 		try {
@@ -310,6 +314,8 @@ class TrackingObject
 				if ($this->validateOpenForClick()) {
 //					
 					$this->mxc->opening = $time;
+					$this->mxc->ip = $geo->ip;
+					$this->mxc->geolocalization = $geo->country;
 					
 					$mailObj->incrementUniqueOpens();
 					$statDbaseObj->incrementUniqueOpens();

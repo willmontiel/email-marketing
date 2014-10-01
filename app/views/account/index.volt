@@ -54,6 +54,9 @@
 		</div>
 	</div>
 	<div class="row">
+		{#   Paginacion sin ember   #}
+		{{ partial('partials/pagination_static_partial', ['pagination_url': 'account/index']) }}
+			
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
@@ -96,4 +99,5 @@
 
 		{#   Paginacion sin ember   #}
 		{{ partial('partials/pagination_static_partial', ['pagination_url': 'account/index']) }}
+	</div>
 {% endblock %}
