@@ -18,12 +18,6 @@
 	{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
 	{{ javascript_include('vendors/highcharts/modules/drilldown.js')}}
 	
-	{# HighMaps#}
-	{{ javascript_include('vendors/highmaps/highmaps.js')}}
-	{{ javascript_include('vendors/highmaps/highmaps.src.js')}}
-	{{ javascript_include('vendors/highmaps/modules/data.js')}}
-	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
-	
 	{{ javascript_include('js/select2.js') }}
 	
 	<script type="text/javascript">
@@ -135,6 +129,10 @@
 	</script>
 {% endblock %}
 {% block content %}
+	{# HighMaps#}
+	{{ javascript_include('vendors/highmaps/highmaps.js')}}
+	{{ javascript_include('vendors/highmaps/modules/data.js')}}
+	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
 	<div id="container" style="max-width: 1000px"></div>
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
