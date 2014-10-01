@@ -24,8 +24,6 @@
 	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
 	
 	{{ javascript_include('js/select2.js') }}
-	{{ stylesheet_link ('css/select2.css') }}
-	{{ stylesheet_link('css/statisticStyles.css') }}
 	
 	<script type="text/javascript">
 		function selectSummary() {
