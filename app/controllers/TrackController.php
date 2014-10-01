@@ -1,6 +1,6 @@
 <?php
 //require 'vendor/autoload.php';
-require 'vendor/geoip.inc';
+require 'vendor/geoip.php';
 
 class TrackController extends ControllerBase
 {
