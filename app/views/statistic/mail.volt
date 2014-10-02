@@ -112,7 +112,7 @@
 					},
 
 					mapNavigation: {
-						enabled: false,
+						enabled: true,
 						buttonOptions: {
 							verticalAlign: 'bottom'
 						}
@@ -167,7 +167,7 @@
 			{{ partial("statistic/partials/shareandcompare_partial") }}	
 			
 			{# Geolocalización por aperturas #}
-			<div id="container" ></div>
+			<div id="container" style="max-width: 100%;"></div>
 	
 			{#   Tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
