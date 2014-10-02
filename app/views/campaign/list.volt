@@ -54,17 +54,68 @@
 {% endblock %}
 {% block content %}
 	<div class="row">
-		<h1  class="sectiontitle">Lista de autorespuestas</h1>
-		<div class="space"></div>
-		{{ flashSession.output() }}
-		
-		<div class="container-fluid">
-			
-			{% if autoresponse|length != 0%}
-				
-				{%for item in autoresponse%}
+		<h1 class="sectiontitle">Lista de autorespuestas</h1>
 
-					<div class="col-md-12 col-sm-12 list-one-autoresponse">
+		<div class="bs-callout bs-callout-info">
+			Esta es la página principal de los correos en la cuenta, aquí podrá encontrar información acerca de la configuración
+			de cada correo enviado, programado, en borrador, etc. Además podrá ver las estadísticas de cada envío.
+		</div>
+
+		{{ flashSession.output() }}
+	</div>
+	
+	
+	{% if autoresponse|length != 0%}	
+		{{ partial('partials/pagination_static_partial', ['pagination_url': 'mail/list']) }}
+		
+		{%for item in autoresponse%}
+			{% if item.active == 1 %}
+				{% set hexagon = 'hexagon-success' %}
+				{% set icon = 'glyphicon glyphicon-calendar'%}
+			{% else %}
+				{% set hexagon = 'hexagon-disable' %}
+				{% set icon = 'glyphicon glyphicon-calendar'%}
+			{% endif %}
+	
+			<div class="mail-block">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+						<div class="hexagon hexagon-sm {{hexagon}}" id="{{item.idAutoresponder}}">
+							<div class="hexagon-wrap">
+								<a href="{{url("campaign/automatic")}}/{{item.idAutoresponder}}" class="hexagon-inner toolTip">
+									<i class="{{icon}}"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+						<div class="mail-info">
+							<div class="mail-name">
+								<a href="{{url("campaign/automatic")}}/{{item.idAutoresponder}}">
+									{{item.name}}
+								</a>
+							</div>
+
+							<div class="mail-detail" style="color: #777;"><strong> Destinatarios:</strong> {{item.target.criteria}}: {{item.target.names}}</div>
+							<div class="mail-detail" style="color: #777;">
+								<strong>Asunto:</strong> {{item.subject}}
+							</div>
+						</div>
+					</div>	
+						
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 autoresponse-list-details">
+						Enviar autorespuesta a las
+						<span>{{item.time.hour}}:{{item.time.minute}} {{item.time.meridian}}</span>
+						<p>los dias {%for day in item.days%} {{day}}, {%endfor%} recurrente.</p>
+					</div>
+				</div>
+			</div>
+	
+	
+			<div class="row">
+				
+				<div class="col-md-12 col-sm-12 list-one-autoresponse">
 						<div class="col-sm-2">
 							{% if item.previewData == null%}
 									<div class="image-64-autorespons">
@@ -108,155 +159,44 @@
 							<input type="checkbox" class="switch-campaign"  data-id="{{item.idAutoresponder}}" {%if item.active == 1%}checked{%endif%}>
 						</div>
 					</div>
+			</div>
+		{%endfor%}
+		
+			
 
-				{%endfor%}
-				
-				<div id="modal-simple" class="modal fade">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h4 class="modal-title">Eliminar envío automático</h4>
-							</div>
-							<div class="modal-body">
-								<p>
-									¿Está seguro que desea eliminar este envío automático?
-								</p>
-								<p>
-									Recuerde que si elimina este envío automático no se enviaran más correos
-								</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
-								<a href="" id="delete_auto_send" class="btn btn-sm btn-default btn-delete extra-padding" >Eliminar</a>
-							</div>
+			<div id="modal-simple" class="modal fade">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Eliminar envío automático</h4>
+						</div>
+						<div class="modal-body">
+							<p>
+								¿Está seguro que desea eliminar este envío automático?
+							</p>
+							<p>
+								Recuerde que si elimina este envío automático no se enviaran más correos
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+							<a href="" id="delete_auto_send" class="btn btn-sm btn-default btn-delete extra-padding" >Eliminar</a>
 						</div>
 					</div>
 				</div>
-			
-			
-			{%else%}
-			
-				<div class="bs-callout bs-callout-warning">
-					<h4>No ha creado ninguna autorespuesta aún</h4>
-					<p>Gestione sus autorespuestas desde aquí.</p>
-				</div>
-			
-			{%endif%}
-			
-			
-			
-			
-{# Ejemplos de autorespuesta			
-			
+			</div>
+
+
+		{%else%}
+
+			<div class="bs-callout bs-callout-warning">
+				<h4>No ha creado ninguna autorespuesta aún</h4>
+				<p>Gestione sus autorespuestas desde aquí.</p>
+			</div>
+
+		{%endif%}
 	
-			<div class="col-md-12 col-sm-12" style="width: 90%; margin: auto; border-top: 1px solid rgb(216, 213, 213);">
-				<div class="col-sm-2">
-					<div class="image-64-autorespons img-64-n1"></div>
-				</div>
-				<div class="col-sm-2" style="margin-top:5%;">
-					<div style="font-size: 60px;text-align: center;margin-left: 45%;"><span class="glyphicon glyphicon-calendar"></span></div>
-				</div>
-				<div class="col-sm-4" style="margin-top:3%;text-align: center;">
-					<div>
-						<div>
-							<h4>Nombre de la autorespuesta</h4>
-							<dl>
-								<dd><strong>Destinatarios:</strong> Lista de pruebas</dd>
-								<dd><strong>Asunto:</strong> Mi asunto</dd>
-							</dl>
-						</div>
-						<div style="margin: auto;display: table;">
-							<div class="btn btn-default btn-sm" style="float:left;margin: 0 2px;"><span class="glyphicon glyphicon-pencil"></span></div>
-							<div class="btn btn-default btn-sm" style="float:left;margin: 0 2px;"><span class="glyphicon glyphicon-eye-open"></span></div>
-							<div class="btn btn-default btn-sm" style="float:left;margin: 0 2px;"><span class="glyphicon glyphicon-trash"></span></div>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-2" style="margin-top:3%;text-align: center;">
-					<div>
-						<div style="margin-bottom:-15px">Enviar</div>
-						<div style="font-size: 70px;">20</div>
-						<div style="margin-top:-15px">días despues</div></div>
-				</div>
-				<div class="col-sm-2" style="margin-top:7%;">
-					<div><input type="checkbox" class="switch-campaign" checked></div>
-				</div>
-			</div>
-
-
-
-
-			<div class="col-md-12 col-sm-12" style="width: 90%; margin: auto; border-top: 1px solid rgb(216, 213, 213);">
-				<div class="col-sm-2">
-					<div class="image-64-autorespons img-64-n2"></div>
-				</div>
-				<div class="col-sm-2" style="margin-top:5%;">
-					<div style="font-size: 60px;text-align: center;margin-left: 45%;"><span class="glyphicon glyphicon-hand-up"></span></div>
-				</div>
-				<div class="col-sm-4" style="margin-top:3%;text-align: center;">
-					<div>
-						<div>
-							<h4>Nombre de la autorespuesta numero dos</h4>
-							<dl>
-								<dd><strong>Destinatarios:</strong> Lista de pruebas</dd>
-								<dd><strong>Asunto:</strong> Mi asunto</dd>
-							</dl>
-						</div>
-						<div style="margin: auto;display: table;">
-							<div class="btn btn-default btn-sm" style="float:left;margin: 0 2px;"><span class="glyphicon glyphicon-pencil"></span></div>
-							<div class="btn btn-default btn-sm" style="float:left;margin: 0 2px;"><span class="glyphicon glyphicon-eye-open"></span></div>
-							<div class="btn btn-default btn-sm" style="float:left;margin: 0 2px;"><span class="glyphicon glyphicon-trash"></span></div>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-2" style="margin-top:3%;text-align: center;">
-					<div style="font-size: 70px;">20</div>
-				</div>
-				<div class="col-sm-2" style="margin-top:7%;">
-					<div><input type="checkbox" class="switch-campaign" checked></div>
-				</div>
-			</div>
-
-
-
-
-			<div class="col-md-12 col-sm-12" style="width: 90%; margin: auto; border-top: 1px solid rgb(216, 213, 213);">
-				<div class="col-sm-2">
-					<div class="image-64-autorespons img-64-n3"></div>
-				</div>
-				<div class="col-sm-2" style="margin-top:5%;">
-					<div style="font-size: 60px;text-align: center;margin-left: 45%;"><span class="glyphicon glyphicon-gift"></span></div>
-				</div>
-				<div class="col-sm-4" style="margin-top:3%;text-align: center;">
-					<div>
-						<div>
-							<h4>Nombre de la autorespuesta numero Tres!</h4>
-							<dl>
-								<dd><strong>Destinatarios:</strong> Otra lista de pruebas</dd>
-								<dd><strong>Asunto:</strong> El super asunto asunto</dd>
-							</dl>
-						</div>
-						<div style="margin: auto;display: table;">
-							<div class="btn btn-default btn-sm" style="float:left;margin: 0 2px;"><span class="glyphicon glyphicon-pencil"></span></div>
-							<div class="btn btn-default btn-sm" style="float:left;margin: 0 2px;"><span class="glyphicon glyphicon-eye-open"></span></div>
-							<div class="btn btn-default btn-sm" style="float:left;margin: 0 2px;"><span class="glyphicon glyphicon-trash"></span></div>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-2" style="margin-top:3%;text-align: center;">
-					<div style="font-size: 70px;">20</div>
-				</div>
-				<div class="col-sm-2" style="margin-top:7%;">
-					<div><input type="checkbox" class="switch-campaign" checked></div>
-				</div>
-			</div>
-#}
-
-		</div>	
 	</div>
 	
 	<div id="preview-auto-send-modal" class="modal fade">
@@ -273,5 +213,4 @@
 			</div>
 		</div>
 	</div>
-
 {% endblock %}
