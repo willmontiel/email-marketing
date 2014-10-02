@@ -23,7 +23,6 @@ class CampaignController extends ControllerBase
 			$obj->category = $autosend->category;
 			$obj->contentsource = $autosend->contentsource;
 			$obj->active = $autosend->active;
-			$this->logger->log($autosend->target);
 			
 			$raw_target = json_decode($autosend->target);
 			$target_wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
