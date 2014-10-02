@@ -126,7 +126,7 @@
 					</div>
 				</div>
 
-				<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+				<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
 					<div class="mail-info">
 						<div class="mail-name">
 							{% if item.status == 'Sent' %}
@@ -145,7 +145,7 @@
 					</div>
 				</div>
 
-				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 					{%if item.status == 'Sent'%}
 						<dl class="dl-horizontal" style="margin-bottom: 0px !important; margin-top: 0px !important;">
 							<dt class="blue medium-indicator">Destinatarios</dt>
@@ -160,7 +160,7 @@
 					{%endif%}
 				</div>
 
-				<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right">
+				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 text-right">
 					{%if item.status == 'Scheduled'%}
 						<button class="ShowDialogEditScheduled btn btn-sm btn-warning tooltip-b3" data-toggle="modal" data-target="#modal-simple-stop" data-id="{{ url('mail/stop/index') }}/{{item.idMail}}" data-placement="top" title="Pausar este correo">
 							<span class="glyphicon glyphicon-pause"></span>
