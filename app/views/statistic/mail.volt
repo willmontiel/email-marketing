@@ -1,23 +1,33 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
-	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/' ~ mail.idMail }}';
 	</script>
+	{# Paginación de Ember #}
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
+	
 	{{ javascript_include('js/mixin_config.js') }}
-	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
 	
+	{# Moment.js#}
+	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js') }}
+	
+	
+	{# HighCharts & HighMaps #}
 	{{ javascript_include('vendors/highcharts/highcharts.js')}}
+	{{ javascript_include('vendors/highmaps/modules/map.js')}}
 	{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
 	{{ javascript_include('vendors/highcharts/modules/drilldown.js')}}
+	{{ javascript_include('vendors/highmaps/modules/data.js')}}
+	{{ javascript_include('vendors/highmaps/mapdata/world.js')}}
+	{#<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>#}
+	
+	{{ javascript_include('js/maps.js')}}
+	
 	{{ javascript_include('js/select2.js') }}
-	{{ stylesheet_link('css/statisticStyles.css') }}
-	{{ stylesheet_link ('css/select2.css') }}
 	<script type="text/javascript">
 		function selectSummary() {
 			$('#inputsummary').focus();
@@ -82,11 +92,31 @@
 			}
 		}
 	</script>
+	
+	<script type="text/javascript">
+		
+		var gData = [
+			{% for geostat in geostats %}
+				{% if geostat.code is not empty AND geostat.name is not empty %}
+					{code: "{{geostat.code}}",value: {{geostat.value}},name: "{{geostat.name}}"},
+				{% endif %}
+			{% endfor %}
+		];
+		
+		$(function () {
+			var obj = new Object();
+			obj.container = "map-container";
+			obj.title = "Aperturas por ubicación";
+			obj.navigation = false;
+			obj.label = "Aperturas";
+			obj.valueText = " Aperturas";
+			obj.data = gData;
+			
+			createMap(obj);
+		});
+	</script>
 {% endblock %}
 {% block content %}
-	{#
-		<div id="container"></div>
-	#}
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
@@ -109,6 +139,9 @@
 			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
 			{{ partial("statistic/partials/shareandcompare_partial") }}	
 			
+			{# Geolocalización por aperturas #}
+			<div id="map-container"></div>
+	
 			{#   Tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
 			{{ "{{outlet}}" }}

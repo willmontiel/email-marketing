@@ -24,6 +24,7 @@ class StatisticController extends ControllerBase
 				$this->view->setVar("target", $target);
 				$this->view->setVar("summaryChartData", $mailStat['summaryChartData']);
 				$this->view->setVar("statisticsData", $mailStat['statisticsData']);
+				$this->view->setVar("geostats", $mailStat['geostats']);
 				$this->view->setVar("statisticsSocial", $mailStat['statisticsSocial']);
 				$this->view->setVar("statisticsClicksSocial", $mailStat['statisticsClicksSocial']);
 				$this->view->setVar("compareMail", $mailStat['compareMail']);

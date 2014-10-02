@@ -28,6 +28,7 @@ class StatisticsWrapper extends BaseWrapper
 	public function showMailStatistics(Mail $mail, $compare = true)
 	{
 		$manager = Phalcon\DI::getDefault()->get('modelsManager');
+		
 		$total = $mail->messagesSent;
 		$opens = ($mail->uniqueOpens != null) ? $mail->uniqueOpens : 0;
 		$bounced = ($mail->bounced != null) ? $mail->bounced : 0;
@@ -132,10 +133,21 @@ class StatisticsWrapper extends BaseWrapper
 			'idMail' => $mail->idMail
 		));
 		
+		$geoOpenQuery = "SELECT code, country AS name, COUNT(country) AS value 
+						 FROM Mxc 
+						 WHERE idMail = :idMail: 
+							GROUP BY 1, 2 ";
+		$geoOpen = $manager->createQuery($geoOpenQuery);
+		$geoOpenStats = $geoOpen->execute(array(
+			'idMail' => $mail->idMail
+		));
+		
+		
 		
 //		$this->logger->log("Stats: " . print_r($statisticsData, true));
 		$response['summaryChartData'] = $summaryChartData;
 		$response['statisticsData'] = $statisticsData;
+		$response['geostats'] = $geoOpenStats;
 		$response['statisticsSocial'] = $socialStats->getFirst();
 		$response['statisticsClicksSocial'] = $socialClickStats->getFirst();
 		
