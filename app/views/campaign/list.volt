@@ -147,7 +147,7 @@
 						</div>
 					</div>
 					
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 						<div class="small-widget">
 							<div class="widget-icon"><span class="glyphicon glyphicon-cog"></span></div>
 							<div class="widget-content">
@@ -157,7 +157,7 @@
 						</div>
 
 						<div class="small-widget">
-							<div class="widget-icon"><span class="glyphicon glyphicon-calendar"></span></div>
+							<div class="widget-icon"><span class="glyphicon glyphicon-check"></span></div>
 							<div class="widget-content">
 								<div class="widget-header">Fecha de creación</div>	
 								<div class="widget-body">{{date('d/M/Y g:i a', item.createdon)}}</div>	
@@ -195,7 +195,7 @@
 						</div>
 
 						<div class="small-widget">
-							<div class="widget-icon"><span class="glyphicon glyphicon-asterisk"></span></div>
+							<div class="widget-icon"><span class="glyphicon glyphicon-calendar"></span></div>
 							<div class="widget-content">
 								<div class="widget-header">Programada para:</div>	
 								<div class="widget-body">
