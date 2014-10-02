@@ -92,8 +92,15 @@
 	
 	<script type="text/javascript">
 		
-		
-		
+		var gData = [
+			{% for geostat in geostats%}
+				{
+					code: "{{geostat.code}}",
+					value: {{geostat.value}},
+					name: "{{geostat.name}}"
+				},
+			{% endfor %}
+		];
 		
 		$(function () {
 			$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=world-population-density.json&callback=?', function (data) {
