@@ -102,7 +102,7 @@
 		];
 		
 		$(function () {
-			$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=world-population-density.json&callback=?', function (data) {
+			//$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=world-population-density.json&callback=?', function (data) {
 
 				// Initiate the chart
 				$('#container').highcharts('Map', {
@@ -125,7 +125,7 @@
 					},
 
 					series : [{
-						data : data,
+						data : gData,
 						mapData: Highcharts.maps['custom/world'],
 						joinBy: ['iso-a2', 'code'],
 						name: 'Aperturas',
@@ -140,7 +140,7 @@
 					}]
 				});
 			});
-		});
+	//	});
 	</script>
 {% endblock %}
 {% block content %}
