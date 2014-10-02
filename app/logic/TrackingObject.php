@@ -65,8 +65,10 @@ class TrackingObject
 //				$this->log->log('Se ha iniciado una transacción');
 				
 				$this->mxc->opening = $time;// Actualizar marcador de apertura (timestamp)
-				$this->mxc->ip = $geo->ip;// Actualizar marcador de apertura (timestamp)
-				$this->mxc->geolocalization = $geo->country;// Actualizar marcador de apertura (timestamp)
+				$this->mxc->ip = $geo->ip;// Grabar IP desde donde se hizo la petición
+				$this->mxc->code = $geo->code;// Código del país
+				$this->mxc->country = $geo->country;// Grabar país desde donde se hizo la petición
+				
 				$this->addDirtyObject($this->mxc);//Se agregar el objeto mxc actualizado para su posterior grabación(esto se hace con todos los objetos)
 //				$this->log->log('Se ha ensuaciado Mxc');
 				
@@ -314,8 +316,9 @@ class TrackingObject
 				if ($this->validateOpenForClick()) {
 //					
 					$this->mxc->opening = $time;
-					$this->mxc->ip = $geo->ip;
-					$this->mxc->geolocalization = $geo->country;
+					$this->mxc->ip = $geo->ip;// Grabar IP desde donde se hizo la petición
+					$this->mxc->code = $geo->code;// Código del país
+					$this->mxc->country = $geo->country;// Grabar país desde donde se hizo la petición
 					
 					$mailObj->incrementUniqueOpens();
 					$statDbaseObj->incrementUniqueOpens();

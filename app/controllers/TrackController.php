@@ -225,12 +225,14 @@ class TrackController extends ControllerBase
 //		$gi = geoip_open("/usr/share/GeoIP/GeoLiteCity.dat",GEOIP_STANDARD);
 //		$this->logger->log(geoip_country_code_by_addr($gi, $ip));
 		$country = geoip_country_name_by_addr($gi, $ip);
+		$code = geoip_country_code_by_addr($gi, $ip);
 		
 		geoip_close($gi);
 		
 		$geolocalization = new stdClass();
 		$geolocalization->ip = $ip;
 		$geolocalization->country = $country;
+		$geolocalization->code = $code;
 		
 		return $geolocalization;
 	}

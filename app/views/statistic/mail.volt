@@ -5,7 +5,9 @@
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1_2Url() ~ '/mail/' ~ mail.idMail }}';
 	</script>
+	{# Paginación de Ember #}
 	{{ javascript_include('js/mixin_pagination_statistics.js') }}
+	
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/app_statistics.js') }}
 	{{ javascript_include('js/app_charts.js') }}
@@ -13,18 +15,16 @@
 	{# Moment.js#}
 	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js') }}
 	
-	{# HighCharts#}
+	
+	{# HighCharts & HighMaps #}
 	{{ javascript_include('vendors/highcharts/highcharts.js')}}
+	{{ javascript_include('vendors/highmaps/modules/map.js')}}
 	{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
 	{{ javascript_include('vendors/highcharts/modules/drilldown.js')}}
-	
-	{# HighMaps#}
-	{{ javascript_include('vendors/highmaps/highmaps.js')}}
 	{{ javascript_include('vendors/highmaps/modules/data.js')}}
 	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
 	
 	{{ javascript_include('js/select2.js') }}
-	
 	<script type="text/javascript">
 		function selectSummary() {
 			$('#inputsummary').focus();
@@ -91,19 +91,22 @@
 	</script>
 	
 	<script type="text/javascript">
+		
+		
+		
+		
 		$(function () {
-
 			$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=world-population-density.json&callback=?', function (data) {
 
 				// Initiate the chart
 				$('#container').highcharts('Map', {
 
 					title : {
-						text : 'Population density by country (/km²)'
+						text : 'Aperturas por pais'
 					},
 
 					mapNavigation: {
-						enabled: true,
+						enabled: false,
 						buttonOptions: {
 							verticalAlign: 'bottom'
 						}
@@ -119,14 +122,14 @@
 						data : data,
 						mapData: Highcharts.maps['custom/world'],
 						joinBy: ['iso-a2', 'code'],
-						name: 'Population density',
+						name: 'Aperturas',
 						states: {
 							hover: {
 								color: '#BADA55'
 							}
 						},
 						tooltip: {
-							valueSuffix: '/km²'
+							valueSuffix: ' Aperturas'
 						}
 					}]
 				});
@@ -135,7 +138,6 @@
 	</script>
 {% endblock %}
 {% block content %}
-	<div id="container" style="max-width: 1000px"></div>
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
@@ -158,6 +160,9 @@
 			{#   Partial para compartir estadisticas y comparar estadisticas de correo	#}
 			{{ partial("statistic/partials/shareandcompare_partial") }}	
 			
+			{# Geolocalización por aperturas #}
+			<div id="container" ></div>
+	
 			{#   Tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
 			{{ "{{outlet}}" }}
