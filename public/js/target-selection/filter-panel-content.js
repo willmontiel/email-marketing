@@ -19,20 +19,6 @@ FilterPanelContent.prototype = new PanelContent;
 FilterPanelContent.prototype.setValues = function(type, himself) {
 	this.type = type;
 	
-	var mtitle = this.content.find('.sgm-mail-title');
-	var ctitle = this.content.find('.sgm-click-title');
-	
-	mtitle.empty();
-	ctitle.empty();
-	
-	if (this.mtitle !== '') {
-		mtitle.append('<div class="sgm-title-box">' + this.mtitle + '</div>');
-	}
-	
-	if (this.ctitle !== '') {
-		ctitle.append('<div class="sgm-title-box">' + this.ctitle + '</div>');
-	}
-	
 	this.content.find('.smg-filter').removeClass('sgm-filter-active');
 	$(himself).addClass('sgm-filter-active');
 	
@@ -49,8 +35,6 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	var self = this;
 	
 	this.content.find('.smg-add-sent-filter').on('click', function (e) {
-		self.ctitle = '';
-		self.mtitle = 'Enviar a contactos que hayan recibido el siguiente correo';
 		var container = self.setValues('mail-sent', this);
 		var filter = new FilterMailContent();
 		self.createFilter(filter, container);
@@ -60,8 +44,6 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	});
 	
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
-		self.ctitle = '';
-		self.mtitle = 'Enviar a contactos que hayan abierto el siguiente correo';
 		var container = self.setValues('mail-open', this);
 		var filter = new FilterMailContent();
 		self.createFilter(filter, container);
@@ -71,8 +53,6 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	});
 	
 	this.content.find('.smg-add-click-filter').on('click', function (e) {
-		self.ctitle = '';
-		self.mtitle = '';
 		var container = self.setValues('click', this);
 		var filter = new FilterClickContent();
 		self.createClickFilter(filter, container);
@@ -106,9 +86,10 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			select.select2('val', self.selectedValue);
 			if (self.content.find('.sgm-add-neg').length == 0) {
 				var active = (self.negation ? 'sgm-neg-active' :'');
-				var addNeg = $('<div class="sgm-add-neg ' + active + '">Not!</div>');
+				var addNeg = $('<div class="sgm-tooltip sgm-add-neg ' + active + '" data-toggle="tooltip" data-placement="right" title="La condición cambiará a ser lo contrario">Not!</div>');
 				self.content.find('.sgm-content-negation-filter').append(addNeg);
 				self.updateNegationValue();
+				self.initializeTooltip();
 			}
 		}
 		
@@ -117,19 +98,22 @@ FilterPanelContent.prototype.createFilter = function(obj, container) {
 			self.selectedValue = e.val;
 			self.updateObject();
 			
-			var addFilter = $('<div class="sgm-add-panel"><span class="glyphicon glyphicon-filter"></span></div>');
+			var addFilter = $('<div class="sgm-tooltip sgm-add-panel" data-toggle="tooltip" data-placement="right" title="Agregar otro filtro"><span class="glyphicon glyphicon-filter"></span></div>');
 			self.content.find('.sgm-content-add-filter').append(addFilter);
 			
+			self.initializeTooltip();
 			addFilter.on('click', function (e) {
 				self.createNextPanel(e);
+				$(this).tooltip('hide');
 				$(this).remove();
 			});
 			
 			if (self.content.find('.sgm-add-neg').length == 0) {
-				var addNeg = $('<div class="sgm-add-neg">Not!</div>');
+				var addNeg = $('<div class="sgm-tooltip sgm-add-neg" data-toggle="tooltip" data-placement="right" title="La condición cambiará a ser lo contrario">Not!</div>');
 				self.content.find('.sgm-content-negation-filter').append(addNeg);
 
 				self.updateNegationValue();
+				self.initializeTooltip();
 			}
 			
 			self.model.refreshTotalContacts();
@@ -171,13 +155,6 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 		}
 		
 		select.on("change", function(e) { 
-			var mtitle = self.content.find('.sgm-mail-title');
-			var ctitle = self.content.find('.sgm-click-title');
-
-			mtitle.empty();
-			ctitle.empty();
-			ctitle.append('<div class="sgm-title-box">Enviar a contactos que hayan hecho click en el siguiente enlace</div>');
-			
 			e.preventDefault();
 			self.mailSelected = e.val;
 			self.updateObject();
@@ -192,22 +169,32 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container) {
 FilterPanelContent.prototype.createContent = function() {
 	this.content = $('<div class="sgm-filter-selector">\n\
 						  <div class="sgm-filter-content">\n\
-							  <div class="sgm-filter-content-header">\n\
-								  <div class="smg-filter smg-add-sent-filter filter-icon">\n\
-									  <div class="sgm-mail-sent-icon"></div>\n\
-								  </div>\n\
-								  <div class="smg-filter smg-add-open-filter filter-icon">\n\
-									  <div class="sgm-mail-open-icon"></div>\n\
-								  </div>\n\
-								  <div class="smg-filter smg-add-click-filter filter-icon">\n\
-									  <div class="sgm-mail-click-icon"></div>\n\
-								  </div>\n\
+							  <div class="sgm-filter-content-header"></div>\n\
+							  <div class="sgm-filter-content-selector">\n\
+								  <ul>\n\
+									  <li class="smg-add-sent-filter">\n\
+										<div class="smg-filter filter-icon">\n\
+											<div class="sgm-mail-sent-icon"></div>\n\
+										</div>\n\
+										Enviar a contactos que hayan recibido un correo\n\
+									  </li>\n\
+									  <li class="smg-add-open-filter">\n\
+										 <div class="smg-filter filter-icon">\n\
+											<div class="sgm-mail-open-icon"></div>\n\
+										 </div>\n\
+										 Enviar a contactos que hayan abierto un correo\n\
+									  </li>\n\
+									  <li class="smg-add-click-filter">\n\
+										 <div class="smg-filter filter-icon">\n\
+											<div class="sgm-mail-click-icon"></div>\n\
+										 </div>\n\
+										 Enviar a contactos que hayan hecho clic un enlace\n\
+									  </li>\n\
+								  </ul>\n\
 							  </div>\n\
 						  </div>\n\
 						  <div class="sgm-filter-content-body">\n\
-							   <div class="sgm-mail-title"></div>\n\
 							   <div class="sgm-filter-content-select-mail"></div>\n\
-							   <div class="sgm-click-title"></div>\n\
 							   <div class="sgm-filter-content-select-click"></div>\n\
 							   <div class="sgm-content-add-filter"></div>\n\
 							   <div class="sgm-content-negation-filter"></div>\n\
@@ -224,8 +211,6 @@ FilterPanelContent.prototype.serialize = function() {
 		
 		switch (type) {
 			case 'mail-sent':
-				this.mtitle = 'Enviar a contactos que hayan recibido el siguiente correo';
-				this.ctitle = '';
 				var active = this.content.find('.smg-add-sent-filter');
 				var container = this.setValues(type, active);
 				var filter = new FilterMailContent();
@@ -235,8 +220,6 @@ FilterPanelContent.prototype.serialize = function() {
 				break;
 				
 			case 'mail-open':
-				this.mtitle = 'Enviar a contactos que hayan abierto el siguiente correo';
-				this.ctitle = '';
 				var active = this.content.find('.smg-add-open-filter');
 				var container = this.setValues(type, active);
 				var filter = new FilterMailContent();
@@ -246,8 +229,6 @@ FilterPanelContent.prototype.serialize = function() {
 				break;
 				
 			case 'click':
-				this.mtitle = '';
-				this.ctitle = 'Enviar a contactos que hayan hecho click en el siguiente enlace';
 				var active = this.content.find('.smg-add-click-filter');
 				this.mailSelected = this.serializerObject.serialization.idMail;
 				var container = this.setValues(type, active);
@@ -285,4 +266,8 @@ FilterPanelContent.prototype.updateObject = function () {
 	
 	this.model.updateObject(this.oldCriteria, this.newCriteria);
 	this.oldCriteria = this.newCriteria;
+};
+
+FilterPanelContent.prototype.initializeTooltip = function() {	
+	$('.sgm-tooltip').tooltip();
 };

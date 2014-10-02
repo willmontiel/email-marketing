@@ -138,6 +138,50 @@
     border-right: 20px solid white;
 }
 
+.sgm-filter-content-selector ul {
+	background-color: white;
+	margin-bottom: 0px;
+	/*padding-top: 6px;*/
+	padding-left: 0px;
+	list-style: none;
+	font-size: 15px;
+	/*font-weight: bold;*/
+}
+
+.sgm-filter-content-selector ul li {
+	color: #20526e;
+	padding-left: 10px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	cursor: pointer;
+	font-size: 12px;
+	/*border: 1px solid #20526e;*/
+}
+
+.sgm-filter-content-selector ul li > .filter-icon {
+	background-color: #f5f5f5;
+	color: white;
+	width: 35px;
+	height: 35px;
+	padding-top: 6px;
+	padding-left: 1px;
+	border: 3px solid #20526e;
+	border-radius: 50%;
+	cursor: pointer;
+	/*display: inline-block;*/
+	float: left;
+	margin-right: 10px;
+}
+
+.sgm-filter-content-selector ul li:hover {
+	background-color: #F5F5F5;
+}
+
+.sgm-filter-title {
+	font-size: 11px;
+	display: inline;
+}
+
 .sgm-content-selector ul {
 	background-color: white;
 	margin-bottom: 0px;
@@ -218,18 +262,6 @@
 	text-align: center;
 }
 
-.sgm-filter-content-header > .filter-icon {
-	background-color: white;
-	color: white;
-	width: 44px;
-	height: 44px;
-	padding-top: 7px;
-	border: 3px solid #20526e;
-	border-radius: 50%;
-	cursor: pointer;
-	display: inline-block;
-}
-
 .sgm-button-add {
 	position: absolute;
 	right: 5%;
@@ -250,11 +282,12 @@
 	color: white;
 	padding: 4px;
 	border-radius: 4px;
-	right: 15%;
+	right: 5%;
 	top: 38%;
 	cursor: pointer;
 	position: absolute;
-	border-radius: 50px;
+	border-radius: 4px;
+	font-size: 11px;
 }
 
 .sgm-button-reset:hover {
@@ -316,7 +349,7 @@
 .sgm-filter-content-body {
 	position: relative;
 	padding: 8px;
-	padding-top: 0px;
+	padding-top: 12px;
 	height: 120px;
 }
 
@@ -333,7 +366,6 @@
 
 .sgm-filter-active {
 	background-color: #f5f5f5 !important;
-	border: 3px solid #428bca !important;
 }
 
 .smg-filter:hover {
@@ -380,26 +412,26 @@
 
 .sgm-mail-sent-icon {
 	background: url('../images/sent-mail-icon1.png');
-	width: 36px;
-	height: 22px;
+	width: 26px;
+	height: 18px;
 	background-repeat: no-repeat;
-	background-size: 36px 22px;
+	background-size: 26px 18px;
 }
 
 .sgm-mail-open-icon {
 	background: url('../images/open-mail-icon.png');
-	width: 36px;
-	height: 22px;
+	width: 26px;
+	height: 18px;
 	background-repeat: no-repeat;
-	background-size: 36px 22px;
+	background-size: 26px 18px;
 }
 
 .sgm-mail-click-icon {
 	background: url('../images/click-mail-icon.png');
-	width: 36px;
-	height: 22px;
+	width: 26px;
+	height: 18px;
 	background-repeat: no-repeat;
-	background-size: 36px 22px;
+	background-size: 26px 18px;
 }
 
 .select2-content {

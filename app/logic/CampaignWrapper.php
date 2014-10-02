@@ -113,12 +113,11 @@ class CampaignWrapper extends BaseWrapper
 				
 		$autoresponder->active = ( isset($content['active']) ) ? 1 : 0 ;
 		$autoresponder->name = $content['name'];
-		
-		if(empty($content['target']) || empty($content['target_selected'])){
+		if(empty($content['target']) || $content['target'] == null || $content['target'] == 'null'){
 			throw new Exception('Recuerde seleccionar destinatarios');
 		}
 		
-		$autoresponder->target = json_encode(array('destination' => $content['target'], 'ids' => implode(",", $content['target_selected']), 'filter' => ''));
+		$autoresponder->target = $content['target'];
 		
 		if( empty($content['meta-tag']) ) {
 			$autoresponder->subject = json_encode( array('mode' => 'static', 'text' => $content['subject']));
