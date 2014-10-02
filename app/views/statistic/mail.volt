@@ -93,12 +93,10 @@
 	<script type="text/javascript">
 		
 		var gData = [
-			{% for geostat in geostats%}
-				{
-					code: "{{geostat.code}}",
-					value: {{geostat.value}},
-					name: "{{geostat.name}}"
-				},
+			{% for geostat in geostats %}
+				{% if geostat.code is not empty AND geostat.name is not empty %}
+					{code: "{{geostat.code}}",value: {{geostat.value}},name: "{{geostat.name}}"},
+				{% endif %}
 			{% endfor %}
 		];
 		
