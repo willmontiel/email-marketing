@@ -47,7 +47,8 @@ App.IndexRoute = Ember.Route.extend({
 	   }
 	}
 });
-// ****************************
+
+
 App.ExternalLinkComponent = Ember.Component.extend({
   tagName: "a",
   classNames: [],
@@ -58,12 +59,12 @@ App.ExternalLinkComponent = Ember.Component.extend({
 });
 
 Ember.Handlebars.helper("external-link", App.ExternalLinkComponent);
-// ****************************
-
 
 App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	senderName: '',
 	senderEmail: '',
+	date: '',
+	time: '',
 	senderAttr: [],
 	fbaccountsel: [],
 	twaccountsel: [],
@@ -241,26 +242,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 
 	}.property('fbaccountsel.[]','twaccountsel.[]'),
 
-	//Observa si hay filtro en selección de destinatarios
-	filterEmpty: function () {
-		var byEmail, byOpen, byClick, byEx;
-		
-		byEmail = this.get('content.filterByEmail');
-		byOpen = this.get('this.open');
-		byClick = this.get('this.click');
-		byEx = this.get('this.exclude');
-		
-		byEmail = (byEmail === '')?null:byEmail;
-		byOpen = (byOpen.length === 0)?null:byOpen;
-		byClick = (byClick.length === 0)?null:byClick;
-		byEx = (byEx.length === 0)?null:byEx;
-		
-		if (!byEmail && !byOpen && !byClick && !byEx) {
-			return true;
-		}
-		return false;
-	}.property('content.filterByEmail','open.[]', 'click.[]', 'exclude.[]'), 
-	
 	//Observa el contenido del correo
 	contentEmpty: function () {
 		var mailcontent, preview;
@@ -347,34 +328,33 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 
 		this.set('time', time);
 		
-		
 		return false;
 	}.property('content.scheduleDate'),
 	
 	isTargetBydbases: function () {
 		return setFilterValues(this.get('this.dbases'), 'dbaseChecked', this);
 	}.property('content.dbases'),
-//	
+
 	isTargetByLists: function () {
 		return setFilterValues(this.get('this.contactlists'), 'listChecked', this);
 	}.property('content.contactlists'),
-//	
+	
 	isTargetBySegments: function () {
 		return setFilterValues(this.get('this.segments'), 'segmentChecked', this);
 	}.property('content.segments'),
-//		
+		
 	isFilterByEmail: function () {
 		return setFilterValues(this.get('this.filterByEmail'), 'filterEmailChecked', this);
 	}.property('content.filterByEmail'),
-//			
+			
 	isFilterByOpen: function () {
 		return setFilterValues(this.get('this.filterByOpen'), 'filterOpenChecked', this);
 	}.property('content.filterByOpen'),
-//	
+	
 	isFilterByClick: function () {
 		return setFilterValues(this.get('this.filterByClick'), 'filterClickChecked', this);
 	}.property('content.filterByClick'),
-//	
+	
 	isFilterByExclude: function () {
 		return setFilterValues(this.get('this.filterByExclude'), 'filterExcludeChecked', this);
 	}.property('content.filterByExclude'),
@@ -432,13 +412,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	}.property('content.name', 'content.fromName', 'content.fromEmail', 'content.subject', 'content.mailcontent', 'content.plainText', 'content.totalContacts', 'content.scheduleDate'),
 
 	SetAndSave: function (mail) {
-//		var filter=/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/;
-			
-		
-		//else if (!filter.test(mail.get('email'))) {
-			//$.gritter.add({title: 'Error', text: 'La dirección de correo de origen ingresada no es válida, por favor verifique la información', sticky: false, time: 3000});
-		//}
-		
 		var senderName = this.get('senderName');
 		var senderEmail = this.get('senderEmail');
 	
@@ -477,19 +450,12 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		}
 		
 		mail.set('sender', sender);
-		mail.set('dbases', dbases);
-		mail.set('contactlists', contactlists);
-		mail.set('segments', segments);
-		mail.set('filterByOpen', open);
-		mail.set('filterByClick', click);
-		mail.set('filterByExclude', exclude);
 		mail.set('googleAnalytics', analitycs);
 		mail.set('fbaccounts', fbaccounts);
 		mail.set('twaccounts', twaccounts);
 		mail.set('fbimagepublication', App.fbimage);
 		
 		return mail;
-		
 	},
 			
 	actions: {
@@ -548,21 +514,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			if (this.get('this.id') !== null) {
 				var target = this.get('content.target');
 				this.set('oldTarget', target);
-//				var arrayDbase = setTargetValues(this.get('this.dbases'), App.dbs);
-//				var arrayList = setTargetValues(this.get('this.contactlists'), App.lists);
-//				var arraySegment = setTargetValues(this.get('this.segments'), App.segments);
-				
-//				this.set('databases', arrayDbase);
-//				this.set('clists', arrayList);
-//				this.set('csegments', arraySegment);
-//
-//				var arrayOpen = setTargetValues(this.get('this.filterByOpen'), App.sendByOpen);
-//				var arrayClick = setTargetValues(this.get('this.filterByClick'), App.sendByClick);
-//				var arrayExclude = setTargetValues(this.get('this.filterByExclude'), App.excludeContact);
-
-//				this.set('fiteropens', arrayOpen);
-//				this.set('filterclicks', arrayClick);
-//				this.set('filterexcludes', arrayExclude);
 			}
 			this.set('isTargetExpanded', true);
 			this.set('isHeaderExpanded', false);
@@ -650,12 +601,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				if (this.get('oldTarget') !== '') {
 					App.serializerObject = JSON.parse(this.get('oldTarget'));
 				}
-//				this.set('dbaselist', this.get('databases'));
-//				this.set('list', this.get('clists'));
-//				this.set('segmentlist', this.get('csegments'));
-//				this.set('open', this.get('fiteropens'));
-//				this.set('click', this.get('filterclicks'));
-//				this.set('exclude', this.get('filterexcludes'));
 			}
 			this.set('isTargetExpanded', false);
 		},
@@ -891,74 +836,6 @@ Ember.RadioButton = Ember.View.extend({
 
 		return this.get("value") === this.get("selection");   
     }.property()
-});
-
-Ember.RadioButtonTarget = Ember.View.extend({
-    tagName : "input",
-    type : "radio",
-    attributeBindings : [ "name", "type", "value", "id", "checked"],
-    click : function() {
-        $("#db").hide();
-		$("#list").hide();
-		$("#seg").hide();
-		
-		this.set('controller.dbaselist', []);
-		this.set('controller.list', []);
-		this.set('controller.segmentlist', []);
-		
-		var value = this.$().val();
-		
-		switch (value) {
-			case "dataBase":
-				$("#db").show();
-				break;
-			case "contactList":
-				$("#list").show();
-				break;
-			case "segment":
-				$("#seg").show();
-				break;
-		}
-    }
-});
-
-Ember.RadioFilter = Ember.View.extend({
-    tagName : "input",
-    type : "radio",
-    attributeBindings : [ "name", "type", "value", "id", "checked"],
-    click : function() {
-		$("#mail").hide();
-		$("#open").hide();
-		$("#click").hide();
-		$("#exclude").hide();
-		
-		this.set('controller.filterByEmail', '');
-		this.set('controller.open', []);
-		this.set('controller.click', []);
-		this.set('controller.exclude', []);
-	
-		$("#sendByMail").val('');
-		$('#sendOpen').val('');
-		$('#sendClick').val('');
-		$('#sendExclude').val('');
-		
-		var value = this.$().val();
-		
-		switch (value) {
-			case "byMail":
-				$("#mail").show();
-				break;
-			case "byOpen":
-				$("#open").show();
-				break;
-			case "byClick":
-				$("#click").show();
-				break;
-			case "byExclude":
-				$("#exclude").show();
-				break;
-		}
-    }	
 });
 
 App.Target = Ember.View.extend({
