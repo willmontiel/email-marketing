@@ -8,7 +8,7 @@
 	<script> 
 		$(function (){
 			$(".switch-campaign").bootstrapSwitch({
-				size: 'small',
+				size: 'mini',
 				onColor: 'success',
 				offColor: 'danger'
 			});
@@ -71,8 +71,9 @@
 	
 	
 	{% if autoresponse|length != 0%}	
+		{#
 		{{ partial('partials/pagination_static_partial', ['pagination_url': 'campaign/list']) }}
-		
+		#}
 		{%for item in autoresponse%}
 			{% if item.active == 1 %}
 				{% set hexagon = 'hexagon-success' %}
@@ -216,7 +217,7 @@
 				</div>
 			</div>
 			
-	
+			{#
 			<div class="row">
 				
 				<div class="col-md-12 col-sm-12 list-one-autoresponse">
@@ -264,6 +265,7 @@
 						</div>
 					</div>
 			</div>
+			#}
 		{%endfor%}
 			<div id="modal-simple" class="modal fade">
 				<div class="modal-dialog">
@@ -287,7 +289,9 @@
 					</div>
 				</div>
 			</div>
+			{#
 			{{ partial('partials/pagination_static_partial', ['pagination_url': 'campaign/list']) }}
+			#}
 		{%else%}
 			<div class="bs-callout bs-callout-warning">
 				<h4>No ha creado ninguna autorespuesta aún</h4>
