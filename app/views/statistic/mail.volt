@@ -25,6 +25,8 @@
 	{{ javascript_include('vendors/highmaps/mapdata/world.js')}}
 	{#<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>#}
 	
+	{{ javascript_include('js/maps.js')}}
+	
 	{{ javascript_include('js/select2.js') }}
 	<script type="text/javascript">
 		function selectSummary() {
@@ -102,45 +104,16 @@
 		];
 		
 		$(function () {
-			//$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=world-population-density.json&callback=?', function (data) {
-
-				// Initiate the chart
-				$('#container').highcharts('Map', {
-
-					title : {
-						text : 'Aperturas por pais'
-					},
-
-					mapNavigation: {
-						enabled: false,
-						buttonOptions: {
-							verticalAlign: 'bottom'
-						}
-					},
-
-					colorAxis: {
-						min: 1,
-						max: 1000,
-						type: 'logarithmic'
-					},
-
-					series : [{
-						data : gData,
-						mapData: Highcharts.maps['custom/world'],
-						joinBy: ['iso-a2', 'code'],
-						name: 'Aperturas',
-						states: {
-							hover: {
-								color: '#BADA55'
-							}
-						},
-						tooltip: {
-							valueSuffix: ' Aperturas'
-						}
-					}]
-				});
-			});
-	//	});
+			var obj = new Object();
+			obj.container = "map-container";
+			obj.title = "Aperturas por ubicación";
+			obj.navigation = false;
+			obj.label = "Aperturas";
+			obj.valueText = " Aperturas";
+			obj.data = gData;
+			
+			createMap(obj);
+		});
 	</script>
 {% endblock %}
 {% block content %}
@@ -167,7 +140,7 @@
 			{{ partial("statistic/partials/shareandcompare_partial") }}	
 			
 			{# Geolocalización por aperturas #}
-			<div id="container"></div>
+			<div id="map-container"></div>
 	
 			{#   Tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
