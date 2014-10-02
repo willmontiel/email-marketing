@@ -109,9 +109,28 @@
 						<span>{{item.time.hour}}:{{item.time.minute}} {{item.time.meridian}}</span>
 						<p>los dias {%for day in item.days%} {{day}}, {%endfor%} recurrente.</p>
 					</div>
+						
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right">
+						<a class="btn btn-primary btn-sm tooltip-b3" href="{{url("campaign/automatic")}}/{{item.idAutoresponder}}" data-placement="top" title="Editar esta autorespuesta">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+						<a onclick="previewAutoSend('{{item.content.url}}', '{{item.idAutoresponder}}');" class="btn btn-primary btn-sm tooltip-b3" data-placement="top" title="Previsualizar esta autorespuesta">
+							<span class="glyphicon glyphicon-eye-open"></span>
+						</a>
+						<button class="btn btn-sm btn btn-info tooltip-b3" data-toggle="collapse" data-target="#preview{{item.idAutoresponder}}" data-placement="top" title="Ver detalles">
+							<span class="glyphicon glyphicon-collapse-down"></span>
+						</button>
+						<a class="auto_send_delete_btn btn btn-danger btn-sm tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('campaign/delete/') }}{{item.idAutoresponder}}" data-placement="top" title="Eliminar esta autorespuesta">
+							<span class="glyphicon glyphicon-trash"></span>
+						</a>
+					</div>
+				</div>
+					
+				<div id="preview{{item.idAutoresponder}}" class="collapse row">
+					<hr>
 				</div>
 			</div>
-	
+			
 	
 			<div class="row">
 				
