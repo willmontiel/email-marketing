@@ -449,7 +449,19 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			mail.set('scheduleDate', schedule);
 		}
 		
+		var target = null;
+		var totalContacts = 0;
+		
+		if (App.model !== undefined) {
+			var model = App.model.getModel();
+			App.serializerObject = model;
+			target = JSON.stringify(model);
+			totalContacts = App.model.getTotalContacts();
+		}
+		
 		mail.set('sender', sender);
+		mail.set('target', target);
+		mail.set('totalContacts', totalContacts);
 		mail.set('googleAnalytics', analitycs);
 		mail.set('fbaccounts', fbaccounts);
 		mail.set('twaccounts', twaccounts);
