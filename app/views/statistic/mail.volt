@@ -22,7 +22,8 @@
 	{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
 	{{ javascript_include('vendors/highcharts/modules/drilldown.js')}}
 	{{ javascript_include('vendors/highmaps/modules/data.js')}}
-	<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>
+	{{ javascript_include('vendors/highmaps/mapdata/world.js')}}
+	{#<script src="http://code.highcharts.com/mapdata/custom/world.js"></script>#}
 	
 	{{ javascript_include('js/select2.js') }}
 	<script type="text/javascript">
