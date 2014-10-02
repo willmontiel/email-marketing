@@ -72,9 +72,13 @@
 			{% if item.active == 1 %}
 				{% set hexagon = 'hexagon-success' %}
 				{% set icon = 'glyphicon glyphicon-calendar'%}
+				{% set status = 'Activa' %}
+				{% set color = "green" %}
 			{% else %}
 				{% set hexagon = 'hexagon-disable' %}
 				{% set icon = 'glyphicon glyphicon-calendar'%}
+				{% set status = 'Inactiva' %}
+				{% set color = "gray" %}
 			{% endif %}
 	
 			<div class="mail-block">
@@ -128,6 +132,80 @@
 					
 				<div id="preview{{item.idAutoresponder}}" class="collapse row">
 					<hr>
+					<div style="font-size: 1.8em; text-align: center; color: #777;">Detalles</div><br />
+					
+					<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+						<div class="preview-mail img-wrap">
+							<div class="not-available">
+						{% if item.previewData == null%}
+								<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+								<label>Previsualización no disponible</label>
+						{% else %}
+								<img src="data: image/png;base64, {{item.previewData}}" />
+						{% endif %}	
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-cog"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Estado</div>	
+								<div class="widget-body {{color}}">{{status}}</div>	
+							</div>
+						</div>
+
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-calendar"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Fecha de creación</div>	
+								<div class="widget-body">{{date('d/M/Y g:i a', item.createdon)}}</div>	
+							</div>
+						</div>
+
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-tag"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Asunto</div>	
+								<div class="widget-body">
+									{% if item.subject is empty%}<span style="color: #bd1b06">Esta autorespuesta no contiene un asunto</span>{% else %}{{item.subject}}{% endif %}
+								</div>	
+							</div>
+						</div>
+
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-share-alt"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Remitente</div>	
+								<div class="widget-body">
+									{% if item.from is empty %}<span style="color: #bd1b06">Esta autorespuesta no contiene un remitente</span>{% else %} {{item.from}}{% endif %}
+								</div>	
+							</div>
+						</div>
+
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-retweet"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Responder a</div>	
+								<div class="widget-body">
+									{% if item.reply is empty%}<span style="color: #777">Esta autorespuesta no tiene configurado un "Responder a"</span>{% else %}{{item.reply}}{% endif %}
+								</div>	
+							</div>
+						</div>
+
+						<div class="small-widget">
+							<div class="widget-icon"><span class="glyphicon glyphicon-asterisk"></span></div>
+							<div class="widget-content">
+								<div class="widget-header">Programada para:</div>	
+								<div class="widget-body">
+									<span>{{item.time.hour}}:{{item.time.minute}} {{item.time.meridian}}</span>
+									<p>los dias {%for day in item.days%} {{day}}, {%endfor%} recurrente.</p>
+								</div>	
+							</div>
+						</div>
+					</div>
+					
 				</div>
 			</div>
 			
