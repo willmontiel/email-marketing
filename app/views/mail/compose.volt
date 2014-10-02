@@ -17,12 +17,13 @@
 	{{ stylesheet_link('vendors/select2-master/select2.css') }}
 	{{ javascript_include('vendors/select2-master/select2.js')}}
 	
-	{# Moment.js#}
+	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js')}}
-
+	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
+	{{ partial("partials/datetimepicker_view_partial") }}
+	{{ partial("partials/select2_view_partial") }}
 	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
 	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
-	
 	<script type="text/javascript">
 		var db;
 		var urlBase = "{{url('')}}";
@@ -155,23 +156,7 @@
 		{% endif %}
 	</script>
 	
-	{# funcionalidad seleccionar destinatarios #}
-	{{ stylesheet_link('js/target-selection/css/target-selection-function.css') }}
-	{{ javascript_include('js/target-selection/model.js')}}
-	{{ javascript_include('js/target-selection/data-source.js')}}
-	{{ javascript_include('js/target-selection/panel-container.js')}}
-	{{ javascript_include('js/target-selection/panel.js')}}
-	{{ javascript_include('js/target-selection/panel-content.js')}}
-	{{ javascript_include('js/target-selection/top-panel-content.js')}}
-	{{ javascript_include('js/target-selection/list-panel-content.js')}}
-	{{ javascript_include('js/target-selection/filter-panel-content.js')}}
-	
-	{{ javascript_include('js/target-selection/filter-content.js')}}
-	{{ javascript_include('js/target-selection/filter-click-content.js')}}
-	{{ javascript_include('js/target-selection/filter-mail-content.js')}}
-	{{ javascript_include('js/target-selection/filter-field-content.js')}}
-	{{ javascript_include('js/target-selection/select2-object.js')}}
-	
+	{{ partial('partials/target_selection_partial') }}
 {% endblock %}
 {% block content %}
 	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}

@@ -1,11 +1,19 @@
 $(function (){
-	$(".switch-campaign").bootstrapSwitch();
-	$("input[name='target']").on('click', function(){
-		$('.target_active').removeClass('target_active');
-		var target = $('#' + $(this)[0].value);
-		target.addClass('target_active');
-		$("select[name='target_selected[]']").attr('name', '');
-		target.find('select').attr('name', 'target_selected[]');
+	$(".switch-campaign").bootstrapSwitch({
+		onColor: 'success',
+		offColor: 'danger'
+	});
+	
+	var panelContainer = new PanelContainer('#panel-container');		
+	model = new Model();
+	model.setPanelContainer(panelContainer);
+	model.setSerializerObject(serializerObject);
+	model.serializer();
+
+	$('#autosend_form').submit(function() {
+		var target = JSON.stringify(model.getModel());
+		var target_obj = $(this).find("input[name='target']")[0];
+		$(target_obj).val(target);
 	});
 
 	$('#select-field').on('change', function(){
@@ -14,10 +22,6 @@ $(function (){
 		$('#from_name').val(values[0]);
 	});
 
-	$('.target-section select').select2({
-		placeholder: "Seleccione los destinatarios"
-	});
-	
 	$('#meta-tag').on('click', function() {
 		if($(this).is(':checked')) {
 			$("input[name='subject']").prop('disabled', true);

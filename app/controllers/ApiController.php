@@ -1525,12 +1525,11 @@ class ApiController extends ControllerBase
 			$interpreter->searchMailFilter();
 			$sql = $interpreter->getSQL();
 			
-			$this->logger->log("SQL: {$sql}");
-			
 			if ($sql != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 				$executer->setSQL($sql);
-				$executer->executeSelectQuery();
+				$executer->instanceDbAbstractLayer();
+				$executer->queryAbstractLayer();
 				$result = $executer->getResult();
 				
 				if (count($result) > 0) {
@@ -1569,12 +1568,12 @@ class ApiController extends ControllerBase
 			$interpreter->setData($data);
 			$interpreter->searchMailsWithClicksFilter();
 			$sql = $interpreter->getSQL();
-			
-			$this->logger->log("SQL: {$sql}");
+		
 			if ($sql != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 				$executer->setSQL($sql);
-				$executer->executeSelectQuery();
+				$executer->instanceDbAbstractLayer();
+				$executer->queryAbstractLayer();
 				$result = $executer->getResult();
 				
 				if (count($result) > 0) {
@@ -1611,11 +1610,11 @@ class ApiController extends ControllerBase
 			$interpreter->setData($data);
 			$interpreter->searchClicksFilter();
 			$sql = $interpreter->getSQL();
-			$this->logger->log("SQL: {$sql}");
 			if ($sql != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 				$executer->setSQL($sql);
-				$executer->executeSelectQuery();
+				$executer->instanceDbAbstractLayer();
+				$executer->queryAbstractLayer();
 				$result = $executer->getResult();
 				
 				if (count($result) > 0) {
@@ -1643,8 +1642,6 @@ class ApiController extends ControllerBase
 		$data = json_encode($data);
 		$data = json_decode($data);
 		
-		$this->logger->log("DATA: " . print_r($data, true));
-		
 		$wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
 		
 		try {
@@ -1655,11 +1652,10 @@ class ApiController extends ControllerBase
 			$sql = $wrapper->getSQL();
 			
 			if ($sql != false) {
-				$this->logger->log("SQL: {$sql}");
-				
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 				$executer->setSQL($sql);
-				$executer->executeSelectQuery();
+				$executer->instanceDbAbstractLayer();
+				$executer->queryAbstractLayer();
 				$r = $executer->getResult();
 				$total = $r[0]['total'];
 			}

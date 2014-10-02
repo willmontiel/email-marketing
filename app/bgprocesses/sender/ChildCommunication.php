@@ -122,11 +122,25 @@ class ChildCommunication extends BaseWrapper
 				throw new \InvalidArgumentException("Error mail's content is empty");
 			}
 			
-			$identifyTarget = new IdentifyTarget();
-			$identifyTarget->setMail($mail);
-			$identifyTarget->processData();
+//			$identifyTarget = new IdentifyTarget();
+//			$identifyTarget->setMail($mail);
+//			$identifyTarget->processData();
+//			$totalSent = $identifyTarget->getTotalContacts();
 			
-			$totalSent = $identifyTarget->getTotalContacts();
+			$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+			$interpreter->setMail($mail);
+			$interpreter->searchTotalContacts();
+			$totalContactsSQL = $interpreter->getSQL();
+			
+			if ($totalContactsSQL != false) {
+				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+				$executer->setSQL($totalContactsSQL);
+				$executer->instanceDbAbstractLayer();
+				$executer->queryAbstractLayer();
+				$r = $executer->getResult();
+				$totalSent = $r[0]['total'];
+			}
+			
 			$totalSent = ($oldstatus == 'Paused' ? $totalSent - $mail->messagesSent : $totalSent);
 			
 			if ($account->accountingMode == 'Envio') {
@@ -145,8 +159,6 @@ class ChildCommunication extends BaseWrapper
 			
 			if ($oldstatus == 'Scheduled') {
 				$log->log("Identificando destinatarios");
-				$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
-				$interpreter->setMail($mail);
 				$interpreter->searchContacts();
 				$mxcSQL = $interpreter->getSQL();
 				$statDbaseSQL = $interpreter->getStatDbaseSQL();
@@ -158,14 +170,16 @@ class ChildCommunication extends BaseWrapper
 				
 				if ($mxcSQL != false) {
 					$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+					$executer->instanceDbAbstractLayer();
+					
 					$executer->setSQL($mxcSQL);
-					$executer->executeQuery();
+					$executer->executeAbstractLayer();
 					
 					$executer->setSQL($statDbaseSQL);
-					$executer->executeQuery();
+					$executer->executeAbstractLayer();
 					
 					$executer->setSQL($statContactlistSQL);
-					$executer->executeQuery();
+					$executer->executeAbstractLayer();
 				}
 				//*** this is the old way for to get the target
 //				$identifyTarget = new IdentifyTarget();
