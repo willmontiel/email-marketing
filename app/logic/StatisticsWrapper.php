@@ -134,7 +134,7 @@ class StatisticsWrapper extends BaseWrapper
 		));
 		
 		$geoOpenQuery = "SELECT code, country AS name, COUNT(country) AS value 
-						 FROM mxc 
+						 FROM Mxc 
 						 WHERE idMail = :idMail: 
 							GROUP BY 1, 2 ";
 		$geoOpen = $manager->createQuery($geoOpenQuery);
