@@ -93,7 +93,7 @@
 						<span class="glyphicon glyphicon-calendar"></span>
 					</div>
 					
-					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
 						<div class="mail-info">
 							<div class="mail-name" style="font-size: 2em !important;">
 								<a href="{{url("campaign/automatic")}}/{{item.idAutoresponder}}">
@@ -108,7 +108,7 @@
 						</div>
 					</div>	
 						
-					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 autoresponse-list-details">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 autoresponse-list-details">
 						Programada para la(s) <br />
 						<span>{{item.time.hour}}:{{item.time.minute}} {{item.time.meridian}}</span>
 						<p>los dias {%for day in item.days%} <strong>{{day}}</strong>, {%endfor%} recurrente.</p>
