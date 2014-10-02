@@ -23,7 +23,18 @@ class CampaignController extends ControllerBase
 			$obj->category = $autosend->category;
 			$obj->contentsource = $autosend->contentsource;
 			$obj->active = $autosend->active;
-			$obj->target = $this->getTargetFromMail($autosend);
+			$this->logger->log($autosend->target);
+			
+			$raw_target = json_decode($autosend->target);
+			$target_wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
+			$target_wrapper->setData($raw_target);
+			$target_wrapper->createModel();
+			
+			$target_info = new stdClass();
+			$target_info->criteria = $this->getCriteriaName($target_wrapper->getCriteria());
+			$target_info->names = $target_wrapper->getNames();
+			
+			$obj->target = $target_info;
 			
 			$subject = json_decode($autosend->subject);
 			$obj->subject = $subject->text;
@@ -232,53 +243,22 @@ class CampaignController extends ControllerBase
 		
 	}
 	
-	private function getTargetFromMail($mail)
+	private function getCriteriaName($criteria)
 	{
-		$t = json_decode($mail->target);
-		$target = "Indefinida";
-		$ids = explode(',', $t->ids);
-		
-		switch ($t->destination) {
+		$name = "Indefinida";
+		switch ($criteria) {
 			case 'contactlists':
-				$target = "Listas de contactos: ";
-				foreach ($ids as $id) {
-					$list = Contactlist::findFirst(array(
-						'conditions' => "idContactlist = ?1",
-						'bind' => array(1 => $id)
-					));
-					if ($list) {
-						$target .= "{$list->name}, ";
-					}
-				}
+				$name = "Listas de contactos";
 				break;
 			case 'dbases':
-				$target = "Bases de datos: ";
-				foreach ($t->ids as $id) {
-					$list = Dbase::findFirst(array(
-						'conditions' => "idDbase = ?1",
-						'bind' => array(1 => $id)
-					));
-					if ($list) {
-						$target .= "{$list->name}, ";
-					}
-				}
+				$name = "Bases de datos";
 				break;
 			case 'segments':
-				$target = "Segmentos: ";
-				foreach ($t->ids as $id) {
-					$list = Segment::findFirst(array(
-						'conditions' => "idSegment = ?1",
-						'bind' => array(1 => $id)
-					));
-
-					if ($list) {
-						$target .= "{$list->name}, ";
-					}
-				}
+				$name = "Segmentos";
 				break;
 			default:
 				break;
 		}
-		return $target;
+		return $name;
 	}
 }

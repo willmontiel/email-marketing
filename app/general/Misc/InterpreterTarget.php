@@ -163,6 +163,7 @@ class InterpreterTarget
 					if (count($data->serialization->items) > 0) {
 						$this->idsArray = $data->serialization->items;
 						$this->ids = implode(',' , $data->serialization->items);
+						$this->names = implode(',' , $data->serialization->names);
 						$this->list = true;
 					}
 				}
@@ -313,6 +314,21 @@ class InterpreterTarget
 	public function getStatContactlistSQL()
 	{
 		return $this->statContactlistSQL;
+	}
+	
+	public function createModel()
+	{
+		$this->modelData();
+	}
+	
+	public function getCriteria()
+	{
+		return $this->criteria;
+	}
+	
+	public function getNames()
+	{
+		return $this->names;
 	}
 }
 
