@@ -101,17 +101,17 @@
 								</a>
 							</div>
 
-							<div class="mail-detail" style="color: #777;"><strong> Destinatarios:</strong> {{item.target.criteria}}: {{item.target.names}}</div>
-							<div class="mail-detail" style="color: #777;">
+							<div class="mail-detail" style="color: #777; font-size: 0.9em !important;"><strong> Destinatarios:</strong> {{item.target.criteria}}: {{item.target.names}}</div>
+							<div class="mail-detail" style="color: #777; font-size: 0.9em !important;">
 								<strong>Asunto:</strong> {{item.subject}}
 							</div>
 						</div>
 					</div>	
 						
 					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 autoresponse-list-details">
-						Enviar autorespuesta a las
+						Programada para la(s) <br />
 						<span>{{item.time.hour}}:{{item.time.minute}} {{item.time.meridian}}</span>
-						<p>los dias {%for day in item.days%} {{day}}, {%endfor%} recurrente.</p>
+						<p>los dias {%for day in item.days%} <strong>{{day}}</strong>, {%endfor%} recurrente.</p>
 					</div>
 						
 					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-right">
