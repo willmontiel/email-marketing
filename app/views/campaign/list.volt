@@ -89,14 +89,8 @@
 	
 			<div class="mail-block">
 				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-						<div class="hexagon hexagon-sm {{hexagon}}" id="{{item.idAutoresponder}}">
-							<div class="hexagon-wrap">
-								<a href="{{url("campaign/automatic")}}/{{item.idAutoresponder}}" class="hexagon-inner toolTip">
-									<i class="{{icon}}"></i>
-								</a>
-							</div>
-						</div>
+					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 autoresponse-list-icon">
+						<span class="glyphicon glyphicon-calendar"></span>
 					</div>
 					
 					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
