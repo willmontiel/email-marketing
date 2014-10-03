@@ -22,6 +22,7 @@ class ChildCommunication extends BaseWrapper
 		$this->urlManager = $di['urlManager'];
         $this->db = $di->get('db');
 		$this->flashSession = $di->get('flashSession');
+		$this->assetsrv = $di['asset'];
 	}
 	
 	public function setSocket($childprocess)
@@ -276,6 +277,23 @@ class ChildCommunication extends BaseWrapper
 			gc_enable(); // Enable Garbage Collector
 
                         $rmemory = 0;
+						
+			/*
+			 * Comprobar si es un correo con adjuntos y si es asi, buscar los archivos y adjuntarlos
+			 */			
+			if ($mail->attachment == 1) {
+				$attachment = Attachment::findFirst(array(
+					'conditions' => 'idMail = ?1',
+					'bind' => array(1 => $mail->idMail)
+				));
+				
+				if ($attachment) {
+					$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/' . $this->mail->idMail . '/';
+					$attPath = $dir . $attachment->fileName;
+				}
+				
+			}			
+						
 			foreach ($contactIterator as $contact) {
 //				if ($messagesLimit <= $messagesSent) {
 //					$this->commitSentMessages($mail, $sentContacts);
@@ -385,6 +403,10 @@ class ChildCommunication extends BaseWrapper
 					$message->setReplyTo($mail->replyTo);
 				}
 				$message->addPart($text, 'text/plain');
+				$message->attach(
+					Swift_Attachment::fromPath($attPath)->setFilename($attachment->fileName)
+				);
+				
 				$timer->endTimer('prepare-msg');
 
 				$timer->startTimer('send-msg', 'Sending message (swift)...');
