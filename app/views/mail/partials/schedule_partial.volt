@@ -1,4 +1,4 @@
-{{ '{{#unless isScheduleExpanded'}}}}
+{{ '{{#unless isScheduleExpanded}}' }}
 	<div {{'{{bind-attr class=": scheduleEmpty:bg-warning:"}}'}}>
 			<div class="dl-horizontal" {{ '{{action "expandSchedule" this}}' }}>
 				{{'{{#if scheduleEmpty }}'}}

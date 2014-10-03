@@ -2505,6 +2505,81 @@ class MailController extends ControllerBase
 		}
 	}
 	
+	public function attachmentAction() {
+		if ($this->request->isPost()) {
+//			$this->logger->log(print_r($_FILES['Filelist']));
+//			$this->logger->log(print_r($_FILES[0]['file']));
+//			$this->logger->log(print_r($_FILES[0]['File']));
+//			
+			if (empty($_FILES['file']['name'])) {
+				$error = array(
+					'error' => 'No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información'
+				);
+
+				return $this->setJsonResponse($error, 400);
+			}
+			
+			$idMail = $this->request->getPost("idMail");
+			$account = $this->user->account;
+			
+			$mail = Mail::findFirst(array(
+				'conditions' => 'idMail = ?1 AND idAccount = ?2',
+				'bind' => array(1 => $idMail,
+								2 => $account->idAccount)
+			));
+			
+			if (!$mail) {
+				$error = array(
+					'message' => 'Esta tratando adjuntar una archivo a un correo que no existe, por favor verifique la información'
+				);
+
+				return $this->setJsonResponse($error, 400);
+			}
+			
+			$name = $_FILES['file']['name'];
+			$size = $_FILES['file']['size'];
+			$type = $_FILES['file']['type'];
+			$tmp_dir = $_FILES['file']['tmp_name'];
+			
+			$data = new stdClass();
+			$data->fileName = $name;
+			$data->fileSize = $size;
+			$data->fileType = $type;
+			$data->tmpDir = $tmp_dir;
+			
+			try {
+				$att = new AttachmentObj();
+				$att->setAccount($account);
+				$att->setMail($mail);
+				$att->setData($data);
+				$att->uploadAttachment();
+				
+				$mail->attachment = 1;
+				if (!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->logger->log("Error while updating attachment in mail: {$msg}");
+					}
+					throw new InvalidArgumentException('Mail attachment could not be updated');
+				}
+				
+				$this->traceSuccess("Upploading attachment in mail, idMail: {$idMail} / idAccount: {$account->idAccount}");
+				return $this->setJsonResponse(array('message' => 'Se ha cargado y adjuntado el archivo correctamente'), 200);
+			}
+			catch (Exception $e) {
+				$this->logger->log("Error: {$e}");
+				$this->traceFail("Upploading attachment in mail, idMail: {$idMail} / idAccount: {$account->idAccount}");
+				
+				return $this->setJsonResponse(
+					array(
+						'message' => 'Ha ocurrido un error mientras se cargaba la imagen, por favor asegurese
+									de que el archivo que intenta subir realmente sea una imagen (jpeg, jpg, gif, png)
+									y tenga un tamaño de archivo menor a 10 MB'
+						)
+					, 400);
+			}
+		}
+	}
+	
 	public function checkformsAction($idMail)
 	{
 		try {

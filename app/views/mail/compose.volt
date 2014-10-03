@@ -2,7 +2,6 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
-	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 	
 	{# Time picker #}
 	{{ javascript_include('vendors/time-picker/js/bootstrap-timepicker.min.js')}}
@@ -17,22 +16,34 @@
 	{{ stylesheet_link('vendors/select2-master/select2.css') }}
 	{{ javascript_include('vendors/select2-master/select2.js')}}
 	
-	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{# Moment.js #}
 	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js')}}
-	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
+
 	{{ partial("partials/datetimepicker_view_partial") }}
 	{{ partial("partials/select2_view_partial") }}
+
 	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
 	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
+
 	<script type="text/javascript">
 		var db;
 		var urlBase = "{{url('')}}";
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
+		var AttUrl = "/{{urlManager.getBaseUri()}}mail/attachment";
+		var idMail = 0;
+		var attachment = 0;
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
 	
 	{{ javascript_include('js/mixin_config.js') }}
-	{{ javascript_include('js/app_mail.js') }}
+	
+	{# Ember Uploader#}
+	{{ javascript_include('js/ember-uploader/ember-uploader.min.js') }}
+	{{ javascript_include('js/ember-uploader/file_field.js') }}
+	
+	{# Ember App Mail #}
+	{{ partial("mail/partials/app_mail_partial") }}
+	
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	
@@ -49,6 +60,8 @@
 	</script>
 	
 	<script type="text/javascript">
+		App.fileNames = "lala";
+		
 		$(function() {
 			{%for asset in assets%}
 				var media = new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}});
@@ -159,6 +172,7 @@
 	{{ partial('partials/target_selection_partial') }}
 {% endblock %}
 {% block content %}
+	
 	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}
 	{{flashSession.output()}}
 	
@@ -198,6 +212,12 @@
 				<div class="row">
 					<div class="col-md-12">
 						{{ partial("mail/partials/content_partial") }}
+					</div>
+				</div>	
+		
+				<div class="row">
+					<div class="col-md-12">
+						{{ partial("mail/partials/attachment_partial") }}
 					</div>
 				</div>	
 

@@ -1,26 +1,26 @@
 {{'{{#unless isHeaderExpanded }}'}}
-			<div {{'{{bind-attr class=": headerEmpty:bg-warning: "}}'}}>
-				<div class="wrapper">
-					<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }}>
-					{{'{{#if headerEmpty }}'}}
-						<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
-						<dt>Asunto:</dt> <dd>_______________________________</dd>
-					{{'{{else}}'}}
-						<dt>De:</dt> <dd>{{'{{fromSummary}}'}}</dd>
-						<dt>Asunto:</dt> <dd>{{'  {{subject}} '}}</dd>
-						<dt></dt>
-						<dd>
-							{{'{{#if fbaccountsel }}'}}
-							<img src="{{url('images')}}/facebook_icon_active.png">
-							{{'{{/if}}'}}
-							{{'{{#if twaccountsel }}'}}
-							<img src="{{url('images')}}/twitter_icon_active.png">
-							{{'{{/if}}'}}
-						</dd>
+	<div {{'{{bind-attr class=": headerEmpty:bg-warning: "}}'}}>
+		<div class="wrapper">
+			<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }}>
+			{{'{{#if headerEmpty }}'}}
+				<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
+				<dt>Asunto:</dt> <dd>_______________________________</dd>
+			{{'{{else}}'}}
+				<dt>De:</dt> <dd>{{'{{fromSummary}}'}}</dd>
+				<dt>Asunto:</dt> <dd>{{'  {{subject}} '}}</dd>
+				<dt></dt>
+				<dd>
+					{{'{{#if fbaccountsel }}'}}
+					<img src="{{url('images')}}/facebook_icon_active.png">
 					{{'{{/if}}'}}
-					</dl>
-				</div>	
-			</div>
+					{{'{{#if twaccountsel }}'}}
+					<img src="{{url('images')}}/twitter_icon_active.png">
+					{{'{{/if}}'}}
+				</dd>
+			{{'{{/if}}'}}
+			</dl>
+		</div>	
+	</div>
 {{ '{{/unless}}' }}
 
 {{ '{{#if isHeaderExpanded}}' }}

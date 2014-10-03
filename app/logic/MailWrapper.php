@@ -145,6 +145,7 @@ class MailWrapper extends BaseWrapper
 		$this->mail->type = $this->content->type;
 		$this->mail->status = 'draft';
 		$this->mail->wizardOption = 'setup';
+		$this->mail->attachment =  (empty($this->content->attachment) ? 0 : $this->content->attachment);
 		$this->mail->totalContacts = (isset($this->content->totalContacts) ? $this->content->totalContacts : 0);
 		if ($this->scheduleDate != null) {
 			$this->mail->scheduleDate = $this->scheduleDate;
@@ -325,6 +326,7 @@ class MailWrapper extends BaseWrapper
 		$jsonObject['id'] = $this->mail->idMail;      
 		$jsonObject['name'] = $this->mail->name;
 		$jsonObject['subject'] = $this->mail->subject;
+		$jsonObject['attachment'] = $this->mail->attachment;
 		
 		$jsonObject['target'] = '';
 		if (!empty($this->mail->target)) {

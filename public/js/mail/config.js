@@ -14,6 +14,7 @@ App.Store = DS.Store.extend({});
 
 App.fbimage = 'default';
 
+
 App.Mail = DS.Model.extend({
 	type: DS.attr('string'),
 	scheduleDate: DS.attr('string'),
@@ -21,17 +22,12 @@ App.Mail = DS.Model.extend({
 	sender: DS.attr('string'),
 	replyTo: DS.attr('string'),
 	subject: DS.attr('string'),
-	dbases: DS.attr('string'),
-	contactlists: DS.attr('string'),
-	segments: DS.attr('string'),
-	filterByEmail: DS.attr('string'),
-	filterByOpen: DS.attr('string'),
-	filterByClick: DS.attr('string'),
-	filterByExclude: DS.attr('string'),
+	target: DS.attr('string'),
 	googleAnalytics: DS.attr('string'),
 	campaignName: DS.attr('string'),
 	previewData: DS.attr('string'),
 	mailcontent: DS.attr('boolean'),
+	attachment: DS.attr('boolean'),
 	plainText: DS.attr('string'),
 	totalContacts: DS.attr('string'),
 	fbaccounts: DS.attr('string'),

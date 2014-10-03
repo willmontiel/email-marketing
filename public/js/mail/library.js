@@ -1,6 +1,18 @@
 /* 
  * Plugins y demás externos
  */
+
+App.ExternalLinkComponent = Ember.Component.extend({
+  tagName: "a",
+  classNames: [],
+  attributeBindings: ["href"],
+  href: (function() {
+    return this.get('pattern').fmt(this.get('content.id'));
+  }).property("content.id")
+});
+
+Ember.Handlebars.helper("external-link", App.ExternalLinkComponent);
+
 App.Select2 = Ember.Select.extend({
 	didInsertElement: function() {
 		$(".select2").select2({
@@ -9,11 +21,35 @@ App.Select2 = Ember.Select.extend({
 	}
 });
 
+App.FileUploadComponent = Ember.FileField.extend({
+	multiple: true,
+			
+	filesDidChange: (function() {
+		var uploadUrl = AttUrl;
+		var files = this.get('files');
+		var idM = {idMail: idMail};
+		
+		var uploader = Ember.Uploader.create({url: uploadUrl});
+
+		if (!Ember.isEmpty(files)) {
+			var promise = uploader.upload(files, idM);
+
+			promise.then(function(data) {
+				attachment = 1;
+				$.gritter.add({title: 'Exito', text: data.message, sticky: false, time: 10000});
+			}, function(error) {
+				$.gritter.add({title: 'Ha ocurrido un error', text: error.message, sticky: false, time: 10000});
+			});
+		}
+	}).observes('files')
+});
+
 App.TimePicker = Ember.TextField.extend({
 	didInsertElement: function() {
 		$('.time-picker').timepicker({
 			showMeridian: false,
-			defaultTime: false
+			defaultTime: false,
+			showInputs: false
 		});
 	}
 });
@@ -65,72 +101,8 @@ Ember.RadioButton = Ember.View.extend({
     }.property()
 });
 
-Ember.RadioButtonTarget = Ember.View.extend({
-    tagName : "input",
-    type : "radio",
-    attributeBindings : [ "name", "type", "value", "id", "checked"],
-    click : function() {
-        $("#db").hide();
-		$("#list").hide();
-		$("#seg").hide();
-		
-		this.set('controller.dbaselist', []);
-		this.set('controller.list', []);
-		this.set('controller.segmentlist', []);
-		
-		var value = this.$().val();
-		
-		switch (value) {
-			case "dataBase":
-				$("#db").show();
-				break;
-			case "contactList":
-				$("#list").show();
-				break;
-			case "segment":
-				$("#seg").show();
-				break;
-		}
-    }
+App.Target = Ember.View.extend({
+	didInsertElement: function() {
+		createSelectorTarget();
+	}
 });
-
-Ember.RadioFilter = Ember.View.extend({
-    tagName : "input",
-    type : "radio",
-    attributeBindings : [ "name", "type", "value", "id", "checked"],
-    click : function() {
-		$("#mail").hide();
-		$("#open").hide();
-		$("#click").hide();
-		$("#exclude").hide();
-		
-		this.set('controller.filterByEmail', '');
-		this.set('controller.open', []);
-		this.set('controller.click', []);
-		this.set('controller.exclude', []);
-	
-		$("#sendByMail").val('');
-		$('#sendOpen').val('');
-		$('#sendClick').val('');
-		$('#sendExclude').val('');
-		
-		var value = this.$().val();
-		
-		switch (value) {
-			case "byMail":
-				$("#mail").show();
-				break;
-			case "byOpen":
-				$("#open").show();
-				break;
-			case "byClick":
-				$("#click").show();
-				break;
-			case "byExclude":
-				$("#exclude").show();
-				break;
-		}
-    }	
-});
-
-
