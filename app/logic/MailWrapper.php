@@ -145,7 +145,8 @@ class MailWrapper extends BaseWrapper
 		$this->mail->type = $this->content->type;
 		$this->mail->status = 'draft';
 		$this->mail->wizardOption = 'setup';
-		$this->mail->attachment =  (empty($this->content->attachment) ? 0 : $this->content->attachment);
+//		$this->mail->attachment =  (empty($this->content->attachment) ? 0 : $this->content->attachment);
+		$this->mail->attachment =  1;
 		$this->mail->totalContacts = (isset($this->content->totalContacts) ? $this->content->totalContacts : 0);
 		if ($this->scheduleDate != null) {
 			$this->mail->scheduleDate = $this->scheduleDate;
