@@ -424,7 +424,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		mail.set('sender', sender);
 		mail.set('target', target);
 		mail.set('totalContacts', totalContacts);
-		mail.set('attachment', attachment);
+		mail.set('attachment', 1);
 		mail.set('googleAnalytics', analitycs);
 		mail.set('fbaccounts', fbaccounts);
 		mail.set('twaccounts', twaccounts);

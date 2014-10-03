@@ -31,7 +31,7 @@ class MailController extends ControllerBase
 		if ($this->request->isPost() || $this->request->isPut()) {
 			$contentsraw = $this->request->getRawBody();
 			$contentsT = json_decode($contentsraw);
-			$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+//			$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 //			$this->logger->log('idMail: ' . $idMail);
 			$content = $contentsT->mail;
 			
