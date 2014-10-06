@@ -30,6 +30,7 @@
 		var urlBase = "{{url('')}}";
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 		var AttUrl = "/{{urlManager.getBaseUri()}}mail/attachment";
+		var urlComplete = "{{urlManager.getBaseUri(true)}}mail/savemail/mails";
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
 	

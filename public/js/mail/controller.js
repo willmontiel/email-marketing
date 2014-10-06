@@ -125,7 +125,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	//Refresca el modelo
 	refreshRecords: function() {
 		var t = this;
-		Ember.$.getJSON('savemail/mails/' + idMail).then(function(data) {
+		Ember.$.getJSON(urlComplete + '/' + idMail).then(function(data) {
 			t.set('content', data.mails);
 		});
 	},
