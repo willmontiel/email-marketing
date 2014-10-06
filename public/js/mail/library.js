@@ -35,10 +35,10 @@ App.FileUploadComponent = Ember.FileField.extend({
 				var promise = uploader.upload(files, idM);
 
 				promise.then(function(data) {
-					$.gritter.add({title: 'Exitoso', text: data.message, sticky: false, time: 10000});
+					$.gritter.add({title: '<i class="glyphicon glyphicon-paperclip"></i> Exitoso', text: data.message, sticky: false, time: 10000});
 					App.controller.refreshRecords();
 				}, function(error) {
-					$.gritter.add({title: 'Ha ocurrido un error', text: error.message, sticky: false, time: 10000});
+					$.gritter.add({title: '<i class="glyphicon glyphicon-remove-sign"></i> Ha ocurrido un error', text: error.message, sticky: false, time: 10000});
 					App.controller.refreshRecords();
 				});
 			}
