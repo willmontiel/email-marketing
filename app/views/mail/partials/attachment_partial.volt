@@ -1,4 +1,4 @@
-{# {{ '{{#if isContentAvailable}}' }} #}
+{{ '{{#if isContentAvailable}}' }} 
 	{{ '{{#unless isAttachementExpanded}}' }}
 		<div {{'{{bind-attr class=": attachmentEmpty:bg-warning: "}}'}}>
 			<div class="wrapper">
@@ -34,4 +34,4 @@
 			</div>
 		</div>
 	{{ '{{/unless}}' }}
-{# {{ '{{/if}}' }} #}
+{{ '{{/if}}' }}
