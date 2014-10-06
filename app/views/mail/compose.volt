@@ -93,9 +93,11 @@
 				data: {},
 				error: function(msg){
 					$.gritter.add({title: 'Exitoso', text: msg.message, sticky: false, time: 10000});
+					App.controller.refreshRecords();
 				},
 				success: function(msg){
 					$.gritter.add({title: 'Ha ocurrido un error', text: msg.message, sticky: false, time: 10000});
+					App.controller.refreshRecords();
 				}
 			});
 		}
@@ -133,6 +135,7 @@
 	</script>
 	
 	<script type="text/javascript">
+		App.controller = "";
 		//Full Mail Content
 		{% if mail is defined %}
 			App.maildata = [{

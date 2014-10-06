@@ -36,8 +36,10 @@ App.FileUploadComponent = Ember.FileField.extend({
 
 				promise.then(function(data) {
 					$.gritter.add({title: 'Exitoso', text: data.message, sticky: false, time: 10000});
+					App.controller.refreshRecords();
 				}, function(error) {
 					$.gritter.add({title: 'Ha ocurrido un error', text: error.message, sticky: false, time: 10000});
+					App.controller.refreshRecords();
 				});
 			}
 		});

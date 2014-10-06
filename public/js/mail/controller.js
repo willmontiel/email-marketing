@@ -480,7 +480,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				
 		refreshModel: function () {
 			this.set('isAttachementExpanded', false);
-			this.refreshRecords();
+			App.controller = this;
+//			this.refreshRecords();
 		},
 				
 		cancelNewSender: function () {
