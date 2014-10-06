@@ -7,6 +7,7 @@ class AttachmentObj
 	protected $account;
 	protected $mail;
 	protected $data;
+	protected $attachment;
 
 	protected $files_not_allowed = array (
 		'ade','adp','bat','chm','cmd','com','cpl','exe','hta','ins','isp','jse','lib','lnk','mde','msc','msp',
@@ -32,6 +33,11 @@ class AttachmentObj
 		$this->mail = $mail;
 	}
 	
+	public function setAttachment(Attachment $attachment)
+	{
+		$this->attachment = $attachment;
+	}
+	
 	public function setData($data)
 	{
 		if (!is_object($data) || empty($data)) {
@@ -46,6 +52,20 @@ class AttachmentObj
 		$this->validateFile();
 		$this->moveFileToServer();
 		$this->saveAttachmentInfoInDb();
+	}
+	
+	public function deleteAttachment()
+	{
+		$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/' . $this->mail->idMail . '/';
+		$attachment = $dir . $this->attachment->fileName;
+		
+		if (!unlink($attachment)) {
+			throw new Exception('File could not delete from server!');
+		}
+		
+		if (!rmdir($dir)) {
+			throw new Exception('Dir could not delete from server!');
+		}
 	}
 	
 	/**

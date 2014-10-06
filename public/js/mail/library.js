@@ -22,7 +22,7 @@ App.Select2 = Ember.Select.extend({
 });
 
 App.FileUploadComponent = Ember.FileField.extend({
-	multiple: true,
+	multiple: false,
 			
 	filesDidChange: (function() {
 		var uploadUrl = AttUrl;
@@ -35,11 +35,9 @@ App.FileUploadComponent = Ember.FileField.extend({
 				var promise = uploader.upload(files, idM);
 
 				promise.then(function(data) {
-					$.gritter.add({title: 'Exito', text: data.message, sticky: false, time: 10000});
-					App.attachment = 1;
+					$.gritter.add({title: 'Exitoso', text: data.message, sticky: false, time: 10000});
 				}, function(error) {
 					$.gritter.add({title: 'Ha ocurrido un error', text: error.message, sticky: false, time: 10000});
-					App.attachment = 0;
 				});
 			}
 		});

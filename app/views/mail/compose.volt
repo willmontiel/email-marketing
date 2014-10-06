@@ -30,7 +30,6 @@
 		var urlBase = "{{url('')}}";
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 		var AttUrl = "/{{urlManager.getBaseUri()}}mail/attachment";
-		var idMail = 0;
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
 	
@@ -58,8 +57,6 @@
 	</script>
 	
 	<script type="text/javascript">
-		App.attachment = 0;
-		
 		$(function() {
 			{%for asset in assets%}
 				var media = new Gallery("{{asset['thumb']}}", "{{asset['image']}}", "{{asset['title']}}", {{asset['id']}});
@@ -86,6 +83,20 @@
 						$(location).attr('href', "{{url('mail/list')}}"); 
 					}
 				});
+			});
+		}
+		
+		function resetAttachment() {
+			$.ajax({
+				url: "{{url('mail/resetattachment')}}/" + idMail,
+				type: "POST",			
+				data: {},
+				error: function(msg){
+					$.gritter.add({title: 'Exitoso', text: msg.message, sticky: false, time: 10000});
+				},
+				success: function(msg){
+					$.gritter.add({title: 'Ha ocurrido un error', text: msg.message, sticky: false, time: 10000});
+				}
 			});
 		}
 		

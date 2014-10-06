@@ -122,6 +122,14 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		}
 	},
 	
+	//Refresca el modelo
+	refreshRecords: function() {
+		var t = this;
+		Ember.$.getJSON('savemail/mails/' + idMail).then(function(data) {
+			t.set('content', data.mails);
+		});
+	},
+	
 	//Observa el contenido del header (fromName, fromEmail, etc)
 	headerEmpty: function () {
 		var sn, s;
@@ -424,7 +432,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		mail.set('sender', sender);
 		mail.set('target', target);
 		mail.set('totalContacts', totalContacts);
-		mail.set('attachment', App.attachment);
 		mail.set('googleAnalytics', analitycs);
 		mail.set('fbaccounts', fbaccounts);
 		mail.set('twaccounts', twaccounts);
@@ -465,6 +472,15 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 					this.set('isSocialExpanded', false);
 				}
 			}
+		},
+			
+		contractingAttachment: function () {
+			this.set('isAttachementExpanded', false);
+		},
+				
+		refreshModel: function () {
+			this.set('isAttachementExpanded', false);
+			this.refreshRecords();
 		},
 				
 		cancelNewSender: function () {
@@ -581,10 +597,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isHeaderExpanded', false);
 			this.set('isScheduleExpanded', false);
 		},		
-		
-		discardAttachment: function() {
-	
-		},
 				
 		discardTarget: function() {
 			if (this.get('this.id') !== null) {

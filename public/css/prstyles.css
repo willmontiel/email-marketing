@@ -1012,3 +1012,11 @@ body {
 	background-color: rgba(173,173,173,0.45);
 	color: #fdfdfd;
 }
+
+.attachment-badge {
+	background-color: #E1F2FF;
+	padding: 6px;
+	color: #1C578B;
+	border-radius: 4px;
+	margin-right: 4px;
+}

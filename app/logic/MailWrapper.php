@@ -139,13 +139,13 @@ class MailWrapper extends BaseWrapper
 		$date = time();
 		if ($this->mail == null) {
 			$this->mail = new Mail();
+			$this->mail->attachment = 0;
 		}
 		
 		$this->mail->idAccount = $this->account->idAccount;
 		$this->mail->type = $this->content->type;
 		$this->mail->status = 'draft';
 		$this->mail->wizardOption = 'setup';
-		$this->mail->attachment =  (empty($this->content->attachment) ? 0 : $this->content->attachment);
 		$this->mail->totalContacts = (isset($this->content->totalContacts) ? $this->content->totalContacts : 0);
 		if ($this->scheduleDate != null) {
 			$this->mail->scheduleDate = $this->scheduleDate;
@@ -326,7 +326,7 @@ class MailWrapper extends BaseWrapper
 		$jsonObject['id'] = $this->mail->idMail;      
 		$jsonObject['name'] = $this->mail->name;
 		$jsonObject['subject'] = $this->mail->subject;
-		$jsonObject['attachment'] = $this->mail->attachment;
+		$jsonObject['attachment'] = ($this->mail->attachment == 0 ? false : true);
 		
 		$attachments = Attachment::find(array(
 			'conditions' => 'idMail = ?1',
@@ -335,7 +335,9 @@ class MailWrapper extends BaseWrapper
 		
 		$array = array();
 		if (count($attachments) > 0) {
-			$array[] = $attachments->fileName;
+			foreach ($attachments as $attachment) {
+				$array[] = $attachment->fileName;
+			}
 		}
 		
 		$jsonObject['attachmentsName'] = (count($array) > 0 ? implode(', ', $array) : "");

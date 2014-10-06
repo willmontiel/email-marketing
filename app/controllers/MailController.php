@@ -10,7 +10,7 @@ class MailController extends ControllerBase
 		$account = $this->user->account;
 		$mail = null;
 		$mailcontent = null;
-		
+	
 		if ($idMail != null) {
 			$mail = Mail::findFirst(array(
 				'conditions' => 'idMail = ?1 AND idAccount = ?2',
@@ -144,6 +144,7 @@ class MailController extends ControllerBase
 			$mailClone->fromEmail = $mail->fromEmail;
 			$mailClone->replyTo = $mail->replyTo;
 			$mailClone->type = $mail->type;
+			$mailClone->attachment = $mail->attachment;
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
 			$mailClone->finishedon = 0;
@@ -2507,8 +2508,6 @@ class MailController extends ControllerBase
 	
 	public function attachmentAction() {
 		if ($this->request->isPost()) {
-			$this->logger->log(print_r($_FILES['file'], true));
-			
 			if (empty($_FILES['file']['name'])) {
 				$error = array(
 					'error' => 'No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información'
@@ -2560,8 +2559,6 @@ class MailController extends ControllerBase
 					throw new InvalidArgumentException('Mail attachment could not be updated');
 				}
 				
-				sleep(8);
-				
 				$this->traceSuccess("Upploading attachment in mail, idMail: {$idMail} / idAccount: {$account->idAccount}");
 				return $this->setJsonResponse(array('message' => 'Se ha cargado y adjuntado el archivo correctamente'), 200);
 			}
@@ -2577,6 +2574,79 @@ class MailController extends ControllerBase
 					, 400);
 			}
 		}
+	}
+	
+	public function resetattachmentAction($idMail) 
+	{
+		$account = $this->user->account;
+		
+		$mail = Mail::findFirst(array(
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idMail,
+							2 => $account->idAccount)
+		));
+		
+		if ($mail) {
+			try {
+				$attachments = Attachment::find(array(
+					'conditions' => 'idMail = ?1',
+					'bind' => array(1 => $mail->idMail)
+				));
+				
+				if (count($attachments) > 0) {
+					
+					$attachobj = new AttachmentObj();
+					$attachobj->setAccount($account);
+					$attachobj->setMail($mail);
+					
+					foreach ($attachments as $attachment) {
+						$attachobj->setAttachment($attachment);
+						$attachobj->deleteAttachment();
+						
+						if (!$attachment->delete()) {
+							foreach ($attachment->getMessages() as $msg) {
+								$this->logger->log("Error while deleting attachment: {$msg}");
+							}
+							throw new \Exception("Could not delete attachment with idMail {$idMail}");
+						}
+					}
+					
+					$mail->attachment = 0;
+					
+					if (!$mail->save()) {
+						foreach ($mail->getMessages() as $msg) {
+							$this->logger->log("Error while updating mail: {$msg}");
+						}
+						throw new \Exception("Could not update mail with idMail {$idMail}");
+					}
+					
+					return $this->setJsonResponse(array(
+								'message' => 'Se han eliminado los archivos adjuntos exitosamente'),
+								200
+							);
+				}
+				
+				return $this->setJsonResponse(array(
+								'message' => 'Se han encontrado archivos adjuntos que eliminar, por favor verifique la información'),
+								404
+							);
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: {$e}");
+				
+				return $this->setJsonResponse(
+					array(
+						'message' => 'Ha ocurrido un error, por favor contacte con el administrador'
+						)
+					, 500);
+			}
+		}
+		
+		return $this->setJsonResponse(
+					array(
+						'message' => 'No se ha podido eliminar ningún archivo archivo adjunto, porque no se encontró el correo'
+						)
+					, 404);
 	}
 	
 	public function checkformsAction($idMail)
