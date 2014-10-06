@@ -2507,10 +2507,8 @@ class MailController extends ControllerBase
 	
 	public function attachmentAction() {
 		if ($this->request->isPost()) {
-//			$this->logger->log(print_r($_FILES['Filelist']));
-//			$this->logger->log(print_r($_FILES[0]['file']));
-//			$this->logger->log(print_r($_FILES[0]['File']));
-//			
+			$this->logger->log(print_r($_FILES['file'], true));
+			
 			if (empty($_FILES['file']['name'])) {
 				$error = array(
 					'error' => 'No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información'
@@ -2562,6 +2560,8 @@ class MailController extends ControllerBase
 					throw new InvalidArgumentException('Mail attachment could not be updated');
 				}
 				
+				sleep(8);
+				
 				$this->traceSuccess("Upploading attachment in mail, idMail: {$idMail} / idAccount: {$account->idAccount}");
 				return $this->setJsonResponse(array('message' => 'Se ha cargado y adjuntado el archivo correctamente'), 200);
 			}
@@ -2571,9 +2571,8 @@ class MailController extends ControllerBase
 				
 				return $this->setJsonResponse(
 					array(
-						'message' => 'Ha ocurrido un error mientras se cargaba la imagen, por favor asegurese
-									de que el archivo que intenta subir realmente sea una imagen (jpeg, jpg, gif, png)
-									y tenga un tamaño de archivo menor a 10 MB'
+						'message' => 'Ha ocurrido un error mientras se cargaba el archivo, por favor asegurese
+									de que el archivo que intenta adjuntar sea válido y tenga un tamaño de archivo menor a 15 MB'
 						)
 					, 400);
 			}

@@ -2,16 +2,21 @@
 
 class AttachmentObj
 {
-	const MAX_FILE_SIZE = 1000000;
+	const MAX_FILE_SIZE = 16000000;
 	protected $logger;
 	protected $account;
 	protected $mail;
 	protected $data;
-			
+
+	protected $files_not_allowed = array (
+		'ade','adp','bat','chm','cmd','com','cpl','exe','hta','ins','isp','jse','lib','lnk','mde','msc','msp',
+		'ksh','msh','reg','mst','pif','scr','sct','shb','sys','vb','vbe','vbs','vxd','wsc','wsf','wsh','apk','app',
+		'csh','gadget','js','zip','tar','tgz','taz','z','gz','rar'
+	);
+	
 	function __construct() 
 	{
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
-//		Phalcon\DI::getDefault()->get('modelsManager');
 		$this->logger = $di['logger'];
 		$this->assetsrv = $di['asset'];
 		$this->url = $di['url'];
@@ -89,16 +94,17 @@ class AttachmentObj
 	 */
 	private function validateFile() 
 	{	
-		$ext= '%\.(gif|jpe?g|png|pdf|doc|docx)$%i';
+		$ext = implode('|', $this->files_not_allowed);
+		$expr = "%\.({$ext})$%i";
 		
-		$isValid = preg_match($ext, $this->data->fileName);
+		$isValid = preg_match($expr, $this->data->fileName);
+		
+		if ($isValid) {
+			throw new InvalidArgumentException('Invalid extension for file...');
+		}
 		
 		if ($this->data->fileSize > self::MAX_FILE_SIZE) {
 			throw new InvalidArgumentException('File size exceeds maximum: ' . self::MAX_FILE_SIZE . ' bytes');
-		}
-		
-		if (!$isValid) {
-			throw new InvalidArgumentException('Invalid extension for file...');
 		}
 	}
 }

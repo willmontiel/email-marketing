@@ -28,6 +28,7 @@ App.Mail = DS.Model.extend({
 	previewData: DS.attr('string'),
 	mailcontent: DS.attr('boolean'),
 	attachment: DS.attr('boolean'),
+	attachmentsName: DS.attr('string'),
 	plainText: DS.attr('string'),
 	totalContacts: DS.attr('string'),
 	fbaccounts: DS.attr('string'),

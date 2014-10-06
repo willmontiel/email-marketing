@@ -6,7 +6,7 @@
 				{{'{{#if attachmentEmpty }}'}}
 					<dt>Archivos adjuntos:</dt> <dd>Este correo no contiene archivos adjuntos</dd>
 				{{'{{else}}'}}
-					<dt>Archivos adjuntos:</dt> <dd>{{ '{{App.fileNames}}' }}</dd>
+					<dt>Archivos adjuntos:</dt> <dd>{{'  {{attachmentsName}} '}}</dd>
 				{{'{{/if}}'}}
 				</dl>
 			</div>
@@ -27,7 +27,7 @@
 				<div class="form-group text-right">
 					<div class="col-sm-12">
 						<button class="btn btn-default btn-sm extra-padding" {{'{{action "discardAttachment" this}}'}}>Descartar cambios</button>
-						<button class="btn btn-default btn-guardar btn-sm extra-padding" {{'{{action "save" this}}'}}>Aplicar cambios</button>
+						<button class="btn btn-default btn-guardar btn-sm extra-padding" id="attach-file" {{'{{action "save" this}}'}}>Aplicar cambios</button>
 					</div>
 				</div>
 			</form>

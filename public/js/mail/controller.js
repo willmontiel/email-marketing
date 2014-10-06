@@ -424,7 +424,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		mail.set('sender', sender);
 		mail.set('target', target);
 		mail.set('totalContacts', totalContacts);
-		mail.set('attachment', 1);
+		mail.set('attachment', App.attachment);
 		mail.set('googleAnalytics', analitycs);
 		mail.set('fbaccounts', fbaccounts);
 		mail.set('twaccounts', twaccounts);
@@ -460,6 +460,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 					this.set('isHeaderExpanded', false);
 					this.set('isTargetExpanded', false);
 					this.set('isGoogleAnalitycsExpanded', false);
+					this.set('isAttachementExpanded', false);
 					this.set('isScheduleExpanded', false);
 					this.set('isSocialExpanded', false);
 				}

@@ -281,15 +281,23 @@ class ChildCommunication extends BaseWrapper
 			/*
 			 * Comprobar si es un correo con adjuntos y si es asi, buscar los archivos y adjuntarlos
 			 */			
+			$attach = array();
+			$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/' . $mail->idMail . '/';			
 			if ($mail->attachment == 1) {
-				$attachment = Attachment::findFirst(array(
+				$attachments = Attachment::find(array(
 					'conditions' => 'idMail = ?1',
 					'bind' => array(1 => $mail->idMail)
 				));
 				
-				if ($attachment) {
-					$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/' . $mail->idMail . '/';
-					$attPath = $dir . $attachment->fileName;
+				if (count($attachments) > 0) {
+					foreach ($attachments as $att) {
+						$attPath = $dir . $att->fileName;
+						
+						$obj = new stdClass();
+						$obj->name = $att->fileName;
+						$obj->path = $attPath;
+						$attach[] = $obj;
+					}
 				}
 				
 			}			
@@ -403,9 +411,14 @@ class ChildCommunication extends BaseWrapper
 					$message->setReplyTo($mail->replyTo);
 				}
 				$message->addPart($text, 'text/plain');
-				$message->attach(
-					Swift_Attachment::fromPath($attPath)->setFilename($attachment->fileName)
-				);
+				
+				if (count($attach) > 0) {
+					foreach ($attach as $at) {
+						$message->attach(
+							Swift_Attachment::fromPath($at->path)->setFilename($at->name)
+						);
+					}
+				}
 				
 				$timer->endTimer('prepare-msg');
 

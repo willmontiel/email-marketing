@@ -31,7 +31,6 @@
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
 		var AttUrl = "/{{urlManager.getBaseUri()}}mail/attachment";
 		var idMail = 0;
-		var attachment = 0;
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
 	
@@ -39,7 +38,6 @@
 	
 	{# Ember Uploader#}
 	{{ javascript_include('js/ember-uploader/ember-uploader.min.js') }}
-	{{ javascript_include('js/ember-uploader/file_field.js') }}
 	
 	{# Ember App Mail #}
 	{{ partial("mail/partials/app_mail_partial") }}
@@ -60,7 +58,7 @@
 	</script>
 	
 	<script type="text/javascript">
-		App.fileNames = "lala";
+		App.attachment = 0;
 		
 		$(function() {
 			{%for asset in assets%}

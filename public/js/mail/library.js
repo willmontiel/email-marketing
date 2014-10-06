@@ -29,18 +29,20 @@ App.FileUploadComponent = Ember.FileField.extend({
 		var files = this.get('files');
 		var idM = {idMail: idMail};
 		
-		var uploader = Ember.Uploader.create({url: uploadUrl});
+		$('#attach-file').click(function() {
+			var uploader = Ember.Uploader.create({url: uploadUrl});
+			if (!Ember.isEmpty(files)) {
+				var promise = uploader.upload(files, idM);
 
-		if (!Ember.isEmpty(files)) {
-			var promise = uploader.upload(files, idM);
-
-			promise.then(function(data) {
-				attachment = 1;
-				$.gritter.add({title: 'Exito', text: data.message, sticky: false, time: 10000});
-			}, function(error) {
-				$.gritter.add({title: 'Ha ocurrido un error', text: error.message, sticky: false, time: 10000});
-			});
-		}
+				promise.then(function(data) {
+					$.gritter.add({title: 'Exito', text: data.message, sticky: false, time: 10000});
+					App.attachment = 1;
+				}, function(error) {
+					$.gritter.add({title: 'Ha ocurrido un error', text: error.message, sticky: false, time: 10000});
+					App.attachment = 0;
+				});
+			}
+		});
 	}).observes('files')
 });
 

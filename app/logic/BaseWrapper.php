@@ -1,6 +1,5 @@
 <?php
 
-
 class BaseWrapper 
 {
 	protected $pager;
