@@ -288,7 +288,7 @@ class ChildCommunication extends BaseWrapper
 				));
 				
 				if ($attachment) {
-					$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/' . $this->mail->idMail . '/';
+					$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/' . $mail->idMail . '/';
 					$attPath = $dir . $attachment->fileName;
 				}
 				
