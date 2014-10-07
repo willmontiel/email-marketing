@@ -13,11 +13,14 @@ class AttachmentManager
 	
 	public function cleanAttachments()
 	{
-		echo 'Searching old mail attachments ' . date('d/m/Y H:i:s') . PHP_EOL;
-		$this->logger->log("Searching old mail attachments" . date('d/m/Y H:i:s'));
+		echo 'Searching old mail attachments' . PHP_EOL;
+		$this->logger->log("Searching old mail attachments");
 		
 		$mails = Mail::find();
 		$one_month_ago = strtotime("-1 month");
+		
+		echo 'Now: ' . date('d/m/Y H:i:s') . PHP_EOL;
+		echo 'One month ago: ' . date('d/m/Y H:i:s', $one_month_ago) . PHP_EOL;
 		
 		try {
 			if (count($mails) > 0) {
