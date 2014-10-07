@@ -28,14 +28,14 @@ class AttachmentManager
 
 				foreach ($mails as $mail) {
 					if ($mail->finishedon < $one_month_ago) {
-						$account = Account::findFirstByIdAccount($mail->idAccount);
-
 						$attachments = Attachment::find(array(
 							'conditions' => 'idMail = ?1',
 							'bind' => array(1 => $mail->idMail)
 						));
 
 						if (count($attachments) > 0 ){
+							$account = Account::findFirstByIdAccount($mail->idAccount);
+							
 							foreach ($attachments as $attachment) {
 								$attachobj->setAccount($account);
 								$attachobj->setMail($mail);
