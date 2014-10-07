@@ -1,6 +1,6 @@
 {{ '{{#if isContentAvailable}}' }} 
 	{{ '{{#unless isAttachementExpanded}}' }}
-		<div {{'{{bind-attr class=": attachmentEmpty:bg-warning: "}}'}}>
+		<div {{'{{bind-attr class=": attachmentEmpty:bg-warning: "}}'}} style="cursor: pointer;">
 			<div class="wrapper">
 				<dl class="dl-horizontal" {{ '{{action "expandAttachment" this}}' }}>
 				{{'{{#if attachmentEmpty }}'}}

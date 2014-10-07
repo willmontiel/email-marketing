@@ -1,6 +1,6 @@
 {{ '{{#unless contentEmpty}}' }}
 	{{ '{{#unless isGoogleAnalitycsExpanded}}' }}
-		<div {{'{{bind-attr class=": GoogleAnalitycsEmpty:bg-warning:"}}'}}>
+		<div {{'{{bind-attr class=": GoogleAnalitycsEmpty:bg-warning:"}}'}} style="cursor: pointer;">
 			<div class="wrapper">
 				<dl class="dl-horizontal" {{ '{{action "expandGA" this}}' }}>
 					<dt>Google Analitycs:</dt><dd>{{ '{{summaryAnalytics}}' }}</dd>

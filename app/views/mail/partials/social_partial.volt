@@ -1,5 +1,5 @@
 {{'{{#unless isSocialExpanded }}'}}
-<div {{'{{bind-attr class=": socialEmpty: :bg-warning"}}'}}>
+<div {{'{{bind-attr class=": socialEmpty: :bg-warning"}}'}} style="cursor: pointer;">
 		{{'{{#if socialEmpty }}'}}
 		<div class="wrapper">
 			<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>

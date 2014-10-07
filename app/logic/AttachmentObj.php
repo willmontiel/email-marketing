@@ -66,6 +66,13 @@ class AttachmentObj
 		if (!rmdir($dir)) {
 			throw new Exception('Dir could not delete from server!');
 		}
+		
+		if (!$this->attachment->delete()) {
+			foreach ($this->attachment->getMessages() as $msg) {
+				$this->logger->log("Error while deleting attachment: {$msg}");
+			}
+			throw new \Exception("Could not delete attachment with idMail {$this->mail->idMail}");
+		}
 	}
 	
 	/**

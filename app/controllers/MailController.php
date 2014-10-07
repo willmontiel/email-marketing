@@ -2602,13 +2602,6 @@ class MailController extends ControllerBase
 					foreach ($attachments as $attachment) {
 						$attachobj->setAttachment($attachment);
 						$attachobj->deleteAttachment();
-						
-						if (!$attachment->delete()) {
-							foreach ($attachment->getMessages() as $msg) {
-								$this->logger->log("Error while deleting attachment: {$msg}");
-							}
-							throw new \Exception("Could not delete attachment with idMail {$idMail}");
-						}
 					}
 					
 					$mail->attachment = 0;

@@ -1,5 +1,5 @@
 {{ '{{#unless isScheduleExpanded}}' }}
-	<div {{'{{bind-attr class=": scheduleEmpty:bg-warning:"}}'}}>
+	<div {{'{{bind-attr class=": scheduleEmpty:bg-warning:"}}'}} style="cursor: pointer;">
 			<div class="dl-horizontal" {{ '{{action "expandSchedule" this}}' }}>
 				{{'{{#if scheduleEmpty }}'}}
 					<div class="wrapper">
@@ -43,17 +43,17 @@
 					
 				<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 8px;">
-						{{ ' {{view Ember.RadioButton name="schedule" id="now" selectionBinding="scheduleRadio" value="now"}}' }}
-						<label for="now">Ahora mismo:</label>
+						{{ ' {{view Ember.RadioButton name="schedule" class="cursor-pointer" id="now" selectionBinding="scheduleRadio" value="now"}}' }}
+						<label for="now" class="cursor-pointer">Ahora mismo:</label>
 					</div>
 						
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 8px;">
 						{{'{{#if scheduleEmpty }}'}}
-							{{ ' {{view Ember.RadioButton name="schedule" id="later" selectionBinding="scheduleRadio" value="later"}}' }}
+							{{ ' {{view Ember.RadioButton class="cursor-pointer" name="schedule" id="later" selectionBinding="scheduleRadio" value="later"}}' }}
 						{{ '{{else}}' }}
-							{{ ' {{view Ember.RadioButton name="schedule" id="later" selectionBinding="scheduleRadio" value="later" checked="checked"}}' }}
+							{{ ' {{view Ember.RadioButton class="cursor-pointer" name="schedule" id="later" selectionBinding="scheduleRadio" value="later" checked="checked"}}' }}
 						{{ '{{/if}}' }}
-						<label for="later">Seleccione la fecha:</label>
+						<label for="later" class="cursor-pointer">Seleccione la fecha:</label>
 				{{'{{#if scheduleEmpty }}'}}
 						<div id="programmer" style="display: none; margin-top: 20px; margin-bottom: 20px;">
 				{{ '{{else}}' }}

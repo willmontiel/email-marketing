@@ -1020,3 +1020,7 @@ body {
 	border-radius: 4px;
 	margin-right: 4px;
 }
+
+.cursor-pointer {
+	cursor: pointer;
+}

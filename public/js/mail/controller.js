@@ -123,10 +123,15 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	},
 	
 	//Refresca el modelo
-	refreshRecords: function() {
+	refreshAttachment: function() {
 		var t = this;
 		Ember.$.getJSON(urlComplete + '/' + idMail).then(function(data) {
-			t.set('content', data.mails);
+//			t.set('content', data.mails);
+//			t.set('model', data.mails);
+			var m = t.get('model');
+			
+			m.set('attachment', data.mails.attachment);
+			m.set('attachmentsName', data.mails.attachmentsName);
 		});
 	},
 	
@@ -453,6 +458,10 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		},
 				
 		save: function(mail) {
+			if (mail === undefined) {
+				mail = this.content;
+			}
+	
 			if (mail.get('name') === undefined) {
 				$.gritter.add({title: 'Error', text: 'No ha ingresado un nombre para el correo, por favor verifique la información', sticky: false, time: 3000});
 			}
@@ -513,8 +522,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isSocialExpanded', false);
 			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
-			
-			
 		},
 				
 		expandAttachment: function () {
@@ -523,7 +530,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 			this.set('isSocialExpanded', false);
 			this.set('isGoogleAnalitycsExpanded', false);
 			this.set('isScheduleExpanded', false);
-			
 			this.set('isAttachementExpanded', true);
 		},
 				
@@ -649,9 +655,8 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 				
 			    var timeTmp = this.get('timeTmp');
 				this.set('time', timeTmp);
-			
-				this.set('isScheduleExpanded', false);
 			}
+			this.set('isScheduleExpanded', false);
 		}
 	}
 });

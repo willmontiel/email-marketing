@@ -94,11 +94,11 @@
 				data: {},
 				error: function(msg){
 					$.gritter.add({title: '<i class="glyphicon glyphicon-minus-sign"></i> Ha ocurrido un error', text: msg.message, sticky: false, time: 10000});
-					App.controller.refreshRecords();
+					App.controller.refreshAttachment();
 				},
 				success: function(msg){
 					$.gritter.add({title: '<i class="glyphicon glyphicon-paperclip"></i> Exitoso', text: msg.message, sticky: false, time: 10000});
-					App.controller.refreshRecords();
+					App.controller.refreshAttachment();
 				}
 			});
 		}

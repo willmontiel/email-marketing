@@ -1,5 +1,5 @@
 {{'{{#unless isTargetExpanded }}'}}
-	<div {{'{{bind-attr class=":wrapper targetEmpty:bg-warning: "}}'}}>
+	<div {{'{{bind-attr class=":wrapper targetEmpty:bg-warning: "}}'}} style="cursor: pointer;">
 		<dl class="dl-horizontal" {{ '{{action "expandTarget" this}}' }}>
 			{{'{{#if targetEmpty }}'}}
 				<dt>Para:</dt>
