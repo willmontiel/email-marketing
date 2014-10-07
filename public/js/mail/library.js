@@ -29,6 +29,8 @@ App.FileUploadComponent = Ember.FileField.extend({
 		var files = this.get('files');
 		var idM = {idMail: idMail};
 		
+		$('#input-file-decorator').val(files[0].name);
+		
 		$('#attach-file').click(function() {
 			var uploader = Ember.Uploader.create({url: uploadUrl});
 			if (!Ember.isEmpty(files)) {

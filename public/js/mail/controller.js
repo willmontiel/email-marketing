@@ -27,6 +27,7 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 	fromSummary: '',
 	summaryMail: '',
 	summaryAnalytics: '',
+	attachmentsFiles: [],
 	
 	imageUrl: function () {
 		Dropzone.autoDiscover = false;
@@ -199,8 +200,20 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		if (!att || att == 0) {
 			return true;
 		}
+		
+		var attachmentsName = this.get('this.attachmentsName');
+		var array = new Array();
+		
+		var res = attachmentsName.split(",");
+		for (var i = 0; i < res.length; i++) {
+			var obj = {attach: res[i]};
+			array.push(obj);
+		}
+		
+		this.set('this.attachmentsFiles', array);
+		
 		return false;
-	}.property('this.attachment'),
+	}.property('this.attachment', 'this.attachmentsName'),
 	
 	socialEmpty: function () {
 		var f, t;
