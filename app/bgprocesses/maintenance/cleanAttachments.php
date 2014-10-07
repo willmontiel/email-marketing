@@ -39,7 +39,7 @@ class AttachmentManager
 								$attachobj->setAttachment($attachment);
 								$attachobj->deleteAttachment(false);
 								
-								echo 'Attachment ' . $attachment->idAttachment . ', with Mail' . $mail->idMail . ' and createdon' . date('d/m/Y H:i:s', $attachment->createdon) . 'cleaned' . PHP_EOL;
+								echo 'Attachment ' . $attachment->idAttachment . ', with Mail ' . $mail->idMail . ' and createdon ' . date('d/m/Y H:i:s', $attachment->createdon) . ' cleaned' . PHP_EOL;
 								$this->logger->log("Attachment {$attachment->idAttachment} with Mail {$mail->idMail} and createdon " . date('d/m/Y H:i:s', $attachment->createdon) . " cleaned");
 							}
 						}
@@ -51,7 +51,7 @@ class AttachmentManager
 			$this->logger->log("Exception while cleaning attachment: {$e}");
 		}
 		
-		echo 'Cleaning fishined' . date('d/m/Y H:i:s') .PHP_EOL;
-		$this->logger->log("Cleaning fishined" . date('d/m/Y H:i:s'));
+		echo 'Cleaning fishined ' . date('d/m/Y H:i:s') .PHP_EOL;
+		$this->logger->log("Cleaning fishined " . date('d/m/Y H:i:s'));
 	}
 }
