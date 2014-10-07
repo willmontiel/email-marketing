@@ -107,7 +107,7 @@
 			var obj = new Object();
 			obj.container = "map-container";
 			obj.title = "Aperturas por ubicación";
-			obj.navigation = false;
+			obj.navigation = true;
 			obj.label = "Aperturas";
 			obj.valueText = " Aperturas";
 			obj.data = gData;
