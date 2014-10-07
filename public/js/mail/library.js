@@ -40,7 +40,9 @@ App.FileUploadComponent = Ember.FileField.extend({
 					$.gritter.add({title: '<i class="glyphicon glyphicon-paperclip"></i> Exitoso', text: data.message, sticky: false, time: 10000});
 					App.controller.refreshAttachment();
 				}, function(error) {
-					$.gritter.add({title: '<i class="glyphicon glyphicon-remove-sign"></i> Ha ocurrido un error', text: error.message, sticky: false, time: 10000});
+					var msg = error.responseText;
+					console.log(msg);
+					$.gritter.add({title: '<i class="glyphicon glyphicon-remove-sign"></i> Ha ocurrido un error', text: msg, sticky: false, time: 10000});
 					App.controller.refreshAttachment();
 				});
 			}

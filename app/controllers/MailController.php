@@ -2509,11 +2509,7 @@ class MailController extends ControllerBase
 	public function attachmentAction() {
 		if ($this->request->isPost()) {
 			if (empty($_FILES['file']['name'])) {
-				$error = array(
-					'error' => 'No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información'
-				);
-
-				return $this->setJsonResponse($error, 400);
+				return $this->setJsonResponse("No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información", 400);
 			}
 			
 			$idMail = $this->request->getPost("idMail");
@@ -2531,6 +2527,19 @@ class MailController extends ControllerBase
 				);
 
 				return $this->setJsonResponse($error, 400);
+			}
+			
+			$attachments = Attachment::findByIdMail($mail->idMail);
+			
+			$sizeAtt = 0;
+			if (count($attachments) > 0) {
+				foreach ($attachments as $attachment) {
+					$sizeAtt += $attachment->fileSize;
+				}
+			}
+			
+			if ($sizeAtt > 16000000) {
+				return $this->setJsonResponse("Ha sobrepasado el limite del tamaño permitido de los archivos adjuntos, recuerde que los archivos adjuntos no deben sobrepasar los 15 Mb", 400);
 			}
 			
 			$name = $_FILES['file']['name'];
@@ -2566,12 +2575,7 @@ class MailController extends ControllerBase
 				$this->logger->log("Error: {$e}");
 				$this->traceFail("Upploading attachment in mail, idMail: {$idMail} / idAccount: {$account->idAccount}");
 				
-				return $this->setJsonResponse(
-					array(
-						'message' => 'Ha ocurrido un error mientras se cargaba el archivo, por favor asegurese
-									de que el archivo que intenta adjuntar sea válido y tenga un tamaño de archivo menor a 15 MB'
-						)
-					, 400);
+				return $this->setJsonResponse('Ha ocurrido un error mientras se cargaba el archivo, por favor asegurese de que el archivo que intenta adjuntar sea válido y tenga un tamaño de archivo menor a 15 MB', 400);
 			}
 		}
 	}

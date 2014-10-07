@@ -1019,6 +1019,8 @@ body {
 	color: #1C578B;
 	border-radius: 4px;
 	margin-right: 4px;
+	margin-top: 4px;
+	display: inline-block;
 }
 
 .cursor-pointer {
