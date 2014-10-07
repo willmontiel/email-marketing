@@ -79,7 +79,7 @@ class AttachmentObj
 	 * Esta función guarda los datos del archivo en la tabla attachment de la base de datos
 	 * @throws InvalidArgumentException
 	 */
-	private function saveAttachmentInfoInDb()
+	private function saveAttachmentInfoInDb($db = true)
 	{
 		$attachment = new Attachment();
 		$attachment->idMail = $this->mail->idMail;
@@ -88,11 +88,13 @@ class AttachmentObj
 		$attachment->type = $this->data->fileType;
 		$attachment->createdon = time();
 		
-		if (!$attachment->save()) {
-			foreach ($attachment->getMessages() as $msg) {
-				$this->logger->log("Error while saving attachment: {$msg}");
+		if ($db) {
+			if (!$attachment->save()) {
+				foreach ($attachment->getMessages() as $msg) {
+					$this->logger->log("Error while saving attachment: {$msg}");
+				}
+				throw new InvalidArgumentException('Info file could not be saved on database');
 			}
-			throw new InvalidArgumentException('Info file could not be saved on database');
 		}
 	}
 	

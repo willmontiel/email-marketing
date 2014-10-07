@@ -37,7 +37,7 @@ class AttachmentManager
 								$attachobj->setAccount($account);
 								$attachobj->setMail($mail);
 								$attachobj->setAttachment($attachment);
-								$attachobj->deleteAttachment();
+								$attachobj->deleteAttachment(false);
 								
 								echo 'Attachment ' . $attachment->idAttachment . ', with Mail' . $mail->idMail . ' and createdon' . date('d/m/Y H:i:s', $attachment->createdon) . 'cleaned' . PHP_EOL;
 								$this->logger->log("Attachment {$attachment->idAttachment} with Mail {$mail->idMail} and createdon " . date('d/m/Y H:i:s', $attachment->createdon) . " cleaned");
