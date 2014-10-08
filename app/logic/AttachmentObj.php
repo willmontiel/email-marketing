@@ -50,8 +50,8 @@ class AttachmentObj
 	public function uploadAttachment()
 	{
 		$this->validateFile();
-		$this->moveFileToServer();
-		$this->saveAttachmentInfoInDb();
+		$this->moveFileToServer(true);
+		$this->saveAttachmentInfoInDb(true);
 	}
 	
 	public function deleteAttachment($db = true)
