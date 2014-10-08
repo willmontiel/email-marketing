@@ -27,7 +27,7 @@ class AttachmentManager
 				$attachobj = new AttachmentObj();
 
 				foreach ($mails as $mail) {
-					if ($mail->finishedon < $one_month_ago) {
+					if (!empty($mail->finishedon) && $mail->finishedon < $one_month_ago) {
 						$attachments = Attachment::find(array(
 							'conditions' => 'idMail = ?1',
 							'bind' => array(1 => $mail->idMail)
