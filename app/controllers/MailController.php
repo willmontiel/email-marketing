@@ -2529,6 +2529,8 @@ class MailController extends ControllerBase
 	
 	public function attachmentAction() {
 		if ($this->request->isPost()) {
+			$this->logger->log(print_r($_FILES['file'], true));
+			
 			if (empty($_FILES['file']['name'])) {
 				return $this->setJsonResponse("No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información", 400);
 			}
