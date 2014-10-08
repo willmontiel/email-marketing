@@ -2598,7 +2598,7 @@ class MailController extends ControllerBase
 				$this->logger->log("Error: {$e}");
 				$this->traceFail("Upploading attachment in mail, idMail: {$idMail} / idAccount: {$account->idAccount}");
 				
-				return $this->setJsonResponse('Ha ocurrido un error mientras se cargaba el archivo, por favor asegurese de que el archivo que intenta adjuntar sea válido y tenga un tamaño de archivo menor a 15 MB', 400);
+				return $this->setJsonResponse('Ha ocurrido un error mientras se cargaba el archivo, por favor asegurese de que el archivo que intenta adjuntar sea válido y tenga un tamaño de archivo menor a 5 MB', 400);
 			}
 		}
 	}
