@@ -77,17 +77,34 @@ class AttachmentObj
 		}
 	}
 	
+	public function cloneAttachment() 
+	{
+		$this->saveAttachmentInfoInDb(false);
+		$this->moveFileToServer(false);
+	}
+	
 	/**
 	 * Esta función guarda los datos del archivo en la tabla attachment de la base de datos
 	 * @throws InvalidArgumentException
 	 */
-	private function saveAttachmentInfoInDb()
+	private function saveAttachmentInfoInDb($uploaded = true)
 	{
+		if ($uploaded) {
+			$name = $this->data->fileName;
+			$size = $this->data->fileSize;
+			$type = $this->data->type;
+		}
+		else {
+			$name = $this->attachment->fileName;
+			$size = $this->attachment->fileSize;
+			$type = $this->attachment->type;
+		}
+		
 		$attachment = new Attachment();
 		$attachment->idMail = $this->mail->idMail;
-		$attachment->fileName = $this->data->fileName;
-		$attachment->fileSize = $this->data->fileSize;
-		$attachment->type = $this->data->fileType;
+		$attachment->fileName = $name;
+		$attachment->fileSize = $size;
+		$attachment->type = $type;
 		$attachment->createdon = time();
 		
 		if (!$attachment->save()) {
@@ -102,7 +119,7 @@ class AttachmentObj
 	 * Esta función mueve el archivo del directorio temporal al servidor como tal
 	 * @throws InvalidArgumentException
 	 */
-	private function moveFileToServer()
+	private function moveFileToServer($uploaded = true)
 	{
 		$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/' . $this->mail->idMail . '/';
 		
@@ -110,7 +127,9 @@ class AttachmentObj
 			mkdir($dir, 0777, true);
 		}
 		
-		$dir .= $this->data->fileName;
+		$name = ($uploaded == true ? $this->data->fileName : $this->attachment->fileName);
+		
+		$dir .= $name;
 		
 		if (!move_uploaded_file($this->data->tmpDir, $dir)){ 
 			throw new InvalidArgumentException('File could not be uploaded on the server');

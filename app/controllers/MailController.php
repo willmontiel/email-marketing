@@ -123,12 +123,12 @@ class MailController extends ControllerBase
 	
 	public function cloneAction($idMail = null)
 	{
-		$idAccount = $this->user->account->idAccount;
+		$account = $this->user->account;
 		
 		$mail = Mail::findFirst(array(
 			"conditions" => "idMail = ?1 AND idAccount = ?2",
 			"bind" => array(1 => $idMail,
-							2 => $idAccount)
+							2 => $account->idAccount)
 		)); 
 		
 		if ($mail) {
@@ -137,7 +137,7 @@ class MailController extends ControllerBase
 			/* Mail Clone */
 			$mailClone = new Mail();
 			
-			$mailClone->idAccount = $idAccount;
+			$mailClone->idAccount = $account->idAccount;
 			$mailClone->name = substr($mail->name . " (copia)", 0, 79);
 			$mailClone->subject = $mail->subject;
 			$mailClone->fromName = $mail->fromName;
@@ -145,6 +145,27 @@ class MailController extends ControllerBase
 			$mailClone->replyTo = $mail->replyTo;
 			$mailClone->type = $mail->type;
 			$mailClone->attachment = $mail->attachment;
+			
+			try {
+				if ($mail->attachment == 1) {
+					$attachments = Attachment::findByIdMail($mail->idMail);
+					if (count($attachments) > 0) {
+						$attach = new AttachmentObj();
+						$attach->setAccount($account);
+						$attach->setMail($mailClone);
+						foreach ($attachments as $attachment) {
+							$attach->setAttachment($attachment);
+							$attach->cloneAttachment();
+						}
+					}
+				}
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception: {$e}");
+				$this->flashSession->error("Ocurrió un error mientras se intentaba duplicar el correo, por favor contacte al administrador");
+				return $this->response->redirect("mail/list");
+			}
+			
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
 			$mailClone->finishedon = 0;
