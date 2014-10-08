@@ -2538,7 +2538,7 @@ class MailController extends ControllerBase
 				}
 			}
 			
-			if ($sizeAtt > 16000000) {
+			if ($sizeAtt > 5500000) {
 				return $this->setJsonResponse("Ha sobrepasado el limite del tamaño permitido de los archivos adjuntos, recuerde que los archivos adjuntos no deben sobrepasar los 15 Mb", 400);
 			}
 			

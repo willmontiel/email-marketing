@@ -2,7 +2,7 @@
 
 class AttachmentObj
 {
-	const MAX_FILE_SIZE = 16000000;
+	const MAX_FILE_SIZE = 5500000;
 	protected $logger;
 	protected $account;
 	protected $mail;
@@ -54,7 +54,7 @@ class AttachmentObj
 		$this->saveAttachmentInfoInDb();
 	}
 	
-	public function deleteAttachment()
+	public function deleteAttachment($db = true)
 	{
 		$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/' . $this->mail->idMail . '/';
 		$attachment = $dir . $this->attachment->fileName;
@@ -67,11 +67,13 @@ class AttachmentObj
 			throw new Exception('Dir could not delete from server!');
 		}
 		
-		if (!$this->attachment->delete()) {
-			foreach ($this->attachment->getMessages() as $msg) {
-				$this->logger->log("Error while deleting attachment: {$msg}");
+		if ($db) {
+			if (!$this->attachment->delete()) {
+				foreach ($this->attachment->getMessages() as $msg) {
+					$this->logger->log("Error while deleting attachment: {$msg}");
+				}
+				throw new \Exception("Could not delete attachment with idMail {$this->mail->idMail}");
 			}
-			throw new \Exception("Could not delete attachment with idMail {$this->mail->idMail}");
 		}
 	}
 	
@@ -79,7 +81,7 @@ class AttachmentObj
 	 * Esta función guarda los datos del archivo en la tabla attachment de la base de datos
 	 * @throws InvalidArgumentException
 	 */
-	private function saveAttachmentInfoInDb($db = true)
+	private function saveAttachmentInfoInDb()
 	{
 		$attachment = new Attachment();
 		$attachment->idMail = $this->mail->idMail;
@@ -88,13 +90,11 @@ class AttachmentObj
 		$attachment->type = $this->data->fileType;
 		$attachment->createdon = time();
 		
-		if ($db) {
-			if (!$attachment->save()) {
-				foreach ($attachment->getMessages() as $msg) {
-					$this->logger->log("Error while saving attachment: {$msg}");
-				}
-				throw new InvalidArgumentException('Info file could not be saved on database');
+		if (!$attachment->save()) {
+			foreach ($attachment->getMessages() as $msg) {
+				$this->logger->log("Error while saving attachment: {$msg}");
 			}
+			throw new InvalidArgumentException('Info file could not be saved on database');
 		}
 	}
 	
