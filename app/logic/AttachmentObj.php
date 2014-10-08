@@ -92,7 +92,7 @@ class AttachmentObj
 		if ($uploaded) {
 			$name = $this->data->fileName;
 			$size = $this->data->fileSize;
-			$type = $this->data->type;
+			$type = $this->data->fileType;
 		}
 		else {
 			$name = $this->attachment->fileName;
