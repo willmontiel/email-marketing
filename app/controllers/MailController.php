@@ -144,7 +144,7 @@ class MailController extends ControllerBase
 			$mailClone->fromEmail = $mail->fromEmail;
 			$mailClone->replyTo = $mail->replyTo;
 			$mailClone->type = $mail->type;
-			$mailClone->attachment = $mail->attachment;
+			$mailClone->attachment = 0;
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
 			$mailClone->finishedon = 0;
@@ -160,25 +160,25 @@ class MailController extends ControllerBase
 				return $this->response->redirect("mail/list");
 			}
 			
-			try {
-				if ($mailClone->attachment == 1) {
-					$attachments = Attachment::findByIdMail($mail->idMail);
-					if (count($attachments) > 0) {
-						$attach = new AttachmentObj();
-						$attach->setAccount($account);
-						$attach->setMail($mailClone);
-						foreach ($attachments as $attachment) {
-							$attach->setAttachment($attachment);
-							$attach->cloneAttachment();
-						}
-					}
-				}
-			}
-			catch (Exception $e) {
-				$this->logger->log("Exception: {$e}");
-				$this->flashSession->error("Ocurrió un error mientras se intentaba duplicar el correo, por favor contacte al administrador");
-				return $this->response->redirect("mail/list");
-			}
+//			try {
+//				if ($mailClone->attachment == 1) {
+//					$attachments = Attachment::findByIdMail($mail->idMail);
+//					if (count($attachments) > 0) {
+//						$attach = new AttachmentObj();
+//						$attach->setAccount($account);
+//						$attach->setMail($mailClone);
+//						foreach ($attachments as $attachment) {
+//							$attach->setAttachment($attachment);
+//							$attach->cloneAttachment();
+//						}
+//					}
+//				}
+//			}
+//			catch (Exception $e) {
+//				$this->logger->log("Exception: {$e}");
+//				$this->flashSession->error("Ocurrió un error mientras se intentaba duplicar el correo, por favor contacte al administrador");
+//				return $this->response->redirect("mail/list");
+//			}
 			
 			/* Mail Content Clone*/
 			$mailContentClone = new Mailcontent();
