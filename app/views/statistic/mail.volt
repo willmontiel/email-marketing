@@ -140,7 +140,11 @@
 			{{ partial("statistic/partials/shareandcompare_partial") }}	
 			
 			{# Geolocalización por aperturas #}
-			<div id="map-container"></div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div id="map-container"></div>
+				</div>
+			</div>
 	
 			{#   Tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
