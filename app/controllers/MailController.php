@@ -2155,10 +2155,11 @@ class MailController extends ControllerBase
 	
 	public function sendtestAction($idMail)
 	{
+		$account = $this->user->account;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idAccount = ?2',
 			'bind' => array(1 => $idMail,
-							2 => $this->user->account->idAccount)
+							2 => $account->idAccount)
 		));
 		
 		if ($this->request->isPost() && $mail) {
@@ -2189,7 +2190,32 @@ class MailController extends ControllerBase
 				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
 				return $this->response->redirect('mail/compose/' . $idMail);
 			}
-
+			
+			
+			/*
+			 * Comprobar si es un correo con adjuntos y si es asi, buscar los archivos y adjuntarlos
+			 */			
+			$attach = array();
+			$dir = $this->assetsrv->dir . $account->idAccount . '/attachments/' . $mail->idMail . '/';			
+			if ($mail->attachment == 1) {
+				$attachments = Attachment::find(array(
+					'conditions' => 'idMail = ?1',
+					'bind' => array(1 => $mail->idMail)
+				));
+				
+				if (count($attachments) > 0) {
+					foreach ($attachments as $att) {
+						$attPath = $dir . $att->fileName;
+						
+						$obj = new stdClass();
+						$obj->name = $att->fileName;
+						$obj->path = $attPath;
+						$attach[] = $obj;
+					}
+				}
+				
+			}
+			
 			$transport = Swift_SendmailTransport::newInstance();
 			$swift = Swift_Mailer::newInstance($transport);
 
@@ -2225,7 +2251,15 @@ class MailController extends ControllerBase
 					if ($replyTo != null) {
 						$message->setReplyTo($replyTo);
 					}
-
+					
+					if (count($attach) > 0) {
+						foreach ($attach as $at) {
+							$message->attach(
+								Swift_Attachment::fromPath($at->path)->setFilename($at->name)
+							);
+						}
+					}
+					
 					$sendMail = $swift->send($message, $failures);
 
 					if (!$sendMail){
