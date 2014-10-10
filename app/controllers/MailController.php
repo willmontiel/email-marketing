@@ -2196,7 +2196,7 @@ class MailController extends ControllerBase
 			 * Comprobar si es un correo con adjuntos y si es asi, buscar los archivos y adjuntarlos
 			 */			
 			$attach = array();
-			$dir = $this->assetsrv->dir . $account->idAccount . '/attachments/' . $mail->idMail . '/';			
+			$dir = $this->asset->dir . $account->idAccount . '/attachments/' . $mail->idMail . '/';			
 			if ($mail->attachment == 1) {
 				$attachments = Attachment::find(array(
 					'conditions' => 'idMail = ?1',
