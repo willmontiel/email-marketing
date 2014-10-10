@@ -33,13 +33,17 @@ class AssetController extends ControllerBase
 				$this->traceSuccess("Upploading asset, idAsset: {$idAsset}");
 			} 
 			catch (Exception $e) {
-				$this->logger->log("Exception: Error while uplodaing asset, {$e}");
+				$kb = $this->uploadConfig->imgAssetSize/1024;
+				$mb = $kb/1024;
+				$mb = explode(',', $mb);
+				
+				$this->logger->log("Exception: Error while uplodaing asset, {$e} size {$mb[0]} MB");
 				$this->traceFail("Upploading asset:");
 				return $this->setJsonResponse(
 					array(
-						'error' => 'Ha ocurrido un error mientras se cargaba la imagen, por favor asegurese
+						'error' => "Ha ocurrido un error mientras se cargaba la imagen, por favor asegurese
 									de que el archivo que intenta subir realmente sea una imagen (jpeg, jpg, gif, png)
-									y tenga un tamaño de archivo menor a 10 MB'
+									y tenga un tamaño de archivo menor a {$mb[0]} MB"
 						)
 					, 400 , 'Error en archivo!');
 			}
