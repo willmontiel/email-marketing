@@ -311,7 +311,7 @@ class AccountController extends ControllerBase
 				else {
 					$remittents = explode(',', $r);
 					$remittents = array_unique($remittents);
-					$this->logger->log("Sender: " . print_r($remittents, true));
+//					$this->logger->log("Sender: " . print_r($remittents, true));
 					
 					$account->prefix = $this->validatePrefix($n, $p);
 					
@@ -607,11 +607,11 @@ class AccountController extends ControllerBase
 	protected function isAValidDomain($domain)
 	{
 		$invalidDomains = array(
-			'yahoo',
-			'hotmail',
-			'live',
-			'gmail',
-			'aol'
+//			'yahoo',
+//			'hotmail',
+//			'live',
+//			'gmail',
+//			'aol'
 		);
 		
 		$d = explode('.', $domain);

@@ -2,7 +2,6 @@
 
 class AttachmentObj
 {
-	const MAX_FILE_SIZE = 5500000;
 	protected $logger;
 	protected $account;
 	protected $mail;
@@ -20,6 +19,7 @@ class AttachmentObj
 		$di =  \Phalcon\DI\FactoryDefault::getDefault();
 		$this->logger = $di['logger'];
 		$this->assetsrv = $di['asset'];
+		$this->uploadConfig = $di['uploadConfig'];
 		$this->url = $di['url'];
 	}
 	
@@ -151,8 +151,8 @@ class AttachmentObj
 			throw new InvalidArgumentException('Invalid extension for file...');
 		}
 		
-		if ($this->data->fileSize > self::MAX_FILE_SIZE) {
-			throw new InvalidArgumentException('File size exceeds maximum: ' . self::MAX_FILE_SIZE . ' bytes');
+		if ($this->data->fileSize > $this->uploadConfig->attachmentSize) {
+			throw new InvalidArgumentException('File size exceeds maximum: ' . $this->uploadConfig->attachmentSize . ' bytes');
 		}
 	}
 }

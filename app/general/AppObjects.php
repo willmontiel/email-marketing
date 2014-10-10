@@ -66,6 +66,7 @@ class AppObjects
 			
 			$this->setModelsMetadata();
 			$this->setMtaConfig();
+			$this->setUploadConfig();
 			
 			$this->setDb();
 			$this->setModelsManager();
@@ -401,6 +402,17 @@ class AppObjects
 		$mtaConfig->port = $this->config->mta->port;
 		$mtaConfig->mailClass = $this->config->mta->mailclass;
 		$this->di->set('mtadata', $mtaConfig);
+	}
+	
+	/*
+	 * 
+	 */
+	private function setUploadConfig()
+	{
+		$uploadConfig = new \stdClass();
+		$uploadConfig->imgAssetSize = $this->config->upload->asset_img_size;
+		$uploadConfig->attachmentSize = $this->config->upload->attachment_size;
+		$this->di->set('uploadConfig', $uploadConfig);
 	}
 	
 	/*
