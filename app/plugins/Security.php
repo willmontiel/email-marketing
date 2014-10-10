@@ -158,6 +158,7 @@ class Security extends Plugin
 				'contacts::newbatch' => array('contact' => array('read','importbatch')),
 				'contacts::importbatch' => array('contact' => array('read', 'importbatch')),
 				'contacts::import' => array('contact' => array('read','importbatch')),
+				'contacts::export' => array('contact' => array('read', 'export')),
 				'contacts::processfile' => array('contact' => array('read','importbatch')),
 				'process::import' => array('contact' => array('read', 'import')),
 				'process::refreshimport' => array('contact' => array('read', 'import')),

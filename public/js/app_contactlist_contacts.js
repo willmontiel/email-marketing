@@ -25,6 +25,7 @@ App.Router.map(function() {
 		this.route('newbatch'),
 		this.route('import'),
 		this.route('newimport'),
+		this.route('export'),
 //			this.resource('contacts.show', { path: '/show/:contact_id'}),
 //			this.resource('contacts.edit', { path: '/edit/:contact_id'}),
 			this.resource('contacts.delete', { path: '/delete/:contact_id'});

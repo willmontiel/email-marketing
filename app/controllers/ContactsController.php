@@ -579,4 +579,39 @@ class ContactsController extends ControllerBase
 		}
 		return $this->response->redirect($form->urlSuccess, true);
 	}
+	
+	public function exportAction()
+	{
+		if($this->request->isPost()){
+			$criteria = $this->request->getPost('criteria');
+			$id = $this->request->getPost('id');
+			$contacts = $this->request->getPost('contacts');
+			$fields = $this->request->getPost('fields');
+			
+			$data = new stdClass();
+			$data->criteria = $criteria;
+			$data->id = $id;
+			$data->contacts = $contacts;
+			$data->fields = $fields;
+			
+			try {
+				$exporter = new ContactExporter();
+				$exporter->setData($data);
+				$exporter->startExporting();
+				$file = $exporter->getFileData();
+			}
+			catch (Exception $e){
+				$this->logger->log("Exception while exporting contacts... {$e}");
+			}
+			
+			$this->view->disable();
+
+			header('Content-type: application/csv');
+			header("Content-Disposition: attachment; filename={$file->name}");
+			header('Pragma: public');
+			header('Expires: 0');
+			header('Content-Type: application/download');
+			readfile($this->tmppath->exportdir . $file->name);
+		}
+	}
 }
