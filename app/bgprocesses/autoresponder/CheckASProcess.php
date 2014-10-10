@@ -7,7 +7,7 @@ $obj->start_process();
 class CheckASProcess
 {
 	
-	const SCHEDULING_INTERVAL_IN_SECONDS = 120;
+	const SCHEDULING_INTERVAL_IN_SECONDS = 12000000;
 	const NUMBER_OF_TRIES = 35;
 	const TIME_TO_SLEEP = 600;
 	
@@ -139,8 +139,8 @@ class CheckASProcess
 		$schedule = Mailschedule::findFirstByIdMail($mail->idMail);
 
 		if($schedule) {
-			$mail->status = 'Scheduled';
-
+			$mail->status = ($mail->status == 'Draft' || $mail->status == 'draft') ? 'Scheduled' : $mail->status;
+			
 			if(!$mail->save()) {
 				foreach ($mail->getMessages() as $msg) {
 					$this->logger->log($msg);
@@ -207,8 +207,8 @@ class CheckASProcess
 	
 	public function send_success_mail_to_support()
 	{
-		$users = array('ivan.barona@sigmamovil.com', 'juan.morales@sigmamovil.com', 'ana.torres@sigmamovil.com');
-		
+		//$users = array('ivan.barona@sigmamovil.com', 'juan.morales@sigmamovil.com', 'ana.torres@sigmamovil.com');
+		$users = array();
 		$message = new AdministrativeMessages();
 		foreach ($users as $user) {
 			$message->createTemporarySuccessMessage($user);

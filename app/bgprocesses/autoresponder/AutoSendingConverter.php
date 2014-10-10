@@ -26,34 +26,72 @@ class AutoSendingConverter
 		$MailWrapper->processDataForMail();
 		$mail = $MailWrapper->saveMail();
 		$this->createMxA($mail);
+		
+		if($this->autoresponder->type == 'birthday') {
+			$birthday_wrapper = new BirthdayAutoResponder();
+			$birthday_wrapper->setMail($this->mail);
+			$birthday_wrapper->setAutoresponder($this->autoresponder);
+			$birthday_wrapper->selectTarget();
+		}
+		
 		return $mail;
 	}
 	
 	public function convertToMail()
 	{
-		if($this->autoresponder->contentsource == 'url') {
-			$this->db->begin();
-			$this->mail = new Mail();
-			$this->mail->idAccount = $this->account->idAccount;
-			$this->mail->type = 'Html';
-			$this->mail->status = 'Draft';
-			$this->mail->wizardOption = 'setup';
-			$this->mail->deleted = 0;
-			$this->mail->previewData = $this->autoresponder->previewData;
-			
-			if(!$this->mail->save()) {
-				foreach ($this->mail->getMessages() as $msg) {
-					$this->logger->log("Error while saving mail {$msg}");
-				}
-				$this->db->rollback();
-				throw new Exception('Error while saving content mail as autoresponder');
-			}
-			
-			$this->saveContentFromURL();
-			$this->db->commit();
+		$this->db->begin();
+		$this->mail = new Mail();
+		$this->mail->idAccount = $this->account->idAccount;
+		$this->mail->wizardOption = 'setup';
+		$this->mail->deleted = 0;
+		$this->mail->previewData = $this->autoresponder->previewData;
+		
+		if($this->autoresponder->type == 'birthday') {
+			$this->selectMailType($this->autoresponder->contentsource);
+			$this->mail->status = 'Birthday';
 		}
+		else {
+			$this->selectMailType($this->autoresponder->contentsource);
+			$this->mail->status = 'Draft';
+		}
+			
+		if(!$this->mail->save()) {
+			foreach ($this->mail->getMessages() as $msg) {
+				$this->logger->log("Error while saving mail {$msg}");
+			}
+			$this->db->rollback();
+			throw new Exception('Error while saving content mail as autoresponder');
+		}
+
+		switch($this->autoresponder->contentsource) {
+			case 'url':
+				$this->saveContentFromURL();
+				break;
+			case 'html':
+				$this->saveContentFromHTML();
+				break;
+			case 'editor':
+				$this->saveContentFromEDITOR();
+				break;
+		}
+
+		$this->db->commit();
+		
 	}
 	
+	protected function selectMailType($contentsource)
+	{
+		switch($contentsource) {
+			case 'url':
+			case 'html':
+				$this->mail->type = 'Html';
+				break;
+			case 'editor':
+				$this->mail->type = 'Editor';
+				break;
+		}
+	}
+
 	protected function saveContentFromURL()
 	{
 		$objJson = json_decode($this->autoresponder->content);
@@ -76,14 +114,63 @@ class AutoSendingConverter
 		try {
 			$content_processed = $this->addMetaAccent($content);
 			$html = $this->changeTDStyles($content_processed);
-
+			$this->saveContent($html);
+		}
+		catch(Exception $e) {
+			$this->db->rollback();
+			$this->logger->log($e->getMessage());
+			throw new Exception(400);
+		}
+	}
+	
+	protected function saveContentFromHTML()
+	{
+		try {
+			$content = html_entity_decode($this->autoresponder->content);
+			$content_processed = $this->addMetaAccent($content);
+			$html = $this->changeTDStyles($content_processed);
+			$this->saveContent($html);
+		}
+		catch(Exception $e) {
+			$this->db->rollback();
+			$this->logger->log($e->getMessage());
+			throw new Exception(400);
+		}
+	}
+	
+	protected function saveContentFromEDITOR()
+	{
+		try {
+			$this->saveContent($this->autoresponder->content, true);
+		}
+		catch(Exception $e) {
+			$this->db->rollback();
+			$this->logger->log($e->getMessage());
+			throw new Exception(400);
+		}
+	}
+	
+	protected function saveContent($html, $editor = false)
+	{
+		try {
 			$mc = new Mailcontent();
 			$mc->idMail = $this->mail->idMail;
 
+			if($editor) {
+				$mc->content = $html;
+				
+				$editorObj = new HtmlObj();
+				$editorObj->setAccount($this->account);
+				$editorObj->assignContent(json_decode($html));
+				$html = $editorObj->render();
+			}
+			else {
+				$mc->content = htmlspecialchars($html, ENT_QUOTES);
+			}
+			
 			$text = new PlainText();
 			$plainText = $text->getPlainText($html);
 
-			$mc->content = htmlspecialchars($html, ENT_QUOTES);
 			$mc->plainText = $plainText;
 		}
 		catch(Exception $e) {
@@ -100,13 +187,13 @@ class AutoSendingConverter
 			throw new Exception('Error while saving content mail as autoresponder');
 		}
 	}
-	
+
 	protected function createContentForMail()
 	{
 		$obj = new stdClass();
 		
-		$obj->scheduleDate = 'now';
-		$obj->type = 'Html';
+		$obj->scheduleDate = 'now';	
+		$obj->type = $this->mail->type;			
 		$obj->name = $this->autoresponder->name . ' ' . date('d/m/Y', time());
 		
 		$from = json_decode($this->autoresponder->from);

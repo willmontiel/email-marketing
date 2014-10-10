@@ -568,7 +568,7 @@ class ChildCommunication extends BaseWrapper
 	
 	protected function checkMailStatus($mail)
 	{
-		if($mail->status != 'Paused' && $mail->status != 'Scheduled') {
+		if($mail->status != 'Paused' && $mail->status != 'Scheduled' && $mail->status != 'Birthday') {
 			throw new MailStatusException('El correo no tiene estados Pausado o Programado. Estados no permitidos, en el Mail con ID '. $mail->idMail . ' Con estado ' . $mail->status);
 		}
 	}

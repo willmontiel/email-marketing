@@ -92,7 +92,7 @@ class InterpreterTarget
 
 				case 'contactlists':
 					$this->SQLFilterMail = " JOIN coxcl AS lc ON (lc.idContact = mc.idContact) WHERE lc.idContactlist IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
-					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN coxcl cl ON (co.idContact = cl.idContact) WHERE cl.idContactlist IN ({$this->ids}) GROUP BY 1, 2, 3)";
+					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed, co.birthDate FROM contact co JOIN coxcl cl ON (co.idContact = cl.idContact) WHERE cl.idContactlist IN ({$this->ids}) GROUP BY 1, 2, 3)";
 					
 					/**
 					* Inserting data into statcontactlist for statistics
@@ -111,7 +111,7 @@ class InterpreterTarget
 
 				case 'segments':
 					$this->SQLFilterMail = " JOIN sxc AS sc ON (sc.idContact = mc.idContact) WHERE sc.idSegment IN ({$this->ids}) AND m.status = 'Sent' GROUP BY 1,2,3,4";
-					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed FROM contact co JOIN sxc s ON (co.idContact = s.idContact) WHERE s.idSegment IN ({$this->ids}) GROUP BY 1, 2, 3)";
+					$this->SQLForContacts = "(SELECT co.idContact, co.idEmail, co.unsubscribed, co.birthDate FROM contact co JOIN sxc s ON (co.idContact = s.idContact) WHERE s.idSegment IN ({$this->ids}) GROUP BY 1, 2, 3)";
 					
 					$this->statContactlistSQL = "INSERT IGNORE INTO statcontactlist (idContactlist, idMail, uniqueOpens,clicks, bounced, spam, unsubscribed, sent, sentDate) 
 													(SELECT c.idContactlist, {$this->mail->idMail}, 0, 0, 0, 0, 0, {$this->mail->totalContacts}, " . time() ."

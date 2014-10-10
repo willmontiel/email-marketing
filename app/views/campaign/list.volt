@@ -32,13 +32,10 @@
 			});
 		}
 		
-		function previewAutoSend(url, id) {
+		function previewAutoSend(id) {
 			$.ajax({
-				url: "{{url('campaign/preview')}}/" + id,
-				type: "POST",			
-				data: { 
-					url: url
-				},
+				url: "{{url('campaign/previewlist')}}/" + id,
+				type: "GET",			
 				error: function(msg){
 					var txt = JSON.parse(msg.responseText);
 					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: txt.status, sticky: false, time: 10000});
@@ -87,10 +84,10 @@
 								<dd><strong>Asunto:</strong> {{item.subject}}</dd>
 							</dl>
 							<div class="autoresponse-list-options">
-								<a class="btn btn-default btn-sm" href="{{url("campaign/automatic")}}/{{item.idAutoresponder}}">
+								<a class="btn btn-default btn-sm" href="{{url("campaign/")}}{{item.type}}/{{item.idAutoresponder}}">
 									<span class="glyphicon glyphicon-pencil"></span>
 								</a>
-								<a onclick="previewAutoSend('{{item.content.url}}', '{{item.idAutoresponder}}');" class="btn btn-default btn-sm">
+								<a onclick="previewAutoSend('{{item.idAutoresponder}}');" class="btn btn-default btn-sm">
 									<span class="glyphicon glyphicon-eye-open"></span>
 								</a>
 								<a class="auto_send_delete_btn btn btn-default btn-sm" data-toggle="modal" href="#modal-simple" data-id="{{ url('campaign/delete/') }}{{item.idAutoresponder}}">

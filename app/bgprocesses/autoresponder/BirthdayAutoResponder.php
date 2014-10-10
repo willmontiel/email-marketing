@@ -1,0 +1,46 @@
+<?php
+
+class BirthdayAutoResponder {
+	
+	protected $autoresponder;
+	protected $mail;
+	
+	function __construct() {
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
+	}
+
+	public function setAutoresponder(Autoresponder $autoresponder)
+	{
+		$this->autoresponder = $autoresponder;
+	}
+	
+	public function setMail(Mail $mail)
+	{
+		$this->mail = $mail;
+	}
+	
+	public function selectTarget()
+	{
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+		$interpreter->setMail($this->mail);
+		$interpreter->searchContacts();
+		$sql = $interpreter->getSQL();
+		if ($sql != false) {
+			$final_sql = $this->addClauseBirthdate($sql);
+			$this->createMXC($final_sql);
+		}
+	}
+	
+	protected function addClauseBirthdate($origin_sql)
+	{
+		return $origin_sql . ' AND  c.birthDate = DATE_FORMAT(NOW(), \'%Y-%m-%d\')';
+	}
+	
+	protected function createMXC($sql)
+	{
+		$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+		$executer->instanceDbAbstractLayer();
+		$executer->setSQL($sql);
+		$executer->executeAbstractLayer();
+	}
+}
