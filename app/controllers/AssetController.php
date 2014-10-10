@@ -35,7 +35,7 @@ class AssetController extends ControllerBase
 			catch (Exception $e) {
 				$kb = $this->uploadConfig->imgAssetSize/1024;
 				$mb = $kb/1024;
-				$mb = explode(',', $mb);
+				$mb = explode('.', $mb);
 				
 				$this->logger->log("Exception: Error while uplodaing asset, {$e} size {$mb[0]} MB");
 				$this->traceFail("Upploading asset:");

@@ -2563,7 +2563,7 @@ class MailController extends ControllerBase
 			if ($sizeAtt > $this->uploadConfig->attachmentSize) {
 				$kb = $this->uploadConfig->attachmentSize/1024;
 				$mb = $kb/1024;
-				$mb = explode(',', $mb);
+				$mb = explode('.', $mb);
 				
 				return $this->setJsonResponse("Ha sobrepasado el limite del tamaño permitido de los archivos adjuntos, recuerde que los archivos adjuntos no deben sobrepasar los {$mb[0]} Mb", 400);
 			}
@@ -2602,7 +2602,7 @@ class MailController extends ControllerBase
 				
 				$kb = $this->uploadConfig->attachmentSize/1024;
 				$mb = $kb/1024;
-				$mb = explode(',', $mb);
+				$mb = explode('.', $mb);
 				$this->traceFail("Upploading attachment in mail, idMail: {$idMail} / idAccount: {$account->idAccount} / {$mb[0]} MB");
 				
 				
