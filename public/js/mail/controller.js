@@ -608,7 +608,6 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		
 		discardSocial: function () {
 			if (this.get('this.id') !== null) {
-				this.get('model').rollback();
 				this.set('fbaccountsel', this.get('facebook'));
 				this.set('twaccountsel', this.get('twitter'));
 			}
