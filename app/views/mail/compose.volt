@@ -2,7 +2,6 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
-	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 	
 	{# Time picker #}
 	{{ javascript_include('vendors/time-picker/js/bootstrap-timepicker.min.js')}}
@@ -17,22 +16,32 @@
 	{{ stylesheet_link('vendors/select2-master/select2.css') }}
 	{{ javascript_include('vendors/select2-master/select2.js')}}
 	
-	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{# Moment.js #}
 	{{ javascript_include('js/pluggins-editor/moment/moment-with-langs.min.js')}}
-	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
+
 	{{ partial("partials/datetimepicker_view_partial") }}
 	{{ partial("partials/select2_view_partial") }}
+
 	{{ javascript_include('js/pluggins-editor/dropzone/dropzone.js')}}
 	{{ stylesheet_link('js/pluggins-editor/dropzone/css/dropzone.css') }}
+
 	<script type="text/javascript">
 		var db;
 		var urlBase = "{{url('')}}";
 		var MyUrl = "{{urlManager.getBaseUri()}}mail/savemail";
+		var AttUrl = "/{{urlManager.getBaseUri()}}mail/attachment";
+		var urlComplete = "{{urlManager.getBaseUri(true)}}mail/savemail/mails";
 		var config = {assetsUrl: "{{url('asset/show')}}", imagesUrl: "{{url('images')}}", baseUrl: "{{url()}}", fbloginUrl: "{{fbloginUrl}}", twloginUrl: "{{twloginUrl}}"};
 	</script>
 	
 	{{ javascript_include('js/mixin_config.js') }}
-	{{ javascript_include('js/app_mail.js') }}
+	
+	{# Ember Uploader#}
+	{{ javascript_include('js/ember-uploader/ember-uploader.min.js') }}
+	
+	{# Ember App Mail #}
+	{{ partial("mail/partials/app_mail_partial") }}
+	
 	{{ javascript_include('js/editor/gallery.js') }}
 	{{ javascript_include('js/editor/social_media_displayer.js') }}
 	
@@ -78,6 +87,22 @@
 			});
 		}
 		
+		function resetAttachment() {
+			$.ajax({
+				url: "{{url('mail/resetattachment')}}/" + idMail,
+				type: "POST",			
+				data: {},
+				error: function(msg){
+					$.gritter.add({title: '<i class="glyphicon glyphicon-minus-sign"></i> Ha ocurrido un error', text: msg.message, sticky: false, time: 10000});
+					App.controller.refreshAttachment();
+				},
+				success: function(msg){
+					$.gritter.add({title: '<i class="glyphicon glyphicon-paperclip"></i> Exitoso', text: msg.message, sticky: false, time: 10000});
+					App.controller.refreshAttachment();
+				}
+			});
+		}
+		
 		function saveDataAndGoToSocialMedia() {
 			var name = $("#name").val();
 			var fromName = $("#fromName").val();
@@ -111,6 +136,7 @@
 	</script>
 	
 	<script type="text/javascript">
+		App.controller = "";
 		//Full Mail Content
 		{% if mail is defined %}
 			App.maildata = [{
@@ -159,6 +185,7 @@
 	{{ partial('partials/target_selection_partial') }}
 {% endblock %}
 {% block content %}
+	
 	{{ partial('mail/partials/small_buttons_nav_partial', ['activelnk': 'compose']) }}
 	{{flashSession.output()}}
 	
@@ -198,6 +225,12 @@
 				<div class="row">
 					<div class="col-md-12">
 						{{ partial("mail/partials/content_partial") }}
+					</div>
+				</div>	
+		
+				<div class="row">
+					<div class="col-md-12">
+						{{ partial("mail/partials/attachment_partial") }}
 					</div>
 				</div>	
 

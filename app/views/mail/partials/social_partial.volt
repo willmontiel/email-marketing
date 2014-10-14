@@ -2,14 +2,14 @@
 <div {{'{{bind-attr class=": socialEmpty: :bg-warning"}}'}}>
 		{{'{{#if socialEmpty }}'}}
 		<div class="wrapper">
-			<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
+			<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }} style="cursor: pointer;">
 				<dt>Redes sociales:</dt>
 				<dd>Inactivas</dd>
 			</dl>
 		</div>
 		{{'{{else}}'}}
 		<div class="wrapper">
-			<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }}>
+			<dl class="dl-horizontal" {{ '{{action "expandSocial" this}}' }} style="cursor: pointer;">
 				<dt>Redes sociales:</dt>
 				<dd>
 					{{'{{#if fbaccountsel }}'}}<img src="{{url('images')}}/facebook_icon_active.png">{{'{{/if}}'}}

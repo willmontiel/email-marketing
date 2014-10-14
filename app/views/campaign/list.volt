@@ -207,10 +207,10 @@
 							</div>
 						</div>
 					</div>
-					
 				</div>
+				<div class="small-space"></div>
 			</div>
-			
+			<div class="space-small"></div>
 			{#
 			<div class="row">
 				

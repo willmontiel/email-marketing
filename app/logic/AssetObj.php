@@ -1,9 +1,12 @@
 <?php
 class AssetObj
 {
-	const MAX_FILE_SIZE = 1000000;
 	protected $log = null;
-	
+	protected $account;
+	protected $assetsrv;
+	protected $url;
+	protected $uploadConfig;
+			
 	function __construct(Account $account) 
 	{
 		$this->account = $account;
@@ -13,6 +16,7 @@ class AssetObj
 		
 		$this->assetsrv = $di['asset'];
 		$this->url = $di['url'];
+		$this->uploadConfig = $di['uploadConfig'];
 	}
 	
 	/**
@@ -73,7 +77,7 @@ class AssetObj
 			$imageObj->saveImage('png', $dir);
 		}
 		catch (InvalidArgumentException $e) {
-			throw new InvalidArgumentException('we have a error...');
+			throw new InvalidArgumentException("we have a error... {$e}");
 		}
 	}
 	/**
@@ -88,8 +92,8 @@ class AssetObj
 		
 		$isValid = preg_match($ext, $name);
 		
-		if ($size > self::MAX_FILE_SIZE) {
-			throw new InvalidArgumentException('File size exceeds maximum: ' . self::MAX_FILE_SIZE . ' bytes');
+		if ($size > $this->uploadConfig->imgAssetSize) {
+			throw new InvalidArgumentException('File size exceeds maximum: ' . $this->uploadConfig->imgAssetSize . ' bytes');
 		}
 		else if (!$isValid) {
 			throw new InvalidArgumentException('Invalid extension for file...');

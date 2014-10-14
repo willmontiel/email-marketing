@@ -300,6 +300,8 @@ class Security extends Plugin
 				'mail::checkforms' => array('mail' => array('read', 'send')),
 				
 				'mail::compose' => array('mail' => array('read', 'create', 'send')),
+				'mail::attachment' => array('mail' => array('read', 'create', 'send')),
+				'mail::resetattachment' => array('mail' => array('read', 'create', 'send')),
 				
 				//Plantillas
 				'template::image' => array('template' => array('read')),

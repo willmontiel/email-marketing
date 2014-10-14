@@ -83,6 +83,14 @@ function setFilterValues(values, checked, self) {
 	return false;
 }
 
+function createSelectorTarget() {
+	var panelContainer = new PanelContainer('#panel-container');		
+	App.model = new Model();
+	App.model.setPanelContainer(panelContainer);
+	App.model.setSerializerObject(App.serializerObject);
+	App.model.serializer();
+}
+
 function getTime(date) {
 	var hour = '' + date.hour();
 	hour = (hour.length === 1)? '0' + hour: hour;

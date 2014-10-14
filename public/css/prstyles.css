@@ -1012,3 +1012,47 @@ body {
 	background-color: rgba(173,173,173,0.45);
 	color: #fdfdfd;
 }
+
+.attachment-badge {
+	background-color: #E1F2FF;
+	padding: 6px;
+	color: #1C578B;
+	border-radius: 4px;
+	margin-right: 4px;
+	margin-top: 4px;
+	display: inline-block;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.fileWrapper {
+	position: relative;
+	padding: 0;
+	margin-bottom: 15px;
+	overflow: hidden;
+}
+
+#input-file-style {
+	height: 34px;
+	width: 100%;
+	z-index: 99;
+	opacity: 0;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.input-group input[type="text"].fileInputText {
+	border-radius: 0!important;
+	background-color: rgba(255,255,255,0.6);
+	border-color: rgba(0,0,0,0.3);
+	color: rgba(0,0,0,0.8);
+}
+
+.btn-no-rc {
+	border-radius: 0 !important;
+}

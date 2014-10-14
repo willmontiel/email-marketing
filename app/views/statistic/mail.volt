@@ -107,7 +107,7 @@
 			var obj = new Object();
 			obj.container = "map-container";
 			obj.title = "Aperturas por ubicación";
-			obj.navigation = false;
+			obj.navigation = true;
 			obj.label = "Aperturas";
 			obj.valueText = " Aperturas";
 			obj.data = gData;
@@ -140,7 +140,11 @@
 			{{ partial("statistic/partials/shareandcompare_partial") }}	
 			
 			{# Geolocalización por aperturas #}
-			<div id="map-container"></div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div id="map-container"></div>
+				</div>
+			</div>
 	
 			{#   Tabs de opciones de interacciones en estadisticas   #}
 			{{ partial("statistic/partials/partial_statistics_nav") }}
