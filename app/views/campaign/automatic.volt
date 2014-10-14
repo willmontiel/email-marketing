@@ -6,11 +6,17 @@
 	{{ javascript_include('bootstrap-switch-master/bootstrap-switch.js')}}
 
 	<script type="text/javascript">
+		var serializerObject = null;
 		var urlBase = "{{url('')}}";
+		
 		{%if autoresponse.target is defined%}
-			var serializerObject = {{autoresponse.target}};
+			{% if autoresponse.target is empty%}
+				serializerObject = null;
+			{% else %}
+				serializerObject = {{autoresponse.target}};
+			{% endif %}
 		{%else%}
-			var serializerObject = null;
+			serializerObject = null;
 		{%endif%}
 	</script>
 	
