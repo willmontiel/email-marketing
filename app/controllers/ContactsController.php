@@ -604,6 +604,8 @@ class ContactsController extends ControllerBase
 			$data->contacts = $contacts;
 			$data->fields = $fields;
 			
+			$this->logger->log("Obj: {$data->fields}");
+			
 			try {
 				$exporter = new ContactExporter();
 				$exporter->setData($data);

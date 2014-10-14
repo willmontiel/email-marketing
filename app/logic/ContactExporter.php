@@ -10,7 +10,9 @@ class ContactExporter extends BaseWrapper
 	private $join;
 	private $where;
 	private $conditions;
-	
+	private $cfSQL = null;
+	private $customfields = null;
+
 	public function __construct() 
 	{
 		$this->appPath = Phalcon\DI::getDefault()->get('appPath');
@@ -34,6 +36,14 @@ class ContactExporter extends BaseWrapper
 		
 		$this->db->execute($newtable);
 		
+		if ($this->data->fields == 'custom-fields') {
+			$this->createCustomFieldsSQL();
+		}
+		
+		if ($this->cfSQL != null) {
+			$this->db->execute($this->cfSQL);
+		}
+		
 		$filePath = $this->appPath->path . '/tmp/efiles/';
 		if (!file_exists($filePath)) {
 			mkdir($filePath, 0777, true);
@@ -47,13 +57,41 @@ class ContactExporter extends BaseWrapper
 		}
 		catch (Exception $e) {
 			$this->db->execute("DROP TEMPORARY TABLE $this->tablename");
-			
 			$this->logger->log("Exception: {$e}");
 			throw new \Exception("{$e}");
 		}
 	}
 	
-//	private function 
+	private function createCustomFieldsSQL()
+	{
+		$cfields = Customfield::find(array(
+			'conditions' => 'idDbase = ?1' ,
+			'bind' => array(1 => $this->data->model->idDbase)
+		));
+		
+		$cfnames = array();
+		$cfs = array();
+		
+		if (count($cfields) > 0) {
+			foreach ($cfields as $cfield) {
+				$type = ($cfield->type == 'Numerical' ? 'INT(100)' : 'VARCHAR(100)');
+				$name = $this->cleanSpaces($cfield->name);
+				$cfs[] = $name;
+				$cfnames[] = "{$name} {$type}";
+			}
+			
+			$this->logger->log(print_r($cfnames, true));
+			
+			if (count($cfnames) > 0) {
+				$columns = implode(', ', $cfnames);
+				$this->customfields = ", ";
+				$this->customfields .= implode(', ', $cfs);
+				
+				$this->cfSQL = "ALTER TABLE {$this->tablename} ADD ({$columns})";
+			}	
+//			$this->logger->log($this->cfSQL);
+		}
+	}
 
 
 	private function createSelectQuery()
@@ -101,6 +139,11 @@ class ContactExporter extends BaseWrapper
 				$this->conditions = "";
 				break;
 		}
+		
+		if ($this->data->fields == 'custom-fields') {
+			$this->cf = "";
+			$this->cfJoin = "";
+		}
 	}
 
 
@@ -115,9 +158,9 @@ class ContactExporter extends BaseWrapper
 						JOIN email AS e ON (e.idEmail = c.idEmail)
 				   WHERE {$this->where} {$this->conditions}";
 		
-		$this->logger->log($select);		   
+//		$this->logger->log($select);		   
 				   
-		$insert = "INSERT INTO {$this->tablename} (idExport, status, email, name, lastName, birthDate, createdon)
+		$insert = "INSERT INTO {$this->tablename} (idExport, status, email, name, lastName, birthDate, createdon {$this->customfields})
 					     ({$select})";
 		
 		$this->logger->log($insert);		   
@@ -149,6 +192,12 @@ class ContactExporter extends BaseWrapper
 		
 		$db->execute("DROP TEMPORARY TABLE $this->tablename");
 		return true;
+	}
+	
+	
+	private function cleanSpaces($cadena){
+		$cadena = ereg_replace( "([ ]+)", "", $cadena );
+		return $cadena;
 	}
 	
 	public function deleteFile()
