@@ -472,11 +472,11 @@
 							 <div class="radio">
 								<label><input name="contacts" value="active" type="radio" checked> Contactos activos</label>
 							 </div>
-
+							 {#
 							 <div class="radio">
 								<label><input name="contacts" value="inactive" type="radio"> Contactos inactivos</label>
 							 </div>
-
+							 #}
 							 <div class="radio">
 								<label><input name="contacts" value="unsuscribed" type="radio"> Contactos des-suscritos</label>
 							 </div>

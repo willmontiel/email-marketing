@@ -583,12 +583,22 @@ class ContactsController extends ControllerBase
 	public function exportAction()
 	{
 		if($this->request->isPost()){
+			$account = $this->user->account;
+			
 			$criteria = $this->request->getPost('criteria');
 			$id = $this->request->getPost('id');
 			$contacts = $this->request->getPost('contacts');
 			$fields = $this->request->getPost('fields');
 			
+			try {
+				$model = $this->validateCriteria($account, $criteria, $id);
+			}
+			catch (Exception $e) {
+				return $this->response->redirect('error');
+			}
+			
 			$data = new stdClass();
+			$data->model = $model;
 			$data->criteria = $criteria;
 			$data->id = $id;
 			$data->contacts = $contacts;
@@ -598,7 +608,6 @@ class ContactsController extends ControllerBase
 				$exporter = new ContactExporter();
 				$exporter->setData($data);
 				$exporter->startExporting();
-				$file = $exporter->getFileData();
 			}
 			catch (Exception $e){
 				$this->logger->log("Exception while exporting contacts... {$e}");
@@ -607,11 +616,64 @@ class ContactsController extends ControllerBase
 			$this->view->disable();
 
 			header('Content-type: application/csv');
-			header("Content-Disposition: attachment; filename={$file->name}");
+			header("Content-Disposition: attachment; filename={$data->model->name}.csv");
 			header('Pragma: public');
 			header('Expires: 0');
 			header('Content-Type: application/download');
-			readfile($this->tmppath->exportdir . $file->name);
+			readfile($this->tmppath->exportdir . $data->model->name . '.csv');
 		}
+	}
+	
+	private function validateCriteria($account, $criteria, $id)
+	{
+		switch ($criteria) {
+			case 'contactlist':
+				$model = Contactlist::findFirst(array(
+					'conditions' => 'idContactlist = ?1',
+					'bind' => array(1 => $id)
+				));
+
+				$dbase = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $model->idDbase,
+									2 => $account->idAccount)
+				));
+
+				if (!$model || !$dbase) {
+					throw new InvalidArgumentException("No existe criterio");
+				}
+				break;
+
+			case 'dbase':
+				$model = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $id,
+									2 => $account->idAccount)
+				));
+
+				if (!$model) {
+					throw new InvalidArgumentException("No existe criterio");
+				}
+				break;
+
+			case 'segment':
+				$model = Segment::findFirst(array(
+					'conditions' => 'idSegment = ?1',
+					'bind' => array(1 => $id)
+				));
+
+				$dbase = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $model->idDbase,
+									2 => $account->idAccount)
+				));
+
+				if (!$model || !$dbase) {
+					throw new InvalidArgumentException("No existe criterio");
+				}
+				break;
+		}
+		
+		return $model;
 	}
 }
