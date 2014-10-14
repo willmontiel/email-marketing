@@ -485,7 +485,7 @@ class Security extends Plugin
 			);
 			$accessdir = $controller . ':' . $action;
 			if (!in_array($accessdir, $this->publicurls)) {
-				return $this->response->redirect('error/notavailable');
+				$this->response->redirect('error/notavailable');
 			}
 			return false;
 		}
