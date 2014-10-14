@@ -39,6 +39,7 @@ class AutoSendingConverter
 			$this->mail->status = 'Draft';
 			$this->mail->wizardOption = 'setup';
 			$this->mail->deleted = 0;
+			$this->mail->attachment = 0;
 			$this->mail->previewData = $this->autoresponder->previewData;
 			
 			if(!$this->mail->save()) {
