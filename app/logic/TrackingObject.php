@@ -148,7 +148,6 @@ class TrackingObject
 	
 	public function findRelatedDbaseStatObject()
 	{
-		
 		$contact = Contact::findFirst(array(
 			'conditions' => 'idContact = ?1',
 			'bind' => array(1 => $this->mxc->idContact)
@@ -210,9 +209,12 @@ class TrackingObject
 								2 => $this->mxc->idMail)
 			));
 			if (!$statcontactlist) {
-				throw new Exception('Statcontactlist object not found!');
+				$this->logger->log("Statcontactlist {$idContactlist} not found!");
+//				throw new Exception('Statcontactlist object not found!');
 			}
-			$stats[] = $statcontactlist;
+			else {
+				$stats[] = $statcontactlist;
+			}
 		}
 //		$this->log->log('Se encontrarón Statlist');
 		
@@ -243,9 +245,12 @@ class TrackingObject
 									2 => $this->mxc->idMail)
 				));
 				if (!$statcontactlist) {
-					throw new Exception('Statcontactlist object not found!');
+					$this->logger->log("Statcontactlist {$id} by email not found!");
+//					throw new Exception('Statcontactlist object not found!');
 				}
-				$stats[] = $statcontactlist;
+				else {
+					$stats[] = $statcontactlist;
+				}
 			}
 //			$this->log->log('Se encontrarón Statlist');
 		}
