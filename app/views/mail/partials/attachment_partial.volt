@@ -1,8 +1,8 @@
 {{ '{{#if isContentAvailable}}' }} 
 	{{ '{{#unless isAttachementExpanded}}' }}
-		<div {{'{{bind-attr class=": attachmentEmpty:bg-warning: "}}'}} style="cursor: pointer;">
+		<div {{'{{bind-attr class=": attachmentEmpty:bg-warning: "}}'}}>
 			<div class="wrapper">
-				<dl class="dl-horizontal" {{ '{{action "expandAttachment" this}}' }}>
+				<dl class="dl-horizontal" {{ '{{action "expandAttachment" this}}' }} style="cursor: pointer;">
 				{{'{{#if attachmentEmpty }}'}}
 					<dt>Archivos adjuntos:</dt> <dd>Este correo no contiene archivos adjuntos</dd>
 				{{'{{else}}'}}

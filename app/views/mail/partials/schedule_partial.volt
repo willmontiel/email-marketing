@@ -1,6 +1,6 @@
 {{ '{{#unless isScheduleExpanded}}' }}
-	<div {{'{{bind-attr class=": scheduleEmpty:bg-warning:"}}'}} style="cursor: pointer;">
-			<div class="dl-horizontal" {{ '{{action "expandSchedule" this}}' }}>
+	<div {{'{{bind-attr class=": scheduleEmpty:bg-warning:"}}'}}>
+			<div class="dl-horizontal" {{ '{{action "expandSchedule" this}}' }} style="cursor: pointer;">
 				{{'{{#if scheduleEmpty }}'}}
 					<div class="wrapper">
 						<dt>Fecha del envío:</dt>

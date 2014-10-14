@@ -1,7 +1,7 @@
 {{'{{#unless isHeaderExpanded }}'}}
-	<div {{'{{bind-attr class=": headerEmpty:bg-warning: "}}'}} style="cursor: pointer;">
+	<div {{'{{bind-attr class=": headerEmpty:bg-warning: "}}'}}>
 		<div class="wrapper">
-			<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }}>
+			<dl class="dl-horizontal" {{ '{{action "expandHeader" this}}' }} style="cursor: pointer;">
 			{{'{{#if headerEmpty }}'}}
 				<dt>De:</dt> <dd>{{'{{fromSummary}}'}} </dd>
 				<dt>Asunto:</dt> <dd>_______________________________</dd>
