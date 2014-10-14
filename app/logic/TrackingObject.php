@@ -209,7 +209,7 @@ class TrackingObject
 								2 => $this->mxc->idMail)
 			));
 			if (!$statcontactlist) {
-				$this->logger->log("Statcontactlist {$idContactlist} not found!");
+				$this->log->log("Statcontactlist {$idContactlist} not found!");
 //				throw new Exception('Statcontactlist object not found!');
 			}
 			else {
@@ -245,7 +245,7 @@ class TrackingObject
 									2 => $this->mxc->idMail)
 				));
 				if (!$statcontactlist) {
-					$this->logger->log("Statcontactlist {$id} by email not found!");
+					$this->log->log("Statcontactlist {$id} by email not found!");
 //					throw new Exception('Statcontactlist object not found!');
 				}
 				else {
