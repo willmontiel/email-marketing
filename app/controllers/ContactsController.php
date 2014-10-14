@@ -610,6 +610,7 @@ class ContactsController extends ControllerBase
 				$exporter->startExporting();
 			}
 			catch (Exception $e){
+				$this->traceFail("Export contacts from list: {$id}");
 				$this->logger->log("Exception while exporting contacts... {$e}");
 			}
 			
@@ -620,7 +621,12 @@ class ContactsController extends ControllerBase
 			header('Pragma: public');
 			header('Expires: 0');
 			header('Content-Type: application/download');
+			echo $data->model->name . PHP_EOL;
+			echo PHP_EOL;
 			readfile($this->tmppath->exportdir . $data->model->name . '.csv');
+			
+			$exporter->deleteFile();
+			$this->traceSuccess("Export contacts from list: {$id}");
 		}
 	}
 	

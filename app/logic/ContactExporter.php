@@ -53,6 +53,9 @@ class ContactExporter extends BaseWrapper
 		}
 	}
 	
+//	private function 
+
+
 	private function createSelectQuery()
 	{
 		switch ($this->data->criteria) {
@@ -79,19 +82,19 @@ class ContactExporter extends BaseWrapper
 		
 		switch ($this->data->contacts) {
 			case 'active':
-				$this->conditions = " AND c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 ";
+				$this->conditions = " AND c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND c.status != 0";
 				break;
 			
 			case 'unsuscribed':
-				$this->conditions = " AND c.unsubscribed = 0 AND  ";
+				$this->conditions = " AND c.unsubscribed != 0 AND  ";
 				break;
 			
 			case 'bounced':
-				$this->conditions = " AND e.bounced = 0 ";
+				$this->conditions = " AND e.bounced != 0 ";
 				break;
 			
 			case 'spam':
-				$this->conditions = " AND e.spam = 0 ";
+				$this->conditions = " AND e.spam != 0 ";
 				break;
 			
 			default:
@@ -106,7 +109,7 @@ class ContactExporter extends BaseWrapper
 	{
 		$this->createSelectQuery();
 		
-		$select = "SELECT null, '{$this->data->contacts}', e.email, c.name, c.lastName, c.birthDate
+		$select = "SELECT null, IF(e.spam != 0, 'Spam', IF(e.bounced != 0, 'Rebotado', IF(e.blocked != 0, 'Bloqueado', IF(c.unsubscribed != 0, 'Des-suscrito', IF(c.status != 0, 'Activo', 'Inactivo'))))), e.email, c.name, c.lastName, c.birthDate, " . time() ."
 				   FROM {$this->from}
 					    {$this->join}
 						JOIN email AS e ON (e.idEmail = c.idEmail)
@@ -115,7 +118,7 @@ class ContactExporter extends BaseWrapper
 		$this->logger->log($select);		   
 				   
 		$insert = "INSERT INTO {$this->tablename} (idExport, status, email, name, lastName, birthDate, createdon)
-					      VALUES ({$select})";
+					     ({$select})";
 		
 		$this->logger->log($insert);		   
 						  
@@ -129,9 +132,10 @@ class ContactExporter extends BaseWrapper
 	
 	private function saveFileInServer()
 	{
-		$exportfile =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, link 
+		$exportfile =  "SELECT email, name, lastName, birthDate, status 
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$this->tmpPath}{$this->data->model->name}.csv'
+						CHARACTER SET utf8
 						FIELDS TERMINATED BY ','
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
@@ -145,5 +149,15 @@ class ContactExporter extends BaseWrapper
 		
 		$db->execute("DROP TEMPORARY TABLE $this->tablename");
 		return true;
+	}
+	
+	public function deleteFile()
+	{
+		$path = "{$this->tmpPath}{$this->data->model->name}.csv";
+		
+		if (!unlink($path)) {
+			$this->logger->log("File could not delete from server!");
+//			throw new Exception('File could not delete from server!');
+		}
 	}
 }

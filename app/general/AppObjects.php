@@ -41,12 +41,17 @@ class AppObjects
 		if (!$this->config->system->status && !in_array($this->ip, $this->allowed_ips)) {
 			$this->setAppPath();
 			$this->setFullPath();
-			$this->setDispatcher();
-			$this->setLogger();
-			$this->setDeleteLogger();
 			$this->setUrlManagerObject();
 			$this->setUri();
+			
+			$this->setDispatcher();
+			
+			$this->setLogger();
+			$this->setDeleteLogger();
+			
 			$this->setViewSystemNotAvailable();
+//			$this->setView();
+//			$this->setVoltCompiler();
 		}
 		else {
 			$this->setAppPath();

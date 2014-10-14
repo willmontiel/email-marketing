@@ -482,9 +482,11 @@ class Security extends Plugin
 				'error:notavailable',
 				'error:unauthorized',
 			);
+			
 			$accessdir = $controller . ':' . $action;
+			
 			if (!in_array($accessdir, $this->publicurls)) {
-				return $this->response->redirect('error/notavailable');
+				$this->response->redirect('error/notavailable');
 			}
 			return false;
 		}
@@ -599,8 +601,8 @@ class Security extends Plugin
 			$accessdir = $controller . ':' . $action;
 			
 			if (!in_array($accessdir, $this->publicurls)) {
-					$this->response->redirect("session/signin");
-					return false;
+				$this->response->redirect("session/signin");
+				return false;
 			}
 		}
 		else{
