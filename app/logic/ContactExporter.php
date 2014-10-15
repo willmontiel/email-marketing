@@ -142,7 +142,7 @@ class ContactExporter extends BaseWrapper
 				break;
 		}
 		
-		if ($this->data->fields == 'custom-fields') {
+		if ($this->data->fields == 'custom-fields' && $this->customfields != null) {
 			$this->cf = " , IF(fi.textValue = null, fi.numberValue, fi.textValue) ";
 			$this->cfJoin = " LEFT JOIN fieldinstance AS fi ON (fi.idContact = c.idContact)";
 		}
