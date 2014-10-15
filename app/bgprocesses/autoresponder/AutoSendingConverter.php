@@ -40,6 +40,9 @@ class AutoSendingConverter
 	public function convertToMail()
 	{
 		$this->db->begin();
+		
+		$this->checkTotalContacts();
+		
 		$this->mail = new Mail();
 		$this->mail->idAccount = $this->account->idAccount;
 		$this->mail->wizardOption = 'setup';
@@ -91,6 +94,36 @@ class AutoSendingConverter
 				break;
 		}
 	}
+
+	protected function checkTotalContacts()
+	{
+		$wrapper = new \EmailMarketing\General\Misc\InterpreterTarget();
+		$total = 0;
+		
+		$wrapper->setData(json_decode($this->autoresponder->target));
+		$wrapper->searchTotalContacts();
+		$sql = $wrapper->getSQL();
+
+		if($this->autoresponder->type == 'birthday') {
+			$sql.= ' AND  c.birthDate = DATE_FORMAT(NOW(), \'%Y-%m-%d\')';
+		}
+				
+		if ($sql != false) {
+			$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+			$executer->setSQL($sql);
+			$executer->instanceDbAbstractLayer();
+			$executer->queryAbstractLayer();
+			$r = $executer->getResult();
+			$total = $r[0]['total'];
+		}
+		
+		if($total == 0) {
+			$this->db->rollback();
+			$this->logger->log('No hay destinatarios');
+			throw new Exception(400);
+		}
+	}
+
 
 	protected function saveContentFromURL()
 	{
