@@ -60,7 +60,7 @@
 				type: "POST",			
 				data: { 
 					type: 'url',
-					url: url
+					content: url
 				},
 				error: function(msg){
 					var txt = JSON.parse(msg.responseText);

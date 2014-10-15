@@ -119,6 +119,8 @@ class CampaignController extends ControllerBase
 			try{ 
 				$content = $this->request->getPost();
 				$image = $this->cache->get($this->user->idUser . '-previewcampaign');
+				$this->cache->delete($this->user->idUser . '-previewcampaign');
+				
 				$wrapper = new CampaignWrapper();
 				$wrapper->setAccount($this->user->account);
 				$wrapper->setPreviewImage($image);
@@ -357,6 +359,7 @@ class CampaignController extends ControllerBase
 				$content = $this->request->getPost();
 				$content['monday'] = $content['tuesday'] = $content['wednesday'] = $content['thursday'] = $content['friday'] = $content['saturday'] = $content['sunday'] = 'on';
 				$image = $this->cache->get($this->user->idUser . '-previewcampaign');
+				$this->cache->delete($this->user->idUser . '-previewcampaign');
 				
 				$wrapper = new CampaignWrapper();
 				$wrapper->setAccount($this->user->account);
