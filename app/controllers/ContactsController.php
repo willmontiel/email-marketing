@@ -604,8 +604,6 @@ class ContactsController extends ControllerBase
 			$data->contacts = $contacts;
 			$data->fields = $fields;
 			
-			$this->logger->log("Obj: {$data->fields}");
-			
 			try {
 				$exporter = new ContactExporter();
 				$exporter->setData($data);
@@ -615,8 +613,6 @@ class ContactsController extends ControllerBase
 				$this->traceFail("Export contacts from list: {$id}");
 				$this->logger->log("Exception while exporting contacts... {$e}");
 			}
-			
-			$this->logger->log("DIR: {$this->tmppath->exportdir}");
 			
 			$this->view->disable();
 
@@ -630,7 +626,7 @@ class ContactsController extends ControllerBase
 			
 			readfile($this->tmppath->exportdir . $data->model->name . '.csv');
 			
-//			$exporter->deleteFile();
+			$exporter->deleteFile();
 			$this->traceSuccess("Export contacts from list: {$id}");
 		}
 	}
