@@ -616,6 +616,8 @@ class ContactsController extends ControllerBase
 				$this->logger->log("Exception while exporting contacts... {$e}");
 			}
 			
+			$this->logger->log("DIR: {$this->tmppath->exportdir}");
+			
 			$this->view->disable();
 
 			header('Content-type: application/csv');
@@ -626,7 +628,6 @@ class ContactsController extends ControllerBase
 			echo $data->model->name . PHP_EOL;
 			echo PHP_EOL;
 			
-			$this->logger->log($this->tmppath->exportdir);
 			readfile($this->tmppath->exportdir . $data->model->name . '.csv');
 			
 //			$exporter->deleteFile();
