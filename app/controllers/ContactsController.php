@@ -627,6 +627,7 @@ class ContactsController extends ControllerBase
 			echo PHP_EOL;
 			readfile($this->tmppath->exportdir . $data->model->name . '.csv');
 			
+			sleep(10);
 //			$exporter->deleteFile();
 			$this->traceSuccess("Export contacts from list: {$id}");
 		}
