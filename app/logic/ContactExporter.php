@@ -31,6 +31,13 @@ class ContactExporter extends BaseWrapper
 	
 	public function startExporting()
 	{
+		$filePath = $this->appPath->path . '/tmp/efiles/';
+		if (!file_exists($filePath)) {
+			mkdir($filePath, 0777, true);
+		}
+		
+		$this->tmpPath = str_replace("\\", "/", $filePath);
+		
 		$this->db = Phalcon\DI::getDefault()->get('db');
 		
 		$this->tablename = "tmp{$this->data->id}{$this->data->criteria}";
@@ -46,15 +53,11 @@ class ContactExporter extends BaseWrapper
 			$this->db->execute($this->cfSQL);
 		}
 		
-		$filePath = $this->appPath->path . '/tmp/efiles/';
-		if (!file_exists($filePath)) {
-			mkdir($filePath, 0777, true);
-		}
-		
-		$this->tmpPath = str_replace("\\", "/", $filePath);
-		
 		try {
-			$this->setDataInTmpTable();
+			$this->setPrimaryFieldsInTmpTable();
+			if ($this->cfSQL != null) {
+				$this->setCustomFieldsInTmpTable();
+			}
 			$this->saveFileInServer();
 		}
 		catch (Exception $e) {
@@ -149,6 +152,36 @@ class ContactExporter extends BaseWrapper
 	}
 
 
+	private function setPrimaryFieldsInTmpTable()
+	{
+		$this->createSelectQuery();
+		
+		$select = "SELECT c.idContact, IF(e.spam != 0, 'Spam', IF(e.bounced != 0, 'Rebotado', IF(e.blocked != 0, 'Bloqueado', IF(c.unsubscribed != 0, 'Des-suscrito', IF(c.status != 0, 'Activo', 'Inactivo'))))), e.email, c.name, c.lastName, c.birthDate, " . time() ."
+				   FROM {$this->from}
+					    {$this->join}
+						JOIN email AS e ON (e.idEmail = c.idEmail)
+				   WHERE {$this->where} {$this->conditions}";
+		
+		$insert = "INSERT INTO {$this->tablename} (idExport, status, email, name, lastName, birthDate, createdon)
+					     ({$select})";
+		
+		$this->logger->log($insert);		   
+						  
+		$db = Phalcon\DI::getDefault()->get('db');
+		$result = $db->execute($insert);
+		
+		if (!$result) {
+			throw new \Exception('Error while saving data in db');
+		}
+	}
+	
+	private function setCustomFieldsInTmpTable()
+	{
+		$select = "";
+		
+		$insert = "INSERT INTO {$this->tablename} ({$this->customfields})
+					     ({$select})";
+	}
 	
 	private function setDataInTmpTable()
 	{
