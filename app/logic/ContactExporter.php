@@ -12,6 +12,8 @@ class ContactExporter extends BaseWrapper
 	private $conditions;
 	private $cfSQL = null;
 	private $customfields = null;
+	private $cf = null;
+	private $cfJoin = null;
 
 	public function __construct() 
 	{
@@ -141,8 +143,8 @@ class ContactExporter extends BaseWrapper
 		}
 		
 		if ($this->data->fields == 'custom-fields') {
-			$this->cf = "";
-			$this->cfJoin = "";
+			$this->cf = " , IF(fi.textValue = null, fi.numberValue, fi.textValue) ";
+			$this->cfJoin = " LEFT JOIN fieldinstance AS fi ON (fi.idContact = c.idContact)";
 		}
 	}
 
@@ -152,10 +154,11 @@ class ContactExporter extends BaseWrapper
 	{
 		$this->createSelectQuery();
 		
-		$select = "SELECT null, IF(e.spam != 0, 'Spam', IF(e.bounced != 0, 'Rebotado', IF(e.blocked != 0, 'Bloqueado', IF(c.unsubscribed != 0, 'Des-suscrito', IF(c.status != 0, 'Activo', 'Inactivo'))))), e.email, c.name, c.lastName, c.birthDate, " . time() ."
+		$select = "SELECT null, IF(e.spam != 0, 'Spam', IF(e.bounced != 0, 'Rebotado', IF(e.blocked != 0, 'Bloqueado', IF(c.unsubscribed != 0, 'Des-suscrito', IF(c.status != 0, 'Activo', 'Inactivo'))))), e.email, c.name, c.lastName, c.birthDate, " . time() ." {$this->cf}
 				   FROM {$this->from}
 					    {$this->join}
 						JOIN email AS e ON (e.idEmail = c.idEmail)
+						{$this->cfJoin}
 				   WHERE {$this->where} {$this->conditions}";
 		
 //		$this->logger->log($select);		   
@@ -175,13 +178,15 @@ class ContactExporter extends BaseWrapper
 	
 	private function saveFileInServer()
 	{
-		$exportfile =  "SELECT email, name, lastName, birthDate, status 
+		$exportfile =  "SELECT email, name, lastName, birthDate, status {$this->customfields}
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$this->tmpPath}{$this->data->model->name}.csv'
 						CHARACTER SET utf8
 						FIELDS TERMINATED BY ','
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
+
+		$this->logger->log($exportfile);				
 						
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->execute($exportfile);
@@ -196,7 +201,9 @@ class ContactExporter extends BaseWrapper
 	
 	
 	private function cleanSpaces($cadena){
-		$cadena = ereg_replace( "([ ]+)", "", $cadena );
+//		$cadena = str_replace($cadena, " ", "");
+//		$cadena = ereg_replace( "([ ]+)", "", $cadena );
+		$cadena = preg_replace("([ ]+)", "", $cadena);
 		return $cadena;
 	}
 	
