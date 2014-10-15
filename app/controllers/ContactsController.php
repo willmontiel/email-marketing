@@ -625,9 +625,10 @@ class ContactsController extends ControllerBase
 			header('Content-Type: application/download');
 			echo $data->model->name . PHP_EOL;
 			echo PHP_EOL;
+			
+			$this->logger->log($this->tmppath->exportdir);
 			readfile($this->tmppath->exportdir . $data->model->name . '.csv');
 			
-			sleep(10);
 //			$exporter->deleteFile();
 			$this->traceSuccess("Export contacts from list: {$id}");
 		}
