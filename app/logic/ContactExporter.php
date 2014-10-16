@@ -6,19 +6,21 @@ class ContactExporter extends BaseWrapper
 	private $appPath;
 	private $logger;
 	private $tmpPath;
-	private $from;
-	private $join;
-	private $where;
-	private $conditions;
 	private $cfSQL = null;
-	private $customfields = null;
-	private $cf = null;
-	private $cfJoin = null;
+	private $cf = false;
+	private $contactsToSave = array();
+	private $cfData;
+
+	const CONTACTS_PER_UPDATE = 1000;
 
 	public function __construct() 
 	{
 		$this->appPath = Phalcon\DI::getDefault()->get('appPath');
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
+		
+		$this->cfData = new stdClass();
+		$this->cfData->customfieldsNames = '';
+		$this->cfData->customfieldsColumns = '';
 	}
 
 	public function setData($data)
@@ -31,33 +33,45 @@ class ContactExporter extends BaseWrapper
 	
 	public function startExporting()
 	{
-		$filePath = $this->appPath->path . '/tmp/efiles/';
-		if (!file_exists($filePath)) {
-			mkdir($filePath, 0777, true);
-		}
-		
-		$this->tmpPath = str_replace("\\", "/", $filePath);
-		
-		$this->db = Phalcon\DI::getDefault()->get('db');
-		
-		$this->tablename = "tmp{$this->data->id}{$this->data->criteria}";
-		$newtable = "CREATE TEMPORARY TABLE $this->tablename LIKE tmpexport";
-		
-		$this->db->execute($newtable);
-		
-		if ($this->data->fields == 'custom-fields') {
-			$this->createCustomFieldsSQL();
-		}
-		
-		if ($this->cfSQL != null) {
-			$this->db->execute($this->cfSQL);
+		try {
+			$this->prepareDirectory();
+			$this->createTmpTable();
+			$this->validateCustomFields();
+		}	
+		catch (Exception $e) {
+			throw new Exception("Exceptio while creating tmp table... {$e}");
 		}
 		
 		try {
-			$this->setPrimaryFieldsInTmpTable();
-			if ($this->cfSQL != null) {
-				$this->setCustomFieldsInTmpTable();
+			$contactIterator = new TotalContactIterator();
+			$contactIterator->setCustomFields($this->cf);
+			$contactIterator->setData($this->data);
+			$contactIterator->initialize();
+			
+			if ($this->cf == true) {
+				$this->cfData = $contactIterator->getCustomFieldsData();
+				$this->addCustomFieldsToTmpTable();
 			}
+			
+			foreach ($contactIterator as $contact) {
+				$this->logger->log("Entra");
+				$this->contactsToSave[] = "{$contact['idContact']}, {$contact['status']}, {$contact['email']}, {$contact['name']}, {$contact['lastName']}, {$contact['birthDate']}, {$contact['createdon']} {$this->cfData->customfieldsNames}";
+				
+				if (count($this->contactsToSave) == self::CONTACTS_PER_UPDATE) {
+					$this->setDataInTmpTable();
+					unset($this->contactsToSave);
+				}
+			}
+			
+			if (count($this->contactsToSave) > 0) {
+				$this->setDataInTmpTable();
+                unset($this->contactsToSave);
+			}
+			
+//			$this->setPrimaryFieldsInTmpTable();
+//			if ($this->cfSQL != null) {
+//				$this->setCustomFieldsInTmpTable();
+//			}
 			$this->saveFileInServer();
 		}
 		catch (Exception $e) {
@@ -67,105 +81,43 @@ class ContactExporter extends BaseWrapper
 		}
 	}
 	
-	private function createCustomFieldsSQL()
+	protected function prepareDirectory()
 	{
-		$cfields = Customfield::find(array(
-			'conditions' => 'idDbase = ?1' ,
-			'bind' => array(1 => $this->data->model->idDbase)
-		));
-		
-		$cfnames = array();
-		$cfs = array();
-		
-		if (count($cfields) > 0) {
-			foreach ($cfields as $cfield) {
-				$type = ($cfield->type == 'Numerical' ? 'INT(100)' : 'VARCHAR(100)');
-				$name = $this->cleanSpaces($cfield->name);
-				$cfs[] = $name;
-				$cfnames[] = "{$name} {$type}";
-			}
-			
-			$this->logger->log(print_r($cfnames, true));
-			
-			if (count($cfnames) > 0) {
-				$columns = implode(', ', $cfnames);
-				$this->customfields = ", ";
-				$this->customfields .= implode(', ', $cfs);
-				
-				$this->cfSQL = "ALTER TABLE {$this->tablename} ADD ({$columns})";
-			}	
-//			$this->logger->log($this->cfSQL);
+		$filePath = $this->appPath->path . '/tmp/efiles/';
+		if (!file_exists($filePath)) {
+			mkdir($filePath, 0777, true);
+		}
+		$this->tmpPath = str_replace("\\", "/", $filePath);
+	}
+
+	protected function createTmpTable()
+	{
+		$this->db = Phalcon\DI::getDefault()->get('db');
+		$this->tablename = "tmp{$this->data->id}{$this->data->criteria}";
+		$newtable = "CREATE TEMPORARY TABLE $this->tablename LIKE tmpexport";
+		$this->db->execute($newtable);
+	}
+	
+	protected function addCustomFieldsToTmpTable()
+	{
+		$this->cfSQL = "ALTER TABLE {$this->tablename} ADD ({$this->cfData->customfieldsColumns})";
+		$this->db->execute($this->cfSQL);
+	}
+
+	protected function validateCustomFields()
+	{
+		if ($this->data->fields == 'custom-fields') {
+			$this->cf = true;
 		}
 	}
 
-
-	private function createSelectQuery()
+	protected function setDataInTmpTable()
 	{
-		switch ($this->data->criteria) {
-			case 'contactlist':
-				$this->from = " contactlist AS cl ";
-				$this->join = " JOIN coxcl AS co ON (co.idContactlist = cl.idContactlist) 
-								JOIN contact AS c ON (c.idContact = co.idContact)";
-				$this->where = " cl.idContactlist = {$this->data->id} ";
-				break;
-			
-			case 'dbase':
-				$this->from = " contact AS c ";
-				$this->join = "";
-				$this->where = " c.idDbase = {$this->data->id} ";
-				break;
-			
-			case 'segment':
-				$this->from = " segment AS s ";
-				$this->join = " JOIN sxc AS sc ON (sc.idSegment = s.idSegment) 
-							    JOIN contact AS c ON (c.idContact = sc.idContact)";
-				$this->where = "s.idSegment = {$this->data->id} ";
-				break;
-		}
+		$values = implode(',', $this->contactsToSave);
+		$insert = "INSERT INTO {$this->tablename} (idContact, status, email, name, lastName, birthDate, createdon {$this->cfData->customfieldsNames})
+				   VALUES ({$values})";
 		
-		switch ($this->data->contacts) {
-			case 'active':
-				$this->conditions = " AND c.unsubscribed = 0 AND e.bounced = 0 AND e.spam = 0 AND c.status != 0";
-				break;
-			
-			case 'unsuscribed':
-				$this->conditions = " AND c.unsubscribed != 0 AND  ";
-				break;
-			
-			case 'bounced':
-				$this->conditions = " AND e.bounced != 0 ";
-				break;
-			
-			case 'spam':
-				$this->conditions = " AND e.spam != 0 ";
-				break;
-			
-			default:
-				$this->conditions = "";
-				break;
-		}
-		
-		if ($this->data->fields == 'custom-fields' && $this->customfields != null) {
-			$this->cf = " , IF(fi.textValue = null, fi.numberValue, fi.textValue) ";
-			$this->cfJoin = " LEFT JOIN fieldinstance AS fi ON (fi.idContact = c.idContact)";
-		}
-	}
-
-
-	private function setPrimaryFieldsInTmpTable()
-	{
-		$this->createSelectQuery();
-		
-		$select = "SELECT c.idContact, IF(e.spam != 0, 'Spam', IF(e.bounced != 0, 'Rebotado', IF(e.blocked != 0, 'Bloqueado', IF(c.unsubscribed != 0, 'Des-suscrito', IF(c.status != 0, 'Activo', 'Inactivo'))))), e.email, c.name, c.lastName, c.birthDate, " . time() ."
-				   FROM {$this->from}
-					    {$this->join}
-						JOIN email AS e ON (e.idEmail = c.idEmail)
-				   WHERE {$this->where} {$this->conditions}";
-		
-		$insert = "INSERT INTO {$this->tablename} (idExport, status, email, name, lastName, birthDate, createdon)
-					     ({$select})";
-		
-		$this->logger->log($insert);		   
+		$this->logger->log("insert: {$insert}");		   
 						  
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->execute($insert);
@@ -175,43 +127,9 @@ class ContactExporter extends BaseWrapper
 		}
 	}
 	
-	private function setCustomFieldsInTmpTable()
+	protected function saveFileInServer()
 	{
-		$select = "";
-		
-		$insert = "INSERT INTO {$this->tablename} ({$this->customfields})
-					     ({$select})";
-	}
-	
-	private function setDataInTmpTable()
-	{
-		$this->createSelectQuery();
-		
-		$select = "SELECT null, IF(e.spam != 0, 'Spam', IF(e.bounced != 0, 'Rebotado', IF(e.blocked != 0, 'Bloqueado', IF(c.unsubscribed != 0, 'Des-suscrito', IF(c.status != 0, 'Activo', 'Inactivo'))))), e.email, c.name, c.lastName, c.birthDate, " . time() ." {$this->cf}
-				   FROM {$this->from}
-					    {$this->join}
-						JOIN email AS e ON (e.idEmail = c.idEmail)
-						{$this->cfJoin}
-				   WHERE {$this->where} {$this->conditions}";
-		
-//		$this->logger->log($select);		   
-				   
-		$insert = "INSERT INTO {$this->tablename} (idExport, status, email, name, lastName, birthDate, createdon {$this->customfields})
-					     ({$select})";
-		
-		$this->logger->log($insert);		   
-						  
-		$db = Phalcon\DI::getDefault()->get('db');
-		$result = $db->execute($insert);
-		
-		if (!$result) {
-			throw new \Exception('Error while saving data in db');
-		}
-	}
-	
-	private function saveFileInServer()
-	{
-		$exportfile =  "SELECT email, name, lastName, birthDate, status {$this->customfields}
+		$exportfile =  "SELECT email, name, lastName, birthDate, status {$this->cfData->customfieldsNames}
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$this->tmpPath}{$this->data->model->name}.csv'
 						CHARACTER SET utf8
@@ -233,7 +151,7 @@ class ContactExporter extends BaseWrapper
 	}
 	
 	
-	private function cleanSpaces($cadena){
+	protected function cleanSpaces($cadena){
 //		$cadena = str_replace($cadena, " ", "");
 //		$cadena = ereg_replace( "([ ]+)", "", $cadena );
 		$cadena = preg_replace("([ ]+)", "", $cadena);
