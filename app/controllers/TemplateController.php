@@ -100,6 +100,7 @@ class TemplateController extends ControllerBase
 			
 			if (empty($content) || empty($name) || empty($category)) {
 				return $this->setJsonResponse(array('msg' => 'Ha enviado campos vacíos (nombre, categoría o contenido), por favor verifique la información'), 400 , 'failed');
+				$this->traceFail('Ha enviado campos vacíos (nombre, categoría o contenido), por favor verifique la información');
 			}
 			
 			try {

@@ -100,3 +100,26 @@
 .gritter-light .gritter-title {
     text-shadow: none;
 }
+/* for the success (light green) version of the gritter notice */
+.gritter-success .gritter-item,
+.gritter-success .gritter-bottom,
+.gritter-success .gritter-top,
+.gritter-success .gritter-close {
+    background-image: url(../images/gritter-success.png);
+    color: #fff;
+}
+.gritter-success .gritter-title {
+    text-shadow: none;
+}
+
+/* for the error (light green) version of the gritter notice */
+.gritter-error .gritter-item,
+.gritter-error .gritter-bottom,
+.gritter-error .gritter-top,
+.gritter-error .gritter-close {
+    background-image: url(../images/gritter-error.png);
+    color: #eee;
+}
+.gritter-error .gritter-title {
+    text-shadow: none;
+}

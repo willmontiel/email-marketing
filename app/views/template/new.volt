@@ -81,15 +81,15 @@
 			},
 			statusCode: {
 				400: function() {
-					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: 'Ha enviado campos inválidos o vacíos (nombre, categoría o contenido), por favor verifique la información', sticky: false, time: 10000});
+					$.gritter.add({class_name: 'gritter-error', title: '<i class="icon-warning-sign"></i> Atención', text: 'Ha enviado campos inválidos o vacíos (nombre, categoría o contenido), por favor verifique la información', sticky: false, time: 10000});
 				},
 				500: function() {
-					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: 'Ha ocurrido un error, contacta al administrador', sticky: false, time: 10000});
+					$.gritter.add({class_name: 'gritter-error', title: '<i class="icon-warning-sign"></i> Atención', text: 'Ha ocurrido un error, contacta al administrador', sticky: false, time: 10000});
 				}
 			},
 			success: function(res){
 				idTemplate = res.idTemplate;
-				$.gritter.add({class_name: 'success', title: '<i class="icon-save"></i> Atención', text: 'Se ha guardado la plantilla exitosamente', sticky: false, time: 10000});
+				$.gritter.add({class_name: 'gritter-success', title: '<i class="icon-save"></i> Atención', text: 'Se ha guardado la plantilla exitosamente', sticky: false, time: 10000});
 			}
 		});
 		document.getElementById('iframeEditor').contentWindow.RecreateEditor();
