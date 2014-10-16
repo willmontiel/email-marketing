@@ -60,11 +60,13 @@ class AttachmentObj
 		$attachment = $dir . $this->attachment->fileName;
 		
 		if (!unlink($attachment)) {
-			throw new Exception('File could not delete from server!');
+			$this->logger->log("Exception... File could not delete from server!");
+//			throw new Exception('File could not delete from server!');
 		}
 		
 		if (!rmdir($dir)) {
-			throw new Exception('Dir could not delete from server!');
+			$this->logger->log("Exception... Dir could not delete from server!");
+//			throw new Exception('Dir could not delete from server!');
 		}
 		
 		if ($db) {
