@@ -80,11 +80,12 @@ class TotalContactIterator implements Iterator
 		unset($contacts);
 		$end = end($this->contacts);
 		$this->start = $end['idContact'];
+		
+		return true;
 	}
 	
 	public function rewind()
 	{
-		$this->logger->log('Rewind');
 		$this->start = 0;
 		$this->contacts = array();
 		$this->offset = 0;
@@ -92,28 +93,21 @@ class TotalContactIterator implements Iterator
 	
 	public function current()
 	{
-		$this->logger->log('Current');
-		$this->logger->log(print_r($this->contacts[$this->offset], true));
 		return $this->contacts[$this->offset];
 	}
 	
 	public function key()
 	{
-		$this->logger->log('Key');
-		$this->logger->log(print_r($this->contacts[$this->offset]['idContact'], true));
 		return $this->contact[$this->offset]['idContact'];
 	}
 	
 	public function next()
 	{
-		$this->logger->log('Next');
-		$this->logger->log($this->offset);
 		$this->offset++;
 	}
 	
 	public function valid()
 	{
-		$this->logger->log('Valid');
 		$cnt = count($this->contacts);
 		
 		if (($cnt - $this->offset) <= 0) {
@@ -141,7 +135,7 @@ class TotalContactIterator implements Iterator
 					'email' => $m['email'],
 					'name' => $m['name'],
 					'lastName' => $m['lastName'],
-					'birthDate' => $m['birthDate'],
+					'birthDate' => (empty($m['birthDate']) ? 'null' : $m['birthDate']),
 					'status' => $m['status'],
 					'createdon' => $m['createdon']
 				);
@@ -158,7 +152,7 @@ class TotalContactIterator implements Iterator
 					'email' => $m['email'],
 					'name' => $m['name'],
 					'lastName' => $m['lastName'],
-					'birthDate' => $m['birthDate'],
+					'birthDate' => (empty($m['birthDate']) ? 'null' : $m['birthDate']),
 					'status' => $m['status'],
 					'createdon' => $m['createdon']
 				);
@@ -321,6 +315,7 @@ class TotalContactIterator implements Iterator
 			$this->cfidentifiers = implode(',', $cfidentifiers);
 			
 			$this->cfObject = new stdClass();
+			$this->cfObject->arrayCustomfieldsNames = $this->cfs;
 			$this->cfObject->customfieldsNames = ',';
 			$this->cfObject->customfieldsNames .= implode(', ', $this->cfs);
 			$this->cfObject->customfieldsColumns = implode(', ', $cfnames);

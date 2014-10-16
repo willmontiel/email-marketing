@@ -21,6 +21,7 @@ class ContactExporter extends BaseWrapper
 		$this->cfData = new stdClass();
 		$this->cfData->customfieldsNames = '';
 		$this->cfData->customfieldsColumns = '';
+		$this->cfData->arrayCustomfieldsNames = array();
 	}
 
 	public function setData($data)
@@ -48,14 +49,23 @@ class ContactExporter extends BaseWrapper
 			$contactIterator->setData($this->data);
 			$contactIterator->initialize();
 			
+			$keys = array();
+			
 			if ($this->cf == true) {
 				$this->cfData = $contactIterator->getCustomFieldsData();
 				$this->addCustomFieldsToTmpTable();
 			}
 			
 			foreach ($contactIterator as $contact) {
-				$this->logger->log("Entra");
-				$this->contactsToSave[] = "{$contact['idContact']}, {$contact['status']}, {$contact['email']}, {$contact['name']}, {$contact['lastName']}, {$contact['birthDate']}, {$contact['createdon']} {$this->cfData->customfieldsNames}";
+				$fields = "{$contact['idContact']}, '{$contact['status']}', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', {$contact['createdon']}";
+				
+				if (count($this->cfData->arrayCustomfieldsNames) > 0) {
+					foreach ($this->cfData->arrayCustomfieldsNames as $cfname) {
+						$fields .= (empty($contact[$cfname]) ? ", null" : ", '{$contact[$cfname]}'");
+					}
+				}
+				
+				$this->contactsToSave[] = $fields;
 				
 				if (count($this->contactsToSave) == self::CONTACTS_PER_UPDATE) {
 					$this->setDataInTmpTable();
@@ -113,9 +123,20 @@ class ContactExporter extends BaseWrapper
 
 	protected function setDataInTmpTable()
 	{
-		$values = implode(',', $this->contactsToSave);
+		$values = '';
+		$init = true;
+		foreach ($this->contactsToSave as $contact) {
+			if ($init) {
+				$values .= "({$contact})";
+			}
+			else {
+				$values .= ",({$contact})";
+			}
+			$init = false;
+		}
+		
 		$insert = "INSERT INTO {$this->tablename} (idContact, status, email, name, lastName, birthDate, createdon {$this->cfData->customfieldsNames})
-				   VALUES ({$values})";
+				   VALUES {$values}";
 		
 		$this->logger->log("insert: {$insert}");		   
 						  
