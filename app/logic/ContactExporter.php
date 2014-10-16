@@ -62,7 +62,7 @@ class ContactExporter extends BaseWrapper
 						$fields .= (empty($contact[$cfname]) ? ", null" : ", '{$contact[$cfname]}'");
 					}
 				}
-				
+				$this->logger->log("Entra");
 				$this->contactsToSave[] = $fields;
 				
 				if (count($this->contactsToSave) == self::CONTACTS_PER_UPDATE) {
