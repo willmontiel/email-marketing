@@ -49,8 +49,6 @@ class ContactExporter extends BaseWrapper
 			$contactIterator->setData($this->data);
 			$contactIterator->initialize();
 			
-			$keys = array();
-			
 			if ($this->cf == true) {
 				$this->cfData = $contactIterator->getCustomFieldsData();
 				$this->addCustomFieldsToTmpTable();

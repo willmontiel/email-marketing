@@ -205,7 +205,7 @@ class TotalContactIterator implements Iterator
 				}
 				
 				$this->contacts[0] = $c;
-				
+				$this->logger->log(print_r($c, true));
 				$c[$name] = null;
 			}
 			else if (isset($this->contacts[$i]) && $this->contacts[$i]['idContact'] == $m['idContact']) {
@@ -213,6 +213,7 @@ class TotalContactIterator implements Iterator
 					$name = $this->cleanSpaces($m['field']);
 					$this->contacts[$i][$name] = (!empty($m['value']) ? $m['value'] : null);
 				}
+				$this->logger->log(print_r($this->contacts[$i], true));
 				$i--;
 				$k--;
 			}
@@ -235,6 +236,7 @@ class TotalContactIterator implements Iterator
 					$c[$name] = null;
 				}
 				
+				$this->logger->log(print_r($c, true));
 				$this->contacts[0] = $c;
 				$c[$name] = null;
 			}
