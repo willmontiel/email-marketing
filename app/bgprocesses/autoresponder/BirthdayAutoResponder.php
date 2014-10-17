@@ -25,9 +25,16 @@ class BirthdayAutoResponder {
 		$interpreter->setMail($this->mail);
 		$interpreter->searchContacts();
 		$sql = $interpreter->getSQL();
+		$statDbaseSQL = $interpreter->getStatDbaseSQL();
+		$statContactlistSQL = $interpreter->getStatContactlistSQL();
+		
 		if ($sql != false) {
 			$final_sql = $this->addClauseBirthdate($sql);
 			$this->createMXC($final_sql);
+			
+			$this->createMXC($statDbaseSQL);
+			$this->createMXC($statContactlistSQL);
+			
 		}
 	}
 	
