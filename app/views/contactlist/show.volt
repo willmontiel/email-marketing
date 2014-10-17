@@ -76,6 +76,48 @@
 			{%endfor%}
 		</script>
 		
+		<script type="text/javascript">
+			function exportContacts() {
+				var id = $('#id').val();
+				var criteria = $('#criteria').val();
+				
+				var contacts = "";
+				var rcontacts = $("#contacts input[type='radio']:checked");
+				if (rcontacts.length > 0) {
+					contacts = rcontacts.val();
+				}
+				
+				var fields = "";
+				var rfields = $("#fields input[type='radio']:checked");
+				if (rfields.length > 0) {
+					fields = rfields.val();
+				}
+				
+				$('#wait').show();
+			
+				$.ajax({
+					url: "{{url('contacts/export')}}",
+					type: "POST",			
+					data: {
+						id: id,
+						criteria: criteria,
+						contacts: contacts,
+						fields: fields
+					},
+					error: function(msg){
+						var obj = $.parseJSON(msg.responseText);
+						$.gritter.add({class_name: 'gritter-success', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
+						$('#wait').hide();
+					},
+					success: function(msg){
+						var obj = $.parseJSON(msg.responseText);
+						$.gritter.add({class_name: 'gritter-error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
+						$('#wait').hide();
+					}
+				});
+			}
+		</script>
+		
 		{{ javascript_include('js/editable-ember-view.js')}}
 		
 		<script type="text/x-handlebars" data-template-name="dropdown" >
@@ -459,9 +501,9 @@
 		</div>
 		<hr>
 		
-		<form action="{{url('contacts/export')}}" method="post">
-			<input type="hidden" name="criteria" value="contactlist" />
-			<input type="hidden" name="id" value="{{datalist.idContactlist}}" />
+		<form>
+			<input type="hidden" id ="criteria" name="criteria" value="contactlist" />
+			<input type="hidden" id ="id" name="id" value="{{datalist.idContactlist}}" />
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 					<div class="panel panel-default">
@@ -470,7 +512,7 @@
 						</div>	
 						<div class="panel-body">
 							 <div class="radio">
-								<label><input name="contacts" value="active" type="radio" checked> Contactos activos</label>
+								<label><input id="contacts" name="contacts" value="active" type="radio" checked> Contactos activos</label>
 							 </div>
 							 {#
 							 <div class="radio">
@@ -478,19 +520,19 @@
 							 </div>
 							 #}
 							 <div class="radio">
-								<label><input name="contacts" value="unsuscribed" type="radio"> Contactos des-suscritos</label>
+								<label><input id="contacts" name="contacts" value="unsuscribed" type="radio"> Contactos des-suscritos</label>
 							 </div>
 
 							 <div class="radio">
-								<label><input name="contacts" value="bounced" type="radio"> Contactos rebotados</label>
+								<label><input id="contacts" name="contacts" value="bounced" type="radio"> Contactos rebotados</label>
 							 </div>
 
 							 <div class="radio">
-								<label><input name="contacts" value="spam" type="radio"> Contactos que marcarón spam</label>
+								<label><input id="contacts" name="contacts" value="spam" type="radio"> Contactos que marcarón spam</label>
 							 </div>
 
 							 <div class="radio">
-								<label><input name="contacts" value="all" type="radio"> Todos los contactos</label>
+								<label><input id="contacts" name="contacts" value="all" type="radio"> Todos los contactos</label>
 							 </div>
 						</div>
 					</div>
@@ -503,11 +545,11 @@
 						</div>	
 						<div class="panel-body">
 							<div class="radio">
-								<label><input type="radio" name="fields" id="primary-fields" value="primary-fields" checked> Solo los campos primarios</label>
+								<label><input id="fields" type="radio" name="fields" id="primary-fields" value="primary-fields" checked> Solo los campos primarios</label>
 							 </div>
 
 							 <div class="radio">
-								<label><input type="radio" name="fields" id="custom-fields" value="custom-fields"> Todos los campos(primarios y personalizados)</label>
+								<label><input id="fields" type="radio" name="fields" id="custom-fields" value="custom-fields"> Todos los campos(primarios y personalizados)</label>
 							 </div>
 						</div>
 					</div>
@@ -515,9 +557,16 @@
 			</div>
 
 			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<div id="wait" style="display: none; margin-bottom: 8px;">
+						Espere... estamos recopilando datos 
+						<img src="{{url('')}}images/loading4.GIF" width="20" height="20"><br />
+						(podría tardar algunos segundos)
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-right">
 					<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default">Cancelar</a>
-					<input type="submit" class="btn btn-success" value="Exportar" />
+					<input type="submit" class="btn btn-success" onClick="exportContacts();" value="Exportar" />
 				</div>
 			</div>
 		</form>
