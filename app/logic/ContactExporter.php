@@ -55,11 +55,11 @@ class ContactExporter extends BaseWrapper
 			}
 			
 			foreach ($contactIterator as $contact) {
-				$status = (empty($contact['status']) ? null : "'{$contact['status']}'");
-				$email = (empty($contact['email']) ? null : "'{$contact['email']}'");
-				$name = (empty($contact['name']) ? null : "'{$contact['name']}'");
-				$lastName = (empty($contact['lastName']) ? null : "'{$contact['lastName']}'");
-				$birthDate = (empty($contact['birthDate']) ? null : "'{$contact['birthDate']}'");
+				$status = (empty($contact['status']) ? "null" : "'{$contact['status']}'");
+				$email = (empty($contact['email']) ? "null" : "'{$contact['email']}'");
+				$name = (empty($contact['name']) ? "null" : "'{$contact['name']}'");
+				$lastName = (empty($contact['lastName']) ? "null" : "'{$contact['lastName']}'");
+				$birthDate = (empty($contact['birthDate']) ? "null" : "'{$contact['birthDate']}'");
 				
 				$fields = "{$contact['idContact']}, {$status}, {$email}, {$name}, {$lastName}, {$birthDate}, {$contact['createdon']}";
 				
