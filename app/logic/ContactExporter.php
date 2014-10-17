@@ -11,7 +11,7 @@ class ContactExporter extends BaseWrapper
 	private $contactsToSave = array();
 	private $cfData;
 
-	const CONTACTS_PER_UPDATE = 5000;
+	const CONTACTS_PER_UPDATE = 1000;
 
 	public function __construct() 
 	{
@@ -70,7 +70,7 @@ class ContactExporter extends BaseWrapper
 						$fields .= (empty($contact[$cfname]) ? ", null" : ", '{$contact[$cfname]}'");
 					}
 				}
-				$this->logger->log("Entra");
+//				$this->logger->log("Entra");
 				$this->contactsToSave[] = $fields;
 				
 				if (count($this->contactsToSave) == self::CONTACTS_PER_UPDATE) {
@@ -83,11 +83,7 @@ class ContactExporter extends BaseWrapper
 				$this->setDataInTmpTable();
                 unset($this->contactsToSave);
 			}
-			
-//			$this->setPrimaryFieldsInTmpTable();
-//			if ($this->cfSQL != null) {
-//				$this->setCustomFieldsInTmpTable();
-//			}
+
 			$this->saveFileInServer();
 		}
 		catch (Exception $e) {
@@ -146,7 +142,7 @@ class ContactExporter extends BaseWrapper
 		$insert = "INSERT INTO {$this->tablename} (idContact, status, email, name, lastName, birthDate, createdon {$this->cfData->customfieldsNames})
 				   VALUES {$values}";
 		
-		$this->logger->log("insert: {$insert}");		   
+//		$this->logger->log("insert: {$insert}");		   
 						  
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->execute($insert);

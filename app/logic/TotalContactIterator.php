@@ -17,7 +17,7 @@ class TotalContactIterator implements Iterator
 	protected $cfs = array();
 	protected $c = array();
 
-	const ROWS_PER_FETCH = 5000;
+	const ROWS_PER_FETCH = 1000;
 	
 	public function __construct() 
 	{
@@ -58,7 +58,7 @@ class TotalContactIterator implements Iterator
 				   
 		unset($this->contacts);
 		
-		$this->logger->log("SQL: {$sql}");
+//		$this->logger->log("SQL: {$sql}");
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
