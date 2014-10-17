@@ -58,7 +58,7 @@ class TotalContactIterator implements Iterator
 				   
 		unset($this->contacts);
 		
-		$this->logger->log("SQL: {$sql}");
+//		$this->logger->log("SQL: {$sql}");
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
