@@ -65,7 +65,7 @@ class ContactExporter extends BaseWrapper
 				
 				$fields = "{$contact['idContact']}, {$status}, {$email}, {$name}, {$lastName}, {$birthDate}, {$contact['createdon']}";
 				
-				if (count($this->cfData->arrayCustomfieldsNames) > 0) {
+				if (isset($this->cfData->arrayCustomfieldsNames) && count($this->cfData->arrayCustomfieldsNames) > 0) {
 					foreach ($this->cfData->arrayCustomfieldsNames as $cfname) {
 						$fields .= (empty($contact[$cfname]) ? ", null" : ", '{$contact[$cfname]}'");
 					}
