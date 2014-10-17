@@ -17,7 +17,7 @@ class TotalContactIterator implements Iterator
 	protected $cfs = array();
 	protected $c = array();
 
-	const ROWS_PER_FETCH = 1000;
+	const ROWS_PER_FETCH = 25000;
 	
 	public function __construct() 
 	{
