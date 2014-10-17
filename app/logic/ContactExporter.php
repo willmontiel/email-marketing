@@ -11,7 +11,7 @@ class ContactExporter extends BaseWrapper
 	private $contactsToSave = array();
 	private $cfData;
 
-	const CONTACTS_PER_UPDATE = 1000;
+	const CONTACTS_PER_UPDATE = 100;
 
 	public function __construct() 
 	{
@@ -72,6 +72,7 @@ class ContactExporter extends BaseWrapper
 				}
 //				$this->logger->log("Entra");
 				$this->contactsToSave[] = $fields;
+				unset($fields);
 				
 				if (count($this->contactsToSave) == self::CONTACTS_PER_UPDATE) {
 					$this->setDataInTmpTable();
