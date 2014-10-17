@@ -51,7 +51,9 @@ class ContactExporter extends BaseWrapper
 			
 			if ($this->cf == true) {
 				$this->cfData = $contactIterator->getCustomFieldsData();
-				$this->addCustomFieldsToTmpTable();
+				if ($this->cfData != null) {
+					$this->addCustomFieldsToTmpTable();
+				}
 			}
 			
 			foreach ($contactIterator as $contact) {
@@ -114,8 +116,10 @@ class ContactExporter extends BaseWrapper
 	
 	protected function addCustomFieldsToTmpTable()
 	{
-		$this->cfSQL = "ALTER TABLE {$this->tablename} ADD ({$this->cfData->customfieldsColumns})";
-		$this->db->execute($this->cfSQL);
+		if (!empty($this->cfData->customfieldsColumns)) {
+			$this->cfSQL = "ALTER TABLE {$this->tablename} ADD ({$this->cfData->customfieldsColumns})";
+			$this->db->execute($this->cfSQL);
+		}
 	}
 
 	protected function validateCustomFields()
