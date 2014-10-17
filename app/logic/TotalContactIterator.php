@@ -134,7 +134,7 @@ class TotalContactIterator implements Iterator
 					'email' => $m['email'],
 					'name' => $m['name'],
 					'lastName' => $m['lastName'],
-					'birthDate' => (empty($m['birthDate']) ? 'null' : $m['birthDate']),
+					'birthDate' => (empty($m['birthDate']) ? null : $m['birthDate']),
 					'status' => $m['status'],
 					'createdon' => $m['createdon']
 				);
@@ -151,7 +151,7 @@ class TotalContactIterator implements Iterator
 					'email' => $m['email'],
 					'name' => $m['name'],
 					'lastName' => $m['lastName'],
-					'birthDate' => (empty($m['birthDate']) ? 'null' : $m['birthDate']),
+					'birthDate' => (empty($m['birthDate']) ? null : $m['birthDate']),
 					'status' => $m['status'],
 					'createdon' => $m['createdon']
 				);

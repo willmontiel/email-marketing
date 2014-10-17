@@ -55,7 +55,13 @@ class ContactExporter extends BaseWrapper
 			}
 			
 			foreach ($contactIterator as $contact) {
-				$fields = "{$contact['idContact']}, '{$contact['status']}', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', {$contact['createdon']}";
+				$status = (empty($contact['status']) ? null : "'{$contact['status']}'");
+				$email = (empty($contact['email']) ? null : "'{$contact['email']}'");
+				$name = (empty($contact['name']) ? null : "'{$contact['name']}'");
+				$lastName = (empty($contact['lastName']) ? null : "'{$contact['lastName']}'");
+				$birthDate = (empty($contact['birthDate']) ? null : "'{$contact['birthDate']}'");
+				
+				$fields = "{$contact['idContact']}, {$status}, {$email}, {$name}, {$lastName}, {$birthDate}, {$contact['createdon']}";
 				
 				if (count($this->cfData->arrayCustomfieldsNames) > 0) {
 					foreach ($this->cfData->arrayCustomfieldsNames as $cfname) {
