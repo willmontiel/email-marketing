@@ -11,7 +11,7 @@ class ContactExporter extends BaseWrapper
 	private $contactsToSave = array();
 	private $cfData;
 
-	const CONTACTS_PER_UPDATE = 75000;
+	const CONTACTS_PER_UPDATE = 25000;
 
 	public function __construct() 
 	{
