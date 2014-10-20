@@ -80,6 +80,38 @@ if(isset($argv[1]) && isset($argv[2])) {
 				break;
 		}
 	}
+	else if($argv[1] === '-e') {
+		switch ($argv[2]) {
+			case '-r':
+				if (isRunning(SocketConstants::getExportRequestsEndPoint())) {
+					echo "The process is already running!\n";
+					exit(0);
+				}
+				printf('Directo' .PHP_EOL);
+				$processObj = new ImportProcess();
+				break;
+			case '-k':
+				if (!isRunning(SocketConstants::getExportRequestsEndPoint())) {
+					echo "There's no process to terminate\n";
+					exit(0);
+				}
+				killProcess(SocketConstants::getExportRequestsEndPoint());
+				exit(0);
+				break;
+			case '-s':
+				if (!isRunning(SocketConstants::getExportRequestsEndPoint())) {
+					echo "There's no process\n";
+					exit(0);
+				}
+				processStatus(SocketConstants::getExportRequestsEndPoint());
+				exit(0);
+				break;
+			default :
+				printf('Comando no reconocido' .PHP_EOL);
+				exit(0);
+				break;
+		}
+	}
 	else {
 		printf('Comando no reconocido' .PHP_EOL);
 		exit(0);

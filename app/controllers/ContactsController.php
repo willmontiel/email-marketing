@@ -162,7 +162,6 @@ class ContactsController extends ControllerBase
 	
 	public function importbatchAction($idContactlist)
 	{
-		
 		$log = $this->logger;
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
@@ -629,6 +628,34 @@ class ContactsController extends ControllerBase
 			$exporter->deleteFile();
 			$this->traceSuccess("Export contacts from list: {$id}");
 		}
+	}
+	
+	public function getexportfileAction($idExport)
+	{
+		$account = $this->user->account;
+		
+		$exfile = Exportfile::findFirst(array(
+			'conditions' => 'idAccount = ?1 AND idExportfile = ?2',
+			'bind' => array(1 => $idExport,
+							2 => $account->idAccount)
+		));
+		
+		if (!$exfile) {
+			$this->flashSession->error("El archivo de importación no existe, por favor verifique la información");
+			return;
+		}
+		
+		$this->view->disable();
+
+		header('Content-type: application/csv');
+		header("Content-Disposition: attachment; filename={$exfile->internalName}.csv");
+		header('Pragma: public');
+		header('Expires: 0');
+		header('Content-Type: application/download');
+		echo $exfile->name . PHP_EOL;
+		echo PHP_EOL;
+
+		readfile($this->tmppath->exportdir . $exfile->internalName . '.csv');
 	}
 	
 	private function validateCriteria($account, $criteria, $id)
