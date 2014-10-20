@@ -590,6 +590,11 @@ class ContactsController extends ControllerBase
 			$contacts = $this->request->getPost('contacts');
 			$fields = $this->request->getPost('fields');
 			
+			$this->logger->log($criteria);
+			$this->logger->log($id);
+			$this->logger->log($contacts);
+			$this->logger->log($fields);
+			
 			try {
 				$model = $this->validateCriteria($account, $criteria, $id);
 			}
