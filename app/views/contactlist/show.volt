@@ -78,43 +78,7 @@
 		
 		<script type="text/javascript">
 			function exportContacts() {
-				var id = $('#id').val();
-				var criteria = $('#criteria').val();
-				
-				var contacts = "";
-				var rcontacts = $("#contacts input[type='radio']:checked");
-				if (rcontacts.length > 0) {
-					contacts = rcontacts.val();
-				}
-				
-				var fields = "";
-				var rfields = $("#fields input[type='radio']:checked");
-				if (rfields.length > 0) {
-					fields = rfields.val();
-				}
-				
 				$('#wait').show();
-			
-				$.ajax({
-					url: "{{url('contacts/export')}}",
-					type: "POST",			
-					data: {
-						id: id,
-						criteria: criteria,
-						contacts: contacts,
-						fields: fields
-					},
-					error: function(msg){
-						var obj = $.parseJSON(msg.responseText);
-						$.gritter.add({class_name: 'gritter-success', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
-						$('#wait').hide();
-					},
-					success: function(msg){
-						var obj = $.parseJSON(msg.responseText);
-						$.gritter.add({class_name: 'gritter-error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 30000});
-						$('#wait').hide();
-					}
-				});
 			}
 		</script>
 		
@@ -501,7 +465,7 @@
 		</div>
 		<hr>
 		
-		<form>
+		<form action="{{url('contacts/export')}}" method="post">
 			<input type="hidden" id ="criteria" name="criteria" value="contactlist" />
 			<input type="hidden" id ="id" name="id" value="{{datalist.idContactlist}}" />
 			<div class="row">
@@ -559,9 +523,10 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 					<div id="wait" style="display: none; margin-bottom: 8px;">
-						Espere... estamos recopilando datos 
-						<img src="{{url('')}}images/loading4.GIF" width="20" height="20"><br />
-						(podría tardar algunos segundos)
+						<h4 style="color: #777;">
+							Por favor espere... podría tadar algunos minutos
+						</h4>
+						{#<img src="{{url('')}}images/loading4.GIF" width="20" height="20"><br />#}
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-right">
