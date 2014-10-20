@@ -494,7 +494,11 @@
 							 <div class="radio">
 								<label><input id="contacts" name="contacts" value="spam" type="radio"> Contactos que marcarón spam</label>
 							 </div>
-
+							 
+							 <div class="radio">
+								<label><input id="contacts" name="contacts" value="blocked" type="radio"> Contactos bloqueados</label>
+							 </div>
+					 
 							 <div class="radio">
 								<label><input id="contacts" name="contacts" value="all" type="radio"> Todos los contactos</label>
 							 </div>

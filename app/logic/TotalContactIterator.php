@@ -58,7 +58,7 @@ class TotalContactIterator implements Iterator
 				   
 		unset($this->contacts);
 		
-		$this->logger->log("SQL: {$sql}");
+//		$this->logger->log("SQL: {$sql}");
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
@@ -283,6 +283,10 @@ class TotalContactIterator implements Iterator
 			
 			case 'spam':
 				$this->conditions = " AND e.spam != 0 ";
+				break;
+			
+			case 'blocked':
+				$this->conditions = " AND e.blocked != 0 ";
 				break;
 			
 			default:
