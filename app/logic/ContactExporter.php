@@ -11,7 +11,7 @@ class ContactExporter extends BaseWrapper
 	private $contactsToSave = array();
 	private $cfData;
 
-	const CONTACTS_PER_UPDATE = 50000;
+	const CONTACTS_PER_UPDATE = 75000;
 
 	public function __construct() 
 	{
@@ -163,7 +163,7 @@ class ContactExporter extends BaseWrapper
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
 
-		$this->logger->log($exportfile);				
+//		$this->logger->log($exportfile);				
 						
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->execute($exportfile);
