@@ -274,7 +274,7 @@ class TotalContactIterator implements Iterator
 				break;
 			
 			case 'unsuscribed':
-				$this->conditions = " AND c.unsubscribed != 0 AND  ";
+				$this->conditions = " AND c.unsubscribed != 0 ";
 				break;
 			
 			case 'bounced':
