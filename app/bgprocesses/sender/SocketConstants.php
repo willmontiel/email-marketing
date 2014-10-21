@@ -57,6 +57,7 @@ class SocketConstants
 	{
 		Phalcon\DI::getDefault()->get('logger')->log("Socket!");
 		Phalcon\DI::getDefault()->get('logger')->log(Phalcon\DI::getDefault()->get('sockets')->exportrequest);
+		Phalcon\DI::getDefault()->get('logger')->log(Phalcon\DI::getDefault()->get('sockets')->importrequest);
 		return Phalcon\DI::getDefault()->get('sockets')->exportrequest;
 	}
 	
