@@ -55,6 +55,8 @@ class SocketConstants
 	
 	public static function getExportRequestsEndPoint()
 	{
+		Phalcon\DI::getDefault()->get('logger')->log("Socket!");
+		Phalcon\DI::getDefault()->get('logger')->log(Phalcon\DI::getDefault()->get('sockets')->exportrequest);
 		return Phalcon\DI::getDefault()->get('sockets')->exportrequest;
 	}
 	
