@@ -10,6 +10,7 @@ class ContactExporter extends BaseWrapper
 	private $cf = false;
 	private $contactsToSave = array();
 	private $cfData;
+	private $exportfile;
 
 	const CONTACTS_PER_UPDATE = 25000;
 
@@ -26,10 +27,17 @@ class ContactExporter extends BaseWrapper
 
 	public function setData($data)
 	{
-		if (!is_object($data) || empty($data)) {
+		if (!is_array($data) || empty($data)) {
 			throw new InvalidArgumentException("export data is not valid...");
 		}
 		$this->data = $data;
+		$exportfile = Exportfile::findFirstByIdImportfile($this->data['idExportfile']);
+		
+		if (!$exportfile) {
+			throw new InvalidArgumentException("exportfile do not exists...");
+		}
+		
+		$this->exportfile = $exportfile;
 	}
 	
 	public function startExporting()
@@ -157,7 +165,7 @@ class ContactExporter extends BaseWrapper
 	{
 		$exportfile =  "SELECT email, name, lastName, birthDate, status {$this->cfData->customfieldsNames}
 						FROM {$this->tablename}
-						INTO OUTFILE  '{$this->tmpPath}{$this->data->model->name}.csv'
+						INTO OUTFILE  '{$this->tmpPath}{$this->exportfile->name}.csv'
 						CHARACTER SET utf8
 						FIELDS TERMINATED BY ','
 						ENCLOSED BY '\"'
@@ -186,7 +194,7 @@ class ContactExporter extends BaseWrapper
 	
 	public function deleteFile()
 	{
-		$path = "{$this->tmpPath}{$this->data->model->name}.csv";
+		$path = "{$this->tmpPath}{$this->exportfile->name}.csv";
 		
 		if (!unlink($path)) {
 			$this->logger->log("File could not delete from server!");

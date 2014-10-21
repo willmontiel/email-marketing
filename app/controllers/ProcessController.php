@@ -45,6 +45,16 @@ class ProcessController extends ControllerBase
 		$this->view->setVar("result", $result);
 	}
 	
+	public function exportAction($idExport)
+	{
+		
+	}
+	
+	public function resfreshexportAction($idExport)
+	{
+		
+	}
+	
 	public function refreshimportAction($idImportprocess)
 	{
 		$res = $this->getImportInfo($idImportprocess);
@@ -271,5 +281,10 @@ class ProcessController extends ControllerBase
 		}
 		
 		$this->view->setVar("process", $res);
+	}
+	
+	public function getexportinfoAction()
+	{
+		
 	}
 }

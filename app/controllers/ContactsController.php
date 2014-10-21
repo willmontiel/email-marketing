@@ -590,43 +590,52 @@ class ContactsController extends ControllerBase
 			$fields = $this->request->getPost('fields');
 			
 			try {
-				$model = $this->validateCriteria($account, $criteria, $id);
+				$this->validateCriteria($account, $criteria, $id);
+				$exportfile = new Exportfile();
+				$exportfile->idAccount  = $account->idAccount;
+				$exportfile->createdon  = time();
+				$name = "{$account->idAccount}-{$criteria}-{$id}-" . date('d-M-Y', time()) . uniqid();
+				$exportfile->name = $name;
+				$exportfile->idCriteria  = $id;
+				$exportfile->criteria  = $criteria;
+				$exportfile->contactStatus  = $contacts;
+				$exportfile->fields  = $fields;
+				
+				if (!$exportfile->save()) {
+					foreach ($exportfile->getMessages() as $msg) {
+						$this->logger->log("Error while saving exportfile: {$msg}");
+						throw new Exception("Exception while saving exportfile {$msg}");
+					}
+				}
 			}
 			catch (Exception $e) {
 				return $this->response->redirect('error');
 			}
 			
-			$data = new stdClass();
-			$data->model = $model;
-			$data->criteria = $criteria;
-			$data->id = $id;
-			$data->contacts = $contacts;
-			$data->fields = $fields;
+			$data = array(
+				'idExportfile' => $exportfile->idExportfile,
+				'idCriteria' => $id,
+				'criteria' => $criteria,
+				'contacts' => $contacts,
+				'fields' => $fields
+			);
 			
 			try {
-				$exporter = new ContactExporter();
-				$exporter->setData($data);
-				$exporter->startExporting();
+				$toSend = json_encode($data);
+				$objcomm = new Communication(SocketConstants::getExportRequestsEndPointPeer());
+				$objcomm->sendImportToParent($toSend, $exportfile->idExportfile);
+				
+//				$exporter = new ContactExporter();
+//				$exporter->setData($data);
+//				$exporter->startExporting();
 			}
 			catch (Exception $e){
 				$this->traceFail("Export contacts from list: {$id}");
 				$this->logger->log("Exception while exporting contacts... {$e}");
+				return $this->response->redirect('error');
 			}
 			
-			$this->view->disable();
-
-			header('Content-type: application/csv');
-			header("Content-Disposition: attachment; filename={$data->model->name}.csv");
-			header('Pragma: public');
-			header('Expires: 0');
-			header('Content-Type: application/download');
-			echo $data->model->name . PHP_EOL;
-			echo PHP_EOL;
-			
-			readfile($this->tmppath->exportdir . $data->model->name . '.csv');
-			
-			$exporter->deleteFile();
-			$this->traceSuccess("Export contacts from list: {$id}");
+			return $this->response->redirect("process/export/{$exportfile->idExportfile}");
 		}
 	}
 	
