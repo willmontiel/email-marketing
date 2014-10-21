@@ -19,7 +19,6 @@ class ContactExporter extends BaseWrapper
 		$this->appPath = Phalcon\DI::getDefault()->get('appPath');
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
 		
-		$this->logger->log("Soy ContactExporter y me han instanciado!!");
 		$this->cfData = new stdClass();
 		$this->cfData->customfieldsNames = '';
 		$this->cfData->customfieldsColumns = '';
@@ -28,9 +27,9 @@ class ContactExporter extends BaseWrapper
 
 	public function setData($data)
 	{
-		if (!is_array($data) || empty($data)) {
-			throw new InvalidArgumentException("export data is not valid...");
-		}
+//		if (!is_array($data) || empty($data)) {
+//			throw new InvalidArgumentException("export data is not valid...");
+//		}
 		$this->data = $data;
 		$exportfile = Exportfile::findFirstByIdImportfile($this->data['idExportfile']);
 		
