@@ -88,7 +88,7 @@ if(isset($argv[1]) && isset($argv[2])) {
 					exit(0);
 				}
 				printf('Directo' .PHP_EOL);
-				$processObj = new ImportProcess();
+				$processObj = new ExportProcess();
 				break;
 			case '-k':
 				if (!isRunning(SocketConstants::getExportRequestsEndPoint())) {
