@@ -22,6 +22,7 @@ class TotalContactIterator implements Iterator
 	public function __construct() 
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
+		$this->logger->log("Soy TotalContactIterator y me han instanciado!!");
 	}
 	
 	public function setCustomFields($customfields = false)

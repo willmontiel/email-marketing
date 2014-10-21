@@ -19,6 +19,7 @@ class ContactExporter extends BaseWrapper
 		$this->appPath = Phalcon\DI::getDefault()->get('appPath');
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
 		
+		$this->logger->log("Soy ContactExporter y me han instanciado!!");
 		$this->cfData = new stdClass();
 		$this->cfData->customfieldsNames = '';
 		$this->cfData->customfieldsColumns = '';
@@ -48,7 +49,7 @@ class ContactExporter extends BaseWrapper
 			$this->validateCustomFields();
 		}	
 		catch (Exception $e) {
-			throw new Exception("Exceptio while creating tmp table... {$e}");
+			throw new Exception("Exception while creating tmp table... {$e}");
 		}
 		
 		try {
