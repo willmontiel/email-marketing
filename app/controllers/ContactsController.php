@@ -603,12 +603,12 @@ class ContactsController extends ControllerBase
 				
 				if (!$exportfile->save()) {
 					foreach ($exportfile->getMessages() as $msg) {
-						$this->logger->log("Error while saving exportfile: {$msg}");
 						throw new Exception("Exception while saving exportfile {$msg}");
 					}
 				}
 			}
-			catch (Exception $e) {
+			catch (Exception $ex) {
+				$this->logger->log("Exception: {$ex}");
 				return $this->response->redirect('error');
 			}
 			
