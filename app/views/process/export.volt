@@ -30,9 +30,8 @@
 	{% else %}
 		{% set ctype = 'No' %}
 	{% endif %}
-	<div class="space"></div>
+	
 	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'import']) }}
-	<div class="space"></div>
 	
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -95,4 +94,6 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="space"></div>
 {% endblock %}
