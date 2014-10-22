@@ -63,6 +63,8 @@ class TotalContactIterator implements Iterator
 		$result = $db->query($sql);
 		$total = $result->fetchAll();
 		
+		$this->logger->log(print_r($total, true));
+		
 		$this->totalContacts = $total['total'];
 	}
 	
