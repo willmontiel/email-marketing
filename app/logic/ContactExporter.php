@@ -32,9 +32,9 @@ class ContactExporter extends BaseWrapper
 //		}
 		$this->data = $data;
 		
-		$this->logger->log("Data: " . print_r($this->data, true));
+//		$this->logger->log("Data: " . print_r($this->data, true));
 		
-		$exportfile = Exportfile::findFirstByIdImportfile($this->data['idExportfile']);
+		$exportfile = Exportfile::findFirstByIdImportfile($this->data->idExportfile);
 		
 		if (!$exportfile) {
 			throw new InvalidArgumentException("exportfile do not exists...");
@@ -117,7 +117,7 @@ class ContactExporter extends BaseWrapper
 	protected function createTmpTable()
 	{
 		$this->db = Phalcon\DI::getDefault()->get('db');
-		$this->tablename = "tmp{$this->data->id}{$this->data->criteria}";
+		$this->tablename = "tmp{$this->data->idCriteria}{$this->data->criteria}";
 		$newtable = "CREATE TEMPORARY TABLE $this->tablename LIKE tmpexport";
 		$this->db->execute($newtable);
 	}
