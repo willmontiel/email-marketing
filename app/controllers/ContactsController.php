@@ -666,7 +666,7 @@ class ContactsController extends ControllerBase
 		header('Pragma: public');
 		header('Expires: 0');
 		header('Content-Type: application/download');
-		echo $exfile->name . PHP_EOL;
+		echo $exfile->criteriaName . PHP_EOL;
 		echo PHP_EOL;
 
 		readfile($this->tmppath->exportdir . $exfile->name . '.csv');
