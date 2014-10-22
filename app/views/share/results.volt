@@ -1,4 +1,4 @@
-{% extends "templates/index_b3.volt" %}
+{% extends "templates/statistics_share.volt" %}
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
