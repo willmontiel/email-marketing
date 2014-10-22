@@ -1,4 +1,29 @@
 {% extends "templates/index_b3.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	<script type="text/javascript">
+		var baseurl = '{{urlManager.getBaseUri(true)}}';
+		
+		var refresher = setInterval(loadNow, 3000);
+		
+		function loadNow () { 
+			$.getJSON(baseurl + 'process/resfreshexport/' + {{export.idExportfile}}, function(data){
+				if(data.length !== 0) {
+					$('#contacts-processed').empty();
+					$('#contacts-processed').append(data.contactsProcessed);
+					
+					if (data.status === 'Finalizado') {
+						$('#file-available').show('slow');
+						clearInterval(refresher);
+					}
+					else if (data.status === 'Cancelado') {
+						clearInterval(refresher);
+					}
+				}
+			});
+		};
+	</script>
+{% endblock %}
 {% block content %}
 	<div class="space"></div>
 	<div class="row">
@@ -10,7 +35,8 @@
 			</div>
 		</div>
 	</div>
-
+	
+	<div class="space"></div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
 			<div class="header-background">
@@ -35,7 +61,7 @@
 						</tr>
 						<tr>
 							<td><strong>Contactos procesados(Aprox)</strong></td>
-							<td>{{export.contactsProcessed}}</td>
+							<td><div id="contacts-processed">0</div></td>
 						</tr>
 						<tr>
 							<td><strong>Estado</strong></td>
@@ -48,8 +74,8 @@
 	</div>
 	
 	<div class="space"></div>
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<div class="row" id="file-available" style="display: none;">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
 			<div class="header-background">
 				<div class="header">
 					<div class="title">

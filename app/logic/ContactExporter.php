@@ -189,9 +189,11 @@ class ContactExporter extends BaseWrapper
 			}
 
 			$this->saveFileInServer();
+			$this->finishExporFile();
 		}
 		catch (Exception $e) {
 			$this->db->execute("DROP TEMPORARY TABLE $this->tablename");
+			$this->cancelExporFile();
 			$this->logger->log("Exception: {$e}");
 			throw new \Exception("{$e}");
 		}
@@ -200,6 +202,28 @@ class ContactExporter extends BaseWrapper
 	private function updateExportFile()
 	{
 		$this->exportfile->contactsProcessed = $this->i;
+		
+		if (!$this->exportfile->save()) {
+			foreach ($this->exportfile->getMessages() as $msg) {
+				$this->logger->log("Error while updating exportfile... {$msg}");
+			}
+		}
+	}
+	
+	private function cancelExporFile()
+	{
+		$this->exportfile->status = 'Cancelado';
+		
+		if (!$this->exportfile->save()) {
+			foreach ($this->exportfile->getMessages() as $msg) {
+				$this->logger->log("Error while updating exportfile... {$msg}");
+			}
+		}
+	}
+	
+	private function finishExporFile()
+	{
+		$this->exportfile->status = 'Finalizado';
 		
 		if (!$this->exportfile->save()) {
 			foreach ($this->exportfile->getMessages() as $msg) {

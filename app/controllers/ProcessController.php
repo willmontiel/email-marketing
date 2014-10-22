@@ -68,7 +68,26 @@ class ProcessController extends ControllerBase
 	
 	public function resfreshexportAction($idExport)
 	{
+		$account = $this->user->account;
 		
+		$export = Exportfile::findFirst(array(
+			'conditions' => 'idExportfile = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idExport,
+							2 => $account->idAccount)
+		));
+		
+		if (!$export) {
+			return $this->setJsonResponse(array('error' => 'Export not found'), '404', 'Export not found');
+		}
+		
+		$data = array(
+			'idExportfile' => $export->idExportfile,
+			'contactsProcessed' => $export->contactsProcessed,
+			'contactsToProcess' => $export->contactsToProcess,
+			'status' => $export->status,
+		);
+		
+		return $this->setJsonResponse($data, 200);
 	}
 	
 	private function validateCriteria($account, $criteria, $id)

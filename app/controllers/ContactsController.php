@@ -600,7 +600,7 @@ class ContactsController extends ControllerBase
 				$exportfile->criteria  = $criteria;
 				$exportfile->contactStatus  = $contacts;
 				$exportfile->fields  = $fields;
-				$exportfile->status = 1;
+				$exportfile->status = 'En proceso';
 				$exportfile->contactsProcessed = 0;
 				$exportfile->contactsToProcess = (isset($model->Ctotal) ? $model->Ctotal : 0);
 				
@@ -649,13 +649,13 @@ class ContactsController extends ControllerBase
 		
 		$exfile = Exportfile::findFirst(array(
 			'conditions' => 'idAccount = ?1 AND idExportfile = ?2',
-			'bind' => array(1 => $idExport,
-							2 => $account->idAccount)
+			'bind' => array(1 => $account->idAccount,
+							2 => $idExport)
 		));
 		
 		if (!$exfile) {
 			$this->flashSession->error("El archivo de importación no existe, por favor verifique la información");
-			return;
+			return $this->response->redirect('error');
 		}
 		
 		$this->view->disable();
