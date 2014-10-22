@@ -6,11 +6,15 @@ class ContactExporter extends BaseWrapper
 	private $appPath;
 	private $logger;
 	private $tmpPath;
+	private $model;
+	private $customfields = false;
+	
 	private $cfSQL = null;
-	private $cf = false;
 	private $contactsToSave = array();
-	private $cfData;
+	private $customfieldsData;
 	private $exportfile;
+	
+	private $i = 0;
 
 	const CONTACTS_PER_UPDATE = 25000;
 
@@ -19,21 +23,22 @@ class ContactExporter extends BaseWrapper
 		$this->appPath = Phalcon\DI::getDefault()->get('appPath');
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
 		
-		$this->cfData = new stdClass();
-		$this->cfData->customfieldsNames = '';
-		$this->cfData->customfieldsColumns = '';
-		$this->cfData->arrayCustomfieldsNames = array();
+		$this->customfieldsData = new stdClass();
+		$this->customfieldsData->customfieldsNames = '';
+		$this->customfieldsData->customfieldsColumns = '';
+		$this->customfieldsData->arrayCustomfieldsNames = array();
 	}
 
 	public function setData($data)
 	{
-//		if (!is_array($data) || empty($data)) {
-//			throw new InvalidArgumentException("export data is not valid...");
-//		}
+		if (!is_object($data) || empty($data)) {
+			throw new InvalidArgumentException("export data is not valid...");
+		}
 		$this->data = $data;
-		
-//		$this->logger->log("Data: " . print_r($this->data, true));
-		
+	}
+	
+	private function findExportFile()
+	{
 		$exportfile = Exportfile::findFirstByIdExportfile($this->data->idExportfile);
 		
 		if (!$exportfile) {
@@ -43,9 +48,89 @@ class ContactExporter extends BaseWrapper
 		$this->exportfile = $exportfile;
 	}
 	
-	public function startExporting()
+	private function findCriteria()
+	{
+		switch ($this->data->criteria) {
+			case 'contactlist':
+				$model = Contactlist::findFirst(array(
+					'conditions' => 'idContactlist = ?1',
+					'bind' => array(1 => $this->data->idCriteria)
+				));
+
+				$dbase = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $model->idDbase,
+									2 => $this->exportfile->idAccount)
+				));
+
+				if (!$model || !$dbase) {
+					throw new InvalidArgumentException("Criteria do not exists");
+				}
+				break;
+
+			case 'dbase':
+				$model = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $this->data->idCriteria,
+									2 => $this->exportfile->idAccount)
+				));
+
+				if (!$model) {
+					throw new InvalidArgumentException("Criteria do not exists");
+				}
+				break;
+
+			case 'segment':
+				$model = Segment::findFirst(array(
+					'conditions' => 'idSegment = ?1',
+					'bind' => array(1 => $this->data->idCriteria)
+				));
+
+				$dbase = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $model->idDbase,
+									2 => $this->exportfile->idAccount)
+				));
+
+				if (!$model || !$dbase) {
+					throw new InvalidArgumentException("Criteria do not exists");
+				}
+				break;
+		}
+		
+		$this->model = $model;
+		$this->data->model = $model;
+	}
+	
+	private function prepareDirectory()
+	{
+		$filePath = $this->appPath->path . '/tmp/efiles/';
+		if (!file_exists($filePath)) {
+			mkdir($filePath, 0777, true);
+		}
+		$this->tmpPath = str_replace("\\", "/", $filePath);
+	}
+
+	private function createTmpTable()
+	{
+		$this->db = Phalcon\DI::getDefault()->get('db');
+		$this->tablename = "tmp{$this->data->idCriteria}{$this->data->criteria}";
+		$newtable = "CREATE TEMPORARY TABLE $this->tablename LIKE tmpexport";
+		$this->db->execute($newtable);
+	}
+	
+	private function validateCustomFields()
+	{
+		if ($this->data->fields == 'custom-fields') {
+			$this->customfields = true;
+		}
+	}
+
+	private function prepareData()
 	{
 		try {
+			$this->findExportFile();
+			$this->findCriteria();
 			$this->prepareDirectory();
 			$this->createTmpTable();
 			$this->validateCustomFields();
@@ -53,18 +138,21 @@ class ContactExporter extends BaseWrapper
 		catch (Exception $e) {
 			throw new Exception("Exception while creating tmp table... {$e}");
 		}
+	}
+	
+	public function startExporting()
+	{
+		$this->prepareData();
 		
 		try {
 			$contactIterator = new TotalContactIterator();
-			$contactIterator->setCustomFields($this->cf);
+			$contactIterator->setCustomFields($this->customfields);
 			$contactIterator->setData($this->data);
 			$contactIterator->initialize();
+			$this->customfieldsData = $contactIterator->getCustomFieldsData();
 			
-			if ($this->cf == true) {
-				$this->cfData = $contactIterator->getCustomFieldsData();
-				if ($this->cfData != null) {
-					$this->addCustomFieldsToTmpTable();
-				}
+			if (!empty($this->customfieldsData)) {
+				$this->addCustomFieldsToTmpTable();
 			}
 			
 			foreach ($contactIterator as $contact) {
@@ -76,8 +164,8 @@ class ContactExporter extends BaseWrapper
 				
 				$fields = "{$contact['idContact']}, {$status}, {$email}, {$name}, {$lastName}, {$birthDate}, {$contact['createdon']}";
 				
-				if (isset($this->cfData->arrayCustomfieldsNames) && count($this->cfData->arrayCustomfieldsNames) > 0) {
-					foreach ($this->cfData->arrayCustomfieldsNames as $cfname) {
+				if (isset($this->customfieldsData->arrayCustomfieldsNames) && count($this->customfieldsData->arrayCustomfieldsNames) > 0) {
+					foreach ($this->customfieldsData->arrayCustomfieldsNames as $cfname) {
 						$fields .= (empty($contact[$cfname]) ? ", null" : ", '{$contact[$cfname]}'");
 					}
 				}
@@ -85,15 +173,19 @@ class ContactExporter extends BaseWrapper
 				$this->contactsToSave[] = $fields;
 				unset($fields);
 				
+				$this->i++;
+				
 				if (count($this->contactsToSave) == self::CONTACTS_PER_UPDATE) {
 					$this->setDataInTmpTable();
 					unset($this->contactsToSave);
+					$this->updateExportFile();
 				}
 			}
 			
 			if (count($this->contactsToSave) > 0) {
 				$this->setDataInTmpTable();
                 unset($this->contactsToSave);
+				$this->updateExportFile();
 			}
 
 			$this->saveFileInServer();
@@ -105,37 +197,26 @@ class ContactExporter extends BaseWrapper
 		}
 	}
 	
-	protected function prepareDirectory()
+	private function updateExportFile()
 	{
-		$filePath = $this->appPath->path . '/tmp/efiles/';
-		if (!file_exists($filePath)) {
-			mkdir($filePath, 0777, true);
+		$this->exportfile->contactsProcessed = $this->i;
+		
+		if (!$this->exportfile->save()) {
+			foreach ($this->exportfile->getMessages() as $msg) {
+				$this->logger->log("Error while updating exportfile... {$msg}");
+			}
 		}
-		$this->tmpPath = str_replace("\\", "/", $filePath);
-	}
-
-	protected function createTmpTable()
-	{
-		$this->db = Phalcon\DI::getDefault()->get('db');
-		$this->tablename = "tmp{$this->data->idCriteria}{$this->data->criteria}";
-		$newtable = "CREATE TEMPORARY TABLE $this->tablename LIKE tmpexport";
-		$this->db->execute($newtable);
 	}
 	
-	protected function addCustomFieldsToTmpTable()
+	private function addCustomFieldsToTmpTable()
 	{
-		if (!empty($this->cfData->customfieldsColumns)) {
-			$this->cfSQL = "ALTER TABLE {$this->tablename} ADD ({$this->cfData->customfieldsColumns})";
+		if (!empty($this->customfieldsData->customfieldsColumns)) {
+			$this->cfSQL = "ALTER TABLE {$this->tablename} ADD ({$this->customfieldsData->customfieldsColumns})";
 			$this->db->execute($this->cfSQL);
 		}
 	}
 
-	protected function validateCustomFields()
-	{
-		if ($this->data->fields == 'custom-fields') {
-			$this->cf = true;
-		}
-	}
+	
 
 	protected function setDataInTmpTable()
 	{
@@ -151,7 +232,7 @@ class ContactExporter extends BaseWrapper
 			$init = false;
 		}
 		
-		$insert = "INSERT INTO {$this->tablename} (idContact, status, email, name, lastName, birthDate, createdon {$this->cfData->customfieldsNames})
+		$insert = "INSERT INTO {$this->tablename} (idContact, status, email, name, lastName, birthDate, createdon {$this->customfieldsData->customfieldsNames})
 				   VALUES {$values}";
 		
 //		$this->logger->log("insert: {$insert}");		   
@@ -166,7 +247,7 @@ class ContactExporter extends BaseWrapper
 	
 	protected function saveFileInServer()
 	{
-		$exportfile =  "SELECT email, name, lastName, birthDate, status {$this->cfData->customfieldsNames}
+		$exportfile =  "SELECT email, name, lastName, birthDate, status {$this->customfieldsData->customfieldsNames}
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$this->tmpPath}{$this->exportfile->name}.csv'
 						CHARACTER SET utf8

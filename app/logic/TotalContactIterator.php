@@ -13,7 +13,7 @@ class TotalContactIterator implements Iterator
 	protected $customNames;
 	protected $cfidentifiers = null;
 	protected $customFieldsQuery = null;
-	protected $cfObject = null;
+	protected $customfieldsData = null;
 	protected $cfs = array();
 	protected $c = array();
 
@@ -22,7 +22,6 @@ class TotalContactIterator implements Iterator
 	public function __construct() 
 	{
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
-		$this->logger->log("Soy TotalContactIterator y me han instanciado!!");
 	}
 	
 	public function setCustomFields($customfields = false)
@@ -41,6 +40,7 @@ class TotalContactIterator implements Iterator
 	public function initialize()
 	{
 		$this->createQuery();
+		
 		if ($this->customfields) {
 			$this->getCustomfieldsIdentifiers();
 			$this->createQueryForCustomFields();
@@ -320,11 +320,11 @@ class TotalContactIterator implements Iterator
 			
 			$this->cfidentifiers = implode(',', $cfidentifiers);
 			
-			$this->cfObject = new stdClass();
-			$this->cfObject->arrayCustomfieldsNames = $this->cfs;
-			$this->cfObject->customfieldsNames = ',';
-			$this->cfObject->customfieldsNames .= implode(', ', $this->cfs);
-			$this->cfObject->customfieldsColumns = implode(', ', $cfnames);
+			$this->customfieldsData = new stdClass();
+			$this->customfieldsData->arrayCustomfieldsNames = $this->cfs;
+			$this->customfieldsData->customfieldsNames = ',';
+			$this->customfieldsData->customfieldsNames .= implode(', ', $this->cfs);
+			$this->customfieldsData->customfieldsColumns = implode(', ', $cfnames);
 		}
 	}
 	
@@ -350,6 +350,6 @@ class TotalContactIterator implements Iterator
 	
 	public function getCustomFieldsData()
 	{
-		return $this->cfObject;
+		return $this->customfieldsData;
 	}
 }

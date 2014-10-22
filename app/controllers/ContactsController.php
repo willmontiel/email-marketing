@@ -590,7 +590,7 @@ class ContactsController extends ControllerBase
 			$fields = $this->request->getPost('fields');
 			
 			try {
-				$this->validateCriteria($account, $criteria, $id);
+				$model = $this->validateCriteria($account, $criteria, $id);
 				$exportfile = new Exportfile();
 				$exportfile->idAccount  = $account->idAccount;
 				$exportfile->createdon  = time();
@@ -600,6 +600,9 @@ class ContactsController extends ControllerBase
 				$exportfile->criteria  = $criteria;
 				$exportfile->contactStatus  = $contacts;
 				$exportfile->fields  = $fields;
+				$exportfile->status = 1;
+				$exportfile->contactsProcessed = 0;
+				$exportfile->contactsToProcess = (isset($model->Ctotal) ? $model->Ctotal : 0);
 				
 				if (!$exportfile->save()) {
 					foreach ($exportfile->getMessages() as $msg) {
