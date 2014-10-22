@@ -57,7 +57,7 @@ class TotalContactIterator implements Iterator
 				FROM {$this->from}
 					{$this->join}
 					JOIN email AS e ON (e.idEmail = c.idEmail)
-				WHERE {$this->where} {$this->conditions} ORDER BY c.idContact";
+				WHERE {$this->where} {$this->conditions}";
 				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
