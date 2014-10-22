@@ -39,6 +39,7 @@
 	</script>
 {% endblock %}
 {% block content %}
+	<div class="space"></div>
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
