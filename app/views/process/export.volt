@@ -13,7 +13,10 @@
 					if(data.length !== 0) {
 						$('#contacts-processed').empty();
 						$('#contacts-processed').append(data.contactsProcessed);
-
+						
+						$('#contacts-to-process').empty();
+						$('#contacts-to-process').append(data.contactsToProcess);
+						
 						if (data.status === 'Finalizado') {
 							$('#export-status').empty();
 							$('#export-status').append(data.status);
@@ -37,7 +40,7 @@
 	{% else %}
 		{% set ctype = 'No' %}
 	{% endif %}
-	
+		
 	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'export']) }}
 	
 	<div class="row">
@@ -72,7 +75,11 @@
 						</tr>
 						<tr>
 							<td><strong>Contactos a procesar(Aprox)</strong></td>
-							<td>{{export.contactsToProcess}}</td>
+							<td>{% if export.status == 'Finalizado' OR export.status == 'Cancelado'%}
+									{{export.contactsToProcess}}
+								{% else %}
+									<div id="contacts-to-process">0</div>
+								{% endif %}</td>
 						</tr>
 						<tr>
 							<td><strong>Contactos procesados(Aprox)</strong></td>
