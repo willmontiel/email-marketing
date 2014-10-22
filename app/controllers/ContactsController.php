@@ -594,7 +594,7 @@ class ContactsController extends ControllerBase
 				$exportfile = new Exportfile();
 				$exportfile->idAccount  = $account->idAccount;
 				$exportfile->createdon  = time();
-				$name = "{$account->idAccount}-{$criteria}-{$id}-" . date('d-M-Y', time()) . uniqid();
+				$name = "{$account->idAccount}-{$criteria}-{$id}-" . date('d-M-Y', time()) . "-" .  uniqid();
 				$exportfile->name = $name;
 				$exportfile->idCriteria  = $id;
 				$exportfile->criteria  = $criteria;
