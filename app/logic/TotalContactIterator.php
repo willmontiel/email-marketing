@@ -59,7 +59,7 @@ class TotalContactIterator implements Iterator
 				   
 		unset($this->contacts);
 		
-//		$this->logger->log("SQL: {$sql}");
+		$this->logger->log("SQL: {$sql}");
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
@@ -252,20 +252,20 @@ class TotalContactIterator implements Iterator
 				$this->from = " contactlist AS cl ";
 				$this->join = " JOIN coxcl AS co ON (co.idContactlist = cl.idContactlist) 
 								JOIN contact AS c ON (c.idContact = co.idContact)";
-				$this->where = " cl.idContactlist = {$this->data->id} ";
+				$this->where = " cl.idContactlist = {$this->data->idCriteria} ";
 				break;
 			
 			case 'dbase':
 				$this->from = " contact AS c ";
 				$this->join = "";
-				$this->where = " c.idDbase = {$this->data->id} ";
+				$this->where = " c.idDbase = {$this->data->idCriteria} ";
 				break;
 			
 			case 'segment':
 				$this->from = " segment AS s ";
 				$this->join = " JOIN sxc AS sc ON (sc.idSegment = s.idSegment) 
 							    JOIN contact AS c ON (c.idContact = sc.idContact)";
-				$this->where = "s.idSegment = {$this->data->id} ";
+				$this->where = "s.idSegment = {$this->data->idCriteria} ";
 				break;
 		}
 		
