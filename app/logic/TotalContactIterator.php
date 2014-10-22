@@ -58,14 +58,10 @@ class TotalContactIterator implements Iterator
 					{$this->join}
 					JOIN email AS e ON (e.idEmail = c.idEmail)
 				WHERE {$this->where} {$this->conditions}";
-			
-		$this->logger->log("Total SQL: {$sql}");
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$total = $result->fetchAll();
-		
-		$this->logger->log(print_r($total, true));
 		
 		$this->totalContacts = $total[0]['total'];
 	}
@@ -81,7 +77,7 @@ class TotalContactIterator implements Iterator
 				   
 		unset($this->contacts);
 		
-		$this->logger->log("SQL: {$sql}");
+//		$this->logger->log("SQL: {$sql}");
 		
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);

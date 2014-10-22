@@ -136,6 +136,8 @@ class ContactExporter extends BaseWrapper
 			$this->validateCustomFields();
 		}	
 		catch (Exception $e) {
+			$this->exportfile->status = "Cancelado";
+			$this->saveExportFile();
 			throw new Exception("Exception while creating tmp table... {$e}");
 		}
 	}
@@ -195,6 +197,7 @@ class ContactExporter extends BaseWrapper
 
 			$this->saveFileInServer();
 			$this->exportfile->contactsProcessed = $this->i;
+			$this->exportfile->status = "Finalizado";
 			$this->saveExportFile();
 		}
 		catch (Exception $e) {
@@ -275,6 +278,7 @@ class ContactExporter extends BaseWrapper
 		}
 		
 		$db->execute("DROP TEMPORARY TABLE $this->tablename");
+		
 		return true;
 	}
 	
