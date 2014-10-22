@@ -30,6 +30,8 @@ class ContactExporter extends BaseWrapper
 //		if (!is_array($data) || empty($data)) {
 //			throw new InvalidArgumentException("export data is not valid...");
 //		}
+		$this->logger->log("Data: " . print_r($this->data, true));
+		
 		$this->data = $data;
 		$exportfile = Exportfile::findFirstByIdImportfile($this->data['idExportfile']);
 		
