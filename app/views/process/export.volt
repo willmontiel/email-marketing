@@ -25,6 +25,11 @@
 	</script>
 {% endblock %}
 {% block content %}
+	{% if export.fields == 'custom-fields'%}
+		{% set ctype == 'Si' %}
+	{% else %}
+		{% set ctype == 'No' %}
+	{% endif %}
 	<div class="space"></div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -53,7 +58,7 @@
 						</tr>
 						<tr>
 							<td><strong>Campos personalizados</strong></td>
-							<td>{{export.fields}}</td>
+							<td>{{ctype}}</td>
 						</tr>
 						<tr>
 							<td><strong>Contactos a procesar(Aprox)</strong></td>

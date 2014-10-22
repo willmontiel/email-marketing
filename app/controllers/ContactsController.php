@@ -661,14 +661,14 @@ class ContactsController extends ControllerBase
 		$this->view->disable();
 
 		header('Content-type: application/csv');
-		header("Content-Disposition: attachment; filename={$exfile->internalName}.csv");
+		header("Content-Disposition: attachment; filename={$exfile->name}.csv");
 		header('Pragma: public');
 		header('Expires: 0');
 		header('Content-Type: application/download');
 		echo $exfile->name . PHP_EOL;
 		echo PHP_EOL;
 
-		readfile($this->tmppath->exportdir . $exfile->internalName . '.csv');
+		readfile($this->tmppath->exportdir . $exfile->name . '.csv');
 	}
 	
 	private function validateCriteria($account, $criteria, $id)

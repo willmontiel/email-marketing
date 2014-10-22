@@ -256,7 +256,8 @@ class ContactExporter extends BaseWrapper
 			$init = false;
 		}
 		
-		$insert = "INSERT INTO {$this->tablename} (idContact, status, email, name, lastName, birthDate, createdon {$this->customfieldsData->customfieldsNames})
+		$customFields = (isset($this->customfieldsData->customfieldsNames) && !empty($this->customfieldsData->customfieldsNames) ? $this->customfieldsData->customfieldsNames : "");
+		$insert = "INSERT INTO {$this->tablename} (idContact, status, email, name, lastName, birthDate, createdon {$customFields})
 				   VALUES {$values}";
 		
 //		$this->logger->log("insert: {$insert}");		   
@@ -271,7 +272,9 @@ class ContactExporter extends BaseWrapper
 	
 	protected function saveFileInServer()
 	{
-		$exportfile =  "SELECT email, name, lastName, birthDate, status {$this->customfieldsData->customfieldsNames}
+		$customFields = (isset($this->customfieldsData->customfieldsNames) && !empty($this->customfieldsData->customfieldsNames) ? $this->customfieldsData->customfieldsNames : "");
+		
+		$exportfile =  "SELECT email, name, lastName, birthDate, status {$customFields}
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$this->tmpPath}{$this->exportfile->name}.csv'
 						CHARACTER SET utf8
