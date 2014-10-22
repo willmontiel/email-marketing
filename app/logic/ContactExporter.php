@@ -184,7 +184,8 @@ class ContactExporter extends BaseWrapper
 				if (count($this->contactsToSave) == self::CONTACTS_PER_UPDATE) {
 					$this->setDataInTmpTable();
 					unset($this->contactsToSave);
-					$this->updateExportFile();
+					$this->exportfile->contactsProcessed = $this->i;
+					$this->saveExportFile();
 				}
 			}
 			

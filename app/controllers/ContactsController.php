@@ -598,6 +598,7 @@ class ContactsController extends ControllerBase
 				$exportfile->name = $name;
 				$exportfile->idCriteria  = $id;
 				$exportfile->criteria  = $criteria;
+				$exportfile->criteriaName  = $model->name;
 				$exportfile->contactStatus  = $contacts;
 				$exportfile->fields  = $fields;
 				$exportfile->status = 'En proceso';
