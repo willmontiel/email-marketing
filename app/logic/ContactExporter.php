@@ -34,7 +34,7 @@ class ContactExporter extends BaseWrapper
 		
 //		$this->logger->log("Data: " . print_r($this->data, true));
 		
-		$exportfile = Exportfile::findFirstByIdImportfile($this->data->idExportfile);
+		$exportfile = Exportfile::findFirstByIdExportfile($this->data->idExportfile);
 		
 		if (!$exportfile) {
 			throw new InvalidArgumentException("exportfile do not exists...");
