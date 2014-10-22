@@ -602,7 +602,7 @@ class ContactsController extends ControllerBase
 				$exportfile->fields  = $fields;
 				$exportfile->status = 'En proceso';
 				$exportfile->contactsProcessed = 0;
-				$exportfile->contactsToProcess = (isset($model->Ctotal) ? $model->Ctotal : 0);
+				$exportfile->contactsToProcess = 0;
 				
 				if (!$exportfile->save()) {
 					foreach ($exportfile->getMessages() as $msg) {

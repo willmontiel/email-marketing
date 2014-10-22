@@ -16,8 +16,9 @@ class TotalContactIterator implements Iterator
 	protected $customfieldsData = null;
 	protected $cfs = array();
 	protected $c = array();
+	protected $totalContacts = 0;
 
-	const ROWS_PER_FETCH = 25000;
+	const ROWS_PER_FETCH = 20000;
 	
 	public function __construct() 
 	{
@@ -45,9 +46,26 @@ class TotalContactIterator implements Iterator
 			$this->getCustomfieldsIdentifiers();
 			$this->createQueryForCustomFields();
 		}
+		
+		$this->findTotalContacts();
 	}
-
-
+	
+	
+	private function findTotalContacts()
+	{
+		$sql = "SELECT COUNT(c.idContact) AS total
+				FROM {$this->from}
+					{$this->join}
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+				WHERE {$this->where} {$this->conditions} ORDER BY c.idContact";
+				
+		$db = Phalcon\DI::getDefault()->get('db');
+		$result = $db->query($sql);
+		$total = $result->fetchAll();
+		
+		$this->totalContacts = $total['total'];
+	}
+	
 	public function extractContactsFromDB($start = 0)
 	{
 		$sql = "SELECT c.idContact, IF(e.spam != 0, 'Spam', IF(e.bounced != 0, 'Rebotado', IF(e.blocked != 0, 'Bloqueado', IF(c.unsubscribed != 0, 'Des-suscrito', IF(c.status != 0, 'Activo', 'Inactivo'))))) AS status, e.email, c.name, c.lastName, c.birthDate, c.createdon {$this->customNames}
@@ -351,5 +369,10 @@ class TotalContactIterator implements Iterator
 	public function getCustomFieldsData()
 	{
 		return $this->customfieldsData;
+	}
+	
+	public function getTotalContacts()
+	{
+		return $this->totalContacts;
 	}
 }

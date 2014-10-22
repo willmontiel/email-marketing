@@ -16,7 +16,7 @@ class ContactExporter extends BaseWrapper
 	
 	private $i = 0;
 
-	const CONTACTS_PER_UPDATE = 25000;
+	const CONTACTS_PER_UPDATE = 20000;
 
 	public function __construct() 
 	{
@@ -149,6 +149,10 @@ class ContactExporter extends BaseWrapper
 			$contactIterator->setCustomFields($this->customfields);
 			$contactIterator->setData($this->data);
 			$contactIterator->initialize();
+			
+			$this->exportfile->contactsToProcess = $contactIterator->getTotalContacts();
+			$this->saveExportFile();
+			
 			$this->customfieldsData = $contactIterator->getCustomFieldsData();
 			
 			if (!empty($this->customfieldsData)) {
@@ -185,46 +189,25 @@ class ContactExporter extends BaseWrapper
 			if (count($this->contactsToSave) > 0) {
 				$this->setDataInTmpTable();
                 unset($this->contactsToSave);
-				$this->updateExportFile();
+				$this->exportfile->contactsProcessed = $this->i;
+				$this->saveExportFile();
 			}
 
 			$this->saveFileInServer();
-			$this->finishExporFile();
+			$this->exportfile->contactsProcessed = $this->i;
+			$this->saveExportFile();
 		}
 		catch (Exception $e) {
 			$this->db->execute("DROP TEMPORARY TABLE $this->tablename");
-			$this->cancelExporFile();
+			$this->exportfile->status = 'Cancelado';
+			$this->saveExportFile();
 			$this->logger->log("Exception: {$e}");
 			throw new \Exception("{$e}");
 		}
 	}
 	
-	private function updateExportFile()
+	private function saveExportFile()
 	{
-		$this->exportfile->contactsProcessed = $this->i;
-		
-		if (!$this->exportfile->save()) {
-			foreach ($this->exportfile->getMessages() as $msg) {
-				$this->logger->log("Error while updating exportfile... {$msg}");
-			}
-		}
-	}
-	
-	private function cancelExporFile()
-	{
-		$this->exportfile->status = 'Cancelado';
-		
-		if (!$this->exportfile->save()) {
-			foreach ($this->exportfile->getMessages() as $msg) {
-				$this->logger->log("Error while updating exportfile... {$msg}");
-			}
-		}
-	}
-	
-	private function finishExporFile()
-	{
-		$this->exportfile->status = 'Finalizado';
-		
 		if (!$this->exportfile->save()) {
 			foreach ($this->exportfile->getMessages() as $msg) {
 				$this->logger->log("Error while updating exportfile... {$msg}");

@@ -15,10 +15,14 @@
 						$('#contacts-processed').append(data.contactsProcessed);
 
 						if (data.status === 'Finalizado') {
+							$('#export-status').empty();
+							$('#export-status').append(data.status);
 							$('#file-available').show('slow');
 							clearInterval(refresher);
 						}
 						else if (data.status === 'Cancelado') {
+							$('#export-status').empty();
+							$('#export-status').append(data.status);
 							clearInterval(refresher);
 						}
 					}
@@ -41,6 +45,7 @@
 			<div class="header-background">
 				<div class="header">
 					<div class="title">Resumen de exportación de contactos</div>
+					<div class="title-info">Podría tardar unos minutos</div>
 				</div>
 			</div>
 		</div>
@@ -81,7 +86,13 @@
 						</tr>
 						<tr>
 							<td><strong>Estado</strong></td>
-							<td>{{export.status}}</td>
+							<td>
+								{% if export.status == 'Finalizado' OR export.status == 'Cancelado'%}
+									{{export.status}}
+								{% else %}
+									<div id="export-status">{{export.status}}</div>
+								{% endif %}
+							</td>
 						</tr>
 					</tbody>
 				</table>
