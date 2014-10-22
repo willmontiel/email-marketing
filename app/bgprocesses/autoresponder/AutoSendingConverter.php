@@ -66,16 +66,23 @@ class AutoSendingConverter
 			throw new Exception('Error while saving content mail as autoresponder');
 		}
 
-		switch($this->autoresponder->contentsource) {
-			case 'url':
-				$this->saveContentFromURL();
-				break;
-			case 'html':
-				$this->saveContentFromHTML();
-				break;
-			case 'editor':
-				$this->saveContentFromEDITOR();
-				break;
+		if($this->autoresponder->contentsource) {
+			switch($this->autoresponder->contentsource) {
+				case 'url':
+					$this->saveContentFromURL();
+					break;
+				case 'html':
+					$this->saveContentFromHTML();
+					break;
+				case 'editor':
+					$this->saveContentFromEDITOR();
+					break;
+			}
+		}
+		else {
+			$this->db->rollback();
+			$this->logger->log('La autorespuesta ' . $this->autoresponder->name . ' no tiene contenido');
+			throw new Exception('No hay contenido');
 		}
 
 		$this->db->commit();
@@ -119,6 +126,7 @@ class AutoSendingConverter
 		
 		if($total == 0) {
 			$this->db->rollback();
+			$this->logger->log('Paso por aqui');
 			$this->logger->log('No hay destinatarios');
 			throw new Exception(400);
 		}

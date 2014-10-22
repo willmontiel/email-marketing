@@ -14,6 +14,31 @@ $(function (){
 		var target = JSON.stringify(model.getModel());
 		var target_obj = $(this).find("input[name='target']")[0];
 		$(target_obj).val(target);
+		
+		var status = [];
+		status.push(check_data_status('name', 'input', 'un nombre'));
+		status.push(check_data_status('target', 'input', 'los destinatarios'));
+		status.push(check_data_status('hour', 'select', 'una hora'));
+		status.push(check_data_status('minute', 'select', 'una hora'));
+		status.push(check_data_status('meridian', 'select', 'una hora'));
+		status.push(check_data_status('subject', 'input', 'un asunto'));
+		status.push(check_data_status('from_email', 'input', 'un remitente'));
+		status.push(check_data_status('from_name', 'input', 'un remitente'));
+		
+		var response = true;
+		for(var i = 0; i < status.length; i++) {
+			if(status[i]) {
+				response = false;
+				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: status[i], sticky: false, time: 2000});
+			}
+		}
+		
+		if(response && content == null){
+			response = false;
+			$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: 'Aún no ha creado ningún tipo de contenido, por favor verifique la información', sticky: false, time: 2000});
+		}
+		
+		return response;
 	});
 
 	$('#select-field').on('change', function(){

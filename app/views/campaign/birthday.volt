@@ -19,6 +19,12 @@
 			var serializerObject = null;
 		{%endif%}
 			
+		{%if autoresponse.contentsource is defined%}
+			var content = "{{autoresponse.contentsource}}";
+		{%else%}
+			var content = null;
+		{%endif%}
+			
 		$(function (){
 			{%if autoresponse is defined%}
 				$('.input-autoresponse-time-hour').val('{{autoresponse.time.hour}}');
