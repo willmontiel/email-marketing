@@ -217,7 +217,7 @@ class TrackController extends ControllerBase
 		return $ip;
 	}
 	
-	private function getGeolocalization ($ip) {
+	private function getGeolocalization () {
 		$ip = $this->getIp();
 		
 		$gi = geoip_open("/usr/share/GeoIP/GeoIP.dat",GEOIP_STANDARD);
