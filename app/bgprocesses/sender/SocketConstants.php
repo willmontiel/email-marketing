@@ -45,4 +45,26 @@ class SocketConstants
 	{
 		return Phalcon\DI::getDefault()->get('sockets')->importfromchild;
 	}
+	
+// ************** - Export Sockets - **************
+	
+	public static function getExportPub2ChildrenEndPoint()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->exporttochildren;
+	}
+	
+	public static function getExportRequestsEndPoint()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->exportrequest;
+	}
+	
+	public static function getExportRequestsEndPointPeer()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->exportrequest;
+	}
+	
+	public static function getExportPullFromChildEndPoint()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->exportfromchild;
+	}
 }

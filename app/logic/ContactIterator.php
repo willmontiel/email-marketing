@@ -45,7 +45,7 @@ class ContactIterator implements Iterator
 		
 		unset($this->contacts);
 		
-		Phalcon\DI::getDefault()->get('logger')->log("SQL: {$sql}");
+//		Phalcon\DI::getDefault()->get('logger')->log("SQL: {$sql}");
 //		Phalcon\DI::getDefault()->get('timerObject')->startTimer('Querying', 'Querying data');
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);

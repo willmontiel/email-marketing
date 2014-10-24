@@ -34,6 +34,11 @@
 				<span class="sm-button-small-import-list"></span>
 				</a>
 			</li>
+			<li class="small-btn-nav sm-btn-blue {{ activelnk=='export'?'active':'' }}">
+				<a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="Detalle de exportacón">
+				<span class="sm-button-small-import-list"></span>
+				</a>
+			</li>
 		</ul>
 	</div>
 </div>

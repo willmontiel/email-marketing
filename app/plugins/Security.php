@@ -158,9 +158,13 @@ class Security extends Plugin
 				'contacts::newbatch' => array('contact' => array('read','importbatch')),
 				'contacts::importbatch' => array('contact' => array('read', 'importbatch')),
 				'contacts::import' => array('contact' => array('read','importbatch')),
+				'contacts::export' => array('contact' => array('read', 'export')),
+				'contacts::getexportfile' => array('contact' => array('read', 'export')),
 				'contacts::processfile' => array('contact' => array('read','importbatch')),
 				'process::import' => array('contact' => array('read', 'import')),
+				'process::export' => array('contact' => array('read', 'export')),
 				'process::refreshimport' => array('contact' => array('read', 'import')),
+				'process::resfreshexport' => array('contact' => array('read', 'export')),
 				'process::downoladsuccess' => array('contact' => array('read', 'import')),
 				'process::downoladerror' => array('contact' => array('read', 'import')),
 				//Dbase controller
@@ -483,7 +487,9 @@ class Security extends Plugin
 				'error:notavailable',
 				'error:unauthorized',
 			);
+			
 			$accessdir = $controller . ':' . $action;
+			
 			if (!in_array($accessdir, $this->publicurls)) {
 				$this->response->redirect('error/notavailable');
 			}
@@ -600,8 +606,8 @@ class Security extends Plugin
 			$accessdir = $controller . ':' . $action;
 			
 			if (!in_array($accessdir, $this->publicurls)) {
-					$this->response->redirect("session/signin");
-					return false;
+				$this->response->redirect("session/signin");
+				return false;
 			}
 		}
 		else{

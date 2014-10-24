@@ -162,7 +162,6 @@ class ContactsController extends ControllerBase
 	
 	public function importbatchAction($idContactlist)
 	{
-		
 		$log = $this->logger;
 		
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
@@ -578,5 +577,151 @@ class ContactsController extends ControllerBase
 			return $this->response->redirect($form->urlError, true);
 		}
 		return $this->response->redirect($form->urlSuccess, true);
+	}
+	
+	public function exportAction()
+	{
+		if($this->request->isPost()){
+			$account = $this->user->account;
+			
+			$criteria = $this->request->getPost('criteria');
+			$id = $this->request->getPost('id');
+			$contacts = $this->request->getPost('contacts');
+			$fields = $this->request->getPost('fields');
+			
+			try {
+				$model = $this->validateCriteria($account, $criteria, $id);
+				$exportfile = new Exportfile();
+				$exportfile->idAccount  = $account->idAccount;
+				$exportfile->createdon  = time();
+				$name = "{$account->idAccount}-{$criteria}-{$id}-" . date('d-M-Y', time()) . "-" .  uniqid();
+				$exportfile->name = $name;
+				$exportfile->idCriteria  = $id;
+				$exportfile->criteria  = $criteria;
+				$exportfile->criteriaName  = $model->name;
+				$exportfile->contactStatus  = $contacts;
+				$exportfile->fields  = $fields;
+				$exportfile->status = 'En proceso';
+				$exportfile->contactsProcessed = 0;
+				$exportfile->contactsToProcess = 0;
+				
+				if (!$exportfile->save()) {
+					foreach ($exportfile->getMessages() as $msg) {
+						throw new Exception("Exception while saving exportfile {$msg}");
+					}
+				}
+			}
+			catch (Exception $ex) {
+				$this->logger->log("Exception: {$ex}");
+				return $this->response->redirect('error');
+			}
+			
+			$data = array(
+				'idExportfile' => $exportfile->idExportfile,
+				'idCriteria' => $id,
+				'criteria' => $criteria,
+				'contacts' => $contacts,
+				'fields' => $fields
+			);
+			
+			$this->logger->log(print_r($data, true));
+			try {
+				$toSend = json_encode($data);
+				$objcomm = new Communication(SocketConstants::getExportRequestsEndPointPeer());
+				$objcomm->sendImportToParent($toSend, $exportfile->idExportfile);
+				
+//				$exporter = new ContactExporter();
+//				$exporter->setData($data);
+//				$exporter->startExporting();
+			}
+			catch (Exception $e){
+				$this->traceFail("Export contacts from list: {$id}");
+				$this->logger->log("Exception while exporting contacts... {$e}");
+				return $this->response->redirect('error');
+			}
+			
+			return $this->response->redirect("process/export/{$exportfile->idExportfile}");
+		}
+	}
+	
+	public function getexportfileAction($idExport)
+	{
+		$account = $this->user->account;
+		
+		$exfile = Exportfile::findFirst(array(
+			'conditions' => 'idAccount = ?1 AND idExportfile = ?2',
+			'bind' => array(1 => $account->idAccount,
+							2 => $idExport)
+		));
+		
+		if (!$exfile) {
+			$this->flashSession->error("El archivo de importación no existe, por favor verifique la información");
+			return $this->response->redirect('error');
+		}
+		
+		$this->view->disable();
+
+		header('Content-type: application/csv');
+		header("Content-Disposition: attachment; filename={$exfile->name}.csv");
+		header('Pragma: public');
+		header('Expires: 0');
+		header('Content-Type: application/download');
+		echo $exfile->criteriaName . PHP_EOL;
+		echo PHP_EOL;
+
+		readfile($this->tmppath->exportdir . $exfile->name . '.csv');
+	}
+	
+	private function validateCriteria($account, $criteria, $id)
+	{
+		switch ($criteria) {
+			case 'contactlist':
+				$model = Contactlist::findFirst(array(
+					'conditions' => 'idContactlist = ?1',
+					'bind' => array(1 => $id)
+				));
+
+				$dbase = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $model->idDbase,
+									2 => $account->idAccount)
+				));
+
+				if (!$model || !$dbase) {
+					throw new InvalidArgumentException("No existe criterio");
+				}
+				break;
+
+			case 'dbase':
+				$model = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $id,
+									2 => $account->idAccount)
+				));
+
+				if (!$model) {
+					throw new InvalidArgumentException("No existe criterio");
+				}
+				break;
+
+			case 'segment':
+				$model = Segment::findFirst(array(
+					'conditions' => 'idSegment = ?1',
+					'bind' => array(1 => $id)
+				));
+
+				$dbase = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $model->idDbase,
+									2 => $account->idAccount)
+				));
+
+				if (!$model || !$dbase) {
+					throw new InvalidArgumentException("No existe criterio");
+				}
+				break;
+		}
+		
+		return $model;
 	}
 }

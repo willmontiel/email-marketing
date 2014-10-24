@@ -12,6 +12,11 @@ abstract class ChildProcess
 	
 	const NUMBER_OF_SECONDS = 20;
 	
+	public function getExportChild()
+	{
+		return new ChildExport();
+	}
+	
 	public function getImportChild()
 	{
 		return new ChildImport();

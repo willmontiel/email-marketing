@@ -76,6 +76,12 @@
 			{%endfor%}
 		</script>
 		
+		<script type="text/javascript">
+			function exportContacts() {
+				$('#wait').show();
+			}
+		</script>
+		
 		{{ javascript_include('js/editable-ember-view.js')}}
 		
 		<script type="text/x-handlebars" data-template-name="dropdown" >
@@ -182,13 +188,16 @@
 					<div class="col-sm-12 col-md-12 col-lg-7">
 						<ul class="list-inline pull-right">
 							<li>
-								{{'{{#link-to "contacts.new" class="btn btn-default extra-padding btn-sm" disabledWhen="createDisabled"}}'}} Crear contacto{{'{{/link-to}}'}}
+								{{'{{#link-to "contacts.new" class="btn btn-default btn-sm" disabledWhen="createDisabled"}}'}} Crear contacto{{'{{/link-to}}'}}
 							</li>
 							<li>
-								{{'{{#link-to "contacts.newbatch" class="btn btn-default extra-padding btn-sm" disabledWhen="importBatchDisabled"}}'}} Crear contactos rápidamente{{'{{/link-to}}'}}
+								{{'{{#link-to "contacts.newbatch" class="btn btn-default btn-sm" disabledWhen="importBatchDisabled"}}'}} Crear contactos rápidamente{{'{{/link-to}}'}}
 							</li>
 							<li>
-								{{ '{{#link-to "contacts.import" class="btn btn-default extra-padding btn-sm" disabledWhen="importDisabled"}}'}} Importar contactos{{'{{/link-to}}'}}	
+								{{ '{{#link-to "contacts.import" class="btn btn-success btn-sm" disabledWhen="importDisabled"}}'}} Importar contactos{{'{{/link-to}}'}}	
+							</li>
+							<li>
+								{{ '{{#link-to "contacts.export" class="btn btn-primary btn-sm" disabledWhen="importDisabled"}}'}} Exportar contactos{{'{{/link-to}}'}}	
 							</li>
 
 							{#	<a href="{{url('dbase/show/')}}{{datalist.idDbase}}" class="btn btn-default extra-padding btn-sm" title="Configuracion avanzada"><i class="icon-cog"></i></a> #}
@@ -323,8 +332,8 @@
 				</div>
 			</div>
 		</div>
-
 	</script>
+	
 	<script type="text/x-handlebars" data-template-name="contacts/newbatch">
 		<div class="row">
 			<div class="col-sm-12">
@@ -443,5 +452,93 @@
 			</div>
 			{{ flashSession.output() }}
 		</div>
+	</script>
+	
+	<script type="text/x-handlebars" data-template-name="contacts/export">
+		<div class="row">
+			<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+				<h3 style="color: #777;">Exportar contactos</h3>
+			</div>
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-right" style="padding-top: 20px;">
+				<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default btn-sm">Regresar</a>
+			</div>
+		</div>
+		<hr>
+		
+		<form action="{{url('contacts/export')}}" method="post">
+			<input type="hidden" id ="criteria" name="criteria" value="contactlist" />
+			<input type="hidden" id ="id" name="id" value="{{datalist.idContactlist}}" />
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">¿Que contactos desea exportar?</h3>
+						</div>	
+						<div class="panel-body">
+							 <div class="radio">
+								<label><input id="contacts" name="contacts" value="active" type="radio" checked> Contactos activos</label>
+							 </div>
+							 {#
+							 <div class="radio">
+								<label><input name="contacts" value="inactive" type="radio"> Contactos inactivos</label>
+							 </div>
+							 #}
+							 <div class="radio">
+								<label><input id="contacts" name="contacts" value="unsuscribed" type="radio"> Contactos des-suscritos</label>
+							 </div>
+
+							 <div class="radio">
+								<label><input id="contacts" name="contacts" value="bounced" type="radio"> Contactos rebotados</label>
+							 </div>
+
+							 <div class="radio">
+								<label><input id="contacts" name="contacts" value="spam" type="radio"> Contactos que marcarón spam</label>
+							 </div>
+							 
+							 <div class="radio">
+								<label><input id="contacts" name="contacts" value="blocked" type="radio"> Contactos bloqueados</label>
+							 </div>
+					 
+							 <div class="radio">
+								<label><input id="contacts" name="contacts" value="all" type="radio"> Todos los contactos</label>
+							 </div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">¿Que campos desea exportar?</h3>
+						</div>	
+						<div class="panel-body">
+							<div class="radio">
+								<label><input id="fields" type="radio" name="fields" id="primary-fields" value="primary-fields" checked> Solo los campos primarios</label>
+							 </div>
+
+							 <div class="radio">
+								<label><input id="fields" type="radio" name="fields" id="custom-fields" value="custom-fields"> Todos los campos(primarios y personalizados)</label>
+							 </div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<div id="wait" style="display: none; margin-bottom: 8px;">
+						<h4 style="color: #777;">
+							Por favor espere... podría tadar algunos minutos
+						</h4>
+						{#<img src="{{url('')}}images/loading4.GIF" width="20" height="20"><br />#}
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-right">
+					<a href="{{url('contactlist/show/')}}{{datalist.idContactlist}}#/contacts" class="btn btn-default">Cancelar</a>
+					<input type="submit" class="btn btn-success" onClick="exportContacts();" value="Exportar" />
+				</div>
+			</div>
+		</form>
+		<div class="space"></div>
 	</script>
 {% endblock %}

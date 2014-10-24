@@ -1,4 +1,4 @@
-{% extends "templates/index_b3.volt" %}
+{% extends "templates/statistics_share.volt" %}
 {% block header_javascript %}
 	{{ stylesheet_link('css/statisticStyles.css') }}
 	{{ super() }}
@@ -39,6 +39,7 @@
 	</script>
 {% endblock %}
 {% block content %}
+	<div class="space"></div>
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">

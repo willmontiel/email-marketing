@@ -50,6 +50,8 @@ class AppObjects
 			$this->setDeleteLogger();
 			
 			$this->setViewSystemNotAvailable();
+//			$this->setView();
+//			$this->setVoltCompiler();
 		}
 		else {
 			$this->setAppPath();
@@ -382,6 +384,7 @@ class AppObjects
 	{
 		$tmpdir = new \stdClass;
 		$tmpdir->dir = $this->config->general->tmpdir;
+		$tmpdir->exportdir = $this->config->general->tmpexportdir;
 		$this->di->set('tmppath', $tmpdir);
 	}
 	
@@ -449,6 +452,9 @@ class AppObjects
 		$sockets->importrequest = $this->config->sockets->importrequest;
 		$sockets->importtochildren = $this->config->sockets->importtochildren;
 		$sockets->importfromchild = $this->config->sockets->importfromchild;
+		$sockets->exportrequest = $this->config->sockets->exportrequest;
+		$sockets->exporttochildren = $this->config->sockets->exporttochildren;
+		$sockets->exportfromchild = $this->config->sockets->exportfromchild;
 		$sockets->mailrequest = $this->config->sockets->mailrequest;
 		$sockets->mailtochildren = $this->config->sockets->mailtochildren;
 		$sockets->mailfromchild = $this->config->sockets->mailfromchild;

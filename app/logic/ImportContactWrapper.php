@@ -61,8 +61,8 @@ class ImportContactWrapper
 	{
 		// Por defecto las tablas temporales son "TEMPORALES"
 		// Por defecto el modo debug esta apagado
-//		$this->temporaryMode = true;
-//		$this->debugMode = false;
+		$this->temporaryMode = true;
+		$this->debugMode = false;
 		
 		// Prueba temporalmente (borrar 2 lineas para produccion)
 		$this->temporaryMode = false;

@@ -45,6 +45,114 @@ class ProcessController extends ControllerBase
 		$this->view->setVar("result", $result);
 	}
 	
+	public function exportAction($idExport)
+	{
+		$account = $this->user->account;
+		
+		$export = Exportfile::findFirst(array(
+			'conditions' => 'idExportfile = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idExport,
+							2 => $account->idAccount)
+		));
+		
+		if (!$export) {
+			return $this->response->redirect('error');
+		}
+		
+		$data = $this->validateCriteria($account, $export->criteria, $export->idCriteria);
+		
+		$this->view->setVar('export', $export);
+		$this->view->setVar('model', $data->model);
+		$this->view->setVar('criteria', $data->criteria);
+	}
+	
+	public function resfreshexportAction($idExport)
+	{
+		$account = $this->user->account;
+		
+		$export = Exportfile::findFirst(array(
+			'conditions' => 'idExportfile = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idExport,
+							2 => $account->idAccount)
+		));
+		
+		if (!$export) {
+			return $this->setJsonResponse(array('error' => 'Export not found'), '404', 'Export not found');
+		}
+		
+		$data = array(
+			'idExportfile' => $export->idExportfile,
+			'contactsProcessed' => $export->contactsProcessed,
+			'contactsToProcess' => $export->contactsToProcess,
+			'status' => $export->status,
+		);
+		
+		return $this->setJsonResponse($data, 200);
+	}
+	
+	private function validateCriteria($account, $criteria, $id)
+	{
+		switch ($criteria) {
+			case 'contactlist':
+				$name = 'Lista de contactos';
+				
+				$model = Contactlist::findFirst(array(
+					'conditions' => 'idContactlist = ?1',
+					'bind' => array(1 => $id)
+				));
+
+				$dbase = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $model->idDbase,
+									2 => $account->idAccount)
+				));
+
+				if (!$model || !$dbase) {
+					throw new InvalidArgumentException("No existe criterio");
+				}
+				break;
+
+			case 'dbase':
+				$name = 'Base de datos';
+				
+				$model = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $id,
+									2 => $account->idAccount)
+				));
+
+				if (!$model) {
+					throw new InvalidArgumentException("No existe criterio");
+				}
+				break;
+
+			case 'segment':
+				$name = 'Segmento';
+				
+				$model = Segment::findFirst(array(
+					'conditions' => 'idSegment = ?1',
+					'bind' => array(1 => $id)
+				));
+
+				$dbase = Dbase::findFirst(array(
+					'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+					'bind' => array(1 => $model->idDbase,
+									2 => $account->idAccount)
+				));
+
+				if (!$model || !$dbase) {
+					throw new InvalidArgumentException("No existe criterio");
+				}
+				break;
+		}
+		
+		$data = new stdClass();
+		$data->model = $model;
+		$data->criteria = $name;
+		
+		return $data;
+	}
+	
 	public function refreshimportAction($idImportprocess)
 	{
 		$res = $this->getImportInfo($idImportprocess);
@@ -271,5 +379,10 @@ class ProcessController extends ControllerBase
 		}
 		
 		$this->view->setVar("process", $res);
+	}
+	
+	public function getexportinfoAction()
+	{
+		
 	}
 }
