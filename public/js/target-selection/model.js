@@ -4,6 +4,7 @@ function Model() {
 	this.totalSelectedValues = 0;
 	this.criteriaType = 'Indefinido';
 	this.selectedCriteria = 'Indefinido';
+	this.filterAllowed = true;
 }
 
 Model.prototype.setPanelContainer = function(container){
@@ -29,6 +30,14 @@ Model.prototype.serializer = function() {
 			this.selectTypeObject(this.serializerObj[i]);
 		}
 	}
+};
+
+Model.prototype.filtersAllowed = function(filter) {
+	this.filterAllowed = filter;
+};
+
+Model.prototype.getFiltersAllowed = function() {
+	return this.filterAllowed;
 };
 
 Model.prototype.selectTypeObject = function(obj) {
