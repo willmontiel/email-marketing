@@ -384,7 +384,6 @@ class AppObjects
 	{
 		$tmpdir = new \stdClass;
 		$tmpdir->dir = $this->config->general->tmpdir;
-		$tmpdir->exportdir = $this->config->general->tmpexportdir;
 		$this->di->set('tmppath', $tmpdir);
 	}
 	
