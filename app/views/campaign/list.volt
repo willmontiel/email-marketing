@@ -112,10 +112,10 @@
 					</div>
 						
 					<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 text-right">
-						<a class="btn btn-primary btn-sm tooltip-b3" href="{{url("campaign/automatic")}}/{{item.idAutoresponder}}" data-placement="top" title="Editar esta autorespuesta">
+						<a class="btn btn-primary btn-sm tooltip-b3" href="{{url("campaign/")}}{{item.type}}/{{item.idAutoresponder}}" data-placement="top" title="Editar esta autorespuesta">
 							<span class="glyphicon glyphicon-pencil"></span>
 						</a>
-						<a onclick="previewAutoSend('{{item.content.url}}', '{{item.idAutoresponder}}');" class="btn btn-primary btn-sm tooltip-b3" data-placement="top" title="Previsualizar esta autorespuesta">
+						<a onclick="previewAutoSend('{{item.idAutoresponder}}');" class="btn btn-primary btn-sm tooltip-b3" data-placement="top" title="Previsualizar esta autorespuesta">
 							<span class="glyphicon glyphicon-eye-open"></span>
 						</a>
 						<button class="btn btn-sm btn btn-info tooltip-b3" data-toggle="collapse" data-target="#preview{{item.idAutoresponder}}" data-placement="top" title="Ver detalles">
@@ -148,14 +148,6 @@
 					
 					<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 						<div class="small-widget">
-							<div class="widget-icon"><span class="glyphicon glyphicon-cog"></span></div>
-							<div class="widget-content">
-								<div class="widget-header">Estado</div>	
-								<div class="widget-body {{color}}">{{status}}</div>	
-							</div>
-						</div>
-
-						<div class="small-widget">
 							<div class="widget-icon"><span class="glyphicon glyphicon-check"></span></div>
 							<div class="widget-content">
 								<div class="widget-header">Fecha de creación</div>	
@@ -178,7 +170,7 @@
 							<div class="widget-content">
 								<div class="widget-header">Remitente</div>	
 								<div class="widget-body">
-									{% if item.from is empty %}<span style="color: #bd1b06">Esta autorespuesta no contiene un remitente</span>{% else %} {{item.from}}{% endif %}
+									{% if item.from is empty %}<span style="color: #bd1b06">Esta autorespuesta no contiene un remitente</span>{% else %} {{item.from.email}} / {{item.from.name}}{% endif %}
 								</div>	
 							</div>
 						</div>

@@ -22,6 +22,9 @@ class CampaignController extends ControllerBase
 			$obj->name = $autosend->name;
 			$obj->type = $autosend->type;
 			$obj->contentsource = $autosend->contentsource;
+			$obj->createdon = $autosend->createdon;
+			$obj->from = json_decode($autosend->from);
+			$obj->reply = $autosend->reply;
 			$obj->active = $autosend->active;
 			
 			$raw_target = json_decode($autosend->target);

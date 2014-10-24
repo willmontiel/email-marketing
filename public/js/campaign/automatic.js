@@ -6,6 +6,7 @@ $(function (){
 	
 	var panelContainer = new PanelContainer('#panel-container');		
 	model = new Model();
+	model.filtersAllowed(false);
 	model.setPanelContainer(panelContainer);
 	model.setSerializerObject(serializerObject);
 	model.serializer();
