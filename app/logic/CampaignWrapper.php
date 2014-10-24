@@ -52,7 +52,7 @@ class CampaignWrapper extends BaseWrapper
 		$nextmailing->setFrequency('Daily');
 		$nextmailing->setLastSentDate(null);
 		
-		$this->populateAutoSendObj($autoresponder, $nextmailing, $content);
+		return $this->populateAutoSendObj($autoresponder, $nextmailing, $content);
 		
 	}
 	
@@ -130,7 +130,15 @@ class CampaignWrapper extends BaseWrapper
 		$autoresponder->reply = $content['reply'];
 		$autoresponder->time = json_encode($time);
 		$autoresponder->days = json_encode($days);
-		$autoresponder->content = json_encode( array( 'url' => $content['content'] ) );
+		
+		switch ($autoresponder->contentsource) {
+			case 'url' :
+				$autoresponder->content = json_encode( array( 'url' => $content['content'] ) );
+				break;
+			default :
+				$autoresponder->content = ( isset($autoresponder->content) ) ? $autoresponder->content : null;
+		}
+		
 		$autoresponder->nextExecution = $nextmailing->getNextSendTime();
 		
 		if($this->image) {
@@ -142,6 +150,8 @@ class CampaignWrapper extends BaseWrapper
 				throw new Exception("Error while saving automatic campaign, {$msg}!");
 			}
 		}
+		
+		return $autoresponder->idAutoresponder;
 	}
 	
 	public function createCampaignPreviewImage($image)
@@ -152,6 +162,28 @@ class CampaignWrapper extends BaseWrapper
 		return $imgObj->getImageBase64();
 	}
 	
+	public function createCampaignContent($content, $contentsource)
+	{
+		
+		$this->autoresponder->contentsource = $contentsource;
+		
+		if($contentsource == 'html') {
+			$buscar = array("<script" , "</script>");
+			$reemplazar = array("<!-- ", " -->");
+			$newContent = str_replace($buscar,$reemplazar, $content);
+			$this->autoresponder->content = htmlspecialchars($newContent, ENT_QUOTES);
+		}
+		else {
+			$this->autoresponder->content = $content;
+		}
+		
+		if (!$this->autoresponder->save()) {
+			foreach ($this->autoresponder->getMessages() as $msg) {
+				$this->logger->log("Error: " . $msg);
+			}
+		}
+	}
+
 	public function updateCampaignPreviewImage($image)
 	{
 		$this->autoresponder->previewData = $this->createCampaignPreviewImage($image);

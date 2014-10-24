@@ -435,9 +435,15 @@ class Security extends Plugin
 				'campaign::delete' => array('campaign' => array('delete')),
 				'campaign::automatic' => array('campaign' => array('create')),
 				'campaign::preview' => array('campaign' => array('read')),
+				'campaign::previewlist' => array('campaign' => array('read')),
 				'campaign::previewframe' => array('campaign' => array('read')),
 				'campaign::changestatus' => array('campaign' => array('update')),
 				'campaign::previewimage' => array('campaign' => array('create')),
+				
+				'campaign::birthday' => array('campaign' => array('create')),
+				'campaign::contenteditor' => array('campaign' => array('create')),
+				'campaign::contenthtml' => array('campaign' => array('create')),
+				'campaign::getcancel' => array('campaign' => array('create')),
 				
 			);
 		}

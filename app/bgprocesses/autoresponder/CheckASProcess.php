@@ -63,7 +63,7 @@ class CheckASProcess
 			foreach ($mails as $mail) {
 				try {
 					$this->send_autoresponders($mail);
-					$this->send_success_mail_to_support();
+					$this->send_success_mail_to_support($mail);
 				}
 				catch (Exception $e) {
 					$this->logger->log("Exception: Error sending auto responder, {$e}");
@@ -139,8 +139,8 @@ class CheckASProcess
 		$schedule = Mailschedule::findFirstByIdMail($mail->idMail);
 
 		if($schedule) {
-			$mail->status = 'Scheduled';
-
+			$mail->status = ($mail->status == 'Draft' || $mail->status == 'draft') ? 'Scheduled' : $mail->status;
+			
 			if(!$mail->save()) {
 				foreach ($mail->getMessages() as $msg) {
 					$this->logger->log($msg);
@@ -205,15 +205,16 @@ class CheckASProcess
 		}
 	}
 	
-	public function send_success_mail_to_support()
+	public function send_success_mail_to_support($mail)
 	{
-		$users = array('ivan.barona@sigmamovil.com', 'juan.morales@sigmamovil.com', 'ana.torres@sigmamovil.com');
-		
-		$message = new AdministrativeMessages();
-		foreach ($users as $user) {
-			$message->createTemporarySuccessMessage($user);
-			$this->logger->log('Enviando correo de exito a soporte de Sigma Movil ' . $user);
-			$message->sendMessage();
+		if($mail->idAccount == 55) {
+			$users = array('ivan.barona@sigmamovil.com', 'juan.morales@sigmamovil.com', 'ana.torres@sigmamovil.com');
+			$message = new AdministrativeMessages();
+			foreach ($users as $user) {
+				$message->createTemporarySuccessMessage($user);
+				$this->logger->log('Enviando correo de exito a soporte de Sigma Movil ' . $user);
+				$message->sendMessage();
+			}
 		}
 	}
 	

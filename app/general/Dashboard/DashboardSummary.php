@@ -6,7 +6,7 @@ class DashboardSummary
 	protected $account;
 	protected $mails;
 	
-	const NUMBER_OF_MAILS = 3;
+	const NUMBER_OF_MAILS = 15;
 	
 	public function setAccount(\Account $account)
 	{
