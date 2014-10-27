@@ -55,6 +55,7 @@ class PermissionsDataBase
 			'apikey' => 20,
 			'api' => 21,
 			'campaign' => 22,
+			'smartmanagment' => 23,
 		);
 	}
 	
@@ -171,6 +172,11 @@ class PermissionsDataBase
 			'campaign::read' => 87,
 			'campaign::update' => 88,
 			'campaign::delete' => 89,
+			
+			'smartmanagment::create' => 90,
+			'smartmanagment::read' => 91,
+			'smartmanagment::update' => 92,
+			'smartmanagment::delete' => 93,
 		);
 	}
 	
@@ -288,6 +294,11 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::read'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::update'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::delete'),
+			
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::create'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::read'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::update'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::delete'),
 			
 			
 //			----------//----------**ROLE_ADMIN**----------//----------

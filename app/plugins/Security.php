@@ -445,6 +445,11 @@ class Security extends Plugin
 				'campaign::contenthtml' => array('campaign' => array('create')),
 				'campaign::getcancel' => array('campaign' => array('create')),
 				
+				'smartmanagment::index' => array('smartmanagment' => array('read')),
+				'smartmanagment::new' => array('smartmanagment' => array('create')),
+				'smartmanagment::edit' => array('smartmanagment' => array('update')),
+				'smartmanagment::delete' => array('smartmanagment' => array('delete')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);
